@@ -1,0 +1,151 @@
+<!-- jEdit buffer-local properties:                     -->
+<!-- :indentSize=1:noTabs=true:maxLineLen=72:tabSize=2: -->
+
+<!-- jEdit FAQ									        -->
+<!-- Copyright (C) 2002 John Gellene                    -->
+
+<!-- $Id$
+-->
+
+
+
+<sect1 id="other-customizing"><title>Other Ways to Customize jEdit</title>
+<para>
+  This section deals with other ways in which you can customize jEdit's appearance and
+  behavior.
+</para>
+
+<qandaset>
+
+<qandadiv id="customize-other"><title>Other Settings and Options</title>
+
+<qandaentry>
+	<question id="settings-change-font">
+		<para>
+			How can I change the font used for menu labels and other elements of jEdit's
+			user interface?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Open the file [jedit install directory]/startup/changeUIFonts.bsh; near the end
+			is the line:
+<programlisting>
+// changeUIFonts("SansSerif", Font.PLAIN, 12);
+</programlisting>
+			<quote>Uncomment</quote> this line by removing the <quote>//</quote> from the beginning, and
+			change the font specification as desired. The new font will be used next time
+			you start jEdit.
+		</para>
+	</answer>
+</qandaentry>
+
+</qandadiv>
+
+
+</qandaset>
+
+
+</sect1>
+
+<sect1 id="macros"><title>Working with Macros</title>
+<para>
+  [Introduction, followed by question and answer set]
+</para>
+
+</sect1>
+
+<sect1 id="plugins"><title>Working with Plugins</title>
+<para>
+  This section deals with questions concerning the use of jEdit's
+  plugins.  PLugins are applications that share jEdit's memory space
+  and user interface and provide a wide variety of functions and
+  services.
+</para>
+
+<qandaset>
+
+<qandadiv id="plugin-general"><title>General plugin questions</title>
+
+<qandaentry>
+  <question id="plugins-latest-official">
+    <para>
+      Where can I get information on the latest available
+      <quote>official</quote> plugins?
+    </para>
+  </question>
+  <answer>
+    <para>
+      To get a listing of the latest plugins available for downloading from
+      jEdit Plugin Central, use the <guimenuitem>Plugin Manager</guimenuitem>guimenuitem>
+      feature on jEdit's <guimenu>Plugin</guimenu> menu. You can also get more
+      detailed descriptions of the plugins from the <ulink
+      ulink="http://plugins.jedit.org">Plugin Central</ulink> web site.
+    </para>
+  </answer>
+</qandaentry>
+
+<qandaentry>
+  <question id="plugins-latest-beta">
+    <para>
+      Where can I get information on new plugins under development?
+    </para>
+  </question>
+  <answer>
+    <para>
+      Many plugin developers make beta versions of their plugins available for
+      downloading on the <ulink url="http://community.jedit.org">jEdit
+      Community</ulink> web site.  Check the <quote>Plugin beta
+      versions</quote> section of the web site's <quote>Downloads</quote>
+      area.
+    </para>
+  </answer>
+</qandaentry>
+
+<qandaentry>
+  <question id="plugins-developing">
+    <para>
+      How do I write a plugin?
+    </para>
+  </question>
+  <answer>
+    <para>
+      Writing a plugin requires a working knowledge of Java and some
+      familiarity with jEdit's Plugin API.  There is a tutorial on
+      plugin development in the jEdit User's Guide.  The source
+      code distribution for jEdit also includes the source for
+      an example plugin, <application>Quick Notepad</application>, which
+      is discussed in the tutorial.
+    </para>
+    <para>
+      To learn more about plugin development, take a look at the source
+      code for other plugins, particularly those whose features or user
+      interface you might use as a model.  The <ulink
+      url="mailto:devel@jedit.org">jedit-devel mailing list</ulink> and
+      the message boards at <ulink url="http://community.jedit.org">jEdit
+      Community</ulink> are also available for specific questions.
+    </para>
+  </answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="plugin-irc">
+		<para>
+			Is there an IRC (Internet Relay Chat) plugin for jEdit?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Yes. Open the Plugin Manager, then select <guimenuitem>Install
+			plugins</guimenuitem>. You will find the
+			IRC plugin which you can select for installation.
+		</para>
+	</answer>
+</qandaentry>
+
+</qandadiv>
+
+</qandaset>
+
+</sect1>
+

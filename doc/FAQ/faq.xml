@@ -30,6 +30,7 @@
 <!ENTITY faq-items-part1 SYSTEM "faq-items1.xml">
 <!ENTITY faq-items-part2 SYSTEM "faq-items2.xml">
 <!ENTITY faq-items-part3 SYSTEM "faq-items3.xml">
+<!ENTITY faq-items-part4 SYSTEM "faq-items4.xml">
 <!ENTITY faq-appendix SYSTEM "faq-appendix.xml">
 
 ]>
@@ -105,6 +106,7 @@
 &faq-items-part1;
 &faq-items-part2;
 &faq-items-part3;
+&faq-items-part4;
 &faq-appendix;
 
 </article>

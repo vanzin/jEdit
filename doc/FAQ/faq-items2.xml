@@ -95,6 +95,27 @@ No such file or directory
       </para></answer>
     </qandaentry>
 
+<qandaentry>
+	<question id="install-noclassdef">
+		<para>
+			After downloading <filename>jedit322install.jar</filename>, I tried to run
+			<userinput>java jedit322install.jar</userinput>, but got the error message,
+			<screen>Exception in main(), NoClassDefFoundError:
+			jedit322install/jar.</screen> What am I doing wrong?
+		</para>
+	</question>
+	<answer>
+		<para>
+			You need to specify the <userinput>-jar</userinput> option for the Java
+			application loader so that the loader will search the installation archive
+			for the starting class file. Without the option, it treats the archive as a
+			single class file (which it is not!), thus producing the error. The correct
+			command line would be <userinput>java -jar jedit322install.jar</userinput>.
+		</para>
+	</answer>
+</qandaentry>
+
+
 
   </qandadiv>
 <!--
@@ -190,6 +211,26 @@ No such file or directory
             </para>
         </answer>
     </qandaentry>
+
+<qandaentry>
+	<question id="install-error-regkey">
+		<para>
+			When I try to run the jEdit installation package in Windows, I get an error
+			message, \"Error opening registration key \"software\javasoft\java runtime
+			environment\". How can I fix this?
+		</para>
+	</question>
+	<answer>
+		<para>
+			The problem is not with jEdit but may be caused by your installation of the Java
+			runtime environment. Under Windows, Sun's Java application loader relies on
+			entries in the Windows registry to find the files that create the runtime
+			environment and a Java virtual machine. The loader (java.exe or javaw.exe) is
+			unable to find the necessary registration entry and therefore sends the error
+			message. The best approach to fixing this is to uninstall and reinstall the JDK.
+		</para>
+	</answer>
+</qandaentry>
 
   </qandadiv>
 
