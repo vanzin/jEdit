@@ -31,6 +31,7 @@ import javax.swing.table.*;
 //}}}
 
 /**
+ * A list where items can be selected and checked off independently.
  * @since jEdit 3.2pre9
  */
 public class JCheckBoxList extends JTable
@@ -170,6 +171,9 @@ public class JCheckBoxList extends JTable
 	//}}}
 
 	//{{{ Entry class
+	/**
+	 * A check box list entry.
+	 */
 	public static class Entry
 	{
 		boolean checked;

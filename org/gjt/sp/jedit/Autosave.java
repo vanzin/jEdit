@@ -63,14 +63,14 @@ class Autosave implements ActionListener
 	public void actionPerformed(ActionEvent evt)
 	{
 		// might come in handy useful some time
-		Runtime runtime = Runtime.getRuntime();
+		/* Runtime runtime = Runtime.getRuntime();
 		int freeMemory = (int)(runtime.freeMemory() / 1024);
 		int totalMemory = (int)(runtime.totalMemory() / 1024);
 		int usedMemory = (totalMemory - freeMemory);
 
 		Log.log(Log.DEBUG,this,"Java heap: " + usedMemory + "Kb / "
 			+ totalMemory + "Kb, " + (usedMemory * 100 / totalMemory)
-			+ "%");
+			+ "%"); */
 
 		// save list of open files
 		if(jEdit.getFirstView() != null)

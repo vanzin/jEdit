@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-public class HelpIndex
+class HelpIndex
 {
 	//{{{ HelpIndex constructor
 	public HelpIndex()

@@ -742,6 +742,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	//}}}
 
 	//{{{ LineContext class
+	/**
+	 * Stores persistent per-line syntax parser state.
+	 */
 	public static class LineContext
 	{
 		private static Hashtable intern = new Hashtable();

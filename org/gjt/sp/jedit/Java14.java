@@ -41,7 +41,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class Java14
+class Java14
 {
 	//{{{ init() method
 	public static void init()

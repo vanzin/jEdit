@@ -20,8 +20,10 @@
 package org.gjt.sp.jedit;
 
 /**
- * A component on the EditBus. Messages sent on the EditBus are forwarded
- * to all components in turn.
+ * A component on the EditBus.
+ *
+ * Messages sent on the EditBus are forwarded to all components in turn.
+ *
  * @author Slava Pestov
  * @version $Id$
  *

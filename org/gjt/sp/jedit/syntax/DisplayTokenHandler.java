@@ -28,6 +28,9 @@ import java.awt.font.*;
 import org.gjt.sp.jedit.syntax.*;
 //}}}
 
+/**
+ * Creates <code>Chunk</code> objects that can be painted on screen.
+ */
 public class DisplayTokenHandler extends DefaultTokenHandler
 {
 	//{{{ init() method

@@ -30,7 +30,7 @@ import java.awt.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
-public class PluginManagerProgress extends JDialog
+class PluginManagerProgress extends JDialog
 {
 	//{{{ PluginManagerProgress constructor
 	public PluginManagerProgress(JDialog dialog, String type, Roster roster)

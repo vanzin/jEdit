@@ -32,6 +32,9 @@ import gnu.regexp.CharIndexed;
 import org.gjt.sp.jedit.BeanShell;
 //}}}
 
+/**
+ * Implements literal search using the Boyer-Moore algorithm.
+ */
 public class BoyerMooreSearchMatcher implements SearchMatcher
 {
 	//{{{ BoyerMooreSearchMatcher constructor

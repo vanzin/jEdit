@@ -203,8 +203,9 @@ public abstract class VFS
 
 	//{{{ constructPath() method
 	/**
-	 * This method should not be called directly! To ensure correct
-	 * behavior, you <b>must</b> call
+	 * This method should not be called directly.<p>
+	 *
+	 * To ensure correct behavior, you <b>must</b> call
 	 * <code>MiscUtilities.constructPath()</code> instead.<p>
 	 *
 	 * Constructs a path from the specified directory and

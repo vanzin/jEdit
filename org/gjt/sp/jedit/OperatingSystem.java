@@ -24,7 +24,7 @@ import java.io.File;
 import org.gjt.sp.util.Log;
 
 /**
- * Contains operating system detection routines.
+ * Operating system detection routines.
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 4.0pre4

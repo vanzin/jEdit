@@ -33,6 +33,9 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * XML handler for mode definition files.
+ */
 public class XModeHandler extends HandlerBase
 {
 	//{{{ XModeHandler constructor

@@ -540,7 +540,8 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ globToRE() method
 	/**
-	 * Converts a Unix-style glob to a regular expression.
+	 * Converts a Unix-style glob to a regular expression.<p>
+	 *
 	 * ? becomes ., * becomes .*, {aa,bb} becomes (aa|bb).
 	 * @param glob The glob pattern
 	 */
@@ -922,6 +923,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 	} //}}}
 
 	//{{{ MenuItemCompare class
+	/**
+	 * Compares menu item labels.
+	 */
 	public static class MenuItemCompare implements Compare
 	{
 		public int compare(Object obj1, Object obj2)

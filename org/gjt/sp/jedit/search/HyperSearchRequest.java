@@ -35,7 +35,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.*;
 //}}}
 
-public class HyperSearchRequest extends WorkRequest
+class HyperSearchRequest extends WorkRequest
 {
 	//{{{ HyperSearchRequest constructor
 	public HyperSearchRequest(View view, SearchMatcher matcher,

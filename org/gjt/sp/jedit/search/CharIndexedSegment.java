@@ -26,8 +26,11 @@ package org.gjt.sp.jedit.search;
 import java.io.Serializable;
 import javax.swing.text.Segment;
 import gnu.regexp.*;
- //}}}
+//}}}
 
+/**
+ * Lets <code>gnu.regexp</code> search within <code>Segment</code> objects.
+ */
 public class CharIndexedSegment implements CharIndexed, Serializable
 {
 	//{{{ CharIndexedSegment constructor

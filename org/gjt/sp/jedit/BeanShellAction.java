@@ -23,6 +23,11 @@ import bsh.BshMethod;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.util.Log;
 
+/**
+ * An action that evaluates BeanShell code when invoked.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class BeanShellAction extends EditAction
 {
 	public BeanShellAction(String name, String code, String isSelected,
