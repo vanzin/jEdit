@@ -16,7 +16,7 @@ invalidation being performed
 - toggle caret scroll to when not in vis region?
 - print selection
 - show context w/ S+F10
-- drop in same place: cancel
+- drop in same place: 
 - adding to icons prop
 - control auto reload
 - C+d with folds
