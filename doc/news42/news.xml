@@ -34,7 +34,7 @@
 	</para>
 
 	<para>
-	 The <guimenu>View</guimenu>&gt;<guisubmenu>Scrollign</guisubmenu>&gt;<guimenuitem>Synchronized Scrolling</guimenuitem> command has been removed.
+	 The <guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Synchronized Scrolling</guimenuitem> command has been removed.
 	</para>
 
 	</sect1>
@@ -91,7 +91,7 @@
 
 	<para>
 	 <guimenu>Edit</guimenu>&gt;<guimenuitem>More Clipboard</guimenuitem>&gt;<guimenuitem>Vertical Paste</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-	 <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) behaves in a more intelligent manner. Entering characters while a rectangular selection is active inserts into each row of the selection, thus a zero-width rectangular selection caw now act like a <quote>tall caret</quote>.
+	 <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>) behaves in a more intelligent manner. Entering characters while a rectangular selection is active inserts into each row of the selection, thus a zero-width rectangular selection can now act like a <quote>tall caret</quote>.
 	</para>
 	
 	<para>

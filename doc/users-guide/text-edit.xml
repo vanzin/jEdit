@@ -84,8 +84,8 @@
  </sect1>
  <sect1 id="selection"><title>Selecting Text</title>
   <para>
-   A <firstterm>selection</firstterm> is a a block of text marked for further
-   manipulation. Range selections are equivalent to selections in most other text editors; they cover text between two points in a buffer. jEdit also allows rectangular selections that cover a rectangular area. Furthermore, several chunks of text can be
+   A <firstterm>selection</firstterm> is a block of text marked for further
+   manipulation. Range selections are equivalent to selections in most other text editors; they cover text between two points in a buffer. jEdit also allows rectangular selections that cover a rectangular area (some text editors refer to these as <quote>column selections</quote>). Furthermore, several chunks of text can be
    selected and operated on simultaneously.
   </para>
   <sect2><title>Range Selection</title>
@@ -700,7 +700,7 @@
     contents of the specified register.
    </para>
    <para>
-    The following two commands display dialog boxes instead of prompting for a
+    The following two three commands display dialog boxes instead of prompting for a
     register name.
    </para>
    <para>

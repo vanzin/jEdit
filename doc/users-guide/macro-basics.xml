@@ -229,7 +229,7 @@
    <function>Macros.message()</function> has two parameters because that is
    the way the method is defined in the <ulink url="../api/org/gjt/sp/jedit/Macros.html">Macros</ulink>
    class. You must specify both parameters when you call the function. The
-   first parameter, <parameter>view</parameter>, is a a variable naming
+   first parameter, <parameter>view</parameter>, is a variable naming
    the current, active <ulink url="../api/org/gjt/sp/jedit/View.html">View</ulink> object. Information
    about pre-defined variables can be found in <xref linkend="predefined-variables" />.
   </para>

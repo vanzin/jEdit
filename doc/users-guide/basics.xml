@@ -14,7 +14,7 @@
    Unlike some editors where each buffer gets its own view, jEdit completely separates the two concepts. A buffer might be visible in several views, or none at all.
   </para>
   <para>
-   The popup menu at the top of the view lists all open buffers; selecting one will make it visible in the view's text area. Different emblems are displayed next to buffer names in the list,
+   The drop-down list at the top of the view shows all open buffers; selecting one will make it visible in the view's text area. Different emblems are displayed next to buffer names in the list,
    depending the buffer's state;
    a red disk is shown for buffers with unsaved changes,
    a lock is shown for read-only buffers,
@@ -31,15 +31,15 @@
   </para>
   <para>
    The strip on the left of the text area is called a <firstterm>gutter</firstterm>.
-   The gutter displays marker and register locations; it will also display
+   The gutter displays marker and register locations, as well as folding arrows; it will also display
    line numbers if the 
-   <guimenu>View</guimenu>&gt;<guimenuitem>Line Numbers</guimenuitem> (shortcut: <keycap>C+e C+t</keycap>) command is invoked.
+   <guimenu>View</guimenu>&gt;<guimenuitem>Line Numbers</guimenuitem> (shortcut: <keycap>C+e C+t</keycap>) command is invoked. Note this command only takes effect until the view is closed. To have line numbers visible all the time, enable the appropriate setting in the <guilabel>Gutter</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
   </para>
  </sect1>
 
  <sect1 id="buffers"><title>Switching Buffers</title>
   <para>
-   In addition to using the popup menu at the top of the view, as documented in the previous section, the current buffer can also be switched using menu item commands and their keyboard shortcuts.
+   In addition to using the drop-down list at the top of the view, as documented in the previous section, the current buffer can also be switched using menu item commands and their keyboard shortcuts.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous Buffer</guimenuitem>

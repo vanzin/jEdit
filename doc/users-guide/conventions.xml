@@ -102,7 +102,7 @@
   Middle mouse button
   </entry>
   <entry>
-  Used by the quick copy feature (see <xref linkend="quick-copy"/>). On a Macintosh with a one or two button mouse, <keycap>Option</keycap>-click. On other platforms with a one or two button mouse, <keycap>Alt</keycap>-click.
+  Used by the quick copy feature (see <xref linkend="quick-copy"/>). True 3-button mice are rare these days. If you have a wheel mouse, press down on the wheel without rolling it. On a Macintosh with a one-button mouse, <keycap>Option</keycap>-click. On other platforms without a three-button mouse, <keycap>Alt</keycap>-click.
   </entry>
   </row>
   </tbody>
