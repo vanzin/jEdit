@@ -49,8 +49,7 @@ public class Install
 		else
 		{
 			System.err.println("Usage:");
-			System.err.println("jre -cp <installer JAR> installer.Install [text] (Java 1.1)");
-			System.err.println("java -jar <installer JAR> [text] (Java 2)");
+			System.err.println("java -jar <installer JAR> [text]");
 			System.err.println("text parameter starts installer in text-only mode");
 		}
 	}
