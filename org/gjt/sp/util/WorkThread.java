@@ -187,7 +187,7 @@ public class WorkThread extends Thread
 
 	private void doRequest(WorkThreadPool.Request request)
 	{
-//		Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: " + request);
+		Log.log(Log.DEBUG,WorkThread.class,"Running in work thread: " + request);
 
 		try
 		{

@@ -13,4 +13,7 @@
 	<DOCKABLE NAME="hypersearch-results">
 		new HyperSearchResults(view);
 	</DOCKABLE>
+	<DOCKABLE NAME="io-progress-monitor">
+		new IOProgressMonitor();
+	</DOCKABLE>
 </DOCKABLES>

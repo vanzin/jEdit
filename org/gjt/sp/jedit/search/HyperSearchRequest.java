@@ -57,7 +57,6 @@ public class HyperSearchRequest extends WorkRequest
 	{
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 		setProgressMaximum(fileset.getFileCount(view));
-		setStatus(jEdit.getProperty("hypersearch.status"));
 
 		int resultCount = 0;
 		int bufferCount = 0;
@@ -68,9 +67,9 @@ public class HyperSearchRequest extends WorkRequest
 		{
 			if(selection != null)
 			{
-				Buffer buffer = jEdit.openTemporary(null,null,files[0],false);
-				if(buffer == null)
-					return;
+				setStatus(jEdit.getProperty("hypersearch.status-selection"));
+
+				Buffer buffer = view.getBuffer();
 
 				bufferCount = 1;
 				resultCount = searchInSelection(buffer);
@@ -81,9 +80,12 @@ public class HyperSearchRequest extends WorkRequest
 
 loop:				for(int i = 0; i < files.length; i++)
 				{
+					String file = files[i];
+					setStatus(jEdit.getProperty("hypersearch.status",
+						new String[] { file }));
 					setProgressValue(++current);
 
-					Buffer buffer = jEdit.openTemporary(null,null,files[i],false);
+					Buffer buffer = jEdit.openTemporary(null,null,file,false);
 					if(buffer == null)
 						continue loop;
 
