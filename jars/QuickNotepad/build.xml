@@ -34,6 +34,7 @@
 				<include name="**/*.html"/>
 				<include name="**/*.gif"/>
 				<include name="actions.xml"/>
+				<include name="dockables.xml"/>
 			</fileset>
 		</jar>
 	</target>

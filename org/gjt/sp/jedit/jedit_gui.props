@@ -1751,7 +1751,7 @@ vfs.status.renaming=Renaming {0} to {1}
 
 plugin-manager.title=Plugin Manager
 
-plugin-manager.url=http://plugins.jedit.org/export/new_plugin_manager.php
+plugin-manager.url=http://plugins.jedit.org/export/gzip_plugin_manager.php
 
 plugin-manager.caption=Installed plugins:
 
