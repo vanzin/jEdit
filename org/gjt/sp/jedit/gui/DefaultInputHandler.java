@@ -333,15 +333,26 @@ public class DefaultInputHandler extends InputHandler
 	//{{{ handleKey() method
 	private void handleKey(KeyEventTranslator.Key keyStroke)
 	{
-		boolean input = (keyStroke.modifiers == null
-			&& keyStroke.input != '\0');
+		char input = '\0';
+		if(keyStroke.modifiers == null)
+		{
+			switch(keyStroke.key)
+			{
+			case '\n':
+			case '\t':
+			case ' ':
+				input = (char)keyStroke.key;
+			default:
+				input = keyStroke.input;
+			}
+		}
 
 		if(readNextChar != null)
 		{
-			if(input)
+			if(input != '\0')
 			{
 				setCurrentBindings(bindings);
-				invokeReadNextChar(keyStroke.input);
+				invokeReadNextChar(input);
 				repeatCount = 1;
 				return;
 			}
@@ -368,8 +379,8 @@ public class DefaultInputHandler extends InputHandler
 				setCurrentBindings(bindings);
 			}
 
-			if(input)
-				userInput(keyStroke.input);
+			if(input != '\0')
+				userInput(input);
 		}
 		else if(o instanceof Hashtable)
 		{

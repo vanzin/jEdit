@@ -83,23 +83,20 @@ public class KeyEventTranslator
 			}
 			else
 			{
-				String mods = getModifierString(evt);
-				switch(keyCode)
-				{
-				case KeyEvent.VK_ENTER:
-				case KeyEvent.VK_TAB:
-				case KeyEvent.VK_SPACE:
-					if(mods == null)
-						return null;
-				}
-
-				returnValue = new Key(mods,keyCode,'\0');
+				returnValue = new Key(getModifierString(evt),keyCode,'\0');
 			}
 			break;
 		case KeyEvent.KEY_TYPED:
 			char ch = evt.getKeyChar();
-			if(ch == '\b')
+
+			switch(ch)
+			{
+			case '\n':
+			case '\t':
+			case '\b':
+			case ' ':
 				return null;
+			}
 
 			boolean mod = (System.currentTimeMillis() -
 				KeyEventWorkaround.lastKeyTime < 750
@@ -109,14 +106,6 @@ public class KeyEventTranslator
 
 			if(mod)
 			{
-				switch(ch)
-				{
-				case KeyEvent.VK_ENTER:
-				case KeyEvent.VK_TAB:
-				case KeyEvent.VK_SPACE:
-					return null;
-				}
-
 				if(Debug.ALTERNATIVE_DISPATCHER)
 				{
 					returnValue = new Key(
