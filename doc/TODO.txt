@@ -7,7 +7,6 @@ and quirks that I need to fix eventually.
 - store anchors in sorted order for factor of two improvement
 - expand: scroll to end of fold if possible
 - docking panels: rubber band resize
-- DELETE in action bar
 - action bar: S+TAB/TAB selects completions
 - complete word: ditto
 - goToBuffer(): need to focus edit pane in question
@@ -58,7 +57,6 @@ and quirks that I need to fix eventually.
 - tab in action bar
 - beanshell: invokeAction() function
 - perl: q{}, etc.
-- position hold still doesn't work
 - changes above a narrow cause display anamolies
 - don't show 'new directory' in favorites:
 - plugin error dialog -- if > 1 error per plugin

@@ -346,6 +346,7 @@ public class ActionBar extends JPanel
 					|| evt.isAltDown()
 					|| evt.isMetaDown()
 					|| keyCode == KeyEvent.VK_BACK_SPACE
+					|| keyCode == KeyEvent.VK_DELETE
 					|| keyCode == KeyEvent.VK_ENTER
 					|| keyCode == KeyEvent.VK_TAB
 					|| keyCode == KeyEvent.VK_ESCAPE)
