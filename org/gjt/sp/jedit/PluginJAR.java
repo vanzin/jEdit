@@ -431,40 +431,40 @@ public class PluginJAR
 			}
 
 			activated = true;
+		}
 
-			if(!(plugin instanceof EditPlugin.Deferred))
-				return;
+		if(!(plugin instanceof EditPlugin.Deferred))
+			return;
 
-			String className = plugin.getClassName();
+		String className = plugin.getClassName();
 
-			try
+		try
+		{
+			Class clazz = classLoader.loadClass(className,false);
+			int modifiers = clazz.getModifiers();
+			if(Modifier.isInterface(modifiers)
+				|| Modifier.isAbstract(modifiers)
+				|| !EditPlugin.class.isAssignableFrom(clazz))
 			{
-				Class clazz = classLoader.loadClass(className,false);
-				int modifiers = clazz.getModifiers();
-				if(Modifier.isInterface(modifiers)
-					|| Modifier.isAbstract(modifiers)
-					|| !EditPlugin.class.isAssignableFrom(clazz))
-				{
-					Log.log(Log.ERROR,this,"Plugin has properties but does not extend EditPlugin: "
-						+ className);
-					breakPlugin();
-					return;
-				}
-
-				plugin = (EditPlugin)clazz.newInstance();
-				plugin.jar = (EditPlugin.JAR)this;
-			}
-			catch(Throwable t)
-			{
+				Log.log(Log.ERROR,this,"Plugin has properties but does not extend EditPlugin: "
+					+ className);
 				breakPlugin();
-
-				Log.log(Log.ERROR,this,"Error while starting plugin " + className);
-				Log.log(Log.ERROR,this,t);
-				String[] args = { t.toString() };
-				jEdit.pluginError(path,"plugin-error.start-error",args);
-
 				return;
 			}
+
+			plugin = (EditPlugin)clazz.newInstance();
+			plugin.jar = (EditPlugin.JAR)this;
+		}
+		catch(Throwable t)
+		{
+			breakPlugin();
+
+			Log.log(Log.ERROR,this,"Error while starting plugin " + className);
+			Log.log(Log.ERROR,this,t);
+			String[] args = { t.toString() };
+			jEdit.pluginError(path,"plugin-error.start-error",args);
+
+			return;
 		}
 
 		if(jEdit.isMainThread()
