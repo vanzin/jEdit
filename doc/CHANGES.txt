@@ -135,6 +135,12 @@ Alessandro Falappa and Ben Williams for contributing to this release.
 - Fixed a problem on some Windows versions where going to the drives
   list would display an error message from the OS.
 
+- A display manager that is not associated with a visible buffer no
+  longer tries to maintain state; instead everything is recalculated
+  when it becomes visible. This fixes a whole class of bugs that would
+  manifest usually as incorrect scrolling behavior after switching
+  buffers.
+
 }}}
 {{{ API Changes
 

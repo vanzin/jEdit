@@ -554,6 +554,7 @@ public class DisplayManager
 		}
 		else
 		{
+			updateWrapSettings();
 			_notifyScreenLineChanges();
 			textArea.updateScrollBars();
 			textArea.recalculateLastPhysicalLine();
@@ -1453,15 +1454,9 @@ loop:		for(;;)
 
 			int endLine = startLine + numLines;
 
-			if(delayedUpdateEnd >= startLine)
-				delayedUpdateEnd += numLines;
-			delayedUpdate(startLine,endLine);
-
 			if(numLines != 0)
 			{
 				delayedMultilineUpdate = true;
-				contentInserted(firstLine,startLine,numLines);
-				contentInserted(scrollLineCount,startLine,numLines);
 
 				/* this is a sloppy hack to fix bug
 				   "[ 677902 ] hitting return after collapsed
@@ -1500,6 +1495,13 @@ loop:		for(;;)
 
 			if(textArea.getDisplayManager() == DisplayManager.this)
 			{
+				contentInserted(firstLine,startLine,numLines);
+				contentInserted(scrollLineCount,startLine,numLines);
+
+				if(delayedUpdateEnd >= startLine)
+					delayedUpdateEnd += numLines;
+				delayedUpdate(startLine,endLine);
+				
 				//{{{ resize selections if necessary
 				for(int i = 0; i < textArea.selection.size(); i++)
 				{
@@ -1531,6 +1533,11 @@ loop:		for(;;)
 						caret,scrollMode);
 				}
 			}
+			else
+			{
+				firstLine.callReset = true;
+				scrollLineCount.callReset = true;
+			}
 		} //}}}
 
 		//{{{ preContentRemoved() method
@@ -1543,8 +1550,6 @@ loop:		for(;;)
 			if(numLines != 0)
 			{
 				delayedMultilineUpdate = true;
-				preContentRemoved(firstLine,startLine,numLines);
-				preContentRemoved(scrollLineCount,startLine,numLines);
 
 				int endLine = startLine + numLines;
 
@@ -1616,9 +1621,20 @@ loop:		for(;;)
 				fvmdump();
 			}
 
-			if(delayedUpdateEnd >= startLine)
-				delayedUpdateEnd -= numLines;
-			delayedUpdate(startLine,startLine);
+			if(textArea.getDisplayManager() == DisplayManager.this)
+			{
+				preContentRemoved(firstLine,startLine,numLines);
+				preContentRemoved(scrollLineCount,startLine,numLines);
+				
+				if(delayedUpdateEnd >= startLine)
+					delayedUpdateEnd -= numLines;
+				delayedUpdate(startLine,startLine);
+			}
+			else
+			{
+				firstLine.callReset = true;
+				scrollLineCount.callReset = true;
+			}
 		} //}}}
 
 		//{{{ contentRemoved() method

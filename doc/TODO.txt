@@ -180,8 +180,6 @@ and quirks that I need to fix eventually.
 - bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end
 - do buffer load AWT half immediately after work thread half
-- prioritize work requests so that active buffers get loaded first?
-  too much of a hack?
 - replace all in a directory could be faster
 - buffer.setMode() slow
 - eliminate redundant scans and events when loading buffer
@@ -197,9 +195,9 @@ and quirks that I need to fix eventually.
   - scroll/physUp/Down() simpler
 - inserting lines repaints whole text area
 - see if getLineOfOffset() can be optimized
-- nextLineRequested logic is overzealous
 - optimize 1 long line case
 - two repaints in line insert
+- redundant calls to recalculateLastPhysicalLines()/updateScrollBars()
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
