@@ -1083,8 +1083,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			//{{{ Paint token backgrounds
 			ChunkCache.LineInfo lineInfo = textArea.chunkCache
 				.getLineInfo(screenLine);
-			if(!lineInfo.chunksValid)
-				Log.log(Log.ERROR,this,"Chunks not valid for " + screenLine);
 
 			if(lineInfo.chunks != null)
 			{
