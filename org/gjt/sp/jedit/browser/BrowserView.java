@@ -512,6 +512,13 @@ public class BrowserView extends JPanel
 		//{{{ processKeyEvent() method
 		protected void processKeyEvent(KeyEvent evt)
 		{
+			// could make things somewhat easier...
+			// ... but KeyEventWorkaround 'output contract' will
+			// change in 4.1, so not a good idea
+			//evt = KeyEventWorkaround.processKeyEvent(evt);
+			//if(evt == null)
+			//	return;
+
 			if(evt.getID() == KeyEvent.KEY_PRESSED)
 			{
 				switch(evt.getKeyCode())
@@ -530,6 +537,12 @@ public class BrowserView extends JPanel
 			}
 			else if(evt.getID() == KeyEvent.KEY_TYPED)
 			{
+				if(evt.isControlDown() || evt.isAltDown()
+					|| evt.isMetaDown())
+				{
+					return;
+				}
+
 				switch(evt.getKeyChar())
 				{
 				case '~':

@@ -612,7 +612,10 @@ public class BufferIORequest extends WorkRequest
 				out = vfs._createOutputStream(session,savePath,view);
 				if(out != null)
 				{
-					if(buffer.getName().endsWith(".gz"))
+					// Can't use buffer.getName() here because
+					// it is not changed until the save is
+					// complete
+					if(savePath.endsWith(".gz"))
 						buffer.setBooleanProperty(Buffer.GZIPPED,true);
 
 					if(buffer.getBooleanProperty(Buffer.GZIPPED))

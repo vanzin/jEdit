@@ -3119,15 +3119,23 @@ loop:		for(int i = 0; i < list.length; i++)
 			return;
 		}
 		//{{{ Sort buffer list
+
+		/**
+		 * Note that we use either buffer.getPath() or buffer.toString().
+		 * If the former, then the list is sorted first by directory,
+		 * then by file name; if the latter, it's the opposite.
+		 *
+		 * (Buffer.toString() returns "NAME (DIR)")
+		 */
 		else if(sortBuffers)
 		{
-			String name1 = (sortByName ? buffer.getName()
+			String name1 = (sortByName ? buffer.toString()
 				: buffer.getPath());
 
 			Buffer _buffer = buffersFirst;
 			while(_buffer != null)
 			{
-				String name2 = (sortByName ? _buffer.getName()
+				String name2 = (sortByName ? _buffer.toString()
 					: _buffer.getPath());
 				if(MiscUtilities.compareStrings(name1,name2,true) <= 0)
 				{
