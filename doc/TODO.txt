@@ -1,7 +1,6 @@
 TO DO
 
 - rename MacOS.jar
-- soft wrap: adding lots of spaces: fucks up wrapping
 - regexp search:
   $ doesn't find last -- gnu.regexp bug
   ^.* with foo only replaces every second line

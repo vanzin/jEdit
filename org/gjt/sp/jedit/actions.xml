@@ -273,6 +273,7 @@
 <ACTION NAME="expand-all-folds">
 	<CODE>
 		textArea.getFoldVisibilityManager().expandAllFolds();
+		textArea.scrollToCaret();
 	</CODE>
 </ACTION>
 
@@ -298,7 +299,8 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			jEdit.getProperty("view.status.expand-folds"),
-			"textArea.getFoldVisibilityManager().expandFolds(__char__);");
+			"textArea.getFoldVisibilityManager().expandFolds(__char__);\n"
+			+ "textArea.scrollToCaret();");
 	</CODE>
 </ACTION>
 

@@ -11,6 +11,8 @@ JEDIT 4.0 VERSION HISTORY
 - It should now be possible to bind shortcuts to the numeric keypad,
   although this might not work perfectly on all Java implementations
 - MacOS plugin version 1.1 (Kris Kopicki)
+- 'Expand Folds With Level' and 'Expand All Folds' commands now scroll
+  the text area to the caret position if necessary
 
 + Bug Fixes
 
@@ -46,6 +48,8 @@ JEDIT 4.0 VERSION HISTORY
   line whose length was exactly that of the wrap margin
 - Searching for .*, ^ by itself and $ by itself should now work
 - Fixed another problem with soft wrapping syntax highlighted buffers
+- Soft wrap would break if a line ended with enough whitespace to be
+  longer than the wrap margin
 
 + API Additions
 

@@ -103,27 +103,26 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
-					}
 
-					if(end != null
-						&& addedNonWhiteSpace
-						&& wrapMargin != 0
-						&& x > wrapMargin)
-					{
-						if(first != null)
-							out.add(first);
-						first = new Chunk(firstNonWhiteSpace,end.offset + 1);
-						first.next = end.next;
-						end.next = null;
+						if(end != null
+							&& addedNonWhiteSpace
+							&& wrapMargin != 0
+							&& x > wrapMargin)
+						{
+							if(first != null)
+								out.add(first);
+							first = new Chunk(firstNonWhiteSpace,end.offset + 1);
+							first.next = end.next;
+							end.next = null;
 
-						x = x + firstNonWhiteSpace - endX;
-					}
+							x = x + firstNonWhiteSpace - endX;
+						}
 
-					if(first == null)
-						first = current;
-
-					if(i != flushIndex)
+						if(first == null)
+							first = current;
+	
 						seenNonWhiteSpace = true;
+					}
 					//}}}
 
 					//{{{ Create ' ' chunk
@@ -187,24 +186,24 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
+
+						if(i == seg.count - 1 && wrapMargin != 0
+							&& x > wrapMargin
+							&& addedNonWhiteSpace
+							&& end != null)
+						{
+							if(first != null)
+								out.add(first);
+							first = new Chunk(firstNonWhiteSpace,end.offset + 1);
+							first.next = end.next;
+							end.next = null;
+
+							x = x + firstNonWhiteSpace - endX;
+						}
+
+						if(first == null)
+							first = current;
 					}
-
-					if(i == seg.count - 1 && wrapMargin != 0
-						&& x > wrapMargin
-						&& addedNonWhiteSpace
-						&& end != null)
-					{
-						if(first != null)
-							out.add(first);
-						first = new Chunk(firstNonWhiteSpace,flushIndex);
-						first.next = end.next;
-						end.next = null;
-
-						x = x + firstNonWhiteSpace - endX;
-					}
-
-					if(first == null)
-						first = current;
 
 					seenNonWhiteSpace = true;
 				}
