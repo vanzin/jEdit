@@ -381,4 +381,5 @@ bufferSwitcher.maxRowCount=10
 showTooltips=true
 view.monospacedHack=false
 ioThreadCount=4
+server.brokenToFront=false
 #}}}

@@ -39,7 +39,7 @@
 		</SPAN>
 
 		<!-- preprocessor statements -->
-		<EOL_SPAN TYPE="KEYWORD2">#</EOL_SPAN>
+		<EOL_SPAN TYPE="KEYWORD2" DELEGATE="CPP">#</EOL_SPAN>
 
 		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
 		<SEQ TYPE="OPERATOR">=</SEQ>
@@ -110,6 +110,41 @@
 			<LITERAL2>true</LITERAL2>
 			<LITERAL2>false</LITERAL2>
 			<LITERAL2>NULL</LITERAL2>
+		</KEYWORDS>
+	</RULES>
+
+	<RULES SET="CPP" DEFAULT="KEYWORD2" IGNORE_CASE="FALSE"
+		HIGHLIGHT_DIGITS="TRUE"
+		DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
+		<!-- C style comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
+		<!-- Directives -->
+		<KEYWORDS>
+			<MARKUP>assert</MARKUP>
+			<MARKUP>define</MARKUP>
+			<MARKUP>assert</MARKUP>
+			<MARKUP>define</MARKUP>
+			<MARKUP>elif</MARKUP>
+			<MARKUP>else</MARKUP>
+			<MARKUP>endif</MARKUP>
+			<MARKUP>error</MARKUP>
+			<MARKUP>ident</MARKUP>
+			<MARKUP>if</MARKUP>
+			<MARKUP>ifdef</MARKUP>
+			<MARKUP>ifndef</MARKUP>
+			<MARKUP>import</MARKUP>
+			<MARKUP>include</MARKUP>
+			<MARKUP>include_next</MARKUP>
+			<MARKUP>line</MARKUP>
+			<MARKUP>pragma</MARKUP>
+			<MARKUP>sccs</MARKUP>
+			<MARKUP>unassert</MARKUP>
+			<MARKUP>undef</MARKUP>
+			<MARKUP>warning</MARKUP>
 		</KEYWORDS>
 	</RULES>
 </MODE>

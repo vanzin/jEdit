@@ -6429,7 +6429,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				setFirstLine(getFirstLine() + 1);
 			}
 
-			if(quickCopyDrag)
+			if(control && quickCopyDrag)
+			{
+				view.getStatus().setMessage(jEdit.getProperty(
+					"view.status.rect-quick-copy"));
+				clearStatus = true;
+			}
+			else if(quickCopyDrag)
 			{
 				view.getStatus().setMessage(jEdit.getProperty(
 					"view.status.quick-copy"));
@@ -6628,11 +6634,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// middle mouse button drag inserts selection
 			// at caret position
 			Selection sel = getSelectionAtOffset(dragStart);
-			if(sel != null)
-				Registers.setRegister('%',getSelectedText(sel));
-
 			if(dragged && sel != null)
 			{
+				Registers.setRegister('%',getSelectedText(sel));
 				if(quickCopyDrag)
 				{
 					removeFromSelection(sel);

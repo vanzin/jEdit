@@ -42,17 +42,6 @@ action-set.jEdit=Built-in Commands
 action-set.macros=Macros
 action-set.plugin=Plugin: {0}
 
-view.docking.close-tooltip=Hides the current docked window
-view.docking.menu-tooltip=Shows a list of docked windows
-view.docking.menu-float=New Floating Instance
-view.docking.menu-config=Docking Options...
-
-view.docking.toggle.label={0} (Toggle)
-view.docking.float.label={0} (New Floating Instance)
-
-directory.not-local=Cannot list directories on remote filesystems
-directory.no-files=No Files
-
 macro-handler.beanshell.label=BeanShell script
 macro-handler.beanshell.glob=*.bsh
 #}}}
@@ -106,6 +95,7 @@ icons=AdjustWidth.png \
 	Floppy.png \
 	Help.png \
 	Home.png \
+	Load.png \
 	Minus.png \
 	MultipleResults.png \
 	NewDir.png \
@@ -126,6 +116,7 @@ icons=AdjustWidth.png \
 	Redo.png \
 	Reload.png \
 	Run.png \
+	RunAgain.png \
 	RunToBuffer.png \
 	Save.png \
 	SaveAll.png \
@@ -686,6 +677,17 @@ whitespace-home.label=Go to Start of White Space
 # Title
 view.title=jEdit - 
 
+view.docking.close-tooltip=Hides the current docked window
+view.docking.menu-tooltip=Shows a list of docked windows
+view.docking.menu-float=New Floating Instance
+view.docking.menu-config=Docking Options...
+
+view.docking.toggle.label={0} (Toggle)
+view.docking.float.label={0} (New Floating Instance)
+
+directory.not-local=Cannot list directories on remote filesystems
+directory.no-files=No Files
+
 #{{{ Gutter highlight
 view.gutter.marker.no-name=Marker
 view.gutter.marker=Marker: {0}
@@ -727,6 +729,7 @@ view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
 view.status.narrow=Invoke "Expand All Folds" to make all text visible again
 view.status.bracket=Matches "{0}"
 view.status.quick-copy=Quick copy mode - marked text will replace selection
+view.status.rect-quick-copy=Rectangular quick copy mode - marked text will replace selection
 view.status.rect-select=Rectangular selection mode
 view.status.print=Printing page {0}
 #}}}
@@ -1161,6 +1164,12 @@ empty-fileset.title=Empty File Set
 empty-fileset.message=The specified search file set contains no files.\n\
 	Please ensure that the file name filter and directory to search\n\
 	(if applicable) are set correctly.
+#}}}
+
+#{{{ Reverse regular expression search not supported dialog
+reverse-regexp.title=Not Supported
+reverse-regexp.message=Cannot search backwards for a regular expression.\n\
+	Either search forwards or disable regular expressions.
 #}}}
 
 #{{{ Can only search local directories dialog
@@ -1984,4 +1993,6 @@ plugin-manager.install-done.message=You must restart jEdit to use the installed 
 plugin-manager.remove-failed.title=Remove Failed
 plugin-manager.remove-failed.message=The plugin {0}\n\
 	could not be removed.
+#}}}
+
 #}}}

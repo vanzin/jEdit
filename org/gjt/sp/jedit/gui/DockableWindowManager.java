@@ -888,11 +888,11 @@ public class DockableWindowManager extends JPanel
 				}
 			}
 
-			if(entry.container instanceof FloatingWindowContainer)
+			/* if(entry.container instanceof FloatingWindowContainer)
 			{
 				SwingUtilities.updateComponentTreeUI(((JFrame)entry.container)
 					.getRootPane());
-			}
+			} */
 		}
 	} //}}}
 
