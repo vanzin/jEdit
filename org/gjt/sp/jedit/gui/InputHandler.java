@@ -193,7 +193,7 @@ public abstract class InputHandler extends KeyAdapter
 	public void readNextChar(String msg, String code)
 	{
 		view.getStatus().setMessage(msg);
-		readNextChar(code);
+		readNextChar = code;
 	} //}}}
 
 	//{{{ readNextChar() method

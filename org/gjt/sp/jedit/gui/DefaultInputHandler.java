@@ -194,11 +194,19 @@ public class DefaultInputHandler extends InputHandler
 			{
 				return;
 			}
-			else if(readNextChar != null && !evt.isActionKey()
-				&& keyCode != KeyEvent.VK_TAB
-				&& keyCode != KeyEvent.VK_ENTER)
+			else if(readNextChar != null)
 			{
-				return;
+				if(keyCode == KeyEvent.VK_ESCAPE)
+				{
+					readNextChar = null;
+					view.getStatus().setMessage(null);
+				}
+				else if(!evt.isActionKey()
+					&& keyCode != KeyEvent.VK_TAB
+					&& keyCode != KeyEvent.VK_ENTER)
+				{
+					return;
+				}
 			}
 			else
 			{

@@ -29,6 +29,10 @@ JEDIT 4.0 VERSION HISTORY
   never see the highlighting mess up
 - Documentation updates
 - Tweaked word and line selection behavior
+- Previously, jEdit would only parse the first 10 lines of a buffer for
+  buffer-local properties; now the last 10 lines are parsed as well
+  (Ollie Rutherfurd)
+- jEditLauncher 4.0.1 (John Gellene)
 
 + Bug Fixes
 
@@ -92,6 +96,10 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed unprintable characters in the help table of contents
 - Added minor hack to jEdit.initMisc() so that plugins wishing to use
   the JAXP API to access the XML plugin's Xerces parser can work
+- Fixed some focus problems with 'Complete Word' command
+- 'Center caret on screen' command threw an exception if the buffer was
+  shorter than the number of visible lines divided in half
+- "Scroll to caret" code is now soft wrap-aware
 
 * Version 4.0pre4
 

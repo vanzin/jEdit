@@ -32,7 +32,7 @@
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
     dialog box; see <xref linkend="buffer-opts" />. To set a buffer's edit mode
     for future editing sessions,
-    place the following in one of the first 10 lines of the buffer,
+    place the following in one of the first or last 10 lines of the buffer,
     where <replaceable>edit mode</replaceable> is the name of the desired edit
     mode:
    </para>
@@ -210,7 +210,7 @@
    dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
    <listitem><para>In the current buffer
    for future editing sessions by placing the
-   following in one of the first 10 lines of the buffer, where
+   following in one of the first or last 10 lines of the buffer, where
    <replaceable>n</replaceable> is the desired tab width, and
    <replaceable>m</replaceable> is the desired indent width:
    </para>
@@ -254,7 +254,7 @@
     dialog box; see <xref linkend="buffer-opts" />.</para></listitem>
     <listitem><para>In the current buffer for
     future editing sessions by placing the following in one of the first
-    10 lines of the buffer, where <replaceable>flag</replaceable> is either
+    or last 10 lines of the buffer, where <replaceable>flag</replaceable> is either
     <quote>true</quote> or <quote>false</quote>:
     </para>
     <screen>:noTabs=<replaceable>flag</replaceable>:</screen>
@@ -305,7 +305,7 @@
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
     dialog box; see <xref linkend="buffer-opts" />. </para></listitem>
     <listitem><para>In the current buffer for future editing sessions
-    by placing the following in the first 10 lines of a buffer,
+    by placing the following in the first or last 10 lines of a buffer,
     where <replaceable>flag</replaceable> is either <quote>true</quote> or
     <quote>false</quote>:
     </para>
@@ -422,7 +422,7 @@ With text inside it.
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
    dialog box; see <xref linkend="buffer-opts" />. </para></listitem>
    <listitem><para>In the current buffer for future editing sessions
-   by placing the following in the first 10 lines of a buffer,
+   by placing the following in the first or last 10 lines of a buffer,
    where <replaceable>mode</replaceable> is either <quote>indent</quote> or
    <quote>explicit</quote>:
    </para>
@@ -546,7 +546,7 @@ With text inside it.
     of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
     Options</guimenuitem> dialog box.</para></listitem>
     <listitem><para>In the current buffer for future editing sessions
-    by placing the following in the first 10 lines of a buffer,
+    by placing the following in the first or last 10 lines of a buffer,
     where <replaceable>level</replaceable> is the desired fold level:
     </para>
     <screen>:collapseFolds=<replaceable>level</replaceable>:</screen>

@@ -131,8 +131,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		fontRenderContext = new FontRenderContext(null,false,false);
 
-		returnValue = new Point();
-
 		addExtension(SELECTION_LAYER,new PaintSelection());
 		addExtension(WRAP_GUIDE_LAYER,new WrapGuide());
 		addExtension(BRACKET_HIGHLIGHT_LAYER,new BracketHighlight());
@@ -733,9 +731,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
-
-	// used to store offsetToXY() results
-	private Point returnValue;
 	//}}}
 
 	//{{{ updateRenderingHints() method
@@ -872,8 +867,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			return;
 
 		int offset = caret - textArea.getLineStartOffset(physicalLine);
-		textArea.offsetToXY(physicalLine,offset,returnValue);
-		int caretX = returnValue.x;
+		textArea.offsetToXY(physicalLine,offset,textArea.returnValue);
+		int caretX = textArea.returnValue.x;
 		int height = fm.getHeight();
 
 		gfx.setColor(caretColor);
@@ -940,10 +935,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				int lineLen = textArea.getLineLength(physicalLine);
 				x1 = textArea.offsetToXY(physicalLine,Math.min(lineLen,
 					s.start - textArea.getLineStartOffset(
-					s.startLine)),returnValue).x;
+					s.startLine)),textArea.returnValue).x;
 				x2 = textArea.offsetToXY(physicalLine,Math.min(lineLen,
 					s.end - textArea.getLineStartOffset(
-					s.endLine)),returnValue).x;
+					s.endLine)),textArea.returnValue).x;
 
 				if(x1 > x2)
 				{
@@ -956,21 +951,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				&& selStartScreenLine != -1)
 			{
 				x1 = textArea.offsetToXY(physicalLine,
-					s.start - lineStart,returnValue).x;
+					s.start - lineStart,textArea.returnValue).x;
 				x2 = textArea.offsetToXY(physicalLine,
-					s.end - lineStart,returnValue).x;
+					s.end - lineStart,textArea.returnValue).x;
 			}
 			else if(screenLine == selStartScreenLine)
 			{
 				x1 = textArea.offsetToXY(physicalLine,
-					s.start - lineStart,returnValue).x;
+					s.start - lineStart,textArea.returnValue).x;
 				x2 = getWidth();
 			}
 			else if(screenLine == selEndScreenLine)
 			{
 				x1 = 0;
 				x2 = textArea.offsetToXY(physicalLine,
-					s.end - lineStart,returnValue).x;
+					s.end - lineStart,textArea.returnValue).x;
 			}
 			else
 			{
@@ -1026,9 +1021,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ BracketHighlight class
 	class BracketHighlight extends TextAreaExtension
 	{
-		// try to minimise access$n() methods
-		Point returnValue = new Point();
-
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
@@ -1045,12 +1037,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				|| bracketOffset + bracketLineStart >= end)
 				return;
 
-			textArea.offsetToXY(bracketLine,bracketOffset,returnValue);
+			textArea.offsetToXY(bracketLine,bracketOffset,textArea.returnValue);
 			gfx.setColor(getBracketHighlightColor());
 			// Hack!!! Since there is no fast way to get the character
 			// from the bracket matching routine, we use ( since all
 			// brackets probably have the same width anyway
-			gfx.drawRect(returnValue.x,y,(int)gfx.getFont().getStringBounds(
+			gfx.drawRect(textArea.returnValue.x,y,(int)gfx.getFont().getStringBounds(
 				"(",getFontRenderContext()).getWidth() - 1,
 				fm.getHeight() - 1);
 		}

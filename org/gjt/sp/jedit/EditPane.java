@@ -253,7 +253,7 @@ public class EditPane extends JPanel implements EBComponent
 		 * first/last lines than what we will end up with eventually.
 		 * Instead of confusing the user with status messages that
 		 * appear at random when switching buffers, we simply hide the
-		 * message alltogether. */
+		 * message altogether. */
 		view.getStatus().setMessage(null);
 	} //}}}
 

@@ -338,7 +338,8 @@ public class CompleteWord extends JWindow
 		{
 			switch(evt.getKeyCode())
 			{
-			case KeyEvent.VK_TAB:
+			// doesn't work in 1.4?
+			//case KeyEvent.VK_TAB:
 			case KeyEvent.VK_ENTER:
 				insertSelected();
 				evt.consume();

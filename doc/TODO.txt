@@ -1,8 +1,5 @@
 TO DO
 
-- vertical scrollbar w/ soft wrap wrong
-- fix scrollToCaret()
-- fix up/down arrow keys
 - idea for fixing buffer property issues: BufferProp class
 - replace in selection with rectangular selections
 - 'troubleshooting' menu: docs in user's guide
@@ -12,8 +9,14 @@ TO DO
 - getCenterPoint()
 - support multi-screen systems properly
 - rollover toolbar buttons option
-- document : at end of soft wrapped lines
-
+- try to make caret movement faster
+- alt-tab: text area focus not lost
+- next/prev word: if whitespace at start of word, don't eat trailing
+- vertical scrollbar w/ soft wrap wrong
+- fix up/down arrow keys
+- fix page up/page down
+- fix home home/end end
+- physLastLine wrong with soft wrap
 - use new offset conversion API throughout
 - test dir replace all and save all
 - switching buffers: horiz scroll bar not updated?

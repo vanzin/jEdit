@@ -142,9 +142,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 		box.add(overwrite);
 
-		updateBufferStatus();
-		updateMiscStatus();
-
 		box.add(Box.createHorizontalStrut(3));
 		memory = new MemoryStatus();
 		memory.setBorder(border);
