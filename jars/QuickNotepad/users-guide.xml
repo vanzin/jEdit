@@ -4,7 +4,7 @@
 <!-- QuickNotepad 2.0 help documentation -->
 <!-- Copyright (C) 2001 John Gellene	 -->
 
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 		"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 
 <!ENTITY qpadhelp SYSTEM "qpadhelp.xml">
@@ -29,17 +29,7 @@
 				included with the jEdit distribution.
 			</para>
 		</legalnotice>
-		<title>QuickNotepad 2.0</title>
-		<revhistory>
-			<revision>
-				<revnumber>1.0</revnumber>
-				<date>June 28, 2001</date>
-		 </revision>
-			<revision>
-				<revnumber>2.0</revnumber>
-				<date>November 9, 2001</date>
-		 </revision>
-		</revhistory>
+		<title>QuickNotepad 4.2</title>
 	</articleinfo>
 
 &qpadhelp;

@@ -188,22 +188,31 @@ public class JARClassLoader extends ClassLoader
 	//{{{ activate() method
 	void activate()
 	{
-		Iterator iter = jar.getClasses().iterator();
-		while(iter.hasNext())
+		String[] classes = jar.getClasses();
+		if(classes == null)
 		{
-			String clazz = (String)iter.next();
-			classHash.put(clazz,this);
+			Log.log(Log.WARNING,this,"No classes: " + jar.getPath());
+		}
+		else
+		{
+			for(int i = 0; i < classes.length; i++)
+			{
+				classHash.put(classes[i],this);
+			}
 		}
 	} //}}}
 
 	//{{{ deactivate() method
 	void deactivate()
 	{
-		Iterator iter = jar.getClasses().iterator();
-		while(iter.hasNext())
+		String[] classes = jar.getClasses();
+		for(int i = 0; i < classes.length; i++)
 		{
-			String clazz = (String)iter.next();
-			classHash.remove(clazz);
+			Object loader = classHash.get(classes[i]);
+			if(loader == this)
+				classHash.remove(classes[i]);
+			else
+				/* two plugins provide same class! */;
 		}
 	} //}}}
 

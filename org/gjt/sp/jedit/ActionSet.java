@@ -371,7 +371,7 @@ public class ActionSet
 			return;
 
 		loaded = true;
-		actions.clear();
+		//actions.clear();
 
 		try
 		{
@@ -399,16 +399,6 @@ public class ActionSet
 
 	//{{{ Package-private members
 	ActionContext context;
-
-	//{{{ getActions() method
-	void getActions(ArrayList vec)
-	{
-		load();
-
-		Enumeration enum = actions.elements();
-		while(enum.hasMoreElements())
-			vec.add(enum.nextElement());
-	} //}}}
 
 	//{{{ getActionNames() method
 	void getActionNames(ArrayList vec)

@@ -116,14 +116,7 @@ public abstract class ActionContext
 	 */
 	public ActionSet getActionSetForAction(String action)
 	{
-		for(int i = 0; i < actionSets.size(); i++)
-		{
-			ActionSet set = (ActionSet)actionSets.elementAt(i);
-			if(set.contains(action))
-				return set;
-		}
-
-		return null;
+		return (ActionSet)actionHash.get(action);
 	} //}}}
 
 	//{{{ getActionNames() method

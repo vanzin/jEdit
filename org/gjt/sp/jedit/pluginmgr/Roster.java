@@ -124,6 +124,11 @@ class Roster
 			if(jar != null)
 				jar.closeZipFile();
 
+			// remove cache file
+			String cachePath = jar.getCachePath();
+			if(cachePath != null)
+				new File(cachePath).delete();
+
 			// move JAR first
 			File jarFile = new File(plugin);
 			File srcFile = new File(plugin.substring(0,plugin.length() - 4));
