@@ -10,6 +10,11 @@ Thanks to Ken Turner for contributing to this release.
 
 - Added SDL/PL syntax highlighting (Ken Turner).
 
+- Added IMPORT element to RULES tag. All rules from the ruleset named
+  by the required attribute DELEGATE are copied into this ruleset.
+
+- Improved Velocity syntax highlighiting.
+
 }}}
 {{{ User Interface
 
@@ -17,6 +22,11 @@ Thanks to Ken Turner for contributing to this release.
   area bounds.
 
 - Docked window menu buttons should now look better on MacOS X.
+
+- When closing a buffer, the previous buffer is now selected, not the
+  first buffer. The code that does this was actually there all along,
+  but it never worked and I didn't notice (it would just go to the first
+  buffer).
 
 }}}
 {{{ Optimizations
@@ -98,6 +108,18 @@ Thanks to Ken Turner for contributing to this release.
 - An undoable edit is no longer merged if there is a pending redo. This
   would cause the undo queue to become inconsistent.
 
+- Changed input modifier mapping on MacOS X.
+
+  C+ is the Command key as before
+  A+ is now the Control key
+  M+ is no longer bound!
+
+  A+ used to be the Option key however this caused problems such as
+  special characters on international keyboards triggering jEdit
+  shortcuts; for example, Option+' inserts # on an Italian keyboard, and
+  jEdit would pick this up as A+QUOTE which is bound to "Scroll Page
+  Up".
+
 }}}
 {{{ API Changes
 
@@ -107,6 +129,9 @@ Thanks to Ken Turner for contributing to this release.
 - Direct construction of SearchDialog no longer possible due to internal
   changes. The SearchDialog.showSearchDialog() method that has been
   recommended since jEdit 4.0 still works.
+
+- Buffer.setReadOnly() can be used to make a buffer read only even if
+  the file is writable on disk.
 
 }}}
 

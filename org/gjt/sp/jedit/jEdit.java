@@ -2478,7 +2478,7 @@ public class jEdit
 		final XmlParser parser = new XmlParser();
 		XModeHandler xmh = new XModeHandler(mode.getName())
 		{
-			protected void error(String what, Object subst)
+			public void error(String what, Object subst)
 			{
 				int line = parser.getLineNumber();
 				int column = parser.getColumnNumber();
@@ -2500,7 +2500,7 @@ public class jEdit
 				GUIUtilities.error(null,"xmode-error",args);
 			}
 
-			protected TokenMarker getTokenMarker(String modeName)
+			public TokenMarker getTokenMarker(String modeName)
 			{
 				return getMode(modeName).getTokenMarker();
 			}
@@ -3470,6 +3470,9 @@ loop:		for(int i = 0; i < list.length; i++)
 			} //}}}
 
 			buffer.prev = buffersLast;
+			// fixes the hang that can occur if we 'save as' to a
+			// new filename which requires re-sorting
+			buffer.next = null;
 			buffersLast.next = buffer;
 			buffersLast = buffer;
 		}

@@ -75,6 +75,8 @@ public class UndoManager
 			int caret = undosLast.undo();
 			redosFirst = undosLast;
 			undosLast = undosLast.prev;
+			if(undosLast == null)
+				undosFirst = null;
 			return caret;
 		}
 	} //}}}
@@ -93,6 +95,8 @@ public class UndoManager
 
 			int caret = redosFirst.redo();
 			undosLast = redosFirst;
+			if(undosFirst == null)
+				undosFirst = undosLast;
 			redosFirst = redosFirst.next;
 			return caret;
 		}
