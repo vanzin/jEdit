@@ -457,7 +457,15 @@ public class View extends JFrame implements EBComponent
 			if(keyEventInterceptor != null)
 				keyEventInterceptor.keyPressed(evt);
 			else
+			{
 				inputHandler.keyPressed(evt);
+				// this is a weird hack.
+				// we don't want C+e a to insert 'a' in the
+				// search bar if the search bar has focus...
+				if(inputHandler.isPrefixActive()
+					&& getFocusOwner() instanceof JTextComponent)
+					getTextArea().requestFocus();
+			}
 			break;
 		case KeyEvent.KEY_RELEASED:
 			if(keyEventInterceptor != null)
@@ -1336,6 +1344,10 @@ public class View extends JFrame implements EBComponent
 		status.updateCaretStatus();
 		status.updateBufferStatus();
 		status.updateMiscStatus();
+
+		// repaint the gutter so that the border color
+		// reflects the focus state
+		updateGutterBorders();
 
 		EditBus.send(new ViewUpdate(this,ViewUpdate.EDIT_PANE_CHANGED));
 	} //}}}

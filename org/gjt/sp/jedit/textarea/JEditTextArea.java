@@ -1351,7 +1351,7 @@ public class JEditTextArea extends JComponent
 
 		if(getLineLength(caretLine) == 0)
 		{
-			view.getToolkit().beep();
+			getToolkit().beep();
 			return;
 		}
 
@@ -1503,7 +1503,7 @@ public class JEditTextArea extends JComponent
 		// We can't do the backward scan if start == 0
 		if(start == 0)
 		{
-			view.getToolkit().beep();
+			getToolkit().beep();
 			return;
 		}
 
@@ -2111,7 +2111,7 @@ forward_scan:		do
 
 		if(caret == newCaret)
 		{
-			if(view.getTextArea() == this)
+			if(focusedComponent == this)
 				finishCaretUpdate(doElectricScroll,false);
 		}
 		else
@@ -2163,7 +2163,7 @@ forward_scan:		do
 			caret = newCaret;
 			caretLine = newCaretLine;
 
-			if(view.getTextArea() == this)
+			if(focusedComponent == this)
 				finishCaretUpdate(doElectricScroll,true);
 		}
 	} //}}}
@@ -2531,8 +2531,6 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ goToNextWord() method
 	/**
 	 * Moves the caret to the start of the next word.
-	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
-	 * this method moves the caret to the end of the current word instead.
 	 * @since jEdit 4.1pre5
 	 */
 	public void goToNextWord(boolean select, boolean stdNextPrevWord)
@@ -2833,8 +2831,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToPrevWord() method
 	/**
 	 * Moves the caret to the start of the previous word.
-	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
-	 * this method moves the caret to the start of the current word instead.
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevWord(boolean select)
@@ -2845,8 +2841,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToPrevWord() method
 	/**
 	 * Moves the caret to the start of the previous word.
-	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
-	 * this method moves the caret to the start of the current word instead.
 	 * @since jEdit 4.1pre5
 	 */
 	public void goToPrevWord(boolean select, boolean stdNextPrevWord)
@@ -2859,7 +2853,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			if(lineStart == 0)
 			{
-				view.getToolkit().beep();
+				getToolkit().beep();
 				return;
 			}
 			else
@@ -4641,10 +4635,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	// debug code to measure key delay
 	long time;
 	boolean timing;
+
 	public void processKeyEvent(KeyEvent evt)
 	{
 		time = System.currentTimeMillis();
-
 		evt = KeyEventWorkaround.processKeyEvent(evt);
 		if(evt == null)
 			return;
@@ -6217,10 +6211,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				invalidateLineRange(bracketLine,caretLine);
 			else
 				invalidateLine(caretLine);
-
-			// repaint the gutter so that the border color
-			// reflects the focus state
-			view.updateGutterBorders();
 		} //}}}
 
 		//{{{ focusLost() method
@@ -6259,6 +6249,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			view.getInputHandler().resetLastActionCount();
 
 			grabFocus();
+			focusedComponent = JEditTextArea.this;
 
 			if(GUIUtilities.isPopupTrigger(evt) && popup != null)
 			{

@@ -3,10 +3,11 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- changing fileset parameters should modify the file set not create a
+  new one
 - split pane wiggles
 - global options: split pane position suboptimal
 - perl: q{}, etc.
-- bracket matching with split view -- not updated properly on switching
 - position hold still doesn't work
 - don't show 'new directory' in favorites:
 - jedit -background -nogui && jedit -norestore opens "Untitled 2"
@@ -16,7 +17,6 @@ and quirks that I need to fix eventually.
 - first focus: show all files that were modified on disk, in a list
 - how to handle S+0-9?
 - C+e , and . insert , and . in the buffer, ditto for [ and ]
-- split pane position hold is still broken
 - bizarre dockable window manager button layout problem
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
