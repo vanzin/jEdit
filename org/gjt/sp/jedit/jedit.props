@@ -91,7 +91,7 @@ firewall.enabled=false
 search.keepDialog.toggle=true
 
 # Confirm dialogs
-confirm.save-all=true
+confirmSaveAll=true
 #}}}
 
 #{{{ Buffer settings

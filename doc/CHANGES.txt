@@ -42,6 +42,13 @@ contributing to this release.
   with S+ENTER (reverse search with regular expressions is not
   supported).
 
+- Added an option for disabling the confirmation dialog box shown by the
+  "Save All Buffers" command.
+
+- When running on Java 2 version 1.4, jEdit now uses NIO APIs to obtain
+  a list of supported file encodings. On Java 2 version 1.3, the same
+  hard-coded list of encodings is offered as before.
+
 }}}
 {{{ Bug Fixes
 
@@ -140,6 +147,9 @@ contributing to this release.
 - The text area's screen line cache was not invalidated on buffer
   changes. This caused rare and obscure problems like bracket matching
   and the caret showing up in the wrong place.
+
+- Incorporated BeanShell 1.3final, which fixes a bug with static field
+  access.
 
 }}}
 {{{ API Additions

@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -57,14 +56,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			lineSeparator);
 
 		/* Default file encoding */
-		DefaultComboBoxModel encodings = new DefaultComboBoxModel();
-		StringTokenizer st = new StringTokenizer(jEdit.getProperty("encodings"));
-		while(st.hasMoreTokens())
-		{
-			encodings.addElement(st.nextToken());
-		}
-
-		encoding = new JComboBox(encodings);
+		encoding = new JComboBox(MiscUtilities.getEncodings());
 		encoding.setEditable(true);
 		encoding.setSelectedItem(jEdit.getProperty("buffer.encoding",
 			System.getProperty("file.encoding")));
@@ -150,6 +142,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"twoStageSave"));
 		addComponent(twoStageSave);
 
+		/* Confirm save all */
+		confirmSaveAll = new JCheckBox(jEdit.getProperty(
+			"options.general.confirmSaveAll"));
+		confirmSaveAll.setSelected(jEdit.getBooleanProperty(
+			"confirmSaveAll"));
+		addComponent(confirmSaveAll);
+
 		/* Strip trailing EOL */
 		stripTrailingEOL = new JCheckBox(jEdit.getProperty(
 			"options.general.stripTrailingEOL"));
@@ -188,6 +187,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		jEdit.setBooleanProperty("view.checkModStatus",checkModStatus.isSelected());
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
+		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}
 
@@ -204,6 +204,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortByName;
 	private JCheckBox checkModStatus;
 	private JCheckBox twoStageSave;
+	private JCheckBox confirmSaveAll;
 	private JCheckBox stripTrailingEOL;
 	//}}}
 }
