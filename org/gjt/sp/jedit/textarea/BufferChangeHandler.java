@@ -165,8 +165,6 @@ class BufferChangeHandler extends BufferChangeAdapter
 		if(!buffer.isLoaded())
 			return;
 
-		delayedMultilineUpdate = true;
-
 		FirstLine firstLine = displayManager.firstLine;
 		ScrollLineCount scrollLineCount = displayManager.scrollLineCount;
 
@@ -192,6 +190,8 @@ class BufferChangeHandler extends BufferChangeAdapter
 
 		if(numLines == 0)
 			return;
+
+		delayedMultilineUpdate = true;
 
 		if(displayManager.folds.preContentRemoved(startLine,numLines))
 		{
