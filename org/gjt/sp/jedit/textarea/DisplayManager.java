@@ -665,7 +665,7 @@ public class DisplayManager
 					physicalLine = getNextVisibleLine(physicalLine);
 			}
 			textArea.updateScrollBars();
-			textArea.chunkCache.setFirstLine(scrollLine,physicalLine);
+			textArea.chunkCache.setFirstLine(scrollLine,physicalLine,0);
 		} //}}}
 
 		//{{{ reset() method
