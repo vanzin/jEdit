@@ -167,6 +167,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		VFS.DirectoryEntry[] files = browser.getSelectedFiles();
 
 		String directory = browser.getDirectory();
+		filename = filenameField.getText();
 
 		if(files.length == 0)
 		{
@@ -176,8 +177,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 			else
 			{
-				filename = filenameField.getText();
-
 				if(filename.length() == 0)
 				{
 					getToolkit().beep();
@@ -204,11 +203,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					|| file.type == VFS.DirectoryEntry.DIRECTORY)
 				{
 					browser.setDirectory(file.path);
-					if(file.name.equals(filenameField.getText()))
+					if(file.name.equals(filename))
 						filenameField.setText(null);
 					return;
 				}
-				else if(browser.getMode() == VFSBrowser.SAVE_DIALOG)
+				else if(browser.getMode() == VFSBrowser.SAVE_DIALOG
+					&& (filename == null || filename.length() == 0))
 					filename = file.path;
 			}
 		}

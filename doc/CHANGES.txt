@@ -61,6 +61,9 @@ Kris Kopicki and Silas Smith for contributing to this release.
   buffer to be shown in a new view if that buffer had been changed on
   disk.
 
+- Contents of filename field in "Save As" dialog box now take precedence
+  over the currently selected file in the file list.
+
 + API Additions:
 
 - Added org.gjt.sp.jedit.gui.AnimatedIcon class (Kris Kopicki).
