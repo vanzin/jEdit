@@ -179,7 +179,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
-		public void mouseClicked(MouseEvent evt)
+		public void mouseReleased(MouseEvent evt)
 		{
 			GUIUtilities.getView((Component)evt.getSource())
 				.getStatus().setMessage(null);

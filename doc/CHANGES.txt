@@ -13,6 +13,39 @@ JEDIT 4.0 VERSION HISTORY
   it is smaller than about six lines vertically
 - Added workaround for search dialog box losing focus after 'keep
   searching' message shown
+- If an error occurs while evaluating a BeanShell snippet during a
+  'Replace All', the replace operation is aborted. This saves you from
+  having to click through an endless stream of "BeanShell error" dialog
+  boxes
+- Status bar message shown while mouse was hovering over a macro menu
+  item wasn't hidden after the menu item was selected
+
++ API Changes
+
+- The 'rethrowBshErrors' parameter of the eval() and runScript() methods
+  in the BeanShell class never did anything, so methods with that
+  parameter have been deprecated:
+
+  - BeanShell.eval(View,NameSpace,String) replaces
+    BeanShell.eval(View,String,boolean) and
+    BeanShell.eval(View,NameSpace,String,boolean)
+
+  - You should pass BeanShell.getNameSpace() as the value of the
+    namespace parameter to mimic the behavior of the old form which did
+    not accept a namespace.
+
+  - BeanShell.runScript(View,String,Reader,boolean) replaces
+    BeanShell.runScript(View,String,boolean,boolean) and
+    BeanShell.runScript(View,String,Reader,boolean,boolean)
+
+  - You can pass 'null' as a Reader now, to mimic the behavior of the
+    old Reader-less form.
+
+  - Some new methods were added that throw exceptions instead of showing
+    error dialog boxes:
+
+    BeanShell._eval(View,NameSpace,String)
+    BeanShell._runScript(View,String,Reader,boolean)
 
 * Version 4.0pre7
 

@@ -336,9 +336,8 @@ public class DockableWindowManager extends JPanel
 				{
 					Log.log(Log.ERROR,this,e);
 				}
-				JComponent win = (JComponent)
-					BeanShell.eval(view,
-					code,false);
+				JComponent win = (JComponent)BeanShell.eval(view,
+					BeanShell.getNameSpace(),code);
 				return win;
 			}
 		} //}}}

@@ -277,7 +277,8 @@ public class EditServer extends Thread
 			{
 				public void run()
 				{
-					BeanShell.eval(null,script,false);
+					BeanShell.eval(null,BeanShell.getNameSpace(),
+						script);
 				}
 			});
 

@@ -873,7 +873,7 @@ public class Macros
 		//{{{ runMacro() method
 		public void runMacro(View view, Macro macro)
 		{
-			BeanShell.runScript(view,macro.getPath(),true,false);
+			BeanShell.runScript(view,macro.getPath(),null,true);
 		}
 		//}}}
 	}

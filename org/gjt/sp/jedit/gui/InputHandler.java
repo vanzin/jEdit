@@ -401,9 +401,10 @@ public abstract class InputHandler extends KeyAdapter
 			{
 				buffer.beginCompoundEdit();
 
-				BeanShell.eval(view,"for(int i = 1; i < "
+				BeanShell.eval(view,BeanShell.getNameSpace(),
+					"for(int i = 1; i < "
 					+ getRepeatCount() + "; i++)\n{\n"
-					+ readNextChar + "\n}",false);
+					+ readNextChar + "\n}");
 			}
 			finally
 			{
@@ -411,7 +412,7 @@ public abstract class InputHandler extends KeyAdapter
 			}
 		}
 		else
-			BeanShell.eval(view,readNextChar,false);
+			BeanShell.eval(view,BeanShell.getNameSpace(),readNextChar);
 
 		readNextChar = null;
 
