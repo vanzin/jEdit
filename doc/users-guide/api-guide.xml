@@ -2413,7 +2413,7 @@ line count of the buffer represented by the gutter's display.  The
  <funcsynopsis>
   <funcprototype>
    <funcdef>public static void <function>message</function></funcdef>
-	<paramdef>View <parameter>view</parameter></paramdef>
+    <paramdef>Component <parameter>comp</parameter></paramdef>
     <paramdef>String <parameter>message</parameter></paramdef>
   </funcprototype>
  </funcsynopsis>
@@ -2463,12 +2463,93 @@ line count of the buffer represented by the gutter's display.  The
 
 </itemizedlist>
 
-
 </sect1>
 
 <sect1 id="class-guiutilities"><title>Class GUIUtilities</title>
 
 <itemizedlist>
+
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static void <function>message</function></funcdef>
+   <paramdef>Component <parameter>comp</parameter></paramdef>
+    <paramdef>String <parameter>prefix</parameter></paramdef>
+    <paramdef>Object[] <parameter>args</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static void <function>error</function></funcdef>
+   <paramdef>Component <parameter>comp</parameter></paramdef>
+    <paramdef>String <parameter>prefix</parameter></paramdef>
+    <paramdef>Object[] <parameter>args</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static String <function>input</function></funcdef>
+   <paramdef>Component <parameter>comp</parameter></paramdef>
+   <paramdef>String <parameter>prefix</parameter></paramdef>
+   <paramdef>Object <parameter>def</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static String <function>input</function></funcdef>
+   <paramdef>Component <parameter>comp</parameter></paramdef>
+   <paramdef>String <parameter>prefix</parameter></paramdef>
+   <paramdef>Object[] <parameter>args</parameter></paramdef>
+   <paramdef>Object <parameter>def</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static String <function>inputProperty</function></funcdef>
+   <paramdef>Component <parameter>comp</parameter></paramdef>
+   <paramdef>String <parameter>prefix</parameter></paramdef>
+   <paramdef>Object <parameter>def</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static String <function>inputProperty</function></funcdef>
+   <paramdef>Component <parameter>comp</parameter></paramdef>
+   <paramdef>String <parameter>prefix</parameter></paramdef>
+   <paramdef>Object[] <parameter>args</parameter></paramdef>
+   <paramdef>Object <parameter>def</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+</listitem>
+
+<listitem>
+ <funcsynopsis>
+  <funcprototype>
+   <funcdef>public static int <function>confirm</function></funcdef>
+    <paramdef>Component <parameter>comp</parameter></paramdef>
+    <paramdef>String <parameter>prefix</parameter></paramdef>
+    <paramdef>Object[] <parameter>args</parameter></paramdef>
+    <paramdef>int <parameter>buttons</parameter></paramdef>
+    <paramdef>int <parameter>type</parameter></paramdef>
+  </funcprototype>
+ </funcsynopsis>
+</listitem>
 
 <listitem>
 <funcsynopsis>

@@ -2,18 +2,17 @@ TO DO
 
 + before 4.0final:
 
-- stylesheet: shortcuts run together, eg Control+eControl+z
-- proofread documentation one more time
 - make sure plugin guide is up to date
 - API guide: need to mention GUIUtilities.{message,input,...}
-- appendix in plugin guide on contributing plugins
 
 + 4.0.1:
 
 - scroll to caret _still_ jumps around
+- printer output spacing problem
 
 + in 4.1:
 
+- appendix in plugin guide on contributing plugins
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
 - support multi-screen systems properly
