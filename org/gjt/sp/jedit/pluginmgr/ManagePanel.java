@@ -302,6 +302,7 @@ public class ManagePanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
+			System.err.println("sorting " + type);
 			Collections.sort(entries,new EntryCompare(type));
 			fireTableChanged(new TableModelEvent(this));
 		}
@@ -325,8 +326,6 @@ public class ManagePanel extends JPanel
 			}
 
 			sort(sortType);
-
-			fireTableChanged(new TableModelEvent(this));
 		} //}}}
 
 		//{{{ unloadPluginJAR() method
@@ -496,26 +495,29 @@ public class ManagePanel extends JPanel
 			Entry e2 = (Entry)o2;
 
 			if (type == NAME)
-			{
-				String s1, s2;
-				if(e1.name == null)
-					s1 = e1.jar;
-				else
-					s1 = e1.name;
-				if(e2.name == null)
-					s2 = e2.jar;
-				else
-					s2 = e2.name;
-
-				return s1.compareToIgnoreCase(s2);
-			}
+				return compareNames(e1,e2);
 			else
 			{
 				int result;
 				if ((result = e1.status.compareToIgnoreCase(e2.status)) == 0)
-					return e1.name.compareToIgnoreCase(e2.name);
+					return compareNames(e1,e2);
 				return result;
 			}
+		}
+
+		private int compareNames(Entry e1, Entry e2)
+		{
+			String s1, s2;
+			if(e1.name == null)
+				s1 = e1.jar;
+			else
+				s1 = e1.name;
+			if(e2.name == null)
+				s2 = e2.jar;
+			else
+				s2 = e2.name;
+
+			return s1.compareToIgnoreCase(s2);
 		}
 	} //}}}
 
@@ -529,10 +531,11 @@ public class ManagePanel extends JPanel
 				case 1:
 					pluginModel.setSortType(EntryCompare.NAME);
 					break;
-				case 2:
+				case 3:
 					pluginModel.setSortType(EntryCompare.STATUS);
 					break;
 				default:
+					break;
 			}
 		}
 	} //}}}

@@ -174,16 +174,22 @@ public class HistoryTextField extends JTextField
 	 */
 	public void setModel(String name)
 	{
+		Border textFieldBorder = UIManager.getBorder("TextField.border");
+
 		if(name == null)
 		{
 			historyModel = null;
-			setBorder(UIManager.getBorder("TextField.border"));
+			if(textFieldBorder != null)
+				setBorder(textFieldBorder);
 		}
 		else
 		{
 			historyModel = HistoryModel.getModel(name);
-			setBorder(new CompoundBorder(UIManager.getBorder("TextField.border"),
-			new HistoryBorder()));
+			if(textFieldBorder != null)
+			{
+				setBorder(new CompoundBorder(textFieldBorder,
+					new HistoryBorder()));
+			}
 		}
 		index = -1;
 		repaint();
