@@ -22,7 +22,6 @@
 
 package org.gjt.sp.jedit.msg;
 
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 
 /**

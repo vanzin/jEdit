@@ -19,13 +19,10 @@
 
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.*;
 
 public class BufferSwitcher extends JComboBox
 {

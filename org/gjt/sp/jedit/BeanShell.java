@@ -24,8 +24,6 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import bsh.*;
-import javax.swing.text.Segment;
-import javax.swing.JFileChooser;
 import java.lang.reflect.InvocationTargetException;
 import java.io.*;
 import org.gjt.sp.jedit.io.*;

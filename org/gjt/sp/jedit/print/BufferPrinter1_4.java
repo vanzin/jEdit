@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.print;
 //{{{ Imports
 import javax.print.attribute.*;
 import javax.print.attribute.standard.*;
-import javax.swing.SwingUtilities;
 import java.awt.print.*;
 import java.awt.*;
 import java.io.*;

@@ -271,8 +271,6 @@ class PluginList
 			{
 				for(int i = 0; i < plugin.branches.size(); i++)
 				{
-					Branch branch = (Branch)plugin.branches
-						.elementAt(i);
 					if(plugin.installedVersion != null
 						&&
 					(from == null || MiscUtilities.compareStrings(

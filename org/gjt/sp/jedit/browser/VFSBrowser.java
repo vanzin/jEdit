@@ -264,7 +264,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 		propertiesChanged();
 
-		HistoryModel filterModel = HistoryModel.getModel("vfs.browser.filter");
 		String filter = jEdit.getProperty("vfs.browser.last-filter");
 		if(filter == null)
 			filter = jEdit.getProperty("vfs.browser.default-filter");

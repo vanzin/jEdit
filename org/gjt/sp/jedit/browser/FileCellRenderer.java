@@ -112,7 +112,7 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 		{
 			Font font = getFont();
 
-			FontMetrics fm = getFontMetrics(getFont());
+			FontMetrics fm = getFontMetrics(font);
 			int x, y;
 			if(getIcon() == null)
 			{

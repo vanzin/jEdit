@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.search;
 
 import gnu.regexp.CharIndexed;
-import javax.swing.text.Segment;
 
 /**
  * An abstract interface for matching strings.

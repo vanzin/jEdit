@@ -24,11 +24,9 @@
 package org.gjt.sp.jedit.print;
 
 //{{{ Imports
-import javax.swing.SwingUtilities;
 import java.awt.print.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.io.VFSManager;
 //}}}
 

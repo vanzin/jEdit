@@ -19,9 +19,6 @@
 
 package org.gjt.sp.jedit;
 
-import java.util.Vector;
-import org.gjt.sp.jedit.gui.OptionsDialog;
-
 /**
  * Plugins extending this class are automatically added to the EditBus.
  * @author Slava Pestov

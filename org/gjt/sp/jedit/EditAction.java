@@ -26,7 +26,6 @@ package org.gjt.sp.jedit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**

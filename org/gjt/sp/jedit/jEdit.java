@@ -25,19 +25,12 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import com.microstar.xml.*;
 import javax.swing.plaf.metal.*;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.DefaultEditorKit;
-import javax.swing.text.Element;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.Keymap;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
-import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
@@ -1159,7 +1152,6 @@ public class jEdit
 			return;
 
 		view.getEditPane().saveCaretInfo();
-		Buffer current = view.getBuffer();
 
 		File session = new File(MiscUtilities.constructPath(
 			settingsDirectory,"session"));
@@ -1321,7 +1313,6 @@ public class jEdit
 
 			if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
 			{
-				int caret = entry.caret;
 				props.put(Buffer.CARET,new Integer(entry.caret));
 				/* if(entry.selection != null)
 				{

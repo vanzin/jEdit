@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.gui;
 
 import java.awt.*;
-import java.net.URL;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 

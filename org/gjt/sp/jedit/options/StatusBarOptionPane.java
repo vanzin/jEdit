@@ -25,10 +25,8 @@ package org.gjt.sp.jedit.options;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.*;
 import org.gjt.sp.jedit.gui.ColorWellButton;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class StatusBarOptionPane extends AbstractOptionPane

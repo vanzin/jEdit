@@ -20,7 +20,6 @@
 package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
-import java.awt.event.*;
 import java.util.Collections;
 import java.util.Vector;
 import org.gjt.sp.jedit.msg.MacrosChanged;

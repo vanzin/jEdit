@@ -28,10 +28,7 @@ import javax.swing.text.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
-import java.util.ArrayList;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**

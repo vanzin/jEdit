@@ -161,9 +161,6 @@ loop:				for(int i = 0; i < files.length; i++)
 		{
 			buffer.readLock();
 
-			final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
-				buffer.getPath());
-
 			for(int i = 0; i < selection.length; i++)
 			{
 				Selection s = selection[i];

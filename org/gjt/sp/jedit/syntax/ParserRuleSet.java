@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.syntax;
 import gnu.regexp.RE;
 import java.util.*;
 import org.gjt.sp.jedit.Mode;
-import javax.swing.text.Segment;
 //}}}
 
 /**

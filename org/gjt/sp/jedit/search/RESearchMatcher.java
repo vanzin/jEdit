@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.search;
 import bsh.BshMethod;
 import bsh.NameSpace;
 import gnu.regexp.*;
-import javax.swing.text.Segment;
 import org.gjt.sp.jedit.BeanShell;
 import org.gjt.sp.jedit.MiscUtilities;
 //}}}

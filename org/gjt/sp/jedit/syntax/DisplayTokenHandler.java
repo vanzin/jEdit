@@ -25,10 +25,7 @@ package org.gjt.sp.jedit.syntax;
 //{{{ Imports
 import javax.swing.text.*;
 import java.awt.font.*;
-import java.awt.geom.*;
-import java.awt.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class DisplayTokenHandler extends DefaultTokenHandler

@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.search;
 //{{{ Imports
 import java.awt.event.*;
 import java.awt.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
@@ -279,25 +278,25 @@ public class SearchBar extends JPanel
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(evt.getSource() == find)
+			if(source == find)
 				find(false);
-			else if(evt.getSource() == hyperSearch)
+			else if(source == hyperSearch)
 			{
 				jEdit.setBooleanProperty("view.search.hypersearch.toggle",
 					hyperSearch.isSelected());
 				update();
 			}
-			else if(evt.getSource() == ignoreCase)
+			else if(source == ignoreCase)
 			{
 				SearchAndReplace.setIgnoreCase(ignoreCase
 					.isSelected());
 			}
-			else if(evt.getSource() == regexp)
+			else if(source == regexp)
 			{
 				SearchAndReplace.setRegexp(regexp
 					.isSelected());
 			}
-			else if(evt.getSource() == close)
+			else if(source == close)
 			{
 				view.removeToolBar(SearchBar.this);
 				SwingUtilities.invokeLater(new Runnable()

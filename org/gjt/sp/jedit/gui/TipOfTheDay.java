@@ -28,7 +28,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
-import java.net.URL;
 import java.util.Random;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;

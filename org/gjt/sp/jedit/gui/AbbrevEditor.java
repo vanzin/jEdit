@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 //}}}

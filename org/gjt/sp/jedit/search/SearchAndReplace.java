@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.search;
 import bsh.BshMethod;
 import javax.swing.text.Segment;
 import javax.swing.JOptionPane;
-import java.awt.Component;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
@@ -740,8 +739,6 @@ loop:			for(;;)
 		boolean smartCaseReplace = (replace != null
 			&& TextUtilities.getStringCase(replace)
 			== TextUtilities.LOWER_CASE);
-
-		JEditTextArea textArea = view.getTextArea();
 
 		try
 		{

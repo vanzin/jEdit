@@ -29,9 +29,7 @@ package org.gjt.sp.jedit.search;
 import bsh.BshMethod;
 import bsh.NameSpace;
 import gnu.regexp.CharIndexed;
-import javax.swing.text.Segment;
 import org.gjt.sp.jedit.BeanShell;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class BoyerMooreSearchMatcher implements SearchMatcher

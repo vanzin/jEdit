@@ -23,11 +23,9 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import gnu.regexp.RE;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;

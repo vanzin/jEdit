@@ -25,10 +25,8 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.*;
-import java.util.ArrayList;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.*;
 //}}}
 

@@ -20,12 +20,10 @@
 package installer;
 
 import javax.swing.border.*;
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Vector;
 
 /*
@@ -200,14 +198,14 @@ public class SwingInstall extends JFrame
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(evt.getSource() == cancelButton)
+			if(source == cancelButton)
 				System.exit(0);
-			else if(evt.getSource() == prevButton)
+			else if(source == prevButton)
 			{
 				currentPage--;
 				pageChanged();
 			}
-			else if(evt.getSource() == nextButton)
+			else if(source == nextButton)
 			{
 				if(currentPage == pages.length - 1)
 					System.exit(0);
@@ -276,8 +274,6 @@ public class SwingInstall extends JFrame
 			Dimension buttonSize = cancelButton.getPreferredSize();
 			buttonSize.width = Math.max(buttonSize.width,prevButton.getPreferredSize().width);
 			buttonSize.width = Math.max(buttonSize.width,nextButton.getPreferredSize().width);
-
-			int bottomBorder = buttonSize.height + PADDING;
 
 			// cancel button goes on far left
 			cancelButton.setBounds(

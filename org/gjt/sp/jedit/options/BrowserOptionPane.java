@@ -23,13 +23,7 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.*;
-import javax.swing.table.*;
 import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.util.*;
 import org.gjt.sp.jedit.*;
 //}}}
 

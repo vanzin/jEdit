@@ -31,7 +31,6 @@ import java.awt.event.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
-import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;

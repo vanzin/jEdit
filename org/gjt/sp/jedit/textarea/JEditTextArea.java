@@ -26,8 +26,6 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.*;
-import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -39,12 +37,10 @@ import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.Position;
 import javax.swing.text.Segment;
-import javax.swing.undo.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -3803,8 +3799,6 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void goToNextFold(boolean select)
 	{
-		int line = caretLine;
-
 		int nextFold = -1;
 		for(int i = caretLine + 1; i < buffer.getLineCount(); i++)
 		{
@@ -3842,8 +3836,6 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void goToPrevFold(boolean select)
 	{
-		int line = caretLine;
-
 		int prevFold = -1;
 		for(int i = caretLine - 1; i >= 0; i--)
 		{
@@ -4492,7 +4484,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void joinLines()
 	{
-		int start = getLineStartOffset(caretLine);
 		int end = getLineEndOffset(caretLine);
 		if(end > buffer.getLength())
 		{
@@ -5425,15 +5416,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int logicalLength = 0; // length with tabs expanded
 		int lastWordOffset = -1;
 		boolean lastWasSpace = true;
-		boolean initialWhiteSpace = true;
-		int initialWhiteSpaceLength = 0;
 		for(int i = 0; i < caretPos; i++)
 		{
 			char ch = lineSegment.array[lineSegment.offset + i];
 			if(ch == '\t')
 			{
-				if(initialWhiteSpace)
-					initialWhiteSpaceLength = i + 1;
 				logicalLength += tabSize - (logicalLength % tabSize);
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
@@ -5443,8 +5430,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 			else if(ch == ' ')
 			{
-				if(initialWhiteSpace)
-					initialWhiteSpaceLength = i + 1;
 				logicalLength++;
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
@@ -5454,7 +5439,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 			else if(wordBreakChars != null && wordBreakChars.indexOf(ch) != -1)
 			{
-				initialWhiteSpace = false;
 				logicalLength++;
 				if(!lastWasSpace && logicalLength <= maxLineLen)
 				{
@@ -5464,7 +5448,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 			else
 			{
-				initialWhiteSpace = false;
 				logicalLength++;
 				lastWasSpace = false;
 			}

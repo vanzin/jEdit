@@ -23,11 +23,9 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import javax.swing.text.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;

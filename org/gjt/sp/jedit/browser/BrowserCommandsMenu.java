@@ -24,11 +24,9 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
-import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;

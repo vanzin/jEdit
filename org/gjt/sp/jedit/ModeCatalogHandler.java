@@ -21,7 +21,6 @@ package org.gjt.sp.jedit;
 
 import com.microstar.xml.*;
 import java.io.*;
-import java.util.Stack;
 import org.gjt.sp.util.Log;
 
 class ModeCatalogHandler extends HandlerBase

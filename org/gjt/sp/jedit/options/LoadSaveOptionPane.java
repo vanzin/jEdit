@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 //}}}

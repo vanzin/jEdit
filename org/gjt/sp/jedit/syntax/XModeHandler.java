@@ -27,7 +27,6 @@ package org.gjt.sp.jedit.syntax;
 import com.microstar.xml.*;
 import gnu.regexp.*;
 import java.io.*;
-import java.net.URL;
 import java.util.*;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.*;
@@ -76,7 +75,6 @@ public class XModeHandler extends HandlerBase
 	//{{{ attribute() method
 	public void attribute(String aname, String value, boolean isSpecified)
 	{
-		String tag = peekElement();
 		aname = (aname == null) ? null : aname.intern();
 
 		if (aname == "NAME")

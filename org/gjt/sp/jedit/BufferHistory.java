@@ -178,7 +178,6 @@ public class BufferHistory
 
 	/* private */ static void removeEntry(String path)
 	{
-		Enumeration enum = history.elements();
 		for(int i = 0; i < history.size(); i++)
 		{
 			Entry entry = (Entry)history.elementAt(i);

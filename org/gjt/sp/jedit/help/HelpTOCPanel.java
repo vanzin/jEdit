@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.help;
 import com.microstar.xml.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -323,7 +322,7 @@ public class HelpTOCPanel extends JPanel
 		//{{{ processMouseEvent() method
 		protected void processMouseEvent(MouseEvent evt)
 		{
-			ToolTipManager ttm = ToolTipManager.sharedInstance();
+			//ToolTipManager ttm = ToolTipManager.sharedInstance();
 
 			switch(evt.getID())
 			{

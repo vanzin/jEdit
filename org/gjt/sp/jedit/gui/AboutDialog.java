@@ -200,8 +200,6 @@ public class AboutDialog extends EnhancedDialog
 
 				while (running)
 				{
-					long start = System.currentTimeMillis();
-
 					scrollPosition += 2;
 
 					if(scrollPosition > max)
