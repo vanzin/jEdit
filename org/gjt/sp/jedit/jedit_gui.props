@@ -26,6 +26,10 @@ common.close=Close
 common.apply=Apply
 common.more=More
 common.insert=Insert
+common.add=Add
+common.remove=Remove
+common.moveUp=Move Up
+common.moveDown=Move Down
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
