@@ -6,11 +6,11 @@ and quirks that I need to fix eventually.
 - options dialog box can use a little cleanup:
   Appearance, Loading and Saving, General panes a bit confusing
 - docking:
-  no menus for clones
   wrap around layout
 - hypersearch refresh
 - fsb parents right-click: wrong dir
-- activity log: log viewer needs copy
+- activity log: log viewer needs copy, tabs in log entries need to be
+  replaced
 - better chunk merging
 - split long lines
 - perl: q{}, etc.

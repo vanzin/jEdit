@@ -1,4 +1,4 @@
-JEDIT 4.2pre1 VERSION HISTORY
+JEDIT 4.2 VERSION HISTORY
 
 * Version 4.2pre1
 
@@ -60,6 +60,10 @@ Thanks to Kris Kopicki for contributing to this release.
   throwing an exception.
 
 - Multiple monitors should work properly now (Kris Kopicki).
+
+- Selecting "Search in Directory" from the right-click menu of a
+  directory in the parent directories list would search in the wrong
+  directory.
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

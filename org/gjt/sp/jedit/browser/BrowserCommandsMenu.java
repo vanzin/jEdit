@@ -326,7 +326,15 @@ public class BrowserCommandsMenu extends JPopupMenu
 			else if(actionCommand.equals("new-directory"))
 				browser.mkdir();
 			else if(actionCommand.equals("search-in-directory"))
-				browser.searchInDirectory();
+			{
+				if(files == null)
+					browser.searchInDirectory();
+				else
+				{
+					browser.searchInDirectory(files[0].path,
+						files[0].type != VFS.DirectoryEntry.FILE);
+				}
+			}
 			else if(actionCommand.equals("show-hidden-files"))
 			{
 				browser.setShowHiddenFiles(!browser.getShowHiddenFiles());

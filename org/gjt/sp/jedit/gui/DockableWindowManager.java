@@ -543,7 +543,10 @@ public class DockableWindowManager extends JPanel
 				dockableWindowFactories.elementAt(i);
 			Entry e;
 			if(view.isPlainView())
-				e = new Entry(factory,FLOATING);
+			{
+				// don't show menu items to dock into a plain view
+				e = new Entry(factory,FLOATING,true);
+			}
 			else
 				e = new Entry(factory);
 			windows.put(factory.name,e);
@@ -597,7 +600,7 @@ public class DockableWindowManager extends JPanel
 		}
 
 		// create a copy of this dockable window and float it
-		Entry newEntry = new Entry(entry.factory,FLOATING);
+		Entry newEntry = new Entry(entry.factory,FLOATING,true);
 		newEntry.open();
 		if(newEntry.win != null)
 			newEntry.container.show(newEntry);
@@ -840,33 +843,36 @@ public class DockableWindowManager extends JPanel
 	} //}}}
 
 	//{{{ createPopupMenu() method
-	public JPopupMenu createPopupMenu(final String dockable)
+	public JPopupMenu createPopupMenu(final String dockable, boolean clone)
 	{
 		JPopupMenu popup = new JPopupMenu();
-		String[] positions = { FLOATING, TOP, LEFT, BOTTOM, RIGHT };
-		for(int i = 0; i < positions.length; i++)
+		String currentPos = jEdit.getProperty(dockable + ".dock-position");
+		if(!clone)
 		{
-			final String pos = positions[i];
-			String currentPos = jEdit.getProperty(dockable + ".dock-position");
-			if(pos.equals(currentPos))
-				continue;
-
-			JMenuItem moveMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-"
-				+ pos));
-
-			moveMenuItem.addActionListener(new ActionListener()
+			String[] positions = { FLOATING, TOP, LEFT, BOTTOM, RIGHT };
+			for(int i = 0; i < positions.length; i++)
 			{
-				public void actionPerformed(ActionEvent evt)
+				final String pos = positions[i];
+				if(pos.equals(currentPos))
+					continue;
+	
+				JMenuItem moveMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-"
+					+ pos));
+	
+				moveMenuItem.addActionListener(new ActionListener()
 				{
-					jEdit.setProperty(dockable + ".dock-position",pos);
-					propertiesChanged();
-					showDockableWindow(dockable);
-				}
-			});
-			popup.add(moveMenuItem);
-		}
+					public void actionPerformed(ActionEvent evt)
+					{
+						jEdit.setProperty(dockable + ".dock-position",pos);
+						propertiesChanged();
+						showDockableWindow(dockable);
+					}
+				});
+				popup.add(moveMenuItem);
+			}
 
-		popup.addSeparator();
+			popup.addSeparator();
+		}
 
 		JMenuItem cloneMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-clone"));
 
@@ -878,6 +884,21 @@ public class DockableWindowManager extends JPanel
 			}
 		});
 		popup.add(cloneMenuItem);
+
+		if(!clone)
+		{
+			JMenuItem undockMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-undock"));
+
+			undockMenuItem.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					jEdit.setProperty(dockable + ".dock-position",FLOATING);
+					propertiesChanged();
+				}
+			});
+			popup.add(undockMenuItem);
+		}
 
 		return popup;
 	} //}}}
@@ -940,6 +961,7 @@ public class DockableWindowManager extends JPanel
 		}
 
 		revalidate();
+		repaint();
 	} //}}}
 
 	//{{{ Private members
@@ -1261,6 +1283,7 @@ public class DockableWindowManager extends JPanel
 		String title;
 		String position;
 		DockableWindowContainer container;
+		boolean clone;
 
 		// only set if open
 		JComponent win;
@@ -1269,14 +1292,15 @@ public class DockableWindowManager extends JPanel
 		Entry(Factory factory)
 		{
 			this(factory,jEdit.getProperty(factory.name
-				+ ".dock-position",FLOATING));
+				+ ".dock-position",FLOATING),false);
 		} //}}}
 
 		//{{{ Entry constructor
-		Entry(Factory factory, String position)
+		Entry(Factory factory, String position, boolean clone)
 		{
 			this.factory = factory;
 			this.position = position;
+			this.clone = clone;
 
 			// get the title here, not in the factory constructor,
 			// since the factory might be created before a plugin's
@@ -1321,7 +1345,7 @@ public class DockableWindowManager extends JPanel
 			if(position.equals(FLOATING))
 			{
 				container = new FloatingWindowContainer(
-					DockableWindowManager.this);
+					DockableWindowManager.this,clone);
 				container.register(this);
 			}
 

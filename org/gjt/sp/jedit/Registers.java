@@ -561,7 +561,6 @@ public class Registers
 				else
 					out.write((char)i);
 				out.write("\">");
-				out.write(lineSep);
 
 				String text = register.toString();
 				for(int j = 0; j < text.length(); j++)
@@ -651,7 +650,7 @@ public class Registers
 		{
 			if(name.equals("REGISTER"))
 			{
-				if(name == null || name.length() != 1)
+				if(registerName == null || registerName.length() != 1)
 					Log.log(Log.ERROR,this,"Malformed NAME: " + registerName);
 				else
 					setRegister(registerName.charAt(0),charData);
