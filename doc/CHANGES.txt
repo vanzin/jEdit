@@ -30,6 +30,8 @@ this release.
 - Added CVS and Subversion commit info syntax highlighting
   (Ollie Rutherfurd).
 
+- Added S# syntax highlighting (Barry Carr).
+
 }}}
 {{{ Bug Fixes
 
@@ -59,6 +61,11 @@ this release.
 - Fixed a performance regression since 4.2pre7 on MacOS X.
 
 - More deep indent fixes (Brad Mace).
+
+- The JARClassLoader's loadClass() method was not synchronized -- this
+  problem has been there for ages!
+
+- Fixed backspace key in file name field of file dialogs on Java 1.5.
 
 }}}
 {{{ API Changes

@@ -290,6 +290,9 @@
 <MODE NAME="s+"			FILE="splus.xml"
 				FILE_NAME_GLOB="*.ssc" />
 
+<MODE NAME="s#"			FILE="ssharp.xml"
+				FILE_NAME_GLOB="*.{ss,ssc,ssi,ssw,sts,aml}"  />
+
 <MODE NAME="sas"		FILE="sas.xml"
 				FILE_NAME_GLOB="*.sas" />
 
