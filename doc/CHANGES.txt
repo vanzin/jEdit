@@ -32,6 +32,17 @@ JEDIT 4.3 VERSION HISTORY
 
 - Fix NullPointerException in file system roots list.
 
+- Search and replace dialog's "Search subdirectories" checkbox did not
+  have an Alt-key mnemonic.
+
+- Binding actions to numeric keypad keys should now work better.
+
+- Pressing something like A+f l where A+f was a prefix but A+f l was
+  not bound would insert l into the buffer, which was undesirable.
+
+- The plugin manager did not select a plugin's dependencies when the
+  plugin was selected for installation.
+
 }}}
 
 }}}

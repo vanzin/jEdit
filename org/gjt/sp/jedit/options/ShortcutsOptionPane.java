@@ -27,6 +27,7 @@ import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 
 /**
  * Key binding editor.
@@ -95,7 +96,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				String modelLabel = actionSet.getLabel();
 				if(modelLabel == null)
 				{
-					System.err.println("Empty action set: "
+					Log.log(Log.ERROR,this,"Empty action set: "
 						+ actionSet.getPluginJAR());
 				}
 				models.addElement(createModel(modelLabel,

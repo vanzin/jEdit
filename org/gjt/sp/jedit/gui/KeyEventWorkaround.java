@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2004 Slava Pestov
+ * Copyright (C) 2000, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,9 @@ import org.gjt.sp.jedit.Debug;
 public class KeyEventWorkaround
 {
 	//{{{ isModifier() method
-	public static boolean isModifier(KeyEvent evt)
+	public static boolean isModifier(int keyCode)
 	{
-		switch(evt.getKeyCode())
+		switch(keyCode)
 		{
 		case KeyEvent.VK_ALT:
 		case KeyEvent.VK_ALT_GRAPH:
@@ -51,7 +51,34 @@ public class KeyEventWorkaround
 			return false;
 		}
 	} //}}}
-	
+
+	//{{{ isNumericKeypad() method
+	public static boolean isNumericKeypad(int keyCode)
+	{
+		switch(keyCode)
+		{
+		case KeyEvent.VK_NUMPAD0:
+		case KeyEvent.VK_NUMPAD1:
+		case KeyEvent.VK_NUMPAD2:
+		case KeyEvent.VK_NUMPAD3:
+		case KeyEvent.VK_NUMPAD4:
+		case KeyEvent.VK_NUMPAD5:
+		case KeyEvent.VK_NUMPAD6:
+		case KeyEvent.VK_NUMPAD7:
+		case KeyEvent.VK_NUMPAD8:
+		case KeyEvent.VK_NUMPAD9:
+		case KeyEvent.VK_MULTIPLY:
+		case KeyEvent.VK_ADD:
+		/* case KeyEvent.VK_SEPARATOR: */
+		case KeyEvent.VK_SUBTRACT:
+		case KeyEvent.VK_DECIMAL:
+		case KeyEvent.VK_DIVIDE:
+			return true;
+		default:
+			return false;
+		}
+	} //}}}
+
 	//{{{ processKeyEvent() method
 	public static KeyEvent processKeyEvent(KeyEvent evt)
 	{
@@ -110,18 +137,17 @@ public class KeyEventWorkaround
 					else if(!evt.isControlDown()
 						&& !evt.isAltDown())
 					{
-						/* This is bad for the numeric keypad */
-						lastKeyTime = 0L;
-
 						if(keyCode >= KeyEvent.VK_0
 							&& keyCode <= KeyEvent.VK_9)
 						{
+							lastKeyTime = 0L;
 							return null;
 						}
 
 						if(keyCode >= KeyEvent.VK_A
 							&& keyCode <= KeyEvent.VK_Z)
 						{
+							lastKeyTime = 0L;
 							return null;
 						}
 					}
@@ -135,30 +161,10 @@ public class KeyEventWorkaround
 						return null;
 				}
 
-				switch(keyCode)
-				{
-				case KeyEvent.VK_NUMPAD0:
-				case KeyEvent.VK_NUMPAD1:
-				case KeyEvent.VK_NUMPAD2:
-				case KeyEvent.VK_NUMPAD3:
-				case KeyEvent.VK_NUMPAD4:
-				case KeyEvent.VK_NUMPAD5:
-				case KeyEvent.VK_NUMPAD6:
-				case KeyEvent.VK_NUMPAD7:
-				case KeyEvent.VK_NUMPAD8:
-				case KeyEvent.VK_NUMPAD9:
-				case KeyEvent.VK_MULTIPLY:
-				case KeyEvent.VK_ADD:
-				/* case KeyEvent.VK_SEPARATOR: */
-				case KeyEvent.VK_SUBTRACT:
-				case KeyEvent.VK_DECIMAL:
-				case KeyEvent.VK_DIVIDE:
+				if(isNumericKeypad(keyCode))
 					last = LAST_NUMKEYPAD;
-					break;
-				default:
+				else
 					last = LAST_NOTHING;
-					break;
-				}
 
 				return evt;
 			}

@@ -401,7 +401,7 @@ public class GrabKeyDialog extends JDialog
 		protected void processKeyEvent(KeyEvent _evt)
 		{
 			KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
-			if(KeyEventWorkaround.isModifier(_evt))
+			if(KeyEventWorkaround.isModifier(_evt.getKeyCode()))
 				evt = null;
 
 			if(debugBuffer != null)

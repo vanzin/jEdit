@@ -335,34 +335,14 @@ public class DefaultInputHandler extends InputHandler
 				repeatCount = 1;
 				setCurrentBindings(bindings);
 			}
-
-			if(input != '\0')
+			else if(input != '\0')
 				userInput(input);
 			else
 			{
 				// this is retarded. excuse me while I drool
 				// and make stupid noises
-				switch(keyStroke.key)
-				{
-				case KeyEvent.VK_NUMPAD0:
-				case KeyEvent.VK_NUMPAD1:
-				case KeyEvent.VK_NUMPAD2:
-				case KeyEvent.VK_NUMPAD3:
-				case KeyEvent.VK_NUMPAD4:
-				case KeyEvent.VK_NUMPAD5:
-				case KeyEvent.VK_NUMPAD6:
-				case KeyEvent.VK_NUMPAD7:
-				case KeyEvent.VK_NUMPAD8:
-				case KeyEvent.VK_NUMPAD9:
-				case KeyEvent.VK_MULTIPLY:
-				case KeyEvent.VK_ADD:
-				/* case KeyEvent.VK_SEPARATOR: */
-				case KeyEvent.VK_SUBTRACT:
-				case KeyEvent.VK_DECIMAL:
-				case KeyEvent.VK_DIVIDE:
+				if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
 					KeyEventWorkaround.numericKeypadKey();
-					break;
-				}
 			}
 		}
 		else if(o instanceof Hashtable)
