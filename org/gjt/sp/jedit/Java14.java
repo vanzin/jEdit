@@ -290,8 +290,15 @@ public class Java14
 		{
 			Log.log(Log.DEBUG,this,"Export done");
 
-			if(t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+			if(t == null)
 			{
+				Log.log(Log.DEBUG,this,"=> Null transferrable");
+				JEditTextArea textArea = (JEditTextArea)c;
+				textArea.selectNone();
+			}
+			else if(t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+			{
+				Log.log(Log.DEBUG,this,"=> File list");
 				EditPane editPane = (EditPane)GUIUtilities
 					.getComponentParent(c,EditPane.class);
 
@@ -327,6 +334,7 @@ public class Java14
 			}
 			else if(t.isDataFlavorSupported(DataFlavor.stringFlavor))
 			{
+				Log.log(Log.DEBUG,this,"=> String");
 				JEditTextArea textArea = (JEditTextArea)c;
 				if(action == MOVE)
 					textArea.setSelectedText(null,false);

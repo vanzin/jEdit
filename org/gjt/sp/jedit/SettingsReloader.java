@@ -1,6 +1,9 @@
 /*
  * SettingsReloader.java - Utility class reloads macros and modes when necessary
- * Copyright (C) 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,12 +22,17 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import java.io.File;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.search.*;
+//}}}
 
 class SettingsReloader implements EBComponent
 {
+	//{{{ handleMessage() method
 	public void handleMessage(EBMessage msg)
 	{
 		if(msg instanceof VFSUpdate)
@@ -32,29 +40,35 @@ class SettingsReloader implements EBComponent
 			VFSUpdate vmsg = (VFSUpdate)msg;
 			maybeReload(vmsg.getPath());
 		}
-	}
+	} //}}}
 
+	//{{{ maybeReload() method
 	private void maybeReload(String path)
 	{
+		String jEditHome = jEdit.getJEditHome();
+		String settingsDirectory = jEdit.getSettingsDirectory();
+
+		if(!MiscUtilities.isURL(path))
+			path = MiscUtilities.resolveSymlinks(path);
+
+		// On Windows and MacOS, path names are case insensitive
+		if((VFSManager.getVFSForPath(path).getCapabilities()
+			& VFS.CASE_INSENSITIVE_CAP) != 0)
+		{
+			path = path.toLowerCase();
+			jEditHome = jEditHome.toLowerCase();
+			settingsDirectory = settingsDirectory.toLowerCase();
+		}
+
 		// XXX: does this really belong here?
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 		if(fileset instanceof DirectoryListSet)
 		{
 			DirectoryListSet dirset = (DirectoryListSet)fileset;
+			String dir = MiscUtilities.resolveSymlinks(
+				dirset.getDirectory());
 			if(path.startsWith(dirset.getDirectory()))
 				dirset.invalidateCachedList();
-		}
-
-		String jEditHome = jEdit.getJEditHome();
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		// On Windows and MacOS, path names are case insensitive
-		if(OperatingSystem.isDOSDerived() || OperatingSystem.isMacOS())
-		{
-			path = path.toLowerCase();
-			if(jEditHome != null)
-				jEditHome = jEditHome.toLowerCase();
-			if(settingsDirectory != null)
-				settingsDirectory = settingsDirectory.toLowerCase();
 		}
 
 		if(jEditHome != null && path.startsWith(jEditHome))
@@ -76,5 +90,5 @@ class SettingsReloader implements EBComponent
 		else if(path.startsWith("modes") && (path.endsWith(".xml")
 			|| path.endsWith("catalog")))
 			jEdit.reloadModes();
-	}
+	} //}}}
 }

@@ -155,6 +155,7 @@ public class FileVFS extends VFS
 			this.modified = file.lastModified();
 			this.canRead = file.canRead();
 			this.canWrite = file.canWrite();
+			this.symlinkPath = MiscUtilities.resolveSymlinks(path);
 		}
 
 		public String getExtendedAttribute(String name)

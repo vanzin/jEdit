@@ -3654,7 +3654,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private void setPath(String path)
 	{
 		this.path = path;
-		this.symlinkPath = path;
 		VFS vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setFlag(READ_ONLY,true);
@@ -3678,6 +3677,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			// past?
 			file = null;
 			autosaveFile = null;
+			symlinkPath = path;
 		}
 	} //}}}
 

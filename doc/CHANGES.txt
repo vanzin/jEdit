@@ -151,6 +151,14 @@ contributing to this release.
 - Incorporated BeanShell 1.3final, which fixes a bug with static field
   access.
 
+- _REGEXP syntax rules that matched strings containing whitespace did
+  not display in some circumstances.
+
+- The file system browser would not refresh, and edit modes would not be
+  reloaded if the paths in question contained symbolic links.
+
+- "Join Lines" no longer prints an exception if the buffer is read only.
+
 }}}
 {{{ API Additions
 

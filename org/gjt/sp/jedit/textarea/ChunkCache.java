@@ -528,7 +528,6 @@ class ChunkCache
 	private void updateChunksUpTo(int lastScreenLine)
 	{
 		// this method is a nightmare
-
 		if(lastScreenLine >= lineInfo.length)
 		{
 			throw new ArrayIndexOutOfBoundsException(lastScreenLine);

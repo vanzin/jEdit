@@ -451,7 +451,7 @@ unwind:		while(context.parent != null)
 
 				if((checkRule.action & ParserRule.REGEXP) != 0)
 				{
-					handleTokenWithTabs(tokenHandler,
+					handleTokenWithSpaces(tokenHandler,
 						checkRule.token,
 						pos - line.offset,
 						matchedChars,
@@ -487,7 +487,7 @@ unwind:		while(context.parent != null)
 
 				if((checkRule.action & ParserRule.REGEXP) != 0)
 				{
-					handleTokenWithTabs(tokenHandler,
+					handleTokenWithSpaces(tokenHandler,
 						tokenType,
 						pos - line.offset,
 						matchedChars,
@@ -622,16 +622,16 @@ unwind:		while(context.parent != null)
 		}
 	} //}}}
 
-	//{{{ handleTokenWithTabs() method
-	private void handleTokenWithTabs(TokenHandler tokenHandler, byte tokenType,
-		int start, int len, LineContext context)
+	//{{{ handleTokenWithSpaces() method
+	private void handleTokenWithSpaces(TokenHandler tokenHandler,
+		byte tokenType, int start, int len, LineContext context)
 	{
 		int last = start;
 		int end = start + len;
 
 		for(int i = start; i < end; i++)
 		{
-			if(line.array[i] == '\t')
+			if(Character.isWhitespace(line.array[i + line.offset]))
 			{
 				if(last != i)
 				{
