@@ -190,6 +190,9 @@
 <MODE NAME="shtml"		FILE="shtml.xml"
 				FILE_NAME_GLOB="*.{shtml,shtm}" />
 
+<MODE NAME="smalltalk"		FILE="smalltalk.xml"
+				FILE_NAME_GLOB="*.{st,sources,changes}" />
+
 <MODE NAME="sqr"                FILE="sqr.xml"
                                 FILE_NAME_GLOB="*.{sqr,sqc}" />
 

@@ -5,12 +5,21 @@ JEDIT 4.0 VERSION HISTORY
 + New Features
 
 - Modula-3 syntax highlighting (Marcio Marchini)
+- Smalltalk syntax highlighting (Marcio Marchini)
 
 + Enhancements
 
 - Minor tweaks to VFS path code, that should make things a bit smoother
   for the FTP plugin
 - Updated Prolog syntax highlighting (Giulio Piancastelli)
+- Hard wrapping is now performed if there is only whitespace between the
+  caret and the end of the line
+- Pressing the Up or Down arrow when the caret is the first or last line
+  of the buffer moves the caret to the beginning and end of the buffer,
+  respectively
+- Only one 'Search and Replace' dialog can be opened per view
+- Favorites menu in file system browser is now sorted using a
+  case-insensitive sort
 
 + Bug Fixes
 
@@ -45,6 +54,9 @@ JEDIT 4.0 VERSION HISTORY
 
   - 'name' is used to key "macro-handler.<name>.label" and
     "macro-handler.<name>.glob" properties.
+  - One minor UI addition is that the language a macro is written in,
+    along with the full path to the macro file is shown in the status
+    bar when the mouse is over a macro's menu item or tool bar button.
 
 * Version 4.0pre5
 

@@ -240,6 +240,8 @@ public class ChunkCache
 
 		float _x = 0.0f;
 
+		Chunk first = chunks;
+
 		Font lastFont = null;
 		Color lastColor = null;
 
@@ -251,7 +253,8 @@ public class ChunkCache
 				Color bgColor = chunks.style.getBackgroundColor();
 				if(bgColor != null)
 				{
-					float x2 = (chunks.next == null ? width
+					float x2 = (chunks.next == null
+						&& chunks == first ? width
 						: _x + chunks.width);
 
 					//LineMetrics lm = font.getLineMetrics(

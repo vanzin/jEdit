@@ -3,7 +3,6 @@ TO DO
 - paste: not scrolled to caret
 - selection extended when shift not down?
 - source for existing plugins
-- only one find dialog
 - triple-click-drag down
 - idea for fixing buffer property issues: BufferProp class
 - replace in selection with rectangular selections
@@ -126,4 +125,4 @@ TO DO
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
 - lower case all user's guide ids
-- C+e , and . insert , and . in the buffer
+- C+e , and . insert , and . in the buffer, ditto for [ and ]

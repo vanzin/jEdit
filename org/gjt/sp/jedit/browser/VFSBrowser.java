@@ -1376,7 +1376,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 					else
 					{
 						MiscUtilities.quicksort(favorites,
-							new MiscUtilities.StringCompare());
+							new MiscUtilities.StringICaseCompare());
 						for(int i = 0; i < favorites.length; i++)
 						{
 							mi = new JMenuItem(favorites[i].toString());

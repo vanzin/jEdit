@@ -44,6 +44,7 @@ The major changes in this release are:
   - Modula-3
   - ObjectRexx
   - Prolog
+  - SmallTalk
 
 There are many smaller improvements as well, too many to list here, but
 some of the more noteworthy ones are:

@@ -429,6 +429,15 @@ With text inside it.
    <screen>:folding=<replaceable>mode</replaceable>:</screen>
    </listitem>
   </itemizedlist>
+  <warning>
+   <para>
+    When using indent folding, portions of the buffer may become
+    inaccessable if you change the leading indent of the first line of a
+    collapsed fold. If you experience this, you will need to use the
+    <guimenuitem>Expand All Folds</guimenuitem> command to make the text
+    visible again.
+   </para>
+  </warning>
   <sect2><title>Collapsing and Expanding Folds</title>
    <para>
     The first line of each fold has a triangle
