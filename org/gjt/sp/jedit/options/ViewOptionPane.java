@@ -66,7 +66,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		layoutPanel.add(BorderLayout.CENTER,layout);
 
 		JPanel buttons = new JPanel(new GridLayout(2,1,12,12));
-		buttons.setBorder(new EmptyBorder(12,12,12,12));
+		buttons.setBorder(new EmptyBorder(0,12,12,12));
 		buttons.add(alternateDockingLayout = new JButton(jEdit.getProperty(
 			"options.view.alternateDockingLayout")));
 		alternateDockingLayout.addActionListener(new ActionHandler());

@@ -29,8 +29,7 @@ import java.awt.dnd.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -250,25 +249,35 @@ public class Java14
 
 		public boolean importData(JComponent c, Transferable t)
 		{
-			if(canImport(c,t.getTransferDataFlavors())) 
-			{
-				try
-				{
-					String str = (String)t.getTransferData(
-						DataFlavor.stringFlavor);
-					JEditTextArea textArea = (JEditTextArea)c;
-					textArea.setSelectedText(str);
-					return true;
-				}
-				catch(Exception e)
-				{
-				}
-			}
+			if(!canImport(c,t.getTransferDataFlavors()))
+				return false;
 
-			return false;
+			try
+			{
+				String str = (String)t.getTransferData(
+					DataFlavor.stringFlavor);
+
+				JEditTextArea textArea = (JEditTextArea)c;
+
+				int caret = textArea.getCaretPosition();
+				Selection s = textArea.getSelectionAtOffset(caret);
+
+				/* if user drops into a selection,
+				replace selection */
+				if(s != null)
+					textArea.setSelectedText(s,str);
+				/* otherwise just insert the text */
+				else
+					textArea.getBuffer().insert(caret,str);
+			}
+			catch(Exception e)
+			{
+			}
+						
+			return true;
 		}
 
-		protected void exportDone(JComponent c, Transferable data,
+		protected void exportDone(JComponent c, Transferable t,
 			int action)
 		{
 			JEditTextArea textArea = (JEditTextArea)c;
@@ -305,6 +314,7 @@ public class Java14
 		public void dragEnter(DropTargetDragEvent dtde)
 		{
 			textArea.setDragInProgress(true);
+			//textArea.getBuffer().beginCompoundEdit();
 			savedCaret = textArea.getCaretPosition();
 		}
 
@@ -324,6 +334,7 @@ public class Java14
 		public void dragExit(DropTargetEvent dtde)
 		{
 			textArea.setDragInProgress(false);
+			//textArea.getBuffer().endCompoundEdit();
 			textArea.moveCaretPosition(savedCaret,
 				JEditTextArea.NO_SCROLL);
 		}
@@ -331,6 +342,7 @@ public class Java14
 		public void drop(DropTargetDropEvent dtde)
 		{
 			textArea.setDragInProgress(false);
+			//textArea.getBuffer().endCompoundEdit();
 		}
 	} //}}}
 

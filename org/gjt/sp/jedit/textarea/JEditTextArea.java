@@ -6303,6 +6303,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		private boolean quickCopyDrag;
 		private boolean clearStatus;
 		private boolean control;
+		/* with drag and drop on, a mouse down in a selection does not
+		immediately deselect */
+		private boolean maybeDragAndDrop;
 
 		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent evt)
@@ -6356,14 +6359,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			clickCount = evt.getClickCount();
 
 			if(isDragEnabled() && getDragAndDropCallback() != null
-				&& getSelectionAtOffset(dragStart) != null)
+				&& getSelectionAtOffset(dragStart) != null
+				&& clickCount == 1)
 			{
-				if(evt.getModifiers() == InputEvent.BUTTON1_MASK)
-					startDragAndDrop(evt,false);
-				else if(control)
-					startDragAndDrop(evt,true);
+				maybeDragAndDrop = true;
+				moveCaretPosition(dragStart,false);
 				return;
 			}
+			else
+				maybeDragAndDrop = false;
 
 			switch(clickCount)
 			{
@@ -6516,6 +6520,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ mouseDragged() method
 		public void mouseDragged(MouseEvent evt)
 		{
+			if(maybeDragAndDrop)
+			{
+				startDragAndDrop(evt,control);
+				return;
+			}
+
 			if(dndInProgress)
 				return;
 
@@ -6752,6 +6762,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					getToolkit().beep();
 				else
 					Registers.paste(JEditTextArea.this,'%',control);
+			}
+			else if(maybeDragAndDrop && !isMultipleSelectionEnabled())
+			{
+				selectNone();
 			}
 
 			dragged = false;

@@ -61,6 +61,11 @@ contributing to this release.
 - "Searching..." message in HyperSearch window did not go away if the
   file set contained no files.
 
+- jEdit will no longer fail to start if the user properties file could
+  not be loaded.
+
+- Fixed a few cosmetic bugs in the Global Options dialog box.
+
 }}}
 
 }}}

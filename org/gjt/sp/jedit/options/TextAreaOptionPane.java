@@ -129,20 +129,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			"view.electricBorders")));
 		addComponent(electricBorders);
 
-		/* Non word character selection behavior */
-		joinNonWordChars = new JCheckBox(jEdit.getProperty(
-			"options.textarea.joinNonWordChars"));
-		joinNonWordChars.setSelected(jEdit.getBooleanProperty(
-			"view.joinNonWordChars"));
-		addComponent(joinNonWordChars);
-
-		/* Middle mouse button click pastes % register */
-		middleMousePaste = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".middleMousePaste"));
-		middleMousePaste.setSelected(jEdit.getBooleanProperty(
-			"view.middleMousePaste"));
-		addComponent(middleMousePaste);
-
 		/* Anti-aliasing */
 		antiAlias = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".antiAlias"));
@@ -192,9 +178,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			wrapGuideColor.getSelectedColor());
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
-		jEdit.setBooleanProperty("view.joinNonWordChars",joinNonWordChars.isSelected());
-		jEdit.setBooleanProperty("view.middleMousePaste",
-			middleMousePaste.isSelected());
 		jEdit.setBooleanProperty("view.antiAlias",antiAlias.isSelected());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 	} //}}}
@@ -217,9 +200,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox wrapGuide;
 	private ColorWellButton wrapGuideColor;
 	private JCheckBox electricBorders;
-	private JCheckBox middleMousePaste;
 	private JCheckBox antiAlias;
 	private JCheckBox fracFontMetrics;
-	private JCheckBox joinNonWordChars;
 	//}}}
 }
