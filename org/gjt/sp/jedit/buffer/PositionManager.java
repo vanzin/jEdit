@@ -84,25 +84,9 @@ public class PositionManager
 		if(gapWidth != 0)
 		{
 			if(gapOffset < offset)
-			{
-				PosBottomHalf start = root.find2(gapOffset);
-				while(start != null
-					&& start.getOffset() < offset)
-				{
-					start.offset += gapWidth;
-					start = start.nextInorder();
-				}
-			}
+				root.contentInserted(gapOffset,offset,gapWidth);
 			else
-			{
-				PosBottomHalf start = root.find2(offset);
-				while(start != null
-					&& start.getOffset() < gapOffset)
-				{
-					start.offset -= gapWidth;
-					start = start.nextInorder();
-				}
-			}
+				root.contentInserted(offset,gapOffset,-gapWidth);
 		}
 
 		gapOffset = offset;
@@ -112,14 +96,59 @@ public class PositionManager
 	//{{{ contentRemoved() method
 	public synchronized void contentRemoved(int offset, int length)
 	{
-		// merge all inside remove range
-		// 
+		if(root == null)
+		{
+			gapWidth = 0;
+			return;
+		}
+
+		// p1 --------------------- p2 ---------------------- p3
+		// kill if bias:   ^---- false        ^----- true
+		// update if bias: ^---- true         ^----- false
+		boolean bias;
+		int p1, p2, p3;
+		if(gapWidth == 0)
+		{
+			p1 = offset;
+			p2 = p3 = offset + length;
+			bias = true;
+		}
+		else
+		{
+			if(gapOffset < offset)
+			{
+				p1 = gapOffset;
+				p2 = offset;
+				p3 = offset + length;
+				bias = true;
+			}
+			else if(gapOffset > offset + length)
+			{
+				p1 = offset;
+				p2 = offset + length;
+				p3 = gapOffset;
+				bias = false;
+			}
+			else
+			{
+				p1 = offset;
+				p2 = p3 = offset + length;
+				bias = false;
+			}
+		}
+
+		root.contentRemoved(p1,p2,p3,gapWidth,bias);
+
+		gapOffset = offset;
+		gapWidth = -length;
+
 	} //}}}
 
 	//{{{ Package-private members
 	/* so that PosBottomHalf can access without access$ methods */
 	int gapOffset;
 	int gapWidth;
+	//}}}
 
 	//{{{ Private members
 	private PosBottomHalf root;
@@ -456,28 +485,6 @@ public class PositionManager
 			}
 		} //}}}
 
-		//{{{ find2() method
-		/* find lowest node greater than or equal given offset */
-		PosBottomHalf find2(int offset)
-		{
-			if(getOffset() == offset)
-				return this;
-			else if(getOffset() < offset)
-			{
-				if(right == null)
-					return null;
-				else
-					return right.find2(offset);
-			}
-			else
-			{
-				if(left != null && left.getOffset() > offset)
-					return left.find2(offset);
-				else
-					return this;
-			}
-		} //}}}
-
 		//{{{ sibling() method
 		PosBottomHalf sibling()
 		{
@@ -489,24 +496,76 @@ public class PositionManager
 				throw new InternalError();
 		} //}}}
 
-		//{{{ nextInorder() method
-		PosBottomHalf nextInorder()
+		//{{{ contentInserted() method
+		/* update all nodes between start and end by length */
+		void contentInserted(int start, int end, int length)
 		{
-			if(right == null)
+			System.err.println(this + ": <" + start + "," + end + ">="
+				+ length);
+			if(getOffset() < start)
 			{
-				if(parent != null)
-				{
-					if(parent.left == this)
-						return parent;
-					else
-						
-				return parent;
+				System.err.println("right");
+				if(right != null)
+					right.contentInserted(start,end,length);
+			}
+			else if(getOffset() > end)
+			{
+				System.err.println("left");
+				if(left != null)
+					left.contentInserted(start,end,length);
+			}
 			else
 			{
-				PosBottomHalf nextInorder = right;
-				while(nextInorder.left != null)
-					nextInorder = nextInorder.left;
-				return nextInorder;
+				System.err.println("this");
+				offset += length;
+				if(left != null)
+					left.contentInserted(start,end,length);
+				if(right != null)
+					right.contentInserted(start,end,length);
+			}
+		} //}}}
+
+		//{{{ contentRemoved() method
+		/* if bias: kill from p1 to p2, update from p2 to p3,
+		*  if !bias: update from p1 to p2, kill from p2 to p3 */
+		void contentRemoved(int p1, int p2, int p3, int length,
+			boolean bias)
+		{
+			if(getOffset() < p1)
+			{
+				if(right != null)
+					right.contentRemoved(p1,p2,p3,length,bias);
+			}
+			else if(getOffset() > p3)
+			{
+				if(left != null)
+					left.contentRemoved(p1,p2,p3,length,bias);
+			}
+			else
+			{
+				// recall from above:
+				// p1 --------------------- p2 ---------------------- p3
+				// kill if bias:   ^---- false        ^----- true
+				// update if bias: ^---- true         ^----- false
+				if(bias)
+				{
+					if(getOffset() > p2)
+						offset = p2;
+					else
+						offset += length;
+				}
+				else
+				{
+					if(getOffset() < p2)
+						offset = p1;
+					else
+						offset -= length;
+				}
+
+				if(left != null)
+					left.contentRemoved(p1,p2,p3,length,bias);
+				if(right != null)
+					right.contentRemoved(p1,p2,p3,length,bias);
 			}
 		} //}}}
 
