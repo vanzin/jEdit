@@ -55,8 +55,6 @@ public class MacOSMenu extends JMenu implements ActionListener, MenuListener
 		add(new ShowBufferMenu());
 		add(new ShowRecentMenu());
 		add(new ShowRecentDirMenu());
-		addSeparator();
-		add(new ScriptsMenu());
 		
 		addMenuListener(this);
 	} //}}}
