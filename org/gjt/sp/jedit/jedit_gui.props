@@ -1260,15 +1260,13 @@ hypersearch-status=Searching
 #{{{ Search and replace error dialog
 searcherror.title=Search and Replace Error
 # {0} - error message
-searcherror.message=An error occurred while performing this operation.\n\
-	({0})
+searcherror.message=An error occurred while performing this operation.
 #}}}
 
 #{{{ Search and replace error dialog
 searcherror-bsh.title=Search and Replace Error
 # {0} - error message
 searcherror-bsh.message=An error occurred while performing this operation.\n\
-	({0})\n\
 	\n\
 	Make sure the replace mode is set to "Text" if you did not intend\n\
 	the replace string to be interpreted as a BeanShell expression.

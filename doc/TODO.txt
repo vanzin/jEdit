@@ -13,7 +13,6 @@ and quirks that I need to fix eventually.
 [error] AWT-EventQueue-0:  at org.gjt.sp.jedit.textarea.JEditTextArea.moveCaretPosition(JEditTextArea.java:2263)
 
 - macro override
--bsh replace error: use bsh error dialog
 
 wrapped dock buttons broken
 

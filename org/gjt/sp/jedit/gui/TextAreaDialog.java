@@ -38,6 +38,40 @@ public class TextAreaDialog extends EnhancedDialog
 	{
 		super(frame,title,true);
 
+		init(title,caption,icon,text);
+	} //}}}
+
+	//{{{ TextAreaDialog constructor
+	public TextAreaDialog(Frame frame, String name, Throwable t)
+	{
+		this(frame,jEdit.getProperty(name + ".title"),
+			jEdit.getProperty(name + ".message"),
+			UIManager.getIcon("OptionPane.errorIcon"),
+			MiscUtilities.throwableToString(t));
+	} //}}}
+
+	//{{{ TextAreaDialog constructor
+	public TextAreaDialog(Dialog frame, String title, String caption,
+		Icon icon, String text)
+	{
+		super(frame,title,true);
+
+		init(title,caption,icon,text);
+	} //}}}
+
+	//{{{ TextAreaDialog constructor
+	public TextAreaDialog(Dialog frame, String name, Throwable t)
+	{
+		this(frame,jEdit.getProperty(name + ".title"),
+			jEdit.getProperty(name + ".message"),
+			UIManager.getIcon("OptionPane.errorIcon"),
+			MiscUtilities.throwableToString(t));
+	} //}}}
+
+	//{{{ init() method
+	private void init(String title, String caption,
+		Icon icon, String text)
+	{
 		JPanel content = new JPanel(new BorderLayout(12,12));
 		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
@@ -49,7 +83,8 @@ public class TextAreaDialog extends EnhancedDialog
 
 		JPanel centerPanel = new JPanel(new BorderLayout(6,6));
 
-		centerPanel.add(BorderLayout.NORTH,new JLabel(caption));
+		centerPanel.add(BorderLayout.NORTH,
+			GUIUtilities.createMultilineLabel(caption));
 
 		JTextArea textArea = new JTextArea(10,80);
 
@@ -71,7 +106,7 @@ public class TextAreaDialog extends EnhancedDialog
 		getRootPane().setDefaultButton(ok);
 
 		pack();
-		setLocationRelativeTo(frame);
+		setLocationRelativeTo(getParent());
 		show();
 	} //}}}
 
