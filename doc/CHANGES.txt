@@ -18,6 +18,8 @@ contributing to this release.
 
 - Much faster auto indent.
 
+- Prefix keys (C+e, C+e n, C+m, C+r) now show a status bar message.
+
 + Bug Fixes:
 
 - Saving a file from one file system to another using the "Save a Copy
@@ -33,11 +35,21 @@ contributing to this release.
 - More fixes for non-standard mouse button handling under MacOS X
   (Kris Kopicki).
 
-- Fixed ArrayIndexOutOfBoundsException when selecting the last edit mode
-  in the list.
+- Fixed possible incorrect enabling and disabling of controls, and an
+  ArrayIndexOutOfBoundsException when selecting the last edit mode in
+  the Editing option pane's list.
 
 - Fixed possible ArrayIndexOutOfBoundsException while scrolling in a
   text area that was narrowed to a specific region in the buffer.
+
+- Fixed problem with Gutter marker tooltips not showing up sometimes if
+  the text area was scrolled horizontally.
+
+- JEditTextArea.getPhysicalLineOfScreenLine() was broken. This caused
+  problems for JDiff.
+
+- Fixed problem when scrolling with soft wrap where the last visible
+  line would get clipped.
 
 + API Changes:
 

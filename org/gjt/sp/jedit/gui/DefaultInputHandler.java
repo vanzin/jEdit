@@ -85,7 +85,8 @@ public class DefaultInputHandler extends InputHandler
 		StringTokenizer st = new StringTokenizer(keyBinding);
 		while(st.hasMoreTokens())
 		{
-			KeyStroke keyStroke = parseKeyStroke(st.nextToken());
+			String keyCodeStr = st.nextToken();
+			KeyStroke keyStroke = parseKeyStroke(keyCodeStr);
 			if(keyStroke == null)
 				return;
 
@@ -96,7 +97,9 @@ public class DefaultInputHandler extends InputHandler
 					current = (Hashtable)o;
 				else
 				{
-					o = new Hashtable();
+					Hashtable hash = new Hashtable();
+					hash.put(PREFIX_STR,keyCodeStr);
+					o = hash;
 					current.put(keyStroke,o);
 					current = (Hashtable)o;
 				}
@@ -231,7 +234,7 @@ public class DefaultInputHandler extends InputHandler
 				repeatCount = 0;
 				repeat = false;
 				evt.consume();
-				currentBindings = bindings;
+				setCurrentBindings(bindings);
 			}
 			else if(modifiers == 0 && (keyCode == KeyEvent.VK_ENTER
 				|| keyCode == KeyEvent.VK_TAB))
@@ -249,13 +252,13 @@ public class DefaultInputHandler extends InputHandler
 
 		if(o instanceof EditAction)
 		{
-			currentBindings = bindings;
+			setCurrentBindings(bindings);
 			invokeAction((EditAction)o);
 			evt.consume();
 		}
 		else if(o instanceof Hashtable)
 		{
-			currentBindings = (Hashtable)o;
+			setCurrentBindings((Hashtable)o);
 			evt.consume();
 		}
 
@@ -317,17 +320,17 @@ public class DefaultInputHandler extends InputHandler
 
 		if(o instanceof Hashtable)
 		{
-			currentBindings = (Hashtable)o;
+			setCurrentBindings((Hashtable)o);
 		}
 		else if(o instanceof EditAction)
 		{
-			currentBindings = bindings;
+			setCurrentBindings(bindings);
 			invokeAction((EditAction)o);
 		}
 		else
 		{
 			// otherwise, reset to default map and do user input
-			currentBindings = bindings;
+			setCurrentBindings(bindings);
 
 			if(repeat && Character.isDigit(c))
 			{
@@ -487,6 +490,8 @@ public class DefaultInputHandler extends InputHandler
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ Class initializer
 	static
 	{
 		if(OperatingSystem.isMacOS())
@@ -505,11 +510,36 @@ public class DefaultInputHandler extends InputHandler
 				InputEvent.META_MASK,
 				InputEvent.SHIFT_MASK);
 		}
-	}
+	} //}}}
 
 	private static int c, a, m, s;
 
+	// Stores prefix name in bindings hashtable
+	private static Object PREFIX_STR = "PREFIX_STR";
+
 	private Hashtable bindings;
 	private Hashtable currentBindings;
+
+	//{{{ setCurrentBindings() method
+	private void setCurrentBindings(Hashtable bindings)
+	{
+		String prefixStr = (String)bindings.get(PREFIX_STR);
+		if(prefixStr != null)
+		{
+			if(currentBindings != this.bindings)
+			{
+				//XXX this won't work past 2 levels of prefixing
+				prefixStr = currentBindings.get(PREFIX_STR)
+					+ " " + prefixStr;
+			}
+
+			view.getStatus().setMessage(prefixStr);
+		}
+		else
+			view.getStatus().setMessage(null);
+
+		currentBindings = bindings;
+	} //}}}
+
 	//}}}
 }
