@@ -578,7 +578,7 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			int _y = y + lineHeight / 2;
 			gfx.setColor(foldColor);
-			if(textArea.getFoldVisibilityManager()
+			if(textArea.getDisplayManager()
 				.isLineVisible(physicalLine + 1))
 			{
 				gfx.drawLine(1,_y - 3,10,_y - 3);

@@ -3,15 +3,16 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- to paint collapsed lines counter: use chunk cached value if possible
+- menu drag: slow
+- action bar: S+TAB/TAB selects completions
+- complete word: ditto
 - goToBuffer(): need to focus edit pane in question
 - after new display: optimize & match old performance
 - switching between soft wrap and not needs to update anchors, etc
 - scrolling bug happened without even using mouse!
 - disable bracket match: gutter highlight not hidden
 - display:
-  - display manager: handle buffer not visible case
-  - OffsetMgr.beginScreenLineOperations();
-  - OffsetMgr.endScreenLineOperations(); // notifies anchors of changes.
   - end anchor:
     updates scroll bars.
     foldStructureChanged(), etc. doesn't need this.
@@ -23,9 +24,6 @@ and quirks that I need to fix eventually.
   - chunk cache first line: can be much better
   - text area: buffer scroll to, set first line, position hold
   - scroll up page, scroll down page
-  - display manager: store first line
-    edit pane no need to store first line between buffer switches
-    still store horizontal scroll?
 - help:
   - titles in search are fucked
   - title adds more to the relevance

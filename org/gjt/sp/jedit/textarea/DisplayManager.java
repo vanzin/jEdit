@@ -55,7 +55,8 @@ public class DisplayManager
 		{
 			public void changed()
 			{
-				
+				System.err.println("screen line count changed: "
+					+ scrollLineCount.scrollLine);
 			}
 		};
 		offsetMgr.addAnchor(scrollLineCount);
@@ -630,16 +631,32 @@ public class DisplayManager
 	//{{{ BufferChangeHandler method
 	class BufferChangeHandler extends BufferChangeAdapter
 	{
+		boolean queuedNotifyScreenLineChanges;
+
 		public void contentInserted(Buffer buffer, int startLine,
 			int offset, int numLines, int length)
 		{
-			if(!textArea.softWrap)
-				return;
-			// not needed? move to getScrollLineCount()
-			for(int i = 0; i < numLines; i++)
+			for(int i = 0; i <= numLines; i++)
 			{
-				getScreenLineCount(i);
+				getScreenLineCount(startLine + i);
 			}
+
+			queuedNotifyScreenLineChanges = true;
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
+		}
+
+		public void contentRemoved(Buffer buffer, int startLine,
+			int offset, int numLines, int length)
+		{
+			queuedNotifyScreenLineChanges = true;
+			if(!buffer.isTransactionInProgress())
+				transactionComplete(buffer);
+		}
+
+		public void transactionComplete(Buffer buffer)
+		{
+			offsetMgr.notifyScreenLineChanges();
 		}
 	} //}}}
 }
