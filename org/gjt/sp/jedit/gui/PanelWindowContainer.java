@@ -161,8 +161,8 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 			Dimension dim = new Dimension(
 				Math.min(size.width,size.height),
 				Math.min(size.width,size.height));
+			closeBox.setMinimumSize(dim);
 			closeBox.setPreferredSize(dim);
-			System.err.println(dim);
 		}
 
 		buttonGroup.add(button);
@@ -374,17 +374,13 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 			setIcon(new RotatedTextIcon(rotate,text));
 		}
 
-		static int maxWidth = 0;
-		static int maxHeight = 1;
-		static Image rotImg;
-		static Graphics rotGfx;
-
 		class RotatedTextIcon implements Icon
 		{
 			int rotate;
 			String text;
 			int width;
 			int height;
+			Image rotated;
 
 			RotatedTextIcon(int rotate, String text)
 			{
@@ -393,32 +389,18 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 				FontMetrics fm = getFontMetrics(getFont());
 				width = fm.stringWidth(text);
 				height = fm.getHeight();
-
-				if(rotate == CW || rotate == CCW)
-				{
-					if(width > maxWidth
-						|| height > maxHeight)
-					{
-						maxWidth = width;
-						maxHeight = height;
-						rotImg = null;
-						rotGfx = null;
-					}
-
-					int tmp = width;
-					width = height;
-					height = tmp;
-				}
 			}
 
 			public int getIconWidth()
 			{
-				return width;
+				return (rotate == CW || rotate == CCW
+					? height : width);
 			}
 
 			public int getIconHeight()
 			{
-				return height;
+				return (rotate == CW || rotate == CCW
+					? width : height);
 			}
 
 			public void paintIcon(Component c, Graphics g, int x, int y)
@@ -432,42 +414,39 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 					return;
 				}
 
-				if(rotImg == null)
+				if(rotated == null)
 				{
-					rotImg = c.createImage(maxWidth,maxHeight);
-					rotGfx = rotImg.getGraphics();
+					Image rotImg = c.createImage(width,height);
+					Graphics rotGfx = rotImg.getGraphics();
+					rotGfx.setColor(c.getForeground());
+
+					rotGfx.drawString(text,0,fm.getAscent());
+
+					ImageFilter filter = new RotationFilter(rotate);
+					rotated = createImage(new FilteredImageSource(
+						rotImg.getSource(),filter));
 				}
 
-				rotGfx.setColor(c.getBackground());
-				rotGfx.fillRect(0,0,width,height);
-				rotGfx.setColor(c.getForeground());
-
-				rotGfx.drawString(text,0,fm.getAscent());
-
-				//ImageFilter filter = new RotationFilter(rotate,width,height);
-				//Image rotated = createImage(new FilteredImageSource(
-				//	rotImg.getSource(),filter));
-
-				//g.drawImage(rotated,x,y,c);
+				g.drawImage(rotated,x,y,c);
 			}
 		}
 
 		static class RotationFilter extends ImageFilter
 		{
+			int rotation;
 			int width;
 			int height;
-			int rotation;
 
-			RotationFilter(int width, int height, int rotation)
+			RotationFilter(int rotation)
 			{
-				this.width = width;
-				this.height = height;
 				this.rotation = rotation;
 			}
 
-			public void setDimensions(int _width, int _height)
+			public void setDimensions(int width, int height)
 			{
-				super.setDimensions(width,height);
+				this.width = height;
+				this.height = width;
+				super.setDimensions(height,width);
 			}
 
 			// Fuck all the retards at Sun who made it impossible to
@@ -477,44 +456,46 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 				ColorModel model, byte pixels[], int off,
 				int scansize)
 			{
-				byte[] retVal = new byte[width * height];
+				byte[] retVal = new byte[h * w];
 
-				for(int i = x; i < Math.max(x + w,width); i++)
+				for(int i = 0; i < w; i++)
 				{
-					for(int j = y; j < Math.max(y + h,height); j++)
+					for(int j = 0; j < h; j++)
 					{
-						retVal[(i - x) * height
-							+ (rotation == CW
-							? (j - y)
-							: (width - j + w))]
-							= pixels[(j - y) * scansize
-								+ (i - x) + off];
+						byte value = pixels[j * scansize
+							+ i + off];
+
+						retVal[i * h + (h - j - 1)]
+							= value;
 					}
 				}
 
-				super.setPixels(x,y,w,h,model,pixels,off,scansize);
+				super.setPixels((rotation == CCW
+					? y : width - y - 1),
+					x,h,w,model,pixels,0,h);
 			}
 
 			public void setPixels(int x, int y, int w, int h,
 				ColorModel model, int pixels[], int off,
 				int scansize)
 			{
-				int[] retVal = new int[width * height];
+				int[] retVal = new int[h * w];
 
-				for(int i = x; i < Math.max(x + w,width); i++)
+				for(int i = 0; i < w; i++)
 				{
-					for(int j = y; j < Math.max(y + h,height); j++)
+					for(int j = 0; j < h; j++)
 					{
-						retVal[(i - x) * height
-							+ (rotation == CW
-							? (j - y)
-							: (width - j + w))]
-							= pixels[(j - y) * scansize
-								+ (i - x) + off];
+						int value = pixels[j * scansize
+							+ i + off];
+
+						retVal[i * h + (h - j - 1)]
+							= value;
 					}
 				}
 
-				super.setPixels(x,y,w,h,model,pixels,off,scansize);
+				super.setPixels((rotation == CCW
+					? y : width - y - 1),
+					x,h,w,model,pixels,0,h);
 			}
 		}
 	}
