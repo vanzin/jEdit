@@ -70,17 +70,20 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.appearance.lf"),
 			lookAndFeel);
 
-		/* Primary Metal L&F font */
-		primaryFont = new FontSelector(jEdit.getFontProperty(
-			"metal.primary.font"));
-		addComponent(jEdit.getProperty("options.appearance.primaryFont"),
-			primaryFont);
+		if(!OperatingSystem.hasJava15())
+		{
+			/* Primary Metal L&F font */
+			primaryFont = new FontSelector(jEdit.getFontProperty(
+				"metal.primary.font"));
+			addComponent(jEdit.getProperty("options.appearance.primaryFont"),
+				primaryFont);
 
-		/* Secondary Metal L&F font */
-		secondaryFont = new FontSelector(jEdit.getFontProperty(
-			"metal.secondary.font"));
-		addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
-			secondaryFont);
+			/* Secondary Metal L&F font */
+			secondaryFont = new FontSelector(jEdit.getFontProperty(
+				"metal.secondary.font"));
+			addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
+				secondaryFont);
+		}
 
 		updateEnabled();
 
@@ -142,8 +145,11 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	{
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
 		jEdit.setProperty("lookAndFeel",lf);
-		jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
-		jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
+		if(!OperatingSystem.hasJava15())
+		{
+			jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
+			jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
+		}
 		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
@@ -195,6 +201,9 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	//{{{ updateEnabled() method
 	private void updateEnabled()
 	{
+		if(OperatingSystem.hasJava15())
+			return;
+
 		String className = lfs[lookAndFeel.getSelectedIndex()]
 			.getClassName();
 
