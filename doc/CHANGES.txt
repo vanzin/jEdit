@@ -30,6 +30,9 @@ contributing to this release.
 - jEdit now remembers if a window was maximized when saving geometry
   (Chris Kent).
 
+- If a HyperSearch produces no results, older result nodes are collapsed
+  in the "HyperSearch Results" window.
+
 + Bug Fixes:
 
 - The action "Insert Tab and Indent" was broken. If you reassigned TAB
@@ -51,6 +54,12 @@ contributing to this release.
 
 - "Rectangular selection mode" status message was not being shown on
   MacOS X.
+
+- Fixed a NoSuchMethodError when invoking "Format Paragraph" on Java
+  1.3.
+
+- A Control-click did not bring up the right-click popup menu in the
+  file system browser on MacOS X.
 
 + API Additions:
 

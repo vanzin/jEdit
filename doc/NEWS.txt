@@ -29,4 +29,4 @@ XXX: Need to go into more detail and clean this up!!!
 - search bar auto hide
 - WheelMouse in core
 - SOCKS proxy support
-
+- window maximization state is now remembered

@@ -766,7 +766,8 @@ class BrowserView extends JPanel
 					if(evt.getClickCount() % 2 == 0)
 						break;
 				}
-				else if(GUIUtilities.isPopupTrigger(evt))
+
+				if(GUIUtilities.isPopupTrigger(evt))
 				{
 					if(popup != null && popup.isVisible())
 					{
