@@ -338,6 +338,11 @@ public abstract class EditPlugin
 			return null;
 		}
 
+		public String toString()
+		{
+			return "Deferred[" + clazz + "]";
+		}
+
 		// private members
 		private String clazz;
 	} //}}}
@@ -348,9 +353,9 @@ public abstract class EditPlugin
 	 */
 	public static class JAR extends PluginJAR
 	{
-		JAR(String path)
+		JAR(java.io.File file)
 		{
-			super(path);
+			super(file);
 		}
 	}
 	//}}}

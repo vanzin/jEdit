@@ -39,25 +39,23 @@ public class ServiceManager
 	//{{{ loadServices() method
 	/**
 	 * Loads a <code>services.xml</code> file.
-	 *
-	 * @param plugin The plugin, or null
-	 * @param plugin The plugin JAR, or null if this is the built-in
-	 * <code>services.xml</code>
-	 *
 	 * @since jEdit 4.2pre1
 	 */
-	public static void loadServices(PluginJAR plugin, URL uri)
+	public static void loadServices(PluginJAR plugin, URL uri,
+		PluginJAR.PluginCacheEntry cache)
 	{
 		try
 		{
 			Log.log(Log.DEBUG,jEdit.class,"Loading services from " + uri);
 
-			ServiceListHandler dh = new ServiceListHandler(uri,plugin);
+			ServiceListHandler dh = new ServiceListHandler(plugin,uri);
 			XmlParser parser = new XmlParser();
 			parser.setHandler(dh);
 			parser.parse(null, null, new BufferedReader(
 				new InputStreamReader(
 				uri.openStream())));
+			if(cache != null)
+				cache.cachedServices = dh.getCachedServices();
 		}
 		catch(XmlException xe)
 		{
@@ -194,7 +192,8 @@ public class ServiceManager
 			if(value.code == null)
 			{
 				loadServices(value.plugin,
-					value.plugin.getServicesURI());
+					value.plugin.getServicesURI(),
+					null);
 				value = (Descriptor)serviceMap.get(key);
 			}
 			return value.getInstance();

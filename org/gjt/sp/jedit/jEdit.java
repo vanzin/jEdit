@@ -990,7 +990,7 @@ public class jEdit
 	public static PluginJAR addPluginJAR(String path)
 	{
 		// backwards compatibility...
-		PluginJAR jar = new EditPlugin.JAR(path);
+		PluginJAR jar = new EditPlugin.JAR(new File(path));
 		jars.addElement(jar);
 		jar.init();
 		jar.getClassLoader().activate();
@@ -1122,6 +1122,8 @@ public class jEdit
 		for(int i = 0; i < actions.length; i++)
 		{
 			actions[i] = actionContext.getAction(names[i]);
+			if(actions[i] == null)
+				Log.log(Log.ERROR,jEdit.class,"wtf: " + names[i]);
 		}
 		return actions;
 	} //}}}
@@ -2146,6 +2148,16 @@ public class jEdit
 		return settingsDirectory;
 	} //}}}
 
+	//{{{ getJARCacheDirectory() method
+	/**
+	 * Returns the directory where plugin cache files are stored.
+	 * @since jEdit 4.2pre1
+	 */
+	public static String getJARCacheDirectory()
+	{
+		return jarCacheDirectory;
+	} //}}}
+
 	//{{{ backupSettingsFile() method
 	/**
 	 * Backs up the specified file in the settings directory.
@@ -2463,6 +2475,7 @@ public class jEdit
 	//{{{ Static variables
 	private static String jEditHome;
 	private static String settingsDirectory;
+	private static String jarCacheDirectory;
 	private static long propsModTime, recentModTime;
 	private static Properties defaultProps;
 	private static Properties props;
@@ -2683,13 +2696,19 @@ public class jEdit
 
 		Log.log(Log.MESSAGE,jEdit.class,"jEdit home directory is " + jEditHome);
 
+		if(settingsDirectory != null)
+		{
+			jarCacheDirectory = MiscUtilities.constructPath(
+				settingsDirectory,"jars-cache");
+			new File(jarCacheDirectory).mkdirs();
+		}
+
 		//if(jEditHome == null)
 		//	Log.log(Log.DEBUG,jEdit.class,"Web start mode");
 
 		// Add an EditBus component that will reload edit modes and
 		// macros if they are changed from within the editor
 		EditBus.addToBus(new SettingsReloader());
-
 
 		// Perhaps if Xerces wasn't slightly brain-damaged, we would
 		// not need this
@@ -2797,10 +2816,12 @@ public class jEdit
 		actionContext.addActionSet(builtInActionSet);
 
 		DockableWindowManager.loadDockableWindows(null,
-			jEdit.class.getResource("dockables.xml"));
+			jEdit.class.getResource("dockables.xml"),
+			null);
 
 		ServiceManager.loadServices(null,
-			jEdit.class.getResource("services.xml"));
+			jEdit.class.getResource("services.xml"),
+			null);
 	} //}}}
 
 	//{{{ initPlugins() method

@@ -147,18 +147,25 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * Plugins shouldn't need to call this method.
 	 * @since jEdit 4.2pre1
 	 */
-	public static void loadDockableWindows(PluginJAR plugin, URL uri)
+	public static void loadDockableWindows(PluginJAR plugin, URL uri,
+		PluginJAR.PluginCacheEntry cache)
 	{
 		try
 		{
-			Log.log(Log.DEBUG,jEdit.class,"Loading dockables from " + uri);
+			Log.log(Log.DEBUG,DockableWindowManager.class,
+				"Loading dockables from " + uri);
 
-			DockableListHandler dh = new DockableListHandler(uri,plugin);
+			DockableListHandler dh = new DockableListHandler(plugin,uri);
 			XmlParser parser = new XmlParser();
 			parser.setHandler(dh);
 			parser.parse(null, null, new BufferedReader(
 				new InputStreamReader(
 				uri.openStream())));
+			if(cache != null)
+			{
+				cache.cachedDockableNames = dh.getCachedDockableNames();
+				cache.cachedDockableActionFlags = dh.getCachedDockableActionFlags();
+			}
 		}
 		catch(XmlException xe)
 		{
@@ -201,7 +208,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		{
 			Factory factory = new Factory(plugin,
 				name[i],null,actions[i]);
-			dockableWindowFactories.put(name,factory);
+			dockableWindowFactories.put(name[i],factory);
 		}
 	} //}}}
 
@@ -211,7 +218,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	{
 		Factory factory = (Factory)dockableWindowFactories.get(name);
 		if(factory != null)
+		{
 			factory.code = code;
+			factory.loaded = true;
+		}
 		else
 		{
 			factory = new Factory(plugin,name,code,actions);
@@ -238,12 +248,15 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	static class DockableListHandler extends HandlerBase
 	{
 		//{{{ DockableListHandler constructor
-		DockableListHandler(URL uri, PluginJAR plugin)
+		DockableListHandler(PluginJAR plugin, URL uri)
 		{
-			this.uri = uri;
 			this.plugin = plugin;
+			this.uri = uri;
 			stateStack = new Stack();
 			actions = true;
+
+			cachedDockableNames = new LinkedList();
+			cachedDockableActionFlags = new LinkedList();
 		} //}}}
 
 		//{{{ resolveEntity() method
@@ -327,6 +340,9 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				{
 					registerDockableWindow(plugin,
 						dockableName,code,actions);
+					cachedDockableNames.add(dockableName);
+					cachedDockableActionFlags.add(
+						new Boolean(actions));
 					// make default be true for the next
 					// action
 					actions = true;
@@ -354,11 +370,37 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			}
 		} //}}}
 
+		//{{{ getCachedDockableNames() method
+		public String[] getCachedDockableNames()
+		{
+			return (String[])cachedDockableNames.toArray(new String[cachedDockableNames.size()]);
+		} //}}}
+
+		//{{{ getCachedDockableActionFlags() method
+		public boolean[] getCachedDockableActionFlags()
+		{
+			boolean[] returnValue = new boolean[
+				cachedDockableActionFlags.size()];
+			Iterator iter = cachedDockableActionFlags.iterator();
+			int i = 0;
+			while(iter.hasNext())
+			{
+				boolean flag = ((Boolean)iter.next())
+					.booleanValue();
+				returnValue[i++] = flag;
+			}
+
+			return returnValue;
+		} //}}}
+
 		//{{{ Private members
 
 		//{{{ Instance variables
-		private URL uri;
 		private PluginJAR plugin;
+		private URL uri;
+
+		private java.util.List cachedDockableNames;
+		private java.util.List cachedDockableActionFlags;
 
 		private String dockableName;
 		private String code;
@@ -443,7 +485,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 					+ "-float.label",
 					jEdit.getProperty(
 					"view.docking.float.label",args));
-				
 			}
 		} //}}}
 
@@ -453,7 +494,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			if(loaded)
 				return;
 
-			loadDockableWindows(plugin,plugin.getDockablesURI());
+			loadDockableWindows(plugin,plugin.getDockablesURI(),null);
 		} //}}}
 
 		//{{{ createDockableWindow() method

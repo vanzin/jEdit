@@ -41,10 +41,114 @@ import org.gjt.sp.util.Log;
  */
 public class PluginJAR
 {
+	//{{{ Static methods
+
+	//{{{ getPluginCache() method
+	static PluginCacheEntry getPluginCache(PluginJAR plugin)
+	{
+		String jarCachePath = plugin.getCachePath();
+		if(jarCachePath == null)
+			return null;
+
+		DataInputStream din = null;
+		try
+		{
+			PluginCacheEntry cache = new PluginCacheEntry();
+			cache.plugin = plugin;
+			cache.modTime = plugin.getFile().lastModified();
+			din = new DataInputStream(
+				new BufferedInputStream(
+				new FileInputStream(jarCachePath)));
+			if(!cache.read(din))
+			{
+				// returns false with outdated cache
+				return null;
+			}
+			else
+				return cache;
+		}
+		catch(FileNotFoundException fnf)
+		{
+			return null;
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,PluginJAR.class,io);
+			return null;
+		}
+		finally
+		{
+			try
+			{
+				if(din != null)
+					din.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,PluginJAR.class,io);
+			}
+		}
+	} //}}}
+
+	//{{{ setPluginCache() method
+	static void setPluginCache(PluginJAR plugin, PluginCacheEntry cache)
+	{
+		String jarCachePath = plugin.getCachePath();
+		if(jarCachePath == null)
+			return;
+
+		Log.log(Log.DEBUG,PluginJAR.class,"Writing " + jarCachePath);
+
+		DataOutputStream dout = null;
+		try
+		{
+			dout = new DataOutputStream(
+				new BufferedOutputStream(
+				new FileOutputStream(jarCachePath)));
+			cache.write(dout);
+			try
+			{
+				if(dout != null)
+					dout.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,PluginJAR.class,io);
+			}
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,PluginJAR.class,io);
+			try
+			{
+				dout.close();
+			}
+			catch(IOException io2)
+			{
+				Log.log(Log.ERROR,PluginJAR.class,io2);
+			}
+			new File(jarCachePath).delete();
+		}
+	} //}}}
+
+	//}}}
+
 	//{{{ getPath() method
 	public String getPath()
 	{
 		return path;
+	} //}}}
+
+	//{{{ getCachePath() method
+	public String getCachePath()
+	{
+		return cachePath;
+	} //}}}
+
+	//{{{ getFile() method
+	public File getFile()
+	{
+		return file;
 	} //}}}
 
 	//{{{ getClassLoader() method
@@ -205,9 +309,16 @@ public class PluginJAR
 	//{{{ Package-private members
 
 	//{{{ PluginJAR constructor
-	PluginJAR(String path)
+	PluginJAR(File file)
 	{
-		this.path = path;
+		this.path = file.getPath();
+		String jarCacheDir = jEdit.getJARCacheDirectory();
+		if(jarCacheDir != null)
+		{
+			cachePath = MiscUtilities.constructPath(
+				jarCacheDir,file.getName() + ".summary");
+		}
+		this.file = file;
 		classLoader = new JARClassLoader(this);
 		actions = new ActionSet();
 	} //}}}
@@ -215,8 +326,7 @@ public class PluginJAR
 	//{{{ init() method
 	void init()
 	{
-		ResourceCache.PluginCacheEntry cache
-			= ResourceCache.getPluginCache(path);
+		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
 			loadCache(cache);
 		else
@@ -224,7 +334,7 @@ public class PluginJAR
 			try
 			{
 				cache = generateCache();
-				ResourceCache.setPluginCache(path,cache);
+				setPluginCache(this,cache);
 			}
 			catch(IOException io)
 			{
@@ -308,29 +418,27 @@ public class PluginJAR
 	//{{{ loadProperties() method
 	void loadProperties() throws IOException
 	{
-		if(propertiesLoaded)
+		if(propertiesLoaded || properties == null)
 			return;
 
 		propertiesLoaded = true;
 
-		Iterator iter = properties.iterator();
-		while(iter.hasNext())
+		for(int i = 0; i < properties.length; i++)
 		{
-			URL propFile = (URL)iter.next();
 			jEdit.loadProps(
-				propFile.openStream(),
+				new URL(properties[i]).openStream(),
 				true);
 		}
 	} //}}}
 
 	//{{{ getPropertyFiles() method
-	List getPropertyFiles()
+	String[] getPropertyFiles()
 	{
 		return properties;
 	} //}}}
 
 	//{{{ getClasses() method
-	List getClasses()
+	String[] getClasses()
 	{
 		return classes;
 	} //}}}
@@ -364,10 +472,13 @@ public class PluginJAR
 
 	//{{{ Instance variables
 	private String path;
+	private String cachePath;
+	private File file;
+
 	private JARClassLoader classLoader;
 	private ZipFile zipFile;
-	private List properties;
-	private List classes;
+	private String[] properties;
+	private String[] classes;
 	private ActionSet actions;
 	private ActionSet browserActions;
 
@@ -381,7 +492,7 @@ public class PluginJAR
 	//}}}
 
 	//{{{ loadCache() method
-	private void loadCache(ResourceCache.PluginCacheEntry cache)
+	private void loadCache(PluginCacheEntry cache)
 	{
 		properties = cache.properties;
 		classes = cache.classes;
@@ -391,21 +502,30 @@ public class PluginJAR
 			actions = new ActionSet(this,
 				cache.cachedActionNames,
 				cache.actionsURI);
+			jEdit.addActionSet(actions);
 		}
+		else
+			actions = new ActionSet();
+
 		if(cache.browserActionsURI != null)
 		{
 			browserActions = new ActionSet(this,
 				cache.cachedBrowserActionNames,
 				cache.browserActionsURI);
+			VFSBrowser.getActionContext().addActionSet(browserActions);
 		}
+
 		if(cache.dockablesURI != null)
 		{
+			dockablesURI = cache.dockablesURI;
 			DockableWindowManager.cacheDockableWindows(this,
 				cache.cachedDockableNames,
 				cache.cachedDockableActionFlags);
 		}
+
 		if(cache.servicesURI != null)
 		{
+			servicesURI = cache.servicesURI;
 			for(int i = 0; i < cache.cachedServices.length;
 				i++)
 			{
@@ -414,14 +534,37 @@ public class PluginJAR
 				ServiceManager.registerService(d);
 			}
 		}
+
+		//XXX soon we won't need this
+		try
+		{
+			loadProperties();
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+		}
+
+		if(cache.pluginClass != null)
+		{
+			if(actions != null)
+			{
+				String label = jEdit.getProperty("plugin."
+					+ cache.pluginClass + ".name");
+				actions.setLabel(jEdit.getProperty(
+					"action-set.plugin",
+					new String[] { label }));
+			}
+			plugin = new EditPlugin.Deferred(cache.pluginClass);
+			plugin.jar = (EditPlugin.JAR)this;
+		}
 	} //}}}
 
 	//{{{ generateCache() method
-	private ResourceCache.PluginCacheEntry generateCache()
-		throws IOException
+	private PluginCacheEntry generateCache() throws IOException
 	{
-		properties = new LinkedList();
-		classes = new LinkedList();
+		LinkedList properties = new LinkedList();
+		LinkedList classes = new LinkedList();
 
 		//XXX: need to unload action set, dockables, services
 		// if plugin core class didn't load.
@@ -429,8 +572,8 @@ public class PluginJAR
 
 		List plugins = new LinkedList();
 
-		ResourceCache.PluginCacheEntry cache
-			= new ResourceCache.PluginCacheEntry();
+		PluginCacheEntry cache = new PluginCacheEntry();
+		cache.modTime = file.lastModified();
 
 		Enumeration entries = zipFile.entries();
 		while(entries.hasMoreElements())
@@ -458,7 +601,7 @@ public class PluginJAR
 				cache.servicesURI = servicesURI;
 			}
 			else if(lname.endsWith(".props"))
-				properties.add(classLoader.getResource(name));
+				properties.add(classLoader.getResourceAsPath(name));
 			else if(name.endsWith(".class"))
 			{
 				String className = MiscUtilities
@@ -482,8 +625,12 @@ public class PluginJAR
 			}
 		}
 
-		cache.properties = properties;
-		cache.classes = classes;
+		this.properties = cache.properties =
+			(String[])properties.toArray(
+			new String[properties.size()]);
+		this.classes = cache.classes =
+			(String[])classes.toArray(
+			new String[classes.size()]);
 
 		loadProperties();
 
@@ -505,7 +652,7 @@ public class PluginJAR
 			{
 				plugin = new EditPlugin.Deferred(className);
 				plugin.jar = (EditPlugin.JAR)this;
-				generateCacheForPluginCoreClass(className,cache);
+				cache.pluginClass = className;
 				label = _label;
 				break;
 			}
@@ -536,13 +683,12 @@ public class PluginJAR
 		if(dockablesURI != null)
 		{
 			DockableWindowManager.loadDockableWindows(this,
-				dockablesURI);
-			//XXX: filling out cache fields
+				dockablesURI,cache);
 		}
 
 		if(servicesURI != null)
 		{
-			ServiceManager.loadServices(this,servicesURI);
+			ServiceManager.loadServices(this,servicesURI,cache);
 		}
 
 		return cache;
@@ -668,74 +814,239 @@ public class PluginJAR
 		return ok;
 	} //}}}
 
-	//{{{ generateCacheForPluginCoreClass() method
-	private void generateCacheForPluginCoreClass(String name,
-		ResourceCache.PluginCacheEntry cache)
-	{
-		// Check if a plugin with the same name is already loaded
-		/* EditPlugin[] plugins = jEdit.getPlugins();
-
-		for(int i = 0; i < plugins.length; i++)
-		{
-			if(plugins[i].getClass().getName().equals(name))
-			{
-				jEdit.pluginError(path,
-					"plugin-error.already-loaded",null);
-				return;
-			}
-		} */
-
-		/* This is a bit silly... but WheelMouse seems to be
-		 * unmaintained so the best solution is to add a hack here.
-		 */
-		/* if(name.equals("WheelMousePlugin")
-			&& OperatingSystem.hasJava14())
-		{
-			plugins.add(new EditPlugin.Broken(name));
-			cache.addBrokenPlugin(name);
-			jEdit.pluginError(path,"plugin-error.obsolete",null);
-			return;
-		} */
-
-		// XXX: this should not be part of the cache stage,
-		// full stop!
-
-		// XXX: what if failed dependencies fuck this up
-		// XXX: right way is to do full dep check in cache
-		// creation, and add dependent plugins to another
-		// collection in the cache object
-		/* Class clazz = classLoader.loadClass(name,false);
-		int modifiers = clazz.getModifiers();
-		if(Modifier.isInterface(modifiers)
-			|| Modifier.isAbstract(modifiers)
-			|| !EditPlugin.class.isAssignableFrom(clazz))
-		{
-			// not a real plugin core class
-			return;
-		}
-
-		//XXX: store these in instance vars
-		String label = jEdit.getProperty("plugin."
-			+ name + ".name");
-		String version = jEdit.getProperty("plugin."
-			+ name + ".version");
-
-		if(name == null || version == null)
-		{
-			Log.log(Log.ERROR,this,"Plugin " +
-				name + " needs"
-				+ " 'name' and 'version' properties.");
-			plugins.add(new EditPlugin.Broken(name));
-			return;
-		}
-
-		// XXX: this is no good
-		actionSet.setLabel(jEdit.getProperty(
-			"action-set.plugin",
-			new String[] { label }));
-
-		plugins.add(new EditPlugin.Deferred(name)); */
-	} //}}}
-
 	//}}}
+
+	//{{{ PluginCacheEntry class
+	/**
+	 * Used by the <code>DockableWindowManager</code> and
+	 * <code>ServiceManager</code> to handle caching.
+	 * @since jEdit 4.2pre1
+	 */
+	public static class PluginCacheEntry
+	{
+		public static final int MAGIC = 0xB1A3E420;
+
+		//{{{ Instance variables
+		public PluginJAR plugin;
+		public long modTime;
+
+		public String[] properties;
+		public String[] classes;
+		public URL actionsURI;
+		public String[] cachedActionNames;
+		public URL browserActionsURI;
+		public String[] cachedBrowserActionNames;
+		public URL dockablesURI;
+		public String[] cachedDockableNames;
+		public boolean[] cachedDockableActionFlags;
+		public URL servicesURI;
+		public ServiceManager.Descriptor[] cachedServices;
+
+		public String pluginClass;
+		//}}}
+
+		/* read() and write() must be kept perfectly in sync...
+		 * its a very simple file format. doing it this way is
+		 * faster than serializing since serialization calls
+		 * reflection, etc. */
+
+		//{{{ read() method
+		public boolean read(DataInputStream din) throws IOException
+		{
+			int cacheMagic = din.readInt();
+			if(cacheMagic != MAGIC)
+				throw new IOException("Wrong magic number");
+
+			String cacheBuild = readString(din);
+			if(!cacheBuild.equals(jEdit.getBuild()))
+				return false;
+
+			long cacheModTime = din.readLong();
+			if(cacheModTime != modTime)
+				return false;
+
+			actionsURI = readURI(din);
+			cachedActionNames = readStringArray(din);
+
+			browserActionsURI = readURI(din);
+			cachedBrowserActionNames = readStringArray(din);
+
+			dockablesURI = readURI(din);
+			cachedDockableNames = readStringArray(din);
+			cachedDockableActionFlags = readBooleanArray(din);
+
+			servicesURI = readURI(din);
+			int len = din.readInt();
+			if(len == 0)
+				cachedServices = null;
+			else
+			{
+				cachedServices = new ServiceManager.Descriptor[len];
+				for(int i = 0; i < len; i++)
+				{
+					ServiceManager.Descriptor d = new
+						ServiceManager.Descriptor(
+						readString(din),
+						readString(din),
+						null,
+						plugin);
+					cachedServices[i] = d;
+				}
+			}
+
+			classes = readStringArray(din);
+			properties = readStringArray(din);
+
+			pluginClass = readString(din);
+
+			return true;
+		} //}}}
+
+		//{{{ write() method
+		public void write(DataOutputStream dout) throws IOException
+		{
+			dout.writeInt(MAGIC);
+			writeString(dout,jEdit.getBuild());
+
+			dout.writeLong(modTime);
+
+			writeString(dout,actionsURI);
+			writeStringArray(dout,cachedActionNames);
+
+			writeString(dout,browserActionsURI);
+			writeStringArray(dout,cachedBrowserActionNames);
+
+			writeString(dout,dockablesURI);
+			writeStringArray(dout,cachedDockableNames);
+			writeBooleanArray(dout,cachedDockableActionFlags);
+
+			writeString(dout,servicesURI);
+			if(cachedServices == null)
+				dout.writeInt(0);
+			else
+			{
+				dout.writeInt(cachedServices.length);
+				for(int i = 0; i < cachedServices.length; i++)
+				{
+					writeString(dout,cachedServices[i].clazz);
+					writeString(dout,cachedServices[i].name);
+				}
+			}
+
+			writeStringArray(dout,classes);
+			writeStringArray(dout,properties);
+
+			writeString(dout,pluginClass);
+		} //}}}
+
+		//{{{ Private members
+
+		//{{{ readString() method
+		private String readString(DataInputStream din)
+			throws IOException
+		{
+			int len = din.readInt();
+			if(len == 0)
+				return null;
+			char[] str = new char[len];
+			for(int i = 0; i < len; i++)
+				str[i] = din.readChar();
+			return new String(str);
+		} //}}}
+
+		//{{{ readURI() method
+		private URL readURI(DataInputStream din)
+			throws IOException
+		{
+			String str = readString(din);
+			if(str == null)
+				return null;
+			else
+				return new URL(str);
+		} //}}}
+
+		//{{{ readStringArray() method
+		private String[] readStringArray(DataInputStream din)
+			throws IOException
+		{
+			int len = din.readInt();
+			if(len == 0)
+				return null;
+			String[] str = new String[len];
+			for(int i = 0; i < len; i++)
+			{
+				str[i] = readString(din);
+			}
+			return str;
+		} //}}}
+
+		//{{{ readBooleanArray() method
+		private boolean[] readBooleanArray(DataInputStream din)
+			throws IOException
+		{
+			int len = din.readInt();
+			if(len == 0)
+				return null;
+			boolean[] bools = new boolean[len];
+			for(int i = 0; i < len; i++)
+			{
+				bools[i] = din.readBoolean();
+			}
+			return bools;
+		} //}}}
+
+		//{{{ writeString() method
+		private void writeString(DataOutputStream dout,
+			Object obj) throws IOException
+		{
+			if(obj == null)
+			{
+				dout.writeInt(0);
+			}
+			else
+			{
+				String str = obj.toString();
+				dout.writeInt(str.length());
+				dout.writeChars(str);
+			}
+		} //}}}
+
+		//{{{ writeStringArray() method
+		private void writeStringArray(DataOutputStream dout,
+			String[] str) throws IOException
+		{
+			if(str == null)
+			{
+				dout.writeInt(0);
+			}
+			else
+			{
+				dout.writeInt(str.length);
+				for(int i = 0; i < str.length; i++)
+				{
+					writeString(dout,str[i]);
+				}
+			}
+		} //}}}
+
+		//{{{ writeBooleanArray() method
+		private void writeBooleanArray(DataOutputStream dout,
+			boolean[] bools) throws IOException
+		{
+			if(bools == null)
+			{
+				dout.writeInt(0);
+			}
+			else
+			{
+				dout.writeInt(bools.length);
+				for(int i = 0; i < bools.length; i++)
+				{
+					dout.writeBoolean(bools[i]);
+				}
+			}
+		} //}}}
+
+		//}}}
+	} //}}}
 }
