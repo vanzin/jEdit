@@ -1,6 +1,6 @@
 JEDIT 4.2 VERSION HISTORY
 
-{{{ Version 2.4pre15
+{{{ Version 4.2pre15
 
 Thanks to Eric Ladner and Justin Hagstrom for contributing to this
 release.
