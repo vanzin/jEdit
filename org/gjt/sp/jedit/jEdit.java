@@ -866,6 +866,10 @@ public class jEdit
 		defaults.put("TextArea.font",font);
 		defaults.put("TextPane.font",font);
 
+		// Enable/Disable tooltips
+		ToolTipManager.sharedInstance().setEnabled(
+			jEdit.getBooleanProperty("showTooltips"));
+
 		initProxy();
 
 		EditBus.send(new PropertiesChanged(null));
