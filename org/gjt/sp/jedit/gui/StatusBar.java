@@ -86,7 +86,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		box.add(mode);
 		box.add(Box.createHorizontalStrut(4));
 
-
 		wrap = new ToolTipLabel();
 		wrap.setHorizontalAlignment(SwingConstants.CENTER);
 		wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip"));
@@ -131,6 +130,22 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		TextAreaPainter painter = view.getTextArea().getPainter();
 		panel.setBackground(painter.getBackground());
 		panel.setForeground(painter.getForeground());
+		caretStatus.setBackground(painter.getBackground());
+		caretStatus.setForeground(painter.getForeground());
+		message.setBackground(painter.getBackground());
+		message.setForeground(painter.getForeground());
+		mode.setBackground(painter.getBackground());
+		mode.setForeground(painter.getForeground());
+		wrap.setBackground(painter.getBackground());
+		wrap.setForeground(painter.getForeground());
+		multiSelect.setBackground(painter.getBackground());
+		multiSelect.setForeground(painter.getForeground());
+		overwrite.setBackground(painter.getBackground());
+		overwrite.setForeground(painter.getForeground());
+		lineSep.setBackground(painter.getBackground());
+		lineSep.setForeground(painter.getForeground());
+		memory.setBackground(painter.getBackground());
+		memory.setForeground(painter.getForeground());
 
 		Font font = UIManager.getFont("Label.font");
 		caretStatus.setFont(font);
