@@ -281,6 +281,9 @@
 <MODE NAME="rpm-spec"		FILE="rpmspec.xml"
 				FILE_NAME_GLOB="*.spec" />
 
+<MODE NAME="rtf"		FILE="rtf.xml"
+				FILE_NAME_GLOB="*.rtf" />
+
 <MODE NAME="ruby"		FILE="ruby.xml"
 				FILE_NAME_GLOB="*.{rb,rbw}" />
 

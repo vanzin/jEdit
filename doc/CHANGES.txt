@@ -32,6 +32,8 @@ contributing to this release.
 
 - Updated Omnimark syntax highlighting (Lionel Fiol).
 
+- Added RTF syntax highlighting (Lionel Fiol).
+
 }}}
 {{{ Bug Fixes
 
