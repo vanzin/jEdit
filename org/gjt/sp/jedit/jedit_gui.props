@@ -1635,15 +1635,15 @@ vfs.browser.commands.search-in-directory.icon=Search24.gif
 vfs.browser.commands.show-hidden-files.label=Show Hidden Files
 #}}}
 
-#{{{ Favorites menu
-vfs.browser.favorites.label=Favorites
-vfs.browser.favorites.add-to-favorites.label=Add to Favorites
-vfs.browser.favorites.go-to-favorites.label=Go to Favorites
-#}}}
-
 #{{{ Plugins menu
 vfs.browser.plugins.label=Plugins
 vfs.browser.plugins.no-plugins.label=No Plugins
+#}}}
+
+#{{{ Favorites menu
+vfs.browser.favorites.label=Favorites
+vfs.browser.favorites.add-to-favorites.label=Add to Favorites
+vfs.browser.favorites.edit-favorites.label=Edit Favorites
 #}}}
 
 vfs.browser.dialog.open=Open

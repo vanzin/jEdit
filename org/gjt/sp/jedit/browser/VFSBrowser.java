@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import gnu.regexp.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.EventListenerList;
+import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -134,6 +134,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 		pathField.setPreferredSize(prefSize);
 		pathField.addActionListener(actionHandler);
 		pathField.addFocusListener(new FocusHandler());
+		pathField.addMouseMotionListener(new MouseHandler());
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 
@@ -988,18 +989,36 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 	} //}}}
 
+	private boolean focusClickFlag;
+
 	//{{{ FocusHandler class
 	class FocusHandler extends FocusAdapter
 	{
 		public void focusGained(FocusEvent evt)
 		{
 			pathField.selectAll();
+			focusClickFlag = true;
 		}
 
 		public void focusLost(FocusEvent evt)
 		{
 			if(!requestRunning && !pathField.getText().equals(path))
 				pathField.setText(path);
+		}
+	} //}}}
+
+	//{{{ MouseHandler class
+	class MouseHandler extends MouseInputAdapter
+	{
+		public void mouseDragged(MouseEvent evt)
+		{
+			if(focusClickFlag)
+			{
+				// unselect if user starts dragging so they can
+				// more easily make a selection
+				pathField.setCaretPosition(pathField.getCaretPosition());
+				focusClickFlag = false;
+			}
 		}
 	} //}}}
 
@@ -1087,6 +1106,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 			setIcon(GUIUtilities.loadIcon("ToolbarMenu.gif"));
 			setHorizontalTextPosition(SwingConstants.LEFT);
 
+			popup = new BrowserCommandsMenu(VFSBrowser.this,null);
+
 			CommandsMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(0,0,0,0));
 			CommandsMenuButton.this.addMouseListener(new MouseHandler());
@@ -1099,16 +1120,15 @@ public class VFSBrowser extends JPanel implements EBComponent
 		{
 			public void mousePressed(MouseEvent evt)
 			{
-				if(popup == null || !popup.isVisible())
+				if(!popup.isVisible())
 				{
-					popup = new BrowserCommandsMenu(VFSBrowser.this,null);
-					popup.show(CommandsMenuButton.this,0,
+					GUIUtilities.showPopupMenu(
+						popup,CommandsMenuButton.this,0,
 						CommandsMenuButton.this.getHeight());
 				}
 				else
 				{
 					popup.setVisible(false);
-					popup = null;
 				}
 			}
 		} //}}}
@@ -1184,7 +1204,8 @@ public class VFSBrowser extends JPanel implements EBComponent
 			{
 				if(!popup.isVisible())
 				{
-					popup.show(PluginsMenuButton.this,0,
+					GUIUtilities.showPopupMenu(
+						popup,PluginsMenuButton.this,0,
 						PluginsMenuButton.this.getHeight());
 				}
 				else
@@ -1207,7 +1228,113 @@ public class VFSBrowser extends JPanel implements EBComponent
 
 			FavoritesMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(0,0,0,0));
-			//FavoritesMenuButton.this.addMouseListener(new MouseHandler());
+			FavoritesMenuButton.this.addMouseListener(new MouseHandler());
+		} //}}}
+
+		JPopupMenu popup;
+
+		//{{{ ActionHandler class
+		class ActionHandler implements ActionListener
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				String actionCommand = evt.getActionCommand();
+				if(actionCommand.equals("add-to-favorites"))
+				{
+					// if any directories are selected, add
+					// them, otherwise add current directory
+					Vector toAdd = new Vector();
+					VFS.DirectoryEntry[] selected = getSelectedFiles();
+					for(int i = 0; i < selected.length; i++)
+					{
+						VFS.DirectoryEntry file = selected[i];
+						if(file.type == VFS.DirectoryEntry.FILE)
+						{
+							GUIUtilities.error(
+								VFSBrowser.this,
+								"vfs.browser.files-favorites",
+								null);
+							return;
+						}
+						else
+							toAdd.addElement(file.path);
+					}
+
+					if(toAdd.size() != 0)
+					{
+						for(int i = 0; i < toAdd.size(); i++)
+						{
+							FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
+						}
+					}
+					else
+					{
+						if(path.equals(FavoritesVFS.PROTOCOL + ":"))
+						{
+							GUIUtilities.error(VFSBrowser.this,
+								"vfs.browser.recurse-favorites",
+								null);
+						}
+						else
+						{
+							FavoritesVFS.addToFavorites(path);
+						}
+					}
+				}
+				else
+					setDirectory(actionCommand);
+			}
+		} //}}}
+
+		//{{{ MouseHandler class
+		class MouseHandler extends MouseAdapter
+		{
+			public void mousePressed(MouseEvent evt)
+			{
+				if(popup == null || !popup.isVisible())
+				{
+					popup = new JPopupMenu();
+					ActionHandler actionHandler = new ActionHandler();
+
+					JMenuItem mi = new JMenuItem(
+						jEdit.getProperty(
+						"vfs.browser.favorites"
+						+ ".add-to-favorites.label"));
+					mi.setActionCommand("add-to-favorites");
+					mi.addActionListener(actionHandler);
+					popup.add(mi);
+
+					mi = new JMenuItem(
+						jEdit.getProperty(
+						"vfs.browser.favorites"
+						+ ".edit-favorites.label"));
+					mi.setActionCommand("favorites:");
+					mi.addActionListener(actionHandler);
+					popup.add(mi);
+
+					popup.addSeparator();
+
+					String[] favorites = FavoritesVFS.getFavorites();
+					MiscUtilities.quicksort(favorites,
+						new MiscUtilities.StringCompare());
+					for(int i = 0; i < favorites.length; i++)
+					{
+						mi = new JMenuItem(favorites[i]);
+						mi.setIcon(FileCellRenderer.dirIcon);
+						mi.addActionListener(actionHandler);
+						popup.add(mi);
+					}
+
+					GUIUtilities.showPopupMenu(
+						popup,FavoritesMenuButton.this,0,
+						FavoritesMenuButton.this.getHeight());
+				}
+				else
+				{
+					popup.setVisible(false);
+					popup = null;
+				}
+			}
 		} //}}}
 	} //}}}
 

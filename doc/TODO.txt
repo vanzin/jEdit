@@ -1,13 +1,14 @@
 TO DO
 
+- C+e s broken
+- style setting for folding line indicator
+- sort color and style lists
 - alleged 'one line buffer' bug
-- readNextChar() broken
+- search in directory: should use that file's extension
+
 - test browse ~ while on FTP
 - inefficencies: lots of File objects created for the sake of
   isAbsolute().
-- key shortcuts bug: C+e s for instance
-- style setting for folding line indicator
-- sort color and style lists
 - loading auto save files: fucked
 - either fix recent files/recent directories/current dir icon issue, or
   ditch icons
@@ -38,7 +39,6 @@ TO DO
   - better window docking
   - smart case insens replace
   - API guide: compareStrings(), showPopupMenu()
-- search in directory: should use that file's extension
 - -noplugins command line switch
 - I/O errors and plugin load errors batched together in one dialog box
 - plugin error dialogs have 'Update Plugins' button
@@ -62,7 +62,6 @@ TO DO
   - CCW rotated text not drawn correctly
 - file system browser:
   - Parent dir list in split pane
-  - 'favorites' menu
   - commands->copy path, copy file list, paste path
   - much better autocomplete
   - aliases
