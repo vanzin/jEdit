@@ -72,8 +72,37 @@
 
 <sect1 id="macros"><title>Working with Macros</title>
 <para>
-  [Introduction, followed by question and answer set]
+  This section deals with questions on writing and running macros.
 </para>
+
+<qandaset>
+
+<qandadiv id="macro-using"><title>Using macros</title>
+
+<qandaentry>
+	<question id="macro-exec">
+		<para>
+			In a macro I'd like to exec an external program (e.g. jmk, javac) and capture
+			its output to a buffer. I'd also like to see this output as the
+			external program runs or be able to interact with the program. So when I exec,
+			what happens to System.in/out/err of the exec'd program?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Use the <filename>runInSystemShell()</filename> or the
+			<filename>runCommandToBuffer()</filename> script methods that come
+			bundled with the Console plugin. The help documentation for Console provides
+			details on these methods. Currently the Console's System shell is not
+			interactive during execution of a command, but it does receive and display the
+			standard output and error streams of the external process.
+		</para>
+	</answer>
+</qandaentry>
+
+</qandadiv>
+
+</qandaset>
 
 </sect1>
 

@@ -273,12 +273,57 @@
         </answer>
     </qandaentry>
 
+
+<qandaentry>
+	<question id="install-windows-badcommand">
+		<para>
+			When trying to install jEdit on Windows Me with an MS-DOS prompt, after entering
+			<userinput>java -jar jedit322install.jar</userinput> I get the message
+			<userinput>bad command or file	name</userinput>.
+			I have tried various alternatives but still cannot install.
+		</para>
+	</question>
+	<answer>
+		<para>
+			You should confirm that you have a Java runtime environment installed, which
+			will include <filename>java.exe</filename>. Make sure that the directory
+			containing <filename>java.exe</filename> is found
+			in the value of your <filename>PATH</filename> environment variable.
+			Otherwise you should give the full path to <filename>java.exe</filename>
+			on your command line.
+		</para>
+	</answer>
+</qandaentry>
+
+
+
+<qandaentry>
+	<question id="install-windows-errmessage">
+		<para>
+			After installing jEdit on Windows, when I try to run
+			<filename>jedit.exe</filename> I get the message
+			<screen>The JEditLauncher component does not appear to be installed.</screen>
+		</para>
+	</question>
+	<answer>
+		<para>
+			The dialog presenting this message asks if you would like to install the
+			launcher. Select <userinput>Yes</userinput> and supply further information
+			as prompted. A file	named <filename>install.log</filename> is generated in the
+			same directory as <filename>jedit.exe</filename> that
+			contains information on the launcher's installation. You can send this file
+			along with jEdit's Activity Log if you continue to have problems running jEdit
+			with the launcher package.
+		</para>
+	</answer>
+</qandaentry>
+
 <qandaentry>
 	<question id="install-error-regkey">
 		<para>
 			When I try to run the jEdit installation package in Windows, I get an error
-			message, \"Error opening registration key \"software\javasoft\java runtime
-			environment\". How can I fix this?
+			message, <screen>Error opening registration key
+            "software\javasoft\java runtime	environment".</screen> How can I fix this?
 		</para>
 	</question>
 	<answer>

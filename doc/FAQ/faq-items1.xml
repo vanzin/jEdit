@@ -461,6 +461,23 @@
       </answer>
     </qandaentry>
 
+
+<qandaentry>
+	<question id="jedit-compile">
+		<para>
+			I am a new user of jEdit 3.2.2. How do you set the classpath and
+			compile the java files in jEdit?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Consult an article on the <ulink url="http://community.jedit.org">jEdit
+			Community</ulink> web site entitled <quote>Build jEdit yourself: the 'Open'
+			in Open Source</quote>.
+		</para>
+	</answer>
+</qandaentry>
+
   </qandadiv>
 
 </qandaset>
