@@ -2,11 +2,28 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 2.4pre15
 
-Thanks to Justin Hagstrom for contributing to this release.
+Thanks to Eric Ladner and Justin Hagstrom for contributing to this
+release.
 
 {{{ Syntax Highlighting
 
 - Updated PHP syntax highlighting for PHP5 and PHPDoc (Justin Hagstrom).
+
+- Updated PL/SQL syntax highlighting (Eric Ladner).
+
+}}}
+{{{ Miscellaneous
+
+- More flexible remapping of modifier keys (Adrian Baker).
+
+For example, this BeanShell snippet points both the ALT and META
+modifiers to A+:
+
+KeyEventTranslator.setModifierMapping(
+    InputEvent.CTRL_MASK,
+    InputEvent.ALT_MASK | InputEvent.META_MASK,
+    0,
+    InputEvent.SHIFT_MASK);
 
 }}}
 {{{ Bug Fixes
