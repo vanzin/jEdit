@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2final
 
-Thanks to Brant Gurganus, Justin Dieters and Thomas Bock for
-contributing to this release.
+Thanks to Brant Gurganus, Justin Dieters, Ollie Rutherfurd and Thomas
+Bock for contributing to this release.
 
 {{{ Syntax Highlighting
 
@@ -14,6 +14,12 @@ contributing to this release.
 - Added ANTLR syntax highlighting (Brant Gurganus).
 
 - Added D syntax highlighting (Jim Lawton).
+
+- Added INNO setup syntax highlighting (Ollie Rutherfurd).
+
+- Added Doxygen syntax highlighting. This includes doxyfile*
+  configuration files, and Doxygen comments in C, C++, Objective-C and
+  D modes. (Jim Lawton)
 
 }}}
 {{{ Bug Fixes
