@@ -1442,10 +1442,11 @@ options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
 options.appearance.secondaryFont=List and text field font:
-options.appearance.menuSpillover=Number of items before menus spill over:
-options.appearance.viewLayout=View layout
-options.appearance.alternateDockingLayout=Alternate docked window placement
-options.appearance.alternateToolBarLayout=Alternate tool bar placement
+options.appearance.history=History text field entries to remember:
+options.appearance.menuSpillover=Number of items before menus spill over:    
+options.appearance.startup.label=Startup options
+options.appearance.showSplash=Show splash screen on startup
+options.appearance.showTips=Show tips on startup
 options.appearance.experimental.label=Experimental options
 options.appearance.experimental.caption=The below three options might not work \
 	correctly with some\n\
@@ -1455,6 +1456,17 @@ options.appearance.textColors=Use jEdit text area colors in all text \
 	components
 options.appearance.decorateFrames=Draw window borders using Swing look & feel
 options.appearance.decorateDialogs=Draw dialog box borders using Swing look & feel
+#}}}
+
+#{{{ Autosave & Backup pane
+options.auto-back.label=Autosave & Backup
+options.auto-back.code=new AutosaveBackupOptionPane();
+options.auto-back.autosave=Autosave frequency (secs):
+options.auto-back.backups=Max number of backups:
+options.auto-back.backupDirectory=Backup directory:
+options.auto-back.backupPrefix=Backup filename prefix:
+options.auto-back.backupSuffix=Backup filename suffix:
+options.auto-back.backupEverySave=Backup on every save
 #}}}
 
 #{{{ Context Menu pane
@@ -1494,18 +1506,19 @@ options.editing.noTabs=Soft (emulated with spaces) tabs
 #{{{ General pane
 options.general.label=General
 options.general.code=new GeneralOptionPane();
-options.general.history=History entries to remember:
+options.general.encoding=Default character encoding:
+options.general.lineSeparator=Default line separator:
 options.general.saveCaret=Save caret positions in recent file list
+options.general.persistentMarkers=Save marker positions
+options.general.restore=Restore previously open files on startup
+options.general.restore.cli=... even if file names were specified on the \
+	command line
 options.general.sortBuffers=Sort buffer list (takes effect after restart)
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.sortRecent=Sort recent file list
 options.general.checkModStatus=Warn if file is modified on disk by another program
-options.general.showFullPath=Show full path of buffer in title bar
-options.general.showSearchbar=Always show search bar
-options.general.beepOnSearchAutoWrap=Beep when searching automatically wraps
-options.general.showBufferSwitcher=Show buffer switcher
-options.general.showTips=Show tips on startup
-options.general.showSplash=Show splash screen on startup
+options.general.twoStageSave=Two-stage save (safer but resets file owner on Unix)
+options.general.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
 #{{{ Gutter pane
@@ -1533,25 +1546,6 @@ options.gutter.gutterAltClick=Alt-click in gutter:
 options.gutter.toggleFold=Collapse/expand fold
 options.gutter.toggleFoldFully=Collapse/expand fold fully
 options.gutter.selectFold=Select fold
-#}}}
-
-#{{{ Loading and Saving pane
-options.loadsave.label=Loading & Saving
-options.loadsave.code=new LoadSaveOptionPane();
-options.loadsave.encoding=Default character encoding:
-options.loadsave.autosave=Autosave frequency (secs):
-options.loadsave.backups=Max number of backups:
-options.loadsave.backupDirectory=Backup directory:
-options.loadsave.backupPrefix=Backup filename prefix:
-options.loadsave.backupSuffix=Backup filename suffix:
-options.loadsave.lineSeparator=Default line separator:
-options.loadsave.restore=Restore previously open files on startup
-options.loadsave.restore.cli=... even if file names were specified on the \
-	command line
-options.loadsave.persistentMarkers=Save marker positions
-options.loadsave.twoStageSave=Two-stage save (safer but resets file owner on Unix)
-options.loadsave.backupEverySave=Backup on every save
-options.loadsave.stripTrailingEOL=Hide final end of line (if any)
 #}}}
 
 #{{{ Plugin Manager pane
@@ -1709,6 +1703,18 @@ options.toolbar.edit.builtin=Use built-in icon:
 options.toolbar.edit.file=Load icon from file:
 options.toolbar.edit.choose=Choose
 options.toolbar.edit.no-icon=No icon selected
+#}}}
+
+#{{{ View pane
+options.view.label=View
+options.view.code=new ViewOptionPane();
+options.view.viewLayout=View layout
+options.view.alternateDockingLayout=Alternate docked window placement
+options.view.alternateToolBarLayout=Alternate tool bar placement
+options.view.showFullPath=Show full path of buffer in title bar
+options.view.showSearchbar=Always show search bar
+options.view.beepOnSearchAutoWrap=Beep when searching automatically wraps
+options.view.showBufferSwitcher=Show buffer switcher
 #}}}
 
 #{{{ File System Browser panes

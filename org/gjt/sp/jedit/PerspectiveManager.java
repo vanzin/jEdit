@@ -52,9 +52,10 @@ public class PerspectiveManager
 		PerspectiveHandler handler = new PerspectiveHandler(restoreFiles);
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
+		Reader in = null;
 		try
 		{
-			BufferedReader in = new BufferedReader(new FileReader(perspective));
+			in = new BufferedReader(new FileReader(perspective));
 			parser.parse(null, null, in);
 		}
 		catch(XmlException xe)
@@ -70,6 +71,18 @@ public class PerspectiveManager
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,PerspectiveManager.class,e);
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,PerspectiveManager.class,io);
+			}
 		}
 
 		return handler.view;

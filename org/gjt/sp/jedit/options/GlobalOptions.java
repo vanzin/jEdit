@@ -68,11 +68,11 @@ public class GlobalOptions extends OptionsDialog
 
 		jEditGroup.addOptionPane("abbrevs");
 		jEditGroup.addOptionPane("appearance");
+		jEditGroup.addOptionPane("auto-back");
 		jEditGroup.addOptionPane("context");
 		jEditGroup.addOptionPane("editing");
 		jEditGroup.addOptionPane("general");
 		jEditGroup.addOptionPane("gutter");
-		jEditGroup.addOptionPane("loadsave");
 		jEditGroup.addOptionPane("print");
 		jEditGroup.addOptionPane("plugin-manager");
 		jEditGroup.addOptionPane("firewall");
@@ -81,6 +81,7 @@ public class GlobalOptions extends OptionsDialog
 		jEditGroup.addOptionPane("syntax");
 		jEditGroup.addOptionPane("textarea");
 		jEditGroup.addOptionPane("toolbar");
+		jEditGroup.addOptionPane("view");
 		rootGroup.addOptionGroup(jEditGroup);
 
 		browserGroup = new OptionGroup("browser");

@@ -102,14 +102,12 @@ and quirks that I need to fix eventually.
 - focus problem with hypersearch in floating window
 - dwm: not always focused correctly
 - JDK 1.4 focus bugs
-- if loadMode() throws error, save of a mode file fails?
 
 + cleanups:
 
 - text area mouse handler cleanup
 - clean up VFSManager.errorOccurred() -vs- BufferIORequest.ERROR_OCCURRED
 - BrowserView.reloadDirectory(): hardcoded design decisions
-- finish persistent splits code
 - custom stylesheet: no xmlns
 - NO_WORD_BREAK and NO_LINE_BREAK: need to think about this, is it worth
   keeping INVALID? report errors in some other manner?
@@ -127,8 +125,6 @@ and quirks that I need to fix eventually.
 - gutter options: add option to completely hide gutter
 - expand: scroll to end of fold if possible
 - hypersearch: open in new split
-- options dialog box can use a little cleanup:
-  Appearance, Loading and Saving, General panes a bit confusing
 - need a new jEditLauncher
 - plugin tutorial:
   - plugin build environment docs

@@ -504,10 +504,11 @@ public class Registers
 		RegistersHandler handler = new RegistersHandler();
 		XmlParser parser = new XmlParser();
 		parser.setHandler(handler);
+		Reader in = null;
 		try
 		{
 			loading = true;
-			BufferedReader in = new BufferedReader(new FileReader(file));
+			in = new BufferedReader(new FileReader(file));
 			parser.parse(null, null, in);
 		}
 		catch(XmlException xe)
@@ -528,6 +529,15 @@ public class Registers
 		finally
 		{
 			loading = false;
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,Registers.class,io);
+			}
 		}
 	} //}}}
 

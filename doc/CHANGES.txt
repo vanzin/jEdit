@@ -2,6 +2,13 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre2
 
+{{{ User Interface
+
+- The Global Options dialog box has been rearranged a little. There are
+  two new panes, Autosave & Backup, and View. The Loading & Saving pane
+  has been removed.
+
+}}}
 {{{ Plugin Loader
 
 - The plugin manager now loads plugins immediately after they are
@@ -47,6 +54,10 @@ JEDIT 4.2 VERSION HISTORY
 
 - Title bar "modified" indicator was not displayed for recovered
   autosave files.
+
+- jEdit never closed streams of XML files being read in. This bug has
+  been there for ages, however its not too major since the stream
+  objects would get garbage collected and closed eventually.
 
 }}}
 {{{ API Changes

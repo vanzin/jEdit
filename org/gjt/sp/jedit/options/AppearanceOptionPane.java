@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001 Slava Pestov
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,10 @@ package org.gjt.sp.jedit.options;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class AppearanceOptionPane extends AbstractOptionPane
@@ -82,48 +84,31 @@ public class AppearanceOptionPane extends AbstractOptionPane
 
 		updateEnabled();
 
+		/* History count */
+		history = new JTextField(jEdit.getProperty("history"));
+		addComponent(jEdit.getProperty("options.appearance.history"),history);
+
 		/* Menu spillover count */
 		menuSpillover = new JTextField(jEdit.getProperty("menu.spillover"));
 		addComponent(jEdit.getProperty("options.appearance.menuSpillover"),menuSpillover);
 
-		/* View dock layout */
-		addSeparator("options.appearance.viewLayout");
+		addSeparator("options.appearance.startup.label");
 
-		layoutIcon1 = GUIUtilities.loadIcon("dock_layout1.png");
-		layoutIcon2 = GUIUtilities.loadIcon("dock_layout2.png");
-		layoutIcon3 = GUIUtilities.loadIcon("dock_layout3.png");
-		layoutIcon4 = GUIUtilities.loadIcon("dock_layout4.png");
-
-		JPanel layoutPanel = new JPanel(new BorderLayout(12,12));
-
-		if(jEdit.getBooleanProperty("view.docking.alternateLayout"))
-		{
-			layout = new JLabel(jEdit.getBooleanProperty(
-				"view.toolbar.alternateLayout")
-				? layoutIcon4 : layoutIcon2);
-		}
+		/* Show splash screen */
+		showSplash = new JCheckBox(jEdit.getProperty(
+			"options.appearance.showSplash"));
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			showSplash.setSelected(true);
 		else
-		{
-			layout = new JLabel(jEdit.getBooleanProperty(
-				"view.toolbar.alternateLayout")
-				? layoutIcon3 : layoutIcon1);
-		}
+			showSplash.setSelected(!new File(settingsDirectory,"nosplash").exists());
+		addComponent(showSplash);
 
-		layoutPanel.add(BorderLayout.WEST,layout);
-
-		Box buttons = new Box(BoxLayout.Y_AXIS);
-		buttons.add(Box.createGlue());
-		buttons.add(alternateDockingLayout = new JButton(jEdit.getProperty(
-			"options.appearance.alternateDockingLayout")));
-		alternateDockingLayout.addActionListener(new ActionHandler());
-		buttons.add(Box.createVerticalStrut(12));
-		buttons.add(alternateToolBarLayout = new JButton(jEdit.getProperty(
-			"options.appearance.alternateToolBarLayout")));
-		alternateToolBarLayout.addActionListener(new ActionHandler());
-		buttons.add(Box.createGlue());
-		layoutPanel.add(BorderLayout.CENTER,buttons);
-
-		addComponent(layoutPanel);
+		/* Show tip of the day */
+		showTips = new JCheckBox(jEdit.getProperty(
+			"options.appearance.showTips"));
+		showTips.setSelected(jEdit.getBooleanProperty("tip.show"));
+		addComponent(showTips);
 
 		addSeparator("options.appearance.experimental.label");
 		addComponent(GUIUtilities.createMultilineLabel(
@@ -159,13 +144,33 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
 		jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
+		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
-		jEdit.setBooleanProperty("view.docking.alternateLayout",
-			layout.getIcon() == layoutIcon2
-			|| layout.getIcon() == layoutIcon4);
-		jEdit.setBooleanProperty("view.toolbar.alternateLayout",
-			layout.getIcon() == layoutIcon3
-			|| layout.getIcon() == layoutIcon4);
+		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
+
+		// this is handled a little differently from other jEdit settings
+		// as the splash screen flag needs to be known very early in the
+		// startup sequence, before the user properties have been loaded
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			File file = new File(settingsDirectory,"nosplash");
+			if(showSplash.isSelected())
+				file.delete();
+			else
+			{
+				try
+				{
+					FileOutputStream out = new FileOutputStream(file);
+					out.write('\n');
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,this,io);
+				}
+			}
+		}
 		jEdit.setBooleanProperty("textColors",textColors.isSelected());
 		jEdit.setBooleanProperty("decorate.frames",decorateFrames.isSelected());
 		jEdit.setBooleanProperty("decorate.dialogs",decorateDialogs.isSelected());
@@ -178,10 +183,10 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JComboBox lookAndFeel;
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
+	private JTextField history;
 	private JTextField menuSpillover;
-	private JLabel layout;
-	private Icon layoutIcon1, layoutIcon2, layoutIcon3, layoutIcon4;
-	private JButton alternateDockingLayout, alternateToolBarLayout;
+	private JCheckBox showTips;
+	private JCheckBox showSplash;
 	private JCheckBox textColors;
 	private JCheckBox decorateFrames;
 	private JCheckBox decorateDialogs;
@@ -207,34 +212,4 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//}}}
-
-	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(evt.getSource() == alternateDockingLayout)
-			{
-				if(layout.getIcon() == layoutIcon1)
-					layout.setIcon(layoutIcon2);
-				else if(layout.getIcon() == layoutIcon2)
-					layout.setIcon(layoutIcon1);
-				else if(layout.getIcon() == layoutIcon3)
-					layout.setIcon(layoutIcon4);
-				else if(layout.getIcon() == layoutIcon4)
-					layout.setIcon(layoutIcon3);
-			}
-			else if(evt.getSource() == alternateToolBarLayout)
-			{
-				if(layout.getIcon() == layoutIcon1)
-					layout.setIcon(layoutIcon3);
-				else if(layout.getIcon() == layoutIcon3)
-					layout.setIcon(layoutIcon1);
-				else if(layout.getIcon() == layoutIcon2)
-					layout.setIcon(layoutIcon4);
-				else if(layout.getIcon() == layoutIcon4)
-					layout.setIcon(layoutIcon2);
-			}
-		}
-	} //}}}
 }

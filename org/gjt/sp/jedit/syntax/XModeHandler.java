@@ -601,6 +601,8 @@ public abstract class XModeHandler extends HandlerBase
 	protected abstract TokenMarker getTokenMarker(String mode);
 	//}}}
 
+	//}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables

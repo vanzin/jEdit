@@ -59,18 +59,25 @@ class PluginList
 		parser.setHandler(handler);
 
 		InputStream in = new BufferedInputStream(new URL(path).openStream());
-		if(in.markSupported())
+		try
 		{
-			in.mark(2);
-			int b1 = in.read();
-			int b2 = in.read();
-			in.reset();
+			if(in.markSupported())
+			{
+				in.mark(2);
+				int b1 = in.read();
+				int b2 = in.read();
+				in.reset();
+	
+				if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
+					in = new GZIPInputStream(in);
+			}
 
-			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
-				in = new GZIPInputStream(in);
+			parser.parse(null,null,new InputStreamReader(in,"UTF8"));
 		}
-
-		parser.parse(null,null,new InputStreamReader(in,"UTF8"));
+		finally
+		{
+			in.close();
+		}
 	}
 
 	void addPlugin(Plugin plugin)
