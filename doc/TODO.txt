@@ -16,6 +16,16 @@ and quirks that I need to fix eventually.
 
 + 4.3 drivers:
 
+- independent text area component
+  - gutter: has a depenency on View to do focus highlight, and Marker
+  - display manager: has a dependency on View for currently focused
+  - text area: depends on view for status bar, input handling,
+    smart home/end macro record, showing dialog boxes, properties,
+    abbrevs, status bar showing various flags
+  - mouse handler: properties, registers
+  - text area transfer handler: opening files dependency
+  text area
+- save help index
 - C+j SPACE: space not registered
 - indent folding: fold marker not always updated
 switching wrap status in status bar doens't update vertical scroll
@@ -28,7 +38,6 @@ switching wrap status in status bar doens't update vertical scroll
 - blink frequency option
 - why is still added to end of kill ring?
 - goToBuffer() -- if any parent has zero height or zero width...
-- independent text area component
 - better auto indent
 - save selection between buffer switch
 - more configurable file system browser

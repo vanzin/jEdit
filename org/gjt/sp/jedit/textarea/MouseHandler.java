@@ -39,9 +39,13 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.Segment;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.Registers;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
