@@ -1085,9 +1085,12 @@ public class Buffer implements EBComponent
 	 */
 	public void insert(int offset, String str)
 	{
+		if(str == null)
+			return;
+
 		int len = str.length();
 
-		if(str == null || len == 0)
+		if(len == 0)
 			return;
 
 		if(isReadOnly())
@@ -1366,7 +1369,8 @@ public class Buffer implements EBComponent
 
 			undoMgr.endCompoundEdit();
 
-			fireTransactionComplete();
+			if(!insideCompoundEdit())
+				fireTransactionComplete();
 		}
 		finally
 		{
@@ -1689,6 +1693,45 @@ public class Buffer implements EBComponent
 	public void setIntegerProperty(String name, int value)
 	{
 		setProperty(name,new Integer(value));
+	} //}}}
+
+	//{{{ getRegexpProperty() method
+	/**
+	 * Returns the value of a property as a regular expression.
+	 * @param name The property name
+	 * @param cflags Regular expression compilation flags
+	 * @param syntax Regular expression syntax
+	 * @since jEdit 4.1pre9
+	 */
+	public RE getRegexpProperty(String name, int cflags, RESyntax syntax)
+		throws REException
+	{
+		boolean defaultValueFlag;
+		Object obj;
+		PropValue value = (PropValue)properties.get(name);
+		if(value != null)
+		{
+			obj = value.value;
+			defaultValueFlag = value.defaultValue;
+		}
+		else
+		{
+			obj = getProperty(name);
+			// will be cached from now on...
+			defaultValueFlag = true;
+		}
+
+		if(obj == null)
+			return null;
+		else if(obj instanceof RE)
+			return (RE)obj;
+		else
+		{
+			RE re = new RE(obj.toString(),cflags,syntax);
+			properties.put(name,new PropValue(re,
+				defaultValueFlag));
+			return re;
+		}
 	} //}}}
 
 	//{{{ getRuleSetAtOffset() method
@@ -2287,46 +2330,38 @@ loop:		for(int i = 0; i < seg.count; i++)
 			return -1;
 
 		//{{{ Get properties
-		String openBrackets = (String)getProperty("indentOpenBrackets");
+		String openBrackets = getStringProperty("indentOpenBrackets");
 		if(openBrackets == null)
 			openBrackets = "";
 
-		String closeBrackets = (String)getProperty("indentCloseBrackets");
+		String closeBrackets = getStringProperty("indentCloseBrackets");
 		if(closeBrackets == null)
 			closeBrackets = "";
 
-		String _indentNextLine = (String)getProperty("indentNextLine");
-		RE indentNextLineRE = null;
-		if(_indentNextLine != null)
+		RE indentNextLineRE;
+		try
 		{
-			try
-			{
-				indentNextLineRE = new RE(_indentNextLine,
-					RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
-			}
-			catch(REException re)
-			{
-				Log.log(Log.ERROR,this,"Invalid 'indentNextLine'"
-					+ " regexp: " + _indentNextLine);
-				Log.log(Log.ERROR,this,re);
-			}
+			indentNextLineRE = getRegexpProperty("indentNextLine",
+				RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
+		}
+		catch(REException re)
+		{
+			indentNextLineRE = null;
+			Log.log(Log.ERROR,this,"Invalid indentNextLine regexp");
+			Log.log(Log.ERROR,this,re);
 		}
 
-		String _indentNextLines = (String)getProperty("indentNextLines");
-		RE indentNextLinesRE = null;
-		if(_indentNextLines != null)
+		RE indentNextLinesRE;
+		try
 		{
-			try
-			{
-				indentNextLinesRE = new RE(_indentNextLines,
-					RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
-			}
-			catch(REException re)
-			{
-				Log.log(Log.ERROR,this,"Invalid 'indentNextLines'"
-					+ " regexp: " + _indentNextLines);
-				Log.log(Log.ERROR,this,re);
-			}
+			indentNextLinesRE = getRegexpProperty("indentNextLines",
+				RE.REG_ICASE,RESearchMatcher.RE_SYNTAX_JEDIT);
+		}
+		catch(REException re)
+		{
+			indentNextLinesRE = null;
+			Log.log(Log.ERROR,this,"Invalid indentNextLines regexp");
+			Log.log(Log.ERROR,this,re);
 		}
 
 		boolean doubleBracketIndent = getBooleanProperty("doubleBracketIndent");
@@ -2449,10 +2484,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		//{{{ Handle brackets
 		if(prevLineBrackets > 0)
-		{
-			System.err.println("bracket indent +1");
 			indent += (indentSize * prevLineBrackets);
-		}
 
 		if(lineUpClosingBracket)
 		{
@@ -2493,17 +2525,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 			// If the previous line matches indentNextLine or indentNextLines,
 			// add a level of indent
 			if(indentNextLinesRE != null && indentNextLinesRE.isMatch(prevLine))
-			{
 				indent += indentSize;
-				System.err.println("indent + 1 due to indentNextLines");
-			}
 			else if(indentNextLineRE != null)
 			{
 				if(indentNextLineRE.isMatch(prevLine))
-				{
 					indent += indentSize;
-					System.err.println("indent + 1 due to indentNextLine");
-				}
+
 				// we don't want
 				// if(foo)
 				// {
@@ -2519,7 +2546,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 					int prevPrevLineIndex;
 					/* if(prevLineCloseBracketIndex != -1)
 					{
-						System.err.println("prev line close bracket index");
 						int offset = TextUtilities.findMatchingBracket(
 							this,prevLineIndex,prevLineCloseBracketIndex);
 						if(offset == -1)
@@ -2531,7 +2557,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 					while(prevPrevLineIndex != -1)
 					{
-						System.err.println("still checking");
 						if(indentNextLineRE.isMatch(getLineText(prevPrevLineIndex)))
 							indent -= indentSize;
 						else
