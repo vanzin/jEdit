@@ -242,6 +242,9 @@
 <MODE NAME="properties"		FILE="props.xml"
 				FILE_NAME_GLOB="*{properties,props}" />
 
+<MODE NAME="psp"		FILE="psp.xml"
+				FILE_NAME_GLOB="*.psp" />
+
 <MODE NAME="pvwave"		FILE="pvwave.xml"
 				FILE_NAME_GLOB="*.jou" />
 
@@ -309,6 +312,9 @@
 
 <MODE NAME="squidconf"		FILE="squidconf.xml"
 				FILE_NAME_GLOB="squid.conf" />
+
+<MODE NAME="swig"		FILE="swig.xml"
+				FILE_NAME_GLOB="*.{i,swg}" />
 
 <MODE NAME="tcl"		FILE="tcl.xml"
 				FILE_NAME_GLOB="*.{tcl,tsh}" />
