@@ -12,6 +12,7 @@ TO DO
 - getCenterPoint()
 - support multi-screen systems properly
 - rollover toolbar buttons option
+- document : at end of soft wrapped lines
 
 - use new offset conversion API throughout
 - test dir replace all and save all
