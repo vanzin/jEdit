@@ -26,21 +26,20 @@ package org.gjt.sp.jedit.textarea;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TooManyListenersException;
 import java.util.TreeSet;
-import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.Segment;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -49,13 +48,13 @@ class SelectionManager
 {
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
-	Vector selection;
+	List selection;
 
 	//{{{ SelectionManager constructor
 	SelectionManager(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
-		selection = new Vector();
+		selection = new ArrayList();
 	} //}}}
 
 	//{{{ getSelectionCount() method
@@ -75,9 +74,8 @@ class SelectionManager
 	 */
 	public Selection[] getSelection()
 	{
-		Selection[] sel = new Selection[selection.size()];
-		selection.copyInto(sel);
-		return sel;
+		return (Selection[])selection.toArray(
+			new Selection[selection.size()]);
 	} //}}}
 
 	//{{{ setSelection() method
@@ -87,7 +85,7 @@ class SelectionManager
 	 */
 	void setSelection(Selection[] selection)
 	{
-		this.selection.removeAllElements();
+		this.selection.clear();
 		addToSelection(selection);
 	} //}}}
 
@@ -126,18 +124,17 @@ class SelectionManager
 			}
 		}
 
-		for(int i = 0; i < selection.size(); i++)
+		Iterator iter = selection.iterator();
+		while(iter.hasNext())
 		{
 			// try and merge existing selections one by
 			// one with the new selection
-			Selection s = (Selection)selection.elementAt(i);
+			Selection s = (Selection)iter.next();
 			if(s.overlaps(addMe))
 			{
 				addMe.start = Math.min(s.start,addMe.start);
 				addMe.end = Math.max(s.end,addMe.end);
-
-				selection.removeElement(s);
-				i--;
+				iter.remove();
 			}
 		}
 
@@ -148,17 +145,17 @@ class SelectionManager
 
 		for(int i = 0; i < selection.size(); i++)
 		{
-			Selection s = (Selection)selection.elementAt(i);
+			Selection s = (Selection)selection.get(i);
 			if(addMe.start < s.start)
 			{
-				selection.insertElementAt(addMe,i);
+				selection.add(i,addMe);
 				added = true;
 				break;
 			}
 		}
 
 		if(!added)
-			selection.addElement(addMe);
+			selection.add(addMe);
 
 		textArea.invalidateLineRange(addMe.startLine,addMe.endLine);
 	} //}}}
@@ -170,7 +167,7 @@ class SelectionManager
 	 */
 	void setSelection(Selection selection)
 	{
-		this.selection.removeAllElements();
+		this.selection.clear();
 
 		if(selection != null)
 			addToSelection(selection);
@@ -187,9 +184,10 @@ class SelectionManager
 	{
 		if(selection != null)
 		{
-			for(int i = 0; i < selection.size(); i++)
+			Iterator iter = selection.iterator();
+			while(iter.hasNext())
 			{
-				Selection s = (Selection)selection.elementAt(i);
+				Selection s = (Selection)iter.next();
 				if(offset >= s.start && offset <= s.end)
 					return s;
 			}
@@ -205,7 +203,7 @@ class SelectionManager
 	 */
 	void removeFromSelection(Selection sel)
 	{
-		selection.removeElement(sel);
+		selection.remove(sel);
 	} //}}}
 
 	//{{{ resizeSelection() method
@@ -264,9 +262,10 @@ class SelectionManager
 		Integer line;
 
 		Set set = new TreeSet();
-		for(int i = 0; i < selection.size(); i++)
+		Iterator iter = selection.iterator();
+		while(iter.hasNext())
 		{
-			Selection s = (Selection)selection.elementAt(i);
+			Selection s = (Selection)iter.next();
 			int endLine =
 				(s.end == textArea.getLineStartOffset(s.endLine)
 				? s.endLine - 1
@@ -282,7 +281,7 @@ class SelectionManager
 		int[] returnValue = new int[set.size()];
 		int i = 0;
 
-		Iterator iter = set.iterator();
+		iter = set.iterator();
 		while(iter.hasNext())
 		{
 			line = (Integer)iter.next();
@@ -299,7 +298,7 @@ class SelectionManager
 		int lastOffset = 0;
 		for(int i = 0; i < selection.size(); i++)
 		{
-			Selection s = (Selection)selection.elementAt(i);
+			Selection s = (Selection)selection.get(i);
 			newSelection[i] = new Selection.Range(lastOffset,
 				s.getStart());
 			lastOffset = s.getEnd();

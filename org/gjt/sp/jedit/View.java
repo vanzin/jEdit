@@ -1320,7 +1320,8 @@ public class View extends JFrame implements EBComponent
 		an app has unsaved changes. For details, see
 		http://developer.apple.com/qa/qa2001/qa1146.html */
 		final String WINDOW_MODIFIED = "windowModified";
-		getRootPane().putClientProperty(WINDOW_MODIFIED,unsavedChanges);
+		getRootPane().putClientProperty(WINDOW_MODIFIED,
+			Boolean.valueOf(unsavedChanges));
 	} //}}}
 
 	//}}}

@@ -32,7 +32,10 @@ import java.awt.*;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.EditPane;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
 
