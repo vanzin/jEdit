@@ -446,7 +446,7 @@
       </funcsynopsis>
       <para>
         If <parameter>flag</parameter> is <literal>true</literal>,
-        BeanShell scripts must follow a much more strict, Java-like syntax, and are not able to use the convinience features described in <xref linkend="macro-tips-BeanShell-convenience" />.
+        BeanShell scripts must follow a much more strict, Java-like syntax, and are not able to use the convenience features described in <xref linkend="macro-tips-BeanShell-convenience" />.
       </para>
     </listitem>
 

@@ -62,6 +62,10 @@ Bock for contributing to this release.
   the right position, but the text area was not always scrolled
   correctly.
 
+- The scroll state was not updated correctly if the caret was at the end
+  of the buffer and a 'Replace All' was performed replacing \n\n with
+  \n.
+
 }}}
 
 }}}

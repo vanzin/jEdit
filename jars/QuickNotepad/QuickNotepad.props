@@ -13,7 +13,7 @@ plugin.QuickNotepadPlugin.author=John Gellene
 plugin.QuickNotepadPlugin.version=4.2
 
 # online help
-plugin.QuickNotepadPlugin.docs=QuickNotepad.html
+plugin.QuickNotepadPlugin.docs=index.html
 
 # we only have one dependency, jEdit 4.2, since we use the new plugin API
 plugin.QuickNotepadPlugin.depend.0=jedit 04.02.01.00

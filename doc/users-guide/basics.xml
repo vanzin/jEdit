@@ -89,7 +89,7 @@
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>New Plain View</guimenuitem> creates
    a new view but without any tool bars or docked windows. This can be used to
-   open a small, unobtrusive window for taking notes and so on.
+   open a small window for taking notes and so on.
   </para>
   <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem> closes the
@@ -276,7 +276,7 @@
    <bridgehead renderas="sect3">Global properties</bridgehead>
    <para>
     Entering <userinput>property=value</userinput> sets the value of the global property named <userinput>property</userinput> to <userinput>value</userinput>.
-    This feature is primarily intended to help plugin develpers, since the properties jEdit uses to store its settings are not currently documented.
+    This feature is primarily intended to help plugin developers, since the properties jEdit uses to store its settings are not currently documented.
    </para>
    <bridgehead renderas="sect3">Command repetition</bridgehead>
    <para>

@@ -2,6 +2,8 @@
 
 <project name="QuickNotepad" default="dist" basedir=".">
 
+	<property file="build.properties"/>
+
 	<property name="jedit.install.dir"  value="../.."/>
 	<property name="jar.name"  value="QuickNotepad.jar"/>
 
@@ -12,6 +14,21 @@
 		<pathelement location="${jedit.install.dir}/jedit.jar"/>
 		<pathelement location="."/>
 	</path>
+
+
+	<target name="init">
+		<delete file="docbook-wrapper.xsl" />
+		<echo file="docbook-wrapper.xsl"
+			message="&lt;xsl:stylesheet"/>
+		<echo file="docbook-wrapper.xsl" append="true"
+			message=" xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"/>
+		<echo file="docbook-wrapper.xsl" append="true"
+			message=" xsl:version='1.0'&gt;"/>
+		<echo file="docbook-wrapper.xsl" append="true"
+			message="&lt;xsl:import href='${docbook.xsl}/html/chunk.xsl'/&gt;"/>
+		<echo file="docbook-wrapper.xsl" append="true"
+			message="&lt;/xsl:stylesheet&gt;"/>
+	</target>
 
 
 	<target name="compile">
@@ -37,5 +54,14 @@
 				<include name="dockables.xml"/>
 			</fileset>
 		</jar>
+	</target>
+
+	<!-- Generate docs with xsltproc tool from www.xmlsoft.org -->
+	<target name="docs-xsltproc" depends="init">
+		<exec executable="xsltproc">
+			<arg value="--catalogs"/>
+			<arg value="users-guide.xsl"/>
+			<arg value="users-guide.xml"/>
+		</exec>
 	</target>
 </project>
