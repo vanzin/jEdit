@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
+ * Copyright (C) 1999, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,35 +121,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public static final int HIGHEST_LAYER = Integer.MAX_VALUE;
 	//}}}
 
-	//{{{ TextAreaPainter constructor
-	/**
-	 * Creates a new painter. Do not create instances of this class
-	 * directly.
-	 */
-	public TextAreaPainter(JEditTextArea textArea)
-	{
-		enableEvents(AWTEvent.FOCUS_EVENT_MASK
-			| AWTEvent.KEY_EVENT_MASK
-			| AWTEvent.MOUSE_EVENT_MASK);
-
-		this.textArea = textArea;
-
-		extensionMgr = new ExtensionManager();
-
-		setAutoscrolls(true);
-		setOpaque(true);
-
-		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
-
-		fontRenderContext = new FontRenderContext(null,false,false);
-
-		addExtension(LINE_BACKGROUND_LAYER,lineBackground
-			= new PaintLineBackground());
-		addExtension(SELECTION_LAYER,new PaintSelection());
-		addExtension(WRAP_GUIDE_LAYER,new WrapGuide());
-		addExtension(BRACKET_HIGHLIGHT_LAYER,new BracketHighlight());
-	} //}}}
-
 	//{{{ setBounds() method
 	/**
 	 * It is a bad idea to override this, but we need to get the component
@@ -214,8 +185,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public final void setStyles(SyntaxStyle[] styles)
 	{
+		// assumed this is called after a font render context is set up.
+		// changing font render context settings without a setStyles()
+		// call will not reset cached monospaced font info.
+		fonts.clear();
+
 		this.styles = styles;
 		styles[Token.NULL] = new SyntaxStyle(getForeground(),null,getFont());
+		for(int i = 0; i < styles.length; i++)
+		{
+			styles[i].setCharWidth(getCharWidth(styles[i].getFont()));
+		}
 		repaint();
 	} //}}}
 
@@ -759,6 +739,40 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		return getPreferredSize();
 	} //}}}
 
+	//{{{ Package-private members
+
+	//{{{ TextAreaPainter constructor
+	/**
+	 * Creates a new painter. Do not create instances of this class
+	 * directly.
+	 */
+	TextAreaPainter(JEditTextArea textArea)
+	{
+		enableEvents(AWTEvent.FOCUS_EVENT_MASK
+			| AWTEvent.KEY_EVENT_MASK
+			| AWTEvent.MOUSE_EVENT_MASK);
+
+		this.textArea = textArea;
+
+		fonts = new HashMap();
+		extensionMgr = new ExtensionManager();
+
+		setAutoscrolls(true);
+		setOpaque(true);
+
+		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+
+		fontRenderContext = new FontRenderContext(null,false,false);
+
+		addExtension(LINE_BACKGROUND_LAYER,lineBackground
+			= new PaintLineBackground());
+		addExtension(SELECTION_LAYER,new PaintSelection());
+		addExtension(WRAP_GUIDE_LAYER,new WrapGuide());
+		addExtension(BRACKET_HIGHLIGHT_LAYER,new BracketHighlight());
+	} //}}}
+
+	//}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
@@ -794,6 +808,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
+
+	private HashMap fonts;
 	//}}}
 
 	//{{{ updateRenderingHints() method
@@ -948,6 +964,47 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			else
 				gfx.drawLine(caretX,y,caretX,y + height - 1);
 		}
+	} //}}}
+
+	//{{{ getCharWidth() method
+	private int getCharWidth(Font font)
+	{
+		Integer returnValue = (Integer)fonts.get(font);
+		if(returnValue == null)
+		{
+			int minWidth = Integer.MAX_VALUE;
+			int maxWidth = Integer.MIN_VALUE;
+			FontMetrics fm = getFontMetrics(font);
+			int[] widths = fm.getWidths();
+			for(int i = 0; i < widths.length; i++)
+			{
+				int width = widths[i];
+				if(width == 0 || !font.canDisplay((char)i))
+					continue;
+				minWidth = Math.min(width,minWidth);
+				maxWidth = Math.max(width,maxWidth);
+			}
+
+			String str = "iwiwiwiau1234";
+			double width1 = font.createGlyphVector(textArea.getPainter()
+				.getFontRenderContext(),str).getLogicalBounds()
+				.getWidth();
+			double width2 = str.length() * maxWidth;
+			if(minWidth == maxWidth
+				&& width1 == width2)
+			{
+				Log.log(Log.DEBUG,this,"Using monospaced font optimization: " + font);
+				returnValue = new Integer(maxWidth);
+			}
+			else
+			{
+				Log.log(Log.DEBUG,this,"Not using monospaced font optimization: " + font);
+				returnValue = new Integer(0);
+			}
+
+			fonts.put(font,returnValue);
+		}
+		return returnValue.intValue();
 	} //}}}
 
 	//}}}

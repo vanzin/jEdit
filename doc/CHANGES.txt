@@ -80,6 +80,13 @@ Thanks to Kris Kopicki and Ryan Grove for contributing to this release.
   list in the cache. This should improve scrolling performance,
   especially when smooth text is on.
 
+- jEdit now performs much better when very long lines are present in a
+  buffer.
+
+- A funky little display optimization with monospaced fonts is now
+  performed. In jEdit 4.1 this could be enabled with a hidden property,
+  but now we detect if a monospaced font is actually in use.
+
 }}}
 {{{ Platform-Specific Changes:
 

@@ -4733,8 +4733,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				.getWidth();
 		}
 
-		monospacedHack = jEdit.getBooleanProperty("view.monospacedHack");
-
 		maxHorizontalScrollWidth = 0;
 		updateScrollBars();
 
@@ -4997,7 +4995,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	int wrapMargin;
 	boolean wrapToWidth;
 	int charWidth;
-	boolean monospacedHack;
 
 	boolean scrollBarsInitialized;
 

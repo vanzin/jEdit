@@ -25,8 +25,6 @@ and quirks that I need to fix eventually.
 - hypersearch refresh
 - activity log: log viewer needs copy, tabs in log entries need to be
   replaced
-- could make non-soft wrap chunk merge even faster!
-- split long lines
 - rect select and trailing whitespace
 - return after collapsed fold: insert line after end of fold
 - global options: don't use card layout
@@ -164,6 +162,8 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 + performance:
 
+- bracket matching: scan up to, say, 10,000 lines
+- bracket matching: no delay for current line match??
 - final optimization for OffsetManager: scan to zero or scan to end
 - insert/remove lines with a lot of folds below is slow for two reasons:
   - getNext/PrevVisibleLine() is a linear scan
@@ -173,7 +173,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - prioritize work requests so that active buffers get loaded first?
   too much of a hack?
 - replace all in a directory could be faster
-- faster smooth text
 - buffer.setMode() slow
 - inserting new lines -- why repaint entire text area?
 - positions should be gapped too
@@ -187,6 +186,9 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 - if caret is at the end of a buffer when doing a replace all, a lot of
   repaint() and getLineOfOffset() calls are made, however this doesn't
   seem to affect performance that much.
+- could make non-soft wrap chunk merge even faster!
+- could make long lines even faster
+- repeat: use a compound edit
 
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:

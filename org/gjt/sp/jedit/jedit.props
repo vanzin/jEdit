@@ -380,7 +380,6 @@ vfs.browser.colors.8.color=#666666
 menu.spillover=20
 bufferSwitcher.maxRowCount=10
 showTooltips=true
-view.monospacedHack=false
 ioThreadCount=4
 server.brokenToFront=false
 #}}}

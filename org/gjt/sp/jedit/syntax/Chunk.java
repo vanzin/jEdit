@@ -57,57 +57,63 @@ public class Chunk extends Token
 		Graphics2D gfx, float x, float y, Color background,
 		boolean glyphVector)
 	{
+		Rectangle clipRect = gfx.getClipBounds();
 		FontMetrics forBackground = gfx.getFontMetrics();
 
 		float _x = 0.0f;
 
 		while(chunks != null)
 		{
-			// Useful for debugging purposes
-			if(DEBUG)
+			// only paint visible chunks
+			if(x + _x + chunks.width > clipRect.x
+				&& x + _x < clipRect.x + clipRect.width)
 			{
-				gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
-					chunks.width,10));
-			}
-
-			if(chunks.accessable)
-			{
-				//{{{ Paint token background color if necessary
-				Color bgColor = chunks.style.getBackgroundColor();
-				if(bgColor != null)
+				// Useful for debugging purposes
+				if(DEBUG)
 				{
-					// Workaround for bug in Graphics2D in
-					// JDK1.4 under Windows; calling
-					// setPaintMode() does not reset
-					// graphics mode.
-					Graphics2D xorGfx = (Graphics2D)gfx.create();
-					xorGfx.setXORMode(background);
-					xorGfx.setColor(bgColor);
+					gfx.draw(new Rectangle2D.Float(x + _x,y - 10,
+						chunks.width,10));
+				}
 
-					xorGfx.fill(new Rectangle2D.Float(
-						x + _x,y - forBackground.getAscent(),
-						_x + chunks.width - _x,forBackground.getHeight()));
-
-					xorGfx.dispose();
-				} //}}}
-
-				//{{{ If there is text in this chunk, paint it
-				if(chunks.visible)
+				if(chunks.accessable)
 				{
-					gfx.setFont(chunks.style.getFont());
-					gfx.setColor(chunks.style.getForegroundColor());
-
-					if(glyphVector && chunks.gv != null)
-						gfx.drawGlyphVector(chunks.gv,x + _x,y);
-					else
+					//{{{ Paint token background color if necessary
+					Color bgColor = chunks.style.getBackgroundColor();
+					if(bgColor != null)
 					{
-						gfx.drawChars(lineText.array,
-							lineText.offset
-							+ chunks.offset,
-							chunks.length,
-							(int)(x + _x),(int)y);
-					}
-				} //}}}
+						// Workaround for bug in Graphics2D in
+						// JDK1.4 under Windows; calling
+						// setPaintMode() does not reset
+						// graphics mode.
+						Graphics2D xorGfx = (Graphics2D)gfx.create();
+						xorGfx.setXORMode(background);
+						xorGfx.setColor(bgColor);
+
+						xorGfx.fill(new Rectangle2D.Float(
+							x + _x,y - forBackground.getAscent(),
+							_x + chunks.width - _x,forBackground.getHeight()));
+
+						xorGfx.dispose();
+					} //}}}
+
+					//{{{ If there is text in this chunk, paint it
+					if(chunks.visible)
+					{
+						gfx.setFont(chunks.style.getFont());
+						gfx.setColor(chunks.style.getForegroundColor());
+
+						if(glyphVector && chunks.gv != null)
+							gfx.drawGlyphVector(chunks.gv,x + _x,y);
+						else
+						{
+							gfx.drawChars(lineText.array,
+								lineText.offset
+								+ chunks.offset,
+								chunks.length,
+								(int)(x + _x),(int)y);
+						}
+					} //}}}
+				}
 			}
 
 			_x += chunks.width;
@@ -178,7 +184,7 @@ public class Chunk extends Token
 	public boolean initialized;
 
 	public boolean monospaced;
-	public float charWidth;
+	public int charWidth;
 
 	// set up after init()
 	public SyntaxStyle style;
@@ -272,9 +278,11 @@ public class Chunk extends Token
 
 	//{{{ init() method
 	public void init(Segment seg, TabExpander expander, float x,
-		FontRenderContext fontRenderContext, float charWidth)
+		FontRenderContext fontRenderContext)
 	{
 		initialized = true;
+		if(style != null)
+			charWidth = style.getCharWidth();
 
 		if(!accessable)
 		{
@@ -286,10 +294,9 @@ public class Chunk extends Token
 			float newX = expander.nextTabStop(x,offset + length);
 			width = newX - x;
 		}
-		else if(charWidth != 0.0f)
+		else if(charWidth != 0)
 		{
 			visible = monospaced = true;
-			this.charWidth = charWidth;
 			width = charWidth * length;
 		}
 		else
