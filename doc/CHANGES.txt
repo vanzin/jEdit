@@ -2,6 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre10
 
+Thanks to Oliver Rutherfurd for contributing to this release.
+
 + Bug Fixes:
 
 - The Format Praragraph command was once again broken on Java 1.3.
@@ -13,6 +15,8 @@ JEDIT 4.1 VERSION HISTORY
     unix-script=<bin directory> unix-man=<man directory>
 
   The last two parameters are optional.
+
+- EOL_SPAN_REGEXP rule was broken (Oliver Rutherfurd).
 
 * Version 4.1pre9
 

@@ -201,7 +201,7 @@ public class ParserRule
 		boolean excludeMatch, boolean ignoreCase)
 		throws REException
 	{
-		int ruleAction = EOL_SPAN |
+		int ruleAction = EOL_SPAN | REGEXP |
 			((atLineStart) ? AT_LINE_START : 0) |
 			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
 			((atWordStart) ? AT_WORD_START : 0) |
@@ -209,7 +209,8 @@ public class ParserRule
 			| NO_LINE_BREAK;
 
 		return new ParserRule(ruleAction, hashChar,
-			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0)), null,
+			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0),
+			RESearchMatcher.RE_SYNTAX_JEDIT), null,
 			delegate, id);
 	} //}}}
 
