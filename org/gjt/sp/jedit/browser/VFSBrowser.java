@@ -1071,8 +1071,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 		button.setToolTipText(jEdit.getProperty(prefix + name + ".label"));
 
-		button.setRequestFocusEnabled(false);
-		button.setMargin(new Insets(0,0,0,0));
 		button.addActionListener(new ActionHandler());
 
 		return button;

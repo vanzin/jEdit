@@ -50,6 +50,9 @@ public class RolloverButton extends JButton
 	{
 		setBorder(new EtchedBorder());
 		setBorderPainted(false);
+		setMargin(new Insets(0,0,0,0));
+
+		setRequestFocusEnabled(false);
 
 		addMouseListener(new MouseOverHandler());
 	} //}}}

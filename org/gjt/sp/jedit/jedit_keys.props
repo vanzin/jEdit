@@ -177,6 +177,7 @@ prev-buffer.shortcut=C+PAGE_UP
 next-buffer.shortcut=C+PAGE_DOWN
 prev-textarea.shortcut=A+PAGE_UP
 next-textarea.shortcut=A+PAGE_DOWN
+insert-newline-indent.shortcut=ENTER
 #}}}
 
 #{{{ Alternative shortcuts for frequently-used commands

@@ -435,6 +435,7 @@ class ToolBarEditDialog extends EnhancedDialog
 
 		list = new JList();
 		list.setVisibleRowCount(8);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		actionPanel.add(BorderLayout.CENTER,new JScrollPane(list));
 
 		// Icon selection

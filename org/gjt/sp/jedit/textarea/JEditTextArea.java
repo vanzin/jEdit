@@ -2468,6 +2468,18 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void goToNextWord(boolean select)
 	{
+		goToNextWord(select,false);
+	} //}}}
+
+	//{{{ goToNextWord() method
+	/**
+	 * Moves the caret to the start of the next word.
+	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
+	 * this method moves the caret to the end of the current word instead.
+	 * @since jEdit 4.1pre5
+	 */
+	public void goToNextWord(boolean select, boolean stdNextPrevWord)
+	{
 		int lineStart = getLineStartOffset(caretLine);
 		int newCaret = caret - lineStart;
 		String lineText = getLineText(caretLine);
@@ -2488,13 +2500,13 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,
 				noWordSep);
-			if(jEdit.getBooleanProperty("view.stdNextPrevWord"))
+			if(stdNextPrevWord)
 			{
 				while((newCaret < lineText.length()) && Character.isWhitespace(lineText.charAt(newCaret)))
 					newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,
 						noWordSep);
 			}
-			
+
 			newCaret += lineStart;
 		}
 
@@ -2770,6 +2782,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToPrevWord(boolean select)
 	{
+		goToPrevWord(select,false);
+	} //}}}
+
+	//{{{ goToPrevWord() method
+	/**
+	 * Moves the caret to the start of the previous word.
+	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
+	 * this method moves the caret to the start of the current word instead.
+	 * @since jEdit 4.1pre5
+	 */
+	public void goToPrevWord(boolean select, boolean stdNextPrevWord)
+	{
 		int lineStart = getLineStartOffset(caretLine);
 		int newCaret = caret - lineStart;
 		String lineText = getLineText(caretLine);
@@ -2798,7 +2822,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,
 				noWordSep);
-			if(jEdit.getBooleanProperty("view.stdNextPrevWord"))
+			if(stdNextPrevWord)
 			{
 				while((newCaret > 0) && Character.isWhitespace(lineText.charAt(newCaret)))
 					newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,
@@ -3201,21 +3225,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 			else
 				insertTab();
-			return;
-		}
-		else if(ch == '\n')
-		{
-			try
-			{
-				buffer.beginCompoundEdit();
-				setSelectedText("\n");
-				if(buffer.getBooleanProperty("indentOnEnter"))
-					buffer.indentLine(caretLine,true,false);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
 			return;
 		}
 		else

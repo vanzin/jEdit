@@ -456,7 +456,8 @@ public class Buffer implements EBComponent
 		{
 			long newModTime = file.lastModified();
 
-			if(newModTime != modTime)
+			if(newModTime != modTime
+				&& jEdit.getBooleanProperty("view.checkModStatus"))
 			{
 				Object[] args = { this.path };
 				int result = GUIUtilities.confirm(view,
@@ -510,7 +511,10 @@ public class Buffer implements EBComponent
 	 */
 	public int checkFileStatus()
 	{
-		// only supported on local file system
+		// - don't do these checks while a save is in progress,
+		// because for a moment newModTime will be greater than
+		// oldModTime, due to the multithreading
+		// - only supported on local file system
 		if(!getFlag(IO) && !getFlag(LOADING) && file != null)
 		{
 			boolean newReadOnly = (file.exists() && !file.canWrite());
@@ -549,13 +553,12 @@ public class Buffer implements EBComponent
 	 */
 	public void checkModTime(View view)
 	{
-		// don't do these checks while a save is in progress,
-		// because for a moment newModTime will be greater than
-		// oldModTime, due to the multithreading
-		if(file == null || !jEdit.getBooleanProperty("view.checkModStatus"))
-			return;
-
 		int status = checkFileStatus();
+
+		// still need to call the status check even if this option is off,
+		// so that the write protection is updated if it changes on disk
+		if(!jEdit.getBooleanProperty("view.checkModStatus"))
+			return;
 
 		if(status == FILE_DELETED)
 		{

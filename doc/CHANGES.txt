@@ -6,6 +6,7 @@ JEDIT 4.1 VERSION HISTORY
 
 - Added NQC syntax highlighting (Fan Ho Yin)
 - Added Ruby-HTML syntax highlighting (Eric Benoit)
+- Added Pike syntax highlighting (Marco Gotze)
 - Updated C-Sharp syntax highlighting (Ollie Rutherfurd)
 
 + Global Options Dialog Changes:
@@ -17,6 +18,15 @@ JEDIT 4.1 VERSION HISTORY
   concrete org.gjt.sp.jedit.options.GlobalOptions subclass with the
   Global Options-specific code. This allows plugins to create paned
   dialog boxes similar to Global Options.
+- The "Standard go to next/previous word behavior" setting has been
+  removed; instead some new actions have been added which can be bound
+  to C+LEFT, C+RIGHT, CS+LEFT and CS+RIGHT to achieve the behavior of
+  this setting:
+
+  Go to Next Word (Eats Whitespace)
+  Go to Previous Word (Eats Whitespace)
+  Select Next Word (Eats Whitespace)
+  Select Previous Word (Eats Whitespace)
 
 + Plugin Manager Changes:
 
@@ -30,6 +40,11 @@ JEDIT 4.1 VERSION HISTORY
   removes the split pane containing the current edit pane only, as
   opposed to the "Unsplit All" command (previously "Unsplit", still
   bound to C+1) which removes all splits from the view.
+- Behavior of "Warn if file is modified on disk by another program"
+  setting is now more intuitive; even if its off, the write protection
+  status of a buffer is still updated if it changes on disk. Also this
+  setting now controls the modification check when saving; previously it
+  only controlled the check performed when jEdit received focus.
 
 + Bug Fixes:
 
@@ -58,6 +73,8 @@ JEDIT 4.1 VERSION HISTORY
   action's namespace from that point on. This has been fixed by making
   dockable creation and action invocation take place in different
   namespaces.
+- Fixed a display problem if a SEQ_REGEXP, SPAN_REGEXP or
+  EOL_SPAN_REGEXP syntax highlighting rule matched a tab.
 
 * Version 4.1pre4
 

@@ -276,17 +276,18 @@ public class GutterOptionPane extends AbstractOptionPane
 	private ColorWellButton gutterNoFocusBorder;
 
 	private JComboBox[] gutterClickActions;
-	
+
+	// simplified these settings a little...
 	private static final String[] clickActionKeys = new String[] {
 		"toggleFold",
-		"toggleFoldFully",
-		"selectFold"
+		"toggleFoldFully" /* ,
+		"selectFold" */
 	};
 	
 	private static final String[] clickModifierKeys = new String[] {
 		"gutterClick",
-		"gutterShiftClick",
+		"gutterShiftClick" /* ,
 		"gutterControlClick",
-		"gutterAltClick"
+		"gutterAltClick" */
 	}; //}}}
 }

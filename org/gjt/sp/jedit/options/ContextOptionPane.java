@@ -77,21 +77,24 @@ public class ContextOptionPane extends AbstractOptionPane
 		JPanel buttons = new JPanel();
 		buttons.setBorder(new EmptyBorder(3,0,0,0));
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		buttons.add(Box.createGlue());
 		ActionHandler actionHandler = new ActionHandler();
-		add = new JButton(jEdit.getProperty("options.context.add"));
+		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
+		add.setToolTipText(jEdit.getProperty("options.context.add"));
 		add.addActionListener(actionHandler);
 		buttons.add(add);
 		buttons.add(Box.createHorizontalStrut(6));
-		remove = new JButton(jEdit.getProperty("options.context.remove"));
+		remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
+		remove.setToolTipText(jEdit.getProperty("options.context.remove"));
 		remove.addActionListener(actionHandler);
 		buttons.add(remove);
 		buttons.add(Box.createHorizontalStrut(6));
-		moveUp = new JButton(jEdit.getProperty("options.context.moveUp"));
+		moveUp = new RolloverButton(GUIUtilities.loadIcon("ArrowU.png"));
+		moveUp.setToolTipText(jEdit.getProperty("options.context.moveUp"));
 		moveUp.addActionListener(actionHandler);
 		buttons.add(moveUp);
 		buttons.add(Box.createHorizontalStrut(6));
-		moveDown = new JButton(jEdit.getProperty("options.context.moveDown"));
+		moveDown = new RolloverButton(GUIUtilities.loadIcon("ArrowD.png"));
+		moveDown.setToolTipText(jEdit.getProperty("options.context.moveDown"));
 		moveDown.addActionListener(actionHandler);
 		buttons.add(moveDown);
 		buttons.add(Box.createGlue());
@@ -276,6 +279,7 @@ class ContextAddDialog extends EnhancedDialog
 
 		list = new JList();
 		list.setVisibleRowCount(8);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		actionPanel.add(BorderLayout.CENTER,new JScrollPane(list));
 
 		content.add(BorderLayout.CENTER,actionPanel);

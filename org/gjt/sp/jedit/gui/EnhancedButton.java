@@ -50,10 +50,6 @@ public class EnhancedButton extends RolloverButton
 			setEnabled(false);
 
 		setToolTipText(toolTip);
-
-		Insets zeroInsets = new Insets(0,0,0,0);
-		setMargin(zeroInsets);
-		setRequestFocusEnabled(false);
 	} //}}}
 
 	//{{{ isFocusTraversable() method

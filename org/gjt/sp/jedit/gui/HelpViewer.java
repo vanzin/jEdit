@@ -122,15 +122,11 @@ public class HelpViewer extends JFrame implements EBComponent
 			jEdit.getProperty("helpviewer.back.icon")));
 		back.setToolTipText(jEdit.getProperty("helpviewer.back.label"));
 		back.addActionListener(actionListener);
-		back.setRequestFocusEnabled(false);
-		back.setMargin(new Insets(0,0,0,0));
 		toolBar.add(back);
 		forward = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty("helpviewer.forward.icon")));
 		forward.addActionListener(actionListener);
 		forward.setToolTipText(jEdit.getProperty("helpviewer.forward.label"));
-		forward.setRequestFocusEnabled(false);
-		forward.setMargin(new Insets(0,0,0,0));
 		toolBar.add(forward);
 		back.setPreferredSize(forward.getPreferredSize());
 

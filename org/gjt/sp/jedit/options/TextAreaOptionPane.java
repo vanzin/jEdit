@@ -123,11 +123,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			"view.electricBorders")));
 		addComponent(electricBorders);
 
-		/* Standard go to next/previous word behaviour */
-		stdNextPrevWord = new JCheckBox(jEdit.getProperty("options.textarea.stdNextPrevWord"));
-		stdNextPrevWord.setSelected(jEdit.getBooleanProperty("view.stdNextPrevWord"));
-		addComponent(stdNextPrevWord);
-
 		/* Non word character selection behavior */
 		joinNonWordChars = new JCheckBox(jEdit.getProperty(
 			"options.textarea.joinNonWordChars"));
@@ -189,7 +184,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			wrapGuideColor.getSelectedColor());
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
-		jEdit.setBooleanProperty("view.stdNextPrevWord",stdNextPrevWord.isSelected());
 		jEdit.setBooleanProperty("view.joinNonWordChars",joinNonWordChars.isSelected());
 		jEdit.setBooleanProperty("view.middleMousePaste",
 			middleMousePaste.isSelected());
@@ -214,7 +208,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox wrapGuide;
 	private ColorWellButton wrapGuideColor;
 	private JCheckBox electricBorders;
-	private JCheckBox stdNextPrevWord;
 	private JCheckBox middleMousePaste;
 	private JCheckBox antiAlias;
 	private JCheckBox fracFontMetrics;
