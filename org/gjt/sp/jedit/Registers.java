@@ -264,7 +264,7 @@ public class Registers
 				}
 			}
 			else
-				textArea.setSelectedText(selection);
+				textArea.replaceSelection(selection);
 
 			HistoryModel.getModel("clipboard").addItem(selection);
 		}

@@ -17,6 +17,7 @@
 		HIGHLIGHT_DIGITS="TRUE"
 		ESCAPE="\"
 		NO_WORD_SEP="_-+?:"
+		DIGIT_RE="-?\d+([./]\d+)?"
 	>
 
 		<SPAN TYPE="COMMENT1">

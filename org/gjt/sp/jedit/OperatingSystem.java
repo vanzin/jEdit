@@ -146,13 +146,6 @@ public class OperatingSystem
 			w = screenW;
 			h = screenH - y - 4;//shadow size
 		}
-		else if (isWindows())
-		{
-			x = screenX - 4;
-			y = screenY - 4;
-			w = screenW - 2*x;
-			h = screenH - 2*y;
-		}
 		else
 		{
 			x = screenX;
