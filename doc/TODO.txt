@@ -34,7 +34,6 @@ and quirks that I need to fix eventually.
 - servicemanager javadocs
 - file changed dialog: don't reload files if flag is off
 - save caret info first
-- electric scroll inconsistent w.r.t. deletes
 - narrow: scrolls one down
 - update man page
 - make gutter fully painted by extensions just like text area
