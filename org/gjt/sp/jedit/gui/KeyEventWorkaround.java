@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2003 Slava Pestov
+ * Copyright (C) 2000, 2004 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -239,9 +239,13 @@ public class KeyEventWorkaround
 				return null;
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_UP:
+			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_PAGE_DOWN:
-				/* workaround for A+LEFT/RIGHT producing
+			case KeyEvent.VK_END:
+			case KeyEvent.VK_HOME:
+				/* workaround for A+keys producing
 				 * garbage on Windows */
 				if(modifiers == InputEvent.ALT_MASK)
 					last = LAST_ALT;
