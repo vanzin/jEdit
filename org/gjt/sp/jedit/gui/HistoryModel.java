@@ -105,6 +105,7 @@ public class HistoryModel extends AbstractListModel
 	 */
 	public void clear()
 	{
+		modified = true;
 		data.removeAllElements();
 	} //}}}
 

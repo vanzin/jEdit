@@ -30,7 +30,6 @@ invalidation being performed
 - control auto reload
 - C+d with folds
 - test inserts with fold vis map
-- new file close messes up perspective
 - document lack of C+e C+e
 - control drag doesn't kill existing selection
 - drag and drop: do a compound edit if same buffer

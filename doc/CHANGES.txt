@@ -14,6 +14,8 @@ JEDIT 4.2 VERSION HISTORY
   This lets you change the order that file names are matched against the
   patterns in the list.
 
+- Improved Scheme syntax highlighting (Stephen Bartlett).
+
 }}}
 {{{ Bug Fixes
 
@@ -70,6 +72,9 @@ JEDIT 4.2 VERSION HISTORY
 
 - The key event workaround would ignore a KEY_TYPED event with the AltGR
   modifier that followed a KEY_PRESSED with a keyCode of \0.
+
+- Changing the buffer sorting options, or having untitled files would
+  would cause the wrong buffers to be restored on startup.
 
 }}}
 

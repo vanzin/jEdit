@@ -258,8 +258,7 @@
 <MODE NAME="sas"		FILE="sas.xml"
 				FILE_NAME_GLOB="*.sas" />
 
-<!-- Note: same XML file as LISP mode -->
-<MODE NAME="scheme"		FILE="lisp.xml"
+<MODE NAME="scheme"		FILE="scheme.xml"
 				FILE_NAME_GLOB="*.scm" />
 
 <MODE NAME="sgml"		FILE="sgml.xml"
