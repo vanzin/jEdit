@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.gui;
 import bsh.EvalError;
 import com.microstar.xml.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.msg.CreateDockableWindow;
 import org.gjt.sp.jedit.search.HyperSearchResults;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -303,43 +302,25 @@ public class DockableWindowManager extends JPanel
 			{
 				actionSet.addAction(new OpenAction());
 				actionSet.addAction(new ToggleAction());
+				actionSet.addAction(new FloatAction());
 			}
 		} //}}}
 
 		//{{{ createDockableWindow() method
 		JComponent createDockableWindow(View view, String position)
 		{
-			// BACKWARDS COMPATIBILITY with jEdit 2.6-3.2 docking APIs
-			if(code == null)
+			try
 			{
-				CreateDockableWindow msg = new CreateDockableWindow(view,name,
-					position);
-				EditBus.send(msg);
-
-				DockableWindow win = msg.getDockableWindow();
-				if(win == null)
-				{
-					Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
-					return null;
-				}
-				return (JComponent)win.getComponent();
+				BeanShell.getNameSpace().setVariable(
+					"position",position);
 			}
-			// END BACKWARDS COMPATIBILITY
-			else
+			catch(EvalError e)
 			{
-				try
-				{
-					BeanShell.getNameSpace().setVariable(
-						"position",position);
-				}
-				catch(EvalError e)
-				{
-					Log.log(Log.ERROR,this,e);
-				}
-				JComponent win = (JComponent)BeanShell.eval(view,
-					BeanShell.getNameSpace(),code);
-				return win;
+				Log.log(Log.ERROR,this,e);
 			}
+			JComponent win = (JComponent)BeanShell.eval(view,
+				BeanShell.getNameSpace(),code);
+			return win;
 		} //}}}
 
 		//{{{ OpenAction class
@@ -400,6 +381,44 @@ public class DockableWindowManager extends JPanel
 			{
 				return "view.getDockableWindowManager()"
 					+ ".toggleDockableWindow(\"" + name + "\");";
+			} //}}}
+
+			//{{{ getLabel() method
+			public String getLabel()
+			{
+				String[] args = { jEdit.getProperty(name + ".label") };
+				return jEdit.getProperty("view.docking.toggle.label",args);
+			} //}}}
+		} //}}}
+
+		//{{{ FloatAction class
+		class FloatAction extends EditAction
+		{
+			//{{{ FloatAction constructor
+			FloatAction()
+			{
+				super(name + "-float");
+			} //}}}
+
+			//{{{ invoke() method
+			public void invoke(View view)
+			{
+				//view.getDockableWindowManager()
+				//	.floatDockableWindow(name);
+			} //}}}
+
+			//{{{ getCode() method
+			public String getCode()
+			{
+				return "view.getDockableWindowManager()"
+					+ ".floatDockableWindow(\"" + name + "\");";
+			} //}}}
+
+			//{{{ getLabel() method
+			public String getLabel()
+			{
+				String[] args = { jEdit.getProperty(name + ".label") };
+				return jEdit.getProperty("view.docking.float.label",args);
 			} //}}}
 		} //}}}
 	} //}}}
@@ -567,41 +586,19 @@ public class DockableWindowManager extends JPanel
 
 	//{{{ getDockableWindow() method
 	/**
-	 * @deprecated The DockableWindow interface is deprecated, as is this
-	 * method. Use <code>getDockable()</code> instead.
+	 * Returns the specified dockable window.
+	 * @param name The name of the dockable window
+	 * @since jEdit 4.1pre2
 	 */
-	public DockableWindow getDockableWindow(String name)
+	public JComponent getDockableWindow(String name)
 	{
-		if(BeanShell.isScriptRunning())
-		{
-			Log.log(Log.WARNING,this,"You are using the"
-				+ " DockableWindowManager.getDockableWindow() method in");
-			Log.log(Log.WARNING,this,"your macro.");
-			Log.log(Log.WARNING,this,"This method is deprecated and will"
-				+ " be removed in a future jEdit");
-			Log.log(Log.WARNING,this,"version, because it cannot be used"
-				+ " with newer plugins.");
-			Log.log(Log.WARNING,this,"Modify the macro to call"
-				+ " DockableWindowManager.getDockable() instead.");
-		}
-
-		/* this is broken, so you should switch to getDockable() ASAP.
-		 * first of all, if the dockable in question returns something
-		 * other than itself from the getComponent() method, it won't
-		 * work. it will also fail with dockables using the new API,
-		 * which don't implement the DockableWindow interface (in
-		 * which case, this method will return null). */
-		Component comp = getDockable(name);
-		if(comp instanceof DockableWindow)
-			return (DockableWindow)comp;
-		else
-			return null;
+		return getDockable(name);
 	} //}}}
 
 	//{{{ getDockable() method
 	/**
-	 * Returns the specified dockable window. Use this method instead of
-	 * the deprecated <code>getDockableWindow()</code> method.
+	 * Returns the specified dockable window. For historical reasons, this
+	 * does the same thing as <code>getDockableWindow()</code>.
 	 * @param name The name of the dockable window
 	 * @since jEdit 4.0pre1
 	 */
