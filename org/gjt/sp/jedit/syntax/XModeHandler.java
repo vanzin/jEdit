@@ -168,8 +168,7 @@ public class XModeHandler extends HandlerBase
 		String tag = peekElement();
 		String text = new String(c, off, len);
 
-		if (tag == "WHITESPACE" ||
-			tag == "EOL_SPAN" ||
+		if (tag == "EOL_SPAN" ||
 			tag == "MARK_PREVIOUS" ||
 			tag == "MARK_FOLLOWING" ||
 			tag == "SEQ" ||
@@ -193,7 +192,12 @@ public class XModeHandler extends HandlerBase
 	{
 		tag = pushElement(tag);
 
-		if (tag == "MODE")
+		if (tag == "WHITESPACE")
+		{
+			Log.log(Log.WARNING,this,path + ": WHITESPACE rule "
+				+ "no longer needed");
+		}
+		else if (tag == "MODE")
 		{
 			mode = jEdit.getMode(modeName);
 			if (mode == null)
@@ -286,20 +290,6 @@ public class XModeHandler extends HandlerBase
 			{
 				rules.setTerminateChar(termChar);
 				termChar = -1;
-			} //}}}
-			//{{{ WHITESPACE
-			else if (tag == "WHITESPACE")
-			{
-				if(lastStart == null)
-				{
-					error("empty-tag","WHITESPACE");
-					return;
-				}
-
-				rules.addRule(ParserRuleFactory.createWhitespaceRule(
-					lastStart));
-				lastStart = null;
-				lastEnd = null;
 			} //}}}
 			//{{{ EOL_SPAN
 			else if (tag == "EOL_SPAN")

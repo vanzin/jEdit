@@ -17,9 +17,6 @@
 		IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+)[lLdDfF]?">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
 
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>

@@ -20,9 +20,6 @@
           Digits may be returned from functions.
         -->
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
-        	<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-                
                 <SEQ TYPE="COMMENT1">/**/</SEQ>
 
 		<!-- Javadoc comment -->
@@ -141,9 +138,6 @@
           Everything that happens in between quotes happens here.                    
         -->
         <RULES SET="RVIEWSTMT" ESCAPE="\" DEFAULT="LITERAL1" HIGHLIGHT_DIGITS="TRUE"> 
-                <WHITESPACE> </WHITESPACE>
-                <WHITESPACE>	</WHITESPACE>
-                
                 <!-- Allow quoting for characters. -->
                 <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
                         <BEGIN>'</BEGIN>

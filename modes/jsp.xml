@@ -8,10 +8,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="--%&gt;" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- JSP comment -->
 		<SPAN TYPE="COMMENT2">
 			<BEGIN>&lt;%--</BEGIN>
@@ -97,10 +93,6 @@
 		</SPAN>
     </RULES>
 	<RULES SET="DIRECTIVES" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- JSP scriptlet expression -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
@@ -157,10 +149,6 @@
 	</RULES>
 
 	<RULES SET="TAGS" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- JSP comment -->
 		<SPAN TYPE="COMMENT2">
 			<BEGIN>&lt;%--</BEGIN>
@@ -189,10 +177,6 @@
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
 	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- JSP scriptlet expression -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>

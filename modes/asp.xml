@@ -10,10 +10,6 @@
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="MARKUP" DELEGATE="ASPVB">
 			<BEGIN>&lt;%@LANGUAGE="VBSCRIPT"%&gt;</BEGIN>
 			<END></END>
@@ -114,10 +110,6 @@
 	     ASP with VBScript as default script engine
 	     ****************************************************************** -->
 	<RULES SET="ASPVB" IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- Inlined server-side VBScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
@@ -203,10 +195,6 @@
 	     ASP with JScript as default script engine
 	     ****************************************************************** -->
 	<RULES SET="ASPJS" IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- Inlined server-side Javascript -->
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
 			<BEGIN>&lt;%</BEGIN>
@@ -292,10 +280,6 @@
 	     ASP with PerlScript as default script engine
 	     ****************************************************************** -->
 	<RULES SET="ASPPL" IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- Inlined server-side Perlscript -->
 		<SPAN TYPE="MARKUP" DELEGATE="perl::MAIN">
 			<BEGIN>&lt;%</BEGIN>

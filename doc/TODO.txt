@@ -1,5 +1,7 @@
 TO DO
 
+- Token.WHITESPACE being munged to Token.NULL
+- WHITESPACE major action in MARK_FOLLOWING
 - first focus: show all files that were modified on disk, in a list
 - idea for fixing buffer property issues: BufferProp class
 

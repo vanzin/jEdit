@@ -15,10 +15,6 @@
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="[[:digit:]]?(px|pt|mm|cm|in|em)">
 
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SEQ TYPE="OPERATOR">:</SEQ>
 		<SEQ TYPE="NULL">;</SEQ>
 		<SPAN TYPE="NULL" DELEGATE="LITERAL">
@@ -119,8 +115,5 @@
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
 	</RULES>
 </MODE>

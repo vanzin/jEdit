@@ -20,10 +20,6 @@
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+)[lLdDfF]?">
 
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- Silly comment -->
 		<SEQ TYPE="COMMENT1">/**/</SEQ>
 
@@ -145,10 +141,6 @@
 	</RULES>
 
 	<RULES SET="JAVADOC" DEFAULT="COMMENT2" IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- so that @link{...} is highlighted -->
 		<SEQ TYPE="COMMENT2">{</SEQ>
 

@@ -15,10 +15,6 @@
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<EOL_SPAN TYPE="COMMENT1">!</EOL_SPAN>
 
         <!-- strings can span lines -->
@@ -169,10 +165,6 @@
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="InformInnerText" IGNORE_CASE="FALSE" DEFAULT="LITERAL1">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SEQ TYPE="OPERATOR">^</SEQ>
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">@</SEQ>

@@ -14,10 +14,6 @@
 		<PROPERTY NAME="lineComment" VALUE="//" />
 	</PROPS>
 	<RULES ESCAPE="\">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- C style comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>

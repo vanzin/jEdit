@@ -9,8 +9,6 @@
 
 <MODE>
     <RULES DEFAULT="LITERAL1">
-        <WHITESPACE> </WHITESPACE>
-        <WHITESPACE>	</WHITESPACE>
 
         <MARK_PREVIOUS
             TYPE="KEYWORD1"

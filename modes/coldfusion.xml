@@ -9,10 +9,6 @@
 		<PROPERTY NAME="tabSize" VALUE="2" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- CFML comment -->
 		<SPAN TYPE="COMMENT2">
 			<BEGIN>&lt;!---</BEGIN>
@@ -63,10 +59,6 @@
 	</RULES>
 
 	<RULES SET="TAGS" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
@@ -92,10 +84,6 @@
 	</RULES>
 
 	<RULES SET="CFTAGS" DEFAULT="KEYWORD3">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>

@@ -8,10 +8,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
 	</PROPS>
 	<RULES>
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
@@ -55,10 +51,6 @@
 		</SPAN>
 	</RULES>
 	<RULES SET="TAGS" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
@@ -81,10 +73,6 @@
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
 	<RULES SET="DTD-TAGS" DEFAULT="KEYWORD2">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
@@ -140,10 +128,6 @@
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="ENTITY-TAGS" DEFAULT="KEYWORD2">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>

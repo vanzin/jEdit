@@ -10,9 +10,6 @@
 		<PROPERTY NAME="lineComment" VALUE="%" />
 	</PROPS>
 	<RULES>
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- @... commands -->
 		<MARK_FOLLOWING TYPE="KEYWORD2">@</MARK_FOLLOWING>
 
@@ -23,12 +20,8 @@
 			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
-	</RULES>	
+	</RULES>
 	<RULES SET="ENTRY" DEFAULT="MARKUP">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="LITERAL1" DELEGATE="ITEM">
 			<BEGIN>"</BEGIN>
 			<END>"</END>

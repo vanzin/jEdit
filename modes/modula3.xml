@@ -11,10 +11,6 @@
 		<PROPERTY NAME="commentEnd" VALUE="*)" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<!-- Comment -->
 		<!-- Compiler directives. -->
 		<SPAN TYPE="COMMENT2">

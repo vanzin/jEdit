@@ -74,6 +74,16 @@ public class DefaultTokenHandler implements TokenHandler
 	{
 		if(length == 0 && id != Token.END)
 			return;
+		else if(id == Token.WHITESPACE)
+		{
+			if(lastToken == null)
+				id = Token.NULL;
+			else
+			{
+				lastToken.length += length;
+				return;
+			}
+		}
 
 		if(firstToken == null)
 		{

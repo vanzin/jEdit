@@ -188,28 +188,6 @@ public class ParserRuleFactory
 		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, Token.NULL);
 	}
 
-	public static final ParserRule createWhitespaceRule(String seq)
-	{
-		int ruleAction = TokenMarker.WHITESPACE;
-
-		String[] strings = new String[1];
-		strings[0] = seq;
-
-		int[] ruleSeqLengths = new int[1];
-		char[] ruleChars;
-		if (seq != null)
-		{
-			ruleSeqLengths[0] = seq.length();
-			ruleChars = seq.toCharArray();
-		}
-		else
-		{
-			ruleChars = new char[0];
-		}
-
-		return new ParserRule(ruleChars, ruleSeqLengths, ruleAction, Token.NULL);
-	}
-
 	// private members
 	private static char[] getCharArray(String[] strings, int[] lengthArray)
 	{

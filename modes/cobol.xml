@@ -41,10 +41,6 @@
 		<SEQ TYPE="OPERATOR"> ^ </SEQ>
 		<SEQ TYPE="OPERATOR"> ~ </SEQ>
 
-		<!-- whitespace: (space and tab) -->
-		<WHITESPACE> </WHITESPACE>
-		<WHITESPACE>	</WHITESPACE>
-
 		<SPAN TYPE="COMMENT2" NO_LINE_BREAK="FALSE">
 			<BEGIN>EXEC SQL</BEGIN>
 			<END>END-EXEC</END>
