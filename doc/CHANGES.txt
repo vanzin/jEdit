@@ -58,6 +58,10 @@ Bock for contributing to this release.
 - Some file names could not be opened because jEdit would mistake them
   for URLs (for example, "foo.bar:baz").
 
+- the +line: and +marker: command line parameters moved the caret to
+  the right position, but the text area was not always scrolled
+  correctly.
+
 }}}
 
 }}}

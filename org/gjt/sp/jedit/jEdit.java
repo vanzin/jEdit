@@ -3579,7 +3579,10 @@ loop:		for(int i = 0; i < list.length; i++)
 				if(view != null && view.getBuffer() == buffer)
 					view.getTextArea().setCaretPosition(pos);
 				else
+				{
 					buffer.setIntegerProperty(Buffer.CARET,pos);
+					buffer.unsetProperty(Buffer.SCROLL_VERT);
+				}
 			}
 		});
 	} //}}}
