@@ -5765,6 +5765,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ doWordWrap() method
+	/**
+	 * Does hard wrap.
+	 */
 	private boolean doWordWrap(boolean spaceInserted)
 	{
 		if(!hardWrap || maxLineLen <= 0)
@@ -5786,8 +5789,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(ch != ' ' && ch != '\t')
 				return false;
 		}
-
-		boolean returnValue = false;
 
 		int tabSize = buffer.getTabSize();
 
@@ -5839,14 +5840,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 
+		boolean returnValue;
+
 		int insertNewLineAt;
 		if(spaceInserted && logicalLength == maxLineLen
 			&& lastInLine == caretPos - 1)
 		{
 			insertNewLineAt = caretPos;
+			returnValue = true;
 		}
 		else if(logicalLength >= maxLineLen && lastWordOffset != -1)
+		{
 			insertNewLineAt = lastWordOffset;
+			returnValue = false;
+		}
 		else
 			return false;
 
@@ -5865,7 +5872,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		/* only ever return true if space was pressed
 		 * with logicalLength == maxLineLen */
-		return true;
+		return returnValue;
 	} //}}}
 
 	//{{{ doWordCount() method

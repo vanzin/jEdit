@@ -56,6 +56,14 @@ release.
 - Dismissing the buffer switcher popup now sends focus back to the text
   area.
 
+- Fix layout problem with tool bars at the bottom of the view.
+
+- Fix layout problem with tool bar obscuring the right docking area.
+
+- Docking area sizes would be determined before the button sizes were
+  known, so it was possible to resize a docking area beyond the edge of
+  the view.
+
 }}}
 
 }}}
