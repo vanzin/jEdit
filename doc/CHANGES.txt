@@ -77,6 +77,8 @@ contributing to this release.
   - Various troubleshooting-related commands moved from Utilities to
     Utilities->Troubleshooting (like they were in 4.1pre1).
 
+- More tool bar icons added. (Kris Kopicki)
+
 + Miscellaneous Changes:
 
 - The JARClassLoader now registers plugin packages and manifest files.
@@ -86,8 +88,6 @@ contributing to this release.
   without invoking 'Update Activity Log on Disk' first, I have added a
   notice to this file, stating that you must invoke the above command
   otherwise the file will be incomplete.
-
-- More tool bar icons added. (Kris Kopicki)
 
 + Bug Fixes:
 
@@ -112,6 +112,11 @@ contributing to this release.
 - Abbreviations whose expansions started with the text "<html>" could
   cause problems since Swing automatically tries to display such strings
   as HTML. A workaround has now been added.
+
++ API Changes:
+
+- Buffer.getFile() method deprecated. Use Buffer.getPath() and the VFS
+  API instead.
 
 * Version 4.1pre2
 

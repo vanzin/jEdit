@@ -321,7 +321,6 @@ public class BufferIORequest extends WorkRequest
 
 		// only true if the file size is known
 		boolean trackProgress = (!buffer.isTemporary() && length != 0);
-		File file = buffer.getFile();
 
 		if(trackProgress)
 		{

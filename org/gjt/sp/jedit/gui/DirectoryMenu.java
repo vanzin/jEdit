@@ -28,6 +28,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 import org.gjt.sp.jedit.browser.*;
+import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -86,7 +87,7 @@ public class DirectoryMenu extends EnhancedMenu implements MenuListener
 		add(mi);
 		addSeparator();
 
-		if(dir == null && view.getBuffer().getFile() == null)
+		if(dir == null && !(view.getBuffer().getVFS() instanceof FileVFS))
 		{
 			mi = new JMenuItem(jEdit.getProperty(
 				"directory.not-local"));
