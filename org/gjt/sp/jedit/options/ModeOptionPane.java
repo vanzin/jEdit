@@ -78,9 +78,9 @@ public class ModeOptionPane extends AbstractOptionPane
 			noWordSep = new JTextField());
 
 		String[] foldModes = {
-			jEdit.getProperty("options.editing.folding.none"),
-			jEdit.getProperty("options.editing.folding.indent"),
-			jEdit.getProperty("options.editing.folding.explicit")
+			"none",
+			"indent",
+			"explicit"
 		};
 		addComponent(jEdit.getProperty("options.editing.folding"),
 			folding = new JComboBox(foldModes));
@@ -142,21 +142,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		current.maxLineLen = (String)maxLineLen.getSelectedItem();
 		current.wordBreakChars = wordBreakChars.getText();
 		current.noWordSep = noWordSep.getText();
-
-		int index = folding.getSelectedIndex();
-		switch(index)
-		{
-		case 0:
-			current.folding = "none";
-			break;
-		case 1:
-			current.folding = "indent";
-			break;
-		case 2:
-			current.folding = "explicit";
-			break;
-		}
-
+		current.folding = (String)folding.getSelectedItem();
 		current.collapseFolds = collapseFolds.getText();
 		current.noTabs = noTabs.isSelected();
 		current.indentOnEnter = indentOnEnter.isSelected();
@@ -178,14 +164,7 @@ public class ModeOptionPane extends AbstractOptionPane
 		maxLineLen.setSelectedItem(current.maxLineLen);
 		wordBreakChars.setText(current.wordBreakChars);
 		noWordSep.setText(current.noWordSep);
-
-		if("indent".equals(current.folding))
-			folding.setSelectedIndex(1);
-		else if("explicit".equals(current.folding))
-			folding.setSelectedIndex(2);
-		else
-			folding.setSelectedIndex(0);
-
+		folding.setSelectedItem(current.folding);
 		collapseFolds.setText(current.collapseFolds);
 		noTabs.setSelected(current.noTabs);
 		indentOnTab.setSelected(current.indentOnTab);

@@ -4,14 +4,23 @@ JEDIT 4.0 VERSION HISTORY
 
 + New Features
 
-- Ant is used instead of jmk to compile jEdit
+- New folding features:
+  - Three fold modes: none, indent, explicit. 'none' is the default now.
+    'indent' is the indent-based folding mode, that behaves the same as
+    indent-based folding in jEdit 3.1 and 3.2. 'explicit' parses the
+    buffer for {{{ and }}} and adds folds based on that.
+  - Change the fold mode by clicking the fold mode widget in the status
+    bar, or in the Buffer Options dialog box, or with the 'folding'
+    buffer-local property, or in the Global Options dialog box.
+  - Folds are now shown in the gutter as triangles, which is more
+    intuitive than filled/not-filled boxes
+  - View->Folding->Collapse All Folds command, equivalent to invoking
+    'Expand Folds With Level' and specifying a level of 1
 - Utilities->Memory Status command to replace 'Show Free Memory' macro
 - General look and feel settings moved to 'Appearance' option pane
 - If you are using the Metal or Kunststoff L&F, the UI control font can
   be changed in Utilities->Global Options->Appearance
 - 'Vertical Paste' macro (Andre Kaplan)
-- View->Folding->Collapse All Folds command, equivalent to invoking
-  'Expand Folds With Level' and specifying a level of 1
 - File listings in the file system browser are now colorized. Change the
   colors in Utilities->Global Options->File System Browser
 - When a file is loaded, jEdit now remembers if it contained a trailing
@@ -26,19 +35,16 @@ JEDIT 4.0 VERSION HISTORY
 - BBj (Business Basic based on Java) syntax highlighting (Thomas Bock)
 - BibTeX syntax highlighting (Nils Krahnstoever)
 - Option added to sort recent file list by name
-- New dockable window API. This does not affect the user interface, it
-  is just a plugin implementation issue.
-  - The old API (registering the dockable window using
-    EditBus.addToNamedList(), and listening for a  CreateDockableWindow
-    message) will continue to work, but the new API is much simpler
-  - All you have to do is write a dockables.xml file, and it will even
-    create the actions to open your dockable windows for you
 - -nogui switch is back. If specified when jEdit is being run in
   background mode, the initial view will not be opened
 - Edit->Invert Selection command added
-- Improved bracket matching:
-  - The gutter now displays a scope bracket when the caret and bracket
-    are not on the same line
+- The gutter now displays a scope indicator when the caret and matching
+  bracket are not on the same line
+- Ant is used instead of jmk to compile jEdit
+
++ Neutral
+
+- Word wrap is disabled by default
 
 + Enhancements
 
@@ -62,6 +68,7 @@ JEDIT 4.0 VERSION HISTORY
 - If a selection ends at the beginning of a line, that line is no longer
   considered to be part of the selection by line manipulation commands
 - Improved window docking feature:
+  - New, much simpler API for plugins
   - 'Auto open' setting in Docking option pane removed, now jEdit
     remembers which dockables were open automatically
   - Docked windows are shown inside a custom control, not a tabbed pane
@@ -77,8 +84,6 @@ JEDIT 4.0 VERSION HISTORY
   an arbitriary java.awt.Component, instead of a View, as the component
   that will parent the dialog box. This will not break any macros since
   BeanShell resolves methods at run-time.
-- Folds are now shown in the gutter as triangles, which is more
-  intuitive than filled/not-filled boxes
 - jEdit now makes an effort to display popup menus on-screen. If you
   want your plugin to do this, use the new GUIUtilities.showPopupMenu()
   method.
@@ -195,7 +200,7 @@ JEDIT 4.0 VERSION HISTORY
   APIs in the ErrorList plugin.
 - DockableWindowManager.getDockableWindow() method (that returns a
   DockableWindow instance) has been deprecated in favor of the new
-  DockableWindowManager.getDockable() (which returns a Component
+  DockableWindowManager.getDockable() (which returns a JComponent
   instance)
 - TextAreaHighlight.init() method removed. If it exists, it will be
   called via reflection so that old plugins can continue to work, but
@@ -203,3 +208,7 @@ JEDIT 4.0 VERSION HISTORY
   highlighter.
 - MiscUtilities.VersionCompare class and MiscUtilities.compareVersions()
   method removed. Use compareStrings() instead
+- Sometimes, Untitled buffers would not be replaced when another file
+  was opened
+- Buffer.collapseFoldAt(int) is now
+  Buffer.collapseFoldAt(int,JEditTextArea)

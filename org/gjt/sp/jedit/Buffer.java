@@ -1,6 +1,7 @@
 /*
  * Buffer.java - jEdit buffer
- * :tabSize=8:indentSize=8:folding=explicit:collapseFolds=1:
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999, 2000 mike dillon
@@ -2204,13 +2205,13 @@ public class Buffer extends PlainDocument implements EBComponent
 				_info.foldLevelValid = true;
 			}
 
-			for(int i = line + 1; i < lineCount; i++)
-			{
-				lineInfo[i].foldLevelValid = false;
-			}
-
 			if(info.foldLevel != newFoldLevel)
+			{
+				for(int i = line + 1; i < lineCount; i++)
+					lineInfo[i].foldLevelValid = false;
+
 				fireFoldLevelsChanged(start - 1,line - 1);
+			}
 
 			return newFoldLevel;
 		}
@@ -2325,10 +2326,11 @@ public class Buffer extends PlainDocument implements EBComponent
 	/**
 	 * Collapse the fold that contains the specified line number.
 	 * @param line The first line number of the fold
+	 * @param textArea Text area for scrolling purposes
 	 * @return False if there are no folds in the buffer
 	 * @since jEdit 3.1pre1
 	 */
-	public boolean collapseFoldAt(int line)
+	public boolean collapseFoldAt(int line, JEditTextArea textArea)
 	{
 		int initialFoldLevel = getFoldLevel(line);
 
@@ -2416,6 +2418,10 @@ public class Buffer extends PlainDocument implements EBComponent
 
 		//System.err.println("copy from " + (start + delta)
 		//	+ " to " + start);
+
+		int firstLine = textArea.getFirstLine();
+		if(start < firstLine)
+			textArea.setFirstLine(start);
 
 		fireFoldStructureChanged();
 
@@ -3355,10 +3361,16 @@ public class Buffer extends PlainDocument implements EBComponent
 	//{{{ setFoldHandler() method
 	private void setFoldHandler(FoldHandler foldHandler)
 	{
+		if(this.foldHandler != null
+			&& this.foldHandler.getClass() == foldHandler.getClass())
+			return;
+
 		this.foldHandler = foldHandler;
 
 		for(int i = 0; i < lineCount; i++)
 			lineInfo[i].foldLevelValid = false;
+
+		fireFoldHandlerChanged();
 	} //}}}
 
 	//{{{ addLinesToMap() method
@@ -3498,6 +3510,16 @@ public class Buffer extends PlainDocument implements EBComponent
 			&& lastTokenizedLine < index + lines)
 		{
 			lastTokenizedLine = -1;
+		}
+	} //}}}
+
+	//{{{ fireFoldHandlerChanged() method
+	private void fireFoldHandlerChanged()
+	{
+		for(int i = 0; i < foldListeners.size(); i++)
+		{
+			((FoldListener)foldListeners.elementAt(i))
+				.foldHandlerChanged();
 		}
 	} //}}}
 

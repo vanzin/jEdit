@@ -1,5 +1,8 @@
 /*
  * Gutter.java
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000 mike dillon
  * Portions copyright (C) 2001 Slava Pestov
  *
@@ -20,17 +23,21 @@
 
 package org.gjt.sp.jedit.textarea;
 
+//{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.reflect.Method;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 public class Gutter extends JComponent implements SwingConstants
 {
+	//{{{ Gutter constructor
 	public Gutter(View view, JEditTextArea textArea)
 	{
 		this.view = view;
@@ -43,8 +50,9 @@ public class Gutter extends JComponent implements SwingConstants
 		MouseHandler ml = new MouseHandler();
 		addMouseListener(ml);
 		addMouseMotionListener(ml);
-	}
+	} //}}}
 
+	//{{{ paintComponent() method
 	public void paintComponent(Graphics gfx)
 	{
 		// fill the background
@@ -100,7 +108,7 @@ public class Gutter extends JComponent implements SwingConstants
 					catch(Throwable t)
 					{
 						Log.log(Log.ERROR,this,t);
-	
+
 						// remove it so editor can continue
 						// functioning
 						highlights.removeElementAt(i);
@@ -140,7 +148,8 @@ public class Gutter extends JComponent implements SwingConstants
 			else
 			{
 				int bracketLine = textArea.getBracketLine();
-				if(bracketLine != -1)
+				if(textArea.isHighlightVisible()
+					&& bracketLine != -1)
 				{
 					int caretLine = textArea.getCaretLine();
 					if(caretLine != bracketLine)
@@ -222,8 +231,9 @@ public class Gutter extends JComponent implements SwingConstants
 			gfx.drawString(number, FOLD_MARKER_SIZE + offset,
 				baseline + y);
 		}
-	}
+	} //}}}
 
+	//{{{ addCustomHighlight() method
 	/**
 	 * Adds a custom highlight painter.
 	 * @param highlight The highlight
@@ -252,8 +262,9 @@ public class Gutter extends JComponent implements SwingConstants
 		}
 
 		repaint();
-	}
+	} //}}}
 
+	//{{{ removeCustomHighlight() method
 	/**
 	 * Removes a custom highlight painter.
 	 * @param highlight The highlight
@@ -263,8 +274,9 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		highlights.removeElement(highlight);
 		repaint();
-	}
+	} //}}}
 
+	//{{{ setBorder() method
 	/**
 	 * Convenience method for setting a default matte border on the right
 	 * with the specified border width and color
@@ -282,8 +294,9 @@ public class Gutter extends JComponent implements SwingConstants
 		noFocusBorder = new CompoundBorder(new MatteBorder(0,0,0,width,color3),
 			new MatteBorder(0,0,0,width,color2));
 		updateBorder();
-	}
+	} //}}}
 
+	//{{{ updateBorder() method
 	/**
 	 * Sets the border differently if the text area has focus or not.
 	 */
@@ -305,8 +318,9 @@ public class Gutter extends JComponent implements SwingConstants
 					setBorder(noFocusBorder);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ setBorder() method
 	/*
 	 * JComponent.setBorder(Border) is overridden here to cache the left
 	 * inset of the border (if any) to avoid having to fetch it during every
@@ -330,8 +344,9 @@ public class Gutter extends JComponent implements SwingConstants
 			gutterSize.width = FOLD_MARKER_SIZE + insets.right
 				+ fm.stringWidth("12345");
 		}
-	}
+	} //}}}
 
+	//{{{ setFont() method
 	/*
 	 * JComponent.setFont(Font) is overridden here to cache the baseline for
 	 * the font. This avoids having to get the font metrics during every
@@ -344,8 +359,11 @@ public class Gutter extends JComponent implements SwingConstants
 		fm = getFontMetrics(font);
 
 		baseline = fm.getAscent();
-	}
+	} //}}}
 
+	//{{{ Getters and setters
+
+	//{{{ getHighlightedForeground() method
 	/**
 	 * Get the foreground color for highlighted line numbers
 	 * @return The highlight color
@@ -353,33 +371,39 @@ public class Gutter extends JComponent implements SwingConstants
 	public Color getHighlightedForeground()
 	{
 		return intervalHighlight;
-	}
+	} //}}}
 
+	//{{{ setHighlightedForeground() method
 	public void setHighlightedForeground(Color highlight)
 	{
 		intervalHighlight = highlight;
-	}
+	} //}}}
 
+	//{{{ getCurrentLineForeground() method
 	public Color getCurrentLineForeground()
  	{
 		return currentLineHighlight;
-	}
+	} //}}}
 
+	//{{{ setCurrentLineForeground() method
 	public void setCurrentLineForeground(Color highlight)
 	{
 		currentLineHighlight = highlight;
- 	}
+ 	} //}}}
 
+	//{{{ getFoldColor() method
 	public Color getFoldColor()
  	{
 		return foldColor;
-	}
+	} //}}}
 
+	//{{{ setFoldColor() method
 	public void setFoldColor(Color foldColor)
 	{
 		this.foldColor = foldColor;
- 	}
+ 	} //}}}
 
+	//{{{ getPreferredSize() method
 	/*
 	 * Component.getPreferredSize() is overridden here to support the
 	 * collapsing behavior.
@@ -390,13 +414,15 @@ public class Gutter extends JComponent implements SwingConstants
 			return gutterSize;
 		else
 			return collapsedSize;
-	}
+	} //}}}
 
+	//{{{ getMinimumSize() method
 	public Dimension getMinimumSize()
 	{
 		return getPreferredSize();
-	}
+	} //}}}
 
+	//{{{ getToolTipText() method
 	public String getToolTipText(MouseEvent evt)
 	{
 		for(int i = 0; i < highlights.size(); i++)
@@ -410,8 +436,9 @@ public class Gutter extends JComponent implements SwingConstants
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ getLineNumberAlignment() method
 	/**
 	 * Identifies whether the horizontal alignment of the line numbers.
 	 * @return Gutter.RIGHT, Gutter.CENTER, Gutter.LEFT
@@ -419,8 +446,9 @@ public class Gutter extends JComponent implements SwingConstants
 	public int getLineNumberAlignment()
 	{
 		return alignment;
-	}
+	} //}}}
 
+	//{{{ setLineNumberAlignment() method
 	/**
 	 * Sets the horizontal alignment of the line numbers.
 	 * @param alignment Gutter.RIGHT, Gutter.CENTER, Gutter.LEFT
@@ -432,8 +460,9 @@ public class Gutter extends JComponent implements SwingConstants
 		this.alignment = alignment;
 
 		repaint();
-	}
+	} //}}}
 
+	//{{{ isExpanded() method
 	/**
 	 * Identifies whether the gutter is collapsed or expanded.
 	 * @return true if the gutter is expanded, false if it is collapsed
@@ -441,8 +470,9 @@ public class Gutter extends JComponent implements SwingConstants
 	public boolean isExpanded()
 	{
 		return expanded;
-	}
+	} //}}}
 
+	//{{{ setExpanded() method
 	/**
 	 * Sets whether the gutter is collapsed or expanded and force the text
 	 * area to update its layout if there is a change.
@@ -456,16 +486,18 @@ public class Gutter extends JComponent implements SwingConstants
 		this.expanded = expanded;
 
 		textArea.revalidate();
-	}
+	} //}}}
 
+	//{{{ toggleExpanded() method
 	/**
 	 * Toggles whether the gutter is collapsed or expanded.
 	 */
 	public void toggleExpanded()
 	{
 		setExpanded(!expanded);
-	}
+	} //}}}
 
+	//{{{ getHighlightInterval() method
 	/**
 	 * Sets the number of lines between highlighted line numbers.
 	 * @return The number of lines between highlighted line numbers or
@@ -474,8 +506,9 @@ public class Gutter extends JComponent implements SwingConstants
 	public int getHighlightInterval()
 	{
 		return interval;
-	}
+	} //}}}
 
+	//{{{ setHighlightInterval() method
 	/**
 	 * Sets the number of lines between highlighted line numbers. Any value
 	 * less than or equal to one will result in highlighting being disabled.
@@ -486,13 +519,15 @@ public class Gutter extends JComponent implements SwingConstants
 		if (interval <= 1) interval = 0;
 		this.interval = interval;
 		repaint();
-	}
+	} //}}}
 
+	//{{{ isCurrentLineHighlightEnabled() method
 	public boolean isCurrentLineHighlightEnabled()
 	{
 		return currentLineHighlightEnabled;
-	}
+	} //}}}
 
+	//{{{ setCurrentLineHighlightEnabled() method
 	public void setCurrentLineHighlightEnabled(boolean enabled)
 	{
 		if (currentLineHighlightEnabled == enabled) return;
@@ -500,16 +535,18 @@ public class Gutter extends JComponent implements SwingConstants
 		currentLineHighlightEnabled = enabled;
 
 		repaint();
-	}
+	} //}}}
 
+	//{{{ getBracketHighlightColor() method
 	/**
 	 * Returns the bracket highlight color.
 	 */
 	public final Color getBracketHighlightColor()
 	{
 		return bracketHighlightColor;
-	}
+	} //}}}
 
+	//{{{ setBracketHighlightColor() method
 	/**
 	 * Sets the bracket highlight color.
 	 * @param bracketHighlightColor The bracket highlight color
@@ -519,8 +556,9 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		this.bracketHighlightColor = bracketHighlightColor;
 		repaint();
-	}
+	} //}}}
 
+	//{{{ isBracketHighlightEnabled() method
 	/**
 	 * Returns true if bracket highlighting is enabled, false otherwise.
 	 * When bracket highlighting is enabled, the bracket matching the
@@ -530,8 +568,9 @@ public class Gutter extends JComponent implements SwingConstants
 	public final boolean isBracketHighlightEnabled()
 	{
 		return bracketHighlight;
-	}
+	} //}}}
 
+	//{{{ setBracketHighlightEnabled() method
 	/**
 	 * Enables or disables bracket highlighting.
 	 * When bracket highlighting is enabled, the bracket matching the
@@ -544,9 +583,11 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		this.bracketHighlight = bracketHighlight;
 		repaint();
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
 	private static final int FOLD_MARKER_SIZE = 12;
 
 	private View view;
@@ -576,12 +617,15 @@ public class Gutter extends JComponent implements SwingConstants
 
 	private int borderWidth;
 	private Border focusBorder, noFocusBorder;
+	//}}}
 
-	class MouseHandler implements MouseListener, MouseMotionListener
+	//{{{ MouseHandler class
+	class MouseHandler extends MouseInputAdapter
 	{
 		boolean drag;
 		int toolTipInitialDelay, toolTipReshowDelay;
 
+		//{{{ mouseEntered() method
 		public void mouseEntered(MouseEvent e)
 		{
 			ToolTipManager ttm = ToolTipManager.sharedInstance();
@@ -589,15 +633,17 @@ public class Gutter extends JComponent implements SwingConstants
 			toolTipReshowDelay = ttm.getReshowDelay();
 			ttm.setInitialDelay(0);
 			ttm.setReshowDelay(0);
-		}
+		} //}}}
 
+		//{{{ mouseExited() method
 		public void mouseExited(MouseEvent evt)
 		{
 			ToolTipManager ttm = ToolTipManager.sharedInstance();
 			ttm.setInitialDelay(toolTipInitialDelay);
 			ttm.setReshowDelay(toolTipReshowDelay);
-		}
+		} //}}}
 
+		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent e)
 		{
 			if(e.getX() < getWidth() - borderWidth * 2)
@@ -620,7 +666,7 @@ public class Gutter extends JComponent implements SwingConstants
 						textArea.selectFoldAt(line);
 					}
 					else if(buffer.isLineVisible(line + 1))
-						buffer.collapseFoldAt(line);
+						buffer.collapseFoldAt(line,textArea);
 					else
 						buffer.expandFoldAt(line,e.isShiftDown(),textArea);
 				}
@@ -631,8 +677,9 @@ public class Gutter extends JComponent implements SwingConstants
 				textArea.mouseHandler.mousePressed(e);
 				drag = true;
 			}
-		}
+		} //}}}
 
+		//{{{ mouseDragged() method
 		public void mouseDragged(MouseEvent e)
 		{
 			if(drag && e.getX() >= getWidth() - borderWidth * 2)
@@ -640,10 +687,9 @@ public class Gutter extends JComponent implements SwingConstants
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mouseDragged(e);
 			}
-		}
+		} //}}}
 
-		public void mouseMoved(MouseEvent e) {}
-
+		//{{{ mouseReleased() method
 		public void mouseReleased(MouseEvent e)
 		{
 			if(drag && e.getX() >= getWidth() - borderWidth * 2)
@@ -653,8 +699,6 @@ public class Gutter extends JComponent implements SwingConstants
 			}
 
 			drag = false;
-		}
-
-		public void mouseClicked(MouseEvent e) {}
-	}
+		} //}}}
+	} //}}}
 }

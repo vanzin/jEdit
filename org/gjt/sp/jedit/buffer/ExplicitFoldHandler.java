@@ -1,6 +1,7 @@
 /*
  * ExplicitFoldHandler.java - Explicit fold handler
- * :tabSize=8:indentSize=8:folding=explicit:collapseFolds=1:
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2001 Slava Pestov
  *
@@ -25,8 +26,9 @@ import javax.swing.text.Segment;
 import org.gjt.sp.jedit.Buffer;
 
 /**
- * A fold handler that folds lines based markers embedded in the text
- * ("{{{" and "}}}").
+ * A fold handler that folds lines based markers embedded in the text.
+ * ("{{{"
+ * and "}}}").
  * @author Slava Pestov
  * @version $Id$
  * @since jEdit 4.0pre1

@@ -1,5 +1,8 @@
 /*
  * DockableWindowManager.java - manages dockable windows
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import bsh.EvalError;
 import com.microstar.xml.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
@@ -31,6 +35,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
+//}}}
 
 /**
  * Manages dockable windows.
@@ -40,8 +45,9 @@ import java.util.*;
  */
 public class DockableWindowManager extends JPanel
 {
-	// static part of class
+	//{{{ Static part of class
 
+	//{{{ Constants
 	/**
 	 * Floating position.
 	 * @since jEdit 2.6pre3
@@ -71,7 +77,9 @@ public class DockableWindowManager extends JPanel
 	 * @since jEdit 2.6pre3
 	 */
 	public static final String RIGHT = "right";
+	//}}}
 
+	//{{{ loadDockableWindows() method
 	/**
 	 * Plugins shouldn't need to call this method.
 	 * @since jEdit 4.0pre1
@@ -101,15 +109,17 @@ public class DockableWindowManager extends JPanel
 		}
 
 		return false;
-	}
+	} //}}}
 
+	//{{{ registerDockableWindow() method
 	public static void registerDockableWindow(String name, String code,
 		boolean actions, ActionSet actionSet)
 	{
 		dockableWindowFactories.addElement(new Factory(name,code,
 			actions,actionSet));
-	}
+	} //}}}
 
+	//{{{ getRegisteredDockableWindows() method
 	public static String[] getRegisteredDockableWindows()
 	{
 		String[] retVal = new String[dockableWindowFactories.size()];
@@ -118,18 +128,21 @@ public class DockableWindowManager extends JPanel
 			retVal[i] = ((Factory)dockableWindowFactories.elementAt(i)).name;
 		}
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ DockableListHandler class
 	static class DockableListHandler extends HandlerBase
 	{
+		//{{{ DockableListHandler constructor
 		DockableListHandler(String path, ActionSet actionSet)
 		{
 			this.path = path;
 			this.actionSet = actionSet;
 			stateStack = new Stack();
 			actions = true;
-		}
+		} //}}}
 
+		//{{{ resolveEntity() method
 		public Object resolveEntity(String publicId, String systemId)
 		{
 			if("dockables.dtd".equals(systemId))
@@ -149,8 +162,9 @@ public class DockableWindowManager extends JPanel
 			}
 
 			return null;
-		}
+		} //}}}
 
+		//{{{ attribute() method
 		public void attribute(String aname, String value, boolean isSpecified)
 		{
 			aname = (aname == null) ? null : aname.intern();
@@ -160,8 +174,9 @@ public class DockableWindowManager extends JPanel
 				dockableName = value;
 			else if(aname == "NO_ACTIONS")
 				actions = (value == "FALSE");
-		}
+		} //}}}
 
+		//{{{ doctypeDecl() method
 		public void doctypeDecl(String name, String publicId,
 			String systemId) throws Exception
 		{
@@ -169,8 +184,9 @@ public class DockableWindowManager extends JPanel
 				return;
 
 			Log.log(Log.ERROR,this,path + ": DOCTYPE must be DOCKABLES");
-		}
+		} //}}}
 
+		//{{{ charData() method
 		public void charData(char[] c, int off, int len)
 		{
 			String tag = peekElement();
@@ -180,13 +196,15 @@ public class DockableWindowManager extends JPanel
 			{
 				code = text;
 			}
-		}
+		} //}}}
 
+		//{{{ startElement() method
 		public void startElement(String tag)
 		{
 			tag = pushElement(tag);
-		}
+		} //}}}
 
+		//{{{ endElement() method
 		public void endElement(String name)
 		{
 			if(name == null)
@@ -212,8 +230,9 @@ public class DockableWindowManager extends JPanel
 				// can't happen
 				throw new InternalError();
 			}
-		}
+		} //}}}
 
+		//{{{ startDocument() method
 		public void startDocument()
 		{
 			try
@@ -224,10 +243,11 @@ public class DockableWindowManager extends JPanel
 			{
 				e.printStackTrace();
 			}
-		}
-		// end HandlerBase implementation
+		} //}}}
 
-		// private members
+		//{{{ Private members
+
+		//{{{ Instance variables
 		private String path;
 		private ActionSet actionSet;
 
@@ -236,7 +256,9 @@ public class DockableWindowManager extends JPanel
 		private boolean actions;
 
 		private Stack stateStack;
+		//}}}
 
+		//{{{ pushElement() method
 		private String pushElement(String name)
 		{
 			name = (name == null) ? null : name.intern();
@@ -244,19 +266,24 @@ public class DockableWindowManager extends JPanel
 			stateStack.push(name);
 
 			return name;
-		}
+		} //}}}
 
+		//{{{ peekElement() method
 		private String peekElement()
 		{
 			return (String) stateStack.peek();
-		}
+		} //}}}
 
+		//{{{ popElement() method
 		private String popElement()
 		{
 			return (String) stateStack.pop();
-		}
-	}
+		} //}}}
 
+		//}}}
+	} //}}}
+
+	//{{{ Factory class
 	static class Factory
 	{
 		String name;
@@ -264,6 +291,7 @@ public class DockableWindowManager extends JPanel
 		String code;
 		String cachedCode;
 
+		//{{{ Factory constructor
 		Factory(String name, String code, boolean actions, ActionSet actionSet)
 		{
 			this.name = name;
@@ -277,9 +305,10 @@ public class DockableWindowManager extends JPanel
 			/* Some characters that we like to use in action names
 			 * ('.', '-') are not allowed in BeanShell identifiers. */
 			sanitizedName = name.replace('.','_').replace('-','_');
-		}
+		} //}}}
 
-		Component createDockableWindow(View view, String position)
+		//{{{ createDockableWindow() method
+		JComponent createDockableWindow(View view, String position)
 		{
 			// BACKWARDS COMPATIBILITY with jEdit 2.6-3.2 docking APIs
 			if(code == null)
@@ -294,7 +323,7 @@ public class DockableWindowManager extends JPanel
 					Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
 					return null;
 				}
-				return win.getComponent();
+				return (JComponent)win.getComponent();
 			}
 			// END BACKWARDS COMPATIBILITY
 			else
@@ -313,74 +342,88 @@ public class DockableWindowManager extends JPanel
 				{
 					Log.log(Log.ERROR,this,e);
 				}
-				Component win = (Component)
+				JComponent win = (JComponent)
 					BeanShell.runCachedBlock(
 					cachedCode,view,null);
 				return win;
 			}
-		}
+		} //}}}
 
+		//{{{ OpenAction class
 		class OpenAction extends EditAction
 		{
+			//{{{ OpenAction constructor
 			OpenAction()
 			{
 				super(name);
-			}
+			} //}}}
 
+			//{{{ invoke() method
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()
 					.showDockableWindow(name);
-			}
+			} //}}}
 
+			//{{{ getCode() method
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
 					+ ".showDockableWindow(\"" + name + "\");";
-			}
-		}
+			} //}}}
+		} //}}}
 
+		//{{{ ToggleAction class
 		class ToggleAction extends EditAction
 		{
+			//{{{ ToggleAction constructor
 			ToggleAction()
 			{
 				super(name + "-toggle");
-			}
+			} //}}}
 
+			//{{{ invoke() method
 			public void invoke(View view)
 			{
 				view.getDockableWindowManager()
 					.toggleDockableWindow(name);
-			}
+			} //}}}
 
+			//{{{ isToggle() method
 			public boolean isToggle()
 			{
 				return true;
-			}
+			} //}}}
 
+			//{{{ isSelected() method
 			public boolean isSelected(View view)
 			{
 				return view.getDockableWindowManager()
 					.isDockableWindowVisible(name);
-			}
+			} //}}}
 
+			//{{{ getCode() method
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
 					+ ".toggleDockableWindow(\"" + name + "\");";
-			}
-		}
-	}
+			} //}}}
+		} //}}}
+	} //}}}
 
 	private static Vector dockableWindowFactories;
 
+	//{{{ Static initializer
 	static
 	{
 		dockableWindowFactories = new Vector();
-	}
+	} //}}}
 
-	// instance part of class
+	//}}}
 
+	//{{{ Instance part of class
+
+	//{{{ DockableWindowManager constructor
 	/**
 	 * Creates a new dockable window manager.
 	 * @param view The view
@@ -406,10 +449,11 @@ public class DockableWindowManager extends JPanel
 		add(LEFT,left.getDockablePanel());
 		add(BOTTOM,bottom.getDockablePanel());
 		add(RIGHT,right.getDockablePanel());
-	}
+	} //}}}
 
+	//{{{ init() method
 	/**
-	 * Adds any dockables set to auto-open.
+	 * Initialises dockable window manager.
 	 * @since jEdit 2.6pre3
 	 */
 	public void init()
@@ -437,8 +481,9 @@ public class DockableWindowManager extends JPanel
 		String lastRight = jEdit.getProperty("view.dock.right.last");
 		if(lastRight != null)
 			showDockableWindow(lastRight);
-	}
+	} //}}}
 
+	//{{{ showDockableWindow() method
 	/**
 	 * Opens the specified dockable window.
 	 * @param name The dockable window name
@@ -457,8 +502,9 @@ public class DockableWindowManager extends JPanel
 			entry.open();
 
 		entry.container.show(entry);
-	}
+	} //}}}
 
+	//{{{ addDockableWindow() method
 	/**
 	 * Opens the specified dockable window. As of version 4.0pre1, has the same
 	 * effect as calling showDockableWindow().
@@ -468,8 +514,9 @@ public class DockableWindowManager extends JPanel
 	public void addDockableWindow(String name)
 	{
 		showDockableWindow(name);
-	}
+	} //}}}
 
+	//{{{ removeDockableWindow() method
 	/**
 	 * Removes the specified dockable window.
 	 * @param name The dockable window name
@@ -496,8 +543,9 @@ public class DockableWindowManager extends JPanel
 		}
 		else
 			entry.container.show(null);
-	}
+	} //}}}
 
+	//{{{ toggleDockableWindow() method
 	/**
 	 * Toggles the visibility of the specified dockable window.
 	 * @param name The dockable window name
@@ -508,8 +556,9 @@ public class DockableWindowManager extends JPanel
 			removeDockableWindow(name);
 		else
 			addDockableWindow(name);
-	}
+	} //}}}
 
+	//{{{ getDockableWindow() method
 	/**
 	 * @deprecated The DockableWindow interface is deprecated, as is this
 	 * method. Use <code>getDockable()</code> instead.
@@ -527,23 +576,25 @@ public class DockableWindowManager extends JPanel
 			return (DockableWindow)comp;
 		else
 			return null;
-	}
+	} //}}}
 
+	//{{{ getDockable() method
 	/**
 	 * Returns the specified dockable window. Use this method instead of
 	 * the deprecated <code>getDockableWindow()</code> method.
 	 * @param name The name of the dockable window
 	 * @since jEdit 4.0pre1
 	 */
-	public Component getDockable(String name)
+	public JComponent getDockable(String name)
 	{
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null || entry.win == null)
 			return null;
 		else
 			return entry.win;
-	}
+	} //}}}
 
+	//{{{ isDockableWindowVisible() method
 	/**
 	 * Returns if the specified dockable window is visible.
 	 * @param name The dockable window name
@@ -555,8 +606,9 @@ public class DockableWindowManager extends JPanel
 			return false;
 		else
 			return entry.container.isVisible(entry);
-	}
+	} //}}}
 
+	//{{{ close() method
 	/**
 	 * Called when the view is being closed.
 	 * @since jEdit 2.6pre3
@@ -575,28 +627,33 @@ public class DockableWindowManager extends JPanel
 			if(entry.win != null)
 				entry.remove();
 		}
-	}
+	} //}}}
 
+	//{{{ getTopDockingArea() method
 	public PanelWindowContainer getTopDockingArea()
 	{
 		return top;
-	}
+	} //}}}
 
+	//{{{ getLeftDockingArea() method
 	public PanelWindowContainer getLeftDockingArea()
 	{
 		return left;
-	}
+	} //}}}
 
+	//{{{ getBottomDockingArea() method
 	public PanelWindowContainer getBottomDockingArea()
 	{
 		return bottom;
-	}
+	} //}}}
 
+	//{{{ getRightDockingArea() method
 	public PanelWindowContainer getRightDockingArea()
 	{
 		return right;
-	}
+	} //}}}
 
+	//{{{ propertiesChanged() method
 	/**
 	 * Called by the view when properties change.
 	 * @since jEdit 2.6pre3
@@ -650,9 +707,11 @@ public class DockableWindowManager extends JPanel
 		}
 
 		revalidate();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private View view;
 	private Hashtable windows;
 	private boolean alternateLayout;
@@ -660,7 +719,13 @@ public class DockableWindowManager extends JPanel
 	private PanelWindowContainer right;
 	private PanelWindowContainer top;
 	private PanelWindowContainer bottom;
+	//}}}
 
+	//}}}
+
+	//}}}
+
+	//{{{ DockableLayout class
 	class DockableLayout implements LayoutManager2
 	{
 		// for backwards compatibility with plugins that fiddle with
@@ -676,11 +741,13 @@ public class DockableWindowManager extends JPanel
 		Component top, left, bottom, right;
 		Component topButtons, leftButtons, bottomButtons, rightButtons;
 
+		//{{{ addLayoutComponent() method
 		public void addLayoutComponent(String name, Component comp)
 		{
 			addLayoutComponent(comp,name);
-		}
+		} //}}}
 
+		//{{{ addLayoutComponent() method
 		public void addLayoutComponent(Component comp, Object cons)
 		{
 			if(cons == null || CENTER.equals(cons))
@@ -701,14 +768,21 @@ public class DockableWindowManager extends JPanel
 				bottomButtons = comp;
 			else if(RIGHT_BUTTONS.equals(cons))
 				rightButtons = comp;
-		}
+		} //}}}
 
+		//{{{ removeLayoutComponent() method
 		public void removeLayoutComponent(Component comp)
 		{
 			if(center == comp)
 				center = null;
-		}
+			else
+			{
+				// none of the others are ever meant to be
+				// removed. retarded, eh?
+			}
+		} //}}}
 
+		//{{{ preferredLayoutSize() method
 		public Dimension preferredLayoutSize(Container parent)
 		{
 			Dimension prefSize = new Dimension(0,0);
@@ -730,8 +804,9 @@ public class DockableWindowManager extends JPanel
 				+ _leftButtons.width + _rightButtons.width;
 
 			return prefSize;
-		}
+		} //}}}
 
+		//{{{ minimumLayoutSize() method
 		public Dimension minimumLayoutSize(Container parent)
 		{
 			Dimension minSize = new Dimension(0,0);
@@ -753,13 +828,15 @@ public class DockableWindowManager extends JPanel
 				+ _leftButtons.width + _rightButtons.width;
 
 			return minSize;
-		}
+		} //}}}
 
+		//{{{ maximumLayoutSize() method
 		public Dimension maximumLayoutSize(Container parent)
 		{
 			return new Dimension(Integer.MAX_VALUE,Integer.MAX_VALUE);
-		}
+		} //}}}
 
+		//{{{ layoutContainer() method
 		public void layoutContainer(Container parent)
 		{
 			Dimension size = parent.getSize();
@@ -888,21 +965,26 @@ public class DockableWindowManager extends JPanel
 					_width - _left.width - _right.width,
 					_height - _top.height - _bottom.height);
 			}
-		}
+		} //}}}
 
+		//{{{ getLayoutAlignmentX() method
 		public float getLayoutAlignmentX(Container target)
 		{
 			return 0.5f;
-		}
+		} //}}}
 
+		//{{{ getLayoutAlignmentY() method
 		public float getLayoutAlignmentY(Container target)
 		{
 			return 0.5f;
-		}
+		} //}}}
 
+		//{{{ invalidateLayout() method
 		public void invalidateLayout(Container target) {}
-	}
+		//}}}
+	} //}}}
 
+	//{{{ Entry class
 	class Entry
 	{
 		Factory factory;
@@ -913,8 +995,9 @@ public class DockableWindowManager extends JPanel
 		DockableWindowContainer container;
 
 		// only set if open
-		Component win;
+		JComponent win;
 
+		//{{{ Entry constructor
 		Entry(Factory factory)
 		{
 			this.factory = factory;
@@ -943,8 +1026,9 @@ public class DockableWindowManager extends JPanel
 
 				container.register(this);
 			}
-		}
+		} //}}}
 
+		//{{{ open() method
 		void open()
 		{
 			win = factory.createDockableWindow(view,position);
@@ -959,8 +1043,9 @@ public class DockableWindowManager extends JPanel
 			}
 
 			container.add(this);
-		}
+		} //}}}
 
+		//{{{ remove() method
 		void remove()
 		{
 			Log.log(Log.DEBUG,this,"Removing " + name + " from "
@@ -973,6 +1058,6 @@ public class DockableWindowManager extends JPanel
 				container = null;
 
 			win = null;
-		}
-	}
+		} //}}}
+	} //}}}
 }

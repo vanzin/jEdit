@@ -216,6 +216,11 @@ public class VFSBrowser extends JPanel implements EBComponent
 		setDirectory(path);
 	}
 
+	public boolean requestDefaultFocus()
+	{
+		return browserView.requestDefaultFocus();
+	}
+
 	public void addNotify()
 	{
 		super.addNotify();

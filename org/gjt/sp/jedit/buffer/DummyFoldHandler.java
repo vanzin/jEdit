@@ -1,5 +1,8 @@
 /*
  * DummyFoldHandler.java - Fold handler used when folding is switched off
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -30,6 +33,7 @@ import org.gjt.sp.jedit.Buffer;
  */
 public class DummyFoldHandler implements FoldHandler
 {
+	//{{{ getFoldLevel() method
 	/**
 	 * Returns the fold level of the specified line.
 	 * @param buffer The buffer in question
@@ -42,5 +46,5 @@ public class DummyFoldHandler implements FoldHandler
 	public int getFoldLevel(Buffer buffer, int lineIndex, Segment seg)
 	{
 		return 0;
-	}
+	} //}}}
 }

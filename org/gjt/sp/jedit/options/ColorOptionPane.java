@@ -1,5 +1,8 @@
 /*
  * ColorOptionPane.java - Color option pane
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
@@ -20,6 +23,7 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -31,7 +35,9 @@ import java.util.Vector;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.*;
+//}}}
 
+//{{{ ColorOptionPane class
 /**
  * Color option pane.
  * @author Slava Pestov
@@ -41,27 +47,34 @@ public class ColorOptionPane extends AbstractOptionPane
 {
 	public static final EmptyBorder noFocusBorder = new EmptyBorder(1,1,1,1);
 
+	//{{{ ColorOptionPane const
 	public ColorOptionPane()
 	{
 		super("color");
-	}
+	} //}}}
 
-	// protected members
+	//{{{ Protected members
+
+	//{{{ _init() method
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
 		add(BorderLayout.CENTER,createColorTableScroller());
-	}
+	} //}}}
 
+	//{{{ _save() method
 	protected void _save()
 	{
 		colorModel.save();
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
 	private ColorTableModel colorModel;
 	private JTable colorTable;
 
+	//{{{ createColorTableScroller() method
 	private JScrollPane createColorTableScroller()
 	{
 		colorModel = createColorTableModel();
@@ -79,13 +92,15 @@ public class ColorOptionPane extends AbstractOptionPane
 		JScrollPane scroller = new JScrollPane(colorTable);
 		scroller.setPreferredSize(d);
 		return scroller;
-	}
+	} //}}}
 
+	//{{{ createColorTableModel() method
 	private ColorTableModel createColorTableModel()
 	{
 		return new ColorTableModel();
-	}
+	} //}}}
 
+	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent evt)
@@ -101,13 +116,17 @@ public class ColorOptionPane extends AbstractOptionPane
 			if(color != null)
 				colorModel.setValueAt(color,row,1);
 		}
-	}
-}
+	} //}}}
 
+	//}}}
+} //}}}
+
+//{{{ ColorTableModel class
 class ColorTableModel extends AbstractTableModel
 {
 	private Vector colorChoices;
 
+	//{{{ ColorTableModel constructor
 	ColorTableModel()
 	{
 		colorChoices = new Vector(16);
@@ -116,6 +135,8 @@ class ColorTableModel extends AbstractTableModel
 		addColorChoice("options.color.caretColor","view.caretColor");
 		addColorChoice("options.color.selectionColor",
 			"view.selectionColor");
+		addColorChoice("options.color.foldLineColor",
+			"view.foldLineColor");
 		addColorChoice("options.color.lineHighlightColor",
 			"view.lineHighlightColor");
 		addColorChoice("options.color.bracketHighlightColor",
@@ -142,18 +163,21 @@ class ColorTableModel extends AbstractTableModel
 			"view.gutter.focusBorderColor");
 		addColorChoice("options.color.gutterNoFocusBorderColor",
 			"view.gutter.noFocusBorderColor");
-	}
+	} //}}}
 
+	//{{{ getColumnCount() method
 	public int getColumnCount()
 	{
 		return 2;
-	}
+	} //}}}
 
+	//{{{ getRowCount() method
 	public int getRowCount()
 	{
 		return colorChoices.size();
-	}
+	} //}}}
 
+	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
 		ColorChoice ch = (ColorChoice)colorChoices.elementAt(row);
@@ -166,16 +190,18 @@ class ColorTableModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ setValueAt() method
 	public void setValueAt(Object value, int row, int col)
 	{
 		ColorChoice ch = (ColorChoice)colorChoices.elementAt(row);
 		if(col == 1)
 			ch.color = (Color)value;
 		fireTableRowsUpdated(row,row);
-	}
+	} //}}}
 
+	//{{{ getColumnName() method
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -187,8 +213,9 @@ class ColorTableModel extends AbstractTableModel
 		default:
 			return null;
 		}
-	}
+	} //}}}
 
+	//{{{ save() method
 	public void save()
 	{
 		for(int i = 0; i < colorChoices.size(); i++)
@@ -197,14 +224,16 @@ class ColorTableModel extends AbstractTableModel
 				.elementAt(i);
 			jEdit.setColorProperty(ch.property,ch.color);
 		}
-	}
+	} //}}}
 
+	//{{{ addColorChoice() method
 	private void addColorChoice(String label, String property)
 	{
 		colorChoices.addElement(new ColorChoice(jEdit.getProperty(label),
 			property,jEdit.getColorProperty(property)));
-	}
+	} //}}}
 
+	//{{{ ColorChoice class
 	static class ColorChoice
 	{
 		String label;
@@ -217,18 +246,20 @@ class ColorTableModel extends AbstractTableModel
 			this.property = property;
 			this.color = color;
 		}
-	}
+	} //}}}
 
+	//{{{ ColorRenderer class
 	static class ColorRenderer extends JLabel
 		implements TableCellRenderer
 	{
+		//{{{ ColorRenderer constructor
 		public ColorRenderer()
 		{
 			setOpaque(true);
 			setBorder(StyleOptionPane.noFocusBorder);
-		}
+		} //}}}
 
-		// TableCellRenderer implementation
+		//{{{ getTableCellRendererComponent() method
 		public Component getTableCellRendererComponent(
 			JTable table,
 			Object value,
@@ -255,7 +286,6 @@ class ColorTableModel extends AbstractTableModel
 				"Table.focusCellHighlightBorder")
 				: StyleOptionPane.noFocusBorder);
 			return this;
-		}
-		// end TableCellRenderer implementation
-	}
-}
+		} //}}}
+	} //}}}
+} //}}}

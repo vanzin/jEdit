@@ -1,24 +1,27 @@
 ###
 ### jEdit global properties
+### :tabSize=8:indentSize=8:noTabs=false:
+### :folding=explicit:collapseFolds=1:
+###
 ### Copyright (C) 1998, 2001 Slava Pestov
 ###
 
-###
-### GLOBAL SETTINGS
-###
+#{{{ Global settings
 
 # Swing look and feel
 #lookAndFeel=javax.swing.plaf.metal.MetalLookAndFeel
 
-# Metal control and menu font
+#{{{ Metal control and menu font
 metal.primary.font=Dialog
 metal.primary.fontsize=12
 metal.primary.fontstyle=0
+#}}}
 
-# Metal system and user text font
+#{{{ Metal system and user text font
 metal.secondary.font=Dialog
 metal.secondary.fontsize=12
 metal.secondary.fontstyle=0
+#}}}
 
 # If true, welcome screen will be displayed.
 # Set to false after initial startup.
@@ -71,10 +74,10 @@ sortByName=true
 # Sort recent file list
 sortRecent=false
 
-###
-### BUFFER SETTINGS
-### These can also be specified as buffer-local properties
-###
+#}}}
+
+#{{{ Buffer settings
+# These can also be specified as buffer-local properties
 
 # Line separator
 # The OS default will be used if this is not specified
@@ -110,7 +113,7 @@ buffer.undoCount=100
 buffer.syntax=true
 
 # Wrap column
-buffer.maxLineLen=80
+buffer.maxLineLen=0
 
 # Word break characters
 buffer.wordBreakChars=
@@ -127,9 +130,9 @@ buffer.collapseFolds=0
 # We need this so that new files are saved with a trailing newline
 buffer.trailingEOL=true
 
-###
-### VIEW SETTINGS
-###
+#}}}
+
+#{{{ View settings
 
 # Apply jEdit colors to Swing text fields, text areas, lists, tables and trees?
 textColors=false
@@ -158,6 +161,9 @@ view.fontstyle=0
 # Background and foreground colors (for the text area)
 view.bgColor=#ffffff
 view.fgColor=#000000
+
+# Folded line
+view.foldedLineColor=#e8e8e8
 
 # Line highlighting
 view.lineHighlight=true
@@ -195,6 +201,8 @@ view.homeEnd=true
 
 # Middle mouse button pastes % register
 view.middleMousePaste=true
+
+#{{{ Gutter
 
 # Gutter background color
 view.gutter.bgColor=#ffffff
@@ -250,10 +258,12 @@ view.gutter.highlightCurrentLine=true
 # Marker highlight
 view.gutter.markerHighlight=true
 
+#}}}
+
 # Expand abbrevs when space bar pressed
 view.expandOnInput=false
 
-# Syntax styles
+#{{{ Syntax styles
 view.style.comment1=color:#006666 style:i
 view.style.comment2=color:#990033 style:i
 view.style.digit=color:#666600
@@ -267,6 +277,7 @@ view.style.literal1=color:#404040
 view.style.literal2=color:#404040
 view.style.markup=color:#5e5e5e style:b
 view.style.operator=style:b
+#}}}
 
 # Java 2 only
 view.antiAlias=false
@@ -276,9 +287,9 @@ view.fracFontMetrics=false
 view.docking.alternateLayout=false
 view.docking.tabsPos=0
 
-###
-### PRINTING
-###
+#}}}
+
+#{{{ Printing settings
 
 # Font
 print.font=Monospaced
@@ -304,9 +315,9 @@ print.margin.left=0.5
 print.margin.bottom=0.5
 print.margin.right=0.5
 
-###
-### FILE SYSTEM BROWSER SETTINGS
-###
+#}}}
+
+#{{{ File system browser settings
 
 vfs.browser.showIcons=true
 vfs.browser.showHiddenFiles=false
@@ -332,3 +343,5 @@ vfs.browser.colors.3.glob=*.{gif,jpg,jpeg,png,bmp,xpm,svg}
 vfs.browser.colors.3.color=#009933
 vfs.browser.colors.4.glob=*.{gz,jar,zip,tgz,z}
 vfs.browser.colors.4.color=#990000
+
+#}}}
