@@ -11,6 +11,8 @@ Thanks to Thomas Alspaugh for contributing to this release.
 - The Buffer Options and Global Options->Editing panes no longer allow
   setting the wrap mode to 'soft' with a wrap margin of zero.
 
+- DELETE key works with the tall caret now.
+
 }}}
 {{{ Bug Fixes
 

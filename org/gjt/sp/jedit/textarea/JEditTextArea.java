@@ -3577,46 +3577,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void backspace()
 	{
-		if(!buffer.isEditable())
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		if(selection.size() != 0)
-		{
-			Selection[] selections = getSelection();
-			for(int i = 0; i < selections.length; i++)
-			{
-				Selection s = selections[i];
-				if(s instanceof Selection.Rect)
-				{
-					Selection.Rect r = (Selection.Rect)s;
-					int startColumn = r.getStartColumn(buffer);
-					if(startColumn == r.getEndColumn(buffer))
-					{
-						if(startColumn == 0)
-							getToolkit().beep();
-						else
-							tallCaretBackspace(r);
-					}
-					else
-						setSelectedText(s,null);
-				}
-				else
-					setSelectedText(s,null);
-			}
-		}
-		else
-		{
-			if(caret == 0)
-			{
-				getToolkit().beep();
-				return;
-			}
-
-			buffer.remove(caret - 1,1);
-		}
+		delete(false);
 	} //}}}
 
 	//{{{ backspaceWord() method
@@ -3681,24 +3642,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void delete()
 	{
-		if(!buffer.isEditable())
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		if(selection.size() != 0)
-			setSelectedText(null);
-		else
-		{
-			if(caret == buffer.getLength())
-			{
-				getToolkit().beep();
-				return;
-			}
-
-			buffer.remove(caret,1);
-		}
+		delete(true);
 	} //}}}
 
 	//{{{ deleteToEndOfLine() method
@@ -6092,8 +6036,63 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
-	//{{{ tallCaretBackspace() method
-	private void tallCaretBackspace(Selection.Rect s)
+	//{{{ delete() method
+	private void delete(boolean forward)
+	{
+		if(!buffer.isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		if(selection.size() != 0)
+		{
+			Selection[] selections = getSelection();
+			for(int i = 0; i < selections.length; i++)
+			{
+				Selection s = selections[i];
+				if(s instanceof Selection.Rect)
+				{
+					Selection.Rect r = (Selection.Rect)s;
+					int startColumn = r.getStartColumn(buffer);
+					if(startColumn == r.getEndColumn(buffer))
+					{
+						if(!forward && startColumn == 0)
+							getToolkit().beep();
+						else
+							tallCaretDelete(r,forward);
+					}
+					else
+						setSelectedText(s,null);
+				}
+				else
+					setSelectedText(s,null);
+			}
+		}
+		else if(forward)
+		{
+			if(caret == buffer.getLength())
+			{
+				getToolkit().beep();
+				return;
+			}
+
+			buffer.remove(caret,1);
+		}
+		else
+		{
+			if(caret == 0)
+			{
+				getToolkit().beep();
+				return;
+			}
+
+			buffer.remove(caret - 1,1);
+		}
+	} //}}}
+
+	//{{{ tallCaretDelete() method
+	private void tallCaretDelete(Selection.Rect s, boolean forward)
 	{
 		try
 		{
@@ -6114,13 +6113,19 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 						offset = getLineLength(i);
 					else
 					{
-						if(i == startLine)
+						if(i == startLine && !forward)
 							shiftTallCaretLeft(s);
 						continue;
 					}
 				}
 				offset += buffer.getLineStartOffset(i);
-				buffer.remove(offset-1,1);
+				if(forward)
+				{
+					if(offset != buffer.getLineEndOffset(i) - 1)
+						buffer.remove(offset,1);
+				}
+				else
+					buffer.remove(offset-1,1);
 			}
 		}
 		finally
