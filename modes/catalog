@@ -14,7 +14,7 @@
 				FILE_NAME_GLOB="*.{ada,adb,ads}" />
 
 <MODE NAME="apdl"		FILE="apdl.xml"
-				FILE_NAME_GLOB="*.apdl" />
+				FILE_NAME_GLOB="*.{ans,inp,mak,mac}" />
 
 <MODE NAME="applescript"	FILE="applescript.xml"
 				FILE_NAME_GLOB="*.applescript" />
@@ -137,7 +137,7 @@
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
 
 <MODE NAME="makefile"		FILE="makefile.xml"
-				FILE_NAME_GLOB="*{makefile,.mak}" />
+				FILE_NAME_GLOB="*makefile" />
 
 <MODE NAME="maple"		FILE="maple.xml"
 				FILE_NAME_GLOB="*.{mpl,mws}" />
