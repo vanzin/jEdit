@@ -6,9 +6,7 @@ plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
 plugin.QuickNotepadPlugin.version=2.0
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
-plugin.QuickNotepadPlugin.depend.0=jdk 1.2
-plugin.QuickNotepadPlugin.depend.1=jedit 04.00.00.00
-plugin.QuickNotepadPlugin.depend.2=plugin EditBusPlugin 1.0
+plugin.QuickNotepadPlugin.depend.0=jedit 04.00.01.00
 
 # action labels for actions supplied by dockables.xml
 quicknotepad.label=QuickNotepad
