@@ -1,9 +1,19 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2final
+
+{{{ Syntax Highlighting
+
+- Added Factor syntax highlighting.
+
+}}}
+
+}}}
 {{{ Version 4.2pre15
 
-Thanks to Eric Ladner, Justin Hagstrom, Ollie Rutherfurd and
-Thomas Alspaugh for contributing to this release.
+Thanks to Adrian Baker, Bertalan Fodor, Eric Ladner, Justin Hagstrom,
+Lionel Fiol, Nicholas O'Leary, Ollie Rutherfurd and Thomas Alspaugh for
+contributing to this release.
 
 {{{ License Change
 

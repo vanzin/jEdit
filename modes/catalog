@@ -101,6 +101,9 @@
 <MODE NAME="eiffel"		FILE="eiffel.xml"
 				FILE_NAME_GLOB="*.e" />
 
+<MODE NAME="factor"		FILE="factor.xml"
+				FILE_NAME_GLOB="*.factor"/>
+
 <MODE NAME="fortran"		FILE="fortran.xml"
 				FILE_NAME_GLOB="*.{f,for,fort,f77,f90}" />
 
