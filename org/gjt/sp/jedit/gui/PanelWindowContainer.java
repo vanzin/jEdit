@@ -62,7 +62,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 		closeBox = new JButton(GUIUtilities.loadIcon("closebox.gif"));
 		closeBox.setRequestFocusEnabled(false);
 		closeBox.setToolTipText(jEdit.getProperty("view.docking.close-tooltip"));
-		closeBox.setMargin(new Insets(0,0,0,0));
+
+		// makes it look a bit better
+		int left;
+		if(position.equals(DockableWindowManager.RIGHT)
+			|| position.equals(DockableWindowManager.LEFT))
+			left = 1;
+		else
+			left = 0;
+
+		closeBox.setMargin(new Insets(0,left,0,0));
 		buttons.add(closeBox);
 
 		closeBox.addActionListener(new ActionHandler());
@@ -85,6 +94,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		dimension = jEdit.getIntegerProperty(
 			"view.dock." + position + ".dimension",0);
+
+		buttons.addMouseListener(new MouseHandler());
 	} //}}}
 
 	//{{{ register() method
@@ -123,7 +134,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 		buttonGroup.add(button);
 		buttons.add(button);
 
-		//{{{ Create menu items
+		button.addMouseListener(new MouseHandler());
+
+		//{{{ Create menu item
 		JMenuItem menuItem = new JMenuItem(entry.title);
 
 		menuItem.addActionListener(new ActionListener()
@@ -290,14 +303,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 	{
 		public void mousePressed(MouseEvent evt)
 		{
-			if(evt.getSource() == popupButton)
+			if(evt.getSource() == popupButton
+				|| GUIUtilities.isPopupTrigger(evt))
 			{
 				if(popup.isVisible())
 					popup.setVisible(false);
 				else
 				{
 					GUIUtilities.showPopupMenu(popup,
-						popupButton,evt.getX(),evt.getY());
+						(Component)evt.getSource(),
+						evt.getX(),evt.getY());
 				}
 			}
 		}
@@ -425,9 +440,9 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 		int rotate;
 		Font font;
-		String text;
-		int width;
-		int height;
+		GlyphVector glyphs;
+		float width;
+		float height;
 		float ascent;
 		RenderingHints renderHints;
 
@@ -436,18 +451,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 		{
 			this.rotate = rotate;
 			this.font = font;
-			this.text = text;
 
 			FontRenderContext fontRenderContext
-				= new FontRenderContext(null,true,
-				true);
-			GlyphVector glyphs = font.createGlyphVector(
-				fontRenderContext,text);
-			width = (int)glyphs.getLogicalBounds().getWidth();
-			height = (int)glyphs.getLogicalBounds().getHeight();
+				= new FontRenderContext(null,true,true);
+			glyphs = font.createGlyphVector(fontRenderContext,text);
+			width = (int)glyphs.getLogicalBounds().getWidth() + 2;
+			//height = (int)glyphs.getLogicalBounds().getHeight();
 
 			LineMetrics lineMetrics = font.getLineMetrics(text,fontRenderContext);
 			ascent = lineMetrics.getAscent();
+			height = (int)lineMetrics.getHeight();
 
 			renderHints = new RenderingHints(
 				RenderingHints.KEY_ANTIALIASING,
@@ -461,7 +474,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		//{{{ getIconWidth() method
 		public int getIconWidth()
 		{
-			return (rotate == RotatedTextIcon.CW
+			return (int)(rotate == RotatedTextIcon.CW
 				|| rotate == RotatedTextIcon.CCW
 				? height : width);
 		} //}}}
@@ -469,7 +482,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		//{{{ getIconHeight() method
 		public int getIconHeight()
 		{
-			return (rotate == RotatedTextIcon.CW
+			return (int)(rotate == RotatedTextIcon.CW
 				|| rotate == RotatedTextIcon.CCW
 				? width : height);
 		} //}}}
@@ -488,18 +501,18 @@ public class PanelWindowContainer implements DockableWindowContainer
 			//{{{ No rotation
 			if(rotate == RotatedTextIcon.NONE)
 			{
-				g2d.drawString(text,x,y + ascent);
+				g2d.drawGlyphVector(glyphs,x + 1,y + ascent);
 			} //}}}
 			//{{{ Clockwise rotation
 			else if(rotate == RotatedTextIcon.CW)
 			{
 				AffineTransform trans = new AffineTransform();
 				trans.concatenate(oldTransform);
-				trans.translate(x,y);
+				trans.translate(x,y + 1);
 				trans.rotate(Math.PI / 2,
 					height / 2, width / 2);
 				g2d.setTransform(trans);
-				g2d.drawString(text,(height - width) / 2,
+				g2d.drawGlyphVector(glyphs,(height - width) / 2,
 					(width - height) / 2
 					+ ascent);
 			} //}}}
@@ -508,11 +521,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 			{
 				AffineTransform trans = new AffineTransform();
 				trans.concatenate(oldTransform);
-				trans.translate(x,y);
+				trans.translate(x,y - 1);
 				trans.rotate(Math.PI * 3 / 2,
 					height / 2, width / 2);
 				g2d.setTransform(trans);
-				g2d.drawString(text,(height - width) / 2,
+				g2d.drawGlyphVector(glyphs,(height - width) / 2,
 					(width - height) / 2
 					+ ascent);
 			} //}}}

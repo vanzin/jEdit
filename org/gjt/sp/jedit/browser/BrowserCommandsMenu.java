@@ -61,10 +61,10 @@ public class BrowserCommandsMenu extends JPopupMenu
 					add(createMenuItem("open"));
 					add(createMenuItem("open-view"));
 					add(createMenuItem("insert"));
-					add(createMenuItem("close"));
 				}
 				else
 					add(createMenuItem("choose"));
+				add(createMenuItem("close"));
 			}
 			else
 			{

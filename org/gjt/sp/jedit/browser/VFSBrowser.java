@@ -432,6 +432,12 @@ public class VFSBrowser extends JPanel implements EBComponent
 		}
 	} //}}}
 
+	//{{{ getDirectoryField() method
+	public HistoryTextField getDirectoryField()
+	{
+		return pathField;
+	} //}}}
+
 	//{{{ getDirectory() method
 	public String getDirectory()
 	{

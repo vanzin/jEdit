@@ -167,7 +167,6 @@ print_loop:	for(;;)
 				ChunkCache.paintChunkList(line,gfx,
 					(float)(pageX + lineNumberWidth),
 					(float)(pageY + y),
-					(float)(pageWidth - lineNumberWidth),
 					Color.white,false);
 			}
 

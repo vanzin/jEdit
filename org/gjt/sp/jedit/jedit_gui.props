@@ -1546,7 +1546,7 @@ options.browser.general.doubleClickClose=Double-clicking an open file closes it
 options.browser.general.currentBufferFilter=Filter in file dialogs is \
 	current buffer extension
 options.browser.general.splitHorizontally=Hierarchy and browsing panes \
-	side-by-side in file dialog
+	side-by-side (in file dialogs only)
 
 options.browser.colors.label=Colors
 options.browser.colors.glob=File name glob

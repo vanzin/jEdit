@@ -22,6 +22,12 @@ JEDIT 4.0 VERSION HISTORY
   case-insensitive sort
 - Improved behavior of 'Plugins' menu when lots of plugins are installed
 - Slightly faster scrolling
+- Added 'Close' command to file dialog's right-click menu
+- Removed funky background token's "paint to end of line" behavior
+- Saving a file no longer causes cached token information to be flushed
+  (doing this on a save was kind of pointless)
+- Entering a new path in a file dialog box and clicking 'Open' now sets
+  the browser's location to that path
 
 + Bug Fixes
 
@@ -51,6 +57,16 @@ JEDIT 4.0 VERSION HISTORY
   buffer that defined the 'collapseFolds' property could have slightly
   bizzarre results, because the folds were collapsed before the fold
   handler was changed
+- Creating rectangular selections on MacOS was not possible since both
+  the context menu and the rectangular selection was bound to
+  Control-click. Now, you can Command-drag to create rectangular
+  selections on MacOS
+- Since the 'apply text area colors to all components' setting only
+  fully took effect after a restart, jEdit.propertiesChanged() no longer
+  performs the initialization for this setting, instead it has been
+  moved to the startup sequence
+- Fixed problem with markers returning to their original locations on
+  save
 
 + API Additions
 

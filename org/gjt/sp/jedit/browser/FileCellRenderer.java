@@ -76,7 +76,7 @@ public class FileCellRenderer extends DefaultTreeCellRenderer
 				Color color = file.getColor();
 
 				setForeground(color == null
-					? tree.getForeground()
+					? UIManager.getColor("Tree.foreground")
 					: color);
 			}
 		}

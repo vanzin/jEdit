@@ -815,7 +815,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				x += ChunkCache.paintChunkList(
 					lineInfo.chunks,gfx,x,baseLine,
-					getWidth(),bgColor,true);
+					bgColor,true);
 			}
 
 			gfx.setFont(defaultFont);
@@ -825,7 +825,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				gfx.drawString(":",Math.max(x,
 					textArea.getHorizontalOffset()
-					+ textArea.wrapMargin),
+					+ textArea.wrapMargin + textArea.charWidth),
 					baseLine);
 				x += textArea.charWidth;
 			}

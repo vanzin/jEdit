@@ -4762,9 +4762,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(max != maxHorizontalScrollWidth)
 		{
 			maxHorizontalScrollWidth = max;
-			horizontal.setValues(-horizontalOffset,painter.getWidth(),
+			horizontal.setValues(Math.max(0,
+				Math.min(maxHorizontalScrollWidth + charWidth
+				- painter.getWidth(),
+				-horizontalOffset)),
+				painter.getWidth(),
 				0,maxHorizontalScrollWidth
-				+ painter.getFontMetrics().charWidth('w'));
+				+ charWidth);
 		}
 	} //}}}
 
@@ -4790,7 +4794,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		painter.repaint();
 	} //}}}
 
-		//{{{ recalculateVisibleLines() method
+	//{{{ recalculateVisibleLines() method
 	void recalculateVisibleLines()
 	{
 		if(painter == null)
@@ -5865,7 +5869,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				setFirstLine(firstLine + 2);
 			}
 
-			boolean rect = evt.isControlDown();
+			boolean rect = (OperatingSystem.isMacOS()
+				? evt.isMetaDown()
+				: evt.isControlDown());
 
 			switch(clickCount)
 			{

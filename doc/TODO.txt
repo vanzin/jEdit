@@ -1,5 +1,9 @@
 TO DO
 
+- middle-drag creates selection, inserts selection at caret,
+  deactivates selection
+- horizontal scroll jerkiness
+- still problem with last phys line repainting
 - closing console minor problem
 - search dialog does not get focus when 'find' invoked while its open
 - paste: not scrolled to caret
@@ -121,8 +125,6 @@ TO DO
     ugly with different backgrounds
   - help viewer looks ugly
   - selected borders in list, tree, table wrong colors
-  - updateUI doesn't update tree colors
-  - restart should not be necessary for 'globalColors' to take effect
 - evalutate for selected lines: > 1 selection per line
 - undo: redo doesn't clear dirty flag if necessary
 - BrowserView.reloadDirectory(): hardcoded design decisions
