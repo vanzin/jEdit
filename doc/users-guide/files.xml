@@ -18,6 +18,10 @@
    a file selector dialog box and loads the specified file into a new
    buffer. Multiple files can be opened at once by holding down
    <keycap>Control</keycap> while clicking on them in the file system browser.
+   The file selector dialog box also supports auto-completion; when you begin
+   typing a the name of an existing file in the file name field, jEdit will
+   attempt to complete it; if the suggested completion is wrong, either select
+   an alternative with the arrow keys or keep typing.
   </para>
   <para>
    Files that you do not have write access to are opened in read-only
@@ -39,13 +43,15 @@
   </para>
   <para>
    The <guimenu>Utilities</guimenu>&gt;<guimenuitem>Current Directory</guimenuitem>
-   menu lists all files in the current buffer's directory.
+   menu lists all files and directories in the current buffer's directory.
+   Selecting a file opens it in a buffer for editing; selecting a directory
+   opens it in the file system browser (see <xref linkend="vfs-browser" />).
   </para>
   <tip>
    <para>
     jEdit supports transparent editing of GZipped files; if a file begins with
     the GZip <quote>magic number</quote>, it is automatically decompressed
-    before loading, and compressed when saving. To compress an existing file,
+    before loading and compressed when saving. To compress an existing file,
     you need to change a setting in the
     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
     dialog box; see <xref linkend="buffer-opts"/> for details.
@@ -196,10 +202,9 @@
  <sect1 id="encodings"><title>Character Encodings</title>
   <para>
    If you edit files in different human languages, you will most likely be
-   familiar with the concept of a <quote>character encoding</quote>. The simplest
-   explanation of this is that there are several ways in which a character can
-   be stored on disk; different programs must be set to the same encoding to be
-   able to exchange text. The current buffer's encoding is shown in the status
+   familiar with the concept of a <quote>character encoding</quote>. The gist
+   of the idea is that there are several ways to store a particular character
+   on disk. The current buffer's encoding is shown in the status
    bar.
   </para>
   <para>
@@ -228,20 +233,13 @@
    Unix.
   </para>
   <para>
-   The <guimenu>File</guimenu>&gt;<guisubmenu>Open With Encoding</guisubmenu>
-   lets you open a file with an encoding other than the default. The menu
-   contains a set of items, one for each common encoding, along with
-   <guimenuitem>System Default</guimenuitem> and <guimenuitem>jEdit
-   Default</guimenuitem> commands. Invoking a menu item displays the usual
-   file dialog box, and opens the selected file with the chosen encoding.
+   To open a file stored in an encoding other than the default, select the
+   encoding from the
+   <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding</guisubmenu> menu of
+   the open file dialog box or file system browser window, then open the file.
   </para>
   <para>
-   The <guimenu>Open With Other Encoding</guimenu> command in the same menu
-   lets you enter an arbitrary encoding name, assuming it is supported by
-   your Java implementation.
-  </para>
-  <para>
-   Once a file has been opened, the encoding to use when saving it
+   The encoding to use when saving an open file
    can be set in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
    Options</guimenuitem> dialog box.
   </para>
@@ -321,7 +319,7 @@
     entered, it will be resolved relative to the current path. This text field
     remembers previously entered strings; see <xref linkend="history" />.
     Previously browsed directories are also listed in the
-    <guimenu>File</guimenu>&gt;<guisubmenu>Recent Directories</guisubmenu>
+    <guimenu>Utilities</guimenu>&gt;<guisubmenu>Recent Directories</guisubmenu>
     menu; selecting one opens it in the file system browser.
    </para>
    <para>
@@ -493,10 +491,15 @@
    jEdit executes all input/output operations asynchronously.
    While I/O is in progress, the status bar displays the number of
    remaining I/O operations.
-   The <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O Progress
+   The <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>I/O
+   Progress
    Monitor</guimenuitem> command displays a window with more detailed status
-   information and progress meters. Requests can also be aborted in this window.
-   Note that aborting a buffer save can result in data loss.
+   information and progress meters. This window is floating by default, but
+   it can be set to dock into the view in the
+   <guibutton>Docking</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="docking" />. I/O requests can also be aborted in
+   this window, however note that aborting a buffer save can result in data loss.
   </para>
   <para>
    By default, four I/O threads are created, which means that up

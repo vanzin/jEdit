@@ -652,6 +652,8 @@ select-visible-end.label=Select to Last Visible Line
 select-visible-home.label=Select to First Visible Line
 select-whitespace-end.label=Select to End of White Space
 select-whitespace-home.label=Select to Start of White Space
+toggle-line-separator.label=Toggle Line Separator
+toggle-word-wrap.label=Toggle Word Wrap
 visible-end.label=Go to Last Visible Line
 visible-home.label=Go to First Visible Line
 whitespace-end.label=Go to End of White Space
@@ -1286,13 +1288,15 @@ folding-not-explicit.message=This command can only be used in explicit fold mode
 
 #{{{ Buffer options dialog
 buffer-options.title=Buffer Options
+buffer-options.caption=This dialog box changes settings for the current buffer\n\
+	only. To change settings on an editor-wide basis, see\n\
+	the Utilities->Global Options dialog box.
 buffer-options.loading-saving=Loading and Saving
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
 buffer-options.gzipped=GZIP (compress) file on disk
 buffer-options.editing=Editing
 buffer-options.mode=Edit mode:
-buffer-options.props=Corresponding buffer-local properties:
 #}}}
 
 #{{{ Global options dialog

@@ -110,9 +110,9 @@ class Roster
 			progress.removing(MiscUtilities.getFileName(plugin));
 
 			// close JAR file
-			//EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
-			//if(jar != null)
-			//	jar.getClassLoader().closeZipFile();
+			EditPlugin.JAR jar = jEdit.getPluginJAR(plugin);
+			if(jar != null)
+				jar.getClassLoader().closeZipFile();
 
 			// move JAR first
 			File jarFile = new File(plugin);
@@ -121,7 +121,7 @@ class Roster
 			boolean ok = true;
 			Log.log(Log.NOTICE,this,"Deleting " + jarFile + " recursively");
 
-			jarFile.deleteOnExit();
+			ok &= jarFile.delete();
 
 			if(srcFile.exists())
 				ok &= deleteRecursively(srcFile);

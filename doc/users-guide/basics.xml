@@ -88,6 +88,11 @@
    <guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem> creates a new view.
   </para>
   <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>New Plain View</guimenuitem> creates
+   a new view but without any tool bars or docked windows. This can be used to
+   open a small unintrusive for taking notes and so on.
+  </para>
+  <para>
    <guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem> closes the
    current view. If only one view is open, closing it will exit jEdit,
    unless background mode is on; see <xref linkend="starting" /> for information
@@ -152,10 +157,39 @@
    </para>
    <para>
     The commands in the <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu>
-    menu (shortcuts: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
-    <keycap>1</keycap>, <keycap>2</keycap>, <keycap>3</keycap>, <keycap>4</keycap>)
-    provide keyboard equivalents for the close boxes.
+    menu move keyboard focus between docking areas.
    </para>
+   <sidebar><title>For power users</title>
+    <para>
+     In addition to the standard menu item command, each dockable window also
+     has two other commands associated with it; they are named:
+    </para>
+    <itemizedlist>
+     <listitem><para><guimenuitem><replaceable>Name of dockable</replaceable>
+     (Toggle)</guimenuitem> - opens the dockable window if it is hidden, and
+     hide it if its already open.</para></listitem>
+     <listitem><para><guimenuitem><replaceable>Name of dockable</replaceable>
+     (New Floating Instance)</guimenuitem> - opens a new floating window
+     containing a new instance of the dockable, regardless of the docking
+     configuration.</para></listitem>
+    </itemizedlist>
+    <para>
+     While these commands cannot be invoked from the menu bar, they can be
+     added to the tool bar or context menu, or given keyboard shortcuts.
+     (See <xref linkend="global-opts" /> for information about how to do this.)
+    </para>
+    <para>
+     The former can be used to conveniently open and close dockables with a
+     keyboard command; the latter is useful for doing things like viewing two
+     different directories side-by-side in two file system browser windows,
+     for example.
+    </para>
+    <para>
+     Another way to open a new floating instance of a window that is already
+     docked is to right-click on the appropriate strip of buttons; this shows
+     a menu from which you can choose to open a new floating instance.
+    </para>
+   </sidebar>
   </sect2>
   <sect2 id="status-bar"><title>The Status Bar</title>
    <para>
@@ -181,33 +215,54 @@
     registers and markers (see <xref linkend="text-transfer" /> and <xref
     linkend="markers" />), also I/O progress messages (see
     <xref linkend="threaded-io" />)</para></listitem>
-    <listitem><para>The current buffer's edit mode. Double-clicking this
+    <listitem><para>The current buffer's edit mode, fold mode,
+    and character encoding. Double-clicking one of these
     displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
-    Options</guimenuitem> dialog box. See <xref
-    linkend="modes" /> and <xref linkend="buffer-opts" />.</para></listitem>
-    <listitem><para>The current buffer's character encoding.  Double-clicking this
-    displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
-    Options</guimenuitem> dialog box. See <xref
-    linkend="encodings" /> and <xref linkend="buffer-opts" />.</para></listitem>
-    <listitem><para>The current buffer's fold mode; this is either
-    <quote>none</quote>, <quote>indent</quote> or <quote>explicit</quote>.
-    Clicking here toggles between the three modes. See <xref linkend="folding" />.
-    </para></listitem>
-    <listitem><para>If multiple selection is enabled, the string
-    <guilabel>multi</guilabel>; otherwise <guilabel>single</guilabel>.
-    Clicking here or pressing <keycombo><keycap>Control</keycap>
-    <keycap>\</keycap></keycombo> turns multiple selection on and off. See <xref
-    linkend="multi-select" />.</para></listitem>
-    <listitem><para>If overwrite mode is enabled, the string
-    <guilabel>ovr</guilabel>; otherwise <guilabel>ins</guilabel>.
-    Clicking here or pressing
-    <keycap>Insert</keycap> turns overwrite mode on and off. See <xref
-    linkend="entering-text" />.</para></listitem>
+    Options</guimenuitem> dialog box. For more information about these settings,
+    see:</para>
+    <itemizedlist>
+     <listitem><para><xref linkend="buffer-opts" /></para></listitem>
+     <listitem><para><xref linkend="modes" /></para></listitem>
+     <listitem><para><xref linkend="folding" /></para></listitem>
+     <listitem><para><xref linkend="encodings" /></para></listitem>
+    </itemizedlist>
+    </listitem>
+    <listitem><para>To the right of the character encoding display is a set of
+    flags which indicate various editor features and settings. Clicking each
+    flag will toggle the feature in question; hovering the mouse over a flag
+    will show a tool tip with an explanation.</para></listitem>
+    <listitem><para>The flags, from left to right, are word wrap,
+    multiple selection, overwrite mode indicator and line separator indicator.
+    For more information about these settings, see:
+    </para>
+    <itemizedlist>
+     <listitem><para><xref linkend="word-wrap" /></para></listitem>
+     <listitem><para><xref linkend="multi-select" /></para></listitem>
+     <listitem><para><xref linkend="entering-text" /></para></listitem>
+     <listitem><para><xref linkend="line-separators" /></para></listitem>
+    </itemizedlist>
+    </listitem>
     <listitem><para>A Java heap memory usage indicator, that shows used versus
     total heap memory, in megabytes. Double-clicking here opens the
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Memory Status</guimenuitem>
+    <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Memory Status</guimenuitem>
     dialog box.</para></listitem>
    </itemizedlist>
+   <sidebar><title>For power users</title>
+    <para>
+     If you would like to be able to quickly toggle the line
+     separator or word wrap settings without having to use the mouse, you can
+     assign keyboard shortcuts to the following two commands in the
+     <guibutton>Shortcuts</guibutton> pane of the
+     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+     dialog box:
+    </para>
+    <itemizedlist>
+     <listitem><para><guimenuitem>Toggle Line Separator</guimenuitem>
+     </para></listitem>
+     <listitem><para><guimenuitem>Toggle Word Wrap</guimenuitem>
+     </para></listitem>
+    </itemizedlist>
+   </sidebar>
   </sect2>
  </sect1>
  <sect1 id="textarea"><title>The Text Area</title>
@@ -219,18 +274,12 @@
   <para>
    The text area will automatically scroll up or down if text editing is performed
    closer than three lines from the top or bottom of the text area. This
-   feature is called <firstterm>electric scrolling</firstterm> and can be disabled
-   in the <guibutton>Text Area</guibutton> pane of the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />.
+   feature is called <firstterm>electric scrolling</firstterm>.
   </para>
   <para>
    To aid in locating the caret, the current line is drawn with a
    different background color. To make it clear which lines end with
    white space, end of line markers are drawn at the end of each line.
-   Both these features can be disabled in the <guibutton>Text Area</guibutton>
-   pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-   Options</guimenuitem> dialog box.
   </para>
   <para>
    The strip on the left of the text area is called a <firstterm>gutter</firstterm>.
@@ -240,29 +289,12 @@
    <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
    <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo>) command is invoked.
   </para>
- </sect1>
- <sect1 id="repeat"><title>Command Repetition</title>
   <para>
-   There is one other jEdit feature that needs to be discussed before we
-   continue further.
-   To repeat a command any number of times, invoke
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Next Command</guimenuitem>
-   (shortcut:
-   <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>) and enter the
-   desired repeat count, followed by the command to repeat (either a keystroke
-   or menu item selection). For example,
-   <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-   <keycap>1</keycap> <keycap>4</keycap>
-   <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></quote> will delete
-   14 lines, and <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
-   <keycap>8</keycap>
-   <keycap>#</keycap></quote>
-   will insert <quote>########</quote> in the buffer.
-  </para>
-  <para>
-   If you specify a repeat count greater than 20, a confirmation dialog box will
-   be displayed, asking if you really want to perform the action. This prevents
-   you from hanging jEdit by executing a command too many times.
+   Many text area and gutter settings can be customized to suit your taste in
+   the  <guibutton>Text Area</guibutton> and <guibutton>Gutter</guibutton> panes
+   of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" /> for details.
   </para>
  </sect1>
 </chapter>

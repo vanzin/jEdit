@@ -34,7 +34,10 @@ import java.awt.*;
  *
  * @see org.gjt.sp.jedit.OptionPane
  */
-public abstract class AbstractOptionPane extends JPanel implements OptionPane
+// even though this class is called AbstractOptionPane, it is not really
+// abstract, since BufferOptions uses an instance of it to lay out its
+// components.
+public class AbstractOptionPane extends JPanel implements OptionPane
 {
 	//{{{ AbstractOptionPane constructor
 	/**
@@ -85,37 +88,6 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		if(initialized)
 			_save();
 	} //}}}
-
-	//{{{ Protected members
-
-	//{{{ Instance variables
-	/**
-	 * Has the option pane been initialized?
-	 */
-	protected boolean initialized;
-
-	/**
-	 * The layout manager.
-	 */
-	protected GridBagLayout gridBag;
-
-	/**
-	 * The number of components already added to the layout manager.
-	 */
-	protected int y;
-	//}}}
-
-	/**
-	 * This method should create the option pane's GUI.
-	 */
-	protected void _init() {}
-
-	/**
-	 * Called when the options dialog's "ok" button is clicked.
-	 * This should save any properties being edited in this option
-	 * pane.
-	 */
-	protected void _save() {}
 
 	//{{{ addComponent() method
 	/**
@@ -256,6 +228,33 @@ public abstract class AbstractOptionPane extends JPanel implements OptionPane
 		add(box);
 	} //}}}
 
+	//{{{ Protected members
+	/**
+	 * Has the option pane been initialized?
+	 */
+	protected boolean initialized;
+
+	/**
+	 * The layout manager.
+	 */
+	protected GridBagLayout gridBag;
+
+	/**
+	 * The number of components already added to the layout manager.
+	 */
+	protected int y;
+
+	/**
+	 * This method should create the option pane's GUI.
+	 */
+	protected void _init() {}
+
+	/**
+	 * Called when the options dialog's "ok" button is clicked.
+	 * This should save any properties being edited in this option
+	 * pane.
+	 */
+	protected void _save() {}
 	//}}}
 
 	//{{{ Private members

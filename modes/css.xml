@@ -17,12 +17,15 @@
 		NO_WORD_SEP="-">
 
 		<SEQ TYPE="OPERATOR">:</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
 		<SPAN TYPE="NULL" DELEGATE="LITERAL">
 			<BEGIN>(</BEGIN>
 			<END>)</END>
 		</SPAN>
 		<SEQ TYPE="OPERATOR">{</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">.</SEQ>
 
 		<SEQ TYPE="OPERATOR">!</SEQ>
 
@@ -34,15 +37,7 @@
 		</SPAN>
 
 		<KEYWORDS>
-			<!-- CSS1 properties -->
-
-			<!-- Font properties -->
-			<KEYWORD2>font</KEYWORD2>
-			<KEYWORD2>font-family</KEYWORD2>
-			<KEYWORD2>font-size</KEYWORD2>
-			<KEYWORD2>font-style</KEYWORD2>
-			<KEYWORD2>font-variant</KEYWORD2>
-			<KEYWORD2>font-weight</KEYWORD2>
+			<!-- CSS2 properties -->
 
 			<!-- Color and background properties -->
 			<KEYWORD2>background</KEYWORD2>
@@ -53,27 +48,49 @@
 			<KEYWORD2>background-repeat</KEYWORD2>
 			<KEYWORD2>color</KEYWORD2>
 
+			<!-- Font properties -->
+			<KEYWORD2>font</KEYWORD2>
+			<KEYWORD2>font-family</KEYWORD2>
+			<KEYWORD2>font-size</KEYWORD2>
+			<KEYWORD2>font-size-adjust</KEYWORD2>
+			<KEYWORD2>font-style</KEYWORD2>
+			<KEYWORD2>font-variant</KEYWORD2>
+			<KEYWORD2>font-weight</KEYWORD2>
+			<KEYWORD2>font-stretch</KEYWORD2>
+
 			<!-- Text properties -->
 			<KEYWORD2>letter-spacing</KEYWORD2>
-			<KEYWORD2>line-height</KEYWORD2>
 			<KEYWORD2>text-align</KEYWORD2>
+			<KEYWORD2>text-shadow</KEYWORD2>
 			<KEYWORD2>text-decoration</KEYWORD2>
 			<KEYWORD2>text-indent</KEYWORD2>
 			<KEYWORD2>text-transform</KEYWORD2>
-			<KEYWORD2>vertical-align</KEYWORD2>
 			<KEYWORD2>word-spacing</KEYWORD2>
+			<KEYWORD2>letter-spacing</KEYWORD2>
+			<KEYWORD2>white-space</KEYWORD2>
 
 			<!-- Box properties -->
 			<KEYWORD2>border</KEYWORD2>
+			<KEYWORD2>bottom</KEYWORD2>
+			<KEYWORD2>border-collapse</KEYWORD2>
+			<KEYWORD2>border-spacing</KEYWORD2>
 			<KEYWORD2>border-bottom</KEYWORD2>
+			<KEYWORD2>border-bottom-style</KEYWORD2>
 			<KEYWORD2>border-bottom-width</KEYWORD2>
-			<KEYWORD2>border-color</KEYWORD2>
+			<KEYWORD2>border-bottom-color</KEYWORD2>
 			<KEYWORD2>border-left</KEYWORD2>
+			<KEYWORD2>border-left-style</KEYWORD2>
 			<KEYWORD2>border-left-width</KEYWORD2>
+			<KEYWORD2>border-left-color</KEYWORD2>
 			<KEYWORD2>border-right</KEYWORD2>
+			<KEYWORD2>border-right-style</KEYWORD2>
 			<KEYWORD2>border-right-width</KEYWORD2>
+			<KEYWORD2>border-right-color</KEYWORD2>
 			<KEYWORD2>border-top</KEYWORD2>
+			<KEYWORD2>border-top-style</KEYWORD2>
 			<KEYWORD2>border-top-width</KEYWORD2>
+			<KEYWORD2>border-top-color</KEYWORD2>
+			<KEYWORD2>border-color</KEYWORD2>
 			<KEYWORD2>border-style</KEYWORD2>
 			<KEYWORD2>border-width</KEYWORD2>
 			<KEYWORD2>clear</KEYWORD2>
@@ -89,27 +106,263 @@
 			<KEYWORD2>padding-left</KEYWORD2>
 			<KEYWORD2>padding-right</KEYWORD2>
 			<KEYWORD2>padding-top</KEYWORD2>
-			<KEYWORD2>width</KEYWORD2>
+			<KEYWORD2>clear</KEYWORD2>
 
-			<!-- Classification properties -->
+			<!-- Visual formatting properties -->
 			<KEYWORD2>display</KEYWORD2>
+			<KEYWORD2>position</KEYWORD2>
+			<KEYWORD2>top</KEYWORD2>
+			<KEYWORD2>right</KEYWORD2>
+			<KEYWORD2>bottom</KEYWORD2>
+			<KEYWORD2>left</KEYWORD2>
+			<KEYWORD2>float</KEYWORD2>
+			<KEYWORD2>z-index</KEYWORD2>
+			<KEYWORD2>direction</KEYWORD2>
+			<KEYWORD2>unicode-bidi</KEYWORD2>
+			<KEYWORD2>width</KEYWORD2>
+			<KEYWORD2>min-width</KEYWORD2>
+			<KEYWORD2>max-width</KEYWORD2>
+			<KEYWORD2>height</KEYWORD2>
+			<KEYWORD2>min-height</KEYWORD2>
+			<KEYWORD2>max-height</KEYWORD2>
+			<KEYWORD2>line-height</KEYWORD2>
+			<KEYWORD2>vertical-align</KEYWORD2>
+			
+			<!-- Visual effects -->
+			<KEYWORD2>overflow</KEYWORD2>
+			<KEYWORD2>clip</KEYWORD2>
+			<KEYWORD2>visibility</KEYWORD2>						
+			
+			<!-- Generated content, automatic listing -->
+			<KEYWORD2>content</KEYWORD2>
+			<KEYWORD3>:after</KEYWORD3>
+			<KEYWORD3>:before</KEYWORD2>
+			<KEYWORD2>quotes</KEYWORD2>
+			<KEYWORD2>counter-reset</KEYWORD2>
+			<KEYWORD2>counter-increment</KEYWORD2>
+			<KEYWORD2>marker-offset</KEYWORD2>
 			<KEYWORD2>list-style</KEYWORD2>
 			<KEYWORD2>list-style-image</KEYWORD2>
 			<KEYWORD2>list-style-position</KEYWORD2>
 			<KEYWORD2>list-style-type</KEYWORD2>
-			<KEYWORD2>white-space</KEYWORD2>
+			
+			<!-- Page properties -->
+			<KEYWORD2>size</KEYWORD2>
+			<KEYWORD2>marks</KEYWORD2>
+			<KEYWORD2>page-break-before</KEYWORD2>
+			<KEYWORD2>page-break-after</KEYWORD2>
+			<KEYWORD2>page-break-inside</KEYWORD2>
+			<KEYWORD2>page</KEYWORD2>
+			<KEYWORD2>orphans</KEYWORD2>
+												
+			<!-- Table properties -->
+			<KEYWORD2>caption-side</KEYWORD2>
+			<KEYWORD2>table-layout</KEYWORD2>
+			<KEYWORD2>border-collapse</KEYWORD2>
+			<KEYWORD2>border-spacing</KEYWORD2>
+			<KEYWORD2>empty-cells</KEYWORD2>
+			<KEYWORD2>speak-headers</KEYWORD2>
 
-			<KEYWORD3>@import</KEYWORD3>
+			<KEYWORD2>@import</KEYWORD2>
+			<KEYWORD2>@media</KEYWORD2>
+			<KEYWORD2>@page</KEYWORD2>
+			<KEYWORD2>@font-face</KEYWORD2>
+			
+			<!-- User interface -->
+			<KEYWORD2>cursor</KEYWORD2>
+			<KEYWORD2>outline</KEYWORD2>
+			<KEYWORD2>outline-width</KEYWORD2>
+			<KEYWORD2>outline-style</KEYWORD2>
+			<KEYWORD2>outline-color</KEYWORD2>
+						
+			<!-- Aural properties -->
+			<KEYWORD2>azimuth</KEYWORD2>
+			<KEYWORD2>volume</KEYWORD2>
+			<KEYWORD2>speak</KEYWORD2>
+			<KEYWORD2>pause</KEYWORD2>
+			<KEYWORD2>pause-before</KEYWORD2>
+			<KEYWORD2>pause-after</KEYWORD2>
+			<KEYWORD2>cue</KEYWORD2>
+			<KEYWORD2>cue-before</KEYWORD2>
+			<KEYWORD2>cue-after</KEYWORD2>
+			<KEYWORD2>play-during</KEYWORD2>
+			<KEYWORD2>elevation</KEYWORD2>
+			<KEYWORD2>speech-rate</KEYWORD2>
+			<KEYWORD2>voice-family</KEYWORD2>
+			<KEYWORD2>pitch</KEYWORD2>
+			<KEYWORD2>pitch-range</KEYWORD2>
+			<KEYWORD2>stress</KEYWORD2>
+			<KEYWORD2>richness</KEYWORD2>
+			<KEYWORD2>speak-punctuation</KEYWORD2>
+			<KEYWORD2>speak-numeral</KEYWORD2>
+
 			<KEYWORD3>rgb</KEYWORD3>
 			<KEYWORD3>url</KEYWORD3>
 
 			<!-- measurement units -->
-			<!-- <KEYWORD3>px</KEYWORD3>
-			<KEYWORD3>pt</KEYWORD3>
-			<KEYWORD3>mm</KEYWORD3>
-			<KEYWORD3>cm</KEYWORD3>
-			<KEYWORD3>in</KEYWORD3>
-			<KEYWORD3>em</KEYWORD3> -->
+			<KEYWORD3>left-side</KEYWORD3>
+			<KEYWORD3>far-left</KEYWORD3>
+			<KEYWORD3>center-left</KEYWORD3>
+			<KEYWORD3>center</KEYWORD3>
+			<KEYWORD3>right</KEYWORD3>			
+			<KEYWORD3>center-right</KEYWORD3>
+			<KEYWORD3>far-right</KEYWORD3>
+			<KEYWORD3>right-side</KEYWORD3>
+			<KEYWORD3>behind</KEYWORD3>
+			<KEYWORD3>leftwards</KEYWORD3>
+			<KEYWORD3>rightwards</KEYWORD3>
+			<KEYWORD3>inherit</KEYWORD3>
+			<KEYWORD3>scroll</KEYWORD3>
+			<KEYWORD3>fixed</KEYWORD3>
+			<KEYWORD3>transparent</KEYWORD3>
+			<KEYWORD3>none</KEYWORD3>
+			<KEYWORD3>repeat</KEYWORD3>
+			<KEYWORD3>repeat-x</KEYWORD3>
+			<KEYWORD3>repeat-y</KEYWORD3>
+			<KEYWORD3>no-repeat</KEYWORD3>
+			<KEYWORD3>collapse</KEYWORD3>
+			<KEYWORD3>separate</KEYWORD3>
+			<KEYWORD3>auto</KEYWORD3>
+			<KEYWORD3>open-quote</KEYWORD3>
+			<KEYWORD3>close-quote</KEYWORD3>
+			<KEYWORD3>no-open-quote</KEYWORD3>
+			<KEYWORD3>no-close-quote</KEYWORD3>
+			<KEYWORD3>cue-before</KEYWORD3>
+			<KEYWORD3>cue-after</KEYWORD3>
+			<KEYWORD3>crosshair</KEYWORD3>
+			<KEYWORD3>default</KEYWORD3>
+			<KEYWORD3>pointer</KEYWORD3>
+			<KEYWORD3>move</KEYWORD3>
+			<KEYWORD3>e-resize</KEYWORD3>
+			<KEYWORD3>ne-resize</KEYWORD3>
+			<KEYWORD3>nw-resize</KEYWORD3>
+			<KEYWORD3>n-resize</KEYWORD3>
+			<KEYWORD3>se-resize</KEYWORD3>
+			<KEYWORD3>sw-resize</KEYWORD3>
+			<KEYWORD3>s-resize</KEYWORD3>
+			<KEYWORD3>w-resize</KEYWORD3>
+			<KEYWORD3>text</KEYWORD3>
+			<KEYWORD3>wait</KEYWORD3>
+			<KEYWORD3>help</KEYWORD3>
+			<KEYWORD3>ltr</KEYWORD3>
+			<KEYWORD3>rtl</KEYWORD3>
+			<KEYWORD3>inline</KEYWORD3>
+			<KEYWORD3>block</KEYWORD3>
+			<KEYWORD3>list-item</KEYWORD3>
+			<KEYWORD3> run-in</KEYWORD3>
+			<KEYWORD3>compact</KEYWORD3>
+			<KEYWORD3>marker</KEYWORD3>
+			<KEYWORD3>table</KEYWORD3>
+			<KEYWORD3>inline-table</KEYWORD3>
+			<KEYWORD3>table-row-group</KEYWORD3>
+			<KEYWORD3>table-header-group</KEYWORD3>
+			<KEYWORD3>table-footer-group</KEYWORD3>
+			<KEYWORD3>table-row</KEYWORD3>
+			<KEYWORD3>table-column-group</KEYWORD3>
+			<KEYWORD3>table-column</KEYWORD3>
+			<KEYWORD3>table-cell</KEYWORD3>
+			<KEYWORD3>table-caption</KEYWORD3>			
+			
+			<KEYWORD3>below</KEYWORD3>
+			<KEYWORD3>level</KEYWORD3>
+			<KEYWORD3>above</KEYWORD3>
+			<KEYWORD3>higher</KEYWORD3>
+			<KEYWORD3>lower</KEYWORD3>
+			<KEYWORD3>show</KEYWORD3>
+			<KEYWORD3>hide</KEYWORD3>
+			<KEYWORD3>normal</KEYWORD3>
+			<KEYWORD3>wider</KEYWORD3>
+			<KEYWORD3>narrower</KEYWORD3>
+			<KEYWORD3>ultra-condensed</KEYWORD3>
+			<KEYWORD3>extra-condensed</KEYWORD3>
+			<KEYWORD3>condensed</KEYWORD3>
+			<KEYWORD3>semi-condensed</KEYWORD3>
+			<KEYWORD3>semi-expanded</KEYWORD3>
+			<KEYWORD3>expanded</KEYWORD3>
+			<KEYWORD3>extra-expanded</KEYWORD3>
+			<KEYWORD3>ultra-expanded</KEYWORD3> 
+			<KEYWORD3>normal</KEYWORD3>
+			<KEYWORD3>italic</KEYWORD3>
+			<KEYWORD3>oblique</KEYWORD3>
+			<KEYWORD3>normal</KEYWORD3>
+			<KEYWORD3>small-caps</KEYWORD3>
+			<KEYWORD3>inherit</KEYWORD3>
+			<KEYWORD3>bold</KEYWORD3>
+			<KEYWORD3>bolder</KEYWORD3>
+			<KEYWORD3>lighter</KEYWORD3>
+			<KEYWORD3>inside</KEYWORD3>
+			<KEYWORD3>outside</KEYWORD3>
+			<KEYWORD3>disc</KEYWORD3>
+			<KEYWORD3>circle</KEYWORD3>
+			<KEYWORD3>square</KEYWORD3>
+			<KEYWORD3>decimal</KEYWORD3>
+			<KEYWORD3>decimal-leading-zero</KEYWORD3>
+			<KEYWORD3>lower-roman</KEYWORD3>
+			<KEYWORD3>upper-roman</KEYWORD3>
+			<KEYWORD3>lower-greek</KEYWORD3>
+			<KEYWORD3>lower-alpha</KEYWORD3>
+			<KEYWORD3>lower-latin</KEYWORD3>
+			<KEYWORD3>upper-alpha</KEYWORD3>
+			<KEYWORD3>upper-latin</KEYWORD3>
+			<KEYWORD3>hebrew</KEYWORD3>
+			<KEYWORD3>armenian</KEYWORD3>
+			<KEYWORD3>georgian</KEYWORD3>
+			<KEYWORD3>cjk-ideographic</KEYWORD3>
+			<KEYWORD3>hiragana</KEYWORD3>
+			<KEYWORD3>katakana</KEYWORD3>
+			<KEYWORD3>hiragana-iroha</KEYWORD3>
+			<KEYWORD3>katakana-iroha</KEYWORD3>
+			<KEYWORD3>crop</KEYWORD3>
+			<KEYWORD3>cross</KEYWORD3>
+			<KEYWORD3>invert</KEYWORD3>
+			<KEYWORD3>hidden</KEYWORD3>
+			<KEYWORD3>always</KEYWORD3>
+			<KEYWORD3>avoid</KEYWORD3>
+			<KEYWORD3>x-low</KEYWORD3>
+			<KEYWORD3>low</KEYWORD3>
+			<KEYWORD3>medium</KEYWORD3>
+			<KEYWORD3>high</KEYWORD3>
+			<KEYWORD3>x-high</KEYWORD3>
+			<KEYWORD3>absolute</KEYWORD3>
+			<KEYWORD3>fixed</KEYWORD3>
+			<KEYWORD3>relative</KEYWORD3>
+			<KEYWORD3>static</KEYWORD3>
+			<KEYWORD3>portrait</KEYWORD3>
+			<KEYWORD3>landscape</KEYWORD3>
+			<KEYWORD3>spell-out</KEYWORD3>
+			<KEYWORD3>digits</KEYWORD3>
+			<KEYWORD3>continuous</KEYWORD3>
+			<KEYWORD3>x-slow</KEYWORD3>
+			<KEYWORD3>slow</KEYWORD3>
+			<KEYWORD3>fast</KEYWORD3>
+			<KEYWORD3>x-fast</KEYWORD3>
+			<KEYWORD3>faster</KEYWORD3>
+			<KEYWORD3>slower</KEYWORD3>
+			<KEYWORD3>underline</KEYWORD3>
+			<KEYWORD3>overline</KEYWORD3>
+			<KEYWORD3>line-through</KEYWORD3>
+			<KEYWORD3>blink</KEYWORD3>
+			<KEYWORD3>capitalize</KEYWORD3>
+			<KEYWORD3>uppercase</KEYWORD3>
+			<KEYWORD3>lowercase</KEYWORD3>
+			<KEYWORD3>embed</KEYWORD3>
+			<KEYWORD3>bidi-override</KEYWORD3>
+			<KEYWORD3>baseline</KEYWORD3>
+			<KEYWORD3>sub</KEYWORD3>
+			<KEYWORD3>super</KEYWORD3>
+			<KEYWORD3>top</KEYWORD3>
+			<KEYWORD3>text-top</KEYWORD3>
+			<KEYWORD3>middle</KEYWORD3>
+			<KEYWORD3>bottom</KEYWORD3>
+			<KEYWORD3>text-bottom</KEYWORD3>
+			<KEYWORD3>visible</KEYWORD3>
+			<KEYWORD3>hidden</KEYWORD3>
+			<KEYWORD3>collapse</KEYWORD3>
+			<KEYWORD3>soft</KEYWORD3>
+			<KEYWORD3>loud</KEYWORD3>
+			<KEYWORD3>x-loud</KEYWORD3>
+			<KEYWORD3>pre</KEYWORD3>
+			<KEYWORD3>nowrap</KEYWORD3>
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">

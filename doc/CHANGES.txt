@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre3
 
-Thanks to Kris Kopicki, Marco Hunsicker and Rudolf Widmann for
-contributing to this release.
+Thanks to Ivan Herman, Kris Kopicki, Marco Hunsicker and Rudolf Widmann
+for contributing to this release.
 
 + Editing Changes:
 
@@ -29,8 +29,10 @@ contributing to this release.
 
 + Syntax Highlighting Changes:
 
-- CHILL (CCITT recommendation language) syntax highlighting added
+- CHILL (CCITT recommendation language) syntax highlighting added.
   (Rudolf Widmann)
+
+- Updated CSS syntax highlighting for CSS2 spec. (Ivan Herman)
 
 + Global Options Dialog Changes:
 
@@ -72,7 +74,7 @@ contributing to this release.
   - 'Recent Directories' moved from File to Utilities menu.
   - 'Current Directory' moved from File to Utilities menu.
   - 'Select Line Range' from from Edit to Edit->More Selection.
-  - BeanShell evaluation commands moved from Macros to.
+  - BeanShell evaluation commands moved from Macros to
     Utilities->BeanShell.
   - Various troubleshooting-related commands moved from Utilities to
     Utilities->Troubleshooting (like they were in 4.1pre1).
@@ -88,6 +90,13 @@ contributing to this release.
   without invoking 'Update Activity Log on Disk' first, I have added a
   notice to this file, stating that you must invoke the above command
   otherwise the file will be incomplete.
+
+- Added two new actions, by default not in any menu, nor bound to any
+  keystroke; 'Toggle Line Separator' and 'Toggle Word Wrap'. They have
+  the same effect as clicking the appropriate section of the status bar,
+  and they can be bound to shortcut keys or added to the tool bar, etc.
+
+- Removed ICONS.LICENSE.txt file since we no longer use the Sun icons.
 
 + Bug Fixes:
 
@@ -117,6 +126,9 @@ contributing to this release.
   session (for example, an FTP login dialog box), cancelling the dialog
   would leave the file system browser stuck with a 'Loading' message.
   This has now been fixed.
+
+- If multiple selection mode was enabled, clicking the mouse did not
+  move the caret! What a silly bug...
 
 + API Changes:
 
@@ -153,9 +165,6 @@ release.
 
 - Multiple files can now be selected in the stand-alone browser;
   right-clicking no longer deselects all but the clicked file.
-
-- Added 'Open in New Split' command to the right-click menu that splits
-  the view and opens the selected file in the newly created text area.
 
 - Right-click menus in the 'Open File' dialog box now contain menu items
   for opening files in new views and new splits.

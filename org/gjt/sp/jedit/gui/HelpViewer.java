@@ -153,6 +153,7 @@ public class HelpViewer extends JFrame implements EBComponent
 			nodes.get("users-guide/using-jedit-part.html");
 		if(node != null)
 			toc.expandPath(new TreePath(node.getPath()));
+		toc.expandPath(new TreePath(pluginTree.getPath()));
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
@@ -298,6 +299,7 @@ public class HelpViewer extends JFrame implements EBComponent
 	private JButton forward;
 	private DefaultTreeModel tocModel;
 	private JTree toc;
+	private DefaultMutableTreeNode pluginTree;
 	// this makes gotoURL()'s tree updating simpler
 	private Hashtable nodes;
 	private JEditorPane viewer;
@@ -330,8 +332,8 @@ public class HelpViewer extends JFrame implements EBComponent
 		loadTOC(root,"users-guide/toc.xml");
 		loadTOC(root,"FAQ/toc.xml");
 
-		DefaultMutableTreeNode pluginDocs = new DefaultMutableTreeNode(
-			jEdit.getProperty("helpviewer.toc.plugins"),true);
+		pluginTree = new DefaultMutableTreeNode(jEdit.getProperty(
+			"helpviewer.toc.plugins"),true);
 
 		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
@@ -353,15 +355,20 @@ public class HelpViewer extends JFrame implements EBComponent
 						.getResource(docs);
 					if(url != null)
 					{
-						pluginDocs.add(createNode(
+						pluginTree.add(createNode(
 							url.toString(),label));
 					}
 				}
 			}
 		}
 
-		if(pluginDocs.getChildCount() != 0)
-			root.add(pluginDocs);
+		if(pluginTree.getChildCount() != 0)
+			root.add(pluginTree);
+		else
+		{
+			// so that HelpViewer constructor doesn't try to expand
+			pluginTree = null;
+		}
 
 		tocModel = new DefaultTreeModel(root);
 	} //}}}

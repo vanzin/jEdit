@@ -112,6 +112,3 @@ jEdit depends on, and comes bundled with the following libraries:
   license. See the BeanShell homepage for details.
 
   The BeanShell homepage is located at <http://www.beanshell.org>.
-
-- The Sun Java look and Feel icon collection. The license may be found
-  in the ICONS.LICENSE.txt file.

@@ -516,8 +516,8 @@ view.getInputHandler().readNextChar("Enter a character",
     library of methods and objects that can be accessed at any time during
     the editing session in another macro, the BeanShell shell of the Console
     plugin, or menu items such as
-    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Evaluate BeanShell
-    Expression</guimenuitem>.
+    <guimenu>Utilities</guimenu>&gt;<guisubmenu>BeanShell</guisubmenu>&gt;<guimenuitem>Evaluate
+    BeanShell Expression</guimenuitem>.
   </para>
 
   <para>
