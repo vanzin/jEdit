@@ -134,7 +134,7 @@ public class jEdit
 				{
 					try
 					{
-						level = Integer.parseInt(arg.substring("log=".length()));
+						level = Integer.parseInt(arg.substring("-log=".length()));
 					}
 					catch(NumberFormatException nf)
 					{

@@ -878,8 +878,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 						canDrag = true;
 				} //}}}
 
-				setCursor(Cursor.getPredefinedCursor(
-					getAppropriateCursor()));
+				if(canDrag)
+				{
+					wm.setCursor(Cursor.getPredefinedCursor(
+						getAppropriateCursor()));
+				}
 			} //}}}
 
 			//{{{ mouseDragged() method
@@ -891,7 +894,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 				if(dragStart == null) // can't happen?
 					return;
 
-				setCursor(Cursor.getPredefinedCursor(
+				wm.setCursor(Cursor.getPredefinedCursor(
 					getAppropriateCursor()));
 
 				//{{{ Top...
@@ -923,7 +926,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 			//{{{ mouseExited() method
 			public void mouseExited(MouseEvent evt)
 			{
-				setCursor(Cursor.getPredefinedCursor(
+				wm.setCursor(Cursor.getPredefinedCursor(
 					Cursor.DEFAULT_CURSOR));
 			} //}}}
 

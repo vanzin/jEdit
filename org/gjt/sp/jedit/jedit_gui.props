@@ -697,7 +697,8 @@ view.docking.menu-top=Dock at Top
 view.docking.menu-left=Dock at Left
 view.docking.menu-bottom=Dock at Bottom
 view.docking.menu-right=Dock at Right
-view.docking.menu-clone=Clone
+view.docking.menu-clone=New Floating Instance
+view.docking.menu-close=Close
 view.docking.menu-undock=Undock
 
 view.docking.toggle.label={0} (Toggle)

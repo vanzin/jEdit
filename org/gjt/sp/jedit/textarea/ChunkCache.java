@@ -609,9 +609,14 @@ class ChunkCache
 	//{{{ updateChunksUpTo() method
 	private void updateChunksUpTo(int lastScreenLine)
 	{
+		// this method is a nightmare
+
+		// if one line's chunks are invalid, remaining lines are also
+		// invalid
 		if(lineInfo[lastScreenLine].chunksValid)
 			return;
 
+		// find a valid line closest to the last screen line
 		int firstScreenLine = 0;
 
 		for(int i = lastScreenLine; i >= 0; i--)
@@ -625,15 +630,20 @@ class ChunkCache
 
 		int physicalLine;
 
+		// for the first line displayed, take its physical line to be
+		// the text area's first physical line
 		if(firstScreenLine == 0)
 		{
 			physicalLine = textArea.getFirstPhysicalLine();
 		}
+		// otherwise, determine the next visible line
 		else
 		{
 			int prevPhysLine = lineInfo[
 				firstScreenLine - 1]
 				.physicalLine;
+			// if -1, the empty space at the end of the text area
+			// when the buffer has less lines than are visible
 			if(prevPhysLine == -1)
 				physicalLine = -1;
 			else
@@ -666,14 +676,18 @@ class ChunkCache
 
 			Chunk chunks;
 
+			// get another line of chunks
 			if(out.size() == 0)
 			{
+				// unless this is the first time, increment
+				// the line number
 				if(physicalLine != -1 && i != firstScreenLine)
 				{
 					physicalLine = textArea.displayManager
 						.getNextVisibleLine(physicalLine);
 				}
 
+				// empty space
 				if(physicalLine == -1)
 				{
 					info.chunks = null;
@@ -682,33 +696,50 @@ class ChunkCache
 					continue;
 				}
 
+				// chunk the line.
 				lineToChunkList(physicalLine,out);
 
 				info.firstSubregion = true;
 
+				// if the line has no text, out.size() == 0
 				if(out.size() == 0)
 				{
 					buffer.setScreenLineCount(
 						physicalLine,1);
+					if(i == 0)
+					{
+						if(skew > 0)
+						{
+							Log.log(Log.ERROR,this,"BUG: skew=" + skew + ",out.size()=" + out.size());
+							skew = 0;
+							needFullRepaint = true;
+							lastScreenLine = lineInfo.length - 1;
+						}
+					}
 					chunks = null;
 					offset = 0;
 					length = 1;
 				}
+				// otherwise, the number of subregions
 				else
 				{
 					buffer.setScreenLineCount(
 						physicalLine,out.size());
-					if(skew >= out.size())
+					if(i == 0)
 					{
-						Log.log(Log.ERROR,this,"BUG: skew=" + skew + ",out.size()=" + out.size());
-						skew = 0;
-						needFullRepaint = true;
-						lastScreenLine = lineInfo.length - 1;
-					}
-					else if(skew != 0 && i == firstScreenLine)
-					{
-						for(int j = 0; j < skew; j++)
-							out.remove(0);
+						if(skew >= out.size())
+						{
+							Log.log(Log.ERROR,this,"BUG: skew=" + skew + ",out.size()=" + out.size());
+							skew = 0;
+							needFullRepaint = true;
+							lastScreenLine = lineInfo.length - 1;
+						}
+						else if(skew > 0)
+						{
+							info.firstSubregion = false;
+							for(int j = 0; j < skew; j++)
+								out.remove(0);
+						}
 					}
 					chunks = (Chunk)out.get(0);
 					out.remove(0);
