@@ -35,6 +35,16 @@
 
 void toggleLineComment()
 {
+	/*
+	 * Guard for readonly files becuase Buffer.insert()
+	 * ignores the flag
+	 *
+	 */
+	if(buffer.isReadOnly())
+	{
+		Macros.error(view, "This file is read only.");
+		return;
+	}
 	String getRE(String str)
 	{
 		commentArray = str.toCharArray();
