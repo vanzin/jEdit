@@ -77,11 +77,20 @@ public class KeyEventTranslator
 			if(evt.getKeyChar() == '\b')
 				return null;
 
-			if(System.currentTimeMillis() - KeyEventWorkaround.lastKeyTime < 750
-				&& KeyEventWorkaround.modifiers != 0 && Debug.ALTERNATIVE_DISPATCHER)
+			boolean mod = (System.currentTimeMillis() -
+				KeyEventWorkaround.lastKeyTime < 750
+				&& (KeyEventWorkaround.modifiers != 0
+				|| KeyEventWorkaround.modifiers
+				!= InputEvent.SHIFT_MASK));
+
+			if(mod)
 			{
-				return new Key(modifiersToString(modifiers),
-					0,evt.getKeyChar());
+				if(Debug.ALTERNATIVE_DISPATCHER)
+				{
+					return new Key(
+						modifiersToString(modifiers),
+						0,evt.getKeyChar());
+				}
 			}
 			else
 				return new Key(null,0,evt.getKeyChar());

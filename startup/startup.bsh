@@ -7,7 +7,7 @@
 
 // Print something useful...
 Log.log(Log.DEBUG,scriptPath,"BeanShell interpreter version "
-	+ Interpreter.VERSION);
+	+ this.interpreter.VERSION);
 
 /*{{{ Some useful scripting aids */
 /* If you are a plugin developer you will like this. After calling
@@ -49,15 +49,6 @@ if(jEdit.getPlugin("console.ConsolePlugin") != null)
 
 /*}}}*/
 
-/*{{{ For debugging jEdit 4.2 work-in-progress */
-// PLEASE TELL ME IF YOU NEED TO ENABLE THIS!!!
-//Debug.DISABLE_MONSPACE_HACK = true;
-//Debug.DISABLE_GLYPH_VECTOR = true;
-
-// Slows down scrolling but performs additional checks
-//Debug.VERIFY_FIRST_LINE = true;
-/*}}}*/
-
 /*{{{ Hang on copy/paste workaround */
 
 /* If your Java version has shitty clipboard support you can have jEdit
@@ -72,7 +63,7 @@ if(jEdit.getPlugin("console.ConsolePlugin") != null)
 
 /*}}}*/
 
-/*{{{ Changing meaning of C+, A+, M+ in keyboard shortcuts */
+/*{{{ Remapping modifier keys part I */
 
 /* The below is the default, swap the items around to
  * change meaning of C+, A+, M+, S+.
@@ -89,7 +80,7 @@ if(jEdit.getPlugin("console.ConsolePlugin") != null)
 
 /*}}}*/
 
-/*{{{ Using Option key for keyboard shortcuts on MacOS X */
+/*{{{ Remapping modifier keys part II */
 
 /* Note if you chose to make use of the M+ (option key) prefix on MacOS, you
  * will need to disable a little piece of code: */
