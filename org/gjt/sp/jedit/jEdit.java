@@ -1975,12 +1975,13 @@ public class jEdit
 		addViewToList(newView);
 		EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
-
 		newView.show();
 
 		// show tip of the day
 		if(newView == viewsFirst)
 		{
+			newView.getTextArea().requestFocus();
+
 			// Don't show the welcome message if jEdit was started
 			// with the -nosettings switch
 			if(settingsDirectory != null && getBooleanProperty("firstTime"))
@@ -2047,6 +2048,8 @@ public class jEdit
 		// show tip of the day
 		if(newView == viewsFirst)
 		{
+			newView.getTextArea().requestFocus();
+
 			// Don't show the welcome message if jEdit was started
 			// with the -nosettings switch
 			if(settingsDirectory != null && getBooleanProperty("firstTime"))
