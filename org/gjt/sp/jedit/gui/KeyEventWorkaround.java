@@ -24,7 +24,7 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.event.*;
-import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.Debug;
 //}}}
 
 /**
@@ -129,7 +129,7 @@ public class KeyEventWorkaround
 					}
 				}
 
-				if(OperatingSystem.isMacOS())
+				if(Debug.ALT_KEY_PRESSED_DISABLED)
 				{
 					/* we don't handle key pressed A+ */
 					/* they're too troublesome */
@@ -148,20 +148,12 @@ public class KeyEventWorkaround
 		case KeyEvent.KEY_TYPED:
 			// need to let \b through so that backspace will work
 			// in HistoryTextFields
-			if((ch < 0x20 || ch == 0x7f || ch == 0xff) && ch != '\b')
+			if((ch < 0x20 || ch == 0x7f || ch == 0xff) && ch != '\b' && ch != '\t' && ch != '\n')
 				return null;
 
 			if(System.currentTimeMillis() - lastKeyTime < 750)
 			{
-				// "Alt" is the option key on MacOS, and it can generate
-				// user input
-				if(OperatingSystem.isMacOS())
-				{
-					/* if((modifiers & (InputEvent.CTRL_MASK
-						| InputEvent.META_MASK)) != 0)
-						return null; */
-				}
-				else
+				if(!Debug.ALTERNATIVE_DISPATCHER)
 				{
 					if((modifiers & InputEvent.CTRL_MASK) != 0
 						^ (modifiers & InputEvent.ALT_MASK) != 0

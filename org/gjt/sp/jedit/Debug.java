@@ -22,6 +22,8 @@
 
 package org.gjt.sp.jedit;
 
+import org.gjt.sp.jedit.Debug;
+
 /**
  * This class contains various debugging flags mainly useful for core
  * development.
@@ -103,4 +105,18 @@ public class Debug
 	 * Logs messages when BeanShell code is evaluated.
 	 */
 	public static boolean BEANSHELL_DEBUG = false;
+
+	/**
+	 * If true, an alternative dispatcher using key typed events will be
+	 * used to handle a modifier key press in conjunction with an alphabet
+	 * key. <b>On by default on MacOS.</b>
+	 */
+	public static boolean ALTERNATIVE_DISPATCHER = OperatingSystem.isMacOS();
+
+	/**
+	 * If true, A+ shortcuts are disabled. If you use this, you should also
+	 * remap the the modifiers so that A+ is actually something else.
+	 * <b>On by default on MacOS.</b>
+	 */
+	public static boolean ALT_KEY_PRESSED_DISABLED = OperatingSystem.isMacOS();
 }

@@ -204,11 +204,7 @@ public class DefaultInputHandler extends InputHandler
 
 		if(keyStroke.modifiers != null)
 		{
-			if(keyStroke.key == KeyEvent.VK_SPACE)
-			{
-				return;
-			}
-			else if(readNextChar != null)
+			if(readNextChar != null)
 			{
 				if(keyStroke.key == KeyEvent.VK_ESCAPE)
 				{
@@ -227,6 +223,17 @@ public class DefaultInputHandler extends InputHandler
 			else
 			{
 				// ok even with no modifiers
+			}
+		}
+		else
+		{
+			// no modifiers, so ditch certain events handled in
+			// keyTyped
+			if(keyStroke.key == KeyEvent.VK_SPACE
+				|| keyStroke.key == KeyEvent.VK_ENTER
+				|| keyStroke.key == KeyEvent.VK_TAB)
+			{
+				return;
 			}
 		}
 
@@ -297,6 +304,8 @@ public class DefaultInputHandler extends InputHandler
 	public void keyTyped(KeyEvent evt)
 	{
 		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
+		if(keyStroke == null)
+			return;
 
 		if(readNextChar != null)
 		{
@@ -304,6 +313,18 @@ public class DefaultInputHandler extends InputHandler
 			invokeReadNextChar(keyStroke.input);
 			repeatCount = 1;
 			return;
+		}
+
+		char input = keyStroke.input;
+
+		switch(keyStroke.input)
+		{
+		case KeyEvent.VK_SPACE: /* == ' '  */
+		case KeyEvent.VK_ENTER: /* == '\n' */
+		case KeyEvent.VK_TAB:   /* == '\t' */
+		System.err.println("special");
+			keyStroke.key = keyStroke.input;
+			keyStroke.input = '\0';
 		}
 
 		Object o = currentBindings.get(keyStroke);
@@ -325,7 +346,7 @@ public class DefaultInputHandler extends InputHandler
 		else
 		{
 			setCurrentBindings(bindings);
-			userInput(keyStroke.input);
+			userInput(input);
 		}
 	} //}}}
 
@@ -481,7 +502,7 @@ public class DefaultInputHandler extends InputHandler
 		while(st.hasMoreTokens())
 		{
 			String keyCodeStr = st.nextToken();
-			KeyStroke keyStroke = parseKeyStroke(keyCodeStr);
+			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
 			if(keyStroke == null)
 				return;
 
