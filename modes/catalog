@@ -283,7 +283,7 @@
 
 <MODE NAME="rest"		FILE="rest.xml"
 				FILE_NAME_GLOB="*.{rst,rest}"
-				FIRST_LINE_GLOB="{===,~~~,---,+++}*"/>
+				FIRST_LINE_GLOB="{===,~~~}*"/>
 
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
