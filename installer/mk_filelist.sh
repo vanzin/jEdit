@@ -33,6 +33,7 @@ echo unlaunch.exe >> installer/jedit-windows
 echo jedinstl.dll >> installer/jedit-windows
 echo jeservps.dll >> installer/jedit-windows
 echo jedidiff.exe >> installer/jedit-windows
+echo jEdit_IE.reg.txt >> installer/jedit-windows
 
 echo -n "jedit-windows: "
 ls -l `cat installer/jedit-windows` | awk 'BEGIN { size=0 } { disk_size+=(int($5/4096+1)*4); size+=$5/1024 } END { print disk_size " " size }'

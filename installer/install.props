@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=4.0pre8
+app.version=4.0pre9
 
 # Info to display on first page of installer
 app.readme=readme.html

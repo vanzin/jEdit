@@ -24,6 +24,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.zip.GZIPInputStream;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.*;
 
@@ -49,7 +50,7 @@ class PluginList
 		parser.setHandler(handler);
 
 		parser.parse(null,null,new BufferedReader(new InputStreamReader(
-			new URL(path).openStream(),"UTF8")));
+			new GZIPInputStream(new URL(path).openStream()),"UTF8")));
 	}
 
 	void addPlugin(Plugin plugin)
