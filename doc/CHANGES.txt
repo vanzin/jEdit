@@ -39,6 +39,21 @@ Thanks to Ryan Fowler and Ryan Grove for contributing to this release.
 
   - Various bug fixes and optimizations.
 
+- Actions and dockables are now invoked in their own temporary
+  namespace. This prevents memory leaks in code like this:
+
+  antfarm = wm.getDockable("antfarm");
+  antfarm.foo();
+  // reference to 'antfarm' remains in global namespace, possibly
+  // after the dockable is closed
+
+}}}
+{{{ User Interface
+
+- Removed the "synchronized scrolling" option which hasn't actually
+  worked since 4.2pre1 or 4.2pre2. If you liked this feature, you can
+  write a plugin that does the same thing pretty easily.
+
 }}}
 {{{ Optimizations
 
@@ -55,6 +70,18 @@ Thanks to Ryan Fowler and Ryan Grove for contributing to this release.
 
 - Regular expression replace didn't work with certain regular
   expressions.
+
+- When deep indent is on, indentation of code like this is handled a bit
+  better:
+
+  if(foo
+     bar)
+  {
+
+  However it is still not 100% correct.
+
+- Added an option for the "deep indent" setting to the Editing option
+  pane.
 
 }}}
 {{{ API Changes

@@ -1272,15 +1272,6 @@
 	</IS_SELECTED>
 </ACTION>
 
-<ACTION NAME="toggle-synchro-scroll">
-	<CODE>
-		view.toggleSynchroScrollEnabled();
-	</CODE>
-	<IS_SELECTED>
-		return view.isSynchroScrollEnabled();
-	</IS_SELECTED>
-</ACTION>
-
 <ACTION NAME="toggle-word-wrap">
 	<CODE>
 		buffer.toggleWordWrap(view);

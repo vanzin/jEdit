@@ -70,10 +70,12 @@ public class BeanShellAction extends EditAction
 			if(cachedCode == null)
 			{
 				String cachedCodeName = "action_" + sanitizedName;
-				cachedCode = BeanShell.cacheBlock(cachedCodeName,code,false);
+				cachedCode = BeanShell.cacheBlock(cachedCodeName,code,true);
 			}
 
-			BeanShell.runCachedBlock(cachedCode,view,null);
+			BeanShell.runCachedBlock(cachedCode,view,
+				new NameSpace(BeanShell.getNameSpace(),
+				"BeanShellAction.invoke()"));
 		}
 		catch(Throwable e)
 		{
@@ -97,7 +99,7 @@ public class BeanShellAction extends EditAction
 			{
 				String cachedIsSelectedName = "selected_" + sanitizedName;
 				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-					isSelected,false);
+					isSelected,true);
 			}
 
 			View view = GUIUtilities.getView(comp);
@@ -107,7 +109,9 @@ public class BeanShellAction extends EditAction
 			global.setVariable("_comp",comp);
 
 			return Boolean.TRUE.equals(BeanShell.runCachedBlock(
-				cachedIsSelected,view,null));
+				cachedIsSelected,view,
+				new NameSpace(BeanShell.getNameSpace(),
+				"BeanShellAction.isSelected()")));
 		}
 		catch(Throwable e)
 		{

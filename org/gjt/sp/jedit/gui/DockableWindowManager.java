@@ -452,11 +452,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	//{{{ Factory class
 	static class Factory
 	{
-		// we assume dockable window code is not called
-		// recursively...
-		private static NameSpace nameSpace = new NameSpace(
-			BeanShell.getNameSpace(),"dockable window");
-
 		PluginJAR plugin;
 		String name;
 		String code;
@@ -523,9 +518,13 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				return null;
 			}
 
+			NameSpace nameSpace = new NameSpace(
+				BeanShell.getNameSpace(),
+				"DockableWindowManager.Factory"
+				+ ".createDockableWindow()");
 			try
 			{
-				BeanShell.getNameSpace().setVariable(
+				nameSpace.setVariable(
 					"position",position);
 			}
 			catch(UtilEvalError e)
