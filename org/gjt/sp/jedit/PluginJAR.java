@@ -210,12 +210,19 @@ public class PluginJAR
 		int i = 0;
 
 		boolean ok = true;
+		boolean optional = false;
 
 		String name = plugin.getClassName();
 
 		String dep;
 		while((dep = jEdit.getProperty("plugin." + name + ".depend." + i++)) != null)
 		{
+			if(dep.startsWith("optional "))
+			{
+				optional = true;
+				dep = dep.substring("optional ".length());
+			}
+
 			int index = dep.indexOf(' ');
 			if(index == -1)
 			{
@@ -230,7 +237,7 @@ public class PluginJAR
 
 			if(what.equals("jdk"))
 			{
-				if(MiscUtilities.compareStrings(
+				if(!optional && MiscUtilities.compareStrings(
 					System.getProperty("java.version"),
 					arg,false) < 0)
 				{
@@ -249,7 +256,7 @@ public class PluginJAR
 					ok = false;
 				}
 
-				if(MiscUtilities.compareStrings(
+				if(!optional && MiscUtilities.compareStrings(
 					jEdit.getBuild(),arg,false) < 0)
 				{
 					String needs = MiscUtilities.buildToVersion(arg);
@@ -280,28 +287,37 @@ public class PluginJAR
 				EditPlugin plugin = jEdit.getPlugin(pluginName);
 				if(plugin == null)
 				{
-					String[] args = { needVersion,
-						pluginName };
-					jEdit.pluginError(path,
-						"plugin-error.dep-plugin.no-version",
-						args);
-					ok = false;
+					if(!optional)
+					{
+						String[] args = { needVersion,
+							pluginName };
+						jEdit.pluginError(path,
+							"plugin-error.dep-plugin.no-version",
+							args);
+						ok = false;
+					}
 				}
 				else if(MiscUtilities.compareStrings(
 					currVersion,needVersion,false) < 0)
 				{
-					String[] args = { needVersion,
-						pluginName, currVersion };
-					jEdit.pluginError(path,
-						"plugin-error.dep-plugin",args);
-					ok = false;
+					if(!optional)
+					{
+						String[] args = { needVersion,
+							pluginName, currVersion };
+						jEdit.pluginError(path,
+							"plugin-error.dep-plugin",args);
+						ok = false;
+					}
 				}
 				else if(plugin instanceof EditPlugin.Broken)
 				{
-					String[] args = { pluginName };
-					jEdit.pluginError(path,
-						"plugin-error.dep-plugin.broken",args);
-					ok = false;
+					if(!optional)
+					{
+						String[] args = { pluginName };
+						jEdit.pluginError(path,
+							"plugin-error.dep-plugin.broken",args);
+						ok = false;
+					}
 				}
 				else
 				{
@@ -312,16 +328,19 @@ public class PluginJAR
 			}
 			else if(what.equals("class"))
 			{
-				try
+				if(!optional)
 				{
-					classLoader.loadClass(arg,false);
-				}
-				catch(Exception e)
-				{
-					String[] args = { arg };
-					jEdit.pluginError(path,
-						"plugin-error.dep-class",args);
-					ok = false;
+					try
+					{
+						classLoader.loadClass(arg,false);
+					}
+					catch(Exception e)
+					{
+						String[] args = { arg };
+						jEdit.pluginError(path,
+							"plugin-error.dep-class",args);
+						ok = false;
+					}
 				}
 			}
 			else

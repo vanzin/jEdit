@@ -36,6 +36,18 @@
                         <END>\fi</END>
                 </SPAN>
 
+		<!-- \begin{verbatim} ... \end{verbatim} -->
+                <SPAN TYPE="KEYWORD1" DELEGATE="VERBATIM">
+                        <BEGIN>\begin{verbatim}</BEGIN>
+                        <END>\end{verbatim}</END>
+                </SPAN>
+
+		<!-- \verb|sometext| -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="VERBATIM"
+			NO_LINE_BREAK="TRUE">
+                        <BEGIN>\verb|</BEGIN>
+                        <END>|</END>
+                </SPAN>
 		<!-- \... commands -->
 		<MARK_FOLLOWING TYPE="KEYWORD1">\</MARK_FOLLOWING>
 
@@ -89,4 +101,6 @@
 		<!-- comments -->
 		<EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
 	</RULES>
+
+	<RULES SET="VERBATIM" DEFAULT="NULL" />
 </MODE>

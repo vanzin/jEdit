@@ -3,6 +3,7 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- splash colors off
 - VFS browser pathsEqual(): case sensitivity!
 - fix revalidate OS X
 - first line problem solved by reset()
@@ -32,7 +33,6 @@ it is done in most text editors
 - option to disable context menu
 - plugin mgr inspection of not-loaded plugins
 - history text field tweak
-- optional dependencies
 - tall caret and tab
 - printing: check default printer setting
 - "downloading plugin list" label in plugin manager
@@ -42,6 +42,7 @@ it is done in most text editors
 
 + docs:
 
+- document optional dependencies
 - 2-stage save and hardlinks
 - add note that regexp matching does not cross newlines in token marker
 - add note to documentation about exponential-time regexps

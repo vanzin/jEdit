@@ -1058,7 +1058,10 @@ public class jEdit
 
 		EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED,false));
 		if(!isMainThread())
+		{
 			EditBus.send(new DynamicMenuChanged("plugins"));
+			initKeyBindings();
+		}
 	} //}}}
 
 	//{{{ addPluginJARsFromDirectory() method
