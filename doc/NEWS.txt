@@ -93,6 +93,9 @@ some of the more noteworthy ones are:
 - jEdit Frequently Asked Questions document, by John Gellene, is now
   included as part of the online help.
 
+- BeanShell 1.2b5 is included; this version fixes a number of bugs
+  present in 1.2b1 (which was bundled with jEdit 3.2.2).
+
 - jEdit now has better support for Java 2 version 1.4.
 
 And of course, there is much, much more; see the CHANGES.txt file for a

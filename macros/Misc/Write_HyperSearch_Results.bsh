@@ -45,7 +45,7 @@ void writeHyperSearchResults()
 {
     title = "Write HyperSearch results";
     hsearch = view.getDockableWindowManager()
-        .getDockableWindow("hypersearch-results");
+        .getDockable("hypersearch-results");
     if(hsearch == null)
     {
         JOptionPane.showMessageDialog(view,
