@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- out of sync scroll
+- expandFolds is broken
 - "need repaint" line info flags & chunk cache handling invalidation
   - if caret is at the end of a buffer when doing a replace all, a lot of
     repaint() and getLineOfOffset() calls are made, however this doesn't

@@ -22,8 +22,10 @@
 
 package org.gjt.sp.jedit;
 
-import java.util.Vector;
+import javax.swing.JMenuItem;
+import java.util.*;
 import java.util.zip.ZipFile;
+import org.gjt.sp.jedit.gui.EnhancedMenu;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.util.Log;
 
@@ -208,6 +210,45 @@ public abstract class EditPlugin
 	public EditPlugin.JAR getJAR()
 	{
 		return jar;
+	} //}}}
+
+	//{{{ createMenuItems() method
+	/**
+	 * Loads menu items from the
+	 * <code>plugin.<i>class name</i>.menu</code> property.<p>
+	 *
+	 * If this
+	 * property only lists one menu item, then this item is returned;
+	 * otherwise the multiple items are placed inside a single menu
+	 * with the plugin's name as the label, and this menu is returned.<p>
+	 *
+	 * If the property is not defined, this method returns null.<p>
+	 *
+	 * Do not override this method; define the above mentioned property
+	 * instead.
+	 *
+	 * @since jEdit 4.2pre1
+	 */
+	public JMenuItem createMenuItems()
+	{
+		if(this instanceof Broken)
+			return null;
+
+		String menuItemName = jEdit.getProperty("plugin." +
+			getClassName() + ".menu-item");
+		if(menuItemName != null)
+			return GUIUtilities.loadMenuItem(menuItemName);
+
+		String menuItemNames = jEdit.getProperty("plugin." +
+			getClassName() + ".menu");
+		if(menuItemNames != null)
+		{
+			String pluginName = jEdit.getProperty("plugin." +
+				getClassName() + ".name");
+			return new EnhancedMenu(menuItemNames,pluginName);
+		}
+
+		return null;
 	} //}}}
 
 	//{{{ Broken class

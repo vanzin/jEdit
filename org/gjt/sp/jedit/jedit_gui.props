@@ -175,8 +175,6 @@ file=new-file \
 file.label=$File
 new-file.label=$New
 open-file.label=$Open...
-recent-files.label=Recent Files
-no-recent-files.label=No Recent Files
 insert-file.label=$Insert...
 reload.label=$Reload
 reload-all.label=Reloa$d All...
@@ -191,6 +189,13 @@ page-setup.label=Pa$ge Setup...
 # Print selection not yet implemented
 #print-selection.label=Prin$t Selection...
 exit.label=E$xit
+
+#{{{ Recent Files menu
+recent-files.custom-menu=new RecentFilesMenu()
+recent-files.label=Recent Files
+no-recent-files.label=No Recent Files
+#}}}
+
 #}}}
 
 #{{{ Edit menu
@@ -531,15 +536,33 @@ utils=vfs.browser \
       global-options
 utils.label=$Utilities
 vfs.browser.label=$File System Browser
-recent-directories.label=$Recent Directories
-current-directory.label=$Current Directory
-no-recent-dirs.label=No Recent Directories
-jedit-directory.label=$jEdit Home Directory
-settings-directory.label=$Settings Directory
 action-bar.label=$Action Bar
 last-action.label=Re$peat Last Action
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
+
+#{{{ Recent Directories menu
+recent-directories.label=$Recent Directories
+recent-directories.custom-menu=new RecentDirectoriesMenu()
+no-recent-dirs.label=No Recent Directories
+#}}}
+
+#{{{ Current Directory menu
+current-directory.label=$Current Directory
+current-directory.custom-menu=new DirectoryMenu("current-directory",null)
+#}}}
+
+#{{{ jEdit Home Directory menu
+jedit-directory.label=$jEdit Home Directory
+jedit-directory.custom-menu=new DirectoryMenu("jedit-directory",jEdit.getJEditHome())
+#}}}
+
+#{{{ Settings Directory menu
+settings-directory.label=$Settings Directory
+settings-directory.custom-menu=settings = jEdit.getSettingsDirectory(); \
+	if(settings == null) settings = jEdit.getJEditHome(); \
+	new DirectoryMenu("settings-directory",settings);
+#}}}
 
 #{{{ BeanShell menu
 beanshell=eval \
@@ -580,6 +603,7 @@ macros=record-macro \
        run-other-macro \
        rescan-macros \
        -
+macros.custom-menu=new MacrosMenu()
 macros.label=Ma$cros
 record-macro.label=$Record Macro...
 record-temp-macro.label=Record $Temporary Macro

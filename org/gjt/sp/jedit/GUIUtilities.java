@@ -176,25 +176,15 @@ public class GUIUtilities
 	 */
 	public static JMenu loadMenu(String name)
 	{
-		if(name.equals("recent-files"))
-			return new RecentFilesMenu();
-		else if(name.equals("recent-directories"))
-			return new RecentDirectoriesMenu();
-		else if(name.equals("current-directory"))
-			return new DirectoryMenu("current-directory",null);
-		else if(name.equals("markers"))
-			return new MarkersMenu();
-		else if(name.equals("jedit-directory"))
-			return new DirectoryMenu("jedit-directory",jEdit.getJEditHome());
-		else if(name.equals("settings-directory"))
+		String customMenu = jEdit.getProperty(name + ".custom-menu");
+		if(customMenu != null)
 		{
-			String settings = jEdit.getSettingsDirectory();
-			if(settings == null)
-				settings = jEdit.getJEditHome();
-			return new DirectoryMenu("settings-directory",settings);
+			Object eval = BeanShell.eval(null,BeanShell.getNameSpace(),customMenu);
+			if(eval instanceof JMenu)
+				return (JMenu)eval;
+			else
+				return null;
 		}
-		else if(name.equals("macros"))
-			return new MacrosMenu();
 		else
 			return new EnhancedMenu(name);
 	} //}}}
@@ -219,12 +209,7 @@ public class GUIUtilities
 				if(menuItemName.equals("-"))
 					menu.addSeparator();
 				else
-				{
-					if(menuItemName.startsWith("%"))
-						menu.add(loadMenu(menuItemName.substring(1)));
-					else
-						menu.add(loadMenuItem(menuItemName,false));
-				}
+					menu.add(loadMenuItem(menuItemName,false));
 			}
 		}
 
@@ -255,6 +240,9 @@ public class GUIUtilities
 	 */
 	public static JMenuItem loadMenuItem(String name, boolean setMnemonic)
 	{
+		if(name.startsWith("%"))
+			return loadMenu(name.substring(1));
+
 		EditAction action = jEdit.getAction(name);
 		String label = (action == null ?
 			jEdit.getProperty(name + ".label")
@@ -1256,18 +1244,26 @@ public class GUIUtilities
 		EditPlugin[] pluginArray = jEdit.getPlugins();
 		for(int i = 0; i < pluginArray.length; i++)
 		{
-			try
+			EditPlugin plugin = pluginArray[i];
+
+			JMenuItem menuItem = plugin.createMenuItems();
+			if(menuItem != null)
+				pluginMenuItems.add(menuItem);
+			//{{{ old API
+			else
 			{
-				EditPlugin plugin = pluginArray[i];
-				plugin.createMenuItems(pluginMenuItems);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,GUIUtilities.class,
-					"Error creating menu items"
-					+ " for plugin");
-				Log.log(Log.ERROR,GUIUtilities.class,t);
-			}
+				try
+				{
+					plugin.createMenuItems(pluginMenuItems);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,GUIUtilities.class,
+						"Error creating menu items"
+						+ " for plugin");
+					Log.log(Log.ERROR,GUIUtilities.class,t);
+				}
+			} //}}}
 		}
 
 		JMenu menu = new EnhancedMenu("plugins");
