@@ -11,7 +11,8 @@ echo startup/README.txt >> installer/jedit-program
 echo startup/*.bsh >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 echo modes/catalog >> installer/jedit-program
-find doc -type f -name \*.txt >> installer/jedit-program
+find doc \( -name \*.txt -o -name \*.html -o -name \*.gif \) >> installer/jedit-program
+find doc -name toc.xml >> installer/jedit-program
 
 echo -n "jedit-program: "
 ls -l `cat installer/jedit-program` | awk 'BEGIN { size=0 } { disk_size+=(int($5/8192+1)*8); size+=$5/1024 } END { print disk_size " " size }'

@@ -1,6 +1,9 @@
 /*
  * TipOfTheDay.java - Tip of the day window
- * Copyright (C) 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,132 +22,146 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.Random;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 public class TipOfTheDay extends EnhancedDialog
 {
+	//{{{ TipOfTheDay constructor
 	public TipOfTheDay(View view)
 	{
 		super(view,jEdit.getProperty("tip.title"),false);
-		setContentPane(new TipPanel());
+
+		JPanel content = new JPanel(new BorderLayout(12,12));
+		content.setBorder(new EmptyBorder(12,12,12,12));
+		setContentPane(content);
+
+		JLabel label = new JLabel(jEdit.getProperty("tip.caption"));
+		label.setFont(new Font("SansSerif",Font.PLAIN,24));
+		label.setForeground(UIManager.getColor("Button.foreground"));
+		content.add(BorderLayout.NORTH,label);
+
+		tipText = new JEditorPane();
+		tipText.setEditable(false);
+		tipText.setContentType("text/html");
+
+		nextTip();
+
+		JScrollPane scroller = new JScrollPane(tipText);
+		scroller.setPreferredSize(new Dimension(150,150));
+		content.add(BorderLayout.CENTER,scroller);
+
+		ActionHandler actionHandler = new ActionHandler();
+
+		Box buttons = new Box(BoxLayout.X_AXIS);
+
+		showNextTime = new JCheckBox(jEdit.getProperty("tip.show-next-time"),
+			jEdit.getBooleanProperty("tip.show"));
+		showNextTime.addActionListener(actionHandler);
+		buttons.add(showNextTime);
+
+		buttons.add(Box.createHorizontalStrut(6));
+		buttons.add(Box.createGlue());
+
+		nextTip = new JButton(jEdit.getProperty("tip.next-tip"));
+		nextTip.addActionListener(actionHandler);
+		buttons.add(nextTip);
+
+		buttons.add(Box.createHorizontalStrut(6));
+
+		close = new JButton(jEdit.getProperty("common.close"));
+		close.addActionListener(actionHandler);
+		buttons.add(close);
+		content.getRootPane().setDefaultButton(close);
+
+		Dimension dim = nextTip.getPreferredSize();
+		dim.width = Math.max(dim.width,close.getPreferredSize().width);
+		nextTip.setPreferredSize(dim);
+		close.setPreferredSize(dim);
+
+		content.add(BorderLayout.SOUTH,buttons);
+
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(view);
 		show();
-	}
+	} //}}}
 
+	//{{{ ok() method
 	public void ok()
 	{
 		dispose();
-	}
+	} //}}}
 
+	//{{{ cancel() method
 	public void cancel()
 	{
 		dispose();
-	}
+	} //}}}
 
-	class TipPanel extends JPanel
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private JCheckBox showNextTime;
+	private JButton nextTip, close;
+	private JEditorPane tipText;
+	private int currentTip = -1;
+	//}}}
+
+	//{{{ nextTip() method
+	private void nextTip()
 	{
-		TipPanel()
+		File[] tips = new File(MiscUtilities.constructPath(
+			jEdit.getJEditHome(),"doc","tips")).listFiles();
+		if(tips == null || tips.length == 0)
 		{
-			super(new BorderLayout(12,12));
-			setBorder(new EmptyBorder(12,12,12,12));
-
-			JLabel label = new JLabel(jEdit.getProperty("tip.caption"));
-			label.setFont(new Font("SansSerif",Font.PLAIN,24));
-			label.setForeground(UIManager.getColor("Button.foreground"));
-			TipPanel.this.add(BorderLayout.NORTH,label);
-
-			tipText = new JEditorPane();
-			tipText.setEditable(false);
-			tipText.setContentType("text/html");
-
-			nextTip();
-
-			JScrollPane scroller = new JScrollPane(tipText);
-			scroller.setPreferredSize(new Dimension(150,150));
-			TipPanel.this.add(BorderLayout.CENTER,scroller);
-
-			ActionHandler actionHandler = new ActionHandler();
-
-			Box buttons = new Box(BoxLayout.X_AXIS);
-
-			showNextTime = new JCheckBox(jEdit.getProperty("tip.show-next-time"),
-				jEdit.getBooleanProperty("tip.show"));
-			showNextTime.addActionListener(actionHandler);
-			buttons.add(showNextTime);
-
-			buttons.add(Box.createHorizontalStrut(6));
-			buttons.add(Box.createGlue());
-
-			nextTip = new JButton(jEdit.getProperty("tip.next-tip"));
-			nextTip.addActionListener(actionHandler);
-			buttons.add(nextTip);
-
-			buttons.add(Box.createHorizontalStrut(6));
-
-			close = new JButton(jEdit.getProperty("common.close"));
-			close.addActionListener(actionHandler);
-			buttons.add(close);
-			TipOfTheDay.this.getRootPane().setDefaultButton(close);
-
-			Dimension dim = nextTip.getPreferredSize();
-			dim.width = Math.max(dim.width,close.getPreferredSize().width);
-			nextTip.setPreferredSize(dim);
-			close.setPreferredSize(dim);
-
-			TipPanel.this.add(BorderLayout.SOUTH,buttons);
+			tipText.setText(jEdit.getProperty("tip.not-found"));
+			return;
 		}
 
-		// private members
-		private JCheckBox showNextTime;
-		private JButton nextTip, close;
-		private JEditorPane tipText;
-		private int currentTip = -1;
+		int count = tips.length;
 
-		private void nextTip()
+		// so that we don't see the same tip again if the user
+		// clicks 'Next Tip'
+		int tipToShow = currentTip;
+		while(tipToShow == currentTip)
+			tipToShow = Math.abs(new Random().nextInt()) % count;
+		try
 		{
-			int count = jEdit.getIntegerProperty("tip.count",0);
-			// so that we don't see the same tip again if the user
-			// clicks 'Next Tip'
-			int tipToShow = currentTip;
-			while(tipToShow == currentTip)
-				tipToShow = Math.abs(new Random().nextInt()) % count;
-			try
-			{
-				tipText.setPage(TipOfTheDay.class.getResource(
-					"/org/gjt/sp/jedit/tips/tip"
-					+ tipToShow + ".html"));
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,e);
-			}
+			tipText.setPage(tips[tipToShow].toURL());
 		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,e);
+		}
+	} //}}}
 
-		class ActionHandler implements ActionListener
+	//}}}
+
+	//{{{ ActionHandler class
+	class ActionHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
 		{
-			public void actionPerformed(ActionEvent evt)
+			Object source = evt.getSource();
+			if(source == showNextTime)
 			{
-				Object source = evt.getSource();
-				if(source == showNextTime)
-				{
-					jEdit.setBooleanProperty("tip.show",showNextTime
-						.isSelected());
-				}
-				else if(source == nextTip)
-					nextTip();
-				else if(source == close)
-					dispose();
+				jEdit.setBooleanProperty("tip.show",showNextTime
+					.isSelected());
 			}
+			else if(source == nextTip)
+				nextTip();
+			else if(source == close)
+				dispose();
 		}
-	}
+	} //}}}
 }

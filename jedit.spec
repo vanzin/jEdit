@@ -12,13 +12,13 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 4.0pre2
+Version: 4.0pre4
 Release: 1
 # REMIND: bump this with each RPM
-Serial: 24
+Serial: 25
 Copyright: GPL
 Group: Applications/Editors
-Source0: http://prdownloads.sourceforge.net/jedit/jedit40pre1source.tar.gz
+Source0: http://prdownloads.sourceforge.net/jedit/jedit40pre4source.tar.gz
 Source1: jedit.sh.in
 URL: http://www.jedit.org
 Vendor: Slava Pestov <slava@jedit.org>
@@ -28,11 +28,14 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-root
 
 %description
 jEdit is an Open Source, cross platform text editor written in Java. It
-has many advanced features that make text editing easier, such as syntax
-highlighting, auto indent, abbreviation expansion, registers, macros,
-regular expressions, and multiple file search and replace.
+has an extensive feature set that includes syntax highlighting, auto indent,
+folding, word wrap, abbreviation expansion, multiple clipboards, powerful search
+and replace, and much more.
 
-jEdit requires Java 2 (or Java 1.1 with Swing 1.1) in order to work.
+Futhermore, jEdit is extremely customizable, and extensible, using either macros
+written in the BeanShell scripting language, or plugins written in Java.
+
+jEdit requires Java 2 version 1.3.
 
 %prep
 %setup -n jEdit
@@ -48,9 +51,6 @@ ant
 
 # Build LatestVersion.jar
 (cd jars/LatestVersion && ant)
-
-# Build Firewall.jar
-(cd jars/Firewall && ant)
 
 # Create installer filelists
 sh installer/mk_filelist.sh
@@ -72,6 +72,5 @@ chmod +x $RPM_BUILD_ROOT%{_bindir}/jedit
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
 
 %files
-%doc doc/*.txt
 %{_bindir}/jedit
 %{_datadir}/jedit/%{version}

@@ -987,23 +987,21 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		public void paintInvalidLine(Graphics2D gfx, int screenLine, int y)
 		{
-			if(!textArea.wrapToWidth && textArea.maxLineLen != 0
+			if(!textArea.wrapToWidth && textArea.wrapMargin != 0
 				&& isWrapGuidePainted())
 			{
 				gfx.setColor(getWrapGuideColor());
-				int x = textArea.getHorizontalOffset();
-				gfx.drawLine(x + textArea.maxLineLen,y,
-					x + textArea.maxLineLen,
-					y + fm.getHeight());
+				int x = textArea.getHorizontalOffset() + textArea.wrapMargin;
+				gfx.drawLine(x,y,x,y + fm.getHeight());
 			}
 		}
 
 		public String getToolTipText(int x, int y)
 		{
-			if(!textArea.wrapToWidth && textArea.maxLineLen != 0
+			if(!textArea.wrapToWidth && textArea.wrapMargin != 0
 				&& isWrapGuidePainted())
 			{
-				int wrapGuidePos = textArea.maxLineLen
+				int wrapGuidePos = textArea.wrapMargin
 					+ textArea.getHorizontalOffset();
 				if(Math.abs(x - wrapGuidePos) < 5)
 				{
@@ -1043,7 +1041,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			// Hack!!! Since there is no fast way to get the character
 			// from the bracket matching routine, we use ( since all
 			// brackets probably have the same width anyway
-			gfx.drawRect(returnValue.x,y,fm.charWidth('(') - 1,
+			gfx.drawRect(returnValue.x,y,(int)gfx.getFont().getStringBounds(
+				"(",getFontRenderContext()).getWidth() - 1,
 				fm.getHeight() - 1);
 		}
 	} //}}}

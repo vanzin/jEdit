@@ -356,7 +356,9 @@
     Open files in the file list have a vertical black bar next to their icon.
     Single-clicking an open file will select the appropriate buffer in the current
     view. Unopened files can be opened for editing by double-clicking (or by
-    clicking the middle mouse button).
+    clicking the middle mouse button). If you hold down <keycap>Shift</keycap>
+    while double-clicking (or middle-clicking), the file will be opened in a new
+    view.
    </para>
    <para>
     Clicking a file or directory with the right mouse button displays a popup

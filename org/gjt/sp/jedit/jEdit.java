@@ -1776,13 +1776,22 @@ public class jEdit
 				return;
 		}
 
+		Buffer current = view.getBuffer();
+
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
 		{
 			if(buffer.isDirty())
+			{
+				if(buffer.isNewFile())
+					view.setBuffer(buffer);
 				buffer.save(view,null,true);
+			}
+
 			buffer = buffer.next;
 		}
+
+		view.setBuffer(current);
 	} //}}}
 
 	//{{{ reloadAllBuffers() method

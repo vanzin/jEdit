@@ -171,45 +171,6 @@
    with the inserted text.
   </para>
   <para>
-   Inserting text at the end of a line beyond the wrap column will
-   automatically break the line
-   at the appropriate word boundary. The wrap column is indicated in the
-   text area as a faint blue line and its location (specified in number of
-   character positions from the left margin) can be changed in one of
-   several ways:
-  </para>
-  <itemizedlist>
-   <listitem><para>On a global or mode-specific
-   basis in the
-   <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
-   of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="global-opts" />.</para></listitem>
-   <listitem><para>In the current buffer
-   for the duration of the editing session in the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
-   dialog box; see <xref linkend="buffer-opts" />.
-   </para></listitem>
-   <listitem><para>In the current buffer
-   for future editing sessions by placing
-   the following in one of the first 10 lines of the buffer, where
-   <replaceable>column</replaceable> is the desired wrap column position:
-   </para>
-   <screen>:maxLineLen=<replaceable>column</replaceable>:</screen>
-   </listitem>
-  </itemizedlist>
-  <para>
-   To disable word wrap completely, set the wrap column to 0 using any of the
-   above means.
-  </para>
-  <note>
-   <para>
-    Word wrap is implemented using character offsets, not screen
-    positions, so it might not behave like you expect if a
-    proportional-width font is being used. For information about
-    changing the font used in the text area, see <xref linkend="global-opts" />.
-   </para>
-  </note>
-  <para>
    When inserting text, keep in mind that the <keycap>Tab</keycap> and
    <keycap>Enter</keycap> keys might
    not behave entirely like you expect because  of various indentation
@@ -396,6 +357,60 @@
    <xref linkend="entering-text" /> for information and word wrap and
    changing the wrap column.
   </para>
+ </sect1>
+ <sect1 id="word-wrap"><title>Word Wrap</title>
+  <para>
+   The <quote>Word wrap</quote> splits lines of text at word boundaries in
+   order for the text to fit within a specified wrap margin. The wrap margin
+   position is indicated in the text are as a faint blue vertical line.
+   Two wrap modes are available; "soft" and "hard". These two modes are
+   described below. The wrap mode and wrap
+   column location can be changed in one of several ways:
+  </para>
+  <itemizedlist>
+   <listitem><para>On a global or mode-specific
+   basis in the
+   <guibutton>Editing</guibutton> and <guibutton>Mode-Specific</guibutton> panes
+   of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.</para></listitem>
+   <listitem><para>In the current buffer
+   for the duration of the editing session in the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+   dialog box; see <xref linkend="buffer-opts" />.
+   </para></listitem>
+   <listitem><para>In the current buffer
+   for future editing sessions by placing
+   the following in one of the first 10 lines of the buffer, where
+   <replaceable>mode</replaceable> is either <quote>soft</quote> or
+   <quote>hard</quote>, and
+   <replaceable>column</replaceable> is the desired wrap margin position:
+   </para>
+   <screen>:wrap=<replaceable>mode</replaceable>:maxLineLen=<replaceable>column</replaceable>:</screen>
+   </listitem>
+  </itemizedlist>
+  <sect2><title>Soft Wrap</title>
+   <para>
+    In soft wrap mode, lines are automatically wrapped when being displayed. No
+    newlines are inserted, and the wrapping is automatically updated when text
+    is inserted or removed.
+    If you set the wrap column to zero while soft wrap is enabled, text will be
+    wrapped to the width of the text area.
+   </para>
+  </sect2>
+  <sect2><title>Hard Wrap</title>
+   <para>
+    In hard wrap mode,
+    inserting text at the end of a line beyond the wrap column will
+    automatically insert a line break at the appropriate word boundary.
+    Existing text is not changed in any way.
+   </para>
+   <para>
+    Hard wrap is implemented using character offsets, not screen
+    positions, so it might not behave like you expect if a
+    proportional-width font is being used. For information about
+    changing the font used in the text area, see <xref linkend="global-opts" />.
+   </para>
+  </sect2>
  </sect1>
  <sect1 id="scrolling"><title>Scrolling</title>
   <para>

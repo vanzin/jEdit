@@ -63,6 +63,10 @@ public class ChunkCache
 		SyntaxStyle[] styles, FontRenderContext fontRenderContext,
 		TabExpander e, float wrapMargin, java.util.List out)
 	{
+		// SILLY: allow for anti-aliased characters' "fuzz"
+		if(wrapMargin != 0.0)
+			wrapMargin += 2.0f;
+
 		float x = 0.0f;
 		boolean seenNonWhiteSpace = false;
 		boolean addedNonWhiteSpace = false;
@@ -167,7 +171,7 @@ public class ChunkCache
 						tokens.id,seg,flushIndex,
 						i + 1,styles,fontRenderContext);
 
-					if(i == seg.count - 1 && wrapMargin != 0
+					if(/* i == seg.count - 1 && */ wrapMargin != 0
 						&& x + newChunk.width > wrapMargin
 						&& addedNonWhiteSpace)
 					{
@@ -518,6 +522,8 @@ public class ChunkCache
 		{
 			lineInfo[i].chunksValid = false;
 		}
+
+		lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ invalidateChunksFromPhys() method
@@ -531,9 +537,6 @@ public class ChunkCache
 				break;
 			}
 		}
-
-		if(lastScreenLineP >= physicalLine)
-			lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ updateChunksUpTo() method
@@ -543,19 +546,16 @@ public class ChunkCache
 		if(lastScreenLine >= lineInfo.length)
 			textArea.recalculateVisibleLines();
 
-		LineInfo info = null;
+		if(lineInfo[lastScreenLine].chunksValid)
+			return;
 
 		int firstScreenLine = 0;
 
 		for(int i = lastScreenLine; i >= 0; i--)
 		{
-			info = lineInfo[i];
-			if(info.chunksValid)
+			if(lineInfo[i].chunksValid)
 			{
-				if(i == lastScreenLine)
-					return;
-				else
-					firstScreenLine = i + 1;
+				firstScreenLine = i + 1;
 				break;
 			}
 		}
@@ -564,7 +564,7 @@ public class ChunkCache
 
 		if(firstScreenLine == 0)
 		{
-			physicalLine = textArea.virtualToPhysical(firstLine);
+			physicalLine = textArea.getFirstPhysicalLine();
 		}
 		else
 		{
@@ -581,11 +581,10 @@ public class ChunkCache
 			}
 		}
 
-		// TODO: Assumptions...
-
-		// Note that we rely on the fact that when a line is
-		// invalidated, all screen lines/subregions are
-		// invalidated as well.
+		// Note that we rely on the fact that when a physical line is
+		// invalidated, all screen lines/subregions of that line are
+		// invalidated as well. See below comment for code that tries
+		// to uphold this assumption.
 
 		Buffer buffer = textArea.getBuffer();
 		TextAreaPainter painter = textArea.getPainter();
@@ -598,7 +597,7 @@ public class ChunkCache
 
 		for(int i = firstScreenLine; i <= lastScreenLine; i++)
 		{
-			info = lineInfo[i];
+			LineInfo info = lineInfo[i];
 
 			Chunk chunks;
 
@@ -626,7 +625,7 @@ public class ChunkCache
 					buffer.markTokens(physicalLine).getFirstToken(),
 					painter.getStyles(),painter.getFontRenderContext(),
 					painter,textArea.softWrap
-					? textArea.maxLineLen
+					? textArea.wrapMargin
 					: 0.0f,out);
 
 				if(out.size() == 0)
@@ -659,6 +658,29 @@ public class ChunkCache
 					length = buffer.getLineLength(physicalLine) - offset + 1;
 			}
 
+			if(i == lastScreenLine
+				&& lastScreenLine != lineInfo.length - 1)
+			{
+				/* If this line has become longer or shorter
+				 * (in which case the new physical line number
+				 * is different from the cached one) we need to:
+				 * - continue updating past the last line
+				 * - advise the text area to repaint
+				 * On the other hand, if the line wraps beyond
+				 * lastScreenLine, we need to keep updating the
+				 * chunk list to ensure proper alignment of
+				 * invalidation flags (see start of method) */
+				if(info.physicalLine != physicalLine)
+				{
+					lastScreenLine++;
+					needFullRepaint = true;
+				}
+				else if(out.size() != 0)
+				{
+					lastScreenLine++;
+				}
+			}
+
 			info.physicalLine = physicalLine;
 			info.subregion = subregion;
 			info.offset = offset;
@@ -674,6 +696,18 @@ public class ChunkCache
 		if(!lineInfo[screenLine].chunksValid)
 			Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
 		return lineInfo[screenLine];
+	} //}}}
+
+	//{{{ needFullRepaint() method
+	/**
+	 * The needFullRepaint variable becomes true when the number of screen
+	 * lines in a physical line changes.
+	 */
+	boolean needFullRepaint()
+	{
+		boolean retVal = needFullRepaint;
+		needFullRepaint = false;
+		return retVal;
 	} //}}}
 
 	//{{{ getLineInfoBackwardsCompatibility() method
@@ -710,6 +744,8 @@ public class ChunkCache
 
 	private int lastScreenLineP;
 	private int lastScreenLine;
+
+	private boolean needFullRepaint;
 	//}}}
 
 	//{{{ LineInfo class

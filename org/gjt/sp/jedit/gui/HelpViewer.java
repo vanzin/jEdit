@@ -51,6 +51,16 @@ public class HelpViewer extends JFrame implements EBComponent
 {
 	//{{{ HelpViewer constructor
 	/**
+	 * Creates a new help viewer with the default help page.
+	 * @since jEdit 4.0pre4
+	 */
+	public HelpViewer()
+	{
+		this("welcome.html");
+	} //}}}
+
+	//{{{ HelpViewer constructor
+	/**
 	 * Creates a new help viewer for the specified URL.
 	 * @param url The URL
 	 */
@@ -69,6 +79,17 @@ public class HelpViewer extends JFrame implements EBComponent
 		super(jEdit.getProperty("helpviewer.title"));
 
 		setIconImage(GUIUtilities.getEditorIcon());
+
+		try
+		{
+			baseURL = new File(MiscUtilities.constructPath(
+				jEdit.getJEditHome(),"doc")).toURL().toString();
+		}
+		catch(MalformedURLException mu)
+		{
+			Log.log(Log.ERROR,this,mu);
+			// what to do?
+		}
 
 		history = new String[25];
 		nodes = new Hashtable();
@@ -122,7 +143,7 @@ public class HelpViewer extends JFrame implements EBComponent
 		toc.setShowsRootHandles(true);
 
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-			nodes.get("jeditresource:/doc/users-guide/using-jedit-part.html");
+			nodes.get("users-guide/using-jedit-part.html");
 		if(node != null)
 			toc.expandPath(new TreePath(node.getPath()));
 
@@ -168,6 +189,26 @@ public class HelpViewer extends JFrame implements EBComponent
 	 */
 	public void gotoURL(String url, boolean addToHistory)
 	{
+		String shortURL;
+		if(MiscUtilities.isURL(url))
+		{
+			if(url.startsWith(baseURL))
+			{
+				shortURL = url.substring(baseURL.length());
+				if(shortURL.startsWith("/"))
+					shortURL = shortURL.substring(1);
+			}
+			else
+			{
+				shortURL = null;
+			}
+		}
+		else
+		{
+			shortURL = url;
+			url = baseURL + '/' + url;
+		}
+
 		// reset default cursor so that the hand cursor doesn't
 		// stick around
 		viewer.setCursor(Cursor.getDefaultCursor());
@@ -210,15 +251,18 @@ public class HelpViewer extends JFrame implements EBComponent
 		}
 
 		// select the appropriate tree node.
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(url);
+		if(shortURL != null)
+		{
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(shortURL);
 
-		if(node == null)
-			return;
+			if(node == null)
+				return;
 
-		TreePath path = new TreePath(tocModel.getPathToRoot(node));
-		toc.expandPath(path);
-		toc.setSelectionPath(path);
-		toc.scrollPathToVisible(path);
+			TreePath path = new TreePath(tocModel.getPathToRoot(node));
+			toc.expandPath(path);
+			toc.setSelectionPath(path);
+			toc.scrollPathToVisible(path);
+		}
 	} //}}}
 
 	//{{{ dispose() method
@@ -239,6 +283,7 @@ public class HelpViewer extends JFrame implements EBComponent
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private String baseURL;
 	private JButton back;
 	private JButton forward;
 	private DefaultTreeModel tocModel;
@@ -256,23 +301,24 @@ public class HelpViewer extends JFrame implements EBComponent
 	{
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode();
 
-		root.add(createNode("jeditresource:/doc/welcome.html",
+		root.add(createNode("welcome.html",
 			jEdit.getProperty("helpviewer.toc.welcome")));
 
-		root.add(createNode("jeditresource:/doc/README.txt",
+		root.add(createNode("README.txt",
 			jEdit.getProperty("helpviewer.toc.readme")));
-		root.add(createNode("jeditresource:/doc/NEWS.txt",
+		root.add(createNode("NEWS.txt",
 			jEdit.getProperty("helpviewer.toc.news")));
-		root.add(createNode("jeditresource:/doc/TODO.txt",
+		root.add(createNode("TODO.txt",
 			jEdit.getProperty("helpviewer.toc.todo")));
-		root.add(createNode("jeditresource:/doc/CHANGES.txt",
+		root.add(createNode("CHANGES.txt",
 			jEdit.getProperty("helpviewer.toc.changes")));
-		root.add(createNode("jeditresource:/doc/COPYING.txt",
+		root.add(createNode("COPYING.txt",
 			jEdit.getProperty("helpviewer.toc.copying")));
-		root.add(createNode("jeditresource:/doc/COPYING.DOC.txt",
+		root.add(createNode("COPYING.DOC.txt",
 			jEdit.getProperty("helpviewer.toc.copying-doc")));
 
-		loadUserGuideTOC(root);
+		loadTOC(root,"users-guide/toc.xml");
+		loadTOC(root,"FAQ/toc.xml");
 
 		DefaultMutableTreeNode pluginDocs = new DefaultMutableTreeNode(
 			jEdit.getProperty("helpviewer.toc.plugins"),true);
@@ -310,34 +356,28 @@ public class HelpViewer extends JFrame implements EBComponent
 		tocModel = new DefaultTreeModel(root);
 	} //}}}
 
-	//{{{ loadUserGuideTOC() method
-	private void loadUserGuideTOC(DefaultMutableTreeNode root)
+	//{{{ loadTOC() method
+	private void loadTOC(DefaultMutableTreeNode root, String path)
 	{
-		URL resource = getClass().getResource("/doc/users-guide/toc.xml");
-		if(resource == null)
-			return;
-
-		TOCHandler h = new TOCHandler(root);
+		TOCHandler h = new TOCHandler(root,MiscUtilities.getParentOfPath(path));
 		XmlParser parser = new XmlParser();
 		parser.setHandler(h);
 
 		try
 		{
-			// use a URL here because with Web Start version,
-			// toc.xml is not a local file
 			parser.parse(null, null, new InputStreamReader(
-				resource.openStream()));
+				new URL(baseURL + '/' + path).openStream()));
 		}
 		catch(XmlException xe)
 		{
 			int line = xe.getLine();
 			String message = xe.getMessage();
-			Log.log(Log.ERROR,this,"toc.xml:" + line
+			Log.log(Log.ERROR,this,path + ':' + line
 				+ ": " + message);
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,this,e);
+			Log.log(Log.NOTICE,this,e);
 		}
 	} //}}}
 
@@ -376,11 +416,14 @@ public class HelpViewer extends JFrame implements EBComponent
 	//{{{ TOCHandler class
 	class TOCHandler extends HandlerBase
 	{
+		String dir;
+
 		//{{{ TOCHandler constructor
-		TOCHandler(DefaultMutableTreeNode root)
+		TOCHandler(DefaultMutableTreeNode root, String dir)
 		{
 			nodes = new Stack();
 			node = root;
+			this.dir = dir;
 		} //}}}
 
 		//{{{ attribute() method
@@ -412,8 +455,7 @@ public class HelpViewer extends JFrame implements EBComponent
 			if(name.equals("TITLE"))
 			{
 				DefaultMutableTreeNode newNode = createNode(
-					"jeditresource:/doc/users-guide/"
-					+ href,title);
+					dir + href,title);
 				node.add(newNode);
 				nodes.push(node);
 				node = newNode;

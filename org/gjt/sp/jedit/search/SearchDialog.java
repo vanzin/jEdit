@@ -563,13 +563,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		wrap.setEnabled(!hyperSearch.isSelected());
 
 		boolean reverseEnabled = !hyperSearch.isSelected()
-			&& searchCurrentBuffer.isSelected();
+			&& searchCurrentBuffer.isSelected()
+			&& !regexp.isSelected();
 		searchBack.setEnabled(reverseEnabled);
 		searchForward.setEnabled(reverseEnabled);
-
-		boolean regexpEnabled = (hyperSearch.isSelected()
-			|| !(searchBack.isEnabled() && searchBack.isSelected()));
-		regexp.setEnabled(regexpEnabled);
 
 		filter.setEnabled(searchAllBuffers.isSelected()
 			|| searchDirectory.isSelected());
@@ -582,6 +579,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		findBtn.setEnabled(!searchSelection.isSelected()
 			|| hyperSearch.isSelected());
+		replaceAndFindBtn.setEnabled(!hyperSearch.isSelected()
+			&& !searchSelection.isSelected());
 	} //}}}
 
 	//{{{ save() method

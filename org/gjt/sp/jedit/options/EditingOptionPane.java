@@ -61,22 +61,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
 		//}}}
 
-		//{{{ Tab size
-		String[] tabSizes = { "2", "4", "8" };
-		defaultTabSize = new JComboBox(tabSizes);
-		defaultTabSize.setEditable(true);
-		defaultTabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
-		addComponent(jEdit.getProperty("options.editing.tabSize"),defaultTabSize);
-
-		//}}}
-
-		//{{{ Indent size
-		defaultIndentSize = new JComboBox(tabSizes);
-		defaultIndentSize.setEditable(true);
-		defaultIndentSize.setSelectedItem(jEdit.getProperty("buffer.indentSize"));
-		addComponent(jEdit.getProperty("options.editing.indentSize"),defaultIndentSize);
-		//}}}
-
 		//{{{ Extra word characters
 		defaultNoWordSep = new JTextField(jEdit.getProperty("buffer.noWordSep"));
 		addComponent(jEdit.getProperty("options.editing.noWordSep"),defaultNoWordSep);
@@ -99,6 +83,18 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.collapseFolds"),defaultCollapseFolds);
 		//}}}
 
+		//{{{ Default wrap mode
+		String[] wrapModes = {
+			"none",
+			"soft",
+			"hard"
+		};
+		addComponent(jEdit.getProperty("options.editing.wrap"),
+			defaultWrap = new JComboBox(wrapModes));
+
+		defaultWrap.setSelectedItem(jEdit.getProperty("buffer.wrap"));
+		//}}}
+
 		//{{{ Max line length
 		String[] lineLens = { "0", "72", "76", "80" };
 		defaultMaxLineLen = new JComboBox(lineLens);
@@ -107,11 +103,27 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editing.maxLineLen"),defaultMaxLineLen);
 		//}}}
 
-		//{{{ Soft wrap
-		defaultSoftWrap = new JCheckBox(jEdit.getProperty("options.editing"
-			+ ".softWrap"));
-		defaultSoftWrap.setSelected(jEdit.getBooleanProperty("buffer.softWrap"));
-		addComponent(defaultSoftWrap);
+		//{{{ Tab size
+		String[] tabSizes = { "2", "4", "8" };
+		defaultTabSize = new JComboBox(tabSizes);
+		defaultTabSize.setEditable(true);
+		defaultTabSize.setSelectedItem(jEdit.getProperty("buffer.tabSize"));
+		addComponent(jEdit.getProperty("options.editing.tabSize"),defaultTabSize);
+
+		//}}}
+
+		//{{{ Indent size
+		defaultIndentSize = new JComboBox(tabSizes);
+		defaultIndentSize.setEditable(true);
+		defaultIndentSize.setSelectedItem(jEdit.getProperty("buffer.indentSize"));
+		addComponent(jEdit.getProperty("options.editing.indentSize"),defaultIndentSize);
+		//}}}
+
+		//{{{ Soft tabs
+		defaultNoTabs = new JCheckBox(jEdit.getProperty("options.editing"
+			+ ".noTabs"));
+		defaultNoTabs.setSelected(jEdit.getBooleanProperty("buffer.noTabs"));
+		addComponent(defaultNoTabs);
 		//}}}
 
 		//{{{ Indent on tab
@@ -127,13 +139,6 @@ public class EditingOptionPane extends AbstractOptionPane
 		defaultIndentOnEnter.setSelected(jEdit.getBooleanProperty("buffer.indentOnEnter"));
 		addComponent(defaultIndentOnEnter);
 		//}}}
-
-		//{{{ Soft tabs
-		defaultNoTabs = new JCheckBox(jEdit.getProperty("options.editing"
-			+ ".noTabs"));
-		defaultNoTabs.setSelected(jEdit.getBooleanProperty("buffer.noTabs"));
-		addComponent(defaultNoTabs);
-		//}}}
 	} //}}}
 
 	//{{{ _save() method
@@ -142,35 +147,34 @@ public class EditingOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.defaultMode",
 			(String)defaultMode.getSelectedItem());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
+		jEdit.setProperty("buffer.noWordSep",defaultNoWordSep.getText());
+		jEdit.setProperty("buffer.folding",(String)defaultFolding.getSelectedItem());
+		jEdit.setProperty("buffer.collapseFolds",defaultCollapseFolds.getText());
+		jEdit.setProperty("buffer.wrap",(String)defaultWrap.getSelectedItem());
+		jEdit.setProperty("buffer.maxLineLen",(String)defaultMaxLineLen.getSelectedItem());
 		jEdit.setProperty("buffer.tabSize",(String)defaultTabSize
 			.getSelectedItem());
 		jEdit.setProperty("buffer.indentSize",(String)defaultIndentSize
 			.getSelectedItem());
-		jEdit.setProperty("buffer.maxLineLen",(String)defaultMaxLineLen.getSelectedItem());
-		jEdit.setProperty("buffer.noWordSep",defaultNoWordSep.getText());
-		jEdit.setProperty("buffer.folding",(String)defaultFolding.getSelectedItem());
-		jEdit.setProperty("buffer.collapseFolds",defaultCollapseFolds.getText());
-		jEdit.setBooleanProperty("buffer.softWrap",defaultSoftWrap
-			.isSelected());
+		jEdit.setBooleanProperty("buffer.noTabs",defaultNoTabs.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnTab",defaultIndentOnTab
 			.isSelected());
 		jEdit.setBooleanProperty("buffer.indentOnEnter",defaultIndentOnEnter
 			.isSelected());
-		jEdit.setBooleanProperty("buffer.noTabs",defaultNoTabs.isSelected());
 	} //}}}
 
 	//{{{ Private members
 	private JComboBox defaultMode;
 	private JTextField undoCount;
-	private JComboBox defaultTabSize;
-	private JComboBox defaultIndentSize;
 	private JTextField defaultNoWordSep;
 	private JComboBox defaultFolding;
 	private JTextField defaultCollapseFolds;
+	private JComboBox defaultWrap;
 	private JComboBox defaultMaxLineLen;
-	private JCheckBox defaultSoftWrap;
+	private JComboBox defaultTabSize;
+	private JComboBox defaultIndentSize;
+	private JCheckBox defaultNoTabs;
 	private JCheckBox defaultIndentOnTab;
 	private JCheckBox defaultIndentOnEnter;
-	private JCheckBox defaultNoTabs;
 	//}}}
 }
