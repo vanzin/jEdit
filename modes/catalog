@@ -92,9 +92,6 @@
 <MODE NAME="dsssl"		FILE="dsssl.xml"
 				FILE_NAME_GLOB="*.dsl" />
 
-<MODE NAME="empy"		FILE="empy.xml"
-				FILE_NAME_GLOB="*.em"/>
-
 <MODE NAME="erlang"		FILE="erlang.xml"
 				FILE_NAME_GLOB="*.erl"/>
 
@@ -110,9 +107,6 @@
 <MODE NAME="freemarker"		FILE="freemarker.xml"
 				FILE_NAME_GLOB="*.ftl"
 				FIRST_LINE_GLOB="<\#ftl*"/>
-
-<MODE NAME="groovy"			FILE="groovy.xml"
-				FILE_NAME_GLOB="*.{gy,groovy}"/>
 
 <MODE NAME="gettext"		FILE="gettext.xml"
 				FILE_NAME_GLOB="*.{po,pot}" />
@@ -165,8 +159,6 @@
 <MODE NAME="jsp"		FILE="jsp.xml"
 				FILE_NAME_GLOB="*.{jsp,jsf,jspf}" />
 
-<MODE NAME="lua" FILE="lua.xml" FILE_NAME_GLOB="*.lua"/>
-
 <MODE NAME="lisp"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
 
@@ -190,7 +182,7 @@
 <MODE NAME="modula3"		FILE="modula3.xml"
 				FILE_NAME_GLOB="*.[im]3" />
 
-<MODE NAME="moin"			FILE="moin.xml"
+<MODE NAME="moin"		FILE="moin.xml"
 				FILE_NAME_GLOB="*.moin" />
 
 <MODE NAME="mqsc"		FILE="mqsc.xml"
@@ -286,9 +278,6 @@
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
 
-<MODE NAME="rnc"		FILE="rnc.xml"
-				FILE_NAME_GLOB="*.rnc" />
-
 <MODE NAME="rpm-spec"		FILE="rpmspec.xml"
 				FILE_NAME_GLOB="*.spec" />
 
@@ -369,9 +358,6 @@
 
 <MODE NAME="vbscript"		FILE="vbscript.xml"
 				FILE_NAME_GLOB="*.{vbs,bas,cls}" />
-
-<MODE NAME="vbdotnet"		FILE="vbdotnet.xml"
-				FILE_NAME_GLOB="*.{vb}" />
 
 <MODE NAME="velocity"		FILE="velocity.xml"
 				FILE_NAME_GLOB="*.vm" />

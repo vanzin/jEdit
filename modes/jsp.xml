@@ -6,7 +6,6 @@
 	<PROPS>
 		<PROPERTY NAME="commentStart" VALUE="&lt;%--" />
 		<PROPERTY NAME="commentEnd" VALUE="--%&gt;" />
-		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*"/>
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- JSP comment -->
@@ -172,7 +171,7 @@
 		</SPAN>
 
 		<SEQ TYPE="MARKUP">/</SEQ>
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<MARK_FOLLOWING TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">:</MARK_FOLLOWING>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
 	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1">
