@@ -72,6 +72,12 @@ import org.gjt.sp.util.Log;
  */
 public class MiscUtilities
 {
+	/**
+	 * This encoding is not supported by Java, yet it is useful.
+	 * A UTF-8 file that begins with 0xEFBBBF.
+	 */
+	public static final String UTF_8_Y = "UTF-8Y";
+
 	//{{{ Path name methods
 
 	//{{{ canonPath() method
@@ -1491,10 +1497,15 @@ loop:		for(;;)
 					new Object[0]);
 				Iterator iter = map.keySet().iterator();
 
+				returnValue.add(UTF_8_Y);
+
 				while(iter.hasNext())
 				{
 					returnValue.add(iter.next());
 				}
+
+				Collections.sort(returnValue,
+					new StringICaseCompare());
 			}
 			catch(Exception e)
 			{
@@ -1513,6 +1524,37 @@ loop:		for(;;)
 
 		return (String[])returnValue.toArray(
 			new String[returnValue.size()]);
+	} //}}}
+
+	//{{{ isSupportedEncoding() method
+	/**
+	 * Returns if the given character encoding is supported.
+	 * Uses reflection to call a Java 1.4 API on Java 1.4, and always
+	 * returns true on Java 1.3.
+	 * @since jEdit 4.2pre7
+	 */
+	public static boolean isSupportedEncoding(String encoding)
+	{
+		if(OperatingSystem.hasJava14())
+		{
+			try
+			{
+				Class clazz = Class.forName(
+					"java.nio.charset.Charset");
+				Method method = clazz.getMethod(
+					"isSupported",
+					new Class[] { String.class });
+				return ((Boolean)method.invoke(null,
+					new Object[] { encoding }))
+					.booleanValue();
+			}
+			catch(Exception e)
+			{
+				Log.log(Log.ERROR,MiscUtilities.class,e);
+			}
+		}
+
+		return true;
 	} //}}}
 
 	//{{{ throwableToString() method

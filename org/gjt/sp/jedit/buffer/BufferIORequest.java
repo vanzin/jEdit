@@ -319,10 +319,10 @@ public class BufferIORequest extends WorkRequest
 			int b1 = in.read();
 			int b2 = in.read();
 			int b3 = in.read();
-			in.reset();
 
 			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
 			{
+				in.reset();
 				in = new GZIPInputStream(in);
 				buffer.setBooleanProperty(Buffer.GZIPPED,true);
 			}
@@ -331,17 +331,24 @@ public class BufferIORequest extends WorkRequest
 				|| (b1 == UNICODE_MAGIC_2
 				&& b2 == UNICODE_MAGIC_1))
 			{
+				in.reset();
 				encoding = "UTF-16";
 				buffer.setProperty(Buffer.ENCODING,encoding);
 			}
 			else if(b1 == UTF8_MAGIC_1 && b2 == UTF8_MAGIC_2
 				&& b3 == UTF8_MAGIC_3)
 			{
+				// do not reset the stream and just treat it
+				// like a normal UTF-8 file.
+				buffer.setProperty(Buffer.ENCODING,
+					MiscUtilities.UTF_8_Y);
+
 				encoding = "UTF-8";
-				buffer.setProperty(Buffer.ENCODING,encoding);
 			}
 			else
 			{
+				in.reset();
+
 				byte[] _xmlPI = new byte[XML_PI_LENGTH];
 				int offset = 0;
 				int count;
@@ -368,7 +375,7 @@ public class BufferIORequest extends WorkRequest
 						encoding = xmlPI.substring(
 							index + 10,endIndex);
 	
-						if(Charset.isSupported(encoding))
+						if(MiscUtilities.isSupportedEncoding(encoding))
 						{
 							buffer.setProperty(Buffer.ENCODING,encoding);
 						}
@@ -805,10 +812,21 @@ public class BufferIORequest extends WorkRequest
 	private void write(Buffer buffer, OutputStream _out)
 		throws IOException
 	{
+		String encoding = buffer.getStringProperty(Buffer.ENCODING);
+		if(encoding.equals(MiscUtilities.UTF_8_Y))
+		{
+			// not supported by Java...
+			_out.write(UTF8_MAGIC_1);
+			_out.write(UTF8_MAGIC_2);
+			_out.write(UTF8_MAGIC_3);
+			_out.flush();
+			encoding = "UTF-8";
+		}
+
 		BufferedWriter out = new BufferedWriter(
-			new OutputStreamWriter(_out,
-				buffer.getStringProperty(Buffer.ENCODING)),
-				IOBUFSIZE);
+			new OutputStreamWriter(_out,encoding),
+			IOBUFSIZE);
+
 		Segment lineSegment = new Segment();
 		String newline = buffer.getStringProperty(Buffer.LINESEP);
 		if(newline == null)

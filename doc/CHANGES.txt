@@ -19,6 +19,14 @@ JEDIT 4.2 VERSION HISTORY
 
 - Updated "Preview Javadoc of Current Buffer" macro (Tom Gutwin).
 
+- Added option to file system browser's Commands->Encoding menu to
+  disable encoding auto-detection.
+
+- Added support for UTF-8Y encoding, which is like UTF-8 except there
+  is a three-byte signature (0xEFBBBF) at the beginning of the file.
+  See http://oss.software.ibm.com/icu/docs/papers/forms_of_unicode/#t2.
+  UTF-8Y files are automatically detected, just like UTF-16.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -104,6 +112,9 @@ JEDIT 4.2 VERSION HISTORY
   <?xml?> processing instruction would throw an exception. Now, XML
   files that specify an invalid encoding are opened with the default
   encoding.
+
+- Changed default shortcut of "Find Previous" from C+h to C+e g since on
+  Mac OS X, C+h is always captured by the OS.
 
 }}}
 {{{ API Changes
