@@ -800,7 +800,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
-				buffer.indentLine(i);
+				buffer.indentLine(i,true);
 			}
 
 			EditBus.removeFromBus(this);

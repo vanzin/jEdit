@@ -211,6 +211,13 @@ Sebastien Pierre for contributing to this release.
   Commands menu with a file selected was supposed to set the directory
   search filter to that file's extension, however this didn't work.
 
+- Fix a problem with "Indent Selected Lines" on text like the following:
+
+    if(foo)
+        bar();
+    if(baz) {
+        quux();
+    }
 }}}
 {{{ API Additions
 
