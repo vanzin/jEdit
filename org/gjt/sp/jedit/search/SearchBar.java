@@ -43,6 +43,8 @@ public class SearchBar extends JPanel
 
 		this.view = view;
 
+		add(Box.createHorizontalStrut(2));
+
 		JLabel label = new JLabel(jEdit.getProperty("view.search.find"));
 		add(label);
 		add(Box.createHorizontalStrut(12));

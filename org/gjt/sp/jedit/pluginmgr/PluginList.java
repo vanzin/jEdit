@@ -187,7 +187,8 @@ class PluginList
 		boolean canBeInstalled()
 		{
 			Branch branch = getCompatibleBranch();
-			return branch != null && !branch.obsolete;
+			return branch != null && !branch.obsolete
+				&& branch.canSatisfyDependencies();
 		}
 
 		void install(Roster roster, String installDirectory, boolean downloadSource)

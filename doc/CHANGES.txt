@@ -1,6 +1,6 @@
 JEDIT 4.0 VERSION HISTORY
 
-* Version 4.0pre9
+* Version 4.0pre9 (a.k.a 4.0 release candidate 2)
 
 + Enhancements
 
@@ -11,6 +11,11 @@ JEDIT 4.0 VERSION HISTORY
 + Bug Fixes
 
 - Fixed QuickNotepad build.xml
+- Explicit folding did not behave correctly if a line contained both the
+  start and end strings ({{{ and }}}) (Ollie Rutherfurd)
+- If a plugin depended on a plugin whose jEdit version requirement was
+  higher than the installed jEdit version, the 'Update Plugins' command
+  would throw a NullPointerException
 
 * Version 4.0pre8 (a.k.a 4.0 release candidate 1)
 
