@@ -92,7 +92,13 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			ActionSet actionSet = actionSets[i];
 			if(actionSet.getActionCount() != 0)
 			{
-				models.addElement(createModel(actionSet.getLabel(),
+				String modelLabel = actionSet.getLabel();
+				if(modelLabel == null)
+				{
+					System.err.println("Empty action set: "
+						+ actionSet.getPluginJAR());
+				}
+				models.addElement(createModel(modelLabel,
 					actionSet.getActionNames()));
 			}
 		}
