@@ -40,6 +40,7 @@ class BufferPrintable implements Printable
 	BufferPrintable(View view, Buffer buffer, Font font, boolean header,
 		boolean footer, boolean lineNumbers, boolean color)
 	{
+		this.view = view;
 		this.buffer = buffer;
 		this.font = font;
 		this.header = header;
@@ -74,6 +75,10 @@ class BufferPrintable implements Printable
 		}
 		else
 			currentPhysicalLine = currentPageStart;
+
+		Object[] args = new Object[] { new Integer(pageIndex + 1) };
+		view.getStatus().setMessageAndClear(jEdit.getProperty(
+			"view.status.print",args));
 
 		double pageX = pageFormat.getImageableX();
 		double pageY = pageFormat.getImageableY();
@@ -140,7 +145,6 @@ print_loop:	for(;;)
 
 				softWrap.init(seg,styles,frc,e,lineList,
 					(float)(pageWidth - lineNumberWidth));
-				softWrap.setPrintGraphics(gfx);
 
 				buffer.markTokens(currentPhysicalLine,softWrap);
 
@@ -203,6 +207,7 @@ print_loop:	for(;;)
 	//}}}
 
 	//{{{ Instance variables
+	private View view;
 	private Buffer buffer;
 	private Font font;
 	private SyntaxStyle[] styles;

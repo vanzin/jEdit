@@ -99,11 +99,11 @@ public class BufferPrinter1_3
 		if(!job.printDialog())
 			return;
 
-		/* VFSManager.runInWorkThread(new Runnable()
+		VFSManager.runInWorkThread(new Runnable()
 		{
 			public void run()
 			{
-				 */try
+				try
 				{
 					//buffer.readLock();
 					job.print();
@@ -127,9 +127,9 @@ public class BufferPrinter1_3
 				finally
 				{
 					//buffer.readUnlock();
-				}/* 
+				}
 			}
-		}); */
+		});
 	} //}}}
 
 	//{{{ getPageFormat() method
