@@ -27,13 +27,12 @@
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static Buffer <function>openFile</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>Buffer</type>
+ <methodname>openFile</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>String</type><parameter>path</parameter></methodparam>
+</methodsynopsis>
 <para>
     Opens the file named <varname>path</varname> in the given
     <classname>View</classname>. To open a file in the current view, use the
@@ -42,12 +41,11 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static Buffer <function>newFile</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>Buffer</type>
+ <methodname>newFile</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+</methodsynopsis>
 <para>
     This creates a new buffer captioned
     <guimenu>Untitled-&lt;n&gt;</guimenu>in the given
@@ -56,13 +54,12 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>closeBuffer</function></funcdef>
-  <paramdef>View  <parameter>view</parameter></paramdef>
-  <paramdef>Buffer  <parameter>buffer</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>closeBuffer</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>Buffer</type><parameter>buffer</parameter></methodparam>
+</methodsynopsis>
 <para>
     Closes the buffer named <varname>buffer</varname> in the view named
     <varname>view</varname>. The user will be prompted to save the buffer
@@ -71,13 +68,12 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>saveAllBuffers</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>boolean <parameter>confirm</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>saveAllBuffers</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>confirm</parameter></methodparam>
+</methodsynopsis>
 <para>
     This saves all open buffers with unsaved changes in the given
     <classname>View</classname>. The parameter <parameter>confirm</parameter>
@@ -87,12 +83,11 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>closeAllBuffers</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>closeAllBuffers</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+</methodsynopsis>
 <para>
     Closes all buffers in the given <classname>View</classname>. A dialog
     window will be displayed for any buffers with unsaved changes to
@@ -101,13 +96,12 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>exit</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>boolean <parameter>reallyExit</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>exit</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>reallyExit</parameter></methodparam>
+</methodsynopsis>
 <para>
     This method causes jEdit to exit. If <parameter>reallyExit</parameter> is
     false and jEdit is running in background mode, the application will simply
@@ -117,12 +111,11 @@
 
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getProperty</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getProperty</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the value of the property named by <varname>name</varname>, or
     <constant>null</constant> if the property is undefined.
@@ -130,14 +123,13 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>getBooleanProperty</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>getBooleanProperty</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+</methodsynopsis>
 <para>
-    Returns a <type>boolean</type> value of <constant>true</constant> or
+    Returns a <classname>boolean</classname> value of <constant>true</constant> or
     <constant>false</constant> for the property named by <varname>name</varname> by
     examining the contents of the property; returns
     <constant>false</constant> if the property cannot be found.
@@ -145,13 +137,12 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setProperty</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
-  <paramdef>String <parameter>property</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setProperty</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+ <methodparam><type>String</type><parameter>property</parameter></methodparam>
+</methodsynopsis>
 <para>
     This method sets the property named by <varname>name</varname> with the value
     <varname>property</varname>. An existing property is overwritten.
@@ -159,13 +150,12 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setBooleanProperty</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
-  <paramdef>boolean <parameter>value</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setBooleanProperty</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>value</parameter></methodparam>
+</methodsynopsis>
 <para>
     This method sets the property named by <varname>name</varname> to
     <varname>value</varname>. The boolean value is stored internally as the
@@ -174,13 +164,12 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setTemporaryProperty</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
-  <paramdef>String <parameter>property</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setTemporaryProperty</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+ <methodparam><type>String</type><parameter>property</parameter></methodparam>
+</methodsynopsis>
 <para>
     This sets a property that will not be stored during the current
     jEdit session only. This method is useful for storing a value
@@ -189,24 +178,22 @@
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getJEditHome</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getJEditHome</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the path of the directory containing the jEdit executable file.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getSettingsDirectory</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getSettingsDirectory</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the path of the directory in which user-specific settings
     are stored. This will be null if jEdit was started with the
@@ -225,12 +212,11 @@ are useful in some situations. They include the following:</para>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static EditAction[] <function>getActions</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>EditAction[]</type>
+ <methodname>getActions</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns an array of <quote>actions</quote> or short routines maintained and used
     by the editor.
@@ -238,12 +224,11 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static EditAction <function>getAction</function></funcdef>
-  <paramdef>String <parameter>action</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>EditAction</type>
+ <methodname>getAction</methodname>
+ <methodparam><type>String</type><parameter>action</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the action named <varname>action</varname>, or
     <constant>null</constant> if it does not exist.
@@ -251,24 +236,22 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static Buffer[] <function>getBuffers</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>Buffer[]</type>
+ <methodname>getBuffers</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns an array of open buffers.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static Properties <function>getProperties</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>Properties</type>
+ <methodname>getProperties</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns a Java <classname>Properties</classname> object (a class derived from
     <classname>Hashtable</classname>) holding all properties
@@ -284,24 +267,22 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static int <function>getBufferCount</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>int</type>
+ <methodname>getBufferCount</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the number of open buffers.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static Buffer <function>getBuffer</function></funcdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>Buffer</type>
+ <methodname>getBuffer</methodname>
+ <methodparam><type>String</type><parameter>path</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the <classname>Buffer</classname> object containing the file named
     <varname>path</varname>. or <constant>null</constant> if the buffer does not exist.
@@ -309,24 +290,22 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static Mode[] <function>getModes</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>Mode[]</type>
+ <methodname>getModes</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns an array containing all editing modes used by jEdit.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static Mode <function>getMode</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>Mode</type>
+ <methodname>getMode</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the editing mode named by <varname>name</varname>, or
     <constant>null</constant> if such a mode does not exist.
@@ -334,24 +313,22 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static EditPlugin[] <function>getPlugins</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>EditPlugin[]</type>
+ <methodname>getPlugins</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns an array containing all existing plugins.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>plugin static EditPlugin <function>getPlugin</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>plugin</modifier><modifier>static</modifier><type>EditPlugin</type>
+ <methodname>getPlugin</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the plugin named by <varname>name</varname>, or
     <constant>null</constant> if such a plugin does not exist.
@@ -377,60 +354,55 @@ are useful in some situations. They include the following:</para>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>splitHorizontally</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>splitHorizontally</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Splits the view horizontally.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>splitVertically</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>splitVertically</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Splits the view vertically.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>unsplit</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>unsplit</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Unsplits the view.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public synchronized void <function>showWaitCursor</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>synchronized</modifier><void/>
+ <methodname>showWaitCursor</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Shows a <quote>waiting</quote> cursor (typically, an hourglass).
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public synchronized void <function>hideWaitCursor</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>synchronized</modifier><void/>
+ <methodname>hideWaitCursor</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Removes the <quote>waiting</quote> cursor. This method and
     <function>showWaitCursor()</function> are implemented using a reference
@@ -441,12 +413,11 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public StatusBar <function>getStatus</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>StatusBar</type>
+ <methodname>getStatus</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Eeach <classname>View</classname> displays a
     <classname>StatusBar</classname> at its bottom edge. It shows the
@@ -462,12 +433,11 @@ are useful in some situations. They include the following:</para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public DockableWindowManager <function>getDockableWindowManager</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>DockableWindowManager</type>
+ <methodname>getDockableWindowManager</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     The object returned by this method keeps track of all dockable
     windows. See <xref linkend="class-dockablewindowmanager" />.
@@ -501,13 +471,12 @@ are useful in some situations. They include the following:</para>
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>copy</function></funcdef>
-        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
-        <paramdef>char <parameter>register</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>copy</methodname>
+      <methodparam><type>JEditTextArea</type><parameter>textArea</parameter></methodparam>
+      <methodparam><type>char</type><parameter>register</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Saves the selected text in the designated <parameter>textArea</parameter>
       to the register indexed at <parameter>register</parameter>.  This
@@ -516,13 +485,12 @@ are useful in some situations. They include the following:</para>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>cut</function></funcdef>
-        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
-        <paramdef>char <parameter>register</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>cut</methodname>
+      <methodparam><type>JEditTextArea</type><parameter>textArea</parameter></methodparam>
+      <methodparam><type>char</type><parameter>register</parameter></methodparam>
+    </methodsynopsis>
   <para>
     Saves the selected text in the designated <parameter>textArea</parameter>
     to the register indexed at <parameter>register</parameter>, and removes the
@@ -532,36 +500,33 @@ are useful in some situations. They include the following:</para>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>append</function></funcdef>
-        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
-        <paramdef>char <parameter>register</parameter></paramdef>
-        <paramdef>String <parameter>separator</parameter></paramdef>
-        <paramdef>boolean <parameter>cut</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>append</methodname>
+      <methodparam><type>JEditTextArea</type><parameter>textArea</parameter></methodparam>
+      <methodparam><type>char</type><parameter>register</parameter></methodparam>
+      <methodparam><type>String</type><parameter>separator</parameter></methodparam>
+      <methodparam><type>boolean</type><parameter>cut</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>append</function></funcdef>
-        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
-        <paramdef>char <parameter>register</parameter></paramdef>
-        <paramdef>String <parameter>separator</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>append</methodname>
+      <methodparam><type>JEditTextArea</type><parameter>textArea</parameter></methodparam>
+      <methodparam><type>char</type><parameter>register</parameter></methodparam>
+      <methodparam><type>String</type><parameter>separator</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>append</function></funcdef>
-        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
-        <paramdef>char <parameter>register</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>append</methodname>
+      <methodparam><type>JEditTextArea</type><parameter>textArea</parameter></methodparam>
+      <methodparam><type>char</type><parameter>register</parameter></methodparam>
+    </methodsynopsis>
   <para>
     These three methods append the selected text in the
     <parameter>textArea</parameter> to the designated register. If the
@@ -582,32 +547,29 @@ are useful in some situations. They include the following:</para>
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>setRegister</function></funcdef>
-        <paramdef>char <parameter>name</parameter></paramdef>
-        <paramdef>Register <parameter>register</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>setRegister</methodname>
+      <methodparam><type>char</type><parameter>name</parameter></methodparam>
+      <methodparam><type>Register</type><parameter>register</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>setRegister</function></funcdef>
-        <paramdef>char <parameter>name</parameter></paramdef>
-        <paramdef>Register <parameter>newRegister</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>setRegister</methodname>
+      <methodparam><type>char</type><parameter>name</parameter></methodparam>
+      <methodparam><type>Register</type><parameter>newRegister</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>clearRegister</function></funcdef>
-        <paramdef>char <parameter>name</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>clearRegister</methodname>
+      <methodparam><type>char</type><parameter>name</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Sets the text of the designated register to <constant>null</constant>.
       If the register is one of the two registers reserved by the
@@ -617,21 +579,19 @@ are useful in some situations. They include the following:</para>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static Register <function>getRegister</function></funcdef>
-        <paramdef>char <parameter>name</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><type>Register</type>
+      <methodname>getRegister</methodname>
+      <methodparam><type>char</type><parameter>name</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static Register[] <function>getRegisters</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><type>Register[]</type>
+      <methodname>getRegisters</methodname>
+      <void/>
+    </methodsynopsis>
   </listitem>
 
 </itemizedlist>
@@ -682,12 +642,11 @@ are useful in some situations. They include the following:</para>
 
     <itemizedlist>
       <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public DockableWindow <function>getDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
+        <methodsynopsis>
+          <modifier>public</modifier><type>DockableWindow</type>
+          <methodname>getDockableWindow</methodname>
+          <methodparam><type>String</type><parameter>name</parameter></methodparam>
+        </methodsynopsis>
         <para>
           This method returns the <classname>DockableWindow</classname>
           object named by the <varname>name</varname> parameter.  The name of a
@@ -698,12 +657,11 @@ are useful in some situations. They include the following:</para>
        </listitem>
 
        <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>addDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
+        <methodsynopsis>
+          <modifier>public</modifier><void/>
+          <methodname>addDockableWindow</methodname>
+          <methodparam><type>String</type><parameter>name</parameter></methodparam>
+        </methodsynopsis>
         <para>
           If the <classname>DockableWindow</classname> named by the
           <varname>name</varname> parameter does not exist, a message is
@@ -713,30 +671,27 @@ are useful in some situations. They include the following:</para>
        </listitem>
 
        <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>showDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
+        <methodsynopsis>
+          <modifier>public</modifier><void/>
+          <methodname>showDockableWindow</methodname>
+          <methodparam><type>String</type><parameter>name</parameter></methodparam>
+        </methodsynopsis>
        </listitem>
 
        <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>removeDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
+        <methodsynopsis>
+          <modifier>public</modifier><void/>
+          <methodname>removeDockableWindow</methodname>
+          <methodparam><type>String</type><parameter>name</parameter></methodparam>
+        </methodsynopsis>
        </listitem>
 
        <listitem>
-        <funcsynopsis>
-          <funcprototype>
-            <funcdef>public void <function>toggleDockableWindow</function></funcdef>
-            <paramdef>String <parameter>name</parameter></paramdef>
-          </funcprototype>
-        </funcsynopsis>
+        <methodsynopsis>
+          <modifier>public</modifier><void/>
+          <methodname>toggleDockableWindow</methodname>
+          <methodparam><type>String</type><parameter>name</parameter></methodparam>
+        </methodsynopsis>
        <para>
          These methods, respectively show, hide and toggle the visibility
          of the <classname>DockableWindow</classname> object named by
@@ -812,21 +767,19 @@ are useful in some situations. They include the following:</para>
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getStart</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>int</type>
+        <methodname>getStart</methodname>
+        <void/>
+      </methodsynopsis>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getEnd</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>int</type>
+        <methodname>getEnd</methodname>
+        <void/>
+      </methodsynopsis>
       <para>
         Retrieves the buffer position representing the start or end
         of the selection.
@@ -834,21 +787,19 @@ are useful in some situations. They include the following:</para>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getStartLine</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>int</type>
+        <methodname>getStartLine</methodname>
+        <void/>
+      </methodsynopsis>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getEndLine</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>int</type>
+        <methodname>getEndLine</methodname>
+        <void/>
+      </methodsynopsis>
       <para>
         Retrieves the zero-based index number representing the line
         on which the selection starts or ends.
@@ -856,23 +807,21 @@ are useful in some situations. They include the following:</para>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getStart</function></funcdef>
-          <paramdef>Buffer <parameter>buffer</parameter></paramdef>
-          <paramdef>int <parameter>line</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>int</type>
+        <methodname>getStart</methodname>
+        <methodparam><type>Buffer</type><parameter>buffer</parameter></methodparam>
+        <methodparam><type>int</type><parameter>line</parameter></methodparam>
+      </methodsynopsis>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getEnd</function></funcdef>
-          <paramdef>Buffer <parameter>buffer</parameter></paramdef>
-          <paramdef>int <parameter>line</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>int</type>
+        <methodname>getEnd</methodname>
+        <methodparam><type>Buffer</type><parameter>buffer</parameter></methodparam>
+        <methodparam><type>int</type><parameter>line</parameter></methodparam>
+      </methodsynopsis>
       <para>
         These two methods return the position of the beginning or end of
         that portion of the selection falling on the line referenced by
@@ -919,12 +868,11 @@ JEditTextArea</title>
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>setMultipleSelectionEnabled</function></funcdef>
-        <paramdef>boolean <parameter>multi</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>setMultipleSelectionEnabled</methodname>
+      <methodparam><type>boolean</type><parameter>multi</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Set multiple selection on or off according to the value of
       <parameter>multi</parameter>. This only affects the ability to
@@ -935,24 +883,22 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Selection[] <function>getSelection</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>Selection[]</type>
+      <methodname>getSelection</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       Returns an array containing a copy of the current selections.
     </para>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int <function>getSelectionCount</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>int</type>
+      <methodname>getSelectionCount</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       Returns the current number of selections.  This can be used to test
       for the existence of selections.
@@ -960,12 +906,11 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Selection <function>getSelectionAtOffset</function></funcdef>
-        <paramdef>int <parameter>offset</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>Selection</type>
+      <methodname>getSelectionAtOffset</methodname>
+      <methodparam><type>int</type><parameter>offset</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Returns the <classname>Selection</classname> containing the specific offset,
       or <constant>null</constant> if there is no selection at that offset.
@@ -973,21 +918,18 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>addToSelection</function></funcdef>
-        <paramdef>Selection <parameter>selection</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>addToSelection</methodname>
+      <methodparam><type>Selection</type><parameter>selection</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>addToSelection</function></funcdef>
-        <paramdef>Selection[] <parameter>selection</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>addToSelection</methodname>
+    </methodsynopsis>
     <para>
       Adds a single <classname>Selection</classname> or an array of
       <classname>Selection</classname> objects to the existing collection
@@ -997,13 +939,12 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>extendSelection</function></funcdef>
-        <paramdef>int <parameter>offset</parameter></paramdef>
-        <paramdef>int <parameter>end</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>extendSelection</methodname>
+      <methodparam><type>int</type><parameter>offset</parameter></methodparam>
+      <methodparam><type>int</type><parameter>end</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Extends the existing selection containing the position at
       <parameter>offset</parameter> to the position represented by
@@ -1016,21 +957,19 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>removeFromSelection</function></funcdef>
-        <paramdef>Selection <parameter>sel</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>removeFromSelection</methodname>
+      <methodparam><type>Selection</type><parameter>sel</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>removeFromSelection</function></funcdef>
-        <paramdef>int <parameter>offset</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>removeFromSelection</methodname>
+      <methodparam><type>int</type><parameter>offset</parameter></methodparam>
+    </methodsynopsis>
     <para>
       These methods remove a selection from the current collection.  The
       second version removes any selection that contains the position at
@@ -1046,30 +985,27 @@ JEditTextArea</title>
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public String <function>getSelectedText</function></funcdef>
-        <paramdef>Selection  <parameter>s</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>String</type>
+      <methodname>getSelectedText</methodname>
+      <methodparam><type>Selection</type><parameter>s</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public String <function>getSelectedText</function></funcdef>
-        <paramdef>String <parameter>separator</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>String</type>
+      <methodname>getSelectedText</methodname>
+      <methodparam><type>String</type><parameter>separator</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public String <function>getSelectedText</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>String</type>
+      <methodname>getSelectedText</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       These three methods return a <classname>String</classname> containing
       text corresponding to the current selections. The first version returns
@@ -1085,22 +1021,20 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>setSelectedText</function></funcdef>
-        <paramdef>Selection <parameter>s</parameter></paramdef>
-        <paramdef>String <parameter>selectedText</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>setSelectedText</methodname>
+      <methodparam><type>Selection</type><parameter>s</parameter></methodparam>
+      <methodparam><type>String</type><parameter>selectedText</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>setSelectedText</function></funcdef>
-        <paramdef>String <parameter>selectedText</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>setSelectedText</methodname>
+      <methodparam><type>String</type><parameter>selectedText</parameter></methodparam>
+    </methodsynopsis>
     <para>
       The first version changes the text of the selection represented
       by <parameter>s</parameter> to
@@ -1115,12 +1049,11 @@ JEditTextArea</title>
     </para>
   </listitem>
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int[] <function>getSelectedLines</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>int[]</type>
+      <methodname>getSelectedLines</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       Returns a sorted array of line numbers on which a selection or selections
       are present. The current line is included in the array whether or
@@ -1149,51 +1082,46 @@ JEditTextArea</title>
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectBlock</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectBlock</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Selects the code block surrounding the caret.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectWord</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectWord</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectLine</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectLine</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectParagraph</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectParagraph</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectFold</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectFold</methodname>
+ <void/>
+</methodsynopsis>
 <para>
   Selects the <quote>fold</quote> (a portion of text sharing a given
   indentation level) that contains the line where the editing caret
@@ -1202,12 +1130,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectFoldAt</function></funcdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectFoldAt</methodname>
+ <methodparam><type>int</type><parameter>line</parameter></methodparam>
+</methodsynopsis>
   <para>
     Selects the fold containing the line referenced by
     <parameter>line</parameter>.
@@ -1215,30 +1142,27 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectAll</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectAll</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>selectNone</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>selectNone</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>indentSelectedLines</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>indentSelectedLines</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 </itemizedlist>
@@ -1259,24 +1183,22 @@ JEditTextArea</title>
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getCaretPosition</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getCaretPosition</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns a zero-based index of the caret position in the existing buffer.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>setCaretPosition</function></funcdef>
-  <paramdef>int <parameter>caret</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>setCaretPosition</methodname>
+ <methodparam><type>int</type><parameter>caret</parameter></methodparam>
+</methodsynopsis>
 <para>
     Sets the caret position at <parameter>caret</parameter> and deactivates
     any selection of text.
@@ -1284,12 +1206,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>moveCaretPosition</function></funcdef>
-  <paramdef>int <parameter>caret</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>moveCaretPosition</methodname>
+ <methodparam><type>int</type><parameter>caret</parameter></methodparam>
+</methodsynopsis>
 <para>
     This moves the caret to the position represented by
     <parameter>caret</parameter> without affecting any selection of
@@ -1298,12 +1219,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getCaretLine</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getCaretLine</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the line on which the caret is positioned.
 </para>
@@ -1322,147 +1242,131 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToStartOfLine</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToStartOfLine</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToEndOfLine</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToEndOfLine</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToStartOfWhiteSpace</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToStartOfWhiteSpace</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToEndOfWhiteSpace</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToEndOfWhiteSpace</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToFirstVisibleLine</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToFirstVisibleLine</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToLastVisibleLine</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToLastVisibleLine</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToNextCharacter</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToNextCharacter</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToPrevCharacter</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToPrevCharacter</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToNextWord</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToNextWord</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToPrevWord</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToPrevWord</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToNextLine</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToNextLine</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToPrevLine</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToPrevLine</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToNextParagraph</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToNextParagraph</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToPrevParagraph</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToPrevParagraph</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToNextBracket</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToNextBracket</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>goToPrevBracket</function></funcdef>
-  <paramdef>boolean <parameter>select</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>goToPrevBracket</methodname>
+ <methodparam><type>boolean</type><parameter>select</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 </itemizedlist>
@@ -1477,48 +1381,43 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>scrollUpLine</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>scrollUpLine</methodname>
+    <void/>
+  </methodsynopsis>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>scrollUpPage</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>scrollUpPage</methodname>
+    <void/>
+  </methodsynopsis>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>scrollDownLine</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>scrollDownLine</methodname>
+    <void/>
+  </methodsynopsis>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>scrollUpPage</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>scrollUpPage</methodname>
+    <void/>
+  </methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>scrollToCaret</function></funcdef>
-  <paramdef>boolean <parameter>doElectricScroll</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>scrollToCaret</methodname>
+ <methodparam><type>boolean</type><parameter>doElectricScroll</parameter></methodparam>
+</methodsynopsis>
 <para>
     Scrolls the text area to ensure that the caret is visible. The
     <parameter>doElectricScroll</parameter> parameter detemines whether
@@ -1529,12 +1428,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>centerCaret</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>centerCaret</methodname>
+    <void/>
+  </methodsynopsis>
   <para>
     Scrolls the text area so that the line containing the edit caret is
     vertically centered.
@@ -1542,21 +1440,19 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
- <funcsynopsis>
-  <funcprototype>
-    <funcdef>public void <function>setFirstLine</function></funcdef>
-     <paramdef>int <parameter>firstLine</parameter></paramdef>
-   </funcprototype>
- </funcsynopsis>
+ <methodsynopsis>
+  <modifier>public</modifier><void/>
+  <methodname>setFirstLine</methodname>
+  <methodparam><type>int</type><parameter>firstLine</parameter></methodparam>
+ </methodsynopsis>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public int <function>getFirstLine</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><type>int</type>
+    <methodname>getFirstLine</methodname>
+    <void/>
+  </methodsynopsis>
   <para>
     This pair of methods deals with the line number of the first line
     displayed at the top of the text area. Lines that are hidden by folds or
@@ -1573,21 +1469,19 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
- <funcsynopsis>
-  <funcprototype>
-    <funcdef>public void <function>setElectricScroll</function></funcdef>
-     <paramdef>int <parameter>electricScroll</parameter></paramdef>
-   </funcprototype>
- </funcsynopsis>
+ <methodsynopsis>
+  <modifier>public</modifier><void/>
+  <methodname>setElectricScroll</methodname>
+  <methodparam><type>int</type><parameter>electricScroll</parameter></methodparam>
+ </methodsynopsis>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public int <function>getElectricScroll</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><type>int</type>
+    <methodname>getElectricScroll</methodname>
+    <void/>
+  </methodsynopsis>
   <para>
     The <quote>electric scroll</quote> attribute is the number of lines
     above and below the editing caret that always remain visible when
@@ -1605,33 +1499,30 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineOfOffset</function></funcdef>
-  <paramdef>int <parameter>offset</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getLineOfOffset</methodname>
+ <methodparam><type>int</type><parameter>offset</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the line on which the given offset is found.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineStartOffset</function></funcdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getLineStartOffset</methodname>
+ <methodparam><type>int</type><parameter>line</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineEndOffset</function></funcdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getLineEndOffset</methodname>
+ <methodparam><type>int</type><parameter>line</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the offset of the beginning or end of the given line.
 </para>
@@ -1650,49 +1541,45 @@ JEditTextArea</title>
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getText</function></funcdef>
-  <paramdef>int <parameter>start</parameter></paramdef>
-  <paramdef>int <parameter>len</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>String</type>
+ <methodname>getText</methodname>
+ <methodparam><type>int</type><parameter>start</parameter></methodparam>
+ <methodparam><type>int</type><parameter>len</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the text located between buffer offset positions.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getLineText</function></funcdef>
-  <paramdef>int <parameter>lineIndex</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>String</type>
+ <methodname>getLineText</methodname>
+ <methodparam><type>int</type><parameter>lineIndex</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the text on the given line.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getText</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>String</type>
+ <methodname>getText</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the entire text in the text area.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>setText</function></funcdef>
-  <paramdef>String <parameter>text</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>setText</methodname>
+ <methodparam><type>String</type><parameter>text</parameter></methodparam>
+</methodsynopsis>
 <para>
     Sets (and replaces) the entire text of the text area.
 </para>
@@ -1708,60 +1595,54 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>delete</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>delete</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Deletes the character to the left of the editing caret.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>deleteWord</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>deleteWord</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>deleteLine</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>deleteLine</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>deleteParagraph</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>deleteParagraph</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>deleteToStartOfLine</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>deleteToStartOfLine</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>deleteToEndOfLine</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>deleteToEndOfLine</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 </itemizedlist>
@@ -1774,21 +1655,19 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>toLowerCase</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>toLowerCase</methodname>
+    <void/>
+  </methodsynopsis>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>toUpperCase</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>toUpperCase</methodname>
+    <void/>
+  </methodsynopsis>
   <para>
     These two methods operate on all selected text, including multiple
     selections.
@@ -1796,33 +1675,30 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>joinLines</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>joinLines</methodname>
+    <void/>
+  </methodsynopsis>
   <para>
     Joins the current line with the following line.
   </para>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>setOverwriteEnabled</function></funcdef>
-      <paramdef>boolean <parameter>overwrite</parameter></paramdef>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>setOverwriteEnabled</methodname>
+    <methodparam><type>boolean</type><parameter>overwrite</parameter></methodparam>
+  </methodsynopsis>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public boolean <function>isOverwriteEnabled</function></funcdef>
-      <void/>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><type>boolean</type>
+    <methodname>isOverwriteEnabled</methodname>
+    <void/>
+  </methodsynopsis>
   <para>
     Sets and gets whether added text will overwrite text at the editing
     caret or whether it will be inserted immediately to the right of the
@@ -1831,12 +1707,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-  <funcsynopsis>
-    <funcprototype>
-      <funcdef>public void <function>userInput</function></funcdef>
-      <paramdef>char <parameter>ch</parameter></paramdef>
-    </funcprototype>
-  </funcsynopsis>
+  <methodsynopsis>
+    <modifier>public</modifier><void/>
+    <methodname>userInput</methodname>
+    <methodparam><type>char</type><parameter>ch</parameter></methodparam>
+  </methodsynopsis>
   <para>
      Inserts the character at the caret position as if it were typed at
      the keyboard (keyboard input is actually passed to this method).
@@ -1858,24 +1733,22 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>lineComment</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>lineComment</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     This inserts the line comment string at the beginning of each selected line.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>rangeComment</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>rangeComment</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     This surrounds each selected text chunk with
     the comment start and end strings.
@@ -1891,36 +1764,33 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getBufferLength</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getBufferLength</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the number of characters in the buffer.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineCount</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getLineCount</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the number of lines in the buffer being edited.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getVirtualLineCount</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getVirtualLineCount</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns the number of <quote>virtual</quote> or visible lines in the
     buffer being edited, which may be less than the total number of
@@ -1934,12 +1804,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>getLineLength</function></funcdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>getLineLength</methodname>
+ <methodparam><type>int</type><parameter>line</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the length of the line number <varname>line</varname> (using a
     zero-based count).
@@ -1966,30 +1835,27 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getName</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>String</type>
+ <methodname>getName</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public String <function>getPath</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>String</type>
+ <methodname>getPath</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public File <function>getFile</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>File</type>
+ <methodname>getFile</methodname>
+ <void/>
+</methodsynopsis>
 <para>
  This method may return <literal>null</literal> if the file is stored on
  a remote file system (for example, if the <application>FTP</application>
@@ -1999,45 +1865,41 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>isNewFile</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>boolean</type>
+ <methodname>isNewFile</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns whether a buffer lacks a corresponding version on disk.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>isDirty</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>boolean</type>
+ <methodname>isDirty</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Returns whether there have been unsaved changes to the buffer.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>isReadOnly</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>boolean</type>
+ <methodname>isReadOnly</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>isUntitled</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>boolean</type>
+ <methodname>isUntitled</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 </itemizedlist>
@@ -2049,42 +1911,38 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public Mode <function>getMode</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>Mode</type>
+ <methodname>getMode</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>setMode</function></funcdef>
-  <paramdef>Mode <parameter>mode</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>setMode</methodname>
+ <methodparam><type>Mode</type><parameter>mode</parameter></methodparam>
+</methodsynopsis>
 <para>
     Gets and sets the editing mode for the buffer.
 </para>
 </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int <function>getIndentSize</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>int</type>
+      <methodname>getIndentSize</methodname>
+      <void/>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int <function>getTabSize</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>int</type>
+      <methodname>getTabSize</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       These methods return the size of an initial indentation at the beginning
       of a line and the distance between tab stops, each measured in
@@ -2101,22 +1959,20 @@ JEditTextArea</title>
 
 <itemizedlist>
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>putProperty</function></funcdef>
-        <paramdef>Object <parameter>key</parameter></paramdef>
-        <paramdef>Object <parameter>value</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>putProperty</methodname>
+      <methodparam><type>Object</type><parameter>key</parameter></methodparam>
+      <methodparam><type>Object</type><parameter>value</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Object <function>getProperty</function></funcdef>
-        <paramdef>Object <parameter>key</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>Object</type>
+      <methodname>getProperty</methodname>
+      <methodparam><type>Object</type><parameter>key</parameter></methodparam>
+    </methodsynopsis>
     <para>
       The <classname>Buffer</classname> object maintains a table of
       properties that describe a broad range of attributes. The value of each
@@ -2132,20 +1988,19 @@ JEditTextArea</title>
 </itemizedlist>
 
 <para>
-  These two methods provide shortcuts for getting snd setting <type>boolean</type>
+  These two methods provide shortcuts for getting snd setting <classname>boolean</classname>
   properties.
 </para>
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>getBooleanProperty</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>getBooleanProperty</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+</methodsynopsis>
 <para>
-    Returns a <type>boolean</type> value of <constant>true</constant> or
+    Returns a <classname>boolean</classname> value of <constant>true</constant> or
     <constant>false</constant> for the property named by <varname>name</varname> by
     examining the contents of the property; returns
     <constant>false</constant> if the property cannot be found.
@@ -2153,13 +2008,12 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setBooleanProperty</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
-  <paramdef>boolean <parameter>value</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setBooleanProperty</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>value</parameter></methodparam>
+</methodsynopsis>
 <para>
     This method sets the property named by <varname>name</varname> to
     <varname>value</varname>. The boolean value is stored internally as the
@@ -2178,12 +2032,11 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>reload</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>reload</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+</methodsynopsis>
 <para>
   Reloads the buffer from disk into <parameter>view</parameter>, asking
   for confirmation if the buffer has unsaved changes.
@@ -2191,24 +2044,22 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>save</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>boolean</type>
+ <methodname>save</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>String</type><parameter>path</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>save</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
-  <paramdef>boolean <parameter>rename</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>boolean</type>
+ <methodname>save</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>String</type><parameter>path</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>rename</parameter></methodparam>
+</methodsynopsis>
 <para>
     The <parameter>rename</parameter> parameter causes a buffer's name to
     change if set to <parameter>true</parameter>; if
@@ -2218,34 +2069,31 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public boolean <function>saveAs</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>boolean <parameter>rename</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>boolean</type>
+ <methodname>saveAs</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>rename</parameter></methodparam>
+</methodsynopsis>
 <para>
     Prompts the user for a new name for saving the file.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>beginCompoundEdit</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>beginCompoundEdit</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>endCompoundEdit</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>endCompoundEdit</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Marks the beginning and end of a series of editing operations that will
     be dealt with by a single <guimenuitem>Undo</guimenuitem> command.
@@ -2253,12 +2101,10 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public void <function>removeTrailingWhiteSpace</function></funcdef>
-  <paramdef>int[] <parameter>lines</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><void/>
+ <methodname>removeTrailingWhiteSpace</methodname>
+</methodsynopsis>
 <para>
     Removes trailing whitespace in the lines referenced by the index numbers
     in <parameter>lines</parameter> array.
@@ -2275,24 +2121,20 @@ JEditTextArea</title>
   <itemizedlist>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public String <function>getText</function></funcdef><!--
-          --><paramdef>int <parameter>offset</parameter></paramdef>
-          <paramdef>int <parameter>length</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>String</type>
+        <methodname>getText</methodname>
+        <methodparam><type>int</type><parameter>length</parameter></methodparam>
+      </methodsynopsis>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public void <function>getText</function></funcdef><!--
-          --><paramdef>int <parameter>offset</parameter></paramdef>
-          <paramdef>int <parameter>length</parameter></paramdef>
-          <paramdef>Segment <parameter>text</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><void/>
+        <methodname>getText</methodname>
+        <methodparam><type>int</type><parameter>length</parameter></methodparam>
+        <methodparam><type>Segment</type><parameter>text</parameter></methodparam>
+      </methodsynopsis>
      <para>
        These methods extract a portion of buffer text having length
        <varname>length</varname> beginning at offset position
@@ -2309,14 +2151,12 @@ JEditTextArea</title>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public void <function>insertString</function></funcdef><!--
-          --><paramdef>int <parameter>offset</parameter></paramdef>
-          <paramdef>String <parameter>text</parameter></paramdef>
-          <paramdef>AttributeSet <parameter>attr</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><void/>
+        <methodname>insertString</methodname>
+        <methodparam><type>String</type><parameter>text</parameter></methodparam>
+        <methodparam><type>AttributeSet</type><parameter>attr</parameter></methodparam>
+      </methodsynopsis>
      <para>
        This method inserts the string <varname>text</varname> at offset
        <varname>offset</varname> in the buffer. The attribute
@@ -2326,11 +2166,10 @@ JEditTextArea</title>
     </listitem>
 
     <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>public int <function>getLength</function></funcdef><void/>
-        </funcprototype>
-      </funcsynopsis>
+      <methodsynopsis>
+        <modifier>public</modifier><type>int</type>
+        <methodname>getLength</methodname>
+      </methodsynopsis>
      <para>
        This method returns the number of characters in the buffer.
      </para>
@@ -2362,13 +2201,12 @@ JEditTextArea</title>
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>addMarker</function></funcdef>
-        <paramdef>char <parameter>shortcut</parameter></paramdef>
-        <paramdef>int <parameter>pos</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>addMarker</methodname>
+      <methodparam><type>char</type><parameter>shortcut</parameter></methodparam>
+      <methodparam><type>int</type><parameter>pos</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Adds a marker for the line indicated by <parameter>pos</parameter>
       using <parameter>shortcut</parameter>.  Set
@@ -2378,12 +2216,11 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Vector <function>getMarkers</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>Vector</type>
+      <methodname>getMarkers</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       Returns a <classname>Vector</classname> containing the buffer's
       current markers.
@@ -2391,12 +2228,11 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Marker <function>getMarkerAtLine</function></funcdef>
-        <paramdef>int <parameter>line</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>Marker</type>
+      <methodname>getMarkerAtLine</methodname>
+      <methodparam><type>int</type><parameter>line</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Returns the first marker at the specified line, or
       <constant>null</constant> if no marker is present at the line.
@@ -2404,12 +2240,11 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public Marker <function>getMarker</function></funcdef>
-        <paramdef>char <parameter>shortcut</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>Marker</type>
+      <methodname>getMarker</methodname>
+      <methodparam><type>char</type><parameter>shortcut</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Returns the marker with the specified shortcut, or
       <constant>null</constant> if no such marker exists.
@@ -2417,24 +2252,22 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>removeMarker</function></funcdef>
-        <paramdef>int <parameter>line</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>removeMarker</methodname>
+      <methodparam><type>int</type><parameter>line</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Removes all markers at the specified line.
     </para>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>removeAllMarkers</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>removeAllMarkers</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       Removes all markers in the buffer.
     </para>
@@ -2457,12 +2290,11 @@ JEditTextArea</title>
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public boolean <function>collapseFoldAt</function></funcdef>
-        <paramdef>int <parameter>line</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>boolean</type>
+      <methodname>collapseFoldAt</methodname>
+      <methodparam><type>int</type><parameter>line</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Collapses the fold that contains the specified line number.  The
       method returns <constant>false</constant> if there are no folds in
@@ -2471,14 +2303,13 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public boolean <function>expandFoldAt</function></funcdef>
-        <paramdef>int <parameter>line</parameter></paramdef>
-        <paramdef>boolean <parameter>fully</parameter></paramdef>
-        <paramdef>JEditTextArea <parameter>textArea</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>boolean</type>
+      <methodname>expandFoldAt</methodname>
+      <methodparam><type>int</type><parameter>line</parameter></methodparam>
+      <methodparam><type>boolean</type><parameter>fully</parameter></methodparam>
+      <methodparam><type>JEditTextArea</type><parameter>textArea</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Expands the fold that contains the specified line number.  If
       <parameter>fully</parameter> is true, all folds at the line will be
@@ -2493,12 +2324,11 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>expandFolds</function></funcdef>
-        <paramdef>int <parameter>level</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>expandFolds</methodname>
+      <methodparam><type>int</type><parameter>level</parameter></methodparam>
+    </methodsynopsis>
     <para>
       This method expands all folds in the buffer up to
       <parameter>level</parameter> and collapses all folds with a
@@ -2509,25 +2339,23 @@ JEditTextArea</title>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>expandAllFolds</function></funcdef>
-        <void/>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>expandAllFolds</methodname>
+      <void/>
+    </methodsynopsis>
     <para>
       Expands all folds in the buffer.
     </para>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public void <function>narrow</function></funcdef>
-        <paramdef>int <parameter>start</parameter></paramdef>
-        <paramdef>int <parameter>end</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><void/>
+      <methodname>narrow</methodname>
+      <methodparam><type>int</type><parameter>start</parameter></methodparam>
+      <methodparam><type>int</type><parameter>end</parameter></methodparam>
+    </methodsynopsis>
     <para>
       Narrows the visible portion of the buffer to the specified
       line range. To undo the narrowing, call the
@@ -2554,21 +2382,19 @@ JEditTextArea</title>
 <itemizedlist>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int <function>virtualToPhysical</function></funcdef>
-        <paramdef>int <parameter>lineNo</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>int</type>
+      <methodname>virtualToPhysical</methodname>
+      <methodparam><type>int</type><parameter>lineNo</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public int <function>physicalToVirtual</function></funcdef>
-        <paramdef>int <parameter>lineNo</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><type>int</type>
+      <methodname>physicalToVirtual</methodname>
+      <methodparam><type>int</type><parameter>lineNo</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 
 </itemizedlist>
@@ -2589,13 +2415,12 @@ JEditTextArea</title>
   <itemizedlist>
 
 <listitem>
- <funcsynopsis>
-  <funcprototype>
-   <funcdef>public static void <function>message</function></funcdef>
-	<paramdef>View <parameter>view</parameter></paramdef>
-    <paramdef>String <parameter>message</parameter></paramdef>
-  </funcprototype>
- </funcsynopsis>
+ <methodsynopsis>
+  <modifier>public</modifier><modifier>static</modifier><void/>
+  <methodname>message</methodname>
+  <methodparam><type>View</type><parameter>view</parameter></methodparam>
+  <methodparam><type>String</type><parameter>message</parameter></methodparam>
+ </methodsynopsis>
 <para>
     Displays the text of <parameter>message</parameter> (with an information icon)
     in a modal message box centered on the designated <parameter>view</parameter>.
@@ -2603,37 +2428,34 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
- <funcsynopsis>
-  <funcprototype>
-   <funcdef>public static void <function>error</function></funcdef>
-	<paramdef>View <parameter>view</parameter></paramdef>
-    <paramdef>String <parameter>message</parameter></paramdef>
-  </funcprototype>
- </funcsynopsis>
+ <methodsynopsis>
+  <modifier>public</modifier><modifier>static</modifier><void/>
+  <methodname>error</methodname>
+  <methodparam><type>View</type><parameter>view</parameter></methodparam>
+  <methodparam><type>String</type><parameter>message</parameter></methodparam>
+ </methodsynopsis>
 <para>
     Similar to <function>message</function> but displays an error icon.
 </para>
 </listitem>
 
 <listitem>
- <funcsynopsis>
-  <funcprototype>
-   <funcdef>public static String <function>input</function></funcdef>
-   <paramdef>View <parameter>view</parameter></paramdef>
-   <paramdef>String <parameter>prompt</parameter></paramdef>
-  </funcprototype>
- </funcsynopsis>
+ <methodsynopsis>
+  <modifier>public</modifier><modifier>static</modifier><type>String</type>
+  <methodname>input</methodname>
+  <methodparam><type>View</type><parameter>view</parameter></methodparam>
+  <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
+ </methodsynopsis>
 </listitem>
 
 <listitem>
- <funcsynopsis>
-  <funcprototype>
-   <funcdef>public static String <function>input</function></funcdef>
-   <paramdef>View <parameter>view</parameter></paramdef>
-   <paramdef>String <parameter>prompt</parameter></paramdef>
-   <paramdef>String <parameter>defaultValue</parameter></paramdef>
-  </funcprototype>
- </funcsynopsis>
+ <methodsynopsis>
+  <modifier>public</modifier><modifier>static</modifier><type>String</type>
+  <methodname>input</methodname>
+  <methodparam><type>View</type><parameter>view</parameter></methodparam>
+  <methodparam><type>String</type><parameter>prompt</parameter></methodparam>
+  <methodparam><type>String</type><parameter>defaultValue</parameter></methodparam>
+ </methodsynopsis>
 <para>
     Displays the text of <parameter>prompt</parameter>, a text input field,
     and a question icon in the designated <parameter>view</parameter>. In
@@ -2646,14 +2468,13 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
- <funcsynopsis>
-  <funcprototype>
-   <funcdef>public static int <function>confirm</function></funcdef>
-	<paramdef>View <parameter>view</parameter></paramdef>
-    <paramdef>String <parameter>message</parameter></paramdef>
-    <paramdef>int <parameter>buttons</parameter></paramdef>
-  </funcprototype>
- </funcsynopsis>
+ <methodsynopsis>
+  <modifier>public</modifier><modifier>static</modifier><type>int</type>
+  <methodname>confirm</methodname>
+  <methodparam><type>View</type><parameter>view</parameter></methodparam>
+  <methodparam><type>String</type><parameter>message</parameter></methodparam>
+  <methodparam><type>int</type><parameter>buttons</parameter></methodparam>
+ </methodsynopsis>
 <para>
    The
    <varname>buttons</varname> parameter should either be
@@ -2689,99 +2510,89 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setSearchString</function></funcdef>
-  <paramdef>String <parameter>search</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setSearchString</methodname>
+ <methodparam><type>String</type><parameter>search</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getSearchString</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getSearchString</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setReplaceString</function></funcdef>
-  <paramdef>String <parameter>replace</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setReplaceString</methodname>
+ <methodparam><type>String</type><parameter>replace</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getReplaceString</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getReplaceString</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setIgnoreCase</function></funcdef>
-  <paramdef>boolean <parameter>ignoreCase</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setIgnoreCase</methodname>
+ <methodparam><type>boolean</type><parameter>ignoreCase</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>getIgnoreCase</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>getIgnoreCase</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setRegexp</function></funcdef>
-  <paramdef>boolean <parameter>regexp</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setRegexp</methodname>
+ <methodparam><type>boolean</type><parameter>regexp</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>getRegexp</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>getRegexp</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Determines whether the search term is interpreted as a regular expression.
 </para>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setReverseSearch</function></funcdef>
-  <paramdef>boolean <parameter>reverse</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setReverseSearch</methodname>
+ <methodparam><type>boolean</type><parameter>reverse</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>getReverseSearch</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>getReverseSearch</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Determines whether a reverse search will conducted from the current
     position to the beginning of a buffer.  Currently, only literal
@@ -2790,21 +2601,19 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setBeanShellReplace</function></funcdef>
-  <paramdef>boolean <parameter>beanshell</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setBeanShellReplace</methodname>
+ <methodparam><type>boolean</type><parameter>beanshell</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>getBeanShellReplace</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>getBeanShellReplace</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Determines whether the replace string will be interpreted as a
     BeanShell expression.
@@ -2812,21 +2621,19 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setAutoWrapAround</function></funcdef>
-  <paramdef>boolean <parameter>wrap</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setAutoWrapAround</methodname>
+ <methodparam><type>boolean</type><parameter>wrap</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>getAutoWrapAround</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>getAutoWrapAround</methodname>
+ <void/>
+</methodsynopsis>
 <para>
     Determines whether a search will automatically <quote>wrap</quote>
     to the beginning of a buffer after the search reaches the buffer's end.
@@ -2836,12 +2643,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>setSearchFileSet</function></funcdef>
-  <paramdef>SearchFileSet <parameter>fileset</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>setSearchFileSet</methodname>
+ <methodparam><type>SearchFileSet</type><parameter>fileset</parameter></methodparam>
+</methodsynopsis>
 <para>
     A <classname>SearchFileSet</classname> is an abstract class representing the
     set of files that are the subject of a search. There are four classes derived
@@ -2858,14 +2664,13 @@ JEditTextArea</title>
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public <function>DirectoryListSet</function></funcdef>
-  <paramdef>String <parameter>directory</parameter></paramdef>
-  <paramdef>String <parameter>glob</parameter></paramdef>
-  <paramdef>boolean <parameter>recurse</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <type>public</type>
+ <methodname>DirectoryListSet</methodname>
+ <methodparam><type>String</type><parameter>directory</parameter></methodparam>
+ <methodparam><type>String</type><parameter>glob</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>recurse</parameter></methodparam>
+</methodsynopsis>
 <para>
     The parameter <parameter>glob</parameter> is the glob pattern
     that determines which files from the
@@ -2886,12 +2691,11 @@ JEditTextArea</title>
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public <function>AllBufferSet</function></funcdef>
-  <paramdef>String <parameter>glob</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <type>public</type>
+ <methodname>AllBufferSet</methodname>
+ <methodparam><type>String</type><parameter>glob</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 </itemizedlist>
 
@@ -2904,12 +2708,11 @@ JEditTextArea</title>
 
 <itemizedlist mark="disc">
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public <function>CurrentBufferSet</function></funcdef>
-  <void/>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <type>public</type>
+ <methodname>CurrentBufferSet</methodname>
+ <void/>
+</methodsynopsis>
 </listitem>
 </itemizedlist>
 
@@ -2926,12 +2729,11 @@ JEditTextArea</title>
 
 <itemizedlist mark="disc">
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public <function>BufferListSet</function></funcdef>
-  <paramdef>Vector <parameter>files</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <type>public</type>
+ <methodname>BufferListSet</methodname>
+ <methodparam><type>Vector</type><parameter>files</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 </itemizedlist>
 
@@ -2948,12 +2750,11 @@ JEditTextArea</title>
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>find</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>find</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+</methodsynopsis>
 <para>
     This will select the next instance of matching text if the search
     is successful.
@@ -2961,12 +2762,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>replace</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>replace</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+</methodsynopsis>
 <para>
     This will replace the each occurrence of the <quote>search string</quote>
     in selected text with the <quote>replace string</quote>.  If no text is selected,
@@ -2975,15 +2775,14 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>replace</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>Buffer <parameter>buffer</parameter></paramdef>
-  <paramdef>int <parameter>start</parameter></paramdef>
-  <paramdef>int <parameter>end</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>replace</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>Buffer</type><parameter>buffer</parameter></methodparam>
+ <methodparam><type>int</type><parameter>start</parameter></methodparam>
+ <methodparam><type>int</type><parameter>end</parameter></methodparam>
+</methodsynopsis>
 <para>
     This will replace the each occurrence of the <quote>search string</quote>
     in the specified range with the <quote>replace string</quote>.
@@ -2991,12 +2790,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>replaceAll</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>replaceAll</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+</methodsynopsis>
 <para>
     This method performs a replacement in all buffers in the
     <classname>SearchFileSet</classname>. Text selection is ignored.
@@ -3004,12 +2802,11 @@ JEditTextArea</title>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static boolean <function>hyperSearch</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>boolean</type>
+ <methodname>hyperSearch</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+</methodsynopsis>
 <para>
     This collects all instances of matching text in the members of the
     <classname>SearchFileSet</classname> and displays them in a dedicated window.
@@ -3047,14 +2844,13 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 
 <itemizedlist>
   <listitem>
-    <funcsynopsis>
-      <funcprototype>
-        <funcdef>public static void <function>showSearchDialog</function></funcdef>
-        <paramdef>View <parameter>view</parameter></paramdef>
-        <paramdef>String <parameter>searchString</parameter></paramdef>
-        <paramdef>int <parameter>searchIn</parameter></paramdef>
-      </funcprototype>
-    </funcsynopsis>
+    <methodsynopsis>
+      <modifier>public</modifier><modifier>static</modifier><void/>
+      <methodname>showSearchDialog</methodname>
+      <methodparam><type>View</type><parameter>view</parameter></methodparam>
+      <methodparam><type>String</type><parameter>searchString</parameter></methodparam>
+      <methodparam><type>int</type><parameter>searchIn</parameter></methodparam>
+    </methodsynopsis>
   </listitem>
 </itemizedlist>
 
@@ -3075,22 +2871,21 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 <para>
     The methods dealing with creating menus and menu items are described
     in <xref linkend="plugin-implement-menu" />.
-    One other <type>static</type> method in this class encapsulates the
+    One other <classname>static</classname> method in this class encapsulates the
     creation and display of jEdit's custom file chooser dialog box.
 </para>
 
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String[] <function>showVFSFileDialog</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
-  <paramdef>int <parameter>type</parameter></paramdef>
-  <paramdef>boolean <parameter>multipleSelection</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String[]</type>
+ <methodname>showVFSFileDialog</methodname>
+ <methodparam><type>View</type><parameter>view</parameter></methodparam>
+ <methodparam><type>String</type><parameter>path</parameter></methodparam>
+ <methodparam><type>int</type><parameter>type</parameter></methodparam>
+ <methodparam><type>boolean</type><parameter>multipleSelection</parameter></methodparam>
+</methodsynopsis>
 <para>
     This method displays the <!-- enhanced, more versatile -->
     <classname>VFSFileChooserDialog</classname> provided by jEdit.  <!-- In this case, -->
@@ -3112,21 +2907,20 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 <sect1 id="class-textutilities"><title>Class TextUtilities</title>
 
 <para>
-    This class contains a number of <type>static</type> methods
+    This class contains a number of <classname>static</classname> methods
     that can be helpful in handling buffer text.
 </para>
 
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static int <function>findMatchingBracket</function></funcdef>
-  <paramdef>Buffer <parameter>buffer</parameter></paramdef>
-  <paramdef>int <parameter>line</parameter></paramdef>
-  <paramdef>int <parameter>offset</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>int</type>
+ <methodname>findMatchingBracket</methodname>
+ <methodparam><type>Buffer</type><parameter>buffer</parameter></methodparam>
+ <methodparam><type>int</type><parameter>line</parameter></methodparam>
+ <methodparam><type>int</type><parameter>offset</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the offset of the bracket matching the one at offset
     <parameter>offset</parameter> of line <parameter>line</parameter> of the buffer;
@@ -3138,25 +2932,23 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static int <function>findWordStart</function></funcdef>
-  <paramdef>String <parameter>line</parameter></paramdef>
-  <paramdef>int <parameter>pos</parameter></paramdef>
-  <paramdef>String <parameter>noWordSep</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>int</type>
+ <methodname>findWordStart</methodname>
+ <methodparam><type>String</type><parameter>line</parameter></methodparam>
+ <methodparam><type>int</type><parameter>pos</parameter></methodparam>
+ <methodparam><type>String</type><parameter>noWordSep</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static int <function>findWordEnd</function></funcdef>
-  <paramdef>String <parameter>line</parameter></paramdef>
-  <paramdef>int <parameter>pos</parameter></paramdef>
-  <paramdef>String <parameter>noWordSep</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>int</type>
+ <methodname>findWordEnd</methodname>
+ <methodparam><type>String</type><parameter>line</parameter></methodparam>
+ <methodparam><type>int</type><parameter>pos</parameter></methodparam>
+ <methodparam><type>String</type><parameter>noWordSep</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the position on which the word found on line
     <parameter>line</parameter>, position <parameter>line</parameter> begins or ends.
@@ -3168,13 +2960,12 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>format</function></funcdef>
-  <paramdef>String <parameter>text</parameter></paramdef>
-  <paramdef>int <parameter>maxLineLength</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>format</methodname>
+ <methodparam><type>String</type><parameter>text</parameter></methodparam>
+ <methodparam><type>int</type><parameter>maxLineLength</parameter></methodparam>
+</methodsynopsis>
 <para>
     Reformats a string and inserts line separators as necessary so
     that no line exceeds <parameter>maxLineLength</parameter> in length.
@@ -3182,23 +2973,21 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>spacesToTabs</function></funcdef>
-  <paramdef>String <parameter>in</parameter></paramdef>
-  <paramdef>int <parameter>tabSize</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>spacesToTabs</methodname>
+ <methodparam><type>String</type><parameter>in</parameter></methodparam>
+ <methodparam><type>int</type><parameter>tabSize</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>tabsToSpaces</function></funcdef>
-  <paramdef>String <parameter>in</parameter></paramdef>
-  <paramdef>int <parameter>tabSize</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>tabsToSpaces</methodname>
+ <methodparam><type>String</type><parameter>in</parameter></methodparam>
+ <methodparam><type>int</type><parameter>tabSize</parameter></methodparam>
+</methodsynopsis>
 <para>
     Makes the indicated change based upon a tab size of
     <parameter>tabSize</parameter>.
@@ -3212,7 +3001,7 @@ jEdit.setBooleanProperty(<quote>search.keepDialog.toggle</quote>,true);</program
 <sect1 id="class-miscutilities"><title>Class MiscUtilities</title>
 
 <para>
-This class is another collection of <type>static</type> utility methods.
+This class is another collection of <classname>static</classname> utility methods.
 </para>
 
 <para>
@@ -3222,30 +3011,27 @@ This class is another collection of <type>static</type> utility methods.
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getFileName</function></funcdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getFileName</methodname>
+ <methodparam><type>String</type><parameter>path</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getFileExtension</function></funcdef>
-  <paramdef>String <parameter>name</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getFileExtension</methodname>
+ <methodparam><type>String</type><parameter>name</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>getParentOfPath</function></funcdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>getParentOfPath</methodname>
+ <methodparam><type>String</type><parameter>path</parameter></methodparam>
+</methodsynopsis>
 <para>
     Returns the directory containing the specified local file.
 </para>
@@ -3261,13 +3047,12 @@ This class is another collection of <type>static</type> utility methods.
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static String <function>createWhiteSpace</function></funcdef>
-  <paramdef>int <parameter>len</parameter></paramdef>
-  <paramdef>int <parameter>tabSize</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><type>String</type>
+ <methodname>createWhiteSpace</methodname>
+ <methodparam><type>int</type><parameter>len</parameter></methodparam>
+ <methodparam><type>int</type><parameter>tabSize</parameter></methodparam>
+</methodsynopsis>
 <para>
     If <parameter>tabSize</parameter> is set to zero, the string will consist entirely
     of space characters.  To get a whitespace string tuned to the current buffer's
@@ -3287,23 +3072,20 @@ This class is another collection of <type>static</type> utility methods.
 <itemizedlist>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>quicksort</function></funcdef>
-  <paramdef>Object[] <parameter>obj</parameter></paramdef>
-  <paramdef>Compare <parameter>compare</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>quicksort</methodname>
+ <methodparam><type>Compare</type><parameter>compare</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public static void <function>quicksort</function></funcdef>
-  <paramdef>Vector <parameter>vector</parameter></paramdef>
-  <paramdef>Compare <parameter>compare</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><modifier>static</modifier><void/>
+ <methodname>quicksort</methodname>
+ <methodparam><type>Vector</type><parameter>vector</parameter></methodparam>
+ <methodparam><type>Compare</type><parameter>compare</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 
 </itemizedlist>
@@ -3319,13 +3101,12 @@ This class is another collection of <type>static</type> utility methods.
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
- <funcprototype>
-  <funcdef>public int <function>compare</function></funcdef>
-  <paramdef>Object <parameter>obj1</parameter></paramdef>
-  <paramdef>Object <parameter>obj2</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+ <modifier>public</modifier><type>int</type>
+ <methodname>compare</methodname>
+ <methodparam><type>Object</type><parameter>obj1</parameter></methodparam>
+ <methodparam><type>Object</type><parameter>obj2</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 </itemizedlist>
 
@@ -3375,15 +3156,14 @@ This class is another collection of <type>static</type> utility methods.
 
 <itemizedlist>
 <listitem>
-<funcsynopsis>
-<funcprototype>
-  <funcdef>public static void <function>runScript</function></funcdef>
-  <paramdef>View <parameter>view</parameter></paramdef>
-  <paramdef>String <parameter>path</parameter></paramdef>
-  <paramdef>boolean <parameter>ownNamespace</parameter></paramdef>
-  <paramdef>boolean <parameter>rethrowBshErrors</parameter></paramdef>
- </funcprototype>
-</funcsynopsis>
+<methodsynopsis>
+<modifier>public</modifier><modifier>static</modifier><void/>
+<methodname>runScript</methodname>
+<methodparam><type>View</type><parameter>view</parameter></methodparam>
+<methodparam><type>String</type><parameter>path</parameter></methodparam>
+<methodparam><type>boolean</type><parameter>ownNamespace</parameter></methodparam>
+<methodparam><type>boolean</type><parameter>rethrowBshErrors</parameter></methodparam>
+</methodsynopsis>
 </listitem>
 </itemizedlist>
 

@@ -43,9 +43,6 @@
 
 <xsl:variable name="shade.verbatim">1</xsl:variable>
 
-<xsl:variable name="funcsynopsis.style">ansi</xsl:variable>
-<xsl:template match="void"><xsl:apply-templates/></xsl:template>
-
 <xsl:variable name="toc.list.type">ul</xsl:variable>
 
 <!-- Stuff for FAQ -->

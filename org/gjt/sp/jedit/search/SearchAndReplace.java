@@ -776,21 +776,24 @@ loop:			while(path != null)
 
 				// Leave buffer in a consistent state if
 				// an error occurs
+				int retVal = 0;
+
 				try
 				{
 					buffer.beginCompoundEdit();
-					int retVal = _replace(view,buffer,
+					retVal = _replace(view,buffer,
 						0,buffer.getLength());
-					if(retVal != 0)
-					{
-						fileCount++;
-						occurCount += retVal;
-						jEdit.commitTemporary(buffer);
-					}
 				}
 				finally
 				{
 					buffer.endCompoundEdit();
+				}
+
+				if(retVal != 0)
+				{
+					fileCount++;
+					occurCount += retVal;
+					jEdit.commitTemporary(buffer);
 				}
 			}
 		}
