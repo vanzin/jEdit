@@ -17,6 +17,7 @@ TO DO
 
 + in 4.1:
 
+- rect select hypersearch
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state
 - drag and up and down should not need setFirstLine() stupidity
