@@ -13,6 +13,7 @@ JEDIT 4.1 VERSION HISTORY
   - Adds a print preview function
   - Uses Java 2 version 1.4 print dialogs when running on that Java
     version
+  - Performs printing in a background thread
   - Fixes a few bugs
 - MacOS plugin version 1.2 adds an option pane with a few settings, and
   some bug fixes and cleanups (Kris Kopicki)
@@ -29,6 +30,14 @@ JEDIT 4.1 VERSION HISTORY
 - The text color and style used to show the "[n lines]" string can now
   be set independently of the EOL marker color
 - Bracket matching tweak (Alexander Maryanovsky)
+- Plugin manager window can be closed by pressing Escape now
+- Fixed indentation of constructs like:
+
+  if(foo)
+    bar();
+  baz();
+
+  in Java/C/C++/etc modes (Alexander Maryanovsky)
 
 + Bug Fixes
 
@@ -49,6 +58,11 @@ JEDIT 4.1 VERSION HISTORY
   normal searches, where an unsuccessful match did not close the dialog
   (so you could correct the search string easier)
 - One of the tips of the day referred to an invalid URL
+- Previously, the filesystem browser opens the clicked directory if
+  clickCount == 2. This doesn't work if you double click once and then
+  immediate double click again on a directory (or a file) at the same
+  physical location, because the 2nd double click is reported with a
+  click count of 3 and 4 (Alexander Maryanovsky)
 
 + API Changes
 

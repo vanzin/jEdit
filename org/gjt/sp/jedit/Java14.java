@@ -27,7 +27,7 @@ import javax.swing.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.msg.ViewUpdate;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.util.Log;
@@ -65,6 +65,16 @@ public class Java14
 					{
 						vu.getView().setFocusTraversalPolicy(
 							new MyFocusTraversalPolicy());
+					}
+				}
+				else if(msg instanceof EditPaneUpdate)
+				{
+					EditPaneUpdate eu = (EditPaneUpdate)msg;
+					if(eu.getWhat() == EditPaneUpdate.CREATED)
+					{
+						eu.getEditPane().getTextArea()
+							.addMouseWheelListener(
+							new MouseWheelHandler());
 					}
 				}
 			}
@@ -124,4 +134,14 @@ public class Java14
 			return ((View)focusCycleRoot).getTextArea();
 		}
 	} //}}}
+
+	//{{{ WheelScrollListener class
+	static class MouseWheelHandler implements MouseWheelListener
+	{
+		public void mouseWheelMoved(MouseWheelEvent e)
+		{
+			int amt = e.getWheelRotation();
+			System.err.println(amt);
+		}
+	}
 }

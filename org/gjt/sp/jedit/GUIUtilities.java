@@ -166,8 +166,7 @@ public class GUIUtilities
 
 	//{{{ loadMenu() method
 	/**
-	 * Creates a menu. This form of loadMenu() does not need to be used
-	 * by plugins; use the other form instead.
+	 * Creates a menu.
 	 * @param view The view to load the menu for
 	 * @param name The menu name
 	 * @since jEdit 2.6pre2

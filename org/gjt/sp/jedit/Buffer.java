@@ -1923,6 +1923,7 @@ public class Buffer implements EBComponent
 
 		Element map = getDefaultRootElement();
 
+		String prevPrevLine = null;
 		String prevLine = null;
 		String line = null;
 
@@ -1931,7 +1932,8 @@ public class Buffer implements EBComponent
 
 		// Get line text
 		line = getText(start,lineElement.getEndOffset() - start - 1);
-
+		
+		int prevLineIndex = -1;
 		for(int i = lineIndex - 1; i >= 0; i--)
 		{
 			lineElement = map.getElement(i);
@@ -1940,19 +1942,21 @@ public class Buffer implements EBComponent
 			if(len != 0)
 			{
 				prevLine = getText(lineStart,len);
+				prevLineIndex = i;
 				break;
 			}
 		}
 
 		if(prevLine == null)
 			return false;
-
+		
 		/*
 		 * If 'prevLineIndent' matches a line --> +1
 		 */
 		boolean prevLineMatches = (indentPrevLineRE == null ? false
 			: indentPrevLineRE.isMatch(prevLine));
-
+		
+		
 		/*
 		 * On the previous line,
 		 * if(bob) { --> +1
@@ -1962,6 +1966,15 @@ public class Buffer implements EBComponent
 		boolean prevLineStart = true; // False after initial indent
 		int prevLineIndent = 0; // Indent width (tab expanded)
 		int prevLineBrackets = 0; // Additional bracket indent
+		int prevLineCloseBracketIndex = -1; // For finding whether we're in
+			// this kind of construct:
+			// if (cond1)
+			//   while (cond2)
+			//     if (cond3){
+			//	
+			//     }
+			// So we know to indent the next line under the 1st if.
+		
 		for(int i = 0; i < prevLine.length(); i++)
 		{
 			char c = prevLine.charAt(i);
@@ -1980,10 +1993,13 @@ public class Buffer implements EBComponent
 				}
 				break;
 			default:
-				prevLineStart = false;
-				if(closeBrackets.indexOf(c) != -1)
+				prevLineStart = false;				
+				
+				if(closeBrackets.indexOf(c) != -1){
 					prevLineBrackets = Math.max(
 						prevLineBrackets-1,0);
+					prevLineCloseBracketIndex = i;
+				}
 				else if(openBrackets.indexOf(c) != -1)
 				{
 					/*
@@ -2012,6 +2028,9 @@ public class Buffer implements EBComponent
 		// when the auto indent is rewritten.
 		if(prevLineBrackets == 3)
 			prevLineBrackets = 0;
+		
+		
+		
 
 		/*
 		 * On the current line,
@@ -2046,8 +2065,7 @@ public class Buffer implements EBComponent
 					lineWidth++;
 				}
 				break;
-			default:
-				lineStart = false;
+			default:			
 				if(closeBrackets.indexOf(c) != -1)
 				{
 					if(lineBrackets == 0)
@@ -2057,11 +2075,11 @@ public class Buffer implements EBComponent
 				}
 				else if(openBrackets.indexOf(c) != -1)
 				{
-					if(!doubleBracketIndent)
+					if((!doubleBracketIndent)&&lineStart)
 						prevLineMatches = false;
 					lineBrackets++;
 				}
-
+				lineStart = false;				
 				break;
 			}
 		}
@@ -2074,6 +2092,48 @@ public class Buffer implements EBComponent
 			closeBracketIndex = -1;
 			lineBrackets = 0;
 		}
+		
+		
+		if((indentPrevLineRE != null) && (!prevLineMatches) && (prevLineBrackets == 0))
+		{
+			int indentLineIndex;
+			if(prevLineCloseBracketIndex != -1){
+				int offset = TextUtilities.findMatchingBracket(
+					this,prevLineIndex,prevLineCloseBracketIndex);
+				if(offset == -1)
+					return false;
+				indentLineIndex = map.getElementIndex(offset);
+			}
+			else
+				indentLineIndex = lineIndex-1;
+			if(indentLineIndex>=0){
+				lineElement = map.getElement(indentLineIndex);				
+				int startOffset = lineElement.getStartOffset();
+				String closeLine = getText(startOffset,
+					lineElement.getEndOffset() - startOffset - 1);
+				
+				while (--indentLineIndex > 0)
+				{
+					lineElement = map.getElement(indentLineIndex);
+					startOffset = lineElement.getStartOffset();
+					int len = lineElement.getEndOffset() - startOffset - 1;
+					String tempLine = getText(startOffset,len);
+					if (tempLine.trim().length()==0)
+						continue;
+					if(indentPrevLineRE.isMatch(tempLine))
+						closeLine = tempLine;
+					else
+						break;
+				}
+				
+				prevLineIndent = MiscUtilities
+					.getLeadingWhiteSpaceWidth(
+					closeLine,tabSize);
+			}
+			else
+				return false;
+		}
+		
 
 		if(closeBracketIndex != -1)
 		{
@@ -2081,11 +2141,10 @@ public class Buffer implements EBComponent
 				this,lineIndex,closeBracketIndex);
 			if(offset != -1)
 			{
-				lineElement = map.getElement(map.getElementIndex(
-					offset));
+				lineElement = map.getElement(map.getElementIndex(offset));
 				int startOffset = lineElement.getStartOffset();
 				String closeLine = getText(startOffset,
-					lineElement.getEndOffset() - startOffset - 1);
+					lineElement.getEndOffset() - startOffset - 1);					
 				prevLineIndent = MiscUtilities
 					.getLeadingWhiteSpaceWidth(
 					closeLine,tabSize);
@@ -2097,8 +2156,9 @@ public class Buffer implements EBComponent
 		{
 			prevLineIndent += (prevLineBrackets * indentSize);
 		}
-
-		if(prevLineMatches)
+		
+		
+		if (prevLineMatches)
 			prevLineIndent += indentSize;
 
 		if(!canDecreaseIndent && prevLineIndent <= lineIndent)

@@ -631,7 +631,10 @@ public class BrowserView extends JPanel
 						browser.filesSelected();
 						super.processMouseEvent(evt);
 					}
-					if(evt.getClickCount() == 2)
+					// A double click is not only when clickCount == 2
+					// because every other click can open a new directory
+					if(evt.getClickCount() % 2 == 0)
+
 					{
 						// don't pass double-clicks to tree, otherwise
 						// directory nodes will be expanded and we don't
