@@ -12,7 +12,9 @@ contributing to this release.
 
 - Updated PHP and Perl syntax highlighting (Chris Petersen).
 
-+ Performance Enhancements:
++ Miscellaneous Changes:
+
+- Global options dialog box remembers its size and position now.
 
 - Much faster auto indent.
 
@@ -30,6 +32,9 @@ contributing to this release.
 
 - More fixes for non-standard mouse button handling under MacOS X
   (Kris Kopicki).
+
+- Fixed ArrayIndexOutOfBoundsException when selecting the last edit mode
+  in the list.
 
 + API Changes:
 
