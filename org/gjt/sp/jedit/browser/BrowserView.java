@@ -675,8 +675,7 @@ class BrowserView extends JPanel
 				case '-':
 					View view = browser.getView();
 					Buffer buffer = view.getBuffer();
-					browser.setDirectory(MiscUtilities.getParentOfPath(
-						buffer.getPath()));
+					browser.setDirectory(buffer.getDirectory());
 					break;
 				default:
 					typeSelectBuffer.append(evt.getKeyChar());

@@ -319,8 +319,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			else if(actionCommand.equals("synchronize"))
 			{
 				Buffer buffer = browser.getView().getBuffer();
-				browser.setDirectory(buffer.getVFS().getParentOfPath(
-					buffer.getPath()));
+				browser.setDirectory(buffer.getDirectory());
 			}
 			else if(actionCommand.equals("new-file"))
 				browser.newFile();

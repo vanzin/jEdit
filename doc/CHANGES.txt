@@ -17,6 +17,8 @@ Thanks to Stefan Kost for contributing to this release.
 
 - jEditLauncher was not being correctly installed on Windows.
 
+- Fixed accidental AbstractOptionPane API breakage.
+
 + API Additions:
 
 - Added Buffer.invalidateCachedFoldLevels() method needed by SideKick

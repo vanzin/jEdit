@@ -30,7 +30,7 @@ public class IntegerArray
 	//{{{ IntegerArray constructor
 	public IntegerArray()
 	{
-		array = new int[100];
+		array = new int[1000];
 	} //}}}
 
 	//{{{ add() method

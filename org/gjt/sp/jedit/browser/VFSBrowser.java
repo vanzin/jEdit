@@ -288,8 +288,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 				if(view != null)
 				{
 					Buffer buffer = view.getBuffer();
-					path = buffer.getVFS().getParentOfPath(
-						buffer.getPath());
+					path = buffer.getDirectory();
 				}
 				else
 					path = userHome;
@@ -1186,8 +1185,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			else if(source == synchronize)
 			{
 				Buffer buffer = view.getBuffer();
-				setDirectory(buffer.getVFS().getParentOfPath(
-					buffer.getPath()));
+				setDirectory(buffer.getDirectory());
 			}
 			else if(source == newFile)
 				newFile();

@@ -5,6 +5,8 @@ and quirks that I need to fix eventually.
 
 - need a new jEditLauncher before the 4.1final release
 - fsb: at roots:; select something; path not prepended
+- default installer path for non-root users
+- asd() call in javadocs
 
 + later:
 
