@@ -1075,6 +1075,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				x2 = getWidth();
 			}
 
+			if(x1 < 0)
+				x1 = 0;
+			if(x2 < 0)
+				x2 = 0;
+
 			if(x1 == x2)
 				x2++;
 
