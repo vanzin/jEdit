@@ -22,6 +22,9 @@
 
 		<!-- parsing words -->
 		<SEQ_REGEXP TYPE="MARKUP"
+			HASH_CHAR="\"
+			AT_WORD_START="TRUE">\\\s+(\S+)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
 			HASH_CHAR=":"
 			AT_WORD_START="TRUE">:\s+(\S+)</SEQ_REGEXP>
 		<SEQ_REGEXP TYPE="MARKUP"

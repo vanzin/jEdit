@@ -110,6 +110,15 @@ public class CompleteWord extends JWindow
 		} //}}}
 	} //}}}
 
+	//{{{ fitInScreen() method
+	public static Point fitInScreen(Point p, Window w, int lineHeight)
+	{
+		Rectangle screenSize = w.getGraphicsConfiguration().getBounds();
+		if(p.y + w.getHeight() >= screenSize.height)
+			p.y = p.y - w.getHeight() - lineHeight;
+		return p;
+	} //}}}
+	
 	//{{{ CompleteWord constructor
 	public CompleteWord(View view, String word, Completion[] completions,
 		Point location, String noWordSep)
@@ -163,7 +172,9 @@ public class CompleteWord extends JWindow
 		GUIUtilities.requestFocus(this,words);
 
 		pack();
-		setLocation(location);
+		setLocation(fitInScreen(location,this,
+			textArea.getPainter().getFontMetrics()
+			.getHeight()));
 		setVisible(true);
 
 		KeyHandler keyHandler = new KeyHandler();

@@ -14,6 +14,9 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
 + text area:
 
+- if(foo(bar
+  <-- too much indent here
+- kill ring still being reversed
   - ruleset importing trick
   - expand fold: try to expand even if already expanded
   - backspace with virtual caret: needs tweaks

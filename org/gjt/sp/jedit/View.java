@@ -559,10 +559,10 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void processKeyEvent(KeyEvent evt, int from)
 	{
-		if(Debug.DUMP_KEY_EVENTS && from != VIEW)
+		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event: "
-				+ GrabKeyDialog.toString(evt));
+				+ GrabKeyDialog.toString(evt) + " from " + from);
 		}
 
 		if(getTextArea().hasFocus() && from == VIEW)
@@ -572,10 +572,10 @@ public class View extends JFrame implements EBComponent
 		if(evt == null)
 			return;
 
-		if(Debug.DUMP_KEY_EVENTS && from != VIEW)
+		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event after workaround: "
-				+ GrabKeyDialog.toString(evt));
+				+ GrabKeyDialog.toString(evt) + " from " + from);
 		}
 
 		switch(evt.getID())
@@ -605,12 +605,11 @@ public class View extends JFrame implements EBComponent
 					.translateKeyEvent(evt);
 				if(keyStroke != null)
 				{
-					if(Debug.DUMP_KEY_EVENTS
-						&& from != VIEW)
+					if(Debug.DUMP_KEY_EVENTS)
 					{
 						Log.log(Log.DEBUG,this,
 							"Translated: "
-							+ keyStroke);
+							+ keyStroke + " from " + from);
 					}
 					if(inputHandler.handleKey(keyStroke))
 						evt.consume();
@@ -668,12 +667,11 @@ public class View extends JFrame implements EBComponent
 					.translateKeyEvent(evt);
 				if(keyStroke != null)
 				{
-					if(Debug.DUMP_KEY_EVENTS
-						&& from != VIEW)
+					if(Debug.DUMP_KEY_EVENTS)
 					{
 						Log.log(Log.DEBUG,this,
 							"Translated: "
-							+ keyStroke);
+							+ keyStroke + " from " + from);
 					}
 					if(inputHandler.handleKey(keyStroke))
 						evt.consume();
