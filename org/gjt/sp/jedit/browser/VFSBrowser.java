@@ -327,6 +327,9 @@ public class VFSBrowser extends JPanel implements EBComponent
 			}
 		}
 
+		currentEncoding = jEdit.getProperty("buffer.encoding",
+			System.getProperty("file.encoding"));
+
 		final String _path = path;
 
 		SwingUtilities.invokeLater(new Runnable()
@@ -753,6 +756,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ Package-private members
+	String currentEncoding;
 
 	//{{{ updateFilenameFilter() method
 	void updateFilenameFilter()
@@ -920,7 +924,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			{
 				Buffer _buffer = jEdit.getBuffer(file.path);
 				if(_buffer == null)
-					_buffer = jEdit.openFile(null,file.path);
+				{
+					Hashtable props = new Hashtable();
+					props.put(Buffer.ENCODING,currentEncoding);
+					_buffer = jEdit.openFile(null,null,file.path,
+						false,props);
+				}
 				else if(doubleClickClose && canDoubleClickClose
 					&& this.mode != BROWSER_DIALOG
 					&& selectedFiles.length == 1)
