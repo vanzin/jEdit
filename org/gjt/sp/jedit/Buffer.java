@@ -3170,8 +3170,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		markers.removeAllElements();
 
-		EditBus.send(new BufferUpdate(this,null,
-			BufferUpdate.MARKERS_CHANGED));
+		if(!getFlag(LOADING))
+		{
+			EditBus.send(new BufferUpdate(this,null,
+				BufferUpdate.MARKERS_CHANGED));
+		}
 	} //}}}
 
 	//{{{ getMarker() method
