@@ -572,6 +572,17 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		repaint();
 	} //}}}
 
+	//{{{ getExtensions() method
+	/**
+	 * Returns an array of registered text area extensions. Useful for
+	 * debugging purposes.
+	 * @since jEdit 4.1pre5
+	 */
+	public TextAreaExtension[] getExtensions()
+	{
+		return extensionMgr.getExtensions();
+	} //}}}
+
 	//{{{ getToolTipText() method
 	/**
 	 * Returns the tool tip to display at the specified location.
@@ -614,8 +625,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void paintComponent(Graphics _gfx)
 	{
-		long start = System.currentTimeMillis();
-
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
@@ -680,8 +689,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			Log.log(Log.ERROR,this,e);
 		}
 
-		//System.err.println((System.currentTimeMillis() - start)
-		//	+ ": " + (lastInvalid - firstInvalid + 1));
+		if(textArea.timing)
+		{
+			textArea.timing = false;
+			System.err.println(System.currentTimeMillis() - textArea.time);
+		}
 	} //}}}
 
 	//{{{ nextTabStop() method

@@ -4528,9 +4528,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		return false;
 	} //}}}
 
+	// debug code to measure key delay
+	long time;
+	boolean timing;
+
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
+		time = System.currentTimeMillis();
+
 		evt = KeyEventWorkaround.processKeyEvent(evt);
 		if(evt == null)
 			return;
@@ -4544,6 +4550,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
+			timing = true;
 			if(keyEventInterceptor != null)
 				keyEventInterceptor.keyTyped(evt);
 			else

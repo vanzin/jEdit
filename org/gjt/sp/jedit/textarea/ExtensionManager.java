@@ -60,6 +60,18 @@ class ExtensionManager
 		}
 	} //}}}
 
+	//{{{ getExtensions() method
+	TextAreaExtension[] getExtensions()
+	{
+		TextAreaExtension[] retVal = new TextAreaExtension[
+			extensions.size()];
+		for(int i = 0; i < extensions.size(); i++)
+		{
+			retVal[i] = ((Entry)extensions.get(i)).ext;
+		}
+		return retVal;
+	} //}}}
+
 	//{{{ paintValidLine() method
 	void paintValidLine(Graphics2D gfx, int screenLine,
 		int physicalLine, int start, int end, int y)

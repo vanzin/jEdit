@@ -12,13 +12,13 @@
 
 Summary: Programmer's text editor written in Java
 Name: jedit
-Version: 4.0.1
+Version: 4.1
 Release: 1
 # REMIND: bump this with each RPM
-Serial: 29
+Serial: 30
 Copyright: GPL
 Group: Applications/Editors
-Source0: http://prdownloads.sourceforge.net/jedit/jedit40source.tar.gz
+Source0: http://prdownloads.sourceforge.net/jedit/jedit41source.tar.gz
 Source1: jedit.sh.in
 URL: http://www.jedit.org
 Vendor: Slava Pestov <slava@jedit.org>
@@ -43,8 +43,7 @@ jEdit requires Java 2 version 1.3.
 %build
 export CLASSPATH="."
 
-jdk13 ant docs-html-xsltproc dist
-jdk14 ant
+ant docs-html-xsltproc dist
 
 # Build LatestVersion.jar
 (cd jars/LatestVersion && ant)
