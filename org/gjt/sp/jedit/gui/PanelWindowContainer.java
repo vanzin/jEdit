@@ -361,11 +361,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 			{
 				if(dockable == null)
 				{
-					popup = wm.createPopupMenu(null,false);
+					popup = wm.createPopupMenu(PanelWindowContainer.this,null,false);
 				}
 				else
 				{
-					popup = wm.createPopupMenu(dockable,false);
+					popup = wm.createPopupMenu(PanelWindowContainer.this,dockable,false);
 				}
 
 				int x, y;
