@@ -106,16 +106,6 @@ public class DisplayManager
 		}
 	} //}}}
 
-	//{{{ _notifyScreenLineChanges() method
-	/* static void _notifyScreenLineChanges(Buffer buffer)
-	{
-		Iterator iter = ((List)bufferMap.get(buffer)).iterator();
-		while(iter.hasNext())
-		{
-			((DisplayManager)iter.next())._notifyScreenLineChanges();
-		}
-	} */ //}}}
-
 	private static Map bufferMap = new HashMap();
 	//}}}
 
@@ -312,7 +302,7 @@ public class DisplayManager
 		// Collapse the fold...
 		hideLineRange(start,end);
 
-		_notifyScreenLineChanges();
+		notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -437,7 +427,7 @@ public class DisplayManager
 			}
 		} //}}}
 
-		_notifyScreenLineChanges();
+		notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 
 		return returnValue;
@@ -451,7 +441,7 @@ public class DisplayManager
 	public void expandAllFolds()
 	{
 		showLineRange(0,buffer.getLineCount() - 1);
-		_notifyScreenLineChanges();
+		notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -506,7 +496,7 @@ public class DisplayManager
 		if(firstInvisible != buffer.getLineCount())
 			hideLineRange(firstInvisible,buffer.getLineCount() - 1);
 
-		_notifyScreenLineChanges();
+		notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -541,7 +531,7 @@ public class DisplayManager
 		GUIUtilities.getView(textArea).getStatus().setMessageAndClear(
 			jEdit.getProperty("view.status.narrow"));
 
-		_notifyScreenLineChanges();
+		notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -563,14 +553,16 @@ public class DisplayManager
 				bufferChangeHandler.foldHandlerChanged(buffer);
 			else
 				fvmreset();
-			_notifyScreenLineChanges();
+			notifyScreenLineChanges();
 		}
 		else
 		{
 			updateWrapSettings();
 			if(buffer.isLoaded())
 			{
-				_notifyScreenLineChanges();
+				firstLine.reset();
+				scrollLineCount.reset();
+				notifyScreenLineChanges();
 				textArea.updateScrollBars();
 				textArea.recalculateLastPhysicalLine();
 			}
@@ -613,33 +605,39 @@ public class DisplayManager
 		}
 	} //}}}
 
-	//{{{ _notifyScreenLineChanges() method
-	void _notifyScreenLineChanges()
+	//{{{ clearNotifyFlags() method
+	private void clearNotifyFlags()
+	{
+		firstLine.callReset = firstLine.callChanged = false;
+		scrollLineCount.callReset = scrollLineCount.callChanged = false;
+	} //}}}
+
+	//{{{ notifyScreenLineChanges() method
+	void notifyScreenLineChanges()
 	{
 		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"_notifyScreenLineChanges()");
+			Log.log(Log.DEBUG,this,"notifyScreenLineChanges()");
 
 		// when the text area switches to us, it will do
 		// a reset anyway
-		if(textArea.getDisplayManager() == this)
-		{
-			try
-			{
-				if(firstLine.callReset)
-					firstLine.reset();
-				else if(firstLine.callChanged)
-					firstLine.changed();
+		if(textArea.getDisplayManager() != this)
+			return;
 
-				if(scrollLineCount.callReset)
-					scrollLineCount.reset();
-				else if(scrollLineCount.callChanged)
-					scrollLineCount.changed();
-			}
-			finally
-			{
-				firstLine.callReset = firstLine.callChanged = false;
-				scrollLineCount.callReset = scrollLineCount.callChanged = false;
-			}
+		try
+		{
+			if(firstLine.callReset)
+				firstLine.reset();
+			else if(firstLine.callChanged)
+				firstLine.changed();
+
+			if(scrollLineCount.callReset)
+				scrollLineCount.reset();
+			else if(scrollLineCount.callChanged)
+				scrollLineCount.changed();
+		}
+		finally
+		{
+			clearNotifyFlags();
 		}
 	} //}}}
 
@@ -669,7 +667,7 @@ public class DisplayManager
 			textArea.chunkCache.scrollUp(oldFirstLine - firstLine);
 		}
 
-		_notifyScreenLineChanges();
+		notifyScreenLineChanges();
 	} //}}}
 	
 	//{{{ setFirstPhysicalLine() method
@@ -718,13 +716,15 @@ public class DisplayManager
 		}
 
 		// we have to be careful
-		_notifyScreenLineChanges();
+		notifyScreenLineChanges();
 	} //}}}
 
 	//{{{ invalidateScreenLineCounts() method
 	void invalidateScreenLineCounts()
 	{
 		screenLineMgr.invalidateScreenLineCounts();
+		firstLine.callReset = true;
+		scrollLineCount.callReset = true;
 	} //}}}
 
 	//}}}
@@ -1198,7 +1198,7 @@ loop:		for(;;)
 				Log.log(Log.DEBUG,this,"reset()");
 
 			physicalLine = getFirstVisibleLine();
-			scrollLine = 0;
+			int scrollLine = 0;
 			while(physicalLine != -1)
 			{
 				updateScreenLineCount(physicalLine);
@@ -1206,6 +1206,7 @@ loop:		for(;;)
 				physicalLine = getNextVisibleLine(physicalLine);
 			}
 
+			this.scrollLine = scrollLine;
 			physicalLine = buffer.getLineCount();
 
 			firstLine.ensurePhysicalLineIsVisible();
@@ -1584,16 +1585,13 @@ loop:		for(;;)
 		public void foldHandlerChanged(Buffer buffer)
 		{
 			fvmreset();
-
-			firstLine.callReset = true;
-			scrollLineCount.callReset = true;
+			firstLine.reset();
+			scrollLineCount.reset();
 
 			int collapseFolds = buffer.getIntegerProperty(
 				"collapseFolds",0);
 			if(collapseFolds != 0)
 				expandFolds(collapseFolds);
-
-			_notifyScreenLineChanges();
 		} //}}}
 
 		//{{{ foldLevelChanged() method
@@ -1899,7 +1897,7 @@ loop:		for(;;)
 		private void doDelayedUpdate()
 		{
 			// must update screen line counts before we call
-			// _notifyScreenLineChanges() since that calls
+			// notifyScreenLineChanges() since that calls
 			// updateScrollBars() which needs valid info
 			int _firstLine = textArea.getFirstPhysicalLine();
 			int _lastLine = textArea.getLastPhysicalLine();
@@ -1917,7 +1915,7 @@ loop:		for(;;)
 			// so that the chunk cache is not
 			// updated with an invisible first
 			// line (see above)
-			_notifyScreenLineChanges();
+			notifyScreenLineChanges();
 
 			if(delayedMultilineUpdate)
 			{
