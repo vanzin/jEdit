@@ -148,13 +148,9 @@ public class PositionManager
 	/* so that PosBottomHalf can access without access$ methods */
 	int gapOffset;
 	int gapWidth;
-	//}}}
-
-	//{{{ Private members
-	private PosBottomHalf root;
 
 	//{{{ removePosition() method
-	private synchronized void removePosition(PosBottomHalf bh)
+	private void removePosition(PosBottomHalf bh)
 	{
 		if(Debug.POSITION_DEBUG)
 			Log.log(Log.DEBUG,this,"killing " + bh);
@@ -270,6 +266,11 @@ public class PositionManager
 		if(Debug.POSITION_DEBUG && root != null)
 			root.dump(0);
 	} //}}}
+
+	//}}}
+
+	//{{{ Private members
+	private PosBottomHalf root;
 
 	//{{{ ibalance() method
 	private void ibalance(PosBottomHalf bh)
@@ -686,13 +687,13 @@ public class PositionManager
 			else
 			{
 				if(Debug.POSITION_DEBUG)
-Log.log(Log.DEBUG,this,"restructure: setting root to " + nodes[3]);
+					Log.log(Log.DEBUG,this,"restructure: setting root to " + nodes[3]);
 				root = nodes[3];
 			}
 
 			// Write-only code for constructing a meaningful tree
 			if(Debug.POSITION_DEBUG)
-Log.log(Log.DEBUG,this,"583: "+nodes[1]+":" + nodes[3]);
+				Log.log(Log.DEBUG,this,"583: "+nodes[1]+":" + nodes[3]);
 			nodes[1].parent = nodes[3];
 			nodes[1].left   = nodes[0];
 			nodes[1].right  = nodes[2];
@@ -700,13 +701,13 @@ Log.log(Log.DEBUG,this,"583: "+nodes[1]+":" + nodes[3]);
 			if(Debug.POSITION_DEBUG)
 				Log.log(Log.DEBUG,this,"setting parent to " + t);
 			if(Debug.POSITION_DEBUG)
-Log.log(Log.DEBUG,this,"590: " + nodes[3]+":" + t);
+				Log.log(Log.DEBUG,this,"590: " + nodes[3]+":" + t);
 			nodes[3].parent = t;
 			nodes[3].left   = nodes[1];
 			nodes[3].right  = nodes[5];
 
 			if(Debug.POSITION_DEBUG)
-Log.log(Log.DEBUG,this,"595: "+nodes[5]+":" + nodes[3]);
+				Log.log(Log.DEBUG,this,"595: "+nodes[5]+":" + nodes[3]);
 			nodes[5].parent = nodes[3];
 			nodes[5].left   = nodes[4];
 			nodes[5].right  = nodes[6];
