@@ -46,6 +46,13 @@ class PropertyManager
 		loadProps(system,in);
 	} //}}}
 
+	//{{{ loadSiteProps() method
+	void loadSiteProps(InputStream in)
+		throws IOException
+	{
+		loadProps(site,in);
+	} //}}}
+
 	//{{{ loadUserProps() method
 	void loadUserProps(InputStream in)
 		throws IOException
@@ -146,19 +153,24 @@ class PropertyManager
 	//{{{ Private members
 	private Properties system = new Properties();
 	private List plugins = new LinkedList();
+	private Properties site = new Properties();
 	private Properties user = new Properties();
 
 	//{{{ getDefaultProperty() method
 	private String getDefaultProperty(String name)
 	{
+		String value = site.getProperty(name);
+		if(value != null)
+			return value;
+
 		Iterator iter = plugins.iterator();
 		while(iter.hasNext())
 		{
-			String value = ((Properties)iter.next()).getProperty(
-				name);
+			value = ((Properties)iter.next()).getProperty(name);
 			if(value != null)
 				return value;
 		}
+
 		return system.getProperty(name);
 	} //}}}
 
