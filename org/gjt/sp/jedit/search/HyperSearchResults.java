@@ -124,6 +124,41 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		jEdit.setBooleanProperty("hypersearch-results.multi",multiStatus);
 	} //}}}
 
+	//{{{ visitBuffers() method
+	private void visitBuffers(ResultVisitor visitor, Buffer buffer)
+	{
+		// impl note: since multiple searches now allowed,
+		// extra level in hierarchy
+		for(int i = resultTreeRoot.getChildCount() - 1; i >= 0; i--)
+		{
+			DefaultMutableTreeNode searchNode
+				= (DefaultMutableTreeNode)
+				resultTreeRoot.getChildAt(i);
+			for(int j = searchNode.getChildCount() - 1;
+				j >= 0; j--)
+			{
+
+				DefaultMutableTreeNode bufferNode
+					= (DefaultMutableTreeNode)
+					searchNode.getChildAt(j);
+
+				for(int k = bufferNode.getChildCount() - 1;
+					k >= 0; k--)
+				{
+					Object userObject =
+						((DefaultMutableTreeNode)bufferNode
+						.getChildAt(k)).getUserObject();
+					HyperSearchResult result
+						= (HyperSearchResult)
+						userObject;
+
+					if(result.pathEquals(buffer.getSymlinkPath()))
+						visitor.visit(buffer,result);
+				}
+			}
+		}
+	} //}}}
+
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage msg)
 	{
@@ -144,33 +179,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				{
 					visitor = new BufferClosedVisitor();
 				}
-				// impl note: since multiple searches now allowed,
-				// extra level in hierarchy
-				for(int i = resultTreeRoot.getChildCount() - 1; i >= 0; i--)
-				{
-					DefaultMutableTreeNode searchNode = (DefaultMutableTreeNode)
-						resultTreeRoot.getChildAt(i);
-					for(int j = searchNode.getChildCount() - 1;
-						j >= 0; j--)
-					{
-
-						DefaultMutableTreeNode bufferNode = (DefaultMutableTreeNode)
-							searchNode.getChildAt(j);
-
-						for(int k = bufferNode.getChildCount() - 1;
-							k >= 0; k--)
-						{
-							Object userObject =
-								((DefaultMutableTreeNode)bufferNode
-								.getChildAt(k)).getUserObject();
-							HyperSearchResult result = (HyperSearchResult)
-									userObject;
-
-							if(buffer.getPath().equals(result.path))
-								visitor.visit(buffer,result);
-						}
-					}
-				}
+				visitBuffers(visitor,buffer);
 			}
 		}
 	} //}}}

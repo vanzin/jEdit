@@ -238,7 +238,7 @@ public class CompleteWord extends JWindow
 	{
 		// build a list of unique words in all visible buffers
 		Set completions = new TreeSet(new MiscUtilities
-			.StringICaseCompare());
+			.StringCompare());
 		Set buffers = new HashSet();
 
 		// only complete current buffer's keyword map

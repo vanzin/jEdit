@@ -68,7 +68,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "04.02.14.00";
+		return "04.02.15.00";
 	} //}}}
 
 	//{{{ main() method
@@ -1934,10 +1934,7 @@ public class jEdit
 	 */
 	public static Buffer getBuffer(String path)
 	{
-		if(MiscUtilities.isURL(path))
-			return _getBuffer(path);
-		else
-			return _getBuffer(MiscUtilities.resolveSymlinks(path));
+		return _getBuffer(MiscUtilities.resolveSymlinks(path));
 	} //}}}
 
 	//{{{ getBuffers() method
