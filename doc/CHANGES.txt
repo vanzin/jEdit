@@ -25,7 +25,10 @@ JEDIT 4.0 VERSION HISTORY
 - Pressing the Up or Down arrow when the caret is the first or last line
   of the buffer moves the caret to the beginning and end of the buffer,
   respectively
-- Only one 'Search and Replace' dialog can be opened per view
+- Only one 'Search and Replace' dialog can be opened per view. Note that
+  due to bugs in the Linux (and probably other Unix) Java
+  implementation, the dialog has to be mometarily hidden and shown again
+  for this to work
 - Favorites menu in file system browser is now sorted using a
   case-insensitive sort
 - Improved behavior of 'Plugins' menu when lots of plugins are installed
@@ -38,8 +41,6 @@ JEDIT 4.0 VERSION HISTORY
   the browser's location to that path
 - Home/end commands, up/down arrows are now soft-wrap-aware
 - Documentation is now built using DocBook-XSL stylesheets 1.48
-- jEdit's build.xml now automatically detects if it is running on Java
-  version 1.4, and doesn't build the Java14.java otherwise
 - Optimized text area's buffer event handler -- this should result in
   faster 'Replace All'
 - Addition to jEdit's glob syntax: "{!glob}" is converted to the
@@ -49,6 +50,8 @@ JEDIT 4.0 VERSION HISTORY
 - If the block caret is enabled, the overwrite caret is now 1/3 the
   height of a character
 - Documentation updates (me and John Gellene)
+- Changes to build.xml; documentation on compiling from source now part
+  of the source distribution (README.SRC.txt)
 
 + Bug Fixes
 

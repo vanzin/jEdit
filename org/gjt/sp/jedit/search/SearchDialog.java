@@ -70,6 +70,13 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		SearchDialog dialog = (SearchDialog)viewHash.get(view);
 		if(dialog != null)
 		{
+			// ugly workaround
+			if(OperatingSystem.isUnix() && !OperatingSystem.isMacOS())
+			{
+				dialog.setVisible(false);
+				dialog.setVisible(true);
+			}
+
 			dialog.setSearchString(searchString,searchIn);
 			GUIUtilities.requestFocus(dialog,dialog.find);
 			dialog.toFront();
