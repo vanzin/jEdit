@@ -3,6 +3,7 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- news: deep indent, action bar, new cli options
 - remove-marker, select-next/prev-marker/bracket
 - option to disable context menu
 - hide caret while typing

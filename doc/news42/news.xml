@@ -2,11 +2,11 @@
 
 <!-- :folding=sidekick: -->
 
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 		"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<article>
-	<articleinfo>
+<book>
+	<bookinfo>
 		<author>
 			<firstname>Slava</firstname><surname>Pestov</surname>
 		</author>
@@ -23,34 +23,43 @@
 			</para>
 		</legalnotice>
 		<title>What's New in jEdit 4.2</title>
-	</articleinfo>
+	</bookinfo>
 
-	<sect1 id="user-changes"><title>User-Visible Changes</title>
+	<chapter id="user-changes"><title>User-Visible Changes</title>
+	
+	<sect1 id="incompatible"><title>Incompatible Changes</title>
 	
 	<para>
-	        plugin api, option to leave behind zip files
-		
-		soft wrap 0 not supported, synchro scroll gone
+	 Soft wrapping to the text area width (by setting the wrap width to zero) is no longer supported.
+	</para>
 
-		plugin options dialog
-		
-		text area scrolls by screen lines, 
-		
-		deep indent
-		
-		better status, action bar
-		
-		fs browser table, better completion, favorite files, utilities->favorites, symlink behavior change
-		
-		new cli options
-		
-		search: flag toggle from keyboard, hypersearch selects all on line
-		search bar command change
-		
-		better control over file reload, 
+	<para>
+	 The <guimenu>View</guimenu>&gt;<guisubmenu>Scrollign</guisubmenu>&gt;<guimenuitem>Synchronized Scrolling</guimenuitem> command has been removed.
+	</para>
+
+	</sect1>
+
+	<sect1 id="plugin-manager"><title>Plugin Manager</title>
+	
+	<para>
+	 A new plugin API has been added that allows plugins to be loaded and unloaded while jEdit is running. The plugin manager's user interface has also been overhauled to be more intuitive and powerful.
+	</para>
+
+	<para>
+	 While the new API is mostly backwards compatible, some plugins will no longer work. The best way to upgrade from 4.1 to 4.2 is to completely remove any existing plugins, and re-install a new set from scratch.
 	</para>
 	
-	<sect2><title>User Interface</title>
+	<para>
+	 Plugin options have been moved from the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box to a new <guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin Options</guimenuitem> dialog box.
+	</para>
+
+	<para>
+	 If you are a plugin developer, see <xref linkend="api-changes"/>.
+	</para>
+
+	</sect1>
+
+	<sect1 id="interface"><title>User Interface</title>
 	
 	<para>
 	 jEdit now saves the configuration of open views between sessions; this includes including their position, size and any splits. This information is stored in the <filename>perspective.xml</filename> file in the settings directory.
@@ -64,9 +73,13 @@
 	 A new <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Last Action</guimenuitem> command (shortcut: <keycombo><keycap>Control</keycap><keycap>Space</keycap></keycombo>) repeats the most recently invoked command.
 	</para>
 
-	</sect2>
+	<para>
+	 The status bar can now optionally display a simple 24-hour clock. This can be enabled in the <guilabel>Status Bar</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box
+	</para>
+
+	</sect1>
 	
-	<sect2><title>Text Editing</title>
+	<sect1 id="editing"><title>Text Editing</title>
 	
 	<para>
 	 Drag and drop of text is now supported in the text area; it can be disabled in the <guimenuitem>Mouse</guimenuitem> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box.
@@ -102,11 +115,16 @@
 	 Fold start lines are now colored according to their nesting level in the text area. The colors can be customized in the <guilabel>Syntax Highlighting</guilabel> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box. <keycap>Alt</keycap>-clicking on a fold in the gutter (or clicking with the middle mouse button) now narrows to that fold.
 	</para>
 
-	</sect2>
+	<para>
+	 When soft wrap is on, the text area now scrolls by screen lines, instead of scrolling by physical lines.
+	</para>
+	
+	</sect1>
 
-	<sect2><title>Syntax Highlighting</title>
+	<sect1 id="syntax"><title>Syntax Highlighting</title>
 	 <para>
-	  19 new syntax highlighting modes were added, and many existing ones were enhanced.
+	 <!-- as of pre7, -->
+	  22 new syntax highlighting modes were added, and many existing ones were enhanced.
 	 </para>
 	 <para>
 	  The following new token types were added:
@@ -131,23 +149,67 @@
 	 <para>
 	  A background color defined for a ruleset's default token type now takes effect on tokens that appear inside this ruleset for which no explicit background color is defined.
 	 </para>
-	</sect2>
+	</sect1>
 
-	<sect2><title>File Encodings</title>
+	<sect1 id="search"><title>Search and Replace</title>
 	
+	<para>
+	 Added <guimenuitem>Ignore Case</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycombo><keycap>Control</keycap><keycap>I</keycap></keycombo>) and <guimenuitem>Regular Expressions</guimenuitem> (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo> <keycombo><keycap>Control</keycap><keycap>X</keycap></keycombo>) commands for toggling search bar settings from the keyboard.
+	</para>
+
+	<para>
+	 The <guimenuitem>Incremental Search Bar</guimenuitem> and <guimenuitem>HyperSearch Bar</guimenuitem> commands in the <guimenu>Search</guimenu> menu no longer insert the currently selected text into the search bar. If you prefer this behavior, use <guimenuitem>Incremental Search for Word</guimenuitem> and <guimenuitem>HyperSearch for Word</guimenuitem> instead.
+	</para>
+
+	<para>
+	 Clicking on a line in the <guimenuitem>HyperSearch Results</guimenuitem> window now selects all ocurrences of the search string in that line, not just the first occurrence.
+	</para>
+
+	</sect1>
+
+	<sect1 id="files"><title>File Management</title>
+	
+	<para>
+	 The handling of files that are changed on disk by another program is now more flexible. There are three possible behaviors that can be specified in the <guibutton>General</guibutton> pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem> dialog box:
+	</para>
+
+	<itemizedlist>
+	 <listitem><para><guilabel>Do nothing</guilabel> - jEdit will not check if files are modified on disk by another program.</para></listitem>
+	 <listitem><para><guilabel>Prompt</guilabel> - a dialog box will be shown listing all changed files, offering to reload them.</para></listitem>
+	 <listitem><para><guilabel>Automatically reload</guilabel> - a dialog box will be shown listing all changed files, and they are all automatically reloaded.</para></listitem>
+	</itemizedlist>
+
 	<para>
 	 A full list of encodings is now shown in the file system browser's <guimenu>Commands</guimenu>&gt;<guimenuitem>Encoding</guimenuitem> menu and other places. The encoding declaration of XML files is now honoured when loading and saving buffers.
 	</para>
 
-	</sect2>
+	<para>
+	 When opening a symbolic link on Unix, the opened buffer has the path name of the link itself, not the file pointed by the link. However, it is still not possible to open the same buffer twice by opening two links to the same file.
+	</para>
 
 	</sect1>
-	
-	<sect1 id="scripting-api-changes"><title>BeanShell Scripting</title>
+
+	<sect1 id="vfs.browser"><title>File System Browser</title>
 	
 	<para>
-		Some new macros are included in the distribution.
+	 The file system browser now shows file details such as size, type, modification time and access permissions. Virtual file systems provided by plugins can add their own columns to the view.
 	</para>
+
+	<para>
+	 The favorites list can now contain files, and a new <guimenu>Utilities</guimenu>&gt;<guisubmenu>Favorites</guisubmenu> menu allows accessing favorites without having to open the file system browser first.
+	</para>
+
+	<para>
+	 File name completion in file dialog boxes has been greatly improved. It is now possible to navigate around the file system quite comfortably without using the mouse.
+	</para>
+
+	</sect1>
+
+	</chapter>
+	
+	<chapter id="api-changes"><title>API Changes</title>
+	
+	<sect1 id="beanshell"><title>BeanShell</title>
 
 	<para>
 		BeanShell has been updated from version 1.2b7 to 1.3.1. The
@@ -199,21 +261,8 @@
     MyPlugin.class);</programlisting>
 
 	</sect1>
-
-	<sect1 id="plugin-api-changes"><title>Plugin API</title>
 	
-	<para>
-		This section outlines the new deferred loading plugin API.
-		Also see <xref linkend="common-api-changes"/>.
-	</para>
-
-	<para>
-		Note that most plugins written for jEdit 4.1 and earlier will continue
-		to work, however they will not take advantage of the new features of the
-		plugin API outlined in this section.
-	</para>
-
-	<sect2><title>General Idea</title>
+	<sect1 id="plugin-api"><title>Dynamic Plugin Loading</title>
 
 	<para>
 		In jEdit 4.1 and earlier, plugins are always fully loaded at program
@@ -263,15 +312,12 @@
 	</para>
 	
 	<para>
-		Also, plugins can now be loaded and unloaded at runtime. Note
-		that in 4.2pre1, this code has not been fully implemented yet, so the
-		only way of doing this is by calling BeanShell APIs. Look for a nice UI
-		for this in the 4.2pre2 plugin manager.
+		Also, plugins can now be loaded and unloaded at runtime.
 	</para>
 	
-	</sect2>
+	</sect1>
 
-	<sect2><title>EditPlugin Class Changes</title>
+	<sect1 id="class-editplugin"><title>EditPlugin Class Changes</title>
 	
 	<para>
 		Documentation for the properties mentioned below, and their possible values,
@@ -372,9 +418,9 @@ quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
 	<programlisting>plugin.QuickNotepadPlugin.option-pane=quicknotepad
 options.quicknotepad.code=new QuickNotepadOptionPane();</programlisting>
 
-	</sect2>
+	</sect1>
 
-	<sect2><title>Actions</title>
+	<sect1 id="actions"><title>Actions</title>
 	
 	<para>
 		The syntax of the <filename>actions.xml</filename> file has not changed.
@@ -447,9 +493,9 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		an <classname>InternalError</classname> when invoked.
 	</para>
 
-	</sect2>
+	</sect1>
 
-	<sect2><title>Dockable Windows</title>
+	<sect1 id="dockables"><title>Dockable Windows</title>
 	
 	<para>
 		The syntax of the <filename>dockables.xml</filename> file has not changed.
@@ -464,9 +510,9 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		<function>focusOnDefaultComponent()</function> method.
 	</para>
 
-	</sect2>
+	</sect1>
 
-	<sect2><title>Services</title>
+	<sect1 id="services"><title>Services</title>
 	
 	<para>
 		A new <filename>services.xml</filename> file can be provided in the
@@ -477,9 +523,9 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		class.
 	</para>
 
-	</sect2>
+	</sect1>
 
-	<sect2><title>Virtual File Systems</title>
+	<sect1 id="vfs"><title>Virtual File Systems</title>
 	
 	<para>
 		Instead of calling <function>VFSManager.registerVFS()</function> in your
@@ -532,24 +578,9 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		instead.</para></listitem>
 	</itemizedlist>
 
-	</sect2>
+	</sect1>
 
-	<sect2><title>Fold Handlers</title>
-	
-	<para>
-		Instead of calling <function>FoldHandler.registerFoldHandler()</function>
-		in your
-		plugin's <function>start()</function> method, add entries in the
-		<filename>services.xml</filename> file that look like so:
-	</para>
-
-	<programlisting><![CDATA[<SERVICE CLASS="org.gjt.sp.jedit.buffer.FoldHandler" NAME="sidekick">
-    new sidekick.SideKickFoldHandler()
-</SERVICE>]]></programlisting>
-
-	</sect2>
-
-	<sect2><title>Text Area Extensions</title>
+	<sect1 id="extensions"><title>Text Area Extensions</title>
 
 	<para>
 		The API for text area extensions is still the same, however you
@@ -602,28 +633,9 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		range of lines.
 	</para>
 
-	</sect2>
-
-	<sect2><title>Other Services</title>
-
-	<para>
-		Currently, macro handlers are not supported in the new
-		plugin API. This will be addressed in 4.2pre2.
-	</para>
-
-	</sect2>
-
 	</sect1>
-	
-	<sect1 id="common-api-changes"><title>Common API</title>
-	
-	<para>
-		This section outlines API changes and enhancements
-		which may affect both plugins and
-		macros.
-	</para>
 
-	<sect2><title>Syntax Highlighting</title>
+	<sect1 id="syntax-api"><title>Syntax Highlighting</title>
 	
 	<para>
 		The <classname>org.gjt.sp.jedit.syntax</classname> package can now
@@ -634,9 +646,9 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		documentation</ulink> for details.
 	</para>
 
-	</sect2>
+	</sect1>
 
-	<sect2><title>Text Area and Folding</title>
+	<sect1 id="textarea-api"><title>Text Area and Folding</title>
 
 	<para>The
 		<ulink
@@ -721,9 +733,20 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		class.
 	</para>
 
-	</sect2>
+	<para>
+		Instead of calling <function>FoldHandler.registerFoldHandler()</function>
+		in your
+		plugin's <function>start()</function> method, add entries in the
+		<filename>services.xml</filename> file that look like so:
+	</para>
 
-	<sect2 id="misc-api-changes"><title>Miscellaneous API Changes</title>
+	<programlisting><![CDATA[<SERVICE CLASS="org.gjt.sp.jedit.buffer.FoldHandler" NAME="sidekick">
+    new sidekick.SideKickFoldHandler()
+</SERVICE>]]></programlisting>
+
+	</sect1>
+
+	<sect1 id="misc-api-changes"><title>Miscellaneous API Changes</title>
 	
 	<para>
 		A new <function>View.goToBuffer()</function> method has been added.
@@ -761,8 +784,8 @@ jEdit.setTemporaryProperty("<replaceable>action name</replaceable>.mouse-over",
 		</funcsynopsis>
 	</para>
 
-	</sect2>
-
 	</sect1>
+
+	</chapter>
 	
-</article>
+</book>
