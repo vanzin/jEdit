@@ -251,7 +251,9 @@ unwind:		while(context.parent != null)
 		tokenHandler.handleToken(line,Token.END,
 			pos - line.offset,0,context);
 
-		return context.intern();
+		context = context.intern();
+		tokenHandler.setLineContext(context);
+		return context;
 	} //}}}
 
 	//{{{ Private members

@@ -11,7 +11,8 @@ and quirks that I need to fix eventually.
 
 + bugs:
 
-- nextLineRequested broken
+- C+b broken
+- nextLineRequested does not invalidate line contexts
 - no need to wait for requests after newFile()
 - C+` inserts ` again
 - plugin mgr install doesn't update existing plugins

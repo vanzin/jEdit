@@ -2124,8 +2124,6 @@ public class Buffer
 				lineIndex);
 		}
 
-		nextLineRequested = false;
-
 		if(Debug.TOKEN_MARKER_DEBUG)
 			Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
 		for(int i = start; i <= lineIndex; i++)
@@ -2161,30 +2159,14 @@ public class Buffer
 				(i == lineIndex ? tokenHandler
 				: DummyTokenHandler.INSTANCE),seg);
 			lineMgr.setLineContext(i,context);
-
-			// Could incorrectly be set to 'false' with
-			// recursive delegates, where the chaining might
-			// have changed but not the rule set in question (?)
-			if(oldRule != context.inRule)
-			{
-				nextLineRequested = true;
-			}
-			else if(oldRules != context.rules)
-			{
-				nextLineRequested = true;
-			}
-			else if(!MiscUtilities.objectsEqual(oldSpanEndSubst,
-				context.spanEndSubst))
-			{
-				nextLineRequested = true;
-			}
 		}
 
 		int lineCount = lineMgr.getLineCount();
 		if(lineCount - 1 == lineIndex)
 			lineMgr.setFirstInvalidLineContext(-1);
-		else if(nextLineRequested)
-			lineMgr.setFirstInvalidLineContext(lineIndex + 1);
+		//XXX
+		//else if(nextLineRequested)
+		//	lineMgr.setFirstInvalidLineContext(lineIndex + 1);
 		else if(firstInvalidLineContext == -1)
 			/* do nothing */;
 		else
@@ -2192,20 +2174,6 @@ public class Buffer
 			lineMgr.setFirstInvalidLineContext(Math.max(
 				firstInvalidLineContext,lineIndex + 1));
 		}
-	} //}}}
-
-	//{{{ isNextLineRequested() method
-	/**
-	 * Returns true if the next line should be repainted. This
-	 * will return true after a line has been tokenized that starts
-	 * a multiline token that continues onto the next line.
-	 */
-	public boolean isNextLineRequested()
-	{
-		return nextLineRequested;
-		/*boolean retVal = nextLineRequested;
-		nextLineRequested = false;
-		return retVal;*/
 	} //}}}
 
 	//}}}
@@ -3669,7 +3637,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean textMode;
 	private TokenMarker tokenMarker;
 	private Segment seg;
-	private boolean nextLineRequested;
 	private FoldHandler foldHandler;
 
 	/**
