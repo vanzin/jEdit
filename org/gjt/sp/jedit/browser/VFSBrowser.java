@@ -820,7 +820,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					Hashtable props = new Hashtable();
 					props.put(Buffer.ENCODING,currentEncoding);
 					props.put(Buffer.ENCODING_AUTODETECT,
-						Boolean.valueOf(autoDetectEncoding));
+						new Boolean(autoDetectEncoding));
 					_buffer = jEdit.openFile(null,null,
 						file.path,false,props);
 				}

@@ -10,6 +10,13 @@ JEDIT 4.2 VERSION HISTORY
 - HyperSearch results would not use floating positions if the files
   being searched were symbolic links.
 
+- Findbugs suggests changing 'new Boolean(' to 'Boolean.valueOf(', so I
+  changed all occurrences in pre14. However, the latter does not exist
+  in JDK 1.3. This change was reverted.
+
+- File permission preservation code no longer waits for 'chmod' command
+  to exit; since on some Java versions, Process.waitFor() would hang.
+
 }}}
 
 }}}

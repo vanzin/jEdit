@@ -468,9 +468,12 @@ public class FileVFS extends VFS
 					process.getInputStream().close();
 					process.getOutputStream().close();
 					process.getErrorStream().close();
-					int exitCode = process.waitFor();
+					// Jun 9 2004 12:40 PM
+					// waitFor() hangs on some Java
+					// implementations.
+					/* int exitCode = process.waitFor();
 					if(exitCode != 0)
-						Log.log(Log.NOTICE,FileVFS.class,"chmod exited with code " + exitCode);
+						Log.log(Log.NOTICE,FileVFS.class,"chmod exited with code " + exitCode); */
 				}
 
 				// Feb 4 2000 5:30 PM

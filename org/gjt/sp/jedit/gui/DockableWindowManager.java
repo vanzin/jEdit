@@ -356,7 +356,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 						dockableName,code,actions);
 					cachedDockableNames.add(dockableName);
 					cachedDockableActionFlags.add(
-						Boolean.valueOf(actions));
+						new Boolean(actions));
 					// make default be true for the next
 					// action
 					actions = true;
