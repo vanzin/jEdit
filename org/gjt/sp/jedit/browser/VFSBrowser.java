@@ -1268,24 +1268,28 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setMargin(new Insets(1,1,1,1));
 			PluginsMenuButton.this.addMouseListener(new MouseHandler());
 
+			if(OperatingSystem.isMacOSLF())
+				PluginsMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
+		} //}}}
+
+		JPopupMenu popup;
+
+		//{{{ createPopupMenu() method
+		private void createPopupMenu()
+		{
+			if(popup != null)
+				return;
+
 			popup = new JPopupMenu();
 			ActionHandler actionHandler = new ActionHandler();
 
-			JMenuItem mi = new JMenuItem(jEdit.getProperty(
-				"vfs.browser.plugins.plugin-manager.label"));
-			mi.setActionCommand("plugin-manager");
-			mi.addActionListener(actionHandler);
-
-			mi = new JMenuItem(jEdit.getProperty(
-				"vfs.browser.plugins.plugin-options.label"));
-			mi.setActionCommand("plugin-options");
-			mi.addActionListener(actionHandler);
-
-			popup.add(mi);
+			popup.add(GUIUtilities.loadMenuItem("plugin-manager",false));
+			popup.add(GUIUtilities.loadMenuItem("plugin-options",false));
 			popup.addSeparator();
 
-			// put them in a vector for sorting
 			ArrayList vec = new ArrayList();
+
+			//{{{ old API
 			Enumeration enum = VFSManager.getFilesystems();
 
 			while(enum.hasMoreElements())
@@ -1299,7 +1303,16 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				menuItem.setActionCommand(vfs.getName());
 				menuItem.addActionListener(actionHandler);
 				vec.add(menuItem);
-			}
+			} //}}}
+
+			//{{{ new API
+			EditPlugin[] plugins = jEdit.getPlugins();
+			for(int i = 0; i < plugins.length; i++)
+			{
+				JMenuItem menuItem = plugins[i].createBrowserMenuItems();
+				if(menuItem != null)
+					vec.add(menuItem);
+			} //}}}
 
 			if(vec.size() != 0)
 			{
@@ -1309,17 +1322,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 			else
 			{
-				mi = new JMenuItem(jEdit.getProperty(
+				JMenuItem mi = new JMenuItem(jEdit.getProperty(
 					"vfs.browser.plugins.no-plugins.label"));
 				mi.setEnabled(false);
 				popup.add(mi);
 			}
-
-			if(OperatingSystem.isMacOSLF())
-				PluginsMenuButton.this.putClientProperty("JButton.buttonType","toolbar");
 		} //}}}
-
-		JPopupMenu popup;
 
 		//{{{ ActionHandler class
 		class ActionHandler implements ActionListener

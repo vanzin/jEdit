@@ -101,17 +101,16 @@ public abstract class VFS
 	public static final int WRITE_CAP = 1 << 1;
 
 	/**
+	 * @deprecated Define <code>plugin.<i>class</i>.browser-menu-item</code>
+	 * or <code>plugin.<i>class</i>.browser-menu</code> properties instead.
+	 *
 	 * If set, a menu item for this VFS will appear in the browser's
 	 * <b>Plugins</b> menu. The property <code>vfs.<i>name</i>.label</code>
 	 * is used as a menu item label.<p>
 	 *
 	 * When invoked, the menu item calls the
 	 * {@link #showBrowseDialog(Object[],Component)} method of the VFS,
-	 * and then lists the directory returned by that method.<p>
-	 *
-	 * If this capability is not set, it will still be possible to type in
-	 * URLs for this VFS in the browser, but there won't be a user-visible
-	 * way of doing this.
+	 * and then lists the directory returned by that method.
 	 *
 	 * @since jEdit 2.6pre2
 	 */
