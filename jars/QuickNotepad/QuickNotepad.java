@@ -167,8 +167,8 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		try
 		{
 			FileWriter out = new FileWriter(filename);
-			dos.write(textArea.getText());
-			dos.close();
+			out.write(textArea.getText());
+			out.close();
 		}
 		catch (IOException ioe)
 		{
