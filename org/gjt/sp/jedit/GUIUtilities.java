@@ -1103,6 +1103,14 @@ public class GUIUtilities
 	{
 		for(;;)
 		{
+			if(comp instanceof JComponent)
+			{
+				Component real = (Component)((JComponent)comp)
+					.getClientProperty("KORTE_REAL_FRAME");
+				if(real != null)
+					comp = real;
+			}
+
 			if(comp instanceof View)
 				return (View)comp;
 			else if(comp instanceof JPopupMenu)

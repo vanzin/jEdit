@@ -77,6 +77,7 @@ public class CompleteWord extends JWindow
 		//{{{ show popup if > 1
 		else
 		{
+			textArea.scrollToCaret(false);
 			Point location = textArea.offsetToXY(caret - word.length());
 			location.y += textArea.getPainter().getFontMetrics()
 				.getHeight();

@@ -691,8 +691,15 @@ public class JEditTextArea extends JComponent
 		recalculateLastPhysicalLine();
 
 		if(point == null)
+		{
 			point = offsetToXY(line,offset,returnValue);
-		//}}}
+			if(point == null)
+			{
+				// a soft wrapped line has more screen lines
+				// than the number of visible lines
+				return;
+			}
+		} //}}}
 
 		//{{{ STAGE 3 -- scroll horizontally
 		if(point.x < 0)
@@ -871,6 +878,8 @@ public class JEditTextArea extends JComponent
 	 * Converts an offset into a point in the text area painter's
 	 * co-ordinate space.
 	 * @param offset The offset
+	 * @return The location of the offset on screen, or <code>null</code>
+	 * if the specified offset is not visible
 	 */
 	public Point offsetToXY(int offset)
 	{
@@ -887,7 +896,8 @@ public class JEditTextArea extends JComponent
 	 * @param line The physical line number
 	 * @param offset The offset, from the start of the line
 	 * @param retVal The point to store the return value in
-	 * @return <code>retVal</code> for convenience
+	 * @return <code>retVal</code> for convenience, or <code>null</code>
+	 * if the specified offset is not visible
 	 * @since jEdit 4.0pre4
 	 */
 	public Point offsetToXY(int line, int offset, Point retVal)
@@ -896,13 +906,13 @@ public class JEditTextArea extends JComponent
 		if(screenLine == -1)
 		{
 			if(line < physFirstLine)
-				screenLine = 0;
+				return null;
 			// must have >= here because the last physical line
 			// might only be partially visible (some offsets would
 			// have a screen line, others would return -1 and hence
 			// this code would be executed)
 			else if(line >= physLastLine)
-				screenLine = visibleLines;
+				return null;
 			else
 			{
 				throw new InternalError("line=" + line
@@ -911,7 +921,6 @@ public class JEditTextArea extends JComponent
 					+ ",physFirstLine=" + physFirstLine
 					+ ",physLastLine=" + physLastLine);
 			}
-			chunkCache.updateChunksUpTo(screenLine);
 		}
 
 		FontMetrics fm = painter.getFontMetrics();
