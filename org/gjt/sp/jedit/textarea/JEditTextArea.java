@@ -5383,14 +5383,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				returnValue = true;
 			}
 			else if(logicalLength >= maxLineLen && lastWordOffset != -1)
-				insertNewLineAt = lastWordOffset + start;
+				insertNewLineAt = lastWordOffset;
 			else
 				continue;
 
 			try
 			{
 				buffer.beginCompoundEdit();
-				buffer.insert(insertNewLineAt,"\n");
+				buffer.insert(start + insertNewLineAt,"\n");
 				// caretLine would have been incremented
 				// since insertNewLineAt <= caretPos
 				buffer.indentLine(caretLine,true,true);

@@ -105,7 +105,6 @@ public class RESearchMatcher implements SearchMatcher
 		int _start = match.getStartIndex();
 		int _end = match.getEndIndex();
 
-		System.err.println("1st attempt found " + _start + ":" + _end);
 		// some regexps (eg ^ by itself) have a length == 0, so we
 		// implement this hack. if you don't understand what's going on
 		// here, then go back to watching MTV
@@ -118,7 +117,6 @@ public class RESearchMatcher implements SearchMatcher
 				return null;
 			else
 			{
-				System.err.println("2nd attempt found " + _start + ":" + _end);
 				_start = match.getStartIndex() + 1;
 				_end = match.getEndIndex() + 1;
 			}

@@ -1,12 +1,13 @@
 TO DO
 
+- soft wrap: adding lots of spaces: fucks up wrapping
 - regexp search:
   $ doesn't find last -- gnu.regexp bug
   replace all .* with foo breaks
   ^.* with foo only replaces every second line
 - scrollToCaret() still "jumps around"
-- if first chunk if a line is a syntax chunk, getScreenLineOfOffset()
-  broken (?)
+- if first chunk if a line is a syntax chunk, start offset of screen
+  line wrong
 - rect select and soft wrap
 - vertical scrollbar w/ soft wrap wrong
 - save to X:filename on Windows
