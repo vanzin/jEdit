@@ -226,7 +226,7 @@ public class DisplayManager
 	//{{{ getScreenLineCount() method
 	public final int getScreenLineCount(int line)
 	{
-		if(lineMgr.isScreenLineCountValid(line))
+		if(screenLineMgr.isScreenLineCountValid(line))
 			return lineMgr.getScreenLineCount(line);
 		else
 		{
@@ -594,7 +594,7 @@ public class DisplayManager
 		// still have to call this even if it equals the
 		// old one so that the offset manager sets the
 		// validity flag!
-		lineMgr.setScreenLineCount(line,count);
+		screenLineMgr.setScreenLineCount(line,count);
 		// this notifies each display manager editing this
 		// buffer of the screen line count change
 		if(count != oldCount)
@@ -750,6 +750,7 @@ public class DisplayManager
 	private boolean inUse;
 	private Buffer buffer;
 	private LineManager lineMgr;
+	private ScreenLineManager screenLineMgr;
 	private JEditTextArea textArea;
 	private BufferChangeHandler bufferChangeHandler;
 
@@ -778,6 +779,7 @@ public class DisplayManager
 	{
 		this.buffer = buffer;
 		this.lineMgr = buffer._getLineManager();
+		this.screenLineMgr = new ScreenLineManager(this,buffer);
 		this.textArea = textArea;
 
 		scrollLineCount = new ScrollLineCount();
@@ -1129,6 +1131,8 @@ loop:		for(;;)
 	//{{{ _setScreenLineCount() method
 	private void _setScreenLineCount(int line, int oldCount, int count)
 	{
+		screenLineMgr.setScreenLineCount(line,count);
+
 		if(!isLineVisible(line))
 			return;
 
@@ -1599,8 +1603,11 @@ loop:		for(;;)
 			if(!buffer.isLoaded())
 			{
 				fvmreset();
+				screenLineMgr.reset();
 				return;
 			}
+
+			screenLineMgr.contentInserted(startLine,numLines);
 
 			int endLine = startLine + numLines;
 
@@ -1700,6 +1707,8 @@ loop:		for(;;)
 		{
 			if(!buffer.isLoaded())
 				return;
+
+			screenLineMgr.contentRemoved(startLine,numLines);
 
 			if(textArea.getDisplayManager() == DisplayManager.this)
 			{
