@@ -28,14 +28,10 @@
 	</question>
 	<answer>
 		<para>
-			Open the file [jedit install directory]/startup/changeUIFonts.bsh; near the end
-			is the line:
-<programlisting>
-// changeUIFonts("SansSerif", Font.PLAIN, 12);
-</programlisting>
-			<quote>Uncomment</quote> this line by removing the <quote>//</quote> from the beginning, and
-			change the font specification as desired. The new font will be used next time
-			you start jEdit.
+      Select <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>,
+      then the <guimenuitem>Appearance</guimenuitem> option pane.  When you select the
+      <quote>Metal</quote> look and feel you can also select the fonts used for
+      various displayed items.
 		</para>
 	</answer>
 </qandaentry>
@@ -127,7 +123,8 @@
       You do not need the extension to run a macro, however.  By
       selecting <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Other
       Macro...</guimenuitem>, you can choose any file to be run as a
-      macro. While in a macro, you can call <userinput>source(&quot;full_path&quot;)</userinput>
+      macro. While in a macro, you can
+      call <userinput>source(&quot;full_path&quot;)</userinput>
       to do the same thing.
     </para>
   </answer>
@@ -388,7 +385,7 @@
 	</question>
 	<answer>
 		<para>
-			There has been no annouced effort to develop a plugin for XSL or XSLT. Using
+			There has been no announced effort to develop a plugin for XSL or XSLT. Using
 			command lines tools, either directly through the System shell of the Console
 			plugin, or through an Ant build file using the AntFarm plugin, you can obtain
 			parsed error output that links to buffer text in the ErrorList plugin's display.
