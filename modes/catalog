@@ -86,8 +86,11 @@
 
 <MODE NAME="freemarker"		FILE="freemarker.xml"
 				FILE_NAME_GLOB="*.ftl"
-				FIRST_LINE_GLOB="<\#ftl*"
-/>
+				FIRST_LINE_GLOB="<\#ftl*"/>
+
+<MODE NAME="gettext"		FILE="gettext.xml"
+				FILE_NAME_GLOB="*.{po,pot}" />
+
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />
 

@@ -558,7 +558,7 @@ class BrowserView extends JPanel
 		public void mouseReleased(MouseEvent evt)
 		{
 			if(evt.getClickCount() % 2 != 0 &&
-				GUIUtilities.isMiddleButton(evt.getModifiers()))
+				!GUIUtilities.isMiddleButton(evt.getModifiers()))
 				return;
 
 			int row = parentDirectories.locationToIndex(evt.getPoint());
