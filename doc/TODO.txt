@@ -5,8 +5,9 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- changing edit mode is broken
+- vertical paste down to line with virt space
 - fix print spacing problem
-- fix tom's bugs
 - minor quicknotepad changes -- update docs
 - add documentation for pre1 features
 - debug rectangular selection
