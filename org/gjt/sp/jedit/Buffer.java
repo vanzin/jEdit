@@ -28,7 +28,7 @@ import gnu.regexp.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-import java.awt.*;
+import java.awt.Toolkit;
 import java.io.File;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
@@ -114,194 +114,6 @@ public class Buffer implements EBComponent
 
 		if(files != null)
 			insertFile(view,files[0]);
-	} //}}}
-
-	//{{{ print() method
-	/**
-	 * Prints the buffer.
-	 * @param view The view
-	 * @since jEdit 2.7pre2
-	 */
-	public void print(View view)
-	{
-		PrintJob job = view.getToolkit().getPrintJob(view,name,null);
-		if(job == null)
-			return;
-
-		view.showWaitCursor();
-
-		int topMargin;
-		int leftMargin;
-		int bottomMargin;
-		int rightMargin;
-		int ppi = job.getPageResolution();
-
-		try
-		{
-			topMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"print.margin.top")).floatValue() * ppi);
-		}
-		catch(NumberFormatException nf)
-		{
-			topMargin = ppi / 2;
-		}
-		try
-		{
-			leftMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"print.margin.left")).floatValue() * ppi);
-		}
-		catch(NumberFormatException nf)
-		{
-			leftMargin = ppi / 2;
-		}
-		try
-		{
-			bottomMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"print.margin.bottom")).floatValue() * ppi);
-		}
-		catch(NumberFormatException nf)
-		{
-			bottomMargin = topMargin;
-		}
-		try
-		{
-			rightMargin = (int)(Float.valueOf(jEdit.getProperty(
-				"print.margin.right")).floatValue() * ppi);
-		}
-		catch(NumberFormatException nf)
-		{
-			rightMargin = leftMargin;
-		}
-
-		boolean printHeader = jEdit.getBooleanProperty("print.header");
-		boolean printFooter = jEdit.getBooleanProperty("print.footer");
-		boolean printLineNumbers = jEdit.getBooleanProperty("print.lineNumbers");
-		boolean syntax = jEdit.getBooleanProperty("print.syntax");
-
-		String header = path;
-		String footer = new Date().toString();
-
-		TabExpander expander = null;
-
-		Graphics gfx = null;
-
-		Font font = jEdit.getFontProperty("print.font");
-
-		SyntaxStyle[] styles = GUIUtilities.loadStyles(
-			jEdit.getProperty("print.font"),
-			jEdit.getIntegerProperty("print.fontsize",10));
-
-		boolean style = jEdit.getBooleanProperty("print.style");
-		boolean color = jEdit.getBooleanProperty("print.color");
-
-		FontMetrics fm = null;
-		Dimension pageDimension = job.getPageDimension();
-		int pageWidth = pageDimension.width;
-		int pageHeight = pageDimension.height;
-		int y = 0;
-		int tabSize = 0;
-		int lineHeight = 0;
-		int page = 0;
-
-		int lineNumberDigits = (int)Math.ceil(Math.log(
-			getLineCount()) / Math.log(10));
-
-		int lineNumberWidth = 0;
-
-		TextRenderer renderer = new TextRenderer();
-
-		renderer.configure(false,false);
-
-		for(int i = 0; i < getLineCount(); i++)
-		{
-			if(gfx == null)
-			{
-				page++;
-
-				gfx = job.getGraphics();
-				renderer.setupGraphics(gfx);
-
-				gfx.setFont(font);
-				fm = gfx.getFontMetrics();
-
-				if(printLineNumbers)
-				{
-					lineNumberWidth = fm.charWidth('0')
-						* lineNumberDigits;
-				}
-				else
-					lineNumberWidth = 0;
-
-				lineHeight = fm.getHeight();
-				tabSize = getTabSize() * fm.charWidth(' ');
-				expander = new PrintTabExpander(leftMargin
-					+ lineNumberWidth,tabSize);
-
-				y = topMargin + lineHeight - fm.getDescent()
-					- fm.getLeading();
-
-				if(printHeader)
-				{
-					gfx.setColor(Color.lightGray);
-					gfx.fillRect(leftMargin,topMargin,pageWidth
-						- leftMargin - rightMargin,lineHeight);
-					gfx.setColor(Color.black);
-					gfx.drawString(header,leftMargin,y);
-					y += lineHeight;
-				}
-			}
-
-			y += lineHeight;
-
-			gfx.setColor(Color.black);
-			gfx.setFont(font);
-
-			int x = leftMargin;
-			if(printLineNumbers)
-			{
-				String lineNumber = String.valueOf(i + 1);
-				gfx.drawString(lineNumber,(leftMargin + lineNumberWidth)
-					- fm.stringWidth(lineNumber),y);
-				x += lineNumberWidth + fm.charWidth('0');
-			}
-
-			paintSyntaxLine(i,gfx,x,y,expander,style,color,
-				font,Color.black,Color.white,styles,
-				renderer);
-
-			int bottomOfPage = pageHeight - bottomMargin - lineHeight;
-			if(printFooter)
-				bottomOfPage -= lineHeight * 2;
-
-			if(y >= bottomOfPage || i == getLineCount() - 1)
-			{
-				if(printFooter)
-				{
-					y = pageHeight - bottomMargin;
-
-					gfx.setColor(Color.lightGray);
-					gfx.setFont(font);
-					gfx.fillRect(leftMargin,y - lineHeight,pageWidth
-						- leftMargin - rightMargin,lineHeight);
-					gfx.setColor(Color.black);
-					y -= (lineHeight - fm.getAscent());
-					gfx.drawString(footer,leftMargin,y);
-
-					Integer[] args = { new Integer(page) };
-					String pageStr = jEdit.getProperty("print.page",args);
-					int width = fm.stringWidth(pageStr);
-					gfx.drawString(pageStr,pageWidth - rightMargin
-						- width,y);
-				}
-
-				gfx.dispose();
-				gfx = null;
-			}
-		}
-
-		job.end();
-
-		view.hideWaitCursor();
 	} //}}}
 
 	//{{{ reload() method
@@ -2393,79 +2205,6 @@ public class Buffer implements EBComponent
 		}
 	} //}}}
 
-	//{{{ paintSyntaxLine() method
-	/**
-	 * Paints the specified line onto the graphics context.
-	 * @since jEdit 3.2pre6
-	 */
-	public int paintSyntaxLine(int lineIndex, Graphics gfx, int _x, int _y,
-		TabExpander expander, boolean style, boolean color,
-		Font defaultFont, Color foreground, Color background,
-		SyntaxStyle[] styles, TextRenderer renderer)
-	{
-		float x = (float)_x;
-		float y = (float)_y;
-
-		if(lastTokenizedLine == lineIndex)
-			getLineText(lineIndex,seg);
-		else
-			markTokens(lineIndex);
-
-		Token tokens = tokenList.firstToken;
-
-		// the above should leave the text in the 'seg' segment
-		char[] text = seg.array;
-
-		int off = seg.offset;
-
-		for(;;)
-		{
-			byte id = tokens.id;
-			if(id == Token.END)
-				break;
-
-			Color tokenForeground;
-			Color tokenBackground = null;
-			if(id == Token.NULL)
-			{
-				gfx.setFont(defaultFont);
-				tokenForeground = foreground;
-			}
-			else
-			{
-				if(style)
-					gfx.setFont(styles[id].getFont());
-				else
-					gfx.setFont(defaultFont);
-
-				if(color)
-				{
-					tokenBackground = styles[id].getBackgroundColor();
-					tokenForeground = styles[id].getForegroundColor();
-					if(tokenForeground == null)
-						tokenForeground = foreground;
-				}
-				else
-					tokenForeground = foreground;
-			}
-
-			int len = tokens.length;
-			/*if(off + len > seg.offset + seg.count)
-			{
-				System.err.println((off - seg.offset)
-					+ "+" + len + ":" + seg.count);
-			}*/
-			x = renderer.drawChars(text,off,len,gfx,x,y,expander,
-				tokenForeground,tokenBackground,background);
-
-			off += len;
-
-			tokens = tokens.next;
-		}
-
-		return (int)x;
-	} //}}}
-
 	//{{{ markTokens() method
 	/**
 	 * Returns the syntax tokens for the specified line.
@@ -2873,10 +2612,10 @@ public class Buffer implements EBComponent
 				else
 					end++;
 			}
-
-			while(getLineLength(end) == 0 && end > start)
-				end--;
 		}
+
+		while(getLineLength(end) == 0 && end > start)
+			end--;
 
 		return new int[] { start, end };
 	} //}}}

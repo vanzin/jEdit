@@ -21,8 +21,13 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
+import java.awt.font.*;
+import java.awt.*;
 import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
 import org.gjt.sp.jedit.syntax.*;
+//}}}
 
 /**
  * Class with several text utility functions.
@@ -56,6 +61,149 @@ public class TextUtilities
 				tokenListOffset += tokens.length;
 				tokens = tokens.next;
 			}
+		}
+	} //}}}
+
+	//{{{ lineToChunkList() method
+	/**
+	 * Converts a line of text into a chunk list.
+	 * @param seg The segment containing line text
+	 * @param tokens The line's syntax tokens
+	 * @param styles The styles to highlight the line with
+	 * @param fontRenderContext Text transform, anti-alias, fractional font
+	 * metrics
+	 * @param e Used for calculating tab offsets
+	 * @since jEdit 4.0pre4
+	 */
+	public static Chunk lineToChunkList(Segment seg, Token tokens,
+		SyntaxStyle[] styles, FontRenderContext fontRenderContext,
+		TabExpander e)
+	{
+		float x = 0.0f;
+
+		Chunk first = null;
+		Chunk current = null;
+
+		int tokenListOffset = 0;
+
+		while(tokens.id != Token.END)
+		{
+			int flushLen = 0;
+			int flushIndex = tokenListOffset;
+
+			for(int i = 0; i < tokens.length; i++)
+			{
+				char ch = seg.array[seg.offset + tokenListOffset + i];
+
+				if(ch != '\t')
+				{
+					flushLen++;
+					if(i != tokens.length - 1)
+						continue;
+				}
+
+				// inefficent, but GlyphVector API sucks
+				char[] text;
+				if(flushLen == 0)
+					text = null;
+				else
+				{
+					text = new char[flushLen];
+					System.arraycopy(seg.array,seg.offset
+						+ flushIndex,text,0,flushLen);
+				}
+
+				Chunk newChunk = new Chunk(x,tokens.id,text,
+					flushIndex,styles,fontRenderContext);
+				if(current == null)
+					current = first = newChunk;
+				else
+				{
+					current.next = newChunk;
+					current = newChunk;
+				}
+
+				flushLen = 0;
+
+				x += newChunk.width;
+
+				flushIndex = tokenListOffset + i + 1;
+
+				if(ch == '\t')
+				{
+					current.length++;
+					x = e.nextTabStop(x,i - seg.offset);
+					current.width = x - current.x;
+				}
+			}
+
+			tokenListOffset += tokens.length;
+			tokens = tokens.next;
+		}
+
+		return first;
+	} //}}}
+
+	//{{{ paintChunkList() method
+	/**
+	 * Paints a chunk list.
+	 * @param chunks The chunk list
+	 * @param gfx The graphics context
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @return The width of the painted text
+	 * @since jEdit 4.0pre4
+	 */
+	public static float paintChunkList(Chunk chunks, Graphics2D gfx,
+		float x, float y)
+	{
+		float _x = 0.0f;
+
+		while(chunks != null)
+		{
+			if(chunks.text != null)
+			{
+				gfx.setFont(chunks.style.getFont());
+				gfx.setColor(chunks.style.getForegroundColor());
+				gfx.drawGlyphVector(chunks.text,x + chunks.x,y);
+			}
+
+			_x = chunks.x + chunks.width;
+			chunks = chunks.next;
+		}
+
+		return _x;
+	} //}}}
+
+	//{{{ Chunk class
+	/**
+	 * A linked-list useful for painting syntax highlighted text and
+	 * calculating offsets.
+	 * @since jEdit 4.0pre4
+	 */
+	public static class Chunk
+	{
+		public float x;
+		public float width;
+		public SyntaxStyle style;
+		public int offset;
+		public int length;
+		public GlyphVector text;
+
+		public Chunk next;
+
+		Chunk(float x, int tokenType, char[] text, int offset,
+			SyntaxStyle[] styles, FontRenderContext fontRenderContext)
+		{
+			this.x = x;
+			style = styles[tokenType];
+			if(text != null)
+			{
+				this.text = style.getFont().createGlyphVector(fontRenderContext,text);
+				this.width = (float)this.text.getLogicalBounds().getWidth();
+				this.length = text.length;
+			}
+			this.offset = offset;
 		}
 	} //}}}
 

@@ -251,6 +251,21 @@ public class BufferOptions extends EnhancedDialog
 		panel.add(encoding);
 		//}}}
 
+		//{{{ GZipped setting
+		cons.gridx = 0;
+		cons.gridy++;
+		cons.weightx = 0.0f;
+		cons.gridwidth = cons.REMAINDER;
+		cons.fill = GridBagConstraints.NONE;
+		cons.anchor = GridBagConstraints.WEST;
+		gzipped = new JCheckBox(jEdit.getProperty(
+			"buffer-options.gzipped"));
+		gzipped.setSelected(buffer.getBooleanProperty(Buffer.GZIPPED));
+		gzipped.addActionListener(actionListener);
+		layout.setConstraints(gzipped,cons);
+		panel.add(gzipped);
+		//}}}
+
 		//{{{ Trailing EOL setting
 		cons.gridx = 0;
 		cons.gridy++;
@@ -404,6 +419,15 @@ public class BufferOptions extends EnhancedDialog
 		String oldFoldMode = buffer.getStringProperty("folding");
 		buffer.setStringProperty("folding",foldMode);
 
+		boolean gzippedValue = gzipped.isSelected();
+		boolean oldGzipped = buffer.getBooleanProperty(
+			Buffer.GZIPPED);
+		if(gzippedValue != oldGzipped)
+		{
+			buffer.setBooleanProperty(Buffer.GZIPPED,gzippedValue);
+			buffer.setDirty(true);
+		}
+
 		boolean trailingEOLValue = trailingEOL.isSelected();
 		boolean oldTrailingEOL = buffer.getBooleanProperty(
 			Buffer.TRAILING_EOL);
@@ -455,6 +479,7 @@ public class BufferOptions extends EnhancedDialog
 	private JComboBox mode;
 	private JComboBox lineSeparator;
 	private JComboBox encoding;
+	private JCheckBox gzipped;
 	private JCheckBox trailingEOL;
 	private JCheckBox indentOnTab;
 	private JCheckBox indentOnEnter;

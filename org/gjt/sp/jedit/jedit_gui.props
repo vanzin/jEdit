@@ -1241,6 +1241,7 @@ buffer-options.title=Buffer Options
 buffer-options.mode=Edit mode:
 buffer-options.lineSeparator=Line separator:
 buffer-options.encoding=Character encoding:
+buffer-options.gzipped=GZIP (compress) file on disk
 buffer-options.trailingEOL=Trailing end-of-line at end of file
 buffer-options.props=Corresponding buffer-local properties: (C+c copies)
 #}}}

@@ -3230,16 +3230,6 @@ loop:		for(int i = 0; i < list.length; i++)
 				continue;
 			}
 
-			if(plugin.equals("jaxp.jar"))
-			{
-				if(System.getProperty("java.version").compareTo("1.4") >= 0)
-				{
-					Log.log(Log.NOTICE,jEdit.class,"Running on Java 1.4. Ignoring "
-						+ path);
-					continue;
-				}
-			}
-
 			try
 			{
 				Log.log(Log.DEBUG,jEdit.class,
