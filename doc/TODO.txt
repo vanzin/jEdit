@@ -5,6 +5,7 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- if a directory load fails, the parent dirs list gets messed up
 - soft wrap is still slow
 - change indentPrevLine to indentOneLine and indentSubsequentLines
 - minor quicknotepad changes -- update docs
