@@ -612,7 +612,7 @@ public class BeanShell
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,BeanShell.class,"You have BeanShell version " + Interpreter.VERSION + " in your CLASSPATH.");
+			Log.log(Log.ERROR,BeanShell.class,"You have BeanShell version " + getVersion() + " in your CLASSPATH.");
 			Log.log(Log.ERROR,BeanShell.class,"Please remove it from the CLASSPATH since jEdit can only run with the bundled BeanShell version " + REQUIRED_VERSION);
 			System.exit(1);
 		}
@@ -733,6 +733,19 @@ public class BeanShell
 	private static Interpreter createInterpreter(NameSpace nameSpace)
 	{
 		return new Interpreter(null,System.out,System.err,false,nameSpace);
+	} //}}}
+
+	//{{{ getVersion() method
+	private static String getVersion()
+	{
+		try
+		{
+			return (String)Interpreter.class.getField("VERSION").get(null);
+		}
+		catch(Exception e)
+		{
+			return "unknown";
+		}
 	} //}}}
 
 	//}}}

@@ -147,4 +147,11 @@ public class Debug
 	 * Create new search dialogs instead of reusing instances.
 	 */
 	public static boolean DISABLE_SEARCH_DIALOG_POOL = false;
+	
+	/**
+	 * Disable multihead support, since it can cause window positioning
+	 * problems with some Java versions.
+	 * @since jEdit 4.3pre1
+	 */
+	public static boolean DISABLE_MULTIHEAD = false;
 }

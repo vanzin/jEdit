@@ -986,7 +986,8 @@ public class View extends JFrame implements EBComponent
 	 */
 	public EditPane goToBuffer(Buffer buffer)
 	{
-		if(editPane.getBuffer() == buffer)
+		if(editPane.getBuffer() == buffer
+			&& editPane.getTextArea().getVisibleLines() > 1)
 		{
 			editPane.focusOnTextArea();
 			return editPane;
@@ -1005,6 +1006,7 @@ public class View extends JFrame implements EBComponent
 				return ep;
 			}
 		}
+
 		setBuffer(buffer);
 		return editPane;
 	} //}}}

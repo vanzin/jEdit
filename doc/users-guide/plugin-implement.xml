@@ -505,29 +505,28 @@ options.quicknotepad.filepath=</programlisting></informalexample>
   as follows:
 </para>
 
-<informalexample><programlisting>&lt;?xml version="1.0"?&gt;
+<informalexample><programlisting><![CDATA[<ACTIONS>
+	<ACTION NAME="quicknotepad.choose-file">
+		<CODE>
+			wm.addDockableWindow(QuickNotepadPlugin.NAME);
+			wm.getDockableWindow(QuickNotepadPlugin.NAME).chooseFile();
+		</CODE>
+	</ACTION>
 
-&lt;!DOCTYPE ACTIONS SYSTEM "actions.dtd"&gt;
+	<ACTION NAME="quicknotepad.save-file">
+		<CODE>
+			wm.addDockableWindow(QuickNotepadPlugin.NAME);
+			wm.getDockableWindow(QuickNotepadPlugin.NAME).saveFile();
+		</CODE>
+	</ACTION>
 
-&lt;ACTIONS&gt;
-    &lt;ACTION NAME="quicknotepad.choose-file"&gt;
-        &lt;CODE&gt;
-            wm.getDockable(QuickNotepadPlugin.NAME).chooseFile();
-        &lt;/CODE&gt;
-    &lt;/ACTION&gt;
-
-    &lt;ACTION NAME="quicknotepad.save-file"&gt;
-        &lt;CODE&gt;
-            wm.getDockable(QuickNotepadPlugin.NAME).saveFile();
-        &lt;/CODE&gt;
-    &lt;/ACTION&gt;
-
-    &lt;ACTION NAME="quicknotepad.copy-to-buffer"&gt;
-        &lt;CODE&gt;
-            wm.getDockable(QuickNotepadPlugin.NAME).copyToBuffer();
-        &lt;/CODE&gt;
-    &lt;/ACTION&gt;
-&lt;/ACTIONS&gt;</programlisting></informalexample>
+	<ACTION NAME="quicknotepad.copy-to-buffer">
+		<CODE>
+			wm.addDockableWindow(QuickNotepadPlugin.NAME);
+			wm.getDockableWindow(QuickNotepadPlugin.NAME).copyToBuffer();
+		</CODE>
+	</ACTION>
+</ACTIONS>]]></programlisting></informalexample>
 
 <para>
   This file defines three actions. They use the current view's

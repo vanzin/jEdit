@@ -945,7 +945,8 @@ public class GUIUtilities
 		Rectangle desired = new Rectangle(x,y,width,height);
 		try
 		{
-			adjustForScreenBounds(desired);
+			if(!Debug.DISABLE_MULTIHEAD)
+				adjustForScreenBounds(desired);
 		}
 		catch(Exception e)
 		{

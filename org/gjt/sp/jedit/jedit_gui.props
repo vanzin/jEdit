@@ -2164,7 +2164,8 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 
 plugin-manager.dependency.title=Plugin Dependency
 plugin-manager.dependency.message={0} is required by the following plugins.\n\
-	Deselecting {0} will also deselect the below plugins.
+	Deselecting {0} will also deselect the below plugins:\n\
+	{1}
 
 install-plugins.depend.title=Dependency Required
 install-plugins.depend.message=One or more of the plugins you are installing\n\
