@@ -993,8 +993,6 @@ public class jEdit
 		PluginJAR jar = new EditPlugin.JAR(path);
 		jars.addElement(jar);
 		jar.init();
-		if(jar.getActionSet() != null)
-			addActionSet(jar.getActionSet());
 		jar.getClassLoader().activate();
 
 		return jar;

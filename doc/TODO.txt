@@ -8,8 +8,6 @@ and quirks that I need to fix eventually.
 
 - plugin api:
 
-  - classes named plugin but not real plugins: don't complain about
-    name/version
   - option panes.
     - port quicknotepad, errorlist, character map, send buffer,
       sidekick, xml.

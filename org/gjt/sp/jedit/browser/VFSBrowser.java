@@ -462,21 +462,14 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 
-		String strippedPath;
-		if(path.length() != 1 && (path.endsWith("/")
-			|| path.endsWith(java.io.File.separator)))
-			strippedPath = path.substring(0,path.length() - 1);
-		else
-			strippedPath = path;
-
-		pathField.setText(strippedPath);
+		pathField.setText(path);
 
 		if(!startRequest())
 			return;
 
 		updateFilenameFilter();
 		browserView.loadDirectory(null,path);
-		this.path = strippedPath;
+		this.path = path;
 
 		VFSManager.runInAWTThread(new Runnable()
 		{

@@ -1389,7 +1389,6 @@ public class View extends JFrame implements EBComponent
 		showFullPath = jEdit.getBooleanProperty("view.showFullPath");
 		updateTitle();
 
-		dockableWindowManager.propertiesChanged();
 		status.propertiesChanged();
 
 		removeToolBar(status);
