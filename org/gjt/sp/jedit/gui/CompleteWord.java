@@ -379,6 +379,7 @@ public class CompleteWord extends JWindow
 				if(word.length() == 1)
 				{
 					textArea.backspace();
+					evt.consume();
 					dispose();
 				}
 				else
@@ -397,6 +398,8 @@ public class CompleteWord extends JWindow
 
 					words.setListData(completions);
 					words.setSelectedIndex(0);
+
+					evt.consume();
 				}
 				break;
 			default:

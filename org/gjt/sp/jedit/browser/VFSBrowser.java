@@ -330,7 +330,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			//
 			// to avoid causing '> 1 request' errors, don't reload
 			// directory if request already active
-			if(requestRunning)
+			if(browserView.isLoading())
 				return;
 
 			// save a file -> sends vfs update. if a VFS file dialog box
@@ -434,6 +434,19 @@ public class VFSBrowser extends JPanel implements EBComponent
 				endRequest();
 			}
 		});
+	} //}}}
+
+	//{{{ rootDirectory() method
+	/**
+	 * Goes to the local drives directory.
+	 * @since jEdit 4.0pre4
+	 */
+	public void rootDirectory()
+	{
+		if(OperatingSystem.isDOSDerived())
+			setDirectory(FileRootsVFS.PROTOCOL + ":");
+		else
+			setDirectory("/");
 	} //}}}
 
 	//{{{ reloadDirectory() method
@@ -1054,7 +1067,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 			else if(source == reload)
 				reloadDirectory();
 			else if(source == roots)
-				setDirectory(FileRootsVFS.PROTOCOL + ":");
+				rootDirectory();
 			else if(source == home)
 				setDirectory(System.getProperty("user.home"));
 			else if(source == synchronize)

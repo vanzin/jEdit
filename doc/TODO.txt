@@ -1,17 +1,13 @@
 TO DO
 
-short term plan:
-
 before soft wrap, must fix all the document bugs:
 
-- reloading read only files
-- browserView.directoryLoaded() npe
-- textArea.getLastVisibleLine() method
 - narrow: insert line after first fucked
 - when loading a file with collapsedFolds property, last line always
   visible
 - nextLineRequested still fucked
 
+- textArea.getLastVisibleLine() method
 - print should not use so much memory
 - background color for tokens
 
@@ -57,7 +53,6 @@ before soft wrap, must fix all the document bugs:
   - make bug report cmd
   - docs in user's guide
 - faster hypersearch
-- put package.html everywhere
 - OK_CANCEL_OPTION in confirm() docs
 - C+d with selection: delete all selected lines
 - isToolsJarAvailable(): prompt for location in a file dialog box. Need

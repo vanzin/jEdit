@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1998, 1999, 2000, 2001, 2002 Slava Pestov
  * Portions copyright (C) 1999, 2000 mike dillon
  *
  * This program is free software; you can redistribute it and/or
@@ -208,6 +208,11 @@ public class Buffer implements EBComponent
 				IntegerArray endOffsets = (IntegerArray)
 					getProperty(BufferIORequest.END_OFFSETS);
 
+				// below remove() call only works if read only
+				// is false. this is a slightly silly workaround.
+				boolean readOnly = isReadOnly();
+				setFlag(READ_ONLY,false);
+
 				// For `reload' command
 				remove(0,getLength());
 
@@ -246,6 +251,8 @@ public class Buffer implements EBComponent
 					// have to set mode according to path name only
 					setMode();
 				}
+
+				setFlag(READ_ONLY,readOnly);
 
 				unsetProperty(BufferIORequest.LOAD_DATA);
 				unsetProperty(BufferIORequest.END_OFFSETS);
@@ -801,7 +808,7 @@ public class Buffer implements EBComponent
 	//{{{ isTemporary() method
 	/**
 	 * Returns if this is a temporary buffer.
-	 * @see jEdit#openTemporary(View,String,String,boolean,boolean)
+	 * @see jEdit#openTemporary(View,String,String,boolean)
 	 * @see jEdit#commitTemporary(Buffer)
 	 * @since jEdit 2.2pre7
 	 */
@@ -1505,7 +1512,6 @@ public class Buffer implements EBComponent
 	 * requiring the same number of <code>endCompoundEdit()</code>
 	 * calls to end the edit.
 	 * @see #endCompoundEdit()
-	 * @see #undo()
 	 */
 	public void beginCompoundEdit()
 	{
@@ -1530,7 +1536,6 @@ public class Buffer implements EBComponent
 	 * <code>beginCompoundEdit()</code> was called can now
 	 * be undone in one step by calling <code>undo()</code>.
 	 * @see #beginCompoundEdit()
-	 * @see #undo()
 	 */
 	public void endCompoundEdit()
 	{

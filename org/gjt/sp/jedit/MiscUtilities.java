@@ -863,12 +863,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static boolean isToolsJarAvailable()
 	{
-		String javaVersion = System.getProperty("java.version");
-		if(compareStrings(javaVersion,"1.2",false) < 0)
-			return true;
-
-		Log.log(Log.DEBUG, MiscUtilities.class, "JDK 1.2 or higher "
-			+ "detected, searching for tools.jar...");
+		Log.log(Log.DEBUG, MiscUtilities.class,"Searching for tools.jar...");
 
 		Vector paths = new Vector();
 

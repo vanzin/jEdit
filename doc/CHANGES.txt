@@ -41,6 +41,9 @@ defaults.
   change is that the printed output is now word-wrapped.
 - The file system browser now preserves expansion state when reloading
   directories
+- On Unix operating systems, the roots: VFS is no longer available,
+  since it is not necessary (Unix systems have a single file system
+  root, /)
 
 + Bug Fixes
 
@@ -69,6 +72,7 @@ defaults.
   status bar messages
 - Sometimes hard tabs would be inserted into the buffer, even if soft
   tabs were enabled
+- Trying to reload a read only file would fail
 
 + API Changes
 
@@ -85,6 +89,12 @@ defaults.
   MiscUtilities.quicksort(List,Comparator) methods added
 - The above changes are completely binary compatible, and they make
   jEdit's sorting API more consistent with the Java collections API.
+- New OperatingSystem class, with the following methods:
+
+  isDOSDerived(), isWindows(), isWindows9x(), isWindowsNT(), isOS2()
+  isMacOS()
+  isUnix()
+  hasJava14()
 
 * Version 4.0pre3
 

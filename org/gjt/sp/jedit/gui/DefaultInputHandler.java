@@ -339,13 +339,13 @@ public class DefaultInputHandler extends InputHandler
 					modifiers |= InputEvent.ALT_MASK;
 					break;
 				case 'C':
-					if(macOS)
+					if(OperatingSystem.isMacOS())
 						modifiers |= InputEvent.META_MASK;
 					else
 						modifiers |= InputEvent.CTRL_MASK;
 					break;
 				case 'M':
-					if(macOS)
+					if(OperatingSystem.isMacOS())
 						modifiers |= InputEvent.CTRL_MASK;
 					else
 						modifiers |= InputEvent.META_MASK;
@@ -398,11 +398,5 @@ public class DefaultInputHandler extends InputHandler
 	//{{{ Private members
 	private Hashtable bindings;
 	private Hashtable currentBindings;
-
-	private static boolean macOS;
-
-	static
-	{
-		macOS = (System.getProperty("os.name").indexOf("Mac") != -1);
-	} //}}}
+	//}}}
 }

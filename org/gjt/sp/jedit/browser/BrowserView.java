@@ -286,6 +286,12 @@ public class BrowserView extends JPanel
 		splitPane.setBorder(null);
 	} //}}}
 
+	//{{{ isLoading() method
+	public boolean isLoading()
+	{
+		return currentlyLoading.size() != 0;
+	} //}}}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
@@ -541,7 +547,7 @@ public class BrowserView extends JPanel
 					browser.setDirectory(System.getProperty("user.home"));
 					break;
 				case '/':
-					browser.setDirectory("roots:");
+					browser.rootDirectory();
 					break;
 				case '-':
 					View view = browser.getView();

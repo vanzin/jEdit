@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2000, 2001 Slava Pestov
+ * Copyright (C) 1999, 2000, 2001, 2002 Slava Pestov
  * Portions copyright (C) 2000 Ollie Rutherfurd
  *
  * This program is free software; you can redistribute it and/or
@@ -266,6 +266,7 @@ public class JEditTextArea extends JComponent
 			}
 
 			updateScrollBars();
+			chunkCache.invalidateAll();
 			painter.repaint();
 			gutter.repaint();
 		}
@@ -711,8 +712,8 @@ public class JEditTextArea extends JComponent
 	{
 		getLineText(line,lineSegment);
 
-		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
-			buffer.markTokens(line).getFirstToken());
+		TextUtilities.Chunk chunks = chunkCache.getLineInfo(
+			physicalToVirtual(line),line).chunks;
 
 		return (int)(horizontalOffset + TextUtilities.offsetToX(chunks,offset));
 	} //}}}
@@ -729,8 +730,8 @@ public class JEditTextArea extends JComponent
 
 		getLineText(line,lineSegment);
 
-		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
-			buffer.markTokens(line).getFirstToken());
+		TextUtilities.Chunk chunks = chunkCache.getLineInfo(
+			physicalToVirtual(line),line).chunks;
 
 		return TextUtilities.xToOffset(chunks,x,true);
 	} //}}}
@@ -749,8 +750,8 @@ public class JEditTextArea extends JComponent
 
 		getLineText(line,lineSegment);
 
-		TextUtilities.Chunk chunks = painter.lineToChunkList(lineSegment,
-			buffer.markTokens(line).getFirstToken());
+		TextUtilities.Chunk chunks = chunkCache.getLineInfo(
+			physicalToVirtual(line),line).chunks;
 
 		return (int)TextUtilities.xToOffset(chunks,x,round);
 	} //}}}
@@ -4495,6 +4496,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ foldStructureChanged() method
 	void foldStructureChanged()
 	{
+		chunkCache.invalidateAll();
+
 		// recalculate first line
 		setFirstLine(physicalToVirtual(physFirstLine));
 
@@ -5311,9 +5314,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 		//}}}
 
-		//{{{ linesChanged() method
+		//{{{ repaintAndScroll() method
 		private void repaintAndScroll(int startLine, int numLines)
 		{
+			int virtualStartLine = physicalToVirtual(startLine);
+			chunkCache.invalidateLineRange(virtualStartLine,
+				getVirtualLineCount() - 1);
+
 			if(numLines == 0)
 				invalidateLine(startLine);
 			// do magic stuff
@@ -5328,8 +5335,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				updateScrollBars();
 
 				invalidateVirtualLineRange(
-					foldVisibilityManager
-					.physicalToVirtual(startLine),
+					virtualStartLine,
 					firstLine + visibleLines);
 			}
 		} //}}}

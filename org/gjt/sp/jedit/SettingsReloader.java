@@ -39,7 +39,7 @@ class SettingsReloader implements EBComponent
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		String osName = System.getProperty("os.name");
 		// On Windows and MacOS, path names are case insensitive
-		if(osName.indexOf("Windows") != -1 || osName.indexOf("Mac") != -1)
+		if(OperatingSystem.isDOSDerived() || OperatingSystem.isMacOS())
 		{
 			path = path.toLowerCase();
 			if(jEditHome != null)
