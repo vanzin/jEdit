@@ -351,7 +351,7 @@ public class BufferIORequest extends WorkRequest
 		if(length == 0)
 			length = IOBUFSIZE;
 
-		SegmentBuffer seg = new SegmentBuffer((int)length);
+		SegmentBuffer seg = new SegmentBuffer((int)length + 1);
 
 		InputStreamReader in = new InputStreamReader(_in,
 			(String)buffer.getProperty(Buffer.ENCODING));

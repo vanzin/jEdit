@@ -45,7 +45,7 @@ import org.gjt.sp.jedit.*;
 public class BrowserView extends JPanel
 {
 	//{{{ BrowserView constructor
-	public BrowserView(VFSBrowser browser, boolean splitHorizontally)
+	public BrowserView(VFSBrowser browser, final boolean splitHorizontally)
 	{
 		this.browser = browser;
 		this.splitHorizontally = splitHorizontally;
@@ -72,13 +72,29 @@ public class BrowserView extends JPanel
 		tree.setShowsRootHandles(true);
 		tree.setVisibleRowCount(12);
 
-		JScrollPane parentScroller = new JScrollPane(parentDirectories);
+		final JScrollPane parentScroller = new JScrollPane(parentDirectories);
 		parentScroller.setMinimumSize(new Dimension(0,0));
 		JScrollPane treeScroller = new JScrollPane(tree);
 		treeScroller.setMinimumSize(new Dimension(0,0));
 		splitPane = new JSplitPane( 
 			splitHorizontally ? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
 			parentScroller,treeScroller);
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				String prop = splitHorizontally ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
+				int loc = jEdit.getIntegerProperty(prop,0);
+				if(loc == 0)
+					loc = parentScroller.getPreferredSize().height;
+
+				splitPane.setDividerLocation(loc);
+				parentDirectories.ensureIndexIsVisible(
+					parentDirectories.getModel()
+					.getSize());
+			}
+		});
 
 		tmpExpanded = new Hashtable();
 
@@ -101,28 +117,6 @@ public class BrowserView extends JPanel
 	{
 		tree.requestFocus();
 		return true;
-	} //}}}
-
-	//{{{ addNotify() method
-	public void addNotify()
-	{
-		super.addNotify();
-
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				String prop = splitHorizontally ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
-				int loc = jEdit.getIntegerProperty(prop,0);
-				if(loc != 0)
-				{
-					splitPane.setDividerLocation(loc);
-					parentDirectories.ensureIndexIsVisible(
-						parentDirectories.getModel()
-						.getSize());
-				}
-			}
-		});
 	} //}}}
 
 	//{{{ removeNotify() method

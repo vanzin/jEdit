@@ -1,5 +1,23 @@
 JEDIT 4.0 VERSION HISTORY
 
+* Version 4.0pre7
+
++ Enhancements
+
+- Yet-another-optimization to file loading. Directory search should be
+  even faster.
+
++ Bug Fixes
+
+- First time jEdit was run, the file system's divider position would be
+  such that the parent directories list would be invisible
+- 'End' key would go to the end of the physical line if the caret was on
+  the first screen line of a wrapped line
+- Due to the changes in buffer property handling caused by the
+  transition to the new document model, new files would always have the
+  system default line separator and encoding, instead of the defaults
+  that were specified in the 'Loading and Saving' option pane
+
 * Version 4.0pre6
 
 + New Features

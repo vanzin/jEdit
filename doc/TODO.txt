@@ -1,5 +1,7 @@
 TO DO
 
+- if first chunk if a line is a syntax chunk, getScreenLineOfOffset()
+  broken (?)
 - rect select and soft wrap
 - still problem with last phys line repainting
 - vertical scrollbar w/ soft wrap wrong
