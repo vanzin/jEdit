@@ -55,10 +55,9 @@ defaults.
     been changed to send the authorization key in binary as four octets,
     as opposed to in a line of text
   - On some braindamaged Unix systems, users can read files in each
-    other's home directories. In this case, it would be possible for
-    attackers to EXECUTE ARBITRIARY BEANSHELL CODE on jEdit's running in
-    other user's accounts. Very bad, but most Unices do not let people
-    poke around in each other's homes.
+    other's home directories. jEdit now explicitly sets the server
+    file's permissions to 0600 to work around this brain damage
+- Improved JSP syntax highlighting (Daiji Takamori)
 
 + Bug Fixes
 
@@ -118,6 +117,11 @@ defaults.
   isMacOS()
   isUnix()
   hasJava14()
+
+- Offset conversion API changes. Old methods (xToOffset(), offsetToX(),
+  yToLine(), lineToY()) deprecated; you must now use xyToOffset() and
+  offsetToXY() instead. Also note that xyToOffset() will return -1 if
+  the y co-ordinate is not visible in the text area.
 
 * Version 4.0pre3
 

@@ -4,19 +4,13 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
-		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+		<PROPERTY NAME="commentStart" VALUE="&lt;%--" />
+		<PROPERTY NAME="commentEnd" VALUE="--%&gt;" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
-
-		<!-- SGML comment -->
-		<SPAN TYPE="COMMENT1">
-			<BEGIN>&lt;!--</BEGIN>
-			<END>--&gt;</END>
-		</SPAN>
 
 		<!-- JSP comment -->
 		<SPAN TYPE="COMMENT1">
@@ -24,15 +18,34 @@
 			<END>--%&gt;</END>
 		</SPAN>
 
-		<!-- markup tags -->
-		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+		<!-- JSP directive -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="DIRECTIVES">
+			<BEGIN>&lt;%@</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<!-- JSP scriptlet expression -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
 		
-		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+		<!-- JSP scriptlet code block -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%!</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+		
+		<!-- JSP scriptlet -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%</BEGIN>
 			<END>%&gt;</END>
+		</SPAN>
+
+		<!-- SGML comment -->
+		<SPAN TYPE="COMMENT2" DELEGATE="COMMENT">
+			<BEGIN>&lt;!--</BEGIN>
+			<END>--&gt;</END>
 		</SPAN>
 
 		<!-- JavaScript -->
@@ -64,15 +77,66 @@
 			<END>;</END>
 		</SPAN>
 	</RULES>
-	<RULES SET="TAGS" DEFAULT="MARKUP">
+	<RULES SET="COMMENT" IGNORE_CASE="TRUE">
+		<!-- JSP comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;%--</BEGIN>
+			<END>--%&gt;</END>
+		</SPAN>
+
+		<!-- JSP scriptlet expression -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+		
+		<!-- JSP scriptlet -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+    </RULES>
+	<RULES SET="DIRECTIVES" DEFAULT="MARKUP">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
+        <KEYWORDS>
+            <KEYWORD1>taglib</KEYWORD1>
+            <KEYWORD1>include</KEYWORD1>
+            <KEYWORD1>page</KEYWORD1>
+            <KEYWORD1>tag</KEYWORD1>
+            <KEYWORD1>tagAttribute</KEYWORD1>
+            <KEYWORD1>tagVariable</KEYWORD1>
+            
+            <KEYWORD2>language</KEYWORD2>
+            <KEYWORD2>session</KEYWORD2>
+            <KEYWORD2>contentType</KEYWORD2>
+            <KEYWORD2>charset</KEYWORD2>
+            <KEYWORD2>import</KEYWORD2>
+            <KEYWORD2>buffer</KEYWORD2>
+            <KEYWORD2>autoflush</KEYWORD2>
+            <KEYWORD2>isThreadSafe</KEYWORD2>
+            <KEYWORD2>info</KEYWORD2>
+            <KEYWORD2>errorPage</KEYWORD2>
+            <KEYWORD2>isErrorpage</KEYWORD2>
+            <KEYWORD2>extends</KEYWORD2>
+            <KEYWORD2>file</KEYWORD2>
+            <KEYWORD2>uri</KEYWORD2>
+            <KEYWORD2>prefix</KEYWORD2>
+            <KEYWORD2>method</KEYWORD2>
+            <KEYWORD2>name</KEYWORD2>
+            <KEYWORD2>default</KEYWORD2>
+            <KEYWORD2>required</KEYWORD2>
+            <KEYWORD2>rtexprvalue</KEYWORD2>
+            <KEYWORD2>id</KEYWORD2>
+            <KEYWORD2>type</KEYWORD2>
+            <KEYWORD2>scope</KEYWORD2>
+        </KEYWORDS>
 
-		<!-- SGML comment -->
-		<SPAN TYPE="COMMENT1">
-			<BEGIN>&lt;!--</BEGIN>
-			<END>--&gt;</END>
+		<!-- JSP scriptlet expression -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
 		</SPAN>
 
 		<SPAN TYPE="LITERAL1" DELEGATE="ATTRVALUE">
@@ -90,12 +154,45 @@
 		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
+	<RULES SET="TAGS" DEFAULT="MARKUP">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- JSP comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>&lt;%--</BEGIN>
+			<END>--%&gt;</END>
+		</SPAN>
+
+		<!-- JSP scriptlet expression -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" DELEGATE="ATTRVALUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" DELEGATE="ATTRVALUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SEQ TYPE="MARKUP">/</SEQ>
+		<MARK_FOLLOWING TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">:</MARK_FOLLOWING>
+		<SEQ TYPE="NULL">=</SEQ>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+	</RULES>
 	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1">
 		<!-- whitespace: (space and tab) -->
 		<WHITESPACE> </WHITESPACE>
 		<WHITESPACE>	</WHITESPACE>
-		<!-- JSP tags -->
-		<SPAN TYPE="MARKUP" DELEGATE="java::MAIN">
+
+		<!-- JSP scriptlet expression -->
+		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>

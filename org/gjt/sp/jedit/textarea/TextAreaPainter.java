@@ -68,6 +68,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
 		fontRenderContext = new FontRenderContext(null,false,false);
+
+		returnValue = new Point();
 	} //}}}
 
 	//{{{ isManagingFocus() method
@@ -602,7 +604,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			for(int line = firstInvalid; line <= lastInvalid; line++)
 			{
 				ChunkCache.LineInfo lineInfo = textArea.chunkCache
-					.getLineInfoForScreenLine(line);
+					.getLineInfo(line);
+				if(!lineInfo.chunksValid)
+					System.err.println("text area painter: not valid");
 				int physicalLine = lineInfo.physicalLine;
 
 				boolean valid = buffer.isLoaded()
@@ -635,10 +639,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(buffer.isNextLineRequested())
 			{
 				int h = clipRect.y + clipRect.height;
-				textArea.chunkCache.invalidateLineRange(
-					lastInvalid + textArea.getFirstLine(),
-					textArea.getVirtualLineCount() - 1);
-
+				textArea.chunkCache.invalidateChunksFrom(lastInvalid + 1);
 				repaint(0,h,getWidth(),getHeight() - h);
 			}
 
@@ -726,6 +727,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private ArrayList highlights;
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
+
+	// used to store offsetToXY() results
+	private Point returnValue;
 	//}}}
 
 	//{{{ updateRenderingHints() method
@@ -899,12 +903,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(position == -1)
 			return;
 
-		int x = textArea.offsetToX(physicalLine,position);
+		textArea.offsetToXY(physicalLine,position,returnValue);
 		gfx.setColor(bracketHighlightColor);
 		// Hack!!! Since there is no fast way to get the character
 		// from the bracket matching routine, we use ( since all
 		// brackets probably have the same width anyway
-		gfx.drawRect(x,y,fm.charWidth('(') - 1,
+		gfx.drawRect(returnValue.x,y,fm.charWidth('(') - 1,
 			fm.getHeight() - 1);
 	} //}}}
 
@@ -914,7 +918,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		int offset = textArea.getCaretPosition()
 			- textArea.getLineStartOffset(physicalLine);
-		int caretX = textArea.offsetToX(physicalLine,offset);
+		textArea.offsetToXY(physicalLine,offset,returnValue);
+		int caretX = returnValue.x;
 		int height = fm.getHeight();
 
 		gfx.setColor(caretColor);
@@ -949,12 +954,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(s instanceof Selection.Rect)
 		{
 			int lineLen = textArea.getLineLength(physicalLine);
-			x1 = textArea.offsetToX(physicalLine,Math.min(lineLen,
+			x1 = textArea.offsetToXY(physicalLine,Math.min(lineLen,
 				s.start - textArea.getLineStartOffset(
-				s.startLine)));
-			x2 = textArea.offsetToX(physicalLine,Math.min(lineLen,
+				s.startLine)),returnValue).x;
+			x2 = textArea.offsetToXY(physicalLine,Math.min(lineLen,
 				s.end - textArea.getLineStartOffset(
-				s.endLine)));
+				s.endLine)),returnValue).x;
 
 			if(x1 > x2)
 			{
@@ -965,22 +970,22 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 		else if(s.startLine == s.endLine)
 		{
-			x1 = textArea.offsetToX(physicalLine,
-				s.start - lineStart);
-			x2 = textArea.offsetToX(physicalLine,
-				s.end - lineStart);
+			x1 = textArea.offsetToXY(physicalLine,
+				s.start - lineStart,returnValue).x;
+			x2 = textArea.offsetToXY(physicalLine,
+				s.end - lineStart,returnValue).x;
 		}
 		else if(physicalLine == s.startLine)
 		{
-			x1 = textArea.offsetToX(physicalLine,
-				s.start - lineStart);
+			x1 = textArea.offsetToXY(physicalLine,
+				s.start - lineStart,returnValue).x;
 			x2 = getWidth();
 		}
 		else if(physicalLine == s.endLine)
 		{
 			x1 = 0;
-			x2 = textArea.offsetToX(physicalLine,
-				s.end - lineStart);
+			x2 = textArea.offsetToXY(physicalLine,
+				s.end - lineStart,returnValue).x;
 		}
 		else
 		{
