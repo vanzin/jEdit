@@ -223,7 +223,10 @@ public class Buffer implements EBComponent
 					{
 						writeLock();
 
-						contentMgr.insert(0,seg.toString());
+						// theoretically a segment could
+						// have seg.offset != 0 but
+						// SegmentBuffer never does that
+						contentMgr._setContent(seg.array,seg.count);
 
 						contentInserted(0,seg.count,endOffsets);
 					}
@@ -2987,10 +2990,11 @@ public class Buffer implements EBComponent
 	{
 		properties = ((Hashtable)props.clone());
 
-		// fill in defaults for these from system properties.
-		if(properties.get(ENCODING) == null)
+		// fill in defaults for these from system properties if the
+		// corresponding buffer.XXX properties not set
+		if(getProperty(ENCODING) == null)
 			properties.put(ENCODING,System.getProperty("file.encoding"));
-		if(properties.get(LINESEP) == null)
+		if(getProperty(LINESEP) == null)
 			properties.put(LINESEP,System.getProperty("line.separator"));
 
 		lock = new ReadWriteLock();

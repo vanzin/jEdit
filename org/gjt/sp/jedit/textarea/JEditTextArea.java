@@ -2921,7 +2921,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		ChunkCache.LineInfo[] lineInfos = chunkCache.getLineInfosForPhysicalLine(line);
 		int subregion = getSubregionOfOffset(offset,lineInfos);
-		if(subregion == 0)
+		if(subregion == lineInfos.length)
 		{
 			lastIndent = getLineLength(line) - MiscUtilities.getTrailingWhiteSpace(getLineText(line));
 			if(lastIndent == 0)

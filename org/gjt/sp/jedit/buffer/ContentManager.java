@@ -121,6 +121,14 @@ public class ContentManager
 		length += seg.count;
 	} //}}}
 
+	//{{{ _setContent() method
+	public void _setContent(char[] text, int length)
+	{
+		this.text = text;
+		this.gapStart = this.gapEnd = 0;
+		this.length = length;
+	} //}}}
+
 	//{{{ remove() method
 	public void remove(int start, int len)
 	{
