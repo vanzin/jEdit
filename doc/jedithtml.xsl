@@ -7,7 +7,7 @@
                 xmlns="http://www.w3.org/TR/xhtml1/transitional"
                 exclude-result-prefixes="#default">
 
-<xsl:import href="docbook-wrapper.xsl"/>
+<xsl:import href="docbook-wrapper-html.xsl"/>
 
 <!-- {{{ Various customizations -->
 

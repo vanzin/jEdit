@@ -6,8 +6,9 @@ and quirks that I need to fix eventually.
 4.2final to do:
 ---------------
 
+goToBuffer() and 0-height edit panes
 check tips of the day
-proofread docs, set up PDF toolchain
+proofread docs
 - quicknotepad help needs to be generated
 - document optional dependencies
 - news: deep indent, action bar, new cli options

@@ -144,7 +144,7 @@ public interface StructureMatcher
 			Match match = textArea.getStructureMatch();
 			if(match != null)
 			{
-				paintHighlight(gfx,screenLine,physicalLine,
+				paintHighlight(gfx,screenLine,
 					start,end,y,match);
 			}
 		}
@@ -185,7 +185,7 @@ public interface StructureMatcher
 		}
 	
 		private void paintHighlight(Graphics gfx, int screenLine,
-			int physicalLine, int start, int end, int y,
+			int start, int end, int y,
 			Match match)
 		{
 			if(!textArea.isStructureHighlightVisible())

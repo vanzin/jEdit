@@ -699,7 +699,7 @@ loop:			for(;;)
 			{
 				s = selection[i];
 
-				retVal += replaceInSelection(view,textArea,
+				retVal += replaceInSelection(textArea,
 					buffer,matcher,smartCaseReplace,s);
 			}
 
@@ -1033,7 +1033,7 @@ loop:			while(path != null)
 	} //}}}
 
 	//{{{ replaceInSelection() method
-	private static int replaceInSelection(View view, JEditTextArea textArea,
+	private static int replaceInSelection(JEditTextArea textArea,
 		Buffer buffer, SearchMatcher matcher, boolean smartCaseReplace,
 		Selection s) throws Exception
 	{
