@@ -22,7 +22,7 @@
 <MODE NAME="asp"		FILE="asp.xml"
 				FILE_NAME_GLOB="*.{asp,asa}" />
 
-<MODE NAME="aspect-j"	FILE="aspect-j.xml"
+<MODE NAME="aspect-j"		FILE="aspect-j.xml"
 				FILE_NAME_GLOB="*.aj" />
 
 <MODE NAME="assembly-r2000"	FILE="assembly-r2000.xml"
@@ -151,6 +151,9 @@
 <MODE NAME="lisp"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
 
+<MODE NAME="lotos"		FILE="lotos.xml"
+				FILE_NAME_GLOB="*.{lot,lotos}"/>
+                                                                                
 <MODE NAME="mail"		FILE="mail.xml" />
 
 <MODE NAME="makefile"		FILE="makefile.xml"
@@ -250,7 +253,7 @@
 <MODE NAME="rview"		FILE="rview.xml"
 				FILE_NAME_GLOB="*.rvw" />
 
-<MODE NAME="s+"		FILE="splus.xml"
+<MODE NAME="s+"			FILE="splus.xml"
 				FILE_NAME_GLOB="*.ssc" />
 
 <MODE NAME="sas"		FILE="sas.xml"
@@ -272,6 +275,9 @@
 
 <MODE NAME="smalltalk"		FILE="smalltalk.xml"
 				FILE_NAME_GLOB="*.{st,sources,changes}" />
+
+<MODE NAME="sdl/pr"		FILE="sdl_pr.xml"
+				FILE_NAME_GLOB="*.pr"/>
 
 <MODE NAME="sqr"                FILE="sqr.xml"
                                 FILE_NAME_GLOB="*.{sqr,sqc}" />

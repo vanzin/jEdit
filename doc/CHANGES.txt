@@ -2,6 +2,15 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre3
 
+Thanks to Ken Turner for contributing to this release.
+
+{{{ Syntax Highlighting
+
+- Added LOTOS syntax highlighting (Ken Turner).
+
+- Added SDL/PL syntax highlighting (Ken Turner).
+
+}}}
 {{{ User Interface
 
 - Activity Log now autoscrolls when dragging the mouse outside the log
