@@ -308,7 +308,7 @@
 
 <ACTION NAME="global-options">
 	<CODE>
-		new OptionsDialog(view);
+		new GlobalOptions(view);
 	</CODE>
 </ACTION>
 

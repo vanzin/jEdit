@@ -1169,7 +1169,8 @@ public class View extends JFrame implements EBComponent
 		{
 			getContentPane().add(BorderLayout.NORTH,topToolBars);
 			getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
-			addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
+			if(!plainView)
+				addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
 		}
 		else
 		{
@@ -1177,8 +1178,11 @@ public class View extends JFrame implements EBComponent
 				.TOP_TOOLBARS,topToolBars);
 			dockableWindowManager.add(DockableWindowManager.DockableLayout
 				.BOTTOM_TOOLBARS,bottomToolBars);
-			removeToolBar(status);
-			getContentPane().add(BorderLayout.SOUTH,status);
+			if(!plainView)
+			{
+				removeToolBar(status);
+				getContentPane().add(BorderLayout.SOUTH,status);
+			}
 		}
 
 		getRootPane().revalidate();

@@ -643,6 +643,21 @@ public class DockableWindowManager extends JPanel
 			return entry.win;
 	} //}}}
 
+	//{{{ getDockableTitle() method
+	/**
+	 * Returns the title of the specified dockable window.
+	 * @param name The name of the dockable window.
+	 * @since jEdit 4.1pre5
+	 */
+	public String getDockableTitle(String name)
+	{
+		Entry entry = (Entry)windows.get(name);
+		if(entry == null)
+			return null;
+		else
+			return entry.title;
+	} //}}}
+
 	//{{{ isDockableWindowVisible() method
 	/**
 	 * Returns if the specified dockable window is visible.

@@ -88,10 +88,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 		buttons.add(popupButton);
 
 		popupButton.addMouseListener(new MouseHandler());
-		popup = new JPopupMenu();
-		popup.addSeparator();
-		floatMenu = new JMenu(jEdit.getProperty("view.docking.menu-float"));
-		popup.add(floatMenu);
 
 		buttonGroup = new ButtonGroup();
 		// JDK 1.4 workaround
@@ -137,30 +133,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 		buttons.add(button);
 
 		button.addMouseListener(new MouseHandler());
-
-		//{{{ Create menu items
-		JMenuItem selectMenuItem = new JMenuItem(entry.title);
-
-		selectMenuItem.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				wm.showDockableWindow(entry.factory.name);
-			}
-		});
-
-		JMenuItem floatMenuItem = new JMenuItem(entry.title);
-
-		floatMenuItem.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				wm.floatDockableWindow(entry.factory.name);
-			}
-		});//}}}
-
-		popup.add(selectMenuItem,popup.getComponentCount() - 2);
-		floatMenu.add(floatMenuItem);
 
 		wm.revalidate();
 	} //}}}
@@ -275,6 +247,19 @@ public class PanelWindowContainer implements DockableWindowContainer
 		return current;
 	} //}}}
 
+	//{{{ getDockables() method
+	public String[] getDockables()
+	{
+		String[] retVal = new String[dockables.size()];
+		for(int i = 0; i < dockables.size(); i++)
+		{
+			DockableWindowManager.Entry entry =
+				(DockableWindowManager.Entry) dockables.elementAt(i);
+			retVal[i] = entry.factory.name;
+		}
+		return retVal;
+	} //}}}
+
 	//{{{ Package-private members
 	static final int SPLITTER_WIDTH = 10;
 	DockablePanel dockablePanel;
@@ -325,8 +310,6 @@ public class PanelWindowContainer implements DockableWindowContainer
 	private int dimension;
 	private Vector dockables;
 	private DockableWindowManager.Entry current;
-	private JPopupMenu popup;
-	private JMenu floatMenu;
 
 	// remember the most recent dockable
 	private String mostRecent;
@@ -354,20 +337,62 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
+		JPopupMenu popup;
+
 		public void mousePressed(MouseEvent evt)
 		{
 			if(evt.getSource() == popupButton
 				|| GUIUtilities.isPopupTrigger(evt))
 			{
-				if(popup.isVisible())
+				if(popup != null && popup.isVisible())
 					popup.setVisible(false);
 				else
 				{
+					popup = createPopupMenu();
 					GUIUtilities.showPopupMenu(popup,
 						(Component)evt.getSource(),
 						evt.getX(),evt.getY());
 				}
 			}
+		}
+
+		private JPopupMenu createPopupMenu()
+		{
+			JPopupMenu popup = new JPopupMenu();
+			JMenu floatMenu = new JMenu(jEdit.getProperty("view.docking.menu-float"));
+
+			String[] dockables = getDockables();
+			for(int i = 0; i < dockables.length; i++)
+			{
+				final String entry = dockables[i];
+				JMenuItem selectMenuItem = new JMenuItem(wm.getDockableTitle(entry));
+
+				selectMenuItem.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent evt)
+					{
+						wm.showDockableWindow(entry);
+					}
+				});
+
+				JMenuItem floatMenuItem = new JMenuItem(wm.getDockableTitle(entry));
+
+				floatMenuItem.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent evt)
+					{
+						wm.floatDockableWindow(entry);
+					}
+				});
+
+				popup.add(selectMenuItem);
+				floatMenu.add(floatMenuItem);
+			}
+
+			popup.addSeparator();
+			popup.add(floatMenu);
+
+			return popup;
 		}
 	} //}}}
 
