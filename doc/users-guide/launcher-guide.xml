@@ -15,9 +15,7 @@
     lightweight components for running jEdit under the Windows
     group of operating systems. The package is designed to run
     on Windows 95, Windows 98, Windows Me, Windows NT (versions 4.0 and
-    greater), Windows 2000 and Windows XP. <!-- This version is designed to work with
-    jEdit version 3.2pre4 and later.  It will not work with earlier
-    versions. -->
+    greater), Windows 2000 and Windows XP.
   </para>
 
   <para>
@@ -47,7 +45,8 @@
       The main component of the jEditLauncher package is a client
       application
       entitled <command>jedit.exe</command>. It may be executed either
-      from Windows Explorer, or the command line. It uses the jEditLauncher
+      from either Windows Explorer, a shortcut icon or the command line.
+      It uses the jEditLauncher
       COM component to open files in jEdit that are listed as command line
       parameters. It supports Windows and UNC file
       specifications as well as wild cards. If called without parameters, it
@@ -77,26 +76,47 @@
           displaying the command-line parameters to be used when calling jEdit.
           This option can also be triggered by selecting <guilabel>Set
           jEdit Parameters</guilabel> from the <guilabel>jEdit</guilabel>
-          section of the Windows Programs menu.
+          section of the Windows Programs menu, or by running the utility program
+          <filename>jedinit.exe</filename>
         </para>
 
         <para>
           Using the dialog, you can change parameters specifying the executable for
-          the Java interpreter, the JAR archive file or class name used as the
-          target of the interpreter, and command line options for both. If the
-          <userinput>-jar</userinput> option is not used for the Java executable,
-          the principal jEdit class of
-          <classname>org.gjt.sp.jedit.jEdit</classname> is set as fixed data. The
-          working directory for the Java interpreter's process can also be
-          specified. A read-only window at the bottom of the dialog displays
-          the full command-line that jEditLauncher will invoke.
+          the Java application loader (either <filename>java.exe</filename>
+          or <filename>javaw.exe</filename>), the location of the jEdit archive file,
+          <filename>jedit.jar</filename>, and command line options for both.
+          <itemizedlist>
+            <listitem>
+              <para>
+                The input fields for Java options and jEdit options are separate.
+                If you insert an option in the wrong place it will not be
+                properly executed.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                If the <userinput>-jar</userinput> option is not used with the
+                Java application loader the principal jEdit class of
+                <classname>org.gjt.sp.jedit.jEdit</classname> is set as
+                fixed data.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                The working directory for the Java interpreter's process
+                can also be specified.
+              </para>
+            </listitem>
+          </itemizedlist>
+          A read-only window at the bottom of the dialog displays
+          the full command line that jEditLauncher will invoke.
         </para>
 
         <para>
           Before committing changes to the command line parameters,
           <command>jedit.exe</command> validates the paths for the Java
           and jEdit targets as well as the working directory. It will complain if
-          the paths are invalid. It will not validate command-line options, but it
+          the paths are invalid. It will not validate command line options, but it
           will warn you if it finds the <userinput>-noserver</userinput> option
           used for jEdit, since this will deactivate the edit
           server and make it
@@ -126,7 +146,8 @@
           parameter specifying the directory where your preferred Java interpreter
           is located, jEditLauncher will install itself and set a reasonable
           initial set of command line parameters for executing jEdit. You can
-          change these parameters later by running <filename>jedit.exe</filename>
+          change these parameters later by running <filename>jedinit.exe</filename>
+          or <filename>jedit.exe</filename>
           with the<userinput>/p</userinput> option.
         </para>
       </listitem>
@@ -223,8 +244,8 @@
     To deactivate jEditLauncher without deleting any files, run
     <filename>jedit /u</filename> from any command prompt where the jEdit
     installation directory is in the search path. This will remove the
-    entries for jEditLauncher from the Windows registry, and disable the
-    context menu handler, and the automatic launching and scripting
+    entries for jEditLauncher from the Windows registry.  It will also disable the
+    context menu handler and the automatic launching and scripting
     capabilities. The package can reactivated by executing
     <command>jedit.exe</command> again, and jEdit can be started in the
     same manner as any other Java application on your system.
@@ -426,7 +447,7 @@ o.RunDiff(path + "Search.bsh", path + "Search2.bsh")
   events relating to starting jEdit, loading files and running scripts,
   and <filename>install.log</filename> for jEditLauncher installation
   activity.  Both files are maintained in the directory in which jEdit
-  is installed.  They are cumulative from session to seesion, but may be
+  is installed.  They are cumulative from session to session, but may be
   manually deleted at any time without affecting program execution.
 </para>
 
