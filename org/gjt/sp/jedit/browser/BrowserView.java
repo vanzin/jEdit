@@ -77,7 +77,9 @@ public class BrowserView extends JPanel
 		treeScroller.setMinimumSize(new Dimension(0,0));
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 			parentScroller,treeScroller);
-		splitPane.setBorder(null);
+		// not null, because then it would be reset to the
+		// default by updateUI()
+		splitPane.setBorder(new EmptyBorder(0,0,0,0));
 
 		tmpExpanded = new Hashtable();
 
@@ -302,16 +304,6 @@ public class BrowserView extends JPanel
 	private Timer timer = new Timer(0,new ClearTypeSelect());
 	//}}}
 
-	//{{{ ClearTypeSelect
-	class ClearTypeSelect implements ActionListener
-	{
-		public void actionPerformed(ActionEvent evt)
-		{
-			typeSelectBuffer.setLength(0);
-			browser.filesSelected();
-		}
-	} //}}}
-
 	//{{{ maybeReloadDirectory() method
 	private boolean maybeReloadDirectory(DefaultMutableTreeNode node, String path)
 	{
@@ -404,6 +396,16 @@ public class BrowserView extends JPanel
 	//}}}
 
 	//{{{ Inner classes
+
+	//{{{ ClearTypeSelect
+	class ClearTypeSelect implements ActionListener
+	{
+		public void actionPerformed(ActionEvent evt)
+		{
+			typeSelectBuffer.setLength(0);
+			browser.filesSelected();
+		}
+	} //}}}
 
 	//{{{ ParentDirectoryRenderer class
 	class ParentDirectoryRenderer extends DefaultListCellRenderer

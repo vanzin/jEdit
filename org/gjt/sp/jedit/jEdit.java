@@ -2192,7 +2192,7 @@ public class jEdit
 				try
 				{
 					OutputStream out = new FileOutputStream(file1);
-					props.save(out,"jEdit properties");
+					props.store(out,"jEdit properties");
 					out.close();
 				}
 				catch(IOException io)
@@ -2358,7 +2358,7 @@ public class jEdit
 
 			parser.parse(null, null, grammar);
 		}
-		catch (Exception e)
+		catch (Throwable e)
 		{
 			Log.log(Log.ERROR, jEdit.class, e);
 

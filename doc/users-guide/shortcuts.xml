@@ -657,7 +657,7 @@
       </entry>
      </row>
      <row>
-      <entry><keycap>Alt</keycap><keycap>Up</keycap></keycombo></entry>
+      <entry><keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo></entry>
       <entry>Moves caret to previous; next fold.
       </entry>
      </row>

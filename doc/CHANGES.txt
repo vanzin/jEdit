@@ -79,6 +79,9 @@ Java 1.1 can no longer be used to run jEdit.
 - Commands in View->Splitting menu moved to top level of View menu
 - Updated PL-SQL mode (Steve Snider)
 - Updated MS-DOS batch mode (Mirco Bova)
+- Files on read-only filesystems (such as the URL filesystem) now have
+  the read-only flag set. Previously, only local files would have the
+  read only flag set automatically.
 
 + Neutral
 
@@ -125,6 +128,13 @@ Java 1.1 can no longer be used to run jEdit.
   symlink loop would hang jEdit
 - The 'Auto Wrap' search option did not take effect in macros
 - Bug fix in MacOS plugin (Kris Kopicki)
+- Fixed problem with default position of table of contents in help, and
+  dockable window dividers
+- Default filename filter in file system browser skipped files with
+  single-character names. Now the default filter is *[^~#], which should
+  work properly
+- On JDK 1.4, closing a docking area didn't deselect the currently
+  selected button
 
 + API Changes
 

@@ -131,7 +131,7 @@ public class HelpViewer extends JFrame implements EBComponent
 		viewer.addHyperlinkListener(new LinkHandler());
 		viewer.setFont(new Font("Monospaced",Font.PLAIN,12));
 
-		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 			new JScrollPane(toc),new JScrollPane(viewer));
 		splitter.setBorder(null);
 
@@ -149,6 +149,14 @@ public class HelpViewer extends JFrame implements EBComponent
 		EditBus.addToBus(this);
 
 		show();
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				splitter.setDividerLocation(250);
+			}
+		});
 	} //}}}
 
 	//{{{ gotoURL() method

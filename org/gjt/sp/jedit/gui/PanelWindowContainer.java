@@ -75,6 +75,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 		popup = new JPopupMenu();
 
 		buttonGroup = new ButtonGroup();
+		// JDK 1.4 workaround
+		buttonGroup.add(nullButton = new JToggleButton());
 		//}}}
 
 		dockables = new Vector();
@@ -201,7 +203,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		else
 		{
 			current = null;
-			buttonGroup.setSelected(null,true);
+			nullButton.setSelected(true);
 			// removing last component, so remove border
 			dockablePanel.setBorder(null);
 
@@ -263,6 +265,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	private JButton closeBox;
 	private JButton popupButton;
 	private ButtonGroup buttonGroup;
+	private JToggleButton nullButton;
 	private int dimension;
 	private Vector dockables;
 	private DockablePanel dockablePanel;
@@ -670,6 +673,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 				return new Dimension(0,0);
 			else
 			{
+				if(dimension <= 0)
+				{
+					int width = super.getPreferredSize().width;
+					dimension = width - SPLITTER_WIDTH - 3;
+				}
+
 				if(position.equals(DockableWindowManager.TOP)
 					|| position.equals(DockableWindowManager.BOTTOM))
 				{

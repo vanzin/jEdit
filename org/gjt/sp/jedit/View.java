@@ -237,7 +237,9 @@ public class View extends JFrame implements EBComponent
 			Component left = oldSplitPane.getLeftComponent();
 			final JSplitPane newSplitPane = new JSplitPane(orientation,
 				oldEditPane,editPane);
-			newSplitPane.setBorder(null);
+			// not null, because then it would be reset to the
+			// default by updateUI()
+			newSplitPane.setBorder(new EmptyBorder(0,0,0,0));
 
 			if(left == oldEditPane)
 				oldSplitPane.setLeftComponent(newSplitPane);
