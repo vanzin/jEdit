@@ -329,7 +329,7 @@ org.gjt.sp.util</programlisting>
   </sidebar>
  </sect1>
 
- <sect1 id="predefined-variables"><title>Predefined Varibles in BeanShell</title>
+ <sect1 id="predefined-variables"><title>Predefined Variables in BeanShell</title>
 
   <para>
    The following variables are always available for use in

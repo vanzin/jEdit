@@ -4,11 +4,11 @@ Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
 - need a new jEditLauncher before the 4.1final release
-- spell-check docs
 - fsb: at roots:; select something; path not prepended
 
 + later:
 
+- plugin error dialog -- if > 1 error per plugin
 - plugin tutorial:
   - plugin build environment docs
   - auto-created actions
