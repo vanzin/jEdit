@@ -579,9 +579,10 @@ no-macros.label=No Macros
 #}}}
 
 #{{{ Plugins menu
-plugins=plugin-manager -
+plugins=plugin-manager plugin-options -
 plugins.label=$Plugins
 plugin-manager.label=Plugin $Manager...
+plugin-options.label=Plugin $Options...
 no-plugins.label=No Plugins Installed
 #}}}
 
@@ -1373,9 +1374,7 @@ buffer-options.mode=Edit mode:
 
 #{{{ Global options dialog
 options.title=Global Options
-options.overview.label=Overview
 options.jedit.label=jEdit
-options.plugins.label=Plugins
 
 # Option pane to show by default
 options.last=editing
@@ -1700,6 +1699,12 @@ style-editor.fgColor=Text color:
 style-editor.bgColor=Background color:
 #}}}
 
+#}}}
+
+#{{{ Plugin options dialog
+plugin-options.title=Plugin Options
+options.plugins.label=Plugins
+options.no-plugins.label=No Plugin Options
 #}}}
 
 #{{{ Help viewer

@@ -87,44 +87,17 @@ public class GlobalOptions extends OptionsDialog
 		addOptionPane(new BrowserOptionPane(), browserGroup);
 		addOptionGroup(browserGroup, rootGroup);
 
-		// initialize the Plugins branch of the options tree
-		pluginsGroup = new OptionGroup("plugins");
-
-		// Query plugins for option panes
-		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
-		{
-			EditPlugin ep = plugins[i];
-			try
-			{
-				ep.createOptionPanes(this);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR, ep,
-					"Error creating option pane");
-				Log.log(Log.ERROR, ep, t);
-			}
-		}
-
-		// only add the Plugins branch if there are OptionPanes
-		if (pluginsGroup.getMemberCount() > 0)
-		{
-			addOptionGroup(pluginsGroup, rootGroup);
-		}
-
 		return paneTreeModel;
 	} //}}}
 
 	//{{{ getDefaultGroup() method
 	protected OptionGroup getDefaultGroup()
 	{
-		return pluginsGroup;
+		return null;
 	} //}}}
 
 	//{{{ Private members
 	private OptionGroup jEditGroup;
 	private OptionGroup browserGroup;
-	private OptionGroup pluginsGroup;
 	//}}}
 }

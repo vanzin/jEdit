@@ -4,10 +4,7 @@ JEDIT 4.2 VERSION HISTORY
 
 Thanks to Kris Kopicki for contributing to this release.
 
-+ Miscellaneous:
-
-- If regular expressions are enabled, Search->Find Previous now shows a
-  dialog box message instead of silently searching forwards.
++ Editing:
 
 - Quick copy now more consistent with usual mouse behavior:
 
@@ -21,17 +18,14 @@ Thanks to Kris Kopicki for contributing to this release.
 - Register contents are now saved across editing sessions in
   ~/.jedit/registers.xml.
 
-- Added an option to Appearance option pane to control menu spillover
-  (default is 20 items).
-
-- The title bar now indicates if the current buffer has been modified
-  since the last save.
-
 + Syntax Highlighting:
 
 - Improved C pre-processor syntax highlighting.
 
-+ Window Docking:
++ User Interface:
+
+- If regular expressions are enabled, Search->Find Previous now shows a
+  dialog box message instead of silently searching forwards.
 
 - Floating windows now have a bar across the top with a menu for docking
   the window.
@@ -43,6 +37,14 @@ Thanks to Kris Kopicki for contributing to this release.
 - Docking pane of Global Options dialog box removed because it is no
   longer necessary.
 
+- Added an option to Appearance option pane to control menu spillover
+  (default is 20 items).
+
+- The title bar now indicates if the current buffer has been modified
+  since the last save.
+
+- Moved plugin option panes to a new Plugins->Plugin Options dialog box.
+ 
 + Scripting:
 
 - BeanShell scripts now preset the 'wm' variable to

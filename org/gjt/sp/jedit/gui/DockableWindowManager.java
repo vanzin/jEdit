@@ -188,20 +188,20 @@ public class DockableWindowManager extends JPanel
 		{
 			retVal[i] = ((Factory)dockableWindowFactories.elementAt(i)).name;
 		}
-		Arrays.sort(retVal,new FactoryCompare());
+		Arrays.sort(retVal,new DockableWindowCompare());
 		return retVal;
 	} //}}}
 
-	//{{{ FactoryCompare class
-	static class FactoryCompare implements Comparator
+	//{{{ DockableWindowCompare class
+	static class DockableWindowCompare implements Comparator
 	{
 		public int compare(Object o1, Object o2)
 		{
-			Factory f1 = (Factory)o1;
-			Factory f2 = (Factory)o2;
+			String name1 = (o1 instanceof Factory ? ((Factory)o1).name : (String)o1);
+			String name2 = (o2 instanceof Factory ? ((Factory)o2).name : (String)o2);
 			return MiscUtilities.compareStrings(
-				jEdit.getProperty(f1.name + ".title"),
-				jEdit.getProperty(f2.name + ".title"),
+				jEdit.getProperty(name1 + ".title",""),
+				jEdit.getProperty(name2 + ".title",""),
 				true);
 		}
 	} //}}}
@@ -547,15 +547,18 @@ public class DockableWindowManager extends JPanel
 
 	//{{{ init() method
 	/**
-	 * Initialises dockable window manager.
+	 * Initialises dockable window manager. Do not call this method directly.
 	 * @since jEdit 2.6pre3
 	 */
 	public void init()
 	{
-		for(int i = 0; i < dockableWindowFactories.size(); i++)
+		Factory[] windowList = (Factory[])dockableWindowFactories.toArray(
+			new Factory[dockableWindowFactories.size()]);
+		Arrays.sort(windowList,new DockableWindowCompare());
+
+		for(int i = 0; i < windowList.length; i++)
 		{
-			Factory factory = (Factory)
-				dockableWindowFactories.elementAt(i);
+			Factory factory = windowList[i];
 			Entry e;
 			if(view.isPlainView())
 			{
@@ -861,6 +864,10 @@ public class DockableWindowManager extends JPanel
 	public JPopupMenu createPopupMenu(final String dockable, boolean clone)
 	{
 		JPopupMenu popup = new JPopupMenu();
+		JMenuItem caption = new JMenuItem(jEdit.getProperty(dockable + ".title",
+			"NO TITLE PROPERTY: " + dockable));
+		popup.add(caption);
+		popup.addSeparator();
 		String currentPos = jEdit.getProperty(dockable + ".dock-position");
 		if(!clone)
 		{
