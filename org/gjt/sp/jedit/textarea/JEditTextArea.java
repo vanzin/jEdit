@@ -6566,8 +6566,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					focusedComponent.requestFocus();
 				}
 			}
-			else if(isQuickCopyEnabled()
-				&& GUIUtilities.isMiddleButton(evt.getModifiers()))
+			else if(!dragged && isQuickCopyEnabled() &&
+				GUIUtilities.isMiddleButton(evt.getModifiers()))
 			{
 				JEditTextArea.this.requestFocus();
 				focusedComponent = JEditTextArea.this;

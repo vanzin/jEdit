@@ -33,7 +33,7 @@
 		</SPAN>
 
 		<!-- JavaScript -->
-		<SPAN TYPE="MARKUP" DELEGATE="html::JAVASCRIPT">
+		<SPAN TYPE="MARKUP" DELEGATE="JAVASCRIPT">
 			<BEGIN>&lt;SCRIPT</BEGIN>
 			<END>&lt;/SCRIPT&gt;</END>
 		</SPAN>
@@ -2574,5 +2574,31 @@
 
 	<RULES SET="PHP_LITERAL" ESCAPE="\" DEFAULT="LITERAL1">
 		<MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
+	</RULES>
+
+	<RULES SET="JAVASCRIPT" DEFAULT="MARKUP" IGNORE_CASE="TRUE">
+		<SEQ TYPE="MARKUP" DELEGATE="JAVASCRIPT+PHP">&gt;</SEQ>
+		<!-- handle <SCRIPT SRC="..."> properly -->
+		<SEQ TYPE="MARKUP" DELEGATE="BACK_TO_HTML">SRC=</SEQ>
+	</RULES>
+
+	<RULES SET="JAVASCRIPT+PHP">
+		<!-- PHP code, copied from php.xml by Chris Petersen -->
+		<SPAN TYPE="MARKUP" DELEGATE="php::PHP">
+			<BEGIN>&lt;?php</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="MARKUP" DELEGATE="php::PHP">
+			<BEGIN>&lt;?</BEGIN>
+			<END>?&gt;</END>
+		</SPAN>
+
+		<SPAN TYPE="MARKUP" DELEGATE="php::PHP">
+			<BEGIN>&lt;%=</BEGIN>
+			<END>%&gt;</END>
+		</SPAN>
+
+		<IMPORT DELEGATE="javascript::MAIN"/>
 	</RULES>
 </MODE>

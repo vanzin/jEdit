@@ -6,9 +6,6 @@ and quirks that I need to fix eventually.
 - plugin mgr install doesn't update existing plugins
 
 last char of line - C+next
- null view -- browser's buttons broken
-- middle drag: go back to start: don't insert!
-
 - backup time distance setting
 - {{{foo}}}\n{{{bar}}}; put cursor at start, enter
 - chunk cache state during a buffer event is too fragile, unnecessary

@@ -215,6 +215,41 @@ public class BeanShell
 		}
 	} //}}}
 
+	//{{{ runScript() method
+	/**
+	 * Runs a BeanShell script. Errors are shown in a dialog box.<p>
+	 *
+	 * If the <code>in</code> parameter is non-null, the script is
+	 * read from that stream; otherwise it is read from the file identified
+	 * by <code>path</code>.<p>
+	 *
+	 * The <code>scriptPath</code> BeanShell variable is set to the path
+	 * name of the script.
+	 *
+	 * @param view The view. Within the script, references to
+	 * <code>buffer</code>, <code>textArea</code> and <code>editPane</code>
+	 * are determined with reference to this parameter.
+	 * @param path The script file's VFS path.
+	 * @param in The reader to read the script from, or <code>null</code>.
+	 * @param namespace The namespace to run the script in.
+	 *
+	 * @since jEdit 4.2pre5
+	 */
+	public static void runScript(View view, String path, Reader in,
+		NameSpace namespace)
+	{
+		try
+		{
+			_runScript(view,path,in,namespace);
+		}
+		catch(Throwable e)
+		{
+			Log.log(Log.ERROR,BeanShell.class,e);
+
+			handleException(view,path,e);
+		}
+	} //}}}
+
 	//{{{ _runScript() method
 	/**
 	 * Runs a BeanShell script. Errors are passed to the caller.<p>
@@ -244,13 +279,36 @@ public class BeanShell
 	public static void _runScript(View view, String path, Reader in,
 		boolean ownNamespace) throws Exception
 	{
-		Log.log(Log.MESSAGE,BeanShell.class,"Running script " + path);
+		_runScript(view,path,in,ownNamespace
+			? new NameSpace(global,"script namespace")
+			: global);
+	} //}}}
 
-		NameSpace namespace;
-		if(ownNamespace)
-			namespace = new NameSpace(global,"script namespace");
-		else
-			namespace = global;
+	//{{{ _runScript() method
+	/**
+	 * Runs a BeanShell script. Errors are passed to the caller.<p>
+	 *
+	 * If the <code>in</code> parameter is non-null, the script is
+	 * read from that stream; otherwise it is read from the file identified
+	 * by <code>path</code>.<p>
+	 *
+	 * The <code>scriptPath</code> BeanShell variable is set to the path
+	 * name of the script.
+	 *
+	 * @param view The view. Within the script, references to
+	 * <code>buffer</code>, <code>textArea</code> and <code>editPane</code>
+	 * are determined with reference to this parameter.
+	 * @param path The script file's VFS path.
+	 * @param in The reader to read the script from, or <code>null</code>.
+	 * @param namespace The namespace to run the script in.
+	 * @exception Exception instances are thrown when various BeanShell errors
+	 * occur
+	 * @since jEdit 4.2pre5
+	 */
+	public static void _runScript(View view, String path, Reader in,
+		NameSpace namespace) throws Exception
+	{
+		Log.log(Log.MESSAGE,BeanShell.class,"Running script " + path);
 
 		Interpreter interp = createInterpreter(namespace);
 
@@ -319,7 +377,7 @@ public class BeanShell
 			try
 			{
 				// no need to do this for macros!
-				if(!ownNamespace)
+				if(namespace == global)
 				{
 					resetDefaultVariables(namespace);
 					interp.unset("scriptPath");

@@ -14,6 +14,8 @@ contributing to this release.
 - The "if" in #include <net/if.h> is no longer highlighted in C and C++
   modes.
 
+- SCRIPT tags in HTML files no longer recognize <?php ... ?>.
+
 }}}
 {{{ Miscellaneous Changes
 
@@ -162,6 +164,9 @@ contributing to this release.
   reloaded, if the paths in question contained symbolic links.
 
 - "Join Lines" no longer prints an exception if the buffer is read only.
+
+- Fixed NullPointerException being thrown when clicking tool bar buttons
+  in a file dialog box with no associated view.
 
 }}}
 {{{ API Additions
