@@ -88,7 +88,7 @@ public class FilesChangedDialog extends EnhancedDialog
 			}
 
 			if(addTo != null)
-				addTo.add(new DefaultMutableTreeNode(buffer.getPath()));
+				addTo.add(new DefaultMutableTreeNode(buffer));
 		}
 
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("",true);
@@ -100,6 +100,7 @@ public class FilesChangedDialog extends EnhancedDialog
 			root.add(changedDirty);
 
 		bufferTree = new JTree(new DefaultTreeModel(root));
+		bufferTree.setRootVisible(false);
 		bufferTree.setVisibleRowCount(10);
 		bufferTree.setCellRenderer(new Renderer());
 		bufferTree.getSelectionModel().addTreeSelectionListener(new TreeHandler());
@@ -201,9 +202,11 @@ public class FilesChangedDialog extends EnhancedDialog
 			super.getTreeCellRendererComponent(tree,value,
 				selected,expanded,leaf,row,hasFocus);
 
-			if (value instanceof String)
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
+
+			if (node.getUserObject() instanceof String)
 				this.setFont(groupFont);
-			else if (value instanceof Buffer)
+			else
 				this.setFont(entryFont);
 
 			setIcon(null);

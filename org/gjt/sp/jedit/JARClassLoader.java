@@ -281,7 +281,7 @@ public class JARClassLoader extends ClassLoader
 						path + "!actions.xml",
 						new BufferedReader(new InputStreamReader(
 						zipFile.getInputStream(entry))),
-						jar.getActions());
+						jar.getActionSet());
 				}
 				else if(name.equalsIgnoreCase("dockables.xml"))
 				{
@@ -376,7 +376,7 @@ public class JARClassLoader extends ClassLoader
 				return false;
 			}
 
-			jar.getActions().setLabel(jEdit.getProperty(
+			jar.getActionSet().setLabel(jEdit.getProperty(
 				"action-set.plugin",
 				new String[] { label }));
 			Log.log(Log.NOTICE,this,"Starting plugin " + label
