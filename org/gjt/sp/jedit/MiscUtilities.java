@@ -278,11 +278,13 @@ public class MiscUtilities
 	/**
 	 * Returns the extension of the specified filename, or an empty
 	 * string if there is none.
-	 * @param name The file name
+	 * @param name The file name or path
 	 */
 	public static String getFileExtension(String name)
 	{
-		int index = name.indexOf('.');
+		int fsIndex = Math.max(name.indexOf('/'),
+			name.indexOf(File.separatorChar));
+		int index = name.indexOf('.',fsIndex);
 		if(index == -1)
 			return "";
 		else
@@ -310,7 +312,7 @@ public class MiscUtilities
 	public static String getFileNameNoExtension(String path)
 	{
 		String name = getFileName(path);
-		int index = name.lastIndexOf('.');
+		int index = name.indexOf('.');
 		if(index == -1)
 			return name;
 		else
