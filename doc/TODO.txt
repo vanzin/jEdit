@@ -1,5 +1,7 @@
 TO DO
 
++ before 4.0pre8:
+
 - proofread documentation one more time
 - make sure plugin guide is up to date
 - lots of spaces then one word; word should not be wrapped
@@ -21,6 +23,8 @@ TO DO
 - MiscUtilities path name methods need to be documented
 - appendix in plugin guide on contributing plugins
 - maybe fix GUIUtilities.java to store maximisation state
+
++ in 4.1:
 
 - plugin guide: mention fully qualified class names
 - drag and up and down should not need setFirstLine() stupidity
