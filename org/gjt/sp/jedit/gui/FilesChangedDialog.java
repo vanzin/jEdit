@@ -253,28 +253,40 @@ public class FilesChangedDialog extends EnhancedDialog
 						return;
 
 					buffer.reload(view);
-					((DefaultMutableTreeNode)node.getParent())
-						.remove(node);
-
-					// remove empty category branches
-					for(int j = 0; j < root.getChildCount();
-						j++)
-					{
-						node = (DefaultMutableTreeNode)
-							root.getChildAt(j);
-						if(root.getChildAt(j)
-							.getChildCount() == 0)
-						{
-							root.remove(j);
-							j--;
-						}
-					}
-
-					if(root.getChildCount() == 0)
-						dispose();
-
-					bufferTreeModel.reload(root);
+					DefaultMutableTreeNode parent =
+						(DefaultMutableTreeNode)
+						node.getParent();
+					parent.remove(node);
 				}
+
+				bufferTreeModel.reload(root);
+
+				// we expand those that are non-empty, and
+				// remove those that are empty
+				TreeNode[] nodes = { root, null };
+
+				// remove empty category branches
+				for(int j = 0; j < root.getChildCount(); j++)
+				{
+					DefaultMutableTreeNode node
+						= (DefaultMutableTreeNode)
+						root.getChildAt(j);
+					if(root.getChildAt(j)
+						.getChildCount() == 0)
+					{
+						root.remove(j);
+						j--;
+					}
+					else
+					{
+						nodes[1] = node;
+						bufferTree.expandPath(
+							new TreePath(nodes));
+					}
+				}
+
+				if(root.getChildCount() == 0)
+					dispose();
 			}
 			else if(source == close)
 				dispose();
