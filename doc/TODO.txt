@@ -3,12 +3,12 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- annoying exceptions when settings files not found
 - activity log: log viewer needs copy
 - better chunk merging
 - split long lines
 - perl: q{}, etc.
 - bracket matching with split view -- not updated properly on switching
-- delayed bracket matching updating
 
 - delete line magic caret w/ block caret
 - replace with lookahead/lookbehind doesn't work

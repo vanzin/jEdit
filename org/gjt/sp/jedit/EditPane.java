@@ -391,6 +391,8 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getColorProperty("view.caretColor"));
 		painter.setSelectionColor(
 			jEdit.getColorProperty("view.selectionColor"));
+		painter.setMultipleSelectionColor(
+			jEdit.getColorProperty("view.multipleSelectionColor"));
 		painter.setBackground(
 			jEdit.getColorProperty("view.bgColor"));
 		painter.setForeground(

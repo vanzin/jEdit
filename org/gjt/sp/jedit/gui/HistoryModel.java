@@ -171,7 +171,6 @@ public class HistoryModel
 	{
 		history = new File(MiscUtilities.constructPath(
 			jEdit.getSettingsDirectory(),"history"));
-		Log.log(Log.MESSAGE,HistoryModel.class,"Loading " + history);
 		if(history.exists())
 			historyModTime = history.lastModified();
 		loadHistory(history);
@@ -187,6 +186,8 @@ public class HistoryModel
 	 */
 	private static void loadHistory(File file)
 	{
+		Log.log(Log.MESSAGE,HistoryModel.class,"Loading " + file);
+
 		if(models == null)
 			models = new Hashtable();
 
@@ -230,7 +231,7 @@ public class HistoryModel
 		}
 		catch(FileNotFoundException fnf)
 		{
-			Log.log(Log.DEBUG,HistoryModel.class,fnf);
+			//Log.log(Log.DEBUG,HistoryModel.class,fnf);
 		}
 		catch(IOException io)
 		{
