@@ -52,5 +52,5 @@ public interface SearchMatcher
 	 * @param text The text
 	 * @return The changed string
 	 */
-	String substitute(String text) throws Throwable;
+	String substitute(String text) throws Exception;
 }
