@@ -47,10 +47,10 @@ public class ParserRule
 	public static final int ACTION_HINTS = 0x0000FF00;
 	public static final int EXCLUDE_MATCH = 1 << 8;
 	public static final int AT_LINE_START = 1 << 9;
-	public static final int NO_LINE_BREAK = 1 << 10;
-	public static final int NO_WORD_BREAK = 1 << 11;
-	public static final int IS_ESCAPE = 1 << 12;
-//	public static final int ACTION_HINT_13 = 1 << 13;
+	public static final int AT_WHITESPACE_END = 1 << 10;
+	public static final int NO_LINE_BREAK = 1 << 11;
+	public static final int NO_WORD_BREAK = 1 << 12;
+	public static final int IS_ESCAPE = 1 << 13;
 //	public static final int ACTION_HINT_14 = 1 << 14;
 //	public static final int ACTION_HINT_15 = 1 << 15;
 	//}}}
@@ -64,17 +64,6 @@ public class ParserRule
 
 	public ParserRule next;
 	//}}}
-
-	//{{{ ParserRule constructor
-	ParserRule(int action, char[] start, char[] end,
-		String delegate, byte token)
-	{
-		this.start = start;
-		this.end = end;
-		this.delegate = delegate;
-		this.action = action;
-		this.token = token;
-	} //}}}
 
 	//{{{ getDelegateRuleSet() method
 	/**
@@ -107,16 +96,14 @@ public class ParserRule
 		}
 	} //}}}
 
-	//{{{ Private members
-	private String delegate;
-	//}}}
-
 	//{{{ createSequenceRule() method
 	public static final ParserRule createSequenceRule(String seq,
-		String delegate, byte id, boolean atLineStart)
+		String delegate, byte id, boolean atLineStart,
+		boolean atWhitespaceEnd)
 	{
-		int ruleAction = SEQ
-			| ((atLineStart) ? AT_LINE_START : 0);
+		int ruleAction = SEQ |
+			((atLineStart) ? AT_LINE_START : 0) |
+			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0);
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
 			delegate, id);
@@ -125,12 +112,13 @@ public class ParserRule
 	//{{{ createSpanRule() method
 	public static final ParserRule createSpanRule(String begin, String end,
 		String delegate, byte id, boolean noLineBreak,
-		boolean atLineStart, boolean excludeMatch,
-		boolean noWordBreak)
+		boolean atLineStart, boolean atWhitespaceEnd,
+		boolean excludeMatch, boolean noWordBreak)
 	{
 		int ruleAction = SPAN |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
 			((atLineStart) ? AT_LINE_START : 0) |
+			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0) |
 			((noWordBreak) ? NO_WORD_BREAK : 0);
 
@@ -141,10 +129,11 @@ public class ParserRule
 	//{{{ createEOLSpanRule() method
 	public static final ParserRule createEOLSpanRule(String seq,
 		String delegate, byte id, boolean atLineStart,
-		boolean excludeMatch)
+		boolean atWhitespaceEnd, boolean excludeMatch)
 	{
 		int ruleAction = EOL_SPAN |
 			((atLineStart) ? AT_LINE_START : 0) |
+			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0)
 			| NO_LINE_BREAK;
 
@@ -154,10 +143,12 @@ public class ParserRule
 
 	//{{{ createMarkFollowingRule() method
 	public static final ParserRule createMarkFollowingRule(String seq,
-		byte id, boolean atLineStart, boolean excludeMatch)
+		byte id, boolean atLineStart, boolean atWhitespaceEnd,
+		boolean excludeMatch)
 	{
 		int ruleAction = MARK_FOLLOWING |
 			((atLineStart) ? AT_LINE_START : 0) |
+			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0);
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
@@ -166,10 +157,11 @@ public class ParserRule
 
 	//{{{ createMarkPreviousRule() method
 	public static final ParserRule createMarkPreviousRule(String seq, byte id,
-		boolean atLineStart, boolean excludeMatch)
+		boolean atLineStart, boolean atWhitespaceEnd, boolean excludeMatch)
 	{
 		int ruleAction = MARK_PREVIOUS |
 			((atLineStart) ? AT_LINE_START : 0) |
+			((atWhitespaceEnd) ? AT_WHITESPACE_END : 0) |
 			((excludeMatch) ? EXCLUDE_MATCH : 0);
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
@@ -183,5 +175,18 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, seq.toCharArray(), null,
 			null, Token.NULL);
+	} //}}}
+
+	//{{{ Private members
+	private String delegate;
+
+	private ParserRule(int action, char[] start, char[] end,
+		String delegate, byte token)
+	{
+		this.start = start;
+		this.end = end;
+		this.delegate = delegate;
+		this.action = action;
+		this.token = token;
 	} //}}}
 }

@@ -98,6 +98,11 @@ public class XModeHandler extends HandlerBase
 			lastAtLineStart = (isSpecified) ? (value.equals("TRUE")) :
 				false;
 		}
+		else if (aname == "AT_WHITESPACE_END")
+		{
+			lastAtWhitespaceEnd = (isSpecified) ? (value.equals("TRUE")) :
+				false;
+		}
 		else if (aname == "NO_LINE_BREAK")
 		{
 			lastNoLineBreak = (isSpecified) ? (value.equals("TRUE")) :
@@ -320,12 +325,13 @@ public class XModeHandler extends HandlerBase
 
 				rules.addRule(ParserRule.createSequenceRule(
 					lastStart,lastDelegateSet,lastTokenID,
-					lastAtLineStart));
+					lastAtLineStart,lastAtWhitespaceEnd));
 				lastStart = null;
 				lastEnd = null;
 				lastDelegateSet = null;
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
+				lastAtWhitespaceEnd = false;
 			} //}}}
 			//{{{ SPAN
 			else if (tag == "SPAN")
@@ -354,6 +360,7 @@ public class XModeHandler extends HandlerBase
 					lastDelegateSet,
 					lastTokenID,lastNoLineBreak,
 					lastAtLineStart,
+					lastAtWhitespaceEnd,
 					lastExcludeMatch,
 					lastNoWordBreak));
 
@@ -362,6 +369,7 @@ public class XModeHandler extends HandlerBase
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
 				lastNoLineBreak = false;
+				lastAtWhitespaceEnd = false;
 				lastExcludeMatch = false;
 				lastNoWordBreak = false;
 				lastDelegateSet = null;
@@ -383,12 +391,14 @@ public class XModeHandler extends HandlerBase
 
 				rules.addRule(ParserRule.createEOLSpanRule(
 					lastStart,lastDelegateSet,lastTokenID,
-					lastAtLineStart,lastExcludeMatch));
+					lastAtLineStart,lastAtWhitespaceEnd,
+					lastExcludeMatch));
 				lastStart = null;
 				lastEnd = null;
 				lastDelegateSet = null;
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
+				lastAtWhitespaceEnd = false;
 				lastExcludeMatch = false;
 			} //}}}
 			//{{{ MARK_FOLLOWING
@@ -403,11 +413,13 @@ public class XModeHandler extends HandlerBase
 				rules.addRule(ParserRule
 					.createMarkFollowingRule(lastStart,
 					lastTokenID,lastAtLineStart,
+					lastAtWhitespaceEnd,
 					lastExcludeMatch));
 				lastStart = null;
 				lastEnd = null;
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
+				lastAtWhitespaceEnd = false;
 				lastExcludeMatch = false;
 			} //}}}
 			//{{{ MARK_PREVIOUS
@@ -422,11 +434,13 @@ public class XModeHandler extends HandlerBase
 				rules.addRule(ParserRule
 					.createMarkPreviousRule(lastStart,
 					lastTokenID,lastAtLineStart,
+					lastAtWhitespaceEnd,
 					lastExcludeMatch));
 				lastStart = null;
 				lastEnd = null;
 				lastTokenID = Token.NULL;
 				lastAtLineStart = false;
+				lastAtWhitespaceEnd = false;
 				lastExcludeMatch = false;
 			} //}}}
 			//{{{ Keywords
@@ -482,6 +496,7 @@ public class XModeHandler extends HandlerBase
 	private boolean lastNoLineBreak;
 	private boolean lastNoWordBreak;
 	private boolean lastAtLineStart;
+	private boolean lastAtWhitespaceEnd;
 	private boolean lastExcludeMatch;
 	private boolean lastIgnoreCase = true;
 	private boolean lastHighlightDigits;

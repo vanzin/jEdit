@@ -17,6 +17,12 @@ Thanks to Gerd Knops for contributing to this release.
 - Added an option to not hide the final end of line character of a
   buffer.
 
++ Syntax Highlighting Changes:
+
+- Syntax rules can now specify the AT_WHITESPACE_END attribute. If this
+  is set to TRUE, then the rule will only match if it is the first
+  non-whitespace text in the line.
+
 - Fixed minor highlighting problem with properties mode.
 
 + Miscellaneous Changes:
