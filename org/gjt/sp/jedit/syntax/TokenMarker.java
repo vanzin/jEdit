@@ -184,7 +184,10 @@ public class TokenMarker
 			context.parent = prevContext.parent;
 			context.inRule = prevContext.inRule;
 			context.rules = prevContext.rules;
-		} //}}}
+		}
+
+		escaped = false;
+		//}}}
 
 		//{{{ Main parser loop
 		int terminateChar = context.rules.getTerminateChar();
@@ -225,7 +228,11 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 
 		//{{{ Mark all remaining characters
 		if(context.inRule == null)
+		{
+			handleSoftSpan();
 			markKeyword(lastKeyword, lineLength);
+		}
+
 		if(context.parent != null && (context.parent.inRule.action
 			& EOL_SPAN) == EOL_SPAN)
 		{
@@ -235,7 +242,7 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 
 		if(lastOffset != lineLength)
 		{
-			if (context.inRule == null)
+			if(context.inRule == null)
 			{
 				tokenHandler.handleToken(lineLength - lastOffset,
 					context.rules.getDefault(),
@@ -285,13 +292,13 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 	{
 		LineContext tempContext = context;
 		context = context.parent;
+		boolean tempEscaped = escaped;
 		boolean b = handleRule(context.inRule,true);
-		
 		context = tempContext;
 
-		if (b)
+		if(b && !tempEscaped)
 		{
-			if (pos > lastOffset)
+			if(pos > lastOffset)
 			{
 				markKeyword(lastKeyword,pos);
 
@@ -302,7 +309,7 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 
 			context = (LineContext)context.parent.clone();
 
-			if ((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+			if((context.inRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 			{
 				tokenHandler.handleToken(pattern.count,
 					context.rules.getDefault(),
@@ -401,37 +408,15 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 		//{{{ Not inside a rule
 		else if (context.inRule == null)
 		{
-			//{{{ handle soft spans
-			if (context.parent != null
-				&& (context.parent.inRule.action
-				& (NO_WORD_BREAK | MARK_FOLLOWING)) != 0
-				&& checkRule.token == Token.WHITESPACE)
+			if(checkRule.token == Token.WHITESPACE)
 			{
-				if ((context.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
-				{
-					tokenHandler.handleToken(pos - lastOffset,
-						Token.INVALID,
-						context.rules);
-				}
-				else
-				{
-					tokenHandler.handleToken(pos - lastOffset,
-						context.inRule.token,
-						context.rules);
-				}
-				lastOffset = lastKeyword = pos;
-				context = context.parent;
-				context.inRule = null;
-				return true;
-			} //}}}
-
-			if ((checkRule.action & AT_LINE_START) == AT_LINE_START)
+				if(handleSoftSpan())
+					return true;
+			}
+			else if((checkRule.action & AT_LINE_START) == AT_LINE_START)
 			{
-				if (
-					(((checkRule.action & MARK_PREVIOUS) != 0) ?
-					lastKeyword :
-					pos) != line.offset
-				)
+				if((((checkRule.action & MARK_PREVIOUS) != 0) ?
+					lastKeyword : pos) != line.offset)
 				{
 					return false;
 				}
@@ -536,7 +521,7 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 			//}}}
 			//{{{ MARK_FOLLOWING
 			case MARK_FOLLOWING:
-				context.inRule = checkRule;
+				/* context.inRule = checkRule;
 				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
 					tokenHandler.handleToken(pattern.count,
@@ -547,7 +532,7 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 				else
 				{
 					lastOffset = pos;
-				}
+				} */
 
 				break;
 			//}}}
@@ -562,6 +547,34 @@ main_loop:	for(pos = line.offset; pos < searchLimit; pos++)
 		} //}}}
 
 		return true;
+	} //}}}
+
+	//{{{ handleSoftSpan() method
+	private boolean handleSoftSpan()
+	{
+		if (context.parent != null
+			&& (context.parent.inRule.action
+			& (NO_WORD_BREAK | MARK_FOLLOWING)) != 0)
+		{
+			if ((context.parent.inRule.action & NO_WORD_BREAK) == NO_WORD_BREAK)
+			{
+				tokenHandler.handleToken(pos - lastOffset,
+					Token.INVALID,
+					context.rules);
+			}
+			else
+			{
+				tokenHandler.handleToken(pos - lastOffset,
+					context.inRule.token,
+					context.rules);
+			}
+			lastOffset = lastKeyword = pos;
+			context = context.parent;
+			context.inRule = null;
+			return true;
+		}
+		else
+			return false;
 	} //}}}
 
 	//{{{ markKeyword() method
