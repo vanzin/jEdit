@@ -169,16 +169,6 @@ public class BeanShell
 		textArea.selectNone();
 	} //}}}
 
-	//{{{ showRunScriptDialog() method
-	/**
-	 * Prompts for a BeanShell script to run.
-	 * @since jEdit 2.7pre2
-	 */
-	public static void showRunScriptDialog(View view)
-	{
-		Macros.showRunScriptDialog(view);
-	} //}}}
-
 	//{{{ runScript() method
 	/**
 	 * Runs a BeanShell script. Errors are shown in a dialog box.
