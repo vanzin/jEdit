@@ -11,13 +11,11 @@ and quirks that I need to fix eventually.
 - scrolling bug happened without even using mouse!
 - disable bracket match: gutter highlight not hidden
 - display:
+  - Java14's wheel mouse scroll
   - offset manager's expandFolds()
   - edit pane properties changed
   - edit pane first line preserve
   - foldStructureChanged(), etc. doesn't need scroll bar update call
-  - scrolling up and down:
-    scroll bar handler stores old position; uses scroll methods in chunk
-    cache
   - chunk cache first line: can be much better
   - text area: buffer scroll to, set first line, position hold
   - scroll up page, scroll down page
@@ -31,6 +29,7 @@ and quirks that I need to fix eventually.
   - human readable strings in source.... entry.status
   - ask before selecting dependencies & 'don't show again'
   - mirror change: refresh download locations
+  - explicit 'refresh mirror list' button in option pane
 - canonPath: get rid of ..
 - update horizontal scroll width immediately on buffer switch
 - enter with browser view focused; hides dialog

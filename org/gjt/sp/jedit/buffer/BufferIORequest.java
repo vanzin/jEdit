@@ -548,38 +548,38 @@ public class BufferIORequest extends WorkRequest
 			// the entire save operation can be aborted...
 			setAbortable(true);
 
+			path = vfs._canonPath(session,path,view);
+
+			// Only backup once per session
+			if(buffer.getProperty(Buffer.BACKED_UP) == null
+				|| jEdit.getBooleanProperty("backupEverySave"))
+			{
+				vfs._backup(session,path,view);
+				buffer.setBooleanProperty(Buffer.BACKED_UP,true);
+			}
+
+			/* if the VFS supports renaming files, we first
+			 * save to #<filename>#save#, then rename that
+			 * to <filename>, so that if the save fails,
+			 * data will not be lost.
+			 *
+			 * as of 4.1pre7 we now call vfs.getTwoStageSaveName()
+			 * instead of constructing the path directly
+			 * since some VFS's might not allow # in filenames.
+			 */
+			String savePath;
+
+			boolean twoStageSave = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0
+				&& jEdit.getBooleanProperty("twoStageSave");
+			if(twoStageSave)
+				savePath = vfs.getTwoStageSaveName(path);
+			else
+				savePath = path;
+
+			out = vfs._createOutputStream(session,savePath,view);
+
 			try
 			{
-				path = vfs._canonPath(session,path,view);
-
-				// Only backup once per session
-				if(buffer.getProperty(Buffer.BACKED_UP) == null
-					|| jEdit.getBooleanProperty("backupEverySave"))
-				{
-					vfs._backup(session,path,view);
-					buffer.setBooleanProperty(Buffer.BACKED_UP,true);
-				}
-
-				/* if the VFS supports renaming files, we first
-				 * save to #<filename>#save#, then rename that
-				 * to <filename>, so that if the save fails,
-				 * data will not be lost.
-				 *
-				 * as of 4.1pre7 we now call vfs.getTwoStageSaveName()
-				 * instead of constructing the path directly
-				 * since some VFS's might not allow # in filenames.
-				 */
-				String savePath;
-
-				boolean twoStageSave = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0
-					&& jEdit.getBooleanProperty("twoStageSave");
-				if(twoStageSave)
-					savePath = vfs.getTwoStageSaveName(path);
-				else
-					savePath = path;
-
-				out = vfs._createOutputStream(session,savePath,view);
-
 				// this must be after the stream is created or
 				// we deadlock with SSHTools.
 				buffer.readLock();
@@ -625,18 +625,18 @@ public class BufferIORequest extends WorkRequest
 				if(!twoStageSave)
 					VFSManager.sendVFSUpdate(vfs,path,true);
 			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				String[] pp = { io.toString() };
-				VFSManager.error(view,path,"ioerror.write-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
 			finally
 			{
 				buffer.readUnlock();
 			}
+		}
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+			String[] pp = { io.toString() };
+			VFSManager.error(view,path,"ioerror.write-error",pp);
+
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		catch(WorkThread.Abort a)
 		{
