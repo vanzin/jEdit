@@ -66,6 +66,8 @@ Bock for contributing to this release.
   of the buffer and a 'Replace All' was performed replacing \n\n with
   \n.
 
+- jEdit did not auto-detect the character encoding within GZipped files.
+
 }}}
 
 }}}

@@ -348,6 +348,8 @@ public class BufferIORequest extends WorkRequest
 				in.reset();
 				in = new GZIPInputStream(in);
 				buffer.setBooleanProperty(Buffer.GZIPPED,true);
+				// auto-detect encoding within the gzip stream.
+				return autodetect(in);
 			}
 			else if((b1 == UNICODE_MAGIC_1
 				&& b2 == UNICODE_MAGIC_2)
