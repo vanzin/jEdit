@@ -248,7 +248,7 @@ class ChunkCache
 	//{{{ getLineSubregionCount() method
 	int getLineSubregionCount(int physicalLine)
 	{
-		if(!textArea.displayManager.softWrap)
+		if(!textArea.softWrap)
 			return 1;
 
 		out.clear();
@@ -741,8 +741,8 @@ class ChunkCache
 		tokenHandler.init(painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter,out,
-			(textArea.displayManager.softWrap
-			? textArea.displayManager.wrapMargin : 0.0f));
+			(textArea.softWrap
+			? textArea.wrapMargin : 0.0f));
 		buffer.markTokens(physicalLine,tokenHandler);
 	} //}}}
 

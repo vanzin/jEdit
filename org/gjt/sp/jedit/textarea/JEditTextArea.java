@@ -4853,9 +4853,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int _tabSize = buffer.getTabSize();
 		char[] foo = new char[_tabSize];
 		for(int i = 0; i < foo.length; i++)
-		{
 			foo[i] = ' ';
-		}
 
 		tabSize = (float)painter.getStringWidth(new String(foo));
 
@@ -4865,23 +4863,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		boolean invalidateScreenLineCounts = false;
 
-		String wrap = buffer.getStringProperty("wrap");
-		if(!wrap.equals(this.wrap))
-		{
-			this.wrap = wrap;
-			hardWrap = wrap.equals("hard");
-			if(displayManager != null && !bufferChanging)
-			{
-				displayManager.firstLine.callReset = true;
-				displayManager.scrollLineCount.callReset = true;
-			}
-			invalidateScreenLineCounts = true;
-		}
+		String oldWrap = wrap;
+		int oldWrapMargin = wrapMargin;
 
-		int maxLineLen = buffer.getIntegerProperty("maxLineLen",0);
-		if(maxLineLen != this.maxLineLen)
+		wrap = buffer.getStringProperty("wrap");
+		hardWrap = wrap.equals("hard");
+		softWrap = wrap.equals("soft");
+		setMaxLineLength(buffer.getIntegerProperty("maxLineLen",0));
+
+		if(oldWrapMargin != wrapMargin || !wrap.equals(this.wrap))
 		{
-			this.maxLineLen = maxLineLen;
 			if(displayManager != null && !bufferChanging)
 			{
 				displayManager.firstLine.callReset = true;
@@ -4896,11 +4887,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		chunkCache.invalidateAll();
 
-		if(displayManager != null && !bufferChanging)
-		{
-			displayManager.updateWrapSettings();
+		if(displayManager != null && !bufferChanging
+			&& buffer.isLoaded())
 			displayManager.notifyScreenLineChanges();
-		}
 
 		gutter.repaint();
 		painter.repaint();
@@ -5107,9 +5096,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	String wrap;
 	boolean hardWrap;
+	boolean softWrap;
+	boolean wrapToWidth;
+	int maxLineLen;
+	int wrapMargin;
 	float tabSize;
 	int charWidth;
-	int maxLineLen;
 
 	boolean scrollBarsInitialized;
 
@@ -5888,6 +5880,40 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			buffer,
 			s.getStartLine(),s.getStartColumn(buffer) - 1,
 			s.getEndLine(),s.getEndColumn(buffer) - 1));
+	} //}}}
+
+	//{{{ setMaxLineLength() method
+	private void setMaxLineLength(int maxLineLen)
+	{
+		this.maxLineLen = maxLineLen;
+
+		if(maxLineLen <= 0)
+		{
+			if(softWrap)
+			{
+				wrapToWidth = true;
+				wrapMargin = painter.getWidth() - charWidth * 3;
+			}
+			else
+			{
+				wrapToWidth = false;
+				wrapMargin = 0;
+			}
+		}
+		else
+		{
+			// stupidity
+			char[] foo = new char[maxLineLen];
+			for(int i = 0; i < foo.length; i++)
+			{
+				foo[i] = ' ';
+			}
+			wrapToWidth = false;
+			wrapMargin = (int)painter.getFont().getStringBounds(
+				foo,0,foo.length,
+				painter.getFontRenderContext())
+				.getWidth();
+		}
 	} //}}}
 
 	//}}}
