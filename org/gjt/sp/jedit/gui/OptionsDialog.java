@@ -245,6 +245,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		setContentPane(content);
 
 		JPanel stage = new JPanel(new BorderLayout(6,6));
+		stage.setMinimumSize(new Dimension(200,100));
 
 		// currentLabel displays the path of the currently selected
 		// OptionPane at the top of the stage area

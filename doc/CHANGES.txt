@@ -40,6 +40,20 @@ contributing to this release.
 - If a HyperSearch produces no results, older result nodes are collapsed
   in the "HyperSearch Results" window.
 
++ Performance Improvements:
+
+- Improved performance of line offset manager when a lot of changes are
+  made starting from the end of the buffer going to the beginning. Early
+  in the 4.1 series a corresponding optimization was added for edits
+  going in the other direction, which improved performance of "Replace
+  All" and similar operations significantly. This change improves
+  performance of undos of "Replace All".
+
+- Improved performance of text area when a lot of changes are made to a
+  buffer, especially while selections are active, or if soft wrap is
+  switched on. Again this improves performance of "Replace All", which
+  was nearly unusable with soft wrap.
+
 + Miscellaneous Changes:
 
 - If the user and system macro directories have a subdirectory with the
@@ -59,19 +73,8 @@ contributing to this release.
 
 - The tips of the day have been updated for assorted jEdit 4.1 changes.
 
-+ Performance Improvements:
-
-- Improved performance of line offset manager when a lot of changes are
-  made starting from the end of the buffer going to the beginning. Early
-  in the 4.1 series a corresponding optimization was added for edits
-  going in the other direction, which improved performance of "Replace
-  All" and similar operations significantly. This change improves
-  performance of undos of "Replace All".
-
-- Improved performance of text area when a lot of changes are made to a
-  buffer, especially while selections are active, or if soft wrap is
-  switched on. Again this improves performance of "Replace All", which
-  was nearly unusable with soft wrap.
+- User's guide is more up-to-date with respect to jEdit 4.1 now. There
+  is still much to be done though.
 
 + Bug Fixes:
 
@@ -131,6 +134,11 @@ contributing to this release.
 
 - Closing the Global Options dialog box would add dockables to plain
   views. Plain views are not supposed to have dockables.
+
+- Bracket highlight color setting in Gutter option pane was broken.
+
+- Digits would not be highlighted properly in modes which did not define
+  any keywords.
 
 + API Additions:
 
