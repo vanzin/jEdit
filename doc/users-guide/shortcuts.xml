@@ -90,8 +90,12 @@
       <entry>Split view vertically.</entry>
      </row>
      <row>
+      <entry><keycombo><keycap>Control</keycap><keycap>0</keycap></keycombo></entry>
+      <entry>Remove split containing current text area only.</entry>
+     </row>
+     <row>
       <entry><keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo></entry>
-      <entry>Unsplit.</entry>
+      <entry>Remove all splits.</entry>
      </row>
      <row>
       <entry><keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo></entry>

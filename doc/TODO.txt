@@ -3,8 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- finish unsplit-current
-- F2 broken
+- long line: select starts at beginning; select to end; incorrectly
+  painted
 - delayed caret updating: breaks status bar perhaps
 - tool bar option pane: test external icon references
 - maybe make caret status into a JLabel

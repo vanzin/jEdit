@@ -111,9 +111,14 @@
    splits the view into two text areas, placed next to each other.
   </para>
   <para>
-   <guimenu>View</guimenu>&gt;<guimenuitem>Unsplit</guimenuitem>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Unsplit Current</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>0</keycap></keycombo>)
+   removes the split containing the current text area only.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Unsplit All</guimenuitem>
    (shortcut: <keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo>)
-   removes all but the current text area from the view.
+   removes all splits from the view.
   </para>
   <para>
    When a view is split, editing commands operate on the text area that

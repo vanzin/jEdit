@@ -3161,6 +3161,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public FoldVisibilityManager _getFoldVisibilityManager(
 		JEditTextArea textArea)
 	{
+		//System.err.println("_getFoldVisibilityManager() called for "
+		//	+ this);
+
 		FoldVisibilityManager mgr = new FoldVisibilityManager(this,
 			offsetMgr,textArea);
 
