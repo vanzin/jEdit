@@ -554,21 +554,32 @@ public class Macros
 			{
 				buffer.beginCompoundEdit();
 
-				for(int i = 0; i < paths.length; i++)
+file_loop:			for(int i = 0; i < paths.length; i++)
 				{
+					String path = paths[i];
+
 					Handler handler;
 
 					for (int j = 0; j < macroHandlers.size(); j++)
 					{
 						handler = (Handler)macroHandlers.get(j);
 
-						if (handler.accept(paths[i]))
+						if (handler.accept(path))
 						{
-							Macro macro = handler.createMacro(paths[i],paths[i]);
+							Macro macro = handler.createMacro(path,path);
 							macro.invoke(view);
-							break;
+							continue file_loop;
 						}
 					}
+
+					// only executed if above loop falls
+					// through, ie there is no handler for
+					// this file
+					Log.log(Log.WARNING,Macros.class,path +
+						": Cannot find a suitable macro handler"
+						+ ", assuming BeanShell");
+					getHandler("beanshell").createMacro(
+						path,path).invoke(view);
 				}
 			}
 			finally

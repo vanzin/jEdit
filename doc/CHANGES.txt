@@ -70,6 +70,8 @@ JEDIT 4.0 VERSION HISTORY
 - Caret event would not be fired if inside a compound edit, a portion of
   text was changed after the caret, then a change was made before the
   caret
+- 'Run Other Macro' command would silently ignore files whose names did
+  not match a registered macro handler
 
 + API Additions
 
@@ -101,6 +103,9 @@ JEDIT 4.0 VERSION HISTORY
 
     BeanShell._eval(View,NameSpace,String)
     BeanShell._runScript(View,String,Reader,boolean)
+
+  - I have also made error reporting to the user more consistent in the
+    process.
 
 * Version 4.0pre7
 

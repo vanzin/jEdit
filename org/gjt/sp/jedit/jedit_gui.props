@@ -816,8 +816,6 @@ ioerror.caption=The following {0} I/O operations could not be completed:
 ioerror.caption-1=The following I/O operation could not be completed:
 
 ioerror={0}
-ioerror.no-read=Cannot load: {0}
-ioerror.no-write=Cannot save: {0}
 ioerror.directory-error=Cannot list directory: {0}
 ioerror.directory-error-nomsg=Cannot list directory.
 ioerror.encoding-error=Cannot load with "{0}" encoding:\n\
@@ -826,8 +824,8 @@ ioerror.encoding-error=Cannot load with "{0}" encoding:\n\
 	File->Open With Encoding menu.\n\
 	If you are really stuck and do not know which encoding\n\
 	to use, try "8859_1".
-ioerror.read-error=Read error: {0}
-ioerror.write-error=Write error: {0}
+ioerror.read-error=Cannot load: {0}
+ioerror.write-error=Cannot save: {0}
 ioerror.open-directory=Cannot open directory as a buffer.
 ioerror.save-directory=Cannot save buffer over a directory.
 ioerror.no-read=Insufficent permissions to load file.
