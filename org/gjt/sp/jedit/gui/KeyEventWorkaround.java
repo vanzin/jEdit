@@ -111,6 +111,7 @@ public class KeyEventWorkaround
 				switch(ch)
 				{
 				case 'B':
+				case 'M':
 				case 'X':
 				case 'c':
 				case '!':
