@@ -1,5 +1,6 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=yes: -->
+<!-- :xml.root=users-guide.xml: -->
 
 <appendix id="regexps"><title>Regular Expressions</title>
  <para>

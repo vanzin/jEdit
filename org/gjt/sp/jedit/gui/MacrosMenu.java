@@ -51,7 +51,7 @@ public class MacrosMenu extends EnhancedMenu implements EBComponent
 			updateMacrosMenu();
 	}
 
-	protected void init()
+	public void init()
 	{
 		super.init();
 		updateMacrosMenu();

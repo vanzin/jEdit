@@ -1,5 +1,6 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
+<!-- :xml.root=users-guide.xml: -->
 
 <chapter id="source-edit"><title>Editing Source Code</title>
  <sect1 id="modes"><title>Edit Modes</title>

@@ -1,5 +1,6 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
+<!-- :xml.root=users-guide.xml: -->
 
 <chapter id="files"><title>Working With Files</title>
  <sect1 id="creating"><title>Creating New Files</title>

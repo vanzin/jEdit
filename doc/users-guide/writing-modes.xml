@@ -1,5 +1,6 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
+<!-- :xml.root=users-guide.xml: -->
 
 <chapter id="writing-modes"><title>Mode Definition Syntax</title>
  <para>

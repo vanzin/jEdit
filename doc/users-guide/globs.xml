@@ -1,5 +1,6 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
+<!-- :xml.root=users-guide.xml: -->
 
 <appendix id="globs"><title>Glob Patterns</title>
  <para>

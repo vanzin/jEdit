@@ -1,10 +1,10 @@
-<!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene                       -->
+<!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene                 -->
 <!-- jEdit buffer-local properties:                                     -->
 <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:                  -->
+<!-- :xml.root=users-guide.xml:                                         -->
 <!-- This file contains an extended discussion of a                     -->
 <!-- dialog-based macro example "Add_Prefix_and_Suffix.bsh"             -->
-<!-- $Id$
- -->
+<!-- $Id$      -->
 
 <chapter id="dialog-macro"><title>A Dialog-Based Macro</title>
  <para>
