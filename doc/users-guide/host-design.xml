@@ -1,4 +1,4 @@
-<!-- jEdit 4.0 Plugin Guide, (C) 2001 John Gellene            -->
+<!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene            -->
 
 <!-- jEdit buffer-local properties:                           -->
 <!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
@@ -37,7 +37,7 @@ Loading Plugins</title>
       parsed command line options;
     </para></listitem>
     <listitem><para>
-      started the edit server (unless instructed not to
+      started the edit server (unless instructed not to do so
       by a command line option) and;
     </para></listitem>
     <listitem><para>
@@ -74,11 +74,19 @@ The JARClassLoader</title>
   <classname>JARClassLoader</classname> object does the following:
     <itemizedlist>
       <listitem><para>
-        Adds any class file with a name ending with
-        <filename>Plugin.class</filename> to an internal collection of
-        plugin class names maintained by the
-        <classname>JARClassLoader</classname>. See <xref
-        linkend="plugin-classes" />.
+        Loads any data on the plugin's actions from a file named
+        <filename>actions.xml</filename> (if it exists) located at the
+        top level of the archive file. See <xref
+        linkend="api-resources-action" />.
+      </para></listitem>
+      <listitem><para>
+        Parses and loads the contents of any file named
+        <filename>dockables.xml</filename> that is located at the top
+        level of the archive file. This file contains BeanShell code for
+        creating a docking or floating window that will contain the visible
+        components of the plugin.  Not all plugins have a visible interface,
+        but those that do need a <filename>dockables.xml</filename> file.
+        <!-- See <xref linkend="api-resources-activation" />. -->
       </para></listitem>
       <listitem><para>
         Loads any properties defined in files ending with
@@ -86,19 +94,11 @@ The JARClassLoader</title>
         in the archive. See <xref linkend="api-resource-properties" />.
       </para></listitem>
       <listitem><para>
-        Loads as stored BeanShell code the routine for creating a
-        docking or floating window containing the visible components of
-        each plugin contained in the archive. This code is contained in an
-        XML file named <filename>dockables.xml</filename> and located at the top
-        level of the archive file. <!-- See <xref linkend="api-resources-activation" />. -->
-        This file is required if the plugin provides for a docking or
-        floating window.
-      </para></listitem>
-      <listitem><para>
-        Loads any data on the plugin's actions from a file named
-        <filename>actions.xml</filename> (if it exists) located at the
-        top level of the archive file. See <xref
-        linkend="api-resources-action" />.
+        Adds any class file with a name ending with
+        <filename>Plugin.class</filename> to an internal collection of
+        plugin class names maintained by the
+        <classname>JARClassLoader</classname>. See <xref
+        linkend="plugin-classes" />.
       </para></listitem>
       <listitem><para>
        Adds to a collection maintained by jEdit a new object of
@@ -111,7 +111,7 @@ The JARClassLoader</title>
 </para>
 
 <para>
-  Once all plugin JAR files have been examined for the above resources,
+  Once all JAR files have been examined for the above resources,
   jEdit initializes all class files whose names end in
   <filename>Plugin.class</filename>, as identified in the first pass
   through the JAR archive.  We will call these classes
@@ -119,10 +119,10 @@ The JARClassLoader</title>
 	<primary>Plugin API</primary>
 	<secondary>plugin core class</secondary>
 </indexterm>
-<firstterm>plugin core classes</firstterm>. Plugin core classes provide
-  the principal point of contact between jEdit and the plugin, and
-  must extend jEdit's abstract <classname>EditPlugin</classname> class.
-  Use of a class name ending in <classname>Plugin</classname> is also
+<firstterm>plugin core classes</firstterm>. They provide
+  the principal point of contact between jEdit and the plugin. A plugin
+  core class must extend jEdit's abstract <classname>EditPlugin</classname>
+  class. Use of a class name ending in <classname>Plugin</classname> is also
   required.
 </para>
 
@@ -131,11 +131,12 @@ The JARClassLoader</title>
 	<primary>Plugins</primary>
 	<secondary>dependencies</secondary>
 </indexterm>
-  For each plugin core class, the loader first checks the plugin's
+  For each plugin core class, the initialization routine first checks the plugin's
   properties to see if it is subject to any dependencies. For example, a
   plugin may require that the version of the Java runtime environment or
   of jEdit itself be equal to or above some threshold version. A plugin
-  can also require the presence of another plugin. If any dependency is
+  can also require the presence of another plugin or a particular class
+  from another archive. If any dependency is
   not satisified, the loader marks the plugin as <quote>broken</quote> and
   logs an error message.
 </para>
@@ -144,8 +145,7 @@ The JARClassLoader</title>
   If all dependencies are satisfied, a new instance
   of the plugin core class is created and added to the collection
   maintained by the appropriate <classname>EditPlugin.JAR</classname>
-  object. By
-  accessing that object, jEdit can keep track of plugins it has
+  object. By accessing that object, jEdit can keep track of plugins it has
   successfully loaded, and call methods or perform routines on them.
 </para>
 
@@ -160,7 +160,9 @@ Additional class libraries for plugins</title>
   JAR files with no plugin core classes are also loaded by jEdit; no special
   initialization is performed on them, and the classes they contain are
   made available to other plugins.  For example, many plugins that rely on
-  third-party class libraries ship them as separate JAR archives.
+  third-party class libraries ship them as separate JAR archives.  The libraries
+  will be available inside the jEdit environment but are not part of a general
+  classpath or library collection when running other Java applications.
 </para>
 
 <para>
@@ -181,11 +183,14 @@ Additional class libraries for plugins</title>
   <function>start()</function> method of the plugin core class.
   Because this method is defined as an empty <quote>no-op</quote> in the
   <classname>EditPlugin</classname> abstract class, a plugin need not
-  provide its own implementation if the plugin does not require its
-  own initialization. If the only initialization required is to register
-  the plugin core object with the EditBus, it is better to do that
-  simply by deriving the class from <classname>EBPlugin</classname>
-  instead of <classname>EditPlugin</classname>.
+  provide an implementation if no unique initialization is required.
+  Often a plugin core object will register itself
+  with jEdit's EditBus messaging facility in order to receive and respond to
+  application messages about changes in views, buffers and other objects
+  and properties. The easier way to do this is to derive the plugin class
+  from <classname>EBPlugin</classname> instead of
+  <classname>EditPlugin</classname>, so that registration is performed
+  automatically.
 </para>
 
 <!--
@@ -208,23 +213,9 @@ Additional class libraries for plugins</title>
 
 <itemizedlist>
   <listitem><para>
-    it must be packaged as a JAR archive;
-  </para></listitem>
-  <listitem><para>
-    the JAR archive must contain an XML data file named
-    <filename>dockables.xml</filename> containing code on how the plugin will
-    create a docking or floating window when it is activated;
-  </para></listitem>
-  <listitem><para>
-    if the plugin requires initialization when jEdit starts up,
-    the JAR archive must contain at least one plugin core
-    class whose name ends in <filename>Plugin</filename> and which
-    extends the <classname>EditPlugin</classname> abstract class;
-  </para></listitem>
-  <listitem><para>
-    the JAR archive may contain data concerning actions for display
-    in jEdit's menu bar and elsewhere in a file entitled
-    <filename>actions.xml</filename>; and
+    it must be packaged as one or more JAR archives and contain a class
+    file ending with the prefix <filename>Plugin</filename> that extends
+    the <classname>EditPlugin</classname> abstract class;
   </para></listitem>
   <listitem><para>
     the archive must contain
@@ -232,6 +223,21 @@ Additional class libraries for plugins</title>
     extension. Certain properties giving information
     about the plugin must be defined.
   </para></listitem>
+  <listitem><para>
+    if the plugin will provide a visible interface, the JAR archive must contain
+    an XML data file named <filename>dockables.xml</filename> containing
+    BeanShell code for creating a container for that interface;
+  </para></listitem>
+  <listitem><para>
+    the JAR archive may contain data concerning actions for display
+    in jEdit's menu bar and elsewhere in a file entitled
+    <filename>actions.xml</filename>; and
+  </para></listitem>
+  <listitem><para>
+    if the plugin must respond as a whole to changes in the state of the jEdit
+    application, the plugin core class should be derived from the
+    <classname>EBPlugin</classname> class instead of directly from
+    <classname>EditPlugin</classname>
 </itemizedlist>
 
 <para>
@@ -271,13 +277,15 @@ Additional class libraries for plugins</title>
 The Role of the View Object</title>
 
 <para>
-  A <classname>View</classname> is jEdit's top-level frame window that
-  contains one or more (if the view is split) text areas, a menu bar,
-  a toolbar and other window
-  decorations, as well as docked plugin components. The
-  <classname>View</classname> class
-  performs two important operations that deal
-  with plugins: creating plugin menu items, and managing dockable
+  A <classname>View</classname> is jEdit's top-level frame window.
+  The largest component it contains is an edit pane that in turn contains a
+  text area that displays a buffer.  A view can have more than one eidt pane
+  in a split window configuration.  The view can also contain a menu bar,
+  a toolbar and other window decorations, as well as docked plugin components.
+</para>
+<para>
+  The <classname>View</classname> class performs two important operations
+  dealing with plugins: creating plugin menu items, and managing dockable
   windows.
 </para>
 
@@ -298,7 +306,7 @@ The Role of the View Object</title>
   As we will explain in the next chapter,
   the typical plugin, instead of creating Java
   <classname>JMenu</classname> and <classname>JMenuItem</classname>
-  objects directly, relies on a method in a utility class to
+  objects directly, relies on a wrapper method in a utility class to
   create menu entries.
 </para>
 
@@ -329,15 +337,15 @@ The Role of the View Object</title>
 The DockableWindowManager and the EditBus</title>
 
 <para>
-  The <classname>DockableWindowManager</classname> keeps track of docked
+  The <classname>DockableWindowManager</classname> in each
+  <classname>View</classname> object keeps track of docked
   and floating windows. When the <classname>View</classname> object
   initializes its <classname>DockableWindowManager</classname>, the
   manager iterates through the list of registered dockable windows and
   examines options supplied by the user in the <guilabel>Global
-  Options</guilabel> dialog box. It displays any windows that the user
-  designated as <quote>auto open</quote>. The
-  <classname>DockableWindowManager</classname> object is also invoked
-  whenever the user requests a dockable window is opened or closed.
+  Options</guilabel> dialog box. It displays any plugins that the user
+  designated for one of the four docking positions when the corresponding
+  buttonon a docking pane is selected.
 </para>
 
 <para>
@@ -352,7 +360,7 @@ The DockableWindowManager and the EditBus</title>
 <para>
   Plugins register with the EditBus to receive messages reflecting
   changes in the application's state, including changes in buffers,
-  views and editing pane, changes in the set of propoerties maintained
+  views and editing panes, changes in the set of properties maintained
   by the application, and the closing of the application.  A full list
   of message classes used by the EditBus are summarized beginning with
   <xref linkend="class-EBMessage"/>.
@@ -371,11 +379,11 @@ The DockableWindowManager and the EditBus</title>
 </para>
 
 <para>
-  Any class in a plugin can receive messages by providing an
-  implementation of the <classname>EBComponent</classname>
+  Any class in a plugin can receive messages by implementing
+  the <classname>EBComponent</classname>
   interface.  A <quote>plugin core class</quote> that implements the
   <classname>EBPlugin</classname> interface (and whose name ends with
-  <quote>Plugin</quote> for identification purposes) will automtically be
+  <quote>Plugin</quote> for identification purposes) will automatically be
   added to the EditBus during jEdit's startup routine.  Any other
   class - for example, a docking window component that needs to receive
   notification of buffer changes - must perform its own registration by calling
@@ -404,29 +412,18 @@ Dockable Window Creation</title>
   code will typically consist of a call to the constructor of the docking
   window component that passes two parameters: the
   <classname>View</classname> associated with the docking window
-  component, and a<classname>String</classname> representing the compnent's
-  docking or floating position. The return value of the constructor call
-  is stored
-</para>
-
-<para>
-  As a final step in plugin activation, the manager creates another window
-  object that will contain the object returned by this constructor call.
-  This object
-  implements the <classname>DockableWindowContainer</classname> interface;
-  depending on the settings for the plugin selected by the user, it will
-  either be a tabbed window pane in one of the docked windows attached
-  to the <classname>View</classname> object, or a separate, floating frame
-  window. Plugins need not be aware of the implementation details of the
-  container.
+  component, and a <classname>String</classname> representing the component's
+  docking or floating position.  The result of the BeanShell expression,
+  typically a newly constructed plugin component, is placed inside the
+  docking or floating window managed by the
+  <classname>DockableWindowManager</classname>.
 </para>
 
 <para>
   Eventually the <classname>DockableWindowManager</classname> destroys
-  the plugin window,
-  whether docking or floating, in response to user action or as
-  part of the destruction of the corresponding <classname>View</classname>
-  object.
+  the plugin window, whether docking or floating, in response to user
+  action or as part of the destruction of the corresponding
+  <classname>View</classname> object.
 </para>
 
 <para>
