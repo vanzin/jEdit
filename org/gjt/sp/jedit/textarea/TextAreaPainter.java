@@ -791,6 +791,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		setAutoscrolls(true);
 		setOpaque(true);
+		setRequestFocusEnabled(false);
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 

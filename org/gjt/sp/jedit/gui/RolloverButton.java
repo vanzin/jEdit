@@ -137,7 +137,7 @@ public class RolloverButton extends JButton
 				Log.log(Log.ERROR,RolloverButton.class,e);
 			}
 		} */
-	}
+	} //}}}
 
 	//{{{ MouseHandler class
 	/**

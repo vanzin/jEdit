@@ -45,7 +45,9 @@
 		</SPAN>
 	</RULES>
 
-	<RULES SET="TAGS" DEFAULT="MARKUP">
+	<!-- ESCAPE is not exactly right but it is needed to correctly
+	     handle JavaScript in on* parameters -->
+	<RULES SET="TAGS" DEFAULT="MARKUP" ESCAPE="\">
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
 			<END>"</END>

@@ -85,14 +85,16 @@ public class JEditTextArea extends JComponent
 
 		//{{{ Initialize the GUI
 		setLayout(new ScrollLayout());
-		add(LEFT,gutter);
 		add(CENTER,painter);
+		add(LEFT,gutter);
 
 		// some plugins add stuff in a "right-hand" gutter
 		verticalBox = new Box(BoxLayout.X_AXIS);
 		verticalBox.add(vertical = new JScrollBar(JScrollBar.VERTICAL));
+		vertical.setRequestFocusEnabled(false);
 		add(RIGHT,verticalBox);
 		add(BOTTOM,horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
+		horizontal.setRequestFocusEnabled(false);
 
 		horizontal.setValues(0,0,0,0);
 		//}}}
@@ -335,7 +337,7 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ Scrolling
 
 	//{{{ Debugging code
@@ -644,6 +646,20 @@ public class JEditTextArea extends JComponent
 	public void scrollToCaret(boolean doElectricScroll)
 	{
 		scrollTo(caretLine,caret - buffer.getLineStartOffset(caretLine),
+			doElectricScroll);
+	} //}}}
+
+	//{{{ scrollTo() method
+	/**
+	 * Ensures that the specified location in the buffer is visible.
+	 * @param offset The offset from the start of the buffer
+	 * @param doElectricScroll If true, electric scrolling will be performed
+	 * @since jEdit 4.2pre3
+	 */
+	public void scrollTo(int offset, boolean doElectricScroll)
+	{
+		int line = buffer.getLineOfOffset(offset);
+		scrollTo(line,offset - buffer.getLineStartOffset(line),
 			doElectricScroll);
 	} //}}}
 
@@ -4741,6 +4757,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		return false;
 	} //}}}
 
+	//{{{ getFocusCycleRoot() method
+	/**
+	 * Java 1.4 compatibility fix to make Tab traversal work in a sane
+	 * manner.
+	 * @since jEdit 4.2pre3
+	 */
+	public boolean getFocusCycleRoot()
+	{
+		return true;
+	} //}}}
+
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
@@ -4771,9 +4798,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	{
 		remove(comp);
 	} //}}}
-	
+
 	//}}}
-	
+
 	//{{{ propertiesChanged() method
 	/**
 	 * Called by jEdit when necessary. Plugins should not call this method.
@@ -6620,7 +6647,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		} //}}}
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ Class initializer
