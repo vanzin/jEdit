@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre12
 
-Thanks to Lionel Fiol, Ollie Rutherfurd and Thomas Alspaugh for
-contributing to this release.
+Thanks to Lionel Fiol, Nicholas O'Leary, Ollie Rutherfurd and
+Thomas Alspaugh for contributing to this release.
 
 {{{ Miscellaneous Changes
 
@@ -22,6 +22,8 @@ contributing to this release.
 
 - Pressing A+DOWN in a history text field now shows the field's popup
   menu (Joerg Spieler).
+
+- Added "Mode Switcher" macro (Nicholas O'Leary).
 
 }}}
 {{{ Syntax Highlighting
