@@ -169,7 +169,10 @@ public class PluginJAR
 	public ZipFile getZipFile() throws IOException
 	{
 		if(zipFile == null)
+		{
+			Log.log(Log.DEBUG,this,"Opening " + path);
 			zipFile = new ZipFile(path);
+		}
 		return zipFile;
 	} //}}}
 
@@ -233,15 +236,17 @@ public class PluginJAR
 
 		String className = plugin.getClassName();
 
-		if(!checkDependencies())
-		{
-			plugin = new EditPlugin.Broken(className);
-			plugin.jar = (EditPlugin.JAR)this;
-			return;
-		}
-
 		try
 		{
+			loadProperties();
+
+			if(!checkDependencies())
+			{
+				plugin = new EditPlugin.Broken(className);
+				plugin.jar = (EditPlugin.JAR)this;
+				return;
+			}
+
 			Class clazz = classLoader.loadClass(className,false);
 			int modifiers = clazz.getModifiers();
 			if(Modifier.isInterface(modifiers)
@@ -535,14 +540,12 @@ public class PluginJAR
 			}
 		}
 
-		//XXX soon we won't need this
-		try
+		Iterator keys = cache.cachedProperties.keySet().iterator();
+		while(keys.hasNext())
 		{
-			loadProperties();
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
+			String key = (String)keys.next();
+			String value = (String)cache.cachedProperties.get(key);
+			jEdit.setTemporaryProperty(key,value);
 		}
 
 		if(cache.pluginClass != null)
@@ -574,6 +577,7 @@ public class PluginJAR
 
 		PluginCacheEntry cache = new PluginCacheEntry();
 		cache.modTime = file.lastModified();
+		cache.cachedProperties = new HashMap();
 
 		Enumeration entries = zipFile.entries();
 		while(entries.hasMoreElements())
@@ -653,6 +657,8 @@ public class PluginJAR
 				plugin = new EditPlugin.Deferred(className);
 				plugin.jar = (EditPlugin.JAR)this;
 				cache.pluginClass = className;
+				cachePluginProperties(className,
+					cache.cachedProperties);
 				label = _label;
 				break;
 			}
@@ -665,6 +671,7 @@ public class PluginJAR
 				"action-set.plugin",
 				new String[] { label }));
 			actions.load();
+			actions.cacheProperties(cache.cachedProperties);
 			jEdit.addActionSet(actions);
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
@@ -675,6 +682,7 @@ public class PluginJAR
 			browserActions = new ActionSet(this,null,
 				cache.browserActionsURI);
 			browserActions.load();
+			browserActions.cacheProperties(cache.cachedProperties);
 			VFSBrowser.getActionContext().addActionSet(browserActions);
 			cache.cachedBrowserActionNames =
 				browserActions.getCacheableActionNames();
@@ -814,6 +822,49 @@ public class PluginJAR
 		return ok;
 	} //}}}
 
+	//{{{ cachePluginProperties() method
+	public void cachePluginProperties(String className,
+		Map cachedProperties)
+	{
+		// this is a kludge, but it means we don't have to even read
+		// the properties file on startup, for 4.2 api aware plugins!
+
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".activate");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".name");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".version");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".author");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".docs");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".jars");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".menu");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".menu-item");
+		jEdit.putProperty(cachedProperties,"plugin." + className + ".option-pane");
+
+		String paneProp = "plugin." + className + ".option-pane";
+		String pane = jEdit.getProperty(paneProp);
+		if(pane != null)
+		{
+			cachedProperties.put(paneProp,pane);
+			jEdit.putProperty(cachedProperties,pane + ".label");
+			jEdit.putProperty(cachedProperties,pane + ".code");
+		}
+
+		String groupProp = "plugin." + className + ".option-group";
+		String group = jEdit.getProperty(groupProp);
+		if(group != null)
+		{
+			cachedProperties.put(groupProp,group);
+			StringTokenizer st = new StringTokenizer(group);
+			while(st.hasMoreTokens())
+			{
+				pane = st.nextToken();
+				jEdit.putProperty(cachedProperties,
+					pane + ".label");
+				jEdit.putProperty(cachedProperties,
+					pane + ".code");
+			}
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ PluginCacheEntry class
@@ -842,6 +893,7 @@ public class PluginJAR
 		public URL servicesURI;
 		public ServiceManager.Descriptor[] cachedServices;
 
+		public Map cachedProperties;
 		public String pluginClass;
 		//}}}
 
@@ -897,6 +949,8 @@ public class PluginJAR
 			classes = readStringArray(din);
 			properties = readStringArray(din);
 
+			cachedProperties = readMap(din);
+
 			pluginClass = readString(din);
 
 			return true;
@@ -935,6 +989,8 @@ public class PluginJAR
 
 			writeStringArray(dout,classes);
 			writeStringArray(dout,properties);
+
+			writeMap(dout,cachedProperties);
 
 			writeString(dout,pluginClass);
 		} //}}}
@@ -995,6 +1051,18 @@ public class PluginJAR
 			return bools;
 		} //}}}
 
+		//{{{ readMap() method
+		private Map readMap(DataInputStream din) throws IOException
+		{
+			HashMap returnValue = new HashMap();
+			int count = din.readInt();
+			for(int i = 0; i < count; i++)
+			{
+				returnValue.put(readString(din),readString(din));
+			}
+			return returnValue;
+		} //}}}
+
 		//{{{ writeString() method
 		private void writeString(DataOutputStream dout,
 			Object obj) throws IOException
@@ -1044,6 +1112,20 @@ public class PluginJAR
 				{
 					dout.writeBoolean(bools[i]);
 				}
+			}
+		} //}}}
+
+		//{{{ writeMap() method
+		private void writeMap(DataOutputStream dout, Map map)
+			throws IOException
+		{
+			dout.writeInt(map.size());
+			Iterator iter = map.keySet().iterator();
+			while(iter.hasNext())
+			{
+				String key = (String)iter.next();
+				writeString(dout,key);
+				writeString(dout,map.get(key));
 			}
 		} //}}}
 

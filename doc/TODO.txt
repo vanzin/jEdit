@@ -7,12 +7,12 @@ and quirks that I need to fix eventually.
 
 I'm releasing 4.2pre1 ASAP.
 
-- very with empty actions.xml, browser.actions.xml, dockables.xml
+- verify with empty actions.xml, browser.actions.xml, dockables.xml
 - browser: enter with table active
 - save file --> collapse to < visibleLines -- click beyond last line
   --> exception
 - while loading --> scroll bar
-- plugin api:pl
+- plugin api:
   - plugin errors after startup
   - mouse over text for actions
 - box in io progress
@@ -21,17 +21,9 @@ I'm releasing 4.2pre1 ASAP.
 - control-drag: rect select back
 - update quicknotepad docs
 
-- cache:
-  - generateCache(): caches props
-    action.label
-    action.toggle
-    dockable.label
-    plugin.foo.{name,version,docs,depend*,menu,menu-item,option-pane,
-    option-group,activate,options.pane.label,options.pane.code}
-    -- XXX: submenus!!! deprecate?
-
 ================================
 
+- don't need property cache if activate=startup
 - action bar: changing buffer props should update status
 - changing global props should send a dockable props changed
 - quicknotepad: handle no settings dir more gracefully
