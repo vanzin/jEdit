@@ -413,6 +413,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		{
 			switch(evt.getKeyCode())
 			{
+			case KeyEvent.VK_LEFT:
+				if(filenameField.getCaretPosition() == 0)
+					browser.getBrowserView().getTree().processKeyEvent(evt);
+				break;
 			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 				browser.getBrowserView().getTree().processKeyEvent(evt);

@@ -24,25 +24,26 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.text.Segment;
-import javax.swing.undo.*;
-import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.*;
 import java.awt.geom.*;
-import java.awt.*;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.event.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.text.Position;
+import javax.swing.text.Segment;
+import javax.swing.undo.*;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -263,8 +264,8 @@ public class JEditTextArea extends JComponent
 
 			foldVisibilityManager = buffer._getFoldVisibilityManager(this);
 
-			chunkCache.setFirstLine(0);
 			physFirstLine = foldVisibilityManager.getFirstVisibleLine();
+			chunkCache.setFirstLine(0,physFirstLine);
 
 			propertiesChanged();
 
@@ -343,7 +344,7 @@ public class JEditTextArea extends JComponent
 
 		maxHorizontalScrollWidth = 0;
 
-		chunkCache.setFirstLine(firstLine);
+		chunkCache.setFirstLine(firstLine,physFirstLine);
 
 		recalculateLastPhysicalLine();
 
@@ -573,7 +574,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
-		System.err.println("scroll to");
 		int extraEndVirt;
 		int lineLength = buffer.getLineLength(line);
 		if(offset > lineLength)
@@ -722,7 +722,7 @@ public class JEditTextArea extends JComponent
 			}
 		}
 
-		chunkCache.setFirstLine(firstLine);
+		chunkCache.setFirstLine(firstLine,physFirstLine);
 
 		recalculateLastPhysicalLine();
 
@@ -965,6 +965,7 @@ public class JEditTextArea extends JComponent
 
 		retVal.y = screenLine * fm.getHeight();
 
+		chunkCache.updateChunksUpTo(screenLine);
 		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
 		if(!info.chunksValid)
 			System.err.println("offset to xy: not valid");
@@ -5840,6 +5841,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		} //}}}
 	} //}}}
 
+	public static boolean FOOLISH = false;
 	//{{{ BufferChangeHandler class
 	/**
 	 * Note that in this class we take great care to defer complicated
@@ -5862,7 +5864,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		boolean delayedMultilineUpdate;
 		int delayedRepaintStart;
 		int delayedRepaintEnd;
-		int delayedFirstLine;
+		// if changes are being made above the first line, we don't want
+		// them to scroll us down or up. so we store the first line
+		// position at the start of the transaction.
+		Position holdPosition;
 		Runnable recalculateLastPhysicalLine = new Runnable()
 		{
 			public void run()
@@ -6047,8 +6052,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
 				//chunkCache.invalidateChunksFromPhys(delayedRepaintStart);
 
-				if(delayedFirstLine != firstLine)
-					setFirstLine(delayedFirstLine);
+				if(holdPosition != null)
+				{
+					setFirstLine(physicalToVirtual(
+						getBuffer().getLineOfOffset(
+						holdPosition.getOffset())));
+				}
 				else if(delayedMultilineUpdate)
 					updateScrollBars();
 
@@ -6066,6 +6075,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 
 				delayedUpdate = delayedMultilineUpdate = false;
+				holdPosition = null;
 			}
 
 			for(int i = 0; i < runnables.size(); i++)
@@ -6104,7 +6114,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(!delayedUpdate)
 			{
-				delayedFirstLine = getFirstLine();
 				delayedRepaintStart = startLine;
 				delayedRepaintEnd = startLine;
 				delayedUpdate = true;
@@ -6119,8 +6128,21 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					startLine);
 			}
 
-			if(startLine < delayedFirstLine)
-				delayedFirstLine += numLines;
+			// this is less than ideal... but it fixes the issue
+			// mentioned in the holdPosition declaration comment
+			// much better than the old fix, which didn't work
+			// with folding.
+			if(holdPosition != null)
+				return;
+			int virtStartLine = physicalToVirtual(startLine);
+			if(virtStartLine < getFirstLine())
+			{
+				int pos = buffer.getLineStartOffset(
+					virtualToPhysical(getFirstLine()
+					+ (physicalToVirtual(startLine + numLines)
+					- virtStartLine)));
+				holdPosition = buffer.createPosition(pos);
+			}
 		} //}}}
 	} //}}}
 

@@ -55,6 +55,12 @@ class Roster
 		operations.addElement(op);
 	} //}}}
 
+	//{{{ getOperation() method
+	public Operation getOperation(int i)
+	{
+		return (Operation)operations.get(i);
+	} //}}}
+
 	//{{{ getOperationCount() method
 	int getOperationCount()
 	{
@@ -90,12 +96,14 @@ class Roster
 
 	//{{{ Private members
 	private Vector operations;
+	//}}}
 
 	static interface Operation
 	{
 		boolean perform(PluginManagerProgress progress);
 		boolean equals(Object o);
-	} //}}}
+		int getMaximum();
+	}
 
 	//{{{ Remove class
 	static class Remove implements Operation
@@ -103,6 +111,11 @@ class Roster
 		Remove(String plugin)
 		{
 			this.plugin = plugin;
+		}
+
+		public int getMaximum()
+		{
+			return 1;
 		}
 
 		public boolean perform(PluginManagerProgress progress)
@@ -169,7 +182,9 @@ class Roster
 	//{{{ Install class
 	static class Install implements Operation
 	{
-		Install(String url, String installDirectory)
+		int size;
+
+		Install(String url, String installDirectory, int size)
 		{
 			// catch those hooligans passing null urls
 			if(url == null)
@@ -177,6 +192,12 @@ class Roster
 
 			this.url = url;
 			this.installDirectory = installDirectory;
+			this.size = size;
+		}
+
+		public int getMaximum()
+		{
+			return size;
 		}
 
 		public boolean perform(final PluginManagerProgress progress)
@@ -245,7 +266,6 @@ class Roster
 			String fileName, String url) throws Exception
 		{
 			URLConnection conn = new URL(url).openConnection();
-			progress.setMaximum(Math.max(0,conn.getContentLength()));
 
 			String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
 
@@ -259,8 +279,6 @@ class Roster
 		private boolean install(PluginManagerProgress progress,
 			String path, String dir) throws Exception
 		{
-			progress.setMaximum(1);
-
 			ZipFile zipFile = new ZipFile(path);
 
 			try

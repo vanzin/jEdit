@@ -508,7 +508,7 @@ public class OffsetManager
 			gapWidth = newGapWidth;
 		else if(newGapLine == -1)
 		{
-			if(gapWidth != 0)
+			//if(gapWidth != 0)
 			{
 				//if(DEBUG && gapLine != lineCount)
 				//	System.err.println(method + ": update from " + gapLine + " to " + lineCount);
@@ -520,7 +520,7 @@ public class OffsetManager
 		}
 		else if(newGapLine < gapLine)
 		{
-			if(gapWidth != 0)
+			//if(gapWidth != 0)
 			{
 				//if(DEBUG && newGapLine != gapLine)
 				//	System.err.println(method + ": update from " + newGapLine + " to " + gapLine);
@@ -531,7 +531,7 @@ public class OffsetManager
 		}
 		else //if(newGapLine >= gapLine)
 		{
-			if(gapWidth != 0)
+			//if(gapWidth != 0)
 			{
 				//if(DEBUG && gapLine != newGapLine)
 				//	System.err.println(method + ": update from " + gapLine + " to " + newGapLine);
