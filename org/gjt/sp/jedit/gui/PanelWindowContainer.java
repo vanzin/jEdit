@@ -291,7 +291,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 				show(null);
 			else
 			{
-				if(wm.getDockable(evt.getActionCommand()) != null)
+				if(wm.isDockableWindowVisible(evt.getActionCommand()))
 					show(null);
 				else
 					wm.showDockableWindow(evt.getActionCommand());

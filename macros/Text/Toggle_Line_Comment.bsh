@@ -109,7 +109,7 @@ void toggleLineComment()
 		Macros.error(view, "Could not create regexp for locating comments");
 		return;
 	}
-	buffer.beginCompoundEdit();
+
 	selections = textArea.getSelection();
 	if(selections.length == 0)
 	{
