@@ -210,15 +210,14 @@ public class Buffer
 				}
 
 				if(isNewFile())
+					/* ie, checkFileForLoad() set this */;
+				else
 				{
-					// ie, checkFileForLoad() set this
-					return true;
-				}
-
-				if(!vfs.load(view,this,path))
-				{
-					setFlag(LOADING,false);
-					return false;
+					if(!vfs.load(view,this,path))
+					{
+						setFlag(LOADING,false);
+						return false;
+					}
 				}
 			}
 		}
@@ -234,7 +233,7 @@ public class Buffer
 					BufferIORequest.NEW_PATH);
 				Segment seg = (Segment)getProperty(
 					BufferIORequest.LOAD_DATA);
-				LongArray endOffsets = (LongArray)
+				IntegerArray endOffsets = (IntegerArray)
 					getProperty(BufferIORequest.END_OFFSETS);
 
 				// below remove() call only works if read only
@@ -249,8 +248,8 @@ public class Buffer
 					seg = new Segment(new char[1024],0,0);
 				if(endOffsets == null)
 				{
-					endOffsets = new LongArray();
-					OffsetManager.addLineEndOffset(endOffsets,1);
+					endOffsets = new IntegerArray();
+					endOffsets.add(1);
 				}
 
 				try
@@ -3323,7 +3322,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		propertyLock = new Object();
 		contentMgr = new ContentManager();
 		offsetMgr = new OffsetManager(this);
-		integerArray = new LongArray();
+		integerArray = new IntegerArray();
 		undoMgr = new UndoManager(this);
 		bufferListeners = new Vector();
 		seg = new Segment();
@@ -3475,7 +3474,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private Object propertyLock;
 	private ContentManager contentMgr;
 	private OffsetManager offsetMgr;
-	private LongArray integerArray;
+	private IntegerArray integerArray;
 	private UndoManager undoMgr;
 	private Vector bufferListeners;
 
@@ -3905,7 +3904,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ contentInserted() method
 	private void contentInserted(int offset, int length,
-		LongArray endOffsets)
+		IntegerArray endOffsets)
 	{
 		try
 		{

@@ -318,7 +318,7 @@ public class BufferIORequest extends WorkRequest
 	private void read(Buffer buffer, InputStream _in, long length)
 		throws IOException
 	{
-		LongArray endOffsets = new LongArray();
+		IntegerArray endOffsets = new IntegerArray();
 
 		// only true if the file size is known
 		boolean trackProgress = (!buffer.isTemporary() && length != 0);
@@ -396,7 +396,7 @@ public class BufferIORequest extends WorkRequest
 					seg.append(buf,lastLine,i -
 						lastLine);
 					seg.append('\n');
-					OffsetManager.addLineEndOffset(endOffsets,seg.count);
+					endOffsets.add(seg.count);
 					if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
 						setProgressValue(seg.count);
 
@@ -434,7 +434,7 @@ public class BufferIORequest extends WorkRequest
 						seg.append(buf,lastLine,
 							i - lastLine);
 						seg.append('\n');
-						OffsetManager.addLineEndOffset(endOffsets,seg.count);
+						endOffsets.add(seg.count);
 						if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
 							setProgressValue(seg.count);
 						lastLine = i + 1;
@@ -498,7 +498,7 @@ public class BufferIORequest extends WorkRequest
 
 		// add a line marker at the end for proper offset manager
 		// operation
-		OffsetManager.addLineEndOffset(endOffsets,seg.count + 1);
+		endOffsets.add(seg.count + 1);
 
 		// to avoid having to deal with read/write locks and such,
 		// we insert the loaded data into the buffer in the
