@@ -170,53 +170,9 @@ public class OffsetManager
 		int mask = 1 << (index + VISIBLE_SHIFT);
 		boolean oldVisible = ((info & mask) != 0);
 		if(visible)
-		{
-			if(!oldVisible)
-			{
-				int screenLines = getScreenLineCount(line);
-				Anchor anchor = anchors;
-				for(;;)
-				{
-					if(anchor == null)
-						break;
-
-					if(anchor.physicalLine < line)
-						break;
-
-					if(anchor.index == index)
-					{
-						anchor.scrollLine += screenLines;
-						anchor.callChanged = true;
-					}
-					anchor = anchor.next;
-				}
-				lineInfo[line] = (info | mask);
-			}
-		}
+			lineInfo[line] = (info | mask);
 		else
-		{
-			if(oldVisible)
-			{
-				int screenLines = getScreenLineCount(line);
-				Anchor anchor = anchors;
-				for(;;)
-				{
-					if(anchor == null)
-						break;
-
-					if(anchor.physicalLine < line)
-						break;
-
-					if(anchor.index == index)
-					{
-						anchor.scrollLine -= screenLines;
-						anchor.callChanged = true;
-					}
-					anchor = anchor.next;
-				}
-				lineInfo[line] = (info & ~mask);
-			}
-		}
+			lineInfo[line] = (info & ~mask);
 	} //}}}
 
 	//{{{ isScreenLineCountValid() method
@@ -237,47 +193,7 @@ public class OffsetManager
 	{
 		if(Debug.SCREEN_LINES_DEBUG)
 			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + "," + count + ")"));
-		int info = lineInfo[line];
-		int oldCount = ((info & SCREEN_LINES_MASK)
-			>> SCREEN_LINES_SHIFT);
-		if(oldCount != count)
-		{
-			Anchor anchor = anchors;
-			for(;;)
-			{
-				if(anchor == null)
-					break;
-
-				if(anchor.physicalLine < line)
-					break;
-
-				// now, this is strange semantics, but since the
-				// only two uses of the 'anchor' API are first
-				// line and scroll line count trackers in
-				// DisplayManager, its ok.
-
-				// the scroll line count never satisifies this
-				// condition. if the first line satisfies this,
-				// we have to make sure the skew does not exceed
-				// the screen line count of the first line.
-				if(anchor.physicalLine == line)
-					anchor.callChanged = true;
-				else
-				{
-					int anchorVisibilityMask = (1 << (anchor.index + VISIBLE_SHIFT));
-					if((info & anchorVisibilityMask) != 0)
-					{
-						//System.err.println("anchor screen shift from "
-						//	+ anchor.scrollLine + " to "
-						//	+ (anchor.scrollLine + (count - oldCount)));
-						anchor.scrollLine += (count - oldCount);
-						anchor.callChanged = true;
-					}
-				}
-				anchor = anchor.next;
-			}
-		}
-		lineInfo[line] = ((info & ~SCREEN_LINES_MASK)
+		lineInfo[line] = ((lineInfo[line] & ~SCREEN_LINES_MASK)
 			| (count << SCREEN_LINES_SHIFT)
 			| SCREEN_LINES_VALID_MASK);
 	} //}}}
@@ -349,53 +265,6 @@ public class OffsetManager
 		}
 
 		return new PosTopHalf(bh);
-	} //}}}
-
-	//{{{ expandFolds() method
-	/**
-	 * Like <code>FoldVisibilityManager.expandFolds()</code>, but does
-	 * it for all fold visibility managers viewing this buffer. Should
-	 * only be called after loading.
-	 */
-	public void expandFolds(int foldLevel)
-	{
-		if(foldLevel == 0)
-		{
-			for(int i = 0; i < lineCount; i++)
-				lineInfo[i] |= VISIBLE_MASK;
-		}
-		else
-		{
-			if(buffer.getFoldHandler() instanceof IndentFoldHandler)
-				foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
-
-			/* this ensures that the first line is always visible */
-			boolean seenVisibleLine = false;
-
-			for(int i = 0; i < lineCount; i++)
-			{
-				if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
-				{
-					seenVisibleLine = true;
-					lineInfo[i] |= VISIBLE_MASK;
-				}
-				else
-					lineInfo[i] &= ~VISIBLE_MASK;
-			}
-		}
-	} //}}}
-
-	//{{{ resetAnchors() method
-	public void resetAnchors()
-	{
-		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"resetAnchors(): " + anchors);
-		Anchor anchor = anchors;
-		while(anchor != null)
-		{
-			anchor.reset();
-			anchor = anchor.next;
-		}
 	} //}}}
 
 	//{{{ invalidateScreenLineCounts() method
@@ -484,22 +353,6 @@ public class OffsetManager
 				this.endOffsets[startLine + i] = (offset + endOffsets.get(i));
 				lineInfo[startLine + i] = visible;
 			}
-
-
-			Anchor anchor = anchors;
-			for(;;)
-			{
-				if(anchor == null)
-					break;
-
-				if(anchor.physicalLine < startLine)
-					break;
-
-				if(anchor.physicalLine != startLine)
-					anchor.physicalLine += numLines;
-				anchor.callChanged = true;
-				anchor = anchor.next;
-			}
 		} //}}}
 
 		if(firstInvalidFoldLevel == -1 || firstInvalidFoldLevel > startLine)
@@ -533,34 +386,6 @@ public class OffsetManager
 
 			lineCount -= numLines;
 
-			// if anchor's physical line > startLine,
-			// count screen lines from startLine to Math.min(startLine + numLines,line)
-			Anchor anchor = anchors;
-			for(;;)
-			{
-				if(anchor == null)
-					break;
-
-				if(anchor.physicalLine < startLine)
-					break;
-
-				if(anchor.physicalLine == startLine)
-					anchor.callChanged = true;
-				else
-				{
-					int end = Math.min(endLine,anchor.physicalLine);
-					for(int i = startLine; i < end; i++)
-					{
-						if(isLineVisible(i,anchor.index))
-							anchor.scrollLine -= getScreenLineCount(i);
-						anchor.physicalLine--;
-						anchor.callChanged = true;
-					}
-				}
-
-				anchor = anchor.next;
-			}
-
 			System.arraycopy(endOffsets,endLine,endOffsets,
 				startLine,lineCount - startLine);
 			System.arraycopy(lineInfo,endLine,lineInfo,
@@ -576,74 +401,6 @@ public class OffsetManager
 		updatePositionsForRemove(offset,length);
 	} //}}}
 
-	//{{{ addAnchor() method
-	/* note the suttle optimization: this method sorts anchors in decreasing
-	 * order so a change on line n can stop checking anchors once reaching
-	 * one before line n. */
-	public void addAnchor(Anchor anchor)
-	{
-		Anchor prev = null;
-		Anchor current = anchors;
-		for(;;)
-		{
-			if(current == null)
-				break;
-
-			if(current.physicalLine < anchor.physicalLine)
-			{
-				if(prev != null)
-					prev.next = anchor;
-				else
-					anchors = anchor;
-				anchor.next = current;
-				return;
-			}
-			prev = current;
-			current = current.next;
-		}
-
-		if(prev != null)
-			prev.next = anchor;
-		else
-			anchors = anchor;
-		anchor.next = null;
-	} //}}}
-
-	//{{{ removeAnchor() method
-	public void removeAnchor(Anchor anchor)
-	{
-		Anchor current = anchors;
-		Anchor prev = null;
-		while(current != null)
-		{
-			if(current == anchor)
-			{
-				if(prev != null)
-					prev.next = current.next;
-				else
-					anchors = current.next;
-				return;
-			}
-			prev = current;
-			current = current.next;
-		}
-	} //}}}
-
-	//{{{ notifyScreenLineChanges() method
-	public void notifyScreenLineChanges()
-	{
-		Anchor anchor = anchors;
-		while(anchor != null)
-		{
-			if(anchor.callChanged)
-			{
-				anchor.callChanged = false;
-				anchor.changed();
-			}
-			anchor = anchor.next;
-		}
-	} //}}}
-
 	//{{{ Private members
 
 	//{{{ Instance variables
@@ -656,8 +413,6 @@ public class OffsetManager
 
 	private PosBottomHalf[] positions;
 	private int positionCount;
-
-	private Anchor anchors;
 
 	/**
 	 * If -1, then there is no gap.
@@ -901,28 +656,6 @@ loop:		for(;;)
 			if(--ref == 0)
 				removePosition(this);
 		} //}}}
-	} //}}}
-
-	//{{{ Anchor class
-	/**
-	 * An anchor is a floating position retaining a scroll line number.
-	 */
-	public static abstract class Anchor
-	{
-		public Anchor(int index)
-		{
-			this.index = index;
-		}
-
-		public Anchor next;
-
-		public int physicalLine;
-		public int scrollLine;
-		public int index;
-		public boolean callChanged;
-
-		public abstract void reset();
-		public abstract void changed();
 	} //}}}
 
 	//}}}

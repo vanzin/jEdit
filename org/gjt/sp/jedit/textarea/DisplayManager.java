@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import javax.swing.SwingUtilities;
 import java.awt.Toolkit;
+import java.util.*;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
@@ -39,6 +40,87 @@ import org.gjt.sp.util.Log;
  */
 public class DisplayManager
 {
+	//{{{ Static part
+
+	//{{{ getDisplayManager() method
+	static DisplayManager getDisplayManager(Buffer buffer,
+		JEditTextArea textArea)
+	{
+		List l = (List)bufferMap.get(buffer);
+		if(l == null || l.size() == 0)
+		{
+			if(l == null)
+			{
+				l = new LinkedList();
+				bufferMap.put(buffer,l);
+			}
+			return new DisplayManager(buffer,textArea);
+		}
+		else
+			return (DisplayManager)l.remove(0);
+	} //}}}
+
+	//{{{ releaseDisplayManager() method
+	static void releaseDisplayManager(DisplayManager dmgr)
+	{
+		List l = (List)bufferMap.get(dmgr.buffer);
+		if(l == null)
+			/* buffer closed! */;
+		else
+			l.add(dmgr);
+	} //}}}
+
+	//{{{ bufferClosed() method
+	public static void bufferClosed(Buffer buffer)
+	{
+		bufferMap.remove(buffer);
+	} //}}}
+
+	//{{{ textAreaDisposed() method
+	static void textAreaDisposed(JEditTextArea textArea)
+	{
+		Iterator biter = bufferMap.values().iterator();
+		while(biter.hasNext())
+		{
+			List l = (List)biter.next();
+			Iterator liter = l.iterator();
+			while(liter.hasNext())
+			{
+				DisplayManager dmgr = (DisplayManager)
+					liter.next();
+				if(dmgr.textArea == textArea)
+				{
+					dmgr.dispose();
+					liter.remove();
+				}
+			}
+		}
+	} //}}}
+
+	//{{{ _setScreenLineCount() method
+	private static void _setScreenLineCount(Buffer buffer, int line,
+		int oldCount, int count)
+	{
+		Iterator iter = ((List)bufferMap.get(buffer)).iterator();
+		while(iter.hasNext())
+		{
+			((DisplayManager)iter.next())._setScreenLineCount(line,oldCount,count);
+		}
+	} //}}}
+
+	//{{{ _notifyScreenLineChanges() method
+	private static void _notifyScreenLineChanges(Buffer buffer)
+	{
+		Iterator iter = ((List)bufferMap.get(buffer)).iterator();
+		while(iter.hasNext())
+		{
+			((DisplayManager)iter.next())._notifyScreenLineChanges();
+		}
+	} //}}}
+
+	private static Map bufferMap = new HashMap();
+	//}}}
+
 	//{{{ isLineVisible() method
 	/**
 	 * Returns if the specified line is visible.
@@ -288,7 +370,7 @@ public class DisplayManager
 			buffer.writeUnlock();
 		}
 
-		offsetMgr.notifyScreenLineChanges();
+		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -413,7 +495,7 @@ public class DisplayManager
 			buffer.writeUnlock();
 		}
 
-		offsetMgr.notifyScreenLineChanges();
+		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 
 		return returnValue;
@@ -437,7 +519,7 @@ public class DisplayManager
 			buffer.writeUnlock();
 		}
 
-		offsetMgr.notifyScreenLineChanges();
+		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -472,26 +554,39 @@ public class DisplayManager
 			if(buffer.getFoldHandler() instanceof IndentFoldHandler)
 				foldLevel = (foldLevel - 1) * buffer.getIndentSize() + 1;
 
+			hideLineRange(0,buffer.getLineCount() - 1);
+
 			/* this ensures that the first line is always visible */
 			boolean seenVisibleLine = false;
+
+			int firstVisible = 0;
 
 			for(int i = 0; i < buffer.getLineCount(); i++)
 			{
 				if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
 				{
 					seenVisibleLine = true;
-					setLineVisible(i,true);
 				}
 				else
-					setLineVisible(i,false);
+				{
+					if(firstVisible != i)
+					{
+						showLineRange(firstVisible,
+							i - 1);
+					}
+					firstVisible = i + 1;
+				}
 			}
+
+			if(firstVisible != buffer.getLineCount())
+				showLineRange(firstVisible,buffer.getLineCount() - 1);
 		}
 		finally
 		{
 			buffer.writeUnlock();
 		}
 
-		offsetMgr.notifyScreenLineChanges();
+		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -523,7 +618,7 @@ public class DisplayManager
 		GUIUtilities.getView(textArea).getStatus().setMessageAndClear(
 			jEdit.getProperty("view.status.narrow"));
 
-		offsetMgr.notifyScreenLineChanges();
+		_notifyScreenLineChanges();
 		textArea.foldStructureChanged();
 	} //}}}
 
@@ -533,36 +628,34 @@ public class DisplayManager
 	FirstLine firstLine;
 	ScrollLineCount scrollLineCount;
 
-	//{{{ DisplayManager constructor
-	DisplayManager(Buffer buffer, JEditTextArea textArea)
+	//{{{ init() method
+	void init()
 	{
-		this.buffer = buffer;
-		this.offsetMgr = buffer._getOffsetManager();
-		this.textArea = textArea;
-		this.index = buffer._displayLock();
-
-		scrollLineCount = new ScrollLineCount(index);
-		offsetMgr.addAnchor(scrollLineCount);
-
-		firstLine = new FirstLine(index);
-		offsetMgr.addAnchor(firstLine);
-	} //}}}
-
-	//{{{ dispose() method
-	void dispose()
-	{
-		offsetMgr.removeAnchor(scrollLineCount);
-		offsetMgr.removeAnchor(firstLine);
-		offsetMgr = null;
-
-		buffer._displayUnlock(index);
-		buffer = null;
+		if(!initialized)
+		{
+			initialized = true;
+			if(buffer.isLoaded())
+			{
+				firstLine.reset();
+				scrollLineCount.reset();
+				textArea.recalculateLastPhysicalLine();
+			}
+		}
 	} //}}}
 
 	//{{{ notifyScreenLineChanges() method
 	void notifyScreenLineChanges()
 	{
-		offsetMgr.notifyScreenLineChanges();
+		if(firstLine.callChanged)
+		{
+			firstLine.callChanged = false;
+			firstLine.changed();
+		}
+		if(scrollLineCount.callChanged)
+		{
+			scrollLineCount.callChanged = false;
+			scrollLineCount.changed();
+		}
 	} //}}}
 
 	//{{{ setScreenLineCount() method
@@ -571,12 +664,17 @@ public class DisplayManager
 	 * is split into.
 	 * @since jEdit 4.2pre1
 	 */
-	public void setScreenLineCount(int line, int count)
+	void setScreenLineCount(int line, int count)
 	{
 		try
 		{
 			buffer.writeLock();
+			int oldCount = offsetMgr.getScreenLineCount(line);
 			offsetMgr.setScreenLineCount(line,count);
+			// this notifies each display manager editing this
+			// buffer of the screen line count change
+			if(count != oldCount)
+				_setScreenLineCount(buffer,line,oldCount,count);
 		}
 		finally
 		{
@@ -613,15 +711,33 @@ public class DisplayManager
 	//}}}
 
 	//{{{ Private members
+	private boolean initialized;
 	private Buffer buffer;
 	private OffsetManager offsetMgr;
 	private JEditTextArea textArea;
 	private int index;
+	private BufferChangeHandler bufferChangeHandler;
 
-	//{{{ setLineVisible() method
-	private final void setLineVisible(int line, boolean visible)
+	//{{{ DisplayManager constructor
+	private DisplayManager(Buffer buffer, JEditTextArea textArea)
 	{
-		offsetMgr.setLineVisible(line,index,visible);
+		this.buffer = buffer;
+		this.offsetMgr = buffer._getOffsetManager();
+		this.textArea = textArea;
+		this.index = buffer._displayLock();
+
+		scrollLineCount = new ScrollLineCount();
+		firstLine = new FirstLine();
+
+		bufferChangeHandler = new BufferChangeHandler();
+		buffer.addBufferChangeListener(bufferChangeHandler);
+	} //}}}
+
+	//{{{ dispose() method
+	private void dispose()
+	{
+		buffer._displayUnlock(index);
+		buffer.removeBufferChangeListener(bufferChangeHandler);
 	} //}}}
 
 	//{{{ showLineRange() method
@@ -629,6 +745,18 @@ public class DisplayManager
 	{
 		for(int i = start; i <= end; i++)
 		{
+			if(!offsetMgr.isLineVisible(i,index))
+			{
+				int screenLines = offsetMgr
+					.getScreenLineCount(i);
+				if(firstLine.physicalLine >= i)
+				{
+					firstLine.scrollLine += screenLines;
+					firstLine.callChanged = true;
+				}
+				scrollLineCount.scrollLine += screenLines;
+				scrollLineCount.callChanged = true;
+			}
 			offsetMgr.setLineVisible(i,index,true);
 		}
 	} //}}}
@@ -638,21 +766,75 @@ public class DisplayManager
 	{
 		for(int i = start; i <= end; i++)
 		{
+			if(offsetMgr.isLineVisible(i,index))
+			{
+				int screenLines = offsetMgr
+					.getScreenLineCount(i);
+				if(firstLine.physicalLine >= i)
+				{
+					firstLine.physicalLine -= screenLines;
+					firstLine.callChanged = true;
+				}
+				scrollLineCount.scrollLine -= screenLines;
+				scrollLineCount.callChanged = true;
+			}
 			offsetMgr.setLineVisible(i,index,false);
+		}
+	} //}}}
+
+	//{{{ _setScreenLineCount() method
+	private void _setScreenLineCount(int line, int oldCount, int count)
+	{
+		if(!isLineVisible(line))
+			return;
+
+		if(firstLine.physicalLine >= line)
+		{
+			if(firstLine.physicalLine == line)
+				firstLine.callChanged = true;
+			else
+			{
+				firstLine.scrollLine += (count - oldCount);
+				firstLine.callChanged = true;
+			}
+		}
+
+		scrollLineCount.scrollLine += (count - oldCount);
+		scrollLineCount.callChanged = true;
+	} //}}}
+
+	//{{{ _notifyScreenLineChanges() method
+	private void _notifyScreenLineChanges()
+	{
+		if(firstLine.callChanged)
+		{
+			firstLine.changed();
+			firstLine.callChanged = false;
+		}
+
+		if(scrollLineCount.callChanged)
+		{
+			scrollLineCount.changed();
+			scrollLineCount.callChanged = false;
 		}
 	} //}}}
 
 	//}}}
 
-	//{{{ ScrollLineCount class
-	class ScrollLineCount extends OffsetManager.Anchor
+	//{{{ Anchor class
+	static abstract class Anchor
 	{
-		//{{{ ScrollLineCount constructor
-		ScrollLineCount(int index)
-		{
-			super(index);
-		} //}}}
+		int physicalLine;
+		int scrollLine;
+		boolean callChanged;
 
+		abstract void reset();
+		abstract void changed();
+	} //}}}
+
+	//{{{ ScrollLineCount class
+	class ScrollLineCount extends Anchor
+	{
 		//{{{ changed() method
 		public void changed()
 		{
@@ -670,7 +852,6 @@ public class DisplayManager
 
 			updateWrapSettings();
 
-			offsetMgr.removeAnchor(this);
 			physicalLine = offsetMgr.getLineCount();
 			scrollLine = 0;
 			for(int i = 0; i < physicalLine; i++)
@@ -678,7 +859,6 @@ public class DisplayManager
 				if(isLineVisible(i))
 					scrollLine += getScreenLineCount(i);
 			}
-			offsetMgr.addAnchor(this);
 
 			firstLine.ensurePhysicalLineIsVisible();
 
@@ -688,15 +868,9 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ FirstLine class
-	class FirstLine extends OffsetManager.Anchor
+	class FirstLine extends Anchor
 	{
 		int skew;
-
-		//{{{ FirstLine constructor
-		FirstLine(int index)
-		{
-			super(index);
-		} //}}}
 
 		//{{{ changed() method
 		public void changed()
@@ -810,8 +984,6 @@ public class DisplayManager
 
 			skew = 0;
 
-			offsetMgr.removeAnchor(this);
-
 			if(!isLineVisible(physicalLine))
 			{
 				int lastVisibleLine = getLastVisibleLine();
@@ -842,8 +1014,6 @@ public class DisplayManager
 				}
 			}
 
-			offsetMgr.addAnchor(this);
-
 			if(Debug.SCROLL_DEBUG)
 			{
 				Log.log(Log.DEBUG,this,"physDown() end: "
@@ -872,8 +1042,6 @@ public class DisplayManager
 			}
 
 			skew = 0;
-
-			offsetMgr.removeAnchor(this);
 
 			if(!isLineVisible(physicalLine))
 			{
@@ -904,8 +1072,6 @@ public class DisplayManager
 				}
 			}
 
-			offsetMgr.addAnchor(this);
-
 			if(Debug.SCROLL_DEBUG)
 			{
 				Log.log(Log.DEBUG,this,"physUp() end: "
@@ -931,8 +1097,6 @@ public class DisplayManager
 				Log.log(Log.DEBUG,this,"scrollDown()");
 
 			ensurePhysicalLineIsVisible();
-
-			offsetMgr.removeAnchor(this);
 
 			amount += skew;
 
@@ -960,8 +1124,6 @@ public class DisplayManager
 					}
 				}
 			}
-
-			offsetMgr.addAnchor(this);
 		} //}}}
 
 		//{{{ scrollUp() method
@@ -972,8 +1134,6 @@ public class DisplayManager
 				Log.log(Log.DEBUG,this,"scrollUp()");
 
 			ensurePhysicalLineIsVisible();
-
-			offsetMgr.removeAnchor(this);
 
 			if(amount <= skew)
 			{
@@ -1002,8 +1162,6 @@ public class DisplayManager
 						amount -= screenLines;
 				}
 			}
-
-			offsetMgr.addAnchor(this);
 		} //}}}
 
 		//{{{ ensurePhysicalLineIsVisible() method
@@ -1020,6 +1178,97 @@ public class DisplayManager
 				{
 					physicalLine = getNextVisibleLine(physicalLine);
 					scrollLine += getScreenLineCount(physicalLine);
+				}
+			}
+		} //}}}
+	} //}}}
+
+	//{{{ BufferChangeHandler class
+	class BufferChangeHandler extends BufferChangeAdapter
+	{
+		//{{{ foldHandlerChanged() method
+		public void foldHandlerChanged(Buffer buffer)
+		{
+			System.err.println("f here in event: " + buffer);
+			firstLine.reset();
+			scrollLineCount.reset();
+			int collapseFolds = buffer.getIntegerProperty(
+				"collapseFolds",0);
+			if(collapseFolds == 0)
+			{
+				expandAllFolds();
+			}
+			else
+			{
+				expandFolds(collapseFolds);
+			}
+		} //}}}
+
+		//{{{ wrapModeChanged() method
+		public void wrapModeChanged(Buffer buffer)
+		{
+			System.err.println("w here in event: " + buffer);
+			firstLine.reset();
+			scrollLineCount.reset();
+		} //}}}
+
+		//{{{ contentInserted() method
+		public void contentInserted(Buffer buffer, int startLine,
+			int offset, int numLines, int length)
+		{
+			if(numLines != 0 && buffer.isLoaded())
+			{
+				contentInserted(firstLine,startLine,numLines);
+				contentInserted(scrollLineCount,startLine,numLines);
+			}
+		} //}}}
+
+		//{{{ preContentRemoved() method
+		public void preContentRemoved(Buffer buffer, int startLine,
+			int offset, int numLines, int length)
+		{
+			if(numLines != 0 && buffer.isLoaded())
+			{
+				preContentRemoved(firstLine,startLine,numLines);
+				preContentRemoved(scrollLineCount,startLine,numLines);
+			}
+		} //}}}
+
+		//{{{ contentInserted() method
+		private void contentInserted(Anchor anchor, int startLine,
+			int numLines)
+		{
+			if(anchor.physicalLine >= startLine)
+			{
+				if(anchor.physicalLine != startLine)
+					anchor.physicalLine += numLines;
+				anchor.callChanged = true;
+			}
+		} //}}}
+
+		//{{{ preContentRemoved() method
+		public void preContentRemoved(Anchor anchor, int startLine,
+			int numLines)
+		{
+			if(anchor.physicalLine >= startLine)
+			{
+				if(anchor.physicalLine == startLine)
+					anchor.callChanged = true;
+				else
+				{
+					int end = Math.min(startLine + numLines,
+						anchor.physicalLine);
+					for(int i = startLine; i < end; i++)
+					{
+						if(isLineVisible(i))
+						{
+							anchor.scrollLine -=
+								offsetMgr
+								.getScreenLineCount(i);
+						}
+						anchor.physicalLine--;
+						anchor.callChanged = true;
+					}
 				}
 			}
 		} //}}}

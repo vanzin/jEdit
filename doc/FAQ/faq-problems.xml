@@ -276,7 +276,7 @@
         </question>
 		<answer>
 			<para>
-				The plugin is missing a <methodname>requestDefautlFocus()</methodname> method.
+				The plugin is missing a <methodname>requestDefaultFocus()</methodname> method.
 				Plugin updates will be available from time to time, or you can email the author
 				of the plugin to let them know of the problem.
 			</para>

@@ -301,17 +301,6 @@ public class Buffer
 				if(!getFlag(TEMPORARY))
 					finishLoading();
 
-				/* Ultra-obscure: we have to fire this event
-				 * after the buffer might have been collapsed
-				 * by finishLoading(), since finishLoading(),
-				 * unlike "official" fold APIs, does not notify
-				 * the text area to invalidate its cached
-				 * virtual to physical information. Note that
-				 * the text area's contentInserted() handler
-				 * updates 'lastPhysLine' even if the LOADING
-				 * flag is set. */
-				fireContentInserted(0,0,getLineCount(),getLength() - 1);
-
 				setFlag(LOADING,false);
 
 				// if reloading a file, clear dirty flag
@@ -1508,7 +1497,7 @@ public class Buffer
 		{
 			offsetMgr.invalidateScreenLineCounts();
 			if(isLoaded())
-				offsetMgr.resetAnchors();
+				fireWrapModeChanged();
 		}
 		this.wrap = newWrap;
 	} //}}}
@@ -3014,11 +3003,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		offsetMgr.setFirstInvalidFoldLevel(0);
 
-		int collapseFolds = getIntegerProperty("collapseFolds",0);
-		offsetMgr.expandFolds(collapseFolds);
-
-		if(isLoaded())
-			offsetMgr.resetAnchors();
+		fireFoldHandlerChanged();
 	} //}}}
 
 	//}}}
@@ -3720,18 +3705,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 			// don't do this on initial fold handler creation
 			offsetMgr.setFirstInvalidFoldLevel(0);
 
-			int collapseFolds = getIntegerProperty("collapseFolds",0);
-			if(collapseFolds == 0)
-			{
-				// all visible by default after load!
-			}
-			else
-			{
-				offsetMgr.expandFolds(collapseFolds);
-			}
+			fireFoldHandlerChanged();
 		}
-
-		offsetMgr.resetAnchors();
 
 		// Create marker positions
 		for(int i = 0; i < markers.size(); i++)
@@ -4081,6 +4056,42 @@ loop:		for(int i = 0; i < seg.count; i++)
 			{
 				((BufferChangeListener)bufferListeners.elementAt(i))
 					.transactionComplete(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireFoldHandlerChanged() method
+	private void fireFoldHandlerChanged()
+	{
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.foldHandlerChanged(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event:");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireWrapModeChanged() method
+	private void fireWrapModeChanged()
+	{
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			try
+			{
+				((BufferChangeListener)bufferListeners.elementAt(i))
+					.wrapModeChanged(this);
 			}
 			catch(Throwable t)
 			{

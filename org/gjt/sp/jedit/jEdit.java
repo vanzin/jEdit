@@ -1686,6 +1686,7 @@ public class jEdit
 
 		removeBufferFromList(buffer);
 		buffer.close();
+		DisplayManager.bufferClosed(buffer);
 
 		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSED));
 
@@ -1759,6 +1760,7 @@ public class jEdit
 			}
 
 			buffer.close();
+			DisplayManager.bufferClosed(buffer);
 			if(!isExiting)
 			{
 				EditBus.send(new BufferUpdate(buffer,view,
@@ -3413,6 +3415,7 @@ loop:		for(int i = 0; i < list.length; i++)
 		{
 			Buffer oldBuffersFirst = buffersFirst;
 			buffersFirst = buffersLast = buffer;
+			DisplayManager.bufferClosed(oldBuffersFirst);
 			EditBus.send(new BufferUpdate(oldBuffersFirst,null,
 				BufferUpdate.CLOSED));
 			return;

@@ -137,7 +137,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void dispose()
 	{
-		displayManager.dispose();
+		DisplayManager.textAreaDisposed(this);
 	} //}}}
 
 	//{{{ Getters and setters
@@ -273,7 +273,6 @@ public class JEditTextArea extends JComponent
 				caretLine = caret = caretScreenLine = 0;
 				bracketLine = bracketPosition = -1;
 
-				displayManager.dispose();
 				this.buffer.removeBufferChangeListener(bufferHandler);
 			}
 			this.buffer = buffer;
@@ -283,20 +282,17 @@ public class JEditTextArea extends JComponent
 
 			chunkCache.setBuffer(buffer);
 			propertiesChanged();
-			displayManager = new DisplayManager(buffer,this);
-			// we don't do this from the DisplayManager constructor
-			// because reset() calls updateScrollBars() which checks
-			// displayManager.softWrap which would check the wrong
-			// DisplayManager instance since the constructor is
-			// executed before the assignment statement!
-			if(buffer.isLoaded())
+
+			if(displayManager != null)
 			{
-				displayManager.firstLine.reset();
-				displayManager.scrollLineCount.reset();
+				DisplayManager.releaseDisplayManager(
+					displayManager);
 			}
 
-			if(buffer.isLoaded())
-				recalculateLastPhysicalLine();
+			displayManager = DisplayManager.getDisplayManager(
+				buffer,this);
+
+			displayManager.init();
 
 			maxHorizontalScrollWidth = 0;
 
@@ -6323,8 +6319,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				dragStartOffset+1,noWordSep,joinNonWordChars);
 
 			int lineStart = getLineStartOffset(dragStartLine);
-			addToSelection(new Selection.Range(lineStart + wordStart,
-				lineStart + wordEnd));
+			Selection sel = new Selection.Range(
+				lineStart + wordStart,
+				lineStart + wordEnd);
+			if(isMultipleSelectionEnabled())
+				addToSelection(sel);
+			else
+				setSelection(sel);
 
 			if(quickCopyDrag)
 				quickCopyDrag = false;
@@ -6343,14 +6344,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(dragStartLine == buffer.getLineCount() - 1)
 				newCaret--;
 
-			addToSelection(new Selection.Range(
+			Selection sel = new Selection.Range(
 				getLineStartOffset(dragStartLine),
-				newCaret));
+				newCaret);
+			if(isMultipleSelectionEnabled())
+				addToSelection(sel);
+			else
+				setSelection(sel);
 
 			if(quickCopyDrag)
 				quickCopyDrag = false;
 
-			moveCaretPosition(newCaret);
+			moveCaretPosition(newCaret,false);
 		} //}}}
 
 		//{{{ mouseDragged() method
