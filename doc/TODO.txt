@@ -3,6 +3,16 @@
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+[error] main: java.lang.NullPointerException
+[error] main:  at org.gjt.sp.jedit.PluginJAR.setPluginCache(PluginJAR.java:721)
+[error] main:  at org.gjt.sp.jedit.PluginJAR.init(PluginJAR.java:767)
+[error] main:  at org.gjt.sp.jedit.jEdit.addPluginJAR(jEdit.java:1036)
+[error] main:  at org.gjt.sp.jedit.jEdit.addPluginJARsFromDirectory(jEdit.java:1083)
+[error] main:  at org.gjt.sp.jedit.jEdit.initPlugins(jEdit.java:3090)
+[error] main:  at org.gjt.sp.jedit.jEdit.main(jEdit.java:396)
+
+wrapped dock buttons broken
+
 4.2 plugin guide:
   - deferred loading mention.
   
