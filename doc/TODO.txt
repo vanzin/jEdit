@@ -7,15 +7,15 @@ and quirks that I need to fix eventually.
 
 - changing edit mode is broken, but only in untitled files it seems
 - fix print spacing problem
-- minor quicknotepad changes -- update docs
-- add documentation for pre1 features
 - debug rectangular selection
-
-+ later:
-
 - fix fsb infinite requests problem, in fact fsb tree expansion state
   preservation seems to be broken
 - change indentPrevLine to indentOneLine and indentSubsequentLines
+
++ later:
+
+- minor quicknotepad changes -- update docs
+- add documentation for pre1 features
 - rect select: support shift-left/right
 - scroll horizontally when dragging into virtual space
 - support start in virtual space too
