@@ -1,0 +1,26 @@
+$Id$
+
+Changes made to QuickNotepad plugin for jEdit 4.2:
+
+(1) The following property was added:
+
+  plugin.QuickNotepadPlugin.activate=defer
+
+This informs jEdit the plugin is using the new API, and that it should only be
+loaded the first time it is accessed by the user.
+
+(2) The createMenuItems() method of the plugin core class has been removed. The
+plugin menu is now specified with the following property:
+
+  plugin.QuickNotepadPlugin.menu=... list of menu items ...
+
+(3) The createOptionPanes() method of the plugin core class has been removed. The plugin option pane is now specified with the following property:
+
+  plugin.QuickNotepadPlugin.option-pane=quicknotepad
+
+(4) The QuickNotepad class (the dockable window) implements the new DefaultFocusComponent interface, and the following method was added to this class:
+
+  public void focusOnDefaultComponent()
+  {
+    textArea.requestFocus();
+  }

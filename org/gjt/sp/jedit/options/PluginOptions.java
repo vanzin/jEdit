@@ -71,23 +71,50 @@ public class PluginOptions extends OptionsDialog
 		for(int i = 0; i < plugins.length; i++)
 		{
 			EditPlugin ep = plugins[i];
-			try
+			String className = ep.getClassName();
+			if(jEdit.getProperty("plugin." + className + ".activate") == null)
 			{
-				ep.createOptionPanes(this);
+				// Old API
+				try
+				{
+					ep.createOptionPanes(this);
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR, ep,
+						"Error creating option pane");
+					Log.log(Log.ERROR, ep, t);
+				}
 			}
-			catch(Throwable t)
+			else
 			{
-				Log.log(Log.ERROR, ep,
-					"Error creating option pane");
-				Log.log(Log.ERROR, ep, t);
+				String optionPane = jEdit.getProperty(
+					"plugin." + className + ".option-pane");
+				if(optionPane != null)
+					pluginsGroup.addOptionPane(optionPane);
+				else
+				{
+					String options = jEdit.getProperty(
+						"plugin." + className
+						+ ".option-group");
+					if(options != null)
+					{
+						pluginsGroup.addOptionGroup(
+							new OptionGroup(
+							jEdit.getProperty("plugin."
+							+ className + ".name"),
+							options)
+						);
+					}
+				}
 			}
 		}
 
 		// only add the Plugins branch if there are OptionPanes
 		if (pluginsGroup.getMemberCount() == 0)
-			addOptionPane(new NoPluginsPane(),pluginsGroup);
+			pluginsGroup.addOptionPane(new NoPluginsPane());
 
-		addOptionGroup(pluginsGroup,rootGroup);
+		rootGroup.addOptionGroup(pluginsGroup);
 
 		return paneTreeModel;
 	} //}}}

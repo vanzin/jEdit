@@ -232,9 +232,6 @@ class VFSFileNameField extends HistoryTextField
 	private void goToParent()
 	{
 		String name = MiscUtilities.getFileName(browser.getDirectory());
-		if(name.endsWith("/") || name.endsWith(File.separator))
-			name = name.substring(0,
-			name.length() - 1);
 		String parent = MiscUtilities.getParentOfPath(
 			browser.getDirectory());
 		browser.setDirectory(parent);

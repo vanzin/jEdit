@@ -1,13 +1,29 @@
 # Properties file for QuickNotepad plugin
 # $Id$
 
-# general plugin information
+# jEdit only needs to load the plugin the first time the user accesses it
+# the presence of this property also tells jEdit the plugin is using the new API
+plugin.QuickNotepadPlugin.activate=defer
+
+# These two properties are required for all plugins
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
+
 # version number == jEdit version number
-plugin.QuickNotepadPlugin.version=4.1
+plugin.QuickNotepadPlugin.version=4.2
+
+# online help
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
-plugin.QuickNotepadPlugin.depend.0=jedit 04.01.01.00
+
+# we only have one dependency, jEdit 4.2, since we use the new plugin API
+plugin.QuickNotepadPlugin.depend.0=jedit 04.02.01.00
+
+# plugin menu
+plugin.QuickNotepadPlugin.menu=quicknotepad \
+	- \
+	quicknotepad.choose-file \
+	quicknotepad.save-file \
+	quicknotepad.copy-to-buffer
 
 # action labels for actions supplied by dockables.xml
 quicknotepad.label=QuickNotepad
@@ -17,18 +33,11 @@ quicknotepad.choose-file.label=Choose notepad file
 quicknotepad.save-file.label=Save notepad file
 quicknotepad.copy-to-buffer.label=Copy notepad to buffer
 
-# application menu items
-quicknotepad.menu.label=QuickNotepad
-quicknotepad.menu=quicknotepad - quicknotepad.choose-file \
-	quicknotepad.save-file quicknotepad.copy-to-buffer
+# plugin option pane
+plugin.QuickNotepadPlugin.option-pane=quicknotepad
 
-# window title
-quicknotepad.title=QuickNotepad
-
-# plugin toolbar buttons
-quicknotepad.choose-file.icon=Open.png
-quicknotepad.save-file.icon=Save.png
-quicknotepad.copy-to-buffer.icon=CopyToBuffer.png
+# Option pane activation BeanShell snippet
+options.quicknotepad.code=new QuickNotepadOptionPane();
 
 # Option pane labels
 options.quicknotepad.label=QuickNotepad
@@ -38,7 +47,15 @@ options.quicknotepad.choose-file.title=Choose a notepad file
 options.quicknotepad.choose-font=Font:
 options.quicknotepad.show-filepath.title=Display notepad file path
 
-# Initial default settings
+# window title
+quicknotepad.title=QuickNotepad
+
+# window toolbar buttons
+quicknotepad.choose-file.icon=Open.png
+quicknotepad.save-file.icon=Save.png
+quicknotepad.copy-to-buffer.icon=CopyToBuffer.png
+
+# default settings
 options.quicknotepad.show-filepath=true
 options.quicknotepad.font=Monospaced
 options.quicknotepad.fontstyle=0

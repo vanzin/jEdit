@@ -1006,13 +1006,24 @@ public class jEdit
 	 * jEdit 4.2 plugin API.
 	 *
 	 * @param jar The <code>PluginJAR</code> instance
+	 * @param exit Set to true if jEdit is exiting; enables some
+	 * shortcuts so the editor can close faster.
 	 * @since jEdit 4.2pre1
 	 */
-	public static void removePluginJAR(PluginJAR jar)
+	public static void removePluginJAR(PluginJAR jar, boolean exit)
 	{
-		jar.uninit();
-		jar.getClassLoader().deactivate();
-		jars.removeElement(jar);
+		if(exit)
+		{
+			EditPlugin plugin = jar.getPlugin();
+			if(plugin != null)
+				plugin.stop();
+		}
+		else
+		{
+			jar.uninit();
+			jar.getClassLoader().deactivate();
+			jars.removeElement(jar);
+		}
 	} //}}}
 
 	//}}}
@@ -1847,22 +1858,31 @@ public class jEdit
 	 */
 	public static void checkBufferStatus(View view)
 	{
+		// still need to call the status check even if the option is off,
+		// so that the write protection is updated if it changes on disk
+		boolean showDialogSetting = getBooleanProperty("view.checkModStatus");
+
 		Buffer[] buffers = jEdit.getBuffers();
 		int[] states = new int[buffers.length];
 		boolean show = false;
 		for(int i = 0; i < buffers.length; i++)
 		{
-			states[i] = buffers[i].checkFileStatus(view);
-			if(states[i] != Buffer.FILE_NOT_CHANGED)
+			Buffer buffer = buffers[i];
+			states[i] = buffer.checkFileStatus(view);
+
+			switch(states[i])
+			{
+			case Buffer.FILE_CHANGED:
+				if(showDialogSetting && !buffer.isDirty())
+					buffer.load(view,true);
+				/* fall through */
+			case Buffer.FILE_DELETED:
 				show = true;
+				break;
+			}
 		}
 
-		// still need to call the status check even if the option is off,
-		// so that the write protection is updated if it changes on disk
-		if(!getBooleanProperty("view.checkModStatus"))
-			return;
-
-		if(show)
+		if(show && showDialogSetting)
 			new FilesChangedDialog(view,states);
 	} //}}}
 
@@ -2283,7 +2303,7 @@ public class jEdit
 			PluginJAR[] plugins = getPluginJARs();
 			for(int i = 0; i < plugins.length; i++)
 			{
-				removePluginJAR(plugins[i]);
+				removePluginJAR(plugins[i],true);
 			}
 
 			// Send EditorExiting

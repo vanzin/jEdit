@@ -21,13 +21,7 @@
  * $Id$
  */
 
-import java.util.Vector;
-import java.awt.*;
-import java.awt.event.*;
-import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.jedit.gui.*;
-
+import org.gjt.sp.jedit.EditPlugin;
 
 /**
  * The QuickNotepad plugin
@@ -37,21 +31,5 @@ import org.gjt.sp.jedit.gui.*;
 public class QuickNotepadPlugin extends EditPlugin
 {
 	public static final String NAME = "quicknotepad";
-	public static final String MENU = "quicknotepad.menu";
-	public static final String PROPERTY_PREFIX = "plugin.QuickNotepadPlugin.";
 	public static final String OPTION_PREFIX = "options.quicknotepad.";
-
-
-	public void createMenuItems(Vector menuItems)
-	{
-		menuItems.addElement(GUIUtilities.loadMenu(MENU));
-	}
-
-
-	public void createOptionPanes(OptionsDialog od)
-	{
-		od.addOptionPane(new QuickNotepadOptionPane());
-	}
-
 }
-

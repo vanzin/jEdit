@@ -697,9 +697,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 				: "*" + ext);
 		}
 
-		if(path.endsWith("/") || path.endsWith(File.separator))
-			path = path.substring(0,path.length() - 1);
-
 		SearchAndReplace.setSearchFileSet(new DirectoryListSet(
 			path,filter,true));
 		new SearchDialog(view,null,SearchDialog.DIRECTORY);
@@ -783,13 +780,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 					{
 						VFS.DirectoryEntry file = list[i];
 						if(file.hidden && !showHiddenFiles)
-						{
-							invisible++;
-							continue;
-						}
-
-						if(file.type == VFS.DirectoryEntry.FILE
-							&& mode == CHOOSE_DIRECTORY_DIALOG)
 						{
 							invisible++;
 							continue;
