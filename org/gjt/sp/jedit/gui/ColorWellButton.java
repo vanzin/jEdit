@@ -176,7 +176,12 @@ public class ColorWellButton extends JButton
 
 		private void init()
 		{
-			chooser = new JColorChooser(getSelectedColor());
+			Color c = getSelectedColor();
+			if(c == null)
+				chooser = new JColorChooser();
+			else
+				chooser = new JColorChooser(c);
+
 			getContentPane().add(BorderLayout.CENTER, chooser);
 
 			Box buttons = new Box(BoxLayout.X_AXIS);
