@@ -29,6 +29,16 @@ contributing to this release.
 - HyperSearch now respects rectangular selections. 'Replace All' already
   supported rectangular selections.
 
+- Added an option to the 'Text Area' pane to implement "standard"
+  previous/next word behavior, like that in a lot of other programs
+  (next word moves caret to start of next word, instead of end of
+  current word; previous word moves caret to end of previous word,
+  instead of start of current word).
+
+  You might remember I implemented this behavior for a little while in
+  the 4.0 pre-releases, but now it's back as a configurable option.
+  (Alexander Maryanovsky)
+
 - Added a few extra key bindings for Windows users:
   S+DELETE bound to cut
   C+INSERT bound to copy

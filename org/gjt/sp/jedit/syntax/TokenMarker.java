@@ -277,8 +277,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		if(context.parent != null)
 		{
 			rule = context.parent.inRule;
-			if(rule != null && (context.parent.inRule.action
+			if((rule != null && (context.parent.inRule.action
 				& NO_LINE_BREAK) == NO_LINE_BREAK)
+				|| terminated)
 			{
 				context = context.parent;
 				keywords = context.rules.getKeywords();

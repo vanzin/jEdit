@@ -94,6 +94,11 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			+ ".homeEnd"));
 		homeEnd.setSelected(jEdit.getBooleanProperty("view.homeEnd"));
 		addComponent(homeEnd);
+		
+		/* Standard go to next/previous word behaviour */
+		stdNextPrevWord = new JCheckBox(jEdit.getProperty("options.textarea.stdNextPrevWord"));
+		stdNextPrevWord.setSelected(jEdit.getBooleanProperty("view.stdNextPrevWord"));
+		addComponent(stdNextPrevWord);
 
 		/* Middle mouse button click pastes % register */
 		middleMousePaste = new JCheckBox(jEdit.getProperty("options.textarea"
@@ -140,6 +145,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
 		jEdit.setBooleanProperty("view.homeEnd",homeEnd.isSelected());
+		jEdit.setBooleanProperty("view.stdNextPrevWord",stdNextPrevWord.isSelected());
 		jEdit.setBooleanProperty("view.middleMousePaste",
 			middleMousePaste.isSelected());
 		jEdit.setBooleanProperty("view.antiAlias",antiAlias.isSelected());
@@ -157,6 +163,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox blockCaret;
 	private JCheckBox electricBorders;
 	private JCheckBox homeEnd;
+	private JCheckBox stdNextPrevWord;
 	private JCheckBox middleMousePaste;
 	private JCheckBox antiAlias;
 	private JCheckBox fracFontMetrics;

@@ -1,5 +1,6 @@
 TO DO
 
+- add some tips of the day about pre1 features
 - check printspec & -nosettings
 - soft wrap
 - COBOL, ASP modes!

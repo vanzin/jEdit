@@ -2496,6 +2496,8 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ goToNextWord() method
 	/**
 	 * Moves the caret to the start of the next word.
+	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
+	 * this method moves the caret to the end of the current word instead.
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToNextWord(boolean select)
@@ -2519,7 +2521,15 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,
-				noWordSep) + lineStart;
+				noWordSep);
+			if(jEdit.getBooleanProperty("view.stdNextPrevWord"))
+			{
+				while((newCaret < lineText.length()) && Character.isWhitespace(lineText.charAt(newCaret)))
+					newCaret = TextUtilities.findWordEnd(lineText,newCaret + 1,
+						noWordSep);
+			}
+			
+			newCaret += lineStart;
 		}
 
 		if(select)
@@ -2788,6 +2798,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToPrevWord() method
 	/**
 	 * Moves the caret to the start of the previous word.
+	 * Note that if the "view.stdNextPrevWord" boolean propery is false,
+	 * this method moves the caret to the start of the current word instead.
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevWord(boolean select)
@@ -2819,7 +2831,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,
-				noWordSep) + lineStart;
+				noWordSep);
+			if(jEdit.getBooleanProperty("view.stdNextPrevWord"))
+			{
+				while((newCaret > 0) && Character.isWhitespace(lineText.charAt(newCaret)))
+					newCaret = TextUtilities.findWordStart(lineText,newCaret - 1,
+						noWordSep);
+			}
+			
+			newCaret += lineStart;
 		}
 
 		if(select)
