@@ -510,24 +510,40 @@ class InstallPanel extends JPanel
 			}
 
 			int length = pluginModel.getRowCount();
-			LinkedList selected = new LinkedList();
+			int instcount = 0;
 			for (int i = 0; i < length; i++)
 			{
 				Entry entry = pluginModel.getEntry(i);
 				if (entry.install)
 				{
 					entry.plugin.install(roster,installDirectory,downloadSource);
-					selected.add(entry.plugin);
+					if (updates)
+						entry.plugin.getCompatibleBranch().satisfyDependencies(
+						roster,installDirectory,downloadSource);
+					instcount++;
 				}
 			}
 
 			if(roster.isEmpty())
 				return;
 
-			new PluginManagerProgress(window,roster);
-
-			roster.performOperationsInAWTThread(window);
-			pluginModel.update();
+			
+			boolean cancel = false;
+			if (updates && roster.getOperationCount() > instcount)
+				if (GUIUtilities.confirm(window,
+					"install-plugins.depend",
+					null,
+					JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE) == JOptionPane.CANCEL_OPTION)
+					cancel = true;
+			
+			if (!cancel)
+			{
+				new PluginManagerProgress(window,roster);
+	
+				roster.performOperationsInAWTThread(window);
+				pluginModel.update();
+			}
 		}
 
 		public void tableChanged(TableModelEvent e)

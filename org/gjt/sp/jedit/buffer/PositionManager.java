@@ -94,6 +94,25 @@ public class PositionManager
 	{
 		PosBottomHalf r, x = bh.parent;
 
+		bh.defunct = true;
+
+		if(bh.parent != null)
+		{
+			if(bh.parent.defunct)
+			{
+				System.err.println("defunct: " +bh.parent);
+				return;
+			}
+			if(bh.parent.parent != null)
+			{
+				if(bh.parent.parent.defunct)
+				{
+					System.err.println("defunct: " +bh.parent.parent);
+					return;
+				}
+			}
+		}
+
 		// if one of the siblings is null, make &this=non null sibling
 		if(bh.left == null)
 		{
@@ -315,6 +334,7 @@ public class PositionManager
 		PosBottomHalf parent;
 		PosBottomHalf left, right;
 		boolean red;
+		boolean defunct;
 
 		//{{{ PosBottomHalf constructor
 		PosBottomHalf(int offset)

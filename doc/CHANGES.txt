@@ -291,6 +291,8 @@ this release.
 
 - Glob patterns containing + caused exceptions to be thrown.
 
+- "Select Line Range" now respects the multiple selection setting.
+
 }}}
 {{{ API Changes
 

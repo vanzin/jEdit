@@ -167,9 +167,15 @@ public abstract class OperatingSystem
 				out.write("#!/bin/sh\n");
 				out.write("# Java heap size, in megabytes\n");
 				out.write("JAVA_HEAP_SIZE=32\n");
-				out.write("exec "
+				out.write("DEFAULT_JAVA_HOME=\""
 					+ System.getProperty("java.home")
-					+ "/bin/java -mx${JAVA_HEAP_SIZE}m ${"
+					+ "\"\n");
+				out.write("if [ \"$JAVA_HOME\" = \"\" ]; then\n");
+				out.write("JAVA_HOME=\"$DEFAULT_JAVA_HOME\"\n");
+				out.write("fi\n");
+
+				out.write("exec \"$JAVA_HOME"
+					+ "/bin/java\" -mx${JAVA_HEAP_SIZE}m ${"
 					+ name.toUpperCase() + "} ");
 
 				String jar = installDir + File.separator

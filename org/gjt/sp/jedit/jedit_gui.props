@@ -2070,6 +2070,11 @@ plugin-manager.dependency.message={0} is required by the following plugins:\n\
 	\n\
 	Deselecting {0} will also deselect the above plugins.
 
+install-plugins.depend.title=Dependency Required
+install-plugins.depend.message=One or more of the plugins you are installing\n\
+	require additional plugins. They will be automatically\n\
+	installed if you continue.
+	
 plugin-manager.status.loaded=Loaded
 plugin-manager.status.not-loaded=Not loaded
 plugin-manager.status.error=Error

@@ -117,14 +117,14 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.highlightColor")),
 			GridBagConstraints.VERTICAL);
 
-		/* Bracket highlight */
-		gutterBracketHighlightEnabled = new JCheckBox(jEdit.getProperty(
-			"options.gutter.bracketHighlight"));
-		gutterBracketHighlightEnabled.setSelected(jEdit.getBooleanProperty(
-			"view.gutter.bracketHighlight"));
-		addComponent(gutterBracketHighlightEnabled,
-			gutterBracketHighlight = new ColorWellButton(
-			jEdit.getColorProperty("view.gutter.bracketHighlightColor")),
+		/* Structure highlight */
+		gutterStructureHighlightEnabled = new JCheckBox(jEdit.getProperty(
+			"options.gutter.structureHighlight"));
+		gutterStructureHighlightEnabled.setSelected(jEdit.getBooleanProperty(
+			"view.gutter.structureHighlight"));
+		addComponent(gutterStructureHighlightEnabled,
+			gutterStructureHighlight = new ColorWellButton(
+			jEdit.getColorProperty("view.gutter.structureHighlightColor")),
 			GridBagConstraints.VERTICAL);
 
 		/* Marker highlight */
@@ -232,10 +232,10 @@ public class GutterOptionPane extends AbstractOptionPane
 		jEdit.setColorProperty("view.gutter.highlightColor",
 			gutterHighlightColor.getSelectedColor());
 
-		jEdit.setBooleanProperty("view.gutter.bracketHighlight",
-			gutterBracketHighlightEnabled.isSelected());
-		jEdit.setColorProperty("view.gutter.bracketHighlightColor",
-			gutterBracketHighlight.getSelectedColor());
+		jEdit.setBooleanProperty("view.gutter.structureHighlight",
+			gutterStructureHighlightEnabled.isSelected());
+		jEdit.setColorProperty("view.gutter.structureHighlightColor",
+			gutterStructureHighlight.getSelectedColor());
 		jEdit.setBooleanProperty("view.gutter.markerHighlight",
 			gutterMarkerHighlightEnabled.isSelected());
 		jEdit.setColorProperty("view.gutter.markerColor",
@@ -267,8 +267,8 @@ public class GutterOptionPane extends AbstractOptionPane
 	private JCheckBox lineNumbersEnabled;
 	private JCheckBox gutterCurrentLineHighlightEnabled;
 	private ColorWellButton gutterCurrentLineHighlight;
-	private JCheckBox gutterBracketHighlightEnabled;
-	private ColorWellButton gutterBracketHighlight;
+	private JCheckBox gutterStructureHighlightEnabled;
+	private ColorWellButton gutterStructureHighlight;
 	private JCheckBox gutterMarkerHighlightEnabled;
 	private ColorWellButton gutterMarkerHighlight;
 	private ColorWellButton gutterFoldMarkers;
