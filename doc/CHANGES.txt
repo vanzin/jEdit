@@ -39,6 +39,14 @@ JEDIT 4.2 VERSION HISTORY
   4.2pre5. The second option is similar to the behavior in jEdit 4.1,
   except all changed buffers are listed in one dialog box.
 
+- Edit->Complete Word now completes words in all visible buffers (ie,
+  showing in at least one edit pane). So as a poor man's CodeAid, you
+  can open a text file listing Java classes and methods in a zero-height
+  split.
+
+- The plugin manager now has better handling of loading and unloading
+  plugins with dependencies.
+
 }}}
 {{{ Bug Fixes
 
@@ -94,7 +102,8 @@ JEDIT 4.2 VERSION HISTORY
   an option pane fails.
 
 - The key event workaround would ignore a KEY_TYPED event with the AltGR
-  modifier that followed a KEY_PRESSED with a keyCode of \0.
+  modifier that followed a KEY_PRESSED with a keyCode of \0. This is
+  incorrect, and broke international key handling.
 
 - Changing the buffer sorting options, or having untitled files would
   would cause the wrong buffers to be restored on startup.

@@ -1118,19 +1118,33 @@ loop:		for(;;)
 	 */
 	public static String getLongestPrefix(String[] str, boolean ignoreCase)
 	{
+		return getLongestPrefix((Object[])str,ignoreCase);
+	} //}}}
+
+	//{{{ getLongestPrefix() method
+	/**
+	 * Returns the longest common prefix in the given set of strings.
+	 * @param str The strings (calls <code>toString()</code> on each object)
+	 * @param ignoreCase If true, case insensitive
+	 * @since jEdit 4.2pre6
+	 */
+	public static String getLongestPrefix(Object[] str, boolean ignoreCase)
+	{
 		if(str.length == 0)
 			return "";
 
 		int prefixLength = 0;
 
+		String first = str[0].toString();
+
 loop:		for(;;)
 		{
-			if(prefixLength >= str[0].length())
+			if(prefixLength >= first.length())
 				break loop;
-			char ch = str[0].charAt(prefixLength);
+			char ch = first.charAt(prefixLength);
 			for(int i = 1; i < str.length; i++)
 			{
-				String s = str[i];
+				String s = str[i].toString();
 				if(prefixLength >= s.length())
 					break loop;
 				if(!compareChars(s.charAt(prefixLength),ch,ignoreCase))
@@ -1139,7 +1153,7 @@ loop:		for(;;)
 			prefixLength++;
 		}
 
-		return str[0].substring(0,prefixLength);
+		return first.substring(0,prefixLength);
 	} //}}}
 
 	//}}}
