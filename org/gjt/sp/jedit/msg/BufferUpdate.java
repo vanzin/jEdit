@@ -81,11 +81,6 @@ public class BufferUpdate extends EBMessage
 	 * @since jEdit 4.1pre1
 	 */
 	public static final Object PROPERTIES_CHANGED = "PROPERTIES_CHANGED";
-
-	/**
-	 * @deprecated No longer sent. Listen for PROPERTIES_CHANGED instead.
-	 */
-	public static final Object MODE_CHANGED = "MODE_CHANGED";
 	//}}}
 
 	//{{{ BufferUpdate constructor

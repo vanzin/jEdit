@@ -110,6 +110,7 @@ public class KeyEventWorkaround
 					else if(!evt.isControlDown()
 						&& !evt.isAltDown())
 					{
+						/* This is bad for the numeric keypad */
 						lastKeyTime = 0L;
 
 						if(keyCode >= KeyEvent.VK_0

@@ -79,19 +79,6 @@ public class BufferHistory
 		return history;
 	} //}}}
 
-	//{{{ getBufferHistory() method
-	/**
-	 * @deprecated Call {@link #getHistory()} instead.
-	 */
-	public static Vector getBufferHistory()
-	{
-		Vector retVal = new Vector(history.size());
-		Iterator iter = history.iterator();
-		while(iter.hasNext())
-			retVal.add(iter.next());
-		return retVal;
-	} //}}}
-
 	//{{{ load() method
 	public static void load()
 	{
