@@ -13,6 +13,9 @@
 <MODE NAME="ada95"		FILE="ada95.xml"
 				FILE_NAME_GLOB="*.{ada,adb,ads}" />
 
+<MODE NAME="antlr"		FILE="antlr.xml"
+				FILE_NAME_GLOB="*.g" />
+
 <MODE NAME="apacheconf"		FILE="apacheconf.xml"
 				FILE_NAME_GLOB="*httpd.conf" />
 
@@ -88,6 +91,9 @@
 
 <MODE NAME="cvs-commit"		FILE="cvs-commit.xml"
 				FILE_NAME_GLOB="cvs*.tmp"/>
+
+<MODE NAME="d"			FILE="d.xml"
+				FILE_NAME_GLOB="*.d" />
 
 <MODE NAME="dsssl"		FILE="dsssl.xml"
 				FILE_NAME_GLOB="*.dsl" />

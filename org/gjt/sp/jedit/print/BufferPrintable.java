@@ -58,6 +58,20 @@ class BufferPrintable implements Printable
 			jEdit.getIntegerProperty("print.fontsize",10),color);
 		styles[Token.NULL] = new SyntaxStyle(textColor,null,font);
 
+		// Change any white text to black
+		for(int i = 0; i < styles.length; i++)
+		{
+			SyntaxStyle s = styles[i];
+			if(s.getForegroundColor().equals(Color.WHITE)
+				&& s.getBackgroundColor() == null)
+			{
+				styles[i] = new SyntaxStyle(
+					Color.BLACK,
+					styles[i].getBackgroundColor(),
+					styles[i].getFont());
+			}
+		}
+
 		lineList = new ArrayList();
 
 		tokenHandler = new DisplayTokenHandler();
