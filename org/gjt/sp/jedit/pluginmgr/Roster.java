@@ -49,9 +49,10 @@ class Roster
 	} //}}}
 
 	//{{{ addInstall() method
-	void addInstall(String url, String installDirectory, int size)
+	void addInstall(String installed, String url, String installDirectory,
+		int size)
 	{
-		addOperation(new Install(url,installDirectory,size));
+		addOperation(new Install(installed,url,installDirectory,size));
 	} //}}}
 
 	//{{{ getOperation() method
@@ -286,12 +287,14 @@ class Roster
 		int size;
 
 		//{{{ Install constructor
-		Install(String url, String installDirectory, int size)
+		Install(String installed, String url, String installDirectory,
+			int size)
 		{
 			// catch those hooligans passing null urls
 			if(url == null)
 				throw new NullPointerException();
 
+			this.installed = installed;
 			this.url = url;
 			this.installDirectory = installDirectory;
 			this.size = size;
@@ -314,8 +317,13 @@ class Roster
 		//{{{ runInAWTThread() method
 		public void runInAWTThread(Component comp)
 		{
+			// check if download failed
 			if(path == null)
 				return;
+
+			// if download OK, remove existing version
+			if(installed != null)
+				new Remove(installed).runInAWTThread(comp);
 
 			ZipFile zipFile = null;
 
@@ -391,6 +399,7 @@ class Roster
 		} //}}}
 
 		//{{{ Private members
+		private String installed;
 		private String url;
 		private String installDirectory;
 		private String path;

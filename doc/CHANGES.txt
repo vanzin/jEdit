@@ -35,6 +35,19 @@ Thanks to Ken Turner for contributing to this release.
   buffer).
 
 }}}
+{{{ Plugin Manager
+
+- The plugin manager now lists JARs that do not contain a plugin core
+  class.
+
+- A warning is shown when updating a plugin from a version using the old
+  API to a version using the new API, advising the user to restart
+  jEdit.
+
+- The plugin manager no longer removes an existing plugin if downloading
+  of an update failed.
+
+}}}
 {{{ Optimizations
 
 - Fixed a performance regression from pre2. Opening large files with

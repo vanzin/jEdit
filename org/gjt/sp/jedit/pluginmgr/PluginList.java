@@ -1,6 +1,9 @@
 /*
- * PluginList.java - Plugin list
- * Copyright (C) 2001 Slava Pestov
+ * PluginList.java - Plugin list downloaded from server
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2001, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
+//{{{ Imports
 import com.microstar.xml.*;
 import java.io.*;
 import java.net.URL;
@@ -27,6 +31,7 @@ import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.*;
+//}}}
 
 /**
  * Plugin list downloaded from server.
@@ -44,6 +49,7 @@ class PluginList
 	Hashtable pluginHash;
 	Vector pluginSets;
 
+	//{{{ PluginList constructor
 	PluginList() throws Exception
 	{
 		plugins = new Vector();
@@ -67,7 +73,7 @@ class PluginList
 				int b1 = in.read();
 				int b2 = in.read();
 				in.reset();
-	
+
 				if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
 					in = new GZIPInputStream(in);
 			}
@@ -78,20 +84,23 @@ class PluginList
 		{
 			in.close();
 		}
-	}
+	} //}}}
 
+	//{{{ addPlugin() method
 	void addPlugin(Plugin plugin)
 	{
 		plugin.checkIfInstalled();
 		plugins.addElement(plugin);
 		pluginHash.put(plugin.name,plugin);
-	}
+	} //}}}
 
+	//{{{ addPluginSet() method
 	void addPluginSet(PluginSet set)
 	{
 		pluginSets.addElement(set);
-	}
+	} //}}}
 
+	//{{{ finished() method
 	void finished()
 	{
 		// after the entire list is loaded, fill out plugin field
@@ -110,8 +119,9 @@ class PluginList
 				}
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ dump() method
 	void dump()
 	{
 		for(int i = 0; i < plugins.size(); i++)
@@ -119,8 +129,9 @@ class PluginList
 			System.err.println((Plugin)plugins.elementAt(i));
 			System.err.println();
 		}
-	}
+	} //}}}
 
+	//{{{ PluginSet class
 	static class PluginSet
 	{
 		String name;
@@ -131,8 +142,9 @@ class PluginList
 		{
 			return plugins.toString();
 		}
-	}
+	} //}}}
 
+	//{{{ Plugin class
 	static public class Plugin
 	{
 		String jar;
@@ -142,7 +154,7 @@ class PluginList
 		Vector branches = new Vector();
 		//String installed;
 		//String installedVersion;
-	
+
 		void checkIfInstalled()
 		{
 			/* // check if the plugin is already installed.
@@ -153,11 +165,11 @@ class PluginList
 				String path = jars[i].getPath();
 				if(!new File(path).exists())
 					continue;
-	
+
 				if(MiscUtilities.getFileName(path).equals(jar))
 				{
 					installed = path;
-	
+
 					EditPlugin plugin = jars[i].getPlugin();
 					if(plugin != null)
 					{
@@ -168,12 +180,12 @@ class PluginList
 					break;
 				}
 			}
-	
+
 			String[] notLoaded = jEdit.getNotLoadedPluginJARs();
 			for(int i = 0; i < notLoaded.length; i++)
 			{
 				String path = notLoaded[i];
-	
+
 				if(MiscUtilities.getFileName(path).equals(jar))
 				{
 					installed = path;
@@ -231,49 +243,53 @@ class PluginList
 				if(branch.canSatisfyDependencies())
 					return branch;
 			}
-	
+
 			return null;
 		}
-	
+
 		boolean canBeInstalled()
 		{
 			Branch branch = getCompatibleBranch();
 			return branch != null && !branch.obsolete
 				&& branch.canSatisfyDependencies();
 		}
-	
+
 		void install(Roster roster, String installDirectory, boolean downloadSource)
 		{
 			String installed = getInstalledPath();
-			if(installed != null)
-				roster.addRemove(installed);
-	
+
 			Branch branch = getCompatibleBranch();
 			if(branch.obsolete)
+			{
+				if(installed != null)
+					roster.addRemove(installed);
 				return;
-	
+			}
+
 			//branch.satisfyDependencies(roster,installDirectory,
 			//	downloadSource);
-	
+
 			if(installed != null)
 			{
 				installDirectory = MiscUtilities.getParentOfPath(
 					installed);
 			}
-	
+
 			roster.addInstall(
+				installed,
 				(downloadSource ? branch.downloadSource : branch.download),
 				installDirectory,
 				(downloadSource ? branch.downloadSourceSize : branch.downloadSize));
-	
+
 		}
-	
+
 		public String toString()
 		{
 			return name;
 		}
-	}
-	
+	} //}}}
+
+	//{{{ Branch class
 	static class Branch
 	{
 		String version;
@@ -312,8 +328,9 @@ class PluginList
 			return "[version=" + version + ",download=" + download
 				+ ",obsolete=" + obsolete + ",deps=" + deps + "]";
 		}
-	}
+	} //}}}
 
+	//{{{ Dependency class
 	static class Dependency
 	{
 		String what;
@@ -431,5 +448,5 @@ class PluginList
 			return "[what=" + what + ",from=" + from
 				+ ",to=" + to + ",plugin=" + plugin + "]";
 		}
-	}
+	} //}}}
 }

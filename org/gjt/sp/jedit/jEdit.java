@@ -2588,9 +2588,17 @@ public class jEdit
 		{
 			if(pluginErrors == null)
 				pluginErrors = new Vector();
-			pluginErrors.addElement(
+
+			ErrorListDialog.ErrorEntry newEntry =
 				new ErrorListDialog.ErrorEntry(
-				path,messageProp,args));
+				path,messageProp,args);
+
+			for(int i = 0; i < pluginErrors.size(); i++)
+			{
+				if(pluginErrors.get(i).equals(newEntry))
+					return;
+			}
+			pluginErrors.addElement(newEntry);
 
 			if(startupDone)
 			{

@@ -28,7 +28,10 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
@@ -63,11 +66,13 @@ public class ManagePanel extends JPanel
 		TableColumn col2 = table.getColumnModel().getColumn(1);
 		TableColumn col3 = table.getColumnModel().getColumn(2);
 		TableColumn col4 = table.getColumnModel().getColumn(3);
+		TableColumn col5 = table.getColumnModel().getColumn(4);
 
 		col1.setPreferredWidth(50);
-		col2.setPreferredWidth(300);
-		col3.setPreferredWidth(100);
+		col2.setPreferredWidth(200);
+		col3.setPreferredWidth(200);
 		col4.setPreferredWidth(100);
+		col5.setPreferredWidth(100);
 
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
@@ -110,82 +115,73 @@ public class ManagePanel extends JPanel
 		static final String LOADED = "loaded";
 		static final String NOT_LOADED = "not-loaded";
 
-		String clazz;
-		String name, version, author, status, docs;
-		Vector jars;
-		String path;
-		boolean broken;
+		String status;
+		String jar;
 
-		Entry(String path, String clazz, boolean broken)
+		String clazz, name, version, author, docs;
+		List jars;
+
+		Entry(String jar)
 		{
-			Entry.this.clazz = clazz;
-			Entry.this.broken = broken;
+			jars = new LinkedList();
+			this.jar = jar;
+			jars.add(this.jar);
+			status = NOT_LOADED;
+		}
 
-			this.path = path;
+		Entry(PluginJAR jar)
+		{
+			jars = new LinkedList();
+			this.jar = jar.getPath();
+			jars.add(this.jar);
 
-			jars = new Vector();
-			jars.addElement(path);
-
-			if(clazz == null)
+			EditPlugin plugin = jar.getPlugin();
+			if(plugin != null)
 			{
-				this.name = new File(path).getName();
-				this.status = NOT_LOADED;
-			}
-			else
-			{
-				Entry.this.name = jEdit.getProperty("plugin."+clazz+".name");
-				if(name == null)
-					name = clazz;
-
-				Entry.this.version = jEdit.getProperty("plugin."+clazz+".version");
-
-				Entry.this.author = jEdit.getProperty("plugin."+clazz+".author");
-
-				if (broken)
-					this.status = ERROR;
-				else
-					this.status = LOADED;
-
-				this.docs = jEdit.getProperty("plugin."+clazz+".docs");
+				status = (plugin instanceof EditPlugin.Broken
+					? ERROR : LOADED);
+				clazz = plugin.getClassName();
+				name = jEdit.getProperty("plugin."+clazz+".name");
+				version = jEdit.getProperty("plugin."+clazz+".version");
+				author = jEdit.getProperty("plugin."+clazz+".author");
+				docs = jEdit.getProperty("plugin."+clazz+".docs");
 
 				String jarsProp = jEdit.getProperty("plugin."+clazz+".jars");
 
 				if(jarsProp != null)
 				{
-					String directory = MiscUtilities.getParentOfPath(path);
+					String directory = MiscUtilities.getParentOfPath(this.jar);
 
 					StringTokenizer st = new StringTokenizer(jarsProp);
 					while(st.hasMoreElements())
 					{
-						jars.addElement(MiscUtilities.constructPath(
+						jars.add(MiscUtilities.constructPath(
 							directory,st.nextToken()));
 					}
 				}
 			}
-		}
-
-		public String toString()
-		{
-			return Entry.this.name;
+			else
+				status = LOADED;
 		}
 	} //}}}
 
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
-		private ArrayList entries;
-		private int sortType = EntryCompare.NAME;
+		private List entries;
+		private int sortType = EntryCompare.JAR;
 
 		//{{{ Constructor
 		public PluginTableModel()
 		{
+			entries = new ArrayList();
 			update();
 		} //}}}
 
 		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
-			return 4;
+			return 5;
 		} //}}}
 
 		//{{{ getColumnClass() method
@@ -194,10 +190,7 @@ public class ManagePanel extends JPanel
 			switch (columnIndex)
 			{
 				case 0: return Boolean.class;
-				case 1:
-				case 2:
-				case 3: return Object.class;
-				default: throw new Error("Column out of range");
+				default: return Object.class;
 			}
 		} //}}}
 
@@ -209,10 +202,12 @@ public class ManagePanel extends JPanel
 				case 0:
 					return jEdit.getProperty("manage-plugins.info.enabled");
 				case 1:
-					return jEdit.getProperty("manage-plugins.info.name");
+					return jEdit.getProperty("manage-plugins.info.jar");
 				case 2:
-					return jEdit.getProperty("manage-plugins.info.version");
+					return jEdit.getProperty("manage-plugins.info.name");
 				case 3:
+					return jEdit.getProperty("manage-plugins.info.version");
+				case 4:
 					return jEdit.getProperty("manage-plugins.info.status");
 				default:
 					throw new Error("Column out of range");
@@ -242,10 +237,12 @@ public class ManagePanel extends JPanel
 						!entry.status.equals(
 						Entry.NOT_LOADED));
 				case 1:
-					return entry.name;
+					return MiscUtilities.getFileName(entry.jar);
 				case 2:
-					return entry.version;
+					return entry.name;
 				case 3:
+					return entry.version;
+				case 4:
 					return jEdit.getProperty("plugin-manager.status."
 						+ entry.status);
 				default:
@@ -266,14 +263,14 @@ public class ManagePanel extends JPanel
 			Entry entry = (Entry)entries.get(rowIndex);
 			if(columnIndex == 0)
 			{
-				PluginJAR jar = jEdit.getPluginJAR(entry.path);
+				PluginJAR jar = jEdit.getPluginJAR(entry.jar);
 				if(jar == null)
 				{
 					if(!value.equals(Boolean.TRUE))
 						return;
 
-					jEdit.addPluginJAR(entry.path);
-					jar = jEdit.getPluginJAR(entry.path);
+					jEdit.addPluginJAR(entry.jar);
+					jar = jEdit.getPluginJAR(entry.jar);
 					if(jar != null)
 					{
 						jar.checkDependencies();
@@ -310,27 +307,16 @@ public class ManagePanel extends JPanel
 		//{{{ update() method
 		public void update()
 		{
-			EditPlugin[] plugins = jEdit.getPlugins();
-			entries = new ArrayList();
+			PluginJAR[] plugins = jEdit.getPluginJARs();
 			for(int i = 0; i < plugins.length; i++)
 			{
-				EditPlugin plugin = plugins[i];
-				String path = plugin.getPluginJAR().getPath();
-				if(!new File(path).exists())
-				{
-					continue;
-				}
-
-				if(plugin instanceof EditPlugin.Broken)
-					entries.add(new Entry(path,plugin.getClassName(),true));
-				else
-					entries.add(new Entry(path,plugin.getClassName(),false));
+				entries.add(new Entry(plugins[i]));
 			}
 
 			String[] newPlugins = jEdit.getNotLoadedPluginJARs();
 			for(int i = 0; i < newPlugins.length; i++)
 			{
-				entries.add(new Entry(newPlugins[i],null,true));
+				entries.add(new Entry(newPlugins[i]));
 			}
 
 			sort(sortType);
@@ -401,9 +387,10 @@ public class ManagePanel extends JPanel
 			for(int i = 0; i < selected.length; i++)
 			{
 				Entry entry = pluginModel.getEntry(selected[i]);
-				for(int j = 0; j < entry.jars.size(); j++)
+				Iterator iter = entry.jars.iterator();
+				while(iter.hasNext())
 				{
-					String jar = (String)entry.jars.elementAt(j);
+					String jar = (String)iter.next();
 					if(buf.length() != 0)
 						buf.append('\n');
 					buf.append(jar);
@@ -454,7 +441,8 @@ public class ManagePanel extends JPanel
 		{
 			if (table.getSelectedRowCount() == 1)
 			{
-				try {
+				try
+				{
 					Entry entry = pluginModel.getEntry(table.getSelectedRow());
 					String label = entry.clazz;
 					String docs = entry.docs;
@@ -471,7 +459,8 @@ public class ManagePanel extends JPanel
 							return;
 						}
 					}
-				} catch (Exception ex) {}
+				}
+				catch (Exception ex) {}
 			}
 			setEnabled(false);
 		}
@@ -480,7 +469,8 @@ public class ManagePanel extends JPanel
 	//{{{ EntryCompare class
 	static class EntryCompare implements Comparator
 	{
-		public static final int NAME = 0;
+		public static final int JAR = 0;
+		public static final int NAME = 1;
 		public static final int STATUS = 2;
 
 		private int type;
@@ -495,8 +485,17 @@ public class ManagePanel extends JPanel
 			Entry e1 = (Entry)o1;
 			Entry e2 = (Entry)o2;
 
-			if (type == NAME)
-				return e1.name.compareToIgnoreCase(e2.name);
+			if (type == JAR)
+				return e1.jar.compareToIgnoreCase(e2.jar);
+			else if (type == NAME)
+			{
+				if(e1.name == null && e2.name != null)
+					return 1;
+				else if(e1.name != null && e2.name == null)
+					return -1;
+				else
+					return e1.name.compareToIgnoreCase(e2.name);
+			}
 			else
 			{
 				int result;
@@ -515,9 +514,12 @@ public class ManagePanel extends JPanel
 			switch(table.getTableHeader().columnAtPoint(evt.getPoint()))
 			{
 				case 1:
-					pluginModel.setSortType(EntryCompare.NAME);
+					pluginModel.setSortType(EntryCompare.JAR);
 					break;
 				case 2:
+					pluginModel.setSortType(EntryCompare.NAME);
+					break;
+				case 3:
 					pluginModel.setSortType(EntryCompare.STATUS);
 					break;
 				default:
