@@ -2267,24 +2267,7 @@ loop:		for(int i = 0; i < text.length(); i++)
 
 		if(select)
 		{
-			int extraEndVirt;
-			Selection s = getSelectionAtOffset(caret);
-			if(s instanceof Selection.Rect)
-			{
-				int virtualWidth = buffer.getVirtualWidth(
-					s.endLine,s.end - getLineStartOffset(
-					s.endLine)) + ((Selection.Rect)s).extraEndVirt;
-				int newLine = getLineOfOffset(newCaret);
-				int[] totalVirtualWidth = new int[1];
-				int newOffset = buffer.getOffsetOfVirtualColumn(newLine,
-					virtualWidth,totalVirtualWidth);
-				if(newOffset == -1)
-					extraEndVirt = virtualWidth - totalVirtualWidth[0];
-				else
-					extraEndVirt = 0;
-			}
-			else
-				extraEndVirt = 0;
+			int extraEndVirt = getExtraEndVirt(caret,newCaret);
 			extendSelection(caret,newCaret,extraEndVirt);
 		}
 		else if(!multi)
@@ -2581,7 +2564,10 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		}
 
 		if(select)
-			extendSelection(caret,newCaret);
+		{
+			int extraEndVirt = getExtraEndVirt(caret,newCaret);
+			extendSelection(caret,newCaret,extraEndVirt);
+		}
 		else if(!multi)
 			selectNone();
 
@@ -5427,6 +5413,28 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 		invalidateScreenLineRange(oldScreenLastLine,screenLastLine);
+	} //}}}
+
+	//{{{ getExtraEndVirt() method
+	private void getExtraEndVirt(int caret, int newCaret)
+	{
+		Selection s = getSelectionAtOffset(caret);
+		if(s instanceof Selection.Rect)
+		{
+			int virtualWidth = buffer.getVirtualWidth(
+				s.endLine,s.end - getLineStartOffset(
+				s.endLine)) + ((Selection.Rect)s).extraEndVirt;
+			int newLine = getLineOfOffset(newCaret);
+			int[] totalVirtualWidth = new int[1];
+			int newOffset = buffer.getOffsetOfVirtualColumn(newLine,
+				virtualWidth,totalVirtualWidth);
+			if(newOffset == -1)
+				return virtualWidth - totalVirtualWidth[0];
+			else
+				return 0;
+		}
+		else
+			return 0;
 	} //}}}
 
 	//}}}
