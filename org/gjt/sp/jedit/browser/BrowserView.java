@@ -1,5 +1,8 @@
 /*
  * BrowserView.java
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit.browser;
 
+//{{{ Imports
 import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.*;
@@ -28,6 +32,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 /**
  * VFS browser tree view.
@@ -36,6 +41,7 @@ import org.gjt.sp.jedit.*;
  */
 public class BrowserView extends JPanel
 {
+	//{{{ BrowserView constructor
 	public BrowserView(VFSBrowser browser)
 	{
 		this.browser = browser;
@@ -66,8 +72,9 @@ public class BrowserView extends JPanel
 		add(BorderLayout.CENTER,scroller);
 
 		propertiesChanged();
-	}
+	} //}}}
 
+	//{{{ getSelectedFiles() method
 	public VFS.DirectoryEntry[] getSelectedFiles()
 	{
 		Vector selected = new Vector(tree.getSelectionCount());
@@ -87,13 +94,15 @@ public class BrowserView extends JPanel
 		VFS.DirectoryEntry[] retVal = new VFS.DirectoryEntry[selected.size()];
 		selected.copyInto(retVal);
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ selectNone() method
 	public void selectNone()
 	{
 		tree.setSelectionPaths(new TreePath[0]);
-	}
+	} //}}}
 
+	//{{{ directoryLoaded() method
 	public void directoryLoaded(Vector directory)
 	{
 		if(currentlyLoadingTreeNode == rootNode)
@@ -129,13 +138,15 @@ public class BrowserView extends JPanel
 
 		timer.stop();
 		typeSelectBuffer.setLength(0);
-	}
+	} //}}}
 
+	//{{{ updateFileView() method
 	public void updateFileView()
 	{
 		tree.repaint();
-	}
+	} //}}}
 
+	//{{{ reloadDirectory() method
 	public void reloadDirectory(String path)
 	{
 		// because this method is called for *every* VFS update,
@@ -160,20 +171,24 @@ public class BrowserView extends JPanel
 		}
 		else if(path.startsWith(browserDir))
 			reloadDirectory(rootNode,path);
-	}
+	} //}}}
 
+	//{{{ getDefaultFocusComponent() method
 	public Component getDefaultFocusComponent()
 	{
 		return tree;
-	}
+	} //}}}
 
+	//{{{ propertiesChanged() method
 	public void propertiesChanged()
 	{
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
 		renderer.propertiesChanged();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private VFSBrowser browser;
 
 	private JTree tree;
@@ -182,14 +197,17 @@ public class BrowserView extends JPanel
 	private DefaultMutableTreeNode rootNode;
 	private DefaultMutableTreeNode currentlyLoadingTreeNode;
 	private BrowserPopupMenu popup;
+	//}}}
 
-	// used for tool tips
+	//{{{ Used for tool tips
 	private boolean showIcons;
 	private FileCellRenderer renderer = new FileCellRenderer();
 
 	private StringBuffer typeSelectBuffer = new StringBuffer();
 	private Timer timer = new Timer(0,new ClearTypeSelect());
+	//}}}
 
+	//{{{ ClearTypeSelect
 	class ClearTypeSelect implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -197,8 +215,9 @@ public class BrowserView extends JPanel
 			typeSelectBuffer.setLength(0);
 			browser.filesSelected();
 		}
-	}
+	} //}}}
 
+	//{{{ reloadDirectory() method
 	private boolean reloadDirectory(DefaultMutableTreeNode node, String path)
 	{
 		// nodes which are not expanded need not be checked
@@ -242,8 +261,9 @@ public class BrowserView extends JPanel
 		}
 
 		return false;
-	}
+	} //}}}
 
+	//{{{ loadDirectoryNode() method
 	private void loadDirectoryNode(DefaultMutableTreeNode node, String path,
 		boolean showLoading)
 	{
@@ -259,22 +279,28 @@ public class BrowserView extends JPanel
 		model.reload(currentlyLoadingTreeNode);
 
 		browser.loadDirectory(path);
-	}
+	} //}}}
 
+	//{{{ showFilePopup() method
 	private void showFilePopup(VFS.DirectoryEntry file, Point point)
 	{
 		popup = new BrowserPopupMenu(browser,file);
 		GUIUtilities.showPopupMenu(popup,tree,point.x+1,point.y+1);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ BrowserJTree class
 	class BrowserJTree extends JTree
 	{
+		//{{{ BrowserJTree constructor
 		BrowserJTree(TreeModel model)
 		{
 			super(model);
 			ToolTipManager.sharedInstance().registerComponent(this);
-		}
+		} //}}}
 
+		//{{{ getToolTipText() method
 		public final String getToolTipText(MouseEvent evt)
 		{
 			TreePath path = getPathForLocation(evt.getX(), evt.getY());
@@ -285,8 +311,9 @@ public class BrowserView extends JPanel
 					return path.getLastPathComponent().toString();
 			}
 			return null;
-		}
+		} //}}}
 
+		//{{{ getToolTipLocation() method
 		public final Point getToolTipLocation(MouseEvent evt)
 		{
 			TreePath path = getPathForLocation(evt.getX(), evt.getY());
@@ -300,8 +327,9 @@ public class BrowserView extends JPanel
 				}
 			}
 			return null;
-		}
+		} //}}}
 
+		//{{{ processKeyEvent() method
 		protected void processKeyEvent(KeyEvent evt)
 		{
 			if(evt.getID() == KeyEvent.KEY_PRESSED)
@@ -354,28 +382,47 @@ public class BrowserView extends JPanel
 
 			if(!evt.isConsumed())
 				super.processKeyEvent(evt);
-		}
+		} //}}}
 
+		//{{{ processMouseEvent() method
 		protected void processMouseEvent(MouseEvent evt)
 		{
 			ToolTipManager ttm = ToolTipManager.sharedInstance();
 
 			switch(evt.getID())
 			{
+			//{{{ MOUSE_ENTERED...
 			case MouseEvent.MOUSE_ENTERED:
 				toolTipInitialDelay = ttm.getInitialDelay();
 				toolTipReshowDelay = ttm.getReshowDelay();
 				ttm.setInitialDelay(200);
 				ttm.setReshowDelay(0);
 				super.processMouseEvent(evt);
-				break;
+				break; //}}}
+			//{{{ MOUSE_EXITED...
 			case MouseEvent.MOUSE_EXITED:
 				ttm.setInitialDelay(toolTipInitialDelay);
 				ttm.setReshowDelay(toolTipReshowDelay);
 				super.processMouseEvent(evt);
-				break;
+				break; //}}}
+			//{{{ MOUSE_CLICKED...
 			case MouseEvent.MOUSE_CLICKED:
-				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
+				if((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0)
+				{
+					TreePath path = getPathForLocation(evt.getX(),evt.getY());
+					if(path == null)
+					{
+						super.processMouseEvent(evt);
+						break;
+					}
+
+					if(!isPathSelected(path))
+						setSelectionPath(path);
+
+					browser.filesActivated();
+					break;
+				}
+				else if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 				{
 					TreePath path = getPathForLocation(evt.getX(),evt.getY());
 					if(path == null)
@@ -405,7 +452,8 @@ public class BrowserView extends JPanel
 					; // do nothing
 
 				super.processMouseEvent(evt);
-				break;
+				break; //}}}
+			//{{{ MOUSE_PRESSED...
 			case MouseEvent.MOUSE_PRESSED:
 				if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0)
 				{
@@ -430,7 +478,7 @@ public class BrowserView extends JPanel
 					{
 						setSelectionPath(path);
 						browser.filesSelected();
-	
+
 						Object userObject = ((DefaultMutableTreeNode)path
 							.getLastPathComponent()).getUserObject();
 						if(userObject instanceof VFS.DirectoryEntry)
@@ -447,25 +495,27 @@ public class BrowserView extends JPanel
 				}
 
 				super.processMouseEvent(evt);
-				break;
+				break; //}}}
 			default:
 				super.processMouseEvent(evt);
 				break;
 			}
-		}
+		} //}}}
 
-		// private members
+		//{{{ Private members
 		private int toolTipInitialDelay = -1;
 		private int toolTipReshowDelay = -1;
 
+		//{{{ cellRectIsVisible() method
 		private boolean cellRectIsVisible(Rectangle cellRect)
 		{
 			Rectangle vr = BrowserJTree.this.getVisibleRect();
 			return vr.contains(cellRect.x,cellRect.y) &&
 				vr.contains(cellRect.x + cellRect.width,
 				cellRect.y + cellRect.height);
-		}
+		} //}}}
 
+		//{{{ doTypeSelect() method
 		private void doTypeSelect(String str)
 		{
 			if(getSelectionCount() == 0)
@@ -482,8 +532,9 @@ public class BrowserView extends JPanel
 					doTypeSelect(str,0,start);
 				}
 			}
-		}
+		} //}}}
 
+		//{{{ doTypeSelect() method
 		private boolean doTypeSelect(String str, int start, int end)
 		{
 			for(int i = start; i < end; i++)
@@ -505,11 +556,15 @@ public class BrowserView extends JPanel
 			}
 
 			return false;
-		}
-	}
+		} //}}}
 
+		//}}}
+	} //}}}
+
+	//{{{ TreeHandler class
 	class TreeHandler implements TreeExpansionListener
 	{
+		//{{{ treeExpanded() method
 		public void treeExpanded(TreeExpansionEvent evt)
 		{
 			TreePath path = evt.getPath();
@@ -521,8 +576,9 @@ public class BrowserView extends JPanel
 				loadDirectoryNode(treeNode,((VFS.DirectoryEntry)
 					userObject).path,true);
 			}
-		}
+		} //}}}
 
+		//{{{ treeCollapsed() method
 		public void treeCollapsed(TreeExpansionEvent evt)
 		{
 			TreePath path = evt.getPath();
@@ -537,8 +593,8 @@ public class BrowserView extends JPanel
 				treeNode.add(new DefaultMutableTreeNode(new LoadingPlaceholder(),false));
 				model.reload(treeNode);
 			}
-		}
-	}
+		} //}}}
+	} //}}}
 
 	class LoadingPlaceholder {}
 }
