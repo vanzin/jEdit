@@ -370,77 +370,49 @@ public class GrabKeyDialog extends JDialog
 		protected void processKeyEvent(KeyEvent _evt)
 		{
 			KeyEvent evt = KeyEventWorkaround.processKeyEvent(_evt);
-			if(evt == null)
+			if(debugBuffer != null)
 			{
-				if(debugBuffer != null)
-				{
-					debugBuffer.insert(debugBuffer.getLength(),
-						"Event " + toString(_evt) + " filtered\n");
-				}
-				return;
+				debugBuffer.insert(debugBuffer.getLength(),
+					"Event " + toString(_evt)
+					+ (evt == null ? " filtered\n"
+					: " passed\n"));
 			}
-			else
-			{
-				if(debugBuffer != null)
-				{
-					debugBuffer.insert(debugBuffer.getLength(),
-						"Event " + toString(_evt)
-						+ " passed\n");
-				}
 
-				KeyEventTranslator.Key key = KeyEventTranslator
-					.translateKeyEvent(evt);
-				if(debugBuffer != null && key != null)
-				{
-					debugBuffer.insert(debugBuffer.getLength(),
-						"Translated to " + key + "\n");
-				}
-			}
+			if(evt == null)
+				return;
 
 			evt.consume();
+
+			KeyEventTranslator.Key key = KeyEventTranslator
+				.translateKeyEvent(evt);
+			if(key == null)
+				return;
+
+			if(debugBuffer != null)
+			{
+				debugBuffer.insert(debugBuffer.getLength(),
+					"==> Translated to " + key + "\n");
+			}
 
 			StringBuffer keyString = new StringBuffer(getText());
 
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
 
-			if(evt.getID() == KeyEvent.KEY_TYPED)
+			if(key.modifiers != null)
+				keyString.append(key.modifiers).append('+');
+
+			if(key.input != '\0')
+				keyString.append(key.input);
+			else
 			{
-				if(!Character.isLetterOrDigit(evt.getKeyChar())
-					&& !Character.isUpperCase(evt.getKeyChar()))
-					return;
-
-				keyString.append(evt.getKeyChar());
-			}
-			else if(evt.getID() == KeyEvent.KEY_PRESSED)
-			{
-				String modifiers = DefaultInputHandler
-					.getModifierString(evt);
-				if(modifiers != null && modifiers.length() != 0)
-				{
-					keyString.append(modifiers);
-					keyString.append('+');
-				}
-
-				int keyCode = evt.getKeyCode();
-
-				if(((keyCode >= KeyEvent.VK_A && keyCode <= KeyEvent.VK_Z)
-					|| (keyCode >= KeyEvent.VK_0 && keyCode <= KeyEvent.VK_9))
-					&& modifiers.length() == 0)
-				{
-					// will be handled by KEY_TYPED
-					return;
-				}
-
-				String symbolicName = getSymbolicName(keyCode);
+				String symbolicName = getSymbolicName(key.key);
 
 				if(symbolicName == null)
 					return;
 
 				keyString.append(symbolicName);
 			}
-			else if(evt.getID() == KeyEvent.KEY_RELEASED)
-				return;
 
 			setText(keyString.toString());
 			if(debugBuffer == null)

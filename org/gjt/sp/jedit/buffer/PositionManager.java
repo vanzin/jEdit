@@ -46,16 +46,6 @@ import org.gjt.sp.util.Log;
 public class PositionManager
 {
 	//{{{ createPosition() method
-
-	// note: Buffer.createPosition() grabs a read lock, so the buffer
-	// will not change during this method. however, if two stops call
-	// it, there can be contention issues unless this method is
-	// synchronized.
-
-	// I could make Buffer.createPosition() grab a write lock, but then
-	// it would be necessary to implement grabbing write locks within
-	// read locks, since HyperSearch for example does everything inside
-	// a read lock.
 	public synchronized Position createPosition(int offset)
 	{
 		PosBottomHalf bh;
@@ -173,14 +163,26 @@ public class PositionManager
 			x = nextInorder.parent;
 		}
 
-		if(Debug.POSITION_DEBUG)
+		if(!bh.red)
 		{
-			root.dump(0);
-			Log.log(Log.DEBUG,this,"w=" + w + ",r=" + r + ",x=" + x);
+			if(r != null && r.red)
+				r.red = false;
+			else
+			{
+				PosBottomHalf y;
+				if(x == null)
+					y = null;
+				else if(x.left == r)
+					y = x.right;
+				else
+					y = x.left;
+
+				rbalance(r,x,y);
+			}
 		}
 
-		if(!bh.red)
-			rbalance(r,x);
+		if(Debug.POSITION_DEBUG && root != null)
+			root.dump(0);
 	} //}}}
 
 	//{{{ ibalance() method
@@ -221,66 +223,53 @@ public class PositionManager
 	} //}}}
 
 	//{{{ rbalance() method
-	private void rbalance(PosBottomHalf r, PosBottomHalf x)
+	private void rbalance(PosBottomHalf r, PosBottomHalf x,
+		PosBottomHalf y)
 	{
-		PosBottomHalf y, z;
+		PosBottomHalf z;
 
-		if(r != null && r.red)
+		if(y != null && !y.red)
 		{
-			r.red = false;
-		}
-		else
-		{
-			if(x == null)
-				y = null;
-			else if(x.left == r)
-				y = x.right;
+			if(y.left != null && y.left.red)
+				z = y.left;
+			else if(y.right != null && y.right.red)
+				z = y.right;
 			else
-				y = x.left;
-
-			if(y != null && !y.red)
 			{
-				if(y.left != null && y.left.red)
-					z = y.left;
-				else if(y.right != null && y.right.red)
+				if(Debug.POSITION_DEBUG)
+					Log.log(Log.DEBUG,this,"case 3");
+				if(x.left == y)
 					z = y.right;
 				else
-				{
-					if(Debug.POSITION_DEBUG)
-						Log.log(Log.DEBUG,this,"case 3");
-					if(x.left == y)
-						z = y.right;
-					else
-						z = y.left;
-					PosBottomHalf b = z.restructure();
-					y.red = false;
-					x.red = true;
-					//XXX: need to do case 1 or 2 again
-					return;
-				}
-
-				if(Debug.POSITION_DEBUG)
-					Log.log(Log.DEBUG,this,"case 1");
-
-				boolean oldXRed = x.red;
+					z = y.left;
 				PosBottomHalf b = z.restructure();
-				b.left.red = false;
-				b.right.red = false;
-				b.red = oldXRed;
+				y.red = false;
+				x.red = true;
+
+				// different meaning of x and y
+				rbalance(r,b.right,b);
+				return;
 			}
-			else if((y.left == null || !y.left.red)
-				&& (y.right != null && y.right.red))
-			{
-				if(Debug.POSITION_DEBUG)
-					Log.log(Log.DEBUG,this,"case 2");
-				y.red = true;
-				if(x.red)
-					x.red = false;
-				else
-				{
-					//XXX propogate up
-				}
-			}
+
+			if(Debug.POSITION_DEBUG)
+				Log.log(Log.DEBUG,this,"case 1");
+
+			boolean oldXRed = x.red;
+			PosBottomHalf b = z.restructure();
+			b.left.red = false;
+			b.right.red = false;
+			b.red = oldXRed;
+		}
+		else if((y.left == null || !y.left.red)
+			&& (y.right != null && y.right.red))
+		{
+			if(Debug.POSITION_DEBUG)
+				Log.log(Log.DEBUG,this,"case 2");
+			y.red = true;
+			if(x.red)
+				x.red = false;
+			else
+				rbalance(r,x,x.parent);
 		}
 	} //}}}
 
@@ -289,7 +278,7 @@ public class PositionManager
 	//{{{ Inner classes
 
 	//{{{ PosTopHalf class
-	static class PosTopHalf implements Position
+	class PosTopHalf implements Position
 	{
 		PosBottomHalf bh;
 
@@ -309,7 +298,10 @@ public class PositionManager
 		//{{{ finalize() method
 		public void finalize()
 		{
-			bh.unref();
+			synchronized(PositionManager.this)
+			{
+				bh.unref();
+			}
 		} //}}}
 	} //}}}
 
@@ -435,13 +427,13 @@ public class PositionManager
 		} //}}}
 
 		//{{{ ref() method
-		synchronized void ref()
+		void ref()
 		{
 			ref++;
 		} //}}}
 
 		//{{{ unref() method
-		synchronized void unref()
+		void unref()
 		{
 			if(--ref == 0)
 				removePosition(this);

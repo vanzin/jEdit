@@ -156,16 +156,16 @@ public class KeyEventTranslator
 					.charAt(i)))
 				{
 				case 'A':
-					modifiers |= InputEvent.ALT_MASK;
+					modifiers |= a;
 					break;
 				case 'C':
-					modifiers |= InputEvent.CTRL_MASK;
+					modifiers |= c;
 					break;
 				case 'M':
-					modifiers |= InputEvent.META_MASK;
+					modifiers |= m;
 					break;
 				case 'S':
-					modifiers |= InputEvent.SHIFT_MASK;
+					modifiers |= s;
 					break;
 				}
 			}
@@ -354,7 +354,8 @@ public class KeyEventTranslator
 
 		public String toString()
 		{
-			return modifiers + "<"
+			return (modifiers == null ? "" : modifiers)
+				+ "<"
 				+ Integer.toString(key,16)
 				+ ","
 				+ Integer.toString(input,16)
