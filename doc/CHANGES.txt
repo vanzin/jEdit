@@ -261,6 +261,8 @@ and Ryan Grove for contributing to this release.
   was 4, a buffer-local property specifying a tab size of 8  would be
   ignored.
 
+- "Spaces To Tabs" didn't work with non-leading tabs.
+
 }}}
 {{{ API Changes
 
