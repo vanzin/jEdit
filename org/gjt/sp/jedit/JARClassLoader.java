@@ -368,6 +368,13 @@ public class JARClassLoader extends ClassLoader
 			}
 			else if(what.equals("jedit"))
 			{
+				if(arg.length() != 11)
+				{
+					Log.log(Log.ERROR,this,"Invalid jEdit version"
+						+ " number: " + arg);
+					return false;
+				}
+
 				if(MiscUtilities.compareStrings(
 					jEdit.getBuild(),arg,false) < 0)
 				{
