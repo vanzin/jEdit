@@ -3,6 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- finish vfs browser extended attributes
+- new file: horiz scroll wrong
 - scroll to with invisible caret
 - actions/dockables eval: should use own namespace?
 - block caret: not very good
@@ -177,6 +179,22 @@ and quirks that I need to fix eventually.
 - hypersearch refresh
 - option to disable floating window dock bar
 - MARK_PREVIOUS delegate like SEQ; update mail.xml
+- ruleset inclusions
+- INLINE token type
+- kill ring
+- AT_WORD_END match
+- history text field tweak
+- better register and marker status prompts
+- abbrevs need an overhaul
+- quick copy between text areas
+- fsb: copy location command
+- hypersearch: "open in..." right click menu
+- hypersearch: remember search settings & "refresh" command
+- search dialog: auto-focus fields show last values
+- eval, eval-selection, etc: do array to string override
+- beanshell: unloading commands when a plugin is unloaded
+- generic matching API used for brackets, tags, etc.
+- persistent floating dockables
 
 + performance:
 

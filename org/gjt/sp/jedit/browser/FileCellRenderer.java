@@ -73,25 +73,23 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 
 			if(column == 0)
 			{
-				underlined = false;
-				if(file.type == VFS.DirectoryEntry.FILE)
-					setIcon(null);
-				else if(entry.expanded)
-					setIcon(UIManager.getIcon("Tree.expandedIcon"));
-				else
-					setIcon(UIManager.getIcon("Tree.collapsedIcon"));
-				setText(null);
-				setBorder(new EmptyBorder(1,1,1,1));
-			}
-			else if(column == 1)
-			{
 				underlined = (jEdit.getBuffer(file.path) != null);
 
 				setIcon(showIcons
 					? getIconForFile(file,entry.expanded)
 					: null);
 				setText(file.name);
-				setBorder(new EmptyBorder(1,entry.level * 10,1,1));
+
+				int state;
+				if(file.type == VFS.DirectoryEntry.FILE)
+					state = ExpansionToggleBorder.STATE_NONE;
+				else if(entry.expanded)
+					state = ExpansionToggleBorder.STATE_EXPANDED;
+				else
+					state = ExpansionToggleBorder.STATE_COLLAPSED;
+
+				setBorder(new ExpansionToggleBorder(
+					state,entry.level));
 			}
 			else
 			{
@@ -183,4 +181,76 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	private boolean isSelected;
 	private VFS.DirectoryEntry file;
 	//}}}
+
+	//{{{ ExpansionToggleBorder class
+	static class ExpansionToggleBorder implements Border
+	{
+		static final Icon COLLAPSED_ICON;
+		static final Icon EXPANDED_ICON;
+		static final int ICON_WIDTH;
+
+		static final int LEVEL_WIDTH = 15;
+
+		static final int STATE_NONE = 0;
+		static final int STATE_COLLAPSED = 1;
+		static final int STATE_EXPANDED = 2;
+
+		//{{{ ExpansionToggleBorder constructor
+		public ExpansionToggleBorder(int state, int level)
+		{
+			this.state = state;
+			this.level = level;
+		} //}}}
+
+		//{{{ paintBorder() method
+		public void paintBorder(Component c, Graphics g,
+			int x, int y, int width, int height)
+		{
+			switch(state)
+			{
+			case STATE_COLLAPSED:
+				COLLAPSED_ICON.paintIcon(c,g,
+					x + level * LEVEL_WIDTH + 1,
+					y + 1);
+				break;
+			case STATE_EXPANDED:
+				EXPANDED_ICON.paintIcon(c,g,
+					x + level * LEVEL_WIDTH + 1,
+					y + 1);
+				break;
+			}
+		} //}}}
+
+		//{{{ getBorderInsets() method
+		public Insets getBorderInsets(Component c)
+		{
+			return new Insets(1,level * LEVEL_WIDTH
+				+ ICON_WIDTH + 2,1,1);
+		} //}}}
+
+		//{{{ isBorderOpaque() method
+		public boolean isBorderOpaque()
+		{
+			return false;
+		} //}}}
+
+		//{{{ isExpansionToggle() method
+		public static boolean isExpansionToggle(int level, int x)
+		{
+			return (x >= level * LEVEL_WIDTH)
+				&& (x <= level * LEVEL_WIDTH + ICON_WIDTH);
+		} //}}}
+
+		//{{{ Private members
+		private int state;
+		private int level;
+
+		static
+		{
+			COLLAPSED_ICON = UIManager.getIcon("Tree.collapsedIcon");
+			EXPANDED_ICON = UIManager.getIcon("Tree.expandedIcon");
+			ICON_WIDTH = Math.max(COLLAPSED_ICON.getIconWidth(),
+				EXPANDED_ICON.getIconWidth());
+		} //}}}
+	}
 }

@@ -25,6 +25,9 @@ release.
 
 - Added a Utilities->Favorites menu.
 
+- The expansion triangles are now flush with the icon. Previously they
+  were vertically aligned which was inconsistent with Swing JTrees.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -131,6 +134,9 @@ release.
   pre1.
 
 - Fixed some problems with symbolic links.
+
+- Collapsing a directory in a file system browser threw an exception if
+  it was the last item in the list.
 
 }}}
 {{{ API Changes
