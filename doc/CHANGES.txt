@@ -1,5 +1,24 @@
 JEDIT 4.2 VERSION HISTORY
 
+{{{ Version 4.2pre4
+
+{{{ Bug Fixes
+
+- Changing the no modifier click action for the gutter didn't work.
+
+- The 'jedit' script was not being created on Unix.
+
+- Fixed AltGR key on certain JVMs that send it as Control+Alt.
+
+}}}
+{{{ API Changes
+
+- SearchMatcher.nextMatch() returns an instance of SearchMatcher.Match
+  instead of a two-element integer array.
+
+}}}
+
+}}}
 {{{ Version 4.2pre3
 
 Thanks to Brad Mace, Brant Langer Gurganus, Christoph Daniel Schulze,
