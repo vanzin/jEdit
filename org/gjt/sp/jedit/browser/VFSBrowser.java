@@ -1015,7 +1015,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	{
 		JPanel menuBar = new JPanel();
 		menuBar.setLayout(new BoxLayout(menuBar,BoxLayout.X_AXIS));
-		menuBar.setBorder(new EmptyBorder(0,3,1,0));
+		menuBar.setBorder(new EmptyBorder(0,1,0,3));
 
 		menuBar.add(new CommandsMenuButton());
 		menuBar.add(Box.createHorizontalStrut(3));
