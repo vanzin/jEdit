@@ -423,15 +423,13 @@ public class View extends JFrame implements EBComponent
 	public void processKeyEvent(KeyEvent evt)
 	{
 		processKeyEvent(evt,false);
-	} //}}}
+	}
 
 	//{{{ processKeyEvent() method
 	/**
 	 * Forwards key events directly to the input handler.
 	 * This is slightly faster than using a KeyListener
 	 * because some Swing overhead is avoided.
-	 * @param calledFromTextArea Changes key typed event handling
-	 * @since jEdit 4.2pre2
 	 */
 	public void processKeyEvent(KeyEvent evt, boolean calledFromTextArea)
 	{
@@ -439,34 +437,30 @@ public class View extends JFrame implements EBComponent
 		if(evt == null)
 			return;
 
+		if(getTextArea().hasFocus() && !calledFromTextArea)
+			return;
+
 		switch(evt.getID())
 		{
 		case KeyEvent.KEY_TYPED:
+			boolean focusOnTextArea = false;
 			// if the user pressed eg C+e n n in the
 			// search bar we want focus to go back there
 			// after the prefix is done
 			if(prefixFocusOwner != null)
 			{
 				if(prefixFocusOwner.isShowing())
+				{
 					prefixFocusOwner.requestFocus();
-				prefixFocusOwner = null;
+					focusOnTextArea = true;
+				}
 			}
 
-			// this is terrible!
-			if(calledFromTextArea)
+			if(keyEventInterceptor == null
+				&& (inputHandler.isPrefixActive()
+				|| getTextArea().hasFocus()))
 			{
-				if(keyEventInterceptor != null)
-					keyEventInterceptor.keyTyped(evt);
-				else //if(!inputHandler.isPrefixActive())
-					inputHandler.keyTyped(evt);
-			}
-			else
-			{
-				if(keyEventInterceptor == null
-					&& inputHandler.isPrefixActive())
-				{
-					inputHandler.keyTyped(evt);
-				}
+				inputHandler.keyTyped(evt);
 			}
 
 			// we might have been closed as a result of
@@ -477,11 +471,25 @@ public class View extends JFrame implements EBComponent
 			// this is a weird hack.
 			// we don't want C+e a to insert 'a' in the
 			// search bar if the search bar has focus...
-			if(inputHandler.isPrefixActive()
-				&& getFocusOwner() instanceof JTextComponent)
+			if(inputHandler.isPrefixActive())
 			{
-				prefixFocusOwner = getFocusOwner();
-				getTextArea().requestFocus();
+				if(getFocusOwner() instanceof JTextComponent)
+				{
+					prefixFocusOwner = getFocusOwner();
+					getTextArea().requestFocus();
+				}
+				else if(focusOnTextArea)
+				{
+					getTextArea().requestFocus();
+				}
+				else
+				{
+					prefixFocusOwner = null;
+				}
+			}
+			else
+			{
+				prefixFocusOwner = null;
 			}
 
 			break;
@@ -490,10 +498,14 @@ public class View extends JFrame implements EBComponent
 				keyEventInterceptor.keyPressed(evt);
 			else
 			{
+				/* boolean */ focusOnTextArea = false;
 				if(prefixFocusOwner != null)
 				{
 					if(prefixFocusOwner.isShowing())
+					{
 						prefixFocusOwner.requestFocus();
+						focusOnTextArea = true;
+					}
 					prefixFocusOwner = null;
 				}
 
@@ -507,11 +519,25 @@ public class View extends JFrame implements EBComponent
 				// this is a weird hack.
 				// we don't want C+e a to insert 'a' in the
 				// search bar if the search bar has focus...
-				if(inputHandler.isPrefixActive()
-					&& getFocusOwner() instanceof JTextComponent)
+				if(inputHandler.isPrefixActive())
 				{
-					prefixFocusOwner = getFocusOwner();
-					getTextArea().requestFocus();
+					if(getFocusOwner() instanceof JTextComponent)
+					{
+						prefixFocusOwner = getFocusOwner();
+						getTextArea().requestFocus();
+					}
+					else if(focusOnTextArea)
+					{
+						getTextArea().requestFocus();
+					}
+					else
+					{
+						prefixFocusOwner = null;
+					}
+				}
+				else
+				{
+					prefixFocusOwner = null;
 				}
 			}
 			break;

@@ -158,9 +158,12 @@ class BrowserView extends JPanel
 				new LoadingPlaceholder() });
 		}
 
+		Object[] loadInfo = new Object[2];
+
 		VFSManager.runInWorkThread(new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,browser,
-			session,vfs,path,null,node));
+			session,vfs,path,null,node,loadInfo));
+		browser.directoryLoaded(node,loadInfo);
 	} //}}}
 
 	//{{{ directoryLoaded() method
