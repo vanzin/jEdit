@@ -17,6 +17,13 @@ contributing to this release.
          moreParameters,
 	 ...); (Brad Mace)
 
+- Just like the Find Previous command, S+ENTER in the search bar now
+  shows an error message if regular expression search is enabled.
+  Previously it would just search forward.
+
+- The "Format Paragraph" command now shows an error message instead of
+  just beeping if the wrap margin is not set.
+
 }}}
 {{{ Syntax Highlighting
 
@@ -248,6 +255,16 @@ aaaaa
 
 - gnu.regexp has rather strange substitution behavior, which caused
   problems with some SPAN_REGEXP's.
+
+- Dialog box for confirming plugin removal now lists the JAR files to be
+  removed in a scrolling list, this fixes the problem of the dialog
+  getting too large in some cases.
+
+- Fix a minor UI layout problem with the style editor dialog box of the
+  Syntax Highlighting option pane.
+
+- Fixed exception when reloading a buffer if a marker was set beyond the
+  location where the buffer ends on disk.
 
 }}}
 {{{ API Changes

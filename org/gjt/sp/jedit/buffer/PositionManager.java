@@ -76,6 +76,8 @@ public class PositionManager
 				bh.ref++;
 		}
 
+		root.dump(0);
+
 		return new PosTopHalf(bh);
 	} //}}}
 
@@ -99,17 +101,31 @@ public class PositionManager
 	//{{{ removePosition() method
 	private synchronized void removePosition(PosBottomHalf bh)
 	{
+		PosBottomHalf w = null, r, x = bh.parent, y, z = null;
+
 		// if one of the siblings is null, make &this=non null sibling
 		if(bh.left == null)
+		{
+			r = bh.right;
+			x = bh.parent;
 			bh.removeLeft();
+		}
 		else if(bh.right == null)
+		{
+			r = bh.left;
+			x = bh.parent;
 			bh.removeRight();
+		}
 		// neither is null;
 		else
 		{
 			PosBottomHalf nextInorder = bh.right;
+			r = null;
 			while(nextInorder.left != null)
+			{
 				nextInorder = nextInorder.left;
+				r = nextInorder.right;
+			}
 			// removing the root?
 			if(bh.parent == null)
 			{
@@ -128,7 +144,48 @@ public class PositionManager
 			nextInorder.left = bh.left;
 			bh.right.left = nextInorder.right;
 			nextInorder.right = bh.right;
+			nextInorder.parent = bh.parent;
+			x = nextInorder.parent;
 		}
+
+		root.dump(0);
+
+		if(bh.red)
+			/* do nothing */;
+		else if(r != null && r.red)
+		{
+			r.red = false;
+		}
+		else
+		{
+			if(x == null)
+				y = null;
+			else if(x.left == r)
+				y = x.right;
+			else
+				y = x.left;
+
+			if(y != null && !y.red)
+			{
+				if(y.left != null && y.left.red)
+					z = y.left;
+				else if(y.right != null && y.right.red)
+					z = y.right;
+				else
+				{
+					System.err.println("case 3");
+					return;
+				}
+
+				System.err.println("case 1");
+			}
+			else if((y.left == null || !y.left.red)
+				&& (y.right != null && y.right.red))
+			{
+				System.err.println("case 2");
+			}
+		}
+		System.err.println("w=" + w + ",r=" + r + ",x=" + x);
 	} //}}}
 
 	//}}}
@@ -183,14 +240,14 @@ public class PositionManager
 				left.dump(level+1);
 			else
 			{
-				Log.log(Log.DEBUG,this,ws + "[]");
+				Log.log(Log.DEBUG,this,ws + " /]");
 			}
 			Log.log(Log.DEBUG,this,ws + red + ":" + offset);
 			if(right != null)
 				right.dump(level+1);
 			else
 			{
-				Log.log(Log.DEBUG,this,ws + "[]");
+				Log.log(Log.DEBUG,this,ws + " \\]");
 			}
 		} //}}}
 
@@ -203,7 +260,7 @@ public class PositionManager
 				{
 					pos.parent = this;
 					left = pos;
-					pos.ibalance();
+					//pos.ibalance();
 				}
 				else
 					left.insert(pos);
@@ -214,7 +271,7 @@ public class PositionManager
 				{
 					pos.parent = this;
 					right = pos;
-					pos.ibalance();
+					//pos.ibalance();
 				}
 				else
 					right.insert(pos);
@@ -233,6 +290,7 @@ public class PositionManager
 				else
 					parent.right = right;
 			}
+			right.parent = parent;
 		} //}}}
 
 		//{{{ removeRight() method
@@ -247,6 +305,7 @@ public class PositionManager
 				else
 					parent.right = left;
 			}
+			right.parent = parent;
 		} //}}}
 
 		//{{{ find() method
@@ -281,7 +340,7 @@ public class PositionManager
 				if(right != null)
 					right.contentInserted(offset,length);
 			}
-			else
+			else if(right != null) 
 				right.contentInserted(offset,length);
 		} //}}}
 
@@ -473,7 +532,7 @@ public class PositionManager
 		public String toString()
 		{
 			return red + ":" + offset;
-		}
+		} //}}}
 	} //}}}
 
 	//}}}

@@ -1433,6 +1433,32 @@ folding-not-explicit.title=Wrong Fold Mode
 folding-not-explicit.message=This command can only be used in explicit fold mode.
 #}}}
 
+#{{{ Memory status dialog box
+memory-status.title=Java Heap Memory
+memory-status.gc=Garbage collection released {0} Kb.
+memory-status.use={0} Kb used, {1} Kb total
+#}}}
+
+#{{{ Multiple I/O request errors
+buffer-multiple-io.title=I/O Error
+buffer-multiple-io.message=Each buffer can only execute one input/output\n\
+	operation at a time. Please wait until the current\n\
+	operation finishes (or abort it in the I/O progress monitor)\n\
+	before starting another one.
+
+browser-multiple-io.title=I/O Error
+browser-multiple-io.message=Each file system browser can only execute one input/output\n\
+	operation at a time. Please wait until the current operation\n\
+	finishes (or abort it in the I/O progress monitor) before starting\n\
+	another one.
+#}}}
+
+#{{{ maxLineLen=0 warning
+format-maxlinelen.title=Wrap Margin
+format-maxlinelen.message=The wrap margin must be set to a non-zero value\n\
+	for this command to work.
+#}}}
+
 #}}}
 
 #{{{ Buffer options dialog
@@ -1861,12 +1887,6 @@ log-viewer.copy=Copy
 log-viewer.tail.label=Tail
 #}}}
 
-#{{{ Memory status dialog box
-memory-status.title=Java Heap Memory
-memory-status.gc=Garbage collection released {0} Kb.
-memory-status.use={0} Kb used, {1} Kb total
-#}}}
-
 #{{{ I/O progress monitor
 io-progress-monitor.title=I/O Progress Monitor
 io-progress-monitor.caption={0} pending request(s).
@@ -1880,20 +1900,6 @@ abort.message=Are you sure you want to abort the currently executing\n\
 	result in data loss.
 #}}}
 
-#}}}
-
-#{{{ Multiple I/O request errors
-buffer-multiple-io.title=I/O Error
-buffer-multiple-io.message=Each buffer can only execute one input/output\n\
-	operation at a time. Please wait until the current\n\
-	operation finishes (or abort it in the I/O progress monitor)\n\
-	before starting another one.
-
-browser-multiple-io.title=I/O Error
-browser-multiple-io.message=Each file system browser can only execute one input/output\n\
-	operation at a time. Please wait until the current operation\n\
-	finishes (or abort it in the I/O progress monitor) before starting\n\
-	another one.
 #}}}
 
 #{{{ VFS browser
@@ -1978,8 +1984,6 @@ vfs.browser.open-plain-view.label=New Plain View
 vfs.browser.open-split.label=New Split
 #}}}
 
-#}}}
-
 #{{{ Plugins menu
 vfs.browser.plugins.label=Plugins
 vfs.browser.plugins.plugin-manager.label=Plugin Manager...
@@ -2048,9 +2052,7 @@ plugin-manager.done=Close
 
 plugin-manager.remove-confirm.title=Remove Plugins
 plugin-manager.remove-confirm.message=Are you sure you want to remove the \
-	following plugins?\n\
-	\n\
-	{0}
+	following plugins?
 
 plugin-manager.dependency.title=Plugin Dependency
 plugin-manager.dependency.message={0} is required by the following plugins:\n\
