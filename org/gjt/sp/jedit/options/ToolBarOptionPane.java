@@ -330,6 +330,13 @@ public class ToolBarOptionPane extends AbstractOptionPane
 			{
 				int index = list.getSelectedIndex();
 				listModel.removeElementAt(index);
+				if(listModel.getSize() != 0)
+				{
+					if(listModel.getSize() == index)
+						list.setSelectedIndex(index-1);
+					else
+						list.setSelectedIndex(index);
+				}
 				updateButtons();
 			}
 			else if(source == moveUp)

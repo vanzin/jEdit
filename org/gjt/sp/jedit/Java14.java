@@ -350,22 +350,27 @@ public class Java14
 		public boolean canImport(JComponent c, DataFlavor[] flavors)
 		{
 			JEditTextArea textArea = (JEditTextArea)c;
-			if(!textArea.isEditable())
-				return false;
+
+			// correctly handle text flavor + file list flavor
+			// + text area read only, do an or of all flags
+			boolean returnValue = false;
 
 			for(int i = 0; i < flavors.length; i++)
 			{
-				if(DataFlavor.stringFlavor.equals(flavors[i]))
+				if(flavors[i].equals(
+					DataFlavor.javaFileListFlavor))
 				{
-					return textArea.isEditable();
+					returnValue = true;
 				}
-				else if(DataFlavor.javaFileListFlavor
-					.equals(flavors[i]))
+				else if(flavors[i].equals(
+					DataFlavor.stringFlavor))
 				{
-					return true;
+					if(textArea.isEditable())
+						returnValue = true;
 				}
 			}
-			return false;
+
+			return returnValue;
 		}
 	} //}}}
 
@@ -397,7 +402,7 @@ public class Java14
 			if(pos != -1)
 			{
 				textArea.moveCaretPosition(pos,
-					JEditTextArea.NO_SCROLL);
+					JEditTextArea.ELECTRIC_SCROLL);
 			}
 		}
 
@@ -407,7 +412,7 @@ public class Java14
 			textArea.setDragInProgress(false);
 			//textArea.getBuffer().endCompoundEdit();
 			textArea.moveCaretPosition(savedCaret,
-				JEditTextArea.NO_SCROLL);
+				JEditTextArea.ELECTRIC_SCROLL);
 		}
 
 		public void drop(DropTargetDropEvent dtde)
