@@ -444,10 +444,24 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					{
 						int caret = filenameField
 							.getCaretPosition();
-						filenameField.setText(files[0].name);
-						filenameField.setCaretPosition(
-							files[0].name.length());
-						filenameField.moveCaretPosition(caret);
+						String path = files[0].path;
+						String name = files[0].name;
+						if(MiscUtilities.getParentOfPath(path)
+							.equals(browser.getDirectory()))
+						{
+							filenameField.setText(name);
+							filenameField.setCaretPosition(
+								name.length());
+							filenameField.moveCaretPosition(caret);
+						}
+						else
+						{
+							filenameField.setText(path);
+							filenameField.setCaretPosition(
+								path.length());
+							filenameField.moveCaretPosition(caret
+								+ (path.length() - name.length()));
+						}
 					}
 				}
 			});
