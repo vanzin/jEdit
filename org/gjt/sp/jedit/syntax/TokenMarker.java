@@ -404,10 +404,8 @@ unwind:		while(context.parent != null)
 				// match the start of the string
 				int matchStart = pos - line.offset;
 				charIndexed = new CharIndexedSegment(line,matchStart);
-				long start = System.currentTimeMillis();
 				match = checkRule.startRegexp.getMatch(
 					charIndexed,0,RE.REG_ANCHORINDEX);
-				System.err.println("Match at " + matchStart  + " took " + (System.currentTimeMillis() - start));
 				if(match == null)
 					return false;
 				else if(match.getStartIndex() != 0)
