@@ -1,0 +1,1094 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE ACTIONS SYSTEM "actions.dtd">
+
+<!-- jEdit action table                                                      -->
+<!-- Copyright (C) 2000, 2001 Slava Pestov                                   -->
+
+<!-- Actions are the 'glue' that binds menu item selections and keystrokes   -->
+<!-- to jEdit's APIs. For simplicity and compactness, they are written in    -->
+<!-- the BeanShell scripting language.                                       -->
+
+<ACTIONS>
+
+<ACTION NAME="about">
+	<CODE>
+		new AboutDialog(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="add-marker">
+	<CODE>
+		textArea.addMarker();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="add-marker-shortcut" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
+			"buffer.addMarker(__char__,textArea.getCaretPosition());");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="backspace">
+	<CODE>
+		textArea.backspace();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="backspace-word">
+	<CODE>
+		textArea.backspaceWord();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="browse-system-macros">
+	<CODE>
+		Macros.browseSystemMacros(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="browse-user-macros">
+	<CODE>
+		Macros.browseUserMacros(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="buffer-options">
+	<CODE>
+		new BufferOptions(view,buffer);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="center-caret">
+	<CODE>
+		textArea.centerCaret();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="close-all">
+	<CODE>
+		jEdit.closeAllBuffers(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="close-buffer">
+	<CODE>
+		jEdit.closeBuffer(view,buffer);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="close-view">
+	<CODE>
+		jEdit.closeView(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="collapse-fold">
+	<CODE>
+		buffer.collapseFoldAt(textArea.getCaretLine());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="complete-word">
+	<CODE>
+		textArea.completeWord();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="copy">
+	<CODE>
+		Registers.copy(textArea,'$');
+	</CODE>
+</ACTION>
+
+<ACTION NAME="copy-append">
+	<CODE>
+		Registers.append(textArea,'$',"\n",false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="copy-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.append(textArea,__char__,\"\\n\",false);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="copy-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.copy(textArea,__char__);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="cut">
+	<CODE>
+		Registers.cut(textArea,'$');
+	</CODE>
+</ACTION>
+
+<ACTION NAME="cut-append">
+	<CODE>
+		Registers.append(textArea,'$',"\n",true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="cut-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.append(textArea,__char__,\"\\n\",true);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="cut-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.cut(textArea,__char__);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="delete">
+	<CODE>
+		textArea.delete();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="delete-end-line">
+	<CODE>
+		textArea.deleteToEndOfLine();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="delete-line">
+	<CODE>
+		textArea.deleteLine();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="delete-paragraph">
+	<CODE>
+		textArea.deleteParagraph();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="delete-start-line">
+	<CODE>
+		textArea.deleteToStartOfLine();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="delete-word">
+	<CODE>
+		textArea.deleteWord();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="docking-bottom-expanded">
+	<CODE>
+		view.getDockableWindowManager().getBottomDockingArea().toggleCollapsed();
+	</CODE>
+	<IS_SELECTED>
+		return !view.getDockableWindowManager().getBottomDockingArea().isCollapsed();
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="docking-left-expanded">
+	<CODE>
+		view.getDockableWindowManager().getLeftDockingArea().toggleCollapsed();
+	</CODE>
+	<IS_SELECTED>
+		return !view.getDockableWindowManager().getLeftDockingArea().isCollapsed();
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="docking-right-expanded">
+	<CODE>
+		view.getDockableWindowManager().getRightDockingArea().toggleCollapsed();
+	</CODE>
+	<IS_SELECTED>
+		return !view.getDockableWindowManager().getRightDockingArea().isCollapsed();
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="docking-top-expanded">
+	<CODE>
+		view.getDockableWindowManager().getTopDockingArea().toggleCollapsed();
+	</CODE>
+	<IS_SELECTED>
+		return !view.getDockableWindowManager().getTopDockingArea().isCollapsed();
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="document-end">
+	<CODE>
+		if(textArea.isMultipleSelectionEnabled())
+			textArea.moveCaretPosition(buffer.getLength());
+		else
+			textArea.setCaretPosition(buffer.getLength());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="document-home">
+	<CODE>
+		if(textArea.isMultipleSelectionEnabled())
+			textArea.moveCaretPosition(0);
+		else
+			textArea.setCaretPosition(0);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="end" NO_RECORD="TRUE">
+	<CODE>
+		textArea.smartEnd(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="eval" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		BeanShell.showEvaluateDialog(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="eval-selection">
+	<CODE>
+		BeanShell.evalSelection(view,textArea);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-abbrev">
+	<CODE>
+		Abbrevs.expandAbbrev(view,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-all-folds">
+	<CODE>
+		buffer.expandAllFolds();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="exit">
+	<CODE>
+		jEdit.exit(view,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-fold">
+	<CODE>
+		buffer.expandFoldAt(textArea.getCaretLine(),true,textArea);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-one-level">
+	<CODE>
+		buffer.expandFoldAt(textArea.getCaretLine(),false,textArea);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="expand-folds" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.expand-folds"),
+			"buffer.expandFolds(__char__);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="find" NO_RECORD="TRUE">
+	<CODE>
+		new SearchDialog(view,null,SearchDialog.CURRENT_BUFFER);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="find-next" NO_RECORD="TRUE">
+	<CODE>
+		SearchAndReplace.setReverseSearch(false);
+		SearchAndReplace.find(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="find-prev" NO_RECORD="TRUE">
+	<CODE>
+		SearchAndReplace.setReverseSearch(true);
+		SearchAndReplace.find(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="find-selection" NO_RECORD="TRUE">
+	<CODE>
+		new SearchDialog(view,textArea.getSelectedText());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="format-paragraph" NO_RECORD="TRUE">
+	<CODE>
+		textArea.formatParagraph();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="global-options">
+	<CODE>
+		new OptionsDialog(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="goto-line">
+	<CODE>
+		textArea.showGoToLineDialog();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="goto-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
+			"textArea.goToMarker(__char__,false);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="help">
+	<CODE>
+		new HelpViewer("jeditresource:/doc/users-guide/index.html");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="home" NO_RECORD="TRUE">
+	<CODE>
+		textArea.smartHome(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="hypersearch" NO_RECORD="TRUE">
+	<CODE>
+		view.quickHyperSearch();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="hypersearch-results">
+	<CODE>
+		view.getDockableWindowManager().toggleDockableWindow("hypersearch-results");
+	</CODE>
+	<IS_SELECTED>
+		return view.getDockableWindowManager().isDockableWindowVisible("hypersearch-results");
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="indent-lines">
+	<CODE>
+		textArea.indentSelectedLines();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="insert-file">
+	<CODE>
+		buffer.showInsertFileDialog(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="insert-literal">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.insert-literal"),
+			"textArea.setSelectedText(String.valueOf(__char__));");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="io-progress-monitor">
+	<CODE>
+		new IOProgressMonitor(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="join-lines">
+	<CODE>
+		textArea.joinLines();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="line-comment">
+	<CODE>
+		textArea.lineComment();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="log-viewer">
+	<CODE>
+		view.getDockableWindowManager().toggleDockableWindow("log-viewer");
+	</CODE>
+	<IS_SELECTED>
+		return view.getDockableWindowManager().isDockableWindowVisible("log-viewer");
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="match-bracket">
+	<CODE>
+		textArea.goToMatchingBracket();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="narrow">
+	<CODE>
+		buffer.narrow(textArea.getSelectionStartLine(),textArea.getSelectionEndLine());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="new-file">
+	<CODE>
+		jEdit.newFile(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="new-view">
+	<CODE>
+		jEdit.newView(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-bracket">
+	<CODE>
+		textArea.goToNextBracket(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-buffer">
+	<CODE>
+		editPane.nextBuffer();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-char">
+	<CODE>
+		textArea.goToNextCharacter(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-line">
+	<CODE>
+		textArea.goToNextLine(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-marker">
+	<CODE>
+		textArea.goToNextMarker(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-page">
+	<CODE>
+		textArea.goToNextPage(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-paragraph">
+	<CODE>
+		textArea.goToNextParagraph(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-textarea">
+	<CODE>
+		view.nextTextArea();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="next-word">
+	<CODE>
+		textArea.goToNextWord(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="open-file">
+	<CODE>
+		jEdit.showOpenFileDialog(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="overwrite">
+	<CODE>
+		textArea.toggleOverwriteEnabled();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="other-encoding">
+	<CODE>
+		jEdit.showOpenFileWithOtherEncodingDialog(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="paste">
+	<CODE>
+		Registers.paste(textArea,'$');
+	</CODE>
+</ACTION>
+
+<ACTION NAME="paste-previous">
+	<CODE>
+		new PastePrevious(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.register-prompt"),
+			"Registers.paste(textArea,__char__);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="plugin-manager">
+	<CODE>
+		new PluginManager(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-bracket">
+	<CODE>
+		textArea.goToPrevBracket(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-buffer">
+	<CODE>
+		editPane.prevBuffer();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-char">
+	<CODE>
+		textArea.goToPrevCharacter(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-line">
+	<CODE>
+		textArea.goToPrevLine(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-marker">
+	<CODE>
+		textArea.goToPrevMarker(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-page">
+	<CODE>
+		textArea.goToPrevPage(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-paragraph">
+	<CODE>
+		textArea.goToPrevParagraph(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-textarea">
+	<CODE>
+		view.prevTextArea();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="prev-word">
+	<CODE>
+		textArea.goToPrevWord(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="print">
+	<CODE>
+		buffer.print(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="quick-search" NO_RECORD="TRUE">
+	<CODE>
+		view.quickIncrementalSearch();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="range-comment">
+	<CODE>
+		textArea.rangeComment();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="record-macro" NO_RECORD="TRUE">
+	<CODE>
+		Macros.recordMacro(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="record-temp-macro" NO_RECORD="TRUE">
+	<CODE>
+		Macros.recordTemporaryMacro(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="recent-buffer">
+	<CODE>
+		view.getEditPane().recentBuffer();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="redo">
+	<CODE>
+		buffer.redo();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="reload">
+	<CODE>
+		buffer.reload(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="reload-all">
+	<CODE>
+		jEdit.reloadAllBuffers(view,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="reload-modes">
+	<CODE>
+		jEdit.reloadModes();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="remove-all-markers">
+	<CODE>
+		buffer.removeAllMarkers();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="remove-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		buffer.removeMarker(textArea.getCaretLine());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="remove-trailing-ws">
+	<CODE>
+		textArea.removeTrailingWhiteSpace();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="replace-all" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		SearchAndReplace.replaceAll(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="replace-and-find-next" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		if(SearchAndReplace.replace(view))
+			SearchAndReplace.find(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="replace-in-selection" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		SearchAndReplace.replace(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="repeat" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().setRepeatEnabled(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="rescan-macros">
+	<CODE>
+		Macros.loadMacros();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="run-last-macro" NO_RECORD="TRUE">
+	<CODE>
+		Macros.runLastMacro(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="run-other-macro">
+	<CODE>
+		BeanShell.showRunScriptDialog(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="run-temp-macro" NO_RECORD="TRUE">
+	<CODE>
+		Macros.runTemporaryMacro(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="save">
+	<CODE>
+		buffer.save(view,null,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="save-all">
+	<CODE>
+		jEdit.saveAllBuffers(view,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="save-as">
+	<CODE>
+		buffer.saveAs(view,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="save-a-copy-as">
+	<CODE>
+		buffer.saveAs(view,false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="scroll-down-line">
+	<CODE>
+		textArea.scrollDownLine();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="scroll-down-page">
+	<CODE>
+		textArea.scrollDownPage();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="scroll-to-current-line">
+	<CODE>
+		textArea.scrollToCaret(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="scroll-up-line">
+	<CODE>
+		textArea.scrollUpLine();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="scroll-up-page">
+	<CODE>
+		textArea.scrollUpPage();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="search-in-open-buffers" NO_RECORD="TRUE">
+	<CODE>
+		new SearchDialog(view,null,SearchDialog.ALL_BUFFERS);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="search-in-directory" NO_RECORD="TRUE">
+	<CODE>
+		new SearchDialog(view,null,SearchDialog.DIRECTORY);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-all">
+	<CODE>
+		textArea.selectAll();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-block">
+	<CODE>
+		textArea.selectBlock();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-fold">
+	<CODE>
+		textArea.selectFold();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-home" NO_RECORD="TRUE">
+	<CODE>
+		textArea.smartHome(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-end" NO_RECORD="TRUE">
+	<CODE>
+		textArea.smartEnd(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-line">
+	<CODE>
+		textArea.selectLine();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-line-range">
+	<CODE>
+		textArea.showSelectLineRangeDialog();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-paragraph">
+	<CODE>
+		textArea.selectParagraph();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-word">
+	<CODE>
+		textArea.selectWord();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-document-end">
+	<CODE>
+		textArea.extendSelection(textArea.getCaretPosition(),buffer.getLength());
+		textArea.moveCaretPosition(buffer.getLength());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-document-home">
+	<CODE>
+		textArea.extendSelection(textArea.getCaretPosition(),0);
+		textArea.moveCaretPosition(0);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
+			"textArea.goToMarker(__char__,true);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-bracket">
+	<CODE>
+		textArea.goToNextBracket(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-char">
+	<CODE>
+		textArea.goToNextCharacter(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-line">
+	<CODE>
+		textArea.goToNextLine(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-marker">
+	<CODE>
+		textArea.goToNextMarker(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-page">
+	<CODE>
+		textArea.goToNextPage(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-paragraph">
+	<CODE>
+		textArea.goToNextParagraph(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-next-word">
+	<CODE>
+		textArea.goToNextWord(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-none">
+	<CODE>
+		textArea.removeFromSelection(textArea.getCaretPosition());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-bracket">
+	<CODE>
+		textArea.goToPrevBracket(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-char">
+	<CODE>
+		textArea.goToPrevCharacter(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-line">
+	<CODE>
+		textArea.goToPrevLine(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-marker">
+	<CODE>
+		textArea.goToPrevMarker(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-page">
+	<CODE>
+		textArea.goToPrevPage(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-paragraph">
+	<CODE>
+		textArea.goToPrevParagraph(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-word">
+	<CODE>
+		textArea.goToPrevWord(true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="shift-left">
+	<CODE>
+		textArea.shiftIndentLeft();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="shift-right">
+	<CODE>
+		textArea.shiftIndentRight();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="spaces-to-tabs">
+	<CODE>
+		textArea.spacesToTabs();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="split-horizontal">
+	<CODE>
+		view.splitHorizontally();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="split-vertical">
+	<CODE>
+		view.splitVertically();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="stop-recording" NO_RECORD="TRUE">
+	<CODE>
+		Macros.stopRecording(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="swap-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
+	<CODE>
+		view.getInputHandler().readNextChar(
+			jEdit.getProperty("view.status.marker-prompt"),
+			"textArea.swapMarkerAndCaret(__char__);");
+	</CODE>
+</ACTION>
+
+<ACTION NAME="tabs-to-spaces">
+	<CODE>
+		textArea.tabsToSpaces();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="tip-of-the-day">
+	<CODE>
+		new TipOfTheDay(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="to-lower">
+	<CODE>
+		textArea.toLowerCase();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="to-upper">
+	<CODE>
+		textArea.toUpperCase();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="toggle-line-numbers">
+	<CODE>
+		textArea.getGutter().toggleExpanded();
+	</CODE>
+	<IS_SELECTED>
+		return textArea.getGutter().isExpanded();
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="toggle-multi-select">
+	<CODE>
+		textArea.toggleMultipleSelectionEnabled();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="toggle-synchro-scroll">
+	<CODE>
+		view.toggleSynchroScrollEnabled();
+	</CODE>
+	<IS_SELECTED>
+		return view.isSynchroScrollEnabled();
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="update-log">
+	<CODE>
+		Log.flushStream();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="undo">
+	<CODE>
+		buffer.undo();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="unsplit">
+	<CODE>
+		view.unsplit();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="vfs-browser">
+	<CODE>
+		view.getDockableWindowManager().toggleDockableWindow("vfs.browser");
+	</CODE>
+	<IS_SELECTED>
+		return view.getDockableWindowManager().isDockableWindowVisible("vfs.browser");
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="view-registers">
+	<CODE>
+		new ViewRegisters(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="word-count">
+	<CODE>
+		textArea.showWordCountDialog();
+	</CODE>
+</ACTION>
+
+</ACTIONS>

@@ -1,0 +1,101 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=true: -->
+
+<chapter id="using-plugins"><title>Installing and Using Plugins</title>
+ <para>
+  A <firstterm>plugin</firstterm> is an application which is loaded and runs
+  as part of another, host application. Plugins respond to user commands
+  and perform tasks that supplement the host application's features.
+ </para>
+ <para>
+  This chapter covers installing, updating and removing plugins. Documentation
+  for the plugins themselves can be found in
+  <guimenu>Help</guimenu>&gt;<guimenuitem>jEdit Help</guimenuitem>, and
+  information about writing plugins can be found in <xref
+  linkend="writing-plugins-part" />.
+ </para>
+ <sect1 id="plugin-manager"><title>The Plugin Manager</title>
+  <para>
+   <guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin Manager</guimenuitem>
+   displays the plugin manager window. The plugin manager lists all installed
+   plugins; clicking on a plugin in the list will display information about it.
+  </para>
+  <para>
+   To remove plugins, select them (multiple plugins can be selected by
+   holding down <keycap>Control</keycap>) and click <guibutton>Remove
+   Plugins</guibutton>. This will display a confirmation dialog box first.
+  </para>
+ </sect1>
+ <sect1 id="installing-plugins"><title>Installing Plugins</title>
+  <para>
+   Plugins can be installed in two ways; manually, and from the plugin manager.
+   In most cases, plugins should be installed from the plugin manager. It is
+   easier and more convinient.
+  </para>
+  <para>
+   To install plugins manually, go to <ulink
+   url="http://plugins.jedit.org">http://plugins.jedit.org</ulink> in a web
+   browser and follow the directions on that page.
+  </para>
+  <para>
+   To install plugins from the plugin manager, make sure you are connected to
+   the Internet and click the <guibutton>Install Plugins</guibutton> button in
+   the plugin manager window. The plugin manager will then download information
+   about available plugins from the jEdit web
+   site<footnote><para>The list of plugins is downloaded from
+   http://plugins.jedit.org/export/new_plugin_manager.php, in XML
+   format.</para></footnote>
+   and list those not already installed in the <guilabel>Install Plugins</guilabel>
+   dialog box. Only plugins compatible with your jEdit release will be shown,
+   and installing
+   a plugin will also automatically install any other plugins it depends on. As
+   a result of this, if you use the plugin manager to install plugins, it is
+   very hard to end up with a non-working set of plugins.
+  </para>
+  <para>
+   Click on a plugin in the list to see some information about it. To select
+   plugins to be installed, click the check box next to their names in the list.
+  </para>
+  <para>
+   The <guibutton>Install source code</guibutton> check box controls if source
+   code for the plugins should be downloaded and installed. Unless you are a
+   developer, you probably don't need the source.
+  </para>
+  <para>
+   The two radio buttons select the location
+   where the plugins are to be installed.
+   Plugins can be installed in either the <filename>jars</filename> subdirectory
+   of the jEdit installation directory, or the <filename>jars</filename>
+   subdirectory of the user-specific settings directory. For information about
+   the settings directory, <xref linkend="settings-directory" />.
+  </para>
+  <para>
+   Once you have specified plugins to install, click <guibutton>Install
+   Plugins</guibutton> to begin the download process. Once all plugins have been
+   downloaded and installed, a dialog box is shown advising that jEdit must be
+   restarted before plugins can be used.
+  </para>
+  <sidebar><title>Firewalls</title>
+   <para>
+    If you are connected to the Internet through a firewall or proxy, you will
+    need to configure firewall settings in the <guibutton>Plugin
+    Options</guibutton>&gt;<guibutton>Firewall</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box, otherwise the plugin manager might not be able to connect to the
+    jEdit web site.
+   </para>
+   <para>
+    This assumes you chose to install the <application>Firewall</application>
+    plugin when installing jEdit. This plugin requires Java 2.
+   </para>
+  </sidebar>
+ </sect1>
+ <sect1 id="updating-plugins"><title>Updating Plugins</title>
+  <para>
+   Clicking <guibutton>Update Plugins</guibutton> in the plugin manager will
+   show a dialog box very similar to the one for installing plugins. It will
+   list plugins for which updated versions are available. It will also offer to
+   delete any obsolete plugins.
+  </para>
+ </sect1>
+</chapter>

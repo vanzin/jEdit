@@ -1,0 +1,131 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=yes: -->
+
+<appendix id="regexps"><title>Regular Expressions</title>
+ <para>
+  jEdit uses regular expressions to implement inexact search and replace.
+  A regular expression consists of a string where some
+  characters are given special meaning with regard to pattern matching.
+ </para>
+ <para>
+  Within a regular expression, the following characters have special meaning:
+ </para>
+ <bridgehead renderas="sect3">Positional Operators</bridgehead>
+ <itemizedlist>
+  <listitem><para><literal>^</literal> matches at the beginning of a line</para></listitem>
+  <listitem><para><literal>$</literal> matches at the end of a line</para></listitem>
+  <listitem><para><literal>\b</literal> matches at a word break</para></listitem>
+  <listitem><para><literal>\B</literal> matches at a non-word break</para></listitem>
+  <listitem><para><literal>\&lt;</literal> matches at the start of a word</para></listitem>
+  <listitem><para><literal>\&gt;</literal> matches at the end of a word</para></listitem>
+ </itemizedlist>
+ <bridgehead renderas="sect3">One-Character Operators</bridgehead>
+ <itemizedlist>
+  <listitem><para><literal>.</literal> matches any single character</para></listitem>
+  <listitem><para><literal>\d</literal> matches any decimal digit</para></listitem>
+  <listitem><para><literal>\D</literal> matches any non-digit</para></listitem>
+  <listitem><para><literal>\n</literal> matches the newline character</para></listitem>
+  <listitem><para><literal>\s</literal> matches any whitespace character</para></listitem>
+  <listitem><para><literal>\S</literal> matches any non-whitespace character</para></listitem>
+  <listitem><para><literal>\t</literal> matches a horizontal tab character</para></listitem>
+  <listitem><para><literal>\w</literal> matches any word (alphanumeric) character</para></listitem>
+  <listitem><para><literal>\W</literal> matches any non-word (alphanumeric)
+  character</para></listitem>
+  <listitem><para><literal>\\</literal> matches the backslash
+  (<quote>\</quote>) character</para></listitem>
+ </itemizedlist>
+ <bridgehead renderas="sect3">Character Class Operator</bridgehead>
+ <itemizedlist>
+  <listitem><para><literal>[<replaceable>abc</replaceable>]</literal> matches
+  any character in
+  the set <replaceable>a</replaceable>, <replaceable>b</replaceable> or
+  <replaceable>c</replaceable></para></listitem>
+  <listitem><para><literal>[^<replaceable>abc</replaceable>]</literal> matches
+  any character not
+  in the set <replaceable>a</replaceable>, <replaceable>b</replaceable> or
+  <replaceable>c</replaceable></para></listitem>
+  <listitem><para><literal>[<replaceable>a-z</replaceable>]</literal> matches
+  any character in the
+  range <replaceable>a</replaceable> to <replaceable>z</replaceable>, inclusive.
+  A leading or trailing dash will be interpreted literally</para></listitem>
+ </itemizedlist>
+ <para>
+  Within a character class expression, the following sequences have special meaning:
+ </para>
+ <itemizedlist>
+  <listitem><para><literal>[:alnum:]</literal> Any alphanumeric
+  character</para></listitem>
+  <listitem><para><literal>[:alpha:]</literal> Any alphabetical character</para></listitem>
+  <listitem><para><literal>[:blank:]</literal> A space or horizontal tab</para></listitem>
+  <listitem><para><literal>[:cntrl:]</literal> A control character</para></listitem>
+  <listitem><para><literal>[:digit:]</literal> A decimal digit</para></listitem>
+  <listitem><para><literal>[:graph:]</literal> A non-space, non-control character</para></listitem>
+  <listitem><para><literal>[:lower:]</literal> A lowercase letter</para></listitem>
+  <listitem><para><literal>[:print:]</literal> Same as <literal>[:graph:]</literal>, but also space and tab</para></listitem>
+  <listitem><para><literal>[:punct:]</literal> A punctuation character</para></listitem>
+  <listitem><para><literal>[:space:]</literal> Any whitespace character, including newlines</para></listitem>
+  <listitem><para><literal>[:upper:]</literal> An uppercase letter</para></listitem>
+  <listitem><para><literal>[:xdigit:]</literal> A valid hexadecimal digit</para></listitem>
+ </itemizedlist>
+ <bridgehead renderas="sect3">Subexpressions and Backreferences</bridgehead>
+ <itemizedlist>
+  <listitem><para><literal>(<replaceable>abc</replaceable>)</literal> matches
+  whatever the expression
+  <replaceable>abc</replaceable> would match, and saves it as a subexpression.
+  Also used for grouping</para></listitem>
+  <listitem><para><literal>(?:<replaceable>...</replaceable>)</literal> pure
+  grouping operator, does not
+  save contents</para></listitem>
+  <listitem><para><literal>(?#<replaceable>...</replaceable>)</literal> embedded
+  comment, ignored by engine</para></listitem>
+  <listitem><para><literal>(?=<replaceable>...</replaceable>)</literal> positive
+  lookahead; the regular expression will match if the text in the brackets
+  matches, but that text will not be considered part of the match</para></listitem>
+  <listitem><para><literal>(?!<replaceable>...</replaceable>)</literal> negative
+  lookahead; the regular expression will match if the text in the brackets
+  does not
+  match, and that text will not be considered part of the match</para></listitem>
+  <listitem><para><literal>\<replaceable>n</replaceable></literal> where 0 &lt;
+  <replaceable>n</replaceable> &lt; 10,
+  matches the same thing the <replaceable>n</replaceable>th
+  subexpression matched. Can only be used in the search string</para></listitem>
+  <listitem><para><literal>$<replaceable>n</replaceable></literal> where 0 &lt;
+  <replaceable>n</replaceable> &lt; 10,
+  substituted with the text matched by the <replaceable>n</replaceable>th
+  subexpression. Can only be used in the replacement string</para></listitem>
+ </itemizedlist>
+ <bridgehead renderas="sect3">Branching (Alternation) Operator</bridgehead>
+ <itemizedlist>
+  <listitem><para><literal><replaceable>a</replaceable>|<replaceable>b</replaceable></literal>
+  matches whatever the expression <replaceable>a</replaceable> would match, or whatever
+  the expression <replaceable>b</replaceable> would match.</para></listitem>
+ </itemizedlist>
+ <bridgehead renderas="sect3">Repeating Operators</bridgehead>
+ <para>
+  These symbols operate on the previous atomic expression.
+ </para>
+ <itemizedlist>
+  <listitem><para><literal>?</literal> matches the preceding expression or the
+  null string</para></listitem>
+  <listitem><para><literal>*</literal> matches the null string or any number of repetitions
+  of the preceding expression</para></listitem>
+  <listitem><para><literal>+</literal> matches one or more repetitions of the preceding
+  expression</para></listitem>
+  <listitem><para><literal>{<replaceable>m</replaceable>}</literal> matches exactly
+  <replaceable>m</replaceable>
+  repetitions of the one-character expression</para></listitem>
+  <listitem><para><literal>{<replaceable>m</replaceable>,<replaceable>n</replaceable>}</literal>
+  matches between
+  <replaceable>m</replaceable> and <replaceable>n</replaceable> repetitions of the preceding
+  expression, inclusive</para></listitem>
+  <listitem><para><literal>{<replaceable>m</replaceable>,}</literal> matches
+  <replaceable>m</replaceable> or more
+  repetitions of the preceding expression</para></listitem>
+ </itemizedlist>
+ <bridgehead renderas="sect3">Stingy (Minimal) Matching</bridgehead>
+ <para>
+  If a repeating operator (above) is immediately followed by a
+  <literal>?</literal>, the repeating operator will stop at the smallest
+  number of repetitions that can complete the rest of the match.
+ </para>
+</appendix>

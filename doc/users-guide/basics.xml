@@ -1,0 +1,215 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=true: -->
+
+<chapter id="basics"><title>jEdit Basics</title>
+ <sect1 id="buffers"><title>Buffers</title>
+  <para>
+   Several files can be opened and edited at once.
+   Each open file is referred to as a <firstterm>buffer</firstterm>.
+   The combo box above the text area selects the buffer to edit.
+   Different emblems are displayed next to buffer names in the list,
+   depending the buffer's state;
+   a red disk is shown for buffers with unsaved changes,
+   a lock is shown for read-only buffers,
+   and a spark is shown for new buffers which don't yet exist on disk.
+  </para>
+  <para>
+   In addition to the buffer combo box, various commands can also be
+   used to select the buffer to edit.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous Buffer</guimenuitem>
+   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>Page Up</keycap>
+   </keycombo>) switches to the previous buffer in the list.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Go to Next Buffer</guimenuitem>
+   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>Page Down</keycap>
+   </keycombo>) switches to the next buffer in the list.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Go to Recent Buffer</guimenuitem>
+   (keyboard shortcut: <keycombo><keycap>Control</keycap><keycap>`</keycap></keycombo>)
+   switches to the buffer that was being edited prior to the current one.
+  </para>
+ </sect1>
+ <sect1 id="views"><title>Views</title>
+  <para>
+   Each editor window is known as a <firstterm>view</firstterm>.
+   It is possible to have multiple views open at once, and each view can
+   be split into multiple panes.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem> creates a new view.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem> closes the
+   current view. If only one view is open, closing it will exit jEdit,
+   unless background mode is on; see <xref linkend="starting" /> for information
+   about starting jEdit in background mode.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Split
+   Horizontally</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>2</keycap></keycombo>)
+   splits the view into two text areas, above each other.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Split
+   Vertically</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>3</keycap></keycombo>)
+   splits the view into two text areas, next to each other.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Unsplit</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>1</keycap></keycombo>)
+   removes all but the current text area from the view.
+  </para>
+  <para>
+   When a view is split, editing commands operate on the text area that
+   has keyboard focus. To give a text area keyboard focus, click in it
+   with the mouse, or use the following commands.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Go to
+   Previous Text Area</guimenuitem>
+   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Page Up</keycap></keycombo>)
+   shifts keyboard focus to the previous text area.
+  </para>
+  <para>
+   <guimenu>View</guimenu>&gt;<guisubmenu>Splitting</guisubmenu>&gt;<guimenuitem>Go to
+   Next Text Area</guimenuitem>
+   (shortcut: <keycombo><keycap>Alt</keycap><keycap>Page Down</keycap></keycombo>)
+   shifts keyboard focus to the next text area.
+  </para>
+  <para>
+   Clicking the text area with the right mouse button displays a popup menu.
+   Both this menu and the tool bar at the top of the view offer quick
+   mouse-based access to frequently-used commands.
+   The contents of the tool bar and right-click menu can be
+   changed in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box.
+  </para>
+  <sect2 id="docking"><title>Window Docking</title>
+   <para>
+    The file system browser, HyperSearch results window, and many plugin
+    windows can optionally be docked into the view. This can be
+    configured in the <guibutton>Docking</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box; see <xref linkend="global-opts" />. Note that changes made in
+    this option pane will not take effect
+    immediately; you must restart jEdit or open a new view first.
+   </para>
+   <para>
+    When windows are docked into the view,
+    the commands in the <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu>
+    menu (shortcuts: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+    <keycap>1</keycap>, <keycap>2</keycap>, <keycap>3</keycap>, <keycap>4</keycap>)
+    can be used
+    to show or hide the top, bottom, left and right docking areas,
+    respectively. Double-clicking on the borders of docking areas has
+    the same effect.
+   </para>
+  </sect2>
+  <sect2><title>The Status Bar</title>
+   <para>
+    A <firstterm>status bar</firstterm> at the bottom of the view displays the
+    following information, from left to right:
+   </para>
+   <itemizedlist>
+    <listitem><para>The line number containing the caret</para></listitem>
+    <listitem><para>The column position of the caret, with the leftmost column
+    being 1.</para>
+    <para>
+     If the line contains tabs, the <firstterm>file</firstterm> position (where a hard
+     tab is counted as one column) is shown first, followed by the
+     <firstterm>screen</firstterm> position (where each tab counts for the number of
+     columns until the next tab stop).
+    </para>
+    </listitem>
+    <listitem><para>Prompts displayed by commands such as those dealing with
+    registers and markers (see <xref linkend="text-transfer" /> and <xref
+    linkend="markers" />)</para></listitem>
+    <listitem><para>The current buffer's edit mode. Clicking this
+    displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+    Options</guimenuitem> dialog box. See <xref
+    linkend="modes" /> and <xref linkend="buffer-opts" />.</para></listitem>
+    <listitem><para>The current buffer's character encoding.  Clicking this
+    displays the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+    Options</guimenuitem> dialog box. See <xref
+    linkend="encodings" /> and <xref linkend="buffer-opts" />.</para></listitem>
+    <listitem><para>If multiple selection is enabled, the text
+    <guilabel>multi</guilabel> is shown in black, otherwise it will be grayed out.
+    Clicking her or pressing <keycombo><keycap>Control</keycap>
+    <keycap>\</keycap></keycombo> turns multiple selection on and off. See <xref
+    linkend="multi-select" />.</para></listitem>
+    <listitem><para>If overwrite mode is enabled, the text <guilabel>over</guilabel> is
+    shown in black, otherwise it will be grayed out. Clicking here or pressing
+    <keycap>Insert</keycap> turns overwrite mode on and off. See <xref
+    linkend="entering-text" />.</para></listitem>
+    <listitem><para>If portions of the buffer are invisible due to folding,
+    the text <guilabel>fold</guilabel> is
+    shown in black, otherwise it will be grayed out. See <xref
+    linkend="folding" />.</para></listitem>
+    <listitem><para>If input/output operations are in progress, a small disk icon
+    and progress bars for each running operation are displayed. Clicking
+    here will display the <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O
+    Progress Monitor</guimenuitem> dialog box. See <xref
+    linkend="threaded-io" />.</para></listitem>
+   </itemizedlist>
+  </sect2>
+ </sect1>
+ <sect1 id="textarea"><title>The Text Area</title>
+  <para>
+   Text editing takes place in the text area. It behaves in a similar
+   manner to many Windows and MacOS editors; the few
+   unique features will be described in this section.
+  </para>
+  <para>
+   The text area will automatically scroll up or down if the caret is moved
+   closer than three lines to the first or last visible line. This
+   feature is called <firstterm>electric scrolling</firstterm> and can be disabled
+   in the <guibutton>Text Area</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.
+  </para>
+  <para>
+   To aid in locating the caret, the current line is drawn with a
+   different background color. To make it clear which lines end with
+   white space, end of line markers are drawn at the end of each line.
+   Both these features can be disabled in the <guibutton>Text Area</guibutton>
+   pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box.
+  </para>
+  <para>
+   The strip on the left of the text area is called a <firstterm>gutter</firstterm>.
+   The gutter displays marker and register locations; it will also display
+   line numbers if the 
+   <guimenu>View</guimenu>&gt;<guimenuitem>Line Numbers</guimenuitem> (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycombo><keycap>Control</keycap><keycap>T</keycap></keycombo>) command is invoked.
+  </para>
+ </sect1>
+ <sect1 id="repeat"><title>Command Repetition</title>
+  <para>
+   To repeat a command any number of times, invoke
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Repeat Next Command</guimenuitem>
+   (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>) and enter the
+   desired repeat count, followed by the command to repeat (either a keystroke
+   or menu item selection). For example,
+   <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
+   <keycap>1</keycap> <keycap>4</keycap>
+   <keycombo><keycap>Control</keycap><keycap>D</keycap></keycombo></quote> will delete
+   14 lines, and <quote><keycombo><keycap>Control</keycap><keycap>Enter</keycap></keycombo>
+   <keycap>8</keycap>
+   <keycap>#</keycap></quote>
+   will insert <quote>########</quote> in the buffer.
+  </para>
+  <para>
+   If you specify a repeat count greater than 20, a confirmation dialog box will
+   be displayed, asking if you really want to perform the action. This prevents
+   you from hanging jEdit by executing a command too many times.
+  </para>
+ </sect1>
+</chapter>

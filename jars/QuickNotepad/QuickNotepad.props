@@ -1,0 +1,47 @@
+# general plugin information
+plugin.QuickNotepadPlugin.name=QuickNotepad
+plugin.QuickNotepadPlugin.author=John Gellene
+plugin.QuickNotepadPlugin.version=1.0
+plugin.QuickNotepadPlugin.docs=QuickNotepad.html
+plugin.QuickNotepadPlugin.depend.0=jdk 1.1
+plugin.QuickNotepadPlugin.depend.1=jedit 03.01.99.00
+plugin.QuickNotepadPlugin.depend.2=plugin EditBusPlugin 1.0
+
+# dockable window name
+quicknotepad.title=QuickNotepad
+
+# action labels
+quicknotepad.toggle.label=QuickNotepad
+quicknotepad-to-front.label=Bring QuickNotepad to front
+quicknotepad.choose-file.label=Choose notepad file
+quicknotepad.save-file.label=Save notepad file
+quicknotepad.copy-to-buffer.label=Copy notepad to buffer
+
+# application menu items
+quicknotepad.menu.label=QuickNotepad
+quicknotepad.menu=quicknotepad.toggle - quicknotepad.choose-file \
+	quicknotepad.save-file quicknotepad.copy-to-buffer
+
+# plugin toolbar buttons
+quicknotepad.choose-file.icon=Open.gif
+quicknotepad.save-file.icon=Save.gif
+quicknotepad.copy-to-buffer.icon=Edit.gif
+
+# Option pane labels
+options.quicknotepad.label=QuickNotepad
+options.quicknotepad.file=File:
+options.quicknotepad.choose-file=Choose
+options.quicknotepad.choose-file.title=Choose a notepad file
+options.quicknotepad.choose-font=Font:
+options.quicknotepad.show-filepath.title=Display notepad file path
+
+# Initial default settings
+options.quicknotepad.show-filepath=true
+options.quicknotepad.font=Monospaced
+options.quicknotepad.fontstyle=0
+options.quicknotepad.fontsize=14
+
+# Setting not defined but supplied for completeness
+options.quicknotepad.filepath=
+
+

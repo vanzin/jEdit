@@ -1,0 +1,694 @@
+<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene      -->
+<!-- Thu Jun 21 23:51:34 EDT 2001 @202 /Internet Time/ -->
+
+<!-- jEdit buffer-local properties:                    -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
+
+<!-- covers index to installed macro set               -->
+
+<appendix id="macro-index"><title>Macros Included With jEdit</title>
+
+<para>
+    jEdit comes with a large number of sample
+    macros that perform a variety of tasks. The following index
+    provides short descriptions of each macro, in some cases accompanied by
+    usage notes.
+</para>
+
+<sect1 id="macros-files"><title>File Management Macros</title>
+<para>
+    These macros automate the opening and closing of files.
+</para>
+
+<itemizedlist>
+
+<listitem>
+    <para><filename>Browse_Directory.bsh</filename></para>
+    <abstract><para>
+        Opens a directory supplied by the user in the file system
+        browser.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Close_Except_Active.bsh</filename></para>
+    <abstract><para>
+        Closes all files except the current buffer.
+    </para></abstract>
+    <para>
+        Prompts the user to save any buffer containing unsaved changes.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Go_to_File_System_Browser.bsh</filename></para>
+    <abstract><para>
+        Sets the input focus to the file system browser.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Open_Path.bsh</filename></para>
+    <abstract><para>
+        Opens the file supplied by the user in an input dialog.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Open_Selection.bsh</filename></para>
+    <abstract><para>
+        Opens the file named by the current buffer's selected text.
+    </para></abstract>
+</listitem>
+
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="macros-text"><title>Text Macros</title>
+<para>
+    These macros generate various forms of formatted text.
+</para>
+
+<itemizedlist>
+
+<listitem>
+    <para><filename>Add_Prefix_and_Suffix.bsh</filename></para>
+    <abstract><para>
+        Adds user-supplied <quote>prefix</quote> and <quote>suffix</quote>
+        text to each line in a group of selected lines.
+    </para></abstract>
+    <para>
+        Text is added after leading whitespace and before trailing whitespace.
+        A dialog window receives input and <quote>remembers</quote> past entries.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Color_Picker.bsh</filename></para>
+    <abstract><para>
+        Displays a color picker and inserts the selected color in
+        hexadecimal format, prefixed with a <quote>#</quote>.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Duplicate_Line.bsh</filename></para>
+    <abstract><para>
+        Duplicates the line on which the caret lies immediately
+        beneath it and moves the caret to the new line.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Insert_Date.bsh</filename></para>
+    <abstract><para>
+        Inserts the current date and time in the current buffer.
+    </para></abstract>
+    <para>
+        The inserted text includes a representation of the time in the
+        <quote>Internet Time</quote> format.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Insert_Tag.bsh</filename></para>
+    <abstract><para>
+        Inserts a balanced pair of markup tags as supplied in a input dialog.
+    </para></abstract>
+</listitem>
+
+<listitem>
+  <para><filename>Toggle_Line_Comment.bsh</filename></para>
+  <abstract><para>
+	  Toggles line comments, alternately inserting and deleting them
+    at the beginning of each selected line.
+  </para></abstract>
+	<para>
+		If there is no selection, the macro operates on the current line.
+	</para>
+</listitem>
+
+<listitem>
+    <para><filename>Make_Double_Box_Comments.bsh</filename></para>
+    <abstract><para>
+        Makes a individual wing style comment of equal width for each
+        selected line in the current buffer.
+    </para></abstract>
+
+   <informalexample>
+   <programlisting>/*  This is an example of the kind                */
+/*  of comment (for Java or C/C++) produced       */
+/*  by this macro. It has uniform width           */
+/*  regardless of the width of the several lines. */
+
+&lt;!-- HTML or SGML code                         --&gt;
+&lt;!-- will look like this when the macro is run --&gt;</programlisting>
+    </informalexample>
+</listitem>
+
+
+<listitem>
+    <para><filename>Reverse.bsh</filename></para>
+    <abstract><para>
+        Reverses the selected text in the current buffer.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Rot13.bsh</filename></para>
+    <abstract><para>
+        Replaces the selected text with the text encoded by the Rot13
+        <quote>encryption</quote> algorithm.
+    </para></abstract>
+    <para>
+        Rot13 is a simple encoding scheme involving fixed character
+        substitution. A second application of the algorithm restores the
+        original text.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Write_File_Header.bsh</filename></para>
+    <abstract><para>
+        Writes a formatted file header in the current buffer based upon
+        user input.
+    </para></abstract>
+    <para>
+        This macro asks for the name of the file, the author and a brief
+        description of its contents.  It also asks whether the file
+        should be saved immediately after the header is inserted.  The
+        header will be set off with block comments based upon the
+        editing mode of the buffer; if the user has not set an editing
+        mode, the macro will select one based upon the file extension.
+    </para>
+    <note><para>
+        The notes accompanying the macro source code describe how the macro
+        can be modified to produce a file header conforming to to
+        personal taste or institutional requirements.
+    </para></note>
+</listitem>
+
+</itemizedlist>
+</sect1>
+
+<sect1 id="macros-java"><title>Java Code Macros</title>
+<para>
+    These macros handle text formatting and generation tasks that are
+    particularly useful in writing Java code.
+</para>
+
+<itemizedlist>
+
+<listitem>
+    <para><filename>Get_Class_Name.bsh</filename></para>
+    <abstract><para>
+        Inserts a Java class name based upon the buffer's file name.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Get_Package_Name.bsh</filename></para>
+    <abstract><para>
+        Inserts a plausible Java package name for the current buffer.
+    </para></abstract>
+    <para>
+        The macro compares the buffer's path name with the elements of the
+        classpath being used by the jEdit session.  An error message will be
+        displayed if no suitable package name is found. This macro will not
+        work if jEdit is being run as a JAR file without specifying a
+        classpath.  In that case the classpath seen by the macro consists
+        solely of the JAR file.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Make_Get_and_Set_Methods.bsh</filename></para>
+    <abstract><para>
+        Creates <function>getXXX()</function> or <function>setXXX()</function>
+        methods that can be pasted into the buffer text.
+    </para></abstract>
+    <para>
+        This macro presents a dialog that will <quote>grab</quote> the names
+        of instance variables from the caret line of the current buffer
+        and paste a corresponding <function>getXXX()</function> or
+        <function>setXXX()</function> method to one of two text areas in the
+        dialog.  The text can be edited in the dialog and then pasted into the
+        current buffer using the <guilabel>Insert...</guilabel> buttons.  If
+        the caret is set to a line containing something other than an instance
+        variable, the text grabbing routine is likely to generate nonsense.
+    </para>
+    <para>
+        As explained in the notes accompanying the source code, the macro
+        uses a global variable which can be set to configure the macro to work
+        with either Java or C++ code.  When set for use with C++ code,
+        the macro will also write (in commented text) definitions of
+        <function>getXXX()</function> or <function>setXXX()</function>
+        suitable for inclusion in a header file.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Tidy_Block_Comments.bsh</filename></para>
+    <abstract><para>
+    Formats all end-of-line <quote>block</quote> comments to begin at a fixed
+    column.
+    </para></abstract>
+    <para>
+    This macro uses jEdit's syntax parsing routines to identify block comments
+    and place them in a column specified by the user.  If uncommented text
+    extends beyond the specified column, the block comment will be placed two
+    columns after the end of the uncommented text with an intervening
+    whitespace.
+    </para>
+    <para>
+    An input dialog allows the user to specify the display column for block
+    comments or to accept a default value.  The user can also select whether
+    tabs will be substituted for spaces and whether comments at the beginning
+    of a line will be ignored.  The macro will complain if the current
+    buffer's editing mode does not support block comments.
+    </para>
+</listitem>
+
+
+</itemizedlist>
+
+</sect1>
+
+
+<sect1 id="macros-search"><title>Search Macros</title>
+<para>
+    These macros provide various shortcuts to search methods.  A group
+    of macros in this category allow the user to search of other
+    occurrences of the word that appear on or next to the editing
+    caret.
+</para>
+
+<itemizedlist>
+
+<listitem>
+    <para><filename>Find_Matching_File.bsh</filename></para>
+    <abstract><para>
+        Switches between C++ header (<filename>.h</filename>) and source
+        (<filename>.cpp</filename>) files with the same name in the same
+        directory.
+    </para></abstract>
+    <note><para>
+        This macro is easily adapted to work with any pair of file extensions.
+    </para></note>
+</listitem>
+
+<listitem>
+    <para><filename>Next_Char.bsh</filename></para>
+    <abstract><para>
+        Finds next occurence of character on current line.
+    </para></abstract>
+    <para>
+        The macro takes the next character typed after macro execution
+        as the character being searched.  That character is not
+        displayed.  If the character does not appear in the balance of
+        the current line, no action occurs.
+    </para>
+    <para>
+        This macro illustrates the use of
+        <function>InputHandler.readNextChar()</function> as a means of
+        obtaining user input. See <xref linkend="macro-tips-single-char"
+        />.
+    </para>
+ </listitem>
+
+
+<listitem>
+    <para><filename>Write_HyperSearch_Results.bsh</filename></para>
+    <abstract><para>
+        This macro writes the contents of the <quote>HyperSearch
+        Results</quote> window to a new text buffer.
+    </para></abstract>
+    <para>
+        The macro employs a simple text report format. Since
+        the HyperSearch window's object does not maintain the search
+        settings that produced the displayed results, the macro examines the
+        current settings in the <classname>SearchAndReplace</classname> object.
+        It confirms that the HyperSearch option is selected before writing
+        the report. However, the only way to be sure that the report's contents
+        are completely accurate is to run the macro immediately after a
+        HyperSearch.
+    </para>
+</listitem>
+
+</itemizedlist>
+
+<sect2 id="macros-search-findx-group"><title>The Find_Occurrence Macro Group</title>
+<para>
+    This is a group of macros that enable searches in a text buffer for
+    another occurrence of the word situated at or immediately
+    to the left of the editing caret.  When these macros are linked to
+    keyboard shortcuts, they give the user the ability to search for
+    occurrences of a word without leaving the text buffer or
+    interrupting use of the keyboard.
+</para>
+
+<para>
+    Because the searching routine for each procedure has common code, the
+    set of macros consists of four macros that set a temporary jEdit
+    property and then call the main search macro,
+    <filename>Find_Occurrence.bsh</filename>. That macro reads the
+    temporary property, executes the corresponding search procedure, and
+    erases the property. If the property cannot be found, the search routine
+    looks for the next succeeding occurrence of the search term.
+</para>
+
+<para>
+    The final macro retrieves the marker left by the searching macro for
+    the file and caret position applicable just prior to the search.
+</para>
+
+<itemizedlist>
+<listitem>
+    <para><filename>Find_Occurrence.bsh</filename></para>
+    <abstract><para>
+        This macro runs the search routine corresponding to the property set
+        by one of its companion macros.
+    </para></abstract>
+    <para>
+        If the macro is called directly or if the search type property cannot
+        be found, it will find the next occurrence of the word on or to the
+        left of the editing caret. If the search succeeds, the macro sets a
+        bookmark by creating temporary jEdit properties for the buffer name
+        and caret location.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Find_First_Occurrence.bsh</filename></para>
+    <abstract><para>
+        Calls <filename>Find_Occurrence</filename> to find the first
+        occurrence of the word on or to the left of the editing caret.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Find_Previous_Occurrence.bsh</filename></para>
+    <abstract><para>
+        Calls <filename>Find_Occurrence</filename> to find the immediately
+        preceding occurrence of the word on or to the left of the editing
+        caret.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Find_Next_Occurrence.bsh</filename></para>
+    <abstract><para>
+        Calls <filename>Find_Occurrence</filename> to find the next
+        occurrence of the word on or to the left of the editing caret.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Find_Last_Occurrence.bsh</filename></para>
+    <abstract><para>
+        Calls <filename>Find_Occurrence</filename> to find the last
+        occurrence of the word on or to the left of the editing caret.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Return_From_Find.bsh</filename></para>
+    <abstract><para>
+        Returns the user to the buffer and location specified in the
+        bookmark created by <filename>Find_Occurrence</filename>,
+        reopening a file if necessary.
+    </para></abstract>
+    <para>
+        The file is reopened if necessary; an error message is displayed
+        if the file no longer exists. If the file exists but the caret
+        position index exceeds the size of the file (because of intervening
+        deletions, for example), the file is displayed and an error message
+        alerts the user that the bookmarked caret position is invalid.
+        The bookmark is deleted immediately after it is used.
+    </para>
+</listitem>
+
+</itemizedlist>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="macros-properties"><title>Macros for Listing Properties</title>
+<para>
+    These macros produce lists or tables containing properties
+    used by the Java platform or jEdit itself.
+</para>
+
+
+<itemizedlist>
+
+<listitem>
+    <para><filename>jEdit_Properties.bsh</filename></para>
+    <abstract><para>
+       Writes an unsorted list of jEdit properties in a new buffer.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>System_Properties.bsh</filename></para>
+    <abstract><para>
+        Writes an unsorted list of all Java system properties in a new
+        buffer.
+    </para></abstract>
+</listitem>
+
+<listitem>
+    <para><filename>Look_and_Feel_Properties.bsh</filename></para>
+    <abstract><para>
+        Writes an unsorted list of the names of Java Look and Feel
+        properties in a new buffer.
+    </para></abstract>
+</listitem>
+
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="macros-misc"><title>Miscellaneous Macros</title>
+<para>
+    While these macros do not fit easily into the other categories, they all provide
+    interesting and useful functions.
+</para>
+
+<itemizedlist>
+
+<listitem>
+    <para><filename>Cascade_jEdit_Windows.bsh</filename></para>
+    <abstract><para>
+        Rearranges view and floating plugin windows.
+    </para></abstract>
+    <para>
+        The windows are arranged in an overlapping <quote>cascade</quote>
+        pattern beginning near the upper left corner of the display.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Copy_Mode_Abbrevs.bsh</filename></para>
+    <abstract><para>
+        Copies all abbreviations from one editing mode to another, overwriting
+        any duplicate entries.
+    </para></abstract>
+    <para>
+        A number of jEdit editing modes target languages that share keywords,
+        tags or other features.  Examples include <quote>java</quote>
+        and <quote>beanshell</quote>, and <quote>c</quote> and <quote>c++</quote>. This macro
+        saves the trouble of manually editing abbreviations sets to share
+        abbreviations between editing modes.  The macro will also permit
+        copying of a mode's abbreviations to the <quote>global</quote> abbreviation
+        set that is available in all buffers regardless of editing mode.
+    </para>
+    <para>
+        The macro will overwrite any existing abbreviations in the target
+        editing mode using the same abbreviation as a member of the
+        source set.  Use caution in copying from one set to another, as
+        any attempt to undo the copying must be done manually.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Display_Abbreviations.bsh</filename></para>
+    <abstract><para>
+        Displays the abbreviations registered for each of jEdit's
+        editing modes.
+    </para></abstract>
+    <para>
+        The macro provides a read-only view of the abbreviations
+        contained in the <quote>Abbreviations</quote> option pane.  Pressing
+        a letter key will scroll the table to the first entry beginning with
+        that letter.  A further option is provided to write a selected mode's
+        abbreviations or all abbreviations in a text buffer for printing as a
+        reference. Notes in the source code listing point out some display options
+        that are configured by modifying global variables.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Display_Shortcuts.bsh</filename></para>
+    <abstract><para>
+        Displays a sorted list of the keyboard shortcuts currently in effect.
+    </para></abstract>
+    <para>
+        The macro provides a combined read-only view of command, macro
+        and plugin shortcuts. Pressing a letter key will
+        scroll the table to the first entry beginning with that letter.
+        A further option is provided to write the shortcut assignments in a
+        text buffer for printing as a reference. Notes in the source code
+        listing point out some display options that are configured by
+        modifying global variables.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Evaluate_Buffer_in_BeanShell.bsh</filename></para>
+    <abstract><para>
+        Evaluates contents of current buffer as a BeanShell script,
+        and opens a new
+        buffer to receive any text output.
+    </para></abstract>
+    <para>
+        This is a quick way to test a macro script even before its text
+        is saved to a file.  Opening a new buffer for output is a precaution
+        to prevent the macro from inadvertently erasing or overwriting
+        itself.  BeanShell scripts that operate on the contents of the
+        current buffer will not work meaningfully when tested using this
+        macro.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Go_to_Text_Area.bsh</filename></para>
+    <abstract><para>
+        Sets the input focus to the text editing area.
+    </para></abstract>
+    <para>
+        Linked to a keyboard shortcut, this macro can quickly return
+        input focus to the text area after invoking a command that
+        shifts focus to a docked plugin window.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>Include_Guard.bsh</filename></para>
+    <abstract><para>
+		Intended for C/C++ header files, this macro inserts a preprocessor
+		directive in the current buffer to ensure that the header is
+		included only once per compilation unit.
+    </para></abstract>
+    <para>
+        To use the macro, first place the caret at the beginning of the
+		header file before any uncommented text.  The macro will return to
+		this position upon completion.  The defined term that triggers the
+		<quote>include guard</quote> is taken from the buffer's name.
+    </para>
+</listitem>
+
+<listitem>
+    <para><filename>List_Plugin_Internal_Names.bsh</filename></para>
+    <abstract><para>
+        Writes a sorted list of installed plugins to the current buffer.
+    </para></abstract>
+    <para>
+        The form of each name is that used by
+        <function>jEdit.getPlugin()</function>.
+    </para>
+    <tip><para>
+        The name can be used in a macro to test for the presence of a
+        particular plugin.
+    </para></tip>
+</listitem>
+
+<listitem>
+    <para><filename>Make_Bug_Report.bsh</filename></para>
+    <abstract><para>
+      Creates a new buffer with installation and error information
+	    extracted from the activity log.
+    </para></abstract>
+	<para>
+	  The macro extracts initial messages written to the activity log
+	  describing the user's operating system, JDK, jEdit version and
+	  installed plugins. It then appends the last set of error messages
+	  written to the activity log.  The new text buffer can be saved and
+	  attached to an email message or a bug report made on SourceForge.
+	</para>
+  </listitem>
+  
+<listitem>
+    <para><filename>Run_Macro_at_Caret.bsh</filename></para>
+    <abstract><para>
+        Executes the macro whose name appears at the editing caret.
+    </para></abstract>
+    <para>
+        When used with abbreviations for macro name, this macro allows the user to
+        execute any macro script from the keyboard by typing its name, without
+        the <filename>.bsh</filename> extension.
+        It will search for the requested script in both the system and user
+        macro directories, in each case using the caret text as a relative
+        path.
+    </para>
+
+    <para>
+        The full utility of this macro can be acheived when it is combined
+        with abbreviations for commonly used macros. To try it out, follow these
+        steps:
+    </para>
+
+    <procedure>
+        <step><para>In the <quote>Macro Shortcuts</quote> option pane, Associate
+        <filename>Run_Macro_at_Caret</filename> with the shortcut
+        <keycombo><keycap>Control</keycap><keycap>Space</keycap>
+        </keycombo>.</para></step>
+
+        <step><para>In the <quote>global</quote> abbreviation group, associate the
+        abbreviation <quote>dtt</quote> with the text <quote>/Text/Insert_Date</quote>.
+        The leading forward slash character is necessary and should be used
+        regardless of one's operating system.  Make sure that the abbreviation
+        option pane has the checkbox <guilabel>Space bar expands
+        abbrevs</guilabel> selected.</para></step>
+
+        <step><para>To activate the macro from the keyboard, type
+        <userinput>dtt</userinput> in a text buffer.</para></step>
+
+        <step><para>Press the space bar to expand <userinput>ddt</userinput> to
+        <userinput>/Text/Insert_Date</userinput></para></step>
+
+        <step><para>Press <keycombo><keycap>Control</keycap>
+        <keycap>Space</keycap></keycombo> to
+        run the macro. The text <userinput>/Text/Insert_Date</userinput> will
+        be replaced by the output of the <filename>Insert_Date</filename>
+        macro.</para></step>
+    </procedure>
+
+    <para>
+        Repeating this procedure allows the user to execute macros from the
+        keyboard using shortcut names instead of keystrokes.
+    </para>
+
+</listitem>
+
+<listitem>
+    <para><filename>Show_Free_Memory.bsh</filename></para>
+    <abstract><para>
+        Runs the Java garbage collection routine to free unneeded memory.
+    </para></abstract>
+    <para>
+        After running garbage collection, the macro displays a message box
+        with text and graphic displays of jEdit's memory usage after garbage
+        collection.
+    </para>
+</listitem>
+
+</itemizedlist>
+
+</sect1>
+
+</appendix>
+

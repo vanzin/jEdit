@@ -1,0 +1,151 @@
+###
+### jEdit keyboard shortcuts
+### Copyright (C) 1998, 2001 Slava Pestov
+###
+
+# Function keys
+help.shortcut=F1
+
+# Single key
+select-all.shortcut=C+a
+complete-word.shortcut=C+b
+copy.shortcut=C+c
+delete-line.shortcut=C+d
+find.shortcut=C+f
+find-next.shortcut=C+g
+find-prev.shortcut=C+h
+indent-lines.shortcut=C+i
+join-lines.shortcut=C+j
+swap-marker.shortcut=C+k
+goto-line.shortcut=C+l
+new-file.shortcut=C+n
+open-file.shortcut=C+o
+print.shortcut=C+p
+exit.shortcut=C+q
+save.shortcut=C+s
+add-marker-shortcut.shortcut=C+t
+select-marker.shortcut=C+u
+paste.shortcut=C+v
+close-buffer.shortcut=C+w
+cut.shortcut=C+x
+goto-marker.shortcut=C+y
+undo.shortcut=C+z
+recent-buffer.shortcut=C+BACK_QUOTE
+unsplit.shortcut=C+1
+split-horizontal.shortcut=C+2
+split-vertical.shortcut=C+3
+expand-abbrev.shortcut=C+SEMICOLON
+quick-search.shortcut=C+COMMA
+hypersearch.shortcut=C+PERIOD
+scroll-up-page.shortcut=A+QUOTE
+scroll-up-line.shortcut=C+QUOTE
+scroll-down-line.shortcut=C+SLASH
+scroll-down-page.shortcut=A+SLASH
+toggle-multi-select.shortcut=C+BACK_SLASH
+prev-buffer.shortcut=C+PAGE_UP
+next-buffer.shortcut=C+PAGE_DOWN
+prev-textarea.shortcut=A+PAGE_UP
+next-textarea.shortcut=A+PAGE_DOWN
+
+# C+e
+# Unused e, f, h, n, p, q, x, y
+copy-append.shortcut=C+e C+a
+search-in-open-buffers.shortcut=C+e C+b
+range-comment.shortcut=C+e C+c
+search-in-directory.shortcut=C+e C+d
+find-selection.shortcut=C+e C+f
+replace-and-find-next.shortcut=C+e C+g
+center-caret.shortcut=C+e C+i
+scroll-to-current-line.shortcut=C+e C+j
+line-comment.shortcut=C+e C+k
+select-line-range.shortcut=C+e C+l
+add-marker.shortcut=C+e C+m
+open-path.shortcut=C+e C+o
+replace-in-selection.shortcut=C+e C+r
+save-all.shortcut=C+e C+s
+toggle-line-numbers.shortcut=C+e C+t
+cut-append.shortcut=C+e C+u
+paste-previous.shortcut=C+e C+v
+close-all.shortcut=C+e C+w
+redo.shortcut=C+e C+z
+expand-folds.shortcut=C+e ENTER
+
+docking-top-expanded.shortcut=C+e 1
+docking-bottom-expanded.shortcut=C+e 2
+docking-left-expanded.shortcut=C+e 3
+docking-right-expanded.shortcut=C+e 4
+delete-paragraph.shortcut=C+e d
+format-paragraph.shortcut=C+e f
+select-line.shortcut=C+e l
+narrow.shortcut=C+e n
+select-paragraph.shortcut=C+e p
+remove-trailing-ws.shortcut=C+e r
+select-fold.shortcut=C+e s
+insert-literal.shortcut=C+e v
+select-word.shortcut=C+e w
+expand-all-folds.shortcut=C+e x
+prev-bracket.shortcut=C+e [
+next-bracket.shortcut=C+e ]
+
+# C+m
+run-last-macro.shortcut=C+m C+l
+record-temp-macro.shortcut=C+m C+m
+run-temp-macro.shortcut=C+m C+p
+record-macro.shortcut=C+m C+r
+stop-recording.shortcut=C+m C+s
+
+# C+r
+copy-append-string-register.shortcut=C+r C+a
+copy-string-register.shortcut=C+r C+c
+clear-register.shortcut=C+r C+l
+cut-append-string-register.shortcut=C+r C+u
+paste-string-register.shortcut=C+r C+v
+cut-string-register.shortcut=C+r C+x
+
+# Other keys
+select-block.shortcut=C+[
+match-bracket.shortcut=C+]
+prev-paragraph.shortcut=C+UP
+next-paragraph.shortcut=C+DOWN
+select-prev-paragraph.shortcut=CS+UP
+select-next-paragraph.shortcut=CS+DOWN
+shift-left.shortcut=A+LEFT
+shift-right.shortcut=A+RIGHT
+prev-marker.shortcut=A+UP
+next-marker.shortcut=A+DOWN
+select-none.shortcut=ESCAPE
+delete-start-line.shortcut=S+BACK_SPACE
+delete-end-line.shortcut=S+DELETE
+backspace.shortcut=BACK_SPACE
+backspace-word.shortcut=C+BACK_SPACE
+delete.shortcut=DELETE
+delete-word.shortcut=C+DELETE
+overwrite.shortcut=INSERT
+home.shortcut=HOME
+end.shortcut=END
+document-home.shortcut=C+HOME
+document-end.shortcut=C+END
+select-home.shortcut=S+HOME
+select-end.shortcut=S+END
+select-document-home.shortcut=CS+HOME
+select-document-end.shortcut=CS+END
+prev-page.shortcut=PAGE_UP
+next-page.shortcut=PAGE_DOWN
+select-prev-page.shortcut=S+PAGE_UP
+select-next-page.shortcut=S+PAGE_DOWN
+prev-char.shortcut=LEFT
+prev-word.shortcut=C+LEFT
+select-prev-char.shortcut=S+LEFT
+select-prev-word.shortcut=CS+LEFT
+next-char.shortcut=RIGHT
+next-word.shortcut=C+RIGHT
+select-next-char.shortcut=S+RIGHT
+select-next-word.shortcut=CS+RIGHT
+prev-line.shortcut=UP
+select-prev-line.shortcut=S+UP
+next-line.shortcut=DOWN
+select-next-line.shortcut=S+DOWN
+repeat.shortcut=C+ENTER
+collapse-fold.shortcut=A+BACK_SPACE
+expand-fold.shortcut=AS+ENTER
+expand-one-level.shortcut=A+ENTER

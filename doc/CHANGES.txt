@@ -1,0 +1,7 @@
+JEDIT 4.0 VERSION HISTORY
+
+* Version 4.0pre1
+
++ New Features
+
+- JHTML syntax highlighting (Will Sargent)

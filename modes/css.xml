@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="noWordSep" VALUE="-" />
+	</PROPS>
+	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<SEQ TYPE="OPERATOR">:</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SPAN TYPE="NULL" DELEGATE="LITERAL">
+			<BEGIN>(</BEGIN>
+			<END>)</END>
+		</SPAN>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">.</SEQ>
+
+		<SEQ TYPE="OPERATOR">!</SEQ>
+
+		<MARK_FOLLOWING TYPE="LITERAL2">#</MARK_FOLLOWING>
+
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
+		<KEYWORDS>
+			<!-- CSS1 properties -->
+
+			<!-- Font properties -->
+			<KEYWORD2>font</KEYWORD2>
+			<KEYWORD2>font-family</KEYWORD2>
+			<KEYWORD2>font-size</KEYWORD2>
+			<KEYWORD2>font-style</KEYWORD2>
+			<KEYWORD2>font-variant</KEYWORD2>
+			<KEYWORD2>font-weight</KEYWORD2>
+
+			<!-- Color and background properties -->
+			<KEYWORD2>background</KEYWORD2>
+			<KEYWORD2>background-attachement</KEYWORD2>
+			<KEYWORD2>background-color</KEYWORD2>
+			<KEYWORD2>background-image</KEYWORD2>
+			<KEYWORD2>background-position</KEYWORD2>
+			<KEYWORD2>background-repeat</KEYWORD2>
+			<KEYWORD2>color</KEYWORD2>
+
+			<!-- Text properties -->
+			<KEYWORD2>letter-spacing</KEYWORD2>
+			<KEYWORD2>line-height</KEYWORD2>
+			<KEYWORD2>text-align</KEYWORD2>
+			<KEYWORD2>text-decoration</KEYWORD2>
+			<KEYWORD2>text-indent</KEYWORD2>
+			<KEYWORD2>text-transform</KEYWORD2>
+			<KEYWORD2>vertical-align</KEYWORD2>
+			<KEYWORD2>word-spacing</KEYWORD2>
+
+			<!-- Box properties -->
+			<KEYWORD2>border</KEYWORD2>
+			<KEYWORD2>border-bottom</KEYWORD2>
+			<KEYWORD2>border-bottom-width</KEYWORD2>
+			<KEYWORD2>border-color</KEYWORD2>
+			<KEYWORD2>border-left</KEYWORD2>
+			<KEYWORD2>border-left-width</KEYWORD2>
+			<KEYWORD2>border-right</KEYWORD2>
+			<KEYWORD2>border-right-width</KEYWORD2>
+			<KEYWORD2>border-top</KEYWORD2>
+			<KEYWORD2>border-top-width</KEYWORD2>
+			<KEYWORD2>border-style</KEYWORD2>
+			<KEYWORD2>border-width</KEYWORD2>
+			<KEYWORD2>clear</KEYWORD2>
+			<KEYWORD2>float</KEYWORD2>
+			<KEYWORD2>height</KEYWORD2>
+			<KEYWORD2>margin</KEYWORD2>
+			<KEYWORD2>margin-bottom</KEYWORD2>
+			<KEYWORD2>margin-left</KEYWORD2>
+			<KEYWORD2>margin-right</KEYWORD2>
+			<KEYWORD2>margin-top</KEYWORD2>
+			<KEYWORD2>padding</KEYWORD2>
+			<KEYWORD2>padding-bottom</KEYWORD2>
+			<KEYWORD2>padding-left</KEYWORD2>
+			<KEYWORD2>padding-right</KEYWORD2>
+			<KEYWORD2>padding-top</KEYWORD2>
+			<KEYWORD2>width</KEYWORD2>
+
+			<!-- Classification properties -->
+			<KEYWORD2>display</KEYWORD2>
+			<KEYWORD2>list-style</KEYWORD2>
+			<KEYWORD2>list-style-image</KEYWORD2>
+			<KEYWORD2>list-style-position</KEYWORD2>
+			<KEYWORD2>list-style-type</KEYWORD2>
+			<KEYWORD2>white-space</KEYWORD2>
+
+			<KEYWORD3>@import</KEYWORD3>
+			<KEYWORD3>rgb</KEYWORD3>
+			<KEYWORD3>url</KEYWORD3>
+
+			<!-- measurement units -->
+			<KEYWORD3>px</KEYWORD3>
+			<KEYWORD3>pt</KEYWORD3>
+			<KEYWORD3>mm</KEYWORD3>
+			<KEYWORD3>cm</KEYWORD3>
+			<KEYWORD3>in</KEYWORD3>
+			<KEYWORD3>em</KEYWORD3>
+		</KEYWORDS>
+	</RULES>
+	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+	</RULES>
+</MODE>

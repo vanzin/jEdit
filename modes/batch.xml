@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="lineComment" VALUE="rem " />
+	</PROPS>
+	<RULES ESCAPE="\" IGNORE_CASE="TRUE">
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- 'echo off' statements -->
+		<SEQ TYPE="KEYWORD3">@</SEQ>
+
+		<!-- labels -- eg :test -->
+		<EOL_SPAN TYPE="LABEL" AT_LINE_START="TRUE">:</EOL_SPAN>
+
+		<!-- comments -->
+		<EOL_SPAN TYPE="COMMENT1">REM</EOL_SPAN>
+
+		<!-- literals -->
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<!-- variables -->
+		<SEQ TYPE="KEYWORD2">%1</SEQ>
+		<SEQ TYPE="KEYWORD2">%2</SEQ>
+		<SEQ TYPE="KEYWORD2">%3</SEQ>
+		<SEQ TYPE="KEYWORD2">%4</SEQ>
+		<SEQ TYPE="KEYWORD2">%5</SEQ>
+		<SEQ TYPE="KEYWORD2">%6</SEQ>
+		<SEQ TYPE="KEYWORD2">%7</SEQ>
+		<SEQ TYPE="KEYWORD2">%8</SEQ>
+		<SEQ TYPE="KEYWORD2">%9</SEQ>
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
+			<BEGIN>%</BEGIN>
+			<END>%</END>
+		</SPAN>
+	</RULES>
+</MODE>

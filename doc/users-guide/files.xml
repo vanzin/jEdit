@@ -1,0 +1,504 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=true: -->
+
+<chapter id="files"><title>Working With Files</title>
+ <sect1 id="creating"><title>Creating New Files</title>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>New File</guimenuitem> (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>N</keycap></keycombo>) opens a new
+   untitled buffer. When it is saved, a file will be created on disk.
+   Another way to create a new file is to specify a non-existent file
+   name when starting jEdit from your operating system's command line.
+  </para>
+ </sect1>
+ <sect1 id="opening"><title>Opening Files</title>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Open File</guimenuitem> (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>O</keycap></keycombo>) displays
+   a file selector dialog box and loads the specified file into a new
+   buffer. Multiple files can be opened at once by holding down
+   <keycap>Control</keycap> while clicking on them in the file system browser.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Insert File</guimenuitem> displays
+   a file selector dialog box and inserts the specified file into the current
+   buffer.
+  </para>
+  <para>
+   The <guimenu>File</guimenu>&gt;<guimenuitem>Current Directory</guimenuitem>
+   menu lists all files in the current buffer's directory.
+  </para>
+  <para>
+   The <guimenu>File</guimenu>&gt;<guimenuitem>Recent Files</guimenuitem> menu
+   lists recent files. When a recent file is opened, the caret
+   is automatically moved to its previous location in that file.
+   The number of recent files to remember can be changed and caret
+   position saving can be disabled in the <guibutton>General</guibutton> pane of
+   the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.
+  </para>
+  <para>
+   Files that you do not have write access to are opened in read-only
+   mode, and editing will not be permitted.
+  </para>
+  <sidebar><title>GZipped Files</title>
+   <para>
+    jEdit supports transparent editing of GZipped files; files with
+    the <filename>.gz</filename> extension are automatically decompressed before
+    loading, and compressed when saving.
+   </para>
+  </sidebar>
+ </sect1>
+ <sect1 id="saving"><title>Saving Files</title>
+  <para>
+   Changed made to a buffer do not affect the file on disk until the
+   buffer is <firstterm>saved</firstterm>.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Save</guimenuitem> (shortcut:
+   <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>)
+   saves the current buffer to disk.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Save All Buffers</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycombo><keycap>Control</keycap><keycap>S</keycap></keycombo>) saves all
+   open buffers to disk, asking for confirmation first.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Save As</guimenuitem> saves the
+   buffer to a different specified file on disk. The buffer is then
+   renamed, and subsequent saves also save to the specified file.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Save a Copy As</guimenuitem> saves
+   the buffer to a different specified file on disk, but doesn't rename the
+   buffer, and doesn't clear the <quote>modified</quote> flag.
+  </para>
+  <sect2><title>Autosave and Crash Recovery</title>
+   <para>
+    The autosave feature protects your work from computer crashes and
+    such. Every 30 seconds, all buffers with unsaved changes are
+    written out to their respective file names, enclosed in hash
+    (<quote>#</quote>) characters. For example, <filename>program.c</filename>
+    will be autosaved to <filename>#program.c#</filename>.
+   </para>
+   <para>
+    Saving a buffer using
+    one of the commands in the previous section automatically deletes the
+    autosave file, so they will only ever be visible in the unlikely
+    event of a jEdit (or operating system) crash.
+   </para>
+   <para>
+    If an autosave file is
+    found while a buffer is being loaded, jEdit will offer to recover the
+    autosaved data.
+   </para>
+   <para>
+    The autosave feature can be configured
+    in the <guibutton>Loading and Saving</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box; see <xref linkend="global-opts" />.
+   </para>
+  </sect2>
+  <sect2><title>Backups</title>
+   <para>
+    The backup feature can be used to roll back to the previous version
+    of a file after changes were made. When a buffer is saved
+    for the first time after being opened, its original contents are
+    <quote>backed up</quote> under a different file name.
+   </para>
+   <para>
+    The default behavior is to back up the original contents
+    to the buffer's file name suffixed with a tilde (<quote>~</quote>).
+    For example, <filename>paper.tex</filename> will be backed up to
+    <filename>paper.tex~</filename>.
+   </para>
+   <para>
+    The backup feature can also be configured to do any of the following:
+   </para>
+   <itemizedlist>
+    <listitem><para>
+     Save numbered backups, named
+     <filename><replaceable>filename</replaceable>~<replaceable>number</replaceable>~</filename>
+    </para></listitem>
+    <listitem><para>
+     Add a prefix to the backed-up file name
+    </para></listitem>
+    <listitem><para>
+     Adds a suffix, other than <quote>~</quote>, to the backed-up file name
+    </para></listitem>
+    <listitem><para>
+     Backups can optionally be saved in a specified backup directory, instead of
+     the directory of the original file. This can reduce clutter
+    </para></listitem>
+   </itemizedlist>
+   <para>
+    The above features can be configured
+    in the <guibutton>Loading and Saving</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box; see <xref linkend="global-opts" />.
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 id="line-separators"><title>Line Separators</title>
+  <para>
+   The three major operating systems use different conventions to mark
+   line endings in text files.
+   The MacOS uses Carriage-Return characters (<literal>\r</literal> in
+   Java-speak) for that purpose. Unix
+   uses Newline characters (<literal>\n</literal>). Windows uses both
+   (<literal>\r\n</literal>). jEdit can read and write files in all three formats.
+  </para>
+  <para>
+   When loading a file, the line separator used within is automatically
+   detected, and will be used when saving a file back to disk. The line
+   separator used when saving the current buffer can be changed in the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+   Options</guimenuitem> dialog box; see <xref linkend="buffer-opts" />.
+  </para>
+  <para>
+   By default, new files are saved with your operating system's native line
+   separator. This can be changed in the
+   <guibutton>Loading and Saving</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />. Note that changing this
+   setting has no effect on existing files.
+  </para>
+ </sect1>
+ <sect1 id="encodings"><title>Character Encodings</title>
+  <para>
+   Internally, Java programs like jEdit store text as a stream of
+   16-bit numerical values, with each value a character in the Unicode character
+   set. Unicode is a
+   standardized character set that can represent characters in almost all human
+   languages.
+  </para>
+  <para>
+   Unfortunately, most other computer programs use far less flexible methods of
+   storing
+   text; therefore, if jEdit loaded and saved all files as raw Unicode, it would
+   be useless.
+  </para>
+  <para>
+   To get around this, jEdit converts Unicode text to other character
+   encodings and vice versa when loading and saving files. jEdit can use any
+   encoding supported by the Java platform.
+  </para>
+  <para>
+   The default encoding, used to load and save files for which no
+   other encoding is specified, can be set in the <guibutton>Loading and
+   Saving</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />. The setting is presented as
+   an editable combo box; the combo box
+   contains a few of the more frequently used encodings, but the Java platform
+   defines practically hundreds more you can use.
+  </para>
+  <para>
+   Unfortunately, there
+   is no programmical way to obtain a list of all supported encodings, and the
+   set is constantly changing with each Java version. So to play it safe, jEdit
+   has a few pre-defined defaults, but allows you to use any other supported
+   encoding, assuming you know its name.
+  </para>
+  <para>
+   Unless you change the default encoding, jEdit will use your operating
+   system's native encoding; <literal>MacRoman</literal> on the MacOS,
+   <literal>Cp1252</literal> on Windows, and <literal>8859_1</literal> on
+   Unix.
+  </para>
+  <para>
+   The <guimenu>File</guimenu>&gt;<guisubmenu>Open With Encoding</guisubmenu>
+   lets you open a file with an encoding other than the default. The menu
+   contains a set of items, one for each common encoding, along with
+   <guimenuitem>System Default</guimenuitem> and <guimenuitem>jEdit
+   Default</guimenuitem> commands. Invoking a menu item displays the usual
+   file dialog box, and opens the selected file with the chosen encoding.
+  </para>
+  <para>
+   The <guimenu>Open With Other Encoding</guimenu> command in the same menu
+   lets you enter an arbitriary encoding name, assuming it is supported by
+   your Java implementation.
+  </para>
+  <para>
+   Once a file has been opened, the encoding to use when saving it
+   can be set in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+   Options</guimenuitem> dialog box.
+  </para>
+  <para>
+   The current buffer's encoding is shown in the status bar. If a file is opened
+   without an explicit encoding specified, jEdit will use the encoding last used
+   when working with that file, if the file is in the recent file list.
+   Otherwise, the default encoding will be used.
+  </para>
+  <sect2><title>Commonly Used Encodings</title>
+   <para>
+    The most frequently-used character encoding is ASCII, or <quote>American 
+    Standard Code for Information Interchange</quote>. ASCII encodes Latin
+    letters used in English, in addition to numbers and a range of punctuation
+    characters.
+    The ASCII character set consists of 127 characters only, and it is unsuitable
+    for anything but English text (and other file types which only use English
+    characters, like most program source). jEdit will load and save files as
+    7-bit ASCII if the <literal>ASCII</literal> encoding is used.
+   </para>
+   <para>
+    Because ASCII is unsuitable for international use, most operating
+    systems use an 8-bit extension of ASCII, with the first 127 characters
+    remaining the same, and the rest used to encode accents, ulmauts, and
+    various less frequently used typographical marks. Unfortunately, the three
+    major
+    operating systems all extend ASCII in a different way. Files written by
+    Macintosh programs can be read using the <literal>MacRoman</literal>
+    encoding; Windows text files are usually stored as
+    <literal>Cp1252</literal>. In the Unix world, the <literal>8859_1</literal>
+    (otherwise known as Latin1) character encoding has found widespread usage.
+   </para>
+   <para>
+    Windows users are accustomized to dealing with files in a wide range of
+    character sets, known as <firstterm>code pages</firstterm>. Java supports a
+    large number of code pages; the encoding name consists of the text
+    <quote>Cp</quote>, followed by a number.
+   </para>
+   <para>
+    Raw Unicode files are quite rare, but can be read and written with the
+    <literal>Unicode</literal> encoding.
+    One reason raw Unicode has not found widespread usage for storing files on
+    disk is that each character takes up 16 bits. Most other character sets
+    devote 8 bits per character, which saves space. The <literal>UTF8</literal>
+    encoding encodes frequently-used Unicode characters as 8 bits, with
+    less-frequent ones stretching up to 24 bits. This saves space but allows the
+    full range of Unicode characters to be represented.
+   </para>
+   <para>
+    Many common cross-platform international character sets are supported;
+    <literal>KOI8_R</literal> for Russian text, <literal>Big5</literal> and
+    <literal>GBK</literal> for Chinese, and <literal>SJIS</literal> for
+    Japanese.
+   </para>
+   <para>
+    Java even supports a few downright obscure encodings, such as the
+    <literal>EBCDIC</literal> character encoding used on IBM mainframes.
+   </para>
+  </sect2>
+ </sect1>
+ <sect1 id="vfs-browser"><title>The File System Browser</title>
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>File System
+   Browser</guimenuitem> displays a file system browser.
+   By default, the file system browser is shown in a floating window;
+   it can be set to dock into the view in the <guibutton>Docking</guibutton>
+   pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box; see <xref linkend="docking" />.
+  </para>
+  <para>
+   The directory to browse is specified in the <guibutton>Path</guibutton> text
+   field. A subset of the current directory to display can be specified in the
+   form of a glob pattern in the <guibutton>Filter</guibutton> text field.
+   See <xref linkend="globs" /> for information about glob patterns.
+   Both text fields remember previously entered strings; see <xref linkend="history" />
+   for details.
+  </para>
+  <para>
+   You can view an entire directory hierarchy at once by clicking
+   the expander controls next to directories in the tree.
+  </para>
+  <para>
+   The toolbar buttons perform the following actions, from left to right:
+  </para>
+  <itemizedlist>
+   <listitem><para><guibutton>Up</guibutton> - displays the current
+   directory's parent in the file system view. The popup arrow next to
+   this button displays a
+   menu listing all the parent directories of the current directory,
+   up to the filesystem root</para></listitem>
+   <listitem><para><guibutton>Reload</guibutton> - reloads the file list
+   </para></listitem>
+   <listitem><para><guibutton>Local Drives</guibutton> - displays all
+   local drives. On Windows, this will be a list of
+   drive letters; on Unix, the list will only contain one entry, the
+   root directory</para></listitem>
+   <listitem><para><guibutton>Home Directory</guibutton> - displays your
+   home directory in the file system browser</para></listitem>
+   <listitem><para><guibutton>Parent Directory of Current Buffer</guibutton> -
+   displays the directory containing the current buffer
+   in the file system browser</para></listitem>
+  </itemizedlist>
+  <para>
+   Clicking the <guimenu>More</guimenu> button displays a menu containing
+   several less frequently-used commands:
+  </para>
+  <itemizedlist>
+   <listitem><para><guimenuitem>Show Hidden Files</guimenuitem> - a check box
+   menu item that controls if hidden
+   files will be shown in the file list</para></listitem>
+   <listitem><para><guimenuitem>New Directory</guimenuitem> - creates a new
+   directory, prompting for the desired name
+   </para></listitem>
+   <listitem><para><guimenuitem>Search in Directory</guimenuitem> - displays the
+   search and
+   replace dialog box for searching in all files in the current directory that
+   match the current filename filter. See <xref linkend="search-replace" />
+   for information
+   about the search and replace feature
+   </para></listitem>
+   <listitem><para><guimenuitem>Add to Favorites</guimenuitem> - adds the
+   currently selected (or the currently displayed, if there is nothing
+   selected) directory to the favorites list</para></listitem>
+   <listitem><para><guimenuitem>Go to Favorites</guimenuitem> - displays the
+   favorites list. To remove a directory from the list, right-click on it and
+   select <guimenuitem>Delete</guimenuitem> from the resulting popup
+   menu</para></listitem>
+  </itemizedlist>
+  <para>
+   Right-clicking on a file in the file system browser displays a popup menu,
+   containing commands for manipulating that file, in addition to all the
+   commands from the <guibutton>More</guibutton> menu.
+   If the file is already open, the popup will have commands to
+   display it or close it.
+   Unopened file popups have commands for opening, opening with a different
+   encoding, deleting and renaming.
+   Note that attempting to delete a directory containing files
+   will give an error;
+   only empty directories may be deleted.
+  </para>
+  <para>
+   The file system browser can be navigated from the keyboard:
+  </para>
+  <itemizedlist>
+   <listitem><para><keycap>Enter</keycap> - opens the currently selected file or
+   directory</para></listitem>
+   <listitem><para><keycap>Left</keycap> - goes to the current directory's parent
+   </para></listitem>
+   <listitem><para><keycap>Up</keycap> - selects previous file in list
+   </para></listitem>
+   <listitem><para><keycap>Down</keycap> - selects next file in list
+   </para></listitem>
+   <listitem><para>Typing the first few characters of
+   a file's name will select that file
+   </para></listitem>
+  </itemizedlist>
+  <para>
+   The file system view must have keyboard focus for these keys
+   to work. In the <guimenuitem>Open File</guimenuitem> dialog box, it is given
+   keyboard focus by default. In other instances, it can be given
+   keyboard focus by clicking with the mouse.
+  </para>
+  <para>
+   The file system browser can be customized in the
+   <guibutton>File System Browser</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box. The following settings can be changed:
+  </para>
+  <itemizedlist>
+   <listitem><para>The directory to display initially (either the directory
+   containing the current buffer, your home directory, the favorites list, or
+   the most recently visited directory)</para></listitem>
+   <listitem><para>If icons should be shown (disabling icons can save a lot of
+   screen space)</para></listitem>
+   <listitem><para>If hidden files should be shown by default</para></listitem>
+   <listitem><para>If the file list should be sorted</para></listitem>
+   <listitem><para>If the sort should be case-insensitive</para></listitem>
+   <listitem><para>If files are directories should be sorted together, as
+   opposed to directories always being at the top of the list</para></listitem>
+   <listitem><para>If double-clicking an open file should close it</para></listitem>
+   <listitem><para>If the file name filter in <guimenuitem>Open</guimenuitem>
+   and <guimenuitem>Save</guimenuitem> dialog boxes should be based on the
+   current buffer's name</para></listitem>
+  </itemizedlist>
+ </sect1>
+ <sect1 id="reloading"><title>Reloading Files</title>
+  <para>
+   If an open buffer is modified on disk by another application, a warning
+   dialog box is displayed, offering to either continue editing
+   (and lose changes made by the other application)
+   or reload the buffer from disk (and lose any usaved changes). This
+   feature can be disabled in the <guibutton>General</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Reload</guimenuitem> can be used to
+   discard unsaved changes and reload the current buffer from disk at any other
+   time; a confirmation dialog box will be displayed first if the buffer
+   has unsaved changes.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Reload All Buffers</guimenuitem>
+   discards unsaved changes in all open buffers and reload them from disk,
+   asking for confirmation first.
+  </para>
+ </sect1>
+ <sect1 id="threaded-io"><title>Multi-Threaded I/O</title>
+  <para>
+   To improve responsiveness and perceived performance,
+   jEdit executes all input/output operations asynchronously.
+   While I/O is in progress, a small disk icon and progress meters for each
+   running operation are shown in the status bar.
+   The <guimenu>Utilities</guimenu>&gt;<guimenuitem>I/O Progress
+   Monitor</guimenuitem> command displays a window with more detailed status
+   information. Requests can also be aborted in this window. Note that aborting
+   a buffer save can result in data loss.
+  </para>
+  <para>
+   By default, four I/O threads are created, which means that up
+   to four buffers can be loaded or saved simultaneously. The number of
+   threads can be changed in the
+   <guibutton>Loading and Saving</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   dialog box; see <xref linkend="global-opts" />. Setting the number to zero
+   disables multi-threaded I/O completely; doing this is not recommended.
+  </para>
+ </sect1>
+ <sect1 id="printing"><title>Printing Files</title>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Print</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>P</keycap></keycombo>)
+   will print the current buffer. By default, the printed output will have
+   syntax highlighting, and each page will have a header with the file name,
+   and a footer with the current date/time and page number. The appearance of
+   printed output
+   can be customized in the <guibutton>Printing</guibutton> pane of the
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+   Options</guimenuitem> dialog box. The following settings can be changed:
+  </para>
+  <itemizedlist>
+   <listitem><para>The font to use when printing</para></listitem>
+   <listitem><para>If a header with the file name should be printed on each
+   page</para></listitem>
+   <listitem><para>If a footer with the page number and current date should be
+   printed on each page</para></listitem>
+   <listitem><para>If line numbers should be printed</para></listitem>
+   <listitem><para>If the output should be styled according to the current
+   mode's syntax highlighting rules</para></listitem>
+   <listitem><para>If the output should be colored according to the current
+   mode's syntax highlighting rules (might look bad on grayscale
+   printers)</para></listitem>
+   <listitem><para>The page margins</para></listitem>
+  </itemizedlist>
+ </sect1>
+ <sect1 id="closing-exiting"><title>Closing Files and Exiting jEdit</title>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Close Buffer</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo>)
+   closes the current buffer. If it has unsaved changes, jEdit
+   will ask if they should be saved first.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Close All Buffers</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>E</keycap></keycombo>
+   <keycombo><keycap>Control</keycap><keycap>W</keycap></keycombo>)
+   closes all buffers. If any buffers have unsaved
+   changes, they will be listed in a dialog box where they can be saved
+   or discarded. In the dialog box, multiple buffers to operate on at
+   once can be selected by clicking on them in the list while holding
+   down <keycap>Control</keycap>.
+  </para>
+  <para>
+   <guimenu>File</guimenu>&gt;<guimenuitem>Exit</guimenuitem>
+   (shortcut: <keycombo><keycap>Control</keycap><keycap>Q</keycap></keycombo>)
+   will completely exit jEdit.
+  </para>
+ </sect1>
+</chapter>

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<MODE>
+	<PROPS>
+		<!-- the ; hack is there so that stuff like if(bob) fred();
+		     does not indent the next line -->
+		<PROPERTY NAME="indentPrevLine" VALUE="\s*(((if|while)\s*\(|else|case|default)[^;]*|for\s*\(.*)" />
+		<!-- set this to 'true' if you want to use GNU coding style -->
+		<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
+		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+	</PROPS>
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+		<!-- whitespace: (space and tab) -->
+		<WHITESPACE> </WHITESPACE>
+		<WHITESPACE>	</WHITESPACE>
+
+		<!-- C style comment -->
+		<SPAN TYPE="COMMENT1">
+			<BEGIN>/*</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
+		<!-- C++ style comment -->
+		<EOL_SPAN TYPE="COMMENT1">//</EOL_SPAN>
+
+		<!-- BeanShell comment -->
+		<EOL_SPAN TYPE="COMMENT1">#!</EOL_SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SEQ TYPE="NULL">)</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="NULL">.</SEQ>
+		<SEQ TYPE="NULL">,</SEQ>
+		<SEQ TYPE="NULL">;</SEQ>
+		<SEQ TYPE="NULL">]</SEQ>
+		<SEQ TYPE="NULL">[</SEQ>
+		<SEQ TYPE="NULL">?</SEQ>
+		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+		<SEQ TYPE="NULL">:</SEQ>
+
+		<!-- Function calls -->
+		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+
+		<KEYWORDS IGNORE_CASE="FALSE">
+			<KEYWORD2>import</KEYWORD2>
+			<KEYWORD3>byte</KEYWORD3>
+			<KEYWORD3>char</KEYWORD3>
+			<KEYWORD3>short</KEYWORD3>
+			<KEYWORD3>int</KEYWORD3>
+			<KEYWORD3>long</KEYWORD3>
+			<KEYWORD3>float</KEYWORD3>
+			<KEYWORD3>double</KEYWORD3>
+			<KEYWORD3>boolean</KEYWORD3>
+			<KEYWORD3>void</KEYWORD3>
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>instanceof</KEYWORD1>
+			<KEYWORD1>new</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>throw</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
+			<KEYWORD1>finally</KEYWORD1>
+			<LITERAL2>this</LITERAL2>
+			<LITERAL2>null</LITERAL2>
+			<LITERAL2>true</LITERAL2>
+			<LITERAL2>false</LITERAL2>
+		</KEYWORDS>
+	</RULES>
+</MODE>

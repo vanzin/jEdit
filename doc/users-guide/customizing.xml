@@ -1,0 +1,366 @@
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=1:noTabs=true: -->
+
+<chapter id="customizing"><title>Customizing jEdit</title>
+ <sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
+   displays a dialog box for changing editor settings on a per-buffer basis.
+   Any changes made in this dialog box are lost after the buffer is
+   closed.
+  </para>
+  <para>
+   The following settings may be changed here:
+  </para>
+  <itemizedlist>
+   <listitem><para>The edit mode (see <xref linkend="modes" />)</para></listitem>
+   <listitem><para>The tab width (see <xref linkend="indent" />)</para></listitem>
+   <listitem><para>The indent width</para></listitem>
+   <listitem><para>The wrap column (see <xref linkend="entering-text" />)
+   </para></listitem>
+   <listitem><para>The line separator (see <xref linkend="line-separators" />)
+   </para></listitem>
+   <listitem><para>If syntax highlighting should be enabled
+   (see <xref linkend="syntax-hilite" />)
+   </para></listitem>
+   <listitem><para>If auto indent and soft tabs should be enabled
+   (see <xref linkend="indent" />)
+   </para></listitem>
+  </itemizedlist>
+  <para>
+   The <quote>Corresponding buffer-local
+   properties</quote> text field displays buffer-local properties that
+   duplicate the current settings in the dialog box.
+  </para>
+ </sect1>
+ <sect1 id="buffer-local"><title>Buffer-Local Properties</title>
+  <para>
+   Buffer-local properties provide an alternate way to change editor settings
+   on a per-buffer basis. While changes made in the Buffer Options dialog box
+   are lost after the buffer is closed, buffer-local properties take effect
+   each time the file is opened, because they are embedded in the file
+   itself.
+  </para>
+  <para>
+   When jEdit loads a file, it checks the first 10 lines for
+   colon-enclosed name/value pairs. The following example changes
+   the indent width to 4 characters, enables soft tabs, and sets
+   the buffer's edit mode to Perl:
+  </para>
+  <screen>:indentSize=4:noTabs=true:mode=perl:</screen>
+  <para>
+   Note that adding buffer-local properties to a buffer only
+   takes effect after the next time the buffer is loaded.
+  </para>
+  <para>
+   The following table describes each buffer-local property in detail.
+  </para>
+  <informaltable>
+   <tgroup cols="2">
+    <colspec colnum="1" colwidth="1.5in" />
+    <thead>
+     <row>
+      <entry>Property name</entry>
+      <entry>Description</entry>
+     </row>
+    </thead>
+    <tbody>
+     <row>
+      <entry>collapseFolds</entry>
+      <entry>Folds with a level of this or higher will be collapsed when the
+      buffer is opened. If set to zero, all folds will be expanded initially.
+      See <xref linkend="folding" />.</entry>
+     </row>
+     <row>
+      <entry>commentEnd</entry>
+      <entry>The range comment end string. For example, in Java mode
+      the default value is <quote>*/</quote>. See <xref linkend="commenting" />.
+      </entry>
+     </row>
+     <row>
+      <entry>commentStart</entry>
+      <entry>The range comment start string. For example, in Java mode
+      the default value is <quote>/*</quote>. See <xref linkend="commenting" />.
+      </entry>
+     </row>
+     <row>
+      <entry>indentOnEnter</entry>
+      <entry>If set to <quote>true</quote>, pressing <keycap>Enter</keycap> will
+      insert a line break and automatically indent the new line. See
+      <xref linkend="indent" />.</entry>
+     </row>
+     <row>
+      <entry>indentOnTab</entry>
+      <entry>If set to <quote>true</quote>, indentation will be performed when
+      the <keycap>Tab</keycap> key is pressed. See <xref linkend="indent" />.
+      </entry>
+     </row>
+     <row>
+      <entry>indentSize</entry>
+      <entry>The width, in characters, of one indent.
+      Must be an integer greater than 0.
+      See <xref linkend="indent" />.</entry>
+     </row>
+     <row>
+      <entry>lineComment</entry>
+      <entry>The line comment string. For example, in Java mode the
+      default value is <quote>//</quote>. See <xref linkend="commenting" />.
+      </entry>
+     </row>
+     <row>
+      <entry>maxLineLen</entry>
+      <entry>The maximum line length and wrap column position.
+      Inserting text beyond this column will automatically insert a line
+      break at the appropriate position.
+      See <xref linkend="entering-text" />.</entry>
+     </row>
+     <row>
+      <entry>mode</entry>
+      <entry>The default edit mode for the buffer.
+      See <xref linkend="modes" />.</entry>
+     </row>
+     <row>
+      <entry>noTabs</entry>
+      <entry>If set to <quote>true</quote>, soft tabs (multiple space characters)
+      will be used instead of <quote>real</quote> tabs. See
+      <xref linkend="indent" />.</entry>
+     </row>
+     <row>
+      <entry>noWordSep</entry>
+      <entry>A list of non-alphanumeric characters that are
+      <emphasis>not</emphasis> to
+      be treated as word separators.</entry>
+     </row>
+     <row>
+      <entry>syntax</entry>
+      <entry>If set to <quote>false</quote>, syntax highlighting will be not
+      be performed. See <xref linkend="syntax-hilite" />.</entry>
+     </row>
+     <row>
+      <entry>tabSize</entry>
+      <entry>The tab width. Must be an integer greater than 0.
+      See <xref linkend="indent" />.</entry>
+     </row>
+     <row>
+      <entry>wordBreakChars</entry>
+      <entry>Characters, in addition to spaces and tabs, at which lines may be
+      split when word wrapping.
+      See <xref linkend="entering-text" />.</entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </informaltable>
+ </sect1>
+ <sect1 id="global-opts"><title>The Global Options Dialog Box</title>
+  <para>
+   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   displays the global options dialog box. The dialog box is divided into
+   several panes, each pane containing a set of related options. Use the list
+   on the left of the dialog box to switch between panes. Only panes
+   created by jEdit are described here; some plugins add their own option
+   panes, and information about them can be found in the documentation
+   for the plugins in question.
+  </para>
+  <bridgehead renderas="sect3">The General Pane</bridgehead>
+  <para>
+   The <guibutton>General</guibutton> option pane lets you change various
+   miscellaneous settings, such as the number of recent files to remember,
+   the Swing look &amp; feel, and such.
+  </para>
+  <bridgehead renderas="sect3">The Loading and Saving Pane</bridgehead>
+  <para>
+   The <guibutton>Loading and Saving</guibutton> option pane lets you change
+   settings such as the autosave frequency, backup settings, file encoding,
+   and so on.
+  </para>
+  <bridgehead renderas="sect3">The Editing Pane</bridgehead>
+  <para>
+   The <guibutton>Editing</guibutton> option pane lets you change settings such
+   as the tab size, syntax highlighting and soft tabs on a global basis.
+  </para>
+  <para>
+   Due to the design of jEdit's properties implementation,
+   changes to some settings in this option pane only take effect
+   in subsequently opened files.
+  </para>
+  <bridgehead renderas="sect3">The Mode-Specific Pane</bridgehead>
+  <para>
+   The <guibutton>Mode-Specific</guibutton> option pane lets you change settings
+   such as the tab size, syntax highlighting and soft tabs on a
+   mode-specific basis.
+  </para>
+  <para>
+   The <guibutton>File name glob</guibutton> and <guibutton>First line
+   glob</guibutton> text fields let you specify a glob pattern that names and
+   first lines of buffers will be matched against to determine the edit mode.
+  </para>
+  <para>
+   This option pane does not change XML mode definition files on disk; it
+   merely writes values to the user properties file which override those
+   in mode files. To find out how to edit mode files directly, see
+   <xref linkend="writing-modes-part" />.
+  </para>
+  <bridgehead renderas="sect3">The Text Area Pane</bridgehead>
+  <para>
+   The <guibutton>Text Area</guibutton> option pane lets you customize the
+   appearance of the text area.
+  </para>
+  <bridgehead renderas="sect3">The Gutter Pane</bridgehead>
+  <para>
+   The <guibutton>Gutter</guibutton> option pane lets you customize the
+   appearance of the gutter.
+  </para>
+  <bridgehead renderas="sect3">The Colors Pane</bridgehead>
+  <para>
+   The <guibutton>Colors</guibutton> option pane lets you change
+   the text area's color scheme.
+  </para>
+  <bridgehead renderas="sect3">The Styles Pane</bridgehead>
+  <para>
+   The <guibutton>Styles</guibutton> option pane lets you change
+   the text styles and colors used for syntax highlighting.
+  </para>
+  <bridgehead renderas="sect3">The Docking Pane</bridgehead>
+  <para>
+   The <guibutton>Docking</guibutton> option pane lets you specify which
+   dockable windows should be floating, and which should be docked in the view.
+  </para>
+   <bridgehead renderas="sect3">The Context Menu Pane</bridgehead>
+  <para>
+   The <guibutton>Context Menu</guibutton> option pane lets you edit the text
+   area's right-click context menu.
+  </para>
+  <bridgehead renderas="sect3">The Tool Bar Pane</bridgehead>
+  <para>
+   The <guibutton>Tool Bar</guibutton> option pane lets you edit the tool bar,
+   or disable it completely.
+  </para>
+  <bridgehead renderas="sect3">The Shortcuts Pane</bridgehead>
+  <para>
+   The <guibutton>Shortcuts</guibutton> option pane
+   let you change keyboard shortcuts. Each command can have up to two shortcuts
+   associated with it.
+  </para>
+  <para>
+   The combo box at the top of the option pane selects the shortcut set
+   to edit (command, plugin or macro shortcuts).
+  </para>
+  <para>
+   To change a shortcut, click the appropriate table entry and press the
+   keys you want associated with that command in the resulting dialog box.
+   The dialog box will warn you if the shortcut is already assigned.
+  </para>
+  <bridgehead renderas="sect3">The Abbreviations Pane</bridgehead>
+  <para>
+   The <guibutton>Abbreviations</guibutton> option pane lets you enable or
+   disable automatic abbreviation expansion, and edit currently defined
+   abbreviations.
+  </para>
+  <para>
+   The combo box labelled <quote>Abbrev set</quote> selects the
+   abbreviation set to edit. The first entry, <quote>global</quote>, contains
+   abbreviations available in all edit modes. The subsequent
+   entries contain mode-specific abbreviations.
+  </para>
+  <para>
+   To change an abbreviation expansion, click the appropriate table entry,
+   which will display a dialog box for doing so.
+  </para>
+  <para>
+   To add an abbreviation, enter it in the last line of the list, which
+   is always blank. When the last line is changed, a new, blank, line
+   is added.
+  </para>
+  <para>
+   See <xref linkend="positional-params" /> for information about positional
+   parameters in abbreviations.
+  </para>
+  <bridgehead renderas="sect3">The Printing Pane</bridgehead>
+  <para>
+   The <guibutton>Printing</guibutton> option pane lets you customize the
+   appearance of printed output.
+  </para>
+  <bridgehead renderas="sect3">The File System Browser Pane</bridgehead>
+  <para>
+   The <guibutton>File System Browser</guibutton> option pane lets you customize
+   jEdit's file system browser.
+  </para>
+ </sect1>
+ <sect1 id="settings-directory"><title>The jEdit Settings Directory</title>
+  <para>
+   jEdit stores all settings, macros, and so on as files
+   inside its <firstterm>settings directory</firstterm>. In most cases, editing
+   these files is not necessary, since graphical tools and commands can do the
+   job. However, being familiar with the structure of the settings directory
+   still comes in handy
+   in certain situations, for example when you want to copy jEdit settings
+   between computers.
+  </para>
+  <para>
+   The location of the settings directory is system-specific; it is printed to
+   the activity log (<guimenu>Utilities</guimenu>&gt;<guimenuitem>Activity
+   Log</guimenuitem>). For example:
+  </para>
+  <screen>[message] jEdit: Settings directory is /home/slava/.jedit</screen>
+  <para>
+   Specifying the <command>-settings</command> switch on the command line
+   instructs jEdit to store settings in a different directory.
+   For example, the following command will instruct jEdit to
+   store all settings
+   in the <filename>jedit</filename> subdirectory of the <filename>C:</filename>
+   drive:
+  </para>
+  <screen><prompt>C:\jedit&gt;</prompt> <userinput>jedit -settings=C:\jedit</userinput></screen>
+  <para>
+   The <command>-nosettings</command> switch will force jEdit to not look for
+   or create a settings directory. Default settings will be used instead.
+  </para>
+  <para>
+   If you are using <application>jEditLauncher</application>
+   to start jEdit on Windows, these parameters cannot be specified on the
+   MS-DOS prompt command line when starting jedit; they must be set as described
+   in <xref linkend="launcher-starting" />.
+  </para>
+  <para>
+   jEdit creates the following files and directories
+   inside the settings directory; plugins may add more:
+  </para>
+  <itemizedlist>
+   <listitem><para><filename>jars</filename> - this directory contains
+   plugins. See <xref linkend="using-plugins" />.</para></listitem>
+   <listitem><para><filename>macros</filename> - this directory contains
+   macros. See <xref linkend="using-macros" />.</para></listitem>
+   <listitem><para><filename>modes</filename> - this directory contains custom
+   edit modes. See <xref linkend="writing-modes-part" />.
+   </para></listitem>
+   <listitem><para><filename>PluginManager.download</filename> - this directory
+   is usually empty. It only contains files while the plugin manager is
+   downloading a plugin. For information about the plugin manager,
+   see <xref linkend="using-plugins" />.</para></listitem>
+   <listitem><para><filename>session</filename> - a list of files, used when
+   restoring previously open files on startup.</para></listitem>
+   <listitem><para><filename>abbrevs</filename> - a plain text file which
+   stores all defined abbreviations. See <xref linkend="abbrevs" />.
+   </para></listitem>
+   <listitem><para><filename>activity.log</filename> - a plain text file which
+   contains the full activity log. See <xref linkend="activity-log" />.
+   </para></listitem>
+   <listitem><para><filename>history</filename> - a plain text file which
+   stores history lists, used by history text fields and the
+   <guimenu>Edit</guimenu>&gt;<guimenuitem>Paste Previous</guimenuitem> command.
+   See <xref linkend="text-transfer" /> and <xref linkend="history" />.
+   </para></listitem>
+   <listitem><para><filename>properties</filename> - a plain text file which
+   stores the majority of jEdit's settings.</para></listitem>
+   <listitem><para><filename>recent.xml</filename> - an XML file which stores
+   the list of recently opened files. jEdit remembers the caret position,
+   selection state and character encoding of each recent file, and
+   automatically restores those values when one of the files in the list is
+   opened.</para></listitem>
+   <listitem><para><filename>server</filename> - a plain text file that only
+   exists while jEdit is running. The edit server's port number and
+   authorization key is stored here. See <xref linkend="starting" />.
+   </para></listitem>
+  </itemizedlist>
+ </sect1>
+</chapter>
