@@ -137,6 +137,10 @@ contributing to this release.
   to an action. So now you can bind A+f to a command, and pressing A+f
   will execute the command without popping up the File menu.
 
+- The text area's screen line cache was not invalidated on buffer
+  changes. This caused rare and obscure problems like bracket matching
+  and the caret showing up in the wrong place.
+
 }}}
 {{{ API Additions
 

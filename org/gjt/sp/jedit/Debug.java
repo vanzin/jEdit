@@ -67,7 +67,7 @@ public class Debug
 	/**
 	 * For checking the line visibility structure..
 	 */
-	public static boolean FOLD_VIS_DEBUG = true;
+	public static boolean FOLD_VIS_DEBUG = false;
 
 	/**
 	 * For checking invalidation, etc.
