@@ -1,5 +1,8 @@
 /*
  * ActionListHandler.java - XML handler for action files
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 2000, 2001 Slava Pestov
  * Portions copyright (C) 1999 mike dillon
  *
@@ -20,20 +23,24 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import com.microstar.xml.*;
 import java.io.*;
 import java.util.Stack;
 import org.gjt.sp.util.Log;
+//}}}
 
 class ActionListHandler extends HandlerBase
 {
+	//{{{ ActionListHandler constructor
 	ActionListHandler(String path, ActionSet actionSet)
 	{
 		this.path = path;
 		this.actionSet = actionSet;
 		stateStack = new Stack();
-	}
+	} //}}}
 
+	//{{{ resolveEntity() method
 	public Object resolveEntity(String publicId, String systemId)
 	{
 		if("actions.dtd".equals(systemId))
@@ -57,8 +64,9 @@ class ActionListHandler extends HandlerBase
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ attribute() method
 	public void attribute(String aname, String value, boolean isSpecified)
 	{
 		aname = (aname == null) ? null : aname.intern();
@@ -70,8 +78,9 @@ class ActionListHandler extends HandlerBase
 			noRepeat = (value == "TRUE");
 		else if(aname == "NO_RECORD")
 			noRecord = (value == "TRUE");
-	}
+	} //}}}
 
+	//{{{ doctypeDecl() method
 	public void doctypeDecl(String name, String publicId,
 		String systemId) throws Exception
 	{
@@ -79,8 +88,9 @@ class ActionListHandler extends HandlerBase
 			return;
 
 		Log.log(Log.ERROR,this,path + ": DOCTYPE must be ACTIONS");
-	}
+	} //}}}
 
+	//{{{ charData() method
 	public void charData(char[] c, int off, int len)
 	{
 		String tag = peekElement();
@@ -94,8 +104,9 @@ class ActionListHandler extends HandlerBase
 		{
 			isSelected = text;
 		}
-	}
+	} //}}}
 
+	//{{{ startElement() method
 	public void startElement(String tag)
 	{
 		tag = pushElement(tag);
@@ -105,8 +116,9 @@ class ActionListHandler extends HandlerBase
 			code = null;
 			isSelected = null;
 		}
-	}
+	} //}}}
 
+	//{{{ endElement() method
 	public void endElement(String name)
 	{
 		if(name == null)
@@ -120,6 +132,7 @@ class ActionListHandler extends HandlerBase
 			{
 				actionSet.addAction(new BeanShellAction(actionName,
 					code,isSelected,noRepeat,noRecord));
+				noRepeat = noRecord = false;
 			}
 
 			popElement();
@@ -129,8 +142,9 @@ class ActionListHandler extends HandlerBase
 			// can't happen
 			throw new InternalError();
 		}
-	}
+	} //}}}
 
+	//{{{ startDocument() method
 	public void startDocument()
 	{
 		try
@@ -141,10 +155,11 @@ class ActionListHandler extends HandlerBase
 		{
 			e.printStackTrace();
 		}
-	}
-	// end HandlerBase implementation
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private String path;
 	private ActionSet actionSet;
 
@@ -156,7 +171,9 @@ class ActionListHandler extends HandlerBase
 	private boolean noRecord;
 
 	private Stack stateStack;
+	//}}}
 
+	//{{{ pushElement() method
 	private String pushElement(String name)
 	{
 		name = (name == null) ? null : name.intern();
@@ -164,15 +181,17 @@ class ActionListHandler extends HandlerBase
 		stateStack.push(name);
 
 		return name;
-	}
+	} //}}}
 
+	//{{{ peekElement() method
 	private String peekElement()
 	{
 		return (String) stateStack.peek();
-	}
+	} //}}}
 
+	//{{{ popElement() method
 	private String popElement()
 	{
 		return (String) stateStack.pop();
-	}
+	} //}}}
 }

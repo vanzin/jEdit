@@ -704,6 +704,8 @@ view.status.overwrite-tooltip=Overwrite/insert mode indicator (click to change)
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
 view.status.narrow=Invoke "Expand All Folds" to make all text visible again
 view.status.bracket=Matches "{0}"
+view.status.quick-copy=Quick copy mode - selected text will be inserted at the caret
+view.status.rect-select=Rectangular selection mode
 #}}}
 
 #}}}
@@ -1326,8 +1328,7 @@ options.textarea.blinkCaret=Blinking caret
 options.textarea.blockCaret=Block caret
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.homeEnd="Smart" home/end key behaviour
-options.textarea.middleMousePaste=Middle mouse button click pastes \
-	most recent selection
+options.textarea.middleMousePaste=Quick copy using middle mouse button
 options.textarea.antiAlias=Smooth text
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
@@ -1427,9 +1428,6 @@ options.print.tabSize=Tab width when printing:
 #{{{ Docking pane
 options.docking.label=Docking
 options.docking.layout=Docked window placement:
-options.docking.tabsPos=Docked window tabs position:
-options.docking.top=top
-options.docking.bottom=bottom
 options.docking.title=Window
 options.docking.dockPosition=Docking position
 #}}}

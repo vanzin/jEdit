@@ -1,6 +1,9 @@
 /*
  * DockingOptionPane.java - Dockable window options panel
- * Copyright (C) 2000, 2001 Slava Pestov
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001, 2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,20 +22,25 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
+//{{{ DockingOptionPane class
 public class DockingOptionPane extends AbstractOptionPane
 {
+	//{{{ DockingOptionPane constructor
 	public DockingOptionPane()
 	{
 		super("docking");
-	}
+	} //}}}
 
+	//{{{ _init() method
 	public void _init()
 	{
 		Box box = new Box(BoxLayout.X_AXIS);
@@ -55,17 +63,6 @@ public class DockingOptionPane extends AbstractOptionPane
 
 		addComponent(jEdit.getProperty("options.docking.layout"),box);
 
-		// reuse properties defined by the general option pane
-		String[] positions = {
-			jEdit.getProperty("options.docking.top"),
-			jEdit.getProperty("options.docking.bottom"),
-		};
-
-		tabsPos = new JComboBox(positions);
-		tabsPos.setSelectedIndex(jEdit.getIntegerProperty(
-			"view.docking.tabsPos",0));
-		addComponent(jEdit.getProperty("options.docking.tabsPos"),tabsPos);
-
 		addComponent(Box.createVerticalStrut(6));
 
 		GridBagConstraints cons = new GridBagConstraints();
@@ -77,24 +74,26 @@ public class DockingOptionPane extends AbstractOptionPane
 		JScrollPane windowScroller = createWindowTableScroller();
 		gridBag.setConstraints(windowScroller,cons);
 		add(windowScroller);
-	}
+	} //}}}
 
+	//{{{ _save() method
 	public void _save()
 	{
 		jEdit.setBooleanProperty("view.docking.alternateLayout",
 			layout2.isSelected());
-		jEdit.setIntegerProperty("view.docking.tabsPos",
-			tabsPos.getSelectedIndex());
 		windowModel.save();
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
+
+	//{{{ Instance variables
 	private JToggleButton layout1;
 	private JToggleButton layout2;
-	private JComboBox tabsPos;
 	private JTable windowTable;
 	private WindowTableModel windowModel;
+	//}}}
 
+	//{{{ createWindowTableScroller() method
 	private JScrollPane createWindowTableScroller()
 	{
 		windowModel = createWindowModel();
@@ -118,13 +117,17 @@ public class DockingOptionPane extends AbstractOptionPane
 		JScrollPane scroller = new JScrollPane(windowTable);
 		scroller.setPreferredSize(d);
 		return scroller;
-	}
+	} //}}}
 
+	//{{{ createWindowModel() method
 	private WindowTableModel createWindowModel()
 	{
 		return new WindowTableModel();
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ DockPositionCellRenderer class
 	class DockPositionCellRenderer extends JComboBox
 		implements TableCellRenderer
 	{
@@ -146,13 +149,15 @@ public class DockingOptionPane extends AbstractOptionPane
 			setSelectedItem(value);
 			return this;
 		}
-	}
-}
+	} //}}}
+} //}}}
 
+//{{{ WindowTableModel class
 class WindowTableModel extends AbstractTableModel
 {
 	private Vector windows;
 
+	//{{{ WindowTableModel constructor
 	WindowTableModel()
 	{
 		windows = new Vector();
@@ -175,24 +180,28 @@ class WindowTableModel extends AbstractTableModel
 		}
 
 		sort();
-	}
+	} //}}}
 
+	//{{{ sort() method
 	public void sort()
 	{
 		MiscUtilities.quicksort(windows,new WindowCompare());
 		fireTableDataChanged();
-	}
+	} //}}}
 
+	//{{{ getColumnCount() method
 	public int getColumnCount()
 	{
 		return 2;
-	}
+	} //}}}
 
+	//{{{ getRowCount() method
 	public int getRowCount()
 	{
 		return windows.size();
-	}
+	} //}}}
 
+	//{{{ getColumnClass() method
 	public Class getColumnClass(int col)
 	{
 		switch(col)
@@ -203,8 +212,9 @@ class WindowTableModel extends AbstractTableModel
 		default:
 			throw new InternalError();
 		}
-	}
+	} //}}}
 
+	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
 		Entry window = (Entry)windows.elementAt(row);
@@ -217,13 +227,15 @@ class WindowTableModel extends AbstractTableModel
 		default:
 			throw new InternalError();
 		}
-	}
+	} //}}}
 
+	//{{{ isCellEditable() method
 	public boolean isCellEditable(int row, int col)
 	{
 		return (col != 0);
-	}
+	} //}}}
 
+	//{{{ setValueAt() method
 	public void setValueAt(Object value, int row, int col)
 	{
 		if(col == 0)
@@ -240,8 +252,9 @@ class WindowTableModel extends AbstractTableModel
 		}
 
 		fireTableRowsUpdated(row,row);
-	}
+	} //}}}
 
+	//{{{ getColumnName() method
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -253,16 +266,18 @@ class WindowTableModel extends AbstractTableModel
 		default:
 			throw new InternalError();
 		}
-	}
+	} //}}}
 
+	//{{{ save() method
 	public void save()
 	{
 		for(int i = 0; i < windows.size(); i++)
 		{
 			((Entry)windows.elementAt(i)).save();
 		}
-	}
+	} //}}}
 
+	//{{{ Entry class
 	class Entry
 	{
 		String name;
@@ -285,8 +300,9 @@ class WindowTableModel extends AbstractTableModel
 		{
 			jEdit.setProperty(name + ".dock-position",dockPosition);
 		}
-	}
+	} //}}}
 
+	//{{{ WindowCompare class
 	class WindowCompare implements MiscUtilities.Compare
 	{
 		public int compare(Object obj1, Object obj2)
@@ -297,5 +313,5 @@ class WindowTableModel extends AbstractTableModel
 			return MiscUtilities.compareStrings(
 				e1.title,e2.title,true);
 		}
-	}
-}
+	} //}}}
+} //}}}

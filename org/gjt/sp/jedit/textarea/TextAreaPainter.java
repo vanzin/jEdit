@@ -933,12 +933,20 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(s instanceof Selection.Rect)
 			{
 				int lineLen = textArea.getLineLength(physicalLine);
-				x1 = textArea.offsetToXY(physicalLine,Math.min(lineLen,
+
+				int startOffset = Math.min(lineLen,
 					s.start - textArea.getLineStartOffset(
-					s.startLine)),textArea.returnValue).x;
-				x2 = textArea.offsetToXY(physicalLine,Math.min(lineLen,
+					s.startLine));
+				int endOffset = Math.min(lineLen,
 					s.end - textArea.getLineStartOffset(
-					s.endLine)),textArea.returnValue).x;
+					s.endLine));
+
+				if(end - textArea.getLineStartOffset(physicalLine) <= startOffset
+					|| start - textArea.getLineStartOffset(physicalLine) > endOffset)
+					return;
+
+				x1 = textArea.offsetToXY(physicalLine,startOffset,textArea.returnValue).x;
+				x2 = textArea.offsetToXY(physicalLine,endOffset,textArea.returnValue).x;
 
 				if(x1 > x2)
 				{

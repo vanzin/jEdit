@@ -1,15 +1,16 @@
 TO DO
 
-- middle-drag creates selection, inserts selection at caret,
-  deactivates selection
+- C+END: no scroll horiz
+- drag and up and down should not need setFirstLine() stupidity
+- home/end should not need scrollToCaret()
+- C+ENTER 1 ...
+- rect select and soft wrap
 - horizontal scroll jerkiness
 - still problem with last phys line repainting
+- still problem with incr search and scrollToCaret()
 - closing console minor problem
 - search dialog does not get focus when 'find' invoked while its open
-- paste: not scrolled to caret
-- selection extended when shift not down?
 - source for existing plugins
-- triple-click-drag down
 - idea for fixing buffer property issues: BufferProp class
 - replace in selection with rectangular selections
 - 'troubleshooting' menu: docs in user's guide
@@ -25,7 +26,6 @@ TO DO
 - vertical scrollbar w/ soft wrap wrong
 - fix up/down arrow keys
 - fix page up/page down
-- fix home home/end end
 - use new offset conversion API throughout
 - test dir replace all and save all
 - switching buffers: horiz scroll bar not updated?
@@ -47,7 +47,6 @@ TO DO
   - 'wrap line'
   - 'unwrap paragraph'
 - don't repaint whole selection when resizing
-- rect select and soft wrap
 - print should not use so much memory
 - fs browser: scroll to visible after setting divider location
 - if loadMode() throws error, save of a mode file fails?

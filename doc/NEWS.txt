@@ -4,17 +4,28 @@ jEdit 4.0 is a significant upgrade to 3.2; the major version number has
 been increased as several parts of the editor have been rewritten for
 improved performance and reduced memory footprint.
 
-jEdit now requires Java 2 version 1.3 or later. It will no longer work
-with Java 1.1 or Java 2 version 1.2. Also, some aspects of the plugin
-API have changed; make sure your installed plugins are their latest
-versions.
+* Incompatible changes
 
-If you added macros to the context menu or tool bar, or assigned
-shortcuts to macros using jEdit 3.2.2 or earlier, you will need to
-recreate those settings after upgrading to jEdit 4.0 since the way
-macros are handled internally has changed.
+- jEdit now requires Java 2 version 1.3 or later. It will no longer work
+  with Java 1.1 or Java 2 version 1.2. Also, some aspects of the plugin
+  API have changed; make sure your installed plugins are their latest
+  versions.
 
-The major changes in this release are:
+- If you added macros to the context menu or tool bar, or assigned
+  shortcuts to macros using jEdit 3.2.2 or earlier, you will need to
+  recreate those settings after upgrading to jEdit 4.0 since the way
+  macros are handled internally has changed.
+
+- In previous jEdit versions, holding down Control while dragging would
+  create a rectangular selection. Now, Control-drags are used by the
+  quick copy feature, and you must drag with the middle mouse button to
+  create rectangular selections. If you only have a two button mouse,
+
+- Clicking the middle mouse button no longer inserts the most recently
+  selected text by default. This can be enabled in the 'Text Area' pane
+  of the Utilities->Global Options dialog box.
+
+* Major changes
 
 - Rewritten buffer code: this results in decreased footprint, faster
   file loading, _much_ faster directory search, and more.
@@ -51,6 +62,8 @@ The major changes in this release are:
   - Prolog
   - SmallTalk
 
+* Other improvements
+
 There are many smaller improvements as well, too many to list here, but
 some of the more noteworthy ones are:
 
@@ -63,6 +76,14 @@ some of the more noteworthy ones are:
   creator codes.
 
 - Unicode files are automatically detected and opened as such.
+
+- If "quick copy" is enabled, holding down Control while dragging now
+  creates a selection without moving the caret. When the mouse button is
+  released the selected text is inserted at the caret position and the
+  selection is deactivated.
+
+  The quick copy feature is disabled by default, but can be enabled in
+  the 'Text Area' pane of the Utilities->Global Options dialog box.
 
 - The font used to display user interface elements can now be changed in
   the new 'Appearance' pane of the Utilities->Global Options dialog box.

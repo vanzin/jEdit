@@ -5,7 +5,7 @@
                 xmlns="http://www.w3.org/TR/xhtml1/transitional"
                 exclude-result-prefixes="#default">
 
-<xsl:import href="/usr/share/xsl/docbook-xsl-1.45/html/chunk.xsl"/>
+<xsl:import href="/usr/share/xsl/docbook-xsl-1.48/html/chunk.xsl"/>
 
 <xsl:template match="guibutton">
   <xsl:call-template name="inline.boldseq"/>

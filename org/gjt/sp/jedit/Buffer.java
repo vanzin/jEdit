@@ -3227,6 +3227,7 @@ public class Buffer implements EBComponent
 			int pos = marker.getPosition();
 			if(pos > getLength())
 				marker.setPosition(getLength());
+			marker.removePosition();
 			marker.createPosition();
 		}
 	} //}}}
