@@ -2610,7 +2610,7 @@ public class jEdit
 		script.append("\tbuffer.setWaitSocket(socket);\n");
 		script.append("\tdoNotCloseSocket = true;\n");
 		script.append("}\n");
-		script.append("if(view != jEdit.getLastView()) {\n");
+		script.append("if(view != jEdit.getLastView() && " + wait + ") {\n");
 		script.append("\tjEdit.getLastView().setWaitSocket(socket);\n");
 		script.append("\tdoNotCloseSocket = true;\n");
 		script.append("}\n");

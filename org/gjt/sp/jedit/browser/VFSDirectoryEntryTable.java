@@ -352,7 +352,15 @@ public class VFSDirectoryEntryTable extends JTable
 		VFSDirectoryEntryTableModel model
 		= (VFSDirectoryEntryTableModel)getModel();
 
+		FontMetrics fm = getFontMetrics(getFont());
 		int[] widths = new int[model.getColumnCount()];
+		for(int i = 0; i < widths.length; i++)
+		{
+			String columnName = model.getColumnName(i);
+			if(columnName != null)
+				widths[i] = fm.stringWidth(columnName);
+		}
+
 		for(int i = 0; i < model.files.length; i++)
 		{
 			for(int j = 0; j < widths.length; j++)

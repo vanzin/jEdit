@@ -609,9 +609,13 @@ public abstract class VFS
 			this.type = type;
 			this.length = length;
 			this.hidden = hidden;
-			VFS vfs = VFSManager.getVFSForPath(path);
-			canRead = ((vfs.getCapabilities() & READ_CAP) != 0);
-			canWrite = ((vfs.getCapabilities() & WRITE_CAP) != 0);
+			if(path != null)
+			{
+				// maintain backwards compatibility
+				VFS vfs = VFSManager.getVFSForPath(path);
+				canRead = ((vfs.getCapabilities() & READ_CAP) != 0);
+				canWrite = ((vfs.getCapabilities() & WRITE_CAP) != 0);
+			}
 		} //}}}
 
 		protected boolean colorCalculated;
