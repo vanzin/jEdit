@@ -154,7 +154,7 @@ public class BeanShell
 				+ "if(newText != null)\n"
 				+ "{\n"
 					+ "buffer.remove(start,end - start - 1);\n"
-					+ "buffer.insert(start,newText);\n"
+					+ "buffer.insert(start,String.valueOf(newText));\n"
 				+ "}\n"
 			+ "}\n";
 

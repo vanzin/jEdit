@@ -91,14 +91,22 @@ public class PasteFromListDialog extends EnhancedDialog
 	//{{{ ok() method
 	public void ok()
 	{
-		String clip = (String)clips.getSelectedValue();
-		if(clip == null)
+		Object[] selected = clips.getSelectedValues();
+		if(selected == null || selected.length == 0)
 		{
 			getToolkit().beep();
 			return;
 		}
 
-		view.getTextArea().setSelectedText(clip);
+		StringBuffer clip = new StringBuffer();
+		for(int i = 0; i < selected.length; i++)
+		{
+			if(i != 0)
+				clip.append('\n');
+			clip.append(selected[i]);
+		}
+
+		view.getTextArea().setSelectedText(clip.toString());
 
 		dispose();
 	} //}}}

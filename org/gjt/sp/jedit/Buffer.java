@@ -1002,18 +1002,24 @@ public class Buffer
 	/**
 	 * Returns the text on the specified line.
 	 * This method is thread-safe.
-	 * @param lineIndex The line
+	 * @param line The line
 	 * @return The text, or null if the line is invalid
 	 * @since jEdit 4.0pre1
 	 */
-	public String getLineText(int lineIndex)
+	public String getLineText(int line)
 	{
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
 		try
 		{
 			readLock();
 
-			return getText(getLineStartOffset(lineIndex),
-				getLineLength(lineIndex));
+			int start = (line == 0 ? 0
+				: offsetMgr.getLineEndOffset(line - 1));
+			int end = offsetMgr.getLineEndOffset(line);
+
+			return getText(start,end - start - 1);
 		}
 		finally
 		{
@@ -1031,17 +1037,23 @@ public class Buffer
 	 *
 	 * This method is thread-safe.
 	 *
-	 * @param lineIndex The line
+	 * @param line The line
 	 * @since jEdit 4.0pre1
 	 */
-	public void getLineText(int lineIndex, Segment segment)
+	public void getLineText(int line, Segment segment)
 	{
+		if(line < 0 || line >= offsetMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
 		try
 		{
 			readLock();
 
-			getText(getLineStartOffset(lineIndex),
-				getLineLength(lineIndex),segment);
+			int start = (line == 0 ? 0
+				: offsetMgr.getLineEndOffset(line - 1));
+			int end = offsetMgr.getLineEndOffset(line);
+
+			getText(start,end - start - 1,segment);
 		}
 		finally
 		{

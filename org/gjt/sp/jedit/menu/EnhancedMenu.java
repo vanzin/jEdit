@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.menu;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.util.StringTokenizer;
-import org.gjt.sp.jedit.msg.DynamicMenuChanged;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -174,6 +174,12 @@ public class EnhancedMenu extends JMenu implements MenuListener
 				&& name.equals(((DynamicMenuChanged)msg)
 				.getMenuName()))
 			{
+				menuOutOfDate = true;
+			}
+			else if(msg instanceof PropertiesChanged)
+			{
+				// while this might be questionable, some
+				// menus depend on properties
 				menuOutOfDate = true;
 			}
 		}

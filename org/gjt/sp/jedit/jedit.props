@@ -37,8 +37,8 @@ autosave=30
 # Maximum number of elements in a history list
 history=20
 
-# Number of files for which to remember caret positions
-recentFiles=50
+# Number of recent files
+recentFiles=40
 
 # Restore open files on startup?
 restore=true

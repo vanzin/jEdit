@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.menu;
 //{{{ Imports
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.Vector;
+import java.util.*;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -35,7 +35,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 	//{{{ updateEveryTime() method
 	public boolean updateEveryTime()
 	{
-		return true;
+		return false;
 	} //}}}
 
 	//{{{ update() method
@@ -69,7 +69,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			}
 		}; //}}}
 
-		Vector recentVector = BufferHistory.getBufferHistory();
+		List recentVector = BufferHistory.getHistory();
 
 		if(recentVector.size() == 0)
 		{
@@ -81,22 +81,15 @@ public class RecentFilesProvider implements DynamicMenuProvider
 		}
 
 		Vector menuItems = new Vector();
+
 		boolean sort = jEdit.getBooleanProperty("sortRecent");
 
-		/*
-		 * While recentVector has 50 entries or so, we only display
-		 * a few of those in the menu (otherwise it will be way too
-		 * long)
-		 */
-		int recentFileCount = Math.min(recentVector.size(),
-			jEdit.getIntegerProperty("history",25));
+		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
 
-		for(int i = recentVector.size() - 1;
-			i >= recentVector.size() - recentFileCount;
-			i--)
+		Iterator iter = recentVector.iterator();
+		while(iter.hasNext())
 		{
-			String path = ((BufferHistory.Entry)recentVector
-				.elementAt(i)).path;
+			String path = ((BufferHistory.Entry)iter.next()).path;
 			JMenuItem menuItem = new JMenuItem(MiscUtilities
 				.getFileName(path));
 			menuItem.setActionCommand(path);
@@ -107,7 +100,18 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			if(sort)
 				menuItems.addElement(menuItem);
 			else
+			{
+				if(menu.getMenuComponentCount() >= maxItems
+					&& iter.hasNext())
+				{
+					JMenu newMenu = new JMenu(
+						jEdit.getProperty("common.more"));
+					menu.add(newMenu);
+					menu = newMenu;
+				}
+
 				menu.add(menuItem);
+			}
 		}
 
 		if(sort)
@@ -116,6 +120,15 @@ public class RecentFilesProvider implements DynamicMenuProvider
 				new MiscUtilities.MenuItemCompare());
 			for(int i = 0; i < menuItems.size(); i++)
 			{
+				if(menu.getMenuComponentCount() >= maxItems
+					&& i != 0)
+				{
+					JMenu newMenu = new JMenu(
+						jEdit.getProperty("common.more"));
+					menu.add(newMenu);
+					menu = newMenu;
+				}
+
 				menu.add((JMenuItem)menuItems.elementAt(i));
 			}
 		}
