@@ -816,14 +816,6 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void quickHyperSearch(boolean word)
 	{
-		if(searchBar == null)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		searchBar.setHyperSearch(true);
-
 		JEditTextArea textArea = getTextArea();
 
 		String text = textArea.getSelectedText();
@@ -842,6 +834,13 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 		{
+			if(searchBar == null)
+			{
+				getToolkit().beep();
+				return;
+			}
+
+			searchBar.setHyperSearch(true);
 			searchBar.getField().setText(null);
 			searchBar.getField().requestFocus();
 			searchBar.getField().selectAll();
