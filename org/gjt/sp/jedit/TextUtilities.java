@@ -546,86 +546,30 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 * @param text The text
 	 * @param maxLineLen The maximum line length
 	 */
-	public static String format(String text, int maxLineLength)
+	public static String format(String text, int maxLineLength, int tabSize)
 	{
-		// Note: StringBuffer.append(StringBuffer) is a 1.4-only method!
-
 		StringBuffer buf = new StringBuffer();
-		StringBuffer word = new StringBuffer();
-		int lineLength = 0;
-		boolean newline = true;
-		boolean space = false;
-		char[] chars = text.toCharArray();
-		for(int i = 0; i < chars.length; i++)
+
+		int index = 0;
+
+		for(;;)
 		{
-			char c = chars[i];
-			switch(c)
-			{
-			case '\n':
-				if(i == 0 || chars.length - i <= 2)
-				{
-					if(lineLength + word.length() >= maxLineLength)
-						buf.append('\n');
-					else if(space && word.length() != 0)
-						buf.append(' ');
-					buf.append(word.toString()); //XXX
-					word.setLength(0);
-					buf.append('\n');
-					newline = true;
-					space = false;
-					break;
-				}
-				else if(newline)
-				{
-					if(lineLength + word.length() >= maxLineLength)
-						buf.append('\n');
-					else if(space && word.length() != 0)
-						buf.append(' ');
-					buf.append(word.toString()); //XXX
-					word.setLength(0);
-					buf.append("\n\n");
-					newline = space = false;
-					lineLength = 0;
-					break;
-				}
-				else
-				{
-					newline = true;
-					/* fall through -- handle like a space */
-				}
-			case ' ':
-				if(lineLength + word.length() >= maxLineLength)
-				{
-					buf.append('\n');
-					lineLength = 0;
-				}
-				else if(space && lineLength != 0 && word.length() != 0)
-				{
-					buf.append(' ');
-					lineLength++;
-					space = false;
-				}
-				else
-					space = true;
-				buf.append(word.toString()); //XXX
-				lineLength += word.length();
-				word.setLength(0);
+			int newIndex = text.indexOf("\n\n",index);
+			if(newIndex == -1)
 				break;
-			default:
-				newline = false;
-				// without this test, we would have spaces
-				// at the start of lines
-				if(lineLength != 0)
-					space = true;
-				word.append(c);
-				break;
-			}
+
+			formatParagraph(text.substring(index,newIndex),
+				maxLineLength,tabSize,buf);
+			buf.append("\n\n");
+			index = newIndex + 2;
 		}
-		if(lineLength + word.length() >= maxLineLength)
-			buf.append('\n');
-		else if(space && word.length() != 0)
-			buf.append(' ');
-		buf.append(word.toString()); //XXX
+
+		if(index != text.length())
+		{
+			formatParagraph(text.substring(index),
+				maxLineLength,tabSize,buf);
+		}
+
 		return buf.toString();
 	} //}}}
 
@@ -707,5 +651,42 @@ loop:		for(int i = pos; i < line.length(); i++)
 	private static final int WHITESPACE = 0;
 	private static final int WORD_CHAR = 1;
 	private static final int SYMBOL = 2;
+
+	//{{{ formatParagraph() method
+	private static void formatParagraph(String text, int maxLineLength,
+		int tabSize, StringBuffer buf)
+	{
+		// align everything to paragraph's leading indent
+		int leadingWhitespaceCount = MiscUtilities.getLeadingWhiteSpace(text);
+		String leadingWhitespace = text.substring(0,leadingWhitespaceCount);
+		int leadingWhitespaceWidth = MiscUtilities.getLeadingWhiteSpaceWidth(text,tabSize);
+
+		buf.append(new StringBuffer(leadingWhitespace));
+
+		int lineLength = leadingWhitespaceWidth;
+		StringTokenizer st = new StringTokenizer(text);
+		while(st.hasMoreTokens())
+		{
+			String word = st.nextToken();
+			if(lineLength == leadingWhitespaceWidth)
+			{
+				// do nothing
+			}
+			else if(lineLength + word.length() + 1 > maxLineLength)
+			{
+				buf.append('\n');
+				buf.append(leadingWhitespace);
+				lineLength = leadingWhitespaceWidth;
+			}
+			else
+			{
+				buf.append(' ');
+				lineLength++;
+			}
+			buf.append(word);
+			lineLength += word.length();
+		}
+	} //}}}
+
 	//}}}
 }

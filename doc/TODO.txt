@@ -8,7 +8,6 @@ and quirks that I need to fix eventually.
 - popup menu display & history text field
 - do some profiling
 - wheel mouse -- option: jEdit mods -vs- system-wide mods
-- format bugs
 - changelog claims roots: lists desktop...
 - wheel mouse page scroll w/ soft wrap
 - rect select and trailing whitespace
@@ -21,8 +20,8 @@ and quirks that I need to fix eventually.
   - wheel mouse modifiers
   - indentOnTab/Enter changes
   - update shortcuts.xml
-  - S+ENTER in fsb for directories
 
+- format -- instead of \n\n, what if it has \n   \n?
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
 - A+# on OS X, need better modifier mapping on OS X

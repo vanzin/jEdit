@@ -4182,7 +4182,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			{
 				Selection s = selection[i];
 				setSelectedText(s,TextUtilities.format(
-					getSelectedText(s),maxLineLen));
+					getSelectedText(s),maxLineLen,
+					buffer.getTabSize()));
 			}
 
 			buffer.endCompoundEdit();
@@ -4209,7 +4210,7 @@ loop:			for(int i = lineNo - 1; i >= 0; i--)
 					}
 				}
 
-				start = getLineStartOffset(i);
+				start = getLineEndOffset(i);
 				break loop;
 			}
 
@@ -4229,7 +4230,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 					}
 				}
 
-				end = getLineEndOffset(i) - 1;
+				end = getLineStartOffset(i) - 1;
 				break loop;
 			}
 
@@ -4240,7 +4241,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				String text = buffer.getText(start,end - start);
 				buffer.remove(start,end - start);
 				buffer.insert(start,TextUtilities.format(
-					text,maxLineLen));
+					text,maxLineLen,buffer.getTabSize()));
 			}
 			finally
 			{
