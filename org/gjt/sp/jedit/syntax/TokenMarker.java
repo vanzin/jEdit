@@ -177,7 +177,7 @@ public class TokenMarker
 main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		{
 			//{{{ check if we have to stop parsing
-			if(terminateChar >= 0 && pos >= terminateChar
+			if(terminateChar >= 0 && pos - line.offset >= terminateChar
 				&& !terminated)
 			{
 				terminated = true;
