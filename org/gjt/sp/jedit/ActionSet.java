@@ -35,6 +35,7 @@ public class ActionSet
 	 */
 	public ActionSet()
 	{
+		this(null);
 	}
 
 	/**
@@ -45,6 +46,7 @@ public class ActionSet
 	public ActionSet(String label)
 	{
 		this.label = label;
+		actions = new Hashtable();
 	}
 
 	/**
@@ -103,6 +105,15 @@ public class ActionSet
 	public EditAction getAction(String name)
 	{
 		return (EditAction)actions.get(name);
+	}
+
+	/**
+	 * Returns the number of actions in the set.
+	 * @since jEdit 4.0pre1
+	 */
+	public int getActionCount()
+	{
+		return actions.size();
 	}
 
 	/**

@@ -47,7 +47,7 @@ public abstract class EditAction
 	/**
 	 * Returns the internal name of this action.
 	 */
-	public final String getName()
+	public String getName()
 	{
 		return name;
 	}
@@ -57,7 +57,7 @@ public abstract class EditAction
 	 * value of the property named by the action's internal name suffixed
 	 * with <code>.label</code>.
 	 */
-	public final String getLabel()
+	public String getLabel()
 	{
 		return jEdit.getProperty(name + ".label");
 	}

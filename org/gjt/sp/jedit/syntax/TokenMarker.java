@@ -657,6 +657,7 @@ loop:			for(int i = 0; i < len; i++)
 					// such a SEQ because it would
 					// break the AT_LINE_START
 					// MARK_PREVIOUS rule.
+
 					continue loop;
 				default:
 					break;
@@ -670,7 +671,7 @@ loop:			for(int i = 0; i < len; i++)
 
 			// if we got this far with digit = true, then the keyword
 			// consists of all digits. Add it as such.
-			if(digit)
+			if(digit && seenSomeDigits)
 			{
 				if(start != lastOffset)
 				{

@@ -22,6 +22,7 @@ JEDIT 4.0 VERSION HISTORY
 - Utilities->Evaluate for Selected Lines command evaluates specified
   BeanShell expression for each selected line, replacing the contents of
   that line with the return value of the expression
+- Macros.confirm() method added, for use in macros
 
 + Enhancements
 
@@ -48,6 +49,14 @@ JEDIT 4.0 VERSION HISTORY
   - 'Auto open' setting in Docking option pane removed, now jEdit
     remembers which dockables were open automatically
 - Improved HyperSearch results window
+- In the Shortcuts option pane, each plugin's actions are shown in a
+  separate section. This solves the problem of plugin actions having
+  ambiguous names (for example, "Edit Settings"). This change is the
+  reason for the jEdit.addAction() method was dropped.
+- Macros.message(), Macros.error() and Macros.input() methods now accept
+  an arbitriary java.awt.Component, instead of a View, as the component
+  that will parent the dialog box. This will not break any macros since
+  BeanShell resolves methods at run-time.
 
 + Bug Fixes
 
@@ -61,6 +70,17 @@ JEDIT 4.0 VERSION HISTORY
   bound to shortcuts.
 - More JDK 1.4 key event bug workarounds
 - History text field border wasn't repainted after the model was changed
+- If two shortcuts were assigned to a command, the second wasn't shown
+  in the tool bar button tooltip
+- In syntax highlighting rule sets that enabled digit highlighting but
+  didn't have SEQ rules for '-' and '.', these two characters would be
+  highlighted with the digit syntax style, even if they were not part of
+  a numeric expression.
+- Pressing Home three times put the caret at the end of the last visible
+  line, not the start of the last visible line as intended
+- Entering a file name in the text field of the Open dialog box would
+  open that file name relative to jEdit's current working directory, not
+  the directory selected in the dialog box
 
 + API Changes
 
@@ -77,3 +97,6 @@ JEDIT 4.0 VERSION HISTORY
 
 - jEdit.addAction() method removed. Plugins not using the jEdit 3.0
   action API will need to be updated.
+- VariableGridLayout is now used to lay out tool bars, instead of
+  BoxLayout. This means it is no longer necessary to add a
+  Box.createGlue() to the tool bar to prevent it from being centered.

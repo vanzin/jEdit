@@ -33,7 +33,7 @@ encodings=ASCII Cp850 Cp1251 Cp1252 ISO8859_1 ISO8859_2 MacRoman Big5 GBK \
 	KOI8_R SJIS Unicode UTF8 
 
 # Action set names
-action-set.jEdit=jEdit
+action-set.jEdit=Built-in Commands
 action-set.macros=Macros
 
 # History text field menu caption
@@ -1003,6 +1003,7 @@ plugin.obsolete.message=The plugin {0} is obsolete.\n\
 macro-input.title=Macro Input
 macro-error.title=Macro Error
 macro-message.title=Macro Message
+macro-confirm.title=Macro Confirmation
 
 # BeanShell stuff
 beanshell-error.title=BeanShell Execution Error
@@ -1231,9 +1232,6 @@ options.abbrevs.expand=Expansion
 
 options.shortcuts.label=Shortcuts
 options.shortcuts.select.label=Edit Shortcuts:
-options.shortcuts.select.commands=Command Shortcuts
-options.shortcuts.select.plugins=Plugin Shortcuts
-options.shortcuts.select.macros=Macro Shortcuts
 options.shortcuts.name=Command
 options.shortcuts.shortcut1=Primary shortcut
 options.shortcuts.shortcut2=Alternative shortcut

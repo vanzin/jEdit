@@ -21,20 +21,12 @@
  *
  * $Id$
  *
- * requires JDK 1.2, jEdit3.1pre5
+ * requires jEdit3.1pre5
  *
  * Notes on use:
  *
  * This macro will display a sorted list of all keyboard shortcuts
- * in a dialog.  "Actions" or built-in commands are listed by their names;
- * macros are listed by their path name (relative to the default macro
- * directory in which they are located).
- *
- * The script defines two global variables intended to allow user
- * customization of the macro's behavior.  By changing the global variable
- * USE_MACRO_LABEL to false, the user can avoid listing macros with the prefix
- * label "Macros: ".  The other global variable is PUT_MACROS_AT_END, which
- * when set as true keeps macros separate from commands in the table display.
+ * in a dialog.
  *
  * Pressing a letter key will cause the table to scroll to the first row
  * with a label beginning with the letter (or the imeediately preceding row if
@@ -54,23 +46,19 @@
 import javax.swing.table.*;
 
 /*
- * methods for creating vectors of row data describing shortcuts for commands
- * and macros
+ * method for creating vectors of row data describing shortcuts.
  */
 
-void addRowsForCommands(Vector v)
+Vector makeShortcutsVector()
 {
-	// from jEdit's CommandShortcutsOptionPane.createBindings()
 	EditAction[] actions = jEdit.getActions();
 	for(int i = 0; i < actions.length; i++)
 	{
 		EditAction action = actions[i];
 		String name = action.getName();
-		String label = jEdit.getProperty(name + ".label");
+		String label = action.getLabel();
 		if(label == null)
-		{
 			label = name;
-		}
 		else label = GUIUtilities.prettifyMenuLabel(label);
 		String shortcut1 = jEdit.getProperty(name + ".shortcut");
 		if(shortcut1 == null)
@@ -78,34 +66,11 @@ void addRowsForCommands(Vector v)
 		String shortcut2 = jEdit.getProperty(name + ".shortcut2");
 		if(shortcut2 == null)
 			shortcut2 = "";
-		if(shortcut1.length() != 0 	|| shortcut2.length() != 0)
+		if(shortcut1.length() != 0 || shortcut2.length() != 0)
 		{
 			v.addElement(makeRow(label,shortcut1,shortcut2));
 		}
 	}
-}
-
-void addRowsForMacros(Vector v)
-{
-	// from jEdit's MacroShortcutsOptionPane.createBindings()
-	Vector macroList = Macros.getMacroList();
-	for(i = 0; i < macroList.size(); i++)
-	{
-		name = macroList.elementAt(i).toString();
-		String shortcut1 = jEdit.getProperty(name + ".shortcut");
-		if(shortcut1 == null)
-			shortcut1 = "";
-		String shortcut2 = jEdit.getProperty(name + ".shortcut2");
-		if(shortcut2 == null)
-			shortcut2 = "";
-		if(USE_MACRO_LABEL)
-			name = "Macro: " + name;
-		if(shortcut1.length() != 0	|| shortcut2.length() != 0)
-		{
-			v.addElement(makeRow(name, shortcut1, shortcut2));
-		}
-	}
-	return v;
 }
 
 /*
@@ -129,9 +94,9 @@ void writeTableToNewBuffer(Vector v)
 	jEdit.newFile(view);
 	textArea.setSelectedText("jEdit Keyboard Shortcut Table\n\n");
 	headings = makeRow("Name", "Shortcut - 1", "Shortcut - 2");
-	writeLine( headings);
+	writeLine(headings);
 	textArea.setSelectedText("\n");
-	for( int i = 0; i < v.size(); ++i)
+	for(int i = 0; i < v.size(); ++i)
 	{
 		writeLine((Vector)v.elementAt(i));
 	}
@@ -170,13 +135,8 @@ void writeLine(Vector row)
  */
 void showShortcuts()
 {
-	v = new Vector(jEdit.getActions().length + Macros.getMacroList().size());
-	addRowsForCommands(v);
-	if(!PUT_MACROS_AT_END)
-		addRowsForMacros(v);
+	v = makeShortcutsVector();
 	MiscUtilities.quicksort(v, new MiscUtilities.StringICaseCompare());
-	if(PUT_MACROS_AT_END)
-		addRowsForMacros(v);
 
 	table = new JTable(v, makeRow( "Name", "Shortcut-1", "Shortcut-2"));
 	table.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -287,8 +247,7 @@ void showShortcuts()
 	}
 	/* This line caches the row that starts the second half of the
 	 * alphabet to speed up searches.  'M' was chosen as the midpoint
-	 * to speed up searches for macros if they are included in the
-	 * sorted list.
+	 * to speed up searches.
 	 */
 	data_midpoint = findFirstItem('M');
 	dialog.pack();
@@ -296,13 +255,5 @@ void showShortcuts()
 	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	dialog.show();
 }
-
-/*
- * main routine: defines global variables
- */
-
-USE_MACRO_LABEL = true;
-PUT_MACROS_AT_END = false;
-Vector v = null;
 
 showShortcuts();
