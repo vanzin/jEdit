@@ -73,6 +73,8 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 
 		generateSkipArray();
 		generateSuffixArray();
+
+		returnValue = new int[2];
 	} //}}}
 
 	//{{{ nextMatch() method
@@ -101,7 +103,9 @@ public class BoyerMooreSearchMatcher implements SearchMatcher
 		}
 		else
 		{
-			return new int[] { pos, pos + pattern.length };
+			returnValue[0] = pos;
+			returnValue[1] = pos + pattern.length;
+			return returnValue;
 		}
 	} //}}}
 
@@ -220,6 +224,8 @@ SEARCH:
 	// Boyer-Moore member fields
 	private int[] skip;
 	private int[] suffix;
+
+	private int[] returnValue;
 	//}}}
 
 	// Boyer-Moore helper methods
