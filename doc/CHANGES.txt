@@ -24,6 +24,8 @@ JEDIT 4.0 VERSION HISTORY
   to CS+BACK_SPACE and CS+DELETE, respectively.
 - BeanShell 1.2b41 included
 - Documentation updates
+- Moved 'more accurate syntax highlighting' option from 'Loading and
+  Saving' option pane to 'Text Area' option pane
 
 + Bug Fixes
 
@@ -80,8 +82,9 @@ JEDIT 4.0 VERSION HISTORY
   screen positions in screen lines.
 - If a save operation fails, the buffer's modified flag is no longer
   cleared, and if it was a 'save as' the buffer is not renamed either
-- Path names of the form "X:foo" (with no \ after the drive letter)
-  will no longer cause problems on Windows
+- Path names of the form "X:foo" (with no \ after the drive letter), and
+  UNC paths (\\servername\directory\file) will no longer cause problems
+  on Windows
 
 + API Additions
 
