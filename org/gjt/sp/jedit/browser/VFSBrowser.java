@@ -494,7 +494,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 */
 	public void rootDirectory()
 	{
-		if(VFSManager.getVFSByName("roots") != null)
+		if(OperatingSystem.isMacOS() || OperatingSystem.isDOSDerived())
 			setDirectory(FileRootsVFS.PROTOCOL + ":");
 		else
 			setDirectory("/");
