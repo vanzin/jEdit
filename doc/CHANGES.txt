@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre4
 
-Thanks to Chris Morris, Ryan Fowler and Ryan Grove for contributing to
-this release.
+Thanks to Chris Morris, Marcelo Vanzin, Ryan Fowler and Ryan Grove for
+contributing to this release.
 
 {{{ Syntax Highlighting
 
@@ -113,11 +113,16 @@ this release.
 - Using the Global Options dialog box or anything else that calls
   jEdit.propertiesChanged() no longer clears the kill ring.
 
+- Escape sequences in the replace string (\n, \t) didn't work properly.
+
 }}}
 {{{ API Changes
 
 - SearchMatcher.nextMatch() returns an instance of SearchMatcher.Match
   instead of a two-element integer array.
+
+- Added jEdit.getPlugin(String name, boolean loadIfNecessary) method
+  (Marcelo Vanzin).
 
 }}}
 
