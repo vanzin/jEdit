@@ -51,15 +51,18 @@ public class PositionManager
 		//System.err.println(this + ": create " + offset);
 		PosBottomHalf bh;
 
+		// moves gap to offset if necessary
+		contentInserted(offset,0);
+
 		if(root == null)
-			root = bh = new PosBottomHalf(offset);
+			root = bh = new PosBottomHalf(offset - gapWidth);
 		else
 		{
 			bh = root.find(offset);
 
 			if(bh == null)
 			{
-				bh = new PosBottomHalf(offset);
+				bh = new PosBottomHalf(offset - gapWidth);
 				bh.red = true;
 				root.insert(bh);
 				if(!Debug.DISABLE_POSITION_BALANCE)
@@ -384,10 +387,7 @@ public class PositionManager
 		//{{{ PosBottomHalf constructor
 		PosBottomHalf(int offset)
 		{
-			if(offset >= gapOffset)
-				this.offset = offset - gapWidth;
-			else
-				this.offset = offset;
+			this.offset = offset;
 		} //}}}
 
 		//{{{ getOffset() method
