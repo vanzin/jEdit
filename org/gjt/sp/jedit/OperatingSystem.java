@@ -279,11 +279,20 @@ public class OperatingSystem
 
 	//{{{ isJava14() method
 	/**
-	 * Returns if Java 2 version 1.4 is in use.
+	 * Returns if Java 2 version 1.4, or Java 2 version 1.5 is in use.
 	 */
 	public static final boolean hasJava14()
 	{
 		return java14;
+	} //}}}
+
+	//{{{ isJava15() method
+	/**
+	 * Returns if Java 2 version 1.5 is in use.
+	 */
+	public static final boolean hasJava15()
+	{
+		return java15;
 	} //}}}
 
 	//{{{ Private members
@@ -297,6 +306,7 @@ public class OperatingSystem
 
 	private static int os;
 	private static boolean java14;
+	private static boolean java15;
 	private static int hasScreenMenuBar = -1;
 
 	//{{{ Class initializer
@@ -338,9 +348,13 @@ public class OperatingSystem
 			}
 		}
 
-		if(System.getProperty("java.version").compareTo("1.4") >= 0
-			&& System.getProperty("jedit.nojava14") == null)
-			java14 = true;
+		// for debugging, make jEdit think its using a different
+		// version of Java than it really is.
+		String javaVersion = System.getProperty("jedit.force.java.version");
+		if(javaVersion == null || javaVersion.equals(""))
+			javaVersion = System.getProperty("java.version");
+		java14 = (javaVersion.compareTo("1.4") >= 0);
+		java15 = (javaVersion.compareTo("1.5") >= 0);
 	} //}}}
 
 	//}}}
