@@ -2,16 +2,21 @@ TO DO
 
 + plugins:
 
-- finish ErrorList 1.2.3
+- finish ErrorList 1.2.3 (need to fix tree expansion flaw)
+- finish FTP 0.3.4 (waiting on bug reports!)
 
 + before 4.0final:
 
-- investigate I/O threads
-- scroll to caret _still_ jumps around
+- blank files problem
 - proofread documentation one more time
 - make sure plugin guide is up to date
 - API guide: need to mention GUIUtilities.{message,input,...}
 - appendix in plugin guide on contributing plugins
+
++ 4.0.1:
+
+- scroll to caret _still_ jumps around
+- investigate I/O threads
 
 + in 4.1:
 
