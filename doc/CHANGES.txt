@@ -22,6 +22,12 @@ Thanks to Scott Allen for contributing to this release.
 
 - Fixed the roots: VFS to return non-null symlinkPaths.
 
+- "Go to Last Visible Line" went one line too far if the last visible
+  line was only partially visible.
+
+- "Remove" button in Tool Bar pane of the Global Options dialog box now
+  selects the next item after removing the currently selected item.
+
 }}}
 
 }}}

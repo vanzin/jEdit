@@ -136,7 +136,7 @@ public class SplashScreen extends Canvas
 
 		offscreenGfx.drawString(str,
 			(getWidth() - fm.stringWidth(str)) / 2,
-			image.getHeight(this)+1 - fm.getDescent() - 10);
+			image.getHeight(this) - fm.getDescent() - 6);
 
 		g.drawImage(offscreenImg,0,0,this);
 
