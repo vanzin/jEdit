@@ -274,7 +274,7 @@ public class ChunkCache
 					xorGfx.dispose();
 				}
 
-				if(chunks.text != null)
+				if(chunks.str != null)
 				{
 					gfx.setFont(font);
 					gfx.setColor(chunks.style.getForegroundColor());
