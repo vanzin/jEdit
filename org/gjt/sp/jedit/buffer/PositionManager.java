@@ -75,36 +75,51 @@ public class PositionManager
 	//{{{ contentInserted() method
 	public synchronized void contentInserted(int offset, int length)
 	{
-		if(root != null)
-			root.contentInserted(offset,length);
+		if(root == null)
+		{
+			gapWidth = 0;
+			return;
+		}
+
+		if(gapWidth != 0)
+		{
+			if(gapOffset < offset)
+			{
+				PosBottomHalf start = root.find2(gapOffset);
+				while(start != null
+					&& start.getOffset() < offset)
+				{
+					start.offset += gapWidth;
+					start = start.nextInorder();
+				}
+			}
+			else
+			{
+				PosBottomHalf start = root.find2(offset);
+				while(start != null
+					&& start.getOffset() < gapOffset)
+				{
+					start.offset -= gapWidth;
+					start = start.nextInorder();
+				}
+			}
+		}
+
+		gapOffset = offset;
+		gapWidth += length;
 	} //}}}
 
 	//{{{ contentRemoved() method
 	public synchronized void contentRemoved(int offset, int length)
 	{
-		if(root != null)
-			root.contentRemoved(offset,length);
+		// merge all inside remove range
+		// 
 	} //}}}
 
-	//{{{ removeAll() method
-	void removeAll()
-	{
-		java.util.List all = new java.util.ArrayList();
-		get(root,all);
-		for(int i = 0; i < all.size(); i++)
-		{
-			removePosition((PosBottomHalf)all.get(i));
-		}
-	}
-
-	void get(PosBottomHalf node, java.util.List list)
-	{
-		if(node == null)
-			return;
-		get(node.left,list);
-		list.add(node);
-		get(node.right,list);
-	} //}}}
+	//{{{ Package-private members
+	/* so that PosBottomHalf can access without access$ methods */
+	int gapOffset;
+	int gapWidth;
 
 	//{{{ Private members
 	private PosBottomHalf root;
@@ -332,7 +347,7 @@ public class PositionManager
 		//{{{ getOffset() method
 		public int getOffset()
 		{
-			return bh.offset;
+			return bh.getOffset();
 		} //}}}
 
 		//{{{ finalize() method
@@ -357,7 +372,19 @@ public class PositionManager
 		//{{{ PosBottomHalf constructor
 		PosBottomHalf(int offset)
 		{
-			this.offset = offset;
+			if(offset >= gapOffset)
+				this.offset = offset - gapWidth;
+			else
+				this.offset = offset;
+		} //}}}
+
+		//{{{ getOffset() method
+		int getOffset()
+		{
+			if(offset >= gapOffset)
+				return offset + gapWidth;
+			else
+				return offset;
 		} //}}}
 
 		//{{{ dump() method
@@ -370,7 +397,7 @@ public class PositionManager
 			{
 				Log.log(Log.DEBUG,this,ws + " /]");
 			}
-			Log.log(Log.DEBUG,this,ws + red + ":" + offset);
+			Log.log(Log.DEBUG,this,ws + red + ":" + getOffset());
 			if(right != null)
 				right.dump(level+1);
 			else
@@ -382,12 +409,12 @@ public class PositionManager
 		//{{{ insert() method
 		void insert(PosBottomHalf pos)
 		{
-			if(pos.offset < offset)
+			if(pos.getOffset() < getOffset())
 			{
 				if(left == null)
 				{
 					if(Debug.POSITION_DEBUG)
-Log.log(Log.DEBUG,this,"382: "+pos+":" + this);
+						Log.log(Log.DEBUG,this,"382: "+pos+":" + this);
 					pos.parent = this;
 					left = pos;
 				}
@@ -399,7 +426,7 @@ Log.log(Log.DEBUG,this,"382: "+pos+":" + this);
 				if(right == null)
 				{
 					if(Debug.POSITION_DEBUG)
-Log.log(Log.DEBUG,this,"393: "+pos+":" + this);
+						Log.log(Log.DEBUG,this,"393: "+pos+":" + this);
 					pos.parent = this;
 					right = pos;
 				}
@@ -411,9 +438,9 @@ Log.log(Log.DEBUG,this,"393: "+pos+":" + this);
 		//{{{ find() method
 		PosBottomHalf find(int offset)
 		{
-			if(this.offset == offset)
+			if(getOffset() == offset)
 				return this;
-			else if(this.offset < offset)
+			else if(getOffset() < offset)
 			{
 				if(right == null)
 					return null;
@@ -429,6 +456,28 @@ Log.log(Log.DEBUG,this,"393: "+pos+":" + this);
 			}
 		} //}}}
 
+		//{{{ find2() method
+		/* find lowest node greater than or equal given offset */
+		PosBottomHalf find2(int offset)
+		{
+			if(getOffset() == offset)
+				return this;
+			else if(getOffset() < offset)
+			{
+				if(right == null)
+					return null;
+				else
+					return right.find2(offset);
+			}
+			else
+			{
+				if(left != null && left.getOffset() > offset)
+					return left.find2(offset);
+				else
+					return this;
+			}
+		} //}}}
+
 		//{{{ sibling() method
 		PosBottomHalf sibling()
 		{
@@ -440,44 +489,24 @@ Log.log(Log.DEBUG,this,"393: "+pos+":" + this);
 				throw new InternalError();
 		} //}}}
 
-		//{{{ contentInserted() method
-		void contentInserted(int offset, int length)
+		//{{{ nextInorder() method
+		PosBottomHalf nextInorder()
 		{
-			if(offset <= this.offset)
+			if(right == null)
 			{
-				this.offset += length;
-				if(left != null)
-					left.contentInserted(offset,length);
-				if(right != null)
-					right.contentInserted(offset,length);
-			}
-			else if(right != null)
-				right.contentInserted(offset,length);
-		} //}}}
-
-		//{{{ contentRemoved() method
-		void contentRemoved(int offset, int length)
-		{
-			if(offset >= this.offset)
-			{
-				if(right != null)
-					right.contentRemoved(offset,length);
-			}
-			else if(offset + length <= this.offset)
-			{
-				this.offset -= length;
-				if(left != null)
-					left.contentRemoved(offset,length);
-				if(right != null)
-					right.contentRemoved(offset,length);
-			}
+				if(parent != null)
+				{
+					if(parent.left == this)
+						return parent;
+					else
+						
+				return parent;
 			else
 			{
-				this.offset = offset;
-				if(left != null)
-					left.contentRemoved(offset,length);
-				if(right != null)
-					right.contentRemoved(offset,length);
+				PosBottomHalf nextInorder = right;
+				while(nextInorder.left != null)
+					nextInorder = nextInorder.left;
+				return nextInorder;
 			}
 		} //}}}
 
@@ -627,7 +656,7 @@ Log.log(Log.DEBUG,this,"595: "+nodes[5]+":" + nodes[3]);
 		//{{{ toString() method
 		public String toString()
 		{
-			return red + ":" + offset;
+			return red + ":" + getOffset();
 		} //}}}
 	} //}}}
 
