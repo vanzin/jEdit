@@ -36,7 +36,12 @@ class ModeCatalogHandler extends HandlerBase
 	{
 		if("catalog.dtd".equals(systemId))
 		{
-			try
+			// this will result in a slight speed up, since we
+			// don't need to read the DTD anyway, as AElfred is
+			// non-validating
+			return new StringReader("<!-- -->");
+
+			/* try
 			{
 				return new BufferedReader(new InputStreamReader(
 					getClass().getResourceAsStream("catalog.dtd")));
@@ -46,7 +51,7 @@ class ModeCatalogHandler extends HandlerBase
 				Log.log(Log.ERROR,this,"Error while opening"
 					+ " catalog.dtd:");
 				Log.log(Log.ERROR,this,e);
-			}
+			} */
 		}
 
 		return null;

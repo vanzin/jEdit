@@ -235,6 +235,10 @@ public class FoldVisibilityManager
 					+ buffer.getLineCount());
 			}
 
+			// optimization
+			if(getVirtualLineCount() == buffer.getLineCount())
+				return line;
+
 			while(!offsetMgr.isLineVisible(line,index) && line > 0)
 				line--;
 
@@ -352,6 +356,10 @@ public class FoldVisibilityManager
 				throw new ArrayIndexOutOfBoundsException(line + " > "
 					+ offsetMgr.getVirtualLineCount(index));
 			}
+
+			// optimization
+			if(getVirtualLineCount() == buffer.getLineCount())
+				return line;
 
 			if(lastVirtual == line)
 			{

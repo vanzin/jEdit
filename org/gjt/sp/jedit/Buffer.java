@@ -2543,9 +2543,9 @@ public class Buffer implements EBComponent
 				for(int i = start; i <= line; i++)
 				{
 					newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
-					offsetMgr.setFoldLevel(i,newFoldLevel);
 					if(newFoldLevel != offsetMgr.getFoldLevel(i))
 						changed = true;
+					offsetMgr.setFoldLevel(i,newFoldLevel);
 				}
 
 				if(changed && !getFlag(INSIDE_INSERT))

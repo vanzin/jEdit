@@ -9,6 +9,11 @@ with Java 1.1 or Java 2 version 1.2. Also, some aspects of the plugin
 API have changed; make sure your installed plugins are their latest
 versions.
 
+If you added macros to the context menu or tool bar, or assigned
+shortcuts to macros using jEdit 3.2.2 or earlier, you will need to
+recreate those settings after upgrading to jEdit 4.0 since the way
+macros are handled internally has changed.
+
 The major changes in this release are:
 
 - Rewritten buffer code: this results in decreased footprint, faster

@@ -35,6 +35,10 @@ import org.gjt.sp.util.Log;
  */
 public class JARClassLoader extends ClassLoader
 {
+	public static long openTime;
+	public static long scanTime;
+	public static long resTime;
+
 	// no-args constructor is for loading classes from all plugins
 	// eg BeanShell uses one of these so that scripts can use
 	// plugin classes
@@ -45,9 +49,21 @@ public class JARClassLoader extends ClassLoader
 	public JARClassLoader(String path)
 		throws IOException
 	{
+		long start = System.currentTimeMillis();
 		zipFile = new ZipFile(path);
+		openTime += (System.currentTimeMillis() - start);
 		jar = new EditPlugin.JAR(path,this);
 
+		start = System.currentTimeMillis();
+		Enumeration _entires = zipFile.entries();
+		while(_entires.hasMoreElements())
+		{
+			_entires.nextElement();
+		}
+
+		scanTime += (System.currentTimeMillis() - start);
+
+		start = System.currentTimeMillis();
 		Enumeration entires = zipFile.entries();
 		while(entires.hasMoreElements())
 		{
@@ -81,6 +97,8 @@ public class JARClassLoader extends ClassLoader
 			}
 		}
 
+		resTime += (System.currentTimeMillis() - start);
+		
 		jEdit.addPluginJAR(jar);
 	}
 

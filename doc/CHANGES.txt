@@ -21,6 +21,7 @@ JEDIT 4.0 VERSION HISTORY
 - Favorites menu in file system browser is now sorted using a
   case-insensitive sort
 - Improved behavior of 'Plugins' menu when lots of plugins are installed
+- Slightly faster scrolling
 
 + Bug Fixes
 
@@ -42,6 +43,14 @@ JEDIT 4.0 VERSION HISTORY
 - The status bar message shown when a bracket is out of bounds was not
   always being displayed if soft wrap was in use
 - Fixed silly behavior in 'Install Plugins' dialog box
+- Fixed possible NPE when loading tool bar with buttons for which
+  actions do not exist
+- Fold level changed events were not fired; this caused problems with
+  indent folding
+- Changing the fold mode using the 'Buffer Options' dialog box in a
+  buffer that defined the 'collapseFolds' property could have slightly
+  bizzarre results, because the folds were collapsed before the fold
+  handler was changed
 
 + API Additions
 

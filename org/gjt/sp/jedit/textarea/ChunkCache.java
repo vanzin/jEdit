@@ -527,14 +527,14 @@ public class ChunkCache
 	//{{{ setFirstLine() method
 	void setFirstLine(int firstLine)
 	{
-		//if(textArea.softWrap || Math.abs(firstLine - this.firstLine) >= lineInfo.length)
+		if(textArea.softWrap || Math.abs(firstLine - this.firstLine) >= lineInfo.length)
 		{
 			for(int i = 0; i < lineInfo.length; i++)
 			{
 				lineInfo[i].chunksValid = false;
 			}
 		}
-		/*else if(firstLine > this.firstLine)
+		else if(firstLine > this.firstLine)
 		{
 			System.arraycopy(lineInfo,firstLine - this.firstLine,
 				lineInfo,0,lineInfo.length - firstLine
@@ -555,7 +555,7 @@ public class ChunkCache
 			{
 				lineInfo[i] = new LineInfo();
 			}
-		}*/
+		}
 
 		lastScreenLine = lastScreenLineP = -1;
 		this.firstLine = firstLine;
@@ -617,6 +617,9 @@ public class ChunkCache
 		// TODO
 		if(lastScreenLine >= lineInfo.length)
 			textArea.recalculateVisibleLines();
+
+		if(!textArea.softWrap)
+			return;
 
 		if(lineInfo[lastScreenLine].chunksValid)
 			return;
@@ -756,9 +759,47 @@ public class ChunkCache
 	//{{{ getLineInfo() method
 	LineInfo getLineInfo(int screenLine)
 	{
-		if(!lineInfo[screenLine].chunksValid)
-			Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
-		return lineInfo[screenLine];
+		LineInfo info = lineInfo[screenLine];
+
+		if(textArea.softWrap)
+		{
+			if(!info.chunksValid)
+				Log.log(Log.ERROR,this,"Not up-to-date: " + screenLine);
+			return info;
+		}
+		else
+		{
+			if(!info.chunksValid)
+			{
+				int virtLine = screenLine + firstLine;
+				if(virtLine >= textArea.getVirtualLineCount())
+				{
+					info.chunks = null;
+					info.chunksValid = true;
+					info.physicalLine = -1;
+				}
+				else
+				{
+					info.physicalLine = textArea.getFoldVisibilityManager()
+						.virtualToPhysical(virtLine);
+
+					out.clear();
+
+					lineToChunkList(textArea.getBuffer(),
+						info.physicalLine,out);
+
+					info.firstSubregion = true;
+					info.lastSubregion = true;
+					info.offset = 0;
+					info.length = textArea.getLineLength(info.physicalLine) + 1;
+					info.chunks = (out.size() == 0 ? null :
+						(Chunk)out.get(0));
+					info.chunksValid = true;
+				}
+			}
+
+			return info;
+		}
 	} //}}}
 
 	//{{{ needFullRepaint() method
