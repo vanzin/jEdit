@@ -142,6 +142,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 			else
 			{
 				popup = dockableWindowManager.createPopupMenu(
+					FloatingWindowContainer.this,
 					entry.factory.name,clone);
 				GUIUtilities.showPopupMenu(popup,
 					menu,menu.getX(),menu.getY() + menu.getHeight(),
