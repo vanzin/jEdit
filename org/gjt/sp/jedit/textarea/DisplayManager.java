@@ -1118,8 +1118,17 @@ loop:		for(;;)
 					+ physicalLine + ":" + scrollLine);
 			} //}}}
 
-			textArea.updateScrollBars();
-			textArea.recalculateLastPhysicalLine();
+			if(!scrollLineCount.callChanged
+				&& !scrollLineCount.callReset)
+			{
+				textArea.updateScrollBars();
+				textArea.recalculateLastPhysicalLine();
+			}
+			else
+			{
+				// ScrollLineCount.changed() does the same
+				// thing
+			}
 		} //}}}
 
 		//{{{ reset() method
@@ -1453,6 +1462,8 @@ loop:		for(;;)
 
 			int endLine = startLine + numLines;
 
+			if(delayedUpdateEnd >= startLine)
+				delayedUpdateEnd += numLines;
 			delayedUpdate(startLine,endLine);
 
 			if(numLines != 0)
@@ -1570,7 +1581,7 @@ loop:		for(;;)
 					}
 				}
 				/* collapse 2 */
-				else if(fvm[starti] == startLine)
+				else if(starti != -1 && fvm[starti] == startLine)
 				{
 					//int newStart = fvm[endi + 1] - 1;
 					fvmput(starti,endi + 1,null);
@@ -1595,6 +1606,8 @@ loop:		for(;;)
 					< getFirstVisibleLine())
 				{
 					// will be handled later.
+					// see comments at the end of
+					// transactionComplete().
 				}
 				// very subtle... if we leave this for
 				// ensurePhysicalLineIsVisible(), an
@@ -1612,6 +1625,8 @@ loop:		for(;;)
 				fvmdump();
 			}
 
+			if(delayedUpdateEnd >= startLine)
+				delayedUpdateEnd -= numLines;
 			delayedUpdate(startLine,startLine);
 		} //}}}
 
@@ -1681,6 +1696,12 @@ loop:		for(;;)
 			{
 				if(delayedUpdate)
 				{
+					// must be before the below call
+					// so that the chunk cache is not
+					// updated with an invisible first
+					// line (see above)
+					_notifyScreenLineChanges();
+
 					if(delayedMultilineUpdate)
 					{
 						textArea.invalidateScreenLineRange(
@@ -1713,11 +1734,10 @@ loop:		for(;;)
 						line = getNextVisibleLine(line);
 					}
 
+					// update visible lines
 					textArea.chunkCache.getLineInfo(
 						textArea.getVisibleLines()
 						- 1);
-
-					_notifyScreenLineChanges();
 				}
 
 				textArea._finishCaretUpdate();

@@ -3,6 +3,7 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- fresh instance; empty fields in search dialog
 - test gzip
 - "downloading plugin list" label in plugin manager
 - delete word: horizontal scroll not updated
@@ -16,10 +17,6 @@ and quirks that I need to fix eventually.
 [error] Buffer:  at org.gjt.sp.jedit.Buffer.endCompoundEdit(Unknown Source)
 
 - xml encoding load with invalid encoding
-- insert longer than the screen
-- remove from beginning of buffer over collapsed folds
-- action context.java: transpose "private members" line
-- replace all \n with blank fuck up
 - choose dir dialog: entering dir name in filename field
 - column reference counting broken
 - gzip & unicode, or gzip & <?xml encoding...

@@ -2579,7 +2579,19 @@ loop:		for(int i = 0; i < text.length(); i++)
 	{
 		scrollToCaret(false);
 		int magic = getMagicCaretPosition();
-		int caretScreenLine = getScreenLineOfOffset(caret);
+		int caretScreenLine;
+		if(displayManager.isLineVisible(caretLine))
+			caretScreenLine = getScreenLineOfOffset(caret);
+		else if(caretLine < displayManager.getFirstVisibleLine())
+		{
+			caretScreenLine = displayManager.getNextVisibleLine(
+				caretLine);
+		}
+		else
+		{
+			caretScreenLine = displayManager.getPrevVisibleLine(
+				caretLine);
+		}
 
 		scrollDownPage();
 
@@ -2896,7 +2908,19 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	{
 		scrollToCaret(false);
 		int magic = getMagicCaretPosition();
-		int caretScreenLine = getScreenLineOfOffset(caret);
+		int caretScreenLine;
+		if(displayManager.isLineVisible(caretLine))
+			caretScreenLine = getScreenLineOfOffset(caret);
+		else if(caretLine < displayManager.getFirstVisibleLine())
+		{
+			caretScreenLine = displayManager.getNextVisibleLine(
+				caretLine);
+		}
+		else
+		{
+			caretScreenLine = displayManager.getPrevVisibleLine(
+				caretLine);
+		}
 
 		scrollUpPage();
 
