@@ -61,19 +61,6 @@ public class MacOSPlugin extends EBPlugin
 		}
 	}//}}}
 	
-	//{{{ createOptionPanes() method
-	public void createOptionPanes(OptionsDialog od) {
-		if (osok)
-			od.addOptionPane(new MacOSOptionPane());
-	}//}}}
-
-	//{{{ createMenuItems() method
-	public void createMenuItems(Vector menuItems)
-	{
-		if (osok)
-			menuItems.addElement(new MacOSMenu());
-	} //}}}
-	
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage message)
 	{
