@@ -12,7 +12,7 @@ contributing to this release.
 
 - Added APDL mode (Randolf Mock).
 
-- Updated PHP and Perl syntax highlighting (Chris Petersen).
+- Updated CSS, PHP, Perl syntax highlighting (Chris Petersen).
 
 + Miscellaneous Changes:
 
@@ -62,6 +62,8 @@ contributing to this release.
 - Plugin properties would override site properties.
 
 - Fixed split pane divider positioning.
+
+- Various modes were missing a "lineUpClosingBracket" property.
 
 + API Changes:
 

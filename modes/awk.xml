@@ -7,6 +7,7 @@
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>

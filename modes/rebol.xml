@@ -6,6 +6,7 @@
 	<PROPS>
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{[(" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}])" />
+		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 		<PROPERTY NAME="commentStart" VALUE="comment {" />
 		<PROPERTY NAME="commentEnd" VALUE="}" />
 		<PROPERTY NAME="lineComment" VALUE=";" />

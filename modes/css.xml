@@ -8,13 +8,15 @@
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 		<PROPERTY NAME="noWordSep" VALUE="-" />
+		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 	<RULES ESCAPE="\"
 		IGNORE_CASE="TRUE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="[[:digit:]]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
-		NO_WORD_SEP="-">
+		NO_WORD_SEP="-_">
 
 		<SEQ TYPE="OPERATOR">:</SEQ>
 		<SEQ TYPE="NULL">;</SEQ>
@@ -143,12 +145,12 @@
 			<KEYWORD2>max-height</KEYWORD2>
 			<KEYWORD2>line-height</KEYWORD2>
 			<KEYWORD2>vertical-align</KEYWORD2>
-			
+
 			<!-- Visual effects -->
 			<KEYWORD2>overflow</KEYWORD2>
 			<KEYWORD2>clip</KEYWORD2>
-			<KEYWORD2>visibility</KEYWORD2>						
-			
+			<KEYWORD2>visibility</KEYWORD2>
+
 			<!-- Generated content, automatic listing -->
 			<KEYWORD2>content</KEYWORD2>
 			<KEYWORD3>:after</KEYWORD3>
@@ -161,7 +163,7 @@
 			<KEYWORD2>list-style-image</KEYWORD2>
 			<KEYWORD2>list-style-position</KEYWORD2>
 			<KEYWORD2>list-style-type</KEYWORD2>
-			
+
 			<!-- Page properties -->
 			<KEYWORD2>size</KEYWORD2>
 			<KEYWORD2>marks</KEYWORD2>
@@ -171,7 +173,7 @@
 			<KEYWORD2>page</KEYWORD2>
 			<KEYWORD2>orphans</KEYWORD2>
 			<KEYWORD2>widows</KEYWORD2>
-												
+
 			<!-- Table properties -->
 			<KEYWORD2>caption-side</KEYWORD2>
 			<KEYWORD2>table-layout</KEYWORD2>
@@ -184,14 +186,14 @@
 			<KEYWORD2>@media</KEYWORD2>
 			<KEYWORD2>@page</KEYWORD2>
 			<KEYWORD2>@font-face</KEYWORD2>
-			
+
 			<!-- User interface -->
 			<KEYWORD2>cursor</KEYWORD2>
 			<KEYWORD2>outline</KEYWORD2>
 			<KEYWORD2>outline-width</KEYWORD2>
 			<KEYWORD2>outline-style</KEYWORD2>
 			<KEYWORD2>outline-color</KEYWORD2>
-						
+
 			<!-- Aural properties -->
 			<KEYWORD2>azimuth</KEYWORD2>
 			<KEYWORD2>volume</KEYWORD2>
@@ -222,7 +224,7 @@
 			<KEYWORD3>far-left</KEYWORD3>
 			<KEYWORD3>center-left</KEYWORD3>
 			<KEYWORD3>center</KEYWORD3>
-			<KEYWORD3>right</KEYWORD3>			
+			<KEYWORD3>right</KEYWORD3>
 			<KEYWORD3>center-right</KEYWORD3>
 			<KEYWORD3>far-right</KEYWORD3>
 			<KEYWORD3>right-side</KEYWORD3>
@@ -279,8 +281,8 @@
 			<KEYWORD3>table-column-group</KEYWORD3>
 			<KEYWORD3>table-column</KEYWORD3>
 			<KEYWORD3>table-cell</KEYWORD3>
-			<KEYWORD3>table-caption</KEYWORD3>			
-			
+			<KEYWORD3>table-caption</KEYWORD3>
+
 			<KEYWORD3>below</KEYWORD3>
 			<KEYWORD3>level</KEYWORD3>
 			<KEYWORD3>above</KEYWORD3>
@@ -298,7 +300,7 @@
 			<KEYWORD3>semi-expanded</KEYWORD3>
 			<KEYWORD3>expanded</KEYWORD3>
 			<KEYWORD3>extra-expanded</KEYWORD3>
-			<KEYWORD3>ultra-expanded</KEYWORD3> 
+			<KEYWORD3>ultra-expanded</KEYWORD3>
 			<KEYWORD3>normal</KEYWORD3>
 			<KEYWORD3>italic</KEYWORD3>
 			<KEYWORD3>oblique</KEYWORD3>
@@ -407,6 +409,156 @@
 			<KEYWORD3>female</KEYWORD3>
 			<KEYWORD3>child</KEYWORD3>
 			<KEYWORD3>code</KEYWORD3>
+
+			<!-- Colors -->
+			<KEYWORD3>aliceblue</KEYWORD3>
+			<KEYWORD3>antiquewhite</KEYWORD3>
+			<KEYWORD3>aqua</KEYWORD3>
+			<KEYWORD3>aquamarine</KEYWORD3>
+			<KEYWORD3>azure</KEYWORD3>
+			<KEYWORD3>beige</KEYWORD3>
+			<KEYWORD3>bisque</KEYWORD3>
+			<KEYWORD3>black</KEYWORD3>
+			<KEYWORD3>blanchedalmond</KEYWORD3>
+			<KEYWORD3>blue</KEYWORD3>
+			<KEYWORD3>blueviolet</KEYWORD3>
+			<KEYWORD3>brown</KEYWORD3>
+			<KEYWORD3>burlywood</KEYWORD3>
+			<KEYWORD3>cadetblue</KEYWORD3>
+			<KEYWORD3>chartreuse</KEYWORD3>
+			<KEYWORD3>chocolate</KEYWORD3>
+			<KEYWORD3>coral</KEYWORD3>
+			<KEYWORD3>cornflowerblue</KEYWORD3>
+			<KEYWORD3>cornsilk</KEYWORD3>
+			<KEYWORD3>crimson</KEYWORD3>
+			<KEYWORD3>cyan</KEYWORD3>
+			<KEYWORD3>darkblue</KEYWORD3>
+			<KEYWORD3>darkcyan</KEYWORD3>
+			<KEYWORD3>darkgoldenrod</KEYWORD3>
+			<KEYWORD3>darkgray</KEYWORD3>
+			<KEYWORD3>darkgreen</KEYWORD3>
+			<KEYWORD3>darkgrey</KEYWORD3>
+			<KEYWORD3>darkkhaki</KEYWORD3>
+			<KEYWORD3>darkmagenta</KEYWORD3>
+			<KEYWORD3>darkolivegreen</KEYWORD3>
+			<KEYWORD3>darkorange</KEYWORD3>
+			<KEYWORD3>darkorchid</KEYWORD3>
+			<KEYWORD3>darkred</KEYWORD3>
+			<KEYWORD3>darksalmon</KEYWORD3>
+			<KEYWORD3>darkseagreen</KEYWORD3>
+			<KEYWORD3>darkslateblue</KEYWORD3>
+			<KEYWORD3>darkslategray</KEYWORD3>
+			<KEYWORD3>darkslategrey</KEYWORD3>
+			<KEYWORD3>darkturquoise</KEYWORD3>
+			<KEYWORD3>darkviolet</KEYWORD3>
+			<KEYWORD3>darkpink</KEYWORD3>
+			<KEYWORD3>deepskyblue</KEYWORD3>
+			<KEYWORD3>dimgray</KEYWORD3>
+			<KEYWORD3>dimgrey</KEYWORD3>
+			<KEYWORD3>dodgerblue</KEYWORD3>
+			<KEYWORD3>firebrick</KEYWORD3>
+			<KEYWORD3>floralwhite</KEYWORD3>
+			<KEYWORD3>forestgreen</KEYWORD3>
+			<KEYWORD3>fushia</KEYWORD3>
+			<KEYWORD3>gainsboro</KEYWORD3>
+			<KEYWORD3>ghostwhite</KEYWORD3>
+			<KEYWORD3>gold</KEYWORD3>
+			<KEYWORD3>goldenrod</KEYWORD3>
+			<KEYWORD3>gray</KEYWORD3>
+			<KEYWORD3>green</KEYWORD3>
+			<KEYWORD3>greenyellow</KEYWORD3>
+			<KEYWORD3>grey</KEYWORD3>
+			<KEYWORD3>honeydew</KEYWORD3>
+			<KEYWORD3>hotpink</KEYWORD3>
+			<KEYWORD3>indianred</KEYWORD3>
+			<KEYWORD3>indigo</KEYWORD3>
+			<KEYWORD3>ivory</KEYWORD3>
+			<KEYWORD3>khaki</KEYWORD3>
+			<KEYWORD3>lavender</KEYWORD3>
+			<KEYWORD3>lavenderblush</KEYWORD3>
+			<KEYWORD3>lawngreen</KEYWORD3>
+			<KEYWORD3>lemonchiffon</KEYWORD3>
+			<KEYWORD3>lightblue</KEYWORD3>
+			<KEYWORD3>lightcoral</KEYWORD3>
+			<KEYWORD3>lightcyan</KEYWORD3>
+			<KEYWORD3>lightgoldenrodyellow</KEYWORD3>
+			<KEYWORD3>lightgray</KEYWORD3>
+			<KEYWORD3>lightgreen</KEYWORD3>
+			<KEYWORD3>lightgrey</KEYWORD3>
+			<KEYWORD3>lightpink</KEYWORD3>
+			<KEYWORD3>lightsalmon</KEYWORD3>
+			<KEYWORD3>lightseagreen</KEYWORD3>
+			<KEYWORD3>lightskyblue</KEYWORD3>
+			<KEYWORD3>lightslategray</KEYWORD3>
+			<KEYWORD3>lightslategrey</KEYWORD3>
+			<KEYWORD3>lightsteelblue</KEYWORD3>
+			<KEYWORD3>lightyellow</KEYWORD3>
+			<KEYWORD3>lime</KEYWORD3>
+			<KEYWORD3>limegreen</KEYWORD3>
+			<KEYWORD3>linen</KEYWORD3>
+			<KEYWORD3>magenta</KEYWORD3>
+			<KEYWORD3>maroon</KEYWORD3>
+			<KEYWORD3>mediumaquamarine</KEYWORD3>
+			<KEYWORD3>mediumblue</KEYWORD3>
+			<KEYWORD3>mediumorchid</KEYWORD3>
+			<KEYWORD3>mediumpurple</KEYWORD3>
+			<KEYWORD3>mediumseagreen</KEYWORD3>
+			<KEYWORD3>mediumslateblue</KEYWORD3>
+			<KEYWORD3>mediumspringgreen</KEYWORD3>
+			<KEYWORD3>mediumturquoise</KEYWORD3>
+			<KEYWORD3>mediumvioletred</KEYWORD3>
+			<KEYWORD3>midnightblue</KEYWORD3>
+			<KEYWORD3>mintcream</KEYWORD3>
+			<KEYWORD3>mistyrose</KEYWORD3>
+			<KEYWORD3>mocassin</KEYWORD3>
+			<KEYWORD3>navawhite</KEYWORD3>
+			<KEYWORD3>navy</KEYWORD3>
+			<KEYWORD3>oldlace</KEYWORD3>
+			<KEYWORD3>olive</KEYWORD3>
+			<KEYWORD3>olidrab</KEYWORD3>
+			<KEYWORD3>orange</KEYWORD3>
+			<KEYWORD3>orangered</KEYWORD3>
+			<KEYWORD3>orchid</KEYWORD3>
+			<KEYWORD3>palegoldenrod</KEYWORD3>
+			<KEYWORD3>palegreen</KEYWORD3>
+			<KEYWORD3>paleturquoise</KEYWORD3>
+			<KEYWORD3>paletvioletred</KEYWORD3>
+			<KEYWORD3>papayawhip</KEYWORD3>
+			<KEYWORD3>peachpuff</KEYWORD3>
+			<KEYWORD3>peru</KEYWORD3>
+			<KEYWORD3>pink</KEYWORD3>
+			<KEYWORD3>plum</KEYWORD3>
+			<KEYWORD3>powderblue</KEYWORD3>
+			<KEYWORD3>purple</KEYWORD3>
+			<KEYWORD3>red</KEYWORD3>
+			<KEYWORD3>rosybrown</KEYWORD3>
+			<KEYWORD3>royalblue</KEYWORD3>
+			<KEYWORD3>saddlebrown</KEYWORD3>
+			<KEYWORD3>salmon</KEYWORD3>
+			<KEYWORD3>sandybrown</KEYWORD3>
+			<KEYWORD3>seagreen</KEYWORD3>
+			<KEYWORD3>seashell</KEYWORD3>
+			<KEYWORD3>sienna</KEYWORD3>
+			<KEYWORD3>silver</KEYWORD3>
+			<KEYWORD3>skyblue</KEYWORD3>
+			<KEYWORD3>slateblue</KEYWORD3>
+			<KEYWORD3>slategray</KEYWORD3>
+			<KEYWORD3>slategrey</KEYWORD3>
+			<KEYWORD3>snow</KEYWORD3>
+			<KEYWORD3>springgreen</KEYWORD3>
+			<KEYWORD3>steelblue</KEYWORD3>
+			<KEYWORD3>tan</KEYWORD3>
+			<KEYWORD3>teal</KEYWORD3>
+			<KEYWORD3>thistle</KEYWORD3>
+			<KEYWORD3>tomato</KEYWORD3>
+			<KEYWORD3>turquoise</KEYWORD3>
+			<KEYWORD3>violet</KEYWORD3>
+			<KEYWORD3>wheat</KEYWORD3>
+			<KEYWORD3>white</KEYWORD3>
+			<KEYWORD3>whitesmoke</KEYWORD3>
+			<KEYWORD3>yellow</KEYWORD3>
+			<KEYWORD3>yellowgreen</KEYWORD3>
+
 		</KEYWORDS>
 	</RULES>
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
