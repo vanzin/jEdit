@@ -854,7 +854,7 @@ public class VFSBrowser extends JPanel implements EBComponent
 	{
 		VFS.DirectoryEntry[] selectedFiles = browserView.getSelectedFiles();
 
-		for(int i = 0; i < selectedFiles.length; i++)
+check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
 			VFS.DirectoryEntry file = selectedFiles[i];
 
@@ -868,8 +868,17 @@ public class VFSBrowser extends JPanel implements EBComponent
 					buffer = jEdit.openFile(null,file.path);
 				else if(doubleClickClose && canDoubleClickClose)
 				{
-					jEdit.closeBuffer(view,buffer);
-					break;
+					// close if this buffer is currently
+					// visible in the view.
+					EditPane[] editPanes = view.getEditPanes();
+					for(int j = 0; j < editPanes.length; j++)
+					{
+						if(editPanes[j].getBuffer() == buffer)
+						{
+							jEdit.closeBuffer(view,buffer);
+							break check_selected;
+						}
+					}
 				}
 
 				if(buffer != null)

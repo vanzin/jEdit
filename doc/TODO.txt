@@ -12,10 +12,10 @@ TO DO
 [error] AWT-EventQueue-0:       at
 org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
-- SOCKS proxy
+  -- trying to show a non-existent dockable
+
 - plugin manager: install plugins, no restart, install another: deps bad
 - plugin deps need JAR name, not plugin name
-- make fs color regexp error more intuitive
 - scroll to caret _still_ jumps around?
 - printer output spacing problem
 - support multi-screen systems properly
@@ -30,8 +30,6 @@ org.gjt.sp.jedit.gui.PanelWindowContainer.show(PanelWindowContainer.java:200)
 
 - more flexible definition of a paragraph, paragraph folding
 - fsb: indicate current buffer
-- double click on _current_ buffer: close
-- double click on other open: select
 - rect select hypersearch
 - escape in panel window container -> focus back to text area?
 - fix GUIUtilities.java to store maximisation state

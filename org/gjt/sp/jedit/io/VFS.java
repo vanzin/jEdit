@@ -632,11 +632,11 @@ public abstract class VFS
 			if(!jEdit.getBooleanProperty("vfs.browser.colorize"))
 				return;
 
-			try
+			String glob;
+			int i = 0;
+			while((glob = jEdit.getProperty("vfs.browser.colors." + i + ".glob")) != null)
 			{
-				String glob;
-				int i = 0;
-				while((glob = jEdit.getProperty("vfs.browser.colors." + i + ".glob")) != null)
+				try
 				{
 					colors.addElement(new ColorEntry(
 						new RE(MiscUtilities.globToRE(glob)),
@@ -645,11 +645,12 @@ public abstract class VFS
 						Color.black)));
 					i++;
 				}
-			}
-			catch(REException e)
-			{
-				Log.log(Log.ERROR,VFS.class,"Error loading file list colors:");
-				Log.log(Log.ERROR,VFS.class,e);
+				catch(REException e)
+				{
+					Log.log(Log.ERROR,VFS.class,"Invalid regular expression: "
+						+ glob);
+					Log.log(Log.ERROR,VFS.class,e);
+				}
 			}
 		}
 	} //}}}

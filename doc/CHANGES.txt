@@ -14,6 +14,8 @@ JEDIT 4.1 VERSION HISTORY
 - On Unix, the installer now defaults to installing in the user's home
   directory when running as a non-root user
 - Updated PL-SQL mode (Steve Snider)
+- A single invalid file system browser coloring regular expression no
+  longer stops the remaining expressions from working
 
 + Bug Fixes
 
