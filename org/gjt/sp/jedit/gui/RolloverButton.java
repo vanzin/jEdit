@@ -105,6 +105,31 @@ public class RolloverButton extends JButton
 		}
 	} //}}}
 
+	//{{{ setBorderPainted() method
+	public void setBorderPainted(boolean b)
+	{
+		try
+		{
+			revalidateBlocked = true;
+			super.setBorderPainted(b);
+		}
+		finally
+		{
+			revalidateBlocked = false;
+		}
+	} //}}}
+
+	//{{{ revalidate() method
+	/**
+	 * We block calls to revalidate() from a setBorderPainted(), for
+	 * performance reasons.
+	 */
+	public void revalidate()
+	{
+		if(!revalidateBlocked)
+			super.revalidate();
+	} //}}}
+
 	//{{{ paint() method
 	public void paint(Graphics g)
 	{
@@ -123,6 +148,8 @@ public class RolloverButton extends JButton
 		AlphaComposite.SRC_OVER, 0.5f);
 
 	private static Method method;
+
+	private boolean revalidateBlocked;
 
 	static
 	{

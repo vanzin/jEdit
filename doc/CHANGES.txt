@@ -13,6 +13,13 @@ JEDIT 4.2 VERSION HISTORY
 
 - jEdit did not compile with Java 1.3.
 
+- Clicking "Select All" in the "Files Changed on Disk" dialog box did
+  not enable the Reload button (Ollie Rutherfurd).
+
+- startup.bsh file was not included in installer bundle.
+
+- Fixed a performance problem with rollover buttons.
+
 }}}
 
 }}}

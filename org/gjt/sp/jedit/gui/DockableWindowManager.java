@@ -1698,7 +1698,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 					0,
 					rightWidth,
 					_height); //}}}
-			} //}}}
+			}
 
 			//{{{ Position tool bars if they are managed by us
 			if(topToolbars != null)

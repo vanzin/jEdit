@@ -253,6 +253,8 @@ public class FilesChangedDialog extends EnhancedDialog
 		}
 
 		selectAllInProgress = false;
+
+		updateEnabled();
 	} //}}}
 
 	//{{{ reload() method

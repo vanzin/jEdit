@@ -14,6 +14,7 @@ echo jars/LatestVersion.jar >> installer/jedit-program
 echo jars/QuickNotepad.jar >> installer/jedit-program
 echo properties/README.txt >> installer/jedit-program
 echo startup/README.txt >> installer/jedit-program
+echo startup/startup.bsh >> installer/jedit-program
 find modes -name \*.xml >> installer/jedit-program
 echo modes/catalog >> installer/jedit-program
 find doc \( -name \*.txt -o -name \*.png \) >> installer/jedit-program

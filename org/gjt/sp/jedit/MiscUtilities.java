@@ -801,6 +801,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 			case '*':
 				buf.append(".*");
 				break;
+			case '|':
+				buf.append("\\|");
+				break;
 			case '{':
 				buf.append('(');
 				if(i + 1 != glob.length() && glob.charAt(i + 1) == '!')
