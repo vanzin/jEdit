@@ -656,6 +656,16 @@ public class Buffer implements EBComponent
 		return path;
 	} //}}}
 
+	//{{{ getDirectory() method
+	/**
+	 * Returns the directory containing this buffer.
+	 * @since jEdit 4.1pre11
+	 */
+	public String getDirectory()
+	{
+		return directory;
+	} //}}}
+
 	//{{{ isClosed() method
 	/**
 	 * Returns true if this buffer has been closed with
@@ -2845,6 +2855,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(inUseFVMs[i] != null)
 				inUseFVMs[i]._invalidate(0);
 		}
+
+		fireFoldLevelChanged(0,getLineCount());
 	} //}}}
 
 	//{{{ getFoldLevel() method
@@ -3227,7 +3239,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public String toString()
 	{
-		return name + " (" + MiscUtilities.getParentOfPath(path) + ")";
+		return name + " (" + directory + ")";
 	} //}}}
 
 	//{{{ handleMessage() method
@@ -3447,6 +3459,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private VFS vfs;
 	private String path;
 	private String name;
+	private String directory;
 	private File file;
 	private File autosaveFile;
 	private long modTime;
@@ -3480,11 +3493,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private void setPath(String path)
 	{
 		this.path = path;
-		name = MiscUtilities.getFileName(path);
-
-		vfs = VFSManager.getVFSForPath(path);
+		this.vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setReadOnly(true);
+		this.name = vfs.getFileName(path);
+		this.directory = vfs.getParentOfPath(path);
 
 		if(vfs instanceof FileVFS)
 		{

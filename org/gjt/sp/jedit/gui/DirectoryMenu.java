@@ -54,8 +54,7 @@ public class DirectoryMenu extends EnhancedMenu
 		final String path;
 		if(dir == null)
 		{
-			path = MiscUtilities.getParentOfPath(
-				view.getBuffer().getPath());
+			path = view.getBuffer().getDirectory();
 		}
 		else
 			path = dir;

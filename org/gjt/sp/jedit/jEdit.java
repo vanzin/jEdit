@@ -1292,7 +1292,7 @@ public class jEdit
 		String path, boolean newFile, Hashtable props)
 	{
 		if(view != null && parent == null)
-			parent = MiscUtilities.getParentOfPath(view.getBuffer().getPath());
+			parent = view.getBuffer().getDirectory();
 
 		if(MiscUtilities.isURL(path))
 		{
@@ -1372,7 +1372,7 @@ public class jEdit
 		String path, boolean newFile)
 	{
 		if(view != null && parent == null)
-			parent = MiscUtilities.getParentOfPath(view.getBuffer().getPath());
+			parent = view.getBuffer().getDirectory();
 
 		if(MiscUtilities.isURL(path))
 		{
@@ -1428,8 +1428,7 @@ public class jEdit
 
 		if(view != null && view.getBuffer() != null)
 		{
-			path = MiscUtilities.getParentOfPath(view.getBuffer()
-				.getPath());
+			path = view.getBuffer().getDirectory();
 			VFS vfs = VFSManager.getVFSForPath(path);
 			// don't want 'New File' to create a read only buffer
 			// if current file is on SQL VFS or something
@@ -3219,25 +3218,37 @@ loop:		for(int i = 0; i < list.length; i++)
 			return;
 		}
 		//{{{ Sort buffer list
-
-		/**
-		 * Note that we use either buffer.getPath() or buffer.toString().
-		 * If the former, then the list is sorted first by directory,
-		 * then by file name; if the latter, it's the opposite.
-		 *
-		 * (Buffer.toString() returns "NAME (DIR)")
-		 */
 		else if(sortBuffers)
 		{
-			String name1 = (sortByName ? buffer.toString()
-				: buffer.getPath());
+			String str11, str12;
+			if(sortByName)
+			{
+				str11 = buffer.getName();
+				str12 = buffer.getDirectory();
+			}
+			else
+			{
+				str11 = buffer.getDirectory();
+				str12 = buffer.getName();
+			}
 
 			Buffer _buffer = buffersFirst;
 			while(_buffer != null)
 			{
-				String name2 = (sortByName ? _buffer.toString()
-					: _buffer.getPath());
-				if(MiscUtilities.compareStrings(name1,name2,true) <= 0)
+				String str21, str22;
+				if(sortByName)
+				{
+					str21 = buffer.getName();
+					str22 = buffer.getDirectory();
+				}
+				else
+				{
+					str21 = buffer.getDirectory();
+					str22 = buffer.getName();
+				}
+
+				int comp = MiscUtilities.compareStrings(str11,str21,true);
+				if(comp <= 0 || (comp == 0 && MiscUtilities.compareStrings(str12,str22,true) <= 0))
 				{
 					buffer.next = _buffer;
 					buffer.prev = _buffer.prev;
