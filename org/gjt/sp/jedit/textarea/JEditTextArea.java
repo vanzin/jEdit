@@ -5207,7 +5207,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	boolean bufferChanging;
 
 	int maxHorizontalScrollWidth;
-	boolean updateMaxHorizontalScrollWidth;
 
 	String wrap;
 	boolean hardWrap;
@@ -5384,6 +5383,141 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			queuedCaretUpdate = queuedScrollToElectric
 				= queuedFireCaretEvent = false;
 		}
+	} //}}}
+
+	//{{{ getSelectionStartEndOnLine() method
+	/**
+	 * Returns the x co-ordinates of the selection start and end on the
+	 * given line. May return null.
+	 */
+	int[] getSelectionStartAndEnd(int screenLine, int physicalLine,
+		Selection s)
+	{
+		int start = getScreenLineStartOffset(screenLine);
+		int end = getScreenLineEndOffset(screenLine);
+
+		if(end <= s.start || start > s.end)
+			return null;
+
+		int selStartScreenLine;
+		if(displayManager.isLineVisible(s.startLine))
+			selStartScreenLine = getScreenLineOfOffset(s.start);
+		else
+			selStartScreenLine = -1;
+
+		int selEndScreenLine;
+		if(displayManager.isLineVisible(s.endLine))
+			selEndScreenLine = getScreenLineOfOffset(s.end);
+		else
+			selEndScreenLine = -1;
+
+		int lineStart = buffer.getLineStartOffset(physicalLine);
+			int x1, x2;
+
+		if(s instanceof Selection.Rect)
+		{
+			start -= lineStart;
+			end -= lineStart;
+
+			Selection.Rect rect = (Selection.Rect)s;
+			int _start = rect.getStartColumn(buffer);
+			int _end = rect.getEndColumn(buffer);
+
+			int lineLen = buffer.getLineLength(physicalLine);
+
+			int[] total = new int[1];
+
+			int rectStart = buffer.getOffsetOfVirtualColumn(
+				physicalLine,_start,total);
+			if(rectStart == -1)
+			{
+				x1 = (_start - total[0]) * charWidth;
+				rectStart = lineLen;
+			}
+			else
+				x1 = 0;
+
+			int rectEnd = buffer.getOffsetOfVirtualColumn(
+				physicalLine,_end,total);
+			if(rectEnd == -1)
+			{
+				x2 = (_end - total[0]) * charWidth;
+				rectEnd = lineLen;
+			}
+			else
+				x2 = 0;
+
+			if(end <= rectStart || start > rectEnd)
+				return null;
+
+			x1 = (rectStart < start ? 0
+				: x1 + offsetToXY(physicalLine,
+				rectStart,returnValue).x);
+			x2 = (rectEnd > end ? getWidth()
+				: x2 + offsetToXY(physicalLine,
+				rectEnd,returnValue).x);
+		}
+		else if(selStartScreenLine == selEndScreenLine
+			&& selStartScreenLine != -1)
+		{
+			x1 = offsetToXY(physicalLine,
+				s.start - lineStart,returnValue).x;
+			x2 = offsetToXY(physicalLine,
+				s.end - lineStart,returnValue).x;
+		}
+		else if(screenLine == selStartScreenLine)
+		{
+			x1 = offsetToXY(physicalLine,
+				s.start - lineStart,returnValue).x;
+			x2 = getWidth();
+		}
+		else if(screenLine == selEndScreenLine)
+		{
+			x1 = 0;
+			x2 = offsetToXY(physicalLine,
+				s.end - lineStart,returnValue).x;
+		}
+		else
+		{
+			x1 = 0;
+			x2 = getWidth();
+		}
+
+		if(x1 < 0)
+			x1 = 0;
+		if(x2 < 0)
+			x2 = 0;
+
+		if(x1 == x2)
+			x2++;
+
+		return new int[] { x1, x2 };
+	} //}}}
+
+	//{{{ insideSelection() method
+	/**
+	 * Returns if the given point is inside a selection.
+	 * Used by drag and drop code in MouseHandler below.
+	 */
+	boolean insideSelection(int x, int y)
+	{
+		int offset = xyToOffset(x,y);
+
+		Selection s = getSelectionAtOffset(offset);
+		if(s == null)
+			return false;
+
+		int screenLine = getScreenLineOfOffset(offset);
+		if(screenLine == -1)
+			return false;
+
+		int[] selectionStartAndEnd = getSelectionStartAndEnd(
+			screenLine,buffer.getLineOfOffset(offset),s);
+		if(selectionStartAndEnd == null)
+			return false;
+
+		return x >= selectionStartAndEnd[0]
+			&& x <= selectionStartAndEnd[1];
 	} //}}}
 
 	//}}}
@@ -6327,7 +6461,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			clickCount = evt.getClickCount();
 
 			if(isDragEnabled() && getDragAndDropCallback() != null
-				&& getSelectionAtOffset(dragStart) != null
+				&& insideSelection(x,y)
 				&& clickCount == 1 && !evt.isShiftDown())
 			{
 				maybeDragAndDrop = true;

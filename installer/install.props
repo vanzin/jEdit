@@ -6,7 +6,7 @@
 app.name=jEdit
 
 # Program version
-app.version=4.2pre8
+app.version=4.2pre9
 
 # Info to display on first page of installer
 app.readme=readme.html
@@ -26,18 +26,18 @@ ostask.unix-man.manpage=jedit.1
 comp.count=6
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=6288
-comp.0.real-size=5348
+comp.0.disk-size=6564
+comp.0.real-size=5587
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
-comp.1.disk-size=248
-comp.1.real-size=161
+comp.1.disk-size=224
+comp.1.real-size=139
 comp.1.fileset=jedit-macros
 
 comp.2.name=API documentation (for macro and plugin development)
-comp.2.disk-size=9048
-comp.2.real-size=8326
+comp.2.disk-size=9688
+comp.2.real-size=8944
 comp.2.fileset=jedit-api
 
 comp.3.name=Windows desktop integration (jEditLauncher)
@@ -48,7 +48,7 @@ comp.3.os=Windows
 
 comp.4.name=MacOS desktop integration
 comp.4.disk-size=28
-comp.4.real-size=125
+comp.4.real-size=26
 comp.4.fileset=jedit-mac
 comp.4.os=MacOS
 
