@@ -543,7 +543,8 @@ public class DisplayManager
 		this.index = buffer._displayLock();
 
 		scrollLineCount = new ScrollLineCount(index);
-		scrollLineCount.reset();
+		// propertiesChanged() takes care of this
+		// scrollLineCount.reset();
 		// reset() calls this
 		//offsetMgr.addAnchor(scrollLineCount);
 		firstLine = new FirstLine(index);
