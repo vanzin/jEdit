@@ -64,6 +64,12 @@ public class Buffer extends PlainDocument implements EBComponent
 	 */
 	public static final String CARET = "Buffer__caret";
 	public static final String SELECTION = "Buffer__selection";
+
+	/**
+	 * This should be a physical line number, so that the scroll
+	 * position is preserved correctly across reloads (which will
+	 * affect virtual line numbers, due to fold being reset)
+	 */
 	public static final String SCROLL_VERT = "Buffer__scrollVert";
 	public static final String SCROLL_HORIZ = "Buffer__scrollHoriz";
 

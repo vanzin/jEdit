@@ -41,7 +41,7 @@ JEDIT 4.0 VERSION HISTORY
   - Same for the overwrite status; it now shows 'ins' or 'ovr'
   - I/O progress display replaced with a Java heap memory indicator
   - I/O status is now shown in the message area of the status bar
-- New splash screen (Kris Kopicki)
+- New splash screen and about box (Kris Kopicki)
 - New color scheme
 - Pressing Tab while a selection is active shifts it right by one level
   of indent
@@ -51,6 +51,10 @@ JEDIT 4.0 VERSION HISTORY
 - Improved window docking feature:
   - 'Auto open' setting in Docking option pane removed, now jEdit
     remembers which dockables were open automatically
+  - Docked windows are shown inside a custom control, not a tabbed pane
+  - ALL dockable windows set to dock in a certain area are shown in that
+    area, not just those currently 'open'. When a dockable is requested
+    for the first time, it is created and loaded
 - Improved HyperSearch results window
 - In the Shortcuts option pane, each plugin's actions are shown in a
   separate section. This solves the problem of plugin actions having
@@ -60,8 +64,8 @@ JEDIT 4.0 VERSION HISTORY
   an arbitriary java.awt.Component, instead of a View, as the component
   that will parent the dialog box. This will not break any macros since
   BeanShell resolves methods at run-time.
-- Improved window docking:
-  - Windows docked into the view now have close boxes
+- Folds are now shown in the gutter as triangles, which is more
+  intuitive than filled/not-filled boxes
 
 + Bug Fixes
 
@@ -88,6 +92,8 @@ JEDIT 4.0 VERSION HISTORY
   the directory selected in the dialog box
 - Fixed possible ArrayIndexOutOfBounds when searching for regular
   expressions that start with \<
+- 'Reload' command didn't preserve caret position very well if sections
+  of the buffer were folded
 
 + API Changes
 

@@ -223,7 +223,9 @@ class PluginList
 	{
 		String version;
 		String date;
+		int downloadSize;
 		String download;
+		int downloadSourceSize;
 		String downloadSource;
 		boolean obsolete;
 		Vector deps = new Vector();

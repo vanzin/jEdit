@@ -62,7 +62,6 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 		// I'm lazy so I chose "b". See register() for details.
 
 		closeBox = new JButton(CLOSE_BOX);
-		closeBox.setMargin(new Insets(0,0,0,0));
 		closeBox.setRequestFocusEnabled(false);
 		buttons.add(closeBox);
 
@@ -163,6 +162,7 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 				Math.min(size.width,size.height));
 			closeBox.setMinimumSize(dim);
 			closeBox.setPreferredSize(dim);
+			closeBox.setMaximumSize(dim);
 		}
 
 		buttonGroup.add(button);
@@ -463,7 +463,8 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 					for(int j = 0; j < h; j++)
 					{
 						byte value = pixels[j * scansize
-							+ i + off];
+							+ (rotation == CW
+							? i : scansize - i - 1) + off];
 
 						retVal[i * h + (h - j - 1)]
 							= value;
@@ -472,7 +473,7 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 
 				super.setPixels((rotation == CCW
 					? y : width - y - 1),
-					x,h,w,model,pixels,0,h);
+					x,h,w,model,retVal,0,h);
 			}
 
 			public void setPixels(int x, int y, int w, int h,
@@ -486,7 +487,8 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 					for(int j = 0; j < h; j++)
 					{
 						int value = pixels[j * scansize
-							+ i + off];
+							+ (rotation == CW
+							? i : scansize - i - 1) + off];
 
 						retVal[i * h + (h - j - 1)]
 							= value;
@@ -494,8 +496,9 @@ public class PanelWindowContainer extends JPanel implements DockableWindowContai
 				}
 
 				super.setPixels((rotation == CCW
-					? y : width - y - 1),
-					x,h,w,model,pixels,0,h);
+					? y : width - y - h),
+					(rotation == CW
+					? x : height - x - w),h,w,model,retVal,0,h);
 			}
 		}
 	}

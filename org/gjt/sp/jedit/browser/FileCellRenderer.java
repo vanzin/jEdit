@@ -41,10 +41,18 @@ public final class FileCellRenderer extends JLabel implements TreeCellRenderer
 		// cause problems in the future.
 		UIDefaults metalDefaults = new javax.swing.plaf.metal.MetalLookAndFeel()
 			.getDefaults();
-		fileIcon = metalDefaults.getIcon("FileView.fileIcon");
-		dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
-		filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
-		loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
+		fileIcon = UIManager.getIcon("FileView.fileIcon");
+		if(fileIcon == null)
+			fileIcon = metalDefaults.getIcon("FileView.fileIcon");
+		dirIcon = UIManager.getIcon("FileView.directoryIcon");
+		if(dirIcon == null)
+			dirIcon = metalDefaults.getIcon("FileView.directoryIcon");
+		filesystemIcon = UIManager.getIcon("FileView.hardDriveIcon");
+		if(filesystemIcon == null)
+			filesystemIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
+		loadingIcon = UIManager.getIcon("FileView.hardDriveIcon");
+		if(loadingIcon == null)
+			loadingIcon = metalDefaults.getIcon("FileView.hardDriveIcon");
 
 		setOpaque(true);
 	}
