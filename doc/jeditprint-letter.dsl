@@ -35,7 +35,9 @@ CDATA DSSSL> ]>
                                     (normalize "paramdef"))))
     (make sequence
       (make paragraph
-        start-indent: (inherited-start-indent)
+        start-indent: (if (equal? (gi (parent)) (normalize "listitem"))
+                          0
+                          (inherited-start-indent))
         font-family-name: %mono-font-family%
         (process-children))
       (if (equal? %funcsynopsis-style% 'kr)
