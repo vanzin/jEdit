@@ -326,7 +326,7 @@ public class JEditTextArea extends JComponent
 	/**
 	 * Returns the line displayed at the text area's origin. This is
 	 * a virtual, not a physical, line number. See
-	 * {@link #virtualToPhysical()}.
+	 * {@link FoldVisibilityManager#virtualToPhysical(int)}.
 	 */
 	public final int getFirstLine()
 	{
@@ -338,7 +338,7 @@ public class JEditTextArea extends JComponent
 	 * Sets the line displayed at the text area's origin.
 	 *
 	 * @param firstLine A virtual, not a physical, line number. See
-	 * {@link #physicalToVirtual()}.
+	 * {@link FoldVisibilityManager#physicalToVirtual(int)}.
 	 */
 	public void setFirstLine(int firstLine)
 	{
@@ -1151,6 +1151,7 @@ public class JEditTextArea extends JComponent
 	//{{{ physicalToVirtual() method
 	/**
 	 * Converts a physical line number to a virtual line number.
+	 * See {@link FoldVisibilityManager} for details.
 	 * @param line A physical line index
 	 * @since jEdit 4.0pre1
 	 */
@@ -1162,6 +1163,7 @@ public class JEditTextArea extends JComponent
 	//{{{ virtualToPhysical() method
 	/**
 	 * Converts a virtual line number to a physical line number.
+	 * See {@link FoldVisibilityManager} for details.
 	 * @param line A virtual line index
 	 * @since jEdit 4.0pre1
 	 */
@@ -3895,9 +3897,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ collapseFold() method
 	/**
-	 * Like {@link FoldVisibilityManager#collapseFold()}, but
+	 * Like {@link FoldVisibilityManager#collapseFold(int)}, but
 	 * also moves the caret to the first line of the fold.
-	 * @see FoldVisibilityManager#collapseFold(int)
 	 * @since jEdit 4.0pre3
 	 */
 	public void collapseFold()
@@ -3918,9 +3919,8 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//{{{ expandFold() method
 	/**
-	 * Like {@link FoldVisibilityManager#expandFold()}, but
+	 * Like {@link FoldVisibilityManager#expandFold(int,boolean)}, but
 	 * also moves the caret to the first sub-fold.
-	 * @see FoldVisibilityManager#expandFold(int,boolean)
 	 * @since jEdit 4.0pre3
 	 */
 	public void expandFold(boolean fully)

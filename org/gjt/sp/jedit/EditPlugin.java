@@ -67,7 +67,7 @@ import org.gjt.sp.util.Log;
  *
  * Here is an example set of plugin properties:
  *
- * <pre>plugin.QuickNotepadPlugin.name=QuickNotepad
+ * <pre> plugin.QuickNotepadPlugin.name=QuickNotepad
  * plugin.QuickNotepadPlugin.author=John Gellene
  * plugin.QuickNotepadPlugin.version=4.1
  * plugin.QuickNotepadPlugin.docs=QuickNotepad.html

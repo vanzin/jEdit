@@ -29,10 +29,30 @@ import java.awt.*;
 //}}}
 
 /**
- * The default implementation of the option pane interface. It lays out
- * components in a vertical fashion.
+ * The default implementation of the option pane interface.<p>
  *
- * @see org.gjt.sp.jedit.OptionPane
+ * Most option panes extend this implementation of {@link OptionPane}, instead
+ * of implementing {@link OptionPane} directly. This class provides a convenient
+ * default framework for laying out configuration options.<p>
+ *
+ * It is derived from Java's <code>JPanel</code> class and uses a
+ * <code>GridBagLayout</code> object for component management. Since
+ * <code>GridBagLayout</code> can be a bit cumbersome to use, this class
+ * contains shortcut methods to simplify layout:
+ *
+ * <ul>
+ * <li>{@link #addComponent(Component)}</li>
+ * <li>{@link #addComponent(String,Component)}</li>
+ * <li>{@link #addComponent(String,Component,int)}</li>
+ * <li>{@link #addComponent(Component,Component)}</li>
+ * <li>{@link #addComponent(Component,Component,int)}</li>
+ * <li>{@link #addSeparator()}</li>
+ * <li>{@link #addSeparator(String)}</li>
+ * </ul>
+ *
+ * @author Slava Pestov
+ * @author John Gellene (API documentation)
+ * @version $Id$
  */
 // even though this class is called AbstractOptionPane, it is not really
 // abstract, since BufferOptions uses an instance of it to lay out its
@@ -73,7 +93,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	} //}}}
 
 	//{{{ init() method
-	public void init()
+	public final void init()
 	{
 		if(!initialized)
 		{
@@ -83,7 +103,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	} //}}}
 
 	//{{{ save() method
-	public void save()
+	public final void save()
 	{
 		if(initialized)
 			_save();
@@ -271,7 +291,10 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	protected int y;
 
 	/**
-	 * This method should create the option pane's GUI.
+	 * This method should create and arrange the components of the option pane
+	 * and initialize the option data displayed to the user. This method
+	 * is called when the option pane is first displayed, and is not
+	 * called again for the lifetime of the object.
 	 */
 	protected void _init() {}
 

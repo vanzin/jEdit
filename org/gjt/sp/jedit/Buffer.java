@@ -52,15 +52,15 @@ import org.gjt.sp.util.*;
  * Buffers can be opened and closed using methods in the <code>jEdit</code>
  * class.<p>
  *
- * This class is partially thread-safe, however you must pay attention to a few
- * very important issues:
+ * This class is partially thread-safe, however you must pay attention to two
+ * very important guidelines:
  * <ul>
  * <li>Changes to a buffer can only be made from the AWT thread.
  * <li>When accessing the buffer from another thread, you must
  * grab a read lock if you plan on performing more than one call, to ensure that
  * the buffer contents are not changed by the AWT thread for the duration of the
  * lock.
- * <li>
+ * </ul>
  *
  * @author Slava Pestov
  * @version $Id$
@@ -1530,7 +1530,7 @@ public class Buffer implements EBComponent
 	 * <li>{@link #getStringProperty(String)}</li>
 	 * <li>{@link #getBooleanProperty(String)}</li>
 	 * <li>{@link #getIntegerProperty(String,int)}</li>
-	 * <li>{@link #getRegexpProperty(String)}</li>
+	 * <li>{@link #getRegexpProperty(String,int,gnu.regexp.RESyntax)}</li>
 	 * </ul>
 	 *
 	 * @param name The property name. For backwards compatibility, this
@@ -3064,7 +3064,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getMarkerAtLine() method
 	/**
-	 * Returns the first marker at the specified line.
+	 * Returns the first marker at the specified line, or <code>null</code>
+	 * if there is none.
 	 * @param line The line number
 	 * @since jEdit 3.2pre2
 	 */
@@ -3231,9 +3232,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ _getFoldVisibilityManager() method
 	/**
-	 * Plugins and macros should call
+	 * Plugins and macros should not call this method. Call
 	 * {@link org.gjt.sp.jedit.textarea.JEditTextArea#getFoldVisibilityManager()}
-	 * instead of this method.
+	 * instead.
 	 * @param textArea The text area
 	 * @since jEdit 4.0pre1
 	 */

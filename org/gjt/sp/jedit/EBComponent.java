@@ -42,7 +42,7 @@ public interface EBComponent
 	 * whether the message is an instance of a derived message class in
 	 * which the plugin has an interest. For example:
 	 *
-	 * <pre>if(msg instanceof BufferUpdate) {
+	 * <pre> if(msg instanceof BufferUpdate) {
          *     // a buffer's state has changed!
          * }
          * else if(msg instanceof ViewUpdate) {
