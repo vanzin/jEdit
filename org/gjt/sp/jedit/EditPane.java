@@ -140,11 +140,7 @@ public class EditPane extends JPanel implements EBComponent
 				// avoid a race condition
 				// see bug #834338
 				if(buffer == getBuffer())
-				{
-					System.err.println("load caret info");
 					loadCaretInfo();
-					System.err.println(buffer.getProperty(Buffer.CARET));
-				}
 			}
 		};
 

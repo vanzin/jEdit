@@ -137,12 +137,6 @@
     <xref linkend="global-opts"/>.
   </para>
 
-  <para>
-    <guimenu>Macros</guimenu>&gt;<guimenuitem>Run Last Macro</guimenuitem>
-    (shortcut: <keycap>C+m C+l</keycap>)
-    runs the last macro run by jEdit again.
-  </para>
-
 </sect1>
 
 <sect1 id="organizing-macros"><title>How jEdit Organizes Macros</title>
