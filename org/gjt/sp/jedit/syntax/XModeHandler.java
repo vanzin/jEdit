@@ -182,21 +182,26 @@ public abstract class XModeHandler extends HandlerBase
 				}
 
 				TokenMarker delegateMarker = getTokenMarker(delegateMode);
-				lastDelegateSet = delegateMarker
-					.getRuleSet(delegateSetName);
-				if(delegateMarker == marker
-					&& lastDelegateSet == null)
-				{
-					// stupid hack to handle referencing
-					// a rule set that is defined later!
-					lastDelegateSet = new ParserRuleSet(
-						delegateMode,
-						delegateSetName);
-					lastDelegateSet.setDefault(Token.INVALID);
-					marker.addRuleSet(lastDelegateSet);
-				}
-				else if(lastDelegateSet == null)
+				if(delegateMarker == null)
 					error("delegate-invalid",value);
+				else
+				{
+					lastDelegateSet = delegateMarker
+						.getRuleSet(delegateSetName);
+					if(delegateMarker == marker
+						&& lastDelegateSet == null)
+					{
+						// stupid hack to handle referencing
+						// a rule set that is defined later!
+						lastDelegateSet = new ParserRuleSet(
+							delegateMode,
+							delegateSetName);
+						lastDelegateSet.setDefault(Token.INVALID);
+						marker.addRuleSet(lastDelegateSet);
+					}
+					else if(lastDelegateSet == null)
+						error("delegate-invalid",value);
+				}
 			}
 		}
 		else if (aname == "DEFAULT")
