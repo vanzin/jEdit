@@ -73,10 +73,9 @@ public class RegexpIndentRule implements IndentRule
 			indentActions.add(prevPrevAction);
 			match = true;
 		}
-		
+
 		if(match && collapse)
 			indentActions.add(new IndentAction.Collapse());
-
 	} //}}}
 
 	//{{{ isMatch() method

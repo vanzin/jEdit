@@ -1,8 +1,34 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre3
+
+Thanks to Loren Charnley and Matthieu Casanova for contributing to this
+release.
+
+{{{ Syntax Highlighting
+
+- Gnuplot syntax highlighting (Loren Charnley).
+
+- Updated PHP syntax highlighting (Matthieu Casanova).
+
+}}}
+{{{ Bug Fixes
+
+- The following Java code did not indent properly:
+
+  if(foo)
+  {
+      foo(bar,
+          baz);
+  }
+
+}}}
+
+}}}
+
 {{{ Version 4.3pre2
 
-Thanks to Bertalan Fodor, Dirk Moebius. Jarek Tuszynski,
+Thanks to Bertalan Fodor, Dirk Moebius. Jarek Tuszynski, Joshua Gertzen,
 Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 
 {{{ Auto Indent

@@ -65,7 +65,8 @@ public class CloseBracketIndentRule extends BracketIndentRule
 				= new IndentAction.AlignBracket(
 				buffer,index,offset);
 			/*
-			Consider the following Common Lisp code:
+			Consider the following Common Lisp code (with one more opening
+			bracket than closing):
 			
 			(defun emit-push-long (arg)
 			  (cond ((eql arg 0)

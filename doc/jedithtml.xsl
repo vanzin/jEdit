@@ -45,8 +45,6 @@
 
 <xsl:variable name="use.id.as.filename">1</xsl:variable>
 
-<xsl:variable name="shade.verbatim">1</xsl:variable>
-
 <xsl:variable name="toc.list.type">ul</xsl:variable>
 
 <xsl:variable name="funcsynopsis.style">ansi</xsl:variable>
