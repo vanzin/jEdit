@@ -1058,6 +1058,11 @@ public class DockableWindowManager extends JPanel
 		void open()
 		{
 			win = factory.createDockableWindow(view,position);
+			if(win == null)
+			{
+				// error occurred
+				return;
+			}
 
 			Log.log(Log.DEBUG,this,"Adding " + name + " with position " + position);
 

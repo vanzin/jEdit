@@ -1,5 +1,8 @@
 /*
- * BrowserPopupMenu.java - provides popup actions for rename, del, etc.
+ * BrowserCommandsMenu.java - provides various commands
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999 Jason Ginchereau
  * Portions copyright (C) 2000, 2001 Slava Pestov
  *
@@ -20,6 +23,7 @@
 
 package org.gjt.sp.jedit.browser;
 
+//{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -27,16 +31,17 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
+//}}}
 
 /**
  * @version $Id$
  * @author Slava Pestov and Jason Ginchereau
  */
-public class BrowserPopupMenu extends JPopupMenu
+public class BrowserCommandsMenu extends JPopupMenu
 {
-	public BrowserPopupMenu(VFSBrowser browser, VFS.DirectoryEntry file)
+	//{{{ BrowserCommandsMenu constructor
+	public BrowserCommandsMenu(VFSBrowser browser, VFS.DirectoryEntry file)
 	{
 		this.browser = browser;
 
@@ -89,72 +94,53 @@ public class BrowserPopupMenu extends JPopupMenu
 		else
 			vfs = VFSManager.getVFSForPath(browser.getDirectory());
 
-		JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
-			jEdit.getProperty("vfs.browser.menu.show-hidden-files.label"));
-		showHiddenFiles.setActionCommand("show-hidden-files");
-		showHiddenFiles.setSelected(browser.getShowHiddenFiles());
-		showHiddenFiles.addActionListener(new ActionHandler());
-		add(showHiddenFiles);
-
+		add(createMenuItem("up"));
+		add(createMenuItem("reload"));
+		add(createMenuItem("roots"));
+		add(createMenuItem("home"));
+		add(createMenuItem("synchronize"));
 		addSeparator();
-		add(createMenuItem("new-file"));
+
+		if(browser.getMode() == VFSBrowser.BROWSER)
+			add(createMenuItem("new-file"));
+
 		add(createMenuItem("new-directory"));
-
-		addSeparator();
 
 		// note that we don't display the search in directory command
 		// in open and save dialog boxes
 		if(browser.getMode() == VFSBrowser.BROWSER
 			&& vfs instanceof FileVFS)
 		{
+			addSeparator();
 			add(createMenuItem("search-in-directory"));
-			addSeparator();
 		}
 
-		add(createMenuItem("add-to-favorites"));
-		add(createMenuItem("go-to-favorites"));
+		addSeparator();
 
-		// put them in a vector for sorting
-		Vector vec = new Vector();
-		Enumeration enum = VFSManager.getFilesystems();
+		JCheckBoxMenuItem showHiddenFiles = new JCheckBoxMenuItem(
+			jEdit.getProperty("vfs.browser.commands.show-hidden-files.label"));
+		showHiddenFiles.setActionCommand("show-hidden-files");
+		showHiddenFiles.setSelected(browser.getShowHiddenFiles());
+		showHiddenFiles.addActionListener(new ActionHandler());
+		add(showHiddenFiles);
+	} //}}}
 
-		while(enum.hasMoreElements())
-		{
-			VFS vfs = (VFS)enum.nextElement();
-			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
-				continue;
-
-			JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
-				"vfs." + vfs.getName() + ".label"));
-			menuItem.setActionCommand("vfs." + vfs.getName());
-			menuItem.addActionListener(new ActionHandler());
-			vec.addElement(menuItem);
-		}
-
-		if(vec.size() != 0)
-		{
-			addSeparator();
-
-			MiscUtilities.quicksort(vec,new MiscUtilities.MenuItemCompare());
-			for(int i = 0; i < vec.size(); i++)
-				add((JMenuItem)vec.elementAt(i));
-		}
-	}
-
-	// private members
+	//{{{ Private members
 	private VFSBrowser browser;
 	private VFS.DirectoryEntry file;
 	private VFS vfs;
 
+	//{{{ createMenuItem() method
 	private JMenuItem createMenuItem(String name)
 	{
-		String label = jEdit.getProperty("vfs.browser.menu." + name + ".label");
+		String label = jEdit.getProperty("vfs.browser.commands." + name + ".label");
 		JMenuItem mi = new JMenuItem(label);
 		mi.setActionCommand(name);
 		mi.addActionListener(new ActionHandler());
 		return mi;
-	}
+	} //}}}
 
+	//{{{ createOpenEncodingMenu() method
 	private JMenu createOpenEncodingMenu()
 	{
 		ActionListener listener = new ActionHandler();
@@ -194,8 +180,11 @@ public class BrowserPopupMenu extends JPopupMenu
 		openEncoding.add(mi);
 
 		return openEncoding;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -236,109 +225,39 @@ public class BrowserPopupMenu extends JPopupMenu
 			}
 			else if(actionCommand.equals("browse"))
 				browser.setDirectory(file.path);
-			else if(evt.getActionCommand().equals("rename"))
+			else if(actionCommand.equals("rename"))
 				browser.rename(file.path);
-			else if(evt.getActionCommand().equals("delete"))
+			else if(actionCommand.equals("delete"))
 				browser.delete(file.deletePath);
+			else if(actionCommand.equals("up"))
+			{
+				String path = browser.getDirectory();
+				VFS vfs = VFSManager.getVFSForPath(path);
+				browser.setDirectory(vfs.getParentOfPath(path));
+			}
+			else if(actionCommand.equals("reload"))
+				browser.reloadDirectory();
+			else if(actionCommand.equals("roots"))
+				browser.setDirectory(FileRootsVFS.PROTOCOL + ":");
+			else if(actionCommand.equals("home"))
+				browser.setDirectory(System.getProperty("user.home"));
+			else if(actionCommand.equals("synchronize"))
+			{
+				Buffer buffer = browser.getView().getBuffer();
+				browser.setDirectory(buffer.getVFS().getParentOfPath(
+					buffer.getPath()));
+			}
+			else if(actionCommand.equals("new-file"))
+				browser.newFile();
+			else if(actionCommand.equals("new-directory"))
+				browser.mkdir();
+			else if(actionCommand.equals("search-in-directory"))
+				browser.searchInDirectory();
 			else if(actionCommand.equals("show-hidden-files"))
 			{
 				browser.setShowHiddenFiles(!browser.getShowHiddenFiles());
 				browser.reloadDirectory();
 			}
-			else if(actionCommand.equals("new-file"))
-			{
-				VFS.DirectoryEntry[] selected = browser.getSelectedFiles();
-				if(selected.length >= 1)
-				{
-					VFS.DirectoryEntry file = selected[0];
-					if(file.type == VFS.DirectoryEntry.DIRECTORY)
-						jEdit.newFile(view,file.path);
-					else
-					{
-						VFS vfs = VFSManager.getVFSForPath(file.path);
-						jEdit.newFile(view,vfs.getParentOfPath(file.path));
-					}
-				}
-				else
-					jEdit.newFile(view,browser.getDirectory());
-			}
-			else if(actionCommand.equals("new-directory"))
-				browser.mkdir();
-			else if(actionCommand.equals("search-in-directory"))
-			{
-				String path;
-
-				VFS.DirectoryEntry[] selected = browser.getSelectedFiles();
-				if(selected.length >= 1)
-				{
-					VFS.DirectoryEntry file = selected[0];
-					if(file.type == VFS.DirectoryEntry.DIRECTORY)
-						path = file.path;
-					else
-					{
-						VFS vfs = VFSManager.getVFSForPath(file.path);
-						path = vfs.getParentOfPath(file.path);
-					}
-				}
-				else
-					path = browser.getDirectory();
-
-				SearchAndReplace.setSearchFileSet(new DirectoryListSet(
-					path,browser.getFilenameFilter(),true));
-				new SearchDialog(browser.getView(),null,SearchDialog.DIRECTORY);
-			}
-			else if(actionCommand.equals("add-to-favorites"))
-			{
-				// if any directories are selected, add
-				// them, otherwise add current directory
-				Vector toAdd = new Vector();
-				VFS.DirectoryEntry[] selected = browser.getSelectedFiles();
-				for(int i = 0; i < selected.length; i++)
-				{
-					VFS.DirectoryEntry file = selected[i];
-					if(file.type == VFS.DirectoryEntry.FILE)
-					{
-						GUIUtilities.error(browser,
-							"vfs.browser.files-favorites",
-							null);
-						return;
-					}
-					else
-						toAdd.addElement(file.path);
-				}
-	
-				if(toAdd.size() != 0)
-				{
-					for(int i = 0; i < toAdd.size(); i++)
-					{
-						FavoritesVFS.addToFavorites((String)toAdd.elementAt(i));
-					}
-				}
-				else
-				{
-					String directory = browser.getDirectory();
-					if(directory.equals(FavoritesVFS.PROTOCOL + ":"))
-					{
-						GUIUtilities.error(browser,
-							"vfs.browser.recurse-favorites",
-							null);
-					}
-					else
-					{
-						FavoritesVFS.addToFavorites(directory);
-					}
-				}
-			}
-			else if(actionCommand.equals("go-to-favorites"))
-				browser.setDirectory(FavoritesVFS.PROTOCOL + ":");
-			else if(actionCommand.startsWith("vfs."))
-			{
-				String vfsName = actionCommand.substring(4);
-				VFS vfs = VFSManager.getVFSByName(vfsName);
-				String directory = vfs.showBrowseDialog(null,browser);
-				if(directory != null)
-					browser.setDirectory(directory);
-			}
 		}
-	}
+	} //}}}
 }
