@@ -144,7 +144,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 
 			try
 			{
-				return action.isSelected(EditAction.getView(
+				return action.isSelected(GUIUtilities.getView(
 					EnhancedCheckBoxMenuItem.this));
 			}
 			catch(Throwable t)
