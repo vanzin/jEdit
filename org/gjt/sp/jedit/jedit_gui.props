@@ -83,8 +83,10 @@ plugin-manager.icon=Plugins.png
 help.icon=Help.png
 
 #{{{ Icon list for tool bar editor
-icons=ArrowL.png \
+icons=ArrowD.png \
+	ArrowL.png \
 	ArrowR.png \
+	ArrowU.png \
 	BrokenImage.png \
 	Copy.png \
 	CopyToBuffer.png \
