@@ -4,6 +4,7 @@ short term plan:
 
 before soft wrap, must fix all the document bugs:
 
+- reloading read only files
 - browserView.directoryLoaded() npe
 - textArea.getLastVisibleLine() method
 - narrow: insert line after first fucked

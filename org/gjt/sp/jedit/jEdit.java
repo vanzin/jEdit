@@ -292,14 +292,20 @@ public class jEdit
 		{
 			try
 			{
-				java.lang.reflect.Method meth
-					= Class.forName("org.gjt.sp.jedit.Java14")
+				ClassLoader loader = jEdit.class.getClassLoader();
+				Class clazz;
+				if(loader != null)
+					clazz = loader.loadClass("org.gjt.sp.jedit.Java14");
+				else
+					clazz = Class.forName("org.gjt.sp.jedit.Java14");
+				java.lang.reflect.Method meth = clazz
 					.getMethod("init",new Class[0]);
 				meth.invoke(null,new Object[0]);
 			}
 			catch(Exception e)
 			{
 				Log.log(Log.ERROR,jEdit.class,e);
+				System.exit(1);
 			}
 		}
 
