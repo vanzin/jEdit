@@ -2136,7 +2136,8 @@ public class Buffer implements EBComponent
 				}
 			}
 
-			//System.err.println("tokenize from " + start + " to " + lineIndex);
+			if(Debug.TOKEN_MARKER_DEBUG)
+				Log.log(Log.DEBUG,this,"tokenize from " + start + " to " + lineIndex);
 			for(int i = start; i <= lineIndex; i++)
 			{
 				getLineText(i,seg);

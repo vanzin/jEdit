@@ -32,6 +32,7 @@ import java.util.HashMap;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -656,8 +657,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		// too many lines will always be painted.
 		int lastInvalid = (clipRect.y + clipRect.height - 1) / height;
 
-		if(PAINT_DEBUG && lastInvalid - firstInvalid >= 1)
-			System.err.println("repainting " + (lastInvalid - firstInvalid) + " lines");
+		if(Debug.PAINT_TIMER && lastInvalid - firstInvalid >= 1)
+			Log.log(Log.DEBUG,this,"repainting " + (lastInvalid - firstInvalid) + " lines");
 
 		int y = (clipRect.y - clipRect.y % height);
 
@@ -669,8 +670,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				ChunkCache.LineInfo lineInfo = textArea.chunkCache
 					.getLineInfo(line);
-				if(!lineInfo.chunksValid)
-					System.err.println("text area painter: not valid");
 
 				lineInfo.width = paintLine(gfx,buffer,lineInfo,line,x,y) - x;
 				if(lineInfo.width > textArea.maxHorizontalScrollWidth)
@@ -681,7 +680,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(buffer.isNextLineRequested())
 			{
-				System.err.println("next line requested");
 				int h = clipRect.y + clipRect.height;
 				textArea.chunkCache.invalidateChunksFrom(lastInvalid + 1);
 				repaint(0,h,getWidth(),getHeight() - h);
@@ -698,9 +696,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			Log.log(Log.ERROR,this,e);
 		}
 
-		if(textArea.timing)
+		if(Debug.KEY_DELAY_TIMER && textArea.time != 0L)
 		{
-			System.err.println(System.currentTimeMillis() - textArea.time);
+			Log.log(Log.DEBUG,this,"Key delay: "
+				+ (System.currentTimeMillis() - textArea.time)
+				+ " ms");
+			textArea.time = 0L;
 		}
 	} //}}}
 
@@ -872,9 +873,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(lineInfo.chunks != null)
 			{
-				buffer.getLineText(physicalLine,textArea.lineSegment);
-				x += Chunk.paintChunkList(textArea.lineSegment,
-					lineInfo.chunks,gfx,x,baseLine,true);
+				x += Chunk.paintChunkList(lineInfo.chunks,
+					gfx,x,baseLine,true);
 			}
 
 			if(!lineInfo.lastSubregion)

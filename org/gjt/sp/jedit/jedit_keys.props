@@ -157,6 +157,7 @@ scroll-down-page.shortcut=A+SLASH
 prev-textarea.shortcut=A+PAGE_UP
 next-textarea.shortcut=A+PAGE_DOWN
 show-buffer-switcher.shortcut=A+BACK_QUOTE
+toggle-rect-select.shortcut=A+BACK_SLASH
 #}}}
 
 #{{{ Other keys

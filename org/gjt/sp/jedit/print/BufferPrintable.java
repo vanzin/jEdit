@@ -283,7 +283,7 @@ print_loop:	for(;;)
 					Chunk.paintChunkBackgrounds(chunks,gfx,
 						(float)(pageX + lineNumberWidth),
 						(float)(pageY + y));
-					Chunk.paintChunkList(seg,chunks,gfx,
+					Chunk.paintChunkList(chunks,gfx,
 						(float)(pageX + lineNumberWidth),
 						(float)(pageY + y),false);
 				}

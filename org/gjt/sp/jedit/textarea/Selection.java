@@ -169,6 +169,11 @@ public abstract class Selection implements Cloneable
 	// should the next two be public, maybe?
 	abstract void getText(Buffer buffer, StringBuffer buf);
 	abstract int setText(Buffer buffer, String text);
+
+	abstract boolean contentInserted(Buffer buffer, int startLine, int start,
+		int numLines, int length);
+	abstract boolean contentRemoved(Buffer buffer, int startLine, int start,
+		int numLines, int length);
 	//}}}
 
 	//{{{ Range class
@@ -230,6 +235,69 @@ public abstract class Selection implements Cloneable
 			}
 			else
 				return start;
+		} //}}}
+
+		//{{{ contentInserted() method
+		boolean contentInserted(Buffer buffer, int startLine, int start,
+			int numLines, int length)
+		{
+			boolean changed = false;
+
+			if(this.start > start)
+			{
+				this.start += length;
+				if(numLines != 0)
+					this.startLine = buffer.getLineOfOffset(this.start);
+				changed = true;
+			}
+
+			if(this.end >= start)
+			{
+				this.end += length;
+				if(numLines != 0)
+					this.endLine = buffer.getLineOfOffset(this.end);
+				changed = true;
+			}
+
+			return changed;
+		} //}}}
+
+		//{{{ contentRemoved() method
+		boolean contentRemoved(Buffer buffer, int startLine, int start,
+			int numLines, int length)
+		{
+			int end = start + length;
+			boolean changed = false;
+
+			if(this.start > start && this.start <= end)
+			{
+				this.start = start;
+				changed = true;
+			}
+			else if(this.start > end)
+			{
+				this.start -= length;
+				changed = true;
+			}
+
+			if(this.end > start && this.end <= end)
+			{
+				this.end = start;
+				changed = true;
+			}
+			else if(this.end > end)
+			{
+				this.end -= length;
+				changed = true;
+			}
+
+			if(changed && numLines != 0)
+			{
+				this.startLine = buffer.getLineOfOffset(this.start);
+				this.endLine = buffer.getLineOfOffset(this.end);
+			}
+
+			return changed;
 		} //}}}
 	} //}}}
 
@@ -522,5 +590,19 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//}}}
+
+		//{{{ contentInserted() method
+		boolean contentInserted(Buffer buffer, int startLine, int start,
+			int numLines, int length)
+		{
+			return false;
+		} //}}}
+
+		//{{{ contentRemoved() method
+		boolean contentRemoved(Buffer buffer, int startLine, int start,
+			int numLines, int length)
+		{
+			return false;
+		} //}}}
 	} //}}}
 }

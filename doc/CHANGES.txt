@@ -2,8 +2,8 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre1
 
-Thanks to Bill McMilleon, Kris Kopicki, Oliver Rutherfurd and Ryan Grove
-for contributing to this release.
+Thanks to Bill McMilleon, Kris Kopicki, Oliver Rutherfurd. Rudi Widmann
+and Ryan Grove for contributing to this release.
 
 {{{ Editing
 
@@ -22,13 +22,6 @@ for contributing to this release.
 - Complete Word popup now has keyboard shortcuts (1 - 0) for inserting
   the first 10 elements in the list.
 
-- Changed vertical paste behavior. Now if the rectangle we are inserting
-  into has more lines than the pasted text, the pasted text cycles
-  through the rectangle. Previously, it would be inserted at the top
-  with the remaining lines blank. The new behavior is very convinient;
-  for example, you can select a zero-width rectangle and paste "final"
-  to mark a set of variables in Java source as being final.
-
 - Entering a prefix while a JTextComponent has focus will move focus to
   the text area. This allows shortcuts like C+e n n to be used from the
   search bar and such without having to prefix them with C+e C+e first.
@@ -39,6 +32,31 @@ for contributing to this release.
 
 - Previously setting the wrap margin to zero with soft wrap on would
   wrap to the width of the text area. This is no longer supported.
+
+- The text area now scrolls by screen lines, not by physical lines, when
+  soft wrap is enabled. The previous behavior resulted in simpler code
+  but was extremely counter-intuitive.
+
+- Right-clicking in the text area with no selection (or if multiple
+  selection mode is enabled) moves the caret to the clicked line before
+  displaying the popup menu (Rudi Widmann).
+
+}}}
+{{{ Rectangular Selection
+
+- Changed vertical paste behavior. Now if the rectangle we are inserting
+  into has more lines than the pasted text, the pasted text cycles
+  through the rectangle. Previously, it would be inserted at the top
+  with the remaining lines blank. The new behavior is very convinient;
+  for example, you can select a zero-width rectangle and paste "final"
+  to mark a set of variables in Java source as being final.
+
+- Control-clicking in virtual space inserts the appropriate amount of
+  white space and moves the caret there (Rudi Widmann).
+
+- After invoking Edit->More Selection->Rectangular Selection,
+  rectangular selections can be created from the keyboard using Shift in
+  conjunction with a caret movement command.
 
 }}}
 {{{ Syntax Highlighting
@@ -145,7 +163,7 @@ for contributing to this release.
   view.getDockableWindowManager(). Useful for actions.xml.
 
 }}}
-{{{ Miscellaneous Changes
+{{{ Miscellaneous
 
 - Added -quit command-line parameter; quits an already running jEdit
   instance.
@@ -193,7 +211,7 @@ for contributing to this release.
   happends.
 
 }}}
-{{{ Platform-Specific Changes
+{{{ Platform-Specific
 
 - MacOS plugin version 3.0 now requires Java 1.4.1. All native calls now
   use the Cocoa API, and a dock menu has been added. The dock menu
