@@ -2,10 +2,7 @@ TO DO
 
 + before 4.0pre1:
 
-- roll linesChanged() into contentInserted()/contentRemoved()
-- if a buffer listener throws an exception, don't break down
 - use improved buffer property code
-- read write lock hangs
 - optimize ContentManager.close()
 - v2p/p2v: implement from end backward scan
 - stupid rest visible hack in offset manager
@@ -43,13 +40,19 @@ TO DO
 
 + features:
 
+- -noplugins command line switch
 - if caps lock is pressed during startup, show dialog box for changing
   settings that are currently set on the CLI (settings directory,
   flags such as -norestore, background mode)
 - show 'this was shown cos caps lock down', blah blah so users don't
   get confused.
 - I/O errors and plugin load errors batched together in one dialog box
-- plugin errors have 'Update Plugins' button
+- plugin error dialogs have 'Update Plugins' button
+- 'Go to Log' button; opens relevant exception in activity log
+- 'Go to Log' button in beanshell error dialog box too
+- click on plugin in plugin manager to see the error that caused it to
+  not load
+- icons in beanshell error, i/o error, plugin error dialog boxes
 - drop LatestVersion plugin
 - roll Firewall plugin into core
 - web start version
@@ -76,6 +79,7 @@ TO DO
   - if not on screen, do matching in background thread and show matching
     line in status bar
   - fix bug
+  - keep in mind, inserting } causes a full bracket scan
 - Alt-key alternatives for arrow keys and home and end
 - select file + search in directory in fsb: should use that file's extension
 - reintroduce -bshclient command line switch
@@ -122,6 +126,7 @@ TO DO
     _listDirectory(...,String[] newPath)
     -- but that is a bit hackish. _listDirectoryEx() is a bit hackish too.
 - improve next/prev-word commands
+- delete line: leave cursor in same column
 - option on JDK 1.4 to have the LnF decorate windows and dialogs
 - search and replace: scroll text area so selection is visible despite
   dialog position

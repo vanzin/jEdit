@@ -1,5 +1,8 @@
 /*
  * jEdit.java - Main class of the jEdit editor
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000, 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,6 +22,7 @@
 
 package org.gjt.sp.jedit;
 
+//{{{ Imports
 import com.microstar.xml.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.plaf.FontUIResource;
@@ -38,6 +42,7 @@ import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * The main class of the jEdit text editor.
@@ -46,14 +51,16 @@ import org.gjt.sp.util.Log;
  */
 public class jEdit
 {
+	//{{{ getVersion() method
 	/**
 	 * Returns the jEdit version as a human-readable string.
 	 */
 	public static String getVersion()
 	{
 		return MiscUtilities.buildToVersion(getBuild());
-	}
+	} //}}}
 
+	//{{{ getBuild() method
 	/**
 	 * Returns the internal version. MiscUtilities.compareStrings() can be used
 	 * to compare different internal versions.
@@ -62,8 +69,9 @@ public class jEdit
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
 		return "04.00.01.00";
-	}
+	} //}}}
 
+	//{{{ main() method
 	/**
 	 * The main method of the jEdit application.
 	 * This should never be invoked directly.
@@ -71,7 +79,7 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		// for developers: run 'jedit 0' to get extensive logging
+		//{{{ Set up log level
 		int level = Log.WARNING;
 		if(args.length >= 1)
 		{
@@ -82,9 +90,9 @@ public class jEdit
 				level = Integer.parseInt(levelStr);
 				args[0] = null;
 			}
-		}
+		} //}}}
 
-		// Parse command line
+		//{{{ Parse command line
 		boolean endOpts = false;
 		settingsDirectory = MiscUtilities.constructPath(
 			System.getProperty("user.home"),".jedit");
@@ -149,14 +157,14 @@ public class jEdit
 				}
 				args[i] = null;
 			}
-		}
+		} //}}}
 
 		if(settingsDirectory != null && portFile != null)
 			portFile = MiscUtilities.constructPath(settingsDirectory,portFile);
 		else
 			portFile = null;
 
-		// Try connecting to another running jEdit instance
+		//{{{ Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())
 		{
 			int port, key;
@@ -194,15 +202,15 @@ public class jEdit
 					+ " know what this means, don't worry.");
 				Log.log(Log.NOTICE,jEdit.class,e);
 			}
-		}
+		} //}}}
 
-		// MacOS X GUI hacks
+		//{{{ MacOS X GUI hacks
 		if(System.getProperty("os.name").indexOf("Mac") != -1)
 		{
 			// put the menu bar at the top of the screen, as opposed to
 			// inside the jEdit window
 			System.getProperties().put("com.apple.macos.useScreenMenuBar","true");
-		}
+		} //}}}
 
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory
@@ -211,7 +219,7 @@ public class jEdit
 
 		Log.init(true,level);
 
-		// Initialize activity log and settings directory
+		//{{{ Initialize activity log and settings directory
 		Writer stream;
 		if(settingsDirectory != null)
 		{
@@ -238,7 +246,7 @@ public class jEdit
 		else
 		{
 			stream = null;
-		}
+		} //}}}
 
 		Log.setLogWriter(stream);
 
@@ -246,7 +254,7 @@ public class jEdit
 		Log.log(Log.MESSAGE,jEdit.class,"Settings directory is "
 			+ settingsDirectory);
 
-		// Initialize server
+		//{{{ Initialize server
 		if(portFile != null)
 		{
 			server = new EditServer(portFile);
@@ -261,9 +269,9 @@ public class jEdit
 				System.err.println("You cannot specify both the"
 					+ " -background and -noserver switches");
 			}
-		}
+		} //}}}
 
-		// Get things rolling
+		//{{{ Get things rolling
 		initMisc();
 		initSystemProperties();
 		BeanShell.init();
@@ -314,16 +322,16 @@ public class jEdit
 		Macros.loadMacros();
 
 		GUIUtilities.advanceSplashProgress();
+		//}}}
 
-		// Start plugins
+		//{{{ Start plugins
 		for(int i = 0; i < jars.size(); i++)
 		{
 			((EditPlugin.JAR)jars.elementAt(i)).getClassLoader()
 				.startAllPlugins();
-		}
+		} //}}}
 
-		// Run startup scripts, after plugins, proeprties, etc
-		// are loaded
+		//{{{ Run startup scripts, after plugins and settings are loaded
 		if(!noStartupScripts && jEditHome != null)
 		{
 			String path = MiscUtilities.constructPath(jEditHome,"startup");
@@ -340,20 +348,21 @@ public class jEdit
 				file.mkdirs();
 			else
 				runStartupScripts(file);
-		}
+		} //}}}
 
-		// Run script specified with -run= parameter
+		//{{{ Run script specified with -run= parameter
 		if(scriptFile != null)
 		{
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
 			BeanShell.runScript(null,scriptFile,false,false);
-		}
+		} //}}}
 
 		// Must be after plugins are started!!!
 		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress();
 
+		//{{{ Open files
 		Buffer buffer = openFiles(null,userDir,args);
 		if(buffer != null)
 		{
@@ -373,8 +382,9 @@ public class jEdit
 
 		if(bufferCount == 0 && gui)
 			newFile(null);
+		//}}}
 
-		// Create the view and hide the splash screen.
+		//{{{ Create the view and hide the splash screen.
 		final Buffer _buffer = buffer;
 		final String _splitConfig = splitConfig;
 		final boolean _gui = gui;
@@ -406,9 +416,12 @@ public class jEdit
 				Log.log(Log.MESSAGE,jEdit.class,"Startup "
 					+ "complete");
 			}
-		});
-	}
+		}); //}}}
+	} //}}}
 
+	//{{{ Property methods
+
+	//{{{ getProperties() method
 	/**
 	 * Returns the properties object which contains all known
 	 * jEdit properties.
@@ -417,8 +430,9 @@ public class jEdit
 	public static final Properties getProperties()
 	{
 		return props;
-	}
+	} //}}}
 
+	//{{{ getProperty() method
 	/**
 	 * Fetches a property, returning null if it's not defined.
 	 * @param name The property
@@ -426,8 +440,9 @@ public class jEdit
 	public static final String getProperty(String name)
 	{
 		return props.getProperty(name);
-	}
+	} //}}}
 
+	//{{{ getProperty() method
 	/**
 	 * Fetches a property, returning the default value if it's not
 	 * defined.
@@ -437,8 +452,9 @@ public class jEdit
 	public static final String getProperty(String name, String def)
 	{
 		return props.getProperty(name,def);
-	}
+	} //}}}
 
+	//{{{ getProperty() method
 	/**
 	 * Returns the property with the specified name, formatting it with
 	 * the <code>java.text.MessageFormat.format()</code> method.
@@ -459,8 +475,9 @@ public class jEdit
 			else
 				return MessageFormat.format(value,args);
 		}
-	}
+	} //}}}
 
+	//{{{ getBooleanProperty() method
 	/**
 	 * Returns the value of a boolean property.
 	 * @param name The property
@@ -468,8 +485,9 @@ public class jEdit
 	public static final boolean getBooleanProperty(String name)
 	{
 		return getBooleanProperty(name,false);
-	}
+	} //}}}
 
+	//{{{ getBooleanProperty() method
 	/**
 	 * Returns the value of a boolean property.
 	 * @param name The property
@@ -488,8 +506,9 @@ public class jEdit
 			return false;
 		else
 			return def;
-	}
+	} //}}}
 
+	//{{{ getIntegerProperty() method
 	/**
 	 * Returns the value of an integer property.
 	 * @param name The property
@@ -512,8 +531,9 @@ public class jEdit
 				return def;
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ getFontProperty() method
 	/**
 	 * Returns the value of a font property. The family is stored
 	 * in the <code><i>name</i></code> property, the font size is stored
@@ -530,8 +550,9 @@ public class jEdit
 	public static final Font getFontProperty(String name)
 	{
 		return getFontProperty(name,null);
-	}
-	
+	} //}}}
+
+	//{{{ getFontProperty() method
 	/**
 	 * Returns the value of a font property. The family is stored
 	 * in the <code><i>name</i></code> property, the font size is stored
@@ -578,8 +599,9 @@ public class jEdit
 
 			return new Font(family,style,size);
 		}
-	}
+	} //}}}
 
+	//{{{ getColorProperty() method
 	/**
 	 * Returns the value of a color property.
 	 * @param name The property name
@@ -588,8 +610,9 @@ public class jEdit
 	public static Color getColorProperty(String name)
 	{
 		return getColorProperty(name,Color.black);
-	}
+	} //}}}
 
+	//{{{ getColorProperty() method
 	/**
 	 * Returns the value of a color property.
 	 * @param name The property name
@@ -603,8 +626,9 @@ public class jEdit
 			return def;
 		else
 			return GUIUtilities.parseColor(value,def);
-	}
+	} //}}}
 
+	//{{{ setColorProperty() method
 	/**
 	 * Sets the value of a color property.
 	 * @param name The property name
@@ -614,8 +638,9 @@ public class jEdit
 	public static void setColorProperty(String name, Color value)
 	{
 		setProperty(name,GUIUtilities.getColorHexString(value));
-	}
+	} //}}}
 
+	//{{{ setProperty() method
 	/**
 	 * Sets a property to a new value.
 	 * @param name The property
@@ -646,8 +671,9 @@ public class jEdit
 			else
 				props.put(name,value);
 		}
-	}
+	} //}}}
 
+	//{{{ setTemporaryProperty() method
 	/**
 	 * Sets a property to a new value. Properties set using this
 	 * method are not saved to the user properties list.
@@ -659,17 +685,9 @@ public class jEdit
 	{
 		props.remove(name);
 		defaultProps.put(name,value);
-	}
+	} //}}}
 
-	/**
-	 * @deprecated As of jEdit 2.3final. Use setTemporaryProperty()
-	 * instead.
-	 */
-	public static final void setDefaultProperty(String name, String value)
-	{
-		setTemporaryProperty(name,value);
-	}
-
+	//{{{ setBooleanProperty() method
 	/**
 	 * Sets a boolean property.
 	 * @param name The property
@@ -678,8 +696,9 @@ public class jEdit
 	public static final void setBooleanProperty(String name, boolean value)
 	{
 		setProperty(name,value ? "true" : "false");
-	}
+	} //}}}
 
+	//{{{ setIntegerProperty() method
 	/**
 	 * Sets the value of an integer property.
 	 * @param name The property
@@ -689,8 +708,9 @@ public class jEdit
 	public static final void setIntegerProperty(String name, int value)
 	{
 		setProperty(name,String.valueOf(value));
-	}
+	} //}}}
 
+	//{{{ setFontProperty() method
 	/**
 	 * Sets the value of a font property. The family is stored
 	 * in the <code><i>name</i></code> property, the font size is stored
@@ -710,8 +730,9 @@ public class jEdit
 		setProperty(name,value.getFamily());
 		setIntegerProperty(name + "size",value.getSize());
 		setIntegerProperty(name + "style",value.getStyle());
-	}
+	} //}}}
 
+	//{{{ unsetProperty() method
 	/**
 	 * Unsets (clears) a property.
 	 * @param name The property
@@ -722,8 +743,9 @@ public class jEdit
 			props.put(name,"");
 		else
 			props.remove(name);
-	}
+	} //}}}
 
+	//{{{ resetProperty() method
 	/**
 	 * Resets a property to its default value.
 	 * @param name The property
@@ -733,8 +755,9 @@ public class jEdit
 	public static final void resetProperty(String name)
 	{
 		props.remove(name);
-	}
+	} //}}}
 
+	//{{{ propertiesChanged() method
 	/**
 	 * Reloads various settings from the properties.
 	 */
@@ -794,8 +817,13 @@ public class jEdit
 		defaults.put("TextPane.font",font);
 
 		EditBus.send(new PropertiesChanged(null));
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Plugin management methods
+
+	//{{{ getNotLoadedPluginJARs() method
 	/**
 	 * Returns a list of plugin JARs that are not currently loaded
 	 * by examining the user and system plugin directories.
@@ -830,8 +858,9 @@ public class jEdit
 		String[] _returnValue = new String[returnValue.size()];
 		returnValue.copyInto(_returnValue);
 		return _returnValue;
-	}
+	} //}}}
 
+	//{{{ getPlugin() method
 	/**
 	 * Returns the plugin with the specified class name.
 	 */
@@ -845,8 +874,9 @@ public class jEdit
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ getPlugins() method
 	/**
 	 * Returns an array of installed plugins.
 	 */
@@ -861,8 +891,9 @@ public class jEdit
 		EditPlugin[] array = new EditPlugin[vector.size()];
 		vector.copyInto(array);
 		return array;
-	}
+	} //}}}
 
+	//{{{ getPluginJARs() method
 	/**
 	 * Returns an array of installed plugins.
 	 * @since jEdit 2.5pre3
@@ -872,8 +903,9 @@ public class jEdit
 		EditPlugin.JAR[] array = new EditPlugin.JAR[jars.size()];
 		jars.copyInto(array);
 		return array;
-	}
+	} //}}}
 
+	//{{{ getPluginJAR() method
 	/**
 	 * Returns the JAR with the specified path name.
 	 * @param path The path name
@@ -889,8 +921,9 @@ public class jEdit
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ addPluginJAR() method
 	/**
 	 * Adds a plugin JAR to the editor.
 	 * @param plugin The plugin
@@ -900,8 +933,13 @@ public class jEdit
 	{
 		addActionSet(plugin.getActions());
 		jars.addElement(plugin);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Action methods
+
+	//{{{ addActionSet() method
 	/**
 	 * Adds a new action set to jEdit's list. Plugins probably won't
 	 * need to call this method.
@@ -910,8 +948,9 @@ public class jEdit
 	public static void addActionSet(ActionSet actionSet)
 	{
 		actionSets.addElement(actionSet);
-	}
+	} //}}}
 
+	//{{{ getActionSets() method
 	/**
 	 * Returns all registered action sets.
 	 * @since jEdit 4.0pre1
@@ -921,8 +960,9 @@ public class jEdit
 		ActionSet[] retVal = new ActionSet[actionSets.size()];
 		actionSets.copyInto(retVal);
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ getAction() method
 	/**
 	 * Returns the specified action.
 	 * @param name The action name
@@ -938,8 +978,9 @@ public class jEdit
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ getActionSetForAction() method
 	/**
 	 * Returns the action set that contains the specified action.
 	 * @param action The action
@@ -955,8 +996,9 @@ public class jEdit
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ getActions() method
 	/**
 	 * Returns the list of actions registered with the editor.
 	 */
@@ -969,8 +1011,13 @@ public class jEdit
 		EditAction[] retVal = new EditAction[vec.size()];
 		vec.copyInto(retVal);
 		return retVal;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Edit mode methods
+
+	//{{{ reloadModes() method
 	/**
 	 * Reloads all edit modes.
 	 * @since jEdit 3.2pre2
@@ -981,16 +1028,16 @@ public class jEdit
 		 * copying */
 		modes = new Vector(50);
 
-		// load the global catalog
+		//{{{ Load the global catalog
 		if(jEditHome == null)
 			loadModeCatalog("/modes/catalog",true);
 		else
 		{
 			loadModeCatalog(MiscUtilities.constructPath(jEditHome,
 				"modes","catalog"),false);
-		}
+		} //}}}
 
-		// load user catalog
+		//{{{ Load user catalog
 		if(settingsDirectory != null)
 		{
 			File userModeDir = new File(MiscUtilities.constructPath(
@@ -1016,7 +1063,7 @@ public class jEdit
 			}
 
 			loadModeCatalog(userCatalog.getPath(),false);
-		}
+		} //}}}
 
 		Buffer buffer = buffersFirst;
 		while(buffer != null)
@@ -1027,8 +1074,9 @@ public class jEdit
 
 			buffer = buffer.next;
 		}
-	}
+	} //}}}
 
+	//{{{ getMode() method
 	/**
 	 * Returns the edit mode with the specified name.
 	 * @param name The edit mode
@@ -1042,8 +1090,9 @@ public class jEdit
 				return mode;
 		}
 		return null;
-	}
+	} //}}}
 
+	//{{{ getModes() method
 	/**
 	 * Returns an array of installed edit modes.
 	 */
@@ -1052,8 +1101,13 @@ public class jEdit
 		Mode[] array = new Mode[modes.size()];
 		modes.copyInto(array);
 		return array;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Buffer creation methods
+
+	//{{{ showOpenFileDialog() method
 	/**
 	 * Displays the open file dialog box, and opens any selected files.
 	 *
@@ -1063,8 +1117,9 @@ public class jEdit
 	public static void showOpenFileDialog(View view)
 	{
 		showOpenFileDialog(view,null);
-	}
+	} //}}}
 
+	//{{{ showOpenFileWithOtherEncodingDialog() method
 	/**
 	 * Displays the open file dialog box, and opens any selected files,
 	 * but first prompts for a character encoding to use.
@@ -1091,8 +1146,9 @@ public class jEdit
 		Hashtable props = new Hashtable();
 		props.put(Buffer.ENCODING,encoding);
 		showOpenFileDialog(view,props);
-	}
+	} //}}}
 
+	//{{{ showOpenFileDialog() method
 	/**
 	 * Displays the open file dialog box, and opens any selected files,
 	 * setting the properties specified in the hash table in the buffers.
@@ -1120,8 +1176,9 @@ public class jEdit
 
 		if(buffer != null)
 			view.setBuffer(buffer);
-	}
+	} //}}}
 
+	//{{{ restoreOpenFiles() method
 	/**
 	 * Opens files that were open last time.
 	 * @since jEdit 3.2pre2
@@ -1162,8 +1219,9 @@ public class jEdit
 		}
 
 		return splitConfig;
-	}
+	} //}}}
 
+	//{{{ saveOpenFiles() method
 	/**
 	 * Saves the list of open files.
 	 * @since jEdit 3.1pre5
@@ -1210,8 +1268,9 @@ public class jEdit
 			Log.log(Log.ERROR,jEdit.class,"Error while saving " + session);
 			Log.log(Log.ERROR,jEdit.class,io);
 		}
-	}
+	} //}}}
 
+	//{{{ openFiles() method
 	/**
 	 * Opens the file names specified in the argument array. This
 	 * handles +line and +marker arguments just like the command
@@ -1247,8 +1306,9 @@ public class jEdit
 			view.setBuffer(retVal);
 
 		return retVal;
-	}
+	} //}}}
 
+	//{{{ openFile() method
 	/**
 	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
 	 * null if the buffer could not be opened.
@@ -1260,8 +1320,9 @@ public class jEdit
 	public static Buffer openFile(View view, String path)
 	{
 		return openFile(view,null,path,false,new Hashtable());
-	}
+	} //}}}
 
+	//{{{ openFile() method
 	/**
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
@@ -1270,8 +1331,9 @@ public class jEdit
 		String path, boolean readOnly, boolean newFile)
 	{
 		return openFile(view,parent,path,newFile,new Hashtable());
-	}
+	} //}}}
 
+	//{{{ openFile() method
 	/**
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
@@ -1281,8 +1343,9 @@ public class jEdit
 		Hashtable props)
 	{
 		return openFile(view,parent,path,newFile,props);
-	}
+	} //}}}
 
+	//{{{ openFile() method
 	/**
 	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
 	 * null if the buffer could not be opened.
@@ -1363,8 +1426,9 @@ public class jEdit
 			view.setBuffer(newBuffer);
 
 		return newBuffer;
-	}
+	} //}}}
 
+	//{{{ openTemporary() method
 	/**
 	 * Opens a temporary buffer. A temporary buffer is like a normal
 	 * buffer, except that an event is not fired, the the buffer is
@@ -1410,8 +1474,9 @@ public class jEdit
 			return null;
 		else
 			return buffer;
-	}
+	} //}}}
 
+	//{{{ commitTemporary() method
 	/**
 	 * Adds a temporary buffer to the buffer list. This must be done
 	 * before allowing the user to interact with the buffer in any
@@ -1430,8 +1495,9 @@ public class jEdit
 		buffer.commitTemporary();
 
 		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.CREATED));
-	}
+	} //}}}
 
+	//{{{ newFile() method
 	/**
 	 * Creates a new `untitled' file.
 	 * @param view The view to create the file in
@@ -1439,8 +1505,9 @@ public class jEdit
 	public static Buffer newFile(View view)
 	{
 		return newFile(view,null);
-	}
+	} //}}}
 
+	//{{{ newFile() method
 	/**
 	 * Creates a new `untitled' file.
 	 * @param view The view to create the file in
@@ -1483,8 +1550,13 @@ public class jEdit
 		}
 
 		return openFile(view,dir,"Untitled-" + (untitledCount+1),true,null);
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ Buffer management methods
+
+	//{{{ closeBuffer() method
 	/**
 	 * Closes a buffer. If there are unsaved changes, the user is
 	 * prompted if they should be saved first.
@@ -1520,8 +1592,9 @@ public class jEdit
 		_closeBuffer(view,buffer);
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ _closeBuffer() method
 	/**
 	 * Closes the buffer, even if it has unsaved changes.
 	 * @param view The view
@@ -1557,8 +1630,9 @@ public class jEdit
 		// Create a new file when the last is closed
 		if(buffersFirst == null && buffersLast == null)
 			newFile(view);
-	}
+	} //}}}
 
+	//{{{ closeAllBuffers() method
 	/**
 	 * Closes all open buffers.
 	 * @param view The view
@@ -1566,8 +1640,9 @@ public class jEdit
 	public static boolean closeAllBuffers(View view)
 	{
 		return closeAllBuffers(view,false);
-	}
+	} //}}}
 
+	//{{{ closeAllBuffers() method
 	/**
 	 * Closes all open buffers.
 	 * @param view The view
@@ -1634,8 +1709,9 @@ public class jEdit
 			newFile(view);
 
 		return true;
-	}
+	} //}}}
 
+	//{{{ saveAllBuffers() method
 	/**
 	 * Saves all open buffers.
 	 * @param view The view
@@ -1660,8 +1736,9 @@ public class jEdit
 				buffer.save(view,null,true);
 			buffer = buffer.next;
 		}
-	}
+	} //}}}
 
+	//{{{ reloadAllBuffers() method
 	/**
 	 * Reloads all open buffers.
 	 * @param view The view
@@ -1698,8 +1775,9 @@ public class jEdit
 			Buffer buffer = buffers[i];
 			buffer.load(view,true);
 		}
-	}
+	} //}}}
 
+	//{{{ getBuffer() method
 	/**
 	 * Returns the buffer with the specified path name. The path name
 	 * must be an absolute, canonical, path.
@@ -1729,8 +1807,9 @@ public class jEdit
 		}
 
 		return null;
-	}
+	} //}}}
 
+	//{{{ getBuffers() method
 	/**
 	 * Returns an array of open buffers.
 	 */
@@ -1744,32 +1823,40 @@ public class jEdit
 			buffer = buffer.next;
 		}
 		return buffers;
-	}
+	} //}}}
 
+	//{{{ getBufferCount() method
 	/**
 	 * Returns the number of open buffers.
 	 */
 	public static int getBufferCount()
 	{
 		return bufferCount;
-	}
+	} //}}}
 
+	//{{{ getFirstBuffer() method
 	/**
 	 * Returns the first buffer.
 	 */
 	public static Buffer getFirstBuffer()
 	{
 		return buffersFirst;
-	}
+	} //}}}
 
+	//{{{ getLastBuffer() method
 	/**
 	 * Returns the last buffer.
 	 */
 	public static Buffer getLastBuffer()
 	{
 		return buffersLast;
-	}
+	} //}}}
 
+	//}}}
+
+	//{{{ View methods
+
+	//{{{ getInputHandler() method
 	/**
 	 * Returns the current input handler (key binding to action mapping)
 	 * @see org.gjt.sp.jedit.gui.InputHandler
@@ -1777,8 +1864,9 @@ public class jEdit
 	public static InputHandler getInputHandler()
 	{
 		return inputHandler;
-	}
+	} //}}}
 
+	//{{{ newView() method
 	/**
 	 * Creates a new view of a buffer.
 	 * @param view An existing view
@@ -1818,7 +1906,9 @@ public class jEdit
 		// show tip of the day
 		if(newView == viewsFirst)
 		{
-			if(getBooleanProperty("firstTime"))
+			// Don't show the welcome message if jEdit was started
+			// with the -nosettings switch
+			if(settingsDirectory != null && getBooleanProperty("firstTime"))
 				new HelpViewer("jeditresource:/doc/welcome.html");
 			else if(jEdit.getBooleanProperty("tip.show"))
 				new TipOfTheDay(newView);
@@ -1827,8 +1917,9 @@ public class jEdit
 		}
 
 		return newView;
-	}
+	} //}}}
 
+	//{{{ newView() method
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -1837,8 +1928,9 @@ public class jEdit
 	public static View newView(View view)
 	{
 		return newView(view,view.getSplitConfig());
-	}
+	} //}}}
 
+	//{{{ newView() method
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -1888,16 +1980,18 @@ public class jEdit
 		}
 
 		return newView;
-	}
+	} //}}}
 
+	//{{{ closeView() method
 	/**
 	 * Closes a view. jEdit will exit if this was the last open view.
 	 */
 	public static void closeView(View view)
 	{
 		closeView(view,true);
-	}
+	} //}}}
 
+	//{{{ getViews() method
 	/**
 	 * Returns an array of all open views.
 	 */
@@ -1911,40 +2005,40 @@ public class jEdit
 			view = view.next;
 		}
 		return views;
-	}
+	} //}}}
 
+	//{{{ getViewCount() method
 	/**
 	 * Returns the number of open views.
 	 */
 	public static int getViewCount()
 	{
 		return viewCount;
-	}
+	} //}}}
 
+	//{{{ getFirstView() method
 	/**
 	 * Returns the first view.
 	 */
 	public static View getFirstView()
 	{
 		return viewsFirst;
-	}
+	} //}}}
 
+	//{{{ getLastView() method
 	/**
 	 * Returns the last view.
 	 */
 	public static View getLastView()
 	{
 		return viewsLast;
-	}
+	} //}}}
 
-	/**
-	 * Returns the jEdit install directory.
-	 */
-	public static String getJEditHome()
-	{
-		return jEditHome;
-	}
+	//}}}
 
+	//{{{ Miscellaneous methods
+
+	//{{{ showMemoryStatusDialog() method
 	/**
 	 * Performs garbage collection and displays a dialog box showing
 	 * memory status.
@@ -1976,16 +2070,27 @@ public class jEdit
 		JOptionPane.showMessageDialog(view,message,
 			jEdit.getProperty("memory-status.title"),
 			JOptionPane.INFORMATION_MESSAGE);
-	}
+	} //}}}
 
+	//{{{ getJEditHome() method
+	/**
+	 * Returns the jEdit install directory.
+	 */
+	public static String getJEditHome()
+	{
+		return jEditHome;
+	} //}}}
+
+	//{{{ getSettingsDirectory() method
 	/**
 	 * Returns the user settings directory.
 	 */
 	public static String getSettingsDirectory()
 	{
 		return settingsDirectory;
-	}
+	} //}}}
 
+	//{{{ backupSettingsFile() method
 	/**
 	 * Backs up the specified file in the settings directory.
 	 * You should call this on any settings files your plugin
@@ -2008,8 +2113,9 @@ public class jEdit
 		// doesn't exist.
 
 		MiscUtilities.saveBackup(file,5,null,"~",backupDir);
-	}
+	} //}}}
 
+	//{{{ saveSettings() method
 	/**
 	 * Saves all user preferences to disk.
 	 */
@@ -2077,8 +2183,9 @@ public class jEdit
 				propsModTime = file.lastModified();
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ exit() method
 	/**
 	 * Exits cleanly from jEdit, prompting the user if any unsaved files
 	 * should be saved first.
@@ -2156,10 +2263,13 @@ public class jEdit
 
 		// Byebye...
 		System.exit(0);
-	}
+	} //}}}
 
-	// package-private members
+	//}}}
 
+	//{{{ Package-private members
+
+	//{{{ updatePosition() method
 	/**
 	 * If buffer sorting is enabled, this repositions the buffer.
 	 */
@@ -2170,8 +2280,9 @@ public class jEdit
 			removeBufferFromList(buffer);
 			addBufferToList(buffer);
 		}
-	}
+	} //}}}
 
+	//{{{ addMode() method
 	/**
 	 * Do not call this method. It is only public so that classes
 	 * in the org.gjt.sp.jedit.syntax package can access it.
@@ -2183,8 +2294,9 @@ public class jEdit
 			+ mode.getName());
 
 		modes.addElement(mode);
-	}
+	} //}}}
 
+	//{{{ loadMode() method
 	/**
 	 * Loads an XML-defined edit mode from the specified reader.
 	 * @param mode The edit mode
@@ -2234,8 +2346,9 @@ public class jEdit
 			marker.addRuleSet("MAIN",new ParserRuleSet());
 			mode.setTokenMarker(marker);
 		}
-	}
+	} //}}}
 
+	//{{{ loadProps() method
 	/**
 	 * Loads the properties from the specified input stream. This
 	 * calls the <code>load()</code> method of the properties object
@@ -2254,8 +2367,9 @@ public class jEdit
 		else
 			props.load(in);
 		in.close();
-	}
+	} //}}}
 
+	//{{{ loadActions() method
 	/**
 	 * Loads the specified action list.
 	 */
@@ -2284,9 +2398,13 @@ public class jEdit
 		}
 
 		return false;
-	}
+	} //}}}
 
-	// private members
+	//}}}
+
+	//{{{ Private members
+
+	//{{{ Static variables
 	private static String jEditHome;
 	private static String settingsDirectory;
 	private static long propsModTime, historyModTime, recentModTime;
@@ -2314,9 +2432,11 @@ public class jEdit
 	private static int viewCount;
 	private static View viewsFirst;
 	private static View viewsLast;
+	//}}}
 
 	private jEdit() {}
 
+	//{{{ usage() method
 	private static void usage()
 	{
 		System.out.println("Usage: jedit [<options>] [<files>]");
@@ -2350,13 +2470,15 @@ public class jEdit
 			+ " (1-9, 1 = print everything, 9 = fatal errors only)");
 		System.out.println();
 		System.out.println("Report bugs to Slava Pestov <slava@jedit.org>.");
-	}
+	} //}}}
 
+	//{{{ version() method
 	private static void version()
 	{
 		System.out.println("jEdit " + getVersion());
-	}
+	} //}}}
 
+	//{{{ makeServerScript() method
 	/**
 	 * Creates a BeanShell script that can be sent to a running edit server.
 	 */
@@ -2404,8 +2526,9 @@ public class jEdit
 		}
 
 		return script.toString();
-	}
+	} //}}}
 
+	//{{{ initMisc() method
 	/**
 	 * Initialise various objects, register protocol handlers.
 	 */
@@ -2467,8 +2590,9 @@ public class jEdit
 		// Add an EditBus component that will reload edit modes and
 		// macros if they are changed from within the editor
 		EditBus.addToBus(new SettingsReloader());
-	}
+	} //}}}
 
+	//{{{ initSystemProperties() method
 	/**
 	 * Load system properties.
 	 */
@@ -2498,8 +2622,9 @@ public class jEdit
 			Log.log(Log.ERROR,jEdit.class,e);
 			System.exit(1);
 		}
-	}
+	} //}}}
 
+	//{{{ initSiteProperties() method
 	/**
 	 * Load site properties.
 	 */
@@ -2548,8 +2673,9 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ initActions() method
 	/**
 	 * Load actions.
 	 */
@@ -2564,8 +2690,9 @@ public class jEdit
 		if(!loadActions("actions.xml",in,builtInActionSet))
 			System.exit(1);
 		addActionSet(builtInActionSet);
-	}
+	} //}}}
 
+	//{{{ initDockables() method
 	/**
 	 * Load info on jEdit's built-in dockable windows.
 	 */
@@ -2576,8 +2703,9 @@ public class jEdit
 		if(!DockableWindowManager.loadDockableWindows("dockables.xml",
 			in,builtInActionSet))
 			System.exit(1);
-	}
+	} //}}}
 
+	//{{{ initPlugins() method
 	/**
 	 * Loads plugins.
 	 */
@@ -2625,8 +2753,9 @@ public class jEdit
 				jarsDirectory.mkdir();
 			loadPlugins(jarsDirectory.getPath());
 		}
-	}
+	} //}}}
 
+	//{{{ initUserProperties() method
 	/**
 	 * Loads user properties.
 	 */
@@ -2653,8 +2782,9 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ initPLAF() method
 	/**
 	 * Sets the Swing look and feel.
 	 */
@@ -2674,8 +2804,9 @@ public class jEdit
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
 		}
-	}
+	} //}}}
 
+	//{{{ runStartupScripts() method
 	/**
 	 * Runs scripts in the site startup directory, and user startup directory.
 	 */
@@ -2701,8 +2832,9 @@ public class jEdit
 
 			BeanShell.runScript(null,path,false,false);
 		}
-	}
+	} //}}}
 
+	//{{{ getNotLoadedPluginJARs() method
 	private static void getNotLoadedPluginJARs(Vector returnValue,
 		String dir, String[] list)
 	{
@@ -2730,8 +2862,9 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			returnValue.addElement(path);
 		}
-	}
+	} //}}}
 
+	//{{{ gotoMarker() method
 	private static void gotoMarker(final View view, final Buffer buffer,
 		final String marker)
 	{
@@ -2777,8 +2910,9 @@ loop:		for(int i = 0; i < list.length; i++)
 					buffer.putProperty(Buffer.CARET,new Integer(pos));
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ addBufferToList() method
 	private static void addBufferToList(Buffer buffer)
 	{
 		// if only one, clean, 'untitled' buffer is open, we
@@ -2802,6 +2936,7 @@ loop:		for(int i = 0; i < list.length; i++)
 			buffersFirst = buffersLast = buffer;
 			return;
 		}
+		//{{{ Sort buffer list
 		else if(sortBuffers)
 		{
 			String name1 = (sortByName ? buffer.getName()
@@ -2826,13 +2961,14 @@ loop:		for(int i = 0; i < list.length; i++)
 
 				_buffer = _buffer.next;
 			}
-		}
+		} //}}}
 
 		buffer.prev = buffersLast;
 		buffersLast.next = buffer;
 		buffersLast = buffer;
-	}
+	} //}}}
 
+	//{{{ removeBufferFromList() method
 	private static void removeBufferFromList(Buffer buffer)
 	{
 		bufferCount--;
@@ -2866,8 +3002,9 @@ loop:		for(int i = 0; i < list.length; i++)
 		// fixes the hang that can occur if we 'save as' to a new
 		// filename which requires re-sorting
 		buffer.next = buffer.prev = null;
-	}
+	} //}}}
 
+	//{{{ addViewToList() method
 	private static void addViewToList(View view)
 	{
 		viewCount++;
@@ -2880,8 +3017,9 @@ loop:		for(int i = 0; i < list.length; i++)
 			viewsLast.next = view;
 			viewsLast = view;
 		}
-	}
+	} //}}}
 
+	//{{{ removeViewFromList() method
 	private static void removeViewFromList(View view)
 	{
 		viewCount--;
@@ -2911,8 +3049,9 @@ loop:		for(int i = 0; i < list.length; i++)
 		{
 			view.next.prev = view.prev;
 		}
-	}
+	} //}}}
 
+	//{{{ closeView() method
 	/**
 	 * closeView() used by exit().
 	 */
@@ -2927,8 +3066,9 @@ loop:		for(int i = 0; i < list.length; i++)
 			view.close();
 			removeViewFromList(view);
 		}
-	}
+	} //}}}
 
+	//{{{ loadModeCatalog() method
 	/**
 	 * Loads a mode catalog file.
 	 * @since jEdit 3.2pre2
@@ -2963,8 +3103,9 @@ loop:		for(int i = 0; i < list.length; i++)
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
 		}
-	}
+	} //}}}
 
+	//{{{ loadPlugins() method
 	/**
 	 * Loads all plugins in a directory.
 	 * @param directory The directory
@@ -3017,8 +3158,9 @@ loop:		for(int i = 0; i < list.length; i++)
 				GUIUtilities.error(null,"plugin.load-error",args);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ initKeyBindings() method
 	/**
 	 * Loads all key bindings from the properties.
 	 * @since 3.1pre1
@@ -3042,5 +3184,7 @@ loop:		for(int i = 0; i < list.length; i++)
 			if(shortcut2 != null)
 				inputHandler.addKeyBinding(shortcut2,action);
 		}
-	}
+	} //}}}
+
+	//}}}
 }

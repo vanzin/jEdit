@@ -22,14 +22,19 @@
 
 package org.gjt.sp.util;
 
+import java.util.Vector;
+
 public class ReadWriteLock
 {
 	//{{{ readLock() method
 	public synchronized void readLock()
 	{
-		if (allowRead())
+		// this seems to make nested readLock() calls work okay.
+		// but I have no idea if it actually fixes things or not.
+		if (activeReaders != 0 || allowRead())
 		{
 			++activeReaders;
+			//readers.addElement(Thread.currentThread());
 			return;
 		}
 		++waitingReaders;
@@ -48,13 +53,17 @@ public class ReadWriteLock
 		}
 		--waitingReaders;
 		++activeReaders;
+		readers.addElement(Thread.currentThread());
 	} //}}}
 
 	//{{{ readUnlock() method
 	public synchronized void readUnlock()
 	{
-		//Debug.assert(activeReaders > 0);
+		if(activeReaders == 0)
+			throw new InternalError("Unbalanced readLock()/readUnlock() calls");
+
 		--activeReaders;
+		//readers.removeElement(Thread.currentThread());
 		notifyAll();
 	} //}}}
 
@@ -76,6 +85,7 @@ public class ReadWriteLock
 			claimWriteLock();
 			return;
 		}
+
 		++waitingWriters;
 		while (!allowWrite())
 		{
@@ -97,9 +107,12 @@ public class ReadWriteLock
 	//{{{ writeUnlock() method
 	public synchronized void writeUnlock()
 	{
-		/*Debug.assert(activeWriters == 1);
-		Debug.assert(lockCount > 0);
-		Debug.assert(Thread.currentThread() == writerThread);*/
+		if(activeWriters != 1 || lockCount <= 0)
+			throw new InternalError("Unbalanced writeLock()/writeUnlock() calls");
+
+		if(Thread.currentThread() != writerThread)
+			throw new InternalError("writeUnlock() from wrong thread");
+
 		if (--lockCount == 0)
 		{
 			--activeWriters;
@@ -122,6 +135,7 @@ public class ReadWriteLock
 	private int activeWriters;
 	private int waitingReaders;
 	private int waitingWriters;
+	private Vector readers = new Vector();
 
 	private Thread writerThread;
 	private int lockCount;
@@ -137,6 +151,13 @@ public class ReadWriteLock
 	//{{{ allowWrite() method
 	private final boolean allowWrite()
 	{
+		/*Thread current = Thread.currentThread();
+		for(int i = 0; i < readers.size(); i++)
+		{
+			if(readers.elementAt(i) == current)
+				throw new InternalError("Cannot nest writeLock() inside readLock()");
+		}*/
+
 		return activeReaders == 0 && activeWriters == 0;
 	} //}}}
 

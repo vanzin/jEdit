@@ -52,10 +52,16 @@ public class IntegerArray
 		return array[index];
 	} //}}}
 
-	//{{{ size() method
-	public final int size()
+	//{{{ getSize() method
+	public final int getSize()
 	{
 		return len;
+	} //}}}
+
+	//{{{ setSize() method
+	public final void setSize(int len)
+	{
+		this.len = len;
 	} //}}}
 
 	//{{{ clear() method

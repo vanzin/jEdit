@@ -53,21 +53,13 @@ public class ContentManager
 	public String getText(int start, int len)
 	{
 		if(start >= gapStart)
-		{
-			char[] retVal = new char[len];
-			System.arraycopy(text,start + gapEnd - gapStart,retVal,0,len);
-			return new String(retVal);
-		}
+			return new String(text,start + gapEnd - gapStart,len);
 		else if(start + len <= gapStart)
-		{
-			char[] retVal = new char[len];
-			System.arraycopy(text,start,retVal,0,len);
-			return new String(retVal);
-		}
+			return new String(text,start,len);
 		else
 		{
 			return new String(text,start,gapStart - start)
-				.concat(new String(text,gapEnd,start + len - gapEnd));
+				.concat(new String(text,gapEnd,start + len - gapStart));
 		}
 	} //}}}
 
@@ -88,15 +80,14 @@ public class ContentManager
 		}
 		else
 		{
-			if(seg.array == null || seg.array.length < len)
-				seg.array = new char[len];
+			seg.array = new char[len];
 
 			// copy text before gap
 			System.arraycopy(text,start,seg.array,0,gapStart - start);
 
 			// copy text after gap
 			System.arraycopy(text,gapEnd,seg.array,gapStart - start,
-				len + start - gapEnd);
+				len + start - gapStart);
 
 			seg.offset = 0;
 			seg.count = len;
@@ -107,8 +98,12 @@ public class ContentManager
 	public void insert(int start, String str)
 	{
 		int len = str.length();
-		close(start,start + len + 200);
-		str.getChars(0,str.length(),text,start);
+		if(gapStart != start || gapEnd - gapStart < len)
+		{
+			ensureCapacity(length + len + 200);
+			close(start,start + len + 200);
+		}
+		str.getChars(0,len,text,start);
 		gapStart += len;
 		length += len;
 	} //}}}
@@ -116,7 +111,11 @@ public class ContentManager
 	//{{{ insert() method
 	public void insert(int start, Segment seg)
 	{
-		close(start,start + seg.count + 200);
+		if(gapStart != start || gapEnd - gapStart < seg.count)
+		{
+			ensureCapacity(length + seg.count + 200);
+			close(start,start + seg.count + 200);
+		}
 		System.arraycopy(seg.array,seg.offset,text,start,seg.count);
 		gapStart += seg.count;
 		length += seg.count;
@@ -139,15 +138,14 @@ public class ContentManager
 	//{{{ close() method
 	private void close(int newStart, int newEnd)
 	{
-		if(gapStart != gapEnd)
+		if(gapStart != gapEnd && gapStart != length)
 		{
 			System.arraycopy(text,gapEnd,text,gapStart,
-				length - gapEnd);
+				length - gapStart);
 		}
 
-		if(newStart != newEnd)
+		if(newStart != newEnd && newStart != length)
 		{
-			ensureCapacity(length + (newEnd - newStart));
 			System.arraycopy(text,newStart,text,newEnd,
 				length - newStart);
 		}

@@ -56,6 +56,8 @@ public class MarkerHighlight implements TextAreaHighlight
 		{
 			FontMetrics fm = textArea.getPainter().getFontMetrics();
 			int line = textArea.getFirstLine() + evt.getY() / fm.getHeight();
+			if(line >= textArea.getVirtualLineCount())
+				return null;
 
 			Buffer buffer = textArea.getBuffer();
 			Marker marker = buffer.getMarkerAtLine(textArea.virtualToPhysical(line));
