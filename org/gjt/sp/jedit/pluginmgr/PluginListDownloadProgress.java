@@ -81,11 +81,6 @@ class PluginListDownloadProgress extends JDialog
 				list = new PluginList();
 				dispose();
 			}
-			catch(InterruptedIOException iio)
-			{
-				// do nothing, user clicked Stop
-				dispose();
-			}
 			catch(XmlException xe)
 			{
 				dispose();
@@ -113,7 +108,8 @@ class PluginListDownloadProgress extends JDialog
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			thread.interrupt();
+			thread.stop();
+			dispose();
 		}
 	}
 
@@ -133,7 +129,7 @@ class PluginListDownloadProgress extends JDialog
 
 		public void windowClosing(WindowEvent evt)
 		{
-			thread.interrupt();
+			thread.stop();
 		}
 	}
 }

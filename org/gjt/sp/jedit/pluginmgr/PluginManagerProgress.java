@@ -202,7 +202,7 @@ public class PluginManagerProgress extends JDialog
 		{
 			if(evt.getSource() == stop)
 			{
-				thread.interrupt();
+				thread.stop();
 				dispose();
 			}
 		}
@@ -224,7 +224,7 @@ public class PluginManagerProgress extends JDialog
 
 		public void windowClosing(WindowEvent evt)
 		{
-			thread.interrupt();
+			thread.stop();
 			dispose();
 		}
 	}

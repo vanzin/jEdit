@@ -8,6 +8,10 @@ JEDIT 3.2 VERSION HISTORY
 - clipboardHangWorkaround.bsh startup script included. If your JVM
   hangs when jEdit tries to copy or paste, take a look at this script.
 
++ Enhancements
+
+- Eliminated delay when showing check box menu items for the first time
+
 + Bug Fixes
 
 - 'Welcome' link in help didn't work
@@ -19,6 +23,13 @@ JEDIT 3.2 VERSION HISTORY
   method via reflection to find out if a file is hidden or not.
 - File permissions were not preserved on MacOS X, because FileVFS did
   not detect if it was running on MacOS X properly
+- 'Stop' button in plugin list download progress should now work under
+  all Java versions
+
++ API Changes
+
+- New MiscUtilities.isToolsJarAvailable() method, attempts to load the
+  JDK tools.jar, returns true if successful (Dirk Moebius)
 
 * Version 3.2.1
 
