@@ -21,8 +21,8 @@ app.license=gpl.html
 comp.count=5
 
 comp.0.name=jEdit text editor
-comp.0.disk-size=3468
-comp.0.real-size=2667
+comp.0.disk-size=3604
+comp.0.real-size=2793
 comp.0.fileset=jedit-program
 
 comp.1.name=Default set of macros (highly recommended)
@@ -31,14 +31,14 @@ comp.1.real-size=114
 comp.1.fileset=jedit-macros
 
 comp.2.name=Improved Windows integration (jEditLauncher)
-comp.2.disk-size=364
+comp.2.disk-size=400
 comp.2.real-size=361
 comp.2.fileset=jedit-windows
 comp.2.os=Windows
 
 comp.3.name=Improved MacOS integration
-comp.3.disk-size=4
-comp.3.real-size=4
+comp.3.disk-size=20
+comp.3.real-size=18
 comp.3.fileset=jedit-mac
 comp.3.os=MacOS
 
