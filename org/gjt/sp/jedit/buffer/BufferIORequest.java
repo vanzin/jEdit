@@ -116,14 +116,6 @@ public class BufferIORequest extends WorkRequest
 	//{{{ run() method
 	public void run()
 	{
-		try
-		{
-			Thread.sleep(3000);
-		}
-		catch(Exception e)
-		{
-		}
-
 		switch(type)
 		{
 		case LOAD:
