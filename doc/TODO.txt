@@ -3,14 +3,13 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
+- recovered autosave not a new file
 - recovering an autosave: not dirty
 - bsh command path
 - beanshell: invokeAction() function
 - if A depends on B but A is loaded before B and B breaks, A ends up
   being loaded. Solution: load plugins in order of dependencies?
-- plugin manager: install plugins, no restart, install another: deps bad
 - up arrow before buffer is loaded
-- toggle menu items broken when loading from cache
 - check plugin mgr reload
 - ditch plugin mgr's install complete, etc. dialog
 - note about dependencies
