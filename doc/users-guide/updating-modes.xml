@@ -1,5 +1,6 @@
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
+<!-- :xml.root=users-guide.xml: -->
 
 <chapter id="updating-modes"><title>Updating Edit Modes for jEdit 4.1</title>
  <para>
