@@ -423,7 +423,7 @@ public class View extends JFrame implements EBComponent
 	public void processKeyEvent(KeyEvent evt)
 	{
 		processKeyEvent(evt,false);
-	}
+	} //}}}
 
 	//{{{ processKeyEvent() method
 	/**
@@ -553,6 +553,8 @@ public class View extends JFrame implements EBComponent
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 	} //}}}
+
+	//}}}
 
 	//{{{ Buffers, edit panes, split panes
 
@@ -1606,9 +1608,10 @@ public class View extends JFrame implements EBComponent
 			{
 				switch(evt.getKeyCode())
 				{
-				case KeyEvent.VK_BACK_SPACE:
-				case KeyEvent.VK_TAB:
 				case KeyEvent.VK_ENTER:
+				case KeyEvent.VK_TAB:
+				case KeyEvent.VK_BACK_SPACE:
+				case KeyEvent.VK_SPACE:
 					return null;
 				}
 			}
