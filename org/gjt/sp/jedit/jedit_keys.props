@@ -82,7 +82,6 @@ copy-append.shortcut=C+e C+a
 search-in-open-buffers.shortcut=C+e C+b
 range-comment.shortcut=C+e C+c
 search-in-directory.shortcut=C+e C+d
-goto-textarea.shortcut=C+e C+e
 replace-and-find-next.shortcut=C+e C+g
 ignore-case.shortcut=C+e C+i
 scroll-to-current-line.shortcut=C+e C+j

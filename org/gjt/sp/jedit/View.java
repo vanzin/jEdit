@@ -422,45 +422,20 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void processKeyEvent(KeyEvent evt)
 	{
-		if(isClosed())
-			return;
+		processKeyEvent(evt,false);
+	} //}}}
 
-		if(getFocusOwner() instanceof JComponent)
-		{
-			JComponent comp = (JComponent)getFocusOwner();
-			InputMap map = comp.getInputMap();
-			ActionMap am = comp.getActionMap();
-
-			if(map != null && am != null && comp.isEnabled())
-			{
-				Object binding = map.get(KeyStroke.getKeyStrokeForEvent(evt));
-				if(binding != null && am.get(binding) != null)
-				{
-					return;
-				}
-			}
-		}
-
-		if(getFocusOwner() instanceof JTextComponent)
-		{
-			// fix for the bug where key events in JTextComponents
-			// inside views are also handled by the input handler
-			if(evt.getID() == KeyEvent.KEY_PRESSED)
-			{
-				switch(evt.getKeyCode())
-				{
-				case KeyEvent.VK_BACK_SPACE:
-				case KeyEvent.VK_TAB:
-				case KeyEvent.VK_ENTER:
-					return;
-				}
-			}
-		}
-
-		if(evt.isConsumed())
-			return;
-
-		evt = KeyEventWorkaround.processKeyEvent(evt);
+	//{{{ processKeyEvent() method
+	/**
+	 * Forwards key events directly to the input handler.
+	 * This is slightly faster than using a KeyListener
+	 * because some Swing overhead is avoided.
+	 * @param calledFromTextArea Changes key typed event handling
+	 * @since jEdit 4.2pre2
+	 */
+	public void processKeyEvent(KeyEvent evt, boolean calledFromTextArea)
+	{
+		evt = _preprocessKeyEvent(evt);
 		if(evt == null)
 			return;
 
@@ -470,9 +445,21 @@ public class View extends JFrame implements EBComponent
 			// Handled in text area
 			if(keyEventInterceptor != null)
 				/* keyEventInterceptor.keyTyped(evt) */;
+			else if(calledFromTextArea
+				&& !inputHandler.isPrefixActive())
+				inputHandler.keyTyped(evt);
 			else if(inputHandler.isPrefixActive()
 				&& !getTextArea().hasFocus())
 				inputHandler.keyTyped(evt);
+			// but if the user pressed eg C+e n n in the
+			// search bar we want focus to go back there
+			// after the prefix is done
+			else if(prefixFocusOwner != null)
+			{
+				if(prefixFocusOwner.isShowing())
+					prefixFocusOwner.requestFocus();
+				prefixFocusOwner = null;
+			}
 			break;
 		case KeyEvent.KEY_PRESSED:
 			if(keyEventInterceptor != null)
@@ -485,7 +472,19 @@ public class View extends JFrame implements EBComponent
 				// search bar if the search bar has focus...
 				if(inputHandler.isPrefixActive()
 					&& getFocusOwner() instanceof JTextComponent)
+				{
+					prefixFocusOwner = getFocusOwner();
 					getTextArea().requestFocus();
+				}
+				// but if the user pressed eg C+e C+x in the
+				// search bar we want focus to go back there
+				// after the prefix is done
+				else if(prefixFocusOwner != null)
+				{
+					if(prefixFocusOwner.isShowing())
+						prefixFocusOwner.requestFocus();
+					prefixFocusOwner = null;
+				}
 			}
 			break;
 		case KeyEvent.KEY_RELEASED:
@@ -499,8 +498,6 @@ public class View extends JFrame implements EBComponent
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 	} //}}}
-
-	//}}}
 
 	//{{{ Buffers, edit panes, split panes
 
@@ -1261,6 +1258,7 @@ public class View extends JFrame implements EBComponent
 	private KeyListener keyEventInterceptor;
 	private InputHandler inputHandler;
 	private Macros.Recorder recorder;
+	private Component prefixFocusOwner;
 
 	private int waitCount;
 
@@ -1510,6 +1508,50 @@ public class View extends JFrame implements EBComponent
 		EditPane[] editPanes = getEditPanes();
 		for(int i = 0; i < editPanes.length; i++)
 			editPanes[i].getTextArea().getGutter().updateBorder();
+	} //}}}
+
+	//{{{ _preprocessKeyEvent() method
+	private KeyEvent _preprocessKeyEvent(KeyEvent evt)
+	{
+		if(isClosed())
+			return null;
+
+		if(getFocusOwner() instanceof JComponent)
+		{
+			JComponent comp = (JComponent)getFocusOwner();
+			InputMap map = comp.getInputMap();
+			ActionMap am = comp.getActionMap();
+
+			if(map != null && am != null && comp.isEnabled())
+			{
+				Object binding = map.get(KeyStroke.getKeyStrokeForEvent(evt));
+				if(binding != null && am.get(binding) != null)
+				{
+					return null;
+				}
+			}
+		}
+
+		if(getFocusOwner() instanceof JTextComponent)
+		{
+			// fix for the bug where key events in JTextComponents
+			// inside views are also handled by the input handler
+			if(evt.getID() == KeyEvent.KEY_PRESSED)
+			{
+				switch(evt.getKeyCode())
+				{
+				case KeyEvent.VK_BACK_SPACE:
+				case KeyEvent.VK_TAB:
+				case KeyEvent.VK_ENTER:
+					return null;
+				}
+			}
+		}
+
+		if(evt.isConsumed())
+			return null;
+
+		return KeyEventWorkaround.processKeyEvent(evt);
 	} //}}}
 
 	//}}}

@@ -181,6 +181,17 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				return;
 			}
 
+			String bufferDir = browser.getView().getBuffer()
+				.getDirectory();
+			if(filename.equals("-"))
+				filename = bufferDir;
+			else if(filename.startsWith("-/")
+				|| filename.startsWith("-" + File.separator))
+			{
+				filename = MiscUtilities.constructPath(
+					bufferDir,filename.substring(2));
+			}
+
 			final int[] type = { -1 };
 			final String path = MiscUtilities.constructPath(
 				browser.getDirectory(),filename);
@@ -345,9 +356,9 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				{
 					String path = file.path;
 					String directory = browser.getDirectory();
-					VFS vfs = VFSManager.getVFSForPath(directory);
-					String parent = vfs.getParentOfPath(path);
-					if(parent.equals(directory))
+					String parent = MiscUtilities
+						.getParentOfPath(path);
+					if(VFSBrowser.pathsEqual(parent,directory))
 						path = file.name;
 
 					filenameField.setText(path);
