@@ -386,7 +386,7 @@ public class EditPane extends JPanel implements EBComponent
 	{
 		TextAreaPainter painter = textArea.getPainter();
 
-		painter.setFont(UIManager.getFont("TextArea.font"));
+		painter.setFont(jEdit.getFontProperty("view.font"));
 		painter.setBracketHighlightEnabled(jEdit.getBooleanProperty(
 			"view.bracketHighlight"));
 		painter.setBracketHighlightColor(

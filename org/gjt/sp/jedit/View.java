@@ -625,7 +625,7 @@ public class View extends JFrame implements EBComponent
 			newSplitPane.setLeftComponent(oldEditPane);
 			newSplitPane.setRightComponent(editPane);
 
-			oldParent.add(newSplitPane);
+			oldParent.add(newSplitPane,0);
 			oldParent.revalidate();
 		}
 
@@ -662,7 +662,7 @@ public class View extends JFrame implements EBComponent
 			JComponent parent = (JComponent)splitPane.getParent();
 
 			parent.remove(splitPane);
-			parent.add(editPane);
+			parent.add(editPane,0);
 			parent.revalidate();
 
 			splitPane = null;
@@ -716,7 +716,7 @@ public class View extends JFrame implements EBComponent
 			else
 			{
 				parent.remove(comp);
-				parent.add(editPane);
+				parent.add(editPane,0);
 				splitPane = null;
 			}
 
@@ -1200,7 +1200,7 @@ public class View extends JFrame implements EBComponent
 			jEdit.getInputHandler());
 
 		Component comp = restoreSplitConfig(buffer,config.splitConfig);
-		dockableWindowManager.add(comp);
+		dockableWindowManager.add(comp,0);
 
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
 
@@ -1458,10 +1458,12 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 		{
-			dockableWindowManager.add(DockableWindowManager.DockableLayout
-				.TOP_TOOLBARS,topToolBars);
-			dockableWindowManager.add(DockableWindowManager.DockableLayout
-				.BOTTOM_TOOLBARS,bottomToolBars);
+			dockableWindowManager.add(topToolBars,
+				DockableWindowManager.DockableLayout
+				.TOP_TOOLBARS,0);
+			dockableWindowManager.add(bottomToolBars,
+				DockableWindowManager.DockableLayout
+				.BOTTOM_TOOLBARS,0);
 			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}

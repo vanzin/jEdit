@@ -196,6 +196,18 @@ Thanks to Brad Mace and Ken Turner for contributing to this release.
   new jEdit release over an old one with the jEditLauncher de-selected
   in the installer.
 
+- When searching for text, jEdit tries a little harder to make sure the
+  search occurrence is visible if the text area needs to be scrolled
+  horizontally.
+
+- When using TAB to move focus from the buffer switcher, or search bar,
+  etc. it should eventually end up in the text area, instead of getting
+  stuck.
+
+- Simplified key event workaround code. Let me know if you encouter any
+  problems (such as garbage being inserted in the text area when certain
+  keys are pressed, etc.)
+
 }}}
 {{{ API Changes
 

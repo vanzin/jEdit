@@ -306,6 +306,8 @@ public class ManagePanel extends JPanel
 		//{{{ update() method
 		public void update()
 		{
+			entries.clear();
+
 			PluginJAR[] plugins = jEdit.getPluginJARs();
 			for(int i = 0; i < plugins.length; i++)
 			{

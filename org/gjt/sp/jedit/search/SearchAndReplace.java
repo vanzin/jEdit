@@ -644,6 +644,8 @@ loop:			for(;;)
 				textArea.setSelection(new Selection.Range(
 					start - match[1],
 					start - match[0]));
+				// make sure end of match is visible
+				textArea.scrollTo(start - match[0],false);
 				textArea.moveCaretPosition(start - match[1]);
 			}
 			else
@@ -652,6 +654,8 @@ loop:			for(;;)
 					start + match[0],
 					start + match[1]));
 				textArea.moveCaretPosition(start + match[1]);
+				// make sure start of match is visible
+				textArea.scrollTo(start + match[0],false);
 			}
 
 			return true;

@@ -79,6 +79,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 		setAutoscrolls(true);
 		setOpaque(true);
+		setRequestFocusEnabled(false);
 
 		extensionMgr = new ExtensionManager();
 

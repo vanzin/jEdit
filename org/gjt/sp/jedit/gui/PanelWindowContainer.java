@@ -753,7 +753,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 			Component[] comp = parent.getComponents();
 			if(comp.length <= 2)
+			{
+				for(int i = 0; i < comp.length; i++)
+				{
+					comp[i].setVisible(false);
+				}
 				return;
+			}
+
+			comp[0].setVisible(true);
+			comp[1].setVisible(true);
 
 			Dimension dim = comp[2].getPreferredSize();
 
