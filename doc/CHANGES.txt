@@ -2,6 +2,14 @@ JEDIT 4.2 VERSION HISTORY
 
 {{{ Version 4.2pre5
 
+Thanks to Ollie Rutherfurd for contributing to this release.
+
+{{{ Miscellaneous Changes
+
+- Files that don't exist on disk are no longer saved in the perspective
+  (Ollie Rutherfurd).
+
+}}}
 {{{ Bug Fixes
 
 - Fixed international keys on MacOS X.
@@ -26,6 +34,9 @@ JEDIT 4.2 VERSION HISTORY
 - Fixed problems such as ArrayIndexOutOfBoundsExceptions or the
   beginning of the buffer becoming inaccessible when expanding the last
   fold in a buffer.
+
+- Pressing ENTER at the end of a collapsed fold line now properly
+  expands the fold.
 
 }}}
 

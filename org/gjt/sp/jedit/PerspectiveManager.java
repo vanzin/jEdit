@@ -123,6 +123,8 @@ public class PerspectiveManager
 			for(int i = 0; i < buffers.length; i++)
 			{
 				Buffer buffer = buffers[i];
+				if(buffer.isNewFile() && !autosave)
+					continue;
 				out.write("<BUFFER>");
 				out.write(MiscUtilities.charsToEntities(buffer.getPath()));
 				out.write("</BUFFER>");
