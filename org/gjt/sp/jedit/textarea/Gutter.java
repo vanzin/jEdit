@@ -96,6 +96,7 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			boolean valid = (line >= firstLine && line <= lastValidLine);
 
+			//{{{ Paint plugin highlights
 			if(highlights.size() != 0)
 			{
 				for(int i = 0; i < highlights.size(); i++)
@@ -117,7 +118,7 @@ public class Gutter extends JComponent implements SwingConstants
 						i--;
 					}
 				}
-			}
+			} //}}}
 
 			if(!valid)
 				return;
@@ -125,6 +126,7 @@ public class Gutter extends JComponent implements SwingConstants
 			int physicalLine = foldVisibilityManager
 				.virtualToPhysical(line);
 
+			//{{{ Paint fold triangles
 			if(physicalLine != buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine))
 			{
@@ -146,13 +148,13 @@ public class Gutter extends JComponent implements SwingConstants
 					gfx.drawLine(7,_y - 2,7,_y + 1);
 					gfx.drawLine(8,_y - 1,8,_y);
 				}
-			}
-			else
+			} //}}}
+			//{{{ Paint bracket scope
+			else if(bracketHighlight)
 			{
-				int bracketLine = textArea.getBracketLine();
-				if(textArea.isHighlightVisible()
-					&& bracketLine != -1)
+				if(textArea.isBracketHighlightVisible())
 				{
+					int bracketLine = textArea.getBracketLine();
 					int caretLine = textArea.getCaretLine();
 					if(caretLine != bracketLine)
 					{
@@ -198,8 +200,9 @@ public class Gutter extends JComponent implements SwingConstants
 						}
 					}
 				}
-			}
+			} //}}}
 
+			//{{{ Paint line numbers
 			if(expanded)
 			{
 				String number = Integer.toString(physicalLine + 1);
@@ -231,7 +234,7 @@ public class Gutter extends JComponent implements SwingConstants
 
 				gfx.drawString(number, FOLD_MARKER_SIZE + offset,
 					baseline + y);
-			}
+			} //}}}
 		}
 	} //}}}
 
@@ -674,6 +677,7 @@ public class Gutter extends JComponent implements SwingConstants
 					return;
 
 				line = foldVisibilityManager.virtualToPhysical(line);
+				//{{{ Clicking on fold triangle does various things
 				if(buffer.isFoldStart(line))
 				{
 					if(e.isControlDown())
@@ -694,7 +698,35 @@ public class Gutter extends JComponent implements SwingConstants
 							.expandFold(line,
 							e.isShiftDown());
 					}
-				}
+				} //}}}
+				//{{{ Clicking in bracket scope locates matching bracket
+				else if(bracketHighlight)
+				{
+					int bracketLine = textArea.getBracketLine();
+					if(textArea.isHighlightVisible()
+						&& bracketLine != -1)
+					{
+						int caretLine = textArea.getCaretLine();
+						if(caretLine != bracketLine)
+						{
+							if(caretLine > bracketLine)
+							{
+								int tmp = caretLine;
+								caretLine = bracketLine;
+								bracketLine = tmp;
+							}
+
+							if(line >= caretLine
+								&& line <= bracketLine)
+							{
+								if(e.isControlDown())
+									textArea.selectToMatchingBracket();
+								else
+									textArea.goToMatchingBracket();
+							}
+						}
+					}
+				} //}}}
 			}
 			else
 			{

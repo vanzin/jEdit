@@ -49,6 +49,16 @@ public class FoldVisibilityManager
 		this.textArea = textArea;
 	} //}}}
 
+	//{{{ isNarrowed() method
+	/**
+	 * Returns if the buffer has been narrowed.
+	 * @since jEdit 4.0pre2
+	 */
+	public boolean isNarrowed()
+	{
+		return narrowed;
+	} //}}}
+
 	//{{{ getVirtualLineCount() method
 	/**
 	 * Returns the number of virtual lines in the buffer.
@@ -157,6 +167,12 @@ public class FoldVisibilityManager
 			while(!buffer._isLineVisible(line,index) && line > 0)
 				line--;
 
+			if(line == 0 && !buffer._isLineVisible(line,index))
+			{
+				// inside the top narrow.
+				return 0;
+			}
+
 			if(lastPhysical == line)
 			{
 				if(lastVirtual < 0 || lastVirtual >= buffer._getVirtualLineCount(index))
@@ -165,7 +181,7 @@ public class FoldVisibilityManager
 						"cached: " + lastVirtual);
 				}
 			}
-			else if(line > lastPhysical)
+			else if(line > lastPhysical && lastPhysical != -1)
 			{
 				for(;;)
 				{
@@ -211,7 +227,12 @@ public class FoldVisibilityManager
 			}
 			else
 			{
-				lastPhysical = lastVirtual = 0;
+				lastPhysical = 0;
+				// find first visible line
+				while(!buffer._isLineVisible(lastPhysical,index))
+					lastPhysical++;
+
+				lastVirtual = 0;
 				for(;;)
 				{
 					if(lastPhysical == line)
@@ -269,7 +290,7 @@ public class FoldVisibilityManager
 						"cached: " + lastPhysical);
 				}
 			}
-			else if(line > lastVirtual)
+			else if(line > lastVirtual && lastVirtual != -1)
 			{
 				for(;;)
 				{
@@ -319,7 +340,12 @@ public class FoldVisibilityManager
 			}
 			else
 			{
-				lastPhysical = lastVirtual = 0;
+				lastPhysical = 0;
+				// find first visible line
+				while(!buffer._isLineVisible(lastPhysical,index))
+					lastPhysical++;
+
+				lastVirtual = 0;
 				for(;;)
 				{
 					if(buffer._isLineVisible(lastPhysical,index))
@@ -686,7 +712,8 @@ public class FoldVisibilityManager
 
 		buffer._setVirtualLineCount(index,virtualLineCount);
 
-		lastPhysical = lastVirtual = -1;
+		narrowed = true;
+
 		foldStructureChanged();
 
 		// Hack... need a more direct way of obtaining a view?
@@ -705,7 +732,7 @@ public class FoldVisibilityManager
 	public final void _grab(int index)
 	{
 		this.index = index;
-		lastPhysical = lastVirtual = 0;
+		lastPhysical = lastVirtual = -1;
 	} //}}}
 
 	//{{{ _release() method
@@ -749,12 +776,13 @@ public class FoldVisibilityManager
 	private int index;
 	private int lastPhysical;
 	private int lastVirtual;
+	private boolean narrowed;
 	//}}}
 
 	//{{{ foldStructureChanged() method
 	private void foldStructureChanged()
 	{
-		lastPhysical = lastVirtual = 0;
+		lastPhysical = lastVirtual = -1;
 		textArea.foldStructureChanged();
 	} //}}}
 

@@ -10,8 +10,8 @@ JEDIT 4.0 VERSION HISTORY
     Finder by double-clicking on them, or dragging them to the jEdit
     icon
   - jEdit is assigned as the creator of new files
-- A few Alt-key shortcuts added for commonly-used commands to help keep
-  your fingers on the home row:
+- A few Alt-key shortcuts added for commonly-used commands so that you
+  don't have to move your fingers all over the keyboard:
   - A+i, A+k: prev, next line
   - A+j, A+l: prev, next character
   - A+q, A+a: page up, page down
@@ -24,6 +24,15 @@ JEDIT 4.0 VERSION HISTORY
 
 + Enhancements
 
+- Bracket matching improvements:
+  - If the highlighted bracket is off screen, the text of the matching
+    line is shown in the status bar. And here's the best part: if the
+    matching line cosists of only a bracket and whitespace, the
+    *previous* line is shown in the status bar instead
+  - Clicking the scope indicator in the gutter moves the caret between
+    the two matching brackets
+  - Control-clicking the scope indicator or a bracket in the text area
+    selects all text between the two matching brackets
 - File system browser improvements:
   - Parent directories are now listed in a widget at the top of the
     file system browser
@@ -65,6 +74,8 @@ JEDIT 4.0 VERSION HISTORY
   now enabled by default
 - Bundled set of macros slimmed down somewhat. You can find more macros
   at http://community.jedit.org (John Gellene)
+- Text selection commands (Select Word, Select Line, and so on) are now
+  multiple selection aware
 
 + Bug Fixes
 
@@ -84,8 +95,6 @@ JEDIT 4.0 VERSION HISTORY
 - In the help viewer, the top-level user's guide link was broken
 - BufferChangeAdapter didn't properly implement BufferChangeListener
   interface (Maik Schreiber)
-- When the text area lost focus, the bracket scope indicator in the
-  gutter was not repainted
 - GUIUtilities.loadToolButton() no longer throws an exception with
   invalid tool bar buttons
 - It was not possible to bind an action to a non-alphanumeric key
@@ -104,8 +113,10 @@ JEDIT 4.0 VERSION HISTORY
 - Fixed a buffer corruption bug
 - 'Select Fold' command threw an exception of there were no folds in the
   buffer
-- Floating position locations were not updated correctly, so they did
-  indeed 'float' all over the buffer
+- Fixed a few bracket matching bugs
+- Fixed cosmetic bug in search and replace code that was triggered by
+  the Tags plugin
+- Fixed minor repaint bug with multiple selections
 
 + API Changes
 
@@ -117,7 +128,8 @@ JEDIT 4.0 VERSION HISTORY
   methods are now VFS-aware
 - Note that the behavior of correspondingly-named methods in the VFS
   class has changed in a suttle manner, and they should no longer be
-  called directory.
+  called directly. Use the MiscUtilities methods for all path
+  manipulation.
 - EditAction.getView() deprecated, call GUIUtilities.getView() instead
 
 * Version 4.0pre1

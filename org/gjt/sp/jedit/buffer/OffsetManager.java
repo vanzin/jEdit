@@ -479,8 +479,8 @@ loop:		for(;;)
 		for(int i = start; i < positions.size(); i++)
 		{
 			bh = (PosBottomHalf)positions.elementAt(i);
-			if(bh.offset < offset)
-				System.err.println("fuck: " + bh.offset);
+			//if(bh.offset < offset)
+			//	System.err.println("fuck: " + bh.offset);
 			bh.offset += length;
 		}
 	} //}}}

@@ -21,7 +21,7 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.text.*;
+import javax.swing.text.Segment;
 import org.gjt.sp.jedit.syntax.*;
 
 /**
@@ -44,7 +44,7 @@ public class TextUtilities
 	public static int findMatchingBracket(Buffer buffer, int line, int offset)
 	{
 		return findMatchingBracket(buffer,line,offset,0,
-			buffer.getDefaultRootElement().getElementCount() - 1);
+			buffer.getLineCount() - 1);
 	} //}}}
 
 	//{{{ findMatchingBracket() method
@@ -69,176 +69,126 @@ public class TextUtilities
 		if(buffer.getLength() == 0)
 			return -1;
 
-		Element map = buffer.getDefaultRootElement();
-		Element lineElement = map.getElement(line);
 		Segment lineText = new Segment();
-		int lineStart = lineElement.getStartOffset();
-		buffer.getText(lineStart,lineElement.getEndOffset() - lineStart - 1,
-			lineText);
+		buffer.getLineText(line,lineText);
 
 		char c = lineText.array[lineText.offset + offset];
-		char cprime; // c` - corresponding character
-		boolean direction; // true = back, false = forward
+		char cprime; // corresponding character
+		boolean direction; // false - backwards, true - forwards
 
 		switch(c)
 		{
-		case '(': cprime = ')'; direction = false; break;
-		case ')': cprime = '('; direction = true; break;
-		case '[': cprime = ']'; direction = false; break;
-		case ']': cprime = '['; direction = true; break;
-		case '{': cprime = '}'; direction = false; break;
-		case '}': cprime = '{'; direction = true; break;
+		case '(': cprime = ')'; direction = true;  break;
+		case ')': cprime = '('; direction = false; break;
+		case '[': cprime = ']'; direction = true;  break;
+		case ']': cprime = '['; direction = false; break;
+		case '{': cprime = '}'; direction = true;  break;
+		case '}': cprime = '{'; direction = false; break;
 		default: return -1;
 		}
 
-		int count;
+		// 1 because we've already 'seen' the first bracket
+		int count = 1;
+
+		Buffer.TokenList tokenList = buffer.markTokens(line);
 
 		// Get the syntax token at 'offset'
 		// only tokens with the same type will be checked for
 		// the corresponding bracket
-		byte idOfBracket = Token.NULL;
+		byte idOfBracket = getTokenAtOffset(tokenList,offset);
 
-		Buffer.TokenList tokenList = buffer.markTokens(line);
-		Token lineTokens = tokenList.getFirstToken();
+		boolean haveTokens = true;
 
-		int tokenListOffset = 0;
-		for(;;)
-		{
-			if(lineTokens.id == Token.END)
-				throw new InternalError("offset > line length");
-	
-			if(tokenListOffset + lineTokens.length > offset)
-			{
-				idOfBracket = lineTokens.id;
-				break;
-			}
-			else
-			{
-				tokenListOffset += lineTokens.length;
-				lineTokens = lineTokens.next;
-			}
-		}
-
-		//{{{ scan backwards
+		//{{{ Forward search
 		if(direction)
 		{
-			count = 0;
+			offset++;
 
-			for(int i = line; i >= startLine; i--)
+			for(;;)
 			{
-				// get text
-				lineElement = map.getElement(i);
-				lineStart = lineElement.getStartOffset();
-				int lineLength = lineElement.getEndOffset()
-					- lineStart - 1;
-
-				buffer.getText(lineStart,lineLength,lineText);
-
-				int scanStartOffset;
-				if(i != line)
+				for(int i = offset; i < lineText.count; i++)
 				{
-					lineTokens = buffer.markTokens(i).getLastToken();
-					tokenListOffset = scanStartOffset = lineLength - 1;
-				}
-				else
-				{
- 					if(tokenListOffset != lineLength)
- 						tokenListOffset += lineTokens.length;
-					scanStartOffset = offset;
-					//System.err.println("sso=" + scanStartOffset + ",tlo=" + tokenListOffset);
-				}
-
-				// only check tokens with id 'idOfBracket'
-				while(lineTokens != null)
-				{
-					byte id = lineTokens.id;
-					if(id == Token.END)
+					char ch = lineText.array[lineText.offset + i];
+					if(ch == c)
 					{
-						lineTokens = lineTokens.prev;
-						continue;
-					}
-
-					int len = lineTokens.length;
-					if(id == idOfBracket)
-					{
-						StringBuffer sb = new StringBuffer();
-						for(int j = scanStartOffset; j >= Math.max(0,tokenListOffset - len); j--)
+						if(!haveTokens)
 						{
-							if(j >= lineText.count)
-								System.err.println("WARNING: " + j + " >= " + lineText.count);
-							else if(j < 0)
-							{
-								System.err.println("sso=" + scanStartOffset + ", tlo=" + tokenListOffset + ",len=" + len);
-								System.err.println("WARNING: " + j + " < 0");
-							}
-
-							char ch = lineText.array[lineText.offset + j];
-							sb.append(ch);
-							if(ch == c)
-								count++;
-							else if(ch == cprime)
-							{
-								if(--count == 0)
-									return lineStart + j;
-							}
+							tokenList = buffer.markTokens(line);
+							haveTokens = true;
 						}
-						//System.err.println("[" + sb.reverse() + "]");
+						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+							count++;
 					}
-
-					scanStartOffset = tokenListOffset = tokenListOffset - len;
-					lineTokens = lineTokens.prev;
+					else if(ch == cprime)
+					{
+						if(!haveTokens)
+						{
+							tokenList = buffer.markTokens(line);
+							haveTokens = true;
+						}
+						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+						{
+							count--;
+							if(count == 0)
+								return buffer.getLineStartOffset(line) + i;
+						}
+					}
 				}
+
+				//{{{ Go on to next line
+				line++;
+				if(line > endLine)
+					break;
+				buffer.getLineText(line,lineText);
+				offset = 0;
+				haveTokens = false;
+				//}}}
 			}
 		} //}}}
-		//{{{ scan forwards
+		//{{{ Backward search
 		else
 		{
-			count = 0;
+			offset--;
 
-			for(int i = line; i <= endLine; i++)
+			for(;;)
 			{
-				// get text
-				lineElement = map.getElement(i);
-				lineStart = lineElement.getStartOffset();
-				buffer.getText(lineStart,lineElement.getEndOffset()
-					- lineStart - 1,lineText);
-
-				int scanStartOffset;
-				if(i != line)
+				for(int i = offset; i >= 0; i--)
 				{
-					lineTokens = buffer.markTokens(i).getFirstToken();
-					tokenListOffset = 0;
-					scanStartOffset = 0;
-				}
-				else
-					scanStartOffset = offset + 1;
-
-				// only check tokens with id 'idOfBracket'
-				for(;;)
-				{
-					byte id = lineTokens.id;
-					if(id == Token.END)
-						break;
-
-					int len = lineTokens.length;
-					if(id == idOfBracket)
+					char ch = lineText.array[lineText.offset + i];
+					if(ch == c)
 					{
-						for(int j = scanStartOffset; j < tokenListOffset + len; j++)
+						if(!haveTokens)
 						{
-							char ch = lineText.array[lineText.offset + j];
-							if(ch == c)
-								count++;
-							else if(ch == cprime)
-							{
-								if(count-- == 0)
-									return lineStart + j;
-							}
+							tokenList = buffer.markTokens(line);
+							haveTokens = true;
+						}
+						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+							count++;
+					}
+					else if(ch == cprime)
+					{
+						if(!haveTokens)
+						{
+							tokenList = buffer.markTokens(line);
+							haveTokens = true;
+						}
+						if(getTokenAtOffset(tokenList,i) == idOfBracket)
+						{
+							count--;
+							if(count == 0)
+								return buffer.getLineStartOffset(line) + i;
 						}
 					}
-
-					scanStartOffset = tokenListOffset = tokenListOffset + len;
-					lineTokens = lineTokens.next;
 				}
+
+				//{{{ Go on to next line
+				line--;
+				if(line < startLine)
+					break;
+				buffer.getLineText(line,lineText);
+				offset = lineText.count - 1;
+				haveTokens = false;
+				//}}}
 			}
 		} //}}}
 
@@ -591,4 +541,29 @@ public class TextUtilities
 				+ str.substring(1).toLowerCase();
 		}
 	} //}}}
+
+	//{{{ Private members
+
+	//{{{ getTokenAtOffset() method
+	private static byte getTokenAtOffset(Buffer.TokenList tokenList, int offset)
+	{
+		Token lineTokens = tokenList.getFirstToken();
+
+		int tokenListOffset = 0;
+		for(;;)
+		{
+			if(lineTokens.id == Token.END)
+				throw new InternalError("offset > line length");
+
+			if(tokenListOffset + lineTokens.length > offset)
+				return lineTokens.id;
+			else
+			{
+				tokenListOffset += lineTokens.length;
+				lineTokens = lineTokens.next;
+			}
+		}
+	} //}}}
+
+	//}}}
 }

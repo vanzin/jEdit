@@ -110,9 +110,11 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void setRepeatEnabled(boolean repeat)
 	{
+		boolean oldRepeat = this.repeat;
 		this.repeat = repeat;
 		repeatCount = 0;
-		view.getStatus().setMessage(null);
+		if(oldRepeat != repeat)
+			view.getStatus().setMessage(null);
 	} //}}}
 
 	//{{{ getRepeatCount() method
@@ -131,9 +133,11 @@ public abstract class InputHandler extends KeyAdapter
 	 */
 	public void setRepeatCount(int repeatCount)
 	{
+		boolean oldRepeat = this.repeat;
 		repeat = true;
 		this.repeatCount = repeatCount;
-		view.getStatus().setMessage(null);
+		if(oldRepeat != repeat)
+			view.getStatus().setMessage(null);
 	} //}}}
 
 	//{{{ getLastAction() method

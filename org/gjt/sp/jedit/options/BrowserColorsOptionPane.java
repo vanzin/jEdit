@@ -186,14 +186,14 @@ class BrowserColorsModel extends AbstractTableModel
 	void add()
 	{
 		entries.addElement(new Entry("",UIManager.getColor("Tree.foreground")));
-		fireTableStructureChanged();
+		fireTableRowsInserted(entries.size() - 1,entries.size() - 1);
 	} //}}}
 
 	//{{{ remove() method
 	void remove(int index)
 	{
 		entries.removeElementAt(index);
-		fireTableStructureChanged();
+		fireTableRowsDeleted(entries.size(),entries.size());
 	} //}}}
 
 	//{{{ save() method

@@ -1,20 +1,19 @@
 TO DO
 
-+ before pre2:
-
-- document new folding
-- colors opt pane broken
+- position bug still there
 - either fix recent files/recent directories/current dir icon issue, or
   ditch icons
-- narrowing; what happends if caret put in top narrow or bottom narrow?
 - changing folding mode using buffer-local props: doesn't take effect on
   save
 - read up on JDK 1.4 focus API
 - getFoldLevel(): should not call linesChanged() all the time
 - v2p/p2v: implement from end backward scan
-
+- {: only re-indent line if prev matches the regexp
+- isToolsJarAvailable(): prompt for location in a file dialog box. Need
+  some way of showing arbitriary message in VFS file chooser.
 - dwm: not always focused correctly?
 - documentation to do
+  - new folding
   - add index terms throughout user's guide!
   - changing heap memory docs
   - tip about compareStrings()
@@ -70,7 +69,6 @@ TO DO
 - clickable stack traces in activity log
 - JOptionPane: try adding keyboard mnemonics for no -vs- cancel?
   + more intuitive button labels throughout
-
 - incremental search; find all occurrences that are visible
 - if caps lock is pressed during startup, show dialog box for changing
   settings that are currently set on the CLI (settings directory,
@@ -86,18 +84,11 @@ TO DO
 - web start version
 - selective undo
 - <file>?line= or ?marker=
-- wacky bracket matching stuff: only on }, ), ]
 - persistent fold visibility option
 - fold navigator to browse fold tree in explicit fold mode
 - command to surround selection with explicit fold markers
 - search & replace: option to skip folded lines
 - complete word: update on the fly as chars typed
-- if caret inside hidden line, don't show bracket highlight
-- bracket matching:
-  - if not on screen, do matching in background thread and show matching
-    line in status bar
-  - fix bug
-  - keep in mind, inserting } causes a full bracket scan
 - reintroduce -bshclient command line switch
 - complete word: custom WrapAroundJList control
 - jEdit 3.1 seems slower than 3.0. Folding-related code needs to be
@@ -114,7 +105,6 @@ TO DO
 - complete-word: complete current mode's keywords
 - recording 'evaluate for selected lines'
 - rollover toolbar buttons option
-- select-* actions: add to selection in multi-select mode
 - when loading plugins and such, check for settingsDir == jEditHome
 - some means of redirecting double-clicks on a file to a VFS
 - improve next/prev-word commands
@@ -190,7 +180,6 @@ TO DO
 - use java2d to draw block caret (instead of XOR)
 - cache plugin list in plugin manager, only loading it from the server if
   the modification date has changed?
-
 - work thread hang?
 - when a new text area is created, if caret is on a bracket, not matched
   initially
