@@ -1,5 +1,5 @@
 /*
- * JEditMetalTheme.java - Minor Metal L&F tweaks for jEdit
+ * JEditMetalTheme14.java - Minor Metal L&F tweaks for jEdit
  * Copyright (C) 2001 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ import javax.swing.plaf.metal.*;
 import javax.swing.plaf.*;
 import org.gjt.sp.jedit.jEdit;
 
-public class JEditMetalTheme extends DefaultMetalTheme
+public class JEditMetalTheme14 extends DefaultMetalTheme
 {
 	public String getName()
 	{
@@ -55,7 +55,7 @@ public class JEditMetalTheme extends DefaultMetalTheme
 		return primaryFont;
 	}
 
-	public void propertiesChanged()
+	public JEditMetalTheme14()
 	{
 		primaryFont = new FontUIResource(
 			jEdit.getFontProperty("metal.primary.font",

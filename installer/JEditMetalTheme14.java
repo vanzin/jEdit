@@ -1,5 +1,5 @@
 /*
- * JEditMetalTheme.java - Minor Metal L&F tweaks for jEdit installer
+ * JEditMetalTheme14.java - Minor Metal L&F tweaks for jEdit installer
  *
  * Originally written by Slava Pestov for the jEdit installer project. This work
  * has been placed into the public domain. You may use this work in any way and
@@ -17,7 +17,7 @@ import javax.swing.plaf.metal.*;
 import javax.swing.plaf.*;
 import java.awt.Font;
 
-public class JEditMetalTheme extends DefaultMetalTheme
+public class JEditMetalTheme14 extends DefaultMetalTheme
 {
 	public String getName()
 	{
