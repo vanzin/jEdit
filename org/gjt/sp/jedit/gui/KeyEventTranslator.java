@@ -285,7 +285,7 @@ public class KeyEventTranslator
 	static int c, a, m, s;
 
 	//{{{ Private members
-	private Map transMap = new HashMap();
+	private static Map transMap = new HashMap();
 
 	static
 	{
