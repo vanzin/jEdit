@@ -185,7 +185,7 @@ public class TokenMarker
 			? terminateChar + line.offset
 			: line.count + line.offset;
 
-		mainLoop(line,searchLimit);
+		mainLoop(line,line.offset,searchLimit);
 
 		//{{{ check for keywords at the line's end
 		if(context.inRule == null)
@@ -250,7 +250,7 @@ public class TokenMarker
 	//}}}
 
 	//{{{ mainLoop() method
-	private void mainLoop(Segment line, int searchLimit)
+	private void mainLoop(Segment line, int offset, int searchLimit)
 	{
 		boolean b;
 		boolean tempEscaped;
@@ -259,10 +259,10 @@ public class TokenMarker
 
 		escaped = false;
 
-		for(pos = line.offset; pos < searchLimit; pos++)
+		for(pos = offset; pos < searchLimit; pos++)
 		{
 			//{{{ if we are not in the top level context, we are delegated
-			if (context.parent != null)
+			if (context.parent != null && context.parent.inRule != null)
 			{
 				tempContext = context;
 
@@ -331,43 +331,12 @@ public class TokenMarker
 				}
 			} //}}}
 
-			//{{{ check the escape rule for the current context, if there is one
-			if ((rule = context.rules.getEscapeRule()) != null)
-			{
-				tempEscaped = escaped;
-
-				b = handleRule(line,rule,false);
-
-				if (!b)
-				{
-					if (tempEscaped)
-						escaped = false;
-					continue;
-				}
-			} //}}}
-
-			//{{{ if we are inside a span, check for its end sequence
-			rule = context.inRule;
-			if(rule != null && (rule.action & SPAN) == SPAN)
-			{
-				// if we match the end of the span, or if this is a "hard" span,
-				// we continue to the next character; otherwise, we check all
-				// applicable rules below
-				if (!handleRule(line,rule,true)
-					|| (rule.action & SOFT_SPAN) == 0)
-				{
-					escaped = false;
-					continue;
-				}
-			} //}}}
-
 			//{{{ now check every rule
 			rule = context.rules.getRules(line.array[pos]);
 			while(rule != null)
 			{
 				// stop checking rules if there was a match and go to next pos
-				if (!handleRule(line,rule,context.inRule == rule
-					&& (rule.action & SPAN) == SPAN))
+				if (!handleRule(line,rule,false))
 				{
 					break;
 				}
@@ -391,6 +360,14 @@ public class TokenMarker
 
 		if(end)
 		{
+			// is this an EOL_SPAN?
+			if(checkRule.sequenceLengths.length == 1)
+			{
+				pattern.offset = 0;
+				pattern.count = 1;
+				return (pos != lineLength - 1);
+			}
+
 			pattern.offset = checkRule.sequenceLengths[0];
 			pattern.count = checkRule.sequenceLengths[1];
 		}
@@ -424,14 +401,14 @@ public class TokenMarker
 			//}}}
 		}
 
-		if (escaped)
+		if ((checkRule.action & IS_ESCAPE) == IS_ESCAPE)
 		{
+			escaped = !escaped;
 			pos += pattern.count - 1;
 			return false;
 		}
-		else if ((checkRule.action & IS_ESCAPE) == IS_ESCAPE)
+		else if (escaped)
 		{
-			escaped = true;
 			pos += pattern.count - 1;
 			return false;
 		}
@@ -535,22 +512,19 @@ public class TokenMarker
 			//}}}
 			//{{{ EOL_SPAN
 			case EOL_SPAN:
-				if ((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
+				if((checkRule.action & EXCLUDE_MATCH) == EXCLUDE_MATCH)
 				{
 					tokenHandler.handleToken(pattern.count,
 						context.rules.getDefault(),
 						context.rules);
-					tokenHandler.handleToken(lineLength - (pos + pattern.count),
-						checkRule.token,context.rules);
+					lastOffset += pattern.count;
+					pos += pattern.count;
 				}
-				else
-				{
-					tokenHandler.handleToken(lineLength - pos,
-						checkRule.token,context.rules);
-				}
-				lastOffset = lineLength;
-				lastKeyword = lineLength;
-				pos = lineLength;
+
+				context.inRule = checkRule;
+				context = new LineContext(
+					ParserRuleSet.getStandardRuleSet(
+					checkRule.token),context);
 
 				return false;
 			//}}}

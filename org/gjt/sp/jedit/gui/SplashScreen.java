@@ -131,7 +131,7 @@ public class SplashScreen extends Canvas
 		String str = "Version " + jEdit.getVersion();
 
 		offscreenGfx.drawString(str,
-			(win.getWidth() - fm.stringWidth(str)) / 2,
+			(getWidth() - fm.stringWidth(str)) / 2,
 			win.getHeight() - fm.getDescent()
 			- fm.getLeading());
 
