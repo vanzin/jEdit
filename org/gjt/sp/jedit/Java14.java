@@ -81,13 +81,13 @@ public class Java14
 				Component comp = (Component)evt.getSource();
 				for(;;)
 				{
-					if(comp == null || comp instanceof Dialog)
-						break;
-					else if(comp instanceof View)
+					if(comp instanceof View)
 					{
 						((View)comp).processKeyEvent(evt);
 						return true;
 					}
+					else if(comp == null || comp instanceof Window)
+						break;
 					else
 						comp = comp.getParent();
 				}

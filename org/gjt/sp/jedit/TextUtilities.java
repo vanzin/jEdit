@@ -93,6 +93,7 @@ public class TextUtilities
 
 		int tokenListOffset = 0;
 
+		//{{{ Split on token boundaries, tabs and spaces
 		while(tokens.id != Token.END)
 		{
 			int flushLen = 0;
@@ -158,8 +159,9 @@ public class TextUtilities
 
 			tokenListOffset += tokens.length;
 			tokens = tokens.next;
-		}
+		} //}}}
 
+		//{{{ Word wrap
 		if(wrapMargin != 0)
 		{
 			Chunk iter = first;
@@ -167,24 +169,31 @@ public class TextUtilities
 			float width = 0.0f;
 			while(iter != null)
 			{
-				iter.x -= width;
-
-				if(iter.x + iter.width > wrapMargin)
+				if(iter.x + iter.width - width > wrapMargin)
 				{
 					out.add(first);
+					// fixed with crappy mungeX param to
+					// paintChunkList() instead
+					/* Chunk i2 = first;
+					do
+					{
+						i2.x -= width;
+						i2 = i2.next;
+					}
+					while(i2 != iter); */
+
 					first = iter;
 					if(prev != null)
 						prev.next = null;
 
-					width = (iter.next == null
-						? iter.x
-						: iter.next.x);
+					if(iter.next != null)
+						width = iter.x;
 				}
 
 				prev = iter;
 				iter = iter.next;
 			}
-		}
+		} //}}}
 
 		if(first != null)
 			out.add(first);
@@ -197,13 +206,22 @@ public class TextUtilities
 	 * @param gfx The graphics context
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
+	 * @param mungeX When painting soft-wrapped text, you must set this
+	 * for subsequent lines in a wrapped set. This is needed because when
+	 * breaking lines, <code>lineToChunkList</code> doesn't reset the
+	 * <code>x</code> ordinate of the first chunk of each "virtual" line,
+	 * so painting without munging this ordinate would result in a
+	 * "stair-step" effect.
+	 *
 	 * @return The width of the painted text
 	 * @since jEdit 4.0pre4
 	 */
 	public static float paintChunkList(Chunk chunks, Graphics2D gfx,
-		float x, float y)
+		float x, float y, boolean mungeX)
 	{
 		float _x = 0.0f;
+
+		float xOffset = (mungeX ? chunks.x : 0.0f);
 
 		while(chunks != null)
 		{
@@ -211,14 +229,15 @@ public class TextUtilities
 			{
 				gfx.setFont(chunks.style.getFont());
 				gfx.setColor(chunks.style.getForegroundColor());
-				gfx.drawGlyphVector(chunks.text,x + chunks.x,y);
+				gfx.drawGlyphVector(chunks.text,
+					x + chunks.x - xOffset,y);
 			}
 
 			_x = chunks.x + chunks.width;
 			chunks = chunks.next;
 		}
 
-		return _x;
+		return _x - xOffset;
 	} //}}}
 
 	//{{{ Chunk class

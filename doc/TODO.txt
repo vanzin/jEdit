@@ -1,25 +1,35 @@
 TO DO
 
+short term plan:
+
+- soft tabs bugs
+- maybe fix GUIUtilities.java to store maximisation state
+- 1-page files don't print
+- java: 0.0f highlighting
+- print should not use so much memory
+- xToOffset() needs a rewrite
+- xToOffset(): fucked with //\t
+- narrow/collapse fold/expand fold: exceptions
+- horizontal scrolling is fucked
+- when loading a file with collapsedFolds property, last line always
+  visible
+- nextLineRequested still fucked
+- background color for tokens
+
 + bugs:
 
-- xToOffset() needs a rewrite
-- bracket match: boxes in status msg
+- DoS in edit server
+- idea for fixing buffer property issues: BufferProp class
 - getCenterPoint()
 - support multi-screen systems properly
 - fs browser: scroll to visible after setting divider location
-- xToOffset(): fucked with //\t
 - aiob in getVirtualLineCount()?
-- narrow/collapse fold/expand fold: exceptions
-- horizontal scrolling is fucked
 - if loadMode() throws error, save of a mode file fails?
 - jdk1.3: open dialog divider
 - expand fold: try to expand even if already expanded
-- when loading a file with collapsedFolds property, last line always
-  visible
 - C+e , and . insert , and . in the buffer
 - docking buttons not always hidden
 - definately repaint problems
-- nextLineRequested still fucked
 - keyboard navigation of current directory, recent dirs, etc broken
 - keystrokes stop working all of a sudden
 - JDK 1.3 focus bugs
@@ -36,7 +46,6 @@ TO DO
   canonPath != path
 
 - text area painter:
-  - token backgrounds
   - use line metrics
   - use float co-ordinates
   - cache chunk lists

@@ -4988,6 +4988,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 
+		// get rid of embedded tabs not removed by trim()
+		text = text.replace('\t',' ');
+
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
 			"view.status.bracket",new String[] { text }));
 	} //}}}

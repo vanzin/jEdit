@@ -30,6 +30,8 @@ JEDIT 4.0 VERSION HISTORY
   error message
 - The edit server now un-iconifies the view, if necessary
 - Updated ML mode (Ingmar Stein)
+- Printing code rewritten to use Java 2 print API. The only user-visible
+  change is that the printed output is now word-wrapped.
 
 + Bug Fixes
 
@@ -54,6 +56,8 @@ JEDIT 4.0 VERSION HISTORY
   - Unfortunately, fixing the last two required the use of Java
     1.4-specific APIs. As a result, the Java14.java source file will not
     compile under a 1.3 JDK.
+- Embedded tabs in lines would show up as boxes in bracket matching
+  status bar messages
 
 + API Changes
 

@@ -273,6 +273,15 @@ public class OffsetManager
 				}
 			} //}}}
 
+			for(int i = 0; i < numLines; i++)
+			{
+				// need the line end offset to be in place
+				// for following fold level calculations
+				lineInfo[startLine + i] = (offset + endOffsets.get(i) + 1)
+					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK);
+			}
+
+			//{{{ Hide lines
 			int[] newVirtualLineCounts = new int[8];
 			System.arraycopy(virtualLineCounts,0,newVirtualLineCounts,0,8);
 
@@ -285,12 +294,6 @@ public class OffsetManager
 
 			for(int i = 0; i < numLines; i++)
 			{
-				// need the line end offset to be in place
-				// for following fold level calculations
-				lineInfo[startLine + i] =
-					((offset + endOffsets.get(i) + 1)
-					& ~(FOLD_LEVEL_VALID_MASK | CONTEXT_VALID_MASK));
-
 				long _visible;
 				if(collapseFolds == 0)
 					_visible = visible;
@@ -330,8 +333,8 @@ public class OffsetManager
 			}
 
 			virtualLineCounts = newVirtualLineCounts;
+			//}}}
 		} //}}}
-
 		//{{{ Update remaining line start offsets
 		for(int i = endLine; i < lineCount; i++)
 		{
