@@ -200,34 +200,31 @@ public class Registers
 				return;
 			}
 
-			// preserve magic pos for easy insertion of the
-			// same string at the start of multiple lines
-
-			// XXX: getMagicCaretPosition() is deprecated
-			int magic = textArea.getMagicCaretPosition();
-
 			if(vertical && textArea.getSelectionCount() == 0)
 			{
 				int caret = textArea.getCaretPosition();
 				int caretLine = textArea.getCaretLine();
 				Selection.Rect rect = new Selection.Rect(
-					caret,caret,caretLine,caretLine);
+					caretLine,caret,caretLine,caret);
 				textArea.setSelectedText(rect,selection);
+
+				// move the caret down a line
+				if(!selection.endsWith("\n"))
+				{
+					Buffer buffer = textArea.getBuffer();
+					int col = rect.getStartColumn(buffer);
+					if(caretLine != buffer.getLineCount() - 1)
+					{
+						int offset = buffer.getOffsetOfVirtualColumn(
+							caretLine + 1,col,null);
+						textArea.moveCaretPosition(
+							buffer.getLineStartOffset(
+							caretLine + 1) + offset);
+					}
+				}
 			}
 			else
 				textArea.setSelectedText(selection);
-
-			if(textArea.getCaretPosition()
-				!= textArea.getLineEndOffset(textArea.getCaretLine()) - 1)
-			{
-				textArea.setMagicCaretPosition(magic);
-			}
-			else
-			{
-				// if user is pasting at end of line, chances are
-				// they want the caret to go the the end of the
-				// line again when they move it up or down
-			}
 
 			HistoryModel.getModel("clipboard").addItem(selection);
 		}

@@ -43,6 +43,9 @@ public class XModeHandler extends HandlerBase
 		this.parser = parser;
 		this.path = path;
 		stateStack = new Stack();
+
+		// default value
+		lastNoWordSep = "_";
 	} //}}}
 
 	//{{{ resolveEntity() method
@@ -123,6 +126,11 @@ public class XModeHandler extends HandlerBase
 		else if (aname == "DIGIT_RE")
 		{
 			lastDigitRE = value;
+		}
+		else if (aname == "NO_WORD_SEP")
+		{
+			if(isSpecified)
+				lastNoWordSep = value;
 		}
 		else if (aname == "AT_CHAR")
 		{
@@ -240,6 +248,7 @@ public class XModeHandler extends HandlerBase
 			if(lastEscape != null)
 				rules.setEscapeRule(ParserRule.createEscapeRule(lastEscape));
 			rules.setDefault(lastDefaultID);
+			rules.setNoWordSep(lastNoWordSep);
 		}
 	} //}}}
 
@@ -285,6 +294,7 @@ public class XModeHandler extends HandlerBase
 				lastHighlightDigits = false;
 				lastDigitRE = null;
 				lastDefaultID = Token.NULL;
+				lastNoWordSep = "_";
 				rules = null;
 			} //}}}
 			//{{{ TERMINATE
@@ -464,6 +474,7 @@ public class XModeHandler extends HandlerBase
 	private String lastSetName;
 	private String lastEscape;
 	private String lastDelegateSet;
+	private String lastNoWordSep;
 	private ParserRuleSet rules;
 	private byte lastDefaultID = Token.NULL;
 	private byte lastTokenID;

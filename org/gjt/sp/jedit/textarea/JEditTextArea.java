@@ -1716,10 +1716,13 @@ forward_scan:		do
 	 * (unlike the rest of the selection API).
 	 * @param offset The offset
 	 * @param end The new selection end
+	 * @param extraEndVirt Only for rectangular selections - specifies how
+	 * far it extends into virtual space.
 	 * @param rect Make the selection rectangular?
 	 * @since jEdit 3.2pre1
 	 */
-	public void resizeSelection(int offset, int end, boolean rect)
+	public void resizeSelection(int offset, int end, int extraEndVirt,
+		boolean rect)
 	{
 		Selection s = getSelectionAtOffset(offset);
 		if(s != null)
@@ -1737,7 +1740,10 @@ forward_scan:		do
 
 		Selection newSel;
 		if(rect)
+		{
 			newSel = new Selection.Rect(offset,end);
+			((Selection.Rect)newSel).extraEndVirt = extraEndVirt;
+		}
 		else
 			newSel = new Selection.Range(offset,end);
 
@@ -6303,8 +6309,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			if(evt.isShiftDown())
 			{
+				float dragStartLineWidth = offsetToXY(dragStartLine,
+					getLineLength(dragStartLine),returnValue).x;
+				int extraEndVirt;
+				if(evt.getX() > dragStartLineWidth)
+				{
+					extraEndVirt = (int)((evt.getX()
+						- dragStartLineWidth) / charWidth);
+				}
+				else
+					extraEndVirt = 0;
 				// XXX: getMarkPosition() deprecated!
-				resizeSelection(getMarkPosition(),dragStart,control);
+				resizeSelection(getMarkPosition(),dragStart,extraEndVirt,control);
 
 				moveCaretPosition(dragStart,false);
 
@@ -6435,13 +6451,22 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		//{{{ doSingleDrag() method
 		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
-			int dot = xyToOffset(evt.getX(),
+			int x = evt.getX();
+			int dot = xyToOffset(x,
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
 				!painter.isBlockCaretEnabled());
+			int dotLine = getLineOfOffset(dot);
+			float dotLineWidth = offsetToXY(dotLine,getLineLength(dotLine),
+				returnValue).x;
+			int extraEndVirt;
+			if(x > dotLineWidth)
+				extraEndVirt = (int)((x - dotLineWidth) / charWidth);
+			else
+				extraEndVirt = 0;
 
 			dragged = true;
 
-			resizeSelection(dragStart,dot,rect);
+			resizeSelection(dragStart,dot,extraEndVirt,rect);
 
 			if(quickCopyDrag)
 			{
@@ -6509,7 +6534,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 
 			resizeSelection(markLineStart + mark,lineStart + offset,
-				rect);
+				0,rect);
 			if(!quickCopyDrag)
 				moveCaretPosition(lineStart + offset,false);
 		} //}}}
@@ -6550,7 +6575,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			dragged = true;
 
-			resizeSelection(mark,mouse,rect);
+			resizeSelection(mark,mouse,0,rect);
 			moveCaretPosition(mouse,false);
 		} //}}}
 	} //}}}

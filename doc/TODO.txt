@@ -5,27 +5,23 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
-- searching in a buffer w/ narrowed fold
-- syntax: separate noWordSep
-- better rectangular editing:
-  - range-comment & rect select
-  - eval-for-selected-lines doesn't work with rectangular selection
-  - rect select aware user input
-  - creating selections with virtual start/end with mouse
-  - document in change log
-- don't repaint whole selection when resizing
 - fix print spacing problem
 - fix tom's bugs
 - change indentPrevLine to indentOneLine and indentSubsequentLines
-- minor quicknotepad changes -- update docs
 - fix fsb infinite requests problem, in fact fsb tree expansion state
   preservation seems to be broken
+- minor quicknotepad changes -- update docs
 - add documentation for pre1 features
-- sometimes trying to extend a selection creates one all the way to the
-  end of the buffer
 
 + later:
 
+- eval-for-selected-lines doesn't work with rectangular selection
+- searching in a buffer w/ narrowed fold
+- range-comment & rect select
+- rect select aware user input
+- sometimes trying to extend a selection creates one all the way to the
+  end of the buffer
+- don't repaint whole selection when resizing
 - finish monospaced hack
 - action system overhaul
 - move text utility methods to TextUtilities
