@@ -3,9 +3,6 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- wm popup needs 'hide'
-- cursor in dockabe win container shown too much
-- but show cursor in wm not panel!
 - wrap of
 			if(extraEndVirt < 0)
 			{
@@ -18,12 +15,8 @@ and quirks that I need to fix eventually.
   - scroll/physUp/Down() simpler
 - optimize for no syntax & no soft wrap case:
   - markTokens() immediately returns
-- optimize 
-- left & right in rect selection
 - left-bias rects broken with up/down
 - loaded flag cleared before loading finished
-- disappearing lines!
-- make sure skew < screen line count of first line
 - display manager transaction handler
   - only one per buffer -- should buffer keep track of display mgrs,
     ask one of them for screen line counts?

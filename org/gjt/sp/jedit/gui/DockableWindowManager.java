@@ -913,6 +913,19 @@ public class DockableWindowManager extends JPanel
 			});
 			popup.add(cloneMenuItem);
 
+			popup.addSeparator();
+
+			JMenuItem closeMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-close"));
+
+			closeMenuItem.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					removeDockableWindow(dockable);
+				}
+			});
+			popup.add(closeMenuItem);
+
 			if(!(clone || currentPos.equals(FLOATING)))
 			{
 				JMenuItem undockMenuItem = new JMenuItem(jEdit.getProperty("view.docking.menu-undock"));
@@ -955,7 +968,7 @@ public class DockableWindowManager extends JPanel
 			System.err.println(dockable);
 
 			String newPosition = jEdit.getProperty(dockable
-				+ ".dock-position");
+				+ ".dock-position",FLOATING);
 			if(FLOATING.equals(newPosition)
 				&& FLOATING.equals(entry.position))
 			{
