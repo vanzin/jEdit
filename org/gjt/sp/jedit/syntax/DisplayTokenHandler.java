@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-public abstract class DisplayTokenHandler extends DefaultTokenHandler
+public class DisplayTokenHandler extends DefaultTokenHandler
 {
 	//{{{ init() method
 	public void init(Segment seg, SyntaxStyle[] styles,
@@ -48,57 +48,44 @@ public abstract class DisplayTokenHandler extends DefaultTokenHandler
 		this.expander = expander;
 	} //}}}
 
+	//{{{ setMonospacedCharWidth() method
+	public void setMonospacedCharWidth(float charWidth)
+	{
+		this.charWidth = charWidth;
+	} //}}}
+
+	//{{{ getChunks() method
+	/**
+	 * Returns the first chunk.
+	 * @since jEdit 4.1pre1
+	 */
+	public Chunk getChunks()
+	{
+		return (Chunk)firstToken;
+	} //}}}
+
 	//{{{ Protected members
 	protected Segment seg;
 	protected SyntaxStyle[] styles;
 	protected FontRenderContext fontRenderContext;
 	protected TabExpander expander;
 	protected float x;
+	protected float charWidth;
 
 	//{{{ createToken() method
 	protected Token createToken(byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
 		if(id == Token.END)
-		{
-			if(lastToken != null)
-			{
-				Chunk lastChunk = (Chunk)lastToken;
-				if(!lastChunk.initialized)
-				{
-					lastChunk.init(seg,expander,x,styles,
-						fontRenderContext,
-						context.rules.getDefault());
-				}
-				x += lastChunk.width;
-			}
-
 			return null;
-		}
-		else
-		{
-			return new Chunk(id,offset,length,
-				getParserRuleSet(context));
-		}
-	} //}}}
 
-	//{{{ addToken() method
-	protected boolean addToken(Token token, TokenMarker.LineContext context,
-		boolean merge)
-	{
-		Chunk oldLastChunk = (Chunk)lastToken;
-		if(super.addToken(token,context,
-			merge && (oldLastChunk == null
-			|| !oldLastChunk.inaccessable
-			|| oldLastChunk.str != null)))
-		{
-			oldLastChunk.init(seg,expander,x,styles,
-				fontRenderContext,context.rules.getDefault());
-			x += oldLastChunk.width;
-			return true;
-		}
-		else
-			return false;
+		Chunk chunk = new Chunk(id,offset,length,getParserRuleSet(context));
+		chunk.init(seg,expander,x,styles,fontRenderContext,
+			context.rules.getDefault(),charWidth);
+
+		x += chunk.width;
+
+		return chunk;
 	} //}}}
 
 	//}}}

@@ -221,7 +221,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			{
 				// don't obscure existing message
 				if(message != null && message.getText() != null
-					&& !"".equals(message.getText()))
+					&& !"".equals(message.getText())
+					&& !currentMessageIsIO)
 					return;
 
 				int requestCount = threadPool.getRequestCount();
@@ -229,17 +230,20 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				{
 					setMessageAndClear(jEdit.getProperty(
 						"view.status.io.done"));
+					currentMessageIsIO = true;
 				}
 				else if(requestCount == 1)
 				{
 					setMessage(jEdit.getProperty(
 						"view.status.io-1"));
+					currentMessageIsIO = true;
 				}
 				else
 				{
 					Object[] args = { new Integer(requestCount) };
 					setMessage(jEdit.getProperty(
 						"view.status.io",args));
+					currentMessageIsIO = true;
 				}
 			}
 		});
@@ -310,6 +314,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ setMessageComponent() method
 	public void setMessageComponent(Component comp)
 	{
+		currentMessageIsIO = false;
+
 		if (comp == null || messageComp == comp)
 		{
 			return;
@@ -376,6 +382,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private MemoryStatus memory;
 	/* package-private for speed */ StringBuffer buf = new StringBuffer();
 	private Timer tempTimer;
+	private boolean currentMessageIsIO;
 	//}}}
 
 	static final String caretTestStr = "9999,999-999 99%";

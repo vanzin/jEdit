@@ -231,7 +231,7 @@ contributing to this release.
 - EBMessage.veto(), isVetoable() methods and EBMessage.NonVetoable class
   deprecated.
 
-- Removed old text area highlighter API.
+- Removed old text area highlighter API, old buffer folding API.
 
 - Removed BufferUpdate.ENCODING_CHANGED, FOLD_HANDLER_CHANGED messages;
   replaced with generic BufferUpdate.PROPERTIES_CHANGED.

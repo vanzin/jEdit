@@ -10,6 +10,9 @@ and quirks that I need to fix eventually.
 
 + before 4.1pre1:
 
+- about dialog
+- finish monospaced hack
+- hypersearch: show total time
 - searching in a buffer w/ narrowed fold
 - syntax: separate noWordSep
 - document edit menu rearrangements
@@ -22,7 +25,6 @@ and quirks that I need to fix eventually.
 - don't repaint whole selection when resizing
 - fix print spacing problem
 - fix tom's bugs
-- soft wrap is still slow
 - change indentPrevLine to indentOneLine and indentSubsequentLines
 - minor quicknotepad changes -- update docs
 - fix fsb infinite requests problem, in fact fsb tree expansion state
@@ -30,10 +32,10 @@ and quirks that I need to fix eventually.
 - add documentation for pre1 features
 - sometimes trying to extend a selection creates one all the way to the
   end of the buffer
-- action system overhaul
 
 + later:
 
+- action system overhaul
 - move text utility methods to TextUtilities
 - focus problem with hypersearch in floating window?
 - offset manager: backwards gap movement

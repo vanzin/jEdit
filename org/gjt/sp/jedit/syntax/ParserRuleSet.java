@@ -84,6 +84,8 @@ public class ParserRuleSet
 	//{{{ addRule() method
 	public void addRule(ParserRule r)
 	{
+		ruleCount++;
+
 		int key = Character.toUpperCase(r.start[0])
 			% RULE_BUCKET_COUNT;
 		ParserRule last = ruleMapLast[key];
@@ -101,6 +103,12 @@ public class ParserRuleSet
 	{
 		int key = Character.toUpperCase(ch) % RULE_BUCKET_COUNT;
 		return ruleMapFirst[key];
+	} //}}}
+
+	//{{{ getRuleCount() method
+	public int getRuleCount()
+	{
+		return ruleCount;
 	} //}}}
 
 	//{{{ getTerminateChar() method
@@ -215,6 +223,8 @@ public class ParserRuleSet
 	private Hashtable props;
 
 	private KeywordMap keywords;
+
+	private int ruleCount;
 
 	private ParserRule[] ruleMapFirst;
 	private ParserRule[] ruleMapLast;

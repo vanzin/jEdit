@@ -3081,7 +3081,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			defaultMode = jEdit.getMode("text");
 		setMode(defaultMode);
 
-		/*Magic: UNTITLED is only set if newFile param to
+		/* Magic: UNTITLED is only set if newFile param to
 		 * constructor is set, NEW_FILE is also set if file
 		 * doesn't exist on disk.
 		 *

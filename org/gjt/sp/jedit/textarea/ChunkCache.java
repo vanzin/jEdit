@@ -47,7 +47,7 @@ class ChunkCache
 	{
 		this.textArea = textArea;
 		out = new ArrayList();
-		noWrap = new NoWrapTokenHandler();
+		noWrap = new DisplayTokenHandler();
 		softWrap = new SoftWrapTokenHandler();
 	} //}}}
 
@@ -218,6 +218,17 @@ class ChunkCache
 		}
 	} //}}}
 
+	void test()
+	{
+		long start = System.currentTimeMillis();
+		int lineCount = textArea.getBuffer().getLineCount();
+		for(int i = 0; i < lineCount; i++)
+		{
+			lineToChunkList(i,out);
+		}
+		System.err.println(System.currentTimeMillis() - start);
+	}
+
 	//{{{ lineToChunkList() method
 	void lineToChunkList(int physicalLine, ArrayList out)
 	{
@@ -230,6 +241,7 @@ class ChunkCache
 			softWrap.init(textArea.lineSegment,painter.getStyles(),
 				painter.getFontRenderContext(),
 				painter,out,textArea.wrapMargin);
+			softWrap.setMonospacedCharWidth(textArea.charWidth);
 			buffer.markTokens(physicalLine,softWrap);
 		}
 		else
@@ -250,6 +262,7 @@ class ChunkCache
 		noWrap.init(textArea.lineSegment,painter.getStyles(),
 			painter.getFontRenderContext(),
 			painter);
+		//noWrap.setMonospacedCharWidth(textArea.charWidth);
 		buffer.markTokens(physicalLine,noWrap);
 		return noWrap.getChunks();
 	} //}}}
@@ -504,7 +517,7 @@ class ChunkCache
 
 	private boolean needFullRepaint;
 
-	private NoWrapTokenHandler noWrap;
+	private DisplayTokenHandler noWrap;
 	private SoftWrapTokenHandler softWrap;
 	//}}}
 

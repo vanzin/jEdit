@@ -192,15 +192,13 @@ class BufferPrintable extends WorkRequest implements Printable
 		Segment seg = new Segment();
 		double y = 0.0;
 
+		lm = font.getLineMetrics("gGyYX",frc);
+
 print_loop:	for(;;)
 		{
 			//{{{ get line text
 			if(currentLine == lineList.size())
 			{
-				buffer.getLineText(currentPhysicalLine,seg);
-				lm = font.getLineMetrics(seg.array,
-					seg.offset,seg.count,frc);
-
 				lineList.add(new Integer(currentPhysicalLine + 1));
 
 				softWrap.init(seg,styles,frc,e,lineList,
@@ -226,8 +224,7 @@ print_loop:	for(;;)
 				{
 					gfx.setFont(font);
 					gfx.setColor(lineNumberColor);
-					String lineNumberString = String.valueOf(obj);
-					gfx.drawString(lineNumberString,
+					gfx.drawString(String.valueOf(obj),
 						(float)pageX,(float)(pageY + y));
 				} //}}}
 
@@ -238,7 +235,8 @@ print_loop:	for(;;)
 			{
 				Chunk line = (Chunk)obj;
 
-				Chunk.paintChunkList(line,gfx,
+				buffer.getLineText(currentPhysicalLine,seg);
+				Chunk.paintChunkList(seg,line,gfx,
 					(float)(pageX + lineNumberWidth),
 					(float)(pageY + y),
 					Color.white,false);

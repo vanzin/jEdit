@@ -58,7 +58,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	 * Returns the list of chunks.
 	 * @since jEdit 4.1pre1
 	 */
-	public ArrayList getChunks()
+	public ArrayList getChunkList()
 	{
 		return out;
 	} //}}}
@@ -76,27 +76,26 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 	public void handleToken(byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
-		Chunk chunk = (Chunk)createToken(id,offset,length,context);
-		if(chunk != null)
+		Token token = createToken(id,offset,length,context);
+		if(token != null)
 		{
-			Chunk oldLastChunk = (Chunk)lastToken;
+			addToken(token,context);
 
-			chunk.init(seg,expander,x,styles,
-				fontRenderContext,
-				context.rules.getDefault());
-			addToken(chunk,context,false);
-
-			if(id == Token.WHITESPACE)
+			if(id == Token.WHITESPACE
+				|| id == Token.TAB)
 			{
 				if(!seenNonWhitespace)
-					endOfWhitespace = x + chunk.width;
+				{
+					endOfWhitespace = x;
+				}
 			}
 			else
 				seenNonWhitespace = true;
 
 			if(out.size() == initialSize)
 				out.add(firstToken);
-			else if(id == Token.WHITESPACE)
+			else if(id == Token.WHITESPACE
+				|| id == Token.TAB)
 			{
 				if(out.size() != initialSize)
 				{
@@ -104,7 +103,7 @@ public class SoftWrapTokenHandler extends DisplayTokenHandler
 					endX = x;
 				}
 			}
-			else if(x + chunk.width > wrapMargin && end != null
+			else if(x > wrapMargin && end != null
 				&& addedNonWhitespace)
 			{
 				Chunk blankSpace = new Chunk(endOfWhitespace,
