@@ -80,14 +80,11 @@
   </para>
   <sect2><title>Rectangular Selection</title>
    <para>
-    Dragging with the middle mouse button will create a rectangular
-    selection. Holding down
-    <keycap>Shift</keycap> while clicking a location in
-    the buffer with the middle mouse button
-    will create a rectangular selection from the caret position to
-    the clicked location.
-    If you only have a two-button mouse, you can click the left mouse button
-    while holding down <keycap>Alt</keycap> instead of middle-clicking.
+    Dragging with the <keycap>Control</keycap> key held down will create a
+    rectangular selection. Holding down
+    <keycap>Shift</keycap> and <keycap>Control</keycap> while clicking a
+    location in the buffer will create a rectangular selection from the caret
+    position to the clicked location.
    </para>
    <para>
     It is possible to select a rectangle with zero width but non-zero height.
@@ -547,9 +544,20 @@
      selected text at the clicked location.
      If you only have a two-button mouse, you can click the left mouse button
      while holding down <keycap>Alt</keycap> instead of middle-clicking.
+    </para>
+    <para>
+     Internally, this is implemented by storing the most recently selected text
+     in the <filename>%</filename> register (recall that registers have
+     single-character names).
+    </para>
+    <para>
+     If jEdit is being run under Java 2 version 1.4 on Unix, you will be
+     able to transfer text with other X Windows applications using the
+     quick copy feature. On other platforms and Java versions, the contents
+     of the quick copy register are only accessable from within jEdit.
     </para></listitem>
     <listitem><para>
-     Dragging with the <keycap>Control</keycap> key held down
+     Dragging with the middle mouse button
      creates a selection without moving the
      caret. As soon as the mouse button is released, the selected text is
      inserted at the caret position and the selection is deactivated.
@@ -557,19 +565,6 @@
      remind you that this is not an ordinary selection.
     </para></listitem>
    </itemizedlist>
-   <para>
-    Internally, this is implemented by storing the most recently selected text
-    in the <filename>%</filename> register (recall that registers have
-    single-character names).
-   </para>
-   <sidebar><title>X Windows primary selection</title>
-    <para>
-     If jEdit is being run under Java 2 version 1.4 on Unix, you will be
-     able to transfer text with other X Windows applications using the
-     quick copy feature. On other platforms and Java versions, the contents
-     of the quick copy register are only accessable from within jEdit.
-    </para>
-   </sidebar>
   </sect2>
   <sect2><title>General Register Commands</title>
    <para>

@@ -26,21 +26,15 @@ TO DO
 - vertical scrollbar w/ soft wrap wrong
 - fix up/down arrow keys
 - fix page up/page down
-- use new offset conversion API throughout
-- test dir replace all and save all
-- switching buffers: horiz scroll bar not updated?
 - save to X:filename on Windows
-- chunk cache & scrolling optimization
 - jdk 1.4: popups in wrong location
 - updateChunksUpTo() called too many times
 - sort mode list and put xml near the start so that xhtml files with the
   .html extension are opened in xml mode
-- see if disabling DTDs improves startup performance
 - plugin manager's progress bar: max value is download size
 - removing a plugin should offer to remove the ones that depend on it too
 - installing source for already installed plugins is not possible: 'hide
   already installed' checkbox in install plugins dialog box
-- optimise repaining, key insertion
 - better formatting commands: - document in 'manual wrap' subsect of
   'word wrap'
   - format becomes 'wrap paragraph'
@@ -69,7 +63,6 @@ TO DO
 - XModeHandler: better error reporting
 - add index terms throughout user's guide!
 - plugin manager needs overhauled error reporting
-- make text area's buffer event handler faster
 - API guide: compareStrings(), showPopupMenu()
 - MiscUtilities path name methods need to be documented
 - plugin guide: mention fully qualified class names

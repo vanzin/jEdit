@@ -177,7 +177,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 		prefSize.width = 0;
 		pathField.setPreferredSize(prefSize);
 		pathField.addActionListener(actionHandler);
-		pathField.addFocusListener(new FocusHandler());
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
 
@@ -1123,16 +1122,6 @@ public class VFSBrowser extends JPanel implements EBComponent
 				mkdir();
 			else if(source == searchInDirectory)
 				searchInDirectory();
-		}
-	} //}}}
-
-	//{{{ FocusHandler class
-	class FocusHandler extends FocusAdapter
-	{
-		public void focusLost(FocusEvent evt)
-		{
-			if(!requestRunning && !pathField.getText().equals(path))
-				pathField.setText(path);
 		}
 	} //}}}
 

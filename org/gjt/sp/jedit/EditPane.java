@@ -472,7 +472,12 @@ public class EditPane extends JPanel implements EBComponent
 			 * are not supported. Instead, it waits for the subsequent
 			 * 'Untitled' file creation. */
 			if(buffer.isClosed())
+			{
 				setBuffer(jEdit.getFirstBuffer());
+				// since recentBuffer will be set to the one that
+				// was closed
+				recentBuffer = null;
+			}
 		}
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{

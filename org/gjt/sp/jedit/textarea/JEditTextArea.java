@@ -267,7 +267,7 @@ public class JEditTextArea extends JComponent
 				setFirstLine(0);
 
 				selectNone();
-				caretLine = caret = 0;
+				caretLine = caret = caretScreenLine = 0;
 				bracketLine = bracketPosition = -1;
 
 				this.buffer._releaseFoldVisibilityManager(foldVisibilityManager);
@@ -554,6 +554,20 @@ public class JEditTextArea extends JComponent
 	 */
 	public void scrollToCaret(boolean doElectricScroll)
 	{
+		scrollTo(caretLine,caret - buffer.getLineStartOffset(caretLine),
+			doElectricScroll);
+	} //}}}
+
+	//{{{ scrollTo() method
+	/**
+	 * Ensures that the specified location in the buffer is visible.
+	 * @param line The line number
+	 * @param offset The offset from the start of the line
+	 * @param doElectricScroll If true, electric scrolling will be performed
+	 * @since jEdit 4.0pre6
+	 */
+	public void scrollTo(int line, int offset, boolean doElectricScroll)
+	{
 		int _electricScroll = (doElectricScroll ? electricScroll : 0);
 
 		// visibleLines == 0 before the component is realized
@@ -562,13 +576,12 @@ public class JEditTextArea extends JComponent
 		if(visibleLines == 0)
 		{
 			setFirstLine(physicalToVirtual(
-				Math.max(0,caretLine - _electricScroll)));
+				Math.max(0,line - _electricScroll)));
 			return;
 		}
 
 		//{{{ STAGE 1 -- determine if the caret is visible.
-		int screenLine = getScreenLineOfOffset(caret);
-		int offset = caret - getLineStartOffset(caretLine);
+		int screenLine = getScreenLineOfOffset(buffer.getLineStartOffset(line) + offset);
 		Point point;
 		if(screenLine != -1)
 		{
@@ -579,7 +592,7 @@ public class JEditTextArea extends JComponent
 				painter.getWidth(),visibleLines * height
 				- height * _electricScroll * 2);
 
-			point = offsetToXY(caretLine,offset,returnValue);
+			point = offsetToXY(line,offset,returnValue);
 			if(rect.contains(point))
 				return;
 		}
@@ -590,13 +603,13 @@ public class JEditTextArea extends JComponent
 		//{{{ STAGE 2 -- scroll vertically
 		if(screenLine == -1)
 		{
-			int virtualCaretLine = foldVisibilityManager.physicalToVirtual(caretLine);
-			if(virtualCaretLine == firstLine - 1)
+			int virtualLine = foldVisibilityManager.physicalToVirtual(line);
+			if(virtualLine == firstLine - 1)
 			{
 				firstLine = Math.max(0,firstLine - _electricScroll - 1);
 				physFirstLine = foldVisibilityManager.virtualToPhysical(firstLine);
 			}
-			else if(virtualCaretLine == firstLine + visibleLines + 1)
+			else if(virtualLine == firstLine + visibleLines + 1)
 			{
 				firstLine = Math.max(0,
 					Math.min(
@@ -606,7 +619,7 @@ public class JEditTextArea extends JComponent
 			}
 			else
 			{
-				physFirstLine = caretLine;
+				physFirstLine = line;
 
 				ArrayList out = new ArrayList();
 				int count = 0;
@@ -654,7 +667,7 @@ public class JEditTextArea extends JComponent
 		recalculateLastPhysicalLine();
 
 		if(point == null)
-			point = offsetToXY(caretLine,offset,returnValue);
+			point = offsetToXY(line,offset,returnValue);
 		//}}}
 
 		//{{{ STAGE 3 -- scroll horizontally
@@ -888,6 +901,14 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateScreenLineRange(int start, int end)
 	{
+		if(chunkCache.needFullRepaint())
+		{
+			recalculateLastPhysicalLine();
+			gutter.repaint();
+			painter.repaint();
+			return;
+		}
+
 		if(start > end)
 		{
 			int tmp = end;
@@ -2000,10 +2021,7 @@ forward_scan:		do
 
 		if(caret == newCaret)
 		{
-			// so that C+y <marker>, for example, will return
-			// to the saved location even if the caret was
-			// never moved but the user scrolled instead
-			scrollToCaret(doElectricScroll);
+			finishCaretUpdate(doElectricScroll);
 			return;
 		}
 
@@ -2026,17 +2044,23 @@ forward_scan:		do
 				foldVisibilityManager.expandFold(newCaretLine,false);
 		}
 
-		invalidateLineRange(caretLine,newCaretLine);
+		if(caretLine == newCaretLine)
+		{
+			if(caretScreenLine != -1)
+				invalidateScreenLineRange(caretScreenLine,caretScreenLine);
+		}
+		else
+		{
+			caretScreenLine = chunkCache.getScreenLineOfOffset(newCaretLine,
+				newCaret - buffer.getLineStartOffset(newCaretLine));
+			invalidateLineRange(caretLine,newCaretLine);
+		}
 
 		caret = newCaret;
 		caretLine = newCaretLine;
 
 		if(focusedComponent == this)
-			scrollToCaret(doElectricScroll);
-
-		updateBracketHighlight();
-
-		fireCaretEvent();
+			finishCaretUpdate(doElectricScroll);
 	} //}}}
 
 	//{{{ getCaretPosition() method
@@ -4263,9 +4287,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(!buffer.isEditable())
 			getToolkit().beep();
 		else
-		{
 			buffer.shiftIndentRight(getSelectedLines());
-		}
 	} //}}}
 
 	//{{{ joinLines() method
@@ -4933,6 +4955,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	private int caret;
 	private int caretLine;
+	private int caretScreenLine;
 
 	private int bracketPosition;
 	private int bracketLine;
@@ -4943,6 +4966,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean overwrite;
 
 	private int maxLineLen;
+
+	// see moveCaretPosition()
+	private boolean queuedScrollTo;
 	//}}}
 
 	//{{{ _addToSelection() method
@@ -5053,6 +5079,36 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				lineSegment.offset,
 				lineSegment.count);
 		}
+	} //}}}
+
+	//{{{ finishCaretUpdate() method
+	/**
+	 * the collapsing of scrolling/event firing inside compound edits
+	 * greatly speeds up replace-all.
+	 */
+	private void finishCaretUpdate(final boolean doElectricScroll)
+	{
+		Runnable r = new Runnable()
+		{
+			public void run()
+			{
+				queuedScrollTo = false;
+				scrollToCaret(doElectricScroll);
+				updateBracketHighlight();
+				fireCaretEvent();
+			}
+		};
+
+		if(queuedScrollTo)
+			/* do nothing */;
+		else if(buffer.insideCompoundEdit()
+			|| buffer.isUndoInProgress())
+		{
+			queuedScrollTo = true;
+			SwingUtilities.invokeLater(r);
+		}
+		else
+			r.run();
 	} //}}}
 
 	//{{{ fireCaretEvent() method
@@ -5613,8 +5669,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			// Inserting multiple lines can change the last physical
 			// line due to folds being pushed down and so on
-			if(numLines != 0 || foldVisibilityManager.getLastVisibleLine()
-				- numLines <= physLastLine)
+			if(numLines != 0 || (softWrap
+				&& foldVisibilityManager.getLastVisibleLine()
+				- numLines <= physLastLine))
 			{
 				int oldScreenLastLine = screenLastLine;
 				recalculateLastPhysicalLine();
@@ -5626,11 +5683,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 
 			repaintAndScroll(startLine,numLines);
-
-			if(caret >= start)
-				moveCaretPosition(caret + length,true);
-			else
-				updateBracketHighlight();
 
 			// loop through all selections, resizing them if
 			// necessary
@@ -5657,6 +5709,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(changed)
 					invalidateLineRange(s.startLine,s.endLine);
 			}
+
+			if(caret >= start)
+				moveCaretPosition(caret + length,true);
+			else
+			{
+				// will update bracket highlight
+				moveCaretPosition(caret);
+			}
 		}
 		//}}}
 
@@ -5672,8 +5732,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// -lineCount because they are removed.
 			repaintAndScroll(startLine,-numLines);
 
-			if(/* numLines != 0 && */ foldVisibilityManager.getLastVisibleLine()
-				+ numLines <= physLastLine)
+			if(numLines != 0 || (softWrap
+				&& foldVisibilityManager.getLastVisibleLine()
+				+ numLines <= physLastLine))
 			{
 				int oldScreenLastLine = screenLastLine;
 				recalculateLastPhysicalLine();
@@ -5682,8 +5743,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 
 			int end = start + length;
-
-			boolean caretEvent = false;
 
 			// loop through all selections, resizing them if
 			// necessary
@@ -5696,23 +5755,23 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				if(s.start > start && s.start <= end)
 				{
 					s.start = start;
-					changed = caretEvent = true;
+					changed = true;
 				}
 				else if(s.start > end)
 				{
 					s.start -= length;
-					changed = caretEvent = true;
+					changed = true;
 				}
 
 				if(s.end > start && s.end <= end)
 				{
 					s.end = start;
-					changed = caretEvent = true;
+					changed = true;
 				}
 				else if(s.end > end)
 				{
 					s.end -= length;
-					changed = caretEvent = true;
+					changed = true;
 				}
 
 				if(s.start == s.end)
@@ -5735,10 +5794,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				moveCaretPosition(caret - length,false);
 			else
 			{
-				updateBracketHighlight();
-
-				if(caretEvent)
-					fireCaretEvent();
+				// will update bracket highlight
+				moveCaretPosition(caret);
 			}
 		}
 		//}}}
@@ -5828,23 +5885,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 			}
 
-			quickCopyDrag = isQuickCopyEnabled()
-				&& ((OperatingSystem.isMacOS() && evt.isMetaDown())
-				|| (!OperatingSystem.isMacOS() && evt.isControlDown()));
-
-			if(quickCopyDrag)
-			{
-				view.getStatus().setMessage(jEdit.getProperty(
-					"view.status.quick-copy"));
-				clearStatus = true;
-			}
-			else if((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0)
-			{
-				view.getStatus().setMessage(jEdit.getProperty(
-					"view.status.rect-select"));
-				clearStatus = true;
-			}
-
+			quickCopyDrag = ((evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0);
 			blink = true;
 			invalidateLine(caretLine);
 
@@ -5908,7 +5949,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			}
 
-			quickCopyDrag = false;
 			dragged = false;
 
 			if(clearStatus)
@@ -5969,8 +6009,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			addToSelection(new Selection.Range(lineStart + wordStart,
 				lineStart + wordEnd));
 
-			if(!quickCopyDrag)
-				moveCaretPosition(lineStart + wordEnd,false);
+			if(quickCopyDrag)
+				quickCopyDrag = false;
+
+			moveCaretPosition(lineStart + wordEnd,false);
 
 			// with double clicks, even if nothing extra
 			// selected, still activate quick copy drag code
@@ -5986,10 +6028,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				newCaret));
 
 			if(quickCopyDrag)
-			{
-				// does not work with triple drags
 				quickCopyDrag = false;
-			}
 
 			moveCaretPosition(newCaret);
 		} //}}}
@@ -6010,22 +6049,38 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				setFirstLine(getFirstLine() + 1);
 			}
 
+			boolean rect = (OperatingSystem.isMacOS() && evt.isMetaDown())
+					|| (!OperatingSystem.isMacOS() && evt.isControlDown());
+
+			if(quickCopyDrag)
+			{
+				view.getStatus().setMessage(jEdit.getProperty(
+					"view.status.quick-copy"));
+				clearStatus = true;
+			}
+			else if(evt.isControlDown())
+			{
+				view.getStatus().setMessage(jEdit.getProperty(
+					"view.status.rect-select"));
+				clearStatus = true;
+			}
+
 			switch(clickCount)
 			{
 			case 1:
-				doSingleDrag(evt);
+				doSingleDrag(evt,rect);
 				break;
 			case 2:
-				doDoubleDrag(evt);
+				doDoubleDrag(evt,rect);
 				break;
 			default: //case 3:
-				doTripleDrag(evt);
+				doTripleDrag(evt,rect);
 				break;
 			}
 		} //}}}
 
 		//{{{ doSingleDrag() method
-		private void doSingleDrag(MouseEvent evt)
+		private void doSingleDrag(MouseEvent evt, boolean rect)
 		{
 			int dot = xyToOffset(evt.getX(),
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
@@ -6035,15 +6090,20 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			dragged = true;
 
-			resizeSelection(dragStart,dot,
-				(evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0);
+			resizeSelection(dragStart,dot,rect);
 
 			if(!quickCopyDrag)
 				moveCaretPosition(dot,false);
+			else
+			{
+				// just scroll to the dragged location
+				int line = buffer.getLineOfOffset(dot);
+				scrollTo(line,dot - buffer.getLineStartOffset(line),false);
+			}
 		} //}}}
 
 		//{{{ doDoubleDrag() method
-		private void doDoubleDrag(MouseEvent evt)
+		private void doDoubleDrag(MouseEvent evt, boolean rect)
 		{
 			int markLineStart = getLineStartOffset(dragStartLine);
 			int markLineLength = getLineLength(dragStartLine);
@@ -6094,13 +6154,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				return;
 
 			resizeSelection(markLineStart + mark,lineStart + offset,
-				(evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0);
+				rect);
 			if(!quickCopyDrag)
 				moveCaretPosition(lineStart + offset,false);
 		} //}}}
 
 		//{{{ doTripleDrag() method
-		private void doTripleDrag(MouseEvent evt)
+		private void doTripleDrag(MouseEvent evt, boolean rect)
 		{
 			int offset = xyToOffset(evt.getX(),
 				Math.max(0,Math.min(painter.getHeight(),evt.getY())),
@@ -6133,8 +6193,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			dragged = true;
 
-			resizeSelection(mark,mouse,
-				(evt.getModifiers() & MouseEvent.BUTTON2_MASK) != 0);
+			resizeSelection(mark,mouse,rect);
 			moveCaretPosition(mouse,false);
 		} //}}}
 	} //}}}
