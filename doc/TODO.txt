@@ -8,7 +8,6 @@ TO DO
 - rect select and soft wrap
 - save to X:filename on Windows
 - motif l&f: shortcuts in menu items
-- replace in selection with rectangular selections
 
 - plugin manager needs overhauled error reporting
 - API guide: compareStrings(), showPopupMenu()

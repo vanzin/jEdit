@@ -4036,8 +4036,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 							commentStart);
 						int end = s.getEnd(buffer,j)
 							+ (j == s.endLine
-							? 0
-							: commentStart.length());
+							? 0 : commentStart.length());
 						buffer.insert(end,commentEnd);
 					}
 				}
@@ -5825,7 +5824,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 				boolean changed = false;
 
-				if(s.start >= start)
+				if((s instanceof Selection.Rect && s.start > start)
+					|| (s instanceof Selection.Range && s.start >= start))
 				{
 					s.start += length;
 					s.startLine = getLineOfOffset(s.start);
@@ -6118,21 +6118,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			/* if(buffer.insideCompoundEdit())
 				buffer.endCompoundEdit(); */
 
-			if((OperatingSystem.isMacOS() && evt.isMetaDown())
-				|| (!OperatingSystem.isMacOS() && evt.isControlDown()))
-			{
-				if(!multi)
-					selectNone();
+			boolean control = (OperatingSystem.isMacOS() && evt.isMetaDown())
+				|| (!OperatingSystem.isMacOS() && evt.isControlDown());
 
-				moveCaretPosition(xyToOffset(evt.getX(),
-					evt.getY(),false),false);
-				selectToMatchingBracket();
-			}
-			else if(evt.isShiftDown())
+			if(evt.isShiftDown())
 			{
 				// XXX: getMarkPosition() deprecated!
-				resizeSelection(getMarkPosition(),dragStart,
-					evt.isControlDown());
+				resizeSelection(getMarkPosition(),dragStart,control);
 
 				moveCaretPosition(dragStart,false);
 
@@ -6141,6 +6133,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				dragStart = getMarkPosition();
 				dragStartOffset = dragStart
 					- getLineStartOffset(dragStartLine);
+			}
+			else if(control)
+			{
+				if(!multi)
+					selectNone();
+
+				moveCaretPosition(xyToOffset(evt.getX(),
+					evt.getY(),false),false);
+				selectToMatchingBracket();
 			}
 			else
 			{
