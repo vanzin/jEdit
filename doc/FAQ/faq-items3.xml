@@ -225,6 +225,41 @@
       </qandaentry>
 
 <qandaentry>
+	<question id="text-line-numbers">
+		<para>
+			Is there a way to automatically view line numbers when a buffer is opened?
+		</para>
+	</question>
+	<answer>
+		<para>
+			<guimenuitem>Select Utilities&gt;Global Options</guimenuitem>, and in
+			the <guimenuitem>Gutter</guimenuitem> option pane select
+			the <guimenuitem>Line Numbering</guimenuitem> check box.
+		</para>
+	</answer>
+</qandaentry>
+
+
+<qandaentry>
+	<question id="text-display-lucida">
+		<para>
+			With JDK 1.3 and Lucida Console font I have problems displaying syntax
+			highlighting text. Sometimes the fonts become italicized or bold without any
+			reason.
+		</para>
+	</question>
+	<answer>
+		<para>
+			The Lucida Console font does not come in a bold style. Various platforms and
+			native applications will render the bold style by overprinting, but this appears
+			not to work correctly in your installation. Unfortunately, there is nothing
+			jEdit can do about this, and the best thing to do is to select another font.
+		</para>
+	</answer>
+</qandaentry>
+
+
+<qandaentry>
 	<question id="smart-quote">
 		<para>
 			Does jEdit know smart quotes? In .tex files I would like to use
