@@ -92,6 +92,9 @@
 <MODE NAME="dsssl"		FILE="dsssl.xml"
 				FILE_NAME_GLOB="*.dsl" />
 
+<MODE NAME="embperl"		FILE="embperl.xml"
+				FILE_NAME_GLOB="*.epl"/>
+
 <MODE NAME="erlang"		FILE="erlang.xml"
 				FILE_NAME_GLOB="*.erl"/>
 
