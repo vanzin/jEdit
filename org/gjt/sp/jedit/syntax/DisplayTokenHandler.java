@@ -58,7 +58,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		this.out = out;
 		initialSize = out.size();
 
-		seenNonWhitespace = addedNonWhitespace = false;
+		seenNonWhitespace = false;
 		endX = endOfWhitespace = 0.0f;
 		end = null;
 	} //}}}
@@ -92,54 +92,56 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	public void handleToken(byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
-		Token token = createToken(id,offset,length,context);
-		if(token != null)
+		if(id == Token.END)
 		{
-			addToken(token,context);
+			if(firstToken != null)
+				out.add(merge((Chunk)firstToken));
+			return;
+		}
+
+		Chunk chunk = createChunk(id,offset,length,context);
+		addToken(chunk,context);
+
+		if(wrapMargin != 0.0f)
+		{
+			initChunk(chunk);
+			x += chunk.width;
 
 			if(id == Token.WHITESPACE
 				|| id == Token.TAB)
 			{
-				if(!seenNonWhitespace)
-				{
-					endOfWhitespace = x;
-				}
-			}
-			else
-				seenNonWhitespace = true;
-
-			if(out.size() == initialSize)
-				out.add(firstToken);
-			else if(id == Token.WHITESPACE
-				|| id == Token.TAB)
-			{
-				if(out.size() != initialSize)
+				if(seenNonWhitespace)
 				{
 					end = lastToken;
 					endX = x;
 				}
+				else
+					endOfWhitespace = x;
 			}
-			else if(wrapMargin != 0.0f
-				&& x > wrapMargin
-				&& end != null
-				&& addedNonWhitespace)
+			else
 			{
-				Chunk blankSpace = new Chunk(endOfWhitespace,
-					end.offset + end.length,
-					getParserRuleSet(context));
+				if(x > wrapMargin
+					&& end != null
+					&& seenNonWhitespace)
+				{
+					if(firstToken != null)
+						out.add(merge((Chunk)firstToken));
 
-				blankSpace.next = end.next;
-				end.next = null;
+					firstToken = new Chunk(endOfWhitespace,
+						end.offset + end.length,
+						getParserRuleSet(context));
 
-				x = x - endX + endOfWhitespace;
+					firstToken.next = end.next;
+					end.next = null;
 
-				out.add(blankSpace);
+					x = x - endX + endOfWhitespace;
 
-				end = null;
-				endX = x;
+					end = null;
+					endX = x;
+				}
+
+				seenNonWhitespace = true;
 			}
-
-			addedNonWhitespace = seenNonWhitespace;
 		}
 	} //}}}
 
@@ -159,26 +161,65 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	private Token end;
 
 	private boolean seenNonWhitespace;
-	private boolean addedNonWhitespace;
 	private float endOfWhitespace;
 
 	private int initialSize;
 	//}}}
 
-	//{{{ createToken() method
-	protected Token createToken(byte id, int offset, int length,
+	//{{{ createChunk() method
+	private Chunk createChunk(byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
-		if(id == Token.END)
+		return new Chunk(id,offset,length,
+			getParserRuleSet(context),styles,
+			context.rules.getDefault());
+	} //}}}
+
+	//{{{ initChunk() method
+	protected void initChunk(Chunk chunk)
+	{
+		chunk.init(seg,expander,x,fontRenderContext,charWidth);
+	} //}}}
+
+	//{{{ merge() method
+	private Chunk merge(Chunk first)
+	{
+		if(first == null)
 			return null;
 
-		Chunk chunk = new Chunk(id,offset,length,getParserRuleSet(context));
-		chunk.init(seg,expander,x,styles,fontRenderContext,
-			context.rules.getDefault(),charWidth);
+		Chunk chunk = first;
+		while(chunk.next != null)
+		{
+			Chunk next = (Chunk)chunk.next;
+			if(canMerge(chunk,next))
+			{
+				// in case already initialized; un-initialize it
+				chunk.initialized = false;
+				chunk.length += next.length;
+				chunk.width += next.width;
+				chunk.next = next.next;
+			}
+			else
+			{
+				if(!chunk.initialized)
+					initChunk(chunk);
+				chunk = next;
+			}
+		}
 
-		x += chunk.width;
+		if(!chunk.initialized)
+			initChunk(chunk);
 
-		return chunk;
+		return first;
+	} //}}}
+
+	//{{{ canMerge() method
+	private boolean canMerge(Chunk c1, Chunk c2)
+	{
+		return ((c1.style == c2.style)
+			&& c1.id != Token.TAB
+			&& c2.id != Token.TAB
+			&& c1.accessable && c2.accessable);
 	} //}}}
 
 	//}}}

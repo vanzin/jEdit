@@ -72,6 +72,7 @@ public class UndoManager
 			return false;
 		else
 		{
+			boolean dirty = buffer.isDirty();
 			Edit edit = (Edit)undos.get(--undoPos);
 			int caret = edit.undo();
 			if(caret != -1)
@@ -364,8 +365,6 @@ public class UndoManager
 		int redo()
 		{
 			buffer.remove(offset,length);
-			if(clearDirty)
-				buffer.setDirty(false);
 			return offset;
 		} //}}}
 

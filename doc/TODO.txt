@@ -25,7 +25,7 @@ and quirks that I need to fix eventually.
 - hypersearch refresh
 - activity log: log viewer needs copy, tabs in log entries need to be
   replaced
-- better chunk merging
+- could make non-soft wrap chunk merge even faster!
 - split long lines
 - rect select and trailing whitespace
 - return after collapsed fold: insert line after end of fold

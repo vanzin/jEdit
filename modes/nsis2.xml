@@ -2,348 +2,374 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- 
-Nullsoft Scriptable Installation System mode by Ryan Grove (ryan@wonko.com) 
+<!--
+Nullsoft Scriptable Installation System mode by Ryan Grove (ryan@wonko.com)
 
-I've done my best to make this file complete as of NSIS 2.0b0, but the
+I've done my best to make this file complete as of NSIS 2.0b2, but the
 new NSIS 2 documentation is absolutely horrible and was apparently
 organized by a rabid crack-smoking one-eyed hippopotamus.
 
 If I've left something out, please email me and let me know.
+
+Last modified: 03/12/2003
 -->
 
 <MODE>
-	<PROPS>
-		<PROPERTY NAME="lineComment" VALUE=";" />
-	</PROPS>
+        <PROPS>
+                <PROPERTY NAME="lineComment" VALUE=";" />
+        </PROPS>
 
-	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
-		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
-		
-		<MARK_FOLLOWING TYPE="KEYWORD3">${</MARK_FOLLOWING>
-		<MARK_PREVIOUS TYPE="KEYWORD1" EXCLUDE_MATCH="TRUE">::</MARK_PREVIOUS>
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
-		
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
-			<BEGIN>"</BEGIN>
-			<END>"</END>
-		</SPAN>
-		
-		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
-			<BEGIN>'</BEGIN>
-			<END>'</END>
-		</SPAN>
+        <RULES IGNORE_CASE="TRUE" ESCAPE="$\" HIGHLIGHT_DIGITS="TRUE">
+                <EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
+                <EOL_SPAN TYPE="COMMENT2">#</EOL_SPAN>
 
-		<KEYWORDS>
-			<!-- Global variables -->
-			<KEYWORD3>$0</KEYWORD3> 
-			<KEYWORD3>$1</KEYWORD3>
-			<KEYWORD3>$2</KEYWORD3>
-			<KEYWORD3>$3</KEYWORD3>
-			<KEYWORD3>$4</KEYWORD3>
-			<KEYWORD3>$5</KEYWORD3>
-			<KEYWORD3>$6</KEYWORD3>
-			<KEYWORD3>$7</KEYWORD3>
-			<KEYWORD3>$8</KEYWORD3>
-			<KEYWORD3>$9</KEYWORD3>
-			<KEYWORD3>$INSTDIR</KEYWORD3>
-			<KEYWORD3>$OUTDIR</KEYWORD3>
-			<KEYWORD3>$CMDLINE</KEYWORD3>
-			<KEYWORD3>$LANGUAGE</KEYWORD3>
-			
-			<!-- Local variables -->
-			<KEYWORD3>$R0</KEYWORD3>
-			<KEYWORD3>$R1</KEYWORD3>
-			<KEYWORD3>$R2</KEYWORD3>
-			<KEYWORD3>$R3</KEYWORD3>
-			<KEYWORD3>$R4</KEYWORD3>
-			<KEYWORD3>$R5</KEYWORD3>
-			<KEYWORD3>$R6</KEYWORD3>
-			<KEYWORD3>$R7</KEYWORD3>
-			<KEYWORD3>$R8</KEYWORD3>
-			<KEYWORD3>$R9</KEYWORD3>
-			
-			<!-- Constants -->
-			<KEYWORD3>$PROGRAMFILES</KEYWORD3>
-			<KEYWORD3>$DESKTOP</KEYWORD3>
-			<KEYWORD3>$EXEDIR</KEYWORD3>
-			<KEYWORD3>${NSISDIR}</KEYWORD3>
-			<KEYWORD3>$WINDIR</KEYWORD3>
-			<KEYWORD3>$SYSDIR</KEYWORD3>
-			<KEYWORD3>$TEMP</KEYWORD3>
-			<KEYWORD3>$STARTMENU</KEYWORD3>
-			<KEYWORD3>$SMPROGRAMS</KEYWORD3>
-			<KEYWORD3>$SMSTARTUP</KEYWORD3>
-			<KEYWORD3>$QUICKLAUNCH</KEYWORD3>
-			<KEYWORD3>$HWNDPARENT</KEYWORD3>
-			<KEYWORD3>$PLUGINSDIR</KEYWORD3>
-			<KEYWORD3>$$</KEYWORD3>
-			<KEYWORD3>$\r</KEYWORD3>
-			<KEYWORD3>$\n</KEYWORD3>
-			<KEYWORD3>HKCR</KEYWORD3>
-			<KEYWORD3>HKLM</KEYWORD3>
-			<KEYWORD3>HKCU</KEYWORD3>
-			<KEYWORD3>HKU</KEYWORD3>
-			<KEYWORD3>HKCC</KEYWORD3>
-			<KEYWORD3>HKDD</KEYWORD3>
-			<KEYWORD3>HKPD</KEYWORD3>
-			<KEYWORD3>NORMAL</KEYWORD3>
-			<KEYWORD3>ARCHIVE</KEYWORD3>
-			<KEYWORD3>HIDDEN</KEYWORD3>
-			<KEYWORD3>OFFLINE</KEYWORD3>
-			<KEYWORD3>READONLY</KEYWORD3>
-			<KEYWORD3>SYSTEM</KEYWORD3>
-			<KEYWORD3>TEMPORARY</KEYWORD3>
-			<KEYWORD3>FILE_ATTRIBUTE_NORMAL</KEYWORD3>
-			<KEYWORD3>FILE_ATTRIBUTE_ARCHIVE</KEYWORD3>
-			<KEYWORD3>FILE_ATTRIBUTE_HIDDEN</KEYWORD3>
-			<KEYWORD3>FILE_ATTRIBUTE_OFFLINE</KEYWORD3>
-			<KEYWORD3>FILE_ATTRIBUTE_READONLY</KEYWORD3>
-			<KEYWORD3>FILE_ATTRIBUTE_SYSTEM</KEYWORD3>
-			<KEYWORD3>FILE_ATTRIBUTE_TEMPORARY</KEYWORD3>
-			<KEYWORD3>MB_OK</KEYWORD3>
-			<KEYWORD3>MB_OKCANCEL</KEYWORD3>
-			<KEYWORD3>MB_ABORTRETRYIGNORE</KEYWORD3>
-			<KEYWORD3>MB_RETRYCANCEL</KEYWORD3>
-			<KEYWORD3>MB_YESNO</KEYWORD3>
-			<KEYWORD3>MB_YESNOCANCEL</KEYWORD3>
-			<KEYWORD3>MB_ICONEXCLAMATION</KEYWORD3>
-			<KEYWORD3>MB_ICONINFORMATION</KEYWORD3>
-			<KEYWORD3>MB_ICONQUESTION</KEYWORD3>
-			<KEYWORD3>MB_ICONSTOP</KEYWORD3>
-			<KEYWORD3>MB_TOPMOST</KEYWORD3>
-			<KEYWORD3>MB_SETFOREGROUND</KEYWORD3>
-			<KEYWORD3>MB_RIGHT</KEYWORD3>
-			<KEYWORD3>MB_DEFBUTTON1</KEYWORD3>
-			<KEYWORD3>MB_DEFBUTTON2</KEYWORD3>
-			<KEYWORD3>MB_DEFBUTTON3</KEYWORD3>
-			<KEYWORD3>MB_DEFBUTTON4</KEYWORD3>
-			<KEYWORD3>IDABORT</KEYWORD3>
-			<KEYWORD3>IDCANCEL</KEYWORD3>
-			<KEYWORD3>IDIGNORE</KEYWORD3>
-			<KEYWORD3>IDNO</KEYWORD3>
-			<KEYWORD3>IDOK</KEYWORD3>
-			<KEYWORD3>IDRETRY</KEYWORD3>
-			<KEYWORD3>IDYES</KEYWORD3>
-			
-			<!-- Compiler utility commands -->
-			<KEYWORD1>!include</KEYWORD1>
-			<KEYWORD1>!cd</KEYWORD1>
-			<KEYWORD1>!echo</KEYWORD1>
-			<KEYWORD1>!error</KEYWORD1>
-			<KEYWORD1>!packhdr</KEYWORD1>
-			<KEYWORD1>!system</KEYWORD1>
-			<KEYWORD1>!warning</KEYWORD1>
-			<KEYWORD1>!verbose</KEYWORD1>
-			
-			<!-- Conditional compilation -->
-			<KEYWORD2>!define</KEYWORD2>
-			<KEYWORD2>!ifdef</KEYWORD2>
-			<KEYWORD2>!ifndef</KEYWORD2>
-			<KEYWORD2>!else</KEYWORD2>
-			<KEYWORD2>!endif</KEYWORD2>
-			<KEYWORD2>!insertmacro</KEYWORD2>
-			<KEYWORD2>!macro</KEYWORD2>
-			<KEYWORD2>!macroend</KEYWORD2>
-			<KEYWORD2>!undef</KEYWORD2>
-			
-			<!-- Keywords -->
-			<KEYWORD1>function</KEYWORD1>
-			<KEYWORD1>functionend</KEYWORD1>
-			<KEYWORD1>section</KEYWORD1>
-			<KEYWORD1>sectionend</KEYWORD1>
-			<KEYWORD1>subsection</KEYWORD1>
-			<KEYWORD1>subsectionend</KEYWORD1>
-			
-			<!-- Installer attributes -->
-			<KEYWORD2>addbrandingimage</KEYWORD2>
-			<KEYWORD2>allowrootdirinstall</KEYWORD2>
-			<KEYWORD2>autoclosewindow</KEYWORD2>
-			<KEYWORD2>bggradient</KEYWORD2>
-			<KEYWORD2>brandingtext</KEYWORD2>
-			<KEYWORD2>caption</KEYWORD2>
-			<KEYWORD2>changeui</KEYWORD2>
-			<KEYWORD2>checkbitmap</KEYWORD2>
-			<KEYWORD2>completedtext</KEYWORD2>
-			<KEYWORD2>componenttext</KEYWORD2>
-			<KEYWORD2>crccheck</KEYWORD2>
-			<KEYWORD2>detailsbuttontext</KEYWORD2>
-			<KEYWORD2>dirshow</KEYWORD2>
-			<KEYWORD2>dirtext</KEYWORD2>
-			<KEYWORD2>fileerrortext</KEYWORD2>
-			<KEYWORD2>installbuttontext</KEYWORD2>
-			<KEYWORD2>installcolors</KEYWORD2>
-			<KEYWORD2>installdir</KEYWORD2>
-			<KEYWORD2>installdirregkey</KEYWORD2>
-			<KEYWORD2>instprogressflags</KEYWORD2>
-			<KEYWORD2>insttype</KEYWORD2>
-			<KEYWORD2>licensebkcolor</KEYWORD2>
-			<KEYWORD2>licensedata</KEYWORD2>
-			<KEYWORD2>licensetext</KEYWORD2>
-			<KEYWORD2>loadlanguagefile</KEYWORD2>
-			<KEYWORD2>miscbuttontext</KEYWORD2>
-			<KEYWORD2>name</KEYWORD2>
-			<KEYWORD2>icon</KEYWORD2>
-			<KEYWORD2>outfile</KEYWORD2>
-			<KEYWORD2>plugindir</KEYWORD2>
-			<KEYWORD2>setfont</KEYWORD2>
-			<KEYWORD2>showinstdetails</KEYWORD2>
-			<KEYWORD2>showuninstdetails</KEYWORD2>
-			<KEYWORD2>silentinstall</KEYWORD2>
-			<KEYWORD2>silentuninstall</KEYWORD2>
-			<KEYWORD2>spacetexts</KEYWORD2>
-			<KEYWORD2>subcaption</KEYWORD2>
-			<KEYWORD2>uninstallbuttontext</KEYWORD2>
-			<KEYWORD2>uninstallcaption</KEYWORD2>
-			<KEYWORD2>uninstallicon</KEYWORD2>
-			<KEYWORD2>uninstallsubcaption</KEYWORD2>
-			<KEYWORD2>uninstalltext</KEYWORD2>
-			<KEYWORD2>windowicon</KEYWORD2>
-			<KEYWORD2>xpstyle</KEYWORD2>
-			
-			<!-- Compiler flags -->
-			<KEYWORD2>setcompress</KEYWORD2>
-			<KEYWORD2>setcompressor</KEYWORD2>
-			<KEYWORD2>setdatablockoptimize</KEYWORD2>
-			<KEYWORD2>setdatesave</KEYWORD2>
-			<KEYWORD2>setoverwrite</KEYWORD2>
-			<KEYWORD2>setpluginunload</KEYWORD2>
-			
-			<!-- Sections -->
-			<KEYWORD2>addsize</KEYWORD2>
-			<KEYWORD2>sectionin</KEYWORD2>
-			
-			<!-- Basic instructions -->
-			<KEYWORD2>delete</KEYWORD2>
-			<KEYWORD2>file</KEYWORD2>
-			<KEYWORD2>exec</KEYWORD2>
-			<KEYWORD2>execshell</KEYWORD2>
-			<KEYWORD2>execwait</KEYWORD2>
-			<KEYWORD2>rename</KEYWORD2>
-			<KEYWORD2>rmdir</KEYWORD2>
-			<KEYWORD2>reservefile</KEYWORD2>
-			<KEYWORD2>setoutpath</KEYWORD2>
-			
-			<KEYWORD2>page</KEYWORD2>
-			<KEYWORD2>uninstpage</KEYWORD2>
-			
-			<!-- Registry, INI, file instructions -->
-			<KEYWORD2>deleteinisec</KEYWORD2>
-			<KEYWORD2>deleteinistr</KEYWORD2>
-			<KEYWORD2>deleteregkey</KEYWORD2>
-			<KEYWORD2>deleteregvalue</KEYWORD2>
-			<KEYWORD2>enumregkey</KEYWORD2>
-			<KEYWORD2>enumregvalue</KEYWORD2>
-			<KEYWORD2>expandenvstrings</KEYWORD2>
-			<KEYWORD2>readenvstr</KEYWORD2>
-			<KEYWORD2>readinistr</KEYWORD2>
-			<KEYWORD2>readregdword</KEYWORD2>
-			<KEYWORD2>readregstr</KEYWORD2>
-			<KEYWORD2>writeinistr</KEYWORD2>
-			<KEYWORD2>writeregbin</KEYWORD2>
-			<KEYWORD2>writeregdword</KEYWORD2>
-			<KEYWORD2>writeregstr</KEYWORD2>
-			
-			<!-- General purpose instructions -->
-			<KEYWORD2>callinstdll</KEYWORD2>
-			<KEYWORD2>copyfiles</KEYWORD2>
-			<KEYWORD2>createdirectory</KEYWORD2>
-			<KEYWORD2>createshortcut</KEYWORD2>
-			<KEYWORD2>getdllversion</KEYWORD2>
-			<KEYWORD2>getdllversionlocal</KEYWORD2>
-			<KEYWORD2>getfiletime</KEYWORD2>
-			<KEYWORD2>getfiletimelocal</KEYWORD2>
-			<KEYWORD2>getfullpathname</KEYWORD2>
-			<KEYWORD2>gettempfilename</KEYWORD2>
-			<KEYWORD2>searchpath</KEYWORD2>
-			<KEYWORD2>setfileattributes</KEYWORD2>
-			<KEYWORD2>regdll</KEYWORD2>
-			<KEYWORD2>unregdll</KEYWORD2>
-			
-			<!-- Flow control instructions -->
-			<KEYWORD1>abort</KEYWORD1>
-			<KEYWORD1>call</KEYWORD1>
-			<KEYWORD1>clearerrors</KEYWORD1>
-			<KEYWORD1>getcurrentaddress</KEYWORD1>
-			<KEYWORD1>getfunctionaddress</KEYWORD1>
-			<KEYWORD1>getlabeladdress</KEYWORD1>
-			<KEYWORD1>goto</KEYWORD1>
-			<KEYWORD1>iferrors</KEYWORD1>
-			<KEYWORD1>iffileexists</KEYWORD1>
-			<KEYWORD1>ifrebootflag</KEYWORD1>
-			<KEYWORD1>intcmp</KEYWORD1>
-			<KEYWORD1>intcmpu</KEYWORD1>
-			<KEYWORD1>messagebox</KEYWORD1>
-			<KEYWORD1>return</KEYWORD1>
-			<KEYWORD1>quit</KEYWORD1>
-			<KEYWORD1>seterrors</KEYWORD1>
-			<KEYWORD1>strcmp</KEYWORD1>
-			
-			<!-- File instructions -->
-			<KEYWORD2>fileclose</KEYWORD2>
-			<KEYWORD2>fileopen</KEYWORD2>
-			<KEYWORD2>fileread</KEYWORD2>
-			<KEYWORD2>filereadbyte</KEYWORD2>
-			<KEYWORD2>fileseek</KEYWORD2>
-			<KEYWORD2>filewrite</KEYWORD2>
-			<KEYWORD2>filewritebyte</KEYWORD2>
-			<KEYWORD2>findclose</KEYWORD2>
-			<KEYWORD2>findfirst</KEYWORD2>
-			<KEYWORD2>findnext</KEYWORD2>
-			
-			<!-- Miscellaneous instructions -->
-			<KEYWORD2>initpluginsdir</KEYWORD2>
-			<KEYWORD2>setshellvarcontext</KEYWORD2>
-			<KEYWORD2>sleep</KEYWORD2>
-			
-			<!-- String manipulation instructions -->
-			<KEYWORD2>strcpy</KEYWORD2>
-			<KEYWORD2>strlen</KEYWORD2>
-			
-			<!-- Stack support -->
-			<KEYWORD2>exch</KEYWORD2>
-			<KEYWORD2>pop</KEYWORD2>
-			<KEYWORD2>push</KEYWORD2>
-			
-			<!-- Integer support -->
-			<KEYWORD2>intfmt</KEYWORD2>
-			<KEYWORD2>intop</KEYWORD2>
-			
-			<!-- Reboot instructions -->
-			<KEYWORD2>reboot</KEYWORD2>
-			<KEYWORD2>setrebootflag</KEYWORD2>
-			
-			<!-- Install logging instructions -->
-			<KEYWORD2>logset</KEYWORD2>
-			<KEYWORD2>logtext</KEYWORD2>
-			
-			<!-- Section management -->
-			<KEYWORD2>sectionsetflags</KEYWORD2>
-			<KEYWORD2>sectiongetflags</KEYWORD2>
-			<KEYWORD2>sectionsettext</KEYWORD2>
-			<KEYWORD2>sectiongettext</KEYWORD2>
-			
-			<!-- User interface instructions -->
-			<KEYWORD2>bringtofront</KEYWORD2>
-			<KEYWORD2>createfont</KEYWORD2>
-			<KEYWORD2>detailprint</KEYWORD2>
-			<KEYWORD2>findwindow</KEYWORD2>
-			<KEYWORD2>getdlgitem</KEYWORD2>
-			<KEYWORD2>hidewindow</KEYWORD2>
-			<KEYWORD2>iswindow</KEYWORD2>
-			<KEYWORD2>sendmessage</KEYWORD2>
-			<KEYWORD2>setautoclose</KEYWORD2>
-			<KEYWORD2>setbrandingimage</KEYWORD2>
-			<KEYWORD2>setdetailsview</KEYWORD2>
-			<KEYWORD2>setdetailsprint</KEYWORD2>
-			<KEYWORD2>setstaticbkcolor</KEYWORD2>
-			<KEYWORD2>setwindowlong</KEYWORD2>
-			<KEYWORD2>showwindow</KEYWORD2>
-			
-			<!-- Language instructions -->
-			<KEYWORD2>loadlanguagefile</KEYWORD2>
-			<KEYWORD2>langstring</KEYWORD2>
-			<KEYWORD2>langstringup</KEYWORD2>
-		</KEYWORDS>
-	</RULES>
+                <MARK_FOLLOWING TYPE="KEYWORD3">${</MARK_FOLLOWING>
+                <MARK_PREVIOUS TYPE="KEYWORD1" EXCLUDE_MATCH="TRUE">::</MARK_PREVIOUS>
+                <MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+
+                <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+                        <BEGIN>"</BEGIN>
+                        <END>"</END>
+                </SPAN>
+
+                <SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+                        <BEGIN>'</BEGIN>
+                        <END>'</END>
+                </SPAN>
+
+                <SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
+                        <BEGIN>`</BEGIN>
+                        <END>`</END>
+                </SPAN>
+
+                <KEYWORDS>
+                        <!-- Global variables -->
+                        <KEYWORD3>$0</KEYWORD3>
+                        <KEYWORD3>$1</KEYWORD3>
+                        <KEYWORD3>$2</KEYWORD3>
+                        <KEYWORD3>$3</KEYWORD3>
+                        <KEYWORD3>$4</KEYWORD3>
+                        <KEYWORD3>$5</KEYWORD3>
+                        <KEYWORD3>$6</KEYWORD3>
+                        <KEYWORD3>$7</KEYWORD3>
+                        <KEYWORD3>$8</KEYWORD3>
+                        <KEYWORD3>$9</KEYWORD3>
+                        <KEYWORD3>$INSTDIR</KEYWORD3>
+                        <KEYWORD3>$OUTDIR</KEYWORD3>
+                        <KEYWORD3>$CMDLINE</KEYWORD3>
+                        <KEYWORD3>$LANGUAGE</KEYWORD3>
+
+                        <!-- Local variables -->
+                        <KEYWORD3>$R0</KEYWORD3>
+                        <KEYWORD3>$R1</KEYWORD3>
+                        <KEYWORD3>$R2</KEYWORD3>
+                        <KEYWORD3>$R3</KEYWORD3>
+                        <KEYWORD3>$R4</KEYWORD3>
+                        <KEYWORD3>$R5</KEYWORD3>
+                        <KEYWORD3>$R6</KEYWORD3>
+                        <KEYWORD3>$R7</KEYWORD3>
+                        <KEYWORD3>$R8</KEYWORD3>
+                        <KEYWORD3>$R9</KEYWORD3>
+
+                        <!-- Constants -->
+                        <KEYWORD3>$PROGRAMFILES</KEYWORD3>
+                        <KEYWORD3>$DESKTOP</KEYWORD3>
+                        <KEYWORD3>$EXEDIR</KEYWORD3>
+                        <KEYWORD3>${NSISDIR}</KEYWORD3>
+                        <KEYWORD3>$WINDIR</KEYWORD3>
+                        <KEYWORD3>$SYSDIR</KEYWORD3>
+                        <KEYWORD3>$TEMP</KEYWORD3>
+                        <KEYWORD3>$STARTMENU</KEYWORD3>
+                        <KEYWORD3>$SMPROGRAMS</KEYWORD3>
+                        <KEYWORD3>$SMSTARTUP</KEYWORD3>
+                        <KEYWORD3>$QUICKLAUNCH</KEYWORD3>
+                        <KEYWORD3>$HWNDPARENT</KEYWORD3>
+                        <KEYWORD3>$PLUGINSDIR</KEYWORD3>
+                        <KEYWORD3>$$</KEYWORD3>
+                        <KEYWORD3>$\r</KEYWORD3>
+                        <KEYWORD3>$\n</KEYWORD3>
+                        <KEYWORD3>HKCR</KEYWORD3>
+                        <KEYWORD3>HKLM</KEYWORD3>
+                        <KEYWORD3>HKCU</KEYWORD3>
+                        <KEYWORD3>HKU</KEYWORD3>
+                        <KEYWORD3>HKCC</KEYWORD3>
+                        <KEYWORD3>HKDD</KEYWORD3>
+                        <KEYWORD3>HKPD</KEYWORD3>
+                        <KEYWORD3>NORMAL</KEYWORD3>
+                        <KEYWORD3>ARCHIVE</KEYWORD3>
+                        <KEYWORD3>HIDDEN</KEYWORD3>
+                        <KEYWORD3>OFFLINE</KEYWORD3>
+                        <KEYWORD3>READONLY</KEYWORD3>
+                        <KEYWORD3>SYSTEM</KEYWORD3>
+                        <KEYWORD3>TEMPORARY</KEYWORD3>
+                        <KEYWORD3>FILE_ATTRIBUTE_NORMAL</KEYWORD3>
+                        <KEYWORD3>FILE_ATTRIBUTE_ARCHIVE</KEYWORD3>
+                        <KEYWORD3>FILE_ATTRIBUTE_HIDDEN</KEYWORD3>
+                        <KEYWORD3>FILE_ATTRIBUTE_OFFLINE</KEYWORD3>
+                        <KEYWORD3>FILE_ATTRIBUTE_READONLY</KEYWORD3>
+                        <KEYWORD3>FILE_ATTRIBUTE_SYSTEM</KEYWORD3>
+                        <KEYWORD3>FILE_ATTRIBUTE_TEMPORARY</KEYWORD3>
+                        <KEYWORD3>MB_OK</KEYWORD3>
+                        <KEYWORD3>MB_OKCANCEL</KEYWORD3>
+                        <KEYWORD3>MB_ABORTRETRYIGNORE</KEYWORD3>
+                        <KEYWORD3>MB_RETRYCANCEL</KEYWORD3>
+                        <KEYWORD3>MB_YESNO</KEYWORD3>
+                        <KEYWORD3>MB_YESNOCANCEL</KEYWORD3>
+                        <KEYWORD3>MB_ICONEXCLAMATION</KEYWORD3>
+                        <KEYWORD3>MB_ICONINFORMATION</KEYWORD3>
+                        <KEYWORD3>MB_ICONQUESTION</KEYWORD3>
+                        <KEYWORD3>MB_ICONSTOP</KEYWORD3>
+                        <KEYWORD3>MB_TOPMOST</KEYWORD3>
+                        <KEYWORD3>MB_SETFOREGROUND</KEYWORD3>
+                        <KEYWORD3>MB_RIGHT</KEYWORD3>
+                        <KEYWORD3>MB_DEFBUTTON1</KEYWORD3>
+                        <KEYWORD3>MB_DEFBUTTON2</KEYWORD3>
+                        <KEYWORD3>MB_DEFBUTTON3</KEYWORD3>
+                        <KEYWORD3>MB_DEFBUTTON4</KEYWORD3>
+                        <KEYWORD3>IDABORT</KEYWORD3>
+                        <KEYWORD3>IDCANCEL</KEYWORD3>
+                        <KEYWORD3>IDIGNORE</KEYWORD3>
+                        <KEYWORD3>IDNO</KEYWORD3>
+                        <KEYWORD3>IDOK</KEYWORD3>
+                        <KEYWORD3>IDRETRY</KEYWORD3>
+                        <KEYWORD3>IDYES</KEYWORD3>
+
+                        <!-- Compiler utility commands -->
+                        <KEYWORD1>!addincludedir</KEYWORD1>
+                        <KEYWORD1>!include</KEYWORD1>
+                        <KEYWORD1>!cd</KEYWORD1>
+                        <KEYWORD1>!echo</KEYWORD1>
+                        <KEYWORD1>!error</KEYWORD1>
+                        <KEYWORD1>!packhdr</KEYWORD1>
+                        <KEYWORD1>!system</KEYWORD1>
+                        <KEYWORD1>!warning</KEYWORD1>
+                        <KEYWORD1>!verbose</KEYWORD1>
+
+                        <!-- Conditional compilation -->
+                        <KEYWORD2>!define</KEYWORD2>
+                        <KEYWORD2>!ifdef</KEYWORD2>
+                        <KEYWORD2>!ifndef</KEYWORD2>
+                        <KEYWORD2>!else</KEYWORD2>
+                        <KEYWORD2>!endif</KEYWORD2>
+                        <KEYWORD2>!insertmacro</KEYWORD2>
+                        <KEYWORD2>!macro</KEYWORD2>
+                        <KEYWORD2>!macroend</KEYWORD2>
+                        <KEYWORD2>!undef</KEYWORD2>
+
+                        <!-- Keywords -->
+                        <KEYWORD1>function</KEYWORD1>
+                        <KEYWORD1>functionend</KEYWORD1>
+                        <KEYWORD1>section</KEYWORD1>
+                        <KEYWORD1>sectionend</KEYWORD1>
+                        <KEYWORD1>subsection</KEYWORD1>
+                        <KEYWORD1>subsectionend</KEYWORD1>
+
+                        <!-- Installer attributes -->
+                        <KEYWORD2>addbrandingimage</KEYWORD2>
+                        <KEYWORD2>allowrootdirinstall</KEYWORD2>
+                        <KEYWORD2>autoclosewindow</KEYWORD2>
+                        <KEYWORD2>bggradient</KEYWORD2>
+                        <KEYWORD2>brandingtext</KEYWORD2>
+                        <KEYWORD2>caption</KEYWORD2>
+                        <KEYWORD2>changeui</KEYWORD2>
+                        <KEYWORD2>checkbitmap</KEYWORD2>
+                        <KEYWORD2>completedtext</KEYWORD2>
+                        <KEYWORD2>componenttext</KEYWORD2>
+                        <KEYWORD2>crccheck</KEYWORD2>
+                        <KEYWORD2>detailsbuttontext</KEYWORD2>
+                        <KEYWORD2>dirshow</KEYWORD2>
+                        <KEYWORD2>dirtext</KEYWORD2>
+                        <KEYWORD2>fileerrortext</KEYWORD2>
+                        <KEYWORD2>installbuttontext</KEYWORD2>
+                        <KEYWORD2>installcolors</KEYWORD2>
+                        <KEYWORD2>installdir</KEYWORD2>
+                        <KEYWORD2>installdirregkey</KEYWORD2>
+                        <KEYWORD2>instprogressflags</KEYWORD2>
+                        <KEYWORD2>insttype</KEYWORD2>
+                        <KEYWORD2>licensebkcolor</KEYWORD2>
+                        <KEYWORD2>licensedata</KEYWORD2>
+                        <KEYWORD2>licensetext</KEYWORD2>
+                        <KEYWORD2>loadlanguagefile</KEYWORD2>
+                        <KEYWORD2>miscbuttontext</KEYWORD2>
+                        <KEYWORD2>name</KEYWORD2>
+                        <KEYWORD2>icon</KEYWORD2>
+                        <KEYWORD2>outfile</KEYWORD2>
+                        <KEYWORD2>plugindir</KEYWORD2>
+                        <KEYWORD2>setfont</KEYWORD2>
+                        <KEYWORD2>showinstdetails</KEYWORD2>
+                        <KEYWORD2>showuninstdetails</KEYWORD2>
+                        <KEYWORD2>silentinstall</KEYWORD2>
+                        <KEYWORD2>silentuninstall</KEYWORD2>
+                        <KEYWORD2>spacetexts</KEYWORD2>
+                        <KEYWORD2>subcaption</KEYWORD2>
+                        <KEYWORD2>uninstallbuttontext</KEYWORD2>
+                        <KEYWORD2>uninstallcaption</KEYWORD2>
+                        <KEYWORD2>uninstallicon</KEYWORD2>
+                        <KEYWORD2>uninstallsubcaption</KEYWORD2>
+                        <KEYWORD2>uninstalltext</KEYWORD2>
+                        <KEYWORD2>windowicon</KEYWORD2>
+                        <KEYWORD2>xpstyle</KEYWORD2>
+
+                        <!-- Compiler flags -->
+                        <KEYWORD2>setcompress</KEYWORD2>
+                        <KEYWORD2>setcompressor</KEYWORD2>
+                        <KEYWORD2>setdatablockoptimize</KEYWORD2>
+                        <KEYWORD2>setdatesave</KEYWORD2>
+                        <KEYWORD2>setoverwrite</KEYWORD2>
+                        <KEYWORD2>setpluginunload</KEYWORD2>
+
+                        <!-- Sections -->
+                        <KEYWORD2>addsize</KEYWORD2>
+                        <KEYWORD2>sectionin</KEYWORD2>
+
+                        <!-- Basic instructions -->
+                        <KEYWORD2>delete</KEYWORD2>
+                        <KEYWORD2>file</KEYWORD2>
+                        <KEYWORD2>exec</KEYWORD2>
+                        <KEYWORD2>execshell</KEYWORD2>
+                        <KEYWORD2>execwait</KEYWORD2>
+                        <KEYWORD2>rename</KEYWORD2>
+                        <KEYWORD2>rmdir</KEYWORD2>
+                        <KEYWORD2>reservefile</KEYWORD2>
+                        <KEYWORD2>setoutpath</KEYWORD2>
+
+                        <KEYWORD2>page</KEYWORD2>
+                        <KEYWORD2>uninstpage</KEYWORD2>
+
+                        <!-- Registry, INI, file instructions -->
+                        <KEYWORD2>deleteinisec</KEYWORD2>
+                        <KEYWORD2>deleteinistr</KEYWORD2>
+                        <KEYWORD2>deleteregkey</KEYWORD2>
+                        <KEYWORD2>deleteregvalue</KEYWORD2>
+                        <KEYWORD2>enumregkey</KEYWORD2>
+                        <KEYWORD2>enumregvalue</KEYWORD2>
+                        <KEYWORD2>expandenvstrings</KEYWORD2>
+                        <KEYWORD2>readenvstr</KEYWORD2>
+                        <KEYWORD2>readinistr</KEYWORD2>
+                        <KEYWORD2>readregdword</KEYWORD2>
+                        <KEYWORD2>readregstr</KEYWORD2>
+                        <KEYWORD2>writeinistr</KEYWORD2>
+                        <KEYWORD2>writeregbin</KEYWORD2>
+                        <KEYWORD2>writeregexpandstr</KEYWORD2>
+                        <KEYWORD2>writeregdword</KEYWORD2>
+                        <KEYWORD2>writeregstr</KEYWORD2>
+                        <KEYWORD2>writeuninstaller</KEYWORD2>
+
+                        <!-- General purpose instructions -->
+                        <KEYWORD2>callinstdll</KEYWORD2>
+                        <KEYWORD2>copyfiles</KEYWORD2>
+                        <KEYWORD2>createdirectory</KEYWORD2>
+                        <KEYWORD2>createshortcut</KEYWORD2>
+                        <KEYWORD2>getdllversion</KEYWORD2>
+                        <KEYWORD2>getdllversionlocal</KEYWORD2>
+                        <KEYWORD2>getfiletime</KEYWORD2>
+                        <KEYWORD2>getfiletimelocal</KEYWORD2>
+                        <KEYWORD2>getfullpathname</KEYWORD2>
+                        <KEYWORD2>gettempfilename</KEYWORD2>
+                        <KEYWORD2>searchpath</KEYWORD2>
+                        <KEYWORD2>setfileattributes</KEYWORD2>
+                        <KEYWORD2>regdll</KEYWORD2>
+                        <KEYWORD2>unregdll</KEYWORD2>
+
+                        <!-- Flow control instructions -->
+                        <KEYWORD1>abort</KEYWORD1>
+                        <KEYWORD1>call</KEYWORD1>
+                        <KEYWORD1>clearerrors</KEYWORD1>
+                        <KEYWORD1>getcurrentaddress</KEYWORD1>
+                        <KEYWORD1>getfunctionaddress</KEYWORD1>
+                        <KEYWORD1>getlabeladdress</KEYWORD1>
+                        <KEYWORD1>goto</KEYWORD1>
+                        <KEYWORD1>iferrors</KEYWORD1>
+                        <KEYWORD1>iffileexists</KEYWORD1>
+                        <KEYWORD1>ifrebootflag</KEYWORD1>
+                        <KEYWORD1>intcmp</KEYWORD1>
+                        <KEYWORD1>intcmpu</KEYWORD1>
+                        <KEYWORD1>messagebox</KEYWORD1>
+                        <KEYWORD1>return</KEYWORD1>
+                        <KEYWORD1>quit</KEYWORD1>
+                        <KEYWORD1>seterrors</KEYWORD1>
+                        <KEYWORD1>strcmp</KEYWORD1>
+
+                        <!-- File instructions -->
+                        <KEYWORD2>fileclose</KEYWORD2>
+                        <KEYWORD2>fileopen</KEYWORD2>
+                        <KEYWORD2>fileread</KEYWORD2>
+                        <KEYWORD2>filereadbyte</KEYWORD2>
+                        <KEYWORD2>fileseek</KEYWORD2>
+                        <KEYWORD2>filewrite</KEYWORD2>
+                        <KEYWORD2>filewritebyte</KEYWORD2>
+                        <KEYWORD2>findclose</KEYWORD2>
+                        <KEYWORD2>findfirst</KEYWORD2>
+                        <KEYWORD2>findnext</KEYWORD2>
+
+                        <!-- Miscellaneous instructions -->
+                        <KEYWORD2>initpluginsdir</KEYWORD2>
+                        <KEYWORD2>setshellvarcontext</KEYWORD2>
+                        <KEYWORD2>sleep</KEYWORD2>
+
+                        <!-- String manipulation instructions -->
+                        <KEYWORD2>strcpy</KEYWORD2>
+                        <KEYWORD2>strlen</KEYWORD2>
+
+                        <!-- Stack support -->
+                        <KEYWORD2>exch</KEYWORD2>
+                        <KEYWORD2>pop</KEYWORD2>
+                        <KEYWORD2>push</KEYWORD2>
+
+                        <!-- Integer support -->
+                        <KEYWORD2>intfmt</KEYWORD2>
+                        <KEYWORD2>intop</KEYWORD2>
+
+                        <!-- Reboot instructions -->
+                        <KEYWORD2>reboot</KEYWORD2>
+                        <KEYWORD2>setrebootflag</KEYWORD2>
+
+                        <!-- Install logging instructions -->
+                        <KEYWORD2>logset</KEYWORD2>
+                        <KEYWORD2>logtext</KEYWORD2>
+
+                        <!-- Section management -->
+                        <KEYWORD2>sectionsetflags</KEYWORD2>
+                        <KEYWORD2>sectiongetflags</KEYWORD2>
+                        <KEYWORD2>sectionsettext</KEYWORD2>
+                        <KEYWORD2>sectiongettext</KEYWORD2>
+
+                        <!-- User interface instructions -->
+                        <KEYWORD2>bringtofront</KEYWORD2>
+                        <KEYWORD2>createfont</KEYWORD2>
+                        <KEYWORD2>detailprint</KEYWORD2>
+                        <KEYWORD2>findwindow</KEYWORD2>
+                        <KEYWORD2>getdlgitem</KEYWORD2>
+                        <KEYWORD2>hidewindow</KEYWORD2>
+                        <KEYWORD2>iswindow</KEYWORD2>
+                        <KEYWORD2>sendmessage</KEYWORD2>
+                        <KEYWORD2>setautoclose</KEYWORD2>
+                        <KEYWORD2>setbrandingimage</KEYWORD2>
+                        <KEYWORD2>setdetailsview</KEYWORD2>
+                        <KEYWORD2>setdetailsprint</KEYWORD2>
+                        <KEYWORD2>setstaticbkcolor</KEYWORD2>
+                        <KEYWORD2>setwindowlong</KEYWORD2>
+                        <KEYWORD2>showwindow</KEYWORD2>
+
+                        <!-- Language instructions -->
+                        <KEYWORD2>loadlanguagefile</KEYWORD2>
+                        <KEYWORD2>langstring</KEYWORD2>
+                        <KEYWORD2>langstringup</KEYWORD2>
+
+                        <!-- Callback functions -->
+                        <KEYWORD3>.onguiinit</KEYWORD3>
+                        <KEYWORD3>.oninit</KEYWORD3>
+                        <KEYWORD3>.oninstfailed</KEYWORD3>
+                        <KEYWORD3>.oninstsuccess</KEYWORD3>
+                        <KEYWORD3>.onmouseoversection</KEYWORD3>
+                        <KEYWORD3>.onselchange</KEYWORD3>
+                        <KEYWORD3>.onuserabort</KEYWORD3>
+                        <KEYWORD3>.onverifyinstdir</KEYWORD3>
+                        <KEYWORD3>un.onguiinit</KEYWORD3>
+                        <KEYWORD3>un.oninit</KEYWORD3>
+                        <KEYWORD3>un.onuninstfailed</KEYWORD3>
+                        <KEYWORD3>un.onuninstsuccess</KEYWORD3>
+                        <KEYWORD3>un.onuserabort</KEYWORD3>
+                </KEYWORDS>
+        </RULES>
 </MODE>
