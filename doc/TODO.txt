@@ -3,8 +3,8 @@ TO DO
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
-- click in parent directory list loses focus
-- jdk 1.3 action bar problem
+- one line rect sel: strange insert behavior
+- s&r dialog: if selection selected and no selection, warn
 - auto indent: don't de-indent on enter if no leading indent at all?
 - update quicknotepad docs
 - actions/dockables eval: should use own namespace?
@@ -13,7 +13,7 @@ and quirks that I need to fix eventually.
   - titles in search are fucked
   - FAQ: better titles
 - new macro handler api
-- new bracket matching; use interface to determine match
+- click to select bracket in gutter doesn't work
 
 - shift+enter jams translator
 - A+`: inserts in text area

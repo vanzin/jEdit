@@ -1,4 +1,4 @@
-,###
+###
 ### jEdit global properties
 ### :tabSize=8:indentSize=8:noTabs=false:
 ### :folding=explicit:collapseFolds=1:
@@ -174,8 +174,8 @@ view.lineHighlight=true
 view.lineHighlightColor=#ffffe0
 
 # Bracket highlighting
-view.bracketHighlight=true
-view.bracketHighlightColor=#000000
+view.structureHighlight=true
+view.structureHighlightColor=#000000
 
 # EOL markers
 view.eolMarkers=true
@@ -222,8 +222,8 @@ view.gutter.highlightColor=#990066
 view.gutter.currentLineColor=#ff0033
 
 # Gutter bracket highlighting
-view.gutter.bracketHighlight=true
-view.gutter.bracketHighlightColor=#666699
+view.gutter.structureHighlight=true
+view.gutter.structureHighlightColor=#666699
 
 # Gutter marker highlight color
 view.gutter.markerColor=#ccffcc
@@ -268,9 +268,9 @@ view.gutter.foldClick=toggle-fold
 view.gutter.SfoldClick=toggle-fold-fully
 view.gutter.CfoldClick=select-fold
 view.gutter.AfoldClick=narrow-fold
-view.gutter.bracketClick=match-bracket
-view.gutter.CbracketClick=select-bracket
-view.gutter.AbracketClick=narrow-bracket
+view.gutter.structClick=match-struct
+view.gutter.CstructClick=select-struct
+view.gutter.AstructClick=narrow-struct
 #}}}
 
 # Expand abbrevs when space bar pressed

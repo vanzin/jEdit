@@ -420,6 +420,7 @@ class BrowserView extends JPanel
 					if(!GUIUtilities.isPopupTrigger(evt))
 					{
 						browser.setDirectory(dirEntry.path);
+						if(browser.getMode() == VFSBrowser.BROWSER)
 						focusOnFileView();
 					}
 				}

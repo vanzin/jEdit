@@ -439,51 +439,48 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	} //}}}
 
-	//{{{ getBracketHighlightColor() method
+	//{{{ getStructureHighlightColor() method
 	/**
-	 * Returns the bracket highlight color.
+	 * Returns the structure highlight color.
+	 * @since jEdit 4.2pre3
 	 */
-	public final Color getBracketHighlightColor()
+	public final Color getStructureHighlightColor()
 	{
-		return bracketHighlightColor;
+		return structureHighlightColor;
 	} //}}}
 
-	//{{{ setBracketHighlightColor() method
+	//{{{ setStructureHighlightColor() method
 	/**
-	 * Sets the bracket highlight color.
-	 * @param bracketHighlightColor The bracket highlight color
-	 * @since jEdit 4.0pre1
+	 * Sets the structure highlight color.
+	 * @param structureHighlightColor The structure highlight color
+	 * @since jEdit 4.2pre3
 	 */
-	public final void setBracketHighlightColor(Color bracketHighlightColor)
+	public final void setStructureHighlightColor(Color structureHighlightColor)
 	{
-		this.bracketHighlightColor = bracketHighlightColor;
+		this.structureHighlightColor = structureHighlightColor;
 		repaint();
 	} //}}}
 
-	//{{{ isBracketHighlightEnabled() method
+	//{{{ isStructureHighlightEnabled() method
 	/**
-	 * Returns true if bracket highlighting is enabled, false otherwise.
-	 * When bracket highlighting is enabled, the bracket matching the
-	 * one before the caret (if any) is highlighted.
-	 * @since jEdit 4.0pre1
+	 * Returns true if structure highlighting is enabled, false otherwise.
+	 * @since jEdit 4.2pre3
 	 */
-	public final boolean isBracketHighlightEnabled()
+	public final boolean isStructureHighlightEnabled()
 	{
-		return bracketHighlight;
+		return structureHighlight;
 	} //}}}
 
-	//{{{ setBracketHighlightEnabled() method
+	//{{{ setStructureHighlightEnabled() method
 	/**
-	 * Enables or disables bracket highlighting.
-	 * When bracket highlighting is enabled, the bracket matching the
-	 * one before the caret (if any) is highlighted.
-	 * @param bracketHighlight True if bracket highlighting should be
+	 * Enables or disables structure highlighting.
+	 * @param structureHighlight True if structure highlighting should be
 	 * enabled, false otherwise
-	 * @since jEdit 4.0pre1
+	 * @since jEdit 4.2pre3
 	 */
-	public final void setBracketHighlightEnabled(boolean bracketHighlight)
+	public final void setStructureHighlightEnabled(boolean structureHighlight)
 	{
-		this.bracketHighlight = bracketHighlight;
+		this.structureHighlight = structureHighlight;
 		repaint();
 	} //}}}
 
@@ -540,8 +537,8 @@ public class Gutter extends JComponent implements SwingConstants
 	private boolean currentLineHighlightEnabled;
 	private boolean expanded;
 
-	private boolean bracketHighlight;
-	private Color bracketHighlightColor;
+	private boolean structureHighlight;
+	private Color structureHighlightColor;
 
 	private boolean markerHighlight;
 	private Color markerHighlightColor;
@@ -593,14 +590,14 @@ public class Gutter extends JComponent implements SwingConstants
 			}
 		} //}}}
 		//{{{ Paint bracket scope
-		else if(bracketHighlight)
+		else if(structureHighlight)
 		{
-			int bracketLine = textArea.getBracketLine();
+			StructureMatcher.Match match = textArea.getStructureMatch();
 			int caretLine = textArea.getCaretLine();
 
-			if(textArea.isBracketHighlightVisible()
-				&& physicalLine >= Math.min(caretLine,bracketLine)
-				&& physicalLine <= Math.max(caretLine,bracketLine))
+			if(textArea.isStructureHighlightVisible()
+				&& physicalLine >= Math.min(caretLine,match.startLine)
+				&& physicalLine <= Math.max(caretLine,match.startLine))
 			{
 				int caretScreenLine;
 				if(caretLine > textArea.getLastPhysicalLine())
@@ -612,29 +609,29 @@ public class Gutter extends JComponent implements SwingConstants
 						textArea.getCaretPosition());
 				}
 
-				int bracketScreenLine;
-				if(bracketLine > textArea.getLastPhysicalLine())
-					bracketScreenLine = Integer.MAX_VALUE;
+				int structScreenLine;
+				if(match.startLine > textArea.getLastPhysicalLine())
+					structScreenLine = Integer.MAX_VALUE;
 				else
 				{
-					bracketScreenLine = textArea.chunkCache
+					structScreenLine = textArea
 						.getScreenLineOfOffset(
-						bracketLine,
-						textArea.getBracketPosition());
+						match.start);
 				}
 
-				if(caretScreenLine > bracketScreenLine)
+				if(caretScreenLine > structScreenLine)
 				{
 					int tmp = caretScreenLine;
-					caretScreenLine = bracketScreenLine;
-					bracketScreenLine = tmp;
+					caretScreenLine = structScreenLine;
+					structScreenLine = tmp;
 				}
 
-				gfx.setColor(bracketHighlightColor);
-				if(bracketScreenLine == caretScreenLine)
+				gfx.setColor(structureHighlightColor);
+				if(structScreenLine == caretScreenLine)
 				{
 					// do nothing
 				}
+				// draw |^
 				else if(line == caretScreenLine)
 				{
 					gfx.fillRect(5,
@@ -648,7 +645,8 @@ public class Gutter extends JComponent implements SwingConstants
 						2,
 						lineHeight - lineHeight / 2);
 				}
-				else if(line == bracketScreenLine)
+				// draw |_
+				else if(line == structScreenLine)
 				{
 					gfx.fillRect(5,
 						y,
@@ -659,8 +657,9 @@ public class Gutter extends JComponent implements SwingConstants
 						5,
 						2);
 				}
+				// draw |
 				else if(line > caretScreenLine
-					&& line < bracketScreenLine)
+					&& line < structScreenLine)
 				{
 					gfx.fillRect(5,
 						y,
@@ -769,12 +768,12 @@ public class Gutter extends JComponent implements SwingConstants
 					defaultAction = "toggle-fold";
 					variant = "fold";
 				}
-				else if(bracketHighlight
-					&& textArea.isBracketHighlightVisible()
-					&& textArea.lineInBracketScope(line))
+				else if(structureHighlight
+					&& textArea.isStructureHighlightVisible()
+					&& textArea.lineInStructureScope(line))
 				{
-					defaultAction = "match-bracket";
-					variant = "bracket";
+					defaultAction = "match-struct";
+					variant = "struct";
 				}
 				else
 					return;
@@ -787,6 +786,9 @@ public class Gutter extends JComponent implements SwingConstants
 				//}}}
 
 				//{{{ Handle actions
+				StructureMatcher.Match match = textArea
+					.getStructureMatch();
+
 				if(action.equals("select-fold"))
 				{
 					textArea.displayManager.expandFold(line,true);
@@ -820,13 +822,31 @@ public class Gutter extends JComponent implements SwingConstants
 						}
 					}
 				}
-				else if(action.equals("match-bracket"))
-					textArea.goToMatchingBracket();
-				else if(action.equals("select-bracket"))
-					textArea.selectToMatchingBracket();
-				else if(action.equals("narrow-bracket"))
-					textArea.narrowToMatchingBracket();
-				//}}}
+				else if(action.equals("match-struct"))
+				{
+					if(match != null)
+						textArea.setCaretPosition(match.end);
+				}
+				else if(action.equals("select-struct"))
+				{
+					if(match != null)
+					{
+						//XXX
+					}
+				}
+				else if(action.equals("narrow-struct"))
+				{
+					if(match != null)
+					{
+						int start = Math.min(
+							match.startLine,
+							textArea.getCaretLine());
+						int end = Math.max(
+							match.endLine,
+							textArea.getCaretLine());
+						textArea.displayManager.narrow(start,end);
+					}
+				} //}}}
 			}
 		} //}}}
 

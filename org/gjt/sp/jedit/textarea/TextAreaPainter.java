@@ -106,7 +106,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	/**
 	 * Default extension layer. This is above the wrap guide but below the
-	 * bracket highlight.
+	 * structure highlight.
 	 * @since jEdit 4.0pre4
 	 */
 	public static final int DEFAULT_LAYER = 0;
@@ -328,51 +328,63 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			textArea.invalidateSelectedLines();
 	} //}}}
 
-	//{{{ getBracketHighlightColor() method
+	//{{{ getStructureHighlightColor() method
 	/**
-	 * Returns the bracket highlight color.
+	 * Returns the structure highlight color.
+	 * @since jEdit 4.2pre3
 	 */
-	public final Color getBracketHighlightColor()
+	public final Color getStructureHighlightColor()
 	{
-		return bracketHighlightColor;
+		return structureHighlightColor;
 	} //}}}
 
-	//{{{ setBracketHighlightColor() method
+	//{{{ setStructureHighlightColor() method
 	/**
-	 * Sets the bracket highlight color.
-	 * @param bracketHighlightColor The bracket highlight color
+	 * Sets the structure highlight color.
+	 * @param structureHighlightColor The bracket highlight color
+	 * @since jEdit 4.2pre3
 	 */
-	public final void setBracketHighlightColor(Color bracketHighlightColor)
+	public final void setStructureHighlightColor(
+		Color structureHighlightColor)
 	{
-		this.bracketHighlightColor = bracketHighlightColor;
-		if(textArea.getBuffer() != null)
-			textArea.invalidateLine(textArea.getBracketLine());
+		this.structureHighlightColor = structureHighlightColor;
+		StructureMatcher.Match match = textArea.getStructureMatch();
+		if(match != null)
+		{
+			textArea.invalidateLineRange(
+				match.startLine,match.endLine
+			);
+		}
 	} //}}}
 
-	//{{{ isBracketHighlightEnabled() method
+	//{{{ isStructureHighlightEnabled() method
 	/**
-	 * Returns true if bracket highlighting is enabled, false otherwise.
-	 * When bracket highlighting is enabled, the bracket matching the
-	 * one before the caret (if any) is highlighted.
+	 * Returns true if structure highlighting is enabled, false otherwise.
+	 * @since jEdit 4.2pre3
 	 */
-	public final boolean isBracketHighlightEnabled()
+	public final boolean isStructureHighlightEnabled()
 	{
-		return bracketHighlight;
+		return structureHighlight;
 	} //}}}
 
-	//{{{ setBracketHighlightEnabled() method
+	//{{{ setStructureHighlightEnabled() method
 	/**
-	 * Enables or disables bracket highlighting.
-	 * When bracket highlighting is enabled, the bracket matching the
-	 * one before the caret (if any) is highlighted.
-	 * @param bracketHighlight True if bracket highlighting should be
+	 * Enables or disables structure highlighting.
+	 * @param structureHighlight True if structure highlighting should be
 	 * enabled, false otherwise
+	 * @since jEdit 4.2pre3
 	 */
-	public final void setBracketHighlightEnabled(boolean bracketHighlight)
+	public final void setStructureHighlightEnabled(boolean structureHighlight)
 	{
-		this.bracketHighlight = bracketHighlight;
-		if(textArea.getBuffer() != null)
-			textArea.invalidateLine(textArea.getBracketLine());
+		this.structureHighlight = structureHighlight;
+		StructureMatcher.Match match = textArea.getStructureMatch();
+		if(match != null)
+		{
+			textArea.invalidateLineRange(
+				match.startLine,
+				match.endLine
+			);
+		}
 	} //}}}
 
 	//{{{ isBlockCaretEnabled() method
@@ -755,7 +767,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	Color selectionColor;
 	Color multipleSelectionColor;
 	Color lineHighlightColor;
-	Color bracketHighlightColor;
+	Color structureHighlightColor;
 	Color eolMarkerColor;
 	Color wrapGuideColor;
 
@@ -763,7 +775,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	boolean blockCaret;
 	boolean lineHighlight;
-	boolean bracketHighlight;
+	boolean structureHighlight;
 	boolean eolMarkers;
 	boolean wrapGuide;
 	boolean antiAlias;
@@ -800,7 +812,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		addExtension(LINE_BACKGROUND_LAYER,new PaintLineBackground());
 		addExtension(SELECTION_LAYER,new PaintSelection());
 		addExtension(WRAP_GUIDE_LAYER,new PaintWrapGuide());
-		addExtension(BRACKET_HIGHLIGHT_LAYER,new PaintBracketHighlight());
+		addExtension(BRACKET_HIGHLIGHT_LAYER,new StructureMatcher
+			.Highlight(textArea));
 		addExtension(TEXT_LAYER,new PaintText());
 		caretExtension = new PaintCaret();
 	} //}}}
@@ -1110,36 +1123,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 
 			return null;
-		}
-	} //}}}
-
-	//{{{ PaintBracketHighlight class
-	class PaintBracketHighlight extends TextAreaExtension
-	{
-		public void paintValidLine(Graphics2D gfx, int screenLine,
-			int physicalLine, int start, int end, int y)
-		{
-			if(!isBracketHighlightEnabled() || !textArea.isBracketHighlightVisible())
-				return;
-
-			int bracketLine = textArea.getBracketLine();
-			int bracketOffset = textArea.getBracketPosition();
-			if(bracketLine == -1 || bracketOffset == -1)
-				return;
-
-			int bracketLineStart = textArea.getLineStartOffset(bracketLine);
-			if(bracketOffset + bracketLineStart < start
-				|| bracketOffset + bracketLineStart >= end)
-				return;
-
-			textArea.offsetToXY(bracketLine,bracketOffset,textArea.returnValue);
-			gfx.setColor(getBracketHighlightColor());
-			// Hack!!! Since there is no fast way to get the character
-			// from the bracket matching routine, we use ( since all
-			// brackets probably have the same width anyway
-			gfx.drawRect(textArea.returnValue.x,y,(int)gfx.getFont().getStringBounds(
-				"(",getFontRenderContext()).getWidth() - 1,
-				fm.getHeight() - 1);
 		}
 	} //}}}
 

@@ -26,10 +26,12 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -76,11 +78,12 @@ public class JEditTextArea extends JComponent
 		bufferHandler = new BufferChangeHandler();
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
-		bracketLine = bracketPosition = -1;
 		blink = true;
 		lineSegment = new Segment();
 		returnValue = new Point();
-		runnables = new ArrayList();
+		runnables = new LinkedList();
+		structureMatchers = new LinkedList();
+		structureMatchers.add(new StructureMatcher.BracketMatcher());
 		//}}}
 
 		//{{{ Initialize the GUI
@@ -273,7 +276,7 @@ public class JEditTextArea extends JComponent
 
 				selectNone();
 				caretLine = caret = caretScreenLine = 0;
-				bracketLine = bracketPosition = -1;
+				match = null;
 
 				this.buffer.removeBufferChangeListener(bufferHandler);
 			}
@@ -1413,43 +1416,6 @@ public class JEditTextArea extends JComponent
 		selectToMatchingBracket(caret,false);
 	} //}}}
 
-	//{{{ narrowToMatchingBracket() method
-	/**
-	 * Narrows from the bracket at the specified position to the
-	 * corresponding bracket.
-	 * @since jEdit 4.2pre1
-	 */
-	public void narrowToMatchingBracket()
-	{
-		narrowToMatchingBracket(caret);
-	} //}}}
-
-	//{{{ narrowToMatchingBracket() method
-	/**
-	 * Narrows from the bracket at the specified position to the
-	 * corresponding bracket.
-	 * @since jEdit 4.2pre1
-	 */
-	public void narrowToMatchingBracket(int position)
-	{
-		int line = buffer.getLineOfOffset(position);
-		int offset = position - buffer.getLineStartOffset(line);
-
-		if(getLineLength(line) != 0)
-		{
-			int bracket = TextUtilities.findMatchingBracket(buffer,
-				line,Math.max(0,offset - 1));
-
-			if(bracket != -1)
-			{
-				int start = Math.min(bracketLine,line);
-				int end = Math.max(bracketLine,line);
-
-				displayManager.narrow(start,end);
-			}
-		}
-	} //}}}
-
 	//{{{ selectBlock() method
 	/**
 	 * Selects the code block surrounding the caret.
@@ -1537,21 +1503,21 @@ forward_scan:		do
 		moveCaretPosition(end);
 	} //}}}
 
-	//{{{ lineInBracketScope() method
+	//{{{ lineInStructureScope() method
 	/**
 	 * Returns if the specified line is contained in the currently
-	 * matched bracket's scope.
-	 * @since jEdit 4.2pre1
+	 * matched structure's scope.
+	 * @since jEdit 4.2pre3
 	 */
-	public boolean lineInBracketScope(int line)
+	public boolean lineInStructureScope(int line)
 	{
-		if(bracketPosition == -1)
+		if(match == null)
 			return false;
 
-		if(bracketLine < caretLine)
-			return (line >= bracketLine && line <= caretLine);
+		if(match.startLine < caretLine)
+			return (line >= match.startLine && line <= caretLine);
 		else
-			return (line <= bracketLine && line >= caretLine);
+			return (line <= match.endLine && line >= caretLine);
 	} //}}}
 
 	//{{{ invertSelection() method
@@ -1725,7 +1691,7 @@ forward_scan:		do
 		fireCaretEvent();
 	} //}}}
 
-	/* //{{{ removeFromSelection() method
+	//{{{ removeFromSelection() method
 	/**
 	 * Deactivates the selection at the specified offset. If there is
 	 * no selection at that offset, does nothing.
@@ -1745,7 +1711,7 @@ forward_scan:		do
 		invalidateLine(caretLine);
 
 		fireCaretEvent();
-	} //}}} */
+	} //}}}
 
 	//{{{ resizeSelection() method
 	/**
@@ -2012,7 +1978,7 @@ forward_scan:		do
 
 		Integer line;
 
-		Hashtable hash = new Hashtable();
+		Set set = new TreeSet();
 		for(int i = 0; i < selection.size(); i++)
 		{
 			Selection s = (Selection)selection.elementAt(i);
@@ -2023,21 +1989,19 @@ forward_scan:		do
 			for(int j = s.startLine; j <= endLine; j++)
 			{
 				line = new Integer(j);
-				hash.put(line,line);
+				set.add(line);
 			}
 		}
 
-		int[] returnValue = new int[hash.size()];
+		int[] returnValue = new int[set.size()];
 		int i = 0;
 
-		Enumeration keys = hash.keys();
-		while(keys.hasMoreElements())
+		Iterator iter = set.iterator();
+		while(iter.hasNext())
 		{
-			line = (Integer)keys.nextElement();
+			line = (Integer)iter.next();
 			returnValue[i++] = line.intValue();
 		}
-
-		Arrays.sort(returnValue);
 
 		return returnValue;
 	} //}}}
@@ -2056,6 +2020,37 @@ forward_scan:		do
 	//}}}
 
 	//{{{ Caret
+
+	//{{{ addStructureMatcher() method
+	/**
+	 * Adds a structure matcher.
+	 * @since jEdit 4.2pre3
+	 */
+	public void addStructureMatcher(StructureMatcher.Match matcher)
+	{
+		structureMatchers.add(matcher);
+	} //}}}
+
+	//{{{ removeStructureMatcher() method
+	/**
+	 * Removes a structure matcher.
+	 * @since jEdit 4.2pre3
+	 */
+	public void removeStructureMatcher(StructureMatcher.Match matcher)
+	{
+		structureMatchers.remove(matcher);
+	} //}}}
+
+	//{{{ getStructureMatch() method
+	/**
+	 * Returns the structure element (bracket, or XML tag, etc) matching the
+	 * one before the caret.
+	 * @since jEdit 4.2pre3
+	 */
+	public StructureMatcher.Match getStructureMatch()
+	{
+		return match;
+	} //}}}
 
 	//{{{ blinkCaret() method
 	/**
@@ -2152,14 +2147,17 @@ forward_scan:		do
 				+ newCaret);
 		}
 
+		if(match != null)
+		{
+			if(caretLine < match.startLine)
+				invalidateLineRange(caretLine,match.endLine);
+			else
+				invalidateLineRange(match.startLine,caretLine);
+			match = null;
+		}
+
 		if(caret == newCaret)
 		{
-			if(bracketLine != -1)
-			{
-				invalidateLineRange(bracketLine,caretLine);
-				bracketLine = bracketPosition = -1;
-			}
-
 			if(scrollMode == NORMAL_SCROLL)
 				finishCaretUpdate(false,false);
 			else if(scrollMode == ELECTRIC_SCROLL)
@@ -2188,12 +2186,6 @@ forward_scan:		do
 				}
 				else
 					displayManager.expandFold(newCaretLine,false);
-			}
-
-			if(bracketLine != -1)
-			{
-				invalidateLineRange(bracketLine,caretLine);
-				bracketLine = bracketPosition = -1;
 			}
 
 			if(caretLine == newCaretLine)
@@ -2287,26 +2279,6 @@ forward_scan:		do
 	public final void removeCaretListener(CaretListener listener)
 	{
 		listenerList.remove(CaretListener.class,listener);
-	} //}}}
-
-	//{{{ getBracketPosition() method
-	/**
-	 * Returns the position of the highlighted bracket (the bracket
-	 * matching the one before the caret)
-	 */
-	public final int getBracketPosition()
-	{
-		return bracketPosition;
-	} //}}}
-
-	//{{{ getBracketLine() method
-	/**
-	 * Returns the line of the highlighted bracket (the bracket
-	 * matching the one before the caret)
-	 */
-	public final int getBracketLine()
-	{
-		return bracketLine;
 	} //}}}
 
 	//{{{ goToNextBracket() method
@@ -5053,7 +5025,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	boolean queuedScrollTo;
 	boolean queuedScrollToElectric;
 	boolean queuedFireCaretEvent;
-	ArrayList runnables;
+	List runnables;
 
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
@@ -5074,16 +5046,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		return blink && hasFocus();
 	} //}}}
 
-	//{{{ isHighlightVisible() method
+	//{{{ isStructureHighlightVisible() method
 	/**
-	 * Returns true if the bracket highlight is visible, false otherwise.
+	 * Returns true if the structure highlight is visible, false otherwise.
+	 * @since jEdit 4.2pre3
 	 */
-	final boolean isBracketHighlightVisible()
+	final boolean isStructureHighlightVisible()
 	{
-		return bracketLine != -1
+		return match != null
 			&& hasFocus()
-			&& displayManager.isLineVisible(bracketLine)
-			&& displayManager.isLineVisible(caretLine);
+			&& displayManager.isLineVisible(match.startLine)
+			&& displayManager.isLineVisible(match.endLine);
 	} //}}}
 
 	//{{{ updateMaxHorizontalScrollWidth() method
@@ -5188,7 +5161,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private static String TOP = "top";
 
 	private static Timer caretTimer;
-	private static Timer bracketTimer;
+	private static Timer structureTimer;
 	private static JEditTextArea focusedComponent;
 	//}}}
 
@@ -5228,8 +5201,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private int caretLine;
 	private int caretScreenLine;
 
-	private int bracketPosition;
-	private int bracketLine;
+	private List structureMatchers;
+	private StructureMatcher.Match match;
 
 	private int magicCaret;
 
@@ -5549,55 +5522,59 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		GUIUtilities.message(view,"wordcount",args);
 	} //}}}
 
-	//{{{ updateBracketHighlightWithDelay() method
+	//{{{ updateStructureHighlightWithDelay() method
 	private void updateBracketHighlightWithDelay()
 	{
-		bracketTimer.stop();
-		bracketTimer.start();
+		structureTimer.stop();
+		structureTimer.start();
 	} //}}}
 
-	//{{{ updateBracketHighlight() method
-	private void updateBracketHighlight()
+	//{{{ updateStructureHighlight() method
+	private void updateStructureHighlight()
 	{
-		if(!painter.isBracketHighlightEnabled()
-			&& !gutter.isBracketHighlightEnabled())
+		if(!painter.isStructureHighlightEnabled()
+			&& !gutter.isStructureHighlightEnabled())
 			return;
 
-		int offset = caret - getLineStartOffset(caretLine);
-
-		if(offset != 0)
+		Iterator iter = structureMatchers.iterator();
+		while(iter.hasNext())
 		{
-			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,caretLine,offset - 1);
-			if(bracketOffset != -1)
-			{
-				bracketLine = getLineOfOffset(bracketOffset);
-				bracketPosition = bracketOffset
-					- getLineStartOffset(bracketLine);
-				invalidateLineRange(bracketLine,caretLine);
-
-				if(chunkCache.getScreenLineOfOffset(bracketLine,bracketPosition) == -1)
-					showBracketStatusMessage(bracketLine < caretLine);
-				return;
-			}
+			StructureMatcher matcher = (StructureMatcher)
+				iter.next();
+			match = matcher.getMatch(this);
+			if(match != null)
+				break;
 		}
 
-		bracketLine = bracketPosition = -1;
+		if(match != null)
+		{
+			if(caretLine < match.startLine)
+				invalidateLineRange(caretLine,match.endLine);
+			else
+				invalidateLineRange(match.startLine,caretLine);
+
+			if(chunkCache.getScreenLineOfOffset(match.startLine,
+				match.start - getLineStartOffset(match.startLine))
+				== -1)
+			{
+				showStructureStatusMessage(match.startLine < caretLine);
+			}
+		}
 	} //}}}
 
-	//{{{ showBracketStatusMessage() method
-	private void showBracketStatusMessage(boolean backward)
+	//{{{ showStructureStatusMessage() method
+	private void showStructureStatusMessage(boolean backward)
 	{
-		String text = buffer.getLineText(bracketLine).trim();
-		if(backward && bracketLine != 0 && text.length() == 1)
+		String text = buffer.getLineText(match.startLine).trim();
+		if(backward && match.startLine != 0 && text.length() == 1)
 		{
 			switch(text.charAt(0))
 			{
 			case '{': case '}':
 			case '[': case ']':
 			case '(': case ')':
-				text = buffer.getLineText(bracketLine - 1).trim()
-					+ " " + text;
+				text = buffer.getLineText(match.startLine - 1)
+					.trim() + " " + text;
 				break;
 			}
 		}
@@ -5607,7 +5584,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
 			"view.status.bracket",new Object[] { 
-			new Integer(bracketLine), text }));
+			new Integer(match.startLine), text }));
 	} //}}}
 
 	//{{{ recalculateLastPhysicalLine() method
@@ -6132,8 +6109,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				delayedUpdate = false;
 			}
 
-			for(int i = 0; i < runnables.size(); i++)
-				((Runnable)runnables.get(i)).run();
+			Iterator iter = runnables.iterator();
+			while(iter.hasNext())
+				((Runnable)iter.next()).run();
 			runnables.clear();
 		} //}}}
 
@@ -6169,8 +6147,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(bufferChanging)
 				return;
 
-			if(bracketLine != -1)
-				invalidateLineRange(bracketLine,caretLine);
+			if(match != null)
+			{
+				if(caretLine < match.startLine)
+					invalidateLineRange(caretLine,match.endLine);
+				else
+					invalidateLineRange(match.startLine,caretLine);
+			}
 			else
 				invalidateLine(caretLine);
 
@@ -6183,8 +6166,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			if(!isShowing())
 				return;
 
-			if(bracketLine != -1)
-				invalidateLineRange(bracketLine,caretLine);
+			if(match != null)
+			{
+				if(caretLine < match.startLine)
+					invalidateLineRange(caretLine,match.endLine);
+				else
+					invalidateLineRange(match.startLine,caretLine);
+			}
 			else
 				invalidateLine(caretLine);
 		} //}}}
@@ -6658,15 +6646,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		caretTimer.setInitialDelay(500);
 		caretTimer.start();
 
-		bracketTimer = new Timer(200,new ActionListener()
+		structureTimer = new Timer(200,new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
 				if(focusedComponent != null)
-					focusedComponent.updateBracketHighlight();
+					focusedComponent.updateStructureHighlight();
 			}
 		});
-		bracketTimer.setInitialDelay(200);
-		bracketTimer.setRepeats(false);
+		structureTimer.setInitialDelay(200);
+		structureTimer.setRepeats(false);
 	} //}}}
 }
