@@ -2,8 +2,8 @@ JEDIT 4.1 VERSION HISTORY
 
 * Version 4.1pre3
 
-Thanks to Rudolf Widmann and Marco Hunsicker for contributing to this
-release.
+Thanks to Kris Kopicki, Marco Hunsicker and Rudolf Widmann for
+contributing to this release.
 
 + Editing Changes:
 
@@ -12,6 +12,13 @@ release.
   the parameter. This was not very intuitive; now missing parameters
   expand to empty strings, and result in a status bar message being
   shown.
+
++ File System Browser Changes:
+
+- For some reason I can't remember now, the state of the 'Filter' check
+  box was only being saved on the browser, and not the dialog box
+  versions of this control. I have changed this so the state of the
+  check box is preserved in all cases.
 
 + Syntax Highlighting Changes:
 
@@ -47,6 +54,8 @@ release.
   notice to this file, stating that you must invoke the above command
   otherwise the file will be incomplete.
 
+- More tool bar icons added. (Kris Kopicki)
+
 + Bug Fixes:
 
 - Clicking the 'Open' button or pressing Enter in the 'Open File' dialog
@@ -63,6 +72,9 @@ release.
   to a mental asylum because of this bug.
 
 - The file system browser's 'Encoding' menu did not work at all.
+
+- Adding a mode to the user modes directory with the same name as one in
+  the system directory would not take effect until jEdit was restarted.
 
 * Version 4.1pre2
 

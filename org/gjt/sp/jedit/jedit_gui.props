@@ -85,7 +85,8 @@ plugin-manager.icon=Plugins.png
 help.icon=Help.png
 
 #{{{ Icon list for tool bar editor
-icons=ArrowD.png \
+icons=AdjustWidth.png \
+	ArrowD.png \
 	ArrowL.png \
 	ArrowR.png \
 	ArrowU.png \
@@ -108,6 +109,8 @@ icons=ArrowD.png \
 	ParentDir.png \
 	Parse.png \
 	Paste.png \
+	Pause.png \
+	Play.png \
 	Plugins.png \
 	Preferences.png \
 	Print.png \
@@ -115,10 +118,14 @@ icons=ArrowD.png \
 	Redo.png \
 	Reload.png \
 	Save.png \
+	SaveAll.png \
+	SaveAs.png \
 	SplitHorizontal.png \
 	SplitVertical.png \
 	Undo.png \
 	UnSplit.png \
+	ZoomIn.png \
+	ZoomOut.png \
 	Blank24.gif
 #}}}
 
@@ -1799,7 +1806,7 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 
 #{{{ Plugin list download progress
 plugin-list.progress.title=Downloading Plugin List
-plugin-list.progress.caption=Downloading plugin list from server...
+plugin-list.progress.caption=Downloading plugin list from plugins.jedit.org...
 plugin-list.progress.stop=Stop
 #}}}
 
