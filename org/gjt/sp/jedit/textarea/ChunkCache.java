@@ -631,9 +631,6 @@ class ChunkCache
 				// if the line has no text, out.size() == 0
 				if(out.size() == 0)
 				{
-					textArea.displayManager
-						.setScreenLineCount(
-						physicalLine,1);
 					if(i == 0)
 					{
 						if(textArea.displayManager.firstLine.skew > 0)
@@ -651,9 +648,6 @@ class ChunkCache
 				// otherwise, the number of subregions
 				else
 				{
-					textArea.displayManager
-						.setScreenLineCount(
-						physicalLine,out.size());
 					if(i == 0)
 					{
 						int skew = textArea.displayManager.firstLine.skew;
