@@ -95,8 +95,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		box.add(encoding);
 		box.add(Box.createHorizontalStrut(3));
 
-		FontMetrics fm = getToolkit().getFontMetrics(
-			UIManager.getFont("Label.font"));
+		FontMetrics fm = getFontMetrics(UIManager.getFont("Label.font"));
 
 		foldMode = new JLabel();
 		foldMode.setHorizontalAlignment(SwingConstants.CENTER);

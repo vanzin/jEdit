@@ -3684,6 +3684,12 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		}
 
 		int level = buffer.getFoldLevel(line);
+		if(level == 0)
+		{
+			// so that it always just finds the first fold
+			level = Integer.MAX_VALUE;
+		}
+
 		int nextFold = -1;
 		for(int i = caretLine + 1; i < buffer.getLineCount(); i++)
 		{
@@ -4980,25 +4986,21 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(offset != 0)
 		{
-			int endLine;
-			if(visibleLines == 0)
-				endLine = buffer.getLineCount();
-			else
-			{
-				endLine = virtualToPhysical(
-					Math.min(foldVisibilityManager
-					.getVirtualLineCount() - 1,
-					firstLine + visibleLines));
-			}
-
-			// performance hack: don't scan forward too far, so that
-			// typing a new { for example doesn't parse entire buffer
 			int bracketOffset = TextUtilities.findMatchingBracket(
-				buffer,caretLine,offset - 1,0,Math.max(
-				endLine,Math.min(buffer.getLineCount() - 1,
-				caretLine + 500)));
+				buffer,caretLine,offset - 1,0,buffer.getLineCount() - 1);
 			if(bracketOffset != -1)
 			{
+				int endLine;
+				if(visibleLines == 0)
+					endLine = buffer.getLineCount();
+				else
+				{
+					endLine = virtualToPhysical(
+						Math.min(foldVisibilityManager
+						.getVirtualLineCount() - 1,
+						firstLine + visibleLines));
+				}
+
 				bracketLine = getLineOfOffset(bracketOffset);
 				bracketPosition = bracketOffset
 					- getLineStartOffset(bracketLine);

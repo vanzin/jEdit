@@ -1,5 +1,8 @@
 /*
  * TextAreaOptionPane.java - Text area options panel
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1998, 1999, 2000 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -19,18 +22,22 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.FontSelector;
 import org.gjt.sp.jedit.*;
+//}}}
 
 public class TextAreaOptionPane extends AbstractOptionPane
 {
+	//{{{ TextAreaOptionPane constructor
 	public TextAreaOptionPane()
 	{
 		super("textarea");
-	}
+	} //}}}
 
+	//{{{ _init() method
 	public void _init()
 	{
 		/* Font */
@@ -99,22 +106,17 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		antiAlias = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".antiAlias"));
 		antiAlias.setSelected(jEdit.getBooleanProperty("view.antiAlias"));
+		addComponent(antiAlias);
 
 		/* Fractional font metrics */
 		fracFontMetrics = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".fracFontMetrics"));
 		fracFontMetrics.setSelected(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
+		addComponent(fracFontMetrics);
+	} //}}}
 
-		if(MiscUtilities.compareStrings(
-			System.getProperty("java.version"),
-			"1.2",false) >= 0)
-		{
-			addComponent(antiAlias);
-			addComponent(fracFontMetrics);
-		}
-	}
-
+	//{{{ _save() method
 	public void _save()
 	{
 		jEdit.setFontProperty("view.font",font.getFont());
@@ -136,9 +138,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			middleMousePaste.isSelected());
 		jEdit.setBooleanProperty("view.antiAlias",antiAlias.isSelected());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
-	}
+	} //}}}
 
-	// private members
+	//{{{ Private members
 	private FontSelector font;
 	private JCheckBox lineHighlight;
 	private JCheckBox bracketHighlight;
@@ -151,4 +153,5 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox middleMousePaste;
 	private JCheckBox antiAlias;
 	private JCheckBox fracFontMetrics;
+	//}}}
 }

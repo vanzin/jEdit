@@ -89,7 +89,9 @@ void toggleLineComment()
 	}
 
 	// main routine of method starts here
-	comment = buffer.getProperty("lineComment");
+	comment = buffer.getContextSensitiveProperty(textArea.getCaretPosition(),
+		"lineComment");
+
 	if (comment == null)
 	{
 		Macros.error(view, "No line comment token to insert");

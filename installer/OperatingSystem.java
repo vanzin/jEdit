@@ -107,18 +107,7 @@ public abstract class OperatingSystem
 			String jar = installDir + File.separator
 				+ name.toLowerCase() + ".jar";
 
-			if(System.getProperty("java.version").compareTo("1.2") >= 0)
-			{
-				out.write("-jar \"" + jar + "\" ");
-			}
-			else
-			{
-				out.write("-classpath \"${CLASSPATH}:"
-					+ jar + "\" "
-					+ installer.getProperty("app.main.class"));
-			}
-
-			out.write(" $@\n");
+			out.write("-jar \"" + jar + "\" $@\n");
 
 			out.close();
 

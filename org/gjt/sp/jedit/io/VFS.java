@@ -253,6 +253,9 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
+		if((getCapabilities() & WRITE_CAP) == 0)
+			buffer.setReadOnly(true);
+
 		BufferIORequest request = new BufferIORequest(
 			BufferIORequest.LOAD,view,buffer,session,this,path);
 		if(buffer.isTemporary())

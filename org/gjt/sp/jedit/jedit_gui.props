@@ -521,9 +521,6 @@ close-bottom-docking-area.label=Close Bottom Docking Area
 utils=vfs.browser \
       io-progress-monitor \
       - \
-      log-viewer \
-      update-log \
-      - \
       eval \
       eval-for-selected-lines \
       eval-selection \
@@ -533,12 +530,12 @@ utils=vfs.browser \
       memory-status \
       - \
       buffer-options \
-      global-options
+      global-options \
+      - \
+      %troubleshooting
 utils.label=$Utilities
 vfs.browser.label=$File System Browser
 io-progress-monitor.label=$I/O Progress Monitor...
-log-viewer.label=$Activity Log
-update-log.label=Update Activity Log on $Disk
 eval.label=$Evaluate BeanShell Expression...
 eval-for-selected-lines.label=Evaluate For Selected $Lines...
 eval-selection.label=E$valuate Selection
@@ -546,6 +543,24 @@ reload-modes.label=$Reload Edit Modes
 memory-status.label=$Memory Status...
 buffer-options.label=$Buffer Options...
 global-options.label=$Global Options...
+
+#{{{ Troubleshooting menu
+troubleshooting=about-troubleshooting \
+		 - \
+		 log-viewer \
+		 update-log \
+		 - \
+		 prepare-bug-report \
+		 - \
+		 keyboard-tester
+troubleshooting.label=Troubleshooting
+about-troubleshooting.label=About the Troubleshooting Menu
+log-viewer.label=Activity Log
+update-log.label=Update Activity Log on Disk
+prepare-bug-report.label=Prepare Bug Report
+keyboard-tester.label=Keyboard Tester
+#}}}
+
 #}}}
 
 #{{{ Macros menu
@@ -1615,7 +1630,7 @@ vfs.browser.title=File System Browser
 vfs.browser.path=Path:
 vfs.browser.path.mnemonic=p
 vfs.browser.filter=Filter:
-vfs.browser.default-filter=[^#]*[^~#]
+vfs.browser.default-filter=*[^~#]
 vfs.browser.filter-enabled=true
 vfs.browser.tree.loading=Loading...
 
