@@ -1229,7 +1229,8 @@ plugin-error.caption-1=The following plugin could not be loaded:
 
 plugin-error.load-error=Cannot load: {0}\n\
 	The most likely reason is that the JAR file is corrupt; try\n\
-	reinstalling it. See the activity log for a full stack trace.
+	reinstalling it. See Utilities->Troubleshooting->Activity Log\n\
+	for a full stack trace.
 plugin-error.start-error=Cannot start: {0}\n\
 	Try updating to a newer version of the plugin.
 plugin-error.already-loaded=Two copies installed. Please remove one of the \
@@ -1260,7 +1261,7 @@ macro-confirm.title=Macro Confirmation
 beanshell-error.title=BeanShell Execution Error
 beanshell-error.message.1=A BeanShell execution error occurred. More details can \
 	be found
-beanshell-error.message.2=in the activity log (Utilities->Activity Log).
+beanshell-error.message.2=in Utilities->Troubleshooting->Activity Log.
 
 beanshell-eval-input.title=Evaluate BeanShell Expression
 beanshell-eval-input.message=BeanShell expression:\n\
