@@ -1104,6 +1104,7 @@ hypersearch-results.title=HyperSearch Results
 hypersearch-results.result-caption={0} ({1} occurrence(s) in {2} file(s))
 hypersearch-results.remove-node=Remove Node
 hypersearch-results.caption=Found {0} occurrence(s) in {1} file(s).
+hypersearch-results.multi=Multiple results
 hypersearch-results.file-caption={0} ({1} occurrences)
 hypersearch-results.file-caption1={0} (1 occurrence)
 hypersearch-results.searching=Searching...
@@ -1664,6 +1665,8 @@ helpviewer.search.caption=Search for:
 helpviewer.search.error.title=Indexing Error
 helpviewer.search.error.message=An error occurred while building the help index.\n\
 	({0})
+helpviewer.searching=Searching...
+helpviewer.no-results=No results
 #}}}
 
 #{{{ Tip of the day window

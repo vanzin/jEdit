@@ -4357,8 +4357,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			getToolkit().beep();
 		else
 		{
-			setSelectedText("\n");
-			buffer.indentLine(caretLine,true,false);
+			try
+			{
+				buffer.beginCompoundEdit();
+				setSelectedText("\n");
+				buffer.indentLine(caretLine,true,false);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
 		}
 	} //}}}
 
@@ -4378,7 +4386,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				&& buffer.indentLine(caretLine,true,false))
 				return;
 			else
-				insertTab();
+				userInput('\t');
 		}
 	} //}}}
 

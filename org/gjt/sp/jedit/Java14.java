@@ -143,8 +143,17 @@ public class Java14
 			JEditTextArea textArea = (JEditTextArea)e.getSource();
 
 			int amt = e.getWheelRotation();
-
-			if(e.isShiftDown())
+			/****************************************************
+			 * move caret depending on pressed control-keys:
+			 * - Alt: move cursor, do not select
+			 * - Alt+(shift or control): move cursor, select
+			 * - shift: scroll page
+			 * - control: scroll single line
+			 * - <else>: scroll 3 lines
+			 ****************************************************/
+			if(e.isAltDown())
+				moveCaret(textArea,amt,e.isShiftDown() || e.isControlDown());
+			else if(e.isShiftDown())
 				scrollPage(textArea,amt);
 			else if(e.isControlDown())
 				scrollLine(textArea,amt);
@@ -163,6 +172,14 @@ public class Java14
 		private void scrollPage(JEditTextArea textArea, int amt)
 		{
 			scrollLine(textArea,amt * textArea.getVisibleLines());
+		}
+
+		private void moveCaret(JEditTextArea textArea, int amt, boolean select)
+		{
+			if (amt < 0)
+				textArea.goToPrevLine(select);
+			else
+				textArea.goToNextLine(select);
 		}
 	}
 }

@@ -28,6 +28,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -83,8 +84,6 @@ public class HelpSearchPanel extends JPanel
 		return index;
 	} //}}}
 
-	//}}}
-
 	//{{{ Result class
 	class Result
 	{
@@ -137,45 +136,64 @@ public class HelpSearchPanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
-			HelpIndex index = getHelpIndex();
+			final HelpIndex index = getHelpIndex();
 			if(index == null)
 				return;
 
-			StringTokenizer st = new StringTokenizer(
-				searchField.getText(),",.;:- ");
+			results.setListData(new String[] { jEdit.getProperty(
+				"helpviewer.searching") });
 
-			DefaultListModel resultModel = new DefaultListModel();
+			final String text = searchField.getText();
+			final DefaultListModel resultModel = new DefaultListModel();
 
-			while(st.hasMoreTokens())
+			VFSManager.runInWorkThread(new Runnable()
 			{
-				String word = st.nextToken().toLowerCase();
-				HelpIndex.Word lookup = index.getWord(word);
-				if(lookup != null)
+				public void run()
 				{
-					for(int i = 0; i < lookup.fileCount; i++)
-					{
-						Result result = new Result(
-							MiscUtilities.getFileName(lookup.files[i]),
-							lookup.files[i]);
-						int idx = resultModel.indexOf(result);
+					StringTokenizer st = new StringTokenizer(text,",.;:- ");
 
-						// if not in list, add; otherwise increment
-						// rank
-						if(idx == -1)
-							resultModel.addElement(result);
-						else
+					while(st.hasMoreTokens())
+					{
+						String word = st.nextToken().toLowerCase();
+						String[] lookup = index.lookupWord(word);
+						for(int i = 0; i < lookup.length; i++)
 						{
-							((Result)resultModel.getElementAt(idx))
-								.rank += 1;
+							Result result = new Result(
+								MiscUtilities.getFileName(lookup[i]),
+								lookup[i]);
+							int idx = resultModel.indexOf(result);
+
+							// if not in list, add; otherwise increment
+							// rank
+							if(idx == -1)
+								resultModel.addElement(result);
+							else
+							{
+								((Result)resultModel.getElementAt(idx))
+									.rank += 1;
+							}
 						}
 					}
 				}
-			}
+			});
 
-			results.setModel(resultModel);
+			VFSManager.runInAWTThread(new Runnable()
+			{
+				public void run()
+				{
+					if(resultModel.getSize() == 0)
+					{
+						results.setListData(new String[] {
+							jEdit.getProperty(
+							"helpviewer.no-results") });
 
-			if(resultModel.getSize() == 0)
-				getToolkit().beep();
+						getToolkit().beep();
+					}
+					else
+						results.setModel(resultModel);
+				}
+			});
+
 		}
 	} //}}}
 

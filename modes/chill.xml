@@ -15,8 +15,6 @@
     </PROPS>
 
     <RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
-        <WHITESPACE> </WHITESPACE>
-        <WHITESPACE>	</WHITESPACE>
 
         <!-- Compiler directives. -->
         <SPAN TYPE="COMMENT2">

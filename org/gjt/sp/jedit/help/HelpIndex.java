@@ -129,13 +129,18 @@ public class HelpIndex
 		indexStream(_in,url);
 	} //}}}
 
-	//{{{ getWord() method
-	public Word getWord(String word)
+	//{{{ lookupWord() method
+	public String[] lookupWord(String word)
 	{
-		return (Word)words.get(word);
+		Word w = (Word)words.get(word);
+		if(w == null)
+			return EMPTY_ARRAY;
+		else
+			return w.files;
 	} //}}}
 
 	//{{{ Private members
+	private static String[] EMPTY_ARRAY = new String[0];
 	private HashMap words;
 
 	//{{{ indexStream() method
