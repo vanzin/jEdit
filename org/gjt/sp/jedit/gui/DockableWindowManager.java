@@ -403,8 +403,8 @@ public class DockableWindowManager extends JPanel
 			//{{{ invoke() method
 			public void invoke(View view)
 			{
-				//view.getDockableWindowManager()
-				//	.floatDockableWindow(name);
+				view.getDockableWindowManager()
+					.floatDockableWindow(name);
 			} //}}}
 
 			//{{{ getCode() method
@@ -474,8 +474,7 @@ public class DockableWindowManager extends JPanel
 		{
 			Factory factory = (Factory)
 				dockableWindowFactories.elementAt(i);
-			Entry entry = new Entry(factory);
-			windows.put(factory.name,entry);
+			windows.put(factory.name,new Entry(factory));
 		}
 
 		String lastTop = jEdit.getProperty("view.dock.top.last");
@@ -503,6 +502,29 @@ public class DockableWindowManager extends JPanel
 	public View getView()
 	{
 		return view;
+	} //}}}
+
+	//{{{ floatDockableWindow() method
+	/**
+	 * Opens a new instance of the specified dockable window in a floating
+	 * container.
+	 * @param name The dockable window name
+	 * @since jEdit 4.1pre2
+	 */
+	public void floatDockableWindow(String name)
+	{
+		Entry entry = (Entry)windows.get(name);
+		if(entry == null)
+		{
+			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
+			return;
+		}
+
+		// create a copy of this dockable window and float it
+		Entry newEntry = new Entry(entry.factory,FLOATING);
+		newEntry.open();
+		if(newEntry.win != null)
+			newEntry.container.show(newEntry);
 	} //}}}
 
 	//{{{ showDockableWindow() method
@@ -700,7 +722,7 @@ public class DockableWindowManager extends JPanel
 		{
 			Entry entry = (Entry)enum.nextElement();
 			String position = entry.position;
-			String newPosition = jEdit.getProperty(entry.name
+			String newPosition = jEdit.getProperty(entry.factory.name
 				+ ".dock-position");
 			if(newPosition != null /* ??? */
 				&& !newPosition.equals(position))
@@ -1061,10 +1083,8 @@ public class DockableWindowManager extends JPanel
 	class Entry
 	{
 		Factory factory;
-		String name;
-		String position;
 		String title;
-
+		String position;
 		DockableWindowContainer container;
 
 		// only set if open
@@ -1073,22 +1093,26 @@ public class DockableWindowManager extends JPanel
 		//{{{ Entry constructor
 		Entry(Factory factory)
 		{
+			this(factory,jEdit.getProperty(factory.name
+				+ ".dock-position",FLOATING));
+		} //}}}
+
+		//{{{ Entry constructor
+		Entry(Factory factory, String position)
+		{
 			this.factory = factory;
-			this.name = factory.name;
-			this.position = jEdit.getProperty(name + ".dock-position",
-				FLOATING);
-			title = jEdit.getProperty(name + ".title");
+			this.position = position;
+
+			// get the title here, not in the factory constructor,
+			// since the factory might be created before a plugin's
+			// props are loaded
+			title = jEdit.getProperty(factory.name + ".title");
 			if(title == null)
-			{
-				Log.log(Log.WARNING,this,name + ".title property"
-					+ " not defined");
-				title = name;
-			}
+				title = "NO TITLE PROPERTY: " + factory.name;
 
 			if(position == null)
 				position = FLOATING;
-
-			if(position.equals(FLOATING))
+			else if(position.equals(FLOATING))
 				/* do nothing */;
 			else
 			{
@@ -1117,7 +1141,7 @@ public class DockableWindowManager extends JPanel
 				return;
 			}
 
-			Log.log(Log.DEBUG,this,"Adding " + name + " with position " + position);
+			Log.log(Log.DEBUG,this,"Adding " + factory.name + " with position " + position);
 
 			if(position.equals(FLOATING))
 			{
@@ -1132,7 +1156,7 @@ public class DockableWindowManager extends JPanel
 		//{{{ remove() method
 		void remove()
 		{
-			Log.log(Log.DEBUG,this,"Removing " + name + " from "
+			Log.log(Log.DEBUG,this,"Removing " + factory.name + " from "
 				+ container);
 
 			container.save(this);

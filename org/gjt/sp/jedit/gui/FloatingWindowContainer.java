@@ -55,7 +55,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		getContentPane().add(BorderLayout.CENTER,entry.win);
 
 		pack();
-		GUIUtilities.loadGeometry(this,entry.name);
+		GUIUtilities.loadGeometry(this,entry.factory.name);
 		show();
 	} //}}}
 
@@ -67,7 +67,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	//{{{ save() method
 	public void save(DockableWindowManager.Entry entry)
 	{
-		GUIUtilities.saveGeometry(this,entry.name);
+		GUIUtilities.saveGeometry(this,entry.factory.name);
 	} //}}}
 
 	//{{{ remove() method
@@ -99,9 +99,10 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	//{{{ dispose() method
 	public void dispose()
 	{
-		dockableWindowManager.removeDockableWindow(entry.name);
-		// eventually calls this.remove() which calls
-		// super.dispose().
+		save(entry);
+		entry.container = null;
+		entry.win = null;
+		super.dispose();
 	} //}}}
 
 	//{{{ getMinimumSize() method
