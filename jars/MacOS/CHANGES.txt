@@ -3,6 +3,8 @@ Mac OS Plugin 3.0
 - Old MRJ methods replaced with com.apple.eawt.
 - Added a Dock Menu. Dock Menu provides similar functionality to the plugin menu.
 - Added services menu (bundle needs to be updated)
+- Opening a directory by drag and drop or with open -a will
+  set the file browser to the directory.
 
 Mac OS Plugin 2.0.4
 

@@ -59,7 +59,7 @@ public class MacOSPlugin extends EBPlugin
 			app.setDelegate(delegate);
 			app.setServicesProvider(delegate);
 		}
-	}//}}}
+	} //}}}
 	
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage message)
