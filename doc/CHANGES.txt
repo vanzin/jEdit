@@ -13,6 +13,8 @@ Thanks to Stefan Kost for contributing to this release.
 
 - Minor fix to BibTeX syntax highlighting (Stefan Kost).
 
+- jEditLauncher was not being correctly installed on Windows.
+
 + API Additions:
 
 - Added Buffer.invalidateCachedFoldLevels() method needed by SideKick
