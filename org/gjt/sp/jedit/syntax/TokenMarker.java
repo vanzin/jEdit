@@ -164,6 +164,9 @@ public class TokenMarker
 
 		keywords = context.rules.getKeywords();
 		escaped = false;
+
+		seenWhitespaceEnd = false;
+		whitespaceEnd = line.offset;
 		//}}}
 
 		//{{{ Main parser loop
@@ -191,7 +194,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				if(rule != null)
 				{
 					if(checkDelegateEnd(rule))
+					{
+						seenWhitespaceEnd = true;
 						continue main_loop;
+					}
 				}
 			} //}}}
 
@@ -203,7 +209,10 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 				// stop checking rules if there was a match
 				if (handleRule(rule,false))
+				{
+					seenWhitespaceEnd = true;
 					continue main_loop;
+				}
 	
 				rule = rule.next;
 			} //}}}
@@ -211,6 +220,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			//{{{ check if current character is a word separator
 			if(Character.isWhitespace(ch))
 			{
+				if(!seenWhitespaceEnd)
+					whitespaceEnd = pos + 1;
+
 				if(context.inRule != null)
 					handleRule(context.inRule,true);
 
@@ -236,32 +248,33 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 				escaped = false;
 			}
-			else if(keywords != null || context.rules.getRuleCount() != 0)
+			else
 			{
-				String noWordSep = context.rules.getNoWordSep();
-
-				if(!Character.isLetterOrDigit(ch)
-					&& noWordSep.indexOf(ch) == -1)
+				if(keywords != null || context.rules.getRuleCount() != 0)
 				{
-					if(context.inRule != null)
-						handleRule(context.inRule,true);
+					String noWordSep = context.rules.getNoWordSep();
 
-					handleNoWordBreak();
+					if(!Character.isLetterOrDigit(ch)
+						&& noWordSep.indexOf(ch) == -1)
+					{
+						if(context.inRule != null)
+							handleRule(context.inRule,true);
 
-					markKeyword(true);
+						handleNoWordBreak();
 
-					tokenHandler.handleToken(
-						context.rules.getDefault(),
-						lastOffset - line.offset,1,
-						context);
-					lastOffset = pos + 1;
+						markKeyword(true);
+
+						tokenHandler.handleToken(
+							context.rules.getDefault(),
+							lastOffset - line.offset,1,
+							context);
+						lastOffset = pos + 1;
+					}
 				}
 
+				seenWhitespaceEnd = true;
 				escaped = false;
-			}
-			else
-				escaped = false;
-			//}}}
+			} //}}}
 		} //}}}
 
 		//{{{ Mark all remaining characters
@@ -310,6 +323,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 	private int lineLength;
 	private int pos;
 	private boolean escaped;
+
+	private int whitespaceEnd;
+	private boolean seenWhitespaceEnd;
 	//}}}
 
 	//{{{ checkDelegateEnd() method
@@ -401,6 +417,15 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			{
 				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
 					lastOffset : pos) != line.offset)
+				{
+					return false;
+				}
+			}
+			else if((checkRule.action & ParserRule.AT_WHITESPACE_END)
+				== ParserRule.AT_WHITESPACE_END)
+			{
+				if((((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
+					lastOffset : pos) != whitespaceEnd)
 				{
 					return false;
 				}

@@ -7,6 +7,7 @@
 <!ENTITY % att-bool '( TRUE | FALSE )' >
 <!ENTITY % att-type 'TYPE %tokens; "NULL"' >
 <!ENTITY % att-at-line-start 'AT_LINE_START %att-bool; "FALSE"' >
+<!ENTITY % att-at-whitespace-end 'AT_WHITESPACE_END %att-bool; "FALSE"' >
 <!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
 
 <!-- MODE element -->
@@ -47,6 +48,7 @@
 <!ATTLIST SEQ
 	%att-type;
 	%att-at-line-start;
+	%att-at-whitespace-end;
 	DELEGATE CDATA #IMPLIED >
 
 <!-- SPAN element -->
@@ -56,6 +58,7 @@
 <!ATTLIST SPAN
 	%att-type;
 	%att-at-line-start;
+	%att-at-whitespace-end;
 	%att-exclude-match;
 	NO_LINE_BREAK %att-bool; "FALSE"
 	NO_WORD_BREAK %att-bool; "FALSE"
@@ -72,6 +75,7 @@
 <!ATTLIST EOL_SPAN
 	%att-type;
 	%att-at-line-start;
+	%att-at-whitespace-end;
 	%att-exclude-match;
 	DELEGATE CDATA #IMPLIED >
 
@@ -82,6 +86,7 @@
 <!ATTLIST MARK_FOLLOWING
 	%att-type;
 	%att-at-line-start;
+	%att-at-whitespace-end;
 	%att-exclude-match; >
 
 <!-- MARK_PREVIOUS element -->
@@ -91,6 +96,7 @@
 <!ATTLIST MARK_PREVIOUS
 	%att-type;
 	%att-at-line-start;
+	%att-at-whitespace-end;
 	%att-exclude-match; >
 
 <!-- KEYWORDS element -->
