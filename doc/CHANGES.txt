@@ -258,6 +258,9 @@ contributing to this release.
 - Preview_Javadoc_of_Buffer.bsh macro used the deprecated
   DockableWindowManager.getDockableWindow() method.
 
+- Text area would not automatically scroll to the caret location when
+  working with multiple views under certain circumstances.
+
 + API Changes:
 
 - Two methods added to jEdit class:
