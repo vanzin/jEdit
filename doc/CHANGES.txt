@@ -4,8 +4,9 @@ JEDIT 4.0 VERSION HISTORY
 
 + Enhancements
 
-- The plugin manager now downloads the plugin list in GZipped format from
-  the server. This should especially be noticable for dial-up users
+- The plugin manager now downloads the plugin list in GZipped format
+  from the server. This should especially be noticable for dial-up users
+- Minor search bar layout tweak
 
 + Bug Fixes
 

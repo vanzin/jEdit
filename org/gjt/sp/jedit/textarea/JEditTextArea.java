@@ -5599,8 +5599,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 			g.setColor(MetalLookAndFeel.getControlDarkShadow());
 			g.drawRect(0,0,width-2,height-2);
-			g.setColor(MetalLookAndFeel.getControlHighlight());
 
+			g.setColor(MetalLookAndFeel.getControlHighlight());
 			g.drawLine(width-1,1,width-1,height-1);
 			g.drawLine(1,height-1,width-1,height-1);
 
