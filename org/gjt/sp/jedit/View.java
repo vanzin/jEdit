@@ -761,6 +761,12 @@ public class View extends JFrame implements EBComponent
 	 */
 	public EditPane goToBuffer(Buffer buffer)
 	{
+		if(editPane.getBuffer() == buffer)
+		{
+			editPane.focusOnTextArea();
+			return editPane;
+		}
+
 		EditPane[] editPanes = getEditPanes();
 		for(int i = 0; i < editPanes.length; i++)
 		{

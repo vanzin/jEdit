@@ -111,6 +111,20 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	//{{{ paintComponent() method
 	public void paintComponent(Graphics g)
 	{
+		if(!colorDetermined)
+		{
+			if(!isSelected)
+			{
+				Color color = file.getColor();
+
+				setForeground(color == null
+					? UIManager.getColor("Tree.foreground")
+					: color);
+			}
+		}
+
+		super.paintComponent(g);
+
 		if(underlined)
 		{
 			Font font = getFont();
@@ -130,20 +144,6 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 			g.setColor(getForeground());
 			g.drawLine(x,y,x + fm.stringWidth(getText()),y);
 		}
-
-		if(!colorDetermined)
-		{
-			if(!isSelected)
-			{
-				Color color = file.getColor();
-
-				setForeground(color == null
-					? UIManager.getColor("Tree.foreground")
-					: color);
-			}
-		}
-
-		super.paintComponent(g);
 	} //}}}
 
 	//{{{ getIconForFile() method

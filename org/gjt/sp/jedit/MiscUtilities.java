@@ -1260,8 +1260,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 				"- adding " + toolsPath + " to jEdit plugins.");
 			try
 			{
+				JARClassLoader classLoader = new JARClassLoader(toolsPath);
 				jEdit.addPluginJAR(new EditPlugin.JAR(toolsPath,
-					new JARClassLoader(toolsPath)));
+					classLoader,classLoader.getZipFile()));
 			}
 			catch(IOException ioex)
 			{

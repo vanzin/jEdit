@@ -375,12 +375,13 @@ public class jEdit
 			}
 		}
 
-		initActions();
 		initDockables();
 
-		GUIUtilities.advanceSplashProgress();
-
 		VFSManager.init();
+
+		ResourceCache.init();
+
+		GUIUtilities.advanceSplashProgress();
 
 		if(loadPlugins)
 			initPlugins();
@@ -2452,6 +2453,12 @@ public class jEdit
 		jEdit.activeView = view;
 	} //}}}
 
+	//{{{ setBuiltInActionSet() method
+	static void setBuiltInActionSet(ActionSet actionSet)
+	{
+		builtInActionSet = actionSet;
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -2606,6 +2613,11 @@ public class jEdit
 	 */
 	private static void initMisc()
 	{
+		jars = new Vector();
+		actionHash = new Hashtable();
+		actionSets = new Vector();
+		inputHandler = new DefaultInputHandler(null);
+
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
 			"org.gjt.sp.jedit.proto|" +
@@ -2617,8 +2629,6 @@ public class jEdit
 			+ ". " + System.getProperty("java.vendor")
 			+ "; " + System.getProperty("os.arch") + ")";
 		System.getProperties().put("http.agent",userAgent);
-
-		inputHandler = new DefaultInputHandler(null);
 
 		/* Determine installation directory.
 		 * If the jedit.home property is set, use that.
@@ -2670,11 +2680,10 @@ public class jEdit
 		//if(jEditHome == null)
 		//	Log.log(Log.DEBUG,jEdit.class,"Web start mode");
 
-		jars = new Vector();
-
 		// Add an EditBus component that will reload edit modes and
 		// macros if they are changed from within the editor
 		EditBus.addToBus(new SettingsReloader());
+
 
 		// Perhaps if Xerces wasn't slightly brain-damaged, we would
 		// not need this
@@ -2771,34 +2780,14 @@ public class jEdit
 		}
 	} //}}}
 
-	//{{{ initActions() method
-	/**
-	 * Load actions.
-	 */
-	private static void initActions()
-	{
-		actionHash = new Hashtable();
-		actionSets = new Vector();
-
-		Reader in = new BufferedReader(new InputStreamReader(
-			jEdit.class.getResourceAsStream("actions.xml")));
-		builtInActionSet = new ActionSet(jEdit.getProperty(
-			"action-set.jEdit"));
-		if(!loadActions("actions.xml",in,builtInActionSet))
-			System.exit(1);
-		addActionSet(builtInActionSet);
-	} //}}}
-
 	//{{{ initDockables() method
 	/**
 	 * Load info on jEdit's built-in dockable windows.
 	 */
 	private static void initDockables()
 	{
-		Reader in = new BufferedReader(new InputStreamReader(
-			jEdit.class.getResourceAsStream("dockables.xml")));
 		if(!DockableWindowManager.loadDockableWindows(null,
-			"dockables.xml",in))
+			jEdit.class.getResource("dockables.xml")))
 			System.exit(1);
 	} //}}}
 
