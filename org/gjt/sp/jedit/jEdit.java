@@ -389,7 +389,7 @@ public class jEdit
 		if(scriptFile != null)
 		{
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
-			BeanShell.runScript(null,scriptFile,false,false);
+			BeanShell.runScript(null,scriptFile,null,false);
 		} //}}}
 
 		// Must be after plugins are started!!!
@@ -2604,7 +2604,7 @@ public class jEdit
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
 			script.append("BeanShell.runScript(null,\""
 				+ MiscUtilities.charsToEscapes(scriptFile)
-				+ "\",false,false);\n");
+				+ "\",false);\n");
 		}
 
 		return script.toString();
@@ -2943,7 +2943,7 @@ public class jEdit
 
 			String path = new File(directory,snippet).getPath();
 
-			BeanShell.runScript(null,path,false,false);
+			BeanShell.runScript(null,path,null,false);
 		}
 	} //}}}
 

@@ -1,5 +1,6 @@
 TO DO
 
+- scroll to caret _still_ jumps around
 - rename MacOS.jar
 - fix stylesheet problem
 - $ doesn't find last -- gnu.regexp bug
