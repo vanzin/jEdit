@@ -699,6 +699,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			textArea.chunkCache.invalidateChunksFrom(lastInvalid + 1);
 			repaint(0,h,getWidth(),getHeight() - h);
 		}
+
+		textArea.displayManager._notifyScreenLineChanges();
 	} //}}}
 
 	//{{{ nextTabStop() method

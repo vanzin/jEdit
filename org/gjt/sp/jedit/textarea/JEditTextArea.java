@@ -464,7 +464,10 @@ public class JEditTextArea extends JComponent
 	public void setFirstPhysicalLine(int physFirstLine, int skew)
 	{
 		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"setFirstPhysicalLine()");
+		{
+			Log.log(Log.DEBUG,this,"setFirstPhysicalLine("
+				+ physFirstLine + "," + skew + ")");
+		}
 
 		//{{{ ensure we don't have empty space at the bottom or top, etc
 		/* int screenLineCount = 0;
@@ -487,12 +490,25 @@ public class JEditTextArea extends JComponent
 
 		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
 
-		if(amount == 0)
-			return;
-
 		int oldFirstLine = getFirstLine();
 
-		if(amount > 0)
+		if(amount == 0)
+		{
+			skew -= displayManager.firstLine.skew;
+
+			// JEditTextArea.scrollTo() needs this to simplify
+			// its code
+			if(skew < 0)
+				displayManager.firstLine.scrollUp(-skew);
+			else if(skew > 0)
+				displayManager.firstLine.scrollDown(skew);
+			else
+			{
+				// nothing to do
+				return;
+			}
+		}
+		else if(amount > 0)
 			displayManager.firstLine.physDown(amount,skew);
 		else if(amount < 0)
 			displayManager.firstLine.physUp(-amount,skew);
@@ -669,10 +685,14 @@ public class JEditTextArea extends JComponent
 
 		//{{{ Scroll vertically
 		int firstLine = getFirstLine();
-		int screenLine = getScreenLineOfOffset(buffer.getLineStartOffset(line) + offset);
+		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		int visibleLines = getVisibleLines();
 		if(screenLine == -1)
 		{
+			ChunkCache.LineInfo[] infos = chunkCache
+				.getLineInfosForPhysicalLine(line);
+			int subregion = chunkCache.getSubregionOfOffset(
+				offset,infos);
 			int prevLine = displayManager.getPrevVisibleLine(getFirstPhysicalLine());
 			int nextLine = displayManager.getNextVisibleLine(getLastPhysicalLine());
 			if(line == prevLine)
@@ -689,7 +709,8 @@ public class JEditTextArea extends JComponent
 			}
 			else
 			{
-				setFirstPhysicalLine(line,-visibleLines / 2);
+				setFirstPhysicalLine(line,subregion
+					- visibleLines / 2);
 			}
 		}
 		else if(screenLine < _electricScroll)
@@ -6171,20 +6192,25 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				buffer.endCompoundEdit(); */
 			int x = evt.getX();
 
-			float dragStartLineWidth = offsetToXY(dragStartLine,
-				getLineLength(dragStartLine),returnValue).x;
-			int extraEndVirt;
-			if(x > dragStartLineWidth)
+			int extraEndVirt = 0;
+			if(chunkCache.getLineInfo(screenLastLine).lastSubregion)
 			{
-				extraEndVirt = (int)((x - dragStartLineWidth)
-					/ charWidth);
-				if(!getPainter().isBlockCaretEnabled()
-					&& !isOverwriteEnabled()
-					&& (x - getHorizontalOffset()) % charWidth > charWidth / 2)
+				float dragStartLineWidth = offsetToXY(
+					dragStartLine,getLineLength(dragStartLine),
+					returnValue).x;
+				if(x > dragStartLineWidth)
+				{
+					extraEndVirt = (int)(
+						(x - dragStartLineWidth)
+						/ charWidth);
+					if(!getPainter().isBlockCaretEnabled()
+						&& !isOverwriteEnabled()
+						&& (x - getHorizontalOffset()) % charWidth > charWidth / 2)
+					{
 						extraEndVirt++;
+					}
+				}
 			}
-			else
-				extraEndVirt = 0;
 
 			if(control || isRectangularSelectionEnabled())
 			{
