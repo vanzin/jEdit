@@ -1,5 +1,6 @@
 TO DO
 
+- lots of spaces then one word; word should not be wrapped
 - numpad problems
 - scroll to caret _still_ jumps around
 - rename MacOS.jar

@@ -69,8 +69,8 @@ public class ChunkCache
 
 		float x = 0.0f;
 		float endX = 0.0f;
-		boolean seenNonWhiteSpace = false;
 		boolean addedNonWhiteSpace = false;
+		boolean lastWasSpace = false;
 		float firstNonWhiteSpace = 0.0f;
 
 		Chunk first = null;
@@ -103,9 +103,12 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
+						addedNonWhiteSpace = true;
+						lastWasSpace = false;
 					}
 
 					if(end != null
+						&& !lastWasSpace
 						&& addedNonWhiteSpace
 						&& wrapMargin != 0
 						&& x > wrapMargin)
@@ -117,12 +120,11 @@ public class ChunkCache
 						end.next = null;
 
 						x = x + firstNonWhiteSpace - endX;
+						addedNonWhiteSpace = false;
 					}
 
 					if(first == null)
 						first = current;
-	
-					seenNonWhiteSpace = true;
 					//}}}
 
 					//{{{ Create ' ' chunk
@@ -161,7 +163,7 @@ public class ChunkCache
 						current.length = 1;
 					} //}}}
 
-					if(!seenNonWhiteSpace)
+					if(!addedNonWhiteSpace && out.size() == 0)
 						firstNonWhiteSpace = x;
 
 					if(first == null)
@@ -170,9 +172,10 @@ public class ChunkCache
 					end = current;
 					endX = x;
 
-					flushIndex = i + 1;
+					if(flushIndex != i + 1)
+						flushIndex = i + 1;
 
-					addedNonWhiteSpace = seenNonWhiteSpace;
+					lastWasSpace = true;
 				}
 				else if(i == tokenListOffset + tokens.length - 1)
 				{
@@ -186,26 +189,28 @@ public class ChunkCache
 						current = newChunk;
 
 						x += newChunk.width;
-
-						if(i == seg.count - 1 && wrapMargin != 0
-							&& x > wrapMargin
-							&& addedNonWhiteSpace
-							&& end != null)
-						{
-							if(first != null)
-								out.add(first);
-							first = new Chunk(firstNonWhiteSpace,end.offset + 1);
-							first.next = end.next;
-							end.next = null;
-
-							x = x + firstNonWhiteSpace - endX;
-						}
-
-						if(first == null)
-							first = current;
+						addedNonWhiteSpace = true;
+						lastWasSpace = false;
 					}
 
-					seenNonWhiteSpace = true;
+					if(i == seg.count - 1 && wrapMargin != 0
+						&& x > wrapMargin
+						&& addedNonWhiteSpace
+						&& end != null)
+					{
+						if(first != null)
+							out.add(first);
+						first = new Chunk(firstNonWhiteSpace,end.offset + 1);
+						first.next = end.next;
+						end.next = null;
+
+						x = x + firstNonWhiteSpace - endX;
+
+						addedNonWhiteSpace = false;
+					}
+
+					if(first == null)
+						first = current;
 				}
 			}
 
