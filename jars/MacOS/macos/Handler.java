@@ -1,5 +1,5 @@
 /* 
- * :tabSize=4:indentSize=4:noTabs=false:
+ * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Handler.java - Handler interface
@@ -19,6 +19,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
+package macos;
  
 //{{{ Imports
 import java.io.*;

@@ -27,7 +27,11 @@ to this release.
 - Updated ColdFusion syntax highlighting (Joshua Miller).
 - Added Maple syntax highlighting (John Perry)
 
-+ Bug Fixes
++ Platform-Specific Changes:
+
+- Updated MacOS plugin (Kris Kopicki).
+
++ Bug Fixes:
 
 - Removed erronous check box from Buffer Options dialog box.
 - Changed the code that makes sure windows are always displayed in the
@@ -41,6 +45,8 @@ to this release.
 - Fixed repaint problems in tool bar option pane's buttons (and possibly
   other places) by making RolloverButton's isOpaque() method return
   false.
+- Fixed highlighting of digits in C, C++, Java and similar modes; now
+  hex digits are only highlighted if the number begins with "0x".
 
 * Version 4.1pre5
 
