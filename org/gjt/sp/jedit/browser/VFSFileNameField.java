@@ -283,6 +283,8 @@ class VFSFileNameField extends HistoryTextField
 
 				String path = getText();
 
+				BrowserView view = browser.getBrowserView();
+
 				view.selectNone();
 
 				int mode = browser.getMode();
