@@ -155,7 +155,7 @@ public class Buffer
 
 	//{{{ load() method
 	/**
-	 * Loads the buffer from disk, even if it is loaded already.
+	 * Loads the buffer from disk.
 	 * @param view The view
 	 * @param reload If true, user will not be asked to recover autosave
 	 * file, if any
@@ -1359,10 +1359,6 @@ public class Buffer
 	 */
 	public void beginCompoundEdit()
 	{
-		// Why?
-		//if(getFlag(TEMPORARY))
-		//	return;
-
 		try
 		{
 			writeLock();
@@ -1384,10 +1380,6 @@ public class Buffer
 	 */
 	public void endCompoundEdit()
 	{
-		// Why?
-		//if(getFlag(TEMPORARY))
-		//	return;
-
 		try
 		{
 			writeLock();
