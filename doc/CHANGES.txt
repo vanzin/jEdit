@@ -16,6 +16,12 @@ and Nicholas O'Leary for contributing to this release.
 - Updated Java and LaTeX syntax highlighting (Alexander Klimetschek).
 
 }}}
+{{{ File system browser
+
+- Pressing / and BACKSPACE in the filename field no longer does
+  completion. Now, you must press TAB to complete.
+
+}}}
 {{{ Miscellaneous
 
 - A single-line selection no longer hides the line highlight, for
@@ -47,6 +53,9 @@ and Nicholas O'Leary for contributing to this release.
 - Fixed corrupted cursor image problem on Mac OS X.
 
 - Complete word popup is now always positioned within the screen bounds.
+
+- The last physical line index was not updated when saving files
+  sometimes, resulting in exceptions when clicking in the text area.
 
 }}}
 

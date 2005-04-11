@@ -14,9 +14,10 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
 + text area:
 
-- if(foo(bar
-  <-- too much indent here
-- kill ring still being reversed
+  - format: doesn't wrap right if selection starts in the middle of the
+    line
+  - if(foo(bar
+    <-- too much indent here
   - ruleset importing trick
   - expand fold: try to expand even if already expanded
   - backspace with virtual caret: needs tweaks
@@ -34,8 +35,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   - tabs to spaces with rect select
   - input methods
   - remove-marker, select-next/prev-marker/bracket
-  - C+b -- click -- keys don't work
-  - complete word not wide enough
   - format -- instead of \n\n, what if it has \n   \n?
   - DnD still dosn't work as expected when draging from the same buffer,
   but differen text area (for example droping at the position where drag
@@ -46,6 +45,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
 + auto indent:
 
+  - ? : do not unindent
   - deep indent
   - Common Lisp &body forms
   - pressing enter: carry over * from prev line in javadoc
@@ -63,10 +63,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
 + vfs browser:
 
-  - using up/down arrows with a blank text field and pressing / goes to
-    the root
-  - only traverse hierarchy on TAB, do nothing special on backsapce
-  - more configurable file system browser
   - test keyboard completion with expanded/collapsed tree
   - test keyboard completion with high latency VFS
   - fsb default size
@@ -75,6 +71,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   
 + misc:
 
+  - kill ring still being reversed
   - jEdit.checkBufferStatus() fucks with split panes
   
   - there is a comment in browser.actions.xml:
@@ -102,6 +99,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
 + docs:
 
+- vfs browser changes
 - auto indent
 - save help index
 - document optional dependencies

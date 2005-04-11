@@ -513,12 +513,7 @@ public class DisplayManager
 		if(initialized)
 		{
 			if(buffer.isLoaded())
-			{
 				resetAnchors();
-
-				textArea.updateScrollBar();
-				textArea.recalculateLastPhysicalLine();
-			}
 		}
 		else
 		{
@@ -548,33 +543,19 @@ public class DisplayManager
 			if(firstLine.callReset)
 				firstLine.reset();
 			else if(firstLine.callChanged)
-			{
 				firstLine.changed();
-
-				if(!scrollLineCount.callChanged
-					&& !scrollLineCount.callReset)
-				{
-					textArea.updateScrollBar();
-					textArea.recalculateLastPhysicalLine();
-				}
-				else
-				{
-					// ScrollLineCount.changed() does the same
-					// thing
-				}
-			}
 
 			if(scrollLineCount.callReset)
 			{
 				scrollLineCount.reset();
 				firstLine.ensurePhysicalLineIsVisible();
-
-				textArea.recalculateLastPhysicalLine();
-				textArea.updateScrollBar();
 			}
 			else if(scrollLineCount.callChanged)
-			{
 				scrollLineCount.changed();
+			
+			if(firstLine.callChanged || scrollLineCount.callReset
+				|| scrollLineCount.callChanged)
+			{
 				textArea.updateScrollBar();
 				textArea.recalculateLastPhysicalLine();
 			}

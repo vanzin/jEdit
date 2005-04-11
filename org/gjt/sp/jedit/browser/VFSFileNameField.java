@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2003 Slava Pestov
+ * Copyright (C) 2003, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,10 +51,6 @@ class VFSFileNameField extends HistoryTextField
 		Dimension dim = getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		setMaximumSize(dim);
-
-		ActionMap map = getActionMap();
-		Action backspace = map.get("delete-previous");
-		map.put("delete-previous",new BackspaceAction(backspace));
 	} //}}}
 
 	//{{{ isManagingFocus() method
@@ -116,86 +112,27 @@ class VFSFileNameField extends HistoryTextField
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
 			char ch = evt.getKeyChar();
-			if((ch == '/' || ch == File.separatorChar)
-				&& getCaretPosition()
-				== getDocument().getLength())
+			if(ch > 0x20 && ch != 0x7f && ch != 0xff)
 			{
 				super.processKeyEvent(evt);
 				String path = getText();
+				if(MiscUtilities.getLastSeparatorIndex(path) == -1)
+				{
+					BrowserView view = browser.getBrowserView();
+					view.selectNone();
 
-				if(path.length() == 2 && path.charAt(0) == '-')
-				{
-					path = browser.getView().getBuffer()
-						.getDirectory();
+					int mode = browser.getMode();
+					// fix for bug #765507
+					// we don't type complete in save dialog
+					// boxes. Press TAB to do an explicit
+					// complete
+					view.getTable().doTypeSelect(path,
+						mode == VFSBrowser
+						.CHOOSE_DIRECTORY_DIALOG
+						||
+						mode == VFSBrowser
+						.SAVE_DIALOG);
 				}
-				else if(path.length() == 3 && path.startsWith(".."))
-				{
-					path = MiscUtilities.getParentOfPath(
-						browser.getDirectory());
-					VFS vfs = VFSManager.getVFSForPath(path);
-					if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
-					{
-						browser.setDirectory(path);
-						VFSManager.waitForRequests();
-						setText(null);
-					}
-				}
-				else if(!MiscUtilities.isAbsolutePath(path))
-				{
-					VFSFile[] files = browser
-						.getBrowserView()
-						.getSelectedFiles();
-					if(files.length != 1
-						|| files[0].getType() ==
-						VFSFile.FILE)
-					{
-						return;
-					}
-					path = files[0].getPath();
-				}
-				else if(OperatingSystem.isDOSDerived()
-					&& path.length() == 3
-					&& path.charAt(1) == ':')
-				{
-					browser.setDirectory(path);
-					VFSManager.waitForRequests();
-					setText(null);
-				}
-
-				VFS vfs = VFSManager.getVFSForPath(path);
-				if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
-				{
-					setText(null);
-					browser.setDirectory(path);
-					VFSManager.waitForRequests();
-				}
-				else
-				{
-					if(path.endsWith("/") || path.endsWith(File.separator))
-						setText(path);
-					else
-						setText(path + vfs.getFileSeparator());
-				}
-			}
-			else if(ch > 0x20 && ch != 0x7f && ch != 0xff)
-			{
-				super.processKeyEvent(evt);
-				String path = getText();
-
-				BrowserView view = browser.getBrowserView();
-				view.selectNone();
-
-				int mode = browser.getMode();
-				// fix for bug #765507
-				// we don't type complete in save dialog
-				// boxes. Press TAB to do an explicit
-				// complete
-				view.getTable().doTypeSelect(path,
-					mode == VFSBrowser
-					.CHOOSE_DIRECTORY_DIALOG
-					||
-					mode == VFSBrowser
-					.SAVE_DIALOG);
 			}
 			else
 				super.processKeyEvent(evt);
@@ -208,32 +145,48 @@ class VFSFileNameField extends HistoryTextField
 	//{{{ doComplete() method
 	private void doComplete(String currentText)
 	{
+		int index = MiscUtilities.getLastSeparatorIndex(currentText);
+		if(index != -1)
+		{
+			String dir = currentText.substring(0,index + 1);
+			dir = MiscUtilities.constructPath(
+				browser.getDirectory(),dir);
+
+			browser.setDirectory(dir);
+			VFSManager.waitForRequests();
+
+			currentText = currentText.substring(index + 1);
+		}
+
 		BrowserView view = browser.getBrowserView();
 		view.selectNone();
 		view.getTable().doTypeSelect(currentText,
 			browser.getMode() == VFSBrowser
 			.CHOOSE_DIRECTORY_DIALOG);
 
+		String newText;
+
 		VFSFile[] files = view.getSelectedFiles();
 		if(files.length == 0)
-			return;
-
-		String path = files[0].getPath();
-		String name = files[0].getName();
-		String parent = MiscUtilities.getParentOfPath(path);
-
-		String newText;
-		if(MiscUtilities.isAbsolutePath(currentText)
-			&& !currentText.startsWith(browser.getDirectory()))
-		{
-			newText = path;
-		}
+			newText = currentText;
 		else
 		{
-			if(MiscUtilities.pathsEqual(parent,browser.getDirectory()))
-				newText = name;
-			else
+			String path = files[0].getPath();
+			String name = files[0].getName();
+			String parent = MiscUtilities.getParentOfPath(path);
+
+			if(MiscUtilities.isAbsolutePath(currentText)
+				&& !currentText.startsWith(browser.getDirectory()))
+			{
 				newText = path;
+			}
+			else
+			{
+				if(MiscUtilities.pathsEqual(parent,browser.getDirectory()))
+					newText = name;
+				else
+					newText = path;
+			}
 		}
 
 		setText(newText);
@@ -259,49 +212,4 @@ class VFSFileNameField extends HistoryTextField
 	} //}}}
 
 	//}}}
-
-	//{{{ BackspaceAction class
-	/**
-	 * In 4.3, I need to change all the keystrokes to use actions.
-	 */
-	class BackspaceAction extends AbstractAction
-	{
-		private Action delegate;
-
-		BackspaceAction(Action delegate)
-		{
-			this.delegate = delegate;
-		}
-
-		public void actionPerformed(ActionEvent evt)
-		{
-			if(getSelectionStart() == 0
-				&& getSelectionEnd() == 0)
-			{
-				goToParent();
-			}
-			else
-			{
-				delegate.actionPerformed(evt);
-
-				String path = getText();
-
-				BrowserView view = browser.getBrowserView();
-
-				view.selectNone();
-
-				int mode = browser.getMode();
-				// fix for bug #765507
-				// we don't type complete in save dialog
-				// boxes. Press TAB to do an explicit
-				// complete
-				view.getTable().doTypeSelect(path,
-					mode == VFSBrowser
-					.CHOOSE_DIRECTORY_DIALOG
-					||
-					mode == VFSBrowser
-					.SAVE_DIALOG);
-			}
-		}
-	} //}}}
 }
