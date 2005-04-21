@@ -10,6 +10,7 @@
 		<PROPERTY NAME="noWordSep" VALUE="_-+?:" />
 		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
 		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+		<PROPERTY NAME="multipleBracketIndent" VALUE="true" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="FALSE"

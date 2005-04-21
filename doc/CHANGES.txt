@@ -40,6 +40,11 @@ and Nicholas O'Leary for contributing to this release.
           baz);
   }
 
+- The following Java code did not indent properly:
+
+  foo(bar(
+          <--- should not have two levels of indent here
+
 - The soft wrap state is no longer reset when a buffer is saved. This
   was pointless and slowed down the editor.
 
@@ -58,7 +63,7 @@ and Nicholas O'Leary for contributing to this release.
   sometimes, resulting in exceptions when clicking in the text area.
 
 - If rectangular selection mode was enabled and you clicked beyond the
-  end of the line, jEdit would beep.
+  end of the line in a read-only buffer, jEdit would beep.
 
 }}}
 

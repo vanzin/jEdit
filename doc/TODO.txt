@@ -18,8 +18,6 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
   - format: doesn't wrap right if selection starts in the middle of the
     line
-  - if(foo(bar
-    <-- too much indent here
   - ruleset importing trick
   - expand fold: try to expand even if already expanded
   - backspace with virtual caret: needs tweaks
