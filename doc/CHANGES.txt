@@ -65,6 +65,9 @@ and Nicholas O'Leary for contributing to this release.
 - If rectangular selection mode was enabled and you clicked beyond the
   end of the line in a read-only buffer, jEdit would beep.
 
+- Using 'Delete Lines' with folding could mess up the vertical scroll
+  bar.
+
 }}}
 
 }}}
