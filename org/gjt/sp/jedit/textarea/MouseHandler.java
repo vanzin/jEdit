@@ -166,7 +166,8 @@ class MouseHandler extends MouseInputAdapter
 			}
 		}
 
-		if(control || textArea.isRectangularSelectionEnabled())
+		if((control || textArea.isRectangularSelectionEnabled())
+			&& textArea.isEditable())
 		{
 			int screenLine = (evt.getY() / textArea.getPainter()
 				.getFontMetrics().getHeight());
@@ -175,12 +176,6 @@ class MouseHandler extends MouseInputAdapter
 			ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(screenLine);
 			if(info.lastSubregion && extraEndVirt != 0)
 			{
-				if(!textArea.isEditable())
-				{
-					textArea.getToolkit().beep();
-					return;
-				}
-
 				// control-click in virtual space inserts
 				// whitespace and moves caret
 				String whitespace = MiscUtilities

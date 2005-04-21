@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -116,11 +117,11 @@ class VFSFileNameField extends HistoryTextField
 			{
 				super.processKeyEvent(evt);
 				String path = getText();
+				BrowserView view = browser.getBrowserView();
+				view.selectNone();
+
 				if(MiscUtilities.getLastSeparatorIndex(path) == -1)
 				{
-					BrowserView view = browser.getBrowserView();
-					view.selectNone();
-
 					int mode = browser.getMode();
 					// fix for bug #765507
 					// we don't type complete in save dialog
@@ -143,14 +144,40 @@ class VFSFileNameField extends HistoryTextField
 	private VFSBrowser browser;
 
 	//{{{ doComplete() method
+	public String doComplete(String path, String complete, boolean dirsOnly)
+	{
+		Log.log(Log.DEBUG,VFSFileNameField.class,
+			"doComplete(" + path + "," + complete
+			+ "," + dirsOnly);
+
+		for(;;)
+		{
+			if(complete.length() == 0)
+				return path;
+			int index = MiscUtilities.getFirstSeparatorIndex(complete);
+			if(index == -1)
+				return path;
+			/* Until the very last path component, we only complete on
+			directories */
+			String newPath = VFSFile.findCompletion(path,
+				complete.substring(0,index),browser,true);
+			if(newPath == null)
+				return null;
+			path = newPath;
+			complete = complete.substring(index + 1);
+		}
+	} //}}}
+
+	//{{{ doComplete() method
 	private void doComplete(String currentText)
 	{
 		int index = MiscUtilities.getLastSeparatorIndex(currentText);
 		if(index != -1)
 		{
 			String dir = currentText.substring(0,index + 1);
-			dir = MiscUtilities.constructPath(
-				browser.getDirectory(),dir);
+			dir = doComplete(browser.getDirectory(),dir,false);
+			if(dir == null)
+				return;
 
 			browser.setDirectory(dir);
 			VFSManager.waitForRequests();

@@ -218,6 +218,15 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			+ extAttr + ".width",w);
 	} //}}}
 	
+	//{{{ getFiles() method
+	public VFSFile[] getFiles()
+	{
+		VFSFile[] f = new VFSFile[files.length];
+		for(int i = 0; i < f.length; i++)
+			f[i] = files[i].dirEntry;
+		return f;
+	} //}}}
+	
 	//{{{ Package-private members
 	Entry[] files;
 	//}}}
