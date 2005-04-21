@@ -78,7 +78,7 @@ abstract class Anchor
 				for(int i = startLine + 1; i <= end; i++)
 				{
 					//XXX
-					if(displayManager.isLineVisible(i))
+					if(displayManager.isLineVisible(i - 1))
 					{
 						this.scrollLine -=
 							displayManager

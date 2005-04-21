@@ -3420,7 +3420,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			buffer.beginCompoundEdit();
 			
 			int start,end;
-			for (int i=lines.length-1;i>=0;i--)
+			for (int i = lines.length - 1; i >= 0; i--)
 			{
 				start = getLineStartOffset(lines[i]);
 				end = getLineEndOffset(lines[i]);
@@ -3451,7 +3451,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			int offset = chunkCache.xToSubregionOffset(caretLine,0,x,true);
 			setCaretPosition(getLineStartOffset(caretLine) + offset);
 		}
-
 	} //}}}
 
 	//{{{ deleteParagraph() method
