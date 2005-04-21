@@ -57,6 +57,9 @@ and Nicholas O'Leary for contributing to this release.
 - The last physical line index was not updated when saving files
   sometimes, resulting in exceptions when clicking in the text area.
 
+- If rectangular selection mode was enabled and you clicked beyond the
+  end of the line, jEdit would beep.
+
 }}}
 
 }}}

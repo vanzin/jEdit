@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2003 Slava Pestov
+ * Copyright (C) 2000, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.awt.Frame;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -272,6 +273,17 @@ public class VFSManager
 	} //}}}
 
 	//}}}
+
+	//{{{ error() method
+	/**
+	 * Handle an I/O error.
+	 * @since jEdit 4.3pre3
+	 */
+	public static void error(IOException e, String path, Component comp)
+	{
+		Log.log(Log.ERROR,VFSManager.class,e);
+		VFSManager.error(comp,path,"ioerror",new String[] { e.toString() });
+	} //}}}
 
 	//{{{ error() method
 	/**

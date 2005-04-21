@@ -495,11 +495,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 			catch(IOException e)
 			{
-				Log.log(Log.ERROR,this,e);
-				VFSManager.error(browser,path,
-					"ioerror",
-					new String[]
-					{ e.toString() });
+				VFSManager.error(e,path,browser);
 				return;
 			}
 			finally
@@ -512,11 +508,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				}
 				catch(IOException e)
 				{
-					Log.log(Log.ERROR,this,e);
-					VFSManager.error(browser,path,
-						"ioerror",
-						new String[]
-						{ e.toString() });
+					VFSManager.error(e,path,browser);
 					return;
 				}
 			}

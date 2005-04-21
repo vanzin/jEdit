@@ -308,6 +308,29 @@ public class MiscUtilities
 			return parent + File.separator + path;
 	} //}}}
 
+	//{{{ getFirstSeparatorIndex() method
+	/**
+	 * Return the first index of either / or the OS-specific file
+	 * separator.
+	 * @param path The path
+	 * @since jEdit 4.3pre3
+	 */
+	public static int getFirstSeparatorIndex(String path)
+	{
+		int start = 0;
+		if(path.startsWith("/"))
+			start = 1;
+		else if(OperatingSystem.isDOSDerived()
+			&& path.length() >= 3
+			&& path.charAt(1) == ':'
+			&& (path.charAt(2) == '/'
+			|| path.charAt(2) == '\\'))
+			start = 3;
+
+		return Math.max(path.indexOf('/',start),
+			path.indexOf(File.separatorChar,start));
+	} //}}}
+	
 	//{{{ getLastSeparatorIndex() method
 	/**
 	 * Return the last index of either / or the OS-specific file
