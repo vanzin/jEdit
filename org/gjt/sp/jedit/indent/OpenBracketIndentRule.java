@@ -48,7 +48,11 @@ public class OpenBracketIndentRule extends BracketIndentRule
 		if(prevOpenBracketCount != 0)
 		{
 			handleCollapse(indentActions);
-			indentActions.add(new IndentAction.Increase(prevOpenBracketCount));
+			boolean multiple = buffer.getBooleanProperty(
+				"multipleBracketIndent");
+			IndentAction increase = new IndentAction.Increase(
+				multiple ? prevOpenBracketCount : 1);
+			indentActions.add(increase);
 		}
 		else if(getOpenBracketCount(buffer,thisLineIndex) != 0)
 		{
@@ -69,12 +73,7 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	private void handleCollapse(List indentActions)
 	{
 		if(indentActions.contains(new IndentAction.Collapse()))
-		{
-			/* if(aligned)
-				indentActions.add(new IndentAction.Reset());
-			else */
-				indentActions.clear();
-		}
+			indentActions.clear();
 	} //}}}
 	
 	private boolean aligned;

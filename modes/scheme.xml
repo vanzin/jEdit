@@ -7,6 +7,7 @@
 		<PROPERTY NAME="noWordSep" VALUE="_-+?:*/!"/>
 		<PROPERTY NAME="unalignedOpenBrackets" VALUE="("/>
 		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")"/>
+		<PROPERTY NAME="multipleBracketIndent" VALUE="true" />
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" NO_WORD_SEP="_-+?:*/!">
 		<SPAN TYPE="COMMENT1">

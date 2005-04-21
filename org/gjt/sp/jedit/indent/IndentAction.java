@@ -109,6 +109,14 @@ public interface IndentAction
 		{
 			return true;
 		}
+		
+		public boolean equals(Object o)
+		{
+			if(o instanceof Increase)
+				return ((Increase)o).amount == amount;
+			else
+				return false;
+		}
 	}
 
 	public class Decrease implements IndentAction
