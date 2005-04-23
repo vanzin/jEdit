@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to James Turk, Loren Charnley, Matthieu Casanova, Michael Macnair
-and Nicholas O'Leary for contributing to this release.
+Thanks to David Chan, James Turk, Loren Charnley, Matthieu Casanova,
+Michael Macnair and Nicholas O'Leary for contributing to this release.
 
 {{{ Syntax Highlighting
 
@@ -67,6 +67,11 @@ and Nicholas O'Leary for contributing to this release.
 
 - Using 'Delete Lines' with folding could mess up the vertical scroll
   bar.
+
+- File system browser's right click menu now contains the "Plugins" menu
+  (Nicholas O'Leary).
+
+- Fixed file system browser's left arrow key behavior (David Chan).
 
 }}}
 

@@ -150,7 +150,8 @@ public class BrowserCommandsMenu extends JPopupMenu
 			addSeparator();
 			add(createEncodingMenu());
 		}
-
+		addSeparator();
+		add(createPluginMenu(browser));
 		update();
 	} //}}}
 
@@ -267,6 +268,16 @@ public class BrowserCommandsMenu extends JPopupMenu
 		return encodingMenu;
 	} //}}}
 
+	//{{{ createPluginsMenu() method
+	private JMenu createPluginMenu(VFSBrowser browser)
+	{
+		JMenu pluginMenu = new JMenu(jEdit.getProperty(
+			"vfs.browser.plugins.label"));
+		return (JMenu)browser.createPluginsMenu(pluginMenu,false);
+		
+	} //}}}
+
+	
 	//}}}
 
 	//{{{ ActionHandler class

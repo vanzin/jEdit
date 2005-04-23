@@ -759,6 +759,67 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		});
 	} //}}}
 
+	//{{{ createPluginsMenu() method
+	public JComponent createPluginsMenu(JComponent pluginMenu, boolean showManagerOptions)
+	{
+		ActionHandler actionHandler = new ActionHandler();
+		if(showManagerOptions && getMode() == VFSBrowser.BROWSER)
+		{
+			pluginMenu.add(GUIUtilities.loadMenuItem("plugin-manager",false));
+			pluginMenu.add(GUIUtilities.loadMenuItem("plugin-options",false));
+			if (pluginMenu instanceof JMenu)
+				((JMenu)pluginMenu).addSeparator();
+			else if (pluginMenu instanceof JPopupMenu)
+				((JPopupMenu)pluginMenu).addSeparator();
+				
+		}
+		else
+			/* we're in a modal dialog */;
+		
+		ArrayList vec = new ArrayList();
+		
+		//{{{ old API
+		Enumeration e = VFSManager.getFilesystems();
+		
+		while(e.hasMoreElements())
+		{
+			VFS vfs = (VFS)e.nextElement();
+			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
+				continue;
+			
+				JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
+						"vfs." + vfs.getName() + ".label"));
+				menuItem.setActionCommand(vfs.getName());
+				menuItem.addActionListener(actionHandler);
+				vec.add(menuItem);
+		} //}}}
+		
+		//{{{ new API
+		EditPlugin[] plugins = jEdit.getPlugins();
+		for(int i = 0; i < plugins.length; i++)
+		{
+			JMenuItem menuItem = plugins[i].createBrowserMenuItems();
+			if(menuItem != null)
+				vec.add(menuItem);
+		} //}}}
+		
+		if(vec.size() != 0)
+		{
+			MiscUtilities.quicksort(vec,new MiscUtilities.MenuItemCompare());
+			for(int i = 0; i < vec.size(); i++)
+				pluginMenu.add((JMenuItem)vec.get(i));
+		}
+		else
+		{
+			JMenuItem mi = new JMenuItem(jEdit.getProperty(
+					"vfs.browser.plugins.no-plugins.label"));
+			mi.setEnabled(false);
+			pluginMenu.add(mi);
+		}
+		
+		return pluginMenu;
+	} //}}}
+	
 	//{{{ addBrowserListener() method
 	public void addBrowserListener(BrowserListener l)
 	{
@@ -1238,58 +1299,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			if(popup != null)
 				return;
 
-			popup = new JPopupMenu();
-			ActionHandler actionHandler = new ActionHandler();
-
-			if(getMode() == BROWSER)
-			{
-				popup.add(GUIUtilities.loadMenuItem("plugin-manager",false));
-				popup.add(GUIUtilities.loadMenuItem("plugin-options",false));
-				popup.addSeparator();
-			}
-			else
-				/* we're in a modal dialog */;
-
-			ArrayList vec = new ArrayList();
-
-			//{{{ old API
-			Enumeration e = VFSManager.getFilesystems();
-
-			while(e.hasMoreElements())
-			{
-				VFS vfs = (VFS)e.nextElement();
-				if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
-					continue;
-
-				JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
-					"vfs." + vfs.getName() + ".label"));
-				menuItem.setActionCommand(vfs.getName());
-				menuItem.addActionListener(actionHandler);
-				vec.add(menuItem);
-			} //}}}
-
-			//{{{ new API
-			EditPlugin[] plugins = jEdit.getPlugins();
-			for(int i = 0; i < plugins.length; i++)
-			{
-				JMenuItem menuItem = plugins[i].createBrowserMenuItems();
-				if(menuItem != null)
-					vec.add(menuItem);
-			} //}}}
-
-			if(vec.size() != 0)
-			{
-				MiscUtilities.quicksort(vec,new MiscUtilities.MenuItemCompare());
-				for(int i = 0; i < vec.size(); i++)
-					popup.add((JMenuItem)vec.get(i));
-			}
-			else
-			{
-				JMenuItem mi = new JMenuItem(jEdit.getProperty(
-					"vfs.browser.plugins.no-plugins.label"));
-				mi.setEnabled(false);
-				popup.add(mi);
-			}
+			popup = (JPopupMenu)createPluginsMenu(new JPopupMenu(),true);
 		} //}}}
 
 		//{{{ ActionHandler class
