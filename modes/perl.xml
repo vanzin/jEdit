@@ -9,6 +9,7 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
 		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+		<PROPERTY NAME="indentNextLine" VALUE="[^#]*\.\s*$" />
 	</PROPS>
 	<RULES ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
 		<!-- Comments -->

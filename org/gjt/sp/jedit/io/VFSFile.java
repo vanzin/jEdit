@@ -81,6 +81,8 @@ public class VFSFile implements Serializable
 			return System.getProperty("user.home");
 		else if(complete.equals("-"))
 			return browser.getView().getBuffer().getDirectory();
+		else if(complete.equals(".."))
+			return MiscUtilities.getParentOfPath(path);
 
 		if(MiscUtilities.isAbsolutePath(complete))
 		{
