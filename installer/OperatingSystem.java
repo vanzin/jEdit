@@ -128,6 +128,11 @@ public abstract class OperatingSystem
 			return new File(dir,name.toLowerCase() + "/" + version).getPath();
 		}
 
+		public String getExtraClassPath()
+		{
+			return "";
+		}
+
 		public class ScriptOSTask extends OSTask
 		{
 			public ScriptOSTask(Install installer)
@@ -165,7 +170,7 @@ public abstract class OperatingSystem
 				FileWriter out = new FileWriter(script);
 				out.write("#!/bin/sh\n");
 				out.write("# Java heap size, in megabytes\n");
-				out.write("JAVA_HEAP_SIZE=32\n");
+				out.write("JAVA_HEAP_SIZE=64\n");
 				out.write("DEFAULT_JAVA_HOME=\""
 					+ System.getProperty("java.home")
 					+ "\"\n");
@@ -180,7 +185,8 @@ public abstract class OperatingSystem
 				String jar = installDir + File.separator
 					+ name.toLowerCase() + ".jar";
 
-				out.write("-jar \"" + jar + "\" $@\n");
+				out.write("-classpath \"" + getExtraClassPath()
+					+ jar + "\" org.gjt.sp.jedit.jEdit $@\n");
 
 				out.close();
 
@@ -263,6 +269,11 @@ public abstract class OperatingSystem
 		public String getInstallDirectory(String name, String version)
 		{
 			return "/Applications/" + name + " " + version;
+		}
+
+		public String getExtraClassPath()
+		{
+			return "/System/Library/Java/:";
 		}
 	}
 
