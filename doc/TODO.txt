@@ -20,6 +20,7 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 
 + text area:
 
+  - click&drag breaks fast scroll
   - format: doesn't wrap right if selection starts in the middle of the
     line
   - ruleset importing trick
