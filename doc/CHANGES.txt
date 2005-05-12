@@ -73,6 +73,19 @@ Michael Macnair and Nicholas O'Leary for contributing to this release.
 
 - Fixed file system browser's left arrow key behavior (David Chan).
 
+- The startup script created by the Java-based installer on Mac OS X now
+  adds the Cocoa classes to jEdit's class path, so the Mac OS plugin
+  should work with no further tweaking.
+
+}}}
+{{{ API Changes
+
+- Selecting multiple directories in the file chooser dialog box is now
+  supported; just pass true as the last parameter (Matthieu Casanova):
+  
+  GUIUtilities.showVFSFileDialog(view,null,
+    VFSBrowser.CHOOSE_DIRECTORY_DIALOG,true)
+
 }}}
 
 }}}
