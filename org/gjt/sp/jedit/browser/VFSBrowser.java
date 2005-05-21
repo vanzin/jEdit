@@ -486,6 +486,15 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		});
 	} //}}}
 
+	//{{{ getRootDirectory() method
+	public static String getRootDirectory()
+	{
+		if(OperatingSystem.isMacOS() || OperatingSystem.isDOSDerived())
+			return FileRootsVFS.PROTOCOL + ":";
+		else
+			return "/";
+	} //}}}
+	
 	//{{{ rootDirectory() method
 	/**
 	 * Goes to the local drives directory.
@@ -493,10 +502,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 */
 	public void rootDirectory()
 	{
-		if(OperatingSystem.isMacOS() || OperatingSystem.isDOSDerived())
-			setDirectory(FileRootsVFS.PROTOCOL + ":");
-		else
-			setDirectory("/");
+		setDirectory(getRootDirectory());
 	} //}}}
 
 	//{{{ reloadDirectory() method

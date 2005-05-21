@@ -2300,7 +2300,7 @@ public class jEdit
 		int before = (int) (rt.freeMemory() / 1024);
 		System.gc();
 		int after = (int) (rt.freeMemory() / 1024);
-		int total = (int) (rt.totalMemory() / 1024);
+		int total = (int) (rt.maxMemory() / 1024);
 
 		JProgressBar progress = new JProgressBar(0,total);
 		progress.setValue(total - after);
