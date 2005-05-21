@@ -649,7 +649,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		{
 			Runtime runtime = Runtime.getRuntime();
 			int freeMemory = (int)(runtime.freeMemory() / 1024);
-			int totalMemory = (int)(runtime.totalMemory() / 1024);
+			int totalMemory = (int)(runtime.maxMemory() / 1024);
 			int usedMemory = (totalMemory - freeMemory);
 			Integer[] args = { new Integer(usedMemory),
 				new Integer(totalMemory) };

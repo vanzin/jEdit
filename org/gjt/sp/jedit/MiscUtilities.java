@@ -317,18 +317,11 @@ public class MiscUtilities
 	 */
 	public static int getFirstSeparatorIndex(String path)
 	{
-		int start = 0;
-		if(path.startsWith("/"))
-			start = 1;
-		else if(OperatingSystem.isDOSDerived()
-			&& path.length() >= 3
-			&& path.charAt(1) == ':'
-			&& (path.charAt(2) == '/'
-			|| path.charAt(2) == '\\'))
-			start = 3;
-
-		return Math.max(path.indexOf('/',start),
-			path.indexOf(File.separatorChar,start));
+		int start = getPathStart(path);
+		int index = path.indexOf('/',start);
+		if(index == -1)
+			index = path.indexOf(File.separatorChar,start);
+		return index;
 	} //}}}
 	
 	//{{{ getLastSeparatorIndex() method
@@ -340,8 +333,15 @@ public class MiscUtilities
 	 */
 	public static int getLastSeparatorIndex(String path)
 	{
-		return Math.max(path.lastIndexOf('/'),
+		int start = getPathStart(path);
+		if(start != 0)
+			path = path.substring(start);
+		int index = Math.max(path.lastIndexOf('/'),
 			path.lastIndexOf(File.separatorChar));
+		if(index == -1)
+			return index;
+		else
+			return index + start;
 	} //}}}
 	
 	//{{{ getFileExtension() method
@@ -1676,5 +1676,21 @@ loop:		for(;;)
 			return ch1 == ch2;
 	} //}}}
 
+	//{{{ getPathStart()
+	private static int getPathStart(String path)
+	{
+		int start = 0;
+		if(path.startsWith("/"))
+			return 1;
+		else if(OperatingSystem.isDOSDerived()
+			&& path.length() >= 3
+			&& path.charAt(1) == ':'
+			&& (path.charAt(2) == '/'
+			|| path.charAt(2) == '\\'))
+			return 3;
+		else
+			return 0;
+	} //}}}
+	
 	//}}}
 }

@@ -157,6 +157,7 @@ class VFSFileNameField extends HistoryTextField
 			int index = MiscUtilities.getFirstSeparatorIndex(complete);
 			if(index == -1)
 				return path;
+
 			/* Until the very last path component, we only complete on
 			directories */
 			String newPath = VFSFile.findCompletion(path,
@@ -172,17 +173,44 @@ class VFSFileNameField extends HistoryTextField
 	private void doComplete(String currentText)
 	{
 		int index = MiscUtilities.getLastSeparatorIndex(currentText);
+		String dir;
 		if(index != -1)
+			dir = currentText.substring(0,index + 1);
+		else
+			dir = "";
+
+		if(MiscUtilities.isAbsolutePath(currentText))
 		{
-			String dir = currentText.substring(0,index + 1);
-			dir = doComplete(browser.getDirectory(),dir,false);
+			if(dir.startsWith("/"))
+				dir = dir.substring(1);
+			dir = doComplete(VFSBrowser.getRootDirectory(),dir,false);
 			if(dir == null)
 				return;
-
+	
 			browser.setDirectory(dir);
 			VFSManager.waitForRequests();
 
-			currentText = currentText.substring(index + 1);
+			if(index == -1)
+			{
+				if(currentText.startsWith("/"))
+					currentText = currentText.substring(1);
+			}
+			else
+				currentText = currentText.substring(index + 1);
+		}
+		else
+		{
+			if(dir.length() != 0)
+			{
+				dir = doComplete(browser.getDirectory(),dir,false);
+				if(dir == null)
+					return;
+	
+				browser.setDirectory(dir);
+				VFSManager.waitForRequests();
+	
+				currentText = currentText.substring(index + 1);
+			}
 		}
 
 		BrowserView view = browser.getBrowserView();

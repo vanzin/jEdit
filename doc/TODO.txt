@@ -1,11 +1,46 @@
+[error] ExtensionManager: java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 379
+[error] ExtensionManager:  at org.gjt.sp.jedit.Buffer.getLineOfOffset(Buffer.java:892)
+[error] ExtensionManager:  at errorlist.DefaultErrorSource$DefaultError.getLineNumber(DefaultErrorSource.java:510)
+[error] ExtensionManager:  at errorlist.DefaultErrorSource.findError(DefaultErrorSource.java:330)
+[error] ExtensionManager:  at errorlist.DefaultErrorSource.getLineErrors(DefaultErrorSource.java:134)
+[error] ExtensionManager:  at errorlist.ErrorHighlight.paintValidLine(ErrorHighlight.java:53)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaExtension.paintScreenLineRange(TextAreaExtension.java:70)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:146)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:106)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter.paint(TextAreaPainter.java:699)
+
+[error] ExtensionManager: java.lang.NullPointerException
+[error] ExtensionManager:  at org.gjt.sp.jedit.Buffer.markTokens(Buffer.java:2161)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ChunkCache.lineToChunkList(ChunkCache.java:760)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ChunkCache.updateChunksUpTo(ChunkCache.java:635)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ChunkCache.getLineInfo(ChunkCache.java:244)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter$PaintText.paintValidLine(TextAreaPainter.java:1039)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaExtension.paintScreenLineRange(TextAreaExtension.java:70)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:146)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:106)
+[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter.paint(TextAreaPainter.java:699)
+
+
 TO DO
+
+absolute path completion
+
+does not indent properly:
+
+1000 [
+    [
+        [
+            [
+                50000 cons-a-lot
+            ] 4 10 make-trash
+        ] 4 10 make-trash
+    ] 4 10 make-trash 0 swap [ [ + ] when* ] tree-each drop
+] times
 
 Note that this is not a complete to do list. It mostly only lists bugs
 and quirks that I need to fix eventually.
 
 splitting messes up last physical line in the newly created text area
-
-startup script should add /System/Library/Java/ on mac os x
 
 console: cd / repeatedly on windows
 
