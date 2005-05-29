@@ -77,6 +77,9 @@ Michael Macnair and Nicholas O'Leary for contributing to this release.
   adds the Cocoa classes to jEdit's class path, so the Mac OS plugin
   should work with no further tweaking.
 
+- Fix race condition when there were buffers in the perspective, as well
+  as buffers specified to open on the command line.
+
 }}}
 {{{ API Changes
 

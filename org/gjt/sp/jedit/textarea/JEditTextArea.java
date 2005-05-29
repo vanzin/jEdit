@@ -315,7 +315,8 @@ public class JEditTextArea extends JComponent
 				// dubious?
 				//setFirstLine(0);
 
-				selectNone();
+				if(buffer.isLoaded())
+					selectNone();
 				caretLine = caret = caretScreenLine = 0;
 				match = null;
 			}
