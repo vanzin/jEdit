@@ -185,7 +185,7 @@ BufferLocalPropertiesDialog(View view){
 					value = "";
 			}
 			buff.append(":");
-			buff.append(name).append("=").append(value);
+			buff.append(name).append("=").append(""+value);
 		}
 
 		jEdit.setProperty("macro.insert-buffer-properties." + mode,
