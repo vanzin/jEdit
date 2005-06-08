@@ -295,27 +295,33 @@ void writeTableToNewBuffer(Vector v, String setName)
 	writeSet(v, setName);
 }
 
+// saved the currentSet and deleted it for makeTableDataForMode()-invocation
+// because otherwise the currently in the Dialog displayed set has no abbrevs
+// in the output written to the buffer.
 void writeAllToNewBuffer()
 {
 	writeHeader();
 	Vector vOut = new Vector();
+	savedCurrentSet = currentSet;
 	for( int i = 0; i < abbrevSets.length; ++i)
 	{
+		currentSet = null;
 		String setName = (String)abbrevSets[i];
 		vOut = makeTableDataForMode(vOut, setName);
 		writeSet(vOut, setName);
 		textArea.setSelectedText("\n\n");
 	}
+	currentSet = savedCurrentSet;
 }
 
 void writeHeader()
 {
 	jEdit.newFile(view);
-	textArea.setSelectedText("jEdit Keyboard Shortcut Table\n\n");
+	textArea.setSelectedText("jEdit Abbreviation Table\n\n");
 }
 
 /*
- * This truncates the definition text at 18 characters and the expansion text
+ * This truncates the definition text at 17 characters and the expansion text
  * at 58.
  */
 void writeSet(Vector v, String setName)
@@ -332,15 +338,15 @@ void writeSet(Vector v, String setName)
 		Vector row = (Vector)v.elementAt(i);
 		abbrevName = (String)row.elementAt(0);
 		if(abbrevName == null) continue;
-		if(abbrevName.length() > 18)
+		if(abbrevName.length() > 17)
 			abbrevName = abbrevName.substring(0, 14) + "...";
 		sb.append(abbrevName);
-		sb.append(space, 0, 16 - (abbrevName.length()));
+		sb.append(space, 0, 18 - (abbrevName.length()));
 		expansion = row.elementAt(1);
 		if(shortcut1 != null)
 		{
 			if(expansion.length() > 58)
-				expansion = expansion.substring(0, 54) + "...";
+				expansion = expansion.substring(0, 55) + "...";
 			sb.append(expansion);
 		}
 		sb.append('\n');

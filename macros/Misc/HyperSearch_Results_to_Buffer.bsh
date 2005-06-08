@@ -33,7 +33,7 @@ writeHypersearchResultsToBuffer(View view){
 	}
 
 	root = hs.getTreeModel().getRoot();
-	if(root == null)
+	if(root == null || root.getDepth() == 0)
 	{
 		Macros.error(view, "No HyperSearch matches.");
 		return;

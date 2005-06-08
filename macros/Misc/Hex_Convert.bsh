@@ -55,11 +55,10 @@ void stringToByte(String target)
     foo.append("\nafter = ");
 
     int length = string.length;
-    for (int i = 0; i < string; k++)
+	for (int i = 0; i < length; i++)
     {
-		
-        foo.append("0x" + byteToHex(string[k]));
-        if (i < length - 1) foo.append(",");
+		foo.append("0x" + byteToHex(string[i]));
+        if (i < length - 1) foo.append(" ");
     }
     print(foo.toString());
 }
