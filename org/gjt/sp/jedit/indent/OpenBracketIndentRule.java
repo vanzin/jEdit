@@ -24,8 +24,8 @@ package org.gjt.sp.jedit.indent;
 
 import gnu.regexp.*;
 import java.util.List;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.search.RESearchMatcher;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.TextUtilities;
 
 public class OpenBracketIndentRule extends BracketIndentRule
@@ -40,7 +40,7 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ apply() method
-	public void apply(Buffer buffer, int thisLineIndex,
+	public void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
 		List indentActions)
 	{
@@ -61,7 +61,7 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ getOpenBracketCount() method
-	private int getOpenBracketCount(Buffer buffer, int line)
+	private int getOpenBracketCount(JEditBuffer buffer, int line)
 	{
 		if(line == -1)
 			return 0;

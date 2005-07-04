@@ -56,7 +56,7 @@ public abstract class BracketIndentRule implements IndentRule
 				an explicit fold. */
 				if(line.length() - i >= 3)
 				{
-					if(line.substring(i,i+3).equals("{{{"))
+					if(line.substring(i,i+3).equals("{{{")) /* }}} */
 					{
 						i += 2;
 						continue;

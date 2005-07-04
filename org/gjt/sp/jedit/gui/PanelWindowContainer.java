@@ -340,7 +340,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//{{{ setDimension() method
 	void setDimension(int dimension)
 	{
-		if(dimension > 0)
+		if(dimension > SPLITTER_WIDTH)
 			this.dimension = dimension - SPLITTER_WIDTH;
 	} //}}}
 

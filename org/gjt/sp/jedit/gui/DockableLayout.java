@@ -415,9 +415,7 @@ public class DockableLayout implements LayoutManager2
 				leftButtonWidth + leftWidth,
 				size.height - bottomHeight
 				- bottomButtonHeight
-				- _bottomToolbars.height
-				+ topButtonHeight
-				+ topHeight,
+				- _bottomToolbars.height,
 				size.width - leftWidth - rightWidth
 				- leftButtonWidth - rightButtonWidth,
 				_bottomToolbars.height);

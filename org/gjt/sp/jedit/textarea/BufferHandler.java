@@ -1,5 +1,5 @@
 /*
- * BufferChangeHandler.java
+ * BufferHandler.java
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -43,11 +43,11 @@ import org.gjt.sp.util.Log;
  *
  * There is still work to do; see TODO.txt.
  */
-class BufferChangeHandler extends BufferChangeAdapter
+class BufferHandler implements BufferListener
 {
 	private DisplayManager displayManager;
 	private JEditTextArea textArea;
-	private Buffer buffer;
+	private JEditBuffer buffer;
 
 	boolean delayedUpdate;
 	boolean delayedMultilineUpdate;
@@ -55,7 +55,7 @@ class BufferChangeHandler extends BufferChangeAdapter
 	int delayedUpdateEnd;
 
 	//{{{ BufferChangeHandler constructor
-	BufferChangeHandler(DisplayManager displayManager,
+	BufferHandler(DisplayManager displayManager,
 		JEditTextArea textArea,
 		Buffer buffer)
 	{
@@ -65,24 +65,24 @@ class BufferChangeHandler extends BufferChangeAdapter
 	} //}}}
 
 	//{{{ bufferLoaded() method
-	public void bufferLoaded(Buffer buffer)
+	public void bufferLoaded(JEditBuffer buffer)
 	{
 		displayManager.bufferLoaded();
 	} //}}}
 
 	//{{{ foldHandlerChanged() method
-	public void foldHandlerChanged(Buffer buffer)
+	public void foldHandlerChanged(JEditBuffer buffer)
 	{
 		displayManager.foldHandlerChanged();
 	} //}}}
 
 	//{{{ foldLevelChanged() method
-	public void foldLevelChanged(Buffer buffer, int start, int end)
+	public void foldLevelChanged(JEditBuffer buffer, int start, int end)
 	{
 		//System.err.println("foldLevelChanged " + (start-1) + " to " + textArea.getLastPhysicalLine() + "," + end);
 
 		if(textArea.getDisplayManager() == displayManager
-			&& end != 0 && buffer.isLoaded())
+			&& end != 0 && !buffer.isLoading())
 		{
 			textArea.invalidateLineRange(start - 1,
 				textArea.getLastPhysicalLine());
@@ -90,10 +90,10 @@ class BufferChangeHandler extends BufferChangeAdapter
 	} //}}}
 
 	//{{{ contentInserted() method
-	public void contentInserted(Buffer buffer, int startLine,
+	public void contentInserted(JEditBuffer buffer, int startLine,
 		int offset, int numLines, int length)
 	{
-		if(!buffer.isLoaded())
+		if(buffer.isLoading())
 			return;
 
 		displayManager.screenLineMgr.contentInserted(startLine,numLines);
@@ -159,10 +159,10 @@ class BufferChangeHandler extends BufferChangeAdapter
 	} //}}}
 
 	//{{{ preContentRemoved() method
-	public void preContentRemoved(Buffer buffer, int startLine,
+	public void preContentRemoved(JEditBuffer buffer, int startLine,
 		int offset, int numLines, int length)
 	{
-		if(!buffer.isLoaded())
+		if(buffer.isLoading())
 			return;
 
 		FirstLine firstLine = displayManager.firstLine;
@@ -223,10 +223,10 @@ class BufferChangeHandler extends BufferChangeAdapter
 	} //}}}
 
 	//{{{ contentRemoved() method
-	public void contentRemoved(Buffer buffer, int startLine,
+	public void contentRemoved(JEditBuffer buffer, int startLine,
 		int start, int numLines, int length)
 	{
-		if(!buffer.isLoaded())
+		if(buffer.isLoading())
 			return;
 
 		if(textArea.getDisplayManager() == displayManager)
@@ -277,7 +277,7 @@ class BufferChangeHandler extends BufferChangeAdapter
 	//}}}
 
 	//{{{ transactionComplete() method
-	public void transactionComplete(Buffer buffer)
+	public void transactionComplete(JEditBuffer buffer)
 	{
 		if(textArea.getDisplayManager() != displayManager)
 		{
