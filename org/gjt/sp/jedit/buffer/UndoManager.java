@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2001, 2003 Slava Pestov
+ * Copyright (C) 2001, 2005 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ import org.gjt.sp.util.Log;
 public class UndoManager
 {
 	//{{{ UndoManager constructor
-	public UndoManager(Buffer buffer)
+	public UndoManager(JEditBuffer buffer)
 	{
 		this.buffer = buffer;
 	} //}}}
@@ -234,7 +234,7 @@ public class UndoManager
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private Buffer buffer;
+	private JEditBuffer buffer;
 
 	// queue of undos. last is most recent, first is oldest
 	private Edit undosFirst;

@@ -22,7 +22,9 @@
 
 package org.gjt.sp.jedit.indent;
 
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.TextUtilities;
 
 public interface IndentAction
 {
@@ -34,7 +36,7 @@ public interface IndentAction
 	 * @param newIndent The new indent -- ie, indent returned by previous
 	 * indent action.
 	 */
-	public int calculateIndent(Buffer buffer, int line, int oldIndent,
+	public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 		int newIndent);
 
 	/**
@@ -54,7 +56,7 @@ public interface IndentAction
 		 * This does nothing; it is merely a sentinel for the
 		 * <code>OpenBracketIndentRule</code>.
 		 */
-		public int calculateIndent(Buffer buffer, int line, int oldIndent,
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
 			return newIndent;
@@ -73,7 +75,7 @@ public interface IndentAction
 
 	public class Reset implements IndentAction
 	{
-		public int calculateIndent(Buffer buffer, int line, int oldIndent,
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
 			return oldIndent;
@@ -99,7 +101,7 @@ public interface IndentAction
 			this.amount = amount;
 		}
 		
-		public int calculateIndent(Buffer buffer, int line, int oldIndent,
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
 			return newIndent + buffer.getIndentSize() * amount;
@@ -121,7 +123,7 @@ public interface IndentAction
 
 	public class Decrease implements IndentAction
 	{
-		public int calculateIndent(Buffer buffer, int line, int oldIndent,
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
 			return newIndent - buffer.getIndentSize();
@@ -141,7 +143,7 @@ public interface IndentAction
 		private String openBracketLineText;
 		private int extraIndent;
 
-		public AlignBracket(Buffer buffer, int line, int offset)
+		public AlignBracket(JEditBuffer buffer, int line, int offset)
 		{
 			this.line = line;
 			this.offset = offset;
@@ -179,7 +181,7 @@ public interface IndentAction
 			return openBracketLineText;
 		}
 
-		public int calculateIndent(Buffer buffer, int line, int oldIndent,
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
 			if(openBracketLineText == null)

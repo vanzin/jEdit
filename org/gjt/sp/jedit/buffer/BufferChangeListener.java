@@ -129,4 +129,126 @@ public interface BufferChangeListener
 	 */
 	void bufferLoaded(Buffer buffer);
 	//}}}
+	
+	//{{{ Compatibility with older jEdit plugins
+	public class Adapter implements BufferListener
+	{
+		private BufferChangeListener delegate;
+
+		//{{{ Adapter constructor
+		public Adapter(BufferChangeListener delegate)
+		{
+			this.delegate = delegate;
+		} //}}}
+	
+		//{{{ getDelegate() method
+		public BufferChangeListener getDelegate()
+		{
+			return delegate;
+		} //}}}
+
+		//{{{ foldLevelChanged() method
+		/**
+		 * Called when line fold levels change.
+		 * @param buffer The buffer in question
+		 * @param startLine The start line number
+		 * @param endLine The end line number
+		 * @since jEdit 4.3pre3
+		 */
+		public void foldLevelChanged(JEditBuffer buffer, int startLine, int endLine)
+		{
+			delegate.foldLevelChanged((Buffer)buffer,startLine,endLine);
+		} //}}}
+	
+		//{{{ contentInserted() method
+		/**
+		 * Called when text is inserted into the buffer.
+		 * @param buffer The buffer in question
+		 * @param startLine The first line
+		 * @param offset The start offset, from the beginning of the buffer
+		 * @param numLines The number of lines inserted
+		 * @param length The number of characters inserted
+		 * @since jEdit 4.3pre3
+		 */
+		public void contentInserted(JEditBuffer buffer, int startLine, int offset,
+			int numLines, int length)
+		{
+			delegate.contentInserted((Buffer)buffer,startLine,offset,numLines,length);
+		} //}}}
+	
+		//{{{ contentRemoved() method
+		/**
+		 * Called when text is removed from the buffer.
+		 * @param buffer The buffer in question
+		 * @param startLine The first line
+		 * @param offset The start offset, from the beginning of the buffer
+		 * @param numLines The number of lines removed
+		 * @param length The number of characters removed
+		 * @since jEdit 4.3pre3
+		 */
+		public void contentRemoved(JEditBuffer buffer, int startLine, int offset,
+			int numLines, int length)
+		{
+			delegate.contentRemoved((Buffer)buffer,startLine,offset,numLines,length);
+		} //}}}
+	
+		//{{{ preContentRemoved() method
+		/**
+		 * Called when text is about to be removed from the buffer, but is
+		 * still present.
+		 * @param buffer The buffer in question
+		 * @param startLine The first line
+		 * @param offset The start offset, from the beginning of the buffer
+		 * @param numLines The number of lines to be removed
+		 * @param length The number of characters to be removed
+		 * @since jEdit 4.3pre3
+		 */
+		public void preContentRemoved(JEditBuffer buffer, int startLine, int offset,
+			int numLines, int length)
+		{
+			delegate.preContentRemoved((Buffer)buffer,startLine,offset,numLines,length);
+		} //}}}
+	
+		//{{{ transactionComplete() method
+		/**
+		 * Called after an undo or compound edit has finished. The text area
+		 * uses this event to queue up and collapse cleanup operations so they
+		 * are only run once during a long transaction (such as a "Replace All"
+		 * operation.)
+		 *
+		 * @param buffer The buffer in question
+		 * @since jEdit 4.3pre3
+		 */
+		public void transactionComplete(JEditBuffer buffer)
+		{
+			delegate.transactionComplete((Buffer)buffer);
+		} //}}}
+	
+		//{{{ foldHandlerChanged() method
+		/**
+		 * Called to notify the text area that folds need to be collapsed if
+		 * the "collapseFolds" property is set. This method is called after the
+		 * buffer has been loaded, and also if the user changes the fold
+		 * handler.
+		 *
+		 * @param buffer The buffer in question
+		 * @since jEdit 4.3pre3
+		 */
+		public void foldHandlerChanged(JEditBuffer buffer)
+		{
+			delegate.foldHandlerChanged((Buffer)buffer);
+		} //}}}
+	
+		//{{{ foldHandlerChanged() method
+		/**
+		 * Called to notify the text area that the buffer has been reloaded.
+		 *
+		 * @param buffer The buffer in question
+		 * @since jEdit 4.3pre3
+		 */
+		public void bufferLoaded(JEditBuffer buffer)
+		{
+			delegate.bufferLoaded((Buffer)buffer);
+		} //}}}
+	} //}}}
 }

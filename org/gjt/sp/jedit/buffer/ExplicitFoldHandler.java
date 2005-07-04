@@ -51,7 +51,7 @@ public class ExplicitFoldHandler extends FoldHandler
 	 * @return The fold level of the specified line
 	 * @since jEdit 4.0pre1
 	 */
-	public int getFoldLevel(Buffer buffer, int lineIndex, Segment seg)
+	public int getFoldLevel(JEditBuffer buffer, int lineIndex, Segment seg)
 	{
 		if(lineIndex == 0)
 			return 0;

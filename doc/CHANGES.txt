@@ -2,8 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to David Chan, James Turk, Loren Charnley, Matthieu Casanova,
-Michael Macnair and Nicholas O'Leary for contributing to this release.
+Thanks to Björn Kautler, David Chan, James Turk, Loren Charnley,
+Matthieu Casanova, Michael Macnair and Nicholas O'Leary for contributing
+to this release.
 
 {{{ Syntax Highlighting
 
@@ -16,7 +17,7 @@ Michael Macnair and Nicholas O'Leary for contributing to this release.
 - Updated Java and LaTeX syntax highlighting (Alexander Klimetschek).
 
 }}}
-{{{ File system browser
+{{{ File System Browser
 
 - Pressing / and BACKSPACE in the filename field no longer does
   completion. Now, you must press TAB to complete.
@@ -28,6 +29,8 @@ Michael Macnair and Nicholas O'Leary for contributing to this release.
   better readability.
 
 - The selection is now saved between buffer switches.
+
+- Updated "Insert Buffer Properties" macro (Björn Kautler).
 
 }}}
 {{{ Bug Fixes
@@ -80,6 +83,9 @@ Michael Macnair and Nicholas O'Leary for contributing to this release.
 - Fix race condition when there were buffers in the perspective, as well
   as buffers specified to open on the command line.
 
+- If windows were docked in the top docking area, the action bar would
+  display in the wrong place.
+
 }}}
 {{{ API Changes
 
@@ -89,10 +95,18 @@ Michael Macnair and Nicholas O'Leary for contributing to this release.
   GUIUtilities.showVFSFileDialog(view,null,
     VFSBrowser.CHOOSE_DIRECTORY_DIALOG,true)
 
-}}}
+- Now that the text area is independent of the rest of jEdit, various
+  text area-related APIs that used to take org.gjt.sp.jedit.Buffer
+  instances now take org.gjt.sp.jedit.buffer.JEditBuffers:
+
+  - BufferChangeListener and BufferChangeAdapter are now deprecated. Use
+    BufferListener instead.
+
+  - FoldHandler.getFoldLevel() now takes a JEditBuffer as a parameter.
 
 }}}
 
+}}}
 {{{ Version 4.3pre2
 
 Thanks to Bertalan Fodor, Dirk Moebius. Jarek Tuszynski, Joshua Gertzen,

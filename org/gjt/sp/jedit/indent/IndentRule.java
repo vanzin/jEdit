@@ -23,14 +23,14 @@
 package org.gjt.sp.jedit.indent;
 
 import java.util.List;
-import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 public interface IndentRule
 {
 	/**
 	 * Apply the indent rule to this line, and return an indent action.
 	 */
-	public void apply(Buffer buffer, int thisLineIndex,
+	public void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
 		List indentActions);
 }
