@@ -78,21 +78,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		resultTreeRoot = new DefaultMutableTreeNode();
 		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
-		resultTree = new JTree(resultTreeModel)
-		{
-		     public String getToolTipText(MouseEvent evt) 
-		     {
-		     	int currow = getRowForLocation(evt.getX(), evt.getY());
-		        if (currow == -1)
-		          return null;
-		        TreePath curPath = getPathForLocation(evt.getX(), evt.getY());
-		        Rectangle rb = getRowBounds(currow);
-				int treeWidth = HyperSearchResults.this.getSize().width;;
-		        if (rb.x + rb.width < treeWidth)
-		        	return null;
-		        return ((DefaultMutableTreeNode) curPath.getLastPathComponent()).getUserObject().toString();	            
-		      }			
-		};
+		resultTree = new JTree(resultTreeModel);
 		resultTree.setToolTipText("");
 		resultTree.setCellRenderer(new ResultCellRenderer());
 		resultTree.setVisibleRowCount(16);
