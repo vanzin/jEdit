@@ -290,7 +290,7 @@ public class JEditTextArea extends JComponent
 	/**
 	 * Returns the buffer this text area is editing.
 	 */
-	public final Buffer getBuffer()
+	public final JEditBuffer getBuffer()
 	{
 		return buffer;
 	} //}}}
@@ -301,7 +301,7 @@ public class JEditTextArea extends JComponent
 	 * use {@link org.gjt.sp.jedit.EditPane#setBuffer(Buffer)} instead.
 	 * @param buffer The buffer
 	 */
-	public void setBuffer(Buffer buffer)
+	public void setBuffer(JEditBuffer buffer)
 	{
 		if(this.buffer == buffer)
 			return;
@@ -315,7 +315,7 @@ public class JEditTextArea extends JComponent
 				// dubious?
 				//setFirstLine(0);
 
-				if(buffer.isLoaded())
+				if(!buffer.isLoading())
 					selectNone();
 				caretLine = caret = caretScreenLine = 0;
 				match = null;
@@ -337,7 +337,7 @@ public class JEditTextArea extends JComponent
 
 			displayManager.init();
 
-			if(!buffer.isLoaded())
+			if(buffer.isLoading())
 				updateScrollBar();
 
 			repaint();
@@ -1015,7 +1015,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateScreenLineRange(int start, int end)
 	{
-		if(!buffer.isLoaded())
+		if(buffer.isLoading())
 			return;
 
 		if(start > end)
@@ -1043,7 +1043,7 @@ public class JEditTextArea extends JComponent
 	public void invalidateLine(int line)
 	{
 		if(!isShowing()
-			|| !buffer.isLoaded()
+			|| buffer.isLoading()
 			|| line < getFirstPhysicalLine()
 			|| line > physLastLine
 			|| !displayManager.isLineVisible(line))
@@ -1084,7 +1084,7 @@ public class JEditTextArea extends JComponent
 	 */
 	public void invalidateLineRange(int start, int end)
 	{
-		if(!isShowing() || !buffer.isLoaded())
+		if(!isShowing() || buffer.isLoading())
 			return;
 
 		if(end < start)
@@ -2372,42 +2372,6 @@ loop:			for(int i = 0; i < text.length(); i++)
 		setMagicCaretPosition(magic);
 	} //}}}
 
-	//{{{ goToNextMarker() method
-	/**
-	 * Moves the caret to the next marker.
-	 * @since jEdit 2.7pre2
-	 */
-	public void goToNextMarker(boolean select)
-	{
-		Vector markers = buffer.getMarkers();
-		if(markers.size() == 0)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		Marker marker = null;
-
-		for(int i = 0; i < markers.size(); i++)
-		{
-			Marker _marker = (Marker)markers.get(i);
-			if(_marker.getPosition() > caret)
-			{
-				marker = _marker;
-				break;
-			}
-		}
-
-		if(marker == null)
-			marker = (Marker)markers.get(0);
-
-		if(select)
-			extendSelection(caret,marker.getPosition());
-		else if(!multi)
-			selectNone();
-		moveCaretPosition(marker.getPosition());
-	} //}}}
-
 	//{{{ goToNextPage() method
 	/**
 	 * Moves the caret to the next screenful.
@@ -2714,41 +2678,6 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 		moveCaretPosition(newCaret);
 
 		setMagicCaretPosition(magic);
-	} //}}}
-
-	//{{{ goToPrevMarker() method
-	/**
-	 * Moves the caret to the previous marker.
-	 * @since jEdit 2.7pre2
-	 */
-	public void goToPrevMarker(boolean select)
-	{
-		Vector markers = buffer.getMarkers();
-		if(markers.size() == 0)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		Marker marker = null;
-		for(int i = markers.size() - 1; i >= 0; i--)
-		{
-			Marker _marker = (Marker)markers.elementAt(i);
-			if(_marker.getPosition() < caret)
-			{
-				marker = _marker;
-				break;
-			}
-		}
-
-		if(marker == null)
-			marker = (Marker)markers.get(markers.size() - 1);
-
-		if(select)
-			extendSelection(caret,marker.getPosition());
-		else if(!multi)
-			selectNone();
-		moveCaretPosition(marker.getPosition());
 	} //}}}
 
 	//{{{ goToPrevPage() method
@@ -3687,84 +3616,6 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 	//}}}
 
-	//{{{ Markers
-
-	//{{{ goToMarker() method
-	/**
-	 * Moves the caret to the marker with the specified shortcut.
-	 * @param shortcut The shortcut
-	 * @param select True if the selection should be extended,
-	 * false otherwise
-	 * @since jEdit 3.2pre2
-	 */
-	public void goToMarker(char shortcut, boolean select)
-	{
-		Marker marker = buffer.getMarker(shortcut);
-		if(marker == null)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		int pos = marker.getPosition();
-
-		if(select)
-			extendSelection(caret,pos);
-		else if(!multi)
-			selectNone();
-		moveCaretPosition(pos);
-	} //}}}
-
-	//{{{ addMarker() method
-	/**
-	 * Adds a marker at the caret position.
-	 * @since jEdit 3.2pre1
-	 */
-	public void addMarker()
-	{
-		// always add markers on selected lines
-		Selection[] selection = getSelection();
-		for(int i = 0; i < selection.length; i++)
-		{
-			Selection s = selection[i];
-			if(s.startLine != s.endLine)
-			{
-				if(s.startLine != caretLine)
-					buffer.addMarker('\0',s.start);
-			}
-
-			if(s.endLine != caretLine)
-				buffer.addMarker('\0',s.end);
-		}
-
-		// toggle marker on caret line
-		buffer.addOrRemoveMarker('\0',caret);
-	} //}}}
-
-	//{{{ swapMarkerAndCaret() method
-	/**
-	 * Moves the caret to the marker with the specified shortcut,
-	 * then sets the marker position to the former caret position.
-	 * @param shortcut The shortcut
-	 * @since jEdit 3.2pre2
-	 */
-	public void swapMarkerAndCaret(char shortcut)
-	{
-		Marker marker = buffer.getMarker(shortcut);
-		if(marker == null)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		int caret = getCaretPosition();
-
-		setCaretPosition(marker.getPosition());
-		buffer.addMarker(shortcut,caret);
-	} //}}}
-
-	//}}}
-
 	//{{{ Folding
 
 	//{{{ goToParentFold() method
@@ -4693,7 +4544,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		ToolTipManager.sharedInstance().registerComponent(gutter);
 
 		recalculateVisibleLines();
-		if(buffer.isLoaded())
+		if(!buffer.isLoading())
 			recalculateLastPhysicalLine();
 		propertiesChanged();
 		
@@ -4831,7 +4682,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			&& oldWrapMargin == wrapMargin);
 
 		if(displayManager != null && !bufferChanging
-			&& buffer.isLoaded() && wrapSettingsChanged)
+			&& !buffer.isLoading() && wrapSettingsChanged)
 		{
 			displayManager.invalidateScreenLineCounts();
 			displayManager.notifyScreenLineChanges();
@@ -5129,7 +4980,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		chunkCache.recalculateVisibleLines();
 
 		// this does the "trick" to eliminate blank space at the end
-		if(displayManager != null && buffer != null && buffer.isLoaded())
+		if(displayManager != null && buffer != null && !buffer.isLoading())
 			setFirstLine(getFirstLine());
 
 		updateScrollBar();
@@ -5319,7 +5170,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private JScrollBar vertical;
 	private JScrollBar horizontal;
 
-	private Buffer buffer;
+	private JEditBuffer buffer;
 
 	private int caret;
 	private int caretLine;

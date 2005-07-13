@@ -78,7 +78,7 @@ class MouseHandler extends MouseInputAdapter
 			JEditTextArea.focusedComponent = textArea;
 		}
 
-		if(!textArea.getBuffer().isLoaded())
+		if(textArea.getBuffer().isLoading())
 			return;
 
 		int x = evt.getX();
@@ -300,7 +300,7 @@ class MouseHandler extends MouseInputAdapter
 			|| (popup != null && popup.isVisible()))
 			return;
 
-		if(!textArea.getBuffer().isLoaded())
+		if(textArea.getBuffer().isLoading())
 			return;
 
 		TextAreaPainter painter = textArea.getPainter();

@@ -73,7 +73,7 @@ public abstract class Selection implements Cloneable
 	 * @param line The line number
 	 * @since jEdit 4.1pre1
 	 */
-	public abstract int getStart(Buffer buffer, int line);
+	public abstract int getStart(JEditBuffer buffer, int line);
 	//}}}
 
 	//{{{ getEnd() method
@@ -85,7 +85,7 @@ public abstract class Selection implements Cloneable
 	 * @param line The line number
 	 * @since jEdit 4.1pre1
 	 */
-	public abstract int getEnd(Buffer buffer, int line);
+	public abstract int getEnd(JEditBuffer buffer, int line);
 	//}}}
 
 	//{{{ getStartLine() method
@@ -202,7 +202,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ getStart() method
-		public int getStart(Buffer buffer, int line)
+		public int getStart(JEditBuffer buffer, int line)
 		{
 			if(line == startLine)
 				return start;
@@ -211,7 +211,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ getEnd() method
-		public int getEnd(Buffer buffer, int line)
+		public int getEnd(JEditBuffer buffer, int line)
 		{
 			if(line == endLine)
 				return end;
@@ -342,7 +342,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ Rect constructor
-		public Rect(Buffer buffer, int startLine, int startColumn,
+		public Rect(JEditBuffer buffer, int startLine, int startColumn,
 			int endLine, int endColumn)
 		{
 			this.startLine = startLine;
@@ -391,14 +391,14 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ getStart() method
-		public int getStart(Buffer buffer, int line)
+		public int getStart(JEditBuffer buffer, int line)
 		{
 			return getColumnOnOtherLine(buffer,line,
 				getStartColumn(buffer));
 		} //}}}
 
 		//{{{ getEnd() method
-		public int getEnd(Buffer buffer, int line)
+		public int getEnd(JEditBuffer buffer, int line)
 		{
 			return getColumnOnOtherLine(buffer,line,
 				getEndColumn(buffer));
@@ -700,7 +700,7 @@ public abstract class Selection implements Cloneable
 		//{{{ Private members
 
 		//{{{ getColumnOnOtherLine() method
-		private int getColumnOnOtherLine(Buffer buffer, int line,
+		private int getColumnOnOtherLine(JEditBuffer buffer, int line,
 			int col)
 		{
 			int returnValue = buffer.getOffsetOfVirtualColumn(

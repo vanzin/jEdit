@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.util.*;
-import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
@@ -145,7 +145,7 @@ class ChunkCache
 	} //}}}
 
 	//{{{ setBuffer() method
-	void setBuffer(Buffer buffer)
+	void setBuffer(JEditBuffer buffer)
 	{
 		this.buffer = buffer;
 		lastScreenLine = lastScreenLineP = -1;
@@ -464,7 +464,7 @@ class ChunkCache
 	{
 		out.clear();
 
-		if(buffer.isLoaded())
+		if(!buffer.isLoading())
 			lineToChunkList(physicalLine,out);
 
 		if(out.size() == 0)
@@ -479,7 +479,7 @@ class ChunkCache
 
 	//{{{ Instance variables
 	private JEditTextArea textArea;
-	private Buffer buffer;
+	private JEditBuffer buffer;
 	private LineInfo[] lineInfo;
 	private ArrayList out;
 

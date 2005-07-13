@@ -35,6 +35,7 @@ import java.net.Socket;
 import java.util.*;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.indent.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
@@ -1557,6 +1558,62 @@ loop:		for(int i = 0; i < seg.count; i++)
 				return re;
 			}
 		}
+	} //}}}
+
+	//{{{ getRuleSetAtOffset() method
+	/**
+	 * Returns the syntax highlighting ruleset at the specified offset.
+	 * @since jEdit 4.1pre1
+	 */
+	public ParserRuleSet getRuleSetAtOffset(int offset)
+	{
+		int line = getLineOfOffset(offset);
+		offset -= getLineStartOffset(line);
+		if(offset != 0)
+			offset--;
+
+		DefaultTokenHandler tokens = new DefaultTokenHandler();
+		markTokens(line,tokens);
+		Token token = TextUtilities.getTokenAtOffset(tokens.getTokens(),offset);
+		return token.rules;
+	} //}}}
+
+	//{{{ getKeywordMapAtOffset() method
+	/**
+	 * Returns the syntax highlighting keyword map in effect at the
+	 * specified offset. Used by the <b>Complete Word</b> command to
+	 * complete keywords.
+	 * @param offset The offset
+	 * @since jEdit 4.0pre3
+	 */
+	public KeywordMap getKeywordMapAtOffset(int offset)
+	{
+		return getRuleSetAtOffset(offset).getKeywords();
+	} //}}}
+
+	//{{{ getContextSensitiveProperty() method
+	/**
+	 * Some settings, like comment start and end strings, can
+	 * vary between different parts of a buffer (HTML text and inline
+	 * JavaScript, for example).
+	 * @param offset The offset
+	 * @param name The property name
+	 * @since jEdit 4.0pre3
+	 */
+	public String getContextSensitiveProperty(int offset, String name)
+	{
+		ParserRuleSet rules = getRuleSetAtOffset(offset);
+
+		Object value = null;
+
+		Hashtable rulesetProps = rules.getProperties();
+		if(rulesetProps != null)
+			value = rulesetProps.get(name);
+
+		if(value == null)
+			return null;
+		else
+			return String.valueOf(value);
 	} //}}}
 
 	//}}}

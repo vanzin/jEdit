@@ -32,8 +32,8 @@ import javax.swing.event.*;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Marker;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -92,8 +92,6 @@ public class Gutter extends JComponent implements SwingConstants
 		addMouseListener(ml);
 		addMouseMotionListener(ml);
 
-		addExtension(new MarkerHighlight());
-
 		updateBorder();
 	} //}}}
 
@@ -108,7 +106,7 @@ public class Gutter extends JComponent implements SwingConstants
 		gfx.fillRect(clip.x, clip.y, clip.width, clip.height);
 
 		// if buffer is loading, don't paint anything
-		if (!textArea.getBuffer().isLoaded())
+		if (textArea.getBuffer().isLoading())
 			return;
 
 		int lineHeight = textArea.getPainter().getFontMetrics()
@@ -203,7 +201,7 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public String getToolTipText(MouseEvent evt)
 	{
-		if(!textArea.getBuffer().isLoaded())
+		if(textArea.getBuffer().isLoading())
 			return null;
 
 		return extensionMgr.getToolTipText(evt.getX(),evt.getY());
@@ -500,30 +498,6 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	} //}}}
 
-	//{{{ getMarkerHighlightColor() method
-	public Color getMarkerHighlightColor()
-	{
-		return markerHighlightColor;
-	} //}}}
-
-	//{{{ setMarkerHighlightColor() method
-	public void setMarkerHighlightColor(Color markerHighlightColor)
-	{
-		this.markerHighlightColor = markerHighlightColor;
-	} //}}}
-
-	//{{{ isMarkerHighlightEnabled() method
-	public boolean isMarkerHighlightEnabled()
-	{
-		return markerHighlight;
-	} //}}}
-
-	//{{{ isMarkerHighlightEnabled()
-	public void setMarkerHighlightEnabled(boolean markerHighlight)
-	{
-		this.markerHighlight = markerHighlight;
-	} //}}}
-
 	//}}}
 
 	//{{{ Private members
@@ -556,9 +530,6 @@ public class Gutter extends JComponent implements SwingConstants
 	private boolean structureHighlight;
 	private Color structureHighlightColor;
 
-	private boolean markerHighlight;
-	private Color markerHighlightColor;
-
 	private int borderWidth;
 	private Border focusBorder, noFocusBorder;
 	//}}}
@@ -566,8 +537,8 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ paintLine() method
 	private void paintLine(Graphics2D gfx, int line, int y)
 	{
-		Buffer buffer = textArea.getBuffer();
-		if(!buffer.isLoaded())
+		JEditBuffer buffer = textArea.getBuffer();
+		if(buffer.isLoading())
 			return;
 
 		int lineHeight = textArea.getPainter().getFontMetrics()
@@ -780,7 +751,7 @@ public class Gutter extends JComponent implements SwingConstants
 			}
 			else
 			{
-				Buffer buffer = textArea.getBuffer();
+				JEditBuffer buffer = textArea.getBuffer();
 
 				int screenLine = e.getY() / textArea.getPainter()
 					.getFontMetrics().getHeight();
@@ -902,59 +873,6 @@ public class Gutter extends JComponent implements SwingConstants
 			}
 
 			drag = false;
-		} //}}}
-	} //}}}
-
-	//{{{ MarkerHighlight class
-	class MarkerHighlight extends TextAreaExtension
-	{
-		//{{{ paintValidLine() method
-		public void paintValidLine(Graphics2D gfx, int screenLine,
-			int physicalLine, int start, int end, int y)
-		{
-			if(isMarkerHighlightEnabled())
-			{
-				Buffer buffer = textArea.getBuffer();
-				if(buffer.getMarkerInRange(start,end) != null)
-				{
-					gfx.setColor(getMarkerHighlightColor());
-					FontMetrics fm = textArea.getPainter().getFontMetrics();
-					gfx.fillRect(0,y,textArea.getGutter()
-						.getWidth(),fm.getHeight());
-				}
-			}
-		} //}}}
-
-		//{{{ getToolTipText() method
-		public String getToolTipText(int x, int y)
-		{
-			if(isMarkerHighlightEnabled())
-			{
-				int lineHeight = textArea.getPainter().getFontMetrics().getHeight();
-				if(lineHeight == 0)
-					return null;
-
-				int line = y / lineHeight;
-				int start = textArea.getScreenLineStartOffset(line);
-				int end = textArea.getScreenLineEndOffset(line);
-				if(start == -1 || end == -1)
-					return null;
-
-				Marker marker = textArea.getBuffer().getMarkerInRange(start,end);
-				if(marker != null)
-				{
-					char shortcut = marker.getShortcut();
-					if(shortcut == '\0')
-						return jEdit.getProperty("view.gutter.marker.no-name");
-					else
-					{
-						String[] args = { String.valueOf(shortcut) };
-						return jEdit.getProperty("view.gutter.marker",args);
-					}
-				}
-			}
-
-			return null;
 		} //}}}
 	} //}}}
 }

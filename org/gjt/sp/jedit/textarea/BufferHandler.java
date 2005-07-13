@@ -57,7 +57,7 @@ class BufferHandler implements BufferListener
 	//{{{ BufferChangeHandler constructor
 	BufferHandler(DisplayManager displayManager,
 		JEditTextArea textArea,
-		Buffer buffer)
+		JEditBuffer buffer)
 	{
 		this.displayManager = displayManager;
 		this.textArea = textArea;
