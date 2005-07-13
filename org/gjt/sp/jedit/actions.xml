@@ -46,7 +46,7 @@
 
 <ACTION NAME="add-marker">
 	<CODE>
-		textArea.addMarker();
+		editPane.addMarker();
 	</CODE>
 </ACTION>
 
@@ -358,7 +358,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			buffer.getMarkerStatusPrompt("goto-marker"),
-			"textArea.goToMarker(__char__,false);");
+			"editPane.goToMarker(__char__,false);");
 	</CODE>
 </ACTION>
 
@@ -564,7 +564,7 @@
 
 <ACTION NAME="next-marker">
 	<CODE>
-		textArea.goToNextMarker(false);
+		editPane.goToNextMarker(false);
 	</CODE>
 </ACTION>
 
@@ -700,7 +700,7 @@
 
 <ACTION NAME="prev-marker">
 	<CODE>
-		textArea.goToPrevMarker(false);
+		editPane.goToPrevMarker(false);
 	</CODE>
 </ACTION>
 
@@ -1226,7 +1226,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			buffer.getMarkerStatusPrompt("swap-marker"),
-			"textArea.swapMarkerAndCaret(__char__);");
+			"editPane.swapMarkerAndCaret(__char__);");
 	</CODE>
 </ACTION>
 

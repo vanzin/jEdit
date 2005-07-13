@@ -30,6 +30,7 @@ import java.awt.font.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
@@ -157,7 +158,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		super.setBounds(x,y,width,height);
 
 		textArea.recalculateVisibleLines();
-		if(textArea.getBuffer().isLoaded())
+		if(!textArea.getBuffer().isLoading())
 			textArea.recalculateLastPhysicalLine();
 		textArea.propertiesChanged();
 		textArea.updateMaxHorizontalScrollWidth();
@@ -606,7 +607,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public String getToolTipText(MouseEvent evt)
 	{
-		if(!textArea.getBuffer().isLoaded())
+		if(textArea.getBuffer().isLoading())
 			return null;
 
 		return extensionMgr.getToolTipText(evt.getX(),evt.getY());
@@ -633,7 +634,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		fm = getFontMetrics(font);
 		textArea.recalculateVisibleLines();
 		if(textArea.getBuffer() != null
-			&& textArea.getBuffer().isLoaded())
+			&& !textArea.getBuffer().isLoading())
 			textArea.recalculateLastPhysicalLine();
 		textArea.propertiesChanged();
 	} //}}}
@@ -680,9 +681,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		Rectangle clipRect = _gfx.getClipBounds();
 
-		Buffer buffer = textArea.getBuffer();
+		JEditBuffer buffer = textArea.getBuffer();
 		int height = fm.getHeight();
-		if(height != 0 && buffer.isLoaded())
+		if(height == 0 || buffer.isLoading())
+		{
+			_gfx.setColor(getBackground());
+			_gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
+		}
+		else
 		{
 			long prepareTime = System.currentTimeMillis();
 			FastRepaintManager.RepaintLines lines
@@ -710,11 +716,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(Debug.PAINT_TIMER && numLines >= 1)
 				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + "/" + blitTime + " ms");
-		}
-		else
-		{
-			_gfx.setColor(getBackground());
-			_gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
 		}
 
 		textArea.updateMaxHorizontalScrollWidth();
@@ -894,7 +895,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			// minimise access$ methods
 			JEditTextArea textArea = TextAreaPainter.this.textArea;
-			Buffer buffer = textArea.getBuffer();
+			JEditBuffer buffer = textArea.getBuffer();
 
 			//{{{ Paint line highlight and collapsed fold highlight
 			boolean collapsedFold =
@@ -1058,7 +1059,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					baseLine,!Debug.DISABLE_GLYPH_VECTOR);
 			}
 
-			Buffer buffer = textArea.getBuffer();
+			JEditBuffer buffer = textArea.getBuffer();
 
 			if(!lineInfo.lastSubregion)
 			{

@@ -795,71 +795,6 @@ public class Buffer extends JEditBuffer
 		return retVal;
 	} //}}}
 
-	//{{{ getRuleSetAtOffset() method
-	/**
-	 * Returns the syntax highlighting ruleset at the specified offset.
-	 * @since jEdit 4.1pre1
-	 */
-	public ParserRuleSet getRuleSetAtOffset(int offset)
-	{
-		int line = getLineOfOffset(offset);
-		offset -= getLineStartOffset(line);
-		if(offset != 0)
-			offset--;
-
-		DefaultTokenHandler tokens = new DefaultTokenHandler();
-		markTokens(line,tokens);
-		Token token = TextUtilities.getTokenAtOffset(tokens.getTokens(),offset);
-		return token.rules;
-	} //}}}
-
-	//{{{ getKeywordMapAtOffset() method
-	/**
-	 * Returns the syntax highlighting keyword map in effect at the
-	 * specified offset. Used by the <b>Complete Word</b> command to
-	 * complete keywords.
-	 * @param offset The offset
-	 * @since jEdit 4.0pre3
-	 */
-	public KeywordMap getKeywordMapAtOffset(int offset)
-	{
-		return getRuleSetAtOffset(offset).getKeywords();
-	} //}}}
-
-	//{{{ getContextSensitiveProperty() method
-	/**
-	 * Some settings, like comment start and end strings, can
-	 * vary between different parts of a buffer (HTML text and inline
-	 * JavaScript, for example).
-	 * @param offset The offset
-	 * @param name The property name
-	 * @since jEdit 4.0pre3
-	 */
-	public String getContextSensitiveProperty(int offset, String name)
-	{
-		ParserRuleSet rules = getRuleSetAtOffset(offset);
-
-		Object value = null;
-
-		Hashtable rulesetProps = rules.getProperties();
-		if(rulesetProps != null)
-			value = rulesetProps.get(name);
-
-		if(value == null)
-		{
-			value = jEdit.getMode(rules.getModeName())
-				.getProperty(name);
-
-			if(value == null)
-				value = mode.getProperty(name);
-		}
-
-		if(value == null)
-			return null;
-		else
-			return String.valueOf(value);
-	} //}}}
-
 	//{{{ toggleWordWrap() method
 	/**
 	 * Toggles word wrap between the three available modes. This is used
@@ -915,6 +850,36 @@ public class Buffer extends JEditBuffer
 		setProperty("lineSeparator",lineSep);
 		setDirty(true);
 		propertiesChanged();
+	} //}}}
+
+	//{{{ getContextSensitiveProperty() method
+	/**
+	 * Some settings, like comment start and end strings, can
+	 * vary between different parts of a buffer (HTML text and inline
+	 * JavaScript, for example).
+	 * @param offset The offset
+	 * @param name The property name
+	 * @since jEdit 4.0pre3
+	 */
+	public String getContextSensitiveProperty(int offset, String name)
+	{
+		Object value = super.getContextSensitiveProperty(offset,name);
+
+		if(value == null)
+		{
+			ParserRuleSet rules = getRuleSetAtOffset(offset);
+
+			value = jEdit.getMode(rules.getModeName())
+				.getProperty(name);
+
+			if(value == null)
+				value = mode.getProperty(name);
+		}
+
+		if(value == null)
+			return null;
+		else
+			return String.valueOf(value);
 	} //}}}
 
 	//}}}

@@ -26,7 +26,7 @@ package org.gjt.sp.jedit;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.lang.reflect.Method;
+import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
@@ -318,6 +318,157 @@ public class EditPane extends JPanel implements EBComponent
 		view.getStatus().setMessage(null);
 	} //}}}
 
+	//{{{ goToNextMarker() method
+	/**
+	 * Moves the caret to the next marker.
+	 * @since jEdit 4.3pre3
+	 */
+	public void goToNextMarker(boolean select)
+	{
+		Vector markers = buffer.getMarkers();
+		if(markers.size() == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		Marker marker = null;
+		
+		int caret = textArea.getCaretPosition();
+
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker _marker = (Marker)markers.get(i);
+			if(_marker.getPosition() > caret)
+			{
+				marker = _marker;
+				break;
+			}
+		}
+
+		if(marker == null)
+			marker = (Marker)markers.get(0);
+
+		if(select)
+			textArea.extendSelection(caret,marker.getPosition());
+		else if(!textArea.isMultipleSelectionEnabled())
+			textArea.selectNone();
+		textArea.moveCaretPosition(marker.getPosition());
+	} //}}}
+
+	//{{{ goToPrevMarker() method
+	/**
+	 * Moves the caret to the previous marker.
+	 * @since jEdit 2.7pre2
+	 */
+	public void goToPrevMarker(boolean select)
+	{
+		Vector markers = buffer.getMarkers();
+		if(markers.size() == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+		
+		int caret = textArea.getCaretPosition();
+
+		Marker marker = null;
+		for(int i = markers.size() - 1; i >= 0; i--)
+		{
+			Marker _marker = (Marker)markers.elementAt(i);
+			if(_marker.getPosition() < caret)
+			{
+				marker = _marker;
+				break;
+			}
+		}
+
+		if(marker == null)
+			marker = (Marker)markers.get(markers.size() - 1);
+
+		if(select)
+			textArea.extendSelection(caret,marker.getPosition());
+		else if(!textArea.isMultipleSelectionEnabled())
+			textArea.selectNone();
+		textArea.moveCaretPosition(marker.getPosition());
+	} //}}}
+
+	//{{{ goToMarker() method
+	/**
+	 * Moves the caret to the marker with the specified shortcut.
+	 * @param shortcut The shortcut
+	 * @param select True if the selection should be extended,
+	 * false otherwise
+	 * @since jEdit 3.2pre2
+	 */
+	public void goToMarker(char shortcut, boolean select)
+	{
+		Marker marker = buffer.getMarker(shortcut);
+		if(marker == null)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int pos = marker.getPosition();
+
+		if(select)
+			textArea.extendSelection(textArea.getCaretPosition(),pos);
+		else if(!textArea.isMultipleSelectionEnabled())
+			textArea.selectNone();
+		textArea.moveCaretPosition(pos);
+	} //}}}
+
+	//{{{ addMarker() method
+	/**
+	 * Adds a marker at the caret position.
+	 * @since jEdit 3.2pre1
+	 */
+	public void addMarker()
+	{
+		int caretLine = textArea.getCaretLine();
+		
+		// always add markers on selected lines
+		Selection[] selection = textArea.getSelection();
+		for(int i = 0; i < selection.length; i++)
+		{
+			Selection s = selection[i];
+			if(s.getStartLine() != s.getEndLine())
+			{
+				if(s.getStartLine() != caretLine)
+					buffer.addMarker('\0',s.getStart());
+			}
+
+			if(s.getEndLine() != caretLine)
+				buffer.addMarker('\0',s.getEnd());
+		}
+
+		// toggle marker on caret line
+		buffer.addOrRemoveMarker('\0',textArea.getCaretPosition());
+	} //}}}
+
+	//{{{ swapMarkerAndCaret() method
+	/**
+	 * Moves the caret to the marker with the specified shortcut,
+	 * then sets the marker position to the former caret position.
+	 * @param shortcut The shortcut
+	 * @since jEdit 3.2pre2
+	 */
+	public void swapMarkerAndCaret(char shortcut)
+	{
+		Marker marker = buffer.getMarker(shortcut);
+		if(marker == null)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		int caret = textArea.getCaretPosition();
+
+		textArea.setCaretPosition(marker.getPosition());
+		buffer.addMarker(shortcut,caret);
+	} //}}}
+
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage msg)
 	{
@@ -362,6 +513,9 @@ public class EditPane extends JPanel implements EBComponent
 		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea(view);
+
+		markerHighlight = new MarkerHighlight();
+		textArea.getGutter().addExtension(markerHighlight);
 		textArea.addStatusListener(new StatusHandler());
 
 		add(BorderLayout.CENTER,textArea);
@@ -398,6 +552,7 @@ public class EditPane extends JPanel implements EBComponent
 	private Buffer recentBuffer;
 	private BufferSwitcher bufferSwitcher;
 	private JEditTextArea textArea;
+	private MarkerHighlight markerHighlight;
 	//}}}
 
 	//{{{ propertiesChanged() method
@@ -471,9 +626,9 @@ public class EditPane extends JPanel implements EBComponent
 			jEdit.getColorProperty("view.gutter.highlightColor"));
 		gutter.setFoldColor(
 			jEdit.getColorProperty("view.gutter.foldColor"));
-		gutter.setMarkerHighlightColor(
+		markerHighlight.setMarkerHighlightColor(
 			jEdit.getColorProperty("view.gutter.markerColor"));
-		gutter.setMarkerHighlightEnabled(jEdit.getBooleanProperty(
+		markerHighlight.setMarkerHighlightEnabled(jEdit.getBooleanProperty(
 			"view.gutter.markerHighlight"));
 		gutter.setCurrentLineForeground(
 			jEdit.getColorProperty("view.gutter.currentLineColor"));
@@ -715,5 +870,86 @@ public class EditPane extends JPanel implements EBComponent
 			status.setMessageAndClear(
 				jEdit.getProperty("view.status.narrow"));
 		}
+	} //}}}
+
+	//{{{ MarkerHighlight class
+	class MarkerHighlight extends TextAreaExtension
+	{
+		private boolean markerHighlight;
+		private Color markerHighlightColor;
+
+		//{{{ getMarkerHighlightColor() method
+		public Color getMarkerHighlightColor()
+		{
+			return markerHighlightColor;
+		} //}}}
+	
+		//{{{ setMarkerHighlightColor() method
+		public void setMarkerHighlightColor(Color markerHighlightColor)
+		{
+			this.markerHighlightColor = markerHighlightColor;
+		} //}}}
+	
+		//{{{ isMarkerHighlightEnabled() method
+		public boolean isMarkerHighlightEnabled()
+		{
+			return markerHighlight;
+		} //}}}
+	
+		//{{{ isMarkerHighlightEnabled()
+		public void setMarkerHighlightEnabled(boolean markerHighlight)
+		{
+			this.markerHighlight = markerHighlight;
+		} //}}}
+	
+		//{{{ paintValidLine() method
+		public void paintValidLine(Graphics2D gfx, int screenLine,
+			int physicalLine, int start, int end, int y)
+		{
+			if(isMarkerHighlightEnabled())
+			{
+				Buffer buffer = (Buffer)textArea.getBuffer();
+				if(buffer.getMarkerInRange(start,end) != null)
+				{
+					gfx.setColor(getMarkerHighlightColor());
+					FontMetrics fm = textArea.getPainter().getFontMetrics();
+					gfx.fillRect(0,y,textArea.getGutter()
+						.getWidth(),fm.getHeight());
+				}
+			}
+		} //}}}
+
+		//{{{ getToolTipText() method
+		public String getToolTipText(int x, int y)
+		{
+			if(isMarkerHighlightEnabled())
+			{
+				int lineHeight = textArea.getPainter().getFontMetrics().getHeight();
+				if(lineHeight == 0)
+					return null;
+
+				int line = y / lineHeight;
+				int start = textArea.getScreenLineStartOffset(line);
+				int end = textArea.getScreenLineEndOffset(line);
+				if(start == -1 || end == -1)
+					return null;
+
+				Buffer buffer = (Buffer)textArea.getBuffer();
+				Marker marker = buffer.getMarkerInRange(start,end);
+				if(marker != null)
+				{
+					char shortcut = marker.getShortcut();
+					if(shortcut == '\0')
+						return jEdit.getProperty("view.gutter.marker.no-name");
+					else
+					{
+						String[] args = { String.valueOf(shortcut) };
+						return jEdit.getProperty("view.gutter.marker",args);
+					}
+				}
+			}
+
+			return null;
+		} //}}}
 	} //}}}
 }

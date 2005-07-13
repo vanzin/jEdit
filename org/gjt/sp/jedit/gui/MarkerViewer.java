@@ -107,15 +107,15 @@ public class MarkerViewer extends JPanel implements EBComponent, ActionListener
 		if (cmd.equals("clear"))
 			view.getBuffer().removeAllMarkers();
 		else if (cmd.equals("add-marker"))
-			view.getTextArea().addMarker();
+			view.getEditPane().addMarker();
 		else if (cmd.equals("next-marker"))
 		{
-			view.getTextArea().goToNextMarker(false);
+			view.getEditPane().goToNextMarker(false);
 			updateSelection();
 		}
 		else if (cmd.equals("prev-marker"))
 		{
-			view.getTextArea().goToPrevMarker(false);
+			view.getEditPane().goToPrevMarker(false);
 			updateSelection();
 		}
 	} //}}}

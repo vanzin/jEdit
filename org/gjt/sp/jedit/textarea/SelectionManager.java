@@ -338,7 +338,7 @@ class SelectionManager
 		else
 			selEndScreenLine = -1;
 
-		Buffer buffer = textArea.getBuffer();
+		JEditBuffer buffer = textArea.getBuffer();
 
 		int lineStart = buffer.getLineStartOffset(physicalLine);
 		int x1, x2;

@@ -42,7 +42,7 @@ public class DisplayManager
 	//{{{ Static part
 
 	//{{{ getDisplayManager() method
-	static DisplayManager getDisplayManager(Buffer buffer,
+	static DisplayManager getDisplayManager(JEditBuffer buffer,
 		JEditTextArea textArea)
 	{
 		List l = (List)bufferMap.get(buffer);
@@ -114,9 +114,9 @@ public class DisplayManager
 
 	//{{{ getBuffer() method
 	/**
-	 * @since jEdit 4.3pre2
+	 * @since jEdit 4.3pre3
 	 */
-	public Buffer getBuffer()
+	public JEditBuffer getBuffer()
 	{
 		return buffer;
 	} //}}}
@@ -512,17 +512,17 @@ public class DisplayManager
 	{
 		if(initialized)
 		{
-			if(buffer.isLoaded())
+			if(!buffer.isLoading())
 				resetAnchors();
 		}
 		else
 		{
 			initialized = true;
 			folds = new RangeMap();
-			if(buffer.isLoaded())
-				bufferHandler.foldHandlerChanged(buffer);
-			else
+			if(buffer.isLoading())
 				folds.reset(buffer.getLineCount());
+			else
+				bufferHandler.foldHandlerChanged(buffer);
 			notifyScreenLineChanges();
 		}
 	} //}}}
@@ -686,7 +686,7 @@ public class DisplayManager
 	//{{{ foldHandlerChanged() method
 	void foldHandlerChanged()
 	{
-		if(!buffer.isLoaded())
+		if(buffer.isLoading())
 			return;
 
 		folds.reset(buffer.getLineCount());
@@ -703,12 +703,12 @@ public class DisplayManager
 	//{{{ Private members
 	private boolean initialized;
 	private boolean inUse;
-	private Buffer buffer;
+	private JEditBuffer buffer;
 	private JEditTextArea textArea;
 	private BufferHandler bufferHandler;
 
 	//{{{ DisplayManager constructor
-	private DisplayManager(Buffer buffer, JEditTextArea textArea,
+	private DisplayManager(JEditBuffer buffer, JEditTextArea textArea,
 		DisplayManager copy)
 	{
 		this.buffer = buffer;

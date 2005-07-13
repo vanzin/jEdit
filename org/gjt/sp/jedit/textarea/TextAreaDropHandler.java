@@ -32,14 +32,14 @@ import java.awt.*;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
 
 class TextAreaDropHandler extends DropTargetAdapter
 {
 	private JEditTextArea textArea;
-	private Buffer savedBuffer;
+	private JEditBuffer savedBuffer;
 	private int savedCaret;
 
 	TextAreaDropHandler(JEditTextArea textArea)

@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.util.*;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.Log;
 //}}}
@@ -38,11 +37,11 @@ import org.gjt.sp.util.Log;
 class ScreenLineManager
 {
 	//{{{ ScreenLineManager constructor
-	ScreenLineManager(DisplayManager displayManager, Buffer buffer)
+	ScreenLineManager(DisplayManager displayManager, JEditBuffer buffer)
 	{
 		this.displayManager = displayManager;
 		this.buffer = buffer;
-		if(buffer.isLoaded())
+		if(!buffer.isLoading())
 			reset();
 	} //}}}
 	
@@ -133,7 +132,7 @@ class ScreenLineManager
 	private static final int SCREEN_LINES_VALID_MASK = 1;
 
 	private DisplayManager displayManager;
-	private Buffer buffer;
+	private JEditBuffer buffer;
 	private short[] screenLines;
 	//}}}
 }

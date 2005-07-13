@@ -27,6 +27,7 @@ import com.microstar.xml.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.textarea.*;
@@ -221,7 +222,7 @@ public class Registers
 
 			if(vertical && textArea.getSelectionCount() == 0)
 			{
-				Buffer buffer = textArea.getBuffer();
+				JEditBuffer buffer = textArea.getBuffer();
 
 				try
 				{
