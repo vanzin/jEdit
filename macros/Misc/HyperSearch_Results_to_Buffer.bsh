@@ -24,6 +24,26 @@
  * $Id$
  */
 
+
+traverseTree(javax.swing.tree.DefaultMutableTreeNode node, StringBuffer results){
+	if (node.getUserObject() instanceof org.gjt.sp.jedit.search.HyperSearchFileNode)
+	{
+		path = node.getUserObject().path;
+		match = node.getFirstChild();
+		while(match != null)
+		{
+			text = match.getUserObject().str;
+			results.append(path + " :" + text + "\n");
+			match = match.getNextSibling();
+		}
+	}
+	else
+	{
+		for (Enumeration e = node.children(); e.hasMoreElements();)
+			traverseTree(e.nextElement(), results);
+	}
+}
+
 writeHypersearchResultsToBuffer(View view){
 	hs = view.getDockableWindowManager().getDockableWindow("hypersearch-results");
 	if (hs == null)
@@ -44,21 +64,9 @@ writeHypersearchResultsToBuffer(View view){
 	{
 		node = node.getNextSibling();
 	}
-	node = node.getFirstChild();
 
 	results = new StringBuffer();
-	while(node != null)
-	{
-		path = node.getUserObject().toString();
-		match = node.getFirstChild();
-		while(match != null)
-		{
-			text = match.getUserObject().str;
-			results.append(path + " :" + text + "\n");
-			match = match.getNextSibling();
-		}
-		node = node.getNextSibling();
-	}
+	traverseTree(node, results);
 
 	text = results.toString();
 	if(text.length() > 0)
