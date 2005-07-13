@@ -1007,7 +1007,7 @@ about.text=jEdit is brought to you by\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
 	Wojciech Stryjewski\n\
-	Wolfgang Chico-Töpfer\n\
+	Wolfgang Chico-T?pfer\n\
 	\ \n\
 	I'd also like to thank the users for their\n\
 	comments, feedback and bug reports.
@@ -1205,7 +1205,7 @@ no-webstart.message=This feature is not available in the WebStart version\n\
 #{{{ Search and replace dialog
 search.title=Search And Replace
 
-search.find=Search for: (press PAGE_UP to recall previous)
+search.find=Search for: (press PAGE_UP or right-click to recall previous)
 search.find.mnemonic=s
 search.replace=Replace with:
 search.replace.mnemonic=w
@@ -1277,6 +1277,10 @@ hypersearch-results.open-view=Open in New View
 hypersearch-results.open-plain-view=Open in New Plain View
 hypersearch-results.open-split=Open in New Split
 hypersearch-results.remove-node=Remove Node
+hypersearch-results.new-search=New Search From Here
+hypersearch-results.expand-child-nodes=Expand Child Nodes
+hypersearch-results.collapse-child-nodes=Collapse Child Nodes
+hypersearch-results.tree-view=Toggle Tree View
 hypersearch-results.clear.label=Remove All Nodes
 hypersearch-results.multi.label=Toggle Multiple Results
 hypersearch-results.file-caption={0} ({1} occurrences)

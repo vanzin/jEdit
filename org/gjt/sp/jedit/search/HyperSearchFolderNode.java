@@ -1,5 +1,5 @@
 /*
- * HyperSearchFileNode.java - HyperSearch file node
+ * HyperSearchFolderNode - HyperSearch Folder Tree Node
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -19,56 +19,35 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package org.gjt.sp.jedit.search;
 
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.EditPane;
-import org.gjt.sp.jedit.jEdit;
+import java.io.File;
 
-public class HyperSearchFileNode implements HyperSearchNode
+public class HyperSearchFolderNode 
 {
-	public String path;
-	public Buffer buffer;
-	public boolean showFullPath = true;
-
+	private File nodeFile;
+	private boolean showFullPath;
 	private static String fileSep = System.getProperty("file.separator");
 	static
 	{
 		if (fileSep.equals("\\"))
 			fileSep = "\\\\";
 	}
-
-	//{{{ HyperSearchFileNode constructor
-	public HyperSearchFileNode(String path)
-	{
-		this.path = path;
-	} //}}}
-
-	//{{{ getBuffer() method
-	public Buffer getBuffer()
-	{
-		if(buffer == null)
-			buffer = jEdit.openFile(null,path);
-		return buffer;
-	} //}}}
-
-	//{{{ goTo() method
-	public void goTo(final EditPane editPane)
-	{
-		Buffer buffer = getBuffer();
-		if(buffer == null)
-			return;
-
-		editPane.setBuffer(buffer);
-	} //}}}
 	
-	//{{{ toString() method
-	public String toString()
-	{
+	public File getNodeFile() {
+		return nodeFile;
+	}
+	
+	public HyperSearchFolderNode(File nodeFile, boolean showFullPath) {
+		this.nodeFile = nodeFile;
+		this.showFullPath = showFullPath;
+	}
+	
+	public String toString() {
 		if (showFullPath)
-			return path;
-		String paths[] = path.split(fileSep);
+			return nodeFile.getAbsolutePath();
+		String paths[] = nodeFile.getAbsolutePath().split(fileSep);
 		return paths[paths.length - 1];
-	} //}}}
+		
+	}
 }
