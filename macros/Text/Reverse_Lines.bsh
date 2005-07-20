@@ -14,7 +14,7 @@
 
 void reverseLines(textArea)
 {
-	Buffer buffer = textArea.getBuffer();
+	JEditBuffer buffer = textArea.getBuffer();
 	Selection[] selections = textArea.getSelection();
 
 	// doesn't work with rectangular selections, check for them up-front

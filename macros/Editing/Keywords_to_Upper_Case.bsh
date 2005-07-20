@@ -6,7 +6,7 @@ void keywords2upper(View view)
 	// declarations run faster than doing Token.KEYWORDx comparison
 	byte KEYWORD1 = Token.KEYWORD1;
 	byte KEYWORD4 = Token.KEYWORD4;
-	Buffer buffer = view.getBuffer();
+	JEditBuffer buffer = view.getBuffer();
 	JEditTextArea textArea = view.getTextArea();
 	Token token = null;
 
