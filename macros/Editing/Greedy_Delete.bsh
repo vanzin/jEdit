@@ -18,7 +18,7 @@
 void greedyDelete(View view, boolean onlyFullTabs)
 {
 	JEditTextArea textArea = view.getTextArea();
-	Buffer buffer = textArea.getBuffer();
+	JEditBuffer buffer = textArea.getBuffer();
 	int caret = textArea.getCaretPosition();
 	int caretLine = textArea.getCaretLine();
 	int lineStart = textArea.getLineStartOffset(caretLine);
