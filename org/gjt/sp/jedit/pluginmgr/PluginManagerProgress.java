@@ -28,9 +28,10 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.ProgressObserver;
 //}}}
 
-class PluginManagerProgress extends JDialog
+class PluginManagerProgress extends JDialog implements ProgressObserver
 {
 	//{{{ PluginManagerProgress constructor
 	public PluginManagerProgress(PluginManager dialog, Roster roster)
@@ -72,7 +73,12 @@ class PluginManagerProgress extends JDialog
 	} //}}}
 
 	//{{{ setValue() method
-	public void setValue(final int value)
+
+  /**
+   * @param value the new value
+   * @deprecated Use {@link #setValue(long)}
+   */
+  public void setValue(final int value)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -81,6 +87,44 @@ class PluginManagerProgress extends JDialog
 				progress.setValue(valueSoFar + value);
 			}
 		});
+	} //}}}
+
+	//{{{ setValue() method
+	/**
+	 * Update the progress value.
+	 *
+	 * @param value the new value
+	 * @since jEdit 4.3pre3
+	 */
+	public void setValue(final long value)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					progress.setValue(valueSoFar + (int) value);
+				}
+			});
+	} //}}}
+
+	//{{{ setMaximum() method
+	/**
+	 * This method is unused with the plugin manager.
+	 *
+	 * @param value the new max value (it will be ignored)
+	 * @since jEdit 4.3pre3
+	 */
+	public void setMaximum(long value) {
+	} //}}}
+
+	//{{{ setStatus() method
+	/**
+	 * This method is unused with the plugin manager.
+	 *
+	 * @param status the new status (it will be ignored)
+	 * @since jEdit 4.3pre3
+	 */
+	public void setStatus(String status) {
 	} //}}}
 
 	//{{{ done() method
