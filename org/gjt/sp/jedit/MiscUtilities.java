@@ -27,7 +27,6 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import javax.swing.text.Segment;
 import javax.swing.JMenuItem;
-import java.lang.reflect.Method;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,6 +35,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ProgressObserver;
 //}}}
 
 /**
@@ -323,7 +323,7 @@ public class MiscUtilities
 			index = path.indexOf(File.separatorChar,start);
 		return index;
 	} //}}}
-	
+
 	//{{{ getLastSeparatorIndex() method
 	/**
 	 * Return the last index of either / or the OS-specific file
@@ -343,7 +343,7 @@ public class MiscUtilities
 		else
 			return index + start;
 	} //}}}
-	
+
 	//{{{ getFileExtension() method
 	/**
 	 * Returns the extension of the specified filename, or an empty
@@ -593,11 +593,7 @@ public class MiscUtilities
 			{
 				fos = new FileOutputStream(dest);
 				fis = new FileInputStream(source);
-				byte[] buf = new byte[32768];
-				int read;
-				while ((read = fis.read(buf, 0, buf.length)) != -1)
-					fos.write(buf, 0, read);
-				ok = true;
+				ok = copyStream(32768,null,fis,fos,false);
 			}
 			catch (IOException ioe)
 			{
@@ -623,6 +619,104 @@ public class MiscUtilities
 				source.delete();
 		}
 		return ok;
+	} //}}}
+
+	//{{{ copyStream() method
+	/**
+	 * Copy an input stream to an output stream.
+	 *
+	 * @param bufferSize the size of the buffer
+	 * @param progress the progress observer it could be null
+	 * @param in the input stream
+	 * @param out the output stream
+	 * @param canStop if true, the copy can be stopped by interrupting the thread
+	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 4.3pre3
+	 */
+	public static boolean copyStream(int bufferSize, ProgressObserver progress,
+		InputStream in, OutputStream out, boolean canStop)
+	throws IOException
+	{
+		if (progress != null)
+		{
+			progress.setStatus("Copying");
+		}
+		byte[] buffer = new byte[bufferSize];
+		int n;
+		long copied = 0;
+		while (-1 != (n = in.read(buffer)))
+		{
+			out.write(buffer, 0, n);
+			copied += n;
+			if(progress != null)
+				progress.setValue(copied);
+			if(canStop && Thread.interrupted()) return false;
+		}
+		return true;
+	} //}}}
+
+	//{{{ copyStream() method
+	/**
+	 * Copy an input stream to an output stream with a buffer of 4096 bytes.
+	 *
+	 * @param progress the progress observer it could be null
+	 * @param in the input stream
+	 * @param out the output stream
+	 * @param canStop if true, the copy can be stopped by interrupting the thread
+	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 4.3pre3
+	 */
+	public static boolean copyStream(ProgressObserver progress,
+		InputStream in, OutputStream out, boolean canStop)
+	throws IOException
+	{
+		return copyStream(4096,progress, in, out, canStop);
+	} //}}}
+
+	//{{{ closeQuietly() method
+	/**
+	 * Method that will close an {@link InputStream} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param in the InputStream to close.
+	 * @since jEdit 4.3pre3
+	 */
+	public static void closeQuietly(InputStream in)
+	{
+		if(in != null)
+		{
+			try
+			{
+				in.close();
+			}
+			catch (IOException e)
+			{
+				//ignore
+			}
+		}
+	} //}}}
+
+	//{{{ copyStream() method
+	/**
+	 * Method that will close an {@link OutputStream} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param out the OutputStream to close.
+	 * @since jEdit 4.3pre3
+	 */
+	public static void closeQuietly(OutputStream out)
+	{
+		if(out != null)
+		{
+			try
+			{
+				out.close();
+			}
+			catch (IOException e)
+			{
+				//ignore
+			}
+		}
 	} //}}}
 
 	//{{{ fileToClass() method
@@ -653,8 +747,8 @@ public class MiscUtilities
 
 	//{{{ pathsEqual() method
 	/**
-	 * @param path1 A path name
-	 * @param path2 A path name
+	 * @param p1 A path name
+	 * @param p2 A path name
 	 * @return True if both paths are equal, ignoring trailing slashes, as
 	 * well as case insensitivity on Windows.
 	 * @since jEdit 4.3pre2
@@ -666,7 +760,7 @@ public class MiscUtilities
 
 		if(v1 != v2)
 			return false;
-		
+
 		if(p1.endsWith("/") || p1.endsWith(File.separator))
 			p1 = p1.substring(0,p1.length() - 1);
 
@@ -678,7 +772,7 @@ public class MiscUtilities
 		else
 			return p1.equals(p2);
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ Text methods
@@ -1691,6 +1785,6 @@ loop:		for(;;)
 		else
 			return 0;
 	} //}}}
-	
+
 	//}}}
 }
