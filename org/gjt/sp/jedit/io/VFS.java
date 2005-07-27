@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ProgressObserver;
 //}}}
 
 /**
@@ -467,6 +468,79 @@ public abstract class VFS
 		return true;
 	} //}}}
 
+	//{{{ copy() method
+	/**
+	 * Copy a file to another using VFS.
+	 *
+	 * @param progress the progress observer. It could be null if you don't want to monitor progress. If not null
+	 *                  you should probably launch this command in a WorkThread
+	 * @param sourceVFS the source VFS
+	 * @param sourceSession the VFS session
+	 * @param sourcePath the source path
+	 * @param targetVFS the target VFS
+	 * @param targetSession the target session
+	 * @param targetPath the target path
+	 * @param comp comp The component that will parent error dialog boxes
+	 * @return true if the copy was successful
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 4.3pre3
+	 */
+	public static boolean copy(ProgressObserver progress, VFS sourceVFS, Object sourceSession,String sourcePath,
+		VFS targetVFS, Object targetSession,String targetPath, Component comp, boolean canStop)
+	throws IOException
+	{
+		if (progress != null)
+			progress.setStatus("Initializing");
+		
+		InputStream in = null;
+		OutputStream out = null;
+		try
+		{
+			if (progress != null)
+			{
+				VFSFile sourceVFSFile = sourceVFS._getFile(sourceSession, sourcePath, comp);
+				if (sourceVFSFile == null)
+					throw new FileNotFoundException(sourcePath);
+				
+				progress.setMaximum(sourceVFSFile.getLength());
+			}
+			in = new BufferedInputStream(sourceVFS._createInputStream(sourceSession, sourcePath, false, comp));
+			out = new BufferedOutputStream(targetVFS._createOutputStream(targetSession, targetPath, comp));
+			boolean copyResult = MiscUtilities.copyStream(4096, progress, in, out, canStop);
+			VFSManager.sendVFSUpdate(targetVFS, targetPath, true);
+			return copyResult;
+		}
+		finally
+		{
+			MiscUtilities.closeQuietly(in);
+			MiscUtilities.closeQuietly(out);
+		}
+	} //}}}
+
+	//{{{ copy() method
+	/**
+	 * Copy a file to another using VFS.
+	 *
+	 * @param progress the progress observer. It could be null if you don't want to monitor progress. If not null
+	 *                  you should probably launch this command in a WorkThread
+	 * @param sourcePath the source path
+	 * @param targetPath the target path
+	 * @param comp comp The component that will parent error dialog boxes
+	 * @param canStop if true the copy can be stopped
+	 * @return true if the copy was successful
+	 * @throws IOException  IOException If an I/O error occurs
+	 * @since jEdit 4.3pre3
+	 */
+	public static boolean copy(ProgressObserver progress, String sourcePath,String targetPath, Component comp, boolean canStop)
+	throws IOException
+	{
+		VFS sourceVFS = VFSManager.getVFSForPath(sourcePath);
+		Object sourceSession = sourceVFS.createVFSSession(sourcePath, comp);
+		VFS targetVFS = VFSManager.getVFSForPath(targetPath);
+		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
+		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
+	} //}}}
+  
 	//{{{ insert() method
 	/**
 	 * Inserts a file into the specified buffer. The default implementation
