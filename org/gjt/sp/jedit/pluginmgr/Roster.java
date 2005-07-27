@@ -342,10 +342,22 @@ class Roster
 					else
 					{
 						new File(file.getParent()).mkdirs();
-						copy(null,
-							zipFile.getInputStream(entry),
-							new FileOutputStream(
-							file),false);
+						InputStream in = null;
+						FileOutputStream out = null;
+						try
+						{
+							in = zipFile.getInputStream(entry);
+							out = new FileOutputStream(file);
+							MiscUtilities.copyStream(4096,
+								null,
+								in,
+								out,false);
+						}
+						finally
+						{
+							MiscUtilities.closeQuietly(in);
+							MiscUtilities.closeQuietly(out);
+						}
 						if(file.getName().toLowerCase().endsWith(".jar"))
 							toLoad.add(file.getPath());
 					}
@@ -414,11 +426,21 @@ class Roster
 
 				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
 
-				if(!copy(progress,conn.getInputStream(),
-					new FileOutputStream(path),true))
-					return null;
+        InputStream in = null;
+        FileOutputStream out = null;
+        try {
+        in = conn.getInputStream();
+        out = new FileOutputStream(path);
+          if(!MiscUtilities.copyStream(progress,in,out,true))
+            return null;
+        }
+        finally
+        {
+          MiscUtilities.closeQuietly(in);
+          MiscUtilities.closeQuietly(out);
+        }
 
-				return path;
+        return path;
 			}
 			catch(InterruptedIOException iio)
 			{
@@ -446,45 +468,6 @@ class Roster
 
 				return null;
 			}
-		} //}}}
-
-		//{{{ copy() method
-		private boolean copy(PluginManagerProgress progress,
-			InputStream in, OutputStream out, boolean canStop)
-			throws Exception
-		{
-			in = new BufferedInputStream(in);
-			out = new BufferedOutputStream(out);
-
-			try
-			{
-				byte[] buf = new byte[4096];
-				int copied = 0;
-loop:				for(;;)
-				{
-					int count = in.read(buf,0,buf.length);
-					if(count == -1)
-						break loop;
-
-					copied += count;
-					if(progress != null)
-						progress.setValue(copied);
-
-					out.write(buf,0,count);
-					if(canStop && Thread.interrupted())
-					{
-						in.close();
-						out.close();
-						return false;
-					}
-				}
-			}
-			finally
-			{
-				in.close();
-				out.close();
-			}
-			return true;
 		} //}}}
 
 		//}}}
