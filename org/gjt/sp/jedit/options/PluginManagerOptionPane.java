@@ -28,11 +28,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.pluginmgr.*;
 import org.gjt.sp.util.*;
 
+/**
+ * @version $Id$
+ */
 public class PluginManagerOptionPane extends AbstractOptionPane
 {
 	//{{{ Constructor
@@ -48,8 +50,10 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 		locationLabel = new JLabel(jEdit.getProperty(
 			"options.plugin-manager.location"));
-		mirrorLabel = new JLabel(jEdit.getProperty(
-			"options.plugin-manager.mirror"));
+
+		mirrorLabel = new JLabel();
+		updateMirrorLabel();
+
 		if(jEdit.getSettingsDirectory() != null)
 		{
 			settingsDir = new JRadioButton(jEdit.getProperty(
@@ -141,6 +145,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			if (!previousMirror.equals(currentMirror))
 			{
 				jEdit.setProperty("plugin-manager.mirror.id",currentMirror);
+				jEdit.setProperty("plugin-manager.mirror.name",(String) miraModel.getElementAt(miraList.getSelectedIndex()));
+				updateMirrorLabel();
 				// Insert code to update the plugin managers list here later
 			}
 		}
@@ -161,6 +167,24 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	private MirrorModel miraModel;
 	private JList miraList;
 	//}}}
+
+	//{{{ updateMirrorLabel method
+	private void updateMirrorLabel()
+	{
+		String currentMirror = jEdit.getProperty("plugin-manager.mirror.id");
+		String mirrorName;
+		if (currentMirror.equals(MirrorList.Mirror.NONE))
+		{
+			mirrorName = "Plugin Central default";
+		}
+		else
+		{
+			mirrorName = jEdit.getProperty("plugin-manager.mirror.name");
+			if (mirrorName == null) mirrorName = currentMirror;
+		}
+		mirrorLabel.setText(jEdit.getProperty(
+			"options.plugin-manager.mirror") + ' ' + mirrorName);
+	} //}}}
 
 	//}}}
 
@@ -227,8 +251,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		public void run()
 		{
 			setStatus(jEdit.getProperty("options.plugin-manager.workthread"));
-			setProgressMaximum(1);
-			setProgressValue(0);
+			setMaximum(1);
+			setValue(0);
 
 			final ArrayList mirrors = new ArrayList();
 			try
@@ -261,7 +285,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 				}
 			});
 
-			setProgressValue(1);
+			setValue(1);
 		}
 	} //}}}
 }
