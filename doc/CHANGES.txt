@@ -32,6 +32,8 @@ to this release.
 
 - Updated "Insert Buffer Properties" macro (Björn Kautler).
 
+- The plugin manager option pane now displays the name of the mirror 
+  currently used
 }}}
 {{{ Bug Fixes
 
@@ -103,6 +105,11 @@ to this release.
     BufferListener instead.
 
   - FoldHandler.getFoldLevel() now takes a JEditBuffer as a parameter.
+
+  - VFS.copy() methods added
+  
+  - MiscUtilities.copyStream() and MiscUtilities.closeQuietly() methods 
+    added
 
 }}}
 
