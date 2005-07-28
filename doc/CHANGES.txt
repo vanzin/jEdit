@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to Björn Kautler, David Chan, James Turk, Loren Charnley,
+Thanks to BjÃ¶rn Kautler, David Chan, James Turk, Loren Charnley,
 Matthieu Casanova, Michael Macnair and Nicholas O'Leary for contributing
 to this release.
 
@@ -30,12 +30,12 @@ to this release.
 
 - The selection is now saved between buffer switches.
 
-- Updated "Insert Buffer Properties" macro (Björn Kautler).
+- Updated "Insert Buffer Properties" macro (BjÃ¶rn Kautler).
 
 - The plugin manager option pane now displays the name of the mirror 
   currently used
 
-- URLs dragged into jEdit are loaded in a buffer rather than pasted.
+- URLs dragged into the textarea are loaded rather than the URL pasted.
 
 }}}
 {{{ Bug Fixes
@@ -427,3 +427,4 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
 :folding=explicit:collapseFolds=2:
+
