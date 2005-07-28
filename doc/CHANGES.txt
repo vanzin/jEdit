@@ -34,6 +34,9 @@ to this release.
 
 - The plugin manager option pane now displays the name of the mirror 
   currently used
+
+- URLs dragged into jEdit are loaded in a buffer rather than pasted.
+
 }}}
 {{{ Bug Fixes
 
