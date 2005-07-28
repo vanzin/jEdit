@@ -146,6 +146,26 @@ class TextAreaTransferHandler extends TransferHandler
 			DataFlavor.stringFlavor);
 
 		JEditTextArea textArea = (JEditTextArea)c;
+		if (dragSource == null)
+		{
+			// Only examine the string for a URL if it came from
+			// outside of jEdit.
+			org.gjt.sp.jedit.io.VFS vfs = org.gjt.sp.jedit.io.VFSManager.getVFSForPath(str);
+			if (!(vfs instanceof org.gjt.sp.jedit.io.FileVFS) || str.startsWith("file://")) 
+			{
+				str = str.replace('\n',' ').replace('\r',' ').trim();
+				if (str.startsWith("file://")) 
+				{
+					str = str.substring(7);
+				}
+				
+				org.gjt.sp.jedit.io.VFSManager.runInWorkThread(
+					new DraggedURLLoader(textArea,str)
+					);
+				
+				return true;
+			}
+		}
 
 		if(dragSource != null
 			&& textArea.getBuffer()
@@ -154,7 +174,8 @@ class TextAreaTransferHandler extends TransferHandler
 			compoundEdit = true;
 			textArea.getBuffer().beginCompoundEdit();
 		}
-
+		
+		
 		sameTextArea = (textArea == dragSource);
 
 		int caret = textArea.getCaretPosition();
@@ -294,4 +315,23 @@ class TextAreaTransferHandler extends TransferHandler
 			this.textArea = textArea;
 		}
 	} //}}}
+
+	//{{{ DraggedURLLoader
+	class DraggedURLLoader extends org.gjt.sp.util.WorkRequest
+	{
+		private JEditTextArea textArea;
+		private String url;
+		
+		public DraggedURLLoader(JEditTextArea textArea, String url)
+		{
+			super();
+			this.textArea = textArea;
+			this.url = url;
+		}
+		public void run()
+		{
+			jEdit.openFile(textArea.getView(),url);
+		}
+	} //}}}
+
 }
