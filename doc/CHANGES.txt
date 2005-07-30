@@ -6,22 +6,6 @@ Thanks to Bj??rn Kautler, David Chan, James Turk, Loren Charnley,
 Matthieu Casanova, Michael Macnair and Nicholas O'Leary for contributing
 to this release.
 
-{{{ Search and Replace
-
-- HyperSearch results can now be displayed in a folder hierarchy tree
-  view. This improves readability of the results when there are matches 
-  for many different files from a deep folder structure. To activate,
-  right click on the top search node in the result tree and select
-  "Toggle Tree View". If multiple results is enabled, the tree view is
-  only toggled for the selected search.
-  
-  There are also new context menu options for the result tree
-  that only display in tree view mode when a folder node is selected.
-  There are options to expand/collapse all child nodes, and another to
-  exeucte a "New Search From Here", which displays the search dialog
-  initialized with the path from the selected result tree folder node.
-
-}}}
 {{{ Syntax Highlighting
 
 - Gnuplot syntax highlighting (Loren Charnley).
