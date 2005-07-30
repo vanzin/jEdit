@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.search;
 
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditPane;
+import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.jEdit;
 
 public class HyperSearchFileNode implements HyperSearchNode
@@ -71,4 +72,16 @@ public class HyperSearchFileNode implements HyperSearchNode
 		String paths[] = path.split(fileSep);
 		return paths[paths.length - 1];
 	} //}}}
+	
+	//{{{ equals() method
+	public boolean equals(Object compareObj)
+	{
+		if (!(compareObj instanceof HyperSearchFileNode))
+			return false;
+		HyperSearchFileNode otherResult = (HyperSearchFileNode)compareObj;
+		
+		return path.equals(MiscUtilities.resolveSymlinks(otherResult.path))
+			&& buffer.equals(otherResult.buffer);		
+	}//}}}
+	
 }

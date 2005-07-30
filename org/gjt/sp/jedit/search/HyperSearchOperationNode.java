@@ -34,6 +34,7 @@ import java.util.TreeMap;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 //{{{ Imports
@@ -95,6 +96,25 @@ public class HyperSearchOperationNode
 		resultNodes = new ArrayList();
 		for (Enumeration e = operNode.children(); e.hasMoreElements();)
 			resultNodes.add(e.nextElement());
+	}//}}}
+	
+	//{{{ removeNodeFromCache() method
+	public static void removeNodeFromCache (MutableTreeNode mnode)
+	{
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)mnode;
+		if (node.getUserObject() instanceof HyperSearchOperationNode)
+			return;
+		
+		DefaultMutableTreeNode tmpNode = node;
+		while ((tmpNode = (DefaultMutableTreeNode) tmpNode.getParent()) != null)
+		{
+			if (!(tmpNode.getUserObject() instanceof HyperSearchOperationNode))
+				continue;
+			HyperSearchOperationNode operNode = (HyperSearchOperationNode) tmpNode.getUserObject();
+			operNode.resultNodes.remove(node);
+			break;
+		}
+		
 	}//}}}
 	
 	//{{{ insertTreeNodes() method
