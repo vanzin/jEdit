@@ -354,6 +354,7 @@ public class ManagePanel extends JPanel
 		private void loadPluginJAR(String jarPath)
 		{
 			jEdit.addPluginJAR(jarPath);
+			jEdit.unsetProperty("plugin-blacklist."+MiscUtilities.getFileName(jarPath));
 			PluginJAR jar = jEdit.getPluginJAR(jarPath);
 			if(jar == null || jar.getPlugin() == null)
 				return;
@@ -449,6 +450,7 @@ public class ManagePanel extends JPanel
 			}
 
 			jEdit.removePluginJAR(jar,false);
+			jEdit.setBooleanProperty("plugin-blacklist."+MiscUtilities.getFileName(jar.getPath()),true);
 		} //}}}
 	} //}}}
 
