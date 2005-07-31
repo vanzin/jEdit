@@ -1042,7 +1042,8 @@ public class jEdit
 				continue;
 
 			String path = MiscUtilities.constructPath(directory,plugin);
-
+			if (jEdit.getBooleanProperty("plugin-blacklist."+plugin))
+				continue;
 			// remove this when 4.1 plugin API is deprecated
 			if(plugin.equals("EditBuddy.jar")
 				|| plugin.equals("PluginManager.jar")
