@@ -36,6 +36,7 @@ import org.gjt.sp.jedit.*;
 /**
  * Plugin list downloaded from server.
  * @since jEdit 3.2pre2
+ * @version $Id$
  */
 class PluginList
 {
@@ -49,6 +50,12 @@ class PluginList
 	Hashtable pluginHash;
 	Vector pluginSets;
 
+	/**
+	 * The mirror id.
+	 * @since jEdit 4.3pre3
+	 */
+	private final String id;
+
 	//{{{ PluginList constructor
 	PluginList() throws Exception
 	{
@@ -57,7 +64,7 @@ class PluginList
 		pluginSets = new Vector();
 
 		String path = jEdit.getProperty("plugin-manager.export-url");
-		String id = jEdit.getProperty("plugin-manager.mirror.id");
+		id = jEdit.getProperty("plugin-manager.mirror.id");
 		if (!id.equals(MirrorList.Mirror.NONE))
 			path += "?mirror="+id;
 		PluginListHandler handler = new PluginListHandler(this,path);
@@ -129,6 +136,18 @@ class PluginList
 			System.err.println((Plugin)plugins.elementAt(i));
 			System.err.println();
 		}
+	} //}}}
+
+	//{{{ getMirrorId() method
+	/**
+	 * Returns the mirror ID.
+	 *
+	 * @return the mirror ID
+	 * @since jEdit 4.3pre3
+	 */
+	String getMirrorId()
+	{
+		return id;
 	} //}}}
 
 	//{{{ PluginSet class
