@@ -95,6 +95,9 @@ to this release.
 - If windows were docked in the top docking area, the action bar would
   display in the wrong place.
 
+- After receiving a PropertiesChanged on EditBus, the PluginManager will check
+  if the mirror was changed before updating the plugin list
+
 }}}
 {{{ API Changes
 

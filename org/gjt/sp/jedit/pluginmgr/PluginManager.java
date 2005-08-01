@@ -26,12 +26,9 @@ package org.gjt.sp.jedit.pluginmgr;
 import com.microstar.xml.XmlException;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.*;
-import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.*;
@@ -40,6 +37,9 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.WorkRequest;
 //}}}
 
+/**
+ * @version $Id$
+ */
 public class PluginManager extends JFrame implements EBComponent
 {
 	//{{{ getInstance() method
@@ -64,16 +64,17 @@ public class PluginManager extends JFrame implements EBComponent
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage message)
 	{
-		// Force the install tab to refresh for possible
-		// change of mirror
 		if (message instanceof PropertiesChanged)
 		{
-			pluginList = null;
-			updatePluginList();
-			if(tabPane.getSelectedIndex() != 0)
+			if (shouldUpdatePluginList())
 			{
-				installer.updateModel();
-				updater.updateModel();
+				pluginList = null;
+				updatePluginList();
+				if(tabPane.getSelectedIndex() != 0)
+				{
+					installer.updateModel();
+					updater.updateModel();
+				}
 			}
 		}
 		else if (message instanceof PluginUpdate)
@@ -195,6 +196,22 @@ public class PluginManager extends JFrame implements EBComponent
 		setVisible(true);
 	} //}}}
 
+	//{{{ shouldUpdatePluginList()
+	/**
+	* Check if the plugin list should be updated.
+	* It will return <code>true</code> if the pluginList is <code>null</code>
+	* or if the mirror id of the current plugin list is not the current preffered mirror id
+	* and will return always false if the plugin list is currently downloading
+	*
+	* @return true if the plugin list should be updated
+	*/
+	private boolean shouldUpdatePluginList()
+	{
+		return (pluginList == null ||
+			!pluginList.getMirrorId().equals(jEdit.getProperty("plugin-manager.mirror.id"))) &&
+			!downloadingPluginList;
+	} //}}}
+
 	//{{{ updatePluginList() method
 	private void updatePluginList()
 	{
@@ -204,7 +221,7 @@ public class PluginManager extends JFrame implements EBComponent
 			GUIUtilities.error(this,"no-settings",null);
 			return;
 		}
-		else if(pluginList != null || downloadingPluginList)
+		if (!shouldUpdatePluginList())
 		{
 			return;
 		}
