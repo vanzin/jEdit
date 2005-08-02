@@ -46,6 +46,7 @@ class TextAreaTransferHandler extends TransferHandler
 	private static boolean compoundEdit;
 	private static boolean sameTextArea;
 	private static int insertPos;
+	private static int insertOffset;
 
 	//{{{ createTransferable
 	protected Transferable createTransferable(JComponent c)
@@ -200,11 +201,12 @@ class TextAreaTransferHandler extends TransferHandler
 			if (sameTextArea)
 			{
 				insertPos = caret;
+				insertOffset = 0;
 				Selection[] selections = textArea.getSelection();
 				for (int i=0;i<selections.length;i++)
 				{
-					if (selections[i].end<insertPos)
-						insertPos-=(selections[i].end-selections[i].start);
+					if (selections[i].end<(insertPos+insertOffset))
+						insertOffset-=(selections[i].end-selections[i].start);
 				}
 			}
 			else
@@ -240,8 +242,10 @@ class TextAreaTransferHandler extends TransferHandler
 				if (sameTextArea)
 				{
 					if(action == MOVE)
+					{
 						textArea.setSelectedText(null,false);
-
+						insertPos += insertOffset;
+					} 
 					try
 					{
 						String str = (String)t.getTransferData(DataFlavor.stringFlavor);
