@@ -98,6 +98,9 @@ to this release.
 - After receiving a PropertiesChanged on EditBus, the PluginManager will check
   if the mirror was changed before updating the plugin list
 
+- Fix for drag'n'copy text to lower position in same textarea - #1246823
+  (Nicholas O'Leary)
+
 }}}
 {{{ API Changes
 
