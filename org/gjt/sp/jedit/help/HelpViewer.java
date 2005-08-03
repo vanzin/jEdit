@@ -363,6 +363,7 @@ public class HelpViewer extends JFrame implements EBComponent, HelpHistoryModelL
 					((HTMLDocument)viewer.getDocument())
 						.processHTMLFrameHyperlinkEvent(
 						(HTMLFrameHyperlinkEvent)evt);
+					historyUpdated();
 				}
 				else
 				{

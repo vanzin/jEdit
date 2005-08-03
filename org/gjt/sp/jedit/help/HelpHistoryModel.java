@@ -47,6 +47,7 @@ class HelpHistoryModel
 			return null;
 		String url = history[historyPos].url;
 		historyPos++;
+		fireUpdate();
 		return url;
 	} //}}}
 	
@@ -62,7 +63,9 @@ class HelpHistoryModel
 	{
 		if (historyPos<=1)
 			return null;
-		return history[--historyPos - 1].url;
+		String url = history[--historyPos - 1].url;
+		fireUpdate();
+		return url;
 	} //}}}
 	
 	//{{{ hasPrevious
@@ -95,18 +98,15 @@ class HelpHistoryModel
 	//{{{ setCurrentEntry
 	public void setCurrentEntry(HistoryEntry entry)
 	{
-		int oldPos = historyPos;
 		for (int i=0;i<history.length;i++)
 		{
 			if (history[i]!=null && history[i].equals(entry))
 			{
 				historyPos = i+1;
-				return;
+				fireUpdate();
+				break;
 			}
 		}
-		if (oldPos != historyPos)
-			fireUpdate();
-
 		// Do nothing?
 	} //}}}
 	
@@ -179,6 +179,11 @@ class HelpHistoryModel
 		{
 			this.url = url;
 			this.title = title;
+		}
+		public boolean equals(HistoryEntry he)
+		{
+			return he.url.equals(this.url) &&
+				he.title.equals(this.title);
 		}
 	}
 	//}}}
