@@ -41,6 +41,9 @@ to this release.
 - Deselecting a plugin in the Plugin Manager persists between reloads of
   jEdit (Nicholas O'Leary).
 
+- Help Browser has an improved history model with drop-down style
+  forward and back buttons.
+
 }}}
 {{{ Bug Fixes
 

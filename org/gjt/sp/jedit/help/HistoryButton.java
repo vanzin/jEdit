@@ -22,14 +22,20 @@
 
 package org.gjt.sp.jedit.help;
 
+//{{{ Imports
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+//}}}
 
-
+/**
+ * History Button
+ * @author Nicholas O'Leary
+ * @version $Id$
+ */
 class HistoryButton extends JPanel implements ActionListener
 {
 	static final int BACK    = 0;
