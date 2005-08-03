@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1999, 2002 Slava Pestov
+ * Copyright (C) 1999, 2005 Slava Pestov, Nicholas O'Leary
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HelpViewer extends JFrame implements EBComponent
+public class HelpViewer extends JFrame implements EBComponent, HelpHistoryModelListener
 {
 	//{{{ HelpViewer constructor
 	/**
@@ -88,8 +88,6 @@ public class HelpViewer extends JFrame implements EBComponent
 			// what to do?
 		}
 
-		history = new String[25];
-
 		ActionHandler actionListener = new ActionHandler();
 
 		JTabbedPane tabs = new JTabbedPane();
@@ -101,27 +99,19 @@ public class HelpViewer extends JFrame implements EBComponent
 
 		JPanel rightPanel = new JPanel(new BorderLayout());
 
-		JToolBar toolBar = new JToolBar();
-		toolBar.setFloatable(false);
+		Box toolBar = new Box(BoxLayout.X_AXIS);
+		//toolBar.setFloatable(false);
 
 		toolBar.add(title = new JLabel());
 		toolBar.add(Box.createGlue());
-
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		buttons.setBorder(new EmptyBorder(0,12,0,0));
-		back = new RolloverButton(GUIUtilities.loadIcon(
-			jEdit.getProperty("helpviewer.back.icon")));
-		back.setToolTipText(jEdit.getProperty("helpviewer.back.label"));
+		historyModel = new HelpHistoryModel(25);
+		back = new HistoryButton(HistoryButton.BACK,historyModel);
 		back.addActionListener(actionListener);
 		toolBar.add(back);
-		forward = new RolloverButton(GUIUtilities.loadIcon(
-			jEdit.getProperty("helpviewer.forward.icon")));
+		forward = new HistoryButton(HistoryButton.FORWARD,historyModel);
 		forward.addActionListener(actionListener);
-		forward.setToolTipText(jEdit.getProperty("helpviewer.forward.label"));
 		toolBar.add(forward);
 		back.setPreferredSize(forward.getPreferredSize());
-
 		rightPanel.add(BorderLayout.NORTH,toolBar);
 
 		viewer = new JEditorPane();
@@ -136,7 +126,11 @@ public class HelpViewer extends JFrame implements EBComponent
 			tabs,rightPanel);
 		splitter.setBorder(null);
 
+
 		getContentPane().add(BorderLayout.CENTER,splitter);
+
+		historyModel.addHelpHistoryModelListener(this);
+		historyUpdated();
 
 		gotoURL(url,true);
 
@@ -215,17 +209,7 @@ public class HelpViewer extends JFrame implements EBComponent
 
 			viewer.setPage(_url);
 			if(addToHistory)
-			{
-				history[historyPos] = url;
-				if(historyPos + 1 == history.length)
-				{
-					System.arraycopy(history,1,history,
-						0,history.length - 1);
-					history[historyPos] = null;
-				}
-				else
-					historyPos++;
-			}
+				historyModel.addToHistory(url);
 		}
 		catch(MalformedURLException mf)
 		{
@@ -290,18 +274,24 @@ public class HelpViewer extends JFrame implements EBComponent
 		return shortURL;
 	} //}}}
 
+	//{{{ historyUpdated() method
+	public void historyUpdated()
+	{
+		back.setEnabled(historyModel.hasPrevious());
+		forward.setEnabled(historyModel.hasNext());
+	} //}}}
+	
 	//{{{ Private members
 
 	//{{{ Instance members
 	private String baseURL;
 	private String shortURL;
-	private JButton back;
-	private JButton forward;
+	private HistoryButton back;
+	private HistoryButton forward;
 	private JEditorPane viewer;
 	private JLabel title;
 	private JSplitPane splitter;
-	private String[] history;
-	private int historyPos;
+	private HelpHistoryModel historyModel;
 	private HelpTOCPanel toc;
 	private boolean queuedTOCReload;
 	//}}}
@@ -330,30 +320,31 @@ public class HelpViewer extends JFrame implements EBComponent
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
+			String url = evt.getActionCommand();
+			if (!url.equals(""))
+			{
+				gotoURL(url,false);
+				return;
+			}
+				
 			if(source == back)
 			{
-				if(historyPos <= 1)
+				url = historyModel.back();
+				if(url == null)
 					getToolkit().beep();
 				else
 				{
-					String url = history[--historyPos - 1];
 					gotoURL(url,false);
 				}
 			}
 			else if(source == forward)
 			{
-				if(history.length - historyPos <= 1)
+				url = historyModel.forward();
+				if(url == null)
 					getToolkit().beep();
 				else
 				{
-					String url = history[historyPos];
-					if(url == null)
-						getToolkit().beep();
-					else
-					{
-						historyPos++;
-						gotoURL(url,false);
-					}
+					gotoURL(url,false);
 				}
 			}
 		} //}}}
@@ -404,6 +395,8 @@ public class HelpViewer extends JFrame implements EBComponent
 						viewer.getPage().toString());
 				}
 				title.setText(titleStr);
+				historyModel.updateTitle(viewer.getPage().toString(),
+					titleStr);
 			}
 		}
 	} //}}}
