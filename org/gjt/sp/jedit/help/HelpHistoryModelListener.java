@@ -22,6 +22,11 @@
 
 package org.gjt.sp.jedit.help;
 
+/**
+ * Listener interface to montior changes to a HelpHistoryModel
+ * @author Nicholas O'Leary
+ * @version $Id$
+ */
 interface HelpHistoryModelListener
 {
 	public void historyUpdated();
