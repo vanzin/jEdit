@@ -104,6 +104,8 @@ to this release.
 - Fix for drag'n'copy text to lower position in same textarea - #1246823
   (Nicholas O'Leary)
 
+- Further Register Viewer fixes (Nicholas O'Leary).
+
 }}}
 {{{ API Changes
 
