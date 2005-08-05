@@ -106,6 +106,8 @@ to this release.
 
 - Further Register Viewer fixes (Nicholas O'Leary).
 
+- Bug 1173630 fixed : Format paragraph with the caret at the end of it
+
 }}}
 {{{ API Changes
 

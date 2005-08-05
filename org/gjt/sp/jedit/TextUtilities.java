@@ -643,6 +643,8 @@ loop:		for(int i = pos; i < line.length(); i++)
 
 			if(j > index)
 				return i;
+			if(i == str.length() - 1)
+				return i + 1;
 		}
 	} //}}}
 
@@ -761,6 +763,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 		}
 	} //}}}
 	
+	//{{{ indexIgnoringWhitespace() method
 	public static void indexIgnoringWhitespace(String text, int maxLineLength,
 		int tabSize, StringBuffer buf)
 	{
