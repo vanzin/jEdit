@@ -55,7 +55,8 @@ public class RegisterViewer extends JPanel implements EBComponent
 		contentTextArea = new JTextArea(10,20);
 		contentTextArea.setEditable(true);
 		documentHandler = new DocumentHandler();
-		contentTextArea.getDocument().addDocumentListener(documentHandler);
+		//contentTextArea.getDocument().addDocumentListener(documentHandler);
+		contentTextArea.addFocusListener(new FocusHandler());
 
 		int orientation = JSplitPane.HORIZONTAL_SPLIT;
 		if (position.equals(DockableWindowManager.LEFT) ||
@@ -127,7 +128,7 @@ public class RegisterViewer extends JPanel implements EBComponent
 				continue;
 
 			String value = reg.toString();
-			if(value == null || value.length() == 0)
+			if(value == null) // || value.length() == 0)
 				continue;
 			if (i == selected)
 				index = registerModel.size();
@@ -141,10 +142,7 @@ public class RegisterViewer extends JPanel implements EBComponent
 		}
 		else
 			registerList.setEnabled(true);
-
-		contentTextArea.getDocument().removeDocumentListener(documentHandler);
 		registerList.setSelectedIndex(index);
-		contentTextArea.getDocument().addDocumentListener(documentHandler);
 	} //}}}
 
 	//{{{ updateSelected
@@ -156,18 +154,22 @@ public class RegisterViewer extends JPanel implements EBComponent
 		else if (o instanceof Character)
 		{
 			Registers.Register reg = Registers.getRegister(((Character)o).charValue());
-			if(!editing)
+			if (!editing)
+			{
 				contentTextArea.setText(reg.toString());
-			contentTextArea.setEditable(true);
+				contentTextArea.setEditable(true);
+			}
 		}
 		else
 		{
-			if(!editing)
+			if (!editing)
+			{
 				contentTextArea.setText("");
-			contentTextArea.setEditable(false);
+				contentTextArea.setEditable(false);
+			}
 		}
-
-		contentTextArea.setCaretPosition(0);
+		if (!editing)
+			contentTextArea.setCaretPosition(0);
 	}//}}}
 
 	//{{{ insertRegister
@@ -211,10 +213,11 @@ public class RegisterViewer extends JPanel implements EBComponent
 					label = jEdit.getProperty("view-registers.selection");
 				else
 					label = String.valueOf((char)name);
-
 				String registerValue = Registers.getRegister(name).toString();
 				if (registerValue.length() > 100)
 					registerValue = registerValue.substring(0,100)+"...";
+				registerValue = registerValue.replaceAll("\n"," ");
+				registerValue = registerValue.replaceAll("\t"," ");
 				setText(label+" : "+registerValue);
 			}
 
@@ -234,7 +237,6 @@ public class RegisterViewer extends JPanel implements EBComponent
 			char name = ((Character)value).charValue();
 
 			Registers.Register reg = Registers.getRegister(name);
-
 			if(reg == null)
 				return;
 			updateSelected();
@@ -244,14 +246,14 @@ public class RegisterViewer extends JPanel implements EBComponent
 	//{{{ MouseHandler Class
 	class MouseHandler extends MouseAdapter
 	{
-		public void mousePressed(MouseEvent evt)
+		/*public void mousePressed(MouseEvent evt)
 		{
 			if(evt.isConsumed())
 				return;
 			int index = registerList.locationToIndex(
 				evt.getPoint());
 			registerList.setSelectedIndex(index);
-		}
+		} */
 
 		public void mouseClicked(MouseEvent evt)
 		{
@@ -300,6 +302,19 @@ public class RegisterViewer extends JPanel implements EBComponent
 			Registers.setRegister(name,contentTextArea.getText());
 		}
 	} //}}}
+
+	//{{{ FocusHandler Class
+	class FocusHandler implements FocusListener
+	{
+		public void focusGained(FocusEvent e)
+		{
+			contentTextArea.getDocument().addDocumentListener(documentHandler);
+		}
+		public void focusLost(FocusEvent e)
+		{
+			contentTextArea.getDocument().removeDocumentListener(documentHandler);
+		}
+	}//}}}
 
 	//}}}
 }
