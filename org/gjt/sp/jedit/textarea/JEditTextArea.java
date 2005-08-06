@@ -26,16 +26,11 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.TooManyListenersException;
-import java.util.TreeSet;
-import java.util.Vector;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.Segment;
@@ -44,7 +39,6 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.Macros;
-import org.gjt.sp.jedit.Marker;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.View;
@@ -3836,12 +3830,12 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		selectNone();
 	} //}}}
 
-	//{{{ addExplicitFold() method
+	//{{{ addExplicitFoldAtCaret() method
 	/**
 	 * Surrounds the selection with explicit fold markers.
-	 * @since jEdit 4.0pre3
+	 * @since jEdit 4.3pre3
 	 */
-	public void addExplicitFold()
+	public void addExplicitFoldAtCaret()
 	{
 		if(!buffer.getStringProperty("folding").equals("explicit"))
 		{
@@ -3849,8 +3843,6 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		// BUG: if there are multiple selections in different
-		// contexts, the wrong comment strings will be inserted.
 		String lineComment = buffer.getContextSensitiveProperty(caret,"lineComment");
 		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
 		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
@@ -3863,7 +3855,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		}
 		else if(commentStart != null && commentEnd != null)
 		{
-			start = commentStart + "{{{  " + commentEnd + "\n";
+			start = commentStart + "{{{  " + commentEnd + '\n';
 			end = commentStart + "}}}" + commentEnd;
 		}
 		else
@@ -3875,45 +3867,15 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		try
 		{
 			buffer.beginCompoundEdit();
-
-			if(getSelectionCount() == 0)
-			{
-				String line = buffer.getLineText(caretLine);
-				String whitespace = line.substring(0,
-					MiscUtilities.getLeadingWhiteSpace(line));
-				int loc = caret + start.length() - 1;
-				start = start + whitespace;
-				buffer.insert(caret,start);
-				// stupid: caret will automatically be incremented
-				buffer.insert(caret,end);
-				moveCaretPosition(loc,false);
-			}
-			else
-			{
-				int loc = -1;
-
-				Selection[] sel = getSelection();
-				for(int i = 0; i < sel.length; i++)
-				{
-					Selection s = sel[i];
-					String line = buffer.getLineText(s.startLine);
-					String whitespace = line.substring(0,
-						MiscUtilities.getLeadingWhiteSpace(line));
-					loc = s.start + start.length() - 1;
-					buffer.insert(s.start,start + whitespace);
-					if(s.end == buffer.getLineStartOffset(
-						s.endLine))
-					{
-						buffer.insert(s.end,end);
-					}
-					else
-					{
-						buffer.insert(s.end," " + end);
-					}
-				}
-
-				setCaretPosition(loc,false);
-			}
+			String line = buffer.getLineText(caretLine);
+			String whitespace = line.substring(0,
+				MiscUtilities.getLeadingWhiteSpace(line));
+			int loc = caret + start.length() - 1;
+			start += whitespace;
+			buffer.insert(caret,start);
+			// stupid: caret will automatically be incremented
+			buffer.insert(caret,end);
+			moveCaretPosition(loc,false);
 		}
 		finally
 		{
@@ -3921,7 +3883,49 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
-	//}}}
+  	//{{{ addExplicitFold() method
+	/**
+	 * Surrounds the selection with explicit fold markers.
+	 * @since jEdit 4.0pre3
+	 */
+	public void addExplicitFold()
+	{
+		// BUG : still bug 1159659,
+		// The token found at start of selection got sometimes wrong rules, specialy at start of line just
+		// before a token that change rule for example in php <? in beginning of the line
+
+		if(!buffer.getStringProperty("folding").equals("explicit"))
+		{
+			GUIUtilities.error(view,"folding-not-explicit",null);
+			return;
+		}
+
+		if (getSelectionCount() == 0)
+		{
+			addExplicitFoldAtCaret();
+		}
+		else
+		{
+			try
+			{
+				buffer.beginCompoundEdit();
+				Selection[] selections = getSelection();
+				Selection selection = null;
+				int caretBack = 0;
+				for (int i = 0; i < selections.length; i++)
+				{
+					selection = selections[i];
+					caretBack = addExplicitFold(selection);
+				}
+				setCaretPosition(selection.start - caretBack, false);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+		}
+	} //}}}
+  //}}}
 
 	//{{{ Text editing
 
@@ -4547,7 +4551,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(!buffer.isLoading())
 			recalculateLastPhysicalLine();
 		propertiesChanged();
-		
+
 		hiddenCursor = getToolkit().createCustomCursor(
 			getGraphicsConfiguration()
 			.createCompatibleImage(16,16,
@@ -4600,7 +4604,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
-			
+
 	} //}}}
 
 	//{{{ addTopComponent() method
@@ -5234,7 +5238,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(!buffer.isTransactionInProgress())
 			_finishCaretUpdate();
 		/* otherwise DisplayManager.BufferChangeHandler calls */
-		
+
 		repaintMgr.setFastScroll(false);
 	} //}}}
 
@@ -5525,7 +5529,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int characters = chars.length;
 		int words = 0;
 		int lines = 1;
-		
+
 		boolean word = true;
 		for(int i = 0; i < chars.length; i++)
 		{
@@ -5850,6 +5854,57 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
+	//{{{ addExplicitFold() method
+	/**
+	 * Add an explicit fold around a selection.
+	 * You should call this method inside a compoundEdit in the buffer.
+	 * You must also check if the buffer fold mode is explicit before
+	 * calling this method.
+	 *
+	 * @param selection the selection where you want to put your explicit fold
+	 * @since jEdit 4.3pre3
+	 */
+	private int addExplicitFold(Selection selection)
+	{
+		// BUG: if there are multiple selections in different
+		// contexts, the wrong comment strings will be inserted.
+		String startLineComment = buffer.getContextSensitiveProperty(selection.start,"lineComment");
+		String endLineComment = buffer.getContextSensitiveProperty(selection.end,"lineComment");
+		String startCommentStart = buffer.getContextSensitiveProperty(selection.start,"commentStart");
+		String startCommentEnd = buffer.getContextSensitiveProperty(selection.start,"commentEnd");
+		String endCommentStart = buffer.getContextSensitiveProperty(selection.end,"commentStart");
+		String endCommentEnd = buffer.getContextSensitiveProperty(selection.end,"commentEnd");
+
+		String start, end;
+		int caretBack = 1;
+		if(startLineComment != null)
+			start = startLineComment + "{{{ \n";
+		else if(startCommentStart != null && startCommentEnd != null)
+		{
+			start = startCommentStart + "{{{  " + startCommentEnd + '\n';
+			caretBack = 1 + startCommentStart.length();
+		}
+		else
+			start = "{{{ \n";
+
+		if(endLineComment != null)
+			end = endLineComment + "}}}";
+		else if(endCommentStart != null && endCommentEnd != null)
+			end = endCommentStart + "}}}" + endCommentEnd;
+		else
+			end = "}}}";
+
+		String line = buffer.getLineText(selection.startLine);
+		String whitespace = line.substring(0,
+			MiscUtilities.getLeadingWhiteSpace(line));
+		buffer.insert(selection.start,start + whitespace);
+		if(selection.end == buffer.getLineStartOffset(selection.endLine))
+			buffer.insert(selection.end,end);
+		else
+			buffer.insert(selection.end,' ' + end);
+
+		return caretBack;
+	} //}}}
 	//}}}
 
 	//{{{ Inner classes

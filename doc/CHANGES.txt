@@ -108,6 +108,8 @@ to this release.
 
 - Bug 1173630 fixed : Format paragraph with the caret at the end of it
 
+- Mixed parser rules are detected when adding explicit fold.
+
 }}}
 {{{ API Changes
 
