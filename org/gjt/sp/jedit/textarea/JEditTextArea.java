@@ -3830,60 +3830,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		selectNone();
 	} //}}}
 
-	//{{{ addExplicitFoldAtCaret() method
-	/**
-	 * Surrounds the selection with explicit fold markers.
-	 * @since jEdit 4.3pre3
-	 */
-	public void addExplicitFoldAtCaret()
-	{
-		if(!buffer.getStringProperty("folding").equals("explicit"))
-		{
-			GUIUtilities.error(view,"folding-not-explicit",null);
-			return;
-		}
-
-		String lineComment = buffer.getContextSensitiveProperty(caret,"lineComment");
-		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
-		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
-
-		String start, end;
-		if(lineComment != null)
-		{
-			start = lineComment + "{{{ \n";
-			end = lineComment + "}}}";
-		}
-		else if(commentStart != null && commentEnd != null)
-		{
-			start = commentStart + "{{{  " + commentEnd + '\n';
-			end = commentStart + "}}}" + commentEnd;
-		}
-		else
-		{
-			start = "{{{ \n";
-			end = "}}}";
-		}
-
-		try
-		{
-			buffer.beginCompoundEdit();
-			String line = buffer.getLineText(caretLine);
-			String whitespace = line.substring(0,
-				MiscUtilities.getLeadingWhiteSpace(line));
-			int loc = caret + start.length() - 1;
-			start += whitespace;
-			buffer.insert(caret,start);
-			// stupid: caret will automatically be incremented
-			buffer.insert(caret,end);
-			moveCaretPosition(loc,false);
-		}
-		finally
-		{
-			buffer.endCompoundEdit();
-		}
-	} //}}}
-
-  	//{{{ addExplicitFold() method
+	//{{{ addExplicitFold() method
 	/**
 	 * Surrounds the selection with explicit fold markers.
 	 * @since jEdit 4.0pre3
@@ -3900,32 +3847,33 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		if (getSelectionCount() == 0)
+		try
 		{
-			addExplicitFoldAtCaret();
-		}
-		else
-		{
-			try
+			buffer.beginCompoundEdit();
+			
+			if (getSelectionCount() == 0)
 			{
-				buffer.beginCompoundEdit();
+				addExplicitFold(caret, caret, caretLine, caretLine);
+			}
+			else
+			{
 				Selection[] selections = getSelection();
 				Selection selection = null;
 				int caretBack = 0;
 				for (int i = 0; i < selections.length; i++)
 				{
 					selection = selections[i];
-					caretBack = addExplicitFold(selection);
+					caretBack = addExplicitFold(selection.start, selection.end, selection.startLine,selection.endLine);
 				}
 				setCaretPosition(selection.start - caretBack, false);
 			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
 		}
 	} //}}}
-  //}}}
+	//}}}
 
 	//{{{ Text editing
 
@@ -5856,24 +5804,25 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	//{{{ addExplicitFold() method
 	/**
-	 * Add an explicit fold around a selection.
+	 * Add an explicit fold.
 	 * You should call this method inside a compoundEdit in the buffer.
 	 * You must also check if the buffer fold mode is explicit before
 	 * calling this method.
 	 *
-	 * @param selection the selection where you want to put your explicit fold
+	 * @param caretStart the starting offset
+	 * @param caretEnd   the end offset
+	 * @param lineStart  the start line
+	 * @param lineEnd    the end line
 	 * @since jEdit 4.3pre3
 	 */
-	private int addExplicitFold(Selection selection)
+	private int addExplicitFold(int caretStart, int caretEnd, int lineStart, int lineEnd)
 	{
-		// BUG: if there are multiple selections in different
-		// contexts, the wrong comment strings will be inserted.
-		String startLineComment = buffer.getContextSensitiveProperty(selection.start,"lineComment");
-		String endLineComment = buffer.getContextSensitiveProperty(selection.end,"lineComment");
-		String startCommentStart = buffer.getContextSensitiveProperty(selection.start,"commentStart");
-		String startCommentEnd = buffer.getContextSensitiveProperty(selection.start,"commentEnd");
-		String endCommentStart = buffer.getContextSensitiveProperty(selection.end,"commentStart");
-		String endCommentEnd = buffer.getContextSensitiveProperty(selection.end,"commentEnd");
+		String startLineComment = buffer.getContextSensitiveProperty(caretStart,"lineComment");
+		String endLineComment = buffer.getContextSensitiveProperty(caretEnd,"lineComment");
+		String startCommentStart = buffer.getContextSensitiveProperty(caretStart,"commentStart");
+		String startCommentEnd = buffer.getContextSensitiveProperty(caretStart,"commentEnd");
+		String endCommentStart = buffer.getContextSensitiveProperty(caretEnd,"commentStart");
+		String endCommentEnd = buffer.getContextSensitiveProperty(caretEnd,"commentEnd");
 
 		String start, end;
 		int caretBack = 1;
@@ -5894,14 +5843,16 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 			end = "}}}";
 
-		String line = buffer.getLineText(selection.startLine);
+		String line = buffer.getLineText(lineStart);
 		String whitespace = line.substring(0,
 			MiscUtilities.getLeadingWhiteSpace(line));
-		buffer.insert(selection.start,start + whitespace);
-		if(selection.end == buffer.getLineStartOffset(selection.endLine))
-			buffer.insert(selection.end,end);
+
+		if(caretEnd == buffer.getLineStartOffset(lineEnd))
+			buffer.insert(caretEnd,end);
 		else
-			buffer.insert(selection.end,' ' + end);
+			buffer.insert(caretEnd,' ' + end);
+
+		buffer.insert(caretStart,start + whitespace);
 
 		return caretBack;
 	} //}}}
