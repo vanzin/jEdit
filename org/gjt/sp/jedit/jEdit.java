@@ -2769,6 +2769,8 @@ public class jEdit
 			+ " at marker <marker>");
 		System.out.println("	<file> +line:<line>: Positions caret"
 			+ " at line number <line>");
+		System.out.println("	<file> +line:<line>,<column>: Positions caret"
+			+ " at line number <line> and column number <column>");
 		System.out.println("	--: End of options");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-nobackground: Disable background mode (default)");
@@ -3551,8 +3553,20 @@ loop:		for(int i = 0; i < list.length; i++)
 				{
 					try
 					{
-						int line = Integer.parseInt(marker.substring(6));
-						pos = buffer.getLineStartOffset(line - 1);
+						String arg = marker.substring(6);
+						String[] lineCol = arg.split(",");
+						int line, col;
+						if(lineCol.length > 1)
+						{
+							line = Integer.parseInt(lineCol[0]);
+							col = Integer.parseInt(lineCol[1]);
+						}
+						else
+						{
+							line = Integer.parseInt(marker.substring(6));
+							col = 1;
+						}
+						pos = buffer.getLineStartOffset(line - 1) + (col - 1);
 					}
 					catch(Exception e)
 					{
