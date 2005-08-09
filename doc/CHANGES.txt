@@ -2,9 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to Bj??rn Kautler, David Chan, James Turk, Loren Charnley,
-Matthieu Casanova, Michael Macnair and Nicholas O'Leary for contributing
-to this release.
+Thanks to Bertalan Fodor, Björn Kautler, David Chan, James Turk, 
+Loren Charnley, Matthieu Casanova, Michael Macnair and Nicholas O'Leary
+for contributing to this release.
 
 {{{ Search and Replace
 
@@ -48,7 +48,7 @@ to this release.
 
 - The selection is now saved between buffer switches.
 
-- Updated "Insert Buffer Properties" macro (Bj??rn Kautler).
+- Updated "Insert Buffer Properties" macro (Björn Kautler).
 
 - The plugin manager option pane now displays the name of the mirror 
   currently used
@@ -61,6 +61,9 @@ to this release.
 
 - Help Browser has an improved history model with drop-down style
   forward and back buttons.
+
+- Can specify caret column number in addition to line number when
+  opening a file (+line:<line>,<column>) (Bertalan Fodor).
 
 }}}
 {{{ Bug Fixes
