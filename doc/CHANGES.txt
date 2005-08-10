@@ -51,7 +51,7 @@ for contributing to this release.
 - Updated "Insert Buffer Properties" macro (Björn Kautler).
 
 - The plugin manager option pane now displays the name of the mirror 
-  currently used
+  currently used (Matthieu Casanova).
 
 - URLs dragged into the textarea are loaded rather than the URL pasted
   (Nicholas O'Leary).
@@ -64,6 +64,10 @@ for contributing to this release.
 
 - Can specify caret column number in addition to line number when
   opening a file (+line:<line>,<column>) (Bertalan Fodor).
+
+- Chunk caching : the GlyphVector and bounds of Chunks are cached in a map
+  Only token with length < Chunk.CHUNK_CACHE_LIMIT are cached, default value is 10.
+  This should increase display speed specialy on large files (Matthieu Casanova).
 
 }}}
 {{{ Bug Fixes
@@ -120,16 +124,16 @@ for contributing to this release.
   display in the wrong place.
 
 - After receiving a PropertiesChanged on EditBus, the PluginManager will check
-  if the mirror was changed before updating the plugin list
+  if the mirror was changed before updating the plugin list (Matthieu Casanova).
 
 - Fix for drag'n'copy text to lower position in same textarea - #1246823
   (Nicholas O'Leary)
 
 - Further Register Viewer fixes (Nicholas O'Leary).
 
-- Bug 1173630 fixed : Format paragraph with the caret at the end of it
+- Bug 1173630 fixed : Format paragraph with the caret at the end of it (Matthieu Casanova).
 
-- Mixed parser rules are detected when adding explicit fold.
+- Mixed parser rules are detected when adding explicit fold (Matthieu Casanova).
 
 }}}
 {{{ API Changes
@@ -149,10 +153,10 @@ for contributing to this release.
 
   - FoldHandler.getFoldLevel() now takes a JEditBuffer as a parameter.
 
-  - VFS.copy() methods added
+  - VFS.copy() methods added (Matthieu Casanova).
   
   - MiscUtilities.copyStream() and MiscUtilities.closeQuietly() methods 
-    added
+    added (Matthieu Casanova).
 
 }}}
 
