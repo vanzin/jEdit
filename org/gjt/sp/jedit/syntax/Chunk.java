@@ -28,7 +28,9 @@ import javax.swing.text.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
-import org.gjt.sp.jedit.syntax.*;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import org.gjt.sp.jedit.Debug;
 //}}}
 
@@ -305,14 +307,54 @@ public class Chunk extends Token
 		else
 		{
 			visible = true;
+
 			str = new String(seg.array,seg.offset + offset,length);
-			gv = style.getFont().createGlyphVector(
-				fontRenderContext,str);
-			width = (float)gv.getLogicalBounds().getWidth();
+			
+			Rectangle2D logicalBounds;
+			if(str.length() < CHUNK_CACHE_LIMIT)
+			{
+				// if the string length is smaller than the CHUNK_CACHE_LIMIT we look in the map if
+				// the GlyphVector already exists. If not it will be added.
+				gv = (GlyphVector) glyphVectorMap.get(str);
+				if(gv == null)
+				{
+					gv = style.getFont().createGlyphVector(
+						fontRenderContext, str);
+					glyphVectorMap.put(str, gv);
+				}
+				
+				logicalBounds = (Rectangle2D) logicalBoundsMap.get(str);
+				if(logicalBounds == null )
+				{
+					logicalBounds = gv.getLogicalBounds();
+					logicalBoundsMap.put(str,logicalBounds);
+				}
+			}
+			else
+			{
+				gv = style.getFont().createGlyphVector(
+					fontRenderContext, str);
+				logicalBounds = gv.getLogicalBounds();
+			}
+			width = (float)logicalBounds.getWidth();
 		}
 	} //}}}
 
 	//{{{ Private members
 	private float[] positions;
+
+	/**
+	 * The cache for GlyphVector. The key is the String
+	 * and the value the GlyphVector for this String
+	 */
+	private static final Map glyphVectorMap = new WeakHashMap();
+	/**
+	 * The cache for bounds. The key is the String
+	 * and the value the GlyphVector for this String
+	 */
+	private static final Map logicalBoundsMap = new WeakHashMap();
+	
+	/** the limit size of the Chunk data that will be cached in the WeakHashMaps. */
+	public static int CHUNK_CACHE_LIMIT = 10;
 	//}}}
 }
