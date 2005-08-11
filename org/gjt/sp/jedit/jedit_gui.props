@@ -1046,6 +1046,12 @@ vfs.not-supported.list=Directories on the "{0}" filesystem cannot be browsed.
 vfs.not-supported.load=Files on the "{0}" filesystem cannot be opened.
 vfs.not-supported.save=Files cannot be saved to the "{0}" filesystem.
 
+vfs.overwrite-readonly.title=File is readonly
+vfs.overwrite-readonly.message=The file {0} is readonly.\n\
+	Would you like to save it anyway, resetting the readonly flag\n\
+	it will use two stage save (resets file owner on Unix)
+
+
 out-of-memory-error=There was insufficent Java heap memory to complete\n\
 	this request. Try increasing the maximum heap size.\n\
 	\n\
