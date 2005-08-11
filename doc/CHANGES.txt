@@ -2,19 +2,19 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre3
 
-Thanks to Bertalan Fodor, Björn Kautler, David Chan, James Turk, 
+Thanks to Bertalan Fodor, Björn Kautler, David Chan, James Turk,
 Loren Charnley, Matthieu Casanova, Michael Macnair and Nicholas O'Leary
 for contributing to this release.
 
 {{{ Search and Replace
 
 - HyperSearch results can now be displayed in a folder hierarchy tree
-  view. This makes it easier to see file locations when there are matches 
+  view. This makes it easier to see file locations when there are matches
   for many different files from a deep folder structure. To activate,
   right click on the top search node in the result tree and select
   "Toggle Tree View". If multiple results is enabled, the tree view is
   only toggled for the selected search.
-  
+
   There are also new context menu options for the result tree
   that only display in tree view mode when a folder node is selected.
   There are options to expand/collapse all child nodes, and another to
@@ -50,7 +50,7 @@ for contributing to this release.
 
 - Updated "Insert Buffer Properties" macro (Björn Kautler).
 
-- The plugin manager option pane now displays the name of the mirror 
+- The plugin manager option pane now displays the name of the mirror
   currently used (Matthieu Casanova).
 
 - URLs dragged into the textarea are loaded rather than the URL pasted
@@ -135,12 +135,14 @@ for contributing to this release.
 
 - Mixed parser rules are detected when adding explicit fold (Matthieu Casanova).
 
+- Bug 1085135 fixed : when typing ctrl+S jEdit will not ask the user if he wants to
+  overwrite readonly flag on the file (using two stage save) (Matthieu Casanova)
 }}}
 {{{ API Changes
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
-  
+
   GUIUtilities.showVFSFileDialog(view,null,
     VFSBrowser.CHOOSE_DIRECTORY_DIALOG,true)
 
@@ -154,8 +156,8 @@ for contributing to this release.
   - FoldHandler.getFoldLevel() now takes a JEditBuffer as a parameter.
 
   - VFS.copy() methods added (Matthieu Casanova).
-  
-  - MiscUtilities.copyStream() and MiscUtilities.closeQuietly() methods 
+
+  - MiscUtilities.copyStream() and MiscUtilities.closeQuietly() methods
     added (Matthieu Casanova).
 
 }}}
