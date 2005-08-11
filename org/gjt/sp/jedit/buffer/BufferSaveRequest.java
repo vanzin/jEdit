@@ -23,9 +23,8 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import javax.swing.text.Segment;
+import javax.swing.*;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.zip.*;
 import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
@@ -54,7 +53,7 @@ public class BufferSaveRequest extends BufferIORequest
 	{
 		super(view,buffer,session,vfs,path);
 	} //}}}
-	
+
 	//{{{ run() method
 	public void run()
 	{
@@ -68,8 +67,48 @@ public class BufferSaveRequest extends BufferIORequest
 			// the entire save operation can be aborted...
 			setAbortable(true);
 
-			path = vfs._canonPath(session,path,view);			if(!MiscUtilities.isURL(path))
+			path = vfs._canonPath(session,path,view);			
+			if(!MiscUtilities.isURL(path))
 				path = MiscUtilities.resolveSymlinks(path);
+
+			boolean vfsRenameCap = (vfs.getCapabilities() & 
+				VFS.RENAME_CAP) != 0;
+
+
+			boolean overwriteReadOnly = false;
+			//{{{ handle read only flag
+			VFSFile vfsFile = vfs._getFile(session, path, view);
+			if(!vfsFile.isWriteable())
+			{
+				if(vfsRenameCap)
+				{
+					int result = GUIUtilities.confirm(
+						view, "vfs.overwrite-readonly",
+						new Object[]{path},
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.WARNING_MESSAGE);
+					if(result == JOptionPane.YES_OPTION)
+					{
+						overwriteReadOnly = true;
+					}
+					else
+					{
+						VFSManager.error(view,
+							path,
+							"ioerror.no-write",
+							null);
+						return;
+					}
+				}
+				else
+				{
+					VFSManager.error(view,
+						path,
+						"ioerror.no-write",
+						null);
+					return;
+				}
+			} //}}}
 
 			// Only backup once per session
 			if(buffer.getProperty(Buffer.BACKED_UP) == null
@@ -90,8 +129,9 @@ public class BufferSaveRequest extends BufferIORequest
 			 */
 			String savePath;
 
-			boolean twoStageSave = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0
-				&& jEdit.getBooleanProperty("twoStageSave");
+			boolean twoStageSave = overwriteReadOnly ||
+                             (vfsRenameCap && 
+				     jEdit.getBooleanProperty("twoStageSave"));
 			if(twoStageSave)
 			{
 				savePath = vfs.getTwoStageSaveName(path);
@@ -138,7 +178,7 @@ public class BufferSaveRequest extends BufferIORequest
 							&& buffer.getMarkers().size() != 0)
 						{
 							setStatus(jEdit.getProperty("vfs.status.save-markers",args));
-							setProgressValue(0);
+							setValue(0);
 							out = vfs._createOutputStream(session,markersPath,view);
 							if(out != null)
 								writeMarkers(buffer,out);
