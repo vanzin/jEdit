@@ -22,8 +22,6 @@ for contributing to this release.
   initialized with the path from the selected result tree folder node.
 
 }}}
-
-
 {{{ Syntax Highlighting
 
 - Gnuplot syntax highlighting (Loren Charnley).
@@ -48,6 +46,9 @@ for contributing to this release.
 
 - The selection is now saved between buffer switches.
 
+- Updated "Display Abbreviations", "Hex Convert" and "HyperSearch
+  Results to Buffer" macros.
+
 - Updated "Insert Buffer Properties" macro (Björn Kautler).
 
 - The plugin manager option pane now displays the name of the mirror
@@ -65,9 +66,8 @@ for contributing to this release.
 - Can specify caret column number in addition to line number when
   opening a file (+line:<line>,<column>) (Bertalan Fodor).
 
-- Chunk caching : the GlyphVector and bounds of Chunks are cached in a map
-  Only token with length < Chunk.CHUNK_CACHE_LIMIT are cached, default value is 10.
-  This should increase display speed specialy on large files (Matthieu Casanova).
+- The GlyphVector and bounds of Chunks are cached,
+  (Matthieu Casanova).
 
 }}}
 {{{ Bug Fixes

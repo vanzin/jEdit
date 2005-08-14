@@ -76,39 +76,8 @@ public class BufferSaveRequest extends BufferIORequest
 
 
 			boolean overwriteReadOnly = false;
-			//{{{ handle read only flag
-			VFSFile vfsFile = vfs._getFile(session, path, view);
-			if(!vfsFile.isWriteable())
-			{
-				if(vfsRenameCap)
-				{
-					int result = GUIUtilities.confirm(
-						view, "vfs.overwrite-readonly",
-						new Object[]{path},
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.WARNING_MESSAGE);
-					if(result == JOptionPane.YES_OPTION)
-					{
-						overwriteReadOnly = true;
-					}
-					else
-					{
-						VFSManager.error(view,
-							path,
-							"ioerror.no-write",
-							null);
-						return;
-					}
-				}
-				else
-				{
-					VFSManager.error(view,
-						path,
-						"ioerror.no-write",
-						null);
-					return;
-				}
-			} //}}}
+
+			VFSManager.error(view,path,"ioerror.no-write",null);
 
 			// Only backup once per session
 			if(buffer.getProperty(Buffer.BACKED_UP) == null
