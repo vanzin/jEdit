@@ -8,6 +8,8 @@
  *
  * Copyright (C) 2002, 2003 Ollie Rutherfurd <oliver@rutherfurd.net>
  *
+ * BugFixed by Björn "Vampire" Kautler <Vampire0@gmx.net>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -46,21 +48,19 @@ BufferLocalPropertiesDialog(View view){
 	buffer = view.getTextArea().getBuffer();
 	mode = buffer.getMode().name;
 
+// removed non-valid BLPs and added missing ones
 	props = new Hashtable();
 	props.put("mode","");
 	props.put("indentSize","int");
 	props.put("tabSize","int");
 	props.put("noTabs","bool");
-	props.put("indentOnTab","bool");
-	props.put("indentOnEnter","bool");
 	props.put("wrap","str");
 	props.put("maxLineLen","int");
 	props.put("folding","str");
 	props.put("collapseFolds","int");
-	props.put("lineSeparator","");
-	props.put("gzipped","bool");
-	props.put("trailingEOL","bool");
 	props.put("deepIndent","bool");
+	props.put("noWordSep","str");
+	props.put("wordBreakChars","str");
 
 	_checked = jEdit.getProperty("macro.insert-buffer-properties." + mode,"");
 	tokens = new StringTokenizer(_checked,",");
@@ -125,74 +125,49 @@ BufferLocalPropertiesDialog(View view){
 	keyTyped(KeyEvent evt){;}
 
 	insertProperties(){
-
-		if(buffer.isReadOnly())
-		{
-			Macros.error(view,"Buffer is read-only");
-			dialog.dispose();
-		}
-
+// removed isReadOnly-Check because already done in the beginning of the script
 		checkNextTime = new StringBuffer();
 		buff = new StringBuffer();
 		names = checkBox.getCheckedValues();
 		for(i=0; i < names.length; i++)
 		{
-			if(i > 0)
-				checkNextTime.append(",");
-			checkNextTime.append(name);
-
+// moved the assignation in front of the checkNextTime-build,
+// because "name" is used and will have a wrong value otherwise
 			name = names[i];
 			type = props.get(name);
 
+			if(i > 0)
+				checkNextTime.append(',');
+			checkNextTime.append(name);
+
+// changed the value reading/building/escaping
 			if(name.equals("mode"))
-			{
 				value = mode;
-			}
-			else if(name.equals("lineSeparator"))
-			{
-				value = buffer.getProperty(name);
-				if(value.equals("\n"))
-					value = "\\n";
-				else if(value.equals("\r"))
-					value = "\\r";
-				else
-					value = "\\r\\n";
-			}
 			else if(type.equals("bool"))
+				value = buffer.getBooleanProperty(name);
+			else if(type.equals("str"))
 			{
-				value = buffer.getProperty(name);
+				value = buffer.getStringProperty(name);
 				if(value == null)
-					value = "false";
-				else if(value.equals(""))
-					value = "false";
-				else if(value.equals("0"))
-					value = "false";
-				else if(value.equals("false"))
-					value = value; // no-op
-				else
-					value = "true";
+					value = "";
+				value = value.replaceAll("=","\\\\=").replaceAll(":","\\\\:").replaceAll("\n","\\\\n").replaceAll("\t","\\\\t");
 			}
 			else if(type.equals("int"))
 			{
-				value = buffer.getProperty(name);
-				if(value == null)
+				value = buffer.getIntegerProperty(name,-1);
+				if(value == -1)
 					value = "";
 			}
-			else	// str
-			{
-				value = buffer.getProperty(name);
-				if(value == null)
-					value = "";
-			}
-			buff.append(":");
-			buff.append(name).append("=").append(""+value);
+			else
+				value = "";
+			buff.append(':').append(name).append('=').append(value);
 		}
 
 		jEdit.setProperty("macro.insert-buffer-properties." + mode,
 			checkNextTime.toString());
 
 		if(buff.length() > 0)
-			buff.append(":");
+			buff.append(':');
 		properties = buff.toString();
 
 		// try to comment out the properties first using a lineComment
@@ -219,7 +194,8 @@ BufferLocalPropertiesDialog(View view){
 	}
 
 	dialog.pack();
-	dialog.setSize(250,350);
+// cosmetic size-correction
+	dialog.setSize(250,290);
 	dialog.setLocationRelativeTo(view);
 	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	dialog.setVisible(true);
@@ -247,4 +223,4 @@ else
 
 */
 
-// :wrap=none:collapseFolds=0:noTabs=false:lineSeparator=\n:maxLineLen=80:mode=beanshell:indentSize=8:deepIndent=false:folding=none:
+// :wrap=none:noTabs=false:collapseFolds=0:maxLineLen=80:mode=beanshell:indentSize=8:deepIndent=false:folding=none:
