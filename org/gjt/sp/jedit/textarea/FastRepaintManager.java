@@ -58,9 +58,9 @@ class FastRepaintManager
 		int width = painter.getWidth();
 		int height = painter.getHeight();
 		/* A little hack */
-		if(width == 0)
+		if(width <= 0)
 			width = 1;
-		if(height == 0)
+		if(height <= 0)
 			height = 1;
 		img = painter.getGraphicsConfiguration()
 			.createCompatibleImage(width,height,

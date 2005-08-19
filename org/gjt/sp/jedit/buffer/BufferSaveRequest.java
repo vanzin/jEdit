@@ -74,10 +74,7 @@ public class BufferSaveRequest extends BufferIORequest
 			boolean vfsRenameCap = (vfs.getCapabilities() & 
 				VFS.RENAME_CAP) != 0;
 
-
 			boolean overwriteReadOnly = false;
-
-			VFSManager.error(view,path,"ioerror.no-write",null);
 
 			// Only backup once per session
 			if(buffer.getProperty(Buffer.BACKED_UP) == null
