@@ -178,13 +178,22 @@ public abstract class BufferIORequest extends WorkRequest
 				// auto-detect encoding within the gzip stream.
 				return autodetect(in);
 			}
-			else if((b1 == UNICODE_MAGIC_1
-				&& b2 == UNICODE_MAGIC_2)
-				|| (b1 == UNICODE_MAGIC_2
-				&& b2 == UNICODE_MAGIC_1))
+			else if (b1 == UNICODE_MAGIC_1
+				 && b2 == UNICODE_MAGIC_2)
 			{
 				in.reset();
-				encoding = "UTF-16";
+				in.read();
+				in.read();
+				encoding = "UTF-16BE";
+				buffer.setProperty(Buffer.ENCODING,encoding);
+			}
+			else if (b1 == UNICODE_MAGIC_2
+				 && b2 == UNICODE_MAGIC_1)
+			{
+				in.reset();
+				in.read();
+				in.read();
+				encoding = "UTF-16LE";
 				buffer.setProperty(Buffer.ENCODING,encoding);
 			}
 			else if(b1 == UTF8_MAGIC_1 && b2 == UTF8_MAGIC_2
@@ -458,7 +467,18 @@ public abstract class BufferIORequest extends WorkRequest
 				_out.flush();
 				encoding = "UTF-8";
 			}
-
+			else if (encoding.equals("UTF-16LE"))
+			{
+				_out.write(UNICODE_MAGIC_2);
+				_out.write(UNICODE_MAGIC_1);
+				_out.flush();
+			}
+			else if (encoding.equals("UTF-16BE"))
+			{
+				_out.write(UNICODE_MAGIC_1);
+				_out.write(UNICODE_MAGIC_2);
+				_out.flush();
+			}
 			out = new BufferedWriter(
 				new OutputStreamWriter(_out,encoding),
 				IOBUFSIZE);
