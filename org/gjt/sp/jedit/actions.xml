@@ -1046,7 +1046,7 @@
 	<CODE>
 		view.getInputHandler().readNextChar(
 			buffer.getMarkerStatusPrompt("select-marker"),
-			"textArea.goToMarker(__char__,true);");
+			"editPane.goToMarker(__char__,true);");
 	</CODE>
 </ACTION>
 

@@ -66,9 +66,6 @@ for contributing to this release.
 - Can specify caret column number in addition to line number when
   opening a file (+line:<line>,<column>) (Bertalan Fodor).
 
-- The GlyphVector and bounds of Chunks are cached,
-  (Matthieu Casanova).
-
 }}}
 {{{ Bug Fixes
 
@@ -123,20 +120,25 @@ for contributing to this release.
 - If windows were docked in the top docking area, the action bar would
   display in the wrong place.
 
-- After receiving a PropertiesChanged on EditBus, the PluginManager will check
-  if the mirror was changed before updating the plugin list (Matthieu Casanova).
+- After receiving a PropertiesChanged on EditBus, the PluginManager will
+  check if the mirror was changed before updating the plugin list
+  (Matthieu Casanova).
 
 - Fix for drag'n'copy text to lower position in same textarea - #1246823
   (Nicholas O'Leary)
 
-- Further Register Viewer fixes (Nicholas O'Leary).
+- Register Viewer fixes (Nicholas O'Leary).
 
-- Bug 1173630 fixed : Format paragraph with the caret at the end of it (Matthieu Casanova).
+- Bug 1173630 fixed : Format paragraph with the caret at the end of it
+  (Matthieu Casanova).
 
-- Mixed parser rules are detected when adding explicit fold (Matthieu Casanova).
+- Mixed parser rules are detected when adding explicit fold
+  (Matthieu Casanova).
 
-- Bug 1085135 fixed : when typing ctrl+S jEdit will not ask the user if he wants to
-  overwrite readonly flag on the file (using two stage save) (Matthieu Casanova)
+- Bug 1085135 fixed : when typing ctrl+S jEdit will not ask the user if
+  he wants to override the read only flag on the file
+  (Matthieu Casanova)
+
 }}}
 {{{ API Changes
 
