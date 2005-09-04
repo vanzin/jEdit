@@ -28,6 +28,9 @@ for contributing to this release.
 
 - Updated PHP syntax highlighting (Matthieu Casanova).
 
+- Fixed end token of heredoc that must start at beginning of the line in
+  PHP (Matthieu Casanova)
+
 - Updated MIPS R2000 assembly syntax highlighting (James Turk).
 
 - Updated Java and LaTeX syntax highlighting (Alexander Klimetschek).
