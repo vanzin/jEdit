@@ -75,14 +75,14 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * The value of a dependency property has one of the following forms:
  *
  * <ul>
- * <li>[FIXME] <code>jdk <i>minimum Java version</i></code> </li>
- * <li>[FIXME] <code>jedit <i>minimum jEdit version</i></code> - note that this must be
+ * <li> <code>jdk <i>minimumJavaVersion</i></code> </li>
+ * <li> <code>jedit <i>minimumjEditVersion</i></code> - note that this must be
  * a version number in the form returned by {@link jEdit#getBuild()},
  * not {@link jEdit#getVersion()}. Note that the documentation here describes
  * the jEdit 4.2 plugin API, so this dependency must be set to at least
  * <code>04.02.01.00</code>.</li>
- * <li>[FIXME] <code>plugin <i>plugin</i> <i>version</i></code> - the fully quailified
- * plugin class name must be specified.</li>
+ * <li><code><i>pluginClassName pluginVersion</i></code> - the fully quailified
+ * plugin class name with package must be specified.</li>
  * </ul>
  *
  * <h3>Plugin menu item properties</h3>
