@@ -157,8 +157,7 @@ How Plugins are Loaded</title>
 <title>Updating 4.1 plugins</title>
 
 <para>
- Note that while jEdit 4.1 plugins were only loaded on startup, jEdit 4.2 plugins can be loaded at any time. As a result, the <function>start()</function> method needs to cope with being called at any time, and <function>stop()</function> needs to fully clean up after the plugin. See the API documentation for the <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
-  <classname>EditPlugin</classname></ulink> class for details.
+ Note that while jEdit 4.1 plugins were only loaded on startup, jEdit 4.2 plugins can be loaded at any time. As a result, the <function>start()</function> method needs to cope with being called at any time, and <function>stop()</function> needs to fully clean up after the plugin. 
  </para>
 </sidebar>
 
@@ -220,7 +219,7 @@ How Plugins are Loaded</title>
 </listitem>
 
 <listitem>
-<para> Next, we define some actions in a file called <filename>actions.xml</filename>. Each action is a beanshell script. 
+<para> Here are some actions defined in a file called <filename>actions.xml</filename>. This file is discussed in more detail in <xref linkend="plugin-implement-actions" />. Each action is a beanshell script. 
 </para>
 <informalexample><programlisting>
 &lt;!DOCTYPE ACTIONS SYSTEM &quot;actions.dtd&quot;&gt;
@@ -250,7 +249,7 @@ How Plugins are Loaded</title>
 </informalexample>
 </listitem>
 <listitem><para>
-Most of the magic happens in the <filename>QuickNotePad.props</filename> file. The properties are explained in more detail in the <ulink
+Most of the magic happens in the <filename>QuickNotePad.props</filename> file. The properties are explained in more detail in <xref linkend="plugin-implement-properties" /> and the <ulink
   url="../api/org/gjt/sp/jedit/EditPlugin.html">
   <classname>EditPlugin</classname></ulink> API docs. </para>  
 
