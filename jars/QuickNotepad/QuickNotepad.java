@@ -22,56 +22,70 @@
  */
 
 // from Java:
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.Vector;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
-// from Swing:
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-// from jEdit:
-import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.DefaultFocusComponent;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
-import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.util.Log;
 
+public class QuickNotepad extends JPanel implements EBComponent,
+		QuickNotepadActions, DefaultFocusComponent {
+	
+	private static final long serialVersionUID = 6412255692894321789L;
 
-public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadActions, DefaultFocusComponent
-{
 	private String filename;
+
 	private String defaultFilename;
+
 	private View view;
+
 	private boolean floating;
 
 	private QuickNotepadTextArea textArea;
+
 	private QuickNotepadToolPanel toolPanel;
 
 	//
 	// Constructor
 	//
 
-	public QuickNotepad(View view, String position)
-	{
+	public QuickNotepad(View view, String position) {
 		super(new BorderLayout());
 
 		this.view = view;
-		this.floating  = position.equals(DockableWindowManager.FLOATING);
+		this.floating = position.equals(DockableWindowManager.FLOATING);
 
-		if(jEdit.getSettingsDirectory() != null)
-		{
-			this.filename = jEdit.getProperty(
-				QuickNotepadPlugin.OPTION_PREFIX + "filepath");
-			if(this.filename == null || this.filename.length() == 0)
-			{
+		if (jEdit.getSettingsDirectory() != null) {
+			this.filename = jEdit.getProperty(QuickNotepadPlugin.OPTION_PREFIX
+					+ "filepath");
+			if (this.filename == null || this.filename.length() == 0) {
 				this.filename = new String(jEdit.getSettingsDirectory()
-					+ File.separator + "qn.txt");
+						+ File.separator + "qn.txt");
 				jEdit.setProperty(
-					QuickNotepadPlugin.OPTION_PREFIX + "filepath",
-					this.filename);
+						QuickNotepadPlugin.OPTION_PREFIX + "filepath",
+						this.filename);
 			}
 			this.defaultFilename = this.filename;
 		}
@@ -79,7 +93,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		this.toolPanel = new QuickNotepadToolPanel(this);
 		add(BorderLayout.NORTH, this.toolPanel);
 
-		if(floating)
+		if (floating)
 			this.setPreferredSize(new Dimension(500, 250));
 
 		textArea = new QuickNotepadTextArea();
@@ -92,8 +106,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		readFile();
 	}
 
-	public void focusOnDefaultComponent()
-	{
+	public void focusOnDefaultComponent() {
 		textArea.requestFocus();
 	}
 
@@ -102,8 +115,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	//
 
 	// for toolbar display
-	public String getFilename()
-	{
+	public String getFilename() {
 		return filename;
 	}
 
@@ -111,21 +123,16 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	// EBComponent implementation
 	//
 
-	public void handleMessage(EBMessage message)
-	{
-		if (message instanceof PropertiesChanged)
-		{
+	public void handleMessage(EBMessage message) {
+		if (message instanceof PropertiesChanged) {
 			propertiesChanged();
 		}
 	}
 
-
-	private void propertiesChanged()
-	{
-		String propertyFilename = jEdit.getProperty(
-			QuickNotepadPlugin.OPTION_PREFIX + "filepath");
-		if(!MiscUtilities.objectsEqual(defaultFilename,propertyFilename))
-		{
+	private void propertiesChanged() {
+		String propertyFilename = jEdit
+				.getProperty(QuickNotepadPlugin.OPTION_PREFIX + "filepath");
+		if (!MiscUtilities.objectsEqual(defaultFilename, propertyFilename)) {
 			saveFile();
 			toolPanel.propertiesChanged();
 			defaultFilename = propertyFilename;
@@ -133,8 +140,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 			readFile();
 		}
 		Font newFont = QuickNotepadOptionPane.makeFont();
-		if(!newFont.equals(textArea.getFont()))
-		{
+		if (!newFont.equals(textArea.getFont())) {
 			textArea.setFont(newFont);
 		}
 	}
@@ -142,47 +148,38 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	// These JComponent methods provide the appropriate points
 	// to subscribe and unsubscribe this object to the EditBus
 
-	public void addNotify()
-	{
+	public void addNotify() {
 		super.addNotify();
 		EditBus.addToBus(this);
 	}
 
-
-	public void removeNotify()
-	{
+	public void removeNotify() {
 		saveFile();
 		super.removeNotify();
 		EditBus.removeFromBus(this);
 	}
 
-
 	//
 	// QuickNotepadActions implementation
 	//
 
-	public void saveFile()
-	{
-		if(filename == null || filename.length() == 0) return;
-		try
-		{
+	public void saveFile() {
+		if (filename == null || filename.length() == 0)
+			return;
+		try {
 			FileWriter out = new FileWriter(filename);
 			out.write(textArea.getText());
 			out.close();
-		}
-		catch (IOException ioe)
-		{
+		} catch (IOException ioe) {
 			Log.log(Log.ERROR, QuickNotepad.class,
-				"Could not write notepad text to " + filename);
+					"Could not write notepad text to " + filename);
 		}
 	}
 
-	public void chooseFile()
-	{
-		String[] paths = GUIUtilities.showVFSFileDialog(view,
-			null,JFileChooser.OPEN_DIALOG,false);
-		if(paths != null && !paths[0].equals(filename))
-		{
+	public void chooseFile() {
+		String[] paths = GUIUtilities.showVFSFileDialog(view, null,
+				JFileChooser.OPEN_DIALOG, false);
+		if (paths != null && !paths[0].equals(filename)) {
 			saveFile();
 			filename = paths[0];
 			toolPanel.propertiesChanged();
@@ -190,9 +187,7 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 		}
 	}
 
-
-	public void copyToBuffer()
-	{
+	public void copyToBuffer() {
 		jEdit.newFile(view);
 		view.getEditPane().getTextArea().setText(textArea.getText());
 	}
@@ -201,32 +196,26 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	// helper methods
 	//
 
-	private void readFile()
-	{
-		if(filename == null || filename.length() == 0) return;
+	private void readFile() {
+		if (filename == null || filename.length() == 0)
+			return;
 
 		BufferedReader bf = null;
-		try
-		{
+		try {
 			bf = new BufferedReader(new FileReader(filename));
 			StringBuffer sb = new StringBuffer(2048);
 			String str;
-			while((str = bf.readLine()) != null)
-			{
+			while ((str = bf.readLine()) != null) {
 				sb.append(str).append('\n');
 			}
 			bf.close();
 			textArea.setText(sb.toString());
-		}
-		catch (FileNotFoundException fnf)
-		{
+		} catch (FileNotFoundException fnf) {
+			Log.log(Log.ERROR, QuickNotepad.class, "notepad file " + filename
+					+ " does not exist");
+		} catch (IOException ioe) {
 			Log.log(Log.ERROR, QuickNotepad.class,
-				"notepad file " + filename + " does not exist");
-		}
-		catch (IOException ioe)
-		{
-			Log.log(Log.ERROR, QuickNotepad.class,
-				"could not read notepad file " + filename);
+					"could not read notepad file " + filename);
 		}
 	}
 
@@ -237,15 +226,14 @@ public class QuickNotepad extends JPanel implements EBComponent, QuickNotepadAct
 	// <Esc> closes a floating window
 	private class KeyHandler extends KeyAdapter {
 		public void keyPressed(KeyEvent evt) {
-			if(QuickNotepad.this.floating &&
-				evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			if (QuickNotepad.this.floating
+					&& evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				evt.consume();
-				DockableWindowManager wm =
-					QuickNotepad.this.view.getDockableWindowManager();
+				DockableWindowManager wm = QuickNotepad.this.view
+						.getDockableWindowManager();
 				wm.removeDockableWindow(QuickNotepadPlugin.NAME);
 			}
 		}
 	}
 
 }
-
