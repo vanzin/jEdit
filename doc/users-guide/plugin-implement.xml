@@ -219,7 +219,7 @@ How Plugins are Loaded</title>
 </listitem>
 
 <listitem>
-<para> Here are some actions defined in a file called <filename>actions.xml</filename>. This file is discussed in more detail in <xref linkend="plugin-implement-actions" />. Each action is a beanshell script. 
+<para> These names are used in <filename>actions.xml</filename> for each of the menu choices. This file is discussed in more detail in <xref linkend="plugin-implement-actions" />. Each action is a beanshell script. 
 </para>
 <informalexample><programlisting>
 &lt;!DOCTYPE ACTIONS SYSTEM &quot;actions.dtd&quot;&gt;
@@ -249,7 +249,8 @@ How Plugins are Loaded</title>
 </informalexample>
 </listitem>
 <listitem><para>
-Most of the magic happens in the <filename>QuickNotePad.props</filename> file. The properties are explained in more detail in <xref linkend="plugin-implement-properties" /> and the <ulink
+The names also come up in the properties file, <filename>QuickNotePad.props</filename> file. The properties define 
+option panes and strings used by the plugin. It is explained in more detail in <xref linkend="plugin-implement-properties" /> and the <ulink
   url="../api/org/gjt/sp/jedit/EditPlugin.html">
   <classname>EditPlugin</classname></ulink> API docs. </para>  
 
