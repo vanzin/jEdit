@@ -35,13 +35,13 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  *
  * <h3>Basic plugin information properties</h3>
  *
- * Note that in all cases above where a class name is needed, the fully
+ * Note that in all cases above where a <i>className</i> is needed, the fully
  * qualified class name, including the package name, if any, must be used.<p>
  *
  * The following properties are required for jEdit to load the plugin:
  *
  * <ul>
- * <li><code>plugin.<i>class name</i>.activate</code> - set this to
+ * <li><code>plugin.<i>className</i>.activate</code> - set this to
  * <code>defer</code> if your plugin only needs to be loaded when it is first
  * invoked; set it to <code>startup</code> if your plugin must be loaded at
  * startup regardless; set it to a whitespace-separated list of property names
@@ -49,9 +49,9 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * Note that if this property is <b>not</b> set, the plugin is loaded like an
  * old-style jEdit 4.1 plugin.
  * </li>
- * <li><code>plugin.<i>class name</i>.name</code></li>
- * <li><code>plugin.<i>class name</i>.version</code></li>
- * <li><code>plugin.<i>class name</i>.jars</code> - only needed if your plugin
+ * <li><code>plugin.<i>className</i>.name</code></li>
+ * <li><code>plugin.<i>className</i>.version</code></li>
+ * <li><code>plugin.<i>className</i>.jars</code> - only needed if your plugin
  * bundles external JAR files. Contains a whitespace-separated list of JAR
  * file names. Without this property, the plugin manager will leave behind the
  * external JAR files when removing the plugin.</li>
@@ -60,8 +60,8 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * The following properties are optional but recommended:
  *
  * <ul>
- * <li><code>plugin.<i>class name</i>.author</code></li>
- * <li><code>plugin.<i>class name</i>.docs</code> - the path to plugin
+ * <li><code>plugin.<i>className</i>.author</code></li>
+ * <li><code>plugin.<i>className</i>.docs</code> - the path to plugin
  * documentation in HTML format within the JAR file.</li>
  * </ul>
  *
@@ -69,19 +69,19 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  *
  * Plugin dependencies are also specified using properties.
  * Each dependency is defined in a property named with
- * <code>plugin.<i>class name</i>.depend.</code> followed by a number.
+ * <code>plugin.<i>className</i>.depend.</code> followed by a number.
  * Dependencies must be numbered in order, starting from zero.<p>
  *
  * The value of a dependency property has one of the following forms:
  *
  * <ul>
- * <li><code>jdk <i>minimum Java version</i></code></li>
- * <li><code>jedit <i>minimum jEdit version</i></code> - note that this must be
+ * <li>[FIXME] <code>jdk <i>minimum Java version</i></code> </li>
+ * <li>[FIXME] <code>jedit <i>minimum jEdit version</i></code> - note that this must be
  * a version number in the form returned by {@link jEdit#getBuild()},
  * not {@link jEdit#getVersion()}. Note that the documentation here describes
  * the jEdit 4.2 plugin API, so this dependency must be set to at least
  * <code>04.02.01.00</code>.</li>
- * <li><code>plugin <i>plugin</i> <i>version</i></code> - the fully quailified
+ * <li>[FIXME] <code>plugin <i>plugin</i> <i>version</i></code> - the fully quailified
  * plugin class name must be specified.</li>
  * </ul>
  *
@@ -91,16 +91,16 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * properties:
  *
  * <ul>
- * <li><code>plugin.<i>class name</i>.menu-item</code> - if this is defined,
+ * <li><code>plugin.<i>className</i>.menu-item</code> - if this is defined,
  * the action named by this property is added to the <b>Plugins</b> menu.</li>
- * <li><code>plugin.<i>class name</i>.menu</code> - if this is defined,
+ * <li><code>plugin.<i>className</i>.menu</code> - if this is defined,
  * a sub-menu is added to the <b>Plugins</b> menu whose content is the
  * whitespace-separated list of action names in this property. A separator may
  * be added to the sub-menu by listing <code>-</code> in the property.</li>
  * </ul>
  *
  * If you want the plugin's menu items to be determined at runtime, define a
- * property <code>plugin.<i>class name</i>.menu.code</code> to be BeanShell
+ * property <code>plugin.<i>className</i>.menu.code</code> to be BeanShell
  * code that evaluates to an implementation of
  * {@link org.gjt.sp.jedit.menu.DynamicMenuProvider}.<p>
  *
@@ -108,17 +108,17 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * one of these two properties:
  *
  * <ul>
- * <li><code>plugin.<i>class name</i>.browser-menu-item</code> - if this is
+ * <li><code>plugin.<i>className</i>.browser-menu-item</code> - if this is
  * defined, the action named by this property is added to the <b>Plugins</b>
  * menu.</li>
- * <li><code>plugin.<i>class name</i>.browser-menu</code> - if this is defined,
+ * <li><code>plugin.<i>className</i>.browser-menu</code> - if this is defined,
  * a sub-menu is added to the <b>Plugins</b> menu whose content is the
  * whitespace-separated list of action names in this property. A separator may
  * be added to the sub-menu by listing <code>-</code> in the property.</li>
  * </ul>
  *
  * In all cases, each action's
- * menu item label is taken from the <code><i>action name</i>.label</code>
+ * menu item label is taken from the <code><i>actionName</i>.label</code>
  * property. View actions are defined in an <code>actions.xml</code>
  * file, file system browser actions are defined in a
  * <code>browser.actions.xml</code> file; see {@link ActionSet}.
@@ -129,20 +129,20 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * these two properties:
  *
  * <ul>
- * <li><code>plugin.<i>class name</i>.option-pane</code> - if this is defined,
- * the option pane named by this property is added to the <b>Plugin Options</b>
+ * <li><code>plugin.<i>className</i>.option-pane=<i>paneName</i></code> - if this is defined,
+ * a single option pane with this name is added to the <b>Plugin Options</b>
  * menu.</li>
- * <li><code>plugin.<i>class name</i>.option-group</code> - if this is defined,
+ * <li><code>plugin.<i>className</i>.option-group=paneName1 [paneName2 paneName3 ...]</code> - if this is defined,
  * a branch node is added to the <b>Plugin Options</b> dialog box whose content
- * is the whitespace-separated list of option pane names in this property.</li>
+ * is the whitespace-separated list of <i>paneNames</i> in this property.</li>
  * </ul>
  *
- * Then for each option pane name, define these two properties:
+ * Then for each option <i>paneName</i>, define these two properties:
  *
  * <ul>
- * <li><code>options.<i>option pane name</i>.label</code> - the label to show
+ * <li><code>options.<i>paneName</i>.label</code> - the label to show
  * for the pane in the dialog box.</li>
- * <li><code>options.<i>option pane name</i>.code</code> - BeanShell code that
+ * <li><code>options.<i>paneName</i>.code</code> - BeanShell code that
  * evaluates to an instance of the {@link OptionPane} class.</li>
  *
  * <h3>Example</h3>
@@ -160,7 +160,17 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  *    quicknotepad.choose-file \
  *    quicknotepad.save-file \
  *    quicknotepad.copy-to-buffer
- *plugin.QuickNotepadPlugin.option-pane=quicknotepad</pre>
+ *plugin.QuickNotepadPlugin.option-pane=quicknotepad
+ *
+ * plugin.QuickNotepadPlugin.option-pane=quicknotepad
+ * options.quicknotepad.code=new QuickNotepadOptionPane();
+ * options.quicknotepad.label=QuickNotepad
+ * options.quicknotepad.file=File:
+ * options.quicknotepad.choose-file=Choose
+ * options.quicknotepad.choose-file.title=Choose a notepad file
+ * options.quicknotepad.choose-font=Font:
+ * options.quicknotepad.show-filepath.title=Display notepad file path
+</pre>
  *
  * Note that action and option pane labels are not shown in the above example.
  *
@@ -179,7 +189,7 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
- * @version $Id$
+ * @author Alan Ezust (API documentation)
  * @since jEdit 2.1pre1
  */
 public abstract class EditPlugin
