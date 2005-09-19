@@ -73,12 +73,11 @@ public class PluginResURLConnection extends URLConnection
 				for(int i = 0; i < plugins.length; i++)
 				{
 					PluginJAR jar = plugins[i];
-					if(MiscUtilities.getFileName(jar.getPath())
-						.equalsIgnoreCase(plugin))
+					String jarName =MiscUtilities.getFileName(jar.getPath()).toLowerCase(); 
+					if(plugin.equalsIgnoreCase(jarName))
 					{
 						in = jar.getClassLoader()
-							.getResourceAsStream(
-							resource);
+						            .getResourceAsStream(resource);
 						break;
 					}
 				}
@@ -86,7 +85,7 @@ public class PluginResURLConnection extends URLConnection
 
 			if(in == null)
 			{
-				throw new IOException("Resource not found: "
+				throw new IOException("Resource not found: " + plugin + "!" 
 					+ resource);
 			}
 
