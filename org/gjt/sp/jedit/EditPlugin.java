@@ -70,8 +70,8 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * Plugin dependencies are also specified using properties.
  * Each dependency is defined in a property named with
  * <code>plugin.<i>className</i>.depend.</code> followed by a number.
- * Dependencies must be numbered in order, starting from zero.<p>
- *
+ * Dependencies must be numbered in order, starting from zero. 
+ 
  * The value of a dependency property has one of the following forms:
  *
  * <ul>
@@ -83,8 +83,22 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * <code>04.02.01.00</code>.</li>
  * <li><code><i>pluginClassName pluginVersion</i></code> - the fully quailified
  * plugin class name with package must be specified.</li>
- * </ul>
- *
+ * <li><code>optional <i>pluginClassName pluginVersion</i></code> - 
+ * an optional dependency, indicating that the plugin will work without it, 
+ * but that the dependency should be loaded before this plugin. </li>
+</ul>
+
+ In this example, the ProjectViewer plugin is an optional dependency of
+ the Console, beacause the Console only listens to events from the ProjectViewer.
+ It requires Jedit 4.2 final.
+ 
+<pre>
+plugin.console.ConsolePlugin.depend.0=jedit 04.02.99.00
+plugin.console.ConsolePlugin.depend.1=jdk 1.5
+plugin.console.ConsolePlugin.depend.2=plugin errorlist.ErrorListPlugin 1.4
+plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugin 2.1.0.92
+</pre>
+
  * <h3>Plugin menu item properties</h3>
  *
  * To add your plugin to the view's <b>Plugins</b> menu, define one of these two
