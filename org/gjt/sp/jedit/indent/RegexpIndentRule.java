@@ -22,8 +22,11 @@
 
 package org.gjt.sp.jedit.indent;
 
-import gnu.regexp.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.search.RESearchMatcher;
 
@@ -36,13 +39,14 @@ public class RegexpIndentRule implements IndentRule
 	 */
 	public RegexpIndentRule(String regexp, IndentAction prevPrev,
 		IndentAction prev, IndentAction thisLine, boolean collapse)
-		throws REException
+	throws PatternSyntaxException 
 	{
 		this.prevPrevAction = prevPrev;
 		this.prevAction = prev;
 		this.thisAction = thisLine;
-		this.regexp = new RE(regexp,RE.REG_ICASE,
-			RESearchMatcher.RE_SYNTAX_JEDIT);
+		this.regexp = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE );
+		/*  this.regexp = new RE(regexp,RE.REG_ICASE,
+			RESearchMatcher.RE_SYNTAX_JEDIT); */
 		this.collapse = collapse;
 	} //}}}
 
@@ -81,7 +85,9 @@ public class RegexpIndentRule implements IndentRule
 	//{{{ isMatch() method
 	public boolean isMatch(String line)
 	{
-		return regexp.isMatch(line);
+		Matcher m = regexp.matcher(line);
+//		return regexp.isMatch(line);
+		return m.matches();
 	} //}}}
 
 	//{{{ toString() method
@@ -91,6 +97,6 @@ public class RegexpIndentRule implements IndentRule
 	} //}}}
 
 	private IndentAction prevPrevAction, prevAction, thisAction;
-	private RE regexp;
+	private Pattern regexp;
 	private boolean collapse;
 }

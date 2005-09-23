@@ -260,6 +260,8 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void removeToolBar(Component toolBar)
 	{
+		if (toolBarManager == null) return;
+		if (toolBar == null) return;
 		toolBarManager.removeToolBar(toolBar);
 		getRootPane().revalidate();
 	} //}}}
