@@ -764,12 +764,6 @@ public class JEditTextArea extends JComponent
 				+ ",firstPhysicalLine=" + getFirstPhysicalLine()
 				+ ",lastPhysicalLine=" + getLastPhysicalLine());
 		}
-		if (screenLine < 0) 
-		{
-			point = new Point(0,0);
-			screenLine = 0;
-		}
-
 		point.x += extraEndVirt;
 
 		if(point.x < 0)
