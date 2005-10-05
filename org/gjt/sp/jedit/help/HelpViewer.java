@@ -46,49 +46,67 @@ import org.gjt.sp.util.Log;
  */
 public class HelpViewer extends JFrame implements EBComponent, HelpHistoryModelListener
 {
-	//{{{ HelpViewer constructor
+
 	/**
-	 * Creates a new help viewer with the default help page.
-	 * @since jEdit 4.0pre4
+	 * An alternate class to create instead of HelpViewer
 	 */
-	public HelpViewer()
-	{
-		this("welcome.html");
-	} //}}}
-
-	//{{{ HelpViewer constructor
+	static protected Class helpClass = null;
+	
 	/**
-	 * Creates a new help viewer for the specified URL.
-	 * @param url The URL
+	 * Change the class that is used to create HelpViewer instances.
+	 * 
+	 * @since Jedit 4.3pre3
+	 * @param clazz The class to create  instead of
+	 * HelpViewer - must be derived from HelpViewer to work.
 	 */
-	public HelpViewer(URL url)
+	public static void setHelpViewerClass(Class clazz) 
 	{
-		this(url.toString());
-	} //}}}
-
-	//{{{ HelpViewer constructor
+		helpClass = clazz;
+	}
+	
 	/**
-	 * Creates a new help viewer for the specified URL.
-	 * @param url The URL
+	 * 
+	 * @param url A place to view help, specified as a resource
+	 *     in a JAR file (usually).
+	 * @return a new HelpViewer pointing at the URL.
 	 */
-	public HelpViewer(String url)
+	public static HelpViewer create(URL url) 
 	{
-		super(jEdit.getProperty("helpviewer.title"));
-
-		setIconImage(GUIUtilities.getEditorIcon());
-
-		try
+		return create(url.getPath());
+	}
+	
+	public static HelpViewer create(String url) 
+	{
+		HelpViewer hv = create();
+		if (url != null) hv.gotoURL(url, true);
+		return hv;
+	}
+	
+	/**
+	 * @return a new HelpViewer instance pointing at welcome.html
+	 */
+	public static HelpViewer create () 
+	{
+		HelpViewer hv = null;
+		if (helpClass != null ) try 
 		{
-			baseURL = new File(MiscUtilities.constructPath(
-				jEdit.getJEditHome(),"doc")).toURL().toString();
+		     hv = (HelpViewer) helpClass.newInstance();
 		}
-		catch(MalformedURLException mu)
-		{
-			Log.log(Log.ERROR,this,mu);
-			// what to do?
-		}
-
-		ActionHandler actionListener = new ActionHandler();
+		catch (Exception e) 
+		{ }
+		if (hv == null) hv = new HelpViewer();
+		hv.gotoURL("welcome.html", true);
+		return hv;
+	}
+	
+	//{{{ HelpViewer()
+	/**
+	 * Not meant to be called publicly - only by derived classes.
+	 * @see HelpViewer.create() to create new instances.
+	 */
+	protected HelpViewer() {
+	     setTitle(jEdit.getProperty("helpviewer.title"));
+	     ActionHandler actionListener = new ActionHandler();
 
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.addTab(jEdit.getProperty("helpviewer.toc.label"),
@@ -132,7 +150,7 @@ public class HelpViewer extends JFrame implements EBComponent, HelpHistoryModelL
 		historyModel.addHelpHistoryModelListener(this);
 		historyUpdated();
 
-		gotoURL(url,true);
+		
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -154,6 +172,7 @@ public class HelpViewer extends JFrame implements EBComponent, HelpHistoryModelL
 				viewer.requestFocus();
 			}
 		});
+		
 	} //}}}
 
 	//{{{ gotoURL() method
@@ -168,6 +187,19 @@ public class HelpViewer extends JFrame implements EBComponent, HelpHistoryModelL
 		// the TOC pane looks up user's guide URLs relative to the
 		// doc directory...
 		String shortURL;
+		setTitle(jEdit.getProperty("helpviewer.title") + ":" + url);
+		setIconImage(GUIUtilities.getEditorIcon());
+		try
+		{
+			baseURL = new File(MiscUtilities.constructPath(
+				jEdit.getJEditHome(),"doc")).toURL().toString();
+		}
+		catch(MalformedURLException mu)
+		{
+			Log.log(Log.ERROR,this,mu);
+			// what to do?
+		}
+
 		if(MiscUtilities.isURL(url))
 		{
 			if(url.startsWith(baseURL))
