@@ -559,7 +559,7 @@ public class ManagePanel extends JPanel
 
 		public void actionPerformed(ActionEvent evt)
 		{
-			new HelpViewer(docURL);
+			HelpViewer.create(docURL);
 		}
 
 		public void valueChanged(ListSelectionEvent e)
