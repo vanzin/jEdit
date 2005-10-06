@@ -364,7 +364,7 @@
 
 <ACTION NAME="help">
 	<CODE>
-		HelpViewer.create();
+		HelpViewerFactory.create();
 	</CODE>
 </ACTION>
 
