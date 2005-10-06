@@ -322,66 +322,7 @@ options.quicknotepad.filepath=
 
 </sect1>
 
-<sect1 id="plugin-implement-editbus"><title>The EditBus</title>
 
-<para>
-  Plugins register <ulink url="../api/org/gjt/sp/jedit/EBComponent.html">
-  <function>EBComponent</function></ulink> instances with the
-  <ulink url="../api/org/gjt/sp/jedit/EditBus.html">
-  <classname>EditBus</classname></ulink> to receive messages reflecting
-  changes in jEdit's state.
-</para>
-
-<para>
-  The message
-  classes derived from <ulink url="../api/org/gjt/sp/jedit/EBMessage.html">
-  <classname>EBMessage</classname></ulink> cover the opening
-  and closing of the application, changes in the status of buffers and views,
-  changes in user settings, as well as changes in
-  the state of other program features. A full list of messages can be found in the
-  <ulink url="../api/org/gjt/sp/jedit/msg/package-summary.html">org.gjt.sp.jedit.msg</ulink>
-  package.
-</para>
-
-<para>
-  <ulink url="../api/org/gjt/sp/jedit/EBComponent.html">
-  <function>EBComponent</function></ulink>s are added and removed with the
-  <ulink url="../api/org/gjt/sp/jedit/EditBus.html#addToBus(org.gjt.sp.jedit.EBComponent)">
-  <function>EditBus.addToBus()</function></ulink> and
-  <ulink url="../api/org/gjt/sp/jedit/EditBus.html#removeFromBus(org.gjt.sp.jedit.EBComponent)">
-  <function>EditBus.removeFromBus()</function></ulink>
-  methods.
-</para>
-
-<para>
-  Typically, the <ulink url="../api/org/gjt/sp/jedit/EBComponent.html#handleMessage(org.gjt.sp.jedit.EBMessage)">
-  <function>EBComponent.handleMessage()</function></ulink> method
-  is implemented with one or more <function>if</function> blocks that test
-	 whether the message is an instance of a derived message class in
-	 which the component has an interest.
-</para>
-
-<programlisting>if(msg instanceof BufferUpdate) {
-    // a buffer's state has changed!
-}
-else if(msg instanceof ViewUpdate) {
-    // a view's state has changed!
-}
-// ... and so on</programlisting>
-
-<para>
-  If a plugin core class will respond to EditBus
-  messages, it can be derived from
-  <ulink url="../api/org/gjt/sp/jedit/EBPlugin.html">
-  <classname>EBPlugin</classname></ulink>, in which case no explicit
-  <function>addToBus()</function> call is necessary.
-  Otherwise,
-  <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
-  <classname>EditPlugin</classname></ulink> will suffice as a
-  plugin base class. Note that QuickNotepad uses the latter.
-</para>
-
-</sect1>
 
 <sect1 id="plugin-implement-properties"><title>The Property File</title>
 
@@ -429,7 +370,8 @@ backslash.property=A backslash can be inserted by writing \\.</programlisting>
 plugin.QuickNotepadPlugin.activate=defer
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
-plugin.QuickNotepadPlugin.version=4.1
+# depends on jedit 4.3pre3
+plugin.QuickNotepadPlugin.version=04.03.03.00
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
 plugin.QuickNotepadPlugin.depend.0=jedit 04.02.10.00</programlisting></informalexample>
 <para>
@@ -517,6 +459,67 @@ options.quicknotepad.filepath=</programlisting></informalexample>
   <classname>EditPlugin</classname></ulink> class for details.
  </para>
 </sidebar>
+
+</sect1>
+
+<sect1 id="plugin-implement-editbus"><title>The EditBus</title>
+
+<para>
+  Plugins register <ulink url="../api/org/gjt/sp/jedit/EBComponent.html">
+  <function>EBComponent</function></ulink> instances with the
+  <ulink url="../api/org/gjt/sp/jedit/EditBus.html">
+  <classname>EditBus</classname></ulink> to receive messages reflecting
+  changes in jEdit's state.
+</para>
+
+<para>
+  The message
+  classes derived from <ulink url="../api/org/gjt/sp/jedit/EBMessage.html">
+  <classname>EBMessage</classname></ulink> cover the opening
+  and closing of the application, changes in the status of buffers and views,
+  changes in user settings, as well as changes in
+  the state of other program features. A full list of messages can be found in the
+  <ulink url="../api/org/gjt/sp/jedit/msg/package-summary.html">org.gjt.sp.jedit.msg</ulink>
+  package.
+</para>
+
+<para>
+  <ulink url="../api/org/gjt/sp/jedit/EBComponent.html">
+  <function>EBComponent</function></ulink>s are added and removed with the
+  <ulink url="../api/org/gjt/sp/jedit/EditBus.html#addToBus(org.gjt.sp.jedit.EBComponent)">
+  <function>EditBus.addToBus()</function></ulink> and
+  <ulink url="../api/org/gjt/sp/jedit/EditBus.html#removeFromBus(org.gjt.sp.jedit.EBComponent)">
+  <function>EditBus.removeFromBus()</function></ulink>
+  methods.
+</para>
+
+<para>
+  Typically, the <ulink url="../api/org/gjt/sp/jedit/EBComponent.html#handleMessage(org.gjt.sp.jedit.EBMessage)">
+  <function>EBComponent.handleMessage()</function></ulink> method
+  is implemented with one or more <function>if</function> blocks that test
+	 whether the message is an instance of a derived message class in
+	 which the component has an interest.
+</para>
+
+<programlisting>if(msg instanceof BufferUpdate) {
+    // a buffer's state has changed!
+}
+else if(msg instanceof ViewUpdate) {
+    // a view's state has changed!
+}
+// ... and so on</programlisting>
+
+<para>
+  If a plugin core class will respond to EditBus
+  messages, it can be derived from
+  <ulink url="../api/org/gjt/sp/jedit/EBPlugin.html">
+  <classname>EBPlugin</classname></ulink>, in which case no explicit
+  <function>addToBus()</function> call is necessary.
+  Otherwise,
+  <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+  <classname>EditPlugin</classname></ulink> will suffice as a
+  plugin base class. Note that QuickNotepad uses the latter.
+</para>
 
 </sect1>
 
