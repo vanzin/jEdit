@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-class HelpSearchPanel extends JPanel
+public class HelpSearchPanel extends JPanel
 {
 	//{{{ HelpSearchPanel constructor
 	public HelpSearchPanel(HelpViewer helpViewer)
@@ -76,7 +76,7 @@ class HelpSearchPanel extends JPanel
 			{
 				index = null;
 				Log.log(Log.ERROR,this,e);
-				GUIUtilities.error(helpViewer,"helpviewer.search.error",
+				GUIUtilities.error(helpViewer.getComponent(),"helpviewer.search.error",
 					new String[] { e.toString() });
 			}
 		}

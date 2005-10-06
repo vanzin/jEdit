@@ -38,10 +38,10 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
-class HelpTOCPanel extends JPanel
+public class HelpTOCPanel extends JPanel
 {
 	//{{{ HelpTOCPanel constructor
-	HelpTOCPanel(HelpViewer helpViewer)
+	public HelpTOCPanel(HelpViewer helpViewer)
 	{
 		super(new BorderLayout());
 
@@ -81,7 +81,7 @@ class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ load() method
-	void load()
+	public void load()
 	{
 		DefaultTreeModel empty = new DefaultTreeModel(
 			new DefaultMutableTreeNode(
