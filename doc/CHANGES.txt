@@ -6,6 +6,7 @@ Thanks to Bertalan Fodor, Björn Kautler, David Chan, James Turk,
 Loren Charnley, Matthieu Casanova, Michael Macnair and Nicholas O'Leary
 for contributing to this release.
 
+
 {{{ Search and Replace
 
 - HyperSearch results can now be displayed in a folder hierarchy tree
@@ -22,6 +23,7 @@ for contributing to this release.
   initialized with the path from the selected result tree folder node.
 
 }}}
+
 {{{ Syntax Highlighting
 
 - Gnuplot syntax highlighting (Loren Charnley).
@@ -43,6 +45,13 @@ for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+
+- A new macro, SplitPane grow, was added to the macros/interface
+  directory
+
+- HelpViewer is now an Interface that can be easily implemented in plugins,
+  such as the InfoViewer
 
 - A single-line selection no longer hides the line highlight, for
   better readability.
