@@ -56,6 +56,7 @@ public class HelpViewerFrame extends JFrame implements HelpViewer, PropertyChang
 
 	protected void init()
 	{
+		
 		setTitle(jEdit.getProperty("helpviewer.title"));
 		// setLayout(new FlowLayout());
 
@@ -67,7 +68,7 @@ public class HelpViewerFrame extends JFrame implements HelpViewer, PropertyChang
 		GUIUtilities.loadGeometry(this, "helpviewer");
 
 		// getRootPane().setPreferredSize(new Dimension(750,500));
-		pack(); // FRAME thing
+//		pack(); // FRAME thing
 		setVisible(true);
 	}
 

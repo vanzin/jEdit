@@ -1,5 +1,5 @@
 /*
- * HelpViewer.java - HTML Help viewer
+ * HelpViewerComponent.java - HTML Help viewer
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
