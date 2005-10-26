@@ -344,7 +344,7 @@
 
 <ACTION NAME="global-options">
 	<CODE>
-		GlobalOptions.createOptions(view);
+		new GlobalOptions(view);
 	</CODE>
 </ACTION>
 

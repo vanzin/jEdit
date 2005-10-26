@@ -1667,7 +1667,6 @@ options.general.label=General
 options.general.code=new GeneralOptionPane();
 options.general.lineSeparator=Default line separator:
 options.general.encoding=Default character encoding:
-options.general.combined=Use Combined Option Pane
 options.general.encodingAutodetect=Auto-detect file encoding when possible
 options.general.checkModStatus=If open files are changed on disk:
 options.general.checkModStatus.nothing=do nothing

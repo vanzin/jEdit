@@ -135,7 +135,7 @@ public class PluginOptions extends OptionsDialog
 	//}}}
 
 	//{{{ NoPluginsPane class
-	static class NoPluginsPane extends AbstractOptionPane
+	public static class NoPluginsPane extends AbstractOptionPane
 	{
 		public NoPluginsPane()
 		{
