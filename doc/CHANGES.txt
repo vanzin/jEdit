@@ -44,14 +44,16 @@ for contributing to this release.
   completion. Now, you must press TAB to complete.
 
 }}}
+
+
 {{{ Miscellaneous
 
+- A new option, CombinedOptions (global options->general),
+  allows you to see/edit Global, Plugin and Buffer options in a single tabbed dialog.
+  (Alan Ezust)
 
 - A new macro, SplitPane grow, was added to the macros/interface
   directory
-
-- HelpViewer is now an Interface that can be easily implemented in plugins,
-  such as the InfoViewer
 
 - A single-line selection no longer hides the line highlight, for
   better readability.
@@ -153,6 +155,11 @@ for contributing to this release.
 
 }}}
 {{{ API Changes
+
+- HelpViewer is now an Interface that can be easily implemented in plugins,
+  such as the InfoViewer (Alan Ezust) 
+
+- HelpViewerFactory is how jedit core creates a new HelpViewer now.  (Alan Ezust)
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
