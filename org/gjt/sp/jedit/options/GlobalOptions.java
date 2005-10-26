@@ -25,14 +25,33 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.Window;
+
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
 
+
+/**
+ * 
+ */
 public class GlobalOptions extends OptionsDialog
 {
+	
+	public static Window createOptions(View view) 
+	{
+		boolean useCombined = jEdit.getBooleanProperty("options.combined", false);
+		if (useCombined) {
+			return new CombinedOptions(view);
+		}
+		else
+		{
+			return new GlobalOptions(view);
+		}
+	}
+	
 	//{{{ GlobalOptions constructor
 	public GlobalOptions(Frame frame)
 	{
@@ -62,35 +81,7 @@ public class GlobalOptions extends OptionsDialog
 	{
 		OptionTreeModel paneTreeModel = new OptionTreeModel();
 		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
-
-		// initialize the jEdit branch of the options tree
-		jEditGroup = new OptionGroup("jedit");
-
-		jEditGroup.addOptionPane("abbrevs");
-		jEditGroup.addOptionPane("appearance");
-		jEditGroup.addOptionPane("context");
-		jEditGroup.addOptionPane("docking");
-		jEditGroup.addOptionPane("editing");
-		jEditGroup.addOptionPane("general");
-		jEditGroup.addOptionPane("gutter");
-		jEditGroup.addOptionPane("mouse");
-		jEditGroup.addOptionPane("print");
-		jEditGroup.addOptionPane("plugin-manager");
-		jEditGroup.addOptionPane("firewall");
-		jEditGroup.addOptionPane("save-back");
-		jEditGroup.addOptionPane("shortcuts");
-		jEditGroup.addOptionPane("status");
-		jEditGroup.addOptionPane("syntax");
-		jEditGroup.addOptionPane("textarea");
-		jEditGroup.addOptionPane("toolbar");
-		jEditGroup.addOptionPane("view");
-		rootGroup.addOptionGroup(jEditGroup);
-
-		browserGroup = new OptionGroup("browser");
-		browserGroup.addOptionPane("browser.general");
-		browserGroup.addOptionPane("browser.colors");
-		rootGroup.addOptionGroup(browserGroup);
-
+		OptionGroup globalOptions = new GlobalOptionGroup(rootGroup);
 		return paneTreeModel;
 	} //}}}
 

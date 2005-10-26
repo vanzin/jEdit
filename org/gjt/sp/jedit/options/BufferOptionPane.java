@@ -1,63 +1,54 @@
-/*
- * BufferOptions.java - Buffer-specific options dialog
- * :tabSize=8:indentSize=8:noTabs=false:
- * :folding=explicit:collapseFolds=1:
- *
- * Copyright (C) 1999, 2004 Slava Pestov
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+package org.gjt.sp.jedit.options;
 
-package org.gjt.sp.jedit.gui;
-
-//{{{ Imports
-import javax.swing.border.EmptyBorder;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Map;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+
+import org.gjt.sp.jedit.AbstractOptionPane;
+import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.FoldHandler;
-import org.gjt.sp.jedit.*;
-//}}}
 
-/**
- * Buffer-specific options dialog.
- * @author Slava Pestov
- * @version $Id$
- * 
- */
-public class BufferOptions extends EnhancedDialog
+
+public class BufferOptionPane extends AbstractOptionPane
 {
-	//{{{ BufferOptions constructor
-	public BufferOptions(View view, Buffer buffer)
+	JComboBox encoding;
+	JComboBox lineSeparator;
+	JCheckBox gzipped;
+	Mode[] modes;
+	JComboBox mode;
+	JComboBox folding;
+	JComboBox wrap;
+	JComboBox maxLineLen;
+	JComboBox tabSize;
+	JComboBox indentSize;
+	JCheckBox noTabs;
+	Buffer buffer;
+	
+	
+	BufferOptionPane() 
 	{
-		super(view,jEdit.getProperty("buffer-options.title"),true);
-		this.view = view;
-		this.buffer = buffer;
-
-		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,12,12,12));
-		setContentPane(content);
-
-		ActionHandler actionListener = new ActionHandler();
-		AbstractOptionPane panel = new AbstractOptionPane(null);
-
-		panel.addComponent(GUIUtilities.createMultilineLabel(
+		super("buffer");
+		init();
+	}
+	
+	protected void _init() {
+		
+		
+		buffer = jEdit.getActiveView().getBuffer();
+		String filename = buffer.getName();
+		setName("Buffer: " + filename);
+		addComponent(GUIUtilities.createMultilineLabel(
 			jEdit.getProperty("buffer-options.caption")));
 
-		panel.addSeparator("buffer-options.loading-saving");
+		addSeparator("buffer-options.loading-saving");
 
 		//{{{ Line separator
 		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
@@ -73,7 +64,7 @@ public class BufferOptions extends EnhancedDialog
 			lineSeparator.setSelectedIndex(1);
 		else if("\r".equals(lineSep))
 			lineSeparator.setSelectedIndex(2);
-		panel.addComponent(jEdit.getProperty("buffer-options.lineSeparator"),
+		addComponent(jEdit.getProperty("buffer-options.lineSeparator"),
 			lineSeparator);
 		//}}}
 
@@ -83,7 +74,7 @@ public class BufferOptions extends EnhancedDialog
 		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
 		encoding.setSelectedItem(buffer.getStringProperty(Buffer.ENCODING));
-		panel.addComponent(jEdit.getProperty("buffer-options.encoding"),
+		addComponent(jEdit.getProperty("buffer-options.encoding"),
 			encoding);
 		//}}}
 
@@ -91,18 +82,19 @@ public class BufferOptions extends EnhancedDialog
 		gzipped = new JCheckBox(jEdit.getProperty(
 			"buffer-options.gzipped"));
 		gzipped.setSelected(buffer.getBooleanProperty(Buffer.GZIPPED));
-		panel.addComponent(gzipped);
+		addComponent(gzipped);
 		//}}}
 
-		panel.addSeparator("buffer-options.editing");
+		addSeparator("buffer-options.editing");
 
 		//{{{ Edit mode
 		modes = jEdit.getModes();
 		MiscUtilities.quicksort(modes,new MiscUtilities.StringICaseCompare());
 		mode = new JComboBox(modes);
 		mode.setSelectedItem(buffer.getMode());
+		ActionHandler actionListener = new ActionHandler();
 		mode.addActionListener(actionListener);
-		panel.addComponent(jEdit.getProperty("buffer-options.mode"),mode);
+		addComponent(jEdit.getProperty("buffer-options.mode"),mode);
 		//}}}
 
 		//{{{ Fold mode
@@ -110,7 +102,7 @@ public class BufferOptions extends EnhancedDialog
 
 		folding = new JComboBox(foldModes);
 		folding.setSelectedItem(buffer.getStringProperty("folding"));
-		panel.addComponent(jEdit.getProperty("options.editing.folding"),
+		addComponent(jEdit.getProperty("options.editing.folding"),
 			folding);
 		//}}}
 
@@ -123,7 +115,7 @@ public class BufferOptions extends EnhancedDialog
 
 		wrap = new JComboBox(wrapModes);
 		wrap.setSelectedItem(buffer.getStringProperty("wrap"));
-		panel.addComponent(jEdit.getProperty("options.editing.wrap"),
+		addComponent(jEdit.getProperty("options.editing.wrap"),
 			wrap);
 		//}}}
 
@@ -133,7 +125,7 @@ public class BufferOptions extends EnhancedDialog
 		maxLineLen = new JComboBox(lineLengths);
 		maxLineLen.setEditable(true);
 		maxLineLen.setSelectedItem(buffer.getStringProperty("maxLineLen"));
-		panel.addComponent(jEdit.getProperty("options.editing.maxLineLen"),
+		addComponent(jEdit.getProperty("options.editing.maxLineLen"),
 			maxLineLen);
 		//}}}
 
@@ -142,14 +134,14 @@ public class BufferOptions extends EnhancedDialog
 		tabSize = new JComboBox(tabSizes);
 		tabSize.setEditable(true);
 		tabSize.setSelectedItem(buffer.getStringProperty("tabSize"));
-		panel.addComponent(jEdit.getProperty("options.editing.tabSize"),tabSize);
+		addComponent(jEdit.getProperty("options.editing.tabSize"),tabSize);
 		//}}}
 
 		//{{{ Indent size
 		indentSize = new JComboBox(tabSizes);
 		indentSize.setEditable(true);
 		indentSize.setSelectedItem(buffer.getStringProperty("indentSize"));
-		panel.addComponent(jEdit.getProperty("options.editing.indentSize"),
+		addComponent(jEdit.getProperty("options.editing.indentSize"),
 			indentSize);
 		//}}}
 
@@ -157,35 +149,12 @@ public class BufferOptions extends EnhancedDialog
 		noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
-		panel.addComponent(noTabs);
-		//}}}
+		addComponent(noTabs);
 
-		content.add(BorderLayout.NORTH,panel);
+	}
+	
 
-		//{{{ Buttons
-		JPanel buttons = new JPanel();
-		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
-		buttons.setBorder(new EmptyBorder(12,0,0,0));
-		buttons.add(Box.createGlue());
-		ok = new JButton(jEdit.getProperty("common.ok"));
-		ok.addActionListener(actionListener);
-		getRootPane().setDefaultButton(ok);
-		buttons.add(ok);
-		buttons.add(Box.createHorizontalStrut(6));
-		cancel = new JButton(jEdit.getProperty("common.cancel"));
-		cancel.addActionListener(actionListener);
-		buttons.add(cancel);
-		buttons.add(Box.createGlue());
-		content.add(BorderLayout.SOUTH,buttons);
-		//}}}
-
-		pack();
-		setLocationRelativeTo(view);
-		setVisible(true);
-	} //}}}
-
-	//{{{ ok() method
-	public void ok()
+	protected void _save()
 	{
 		int index = lineSeparator.getSelectedIndex();
 		String lineSep;
@@ -259,46 +228,16 @@ public class BufferOptions extends EnhancedDialog
 
 		index = mode.getSelectedIndex();
 		buffer.setMode(modes[index]);
+	}
 
-		dispose();
-	} //}}}
-
-	//{{{ cancel() method
-	public void cancel()
-	{
-		dispose();
-	} //}}}
-
-        //{{{ Private members
-	private View view;
-	private Buffer buffer;
-	private Mode[] modes;
-	private JComboBox mode;
-	private JComboBox lineSeparator;
-	private JComboBox encoding;
-	private JCheckBox gzipped;
-	private JComboBox folding;
-	private JComboBox wrap;
-	private JComboBox maxLineLen;
-	private JComboBox tabSize;
-	private JComboBox indentSize;
-	private JCheckBox noTabs;
-	private JButton ok;
-	private JButton cancel;
-	//}}}
-
-	//{{{ ActionHandler class
+	
 	class ActionHandler implements ActionListener
 	{
 		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == ok)
-				ok();
-			else if(source == cancel)
-				cancel();
-			else if(source == mode)
+			if(source == mode)
 			{
 				Mode _mode = (Mode)mode.getSelectedItem();
 				folding.setSelectedItem(_mode.getProperty(
@@ -316,4 +255,5 @@ public class BufferOptions extends EnhancedDialog
 			}
 		} //}}}
 	} //}}}
+
 }

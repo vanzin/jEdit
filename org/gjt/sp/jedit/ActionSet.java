@@ -387,7 +387,9 @@ public class ActionSet
 	 */
 	public boolean contains(String action)
 	{
-		return actions.containsKey(action);
+		boolean retval = actions.containsKey(action);
+		return retval;
+//		return actions.containsKey(action);
 	} //}}}
 
 	//{{{ size() method

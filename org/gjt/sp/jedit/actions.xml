@@ -344,10 +344,11 @@
 
 <ACTION NAME="global-options">
 	<CODE>
-		new GlobalOptions(view);
+		GlobalOptions.createOptions(view);
 	</CODE>
 </ACTION>
 
+	
 <ACTION NAME="goto-line">
 	<CODE>
 		textArea.showGoToLineDialog();

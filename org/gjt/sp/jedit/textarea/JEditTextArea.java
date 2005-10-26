@@ -203,7 +203,7 @@ public class JEditTextArea extends JComponent
 
 	//{{{ getDisplayManager() method
 	/**
-	 * Returns the display manager used by this text area.
+	 * @return the display manager used by this text area.
 	 * @since jEdit 4.2pre1
 	 */
 	public DisplayManager getDisplayManager()
@@ -213,7 +213,7 @@ public class JEditTextArea extends JComponent
 
 	//{{{ isCaretBlinkEnabled() method
 	/**
-	 * Returns true if the caret is blinking, false otherwise.
+	 * @return true if the caret is blinking, false otherwise.
 	 */
 	public final boolean isCaretBlinkEnabled()
 	{
@@ -236,9 +236,11 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	//{{{ getElectricScroll() method
+
 	/**
-	 * Returns the number of lines from the top and button of the
-	 * text area that are always visible.
+	 * @return the minimum distance (in number of lines)
+	 * from the caret to the nearest edge of the screen 
+	 * (top or bottom edge).
 	 */
 	public final int getElectricScroll()
 	{
