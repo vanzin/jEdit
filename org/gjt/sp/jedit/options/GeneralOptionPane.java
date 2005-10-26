@@ -29,6 +29,8 @@ import java.util.Arrays;
 import org.gjt.sp.jedit.*;
 //}}}
 
+
+
 public class GeneralOptionPane extends AbstractOptionPane
 {
 	//{{{ GeneralOptionPane constructor
@@ -40,6 +42,11 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ _init() method
 	protected void _init()
 	{
+		String useCombinedOptions = jEdit.getProperty("options.general.combined");
+		useCombined = new JCheckBox(useCombinedOptions);
+		useCombined.setSelected(jEdit.getBooleanProperty("options.combined"));
+		addComponent(useCombined);
+		
 		/* Line separator */
 		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
 			jEdit.getProperty("lineSep.windows"),
@@ -158,6 +165,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ _save() method
 	protected void _save()
 	{
+		boolean combined = useCombined.isSelected();
+		jEdit.setBooleanProperty("options.combined", combined);
+		
 		String lineSep = null;
 		switch(lineSeparator.getSelectedIndex())
 		{
@@ -215,5 +225,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restoreCLI;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
+	private JCheckBox useCombined;
+	
 	//}}}
 }
