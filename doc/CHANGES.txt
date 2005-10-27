@@ -56,6 +56,9 @@ for contributing to this release.
 
 - The selection is now saved between buffer switches.
 
+- ActionContext now remembers overridden actions, so plugins can override builtin
+  actions, and when the plugin is unloaded, the built-in actions will be restored.
+
 - Updated "Display Abbreviations", "Hex Convert" and "HyperSearch
   Results to Buffer" macros.
 
