@@ -48,10 +48,6 @@ for contributing to this release.
 
 {{{ Miscellaneous
 
-- A new option, CombinedOptions (global options->general),
-  allows you to see/edit Global, Plugin and Buffer options in a single tabbed dialog.
-  (Alan Ezust)
-
 - A new macro, SplitPane grow, was added to the macros/interface
   directory
 
