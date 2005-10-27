@@ -62,6 +62,13 @@ public abstract class ActionContext
 		String[] actions = actionSet.getActionNames();
 		for(int i = 0; i < actions.length; i++)
 		{
+			/* Is it already there? */
+			if (actionHash.containsKey(actions[i])) 
+			{
+				/* Save it for plugin unloading time */
+				Object oldAction = actionHash.get(actions[i]);
+				overriddenActions.put(actions[i], oldAction);
+			}
 			actionHash.put(actions[i],actionSet);
 		}
 	} //}}}
@@ -80,6 +87,11 @@ public abstract class ActionContext
 		for(int i = 0; i < actions.length; i++)
 		{
 			actionHash.remove(actions[i]);
+			if (overriddenActions.containsKey(actions[i])) 
+			{
+				Object oldAction = overriddenActions.remove(actions[i]);
+				actionHash.put(actions[i], oldAction);
+			}
 		}
 	} //}}}
 
@@ -146,6 +158,9 @@ public abstract class ActionContext
 	//{{{ Package-private members
 	String[] actionNames;
 	Hashtable actionHash = new Hashtable();
+	
+	/** A map of built-in actions that were overridden by plugins. */
+	Hashtable overriddenActions = new Hashtable(); 
 	//}}}
 
 	//{{{ Private members
