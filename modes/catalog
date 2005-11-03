@@ -19,6 +19,7 @@
 <MODE NAME="apacheconf"		FILE="apacheconf.xml"
 				FILE_NAME_GLOB="*httpd.conf" />
 
+
 <MODE NAME="apdl"		FILE="apdl.xml"
 				FILE_NAME_GLOB="*.{ans,inp,mak,mac}" />
 
@@ -145,6 +146,9 @@
 
 <!-- Used by Andre Kaplan's Hex plugin -->
 <MODE NAME="hex"		FILE="hex.xml" />
+
+<MODE NAME="htaccess"			FILE="htaccess.xml"
+				FILE_NAME_GLOB=".htaccess" />
 
 <MODE NAME="html"		FILE="html.xml"
 				FILE_NAME_GLOB="*.{html,htm,hta}" />
