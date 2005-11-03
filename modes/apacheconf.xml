@@ -221,6 +221,7 @@
 			<KEYWORD1>RedirectPermanent</KEYWORD1>
 			<KEYWORD1>RedirectTemp</KEYWORD1>
 			<KEYWORD1>RequestHeader</KEYWORD1>
+			<KEYWORD1>RewriteBase</KEYWORD1>
 			<KEYWORD1>RewriteCond</KEYWORD1>
 			<KEYWORD1>RewriteEngine</KEYWORD1>
 			<KEYWORD1>RewriteLock</KEYWORD1>
@@ -910,6 +911,7 @@
 			<KEYWORD2>RemoveOutputFilter</KEYWORD2>
 			<KEYWORD2>RemoveType</KEYWORD2>
 			<KEYWORD2>RequestHeader</KEYWORD2>
+			<KEYWORD2>RewriteBase</KEYWORD2>
 			<KEYWORD2>RewriteCond</KEYWORD2>
 			<KEYWORD2>RewriteEngine</KEYWORD2>
 			<KEYWORD2>RewriteLock</KEYWORD2>
