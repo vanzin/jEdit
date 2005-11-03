@@ -527,6 +527,7 @@
 			<KEYWORD2>XBitHack</KEYWORD2>
 
 			<!-- Apache 1.x -->
+			<!-- using 4 for apache 1.x vs 2.x -->
 			<KEYWORD4>AddModule</KEYWORD4>
 			<KEYWORD4>ClearModuleList</KEYWORD4>
 
@@ -538,6 +539,11 @@
 			<!-- mod_python directives -->
 			<KEYWORD3>PythonHandler</KEYWORD3>
 			<KEYWORD3>PythonDebug</KEYWORD3>
+
+			<!-- mod_php -->
+			<KEYWORD3>php_value</KEYWORD3>
+			<!-- using 4 for apache 1.x vs 2.x -->
+			<KEYWORD4>php_flag</KEYWORD4>
 
 			<LITERAL2>All</LITERAL2>
 			<LITERAL2>ExecCGI</LITERAL2>
