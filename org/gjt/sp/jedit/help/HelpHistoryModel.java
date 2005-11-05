@@ -27,7 +27,7 @@ package org.gjt.sp.jedit.help;
  * @author Nicholas O'Leary
  * @version $Id$
  */
-class HelpHistoryModel
+public class HelpHistoryModel
 {
 	//{{{ HelpHistoryModel
 	public HelpHistoryModel(int size)

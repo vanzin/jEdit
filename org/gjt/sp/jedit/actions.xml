@@ -365,7 +365,7 @@
 
 <ACTION NAME="help">
 	<CODE>
-		HelpViewerFactory.create();
+		new HelpViewerDialog();
 	</CODE>
 </ACTION>
 

@@ -27,7 +27,7 @@ package org.gjt.sp.jedit.help;
  * @author Nicholas O'Leary
  * @version $Id$
  */
-interface HelpHistoryModelListener
+public interface HelpHistoryModelListener
 {
 	public void historyUpdated();
 }

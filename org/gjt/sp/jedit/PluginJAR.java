@@ -800,7 +800,7 @@ public class PluginJAR
 			BeanShell.resetClassManager();
 
 			if(actions != null)
-				jEdit.getActionContext().removeActionSet(actions);
+				jEdit.removeActionSet(actions);
 			if(browserActions != null)
 				VFSBrowser.getActionContext().removeActionSet(browserActions);
 
