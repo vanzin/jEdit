@@ -23,6 +23,9 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
+
+
+
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -559,7 +562,7 @@ public class ManagePanel extends JPanel
 
 		public void actionPerformed(ActionEvent evt)
 		{
-			HelpViewerFactory.create(docURL);
+			new HelpViewerDialog(docURL);
 		}
 
 		public void valueChanged(ListSelectionEvent e)

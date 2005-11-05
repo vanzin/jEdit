@@ -64,7 +64,7 @@ public class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ selectNode() method
-	void selectNode(String shortURL)
+	public void selectNode(String shortURL)
 	{
 		if(tocModel == null)
 			return;

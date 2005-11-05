@@ -36,10 +36,10 @@ import javax.swing.event.*;
  * @author Nicholas O'Leary
  * @version $Id$
  */
-class HistoryButton extends JPanel implements ActionListener
+public class HistoryButton extends JPanel implements ActionListener
 {
-	static final int BACK    = 0;
-	static final int FORWARD = 1;
+	public static final int BACK    = 0;
+	public static final int FORWARD = 1;
 
 	//{{{ Private Members
 	private int type;
