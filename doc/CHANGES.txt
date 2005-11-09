@@ -156,9 +156,7 @@ for contributing to this release.
 {{{ API Changes
 
 - HelpViewer is now an Interface that can be easily implemented in plugins,
-  such as the InfoViewer (Alan Ezust) 
-
-- HelpViewerFactory is how jedit core creates a new HelpViewer now.  (Alan Ezust)
+  such as the InfoViewer. Original HelpViewer is now HelpViewerDialog.
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
