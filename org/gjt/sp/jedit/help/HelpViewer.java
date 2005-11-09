@@ -9,8 +9,6 @@ import java.beans.PropertyChangeSupport;
 /**
  * Interface supported by all HelpViewer classes.  
  * 
- * To create an instance, @see HelpViewerFactory.create()
- * 
  * @author ezust
  *
  */
