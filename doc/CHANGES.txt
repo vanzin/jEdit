@@ -3,7 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre3
 
 Thanks to Bertalan Fodor, Björn Kautler, David Chan, James Turk,
-Loren Charnley, Matthieu Casanova, Michael Macnair and Nicholas O'Leary
+Loren Charnley, Matthieu Casanova, Michael Macnair, Nicholas O'Leary,
+and Jeffrey Hoyt
 for contributing to this release.
 
 
@@ -78,6 +79,11 @@ for contributing to this release.
 
 - Can specify caret column number in addition to line number when
   opening a file (+line:<line>,<column>) (Bertalan Fodor).
+  
+- Added a new EBMessage subclass to announce when jEdit was looking for 
+  prefix completions, and when it was done, and make very small changes 
+  to the DefaultInputHandler to send the messages on the EditBus.  These
+  notifications are for the ShortcutDisplay plugin.
 
 }}}
 {{{ Bug Fixes
