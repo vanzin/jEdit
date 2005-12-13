@@ -63,18 +63,14 @@ public class SearchBar extends JPanel
 		Insets margin = new Insets(1,1,1,1);
 
 		add(Box.createHorizontalStrut(12));
-
 		add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
-		
 		ignoreCase.addActionListener(actionHandler);
 		ignoreCase.setMargin(margin);
 		ignoreCase.setRequestFocusEnabled(false);
 		add(Box.createHorizontalStrut(2));
-
 		add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
-
 		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
 		regexp.setRequestFocusEnabled(false);
