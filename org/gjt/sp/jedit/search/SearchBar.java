@@ -63,14 +63,18 @@ public class SearchBar extends JPanel
 		Insets margin = new Insets(1,1,1,1);
 
 		add(Box.createHorizontalStrut(12));
+
 		add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
+		
 		ignoreCase.addActionListener(actionHandler);
 		ignoreCase.setMargin(margin);
 		ignoreCase.setRequestFocusEnabled(false);
 		add(Box.createHorizontalStrut(2));
+
 		add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
+
 		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
 		regexp.setRequestFocusEnabled(false);
@@ -126,8 +130,8 @@ public class SearchBar extends JPanel
 	//{{{ update() method
 	public void update()
 	{
-		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
-		regexp.setSelected(SearchAndReplace.getRegexp());
+		ignoreCase.setSelected(jEdit.getBooleanProperty("isearch.caseignore", false));
+		regexp.setSelected(jEdit.getBooleanProperty("isearch.regexp", false));
 		hyperSearch.setSelected(jEdit.getBooleanProperty(
 			"view.search.hypersearch.toggle"));
 	} //}}}
@@ -306,13 +310,13 @@ public class SearchBar extends JPanel
 			}
 			else if(source == ignoreCase)
 			{
-				SearchAndReplace.setIgnoreCase(ignoreCase
-					.isSelected());
+				jEdit.setBooleanProperty("isearch.caseignore", ignoreCase.isSelected());
+				SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
 			}
 			else if(source == regexp)
 			{
-				SearchAndReplace.setRegexp(regexp
-					.isSelected());
+				jEdit.setBooleanProperty("isearch.regexp", regexp.isSelected());
+				SearchAndReplace.setRegexp(regexp.isSelected());
 			}
 			else if(source == close)
 			{
