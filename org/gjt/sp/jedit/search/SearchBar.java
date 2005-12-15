@@ -126,8 +126,12 @@ public class SearchBar extends JPanel
 	//{{{ update() method
 	public void update()
 	{
-		ignoreCase.setSelected(jEdit.getBooleanProperty("isearch.caseignore", false));
-		regexp.setSelected(jEdit.getBooleanProperty("isearch.regexp", false));
+		boolean ic = jEdit.getBooleanProperty("isearch.caseignore", false);
+		ignoreCase.setSelected(ic);
+		SearchAndReplace.setIgnoreCase(ic);
+		boolean re = jEdit.getBooleanProperty("isearch.regexp", false);
+		regexp.setSelected(re);
+		SearchAndReplace.setRegexp(re);
 		hyperSearch.setSelected(jEdit.getBooleanProperty(
 			"view.search.hypersearch.toggle"));
 	} //}}}
