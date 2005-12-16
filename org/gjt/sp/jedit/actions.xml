@@ -365,7 +365,7 @@
 
 <ACTION NAME="help">
 	<CODE>
-		new HelpViewerDialog();
+		new HelpViewer();
 	</CODE>
 </ACTION>
 

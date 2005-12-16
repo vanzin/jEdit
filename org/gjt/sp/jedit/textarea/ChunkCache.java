@@ -61,6 +61,12 @@ class ChunkCache
 	} //}}}
 
 	//{{{ getScreenLineOfOffset() method
+	/**
+	 * @param line physical line number of document 
+	 * @param offset number of characters from the left of the line. 
+	 * @return number of pixels from the left of the textArea where the
+	 * cursor should be
+	 */
 	int getScreenLineOfOffset(int line, int offset)
 	{
 		if(lineInfo.length == 0)
@@ -81,8 +87,7 @@ class ChunkCache
 				LineInfo last = getLineInfo(lastScreenLine);
 
 				if(offset >= last.offset
-					&& offset < last.offset + last.length)
-				{
+					&& offset < last.offset + last.length) {
 					return lastScreenLine;
 				}
 			}
