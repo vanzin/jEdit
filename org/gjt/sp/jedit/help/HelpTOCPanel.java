@@ -41,7 +41,7 @@ import org.gjt.sp.util.Log;
 public class HelpTOCPanel extends JPanel
 {
 	//{{{ HelpTOCPanel constructor
-	public HelpTOCPanel(HelpViewer helpViewer)
+	public HelpTOCPanel(HelpViewerInterface helpViewer)
 	{
 		super(new BorderLayout());
 
@@ -112,7 +112,7 @@ public class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ Private members
-	private HelpViewer helpViewer;
+	private HelpViewerInterface helpViewer;
 	private DefaultTreeModel tocModel;
 	private DefaultMutableTreeNode tocRoot;
 	private JTree toc;

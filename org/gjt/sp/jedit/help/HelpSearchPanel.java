@@ -36,7 +36,7 @@ import org.gjt.sp.util.Log;
 public class HelpSearchPanel extends JPanel
 {
 	//{{{ HelpSearchPanel constructor
-	public HelpSearchPanel(HelpViewer helpViewer)
+	public HelpSearchPanel(HelpViewerInterface helpViewer)
 	{
 		super(new BorderLayout(6,6));
 
@@ -58,7 +58,7 @@ public class HelpSearchPanel extends JPanel
 	} //}}}
 
 	//{{{ Private members
-	private HelpViewer helpViewer;
+	private HelpViewerInterface helpViewer;
 	private HistoryTextField searchField;
 	private JList results;
 	private HelpIndex index;

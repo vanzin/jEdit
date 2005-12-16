@@ -1137,8 +1137,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				return;
 
 			int offset = caret - textArea.getLineStartOffset(physicalLine);
-			textArea.offsetToXY(physicalLine,offset,textArea.returnValue);
-			int caretX = textArea.returnValue.x;
+			textArea.offsetToXY(physicalLine, offset, textArea.offsetXY);
+			int caretX = textArea.offsetXY.x;
 			int height = fm.getHeight();
 
 			gfx.setColor(caretColor);

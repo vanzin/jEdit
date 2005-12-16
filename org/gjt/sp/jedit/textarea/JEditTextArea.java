@@ -82,7 +82,7 @@ public class JEditTextArea extends JComponent
 		caretEvent = new MutableCaretEvent();
 		blink = true;
 		lineSegment = new Segment();
-		returnValue = new Point();
+		offsetXY = new Point();
 		structureMatchers = new LinkedList();
 		structureMatchers.add(new StructureMatcher.BracketMatcher());
 		//}}}
@@ -757,14 +757,16 @@ public class JEditTextArea extends JComponent
 		if(!displayManager.isLineVisible(line))
 			return;
 
-		Point point = offsetToXY(line,offset,returnValue);
+		Point point = offsetToXY(line,offset,offsetXY);
 		if(point == null)
 		{
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
 				+ ",visibleLines=" + visibleLines
 				+ ",physicalLine=" + line
+				+ ",offset=" + offset
 				+ ",firstPhysicalLine=" + getFirstPhysicalLine()
 				+ ",lastPhysicalLine=" + getLastPhysicalLine());
+
 		}
 		point.x += extraEndVirt;
 
@@ -968,10 +970,11 @@ public class JEditTextArea extends JComponent
 
 	//{{{ offsetToXY() method
 	/**
-	 * Converts an offset into a point in the text area painter's
-	 * co-ordinate space.
-	 * @param line The physical line number
-	 * @param offset The offset, from the start of the line
+	 * Converts a line,offset pair into an x,y (pixel) point relative to the 
+	 * upper left corner (0,0) of the text area.
+	 * 
+	 * @param line The physical line number (from top of document)
+	 * @param offset The offset in characters, from the start of the line
 	 * @param retVal The point to store the return value in
 	 * @return <code>retVal</code> for convenience, or <code>null</code>
 	 * if the specified offset is not visible
@@ -4858,8 +4861,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	boolean scrollBarsInitialized;
 
-	// used to store offsetToXY() results
-	Point returnValue;
+	/** Cursor location, measured as an offset (in pixels) from upper left corner 
+	 *   of the TextArea. 
+	 */
+	Point offsetXY;
 
 	boolean lastLinePartial;
 
