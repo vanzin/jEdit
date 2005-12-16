@@ -57,8 +57,9 @@ for contributing to this release.
 
 - The selection is now saved between buffer switches.
 
-- ActionContext now remembers overridden actions, so plugins can override builtin
-  actions, and when the plugin is unloaded, the built-in actions will be restored.
+- ActionContext now remembers overridden actions, so another plugin
+  can override builtin actions (via listing one in actions.xml with the same name).
+  When the plugin is unloaded, the original action will be restored.
 
 - Updated "Display Abbreviations", "Hex Convert" and "HyperSearch
   Results to Buffer" macros.
@@ -161,8 +162,6 @@ for contributing to this release.
 }}}
 {{{ API Changes
 
-- HelpViewer is now an Interface that can be easily implemented in plugins,
-  such as the InfoViewer. Original HelpViewer is now HelpViewerDialog.
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
