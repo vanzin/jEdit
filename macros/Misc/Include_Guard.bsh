@@ -58,7 +58,7 @@ void includeGuard()
 		return;
 	}
 	// you can change the routine for creating the guard name here
-	guardName = "__" + buffer.getName().toUpperCase().replace('.', '_')
+	guardName = + buffer.getName().toUpperCase().replace('.', '_')
 		+ "__";
 	pos = textArea.getCaretPosition();
 	textArea.setSelectedText("#if !defined(" + guardName
