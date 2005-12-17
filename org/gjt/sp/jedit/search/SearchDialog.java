@@ -40,7 +40,7 @@ import org.gjt.sp.jedit.*;
 /**
  * Search and replace dialog.
  * @author Slava Pestov
- * @version $Id$
+ * @version $Id: 
  */
 public class SearchDialog extends EnhancedDialog implements EBComponent
 {
