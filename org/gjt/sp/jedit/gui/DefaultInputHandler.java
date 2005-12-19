@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.msg.*;
+import javax.swing.event.*;
 //}}}
 
 /**
@@ -350,7 +351,7 @@ public class DefaultInputHandler extends InputHandler
 		else if(o instanceof Hashtable)
 		{
 			setCurrentBindings((Hashtable)o);
-			EditBus.send(new ShortcutPrefixActive(null, currentBindings, true));
+			ShortcutPrefixActiveEvent.firePrefixStateChange(currentBindings, true);
 			shortcutOn = true;
 			return true;
 		}
@@ -380,7 +381,7 @@ public class DefaultInputHandler extends InputHandler
 	{
 		if( shortcutOn == true )
 		{
-			EditBus.send(new ShortcutPrefixActive(null, null, false));
+			ShortcutPrefixActiveEvent.firePrefixStateChange(null, false);
 			shortcutOn = false;
 		}
 	} //}}}
@@ -423,4 +424,5 @@ public class DefaultInputHandler extends InputHandler
 	private Hashtable bindings;
 	private Hashtable currentBindings;
 	//}}}
+
 }
