@@ -10,7 +10,7 @@ import java.beans.PropertyChangeSupport;
  * Interface supported by all HelpViewer classes.  
  * 
  * @author ezust
- *
+ * @version $id
  */
 public interface HelpViewerInterface 
 {
