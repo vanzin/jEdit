@@ -264,7 +264,7 @@ public class GrabKeyDialog extends JDialog
 	} //}}}
 
 	//{{{ getSymbolicName() method
-	private String getSymbolicName(int keyCode)
+	public static String getSymbolicName(int keyCode)
 	{
 		if(keyCode == KeyEvent.VK_UNDEFINED)
 			return null;
@@ -292,7 +292,7 @@ public class GrabKeyDialog extends JDialog
 		}
 		catch(Exception e)
 		{
-			Log.log(Log.ERROR,this,e);
+			Log.log(Log.ERROR,GrabKeyDialog.class,e);
 		}
 
 		return null;
