@@ -273,6 +273,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			}
 
 			entry.container.show(entry);
+			Object reason = DockableWindowUpdate.ACTIVATED;
+			EditBus.send(new DockableWindowUpdate(this, reason, name));
 		}
 		else
 			/* an error occurred */;

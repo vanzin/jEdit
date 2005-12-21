@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Bertalan Fodor, Björn Kautler, David Chan, James Turk,
 Loren Charnley, Matthieu Casanova, Michael Macnair, Nicholas O'Leary,
-and Jeffrey Hoyt
+Alan Ezust, and Jeffrey Hoyt 
 for contributing to this release.
 
 
@@ -162,6 +162,8 @@ for contributing to this release.
 }}}
 {{{ API Changes
 
+- bug  1386702: DockableWindowManager now sends an EditBus message
+        DockableWindowUpdate.ACTIVATED when a dockable is activated.
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
