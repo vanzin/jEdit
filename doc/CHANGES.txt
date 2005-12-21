@@ -159,6 +159,9 @@ for contributing to this release.
   he wants to override the read only flag on the file
   (Matthieu Casanova)
 
+- NPE fixed when removing hyper search result that aren't cached
+(Matthieu Casanova)
+
 }}}
 {{{ API Changes
 

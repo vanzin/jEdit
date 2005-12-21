@@ -111,7 +111,11 @@ public class HyperSearchOperationNode
 			if (!(tmpNode.getUserObject() instanceof HyperSearchOperationNode))
 				continue;
 			HyperSearchOperationNode operNode = (HyperSearchOperationNode) tmpNode.getUserObject();
-			operNode.resultNodes.remove(node);
+			if (operNode.resultNodes != null)
+			{
+				// the nodes aren't cached so no need to remove the node from cache
+				operNode.resultNodes.remove(node);
+			}
 			break;
 		}
 		
