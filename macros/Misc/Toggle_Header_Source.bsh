@@ -1,0 +1,76 @@
+/**
+    ToggleHeaderSource.bsh
+    by Alan Ezust
+    $Id$
+    alan dot ezust at gmail dot com
+    2005-11-09
+   
+    A jedit beanshell macro that toggles your current buffer
+    between the header file (.h) and the source file (.c(pp|xx)?).
+
+    Enables you to switch the current text
+    buffer between C/C++ header and sourcecode
+    file. If the file does not already exist, it opens a buffer
+    of that name for you (!).
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with the jEdit program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+ */
+
+String defaultSourceExtension = "cpp";  
+
+String[] sourceExtensions = new String[]{"cpp", "c", "cxx" };
+
+String getSourceFile(String baseName)
+{
+    int numExt = sourceExtensions.length;
+    for (int i=numExt-1; i>=0; --i) 
+    {
+        String ext = sourceExtensions[i];
+        String tryFile = baseName + "." + ext;
+        File f = new File(tryFile);
+        if (f.canRead()) return f.getPath();
+    }              
+    return baseName + "." + defaultSourceExtension;
+}
+
+boolean isSourceFile(String extension) 
+{
+    for (int i=0; i<sourceExtensions.length; ++i) {
+        if (extension.equals(sourceExtensions[i])) return true;
+    }
+    return false;
+}
+
+void toggleHeaderSource()
+{
+
+    String currentFile = buffer.getPath();
+    int pos = currentFile.lastIndexOf('.');
+    String extension = currentFile.substring(pos+1);
+    String baseName = currentFile.substring(0, pos);
+    if (isSourceFile(extension)) 
+    {
+        jEdit.openFile(view, baseName + ".h"); 
+    }
+    else if (extension.equals("h")) {
+        String sourceFile = getSourceFile(baseName);
+        jEdit.openFile(view, sourceFile);         
+    }
+}
+
+toggleHeaderSource();
+
+
