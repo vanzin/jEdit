@@ -38,7 +38,11 @@ public class BufferUpdate extends EBMessage
 	 * Buffer created.
 	 */
 	public static final Object CREATED = "CREATED";
-
+	
+	/**
+	 * About to be closed 
+	 */
+	public static final Object CLOSING = "CLOSING";
 	/**
 	 * Buffer load started.
 	 * @since jEdit 2.6pre1
