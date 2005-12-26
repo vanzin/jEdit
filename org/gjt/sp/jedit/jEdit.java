@@ -1684,6 +1684,7 @@ public class jEdit
 		{
 			path = path.toLowerCase();
 		}
+		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSING));
 		bufferHash.remove(path);
 		removeBufferFromList(buffer);
 		buffer.close();
