@@ -300,6 +300,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public void hideDockableWindow(String name)
 	{
+		
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null)
 		{
@@ -307,8 +308,12 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			return;
 		}
 
+
+		
 		if(entry.win == null)
 			return;
+		Object reason = DockableWindowUpdate.DEACTIVATED;
+		EditBus.send(new DockableWindowUpdate(this, reason, name));
 
 		entry.container.show(null);
 	} //}}}
