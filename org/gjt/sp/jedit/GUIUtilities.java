@@ -910,7 +910,7 @@ public class GUIUtilities
 			{
 				String styleName = "view.style."
 					+ Token.tokenToString((byte)i)
-					.toLowerCase();
+					.toLowerCase(Locale.ENGLISH);
 				styles[i] = GUIUtilities.parseStyle(
 					jEdit.getProperty(styleName),
 					family,size,color);
