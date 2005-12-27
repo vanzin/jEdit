@@ -52,6 +52,8 @@ for contributing to this release.
 - A new macro, SplitPane grow, was added to the macros/interface
   directory
 
+- A new macro, ToggleHeaderSource, for C/C++ editing. 
+
 - A single-line selection no longer hides the line highlight, for
   better readability.
 
@@ -162,11 +164,18 @@ for contributing to this release.
 - NPE fixed when removing hyper search result that aren't cached
 (Matthieu Casanova)
 
+- NPE fixed when using turkish locale (889520)
+
 }}}
 {{{ API Changes
 
 - bug  1386702: DockableWindowManager now sends an EditBus message
         DockableWindowUpdate.ACTIVATED when a dockable is activated.
+        And a corresponding DEACTIVATED message when it is deactivated.
+
+-  A new EditBus message has been introduced: BufferUpdate.CLOSING
+        for Navigator (or other EBPlugins) to catch caret positions just
+        before buffers are closed. 
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
