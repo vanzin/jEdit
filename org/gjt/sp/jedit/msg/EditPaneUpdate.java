@@ -46,6 +46,13 @@ public class EditPaneUpdate extends EBMessage
 	public static final Object BUFFER_CHANGED = "BUFFER_CHANGED";
 
 	/**
+	 * Edit pane buffer about to change
+	 * @since 4.3pre3
+	 */
+	public static final Object BUFFER_CHANGING = "BUFFER_CHANGING";
+
+	
+	/**
 	 * Creates a new edit pane update message.
 	 * @param editPane The edit pane
 	 * @param what What happened
