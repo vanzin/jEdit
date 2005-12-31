@@ -1,111 +1,293 @@
 <?xml version="1.0"?>
 
-
 <!--
      This is a build.xml file for building jEdit.
 -->
 
 <project name="jEdit" default="dist" basedir=".">
+        <property file="../build.properties" />
+	<property file="build.properties"/>
 
-	<target name="compile">
+	<target name="init">
+		<available property="jdk15" classname="javax.swing.plaf.metal.OceanTheme" />
+		<mkdir dir="${build.directory}"/>
+	</target>
+
+	<target name="compile" depends="init">
 		<javac
 			srcdir="."
+			destdir="${build.directory}"
 			deprecation="on"
 			includeJavaRuntime="yes"
+			debug="yes"
+			encoding="UTF8" 
+			source="1.4"
+			target="1.4"
 		>
 			<include name="bsh/**/*.java"/>
-			<include name="com/microstar/*.java"/>
-			<include name="com/incors/plaf/kunststoff/*.java"/>
+			<include name="com/microstar/xml/*.java"/>
 			<include name="gnu/regexp/*.java"/>
 			<include name="installer/*.java"/>
 			<include name="org/gjt/sp/jedit/**/*.java"/>
 			<include name="org/gjt/sp/util/*.java"/>
+			<include name="org/objectweb/asm/*.java"/>
 		</javac>
 	</target>
 
-
-	<target name="dist" depends="compile">
+	<target name="dist" depends="compile" description="Compile and package jEdit.">
 		<jar
 			jarfile="jedit.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
+			compress="false"
 		>
-			<fileset dir=".">
+			<fileset dir="${build.directory}">
 				<include name="bsh/**/*.class"/>
+				<include name="com/**/*.class"/>
+				<include name="gnu/**/*.class"/>
+				<include name="org/**/*.class"/>
+				<exclude name="com/loomcom/**/*.class"/>
+			</fileset>
+
+			<fileset dir=".">
 				<include name="bsh/commands/*.bsh"/>
 
-				<include name="com/microstar/*.class"/>
-				<include name="com/incors/plaf/kunststoff/*.class"/>
-				<include name="com/incors/plaf/kunststoff/icons/*.gif"/>
-				<include name="gnu/regexp/*.class"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
-				<include name="javax/help/**/*.class"/>
 
-				<include name="org/gjt/sp/jedit/**/*.class"/>
-				<include name="org/gjt/sp/util/**/*.class"/>
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
 				<include name="org/gjt/sp/jedit/icons/*.gif"/>
-				<include name="org/gjt/sp/jedit/tips/*.html"/>
+				<include name="org/gjt/sp/jedit/icons/*.jpg"/>
+				<include name="org/gjt/sp/jedit/icons/*.png"/>
 				<include name="org/gjt/sp/jedit/*.props"/>
 
 				<include name="org/gjt/sp/jedit/actions.xml"/>
-				<include name="org/gjt/sp/jedit/default.abbrevs"/>
-				<include name="org/gjt/sp/jedit/jedit.bsh"/>
+				<include name="org/gjt/sp/jedit/browser.actions.xml"/>
+				<include name="org/gjt/sp/jedit/dockables.xml"/>
+				<include name="org/gjt/sp/jedit/services.xml"/>
 
-				<include name="doc/*.txt"/>
-				<include name="doc/welcome.html"/>
-				<include name="doc/users-guide/*.html"/>
-				<include name="doc/users-guide/toc.xml"/>
-				<include name="doc/users-guide/word-index.xml"/>
+				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 			</fileset>
 		</jar>
+
 	</target>
 
-	<!-- Generate docs with xsltproc tool from www.xmlsoft.org -->
-	<target name="docs-html-xsltproc">
+	<target name="dist-mac" depends="docs-html,javadoc">
+
+		<!-- Make sure all of the default plugins are compiled -->
+		<ant dir="jars/LatestVersion"/>
+		<ant dir="jars/MacOS"/>
+		<ant dir="jars/QuickNotepad"/>
+
+		<javac
+			srcdir="."
+			destdir="${build.directory}"
+			deprecation="on"
+			includeJavaRuntime="yes"
+			debug="yes"
+			encoding="UTF8" 
+		>
+			<include name="com/loomcom/ant/tasks/jarbundler/*.java"/>
+		</javac>
+
+		<!-- Package jEdit into a Mac-friendly application bundle -->
+		<taskdef name="jarbundler" classpath="${build.directory}" classname="com.loomcom.ant.tasks.jarbundler.JarBundler"/>
+		<delete dir="jEdit.app"/>
+		<jarbundler
+			dir="${build.directory}"
+			name="jEdit"
+			aboutmenuname="jEdit"
+			mainclass="org.gjt.sp.jedit.jEdit"
+			antialiasedgraphics="true"
+			antialiasedtext="true"
+			infostring="jEdit 4.3, Copyright &amp;#169; 1998-2004 Slava Pestov"
+			version="4.3"
+			shortVersion="4.3"
+			jvmversion="1.4+"
+			arguments="-background"
+			extraClasspath="/System/Library/Java"
+			screenmenu="true"
+			icon="icons/icon.icns"
+			bundleid="org.gjt.sp.jedit"
+			signature="JESP">
+			<jarfileset dir="${build.directory}">
+				<include name="jedit.jar"/>
+				<include name="doc/**/*.html"/>
+				<include name="doc/**/*.css"/>
+				<include name="doc/**/*.png"/>
+				<include name="doc/**/*.gif"/>
+				<include name="doc/**/*.txt"/>
+				<include name="doc/**/toc.xml"/>
+				<include name="jars/*.jar"/>
+				<include name="macros/**"/>
+				<include name="modes/**"/>
+				<include name="properties/**"/>
+				<include name="startup/**"/>
+			</jarfileset>
+			<documenttype
+				extensions="*" iconFile="icons/file.icns" name="jEdit TEXT Document" role="Editor"/>
+			<documenttype
+				ostypes="TEXT" iconFile="icons/file.icns" name="jEdit TEXT Document" role="Editor"/>
+			<documenttype
+				ostypes="****" iconFile="icons/file.icns" name="jEdit TEXT Document" role="Editor"/>
+			<service
+				menuItem="jEdit/Open Files" message="openFile" sendTypes="NSStringPboardType,NSFilenamesPboardType"/>
+			<service
+				menuItem="jEdit/Insert Text" message="insertSelection" sendTypes="NSStringPboardType"/>
+			<service
+				menuItem="jEdit/New Buffer with Text" message="openSelection" sendTypes="NSStringPboardType"/>
+		</jarbundler>
+		
+		<!-- Create disk image -->
+		<delete file="jEdit.dmg"/>
+		<echo message="Creating disk image..."/>
+		<exec executable="hdiutil">
+			<arg line="create -quiet -volname &quot;jEdit 4.2&quot; -srcfolder jEdit.app jEdit.dmg"/>
+		</exec>
+
+	</target>
+
+	<target name="generate-docbook-wrapper">
+		<delete file="doc/docbook-wrapper-${format}.xsl" />
+		<echo file="doc/docbook-wrapper-${format}.xsl"
+			message="&lt;xsl:stylesheet"/>
+		<echo file="doc/docbook-wrapper-${format}.xsl" append="true"
+			message=" xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"/>
+		<echo file="doc/docbook-wrapper-${format}.xsl" append="true"
+			message=" version='1.0'&gt;"/>
+		<echo file="doc/docbook-wrapper-${format}.xsl" append="true"
+			message="&lt;xsl:import href='${docbook.xsl}/${stylesheet}'/&gt;"/>
+		<echo file="doc/docbook-wrapper-${format}.xsl" append="true"
+			message="&lt;/xsl:stylesheet&gt;"/>
+		<mkdir dir="${build.directory}"/>
+	</target>
+
+	<target name="docs-html" depends="init" description="Generate HTML documents with xsltproc tool.">
+	
+		<property name="format" value="html" />
+		<property name="stylesheet" value="html/chunk.xsl" />
+		<antcall target="generate-docbook-wrapper"/>
+
 		<exec executable="xsltproc" dir="doc/users-guide">
 			<arg value="--catalogs"/>
-			<arg value="jedithtml.xsl"/>
+			<arg value="../jedithtml.xsl"/>
 			<arg value="users-guide.xml"/>
+		</exec>
+		<exec executable="xsltproc" dir="doc/FAQ">
+			<arg value="--catalogs"/>
+			<arg value="../jedithtml.xsl"/>
+			<arg value="faq.xml"/>
+		</exec>
+		<exec executable="xsltproc" dir="doc/news42">
+			<arg value="--catalogs"/>
+			<arg value="../jedithtml.xsl"/>
+			<arg value="news.xml"/>
 		</exec>
 	</target>
 
-	<!-- Generate docs with Xalan tool from xml.apache.org -->
-	<target name="docs-html-xalan">
-		<style
-			in="doc/users-guide/users-guide.xml"
-			destdir="doc/users-guide"
-			style="doc/users-guide/jedithtml.xsl"/>
+	<target name="docs-fo" depends="init" description="Generate FOT documents with xsltproc tool.">
+		<property name="format" value="fo" />
+		<property name="stylesheet" value="fo/docbook.xsl" />
+		<antcall target="generate-docbook-wrapper"/>
+		
+		<exec executable="xsltproc" dir="doc/users-guide">
+			<arg value="--param"/>
+			<arg value="paper.type"/>
+			<arg value="'${paper}'"/>
+			<arg value="--output"/>
+			<arg value="users-guide.fot"/>
+			<arg value="--catalogs"/>
+			<arg value="../jeditfo.xsl"/>
+			<arg value="users-guide.xml"/>
+		</exec>
+		
+		<exec executable="${fop.bin}" dir="doc/users-guide">
+			<arg value="users-guide.fot"/>
+			<arg value="-pdf"/>
+			<arg value="users-guide-${paper}.pdf"/>
+		</exec>
 	</target>
 
-	<target name="clean">
+	<target name="docs-fo-a4" depends="init" description="Generate FOT documents with xsltproc tool, A4 paper size.">
+		<property name="paper" value="A4" />
+		<antcall target="docs-fo"/>
+	</target>
+
+	<target name="docs-fo-letter" depends="init" description="Generate FOT documents with xsltproc tool, US letter paper size.">
+		<property name="paper" value="USletter" />
+		<antcall target="docs-fo"/>
+	</target>
+
+	<path id="doclet.class.path">
+		<pathelement location="${tools.jar}"/>
+		<pathelement location="."/>
+	</path>
+
+	<target name="javadoc" description="Generate documentation.">
+		<delete dir="doc/api"/>
+		<mkdir dir="doc/api"/>
+
+		<javac
+			srcdir="."
+			destdir="."
+			deprecation="on"
+			includeJavaRuntime="yes"
+		>
+			<classpath refid="doclet.class.path"/>
+			<include name="doclet/GenerateTocXML.java"/>
+		</javac>
+
+		<javadoc packagenames="bsh.*, com.*, gnu.*, org.*"
+			sourcepath="."
+			classpath="."
+			destdir="doc/api"
+			doctitle="jEdit API" />
+
+		<javadoc classpath="."
+			doclet="doclet.GenerateTocXML"
+			docletpath="."
+			packagenames="bsh.*, com.*, gnu.*, org.*"
+			sourcepath="."/>
+	</target>
+
+	<target name="clean" description="Clean old stuff.">
 		<delete>
+			<fileset dir="${build.directory}" includes="**/*.class"/>
 			<fileset dir="." includes="**/*~" defaultexcludes="no"/>
 			<fileset dir="." includes="**/#*#" defaultexcludes="no"/>
-			<fileset dir="." includes="**/*.orig"/>
 			<fileset dir="." includes="**/*.rej"/>
+			<fileset dir="." includes="**/*.orig"/>
 			<fileset dir="." includes="**/.*.swp"/>
 			<fileset dir="." includes="**/.#*"/>
 			<fileset dir="." includes="**/.new*"/>
 			<fileset dir="." includes="**/.directory"/>
-			<fileset dir=".">
-				<include name="**/*.class"/>
-				<exclude name="com/incors/plaf/kunststoff/*.class"/>
-				<exclude name="org/gjt/sp/jedit/textarea/TextRenderer2D.class"/>
-				<exclude name="bsh/XThis*.class"/>
-				<exclude name="bsh/reflect/ReflectManagerImpl.class"/>
-			</fileset>
-
+<!--
 			<fileset dir="." includes="doc/users-guide/*.html"/>
 			<fileset dir="." includes="doc/users-guide/toc.xml"/>
 			<fileset dir="." includes="doc/users-guide/word-index.xml"/>
 
+			<fileset dir="." includes="doc/FAQ/*.html"/>
+			<fileset dir="." includes="doc/FAQ/toc.xml"/>
+			<fileset dir="." includes="doc/FAQ/word-index.xml"/>
+-->
 			<fileset dir="." includes="doc/users-guide/*.pdf"/>
 			<fileset dir="." includes="doc/users-guide/*.aux"/>
 			<fileset dir="." includes="doc/users-guide/*.tex"/>
+			<fileset dir="." includes="doc/users-guide/*.out"/>
 			<fileset dir="." includes="doc/users-guide/*.log"/>
+			<fileset dir="." includes="**/users-guide/*.fot"/>
 
 			<fileset dir="." includes="installer/jedit-*"/>
 		</delete>
+		<delete dir="doc/api"/>
+		<delete dir="jEdit.app"/>
+		<delete file="jEdit.dmg"/>
+	</target>
+
+	<!-- Generate tags using 'ctags' program from ctags.sourceforge.net -->
+	<target name="tags" description="Generate tags using ctags program.">
+		<exec executable="ctags">
+			<arg value="-R" />
+			<arg path="." />
+		</exec>
 	</target>
 
 </project>
