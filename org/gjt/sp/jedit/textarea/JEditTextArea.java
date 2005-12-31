@@ -164,11 +164,10 @@ public class JEditTextArea extends JComponent
 		sl.add("magicCaret: " + magicCaret);
 		sl.add("offsetXY" + offsetXY.toString());
 		sl.add("oldCaretLine: " + oldCaretLine);
-		sl.add("physLastLine: " + physLastLine);
 		sl.add("screenLastLine: " + screenLastLine);
 		sl.add("visibleLines: " + visibleLines);
 		sl.add("firstPhysicalLine: " + getFirstPhysicalLine());
-		sl.add("lastPhysicalLine=" + getLastPhysicalLine());
+		sl.add("physLastLine: " + physLastLine);
 		return TextUtilities.join(sl, "\n");
 	}
 	
