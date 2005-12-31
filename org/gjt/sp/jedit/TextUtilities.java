@@ -251,6 +251,14 @@ public class TextUtilities
 		return findWordStart(line, pos, noWordSep, true, false);
 	} //}}}
 
+	
+	/** Similar to perl's join() method on lists,
+	 *    but works with all collections.
+	 * 
+	 * @param c An iterable collection of Objects
+	 * @param delim a string to put between each object
+	 * @return a joined toString() representation of the collection
+	 */
 	public static String join(Collection c, String delim) {
 		StringBuffer retval = new StringBuffer();
 		Iterator itr = c.iterator();
