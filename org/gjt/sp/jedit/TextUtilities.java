@@ -251,6 +251,20 @@ public class TextUtilities
 		return findWordStart(line, pos, noWordSep, true, false);
 	} //}}}
 
+	public static String join(Collection c, String delim) {
+		StringBuffer retval = new StringBuffer();
+		Iterator itr = c.iterator();
+		if (itr.hasNext()) {
+			retval.append( itr.next().toString() );
+		}
+		else return "";
+		while (itr.hasNext()) {
+			retval.append(delim);
+			retval.append(itr.next().toString());
+		}
+		return retval.toString();
+	}
+	
 	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.

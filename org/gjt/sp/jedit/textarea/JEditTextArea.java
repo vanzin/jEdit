@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +47,8 @@ import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
+
+
 //}}}
 
 /**
@@ -151,6 +154,25 @@ public class JEditTextArea extends JComponent
 		popupEnabled = true;
 	} //}}}
 
+	public String toString() {
+		ArrayList sl = new ArrayList();
+		sl .add("caret: " + caret);
+		sl.add("caretLine: " + caretLine );
+		sl.add("caretScreenLine: " + caretScreenLine);
+		sl.add("electricScroll: " + electricScroll);
+		sl.add("horizontalOffset: " + horizontalOffset);
+		sl.add("magicCaret: " + magicCaret);
+		sl.add("offsetXY" + offsetXY.toString());
+		sl.add("oldCaretLine: " + oldCaretLine);
+		sl.add("physLastLine: " + physLastLine);
+		sl.add("screenLastLine: " + screenLastLine);
+		sl.add("visibleLines: " + visibleLines);
+		sl.add("firstPhysicalLine: " + getFirstPhysicalLine());
+		sl.add("lastPhysicalLine=" + getLastPhysicalLine());
+		return TextUtilities.join(sl, "\n");
+	}
+	
+	
 	//{{{ dispose() method
 	/**
 	 * Plugins and macros should not call this method.
@@ -759,7 +781,10 @@ public class JEditTextArea extends JComponent
 
 		Point point = offsetToXY(line,offset,offsetXY);
 		if(point == null)
+		// FIXME - we need to reset the state of this window so that it has the right
+		// dimensions again. 
 		{
+			
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
 				+ ",visibleLines=" + visibleLines
 				+ ",physicalLine=" + line
