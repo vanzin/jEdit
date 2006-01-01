@@ -31,6 +31,12 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.gjt.sp.util.Log;
+
+import java.util.jar.Manifest;
+import java.util.jar.JarFile;
+import java.net.MalformedURLException;
+import java.util.jar.Attributes;
+import java.util.jar.Attributes.Name;
 //}}}
 
 /**
@@ -331,6 +337,7 @@ public class JARClassLoader extends ClassLoader
 
 			try
 			{
+				definePackage(clazz);
 				ZipFile zipFile = jar.getZipFile();
 				ZipEntry entry = zipFile.getEntry(name);
 
@@ -372,5 +379,61 @@ public class JARClassLoader extends ClassLoader
 		}
 	} //}}}
 
+	//{{{ definePackage(clazz) method
+	private void definePackage(String clazz) throws IOException 
+	{
+		int idx = clazz.lastIndexOf('.');
+		if (idx != -1) {		
+			String name = clazz.substring(0, idx);
+			if (getPackage(name) == null) definePackage(name, new JarFile(jar.getFile()).getManifest());
+		}
+	} //}}}
+	
+	//{{{ getMfValue() method
+	private String getMfValue(Attributes sectionAttrs, Attributes mainAttrs, Attributes.Name name) 
+	{
+		String value=null;
+		if (sectionAttrs != null)
+			value = sectionAttrs.getValue(name);
+		else if (mainAttrs != null) {
+			value = mainAttrs.getValue(name);
+		}
+		return value;
+	}
+	//}}}
+	
+	//{{{ definePackage(packageName, manifest) method
+	private void definePackage(String name, Manifest mf) 
+	{
+		if (mf==null) 
+		{
+			definePackage(name, null, null, null, null, null,
+			null, null);
+			return;
+		}
+
+		Attributes sa = mf.getAttributes(name.replace('.', '/') + "/");
+		Attributes ma = mf.getMainAttributes();
+		
+		URL sealBase = null;		
+		if (Boolean.valueOf(getMfValue(sa, ma, Name.SEALED)).booleanValue()) 
+		{
+			try 
+			{
+				sealBase = jar.getFile().toURL();
+			} catch (MalformedURLException e) { }
+		}
+		
+		Package pkg=definePackage(
+			name, 
+			getMfValue(sa, ma, Name.SPECIFICATION_TITLE), 
+			getMfValue(sa, ma, Name.SPECIFICATION_VERSION), 
+			getMfValue(sa, ma, Name.SPECIFICATION_VENDOR), 
+			getMfValue(sa, ma, Name.IMPLEMENTATION_TITLE), 
+			getMfValue(sa, ma, Name.IMPLEMENTATION_VERSION), 
+			getMfValue(sa, ma, Name.IMPLEMENTATION_VENDOR), 
+			sealBase);
+	} //}}}
+	
 	//}}}
 }
