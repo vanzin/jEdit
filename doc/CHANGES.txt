@@ -4,8 +4,8 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Bertalan Fodor, Björn Kautler, David Chan, James Turk,
 Loren Charnley, Matthieu Casanova, Michael Macnair, Nicholas O'Leary,
-Alan Ezust, and Jeffrey Hoyt 
-for contributing to this release.
+Alan Ezust, Slava Pestov, Ollie Rutherfurd, Jeffrey Hoyt, Marcelo Vanzin, 
+Rob (copy_paste), and Simon Ruggier for contributing to this release.
 
 
 {{{ Search and Replace
@@ -24,7 +24,6 @@ for contributing to this release.
   initialized with the path from the selected result tree folder node.
 
 }}}
-
 {{{ Syntax Highlighting
 
 - Gnuplot syntax highlighting (Loren Charnley).
@@ -45,8 +44,6 @@ for contributing to this release.
   completion. Now, you must press TAB to complete.
 
 }}}
-
-
 {{{ Miscellaneous
 
 - A new macro, SplitPane grow, was added to the macros/interface
@@ -83,9 +80,8 @@ for contributing to this release.
 - Can specify caret column number in addition to line number when
   opening a file (+line:<line>,<column>) (Bertalan Fodor).
   
-- Added a new EBMessage subclass to announce when jEdit was looking for 
-  prefix completions, and when it was done, and make very small changes 
-  to the DefaultInputHandler to send the messages on the EditBus.  These
+- Added a new EventListener to notify subscribing plugins when jEdit was 
+  looking for prefix completions and when it was done. These 
   notifications are for the ShortcutDisplay plugin.
 
 }}}
