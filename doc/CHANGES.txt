@@ -46,6 +46,8 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- JARClassLoader now reports package information (Bertalan Fodor).
+
 - A new macro, SplitPane grow, was added to the macros/interface
   directory
 
