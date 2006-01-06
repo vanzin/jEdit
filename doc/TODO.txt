@@ -83,6 +83,15 @@ ok [error] ExtensionManager: java.lang.NullPointerException
   textArea.moveCaretPosition(pos,JEditTextArea.ELECTRIC_SCROLL) in
   dragOver() method)
 
+Ideas: a lot of the code in the jedit text area can be simplified
+<slava> for example, i'm not sure we really need the ChunkCache anymore
+<slava> just keep the chunks for the currently
+ painting line around, to speed up the multiple offsetToX() 
+ calls that happen during painting
+<slava> also, you might want to rip out the text area's 
+scrolling code, and put it in a JScrollPane
+
+
 + auto indent:
 
   - ? : do not unindent

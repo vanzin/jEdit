@@ -671,6 +671,23 @@ and the docking position of the plugin.
 </para>
 
 </sect1>
+<sect1 id="plugin-implement-services"><title> The services.xml file </title>
+
+
+<para> Some plugins, such as SideKick and Console, offer services, which can be described in a file called "services.xml". Here is an example of one from SideKick: </para>
+
+<informalexample><programlisting>
+&lt;SERVICES&gt;
+        &lt;SERVICE CLASS=&quot;org.gjt.sp.jedit.buffer.FoldHandler&quot; NAME=&quot;sidekick&quot;&gt;
+                new sidekick.SideKickFoldHandler()
+        &lt;/SERVICE&gt;
+&lt;/SERVICES&gt;
+</programlisting>
+</informalexample>
+
+<para> For information about services, refer to the <ulink url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink> class API documentation. There, you can find out what the tags and attributes mean, as well as how to register and use services. </para>
+
+</sect1>
 
 <sect1 id="plugin-implement-quicknotepad"><title>The QuickNotepad Class</title>
 
