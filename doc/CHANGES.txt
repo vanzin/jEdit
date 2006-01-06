@@ -49,9 +49,9 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 - JARClassLoader now reports package information (Bertalan Fodor).
 
 - A new macro, SplitPane grow, was added to the macros/interface
-  directory
+  directory. (aezust)
 
-- A new macro, ToggleHeaderSource, for C/C++ editing. 
+- A new macro, ToggleHeaderSource, for C/C++ editing.  (aezust)
 
 - A single-line selection no longer hides the line highlight, for
   better readability.
@@ -60,7 +60,8 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 
 - ActionContext now remembers overridden actions, so another plugin
   can override builtin actions (via listing one in actions.xml with the same name).
-  When the plugin is unloaded, the original action will be restored.
+  When the plugin is unloaded, the original action will be restored. (aezust)
+  plugins that use this feature: infoviewer, xsearch, and optional.
 
 - Updated "Display Abbreviations", "Hex Convert" and "HyperSearch
   Results to Buffer" macros.
@@ -169,11 +170,15 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 
 - bug  1386702: DockableWindowManager now sends an EditBus message
         DockableWindowUpdate.ACTIVATED when a dockable is activated.
-        And a corresponding DEACTIVATED message when it is deactivated.
+        And a corresponding DEACTIVATED message when it is deactivated. (aezust)
+
+-  A new EditBus message has been introduced: EditPaneUpdate.CHANGING
+        for Navigator (or other EBPlugins) to catch caret positions
+        just before buffers are changed.  (aezust)
 
 -  A new EditBus message has been introduced: BufferUpdate.CLOSING
-        for Navigator (or other EBPlugins) to catch caret positions just
-        before buffers are closed. 
+        for EBPlugins to catch events just before buffers are closed. 
+		(aezust)
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
