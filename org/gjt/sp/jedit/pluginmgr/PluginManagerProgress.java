@@ -74,11 +74,11 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 
 	//{{{ setValue() method
 
-  /**
-   * @param value the new value
-   * @deprecated Use {@link #setValue(long)}
-   */
-  public void setValue(final int value)
+	/**
+	 * @param value the new value
+	 * @deprecated Use {@link #setValue(long)}
+	 */
+	public void setValue(final int value)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -114,7 +114,8 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param value the new max value (it will be ignored)
 	 * @since jEdit 4.3pre3
 	 */
-	public void setMaximum(long value) {
+	public void setMaximum(long value) 
+	{
 	} //}}}
 
 	//{{{ setStatus() method
@@ -124,7 +125,10 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param status the new status (it will be ignored)
 	 * @since jEdit 4.3pre3
 	 */
-	public void setStatus(String status) {
+	 public void setStatus(String status) 
+	 {
+		 setTitle(status);
+		 progress.setString(status);
 	} //}}}
 
 	//{{{ done() method

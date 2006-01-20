@@ -2245,7 +2245,7 @@ install-plugins.info=Author: {0}\n\
 
 update-plugins.title=Update
 
-plugin-manager.progress=Downloading selected plugins from plugins.jedit.org...
+plugin-manager.progress=Downloading {0} from mirror {1}
 plugin-manager.progress.stop=Stop
 #}}}
 

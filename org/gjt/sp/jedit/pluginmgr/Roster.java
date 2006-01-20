@@ -422,25 +422,28 @@ class Roster
 		{
 			try
 			{
-				URLConnection conn = new URL(url).openConnection();
-
+				String host = jEdit.getProperty("plugin-manager.mirror.id");
+				if (host == null || host.equals(MirrorList.Mirror.NONE))
+					host = "default";
+				
 				String path = MiscUtilities.constructPath(getDownloadDir(),fileName);
-
-        InputStream in = null;
-        FileOutputStream out = null;
-        try {
-        in = conn.getInputStream();
-        out = new FileOutputStream(path);
-          if(!MiscUtilities.copyStream(progress,in,out,true))
-            return null;
-        }
-        finally
-        {
-          MiscUtilities.closeQuietly(in);
-          MiscUtilities.closeQuietly(out);
-        }
-
-        return path;
+				URLConnection conn = new URL(url).openConnection();
+				progress.setStatus(jEdit.getProperty("plugin-manager.progress",new String[] {fileName, host}));
+				InputStream in = null;
+				FileOutputStream out = null;
+				try {
+					in = conn.getInputStream();
+					out = new FileOutputStream(path);
+					if(!MiscUtilities.copyStream(progress,in,out,true))
+						return null;
+				}
+				finally
+				{
+					MiscUtilities.closeQuietly(in);
+					MiscUtilities.closeQuietly(out);
+				}
+				
+				return path;
 			}
 			catch(InterruptedIOException iio)
 			{
