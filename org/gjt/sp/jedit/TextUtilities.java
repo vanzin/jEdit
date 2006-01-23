@@ -258,6 +258,8 @@ public class TextUtilities
 	 * @param c An iterable collection of Objects
 	 * @param delim a string to put between each object
 	 * @return a joined toString() representation of the collection
+	 * 
+	 * @since jedit 4.3pre3
 	 */
 	public static String join(Collection c, String delim) {
 		StringBuffer retval = new StringBuffer();

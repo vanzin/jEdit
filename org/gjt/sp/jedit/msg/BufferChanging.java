@@ -6,18 +6,18 @@ import org.gjt.sp.jedit.EditPane;
 /** An EBMessage sent by the 
  * EditPane just before the buffer changes.
  * 
- * @author ezust
  * @since jEdit 4.3pre4
+ * @version $Id$
  */
 public class BufferChanging extends EditPaneUpdate
 {
 	/**
 	 * 
-	 * @param what the editPane that sent the message
+	 * @param editPane the editPane that sent the message
 	 * @param newBuffer the buffer that will soon be displayed.
 	 */
-	public BufferChanging(EditPane what, Buffer newBuffer) {
-		super(what, BUFFER_CHANGING);
+	public BufferChanging(EditPane editPane, Buffer newBuffer) {
+		super(editPane, BUFFER_CHANGING);
 		m_buffer = newBuffer;
 	}
 	

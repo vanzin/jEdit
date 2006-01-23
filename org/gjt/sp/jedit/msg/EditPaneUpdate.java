@@ -51,6 +51,7 @@ public class EditPaneUpdate extends EBMessage
 	 */
 	public static final Object BUFFER_CHANGING = "BUFFER_CHANGING";
 
+
 	
 	/**
 	 * Creates a new edit pane update message.
@@ -60,7 +61,6 @@ public class EditPaneUpdate extends EBMessage
 	public EditPaneUpdate(EditPane editPane, Object what)
 	{
 		super(editPane);
-
 		if(what == null)
 			throw new NullPointerException("What must be non-null");
 
@@ -87,7 +87,8 @@ public class EditPaneUpdate extends EBMessage
 	{
 		return "what=" + what + "," + super.paramString();
 	}
-
+	
 	// private members
 	private Object what;
+
 }
