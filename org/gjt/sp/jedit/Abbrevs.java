@@ -102,7 +102,7 @@ public class Abbrevs
 		} //}}}
 
 		// we reuse the 'pp' vector to save time
-		pp.removeAllElements();
+		m_pp.removeAllElements();
 
 		int wordStart;
 		String abbrev;
@@ -124,16 +124,16 @@ public class Abbrevs
 			{
 				if(abbrev.charAt(i) == '#')
 				{
-					pp.addElement(abbrev.substring(lastIndex,i));
+					m_pp.addElement(abbrev.substring(lastIndex,i));
 					lastIndex = i + 1;
 				}
 			}
 
-			pp.addElement(abbrev.substring(lastIndex));
+			m_pp.addElement(abbrev.substring(lastIndex));
 
 			// the first element of pp is the abbrev itself
-			abbrev = (String)pp.elementAt(0);
-			pp.removeElementAt(0);
+			abbrev = (String)m_pp.elementAt(0);
+			m_pp.removeElementAt(0);
 		} //}}}
 		//{{{ Handle ordinary abbrevs
 		else
@@ -146,7 +146,7 @@ public class Abbrevs
 
 		Expansion expand = expandAbbrev(buffer.getMode().getName(),
 			abbrev,(buffer.getBooleanProperty("noTabs") ?
-			buffer.getTabSize() : 0),pp);
+			buffer.getTabSize() : 0),m_pp);
 
 		//{{{ Maybe show add abbrev dialog
 		if(expand == null)
@@ -175,12 +175,12 @@ public class Abbrevs
 					+ expand.caretPosition
 					+ newlines * whitespace);
 			}
-			if(expand.posParamCount != pp.size())
+			if(expand.posParamCount != m_pp.size())
 			{
 				view.getStatus().setMessageAndClear(
 					jEdit.getProperty(
 					"view.status.incomplete-abbrev",
-					new Integer[] { new Integer(pp.size()),
+					new Integer[] { new Integer(m_pp.size()),
 					new Integer(expand.posParamCount) }));
 			}
 
@@ -323,7 +323,9 @@ public class Abbrevs
 	private static boolean expandOnInput;
 	private static Hashtable globalAbbrevs;
 	private static Hashtable modes;
-	private static Vector pp = new Vector();
+	
+	/**  Vector of Positional Parameters */
+	private static Vector m_pp = new Vector();
 	//}}}
 
 	private Abbrevs() {}
@@ -397,6 +399,7 @@ public class Abbrevs
 	private static Expansion expandAbbrev(String mode, String abbrev,
 		int softTabSize, Vector pp)
 	{
+		m_pp = pp;
 		if(!loaded)
 			load();
 
@@ -412,7 +415,7 @@ public class Abbrevs
 		if(expand == null)
 			return null;
 		else
-			return new Expansion(expand,softTabSize,pp);
+			return new Expansion(expand,softTabSize,m_pp);
 	} //}}}
 
 	//{{{ loadAbbrevs() method

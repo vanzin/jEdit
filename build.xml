@@ -5,7 +5,8 @@
 -->
 
 <project name="jEdit" default="dist" basedir=".">
-        <property file="../build.properties" />
+
+	<property file="../build.properties"/>
 	<property file="build.properties"/>
 
 	<target name="init">
@@ -229,7 +230,7 @@
 			srcdir="."
 			destdir="."
 			deprecation="on"
-			includeJavaRuntime="yes"
+			includejavaruntime="yes"
 		>
 			<classpath refid="doclet.class.path"/>
 			<include name="doclet/GenerateTocXML.java"/>

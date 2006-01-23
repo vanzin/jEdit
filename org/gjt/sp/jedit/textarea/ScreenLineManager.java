@@ -30,6 +30,8 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
+ * Performs the Mapping between physical lines and screen lines.
+ * 
  * @since jEdit 4.3pre1
  * @author Slava Pestov
  * @version $Id$

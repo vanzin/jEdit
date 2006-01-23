@@ -32,7 +32,8 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * Manages low-level text display tasks.
+ * Manages low-level text display tasks, such as folding.
+ * 
  * @since jEdit 4.2pre1
  * @author Slava Pestov
  * @version $Id$

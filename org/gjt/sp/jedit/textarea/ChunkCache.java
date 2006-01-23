@@ -32,7 +32,9 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * Manages low-level text display tasks.
+ * Manages low-level text display tasks - the visible lines in the TextArea.
+ * 
+ * 
  *
  * @author Slava Pestov
  * @version $Id$

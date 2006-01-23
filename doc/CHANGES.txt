@@ -2,11 +2,13 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre4
 
-API Changes
+{{{ API Changes
+
 -  new class: BufferChanging - extends EditPaneUpdate with
    a getBuffer() method which returns the about-to-be 
    opened buffer. 
 
+}}}
 }}}
 
 
