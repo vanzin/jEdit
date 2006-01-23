@@ -523,8 +523,7 @@ else if(msg instanceof ViewUpdate) {
 
 </sect1>
 
-<sect1 id="plugin-implement-actions"><title>The Action Catalog</title>
-
+<sect1 id="plugin-implement-actions"><title>The Actions Catalog</title>
 <para>
   Actions define procedures that can be bound to a menu
   item, a toolbar button or a keyboard shortcut. Actions are short
@@ -619,7 +618,7 @@ else if(msg instanceof ViewUpdate) {
 
 </sect1>
 
-<sect1 id="plugin-implement-dockables"><title>The Dockable Window Catalog</title>
+<sect1 id="plugin-implement-dockables"><title>The dockables.xml Window Catalog</title>
 
 <para>
   The jEdit plugin API uses BeanShell to create the top-level visible container
@@ -671,7 +670,7 @@ and the docking position of the plugin.
 </para>
 
 </sect1>
-<sect1 id="plugin-implement-services"><title> The services.xml file </title>
+<sect1 id="plugin-implement-services"><title>The services.xml file </title>
 
 
 <para> Some plugins, such as SideKick and Console, offer services, which can be described in a file called "services.xml". Here is an example of one from SideKick: </para>
