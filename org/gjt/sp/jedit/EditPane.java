@@ -96,9 +96,7 @@ public class EditPane extends JPanel implements EBComponent
 
 		//if(buffer.insideCompoundEdit())
 		//	buffer.endCompoundEdit();
-
-		EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
-			.BUFFER_CHANGING));
+		EditBus.send(new BufferChanging(this, buffer));
 		recentBuffer = this.buffer;
 		if(recentBuffer != null)
 			saveCaretInfo();
