@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.buffer;
 
 import javax.swing.text.Segment;
-import org.gjt.sp.jedit.Buffer;
 
 /**
  * A fold handler that folds lines based on markers ("{{{" and "}}}")

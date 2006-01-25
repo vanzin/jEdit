@@ -2,6 +2,11 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre4
 
+{{{ Syntax Highlighting 
+
+- TypoScript syntax highlighting (Neil Bertram).
+
+}}}
 {{{ API Changes
 
 -  new class: BufferChanging - extends EditPaneUpdate with
@@ -9,6 +14,7 @@ JEDIT 4.3 VERSION HISTORY
    opened buffer. 
 
 }}}
+
 }}}
 
 

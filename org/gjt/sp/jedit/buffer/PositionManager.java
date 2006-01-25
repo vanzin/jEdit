@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.buffer;
 //{{{ Imports
 import javax.swing.text.Position;
 import java.util.*;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
 //}}}
 
