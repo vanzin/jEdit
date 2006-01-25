@@ -417,6 +417,9 @@
 <MODE NAME="twiki"		FILE="twiki.xml"
 				FILE_NAME_GLOB="*.twiki"/>
 
+<MODE NAME="typoscript"         FILE="typoscript.xml"
+                                FILE_NAME_GLOB="*.ts"/>
+
 <MODE NAME="uscript"		FILE="uscript.xml"
 				FILE_NAME_GLOB="*.uc" />
 
