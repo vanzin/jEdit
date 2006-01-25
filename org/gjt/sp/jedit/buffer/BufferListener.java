@@ -22,8 +22,6 @@
 
 package org.gjt.sp.jedit.buffer;
 
-import org.gjt.sp.jedit.Buffer;
-
 /**
  * A interface for notification of changes to buffer text.<p>
  *

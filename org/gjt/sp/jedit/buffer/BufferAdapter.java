@@ -22,8 +22,6 @@
 
 package org.gjt.sp.jedit.buffer;
 
-import org.gjt.sp.jedit.Buffer;
-
 /**
  * An adapter you can subclass to avoid having to implement all the methods
  * of the {@link BufferListener} interface.

@@ -59,8 +59,8 @@ public abstract class EnhancedDialog extends JDialog
 	public abstract void cancel();
 
 	//{{{ Private members
-	
-	private void _init() {
+	private void _init()
+	{
 		((Container)getLayeredPane()).addContainerListener(
 			new ContainerHandler());
 		getContentPane().addContainerListener(new ContainerHandler());
@@ -73,7 +73,6 @@ public abstract class EnhancedDialog extends JDialog
 		
 		enterEnabled = true;
 	}
-
 	//}}}
 	
 	// protected members

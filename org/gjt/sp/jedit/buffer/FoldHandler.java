@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.buffer;
 
 import java.util.*;
 import javax.swing.text.Segment;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.util.Log;

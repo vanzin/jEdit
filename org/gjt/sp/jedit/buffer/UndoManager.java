@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.util.Log;
 //}}}
 
