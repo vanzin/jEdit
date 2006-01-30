@@ -1040,6 +1040,7 @@ ioerror.open-directory=Cannot open directory as a buffer.
 ioerror.save-directory=Cannot save buffer over a directory.
 ioerror.no-read=Insufficent permissions to load file.
 ioerror.no-write=Insufficent permissions to save file.
+ioerror.write-error-readonly=Unable to save, the file is readonly.
 ioerror.badurl=Malformed URL: {0}
 ioerror.delete-error=Cannot delete file.
 ioerror.rename-exists=Cannot overwrite existing file {0}.
