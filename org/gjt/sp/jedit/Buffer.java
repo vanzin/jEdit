@@ -415,101 +415,101 @@ public class Buffer extends JEditBuffer
 			return false;
 		}
 
-    Object session = vfs.createVFSSession(newPath,view);
-    if (session == null)
-    {
-      setPerformingIO(false);
-      return false;
-    }
-
-    boolean overwriteReadOnly = false;
-    setBooleanProperty("overwriteReadonly",false);
-    try
-    {
-      VFSFile file = vfs._getFile(session,newPath,view);
-      if (file != null)
-      {
-        boolean vfsRenameCap = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
-        if (!file.isWriteable())
-        {
-          if (vfsRenameCap)
-          {
-            int result = GUIUtilities.confirm(
-                    view, "vfs.overwrite-readonly",
-                    new Object[]{newPath},
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-            if (result == JOptionPane.YES_OPTION)
-            {
-              overwriteReadOnly = true;
-            }
-            else
-            {
-              VFSManager.error(view,
-                               newPath,
-                               "ioerror.write-error-readonly",
-                               null);
-              setPerformingIO(false);
-              return false;
-            }
-          }
-          else
-          {
-            VFSManager.error(view,
-                             newPath,
-                             "ioerror.write-error-readonly",
-                             null);
-            setPerformingIO(false);
-            return false;
-          }
-        }
-
-
-        if (overwriteReadOnly)
-          setBooleanProperty("overwriteReadonly",true);
-      }
-    }
-    catch(IOException io)
-    {
-      VFSManager.error(view,newPath,"ioerror",
-        new String[] { io.toString() });
-      setPerformingIO(false);
-      return false;
-    }
-    finally
-    {
-      try
-      {
-        vfs._endVFSSession(session,view);
-      }
-      catch(IOException io)
-      {
-        VFSManager.error(view,newPath,"ioerror",
-          new String[] { io.toString() });
-        setPerformingIO(false);
-        return false;
-      }
-    }
-
-    if(!vfs.save(view,this,newPath))
+		Object session = vfs.createVFSSession(newPath,view);
+		if (session == null)
 		{
 			setPerformingIO(false);
 			return false;
 		}
+		
+		boolean overwriteReadOnly = false;
+		setBooleanProperty("overwriteReadonly",false);
+		try
+		{
+			VFSFile file = vfs._getFile(session,newPath,view);
+			if (file != null)
+			{
+				boolean vfsRenameCap = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
+				if (!file.isWriteable())
+				{
+					if (vfsRenameCap)
+					{
+						int result = GUIUtilities.confirm(
+							view, "vfs.overwrite-readonly",
+							new Object[]{newPath},
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+						if (result == JOptionPane.YES_OPTION)
+						{
+							overwriteReadOnly = true;
+						}
+						else
+						{
+							VFSManager.error(view,
+								newPath,
+								"ioerror.write-error-readonly",
+								null);
+							setPerformingIO(false);
+							return false;
+						}
+					}
+					else
+					{
+						VFSManager.error(view,
+							newPath,
+							"ioerror.write-error-readonly",
+							null);
+						setPerformingIO(false);
+						return false;
+					}
+				}
+				
+				
+				if (overwriteReadOnly)
+					setBooleanProperty("overwriteReadonly",true);
+			}
+		}
+		catch(IOException io)
+		{
+			VFSManager.error(view,newPath,"ioerror",
+				new String[] { io.toString() });
+			setPerformingIO(false);
+			return false;
+		}
+		finally
+		{
+			try
+			{
+				vfs._endVFSSession(session,view);
+			}
+			catch(IOException io)
+			{
+				VFSManager.error(view,newPath,"ioerror",
+					new String[] { io.toString() });
+				setPerformingIO(false);
+				return false;
+			}
+		}
 
+		if(!vfs.save(view,this,newPath))
+		{
+			setPerformingIO(false);
+			return false;
+		}
+		
 		// Once save is complete, do a few other things
 		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
 			{
-				setPerformingIO(false);
-        setProperty("overwriteReadonly",null);
-        finishSaving(view,oldPath,oldSymlinkPath,
-					newPath,rename,getBooleanProperty(
-					BufferIORequest.ERROR_OCCURRED));
-			}
-		});
-
+				public void run()
+				{
+					setPerformingIO(false);
+					setProperty("overwriteReadonly",null);
+					finishSaving(view,oldPath,oldSymlinkPath,
+						newPath,rename,getBooleanProperty(
+							BufferIORequest.ERROR_OCCURRED));
+				}
+			});
+		
 		return true;
 	} //}}}
 

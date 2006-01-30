@@ -95,8 +95,8 @@ public class BufferSaveRequest extends BufferIORequest
 			String savePath;
 
 			boolean twoStageSave = overwriteReadOnly ||
-                             (vfsRenameCap && 
-				     jEdit.getBooleanProperty("twoStageSave"));
+				(vfsRenameCap && 
+				jEdit.getBooleanProperty("twoStageSave"));
 			if(twoStageSave)
 			{
 				savePath = vfs.getTwoStageSaveName(path);
