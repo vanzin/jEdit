@@ -24,21 +24,16 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import gnu.regexp.*;
 import javax.swing.*;
 import javax.swing.text.*;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.*;
 import java.net.Socket;
 import java.util.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.indent.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.*;
@@ -420,7 +415,83 @@ public class Buffer extends JEditBuffer
 			return false;
 		}
 
-		if(!vfs.save(view,this,newPath))
+    Object session = vfs.createVFSSession(newPath,view);
+    if (session == null)
+    {
+      setPerformingIO(false);
+      return false;
+    }
+
+    boolean overwriteReadOnly = false;
+    setBooleanProperty("overwriteReadonly",false);
+    try
+    {
+      VFSFile file = vfs._getFile(session,newPath,view);
+      if (file != null)
+      {
+        boolean vfsRenameCap = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
+        if (!file.isWriteable())
+        {
+          if (vfsRenameCap)
+          {
+            int result = GUIUtilities.confirm(
+                    view, "vfs.overwrite-readonly",
+                    new Object[]{newPath},
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.YES_OPTION)
+            {
+              overwriteReadOnly = true;
+            }
+            else
+            {
+              VFSManager.error(view,
+                               newPath,
+                               "ioerror.write-error-readonly",
+                               null);
+              setPerformingIO(false);
+              return false;
+            }
+          }
+          else
+          {
+            VFSManager.error(view,
+                             newPath,
+                             "ioerror.write-error-readonly",
+                             null);
+            setPerformingIO(false);
+            return false;
+          }
+        }
+
+
+        if (overwriteReadOnly)
+          setBooleanProperty("overwriteReadonly",true);
+      }
+    }
+    catch(IOException io)
+    {
+      VFSManager.error(view,newPath,"ioerror",
+        new String[] { io.toString() });
+      setPerformingIO(false);
+      return false;
+    }
+    finally
+    {
+      try
+      {
+        vfs._endVFSSession(session,view);
+      }
+      catch(IOException io)
+      {
+        VFSManager.error(view,newPath,"ioerror",
+          new String[] { io.toString() });
+        setPerformingIO(false);
+        return false;
+      }
+    }
+
+    if(!vfs.save(view,this,newPath))
 		{
 			setPerformingIO(false);
 			return false;
@@ -432,7 +503,8 @@ public class Buffer extends JEditBuffer
 			public void run()
 			{
 				setPerformingIO(false);
-				finishSaving(view,oldPath,oldSymlinkPath,
+        setProperty("overwriteReadonly",null);
+        finishSaving(view,oldPath,oldSymlinkPath,
 					newPath,rename,getBooleanProperty(
 					BufferIORequest.ERROR_OCCURRED));
 			}
@@ -767,7 +839,7 @@ public class Buffer extends JEditBuffer
 
 		if(mode != null)
 		{
-			retVal = mode.getProperty((String)name);
+			retVal = mode.getProperty(name);
 			if(retVal == null)
 				return null;
 

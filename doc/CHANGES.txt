@@ -15,6 +15,13 @@ JEDIT 4.3 VERSION HISTORY
 
 }}}
 
+{{{ Miscellaneous
+- saving read only file change:
+  now if your file is readonly jEdit will ask for a confirmation if you really want to overwrite it.
+  If yes, it will activate two stage save if the VFS is capable to rename files. If no, the file will
+  not be saved (Matthieu Casanova)
+
+}}}
 }}}
 
 
