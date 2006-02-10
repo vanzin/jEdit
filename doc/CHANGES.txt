@@ -9,19 +9,23 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 {{{ API Changes
 
--  new class: BufferChanging - extends EditPaneUpdate with
-   a getBuffer() method which returns the about-to-be 
-   opened buffer. 
+- New BufferChanging class, extends EditPaneUpdate with a getBuffer()
+  method which returns the about-to-be opened buffer.
 
 }}}
-
 {{{ Miscellaneous
-- saving read only file change:
-  now if your file is readonly jEdit will ask for a confirmation if you really want to overwrite it.
-  If yes, it will activate two stage save if the VFS is capable to rename files. If no, the file will
-  not be saved (Matthieu Casanova)
+
+- jEdit will ask for confirmation before overwriting read only files.
+  If yes, it will activate two stage save if the VFS is capable of
+  renaming files. If no, the file will not be saved (Matthieu Casanova).
 
 }}}
+{{{ Bug Fixes
+
+- Fix a deadlock when using directory search (Slava Pestov).
+
+}}}
+
 }}}
 
 
