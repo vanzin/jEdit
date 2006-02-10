@@ -126,7 +126,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ invalidateCachedList() method
-	public synchronized void invalidateCachedList()
+	public void invalidateCachedList()
 	{
 		files = null;
 	} //}}}
