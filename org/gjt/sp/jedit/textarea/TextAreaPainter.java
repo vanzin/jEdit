@@ -27,13 +27,19 @@ import javax.swing.text.*;
 import javax.swing.JComponent;
 import java.awt.event.MouseEvent;
 import java.awt.font.*;
+import java.awt.geom.AffineTransform;
 import java.awt.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.ActionContext;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -494,24 +500,34 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ setAntiAliasEnabled() method
 	/**
-	 * Sets if anti-aliasing should be enabled. Has no effect when
-	 * running on Java 1.1.
-	 * @since jEdit 3.2pre6
+	 * As of jEdit 4.3pre4, a new JDK 1.6 subpixel antialias mode is supported.
+	 * 
+	 * @param antiAlias
+	 *     0 = no antiAliasing (default)
+	 *     1 = Standard
+	 *     2 = SubPixel (LCD) jdk 1.6 +
+	 * 
+	 * @since jEdit 4.2pre4
 	 */
-	public void setAntiAliasEnabled(boolean antiAlias)
+	public void setAntiAliasEnabled(int antiAlias)
 	{
 		this.antiAlias = antiAlias;
 		updateRenderingHints();
 	} //}}}
 
+	public int getAntiAlias() {
+		return antiAlias;
+	}
+	
 	//{{{ isAntiAliasEnabled() method
 	/**
 	 * Returns if anti-aliasing is enabled.
 	 * @since jEdit 3.2pre6
+	 * @deprecated - use @ref getAntiAlias()
 	 */
 	public boolean isAntiAliasEnabled()
 	{
-		return antiAlias;
+		return antiAlias > 0;
 	} //}}}
 
 	//{{{ setFractionalFontMetricsEnabled() method
@@ -783,7 +799,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	boolean structureHighlight;
 	boolean eolMarkers;
 	boolean wrapGuide;
-	boolean antiAlias;
+	int antiAlias;
 	boolean fracFontMetrics;
 
 	// should try to use this as little as possible.
@@ -836,31 +852,62 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private HashMap fonts;
 	//}}}
 
+	private static Object sm_hrgbRender = null;
+	private static Class[] sm_FracFontMetricsTypeList = null;
+	private static Constructor sm_frcConstructor = null;
+	
+	static {
+		try {
+			Field f = RenderingHints.class.getField("VALUE_TEXT_ANTIALIAS_LCD_HRGB");
+			sm_frcConstructor = FontRenderContext.class.getConstructor(sm_FracFontMetricsTypeList);
+			sm_hrgbRender = f.get(null);
+		}
+		catch (Exception e) {
+			
+		}
+		sm_FracFontMetricsTypeList = new Class[] {AffineTransform.class, Object.class, Object.class};
+	}
+	
+	
+	
 	//{{{ updateRenderingHints() method
 	private void updateRenderingHints()
 	{
 		HashMap hints = new HashMap();
 
-		if(antiAlias)
-		{
-			//hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		}
-		else
-		{
-			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-		}
-
 		hints.put(RenderingHints.KEY_FRACTIONALMETRICS,
-			fracFontMetrics ?
-				RenderingHints.VALUE_FRACTIONALMETRICS_ON
+			fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON
 				: RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 
+		Object render = RenderingHints.VALUE_ANTIALIAS_OFF;
+		Object renderText =  RenderingHints.VALUE_TEXT_ANTIALIAS_OFF;
+		if (antiAlias > 0) {
+			render = RenderingHints.VALUE_ANTIALIAS_ON;
+			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+		}
+		if ((antiAlias == 2) && (sm_hrgbRender != null )) {
+			// renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB;
+			renderText = sm_hrgbRender;
+			Object fontRenderHint = fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
+			// fontRenderContext = new FontRenderContext(null, renderText, fontRenderHint);
+			Object[] paramList = new Object[] {null, renderText, fontRenderHint};
+			try {
+				fontRenderContext = (FontRenderContext) sm_frcConstructor.newInstance(paramList);
+			}
+			catch (Exception e) {
+				fontRenderContext = new FontRenderContext(null, antiAlias>0, fracFontMetrics);
+			}
+		}
+		else {
+			fontRenderContext = new FontRenderContext(null, antiAlias>0, fracFontMetrics);
+		}
+		
+		hints.put(RenderingHints.KEY_ANTIALIASING, render);
+		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, renderText);
 		renderingHints = new RenderingHints(hints);
-		fontRenderContext = new FontRenderContext(null,antiAlias,
-			fracFontMetrics);
+	       
+		
 	} //}}}
 
 	//}}}

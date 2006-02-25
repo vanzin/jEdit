@@ -589,8 +589,7 @@ public class EditPane extends JPanel implements EBComponent
 			"view.lineHighlight"));
 		painter.setLineHighlightColor(
 			jEdit.getColorProperty("view.lineHighlightColor"));
-		painter.setAntiAliasEnabled(jEdit.getBooleanProperty(
-			"view.antiAlias"));
+		painter.setAntiAliasEnabled(jEdit.getIntegerProperty("view.antiAlias", 0));
 		painter.setFractionalFontMetricsEnabled(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
 

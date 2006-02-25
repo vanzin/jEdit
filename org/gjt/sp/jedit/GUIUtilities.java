@@ -23,14 +23,38 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Window;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.StringTokenizer;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.net.*;
-import java.util.*;
-import org.gjt.sp.jedit.browser.*;
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.menu.*;
+
+import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
+import org.gjt.sp.jedit.gui.EnhancedButton;
+import org.gjt.sp.jedit.gui.FloatingWindowContainer;
+import org.gjt.sp.jedit.gui.SplashScreen;
+
+import org.gjt.sp.jedit.gui.VariableGridLayout;
+import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
+import org.gjt.sp.jedit.menu.EnhancedMenu;
+import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.util.Log;
