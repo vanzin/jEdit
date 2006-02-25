@@ -502,20 +502,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/**
 	 * As of jEdit 4.3pre4, a new JDK 1.6 subpixel antialias mode is supported.
 	 * 
-	 * @param antiAlias
-	 *     0 = no antiAliasing (default)
-	 *     1 = Standard
-	 *     2 = SubPixel (LCD) jdk 1.6 +
-	 * 
 	 * @since jEdit 4.2pre4
 	 */
-	public void setAntiAliasEnabled(int antiAlias)
+	public void setAntiAlias(AntiAlias newValue)
 	{
-		this.antiAlias = antiAlias;
+		this.antiAlias = newValue;
 		updateRenderingHints();
 	} //}}}
 
-	public int getAntiAlias() {
+	public AntiAlias getAntiAlias() {
 		return antiAlias;
 	}
 	
@@ -527,7 +522,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public boolean isAntiAliasEnabled()
 	{
-		return antiAlias > 0;
+		return antiAlias.val() > 0;
 	} //}}}
 
 	//{{{ setFractionalFontMetricsEnabled() method
@@ -799,7 +794,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	boolean structureHighlight;
 	boolean eolMarkers;
 	boolean wrapGuide;
-	int antiAlias;
+	AntiAlias antiAlias;
 	boolean fracFontMetrics;
 
 	// should try to use this as little as possible.
@@ -818,7 +813,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			| AWTEvent.MOUSE_EVENT_MASK);
 
 		this.textArea = textArea;
-
+		antiAlias = new AntiAlias();
 		fonts = new HashMap();
 		extensionMgr = new ExtensionManager();
 
@@ -881,12 +876,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		Object render = RenderingHints.VALUE_ANTIALIAS_OFF;
 		Object renderText =  RenderingHints.VALUE_TEXT_ANTIALIAS_OFF;
-		if (antiAlias > 0) {
+		if (antiAlias.val() > 0) {
 			render = RenderingHints.VALUE_ANTIALIAS_ON;
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
 		}
-		if ((antiAlias == 2) && (sm_hrgbRender != null )) {
+		if (antiAlias.equals(AntiAlias.subpixel) && (sm_hrgbRender != null )) {
 			// renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB;
 			renderText = sm_hrgbRender;
 			Object fontRenderHint = fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
@@ -896,11 +891,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				fontRenderContext = (FontRenderContext) sm_frcConstructor.newInstance(paramList);
 			}
 			catch (Exception e) {
-				fontRenderContext = new FontRenderContext(null, antiAlias>0, fracFontMetrics);
+				fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 			}
 		}
 		else {
-			fontRenderContext = new FontRenderContext(null, antiAlias>0, fracFontMetrics);
+			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 		}
 		
 		hints.put(RenderingHints.KEY_ANTIALIASING, render);

@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -132,11 +133,11 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		addComponent(electricBorders);
 
 		/* Anti-aliasing */
-		String[] choices = new String[] {"None", "Standard", "LCD Sub-pixel (1.6)"}; 
-		antiAlias = new JComboBox(choices);
+		
+		antiAlias = new JComboBox(AntiAlias.comboChoices);
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
-		int antiAliasValue = jEdit.getIntegerProperty("view.antiAlias", 0);
-		font.setAntiAliasEnabled(antiAliasValue>0);
+		AntiAlias antiAliasValue = new AntiAlias();
+		font.setAntiAliasEnabled(antiAliasValue.val()>0);
 		antiAlias.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent evt)
@@ -146,7 +147,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 					font.repaint();
 				}
 			});		
-		antiAlias.setSelectedIndex(antiAliasValue);
+		antiAlias.setSelectedIndex(antiAliasValue.val());
 		addComponent(jEdit.getProperty("options.textarea"+ ".antiAlias"), antiAlias);
 		
 		/* Fractional font metrics */
@@ -198,7 +199,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			wrapGuideColor.getSelectedColor());
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
-		jEdit.setIntegerProperty("view.antiAlias",antiAlias.getSelectedIndex());
+		AntiAlias nv = new AntiAlias(antiAlias.getSelectedIndex());
+		jEdit.setProperty("view.antiAlias", nv.toString());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}
