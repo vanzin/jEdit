@@ -28,6 +28,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
+import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -82,6 +83,12 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
 			secondaryFont);
 
+		/*
+		antiAliasExtras = new JComboBox(AntiAlias.comboChoices);
+		antiAliasExtras.setSelectedIndex(AntiAlias.appearance().val());
+		antiAliasExtras.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
+		addComponent(jEdit.getProperty("options.appearance.fonts.antialias"), antiAliasExtras);
+		*/
 		updateEnabled();
 
 		/* History count */
@@ -143,6 +150,14 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
+		
+		/* AntiAlias nv = AntiAlias.appearance();
+		 int idx = antiAliasExtras.getSelectedIndex();
+		nv.set(idx);
+		primaryFont.setAntiAliasEnabled(idx > 0);
+		secondaryFont.setAntiAliasEnabled(idx > 0);
+		primaryFont.repaint();
+		secondaryFont.repaint(); */
 
 		// this is handled a little differently from other jEdit settings
 		// as the splash screen flag needs to be known very early in the
@@ -198,6 +213,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JCheckBox textColors;
 	private JCheckBox decorateFrames;
 	private JCheckBox decorateDialogs;
+	private JComboBox antiAliasExtras;
 	//}}}
 
 	//{{{ updateEnabled() method

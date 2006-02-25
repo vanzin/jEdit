@@ -844,7 +844,7 @@ print-error.message=An error occurred while trying to print:\n\
 
 #{{{ About dialog
 about.title=About jEdit
-about.version=jEdit version {0}
+about.version=jEdit version {0} using JDK version {1}
 
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
@@ -1595,6 +1595,7 @@ options.abbrevs.remove=Remove
 #{{{ Appearance pane
 options.appearance.label=Appearance
 options.appearance.code=new AppearanceOptionPane();
+options.appearance.fonts.antialias=Anti-alias Non-TextArea fonts
 options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
