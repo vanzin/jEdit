@@ -1866,7 +1866,8 @@ options.textarea.eolMarkers=End of line markers:
 options.textarea.wrapGuide=Wrap guide:
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
-options.textarea.antiAlias=Smooth text (slow on some systems)
+options.textarea.antiAlias=Anti Aliased smooth text
+options.textarea.antiAlias.tooltip=Anti-aliased fonts can slow down display on some systems.
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
 options.textArea.stripTrailingEOL=Hide final end of line (if any)

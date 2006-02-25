@@ -132,28 +132,27 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		addComponent(electricBorders);
 
 		/* Anti-aliasing */
-		antiAlias = new JCheckBox(jEdit.getProperty("options.textarea"
-			+ ".antiAlias"));
-		boolean antiAliasEnabled = jEdit.getBooleanProperty(
-			"view.antiAlias");
-		font.setAntiAliasEnabled(antiAliasEnabled);
+		String[] choices = new String[] {"None", "Standard", "LCD Sub-pixel (1.6)"}; 
+		antiAlias = new JComboBox(choices);
+		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
+		int antiAliasValue = jEdit.getIntegerProperty("view.antiAlias", 0);
+		font.setAntiAliasEnabled(antiAliasValue>0);
 		antiAlias.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
 			{
-				font.setAntiAliasEnabled(
-					antiAlias.isSelected());
-				font.repaint();
-			}
-		});
-		antiAlias.setSelected(antiAliasEnabled);
-		addComponent(antiAlias);
-
+				public void actionPerformed(ActionEvent evt)
+				{
+					int idx = antiAlias.getSelectedIndex();
+					font.setAntiAliasEnabled(idx > 0);
+					font.repaint();
+				}
+			});		
+		antiAlias.setSelectedIndex(antiAliasValue);
+		addComponent(jEdit.getProperty("options.textarea"+ ".antiAlias"), antiAlias);
+		
 		/* Fractional font metrics */
 		fracFontMetrics = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".fracFontMetrics"));
-		fracFontMetrics.setSelected(jEdit.getBooleanProperty(
-			"view.fracFontMetrics"));
+		fracFontMetrics.setSelected(jEdit.getBooleanProperty("view.fracFontMetrics"));
 		addComponent(fracFontMetrics);
 
 		/* Strip trailing EOL */
@@ -199,7 +198,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			wrapGuideColor.getSelectedColor());
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
-		jEdit.setBooleanProperty("view.antiAlias",antiAlias.isSelected());
+		jEdit.setIntegerProperty("view.antiAlias",antiAlias.getSelectedIndex());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}
@@ -222,7 +221,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox wrapGuide;
 	private ColorWellButton wrapGuideColor;
 	private JCheckBox electricBorders;
-	private JCheckBox antiAlias;
+	// private JCheckBox antiAlias;
+	private JComboBox antiAlias;
 	private JCheckBox fracFontMetrics;
 	private JCheckBox stripTrailingEOL;
 	//}}}
