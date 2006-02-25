@@ -34,12 +34,11 @@ import java.lang.reflect.Field;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.ActionContext;
-import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.syntax.Chunk;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.jEdit;
+
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -500,6 +499,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ setAntiAliasEnabled() method
 	/**
+	 * @deprecated use setAntiAlias(AntiAlias newMode)
+	 */
+	public void setAntiAliasEnabled(boolean isEnabled) {
+		
+		setAntiAlias(new AntiAlias(isEnabled));
+	}
+	/**
 	 * As of jEdit 4.3pre4, a new JDK 1.6 subpixel antialias mode is supported.
 	 * 
 	 * @since jEdit 4.2pre4
@@ -881,7 +887,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
 		}
-		if (antiAlias.equals(AntiAlias.subpixel) && (sm_hrgbRender != null )) {
+		if (antiAlias.equals(AntiAlias.SUBPIXEL) && (sm_hrgbRender != null )) {
 			// renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB;
 			renderText = sm_hrgbRender;
 			Object fontRenderHint = fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
