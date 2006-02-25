@@ -136,7 +136,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		
 		antiAlias = new JComboBox(AntiAlias.comboChoices);
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
-		AntiAlias antiAliasValue = new AntiAlias();
+		AntiAlias antiAliasValue = AntiAlias.textArea();
 		font.setAntiAliasEnabled(antiAliasValue.val()>0);
 		antiAlias.addActionListener(new ActionListener()
 			{
@@ -199,8 +199,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			wrapGuideColor.getSelectedColor());
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
-		AntiAlias nv = new AntiAlias(antiAlias.getSelectedIndex());
-		jEdit.setProperty("view.antiAlias", nv.toString());
+		AntiAlias nv = AntiAlias.textArea();
+		nv.set(antiAlias.getSelectedIndex());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}

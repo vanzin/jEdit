@@ -133,7 +133,7 @@ public class AboutDialog extends EnhancedDialog
 
 			FontMetrics fm = g.getFontMetrics();
 
-			String[] args = { jEdit.getVersion() };
+			String[] args = { jEdit.getVersion(), System.getProperty("java.version") };
 			String version = jEdit.getProperty("about.version",args);
 			g.drawString(version,(getWidth() - fm.stringWidth(version)) / 2,
 				getHeight() - 5);

@@ -120,6 +120,17 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 			_save();
 	} //}}}
 
+	public JLabel newLabel(String label, Component comp) {
+		JLabel retval = new JLabel(label);
+		try {
+			JComponent jc = (JComponent) comp;
+			String tttext = jc.getToolTipText();
+			retval.setToolTipText(tttext);
+		}
+		catch (Exception e) {}
+		return retval;
+	}
+	
 	//{{{ addComponent() method
 	/**
 	 * Adds a labeled component to the option pane. Components are
@@ -130,7 +141,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public void addComponent(String label, Component comp)
 	{
-		JLabel l = new JLabel(label);
+		JLabel l = newLabel(label, comp);
 		l.setBorder(new EmptyBorder(0,0,0,12));
 		addComponent(l,comp,GridBagConstraints.BOTH);
 	} //}}}
@@ -147,7 +158,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public void addComponent(String label, Component comp, int fill)
 	{
-		JLabel l = new JLabel(label);
+		JLabel l = newLabel(label, comp);
 		l.setBorder(new EmptyBorder(0,0,0,12));
 		addComponent(l,comp,fill);
 	} //}}}
