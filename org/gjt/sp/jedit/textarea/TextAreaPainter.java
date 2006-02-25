@@ -854,23 +854,24 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//}}}
 
 	private static Object sm_hrgbRender = null;
-	private static Class[] sm_FracFontMetricsTypeList = null;
 	private static Constructor sm_frcConstructor = null;
 	
-	static {
-		try {
-			Field f = RenderingHints.class.getField("VALUE_TEXT_ANTIALIAS_LCD_HRGB");
-			sm_frcConstructor = FontRenderContext.class.getConstructor(sm_FracFontMetricsTypeList);
-			sm_hrgbRender = f.get(null);
-		}
-		catch (Exception e) {
-			
-		}
-		sm_FracFontMetricsTypeList = new Class[] {AffineTransform.class, Object.class, Object.class};
+	static 
+	{
+			try
+			{
+				Field f = RenderingHints.class.getField("VALUE_TEXT_ANTIALIAS_LCD_HRGB");
+				sm_hrgbRender = f.get(null);
+				Class[] fracFontMetricsTypeList = new Class[] {AffineTransform.class, Object.class, Object.class};
+				sm_frcConstructor = FontRenderContext.class.getConstructor(fracFontMetricsTypeList);
+			}
+			catch (NullPointerException npe) {}
+			catch (SecurityException se) {}
+			catch (NoSuchFieldException nsfe) {}
+			catch (IllegalArgumentException iae) {}
+			catch (IllegalAccessException iae) {}
+			catch (NoSuchMethodException nsme) {}
 	}
-	
-	
-	
 	//{{{ updateRenderingHints() method
 	private void updateRenderingHints()
 	{
@@ -882,25 +883,30 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		Object render = RenderingHints.VALUE_ANTIALIAS_OFF;
 		Object renderText =  RenderingHints.VALUE_TEXT_ANTIALIAS_OFF;
-		if (antiAlias.val() > 0) {
+		if (antiAlias.val() > 0) 
+		{
 			render = RenderingHints.VALUE_ANTIALIAS_ON;
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
 		}
-		if (antiAlias.equals(AntiAlias.SUBPIXEL) && (sm_hrgbRender != null )) {
-			// renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB;
+		if (antiAlias.equals(AntiAlias.SUBPIXEL) && (sm_hrgbRender != null )) 
+		{
 			renderText = sm_hrgbRender;
-			Object fontRenderHint = fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
-			// fontRenderContext = new FontRenderContext(null, renderText, fontRenderHint);
+			Object fontRenderHint = fracFontMetrics ? 
+				RenderingHints.VALUE_FRACTIONALMETRICS_ON :
+				RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
 			Object[] paramList = new Object[] {null, renderText, fontRenderHint};
-			try {
+			try 
+			{
 				fontRenderContext = (FontRenderContext) sm_frcConstructor.newInstance(paramList);
 			}
-			catch (Exception e) {
+			catch (Exception e) 
+			{
 				fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 			}
 		}
-		else {
+		else 
+		{
 			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 		}
 		
