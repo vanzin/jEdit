@@ -15,18 +15,21 @@ import org.gjt.sp.jedit.jEdit;
  */
 public class AntiAlias extends Object
 {
-	public static final Object none = "none";
-	public static final Object standard = "standard";
-	public static final Object subpixel = "subpixel";
+	public static final Object NONE = "none";
+	public static final Object STANDARD = "standard";
+	public static final Object SUBPIXEL = "subpixel";
 
 	public static final Object comboChoices[] = new Object[] {
-		none, standard, subpixel
+		NONE, STANDARD, SUBPIXEL
 	};
 	
 	public AntiAlias() {
 		fromString(jEdit.getProperty("view.antiAlias", "none"));
 	}
-	
+
+	public AntiAlias(boolean isEnabled) {
+		m_val = isEnabled? 1:0;
+	}
 	public AntiAlias(int val) {
 		m_val = val;
 	}
