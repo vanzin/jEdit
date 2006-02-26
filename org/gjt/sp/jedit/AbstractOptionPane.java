@@ -120,14 +120,25 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 			_save();
 	} //}}}
 
-	public JLabel newLabel(String label, Component comp) {
+	// {{{ newLabel()
+	/**
+	 *@return a label which has the same tooltiptext as the Component
+	 *    that it is a label for. This is used to create labels from inside
+	 *    AbstractOptionPane.
+	 *    @since jEdit 4.3pre4
+	 */
+	public JLabel newLabel(String label, Component comp) 
+	{
 		JLabel retval = new JLabel(label);
-		try {
+		try 
+		{
 			JComponent jc = (JComponent) comp;
 			String tttext = jc.getToolTipText();
 			retval.setToolTipText(tttext);
 		}
-		catch (Exception e) {}
+		catch (Exception e) 
+		{
+		}
 		return retval;
 	}
 	
