@@ -130,7 +130,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	public JLabel newLabel(String label, Component comp) 
 	{
 		JLabel retval = new JLabel(label);
-		try 
+		try /* to get the tooltip of the component */ 
 		{
 			JComponent jc = (JComponent) comp;
 			String tttext = jc.getToolTipText();
@@ -138,9 +138,12 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		}
 		catch (Exception e) 
 		{
+			/* There probably wasn't a tooltip, 
+			 * or it wasn't a JComponent.
+			   We don't care. */
 		}
 		return retval;
-	}
+	}// }}}
 	
 	//{{{ addComponent() method
 	/**
