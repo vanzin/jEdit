@@ -133,7 +133,7 @@ class PluginList
 	{
 		for(int i = 0; i < plugins.size(); i++)
 		{
-			System.err.println((Plugin)plugins.elementAt(i));
+			System.err.println(plugins.elementAt(i));
 			System.err.println();
 		}
 	} //}}}

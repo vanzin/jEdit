@@ -36,6 +36,7 @@ import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
+import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 //}}}
 
 /**
@@ -104,31 +105,31 @@ public class MiscUtilities
 			return path;
 
 		if(File.separatorChar == '\\')
-		{
-			// get rid of mixed paths on Windows
-			path = path.replace('/','\\');
-			// also get rid of trailing spaces on Windows
-			int trim = path.length();
-			while(path.charAt(trim - 1) == ' ')
-				trim--;
-			path = path.substring(0,trim);
-		}
+			{
+				// get rid of mixed paths on Windows
+				path = path.replace('/','\\');
+				// also get rid of trailing spaces on Windows
+				int trim = path.length();
+				while(path.charAt(trim - 1) == ' ')
+					trim--;
+				path = path.substring(0,trim);
+			}
 		else if(OperatingSystem.isMacOS())
-		{
-			// do the same on OS X
-			path = path.replace(':','/');
-		}
+			{
+				// do the same on OS X
+				path = path.replace(':','/');
+			}
 
 		if(path.startsWith("~" + File.separator))
-		{
-			path = path.substring(2);
-			String home = System.getProperty("user.home");
+			{
+				path = path.substring(2);
+				String home = System.getProperty("user.home");
 
-			if(home.endsWith(File.separator))
-				return home + path;
-			else
-				return home + File.separator + path;
-		}
+				if(home.endsWith(File.separator))
+					return home + path;
+				else
+					return home + File.separator + path;
+			}
 		else if(path.equals("~"))
 			return System.getProperty("user.home");
 		else
@@ -153,21 +154,21 @@ public class MiscUtilities
 		// 18 nov 2003: calling this on a drive letter on Windows causes
 		// drive access
 		if(OperatingSystem.isDOSDerived())
-		{
-			if(path.length() == 2 || path.length() == 3)
 			{
-				if(path.charAt(1) == ':')
-					return path;
+				if(path.length() == 2 || path.length() == 3)
+					{
+						if(path.charAt(1) == ':')
+							return path;
+					}
 			}
-		}
 		try
-		{
-			return new File(path).getCanonicalPath();
-		}
+			{
+				return new File(path).getCanonicalPath();
+			}
 		catch(IOException io)
-		{
-			return path;
-		}
+			{
+				return path;
+			}
 	} //}}}
 
 	//{{{ isAbsolutePath() method
@@ -182,25 +183,25 @@ public class MiscUtilities
 		else if(path.startsWith("~/") || path.startsWith("~" + File.separator) || path.equals("~"))
 			return true;
 		else if(OperatingSystem.isDOSDerived())
-		{
-			if(path.length() == 2 && path.charAt(1) == ':')
-				return true;
-			if(path.length() > 2 && path.charAt(1) == ':'
-				&& (path.charAt(2) == '\\'
-				|| path.charAt(2) == '/'))
-				return true;
-			if(path.startsWith("\\\\")
-				|| path.startsWith("//"))
-				return true;
-		}
+			{
+				if(path.length() == 2 && path.charAt(1) == ':')
+					return true;
+				if(path.length() > 2 && path.charAt(1) == ':'
+				   && (path.charAt(2) == '\\'
+					   || path.charAt(2) == '/'))
+					return true;
+				if(path.startsWith("\\\\")
+				   || path.startsWith("//"))
+					return true;
+			}
 		// not sure if this is correct for OpenVMS.
 		else if(OperatingSystem.isUnix()
-			|| OperatingSystem.isVMS())
-		{
-			// nice and simple
-			if(path.length() > 0 && path.charAt(0) == '/')
-				return true;
-		}
+				|| OperatingSystem.isVMS())
+			{
+				// nice and simple
+				if(path.length() > 0 && path.charAt(0) == '/')
+					return true;
+			}
 
 		return false;
 	} //}}}
@@ -220,17 +221,17 @@ public class MiscUtilities
 		// have to handle this case specially on windows.
 		// insert \ between, eg A: and myfile.txt.
 		if(OperatingSystem.isDOSDerived())
-		{
-			if(path.length() == 2 && path.charAt(1) == ':')
-				return path;
-			else if(path.length() > 2 && path.charAt(1) == ':'
-				&& path.charAt(2) != '\\')
 			{
-				path = path.substring(0,2) + '\\'
-					+ path.substring(2);
-				return canonPath(path);
+				if(path.length() == 2 && path.charAt(1) == ':')
+					return path;
+				else if(path.length() > 2 && path.charAt(1) == ':'
+						&& path.charAt(2) != '\\')
+					{
+						path = path.substring(0,2) + '\\'
+							+ path.substring(2);
+						return canonPath(path);
+					}
 			}
-		}
 
 		String dd = ".." + File.separator;
 		String d = "." + File.separator;
@@ -239,25 +240,25 @@ public class MiscUtilities
 			parent = System.getProperty("user.dir");
 
 		for(;;)
-		{
-			if(path.equals("."))
-				return parent;
-			else if(path.equals(".."))
-				return getParentOfPath(parent);
-			else if(path.startsWith(dd) || path.startsWith("../"))
 			{
-				parent = getParentOfPath(parent);
-				path = path.substring(3);
+				if(path.equals("."))
+					return parent;
+				else if(path.equals(".."))
+					return getParentOfPath(parent);
+				else if(path.startsWith(dd) || path.startsWith("../"))
+					{
+						parent = getParentOfPath(parent);
+						path = path.substring(3);
+					}
+				else if(path.startsWith(d) || path.startsWith("./"))
+					path = path.substring(2);
+				else
+					break;
 			}
-			else if(path.startsWith(d) || path.startsWith("./"))
-				path = path.substring(2);
-			else
-				break;
-		}
 
 		if(OperatingSystem.isDOSDerived()
-			&& !isURL(parent)
-			&& path.startsWith("\\"))
+		   && !isURL(parent)
+		   && path.startsWith("\\"))
 			parent = parent.substring(0,2);
 
 		VFS vfs = VFSManager.getVFSForPath(parent);
@@ -274,7 +275,7 @@ public class MiscUtilities
 	 * @param path2 The second path
 	 */
 	public static String constructPath(String parent,
-		String path1, String path2)
+									   String path1, String path2)
 	{
 		return constructPath(constructPath(parent,path1),path2);
 	} //}}}
@@ -337,7 +338,7 @@ public class MiscUtilities
 		if(start != 0)
 			path = path.substring(start);
 		int index = Math.max(path.lastIndexOf('/'),
-			path.lastIndexOf(File.separatorChar));
+							 path.lastIndexOf(File.separatorChar));
 		if(index == -1)
 			return index;
 		else
@@ -452,14 +453,14 @@ public class MiscUtilities
 			return true;
 
 		try
-		{
-			new URL(str);
-			return true;
-		}
+			{
+				new URL(str);
+				return true;
+			}
 		catch(MalformedURLException mf)
-		{
-			return false;
-		}
+			{
+				return false;
+			}
 	} //}}}
 
 	//{{{ saveBackup() method
@@ -475,8 +476,8 @@ public class MiscUtilities
 	 * @since jEdit 4.0pre1
 	 */
 	public static void saveBackup(File file, int backups,
-		String backupPrefix, String backupSuffix,
-		String backupDirectory)
+								  String backupPrefix, String backupSuffix,
+								  String backupDirectory)
 	{
 		saveBackup(file,backups,backupPrefix,backupSuffix,backupDirectory,0);
 	} //}}}
@@ -497,8 +498,8 @@ public class MiscUtilities
 	 * @since jEdit 4.2pre5
 	 */
 	public static void saveBackup(File file, int backups,
-		String backupPrefix, String backupSuffix,
-		String backupDirectory, int backupTimeDistance)
+								  String backupPrefix, String backupSuffix,
+								  String backupDirectory, int backupTimeDistance)
 	{
 		if(backupPrefix == null)
 			backupPrefix = "";
@@ -509,60 +510,60 @@ public class MiscUtilities
 
 		// If backups is 1, create ~ file
 		if(backups == 1)
-		{
-			File backupFile = new File(backupDirectory,
-				backupPrefix + name + backupSuffix);
-			long modTime = backupFile.lastModified();
-			/* if backup file was created less than
-			 * 'backupTimeDistance' ago, we do not
-			 * create the backup */
-			if(System.currentTimeMillis() - modTime
-				>= backupTimeDistance)
 			{
-				backupFile.delete();
-				if (!file.renameTo(backupFile))
-					moveFile(file, backupFile);
+				File backupFile = new File(backupDirectory,
+										   backupPrefix + name + backupSuffix);
+				long modTime = backupFile.lastModified();
+				/* if backup file was created less than
+				 * 'backupTimeDistance' ago, we do not
+				 * create the backup */
+				if(System.currentTimeMillis() - modTime
+				   >= backupTimeDistance)
+					{
+						backupFile.delete();
+						if (!file.renameTo(backupFile))
+							moveFile(file, backupFile);
+					}
 			}
-		}
 		// If backups > 1, move old ~n~ files, create ~1~ file
 		else
-		{
-			/* delete a backup created using above method */
-			new File(backupDirectory,
-				backupPrefix + name + backupSuffix
-				+ backups + backupSuffix).delete();
-
-			File firstBackup = new File(backupDirectory,
-				backupPrefix + name + backupSuffix
-				+ "1" + backupSuffix);
-			long modTime = firstBackup.lastModified();
-			/* if backup file was created less than
-			 * 'backupTimeDistance' ago, we do not
-			 * create the backup */
-			if(System.currentTimeMillis() - modTime
-				>= backupTimeDistance)
 			{
-				for(int i = backups - 1; i > 0; i--)
-				{
-					File backup = new File(backupDirectory,
-						backupPrefix + name
-						+ backupSuffix + i
-						+ backupSuffix);
+				/* delete a backup created using above method */
+				new File(backupDirectory,
+						 backupPrefix + name + backupSuffix
+						 + backups + backupSuffix).delete();
 
-					backup.renameTo(
-						new File(backupDirectory,
-						backupPrefix + name
-						+ backupSuffix + (i+1)
-						+ backupSuffix));
-				}
+				File firstBackup = new File(backupDirectory,
+											backupPrefix + name + backupSuffix
+											+ "1" + backupSuffix);
+				long modTime = firstBackup.lastModified();
+				/* if backup file was created less than
+				 * 'backupTimeDistance' ago, we do not
+				 * create the backup */
+				if(System.currentTimeMillis() - modTime
+				   >= backupTimeDistance)
+					{
+						for(int i = backups - 1; i > 0; i--)
+							{
+								File backup = new File(backupDirectory,
+													   backupPrefix + name
+													   + backupSuffix + i
+													   + backupSuffix);
 
-				File backupFile = new File(backupDirectory,
-					backupPrefix + name + backupSuffix
-					+ "1" + backupSuffix);
-				if (!file.renameTo(backupFile))
-					moveFile(file, backupFile);
+								backup.renameTo(
+												new File(backupDirectory,
+														 backupPrefix + name
+														 + backupSuffix + (i+1)
+														 + backupSuffix));
+							}
+
+						File backupFile = new File(backupDirectory,
+												   backupPrefix + name + backupSuffix
+												   + "1" + backupSuffix);
+						if (!file.renameTo(backupFile))
+							moveFile(file, backupFile);
+					}
 			}
-		}
 	} //}}}
 
 	//{{{ moveFile() method
@@ -586,38 +587,38 @@ public class MiscUtilities
 
 		if ((dest.exists() && dest.canWrite())
 			|| (!dest.exists() && dest.getParentFile().canWrite()))
-		{
-			OutputStream fos = null;
-			InputStream fis = null;
-			try
 			{
-				fos = new FileOutputStream(dest);
-				fis = new FileInputStream(source);
-				ok = copyStream(32768,null,fis,fos,false);
-			}
-			catch (IOException ioe)
-			{
-				Log.log(Log.WARNING, MiscUtilities.class,
-					"Error moving file: " + ioe + " : " + ioe.getMessage());
-			}
-			finally
-			{
+				OutputStream fos = null;
+				InputStream fis = null;
 				try
-				{
-					if(fos != null)
-						fos.close();
-					if(fis != null)
-						fis.close();
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,MiscUtilities.class,e);
-				}
-			}
+					{
+						fos = new FileOutputStream(dest);
+						fis = new FileInputStream(source);
+						ok = copyStream(32768,null,fis,fos,false);
+					}
+				catch (IOException ioe)
+					{
+						Log.log(Log.WARNING, MiscUtilities.class,
+								"Error moving file: " + ioe + " : " + ioe.getMessage());
+					}
+				finally
+					{
+						try
+							{
+								if(fos != null)
+									fos.close();
+								if(fis != null)
+									fis.close();
+							}
+						catch(Exception e)
+							{
+								Log.log(Log.ERROR,MiscUtilities.class,e);
+							}
+					}
 
-			if(ok)
-				source.delete();
-		}
+				if(ok)
+					source.delete();
+			}
 		return ok;
 	} //}}}
 
@@ -635,20 +636,20 @@ public class MiscUtilities
 	 * @since jEdit 4.3pre3
 	 */
 	public static boolean copyStream(int bufferSize, ProgressObserver progress,
-		InputStream in, OutputStream out, boolean canStop)
-	throws IOException
+									 InputStream in, OutputStream out, boolean canStop)
+		throws IOException
 	{
 		byte[] buffer = new byte[bufferSize];
 		int n;
 		long copied = 0;
 		while (-1 != (n = in.read(buffer)))
-		{
-			out.write(buffer, 0, n);
-			copied += n;
-			if(progress != null)
-				progress.setValue(copied);
-			if(canStop && Thread.interrupted()) return false;
-		}
+			{
+				out.write(buffer, 0, n);
+				copied += n;
+				if(progress != null)
+					progress.setValue(copied);
+				if(canStop && Thread.interrupted()) return false;
+			}
 		return true;
 	} //}}}
 
@@ -665,8 +666,8 @@ public class MiscUtilities
 	 * @since jEdit 4.3pre3
 	 */
 	public static boolean copyStream(ProgressObserver progress,
-		InputStream in, OutputStream out, boolean canStop)
-	throws IOException
+									 InputStream in, OutputStream out, boolean canStop)
+		throws IOException
 	{
 		return copyStream(4096,progress, in, out, canStop);
 	} //}}}
@@ -681,16 +682,16 @@ public class MiscUtilities
 	public static void closeQuietly(InputStream in)
 	{
 		if(in != null)
-		{
-			try
 			{
-				in.close();
+				try
+					{
+						in.close();
+					}
+				catch (IOException e)
+					{
+						//ignore
+					}
 			}
-			catch (IOException e)
-			{
-				//ignore
-			}
-		}
 	} //}}}
 
 	//{{{ copyStream() method
@@ -703,16 +704,16 @@ public class MiscUtilities
 	public static void closeQuietly(OutputStream out)
 	{
 		if(out != null)
-		{
-			try
 			{
-				out.close();
+				try
+					{
+						out.close();
+					}
+				catch (IOException e)
+					{
+						//ignore
+					}
 			}
-			catch (IOException e)
-			{
-				//ignore
-			}
-		}
 	} //}}}
 
 	//{{{ fileToClass() method
@@ -782,17 +783,17 @@ public class MiscUtilities
 	public static int getLeadingWhiteSpace(String str)
 	{
 		int whitespace = 0;
-loop:		for(;whitespace < str.length();)
-		{
-			switch(str.charAt(whitespace))
+		loop:		for(;whitespace < str.length();)
 			{
-			case ' ': case '\t':
-				whitespace++;
-				break;
-			default:
-				break loop;
+				switch(str.charAt(whitespace))
+					{
+					case ' ': case '\t':
+						whitespace++;
+						break;
+					default:
+						break loop;
+					}
 			}
-		}
 		return whitespace;
 	} //}}}
 
@@ -806,17 +807,17 @@ loop:		for(;whitespace < str.length();)
 	public static int getTrailingWhiteSpace(String str)
 	{
 		int whitespace = 0;
-loop:		for(int i = str.length() - 1; i >= 0; i--)
-		{
-			switch(str.charAt(i))
+		loop:		for(int i = str.length() - 1; i >= 0; i--)
 			{
-			case ' ': case '\t':
-				whitespace++;
-				break;
-			default:
-				break loop;
+				switch(str.charAt(i))
+					{
+					case ' ': case '\t':
+						whitespace++;
+						break;
+					default:
+						break loop;
+					}
 			}
-		}
 		return whitespace;
 	} //}}}
 
@@ -830,20 +831,20 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
 	{
 		int whitespace = 0;
-loop:		for(int i = 0; i < str.length(); i++)
-		{
-			switch(str.charAt(i))
+		loop:		for(int i = 0; i < str.length(); i++)
 			{
-			case ' ':
-				whitespace++;
-				break;
-			case '\t':
-				whitespace += (tabSize - whitespace % tabSize);
-				break;
-			default:
-				break loop;
+				switch(str.charAt(i))
+					{
+					case ' ':
+						whitespace++;
+						break;
+					case '\t':
+						whitespace += (tabSize - whitespace % tabSize);
+						break;
+					default:
+						break loop;
+					}
 			}
-		}
 		return whitespace;
 	} //}}}
 
@@ -861,19 +862,19 @@ loop:		for(int i = 0; i < str.length(); i++)
 		int virtualPosition = 0;
 
 		for (int i = 0; i < seg.count; i++)
-		{
-			char ch = seg.array[seg.offset + i];
+			{
+				char ch = seg.array[seg.offset + i];
 
-			if (ch == '\t')
-			{
-				virtualPosition += tabSize
-					- (virtualPosition % tabSize);
+				if (ch == '\t')
+					{
+						virtualPosition += tabSize
+							- (virtualPosition % tabSize);
+					}
+				else
+					{
+						++virtualPosition;
+					}
 			}
-			else
-			{
-				++virtualPosition;
-			}
-		}
 
 		return virtualPosition;
 	} //}}}
@@ -895,31 +896,31 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 * @since jEdit 4.1pre1
 	 */
 	public static int getOffsetOfVirtualColumn(Segment seg, int tabSize,
-		int column, int[] totalVirtualWidth)
+											   int column, int[] totalVirtualWidth)
 	{
 		int virtualPosition = 0;
 
 		for (int i = 0; i < seg.count; i++)
-		{
-			char ch = seg.array[seg.offset + i];
+			{
+				char ch = seg.array[seg.offset + i];
 
-			if (ch == '\t')
-			{
-				int tabWidth = tabSize
-					- (virtualPosition % tabSize);
-				if(virtualPosition >= column)
-					return i;
+				if (ch == '\t')
+					{
+						int tabWidth = tabSize
+							- (virtualPosition % tabSize);
+						if(virtualPosition >= column)
+							return i;
+						else
+							virtualPosition += tabWidth;
+					}
 				else
-					virtualPosition += tabWidth;
+					{
+						if(virtualPosition >= column)
+							return i;
+						else
+							++virtualPosition;
+					}
 			}
-			else
-			{
-				if(virtualPosition >= column)
-					return i;
-				else
-					++virtualPosition;
-			}
-		}
 
 		if(totalVirtualWidth != null)
 			totalVirtualWidth[0] = virtualPosition;
@@ -965,23 +966,23 @@ loop:		for(int i = 0; i < str.length(); i++)
 	{
 		StringBuffer buf = new StringBuffer();
 		if(tabSize == 0)
-		{
-			while(len-- > 0)
-				buf.append(' ');
-		}
+			{
+				while(len-- > 0)
+					buf.append(' ');
+			}
 		else if(len == 1)
 			buf.append(' ');
 		else
-		{
-			int count = (len + start % tabSize) / tabSize;
-			if(count != 0)
-				len += start;
-			while(count-- > 0)
-				buf.append('\t');
-			count = len % tabSize;
-			while(count-- > 0)
-				buf.append(' ');
-		}
+			{
+				int count = (len + start % tabSize) / tabSize;
+				if(count != 0)
+					len += start;
+				while(count-- > 0)
+					buf.append('\t');
+				count = len % tabSize;
+				while(count-- > 0)
+					buf.append(' ');
+			}
 		return buf.toString();
 	} //}}}
 
@@ -1523,8 +1524,16 @@ loop:		for(;;)
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return compareStrings(((JMenuItem)obj1).getText(),
-				((JMenuItem)obj2).getText(),true);
+			boolean obj1E, obj2E;
+			obj1E = obj1 instanceof EnhancedMenuItem;
+			obj2E = obj2 instanceof EnhancedMenuItem;
+            if(obj1E && !obj2E)
+                  return 1;
+            else if(obj2E && !obj1E)
+                  return -1;
+			else
+				return compareStrings(((JMenuItem)obj1).getText(),
+									  ((JMenuItem)obj2).getText(),true);
 		}
 	} //}}}
 

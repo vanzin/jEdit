@@ -121,13 +121,13 @@ public class BufferPrinter1_4
 		MediaPrintableArea mediaarea=(MediaPrintableArea)format.get(
 		                                     MediaPrintableArea.class);
 		if(mediaarea!=null)
-			pap.setImageableArea((double)(mediaarea.getX(MediaPrintableArea.INCH)*72),
-			                     (double)(mediaarea.getY(MediaPrintableArea.INCH)*72),
-			                     (double)(mediaarea.getWidth(MediaPrintableArea.INCH)*72),
-			                     (double)(mediaarea.getHeight(MediaPrintableArea.INCH)*72));
+			pap.setImageableArea((mediaarea.getX(MediaPrintableArea.INCH)*72),
+			                     (mediaarea.getY(MediaPrintableArea.INCH)*72),
+			                     (mediaarea.getWidth(MediaPrintableArea.INCH)*72),
+			                     (mediaarea.getHeight(MediaPrintableArea.INCH)*72));
 		if(ms!=null)
-			pap.setSize((double)(ms.getX(MediaSize.INCH)*72),
-			            (double)(ms.getY(MediaSize.INCH)*72));
+			pap.setSize((ms.getX(MediaSize.INCH)*72),
+			            (ms.getY(MediaSize.INCH)*72));
 		pf.setPaper(pap);
 
 		OrientationRequested orientation=(OrientationRequested)format.get(

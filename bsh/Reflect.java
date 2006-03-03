@@ -34,7 +34,6 @@
 package bsh;
 
 import java.lang.reflect.*;
-import java.io.*;
 import java.util.Vector;
 
 /**
@@ -598,13 +597,13 @@ class Reflect
 			if ( !c.isInterface() ) {
 				Class superclass = c.getSuperclass();
 				if ( superclass != null )
-					classQ.addElement((Object)superclass);
+					classQ.addElement(superclass);
 			}
 
 			// search all of its interfaces breadth first
 			Class [] intfs = c.getInterfaces();
 			for( int i=0; i< intfs.length; i++ )
-				classQ.addElement((Object)intfs[i]);
+				classQ.addElement(intfs[i]);
 		}
 
 		if ( found != null )

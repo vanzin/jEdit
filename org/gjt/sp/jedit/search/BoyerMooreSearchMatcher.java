@@ -254,7 +254,7 @@ SEARCH:
 	 */
 	private static final int getSkipIndex(char ch)
 	{
-		return ((int) ch) & 0x000000FF;
+		return ch & 0x000000FF;
 	} //}}}
 
 	//{{{ generateSuffixArray() method

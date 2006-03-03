@@ -384,7 +384,7 @@ public class BshMethod
 
 			// return type is a class
 			try {
-				ret = Types.getAssignableForm( ret, (Class)returnType );
+				ret = Types.getAssignableForm( ret, returnType );
 			} catch( UtilEvalError e ) 
 			{
 				// Point to return statement point if we had one.

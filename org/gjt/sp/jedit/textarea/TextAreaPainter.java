@@ -908,11 +908,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 		else /** Standard Antialias Version */  
 		{
-			Object render = RenderingHints.VALUE_ANTIALIAS_ON;
-			Object renderText = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			hints.put(RenderingHints.KEY_ANTIALIASING, render);
-			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, renderText);
+			hints.put(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
+			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 		} 
 

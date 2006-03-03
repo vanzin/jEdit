@@ -42,7 +42,7 @@ public class Token
 		try
 		{
 			Field f = Token.class.getField(value);
-			return (byte)f.getByte(null);
+			return f.getByte(null);
 		}
 		catch(Exception e)
 		{
