@@ -89,14 +89,14 @@
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guisubmenu>Shift
    Indent Left</guisubmenu>
    (shortcut: <keycap>S+TAB</keycap> or <keycap>A+LEFT</keycap>)
-   adds one level of indent to each selected line, or the current line
+   removes one level of indent from each selected line, or the current line
    if there is no selection.
   </para>
   <para>
    <guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guisubmenu>Shift
    Indent Right</guisubmenu>
    (shortcut: <keycap>A+RIGHT</keycap>)
-   removes one level of indent from each selected line, or the current line
+   adds one level of indent to each selected line, or the current line
    if there is no selection. Pressing <keycap>Tab</keycap> while a multi-line
    selection is active has the same effect.
   </para>
