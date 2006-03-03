@@ -143,7 +143,7 @@ public class PluginsProvider implements DynamicMenuProvider
 					submenu.setText(String.valueOf(first));
 				else
 					submenu.setText(first + " - " + last);
-				first = (char)(char)(i + 'A');
+				first = (char)(i + 'A');
 				count = 0;
 				submenu = null;
 			}

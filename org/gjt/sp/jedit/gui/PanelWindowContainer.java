@@ -717,8 +717,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 		 */
 		int getWrappedDimension(JComponent parent, int dimension)
 		{
-			Insets insets = ((JComponent)parent).getBorder()
-				.getBorderInsets((JComponent)parent);
+			Insets insets = (parent).getBorder()
+				.getBorderInsets(parent);
 
 			Component[] comp = parent.getComponents();
 			if(comp.length <= 2)
@@ -775,7 +775,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		public Dimension preferredLayoutSize(Container parent)
 		{
 			Insets insets = ((JComponent)parent).getBorder()
-				.getBorderInsets((JComponent)parent);
+				.getBorderInsets(parent);
 
 			Component[] comp = parent.getComponents();
 			if(comp.length <= 2)
@@ -841,7 +841,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		public void layoutContainer(Container parent)
 		{
 			Insets insets = ((JComponent)parent).getBorder()
-				.getBorderInsets((JComponent)parent);
+				.getBorderInsets(parent);
 
 			Component[] comp = parent.getComponents();
 			if(comp.length <= 2)

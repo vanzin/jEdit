@@ -130,10 +130,10 @@ public class OperatingSystem
 			choice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
 		
 		// Make adjustments for some OS's
-		int screenX = (int)choice.getBounds().x;
-		int screenY = (int)choice.getBounds().y;
-		int screenW = (int)choice.getBounds().width;
-		int screenH = (int)choice.getBounds().height;
+		int screenX = choice.getBounds().x;
+		int screenY = choice.getBounds().y;
+		int screenW = choice.getBounds().width;
+		int screenH = choice.getBounds().height;
 		int x, y, w, h;
 		
 		if (isMacOS())

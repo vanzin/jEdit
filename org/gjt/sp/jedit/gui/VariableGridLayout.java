@@ -199,14 +199,14 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 			if (total_height != free_height) {
 				double dy = (double)free_height / (double)total_height;
 				for (int r = 0; r < nrows; r++) {
-					row_heights[r] = (int) ((double)row_heights[r] * dy);
+					row_heights[r] = (int) (row_heights[r] * dy);
 				}
 			}
 
 			if (total_width != free_width) {
 				double dx = ((double)free_width) / ((double)total_width);
 				for (int c = 0; c < ncols; c++) {
-					col_widths[c] = (int) ((double)col_widths[c] * dx);
+					col_widths[c] = (int) (col_widths[c] * dx);
 				}
 			}
 

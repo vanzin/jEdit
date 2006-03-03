@@ -178,7 +178,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 				label = jEdit.getProperty("options."
 					+ node + ".label");
 				optionPane = (OptionPane)deferredOptionPanes
-					.get((String)node);
+					.get(node);
 				if(optionPane == null)
 				{
 					String propName = "options." + node + ".code";

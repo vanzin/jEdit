@@ -428,7 +428,7 @@ public class DisplayManager
 			return;
 		}
 		else
-			expandFolds((int)(digit - '1') + 1);
+			expandFolds((digit - '1') + 1);
 	} //}}}
 
 	//{{{ expandFolds() method

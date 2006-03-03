@@ -767,7 +767,7 @@ public class View extends JFrame implements EBComponent
 
 		int parentSize = (orientation == JSplitPane.VERTICAL_SPLIT
 			? oldEditPane.getHeight() : oldEditPane.getWidth());
-		final int dividerPosition = (int)((double)(parentSize
+		final int dividerPosition = (int)((parentSize
 			- newSplitPane.getDividerSize()) * 0.5);
 		newSplitPane.setDividerLocation(dividerPosition);
 

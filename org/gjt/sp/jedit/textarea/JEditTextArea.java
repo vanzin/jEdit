@@ -4643,7 +4643,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		for(int i = 0; i < foo.length; i++)
 			foo[i] = ' ';
 
-		tabSize = (float)painter.getStringWidth(new String(foo));
+		tabSize = painter.getStringWidth(new String(foo));
 
 		charWidth = (int)Math.round(
 			painter.getFont().getStringBounds(foo,0,1,

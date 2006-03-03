@@ -864,7 +864,7 @@ public final class Primitive implements ParserConstants, java.io.Serializable
 
 		// non boolean primitive, get appropriate flavor of zero
 		try {
-			return new Primitive((int)0).castToType( type, Types.CAST );
+			return new Primitive(0).castToType( type, Types.CAST );
 		} catch ( UtilEvalError e ) {
 			throw new InterpreterError( "bad cast" );
 		}

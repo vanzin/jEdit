@@ -15,7 +15,12 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 {{{ Miscellaneous
 
-- jEdit now supports LCD Subpixel Anti-Aliasing (JDK 1.6)
+- Macro list is now sorted so that directories show up first 
+  (carmine.lucarelli)
+
+- jEdit now supports LCD Subpixel Anti-Aliasing (JDK 1.6 only). 
+  Global Options -> TextArea -> Anti-Aliased Smooth Text -> Subpixel
+  (Onur Turgay / Alan Ezust)
 
 - jEdit will ask for confirmation before overwriting read only files.
   If yes, it will activate two stage save if the VFS is capable of

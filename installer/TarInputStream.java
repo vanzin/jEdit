@@ -344,7 +344,7 @@ extends		FilterInputStream
 		if ( num == -1 )
 			return num;
 		else
-			return (int) this.oneBuf[0];
+			return this.oneBuf[0];
 		}
 
 	/**

@@ -212,7 +212,7 @@ public class RegisterViewer extends JPanel implements EBComponent
 				else if(name == '%')
 					label = jEdit.getProperty("view-registers.selection");
 				else
-					label = String.valueOf((char)name);
+					label = String.valueOf(name);
 				String registerValue = Registers.getRegister(name).toString();
 				if (registerValue.length() > 100)
 					registerValue = registerValue.substring(0,100)+"...";

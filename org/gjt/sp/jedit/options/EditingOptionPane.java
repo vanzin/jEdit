@@ -372,9 +372,9 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "deepIndent");
 	
 					if(!(MiscUtilities.objectsEqual(oldFilenameGlob,
-						(String)mode.getProperty("filenameGlob"))
+						mode.getProperty("filenameGlob"))
 						&& MiscUtilities.objectsEqual(oldFirstlineGlob,
-						(String)mode.getProperty("firstlineGlob"))))
+						mode.getProperty("firstlineGlob"))))
 					{
 						mode.init();
 					}

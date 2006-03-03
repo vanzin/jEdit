@@ -54,7 +54,7 @@ public class ContextOptionPane extends AbstractOptionPane
 		listModel = new DefaultListModel();
 		while(st.hasMoreTokens())
 		{
-			String actionName = (String)st.nextToken();
+			String actionName = st.nextToken();
 			if(actionName.equals("-"))
 				listModel.addElement(new ContextOptionPane.MenuItem("-","-"));
 			else
