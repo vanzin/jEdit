@@ -32,6 +32,12 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 //}}}
 
+/**
+ * The IO progressMonitor is the panel that will show JProgressBar for
+ * IO threads.
+ *
+ * @version $Id$
+ */
 public class IOProgressMonitor extends JPanel
 {
 	//{{{ IOProgressMonitor constructor
@@ -99,26 +105,26 @@ public class IOProgressMonitor extends JPanel
 	//{{{ WorkThreadHandler class
 	class WorkThreadHandler implements WorkThreadProgressListener
 	{
-		public void statusUpdate(final WorkThreadPool pool, final int index)
+		public void statusUpdate(final WorkThreadPool threadPool, final int threadIndex)
 		{
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
 				{
 					updateCaption();
-					threads[index].update();
+					threads[threadIndex].update();
 				}
 			});
 		}
 
-		public void progressUpdate(final WorkThreadPool pool, final int index)
+		public void progressUpdate(final WorkThreadPool threadPool, final int threadIndex)
 		{
 			SwingUtilities.invokeLater(new Runnable()
 			{
 				public void run()
 				{
 					updateCaption();
-					threads[index].update();
+					threads[threadIndex].update();
 				}
 			});
 		}
@@ -154,6 +160,14 @@ public class IOProgressMonitor extends JPanel
 			WorkThread thread = VFSManager.getIOThreadPool().getThread(index);
 			if(thread.isRequestRunning())
 			{
+				if (progress.isIndeterminate())
+				{
+					if (thread.getProgressMaximum() != 0)
+						progress.setIndeterminate(false);
+				}
+				else if (thread.getProgressMaximum() == 0)
+					progress.setIndeterminate(true);
+				
 				abort.setEnabled(true);
 				String status = thread.getStatus();
 				if(status == null)
@@ -168,6 +182,7 @@ public class IOProgressMonitor extends JPanel
 				abort.setEnabled(false);
 				progress.setString(jEdit.getProperty("io-progress-monitor"
 					+ ".idle"));
+				progress.setIndeterminate(false);
 				progress.setValue(0);
 			}
 		} //}}}

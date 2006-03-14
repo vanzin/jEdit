@@ -26,6 +26,9 @@ JEDIT 4.3 VERSION HISTORY
   If yes, it will activate two stage save if the VFS is capable of
   renaming files. If no, the file will not be saved (Matthieu Casanova).
 
+-IO progress monitor are indeterminate if the maximum value of the WorkThread is 0
+ (Matthieu Casanova)
+
 }}}
 {{{ Bug Fixes
 
