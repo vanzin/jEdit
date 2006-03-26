@@ -6,6 +6,7 @@ JEDIT 4.3 VERSION HISTORY
 
 - TypoScript syntax highlighting (Neil Bertram).
 - Myghty template syntax highlighting (Ollie Rutherfurd)
+- JavaCC syntax highlighting (Dale Anson)
 
 }}}
 {{{ API Changes

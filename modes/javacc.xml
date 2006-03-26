@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+<MODE>
+    <RULES IGNORE_CASE="FALSE">
+        <IMPORT DELEGATE="java::MAIN"/>
+        <KEYWORDS>
+            <KEYWORD1>EOF</KEYWORD1>
+            <KEYWORD1>IGNORE_CASE</KEYWORD1>
+            <KEYWORD1>JAVACODE</KEYWORD1>
+            <KEYWORD1>LOOKAHEAD</KEYWORD1>
+            <KEYWORD1>MORE</KEYWORD1>
+            <KEYWORD1>PARSER_BEGIN</KEYWORD1>
+            <KEYWORD1>PARSER_END</KEYWORD1>
+            <KEYWORD1>SKIP</KEYWORD1>
+            <KEYWORD1>SPECIAL_TOKEN</KEYWORD1>
+            <KEYWORD1>TOKEN</KEYWORD1>
+            <KEYWORD1>TOKEN_MGR_DECLS</KEYWORD1>
+            <KEYWORD1>options</KEYWORD1>
+        </KEYWORDS>
+    </RULES>
+</MODE>

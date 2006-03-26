@@ -177,6 +177,9 @@
 <MODE NAME="io"			FILE="io.xml"
 				FILE_NAME_GLOB="*.io" />
 
+<MODE NAME="javacc" FILE="javacc.xml"
+        FILE_NAME_GLOB="*.{jj,jjt}"/>
+
 <MODE NAME="java"		FILE="java.xml"
 				FILE_NAME_GLOB="*.java" />
 
