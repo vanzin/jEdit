@@ -4368,6 +4368,7 @@
 			<KEYWORD1>implements</KEYWORD1>
 			<KEYWORD1>include</KEYWORD1>
 			<KEYWORD1>include_once</KEYWORD1>
+			<KEYWORD1>instanceof</KEYWORD1>
 			<KEYWORD1>interface</KEYWORD1>
 			<KEYWORD1>isset</KEYWORD1>
 			<KEYWORD1>list</KEYWORD1>
