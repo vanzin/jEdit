@@ -20,10 +20,7 @@
 	</PROPS>
     <RULES IGNORE_CASE="FALSE">
         <IMPORT DELEGATE="java::MAIN"/>
-        <SPAN TYPE="KEYWORD2" DELEGATE="xml::DTD-TAGS">
-			<BEGIN>&lt;</BEGIN>
-			<END>&gt;</END>
-		</SPAN>
+        
         <KEYWORDS>
             <KEYWORD1>EOF</KEYWORD1>
             <KEYWORD1>IGNORE_CASE</KEYWORD1>
