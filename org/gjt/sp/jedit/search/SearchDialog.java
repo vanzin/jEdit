@@ -40,7 +40,7 @@ import org.gjt.sp.jedit.*;
 /**
  * Search and replace dialog.
  * @author Slava Pestov
- * @version $Id: 
+ * @version $Id$
  */
 public class SearchDialog extends EnhancedDialog implements EBComponent
 {
@@ -90,18 +90,24 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	public static void showSearchDialog(View view, String searchString,
 		int searchIn)
 	{
-		SearchDialog dialog = getSearchDialog(view);
+		final SearchDialog dialog = getSearchDialog(view);
 
 		dialog.setSearchString(searchString,searchIn);
-		GUIUtilities.requestFocus(dialog,dialog.find);
 
 		// ugly workaround
 		if(OperatingSystem.isUnix() && !OperatingSystem.isMacOS())
 			dialog.setVisible(false);
 
+		// I'm not sure if calling requestFocus() is strictly necessary
+		// (focus looks fine without this, on Linux at least), but
+		// it doesn't hurt to leave it here.
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				dialog.toFront();
+				dialog.find.requestFocus();
+			}
+		});
 		dialog.setVisible(true);
-		dialog.toFront();
-		dialog.requestFocus();
 	} //}}}
 
 	//{{{ setSearchString() method
@@ -324,7 +330,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		label.setLabelFor(find);
 		label.setBorder(new EmptyBorder(12,0,2,0));
-		
+
 		cons.gridx = 0;
 		cons.weightx = 0.0f;
 		cons.weighty = 0.0f;
