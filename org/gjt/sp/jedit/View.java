@@ -1803,7 +1803,7 @@ loop:		for(;;)
 			if (editPaneChanged)
 			{
 				EditBus.send(new ViewUpdate(View.this,ViewUpdate
-					.EDIT_PANE_CHANGED));
+					.ACTIVATED));
 			}
 		}
 
