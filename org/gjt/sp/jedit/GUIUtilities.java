@@ -269,7 +269,7 @@ public class GUIUtilities
 	//{{{ loadPopupMenu() method
 	/**
 	 * Creates a popup menu.
-	 
+
 	 * @param name The menu name
 	 * @since jEdit 2.6pre2
 	 */
@@ -281,7 +281,7 @@ public class GUIUtilities
 	//{{{ loadPopupMenu() method
 	/**
 	 * Creates a popup menu.
-	 
+
 	 * @param context An action context; either
 	 * <code>jEdit.getActionContext()</code> or
 	 * <code>VFSBrowser.getActionContext()</code>.
@@ -888,7 +888,7 @@ public class GUIUtilities
 			buf.append("color:" + getColorHexString(style.getForegroundColor()));
 		}
 
-		if(style.getBackgroundColor() != null) 
+		if(style.getBackgroundColor() != null)
 		{
 			buf.append(" bgColor:" + getColorHexString(style.getBackgroundColor()));
 		}
@@ -1443,11 +1443,7 @@ public class GUIUtilities
 	 */
 	public static JDialog getParentDialog(Component c)
 	{
-		Component p = c.getParent();
-		while (p != null && !(p instanceof JDialog))
-			p = p.getParent();
-
-		return (p instanceof JDialog) ? (JDialog) p : null;
+		return (JDialog) SwingUtilities.getAncestorOfClass(JDialog.class, c);
 	} //}}}
 
 	//{{{ getComponentParent() method
