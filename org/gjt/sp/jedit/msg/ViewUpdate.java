@@ -49,6 +49,12 @@ public class ViewUpdate extends EBMessage
 	 */
 	public static final Object EDIT_PANE_CHANGED = "EDIT_PANE_CHANGED";
 
+	/**
+	 * Active view changed.
+	 * @since jEdit 4.3pre4
+	 */
+	public static final Object ACTIVATED = "VIEW_ACTIVATED";
+
 	//{{{ ViewUpdate constructor
 	/**
 	 * Creates a new view update message.
