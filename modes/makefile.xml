@@ -36,6 +36,11 @@
 			<END>`</END>
 		</SPAN>
 
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">:=</SEQ>
+		<SEQ TYPE="OPERATOR">+=</SEQ>
+		<SEQ TYPE="OPERATOR">?=</SEQ>
+
 		<MARK_PREVIOUS TYPE="LABEL">:</MARK_PREVIOUS>
 
 		<KEYWORDS>
@@ -60,7 +65,16 @@
 			<KEYWORD1>wildcard</KEYWORD1>
 			<KEYWORD1>word</KEYWORD1>
 			<KEYWORD1>words</KEYWORD1>
+			<KEYWORD1>ifeq</KEYWORD1>
+            <KEYWORD1>ifneq</KEYWORD1>
+            <KEYWORD1>else</KEYWORD1>
+            <KEYWORD1>endif</KEYWORD1>
+            <KEYWORD1>define</KEYWORD1>
+            <KEYWORD1>endef</KEYWORD1>
+            <KEYWORD1>ifdef</KEYWORD1>
+            <KEYWORD1>ifndef</KEYWORD1>
 		</KEYWORDS>
+
 	</RULES>
 
 	<RULES SET="VARIABLE" ESCAPE="\" IGNORE_CASE="FALSE"
