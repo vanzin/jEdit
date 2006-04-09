@@ -101,8 +101,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		panel.add(Box.createHorizontalStrut(12));
 
-		GUIUtilities.requestFocus(this,filenameField);
-
 		ok = new JButton();
 		getRootPane().setDefaultButton(ok);
 
@@ -137,6 +135,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
+		GUIUtilities.requestFocus(this,filenameField);
 		setVisible(true);
 	} //}}}
 
