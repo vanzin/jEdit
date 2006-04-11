@@ -58,6 +58,26 @@ public class BufferSaveRequest extends BufferIORequest
 	{
 		OutputStream out = null;
 
+		boolean vfsRenameCap = (vfs.getCapabilities() &
+			VFS.RENAME_CAP) != 0;
+
+		boolean overwriteReadOnly = buffer.getBooleanProperty("overwriteReadonly");
+
+		/* if the VFS supports renaming files, we first
+		 * save to #<filename>#save#, then rename that
+		 * to <filename>, so that if the save fails,
+		 * data will not be lost.
+		 *
+		 * as of 4.1pre7 we now call vfs.getTwoStageSaveName()
+		 * instead of constructing the path directly
+		 * since some VFS's might not allow # in filenames.
+		 */
+		String savePath;
+
+		boolean twoStageSave = overwriteReadOnly ||
+			(vfsRenameCap &&
+			jEdit.getBooleanProperty("twoStageSave"));
+
 		try
 		{
 			String[] args = { vfs.getFileName(path) };
@@ -70,10 +90,6 @@ public class BufferSaveRequest extends BufferIORequest
 			if(!MiscUtilities.isURL(path))
 				path = MiscUtilities.resolveSymlinks(path);
 
-			boolean vfsRenameCap = (vfs.getCapabilities() & 
-				VFS.RENAME_CAP) != 0;
-
-			boolean overwriteReadOnly = buffer.getBooleanProperty("overwriteReadonly");
 
 			// Only backup once per session
 			if(buffer.getProperty(Buffer.BACKED_UP) == null
@@ -83,20 +99,6 @@ public class BufferSaveRequest extends BufferIORequest
 				buffer.setBooleanProperty(Buffer.BACKED_UP,true);
 			}
 
-			/* if the VFS supports renaming files, we first
-			 * save to #<filename>#save#, then rename that
-			 * to <filename>, so that if the save fails,
-			 * data will not be lost.
-			 *
-			 * as of 4.1pre7 we now call vfs.getTwoStageSaveName()
-			 * instead of constructing the path directly
-			 * since some VFS's might not allow # in filenames.
-			 */
-			String savePath;
-
-			boolean twoStageSave = overwriteReadOnly ||
-				(vfsRenameCap && 
-				jEdit.getBooleanProperty("twoStageSave"));
 			if(twoStageSave)
 			{
 				savePath = vfs.getTwoStageSaveName(path);
@@ -191,6 +193,10 @@ public class BufferSaveRequest extends BufferIORequest
 			try
 			{
 				vfs._saveComplete(session,buffer,path,view);
+				if( twoStageSave )
+				{
+					vfs._finishTwoStageSave(session,buffer,path,view);
+				}
 				vfs._endVFSSession(session,view);
 			}
 			catch(IOException io)

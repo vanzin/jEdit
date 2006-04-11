@@ -304,6 +304,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		JScrollPane scroller = new JScrollPane(paneTree,
 			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroller.setMinimumSize(new Dimension(100, 0));
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 			scroller,stage);
 		content.add(splitter, BorderLayout.CENTER);
