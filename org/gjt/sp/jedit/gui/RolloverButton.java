@@ -26,12 +26,10 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Method;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import org.gjt.sp.jedit.OperatingSystem;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**

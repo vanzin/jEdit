@@ -206,6 +206,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	 */
 	public void addComponent(Component comp1, Component comp2, int fill)
 	{
+		copyToolTips(comp1, comp2);
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridy = y++;
 		cons.gridheight = 1;
@@ -268,6 +269,34 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		add(comp);
 	} //}}}
 
+	private void copyToolTips (Component c1, Component c2) {
+		int tooltips = 0;
+		int jc=0;
+		String text = null;
+		JComponent jc1 = null, jc2 = null;
+		try {
+			jc1 = (JComponent) c1;
+			text = jc1.getToolTipText();
+			++jc;
+			if (text != null && text.length() > 0) tooltips++;
+		}
+		catch (Exception e) {}
+		try {
+			jc2 = (JComponent) c2;
+			String text2 = jc2.getToolTipText();
+			++jc;
+			if (text2 != null && text2.length() > 0) {
+				text = text2;
+				tooltips++;
+			}
+		}
+		catch (Exception e) {}
+		if (tooltips == 1 && jc == 2) {
+			jc1.setToolTipText(text);
+			jc2.setToolTipText(text);
+		}
+		
+	}
 	//{{{ addSeparator() method
 	/**
 	 * Adds a separator component.
