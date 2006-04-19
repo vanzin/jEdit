@@ -17,6 +17,8 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 {{{ Miscellaneous
 
+- GUIUtilities patch 1467821 for dual-head displays applied
+
 - Macro list is now sorted so that directories show up first 
   (carmine.lucarelli)
 
