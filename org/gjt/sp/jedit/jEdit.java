@@ -3443,7 +3443,7 @@ public class jEdit
 
 				boolean restoreFiles = restore
 					&& jEdit.getBooleanProperty("restore")
-					&& (getBufferCount() == 0 ||
+					&& (count == 0 ||
 					jEdit.getBooleanProperty("restore.cli"));
 
 				if(gui || count != 0)
