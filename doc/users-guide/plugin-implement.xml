@@ -1132,50 +1132,58 @@ and the docking position of the plugin.
   in XML format for the
   <application>Ant</application> utility.  The format for this file
   requires few changes from plugin to plugin.  Here is the version of
-  <filename>build.xml</filename> used by QuickNotepad and many other
+  <filename>build.xml</filename> used by Console and many other
   plugins:
 </para>
 
-<informalexample><programlisting><![CDATA[<project name="QuickNotepad" default="dist" basedir=".">
+<informalexample><programlisting><![CDATA[
+<project name="Console" default="build" basedir=".">
+    <property file="../build.properties" />
+	<property name="build.support" value="../build-support" />
+	<property name="javadoc.packagenames"	value="console.*" />
+	<property name="plugin.dependencies" 	value="ErrorList,InfoViewer,ProjectViewer" />
+	<property name="dist.target" 			value="dist.complete" />
+	<property name="compiler.source" value="1.5" />
+	<property name="compiler.target" value="1.5" />
 
-  <property name="jedit.install.dir"  value="../.."/>
-  <property name="jar.name"  value="QuickNotepad.jar"/>
+	<import file="${build.support}/plugin-build.xml" />
 
-  <property name="install.dir"  value=".."/>
+	<selector id="compileFiles">
+	     <and>
+			<filename name="**/*.java" />
+		 </and>
+	</selector>
 
+    <selector id="extraFiles">
+	  <or>
+	  <filename name="**/actions.xml" />
+		<filename name="**/dockables.xml" />
+		<filename name="**/services.xml" />
+		<filename name="**/*.props" />
+		<filename name="**/LICENSE" />
+		<filename name="**/README" />
+		<filename name="**/*.bsh" />
+		<filename name="**/*.xml" />
+		<filename name="**/*.png" />
+		<filename name="**/*.gif" />
+		<filename name="**/*.dtd" />
+	  </or>
+    </selector>
 
-  <path id="project.class.path">
-    <pathelement location="${jedit.install.dir}/jedit.jar"/>
-    <pathelement location="."/>
-  </path>
-
-
-  <target name="compile">
-    <javac
-      srcdir="."
-      deprecation="on"
-      includeJavaRuntime="yes"
-    >
-      <classpath refid="project.class.path"/>
-    </javac>
-  </target>
-
-
-  <target name="dist" depends="compile">
-    <mkdir dir="${install.dir}"/>
-    <jar jarfile="${install.dir}/${jar.name}">
-      <fileset dir=".">
-        <include name="**/*.class"/>
-        <include name="**/*.props"/>
-        <include name="**/*.html"/>
-        <include name="actions.xml"/>
-        <include name="dockables.xml"/>
-      </fileset>
-    </jar>
-  </target>
-</project>]]></programlisting></informalexample>
+	<!-- Add needed plugins to the classpath. -->
+	<path id="project.class.path">
+		<pathelement location="${install.dir}/ProjectViewer.jar"/>
+		<pathelement location="${install.dir}/ErrorList.jar" />
+		<pathelement location="${install.dir}/InfoViewer.jar" />
+	</path>
+</project>
+]]></programlisting></informalexample>
 
 <para>
+  This build file makes use of a CVS module known as <application>plugins/build-support</application>. You can check this out from the jEdit repository. It contains common build steps
+  for jEdit plugins, and some example properties files which you can adapt for use with your plugin.
+  </para>
+  <para>
   For a full discussion of the <filename>Ant</filename> file format and
   command syntax, you should consult the <ulink
   url="http://jakarta.apache.org/ant/manual/index.html">Ant
@@ -1188,22 +1196,18 @@ and the docking position of the plugin.
     the name of the plugin;
   </para></listitem>
   <listitem><para>
-    the choice of compiler (made by inserting and deleting the comment character
-    <userinput>'#'</userinput>); and
-  </para> </listitem>
+    the dependencies of the plugin 
+   </para> </listitem>
   <listitem><para>
-    the classpath variables for <filename>jedit.jar</filename>
-    any plugins this one depends on.
+    The extra files that need to be copied into the jar.
   </para></listitem>
 </itemizedlist>
-
 </sect1>
 
 <sect1 id="plugin-implement-reloading"><title>Reloading the Plugin</title>
 
 <para>
-  Once you have compiled your plugin using the 4.2 API you will need to reload
-  it to test it. Follow these steps to reload your plugin without restarting jEdit: 
+  Once you have compiled your plugin using the 4.2 API you will need to reload it to test it. Follow these steps to reload your plugin without restarting jEdit: 
 </para>
 
 <itemizedlist>
@@ -1227,11 +1231,8 @@ and the docking position of the plugin.
 
 
 <para>
-  The jEdit web site contains a macro and an Ant task that can be used as an alternative 
-  method for dynamically reloading plugins. 
+  The Activator plugin also provides a very convenient way to test the reloading behavior of your plugin, as well as restart it for debugging purposes. 
 </para>
-
-
 
 <para>
   If you have reached this point in the text, you are probably serious
