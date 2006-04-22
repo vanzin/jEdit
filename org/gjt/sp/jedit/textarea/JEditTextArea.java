@@ -846,7 +846,7 @@ public class JEditTextArea extends JComponent
 	 * @param screenLine The screen line
 	 * @since jEdit 4.0pre6
 	 */
-	private int getPhysicalLineOfScreenLine(int screenLine)
+	public int getPhysicalLineOfScreenLine(int screenLine)
 	{
 		return chunkCache.getLineInfo(screenLine).physicalLine;
 	} //}}}
