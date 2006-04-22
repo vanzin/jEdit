@@ -269,8 +269,8 @@ plugin.QuickNotepadPlugin.version=4.2
 # online help
 plugin.QuickNotepadPlugin.docs=index.html
 
-# we only have one dependency, jEdit 4.2, since we use the new plugin API
-plugin.QuickNotepadPlugin.depend.0=jedit 04.02.01.00
+# we only have one dependency, jEdit 4.2final, since we use the new plugin API
+plugin.QuickNotepadPlugin.depend.0=jedit 04.02.99.00
 
 # plugin menu
 plugin.QuickNotepadPlugin.menu=quicknotepad \
@@ -371,7 +371,7 @@ plugin.QuickNotepadPlugin.activate=defer
 plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
 # depends on jedit 4.3pre3
-plugin.QuickNotepadPlugin.version=04.03.03.00
+plugin.QuickNotepadPlugin.version=04.02.99.00
 plugin.QuickNotepadPlugin.docs=QuickNotepad.html
 plugin.QuickNotepadPlugin.depend.0=jedit 04.02.10.00</programlisting></informalexample>
 <para>
@@ -1180,9 +1180,15 @@ and the docking position of the plugin.
 ]]></programlisting></informalexample>
 
 <para>
-  This build file makes use of a CVS module known as <application>plugins/build-support</application>. You can check this out from the jEdit repository. It contains common build steps
-  for jEdit plugins, and some example properties files which you can adapt for use with your plugin.
-  </para>
+  This build file imports another modular build file, located in another directory. It makes use of a CVS module known as <application>plugins/build-support</application>. You can check this out from the jEdit repository. It contains common build steps
+  for jEdit plugins, and some example properties files which you can adapt for use with your plugin. The file is imported with this line
+  </para> 
+  <programlisting>
+  &lt;import file=&quot;${build.support}/plugin-build.xml&quot; /&gt;
+  </programlisting>
+  
+  <para> As long as <literal>${build.support}</literal> is set to your local checked-out copy of build-support, the common build rules are imported and the resulting build file is very small and easy to maintain. </para>
+  
   <para>
   For a full discussion of the <filename>Ant</filename> file format and
   command syntax, you should consult the <ulink
@@ -1231,7 +1237,7 @@ and the docking position of the plugin.
 
 
 <para>
-  The Activator plugin also provides a very convenient way to test the reloading behavior of your plugin, as well as restart it for debugging purposes. 
+  The Activator plugin provides a very convenient way to test the reloading behavior of your plugin, as well as restart it for debugging purposes. 
 </para>
 
 <para>
