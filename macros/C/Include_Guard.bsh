@@ -50,30 +50,23 @@
  *
  */
 
-# 1 "Include_Guard.bsh"
-# 1 "<built-in>"
-# 1 "<command line>"
-# 1 "Include_Guard.bsh"
-# 53 "Include_Guard.bsh"
 void includeGuard()
 {
-if(buffer.isUntitled())
-{
-Macros.error(view, "Name the file before inserting an include guard.");
-return;
+    if(buffer.isUntitled())
+    {
+        Macros.error(view, "Name the file before inserting an include guard.");
+        return;
+    }
+
+    guardName = buffer.getName().toUpperCase().replace('.', '_') ;
+    pos = textArea.getCaretPosition();
+    textArea.setSelectedText("#ifndef " + guardName + "\n#define " + guardName + "\n");
+    textArea.setCaretPosition(buffer.getLength());
+    textArea.setSelectedText("\n#endif        //  #ifndef " + guardName + "\n");
+    textArea.setCaretPosition(pos);
 }
 
-guardName = buffer.getName().toUpperCase().replace('.', '_') ;
-pos = textArea.getCaretPosition();
-textArea.setSelectedText("#ifndef " + guardName
-+ "\n#define " + guardName + "\n");
-textArea.setCaretPosition(buffer.getLength());
-textArea.setSelectedText("\n#endif        //  #ifndef " +
-guardName + "\n");
-textArea.setCaretPosition(pos);
-}
-
-if( buffer.isReadOnly() )
-Macros.error(view, "Buffer is read-only.");
-else
-includeGuard();
+if( buffer.isReadOnly() ) 
+    Macros.error(view, "Buffer is read-only.");
+else 
+    includeGuard();
