@@ -71,14 +71,14 @@ class HyperSearchRequest extends WorkRequest
 			return;
 		}
 
-		setProgressMaximum(fileset.getFileCount(view));
+		setMaximum(fileset.getFileCount(view));
 
 		// to minimise synchronization and stuff like that, we only
 		// show a status message at most twice a second
 
 		// initially zero, so that we always show the first message
 		long lastStatusTime = 0;
-
+		String searchingCaption = jEdit.getProperty("hypersearch-results.searching") + ' ';
 		try
 		{
 			if(selection != null)
@@ -99,8 +99,9 @@ loop:				for(int i = 0; i < files.length; i++)
 					long currentTime = System.currentTimeMillis();
 					if(currentTime - lastStatusTime > 250)
 					{
-						setProgressValue(current);
+						setValue(current);
 						lastStatusTime = currentTime;
+						results.setSearchStatus(searchingCaption + file);
 					}
 
 					Buffer buffer = jEdit.openTemporary(null,null,file,false);
@@ -108,7 +109,7 @@ loop:				for(int i = 0; i < files.length; i++)
 						continue loop;
 
 					doHyperSearch(buffer);
-				};
+				}
 			}
 		}
 		catch(final Exception e)

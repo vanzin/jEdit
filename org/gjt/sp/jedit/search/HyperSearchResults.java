@@ -25,17 +25,14 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.tree.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -195,6 +192,12 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	public void searchStarted()
 	{
 		caption.setText(jEdit.getProperty("hypersearch-results.searching"));
+	} //}}}
+
+	//{{{ setSearchStatus() method
+	public void setSearchStatus(String status)
+	{
+		caption.setText(status);
 	} //}}}
 
 	//{{{ searchFailed() method
