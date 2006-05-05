@@ -35,6 +35,9 @@ JEDIT 4.3 VERSION HISTORY
 -IO progress monitor are indeterminate if the maximum value of the WorkThread is 0
  (Matthieu Casanova)
 
+-Hyper search result panel now indicates the processed files
+ (Matthieu Casanova)
+
 }}}
 {{{ Bug Fixes
 
