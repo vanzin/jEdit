@@ -4,7 +4,7 @@
      This is a build.xml file for building jEdit.
 -->
 
-<project name="jEdit" default="dist" basedir=".">
+<project name="jEdit" default="jar" basedir=".">
 
 	<property file="../build.properties"/>
 	<property file="build.properties"/>
@@ -19,12 +19,11 @@
 			srcdir="."
 			destdir="${build.directory}"
 			deprecation="on"
-			includeJavaRuntime="yes"
-			debug="yes"
+			includejavaruntime="yes"
+			debug="${compiler.debug}"
 			encoding="UTF8" 
 			source="1.4"
-			target="1.4"
-		>
+			target="1.4"		>
 			<include name="bsh/**/*.java"/>
 			<include name="com/microstar/xml/*.java"/>
 			<include name="gnu/regexp/*.java"/>
@@ -35,7 +34,10 @@
 		</javac>
 	</target>
 
-	<target name="dist" depends="compile" description="Compile and package jEdit.">
+    <target name="dist" depends="docs-html, javadoc, jar" 
+       description="Compile and package jedit with docs" />
+    
+	<target name="jar" depends="compile" description="Compile and package jEdit (no docs).">
 		<jar
 			jarfile="jedit.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
