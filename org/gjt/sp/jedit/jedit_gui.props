@@ -1217,7 +1217,7 @@ no-webstart.message=This feature is not available in the WebStart version\n\
 #{{{ Search and replace dialog
 search.title=Search And Replace
 
-search.find=Search for: (press PAGE_UP or right-click to recall previous)
+search.find=Search for: (up/down arrows or right-click to recall previous)
 search.find.mnemonic=s
 search.replace=Replace with:
 search.replace.mnemonic=w
