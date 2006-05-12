@@ -50,6 +50,7 @@
 
 			<fileset dir=".">
 				<include name="bsh/commands/*.bsh"/>
+				<include name="icons/jedit.ico"/>
 				<include name="doc/jedit.png"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
 
