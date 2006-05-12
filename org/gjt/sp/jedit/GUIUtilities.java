@@ -1259,18 +1259,14 @@ public class GUIUtilities
 	 */
 	public static void requestFocus(final Window win, final Component comp)
 	{
-		win.addWindowListener(new WindowAdapter()
+		win.addWindowFocusListener(new WindowAdapter()
 		{
-			public void windowActivated(WindowEvent evt)
+			public void windowGainedFocus(WindowEvent evt)
 			{
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						comp.requestFocus();
-					}
-				});
-				win.removeWindowListener(this);
+				
+				boolean success = comp.requestFocusInWindow();
+				
+				win.removeWindowFocusListener(this);
 			}
 		});
 	} //}}}
