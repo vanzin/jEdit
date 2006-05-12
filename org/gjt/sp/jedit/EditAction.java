@@ -59,6 +59,15 @@ public abstract class EditAction
 	{
 		return name;
 	} //}}}
+	
+	/**
+	 * Changes the name of an action
+	 * @param newName
+	 * @since jEdit 4.3pre4
+	 */
+	public void setName(String newName) {
+		name = newName;
+	}
 
 	//{{{ getLabel() method
 	/**
