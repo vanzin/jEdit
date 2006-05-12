@@ -39,8 +39,7 @@
 		<jar
 			jarfile="jedit.jar"
 			manifest="org/gjt/sp/jedit/jedit.manifest"
-			compress="false"
-		>
+			compress="false" >
 			<fileset dir="${build.directory}">
 				<include name="bsh/**/*.class"/>
 				<include name="com/**/*.class"/>
@@ -51,7 +50,7 @@
 
 			<fileset dir=".">
 				<include name="bsh/commands/*.bsh"/>
-
+				<include name="doc/jedit.png"/>
 				<include name="gnu/regexp/MessagesBundle.properties"/>
 
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
@@ -82,10 +81,9 @@
 			srcdir="."
 			destdir="${build.directory}"
 			deprecation="on"
-			includeJavaRuntime="yes"
+			includejavaruntime="yes"
 			debug="yes"
-			encoding="UTF8" 
-		>
+			encoding="UTF8" >
 			<include name="com/loomcom/ant/tasks/jarbundler/*.java"/>
 		</javac>
 
@@ -230,8 +228,7 @@
 			srcdir="."
 			destdir="."
 			deprecation="on"
-			includejavaruntime="yes"
-		>
+			includejavaruntime="yes"		>
 			<classpath refid="doclet.class.path"/>
 			<include name="doclet/GenerateTocXML.java"/>
 		</javac>
