@@ -170,7 +170,7 @@ public abstract class OperatingSystem
 				FileWriter out = new FileWriter(script);
 				out.write("#!/bin/sh\n");
 				out.write("# Java heap size, in megabytes\n");
-				out.write("JAVA_HEAP_SIZE=64\n");
+				out.write("JAVA_HEAP_SIZE=128\n");
 				out.write("DEFAULT_JAVA_HOME=\""
 					+ System.getProperty("java.home")
 					+ "\"\n");
@@ -179,14 +179,14 @@ public abstract class OperatingSystem
 				out.write("fi\n");
 
 				out.write("exec \"$JAVA_HOME"
-					+ "/bin/java\" -mx${JAVA_HEAP_SIZE}m ${"
+					+ "/bin/java\" -server -mx${JAVA_HEAP_SIZE}m ${"
 					+ name.toUpperCase() + "} ");
 
 				String jar = installDir + File.separator
 					+ name.toLowerCase() + ".jar";
 
 				out.write("-classpath \"" + getExtraClassPath()
-					+ jar + "\" org.gjt.sp.jedit.jEdit $@\n");
+					+ jar + "\" org.gjt.sp.jedit.jEdit -reuseview $@\n");
 
 				out.close();
 
