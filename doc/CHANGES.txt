@@ -3,7 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre4
 Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf, 
 Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust, 
-Slava Pestov, Bjorn Kautler, and Jeffrey Hoyt for contributing to this release.
+Marcello Vanzin, Slava Pestov, Bjorn Kautler, and Jeffrey Hoyt for 
+contributing to this release.
 
 {{{ Syntax Highlighting 
 
@@ -14,13 +15,24 @@ Slava Pestov, Bjorn Kautler, and Jeffrey Hoyt for contributing to this release.
 }}}
 {{{ API Changes
 
+- better fix for 1449909: 
+   Create a new message (ViewUpdate.ACTIVATED) to indicate that a different 
+   view was activated. (Marcello Vanzin) 
+ 
+- send a ViewUpdate.EDIT_PANE_CHANGED when changing the active view.
+    (Marcello Vanza)
+
+- EditAction now has a setName() method, allowing one to change the name.
+
 - New BufferChanging class, extends EditPaneUpdate with a getBuffer()
-  method which returns the about-to-be opened buffer.
+  method which returns the about-to-be opened buffer. (Alan Ezust)
 
 }}}
 {{{ Miscellaneous
 
+
 - TextAreaTransferHandler patch 1487647 Drag 'n' drop from KDE now works. (Xuan Baldauf)
+- Also fixed by Vanza
 
 - GUIUtilities patch 1275607 for "find" dialog (Xuan Baldauf)
 
