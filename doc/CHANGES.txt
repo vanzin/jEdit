@@ -1,6 +1,9 @@
 JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre4
+Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf, 
+Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust, 
+Slava Pestov, Bjorn Kautler, and Jeffrey Hoyt for contributing to this release.
 
 {{{ Syntax Highlighting 
 
@@ -17,7 +20,9 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 {{{ Miscellaneous
 
-- GUIUtilities patch 1275607 for "find" dialog (mediumnet)
+- TextAreaTransferHandler patch 1487647 Drag 'n' drop from KDE now works. (Xuan Baldauf)
+
+- GUIUtilities patch 1275607 for "find" dialog (Xuan Baldauf)
 
 - GUIUtilities patch 1467821 for dual-head displays applied (Nathan Blair)
 
