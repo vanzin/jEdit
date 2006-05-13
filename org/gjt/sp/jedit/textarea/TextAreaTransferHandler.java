@@ -138,28 +138,40 @@ class TextAreaTransferHandler extends TransferHandler
 	private boolean importText(JComponent c, Transferable t)
 		throws Exception
 	{
-		Log.log(Log.DEBUG,this,"=> String");
 		String str = (String)t.getTransferData(
 			DataFlavor.stringFlavor);
-
+		str = str.trim();
+		Log.log(Log.DEBUG,this,"=> String \""+str+"\"");
+		
 		JEditTextArea textArea = (JEditTextArea)c;
 		if (dragSource == null)
 		{
-			// Only examine the string for a URL if it came from
-			// outside of jEdit.
-			org.gjt.sp.jedit.io.VFS vfs = org.gjt.sp.jedit.io.VFSManager.getVFSForPath(str);
-			if (!(vfs instanceof org.gjt.sp.jedit.io.FileVFS) || str.startsWith("file://")) 
+			String		maybeManyFileNames	= str;
+			boolean		found			= false;			
+			String[]	components		= str.split("\n");
+			
+			for (int i = 0;i<components.length;i++)
 			{
-				str = str.replace('\n',' ').replace('\r',' ').trim();
-				if (str.startsWith("file://")) 
+				String str0 = components[i];
+				// Only examine the string for a URL if it came from
+				// outside of jEdit.
+				org.gjt.sp.jedit.io.VFS vfs = org.gjt.sp.jedit.io.VFSManager.getVFSForPath(str0);
+				if (!(vfs instanceof org.gjt.sp.jedit.io.FileVFS) || str.startsWith("file://"))
 				{
-					str = str.substring(7);
+				
+//					str = str.replace('\n',' ').replace('\r',' ').trim();
+					if (str0.startsWith("file://"))
+					{
+						str0 = str0.substring(7);
+					}
+					
+					org.gjt.sp.jedit.io.VFSManager.runInWorkThread(new DraggedURLLoader(textArea,str0));
 				}
+				found = true;
 				
-				org.gjt.sp.jedit.io.VFSManager.runInWorkThread(
-					new DraggedURLLoader(textArea,str)
-					);
-				
+			}
+			
+			if (found) {
 				return true;
 			}
 		}
