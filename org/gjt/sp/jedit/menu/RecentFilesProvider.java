@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.menu;
 //{{{ Imports
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.util.*;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
 import org.gjt.sp.jedit.*;
@@ -54,6 +55,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 		}; //}}}
 
 		//{{{ MouseListener...
+		/*
 		MouseListener mouseListener = new MouseAdapter()
 		{
 			public void mouseEntered(MouseEvent evt)
@@ -67,6 +69,19 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			{
 				view.getStatus().setMessage(null);
 			}
+		};
+		*/
+		//}}}
+		
+		//{{{ ChangeListener...
+		ChangeListener changeListener = new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent e)
+			{
+				JMenuItem menuItem = (JMenuItem) e.getSource();
+				
+				view.getStatus().setMessage(menuItem.isArmed()?menuItem.getActionCommand():null);
+			} 
 		}; //}}}
 
 		List recentVector = BufferHistory.getHistory();
@@ -94,7 +109,9 @@ public class RecentFilesProvider implements DynamicMenuProvider
 				.getFileName(path));
 			menuItem.setActionCommand(path);
 			menuItem.addActionListener(actionListener);
-			menuItem.addMouseListener(mouseListener);
+//			menuItem.addMouseListener(mouseListener);
+			menuItem.addChangeListener(changeListener);
+			
 			menuItem.setIcon(FileCellRenderer.fileIcon);
 
 			if(sort)
