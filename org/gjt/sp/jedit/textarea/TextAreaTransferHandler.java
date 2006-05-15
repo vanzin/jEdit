@@ -28,6 +28,7 @@ import java.awt.datatransfer.*;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.net.URI;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditPane;
 import org.gjt.sp.jedit.GUIUtilities;
@@ -43,6 +44,19 @@ class TextAreaTransferHandler extends TransferHandler
 	private static boolean sameTextArea;
 	private static int insertPos;
 	private static int insertOffset;
+	
+	// Unfortunately, this does not work, as this DataFlavor is internally changed into another DataFlavor which does not match the intented DataFlavor anymore. :-( So, below, we are iterating.
+	/*
+	protected static DataFlavor	textURIlistDataFlavor = null;
+	
+	static {
+		try {
+			textURIlistDataFlavor = new DataFlavor("text/uri-list;representationclass=java.lang.String");
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Cannot create DataFlavor. This should not happen.",e);
+		}
+	}
+	*/
 
 	//{{{ createTransferable
 	protected Transferable createTransferable(JComponent c)
@@ -68,6 +82,7 @@ class TextAreaTransferHandler extends TransferHandler
 	public boolean importData(JComponent c, Transferable t)
 	{
 		Log.log(Log.DEBUG,this,"Import data");
+//		Log.log(Log.DEBUG,this,"Import data: t.isDataFlavorSupported("+textURIlistDataFlavor+")="+t.isDataFlavorSupported(textURIlistDataFlavor)+".");
 		if(!canImport(c,t.getTransferDataFlavors()))
 			return false;
 
@@ -75,14 +90,30 @@ class TextAreaTransferHandler extends TransferHandler
 
 		try
 		{
-			if(t.isDataFlavorSupported(
-				DataFlavor.javaFileListFlavor))
+			if(t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			{
 				returnValue = importFile(c,t);
 			}
-			else
-			{
-				returnValue = importText(c,t);
+			else {
+				DataFlavor	uriListStringDataFlavor = null;
+				DataFlavor[]	dataFlavors		= t.getTransferDataFlavors();
+				
+				for (int i = 0;i<dataFlavors.length;i++) {
+					DataFlavor dataFlavor = dataFlavors[i];
+					if (dataFlavor.getPrimaryType().equals("text")&&dataFlavor.getSubType().equals("uri-list")&&(dataFlavor.getRepresentationClass()==String.class)) {
+						uriListStringDataFlavor = dataFlavor;
+						break;
+					}
+ 				}
+				
+				if ((uriListStringDataFlavor!=null)&&t.isDataFlavorSupported(uriListStringDataFlavor))
+				{
+					returnValue = importURIList(c,t,uriListStringDataFlavor);
+				}
+				else
+				{
+					returnValue = importText(c,t);
+				}
 			}
 		}
 		catch(Exception e)
@@ -134,6 +165,57 @@ class TextAreaTransferHandler extends TransferHandler
 		return true;
 	} //}}}
 
+	//{{{ importText
+	private boolean importURIList(JComponent c, Transferable t,DataFlavor uriListStringDataFlavor)
+		throws Exception
+	{
+		String str = (String) t.getTransferData(uriListStringDataFlavor);
+
+		Log.log(Log.DEBUG,this,"=> URIList \""+str+"\"");
+		
+		JEditTextArea textArea = (JEditTextArea) c;
+		if (dragSource == null)
+		{
+			String		maybeManyFileURI	= str;
+			boolean		found			= false;			
+			String[]	components		= str.split("\r\n");
+			
+			for (int i = 0;i<components.length;i++)
+			{
+				String	str0	= components[i];
+				
+				if (str0.length()>0) {
+					URI	uri	= new URI(str0); // this handles the URI-decoding
+					
+					if ("file".equals(uri.getScheme()))
+					{
+						org.gjt.sp.jedit.io.VFSManager.runInWorkThread(new DraggedURLLoader(textArea,uri.getPath()));
+						found = true;
+					}
+					else
+					{
+						Log.log(Log.DEBUG,this,"I do not know how to handle this URI "+uri+", ignoring.");
+					}
+				}
+				else
+				{
+					// This should be the last component, because every URI in the list is terminated with a "\r\n", even the last one.
+					if (i!=components.length-1)
+					{
+						Log.log(Log.DEBUG,this,"Odd: there is an empty line in the uri list which is not the last line.");
+					}
+				}
+			}
+			
+			if (found)
+			{
+				return true;
+			}
+		}
+		
+		return true;
+	}
+	
 	//{{{ importText
 	private boolean importText(JComponent c, Transferable t)
 		throws Exception
