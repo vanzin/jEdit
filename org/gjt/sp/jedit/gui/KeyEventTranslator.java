@@ -75,6 +75,7 @@ public class KeyEventTranslator
 				case 0x08:	// case KeyEvent.VK_BACK_SPACE:
 				case 0x7f:	// case KeyEvent.VK_DELETE:
 				case 0x09:	// case KeyEvent.VK_TAB:
+				case 0x0a:	// case KeyEvent.VK_ENTER:
 				case KeyEvent.CHAR_UNDEFINED:
 					usecooked	= false;
 					keyChar		= 0;
