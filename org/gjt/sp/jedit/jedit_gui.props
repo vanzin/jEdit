@@ -203,7 +203,7 @@ exit.label=E$xit
 
 #{{{ Recent Files menu
 recent-files.code=new RecentFilesProvider();
-recent-files.label=Recent Files
+recent-files.label=Recent $Files
 no-recent-files.label=No Recent Files
 #}}}
 
