@@ -1414,48 +1414,51 @@ public class jEdit
 
 		Buffer newBuffer;
 
-		synchronized(bufferListLock)
+		synchronized (editBusOrderingLock)
 		{
-			Buffer buffer = getBuffer(path);
-			if(buffer != null)
+			synchronized(bufferListLock)
 			{
-				if(view != null)
-					view.setBuffer(buffer);
-
-				return buffer;
-			}
-
-			if(props == null)
-				props = new Hashtable();
-
-			BufferHistory.Entry entry = BufferHistory.getEntry(path);
-
-			if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
-			{
-				props.put(Buffer.CARET,new Integer(entry.caret));
-				/* if(entry.selection != null)
+				Buffer buffer = getBuffer(path);
+				if(buffer != null)
 				{
-					// getSelection() converts from string to
-					// Selection[]
-					props.put(Buffer.SELECTION,entry.getSelection());
-				} */
+					if(view != null)
+						view.setBuffer(buffer);
+	
+					return buffer;
+				}
+	
+				if(props == null)
+					props = new Hashtable();
+	
+				BufferHistory.Entry entry = BufferHistory.getEntry(path);
+	
+				if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
+				{
+					props.put(Buffer.CARET,new Integer(entry.caret));
+					/* if(entry.selection != null)
+					{
+						// getSelection() converts from string to
+						// Selection[]
+						props.put(Buffer.SELECTION,entry.getSelection());
+					} */
+				}
+	
+				if(entry != null && props.get(Buffer.ENCODING) == null)
+				{
+					if(entry.encoding != null)
+						props.put(Buffer.ENCODING,entry.encoding);
+				}
+	
+				newBuffer = new Buffer(path,newFile,false,props);
+	
+				if(!newBuffer.load(view,false))
+					return null;
+	
+				addBufferToList(newBuffer);
 			}
-
-			if(entry != null && props.get(Buffer.ENCODING) == null)
-			{
-				if(entry.encoding != null)
-					props.put(Buffer.ENCODING,entry.encoding);
-			}
-
-			newBuffer = new Buffer(path,newFile,false,props);
-
-			if(!newBuffer.load(view,false))
-				return null;
-
-			addBufferToList(newBuffer);
+	
+			EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
 		}
-
-		EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
 
 		if(view != null)
 			view.setBuffer(newBuffer);
@@ -2746,7 +2749,9 @@ public class jEdit
 	private static Map bufferHash;
 
 	// makes openTemporary() thread-safe
-	private static Object bufferListLock = new Object();
+	private static Object bufferListLock 		= new Object();
+	
+	private static Object editBusOrderingLock	= new Object();
 
 	// view link list
 	private static int viewCount;
