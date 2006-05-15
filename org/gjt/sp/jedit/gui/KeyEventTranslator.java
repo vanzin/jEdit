@@ -59,133 +59,176 @@ public class KeyEventTranslator
 	 */
 	public static Key translateKeyEvent(KeyEvent evt)
 	{
-		int modifiers = evt.getModifiers();
-		Key returnValue = null;
-
-		switch(evt.getID())
+		if (Debug.SIMPLIFIED_KEY_HANDLING)
 		{
-		case KeyEvent.KEY_PRESSED:
-			int keyCode = evt.getKeyCode();
-			if((keyCode >= KeyEvent.VK_0
-				&& keyCode <= KeyEvent.VK_9)
-				|| (keyCode >= KeyEvent.VK_A
-				&& keyCode <= KeyEvent.VK_Z))
-			{
-				if(Debug.ALTERNATIVE_DISPATCHER)
-					return null;
-				else
-				{
-					returnValue = new Key(
-						modifiersToString(modifiers),
-						'\0',Character.toLowerCase(
-						(char)keyCode));
-				}
+			char	keyChar		= evt.getKeyChar();
+			boolean usecooked	= !evt.isActionKey();
+			boolean accept		= false;
+
+			/**
+				These keys are hidden "control keys". That is, they are used as special function key (instead of representing a character to be input), but
+				Java delivers them with a valid keyChar. We intentionally ignore this keyChar.
+				(However, not ignoring the keyChar  would be an easy way to enter "escape" or "delete" characters into the edited text document, but this is not what we want.) 
+			*/
+			switch (evt.getKeyChar()) {
+				case 0x1b:	// case KeyEvent.VK_ESCAPE:
+				case 0x08:	// case KeyEvent.VK_BACK_SPACE:
+				case 0x7f:	// case KeyEvent.VK_DELETE:
+				case 0x09:	// case KeyEvent.VK_TAB:
+				case KeyEvent.CHAR_UNDEFINED:
+					usecooked	= false;
+					keyChar		= 0;
 			}
-			else
+
+			switch(evt.getID())
 			{
-				if(keyCode == KeyEvent.VK_TAB)
+				case KeyEvent.KEY_PRESSED:
+					accept	= !usecooked;
+				break;
+				case KeyEvent.KEY_TYPED:
+					accept	= usecooked;
+				break;
+				default:
+			}
+			
+			Key returnValue = null;
+			
+			if (accept) {
+				returnValue = new Key(modifiersToString(evt.getModifiers()),evt.getKeyCode(),keyChar);
+			}
+			
+			return returnValue;
+		}
+		else
+		{
+			int modifiers = evt.getModifiers();
+			Key returnValue = null;
+	
+			switch(evt.getID())
+			{
+			case KeyEvent.KEY_PRESSED:
+				int keyCode = evt.getKeyCode();
+				if((keyCode >= KeyEvent.VK_0
+					&& keyCode <= KeyEvent.VK_9)
+					|| (keyCode >= KeyEvent.VK_A
+					&& keyCode <= KeyEvent.VK_Z))
 				{
-					evt.consume();
-					returnValue = new Key(
-						modifiersToString(modifiers),
-						keyCode,'\0');
-				}
-				else if(keyCode == KeyEvent.VK_SPACE)
-				{
-					// for SPACE or S+SPACE we pass the
-					// key typed since international
-					// keyboards sometimes produce a
-					// KEY_PRESSED SPACE but not a
-					// KEY_TYPED SPACE, eg if you have to
-					// do a "<space> to insert ".
-					if((modifiers & ~InputEvent.SHIFT_MASK) == 0)
-						returnValue = null;
+					if(Debug.ALTERNATIVE_DISPATCHER)
+						return null;
 					else
 					{
 						returnValue = new Key(
 							modifiersToString(modifiers),
-							0,' ');
+							'\0',Character.toLowerCase(
+							(char)keyCode));
 					}
 				}
 				else
 				{
-					returnValue = new Key(
-						modifiersToString(modifiers),
-						keyCode,'\0');
+					if(keyCode == KeyEvent.VK_TAB)
+					{
+						evt.consume();
+						returnValue = new Key(
+							modifiersToString(modifiers),
+							keyCode,'\0');
+					}
+					else if(keyCode == KeyEvent.VK_SPACE)
+					{
+						// for SPACE or S+SPACE we pass the
+						// key typed since international
+						// keyboards sometimes produce a
+						// KEY_PRESSED SPACE but not a
+						// KEY_TYPED SPACE, eg if you have to
+						// do a "<space> to insert ".
+						if((modifiers & ~InputEvent.SHIFT_MASK) == 0)
+							returnValue = null;
+						else
+						{
+							returnValue = new Key(
+								modifiersToString(modifiers),
+								0,' ');
+						}
+					}
+					else
+					{
+						returnValue = new Key(
+							modifiersToString(modifiers),
+							keyCode,'\0');
+					}
 				}
-			}
-			break;
-		case KeyEvent.KEY_TYPED:
-			char ch = evt.getKeyChar();
-
-			if(KeyEventWorkaround.isMacControl(evt))
-				ch |= 0x60;
-
-			switch(ch)
-			{
-			case '\n':
-			case '\t':
-			case '\b':
+				break;
+			case KeyEvent.KEY_TYPED:
+				char ch = evt.getKeyChar();
+	
+				if(KeyEventWorkaround.isMacControl(evt))
+					ch |= 0x60;
+	
+				switch(ch)
+				{
+				case '\n':
+				case '\t':
+				case '\b':
+					return null;
+				case ' ':
+					if((modifiers & ~InputEvent.SHIFT_MASK) != 0)
+						return null;
+				}
+	
+				int ignoreMods;
+				if(Debug.ALT_KEY_PRESSED_DISABLED)
+				{
+					/* on MacOS, A+ can be user input */
+					ignoreMods = (InputEvent.SHIFT_MASK
+						| InputEvent.ALT_GRAPH_MASK
+						| InputEvent.ALT_MASK);
+				}
+				else
+				{
+					/* on MacOS, A+ can be user input */
+					ignoreMods = (InputEvent.SHIFT_MASK
+						| InputEvent.ALT_GRAPH_MASK);
+				}
+	
+				if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
+					&& evt.getWhen()
+					-  KeyEventWorkaround.lastKeyTime < 750
+					&& (KeyEventWorkaround.modifiers & ~ignoreMods)
+					!= 0)
+				{
+					if(Debug.ALTERNATIVE_DISPATCHER)
+					{
+						returnValue = new Key(
+							modifiersToString(modifiers),
+							0,ch);
+					}
+					else
+						return null;
+				}
+				else
+				{
+					if(ch == ' ')
+					{
+						returnValue = new Key(
+							modifiersToString(modifiers),
+							0,ch);
+					}
+					else
+						returnValue = new Key(null,0,ch);
+				}
+				break;
+			default:
 				return null;
-			case ' ':
-				if((modifiers & ~InputEvent.SHIFT_MASK) != 0)
-					return null;
 			}
-
-			int ignoreMods;
-			if(Debug.ALT_KEY_PRESSED_DISABLED)
-			{
-				/* on MacOS, A+ can be user input */
-				ignoreMods = (InputEvent.SHIFT_MASK
-					| InputEvent.ALT_GRAPH_MASK
-					| InputEvent.ALT_MASK);
-			}
+	
+			/* I guess translated events do not have the 'evt' field set
+			so consuming won't work. I don't think this is a problem as
+			nothing uses translation anyway */
+			Key trans = (Key)transMap.get(returnValue);
+			if(trans == null)
+				return returnValue;
 			else
-			{
-				/* on MacOS, A+ can be user input */
-				ignoreMods = (InputEvent.SHIFT_MASK
-					| InputEvent.ALT_GRAPH_MASK);
-			}
-
-			if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
-				&& evt.getWhen()
-				-  KeyEventWorkaround.lastKeyTime < 750
-				&& (KeyEventWorkaround.modifiers & ~ignoreMods)
-				!= 0)
-			{
-				if(Debug.ALTERNATIVE_DISPATCHER)
-				{
-					returnValue = new Key(
-						modifiersToString(modifiers),
-						0,ch);
-				}
-				else
-					return null;
-			}
-			else
-			{
-				if(ch == ' ')
-				{
-					returnValue = new Key(
-						modifiersToString(modifiers),
-						0,ch);
-				}
-				else
-					returnValue = new Key(null,0,ch);
-			}
-			break;
-		default:
-			return null;
+				return trans;
 		}
-
-		/* I guess translated events do not have the 'evt' field set
-		so consuming won't work. I don't think this is a problem as
-		nothing uses translation anyway */
-		Key trans = (Key)transMap.get(returnValue);
-		if(trans == null)
-			return returnValue;
-		else
-			return trans;
 	} //}}}
 
 	//{{{ parseKey() method
