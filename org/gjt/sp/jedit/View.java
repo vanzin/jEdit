@@ -563,7 +563,7 @@ public class View extends JFrame implements EBComponent
 	{
 		if(Debug.DUMP_KEY_EVENTS)
 		{
-			Log.log(Log.DEBUG,this,"Key event: "
+			Log.log(Log.DEBUG,this,"Key event                 : "
 				+ GrabKeyDialog.toString(evt) + " from " + from);
 		}
 
@@ -1725,9 +1725,15 @@ loop:		for(;;)
 				}
 			}
 		}
-
+		
 		if(evt.isConsumed())
 			return null;
+
+		if(Debug.DUMP_KEY_EVENTS)
+		{
+			Log.log(Log.DEBUG,this,"Key event (preprocessing) : "
+					+ GrabKeyDialog.toString(evt));
+		}
 
 		return KeyEventWorkaround.processKeyEvent(evt);
 	} //}}}
