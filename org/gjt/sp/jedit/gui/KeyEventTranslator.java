@@ -81,7 +81,7 @@ public class KeyEventTranslator
 						keyChar+=0x40;
 						
 						if ((keyChar>='A')&&(keyChar<='Z')) {	// if they are uppercase letters
-								keyChar+=20; 		// make them lowercase letters
+								keyChar+=0x20; 		// make them lowercase letters
 						}
 //						usecooked	= false;
 
