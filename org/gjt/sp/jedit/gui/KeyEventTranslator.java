@@ -62,9 +62,29 @@ public class KeyEventTranslator
 		if (Debug.SIMPLIFIED_KEY_HANDLING)
 		{
 			char	keyChar		= evt.getKeyChar();
+			int	keyCode		= evt.getKeyCode();
+			int	modifiers	= evt.getModifiers();
 			boolean usecooked	= !evt.isActionKey();
 			boolean accept		= false;
 
+//			Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+".");
+			
+			/*
+				Workaround against the bug of jdk1.5, that Ctrl+A has keyChar 0x1 instead of keyChar 0x41:
+			*/
+			if ((modifiers&KeyEvent.CTRL_MASK)!=0) {
+//				Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.");
+				if (keyChar<0x20) {
+//					Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.1.");
+					if (keyChar!=keyCode) { // specifically: if the real Escape, Backspace, Delete, Tab, Enter key was pressed, then this is false
+//						Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.1.1");
+						keyChar+=0x60;
+//						usecooked	= false;
+//						keyChar		= 0;
+					}
+				}
+			}
+			
 			/**
 				These keys are hidden "control keys". That is, they are used as special function key (instead of representing a character to be input), but
 				Java delivers them with a valid keyChar. We intentionally ignore this keyChar.
@@ -95,7 +115,7 @@ public class KeyEventTranslator
 			Key returnValue = null;
 			
 			if (accept) {
-				returnValue = new Key(modifiersToString(evt.getModifiers()),evt.getKeyCode(),keyChar);
+				returnValue = new Key(modifiersToString(modifiers),keyCode,keyChar);
 			}
 			
 			return returnValue;
