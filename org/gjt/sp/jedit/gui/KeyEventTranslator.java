@@ -78,12 +78,23 @@ public class KeyEventTranslator
 //					Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.1.");
 					if (keyChar!=keyCode) { // specifically: if the real Escape, Backspace, Delete, Tab, Enter key was pressed, then this is false
 //						Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.1.1");
-						keyChar+=0x60;
+						keyChar+=0x40;
+						
+						if ((keyChar>='A')&&(keyChar<='Z')) {	// if they are uppercase letters
+								keyChar+=20; 		// make them lowercase letters
+						}
 //						usecooked	= false;
-//						keyChar		= 0;
+
 					}
 				}
+				
+				if (keyChar=='\\') { // for compatibility with traditional jEdit installations (Shortcuts are called "C+BACK_SLASH" instead of "C+\")
+//					Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.1.1: backslash.");
+					keyChar		= 0;
+					keyCode		= KeyEvent.VK_BACK_SLASH;
+				}
 			}
+			
 			
 			/**
 				These keys are hidden "control keys". That is, they are used as special function key (instead of representing a character to be input), but
