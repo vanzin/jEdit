@@ -155,6 +155,11 @@ public class GeneralOptionPane extends AbstractOptionPane
 		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
 		sortByName.setEnabled(sortBuffers.isSelected());
 		addComponent(sortByName);
+		
+		newKeyboardHandling = new JCheckBox(jEdit.getProperty("options.general.newkeyhandling"));
+		newKeyboardHandling.setSelected(jEdit.getBooleanProperty("newkeyhandling"));
+		addComponent(newKeyboardHandling);
+		
 
 	} //}}}
 
@@ -197,6 +202,9 @@ public class GeneralOptionPane extends AbstractOptionPane
 		}
 		jEdit.setProperty("recentFiles",recentFiles.getText());
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
+		boolean nkh = newKeyboardHandling.isSelected();
+		jEdit.setBooleanProperty("newkeyhandling", nkh);
+		Debug.SIMPLIFIED_KEY_HANDLING = nkh;
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());
@@ -219,6 +227,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restoreCLI;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
-	
+	private JCheckBox newKeyboardHandling;
 	//}}}
 }
