@@ -266,6 +266,10 @@ public class GrabKeyDialog extends JDialog
 	//{{{ getSymbolicName() method
 	public static String getSymbolicName(int keyCode)
 	{
+		if (Debug.DUMP_KEY_EVENTS) {
+			Log.log(Log.DEBUG,GrabKeyDialog.class,"getSymbolicName("+keyCode+").");
+		}
+		
 		if(keyCode == KeyEvent.VK_UNDEFINED)
 			return null;
 		/* else if(keyCode == KeyEvent.VK_OPEN_BRACKET)
@@ -435,6 +439,10 @@ public class GrabKeyDialog extends JDialog
 
 			if(key.modifiers != null)
 				keyString.append(key.modifiers).append('+');
+
+			if (Debug.DUMP_KEY_EVENTS) {
+				Log.log(Log.DEBUG,GrabKeyDialog.class,"processKeyEvent() key="+key+".");
+			}
 
 			if(key.input == ' ')
 				keyString.append("SPACE");
