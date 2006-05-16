@@ -118,7 +118,7 @@ public class Debug
 	 */
 	public static boolean ALT_KEY_PRESSED_DISABLED = OperatingSystem.isMacOS();
 
-	public static boolean SIMPLIFIED_KEY_HANDLING	= true;
+	public static boolean SIMPLIFIED_KEY_HANDLING	= false;
 
 	/**
 	 * Geometry workaround for X11.
