@@ -71,6 +71,8 @@ public class KeyEventTranslator
 			
 			/*
 				Workaround against the bug of jdk1.5, that Ctrl+A has keyChar 0x1 instead of keyChar 0x41:
+				
+				This bug may be related to http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6320676
 			*/
 			if ((modifiers&KeyEvent.CTRL_MASK)!=0) {
 //				Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.");
