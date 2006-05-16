@@ -662,11 +662,11 @@ doSomethingUseful();</programlisting>
 <title> Switching Buffers from Macros </title>
 
 <para> Many jEdit macros switch buffers. However, a macro itself
-is considered a <literal>compoundEdit</literal>, or a single undoable transaction. Each <literal>compoundEdit</literal> must be associated with a single jedit Buffer. Therefore, any macro that performs a buffer switching operation must do so <emphasis>outside</emphasis> the compoundEdit, otherwise you will see "Unbalanced Begin/End Compound" exceptions.
+is considered a <literal>compoundEdit</literal>, or a single undoable transaction. Each <literal>compoundEdit</literal> must be associated with a single jEdit Buffer. Therefore, any macro that performs a buffer switching operation must do so <emphasis>outside</emphasis> the compoundEdit (because such an operation is also considered an undoable transaction). Without handling this, you will either see "Unbalanced Begin/End Compound" exceptions, or the text area will get totally confused about where it is, and the cursor can go out of your visible window. 
 </para> 
 
 <programlisting>
-// End the previous transaction
+// End the "current" compoundEdit
 view.getEditPane().getBuffer().endCompoundEdit();
 // switch to the corresponding header/source file.
 if (isSourceFile(extension)) 
@@ -677,11 +677,13 @@ else if (extension.equals(&quot;h&quot;)) {
   String sourceFile = getSourceFile(baseName);
   jEdit.openFile(view, sourceFile);         
 }
-//start a new transaction
+//start a new compoundEdit
 view.getEditPane().getBuffer().beginCompoundEdit();
 </programlisting>
 
-<para> Any of these operations must be enclosed inbetween an end/begin compound edit: <literal>jEdit.openFile(), EditPane.nextBuffer(), EditPane.prevBuffer(), EditPane.setBuffer(), JEditTextArea.setBuffer()</literal>.</para>
+<para> Any of these operations must be enclosed inbetween an end/begin compound edit: <literal>jEdit.openFile(), EditPane.nextBuffer(), EditPane.prevBuffer(), EditPane.setBuffer(), JEditTextArea.setBuffer()</literal>. Operations that call these functions indirectly should also be "protected". 
+</para>
+
 </sect1>
 
 <sect1 id="macro-tips-BeanShell"><title>Advanced BeanShell Techniques</title>

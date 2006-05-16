@@ -1,18 +1,24 @@
 JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
-Thanks to: ...<also insert your name here if you committed anything>..., and Xuan Baldauf
-for contributing to this release.
+    Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson, 
+    Bjorn Kautler, and Xuan Baldauf for contributing to this release.
+
 {{{ Keyboard handling changes
 - Keyboard event workaround handling has been substantially changed (as
   a fix to bug 1488047). This may greatly affect the way your keys work.
   Please report any bugs regarding this (and please drop a note about
   this bug in bug 1488047).
 }}}
+
 {{{ API Changes
 - 
 }}}
+
 {{{ Miscellaneous
+- Buffer_Switcher and ToggleHeaderSource were confusing the TextArea (bug#1469996).
+  These macros have been rewritten to fix that (Bjorn Kautler). 
+  New section added to docs about buffer-switching macros.
 - The "Recent files" menu can now be reaches with the keystroke sequence
   "Alt+F F" (bug 1488066) (Xuan Baldauf)
 - The "Recent files" menu displays pathname information in the status
@@ -26,7 +32,7 @@ for contributing to this release.
 {{{ Version 4.3pre4
 Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf, 
 Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust, 
-Marcello Vanzin, Slava Pestov, Bjorn Kautler, and Jeffrey Hoyt for 
+Daniel Hahler, Marcello Vanzin, Slava Pestov, Bjorn Kautler, and Jeffrey Hoyt for 
 contributing to this release.
 
 {{{ Syntax Highlighting 
@@ -55,7 +61,6 @@ contributing to this release.
 
 
 - TextAreaTransferHandler patch 1487647 Drag 'n' drop from KDE now works. (Xuan Baldauf)
-- Also fixed by Vanza
 
 - GUIUtilities patch 1275607 for "find" dialog (Xuan Baldauf)
 
