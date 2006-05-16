@@ -429,16 +429,14 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				handler.runMacro(null,this);
 			else
 			{
-				Buffer buffer = view.getBuffer();
-
 				try
 				{
-					buffer.beginCompoundEdit();
+					view.getBuffer().beginCompoundEdit();
 					handler.runMacro(view,this);
 				}
 				finally
 				{
-					buffer.endCompoundEdit();
+					view.getBuffer().endCompoundEdit();
 				}
 			}
 		} //}}}

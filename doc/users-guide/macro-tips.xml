@@ -658,6 +658,31 @@ doSomethingUseful();</programlisting>
 </para>
 
 </sect1>
+<sect1 id="switching-buffers-fromm-acros">
+<title> Switching Buffers from Macros </title>
+
+<para> Many jEdit macros switch buffers. However, a macro itself
+is considered a <literal>compoundEdit</literal>, or a single undoable transaction. Each <literal>compoundEdit</literal> must be associated with a single jedit Buffer. Therefore, any macro that performs a buffer switching operation must do so <emphasis>outside</emphasis> the compoundEdit, otherwise you will see "Unbalanced Begin/End Compound" exceptions.
+</para> 
+
+<programlisting>
+// End the previous transaction
+view.getEditPane().getBuffer().endCompoundEdit();
+// switch to the corresponding header/source file.
+if (isSourceFile(extension)) 
+{
+  jEdit.openFile(view, baseName + &quot;.h&quot;); 
+}
+else if (extension.equals(&quot;h&quot;)) {
+  String sourceFile = getSourceFile(baseName);
+  jEdit.openFile(view, sourceFile);         
+}
+//start a new transaction
+view.getEditPane().getBuffer().beginCompoundEdit();
+</programlisting>
+
+<para> Any of these operations must be enclosed inbetween an end/begin compound edit: <literal>jEdit.openFile(), EditPane.nextBuffer(), EditPane.prevBuffer(), EditPane.setBuffer(), JEditTextArea.setBuffer()</literal>.</para>
+</sect1>
 
 <sect1 id="macro-tips-BeanShell"><title>Advanced BeanShell Techniques</title>
 

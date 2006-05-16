@@ -2,6 +2,8 @@
  * Buffer_Switcher.bsh - a BeanShell macro script for displaying
  * and switching between open buffers.
  *
+ * Requires jedit 4.3pre5
+ *
  * Copyright (C) 2001-2004 Ollie Rutherfurd, oliver@rutherfurd.net
  *
  * :mode=beanshell:tabSize=4:indentSize=4:maxLineLen=0:noTabs=false:
@@ -130,7 +132,14 @@ BufferSwitcherDialog(doModal, useCustomCellRenderer)
 		if(_buffer == null)
 			view.getToolkit().beep();
 		else
+		{
+		/* Because we are about to change buffers, we must tell jEdit that the current
+			compound update is finished, and we want to start a new one. 
+			Without this, the undo manager gets confused */
+		    view.getEditPane().getBuffer().endCompoundEdit();
 			view.getEditPane().setBuffer(_buffer);
+			_buffer.beginCompoundEdit();
+		}
 	}	// }}}
 
 	// {{{ closeBuffer()
@@ -141,6 +150,10 @@ BufferSwitcherDialog(doModal, useCustomCellRenderer)
 		if(_buffer == null)
 			view.getToolkit().beep();
 		else
+		{
+			boolean inCompoundEdit = _buffer.insideCompoundEdit();
+			if (inCompoundEdit)
+				_buffer.endCompoundEdit();
 			if(jEdit.closeBuffer(view, _buffer))
 			{
 				bufferList.setListData(jEdit.getBuffers());
@@ -148,6 +161,9 @@ BufferSwitcherDialog(doModal, useCustomCellRenderer)
 					index--;
 				bufferList.setSelectedIndex(index);
 			}
+			if (inCompoundEdit)
+				view.getEditPane().getBuffer().beginCompoundEdit();
+		}
 		numOpen--;
 		dialog.setTitle("" + numOpen + " Open Buffers");
 	}	// }}}
