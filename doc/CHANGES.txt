@@ -1,5 +1,28 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre5
+Thanks to: ...<also insert your name here if you committed anything>..., and Xuan Baldauf
+for contributing to this release.
+{{{ Keyboard handling changes
+- Keyboard event workaround handling has been substantially changed (as
+  a fix to bug 1488047). This may greatly affect the way your keys work.
+  Please report any bugs regarding this (and please drop a note about
+  this bug in bug 1488047).
+}}}
+{{{ API Changes
+- 
+}}}
+{{{ Miscellaneous
+- The "Recent files" menu can now be reaches with the keystroke sequence
+  "Alt+F F" (bug 1488066) (Xuan Baldauf)
+- The "Recent files" menu displays pathname information in the status
+  line now also in cases the keyboard is used to choose menu items
+  (bug 1488060) (Xuan Baldauf)
+- Drag&Drop now accepts multiple files in KDE environment. (bug 1487647)
+  (Xuan Baldauf)
+}}}
+}}}
+
 {{{ Version 4.3pre4
 Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf, 
 Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust, 
