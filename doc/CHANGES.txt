@@ -12,26 +12,30 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 
 {{{ API Changes
-- 
+- Macros.Macro.invoke() has been rewritten to begin a compoundEdit on the buffer that is
+  active buffer before the macro gets invoked, and end a compoundEdit on the buffer that is active
+  after the macro is invoked.
+  Macros that change the active buffer have to call endCompoundEdit() on the old active buffer
+  and beginCompoundEdit() on the new active buffer from now on.
+  If this is done incorrectly, the UndoManager throws an exception about
+  "unbalanced begin-/endCompoundEdit" to the ActivitLog. (bug #1469996).
+  New section added to docs about buffer-switching macros.
+  (Björn "Vampire" Kautler) 
 }}}
 
 {{{ Miscellaneous
 - The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn "Vampire" Kautler)
-- Buffer_Switcher and ToggleHeaderSource were confusing the TextArea (bug #1469996).
+
+- macros Buffer_Switcher and ToggleHeaderSource were confusing the TextArea (bug #1469996).
   These macros have been rewritten to fix that (Björn "Vampire" Kautler). 
-  New section added to docs about buffer-switching macros.
-- Macros.Macro.invoke() has been rewritten to begin a compoundEdit on the buffer that is
-  active before the macro gets invoked and end a compoundEdit on the buffer that is active
-  after the macro is invoked (not on the same as before the macro-invokation like until now).
-  Macros that change the active buffer have to call endCompoundEdit() on the old active buffer
-  and beginCompoundEdit() on the new active buffer from now on. If this is done incorrectly,
-  the UndoManager throws an exception about "unbalanced begin-/endCompoundEdit" to the
-  ActivitLog. (bug #1469996) (Björn "Vampire" Kautler)
+
 - The "Recent files" menu can now be reaches with the keystroke sequence
   "Alt+F F" (bug 1488066) (Xuan Baldauf)
+
 - The "Recent files" menu displays pathname information in the status
   line now also in cases the keyboard is used to choose menu items
   (bug 1488060) (Xuan Baldauf)
+
 - Drag&Drop now accepts multiple files in KDE environment. (bug 1487647)
   (Xuan Baldauf)
 }}}
