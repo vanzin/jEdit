@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
     Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson, 
-    Bjorn Kautler, and Xuan Baldauf for contributing to this release.
+    Björn Kautler, and Xuan Baldauf for contributing to this release.
 
 {{{ Keyboard handling changes
 - Keyboard event workaround handling has been substantially changed (as
@@ -16,8 +16,9 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 
 {{{ Miscellaneous
+- The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn Kautler)
 - Buffer_Switcher and ToggleHeaderSource were confusing the TextArea (bug#1469996).
-  These macros have been rewritten to fix that (Bjorn Kautler). 
+  These macros have been rewritten to fix that (Björn Kautler). 
   New section added to docs about buffer-switching macros.
 - The "Recent files" menu can now be reaches with the keystroke sequence
   "Alt+F F" (bug 1488066) (Xuan Baldauf)
@@ -32,7 +33,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre4
 Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf, 
 Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust, 
-Daniel Hahler, Marcello Vanzin, Slava Pestov, Bjorn Kautler, and Jeffrey Hoyt for 
+Daniel Hahler, Marcello Vanzin, Slava Pestov, Björn Kautler, and Jeffrey Hoyt for 
 contributing to this release.
 
 {{{ Syntax Highlighting 

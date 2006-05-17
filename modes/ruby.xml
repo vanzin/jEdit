@@ -12,7 +12,7 @@
 		<PROPERTY NAME="commentEnd" VALUE="=end" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x([[:xdigit:]]+[_]?)*[[:xdigit:]]|0b([01]+[_]?)*[01]|([[:digit:]]+[_]?)*[[:digit:]](e(([[:digit:]]+[_]?)*[[:digit:]])*)?)">
 		<!-- Ruby comment (Inline Documetation ) -->
 		<SPAN TYPE="COMMENT2">
 			<BEGIN>=begin</BEGIN>
