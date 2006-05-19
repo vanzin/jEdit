@@ -396,7 +396,7 @@ public class HelpTOCPanel extends JPanel
 
 					HelpNode node = (HelpNode)obj;
 
-					helpViewer.gotoURL(node.href,true);
+					helpViewer.gotoURL(node.href,true,0);
 				}
 
 				super.processMouseEvent(evt);
