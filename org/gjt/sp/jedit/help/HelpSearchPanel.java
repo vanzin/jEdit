@@ -293,7 +293,7 @@ public class HelpSearchPanel extends JPanel
 			{
 				Result result = (Result)results.getModel()
 					.getElementAt(row);
-				helpViewer.gotoURL(result.file,true);
+				helpViewer.gotoURL(result.file,true, 0);
 			}
 		}
 	} //}}}
