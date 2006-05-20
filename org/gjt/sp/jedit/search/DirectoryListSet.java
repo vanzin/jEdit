@@ -44,8 +44,13 @@ public class DirectoryListSet extends BufferListSet
 		this.directory = directory;
 		this.glob = glob;
 		this.recurse = recurse;
+		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary");
+		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden");
+		
 	} //}}}
 
+	
+	
 	//{{{ getDirectory() method
 	public String getDirectory()
 	{
@@ -138,7 +143,7 @@ public class DirectoryListSet extends BufferListSet
 
 		try
 		{
-			return vfs._listDirectory(session,directory,glob,recurse,comp);
+			return vfs._listDirectory(session,directory,glob,recurse,comp, skipBinary, skipHidden);
 		}
 		catch(IOException io)
 		{
@@ -152,5 +157,7 @@ public class DirectoryListSet extends BufferListSet
 	private String directory;
 	private String glob;
 	private boolean recurse;
+	private boolean skipHidden;
+	private boolean skipBinary;
 	//}}}
 }

@@ -600,7 +600,36 @@ public abstract class VFS
 	 * @since jEdit 4.1pre1
 	 */
 	public String[] _listDirectory(Object session, String directory,
-		String glob, boolean recursive, Component comp)
+		String glob, boolean recursive, Component comp )
+		throws IOException
+	{
+		String[] retval = null;
+		retval = _listDirectory(session, directory, glob, recursive, comp, true, false);
+		return retval;
+	}
+	
+	
+	//{{{ _listDirectory() method
+	/**
+	 * A convinience method that matches file names against globs, and can
+	 * optionally list the directory recursively.
+	 * @param session The session
+	 * @param directory The directory. Note that this must be a full
+	 * URL, including the host name, path name, and so on. The
+	 * username and password (if needed by the VFS) is obtained from the
+	 * session instance.
+	 * @param glob Only file names matching this glob will be returned
+	 * @param recursive If true, subdirectories will also be listed.
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @param skipBinary ignore binary files (do not return them)
+	 * @param skipHidden hidden directories beginning with "." 
+	 * 
+	 * @since jEdit 4.3pre5
+	 */
+	public String[] _listDirectory(Object session, String directory,
+		String glob, boolean recursive, Component comp,
+		boolean skipBinary, boolean skipHidden)
 		throws IOException
 	{
 		Log.log(Log.DEBUG,this,"Listing " + directory);
@@ -619,7 +648,7 @@ public abstract class VFS
 		}
 
 		_listDirectory(session,new ArrayList(),files,directory,filter,
-			recursive,comp);
+			recursive, comp, skipBinary, skipHidden);
 
 		String[] retVal = (String[])files.toArray(new String[files.size()]);
 
@@ -967,10 +996,10 @@ public abstract class VFS
 		});
 	} //}}}
 
-	//{{{ _listDirectory() method
+	//{{{ recursive _listDirectory() method
 	private void _listDirectory(Object session, ArrayList stack,
 		ArrayList files, String directory, RE glob, boolean recursive,
-		Component comp) throws IOException
+		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
 		if(stack.contains(directory))
 		{
@@ -990,10 +1019,11 @@ public abstract class VFS
 		for(int i = 0; i < _files.length; i++)
 		{
 			VFSFile file = _files[i];
-
 			if(file.getType() == VFSFile.DIRECTORY
 				|| file.getType() == VFSFile.FILESYSTEM)
 			{
+				if (skipHidden && file.getName().startsWith("."))
+					continue;
 				if(recursive)
 				{
 					// resolve symlinks to avoid loops
@@ -1004,15 +1034,21 @@ public abstract class VFS
 
 					_listDirectory(session,stack,files,
 						canonPath,glob,recursive,
-						comp);
+						comp, skipBinary, skipHidden);
 				}
+		
 			}
-			else
+			else // It's a regular file
 			{
 				if(!glob.isMatch(file.getName()))
 					continue;
 
 				Log.log(Log.DEBUG,this,file.getPath());
+				if (skipBinary) 
+				{
+					// File f = file.getPath();
+					// TODO: Add a check for binary conditions
+				}
 				files.add(file.getPath());
 			}
 		}
