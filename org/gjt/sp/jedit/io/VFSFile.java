@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.io;
 
 //{{{ Imports
 import java.awt.Color;
+import java.awt.Component;
 import java.io.*;
 import java.text.*;
 import java.util.Date;
@@ -219,6 +220,55 @@ public class VFSFile implements Serializable
 		this.name = name;
 	} //}}}
 
+	//{{{ isBinary() method
+	/**
+	* Check if a file is binary file.
+	* To check if a file is binary, we will check the first characters 100 
+	* (jEdit property vfs.binaryCheck.length)
+	* If more than 1 (jEdit property vfs.binaryCheck.count), the
+	* file is declared binary.
+	* This is not 100% because sometimes the autodetection could fail.
+	*
+	* @param session the VFS session
+	* @return <code>true</code> if the file was detected as binary
+	* @throws IOException IOException If an I/O error occurs
+	* @since jEdit 4.3pre5
+	*/
+	public boolean isBinary(Object session)
+		throws IOException
+	{
+		
+		Reader reader = null;
+		InputStream in = getVFS()._createInputStream(session,getPath(),
+			false,jEdit.getActiveView());
+		if(in == null)
+			throw new IOException("Unable to get a Stream for this file "+this);
+
+		try
+		{
+			reader = MiscUtilities.autodetect(in, null);
+			long nbChars = Math.min(length, jEdit.getIntegerProperty("vfs.binaryCheck.length",100));
+			int authorized = jEdit.getIntegerProperty("vfs.binaryCheck.count",1);
+			for (long i = 0;i < nbChars;i++)
+			{
+				int c = reader.read();
+				if (c == 0)
+				{
+					authorized--;
+					if (authorized == 0)
+						return true;
+				}
+			}
+		}
+		finally
+		{
+			MiscUtilities.closeQuietly(reader);
+		}
+		return false;
+	} //}}}
+
+	
+	
 	//{{{ getPath() method
 	public String getPath()
 	{

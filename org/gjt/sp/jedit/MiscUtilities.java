@@ -677,55 +677,18 @@ public class MiscUtilities
 		return copyStream(4096,progress, in, out, canStop);
 	} //}}}
 
-	//{{{ isBinaryFile() method
 	/**
-	* Check if a file is binary file.
-	* To check if a file is binary, we will check the first characters 100 
-	* (jEdit property vfs.binaryCheck.length)
-	* If more than 1 (jEdit property vfs.binaryCheck.count), the
-	* file is declared binary.
-	* This is not 100% because sometimes the autodetection could fail.
-	*
-	* @param comp The component that will parent error dialog boxes
-	* @param session the VFS session
-	* @param file the file
-	* @return <code>true</code> if the file was detected as binary
-	* @throws IOException IOException If an I/O error occurs
-	* @since jEdit 4.3pre5
-	*/
-	public static boolean isBinaryFile(Component comp, Object session, VFSFile file)
-		throws IOException
-	{
-		long length = file.getLength();
-		
-		Reader reader = null;
-		InputStream in = file.getVFS()._createInputStream(session,file.getPath(),
-			false,comp);
-		if(in == null)
-			throw new IOException("Unable to get a Stream for this file "+file);
-
-		try
-		{
-			reader = autodetect(in, null);
-			long nbChars = Math.min(length, jEdit.getIntegerProperty("vfs.binaryCheck.length",100));
-			int authorized = jEdit.getIntegerProperty("vfs.binaryCheck.count",1);
-			for (long i = 0;i < nbChars;i++)
-			{
-				int c = reader.read();
-				if (c == 0)
-				{
-					authorized--;
-					if (authorized == 0)
-						return true;
-				}
-			}
-		}
-		finally
-		{
-			closeQuietly(reader);
-		}
+	 * 
+	 * @param filename
+	 * @return true if this is a backup file.
+	 */
+	public static boolean isBackup( String filename ) {
+		if (filename.startsWith("#")) return true;
+		if (filename.endsWith("~")) return true;
+		if (filename.endsWith(".bak")) return true;
 		return false;
-	} //}}}
+	}
+	
 
   //{{{ autodetect() method
 	/**
