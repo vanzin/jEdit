@@ -624,7 +624,10 @@ public abstract class VFS
 	 * @exception IOException if an I/O error occurred
 	 * @param skipBinary ignore binary files (do not return them).
 	 *    This will slow down the process since it will open the files
-	 * @param skipHidden hidden directories beginning with "." 
+	 * @param skipHidden skips hidden files, directories, and
+	 *        backup files. Ignores any file beginning with . or #, or ending with ~
+	 *        or .bak
+	 *        
 	 * 
 	 * @since jEdit 4.3pre5
 	 */
@@ -648,7 +651,7 @@ public abstract class VFS
 			return null;
 		}
 
-		_listDirectory(session,new ArrayList(),files,directory,filter,
+		listFiles(session,new ArrayList(),files,directory,filter,
 			recursive, comp, skipBinary, skipHidden);
 
 		String[] retVal = (String[])files.toArray(new String[files.size()]);
@@ -998,8 +1001,8 @@ public abstract class VFS
 		});
 	} //}}}
 
-	//{{{ recursive _listDirectory() method
-	private void _listDirectory(Object session, ArrayList stack,
+	//{{{ recursive listFiles() method
+	private void listFiles(Object session, ArrayList stack,
 		ArrayList files, String directory, RE glob, boolean recursive,
 		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
@@ -1021,11 +1024,11 @@ public abstract class VFS
 		for(int i = 0; i < _files.length; i++)
 		{
 			VFSFile file = _files[i];
+			if (skipHidden && (file.isHidden() || MiscUtilities.isBackup(file.getName()))) 
+				continue;
 			if(file.getType() == VFSFile.DIRECTORY
 				|| file.getType() == VFSFile.FILESYSTEM)
 			{
-				if (skipHidden && file.getName().startsWith("."))
-					continue;
 				if(recursive)
 				{
 					// resolve symlinks to avoid loops
@@ -1034,7 +1037,7 @@ public abstract class VFS
 					if(!MiscUtilities.isURL(canonPath))
 						canonPath = MiscUtilities.resolveSymlinks(canonPath);
 
-					_listDirectory(session,stack,files,
+					listFiles(session,stack,files,
 						canonPath,glob,recursive,
 						comp, skipBinary, skipHidden);
 				}
@@ -1045,8 +1048,7 @@ public abstract class VFS
 				if(!glob.isMatch(file.getName()))
 					continue;
 
-				if (skipBinary &&
-					MiscUtilities.isBinaryFile(jEdit.getActiveView(), session, file))
+				if (skipBinary && file.isBinary(session))
 					continue;
 					
 				Log.log(Log.DEBUG,this,file.getPath());
