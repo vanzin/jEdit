@@ -33,10 +33,15 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.awt.*;
+
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
+import org.gjt.sp.jedit.buffer.BufferIORequest;
 //}}}
 
 /**
@@ -672,6 +677,189 @@ public class MiscUtilities
 		return copyStream(4096,progress, in, out, canStop);
 	} //}}}
 
+	//{{{ isBinaryFile() method
+	/**
+	* Check if a file is binary file.
+	* To check if a file is binary, we will check the first characters 100 
+	* (jEdit property vfs.binaryCheck.length)
+	* If more than 1 (jEdit property vfs.binaryCheck.count), the
+	* file is declared binary.
+	* This is not 100% because sometimes the autodetection could fail.
+	*
+	* @param comp The component that will parent error dialog boxes
+	* @param session the VFS session
+	* @param file the file
+	* @return <code>true</code> if the file was detected as binary
+	* @throws IOException IOException If an I/O error occurs
+	* @since jEdit 4.3pre5
+	*/
+	public static boolean isBinaryFile(Component comp, Object session, VFSFile file)
+		throws IOException
+	{
+		long length = file.getLength();
+		
+		Reader reader = null;
+		InputStream in = file.getVFS()._createInputStream(session,file.getPath(),
+			false,comp);
+		if(in == null)
+			throw new IOException("Unable to get a Stream for this file "+file);
+
+		try
+		{
+			reader = autodetect(in, null);
+			long nbChars = Math.min(length, jEdit.getIntegerProperty("vfs.binaryCheck.length",100));
+			int authorized = jEdit.getIntegerProperty("vfs.binaryCheck.count",1);
+			for (long i = 0;i < nbChars;i++)
+			{
+				int c = reader.read();
+				if (c == 0)
+				{
+					authorized--;
+					if (authorized == 0)
+						return true;
+				}
+			}
+		}
+		finally
+		{
+			closeQuietly(reader);
+		}
+		return false;
+	} //}}}
+
+  //{{{ autodetect() method
+	/**
+	 * Tries to detect if the stream is gzipped, and if it has an encoding
+	 * specified with an XML PI.
+	 *
+	 * @param in the input stream reader that must be autodetected
+	 * @param buffer a buffer. It can be null if you only want to autodetect the encoding of a file
+	 * @return a reader using the detected encoding
+	 * @throws IOException io exception during read
+	 * @since jEdit 4.3pre5
+	 */
+	public static Reader autodetect(InputStream in, Buffer buffer) throws IOException
+	{
+		in = new BufferedInputStream(in);
+
+		String encoding;
+		if (buffer == null)
+			encoding = System.getProperty("file.encoding");
+		else
+			encoding = buffer.getStringProperty(Buffer.ENCODING);
+		
+		if(!in.markSupported())
+			Log.log(Log.WARNING,MiscUtilities.class,"Mark not supported: " + in);
+		else if(buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
+		{
+			in.mark(BufferIORequest.XML_PI_LENGTH);
+			int b1 = in.read();
+			int b2 = in.read();
+			int b3 = in.read();
+			
+			if(b1 == BufferIORequest.GZIP_MAGIC_1 && b2 == BufferIORequest.GZIP_MAGIC_2)
+			{
+				in.reset();
+				in = new GZIPInputStream(in);
+				if (buffer != null)
+					buffer.setBooleanProperty(Buffer.GZIPPED,true);
+				// auto-detect encoding within the gzip stream.
+				return autodetect(in, buffer);
+			}
+			else if (b1 == BufferIORequest.UNICODE_MAGIC_1
+				&& b2 == BufferIORequest.UNICODE_MAGIC_2)
+			{
+				in.reset();
+				in.read();
+				in.read();
+				encoding = "UTF-16BE";
+				if (buffer != null)
+					buffer.setProperty(Buffer.ENCODING,encoding);
+			}
+			else if (b1 == BufferIORequest.UNICODE_MAGIC_2
+				&& b2 == BufferIORequest.UNICODE_MAGIC_1)
+			{
+				in.reset();
+				in.read();
+				in.read();
+				encoding = "UTF-16LE";
+				if (buffer != null)
+					buffer.setProperty(Buffer.ENCODING,encoding);
+			}
+			else if(b1 == BufferIORequest.UTF8_MAGIC_1 && b2 == BufferIORequest.UTF8_MAGIC_2
+				&& b3 == BufferIORequest.UTF8_MAGIC_3)
+			{
+				// do not reset the stream and just treat it
+				// like a normal UTF-8 file.
+				if (buffer != null)
+					buffer.setProperty(Buffer.ENCODING, MiscUtilities.UTF_8_Y);
+				
+				encoding = "UTF-8";
+			}
+			else
+			{
+				in.reset();
+				
+				byte[] _xmlPI = new byte[BufferIORequest.XML_PI_LENGTH];
+				int offset = 0;
+				int count;
+				while((count = in.read(_xmlPI,offset,
+					BufferIORequest.XML_PI_LENGTH - offset)) != -1)
+				{
+					offset += count;
+					if(offset == BufferIORequest.XML_PI_LENGTH)
+						break;
+				}
+				
+				String xmlEncoding = getXMLEncoding(new String(
+					_xmlPI,0,offset,"ASCII"));
+				if(xmlEncoding != null)
+				{
+					encoding = xmlEncoding;
+					if (buffer != null)
+						buffer.setProperty(Buffer.ENCODING,encoding);
+				}
+				
+				if(encoding.equals(MiscUtilities.UTF_8_Y))
+					encoding = "UTF-8";
+				
+				in.reset();
+			}
+		}
+		
+		return new InputStreamReader(in,encoding);
+	} //}}}
+
+	//{{{ getXMLEncoding() method
+	/**
+	 * Extract XML encoding name from PI.
+	 */
+	private static String getXMLEncoding(String xmlPI)
+	{
+		if(!xmlPI.startsWith("<?xml"))
+			return null;
+
+		int index = xmlPI.indexOf("encoding=");
+		if(index == -1 || index + 9 == xmlPI.length())
+			return null;
+
+		char ch = xmlPI.charAt(index + 9);
+		int endIndex = xmlPI.indexOf(ch,index + 10);
+		if(endIndex == -1)
+			return null;
+
+		String encoding = xmlPI.substring(index + 10,endIndex);
+
+		if(Charset.isSupported(encoding))
+			return encoding;
+		else
+		{
+			Log.log(Log.WARNING,MiscUtilities.class,"XML PI specifies "
+				+ "unsupported encoding: " + encoding);
+			return null;
+		}
+	} //}}}
+
 	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link InputStream} ignoring it if it is null and ignoring exceptions.
@@ -682,16 +870,16 @@ public class MiscUtilities
 	public static void closeQuietly(InputStream in)
 	{
 		if(in != null)
+		{
+			try
 			{
-				try
-					{
-						in.close();
-					}
-				catch (IOException e)
-					{
-						//ignore
-					}
+				in.close();
 			}
+			catch (IOException e)
+			{
+				//ignore
+			}
+		}
 	} //}}}
 
 	//{{{ copyStream() method
@@ -708,6 +896,28 @@ public class MiscUtilities
 				try
 					{
 						out.close();
+					}
+				catch (IOException e)
+					{
+						//ignore
+					}
+			}
+	} //}}}
+
+  	//{{{ copyStream() method
+	/**
+	 * Method that will close an {@link Reader} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param r the Reader to close.
+	 * @since jEdit 4.3pre5
+	 */
+	public static void closeQuietly(Reader r)
+	{
+		if(r != null)
+			{
+				try
+					{
+						r.close();
 					}
 				catch (IOException e)
 					{

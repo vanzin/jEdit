@@ -25,9 +25,6 @@ package org.gjt.sp.jedit.buffer;
 //{{{ Imports
 import javax.swing.text.Segment;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.zip.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -83,7 +80,6 @@ public abstract class BufferIORequest extends WorkRequest
 	//{{{ BufferIORequest constructor
 	/**
 	 * Creates a new buffer I/O request.
-	 * @param type The request type
 	 * @param view The view
 	 * @param buffer The buffer
 	 * @param session The VFS session
@@ -121,36 +117,6 @@ public abstract class BufferIORequest extends WorkRequest
 	protected String markersPath;
 	//}}}
 
-	//{{{ getXMLEncoding() method
-	/**
-	 * Extract XML encoding name from PI.
-	 */
-	private String getXMLEncoding(String xmlPI)
-	{
-		if(!xmlPI.startsWith("<?xml"))
-			return null;
-
-		int index = xmlPI.indexOf("encoding=");
-		if(index == -1 || index + 9 == xmlPI.length())
-			return null;
-
-		char ch = xmlPI.charAt(index + 9);
-		int endIndex = xmlPI.indexOf(ch,index + 10);
-		if(endIndex == -1)
-			return null;
-
-		String encoding = xmlPI.substring(index + 10,endIndex);
-
-		if(Charset.isSupported(encoding))
-			return encoding;
-		else
-		{
-			Log.log(Log.WARNING,this,"XML PI specifies "
-				+ "unsupported encoding: " + encoding);
-			return null;
-		}
-	} //}}}
-
 	//{{{ autodetect() method
 	/**
 	 * Tries to detect if the stream is gzipped, and if it has an encoding
@@ -158,85 +124,7 @@ public abstract class BufferIORequest extends WorkRequest
 	 */
 	protected Reader autodetect(InputStream in) throws IOException
 	{
-		in = new BufferedInputStream(in);
-
-		String encoding = buffer.getStringProperty(Buffer.ENCODING);
-		if(!in.markSupported())
-			Log.log(Log.WARNING,this,"Mark not supported: " + in);
-		else if(buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
-		{
-			in.mark(XML_PI_LENGTH);
-			int b1 = in.read();
-			int b2 = in.read();
-			int b3 = in.read();
-
-			if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
-			{
-				in.reset();
-				in = new GZIPInputStream(in);
-				buffer.setBooleanProperty(Buffer.GZIPPED,true);
-				// auto-detect encoding within the gzip stream.
-				return autodetect(in);
-			}
-			else if (b1 == UNICODE_MAGIC_1
-				 && b2 == UNICODE_MAGIC_2)
-			{
-				in.reset();
-				in.read();
-				in.read();
-				encoding = "UTF-16BE";
-				buffer.setProperty(Buffer.ENCODING,encoding);
-			}
-			else if (b1 == UNICODE_MAGIC_2
-				 && b2 == UNICODE_MAGIC_1)
-			{
-				in.reset();
-				in.read();
-				in.read();
-				encoding = "UTF-16LE";
-				buffer.setProperty(Buffer.ENCODING,encoding);
-			}
-			else if(b1 == UTF8_MAGIC_1 && b2 == UTF8_MAGIC_2
-				&& b3 == UTF8_MAGIC_3)
-			{
-				// do not reset the stream and just treat it
-				// like a normal UTF-8 file.
-				buffer.setProperty(Buffer.ENCODING,
-					MiscUtilities.UTF_8_Y);
-
-				encoding = "UTF-8";
-			}
-			else
-			{
-				in.reset();
-
-				byte[] _xmlPI = new byte[XML_PI_LENGTH];
-				int offset = 0;
-				int count;
-				while((count = in.read(_xmlPI,offset,
-					XML_PI_LENGTH - offset)) != -1)
-				{
-					offset += count;
-					if(offset == XML_PI_LENGTH)
-						break;
-				}
-
-				String xmlEncoding = getXMLEncoding(new String(
-					_xmlPI,0,offset,"ASCII"));
-				if(xmlEncoding != null)
-				{
-					encoding = xmlEncoding;
-					buffer.setProperty(Buffer.ENCODING,encoding);
-				}
-
-				if(encoding.equals(MiscUtilities.UTF_8_Y))
-					encoding = "UTF-8";
-
-				in.reset();
-			}
-		}
-
-		return new InputStreamReader(in,encoding);
+		return MiscUtilities.autodetect(in, buffer);
 	} //}}}
 
 	//{{{ read() method
@@ -252,8 +140,8 @@ public abstract class BufferIORequest extends WorkRequest
 
 		if(trackProgress)
 		{
-			setProgressValue(0);
-			setProgressMaximum((int)length);
+			setMaximum(length);
+			setValue(0);
 		}
 
 		// if the file size is not known, start with a resonable
@@ -323,7 +211,7 @@ public abstract class BufferIORequest extends WorkRequest
 					seg.append('\n');
 					endOffsets.add(seg.count);
 					if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
-						setProgressValue(seg.count);
+						setValue(seg.count);
 
 					// This is i+1 to take the
 					// trailing \n into account
@@ -361,7 +249,7 @@ public abstract class BufferIORequest extends WorkRequest
 						seg.append('\n');
 						endOffsets.add(seg.count);
 						if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
-							setProgressValue(seg.count);
+							setValue(seg.count);
 						lastLine = i + 1;
 					}
 					break;
@@ -382,7 +270,7 @@ public abstract class BufferIORequest extends WorkRequest
 			}
 
 			if(trackProgress)
-				setProgressValue(seg.count);
+				setValue(seg.count);
 
 			// Add remaining stuff from buffer
 			seg.append(buf,lastLine,len - lastLine);
@@ -488,8 +376,8 @@ public abstract class BufferIORequest extends WorkRequest
 			if(newline == null)
 				newline = System.getProperty("line.separator");
 
-			setProgressMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
-			setProgressValue(0);
+			setMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
+			setValue(0);
 
 			int i = 0;
 			while(i < buffer.getLineCount())
@@ -504,7 +392,7 @@ public abstract class BufferIORequest extends WorkRequest
 				}
 
 				if(++i % PROGRESS_INTERVAL == 0)
-					setProgressValue(i / PROGRESS_INTERVAL);
+					setValue(i / PROGRESS_INTERVAL);
 			}
 
 			if(jEdit.getBooleanProperty("stripTrailingEOL")

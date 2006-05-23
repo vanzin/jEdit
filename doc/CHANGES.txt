@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
     Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson, 
-    Björn "Vampire" Kautler, and Xuan Baldauf for contributing to this release.
+    Björn "Vampire" Kautler, Matthieu Casanova, and Xuan Baldauf for contributing to this release.
 
 {{{ Keyboard handling changes
 - Keyboard event workaround handling has been substantially changed (as
@@ -20,7 +20,12 @@ JEDIT 4.3 VERSION HISTORY
   If this is done incorrectly, the UndoManager throws an exception about
   "unbalanced begin-/endCompoundEdit" to the ActivitLog. (bug #1469996).
   New section added to docs about buffer-switching macros.
-  (Björn "Vampire" Kautler) 
+  (Björn "Vampire" Kautler)
+-MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
+-MiscUtilities.autodetect() this method tries to autodetect the file encoding. It was moved
+  from BufferIORequest (Matthieu Casanova)
+-MiscUtilities.closeQuietly(Reader) simply close a Reader ignoring if it is null or if there
+  are IOExceptions (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous

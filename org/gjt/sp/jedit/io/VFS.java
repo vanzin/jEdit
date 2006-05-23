@@ -540,7 +540,7 @@ public abstract class VFS
 		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
 		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
 	} //}}}
-  
+
 	//{{{ insert() method
 	/**
 	 * Inserts a file into the specified buffer. The default implementation
@@ -622,7 +622,8 @@ public abstract class VFS
 	 * @param recursive If true, subdirectories will also be listed.
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
-	 * @param skipBinary ignore binary files (do not return them)
+	 * @param skipBinary ignore binary files (do not return them).
+	 *    This will slow down the process since it will open the files
 	 * @param skipHidden hidden directories beginning with "." 
 	 * 
 	 * @since jEdit 4.3pre5
@@ -829,6 +830,7 @@ public abstract class VFS
 	 * @param ignoreErrors If true, file not found errors should be
 	 * ignored
 	 * @param comp The component that will parent error dialog boxes
+	 * @return an inputstream or <code>null</code> if there was a problem 
 	 * @exception IOException If an I/O error occurs
 	 * @since jEdit 2.7pre1
 	 */
@@ -1043,12 +1045,11 @@ public abstract class VFS
 				if(!glob.isMatch(file.getName()))
 					continue;
 
+				if (skipBinary &&
+					MiscUtilities.isBinaryFile(jEdit.getActiveView(), session, file))
+					continue;
+					
 				Log.log(Log.DEBUG,this,file.getPath());
-				if (skipBinary) 
-				{
-					// File f = file.getPath();
-					// TODO: Add a check for binary conditions
-				}
 				files.add(file.getPath());
 			}
 		}
