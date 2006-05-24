@@ -33,15 +33,15 @@ then run the 'docs-html-xalan' or 'docs-html-xsltproc' target.
 
 * Building the online help in PDF format
 
-You will need:
+There are many ways to go from docbook to PDF. You need the Docbook XML 4.2 DTD
+in all cases,
 
-- DocBook-XML 4.1.2 DTD and DocBook-DSSSL 1.76 (or later) stylesheets
-  (<http://docbook.sourceforge.net>).
+1. DocBook-DSSSL 1.76 (or later) stylesheets +  (<http://docbook.sourceforge.net>).
+   OpenJade 1.3 and OpenSP 1.3.4 (or later)  (<http://openjade.sourceforge.net>).
 
-- OpenJade 1.3 and OpenSP 1.3.4 (or later)
-  (<http://openjade.sourceforge.net>).
+2. xsltproc using db2latex stylesheets + latex + a PDF output tool
 
-- A TeX implementation that includes PDF output capability.
+3. xsltproc using docbook-xsl stylesheets + (FOP,JAI,JINI | XEP)
 
 To build the PDF format docs, you will most likely have to edit the
 build.xml to set up various paths. Then run the 'docs-pdf-openjade-a4'

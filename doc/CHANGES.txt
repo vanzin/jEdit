@@ -1,30 +1,40 @@
 JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
-    Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson, 
+    Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
     Björn "Vampire" Kautler, Matthieu Casanova, and Xuan Baldauf for contributing to this release.
 
 {{{ Keyboard handling changes
 - Keyboard event workaround handling has been substantially changed (as
   a fix to bug 1488047). This may greatly affect the way your keys work.
   Please report any bugs regarding this (and please drop a note about
-  this bug in bug 1488047).
+  this bug in bug 1488047). There is a new option, "simplified keyboard handling"
+  under "general options" to switch between the two keyboard handling modes.
+  (xuan balduf). 
 }}}
 
 {{{ API Changes
+
 - Macros.Macro.invoke() has been rewritten to begin a compoundEdit on the buffer that is
   active buffer before the macro gets invoked, and end a compoundEdit on the buffer that is active
   after the macro is invoked.
   Macros that change the active buffer have to call endCompoundEdit() on the old active buffer
   and beginCompoundEdit() on the new active buffer from now on.
   If this is done incorrectly, the UndoManager throws an exception about
-  "unbalanced begin-/endCompoundEdit" to the ActivitLog. (bug #1469996).
-  New section added to docs about buffer-switching macros.
-  (Björn "Vampire" Kautler)
--MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
--MiscUtilities.autodetect() this method tries to autodetect the file encoding. It was moved
+  "unbalanced begin-/endCompoundEdit" to the ActivitLog. (bug #1469996).   (Björn "Vampire" Kautler )
+  New section added to docs about buffer-switching macros. (Alan Ezust)
+  
+- VFS._listDirectory accepts 2 more boolean flags: skipBinary
+   and skipHidden. This is to make it possible for directory
+   searches from XSearch pluugin to skip over binary files 
+   and hidden directories. (Alan Ezust) 
+
+- MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
+
+- MiscUtilities.autodetect() this method tries to autodetect the file encoding. It was moved
   from BufferIORequest (Matthieu Casanova)
--MiscUtilities.closeQuietly(Reader) simply close a Reader ignoring if it is null or if there
+
+- MiscUtilities.closeQuietly(Reader) simply close a Reader ignoring if it is null or if there
   are IOExceptions (Matthieu Casanova)
 }}}
 
@@ -66,7 +76,7 @@ contributing to this release.
    view was activated. (Marcello Vanzin) 
  
 - send a ViewUpdate.EDIT_PANE_CHANGED when changing the active view.
-    (Marcello Vanza)
+    (Marcello Vanzin)
 
 - EditAction now has a setName() method, allowing one to change the name.
 
@@ -161,9 +171,9 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 - JARClassLoader now reports package information (Bertalan Fodor).
 
 - A new macro, SplitPane grow, was added to the macros/interface
-  directory. (aezust)
+  directory. (alan ezust)
 
-- A new macro, ToggleHeaderSource, for C/C++ editing.  (aezust)
+- A new macro, ToggleHeaderSource, for C/C++ editing.  (alan ezust)
 
 - A single-line selection no longer hides the line highlight, for
   better readability.
@@ -172,7 +182,7 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 
 - ActionContext now remembers overridden actions, so another plugin
   can override builtin actions (via listing one in actions.xml with the same name).
-  When the plugin is unloaded, the original action will be restored. (aezust)
+  When the plugin is unloaded, the original action will be restored. (alan ezust)
   plugins that use this feature: infoviewer, xsearch, and optional.
 
 - Updated "Display Abbreviations", "Hex Convert" and "HyperSearch
@@ -282,15 +292,15 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 
 - bug  1386702: DockableWindowManager now sends an EditBus message
         DockableWindowUpdate.ACTIVATED when a dockable is activated.
-        And a corresponding DEACTIVATED message when it is deactivated. (aezust)
+        And a corresponding DEACTIVATED message when it is deactivated. (alan ezust)
 
 -  A new EditBus message has been introduced: EditPaneUpdate.CHANGING
         for Navigator (or other EBPlugins) to catch caret positions
-        just before buffers are changed.  (aezust)
+        just before buffers are changed.  (Alan ezust)
 
 -  A new EditBus message has been introduced: BufferUpdate.CLOSING
         for EBPlugins to catch events just before buffers are closed. 
-		(aezust)
+		(Alan ezust)
 
 - Selecting multiple directories in the file chooser dialog box is now
   supported; just pass true as the last parameter (Matthieu Casanova):
