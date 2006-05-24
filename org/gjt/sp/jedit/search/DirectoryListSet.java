@@ -110,6 +110,8 @@ public class DirectoryListSet extends BufferListSet
 	//{{{ _getFiles() method
 	protected String[] _getFiles(final Component comp)
 	{
+		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary");
+		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden");
 		final VFS vfs = VFSManager.getVFSForPath(directory);
 		Object session;
 		if(SwingUtilities.isEventDispatchThread())
