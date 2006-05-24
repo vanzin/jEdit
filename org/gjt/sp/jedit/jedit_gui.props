@@ -1251,6 +1251,10 @@ search.all=All buffers
 search.all.mnemonic=l
 search.directory=Directory:
 search.directory.mnemonic=d
+search.skipHidden=Skip hiddens/backups
+search.skipBinary=Skip binary files
+search.skipHidden.mnemonic=h
+search.skipBinary.mnemonic=b
 
 search.directoryField=Directory:
 search.directoryField.mnemonic=y
@@ -1262,7 +1266,7 @@ search.choose=Choose...
 search.choose.mnemonic=e
 search.synchronize=Synchronize
 search.synchronize.mnemonic=z
-
+search.synchronize.tooltip=Sets filter and directory to current buffer's extension/location.
 search.findBtn=Find
 search.replaceAndFindBtn=Replace & Find
 search.replaceAndFindBtn.mnemonic=r
