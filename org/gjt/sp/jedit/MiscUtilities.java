@@ -35,7 +35,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-import java.awt.*;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
@@ -677,20 +676,57 @@ public class MiscUtilities
 		return copyStream(4096,progress, in, out, canStop);
 	} //}}}
 
+	//{{{ isBinaryFile() method
 	/**
-	 * 
-	 * @param filename
+	* Check if a Reader is binary.
+	* To check if a file is binary, we will check the first characters 100
+	* (jEdit property vfs.binaryCheck.length)
+	* If more than 1 (jEdit property vfs.binaryCheck.count), the
+	* file is declared binary.
+	* This is not 100% because sometimes the autodetection could fail.
+	* This method will not close your reader. You have to do it yourself
+	*
+	* @param reader the reader
+	* @return <code>true</code> if the Reader was detected as binary
+	* @throws IOException IOException If an I/O error occurs
+	* @since jEdit 4.3pre5
+	*/
+	public static boolean isBinary(Reader reader)
+	throws IOException
+	{
+		int nbChars = jEdit.getIntegerProperty("vfs.binaryCheck.length",100);
+		int authorized = jEdit.getIntegerProperty("vfs.binaryCheck.count",1);
+		for (long i = 0;i < nbChars;i++)
+		{
+			int c = reader.read();
+			if (c == -1)
+				return false;
+			if (c == 0)
+			{
+				authorized--;
+				if (authorized == 0)
+					return true;
+			}
+		}
+		return false;
+	} //}}}
+
+	//{{{ isBackup() method
+	/**
+	 * Check if the filename is a backup file.
+	 * @param filename the filename to check
 	 * @return true if this is a backup file.
+	 * @since jEdit 4.3pre5
 	 */
 	public static boolean isBackup( String filename ) {
 		if (filename.startsWith("#")) return true;
 		if (filename.endsWith("~")) return true;
 		if (filename.endsWith(".bak")) return true;
 		return false;
-	}
+	} //}}}
 	
 
-  //{{{ autodetect() method
+	//{{{ autodetect() method
 	/**
 	 * Tries to detect if the stream is gzipped, and if it has an encoding
 	 * specified with an XML PI.
