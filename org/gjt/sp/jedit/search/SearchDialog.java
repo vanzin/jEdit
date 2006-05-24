@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.search;
 //{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -272,6 +273,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	// multifile settings
 	private HistoryTextField filter, directory;
 	private JCheckBox searchSubDirectories;
+	private JCheckBox skipBinaryFiles;
+	private JCheckBox skipHidden;
+	
 	private JButton choose;
 	private JButton synchronize;
 
@@ -588,14 +592,27 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		cons.gridy++;
 		cons.gridwidth = 3;
 
+		JPanel dirCheckBoxPanel = new JPanel();
  		searchSubDirectories = new JCheckBox(jEdit.getProperty(
  			"search.subdirs"));
  		String mnemonic = jEdit.getProperty(
 			"search.subdirs.mnemonic");
 		searchSubDirectories.setMnemonic(mnemonic.charAt(0));
+		searchSubDirectories.setSelected(jEdit.getBooleanProperty("search.subdirs.toggle"));
+		skipHidden = new JCheckBox(jEdit.getProperty("search.skipHidden"));
+		skipHidden.setSelected(jEdit.getBooleanProperty("search.skipHidden.toggle", true));
+		skipBinaryFiles = new JCheckBox(jEdit.getProperty("search.skipBinary"));
+		skipBinaryFiles.setSelected(jEdit.getBooleanProperty("search.skipBinary.toggle", true));
+		dirCheckBoxPanel.add(searchSubDirectories);
+		dirCheckBoxPanel.add(skipHidden);
+		dirCheckBoxPanel.add(skipBinaryFiles);
 
- 		layout.setConstraints(searchSubDirectories,cons);
- 		multifile.add(searchSubDirectories);
+		cons.insets = new Insets(0, 0, 0, 0);
+		cons.gridy++;
+		cons.gridwidth = 4;
+		layout.setConstraints(dirCheckBoxPanel, cons);
+
+ 		multifile.add(dirCheckBoxPanel);
 
 		return multifile;
 	} //}}}
@@ -665,9 +682,13 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		filter.setEnabled(searchAllBuffers.isSelected()
 			|| searchDirectory.isSelected());
 
-		directory.setEnabled(searchDirectory.isSelected());
-		choose.setEnabled(searchDirectory.isSelected());
-		searchSubDirectories.setEnabled(searchDirectory.isSelected());
+		boolean searchDirs = searchDirectory.isSelected();
+		directory.setEnabled(searchDirs);
+		choose.setEnabled(searchDirs);
+		searchSubDirectories.setEnabled(searchDirs);
+		skipHidden.setEnabled(searchDirs);
+		skipBinaryFiles.setEnabled(searchDirs);
+		
 		synchronize.setEnabled(searchAllBuffers.isSelected()
 			|| searchDirectory.isSelected());
 
@@ -692,6 +713,9 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			SearchAndReplace.setRegexp(regexp.isSelected());
 			SearchAndReplace.setReverseSearch(searchBack.isSelected());
 			SearchAndReplace.setAutoWrapAround(wrap.isSelected());
+			jEdit.setBooleanProperty("search.subdirs.toggle", searchSubDirectories.isSelected());
+			jEdit.setBooleanProperty("search.skipHidden.toggle", skipHidden.isSelected());
+			jEdit.setBooleanProperty("search.skipBinary.toggle", skipBinaryFiles.isSelected());
 
 			String filter = this.filter.getText();
 			this.filter.addCurrentToHistory();
