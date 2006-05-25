@@ -5,13 +5,15 @@ JEDIT 4.3 VERSION HISTORY
     Björn "Vampire" Kautler, Matthieu Casanova, and Xuan Baldauf for contributing to this release.
 
 {{{ Keyboard handling changes
-- Keyboard event workaround handling has been substantially changed (as
+- There is a new option, "simplified keyboard handling"
+  under "general options" to switch between two keyboard handling modes.
+  Keyboard event workaround handling has been substantially changed (as
   a fix to bug 1488047). This may greatly affect the way your keys work.
   Please report any bugs regarding this (and please drop a note about
-  this bug in bug 1488047). There is a new option, "simplified keyboard handling"
-  under "general options" to switch between the two keyboard handling modes.
+  this bug in bug 1488047). 
   (xuan balduf). 
 }}}
+
 
 {{{ API Changes
 
@@ -21,13 +23,10 @@ JEDIT 4.3 VERSION HISTORY
   Macros that change the active buffer have to call endCompoundEdit() on the old active buffer
   and beginCompoundEdit() on the new active buffer from now on.
   If this is done incorrectly, the UndoManager throws an exception about
-  "unbalanced begin-/endCompoundEdit" to the ActivitLog. (bug #1469996).   (Björn "Vampire" Kautler )
-  New section added to docs about buffer-switching macros. (Alan Ezust)
-  
-- VFS._listDirectory accepts 2 more boolean flags: skipBinary
-   and skipHidden. This is to make it possible for directory
-   searches from XSearch pluugin to skip over binary files 
-   and hidden directories. (Alan Ezust) 
+  "unbalanced begin-/endCompoundEdit" to the ActivityLog. 
+  (bug #1469996).   (Björn "Vampire" Kautler )
+
+- New section added to docs about buffer-switching macros. (Alan Ezust)
 
 - MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
 
@@ -39,10 +38,16 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 
 {{{ Miscellaneous
+- SearchReplace dialog now supports additional options,
+  for Directory Search: "skipHidden" and "skipBinary". 
+  Now you can skip over hidden directories/files, as well
+  as binary files. (Matthieu Casanova & Alan Ezust)
+
 - The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn "Vampire" Kautler)
 
-- macros Buffer_Switcher and ToggleHeaderSource were confusing the TextArea (bug #1469996).
-  These macros have been rewritten to fix that (Björn "Vampire" Kautler). 
+- macros Buffer_Switcher and ToggleHeaderSource are updated
+  to work properly with UndoManager using begin/endCompoundEdit
+  (bug #1469996)  (Björn "Vampire" Kautler). 
 
 - The "Recent files" menu can now be reaches with the keystroke sequence
   "Alt+F F" (bug 1488066) (Xuan Baldauf)
@@ -171,7 +176,7 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 - JARClassLoader now reports package information (Bertalan Fodor).
 
 - A new macro, SplitPane grow, was added to the macros/interface
-  directory. (alan ezust)
+  directory. (Alan Ezust)
 
 - A new macro, ToggleHeaderSource, for C/C++ editing.  (alan ezust)
 
