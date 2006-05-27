@@ -44,13 +44,12 @@ public class DirectoryListSet extends BufferListSet
 		this.directory = directory;
 		this.glob = glob;
 		this.recurse = recurse;
-		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary");
-		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden");
-		
+		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary.toggle");
+		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden.toggle");
 	} //}}}
 
-	
-	
+
+
 	//{{{ getDirectory() method
 	public String getDirectory()
 	{
@@ -110,8 +109,8 @@ public class DirectoryListSet extends BufferListSet
 	//{{{ _getFiles() method
 	protected String[] _getFiles(final Component comp)
 	{
-		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary");
-		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden");
+		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary.toggle");
+		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden.toggle");
 		final VFS vfs = VFSManager.getVFSForPath(directory);
 		Object session;
 		if(SwingUtilities.isEventDispatchThread())
