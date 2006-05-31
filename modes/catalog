@@ -447,6 +447,9 @@
 				FILE_NAME_GLOB="*.{xml,xhtml,xsd}"
 				FIRST_LINE_GLOB="<\?xml*" />
 
+<MODE NAME="xq"			FILE="xq.xml"
+				FILE_NAME_GLOB="*.x{q,qm,ql}" />
+
 <MODE NAME="xsl"		FILE="xsl.xml"
 				FILE_NAME_GLOB="*.xsl" />
 
