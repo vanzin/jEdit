@@ -199,4 +199,59 @@ public interface IndentAction
 			return false;
 		}
 	}
+
+	/**
+	* @author Matthieu Casanova
+	*/
+	public class AlignOffset implements IndentAction
+	{
+		private int offset;
+		
+		public AlignOffset(int offset)
+		{
+			this.offset = offset;
+		}
+
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
+			int newIndent)
+		{
+			return offset;
+		}
+
+		public boolean keepChecking()
+		{
+			return false;
+		}
+	}
+
+	/**
+	* @author Matthieu Casanova
+	*/
+	public class AlignParameter implements IndentAction
+	{
+		private int openParensColumn;
+		private String openParensLineText;
+		
+		public AlignParameter(int openParensColumn, String openParensLineText)
+		{
+			this.openParensLineText = openParensLineText;
+			this.openParensColumn = openParensColumn;
+		}
+
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
+			int newIndent)
+		{
+			if(openParensLineText == null)
+				return newIndent;
+			else
+			{
+				return openParensColumn + 1;
+			}
+		}
+
+		public boolean keepChecking()
+		{
+			return false;
+		}
+	}
 }
