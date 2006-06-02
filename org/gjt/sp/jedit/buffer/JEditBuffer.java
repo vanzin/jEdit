@@ -2273,6 +2273,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		indentRules.clear();
 
+		if (getBooleanProperty("deepIndent"))
+			indentRules.add(new DeepIndentRule());
+
 		String[] regexpProps = {
 			"indentNextLine",
 			"indentNextLines"
