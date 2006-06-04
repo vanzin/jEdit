@@ -1,154 +1,119 @@
+/*
+ * DeepIndentRule.java
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2006 Matthieu Casanova
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 package org.gjt.sp.jedit.indent;
 
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 import java.util.List;
-import java.util.Stack;
 
 /**
+ * Deep indent rule.
+ *
  * @author Matthieu Casanova
+ * @version $Id$
  */
-public class DeepIndentRule implements IndentRule {
+public class DeepIndentRule implements IndentRule
+{
 
-	//{{{ apply() method
-	public void apply(JEditBuffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex,
-		List indentActions) {
-		if(prevLineIndex == -1)
-			return;
-		
-		int prevLineUnclosedParenIndex = -1; // Index of the last unclosed parenthesis
-		int prevLineParenWeight = 0;  // (openParens - closeParens)
-		Stack openParens = new Stack();
-		
-		String prevLine = buffer.getLineText(prevLineIndex);
-		for (int i = 0; i < prevLine.length(); i++)
-		{
-			char c = prevLine.charAt(i);
-			switch (c)
-			{
-				case'(':
-					openParens.push(new Integer(i));
-					prevLineParenWeight++;
-					break;
-				case')':
-				if (openParens.size() > 0)
-					openParens.pop();
-				prevLineParenWeight--;
-				break;
-			}
-		}
-		
-		if (openParens.size() > 0)
-		{
-			prevLineUnclosedParenIndex = ((Integer) openParens.pop()).intValue();
-		}
-		
-		
-		
-		if (prevLineParenWeight > 0)
-		{
-			// more opening (
-				indentActions.add(new IndentAction.AlignParameter(prevLineUnclosedParenIndex, prevLine));
-				
-		}
-		else if (prevLineParenWeight < 0)
-		{
-			// more closing )
-			int openParenOffset = TextUtilities.findMatchingBracket(buffer, prevLineIndex, prevLine.lastIndexOf(')'));
-			
-			if (openParenOffset >= 0)
-			{
-				
-				int openParensLine = buffer.getLineOfOffset(openParenOffset);
-				int openParensColumn = openParenOffset - buffer.getLineStartOffset(openParensLine);
-				String openParensLineText = buffer.getLineText(openParensLine);
-				
-				
-				
-				int startLineParenWeight = getLineParenWeight(openParensLineText);
-				if (startLineParenWeight == 1)
-				{
-					indentActions.add(new IndentAction.AlignParameter(openParensColumn, openParensLineText));
-				}
-				else if (startLineParenWeight > 1)
-				{
-					int prevParens = openParensLineText.lastIndexOf('(', openParensColumn - 1);
-						indentActions.add(new IndentAction.AlignParameter(prevParens, openParensLineText));
-				}
-				else
-				{
-					int indent = getOpenParenIndent(buffer, openParensLine, thisLineIndex);
-					indentActions.add(new IndentAction.AlignOffset(indent));
-				}
-			}
-		}
-	}
-
-  	//{{{ getOpenParenIndent() method
 	/**
-	 * Returns the appropriate indent based on open parenthesis on previous lines.
+	 * Return the indexes of the last closing and the last opening parens in a line
 	 *
-	 * @param startLine The line where parens were last balanced
-	 * @param targetLine The line we're finding the indent for
+	 * @param s   the line text
+	 * @param pos the starting pos from the end (or -1 for entire line)
+	 *
+	 * @return the last pos of the parens in the line
 	 */
-	private int getOpenParenIndent(JEditBuffer buffer, int startLine, int targetLine)
-	{
-		Stack openParens = new Stack();
-		String lineText;
+	 private Parens getLastParens(String s, int pos)
+	 {
+		 int lastClose;
+		 int lastOpen;
+		 if (pos == -1)
+		 {
+			 lastClose = s.lastIndexOf(')');
+			 lastOpen = s.lastIndexOf('(');
+		 }
+		 else
+		 {
+			 lastClose = s.lastIndexOf(')', pos);
+			 lastOpen = s.lastIndexOf('(', pos);
+		 }
+		 return new Parens(lastOpen, lastClose);
+	 }
 
-		for(int lineIndex = startLine; lineIndex < targetLine; lineIndex++)
-		{
-			lineText = buffer.getLineText(lineIndex);
-			for(int i = 0; i < lineText.length(); i++)
-			{
-				char c = lineText.charAt(i);
-				switch(c)
-				{
-					case '(':
-						openParens.push(new Integer(i));
-						break;
-					case ')':
-						if(openParens.size() > 0)
-							openParens.pop();
-						break;
-					default:
-				}
-			}
-		}
-		int indent = buffer.getCurrentIndentForLine(startLine,null);
-
-		if(openParens.size() > 0)
-			indent += ((Integer) openParens.pop()).intValue();
-
-		return indent;
-	}
-	//}}}
-
-	/**
-	* took from Buffer method
-	* @param lineText
-	* @return
-	*/
-	private int getLineParenWeight(String lineText)
-	{
-		int parenWeight = 0;
-		for(int i = 0; i < lineText.length(); i++)
-		{
-			char c = lineText.charAt(i);
-			switch(c)
-			{
-				case '(':
-					parenWeight++;
-					break;
-				case ')':
-					parenWeight--;
-					break;
-				default:
-			}
-		}
-		return parenWeight;
-	}
-} //}}}
+	 //{{{ apply() method
+	 public void apply(JEditBuffer buffer, int thisLineIndex,
+			    int prevLineIndex, int prevPrevLineIndex,
+			    List indentActions)
+	 {
+		 if (prevLineIndex == -1)
+			 return;
+		 
+		 int lineIndex = prevLineIndex;
+		 int searchPos = -1;
+		 boolean shouldIndent = false;
+		 while (true)
+		 {
+			 String lineText = buffer.getLineText(lineIndex);
+			 Parens parens = getLastParens(lineText, searchPos);
+			 if (parens.openOffset > parens.closeOffset)
+			 {
+				 indentActions.add(new IndentAction.AlignParameter(parens.openOffset, lineText));
+				 return;
+			 }
+			 
+			 // No parens on prev line
+			 if (parens.openOffset == -1 && parens.closeOffset == -1)
+			 {
+				 if (shouldIndent)
+				 {
+					 int i = buffer.getCurrentIndentForLine(lineIndex, null);
+					 indentActions.add(new IndentAction.AlignParameter(i - 1, lineText));
+				 }
+				 return;
+			 }
+			 shouldIndent = true;
+			 int openParenOffset = TextUtilities.findMatchingBracket(buffer, lineIndex, parens.closeOffset);
+			 if (openParenOffset >= 0)
+			 {
+				 lineIndex = buffer.getLineOfOffset(openParenOffset);
+				 searchPos = openParenOffset - buffer.getLineStartOffset(lineIndex) - 1;
+			 }
+			 else
+				 break;
+		 }
+	 }
+	 
+	 private class Parens
+	 {
+		 int openOffset;
+		 int closeOffset;
+		 
+		 public Parens(int openOffset, int closeOffset)
+		 {
+			 this.openOffset = openOffset;
+			 this.closeOffset = closeOffset;
+		 }
+	 } //}}}
+}
 
