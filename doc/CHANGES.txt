@@ -122,6 +122,8 @@ contributing to this release.
 
 - Fix a deadlock when using directory search (Slava Pestov).
 
+-Deep indent was broken since 4.3pre2 and is now fixed (Matthieu Casanova)
+
 }}}
 
 }}}

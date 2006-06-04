@@ -225,13 +225,14 @@ public interface IndentAction
 	}
 
 	/**
+	* Indent action used for deep indent.
 	* @author Matthieu Casanova
 	*/
 	public class AlignParameter implements IndentAction
 	{
 		private int openParensColumn;
 		private String openParensLineText;
-		
+
 		public AlignParameter(int openParensColumn, String openParensLineText)
 		{
 			this.openParensLineText = openParensLineText;
@@ -239,19 +240,14 @@ public interface IndentAction
 		}
 
 		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
-			int newIndent)
+				     int newIndent)
 		{
-			if(openParensLineText == null)
-				return newIndent;
-			else
-			{
-				return openParensColumn + 1;
-			}
+			return openParensLineText == null ? newIndent : openParensColumn + 1;
 		}
 
 		public boolean keepChecking()
 		{
-			return false;
+			return true;
 		}
 	}
 }
