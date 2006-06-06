@@ -247,7 +247,7 @@ public interface IndentAction
 
 		public boolean keepChecking()
 		{
-			return true;
+			return false;
 		}
 	}
 }
