@@ -2,7 +2,7 @@
  * ModeSwitcher.bsh - a BeanShell macro script for changing the current
  * buffer's edit mode.
  *
- * Copyright (C) 2004 Nicholas O'Leary nol@deferential.net
+ * Copyright (C) 2004-6 Nicholas O'Leary nick.oleary@gmail.com
  * 
  * :mode=beanshell:tabSize=3:indentSize=3:maxLineLen=0:noTabs=false:
  * :indentOnTab=true:indentOnEnter=true:folding=explicit:collapseFolds=1:
@@ -36,18 +36,8 @@
 
 import javax.swing.border.EmptyBorder;
 
-Mode[] modes = jEdit.getModes();
-JDialog dialog = new JDialog(view, "Buffer Mode Switcher", true);
-dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-JPanel content = new JPanel(new BorderLayout());
-content.setBorder(new EmptyBorder(12,12,12,12));
-Mode[] modes = jEdit.getModes();
-String[] names = new String[modes.length];
-for(int i=0;i<modes.length;i++) {
-	names[i] = modes[i].getName();
-}
-Arrays.sort(names);
-JTextField textfield = new JTextField() {
+class ModeSwitcherTextField extends JTextField
+{
 	protected String[] names;
 	protected boolean shifted = false;
 	//{{{ setNames
@@ -115,7 +105,20 @@ JTextField textfield = new JTextField() {
 		}
 		super.processKeyEvent(evt);
 	} //}}}
-};
+}	
+Mode[] modes = jEdit.getModes();
+JDialog dialog = new JDialog(view, "Buffer Mode Switcher", true);
+dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+JPanel content = new JPanel(new BorderLayout());
+content.setBorder(new EmptyBorder(12,12,12,12));
+Mode[] modes = jEdit.getModes();
+String[] names = new String[modes.length];
+for(int i=0;i<modes.length;i++) {
+	names[i] = modes[i].getName();
+}
+Arrays.sort(names);
+ModeSwitcherTextField textfield = new ModeSwitcherTextField();
+
 textfield.setColumns(20);
 textfield.setNames(names);
 Mode m = buffer.getMode();
