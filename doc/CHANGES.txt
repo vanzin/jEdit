@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
     Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
-    Björn "Vampire" Kautler, Matthieu Casanova, and Xuan Baldauf for contributing to this release.
+    Björn "Vampire" Kautler, Matthieu Casanova, Xuan Baldauf and
+    Nicholas O'Leary for contributing to this release.
 
 {{{ Keyboard handling changes
 - There is a new option, "simplified keyboard handling"
@@ -58,6 +59,10 @@ JEDIT 4.3 VERSION HISTORY
 
 - Drag&Drop now accepts multiple files in KDE environment. (bug 1487647)
   (Xuan Baldauf)
+
+- Mode_Switcher macro fixed to stop InvocationTargetException
+  (Nicholas O'Leary)
+
 }}}
 }}}
 
