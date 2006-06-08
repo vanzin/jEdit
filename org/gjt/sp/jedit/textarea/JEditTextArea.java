@@ -3871,10 +3871,6 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void addExplicitFold()
 	{
-		// BUG : still bug 1159659,
-		// The token found at start of selection got sometimes wrong rules, specialy at start of line just
-		// before a token that change rule for example in php <? in beginning of the line
-
 		if(!buffer.getStringProperty("folding").equals("explicit"))
 		{
 			GUIUtilities.error(view,"folding-not-explicit",null);
@@ -5853,12 +5849,15 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	private int addExplicitFold(int caretStart, int caretEnd, int lineStart, int lineEnd)
 	{
-		String startLineComment = buffer.getContextSensitiveProperty(caretStart,"lineComment");
-		String endLineComment = buffer.getContextSensitiveProperty(caretEnd,"lineComment");
-		String startCommentStart = buffer.getContextSensitiveProperty(caretStart,"commentStart");
-		String startCommentEnd = buffer.getContextSensitiveProperty(caretStart,"commentEnd");
-		String endCommentStart = buffer.getContextSensitiveProperty(caretEnd,"commentStart");
-		String endCommentEnd = buffer.getContextSensitiveProperty(caretEnd,"commentEnd");
+		int startCaret = caretStart > 0 ? caretStart - 1 : caretStart;
+		int endCaret = caretEnd < buffer.getLength() ? caretEnd + 1 : caretEnd;
+
+		String startLineComment = buffer.getContextSensitiveProperty(startCaret,"lineComment");
+		String endLineComment = buffer.getContextSensitiveProperty(endCaret,"lineComment");
+		String startCommentStart = buffer.getContextSensitiveProperty(startCaret,"commentStart");
+		String startCommentEnd = buffer.getContextSensitiveProperty(startCaret,"commentEnd");
+		String endCommentStart = buffer.getContextSensitiveProperty(endCaret,"commentStart");
+		String endCommentEnd = buffer.getContextSensitiveProperty(endCaret,"commentEnd");
 
 		String start, end;
 		int caretBack = 1;
@@ -5883,10 +5882,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		String whitespace = line.substring(0,
 			MiscUtilities.getLeadingWhiteSpace(line));
 
+
 		if(caretEnd == buffer.getLineStartOffset(lineEnd))
 			buffer.insert(caretEnd,end);
 		else
-			buffer.insert(caretEnd,' ' + end);
+		{
+			String lineText = buffer.getText(caretEnd - 1, 1);
+			if (Character.isWhitespace(lineText.charAt(0)))
+				buffer.insert(caretEnd, end);
+			else
+				buffer.insert(caretEnd,' ' + end);
+		}
 
 		buffer.insert(caretStart,start + whitespace);
 
