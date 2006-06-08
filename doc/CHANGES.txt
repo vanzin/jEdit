@@ -63,6 +63,9 @@ JEDIT 4.3 VERSION HISTORY
 - Mode_Switcher macro fixed to stop InvocationTargetException
   (Nicholas O'Leary)
 
+- Add explicit fold when start and end of selection are in different edit mode
+  (bug #1159659) (Matthieu Casanova)
+
 }}}
 }}}
 
@@ -345,7 +348,7 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 {{{ Auto Indent
 
 - The auto indent engine has been rewritten from scratch to provide
-  more accurate indentation for a variety of langauges, including Java,
+  more accurate indentation for a variety of languages, including Java,
   Common Lisp, and Factor.
 
 - Aligned bracket indent is done as before with "indentOpenBrackets" and
