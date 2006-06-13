@@ -66,6 +66,10 @@ JEDIT 4.3 VERSION HISTORY
 - Add explicit fold when start and end of selection are in different edit mode
   (bug #1159659) (Matthieu Casanova)
 
+- When saving a file with .gz extension the buffer is gzipped (it was not working when using two stage save.)
+  It also remove GZIPPED property if the buffer name was ending with .gz and is not anymore
+  (Matthieu Casanova)
+
 }}}
 }}}
 

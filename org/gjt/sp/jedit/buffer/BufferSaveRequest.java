@@ -25,7 +25,8 @@ package org.gjt.sp.jedit.buffer;
 //{{{ Imports
 import java.io.*;
 import java.util.zip.*;
-import java.util.Vector;
+import java.util.List;
+
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -72,7 +73,6 @@ public class BufferSaveRequest extends BufferIORequest
 		 * instead of constructing the path directly
 		 * since some VFS's might not allow # in filenames.
 		 */
-		String savePath;
 
 		boolean twoStageSave = overwriteReadOnly ||
 			(vfsRenameCap &&
@@ -99,6 +99,7 @@ public class BufferSaveRequest extends BufferIORequest
 				buffer.setBooleanProperty(Buffer.BACKED_UP,true);
 			}
 
+			String savePath;
 			if(twoStageSave)
 			{
 				savePath = vfs.getTwoStageSaveName(path);
@@ -123,8 +124,16 @@ public class BufferSaveRequest extends BufferIORequest
 					// Can't use buffer.getName() here because
 					// it is not changed until the save is
 					// complete
-					if(savePath.endsWith(".gz"))
+					if(path.endsWith(".gz"))
 						buffer.setBooleanProperty(Buffer.GZIPPED,true);
+					else if (buffer.getName().endsWith(".gz"))
+					{
+						// The path do not ends with gz.
+						// The buffer name was .gz.
+						// So it means it's blabla.txt.gz -> blabla.txt, I remove
+						// the gz property
+						buffer.setBooleanProperty(Buffer.GZIPPED, false);
+					}
 
 					if(buffer.getBooleanProperty(Buffer.GZIPPED))
 						out = new GZIPOutputStream(out);
@@ -142,7 +151,7 @@ public class BufferSaveRequest extends BufferIORequest
 					if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
 					{
 						if(jEdit.getBooleanProperty("persistentMarkers")
-							&& buffer.getMarkers().size() != 0)
+							&& !buffer.getMarkers().isEmpty())
 						{
 							setStatus(jEdit.getProperty("vfs.status.save-markers",args));
 							setValue(0);
@@ -175,17 +184,7 @@ public class BufferSaveRequest extends BufferIORequest
 		}
 		catch(WorkThread.Abort a)
 		{
-			if(out != null)
-			{
-				try
-				{
-					out.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
-
+			MiscUtilities.closeQuietly(out);
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
@@ -215,16 +214,16 @@ public class BufferSaveRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ writeMarkers() method
-	private void writeMarkers(Buffer buffer, OutputStream out)
+	private static void writeMarkers(Buffer buffer, OutputStream out)
 		throws IOException
 	{
 		Writer o = new BufferedWriter(new OutputStreamWriter(out));
 		try
 		{
-			Vector markers = buffer.getMarkers();
+			List markers = buffer.getMarkers();
 			for(int i = 0; i < markers.size(); i++)
 			{
-				Marker marker = (Marker)markers.elementAt(i);
+				Marker marker = (Marker)markers.get(i);
 				o.write('!');
 				o.write(marker.getShortcut());
 				o.write(';');
