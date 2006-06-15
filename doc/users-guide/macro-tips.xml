@@ -2,7 +2,7 @@
 <!-- Wed Jun 20 16:56:26 EDT 2001 @914 /Internet Time/        -->
 <!--                                                          -->
 <!-- jEdit buffer-local properties:                           -->
-<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:        -->
+<!-- :indentSize=1:noTabs=yes:maxLineLen=0:wrap=soft:tabSize=2: -->
 <!-- :xml.root=users-guide.xml:                               -->
 <!--                                                          -->
 <!-- This file covers the chapter "Macro tips and techniques" -->
@@ -576,8 +576,8 @@ view.getInputHandler().readNextChar("Enter a character",
   </sidebar>
 </sect1>
 
-<sect1 id="scripts-command-line"><title>Running Scripts from the Command
-Line</title>
+<sect1 id="scripts-command-line">
+<title>Running Scripts from the Command Line</title>
 
 <para>
   The <userinput>-run</userinput> command line switch specifies a BeanShell
