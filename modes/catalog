@@ -352,7 +352,8 @@
 				FILE_NAME_GLOB="*.rtf" />
 
 <MODE NAME="ruby"		FILE="ruby.xml"
-				FILE_NAME_GLOB="*.{rb,rbw}" />
+				FILE_NAME_GLOB="*.{rb,rbw}" 
+	            FIRST_LINE_GLOB="#!*/*ruby*" />
 
 <MODE NAME="rview"		FILE="rview.xml"
 				FILE_NAME_GLOB="*.rvw" />
