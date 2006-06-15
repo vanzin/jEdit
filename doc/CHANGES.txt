@@ -44,7 +44,8 @@ JEDIT 4.3 VERSION HISTORY
   Now you can skip over hidden directories/files, as well
   as binary files. (Matthieu Casanova & Alan Ezust)
 
-- The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn "Vampire" Kautler)
+- Updated Ruby Edit-mode to v0.6.2
+  The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn "Vampire" Kautler)
 
 - macros Buffer_Switcher and ToggleHeaderSource are updated
   to work properly with UndoManager using begin/endCompoundEdit
