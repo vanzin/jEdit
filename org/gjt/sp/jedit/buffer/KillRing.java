@@ -22,11 +22,15 @@
 
 package org.gjt.sp.jedit.buffer;
 
-import com.microstar.xml.*;
 import javax.swing.event.ListDataListener;
 import javax.swing.ListModel;
 import java.io.*;
 import java.util.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.MutableListModel;
 import org.gjt.sp.util.Log;
@@ -89,40 +93,13 @@ public class KillRing implements MutableListModel
 		Log.log(Log.MESSAGE,KillRing.class,"Loading killring.xml");
 
 		KillRingHandler handler = new KillRingHandler();
-		XmlParser parser = new XmlParser();
-		Reader in = null;
-		parser.setHandler(handler);
 		try
 		{
-			in = new BufferedReader(new FileReader(killRing));
-			parser.parse(null, null, in);
+			MiscUtilities.parseXML(new FileInputStream(killRing), handler);
 		}
-		catch(XmlException xe)
+		catch (IOException ioe)
 		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,KillRing.class,killRing + ":" + line
-				+ ": " + message);
-		}
-		catch(FileNotFoundException fnf)
-		{
-			//Log.log(Log.DEBUG,BufferHistory.class,fnf);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,KillRing.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,KillRing.class,io);
-			}
+			Log.log(Log.ERROR, this, ioe);
 		}
 
 		ring = (UndoManager.Remove[])handler.list.toArray(
@@ -251,9 +228,9 @@ public class KillRing implements MutableListModel
 		remove(index);
 		add((UndoManager.Remove)value);
 	} //}}}
-	
+
 	//}}}
-	
+
 	//{{{ Package-private members
 	UndoManager.Remove[] ring;
 	int count;
@@ -370,7 +347,7 @@ public class KillRing implements MutableListModel
 	//{{{ Private members
 	private long killRingModTime;
 	private static KillRing killRing;
-	
+
 	//{{{ virtualToPhysicalIndex() method
 	/**
 	 * Since the kill ring has a wrap-around representation, we need to
@@ -392,45 +369,38 @@ public class KillRing implements MutableListModel
 	//}}}
 
 	//{{{ KillRingHandler class
-	class KillRingHandler extends HandlerBase
+	class KillRingHandler extends DefaultHandler
 	{
 		List list = new LinkedList();
 
-		public Object resolveEntity(String publicId, String systemId)
+		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			if("killring.dtd".equals(systemId))
-			{
-				// this will result in a slight speed up, since we
-				// don't need to read the DTD anyway, as AElfred is
-				// non-validating
-				return new StringReader("<!-- -->");
-			}
-
-			return null;
+			return MiscUtilities.findEntity(systemId, "killring.dtd", getClass());
 		}
 
-		public void doctypeDecl(String name, String publicId,
-			String systemId) throws Exception
+		public void startElement(String uri, String localName,
+					 String qName, Attributes attrs)
 		{
-			if("KILLRING".equals(name))
-				return;
-
-			Log.log(Log.ERROR,this,"killring.xml: DOCTYPE must be KILLRING");
+			inEntry = qName.equals("ENTRY");
 		}
 
-		public void endElement(String name)
+		public void endElement(String uri, String localName, String name)
 		{
 			if(name.equals("ENTRY"))
 			{
-				list.add(new UndoManager.Remove(null,0,0,charData));
+				list.add(new UndoManager.Remove(null,0,0,charData.toString()));
+				inEntry = false;
+				charData.setLength(0);
 			}
 		}
 
-		public void charData(char[] ch, int start, int length)
+		public void characters(char[] ch, int start, int length)
 		{
-			charData = new String(ch,start,length);
+			if (inEntry)
+				charData.append(ch, start, length);
 		}
 
-		private String charData;
+		private StringBuffer charData = new StringBuffer();
+		private boolean inEntry;
 	} //}}}
 }

@@ -176,22 +176,22 @@
 			<BEGIN>&lt;</BEGIN>
 			<END>&gt;</END>
 		</SPAN>
-		
+
 		<!-- so that @link{...} is highlighted -->
 		<!-- XXX: this is wrong, {@link ..} is correct, see below -->
 		<!--<SEQ TYPE="COMMENT3">{</SEQ>-->
-		
+
 		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
-			<BEGIN>{@(link|linkplain|docRoot|code|literal)\s</BEGIN>
+			<BEGIN>\{@(link|linkplain|docRoot|code|literal)\s</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
-		
+
 		<!-- for the common usage of the cvs keyword $Id$ -->
 		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
 			<BEGIN>@version\s+\$</BEGIN>
 			<END>$</END>
 		</SPAN_REGEXP>
-		
+
 		<!-- This works only when you use the same whitespace before and after the param's name,
 			 eg. a tab before and after, but mixing space and tab won't work.
 			 The reason is that you can't enter a regexp in END, except for the backreference operator $n -->
@@ -199,10 +199,10 @@
 			<BEGIN>@(?:param|throws|exception|serialField)(\s)</BEGIN>
 			<END>$1</END>
 		</SPAN_REGEXP>
-		
+
 		<KEYWORDS>
 		<!-- Note: the labels in comments are handled by SPANs above -->
-		
+
 		<!-- Official javadoc tags:
 			 http://java.sun.com/j2se/1.5/docs/tooldocs/windows/javadoc.html#javadoctags -->
 			<LABEL>@author</LABEL>
@@ -222,11 +222,11 @@
 		<!--<LABEL>@throws</LABEL>-->
 			<LABEL>{@value}</LABEL>
 			<LABEL>@version</LABEL>
-			
+
 		<!-- new in 1.5 -->
 		<!--<LABEL>@code</LABEL>-->
 		<!--<LABEL>@literal</LABEL>-->
-			
+
 		<!-- SUNs proposed tags:
 			 http://java.sun.com/j2se/javadoc/proposed-tags.html -->
 			<KEYWORD2>@category</KEYWORD2>
@@ -238,7 +238,7 @@
 			<KEYWORD2>@threadsafety</KEYWORD2>
 			<KEYWORD2>@tutorial</KEYWORD2>
 			<KEYWORD2>@todo</KEYWORD2>
-		
+
 		<!-- Custom tags -->
 			<KEYWORD4>@access</KEYWORD4>
 			<KEYWORD4>@beaninfo</KEYWORD4>
@@ -267,6 +267,6 @@
 		</KEYWORDS>
 	</RULES>
 
-	<!-- just a dummy which makes use of the default token type COMMENT4 for highlighting the word after @param in javadoc -->	
+	<!-- just a dummy which makes use of the default token type COMMENT4 for highlighting the word after @param in javadoc -->
 	<RULES SET="JAVADOC_PARAM" DEFAULT="COMMENT4" IGNORE_CASE="TRUE" />
 </MODE>

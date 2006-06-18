@@ -4,16 +4,16 @@
 	LABEL | LITERAL1 | LITERAL2 | LITERAL3 | LITERAL4 | MARKUP | OPERATOR )" >
 
 <!-- Entities for attributes shared by multiple rules -->
-<!ENTITY % att-bool '( TRUE | FALSE )' >
-<!ENTITY % att-type 'TYPE %tokens; "NULL"' >
-<!ENTITY % att-position-mix 'AT_LINE_START %att-bool; "FALSE"
-	AT_WHITESPACE_END %att-bool; "FALSE"
-	AT_WORD_START %att-bool; "FALSE"' >
-<!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; "FALSE"' >
+<!ENTITY % att-bool '( TRUE | FALSE ) #IMPLIED' >
+<!ENTITY % att-type 'TYPE %tokens; #IMPLIED' >
+<!ENTITY % att-position-mix 'AT_LINE_START %att-bool;
+	AT_WHITESPACE_END %att-bool;
+	AT_WORD_START %att-bool; ' >
+<!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; ' >
 <!ENTITY % att-delegate 'DELEGATE CDATA #IMPLIED' >
-<!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool; "FALSE"
-	NO_WORD_BREAK %att-bool; "FALSE"
-	NO_ESCAPE %att-bool; "FALSE"'>
+<!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool;
+	NO_WORD_BREAK %att-bool;
+	NO_ESCAPE %att-bool; '>
 <!ENTITY % att-hash-char 'HASH_CHAR CDATA #REQUIRED' >
 
 <!-- MODE element -->
@@ -36,13 +36,13 @@
 
 <!-- RULES attributes -->
 <!ATTLIST RULES
-	SET CDATA "MAIN"
-	IGNORE_CASE %att-bool; "TRUE"
-	HIGHLIGHT_DIGITS %att-bool; "FALSE"
+	SET CDATA #IMPLIED
+	IGNORE_CASE %att-bool;
+	HIGHLIGHT_DIGITS %att-bool;
 	DIGIT_RE CDATA #IMPLIED
 	ESCAPE CDATA #IMPLIED
-	DEFAULT %tokens; "NULL"
-	NO_WORD_SEP CDATA "_">
+	DEFAULT %tokens; #IMPLIED
+	NO_WORD_SEP CDATA #IMPLIED >
 
 <!-- IMPORT element -->
 <!ELEMENT IMPORT EMPTY >

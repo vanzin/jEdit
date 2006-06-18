@@ -22,8 +22,12 @@
 
 package org.gjt.sp.jedit;
 
-import com.microstar.xml.*;
 import java.io.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.gjt.sp.util.Log;
 
 /**
@@ -94,41 +98,14 @@ public class PerspectiveManager
 		Log.log(Log.MESSAGE,PerspectiveManager.class,"Loading " + perspective);
 
 		PerspectiveHandler handler = new PerspectiveHandler(restoreFiles);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(handler);
-		Reader in = null;
 		try
 		{
-			in = new BufferedReader(new FileReader(perspective));
-			parser.parse(null, null, in);
+			MiscUtilities.parseXML(new FileInputStream(perspective), handler);
 		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,PerspectiveManager.class,perspective
-				+ ":" + line + ": " + message);
-		}
-		catch(FileNotFoundException fnf)
-		{
-		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			Log.log(Log.ERROR,PerspectiveManager.class,e);
 		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,PerspectiveManager.class,io);
-			}
-		}
-
 		return handler.view;
 	} //}}}
 
@@ -137,7 +114,7 @@ public class PerspectiveManager
 	{
 		if(!isPerspectiveEnabled())
 			return;
-		
+
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory == null)
 			return;
@@ -273,10 +250,10 @@ public class PerspectiveManager
 	private static boolean dirty, enabled = true;
 
 	//{{{ PerspectiveHandler class
-	static class PerspectiveHandler extends HandlerBase
+	static class PerspectiveHandler extends DefaultHandler
 	{
 		View view;
-		String charData;
+		StringBuffer charData;
 		View.ViewConfig config;
 		boolean restoreFiles;
 
@@ -284,47 +261,28 @@ public class PerspectiveManager
 		{
 			this.restoreFiles = restoreFiles;
 			config = new View.ViewConfig();
+			charData = new StringBuffer();
 		}
 
-		public Object resolveEntity(String publicId, String systemId)
+		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			if("perspective.dtd".equals(systemId))
+			return MiscUtilities.findEntity(systemId, "perspective.dtd", getClass());
+		}
+
+		public void startElement(String uri, String localName,
+					 String qName, Attributes attrs)
+		{
+			charData.setLength(0);
+			for (int i = 0; i < attrs.getLength(); i++)
 			{
-				// this will result in a slight speed up, since we
-				// don't need to read the DTD anyway, as AElfred is
-				// non-validating
-				return new StringReader("<!-- -->");
-
-				/* try
-				{
-					return new BufferedReader(new InputStreamReader(
-						getClass().getResourceAsStream("recent.dtd")));
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,"Error while opening"
-						+ " recent.dtd:");
-					Log.log(Log.ERROR,this,e);
-				} */
+				String name = attrs.getQName(i);
+				String value = attrs.getValue(i);
+				attribute(name, value);
 			}
-
-			return null;
 		}
 
-		public void doctypeDecl(String name, String publicId,
-			String systemId) throws Exception
+		private void attribute(String aname, String value)
 		{
-			if("PERSPECTIVE".equals(name))
-				return;
-
-			Log.log(Log.ERROR,this,"perspective.xml: DOCTYPE must be PERSPECTIVE");
-		}
-
-		public void attribute(String aname, String value, boolean specified)
-		{
-			if(!specified)
-				return;
-
 			if(aname.equals("X"))
 				config.x = Integer.parseInt(value);
 			else if(aname.equals("Y"))
@@ -355,15 +313,15 @@ public class PerspectiveManager
 				config.rightPos = Integer.parseInt(value);
 		}
 
-		public void endElement(String name)
+		public void endElement(String uri, String localName, String name)
 		{
 			if(name.equals("BUFFER"))
 			{
 				if(restoreFiles)
-					jEdit.openFile(null,charData);
+					jEdit.openFile(null,charData.toString());
 			}
 			else if(name.equals("PANES"))
-				config.splitConfig = charData;
+				config.splitConfig = charData.toString();
 			else if(name.equals("VIEW"))
 			{
 				view = jEdit.newView(view,null,config);
@@ -371,9 +329,9 @@ public class PerspectiveManager
 			}
 		}
 
-		public void charData(char[] ch, int start, int length)
+		public void characters(char[] ch, int start, int length)
 		{
-			charData = new String(ch,start,length);
+			charData.append(ch,start,length);
 		}
 	} //}}}
 }

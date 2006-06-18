@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
 import bsh.*;
-import gnu.regexp.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -33,6 +32,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.regex.Pattern;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -494,7 +494,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		else
 			return "/";
 	} //}}}
-	
+
 	//{{{ rootDirectory() method
 	/**
 	 * Goes to the local drives directory.
@@ -752,7 +752,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 */
 	public void locateFile(final String path)
 	{
-		if(!filenameFilter.isMatch(MiscUtilities.getFileName(path)))
+		if(!filenameFilter.matcher(MiscUtilities.getFileName(path)).matches())
 			setFilenameFilter(null);
 
 		setDirectory(MiscUtilities.getParentOfPath(path));
@@ -777,29 +777,29 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 				((JMenu)pluginMenu).addSeparator();
 			else if (pluginMenu instanceof JPopupMenu)
 				((JPopupMenu)pluginMenu).addSeparator();
-				
+
 		}
 		else
 			/* we're in a modal dialog */;
-		
+
 		ArrayList vec = new ArrayList();
-		
+
 		//{{{ old API
 		Enumeration e = VFSManager.getFilesystems();
-		
+
 		while(e.hasMoreElements())
 		{
 			VFS vfs = (VFS)e.nextElement();
 			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
 				continue;
-			
+
 				JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
 						"vfs." + vfs.getName() + ".label"));
 				menuItem.setActionCommand(vfs.getName());
 				menuItem.addActionListener(actionHandler);
 				vec.add(menuItem);
 		} //}}}
-		
+
 		//{{{ new API
 		EditPlugin[] plugins = jEdit.getPlugins();
 		for(int i = 0; i < plugins.length; i++)
@@ -808,7 +808,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			if(menuItem != null)
 				vec.add(menuItem);
 		} //}}}
-		
+
 		if(vec.size() != 0)
 		{
 			MiscUtilities.quicksort(vec,new MiscUtilities.MenuItemCompare());
@@ -822,10 +822,10 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			mi.setEnabled(false);
 			pluginMenu.add(mi);
 		}
-		
+
 		return pluginMenu;
 	} //}}}
-	
+
 	//{{{ addBrowserListener() method
 	public void addBrowserListener(BrowserListener l)
 	{
@@ -958,7 +958,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			String filter = filterField.getText();
 			if(filter.length() == 0)
 				filter = "*";
-			filenameFilter = new RE(MiscUtilities.globToRE(filter),RE.REG_ICASE);
+			filenameFilter = Pattern.compile(MiscUtilities.globToRE(filter),
+							 Pattern.CASE_INSENSITIVE);
 		}
 		catch(Exception e)
 		{
@@ -1039,7 +1040,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private FavoritesMenuButton favorites;
 	private PluginsMenuButton plugins;
 	private BrowserView browserView;
-	private RE filenameFilter;
+	private Pattern filenameFilter;
 	private int mode;
 	private boolean multipleSelection;
 
@@ -1568,7 +1569,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					if(file.getType() == VFSFile.FILE
 						&& filterEnabled
 						&& filenameFilter != null
-						&& !filenameFilter.isMatch(file.getName()))
+						&& !filenameFilter.matcher(file.getName()).matches())
 					{
 						invisible++;
 						continue;

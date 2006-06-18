@@ -23,7 +23,8 @@
 
 package org.gjt.sp.jedit.syntax;
 
-import gnu.regexp.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * A parser rule.
@@ -32,16 +33,6 @@ import gnu.regexp.*;
  */
 public class ParserRule
 {
-	/**
-	 * Perl5 syntax with character classes enabled.
-	 * @since jEdit 4.2pre1
-	 */
-	// copy and paste from RESyntaxMatcher to make syntax package
-	// independent of jEdit itself
-	public static final RESyntax RE_SYNTAX_JEDIT
-		= new RESyntax(RESyntax.RE_SYNTAX_PERL5)
-		.set(RESyntax.RE_CHAR_CLASSES)
-		.setLineSeparator("\n");
 
 	//{{{ Major actions
 	public static final int MAJOR_ACTIONS = 0x000000FF;
@@ -72,7 +63,7 @@ public class ParserRule
 	public final char hashChar;
 	public final int startPosMatch;
 	public final char[] start;
-	public final RE startRegexp;
+	public final Pattern startRegexp;
 
 	public final int endPosMatch;
 	public final char[] end;
@@ -98,12 +89,11 @@ public class ParserRule
 	public static final ParserRule createRegexpSequenceRule(
 		char hashChar, int posMatch, String seq,
 		ParserRuleSet delegate, byte id, boolean ignoreCase)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new ParserRule(SEQ | REGEXP, hashChar, posMatch,
-			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0),
-			RE_SYNTAX_JEDIT), 0,
-			null, delegate, id);
+			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
+			0, null, delegate, id);
 	} //}}}
 
 	//{{{ createSpanRule() method
@@ -130,7 +120,7 @@ public class ParserRule
 		int endPosMatch, String end, ParserRuleSet delegate, byte id,
 		boolean excludeMatch, boolean noLineBreak, boolean noWordBreak,
 		boolean ignoreCase, boolean noEscape)
-		throws REException
+		throws PatternSyntaxException
 	{
 		int ruleAction = SPAN | REGEXP |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
@@ -139,9 +129,8 @@ public class ParserRule
 			((noEscape) ? NO_ESCAPE : 0);
 
 		return new ParserRule(ruleAction, hashChar, startPosMatch, null,
-			new RE("\\A" + start,(ignoreCase ? RE.REG_ICASE : 0),
-			RE_SYNTAX_JEDIT), endPosMatch,
-			end.toCharArray(), delegate, id);
+			Pattern.compile(start,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
+			endPosMatch, end.toCharArray(), delegate, id);
 	} //}}}
 
 	//{{{ createEOLSpanRule() method
@@ -162,16 +151,15 @@ public class ParserRule
 	public static final ParserRule createRegexpEOLSpanRule(
 		char hashChar, int posMatch, String seq, ParserRuleSet delegate,
 		byte id, boolean excludeMatch, boolean ignoreCase)
-		throws REException
+		throws PatternSyntaxException
 	{
 		int ruleAction = EOL_SPAN | REGEXP |
 			((excludeMatch) ? EXCLUDE_MATCH : 0)
 			| NO_LINE_BREAK;
 
 		return new ParserRule(ruleAction, hashChar, posMatch,
-			null, new RE("\\A" + seq,(ignoreCase ? RE.REG_ICASE : 0),
-			RE_SYNTAX_JEDIT), 0, null,
-			delegate, id);
+			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
+			0, null, delegate, id);
 	} //}}}
 
 	//{{{ createMarkFollowingRule() method
@@ -208,7 +196,7 @@ public class ParserRule
 
 	//{{{ Private members
 	private ParserRule(int action, char hashChar,
-		int startPosMatch, char[] start, RE startRegexp,
+		int startPosMatch, char[] start, Pattern startRegexp,
 		int endPosMatch, char[] end,
 		ParserRuleSet delegate, byte token)
 	{

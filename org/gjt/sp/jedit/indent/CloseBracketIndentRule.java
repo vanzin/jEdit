@@ -22,9 +22,7 @@
 
 package org.gjt.sp.jedit.indent;
 
-import gnu.regexp.*;
 import java.util.List;
-import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.TextUtilities;
 
@@ -67,13 +65,13 @@ public class CloseBracketIndentRule extends BracketIndentRule
 			/*
 			Consider the following Common Lisp code (with one more opening
 			bracket than closing):
-			
+
 			(defun emit-push-long (arg)
 			  (cond ((eql arg 0)
 			      (emit 'lconst_0))
 			    ((eql arg 1)
 			      (emit 'lconst_1)))
-			
+
 			even though we have a closing bracket match on line 3,
 			the next line must be indented relative to the
 			corresponding opening bracket from line 1.
@@ -86,16 +84,16 @@ public class CloseBracketIndentRule extends BracketIndentRule
 				alignBracket.setExtraIndent(getBrackets(leadingBrackets)
 					.openCount);
 			}
-			
+
 			indentActions.add(alignBracket);
 		}
 	} //}}}
-	
+
 	//{{{ isMatch() method
 	public boolean isMatch(String line)
 	{
 		return getBrackets(line).closeCount != 0;
 	} //}}}
-	
+
 	private boolean aligned;
 }

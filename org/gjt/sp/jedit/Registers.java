@@ -23,10 +23,14 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import com.microstar.xml.*;
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.RegisterChanged;
@@ -78,7 +82,7 @@ public class Registers
 
 		setRegister(register,selection);
 		HistoryModel.getModel("clipboard").addItem(selection);
-	
+
 	} //}}}
 
 	//{{{ cut() method
@@ -256,7 +260,7 @@ public class Registers
 						}
 					}
 				}
-				else /* Regular paste */ 
+				else /* Regular paste */
 				{
 					textArea.replaceSelection(selection);
 				}
@@ -439,9 +443,9 @@ public class Registers
 			for(int i = 0; i < registers.length; i++)
 			{
 				Register register = registers[i];
-				if(register == null || 
-                                   i == '$' || 
-                                   i == '%' || 
+				if(register == null ||
+                                   i == '$' ||
+                                   i == '%' ||
                                    register.toString().length() == 0
                                   )
 					continue;
@@ -523,7 +527,7 @@ public class Registers
 		if(!loading)
 			modified = true;
 	} //}}}
-	
+
 	//{{{ loadRegisters() method
 	private static void loadRegisters()
 	{
@@ -543,42 +547,15 @@ public class Registers
 		Log.log(Log.MESSAGE,jEdit.class,"Loading registers.xml");
 
 		RegistersHandler handler = new RegistersHandler();
-		XmlParser parser = new XmlParser();
-		parser.setHandler(handler);
-		Reader in = null;
-		try
-		{
+		try {
 			loading = true;
-			in = new BufferedReader(new FileReader(registerFile));
-			parser.parse(null, null, in);
+			MiscUtilities.parseXML(new FileInputStream(registerFile),
+						handler);
 		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,Registers.class,registerFile + ":"
-				+ line + ": " + message);
-		}
-		catch(FileNotFoundException fnf)
-		{
-			//Log.log(Log.DEBUG,Registers.class,fnf);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,Registers.class,e);
-		}
-		finally
-		{
+		catch (IOException ioe) {
+			Log.log(Log.ERROR, Registers.class, ioe);
+		} finally {
 			loading = false;
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,Registers.class,io);
-			}
 		}
 	} //}}}
 
@@ -714,72 +691,47 @@ public class Registers
 	} //}}}
 
 	//{{{ RegistersHandler class
-	static class RegistersHandler extends HandlerBase
+	static class RegistersHandler extends DefaultHandler
 	{
 		//{{{ resolveEntity() method
-		public Object resolveEntity(String publicId, String systemId)
+		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			if("registers.dtd".equals(systemId))
-			{
-				// this will result in a slight speed up, since we
-				// don't need to read the DTD anyway, as AElfred is
-				// non-validating
-				return new StringReader("<!-- -->");
-
-				/* try
-				{
-					return new BufferedReader(new InputStreamReader(
-						getClass().getResourceAsStream("registers.dtd")));
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,"Error while opening"
-						+ " recent.dtd:");
-					Log.log(Log.ERROR,this,e);
-				} */
-			}
-
-			return null;
+			return MiscUtilities.findEntity(systemId, "registers.dtd", getClass());
 		} //}}}
 
-		//{{{ attribute() method
-		public void attribute(String aname, String value, boolean isSpecified)
+		//{{{ startElement() method
+		public void startElement(String uri, String localName,
+					 String qName, Attributes attrs)
 		{
-			if(aname.equals("NAME"))
-				registerName = value;
-		} //}}}
-
-		//{{{ doctypeDecl() method
-		public void doctypeDecl(String name, String publicId,
-			String systemId) throws Exception
-		{
-			if("REGISTERS".equals(name))
-				return;
-
-			Log.log(Log.ERROR,this,"registers.xml: DOCTYPE must be REGISTERS");
+			registerName = attrs.getValue("NAME");
+			inRegister = "REGISTER".equals(qName);
 		} //}}}
 
 		//{{{ endElement() method
-		public void endElement(String name)
+		public void endElement(String uri, String localName, String name)
 		{
 			if(name.equals("REGISTER"))
 			{
 				if(registerName == null || registerName.length() != 1)
 					Log.log(Log.ERROR,this,"Malformed NAME: " + registerName);
 				else
-					setRegister(registerName.charAt(0),charData);
+					setRegister(registerName.charAt(0),charData.toString());
+				inRegister = false;
+				charData.setLength(0);
 			}
 		} //}}}
 
-		//{{{ charData() method
-		public void charData(char[] ch, int start, int length)
+		//{{{ characters() method
+		public void characters(char[] ch, int start, int length)
 		{
-			charData = new String(ch,start,length);
+			if (inRegister)
+				charData.append(ch, start, length);
 		} //}}}
 
 		//{{{ Private members
 		private String registerName;
-		private String charData;
+		private StringBuffer charData = new StringBuffer();
+		private boolean inRegister;
 		//}}}
 	} //}}}
 

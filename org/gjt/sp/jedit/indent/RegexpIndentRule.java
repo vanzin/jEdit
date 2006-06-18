@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.search.RESearchMatcher;
 
 public class RegexpIndentRule implements IndentRule
 {
@@ -39,14 +38,12 @@ public class RegexpIndentRule implements IndentRule
 	 */
 	public RegexpIndentRule(String regexp, IndentAction prevPrev,
 		IndentAction prev, IndentAction thisLine, boolean collapse)
-	throws PatternSyntaxException 
+	throws PatternSyntaxException
 	{
 		this.prevPrevAction = prevPrev;
 		this.prevAction = prev;
 		this.thisAction = thisLine;
 		this.regexp = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE );
-		/*  this.regexp = new RE(regexp,RE.REG_ICASE,
-			RESearchMatcher.RE_SYNTAX_JEDIT); */
 		this.collapse = collapse;
 	} //}}}
 
@@ -56,7 +53,7 @@ public class RegexpIndentRule implements IndentRule
 		List indentActions)
 	{
 		boolean match = false;
-		
+
 		if(thisAction != null
 			&& isMatch(buffer.getLineText(thisLineIndex)))
 		{

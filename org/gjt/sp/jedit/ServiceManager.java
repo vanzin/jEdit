@@ -22,7 +22,6 @@
 
 package org.gjt.sp.jedit;
 
-import com.microstar.xml.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -30,7 +29,7 @@ import org.gjt.sp.util.Log;
 
 /**
  * A generic way for plugins to provide various API extensions.<p>
- * 
+ *
  * Services are loaded from files named <code>services.xml</code> inside the
  * plugin JAR. A service definition file has the following form:
  *
@@ -92,44 +91,14 @@ public class ServiceManager
 	public static void loadServices(PluginJAR plugin, URL uri,
 		PluginJAR.PluginCacheEntry cache)
 	{
-		Reader in = null;
-
+		ServiceListHandler dh = new ServiceListHandler(plugin,uri);
 		try
 		{
-			Log.log(Log.DEBUG,jEdit.class,"Loading services from " + uri);
-
-			ServiceListHandler dh = new ServiceListHandler(plugin,uri);
-			XmlParser parser = new XmlParser();
-			parser.setHandler(dh);
-			in = new BufferedReader(
-				new InputStreamReader(
-				uri.openStream()));
-			parser.parse(null, null, in);
-			if(cache != null)
-				cache.cachedServices = dh.getCachedServices();
+			MiscUtilities.parseXML(uri.openStream(), dh);
 		}
-		catch(XmlException xe)
+		catch (IOException ioe)
 		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,ServiceManager.class,uri + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,ServiceManager.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,ServiceManager.class,io);
-			}
+			Log.log(Log.ERROR, ServiceManager.class, ioe);
 		}
 	} //}}}
 
@@ -152,7 +121,7 @@ public class ServiceManager
 
 	//{{{ registerService() method
 	/**
-	 * Registers a service. Plugins should provide a 
+	 * Registers a service. Plugins should provide a
 	 * <code>services.xml</code> file instead of calling this directly.
 	 *
 	 * @param clazz The service class

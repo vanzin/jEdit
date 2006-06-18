@@ -22,10 +22,10 @@
 
 package org.gjt.sp.jedit;
 
-import com.microstar.xml.*;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.util.Log;
 
@@ -458,36 +458,12 @@ public class ActionSet
 		try
 		{
 			Log.log(Log.DEBUG,this,"Loading actions from " + uri);
-
 			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
-			stream = new BufferedReader(new InputStreamReader(
-				uri.openStream()));
-			XmlParser parser = new XmlParser();
-			parser.setHandler(ah);
-			parser.parse(null, null, stream);
+			MiscUtilities.parseXML(uri.openStream(), ah);
 		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,this,uri + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			Log.log(Log.ERROR,uri,e);
-		}
-		finally
-		{
-			try
-			{
-				if(stream != null)
-					stream.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-			}
 		}
 	} //}}}
 

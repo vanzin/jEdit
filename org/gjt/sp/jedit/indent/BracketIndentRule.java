@@ -22,7 +22,6 @@
 
 package org.gjt.sp.jedit.indent;
 
-import gnu.regexp.*;
 import org.gjt.sp.jedit.Buffer;
 
 public abstract class BracketIndentRule implements IndentRule

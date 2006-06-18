@@ -23,12 +23,12 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import com.microstar.xml.XmlException;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import org.xml.sax.SAXParseException;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.*;
@@ -254,15 +254,15 @@ public class PluginManager extends JFrame implements EBComponent
 		{
 			public void run()
 			{
-				if(exception[0] instanceof XmlException)
+				if(exception[0] instanceof SAXParseException)
 				{
-					XmlException xe = (XmlException)
+					SAXParseException se = (SAXParseException)
 						exception[0];
 
-					int line = xe.getLine();
+					int line = se.getLineNumber();
 					String path = jEdit.getProperty(
 						"plugin-manager.export-url");
-					String message = xe.getMessage();
+					String message = se.getMessage();
 					Log.log(Log.ERROR,this,path + ":" + line
 						+ ": " + message);
 					String[] pp = { path,
