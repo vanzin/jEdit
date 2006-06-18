@@ -50,6 +50,11 @@ JEDIT 4.3 VERSION HISTORY
   of the gnu.regexp removal; it didn't make sense to write extra
   code to keep that class working. (Marcelo Vanzin)
 
+- due to the change to support java.util.regex, the signature for
+  org.gjt.sp.jedit.search.SearchMatcher.nextMatch() has changed.
+  This means that any plugin that uses SearchMatcher or one of its
+  implementations directly will break. (Marcelo Vanzin)
+
 }}}
 
 {{{ Miscellaneous
