@@ -370,18 +370,19 @@ public class BufferHistory
 				encoding = null;
 			}
 			else if(name.equals("PATH"))
-				path = charData;
+				path = charData.toString();
 			else if(name.equals("CARET"))
-				caret = Integer.parseInt(charData);
+				caret = Integer.parseInt(charData.toString());
 			else if(name.equals("SELECTION"))
-				selection = charData;
+				selection = charData.toString();
 			else if(name.equals("ENCODING"))
-				encoding = charData;
+				encoding = charData.toString();
+			charData.setLength(0);
 		}
 
-		public void caharacters(char[] ch, int start, int length)
+		public void characters(char[] ch, int start, int length)
 		{
-			charData = new String(ch,start,length);
+			charData.append(ch,start,length);
 		}
 
 		// end HandlerBase implementation
@@ -391,6 +392,6 @@ public class BufferHistory
 		private int caret;
 		private String selection;
 		private String encoding;
-		private String charData;
+		private StringBuffer charData = new StringBuffer();
 	} //}}}
 }
