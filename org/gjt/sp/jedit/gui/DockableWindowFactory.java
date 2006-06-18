@@ -23,17 +23,21 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
- import bsh.*;
- import com.microstar.xml.*;
- import javax.swing.*;
- import java.awt.event.*;
- import java.awt.*;
- import java.io.*;
- import java.net.URL;
- import java.util.*;
- import org.gjt.sp.jedit.msg.*;
- import org.gjt.sp.jedit.*;
- import org.gjt.sp.util.Log;
+import bsh.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
+import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -68,48 +72,22 @@ public class DockableWindowFactory
 	public void loadDockableWindows(PluginJAR plugin, URL uri,
 		PluginJAR.PluginCacheEntry cache)
 	{
-		Reader in = null;
-
 		try
 		{
 			Log.log(Log.DEBUG,DockableWindowManager.class,
 				"Loading dockables from " + uri);
-
 			DockableListHandler dh = new DockableListHandler(plugin,uri);
-			in = new BufferedReader(
-				new InputStreamReader(
-				uri.openStream()));
-			XmlParser parser = new XmlParser();
-			parser.setHandler(dh);
-			parser.parse(null, null, in);
-			if(cache != null)
+			boolean success = MiscUtilities.parseXML(uri.openStream(), dh);
+
+			if (success && cache != null)
 			{
 				cache.cachedDockableNames = dh.getCachedDockableNames();
 				cache.cachedDockableActionFlags = dh.getCachedDockableActionFlags();
 			}
 		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,DockableWindowManager.class,uri + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			Log.log(Log.ERROR,DockableWindowManager.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,DockableWindowManager.class,io);
-			}
 		}
 	} //}}}
 
@@ -182,9 +160,9 @@ public class DockableWindowFactory
 	{
 		return dockableWindowFactories.values().iterator();
 	} //}}}
-	
+
 	//{{{ DockableListHandler class
-	class DockableListHandler extends HandlerBase
+	class DockableListHandler extends DefaultHandler
 	{
 		//{{{ DockableListHandler constructor
 		DockableListHandler(PluginJAR plugin, URL uri)
@@ -194,79 +172,39 @@ public class DockableWindowFactory
 			stateStack = new Stack();
 			actions = true;
 
+			code = new StringBuffer();
 			cachedDockableNames = new LinkedList();
 			cachedDockableActionFlags = new LinkedList();
 		} //}}}
 
 		//{{{ resolveEntity() method
-		public Object resolveEntity(String publicId, String systemId)
+		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			if("dockables.dtd".equals(systemId))
-			{
-				// this will result in a slight speed up, since we
-				// don't need to read the DTD anyway, as AElfred is
-				// non-validating
-				return new StringReader("<!-- -->");
-
-				/* try
-				{
-					return new BufferedReader(new InputStreamReader(
-						getClass().getResourceAsStream
-						("/org/gjt/sp/jedit/dockables.dtd")));
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,"Error while opening"
-						+ " dockables.dtd:");
-					Log.log(Log.ERROR,this,e);
-				} */
-			}
-
-			return null;
+			return MiscUtilities.findEntity(systemId, "dockables.dtd", MiscUtilities.class);
 		} //}}}
 
-		//{{{ attribute() method
-		public void attribute(String aname, String value, boolean isSpecified)
-		{
-			aname = (aname == null) ? null : aname.intern();
-			value = (value == null) ? null : value.intern();
-
-			if(aname == "NAME")
-				dockableName = value;
-			else if(aname == "NO_ACTIONS")
-				actions = (value == "FALSE");
-		} //}}}
-
-		//{{{ doctypeDecl() method
-		public void doctypeDecl(String name, String publicId,
-			String systemId) throws Exception
-		{
-			if("DOCKABLES".equals(name))
-				return;
-
-			Log.log(Log.ERROR,this,uri + ": DOCTYPE must be DOCKABLES");
-		} //}}}
-
-		//{{{ charData() method
-		public void charData(char[] c, int off, int len)
+		//{{{ characters() method
+		public void characters(char[] c, int off, int len)
 		{
 			String tag = peekElement();
-			String text = new String(c, off, len);
-
-			if (tag == "DOCKABLE")
-			{
-				code = text;
-			}
+			if (tag.equals("DOCKABLE"))
+				code.append(c, off, len);
 		} //}}}
 
 		//{{{ startElement() method
-		public void startElement(String tag)
+		public void startElement(String uri, String localName,
+					 String qName, Attributes attrs)
 		{
-			tag = pushElement(tag);
+			String tag = pushElement(qName);
+			if (tag.equals("DOCKABLE"))
+			{
+				dockableName = attrs.getValue("NAME");
+				actions = "FALSE".equals(attrs.getValue("NO_ACTIONS"));
+			}
 		} //}}}
 
 		//{{{ endElement() method
-		public void endElement(String name)
+		public void endElement(String uri, String localName, String name)
 		{
 			if(name == null)
 				return;
@@ -275,16 +213,17 @@ public class DockableWindowFactory
 
 			if(name.equals(tag))
 			{
-				if(tag == "DOCKABLE")
+				if(tag.equals("DOCKABLE"))
 				{
 					registerDockableWindow(plugin,
-						dockableName,code,actions);
+						dockableName,code.toString(),actions);
 					cachedDockableNames.add(dockableName);
 					cachedDockableActionFlags.add(
 						new Boolean(actions));
 					// make default be true for the next
 					// action
 					actions = true;
+					code.setLength(0);
 				}
 
 				popElement();
@@ -342,7 +281,7 @@ public class DockableWindowFactory
 		private java.util.List cachedDockableActionFlags;
 
 		private String dockableName;
-		private String code;
+		private StringBuffer code;
 		private boolean actions;
 
 		private Stack stateStack;

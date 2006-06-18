@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import bsh.*;
-import com.microstar.xml.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -148,7 +147,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		return DockableWindowFactory.getInstance()
 			.getRegisteredDockableWindows();
 	} //}}}
-	
+
 	//{{{ DockableWindowManager constructor
 	/**
 	 * Creates a new dockable window manager.
@@ -300,7 +299,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public void hideDockableWindow(String name)
 	{
-		
+
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null)
 		{
@@ -309,7 +308,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		}
 
 
-		
+
 		if(entry.win == null)
 			return;
 		Object reason = DockableWindowUpdate.DEACTIVATED;

@@ -23,12 +23,13 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import com.microstar.xml.*;
 import java.io.*;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.zip.GZIPInputStream;
+import javax.xml.parsers.SAXParser;
+import org.xml.sax.InputSource;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -68,9 +69,7 @@ class PluginList
 		if (!id.equals(MirrorList.Mirror.NONE))
 			path += "?mirror="+id;
 		PluginListHandler handler = new PluginListHandler(this,path);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(handler);
-
+		SAXParser parser = MiscUtilities.newSAXParser();
 		InputStream in = new BufferedInputStream(new URL(path).openStream());
 		try
 		{
@@ -85,7 +84,9 @@ class PluginList
 					in = new GZIPInputStream(in);
 			}
 
-			parser.parse(null,null,new InputStreamReader(in,"UTF8"));
+			InputSource isrc = new InputSource(new InputStreamReader(in,"UTF8"));
+			isrc.setSystemId("jedit.jar");
+			parser.parse(isrc, handler);
 		}
 		finally
 		{

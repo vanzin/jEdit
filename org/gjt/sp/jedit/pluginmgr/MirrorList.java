@@ -22,10 +22,11 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
-import com.microstar.xml.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import javax.xml.parsers.SAXParser;
+import org.xml.sax.InputSource;
 import org.gjt.sp.jedit.*;
 
 public class MirrorList
@@ -44,14 +45,15 @@ public class MirrorList
 
 		String path = jEdit.getProperty("plugin-manager.mirror-url");
 		MirrorListHandler handler = new MirrorListHandler(this,path);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(handler);
 
+		SAXParser parser = MiscUtilities.newSAXParser();
 		Reader in = new BufferedReader(new InputStreamReader(
 			new URL(path).openStream()));
+		InputSource isrc = new InputSource(in);
+		isrc.setSystemId("jedit.jar");
 		try
 		{
-			parser.parse(null,null,in);
+			parser.parse(isrc, handler);
 		}
 		finally
 		{

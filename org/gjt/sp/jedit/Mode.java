@@ -24,8 +24,9 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import gnu.regexp.*;
 import java.util.Hashtable;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.Log;
 //}}}
@@ -65,18 +66,18 @@ public class Mode
 			String filenameGlob = (String)getProperty("filenameGlob");
 			if(filenameGlob != null && filenameGlob.length() != 0)
 			{
-				filenameRE = new RE(MiscUtilities.globToRE(
-					filenameGlob),RE.REG_ICASE);
+				filenameRE = Pattern.compile(MiscUtilities.globToRE(filenameGlob),
+							     Pattern.CASE_INSENSITIVE);
 			}
 
 			String firstlineGlob = (String)getProperty("firstlineGlob");
 			if(firstlineGlob != null && firstlineGlob.length() != 0)
 			{
-				firstlineRE = new RE(MiscUtilities.globToRE(
-					firstlineGlob),RE.REG_ICASE);
+				firstlineRE = Pattern.compile(MiscUtilities.globToRE(firstlineGlob),
+							      Pattern.CASE_INSENSITIVE);
 			}
 		}
-		catch(REException re)
+		catch(PatternSyntaxException re)
 		{
 			Log.log(Log.ERROR,this,"Invalid filename/firstline"
 				+ " globs in mode " + name);
@@ -247,10 +248,10 @@ public class Mode
 	 */
 	public boolean accept(String fileName, String firstLine)
 	{
-		if(filenameRE != null && filenameRE.isMatch(fileName))
+		if(filenameRE != null && filenameRE.matcher(fileName).matches())
 			return true;
 
-		if(firstlineRE != null && firstlineRE.isMatch(firstLine))
+		if(firstlineRE != null && firstlineRE.matcher(firstLine).matches())
 			return true;
 
 		return false;
@@ -277,8 +278,8 @@ public class Mode
 	//{{{ Private members
 	private String name;
 	private Hashtable props;
-	private RE firstlineRE;
-	private RE filenameRE;
+	private Pattern firstlineRE;
+	private Pattern filenameRE;
 	private TokenMarker marker;
 	//}}}
 }

@@ -22,12 +22,12 @@
 
 package org.gjt.sp.jedit.indent;
 
-import gnu.regexp.*;
+import java.util.regex.PatternSyntaxException;
 
 public class IndentRuleFactory
 {
 	public static IndentRule indentNextLines(String regexp)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new RegexpIndentRule(regexp,
 			null,
@@ -36,7 +36,7 @@ public class IndentRuleFactory
 	}
 
 	public static IndentRule indentNextLine(String regexp)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new RegexpIndentRule(regexp,
 			new IndentAction.Decrease(),
@@ -45,7 +45,7 @@ public class IndentRuleFactory
 	}
 
 	public static IndentRule unindentThisLine(String regexp)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new RegexpIndentRule(regexp,
 			null,
@@ -55,7 +55,7 @@ public class IndentRuleFactory
 	}
 
 	public static IndentRule unindentNextLines(String regexp)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new RegexpIndentRule(regexp,
 			null,
@@ -65,25 +65,25 @@ public class IndentRuleFactory
 	}
 
 	public static IndentRule indentOpenBracket(char bracket)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new OpenBracketIndentRule(bracket,true);
 	}
 
 	public static IndentRule indentCloseBracket(char bracket)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new CloseBracketIndentRule(bracket,true);
 	}
 
 	public static IndentRule unalignedOpenBracket(char bracket)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new OpenBracketIndentRule(bracket,false);
 	}
 
 	public static IndentRule unalignedCloseBracket(char bracket)
-		throws REException
+		throws PatternSyntaxException
 	{
 		return new CloseBracketIndentRule(bracket,false);
 	}

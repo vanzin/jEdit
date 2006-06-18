@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
     Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
-    Björn "Vampire" Kautler, Matthieu Casanova, Xuan Baldauf and
-    Nicholas O'Leary for contributing to this release.
+    Björn "Vampire" Kautler, Matthieu Casanova, Xuan Baldauf,
+	Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
 {{{ Keyboard handling changes
 - There is a new option, "simplified keyboard handling"
@@ -11,8 +11,8 @@ JEDIT 4.3 VERSION HISTORY
   Keyboard event workaround handling has been substantially changed (as
   a fix to bug 1488047). This may greatly affect the way your keys work.
   Please report any bugs regarding this (and please drop a note about
-  this bug in bug 1488047). 
-  (xuan balduf). 
+  this bug in bug 1488047).
+  (xuan balduf).
 }}}
 
 
@@ -24,7 +24,7 @@ JEDIT 4.3 VERSION HISTORY
   Macros that change the active buffer have to call endCompoundEdit() on the old active buffer
   and beginCompoundEdit() on the new active buffer from now on.
   If this is done incorrectly, the UndoManager throws an exception about
-  "unbalanced begin-/endCompoundEdit" to the ActivityLog. 
+  "unbalanced begin-/endCompoundEdit" to the ActivityLog.
   (bug #1469996).   (Björn "Vampire" Kautler )
 
 - New section added to docs about buffer-switching macros. (Alan Ezust)
@@ -36,11 +36,25 @@ JEDIT 4.3 VERSION HISTORY
 
 - MiscUtilities.closeQuietly(Reader) simply close a Reader ignoring if it is null or if there
   are IOExceptions (Matthieu Casanova)
+
+- jEditBuffer.getRegexProperty() has been removed;
+  jEditBuffer.getPatternProperty() was added to replace it.
+  (Marcelo Vanzin)
+
+- MiscUtilities.parseXML() and MiscUtilities.findEntity() were added.
+  They're mainly used internally to ease XML parsing, but can safely
+  be used by other people. Please refer to the javadoc documentation
+  about how these methods operate. (Marcelo Vanzin)
+
+- org.gjt.sp.jedit.search.RESearchMatcher has been removed as part
+  of the gnu.regexp removal; it didn't make sense to write extra
+  code to keep that class working. (Marcelo Vanzin)
+
 }}}
 
 {{{ Miscellaneous
 - SearchReplace dialog now supports additional options,
-  for Directory Search: "skipHidden" and "skipBinary". 
+  for Directory Search: "skipHidden" and "skipBinary".
   Now you can skip over hidden directories/files, as well
   as binary files. (Matthieu Casanova & Alan Ezust)
 
@@ -49,7 +63,7 @@ JEDIT 4.3 VERSION HISTORY
 
 - macros Buffer_Switcher and ToggleHeaderSource are updated
   to work properly with UndoManager using begin/endCompoundEdit
-  (bug #1469996)  (Björn "Vampire" Kautler). 
+  (bug #1469996)  (Björn "Vampire" Kautler).
 
 - The "Recent files" menu can now be reaches with the keystroke sequence
   "Alt+F F" (bug 1488066) (Xuan Baldauf)
@@ -71,16 +85,30 @@ JEDIT 4.3 VERSION HISTORY
   It also remove GZIPPED property if the buffer name was ending with .gz and is not anymore
   (Matthieu Casanova)
 
+- All classes using the gnu.regexp packages have been changed to use
+  java.util.regexp. This needed some refactoring of a few components
+  inside the syntax highlighting and search subsystems. This means
+  that mode files using regexps and searches now should use the
+  java.util.regex syntax instead of the old syntax.
+  (Marcelo Vanzin)
+
+- All classes using the com.microstar.xml packages have been changed to
+  use JAXP to parse XML. Which means that some classes have different
+  base classes now, but I don't expect anyone to be inheriting from any
+  of those. Also, this means that XML parsing will be a little bit more
+  "correct" now, in the sense that it will check the files against their
+  DTDs (this needed some changes to the DTDs shipped with jEdit since
+  some of them had errors). (Marcelo Vanzin)
 }}}
 }}}
 
 {{{ Version 4.3pre4
-Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf, 
-Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust, 
-Daniel Hahler, Marcello Vanzin, Slava Pestov, Björn "Vampire" Kautler, and Jeffrey Hoyt for 
+Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf,
+Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust,
+Daniel Hahler, Marcello Vanzin, Slava Pestov, Björn "Vampire" Kautler, and Jeffrey Hoyt for
 contributing to this release.
 
-{{{ Syntax Highlighting 
+{{{ Syntax Highlighting
 
 - TypoScript syntax highlighting (Neil Bertram).
 - Myghty template syntax highlighting (Ollie Rutherfurd)
@@ -89,10 +117,10 @@ contributing to this release.
 }}}
 {{{ API Changes
 
-- better fix for 1449909: 
-   Create a new message (ViewUpdate.ACTIVATED) to indicate that a different 
-   view was activated. (Marcello Vanzin) 
- 
+- better fix for 1449909:
+   Create a new message (ViewUpdate.ACTIVATED) to indicate that a different
+   view was activated. (Marcello Vanzin)
+
 - send a ViewUpdate.EDIT_PANE_CHANGED when changing the active view.
     (Marcello Vanzin)
 
@@ -113,10 +141,10 @@ contributing to this release.
 
 - patch 1467311 applied (Peter Adolphs) Restore previously open files on startup
 
-- Macro list is now sorted so that directories show up first 
+- Macro list is now sorted so that directories show up first
   (carmine.lucarelli)
 
-- jEdit now supports LCD Subpixel Anti-Aliasing (JDK 1.6 only). 
+- jEdit now supports LCD Subpixel Anti-Aliasing (JDK 1.6 only).
   Global Options -> TextArea -> Anti-Aliased Smooth Text -> Subpixel
   (Onur Turgay / Alan Ezust)
 
@@ -146,7 +174,7 @@ contributing to this release.
 
 Thanks to Bertalan Fodor, Björn "Vampire" Kautler, David Chan, James Turk,
 Loren Charnley, Matthieu Casanova, Michael Macnair, Nicholas O'Leary,
-Alan Ezust, Slava Pestov, Ollie Rutherfurd, Jeffrey Hoyt, Marcelo Vanzin, 
+Alan Ezust, Slava Pestov, Ollie Rutherfurd, Jeffrey Hoyt, Marcelo Vanzin,
 Rob (copy_paste), and Simon Ruggier for contributing to this release.
 
 
@@ -224,9 +252,9 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 
 - Can specify caret column number in addition to line number when
   opening a file (+line:<line>,<column>) (Bertalan Fodor).
-  
-- Added a new EventListener to notify subscribing plugins when jEdit was 
-  looking for prefix completions and when it was done. These 
+
+- Added a new EventListener to notify subscribing plugins when jEdit was
+  looking for prefix completions and when it was done. These
   notifications are for the ShortcutDisplay plugin.
 
 }}}
@@ -319,7 +347,7 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
         just before buffers are changed.  (Alan ezust)
 
 -  A new EditBus message has been introduced: BufferUpdate.CLOSING
-        for EBPlugins to catch events just before buffers are closed. 
+        for EBPlugins to catch events just before buffers are closed.
 		(Alan ezust)
 
 - Selecting multiple directories in the file chooser dialog box is now
@@ -361,21 +389,21 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
   enabled by setting "lineUpClosingBrackets" to "false". Now, you must
   specify "unalignedOpenBrackets" and "unalignedCloseBrackets"
   properties.
-  
+
   The upside is that both aligned and unaligned indent can be used in
   the same edit mode. For example, in Java source, the following piece
   of code is indented correctly:
-  
+
   public void apply(Buffer buffer, int thisLineIndex,
           int prevLineIndex, int prevPrevLineIndex,
           List indentActions)
   {
           // ...
   }
-  
+
 - The new "unindentThisLine" property, whose value is a regexp, allows
   indentation of Java switch/case constructs:
-  
+
   switch(foo) {
   case bar:
           hello();

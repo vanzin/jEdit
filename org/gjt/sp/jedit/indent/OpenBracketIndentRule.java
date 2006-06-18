@@ -22,10 +22,8 @@
 
 package org.gjt.sp.jedit.indent;
 
-import gnu.regexp.*;
 import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.search.RESearchMatcher;
 import org.gjt.sp.jedit.TextUtilities;
 
 public class OpenBracketIndentRule extends BracketIndentRule
@@ -68,13 +66,13 @@ public class OpenBracketIndentRule extends BracketIndentRule
 		else
 			return getBrackets(buffer.getLineText(line)).openCount;
 	} //}}}
-	
+
 	//{{{ handleCollapse() method
 	private void handleCollapse(List indentActions)
 	{
 		if(indentActions.contains(new IndentAction.Collapse()))
 			indentActions.clear();
 	} //}}}
-	
+
 	private boolean aligned;
 }

@@ -30,6 +30,9 @@ import gnu.regexp.*;
 
 /**
  * Lets <code>gnu.regexp</code> search within <code>Segment</code> objects.
+ *
+ * @deprecated	Use {@link SegmentCharSequence} and the java.util.regex
+ *		package instead.
  */
 public class CharIndexedSegment implements CharIndexed, Serializable
 {

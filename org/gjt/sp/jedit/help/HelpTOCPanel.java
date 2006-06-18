@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.help;
 
 //{{{ Imports
-import com.microstar.xml.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.tree.*;
@@ -32,6 +31,11 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.gjt.sp.jedit.browser.FileCellRenderer; // for icons
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
@@ -196,39 +200,15 @@ public class HelpTOCPanel extends JPanel
 	private void loadTOC(DefaultMutableTreeNode root, String path)
 	{
 		TOCHandler h = new TOCHandler(root,MiscUtilities.getParentOfPath(path));
-		XmlParser parser = new XmlParser();
-		Reader in = null;
-		parser.setHandler(h);
-
 		try
 		{
-			in = new InputStreamReader(
+			MiscUtilities.parseXML(
 				new URL(helpViewer.getBaseURL()
-				+ '/' + path).openStream());
-			parser.parse(null, null, in);
+					+ '/' + path).openStream(), h);
 		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,this,path + ':' + line
-				+ ": " + message);
-		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			Log.log(Log.ERROR,this,e);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-			}
 		}
 	} //}}}
 
@@ -254,7 +234,7 @@ public class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ TOCHandler class
-	class TOCHandler extends HandlerBase
+	class TOCHandler extends DefaultHandler
 	{
 		String dir;
 
@@ -266,37 +246,31 @@ public class HelpTOCPanel extends JPanel
 			this.dir = dir;
 		} //}}}
 
-		//{{{ attribute() method
-		public void attribute(String aname, String value, boolean isSpecified)
-		{
-			if(aname.equals("HREF"))
-				href = value;
-		} //}}}
-
-		//{{{ charData() method
-		public void charData(char[] c, int off, int len)
+		//{{{ characters() method
+		public void characters(char[] c, int off, int len)
 		{
 			if(tag.equals("TITLE"))
 			{
-				StringBuffer buf = new StringBuffer();
 				for(int i = 0; i < len; i++)
 				{
 					char ch = c[off + i];
 					if(ch == ' ' || !Character.isWhitespace(ch))
-						buf.append(ch);
+						title.append(ch);
 				}
-				title = buf.toString();
 			}
 		} //}}}
 
 		//{{{ startElement() method
-		public void startElement(String name)
+		public void startElement(String uri, String localName,
+					 String name, Attributes attrs)
 		{
 			tag = name;
+			if (name.equals("ENTRY"))
+				href = attrs.getValue("HREF");
 		} //}}}
 
 		//{{{ endElement() method
-		public void endElement(String name)
+		public void endElement(String uri, String localName, String name)
 		{
 			if(name == null)
 				return;
@@ -304,18 +278,22 @@ public class HelpTOCPanel extends JPanel
 			if(name.equals("TITLE"))
 			{
 				DefaultMutableTreeNode newNode = createNode(
-					dir + href,title);
+					dir + href,title.toString());
 				node.add(newNode);
 				nodes.push(node);
 				node = newNode;
+				title.setLength(0);
 			}
 			else if(name.equals("ENTRY"))
+			{
 				node = (DefaultMutableTreeNode)nodes.pop();
+				href = null;
+			}
 		} //}}}
 
 		//{{{ Private members
 		private String tag;
-		private String title;
+		private StringBuffer title = new StringBuffer();
 		private String href;
 		private DefaultMutableTreeNode node;
 		private Stack nodes;

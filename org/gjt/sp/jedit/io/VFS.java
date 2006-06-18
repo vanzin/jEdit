@@ -23,11 +23,15 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
-import gnu.regexp.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.*;
 import java.util.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
@@ -491,7 +495,7 @@ public abstract class VFS
 	{
 		if (progress != null)
 			progress.setStatus("Initializing");
-		
+
 		InputStream in = null;
 		OutputStream out = null;
 		try
@@ -501,7 +505,7 @@ public abstract class VFS
 				VFSFile sourceVFSFile = sourceVFS._getFile(sourceSession, sourcePath, comp);
 				if (sourceVFSFile == null)
 					throw new FileNotFoundException(sourcePath);
-				
+
 				progress.setMaximum(sourceVFSFile.getLength());
 			}
 			in = new BufferedInputStream(sourceVFS._createInputStream(sourceSession, sourcePath, false, comp));
@@ -607,8 +611,8 @@ public abstract class VFS
 		retval = _listDirectory(session, directory, glob, recursive, comp, true, false);
 		return retval;
 	}
-	
-	
+
+
 	//{{{ _listDirectory() method
 	/**
 	 * A convinience method that matches file names against globs, and can
@@ -627,8 +631,8 @@ public abstract class VFS
 	 * @param skipHidden skips hidden files, directories, and
 	 *        backup files. Ignores any file beginning with . or #, or ending with ~
 	 *        or .bak
-	 *        
-	 * 
+	 *
+	 *
 	 * @since jEdit 4.3pre5
 	 */
 	public String[] _listDirectory(Object session, String directory,
@@ -639,13 +643,13 @@ public abstract class VFS
 		Log.log(Log.DEBUG,this,"Listing " + directory);
 		ArrayList files = new ArrayList(100);
 
-		RE filter;
+		Pattern filter;
 		try
 		{
-			filter = new RE(MiscUtilities.globToRE(glob),
-				RE.REG_ICASE);
+			filter = Pattern.compile(MiscUtilities.globToRE(glob),
+						 Pattern.CASE_INSENSITIVE);
 		}
-		catch(REException e)
+		catch(PatternSyntaxException e)
 		{
 			Log.log(Log.ERROR,this,e);
 			return null;
@@ -833,7 +837,7 @@ public abstract class VFS
 	 * @param ignoreErrors If true, file not found errors should be
 	 * ignored
 	 * @param comp The component that will parent error dialog boxes
-	 * @return an inputstream or <code>null</code> if there was a problem 
+	 * @return an inputstream or <code>null</code> if there was a problem
 	 * @exception IOException If an I/O error occurs
 	 * @since jEdit 2.7pre1
 	 */
@@ -928,7 +932,7 @@ public abstract class VFS
 			for(int i = 0; i < colors.size(); i++)
 			{
 				ColorEntry entry = (ColorEntry)colors.elementAt(i);
-				if(entry.re.isMatch(name))
+				if(entry.re.matcher(name).matches())
 					return entry.color;
 			}
 
@@ -1003,7 +1007,7 @@ public abstract class VFS
 
 	//{{{ recursive listFiles() method
 	private void listFiles(Object session, ArrayList stack,
-		ArrayList files, String directory, RE glob, boolean recursive,
+		ArrayList files, String directory, Pattern glob, boolean recursive,
 		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
 		if(stack.contains(directory))
@@ -1024,7 +1028,7 @@ public abstract class VFS
 		for(int i = 0; i < _files.length; i++)
 		{
 			VFSFile file = _files[i];
-			if (skipHidden && (file.isHidden() || MiscUtilities.isBackup(file.getName()))) 
+			if (skipHidden && (file.isHidden() || MiscUtilities.isBackup(file.getName())))
 				continue;
 			if(file.getType() == VFSFile.DIRECTORY
 				|| file.getType() == VFSFile.FILESYSTEM)
@@ -1041,16 +1045,16 @@ public abstract class VFS
 						canonPath,glob,recursive,
 						comp, skipBinary, skipHidden);
 				}
-		
+
 			}
 			else // It's a regular file
 			{
-				if(!glob.isMatch(file.getName()))
+				if(!glob.matcher(file.getName()).matches())
 					continue;
 
 				if (skipBinary && file.isBinary(session))
 					continue;
-					
+
 				Log.log(Log.DEBUG,this,file.getPath());
 				files.add(file.getPath());
 			}
@@ -1074,12 +1078,12 @@ public abstract class VFS
 				try
 				{
 					colors.addElement(new ColorEntry(
-						new RE(MiscUtilities.globToRE(glob)),
+						Pattern.compile(MiscUtilities.globToRE(glob)),
 						jEdit.getColorProperty(
 						"vfs.browser.colors." + i + ".color",
 						Color.black)));
 				}
-				catch(REException e)
+				catch(PatternSyntaxException e)
 				{
 					Log.log(Log.ERROR,VFS.class,"Invalid regular expression: "
 						+ glob);
@@ -1094,10 +1098,10 @@ public abstract class VFS
 	//{{{ ColorEntry class
 	static class ColorEntry
 	{
-		RE re;
+		Pattern re;
 		Color color;
 
-		ColorEntry(RE re, Color color)
+		ColorEntry(Pattern re, Color color)
 		{
 			this.re = re;
 			this.color = color;

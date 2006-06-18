@@ -24,17 +24,23 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import com.microstar.xml.*;
-import gnu.regexp.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
+import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 //}}}
 
 /**
  * XML handler for mode definition files.
  */
-public abstract class XModeHandler extends HandlerBase
+public abstract class XModeHandler extends DefaultHandler
 {
 	//{{{ XModeHandler constructor
 	public XModeHandler (String modeName)
@@ -43,307 +49,83 @@ public abstract class XModeHandler extends HandlerBase
 		marker = new TokenMarker();
 		marker.addRuleSet(new ParserRuleSet(modeName,"MAIN"));
 		stateStack = new Stack();
-
-		// default value
-		lastNoWordSep = "_";
 	} //}}}
 
 	//{{{ resolveEntity() method
-	public Object resolveEntity(String publicId, String systemId)
+	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		if("xmode.dtd".equals(systemId))
-		{
-			// this will result in a slight speed up, since we
-			// don't need to read the DTD anyway, as AElfred is
-			// non-validating
-			return new StringReader("<!-- -->");
-
-			/* try
-			{
-				return new BufferedReader(new InputStreamReader(
-					getClass().getResourceAsStream(
-					"/org/gjt/sp/jedit/syntax/xmode.dtd")));
-			}
-			catch(Exception e)
-			{
-				error("dtd",e);
-			} */
-		}
-
-		return null;
+		return MiscUtilities.findEntity(systemId, "xmode.dtd", XModeHandler.class);
 	} //}}}
 
-	//{{{ attribute() method
-	public void attribute(String aname, String value, boolean isSpecified)
+	//{{{ characters() method
+	public void characters(char[] c, int off, int len)
 	{
-		aname = (aname == null) ? null : aname.intern();
-
-		if (aname == "NAME")
-		{
-			propName = value;
-		}
-		else if (aname == "VALUE")
-		{
-			propValue = value;
-		}
-		else if (aname == "TYPE")
-		{
-			lastTokenID = Token.stringToToken(value);
-			if(lastTokenID == -1)
-				error("token-invalid",value);
-		}
-		else if (aname == "AT_LINE_START")
-		{
-			lastAtLineStart = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "AT_WHITESPACE_END")
-		{
-			lastAtWhitespaceEnd = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "AT_WORD_START")
-		{
-			lastAtWordStart = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "NO_LINE_BREAK")
-		{
-			lastNoLineBreak = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "NO_WORD_BREAK")
-		{
-			lastNoWordBreak = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "NO_ESCAPE")
-		{
-			lastNoEscape = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "EXCLUDE_MATCH")
-		{
-			lastExcludeMatch = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "IGNORE_CASE")
-		{
-			lastIgnoreCase = (isSpecified) ? (value.equals("TRUE")) :
-				true;
-		}
-		else if (aname == "HIGHLIGHT_DIGITS")
-		{
-			lastHighlightDigits = (isSpecified) ? (value.equals("TRUE")) :
-				false;
-		}
-		else if (aname == "DIGIT_RE")
-		{
-			lastDigitRE = value;
-		}
-		else if (aname == "NO_WORD_SEP")
-		{
-			if(isSpecified)
-				lastNoWordSep = value;
-		}
-		else if (aname == "AT_CHAR")
-		{
-			try
-			{
-				if (isSpecified) termChar =
-					Integer.parseInt(value);
-			}
-			catch (NumberFormatException e)
-			{
-				error("termchar-invalid",value);
-				termChar = -1;
-			}
-		}
-		else if (aname == "ESCAPE")
-		{
-			lastEscape = value;
-		}
-		else if (aname == "SET")
-		{
-			lastSetName = value;
-		}
-		else if (aname == "DELEGATE")
-		{
-			String delegateMode, delegateSetName;
-
-			if(value != null)
-			{
-				int index = value.indexOf("::");
-
-				if(index != -1)
-				{
-					delegateMode = value.substring(0,index);
-					delegateSetName = value.substring(index + 2);
-				}
-				else
-				{
-					delegateMode = modeName;
-					delegateSetName = value;
-				}
-
-				TokenMarker delegateMarker = getTokenMarker(delegateMode);
-				if(delegateMarker == null)
-					error("delegate-invalid",value);
-				else
-				{
-					lastDelegateSet = delegateMarker
-						.getRuleSet(delegateSetName);
-					if(delegateMarker == marker
-						&& lastDelegateSet == null)
-					{
-						// stupid hack to handle referencing
-						// a rule set that is defined later!
-						lastDelegateSet = new ParserRuleSet(
-							delegateMode,
-							delegateSetName);
-						lastDelegateSet.setDefault(Token.INVALID);
-						marker.addRuleSet(lastDelegateSet);
-					}
-					else if(lastDelegateSet == null)
-						error("delegate-invalid",value);
-				}
-			}
-		}
-		else if (aname == "DEFAULT")
-		{
-			lastDefaultID = Token.stringToToken(value);
-			if(lastDefaultID == -1)
-			{
-				error("token-invalid",value);
-				lastDefaultID = Token.NULL;
-			}
-		}
-		else if (aname == "HASH_CHAR")
-		{
-			if(value.length() != 1)
-			{
-				error("hash-char-invalid",value);
-				lastDefaultID = Token.NULL;
-			}
-			else
-				lastHashChar = value.charAt(0);
-		}
-	} //}}}
-
-	//{{{ doctypeDecl() method
-	public void doctypeDecl(String name, String publicId,
-		String systemId) throws Exception
-	{
-		if ("MODE".equalsIgnoreCase(name)) return;
-
-		error("doctype-invalid",name);
-	} //}}}
-
-	//{{{ charData() method
-	public void charData(char[] c, int off, int len)
-	{
-		String tag = peekElement();
-		String text = new String(c, off, len);
-
-		if (tag == "EOL_SPAN" ||
-			tag == "EOL_SPAN_REGEXP" ||
-			tag == "MARK_PREVIOUS" ||
-			tag == "MARK_FOLLOWING" ||
-			tag == "SEQ" ||
-			tag == "SEQ_REGEXP" ||
-			tag == "BEGIN"
-		)
-		{
-			lastStart = text;
-			lastStartPosMatch = ((lastAtLineStart ? ParserRule.AT_LINE_START : 0)
-				| (lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
-				| (lastAtWordStart ? ParserRule.AT_WORD_START : 0));
-			lastAtLineStart = false;
-			lastAtWordStart = false;
-			lastAtWhitespaceEnd = false;
-		}
-		else if (tag == "END")
-		{
-			lastEnd = text;
-			lastEndPosMatch = ((lastAtLineStart ? ParserRule.AT_LINE_START : 0)
-				| (lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
-				| (lastAtWordStart ? ParserRule.AT_WORD_START : 0));
-			lastAtLineStart = false;
-			lastAtWordStart = false;
-			lastAtWhitespaceEnd = false;
-		}
-		else
-		{
-			lastKeyword = text;
-		}
+		peekElement().setText(c, off, len);
 	} //}}}
 
 	//{{{ startElement() method
-	public void startElement (String tag)
+	public void startElement(String uri, String localName,
+				 String qName, Attributes attrs)
 	{
-		tag = pushElement(tag);
+		TagDecl tag = pushElement(qName, attrs);
 
-		if (tag == "WHITESPACE")
+		if (qName.equals("WHITESPACE"))
 		{
 			Log.log(Log.WARNING,this,modeName + ": WHITESPACE rule "
 				+ "no longer needed");
 		}
-		else if (tag == "KEYWORDS")
+		else if (qName.equals("KEYWORDS"))
 		{
 			keywords = new KeywordMap(rules.getIgnoreCase());
 		}
-		else if (tag == "RULES")
+		else if (qName.equals("RULES"))
 		{
-			if(lastSetName == null)
-				lastSetName = "MAIN";
-			rules = marker.getRuleSet(lastSetName);
+			if(tag.lastSetName == null)
+				tag.lastSetName = "MAIN";
+			rules = marker.getRuleSet(tag.lastSetName);
 			if(rules == null)
 			{
-				rules = new ParserRuleSet(modeName,lastSetName);
+				rules = new ParserRuleSet(modeName,tag.lastSetName);
 				marker.addRuleSet(rules);
 			}
-			rules.setIgnoreCase(lastIgnoreCase);
-			rules.setHighlightDigits(lastHighlightDigits);
-			if(lastDigitRE != null)
+			rules.setIgnoreCase(tag.lastIgnoreCase);
+			rules.setHighlightDigits(tag.lastHighlightDigits);
+			if(tag.lastDigitRE != null)
 			{
 				try
 				{
-					rules.setDigitRegexp(new RE(lastDigitRE,
-						lastIgnoreCase
-						? RE.REG_ICASE : 0,
-						ParserRule.RE_SYNTAX_JEDIT));
+					rules.setDigitRegexp(Pattern.compile(tag.lastDigitRE,
+						tag.lastIgnoreCase
+						? Pattern.CASE_INSENSITIVE : 0));
 				}
-				catch(REException e)
+				catch(PatternSyntaxException e)
 				{
 					error("regexp",e);
 				}
 			}
 
-			if(lastEscape != null)
-				rules.setEscapeRule(ParserRule.createEscapeRule(lastEscape));
-			rules.setDefault(lastDefaultID);
-			rules.setNoWordSep(lastNoWordSep);
+			if(tag.lastEscape != null)
+				rules.setEscapeRule(ParserRule.createEscapeRule(tag.lastEscape));
+			rules.setDefault(tag.lastDefaultID);
+			rules.setNoWordSep(tag.lastNoWordSep);
 		}
 	} //}}}
 
 	//{{{ endElement() method
-	public void endElement (String name)
+	public void endElement(String uri, String localName, String name)
 	{
-		if (name == null) return;
-
-		String tag = popElement();
-
-		if (name.equals(tag))
+		TagDecl tag = popElement();
+		if (name.equals(tag.tagName))
 		{
 			//{{{ PROPERTY
-			if (tag == "PROPERTY")
+			if (tag.tagName.equals("PROPERTY"))
 			{
 				props.put(propName,propValue);
 			} //}}}
 			//{{{ PROPS
-			else if (tag == "PROPS")
+			else if (tag.tagName.equals("PROPS"))
 			{
-				if(peekElement().equals("RULES"))
+				if(peekElement().tagName.equals("RULES"))
 					rules.setProperties(props);
 				else
 					modeProps = props;
@@ -351,49 +133,39 @@ public abstract class XModeHandler extends HandlerBase
 				props = new Hashtable();
 			} //}}}
 			//{{{ RULES
-			else if (tag == "RULES")
+			else if (tag.tagName.equals("RULES"))
 			{
 				rules.setKeywords(keywords);
 				keywords = null;
-				lastSetName = null;
-				lastEscape = null;
-				lastIgnoreCase = true;
-				lastHighlightDigits = false;
-				lastDigitRE = null;
-				lastDefaultID = Token.NULL;
-				lastNoWordSep = "_";
 				rules = null;
 			} //}}}
 			//{{{ IMPORT
-			else if (tag == "IMPORT")
+			else if (tag.tagName.equals("IMPORT"))
 			{
-				rules.addRuleSet(lastDelegateSet);
-				lastDelegateSet = null;
+				rules.addRuleSet(tag.lastDelegateSet);
 			} //}}}
 			//{{{ TERMINATE
-			else if (tag == "TERMINATE")
+			else if (tag.tagName.equals("TERMINATE"))
 			{
-				rules.setTerminateChar(termChar);
-				termChar = -1;
+				rules.setTerminateChar(tag.termChar);
 			} //}}}
 			//{{{ SEQ
-			else if (tag == "SEQ")
+			else if (tag.tagName.equals("SEQ"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","SEQ");
 					return;
 				}
 
 				rules.addRule(ParserRule.createSequenceRule(
-					lastStartPosMatch,lastStart,lastDelegateSet,
-					lastTokenID));
-				reset();
+					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastDelegateSet,tag.lastTokenID));
 			} //}}}
 			//{{{ SEQ_REGEXP
-			else if (tag == "SEQ_REGEXP")
+			else if (tag.tagName.equals("SEQ_REGEXP"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","SEQ_REGEXP");
 					return;
@@ -402,27 +174,25 @@ public abstract class XModeHandler extends HandlerBase
 				try
 				{
 					rules.addRule(ParserRule.createRegexpSequenceRule(
-						lastHashChar,lastStartPosMatch,
-						lastStart,lastDelegateSet,lastTokenID,
-						lastIgnoreCase));
+						tag.lastHashChar,tag.lastStartPosMatch,
+						tag.lastStart,tag.lastDelegateSet,
+						tag.lastTokenID,tag.lastIgnoreCase));
 				}
-				catch(REException re)
+				catch(PatternSyntaxException re)
 				{
 					error("regexp",re);
 				}
-
-				reset();
 			} //}}}
 			//{{{ SPAN
-			else if (tag == "SPAN")
+			else if (tag.tagName.equals("SPAN"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","BEGIN");
 					return;
 				}
 
-				if(lastEnd == null)
+				if(tag.lastEnd == null)
 				{
 					error("empty-tag","END");
 					return;
@@ -430,26 +200,24 @@ public abstract class XModeHandler extends HandlerBase
 
 				rules.addRule(ParserRule
 					.createSpanRule(
-					lastStartPosMatch,lastStart,
-					lastEndPosMatch,lastEnd,
-					lastDelegateSet,
-					lastTokenID,lastExcludeMatch,
-					lastNoLineBreak,
-					lastNoWordBreak,
-					lastNoEscape));
-
-				reset();
+					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastEndPosMatch,tag.lastEnd,
+					tag.lastDelegateSet,
+					tag.lastTokenID,tag.lastExcludeMatch,
+					tag.lastNoLineBreak,
+					tag.lastNoWordBreak,
+					tag.lastNoEscape));
 			} //}}}
 			//{{{ SPAN_REGEXP
-			else if (tag == "SPAN_REGEXP")
+			else if (tag.tagName.equals("SPAN_REGEXP"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","BEGIN");
 					return;
 				}
 
-				if(lastEnd == null)
+				if(tag.lastEnd == null)
 				{
 					error("empty-tag","END");
 					return;
@@ -459,44 +227,40 @@ public abstract class XModeHandler extends HandlerBase
 				{
 					rules.addRule(ParserRule
 						.createRegexpSpanRule(
-						lastHashChar,
-						lastStartPosMatch,lastStart,
-						lastEndPosMatch,lastEnd,
-						lastDelegateSet,
-						lastTokenID,
-						lastExcludeMatch,
-						lastNoLineBreak,
-						lastNoWordBreak,
-						lastIgnoreCase,
-						lastNoEscape));
+						tag.lastHashChar,
+						tag.lastStartPosMatch,tag.lastStart,
+						tag.lastEndPosMatch,tag.lastEnd,
+						tag.lastDelegateSet,
+						tag.lastTokenID,
+						tag.lastExcludeMatch,
+						tag.lastNoLineBreak,
+						tag.lastNoWordBreak,
+						tag.lastIgnoreCase,
+						tag.lastNoEscape));
 				}
-				catch(REException re)
+				catch(PatternSyntaxException re)
 				{
 					error("regexp",re);
 				}
-
-				reset();
 			} //}}}
 			//{{{ EOL_SPAN
-			else if (tag == "EOL_SPAN")
+			else if (tag.tagName.equals("EOL_SPAN"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","EOL_SPAN");
 					return;
 				}
 
 				rules.addRule(ParserRule.createEOLSpanRule(
-					lastStartPosMatch,lastStart,
-					lastDelegateSet,lastTokenID,
-					lastExcludeMatch));
-
-				reset();
+					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastDelegateSet,tag.lastTokenID,
+					tag.lastExcludeMatch));
 			} //}}}
 			//{{{ EOL_SPAN_REGEXP
-			else if (tag == "EOL_SPAN_REGEXP")
+			else if (tag.tagName.equals("EOL_SPAN_REGEXP"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","EOL_SPAN_REGEXP");
 					return;
@@ -505,21 +269,20 @@ public abstract class XModeHandler extends HandlerBase
 				try
 				{
 					rules.addRule(ParserRule.createRegexpEOLSpanRule(
-						lastHashChar,lastStartPosMatch,lastStart,
-						lastDelegateSet,lastTokenID,
-						lastExcludeMatch,lastIgnoreCase));
+						tag.lastHashChar,tag.lastStartPosMatch,
+						tag.lastStart,tag.lastDelegateSet,
+						tag.lastTokenID,tag.lastExcludeMatch,
+						tag.lastIgnoreCase));
 				}
-				catch(REException re)
+				catch(PatternSyntaxException re)
 				{
 					error("regexp",re);
 				}
-
-				reset();
 			} //}}}
 			//{{{ MARK_FOLLOWING
-			else if (tag == "MARK_FOLLOWING")
+			else if (tag.tagName.equals("MARK_FOLLOWING"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","MARK_FOLLOWING");
 					return;
@@ -527,14 +290,13 @@ public abstract class XModeHandler extends HandlerBase
 
 				rules.addRule(ParserRule
 					.createMarkFollowingRule(
-					lastStartPosMatch,lastStart,
-					lastTokenID,lastExcludeMatch));
-				reset();
+					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastTokenID,tag.lastExcludeMatch));
 			} //}}}
 			//{{{ MARK_PREVIOUS
-			else if (tag == "MARK_PREVIOUS")
+			else if (tag.tagName.equals("MARK_PREVIOUS"))
 			{
-				if(lastStart == null)
+				if(tag.lastStart == null)
 				{
 					error("empty-tag","MARK_PREVIOUS");
 					return;
@@ -542,16 +304,19 @@ public abstract class XModeHandler extends HandlerBase
 
 				rules.addRule(ParserRule
 					.createMarkPreviousRule(
-					lastStartPosMatch,lastStart,
-					lastTokenID,lastExcludeMatch));
-				reset();
+					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastTokenID,tag.lastExcludeMatch));
 			} //}}}
 			//{{{ Keywords
-			else
-			{
-				byte token = Token.stringToToken(tag);
+			else if (
+				!tag.tagName.equals("END")
+				&& !tag.tagName.equals("BEGIN")
+				&& !tag.tagName.equals("KEYWORDS")
+				&& !tag.tagName.equals("MODE")
+			) {
+				byte token = Token.stringToToken(tag.tagName);
 				if(token != -1)
-					addKeyword(lastKeyword,token);
+					addKeyword(tag.lastKeyword,token);
 			} //}}}
 		}
 		else
@@ -565,8 +330,7 @@ public abstract class XModeHandler extends HandlerBase
 	public void startDocument()
 	{
 		props = new Hashtable();
-
-		pushElement(null);
+		pushElement(null, null);
 	} //}}}
 
 	//{{{ endDocument() method
@@ -630,47 +394,8 @@ public abstract class XModeHandler extends HandlerBase
 	private String propValue;
 	private Hashtable props;
 	private Hashtable modeProps;
-	private String lastStart;
-	private String lastEnd;
-	private String lastKeyword;
-	private String lastSetName;
-	private String lastEscape;
-	private ParserRuleSet lastDelegateSet;
-	private String lastNoWordSep;
 	private ParserRuleSet rules;
-	private byte lastDefaultID = Token.NULL;
-	private byte lastTokenID;
-	private int termChar = -1;
-	private boolean lastNoLineBreak;
-	private boolean lastNoWordBreak;
-	private boolean lastExcludeMatch;
-	private boolean lastIgnoreCase = true;
-	private boolean lastHighlightDigits;
-	private boolean lastAtLineStart;
-	private boolean lastAtWhitespaceEnd;
-	private boolean lastAtWordStart;
-	private boolean lastNoEscape;
-	private int lastStartPosMatch;
-	private int lastEndPosMatch;
-	private String lastDigitRE;
-	private char lastHashChar;
 	//}}}
-
-	//{{{ reset() method
-	private void reset()
-	{
-		lastHashChar = '\0';
-		lastStartPosMatch = 0;
-		lastStart = null;
-		lastEndPosMatch = 0;
-		lastEnd = null;
-		lastDelegateSet = null;
-		lastTokenID = Token.NULL;
-		lastExcludeMatch = false;
-		lastNoLineBreak = false;
-		lastNoWordBreak = false;
-		lastNoEscape = false;
-	} //}}}
 
 	//{{{ addKeyword() method
 	private void addKeyword(String k, byte id)
@@ -686,26 +411,234 @@ public abstract class XModeHandler extends HandlerBase
 	} //}}}
 
 	//{{{ pushElement() method
-	private String pushElement(String name)
+	private TagDecl pushElement(String name, Attributes attrs)
 	{
-		name = (name == null) ? null : name.intern();
-
-		stateStack.push(name);
-
-		return name;
+		if (name != null)
+		{
+			TagDecl tag = new TagDecl(name, attrs);
+			stateStack.push(tag);
+			return tag;
+		}
+		else
+		{
+			stateStack.push(null);
+			return null;
+		}
 	} //}}}
 
 	//{{{ peekElement() method
-	private String peekElement()
+	private TagDecl peekElement()
 	{
-		return (String) stateStack.peek();
+		return (TagDecl) stateStack.peek();
 	} //}}}
 
 	//{{{ popElement() method
-	private String popElement()
+	private TagDecl popElement()
 	{
-		return (String) stateStack.pop();
+		return (TagDecl) stateStack.pop();
 	} //}}}
 
 	//}}}
+
+	/**
+	 * Hold info about what tag was read and what attributes were
+	 * set in the XML file, to be kept by the handler in a stack
+	 * (similar to the way tag names were kept in a stack before).
+	 */
+	private class TagDecl
+	{
+
+		public TagDecl(String tagName, Attributes attrs)
+		{
+			this.tagName = tagName;
+
+			String tmp;
+
+			propName = attrs.getValue("NAME");
+			propValue = attrs.getValue("VALUE");
+
+			tmp = attrs.getValue("TYPE");
+			if (tmp != null)
+			{
+				lastTokenID = Token.stringToToken(tmp);
+				if(lastTokenID == -1)
+					error("token-invalid",tmp);
+			}
+
+			lastAtLineStart = "TRUE".equals(attrs.getValue("AT_LINE_START"));
+			lastAtWhitespaceEnd = "TRUE".equals(attrs.getValue("AT_WHITESPACE_END"));
+			lastAtWordStart = "TRUE".equals(attrs.getValue("AT_WORD_START"));
+			lastNoLineBreak = "TRUE".equals(attrs.getValue("NO_LINE_BREAK"));
+			lastNoWordBreak = "TRUE".equals(attrs.getValue("NO_WORD_BREAK"));
+			lastNoEscape = "TRUE".equals(attrs.getValue("NO_ESCAPE"));
+			lastExcludeMatch = "TRUE".equals(attrs.getValue("EXCLUDE_MATCH"));
+			lastIgnoreCase = (attrs.getValue("IGNORE_CASE") == null ||
+					"TRUE".equals(attrs.getValue("IGNORE_CASE")));
+			lastHighlightDigits = "TRUE".equals(attrs.getValue("HIGHLIGHT_DIGITS"));;
+			lastDigitRE = attrs.getValue("DIGIT_RE");
+
+			tmp = attrs.getValue("NO_WORD_SEP");
+			if (tmp != null)
+				lastNoWordSep = tmp;
+
+			tmp = attrs.getValue("AT_CHAR");
+			if (tmp != null)
+			{
+				try
+				{
+					termChar = Integer.parseInt(tmp);
+				}
+				catch (NumberFormatException e)
+				{
+					error("termchar-invalid",tmp);
+					termChar = -1;
+				}
+			}
+
+			lastEscape = attrs.getValue("ESCAPE");;
+			lastSetName = attrs.getValue("SET");;
+
+			tmp = attrs.getValue("DELEGATE");
+			if (tmp != null)
+			{
+				String delegateMode, delegateSetName;
+
+				int index = tmp.indexOf("::");
+
+				if(index != -1)
+				{
+					delegateMode = tmp.substring(0,index);
+					delegateSetName = tmp.substring(index + 2);
+				}
+				else
+				{
+					delegateMode = modeName;
+					delegateSetName = tmp;
+				}
+
+				TokenMarker delegateMarker = getTokenMarker(delegateMode);
+				if(delegateMarker == null)
+					error("delegate-invalid",tmp);
+				else
+				{
+					lastDelegateSet = delegateMarker
+						.getRuleSet(delegateSetName);
+					if(delegateMarker == marker
+						&& lastDelegateSet == null)
+					{
+						// stupid hack to handle referencing
+						// a rule set that is defined later!
+						lastDelegateSet = new ParserRuleSet(
+							delegateMode,
+							delegateSetName);
+						lastDelegateSet.setDefault(Token.INVALID);
+						marker.addRuleSet(lastDelegateSet);
+					}
+					else if(lastDelegateSet == null)
+						error("delegate-invalid",tmp);
+				}
+			}
+
+			tmp = attrs.getValue("DEFAULT");
+			if (tmp != null)
+			{
+				lastDefaultID = Token.stringToToken(tmp);
+				if(lastDefaultID == -1)
+				{
+					error("token-invalid",tmp);
+					lastDefaultID = Token.NULL;
+				}
+			}
+
+			tmp = attrs.getValue("HASH_CHAR");
+			if (tmp != null)
+			{
+				if(tmp.length() != 1)
+				{
+					error("hash-char-invalid",tmp);
+					lastDefaultID = Token.NULL;
+				}
+				else
+					lastHashChar = tmp.charAt(0);
+			}
+		}
+
+		public void setText(char[] c, int off, int len)
+		{
+			String text = new String(c, off, len);
+			if (tagName.equals("EOL_SPAN") ||
+				tagName.equals("EOL_SPAN_REGEXP") ||
+				tagName.equals("MARK_PREVIOUS") ||
+				tagName.equals("MARK_FOLLOWING") ||
+				tagName.equals("SEQ") ||
+				tagName.equals("SEQ_REGEXP") ||
+				tagName.equals("BEGIN")
+			)
+			{
+				TagDecl target = this;
+				if (tagName.equals("BEGIN"))
+					target = (TagDecl) stateStack.get(stateStack.size() - 2);
+
+				if (target.lastStart == null)
+					target.lastStart = text;
+				else
+					target.lastStart += text;
+				target.lastStartPosMatch = ((target.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
+					| (target.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
+					| (target.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+				target.lastAtLineStart = false;
+				target.lastAtWordStart = false;
+				target.lastAtWhitespaceEnd = false;
+			}
+			else if (tagName.equals("END"))
+			{
+				TagDecl target = (TagDecl) stateStack.get(stateStack.size() - 2);
+				if (target.lastEnd == null)
+					target.lastEnd = text;
+				else
+					target.lastEnd += text;
+				target.lastEndPosMatch = ((target.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
+					| (target.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
+					| (target.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+				target.lastAtLineStart = false;
+				target.lastAtWordStart = false;
+				target.lastAtWhitespaceEnd = false;
+			}
+			else
+			{
+				if (lastKeyword == null)
+					lastKeyword = text;
+				else
+					lastKeyword += text;
+			}
+		}
+
+		public String tagName;
+		public String lastStart;
+		public String lastEnd;
+		public String lastKeyword;
+		public String lastSetName;
+		public String lastEscape;
+		public ParserRuleSet lastDelegateSet;
+		public String lastNoWordSep;
+		public ParserRuleSet rules;
+		public byte lastDefaultID = Token.NULL;
+		public byte lastTokenID;
+		public int termChar = -1;
+		public boolean lastNoLineBreak;
+		public boolean lastNoWordBreak;
+		public boolean lastExcludeMatch;
+		public boolean lastIgnoreCase = true;
+		public boolean lastHighlightDigits;
+		public boolean lastAtLineStart;
+		public boolean lastAtWhitespaceEnd;
+		public boolean lastAtWordStart;
+		public boolean lastNoEscape;
+		public int lastStartPosMatch;
+		public int lastEndPosMatch;
+		public String lastDigitRE;
+		public char lastHashChar;
+
+	}
+
 }

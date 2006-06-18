@@ -23,7 +23,6 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import bsh.UtilEvalError;
-import com.microstar.xml.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -32,6 +31,11 @@ import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
+
+import javax.xml.parsers.SAXParser;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
+
 import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.buffer.KillRing;
 import org.gjt.sp.jedit.msg.*;
@@ -1423,15 +1427,15 @@ public class jEdit
 				{
 					if(view != null)
 						view.setBuffer(buffer);
-	
+
 					return buffer;
 				}
-	
+
 				if(props == null)
 					props = new Hashtable();
-	
+
 				BufferHistory.Entry entry = BufferHistory.getEntry(path);
-	
+
 				if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
 				{
 					props.put(Buffer.CARET,new Integer(entry.caret));
@@ -1442,21 +1446,21 @@ public class jEdit
 						props.put(Buffer.SELECTION,entry.getSelection());
 					} */
 				}
-	
+
 				if(entry != null && props.get(Buffer.ENCODING) == null)
 				{
 					if(entry.encoding != null)
 						props.put(Buffer.ENCODING,entry.encoding);
 				}
-	
+
 				newBuffer = new Buffer(path,newFile,false,props);
-	
+
 				if(!newBuffer.load(view,false))
 					return null;
-	
+
 				addBufferToList(newBuffer);
 			}
-	
+
 			EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
 		}
 
@@ -2591,16 +2595,14 @@ public class jEdit
 
 		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
 
-		final XmlParser parser = new XmlParser();
+		final SAXParser parser = MiscUtilities.newSAXParser();
 		XModeHandler xmh = new XModeHandler(mode.getName())
 		{
 			public void error(String what, Object subst)
 			{
-				int line = parser.getLineNumber();
-				int column = parser.getColumnNumber();
-
 				String msg;
 
+				Object line = "?";
 				if(subst == null)
 					msg = jEdit.getProperty("xmode-error." + what);
 				else
@@ -2609,10 +2611,13 @@ public class jEdit
 						new String[] { subst.toString() });
 					if(subst instanceof Throwable)
 						Log.log(Log.ERROR,this,subst);
+					if (subst instanceof SAXParseException) {
+						line = new Integer(
+							((SAXParseException)subst).getLineNumber());
+					}
 				}
 
-				Object[] args = { fileName, new Integer(line),
-					new Integer(column), msg };
+				Object[] args = { fileName, line, null, msg };
 				GUIUtilities.error(null,"xmode-error",args);
 			}
 
@@ -2630,12 +2635,13 @@ public class jEdit
 
 		Reader grammar = null;
 
-		parser.setHandler(xmh);
 		try
 		{
 			grammar = new BufferedReader(new FileReader(fileName));
 
-			parser.parse(null, null, grammar);
+			InputSource isrc = new InputSource(grammar);
+			isrc.setSystemId("jedit.jar");
+			parser.parse(isrc, xmh);
 
 			mode.setProperties(xmh.getModeProperties());
 		}
@@ -2643,14 +2649,14 @@ public class jEdit
 		{
 			Log.log(Log.ERROR, jEdit.class, e);
 
-			if (e instanceof XmlException)
+			if (e instanceof SAXParseException)
 			{
-				XmlException xe = (XmlException) e;
-				int line = xe.getLine();
-				String message = xe.getMessage();
+				String message = e.getMessage();
+				int line = ((SAXParseException)e).getLineNumber();
+				int col = ((SAXParseException)e).getColumnNumber();
 
-				Object[] args = { fileName, new Integer(line), null,
-					message };
+				Object[] args = { fileName, new Integer(line),
+						  new Integer(col), message };
 				GUIUtilities.error(null,"xmode-error",args);
 			}
 		}
@@ -2750,7 +2756,7 @@ public class jEdit
 
 	// makes openTemporary() thread-safe
 	private static Object bufferListLock 		= new Object();
-	
+
 	private static Object editBusOrderingLock	= new Object();
 
 	// view link list
@@ -3190,7 +3196,7 @@ public class jEdit
 			+ "-"
 			+ font.getSize();
 	} //}}}
-	
+
 	//{{{ initPLAF() method
 	/**
 	 * Sets the Swing look and feel.
@@ -3826,9 +3832,6 @@ loop:		for(int i = 0; i < list.length; i++)
 
 		ModeCatalogHandler handler = new ModeCatalogHandler(
 			MiscUtilities.getParentOfPath(path),resource);
-		XmlParser parser = new XmlParser();
-		parser.setHandler(handler);
-		Reader in = null;
 		try
 		{
 			InputStream _in;
@@ -3836,31 +3839,11 @@ loop:		for(int i = 0; i < list.length; i++)
 				_in = jEdit.class.getResourceAsStream(path);
 			else
 				_in = new FileInputStream(path);
-			in = new BufferedReader(new InputStreamReader(_in));
-			parser.parse(null, null, in);
+			MiscUtilities.parseXML(_in, handler);
 		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,jEdit.class,path + ":" + line
-				+ ": " + message);
-		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			Log.log(Log.ERROR,jEdit.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,jEdit.class,io);
-			}
 		}
 	} //}}}
 

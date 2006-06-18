@@ -286,7 +286,7 @@
 <MODE NAME="pl1"		FILE="pl1.xml"
 				FILE_NAME_GLOB="*.pl[i1]" />
 
-<MODE NAME="pop11"		FILE="pop11.xml" 
+<MODE NAME="pop11"		FILE="pop11.xml"
 				FILE_NAME_GLOB="*.{p,pop11,p11}" />
 
 <MODE NAME="postscript"		FILE="postscript.xml"
@@ -446,7 +446,7 @@
      but all other XML parsers complain if < appears. -->
 <MODE NAME="xml"		FILE="xml.xml"
 				FILE_NAME_GLOB="*.{xml,xhtml,xsd}"
-				FIRST_LINE_GLOB="<\?xml*" />
+				FIRST_LINE_GLOB="&lt;\?xml*" />
 
 <MODE NAME="xq"			FILE="xq.xml"
 				FILE_NAME_GLOB="*.x{q,qm,ql}" />

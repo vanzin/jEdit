@@ -34,7 +34,16 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
@@ -724,7 +733,7 @@ public class MiscUtilities
 		if (filename.endsWith(".bak")) return true;
 		return false;
 	} //}}}
-	
+
 
 	//{{{ autodetect() method
 	/**
@@ -746,7 +755,7 @@ public class MiscUtilities
 			encoding = System.getProperty("file.encoding");
 		else
 			encoding = buffer.getStringProperty(Buffer.ENCODING);
-		
+
 		if(!in.markSupported())
 			Log.log(Log.WARNING,MiscUtilities.class,"Mark not supported: " + in);
 		else if(buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
@@ -755,7 +764,7 @@ public class MiscUtilities
 			int b1 = in.read();
 			int b2 = in.read();
 			int b3 = in.read();
-			
+
 			if(b1 == BufferIORequest.GZIP_MAGIC_1 && b2 == BufferIORequest.GZIP_MAGIC_2)
 			{
 				in.reset();
@@ -792,13 +801,13 @@ public class MiscUtilities
 				// like a normal UTF-8 file.
 				if (buffer != null)
 					buffer.setProperty(Buffer.ENCODING, MiscUtilities.UTF_8_Y);
-				
+
 				encoding = "UTF-8";
 			}
 			else
 			{
 				in.reset();
-				
+
 				byte[] _xmlPI = new byte[BufferIORequest.XML_PI_LENGTH];
 				int offset = 0;
 				int count;
@@ -809,7 +818,7 @@ public class MiscUtilities
 					if(offset == BufferIORequest.XML_PI_LENGTH)
 						break;
 				}
-				
+
 				String xmlEncoding = getXMLEncoding(new String(
 					_xmlPI,0,offset,"ASCII"));
 				if(xmlEncoding != null)
@@ -818,14 +827,14 @@ public class MiscUtilities
 					if (buffer != null)
 						buffer.setProperty(Buffer.ENCODING,encoding);
 				}
-				
+
 				if(encoding.equals(MiscUtilities.UTF_8_Y))
 					encoding = "UTF-8";
-				
+
 				in.reset();
 			}
 		}
-		
+
 		return new InputStreamReader(in,encoding);
 	} //}}}
 
@@ -1969,6 +1978,120 @@ loop:		for(;;)
 		StringWriter s = new StringWriter();
 		t.printStackTrace(new PrintWriter(s));
 		return s.toString();
+	} //}}}
+
+	//{{{ +_newSAXParser()_ : SAXParser
+	/**
+	 * Returns a new SAX parser; convenience method that catches
+	 * all exceptions and prints a log message in case they occur
+	 * (returning null).
+	 *
+	 * @since jEdit 4.3pre5
+	 */
+	public static SAXParser newSAXParser()
+	{
+		try
+		{
+			SAXParserFactory spf = SAXParserFactory.newInstance();
+			return spf.newSAXParser();
+		}
+		catch (Exception e)
+		{
+			Log.log(Log.ERROR, MiscUtilities.class, e);
+			return null;
+		}
+	} //}}}
+
+	//{{{ parseXML() method
+	/**
+	 * Convenience method for parsing an XML file. This method will
+	 * wrap the resource in an InputSource and set the source's
+	 * systemId to "jedit.jar" (so the source should be able to
+	 * handle any external entities by itself).
+	 *
+	 * <p>SAX Errors are caught and are not propagated to the caller;
+	 * instead, an error message is printed to jEdit's activity
+	 * log. So, if you need custom error handling, <b>do not use
+	 * this method</b>.
+	 *
+	 * <p>The given stream is closed before the method returns,
+	 * regardless whether there were errors or not.</p>
+	 *
+	 * @return Whether any error occured during parsing.
+	 * @since jEdit 4.3pre5
+	 */
+	public static boolean parseXML(InputStream in, DefaultHandler handler)
+		throws IOException
+	{
+		SAXParser parser = newSAXParser();
+		Reader r = null;
+		try
+		{
+			r = new BufferedReader(new InputStreamReader(in));
+			InputSource isrc = new InputSource(r);
+			isrc.setSystemId("jedit.jar");
+			parser.getXMLReader().setEntityResolver(handler);
+			parser.parse(isrc, handler);
+		}
+		catch(SAXParseException se)
+		{
+			int line = se.getLineNumber();
+			String message = se.getMessage();
+			Log.log(Log.ERROR,MiscUtilities.class,
+				"SAXParseException: " + line + ": " + message);
+			return true;
+		}
+		catch(SAXException e)
+		{
+			Log.log(Log.ERROR,Registers.class,e);
+			return true;
+		}
+		finally
+		{
+			try
+			{
+				if(in != null)
+					in.close();
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,MiscUtilities.class,io);
+			}
+		}
+		return false;
+	} //}}}
+
+	//{{{ resolveEntity() method
+	/**
+	 * Tries to find the given systemId in the context of the given
+	 * class. If the given systemId ends with the given test string,
+	 * then try to load a resource using the Class's
+	 * <code>getResourceAsStream()</code> method using the test string
+	 * as the resource.
+	 *
+	 * <p>This is used a lot internally while parsing XML files used
+	 * by jEdit, but anyone is free to use the method if it sounds
+	 * usable.</p>
+	 */
+	public static InputSource findEntity(String systemId, String test, Class where)
+	{
+		if (systemId != null && systemId.endsWith(test))
+		{
+			try
+			{
+				return new InputSource(new BufferedReader(
+					new InputStreamReader(
+						where.getResourceAsStream(test))));
+			}
+			catch (Exception e)
+			{
+				Log.log(Log.ERROR,MiscUtilities.class,
+					"Error while opening " + test + ":");
+				Log.log(Log.ERROR,MiscUtilities.class,e);
+			}
+		}
+
+		return null;
 	} //}}}
 
 	//{{{ Private members

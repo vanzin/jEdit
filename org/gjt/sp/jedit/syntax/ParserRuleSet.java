@@ -24,8 +24,9 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import gnu.regexp.RE;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 //}}}
 
 /**
@@ -209,13 +210,13 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ getDigitRegexp() method
-	public RE getDigitRegexp()
+	public Pattern getDigitRegexp()
 	{
 		return digitRE;
 	} //}}}
 
 	//{{{ setDigitRegexp() method
-	public void setDigitRegexp(RE digitRE)
+	public void setDigitRegexp(Pattern digitRE)
 	{
 		this.digitRE = digitRE;
 	} //}}}
@@ -316,7 +317,7 @@ public class ParserRuleSet
 	private ParserRule escapeRule;
 
 	private boolean highlightDigits;
-	private RE digitRE;
+	private Pattern digitRE;
 
 	private String _noWordSep;
 	private String noWordSep;

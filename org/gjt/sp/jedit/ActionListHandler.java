@@ -24,13 +24,17 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import com.microstar.xml.*;
 import java.io.*;
 import java.util.Stack;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.gjt.sp.util.Log;
 //}}}
 
-class ActionListHandler extends HandlerBase
+class ActionListHandler extends DefaultHandler
 {
 	//{{{ ActionListHandler constructor
 	ActionListHandler(String path, ActionSet actionSet)
@@ -38,32 +42,14 @@ class ActionListHandler extends HandlerBase
 		this.path = path;
 		this.actionSet = actionSet;
 		stateStack = new Stack();
+		code = new StringBuffer();
+		isSelected = new StringBuffer();
 	} //}}}
 
 	//{{{ resolveEntity() method
-	public Object resolveEntity(String publicId, String systemId)
+	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		if("actions.dtd".equals(systemId))
-		{
-			// this will result in a slight speed up, since we
-			// don't need to read the DTD anyway, as AElfred is
-			// non-validating
-			return new StringReader("<!-- -->");
-
-			/* try
-			{
-				return new BufferedReader(new InputStreamReader(
-					getClass().getResourceAsStream("actions.dtd")));
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,this,"Error while opening"
-					+ " actions.dtd:");
-				Log.log(Log.ERROR,this,e);
-			} */
-		}
-
-		return null;
+		return MiscUtilities.findEntity(systemId, "actions.dtd", getClass());
 	} //}}}
 
 	//{{{ attribute() method
@@ -82,60 +68,54 @@ class ActionListHandler extends HandlerBase
 			noRememberLast = (value == "TRUE");
 	} //}}}
 
-	//{{{ doctypeDecl() method
-	public void doctypeDecl(String name, String publicId,
-		String systemId) throws Exception
-	{
-		if("ACTIONS".equals(name))
-			return;
-
-		Log.log(Log.ERROR,this,path + ": DOCTYPE must be ACTIONS");
-	} //}}}
-
-	//{{{ charData() method
-	public void charData(char[] c, int off, int len)
+	//{{{ characters() method
+	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
-		String text = new String(c, off, len);
-
-		if (tag == "CODE")
+		if (tag.equals("CODE"))
 		{
-			code = text;
+			code.append(c, off, len);
 		}
-		else if (tag == "IS_SELECTED")
+		else if (tag.equals("IS_SELECTED"))
 		{
-			isSelected = text;
+			isSelected.append(c, off, len);
 		}
 	} //}}}
 
 	//{{{ startElement() method
-	public void startElement(String tag)
+	public void startElement(String uri, String localName,
+				 String qName, Attributes attrs)
 	{
-		tag = pushElement(tag);
+		String tag = pushElement(qName);
 
-		if (tag == "ACTION")
+		if (tag.equals("ACTION"))
 		{
-			code = null;
-			isSelected = null;
+			actionName = attrs.getValue("NAME");
+			noRepeat = "TRUE".equals(attrs.getValue("NO_REPEAT"));
+			noRecord = "TRUE".equals(attrs.getValue("NO_RECORD"));
+			noRememberLast = "TRUE".equals(attrs.getValue("NO_REMEMBER_LAST"));
+			code.setLength(0);
+			isSelected.setLength(0);
 		}
 	} //}}}
 
 	//{{{ endElement() method
-	public void endElement(String name)
+	public void endElement(String uri, String localName, String qName)
 	{
-		if(name == null)
-			return;
-
 		String tag = peekElement();
 
-		if(name.equals(tag))
+		if (qName.equals(tag))
 		{
-			if(tag == "ACTION")
+			if (tag.equals("ACTION"))
 			{
+				String selected = (isSelected.length() > 0) ?
+					isSelected.toString() : null;
 				actionSet.addAction(new BeanShellAction(actionName,
-					code,isSelected,noRepeat,noRecord,
-					noRememberLast));
+					code.toString(),selected,
+					noRepeat,noRecord,noRememberLast));
 				noRepeat = noRecord = noRememberLast = false;
+				code.setLength(0);
+				isSelected.setLength(0);
 			}
 
 			popElement();
@@ -167,8 +147,8 @@ class ActionListHandler extends HandlerBase
 	private ActionSet actionSet;
 
 	private String actionName;
-	private String code;
-	private String isSelected;
+	private StringBuffer code;
+	private StringBuffer isSelected;
 
 	private boolean noRepeat;
 	private boolean noRecord;
@@ -200,4 +180,5 @@ class ActionListHandler extends HandlerBase
 	} //}}}
 
 	//}}}
+
 }

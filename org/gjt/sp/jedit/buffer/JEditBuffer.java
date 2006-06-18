@@ -24,12 +24,12 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import gnu.regexp.*;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.Toolkit;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
@@ -87,7 +87,7 @@ public class JEditBuffer
 		propertyLock = new Object();
 		properties = new HashMap();
 		indentRules = new ArrayList();
-		
+
 		//{{{ need to convert entries of 'props' to PropValue instances
 		Enumeration e = props.keys();
 		while(e.hasMoreElements())
@@ -183,7 +183,7 @@ public class JEditBuffer
 	{
 		readOnlyOverride = readOnly;
 	} //}}}
-	
+
 	//{{{ setDirty() method
 	/**
 	 * Sets the 'dirty' (changed since last save) flag of this buffer.
@@ -211,9 +211,9 @@ public class JEditBuffer
 			}
 		}
 	} //}}}
-	
+
 	//}}}
-	
+
 	//{{{ Thread safety
 
 	//{{{ readLock() method
@@ -1141,11 +1141,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		return electricKeys.indexOf(ch) != -1;
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ Syntax highlighting
-	
+
 	//{{{ markTokens() method
 	/**
 	 * Returns the syntax tokens for the specified line.
@@ -1255,7 +1255,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ Property methods
 
 	//{{{ getTabSize() method
@@ -1335,13 +1335,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 		}
 	} //}}}
-	
+
 	//{{{ getDefaultProperty() method
 	public Object getDefaultProperty(String key)
 	{
 		return null;
 	} //}}}
-	
+
 	//{{{ setProperty() method
 	/**
 	 * Sets the value of a buffer-local property.
@@ -1514,18 +1514,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 		setProperty(name,new Integer(value));
 	} //}}}
 
-	//{{{ getRegexpProperty() method
+	//{{{ getPatternProperty()
 	/**
 	 * Returns the value of a property as a regular expression.
 	 * This method is thread-safe.
 	 * @param name The property name
 	 * @param cflags Regular expression compilation flags
-	 * @param syntax Regular expression syntax
-	 * @since jEdit 4.1pre9
+	 * @since jEdit 4.3pre5
 	 */
-	public RE getRegexpProperty(String name, int cflags,
-		RESyntax syntax) throws REException
-	{
+	public Pattern getPatternProperty(String name, int flags) {
 		synchronized(propertyLock)
 		{
 			boolean defaultValueFlag;
@@ -1545,11 +1542,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			if(obj == null)
 				return null;
-			else if(obj instanceof RE)
-				return (RE)obj;
+			else if (obj instanceof Pattern)
+				return (Pattern) obj;
 			else
 			{
-				RE re = new RE(obj.toString(),cflags,syntax);
+				Pattern re = Pattern.compile(obj.toString(),flags);
 				properties.put(name,new PropValue(re,
 					defaultValueFlag));
 				return re;
@@ -1614,7 +1611,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ Folding methods
 
 	//{{{ isFoldStart() method
@@ -2046,9 +2043,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ Protected members
-	
+
 	protected Segment seg;
 	protected boolean textMode;
 	protected UndoManager undoMgr;
@@ -2181,7 +2178,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ isFileReadOnly() method
 	protected boolean isFileReadOnly()
 	{
@@ -2247,7 +2244,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		lineMgr.setFirstInvalidFoldLevel(0);
 	} //}}}
-	
+
 	//{{{ parseBufferLocalProperties() method
 	protected void parseBufferLocalProperties()
 	{
@@ -2264,7 +2261,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			parseBufferLocalProperties(getText(getLineStartOffset(firstLine),length));
 		}
 	} //}}}
-	
+
 	//{{{ initIndentRules() method
 	protected void initIndentRules()
 	{
@@ -2325,7 +2322,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		electricKeys = buf.toString();
 	} //}}}
-	
+
 	//{{{ Used to store property values
 	protected static class PropValue
 	{
@@ -2356,7 +2353,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ Private members
 	private Vector bufferListeners;
 	private ReadWriteLock lock;
@@ -2486,7 +2483,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 		}
 	} //}}}
-	
+
 	//{{{ createRegexpIndentRule() method
 	private IndentRule createRegexpIndentRule(String prop)
 	{

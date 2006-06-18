@@ -23,9 +23,12 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import com.microstar.xml.*;
 import java.io.*;
 import java.util.*;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -88,40 +91,13 @@ public class BufferHistory
 		Log.log(Log.MESSAGE,BufferHistory.class,"Loading recent.xml");
 
 		RecentHandler handler = new RecentHandler();
-		XmlParser parser = new XmlParser();
-		Reader in = null;
-		parser.setHandler(handler);
 		try
 		{
-			in = new BufferedReader(new FileReader(recent));
-			parser.parse(null, null, in);
+			MiscUtilities.parseXML(new FileInputStream(recent), handler);
 		}
-		catch(XmlException xe)
-		{
-			int line = xe.getLine();
-			String message = xe.getMessage();
-			Log.log(Log.ERROR,BufferHistory.class,recent + ":" + line
-				+ ": " + message);
-		}
-		catch(FileNotFoundException fnf)
-		{
-			//Log.log(Log.DEBUG,BufferHistory.class,fnf);
-		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			Log.log(Log.ERROR,BufferHistory.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,BufferHistory.class,io);
-			}
 		}
 	} //}}}
 
@@ -367,51 +343,21 @@ public class BufferHistory
 	} //}}}
 
 	//{{{ RecentHandler class
-	static class RecentHandler extends HandlerBase
+	static class RecentHandler extends DefaultHandler
 	{
 		public void endDocument()
-			throws java.lang.Exception
 		{
 			int max = jEdit.getIntegerProperty("recentFiles",50);
 			while(history.size() > max)
 				history.removeLast();
 		}
 
-		public Object resolveEntity(String publicId, String systemId)
+		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			if("recent.dtd".equals(systemId))
-			{
-				// this will result in a slight speed up, since we
-				// don't need to read the DTD anyway, as AElfred is
-				// non-validating
-				return new StringReader("<!-- -->");
-
-				/* try
-				{
-					return new BufferedReader(new InputStreamReader(
-						getClass().getResourceAsStream("recent.dtd")));
-				}
-				catch(Exception e)
-				{
-					Log.log(Log.ERROR,this,"Error while opening"
-						+ " recent.dtd:");
-					Log.log(Log.ERROR,this,e);
-				} */
-			}
-
-			return null;
+			return MiscUtilities.findEntity(systemId, "recent.dtd", getClass());
 		}
 
-		public void doctypeDecl(String name, String publicId,
-			String systemId) throws Exception
-		{
-			if("RECENT".equals(name))
-				return;
-
-			Log.log(Log.ERROR,this,"recent.xml: DOCTYPE must be RECENT");
-		}
-
-		public void endElement(String name)
+		public void endElement(String uri, String localName, String name)
 		{
 			if(name.equals("ENTRY"))
 			{
@@ -433,7 +379,7 @@ public class BufferHistory
 				encoding = charData;
 		}
 
-		public void charData(char[] ch, int start, int length)
+		public void caharacters(char[] ch, int start, int length)
 		{
 			charData = new String(ch,start,length);
 		}

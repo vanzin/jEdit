@@ -24,11 +24,13 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import gnu.regexp.*;
 import javax.swing.text.Segment;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.CharIndexedSegment;
+import org.gjt.sp.util.SegmentCharSequence;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -374,8 +376,8 @@ unwind:		while(context.parent != null)
 		} //}}}
 
 		int matchedChars = 1;
-		CharIndexedSegment charIndexed = null;
-		REMatch match = null;
+		SegmentCharSequence charSeq = null;
+		Matcher match = null;
 
 		//{{{ See if the rule's start or end sequence matches here
 		if(!end || (checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
@@ -406,17 +408,17 @@ unwind:		while(context.parent != null)
 			{
 				// note that all regexps start with \A so they only
 				// match the start of the string
-				int matchStart = pos - line.offset;
-				charIndexed = new CharIndexedSegment(line,matchStart);
-				match = checkRule.startRegexp.getMatch(
-					charIndexed,0,RE.REG_ANCHORINDEX);
-				if(match == null)
+				//int matchStart = pos - line.offset;
+				charSeq = new SegmentCharSequence(line, pos - line.offset,
+								  line.count - (pos - line.offset));
+				match = checkRule.startRegexp.matcher(charSeq);
+				if(!match.find())
 					return false;
-				else if(match.getStartIndex() != 0)
+				else if(match.start() != 0)
 					throw new InternalError("Can't happen");
 				else
 				{
-					matchedChars = match.getEndIndex();
+					matchedChars = match.end();
 					/* workaround for hang if match was
 					 * zero-width. not sure if there is
 					 * a better way to handle this */
@@ -516,7 +518,7 @@ unwind:		while(context.parent != null)
 				 * ...
 				 * EOF
 				 */
-				if(charIndexed != null && checkRule.end != null)
+				if(charSeq != null && checkRule.end != null)
 				{
 					spanEndSubst = substitute(match,
 						checkRule.end);
@@ -680,12 +682,12 @@ unwind:		while(context.parent != null)
 
 			if(mixed)
 			{
-				RE digitRE = context.rules.getDigitRegexp();
+				Pattern digitRE = context.rules.getDigitRegexp();
 
 				// only match against regexp if its not all
 				// digits; if all digits, no point matching
 				if(digit)
-				{ 
+				{
 					if(digitRE == null)
 					{
 						// mixed digit/alpha keyword,
@@ -695,13 +697,12 @@ unwind:		while(context.parent != null)
 					}
 					else
 					{
-						CharIndexedSegment seg = new CharIndexedSegment(
-							line,false);
+						CharSequence seq = new SegmentCharSequence(line);
 						int oldCount = line.count;
 						int oldOffset = line.offset;
 						line.offset = lastOffset;
 						line.count = len;
-						if(!digitRE.isMatch(seg))
+						if(!digitRE.matcher(seq).matches())
 							digit = false;
 						line.offset = oldOffset;
 						line.count = oldCount;
@@ -745,7 +746,7 @@ unwind:		while(context.parent != null)
 	} //}}}
 
 	//{{{ substitute() method
-	private char[] substitute(REMatch match, char[] end)
+	private char[] substitute(Matcher match, char[] end)
 	{
 		StringBuffer buf = new StringBuffer();
 		for(int i = 0; i < end.length; i++)
@@ -762,7 +763,7 @@ unwind:		while(context.parent != null)
 						buf.append(ch);
 					else
 					{
-						buf.append(match.toString(
+						buf.append(match.group(
 							digit - '0'));
 						i++;
 					}

@@ -23,9 +23,9 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import gnu.regexp.*;
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -79,10 +79,10 @@ public class AllBufferSet extends BufferListSet
 		Buffer[] buffers = jEdit.getBuffers();
 		ArrayList returnValue = new ArrayList(buffers.length);
 
-		RE filter;
+		Pattern filter;
 		try
 		{
-			filter = new RE(MiscUtilities.globToRE(glob));
+			filter = Pattern.compile(MiscUtilities.globToRE(glob));
 		}
 		catch(Exception e)
 		{
@@ -93,7 +93,7 @@ public class AllBufferSet extends BufferListSet
 		for(int i = 0; i < buffers.length; i++)
 		{
 			Buffer buffer = buffers[i];
-			if(filter.isMatch(buffer.getName()))
+			if(filter.matcher(buffer.getName()).matches())
 				returnValue.add(buffer.getPath());
 		}
 
