@@ -25,8 +25,11 @@ package org.gjt.sp.jedit.pluginmgr;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import javax.xml.parsers.SAXParser;
+
+import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import org.gjt.sp.jedit.*;
 
 public class MirrorList
@@ -46,14 +49,18 @@ public class MirrorList
 		String path = jEdit.getProperty("plugin-manager.mirror-url");
 		MirrorListHandler handler = new MirrorListHandler(this,path);
 
-		SAXParser parser = MiscUtilities.newSAXParser();
+		XMLReader parser = XMLReaderFactory.createXMLReader();
 		Reader in = new BufferedReader(new InputStreamReader(
 			new URL(path).openStream()));
 		InputSource isrc = new InputSource(in);
 		isrc.setSystemId("jedit.jar");
+		parser.setContentHandler(handler);
+		parser.setDTDHandler(handler);
+		parser.setEntityResolver(handler);
+		parser.setErrorHandler(handler);
 		try
 		{
-			parser.parse(isrc, handler);
+			parser.parse(isrc);
 		}
 		finally
 		{
