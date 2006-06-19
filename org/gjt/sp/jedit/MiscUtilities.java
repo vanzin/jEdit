@@ -37,13 +37,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
@@ -1980,28 +1979,6 @@ loop:		for(;;)
 		return s.toString();
 	} //}}}
 
-	//{{{ +_newSAXParser()_ : SAXParser
-	/**
-	 * Returns a new SAX parser; convenience method that catches
-	 * all exceptions and prints a log message in case they occur
-	 * (returning null).
-	 *
-	 * @since jEdit 4.3pre5
-	 */
-	public static SAXParser newSAXParser()
-	{
-		try
-		{
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			return spf.newSAXParser();
-		}
-		catch (Exception e)
-		{
-			Log.log(Log.ERROR, MiscUtilities.class, e);
-			return null;
-		}
-	} //}}}
-
 	//{{{ parseXML() method
 	/**
 	 * Convenience method for parsing an XML file. This method will
@@ -2023,15 +2000,18 @@ loop:		for(;;)
 	public static boolean parseXML(InputStream in, DefaultHandler handler)
 		throws IOException
 	{
-		SAXParser parser = newSAXParser();
 		Reader r = null;
 		try
 		{
+			XMLReader parser = XMLReaderFactory.createXMLReader();
 			r = new BufferedReader(new InputStreamReader(in));
 			InputSource isrc = new InputSource(r);
 			isrc.setSystemId("jedit.jar");
-			parser.getXMLReader().setEntityResolver(handler);
-			parser.parse(isrc, handler);
+			parser.setContentHandler(handler);
+			parser.setDTDHandler(handler);
+			parser.setEntityResolver(handler);
+			parser.setErrorHandler(handler);
+			parser.parse(isrc);
 		}
 		catch(SAXParseException se)
 		{

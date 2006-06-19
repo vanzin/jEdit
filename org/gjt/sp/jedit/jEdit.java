@@ -32,9 +32,11 @@ import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
 
-import javax.xml.parsers.SAXParser;
+import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.buffer.KillRing;
@@ -93,6 +95,15 @@ public class jEdit
 			System.err.println("jEdit requires Java 1.4 or later.");
 			System.exit(1);
 		} //}}}
+
+		// Java 1.4 doesn't seem to have XMLReaderFactory configured
+		// correctly, so we check it during startup.
+		if (OperatingSystem.hasJava14() && !OperatingSystem.hasJava15()
+			&& System.getProperty("org.xml.sax.driver") == null)
+		{
+			System.setProperty("org.xml.sax.driver",
+					"org.apache.crimson.parser.XMLReaderImpl");
+		}
 
 		// later on we need to know if certain code is called from
 		// the main thread
@@ -2595,7 +2606,13 @@ public class jEdit
 
 		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
 
-		final SAXParser parser = MiscUtilities.newSAXParser();
+		XMLReader parser = null;
+		try {
+			parser = XMLReaderFactory.createXMLReader();
+		} catch (SAXException saxe) {
+			Log.log(Log.ERROR, jEdit.class, saxe);
+			return;
+		}
 		XModeHandler xmh = new XModeHandler(mode.getName())
 		{
 			public void error(String what, Object subst)
@@ -2641,7 +2658,11 @@ public class jEdit
 
 			InputSource isrc = new InputSource(grammar);
 			isrc.setSystemId("jedit.jar");
-			parser.parse(isrc, xmh);
+			parser.setContentHandler(xmh);
+			parser.setDTDHandler(xmh);
+			parser.setEntityResolver(xmh);
+			parser.setErrorHandler(xmh);
+			parser.parse(isrc);
 
 			mode.setProperties(xmh.getModeProperties());
 		}
