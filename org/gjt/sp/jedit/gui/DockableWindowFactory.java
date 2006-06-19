@@ -77,9 +77,9 @@ public class DockableWindowFactory
 			Log.log(Log.DEBUG,DockableWindowManager.class,
 				"Loading dockables from " + uri);
 			DockableListHandler dh = new DockableListHandler(plugin,uri);
-			boolean success = MiscUtilities.parseXML(uri.openStream(), dh);
+			boolean failure = MiscUtilities.parseXML(uri.openStream(), dh);
 
-			if (success && cache != null)
+			if (!failure && cache != null)
 			{
 				cache.cachedDockableNames = dh.getCachedDockableNames();
 				cache.cachedDockableActionFlags = dh.getCachedDockableActionFlags();
