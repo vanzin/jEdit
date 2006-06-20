@@ -30,8 +30,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.Marker;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
@@ -77,9 +75,8 @@ public class Gutter extends JComponent implements SwingConstants
 	//}}}
 
 	//{{{ Gutter constructor
-	public Gutter(View view, JEditTextArea textArea)
+	public Gutter(JEditTextArea textArea)
 	{
-		this.view = view;
 		this.textArea = textArea;
 
 		setAutoscrolls(true);
@@ -233,9 +230,7 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public void updateBorder()
 	{
-		if(view.getEditPane() == null)
-			setBorder(noFocusBorder);
-		else if(view.getEditPane().getTextArea() == textArea)
+		if (textArea.hasFocus())
 			setBorder(focusBorder);
 		else
 			setBorder(noFocusBorder);

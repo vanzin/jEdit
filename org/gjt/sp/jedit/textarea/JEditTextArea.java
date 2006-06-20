@@ -80,7 +80,7 @@ public class JEditTextArea extends JComponent
 		chunkCache = new ChunkCache(this);
 		painter = new TextAreaPainter(this);
 		repaintMgr = new FastRepaintManager(this,painter);
-		gutter = new Gutter(view,this);
+		gutter = new Gutter(this);
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
 		blink = true;
@@ -170,8 +170,8 @@ public class JEditTextArea extends JComponent
 		sl.add("physLastLine: " + physLastLine);
 		return TextUtilities.join(sl, "\n");
 	}
-	
-	
+
+
 	//{{{ dispose() method
 	/**
 	 * Plugins and macros should not call this method.
@@ -260,7 +260,7 @@ public class JEditTextArea extends JComponent
 
 	/**
 	 * @return the minimum distance (in number of lines)
-	 * from the caret to the nearest edge of the screen 
+	 * from the caret to the nearest edge of the screen
 	 * (top or bottom edge).
 	 */
 	public final int getElectricScroll()
@@ -307,11 +307,11 @@ public class JEditTextArea extends JComponent
 	/**
 	 * Returns the buffer this text area is editing.
 	 * @since jedit 4.3pre3
-	 * 
+	 *
 	 *  Prior to 4.3pre3, this function returned a "Buffer" type.
-	 *  If this causes your code to break, try calling view.getBuffer() instead of 
+	 *  If this causes your code to break, try calling view.getBuffer() instead of
 	 *  view.getTextArea().getBuffer().
-	 *  
+	 *
 	 */
 	public final JEditBuffer getBuffer()
 	{
