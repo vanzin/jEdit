@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.browser;
 import bsh.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
@@ -884,7 +883,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					Hashtable props = new Hashtable();
 					props.put(Buffer.ENCODING,currentEncoding);
 					props.put(Buffer.ENCODING_AUTODETECT,
-						new Boolean(autoDetectEncoding));
+                              Boolean.valueOf(autoDetectEncoding));
 					_buffer = jEdit.openFile(null,null,
 						file.getPath(),false,props);
 				}
