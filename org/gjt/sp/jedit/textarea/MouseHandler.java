@@ -26,27 +26,13 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.TooManyListenersException;
-import java.util.TreeSet;
-import java.util.Vector;
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.text.Segment;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 class MouseHandler extends MouseInputAdapter

@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.util.ArrayList;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}

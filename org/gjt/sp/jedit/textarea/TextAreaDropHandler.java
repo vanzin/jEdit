@@ -23,15 +23,9 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import javax.swing.event.*;
 import javax.swing.*;
-import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import java.awt.event.*;
 import java.awt.*;
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
