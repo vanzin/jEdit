@@ -46,12 +46,23 @@ public class EditPaneUpdate extends EBMessage
 	public static final Object BUFFER_CHANGED = "BUFFER_CHANGED";
 
 	/**
-	 * Edit pane buffer about to change
+	 * Edit pane buffer about to change. Note: this could be an instance of BufferChanging class,
+	 * which also contains information about the new buffer that is about to be opened.
 	 * @since 4.3pre3
 	 */
 	public static final Object BUFFER_CHANGING = "BUFFER_CHANGING";
 
 
+	/**
+	 * The caret is about to change (but the buffer is not).
+	 * This kind of event is thrown from plugins such as
+	 * sidekick and codebrowser when a tree node is selected,
+	 * and plugins such as Navigator can remember the position before the 
+	 * caret changed. 
+	 * 
+	 * @since jedit 4.3pre5
+	 */
+	public static final Object CARET_CHANGING = "CARET_CHANGING";
 	
 	/**
 	 * Creates a new edit pane update message.
