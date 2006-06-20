@@ -25,6 +25,11 @@ JEDIT 4.3 VERSION HISTORY
   a new compoundEdit on the new buffer if there were a compoundEdit in progress.
   (bug #1469996).   (Björn "Vampire" Kautler )
 
+- New class: org.gjt.sp.jedit.msg.CaretChanging, for alerting
+  other plugins that the caret position is about to change.
+  This allows Navigator to be alerted of sidekick selections. (Alan
+  Ezust)
+  
 - MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
 
 - MiscUtilities.autodetect() this method tries to autodetect the file encoding. It was moved
