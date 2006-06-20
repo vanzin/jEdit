@@ -7,6 +7,9 @@
 		<PROPERTY NAME="commentStart" VALUE="#*" />
 		<PROPERTY NAME="commentEnd" VALUE="*#" />
 		<PROPERTY NAME="lineComment" VALUE="##" />
+		<!-- Auto indent -->
+		<PROPERTY NAME="indentNextLines" VALUE="^\s*(#(foreach|if|elseif|else))\s*\(.*\)\s*"/>
+		<PROPERTY NAME="unindentThisLine" VALUE="^\s*#(end|elseif|else)\b.*"/>
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE">
 		<!-- SGML comment -->
@@ -60,8 +63,8 @@
 			<END>}</END>
 		</SPAN>
 
-		<MARK_FOLLOWING TYPE="KEYWORD3">$!</MARK_FOLLOWING>
-		<MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
+		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD3"
+			>\$!?[A-z][A-z0-9._-]*</SEQ_REGEXP>
 
 		<KEYWORDS>
 			<KEYWORD1>#set</KEYWORD1>
