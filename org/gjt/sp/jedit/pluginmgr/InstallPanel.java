@@ -37,11 +37,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
-import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 class InstallPanel extends JPanel
@@ -150,7 +147,7 @@ class InstallPanel extends JPanel
 	//}}}
 
 	//{{{ formatSize() method
-	private String formatSize(int size)
+	private static String formatSize(int size)
 	{
 		NumberFormat df = NumberFormat.getInstance();
 		df.setMaximumFractionDigits(1);
@@ -170,7 +167,7 @@ class InstallPanel extends JPanel
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
-		private ArrayList entries = new ArrayList();
+		private List entries = new ArrayList();
 		private int sortType = EntryCompare.NAME;
 
 		//{{{ getColumnClass() method
@@ -199,10 +196,10 @@ class InstallPanel extends JPanel
 			switch (column)
 			{
 				case 0: return " ";
-				case 1: return " "+jEdit.getProperty("install-plugins.info.name");
-				case 2: return " "+jEdit.getProperty("install-plugins.info.category");
-				case 3: return " "+jEdit.getProperty("install-plugins.info.version");
-				case 4: return " "+jEdit.getProperty("install-plugins.info.size");
+				case 1: return ' '+jEdit.getProperty("install-plugins.info.name");
+				case 2: return ' '+jEdit.getProperty("install-plugins.info.category");
+				case 3: return ' '+jEdit.getProperty("install-plugins.info.version");
+				case 4: return ' '+jEdit.getProperty("install-plugins.info.size");
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
@@ -231,8 +228,7 @@ class InstallPanel extends JPanel
 				switch (columnIndex)
 				{
 					case 0:
-						return new Boolean(
-							entry.install);
+						return Boolean.valueOf(entry.install);
 					case 1:
 						return entry.name;
 					case 2:
@@ -250,7 +246,7 @@ class InstallPanel extends JPanel
 		//{{{ isCellEditable() method
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
-			return (columnIndex == 0);
+			return columnIndex == 0;
 		} //}}}
 
 		//{{{ setSelectAll() method
@@ -321,11 +317,11 @@ class InstallPanel extends JPanel
 			if (!entry.install)
 				deselectParents(entry);
 
-			Vector deps = entry.plugin.getCompatibleBranch().deps;
+			List deps = entry.plugin.getCompatibleBranch().deps;
 
 			for (int i = 0; i < deps.size(); i++)
 			{
-				PluginList.Dependency dep = (PluginList.Dependency)deps.elementAt(i);
+				PluginList.Dependency dep = (PluginList.Dependency)deps.get(i);
 				if (dep.what.equals("plugin"))
 				{
 					for (int j = 0; j < entries.size(); j++)
@@ -351,7 +347,7 @@ class InstallPanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
-			this.sortType = type;
+			sortType = type;
 
 			if(isDownloadingList())
 				return;
@@ -364,7 +360,7 @@ class InstallPanel extends JPanel
 		//{{{ isDownloadingList() method
 		private boolean isDownloadingList()
 		{
-			return (entries.size() == 1 && entries.get(0) instanceof String);
+			return entries.size() == 1 && entries.get(0) instanceof String;
 		} //}}}
 
 		//{{{ clear() method
@@ -432,7 +428,7 @@ class InstallPanel extends JPanel
 		{
 			PluginList.Branch branch = plugin.getCompatibleBranch();
 			boolean downloadSource = jEdit.getBooleanProperty("plugin-manager.downloadSource");
-			int size = (downloadSource) ? branch.downloadSourceSize : branch.downloadSize;
+			int size = downloadSource ? branch.downloadSourceSize : branch.downloadSize;
 
 			this.name = plugin.name;
 			this.author = plugin.author;
