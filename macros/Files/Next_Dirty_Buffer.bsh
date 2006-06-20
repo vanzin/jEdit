@@ -3,8 +3,6 @@
  * the current EditPane to the next dirty buffer, if 
  * there is one.
  *
- * Patched for 4.3pre5
- *
  * Copyright (C) 2002-2004 Ollie Rutherfurd <oliver@rutherfurd.net>
  *
  * $Id$
@@ -13,7 +11,6 @@
 void nextDirtyBuffer(View view)
 {
 	Buffer current = view.getBuffer();
-    current.endCompoundEdit();
 	Buffer b = current.getNext();
 	for(int i=0; i < jEdit.getBufferCount()-1; i++)
 	{
@@ -23,7 +20,6 @@ void nextDirtyBuffer(View view)
 		if(b.isDirty())
 		{
 			view.getEditPane().setBuffer(b);
-            b.beginCompoundEdit();
 			return;
 		}
 		b = b.getNext();	// check next
