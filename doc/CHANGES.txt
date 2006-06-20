@@ -18,16 +18,12 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ API Changes
 
-- Macros.Macro.invoke() has been rewritten to begin a compoundEdit on the buffer that is
-  active buffer before the macro gets invoked, and end a compoundEdit on the buffer that is active
-  after the macro is invoked.
-  Macros that change the active buffer have to call endCompoundEdit() on the old active buffer
-  and beginCompoundEdit() on the new active buffer from now on.
-  If this is done incorrectly, the UndoManager throws an exception about
-  "unbalanced begin-/endCompoundEdit" to the ActivityLog.
+- Macros.Macro.invoke() has been rewritten to begin the compoundEdit on the buffer that is
+  active buffer before the macro gets invoked, and end the compoundEdit on the buffer that is active
+  after the macro is invoked opposed to end the compoundEdit on the buffer it was started on.
+  JEditTextArea.setBuffer() has been rewritten to end a compoundEdit on the old buffer and start
+  a new compoundEdit on the new buffer if there were a compoundEdit in progress.
   (bug #1469996).   (Björn "Vampire" Kautler )
-
-- New section added to docs about buffer-switching macros. (Alan Ezust)
 
 - MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
 
@@ -65,10 +61,6 @@ JEDIT 4.3 VERSION HISTORY
 
 - Updated Ruby Edit-mode to v0.6.2
   The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn "Vampire" Kautler)
-
-- macros Buffer_Switcher and ToggleHeaderSource are updated
-  to work properly with UndoManager using begin/endCompoundEdit
-  (bug #1469996)  (Björn "Vampire" Kautler).
 
 - The "Recent files" menu can now be reaches with the keystroke sequence
   "Alt+F F" (bug 1488066) (Xuan Baldauf)

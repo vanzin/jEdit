@@ -343,7 +343,14 @@ public class JEditTextArea extends JComponent
 				caretLine = caret = caretScreenLine = 0;
 				match = null;
 			}
+			boolean inCompoundEdit = false;
+			if (this.buffer != null)
+				inCompoundEdit = this.buffer.insideCompoundEdit();
+			if (inCompoundEdit)
+				this.buffer.endCompoundEdit();
 			this.buffer = buffer;
+			if (inCompoundEdit)
+				this.buffer.beginCompoundEdit();
 
 			chunkCache.setBuffer(buffer);
 			repaintMgr.setFastScroll(false);

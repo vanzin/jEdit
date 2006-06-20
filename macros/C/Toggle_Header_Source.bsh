@@ -3,7 +3,7 @@
     by Alan Ezust
     $Id$
     alan dot ezust at gmail dot com
-    2006-05-16 - patched for jedit 4.3pre5
+    2005-11-09
    
     A jedit beanshell macro that toggles your current buffer
     between the header file (.h) and the source file (.c(pp|xx)?).
@@ -61,9 +61,6 @@ void toggleHeaderSource()
     int pos = currentFile.lastIndexOf('.');
     String extension = currentFile.substring(pos+1);
     String baseName = currentFile.substring(0, pos);
-    /* We add this to avoid confusing the undo manager - buffer switching
-       macros need to do this when changing the visible buffer */
-    view.getEditPane().getBuffer().endCompoundEdit();
     if (isSourceFile(extension)) 
     {
         jEdit.openFile(view, baseName + ".h"); 
@@ -72,7 +69,6 @@ void toggleHeaderSource()
         String sourceFile = getSourceFile(baseName);
         jEdit.openFile(view, sourceFile);         
     }
-	view.getEditPane().getBuffer().beginCompoundEdit();
 }
 
 toggleHeaderSource();
