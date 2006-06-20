@@ -24,9 +24,7 @@ package org.gjt.sp.jedit.textarea;
 
 import java.util.Iterator;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.util.Log;
 
 /**
  * Note that in this class we take great care to defer complicated

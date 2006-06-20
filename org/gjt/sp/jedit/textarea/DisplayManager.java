@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.textarea;
 import java.awt.Toolkit;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.Log;
 //}}}
@@ -84,7 +83,7 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ bufferClosed() method
-	public static void bufferClosed(Buffer buffer)
+	public static void bufferClosed(JEditBuffer buffer)
 	{
 		bufferMap.remove(buffer);
 	} //}}}
