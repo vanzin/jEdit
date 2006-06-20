@@ -860,8 +860,8 @@ unwind:		while(context.parent != null)
 			if(c1 == null)
 				return c2 == null;
 
-            // c1 is not null
-            if(c2 == null)
+			// c1 is not null
+			if(c2 == null)
 				return false;
 
 			if(c1.length != c2.length)
