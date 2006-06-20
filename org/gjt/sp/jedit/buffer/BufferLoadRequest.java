@@ -23,11 +23,7 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import javax.swing.text.Segment;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.zip.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -69,7 +65,7 @@ public class BufferLoadRequest extends BufferIORequest
 				if(!buffer.isTemporary())
 				{
 					setStatus(jEdit.getProperty("vfs.status.load",args));
-					setProgressValue(0);
+					setValue(0L);
 				}
 
 				path = vfs._canonPath(session,path,view);
@@ -93,7 +89,7 @@ public class BufferLoadRequest extends BufferIORequest
 			catch(CharConversionException ch)
 			{
 				Log.log(Log.ERROR,this,ch);
-				Object[] pp = { buffer.getProperty(Buffer.ENCODING),
+				Object[] pp = { buffer.getProperty(JEditBuffer.ENCODING),
 					ch.toString() };
 				VFSManager.error(view,path,"ioerror.encoding-error",pp);
 
@@ -102,7 +98,7 @@ public class BufferLoadRequest extends BufferIORequest
 			catch(UnsupportedEncodingException uu)
 			{
 				Log.log(Log.ERROR,this,uu);
-				Object[] pp = { buffer.getProperty(Buffer.ENCODING),
+				Object[] pp = { buffer.getProperty(JEditBuffer.ENCODING),
 					uu.toString() };
 				VFSManager.error(view,path,"ioerror.encoding-error",pp);
 
@@ -145,17 +141,7 @@ public class BufferLoadRequest extends BufferIORequest
 		}
 		catch(WorkThread.Abort a)
 		{
-			if(in != null)
-			{
-				try
-				{
-					in.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
-
+			MiscUtilities.closeQuietly(in);
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
@@ -180,7 +166,7 @@ public class BufferLoadRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ readMarkers() method
-	private void readMarkers(Buffer buffer, InputStream _in)
+	private static void readMarkers(Buffer buffer, InputStream _in)
 		throws IOException
 	{
 		// For `reload' command
@@ -193,14 +179,15 @@ public class BufferLoadRequest extends BufferIORequest
 			String line;
 			while((line = in.readLine()) != null)
 			{
-				// compatibility kludge for jEdit 3.1 and earlier
-				if(!line.startsWith("!"))
-					continue;
-
 				// malformed marks file?
 				if(line.length() == 0)
 					continue;
 				
+				// compatibility kludge for jEdit 3.1 and earlier
+				if(line.charAt(0) != '!')
+					continue;
+
+
 				char shortcut = line.charAt(1);
 				int start = line.indexOf(';');
 				int end = line.indexOf(';',start + 1);
