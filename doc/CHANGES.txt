@@ -5,6 +5,13 @@ JEDIT 4.3 VERSION HISTORY
     Björn "Vampire" Kautler, Matthieu Casanova, Xuan Baldauf,
 	Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
+{{{ Reinstall required
+- Since the regexp removal has also affected the modes handling and thus
+  the files in the "modes" directory, just updating "jedit.jar" of an
+  existing jEdit installation does not suffice. You would get weird
+  errors in this case. Thus, a full reinstall is required.
+}}}
+
 {{{ Keyboard handling changes
 - There is a new option, "simplified keyboard handling"
   under "general options" to switch between two keyboard handling modes.
@@ -12,7 +19,7 @@ JEDIT 4.3 VERSION HISTORY
   a fix to bug 1488047). This may greatly affect the way your keys work.
   Please report any bugs regarding this (and please drop a note about
   this bug in bug 1488047).
-  (xuan balduf).
+  (Xuan Baldauf).
 }}}
 
 
