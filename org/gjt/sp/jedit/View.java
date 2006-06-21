@@ -610,7 +610,7 @@ public class View extends JFrame implements EBComponent
 					if(Debug.DUMP_KEY_EVENTS)
 					{
 						Log.log(Log.DEBUG,this,
-							"Translated: "
+							"Translated (key type ): "
 							+ keyStroke + " from " + from);
 					}
 					if(inputHandler.handleKey(keyStroke))
@@ -672,7 +672,7 @@ public class View extends JFrame implements EBComponent
 					if(Debug.DUMP_KEY_EVENTS)
 					{
 						Log.log(Log.DEBUG,this,
-							"Translated: "
+							"Translated (key press): "
 							+ keyStroke + " from " + from);
 					}
 					if(inputHandler.handleKey(keyStroke))
