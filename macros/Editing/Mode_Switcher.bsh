@@ -36,138 +36,142 @@
 
 import javax.swing.border.EmptyBorder;
 
-class ModeSwitcherTextField extends JTextField
-{
-	protected String[] names;
-	protected boolean shifted = false;
-	//{{{ setNames
-	public void setNames(String[] a){
-		names = a;
-	} //}}}
-	public boolean getFocusTraversalKeysEnabled(){return false;}
-	//{{{ processKeyEvent
-	protected void processKeyEvent(KeyEvent evt)
-	{
-		if (evt.getID() == KeyEvent.KEY_RELEASED) {
-			if (evt.getKeyCode() == KeyEvent.VK_SHIFT) {
-				shifted = false;
-			}
-		} else if(evt.getID() == KeyEvent.KEY_PRESSED) {
-			if (evt.getKeyCode() == KeyEvent.VK_SHIFT) {
-				shifted = true;
-			} else if(evt.getKeyCode() == KeyEvent.VK_TAB) {
-				// Get the current text
-				String txt = getText();
-				String original = txt;
-				// See if some text is selected
-				if (getSelectedText() != null)
-					txt = txt.substring(0,txt.length()-getSelectedText().length());
-				// txt represents the unhighlighted text in the box. This is used
-				// to find further matches.
-				
-				// See if the current text is a known mode
-				int index = Arrays.binarySearch(names,original);
-				if (index < 0) index = 0;
-				int indexStep = 1;
-				if (shifted) indexStep = -1;
-				index+=indexStep;
-				if (index == names.length) index = 0;
-				if (index < 0) index = names.length-1;
-				int match = -1;
-				boolean foundExact = false;
-				boolean keepLooping = true;
-				// Loop through modes, starting at current+1
-				int i = index;
-				while(keepLooping) {
-					// Skip if the mode name is shorter than the current text
-					if (names[i].length()>=txt.length())
-					{
-						// If the mode matches, escape
-						if (names[i].substring(0,txt.length()).equals(txt)) {
-							match = i;
-							break;
-						}
-					}
-					// Loop the loop
-					i+=indexStep;
-					if (i == names.length) i = 0;
-					if (i < 0) i = names.length-1;
-					if (i==index) break;
-				}
-				// If a match has been found...
-				if (match >= 0) {
-					setText(names[match]);
-					setSelectionStart(txt.length());
-					setSelectionEnd(names[match].length());
-				}
-				return;
-			}
-		}
-		super.processKeyEvent(evt);
-	} //}}}
-}	
-Mode[] modes = jEdit.getModes();
-JDialog dialog = new JDialog(view, "Buffer Mode Switcher", true);
-dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-JPanel content = new JPanel(new BorderLayout());
-content.setBorder(new EmptyBorder(12,12,12,12));
-Mode[] modes = jEdit.getModes();
-String[] names = new String[modes.length];
-for(int i=0;i<modes.length;i++) {
-	names[i] = modes[i].getName();
-}
-Arrays.sort(names);
-ModeSwitcherTextField textfield = new ModeSwitcherTextField();
-
-textfield.setColumns(20);
-textfield.setNames(names);
-Mode m = buffer.getMode();
-// Set the inital text to the current mode, and highlight it, so a key
-// press will clear the entry.
-if (m != null) {
-	textfield.setText(m.getName());
-	textfield.setSelectionStart(0);
-	textfield.setSelectionEnd(m.getName().length());
-}
-content.add(new JLabel("Enter buffer mode:"), BorderLayout.NORTH);
-content.add(textfield, BorderLayout.CENTER);
-Vector v = new Vector();
-
-// KeyListener Interface
-//{{{ keyPressed
-void keyPressed(evt)
-{
-	if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
-		dialog.dispose();
-	else if(evt.getKeyCode() == KeyEvent.VK_ENTER)
-	{
-		Mode m = jEdit.getMode(textfield.getText());
-		if (m!=null)
-		{
-			buffer.setMode(m);
-			Log.log(Log.NOTICE,
-					  BeanShell.class,
-					  "Changing mode of buffer ["+
-						  buffer.getName()+"] to ["+
-						  m.getName()+"]");
-		} else {
-			Log.log(Log.WARNING,
-					  BeanShell.class,
-					  "Mode ["+textfield.getText()+"] not found");
-		}
-		evt.consume();
-		dialog.dispose();
+//class ModeSwitcherTextField extends JTextField
+void modeSwitcher() {
+	Mode[] modes = jEdit.getModes();
+	JDialog dialog = new JDialog(view, "Buffer Mode Switcher", true);
+	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	JPanel content = new JPanel(new BorderLayout());
+	content.setBorder(new EmptyBorder(12,12,12,12));
+	Mode[] modes = jEdit.getModes();
+	String[] names = new String[modes.length];
+	for(int i=0;i<modes.length;i++) {
+		names[i] = modes[i].getName();
 	}
-}//}}}
-void keyReleased(evt) {}
-void keyTyped(evt) {}
+	Arrays.sort(names);
+	JTextField textfield = new JTextField() {
+		protected String[] names;
+		protected boolean shifted = false;
+		//{{{ setNames
+		public void setNames(String[] a){
+			names = a;
+		} //}}}
+		public boolean getFocusTraversalKeysEnabled(){return false;}
+		//{{{ processKeyEvent
+		protected void processKeyEvent(KeyEvent evt)
+		{
+			if (evt.getID() == KeyEvent.KEY_RELEASED) {
+				if (evt.getKeyCode() == KeyEvent.VK_SHIFT) {
+					shifted = false;
+				}
+			} else if(evt.getID() == KeyEvent.KEY_PRESSED) {
+				if (evt.getKeyCode() == KeyEvent.VK_SHIFT) {
+					shifted = true;
+				} else if(evt.getKeyCode() == KeyEvent.VK_TAB) {
+					// Get the current text
+					String txt = getText();
+					String original = txt;
+					// See if some text is selected
+					if (getSelectedText() != null)
+						txt = txt.substring(0,txt.length()-getSelectedText().length());
+					// txt represents the unhighlighted text in the box. This is used
+					// to find further matches.
+					
+					// See if the current text is a known mode
+					int index = Arrays.binarySearch(names,original);
+					if (index < 0) index = 0;
+					int indexStep = 1;
+					if (shifted) indexStep = -1;
+					index+=indexStep;
+					if (index == names.length) index = 0;
+					if (index < 0) index = names.length-1;
+					int match = -1;
+					boolean foundExact = false;
+					boolean keepLooping = true;
+					// Loop through modes, starting at current+1
+					int i = index;
+					while(keepLooping) {
+						// Skip if the mode name is shorter than the current text
+						if (names[i].length()>=txt.length())
+						{
+							// If the mode matches, escape
+							if (names[i].substring(0,txt.length()).equals(txt)) {
+								match = i;
+								break;
+							}
+						}
+						// Loop the loop
+						i+=indexStep;
+						if (i == names.length) i = 0;
+						if (i < 0) i = names.length-1;
+						if (i==index) break;
+					}
+					// If a match has been found...
+					if (match >= 0) {
+						setText(names[match]);
+						setSelectionStart(txt.length());
+						setSelectionEnd(names[match].length());
+					}
+					return;
+				}
+			}
+			super.processKeyEvent(evt);
+		} //}}}
+	};
+	
+	textfield.setColumns(20);
+	textfield.setNames(names);
+	Mode m = buffer.getMode();
+	// Set the inital text to the current mode, and highlight it, so a key
+	// press will clear the entry.
+	if (m != null) {
+		textfield.setText(m.getName());
+		textfield.setSelectionStart(0);
+		textfield.setSelectionEnd(m.getName().length());
+	}
+	content.add(new JLabel("Enter buffer mode:"), BorderLayout.NORTH);
+	content.add(textfield, BorderLayout.CENTER);
+	Vector v = new Vector();
+	
+	// KeyListener Interface
+	//{{{ keyPressed
+	void keyPressed(evt)
+	{
+		if(evt.getKeyCode() == KeyEvent.VK_ESCAPE)
+			dialog.dispose();
+		else if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+		{
+			Mode m = jEdit.getMode(textfield.getText());
+			if (m!=null)
+			{
+				buffer.setMode(m);
+				Log.log(Log.NOTICE,
+						  BeanShell.class,
+						  "Changing mode of buffer ["+
+							  buffer.getName()+"] to ["+
+							  m.getName()+"]");
+			} else {
+				Log.log(Log.WARNING,
+						  BeanShell.class,
+						  "Mode ["+textfield.getText()+"] not found");
+			}
+			evt.consume();
+			dialog.dispose();
+		}
+	}//}}}
+	void keyReleased(evt) {}
+	void keyTyped(evt) {}
+	
+	dialog.addKeyListener(this);
+	textfield.addKeyListener(this);
+	dialog.setContentPane(content);
+	dialog.pack();
+	dialog.setLocationRelativeTo(view);
+	textfield.grabFocus();
+	dialog.setVisible(true);
+}
 
-dialog.addKeyListener(this);
-textfield.addKeyListener(this);
-dialog.setContentPane(content);
-dialog.pack();
-dialog.setLocationRelativeTo(view);
-dialog.setVisible(true);
+modeSwitcher();
 
 /*
 
