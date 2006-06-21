@@ -52,7 +52,7 @@ public class SegmentCharSequence implements CharSequence, Serializable
 	public char charAt(int index)
 	{
 		if (reverse)
-			index = -index;
+			index = length - index - 1;
 		return seg.array[seg.offset + offset + index];
 	}
 
