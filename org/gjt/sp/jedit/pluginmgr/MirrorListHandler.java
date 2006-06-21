@@ -76,9 +76,11 @@ class MirrorListHandler extends DefaultHandler
 	{
 		tag = pushElement(tag);
 
-		if(tag.equals("MIRROR"))
+		if (tag.equals("MIRROR"))
+		{
 			mirror = new MirrorList.Mirror();
-		id = attrs.getValue("ID");
+			id = attrs.getValue("ID");
+		}
 	} //}}}
 
 	//{{{ endElement() method
