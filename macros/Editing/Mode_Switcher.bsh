@@ -38,7 +38,6 @@ import javax.swing.border.EmptyBorder;
 
 //class ModeSwitcherTextField extends JTextField
 void modeSwitcher() {
-	Mode[] modes = jEdit.getModes();
 	JDialog dialog = new JDialog(view, "Buffer Mode Switcher", true);
 	dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 	JPanel content = new JPanel(new BorderLayout());
