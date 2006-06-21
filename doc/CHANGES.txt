@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
     Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
-    Björn "Vampire" Kautler, Matthieu Casanova, Xuan Baldauf,
+    Björn "Vampire" Kautler, Matthieu Casanova, Xuân Baldauf,
 	Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
 {{{ Reinstall required
@@ -19,7 +19,7 @@ JEDIT 4.3 VERSION HISTORY
   a fix to bug 1488047). This may greatly affect the way your keys work.
   Please report any bugs regarding this (and please drop a note about
   this bug in bug 1488047).
-  (Xuan Baldauf).
+  (Xuân Baldauf).
 }}}
 
 
@@ -75,14 +75,14 @@ JEDIT 4.3 VERSION HISTORY
   The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn "Vampire" Kautler)
 
 - The "Recent files" menu can now be reaches with the keystroke sequence
-  "Alt+F F" (bug 1488066) (Xuan Baldauf)
+  "Alt+F F" (bug 1488066) (Xuân Baldauf)
 
 - The "Recent files" menu displays pathname information in the status
   line now also in cases the keyboard is used to choose menu items
-  (bug 1488060) (Xuan Baldauf)
+  (bug 1488060) (Xuân Baldauf)
 
 - Drag&Drop now accepts multiple files in KDE environment. (bug 1487647)
-  (Xuan Baldauf)
+  (Xuân Baldauf)
 
 - Mode_Switcher macro fixed to stop InvocationTargetException
   (Nicholas O'Leary)
@@ -112,7 +112,7 @@ JEDIT 4.3 VERSION HISTORY
 }}}
 
 {{{ Version 4.3pre4
-Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuan Balduf,
+Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuân Balduf,
 Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust,
 Daniel Hahler, Marcello Vanzin, Slava Pestov, Björn "Vampire" Kautler, and Jeffrey Hoyt for
 contributing to this release.
@@ -142,9 +142,9 @@ contributing to this release.
 {{{ Miscellaneous
 
 
-- TextAreaTransferHandler patch 1487647 Drag 'n' drop from KDE now works. (Xuan Baldauf)
+- TextAreaTransferHandler patch 1487647 Drag 'n' drop from KDE now works. (Xuân Baldauf)
 
-- GUIUtilities patch 1275607 for "find" dialog (Xuan Baldauf)
+- GUIUtilities patch 1275607 for "find" dialog (Xuân Baldauf)
 
 - GUIUtilities patch 1467821 for dual-head displays applied (Nathan Blair)
 
