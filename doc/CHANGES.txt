@@ -1,9 +1,10 @@
 JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre5
-    Thanks to: Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
-    Björn "Vampire" Kautler, Matthieu Casanova, Xuân Baldauf,
-	Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
+
+Thanks to Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
+Björn "Vampire" Kautler, Matthieu Casanova, Xuân Baldauf,
+Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
 {{{ Reinstall required
 - Since the regexp removal has also affected the modes handling and thus
@@ -11,7 +12,6 @@ JEDIT 4.3 VERSION HISTORY
   existing jEdit installation does not suffice. You would get weird
   errors in this case. Thus, a full reinstall is required.
 }}}
-
 {{{ Keyboard handling changes
 - There is a new option, "simplified keyboard handling"
   under "general options" to switch between two keyboard handling modes.
@@ -21,8 +21,6 @@ JEDIT 4.3 VERSION HISTORY
   this bug in bug 1488047).
   (Xuân Baldauf).
 }}}
-
-
 {{{ API Changes
 
 - Macros.Macro.invoke() has been rewritten to begin the compoundEdit on the buffer that is
@@ -63,8 +61,9 @@ JEDIT 4.3 VERSION HISTORY
   This means that any plugin that uses SearchMatcher or one of its
   implementations directly will break. (Marcelo Vanzin)
 
-}}}
+- Added Log.log(urgency, source, message, exception). (Xuân Baldauf)
 
+}}}
 {{{ Miscellaneous
 - SearchReplace dialog now supports additional options,
   for Directory Search: "skipHidden" and "skipBinary".
@@ -110,9 +109,9 @@ JEDIT 4.3 VERSION HISTORY
   some of them had errors). (Marcelo Vanzin)
 }}}
 }}}
-
 {{{ Version 4.3pre4
-Thanks to: Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuân Balduf,
+
+Thanks to Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuân Balduf,
 Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust,
 Daniel Hahler, Marcello Vanzin, Slava Pestov, Björn "Vampire" Kautler, and Jeffrey Hoyt for
 contributing to this release.
@@ -177,8 +176,6 @@ contributing to this release.
 }}}
 
 }}}
-
-
 {{{ Version 4.3pre3
 
 Thanks to Bertalan Fodor, Björn "Vampire" Kautler, David Chan, James Turk,
