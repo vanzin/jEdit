@@ -120,10 +120,9 @@ public class TokenMarker
 		ParserRule rule;
 		int terminateChar = context.rules.getTerminateChar();
 		boolean terminated = false;
-
 main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		{
-			//{{{ check if we have to stop parsing
+			//{{{ check if we have to stop parsing (happens if the terminateChar has been exceeded)
 			if(terminateChar >= 0 && pos - line.offset >= terminateChar
 				&& !terminated)
 			{
@@ -374,7 +373,7 @@ unwind:		while(context.parent != null)
 		} //}}}
 
 		int matchedChars = 1;
-		SegmentCharSequence charSeq = null;
+		CharSequence charSeq = null;
 		Matcher match = null;
 
 		//{{{ See if the rule's start or end sequence matches here
