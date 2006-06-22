@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;

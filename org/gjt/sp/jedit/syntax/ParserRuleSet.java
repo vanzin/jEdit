@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.syntax;
 //{{{ Imports
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 //}}}
 
 /**
@@ -161,6 +160,11 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ getTerminateChar() method
+	/**
+	 * Returns the number of chars that can be read before the rule parsing stops.
+	 *
+	 * @return a number of chars or -1 (default value) if there is no limit
+	 */
 	public int getTerminateChar()
 	{
 		return terminateChar;
@@ -280,7 +284,7 @@ public class ParserRuleSet
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "[" + modeName + "::" + setName + "]";
+		return getClass().getName() + '[' + modeName + "::" + setName + ']';
 	} //}}}
 
 	//{{{ Private members
@@ -289,7 +293,7 @@ public class ParserRuleSet
 	static
 	{
 		standard = new ParserRuleSet[Token.ID_COUNT];
-		for(byte i = 0; i < standard.length; i++)
+		for(byte i = 0; i < Token.ID_COUNT; i++)
 		{
 			standard[i] = new ParserRuleSet(null,null);
 			standard[i].setDefault(i);
@@ -311,6 +315,10 @@ public class ParserRuleSet
 
 	private LinkedList imports;
 
+	/**
+	 * The number of chars that can be read before the parsing stops.
+	 * &lt;TERMINATE AT_CHAR="1" /&gt;
+	 */
 	private int terminateChar = -1;
 	private boolean ignoreCase = true;
 	private byte defaultToken;
