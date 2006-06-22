@@ -2018,7 +2018,7 @@ loop:		for(;;)
 			int line = se.getLineNumber();
 			String message = se.getMessage();
 			Log.log(Log.ERROR,MiscUtilities.class,
-				"while parsing from "+in+": SAXParseException: line " + line + ": " , se);
+				"while parsing from " + in + ": SAXParseException: line " + line + ": " , se);
 			return true;
 		}
 		catch(SAXException e)
