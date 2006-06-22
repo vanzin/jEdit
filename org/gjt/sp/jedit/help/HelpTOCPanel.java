@@ -251,13 +251,17 @@ public class HelpTOCPanel extends JPanel
 		{
 			if(tag.equals("TITLE"))
 			{
+				boolean firstNonWhitespace = false;
 				for(int i = 0; i < len; i++)
 				{
 					char ch = c[off + i];
-					if(ch == ' ' || !Character.isWhitespace(ch))
-						title.append(ch);
+					if (!firstNonWhitespace && Character.isWhitespace(ch)) continue;
+					firstNonWhitespace = true;
+					title.append(ch);
 				}
 			}
+			
+			
 		} //}}}
 
 		//{{{ startElement() method
