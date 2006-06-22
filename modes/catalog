@@ -130,7 +130,7 @@
 
 <MODE NAME="freemarker"		FILE="freemarker.xml"
 				FILE_NAME_GLOB="*.ftl"
-				FIRST_LINE_GLOB="\b\#ftl*"/>
+				FIRST_LINE_GLOB="&lt;\#ftl*"/>
 
 <MODE NAME="gettext"		FILE="gettext.xml"
 				FILE_NAME_GLOB="*.{po,pot}" />
@@ -275,7 +275,7 @@
 
 <MODE NAME="php"		FILE="php.xml"
 				FILE_NAME_GLOB="*.{php3,php4,php,phtml,inc}"
-				FIRST_LINE_GLOB="{\b?php*,#!/*php*}" />
+				FIRST_LINE_GLOB="{&lt;?php*,#!/*php*}" />
 
 <MODE NAME="pike"		FILE="pike.xml"
 				FILE_NAME_GLOB="*.{pike,pmod}" />
@@ -446,7 +446,7 @@
      but all other XML parsers complain if < appears. -->
 <MODE NAME="xml"		FILE="xml.xml"
 				FILE_NAME_GLOB="*.{xml,xhtml,xsd}"
-				FIRST_LINE_GLOB="\b\?xml*" />
+				FIRST_LINE_GLOB="&lt;\?xml*" />
 
 <MODE NAME="xq"			FILE="xq.xml"
 				FILE_NAME_GLOB="*.x{q,qm,ql}" />
