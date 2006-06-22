@@ -599,6 +599,7 @@ public class View extends JFrame implements EBComponent
 			if(keyEventInterceptor != null)
 				keyEventInterceptor.keyTyped(evt);
 			else if(from == ACTION_BAR
+				|| Debug.GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES
 				|| inputHandler.isPrefixActive()
 				|| getTextArea().hasFocus())
 			{
@@ -1693,18 +1694,52 @@ loop:		for(;;)
 		if(isClosed())
 			return null;
 
-		if(getFocusOwner() instanceof JComponent)
+		if (Debug.SIMPLIFIED_KEY_HANDLING)
 		{
-			JComponent comp = (JComponent)getFocusOwner();
-			InputMap map = comp.getInputMap();
-			ActionMap am = comp.getActionMap();
-
-			if(map != null && am != null && comp.isEnabled())
+			/*
+				It seems that the "else" path below does
+				not work. Apparently, is is there to prevent
+				some keyboard events to be "swallowed" by
+				jEdit when the keyboard event in fact should
+				be scheduled to swing for further handling.
+				
+				On some "key typed" events, the "return null;"
+				is triggered. However, these key events
+				actually do not seem to be handled elseewhere,
+				so they are not handled at all.
+				
+				This behaviour exists with old keyboard handling
+				as well as with new keyboard handling. However,
+				the new keyboard handling is more sensitive
+				about what kinds of key events it receives. It
+				expects to see all "key typed" events,
+				which is incompatible with the "return null;"
+				below.
+				
+				This bug triggers jEdit bug 1493185 ( https://sourceforge.net/tracker/?func=detail&aid=1493185&group_id=588&atid=100588 ).
+				
+				Thus, we disable the possibility of
+				key event swallowing for the new key event
+				handling.			
+				
+			*/
+		}
+		else
+		{		
+			if(getFocusOwner() instanceof JComponent)
 			{
-				Object binding = map.get(KeyStroke.getKeyStrokeForEvent(evt));
-				if(binding != null && am.get(binding) != null)
+				JComponent comp = (JComponent)getFocusOwner();
+				InputMap map = comp.getInputMap();
+				ActionMap am = comp.getActionMap();
+	
+				if(map != null && am != null && comp.isEnabled())
 				{
-					return null;
+					KeyStroke	keyStroke	= KeyStroke.getKeyStrokeForEvent(evt); 
+					Object binding = map.get(keyStroke);
+					if(binding != null && am.get(binding) != null)
+					{
+						return null;
+					}
 				}
 			}
 		}

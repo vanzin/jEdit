@@ -120,6 +120,20 @@ public class Debug
 
 	
 	public static boolean SIMPLIFIED_KEY_HANDLING	= jEdit.getBooleanProperty("newkeyhandling");
+	
+	/**
+	 * With old key handling (SIMPLIFIED_KEY_HANDLING==false), there was a
+	 * bug: Shortcuts worked also when docked dockables had the focus.
+	 * Actually, they should not have worked in this case.
+	 * With new key handling (SIMPLIFIED_KEY_HANDLING==true), this bug
+	 * does not persist anymore. However, to be compatible with old
+	 * key handling and old users experience, we can explicitly allow
+	 * this behaviour.
+	 *
+	 * See also: jEdit bug 1493185 ( https://sourceforge.net/tracker/?func=detail&aid=1493185&group_id=588&atid=100588 ).
+	 */
+	public static boolean GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES = true;
+	
 	/**
 	 * Geometry workaround for X11.
 	 */
