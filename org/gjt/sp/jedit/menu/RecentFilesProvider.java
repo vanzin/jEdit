@@ -86,7 +86,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 
 		List recentVector = BufferHistory.getHistory();
 
-		if(recentVector.size() == 0)
+		if(recentVector.isEmpty())
 		{
 			JMenuItem menuItem = new JMenuItem(
 				jEdit.getProperty("no-recent-files.label"));
@@ -133,7 +133,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 
 		if(sort)
 		{
-			MiscUtilities.quicksort(menuItems,
+			Collections.sort(menuItems,
 				new MiscUtilities.MenuItemCompare());
 			for(int i = 0; i < menuItems.size(); i++)
 			{

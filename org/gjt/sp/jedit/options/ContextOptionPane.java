@@ -103,7 +103,7 @@ public class ContextOptionPane extends AbstractOptionPane
 		add(BorderLayout.SOUTH,buttons);
 	}
 
-	static class MenuItemCompare implements MiscUtilities.Compare
+	static class MenuItemCompare implements Comparator
 	{
 		public int compare(Object obj1, Object obj2)
 		{
@@ -364,7 +364,7 @@ class ContextAddDialog extends EnhancedDialog
 				action.getName(),label));
 		}
 
-		MiscUtilities.quicksort(listModel,new ContextOptionPane.MenuItemCompare());
+		Collections.sort(listModel,new ContextOptionPane.MenuItemCompare());
 
 		list.setListData(listModel);
 	}

@@ -23,10 +23,11 @@
 package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
+import java.util.Arrays;
+
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.*;
@@ -115,7 +116,7 @@ public class DirectoryProvider implements DynamicMenuProvider
 		{
 			int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
 
-			MiscUtilities.quicksort(list,
+			Arrays.sort(list,
 				new MiscUtilities.StringICaseCompare());
 			for(int i = 0; i < list.length; i++)
 			{

@@ -23,9 +23,10 @@
 package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Arrays;
+
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
@@ -74,7 +75,7 @@ public class FavoritesProvider implements DynamicMenuProvider
 		}
 		else
 		{
-			MiscUtilities.quicksort(favorites,
+			Arrays.sort(favorites,
 				new VFS.DirectoryEntryCompare(
 				jEdit.getBooleanProperty("vfs.browser.sortMixFilesAndDirs"),
 				jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase")));

@@ -23,7 +23,6 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import bsh.UtilEvalError;
-import javax.swing.plaf.metal.*;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.*;
@@ -3087,7 +3086,7 @@ public class jEdit
 		if (snippets == null)
 			return;
 
-		MiscUtilities.quicksort(snippets,
+		Arrays.sort(snippets,
 			new MiscUtilities.StringICaseCompare());
 
 		for (int i = 0; i < snippets.length; ++i)
@@ -3336,7 +3335,7 @@ public class jEdit
 		if (snippets == null)
 			return;
 
-		MiscUtilities.quicksort(snippets,
+		Arrays.sort(snippets,
 			new MiscUtilities.StringICaseCompare());
 
 		for(int i = 0; i < snippets.length; ++i)

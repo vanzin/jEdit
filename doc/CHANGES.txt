@@ -50,6 +50,9 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   jEditBuffer.getPatternProperty() was added to replace it.
   (Marcelo Vanzin)
 
+- MiscUtilities.quickSort() methods and MiscUtilities.Compare class are now deprecated
+	use Arrays.sort() and Collections.sort() (Matthieu Casanova)
+	
 - MiscUtilities.parseXML() and MiscUtilities.findEntity() were added.
   They're mainly used internally to ease XML parsing, but can safely
   be used by other people. Please refer to the javadoc documentation
