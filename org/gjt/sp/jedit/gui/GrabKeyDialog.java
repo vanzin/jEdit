@@ -437,25 +437,48 @@ public class GrabKeyDialog extends JDialog
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
 
-			if(key.modifiers != null)
-				keyString.append(key.modifiers).append('+');
-
 			if (Debug.DUMP_KEY_EVENTS) {
 				Log.log(Log.DEBUG,GrabKeyDialog.class,"processKeyEvent() key="+key+".");
 			}
 
-			if(key.input == ' ')
-				keyString.append("SPACE");
-			else if(key.input != '\0')
-				keyString.append(key.input);
-			else
-			{
+			if (!Debug.SIMPLIFIED_KEY_HANDLING) {
+				if(key.modifiers != null)
+					keyString.append(key.modifiers).append('+');
+	
+				if(key.input == ' ')
+					keyString.append("SPACE");
+				else if(key.input != '\0')
+					keyString.append(key.input);
+				else
+				{
+					String symbolicName = getSymbolicName(key.key);
+	
+					if(symbolicName == null)
+						return;
+	
+					keyString.append(symbolicName);
+				}
+			} else {
+				if(key.modifiers != null) {
+					keyString.append(key.modifiers).append('+');
+				}
+				
 				String symbolicName = getSymbolicName(key.key);
 
-				if(symbolicName == null)
-					return;
+				if(symbolicName != null) { 
+					keyString.append(symbolicName);
+				} else {
+					if (key.input != '\0') {
+						if (key.input == ' ') {
+							keyString.append("SPACE");
+						} else {
+							keyString.append(key.input);
+						}
+					} else {
+						return;
+					}
+				}
 
-				keyString.append(symbolicName);
 			}
 
 			setText(keyString.toString());
