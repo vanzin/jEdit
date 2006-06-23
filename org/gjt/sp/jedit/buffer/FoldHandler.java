@@ -26,7 +26,6 @@ import java.util.*;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.ServiceManager;
-import org.gjt.sp.util.Log;
 
 /**
  * Interface for obtaining the fold level of a specified line.<p>
