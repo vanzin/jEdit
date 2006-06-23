@@ -423,6 +423,11 @@ public class GrabKeyDialog extends JDialog
 
 			KeyEventTranslator.Key key = KeyEventTranslator
 				.translateKeyEvent(evt);
+				
+			if (Debug.DUMP_KEY_EVENTS) {
+				Log.log(Log.DEBUG,GrabKeyDialog.class,"processKeyEvent() key="+key+", _evt="+_evt+".");
+			}
+
 			if(key == null)
 				return;
 
@@ -436,10 +441,6 @@ public class GrabKeyDialog extends JDialog
 
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
-
-			if (Debug.DUMP_KEY_EVENTS) {
-				Log.log(Log.DEBUG,GrabKeyDialog.class,"processKeyEvent() key="+key+".");
-			}
 
 			if (!Debug.SIMPLIFIED_KEY_HANDLING) {
 				if(key.modifiers != null)
