@@ -47,7 +47,7 @@ import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
-
+import org.gjt.sp.util.StandardUtilities;
 
 //}}}
 
@@ -2992,7 +2992,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		int firstIndent = chunkCache.getSubregionStartOffset(line,offset);
 		if(firstIndent == getLineStartOffset(line))
 		{
-			firstIndent = MiscUtilities.getLeadingWhiteSpace(getLineText(line));
+			firstIndent = StandardUtilities.getLeadingWhiteSpace(getLineText(line));
 			if(firstIndent == getLineLength(line))
 				firstIndent = 0;
 			firstIndent += getLineStartOffset(line);
@@ -3940,7 +3940,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			{
 				String text = getLineText(lines[i]);
 				buffer.insert(getLineStartOffset(lines[i])
-					+ MiscUtilities.getLeadingWhiteSpace(text),
+					+ StandardUtilities.getLeadingWhiteSpace(text),
 					comment);
 			}
 		}
@@ -4292,7 +4292,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			// if caret is inside leading whitespace, indent.
 			String text = buffer.getLineText(caretLine);
 			int start = buffer.getLineStartOffset(caretLine);
-			int whiteSpace = MiscUtilities.getLeadingWhiteSpace(text);
+			int whiteSpace = StandardUtilities.getLeadingWhiteSpace(text);
 
 			if(caret - start <= whiteSpace
 				&& buffer.indentLine(caretLine,false))
@@ -4365,7 +4365,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			try
 			{
 				buffer.beginCompoundEdit();
-				buffer.remove(end - 1,MiscUtilities.getLeadingWhiteSpace(
+				buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
 					buffer.getLineText(caretLine + 1)) + 1);
 				buffer.insert(end - 1, " ");
 			}
@@ -4390,7 +4390,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 					int end = getLineEndOffset(selectedLines[i]-offset);
 					buffer.remove(
-					end - 1,MiscUtilities.getLeadingWhiteSpace(
+					end - 1,StandardUtilities.getLeadingWhiteSpace(
 						buffer.getLineText(selectedLines[i] + 1 - offset)) + 1);
 					buffer.insert(end - 1, " ");
 					offset++;
@@ -5369,7 +5369,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				}
 			}
 
-			replaceSelection(MiscUtilities.createWhiteSpace(
+			replaceSelection(StandardUtilities.createWhiteSpace(
 				tabSize - pos,0));
 		}
 		else
@@ -5887,7 +5887,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		String line = buffer.getLineText(lineStart);
 		String whitespace = line.substring(0,
-			MiscUtilities.getLeadingWhiteSpace(line));
+			StandardUtilities.getLeadingWhiteSpace(line));
 
 
 		if(caretEnd == buffer.getLineStartOffset(lineEnd))

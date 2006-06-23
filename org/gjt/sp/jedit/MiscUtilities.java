@@ -34,7 +34,6 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import org.xml.sax.InputSource;
@@ -47,8 +46,10 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
+import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.buffer.BufferIORequest;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}
 
 /**
@@ -132,7 +133,7 @@ public class MiscUtilities
 				path = path.replace(':','/');
 			}
 
-		if(path.startsWith("~" + File.separator))
+		if(path.startsWith('~' + File.separator))
 			{
 				path = path.substring(2);
 				String home = System.getProperty("user.home");
@@ -246,7 +247,7 @@ public class MiscUtilities
 			}
 
 		String dd = ".." + File.separator;
-		String d = "." + File.separator;
+		String d = '.' + File.separator;
 
 		if(parent == null)
 			parent = System.getProperty("user.dir");
@@ -270,7 +271,7 @@ public class MiscUtilities
 
 		if(OperatingSystem.isDOSDerived()
 		   && !isURL(parent)
-		   && path.startsWith("\\"))
+		   && path.charAt(0) == '\\')
 			parent = parent.substring(0,2);
 
 		VFS vfs = VFSManager.getVFSForPath(parent);
@@ -753,7 +754,7 @@ public class MiscUtilities
 		if (buffer == null)
 			encoding = System.getProperty("file.encoding");
 		else
-			encoding = buffer.getStringProperty(Buffer.ENCODING);
+			encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
 
 		if(!in.markSupported())
 			Log.log(Log.WARNING,MiscUtilities.class,"Mark not supported: " + in);
@@ -781,7 +782,7 @@ public class MiscUtilities
 				in.read();
 				encoding = "UTF-16BE";
 				if (buffer != null)
-					buffer.setProperty(Buffer.ENCODING,encoding);
+					buffer.setProperty(JEditBuffer.ENCODING,encoding);
 			}
 			else if (b1 == BufferIORequest.UNICODE_MAGIC_2
 				&& b2 == BufferIORequest.UNICODE_MAGIC_1)
@@ -791,7 +792,7 @@ public class MiscUtilities
 				in.read();
 				encoding = "UTF-16LE";
 				if (buffer != null)
-					buffer.setProperty(Buffer.ENCODING,encoding);
+					buffer.setProperty(JEditBuffer.ENCODING,encoding);
 			}
 			else if(b1 == BufferIORequest.UTF8_MAGIC_1 && b2 == BufferIORequest.UTF8_MAGIC_2
 				&& b3 == BufferIORequest.UTF8_MAGIC_3)
@@ -799,7 +800,7 @@ public class MiscUtilities
 				// do not reset the stream and just treat it
 				// like a normal UTF-8 file.
 				if (buffer != null)
-					buffer.setProperty(Buffer.ENCODING, MiscUtilities.UTF_8_Y);
+					buffer.setProperty(JEditBuffer.ENCODING, MiscUtilities.UTF_8_Y);
 
 				encoding = "UTF-8";
 			}
@@ -824,7 +825,7 @@ public class MiscUtilities
 				{
 					encoding = xmlEncoding;
 					if (buffer != null)
-						buffer.setProperty(Buffer.ENCODING,encoding);
+						buffer.setProperty(JEditBuffer.ENCODING,encoding);
 				}
 
 				if(encoding.equals(MiscUtilities.UTF_8_Y))
@@ -996,22 +997,11 @@ public class MiscUtilities
 	 * Returns the number of leading white space characters in the
 	 * specified string.
 	 * @param str The string
+	 * @deprecated use {@link StandardUtilities#getLeadingWhiteSpace(String)}
 	 */
 	public static int getLeadingWhiteSpace(String str)
 	{
-		int whitespace = 0;
-		loop:		for(;whitespace < str.length();)
-			{
-				switch(str.charAt(whitespace))
-					{
-					case ' ': case '\t':
-						whitespace++;
-						break;
-					default:
-						break loop;
-					}
-			}
-		return whitespace;
+		return StandardUtilities.getLeadingWhiteSpace(str);
 	} //}}}
 
 	//{{{ getTrailingWhiteSpace() method
@@ -1020,22 +1010,11 @@ public class MiscUtilities
 	 * specified string.
 	 * @param str The string
 	 * @since jEdit 2.5pre5
+	 * @deprecated use {@link StandardUtilities#getTrailingWhiteSpace(String)}
 	 */
 	public static int getTrailingWhiteSpace(String str)
 	{
-		int whitespace = 0;
-		loop:		for(int i = str.length() - 1; i >= 0; i--)
-			{
-				switch(str.charAt(i))
-					{
-					case ' ': case '\t':
-						whitespace++;
-						break;
-					default:
-						break loop;
-					}
-			}
-		return whitespace;
+		return StandardUtilities.getTrailingWhiteSpace(str);
 	} //}}}
 
 	//{{{ getLeadingWhiteSpaceWidth() method
@@ -1044,25 +1023,11 @@ public class MiscUtilities
 	 * string.
 	 * @param str The string
 	 * @param tabSize The tab size
+	 * @deprecated use {@link StandardUtilities#getLeadingWhiteSpace(String)}
 	 */
 	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
 	{
-		int whitespace = 0;
-		loop:		for(int i = 0; i < str.length(); i++)
-			{
-				switch(str.charAt(i))
-					{
-					case ' ':
-						whitespace++;
-						break;
-					case '\t':
-						whitespace += (tabSize - whitespace % tabSize);
-						break;
-					default:
-						break loop;
-					}
-			}
-		return whitespace;
+		return StandardUtilities.getLeadingWhiteSpaceWidth(str, tabSize);
 	} //}}}
 
 	//{{{ getVirtualWidth() method
@@ -1073,27 +1038,11 @@ public class MiscUtilities
 	 * @param seg The segment
 	 * @param tabSize The tab size
 	 * @since jEdit 4.1pre1
+	 * @deprecated use {@link StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
 	 */
 	public static int getVirtualWidth(Segment seg, int tabSize)
 	{
-		int virtualPosition = 0;
-
-		for (int i = 0; i < seg.count; i++)
-			{
-				char ch = seg.array[seg.offset + i];
-
-				if (ch == '\t')
-					{
-						virtualPosition += tabSize
-							- (virtualPosition % tabSize);
-					}
-				else
-					{
-						++virtualPosition;
-					}
-			}
-
-		return virtualPosition;
+		return StandardUtilities.getVirtualWidth(seg, tabSize);
 	} //}}}
 
 	//{{{ getOffsetOfVirtualColumn() method
@@ -1111,37 +1060,12 @@ public class MiscUtilities
 	 * @return -1 if the column is out of bounds
 	 *
 	 * @since jEdit 4.1pre1
+	 * @deprecated use {@link StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
 	 */
 	public static int getOffsetOfVirtualColumn(Segment seg, int tabSize,
-											   int column, int[] totalVirtualWidth)
+					    int column, int[] totalVirtualWidth)
 	{
-		int virtualPosition = 0;
-
-		for (int i = 0; i < seg.count; i++)
-			{
-				char ch = seg.array[seg.offset + i];
-
-				if (ch == '\t')
-					{
-						int tabWidth = tabSize
-							- (virtualPosition % tabSize);
-						if(virtualPosition >= column)
-							return i;
-						else
-							virtualPosition += tabWidth;
-					}
-				else
-					{
-						if(virtualPosition >= column)
-							return i;
-						else
-							++virtualPosition;
-					}
-			}
-
-		if(totalVirtualWidth != null)
-			totalVirtualWidth[0] = virtualPosition;
-		return -1;
+		return StandardUtilities.getOffsetOfVirtualColumn(seg, tabSize, column, totalVirtualWidth);
 	} //}}}
 
 	//{{{ createWhiteSpace() method
@@ -1157,10 +1081,11 @@ public class MiscUtilities
 	 *
 	 * @param len The length
 	 * @param tabSize The tab size, or 0 if tabs are not to be used
+	 * @deprecated use {@link StandardUtilities#createWhiteSpace(int, int)}
 	 */
 	public static String createWhiteSpace(int len, int tabSize)
 	{
-		return createWhiteSpace(len,tabSize,0);
+		return StandardUtilities.createWhiteSpace(len,tabSize,0);
 	} //}}}
 
 	//{{{ createWhiteSpace() method
@@ -1178,29 +1103,11 @@ public class MiscUtilities
 	 * @param tabSize The tab size, or 0 if tabs are not to be used
 	 * @param start The start offset, for tab alignment
 	 * @since jEdit 4.2pre1
+	 * @deprecated use {@link StandardUtilities#createWhiteSpace(int, int, int)}
 	 */
 	public static String createWhiteSpace(int len, int tabSize, int start)
 	{
-		StringBuffer buf = new StringBuffer();
-		if(tabSize == 0)
-			{
-				while(len-- > 0)
-					buf.append(' ');
-			}
-		else if(len == 1)
-			buf.append(' ');
-		else
-			{
-				int count = (len + start % tabSize) / tabSize;
-				if(count != 0)
-					len += start;
-				while(count-- > 0)
-					buf.append('\t');
-				count = len % tabSize;
-				while(count-- > 0)
-					buf.append(' ');
-			}
-		return buf.toString();
+		return StandardUtilities.createWhiteSpace(len, tabSize, start);
 	} //}}}
 
 	//{{{ globToRE() method
