@@ -184,7 +184,7 @@ public class BufferSaveRequest extends BufferIORequest
 		}
 		catch(WorkThread.Abort a)
 		{
-			MiscUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly(out);
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally

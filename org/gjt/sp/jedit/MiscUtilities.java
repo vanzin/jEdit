@@ -47,6 +47,7 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -874,20 +875,11 @@ public class MiscUtilities
 	 *
 	 * @param in the InputStream to close.
 	 * @since jEdit 4.3pre3
+	 * @deprecated use {@link IOUtilities#closeQuietly(java.io.InputStream)}
 	 */
 	public static void closeQuietly(InputStream in)
 	{
-		if(in != null)
-		{
-			try
-			{
-				in.close();
-			}
-			catch (IOException e)
-			{
-				//ignore
-			}
-		}
+		IOUtilities.closeQuietly(in);
 	} //}}}
 
 	//{{{ copyStream() method
@@ -896,42 +888,11 @@ public class MiscUtilities
 	 *
 	 * @param out the OutputStream to close.
 	 * @since jEdit 4.3pre3
+	 * @deprecated use {@link IOUtilities#closeQuietly(java.io.OutputStream)}
 	 */
 	public static void closeQuietly(OutputStream out)
 	{
-		if(out != null)
-			{
-				try
-					{
-						out.close();
-					}
-				catch (IOException e)
-					{
-						//ignore
-					}
-			}
-	} //}}}
-
-  	//{{{ copyStream() method
-	/**
-	 * Method that will close an {@link Reader} ignoring it if it is null and ignoring exceptions.
-	 *
-	 * @param r the Reader to close.
-	 * @since jEdit 4.3pre5
-	 */
-	public static void closeQuietly(Reader r)
-	{
-		if(r != null)
-			{
-				try
-					{
-						r.close();
-					}
-				catch (IOException e)
-					{
-						//ignore
-					}
-			}
+		IOUtilities.closeQuietly(out);
 	} //}}}
 
 	//{{{ fileToClass() method
@@ -1549,6 +1510,7 @@ loop:		for(;;)
 	 * @param obj The array
 	 * @param compare Compares the objects
 	 * @since jEdit 4.0pre4
+	 * @deprecated use <code>Arrays.sort()</code>
 	 */
 	public static void quicksort(Object[] obj, Comparator compare)
 	{
@@ -1561,6 +1523,7 @@ loop:		for(;;)
 	 * @param vector The vector
 	 * @param compare Compares the objects
 	 * @since jEdit 4.0pre4
+	 * @deprecated <code>Collections.sort()</code>
 	 */
 	public static void quicksort(Vector vector, Comparator compare)
 	{
@@ -1573,6 +1536,7 @@ loop:		for(;;)
 	 * @param list The list
 	 * @param compare Compares the objects
 	 * @since jEdit 4.0pre4
+	 * @deprecated <code>Collections.sort()</code>
 	 */
 	public static void quicksort(List list, Comparator compare)
 	{
@@ -1585,6 +1549,7 @@ loop:		for(;;)
 	 * <code>Arrays.sort()</code>.
 	 * @param obj The array
 	 * @param compare Compares the objects
+	 * @deprecated use <code>Arrays.sort()</code>
 	 */
 	public static void quicksort(Object[] obj, Compare compare)
 	{
@@ -1596,6 +1561,7 @@ loop:		for(;;)
 	 * Sorts the specified vector.
 	 * @param vector The vector
 	 * @param compare Compares the objects
+	 * @deprecated <code>Collections.sort()</code>
 	 */
 	public static void quicksort(Vector vector, Compare compare)
 	{
@@ -1608,6 +1574,7 @@ loop:		for(;;)
 	 * they days when jEdit had its own sorting API due to JDK 1.1
 	 * compatibility requirements. Use <code>java.util.Comparable</code>
 	 * instead.
+	 * @deprecated
 	 */
 	public interface Compare extends Comparator
 	{

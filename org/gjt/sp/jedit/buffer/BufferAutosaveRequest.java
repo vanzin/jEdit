@@ -23,11 +23,7 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import javax.swing.text.Segment;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.zip.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -88,23 +84,14 @@ public class BufferAutosaveRequest extends BufferIORequest
 			catch(Exception e)
 			{
 			}
-			finally
-			{
+			//finally
+			//{
 				//buffer.readUnlock();
-			}
+			//}
 		}
 		catch(WorkThread.Abort a)
 		{
-			if(out != null)
-			{
-				try
-				{
-					out.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
+			IOUtilities.closeQuietly(out);
 		}
 	} //}}}
 }

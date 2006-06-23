@@ -40,8 +40,11 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 - MiscUtilities.autodetect() this method tries to autodetect the file encoding. It was moved
   from BufferIORequest (Matthieu Casanova)
 
-- MiscUtilities.closeQuietly(Reader) simply close a Reader ignoring if it is null or if there
-  are IOExceptions (Matthieu Casanova)
+-New utility class : IOUtilities that will contains static IO methods that
+	depends only on JDK. (Matthieu Casanova)
+
+-New utility class : StandardUtilities that will contains static
+	methods that depends only on JDK (Matthieu Casanova)
 
 - jEditBuffer.getRegexProperty() has been removed;
   jEditBuffer.getPatternProperty() was added to replace it.
