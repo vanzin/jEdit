@@ -31,7 +31,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.indent.*;
 import org.gjt.sp.jedit.syntax.*;
@@ -752,17 +751,17 @@ public class JEditBuffer
 			{
 				int lineStart = getLineStartOffset(lines[i]);
 				String line = getLineText(lines[i]);
-				int whiteSpace = MiscUtilities
+				int whiteSpace = StandardUtilities
 					.getLeadingWhiteSpace(line);
 				if(whiteSpace == 0)
 					continue;
-				int whiteSpaceWidth = Math.max(0,MiscUtilities
+				int whiteSpaceWidth = Math.max(0,StandardUtilities
 					.getLeadingWhiteSpaceWidth(line,tabSize)
 					- indentSize);
 
-				insert(lineStart + whiteSpace,MiscUtilities
+				insert(lineStart + whiteSpace,StandardUtilities
 					.createWhiteSpace(whiteSpaceWidth,
-					(noTabs ? 0 : tabSize)));
+		      			 noTabs ? 0 : tabSize));
 				remove(lineStart,whiteSpace);
 			}
 
@@ -792,19 +791,19 @@ public class JEditBuffer
 			{
 				int lineStart = getLineStartOffset(lines[i]);
 				String line = getLineText(lines[i]);
-				int whiteSpace = MiscUtilities
+				int whiteSpace = StandardUtilities
 					.getLeadingWhiteSpace(line);
 
 				// silly usability hack
 				//if(lines.length != 1 && whiteSpace == 0)
 				//	continue;
 
-				int whiteSpaceWidth = MiscUtilities
+				int whiteSpaceWidth = StandardUtilities
 					.getLeadingWhiteSpaceWidth(
 					line,tabSize) + indentSize;
-				insert(lineStart + whiteSpace,MiscUtilities
+				insert(lineStart + whiteSpace,StandardUtilities
 					.createWhiteSpace(whiteSpaceWidth,
-					(noTabs ? 0 : tabSize)));
+					noTabs ? 0 : tabSize));
 				remove(lineStart,whiteSpace);
 			}
 		}
@@ -893,7 +892,7 @@ public class JEditBuffer
 			int start = getLineStartOffset(lineIndex);
 
 			remove(start,whitespaceChars[0]);
-			insert(start,MiscUtilities.createWhiteSpace(
+			insert(start,StandardUtilities.createWhiteSpace(
 				idealIndent,(getBooleanProperty("noTabs")
 				? 0 : getTabSize())));
 		}
@@ -957,7 +956,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			: getPriorNonEmptyLine(prevLineIndex);
 
 		int oldIndent = (prevLineIndex == -1 ? 0 :
-			MiscUtilities.getLeadingWhiteSpaceWidth(
+			StandardUtilities.getLeadingWhiteSpaceWidth(
 			getLineText(prevLineIndex),
 			getTabSize()));
 		int newIndent = oldIndent;
@@ -1008,7 +1007,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			int start = getLineStartOffset(line);
 			getText(start,column,seg);
 
-			return MiscUtilities.getVirtualWidth(seg,getTabSize());
+			return StandardUtilities.getVirtualWidth(seg,getTabSize());
 		}
 		finally
 		{
@@ -1040,7 +1039,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			getLineText(line,seg);
 
-			return MiscUtilities.getOffsetOfVirtualColumn(seg,
+			return StandardUtilities.getOffsetOfVirtualColumn(seg,
 				getTabSize(),column,totalVirtualWidth);
 		}
 		finally
@@ -1069,7 +1068,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(offset == -1)
 			{
 				offset = getLineEndOffset(line) - 1;
-				str = MiscUtilities.createWhiteSpace(col - total[0],0) + str;
+				str = StandardUtilities.createWhiteSpace(col - total[0],0) + str;
 			}
 			else
 				offset += getLineStartOffset(line);
@@ -1105,10 +1104,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 			int firstLine = getLineOfOffset(offset);
 			String lineText = getLineText(firstLine);
 			int leadingIndent
-				= MiscUtilities.getLeadingWhiteSpaceWidth(
+				= StandardUtilities.getLeadingWhiteSpaceWidth(
 				lineText,getTabSize());
 
-			String whiteSpace = MiscUtilities.createWhiteSpace(
+			String whiteSpace = StandardUtilities.createWhiteSpace(
 				leadingIndent,getBooleanProperty("noTabs")
 				? 0 : getTabSize());
 
@@ -2502,7 +2501,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,"Bad indent rule " + prop
-				+ "=" + value + ":");
+				+ '=' + value + ':');
 			Log.log(Log.ERROR,this,e);
 		}
 
@@ -2513,7 +2512,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private List createBracketIndentRules(String prop)
 	{
 		List returnValue = new ArrayList();
-		String value = getStringProperty(prop + "s");
+		String value = getStringProperty(prop + 's');
 
 		try
 		{
@@ -2534,7 +2533,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,"Bad indent rule " + prop
-				+ "=" + value + ":");
+				+ '=' + value + ':');
 			Log.log(Log.ERROR,this,e);
 		}
 

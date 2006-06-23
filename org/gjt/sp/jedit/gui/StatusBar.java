@@ -32,7 +32,6 @@ import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
 import java.text.*;
-import java.util.Calendar;
 import java.util.Date;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.textarea.*;
@@ -397,7 +396,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				return;
 
 			buffer.getText(start,dot,seg);
-			int virtualPosition = MiscUtilities.getVirtualWidth(seg,
+			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
 				buffer.getTabSize());
 
 			buf.setLength(0);

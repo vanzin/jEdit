@@ -29,10 +29,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 class MouseHandler extends MouseInputAdapter
@@ -164,7 +164,7 @@ class MouseHandler extends MouseInputAdapter
 			{
 				// control-click in virtual space inserts
 				// whitespace and moves caret
-				String whitespace = MiscUtilities
+				String whitespace = StandardUtilities
 					.createWhiteSpace(extraEndVirt,0);
 				textArea.getBuffer().insert(dragStart,whitespace);
 

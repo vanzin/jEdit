@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.indent;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.util.StandardUtilities;
 
 public interface IndentAction
 {
@@ -188,7 +189,7 @@ public interface IndentAction
 				return newIndent;
 			else
 			{
-				return MiscUtilities.getLeadingWhiteSpaceWidth(
+				return StandardUtilities.getLeadingWhiteSpaceWidth(
 					openBracketLineText,buffer.getTabSize())
 					+ (extraIndent * buffer.getIndentSize());
 			}

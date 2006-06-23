@@ -24,8 +24,8 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.util.ArrayList;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -518,7 +518,7 @@ public abstract class Selection implements Cloneable
 				if(startWhitespace != 0)
 				{
 					buffer.insert(rectStart + lineStart,
-						MiscUtilities.createWhiteSpace(startWhitespace,0));
+						StandardUtilities.createWhiteSpace(startWhitespace,0));
 				}
 
 				int endWhitespace;
@@ -549,7 +549,7 @@ public abstract class Selection implements Cloneable
 				{
 					buffer.insert(rectStart + lineStart
 						+ startWhitespace,
-						MiscUtilities.createWhiteSpace(endWhitespace,0));
+						StandardUtilities.createWhiteSpace(endWhitespace,0));
 				}
 
 				endOffset = rectStart + lineStart
