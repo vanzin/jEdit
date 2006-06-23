@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.buffer;
 
 import javax.swing.event.ListDataListener;
-import javax.swing.ListModel;
 import java.io.*;
 import java.util.*;
 
