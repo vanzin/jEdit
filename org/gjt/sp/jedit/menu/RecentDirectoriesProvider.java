@@ -23,10 +23,11 @@
 package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.Vector;
+import java.util.Collections;
+
 import org.gjt.sp.jedit.browser.*;
 import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.*;
@@ -116,7 +117,7 @@ public class RecentDirectoriesProvider implements DynamicMenuProvider
 
 		if(sort)
 		{
-			MiscUtilities.quicksort(menuItems,
+			Collections.sort(menuItems,
 				new MiscUtilities.MenuItemCompare());
 			for(int i = 0; i < menuItems.size(); i++)
 			{

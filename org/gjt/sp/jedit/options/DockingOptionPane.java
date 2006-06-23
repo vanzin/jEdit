@@ -25,11 +25,12 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.table.*;
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -86,7 +87,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ createWindowModel() method
-	private WindowTableModel createWindowModel()
+	private static WindowTableModel createWindowModel()
 	{
 		return new WindowTableModel();
 	} //}}}
@@ -94,7 +95,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ DockPositionCellRenderer class
-	class DockPositionCellRenderer extends JComboBox
+	static class DockPositionCellRenderer extends JComboBox
 		implements TableCellRenderer
 	{
 		DockPositionCellRenderer()
@@ -142,7 +143,7 @@ class WindowTableModel extends AbstractTableModel
 	//{{{ sort() method
 	public void sort()
 	{
-		MiscUtilities.quicksort(windows,new WindowCompare());
+		Collections.sort(windows,new WindowCompare());
 		fireTableDataChanged();
 	} //}}}
 
@@ -235,7 +236,7 @@ class WindowTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ Entry class
-	class Entry
+	static class Entry
 	{
 		String name;
 		String title;
@@ -260,7 +261,7 @@ class WindowTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ WindowCompare class
-	class WindowCompare implements MiscUtilities.Compare
+	static class WindowCompare implements Comparator
 	{
 		public int compare(Object obj1, Object obj2)
 		{

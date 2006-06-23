@@ -648,23 +648,13 @@ public class MiscUtilities
 	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
 	 * @throws IOException  IOException If an I/O error occurs
 	 * @since jEdit 4.3pre3
+	 * @deprecated use {@link IOUtilities#copyStream(int, org.gjt.sp.util.ProgressObserver, java.io.InputStream, java.io.OutputStream, boolean)}
 	 */
 	public static boolean copyStream(int bufferSize, ProgressObserver progress,
 									 InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
-		byte[] buffer = new byte[bufferSize];
-		int n;
-		long copied = 0;
-		while (-1 != (n = in.read(buffer)))
-			{
-				out.write(buffer, 0, n);
-				copied += n;
-				if(progress != null)
-					progress.setValue(copied);
-				if(canStop && Thread.interrupted()) return false;
-			}
-		return true;
+		return IOUtilities.copyStream(bufferSize, progress, in, out, canStop);
 	} //}}}
 
 	//{{{ copyStream() method
@@ -678,6 +668,7 @@ public class MiscUtilities
 	 * @return <code>true</code> if the copy was done, <code>false</code> if it was interrupted
 	 * @throws IOException  IOException If an I/O error occurs
 	 * @since jEdit 4.3pre3
+	 * @deprecated use {@link IOUtilities#copyStream(org.gjt.sp.util.ProgressObserver, java.io.InputStream, java.io.OutputStream, boolean)}
 	 */
 	public static boolean copyStream(ProgressObserver progress,
 									 InputStream in, OutputStream out, boolean canStop)
@@ -706,7 +697,7 @@ public class MiscUtilities
 	{
 		int nbChars = jEdit.getIntegerProperty("vfs.binaryCheck.length",100);
 		int authorized = jEdit.getIntegerProperty("vfs.binaryCheck.count",1);
-		for (long i = 0;i < nbChars;i++)
+		for (long i = 0L;i < nbChars;i++)
 		{
 			int c = reader.read();
 			if (c == -1)

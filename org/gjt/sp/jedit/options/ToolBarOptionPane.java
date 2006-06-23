@@ -208,7 +208,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	//{{{ Inner classes
 
 	//{{{ ButtonCompare class
-	static class ButtonCompare implements MiscUtilities.Compare
+	static class ButtonCompare implements Comparator
 	{
 		public int compare(Object obj1, Object obj2)
 		{
@@ -659,7 +659,7 @@ class ToolBarEditDialog extends EnhancedDialog
 				action.getName(),null,null,label));
 		}
 
-		MiscUtilities.quicksort(listModel,new ToolBarOptionPane.ButtonCompare());
+		Collections.sort(listModel,new ToolBarOptionPane.ButtonCompare());
 		list.setListData(listModel);
 	} //}}}
 

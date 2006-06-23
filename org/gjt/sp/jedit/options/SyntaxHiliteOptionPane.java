@@ -30,6 +30,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.Vector;
+import java.util.Collections;
+
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.gui.ColorWellButton;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
@@ -96,7 +98,7 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ createStyleTableModel() method
-	private StyleTableModel createStyleTableModel()
+	private static StyleTableModel createStyleTableModel()
 	{
 		return new StyleTableModel();
 	} //}}}
@@ -147,7 +149,7 @@ class StyleTableModel extends AbstractTableModel
 		addStyleChoice(jEdit.getProperty("options.syntax.foldLine.0"),
 			"view.style.foldLine.0");
 
-		MiscUtilities.quicksort(styleChoices,new MiscUtilities.StringICaseCompare());
+		Collections.sort(styleChoices,new MiscUtilities.StringICaseCompare());
 	} //}}}
 
 	//{{{ getColumnCount() method

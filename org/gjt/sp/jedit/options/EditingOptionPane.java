@@ -25,6 +25,8 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Arrays;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 //}}}
@@ -41,7 +43,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		Mode[] modes = jEdit.getModes();
-		MiscUtilities.quicksort(modes,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(modes,new MiscUtilities.StringICaseCompare());
 
 		global = new ModeProperties();
 		modeProps = new ModeProperties[modes.length];
@@ -267,7 +269,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ ModeProperties class
-	class ModeProperties
+	static class ModeProperties
 	{
 		//{{{ Instance variables
 		Mode mode;
@@ -350,7 +352,7 @@ public class EditingOptionPane extends AbstractOptionPane
 			String prefix;
 			if(mode != null)
 			{
-				prefix = "mode." + mode.getName() + ".";
+				prefix = "mode." + mode.getName() + '.';
 				jEdit.setBooleanProperty(prefix + "customSettings",!useDefaults);
 
 				// need to call Mode.init() if the file name or first line

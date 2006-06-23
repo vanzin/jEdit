@@ -810,7 +810,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		if(vec.size() != 0)
 		{
-			MiscUtilities.quicksort(vec,new MiscUtilities.MenuItemCompare());
+			Collections.sort(vec,new MiscUtilities.MenuItemCompare());
 			for(int i = 0; i < vec.size(); i++)
 				pluginMenu.add((JMenuItem)vec.get(i));
 		}
@@ -1399,7 +1399,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 			else
 			{
-				MiscUtilities.quicksort(favorites,
+				Arrays.sort(favorites,
 					new VFS.DirectoryEntryCompare(
 					sortMixFilesAndDirs,
 					sortIgnoreCase));
@@ -1582,7 +1582,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					directoryVector.add(file);
 				}
 
-				MiscUtilities.quicksort(directoryVector,
+				Collections.sort(directoryVector,
 					new VFS.DirectoryEntryCompare(
 					sortMixFilesAndDirs,
 					sortIgnoreCase));
