@@ -28,6 +28,7 @@ import java.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
 /**
@@ -247,7 +248,7 @@ public class VFSFile implements Serializable
 		}
 		finally
 		{
-			MiscUtilities.closeQuietly(reader);
+			IOUtilities.closeQuietly(reader);
 		}
 	} //}}}
 

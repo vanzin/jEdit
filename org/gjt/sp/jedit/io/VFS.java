@@ -37,6 +37,7 @@ import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
 /**
@@ -516,8 +517,8 @@ public abstract class VFS
 		}
 		finally
 		{
-			MiscUtilities.closeQuietly(in);
-			MiscUtilities.closeQuietly(out);
+			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly(out);
 		}
 	} //}}}
 

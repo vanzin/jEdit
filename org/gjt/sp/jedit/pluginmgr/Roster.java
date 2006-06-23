@@ -31,6 +31,7 @@ import java.util.zip.*;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
 class Roster
@@ -355,8 +356,8 @@ class Roster
 						}
 						finally
 						{
-							MiscUtilities.closeQuietly(in);
-							MiscUtilities.closeQuietly(out);
+							IOUtilities.closeQuietly(in);
+							IOUtilities.closeQuietly(out);
 						}
 						if(file.getName().toLowerCase().endsWith(".jar"))
 							toLoad.add(file.getPath());
@@ -439,8 +440,8 @@ class Roster
 				}
 				finally
 				{
-					MiscUtilities.closeQuietly(in);
-					MiscUtilities.closeQuietly(out);
+					IOUtilities.closeQuietly(in);
+					IOUtilities.closeQuietly(out);
 				}
 				
 				return path;

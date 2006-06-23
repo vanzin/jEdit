@@ -141,7 +141,7 @@ public class BufferLoadRequest extends BufferIORequest
 		}
 		catch(WorkThread.Abort a)
 		{
-			MiscUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly(in);
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
