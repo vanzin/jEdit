@@ -34,6 +34,9 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 //}}}
 
+/**
+ * @author $Id$
+ */
 class Roster
 {
 	//{{{ Roster constructor
@@ -71,7 +74,7 @@ class Roster
 	//{{{ isEmpty() method
 	boolean isEmpty()
 	{
-		return operations.size() == 0;
+		return operations.isEmpty();
 	} //}}}
 
 	//{{{ performOperationsInWorkThread() method
@@ -166,7 +169,7 @@ class Roster
 	//}}}
 
 	//{{{ Operation interface
-	static abstract class Operation
+	abstract static class Operation
 	{
 		public void runInWorkThread(PluginManagerProgress progress)
 		{
@@ -349,7 +352,7 @@ class Roster
 						{
 							in = zipFile.getInputStream(entry);
 							out = new FileOutputStream(file);
-							MiscUtilities.copyStream(4096,
+							IOUtilities.copyStream(4096,
 								null,
 								in,
 								out,false);
@@ -435,7 +438,7 @@ class Roster
 				try {
 					in = conn.getInputStream();
 					out = new FileOutputStream(path);
-					if(!MiscUtilities.copyStream(progress,in,out,true))
+					if(!IOUtilities.copyStream(progress,in,out,true))
 						return null;
 				}
 				finally

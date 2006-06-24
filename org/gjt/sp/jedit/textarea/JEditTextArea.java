@@ -3030,7 +3030,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		if(lastIndent == getLineEndOffset(line))
 		{
-			lastIndent = getLineLength(line) - MiscUtilities.getTrailingWhiteSpace(getLineText(line));
+			lastIndent = getLineLength(line) - StandardUtilities.getTrailingWhiteSpace(getLineText(line));
 			if(lastIndent == 0)
 				lastIndent = getLineLength(line);
 			lastIndent += getLineStartOffset(line);
