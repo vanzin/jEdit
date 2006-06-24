@@ -158,7 +158,7 @@ public abstract class XModeHandler extends DefaultHandler
 				}
 
 				rules.addRule(ParserRule.createSequenceRule(
-					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastStartPosMatch,tag.lastStart.toString(),
 					tag.lastDelegateSet,tag.lastTokenID));
 			} //}}}
 			//{{{ SEQ_REGEXP
@@ -174,7 +174,7 @@ public abstract class XModeHandler extends DefaultHandler
 				{
 					rules.addRule(ParserRule.createRegexpSequenceRule(
 						tag.lastHashChar,tag.lastStartPosMatch,
-						tag.lastStart,tag.lastDelegateSet,
+						tag.lastStart.toString(),tag.lastDelegateSet,
 						tag.lastTokenID,tag.lastIgnoreCase));
 				}
 				catch(PatternSyntaxException re)
@@ -199,8 +199,8 @@ public abstract class XModeHandler extends DefaultHandler
 
 				rules.addRule(ParserRule
 					.createSpanRule(
-					tag.lastStartPosMatch,tag.lastStart,
-					tag.lastEndPosMatch,tag.lastEnd,
+					tag.lastStartPosMatch,tag.lastStart.toString(),
+					tag.lastEndPosMatch,tag.lastEnd.toString(),
 					tag.lastDelegateSet,
 					tag.lastTokenID,tag.lastExcludeMatch,
 					tag.lastNoLineBreak,
@@ -227,8 +227,8 @@ public abstract class XModeHandler extends DefaultHandler
 					rules.addRule(ParserRule
 						.createRegexpSpanRule(
 						tag.lastHashChar,
-						tag.lastStartPosMatch,tag.lastStart,
-						tag.lastEndPosMatch,tag.lastEnd,
+						tag.lastStartPosMatch,tag.lastStart.toString(),
+						tag.lastEndPosMatch,tag.lastEnd.toString(),
 						tag.lastDelegateSet,
 						tag.lastTokenID,
 						tag.lastExcludeMatch,
@@ -252,7 +252,7 @@ public abstract class XModeHandler extends DefaultHandler
 				}
 
 				rules.addRule(ParserRule.createEOLSpanRule(
-					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastStartPosMatch,tag.lastStart.toString(),
 					tag.lastDelegateSet,tag.lastTokenID,
 					tag.lastExcludeMatch));
 			} //}}}
@@ -269,7 +269,7 @@ public abstract class XModeHandler extends DefaultHandler
 				{
 					rules.addRule(ParserRule.createRegexpEOLSpanRule(
 						tag.lastHashChar,tag.lastStartPosMatch,
-						tag.lastStart,tag.lastDelegateSet,
+						tag.lastStart.toString(),tag.lastDelegateSet,
 						tag.lastTokenID,tag.lastExcludeMatch,
 						tag.lastIgnoreCase));
 				}
@@ -289,7 +289,7 @@ public abstract class XModeHandler extends DefaultHandler
 
 				rules.addRule(ParserRule
 					.createMarkFollowingRule(
-					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastStartPosMatch,tag.lastStart.toString(),
 					tag.lastTokenID,tag.lastExcludeMatch));
 			} //}}}
 			//{{{ MARK_PREVIOUS
@@ -303,7 +303,7 @@ public abstract class XModeHandler extends DefaultHandler
 
 				rules.addRule(ParserRule
 					.createMarkPreviousRule(
-					tag.lastStartPosMatch,tag.lastStart,
+					tag.lastStartPosMatch,tag.lastStart.toString(),
 					tag.lastTokenID,tag.lastExcludeMatch));
 			} //}}}
 			//{{{ Keywords
@@ -315,7 +315,7 @@ public abstract class XModeHandler extends DefaultHandler
 			) {
 				byte token = Token.stringToToken(tag.tagName);
 				if(token != -1)
-					addKeyword(tag.lastKeyword,token);
+					addKeyword(tag.lastKeyword.toString(),token);
 			} //}}}
 		}
 		else
@@ -564,7 +564,6 @@ public abstract class XModeHandler extends DefaultHandler
 
 		public void setText(char[] c, int off, int len)
 		{
-			String text = new String(c, off, len);
 			if (tagName.equals("EOL_SPAN") ||
 				tagName.equals("EOL_SPAN_REGEXP") ||
 				tagName.equals("MARK_PREVIOUS") ||
@@ -579,43 +578,52 @@ public abstract class XModeHandler extends DefaultHandler
 					target = (TagDecl) stateStack.get(stateStack.size() - 2);
 
 				if (target.lastStart == null)
-					target.lastStart = text;
+				{
+					target.lastStart = new StringBuffer();
+					target.lastStart.append(c, off, len);
+					target.lastStartPosMatch = ((target.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
+						| (target.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
+						| (target.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+					target.lastAtLineStart = false;
+					target.lastAtWordStart = false;
+					target.lastAtWhitespaceEnd = false;
+				}
 				else
-					target.lastStart += text;
-				target.lastStartPosMatch = ((target.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
-					| (target.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
-					| (target.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
-				target.lastAtLineStart = false;
-				target.lastAtWordStart = false;
-				target.lastAtWhitespaceEnd = false;
+				{
+					target.lastStart.append(c, off, len);
+				}
 			}
 			else if (tagName.equals("END"))
 			{
 				TagDecl target = (TagDecl) stateStack.get(stateStack.size() - 2);
 				if (target.lastEnd == null)
-					target.lastEnd = text;
+				{
+					target.lastEnd = new StringBuffer();
+					target.lastEnd.append(c, off, len);
+					target.lastEndPosMatch = ((target.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
+						| (target.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
+						| (target.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+					target.lastAtLineStart = false;
+					target.lastAtWordStart = false;
+					target.lastAtWhitespaceEnd = false;
+				}
 				else
-					target.lastEnd += text;
-				target.lastEndPosMatch = ((target.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
-					| (target.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
-					| (target.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
-				target.lastAtLineStart = false;
-				target.lastAtWordStart = false;
-				target.lastAtWhitespaceEnd = false;
+				{
+					target.lastEnd.append(c, off, len);
+				}
 			}
 			else
 			{
 				if (lastKeyword == null)
-					lastKeyword = text;
-				else
-					lastKeyword += text;
+					lastKeyword = new StringBuffer();
+				lastKeyword.append(c, off, len);
 			}
 		}
 
 		public String tagName;
-		public String lastStart;
-		public String lastEnd;
-		public String lastKeyword;
+		public StringBuffer lastStart;
+		public StringBuffer lastEnd;
+		public StringBuffer lastKeyword;
 		public String lastSetName;
 		public String lastEscape;
 		public ParserRuleSet lastDelegateSet;
