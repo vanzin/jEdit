@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
+
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
+
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="#" />
@@ -64,6 +66,12 @@
 		<SEQ TYPE="KEYWORD2">$'</SEQ>
 		<SEQ TYPE="KEYWORD2">$"</SEQ>
 
+		<!-- Some other things that confuse the mode file. -->
+		<SEQ TYPE="OPERATOR">*"</SEQ>
+		<SEQ TYPE="OPERATOR">*'</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;"</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;'</SEQ>
+
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
 			<BEGIN>${</BEGIN>
 			<END>}</END>
@@ -83,6 +91,15 @@
 			<END>}</END>
 		</SPAN>
 
+		<!-- Messed up sub names that contain '
+			 - see "bigfloat.pl" in /usr/lib/somewhere -->
+		<SEQ_REGEXP HASH_CHAR="s" TYPE="FUNCTION"
+		>sub\s\p{Alpha}[\p{Alnum}_]*'\p{Alpha}[\p{Alnum}_]*</SEQ_REGEXP>
+
+		<!-- Calls to those messed up sub names. -->
+		<SEQ_REGEXP HASH_CHAR="&amp;" TYPE="FUNCTION"
+		>&amp;\p{Alpha}[\p{Alnum}_]*'\p{Alpha}[\p{Alnum}_]*</SEQ_REGEXP>
+
 		<!-- Literals -->
 		<SPAN TYPE="LITERAL1" DELEGATE="LITERAL">
 			<BEGIN>"</BEGIN>
@@ -101,129 +118,76 @@
 
 		<!-- Heredoc -->
 		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
-		<BEGIN><![CDATA[<<\s*(['"])([[\s][\w]]*)\1;?\s*]]></BEGIN>
+		<BEGIN><![CDATA[<<[:space:]*(['"])([[:space:][:alnum:]_]*)\1;?\s*]]></BEGIN>
 		<END>$2</END>
 		</SPAN_REGEXP>
 		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
-		<BEGIN><![CDATA[<<([[a-zA-Z_]]\w*);?\s*]]></BEGIN>
+		<BEGIN><![CDATA[<<([[:alpha:]_][[:alnum:]_]*);?\s*]]></BEGIN>
 		<END>$1</END>
 		</SPAN_REGEXP>
 
+		<!-- jEdit 4.1 adds regular expression syntax rules so we can
+		     highlight this sort of crap. -->
 
 		<SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="/"
                         AT_WORD_START="TRUE"
-                >/[^\p{Blank}]*[^\\]/</SEQ_REGEXP>
+                >/[^\p{Blank}]*?[^\\]/</SEQ_REGEXP>
 
-    <!-- {{{ q//, qq//, qr//, qx//, tr///, y/// -->
+                <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
+		<!--
 		<SEQ_REGEXP TYPE="MARKUP"
                 	HASH_CHAR="q"
                 	AT_WORD_START="TRUE"
-		>q[qrx]?\{[^\}]*\}</SEQ_REGEXP>
-		
+		>q(?:|[qrx])\{(?:.*?[^\\])*?\}</SEQ_REGEXP>
+		-->
 		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="q"
-			    AT_WORD_START="TRUE"
-			    >q[qrx]?\(.*\)</SEQ_REGEXP>
-		
-		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="q"
-			    AT_WORD_START="TRUE"
-			    >q[qrx]?\[.*\]</SEQ_REGEXP>
-		
-		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="q"
-			    AT_WORD_START="TRUE"
-			    >q[qrx]([/#@!,:%^]).*\1</SEQ_REGEXP>
+                	HASH_CHAR="q"
+                	AT_WORD_START="TRUE">q(?:|[qrx])\{.*\}</SEQ_REGEXP>
 
-		
-		<!-- {{{ tr/y are not currently covering all cases, but at least they don't crash jedit anymore -->
+		<!-- For multi-line 'q' statements.
+			 Do we really need one entry per possible delimiter? {, (, etc... -->
+		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
+			<BEGIN>q(?:|[qrxw])\{</BEGIN>
+			<END>}</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
+			<BEGIN>q(?:|[qrxw])\(</BEGIN>
+			<END>)</END>
+		</SPAN_REGEXP>
+
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="t"
                         AT_WORD_START="TRUE"
-		>tr/.*?/.*?/</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="t"
-			    AT_WORD_START="TRUE"
-		>tr\(.*?\)\(.*?\)</SEQ_REGEXP>
-		
-		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="t"
-			    AT_WORD_START="TRUE"
-		>tr\[.*?\]\[.*?\]</SEQ_REGEXP>
+		>tr(\p{Punct})(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1</SEQ_REGEXP>
+
+                <SEQ_REGEXP TYPE="MARKUP"
+                        HASH_CHAR="y"
+                        AT_WORD_START="TRUE"
+		>y(\p{Punct})(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1</SEQ_REGEXP>
+
+                <SEQ_REGEXP TYPE="MARKUP"
+                        HASH_CHAR="m"
+                        AT_WORD_START="TRUE"
+                >m\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
+
+                <SEQ_REGEXP TYPE="MARKUP"
+                        HASH_CHAR="m"
+                        AT_WORD_START="TRUE"
+                >m(\p{Punct})(?:.*?[^\\])\1[sgiexom]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="t"
-			    AT_WORD_START="TRUE"
-			    >tr\{.*?\}\{.*?\}</SEQ_REGEXP>
-
+                        HASH_CHAR="s"
+                        AT_WORD_START="TRUE"
+                >s\s*\{(?:.*?[^\\])*?\}\s*\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
 		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="y"
-			    AT_WORD_START="TRUE"
-			    >y/.*?/.*?/</SEQ_REGEXP>
-		
-		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="y"
-			    AT_WORD_START="TRUE"
-			    >y\(.*?\)\(.*?\)</SEQ_REGEXP>
-		
-		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="y"
-			    AT_WORD_START="TRUE"
-			    >y\[.*?\]\[.*?\]</SEQ_REGEXP>
-		
-		<SEQ_REGEXP TYPE="MARKUP"
-			    HASH_CHAR="y"
-			    AT_WORD_START="TRUE"
-			    >y\{.*?\}\{.*?\}</SEQ_REGEXP>
-
-
-        <!-- }}} -->
-        
-        <!-- {{{ m/pattern/sgieom variations -->
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="m"
-       AT_WORD_START="TRUE">m\{[^\}]*\}[sgiexom]*</SEQ_REGEXP>
-
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="m"
-       AT_WORD_START="TRUE">m\([^\)]*\)[sgiexom]*</SEQ_REGEXP>
-
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="m"
-       AT_WORD_START="TRUE">m\[[^\]]*\][sgiexom]*</SEQ_REGEXP>
-
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="m"
-       AT_WORD_START="TRUE">m([^\(\)\]\[\{\}]).*?\1[sgiexom]*</SEQ_REGEXP>
-<!-- }}} -->
-
-<!-- {{{ s/pattern/repl/sgieom variations -->
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="s"
-       AT_WORD_START="TRUE">s\{[^\}]*\}\{[^\}]*\}[sgiexom]*</SEQ_REGEXP>
-
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="s"
-       AT_WORD_START="TRUE">s\([^\)]*\)\([^\)]*\)[sgiexom]*</SEQ_REGEXP>
-
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="s"
-       AT_WORD_START="TRUE">s\[[^\]]*\]\[[^\]]*\][sgiexom]*</SEQ_REGEXP>
-
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="s"
-       AT_WORD_START="TRUE">s(['"`]).*?\1(['"`]).*?\2[sgiexom]*</SEQ_REGEXP>
-         
-<SEQ_REGEXP TYPE="MARKUP"
-       HASH_CHAR="s"
-       AT_WORD_START="TRUE">s([\S&amp;&amp;[^'"`\(\)\]\[\{\}]]).*?\1.*?\1[sgiexom]*</SEQ_REGEXP>
-<!-- }}} -->
-
+                        HASH_CHAR="s"
+                        AT_WORD_START="TRUE"
+                >s(\p{Punct})(?:.*?)\1(?:.*?)\1[sgiexom]*</SEQ_REGEXP>
 		<SEQ_REGEXP TYPE="MARKUP"
 			HASH_CHAR="/"
 			AT_WORD_START="TRUE"
-		>/.*?/</SEQ_REGEXP>
+		>/[^\p{Blank}]*?/</SEQ_REGEXP>
 
 		<!-- Operators -->
 		<SEQ TYPE="OPERATOR">|</SEQ>
