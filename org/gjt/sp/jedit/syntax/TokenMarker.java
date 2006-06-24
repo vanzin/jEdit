@@ -694,13 +694,12 @@ unwind:		while(context.parent != null)
 					}
 					else
 					{
-						CharSequence seq = new SegmentCharSequence(line);
 						int oldCount = line.count;
 						int oldOffset = line.offset;
 						line.offset = lastOffset;
 						line.count = len;
-						if(!digitRE.matcher(seq).matches())
-							digit = false;
+						CharSequence seq = new SegmentCharSequence(line);
+						digit = digitRE.matcher(seq).matches();
 						line.offset = oldOffset;
 						line.count = oldCount;
 					}
