@@ -143,7 +143,7 @@
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="m"
                         AT_WORD_START="TRUE"
-                >m(\p{Punct})(?:.*?[^\\])*?\1[sgiexom]*</SEQ_REGEXP>
+                >m(\p{Punct})(?:.*?[^\\])\1[sgiexom]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="s"
