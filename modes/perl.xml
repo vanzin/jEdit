@@ -119,17 +119,64 @@
 		<SEQ_REGEXP TYPE="MARKUP"
                 	HASH_CHAR="q"
                 	AT_WORD_START="TRUE"
-		>q(?:|[qrx])\{(?:.*[^\\])*\}</SEQ_REGEXP>
+		>q[qrx]?\{[^\}]*\}</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="q"
+			    AT_WORD_START="TRUE"
+			    >q[qrx]?\(.*\)</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="q"
+			    AT_WORD_START="TRUE"
+			    >q[qrx]?\[.*\]</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="q"
+			    AT_WORD_START="TRUE"
+			    >q[qrx]([/#@!,:%^]).*\1</SEQ_REGEXP>
 
+		
+		<!-- {{{ tr/y are not currently covering all cases, but at least they don't crash jedit anymore -->
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="t"
                         AT_WORD_START="TRUE"
-		>tr(\S)(?:.*[^\\])*\1(?:.*[^\\])*\1</SEQ_REGEXP>
+		>tr/.*?/.*?/</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="t"
+			    AT_WORD_START="TRUE"
+		>tr\(.*?\)\(.*?\)</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="t"
+			    AT_WORD_START="TRUE"
+		>tr\[.*?\]\[.*?\]</SEQ_REGEXP>
 
-                <SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="y"
-                        AT_WORD_START="TRUE"
-		>y(\S)(?:.*[^\\])*\1(?:.*[^\\])*\1</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="t"
+			    AT_WORD_START="TRUE"
+			    >tr\{.*?\}\{.*?\}</SEQ_REGEXP>
+
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="y"
+			    AT_WORD_START="TRUE"
+			    >y/.*?/.*?/</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="y"
+			    AT_WORD_START="TRUE"
+			    >y\(.*?\)\(.*?\)</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="y"
+			    AT_WORD_START="TRUE"
+			    >y\[.*?\]\[.*?\]</SEQ_REGEXP>
+		
+		<SEQ_REGEXP TYPE="MARKUP"
+			    HASH_CHAR="y"
+			    AT_WORD_START="TRUE"
+			    >y\{.*?\}\{.*?\}</SEQ_REGEXP>
+
 
         <!-- }}} -->
         
@@ -148,7 +195,7 @@
 
 <SEQ_REGEXP TYPE="MARKUP"
        HASH_CHAR="m"
-       AT_WORD_START="TRUE">m([^\(\)\]\[\{\}]).*\1[sgiexom]*</SEQ_REGEXP>
+       AT_WORD_START="TRUE">m([^\(\)\]\[\{\}]).*?\1[sgiexom]*</SEQ_REGEXP>
 <!-- }}} -->
 
 <!-- {{{ s/pattern/repl/sgieom variations -->
@@ -166,17 +213,17 @@
 
 <SEQ_REGEXP TYPE="MARKUP"
        HASH_CHAR="s"
-       AT_WORD_START="TRUE">s(['"`]).*\1(['"`]).*\2[sgiexom]*</SEQ_REGEXP>
+       AT_WORD_START="TRUE">s(['"`]).*?\1(['"`]).*?\2[sgiexom]*</SEQ_REGEXP>
          
 <SEQ_REGEXP TYPE="MARKUP"
        HASH_CHAR="s"
-       AT_WORD_START="TRUE">s([\S&amp;&amp;[^'"`\(\)\]\[\{\}]]).*\1.*\1[sgiexom]*</SEQ_REGEXP>
+       AT_WORD_START="TRUE">s([\S&amp;&amp;[^'"`\(\)\]\[\{\}]]).*?\1.*?\1[sgiexom]*</SEQ_REGEXP>
 <!-- }}} -->
 
 		<SEQ_REGEXP TYPE="MARKUP"
 			HASH_CHAR="/"
 			AT_WORD_START="TRUE"
-		>/.*/</SEQ_REGEXP>
+		>/.*?/</SEQ_REGEXP>
 
 		<!-- Operators -->
 		<SEQ TYPE="OPERATOR">|</SEQ>
