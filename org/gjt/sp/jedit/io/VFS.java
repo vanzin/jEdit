@@ -510,7 +510,7 @@ public abstract class VFS
 			}
 			in = new BufferedInputStream(sourceVFS._createInputStream(sourceSession, sourcePath, false, comp));
 			out = new BufferedOutputStream(targetVFS._createOutputStream(targetSession, targetPath, comp));
-			boolean copyResult = MiscUtilities.copyStream(4096, progress, in, out, canStop);
+			boolean copyResult = IOUtilities.copyStream(4096, progress, in, out, canStop);
 			VFSManager.sendVFSUpdate(targetVFS, targetPath, true);
 			return copyResult;
 		}
