@@ -113,23 +113,23 @@
 		<SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="/"
                         AT_WORD_START="TRUE"
-                >/[^\p{Blank}]*?[^\\]/</SEQ_REGEXP>
+                >/[^\p{Blank}]*[^\\]/</SEQ_REGEXP>
 
     <!-- {{{ q//, qq//, qr//, qx//, tr///, y/// -->
 		<SEQ_REGEXP TYPE="MARKUP"
                 	HASH_CHAR="q"
                 	AT_WORD_START="TRUE"
-		>q(?:|[qrx])\{(?:.*?[^\\])*\}</SEQ_REGEXP>
+		>q(?:|[qrx])\{(?:.*[^\\])*\}</SEQ_REGEXP>
 
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="t"
                         AT_WORD_START="TRUE"
-		>tr(\p{Punct})(?:.*?[^\\])*?\1(?:.*?[^\\])*\1</SEQ_REGEXP>
+		>tr(\S)(?:.*[^\\])*\1(?:.*[^\\])*\1</SEQ_REGEXP>
 
                 <SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="y"
                         AT_WORD_START="TRUE"
-		>y(\p{Punct})(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1</SEQ_REGEXP>
+		>y(\S)(?:.*[^\\])*\1(?:.*[^\\])*\1</SEQ_REGEXP>
 
         <!-- }}} -->
         
@@ -148,7 +148,7 @@
 
 <SEQ_REGEXP TYPE="MARKUP"
        HASH_CHAR="m"
-       AT_WORD_START="TRUE">m([^\(\)\]\[\{\}]).*?\1[sgiexom]*</SEQ_REGEXP>
+       AT_WORD_START="TRUE">m([^\(\)\]\[\{\}]).*\1[sgiexom]*</SEQ_REGEXP>
 <!-- }}} -->
 
 <!-- {{{ s/pattern/repl/sgieom variations -->
@@ -166,17 +166,17 @@
 
 <SEQ_REGEXP TYPE="MARKUP"
        HASH_CHAR="s"
-       AT_WORD_START="TRUE">s(['"`]).*?\1(['"`]).*?\2[sgiexom]*</SEQ_REGEXP>
+       AT_WORD_START="TRUE">s(['"`]).*\1(['"`]).*\2[sgiexom]*</SEQ_REGEXP>
          
 <SEQ_REGEXP TYPE="MARKUP"
        HASH_CHAR="s"
-       AT_WORD_START="TRUE">s([^'"`\(\)\]\[\{\}]).*\1.*\1[sgiexom]*</SEQ_REGEXP>
+       AT_WORD_START="TRUE">s([\S&amp;&amp;[^'"`\(\)\]\[\{\}]]).*\1.*\1[sgiexom]*</SEQ_REGEXP>
 <!-- }}} -->
 
 		<SEQ_REGEXP TYPE="MARKUP"
 			HASH_CHAR="/"
 			AT_WORD_START="TRUE"
-		>/[^\p{Blank}]*?/</SEQ_REGEXP>
+		>/.*/</SEQ_REGEXP>
 
 		<!-- Operators -->
 		<SEQ TYPE="OPERATOR">|</SEQ>
