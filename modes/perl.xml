@@ -118,11 +118,11 @@
 
 		<!-- Heredoc -->
 		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
-		<BEGIN><![CDATA[<<[:space:]*(['"])([[:space:][:alnum:]_]*)\1;?\s*]]></BEGIN>
+		<BEGIN><![CDATA[<<\p{Space}*(['"])([\p{Space}\p{Alnum}_]*)\1;?\s*]]></BEGIN>
 		<END>$2</END>
 		</SPAN_REGEXP>
 		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
-		<BEGIN><![CDATA[<<([[:alpha:]_][[:alnum:]_]*);?\s*]]></BEGIN>
+		<BEGIN><![CDATA[<<([\p{Alpha}_][\p{Alnum}_]*);?\s*]]></BEGIN>
 		<END>$1</END>
 		</SPAN_REGEXP>
 
