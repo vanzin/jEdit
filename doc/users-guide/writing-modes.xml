@@ -4,11 +4,6 @@
 
 <chapter id="writing-modes"><title>Mode Definition Syntax</title>
 
- <note>
-   <para> Between jEdit 4.3pre4 and 4.3pre5, jEdit switched from <literal>gnu.regex</literal> to <literal>java.util.regex</literal>, which means all mode files needed to be rewritten.  The regexp languages are not compatible, so therefore, the mode files are not either.
-   </para>
-</note>   
-
  <para>
   Edit modes are defined using XML, the <firstterm>extensible markup
   language</firstterm>; mode files have the extension
