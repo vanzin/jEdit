@@ -2,7 +2,9 @@
 <!-- :indentSize=1:noTabs=true: -->
 <!-- :xml.root=users-guide.xml: -->
 
-<chapter id="updating-modes"><title>Updating Edit Modes for jEdit 4.1/4.2</title>
+<chapter id="updating-modes"><title>Updating Edit Modes</title>
+<section>
+<title> From jEdit 4.0 to 4.1</title>
  <para>
   In jEdit 4.1, the mode file grammar has been cleaned up somewhat. As a result, some
   edit modes written for jEdit 4.0 and earlier need to be updated:
@@ -42,4 +44,16 @@
    </para>
   </listitem>
  </itemizedlist>
+ </section>
+ 
+ <section>
+ <title> From jEdit 4.2 to 4.3 </title>
+ <para> All regular expressions in mode files were rewritten to use 
+ <ulink
+    url="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html"
+    >java.util.regex</ulink> instead of 
+    <ulink  url="http://www.cacas.org/java/gnu/regexp/syntax.html">
+    gnu.regex</ulink>. 
+    </para>
+ </section>
 </chapter>
