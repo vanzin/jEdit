@@ -18,7 +18,7 @@
         <RULES ESCAPE="\"
                 IGNORE_CASE="FALSE"
                 HIGHLIGHT_DIGITS="TRUE"
-                DIGIT_RE="(0x)?[[:xdigit:]]+[lLdDfF]?">
+                DIGIT_RE="(0x)?[\p{XDigit}]+[lLdDfF]?">
 
                 <!-- Silly comment -->
                 <SEQ TYPE="COMMENT1">/**/</SEQ>
@@ -105,10 +105,10 @@
 						<KEYWORD1>try</KEYWORD1>
 						<KEYWORD1>volatile</KEYWORD1>
 						<KEYWORD1>while</KEYWORD1>
-						
+
 						<KEYWORD2>package</KEYWORD2>
 						<KEYWORD2>import</KEYWORD2>
-						
+
 						<KEYWORD3>boolean</KEYWORD3>
 						<KEYWORD3>byte</KEYWORD3>
 						<KEYWORD3>char</KEYWORD3>
@@ -120,16 +120,16 @@
 						<KEYWORD3>long</KEYWORD3>
 						<KEYWORD3>short</KEYWORD3>
 						<KEYWORD3>void</KEYWORD3>
-						
+
 						<FUNCTION>assert</FUNCTION>
 						<KEYWORD1>strictfp</KEYWORD1>
-						
+
 						<LITERAL2>false</LITERAL2>
 						<LITERAL2>null</LITERAL2>
 						<LITERAL2>super</LITERAL2>
 						<LITERAL2>this</LITERAL2>
 						<LITERAL2>true</LITERAL2>
-						
+
 						<INVALID>goto</INVALID>
 						<INVALID>const</INVALID>
 

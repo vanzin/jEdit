@@ -14,7 +14,7 @@
 	<RULES ESCAPE="\"
 		IGNORE_CASE="TRUE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="-?[[:digit:]]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
+		DIGIT_RE="-?[\p{Digit}]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
 		NO_WORD_SEP="-_%">
 
 		<SEQ TYPE="OPERATOR">:</SEQ>

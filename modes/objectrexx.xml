@@ -15,7 +15,7 @@
 	<RULES ESCAPE="\"
 		IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
+		DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
 
 		<!-- C style comment -->
 		<SPAN TYPE="COMMENT1">
@@ -54,9 +54,9 @@
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
-		
+
 		<MARK_PREVIOUS TYPE="FUNCTION">::</MARK_PREVIOUS>
-		
+
 		<MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
 			EXCLUDE_MATCH="TRUE"
 			TYPE="LABEL">:</MARK_PREVIOUS>

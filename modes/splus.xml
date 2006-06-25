@@ -18,7 +18,7 @@
     <RULES ESCAPE="\"
         IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE"
-        DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
+        DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
 
         <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
             <BEGIN>"</BEGIN>
@@ -71,7 +71,7 @@
             <KEYWORD1>sizeof</KEYWORD1>
             <KEYWORD1>switch</KEYWORD1>
             <KEYWORD1>while</KEYWORD1>
-            
+
             <KEYWORD1>function</KEYWORD1>
 
             <LITERAL2>T</LITERAL2>

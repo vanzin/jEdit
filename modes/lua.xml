@@ -26,7 +26,7 @@
     <PROPERTY NAME="doubleBracketIndent" VALUE="true"/>
   </PROPS>
   <RULES IGNORE_CASE="FALSE" NO_WORD_SEP="_:." HIGHLIGHT_DIGITS="TRUE"
-         DIGIT_RE="[[:digit:]]*(\.[[:digit:]]*)?([eE][+-]?[[:digit:]]*)?">
+         DIGIT_RE="[\p{Digit}]*(\.[\p{Digit}]*)?([eE][+-]?[\p{Digit}]*)?">
     <!-- Multiline comments -->
     <SPAN TYPE="COMMENT1">
       <BEGIN>--[[</BEGIN>

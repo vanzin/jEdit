@@ -65,7 +65,7 @@
 		<SEQ_REGEXP TYPE="KEYWORD2"
 					HASH_CHAR="%"
 					AT_WORD_START="TRUE"
-					>%%[[:alpha:]]</SEQ_REGEXP>
+					>%%[\p{Alpha}]</SEQ_REGEXP>
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">
 			<BEGIN>%</BEGIN>
 			<END>%</END>

@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<!DOCTYPE MODE SYSTEM "xmode.dtd"> 
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- LilyPond (www.lilypond.org) mode by Bertalan Fodor <fodber@users.sf.net> & others at http://lily4jedit.sf.net
-Based on Vim and Emacs syntax coloring by Heikki Junes, Han-Wen Nienhuys and others 
+Based on Vim and Emacs syntax coloring by Heikki Junes, Han-Wen Nienhuys and others
 Recommended jEdit/modes/catalog entry:
-	<MODE NAME="lilypond" FILE="lilypond.xml"  
-	FILE_NAME_GLOB="*.ly" /> 
+	<MODE NAME="lilypond" FILE="lilypond.xml"
+	FILE_NAME_GLOB="*.ly" />
 -->
 
 <MODE>
@@ -25,7 +25,7 @@ Recommended jEdit/modes/catalog entry:
 		<BEGIN>%{</BEGIN><END>%}</END>
 	</SPAN>
 	<EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
-	
+
 	<SEQ TYPE="NULL">\"</SEQ>
 	<SEQ TYPE="NULL">\'</SEQ>
 	<SEQ TYPE="NULL">\H</SEQ>
@@ -48,33 +48,33 @@ Recommended jEdit/modes/catalog entry:
 	<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE"><BEGIN>"</BEGIN><END>"</END></SPAN>
 
 <!-- Less can be more: Notes are simple black.
-	Now digits are highlighted.	
+	Now digits are highlighted.
 	Octave jumps now are as highlighted as markup. -->
 
- 	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="TRUE" HASH_CHAR="-">-[[:digit:]]+></SEQ_REGEXP>
-	
+ 	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="TRUE" HASH_CHAR="-">-[\p{Digit}]+></SEQ_REGEXP>
+
 	<!--octave-->
 	<SEQ TYPE="MARKUP" AT_WORD_START="TRUE" >'</SEQ>
 	<SEQ TYPE="MARKUP" AT_WORD_START="TRUE">,</SEQ>
-	
+
 	<!-- rests and skip -->
 
-	<SEQ_REGEXP TYPE="COMMENT2" AT_WORD_START="TRUE" HASH_CHAR="r">r([[:digit:]]*)\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="COMMENT2" AT_WORD_START="TRUE" HASH_CHAR="R">R([[:digit:]]*)\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="COMMENT2" AT_WORD_START="TRUE" HASH_CHAR="s">s([[:digit:]]*)\></SEQ_REGEXP>          
-	
- 	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="1">1[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="2">2[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="3">3[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="4">4[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="5">5[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="6">6[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="7">7[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="8">8[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="9">9[[:digit:]]*\></SEQ_REGEXP>
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="0">0[[:digit:]]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="COMMENT2" AT_WORD_START="TRUE" HASH_CHAR="r">r([\p{Digit}]*)\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="COMMENT2" AT_WORD_START="TRUE" HASH_CHAR="R">R([\p{Digit}]*)\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="COMMENT2" AT_WORD_START="TRUE" HASH_CHAR="s">s([\p{Digit}]*)\></SEQ_REGEXP>
 
-	<MARK_FOLLOWING TYPE="LITERAL3" EXCLUDE_MATCH="TRUE">.</MARK_FOLLOWING>	
+ 	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="1">1[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="2">2[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="3">3[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="4">4[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="5">5[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="6">6[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="7">7[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="8">8[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="9">9[\p{Digit}]*\></SEQ_REGEXP>
+	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHAR="0">0[\p{Digit}]*\></SEQ_REGEXP>
+
+	<MARK_FOLLOWING TYPE="LITERAL3" EXCLUDE_MATCH="TRUE">.</MARK_FOLLOWING>
 
 <!-- Generated part follows -->
 
@@ -602,4 +602,4 @@ Recommended jEdit/modes/catalog entry:
 
 </RULES>
 
-</MODE> 
+</MODE>
