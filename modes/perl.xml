@@ -134,16 +134,13 @@
                         AT_WORD_START="TRUE"
                 >/[^\p{Blank}]*?[^\\]/</SEQ_REGEXP>
 
-                <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
-		<!--
+        <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
 		<SEQ_REGEXP TYPE="MARKUP"
                 	HASH_CHAR="q"
-                	AT_WORD_START="TRUE"
-		>q(?:|[qrx])\{(?:.*?[^\\])*?\}</SEQ_REGEXP>
-		-->
+                	AT_WORD_START="TRUE">q(?:|[qx])\{.*\}</SEQ_REGEXP>
 		<SEQ_REGEXP TYPE="MARKUP"
                 	HASH_CHAR="q"
-                	AT_WORD_START="TRUE">q(?:|[qrx])\{.*\}</SEQ_REGEXP>
+                	AT_WORD_START="TRUE">qr\{.*\}[imosx]*</SEQ_REGEXP>
 
 		<!-- For multi-line 'q' statements.
 			 Do we really need one entry per possible delimiter? {, (, etc... -->
@@ -156,25 +153,25 @@
 			<END>)</END>
 		</SPAN_REGEXP>
 
-                <SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="t"
-                        AT_WORD_START="TRUE"
-		>tr(\p{Punct})(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
+					HASH_CHAR="t"
+					AT_WORD_START="TRUE"
+		>tr([^\p{Alnum}\p{Space}])(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1[cds]*</SEQ_REGEXP>
 
-                <SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="y"
-                        AT_WORD_START="TRUE"
-		>y(\p{Punct})(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
+					HASH_CHAR="y"
+					AT_WORD_START="TRUE"
+		>y([^\p{Alnum}\p{Space}])(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1[cds]*</SEQ_REGEXP>
 
-                <SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="m"
-                        AT_WORD_START="TRUE"
-                >m\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
+					HASH_CHAR="m"
+					AT_WORD_START="TRUE"
+		>m\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
 
-                <SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="m"
-                        AT_WORD_START="TRUE"
-                >m(\p{Punct})(?:.*?[^\\])\1[sgiexom]*</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP"
+					HASH_CHAR="m"
+					AT_WORD_START="TRUE"
+		>m([^\p{Alnum}\p{Space}])(?:.*?[^\\])\1[sgicxom]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="s"
@@ -183,7 +180,7 @@
 		<SEQ_REGEXP TYPE="MARKUP"
                         HASH_CHAR="s"
                         AT_WORD_START="TRUE"
-                >s(\p{Punct})(?:.*?)\1(?:.*?)\1[sgiexom]*</SEQ_REGEXP>
+                >s([^\p{Alnum}\p{Space}])(?:.*?)\1(?:.*?)\1[sgiexom]*</SEQ_REGEXP>
 		<SEQ_REGEXP TYPE="MARKUP"
 			HASH_CHAR="/"
 			AT_WORD_START="TRUE"
