@@ -26,7 +26,7 @@
 			HASH_CHAR=' '
 			AT_LINE_START='TRUE'
 			TYPE="LABEL"
-		>\s+(?:\(|\)|\w)[[:alnum:][:blank:].()]+::</SEQ_REGEXP>
+		>\s+(?:\(|\)|\w)[\p{Alnum}\p{Blank}.()]+::</SEQ_REGEXP>
 
 		<!-- smileys -->
 		<!-- not on by default because it slows things down a bit
@@ -82,9 +82,9 @@
 		>-{4,}</SEQ_REGEXP>
 
 		<!-- section header -->
-		<SPAN_REGEXP 
-			HASH_CHAR="=" 
-			TYPE="KEYWORD1" 
+		<SPAN_REGEXP
+			HASH_CHAR="="
+			TYPE="KEYWORD1"
 			AT_LINE_START="TRUE"
 		>
 			<BEGIN>(={1,5}) </BEGIN>

@@ -23,14 +23,14 @@
             VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
         <!-- set this to 'true' if you want to use GNU coding style -->
         <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
-        
+
         <PROPERTY NAME="filenameGlob" VALUE="*.(inf|h)" />
     </PROPS>
-        
+
     <RULES
             IGNORE_CASE="FALSE"
             HIGHLIGHT_DIGITS="TRUE"
-            DIGIT_RE="(\$[[:xdigit:]]|[[:digit:]])">
+            DIGIT_RE="(\$[\p{XDigit}]|[\p{Digit}])">
         <EOL_SPAN TYPE="COMMENT1">!</EOL_SPAN>
 
         <!-- strings can span lines -->
@@ -42,11 +42,11 @@
             <BEGIN>'</BEGIN>
             <END>'</END>
         </SPAN>
-        
+
         <!-- preprocessor statements -->
         <EOL_SPAN TYPE="KEYWORD2">#</EOL_SPAN>
         <EOL_SPAN TYPE="COMMENT1">!</EOL_SPAN>
-        
+
         <!-- special sequences that require special highlighting -->
         <SEQ TYPE="OPERATOR">=</SEQ>
         <SEQ TYPE="OPERATOR">==</SEQ>
@@ -69,7 +69,7 @@
         <SEQ TYPE="OPERATOR">{</SEQ>
         <SEQ TYPE="OPERATOR">]</SEQ>
         <SEQ TYPE="OPERATOR">[</SEQ>
-        
+
         <SEQ TYPE="OPERATOR">.&amp;</SEQ>
         <SEQ TYPE="OPERATOR">.#</SEQ>
         <SEQ TYPE="OPERATOR">--></SEQ>
@@ -81,7 +81,7 @@
         <MARK_PREVIOUS AT_WHITESPACE_END="FALSE"
             EXCLUDE_MATCH="TRUE"
             TYPE="LABEL">:</MARK_PREVIOUS>
-        
+
         <KEYWORDS>
             <!-- operators -->
             <KEYWORD1>has</KEYWORD1>
@@ -91,7 +91,7 @@
             <KEYWORD1>ofclass</KEYWORD1>
             <KEYWORD1>provides</KEYWORD1>
             <KEYWORD1>or</KEYWORD1>
-            
+
             <!-- text-base conversion functions -->
             <LITERAL2>char</LITERAL2>
             <LITERAL2>string</LITERAL2>
@@ -103,7 +103,7 @@
             <LITERAL2>The</LITERAL2>
             <LITERAL2>property</LITERAL2>
             <LITERAL2>object</LITERAL2>
-            
+
             <!-- language semantics -->
             <KEYWORD1>break</KEYWORD1>
             <KEYWORD1>continue</KEYWORD1>
@@ -125,11 +125,11 @@
             <KEYWORD1>string</KEYWORD1>
             <KEYWORD1>switch</KEYWORD1>
             <KEYWORD1>while</KEYWORD1>
-            
+
             <!-- class keyworks -->
             <KEYWORD1>with</KEYWORD1>
 <!--			<KEYWORD1>has</KEYWORD1> -->
-            
+
             <!-- built-in functions -->
             <FUNCTION>new_line</FUNCTION>
             <FUNCTION>print</FUNCTION>
@@ -151,7 +151,7 @@
                 <KEYWORD2>fixed</KEYWORD2>
             <FUNCTION>score</FUNCTION>
             <FUNCTION>time</FUNCTION>
-            
+
             <!-- Top-level keyworks -->
             <KEYWORD3>Abbreviate</KEYWORD3>
             <KEYWORD3>Array</KEYWORD3>
@@ -188,7 +188,7 @@
             <LITERAL2>null</LITERAL2>
             <LITERAL2>super</LITERAL2>
             <LITERAL2>self</LITERAL2>
-            
+
             <INVALID>this</INVALID>
         </KEYWORDS>
     </RULES>
@@ -197,7 +197,7 @@
         <SEQ TYPE="OPERATOR">~</SEQ>
         <SEQ TYPE="OPERATOR">@</SEQ>
         <SEQ TYPE="OPERATOR">\</SEQ>
-        
+
         <!-- escaping the @ symbol -->
         <SEQ TYPE="LITERAL2">@@</SEQ>
     </RULES>

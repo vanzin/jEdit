@@ -10,9 +10,9 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="wordBreakChars" VALUE="|.\\:,+-*/=?^!@%&lt;&gt;&amp;" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" 
-	    HIGHLIGHT_DIGITS="TRUE" 
-	    DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE"
+	    HIGHLIGHT_DIGITS="TRUE"
+	    DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
 		<!-- comments -->
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 
@@ -31,7 +31,7 @@
 		<SEQ TYPE="OPERATOR">~===</SEQ>
 		<SEQ TYPE="OPERATOR">===</SEQ>
 		<SEQ TYPE="OPERATOR">|||</SEQ> <!-- list concatenation -->
-		
+
 		<!-- lexical operators -->
 		<SEQ TYPE="OPERATOR">&gt;&gt;=</SEQ> <!-- ">>=" -->
 		<SEQ TYPE="OPERATOR">&gt;&gt;</SEQ> <!-- ">>" -->
@@ -40,7 +40,7 @@
 		<SEQ TYPE="OPERATOR">~==</SEQ>
 		<SEQ TYPE="OPERATOR">==</SEQ>
 		<SEQ TYPE="OPERATOR">||</SEQ>
-		
+
 		<!-- set operators -->
 		<SEQ TYPE="OPERATOR">++</SEQ> <!-- union -->
 		<SEQ TYPE="OPERATOR">**</SEQ> <!-- intersection -->
@@ -58,7 +58,7 @@
 		<SEQ TYPE="OPERATOR">:=</SEQ>
 		<SEQ TYPE="OPERATOR">-:</SEQ>
 		<SEQ TYPE="OPERATOR">+:</SEQ>
-		
+
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
@@ -77,7 +77,7 @@
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>
-		
+
 		<!-- Function calls -->
 		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
@@ -99,7 +99,7 @@
 			<KEYWORD1>until</KEYWORD1>
 			<KEYWORD1>while</KEYWORD1>
 
-			<KEYWORD2>break</KEYWORD2> 
+			<KEYWORD2>break</KEYWORD2>
 			<KEYWORD2>end</KEYWORD2>
 			<KEYWORD2>fail</KEYWORD2>
 			<KEYWORD2>global</KEYWORD2>
@@ -111,7 +111,7 @@
 			<KEYWORD2>return</KEYWORD2>
 			<KEYWORD2>static</KEYWORD2>
 			<KEYWORD2>suspend</KEYWORD2>
-			
+
 			<KEYWORD3>&amp;allocated</KEYWORD3>
 			<KEYWORD3>&amp;ascii</KEYWORD3>
 			<KEYWORD3>&amp;clock</KEYWORD3>
@@ -145,7 +145,7 @@
 			<KEYWORD3>&amp;pos</KEYWORD3>
 			<KEYWORD3>&amp;progname</KEYWORD3>
 			<KEYWORD3>&amp;random</KEYWORD3>
-			<KEYWORD3>&amp;regions</KEYWORD3> 
+			<KEYWORD3>&amp;regions</KEYWORD3>
 			<KEYWORD3>&amp;source</KEYWORD3>
 			<KEYWORD3>&amp;storage</KEYWORD3>
 			<KEYWORD3>&amp;subject</KEYWORD3>
@@ -164,7 +164,7 @@
 			<KEYWORD3>$include</KEYWORD3>
 			<KEYWORD3>$line</KEYWORD3>
 			<KEYWORD3>$undef</KEYWORD3>
-			
+
 			<!-- predefined prepocessor symbols -->
 			<KEYWORD3>_MACINTOSH</KEYWORD3>
 			<KEYWORD3>_MS_WINDOWS_NT</KEYWORD3>
@@ -179,7 +179,7 @@
 			<KEYWORD3>_VMS</KEYWORD3>
 			<KEYWORD3>_WINDOW_FUNCTIONS</KEYWORD3>
 			<KEYWORD3>_X_WINDOW_SYSTEM</KEYWORD3>
-						
+
 			<KEYWORD4>co-expression</KEYWORD4>
 			<KEYWORD4>cset</KEYWORD4>
 			<KEYWORD4>file</KEYWORD4>

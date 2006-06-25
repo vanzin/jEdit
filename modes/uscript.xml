@@ -20,7 +20,7 @@
 	<RULES ESCAPE="\"
 		IGNORE_CASE="TRUE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
+		DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
 
 		<!-- Silly comment -->
 		<SEQ TYPE="COMMENT1">/**/</SEQ>
@@ -61,7 +61,7 @@
         <SEQ TYPE="OPERATOR">/</SEQ>
         <SEQ TYPE="OPERATOR">?</SEQ>
         <SEQ TYPE="OPERATOR">`</SEQ>
-        
+
 		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
 			AT_WHITESPACE_END="TRUE">:</MARK_PREVIOUS>
 
@@ -141,14 +141,14 @@
             <KEYWORD1>var</KEYWORD1>
             <KEYWORD1>while</KEYWORD1>
             <KEYWORD1>within</KEYWORD1>
-            
+
             <KEYWORD2>default</KEYWORD2>
             <KEYWORD2>global</KEYWORD2>
             <KEYWORD2>none</KEYWORD2>
             <KEYWORD2>self</KEYWORD2>
             <KEYWORD2>static</KEYWORD2>
             <KEYWORD2>super</KEYWORD2>
-            
+
             <KEYWORD3>bool</KEYWORD3>
             <KEYWORD3>byte</KEYWORD3>
             <KEYWORD3>float</KEYWORD3>

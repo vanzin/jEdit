@@ -44,7 +44,7 @@
 
 		<!-- heredoc -->
 		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL1" DELEGATE="LITERAL">
-			<BEGIN><![CDATA[<<<([[:alpha:]_][[:alnum:]_]*)\s*]]></BEGIN>
+			<BEGIN><![CDATA[<<<([\p{Alpha}_][\p{Alnum}_]*)\s*]]></BEGIN>
 			<END>$1</END>
 		</SPAN_REGEXP>
 

@@ -17,262 +17,266 @@
         <PROPERTY NAME="lineComment" VALUE="#"/>
         <PROPERTY NAME="indentNextLines" VALUE="\s*((if\s+.*|elsif\s+.*|else\s*|do(\s*|\s+.*)|case\s+.*|when\s+.*|while\s+.*|for\s+.*|until\s+.*|loop\s+.*|def\s+.*|class\s+.*|module\s+.*|begin.*|unless\s+.*)*)"/>
     </PROPS>
-    <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0b[01]([01_]*[01])?)|(0x[[:xdigit:]]([[:xdigit:]_]*[[:xdigit:]])?)|(0([0-7_]*[0-7])?)|(0d[0-9]([0-9_]*[0-9])?)|([1-9]([0-9_]*[0-9])?)|([0-9]([0-9_]*[0-9])?[Ee]([0-9]([0-9_]*[0-9])?)?)">
+    <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0b[01]([01_]*[01])?)|(0x[\p{XDigit}]([\p{XDigit}_]*[\p{XDigit}])?)|(0([0-7_]*[0-7])?)|(0d[0-9]([0-9_]*[0-9])?)|([1-9]([0-9_]*[0-9])?)|([0-9]([0-9_]*[0-9])?[Ee]([0-9]([0-9_]*[0-9])?)?)">
         <!--       ^ Binary literal    | ^ Hex literal                               | ^ Octal literal  | ^ "0d" Style Dec lit   | ^ Normal Dec literal | ^ Float literal w/out dec point, with exp. -->
-       
+
         <!-- Ruby comment (Inline Documentation ) -->
         <SPAN TYPE="COMMENT2">
             <BEGIN>=begin</BEGIN>
             <END>=end</END>
         </SPAN>
-        
+
         <!-- Class and instance vars -->
         <MARK_FOLLOWING TYPE="KEYWORD4">@</MARK_FOLLOWING>
 
+		<!-- Perl-style regexps - from perl.xml -->
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/" AT_WORD_START="TRUE"
+		>/[^\p{Blank}]*?/</SEQ_REGEXP>
+
         <!-- String literals -->
-        
+
         <SPAN TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>"</BEGIN>
             <END>"</END>
         </SPAN>
-        
+
         <SPAN TYPE="LITERAL1">
             <BEGIN>'</BEGIN>
             <END>'</END>
         </SPAN>
-        
+
         <!-- %Q(Hello world) %(Hello world)-->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%Q?\(</BEGIN>
             <END>)</END>
         </SPAN_REGEXP>
-        
+
         <!-- %q(Hello world) -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%q\(</BEGIN>
             <END>)</END>
         </SPAN_REGEXP>
-        
+
         <!-- %Q{Hello world} %{Hello world} -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%Q?\{</BEGIN>
             <END>}</END>
         </SPAN_REGEXP>
-        
+
         <!-- %q{Hello world} -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%q\{</BEGIN>
             <END>}</END>
         </SPAN_REGEXP>
-        
+
         <!-- %Q[Hello world] %[Hello world] -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%Q?\[</BEGIN>
             <END>]</END>
         </SPAN_REGEXP>
-        
+
         <!-- %q[Hello world] -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%q\[</BEGIN>
             <END>]</END>
         </SPAN_REGEXP>
-        
+
         <!-- %Q<Hello world> %<Hello world> -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%Q?&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN_REGEXP>
-        
+
         <!-- %q<Hello world> -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%q&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN_REGEXP>
-        
-        <!-- I made the next three forms as three instead of two, because the 
-         first two actually support whitespace as a delimiter, and the third 
+
+        <!-- I made the next three forms as three instead of two, because the
+         first two actually support whitespace as a delimiter, and the third
          one doesn't. -->
         <!-- %Q$Hello world$ -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
-            <BEGIN>%Q([^[:alnum:]])</BEGIN>
+            <BEGIN>%Q([^\p{Alnum}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- %q$Hello world$ -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
-            <BEGIN>%q([^[:alnum:]])</BEGIN>
+            <BEGIN>%q([^\p{Alnum}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- %$Hello world$ -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
-            <BEGIN>%([^[:alnum:][:space:]])</BEGIN>
+            <BEGIN>%([^\p{Alnum}\p{Space}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- %W(Array of strings) -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%W\(</BEGIN>
             <END>)</END>
         </SPAN_REGEXP>
-        
+
         <!-- %w(Array of strings) -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%w\(</BEGIN>
             <END>)</END>
         </SPAN_REGEXP>
-        
+
         <!-- %W{Array of strings} -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%W\{</BEGIN>
             <END>}</END>
         </SPAN_REGEXP>
-        
+
         <!-- %w{Array of strings} -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%w\{</BEGIN>
             <END>}</END>
         </SPAN_REGEXP>
-        
+
         <!-- %W[Array of strings] -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%W\[</BEGIN>
             <END>]</END>
         </SPAN_REGEXP>
-        
+
         <!-- %w[Array of strings] -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%w\[</BEGIN>
             <END>]</END>
         </SPAN_REGEXP>
-        
+
         <!-- %W<Array of strings>  -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>%W&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN_REGEXP>
-        
+
         <!-- %w<Array of strings> -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
             <BEGIN>%w&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN_REGEXP>
-        
+
         <!-- %W$Array of strings$ -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
-            <BEGIN>%W([^[:alnum:][:space:]])</BEGIN>
+            <BEGIN>%W([^\p{Alnum}\p{Space}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- %w@Array of strings@ -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL1">
-            <BEGIN>%w([^[:alnum:][:space:]])</BEGIN>
+            <BEGIN>%w([^\p{Alnum}\p{Space}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- Here documents <<"FOO" <<-"FOO" -->
-        <!-- Unfortunately, in a SPAN_REGEXP element only the <BEGIN> tag takes 
-         a regex, not the <END> tag. So an instance of FOO anywhere in the here 
-         document will terminate highlighting; I couldn't make it smarter. -->        
+        <!-- Unfortunately, in a SPAN_REGEXP element only the <BEGIN> tag takes
+         a regex, not the <END> tag. So an instance of FOO anywhere in the here
+         document will terminate highlighting; I couldn't make it smarter. -->
         <SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
-            <BEGIN>&lt;&lt;-?"([[:graph:]]+)"</BEGIN>
+            <BEGIN>&lt;&lt;-?"([\p{Graph}]+)"</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- Here documents <<'FOO' <<-'FOO' -->
-        <!-- Unfortunately, in a SPAN_REGEXP element only the <BEGIN> tag takes 
-         a regex, not the <END> tag. So an instance of FOO anywhere in the here 
-         document will terminate highlighting; I couldn't make it smarter. -->        
+        <!-- Unfortunately, in a SPAN_REGEXP element only the <BEGIN> tag takes
+         a regex, not the <END> tag. So an instance of FOO anywhere in the here
+         document will terminate highlighting; I couldn't make it smarter. -->
         <SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL1">
-            <BEGIN>&lt;&lt;-?'([[:graph:]]+)'</BEGIN>
+            <BEGIN>&lt;&lt;-?'([\p{Graph}]+)'</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- Here documents <<FOO <<-FOO -->
-        <!-- Unfortunately, in a SPAN_REGEXP element only the <BEGIN> tag takes 
-         a regex, not the <END> tag. So an instance of FOO anywhere in the here 
-         document will terminate highlighting; I couldn't make it smarter. -->        
+        <!-- Unfortunately, in a SPAN_REGEXP element only the <BEGIN> tag takes
+         a regex, not the <END> tag. So an instance of FOO anywhere in the here
+         document will terminate highlighting; I couldn't make it smarter. -->
         <SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
             <BEGIN>&lt;&lt;-?([A-Za-z_]+)</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- Shell command strings -->
-        
+
         <!-- `echo foo` -->
         <SPAN TYPE="LITERAL2" DELEGATE="BackquoteLiteral">
             <BEGIN>`</BEGIN>
             <END>`</END>
         </SPAN>
-        
+
         <!-- %x(echo foo) -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL2" DELEGATE="BackquoteLiteral">
             <BEGIN>%x\(</BEGIN>
             <END>)</END>
         </SPAN_REGEXP>
-        
+
         <!-- %x{echo foo} -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL2" DELEGATE="BackquoteLiteral">
             <BEGIN>%x\{</BEGIN>
             <END>}</END>
         </SPAN_REGEXP>
-        
+
         <!-- %x[echo foo] -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL2" DELEGATE="BackquoteLiteral">
             <BEGIN>%x\[</BEGIN>
             <END>]</END>
         </SPAN_REGEXP>
-        
+
         <!-- %x<echo foo> -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL2" DELEGATE="BackquoteLiteral">
             <BEGIN>%x&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN_REGEXP>
-        
+
         <!-- %x$echo foo$ -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL2" DELEGATE="BackquoteLiteral">
-            <BEGIN>%x([^[:alnum:][:space:]])</BEGIN>
+            <BEGIN>%x([^\p{Alnum}\p{Space}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- Regular expressions   -->
-        
+
         <!-- /regexp?/i -->
         <!-- This doesn't really work well, because it can't distinguish a regexp
          from multiple instances of the "/" division operator on the same line. -->
         <!-- <SEQ_REGEXP HASH_CHAR="/" AT_WORD_START="TRUE"
             TYPE="LITERAL3">/[^/]+/[iomx]*</SEQ_REGEXP> -->
-        
+
         <!-- %r(regexp?) -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL3" DELEGATE="RegexpLiteral">
             <BEGIN>%r\(</BEGIN>
             <END>)</END>
         </SPAN_REGEXP>
-        
+
         <!-- %r{regexp?} -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL3" DELEGATE="RegexpLiteral">
             <BEGIN>%r\{</BEGIN>
             <END>}</END>
         </SPAN_REGEXP>
-        
+
         <!-- %r[regexp?] -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL3" DELEGATE="RegexpLiteral">
             <BEGIN>%r\[</BEGIN>
             <END>]</END>
         </SPAN_REGEXP>
-        
+
         <!-- %r<regexp?> -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL3" DELEGATE="RegexpLiteral">
             <BEGIN>%r&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN_REGEXP>
-        
+
         <!-- %r$regexp?$ -->
         <SPAN_REGEXP HASH_CHAR="%" TYPE="LITERAL3" DELEGATE="RegexpLiteral">
-            <BEGIN>%r([^[:alnum:][:space:]])</BEGIN>
+            <BEGIN>%r([^\p{Alnum}\p{Space}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-        
+
         <!-- (/regexp/) -->
         <SPAN_REGEXP HASH_CHAR="(" DELEGATE="RegexpLiteral" EXCLUDE_MATCH="TRUE" TYPE="LITERAL3">
             <BEGIN>\(/</BEGIN>
@@ -290,18 +294,18 @@
 
         <!-- Std Comment -->
         <EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
-        
+
         <!-- Predefined global variables -->
-        <SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD3" AT_WORD_START="TRUE">\$-[0adFiIKlpvw](?![[:alnum:]_])</SEQ_REGEXP>
-             
-        <SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD3" AT_WORD_START="TRUE">\$[0-9!@&amp;\+`'=~/\\,\.;&lt;&gt;_\*"\$\?\:F](?![[:alnum:]_])</SEQ_REGEXP>
+        <SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD3" AT_WORD_START="TRUE">\$-[0adFiIKlpvw](?![\p{Alnum}_])</SEQ_REGEXP>
+
+        <SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD3" AT_WORD_START="TRUE">\$[0-9!@&amp;\+`'=~/\\,\.;&lt;&gt;_\*"\$\?\:F](?![\p{Alnum}_])</SEQ_REGEXP>
 
         <!-- Because of the ? char, this can't be done as a KEYWORD element -->
         <SEQ TYPE="KEYWORD1" AT_WORD_START="TRUE">defined?</SEQ>
-        
+
         <!-- Highlight "include" but not "include?" -->
-        <SEQ_REGEXP HASH_CHAR="i" TYPE="KEYWORD2" AT_WORD_START="TRUE">include(?![[:alnum:]_\?])</SEQ_REGEXP>
-        
+        <SEQ_REGEXP HASH_CHAR="i" TYPE="KEYWORD2" AT_WORD_START="TRUE">include(?![\p{Alnum}_\?])</SEQ_REGEXP>
+
         <!-- Not Operators but like the syntax highlight to match operators -->
         <SEQ TYPE="OPERATOR">{</SEQ>
         <SEQ TYPE="OPERATOR">}</SEQ>
@@ -340,12 +344,12 @@
         <SEQ TYPE="OPERATOR">]</SEQ>
         <SEQ TYPE="OPERATOR">[</SEQ>
         <SEQ TYPE="OPERATOR">?</SEQ>
-        
+
         <!-- Symbols -->
-        <SEQ_REGEXP AT_WORD_START="TRUE" HASH_CHAR=":" TYPE="LABEL">:[[:alpha:]_][[:alnum:]_]*</SEQ_REGEXP>
-             
+        <SEQ_REGEXP AT_WORD_START="TRUE" HASH_CHAR=":" TYPE="LABEL">:[\p{Alpha}_][\p{Alnum}_]*</SEQ_REGEXP>
+
         <SEQ TYPE="OPERATOR">:</SEQ>
-        
+
         <KEYWORDS>
             <KEYWORD1>BEGIN</KEYWORD1>
             <KEYWORD1>END</KEYWORD1>
@@ -389,7 +393,7 @@
             <KEYWORD3>self</KEYWORD3>
             <KEYWORD3>super</KEYWORD3>
             <KEYWORD3>true</KEYWORD3>
-             
+
             <KEYWORD3>$defout</KEYWORD3>
             <KEYWORD3>$deferr</KEYWORD3>
             <KEYWORD3>$stderr</KEYWORD3>
@@ -416,11 +420,11 @@
             <KEYWORD3>STDOUT</KEYWORD3>
             <KEYWORD3>SCRIPT_LINES__</KEYWORD3>
             <KEYWORD3>TOPLEVEL_BINDING</KEYWORD3>
-            <KEYWORD3>TRUE</KEYWORD3>             
+            <KEYWORD3>TRUE</KEYWORD3>
         </KEYWORDS>
     </RULES>
-    
-    <!-- Delegate contents of #{} expression in double quotes to MAIN so that 
+
+    <!-- Delegate contents of #{} expression in double quotes to MAIN so that
      it will be syntax highlighted as well -->
     <RULES DEFAULT="LITERAL1" SET="doubleQuoteLiteral">
         <SPAN DELEGATE="MAIN" TYPE="OPERATOR">
@@ -431,8 +435,8 @@
         <MARK_FOLLOWING TYPE="KEYWORD4">#@</MARK_FOLLOWING>
         <MARK_FOLLOWING TYPE="NULL">#$</MARK_FOLLOWING>
     </RULES>
-    
-    <!-- Delegate contents of #{} expression in backquotes to MAIN so that 
+
+    <!-- Delegate contents of #{} expression in backquotes to MAIN so that
      it will be syntax highlighted as well -->
     <RULES DEFAULT="LITERAL2" SET="BackquoteLiteral">
         <SPAN DELEGATE="MAIN" TYPE="OPERATOR">
@@ -443,8 +447,8 @@
         <MARK_FOLLOWING TYPE="KEYWORD4">#@</MARK_FOLLOWING>
         <MARK_FOLLOWING TYPE="NULL">#$</MARK_FOLLOWING>
     </RULES>
-    
-    <!-- Delegate contents of #{} expression in a regexp to MAIN so that 
+
+    <!-- Delegate contents of #{} expression in a regexp to MAIN so that
      it will be syntax highlighted as well -->
     <RULES DEFAULT="LITERAL3" SET="RegexpLiteral">
         <SPAN DELEGATE="MAIN" TYPE="OPERATOR">

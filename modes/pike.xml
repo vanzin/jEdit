@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<!-- Pike mode, contributed by 
+<!-- Pike mode, contributed by
                       Marco G?tze, <gomar@gmx.net> -->
-<!-- Small fixes and autodoc support contributed by 
+<!-- Small fixes and autodoc support contributed by
                       Peter Lundqvist <peterl@update.uu.se> -->
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
@@ -21,7 +21,7 @@
     <!-- set this to 'true' if you want to use GNU coding style -->
     <PROPERTY NAME="doubleBracketIndent" VALUE="false"/>
   </PROPS>
-  <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[[:xdigit:]]+|[[:digit]]+|0[bB][01]+)[lLdDfF]?">
+  <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[\p{XDigit}]+|[\p{Digit}]+|0[bB][01]+)[lLdDfF]?">
 
     <!-- comments -->
     <SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
@@ -140,9 +140,9 @@
   </RULES>
 
   <RULES SET="AUTODOC" IGNORE_CASE="TRUE" DEFAULT="COMMENT1">
-		
+
 		<EOL_SPAN TYPE="NULL" DELEGATE="MAIN" EXCLUDE_MATCH="TRUE">@decl</EOL_SPAN>
-		
+
 		<!-- XML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS">
 		  <BEGIN>@xml{</BEGIN>
@@ -153,10 +153,10 @@
   		<BEGIN>@[</BEGIN>
 			<END>]</END>
 		</SPAN>
-			
+
 		<!-- Brace keywords -->
 		<SEQ_REGEXP TYPE="FUNCTION" HASH_CHAR="@">@(b|i|u|tt|url|pre|ref|code|expr|image)?(\{.*@\})</SEQ_REGEXP>
-				
+
 		<KEYWORDS>
 		  <!-- Meta keywords -->
 		  <LABEL>@appears</LABEL>
@@ -168,12 +168,12 @@
 		  <LABEL>@endmodule</LABEL>
 		  <LABEL>@namespace</LABEL>
 		  <LABEL>@endnamespace</LABEL>
-		  <!-- <LABEL>@decl</LABEL> 
+		  <!-- <LABEL>@decl</LABEL>
 		  -->
-		  
+
 		  <!-- Single keywords -->
 		  <LABEL>@deprecated</LABEL>
-		  
+
 		  <!-- Delimiter keywords -->
 		  <LABEL>@note</LABEL>
 		  <LABEL>@example</LABEL>
@@ -190,7 +190,7 @@
 		  <LABEL>@value</LABEL>
 		  <LABEL>@type</LABEL>
 		  <LABEL>@item</LABEL>
-		  
+
 		  <!-- Container keywords -->
 		  <LABEL>@section</LABEL>
 		  <LABEL>@mapping</LABEL>
@@ -211,29 +211,29 @@
 		  <LABEL>@endol</LABEL>
 		  <LABEL>@ul</LABEL>
 		  <LABEL>@endol</LABEL>
-		  
+
 		  <!-- Special keywords -->
 		  <LABEL>@ignore</LABEL>
 		  <LABEL>@endignore</LABEL>
-		  
+
 		</KEYWORDS>
-		
-		<!-- Attempt to get syntax highlighting of @decl-ed functions 
-		     inside of the autodoc-rule. 
-				 
-		     It works - but jEdit 4.1 has problems keeping it highlighted 
+
+		<!-- Attempt to get syntax highlighting of @decl-ed functions
+		     inside of the autodoc-rule.
+
+		     It works - but jEdit 4.1 has problems keeping it highlighted
 		     (the syntax highlighting works depending on how you travel
 		     past the @decl-ed region).
 		     Can't figure aout how to to proper coloring of the @decl
 		     keyword either.
-		     
-		     If there are problems with what regions are highlighted - 
+
+		     If there are problems with what regions are highlighted -
 		     try to uncomment this first.
 		-->
 		<EOL_SPAN TYPE="NULL" DELEGATE="MAIN">@decl</EOL_SPAN>
-		
+
 	</RULES>
-	
+
   <RULES SET="STRING_LITERAL" ESCAPE="\" IGNORE_CASE="TRUE" DEFAULT="LITERAL1">
     <SEQ_REGEXP TYPE="LITERAL2" HASH_CHAR="%">%([^ a-z]*[a-z]|\[[^\]]*\])</SEQ_REGEXP>
     <SEQ_REGEXP TYPE="COMMENT2" HASH_CHAR="D">DEBUG:</SEQ_REGEXP>
