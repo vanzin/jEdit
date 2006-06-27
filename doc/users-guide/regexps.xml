@@ -27,8 +27,7 @@
   <listitem><para><literal>$</literal> matches at the end of a line</para></listitem>
   <listitem><para><literal>\b</literal> matches at a word break</para></listitem>
   <listitem><para><literal>\B</literal> matches at a non-word break</para></listitem>
-  <listitem><para><literal>\&lt;</literal> matches at the start of a word</para></listitem>
-  <listitem><para><literal>\&gt;</literal> matches at the end of a word</para></listitem>
+  <listitem><para><literal>\b</literal> matches at a word boundary</para></listitem>
  </itemizedlist>
  <bridgehead renderas="sect3">One-Character Operators</bridgehead>
  <itemizedlist>

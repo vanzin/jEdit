@@ -6,8 +6,11 @@ Thanks to Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
 Björn "Vampire" Kautler, Matthieu Casanova, Xuân Baldauf,
 Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
+
+
 {{{ Reinstall required
-- Since the regexp removal has also affected the modes handling and thus
+- Gnu.regexp is no longer used by jEdit, in favor of java.util.regex
+  Since the regexp removal has also affected the modes handling and thus
   the files in the "modes" directory, just updating "jedit.jar" of an
   existing jEdit installation does not suffice. You would get weird
   errors in this case. Thus, a full reinstall is required.
