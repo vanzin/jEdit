@@ -4,7 +4,7 @@
 
 <!--
 	M68000 Assembly mode by Igor Lesik (curoles@yahoo.com)
-	version 0.1 (July 24, 2004)
+	version 0.2 (July 24, 2006)
 	TODO: i)add missing size qualifiers, ii)add Xcc like instructions
 -->
 
@@ -14,7 +14,7 @@
 		<PROPERTY NAME="lineComment" VALUE=";" />
 	</PROPS>
 
-	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[[:xdigit:]]+|[[:digit:]]+)">
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x\p{Xdigit}+|\d+)">
 
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT2">*</EOL_SPAN>
