@@ -53,7 +53,7 @@
 
 		<!-- markup tags -->
 		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="MARKUP" DELEGATE="TAGS">
-			<BEGIN><![CDATA[<[[:alpha:]/][:alnum:]*]]></BEGIN>
+			<BEGIN><![CDATA[<[a-zA-Z/]\w*]]></BEGIN>
 			<END>&gt;</END>
 		</SPAN_REGEXP>
 
@@ -181,7 +181,7 @@
 	<RULES ESCAPE="\"
 		IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="(0x[[:xdigit:]]+[lL]?|[[:digit:]]+(e[[:digit:]]*)?[lLdDfF]?)">
+		DIGIT_RE="(0x\p{Xdigit}+[lL]?|\d+(e\d*)?[lLdDfF]?)">
 
 		<!-- XQuery style comment -->
 		<SPAN TYPE="COMMENT1">
