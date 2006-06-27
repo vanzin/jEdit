@@ -265,6 +265,9 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.getFirstPhysicalLine());
 		buffer.setIntegerProperty(Buffer.SCROLL_HORIZ,
 			textArea.getHorizontalOffset());
+		BufferHistory.setEntry(buffer.getPath(), textArea.getCaretPosition(), 
+			(Selection[])buffer.getProperty(Buffer.SELECTION),
+			buffer.getStringProperty(Buffer.ENCODING));
 	} //}}}
 
 	//{{{ loadCaretInfo() method
