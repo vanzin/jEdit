@@ -65,12 +65,12 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	//{{{ AbstractOptionPane constructor
 	/**
 	 * Creates a new option pane.
-	 * @param name The internal name. The option pane's label is set to the
+	 * @param internalName The internal name. The option pane's label is set to the
 	 * value of the property named <code>options.<i>name</i>.label</code>.
 	 */
-	public AbstractOptionPane(String name)
+	public AbstractOptionPane(String internalName)
 	{
-		this.name = name;
+		this.name = internalName;
 		setLayout(gridBag = new GridBagLayout());
 	} //}}}
 
