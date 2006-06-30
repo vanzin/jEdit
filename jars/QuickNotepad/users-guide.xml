@@ -1,12 +1,9 @@
 <?xml version="1.0" standalone="no" ?>
-
-
 <!-- QuickNotepad 2.0 help documentation -->
 <!-- Copyright (C) 2001 John Gellene	 -->
 
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-		"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
-
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <article id="QuickNotepad">
 	<articleinfo>
 		<author>
@@ -74,7 +71,7 @@
 </para>
 <!-- Limitations on xsltproc's capabilities require a blank column between -->
 <!-- the two columns of data to provide spacing for the table.       -->
-<informaltable align="center" frame="none">
+<informaltable frame="none">
 	<tgroup cols="4" align="left">
 		<colspec colnum="1"/> <!-- blank column -->
 		<colspec colnum="2"/>
