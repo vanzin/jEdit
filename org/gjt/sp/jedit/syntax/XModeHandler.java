@@ -175,7 +175,7 @@ public abstract class XModeHandler extends DefaultHandler
 					rules.addRule(ParserRule.createRegexpSequenceRule(
 						tag.lastHashChar,tag.lastStartPosMatch,
 						tag.lastStart.toString(),tag.lastDelegateSet,
-						tag.lastTokenID,tag.lastIgnoreCase));
+						tag.lastTokenID,findParent("RULES").lastIgnoreCase));
 				}
 				catch(PatternSyntaxException re)
 				{
@@ -234,7 +234,7 @@ public abstract class XModeHandler extends DefaultHandler
 						tag.lastExcludeMatch,
 						tag.lastNoLineBreak,
 						tag.lastNoWordBreak,
-						tag.lastIgnoreCase,
+						findParent("RULES").lastIgnoreCase,
 						tag.lastNoEscape));
 				}
 				catch(PatternSyntaxException re)
@@ -271,7 +271,7 @@ public abstract class XModeHandler extends DefaultHandler
 						tag.lastHashChar,tag.lastStartPosMatch,
 						tag.lastStart.toString(),tag.lastDelegateSet,
 						tag.lastTokenID,tag.lastExcludeMatch,
-						tag.lastIgnoreCase));
+						findParent("RULES").lastIgnoreCase));
 				}
 				catch(PatternSyntaxException re)
 				{
@@ -435,6 +435,22 @@ public abstract class XModeHandler extends DefaultHandler
 	private TagDecl popElement()
 	{
 		return (TagDecl) stateStack.pop();
+	} //}}}
+
+	//{{{ findElement() method
+	/**
+	 * Finds the first element whose tag matches 'tagName',
+	 * searching backwards in the stack.
+	 */
+	private TagDecl findParent(String tagName)
+	{
+		for (int idx = stateStack.size() - 1; idx >= 0; idx--)
+		{
+			TagDecl tag = (TagDecl) stateStack.get(idx);
+			if (tag.tagName.equals(tagName))
+				return tag;
+		}
+		return null;
 	} //}}}
 
 	//}}}
