@@ -10,13 +10,13 @@ plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
 
 # version number == jEdit version number
-plugin.QuickNotepadPlugin.version=4.2
+plugin.QuickNotepadPlugin.version=4.3
 
 # online help
 plugin.QuickNotepadPlugin.docs=index.html
 
-# we only have one dependency, jEdit 4.2, since we use the new plugin API
-plugin.QuickNotepadPlugin.depend.0=jedit 04.02.01.00
+# we only have one dependency, jEdit 4.3
+plugin.QuickNotepadPlugin.depend.0=jedit 04.03.04.00
 
 # plugin menu
 plugin.QuickNotepadPlugin.menu=quicknotepad \
