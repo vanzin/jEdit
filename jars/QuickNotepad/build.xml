@@ -1,67 +1,40 @@
 <?xml version="1.0"?>
+<!--
+     This is a build.xml file for building the QuickNotePad plugin.
 
-<project name="QuickNotepad" default="dist" basedir=".">
+     ant -p shows a list of all targets
+     and what they do.
+     
+     This file depends on "build-support", a
+     collection of ant build steps designed for use with jedit plugins.
+     
+     http://jedit.cvs.sourceforge.net/jedit/plugins/build-support/
+
+     - If necessary, add any dependencies to the 'project.class.path'
+       definition
+-->
+
+<project name="QuickNotepad" default="build" basedir=".">
 	<property file="../build.properties"/>
 	<property file="build.properties"/>
+    
+    <!--
+    It is important that the value of ${build.support} as well as ${jedit.install.dir} are set before the property file is imported. -->
+    
+    <property name="jedit.install.dir"  value="../../"/>
+    
+    <property name="compiler.source" value="1.4" />
+    <property name="compiler.target" value="1.4" />
+	
+	<property name="build.dir" value="build"/>
+	<property name="install.dir"  value="../"/>
+    
+    <property name="build.support" 
+    location="/home/ezust/workspace/plugins/build-support"/>
 
-	<property name="jedit.install.dir"  value="../.."/>
-	<property name="jar.name"  value="QuickNotepad.jar"/>
+    <!-- Importing the modular build file -->
+    <import file="${build.support}/plugin-build.xml" />
 
-	<property name="install.dir"  value=".."/>
+    <!-- Look ma, no targets! ant -p shows a list though.  -->
 
-
-	<path id="project.class.path">
-		<pathelement location="${jedit.install.dir}/jedit.jar"/>
-		<pathelement location="."/>
-	</path>
-
-
-	<target name="init">
-		<delete file="docbook-wrapper.xsl" />
-		<echo file="docbook-wrapper.xsl"
-			message="&lt;xsl:stylesheet"/>
-		<echo file="docbook-wrapper.xsl" append="true"
-			message=" xmlns:xsl='http://www.w3.org/1999/XSL/Transform'"/>
-		<echo file="docbook-wrapper.xsl" append="true"
-			message=" xsl:version='1.0'&gt;"/>
-		<echo file="docbook-wrapper.xsl" append="true"
-			message="&lt;xsl:import href='${docbook.xsl}/html/chunk.xsl'/&gt;"/>
-		<echo file="docbook-wrapper.xsl" append="true"
-			message="&lt;/xsl:stylesheet&gt;"/>
-	</target>
-
-
-	<target name="compile">
-		<javac
-			srcdir="."
-			deprecation="on"
-			includeJavaRuntime="yes"
-		>
-			<classpath refid="project.class.path"/>
-		</javac>
-	</target>
-
-
-	<target name="dist" depends="compile">
-		<mkdir dir="${install.dir}"/>
-		<jar jarfile="${install.dir}/${jar.name}">
-			<fileset dir=".">
-				<include name="**/*.class"/>
-				<include name="**/*.props"/>
-				<include name="**/*.html"/>
-				<include name="**/*.gif"/>
-				<include name="actions.xml"/>
-				<include name="dockables.xml"/>
-			</fileset>
-		</jar>
-	</target>
-
-	<!-- Generate docs with xsltproc tool from www.xmlsoft.org -->
-	<target name="docs-xsltproc" depends="init">
-		<exec executable="xsltproc">
-			<arg value="--catalogs"/>
-			<arg value="users-guide.xsl"/>
-			<arg value="users-guide.xml"/>
-		</exec>
-	</target>
 </project>
