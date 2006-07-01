@@ -264,7 +264,7 @@ plugin.QuickNotepadPlugin.name=QuickNotepad
 plugin.QuickNotepadPlugin.author=John Gellene
 
 # version number == jEdit version number
-plugin.QuickNotepadPlugin.version=4.2
+plugin.QuickNotepadPlugin.version=4.3
 
 # online help
 plugin.QuickNotepadPlugin.docs=index.html
@@ -643,22 +643,25 @@ else if(msg instanceof ViewUpdate) {
 </DOCKABLES>]]></programlisting></informalexample>
 
 <para>
-
 In this example, the <classname>&lt;DOCKABLE&gt;</classname> element has
 a single attribute, the dockable window's identifier. This attribute is
 used to key a property where the window title is stored; see
 <xref linkend="plugin-implement-properties"/>.
+</para>
 
+<para> For each dockable, jedit defines an action with the same name. 
+This is why there is a <literal>quicknotepad.label</literal> in the properties file - this will be the label that shows up in the QuickNotePad plugin menu, corresponding to the action that was added. 
 </para>
 
 <para>
+Actually, there are two other actions defined for each dockable too: "toggle", and "new floating instance". </para>
 
+<para>
 The contents of the <classname>&lt;DOCKABLE&gt;</classname> element itself is a
 BeanShell expression that constructs a new <classname>QuickNotepad</classname>
 object.  The <varname>view</varname> and <varname>position</varname> are
 predefined by the plugin API as the view in which the plugin window will reside,
 and the docking position of the plugin.
-
 </para>
 
 <para>
@@ -673,19 +676,23 @@ and the docking position of the plugin.
 <sect1 id="plugin-implement-services"><title>The services.xml file </title>
 
 
-<para> Some plugins, such as SideKick and Console, offer services, which can be described in a file called "services.xml". Here is an example of one from SideKick: </para>
+<para> Some plugins, such as SideKick and Console, define services, which can be described in a file called "services.xml". This makes it possible for other plugins to extend them. Here is an example of one from the XML plugin, which extends Sidekick: </para>
 
 <informalexample><programlisting>
+&lt;!DOCTYPE SERVICES SYSTEM &quot;services.dtd&quot;&gt;
+
 &lt;SERVICES&gt;
-        &lt;SERVICE CLASS=&quot;org.gjt.sp.jedit.buffer.FoldHandler&quot; NAME=&quot;sidekick&quot;&gt;
-                new sidekick.SideKickFoldHandler()
+        &lt;SERVICE CLASS=&quot;sidekick.SideKickParser&quot; NAME=&quot;xml&quot;&gt;
+                new xml.parser.SAXParserImpl();
         &lt;/SERVICE&gt;
 &lt;/SERVICES&gt;
 </programlisting>
 </informalexample>
 
-<para> For information about services, refer to the <ulink url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink> class API documentation. There, you can find out what the tags and attributes mean, as well as how to register and use services. </para>
+<para> This defines a service for Sidekick, which can parse XML files.
+The object it returns tells Sidekick how it can parse files of a specific type. The API docs for SideKickParser indicate exactly which methods must be implemented in a plugin which offers this service. It should be enough information to let Sidekick, which has its own dockable, display the tree information in its own view.  </para>
 
+<para> For more information about services, refer to the <ulink url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink> class API documentation. There, you can find out what the tags and attributes mean, as well as how to register and use services. </para>
 </sect1>
 
 <sect1 id="plugin-implement-quicknotepad"><title>The QuickNotepad Class</title>
@@ -1132,55 +1139,41 @@ and the docking position of the plugin.
   in XML format for the
   <application>Ant</application> utility.  The format for this file
   requires few changes from plugin to plugin.  Here is the version of
-  <filename>build.xml</filename> used by Console and many other
+  <filename>build.xml</filename> used by QuickNotepad and many other
   plugins:
 </para>
 
 <informalexample><programlisting><![CDATA[
-<project name="Console" default="build" basedir=".">
-    <property file="../build.properties" />
-	<property name="build.support" value="../build-support" />
-	<property name="javadoc.packagenames"	value="console.*" />
-	<property name="plugin.dependencies" 	value="ErrorList,InfoViewer,ProjectViewer" />
-	<property name="dist.target" 			value="dist.complete" />
-	<property name="compiler.source" value="1.5" />
-	<property name="compiler.target" value="1.5" />
+<project name="QuickNotepad" default="build" basedir=".">
 
-	<import file="${build.support}/plugin-build.xml" />
+    <!-- Import other property files -->
+    <property file="../build.properties"/>
+    <property file="build.properties"/>
+    
 
-	<selector id="compileFiles">
-	     <and>
-			<filename name="**/*.java" />
-		 </and>
-	</selector>
+    <property name="jedit.install.dir"  value="../../"/>
+    
+    <property name="compiler.source" value="1.4" />
+    <property name="compiler.target" value="1.4" />
+	
+    <property name="build.dir" value="build"/>
+    <property name="install.dir"  value="../"/>
+    
+    <property name="build.support" 
+    location="/home/ezust/workspace/plugins/build-support"/>
 
-    <selector id="extraFiles">
-	  <or>
-	  <filename name="**/actions.xml" />
-		<filename name="**/dockables.xml" />
-		<filename name="**/services.xml" />
-		<filename name="**/*.props" />
-		<filename name="**/LICENSE" />
-		<filename name="**/README" />
-		<filename name="**/*.bsh" />
-		<filename name="**/*.xml" />
-		<filename name="**/*.png" />
-		<filename name="**/*.gif" />
-		<filename name="**/*.dtd" />
-	  </or>
-    </selector>
+    <!--
+    It is important that the value of ${build.support} as well as ${jedit.install.dir} are set before the property file is imported. -->
+    <import file="${build.support}/plugin-build.xml" />
 
-	<!-- Add needed plugins to the classpath. -->
-	<path id="project.class.path">
-		<pathelement location="${install.dir}/ProjectViewer.jar"/>
-		<pathelement location="${install.dir}/ErrorList.jar" />
-		<pathelement location="${install.dir}/InfoViewer.jar" />
-	</path>
+    <!-- Look ma, no targets! ant -p shows a list though.  -->
+
 </project>
 ]]></programlisting></informalexample>
 
 <para>
-  This build file imports another modular build file, located in another directory. It makes use of a CVS module known as <application>plugins/build-support</application>. You can check this out from the jEdit repository. It contains common build steps
+  This build file imports another modular build file, <literal>plugin-build.xml</literal> located in another project. It makes use of a CVS module known as <ulink url="http://jedit.cvs.sourceforge.net/jedit/plugins/build-support/">
+  build-support</ulink>. You can check this out from the jEdit repository. It contains common build steps
   for jEdit plugins, and some example properties files which you can adapt for use with your plugin. The file is imported with this line
   </para> 
   <programlisting>
@@ -1193,7 +1186,7 @@ and the docking position of the plugin.
   For a full discussion of the <filename>Ant</filename> file format and
   command syntax, you should consult the <ulink
   url="http://jakarta.apache.org/ant/manual/index.html">Ant
-  documentation site</ulink>. Modifying this makefile for a different
+  documentation site</ulink>. Customizing this makefile for a different
   plugin will likely only require three changes:
 </para>
 
@@ -1213,7 +1206,7 @@ and the docking position of the plugin.
 <sect1 id="plugin-implement-reloading"><title>Reloading the Plugin</title>
 
 <para>
-  Once you have compiled your plugin using the 4.2 API you will need to reload it to test it. Follow these steps to reload your plugin without restarting jEdit: 
+  Once you have compiled your plugin you will need to reload it to test it. Follow these steps to reload your plugin without restarting jEdit: 
 </para>
 
 <itemizedlist>
@@ -1236,9 +1229,9 @@ and the docking position of the plugin.
 </itemizedlist>
 
 
-<para>
-  The Activator plugin provides a very convenient way to test the reloading behavior of your plugin, as well as restart it for debugging purposes. 
-</para>
+<tip><para>
+  The Activator plugin provides a very convenient way to test the reloading behavior of your plugin, as well as restart it for debugging purposes. For plugins that offer services, it doesn't work so well. 
+</para> </tip>
 
 <para>
   If you have reached this point in the text, you are probably serious
