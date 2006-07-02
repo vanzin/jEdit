@@ -530,11 +530,14 @@ docking=left-docking-area \
 	- \
 	close-docking-area
 docking.label=$Docking
+docking.menu.label=Dockable Menu
 left-docking-area.label=Go to $Left Docking Area
 top-docking-area.label=Go to $Top Docking Area
 right-docking-area.label=Go to $Right Docking Area
 bottom-docking-area.label=Go to $Bottom Docking Area
 close-docking-area.label=$Close Current Docking Area
+
+
 #}}}
 
 #}}}
@@ -1268,8 +1271,9 @@ search.synchronize=Synchronize
 search.synchronize.mnemonic=z
 search.synchronize.tooltip=Sets filter and directory to current buffer's extension/location.
 search.findBtn=Find
+search.findBtn.mnemonic=f
 search.replaceAndFindBtn=Replace & Find
-search.replaceAndFindBtn.mnemonic=r
+search.replaceAndFindBtn.mnemonic=n
 search.replaceAllBtn=Replace All
 search.replaceAllBtn.mnemonic=a
 

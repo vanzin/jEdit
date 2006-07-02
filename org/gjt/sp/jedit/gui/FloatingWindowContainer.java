@@ -50,6 +50,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		caption.add(menu = new RolloverButton(GUIUtilities
 			.loadIcon("ToolbarMenu.gif")));
 		menu.addMouseListener(new MouseHandler());
+		menu.setToolTipText(jEdit.getProperty("docking.menu.label"));
 		Box separatorBox = new Box(BoxLayout.Y_AXIS);
 		separatorBox.add(Box.createVerticalStrut(3));
 		separatorBox.add(new JSeparator(JSeparator.HORIZONTAL));
