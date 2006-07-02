@@ -675,8 +675,12 @@ and the docking position of the plugin.
 </sect1>
 <sect1 id="plugin-implement-services"><title>The services.xml file </title>
 
+<para> A "service" is a mechanism by which one plugin can work with other plugins and avoid a bidirectional build-dependency. For example, the XML plugin "depends" on Sidekick, but in fact, it is SideKick which creates and operates on an object (a <literal>SideKickParser</literal>, in fact) defined in the XML plugin. In a way, the dependency is bidirectional. </para>
 
-<para> Some plugins, such as SideKick and Console, define services, which can be described in a file called "services.xml". This makes it possible for other plugins to extend them. Here is an example of one from the XML plugin, which extends Sidekick: </para>
+<para> Similarly, the AntFarm plugin defines but does not instantiate a <literal>Shell</literal> object. It is the Console plugin which creates a specific shell for each available service. SideKick and Console use the ServiceManager to search for services offered by other plugins.
+</para>
+
+<para> Here is an example of a service from the XML plugin, which extends Sidekick: </para>
 
 <informalexample><programlisting>
 &lt;!DOCTYPE SERVICES SYSTEM &quot;services.dtd&quot;&gt;
@@ -689,8 +693,7 @@ and the docking position of the plugin.
 </programlisting>
 </informalexample>
 
-<para> This defines a service for Sidekick, which can parse XML files.
-The object it returns tells Sidekick how it can parse files of a specific type. The API docs for SideKickParser indicate exactly which methods must be implemented in a plugin which offers this service. It should be enough information to let Sidekick, which has its own dockable, display the tree information in its own view.  </para>
+<para> The object it returns tells Sidekick how it can parse files of a specific type. The API docs for SideKickParser indicate exactly which methods must be implemented in a plugin which offers this service. It should be enough information to let Sidekick, which has its own dockable, display the tree information in its own view.  </para>
 
 <para> For more information about services, refer to the <ulink url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink> class API documentation. There, you can find out what the tags and attributes mean, as well as how to register and use services. </para>
 </sect1>
