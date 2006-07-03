@@ -24,7 +24,13 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   this bug in bug 1488047).
   (Xuân Baldauf).
 }}}
+
 {{{ API Changes
+
+- DockableWindowManager has a new method, setDockableTitle()
+  which allows you to set the string in the title bar
+  for floating dockables. (Alan Ezust)
+  
 
 - Macros.Macro.invoke() has been rewritten to begin the compoundEdit on the buffer that is
   active buffer before the macro gets invoked, and end the compoundEdit on the buffer that is active
@@ -73,6 +79,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 - Added Log.log(urgency, source, message, exception). (Xuân Baldauf)
 
 }}}
+
 {{{ Miscellaneous
 - SearchReplace dialog now supports additional options,
   for Directory Search: "skipHidden" and "skipBinary".
