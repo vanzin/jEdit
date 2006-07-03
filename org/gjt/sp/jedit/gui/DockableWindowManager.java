@@ -225,7 +225,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
 			return null;
 		}
-
+		
 		// create a copy of this dockable window and float it
 		Entry newEntry = new Entry(entry.factory,FLOATING);
 		newEntry.win = newEntry.factory.createDockableWindow(view,FLOATING);
@@ -396,6 +396,25 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			return title;
 	} //}}}
 
+	/**
+	 * Changes the title string of a floating dockable.
+	 * 
+	 * @param dockableName the name of the dockable, as specified in the dockables.xml
+	 * @param newTitle the new title you want to see above it. This is prefixed by the
+	 *        Dockable's label.
+	 * @since 4.3pre5
+	 * 
+	 */
+	public void  setDockableTitle(String dockableName, String newTitle) {
+		String propName = dockableName + ".title";
+		Entry entry = (Entry)windows.get(dockableName);
+		String dockLabel = entry.label();
+		newTitle = dockLabel + ": " + newTitle;
+		String oldTitle = jEdit.getProperty(propName);
+		jEdit.setProperty(propName, newTitle);
+		firePropertyChange(propName, oldTitle, newTitle);
+	}
+	
 	//{{{ isDockableWindowVisible() method
 	/**
 	 * Returns if the specified dockable window is visible.
@@ -825,8 +844,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				entry.win = null;
 			}
 
-			if(newPosition.equals(FLOATING))
-				/* do nothing */;
+			if(newPosition.equals(FLOATING)) {
+
+			}
+				
 			else
 			{
 				if(newPosition.equals(TOP))
@@ -934,7 +955,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	{
 		DockableWindowFactory.Window factory;
 
-		String title;
+//		String title;
 		String position;
 		DockableWindowContainer container;
 
@@ -951,6 +972,18 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				+ ".dock-position",FLOATING));
 		} //}}}
 
+		/**
+		 * @return The title for the floating dockable window
+		 */
+		public String title() {
+			return getDockableTitle(factory.name);
+		}
+		/**
+		 * @return A label appropriate for the title on the dock buttons.
+		 */
+		public String label() {
+			return jEdit.getProperty(factory.name + ".label");
+		}
 		//{{{ Entry constructor
 		Entry(DockableWindowFactory.Window factory, String position)
 		{
@@ -960,7 +993,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			// get the title here, not in the factory constructor,
 			// since the factory might be created before a plugin's
 			// props are loaded
-			title = getDockableTitle(factory.name);
+			
 		} //}}}
 	} //}}}
 }

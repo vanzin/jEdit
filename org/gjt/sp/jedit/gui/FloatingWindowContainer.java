@@ -26,6 +26,9 @@ package org.gjt.sp.jedit.gui;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -35,13 +38,16 @@ import org.gjt.sp.jedit.*;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class FloatingWindowContainer extends JFrame implements DockableWindowContainer
+public class FloatingWindowContainer extends JFrame implements DockableWindowContainer,
+	PropertyChangeListener
 {
+	String dockableName = null;
 	//{{{ FloatingWindowContainer constructor
 	public FloatingWindowContainer(DockableWindowManager dockableWindowManager,
 		boolean clone)
 	{
 		this.dockableWindowManager = dockableWindowManager;
+		dockableWindowManager.addPropertyChangeListener(this);
 		this.clone = clone;
 		setIconImage(GUIUtilities.getPluginIcon());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -57,13 +63,16 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		separatorBox.add(Box.createVerticalStrut(3));
 		caption.add(separatorBox);
 		getContentPane().add(BorderLayout.NORTH,caption);
+		
 	} //}}}
 
 	//{{{ register() method
 	public void register(DockableWindowManager.Entry entry)
 	{
 		this.entry = entry;
-		setTitle(entry.title);
+		dockableName = entry.factory.name;
+
+		setTitle(entry.title());
 
 		getContentPane().add(BorderLayout.CENTER,entry.win);
 
@@ -92,6 +101,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 			dispose();
 		else
 		{
+			setTitle(entry.title());
 			toFront();
 			requestFocus();
 			SwingUtilities.invokeLater(new Runnable()
@@ -166,4 +176,11 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 			}
 		}
 	} //}}}
+	public void propertyChange(PropertyChangeEvent evt)
+	{
+		if (dockableName == null) return;
+		if ((dockableName + ".title").equals(evt.getPropertyName())) {
+			setTitle(evt.getNewValue().toString());
+		}
+	}
 }
