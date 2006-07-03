@@ -982,7 +982,9 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		 * @return A label appropriate for the title on the dock buttons.
 		 */
 		public String label() {
-			return jEdit.getProperty(factory.name + ".label");
+			String retval = jEdit.getProperty(factory.name + ".label");
+			retval = retval.replaceAll("\\$", "");
+			return retval; 
 		}
 		//{{{ Entry constructor
 		Entry(DockableWindowFactory.Window factory, String position)
