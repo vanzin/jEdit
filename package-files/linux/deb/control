@@ -1,0 +1,19 @@
+Package: jedit
+Version: 4:@jedit.build.number@
+Architecture: all
+Maintainer: Slava Pestov and others <devel@jEdit.org>
+Conflicts: jedit-cvs
+Replaces: jedit-cvs
+Description: A real editor for programmers
+ As one of the most feature rich editors available, jEdit boasts
+ support for syntax highlighting in more than 140 languages. jEdit
+ is more  than just an editor, and its functionality is extended by
+ the use of 'plugins' which include tools for ant and console
+ integration as well as a host of other features. Any serious
+ programmer will undoubtedly want to give jEdit a good look.
+ .
+ More information about jEdit, its plugins, macros, etc. can be
+ found at http://www.jEdit.org/.
+Section: contrib/editors
+Priority: optional
+Installed-Size: @deb.installed.size@

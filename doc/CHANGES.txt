@@ -126,6 +126,11 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   "correct" now, in the sense that it will check the files against their
   DTDs (this needed some changes to the DTDs shipped with jEdit since
   some of them had errors). (Marcelo Vanzin)
+
+- The build.xml got rebuilt to allow building the MacOS-Plugin on any platform
+  and to make it easier to build the distribution files (DEB, Java-Installer,
+  Mac OS X DMG, TGZ Slackware Package, Windows-Installer, SRC-package, PDF-Manuals).
+  (Björn "Vampire" Kautler)
 }}}
 }}}
 {{{ Version 4.3pre4

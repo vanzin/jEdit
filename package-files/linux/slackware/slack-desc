@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description. Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can put a character in. You must
+# make exactly 11 lines for the formatting to be correct. It's also
+# customary to leave one space after the ':'.
+
+      |-----handy-ruler------------------------------------------------------|
+jEdit: jEdit @jedit.version@ (Programmer's Text Editor)
+jEdit: 
+jEdit: jEdit is a mature and well-designed programmer's text editor that
+jEdit: has been in development for over 7 years. While jEdit beats many
+jEdit: expensive development tools for features and ease of use, it is
+jEdit: released as free software with full source code, provided under
+jEdit: the terms of the GNU General Public License.
+jEdit: 
+jEdit: For more information please visit the jEdit website at:
+jEdit:   http://www.jEdit.org 
+jEdit: 
