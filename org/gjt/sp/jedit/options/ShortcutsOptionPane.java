@@ -52,7 +52,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		selectModel = new JComboBox(models);
 		selectModel.addActionListener(new ActionHandler());
-
+		selectModel.setToolTipText(jEdit.getProperty("options.shortcuts.select.tooltip"));
 		Box north = Box.createHorizontalBox();
 		north.add(new JLabel(jEdit.getProperty(
 			"options.shortcuts.select.label")));

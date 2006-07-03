@@ -1791,6 +1791,7 @@ options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.shortcuts.label=Shortcuts
 options.shortcuts.code=new ShortcutsOptionPane();
 options.shortcuts.select.label=Edit Shortcuts:
+options.shortcuts.select.tooltip=Configure shortcuts from plugins
 options.shortcuts.name=Command
 options.shortcuts.shortcut1=Primary shortcut
 options.shortcuts.shortcut2=Alternative shortcut
