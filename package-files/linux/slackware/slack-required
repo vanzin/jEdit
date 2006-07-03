@@ -1,0 +1,1 @@
+jre >= @slackware.target.java.version@ | j2sdk >= @slackware.target.java.version@ | jdk >= @slackware.target.java.version@

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=jEdit
+Comment=Programmer's Text Editor
+Exec=jedit %F
+TryExec=jedit
+Icon=jedit-icon48.png
+Terminal=false
+Type=Application
+Categories=Application;Development;
+StartupNotify=true

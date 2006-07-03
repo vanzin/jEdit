@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=jEdit
+Comment=Programmer's Text Editor
+Exec=jedit %U
+Icon=/usr/share/jEdit/doc/jedit.png
+Terminal=false
+Type=Application
+Categories=Application;Development;
+StartupNotify=true
+MimeType=text/plain;

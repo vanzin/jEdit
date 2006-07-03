@@ -3,9 +3,7 @@
 <!-- :folding=explicit:collapseFolds=1: -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version='1.0'
-                xmlns="http://www.w3.org/TR/xhtml1/transitional"
-                exclude-result-prefixes="#default">
+                version='1.0'>
 
 <xsl:import href="docbook-wrapper-fo.xsl"/>
 
@@ -41,7 +39,7 @@
   <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
 
-<xsl:variable name="funcsynopsis.style">ansi</xsl:variable>
+<xsl:param name="funcsynopsis.style">ansi</xsl:param>
 
 <xsl:param name="generate.toc">
 book      toc

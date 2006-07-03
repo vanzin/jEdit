@@ -50,9 +50,10 @@ import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 
-public class QuickNotepad extends JPanel
-    implements EBComponent, QuickNotepadActions, DefaultFocusComponent {
+public class QuickNotepad extends JPanel implements EBComponent,
+		QuickNotepadActions, DefaultFocusComponent {
 	
+	private static final long serialVersionUID = 6412255692894321789L;
 
 	private String filename;
 

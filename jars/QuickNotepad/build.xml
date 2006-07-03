@@ -1,40 +1,9 @@
 <?xml version="1.0"?>
-<!--
-     This is a build.xml file for building the QuickNotePad plugin.
-
-     ant -p shows a list of all targets
-     and what they do.
-     
-     This file depends on "build-support", a
-     collection of ant build steps designed for use with jedit plugins.
-     
-     http://jedit.cvs.sourceforge.net/jedit/plugins/build-support/
-
-     - If necessary, add any dependencies to the 'project.class.path'
-       definition
--->
-
-<project name="QuickNotepad" default="build" basedir=".">
-	<property file="../build.properties"/>
-	<property file="build.properties"/>
+<project name="QuickNotepad"
+         default="build">
+    <description>
+        This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
+    </description>
     
-    <!--
-    It is important that the value of ${build.support} as well as ${jedit.install.dir} are set before the property file is imported. -->
-    
-    <property name="jedit.install.dir"  value="../../"/>
-    
-    <property name="compiler.source" value="1.4" />
-    <property name="compiler.target" value="1.4" />
-	
-	<property name="build.dir" value="build"/>
-	<property name="install.dir"  value="../"/>
-    
-    <property name="build.support" 
-    location="/home/ezust/workspace/plugins/build-support"/>
-
-    <!-- Importing the modular build file -->
-    <import file="${build.support}/plugin-build.xml" />
-
-    <!-- Look ma, no targets! ant -p shows a list though.  -->
-
+    <import file="../../build-support/plugin-build.xml" />
 </project>

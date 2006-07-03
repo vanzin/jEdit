@@ -1,0 +1,563 @@
+<project name="jEditPlugin" default="build">
+
+    <!-- {{{ Top-Level build file for jEdit plugins. ====== -->
+    <!--
+        Version: $Id$
+        Requires apache Ant 1.6, including optional tasks, and xerces.
+
+        :tabSize=4:indentSize=4:noTabs=true:
+        :folding=explicit:collapseFolds=2:
+
+        To use this file, use the "import" task from ant
+        on your plugin's build file, like this:
+
+        <import file="../build-support/plugin-build.xml" />
+
+        The use of the property is to ease the work of the plugin
+        packagers.
+
+        General tips:
+        - To override properties, either use the several
+          options for build.properties files, or declare
+          them in you plugin's build file *before* the
+          import statement.
+        - To override paths and selectors, declare them in
+          your build file *after* the import statement.
+
+        Some tasks require the ant-contrib library available from
+        http://ant-contrib.sourceforge.net. If you have the
+        library, specify a property named "ant-contrib.jar" with
+        the location of the library. The tasks that need ant-contrib
+        are the tasks related to plugin dependencies.
+
+        For JUnit support, make sure you have the ant-junit.jar
+        library in Ant's lib directory. Specify the location of
+        the junit jar file using the property "junit.jar".
+    -->
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Property definitions ========================= -->
+    <!-- First loads options from the user's optional
+         build.properties files in the following order:
+         current dir, parent dir, $HOME/.build.properties
+         and finally $HOME/build.properties . The defines
+         several default properties used by the different
+         targets.                                           -->
+    <!-- ================================================== -->
+    <property file="../build.properties" />
+    <property file="build.properties" />
+    <echo>${java.home}</echo>
+    <property file="${user.home}/.build.properties" />
+    <property file="${user.home}/build.properties" />
+
+    <!-- where to find jEdit and plugins    -->
+    <property name="jedit.install.dir"  value="../../jEdit" />
+    <property name="jedit.user.home"    value="${user.home}/.jedit" />
+    <property name="plugins.srcdir"     value=".." />
+    <property name="install.dir"        value=".." />
+
+    <!-- some info about the plugin and where to put it -->
+    <property name="src.dir"        value="." />
+    <property name="jar.file"       value="${ant.project.name}.jar" />
+    <property name="src.zip.file"   value="${ant.project.name}.zip" />
+    <property name="dist.target"    value="dist.nojavadoc" />
+
+    <!-- where files will go    -->
+    <property name="build.dir"      value="build" />
+    <property name="build.classes"  value="${build.dir}/classes" />
+    <property name="build.docs"     value="${build.dir}/docs" />
+    <property name="build.javadoc"  value="${build.docs}/javadoc" />
+    <property name="build.extras"   value="${build.dir}/extras" />
+
+    <!-- default compiler flags -->
+    <property name="compiler.debug"         value="off" />
+    <property name="compiler.optimize"      value="off" />
+    <property name="compiler.deprecation"   value="off" />
+    <property name="compiler.verbose"       value="off" />
+    <property name="compiler.nowarn"        value="off" />
+    <property name="compiler.target"        value="1.4" />
+    <property name="compiler.source"        value="1.4" />
+    <property name="compiler.listfiles"     value="no" />
+    <property name="compiler.fork"          value="no" />
+
+    <!-- default documentation options  -->
+    <property name="docs-proc.target"       value="xsltproc" />
+    <property name="docbookx.dtd"           value="../XML/xml/dtds/docbookx.dtd" />
+    <dirname property="build.support"       file="${ant.file.jEditPlugin}" />
+    <property name="user-doc.xsl"           location="${build.support}/users-guide.xsl" />
+    <property name="user-doc.xml"           location="${basedir}/docs/users-guide.xml" />
+    <property name="user-doc.out"           value="users-guide.html" />
+    <property name="javadoc.title"          value="${ant.project.name} API" />
+    <property name="docbook.xsl.sheet"      value="html/chunk.xsl" />
+    <pathconvert property="docs.style.sheet"
+                 dirsep="/">
+        <path location="${docbook.xsl}/${docbook.xsl.sheet}" />
+    </pathconvert>
+    <property name="xsltproc.executable"    value="xsltproc" />
+
+    <!-- default cvs options -->
+    <property name="jedit.cvs.user" value="${user.name}" />
+    <property name="cvs.rsh"        value="ssh" />
+    <property name="cvs.root"       value=":ext:${jedit.cvs.user}@jedit.cvs.sourceforge.net:/cvsroot/jedit" />
+
+    <!-- default junit options -->
+    <property name="junit.jar"              value="junit.jar" />
+    <property name="junit.testcase"         value="${ant.project.name}TestSuite" />
+    <property name="junit.printsummary"     value="on" />
+    <property name="junit.haltonfailure"    value="off" />
+
+    <fail message="The jedit JAR (jedit.jar) is not available in &quot;${jedit.install.dir}&quot;">
+        <condition>
+            <not>
+                <available file="${jedit.install.dir}/jedit.jar"
+                           type="file" />
+            </not>
+        </condition>
+    </fail>
+
+    <!-- default class path; try not to override this,
+         since the intention is to add here anything that
+         might be needed by all the plugins (such as the
+         jedit.jar file and any other jar files that
+         jEdit might use in the future.                     -->
+    <path id="default.class.path">
+        <pathelement location="${jedit.install.dir}/jedit.jar" />
+        <pathelement location="${junit.jar}" />
+    </path>
+
+    <!-- this is the classpath used by the "compile"
+         target. Override this one if you need to. You don't
+         need to reference "default.class.path" here - it's added
+         automatically to the javac command.                -->
+    <path id="project.class.path" />
+
+    <!-- {{{ Load ant-contrib library ===================== -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties" onerror="ignore">
+        <classpath>
+            <pathelement location="${ant-contrib.jar}"/>
+        </classpath>
+    </taskdef>
+    <!-- ===============================================}}} -->
+
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Custom javac task ============================ -->
+    <presetdef name="jp.javac">
+        <javac destdir="${build.classes}"
+                debug="${compiler.debug}"
+                optimize="${compiler.optimize}"
+                deprecation="${compiler.deprecation}"
+                verbose="${compiler.verbose}"
+                nowarn="${compiler.nowarn}"
+                target="${compiler.target}"
+                source="${compiler.source}"
+                listfiles="${compiler.listfiles}"
+                fork="${compiler.fork}"
+                >
+            <src location="${src.dir}" />
+            <classpath refid="default.class.path" />
+            <classpath refid="project.class.path" />
+        </javac>
+    </presetdef>
+    <!-- }}} ============================================== -->
+
+    <!-- {{{ Compilation and building ===================== -->
+
+    <!-- This selector defines the files that will be
+         compiled by the "compile" target. Define here which
+         files under ${src.dir} will be compiled when the
+         "compile" task is called.                          -->
+    <selector id="compileFiles">
+        <filename name="**/*.java" />
+    </selector>
+
+    <!-- This selector defines extra files to be included
+         in the plugin's JAR file. The context of the
+         selector is the plugin's directory (${basedir}),
+         so it will not work for files outside the plugin
+         directory. For those cases, use the "build.prepare"
+         target. By default, it's empty.                    -->
+    <selector id="packageFiles">
+        <size value="0" when="less" />
+    </selector>
+
+    <!-- This selector defines other files that should be packaged
+         in the plugin's jar file; by default it contains actions.xml,
+         dockables.xml, services.xml, any files ending in ".props",
+         "LICENSE" and "README". The context is "${basedir}". Override
+         it if your plugin needs special treatment for these files. -->
+    <selector id="extraFiles">
+        <and>
+            <or>
+                <filename name="**/actions.xml" />
+                <filename name="**/dockables.xml" />
+                <filename name="**/services.xml" />
+                <filename name="**/*.props" />
+                <filename name="**/LICENSE" />
+                <filename name="**/README" />
+            </or>
+            <not>
+                <filename name="${build.dir}/**" />
+            </not>
+        </and>
+    </selector>
+
+    <!-- {{{ Target: compile ============================== -->
+    <!-- Compiles all the ".java" files present in the
+         directory pointed by the "src.dir" property
+         defined above. Classes are put in the directory
+         designated in the "build.classes" property.
+         The following properties control the behavior of
+         the compiler (relates to options to the javac
+         ant task, defaults in parethesis):
+         compiler.debug: the debug option (off)
+         compiler.optimize: the optimize option (off)
+         compiler.deprecation: deprecation option (off)
+         compiler.verbose: the verbose option (off)
+         compiler.nowarn: the nowarn option (off)
+         compiler.target: the target option (1.3)
+         compiler.source: the source option (1.3)
+         compiler.listfiles: the listfiles option (no)      -->
+    <target name="compile"
+            description="Compile the plugin's classes">
+
+        <mkdir dir="${build.classes}" />
+        <jp.javac>
+            <selector refid="compileFiles" />
+        </jp.javac>
+
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: clean ================================ -->
+    <!-- Removes the directory defined in the "build"
+         property, the "docbook-wrapper.xsl" file and the
+         file defined by the property "jar.file" in the
+         directory defined by "install.dir".                -->
+    <target name="clean" description="Cleans project directories">
+        <delete dir="${build.dir}" quiet="true" />
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: build ================================ -->
+    <!-- This target build the plugin JAR file. It
+         depends on two other targets: "compile", defined
+         above, and "build.prepare", which is empty in
+         this file but can be overriden by the plugin's
+         build file.
+         This target does the following after that:
+         * Copies all files defined by the extraFiles selector
+           to the staging area.
+         * Copies all files defined by the packageFiles selector
+           to the staging area.
+         * Creates a JAR with the name defined in
+           "jar.file" in the directory defined by
+           "install.dir". This JAR will contain the
+           contents of the directories defined by
+           "build.classes", "build.docs" and "build.extras"
+         If you need to have any other files added to the
+         JAR, override the "build.prepare" target and use
+         it to copy files to one of those three
+         directories, or redefine the "extraFiles"
+         selector.                                          -->
+
+    <target name="build"
+          depends="build.prepare,compile"
+          description="Builds the plugin JAR file (no docs)">
+
+        <mkdir dir="${build.classes}" />
+        <mkdir dir="${build.docs}" />
+        <mkdir dir="${build.extras}" />
+        <mkdir dir="${install.dir}" />
+
+        <copy todir="${build.extras}" includeEmptyDirs="false">
+            <fileset dir="${basedir}">
+                <selector refid="extraFiles" />
+            </fileset>
+        </copy>
+
+        <copy todir="${build.extras}" includeEmptyDirs="false">
+            <fileset dir="${basedir}">
+                <selector refid="packageFiles" />
+            </fileset>
+        </copy>
+
+        <jar jarfile="${install.dir}/${jar.file}">
+            <fileset dir="${build.classes}" />
+            <fileset dir="${build.docs}" />
+            <fileset dir="${build.extras}" />
+        </jar>
+
+        <antcall target="build.post" />
+
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: build.prepare ======================== -->
+    <!-- This implementation does nothing. See the
+         "build" target for details.                        -->
+    <target name="build.prepare" />
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: build.post =========================== -->
+    <!-- Called after the build process is finished.
+         Plugins can use this to copy extra jar files the
+         plugin needs to ${install.dir}.
+         By default does nothing.                           -->
+    <target name="build.post" />
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: dist.nojavadoc ======================= -->
+    <!-- Meta-task that builds the user documentation and
+         builds the plugin JAR file, but not the javadoc.   -->
+    <target name="dist.nojavadoc"  depends="userdocs,build" />
+    <!-- =============================================== }}} -->
+
+    <!-- {{{ Target: dist.complete ======================== -->
+    <!-- Meta-task that builds the user documentation,
+         javadoc documentation and builds the plugin JAR
+         file.                                              -->
+    <target name="dist.complete" depends="docs,build" />
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: dist ================================= -->
+    <!-- This task calls the target defined in the
+         property "dist.target" to build the plugin and
+         package it for distribution. Before proceeding,
+         it cleans the build directory.                     -->
+    <target name="dist" depends="clean" description="Builds JAR file, with docs">
+        <antcall target="${dist.target}" />
+    </target>
+    <!-- =============================================== }}} -->
+
+    <!-- {{{ Target: dist.source ========================== -->
+    <!-- Creates a ZIP file of the plugin's source. The
+         name of the file is defined in the property
+         "src.zip.file" and will be created in the
+         directory defined by "install.dir".                -->
+    <target name="dist.source">
+        <delete file="${install.dir}/${src.zip.file}" quiet="true" />
+        <zip destfile="${install.dir}/${src.zip.file}">
+            <fileset dir="${src.dir}">
+                <include name="**/*.*" />
+                <exclude name="${build.dir}/**" />
+            </fileset>
+        </zip>
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: package ============================== -->
+    <!-- Convenience target that calls both "docs" and
+         "build" to create the plugin jar file.             -->
+    <target name="package" depends="docs,build" />
+    <!-- =============================================== }}} -->
+
+    <!-- =============================================== }}} -->
+
+    <!-- {{{ Documentation ================================ -->
+
+    <!-- {{{ Target: docs ================================= -->
+    <!-- Meta-task that calls javadoc and userdocs.         -->
+    <target name="docs"
+            depends="javadoc,userdocs"
+            description="Build the User's Guide and Javadoc documentation" />
+    <!-- =============================================== }}} -->
+
+    <!-- {{{ Target: userdocs ============================= -->
+    <target name="userdocs"
+            description="Builds the user's guide.">
+        <mkdir dir="${build.docs}" />
+        <copy tofile="${build.docs}/users-guide.xsl"
+              flatten="true"
+              file="${user-doc.xsl}">
+            <filterset>
+                <filter token="docs.style.sheet"
+                        value="${docs.style.sheet}" />
+            </filterset>
+        </copy>
+        <antcall target="docs-${docs-proc.target}" />
+        <delete file="${build.docs}/users-guide.xsl" />
+    </target>
+    <!-- =============================================== }}} -->
+
+    <!-- {{{ Target: javadoc ============================== -->
+    <!-- Builds the javadoc documentation for the plugin,
+         placing it under "build.javadoc". Your plugin
+         build file *must* define a property called
+         named "javadoc.packagenames" to be used as the
+         "packagenames" option of ant's javadoc task.
+         This property is not defined in this file and
+         execition will probably fail if it's not defined.
+         The title of the documentation is defined in the
+         "javadoc.title" property.                          -->
+    <target name="javadoc"
+            description="Generates javadoc sourcecode documentation"
+            if="javadoc.packagenames">
+        <mkdir dir="${build.javadoc}" />
+        <javadoc sourcepath="${src.dir}"
+                    destdir="${build.javadoc}"
+                    packagenames="${javadoc.packagenames}"
+                    windowtitle="${javadoc.title}">
+            <classpath refid="default.class.path" />
+            <classpath refid="project.class.path" />
+        </javadoc>
+    </target>
+    <!-- =============================================== }}} -->
+
+    <!-- {{{ Target: docs-xsltproc ======================== -->
+    <!-- Generate docs with xsltproc tool from
+         www.xmlsoft.org. This task creates a temporary
+         file called "docbook.catalog" containing a
+         reference to the Docbook DTD defined in the
+         property "docbookx.dtd" above. The style sheet
+         used is defined by the property "user-doc.xsl",
+         and defaults to "docbook-wrapper.xsl". The XML
+         document to be processed is defined by the
+         "user-doc.xml" property, and defaults to
+         "docs/users-guide.xml". The output is defined in
+         the "user-doc.out" property.                       -->
+    <target name="docs-xsltproc" description="Generate user documentation in html format with xsltproc" if="docbook.catalog">
+        <exec executable="${xsltproc.executable}" dir="${build.docs}">
+            <arg value="-o" />
+            <arg value="${user-doc.out}" />
+            <arg value="--catalogs" />
+            <arg value="users-guide.xsl" />
+            <arg value="${user-doc.xml}" />
+			<env key="SGML_CATALOG_FILES"
+				 file="${docbook.catalog}" />
+        </exec>
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: docs-xalan =========================== -->
+    <!-- Generate docs with Xalan tool from
+         xml.apache.org . Same properties as the
+         "docs-xsltproc" target apply here.                 -->
+    <target name="docs-xalan"
+            if="docbookx.dtd"
+            description="Generate user documentation in html format with xalan">
+        <xslt basedir="."
+              destdir="${build.docs}"
+              style="${build.docs}/users-guide.xsl"
+              includes="${user-doc.xml}">
+            <xmlcatalog>
+                <dtd publicId="-//OASIS//DTD DocBook XML V4.2//EN"
+                     location="${docbookx.dtd}" />
+            </xmlcatalog>
+        </xslt>
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- =============================================== }}} -->
+
+    <!-- {{{ Unit testing ================================= -->
+
+    <!-- {{{ Target: test ================================= -->
+    <!-- Meta-task that calls the defined test target.      -->
+    <target name="test"
+            description="Runs the plugin's unit tests.">
+        <antcall target="${unit.test.target}" />
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: test-junit============================ -->
+    <!-- Executes a jUnit test case defined by the plugin's
+         build file. The classpath for the test will be the
+         ${build.class} directory, the ${junit.jar} file and
+         the default.class.path and project.class.path path
+         structures.
+         -->
+    <target name="test-junit"
+            description="Runs the plugin's jUnit tests."
+            if="junit.testcase,junit.jar">
+
+        <junit printsummary="${junit.printsummary}"
+                haltonfailure="${junit.haltonfailure}">
+
+            <classpath>
+                <pathelement location="${junit.jar}" />
+                <pathelement location="${build.classes}" />
+                <path refid="default.class.path" />
+                <path refid="project.class.path" />
+            </classpath>
+
+            <test name="${junit.testcase}" />
+        </junit>
+
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- ===============================================}}} -->
+
+    <!--{{{  Dependencies ================================= -->
+
+    <!-- {{{ Target: cvs.update =========================== -->
+    <!-- Updates a plugin's source code from CVS. This
+         target expects one parameter, "plugin.name",
+         containing the name of the plugin's directory in
+         CVS (don't include the leading "plugins"; for
+         example, use "XML" for the XML Plugin.             -->
+    <target name="cvs.update">
+        <mkdir dir="${plugins.srcdir}" />
+        <cvs command="update -dP"
+                compression="true"
+                cvsRsh="${cvs.rsh}"
+                cvsRoot="${cvs.root}"
+                dest="${plugins.srcdir}"
+                package="${plugin.name}" />
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: update.dependencies ================== -->
+    <!-- This task iterates through the dependency list
+         defined in the property "plugin.dependencies"
+         as a comma-separated list of plugin names, calling
+         the "cvs.update" target for each dependency.       -->
+    <target name="update.dependencies"
+            description="Download the most recent source of the needed plugins from CVS"
+            if="plugin.dependencies,ant-contrib.jar">
+        <foreach list="${plugin.dependencies}"
+                    target="cvs.update"
+                    param="plugin.name"
+                    delimiter=","
+                    trim="true" />
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: build.dependencies =================== -->
+    <target name="build.dependencies"
+            description="Builds the needed plugins from the available source code."
+            if="plugin.dependencies,ant-contrib.jar">
+        <foreach list="${plugin.dependencies}"
+                    target="build.other"
+                    param="plugin.name"
+                    delimiter=","
+                    trim="true" />
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- {{{ Target: build.other=========================== -->
+    <!-- Builds a plugin from the code available in its
+         directory under "plugins.srcdir". This will call
+         the "build" target of that plugin's build file.
+         Expects the "plugin.name" parameter with the name
+         of the plugin's directory.                         -->
+    <target name="build.other">
+        <fail message="Can't find plugin: ${plugin.name}">
+            <condition>
+                <not>
+                    <available file="${plugins.srcdir}/${plugin.name}/build.xml" />
+                </not>
+            </condition>
+        </fail>
+        <ant antfile="${plugins.srcdir}/${plugin.name}/build.xml"
+                target="build"
+                inheritAll="false"
+                inheritRefs="false" />
+    </target>
+    <!-- ===============================================}}} -->
+
+    <!-- ================================================== }}}-->
+
+</project>
+

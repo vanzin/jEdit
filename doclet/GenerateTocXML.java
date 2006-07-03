@@ -20,26 +20,27 @@
 package doclet;
 
 import com.sun.javadoc.*;
+import com.sun.tools.doclets.standard.Standard;
 
 import java.io.*;
 import java.util.Arrays;
 
-/**
- * This is very much of a hack.
- */
 public class GenerateTocXML
 {
-	public static final String PATH = "doc/api/";
-	public static final String OUT = PATH + "toc.xml";
+	public static final String OUT = "toc.xml";
 	public static final String HEADER = "<?xml version='1.0'?>\n<TOC>\n"
 		+ "<ENTRY HREF='overview-summary.html'><TITLE>jEdit API Reference</TITLE>";
 	public static final String FOOTER = "</ENTRY></TOC>\n";
 
 	public static boolean start(RootDoc root)
 	{
+		if (!Standard.start(root))
+		{
+			return false;
+		}
 		try
 		{
-			FileWriter out = new FileWriter(OUT);
+			FileWriter out = new FileWriter(Standard.htmlDoclet.configuration().destDirName + OUT);
 			out.write(HEADER);
 
 			PackageDoc[] packages = root.specifiedPackages();
@@ -58,6 +59,21 @@ public class GenerateTocXML
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public static int optionLength(String option)
+	{
+		return Standard.optionLength(option);
+	}
+
+	public static boolean validOptions(String[][] options, DocErrorReporter reporter)
+	{
+		return Standard.validOptions(options,reporter);
+	}
+
+	public static LanguageVersion languageVersion()
+	{
+		return Standard.languageVersion();
 	}
 
 	private static void processPackage(Writer out, PackageDoc pkg)
@@ -98,4 +114,3 @@ public class GenerateTocXML
 		out.write("</ENTRY>");
 	}
 }
-
