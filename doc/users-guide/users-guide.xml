@@ -3,6 +3,7 @@
 <!-- jEdit user's guide -->
 <!-- (C) 1999, 2004 Slava Pestov -->
 <!-- (C) 2001, 2002 John Gellene -->
+<!-- (C) 2005, 2006 Alan Ezust -->
 
 <!-- jEdit buffer-local properties: -->
 <!-- :indentSize=1:noTabs=true: -->
@@ -49,6 +50,8 @@
 
  <copyright><year>1999</year><year>2004</year><holder>Slava Pestov</holder></copyright>
  <copyright><year>2001</year><year>2002</year><holder>John Gellene</holder></copyright>
+ <copyright><year>2005</year><year>2006</year><holder>Alan Ezust</holder></copyright>
+ 
  <legalnotice><title>Legal Notice</title>
   <para>
    Permission is granted to copy, distribute and/or modify this document

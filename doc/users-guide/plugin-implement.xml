@@ -1,4 +1,4 @@
-<!-- jEdit 4.3 Plugin Guide, (C) 2005, Alan Ezust -->
+<!-- jEdit 4.3 Plugin Guide, (C) 2005, 2006 Alan Ezust -->
 <!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene      -->
 
 <!-- jEdit buffer-local properties:                           -->
@@ -187,6 +187,9 @@ How Plugins are Loaded</title>
     Will the plugin
     respond to any messages reflecting changes in the host
     application's state?
+  </para></listitem>
+  <listitem><para> 
+    Should the plugin do something special when it gets focus?
   </para></listitem>
 
 </itemizedlist>
@@ -1163,10 +1166,11 @@ and the docking position of the plugin.
     <property name="install.dir"  value="../"/>
     
     <property name="build.support" 
-    location="/home/ezust/workspace/plugins/build-support"/>
+    location="/home/ezust/workspace/jEditCVS/build-support"/>
 
     <!--
-    It is important that the value of ${build.support} as well as ${jedit.install.dir} are set before the property file is imported. -->
+    It is important that the value of ${build.support} as well as
+    ${jedit.install.dir} are set before the property file is imported. -->
     <import file="${build.support}/plugin-build.xml" />
 
     <!-- Look ma, no targets! ant -p shows a list though.  -->
@@ -1175,15 +1179,15 @@ and the docking position of the plugin.
 ]]></programlisting></informalexample>
 
 <para>
-  This build file imports another modular build file, <literal>plugin-build.xml</literal> located in another project. It makes use of a CVS module known as <ulink url="http://jedit.cvs.sourceforge.net/jedit/plugins/build-support/">
-  build-support</ulink>. You can check this out from the jEdit repository. It contains common build steps
+  This build file imports another modular build file, <literal>plugin-build.xml</literal> located in another project. 
+  This project is included with jEdit 4.3pre5 and later, and can be found online in  <ulink url= "http://jedit.cvs.sourceforge.net/jedit/jEdit/build-support/" >jEdit's CVS repository</ulink>. It contains common build steps
   for jEdit plugins, and some example properties files which you can adapt for use with your plugin. The file is imported with this line
   </para> 
   <programlisting>
   &lt;import file=&quot;${build.support}/plugin-build.xml&quot; /&gt;
   </programlisting>
   
-  <para> As long as <literal>${build.support}</literal> is set to your local checked-out copy of build-support, the common build rules are imported and the resulting build file is very small and easy to maintain. </para>
+  <para> As long as <literal>${build.support}</literal> is set to the location of that location, the common build rules are imported and the resulting build file is very small and easy to maintain. </para>
   
   <para>
   For a full discussion of the <filename>Ant</filename> file format and
@@ -1191,7 +1195,7 @@ and the docking position of the plugin.
   url="http://jakarta.apache.org/ant/manual/index.html">Ant
   documentation site</ulink>. Customizing this makefile for a different
   plugin will likely only require three changes:
-</para>
+  </para>
 
 <itemizedlist>
   <listitem><para>
