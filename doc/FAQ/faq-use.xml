@@ -64,11 +64,11 @@
         <answer><para>
             The <guimenuitem>Cut Append</guimenuitem>
             (<keycombo
-            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>&nbsp;
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo> 
             <keycombo action="simul"><keycap>CTRL</keycap><keycap>U</keycap></keycombo>)
             and <guimenuitem>Copy
             Append</guimenuitem> (<keycombo
-            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>&nbsp;
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo> 
             <keycombo action="simul"><keycap>CTRL</keycap><keycap>A</keycap></keycombo>)
             both add the selected text to the existing contents of the Clipboard. A single
             <guimenuitem>Paste</guimenuitem>
