@@ -150,7 +150,13 @@
    panes, and information about them can be found in the documentation
    for the plugins in question.
   </para>
-  <sect2 id="abbrevs-pane"><title>The Abbreviations Pane</title>
+  <sect2 id="abbrevs-pane">
+  <title>The Abbreviations Pane</title>
+
+  <indexterm><primary>Abbreviations</primary> <secondary> creating and editing </secondary> </indexterm>
+  
+
+  
   <para>
    The <guibutton>Abbreviations</guibutton> option pane can be used to enable or
    disable automatic abbreviation expansion, and to edit currently defined

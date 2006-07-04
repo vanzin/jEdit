@@ -4,8 +4,6 @@
 <!-- jEdit buffer-local properties:                           -->
 <!-- :indentSize=1:tabSize=2:noTabs=true:maxLineLen=72:       -->
 <!-- :xml.root=users-guide.xml:                               -->
-
-
 <chapter id="plugin-implement"><title>Implementing a Simple Plugin</title>
 
 <para>
@@ -623,11 +621,10 @@ else if(msg instanceof ViewUpdate) {
 
 <sect1 id="plugin-implement-dockables"><title>The dockables.xml Window Catalog</title>
 
+<para> A Dockable is a window that can float like a dialog, or dock into jEdit's docking area. Each dockable needs a label (for display in menus, and on small buttons) and a title (for display in the floating window's title bar). </para>
+
 <para>
-  The jEdit plugin API uses BeanShell to create the top-level visible container
-  of a plugin's interface.  The BeanShell code is contained in a file named
-  <filename>dockables.xml</filename>.  It usually is quite short, providing only
-  a single BeanShell expression used to create a visible plugin window.
+  The jEdit plugin API uses BeanShell to create the top-level visible container of a plugin's interface.  The BeanShell code is contained in a file named <filename>dockables.xml</filename>.  It usually is quite short, providing only a single BeanShell expression used to create a visible plugin window.
 </para>
 
 <para>
@@ -653,18 +650,13 @@ used to key a property where the window title is stored; see
 </para>
 
 <para> For each dockable, jedit defines an action with the same name. 
-This is why there is a <literal>quicknotepad.label</literal> in the properties file - this will be the label that shows up in the QuickNotePad plugin menu, corresponding to the action that was added. 
-</para>
-
-<para>
-Actually, there are two other actions defined for each dockable too: "toggle", and "new floating instance". </para>
+This means you do not need to define an explicit action to create your dockable - in fact, jEdit defines three actions: "toggle", "get" and "new floating instance" for each. </para>
 
 <para>
 The contents of the <classname>&lt;DOCKABLE&gt;</classname> element itself is a
 BeanShell expression that constructs a new <classname>QuickNotepad</classname>
 object.  The <varname>view</varname> and <varname>position</varname> are
-predefined by the plugin API as the view in which the plugin window will reside,
-and the docking position of the plugin.
+predefined by the plugin API as the view in which the plugin window will reside, and the docking position of the plugin. You can use <varname>position</varname> to customize the layout of your plugin depending on whether it appears on the sides, or the top/bottom, or as a floating dockable.
 </para>
 
 <para>
@@ -672,7 +664,7 @@ and the docking position of the plugin.
   <filename>dockables.xml</filename> file can be found in the
   documentation of the
   <ulink url="../api/org/gjt/sp/jedit/gui/DockableWindowManager.html">
-  <classname>DockableWindowManager</classname></ulink> class.
+  <classname>DockableWindowManager</classname></ulink> class. This class also contains the public interface you should use for getting, showing, hiding, and other interactions with the plugin's top-level windows. 
 </para>
 
 </sect1>
@@ -1136,70 +1128,44 @@ and the docking position of the plugin.
 <para>
   We have already outlined the contents of the user action catalog, the
   properties file and the documentation file in our earlier discussion.
-  The final step is to compile the source file and build the archive file
-  that will hold the class files and the plugin's other resources.
+  The final step is to compile the source file and build the archive file that will hold the class files and the plugin's other resources.
 </para>
 
 <para>
   Publicly released plugins include with their source a makefile
-  in XML format for the
-  <application>Ant</application> utility.  The format for this file
-  requires few changes from plugin to plugin.  Here is the version of
-  <filename>build.xml</filename> used by QuickNotepad and many other
-  plugins:
+  in XML format for the <application>Ant</application> utility.  The format for this file requires few changes from plugin to plugin.  Here is the version of <filename>build.xml</filename> used by QuickNotepad and many other plugins:
 </para>
 
 <informalexample><programlisting><![CDATA[
-<project name="QuickNotepad" default="build" basedir=".">
-
-    <!-- Import other property files -->
-    <property file="../build.properties"/>
-    <property file="build.properties"/>
+<project name="QuickNotepad"
+         default="build">
+    <description>
+        This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
+    </description>
     
-
-    <property name="jedit.install.dir"  value="../../"/>
-    
-    <property name="compiler.source" value="1.4" />
-    <property name="compiler.target" value="1.4" />
-	
-    <property name="build.dir" value="build"/>
-    <property name="install.dir"  value="../"/>
-    
-    <property name="build.support" 
-    location="/home/ezust/workspace/jEditCVS/build-support"/>
-
-    <!--
-    It is important that the value of ${build.support} as well as
-    ${jedit.install.dir} are set before the property file is imported. -->
-    <import file="${build.support}/plugin-build.xml" />
-
-    <!-- Look ma, no targets! ant -p shows a list though.  -->
-
+    <import file="../../build-support/plugin-build.xml" />
 </project>
 ]]></programlisting></informalexample>
 
 <para>
-  This build file imports another modular build file, <literal>plugin-build.xml</literal> located in another project. 
-  This project is included with jEdit 4.3pre5 and later, and can be found online in  <ulink url= "http://jedit.cvs.sourceforge.net/jedit/jEdit/build-support/" >jEdit's CVS repository</ulink>. It contains common build steps
+  This build file imports another modular build file, <literal>plugin-build.xml</literal> included in the jEdit
+  source tree, after jEdit 4.3pre5. It can be checked out individually, or found online in the <ulink url= "http://jedit.cvs.sourceforge.net/jedit/jEdit/build-support/" >jEdit's CVS repository</ulink>. It contains common build steps
   for jEdit plugins, and some example properties files which you can adapt for use with your plugin. The file is imported with this line
   </para> 
   <programlisting>
-  &lt;import file=&quot;${build.support}/plugin-build.xml&quot; /&gt;
+  &lt;import file=&quot;../../plugin-build.xml&quot; /&gt;
   </programlisting>
-  
-  <para> As long as <literal>${build.support}</literal> is set to the location of that location, the common build rules are imported and the resulting build file is very small and easy to maintain. </para>
   
   <para>
   For a full discussion of the <filename>Ant</filename> file format and
   command syntax, you should consult the <ulink
   url="http://jakarta.apache.org/ant/manual/index.html">Ant
-  documentation site</ulink>. Customizing this makefile for a different
-  plugin will likely only require three changes:
+  documentation site</ulink>. Customizing this build file for a different plugin will likely only require three changes:
   </para>
 
 <itemizedlist>
   <listitem><para>
-    the name of the plugin;
+    the name of the project
   </para></listitem>
   <listitem><para>
     the dependencies of the plugin 
