@@ -29,8 +29,9 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
 - DockableWindowManager has a new method, setDockableTitle()
   which allows you to set the string in the title bar
-  for floating dockables. (Alan Ezust)
-  
+  for floating dockables. Now docked buttons use the dockableName.label
+  property instead of the .title. This way, we can have have long titles
+  in the floater, and short strings on the dock button. (Alan Ezust)
 
 - Macros.Macro.invoke() has been rewritten to begin the compoundEdit on the buffer that is
   active buffer before the macro gets invoked, and end the compoundEdit on the buffer that is active
