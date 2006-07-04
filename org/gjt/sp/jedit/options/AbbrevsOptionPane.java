@@ -127,7 +127,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		buttons.add(Box.createGlue());
 
 		add(BorderLayout.SOUTH,buttons);
-
+		setsComboBox.setSelectedIndex(jEdit.getIntegerProperty("options.abbrevs.combobox.index", 0));
 		updateEnabled();
 	} //}}}
 
@@ -269,6 +269,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 			Object source = evt.getSource();
 			if(source == setsComboBox)
 			{
+				jEdit.setIntegerProperty("options.abbrevs.combobox.index", setsComboBox.getSelectedIndex());
 				String selected = (String)setsComboBox.getSelectedItem();
 				if(selected.equals("global"))
 				{
