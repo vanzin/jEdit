@@ -181,7 +181,7 @@
 	<RULES ESCAPE="\"
 		IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="(0x\p{Xdigit}+[lL]?|\d+(e\d*)?[lLdDfF]?)">
+		DIGIT_RE="(0x\p{XDigit}+[lL]?|\d+(e\d*)?[lLdDfF]?)">
 
 		<!-- XQuery style comment -->
 		<SPAN TYPE="COMMENT1">

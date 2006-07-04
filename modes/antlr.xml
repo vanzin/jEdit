@@ -34,13 +34,9 @@
                 <SEQ TYPE="OPERATOR">|</SEQ>
                 <SEQ TYPE="OPERATOR">:</SEQ>
                 <KEYWORDS>
-                        <!-- KEYWORD1 through 2 is Java
-                          -- KEyWORD3 is ANTLR.
-                          -->
                         <KEYWORD3>header</KEYWORD3>
                         <KEYWORD3>options</KEYWORD3>
                         <KEYWORD3>tokens</KEYWORD3>
-                        
                         <KEYWORD1>abstract</KEYWORD1>
 			<KEYWORD1>break</KEYWORD1>
 			<KEYWORD1>case</KEYWORD1>

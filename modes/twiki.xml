@@ -122,7 +122,7 @@
 		<!-- twiki variables -->
 		<SEQ_REGEXP HASH_CHAR="%" 
 			TYPE="FUNCTION"
-			>%[A-Z]+(?:{[^}]+})?%</SEQ_REGEXP>
+			>%[A-Z]+(?:\{[^\}]+\})?%</SEQ_REGEXP>
 
 		<KEYWORDS>
 			<!-- variables, just here for complete-word -->
