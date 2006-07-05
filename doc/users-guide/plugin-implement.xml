@@ -1133,7 +1133,7 @@ predefined by the plugin API as the view in which the plugin window will reside,
 
 <para>
   Publicly released plugins include with their source a makefile
-  in XML format for the <application>Ant</application> utility.  The format for this file requires few changes from plugin to plugin.  Here is the version of <filename>build.xml</filename> used by QuickNotepad and many other plugins:
+  in XML format for the <application>Ant</application> utility.  The format for this file requires few changes from plugin to plugin.  Here is the version of <filename>build.xml</filename> used by QuickNotepad:
 </para>
 
 <informalexample><programlisting><![CDATA[
@@ -1150,11 +1150,8 @@ predefined by the plugin API as the view in which the plugin window will reside,
 <para>
   This build file imports another modular build file, <literal>plugin-build.xml</literal> included in the jEdit
   source tree, after jEdit 4.3pre5. It can be checked out individually, or found online in the <ulink url= "http://jedit.cvs.sourceforge.net/jedit/jEdit/build-support/" >jEdit's CVS repository</ulink>. It contains common build steps
-  for jEdit plugins, and some example properties files which you can adapt for use with your plugin. The file is imported with this line
+  for jEdit plugins, and some example properties files which you can adapt for use with your plugin. 
   </para> 
-  <programlisting>
-  &lt;import file=&quot;../../plugin-build.xml&quot; /&gt;
-  </programlisting>
   
   <para>
   For a full discussion of the <filename>Ant</filename> file format and

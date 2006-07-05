@@ -28,14 +28,6 @@
 				  value="true" />
 	</target>
 	
-    <target name="userdocs"
-        description="force rebuild of html users guide">
-        <delete includeemptydirs="true"
-            failonerror="false">
-        <fileset dir="${build.dir}/doc/users-guide" />            
-        </delete>
-        <antcall target="docs-html"/>
-    </target>
 	<target name="clean"
 			depends="init"
 			description="clean up build.dir and dist.dir">
@@ -236,7 +228,7 @@
 			<srcfileset dir="doc/users-guide" />
 			<targetfileset dir="${doc.output.location}/users-guide" />
 		</dependset>
-        <!-- TODO: This is not correct - it should check if any of the files are changed -->
+
 		<available property="users-guide.is.up.to.date"
 				   file="${doc.output.location}/users-guide/toc.xml"
 				   type="file" />
