@@ -1815,18 +1815,41 @@ loop:		for(;;)
 	/**
 	 * Returns a list of supported character encodings.
 	 * @since jEdit 4.2pre5
+	 * @deprecated See #getEncodings( boolean )
 	 */
 	public static String[] getEncodings()
+	{
+		return getEncodings(false);
+	} //}}}
+
+	//{{{ getEncodings() method
+	/**
+	 * Returns a list of supported character encodings.
+	 * @since jEdit 4.3pre5
+	 * @param getSelected Whether to return just the selected encodings or all.
+	 */
+	public static String[] getEncodings(boolean getSelected)
 	{
 		List returnValue = new ArrayList();
 
 		Map map = Charset.availableCharsets();
 		Iterator iter = map.keySet().iterator();
 
-		returnValue.add(UTF_8_Y);
+		if ((getSelected && !jEdit.getBooleanProperty("encoding.opt-out."+UTF_8_Y,false)) ||
+			!getSelected)
+		{
+			returnValue.add(UTF_8_Y);
+		}
 
 		while(iter.hasNext())
-			returnValue.add(iter.next());
+		{
+			String encoding = (String)iter.next();
+			if ((getSelected && !jEdit.getBooleanProperty("encoding.opt-out."+encoding,false)) ||
+				!getSelected)
+			{
+				returnValue.add(encoding);
+			}
+		}
 
 		return (String[])returnValue.toArray(
 			new String[returnValue.size()]);

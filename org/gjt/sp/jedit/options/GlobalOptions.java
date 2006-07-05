@@ -66,16 +66,17 @@ public class GlobalOptions extends OptionsDialog
 		// initialize the jEdit branch of the options tree
 		jEditGroup = new OptionGroup("jedit");
 
+		jEditGroup.addOptionPane("general");
 		jEditGroup.addOptionPane("abbrevs");
 		jEditGroup.addOptionPane("appearance");
 		jEditGroup.addOptionPane("context");
 		jEditGroup.addOptionPane("docking");
 		jEditGroup.addOptionPane("editing");
-		jEditGroup.addOptionPane("general");
+		jEditGroup.addOptionPane("encodings");
 		jEditGroup.addOptionPane("gutter");
 		jEditGroup.addOptionPane("mouse");
-		jEditGroup.addOptionPane("print");
 		jEditGroup.addOptionPane("plugin-manager");
+		jEditGroup.addOptionPane("print");
 		jEditGroup.addOptionPane("firewall");
 		jEditGroup.addOptionPane("save-back");
 		jEditGroup.addOptionPane("shortcuts");

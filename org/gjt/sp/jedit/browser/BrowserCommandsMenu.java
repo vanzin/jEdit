@@ -214,7 +214,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 		ButtonGroup grp = new ButtonGroup();
 
 		List encodingMenuItemList = new ArrayList();
-		String[] encodings = MiscUtilities.getEncodings();
+		String[] encodings = MiscUtilities.getEncodings(true);
 		for(int i = 0; i < encodings.length; i++)
 		{
 			String encoding = encodings[i];

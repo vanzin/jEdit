@@ -159,7 +159,7 @@ public class BufferOptions extends EnhancedDialog
 
 		//{{{ Encoding
 
-		String[] encodings = MiscUtilities.getEncodings();
+		String[] encodings = MiscUtilities.getEncodings(true);
 
 		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
 

@@ -1590,6 +1590,28 @@ options.jedit.label=jEdit
 # Option pane to show by default
 options.last=editing
 
+#{{{ General pane
+options.general.label=General
+options.general.code=new GeneralOptionPane();
+options.general.lineSeparator=Default line separator:
+options.general.encoding=Default character encoding:
+options.general.encodingAutodetect=Auto-detect file encoding when possible
+options.general.checkModStatus=If open files are changed on disk:
+options.general.checkModStatus.nothing=do nothing
+options.general.checkModStatus.prompt=prompt
+options.general.checkModStatus.reload=automatically reload
+options.general.recentFiles=Recent files to remember:
+options.general.sortRecent=Sort recent file list
+options.general.saveCaret=Save caret positions in recent file list
+options.general.persistentMarkers=Save marker positions
+options.general.restore=Restore previously open files on startup
+options.general.restore.cli=... even if file names were specified on the \
+	command line
+options.general.sortBuffers=Sort buffer list (takes effect after restart)
+options.general.sortByName=Sort buffer list by file name, instead of path name
+options.general.newkeyhandling=Use new keyboard handling (experimental)
+#}}}
+
 #{{{ Abbreviations pane
 options.abbrevs.label=Abbreviations
 options.abbrevs.code=new AbbrevsOptionPane();
@@ -1676,26 +1698,12 @@ options.editing.noTabs=Soft (emulated with spaces) tabs
 options.editing.deepIndent=Deep indent
 #}}}
 
-#{{{ General pane
-options.general.label=General
-options.general.code=new GeneralOptionPane();
-options.general.lineSeparator=Default line separator:
-options.general.encoding=Default character encoding:
-options.general.encodingAutodetect=Auto-detect file encoding when possible
-options.general.checkModStatus=If open files are changed on disk:
-options.general.checkModStatus.nothing=do nothing
-options.general.checkModStatus.prompt=prompt
-options.general.checkModStatus.reload=automatically reload
-options.general.recentFiles=Recent files to remember:
-options.general.sortRecent=Sort recent file list
-options.general.saveCaret=Save caret positions in recent file list
-options.general.persistentMarkers=Save marker positions
-options.general.restore=Restore previously open files on startup
-options.general.restore.cli=... even if file names were specified on the \
-	command line
-options.general.sortBuffers=Sort buffer list (takes effect after restart)
-options.general.sortByName=Sort buffer list by file name, instead of path name
-options.general.newkeyhandling=Use new keyboard handling (experimental)
+#{{{ Encodings pane
+options.encodings.label=Encodings
+options.encodings.code=new EncodingsOptionPane();
+options.encodings.selectEncodings=Select the encodings that should be shown in encoding dialogs:
+options.encodings.selectAll=Select All
+options.encodings.selectNone=Select None
 #}}}
 
 #{{{ Gutter pane

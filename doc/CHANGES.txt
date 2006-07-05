@@ -1,5 +1,23 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre6
+
+Thanks to Björn "Vampire" Kautler for contributing to this release.
+
+{{{ API Changes
+- MiscUtilities has a new method getEncodings(boolean getSelected)
+  to get only the user-chosen encodings, e. g. in encoding dialogs.
+  getEncodings() is deprecated in favor of getEncodings(false).
+  (Björn "Vampire" Kautler)
+}}}
+
+{{{ Miscellaneous
+- Added an OptionPane "Encodings" to select which encodings to
+  show in encoding dialogs.
+  (Björn "Vampire" Kautler)
+}}}
+}}}
+
 {{{ Version 4.3pre5
 
 Thanks to Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
@@ -15,6 +33,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   existing jEdit installation does not suffice. You would get weird
   errors in this case. Thus, a full reinstall is required.
 }}}
+
 {{{ Keyboard handling changes
 - There is a new option, "simplified keyboard handling"
   under "general options" to switch between two keyboard handling modes.
@@ -50,11 +69,11 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 - MiscUtilities.autodetect() this method tries to autodetect the file encoding. It was moved
   from BufferIORequest (Matthieu Casanova)
 
--New utility class : IOUtilities that will contains static IO methods that
-	depends only on JDK. (Matthieu Casanova)
+- New utility class : IOUtilities that will contains static IO methods that
+  depends only on JDK. (Matthieu Casanova)
 
--New utility class : StandardUtilities that will contains static
-	methods that depends only on JDK (Matthieu Casanova)
+- New utility class : StandardUtilities that will contains static
+  methods that depends only on JDK (Matthieu Casanova)
 
 - jEditBuffer.getRegexProperty() has been removed;
   jEditBuffer.getPatternProperty() was added to replace it.
@@ -134,6 +153,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   (Björn "Vampire" Kautler)
 }}}
 }}}
+
 {{{ Version 4.3pre4
 
 Thanks to Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuân Balduf,
