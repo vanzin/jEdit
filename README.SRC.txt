@@ -26,6 +26,7 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the online help in either HTML- or PDF-format:
 
+  - DocBook XML 4.2. Get it from <http://www.docbook.org/xml/4.2/>
   - DocBook XSL. Don't use a ".0" version, these are experimental releases.
     They are normally followed by a ".1" version short time after release
     of the ".0" version.
