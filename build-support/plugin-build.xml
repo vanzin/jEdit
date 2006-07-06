@@ -49,7 +49,7 @@
     <echo>${java.home}</echo>
     <property file="${user.home}/.build.properties" />
     <property file="${user.home}/build.properties" />
-
+    
     <!-- where to find jEdit and plugins    -->
     <property name="jedit.install.dir"  value="../../jEdit" />
     <property name="jedit.user.home"    value="${user.home}/.jedit" />

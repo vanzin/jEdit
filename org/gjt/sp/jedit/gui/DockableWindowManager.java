@@ -23,15 +23,38 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import bsh.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.io.*;
-import java.net.URL;
-import java.util.*;
-import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Stack;
+
+import javax.swing.AbstractButton;
+import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.PluginJAR;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
+import org.gjt.sp.jedit.msg.DockableWindowUpdate;
+import org.gjt.sp.jedit.msg.PluginUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -148,6 +171,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	private PanelWindowContainer bottom;
 	private ArrayList clones;
 	private Entry lastEntry;
+	public Stack showStack = new Stack();
 	// }}}
 	
 	//{{{ getRegisteredDockableWindows() method
@@ -211,6 +235,25 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		propertiesChanged();
 	} //}}}
 
+	// {{{ closeListener() method
+	/**
+	 * 
+	 * The actionEvent "close-docking-area" by default only works on 
+	 * windows that are docked. If you want your floatable plugins to also
+	 * respond to this event, you need to add key listeners to each components
+	 * in your plugin that usually has keyboard focus. 
+	 * This function returns a key listener which does exactly that.
+	 * 
+	 * @param dockableName the name of your dockable
+	 * @return a KeyListener you can add to that plugin's component.
+	 * @since jEdit 4.3pre6
+	 * 
+	 */
+	public KeyListener closeListener(String dockableName) {
+		return new KeyHandler(dockableName);
+	}
+	// }}}
+	
 	//{{{ getView() method
 	/**
 	 * Returns this dockable window manager's view.
@@ -241,13 +284,16 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		// create a copy of this dockable window and float it
 		Entry newEntry = new Entry(entry.factory,FLOATING);
 		newEntry.win = newEntry.factory.createDockableWindow(view,FLOATING);
+		
 		if(newEntry.win != null)
 		{
-			newEntry.container = new FloatingWindowContainer(this,true);
+			FloatingWindowContainer fwc = new FloatingWindowContainer(this,true); 
+			newEntry.container = fwc;
 			newEntry.container.register(newEntry);
 			newEntry.container.show(newEntry);
+			
+			
 		}
-
 		clones.add(newEntry);
 		return newEntry.win;
 	} //}}}
@@ -278,11 +324,12 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			if(lastEntry.position.equals(FLOATING)
 				&& lastEntry.container == null)
 			{
-				lastEntry.container = new FloatingWindowContainer(
-					this,view.isPlainView());
+				FloatingWindowContainer fwc = new FloatingWindowContainer(
+					this,view.isPlainView()); 
+				lastEntry.container = fwc;
 				lastEntry.container.register(lastEntry);
 			}
-
+			showStack.push(name);
 			lastEntry.container.show(lastEntry);
 			Object reason = DockableWindowUpdate.ACTIVATED;
 			EditBus.send(new DockableWindowUpdate(this, reason, name));
@@ -386,6 +433,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public JComponent getDockable(String name)
 	{
+		
 		Entry entry = (Entry)windows.get(name);
 		if(entry == null || entry.win == null)
 			return null;
@@ -461,7 +509,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 	//{{{ closeCurrentArea() method
 	/**
-	 * Closes the currently focused docking area.
+	 * Closes the most recently focused dockable. 
 	 * @since jEdit 4.1pre3
 	 */
 	public void closeCurrentArea()
@@ -475,9 +523,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			{
 				/* Try to hide the last entry that was shown */
 				try {
-					String dockableName = lastEntry.factory.name;
+					String dockableName = showStack.pop().toString(); 
 					hideDockableWindow(dockableName);
-					lastEntry = null;
 					return;
 				}
 				catch (Exception e) {}
@@ -1010,4 +1057,36 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			
 		} //}}}
 	} //}}}
+
+	/**
+	 * This keyhandler responds to only two key events - those corresponding to
+	 * the close-docking-area action event. 
+	 * 
+	 * @author ezust
+	 *
+	 */
+	class KeyHandler extends KeyAdapter {
+		static final String action = "close-docking-area";  
+		Key b1, b2;
+		String name;
+		
+		public KeyHandler(String dockableName) {
+			String shortcut1=jEdit.getProperty(action + ".shortcut");
+			String shortcut2=jEdit.getProperty(action + ".shortcut2");
+			if (shortcut1 != null)
+				b1 = KeyEventTranslator.parseKey(shortcut1);
+			if (shortcut2 != null)
+				b2 = KeyEventTranslator.parseKey(shortcut2);
+			name = dockableName;
+		}
+		public void keyPressed(KeyEvent e)
+		{
+			if ((b1 != null && e.getKeyChar() == b1.key) ||
+			    (b2 != null && e.getKeyChar() == b2.key)) 
+				hideDockableWindow(name);
+		}
+
+
+	}
+	
 }
