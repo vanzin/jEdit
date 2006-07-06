@@ -26,12 +26,9 @@ Matthieu Casanova for contributing to this release.
 - Added an OptionPane "Encodings" to select which encodings to
   show in encoding dialogs.
   (Björn "Vampire" Kautler)
-<<<<<<< CHANGES.txt
 
 - Improved DockableWindowManager.currentArea() - closes more
   docked dockables than it did before. (Alan Ezust) 
-  
-=======
 
 - Fixed the storing of Frame size and position
   if the Frame gets maximized. (bug #1325358)
@@ -39,7 +36,6 @@ Matthieu Casanova for contributing to this release.
 
 - Fixed VFS.copy() method when the returned session is null
   (Matthieu Casanova)
->>>>>>> 1.852
 }}}
 }}}
 
