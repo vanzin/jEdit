@@ -542,19 +542,19 @@ public abstract class VFS
 	{
 		VFS sourceVFS = VFSManager.getVFSForPath(sourcePath);
 		Object sourceSession = sourceVFS.createVFSSession(sourcePath, comp);
-        if (sourceSession == null)
-        {
-            Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + sourceVFS + " for path " + sourcePath);
-            return false;
-        }
-        VFS targetVFS = VFSManager.getVFSForPath(targetPath);
+		if (sourceSession == null)
+		{
+			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + sourceVFS + " for path " + sourcePath);
+			return false;
+		}
+		VFS targetVFS = VFSManager.getVFSForPath(targetPath);
 		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
-        if (targetSession == null)
-        {
-            Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS  + " for path " + targetPath);
-            return false;
-        }
-        return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
+		if (targetSession == null)
+		{
+			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS  + " for path " + targetPath);
+			return false;
+		}
+		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
 	} //}}}
 
 	//{{{ insert() method
