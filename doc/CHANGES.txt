@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre6
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing 
+to this release.
 
 {{{ API Changes
 - MiscUtilities.getEncodings(boolean getSelected) added
@@ -24,6 +25,9 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 - Fixed the storing of Frame size and position
   if the Frame gets maximized. (bug #1325358)
   (Björn "Vampire" Kautler)
+
+- Fixed VFS.copy() method when the returned session is null
+  (Matthieu Casanova)
 }}}
 }}}
 

@@ -186,7 +186,9 @@ public abstract class VFS
 	public static final String EA_MODIFIED = "modified";
 	//}}}
 
-	//{{{ VFS constructor
+    public static int IOBUFSIZE = 32678;
+
+    //{{{ VFS constructor
 	/**
 	 * @deprecated Use the form where the constructor takes a capability
 	 * list.
@@ -397,7 +399,7 @@ public abstract class VFS
 	 * a login name and password, for example.
 	 * @param path The path in question
 	 * @param comp The component that will parent any dialog boxes shown
-	 * @return The session
+	 * @return The session. The session can be null if there were errors
 	 * @since jEdit 2.6pre3
 	 */
 	public Object createVFSSession(String path, Component comp)
@@ -510,7 +512,7 @@ public abstract class VFS
 			}
 			in = new BufferedInputStream(sourceVFS._createInputStream(sourceSession, sourcePath, false, comp));
 			out = new BufferedOutputStream(targetVFS._createOutputStream(targetSession, targetPath, comp));
-			boolean copyResult = IOUtilities.copyStream(4096, progress, in, out, canStop);
+			boolean copyResult = IOUtilities.copyStream(IOBUFSIZE, progress, in, out, canStop);
 			VFSManager.sendVFSUpdate(targetVFS, targetPath, true);
 			return copyResult;
 		}
@@ -540,9 +542,19 @@ public abstract class VFS
 	{
 		VFS sourceVFS = VFSManager.getVFSForPath(sourcePath);
 		Object sourceSession = sourceVFS.createVFSSession(sourcePath, comp);
-		VFS targetVFS = VFSManager.getVFSForPath(targetPath);
+        if (sourceSession == null)
+        {
+            Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + sourceVFS + " for path " + sourcePath);
+            return false;
+        }
+        VFS targetVFS = VFSManager.getVFSForPath(targetPath);
 		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
-		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
+        if (targetSession == null)
+        {
+            Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS  + " for path " + targetPath);
+            return false;
+        }
+        return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
 	} //}}}
 
 	//{{{ insert() method
