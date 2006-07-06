@@ -136,9 +136,12 @@ public class KillRing implements MutableListModel
 
 		try
 		{
-			out = new BufferedWriter(new FileWriter(file1));
+			out = new BufferedWriter(
+				new OutputStreamWriter(
+					new FileOutputStream(file1),
+					"UTF-8"));
 
-			out.write("<?xml version=\"1.0\"?>");
+			out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			out.write(lineSep);
 			out.write("<!DOCTYPE KILLRING SYSTEM \"killring.dtd\">");
 			out.write(lineSep);
