@@ -44,7 +44,7 @@ import org.gjt.sp.jedit.MiscUtilities.StringICaseCompare;
 /**
  * Encodings editor.
  * @author Björn Kautler
- * @since 4.3pre5
+ * @since jEdit 4.3pre6
  * @version $Id$
  */
 public class EncodingsOptionPane extends AbstractOptionPane
