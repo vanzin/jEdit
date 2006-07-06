@@ -76,6 +76,7 @@ public class QuickNotepad extends JPanel
 
 	private QuickNotepadToolPanel toolPanel;
     // }}}
+
     // {{{ Constructor
 	/**
 	 * 
@@ -110,7 +111,6 @@ public class QuickNotepad extends JPanel
 
 		textArea = new QuickNotepadTextArea();
 		textArea.setFont(QuickNotepadOptionPane.makeFont());
-		textArea.addKeyListener(new KeyHandler());
 
 		JScrollPane pane = new JScrollPane(textArea);
 		add(BorderLayout.CENTER, pane);
@@ -242,27 +242,6 @@ public class QuickNotepad extends JPanel
 		}
 	}
     // }}}
-    // }}}
-
-    // {{{ Listener objects
-    
-    // {{{ KeyHandler
-    /**
-     * <Esc> closes a floating window
-     */
-    private class KeyHandler extends KeyAdapter {   
-            public void keyPressed(KeyEvent evt) {   
-                    if (QuickNotepad.this.floating   
-                                    && evt.getKeyCode() == KeyEvent.VK_ESCAPE) {   
-                            evt.consume();   
-                            DockableWindowManager wm = QuickNotepad.this.view   
-                                            .getDockableWindowManager();   
-                            wm.removeDockableWindow(QuickNotepadPlugin.NAME);   
-                    }   
-            }   
-    }   
-    // }}}
-    
     // }}}
 }
 // }}}
