@@ -23,15 +23,17 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.border.*;
-import javax.swing.plaf.metal.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.font.*;
-import java.awt.geom.AffineTransform;
-import java.awt.*;
-import java.util.*;
-import org.gjt.sp.jedit.*;
+import java.awt.CardLayout;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+
+import javax.swing.JPanel;
+import javax.swing.border.Border;
 //}}}
 
 class DockablePanel extends JPanel

@@ -137,7 +137,19 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public static final String RIGHT = "right";
 	//}}}
-
+	
+	//{{{ Data members
+	private View view;
+	private DockableWindowFactory factory;
+	private Hashtable windows;
+	private PanelWindowContainer left;
+	private PanelWindowContainer right;
+	private PanelWindowContainer top;
+	private PanelWindowContainer bottom;
+	private ArrayList clones;
+	private Entry lastEntry;
+	// }}}
+	
 	//{{{ getRegisteredDockableWindows() method
 	/**
 	 * @since jEdit 4.3pre2
@@ -248,30 +260,30 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public void showDockableWindow(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
-		if(entry == null)
+		lastEntry = (Entry)windows.get(name);
+		if(lastEntry == null)
 		{
 			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
 			return;
 		}
 
-		if(entry.win == null)
+		if(lastEntry.win == null)
 		{
-			entry.win = entry.factory.createDockableWindow(
-				view,entry.position);
+			lastEntry.win = lastEntry.factory.createDockableWindow(
+				view,lastEntry.position);
 		}
 
-		if(entry.win != null)
+		if(lastEntry.win != null)
 		{
-			if(entry.position.equals(FLOATING)
-				&& entry.container == null)
+			if(lastEntry.position.equals(FLOATING)
+				&& lastEntry.container == null)
 			{
-				entry.container = new FloatingWindowContainer(
+				lastEntry.container = new FloatingWindowContainer(
 					this,view.isPlainView());
-				entry.container.register(entry);
+				lastEntry.container.register(lastEntry);
 			}
 
-			entry.container.show(entry);
+			lastEntry.container.show(lastEntry);
 			Object reason = DockableWindowUpdate.ACTIVATED;
 			EditBus.send(new DockableWindowUpdate(this, reason, name));
 		}
@@ -396,6 +408,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			return title;
 	} //}}}
 
+	//{{{ setDockableTitle() method
 	/**
 	 * Changes the title string of a floating dockable.
 	 * 
@@ -414,6 +427,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		jEdit.setProperty(propName, newTitle);
 		firePropertyChange(propName, oldTitle, newTitle);
 	}
+	// }}}
 	
 	//{{{ isDockableWindowVisible() method
 	/**
@@ -459,15 +473,25 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		{
 			public void run()
 			{
+				/* Try to hide the last entry that was shown */
+				try {
+					String dockableName = lastEntry.factory.name;
+					hideDockableWindow(dockableName);
+					lastEntry = null;
+					return;
+				}
+				catch (Exception e) {}
+				
 				Component comp = view.getFocusOwner();
 				while(comp != null)
 				{
 					//System.err.println(comp.getClass());
 					if(comp instanceof DockablePanel)
 					{
-						PanelWindowContainer container =
-							((DockablePanel)comp)
-							.getWindowContainer();
+						DockablePanel panel = (DockablePanel) comp;
+						
+						PanelWindowContainer container = panel.getWindowContainer();
+						
 						container.show(null);
 						return;
 					}
@@ -803,16 +827,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 	//}}}
 
-	//{{{ Private members
-	private View view;
-	private DockableWindowFactory factory;
-	private Hashtable windows;
-	private PanelWindowContainer left;
-	private PanelWindowContainer right;
-	private PanelWindowContainer top;
-	private PanelWindowContainer bottom;
-	private ArrayList clones;
-
 	//{{{ propertiesChanged() method
 	private void propertiesChanged()
 	{
@@ -947,8 +961,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 		return returnValue.iterator();
 	} //}}}
-
-	//}}}
 
 	//{{{ Entry class
 	class Entry
