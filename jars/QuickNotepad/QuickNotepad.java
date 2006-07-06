@@ -1,4 +1,4 @@
-// {{{ QuickNotePad
+// {{{ QuickNotepad
 /*
  * QuickNotepad.java
  * part of the QuickNotepad plugin for the jEdit text editor
@@ -125,7 +125,7 @@ public class QuickNotepad extends JPanel
 	public void focusOnDefaultComponent() {
 		textArea.requestFocus();
 	}
-    //}}}
+    // }}}
 
     // {{{ getFileName
 	public String getFilename() {
@@ -133,7 +133,7 @@ public class QuickNotepad extends JPanel
 	}
     // }}}
 
-	/*   EBComponent implementation */
+	// EBComponent implementation
 	
     // {{{ handleMessage
 	public void handleMessage(EBMessage message) {
@@ -160,11 +160,11 @@ public class QuickNotepad extends JPanel
 		}
 	}
     // }}}
-	/* These JComponent methods provide the appropriate points
-	   to subscribe and unsubscribe this object to the EditBus.
-	 */
 
-     // {{{ addNotify
+	// These JComponent methods provide the appropriate points
+	// to subscribe and unsubscribe this object to the EditBus.
+
+    // {{{ addNotify
 	public void addNotify() {
 		super.addNotify();
 		EditBus.addToBus(this);
@@ -179,9 +179,7 @@ public class QuickNotepad extends JPanel
 	}
     // }}}
     
-	/*
-	   QuickNotepadActions implementation
-	*/
+	// QuickNotepadActions implementation
 
     // {{{
 	public void saveFile() {
@@ -220,7 +218,6 @@ public class QuickNotepad extends JPanel
     // {{{ readFile()
 	/**
 	 * Helper method
-	 *
 	 */
 	private void readFile() {
 		if (filename == null || filename.length() == 0)
@@ -245,6 +242,27 @@ public class QuickNotepad extends JPanel
 		}
 	}
     // }}}
+    // }}}
+
+    // {{{ Listener objects
+    
+    // {{{ KeyHandler
+    /**
+     * <Esc> closes a floating window
+     */
+    private class KeyHandler extends KeyAdapter {   
+            public void keyPressed(KeyEvent evt) {   
+                    if (QuickNotepad.this.floating   
+                                    && evt.getKeyCode() == KeyEvent.VK_ESCAPE) {   
+                            evt.consume();   
+                            DockableWindowManager wm = QuickNotepad.this.view   
+                                            .getDockableWindowManager();   
+                            wm.removeDockableWindow(QuickNotepadPlugin.NAME);   
+                    }   
+            }   
+    }   
+    // }}}
+    
     // }}}
 }
 // }}}
