@@ -5,6 +5,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <article id="QuickNotepad">
+	
 	<articleinfo>
 		<author>
 			<firstname>John</firstname><surname>Gellene</surname>
@@ -79,27 +80,27 @@
 		<colspec colnum="4"/>
 		<tbody>
 			<row>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry>Cut</entry>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>x</keysym></keycombo></entry>
 			</row>
 			<row>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry>Copy</entry>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>c</keysym></keycombo></entry>
 			</row>
 			<row>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry>Paste</entry>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>v</keysym></keycombo></entry>
 			</row>
 			<row>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry>Select All</entry>
-				<entry>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</entry>
+				<entry>      </entry>
 				<entry><keycombo action="simul"><keysym>Ctrl</keysym><keysym>a</keysym></keycombo></entry>
 			</row>
 		</tbody>
