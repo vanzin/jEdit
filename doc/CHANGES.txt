@@ -2,14 +2,19 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre6
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing 
-to this release.
+
+Thanks to Björn "Vampire" Kautler, Alan Ezust, and 
+Matthieu Casanova for contributing to this release.
 
 {{{ API Changes
 - MiscUtilities.getEncodings(boolean getSelected) added
   to get only the user-chosen encodings, e. g. in encoding dialogs.
   getEncodings() is deprecated in favor of getEncodings(false).
   (Björn "Vampire" Kautler)
+  
+- DockableWindowManager.closeListener(String dockableName) - a new 
+  convenience method for creating keyboard listeners for floating
+  dockables to respond to the "close-current-area" action. (Alan Ezust)
 
 - GUIUtilities.addSizeSaver(Frame parent, String name) added to
   save a Frames size and position correctly, even if it gets
@@ -21,6 +26,12 @@ to this release.
 - Added an OptionPane "Encodings" to select which encodings to
   show in encoding dialogs.
   (Björn "Vampire" Kautler)
+<<<<<<< CHANGES.txt
+
+- Improved DockableWindowManager.currentArea() - closes more
+  docked dockables than it did before. (Alan Ezust) 
+  
+=======
 
 - Fixed the storing of Frame size and position
   if the Frame gets maximized. (bug #1325358)
@@ -28,6 +39,7 @@ to this release.
 
 - Fixed VFS.copy() method when the returned session is null
   (Matthieu Casanova)
+>>>>>>> 1.852
 }}}
 }}}
 
