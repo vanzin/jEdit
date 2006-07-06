@@ -140,6 +140,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 
 		pack();
 		GUIUtilities.loadGeometry(this,"helpviewer");
+		GUIUtilities.addSizeSaver(this,"helpviewer");
 
 		EditBus.addToBus(this);
 
@@ -239,7 +240,6 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 		EditBus.removeFromBus(this);
 		jEdit.setIntegerProperty("helpviewer.splitter",
 			splitter.getDividerLocation());
-		GUIUtilities.saveGeometry(this,"helpviewer");
 		super.dispose();
 	} //}}}
 

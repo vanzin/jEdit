@@ -78,6 +78,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 
 		pack();
 		GUIUtilities.loadGeometry(this,entry.factory.name);
+		GUIUtilities.addSizeSaver(this,entry.factory.name);
 		setVisible(true);
 	} //}}}
 
@@ -131,7 +132,6 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	//{{{ dispose() method
 	public void dispose()
 	{
-		GUIUtilities.saveGeometry(this,entry.factory.name);
 		entry.container = null;
 		entry.win = null;
 		super.dispose();

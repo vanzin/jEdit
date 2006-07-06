@@ -1084,11 +1084,40 @@ public class View extends JFrame implements EBComponent
 		ViewConfig config = new ViewConfig();
 		config.plainView = isPlainView();
 		config.splitConfig = getSplitConfig();
-		config.x = getX();
-		config.y = getY();
-		config.width = getWidth();
-		config.height = getHeight();
 		config.extState = getExtendedState();
+		String prefix = (config.plainView ? "plain-view" : "view");
+		switch (config.extState)
+		{
+			case Frame.MAXIMIZED_BOTH:
+			case Frame.ICONIFIED:
+				config.x = jEdit.getIntegerProperty(prefix + ".x",getX());
+				config.y = jEdit.getIntegerProperty(prefix + ".y",getY());
+				config.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
+				config.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
+				break;
+
+			case Frame.MAXIMIZED_VERT:
+				config.x = getX();
+				config.y = jEdit.getIntegerProperty(prefix + ".y",getY());
+				config.width = getWidth();
+				config.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
+				break;
+
+			case Frame.MAXIMIZED_HORIZ:
+				config.x = jEdit.getIntegerProperty(prefix + ".x",getX());
+				config.y = getY();
+				config.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
+				config.height = getHeight();
+				break;
+
+			case Frame.NORMAL:
+			default:
+				config.x = getX();
+				config.y = getY();
+				config.width = getWidth();
+				config.height = getHeight();
+				break;
+		}
 
 		config.top = dockableWindowManager.getTopDockingArea().getCurrent();
 		config.left = dockableWindowManager.getLeftDockingArea().getCurrent();
@@ -1280,12 +1309,13 @@ public class View extends JFrame implements EBComponent
 		EditBus.addToBus(this);
 
 		SearchDialog.preloadSearchDialog(this);
+
+		GUIUtilities.addSizeSaver(this,this.plainView ? "plain-view" : "view");
 	} //}}}
 
 	//{{{ close() method
 	void close()
 	{
-		GUIUtilities.saveGeometry(this,plainView ? "plain-view" : "view");
 		closed = true;
 
 		// save dockable window geometry, and close 'em
@@ -1877,6 +1907,7 @@ loop:		for(;;)
 			y = jEdit.getIntegerProperty(prefix + ".y",0);
 			width = jEdit.getIntegerProperty(prefix + ".width",0);
 			height = jEdit.getIntegerProperty(prefix + ".height",0);
+			extState = jEdit.getIntegerProperty(prefix + ".extendedState",NORMAL);
 		}
 
 		public ViewConfig(boolean plainView, String splitConfig,

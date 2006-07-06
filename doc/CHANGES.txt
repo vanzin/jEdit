@@ -5,15 +5,24 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ API Changes
-- MiscUtilities has a new method getEncodings(boolean getSelected)
+- MiscUtilities.getEncodings(boolean getSelected) added
   to get only the user-chosen encodings, e. g. in encoding dialogs.
   getEncodings() is deprecated in favor of getEncodings(false).
   (Björn "Vampire" Kautler)
+
+- GUIUtilities.addSizeSaver(Frame parent, String name) added to
+  save a Frames size and position correctly, even if it gets
+  maximized.
+  (Björn "Vampire" Kautler )
 }}}
 
 {{{ Miscellaneous
 - Added an OptionPane "Encodings" to select which encodings to
   show in encoding dialogs.
+  (Björn "Vampire" Kautler)
+
+- Fixed the storing of Frame size and position
+  if the Frame gets maximized. (bug #1325358)
   (Björn "Vampire" Kautler)
 }}}
 }}}

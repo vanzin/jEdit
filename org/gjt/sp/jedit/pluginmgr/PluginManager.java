@@ -55,7 +55,6 @@ public class PluginManager extends JFrame implements EBComponent
 	//{{{ dispose() method
 	public void dispose()
 	{
-		GUIUtilities.saveGeometry(this,"plugin-manager");
 		instance = null;
 		EditBus.removeFromBus(this);
 		super.dispose();
@@ -193,6 +192,7 @@ public class PluginManager extends JFrame implements EBComponent
 
 		pack();
 		GUIUtilities.loadGeometry(this,"plugin-manager");
+		GUIUtilities.addSizeSaver(this,"plugin-manager");
 		setVisible(true);
 	} //}}}
 
@@ -342,6 +342,5 @@ public class PluginManager extends JFrame implements EBComponent
 				manager.update();
 		}
 	} //}}}
-
 	//}}}
 }

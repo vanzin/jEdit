@@ -40,6 +40,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -998,7 +999,7 @@ public class GUIUtilities
 		x = jEdit.getIntegerProperty(name + ".x",x);
 		y = jEdit.getIntegerProperty(name + ".y",y);
 
-		int extState = jEdit.getIntegerProperty(name + ".extendedState", 0);
+		int extState = jEdit.getIntegerProperty(name + ".extendedState", Frame.NORMAL);
 
 		Rectangle desired = new Rectangle(x,y,width,height);
 		try
@@ -1515,6 +1516,21 @@ public class GUIUtilities
 		return (View)getComponentParent(comp,View.class);
 	} //}}}
 
+	//{{{ addSizeSaver() method
+	/**
+	 * Adds a SizeSaver to the specified Frame.
+	 *
+	 * @param parent The Frame for which to save the size
+	 * @param name The prefix for the settings
+	 * @since jEdit 4.3pre6
+	 */
+	public static void addSizeSaver(Frame parent, String name)
+	{
+		SizeSaver ss = new SizeSaver(parent,name);
+		parent.addWindowStateListener(ss);
+		parent.addComponentListener(ss);
+	} //}}}
+
 	//{{{ Package-private members
 
 	//{{{ init() method
@@ -1551,5 +1567,113 @@ public class GUIUtilities
 	private static String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
 
 	private GUIUtilities() {}
+	//}}}
+
+	//{{{ Inner classes
+
+	//{{{ SizeSaver class
+	/**
+	 * A combined ComponentListener and WindowStateListener to continually save a Frames size.<p>
+	 *
+	 * @author Björn Kautler
+	 * @version $Id$
+	 * @since jEdit 4.3pre6
+	 */
+	static class SizeSaver extends ComponentAdapter implements WindowStateListener
+	{
+		private Frame parent;
+		private String name;
+
+		/**
+		 * Constructs a new SizeSaver.
+		 * 
+		 * @param parent The Frame for which to save the size
+		 * @param name The prefix for the settings
+		 */
+		public SizeSaver(Frame parent, String name)
+		{
+			if ((null == parent) || (null == name))
+			{
+				throw new NullPointerException();
+			}
+			this.parent = parent;
+			this.name = name;
+		}
+
+		public void windowStateChanged(WindowEvent wse)
+		{
+			int extendedState = wse.getNewState();
+			jEdit.setIntegerProperty(name + ".extendedState",extendedState);
+			Rectangle bounds = parent.getBounds();
+			switch (extendedState)
+			{
+				case Frame.MAXIMIZED_VERT:
+					jEdit.setIntegerProperty(name + ".x",bounds.x);
+					jEdit.setIntegerProperty(name + ".width",bounds.width);
+					break;
+
+				case Frame.MAXIMIZED_HORIZ:
+					jEdit.setIntegerProperty(name + ".y",bounds.y);
+					jEdit.setIntegerProperty(name + ".height",bounds.height);
+					break;
+
+				case Frame.NORMAL:
+					jEdit.setIntegerProperty(name + ".x",bounds.x);
+					jEdit.setIntegerProperty(name + ".y",bounds.y);
+					jEdit.setIntegerProperty(name + ".width",bounds.width);
+					jEdit.setIntegerProperty(name + ".height",bounds.height);
+					break;
+			}
+		}
+
+		public void componentResized(ComponentEvent ce)
+		{
+			componentMoved(ce);
+		}
+
+		public void componentMoved(ComponentEvent ce)
+		{
+			final Rectangle bounds = parent.getBounds();
+			final Runnable sizeSaver = new Runnable()
+			{
+				public void run()
+				{
+					switch (parent.getExtendedState())
+					{
+						case Frame.MAXIMIZED_VERT:
+							jEdit.setIntegerProperty(name + ".x",bounds.x);
+							jEdit.setIntegerProperty(name + ".width",bounds.width);
+							break;
+
+						case Frame.MAXIMIZED_HORIZ:
+							jEdit.setIntegerProperty(name + ".y",bounds.y);
+							jEdit.setIntegerProperty(name + ".height",bounds.height);
+							break;
+
+						case Frame.NORMAL:
+							jEdit.setIntegerProperty(name + ".x",bounds.x);
+							jEdit.setIntegerProperty(name + ".y",bounds.y);
+							jEdit.setIntegerProperty(name + ".width",bounds.width);
+							jEdit.setIntegerProperty(name + ".height",bounds.height);
+							break;
+					}
+				}
+			};
+			new Thread("Sizesavingdelay")
+			{
+				public void run()
+				{
+					try
+					{
+						Thread.sleep(500);
+					}
+					catch (InterruptedException ie)
+					{
+					}
+					SwingUtilities.invokeLater(sizeSaver);
+				}
+			}.start();
+		}
+	} //}}}
 	//}}}
 }
