@@ -22,8 +22,8 @@ dist.dir=dist
 jar.filename=jedit.jar
 
 ### The version of jEdit
-jedit.version=4.3pre5
-jedit.build.number=04.03.05.00
+jedit.version=4.3pre6
+jedit.build.number=04.03.06.00
 
 ### The name of the distribution JAR-file
 dist.jar.filename=jEdit${jedit.version}install.jar
