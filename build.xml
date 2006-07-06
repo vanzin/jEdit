@@ -106,7 +106,9 @@
 			description="run jEdit">
 		<java jar="${jar.location}/${config.jar.filename}"
 			  fork="true"
-			  spawn="true" />
+			  spawn="true">
+			<arg value="-noserver" />
+		</java>
 	</target>
 	
 	<target name="generate-docbook-wrapper"
