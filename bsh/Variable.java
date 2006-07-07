@@ -72,6 +72,8 @@ public class Variable implements java.io.Serializable
 			return;
 		}
 
+		// TODO: should add isJavaCastable() test for strictJava
+		// (as opposed to isJavaAssignable())
 		if ( type != null )
 			value = Types.castObject( value, type, 
 				context == DECLARATION ? Types.CAST : Types.ASSIGNMENT
@@ -80,6 +82,11 @@ public class Variable implements java.io.Serializable
 		this.value= value;
 	}
 
+	/*
+		Note: UtilEvalError here comes from lhs.getValue().
+		A Variable can represent an LHS for the case of an imported class or
+		object field.
+	*/
 	Object getValue() 
 		throws UtilEvalError
 	{ 

@@ -59,10 +59,14 @@ public class ClassGeneratorImpl extends ClassGenerator
 	{
 		// Scripting classes currently requires accessibility
 		// This can be eliminated with a bit more work.
-		Capabilities.setAccessibility( true );	
-		if ( !Capabilities.haveAccessibility() )
-			throw new InterpreterError(
-				"Defining classes currently requires reflect Accessibility.");
+		try {
+			Capabilities.setAccessibility( true );
+		} catch ( Capabilities.Unavailable e )
+		{
+			throw new EvalError( 
+				"Defining classes currently requires reflective Accessibility.",
+				block, callstack );
+		}
 
 		NameSpace enclosingNameSpace = callstack.top();
 		String packageName = enclosingNameSpace.getPackage();
@@ -112,22 +116,8 @@ public class ClassGeneratorImpl extends ClassGenerator
 		// Define the new class in the classloader
 		Class genClass = bcm.defineClass( fqClassName, code );
 
-//bcm.doneDefiningClass( fqClassName );
-
 		// import the unq name into parent
 		enclosingNameSpace.importClass( fqClassName.replace('$','.') );
-
-		// Also cache the class so that no import resolution must occur
-		// this avoids having to load our enclosing class which isn't
-		// finished being generated yet... oy.
-
-// caching is not correct and doesn't seem to help...
-//	enclosingNameSpace.cacheClass( name, genClass );
-
-// Also cache it in the static namespace...
-//classStaticNameSpace.cacheClass( name, genClass );
-
-//classStaticNameSpace.importClass( fqClassName.replace('$','.') );
 
 		try {
 			classStaticNameSpace.setLocalVariable( 
@@ -168,7 +158,6 @@ public class ClassGeneratorImpl extends ClassGenerator
 		BSHBlock body, CallStack callstack, Interpreter interpreter, 
 		String defaultPackage 
 	) 
-		throws EvalError
 	{
 		List vars = new ArrayList();
 		for( int child=0; child<body.jjtGetNumChildren(); child++ )
@@ -312,7 +301,7 @@ public class ClassGeneratorImpl extends ClassGenerator
 		Method superMethod = Reflect.resolveJavaMethod(
 			bcm, clas, superName, Types.getTypes(args), false/*onlyStatic*/ );
 		if ( superMethod != null )
-			return Reflect.invokeOnMethod( 
+			return Reflect.invokeMethod(
 				superMethod, instance, args );
 
 		// No super method, try to invoke regular method
@@ -321,7 +310,7 @@ public class ClassGeneratorImpl extends ClassGenerator
 		superMethod = Reflect.resolveExpectedJavaMethod(
 			bcm, superClass, instance, methodName, args, 
 			false/*onlyStatic*/ );
-		return Reflect.invokeOnMethod( superMethod, instance, args );
+		return Reflect.invokeMethod( superMethod, instance, args );
 	}
 
 }

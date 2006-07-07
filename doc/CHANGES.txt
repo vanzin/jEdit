@@ -23,6 +23,8 @@ Matthieu Casanova for contributing to this release.
 }}}
 
 {{{ Miscellaneous
+- Beanshell 2.0b4 bundled (Matthieu Casanova)
+
 - Added an OptionPane "Encodings" to select which encodings to
   show in encoding dialogs.
   (Björn "Vampire" Kautler)

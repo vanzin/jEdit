@@ -400,9 +400,9 @@ class Name implements java.io.Serializable
 			// static field?
 			try {
 				if ( Interpreter.DEBUG ) 
-					Interpreter.debug("Name call to getStaticField, class: " 
+					Interpreter.debug("Name call to getStaticFieldValue, class: "
 						+clas+", field:"+field);
-				obj = Reflect.getStaticField(clas, field);
+				obj = Reflect.getStaticFieldValue(clas, field);
 			} catch( ReflectError e ) { 
 				if ( Interpreter.DEBUG ) 
 					Interpreter.debug("field reflect error: "+e);
@@ -448,7 +448,7 @@ class Name implements java.io.Serializable
 		// Check for field on object 
 		// Note: could eliminate throwing the exception somehow
 		try {
-			Object obj = Reflect.getObjectField(evalBaseObject, field);
+			Object obj = Reflect.getObjectFieldValue(evalBaseObject, field);
 			return completeRound( field, suffix(evalName), obj );
 		} catch(ReflectError e) { /* not a field */ }
 	
@@ -605,7 +605,6 @@ class Name implements java.io.Serializable
 	*/
 	static NameSpace getClassNameSpace( NameSpace thisNameSpace ) 
 	{
-		NameSpace classNameSpace = null;
 		// is a class instance
 		//if ( thisNameSpace.classInstance != null )
 		if ( thisNameSpace.isClass )
@@ -816,7 +815,10 @@ class Name implements java.io.Serializable
 		// Superclass method invocation? (e.g. super.foo())
 		if ( prefix.equals("super") && Name.countParts(value) == 2 )
 		{
-			NameSpace classNameSpace = getClassNameSpace( namespace );
+			// Allow getThis() to work through block namespaces first
+			This ths = namespace.getThis( interpreter );
+			NameSpace thisNameSpace = ths.getNameSpace();
+			NameSpace classNameSpace = getClassNameSpace( thisNameSpace );
 			if ( classNameSpace != null )
 			{
 				Object instance = classNameSpace.getClassInstance();

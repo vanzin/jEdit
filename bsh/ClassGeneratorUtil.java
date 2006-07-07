@@ -33,14 +33,10 @@
 
 package bsh;
 
-import org.objectweb.asm.Constants;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
-import org.objectweb.asm.CodeVisitor;
-import org.objectweb.asm.Type;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
+import bsh.org.objectweb.asm.*;
+import bsh.org.objectweb.asm.Type;
+
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,9 +171,6 @@ public class ClassGeneratorUtil implements Constants
 
 	/**
 		Generate the class bytecode for this class.
-
-		@param className should be a path style name, e.g. 
-			"TestClass" or "mypackage/TestClass"
 	*/
 	public byte [] generateClass() 
 	{
@@ -266,7 +259,7 @@ public class ClassGeneratorUtil implements Constants
 				superClass, methods[i].getName(), 
 				methods[i].getParamTypeDescriptors() ) ;
 			if ( !isStatic && overridden )
-				generateSuperDelegateMethod( superClass, superClassName,
+				generateSuperDelegateMethod( superClassName,
 					methods[i].getName(), returnType,
 					methods[i].getParamTypeDescriptors(), modifiers, cw );
 		}
@@ -594,9 +587,8 @@ public class ClassGeneratorUtil implements Constants
 		normally does not allow).
 	*/
 	// Maybe combine this with generateMethod()
-	static void generateSuperDelegateMethod( 
-		Class superClass, String superClassName, String methodName, 
-		String returnType, String [] paramTypes, int modifiers, ClassWriter cw) 
+	static void generateSuperDelegateMethod( String superClassName, String methodName,
+											 String returnType, String[] paramTypes, int modifiers, ClassWriter cw )
 	{
 		String [] exceptions = null;
 
@@ -695,10 +687,10 @@ public class ClassGeneratorUtil implements Constants
 		corresponding to the "new Object[] { new bsh.Primitive(i), s }" 
 		expression.
 
+	 	@author Eric Bruneton
+	 	@author Pat Niemeyer
 		@param cv the code visitor to be used to generate the bytecode.
 		@param isStatic the enclosing methods is static
-		@author Eric Bruneton
-		@author Pat Niemeyer
 	*/
 	public static void generateParameterReifierCode (
 		String [] paramTypes, boolean isStatic, final CodeVisitor cv )
@@ -713,7 +705,17 @@ public class ClassGeneratorUtil implements Constants
 			cv.visitIntInsn(SIPUSH, i);
 			if ( isPrimitive( param ) ) 
 			{
-				int opcode = ILOAD;
+                int opcode;
+                if (param.equals("F")) {
+                    opcode = FLOAD;
+                } else if (param.equals("D")) {
+                    opcode = DLOAD;
+                } else if (param.equals("J")) {
+                    opcode = LLOAD;
+                } else {
+                    opcode = ILOAD;
+                }
+
 				String type = "bsh/Primitive";
 				cv.visitTypeInsn( NEW, type );
 				cv.visitInsn(DUP);
@@ -740,7 +742,6 @@ public class ClassGeneratorUtil implements Constants
 		method "int m (int i, String s)", this code is the bytecode
 		corresponding to the "((Integer)...).intValue()" expression.
 	   
-		@param m a method object.
 		@param cv the code visitor to be used to generate the bytecode.
 		@author Eric Bruneton
 		@author Pat Niemeyer
@@ -804,7 +805,7 @@ public class ClassGeneratorUtil implements Constants
 		contains the actual arguments to the alternate constructor and also the
 		index of that constructor for the constructor switch.
 
-		@param args the arguments to the constructor.  These are necessary in
+		@param consArgs the arguments to the constructor.  These are necessary in
 		the evaluation of the alt constructor args.  e.g. Foo(a) { super(a); }
 		@return the ConstructorArgs object containing a constructor selector
 			and evaluated arguments for the alternate constructor
@@ -1037,7 +1038,7 @@ public class ClassGeneratorUtil implements Constants
 	static This getClassStaticThis( Class clas, String className )
 	{
 		try {
-			return (This)Reflect.getStaticField( 
+			return (This)Reflect.getStaticFieldValue(
 				clas, BSHSTATIC + className );
 		} catch ( Exception e ) {
 			throw new InterpreterError("Unable to get class static space: "+e);
@@ -1052,7 +1053,7 @@ public class ClassGeneratorUtil implements Constants
 	static This getClassInstanceThis( Object instance, String className )
 	{
 		try {
-			Object o = Reflect.getObjectField( instance, BSHTHIS+className );
+			Object o = Reflect.getObjectFieldValue( instance, BSHTHIS+className );
 			return (This)Primitive.unwrap(o); // unwrap Primitive.Null to null
 		} catch ( Exception e ) {
 			throw new InterpreterError(
@@ -1101,7 +1102,7 @@ public class ClassGeneratorUtil implements Constants
 		A ConstructorArgs object holds evaluated arguments for a constructor
 		call as well as the index of a possible alternate selector to invoke.
 		This object is used by the constructor switch.
-		@see #generateConstructor( int , String [] , int , ClassWriter ) 
+	 	@see #generateConstructor( int , String [] , int , ClassWriter )
 	*/
 	public static class ConstructorArgs
 	{

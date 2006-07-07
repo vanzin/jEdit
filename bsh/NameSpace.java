@@ -88,9 +88,9 @@ public class NameSpace
 
     protected Hashtable importedClasses;
     private Vector importedPackages;
+    private Vector importedCommands;
 	private Vector importedObjects;
 	private Vector importedStatic;
-    private Vector importedCommands;
 	private String packageName;
 
 	transient private BshClassManager classManager;
@@ -238,11 +238,6 @@ public class NameSpace
 		return getNameResolver( name ).toObject( callstack, interpreter );
 	}
 
-	public void setVariable(String name, Object value) throws UtilEvalError
-        {
-                setVariable(name,value,false);
-        }
-
 	/**
 		Set the variable through this namespace.
 		This method obeys the LOCALSCOPING property to determine how variables
@@ -307,13 +302,17 @@ public class NameSpace
 			variables =	new Hashtable();
 
 		// primitives should have been wrapped
+		// {{{ jEdit change
+		//if ( value == null )
+		//	throw new InterpreterError("null variable value");
+
 		if ( value == null ) {
 			// don't break jEdit core and plugins!
-			//throw new InterpreterError("null variable value");
 			unsetVariable(name);
 			return;
 		}
 
+		// }}}
 		// Locate the variable definition if it exists.
 		Variable existing = getVariableImpl( name, recurse );
 
@@ -352,8 +351,11 @@ public class NameSpace
 	*/
 	public void unsetVariable( String name )
 	{
-		variables.remove( name );
-		nameSpaceChanged();
+		if ( variables != null )
+		{
+			variables.remove( name );
+			nameSpaceChanged();
+		}
 	}
 
 	/**
@@ -856,74 +858,34 @@ System.out.println("experiment: creating class manager");
 		nameSpaceChanged();
     }
 
-    static class CommandPathEntry
-	{
-		String path;
-		Class clas;
-
-		CommandPathEntry(String path, Class clas)
-		{
-			this.path = path;
-			this.clas = clas;
-		}
-	}
-
 	/**
-		Adds a URL to the command path.
+		Import scripted or compiled BeanShell commands in the following package
+		in the classpath.  You may use either "/" path or "." package notation.
+		e.g. importCommands("/bsh/commands") or importCommands("bsh.commands")
+		are equivalent.  If a relative path style specifier is used then it is
+		made into an absolute path by prepending "/".
 	*/
-	public void addCommandPath(String path, Class clas)
-	{
-		if(importedCommands == null)
+    public void	importCommands( String name )
+    {
+		if ( importedCommands == null )
 			importedCommands = new Vector();
 
-		if(!path.endsWith("/"))
-			path = path + "/";
-		importedCommands.addElement(new CommandPathEntry(path,clas));
-	}
+		// dots to slashes
+		name = name.replace('.','/');
+		// absolute
+		if ( !name.startsWith("/") )
+			name = "/"+name;
+		// remove trailing (but preserve case of simple "/")
+		if ( name.length() > 1 && name.endsWith("/") )
+			name = name.substring( 0, name.length()-1 );
 
-	/**
-		Remove a URLfrom the command path.
-	*/
-	public void removeCommandPath(String path, Class clas)
-	{
-		if(importedCommands == null)
-			return;
+		// If it exists, remove it and add it at the end (avoid memory leak)
+		if ( importedCommands.contains( name ) )
+			importedCommands.remove( name );
 
-		for(int i = 0; i < importedCommands.size(); i++)
-		{
-			CommandPathEntry entry = (CommandPathEntry)importedCommands
-				.elementAt(i);
-			if(entry.path.equals(path) && entry.clas == clas)
-			{
-				importedCommands.removeElementAt(i);
-				return;
-			}
-		}
-	}
-
-	/**
-		Looks up a command.
-	*/
-	public InputStream getCommand(String name)
-	{
-		if(importedCommands != null)
-		{
-			String extName = name + ".bsh";
-			for(int i = importedCommands.size() - 1; i >= 0; i--)
-			{
-				CommandPathEntry entry = (CommandPathEntry)importedCommands
-					.elementAt(i);
-				InputStream in = entry.clas.getResourceAsStream(entry.path + extName);
-				if(in != null)
-					return in;
-			}
-		}
-
-		if(parent == null)
-			return null;
-		else
-			return parent.getCommand(name);
-	}
+		importedCommands.addElement(name);
+		nameSpaceChanged();
+    }
 
 	/**
 		A command is a scripted method or compiled command class implementing a 
@@ -952,8 +914,9 @@ System.out.println("experiment: creating class manager");
 		@throws UtilEvalError if loadScriptedCommand throws UtilEvalError
 			i.e. on errors loading a script that was found
 	*/
-	public Object getCommand( 	
-		String name, Class [] argTypes, Interpreter interpreter ) 
+	// {{{ jEdit's getCommand
+	public Object getCommand(
+		String name, Class [] argTypes, Interpreter interpreter )
 		throws UtilEvalError
 	{
 		if (Interpreter.DEBUG) Interpreter.debug("getCommand: "+name);
@@ -962,7 +925,7 @@ System.out.println("experiment: creating class manager");
 		InputStream in = getCommand( name );
 
 		if ( in != null )
-			return loadScriptedCommand( 
+			return loadScriptedCommand(
 				in, name, argTypes, name, interpreter );
 
 		/* // Chop leading "/" and change "/" to "."
@@ -982,6 +945,56 @@ System.out.println("experiment: creating class manager");
 			return null;
 	}
 
+
+	/*
+	public Object getCommand( 	
+		String name, Class [] argTypes, Interpreter interpreter ) 
+		throws UtilEvalError
+	{
+		if (Interpreter.DEBUG) Interpreter.debug("getCommand: "+name);
+		BshClassManager bcm = interpreter.getClassManager();
+
+		if ( importedCommands != null )
+		{
+			// loop backwards for precedence
+			for(int i=importedCommands.size()-1; i>=0; i--)
+			{
+				String path = (String)importedCommands.elementAt(i);
+
+				String scriptPath; 
+				if ( path.equals("/") )
+					scriptPath = path + name +".bsh";
+				else
+					scriptPath = path +"/"+ name +".bsh";
+
+				Interpreter.debug("searching for script: "+scriptPath );
+
+        		InputStream in = bcm.getResourceAsStream( scriptPath );
+
+				if ( in != null )
+					return loadScriptedCommand( 
+						in, name, argTypes, scriptPath, interpreter );
+
+				// Chop leading "/" and change "/" to "."
+				String className;
+				if ( path.equals("/") )
+					className = name;
+				else
+					className = path.substring(1).replace('/','.') +"."+name;
+
+				Interpreter.debug("searching for class: "+className);
+        		Class clas = bcm.classForName( className );
+				if ( clas != null )
+					return clas;
+			}
+		}
+
+		if ( parent != null )
+			return parent.getCommand( name, argTypes, interpreter );
+		else
+			return null;
+	}   */
+	// }}}
 	protected BshMethod getImportedMethod( String name, Class [] sig ) 
 		throws UtilEvalError
 	{
@@ -1425,7 +1438,10 @@ System.out.println("experiment: creating class manager");
 		importPackage("java.util");
 		importPackage("java.io");
 		importPackage("java.lang");
-		addCommandPath("/bsh/commands",getClass());
+	    	// {{{ jEdit modification
+		//importCommands("/bsh/commands");
+	    	addCommandPath("/bsh/commands",getClass());
+	   	 // }}}
     }
 
 	/**
@@ -1574,5 +1590,82 @@ System.out.println("experiment: creating class manager");
 		
 		return null;
 	}
+
+	// {{{ jEdit addition
+	public void setVariable(String name, Object value) throws UtilEvalError
+        {
+                setVariable(name,value,false);
+        }
+
+	/**
+		Adds a URL to the command path.
+	*/
+	public void addCommandPath(String path, Class clas)
+	{
+		if(importedCommands == null)
+			importedCommands = new Vector();
+
+		if(!path.endsWith("/"))
+			path += '/';
+		importedCommands.addElement(new CommandPathEntry(path,clas));
+	}
+
+	/**
+		Remove a URLfrom the command path.
+	*/
+	public void removeCommandPath(String path, Class clas)
+	{
+		if(importedCommands == null)
+			return;
+
+		for(int i = 0; i < importedCommands.size(); i++)
+		{
+			CommandPathEntry entry = (CommandPathEntry)importedCommands
+				.elementAt(i);
+			if(entry.path.equals(path) && entry.clas == clas)
+			{
+				importedCommands.removeElementAt(i);
+				return;
+			}
+		}
+	}
+
+	/**
+		Looks up a command.
+	*/
+	public InputStream getCommand(String name)
+	{
+		if(importedCommands != null)
+		{
+			String extName = name + ".bsh";
+			for(int i = importedCommands.size() - 1; i >= 0; i--)
+			{
+				CommandPathEntry entry = (CommandPathEntry)importedCommands
+					.elementAt(i);
+				InputStream in = entry.clas.getResourceAsStream(entry.path + extName);
+				if(in != null)
+					return in;
+			}
+		}
+
+		if(parent == null)
+			return null;
+		else
+			return parent.getCommand(name);
+	}
+
+	static class CommandPathEntry
+	{
+		final String path;
+		final Class clas;
+
+		CommandPathEntry(String path, Class clas)
+		{
+			this.path = path;
+			this.clas = clas;
+		}
+	}
+
+	// }}}
 }
 

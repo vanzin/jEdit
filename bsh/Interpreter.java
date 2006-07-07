@@ -95,13 +95,13 @@ public class Interpreter
 {
 	/* --- Begin static members --- */
 
-	public static final String VERSION = "2.0b1.1-jedit-1";
+	public static final String VERSION = "2.0b4-jedit";
 	/*
 		Debug utils are static so that they are reachable by code that doesn't
 		necessarily have an interpreter reference (e.g. tracing in utils).
 		In the future we may want to allow debug/trace to be turned on on
-		a per interpreter basis, in which case we'll need to use the parent 
-		reference in some way to determine the scope of the command that 
+		a per interpreter basis, in which case we'll need to use the parent
+		reference in some way to determine the scope of the command that
 		turns it on or off.
 	*/
     public static boolean DEBUG, TRACE, LOCALSCOPING;
@@ -110,16 +110,16 @@ public class Interpreter
     transient static PrintStream debug;
 	static String systemLineSeparator = "\n"; // default
 
-	static { 
+	static {
 		staticInit();
 	}
 
 	/** Shared system object visible under bsh.system */
 	static This sharedObject;
 
-	/** 
-		Strict Java mode 
-		@see setStrictJava( boolean )
+	/**
+		Strict Java mode
+		@see #setStrictJava( boolean )
 	*/
 	private boolean strictJava = false;
 
@@ -132,7 +132,7 @@ public class Interpreter
     transient Reader in;
     transient PrintStream out;
     transient PrintStream err;
-    ConsoleInterface console; 
+    ConsoleInterface console;
 
 	/** If this interpeter is a child of another, the parent */
 	Interpreter parent;
@@ -143,9 +143,12 @@ public class Interpreter
 	/** by default in interactive mode System.exit() on EOF */
 	private boolean exitOnEOF = true;
 
-    protected boolean 
+    protected boolean
 		evalOnly, 		// Interpreter has no input stream, use eval() only
 		interactive;	// Interpreter has a user, print prompts, etc.
+
+	/** Control the verbose printing of results for the show() command. */
+	private boolean showResults;
 
 	/* --- End instance data --- */
 
@@ -153,21 +156,22 @@ public class Interpreter
 		The main constructor.
 		All constructors should now pass through here.
 
-		@param namespace If namespace is non-null then this interpreter's 
-		root namespace will be set to the one provided.  If it is null a new 
+		@param namespace If namespace is non-null then this interpreter's
+		root namespace will be set to the one provided.  If it is null a new
 		one will be created for it.
-		@param parent The parent interpreter if this interpreter is a child 
+		@param parent The parent interpreter if this interpreter is a child
 			of another.  May be null.  Children share a BshClassManager with
 			their parent instance.
-		@param sourceFileInfo An informative string holding the filename 
+		@param sourceFileInfo An informative string holding the filename
 		or other description of the source from which this interpreter is
 		reading... used for debugging.  May be null.
 	*/
     public Interpreter(
-		Reader in, PrintStream out, PrintStream err, 
+		Reader in, PrintStream out, PrintStream err,
 		boolean interactive, NameSpace namespace,
 		Interpreter parent, String sourceFileInfo )
     {
+		//System.out.println("New Interpreter: "+this +", sourcefile = "+sourceFileInfo );
 		parser = new Parser( in );
 		long t1=System.currentTimeMillis();
         this.in = in;
@@ -190,7 +194,7 @@ public class Interpreter
 		// The classes which are imported by default
 		//globalNameSpace.loadDefaultImports();
 
-		/* 
+		/*
 			Create the root "bsh" system object if it doesn't exist.
 		*/
 		if ( ! ( getu("bsh") instanceof bsh.This ) )
@@ -200,12 +204,12 @@ public class Interpreter
 			loadRCFiles();
 
 		long t2=System.currentTimeMillis();
-		if ( Interpreter.DEBUG ) 
+		if ( Interpreter.DEBUG )
 			Interpreter.debug("Time to initialize interpreter: "+(t2-t1));
     }
 
     public Interpreter(
-		Reader in, PrintStream out, PrintStream err, 
+		Reader in, PrintStream out, PrintStream err,
 		boolean interactive, NameSpace namespace)
     {
 		this( in, out, err, interactive, namespace, null, null );
@@ -218,19 +222,19 @@ public class Interpreter
     }
 
 	/**
-		Construct a new interactive interpreter attached to the specified 
+		Construct a new interactive interpreter attached to the specified
 		console using the specified parent namespace.
 	*/
     public Interpreter(ConsoleInterface console, NameSpace globalNameSpace) {
 
-        this( console.getIn(), console.getOut(), console.getErr(), 
+        this( console.getIn(), console.getOut(), console.getErr(),
 			true, globalNameSpace );
 
 		setConsole( console );
     }
 
 	/**
-		Construct a new interactive interpreter attached to the specified 
+		Construct a new interactive interpreter attached to the specified
 		console.
 	*/
     public Interpreter(ConsoleInterface console) {
@@ -242,7 +246,7 @@ public class Interpreter
 	*/
     public Interpreter()
     {
-		this( new StringReader(""), 
+		this( new StringReader(""),
 			System.out, System.err, false, null );
         evalOnly = true;
 		setu( "bsh.evalOnly", new Primitive(true) );
@@ -263,7 +267,7 @@ public class Interpreter
 		// need to set the input stream - reinit the parser?
 	}
 
-	private void initRootSystemObject() 
+	private void initRootSystemObject()
 	{
 		BshClassManager bcm = getClassManager();
 		// bsh
@@ -271,21 +275,21 @@ public class Interpreter
 
 		// init the static shared sharedObject if it's not there yet
 		if ( sharedObject == null )
-			sharedObject = new NameSpace( 
+			sharedObject = new NameSpace(
 				bcm, "Bsh Shared System Object" ).getThis( this );
 		// bsh.system
 		setu( "bsh.system", sharedObject );
 		setu( "bsh.shared", sharedObject ); // alias
 
 		// bsh.help
-		This helpText = new NameSpace( 
+		This helpText = new NameSpace(
 			bcm, "Bsh Command Help Text" ).getThis( this );
 		setu( "bsh.help", helpText );
 
 		// bsh.cwd
 		try {
 			setu( "bsh.cwd", System.getProperty("user.dir") );
-		} catch ( SecurityException e ) { 
+		} catch ( SecurityException e ) {
 			// applets can't see sys props
 			setu( "bsh.cwd", "." );
 		}
@@ -300,14 +304,14 @@ public class Interpreter
 		Set the global namespace for this interpreter.
 		<p>
 
-		Note: This is here for completeness.  If you're using this a lot 
-		it may be an indication that you are doing more work than you have 
-		to.  For example, caching the interpreter instance rather than the 
-		namespace should not add a significant overhead.  No state other 
+		Note: This is here for completeness.  If you're using this a lot
+		it may be an indication that you are doing more work than you have
+		to.  For example, caching the interpreter instance rather than the
+		namespace should not add a significant overhead.  No state other
 		than the debug status is stored in the interpreter.
 		<p>
 
-		All features of the namespace can also be accessed using the 
+		All features of the namespace can also be accessed using the
 		interpreter via eval() and the script variable 'this.namespace'
 		(or global.namespace as necessary).
 	*/
@@ -319,14 +323,14 @@ public class Interpreter
 		Get the global namespace of this interpreter.
 		<p>
 
-		Note: This is here for completeness.  If you're using this a lot 
-		it may be an indication that you are doing more work than you have 
-		to.  For example, caching the interpreter instance rather than the 
-		namespace should not add a significant overhead.  No state other than 
-		the debug status is stored in the interpreter.  
+		Note: This is here for completeness.  If you're using this a lot
+		it may be an indication that you are doing more work than you have
+		to.  For example, caching the interpreter instance rather than the
+		namespace should not add a significant overhead.  No state other than
+		the debug status is stored in the interpreter.
 		<p>
 
-		All features of the namespace can also be accessed using the 
+		All features of the namespace can also be accessed using the
 		interpreter via eval() and the script variable 'this.namespace'
 		(or global.namespace as necessary).
 	*/
@@ -337,7 +341,7 @@ public class Interpreter
 	/**
 		Run the text only interpreter on the command line or specify a file.
 	*/
-    public static void main( String [] args ) 
+    public static void main( String [] args )
 	{
         if ( args.length > 0 ) {
 			String filename = args[0];
@@ -350,14 +354,15 @@ public class Interpreter
 				bshArgs = new String [0];
 
             Interpreter interpreter = new Interpreter();
+			//System.out.println("run i = "+interpreter);
 			interpreter.setu( "bsh.args", bshArgs );
 			try {
-				Object result = 
+				Object result =
 					interpreter.source( filename, interpreter.globalNameSpace );
 				if ( result instanceof Class )
 					try {
 						invokeMain( (Class)result, bshArgs );
-					} catch ( Exception e ) 
+					} catch ( Exception e )
 					{
 						Object o = e;
 						if ( e instanceof InvocationTargetException )
@@ -377,12 +382,12 @@ public class Interpreter
 			} catch ( IOException e ) {
 				System.out.println("I/O Error: "+e);
 			}
-        } else 
+        } else
 		{
-			// Workaround for JDK bug 4071281, where system.in.available() 
+			// Workaround for JDK bug 4071281, where system.in.available()
 			// returns too large a value. This bug has been fixed in JDK 1.2.
 			InputStream src;
-			if ( System.getProperty("os.name").startsWith("Windows") 
+			if ( System.getProperty("os.name").startsWith("Windows")
 				&& System.getProperty("java.version").startsWith("1.1."))
 			{
 				src = new FilterInputStream(System.in) {
@@ -395,17 +400,17 @@ public class Interpreter
 				src = System.in;
 
             Reader in = new CommandLineReader( new InputStreamReader(src));
-            Interpreter interpreter = 
+            Interpreter interpreter =
 				new Interpreter( in, System.out, System.err, true );
         	interpreter.run();
         }
     }
 
-	public static void invokeMain( Class clas, String [] args ) 
+	public static void invokeMain( Class clas, String [] args )
 		throws Exception
 	{
     	Method main = Reflect.resolveJavaMethod(
-			null/*BshClassManager*/, clas, "main", 
+			null/*BshClassManager*/, clas, "main",
 			new Class [] { String [].class }, true/*onlyStatic*/ );
 		if ( main != null )
 			main.invoke( null, new Object [] { args } );
@@ -414,7 +419,7 @@ public class Interpreter
 	/**
 		Run interactively.  (printing prompts, etc.)
 	*/
-    public void run() 
+    public void run()
 	{
         if(evalOnly)
             throw new RuntimeException("bsh Interpreter: No stream");
@@ -425,14 +430,14 @@ public class Interpreter
           This ameliorates the delay after typing the first statement.
         */
         if ( interactive )
-			try { 
-				eval("printBanner();"); 
+			try {
+				eval("printBanner();");
 			} catch ( EvalError e ) {
 				println(
 					"BeanShell "+VERSION+" - by Pat Niemeyer (pat@pat.net)");
 			}
 
-		// init the callstack.  
+		// init the callstack.
 		CallStack callstack = new CallStack( globalNameSpace );
 
         boolean eof = false;
@@ -450,7 +455,7 @@ public class Interpreter
 
                 eof = Line();
 
-                if( get_jjtree().nodeArity() > 0 )  // number of child nodes 
+                if( get_jjtree().nodeArity() > 0 )  // number of child nodes
                 {
                     SimpleNode node = (SimpleNode)(get_jjtree().rootNode());
 
@@ -458,7 +463,7 @@ public class Interpreter
                         node.dump(">");
 
                     Object ret = node.eval( callstack, this );
-				
+
 					// sanity check during development
 					if ( callstack.depth() > 1 )
 						throw new InterpreterError(
@@ -466,12 +471,11 @@ public class Interpreter
 
                     if(ret instanceof ReturnControl)
                         ret = ((ReturnControl)ret).value;
-                    if(ret != Primitive.VOID)
+
+                    if( ret != Primitive.VOID )
                     {
                         setu("$_", ret);
-                        Object show = getu("bsh.show");
-                        if(show instanceof Boolean &&
-                            ((Boolean)show).booleanValue() == true)
+						if ( showResults )
                             println("<" + ret + ">");
                     }
                 }
@@ -529,7 +533,7 @@ public class Interpreter
 
 				/*
 					We get stuck in infinite loops here when unicode escapes
-					fail.  Must re-init the char stream reader 
+					fail.  Must re-init the char stream reader
 					(ASCII_UCodeESC_CharStream.java)
 				*/
 				parser.reInitTokenInput( in );
@@ -557,8 +561,8 @@ public class Interpreter
 	/**
 		Read text from fileName and eval it.
 	*/
-    public Object source( String filename, NameSpace nameSpace ) 
-		throws FileNotFoundException, IOException, EvalError 
+    public Object source( String filename, NameSpace nameSpace )
+		throws FileNotFoundException, IOException, EvalError
 	{
 		File file = pathToFile( filename );
 		if ( Interpreter.DEBUG ) debug("Sourcing file: "+file);
@@ -574,17 +578,17 @@ public class Interpreter
 		Read text from fileName and eval it.
 		Convenience method.  Use the global namespace.
 	*/
-    public Object source( String filename ) 
-		throws FileNotFoundException, IOException, EvalError 
+    public Object source( String filename )
+		throws FileNotFoundException, IOException, EvalError
 	{
 		return source( filename, globalNameSpace );
 	}
 
     /**
-        Spawn a non-interactive local interpreter to evaluate text in the 
-		specified namespace.  
+        Spawn a non-interactive local interpreter to evaluate text in the
+		specified namespace.
 
-		Return value is the evaluated object (or corresponding primitive 
+		Return value is the evaluated object (or corresponding primitive
 		wrapper).
 
 		@param sourceFileInfo is for information purposes only.  It is used to
@@ -603,21 +607,21 @@ public class Interpreter
 	exception handling.
 	*/
 
-    public Object eval( 
+    public Object eval(
 		Reader in, NameSpace nameSpace, String sourceFileInfo
-			/*, CallStack callstack */ ) 
-		throws EvalError 
+			/*, CallStack callstack */ )
+		throws EvalError
 	{
 		Object retVal = null;
 		if ( Interpreter.DEBUG ) debug("eval: nameSpace = "+nameSpace);
 
-		/* 
+		/*
 			Create non-interactive local interpreter for this namespace
-			with source from the input stream and out/err same as 
+			with source from the input stream and out/err same as
 			this interpreter.
 		*/
-        Interpreter localInterpreter = 
-			new Interpreter( 
+        Interpreter localInterpreter =
+			new Interpreter(
 				in, out, err, false, nameSpace, this, sourceFileInfo  );
 
 		CallStack callstack = new CallStack( nameSpace );
@@ -649,11 +653,15 @@ public class Interpreter
                         retVal = ((ReturnControl)retVal).value;
 						break; // non-interactive, return control now
 					}
+
+					if ( localInterpreter.showResults
+						&& retVal != Primitive.VOID )
+						println("<" + retVal + ">");
                 }
             } catch(ParseException e) {
 				/*
                 throw new EvalError(
-					"Sourced file: "+sourceFileInfo+" parser Error: " 
+					"Sourced file: "+sourceFileInfo+" parser Error: "
 					+ e.getMessage( DEBUG ), node, callstack );
 				*/
 				if ( DEBUG )
@@ -667,7 +675,7 @@ public class Interpreter
             } catch ( InterpreterError e ) {
                 e.printStackTrace();
                 throw new EvalError(
-					"Sourced file: "+sourceFileInfo+" internal Error: " 
+					"Sourced file: "+sourceFileInfo+" internal Error: "
 					+ e.getMessage(), node, callstack);
             } catch ( TargetError e ) {
 				// failsafe, set the Line as the origin of the error.
@@ -685,11 +693,11 @@ public class Interpreter
                 if ( DEBUG)
                 	e.printStackTrace();
                 throw new EvalError(
-					"Sourced file: "+sourceFileInfo+" unknown error: " 
+					"Sourced file: "+sourceFileInfo+" unknown error: "
 					+ e.getMessage(), node, callstack);
             } catch(TokenMgrError e) {
                 throw new EvalError(
-					"Sourced file: "+sourceFileInfo+" Token Parsing Error: " 
+					"Sourced file: "+sourceFileInfo+" Token Parsing Error: "
 					+ e.getMessage(), node, callstack );
             } finally {
                 localInterpreter.get_jjtree().reset();
@@ -707,7 +715,7 @@ public class Interpreter
 	/**
 		Evaluate the inputstream in this interpreter's global namespace.
 	*/
-    public Object eval( Reader in ) throws EvalError 
+    public Object eval( Reader in ) throws EvalError
 	{
 		return eval( in, globalNameSpace, "eval stream" );
 	}
@@ -723,13 +731,13 @@ public class Interpreter
 	/**
 		Evaluate the string in the specified namespace.
 	*/
-    public Object eval( String statements, NameSpace nameSpace ) 
-		throws EvalError 
+    public Object eval( String statements, NameSpace nameSpace )
+		throws EvalError
 	{
 
 		String s = ( statements.endsWith(";") ? statements : statements+";" );
-        return eval( 
-			new StringReader(s), nameSpace, 
+        return eval(
+			new StringReader(s), nameSpace,
 			"inline evaluation of: ``"+ showEvalString(s)+"''" );
     }
 
@@ -745,7 +753,7 @@ public class Interpreter
 
 	/**
 		Print an error message in a standard format on the output stream
-		associated with this interpreter. On the GUI console this will appear 
+		associated with this interpreter. On the GUI console this will appear
 		in red, etc.
 	*/
     public final void error( Object o ) {
@@ -758,23 +766,23 @@ public class Interpreter
     }
 
 	// ConsoleInterface
-	// The interpreter reflexively implements the console interface that it 
+	// The interpreter reflexively implements the console interface that it
 	// uses.  Should clean this up by using an inner class to implement the
 	// console for us.
 
-	/** 
+	/**
 		Get the input stream associated with this interpreter.
 		This may be be stdin or the GUI console.
 	*/
 	public Reader getIn() { return in; }
 
-	/** 
+	/**
 		Get the outptut stream associated with this interpreter.
 		This may be be stdout or the GUI console.
 	*/
 	public PrintStream getOut() { return out; }
 
-	/** 
+	/**
 		Get the error output stream associated with this interpreter.
 		This may be be stderr or the GUI console.
 	*/
@@ -807,7 +815,7 @@ public class Interpreter
             debug.println("// Debug: " + s);
     }
 
-	/* 
+	/*
 		Primary interpreter set and get variable methods
 		Note: These are squeltching errors... should they?
 	*/
@@ -820,8 +828,8 @@ public class Interpreter
 		try {
 			Object ret = globalNameSpace.get( name, this );
 			return Primitive.unwrap( ret );
-		} catch ( UtilEvalError e ) { 
-			throw e.toEvalError( SimpleNode.JAVACODE, new CallStack() ); 
+		} catch ( UtilEvalError e ) {
+			throw e.toEvalError( SimpleNode.JAVACODE, new CallStack() );
 		}
 	}
 
@@ -829,19 +837,19 @@ public class Interpreter
 		Unchecked get for internal use
 	*/
     Object getu( String name ) {
-		try { 
+		try {
 			return get( name );
-		} catch ( EvalError e ) { 
+		} catch ( EvalError e ) {
 			throw new InterpreterError("set: "+e);
 		}
 	}
 
 	/**
-		Assign the value to the name.	
+		Assign the value to the name.
 		name may evaluate to anything assignable. e.g. a variable or field.
 	*/
     public void set( String name, Object value )
-		throws EvalError 
+		throws EvalError
 	{
 		// map null to Primtive.NULL coming in...
 		if ( value == null )
@@ -849,15 +857,15 @@ public class Interpreter
 
 		CallStack callstack = new CallStack();
 		try {
-			if ( Name.isCompound( name ) ) 
+			if ( Name.isCompound( name ) )
 			{
-				LHS lhs = globalNameSpace.getNameResolver( name ).toLHS( 
+				LHS lhs = globalNameSpace.getNameResolver( name ).toLHS(
 					callstack, this );
 				lhs.assign( value, false );
 			} else // optimization for common case
 				globalNameSpace.setVariable( name, value, false );
-		} catch ( UtilEvalError e ) { 
-			throw e.toEvalError( SimpleNode.JAVACODE, callstack ); 
+		} catch ( UtilEvalError e ) {
+			throw e.toEvalError( SimpleNode.JAVACODE, callstack );
 		}
 	}
 
@@ -865,9 +873,9 @@ public class Interpreter
 		Unchecked set for internal use
 	*/
     void setu(String name, Object value) {
-		try { 
+		try {
 			set(name, value);
-		} catch ( EvalError e ) { 
+		} catch ( EvalError e ) {
 			throw new InterpreterError("set: "+e);
 		}
 	}
@@ -889,11 +897,11 @@ public class Interpreter
 	}
 
 	/**
-		Unassign the variable name.	
+		Unassign the variable name.
 		Name should evaluate to a variable.
 	*/
-    public void unset( String name ) 
-		throws EvalError 
+    public void unset( String name )
+		throws EvalError
 	{
 		/*
 			We jump through some hoops here to handle arbitrary cases like
@@ -901,17 +909,17 @@ public class Interpreter
 		*/
 		CallStack callstack = new CallStack();
 		try {
-			LHS lhs = globalNameSpace.getNameResolver( name ).toLHS( 
+			LHS lhs = globalNameSpace.getNameResolver( name ).toLHS(
 				callstack, this );
 
 			if ( lhs.type != LHS.VARIABLE )
-				throw new EvalError("Can't unset, not a variable: "+name, 
+				throw new EvalError("Can't unset, not a variable: "+name,
 					SimpleNode.JAVACODE, new CallStack() );
 
 			//lhs.assign( null, false );
 			lhs.nameSpace.unsetVariable( name );
 		} catch ( UtilEvalError e ) {
-			throw new EvalError( e.getMessage(), 
+			throw new EvalError( e.getMessage(),
 				SimpleNode.JAVACODE, new CallStack() );
 		}
 	}
@@ -919,9 +927,9 @@ public class Interpreter
 	// end primary set and get methods
 
 	/**
-		Get a reference to the interpreter (global namespace), cast 
-		to the specified interface type.  Assuming the appropriate 
-		methods of the interface are defined in the interpreter, then you may 
+		Get a reference to the interpreter (global namespace), cast
+		to the specified interface type.  Assuming the appropriate
+		methods of the interface are defined in the interpreter, then you may
 		use this interface from Java, just like any other Java object.
 		<p>
 
@@ -930,9 +938,9 @@ public class Interpreter
 			Interpreter interpreter = new Interpreter();
 			// define a method called run()
 			interpreter.eval("run() { ... }");
-		
+
 			// Fetch a reference to the interpreter as a Runnable
-			Runnable runnable = 
+			Runnable runnable =
 				(Runnable)interpreter.getInterface( Runnable.class );
 		</pre>
 		<p>
@@ -943,7 +951,7 @@ public class Interpreter
 		you will get a runtime exception.
 		<p>
 
-		Note also that this convenience method has exactly the same effect as 
+		Note also that this convenience method has exactly the same effect as
 		evaluating the script:
 		<pre>
 			(Type)this;
@@ -955,18 +963,18 @@ public class Interpreter
 
 		<pre>
 			// Fetch a reference to the interpreter as a Runnable
-			Runnable runnable = 
+			Runnable runnable =
 				(Runnable)interpreter.eval( "(Runnable)this" );
 		</pre>
 		<p>
 
-		<em>Version requirement</em> Although standard Java interface types 
-		are always available, to be used with arbitrary interfaces this 
+		<em>Version requirement</em> Although standard Java interface types
+		are always available, to be used with arbitrary interfaces this
 		feature requires that you are using Java 1.3 or greater.
 		<p>
 
 		@throws EvalError if the interface cannot be generated because the
-		version of Java does not support the proxy mechanism. 
+		version of Java does not support the proxy mechanism.
 	*/
 	public Object getInterface( Class interf ) throws EvalError
 	{
@@ -995,21 +1003,21 @@ public class Interpreter
 
 	void loadRCFiles() {
 		try {
-			String rcfile = 
+			String rcfile =
 				// Default is c:\windows under win98, $HOME under Unix
 				System.getProperty("user.home") + File.separator + ".bshrc";
 			source( rcfile, globalNameSpace );
-		} catch ( Exception e ) { 
+		} catch ( Exception e ) {
 			// squeltch security exception, filenotfoundexception
 			if ( Interpreter.DEBUG ) debug("Could not find rc file: "+e);
 		}
 	}
 
 	/**
-		Localize a path to the file name based on the bsh.cwd interpreter 
+		Localize a path to the file name based on the bsh.cwd interpreter
 		working directory.
 	*/
-    public File pathToFile( String fileName ) 
+    public File pathToFile( String fileName )
 		throws IOException
 	{
 		File file = new File( fileName );
@@ -1025,10 +1033,10 @@ public class Interpreter
 		return new File( file.getCanonicalPath() );
 	}
 
-	public static void redirectOutputToFile( String filename ) 
+	public static void redirectOutputToFile( String filename )
 	{
 		try {
-			PrintStream pout = new PrintStream( 
+			PrintStream pout = new PrintStream(
 				new FileOutputStream( filename ) );
 			System.setOut( pout );
 			System.setErr( pout );
@@ -1038,17 +1046,21 @@ public class Interpreter
 	}
 
 	/**
-		Set an external class loader to be used for all basic class loading
-		in BeanShell.  
+		Set an external class loader to be used as the base classloader
+		for BeanShell.  The base classloader is used for all classloading
+		unless/until the addClasspath()/setClasspath()/reloadClasses()
+		commands are called to modify the interpreter's classpath.  At that
+		time the new paths /updated paths are added on top of the base
+		classloader.
 		<p>
 
-		BeanShell will use this at the same point it would otherwise use the 
+		BeanShell will use this at the same point it would otherwise use the
 		plain Class.forName().
 		i.e. if no explicit classpath management is done from the script
 		(addClassPath(), setClassPath(), reloadClasses()) then BeanShell will
 		only use the supplied classloader.  If additional classpath management
 		is done then BeanShell will perform that in addition to the supplied
-		external classloader.  
+		external classloader.
 		However BeanShell is not currently able to reload
 		classes supplied through the external classloader.
 		<p>
@@ -1064,40 +1076,40 @@ public class Interpreter
 		(the BshClassManager of this interpreter's global namespace).
 		This is primarily a convenience method.
 	*/
-	public BshClassManager getClassManager() 
+	public BshClassManager getClassManager()
 	{
 		return getNameSpace().getClassManager();
 	}
-	
+
 	/**
-		Set strict Java mode on or off.  
+		Set strict Java mode on or off.
 		This mode attempts to make BeanShell syntax behave as Java
 		syntax, eliminating conveniences like loose variables, etc.
-		When enabled, variables are required to be declared or initialized 
-		before use and method arguments are reqired to have types. 
+		When enabled, variables are required to be declared or initialized
+		before use and method arguments are reqired to have types.
 		<p>
 
-		This mode will become more strict in a future release when 
+		This mode will become more strict in a future release when
 		classes are interpreted and there is an alternative to scripting
 		objects as method closures.
 	*/
-	public void setStrictJava( boolean b ) { 
-		this.strictJava = b; 
+	public void setStrictJava( boolean b ) {
+		this.strictJava = b;
 	}
 
 	/**
 		@see #setStrictJava( boolean )
 	*/
-	public boolean getStrictJava() { 
+	public boolean getStrictJava() {
 		return this.strictJava;
 	}
 
-	static void staticInit() 
+	static void staticInit()
 	{
-	/* 
+	/*
 		Apparently in some environments you can't catch the security exception
-		at all...  e.g. as an applet in IE  ... will probably have to work 
-		around 
+		at all...  e.g. as an applet in IE  ... will probably have to work
+		around
 	*/
 		try {
 			systemLineSeparator = System.getProperty("line.separator");
@@ -1108,24 +1120,24 @@ public class Interpreter
 			String outfilename = System.getProperty("outfile");
 			if ( outfilename != null )
 				redirectOutputToFile( outfilename );
-		} catch ( SecurityException e ) { 
+		} catch ( SecurityException e ) {
 			System.err.println("Could not init static:"+e);
 		} catch ( Exception e ) {
 			System.err.println("Could not init static(2):"+e);
-		} catch ( Throwable e ) { 
+		} catch ( Throwable e ) {
 			System.err.println("Could not init static(3):"+e);
 		}
 	}
 
 	/**
 		Specify the source of the text from which this interpreter is reading.
-		Note: there is a difference between what file the interrpeter is 
+		Note: there is a difference between what file the interrpeter is
 		sourcing and from what file a method was originally parsed.  One
 		file may call a method sourced from another file.  See SimpleNode
 		for origination file info.
 		@see bsh.SimpleNode#getSourceFile()
 	*/
-	public String getSourceFileInfo() { 
+	public String getSourceFileInfo() {
 		if ( sourceFileInfo != null )
 			return sourceFileInfo;
 		else
@@ -1156,7 +1168,7 @@ public class Interpreter
 		De-serialization setup.
 		Default out and err streams to stdout, stderr if they are null.
 	*/
-	private void readObject(ObjectInputStream stream) 
+	private void readObject(ObjectInputStream stream)
 		throws java.io.IOException, ClassNotFoundException
 	{
 		stream.defaultReadObject();
@@ -1177,7 +1189,7 @@ public class Interpreter
 		be defined by the user as with any other method.
 		Defaults to "bsh % " if the method is not defined or there is an error.
 	*/
-	private String getBshPrompt() 
+	private String getBshPrompt()
 	{
 		try {
 			return (String)eval("getBshPrompt()");
@@ -1199,6 +1211,24 @@ public class Interpreter
 	*/
 	public void setExitOnEOF( boolean value ) {
 		exitOnEOF = value; // ug
+	}
+
+	/**
+		Turn on/off the verbose printing of results as for the show()
+		 command.
+	 	If this interpreter has a parent the call is delegated.
+	 	See the BeanShell show() command.
+	*/
+	public void setShowResults( boolean showResults ) {
+		this.showResults = showResults;
+	}
+	/**
+	 Show on/off verbose printing status for the show() command.
+	 See the BeanShell show() command.
+	 If this interpreter has a parent the call is delegated.
+	 */
+	public boolean getShowResults()  {
+		return showResults;
 	}
 }
 

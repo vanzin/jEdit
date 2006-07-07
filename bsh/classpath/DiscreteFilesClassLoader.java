@@ -31,73 +31,65 @@
  *                                                                           *
  *****************************************************************************/
 
+package bsh.classpath;
 
-package bsh;
+import java.io.*;
+import java.io.File;
+import java.util.*;
+import java.awt.*;
+import bsh.BshClassManager;
+import bsh.classpath.BshClassPath.ClassSource;
+import bsh.classpath.BshClassPath.DirClassSource;
+import bsh.classpath.BshClassPath.GeneratedClassSource;
 
-import java.lang.reflect.InvocationTargetException;
-
-class BSHMethodInvocation extends SimpleNode
+/**
+	A classloader which can load one or more classes from specified sources.
+	Because the classes are loaded via a single classloader they change as a
+	group and any versioning cross dependencies can be managed.
+*/
+public class DiscreteFilesClassLoader extends BshClassLoader 
 {
-	BSHMethodInvocation (int id) { super(id); }
+	/**
+		Map of class sources which also implies our coverage space.
+	*/
+	ClassSourceMap map;
 
-	BSHAmbiguousName getNameNode() {
-		return (BSHAmbiguousName)jjtGetChild(0);
+	public static class ClassSourceMap extends HashMap 
+	{
+		public void put( String name, ClassSource source ) {
+			super.put( name, source );
+		}
+		public ClassSource get( String name ) {
+			return (ClassSource)super.get( name );
+		}
 	}
-
-	BSHArguments getArgsNode() {
-		return (BSHArguments)jjtGetChild(1);
+	
+	public DiscreteFilesClassLoader( 
+		BshClassManager classManager, ClassSourceMap map ) 
+	{
+		super( classManager );
+		this.map = map;
 	}
 
 	/**
-		Evaluate the method invocation with the specified callstack and 
-		interpreter
 	*/
-	public Object eval( CallStack callstack, Interpreter interpreter )
-		throws EvalError
+	public Class findClass( String name ) throws ClassNotFoundException 
 	{
-		NameSpace namespace = callstack.top();
-		BSHAmbiguousName nameNode = getNameNode();
+		// Load it if it's one of our classes
+		ClassSource source = map.get( name );
 
-		// Do not evaluate methods this() or super() in class instance space
-		// (i.e. inside a constructor)
-		if ( namespace.getParent() != null && namespace.getParent().isClass
-			&& ( nameNode.text.equals("super") || nameNode.text.equals("this") )
-		)
-			return Primitive.VOID;
- 
-		Name name = nameNode.getName(namespace);
-		Object[] args = getArgsNode().getArguments(callstack, interpreter);
-
-// This try/catch block is replicated is BSHPrimarySuffix... need to
-// factor out common functionality...
-// Move to Reflect?
-		try {
-			return name.invokeMethod( interpreter, args, callstack, this);
-		} catch ( ReflectError e ) {
-			throw new EvalError(
-				"Error in method invocation: " + e.getMessage(), 
-				this, callstack );
-		} catch ( InvocationTargetException e ) 
+		if ( source != null )
 		{
-			String msg = "Method Invocation "+name;
-			Throwable te = e.getTargetException();
-
-			/*
-				Try to squeltch the native code stack trace if the exception
-				was caused by a reflective call back into the bsh interpreter
-				(e.g. eval() or source()
-			*/
-			boolean isNative = true;
-			if ( te instanceof EvalError ) 
-				if ( te instanceof TargetError )
-					isNative = ((TargetError)te).inNativeCode();
-				else
-					isNative = false;
-			
-			throw new TargetError( msg, te, this, callstack, isNative );
-		} catch ( UtilEvalError e ) {
-			throw e.toEvalError( this, callstack );
-		}
+			byte [] code = source.getCode( name );
+			return defineClass( name, code, 0, code.length );
+		} else
+			// Let superclass BshClassLoader (URLClassLoader) findClass try 
+			// to find the class...
+			return super.findClass( name );
 	}
-}
 
+	public String toString() {
+		return super.toString() + "for files: "+map;
+	}
+
+}

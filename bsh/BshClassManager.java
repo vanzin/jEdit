@@ -90,7 +90,7 @@ public class BshClassManager
 	/**
 		An external classloader supplied by the setClassLoader() command.
 	*/
-	private ClassLoader externalClassLoader;
+	protected ClassLoader externalClassLoader;
 
 	/**
 		Global cache for things we know are classes.
@@ -156,6 +156,9 @@ public class BshClassManager
 	/**
 		Load the specified class by name, taking into account added classpath
 		and reloaded classes, etc.
+		Note: Again, this is just a trivial implementation. 
+		See bsh.classpath.ClassManagerImpl for the fully functional class
+		management package.
 		@return the class or null
 	*/
 	public Class classForName( String name ) 
@@ -250,12 +253,16 @@ public class BshClassManager
 	*/
 	public URL getResource( String path ) 
 	{
+		URL url = null;
 		if ( externalClassLoader != null )
 		{
 			// classloader wants no leading slash
-			return externalClassLoader.getResource( path.substring(1) );
-		} else
-			return Interpreter.class.getResource( path );
+			url = externalClassLoader.getResource( path.substring(1) );
+		} 
+		if ( url == null )
+			url = Interpreter.class.getResource( path );
+
+		return url;
 	}
 	/**
 		Get a resource stream using the BeanShell classpath
@@ -263,12 +270,16 @@ public class BshClassManager
 	*/
 	public InputStream getResourceAsStream( String path ) 
 	{
+		InputStream in = null;
 		if ( externalClassLoader != null )
 		{
 			// classloader wants no leading slash
-			return externalClassLoader.getResourceAsStream( path.substring(1) );
-		} else
-			return Interpreter.class.getResourceAsStream( path );
+			in = externalClassLoader.getResourceAsStream( path.substring(1) );
+		} 
+		if ( in == null )
+			in = Interpreter.class.getResourceAsStream( path );
+
+		return in;
 	}
 
 	/**
@@ -513,15 +524,19 @@ public class BshClassManager
 	}
 
 	/*
-		Issues to resolve here...
-		1) In which classloader should we define the class?
-		if there is a BshClassLoader should we define it there?
-		2) should we use reflection to set it in a non-bsh classloader
-		if there is one or should we always create a bsh classloader
-		(and expose its defineClass)?
+		The real implementation in the classpath.ClassManagerImpl handles
+		reloading of the generated classes.
 	*/
 	public Class defineClass( String name, byte [] code ) 
 	{
+		throw new InterpreterError("Can't create class ("+name
+			+") without class manager package.");
+	/*
+		Old implementation injected classes into the parent classloader.
+		This was incorrect behavior for several reasons.  The biggest problem
+		is that classes could therefore only be defined once across all
+		executions of the script...  
+
 		ClassLoader cl = this.getClass().getClassLoader();
 		Class clas;
 		try {
@@ -529,8 +544,8 @@ public class BshClassManager
 				cl, "defineClass", 
 				new Object [] { 
 					name, code, 
-					new Primitive( (int)0 )/*offset*/, 
-					new Primitive( code.length )/*len*/ 
+					new Primitive( (int)0 )/offset/, 
+					new Primitive( code.length )/len/ 
 				}, 
 				(Interpreter)null, (CallStack)null, (SimpleNode)null 
 			);
@@ -540,6 +555,7 @@ public class BshClassManager
 		}
 		absoluteNonClasses.remove( name ); // may have been axed previously
 		return clas;
+	*/
 	}
 
 	protected void classLoaderChanged() { }

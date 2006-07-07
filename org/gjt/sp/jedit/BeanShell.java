@@ -24,6 +24,8 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import bsh.*;
+import bsh.classpath.ClassManagerImpl;
+
 import java.io.*;
 import java.lang.ref.*;
 import java.lang.reflect.InvocationTargetException;
@@ -282,7 +284,7 @@ public class BeanShell
 		boolean ownNamespace) throws Exception
 	{
 		_runScript(view,path,in,ownNamespace
-			? new NameSpace(global,"script namespace")
+			? new NameSpace(global,"namespace")
 			: global);
 	} //}}}
 
@@ -507,7 +509,7 @@ public class BeanShell
 			Object retVal = method.invoke(useNamespace
 				? new Object[] { namespace }
 				: NO_ARGS,
-				interpForMethods,new CallStack());
+				interpForMethods,new CallStack(), null);
 			if(retVal instanceof Primitive)
 			{
 				if(retVal == Primitive.VOID)
@@ -605,7 +607,7 @@ public class BeanShell
 	//{{{ init() method
 	static void init()
 	{
-		try
+		/*try
 		{
 			NameSpace.class.getMethod("addCommandPath",
 				new Class[] { String.class, Class.class });
@@ -615,9 +617,9 @@ public class BeanShell
 			Log.log(Log.ERROR,BeanShell.class,"You have BeanShell version " + getVersion() + " in your CLASSPATH.");
 			Log.log(Log.ERROR,BeanShell.class,"Please remove it from the CLASSPATH since jEdit can only run with the bundled BeanShell version " + REQUIRED_VERSION);
 			System.exit(1);
-		}
+		} */
 
-		classManager = new CustomClassManager();
+		classManager = new ClassManagerImpl();
 		classManager.setClassLoader(new JARClassLoader());
 
 		global = new NameSpace(classManager,
@@ -657,7 +659,7 @@ public class BeanShell
 
 	//{{{ Static variables
 	private static final Object[] NO_ARGS = new Object[0];
-	private static CustomClassManager classManager;
+	private static BshClassManager classManager;
 	private static Interpreter interpForMethods;
 	private static NameSpace global;
 	private static boolean running;
@@ -670,11 +672,11 @@ public class BeanShell
 		if(view != null)
 		{
 			EditPane editPane = view.getEditPane();
-			namespace.setVariable("view",view);
-			namespace.setVariable("editPane",editPane);
-			namespace.setVariable("buffer",editPane.getBuffer());
-			namespace.setVariable("textArea",editPane.getTextArea());
-			namespace.setVariable("wm",view.getDockableWindowManager());
+			namespace.setVariable("view",view, false);
+			namespace.setVariable("editPane",editPane, false);
+			namespace.setVariable("buffer",editPane.getBuffer(), false);
+			namespace.setVariable("textArea",editPane.getTextArea(), false);
+			namespace.setVariable("wm",view.getDockableWindowManager(), false);
 		}
 	} //}}}
 
@@ -682,11 +684,11 @@ public class BeanShell
 	private static void resetDefaultVariables(NameSpace namespace)
 		throws UtilEvalError
 	{
-		namespace.setVariable("view",null);
-		namespace.setVariable("editPane",null);
-		namespace.setVariable("buffer",null);
-		namespace.setVariable("textArea",null);
-		namespace.setVariable("wm",null);
+		namespace.setVariable("view",null, false);
+		namespace.setVariable("editPane",null, false);
+		namespace.setVariable("buffer",null, false);
+		namespace.setVariable("textArea",null, false);
+		namespace.setVariable("wm",null, false);
 	} //}}}
 
 	//{{{ unwrapException() method
@@ -751,7 +753,7 @@ public class BeanShell
 	//}}}
 
 	//{{{ CustomClassManager class
-	static class CustomClassManager extends BshClassManager
+	static class CustomClassManager extends ClassManagerImpl
 	{
 		private LinkedList listeners = new LinkedList();
 		private ReferenceQueue refQueue = new ReferenceQueue();
@@ -792,17 +794,20 @@ public class BeanShell
 		{
 			// clear the static caches in BshClassManager
 			clearCaches();
-
-			for (Iterator iter = listeners.iterator();
-				iter.hasNext(); )
+			if (listeners != null)
 			{
-				WeakReference wr = (WeakReference)
-					iter.next();
-				Listener l = (Listener)wr.get();
-				if ( l == null )  // garbage collected
-					iter.remove();
-				else
-					l.classLoaderChanged();
+
+				for (Iterator iter = listeners.iterator();
+				     iter.hasNext(); )
+				{
+					WeakReference wr = (WeakReference)
+						iter.next();
+					Listener l = (Listener)wr.get();
+					if ( l == null )  // garbage collected
+						iter.remove();
+					else
+						l.classLoaderChanged();
+				}
 			}
 		}
 	} //}}}
