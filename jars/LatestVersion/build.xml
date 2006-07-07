@@ -5,6 +5,12 @@
 		This is an ant build.xml file for building the LatestVersion plugin for jEdit.
 	</description>
 	
+	<property name="jedit.install.dir"
+			  location="../../build" />
+	<property name="install.dir"
+			  location="${jedit.install.dir}/jars" />
+	<property name="compiler.deprecation"
+			  value="on" />
     <import file="../../build-support/plugin-build.xml" />
     
     <selector id="packageFiles">

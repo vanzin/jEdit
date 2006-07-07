@@ -101,8 +101,8 @@
 # Where to find the DocBook XML DTD
 #docbookx.dtd=C:\\Programme\\DocBook\\XML\\4.2\\docbookx.dtd
 
-# Where to find the dockbook stylesheet
-#docbook.xsl=/usr/share/xsl/docbook-xsl
+# Where to find the DocBook stylesheet
+#docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.70.1\\
 
 # The name of the xsl stylesheet (without the path info)
 #docbook.xsl.sheet=html/chunk.xsl
@@ -111,7 +111,7 @@
 #docs.style.sheet=${docbook.xsl}/${docbook.xsl.sheet}
 
 # The path to the xsltproc executable
-#xsltproc.executable=xsltproc
+#xsltproc.executable=C:\\Programme\\xsltproc\\xsltproc.exe
 
 # CVS options
 
