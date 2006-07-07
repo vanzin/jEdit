@@ -8,7 +8,7 @@
 ### it with all its content. (So don't use your
 ### home-directory or your project-directory
 ### if you don't want to loose all your files!)
-build.dir=build
+#build.dir=build
 
 ### The directory where to put the distribution-files
 ### Use a directory exclusive used for that,
@@ -16,50 +16,19 @@ build.dir=build
 ### it with all its content. (So don't use your
 ### home-directory or your project-directory
 ### if you don't want to loose all your files!)
-dist.dir=dist
+#dist.dir=dist
 
-### The name of the jedit JAR-file
-jar.filename=jedit.jar
-
-### The version of jEdit
-jedit.version=4.3pre6
-jedit.build.number=04.03.06.00
-
-### The name of the distribution JAR-file
-dist.jar.filename=jEdit${jedit.version}install.jar
-
-### The name of the users-guide as PDF-file up to the format
-### For "jedit42manual-A4.pdf" this should be set to "jedit42manual-"
-manual.filename.prefix=jEdit${jedit.version}manual-
-
-### The name of the distribution src-archive
-src.archive.filename=jEdit${jedit.version}source.tar.bz2
-
-### Variables for the Mac OS X application bundle
-## For target.mac.java.version
-## see http://developer.apple.com/documentation/Java/Conceptual/JavaPropVMInfoRef/Articles/JavaDictionaryInfo.plistKeys.html
-## and http://developer.apple.com/ReleaseNotes/Java/Java50RN/1_NewFeatures/chapter_2_section_4.html#//apple_ref/doc/uid/TP40001881-202-BCIBFCJB
-mac.target.java.version=1.4+
-mac.disk.image.filename=jEdit${jedit.version}.dmg
-
-### The name of the Inno Setup compiler executable for building of the Windows installer
-innosetup.compiler.executable=C:\\Programme\\Inno Setup 5\\Compil32.exe
-## The name of the distribution file for windows without .exe extension
-win.filename=jEdit${jedit.version}installer
-
-### The Java-Version for which to compile
-### (on which jEdit should run at least later on)
-target.java.version=1.4
-
-### The Java-Version needed at least in Slackware format
-slackware.target.java.version=1_4_2_12-i586-1
+### The name of the Inno Setup compiler executable
+### for building of the Windows installer
+#innosetup.compiler.executable=C:\\Programme\\Inno Setup 5\\Compil32.exe
 
 ### For generating the docs adjust the following to your local paths
 ### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
-xsltproc.executable=xsltproc
-docbook.xsl=/usr/share/docbook-xsl
-docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.2/catalog.xml
+#xsltproc.executable=C:\\Programme\\xsltproc\\xsltproc.exe
+#docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.70.1\\
+#docbook.catalog=C:\\Programme\\DocBook\\XML\\4.2\\docbook.cat
 
 ### If you want to build the PDF user's guide,
-### set these to your local FOP directory. (xsltproc needed also)
-fop.dir=/home/ezust/workspace/slackerdoc/lib
+### set this to your local FOP install directory.
+### (the above three properties are needed also)
+#fop.dir=C:\\Programme\\FOP

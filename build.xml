@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="jEdit"
+<project name="jedit"
 		 default="build">
 	<description>
 		This is an ant build.xml file for building jEdit - Programmer's Text Editor.
@@ -7,8 +7,26 @@
 	
 	<property file="build.properties"
 			  prefix="config" />
-	<property name="src.dir"
-			  location="." />
+	
+	<!-- jEdit Version -->
+	<property name="jedit.version"
+			  value="4.3pre6" />
+	<property name="jedit.build.number"
+			  value="04.03.06.00" />
+	
+	<!-- Target Java Versions -->
+	<property name="target.java.version"
+			  value="1.4" />
+	<property name="mac.target.java.version"
+			  value="1.4+" />
+	<property name="slackware.target.java.version"
+			  value="1_4_2_12-i586-1" />
+	
+	<!-- Various Paths -->
+	<property name="config.build.dir"
+			  value="build" />
+	<property name="config.dist.dir"
+			  value="dist" />
 	<property name="build.dir"
 			  location="${config.build.dir}" />
 	<property name="dist.dir"
@@ -17,6 +35,22 @@
 			  location="${build.dir}/classes" />
 	<property name="jar.location"
 			  location="${build.dir}" />
+	
+	<!-- Various Filenames -->
+	<property name="jar.filename"
+			  value="${ant.project.name}.jar" />
+	<property name="dist.jar.filename"
+			  value="jEdit${jedit.version}install.jar" />
+	<property name="manual.filename.prefix"
+			  value="jEdit${jedit.version}manual-" />
+	<property name="src.archive.filename"
+			  value="jEdit${jedit.version}source.tar.bz2" />
+	<property name="win.filename"
+			  value="jEdit${jedit.version}installer" />
+	<property name="mac.disk.image.filename"
+			  value="jEdit${jedit.version}.dmg" />
+	
+	<!-- Miscellaneous -->
 	<property name="build.debuglevel"
 			  value="lines,vars,source" />
 	
@@ -35,6 +69,8 @@
 				failonerror="false">
 			<fileset dir="${build.dir}/classes" />
 			<fileset dir="${dist.dir}/classes" />
+			<fileset dir="doc"
+					 includes="docbook-wrapper-*.xsl" />
 		</delete>
 	</target>
 	
@@ -45,22 +81,24 @@
 				failonerror="false">
 			<fileset dir="${build.dir}" />
 			<fileset dir="${dist.dir}" />
+			<fileset dir="doc"
+					 includes="docbook-wrapper-*.xsl" />
 		</delete>
 	</target>
 	
 	<target name="compile"
 			depends="init">
 		<mkdir dir="${classes.dir}/core" />
-		<depend srcDir="${src.dir}"
+		<depend srcDir="."
 				destDir="${classes.dir}/core"
 				cache="${classes.dir}" />
-		<javac srcdir="${src.dir}"
+		<javac srcdir="."
 			   destdir="${classes.dir}/core"
 			   debug="true"
 			   debuglevel="${build.debuglevel}"
 			   deprecation="true"
-			   source="${config.target.java.version}"
-			   target="${config.target.java.version}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
 			   compiler="modern">
 			<include name="bsh/**" />
 			<include name="org/**" />
@@ -73,7 +111,7 @@
 			depends="init,compile"
 			description="build the jEdit JAR-file with full debug-information">
 		<mkdir dir="${jar.location}" />
-		<jar destfile="${jar.location}/${config.jar.filename}"
+		<jar destfile="${jar.location}/${jar.filename}"
 			 basedir="${classes.dir}/core"
 			 compress="false"
 			 manifest="org/gjt/sp/jedit/jedit.manifest"
@@ -104,7 +142,7 @@
 	<target name="run"
 			depends="init,build"
 			description="run jEdit">
-		<java jar="${jar.location}/${config.jar.filename}"
+		<java jar="${jar.location}/${jar.filename}"
 			  fork="true"
 			  spawn="true">
 			<arg value="-noserver" />
@@ -114,6 +152,8 @@
 	<target name="generate-docbook-wrapper"
 			if="format"
 			depends="init">
+		<fail message="Please set the &quot;docbook.xsl&quot; in build.properties"
+			  unless="config.docbook.xsl" />
 		<pathconvert property="absolute-stylesheet"
 					 dirsep="/">
 			<path location="${config.docbook.xsl}/${stylesheet}" />
@@ -143,6 +183,10 @@
 			depends="init"
 			if="doc.output.location"
 			unless="faq.is.up.to.date">
+		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+			  unless="config.xsltproc.executable" />
+		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
+			  unless="config.docbook.catalog" />
 		<mkdir dir="${doc.output.location}/FAQ" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -161,6 +205,10 @@
 			depends="init"
 			if="doc.output.location"
 			unless="news.is.up.to.date">
+		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+			  unless="config.xsltproc.executable" />
+		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
+			  unless="config.docbook.catalog" />
 		<mkdir dir="${doc.output.location}/news42" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -179,6 +227,10 @@
 			depends="init"
 			if="doc.output.location"
 			unless="users-guide.is.up.to.date">
+		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+			  unless="config.xsltproc.executable" />
+		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
+			  unless="config.docbook.catalog" />
 		<mkdir dir="${doc.output.location}/users-guide" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -249,16 +301,16 @@
 			depends="init"
 			unless="javadoc.is.up.to.date">
 		<mkdir dir="${classes.dir}/javadoc" />
-		<javac srcdir="${src.dir}"
+		<javac srcdir="."
 			   destdir="${classes.dir}/javadoc"
 			   includes="doclet/**"
 			   debug="true"
 			   debuglevel="${build.debuglevel}"
 			   deprecation="true"
-			   source="${config.target.java.version}"
-			   target="${config.target.java.version}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
 			   compiler="modern" />
-		<javadoc sourcepath="${src.dir}"
+		<javadoc sourcepath="."
 				 destdir="${classes.dir}/javadoc/api"
 				 packagenames="bsh.*,org.*,com.*,gnu.*"
 				 classpath="${classes.dir}/core"
@@ -271,7 +323,7 @@
 				 windowtitle="jEdit API"
 				 doctitle="jEdit API"
 				 failonerror="true"
-				 source="${config.target.java.version}">
+				 source="${target.java.version}">
 			<group title="jEdit"
 				   packages="org.gjt.sp*" />
 			<group title="BeanShell"
@@ -287,7 +339,7 @@
 			depends="init"
 			description="generate JavaDoc API docs">
 		<dependset>
-			<srcfileset dir="${src.dir}">
+			<srcfileset dir=".">
 				<include name="doclet/**/*.java" />
 				<include name="bsh/**/*.java" />
 				<include name="bsh/**/package.html" />
@@ -330,6 +382,12 @@
 			depends="init"
 			if="paper.type"
 			unless="pdf-users-guide.is.up.to.date">
+		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+			  unless="config.xsltproc.executable" />
+		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
+			  unless="config.docbook.catalog" />
+		<fail message="Please set the &quot;fop.dir&quot; in build.properties"
+			  unless="config.fop.dir" />
 		<antcall target="generate-docbook-wrapper">
 			<param name="format"
 				   value="fo" />
@@ -351,10 +409,12 @@
 			<arg value="paper.type" />
 			<arg value="&quot;${paper.type}&quot;" />
 			<arg value="--output" />
-			<arg value="../${docs-pdf.classes.dir}/${config.manual.filename.prefix}${paper.type}.fot" />
-			<arg value="--novalid" />
+			<arg value="../${docs-pdf.classes.dir}/${manual.filename.prefix}${paper.type}.fot" />
+			<arg value="--catalogs" />
 			<arg value="jeditfo.xsl" />
 			<arg value="users-guide/users-guide.xml" />
+			<env key="SGML_CATALOG_FILES"
+				 file="${config.docbook.catalog}" />
 		</exec>
 		<delete file="doc/docbook-wrapper-fo.xsl"
 				failonerror="false" />
@@ -366,8 +426,8 @@
 						 includes="*.jar" />
 			</classpath>
 		</taskdef>
-		<fop fofile="${docs-pdf.classes.dir}/${config.manual.filename.prefix}${paper.type}.fot"
-			 outfile="${jar.location}/${config.manual.filename.prefix}${paper.type}.pdf"
+		<fop fofile="${docs-pdf.classes.dir}/${manual.filename.prefix}${paper.type}.fot"
+			 outfile="${jar.location}/${manual.filename.prefix}${paper.type}.pdf"
 			 format="application/pdf"
 			 messagelevel="info" />
 	</target>
@@ -378,12 +438,12 @@
 		<dependset>
 			<srcfileset dir="doc/users-guide" />
 			<targetfilelist dir="${classes.dir}/docs-pdf"
-							files="${config.manual.filename.prefix}${paper.type}.fot" />
+							files="${manual.filename.prefix}${paper.type}.fot" />
 			<targetfilelist dir="${jar.location}"
-							files="${config.manual.filename.prefix}${paper.type}.pdf" />
+							files="${manual.filename.prefix}${paper.type}.pdf" />
 		</dependset>
 		<available property="pdf-users-guide.is.up.to.date"
-				   file="${jar.location}/${config.manual.filename.prefix}${paper.type}.pdf"
+				   file="${jar.location}/${manual.filename.prefix}${paper.type}.pdf"
 				   type="file" />
 		<antcall target="generate-pdf-users-guide" />
 	</target>
@@ -409,17 +469,17 @@
 	<target name="compile-installer"
 			depends="init">
 		<mkdir dir="${classes.dir}/installer" />
-		<depend srcDir="${src.dir}"
+		<depend srcDir="."
 				destDir="${classes.dir}/installer"
 				cache="${classes.dir}" />
-		<javac srcdir="${src.dir}"
+		<javac srcdir="."
 			   destdir="${classes.dir}/installer"
 			   includes="installer/**"
 			   debug="true"
 			   debuglevel="${build.debuglevel}"
 			   deprecation="true"
-			   source="${config.target.java.version}"
-			   target="${config.target.java.version}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
 	
@@ -479,7 +539,7 @@
 					   modes/**
 					   properties/**
 					   startup/**
-					   ${config.jar.filename}"
+					   ${jar.filename}"
 			 excludes="doc/api/**"
 			 compression="bzip2" />
 		<tar destfile="${dist.dir}/jedit-mac.tar.bz2"
@@ -505,10 +565,10 @@
 			<fileset file="installer/install.props" />
 			<filterset>
 				<filter token="jedit.version"
-						value="${config.jedit.version}" />
+						value="${jedit.version}" />
 			</filterset>
 		</copy>
-		<jar destfile="${dist.dir}/${config.dist.jar.filename}"
+		<jar destfile="${dist.dir}/${dist.jar.filename}"
 			 basedir="${dist.dir}/classes/installer"
 			 compress="true"
 			 manifest="installer/install.mf"
@@ -575,7 +635,7 @@
 						handledirsep="true" />
 		</pathconvert>
 		<mkdir dir="${dist.dir}" />
-		<tar destfile="${dist.dir}/${config.src.archive.filename}"
+		<tar destfile="${dist.dir}/${src.archive.filename}"
 			 basedir=".."
 			 includes="jEdit/**"
 			 excludes="${relative.build.dir}/**
@@ -586,17 +646,17 @@
 	<target name="compile-jarbundler"
 			depends="init">
 		<mkdir dir="${classes.dir}/jarbundler" />
-		<depend srcDir="${src.dir}"
+		<depend srcDir="."
 				destDir="${classes.dir}/jarbundler"
 				cache="${classes.dir}" />
-		<javac srcdir="${src.dir}"
+		<javac srcdir="."
 			   destdir="${classes.dir}/jarbundler"
 			   includes="net/**"
 			   debug="true"
 			   debuglevel="${build.debuglevel}"
 			   deprecation="true"
-			   source="${config.target.java.version}"
-			   target="${config.target.java.version}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
 
@@ -622,18 +682,18 @@
 		<jarbundler dir="${dist.dir}/classes/mac"
 					name="jEdit"
 					mainclass="org.gjt.sp.jedit.jEdit"
-					jar="${dist.dir}/${config.jar.filename}"
+					jar="${dist.dir}/${jar.filename}"
 					arguments="-background"
-					build="${config.jedit.build.number}"
+					build="${jedit.build.number}"
 					bundleid="org.gjt.sp.jedit"
 					extraclasspath="/System/Library/Java"
 					icon="icons/icon.icns"
-					infostring="jEdit ${config.jedit.version}, Copyright &#169; 1998-${current.year} Slava Pestov"
-					jvmversion="${config.mac.target.java.version}"
+					infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Slava Pestov"
+					jvmversion="${mac.target.java.version}"
 					shortname="jEdit"
 					signature="JESP"
 					stubfile="jedit"
-					version="${config.jedit.version}">
+					version="${jedit.version}">
 			<javaproperty name="apple.awt.antialiasing"
 						  value="true" />
 			<javaproperty name="apple.awt.textantialiasing"
@@ -669,23 +729,23 @@
 			<arg file="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub" />
 			<arg file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
 		</exec>
-		<delete file="${dist.dir}/${config.mac.disk.image.filename}"
+		<delete file="${dist.dir}/${mac.disk.image.filename}"
 				failonerror="false" />
 		<exec executable="hdiutil"
 			  failonerror="true">
 			<arg value="create" />
 			<arg value="-quiet" />
 			<arg value="-volname" />
-			<arg value="jEdit ${config.jedit.version}" />
+			<arg value="jEdit ${jedit.version}" />
 			<arg value="-srcfolder" />
 			<arg file="${dist.dir}/classes/mac/jEdit.app" />
-			<arg file="${dist.dir}/${config.mac.disk.image.filename}" />
+			<arg file="${dist.dir}/${mac.disk.image.filename}" />
 		</exec>
 		<exec executable="hdiutil"
 			  failonerror="true">
 			<arg value="internet-enable" />
 			<arg value="-quiet" />
-			<arg file="${dist.dir}/${config.mac.disk.image.filename}" />
+			<arg file="${dist.dir}/${mac.disk.image.filename}" />
 		</exec>
 		<condition property="wipe.dist.files">
 			<not>
@@ -698,13 +758,13 @@
 	<target name="prepare-dist-mac-finish"
 			depends="init"
 			if="build.on.non.mac">
-		<tar destfile="${dist.dir}/jEdit-${config.jedit.version}-dist-mac-finish.tar.bz2"
+		<tar destfile="${dist.dir}/jEdit-${jedit.version}-dist-mac-finish.tar.bz2"
 			 basedir="."
 			 includes="build.properties
 			 		   build.xml
 			 		   icons/file.icns
 			 		   icons/icon.icns
-			 		   ${config.dist.dir}/${config.jar.filename}
+			 		   ${config.dist.dir}/${jar.filename}
 			 		   ${config.dist.dir}/classes/jarbundler/**
 			 		   ${config.dist.dir}/doc/**
 			 		   ${config.dist.dir}/jars/**
@@ -776,13 +836,13 @@
 					 excludes="windows/launchstub.exe" />
 			<filterset>
 				<filter token="jar.filename"
-						value="${config.jar.filename}" />
+						value="${jar.filename}" />
 				<filter token="jedit.version"
-						value="${config.jedit.version}" />
+						value="${jedit.version}" />
 				<filter token="jedit.build.number"
-						value="${config.jedit.build.number}" />
+						value="${jedit.build.number}" />
 				<filter token="slackware.target.java.version"
-						value="${config.slackware.target.java.version}" />
+						value="${slackware.target.java.version}" />
 			</filterset>
 		</copy>
 		<copy todir="${dist.dir}/classes/package-files/windows">
@@ -796,7 +856,7 @@
 			depends="init"
 			description="build the Slackware Package">
 		<antcall target="prepare-dist-files" />
-		<tar destfile="${dist.dir}/jEdit-${config.jedit.version}-noarch-1sao.tgz"
+		<tar destfile="${dist.dir}/jEdit-${jedit.version}-noarch-1sao.tgz"
 			 compression="gzip">
 			<tarfileset file="."
 						username="root"
@@ -818,7 +878,7 @@
 						includes="*.txt"
 						username="root"
 						group="root"
-						prefix="usr/doc/jEdit-${config.jedit.version}/" />
+						prefix="usr/doc/jEdit-${jedit.version}/" />
 			<tarfileset file="${dist.dir}/classes/package-files/linux/jedit.1.gz"
 						username="root"
 						group="root"
@@ -835,10 +895,10 @@
 								  modes/**
 								  properties/**
 								  startup/**
-								  ${config.jar.filename}"
+								  ${jar.filename}"
 						username="root"
 						group="root"
-						prefix="usr/share/jEdit-${config.jedit.version}/" />
+						prefix="usr/share/jEdit-${jedit.version}/" />
 			<tarfileset dir="icons"
 						includes="jedit-file48.png
 								  jedit-icon48.png"
@@ -857,34 +917,34 @@
 	<target name="compile-ar"
 			depends="init">
 		<mkdir dir="${classes.dir}/ar" />
-		<depend srcDir="${src.dir}"
+		<depend srcDir="."
 				destDir="${classes.dir}/ar"
 				cache="${classes.dir}" />
-		<javac srcdir="${src.dir}"
+		<javac srcdir="."
 			   destdir="${classes.dir}/ar"
 			   includes="de/masters_of_disaster/ant/tasks/ar/**"
 			   debug="true"
 			   debuglevel="${build.debuglevel}"
 			   deprecation="true"
-			   source="${config.target.java.version}"
-			   target="${config.target.java.version}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
 	
 	<target name="compile-deb"
 			depends="init">
 		<mkdir dir="${classes.dir}/deb" />
-		<depend srcDir="${src.dir}"
+		<depend srcDir="."
 				destDir="${classes.dir}/deb"
 				cache="${classes.dir}" />
-		<javac srcdir="${src.dir}"
+		<javac srcdir="."
 			   destdir="${classes.dir}/deb"
 			   includes="de/masters_of_disaster/ant/tasks/deb/**"
 			   debug="true"
 			   debuglevel="${build.debuglevel}"
 			   deprecation="true"
-			   source="${config.target.java.version}"
-			   target="${config.target.java.version}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
 	
@@ -925,19 +985,19 @@
 						 	   modes/**
 						 	   properties/**
 						 	   startup/**
-						 	   ${config.jar.filename}" />
+						 	   ${jar.filename}" />
 		</calculateinstalledsizefordeb>
 		<copy todir="${dist.dir}/classes/package-files/linux/deb"
 			  overwrite="true">
 			<fileset file="package-files/linux/deb/control" />
 			<filterset>
 				<filter token="jedit.build.number"
-						value="${config.jedit.build.number}" />
+						value="${jedit.build.number}" />
 				<filter token="deb.installed.size"
 						value="${deb.installed.size}" />
 			</filterset>
 		</copy>
-		<deb destfile="${dist.dir}/jedit_${config.jedit.version}_all.deb"
+		<deb destfile="${dist.dir}/jedit_${jedit.version}_all.deb"
 			 tempDir="${dist.dir}/classes/deb"
 			 deleteTempFiles="false"
 			 includeMd5sums="true">
@@ -966,7 +1026,7 @@
 						 		   modes/**
 						 		   properties/**
 						 		   startup/**
-						 		   ${config.jar.filename}"
+						 		   ${jar.filename}"
 						 prefix="usr/share/jEdit/" />
 			<datafileset file="${dist.dir}/classes/package-files/linux/jedit.1.gz"
 						 fullpath="usr/share/man/man1/jedit.1.gz" />
@@ -990,6 +1050,8 @@
 				</not>
 			</condition>
 		</fail>
+		<fail message="Please set the innosetup.compiler.executable in build.properties"
+			  unless="config.innosetup.compiler.executable" />
 		<tstamp>
 			<format property="current.year"
 					pattern="yyyy" />
@@ -999,13 +1061,13 @@
 			<fileset file="package-files/windows/win32installer.iss" />
 			<filterset>
 				<filter token="jar.filename"
-						value="${config.jar.filename}" />
+						value="${jar.filename}" />
 				<filter token="jedit.version"
-						value="${config.jedit.version}" />
+						value="${jedit.version}" />
 				<filter token="jedit.build.number"
-						value="${config.jedit.build.number}" />
+						value="${jedit.build.number}" />
 				<filter token="win.filename"
-						value="${config.win.filename}" />
+						value="${win.filename}" />
 				<filter token="dist.dir"
 						value="${dist.dir}" />
 				<filter token="base.dir"
@@ -1014,7 +1076,7 @@
 						value="${current.year}" />
 			</filterset>
 		</copy>
-			<exec executable="${config.innosetup.compiler.executable}"
+		<exec executable="${config.innosetup.compiler.executable}"
 			  failonerror="true">
 			<arg value="/cc" />
 			<arg file="${dist.dir}/classes/package-files/windows/win32installer.iss" />
@@ -1030,7 +1092,7 @@
 	<target name="prepare-dist-win-finish"
 			depends="init"
 			if="build.on.non.win">
-		<tar destfile="${dist.dir}/jEdit-${config.jedit.version}-dist-win-finish.tar.bz2"
+		<tar destfile="${dist.dir}/jEdit-${jedit.version}-dist-win-finish.tar.bz2"
 			 basedir="."
 			 includes="build.properties
 			 		   build.xml
@@ -1038,7 +1100,7 @@
 			 		   icons/WindowsInstallerSmallImage.bmp
 			 		   icons/WindowsInstallerImage.bmp
 					   package-files/windows/win32installer.iss
-			 		   ${config.dist.dir}/${config.jar.filename}
+			 		   ${config.dist.dir}/${jar.filename}
 			 		   ${config.dist.dir}/classes/package-files/windows/**
 			 		   ${config.dist.dir}/doc/**
 			 		   ${config.dist.dir}/jars/LatestVersion.jar
@@ -1101,14 +1163,14 @@
 						<filename name="modes/**" />
 						<filename name="properties/**" />
 						<filename name="startup/**" />
-						<filename name="${config.jar.filename}" />
+						<filename name="${jar.filename}" />
 						<and>
 							<filename name="*.tar.bz2" />
-							<filename name="${config.src.archive.filename}"
+							<filename name="${src.archive.filename}"
 									  negate="true" />
-							<filename name="jEdit-${config.jedit.version}-dist-mac-finish.tar.bz2"
+							<filename name="jEdit-${jedit.version}-dist-mac-finish.tar.bz2"
 									  negate="true" />
-							<filename name="jEdit-${config.jedit.version}-dist-win-finish.tar.bz2"
+							<filename name="jEdit-${jedit.version}-dist-win-finish.tar.bz2"
 									  negate="true" />
 						</and>
 						<filename name="classes/**" />
