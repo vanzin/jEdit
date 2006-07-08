@@ -26,14 +26,13 @@ package org.gjt.sp.jedit;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.Vector;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}
 
 /**
@@ -94,6 +93,18 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void setBuffer(final Buffer buffer)
 	{
+		setBuffer(buffer, true);
+	} //}}}
+
+	//{{{ setBuffer() method
+	/**
+	 * Sets the current buffer.
+	 * @param buffer The buffer to edit.
+	 * @param requestFocus true if the textarea should request focus, false otherwise
+	 * @since jEdit 4.3pre6
+	 */
+	public void setBuffer(final Buffer buffer, boolean requestFocus)
+	{
 		if(buffer == null)
 			throw new NullPointerException();
 
@@ -124,19 +135,22 @@ public class EditPane extends JPanel implements EBComponent
 				.BUFFER_CHANGED));
 		}
 
-		SwingUtilities.invokeLater(new Runnable()
+		if (requestFocus)
 		{
-			public void run()
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				// only do this if we are the current edit pane
-				if(view.getEditPane() == EditPane.this
-					&& (bufferSwitcher == null
-					|| !bufferSwitcher.isPopupVisible()))
+				public void run()
 				{
-					textArea.requestFocus();
+					// only do this if we are the current edit pane
+					if(view.getEditPane() == EditPane.this
+						&& (bufferSwitcher == null
+						|| !bufferSwitcher.isPopupVisible()))
+					{
+						textArea.requestFocus();
+					}
 				}
-			}
-		});
+			});
+		}
 
 		// Only do this after all I/O requests are complete
 		Runnable runnable = new Runnable()
@@ -273,7 +287,7 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.getHorizontalOffset());
 		BufferHistory.setEntry(buffer.getPath(), textArea.getCaretPosition(), 
 			(Selection[])buffer.getProperty(Buffer.SELECTION),
-			buffer.getStringProperty(Buffer.ENCODING));
+			buffer.getStringProperty(JEditBuffer.ENCODING));
 	} //}}}
 
 	//{{{ loadCaretInfo() method
@@ -334,8 +348,8 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void goToNextMarker(boolean select)
 	{
-		Vector markers = buffer.getMarkers();
-		if(markers.size() == 0)
+		java.util.List markers = buffer.getMarkers();
+		if(markers.isEmpty())
 		{
 			getToolkit().beep();
 			return;
@@ -372,8 +386,8 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void goToPrevMarker(boolean select)
 	{
-		Vector markers = buffer.getMarkers();
-		if(markers.size() == 0)
+		java.util.List markers = buffer.getMarkers();
+		if(markers.isEmpty())
 		{
 			getToolkit().beep();
 			return;
@@ -384,7 +398,7 @@ public class EditPane extends JPanel implements EBComponent
 		Marker marker = null;
 		for(int i = markers.size() - 1; i >= 0; i--)
 		{
-			Marker _marker = (Marker)markers.elementAt(i);
+			Marker _marker = (Marker)markers.get(i);
 			if(_marker.getPosition() < caret)
 			{
 				marker = _marker;
@@ -502,10 +516,10 @@ public class EditPane extends JPanel implements EBComponent
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "["
-			+ (view.getEditPane() == this
+		return getClass().getName() + '['
+		       + (view.getEditPane() == this
 			? "active" : "inactive")
-			+ "]";
+			+ ']';
 	} //}}}
 
 	//{{{ Package-private members
@@ -734,7 +748,7 @@ public class EditPane extends JPanel implements EBComponent
 			 * 'Untitled' file creation. */
 			if(buffer.isClosed())
 			{
-				setBuffer(jEdit.getFirstBuffer());
+				setBuffer(jEdit.getFirstBuffer(), msg.getView() == view);
 				// since recentBuffer will be set to the one that
 				// was closed
 				recentBuffer = null;

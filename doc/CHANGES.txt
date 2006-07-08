@@ -38,6 +38,9 @@ Matthieu Casanova for contributing to this release.
 
 - Fixed VFS.copy() method when the returned session is null
   (Matthieu Casanova)
+
+- When multiple views are open, closing a buffer will not change the active view
+  (Bug #1518400) (Matthieu Casanova)
 }}}
 }}}
 
