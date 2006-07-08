@@ -649,6 +649,21 @@ public class Registers
 			}
 		}
 	} //}}}
+	
+	protected static void debugListDataFlavors(Transferable transferable) {
+		DataFlavor[]	dataFlavors		= transferable.getTransferDataFlavors();
+		
+		for (int i = 0;i<dataFlavors.length;i++) {
+			DataFlavor dataFlavor = dataFlavors[i];
+			
+			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): dataFlavor="+dataFlavor+".");
+			
+		}
+		
+		if (dataFlavors.length==0) {
+			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): no dataFlavor supported.");
+		}
+	}
 
 	//{{{ StringRegister class
 	/**
