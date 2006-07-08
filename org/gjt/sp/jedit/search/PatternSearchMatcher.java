@@ -66,7 +66,7 @@ public class PatternSearchMatcher extends SearchMatcher
 	public SearchMatcher.Match nextMatch(CharSequence text, boolean start,
 		boolean end, boolean firstTime, boolean reverse)
 	{
-		int flags = 0;
+		int flags = Pattern.MULTILINE;
 
 		if (re == null)
 			re = Pattern.compile(pattern, flags);
