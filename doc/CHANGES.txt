@@ -20,6 +20,13 @@ Matthieu Casanova for contributing to this release.
   save a Frames size and position correctly, even if it gets
   maximized.
   (Björn "Vampire" Kautler )
+
+- EditPane.setBuffer(final Buffer buffer, boolean requestFocus) that allow
+  to set a buffer without requesting the focus (default is to request focus)
+  (Matthieu Casanova
+
+- BufferHistory.clear() to clear the recent file list
+  (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous
