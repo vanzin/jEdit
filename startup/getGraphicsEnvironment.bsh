@@ -20,5 +20,6 @@ public class EnvGetter extends Thread {
 	}
 }
 
-new EnvGetter().start();
+
+SwingUtilities.invokeLater(new EnvGetter());
 
