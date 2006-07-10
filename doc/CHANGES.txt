@@ -30,6 +30,8 @@ Matthieu Casanova for contributing to this release.
 }}}
 
 {{{ Miscellaneous
+- Ability to clear the Recent Files List from menu (Matthieu Casanova)
+
 - Beanshell 2.0b4 bundled (Matthieu Casanova)
 
 - Added an OptionPane "Encodings" to select which encodings to
@@ -48,6 +50,9 @@ Matthieu Casanova for contributing to this release.
 
 - When multiple views are open, closing a buffer will not change the active view
   (Bug #1518400) (Matthieu Casanova)
+
+- Fixed Untitled buffer added to the Recent file list (Bug #1518620) 
+  (Matthieu Casanova)
 }}}
 }}}
 

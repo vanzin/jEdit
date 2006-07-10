@@ -91,7 +91,7 @@ public class EditPane extends JPanel implements EBComponent
 	 * @param buffer The buffer to edit.
 	 * @since jEdit 2.5pre2
 	 */
-	public void setBuffer(final Buffer buffer)
+	public void setBuffer(Buffer buffer)
 	{
 		setBuffer(buffer, true);
 	} //}}}
@@ -285,9 +285,12 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.getFirstPhysicalLine());
 		buffer.setIntegerProperty(Buffer.SCROLL_HORIZ,
 			textArea.getHorizontalOffset());
-		BufferHistory.setEntry(buffer.getPath(), textArea.getCaretPosition(), 
-			(Selection[])buffer.getProperty(Buffer.SELECTION),
-			buffer.getStringProperty(JEditBuffer.ENCODING));
+		if (!buffer.isUntitled())
+		{
+			BufferHistory.setEntry(buffer.getPath(), textArea.getCaretPosition(),
+				(Selection[])buffer.getProperty(Buffer.SELECTION),
+				buffer.getStringProperty(JEditBuffer.ENCODING));
+		}
 	} //}}}
 
 	//{{{ loadCaretInfo() method
@@ -571,6 +574,7 @@ public class EditPane extends JPanel implements EBComponent
 	//{{{ Instance variables
 	private boolean init;
 	private View view;
+	/** The current buffer. */
 	private Buffer buffer;
 	private Buffer recentBuffer;
 	private BufferSwitcher bufferSwitcher;
@@ -761,8 +765,10 @@ public class EditPane extends JPanel implements EBComponent
 
 			if(_buffer == buffer)
 			{
-				Buffer newBuffer = (recentBuffer != null ?
-					recentBuffer : _buffer.getPrev());
+				// The closed buffer is the current buffer
+				Buffer newBuffer = recentBuffer != null ?
+					recentBuffer : _buffer.getPrev();
+
 				if(newBuffer != null && !newBuffer.isClosed())
 				{
 					setBuffer(newBuffer);

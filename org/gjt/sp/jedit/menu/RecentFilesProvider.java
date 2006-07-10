@@ -95,7 +95,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			return;
 		}
 
-		Vector menuItems = new Vector();
+		List menuItems = new ArrayList();
 
 		boolean sort = jEdit.getBooleanProperty("sortRecent");
 
@@ -115,7 +115,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			menuItem.setIcon(FileCellRenderer.fileIcon);
 
 			if(sort)
-				menuItems.addElement(menuItem);
+				menuItems.add(menuItem);
 			else
 			{
 				if(menu.getMenuComponentCount() >= maxItems
@@ -146,8 +146,18 @@ public class RecentFilesProvider implements DynamicMenuProvider
 					menu = newMenu;
 				}
 
-				menu.add((JMenuItem)menuItems.elementAt(i));
+				menu.add((JMenuItem)menuItems.get(i));
 			}
 		}
+		JMenuItem menuItem = new JMenuItem(jEdit.getProperty("clear-recent-files.label"));
+		menuItem.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				BufferHistory.clear();
+			}
+		});
+		menu.addSeparator();
+		menu.add(menuItem);
 	} //}}}
 }

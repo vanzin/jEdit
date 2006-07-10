@@ -205,6 +205,7 @@ exit.label=E$xit
 recent-files.code=new RecentFilesProvider();
 recent-files.label=Recent $Files
 no-recent-files.label=No Recent Files
+clear-recent-files.label=Clear Recent Files
 #}}}
 
 #}}}
