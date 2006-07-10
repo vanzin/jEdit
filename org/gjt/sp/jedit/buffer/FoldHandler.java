@@ -24,8 +24,8 @@ package org.gjt.sp.jedit.buffer;
 
 import java.util.*;
 import javax.swing.text.Segment;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.ServiceManager;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * Interface for obtaining the fold level of a specified line.<p>
@@ -121,7 +121,7 @@ public abstract class FoldHandler
 	public static String[] getFoldModes()
 	{
 		String[] handlers = ServiceManager.getServiceNames(SERVICE);
-		Arrays.sort(handlers,new MiscUtilities.StringCompare());
+		Arrays.sort(handlers,new StandardUtilities.StringCompare());
 		return handlers;
 	}
 	//}}}

@@ -27,6 +27,9 @@ Matthieu Casanova for contributing to this release.
 
 - BufferHistory.clear() to clear the recent file list
   (Matthieu Casanova)
+
+- MiscUtilities.stringCompare() and MiscUtilities.CompareString are moved to
+  StandardUtilities (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous

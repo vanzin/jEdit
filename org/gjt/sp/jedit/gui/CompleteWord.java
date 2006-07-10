@@ -32,6 +32,7 @@ import java.util.Set;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 public class CompleteWord extends JWindow
@@ -248,7 +249,7 @@ public class CompleteWord extends JWindow
 		int caret)
 	{
 		// build a list of unique words in all visible buffers
-		Set completions = new TreeSet(new MiscUtilities
+		Set completions = new TreeSet(new StandardUtilities
 			.StringCompare());
 		Set buffers = new HashSet();
 

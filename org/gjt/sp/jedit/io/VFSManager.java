@@ -40,6 +40,7 @@ import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.WorkThreadPool;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -433,7 +434,7 @@ public class VFSManager
 				// before any updates for the children. sorting
 				// the list alphanumerically guarantees this.
 				Collections.sort(vfsUpdates,
-					new MiscUtilities.StringCompare()
+					new StandardUtilities.StringCompare()
 				);
 				for(int i = 0; i < vfsUpdates.size(); i++)
 				{
