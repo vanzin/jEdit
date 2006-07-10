@@ -73,8 +73,9 @@ public class BufferHistory
 	public static void clear()
 	{
 		history.clear();
+		EditBus.send(new DynamicMenuChanged("recent-files"));
 	} //}}}
-	
+
 	//{{{ getHistory() method
 	/**
 	 * @since jEdit 4.2pre2
