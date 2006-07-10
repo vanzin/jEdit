@@ -622,25 +622,16 @@
 	<target name="dist-src"
 			depends="init"
 			description="build the src-archive">
-		<pathconvert property="relative.build.dir">
-			<path location="${build.dir}" />
-			<globmapper from="${basedir}/*"
-						to="jEdit/*"
-						handledirsep="true" />
-		</pathconvert>
-		<pathconvert property="relative.dist.dir">
-			<path location="${dist.dir}" />
-			<globmapper from="${basedir}/*"
-						to="jEdit/*"
-						handledirsep="true" />
-		</pathconvert>
 		<mkdir dir="${dist.dir}" />
 		<tar destfile="${dist.dir}/${src.archive.filename}"
-			 basedir=".."
-			 includes="jEdit/**"
-			 excludes="${relative.build.dir}/**
-			 		   ${relative.dist.dir}/**"
-			 compression="bzip2" />
+			 compression="bzip2">
+			<tarfileset dir="."
+						excludes="${config.build.dir}/**
+								  ${config.dist.dir}/**
+								  **/build.properties
+								  doc/docbook-wrapper-*.xsl"
+						prefix="jEdit/" />
+		</tar>
 	</target>
 	
 	<target name="compile-jarbundler"
