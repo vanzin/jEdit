@@ -33,7 +33,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import org.xml.sax.InputSource;
@@ -201,11 +200,11 @@ public class MiscUtilities
 				if(path.length() == 2 && path.charAt(1) == ':')
 					return true;
 				if(path.length() > 2 && path.charAt(1) == ':'
-				   && (path.charAt(2) == '\\'
-					   || path.charAt(2) == '/'))
+					&& (path.charAt(2) == '\\'
+						|| path.charAt(2) == '/'))
 					return true;
 				if(path.startsWith("\\\\")
-				   || path.startsWith("//"))
+					|| path.startsWith("//"))
 					return true;
 			}
 		// not sure if this is correct for OpenVMS.
@@ -271,8 +270,8 @@ public class MiscUtilities
 			}
 
 		if(OperatingSystem.isDOSDerived()
-		   && !isURL(parent)
-		   && path.charAt(0) == '\\')
+			&& !isURL(parent)
+		&& path.charAt(0) == '\\')
 			parent = parent.substring(0,2);
 
 		VFS vfs = VFSManager.getVFSForPath(parent);
@@ -289,7 +288,7 @@ public class MiscUtilities
 	 * @param path2 The second path
 	 */
 	public static String constructPath(String parent,
-									   String path1, String path2)
+				    String path1, String path2)
 	{
 		return constructPath(constructPath(parent,path1),path2);
 	} //}}}
@@ -512,8 +511,8 @@ public class MiscUtilities
 	 * @since jEdit 4.2pre5
 	 */
 	public static void saveBackup(File file, int backups,
-								  String backupPrefix, String backupSuffix,
-								  String backupDirectory, int backupTimeDistance)
+			       String backupPrefix, String backupSuffix,
+			       String backupDirectory, int backupTimeDistance)
 	{
 		if(backupPrefix == null)
 			backupPrefix = "";
@@ -1238,7 +1237,7 @@ public class MiscUtilities
 	 */
 	public static int compareVersions(String v1, String v2)
 	{
-		return compareStrings(v1,v2,false);
+		return StandardUtilities.compareStrings(v1,v2,false);
 	} //}}}
 
 	//{{{ compareStrings() method
@@ -1529,7 +1528,7 @@ loop:		for(;;)
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return compareStrings(obj1.toString(),
+			return StandardUtilities.compareStrings(obj1.toString(),
 				obj2.toString(),true);
 		}
 	} //}}}
@@ -1545,13 +1544,13 @@ loop:		for(;;)
 			boolean obj1E, obj2E;
 			obj1E = obj1 instanceof EnhancedMenuItem;
 			obj2E = obj2 instanceof EnhancedMenuItem;
-            if(obj1E && !obj2E)
-                  return 1;
-            else if(obj2E && !obj1E)
-                  return -1;
+			if(obj1E && !obj2E)
+				return 1;
+			else if(obj2E && !obj1E)
+				return -1;
 			else
-				return compareStrings(((JMenuItem)obj1).getText(),
-									  ((JMenuItem)obj2).getText(),true);
+				return StandardUtilities.compareStrings(((JMenuItem)obj1).getText(),
+					((JMenuItem)obj2).getText(),true);
 		}
 	} //}}}
 

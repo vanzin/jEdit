@@ -37,6 +37,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -186,9 +187,9 @@ public abstract class VFS
 	public static final String EA_MODIFIED = "modified";
 	//}}}
 
-    public static int IOBUFSIZE = 32678;
+	public static int IOBUFSIZE = 32678;
 
-    //{{{ VFS constructor
+	//{{{ VFS constructor
 	/**
 	 * @deprecated Use the form where the constructor takes a capability
 	 * list.
@@ -534,7 +535,7 @@ public abstract class VFS
 	 * @param comp comp The component that will parent error dialog boxes
 	 * @param canStop if true the copy can be stopped
 	 * @return true if the copy was successful
-	 * @throws IOException  IOException If an I/O error occurs
+	 * @throws IOException IOException If an I/O error occurs
 	 * @since jEdit 4.3pre3
 	 */
 	public static boolean copy(ProgressObserver progress, String sourcePath,String targetPath, Component comp, boolean canStop)
@@ -551,7 +552,7 @@ public abstract class VFS
 		Object targetSession = targetVFS.createVFSSession(targetPath, comp);
 		if (targetSession == null)
 		{
-			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS  + " for path " + targetPath);
+			Log.log(Log.WARNING, VFS.class, "Unable to get a valid session from " + targetVFS + " for path " + targetPath);
 			return false;
 		}
 		return copy(progress, sourceVFS, sourceSession, sourcePath, targetVFS, targetSession, targetPath, comp,canStop);
@@ -653,7 +654,7 @@ public abstract class VFS
 		throws IOException
 	{
 		Log.log(Log.DEBUG,this,"Listing " + directory);
-		ArrayList files = new ArrayList(100);
+		List files = new ArrayList(100);
 
 		Pattern filter;
 		try
@@ -987,7 +988,7 @@ public abstract class VFS
 					return file2.getType() - file1.getType();
 			}
 
-			return MiscUtilities.compareStrings(file1.getName(),
+			return StandardUtilities.compareStrings(file1.getName(),
 				file2.getName(),sortIgnoreCase);
 		}
 	} //}}}
@@ -1018,8 +1019,8 @@ public abstract class VFS
 	} //}}}
 
 	//{{{ recursive listFiles() method
-	private void listFiles(Object session, ArrayList stack,
-		ArrayList files, String directory, Pattern glob, boolean recursive,
+	private void listFiles(Object session, List stack,
+		List files, String directory, Pattern glob, boolean recursive,
 		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
 		if(stack.contains(directory))
@@ -1029,8 +1030,8 @@ public abstract class VFS
 				+ directory);
 			return;
 		}
-		else
-			stack.add(directory);
+
+		stack.add(directory);
 
 		VFSFile[] _files = _listFiles(session,directory,
 			comp);

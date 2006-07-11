@@ -32,6 +32,7 @@ import java.util.Comparator;
 
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 //{{{ DockingOptionPane class
@@ -190,7 +191,7 @@ class WindowTableModel extends AbstractTableModel
 	//{{{ isCellEditable() method
 	public boolean isCellEditable(int row, int col)
 	{
-		return (col != 0);
+		return col != 0;
 	} //}}}
 
 	//{{{ setValueAt() method
@@ -268,7 +269,7 @@ class WindowTableModel extends AbstractTableModel
 			Entry e1 = (Entry)obj1;
 			Entry e2 = (Entry)obj2;
 
-			return MiscUtilities.compareStrings(
+			return StandardUtilities.compareStrings(
 				e1.title,e2.title,true);
 		}
 	} //}}}

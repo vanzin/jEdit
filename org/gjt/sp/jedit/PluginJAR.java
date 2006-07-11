@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -237,7 +238,7 @@ public class PluginJAR
 
 			if(what.equals("jdk"))
 			{
-				if(!optional && MiscUtilities.compareStrings(
+				if(!optional && StandardUtilities.compareStrings(
 					System.getProperty("java.version"),
 					arg,false) < 0)
 				{
@@ -256,7 +257,7 @@ public class PluginJAR
 					ok = false;
 				}
 
-				if(!optional && MiscUtilities.compareStrings(
+				if(!optional && StandardUtilities.compareStrings(
 					jEdit.getBuild(),arg,false) < 0)
 				{
 					String needs = MiscUtilities.buildToVersion(arg);
@@ -297,7 +298,7 @@ public class PluginJAR
 						ok = false;
 					}
 				}
-				else if(MiscUtilities.compareStrings(
+				else if(StandardUtilities.compareStrings(
 					currVersion,needVersion,false) < 0)
 				{
 					if(!optional)
@@ -958,7 +959,7 @@ public class PluginJAR
 	{
 		properties = new Properties();
 
-		LinkedList classes = new LinkedList();
+		List classes = new LinkedList();
 
 		ZipFile zipFile = getZipFile();
 
@@ -1047,13 +1048,10 @@ public class PluginJAR
 						null);
 					return null;
 				}
-				else
-				{
-					plugin = new EditPlugin.Deferred(this,
-						className);
-					label = _label;
-				}
-
+				plugin = new EditPlugin.Deferred(this,
+				     className);
+				label = _label;
+				
 				break;
 			}
 		}
@@ -1342,7 +1340,7 @@ public class PluginJAR
 		//{{{ Private members
 
 		//{{{ readString() method
-		private String readString(DataInputStream din)
+		private static String readString(DataInputStream din)
 			throws IOException
 		{
 			int len = din.readInt();
@@ -1355,7 +1353,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ readURI() method
-		private URL readURI(DataInputStream din)
+		private static URL readURI(DataInputStream din)
 			throws IOException
 		{
 			String str = readString(din);
@@ -1366,7 +1364,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ readStringArray() method
-		private String[] readStringArray(DataInputStream din)
+		private static String[] readStringArray(DataInputStream din)
 			throws IOException
 		{
 			int len = din.readInt();
@@ -1381,7 +1379,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ readBooleanArray() method
-		private boolean[] readBooleanArray(DataInputStream din)
+		private static boolean[] readBooleanArray(DataInputStream din)
 			throws IOException
 		{
 			int len = din.readInt();
@@ -1396,7 +1394,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ readMap() method
-		private Properties readMap(DataInputStream din)
+		private static Properties readMap(DataInputStream din)
 			throws IOException
 		{
 			Properties returnValue = new Properties();
@@ -1413,7 +1411,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ writeString() method
-		private void writeString(DataOutputStream dout,
+		private static void writeString(DataOutputStream dout,
 			Object obj) throws IOException
 		{
 			if(obj == null)
@@ -1429,7 +1427,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ writeStringArray() method
-		private void writeStringArray(DataOutputStream dout,
+		private static void writeStringArray(DataOutputStream dout,
 			String[] str) throws IOException
 		{
 			if(str == null)
@@ -1447,7 +1445,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ writeBooleanArray() method
-		private void writeBooleanArray(DataOutputStream dout,
+		private static void writeBooleanArray(DataOutputStream dout,
 			boolean[] bools) throws IOException
 		{
 			if(bools == null)
@@ -1465,7 +1463,7 @@ public class PluginJAR
 		} //}}}
 
 		//{{{ writeMap() method
-		private void writeMap(DataOutputStream dout, Map map)
+		private static void writeMap(DataOutputStream dout, Map map)
 			throws IOException
 		{
 			dout.writeInt(map.size());

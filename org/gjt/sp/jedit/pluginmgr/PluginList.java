@@ -32,6 +32,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -170,7 +171,7 @@ class PluginList
 	} //}}}
 
 	//{{{ Plugin class
-	static public class Plugin
+	public static class Plugin
 	{
 		String jar;
 		String name;
@@ -351,7 +352,7 @@ class PluginList
 		public String toString()
 		{
 			return "[version=" + version + ",download=" + download
-				+ ",obsolete=" + obsolete + ",deps=" + deps + "]";
+				+ ",obsolete=" + obsolete + ",deps=" + deps + ']';
 		}
 	} //}}}
 
@@ -382,11 +383,11 @@ class PluginList
 					String installedVersion = plugin.getInstalledVersion();
 					if(installedVersion != null
 						&&
-					(from == null || MiscUtilities.compareStrings(
+					(from == null || StandardUtilities.compareStrings(
 						installedVersion,from,false) >= 0)
 						&&
-					   (to == null || MiscUtilities.compareStrings(
-					   	installedVersion,to,false) <= 0))
+						(to == null || StandardUtilities.compareStrings(
+						      installedVersion,to,false) <= 0))
 					{
 						return true;
 					}
@@ -398,11 +399,11 @@ class PluginList
 			{
 				String javaVersion = System.getProperty("java.version").substring(0,3);
 
-				if((from == null || MiscUtilities.compareStrings(
+				if((from == null || StandardUtilities.compareStrings(
 					javaVersion,from,false) >= 0)
 					&&
-				   (to == null || MiscUtilities.compareStrings(
-				   	javaVersion,to,false) <= 0))
+					(to == null || StandardUtilities.compareStrings(
+						     javaVersion,to,false) <= 0))
 					return true;
 				else
 					return false;
@@ -411,11 +412,11 @@ class PluginList
 			{
 				String build = jEdit.getBuild();
 
-				if((from == null || MiscUtilities.compareStrings(
+				if((from == null || StandardUtilities.compareStrings(
 					build,from,false) >= 0)
 					&&
-				   (to == null || MiscUtilities.compareStrings(
-				   	build,to,false) <= 0))
+					(to == null || StandardUtilities.compareStrings(
+						     build,to,false) <= 0))
 					return true;
 				else
 					return false;
@@ -451,14 +452,14 @@ class PluginList
 						.elementAt(i);
 					if((installedVersion == null
 						||
-					MiscUtilities.compareStrings(
+					StandardUtilities.compareStrings(
 						installedVersion,branch.version,false) < 0)
 						&&
-					(from == null || MiscUtilities.compareStrings(
+					(from == null || StandardUtilities.compareStrings(
 						branch.version,from,false) >= 0)
 						&&
-					   (to == null || MiscUtilities.compareStrings(
-					   	branch.version,to,false) <= 0))
+						(to == null || StandardUtilities.compareStrings(
+						      branch.version,to,false) <= 0))
 					{
 						plugin.install(roster,installDirectory,
 							downloadSource);
@@ -471,7 +472,7 @@ class PluginList
 		public String toString()
 		{
 			return "[what=" + what + ",from=" + from
-				+ ",to=" + to + ",plugin=" + plugin + "]";
+				+ ",to=" + to + ",plugin=" + plugin + ']';
 		}
 	} //}}}
 }

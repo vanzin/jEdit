@@ -1,5 +1,8 @@
 /*
  * ShortcutsOptionPane.java - Shortcuts options panel
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
  * Copyright (C) 1999, 2000, 2001 Slava Pestov
  * Copyright (C) 2001 Dirk Moebius
  *
@@ -25,9 +28,12 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * Key binding editor.
@@ -127,16 +133,16 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		return new ShortcutsModel(modelLabel,bindings);
 	}
 
-	private void addBindings(String name, String label, Vector bindings)
+	private void addBindings(String name, String label, List bindings)
 	{
-		GrabKeyDialog.KeyBinding b[] = new GrabKeyDialog.KeyBinding[2];
+		GrabKeyDialog.KeyBinding[] b = new GrabKeyDialog.KeyBinding[2];
 
 		b[0] = createBinding(name,label,
 			jEdit.getProperty(name + ".shortcut"));
 		b[1] = createBinding(name,label,
 			jEdit.getProperty(name + ".shortcut2"));
 
-		bindings.addElement(b);
+		bindings.add(b);
 	}
 
 	private GrabKeyDialog.KeyBinding createBinding(String name,
@@ -288,7 +294,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			Enumeration e = bindings.elements();
 			while(e.hasMoreElements())
 			{
-				GrabKeyDialog.KeyBinding binding[]
+				GrabKeyDialog.KeyBinding[] binding
 					= (GrabKeyDialog.KeyBinding[])
 						e.nextElement();
 				jEdit.setProperty(
@@ -302,7 +308,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public GrabKeyDialog.KeyBinding getBindingAt(int row, int nr)
 		{
-			GrabKeyDialog.KeyBinding binding[]
+			GrabKeyDialog.KeyBinding[] binding
 				= (GrabKeyDialog.KeyBinding[])
 					bindings.elementAt(row);
 			return binding[nr];
@@ -333,13 +339,14 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				String label2 = k2[0].label.toLowerCase();
 
 				if(col == 0)
-					return MiscUtilities.compareStrings(
+					return StandardUtilities.compareStrings(
 						label1,label2,true);
 				else
 				{
 					String shortcut1, shortcut2;
 
-					if(col == 1)
+					// why this test ?
+					/* if(col == 1)
 					{
 						shortcut1 = k1[0].shortcut;
 						shortcut2 = k2[0].shortcut;
@@ -348,7 +355,10 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 					{
 						shortcut1 = k1[1].shortcut;
 						shortcut2 = k2[1].shortcut;
-					}
+					}*/
+					
+					shortcut1 = k1[1].shortcut;
+					shortcut2 = k2[1].shortcut;
 
 					if(shortcut1 == null && shortcut2 != null)
 						return 1;
@@ -357,9 +367,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 						return -1;
 
 					if(shortcut1 == null)
-						return MiscUtilities.compareStrings(label1,label2,true);
+						return StandardUtilities.compareStrings(label1,label2,true);
 
-					return MiscUtilities.compareStrings(shortcut1,shortcut2,true);
+					return StandardUtilities.compareStrings(shortcut1,shortcut2,true);
 				}
 			}
 		}

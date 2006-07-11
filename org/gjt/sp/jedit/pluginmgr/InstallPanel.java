@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 class InstallPanel extends JPanel
@@ -156,7 +157,7 @@ class InstallPanel extends JPanel
 		if (size < 1048576)
 			sizeText = size/1024 + "KB";
 		else
-			sizeText = df.format(size/1048576d) + "MB";
+			sizeText = df.format(size/ 1048576.0d) + "MB";
 		return sizeText;
 	} //}}}
 
@@ -395,7 +396,7 @@ class InstallPanel extends JPanel
 						if(branch != null
 							&& branch.canSatisfyDependencies()
 							&& installedVersion != null
-							&& MiscUtilities.compareStrings(branch.version,
+							&& StandardUtilities.compareStrings(branch.version,
 							installedVersion,false) > 0)
 						{
 							entries.add(new Entry(plugin,set.name));

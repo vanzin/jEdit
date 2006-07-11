@@ -30,6 +30,7 @@ import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.List;
 
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
@@ -39,6 +40,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.buffer.KillRing;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.help.HelpViewer;
@@ -48,6 +50,7 @@ import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -90,7 +93,7 @@ public class jEdit
 		if(javaVersion.compareTo("1.4") < 0)
 		{
 			System.err.println("You are running Java version "
-				+ javaVersion + ".");
+				+ javaVersion + '.');
 			System.err.println("jEdit requires Java 1.4 or later.");
 			System.exit(1);
 		} //}}}
@@ -239,7 +242,6 @@ public class jEdit
 		//{{{ Try connecting to another running jEdit instance
 		if(portFile != null && new File(portFile).exists())
 		{
-			int port, key;
 			try
 			{
 				BufferedReader in = new BufferedReader(new FileReader(portFile));
@@ -247,8 +249,8 @@ public class jEdit
 				if(!check.equals("b"))
 					throw new Exception("Wrong port file format");
 
-				port = Integer.parseInt(in.readLine());
-				key = Integer.parseInt(in.readLine());
+				int port = Integer.parseInt(in.readLine());
+				int key = Integer.parseInt(in.readLine());
 
 				Socket socket = new Socket(InetAddress.getByName("127.0.0.1"),port);
 				DataOutputStream out = new DataOutputStream(
@@ -1457,10 +1459,10 @@ public class jEdit
 					} */
 				}
 
-				if(entry != null && props.get(Buffer.ENCODING) == null)
+				if(entry != null && props.get(JEditBuffer.ENCODING) == null)
 				{
 					if(entry.encoding != null)
-						props.put(Buffer.ENCODING,entry.encoding);
+						props.put(JEditBuffer.ENCODING,entry.encoding);
 				}
 
 				newBuffer = new Buffer(path,newFile,false,props);
@@ -1692,7 +1694,7 @@ public class jEdit
 
 			BufferHistory.setEntry(buffer.getPath(),caret,
 				(Selection[])buffer.getProperty(Buffer.SELECTION),
-				buffer.getStringProperty(Buffer.ENCODING));
+				buffer.getStringProperty(JEditBuffer.ENCODING));
 		}
 
 		String path = buffer.getSymlinkPath();
@@ -1781,7 +1783,7 @@ public class jEdit
 				int caret = (_caret == null ? 0 : _caret.intValue());
 				BufferHistory.setEntry(buffer.getPath(),caret,
 					(Selection[])buffer.getProperty(Buffer.SELECTION),
-					buffer.getStringProperty(Buffer.ENCODING));
+					buffer.getStringProperty(JEditBuffer.ENCODING));
 			}
 
 			buffer.close();
@@ -1857,12 +1859,12 @@ public class jEdit
 	 *	if any buffers are dirty
 	 * @since jEdit 2.7pre2
 	 */
-	public static void reloadAllBuffers(final View view, boolean confirm)
+	public static void reloadAllBuffers(View view, boolean confirm)
 	{
 		boolean hasDirty = false;
 		Buffer[] buffers = jEdit.getBuffers();
 
-		for(int i = 0; i < buffers.length && hasDirty == false; i++)
+		for(int i = 0; i < buffers.length && !hasDirty; i++)
 			hasDirty = buffers[i].isDirty();
 
 		if(confirm && hasDirty)
@@ -2292,7 +2294,7 @@ public class jEdit
 	 */
 	public static boolean isMainThread()
 	{
-		return (Thread.currentThread() == mainThread);
+		return Thread.currentThread() == mainThread;
 	} //}}}
 
 	//{{{ isBackgroundMode() method
@@ -2880,14 +2882,14 @@ public class jEdit
 		}
 
 		script.append("view = jEdit.getLastView();\n");
-		script.append("buffer = EditServer.handleClient("
-			+ restore + "," + newView + "," + newPlainView +
-			",parent,args);\n");
-		script.append("if(buffer != null && " + wait + ") {\n");
+		script.append("buffer = EditServer.handleClient(");
+		script.append(restore).append(',').append(newView).append(',').append(newPlainView);
+		script.append(",parent,args);\n");
+		script.append("if(buffer != null && ").append(wait).append(") {\n");
 		script.append("\tbuffer.setWaitSocket(socket);\n");
 		script.append("\tdoNotCloseSocket = true;\n");
 		script.append("}\n");
-		script.append("if(view != jEdit.getLastView() && " + wait + ") {\n");
+		script.append("if(view != jEdit.getLastView() && ").append(wait).append(") {\n");
 		script.append("\tjEdit.getLastView().setWaitSocket(socket);\n");
 		script.append("\tdoNotCloseSocket = true;\n");
 		script.append("}\n");
@@ -2897,9 +2899,9 @@ public class jEdit
 		if(scriptFile != null)
 		{
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
-			script.append("BeanShell.runScript(view,\""
-				+ MiscUtilities.charsToEscapes(scriptFile)
-				+ "\",null,this.namespace);\n");
+			script.append("BeanShell.runScript(view,\"")
+				.append(MiscUtilities.charsToEscapes(scriptFile))
+				.append("\",null,this.namespace);\n");
 		}
 
 		return script.toString();
@@ -2956,7 +2958,7 @@ public class jEdit
 		String userAgent = "jEdit/" + getVersion()
 			+ " (Java " + System.getProperty("java.version")
 			+ ". " + System.getProperty("java.vendor")
-			+ "; " + System.getProperty("os.arch") + ")";
+			+ "; " + System.getProperty("os.arch") + ')';
 		System.getProperties().put("http.agent",userAgent);
 
 		/* Determine installation directory.
@@ -2997,7 +2999,7 @@ public class jEdit
 
 					Log.log(Log.WARNING,jEdit.class,"jedit.jar not in class path!");
 					Log.log(Log.WARNING,jEdit.class,"Assuming jEdit is installed in "
-						+ jEditHome + ".");
+						+ jEditHome + '.');
 					Log.log(Log.WARNING,jEdit.class,"Override with jedit.home "
 						+ "system property.");
 				}
@@ -3211,9 +3213,9 @@ public class jEdit
 	private static String fontToString(Font font)
 	{
 		return font.getFamily()
-			+ "-"
+			+ '-'
 			+ fontStyleToString(font.getStyle())
-			+ "-"
+			+ '-'
 			+ font.getSize();
 	} //}}}
 
@@ -3368,8 +3370,8 @@ public class jEdit
 		if(!socksEnabled)
 		{
 			Log.log(Log.DEBUG,jEdit.class,"SOCKS proxy disabled");
-                        System.getProperties().remove("socksProxyHost");
-                        System.getProperties().remove("socksProxyPort");
+			System.getProperties().remove("socksProxyHost");
+			System.getProperties().remove("socksProxyPort");
 		}
 		else
 		{
@@ -3379,9 +3381,9 @@ public class jEdit
 				System.setProperty("socksProxyHost", socksHost);
 				Log.log(Log.DEBUG, jEdit.class,
 					"SOCKS proxy enabled: " + socksHost);
-                        }
+			}
 
-			String socksPort =  jEdit.getProperty("firewall.socks.port");
+			String socksPort = jEdit.getProperty("firewall.socks.port");
 			if(socksPort != null)
 				System.setProperty("socksProxyPort", socksPort);
 		}
@@ -3541,7 +3543,7 @@ public class jEdit
 	} //}}}
 
 	//{{{ getNotLoadedPluginJARs() method
-	private static void getNotLoadedPluginJARs(Vector returnValue,
+	private static void getNotLoadedPluginJARs(List returnValue,
 		String dir, String[] list)
 	{
 loop:		for(int i = 0; i < list.length; i++)
@@ -3566,7 +3568,7 @@ loop:		for(int i = 0; i < list.length; i++)
 					continue loop;
 			}
 
-			returnValue.addElement(path);
+			returnValue.add(path);
 		}
 	} //}}}
 
@@ -3701,8 +3703,8 @@ loop:		for(int i = 0; i < list.length; i++)
 						str22 = _buffer.getName();
 					}
 
-					int comp = MiscUtilities.compareStrings(str11,str21,true);
-					if(comp < 0 || (comp == 0 && MiscUtilities.compareStrings(str12,str22,true) < 0))
+					int comp = StandardUtilities.compareStrings(str11,str21,true);
+					if(comp < 0 || (comp == 0 && StandardUtilities.compareStrings(str12,str22,true) < 0))
 					{
 						buffer.next = _buffer;
 						buffer.prev = _buffer.prev;

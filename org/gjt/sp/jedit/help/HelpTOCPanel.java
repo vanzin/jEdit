@@ -33,13 +33,13 @@ import java.net.*;
 import java.util.*;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.jedit.browser.FileCellRenderer; // for icons
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 public class HelpTOCPanel extends JPanel
@@ -426,7 +426,7 @@ public class HelpTOCPanel extends JPanel
 		{
 			EditPlugin p1 = (EditPlugin)o1;
 			EditPlugin p2 = (EditPlugin)o2;
-			return MiscUtilities.compareStrings(
+			return StandardUtilities.compareStrings(
 				jEdit.getProperty("plugin." + p1.getClassName() + ".name"),
 				jEdit.getProperty("plugin." + p2.getClassName() + ".name"),
 				true);

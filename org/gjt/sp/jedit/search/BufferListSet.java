@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.search;
 import java.awt.Component;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -48,7 +49,7 @@ public abstract class BufferListSet implements SearchFileSet
 	} //}}}
 
 	//{{{ getNextFile() method
-	public synchronized String getNextFile(View view, String file)
+	public synchronized String getNextFile(View view, String path)
 	{
 		if(files == null)
 			files = _getFiles(view);
@@ -56,19 +57,19 @@ public abstract class BufferListSet implements SearchFileSet
 		if(files == null || files.length == 0)
 			return null;
 
-		if(file == null)
+		if(path == null)
 		{
-			file = view.getBuffer().getSymlinkPath();
-			VFS vfs = VFSManager.getVFSForPath(file);
+			path = view.getBuffer().getSymlinkPath();
+			VFS vfs = VFSManager.getVFSForPath(path);
 			boolean ignoreCase = ((vfs.getCapabilities()
 				& VFS.CASE_INSENSITIVE_CAP) != 0);
 
 			for(int i = 0; i < files.length; i++)
 			{
-				if(MiscUtilities.compareStrings(
-					files[i],file,ignoreCase) == 0)
+				if(StandardUtilities.compareStrings(
+					files[i],path,ignoreCase) == 0)
 				{
-					return file;
+					return path;
 				}
 			}
 
@@ -77,14 +78,14 @@ public abstract class BufferListSet implements SearchFileSet
 		else
 		{
 			// -1 so that the last isn't checked
-			VFS vfs = VFSManager.getVFSForPath(file);
+			VFS vfs = VFSManager.getVFSForPath(path);
 			boolean ignoreCase = ((vfs.getCapabilities()
 				& VFS.CASE_INSENSITIVE_CAP) != 0);
 
 			for(int i = 0; i < files.length - 1; i++)
 			{
-				if(MiscUtilities.compareStrings(
-					files[i],file,ignoreCase) == 0)
+				if(StandardUtilities.compareStrings(
+					files[i],path,ignoreCase) == 0)
 				{
 					return files[i+1];
 				}

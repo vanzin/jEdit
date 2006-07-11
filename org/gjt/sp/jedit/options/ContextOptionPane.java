@@ -27,6 +27,7 @@ import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * Right-click context menu editor.
@@ -107,7 +108,7 @@ public class ContextOptionPane extends AbstractOptionPane
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return MiscUtilities.compareStrings(
+			return StandardUtilities.compareStrings(
 				((MenuItem)obj1).label,
 				((MenuItem)obj2).label,
 				true);
