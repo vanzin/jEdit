@@ -11,6 +11,10 @@ General jEdit documentation can be found in the 'doc' directory.
 
   - Apache Ant. I use version 1.6.5; older versions might or might not
     work. Get it from <http://ant.apache.org>.
+  - The Ant Optional package. This is included in the download from ants website,
+    but not in some default installs on various *nix systems.
+    There you should get the ant-optional package through your
+    package management system.
   - Configure the build.properties file with your local paths.
 
  For building jEdit, the API documentation or any of the
