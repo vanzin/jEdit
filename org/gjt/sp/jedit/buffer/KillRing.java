@@ -33,6 +33,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.MutableListModel;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * The kill ring retains deleted text. This class is a singleton -- only one
@@ -141,7 +142,7 @@ public class KillRing implements MutableListModel
 					new FileOutputStream(file1),
 					"UTF-8"));
 
-			out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+			out.write("<?xml version=\"1.1\" encoding=\"UTF-8\"?>");
 			out.write(lineSep);
 			out.write("<!DOCTYPE KILLRING SYSTEM \"killring.dtd\">");
 			out.write(lineSep);
@@ -152,7 +153,7 @@ public class KillRing implements MutableListModel
 			for(int i = size - 1; i >=0; i--)
 			{
 				out.write("<ENTRY>");
-				out.write(MiscUtilities.charsToEntities(
+				out.write(StandardUtilities.charsToEntities(
 					getElementAt(i).toString()));
 				out.write("</ENTRY>");
 				out.write(lineSep);

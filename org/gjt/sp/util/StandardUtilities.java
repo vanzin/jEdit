@@ -39,7 +39,7 @@ import java.util.Comparator;
  */
 public class StandardUtilities
 {
-	
+
 	//{{{ Text methods
 
 	//{{{ getLeadingWhiteSpace() method
@@ -55,7 +55,7 @@ loop:		for(;whitespace < str.length();)
 		{
 			switch(str.charAt(whitespace))
 			{
-			case ' ': 
+			case ' ':
 			case '\t':
 				whitespace++;
 				break;
@@ -79,7 +79,7 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 		{
 			switch(str.charAt(i))
 			{
-				case ' ': 
+				case ' ':
 				case '\t':
 					whitespace++;
 					break;
@@ -89,7 +89,7 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 		}
 		return whitespace;
 	} //}}}
-	
+
 	//{{{ getLeadingWhiteSpaceWidth() method
 	/**
 	 * Returns the width of the leading white space in the specified
@@ -108,7 +108,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 					whitespace++;
 					break;
 				case '\t':
-					whitespace += tabSize - 
+					whitespace += tabSize -
 						whitespace % tabSize;
 					break;
 				default:
@@ -220,7 +220,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 *
 	 * @return -1 if the column is out of bounds
 	 */
-	public static int getOffsetOfVirtualColumn(Segment seg, int tabSize, 
+	public static int getOffsetOfVirtualColumn(Segment seg, int tabSize,
 					    int column, int[] totalVirtualWidth)
 	{
 		int virtualPosition = 0;
@@ -336,6 +336,51 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 
 		return char1.length - char2.length;
+	} //}}}
+
+	//{{{ charsToEntities() method
+	/**
+	 * Converts &lt;, &gt;, &amp; and illegal XML characters (ASCII
+	 * control characters) in the string to their HTML entity
+	 * equivalents. Character entities are only supported in XML 1.1,
+	 * so make sure your parser supports that (unless you're sure
+	 * that the string doesn't contain control characters, then
+	 * the output will be compatible with XML 1.0).
+	 *
+	 * @param str The string
+	 * @since jEdit 4.3pre6
+	 */
+	public static String charsToEntities(String str)
+	{
+		StringBuffer buf = new StringBuffer(str.length());
+		for(int i = 0; i < str.length(); i++)
+		{
+			char ch = str.charAt(i);
+
+			// control characters, excluding \t, \r and \n
+			if (ch < 32 && ch != '\r' && ch != '\n' && ch != '\t')
+			{
+				buf.append("&#").append((int)ch).append(";");
+				continue;
+			}
+
+			switch(ch)
+			{
+			case '<':
+				buf.append("&lt;");
+				break;
+			case '>':
+				buf.append("&gt;");
+				break;
+			case '&':
+				buf.append("&amp;");
+				break;
+			default:
+				buf.append(ch);
+				break;
+			}
+		}
+		return buf.toString();
 	} //}}}
 
 	//{{{ StringCompare class

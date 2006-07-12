@@ -3,16 +3,16 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre6
 
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, and 
-Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust,
+Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 
 {{{ API Changes
 - MiscUtilities.getEncodings(boolean getSelected) added
   to get only the user-chosen encodings, e. g. in encoding dialogs.
   getEncodings() is deprecated in favor of getEncodings(false).
   (Björn "Vampire" Kautler)
-  
-- DockableWindowManager.closeListener(String dockableName) - a new 
+
+- DockableWindowManager.closeListener(String dockableName) - a new
   convenience method for creating keyboard listeners for floating
   dockables to respond to the "close-current-area" action. (Alan Ezust)
 
@@ -30,6 +30,10 @@ Matthieu Casanova for contributing to this release.
 
 - MiscUtilities.stringCompare() and MiscUtilities.CompareString are moved to
   StandardUtilities (Matthieu Casanova)
+
+- StandardUtilities.charsToEntities(): aside from what the MistUtilities
+  version already does, converts control characters to XML 1.1 character
+  entities.
 }}}
 
 {{{ Miscellaneous
@@ -42,7 +46,7 @@ Matthieu Casanova for contributing to this release.
   (Björn "Vampire" Kautler)
 
 - Improved DockableWindowManager.currentArea() - closes more
-  docked dockables than it did before. (Alan Ezust) 
+  docked dockables than it did before. (Alan Ezust)
 
 - Fixed the storing of Frame size and position
   if the Frame gets maximized. (bug #1325358)
@@ -51,12 +55,26 @@ Matthieu Casanova for contributing to this release.
 - Fixed VFS.copy() method when the returned session is null
   (Matthieu Casanova)
 
+}}}
+
+{{{ Bug Fixes
 - When multiple views are open, closing a buffer will not change the active view
   (Bug #1518400) (Matthieu Casanova)
 
-- Fixed Untitled buffer added to the Recent file list (Bug #1518620) 
+- Fixed Untitled buffer added to the Recent file list (Bug #1518620)
   (Matthieu Casanova)
+
+- SF bug 1519237: Regular Expression Search in 4.3pre5
+  regexp search should be done with Pattern.MULTILINE enabled, otherwise
+  ^ and $ will only match the start and end of the buffer. (Marcelo Vanzin)
+
+- SF bug 1517395: Wrong character encoding in killring.xml
+  fix bug in Java 1.5 by saving ASCII control characters as character
+  entities; since 1.4 doesn't support XML 1.1, if killring.xml has
+  character entities it will fail (so the bug will still be there
+  when running on 1.4). (Marcelo Vanzin)
 }}}
+
 }}}
 
 {{{ Version 4.3pre5
@@ -104,7 +122,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   other plugins that the caret position is about to change.
   This allows Navigator to be alerted of sidekick selections. (Alan
   Ezust)
-  
+
 - MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
 
 - MiscUtilities.autodetect() this method tries to autodetect the file encoding. It was moved
@@ -122,7 +140,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
 - MiscUtilities.quickSort() methods and MiscUtilities.Compare class are now deprecated
 	use Arrays.sort() and Collections.sort() (Matthieu Casanova)
-	
+
 - MiscUtilities.parseXML() and MiscUtilities.findEntity() were added.
   They're mainly used internally to ease XML parsing, but can safely
   be used by other people. Please refer to the javadoc documentation
