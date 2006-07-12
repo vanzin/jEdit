@@ -118,31 +118,37 @@ public class MiscUtilities
 			return path;
 
 		if(File.separatorChar == '\\')
-			{
+		{
 				// get rid of mixed paths on Windows
 				path = path.replace('/','\\');
 				// also get rid of trailing spaces on Windows
 				int trim = path.length();
 				while(path.charAt(trim - 1) == ' ')
 					trim--;
+
+				if (path.charAt(trim - 1) == '\\')
+					while (trim > 1 && path.charAt(trim - 2) == '\\')
+					{
+						trim--;
+					}
 				path = path.substring(0,trim);
-			}
+		}
 		else if(OperatingSystem.isMacOS())
-			{
-				// do the same on OS X
-				path = path.replace(':','/');
-			}
+		{
+			// do the same on OS X
+			path = path.replace(':','/');
+		}
 
 		if(path.startsWith('~' + File.separator))
-			{
-				path = path.substring(2);
-				String home = System.getProperty("user.home");
+		{
+			path = path.substring(2);
+			String home = System.getProperty("user.home");
 
-				if(home.endsWith(File.separator))
-					return home + path;
-				else
-					return home + File.separator + path;
-			}
+			if(home.endsWith(File.separator))
+				return home + path;
+			else
+				return home + File.separator + path;
+		}
 		else if(path.equals("~"))
 			return System.getProperty("user.home");
 		else

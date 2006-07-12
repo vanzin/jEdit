@@ -64,6 +64,10 @@ Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 - Fixed Untitled buffer added to the Recent file list (Bug #1518620)
   (Matthieu Casanova)
 
+- MiscUtilities.canonPath() now trim redundant / and \ at the end of the path
+  of Dos derived OS (bug that can be seen when typing some / in the end of the
+  path field of VFS browser) (Matthieu Casanova)
+
 - SF bug 1519237: Regular Expression Search in 4.3pre5
   regexp search should be done with Pattern.MULTILINE enabled, otherwise
   ^ and $ will only match the start and end of the buffer. (Marcelo Vanzin)
