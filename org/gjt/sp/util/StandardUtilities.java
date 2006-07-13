@@ -154,7 +154,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static String createWhiteSpace(int len, int tabSize, int start)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if(tabSize == 0)
 		{
 			while(len-- > 0)
