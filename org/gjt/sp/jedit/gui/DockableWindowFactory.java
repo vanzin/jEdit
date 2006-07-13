@@ -38,6 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 /**
@@ -77,7 +78,7 @@ public class DockableWindowFactory
 			Log.log(Log.DEBUG,DockableWindowManager.class,
 				"Loading dockables from " + uri);
 			DockableListHandler dh = new DockableListHandler(plugin,uri);
-			boolean failure = MiscUtilities.parseXML(uri.openStream(), dh);
+			boolean failure = XMLUtilities.parseXML(uri.openStream(), dh);
 
 			if (!failure && cache != null)
 			{
@@ -180,7 +181,7 @@ public class DockableWindowFactory
 		//{{{ resolveEntity() method
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			return MiscUtilities.findEntity(systemId, "dockables.dtd", MiscUtilities.class);
+			return XMLUtilities.findEntity(systemId, "dockables.dtd", MiscUtilities.class);
 		} //}}}
 
 		//{{{ characters() method

@@ -47,6 +47,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.buffer.BufferIORequest;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -1303,30 +1304,11 @@ public class MiscUtilities
 	 * equivalents.
 	 * @param str The string
 	 * @since jEdit 4.2pre1
+	 * @deprecated	Use {@link XMLUtilities#charToEntiries(String,boolean)}.
 	 */
 	public static String charsToEntities(String str)
 	{
-		StringBuffer buf = new StringBuffer(str.length());
-		for(int i = 0; i < str.length(); i++)
-		{
-			char ch = str.charAt(i);
-			switch(ch)
-			{
-			case '<':
-				buf.append("&lt;");
-				break;
-			case '>':
-				buf.append("&gt;");
-				break;
-			case '&':
-				buf.append("&amp;");
-				break;
-			default:
-				buf.append(ch);
-				break;
-			}
-		}
-		return buf.toString();
+		return XMLUtilities.charsToEntities(str,false);
 	} //}}}
 
 	//{{{ formatFileSize() method
@@ -1810,97 +1792,28 @@ loop:		for(;;)
 
 	//{{{ parseXML() method
 	/**
-	 * Convenience method for parsing an XML file. This method will
-	 * wrap the resource in an InputSource and set the source's
-	 * systemId to "jedit.jar" (so the source should be able to
-	 * handle any external entities by itself).
-	 *
-	 * <p>SAX Errors are caught and are not propagated to the caller;
-	 * instead, an error message is printed to jEdit's activity
-	 * log. So, if you need custom error handling, <b>do not use
-	 * this method</b>.
-	 *
-	 * <p>The given stream is closed before the method returns,
-	 * regardless whether there were errors or not.</p>
+	 * Convenience method for parsing an XML file.
 	 *
 	 * @return Whether any error occured during parsing.
 	 * @since jEdit 4.3pre5
+	 * @deprecated Use {@link XMLUtilities#parseXML(InputStream,DefaultHandler)}.
 	 */
 	public static boolean parseXML(InputStream in, DefaultHandler handler)
 		throws IOException
 	{
-		Reader r = null;
-		try
-		{
-			XMLReader parser = XMLReaderFactory.createXMLReader();
-			r = new BufferedReader(new InputStreamReader(in));
-			InputSource isrc = new InputSource(r);
-			isrc.setSystemId("jedit.jar");
-			parser.setContentHandler(handler);
-			parser.setDTDHandler(handler);
-			parser.setEntityResolver(handler);
-			parser.setErrorHandler(handler);
-			parser.parse(isrc);
-		}
-		catch(SAXParseException se)
-		{
-			int line = se.getLineNumber();
-			String message = se.getMessage();
-			Log.log(Log.ERROR,MiscUtilities.class,
-				"while parsing from " + in + ": SAXParseException: line " + line + ": " , se);
-			return true;
-		}
-		catch(SAXException e)
-		{
-			Log.log(Log.ERROR,Registers.class,e);
-			return true;
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,MiscUtilities.class,io);
-			}
-		}
-		return false;
+		return XMLUtilities.parseXML(in, handler);
 	} //}}}
 
 	//{{{ resolveEntity() method
 	/**
 	 * Tries to find the given systemId in the context of the given
-	 * class. If the given systemId ends with the given test string,
-	 * then try to load a resource using the Class's
-	 * <code>getResourceAsStream()</code> method using the test string
-	 * as the resource.
+	 * class.
 	 *
-	 * <p>This is used a lot internally while parsing XML files used
-	 * by jEdit, but anyone is free to use the method if it sounds
-	 * usable.</p>
+	 * @deprecated Use {@link XMLUtilities#findEntity(String,String,Class)}.
 	 */
 	public static InputSource findEntity(String systemId, String test, Class where)
 	{
-		if (systemId != null && systemId.endsWith(test))
-		{
-			try
-			{
-				return new InputSource(new BufferedReader(
-					new InputStreamReader(
-						where.getResourceAsStream(test))));
-			}
-			catch (Exception e)
-			{
-				Log.log(Log.ERROR,MiscUtilities.class,
-					"Error while opening " + test + ":");
-				Log.log(Log.ERROR,MiscUtilities.class,e);
-			}
-		}
-
-		return null;
+		return XMLUtilities.findEntity(systemId, test, where);
 	} //}}}
 
 	//{{{ Private members

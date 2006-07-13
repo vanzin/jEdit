@@ -32,6 +32,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 /**
@@ -54,7 +55,7 @@ class ServiceListHandler extends DefaultHandler
 	//{{{ resolveEntity() method
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		return MiscUtilities.findEntity(systemId, "services.dtd", getClass());
+		return XMLUtilities.findEntity(systemId, "services.dtd", getClass());
 	} //}}}
 
 	//{{{ characters() method

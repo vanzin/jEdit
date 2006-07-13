@@ -26,6 +26,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 
 /**
  * A generic way for plugins to provide various API extensions.<p>
@@ -94,7 +95,7 @@ public class ServiceManager
 		ServiceListHandler dh = new ServiceListHandler(plugin,uri);
 		try
 		{
-			if (!MiscUtilities.parseXML(uri.openStream(), dh)
+			if (!XMLUtilities.parseXML(uri.openStream(), dh)
 				&& cache != null)
 			{
 				cache.cachedServices = dh.getCachedServices();

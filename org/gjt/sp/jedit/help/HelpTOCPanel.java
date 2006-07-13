@@ -40,6 +40,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 public class HelpTOCPanel extends JPanel
@@ -202,7 +203,7 @@ public class HelpTOCPanel extends JPanel
 		TOCHandler h = new TOCHandler(root,MiscUtilities.getParentOfPath(path));
 		try
 		{
-			MiscUtilities.parseXML(
+			XMLUtilities.parseXML(
 				new URL(helpViewer.getBaseURL()
 					+ '/' + path).openStream(), h);
 		}
@@ -260,8 +261,8 @@ public class HelpTOCPanel extends JPanel
 					title.append(ch);
 				}
 			}
-			
-			
+
+
 		} //}}}
 
 		//{{{ startElement() method

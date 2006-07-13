@@ -32,6 +32,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 class ActionListHandler extends DefaultHandler
@@ -49,7 +50,7 @@ class ActionListHandler extends DefaultHandler
 	//{{{ resolveEntity() method
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		return MiscUtilities.findEntity(systemId, "actions.dtd", getClass());
+		return XMLUtilities.findEntity(systemId, "actions.dtd", getClass());
 	} //}}}
 
 	//{{{ attribute() method

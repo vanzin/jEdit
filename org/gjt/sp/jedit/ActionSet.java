@@ -28,6 +28,7 @@ import java.util.*;
 
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 
 /**
  * A set of actions, either loaded from an XML file, or constructed at runtime
@@ -459,7 +460,7 @@ public class ActionSet
 		{
 			Log.log(Log.DEBUG,this,"Loading actions from " + uri);
 			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
-			MiscUtilities.parseXML(uri.openStream(), ah);
+			XMLUtilities.parseXML(uri.openStream(), ah);
 		}
 		catch(IOException e)
 		{

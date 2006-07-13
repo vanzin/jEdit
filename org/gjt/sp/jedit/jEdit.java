@@ -51,6 +51,7 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 /**
@@ -3861,7 +3862,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				_in = jEdit.class.getResourceAsStream(path);
 			else
 				_in = new FileInputStream(path);
-			MiscUtilities.parseXML(_in, handler);
+			XMLUtilities.parseXML(_in, handler);
 		}
 		catch(IOException e)
 		{

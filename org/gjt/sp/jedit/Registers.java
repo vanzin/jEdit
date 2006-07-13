@@ -36,6 +36,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 /**
@@ -457,8 +458,8 @@ public class Registers
 					out.write((char)i);
 				out.write("\">");
 
-				out.write(MiscUtilities.charsToEntities(
-					register.toString()));
+				out.write(XMLUtilities.charsToEntities(
+					register.toString(), false));
 
 				out.write("</REGISTER>");
 				out.write(lineSep);
@@ -549,7 +550,7 @@ public class Registers
 		RegistersHandler handler = new RegistersHandler();
 		try {
 			loading = true;
-			MiscUtilities.parseXML(new FileInputStream(registerFile),
+			XMLUtilities.parseXML(new FileInputStream(registerFile),
 						handler);
 		}
 		catch (IOException ioe) {
@@ -614,7 +615,7 @@ public class Registers
 				if (false) {
 					/*
 						This is to debug clipboard problems.
-						
+
 						Apparently, jEdit is unable to copy text from clipbard into the current
 						text buffer if the clipboard was filles using the command
 							echo test | xselection CLIPBOARD -
@@ -625,7 +626,7 @@ public class Registers
 					Log.log(Log.DEBUG,this,"clipboard.getContents(this)="+clipboard.getContents(this)+".");
 					debugListDataFlavors(clipboard.getContents(this));
 				}
-				
+
 				String selection = (String)(clipboard
 					.getContents(this).getTransferData(
 					DataFlavor.stringFlavor));
@@ -665,17 +666,17 @@ public class Registers
 			}
 		}
 	} //}}}
-	
+
 	protected static void debugListDataFlavors(Transferable transferable) {
 		DataFlavor[]	dataFlavors		= transferable.getTransferDataFlavors();
-		
+
 		for (int i = 0;i<dataFlavors.length;i++) {
 			DataFlavor dataFlavor = dataFlavors[i];
-			
+
 			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): dataFlavor="+dataFlavor+".");
-			
+
 		}
-		
+
 		if (dataFlavors.length==0) {
 			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): no dataFlavor supported.");
 		}
@@ -727,7 +728,7 @@ public class Registers
 		//{{{ resolveEntity() method
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			return MiscUtilities.findEntity(systemId, "registers.dtd", getClass());
+			return XMLUtilities.findEntity(systemId, "registers.dtd", getClass());
 		} //}}}
 
 		//{{{ startElement() method

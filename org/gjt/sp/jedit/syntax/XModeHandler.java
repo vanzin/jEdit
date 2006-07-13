@@ -32,8 +32,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 /**
@@ -53,7 +53,7 @@ public abstract class XModeHandler extends DefaultHandler
 	//{{{ resolveEntity() method
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		return MiscUtilities.findEntity(systemId, "xmode.dtd", XModeHandler.class);
+		return XMLUtilities.findEntity(systemId, "xmode.dtd", XModeHandler.class);
 	} //}}}
 
 	//{{{ characters() method

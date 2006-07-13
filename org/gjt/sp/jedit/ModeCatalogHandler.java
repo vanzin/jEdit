@@ -26,6 +26,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 
 class ModeCatalogHandler extends DefaultHandler
 {
@@ -37,7 +38,7 @@ class ModeCatalogHandler extends DefaultHandler
 
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		return MiscUtilities.findEntity(systemId, "catalog.dtd", getClass());
+		return XMLUtilities.findEntity(systemId, "catalog.dtd", getClass());
 	}
 
 	public void startElement(String uri, String localName,

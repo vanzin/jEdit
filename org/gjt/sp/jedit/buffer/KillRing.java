@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.MutableListModel;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.XMLUtilities;
 
 /**
  * The kill ring retains deleted text. This class is a singleton -- only one
@@ -95,7 +96,7 @@ public class KillRing implements MutableListModel
 		KillRingHandler handler = new KillRingHandler();
 		try
 		{
-			MiscUtilities.parseXML(new FileInputStream(killRing), handler);
+			XMLUtilities.parseXML(new FileInputStream(killRing), handler);
 		}
 		catch (IOException ioe)
 		{
@@ -153,8 +154,8 @@ public class KillRing implements MutableListModel
 			for(int i = size - 1; i >=0; i--)
 			{
 				out.write("<ENTRY>");
-				out.write(StandardUtilities.charsToEntities(
-					getElementAt(i).toString()));
+				out.write(XMLUtilities.charsToEntities(
+					getElementAt(i).toString(),true));
 				out.write("</ENTRY>");
 				out.write(lineSep);
 			}
@@ -378,7 +379,7 @@ public class KillRing implements MutableListModel
 
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
-			return MiscUtilities.findEntity(systemId, "killring.dtd", getClass());
+			return XMLUtilities.findEntity(systemId, "killring.dtd", getClass());
 		}
 
 		public void startElement(String uri, String localName,

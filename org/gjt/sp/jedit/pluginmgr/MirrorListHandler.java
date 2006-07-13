@@ -29,8 +29,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 
 class MirrorListHandler extends DefaultHandler
 {
@@ -50,7 +50,7 @@ class MirrorListHandler extends DefaultHandler
 	//{{{ resolveEntity() method
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		return MiscUtilities.findEntity(systemId, "mirrors.dtd",
+		return XMLUtilities.findEntity(systemId, "mirrors.dtd",
 					org.gjt.sp.jedit.options.PluginOptions.class);
 	} //}}}
 

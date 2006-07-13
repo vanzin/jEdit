@@ -31,9 +31,9 @@ Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 - MiscUtilities.stringCompare() and MiscUtilities.CompareString are moved to
   StandardUtilities (Matthieu Casanova)
 
-- StandardUtilities.charsToEntities(): aside from what the MistUtilities
-  version already does, converts control characters to XML 1.1 character
-  entities.
+- Added XMLUtilities class for XML-related utility methods. Move some
+  methods from MiscUtilities to this class, and deprecate the old ones.
+  (Marcelo Vanzin)
 }}}
 
 {{{ Miscellaneous

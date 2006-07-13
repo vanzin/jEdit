@@ -26,8 +26,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 
 class PluginListHandler extends DefaultHandler
 {
@@ -46,7 +46,7 @@ class PluginListHandler extends DefaultHandler
 
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
-		return MiscUtilities.findEntity(systemId, "plugins.dtd", getClass());
+		return XMLUtilities.findEntity(systemId, "plugins.dtd", getClass());
 	}
 
 	public void attribute(String aname, String value, boolean isSpecified)
