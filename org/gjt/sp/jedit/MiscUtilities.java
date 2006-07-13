@@ -36,11 +36,7 @@ import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
@@ -1274,7 +1270,7 @@ public class MiscUtilities
 	 */
 	public static boolean stringsEqual(String s1, String s2)
 	{
-		return objectsEqual(s1,s2);
+		return StandardUtilities.objectsEqual(s1,s2);
 	} //}}}
 
 	//{{{ objectsEqual() method
@@ -1282,20 +1278,11 @@ public class MiscUtilities
 	 * Returns if two strings are equal. This correctly handles null pointers,
 	 * as opposed to calling <code>o1.equals(o2)</code>.
 	 * @since jEdit 4.2pre1
+	 * @deprecated use {@link StandardUtilities#objectsEqual(Object, Object)}
 	 */
 	public static boolean objectsEqual(Object o1, Object o2)
 	{
-		if(o1 == null)
-		{
-			if(o2 == null)
-				return true;
-			else
-				return false;
-		}
-		else if(o2 == null)
-			return false;
-		else
-			return o1.equals(o2);
+		return StandardUtilities.objectsEqual(o1, o2);
 	} //}}}
 
 	//{{{ charsToEntities() method

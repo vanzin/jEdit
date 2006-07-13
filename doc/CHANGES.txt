@@ -34,6 +34,9 @@ Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 - Added XMLUtilities class for XML-related utility methods. Move some
   methods from MiscUtilities to this class, and deprecate the old ones.
   (Marcelo Vanzin)
+
+- Moved MiscUtilities.objectsEqual() method to StandardUtilities()
+  (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous

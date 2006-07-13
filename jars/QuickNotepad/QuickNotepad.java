@@ -26,8 +26,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,13 +41,13 @@ import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 // }}}
 
 // {{{ QuickNotePad class
@@ -147,7 +145,7 @@ public class QuickNotepad extends JPanel
 	private void propertiesChanged() {
 		String propertyFilename = jEdit
 				.getProperty(QuickNotepadPlugin.OPTION_PREFIX + "filepath");
-		if (!MiscUtilities.objectsEqual(defaultFilename, propertyFilename)) {
+		if (!StandardUtilities.objectsEqual(defaultFilename, propertyFilename)) {
 			saveFile();
 			toolPanel.propertiesChanged();
 			defaultFilename = propertyFilename;

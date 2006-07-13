@@ -24,10 +24,10 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.event.*;
-import java.awt.Toolkit;
 import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -94,7 +94,7 @@ public class KeyEventTranslator
 				
 				This bug may be related to http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6320676
 			*/
-			if ((modifiers&KeyEvent.CTRL_MASK)!=0) {
+			if ((modifiers&InputEvent.CTRL_MASK)!=0) {
 //				Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.");
 				if (keyChar<0x20) {
 //					Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+": 1.1.");
@@ -263,20 +263,20 @@ public class KeyEventTranslator
 				if(Debug.ALT_KEY_PRESSED_DISABLED)
 				{
 					/* on MacOS, A+ can be user input */
-					ignoreMods = (InputEvent.SHIFT_MASK
+					ignoreMods = InputEvent.SHIFT_MASK
 						| InputEvent.ALT_GRAPH_MASK
-						| InputEvent.ALT_MASK);
+						| InputEvent.ALT_MASK;
 				}
 				else
 				{
 					/* on MacOS, A+ can be user input */
-					ignoreMods = (InputEvent.SHIFT_MASK
-						| InputEvent.ALT_GRAPH_MASK);
+					ignoreMods = InputEvent.SHIFT_MASK
+						| InputEvent.ALT_GRAPH_MASK;
 				}
 	
 				if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
 					&& evt.getWhen()
-					-  KeyEventWorkaround.lastKeyTime < 750
+					- KeyEventWorkaround.lastKeyTime < 750L
 					&& (KeyEventWorkaround.modifiers & ~ignoreMods)
 					!= 0)
 				{
@@ -420,7 +420,7 @@ public class KeyEventTranslator
 	{
 	
 		int duplicateMapping = 
-			((c & a) | (c & m) | (c & s) | (a & m) | (a & s) | (m & s)); 
+			(c & a) | (c & m) | (c & s) | (a & m) | (a & s) | (m & s);
 		
 		if((duplicateMapping & InputEvent.CTRL_MASK) != 0) {
 			throw new IllegalArgumentException(
@@ -512,7 +512,7 @@ public class KeyEventTranslator
 			buf.append(getSymbolicModifierName(InputEvent.META_MASK));
 		if(evt.isShiftDown())
 			buf.append(getSymbolicModifierName(InputEvent.SHIFT_MASK));
-		return (buf.length() == 0 ? null : buf.toString());
+		return buf.length() == 0 ? null : buf.toString();
 	} //}}}
 
 	static int c, a, m, s;
@@ -574,7 +574,7 @@ public class KeyEventTranslator
 			if(o instanceof Key)
 			{
 				Key k = (Key)o;
-				if(MiscUtilities.objectsEqual(modifiers,
+				if(StandardUtilities.objectsEqual(modifiers,
 					k.modifiers) && key == k.key
 					&& input == k.input)
 				{
@@ -588,11 +588,11 @@ public class KeyEventTranslator
 		public String toString()
 		{
 			return (modifiers == null ? "" : modifiers)
-				+ "<"
+				+ '<'
 				+ Integer.toString(key,16)
-				+ ","
+				+ ','
 				+ Integer.toString(input,16)
-				+ ">";
+				+ '>';
 		}
 	} //}}}
 }

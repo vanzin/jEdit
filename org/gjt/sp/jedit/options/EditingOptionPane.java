@@ -29,8 +29,12 @@ import java.util.Arrays;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
+/**
+ * @version $Id$
+ */
 public class EditingOptionPane extends AbstractOptionPane
 {
 	//{{{ EditingOptionPane constructor
@@ -189,7 +193,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	private void selectMode()
 	{
 		int index = mode.getSelectedIndex();
-		current = (index == 0 ? global : modeProps[index - 1]);
+		current = index == 0 ? global : modeProps[index - 1];
 		current.edited = true;
 		current.load();
 
@@ -373,9 +377,9 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "noTabs");
 					jEdit.resetProperty(prefix + "deepIndent");
 	
-					if(!(MiscUtilities.objectsEqual(oldFilenameGlob,
+					if(!(StandardUtilities.objectsEqual(oldFilenameGlob,
 						mode.getProperty("filenameGlob"))
-						&& MiscUtilities.objectsEqual(oldFirstlineGlob,
+						&& StandardUtilities.objectsEqual(oldFirstlineGlob,
 						mode.getProperty("firstlineGlob"))))
 					{
 						mode.init();
@@ -388,9 +392,9 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.setProperty(prefix + "filenameGlob",filenameGlob);
 					jEdit.setProperty(prefix + "firstlineGlob",firstlineGlob);
 
-					if(!(MiscUtilities.objectsEqual(oldFilenameGlob,
+					if(!(StandardUtilities.objectsEqual(oldFilenameGlob,
 						filenameGlob)
-						&& MiscUtilities.objectsEqual(oldFirstlineGlob,
+						&& StandardUtilities.objectsEqual(oldFirstlineGlob,
 						firstlineGlob)))
 					{
 						mode.init();
