@@ -27,7 +27,6 @@ import bsh.NameSpace;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;

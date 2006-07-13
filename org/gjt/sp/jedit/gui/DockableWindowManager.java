@@ -33,6 +33,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -40,6 +41,7 @@ import java.util.Stack;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -136,6 +138,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public static final String FLOATING = "floating";
 
+	public static final String NAME="xsearch-hypersearch-results";
+	
 	/**
 	 * Top position.
 	 * @since jEdit 2.6pre3
@@ -164,12 +168,15 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	//{{{ Data members
 	private View view;
 	private DockableWindowFactory factory;
-	private Hashtable windows;
+
+	/** A mapping from Strings to Entry objects. */
+	private HashMap<String, Entry> windows;
 	private PanelWindowContainer left;
 	private PanelWindowContainer right;
 	private PanelWindowContainer top;
 	private PanelWindowContainer bottom;
 	private ArrayList clones;
+	
 	private Entry lastEntry;
 	public Stack showStack = new Stack();
 	// }}}
@@ -200,7 +207,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		this.view = view;
 		this.factory = factory;
 
-		windows = new Hashtable();
+		windows = new HashMap<String, Entry>();
 		clones = new ArrayList();
 
 		top = new PanelWindowContainer(this,TOP,config.topPos);
@@ -240,7 +247,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * 
 	 * The actionEvent "close-docking-area" by default only works on 
 	 * windows that are docked. If you want your floatable plugins to also
-	 * respond to this event, you need to add key listeners to each components
+	 * respond to this event, you need to add key listeners to each component
 	 * in your plugin that usually has keyboard focus. 
 	 * This function returns a key listener which does exactly that.
 	 * 
@@ -449,11 +456,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public String getDockableTitle(String name)
 	{
-		String title = jEdit.getProperty(name + ".title");
-		if(title == null)
-			return "NO TITLE PROPERTY: " + name;
-		else
-			return title;
+		Entry e = windows.get(name);
+		return e.longTitle();
 	} //}}}
 
 	//{{{ setDockableTitle() method
@@ -467,10 +471,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * 
 	 */
 	public void  setDockableTitle(String dockableName, String newTitle) {
-		String propName = dockableName + ".title";
 		Entry entry = (Entry)windows.get(dockableName);
-		String dockLabel = entry.label();
-		newTitle = dockLabel + ": " + newTitle;
+		String propName = entry.factory.name + ".longtitle";
 		String oldTitle = jEdit.getProperty(propName);
 		jEdit.setProperty(propName, newTitle);
 		firePropertyChange(propName, oldTitle, newTitle);
@@ -1031,11 +1033,28 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				+ ".dock-position",FLOATING));
 		} //}}}
 
+		
 		/**
-		 * @return The title for the floating dockable window
+		 * 
+		 * @return the long title for the dockable button
 		 */
-		public String title() {
-			return getDockableTitle(factory.name);
+		public String longTitle() {
+			String title = jEdit.getProperty(factory.name + ".longtitle");
+			if (title == null) return shortTitle();
+			else return title;
+			
+		}
+		
+		/**
+		 * @return The short for the dockable button
+		 */
+		public String shortTitle() {
+			
+			String title = jEdit.getProperty(factory.name + ".title");
+			if(title == null)
+				return "NO TITLE PROPERTY: " + factory.name;
+			else
+				return title;
 		}
 		/**
 		 * @return A label appropriate for the title on the dock buttons.

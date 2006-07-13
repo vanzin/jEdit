@@ -35,6 +35,10 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
+/**
+ * A completion popup class.
+ */
+
 public class CompleteWord extends JWindow
 {
 	//{{{ completeWord() method
@@ -453,8 +457,13 @@ public class CompleteWord extends JWindow
 		//{{{ keyPressed() method
 		public void keyPressed(KeyEvent evt)
 		{
+			int selected = words.getSelectedIndex();
+			int numRows = words.getVisibleRowCount()-1;
+			int newSelect = -1;
+
 			switch(evt.getKeyCode())
 			{
+			
 			case KeyEvent.VK_TAB:
 			case KeyEvent.VK_ENTER:
 				insertSelected();
@@ -465,35 +474,36 @@ public class CompleteWord extends JWindow
 				evt.consume();
 				break;
 			case KeyEvent.VK_UP:
-				int selected = words.getSelectedIndex();
-
-				if(selected == 0)
-					selected = words.getModel().getSize() - 1;
-				else if(getFocusOwner() == words)
-					return;
-				else
-					selected = selected - 1;
-
+				if (getFocusOwner() == words) return;
+				evt.consume();
+				if(selected == 0) return;
+				selected = selected - 1;
 				words.setSelectedIndex(selected);
 				words.ensureIndexIsVisible(selected);
-
-				evt.consume();
 				break;
 			case KeyEvent.VK_DOWN:
-				/* int */ selected = words.getSelectedIndex();
-
-				if(selected == words.getModel().getSize() - 1)
-					selected = 0;
-				else if(getFocusOwner() == words)
-					return;
-				else
-					selected = selected + 1;
-
+				if(getFocusOwner() == words) return;
+				evt.consume();
+				if(selected >= words.getModel().getSize()) break;
+				selected = selected + 1;
 				words.setSelectedIndex(selected);
 				words.ensureIndexIsVisible(selected);
-
+				break;
+			case KeyEvent.VK_PAGE_UP:
+				newSelect = selected - numRows;
+				if (newSelect < 0) newSelect = 0;
+				words.setSelectedIndex(newSelect);
+				words.ensureIndexIsVisible(newSelect);
 				evt.consume();
 				break;
+			case KeyEvent.VK_PAGE_DOWN:
+				newSelect = selected + numRows;
+				if (newSelect >= words.getModel().getSize()) newSelect = words.getModel().getSize() - 1; 
+				words.setSelectedIndex(newSelect);
+				words.ensureIndexIsVisible(newSelect);
+				evt.consume();
+				break;
+				
 			case KeyEvent.VK_BACK_SPACE:
 				if(word.length() == 1)
 				{
@@ -537,6 +547,8 @@ public class CompleteWord extends JWindow
 				}
 				break;
 			}
+
+
 		} //}}}
 
 		//{{{ keyTyped() method
@@ -605,6 +617,7 @@ public class CompleteWord extends JWindow
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
+			evt.consume();
 			insertSelected();
 		}
 	} //}}}

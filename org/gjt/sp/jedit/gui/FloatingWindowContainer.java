@@ -72,7 +72,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		this.entry = entry;
 		dockableName = entry.factory.name;
 
-		setTitle(entry.title());
+		setTitle(entry.shortTitle());
 
 		getContentPane().add(BorderLayout.CENTER,entry.win);
 
@@ -102,7 +102,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 			dispose();
 		else
 		{
-			setTitle(entry.title());
+			setTitle(entry.longTitle());
 			toFront();
 			requestFocus();
 			SwingUtilities.invokeLater(new Runnable()
@@ -179,8 +179,8 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	public void propertyChange(PropertyChangeEvent evt)
 	{
 		if (dockableName == null) return;
-		if ((dockableName + ".title").equals(evt.getPropertyName())) {
+		String pn = evt.getPropertyName();
+		if (pn.startsWith(dockableName) && pn.endsWith("title"))
 			setTitle(evt.getNewValue().toString());
-		}
 	}
 }
