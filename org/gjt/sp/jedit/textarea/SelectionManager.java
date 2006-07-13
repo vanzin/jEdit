@@ -35,13 +35,13 @@ class SelectionManager
 {
 	// this is package-private so that the painter can use it without
 	// having to call getSelection() (which involves an array copy)
-	List selection;
+	List<Selection> selection;
 
 	//{{{ SelectionManager constructor
 	SelectionManager(JEditTextArea textArea)
 	{
 		this.textArea = textArea;
-		selection = new ArrayList();
+		selection = new ArrayList<Selection>();
 	} //}}}
 
 	//{{{ getSelectionCount() method
@@ -61,7 +61,7 @@ class SelectionManager
 	 */
 	public Selection[] getSelection()
 	{
-		return (Selection[])selection.toArray(
+		return selection.toArray(
 			new Selection[selection.size()]);
 	} //}}}
 
@@ -115,12 +115,12 @@ class SelectionManager
 			}
 		}
 
-		Iterator iter = selection.iterator();
+		Iterator<Selection> iter = selection.iterator();
 		while(iter.hasNext())
 		{
 			// try and merge existing selections one by
 			// one with the new selection
-			Selection s = (Selection)iter.next();
+			Selection s = iter.next();
 			if(s.overlaps(addMe))
 			{
 				addMe.start = Math.min(s.start,addMe.start);
@@ -136,7 +136,7 @@ class SelectionManager
 
 		for(int i = 0; i < selection.size(); i++)
 		{
-			Selection s = (Selection)selection.get(i);
+			Selection s = selection.get(i);
 			if(addMe.start < s.start)
 			{
 				selection.add(i,addMe);
@@ -175,10 +175,8 @@ class SelectionManager
 	{
 		if(selection != null)
 		{
-			Iterator iter = selection.iterator();
-			while(iter.hasNext())
+			for (Selection s : selection)
 			{
-				Selection s = (Selection)iter.next();
 				if(offset >= s.start && offset <= s.end)
 					return s;
 			}
@@ -250,34 +248,26 @@ class SelectionManager
 	 */
 	int[] getSelectedLines()
 	{
-		Integer line;
 
-		Set set = new TreeSet();
-		Iterator iter = selection.iterator();
-		while(iter.hasNext())
+		Set<Integer> set = new TreeSet<Integer>();
+		for (Selection s : selection)
 		{
-			Selection s = (Selection)iter.next();
 			int endLine =
-				(s.end == textArea.getLineStartOffset(s.endLine)
+				s.end == textArea.getLineStartOffset(s.endLine)
 				? s.endLine - 1
-				: s.endLine);
+				: s.endLine;
 
 			for(int j = s.startLine; j <= endLine; j++)
 			{
-				line = new Integer(j);
-				set.add(line);
+				set.add(j);
 			}
 		}
 
+
 		int[] returnValue = new int[set.size()];
 		int i = 0;
-
-		iter = set.iterator();
-		while(iter.hasNext())
-		{
-			line = (Integer)iter.next();
-			returnValue[i++] = line.intValue();
-		}
+		for (Integer line : set)
+			returnValue[i++] = line;
 
 		return returnValue;
 	} //}}}
@@ -289,7 +279,7 @@ class SelectionManager
 		int lastOffset = 0;
 		for(int i = 0; i < selection.size(); i++)
 		{
-			Selection s = (Selection)selection.get(i);
+			Selection s = selection.get(i);
 			newSelection[i] = new Selection.Range(lastOffset,
 				s.getStart());
 			lastOffset = s.getEnd();
@@ -366,12 +356,12 @@ class SelectionManager
 			if(end <= rectStart || start > rectEnd)
 				return null;
 
-			x1 = (rectStart < start ? 0
+			x1 = rectStart < start ? 0
 				: x1 + textArea.offsetToXY(physicalLine,
-				rectStart).x);
-			x2 = (rectEnd > end ? textArea.getWidth()
+				rectStart).x;
+			x2 = rectEnd > end ? textArea.getWidth()
 				: x2 + textArea.offsetToXY(physicalLine,
-				rectEnd).x);
+				rectEnd).x;
 		}
 		else if(selStartScreenLine == selEndScreenLine
 			&& selStartScreenLine != -1)

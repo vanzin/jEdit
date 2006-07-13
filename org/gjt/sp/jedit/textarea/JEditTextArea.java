@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +39,6 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.Macros;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.buffer.*;
@@ -86,7 +84,7 @@ public class JEditTextArea extends JComponent
 		blink = true;
 		lineSegment = new Segment();
 		offsetXY = new Point();
-		structureMatchers = new LinkedList();
+		structureMatchers = new LinkedList<StructureMatcher>();
 		structureMatchers.add(new StructureMatcher.BracketMatcher());
 		//}}}
 
@@ -97,11 +95,11 @@ public class JEditTextArea extends JComponent
 
 		// some plugins add stuff in a "right-hand" gutter
 		verticalBox = new Box(BoxLayout.X_AXIS);
-		verticalBox.add(vertical = new JScrollBar(JScrollBar.VERTICAL));
+		verticalBox.add(vertical = new JScrollBar(Adjustable.VERTICAL));
 		vertical.setRequestFocusEnabled(false);
 		add(ScrollLayout.RIGHT,verticalBox);
 		add(ScrollLayout.BOTTOM,
-			horizontal = new JScrollBar(JScrollBar.HORIZONTAL));
+			horizontal = new JScrollBar(Adjustable.HORIZONTAL));
 		horizontal.setRequestFocusEnabled(false);
 
 		horizontal.setValues(0,0,0,0);
@@ -155,20 +153,20 @@ public class JEditTextArea extends JComponent
 	} //}}}
 
 	public String toString() {
-		ArrayList sl = new ArrayList();
-		sl .add("caret: " + caret);
-		sl.add("caretLine: " + caretLine );
-		sl.add("caretScreenLine: " + caretScreenLine);
-		sl.add("electricScroll: " + electricScroll);
-		sl.add("horizontalOffset: " + horizontalOffset);
-		sl.add("magicCaret: " + magicCaret);
-		sl.add("offsetXY" + offsetXY.toString());
-		sl.add("oldCaretLine: " + oldCaretLine);
-		sl.add("screenLastLine: " + screenLastLine);
-		sl.add("visibleLines: " + visibleLines);
-		sl.add("firstPhysicalLine: " + getFirstPhysicalLine());
-		sl.add("physLastLine: " + physLastLine);
-		return TextUtilities.join(sl, "\n");
+		StringBuilder builder = new StringBuilder();
+		builder.append("caret: ").append(caret).append('\n');
+		builder.append("caretLine: ").append(caretLine).append('\n');
+		builder.append("caretScreenLine: ").append(caretScreenLine).append('\n');
+		builder.append("electricScroll: ").append(electricScroll).append('\n');
+		builder.append("horizontalOffset: ").append(horizontalOffset).append('\n');
+		builder.append("magicCaret: ").append(magicCaret).append('\n');
+		builder.append("offsetXY").append(offsetXY.toString()).append('\n');
+		builder.append("oldCaretLine: ").append(oldCaretLine).append('\n');
+		builder.append("screenLastLine: ").append(screenLastLine).append('\n');
+		builder.append("visibleLines: ").append(visibleLines).append('\n');
+		builder.append("firstPhysicalLine: ").append(getFirstPhysicalLine()).append('\n');
+		builder.append("physLastLine: ").append(physLastLine).append('\n');
+		return builder.toString();
 	}
 
 
@@ -539,10 +537,10 @@ public class JEditTextArea extends JComponent
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"setFirstPhysicalLine("
-				+ physFirstLine + "," + skew + ")");
+				+ physFirstLine + ',' + skew + ')');
 		}
 
-		int amount = (physFirstLine - displayManager.firstLine.physicalLine);
+		int amount = physFirstLine - displayManager.firstLine.physicalLine;
 
 		displayManager.setFirstPhysicalLine(amount,skew);
 
@@ -701,9 +699,10 @@ public class JEditTextArea extends JComponent
 		else
 			extraEndVirt = 0;
 
-		int _electricScroll = (doElectricScroll
+		int _electricScroll = doElectricScroll
 			&& visibleLines - 1 > electricScroll * 2
-			? electricScroll : 0); //}}}
+			? electricScroll : 0;
+		//}}}
 
 		if(visibleLines <= 1)
 		{
@@ -722,7 +721,7 @@ public class JEditTextArea extends JComponent
 				Log.log(Log.DEBUG,this,"screenLine == -1");
 			ChunkCache.LineInfo[] infos = chunkCache
 				.getLineInfosForPhysicalLine(line);
-			int subregion = chunkCache.getSubregionOfOffset(
+			int subregion = ChunkCache.getSubregionOfOffset(
 				offset,infos);
 			int prevLine = displayManager.getPrevVisibleLine(getFirstPhysicalLine());
 			int nextLine = displayManager.getNextVisibleLine(getLastPhysicalLine());
@@ -1477,8 +1476,6 @@ public class JEditTextArea extends JComponent
 	 */
 	public void selectBlock()
 	{
-		String openBrackets = "([{";
-		String closeBrackets = ")]}";
 
 		Selection s = getSelectionAtOffset(caret);
 		int start, end;
@@ -1492,17 +1489,19 @@ public class JEditTextArea extends JComponent
 
 		String text = getText(0,buffer.getLength());
 
-		// Scan backwards, trying to find a bracket
-		int count = 1;
-		char openBracket = '\0';
-		char closeBracket = '\0';
-
 		// We can't do the backward scan if start == 0
 		if(start == 0)
 		{
 			getToolkit().beep();
 			return;
 		}
+
+		// Scan backwards, trying to find a bracket
+		String openBrackets = "([{";
+		String closeBrackets = ")]}";
+		int count = 1;
+		char openBracket = '\0';
+		char closeBracket = '\0';
 
 backward_scan:	while(--start > 0)
 		{
@@ -1530,24 +1529,21 @@ backward_scan:	while(--start > 0)
 			getToolkit().beep();
 			return;
 		}
-		else
+forward_scan:	do
 		{
-forward_scan:		do
+			char c = text.charAt(end);
+			if(c == closeBracket)
 			{
-				char c = text.charAt(end);
-				if(c == closeBracket)
+				if(--count == 0)
 				{
-					if(--count == 0)
-					{
-						end++;
-						break forward_scan;
-					}
+					end++;
+					break forward_scan;
 				}
-				else if(c == openBracket)
-					count++;
 			}
-			while(++end < buffer.getLength());
+			else if(c == openBracket)
+				count++;
 		}
+		while(++end < buffer.getLength());
 
 		s = new Selection.Range(start,end);
 		if(multi)
@@ -1569,9 +1565,9 @@ forward_scan:		do
 			return false;
 
 		if(match.startLine < caretLine)
-			return (line >= match.startLine && line <= caretLine);
+			return line >= match.startLine && line <= caretLine;
 		else
-			return (line <= match.endLine && line >= caretLine);
+			return line <= match.endLine && line >= caretLine;
 	} //}}}
 
 	//{{{ invertSelection() method
@@ -1610,7 +1606,7 @@ forward_scan:		do
 	 * Returns the current selection.
 	 * @since jEdit 4.3pre1
 	 */
-	public Iterator getSelectionIterator()
+	public Iterator<Selection> getSelectionIterator()
 	{
 		return selectionManager.selection.iterator();
 	} //}}}
@@ -2022,7 +2018,7 @@ forward_scan:		do
 	 */
 	public boolean caretAutoScroll()
 	{
-		return (focusedComponent == this);
+		return focusedComponent == this;
 	} //}}}
 
 	//{{{ addStructureMatcher() method
@@ -2131,9 +2127,9 @@ forward_scan:		do
 	} //}}}
 
 	//{{{ moveCaretPosition() method
-	public static int NO_SCROLL = 0;
-	public static int NORMAL_SCROLL = 1;
-	public static int ELECTRIC_SCROLL = 2;
+	public static final int NO_SCROLL = 0;
+	public static final int NORMAL_SCROLL = 1;
+	public static final int ELECTRIC_SCROLL = 2;
 	/**
 	 * Sets the caret position without deactivating the selection.
 	 * @param newCaret The caret position
@@ -2363,8 +2359,8 @@ loop:			for(int i = 0; i < text.length(); i++)
 	public void goToNextLine(boolean select)
 	{
 		Selection s = getSelectionAtOffset(caret);
-		boolean rectSelect = (s == null ? rectangularSelectionMode
-			: s instanceof Selection.Rect);
+		boolean rectSelect = s == null ? rectangularSelectionMode
+			: s instanceof Selection.Rect;
 		int magic = getMagicCaretPosition();
 		int newCaret = chunkCache.getBelowPosition(caretLine,
 			caret - buffer.getLineStartOffset(caretLine),magic + 1,
@@ -2670,8 +2666,8 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	public void goToPrevLine(boolean select)
 	{
 		Selection s = getSelectionAtOffset(caret);
-		boolean rectSelect = (s == null ? rectangularSelectionMode
-			: s instanceof Selection.Rect);
+		boolean rectSelect = s == null ? rectangularSelectionMode
+			: s instanceof Selection.Rect;
 		int magic = getMagicCaretPosition();
 
 		int newCaret = chunkCache.getAbovePosition(caretLine,
@@ -2936,8 +2932,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void goToStartOfLine(boolean select)
 	{
 		Selection s = getSelectionAtOffset(caret);
-		int line = (select || s == null
-			? caretLine : s.startLine);
+		int line = select || s == null ? caretLine : s.startLine;
 		int newCaret = getLineStartOffset(line);
 		if(select)
 			extendSelection(caret,newCaret);
@@ -2954,8 +2949,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void goToEndOfLine(boolean select)
 	{
 		Selection s = getSelectionAtOffset(caret);
-		int line = (select || s == null
-			? caretLine : s.endLine);
+		int line = select || s == null ? caretLine : s.endLine;
 		int newCaret = getLineEndOffset(line) - 1;
 		if(select)
 			extendSelection(caret,newCaret);
@@ -3384,11 +3378,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			buffer.beginCompoundEdit();
 			
-			int start,end;
 			for (int i = lines.length - 1; i >= 0; i--)
 			{
-				start = getLineStartOffset(lines[i]);
-				end = getLineEndOffset(lines[i]);
+				int start = getLineStartOffset(lines[i]);
+				int end = getLineEndOffset(lines[i]);
 				if (end > buffer.getLength())
 				{
 					if (start != 0)
@@ -3902,6 +3895,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 					selection = selections[i];
 					caretBack = addExplicitFold(selection.start, selection.end, selection.startLine,selection.endLine);
 				}
+				// Selection cannot ne null because there is at least 1 selection
 				setCaretPosition(selection.start - caretBack, false);
 			}
 		}
@@ -3928,7 +3922,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		comment = comment + ' ';
+		comment += ' ';
 
 		buffer.beginCompoundEdit();
 
@@ -3969,7 +3963,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 			return;
 		}
 
-		commentStart = commentStart + ' ';
+		commentStart += ' ';
 		commentEnd = ' ' + commentEnd;
 
 		try
@@ -4201,10 +4195,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		Selection[] selection = getSelection();
 
 		if(!buffer.isEditable() || selection.length == 0)
-                {
-                	getToolkit().beep();
-                	return;
-                }
+		{
+			getToolkit().beep();
+			return;
+		}
 
 		buffer.beginCompoundEdit();
 
@@ -4227,10 +4221,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		Selection[] selection = getSelection();
 
 		if(!buffer.isEditable() || selection.length == 0)
-                {
-                	getToolkit().beep();
-                	return;
-                }
+		{
+			getToolkit().beep();
+			return;
+		}
 
 		buffer.beginCompoundEdit();
 
@@ -4895,7 +4889,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	boolean scrollBarsInitialized;
 
 	/** Cursor location, measured as an offset (in pixels) from upper left corner 
-	 *   of the TextArea. 
+	 *  of the TextArea. 
 	 */
 	Point offsetXY;
 
@@ -5167,7 +5161,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private int caretLine;
 	private int caretScreenLine;
 
-	private List structureMatchers;
+	private final List<StructureMatcher> structureMatchers;
 	private StructureMatcher.Match match;
 
 	private int magicCaret;
@@ -5213,8 +5207,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private void finishCaretUpdate(int oldCaretLine,
 		int scrollMode, boolean fireCaretEvent)
 	{
-		this.queuedFireCaretEvent |= fireCaretEvent;
-		this.queuedScrollMode = Math.max(scrollMode,queuedScrollMode);
+		queuedFireCaretEvent |= fireCaretEvent;
+		queuedScrollMode = Math.max(scrollMode,queuedScrollMode);
 
 		if(queuedCaretUpdate)
 			return;
@@ -5510,7 +5504,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ doWordCount() method
-	private void doWordCount(View view, String text)
+	private static void doWordCount(View view, String text)
 	{
 		char[] chars = text.toCharArray();
 		int characters = chars.length;
@@ -5537,13 +5531,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 
-		Object[] args = { new Integer(characters), new Integer(words),
-			new Integer(lines) };
+		Object[] args = { characters, words, lines };
 		GUIUtilities.message(view,"wordcount",args);
 	} //}}}
 
 	//{{{ updateStructureHighlightWithDelay() method
-	private void updateBracketHighlightWithDelay()
+	private static void updateBracketHighlightWithDelay()
 	{
 		structureTimer.stop();
 		structureTimer.start();
@@ -5556,11 +5549,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			&& !gutter.isStructureHighlightEnabled())
 			return;
 
-		Iterator iter = structureMatchers.iterator();
+		Iterator<StructureMatcher> iter = structureMatchers.iterator();
 		while(iter.hasNext())
 		{
-			StructureMatcher matcher = (StructureMatcher)
-				iter.next();
+			StructureMatcher matcher = iter.next();
 			match = matcher.getMatch(this);
 			if(match != null)
 				break;
@@ -5595,7 +5587,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			case '[': case ']':
 			case '(': case ')':
 				text = buffer.getLineText(match.startLine - 1)
-					.trim() + " " + text;
+					.trim() + ' ' + text;
 				break;
 			}
 		}
@@ -5674,18 +5666,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			int extraVirt = virtualWidth - totalVirtualWidth[0];
 			newCaret = getLineEndOffset(newLine) - 1;
-			RectParams returnValue;
 
 			boolean bias;
 			if(s == null)
-				bias = (newCaret < caret);
+				bias = newCaret < caret;
 			else if(s.start == caret)
-				bias = (newCaret <= s.end);
+				bias = newCaret <= s.end;
 			else if(s.end == caret)
-				bias = (newCaret <= s.start);
+				bias = newCaret <= s.start;
 			else
 				bias = false;
 
+			RectParams returnValue;
 			if(bias)
 				returnValue = new RectParams(extraVirt,0,newCaret);
 			else
@@ -5946,7 +5938,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	class AdjustHandler implements AdjustmentListener
 	{
 		//{{{ adjustmentValueChanged() method
-		public void adjustmentValueChanged(final AdjustmentEvent evt)
+		public void adjustmentValueChanged(AdjustmentEvent evt)
 		{
 			if(!scrollBarsInitialized)
 				return;
@@ -6013,8 +6005,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			 ****************************************************/
 			if(e.isAltDown())
 			{
-				boolean select = (e.isShiftDown()
-					|| e.isControlDown());
+				boolean select = e.isShiftDown()
+					|| e.isControlDown();
 				if(e.getWheelRotation() < 0)
 					goToPrevLine(select);
 				else
