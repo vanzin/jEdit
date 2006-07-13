@@ -75,7 +75,7 @@ public class JEditBuffer
 	//{{{ JEditBuffer constructor
 	public JEditBuffer(Hashtable props)
 	{
-		bufferListeners = new Vector();
+		bufferListeners = new Vector<Listener>();
 		lock = new ReadWriteLock();
 		contentMgr = new ContentManager();
 		lineMgr = new LineManager();
@@ -84,8 +84,8 @@ public class JEditBuffer
 		seg = new Segment();
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
-		properties = new HashMap();
-		indentRules = new ArrayList();
+		properties = new HashMap<Object, PropValue>();
+		indentRules = new ArrayList<IndentRule>();
 
 		//{{{ need to convert entries of 'props' to PropValue instances
 		Enumeration e = props.keys();
@@ -427,8 +427,7 @@ public class JEditBuffer
 		{
 			readLock();
 
-			int start = (line == 0 ? 0
-				: lineMgr.getLineEndOffset(line - 1));
+			int start = line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1);
 			int end = lineMgr.getLineEndOffset(line);
 
 			return getText(start,end - start - 1);
@@ -461,8 +460,7 @@ public class JEditBuffer
 		{
 			readLock();
 
-			int start = (line == 0 ? 0
-				: lineMgr.getLineEndOffset(line - 1));
+			int start = line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1);
 			int end = lineMgr.getLineEndOffset(line);
 
 			getText(start,end - start - 1,segment);
@@ -761,7 +759,7 @@ public class JEditBuffer
 
 				insert(lineStart + whiteSpace,StandardUtilities
 					.createWhiteSpace(whiteSpaceWidth,
-		      			 noTabs ? 0 : tabSize));
+					noTabs ? 0 : tabSize));
 				remove(lineStart,whiteSpace);
 			}
 
@@ -893,8 +891,7 @@ public class JEditBuffer
 
 			remove(start,whitespaceChars[0]);
 			insert(start,StandardUtilities.createWhiteSpace(
-				idealIndent,(getBooleanProperty("noTabs")
-				? 0 : getTabSize())));
+				idealIndent, getBooleanProperty("noTabs") ? 0 : getTabSize()));
 		}
 		finally
 		{
@@ -930,8 +927,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 					whitespaceChars[0]++;
 				break;
 			case '\t':
-				currentIndent += (tabSize - (currentIndent
-					% tabSize));
+				currentIndent += tabSize - (currentIndent
+					% tabSize);
 				if(whitespaceChars != null)
 					whitespaceChars[0]++;
 				break;
@@ -955,34 +952,29 @@ loop:		for(int i = 0; i < seg.count; i++)
 		int prevPrevLineIndex = prevLineIndex < 0 ? -1
 			: getPriorNonEmptyLine(prevLineIndex);
 
-		int oldIndent = (prevLineIndex == -1 ? 0 :
+		int oldIndent = prevLineIndex == -1 ? 0 :
 			StandardUtilities.getLeadingWhiteSpaceWidth(
 			getLineText(prevLineIndex),
-			getTabSize()));
+			getTabSize());
 		int newIndent = oldIndent;
 
-		Iterator rules = indentRules.iterator();
-
-		List actions = new LinkedList();
-
-		while(rules.hasNext())
+		List<IndentAction> actions = new LinkedList<IndentAction>();
+		for (int i = 0;i<indentRules.size();i++)
 		{
-			IndentRule rule = (IndentRule)rules.next();
+			IndentRule rule = indentRules.get(i);
 			rule.apply(this,lineIndex,prevLineIndex,
 				prevPrevLineIndex,actions);
 		}
 
-		Iterator actionIter = actions.iterator();
 
-		while(actionIter.hasNext())
+		for (IndentAction action : actions)
 		{
-			IndentAction action = (IndentAction)actionIter.next();
-			newIndent = action.calculateIndent(this,lineIndex,
-				oldIndent,newIndent);
-			if(newIndent < 0)
+			newIndent = action.calculateIndent(this, lineIndex,
+					oldIndent, newIndent);
+			if (newIndent < 0)
 				newIndent = 0;
 
-			if(!action.keepChecking())
+			if (!action.keepChecking())
 				break;
 		}
 
@@ -1354,7 +1346,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			properties.remove(name);
 		else
 		{
-			PropValue test = (PropValue)properties.get(name);
+			PropValue test = properties.get(name);
 			if(test == null)
 				properties.put(name,new PropValue(value,false));
 			else if(test.value.equals(value))
@@ -1391,10 +1383,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		// Need to reset properties that were cached defaults,
 		// since the defaults might have changed.
-		Iterator iter = properties.values().iterator();
+		Iterator<PropValue> iter = properties.values().iterator();
 		while(iter.hasNext())
 		{
-			PropValue value = (PropValue)iter.next();
+			PropValue value = iter.next();
 			if(value.defaultValue)
 				iter.remove();
 		}
@@ -1437,7 +1429,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		Object obj = getProperty(name);
 		if(obj instanceof Boolean)
-			return ((Boolean)obj).booleanValue();
+			return (Boolean)obj;
 		else if("true".equals(obj) || "on".equals(obj) || "yes".equals(obj))
 			return true;
 		else
@@ -1490,7 +1482,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 				int returnValue = Integer.parseInt(
 					obj.toString().trim());
 				properties.put(name,new PropValue(
-					new Integer(returnValue),
+					returnValue,
 					defaultValueFlag));
 				return returnValue;
 			}
@@ -1510,7 +1502,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void setIntegerProperty(String name, int value)
 	{
-		setProperty(name,new Integer(value));
+		setProperty(name,value);
 	} //}}}
 
 	//{{{ getPatternProperty()
@@ -1620,8 +1612,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public boolean isFoldStart(int line)
 	{
-		return (line != getLineCount() - 1
-			&& getFoldLevel(line) < getFoldLevel(line + 1));
+		return line != getLineCount() - 1
+			&& getFoldLevel(line) < getFoldLevel(line + 1);
 	} //}}}
 
 	//{{{ isFoldEnd() method
@@ -1631,8 +1623,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public boolean isFoldEnd(int line)
 	{
-		return (line != getLineCount() - 1
-			&& getFoldLevel(line) > getFoldLevel(line + 1));
+		return line != getLineCount() - 1
+			&& getFoldLevel(line) > getFoldLevel(line + 1);
 	} //}}}
 
 	//{{{ invalidateCachedFoldLevels() method
@@ -2311,7 +2303,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			"electricKeys"
 		};
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < props.length; i++)
 		{
 			String prop = getStringProperty(props[i]);
@@ -2354,7 +2346,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ Private members
-	private Vector bufferListeners;
+	private Vector<Listener> bufferListeners;
 	private ReadWriteLock lock;
 	private ContentManager contentMgr;
 	private LineManager lineMgr;
@@ -2369,15 +2361,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean transaction;
 	private boolean loading;
 	private boolean io;
-	private HashMap properties;
-	private Object propertyLock;
-	private List indentRules;
+	private final Map<Object, PropValue> properties;
+	private final Object propertyLock;
+	private final List<IndentRule> indentRules;
 	private String electricKeys;
 
 	//{{{ getListener() method
 	private BufferListener getListener(int index)
 	{
-		return ((Listener)bufferListeners.elementAt(index)).listener;
+		return bufferListeners.elementAt(index).listener;
 	} //}}}
 
 	//{{{ contentInserted() method
@@ -2415,7 +2407,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ parseBufferLocalProperties() method
 	private void parseBufferLocalProperties(String prop)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		String name = null;
 		boolean escape = false;
 		for(int i = 0; i < prop.length(); i++)
@@ -2509,9 +2501,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//{{{ createBracketIndentRules() method
-	private List createBracketIndentRules(String prop)
+	private List<IndentRule> createBracketIndentRules(String prop)
 	{
-		List returnValue = new ArrayList();
+		List<IndentRule> returnValue = new ArrayList<IndentRule>();
 		String value = getStringProperty(prop + 's');
 
 		try
@@ -2524,9 +2516,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 					Method m = IndentRuleFactory.class.getMethod(
 						prop,new Class[] { char.class });
-					returnValue.add(
+					returnValue.add((IndentRule)
 						m.invoke(null,new Character[]
-						{ new Character(ch) }));
+						{ ch }));
 				}
 			}
 		}

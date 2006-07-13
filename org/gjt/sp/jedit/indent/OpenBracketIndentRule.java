@@ -26,6 +26,10 @@ import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.TextUtilities;
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class OpenBracketIndentRule extends BracketIndentRule
 {
 	//{{{ OpenBracketIndentRule constructor
@@ -40,7 +44,7 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	//{{{ apply() method
 	public void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
-		List indentActions)
+		List<IndentAction> indentActions)
 	{
 		int prevOpenBracketCount = getOpenBracketCount(buffer,prevLineIndex);
 		if(prevOpenBracketCount != 0)
@@ -68,7 +72,7 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ handleCollapse() method
-	private void handleCollapse(List indentActions)
+	private static void handleCollapse(List<IndentAction> indentActions)
 	{
 		if(indentActions.contains(new IndentAction.Collapse()))
 			indentActions.clear();

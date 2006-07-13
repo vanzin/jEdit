@@ -29,6 +29,10 @@ import java.util.regex.PatternSyntaxException;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class RegexpIndentRule implements IndentRule
 {
 	//{{{ RegexpIndentRule constructor
@@ -40,9 +44,9 @@ public class RegexpIndentRule implements IndentRule
 		IndentAction prev, IndentAction thisLine, boolean collapse)
 	throws PatternSyntaxException
 	{
-		this.prevPrevAction = prevPrev;
-		this.prevAction = prev;
-		this.thisAction = thisLine;
+		prevPrevAction = prevPrev;
+		prevAction = prev;
+		thisAction = thisLine;
 		this.regexp = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE );
 		this.collapse = collapse;
 	} //}}}
@@ -50,7 +54,7 @@ public class RegexpIndentRule implements IndentRule
 	//{{{ apply() method
 	public void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
-		List indentActions)
+		List<IndentAction> indentActions)
 	{
 		boolean match = false;
 
@@ -90,7 +94,7 @@ public class RegexpIndentRule implements IndentRule
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "[" + regexp + "]";
+		return getClass().getName() + '[' + regexp + ']';
 	} //}}}
 
 	private IndentAction prevPrevAction, prevAction, thisAction;

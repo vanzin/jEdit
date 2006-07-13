@@ -23,10 +23,13 @@
 package org.gjt.sp.jedit.indent;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.StandardUtilities;
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public interface IndentAction
 {
 	/**
@@ -37,21 +40,21 @@ public interface IndentAction
 	 * @param newIndent The new indent -- ie, indent returned by previous
 	 * indent action.
 	 */
-	public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
+	int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 		int newIndent);
 
 	/**
 	 * @return true if the indent engine should keep processing after
 	 * this rule.
 	 */
-	public boolean keepChecking();
+	boolean keepChecking();
 
 	/**
 	 * This handles the following Java code:
 	 * if(something)
 	 * { // no indentation on this line, even though previous matches a rule
 	 */
-	public class Collapse implements IndentAction
+	class Collapse implements IndentAction
 	{
 		/**
 		 * This does nothing; it is merely a sentinel for the
@@ -74,7 +77,7 @@ public interface IndentAction
 		}
 	}
 
-	public class Reset implements IndentAction
+	class Reset implements IndentAction
 	{
 		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
@@ -88,7 +91,7 @@ public interface IndentAction
 		}
 	}
 
-	public class Increase implements IndentAction
+	class Increase implements IndentAction
 	{
 		private int amount;
 		
@@ -122,7 +125,7 @@ public interface IndentAction
 		}
 	}
 
-	public class Decrease implements IndentAction
+	class Decrease implements IndentAction
 	{
 		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
@@ -136,7 +139,7 @@ public interface IndentAction
 		}
 	}
 
-	public class AlignBracket implements IndentAction
+	class AlignBracket implements IndentAction
 	{
 		private int line, offset;
 		private int openBracketLine;
@@ -204,7 +207,7 @@ public interface IndentAction
 	/**
 	* @author Matthieu Casanova
 	*/
-	public class AlignOffset implements IndentAction
+	class AlignOffset implements IndentAction
 	{
 		private int offset;
 		
@@ -229,7 +232,7 @@ public interface IndentAction
 	* Indent action used for deep indent.
 	* @author Matthieu Casanova
 	*/
-	public class AlignParameter implements IndentAction
+	class AlignParameter implements IndentAction
 	{
 		private int openParensColumn;
 		private String openParensLineText;

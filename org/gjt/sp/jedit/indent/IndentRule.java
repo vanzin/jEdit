@@ -25,12 +25,16 @@ package org.gjt.sp.jedit.indent;
 import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public interface IndentRule
 {
 	/**
 	 * Apply the indent rule to this line, and return an indent action.
 	 */
-	public void apply(JEditBuffer buffer, int thisLineIndex,
+	void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
-		List indentActions);
+		List<IndentAction> indentActions);
 }

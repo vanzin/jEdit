@@ -22,8 +22,10 @@
 
 package org.gjt.sp.jedit.indent;
 
-import org.gjt.sp.jedit.Buffer;
-
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public abstract class BracketIndentRule implements IndentRule
 {
 	//{{{ BracketIndentRule constructor

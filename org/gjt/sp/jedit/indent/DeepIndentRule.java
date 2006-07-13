@@ -44,7 +44,7 @@ public class DeepIndentRule implements IndentRule
 	 *
 	 * @return the last pos of the parens in the line
 	 */
-	 private Parens getLastParens(String s, int pos)
+	 private static Parens getLastParens(String s, int pos)
 	 {
 		 int lastClose;
 		 int lastOpen;
@@ -64,7 +64,7 @@ public class DeepIndentRule implements IndentRule
 	 //{{{ apply() method
 	 public void apply(JEditBuffer buffer, int thisLineIndex,
 			    int prevLineIndex, int prevPrevLineIndex,
-			    List indentActions)
+			    List<IndentAction> indentActions)
 	 {
 		 if (prevLineIndex == -1)
 			 return;
@@ -105,12 +105,12 @@ public class DeepIndentRule implements IndentRule
 		 }
 	 }
 	 
-	 private class Parens
+	 private static class Parens
 	 {
-		 int openOffset;
-		 int closeOffset;
+		 final int openOffset;
+		 final int closeOffset;
 		 
-		 public Parens(int openOffset, int closeOffset)
+		 Parens(int openOffset, int closeOffset)
 		 {
 			 this.openOffset = openOffset;
 			 this.closeOffset = closeOffset;

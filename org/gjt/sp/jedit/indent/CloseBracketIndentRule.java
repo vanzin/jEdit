@@ -26,6 +26,10 @@ import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.TextUtilities;
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class CloseBracketIndentRule extends BracketIndentRule
 {
 	//{{{ CloseBracketIndentRule constructor
@@ -39,7 +43,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	//{{{ apply() method
 	public void apply(JEditBuffer buffer, int thisLineIndex,
 		int prevLineIndex, int prevPrevLineIndex,
-		List indentActions)
+		List<IndentAction> indentActions)
 	{
 		int index;
 		if(aligned)
