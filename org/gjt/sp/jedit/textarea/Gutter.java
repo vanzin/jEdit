@@ -29,7 +29,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
@@ -127,7 +126,7 @@ public class Gutter extends JComponent implements SwingConstants
 			Log.log(Log.ERROR,this,"     lineHeight=" + lineHeight);
 		}
 	
-		int y = (clip.y - clip.y % lineHeight);
+		int y = clip.y - clip.y % lineHeight;
 
 		extensionMgr.paintScreenLineRange(textArea,gfx,
 			firstLine,lastLine,y,lineHeight);
@@ -215,7 +214,7 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public void setBorder(int width, Color color1, Color color2, Color color3)
 	{
-		this.borderWidth = width;
+		borderWidth = width;
 
 		focusBorder = new CompoundBorder(new MatteBorder(0,0,0,width,color3),
 			new MatteBorder(0,0,0,width,color1));
@@ -500,7 +499,6 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ Instance variables
 	private static final int FOLD_MARKER_SIZE = 12;
 
-	private View view;
 	private JEditTextArea textArea;
 
 	private ExtensionManager extensionMgr;
