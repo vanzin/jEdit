@@ -137,8 +137,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * @since jEdit 2.6pre3
 	 */
 	public static final String FLOATING = "floating";
-
-	public static final String NAME="xsearch-hypersearch-results";
 	
 	/**
 	 * Top position.
@@ -462,11 +460,12 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 	//{{{ setDockableTitle() method
 	/**
-	 * Changes the title string of a floating dockable.
+	 * Changes the .longtitle property of a dockable window, which corresponds to the 
+	 * title shown when it is floating (not docked). Fires a change event that makes sure
+	 * all floating dockables change their title.
 	 * 
 	 * @param dockableName the name of the dockable, as specified in the dockables.xml
-	 * @param newTitle the new title you want to see above it. This is prefixed by the
-	 *        Dockable's label.
+	 * @param newTitle the new .longtitle you want to see above it.
 	 * @since 4.3pre5
 	 * 
 	 */
@@ -907,8 +906,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				entry.win = null;
 			}
 
-			if(newPosition.equals(FLOATING)) {
-
+			if(newPosition.equals(FLOATING)) 
+			{
 			}
 				
 			else
@@ -1035,10 +1034,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 		
 		/**
-		 * 
-		 * @return the long title for the dockable button
+		 * @return the long title for the dockable floating window.
 		 */
-		public String longTitle() {
+		public String longTitle() 
+		{
 			String title = jEdit.getProperty(factory.name + ".longtitle");
 			if (title == null) return shortTitle();
 			else return title;
@@ -1046,9 +1045,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		}
 		
 		/**
-		 * @return The short for the dockable button
+		 * @return The short title, for the dockable button text
 		 */
-		public String shortTitle() {
+		public String shortTitle() 
+		{
 			
 			String title = jEdit.getProperty(factory.name + ".title");
 			if(title == null)
