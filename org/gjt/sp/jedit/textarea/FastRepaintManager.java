@@ -71,9 +71,10 @@ class FastRepaintManager
 	} //}}}
 
 	//{{{ prepareGraphics() method
-	class RepaintLines
+	static class RepaintLines
 	{
-		int first, last;
+		final int first;
+		final int last;
 
 		RepaintLines(int first, int last)
 		{
@@ -93,7 +94,7 @@ class FastRepaintManager
 
 		if(fastScroll)
 		{
-			int lineDelta = (this.firstLine - firstLine);
+			int lineDelta = this.firstLine - firstLine;
 			int yDelta = lineDelta * height;
 			int visibleLines = textArea.getVisibleLines();
 
