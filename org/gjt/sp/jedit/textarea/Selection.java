@@ -24,6 +24,8 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.util.ArrayList;
+import java.util.List;
+
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -125,7 +127,7 @@ public abstract class Selection implements Cloneable
 	{
 		return getClass().getName() + "[start=" + start
 			+ ",end=" + end + ",startLine=" + startLine
-			+ ",endLine=" + endLine + "]";
+			+ ",endLine=" + endLine + ']';
 	} //}}}
 
 	//{{{ clone() method
@@ -429,8 +431,8 @@ public abstract class Selection implements Cloneable
 					rectEnd = lineLen;
 
 				if(rectEnd < rectStart)
-					System.err.println(i + ":::" + start + ":" + end
-						+ " ==> " + rectStart + ":" + rectEnd);
+					System.err.println(i + ":::" + start + ':' + end
+						+ " ==> " + rectStart + ':' + rectEnd);
 				buf.append(buffer.getText(lineStart + rectStart,
 					rectEnd - rectStart));
 
@@ -445,13 +447,11 @@ public abstract class Selection implements Cloneable
 			int startColumn = getStartColumn(buffer);
 			int endColumn = getEndColumn(buffer);
 
-			int[] total = new int[1];
-
 			int tabSize = buffer.getTabSize();
 
 			int maxWidth = 0;
 			int totalLines = 0;
-			ArrayList lines = new ArrayList();
+			List lines = new ArrayList();
 
 			//{{{ Split the text into lines
 			if(text != null)
@@ -468,7 +468,7 @@ public abstract class Selection implements Cloneable
 							lastNewline,i));
 						lastNewline = i + 1;
 						maxWidth = Math.max(maxWidth,currentWidth);
-						lines.add(new Integer(currentWidth));
+						lines.add(currentWidth);
 						currentWidth = startColumn;
 					}
 					else if(ch == '\t')
@@ -481,13 +481,14 @@ public abstract class Selection implements Cloneable
 				{
 					totalLines++;
 					lines.add(text.substring(lastNewline));
-					lines.add(new Integer(currentWidth));
+					lines.add(currentWidth);
 					maxWidth = Math.max(maxWidth,currentWidth);
 				}
 			} //}}}
 
 			//{{{ Insert the lines into the buffer
 			int endOffset = 0;
+			int[] total = new int[1];
 			int lastLine = Math.max(startLine + totalLines - 1,endLine);
 			for(int i = startLine; i <= lastLine; i++)
 			{
@@ -502,7 +503,7 @@ public abstract class Selection implements Cloneable
 				int startWhitespace;
 				if(rectStart == -1)
 				{
-					startWhitespace = (startColumn - total[0]);
+					startWhitespace = startColumn - total[0];
 					rectStart = lineLen;
 				}
 				else
@@ -539,8 +540,7 @@ public abstract class Selection implements Cloneable
 					else
 					{
 						endWhitespace = maxWidth
-							- ((Integer)lines.get(index+1))
-							.intValue();
+							- (Integer) lines.get(index + 1);
 					}
 					startWhitespace += str.length();
 				}
@@ -643,14 +643,12 @@ public abstract class Selection implements Cloneable
 				end - buffer.getLineStartOffset(this.endLine));
 			if(startLine == this.endLine && extraEndVirt != 0)
 			{
-				extraEndVirt += (endVirtualColumn
-					- newEndVirtualColumn);
+				extraEndVirt += endVirtualColumn - newEndVirtualColumn;
 			}
 			else if(startLine == this.startLine
 				&& extraStartVirt != 0)
 			{
-				extraStartVirt += (endVirtualColumn
-					- newEndVirtualColumn);
+				extraStartVirt += endVirtualColumn - newEndVirtualColumn;
 			}
 
 			return true;
@@ -699,7 +697,7 @@ public abstract class Selection implements Cloneable
 		//{{{ Private members
 
 		//{{{ getColumnOnOtherLine() method
-		private int getColumnOnOtherLine(JEditBuffer buffer, int line,
+		private static int getColumnOnOtherLine(JEditBuffer buffer, int line,
 			int col)
 		{
 			int returnValue = buffer.getOffsetOfVirtualColumn(
