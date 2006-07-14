@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust,
-Matthieu Casanova and Marcelo Vanzin for contributing to this release.
+Matthieu Casanova, Jakub Rozto?il and Marcelo Vanzin for contributing to this release.
 
 {{{ API Changes
 - MiscUtilities.getEncodings(boolean getSelected) added
@@ -82,6 +82,9 @@ Matthieu Casanova and Marcelo Vanzin for contributing to this release.
   when running on 1.4). (Marcelo Vanzin)
 }}}
 
+{{{ Syntax Highlighting
+- Fixed character escape in transact-sql (bug #1522589) (Jakub Rozto?il)
+}}}
 }}}
 
 {{{ Version 4.3pre5
