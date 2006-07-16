@@ -5885,18 +5885,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		String whitespace = line.substring(0,
 			StandardUtilities.getLeadingWhiteSpace(line));
 
-		int endLineOffset = buffer.getLineStartOffset(lineEnd);
 		if (endLineComment != null)
 		{
 			// if we're inserting a line comment into a non-empty
 			// line, we'll need to add a line break so we don't
 			// comment out existing code.
 			int nextLineOffset = buffer.getLineStartOffset(lineEnd+1);
-			if (nextLineOffset - endLineOffset != 1)
+			if (nextLineOffset - caretEnd != 1)
 				end += "\n";
 		}
 
-		if(caretEnd == endLineOffset)
+		if(caretEnd == buffer.getLineStartOffset(lineEnd))
 			buffer.insert(caretEnd,end);
 		else
 		{
