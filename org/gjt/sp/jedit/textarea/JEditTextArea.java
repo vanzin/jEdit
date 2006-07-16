@@ -444,7 +444,7 @@ public class JEditTextArea extends JComponent
 	{
 		return joinNonWordChars;
 	} //}}}
-	
+
 	//{{{ setJoinNonWordChars() method
 	/**
 	 * If set, double clicking will join non-word characters to form one "word".
@@ -454,7 +454,7 @@ public class JEditTextArea extends JComponent
 	{
 		this.joinNonWordChars = joinNonWordChars;
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ Scrolling
@@ -793,9 +793,9 @@ public class JEditTextArea extends JComponent
 		Point point = offsetToXY(line,offset,offsetXY);
 		if(point == null)
 		// FIXME - we need to reset the state of this window so that it has the right
-		// dimensions again. 
+		// dimensions again.
 		{
-			
+
 			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
 				+ ",visibleLines=" + visibleLines
 				+ ",physicalLine=" + line
@@ -1006,9 +1006,9 @@ public class JEditTextArea extends JComponent
 
 	//{{{ offsetToXY() method
 	/**
-	 * Converts a line,offset pair into an x,y (pixel) point relative to the 
+	 * Converts a line,offset pair into an x,y (pixel) point relative to the
 	 * upper left corner (0,0) of the text area.
-	 * 
+	 *
 	 * @param line The physical line number (from top of document)
 	 * @param offset The offset in characters, from the start of the line
 	 * @param retVal The point to store the return value in
@@ -3370,14 +3370,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 			return;
 		}
-		
+
 		int x = chunkCache.subregionOffsetToX(caretLine,caret - getLineStartOffset(caretLine));
 		int[] lines = getSelectedLines();
-		
+
 		try
 		{
 			buffer.beginCompoundEdit();
-			
+
 			for (int i = lines.length - 1; i >= 0; i--)
 			{
 				int start = getLineStartOffset(lines[i]);
@@ -3880,7 +3880,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 		try
 		{
 			buffer.beginCompoundEdit();
-			
+
 			if (getSelectionCount() == 0)
 			{
 				addExplicitFold(caret, caret, caretLine, caretLine);
@@ -4888,8 +4888,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	boolean scrollBarsInitialized;
 
-	/** Cursor location, measured as an offset (in pixels) from upper left corner 
-	 *  of the TextArea. 
+	/** Cursor location, measured as an offset (in pixels) from upper left corner
+	 *  of the TextArea.
 	 */
 	Point offsetXY;
 
@@ -5851,10 +5851,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int startCaret = caretStart > 0 ? caretStart - 1 : caretStart;
 		int endCaret = caretEnd < buffer.getLength() ? caretEnd + 1 : caretEnd;
 
+		ParserRuleSet atStart = buffer.getRuleSetAtOffset(startCaret);
+		ParserRuleSet atStartMinus1 = buffer.getRuleSetAtOffset(startCaret-1);
+		System.err.println(atStart.getName() + " :: " + atStartMinus1.getName());
+
 		String startLineComment = buffer.getContextSensitiveProperty(startCaret,"lineComment");
-		String endLineComment = buffer.getContextSensitiveProperty(endCaret,"lineComment");
 		String startCommentStart = buffer.getContextSensitiveProperty(startCaret,"commentStart");
 		String startCommentEnd = buffer.getContextSensitiveProperty(startCaret,"commentEnd");
+		String endLineComment = buffer.getContextSensitiveProperty(endCaret,"lineComment");
 		String endCommentStart = buffer.getContextSensitiveProperty(endCaret,"commentStart");
 		String endCommentEnd = buffer.getContextSensitiveProperty(endCaret,"commentEnd");
 
@@ -5881,8 +5885,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		String whitespace = line.substring(0,
 			StandardUtilities.getLeadingWhiteSpace(line));
 
+		int endLineOffset = buffer.getLineStartOffset(lineEnd);
+		if (endLineComment != null)
+		{
+			// if we're inserting a line comment into a non-empty
+			// line, we'll need to add a line break so we don't
+			// comment out existing code.
+			int nextLineOffset = buffer.getLineStartOffset(lineEnd+1);
+			if (nextLineOffset - endLineOffset != 1)
+				end += "\n";
+		}
 
-		if(caretEnd == buffer.getLineStartOffset(lineEnd))
+		if(caretEnd == endLineOffset)
 			buffer.insert(caretEnd,end);
 		else
 		{

@@ -202,6 +202,12 @@
 
 	<!-- Helper for class / interface definition -->
 	<RULES SET="DEF_CLASS" DEFAULT="KEYWORD4">
+		<PROPS>
+			<PROPERTY NAME="commentStart" VALUE="/*" />
+			<PROPERTY NAME="commentEnd" VALUE="*/" />
+			<PROPERTY NAME="lineComment" VALUE="//" />
+		</PROPS>
+
 		<SEQ TYPE="OPERATOR" DELEGATE="PHP">{</SEQ>
 
 		<!-- TODO: redundant comments {{{ -->

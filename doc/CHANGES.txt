@@ -58,6 +58,9 @@ Matthieu Casanova, Jakub Rozto?il and Marcelo Vanzin for contributing to this re
 - Fixed VFS.copy() method when the returned session is null
   (Matthieu Casanova)
 
+- When adding explicit folds, and using a line comment for the end line,
+  insert a line break after the fold end if the line is not empty,
+  avoiding commenting out existing code. (Marcelo Vanzin)
 }}}
 
 {{{ Bug Fixes
@@ -80,6 +83,23 @@ Matthieu Casanova, Jakub Rozto?il and Marcelo Vanzin for contributing to this re
   entities; since 1.4 doesn't support XML 1.1, if killring.xml has
   character entities it will fail (so the bug will still be there
   when running on 1.4). (Marcelo Vanzin)
+
+- SF bug 1523261: "Regular expression " and "Ignore case"
+  There was a stray "flags" variable in PatternSearchMatcher.nextMatch()
+  that was clobbering the instance variable with the same name (that
+  actually contained the needed flags for the compiled pattern).
+  (Marcelo Vanzin)
+
+- SF bug 1523117: Add explicit fold in PHP mode inserts wrong comments
+  The "DEF_CLASS" rule set in the php mode file didn't have any line
+  or range comments declared in the props section; so the code was now
+  picking up the porperties for the default rule set, which had the
+  HTML-style range comment instead of the PHP line comment. This is
+  probably due to the XML parser change - the old code was probably
+  propagating some property of another rule set to the DEF_CLASS rule
+  set, since it used global variables for a bunch of things. So this
+  might show up in other places, and might need a better fix...
+  (Marcelo Vanzin)
 }}}
 
 {{{ Syntax Highlighting
