@@ -5851,10 +5851,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		int startCaret = caretStart > 0 ? caretStart - 1 : caretStart;
 		int endCaret = caretEnd < buffer.getLength() ? caretEnd + 1 : caretEnd;
 
-		ParserRuleSet atStart = buffer.getRuleSetAtOffset(startCaret);
-		ParserRuleSet atStartMinus1 = buffer.getRuleSetAtOffset(startCaret-1);
-		System.err.println(atStart.getName() + " :: " + atStartMinus1.getName());
-
 		String startLineComment = buffer.getContextSensitiveProperty(startCaret,"lineComment");
 		String startCommentStart = buffer.getContextSensitiveProperty(startCaret,"commentStart");
 		String startCommentEnd = buffer.getContextSensitiveProperty(startCaret,"commentEnd");
