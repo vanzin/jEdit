@@ -4,7 +4,8 @@ JEDIT 4.3 VERSION HISTORY
 
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust,
-Matthieu Casanova, Jakub Rozto?il and Marcelo Vanzin for contributing to this release.
+Matthieu Casanova, Jakub Rozto?il, Nicholas O'Leary and 
+Marcelo Vanzin for contributing to this release.
 
 {{{ API Changes
 - MiscUtilities.getEncodings(boolean getSelected) added
@@ -100,6 +101,9 @@ Matthieu Casanova, Jakub Rozto?il and Marcelo Vanzin for contributing to this re
   set, since it used global variables for a bunch of things. So this
   might show up in other places, and might need a better fix...
   (Marcelo Vanzin)
+
+- SF bug 1524032: Line number not highlighted when the line is selected
+  (Nicholas O'Leary)
 }}}
 
 {{{ Syntax Highlighting
