@@ -525,6 +525,7 @@
    <listitem><para>The tab size to use when printing - this will usually be
    less than the text area tab size, to conserve space in the printed output.
    </para></listitem>
+   <listitem><para>If folded regions should be printed.</para></listitem>
   </itemizedlist>
  </sect1>
  <sect1 id="closing-exiting"><title>Closing Files and Exiting jEdit</title>
