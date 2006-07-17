@@ -106,6 +106,9 @@ Marcelo Vanzin for contributing to this release.
 
 - SF bug 1524032: Line number not highlighted when the line is selected
   (Nicholas O'Leary)
+
+- SF bug 1524155: replace all within selection doesn't give feedback
+  (Nicholas O'Leary)
 }}}
 
 {{{ Syntax Highlighting

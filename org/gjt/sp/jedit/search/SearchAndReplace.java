@@ -702,7 +702,7 @@ loop:			for(;;)
 				retVal += replaceInSelection(view,textArea,
 					buffer,matcher,smartCaseReplace,s);
 			}
-
+			
 			boolean _reverse = !regexp && reverse && fileset instanceof CurrentBufferSet;
 			if(_reverse)
 			{
@@ -718,6 +718,14 @@ loop:			for(;;)
 					textArea.moveCaretPosition(s.getEnd());
 			}
 
+			if(!BeanShell.isScriptRunning())
+			{
+				Object[] args = { new Integer(retVal),
+					new Integer(1) };
+				view.getStatus().setMessageAndClear(jEdit.getProperty(
+					"view.status.replace-all",args));
+			}
+			
 			if(retVal == 0)
 			{
 				view.getToolkit().beep();
