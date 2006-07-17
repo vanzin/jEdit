@@ -62,6 +62,8 @@ Marcelo Vanzin for contributing to this release.
 - When adding explicit folds, and using a line comment for the end line,
   insert a line break after the fold end if the line is not empty,
   avoiding commenting out existing code. (Marcelo Vanzin)
+
+- Added option to not print collapsed folds. (Nicholas O'Leary)
 }}}
 
 {{{ Bug Fixes

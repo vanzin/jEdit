@@ -284,7 +284,15 @@ print_loop:	for(;;)
 				end = true;
 				break print_loop;
 			}
-
+			if (!jEdit.getBooleanProperty("print.folds",true) &&
+				!view.getTextArea().getDisplayManager().isLineVisible(currentPhysicalLine))
+			{
+				
+				Log.log(Log.DEBUG,this,"Skipping invisible line");
+				currentPhysicalLine++;
+				continue;
+			}
+				
 			lineList.clear();
 
 			tokenHandler.init(styles,frc,e,lineList,
