@@ -383,7 +383,7 @@
     
     <!-- =============================================== }}} -->
 
-    <target name="upload.docs" depends="userdocs"
+    <target name="upload.docs" depends="javadoc, userdocs"
     description="upload documentation to plugins.jedit.org site" >
         <exec dir="${build.docs}" executable="rsync">
       <arg line="-avz ./ ${sourceforge.user.name}@plugins.jedit.org:/home/groups/j/je/jedit-plugins/htdocs/plugindoc/${ant.project.name}" />
