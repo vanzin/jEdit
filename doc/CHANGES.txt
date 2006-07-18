@@ -49,8 +49,8 @@ Marcelo Vanzin for contributing to this release.
   show in encoding dialogs.
   (Björn "Vampire" Kautler)
 
-- Improved DockableWindowManager.currentArea() - closes more
-  docked dockables than it did before. (Alan Ezust)
+- Improved DockableWindowManager.closeCurrentArea() - closes more
+  docked dockables than it did before. (Alan Ezust) 
 
 - Fixed the storing of Frame size and position
   if the Frame gets maximized. (bug #1325358)
@@ -112,6 +112,11 @@ Marcelo Vanzin for contributing to this release.
 
 - SF bug 1524191: s() method from startup.bsh doesn't work
   (Nicholas O'Leary)
+
+- SF bug 1516994: Fixed infinite recursion possibility
+   in ManagePanel.java when unloading certain plugins
+   with circular dependencies due to services. (Alan Ezust)
+  
 }}}
 
 {{{ Syntax Highlighting
