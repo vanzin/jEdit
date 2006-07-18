@@ -87,7 +87,7 @@
     <property name="docbookx.dtd"           value="../XML/xml/dtds/docbookx.dtd" />
     <dirname property="build.support"       file="${ant.file.jEditPlugin}" />
     <property name="user-doc.xsl"           location="${build.support}/users-guide.xsl" />
-    <property name="user-doc.xml"           location="${basedir}/docs/users-guide.xml" />
+    <property name="user-doc.xml"           value="docs/users-guide.xml" />
     <property name="user-doc.out"           value="users-guide.html" />
     <property name="javadoc.title"          value="${ant.project.name} API" />
     <property name="docbook.xsl.sheet"      value="html/chunk.xsl" />
@@ -181,6 +181,15 @@
          target. By default, it's empty.                    -->
     <selector id="packageFiles">
         <size value="0" when="less" />
+    </selector>
+
+    <!-- This selector defines the doc source files
+         The context of the selector is the plugin's directory (${basedir}),
+         so it will not work for files outside the plugin
+         directory. For those cases, use the "build.prepare"
+         target. By default, docs/users-guide.xml is selected.                    -->
+    <selector id="docSrcFiles">
+        <filename name="docs/users-guide.xml" />
     </selector>
 
     <!-- This selector defines other files that should be packaged
@@ -369,6 +378,11 @@
     <target name="userdocs"
             description="Builds the user's guide.">
         <mkdir dir="${build.docs}" />
+        <copy todir="${build.docs}" includeEmptyDirs="false">
+            <fileset dir="${basedir}">
+                <selector refid="docSrcFiles" />
+            </fileset>
+        </copy>
         <copy tofile="${build.docs}/users-guide.xsl"
               flatten="true"
               file="${user-doc.xsl}">
@@ -379,6 +393,11 @@
         </copy>
         <antcall target="docs-${docs-proc.target}" />
         <delete file="${build.docs}/users-guide.xsl" />
+        <delete>
+            <fileset dir="${build.docs}">
+                <selector refid="docSrcFiles" />
+            </fileset>
+        </delete>
     </target>
     
     <!-- =============================================== }}} -->
@@ -428,8 +447,8 @@
          "docs/users-guide.xml". The output is defined in
          the "user-doc.out" property.                       -->
     <target name="docs-xsltproc" description="Generate user documentation in html format with xsltproc" if="docbook.catalog">
-        <exec executable="${xsltproc.executable}" dir="${build.docs}">
-            <arg value="-o" />
+        <exec executable="${xsltproc.executable}" dir="${build.docs}" failonerror="true">
+            <arg value="--output" />
             <arg value="${user-doc.out}" />
             <arg value="--catalogs" />
             <arg value="users-guide.xsl" />
@@ -446,7 +465,7 @@
          "docs-xsltproc" target apply here.                 -->
     <target name="docs-xalan"
             if="docbookx.dtd"
-            description="Generate user documentation in html format with xalan">
+            description="Generate user documentation in html format with xalan (not working)">
         <xslt basedir="."
               destdir="${build.docs}"
               style="${build.docs}/users-guide.xsl"

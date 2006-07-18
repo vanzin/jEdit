@@ -9,11 +9,10 @@
 			  location="../../build" />
 	<property name="install.dir"
 			  location="${jedit.install.dir}/jars" />
-	<property name="compiler.deprecation"
-			  value="on" />
-	<property name="docs-proc.target"
-			  value="xalan" />
 	<property name="user-doc.xml"
-			  value="${basedir}/users-guide.xml" />
+			  value="users-guide.xml" />
     <import file="../../build-support/plugin-build.xml" />
+    <selector id="docSrcFiles">
+        <filename name="users-guide.xml" />
+    </selector>
 </project>
