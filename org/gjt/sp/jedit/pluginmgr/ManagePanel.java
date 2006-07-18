@@ -388,25 +388,25 @@ public class ManagePanel extends JPanel
 			jar.checkDependencies();
 			jar.activatePluginIfNecessary();
 		} //}}}
+		private HashSet<String> unloaded;
 
 		//{{{ unloadPluginJARWithDialog() method
 		private void unloadPluginJARWithDialog(PluginJAR jar)
 		{
+			unloaded = new HashSet<String>();
 			String[] dependents = jar.getDependentPlugins();
 			if(dependents.length == 0)
 				unloadPluginJAR(jar);
 			else
 			{
-				List listModel = new LinkedList();
+				List<String> listModel = new LinkedList<String>();
 				transitiveClosure(dependents,listModel);
-				Object[] array = listModel.toArray();
-				Arrays.sort(array,new MiscUtilities
-					.StringICaseCompare());
+				Collections.sort(listModel,new MiscUtilities.StringICaseCompare());
 
 				int button = GUIUtilities.listConfirm(
 					window,"plugin-manager.dependency",
 					new String[] { jar.getFile()
-					.getName() },array);
+					.getName() }, listModel.toArray());
 				if(button == JOptionPane.YES_OPTION)
 					unloadPluginJAR(jar);
 			}
@@ -436,22 +436,20 @@ public class ManagePanel extends JPanel
 		} //}}}
 
 		//{{{ unloadPluginJAR() method
-		/**
-		 * This should go into a public method somewhere.
-		 */
 		private void unloadPluginJAR(PluginJAR jar)
 		{
 			String[] dependents = jar.getDependentPlugins();
-			for(int i = 0; i < dependents.length; i++)
-			{
-				PluginJAR _jar = jEdit.getPluginJAR(
-					dependents[i]);
-				if(_jar != null)
+
+			for (String dependent : dependents) {
+				if (!unloaded.contains(dependent)) 
 				{
-					unloadPluginJAR(_jar);
+					unloaded.add(dependent);
+					PluginJAR _jar = jEdit.getPluginJAR(dependent);
+					if(_jar != null)
+						unloadPluginJAR(_jar);
+					
 				}
 			}
-
 			jEdit.removePluginJAR(jar,false);
 			jEdit.setBooleanProperty("plugin-blacklist."+MiscUtilities.getFileName(jar.getPath()),true);
 		} //}}}
