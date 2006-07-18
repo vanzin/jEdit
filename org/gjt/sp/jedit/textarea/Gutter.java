@@ -685,9 +685,7 @@ public class Gutter extends JComponent implements SwingConstants
 				break;
 			}
 
-			boolean highlightCurrentLine = currentLineHighlightEnabled
-				&& textArea.getSelectedLines().length == 1;
-			if (physicalLine == textArea.getCaretLine() && highlightCurrentLine)
+			if (physicalLine == textArea.getCaretLine() && currentLineHighlightEnabled)
 			{
 				gfx.setColor(currentLineHighlight);
 			}
