@@ -31,7 +31,7 @@ s(search,replace,flags)
 	SearchAndReplace.setIgnoreCase(flags.indexOf('i') != -1);
 	SearchAndReplace.setRegexp(flags.indexOf('r') != -1);
 	SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
-	SearchAndReplace.replaceAll();
+	SearchAndReplace.replaceAll(view);
 } /*}}}*/
 
 /*{{{ Setting environment variables on Console plugin */

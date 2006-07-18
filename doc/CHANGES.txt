@@ -109,6 +109,9 @@ Marcelo Vanzin for contributing to this release.
 
 - SF bug 1524155: replace all within selection doesn't give feedback
   (Nicholas O'Leary)
+
+- SF bug 1524191: s() method from startup.bsh doesn't work
+  (Nicholas O'Leary)
 }}}
 
 {{{ Syntax Highlighting
