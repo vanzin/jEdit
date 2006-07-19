@@ -275,6 +275,7 @@ public class VFSDirectoryEntryTable extends JTable
 			VFSDirectoryEntryTableModel model =
 				(VFSDirectoryEntryTableModel)getModel();
 			int row = getSelectedRow();
+			ActionContext ac = VFSBrowser.getActionContext();
 
 			switch(evt.getKeyCode())
 			{
@@ -305,10 +306,14 @@ public class VFSDirectoryEntryTable extends JTable
 				break;
 			case KeyEvent.VK_BACK_SPACE:
 				evt.consume();
-				ActionContext ac = VFSBrowser.getActionContext();
 				EditAction ea = ac.getAction("vfs.browser.up");
 				ac.invokeAction(evt, ea);
 				break;
+		          case KeyEvent.VK_F5:
+                               evt.consume();
+                               ea = ac.getAction("vfs.browser.reload");
+                               ac.invokeAction(evt, ea);
+                               break;				
 			case KeyEvent.VK_RIGHT:
 				evt.consume();
 				if(row != -1)
