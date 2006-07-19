@@ -37,7 +37,10 @@ import java.util.Set;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.ActionContext;
+import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -300,57 +303,65 @@ public class VFSDirectoryEntryTable extends JTable
 				dir = MiscUtilities.getParentOfPath(dir);
 				browserView.getBrowser().setDirectory(dir);
 				break;
+			case KeyEvent.VK_BACK_SPACE:
+				evt.consume();
+				ActionContext ac = VFSBrowser.getActionContext();
+				EditAction ea = ac.getAction("vfs.browser.up");
+				ac.invokeAction(evt, ea);
+				break;
 			case KeyEvent.VK_RIGHT:
+				evt.consume();
 				if(row != -1)
 				{
 					if(!model.files[row].expanded)
 						toggleExpanded(row);
 				}
-				evt.consume();
-				break;
-			case KeyEvent.VK_DOWN:
-				// stupid Swing
-				if(row == -1 && getModel().getRowCount() != 0)
-				{
-					setSelectedRow(0);
-					evt.consume();
-				}
+				
 				break;
 			case KeyEvent.VK_ENTER:
+				evt.consume();
 				browserView.getBrowser().filesActivated(
 					(evt.isShiftDown()
 					? VFSBrowser.M_OPEN_NEW_VIEW
 					: VFSBrowser.M_OPEN),false);
-				evt.consume();
+				
 				break;
 			}
 		}
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
+			
 			if(evt.isControlDown() || evt.isAltDown()
 				|| evt.isMetaDown())
 			{
+				evt.consume();
 				return;
 			}
 
 			// hack...
-			if(evt.isShiftDown() && evt.getKeyChar() == '\n')
+			if(evt.isShiftDown() && evt.getKeyChar() == '\n') {
+				evt.consume();
 				return;
+			}
+				
 
 			VFSBrowser browser = browserView.getBrowser();
 
 			switch(evt.getKeyChar())
 			{
 			case '~':
+				evt.consume();
 				if(browser.getMode() == VFSBrowser.BROWSER)
 					browser.setDirectory(System.getProperty(
 						"user.home"));
 				break;
 			case '/':
+				evt.consume();
 				if(browser.getMode() == VFSBrowser.BROWSER)
 					browser.rootDirectory();
 				break;
 			case '-':
+				evt.consume();
 				if(browser.getMode() == VFSBrowser.BROWSER)
 				{
 					browser.setDirectory(
@@ -359,6 +370,7 @@ public class VFSDirectoryEntryTable extends JTable
 				}
 				break;
 			default:
+				evt.consume();
 				typeSelectBuffer.append(evt.getKeyChar());
 				doTypeSelect(typeSelectBuffer.toString(),
 					browser.getMode() == VFSBrowser

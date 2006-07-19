@@ -48,11 +48,9 @@ class BrowserView extends JPanel
 
 		tmpExpanded = new HashSet();
 
-		parentDirectories = new JList();
-
+		parentDirectories = new ParentDirectoryList();
 		parentDirectories.getSelectionModel().setSelectionMode(
 			ListSelectionModel.SINGLE_SELECTION);
-
 		parentDirectories.setCellRenderer(new ParentDirectoryRenderer());
 		parentDirectories.setVisibleRowCount(5);
 		parentDirectories.addMouseListener(new ParentMouseHandler());
@@ -559,4 +557,47 @@ class BrowserView extends JPanel
 
 	static class LoadingPlaceholder {}
 	//}}}
+	
+	class ParentDirectoryList extends JList
+	{
+
+		public String getPath(int row) {
+			LinkedList<String> components = new LinkedList<String>();
+			for (int i=1; i<=row; ++i) components.add(getModel().getElementAt(i).toString());
+			return getModel().getElementAt(0) + TextUtilities.join(components, File.separator);
+		}
+		protected void processKeyEvent(KeyEvent e)
+		{
+			if (e.getID() == KeyEvent.KEY_PRESSED)  {
+				int row = parentDirectories.getSelectedIndex();
+				switch(e.getKeyCode()) {
+				
+				case KeyEvent.VK_DOWN:
+					e.consume();			
+					if (row < parentDirectories.getSize().height-1) 
+						parentDirectories.setSelectedIndex(++row);
+					break;
+				case KeyEvent.VK_UP :
+					e.consume();
+					if (row > 0) 
+						parentDirectories.setSelectedIndex(--row);
+					break;
+				case KeyEvent.VK_F5: 
+					e.consume();
+					ActionContext ac = VFSBrowser.getActionContext();
+					EditAction ea = ac.getAction("vfs.browser.reload");
+					ac.invokeAction(e, ea);
+					break;
+				case KeyEvent.VK_ENTER: 
+					e.consume();
+					String path = getPath(row);
+					getBrowser().setDirectory(path);
+					table.requestFocus();
+					break;
+				}
+			}
+			if (!e.isConsumed()) super.processKeyEvent(e);
+		}	
+	}
+	
 }

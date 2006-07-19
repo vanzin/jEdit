@@ -67,6 +67,12 @@ Marcelo Vanzin for contributing to this release.
 }}}
 
 {{{ Bug Fixes
+
+- File System Browser keyboard handling bugs fixed.
+  Arrow keys, backspace, and return all do sensible things
+  from the table as well as the list view.
+  (jedit-Bugs-1518537) (Alan Ezust)
+  
 - When multiple views are open, closing a buffer will not change the active view
   (Bug #1518400) (Matthieu Casanova)
 
@@ -327,6 +333,7 @@ contributing to this release.
 }}}
 
 }}}
+
 {{{ Version 4.3pre3
 
 Thanks to Bertalan Fodor, Björn "Vampire" Kautler, David Chan, James Turk,
@@ -530,6 +537,7 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 }}}
 
 }}}
+
 {{{ Version 4.3pre2
 
 Thanks to Bertalan Fodor, Dirk Moebius. Jarek Tuszynski, Joshua Gertzen,
@@ -718,6 +726,7 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 }}}
 
 }}}
+
 {{{ Version 4.3pre1
 
 Thanks to Cameron Morrison, Igor Lesik, Jim Lawton, Marcelo Vanzin,

@@ -65,7 +65,7 @@
 	
 	<target name="clean"
 			depends="init"
-			description="clean up build.dir and dist.dir">
+			description="remove .class files docbook-wrapper files">
 		<delete includeemptydirs="true"
 				failonerror="false">
 			<fileset dir="${build.dir}/classes" />
@@ -380,7 +380,8 @@
 			</filterchain>
 		</copy>
 	</target>
-	
+    
+    
 	<target name="generate-pdf-users-guide"
 			depends="init"
 			if="paper.type"
