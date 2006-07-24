@@ -33,17 +33,39 @@ import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.util.Log;
 //}}}
 
-public class RegisterViewer extends JPanel implements EBComponent
+public class RegisterViewer extends JPanel implements EBComponent, ActionListener
 {
 	//{{{ RegisterViewer constructor
 	public RegisterViewer(View view, String position)
 	{
 		super(new BorderLayout());
 		this.view = view;
+		Box toolBar = new Box(BoxLayout.X_AXIS);
 		JLabel label = new JLabel(
 			jEdit.getProperty("view-registers.title"));
 		label.setBorder(new EmptyBorder(0,0,3,0));
-		add(BorderLayout.NORTH,label);
+		toolBar.add(label);
+		
+		toolBar.add(Box.createGlue());
+
+		RolloverButton pasteRegister = new RolloverButton(
+			GUIUtilities.loadIcon("Paste.png"));
+		pasteRegister.setToolTipText(GUIUtilities.prettifyMenuLabel(
+			jEdit.getProperty("paste-string-register.label")));
+		pasteRegister.addActionListener(this);
+		pasteRegister.setActionCommand("paste-string-register");
+		toolBar.add(pasteRegister);
+
+		RolloverButton clearRegister = new RolloverButton(
+			GUIUtilities.loadIcon("Clear.png"));
+		clearRegister.setToolTipText(GUIUtilities.prettifyMenuLabel(
+			jEdit.getProperty("clear-string-register.label")));
+		clearRegister.addActionListener(this);
+		clearRegister.setActionCommand("clear-string-register");
+		toolBar.add(clearRegister);
+
+		
+		add(BorderLayout.NORTH,toolBar);
 
 		DefaultListModel registerModel = new DefaultListModel();
 		registerList = new JList(registerModel);
@@ -71,7 +93,26 @@ public class RegisterViewer extends JPanel implements EBComponent
 
 		refreshList();
 	} //}}}
-
+	
+	//{{{ actionPerformed() method
+	public void actionPerformed(ActionEvent evt)
+	{
+		String cmd = evt.getActionCommand();
+		if (cmd.equals("paste-string-register"))
+			insertRegister();
+		else if (cmd.equals("clear-string-register"))
+		{
+			Object o = registerList.getSelectedValue();
+			if (o == null)
+				return;
+			else if (o instanceof Character)
+			{
+				Registers.clearRegister(((Character)o).charValue());
+				refreshList();
+			}
+		}
+	} //}}}
+	
 	//{{{ handleMessage
 	public void handleMessage(EBMessage msg)
 	{

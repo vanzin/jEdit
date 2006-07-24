@@ -270,6 +270,7 @@ paste-deleted.label=Paste $Deleted...
 cut-string-register.label=Cu$t to Register
 copy-string-register.label=Co$py to Register
 paste-string-register.label=Paste $Register
+clear-string-register.label=Clear Register
 cut-append-string-register.label=Cut Appe$nd to Register
 copy-append-string-register.label=Copy $Append to Register
 vertical-paste-string-register.label=V$ertical Paste Register

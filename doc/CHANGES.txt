@@ -64,6 +64,10 @@ Marcelo Vanzin for contributing to this release.
   avoiding commenting out existing code. (Marcelo Vanzin)
 
 - Added option to not print collapsed folds. (Nicholas O'Leary)
+
+- Added paste and clear buttons to the Registers dockable.
+  (Nicholas O'Leary)
+  
 }}}
 
 {{{ Bug Fixes
