@@ -157,7 +157,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		boolean multipleSelection, String position)
 	{
 		super(new BorderLayout());
-
+		
 		listenerList = new EventListenerList();
 
 		this.mode = mode;
@@ -276,6 +276,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		updateFilterEnabled();
 
+		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 		// see VFSBrowser.browseDirectory()
 		if(path == null)
 			path = jEdit.getProperty("vfs.browser.path.tmp");
@@ -329,7 +330,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	//{{{ focusOnDefaultComponent() method
 	public void focusOnDefaultComponent()
 	{
-		browserView.focusOnFileView();
+		pathField.requestFocus();
+	//	browserView.focusOnFileView();
 	} //}}}
 
 	//{{{ addNotify() method

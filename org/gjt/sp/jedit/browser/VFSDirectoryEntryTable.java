@@ -276,7 +276,7 @@ public class VFSDirectoryEntryTable extends JTable
 				(VFSDirectoryEntryTableModel)getModel();
 			int row = getSelectedRow();
 			ActionContext ac = VFSBrowser.getActionContext();
-
+			VFSBrowser browser = browserView.getBrowser();
 			switch(evt.getKeyCode())
 			{
 			case KeyEvent.VK_LEFT:
@@ -313,8 +313,13 @@ public class VFSDirectoryEntryTable extends JTable
                                evt.consume();
                                ea = ac.getAction("vfs.browser.reload");
                                ac.invokeAction(evt, ea);
-                               break;				
-			case KeyEvent.VK_RIGHT:
+                               break;
+		          case KeyEvent.VK_F6:
+		          case KeyEvent.VK_TAB:
+		        	  browser.focusOnDefaultComponent();
+		        	  evt.consume();
+		        	  break;
+		          case KeyEvent.VK_RIGHT:
 				evt.consume();
 				if(row != -1)
 				{
