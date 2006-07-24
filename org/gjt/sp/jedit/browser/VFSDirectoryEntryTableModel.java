@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.browser;
 
 import javax.swing.table.*;
-import javax.swing.*;
 import java.util.*;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
@@ -41,11 +40,11 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ VFSDirectoryEntryTableModel constructor
 	public VFSDirectoryEntryTableModel()
 	{
-		extAttrs = new ArrayList();
+		extAttrs = new ArrayList<ExtendedAttribute>();
 	} //}}}
 
 	//{{{ setRoot() method
-	public void setRoot(VFS vfs, ArrayList list)
+	public void setRoot(VFS vfs, List<VFSFile> list)
 	{
 		extAttrs.clear();
 		addExtendedAttributes(vfs);
@@ -56,7 +55,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		files = new Entry[list.size()];
 		for(int i = 0; i < files.length; i++)
 		{
-			files[i] = new Entry((VFSFile)list.get(i),0);
+			files[i] = new Entry(list.get(i),0);
 		}
 
 		/* if(files.length != 0)
@@ -66,7 +65,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ expand() method
-	public int expand(VFS vfs, Entry entry, ArrayList list)
+	public int expand(VFS vfs, Entry entry, List<VFSFile> list)
 	{
 		int startIndex = -1;
 		for(int i = 0; i < files.length; i++)
@@ -74,8 +73,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			if(files[i] == entry)
 				startIndex = i;
 		}
-
-		collapse(vfs,startIndex);
+		if (startIndex != -1)
+			collapse(vfs,startIndex);
 
 		addExtendedAttributes(vfs);
 		entry.expanded = true;
@@ -87,7 +86,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			for(int i = 0; i < list.size(); i++)
 			{
 				newFiles[startIndex + i + 1] = new Entry(
-					(VFSFile)list.get(i),
+					list.get(i),
 					entry.level + 1);
 			}
 			System.arraycopy(files,startIndex + 1,
@@ -122,8 +121,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 			if(e.level <= entry.level)
 				break;
-			else
-				lastIndex++;
+
+			lastIndex++;
 
 			if(e.expanded)
 			{
@@ -189,7 +188,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ getExtendedAttribute() method
 	public String getExtendedAttribute(int index)
 	{
-		return ((ExtendedAttribute)extAttrs.get(index - 1)).name;
+		return extAttrs.get(index - 1).name;
 	} //}}}
 
 	//{{{ getColumnWidth() method
@@ -232,7 +231,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//}}}
 
 	//{{{ Private members
-	private List extAttrs;
+	private List<ExtendedAttribute> extAttrs;
 
 	//{{{ addExtendedAttributes() method
 	private void addExtendedAttributes(VFS vfs)
@@ -240,12 +239,9 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		String[] attrs = vfs.getExtendedAttributes();
 vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		{
-			Iterator iter = extAttrs.iterator();
-			while(iter.hasNext())
+			for (ExtendedAttribute attr : extAttrs)
 			{
-				ExtendedAttribute attr = (ExtendedAttribute)
-					iter.next();
-				if(attrs[i].equals(attr.name))
+				if (attrs[i].equals(attr.name))
 				{
 					attr.ref++;
 					continue vfs_attr_loop;
@@ -265,11 +261,10 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		String[] attrs = vfs.getExtendedAttributes();
 vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		{
-			Iterator iter = extAttrs.iterator();
+			Iterator<ExtendedAttribute> iter = extAttrs.iterator();
 			while(iter.hasNext())
 			{
-				ExtendedAttribute attr = (ExtendedAttribute)
-					iter.next();
+				ExtendedAttribute attr = iter.next();
 				if(attrs[i].equals(attr.name))
 				{
 					if(--attr.ref == 0)

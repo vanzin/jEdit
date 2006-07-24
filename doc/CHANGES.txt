@@ -87,6 +87,8 @@ Marcelo Vanzin for contributing to this release.
   of Dos derived OS (bug that can be seen when typing some / in the end of the
   path field of VFS browser) (Matthieu Casanova)
 
+- SF bug 1526487: ArrayOutOfBoundException in VFS Browser. (Matthieu Casanova)
+
 - SF bug 1519237: Regular Expression Search in 4.3pre5
   regexp search should be done with Pattern.MULTILINE enabled, otherwise
   ^ and $ will only match the start and end of the buffer. (Marcelo Vanzin)
