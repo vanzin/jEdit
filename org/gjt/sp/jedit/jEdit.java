@@ -89,24 +89,15 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		//{{{ Check for Java 1.4 or later
+		//{{{ Check for Java 1.5 or later
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.4") < 0)
+		if(javaVersion.compareTo("1.5") < 0)
 		{
 			System.err.println("You are running Java version "
 				+ javaVersion + '.');
-			System.err.println("jEdit requires Java 1.4 or later.");
+			System.err.println("jEdit requires Java 1.5 or later.");
 			System.exit(1);
 		} //}}}
-
-		// Java 1.4 doesn't seem to have XMLReaderFactory configured
-		// correctly, so we check it during startup.
-		if (OperatingSystem.hasJava14() && !OperatingSystem.hasJava15()
-			&& System.getProperty("org.xml.sax.driver") == null)
-		{
-			System.setProperty("org.xml.sax.driver",
-					"org.apache.crimson.parser.XMLReaderImpl");
-		}
 
 		// later on we need to know if certain code is called from
 		// the main thread
