@@ -19,10 +19,9 @@
 			  value="1.5" />
 	<property name="mac.target.java.version"
 			  value="1.5+" />
-    <!--
 	<property name="slackware.target.java.version"
-			  value="1_4_2_12-i586-1" />
-	-->
+			  value="1_5_0_07-i586-1" />
+	
 	<!-- Various Paths -->
 	<property name="config.build.dir"
 			  value="build" />
@@ -246,8 +245,10 @@
 		</exec>
 	</target>
 	
-    <target name="userdocs" depends="docs-html, docs-javadoc" description="user guide and API docs" />
-    
+	<target name="userdocs"
+			depends="docs-html,docs-javadoc"
+			description="users guide and API docs" />
+	
 	<target name="docs-html"
 			depends="init"
 			description="generate HTML docs (needs xsltproc)">
