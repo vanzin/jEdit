@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust,
-Matthieu Casanova, Jakub Rozto?il, Nicholas O'Leary and 
+Matthieu Casanova, Nicholas O'Leary and 
 Marcelo Vanzin for contributing to this release.
 
 {{{ API Changes
@@ -132,7 +132,8 @@ Marcelo Vanzin for contributing to this release.
 }}}
 
 {{{ Syntax Highlighting
-- Fixed character escape in transact-sql (bug #1522589) (Jakub Rozto?il)
+- Added mysql mode.
+- Added django templates mode. (Ollie Rutherfurd)
 }}}
 }}}
 

@@ -101,6 +101,8 @@
 <MODE NAME="d"			FILE="d.xml"
 				FILE_NAME_GLOB="*.d" />
 
+<MODE NAME="django"		FILE="django.xml"/>
+
 <MODE NAME="doxygen"		FILE="doxygen.xml"
 				FILE_NAME_GLOB="doxyfile*" />
 
@@ -241,6 +243,8 @@
 
 <MODE NAME="myghty"			FILE="myghty.xml"
 				FILE_NAME_GLOB="{autohandler,dhandler,*.myt}"/>
+
+<MODE NAME="mysql"		FILE="mysql.xml" />
 
 <MODE NAME="netrexx"		FILE="netrexx.xml"
 				FILE_NAME_GLOB="*.nrx" />
