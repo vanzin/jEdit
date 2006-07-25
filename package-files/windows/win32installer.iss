@@ -156,27 +156,27 @@ begin
 		exit;
 	end;
 
-	// try to find JRE "javaw.exe"
-	javaVersion := getJREVersion;
-	if (Length(javaVersion) > 0) and (javaVersion >= '1.4') then begin
-		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion,'JavaHome',javaHome);
-		path := javaHome + '\bin\javaw.exe';
-		if FileExists(path) then begin
-			Log('(JRE) found javaw.exe: ' + path);
-			javawExePath := path;
-			Result := javawExePath;
-			exit;
-		end;
-	end;
-
-	// if we didn't find a JRE "javaw.exe", try for a JDK one
-	Log('(JDK) JRE not found or too old, looking for JDK');
+	// try to find JDK "javaw.exe"
 	javaVersion := getJDKVersion;
 	if (Length(javaVersion) > 0) and (javaVersion >= '1.4') then begin
 		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Development Kit\' + javaVersion,'JavaHome',javaHome);
 		path := javaHome + '\bin\javaw.exe';
 		if FileExists(path) then begin
 			Log('(JDK) found javaw.exe: ' + path);
+			javawExePath := path;
+			Result := javawExePath;
+			exit;
+		end;
+	end;
+
+	// if we didn't find a JDK "javaw.exe", try for a JRE one
+	Log('(JRE) JDK not found or too old, looking for JRE');
+	javaVersion := getJREVersion;
+	if (Length(javaVersion) > 0) and (javaVersion >= '1.4') then begin
+		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion,'JavaHome',javaHome);
+		path := javaHome + '\bin\javaw.exe';
+		if FileExists(path) then begin
+			Log('(JRE) found javaw.exe: ' + path);
 			javawExePath := path;
 			Result := javawExePath;
 			exit;
@@ -289,3 +289,4 @@ begin
 		DelTree(ExpandConstant('{app}\jars'),true,true,true);
 	end;
 end;
+
