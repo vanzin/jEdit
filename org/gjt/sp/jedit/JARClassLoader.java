@@ -55,6 +55,17 @@ public class JARClassLoader extends ClassLoader
 	 */
 	public JARClassLoader()
 	{
+		this(true);
+	}
+
+	/**
+	 * Creates a class loader that will optionally delegate the
+	 * finding of classes to the parent class loader by default.
+	 *
+	 * @since jEdit 4.3pre6
+	 */
+	public JARClassLoader(boolean delegateFirst) {
+		this.delegateFirst = delegateFirst;
 		// for debugging
 		id = INDEX++;
 		live++;
@@ -67,7 +78,20 @@ public class JARClassLoader extends ClassLoader
 	public Class loadClass(String clazz, boolean resolveIt)
 		throws ClassNotFoundException
 	{
-		// see what JARClassLoader this class is in
+		ClassNotFoundException pending = null;
+		if (delegateFirst)
+		{
+			try
+			{
+				return loadFromParent(clazz);
+			}
+			catch (ClassNotFoundException cnf)
+			{
+				// keep going if class was not found.
+				pending = cnf;
+			}
+		}
+
 		Object obj = classHash.get(clazz);
 		if(obj == NO_CLASS)
 		{
@@ -79,33 +103,24 @@ public class JARClassLoader extends ClassLoader
 		else if(obj instanceof JARClassLoader)
 		{
 			JARClassLoader classLoader = (JARClassLoader)obj;
-			return classLoader._loadClass(clazz,resolveIt);
+			try
+			{
+				return classLoader._loadClass(clazz,resolveIt);
+			} catch (ClassNotFoundException cnf2)
+			{
+				classHash.put(clazz,NO_CLASS);
+				throw cnf2;
+			}
 		}
-
-		// if it's not in the class hash, and not marked as
-		// non-existent, try loading it from the CLASSPATH
-		try
+		else if (delegateFirst)
 		{
-			Class cls;
-
-			/* Defer to whoever loaded us (such as JShell,
-			 * Echidna, etc) */
-			ClassLoader parentLoader = getClass().getClassLoader();
-			if (parentLoader != null)
-				cls = parentLoader.loadClass(clazz);
-			else
-				cls = findSystemClass(clazz);
-
-			return cls;
+			// if delegating, reaching this statement means
+			// the class was really not found. Otherwise
+			// we'll try loading from the parent class loader.
+			throw pending;
 		}
-		catch(ClassNotFoundException cnf)
-		{
-			// remember that this class doesn't exist for
-			// future reference
-			classHash.put(clazz,NO_CLASS);
 
-			throw cnf;
-		}
+		return loadFromParent(clazz);
 	} //}}}
 
 	//{{{ getResourceAsStream() method
@@ -273,6 +288,13 @@ public class JARClassLoader extends ClassLoader
 	//{{{ activate() method
 	void activate()
 	{
+		if (jar.getPlugin() != null)
+		{
+			String _delegate = jEdit.getProperty(
+				"plugin." + jar.getPlugin().getClassName() + ".class_loader_delegate");
+			delegateFirst = (_delegate == null || "true".equals(_delegate));
+		}
+
 		String[] classes = jar.getClasses();
 		if(classes != null)
 		{
@@ -312,6 +334,7 @@ public class JARClassLoader extends ClassLoader
 	private static Hashtable classHash = new Hashtable();
 
 	private int id;
+	private boolean delegateFirst;
 	private PluginJAR jar;
 
 	//{{{ _loadClass() method
@@ -380,17 +403,17 @@ public class JARClassLoader extends ClassLoader
 	} //}}}
 
 	//{{{ definePackage(clazz) method
-	private void definePackage(String clazz) throws IOException 
+	private void definePackage(String clazz) throws IOException
 	{
 		int idx = clazz.lastIndexOf('.');
-		if (idx != -1) {		
+		if (idx != -1) {
 			String name = clazz.substring(0, idx);
 			if (getPackage(name) == null) definePackage(name, new JarFile(jar.getFile()).getManifest());
 		}
 	} //}}}
-	
+
 	//{{{ getMfValue() method
-	private String getMfValue(Attributes sectionAttrs, Attributes mainAttrs, Attributes.Name name) 
+	private String getMfValue(Attributes sectionAttrs, Attributes mainAttrs, Attributes.Name name)
 	{
 		String value=null;
 		if (sectionAttrs != null)
@@ -401,11 +424,11 @@ public class JARClassLoader extends ClassLoader
 		return value;
 	}
 	//}}}
-	
+
 	//{{{ definePackage(packageName, manifest) method
-	private void definePackage(String name, Manifest mf) 
+	private void definePackage(String name, Manifest mf)
 	{
-		if (mf==null) 
+		if (mf==null)
 		{
 			definePackage(name, null, null, null, null, null,
 			null, null);
@@ -414,26 +437,41 @@ public class JARClassLoader extends ClassLoader
 
 		Attributes sa = mf.getAttributes(name.replace('.', '/') + "/");
 		Attributes ma = mf.getMainAttributes();
-		
-		URL sealBase = null;		
-		if (Boolean.valueOf(getMfValue(sa, ma, Name.SEALED)).booleanValue()) 
+
+		URL sealBase = null;
+		if (Boolean.valueOf(getMfValue(sa, ma, Name.SEALED)).booleanValue())
 		{
-			try 
+			try
 			{
 				sealBase = jar.getFile().toURL();
 			} catch (MalformedURLException e) { }
 		}
-		
+
 		Package pkg=definePackage(
-			name, 
-			getMfValue(sa, ma, Name.SPECIFICATION_TITLE), 
-			getMfValue(sa, ma, Name.SPECIFICATION_VERSION), 
-			getMfValue(sa, ma, Name.SPECIFICATION_VENDOR), 
-			getMfValue(sa, ma, Name.IMPLEMENTATION_TITLE), 
-			getMfValue(sa, ma, Name.IMPLEMENTATION_VERSION), 
-			getMfValue(sa, ma, Name.IMPLEMENTATION_VENDOR), 
+			name,
+			getMfValue(sa, ma, Name.SPECIFICATION_TITLE),
+			getMfValue(sa, ma, Name.SPECIFICATION_VERSION),
+			getMfValue(sa, ma, Name.SPECIFICATION_VENDOR),
+			getMfValue(sa, ma, Name.IMPLEMENTATION_TITLE),
+			getMfValue(sa, ma, Name.IMPLEMENTATION_VERSION),
+			getMfValue(sa, ma, Name.IMPLEMENTATION_VENDOR),
 			sealBase);
 	} //}}}
-	
+
+	//{{{ loadFromParent() method
+	private Class loadFromParent(String clazz)
+		throws ClassNotFoundException
+	{
+		Class cls;
+
+		ClassLoader parentLoader = getClass().getClassLoader();
+		if (parentLoader != null)
+			cls = parentLoader.loadClass(clazz);
+		else
+			cls = findSystemClass(clazz);
+
+		return cls;
+	} //}}}
+
 	//}}}
 }

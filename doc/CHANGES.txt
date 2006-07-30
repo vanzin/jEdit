@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust,
-Matthieu Casanova, Nicholas O'Leary and 
+Matthieu Casanova, Nicholas O'Leary and
 Marcelo Vanzin for contributing to this release.
 
 {{{ API Changes
@@ -50,7 +50,7 @@ Marcelo Vanzin for contributing to this release.
   (Björn "Vampire" Kautler)
 
 - Improved DockableWindowManager.closeCurrentArea() - closes more
-  docked dockables than it did before. (Alan Ezust) 
+  docked dockables than it did before. (Alan Ezust)
 
 - Fixed the storing of Frame size and position
   if the Frame gets maximized. (bug #1325358)
@@ -67,7 +67,15 @@ Marcelo Vanzin for contributing to this release.
 
 - Added paste and clear buttons to the Registers dockable.
   (Nicholas O'Leary)
-  
+
+- The behavior of JARClassLoader now is different than in previous
+  versions of jEdit. JARClassLoader will now delegate class loading
+  to the parent class loader before looking in its cache. This means
+  that, by default, plugins can't override classes in the JVM's
+  boot classpath. The behavior is configurable on a per-plugin
+  basis (see javadoc for details). This fixes SF Bug #1509218.
+  (Marcelo Vanzin)
+
 }}}
 
 {{{ Bug Fixes
@@ -76,7 +84,7 @@ Marcelo Vanzin for contributing to this release.
   Arrow keys, backspace, and return all do sensible things
   from the table as well as the list view.
   (jedit-Bugs-1518537) (Alan Ezust)
-  
+
 - When multiple views are open, closing a buffer will not change the active view
   (Bug #1518400) (Matthieu Casanova)
 
@@ -128,7 +136,7 @@ Marcelo Vanzin for contributing to this release.
 - SF bug 1516994: Fixed infinite recursion possibility
    in ManagePanel.java when unloading certain plugins
    with circular dependencies due to services. (Alan Ezust)
-  
+
 }}}
 
 {{{ Syntax Highlighting
