@@ -38,6 +38,7 @@ Marcelo Vanzin for contributing to this release.
 
 - Moved MiscUtilities.objectsEqual() method to StandardUtilities()
   (Matthieu Casanova)
+
 }}}
 
 {{{ Miscellaneous
@@ -74,6 +75,17 @@ Marcelo Vanzin for contributing to this release.
   that, by default, plugins can't override classes in the JVM's
   boot classpath. The behavior is configurable on a per-plugin
   basis (see javadoc for details). This fixes SF Bug #1509218.
+  (Marcelo Vanzin)
+
+- SF Bug #1527824: Perl Syntax Highlighting hangs 4.3pre6
+  More activity on my favorite edit mode. :-)
+  The [^\p{Alpha}\p{Space}] rule at the start of Perl's "y/.../" syntax
+  was not entirely correct; some other characters, mainly operators like
+  +, -, etc, and also underscore, are not allowed either. But since the
+  regexp was still trying to be matched against such strings, it would
+  have two effects: a very long pause (the "hang"), and strings like
+  "y_something_something" being highlighted incorrectly. By adding a few
+  extra characters to that exclusion, things seem to be much better.
   (Marcelo Vanzin)
 
 }}}
