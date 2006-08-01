@@ -7,8 +7,6 @@
     
 	<property name="jedit.install.dir"
 			  location="../../build" />
-	<property name="install.dir"
-			  location="${jedit.install.dir}/jars" />
 	<property name="docs-proc.target"
 			  value="xalan" />
     <import file="../../build-support/plugin-build.xml" />

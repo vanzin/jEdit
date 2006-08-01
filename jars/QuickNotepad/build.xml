@@ -7,8 +7,6 @@
     
 	<property name="jedit.install.dir"
 			  location="../../build" />
-	<property name="install.dir"
-			  location="${jedit.install.dir}/jars" />
 	<property name="user-doc.xml"
 			  value="users-guide.xml" />
     <import file="../../build-support/plugin-build.xml" />
