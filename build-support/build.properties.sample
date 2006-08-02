@@ -12,16 +12,13 @@
 #jedit.install.dir=../../jEdit
 
 # location where your jars are installed
-install.dir=${jedit.install.dir}/jars
+#install.dir=${jedit.install.dir}/jars
 
 # Location where the plugins are (used by some older build files)
-jedit.plugins.dir=${install.dir}
+#jedit.plugins.dir=${install.dir}
 
 # Location to find built jars (for dependencies)
-jedit.jars.dir=${install.dir}
-
-# location to find this directory
-build.support=${jedit.install.dir}/../build-support
+#jedit.jars.dir=${install.dir}
 
 # User settings directory
 #jedit.user.home=${user.home}/.jedit
