@@ -96,7 +96,14 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		for (int i=0, c=encodingCheckBoxArray.length ; i<c ; i++)
 		{
 			JCheckBox encodingCheckBox = encodingCheckBoxArray[i];
-			jEdit.setBooleanProperty("encoding.opt-out."+encodingCheckBox.getText(),!encodingCheckBox.isSelected());
+			if (encodingCheckBox.isSelected())
+			{
+				jEdit.unsetProperty("encoding.opt-out."+encodingCheckBox.getText());
+			}
+			else
+			{
+				jEdit.setBooleanProperty("encoding.opt-out."+encodingCheckBox.getText(),true);
+			}
 		}
 	} //}}}
 
