@@ -4,16 +4,16 @@
 	<description>
 		This is an ant build.xml file for building jEdit - Programmer's Text Editor.
 	</description>
-
+	
 	<property file="build.properties"
 			  prefix="config" />
-
+	
 	<!-- jEdit Version -->
 	<property name="jedit.version"
 			  value="4.3pre6" />
 	<property name="jedit.build.number"
 			  value="04.03.06.00" />
-
+	
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
 			  value="1.5" />
@@ -21,7 +21,7 @@
 			  value="1.5+" />
 	<property name="slackware.target.java.version"
 			  value="1_5_0_07-i586-1" />
-
+	
 	<!-- Various Paths -->
 	<property name="config.build.dir"
 			  value="build" />
@@ -35,7 +35,7 @@
 			  location="${build.dir}/classes" />
 	<property name="jar.location"
 			  location="${build.dir}" />
-
+	
 	<!-- Various Filenames -->
 	<property name="jar.filename"
 			  value="${ant.project.name}.jar" />
@@ -49,22 +49,29 @@
 			  value="jEdit${jedit.version}installer" />
 	<property name="mac.disk.image.filename"
 			  value="jEdit${jedit.version}.dmg" />
-
+	
 	<!-- Miscellaneous -->
 	<property name="build.debuglevel"
 			  value="lines,vars,source" />
-
+	
 	<target name="init"
 			unless="init.done">
 		<echo message="Buildfile for ${ant.project.name} (${ant.file})"
 			  level="info" />
+		<fail message="The ant-optional package is needed for jEdit to build, please install it and rerun">
+			<condition>
+				<not>
+					<available classname="org.apache.tools.ant.taskdefs.optional.depend.Depend" />
+				</not>
+			</condition>
+		</fail>
 		<property name="init.done"
 				  value="true" />
 	</target>
-
+	
 	<target name="clean"
 			depends="init"
-			description="remove .class files docbook-wrapper files">
+			description="clean up intermediate files">
 		<delete includeemptydirs="true"
 				failonerror="false">
 			<fileset dir="${build.dir}/classes" />
@@ -73,7 +80,7 @@
 					 includes="docbook-wrapper-*.xsl" />
 		</delete>
 	</target>
-
+	
 	<target name="clean-all"
 			depends="init"
 			description="clean up build.dir and dist.dir completely">
@@ -85,7 +92,7 @@
 					 includes="docbook-wrapper-*.xsl" />
 		</delete>
 	</target>
-
+	
 	<target name="compile"
 			depends="init">
 		<mkdir dir="${classes.dir}/core" />
@@ -107,7 +114,7 @@
 			<include name="gnu/**" />
 		</javac>
 	</target>
-
+	
 	<target name="build"
 			depends="init,compile"
 			description="build the jEdit JAR-file with full debug-information">
@@ -139,7 +146,7 @@
 			</fileset>
 		</copy>
 	</target>
-
+	
 	<target name="run"
 			depends="init,build"
 			description="run jEdit">
@@ -149,7 +156,7 @@
 			<arg value="-noserver" />
 		</java>
 	</target>
-
+	
 	<target name="generate-docbook-wrapper"
 			if="format"
 			depends="init">
@@ -179,7 +186,7 @@
 			  append="true"
 			  level="error" />
 	</target>
-
+	
 	<target name="generate-doc-faq"
 			depends="init"
 			if="doc.output.location"
@@ -201,7 +208,7 @@
 				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
-
+	
 	<target name="generate-doc-news"
 			depends="init"
 			if="doc.output.location"
@@ -223,7 +230,7 @@
 				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
-
+	
 	<target name="generate-doc-users-guide"
 			depends="init"
 			if="doc.output.location"
@@ -245,11 +252,11 @@
 				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
-
+	
 	<target name="userdocs"
-			depends="docs-html,docs-javadoc"
-			description="users guide and API docs" />
-
+			depends="init,docs-html,docs-javadoc"
+			description="generate HTML and JavaDoc API docs (needs xsltproc)" />
+	
 	<target name="docs-html"
 			depends="init"
 			description="generate HTML docs (needs xsltproc)">
@@ -301,7 +308,7 @@
 			</fileset>
 		</copy>
 	</target>
-
+	
 	<target name="generate-javadoc"
 			depends="init"
 			unless="javadoc.is.up.to.date">
@@ -339,7 +346,7 @@
 				   packages="gnu.regexp*" />
 		</javadoc>
 	</target>
-
+	
 	<target name="docs-javadoc"
 			depends="init"
 			description="generate JavaDoc API docs">
@@ -382,8 +389,7 @@
 			</filterchain>
 		</copy>
 	</target>
-
-
+	
 	<target name="generate-pdf-users-guide"
 			depends="init"
 			if="paper.type"
@@ -437,7 +443,7 @@
 			 format="application/pdf"
 			 messagelevel="info" />
 	</target>
-
+	
 	<target name="docs-pdf"
 			depends="init"
 			if="paper.type">
@@ -453,7 +459,7 @@
 				   type="file" />
 		<antcall target="generate-pdf-users-guide" />
 	</target>
-
+	
 	<target name="docs-pdf-a4"
 			depends="init"
 			description="generate PDF users-guide with A4 paper size (needs xsltproc and fop)">
@@ -462,7 +468,7 @@
 				   value="A4" />
 		</antcall>
 	</target>
-
+	
 	<target name="docs-pdf-USletter"
 			depends="init"
 			description="generate PDF users-guide with US letter paper size (needs xsltproc and fop)">
@@ -471,7 +477,7 @@
 				   value="USletter" />
 		</antcall>
 	</target>
-
+	
 	<target name="compile-installer"
 			depends="init">
 		<mkdir dir="${classes.dir}/installer" />
@@ -488,7 +494,7 @@
 			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
-
+	
 	<target name="compile-default-plugins-for-dist"
 			depends="init">
 		<ant dir="jars/LatestVersion"
@@ -528,7 +534,7 @@
 					  value="${dist.dir}" />
 		</ant>
 	</target>
-
+	
 	<target name="dist-java"
 			depends="init"
 			description="build the Java-installer">
@@ -601,7 +607,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="dist-manuals"
 			depends="init"
 			description="build the PDF-manuals">
@@ -624,7 +630,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="dist-src"
 			depends="init"
 			description="build the src-archive">
@@ -639,7 +645,7 @@
 						prefix="jEdit/" />
 		</tar>
 	</target>
-
+	
 	<target name="compile-jarbundler"
 			depends="init">
 		<mkdir dir="${classes.dir}/jarbundler" />
@@ -656,7 +662,7 @@
 			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
-
+	
 	<target name="dist-mac-finish"
 			depends="init"
 			unless="build.on.non.mac"
@@ -751,7 +757,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="prepare-dist-mac-finish"
 			depends="init"
 			if="build.on.non.mac">
@@ -770,7 +776,7 @@
 			 		   ${config.dist.dir}/startup/**"
 			 compression="bzip2" />
 	</target>
-
+	
 	<target name="dist-mac"
 			depends="init"
 			description="build the Mac OS X disk image (DMG-file)">
@@ -798,7 +804,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="prepare-dist-files"
 			depends="init">
 		<antcall target="build">
@@ -847,7 +853,7 @@
 		<gzip src="${dist.dir}/classes/package-files/linux/jedit.1"
 			  destfile="${dist.dir}/classes/package-files/linux/jedit.1.gz" />
 	</target>
-
+	
 	<target name="dist-slackware"
 			depends="init"
 			description="build the Slackware Package">
@@ -909,7 +915,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="compile-ar"
 			depends="init">
 		<mkdir dir="${classes.dir}/ar" />
@@ -926,7 +932,7 @@
 			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
-
+	
 	<target name="compile-deb"
 			depends="init">
 		<mkdir dir="${classes.dir}/deb" />
@@ -943,7 +949,7 @@
 			   target="${target.java.version}"
 			   compiler="modern" />
 	</target>
-
+	
 	<target name="dist-deb"
 			depends="init"
 			description="build the DEB Package">
@@ -1034,7 +1040,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="dist-win-finish"
 			depends="init"
 			unless="build.on.non.win"
@@ -1084,7 +1090,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="prepare-dist-win-finish"
 			depends="init"
 			if="build.on.non.win">
@@ -1106,7 +1112,7 @@
 			 		   ${config.dist.dir}/startup/**"
 			 compression="bzip2" />
 	</target>
-
+	
 	<target name="dist-win"
 			depends="init"
 			description="build the Windows installer (EXE-file)">
@@ -1128,7 +1134,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="dist"
 			depends="init"
 			description="build all distribution files">
@@ -1145,7 +1151,7 @@
 				  value="true" />
 		<antcall target="dist-cleanup" />
 	</target>
-
+	
 	<target name="dist-cleanup"
 			depends="init">
 		<delete includeemptydirs="true">
