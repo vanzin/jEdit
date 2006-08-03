@@ -195,13 +195,11 @@ public class WorkThread extends Thread
 		}
 		catch(Abort a)
 		{
-			Log.log(Log.ERROR,WorkThread.class,"Unhandled abort");
+			Log.log(Log.ERROR,WorkThread.class,"Unhandled abort", a);
 		}
 		catch(Throwable t)
 		{
-			Log.log(Log.ERROR,WorkThread.class,"Exception "
-				+ "in work thread:");
-			Log.log(Log.ERROR,WorkThread.class,t);
+			Log.log(Log.ERROR,WorkThread.class,"Exception in work thread: ", t);
 		}
 		finally
 		{

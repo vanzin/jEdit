@@ -202,9 +202,6 @@ class Roster
 			if(jar != null)
 			{
 				unloadPluginJAR(jar);
-				String cachePath = jar.getCachePath();
-				if(cachePath != null)
-					new File(cachePath).delete();
 			}
 
 			toLoad.remove(plugin);
@@ -244,10 +241,12 @@ class Roster
 				{
 					toLoad.add(dependents[i]);
 					unloadPluginJAR(_jar);
+					// moved cache clearing code into the jEdit.removePluginJAR()
+
 				}
 			}
-
 			jEdit.removePluginJAR(jar,false);
+			
 		} //}}}
 
 		//{{{ equals() method
