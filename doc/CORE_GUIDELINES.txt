@@ -33,16 +33,12 @@ and their status.
         -org.gjt.sp.jedit.buffer.*
         -org.gjt.sp.jedit.TextUtilities
 
-- org.gjt.sp.jedit.syntax : No dependency (OK))
+- org.gjt.sp.jedit.syntax : No dependency (OK)
 
 - org.gjt.sp.jedit.buffer : (NOK)
         -org.gjt.sp.jedit.textarea.*
         -org.gjt.sp.jedit.syntax.*
         
-- org.gjt.sp.jedit.buffer : (NOK)
-        -org.gjt.sp.jedit.textarea.*
-        -org.gjt.sp.jedit.syntax.*
-
 - org.gjt.sp.jedit.textarea : (NOK)
         -org.gjt.sp.jedit.buffer.*
         -org.gjt.sp.jedit.syntax.*
