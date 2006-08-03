@@ -115,10 +115,10 @@ public class ServiceManager
 	 */
 	public static void unloadServices(PluginJAR plugin)
 	{
-		Iterator descriptors = serviceMap.keySet().iterator();
+		Iterator<Descriptor> descriptors = serviceMap.keySet().iterator();
 		while(descriptors.hasNext())
 		{
-			Descriptor d = (Descriptor)descriptors.next();
+			Descriptor d = descriptors.next();
 			if(d.plugin == plugin)
 				descriptors.remove();
 		}
@@ -166,16 +166,13 @@ public class ServiceManager
 	 */
 	public static String[] getServiceTypes()
 	{
-		HashSet returnValue = new HashSet();
+		Set<String> returnValue = new HashSet<String>();
 
-		Iterator descriptors = serviceMap.keySet().iterator();
-		while(descriptors.hasNext())
-		{
-			Descriptor d = (Descriptor)descriptors.next();
+		Set<Descriptor> keySet = serviceMap.keySet();
+		for (Descriptor d : keySet)
 			returnValue.add(d.clazz);
-		}
 
-		return (String[])returnValue.toArray(
+		return returnValue.toArray(
 			new String[returnValue.size()]);
 	} //}}}
 
@@ -191,17 +188,15 @@ public class ServiceManager
 	 */
 	public static String[] getServiceNames(String clazz)
 	{
-		ArrayList returnValue = new ArrayList();
+		List<String> returnValue = new ArrayList<String>();
 
-		Iterator descriptors = serviceMap.keySet().iterator();
-		while(descriptors.hasNext())
-		{
-			Descriptor d = (Descriptor)descriptors.next();
+		Set<Descriptor> keySet = serviceMap.keySet();
+		for (Descriptor d : keySet)
 			if(d.clazz.equals(clazz))
 				returnValue.add(d.name);
-		}
 
-		return (String[])returnValue.toArray(
+
+		return returnValue.toArray(
 			new String[returnValue.size()]);
 	} //}}}
 
@@ -220,7 +215,7 @@ public class ServiceManager
 	{
 		// they never taught you this in undergrad computer science
 		Descriptor key = new Descriptor(clazz,name);
-		Descriptor value = (Descriptor)serviceMap.get(key);
+		Descriptor value = serviceMap.get(key);
 		if(value == null)
 		{
 			// unknown service - <clazz,name> not in table
@@ -233,7 +228,7 @@ public class ServiceManager
 				loadServices(value.plugin,
 					value.plugin.getServicesURI(),
 					null);
-				value = (Descriptor)serviceMap.get(key);
+				value = serviceMap.get(key);
 			}
 			return value.getInstance();
 		}
@@ -255,14 +250,14 @@ public class ServiceManager
 	//}}}
 
 	//{{{ Private members
-	private static Map serviceMap = new HashMap();
+	private static final Map<Descriptor, Descriptor> serviceMap = new HashMap<Descriptor, Descriptor>();
 	//}}}
 
 	//{{{ Descriptor class
 	static class Descriptor
 	{
-		String clazz;
-		String name;
+		final String clazz;
+		final String name;
 		String code;
 		PluginJAR plugin;
 		Object instance;
