@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust,
-Matthieu Casanova, Nicholas O'Leary and
+Matthieu Casanova, Nicholas O'Leary, Ollie Rutherfurd, and
 Marcelo Vanzin for contributing to this release.
 
 {{{ API Changes
@@ -24,7 +24,7 @@ Marcelo Vanzin for contributing to this release.
 
 - EditPane.setBuffer(final Buffer buffer, boolean requestFocus) that allow
   to set a buffer without requesting the focus (default is to request focus)
-  (Matthieu Casanova
+  (Matthieu Casanova)
 
 - BufferHistory.clear() to clear the recent file list
   (Matthieu Casanova)
@@ -38,10 +38,17 @@ Marcelo Vanzin for contributing to this release.
 
 - Moved MiscUtilities.objectsEqual() method to StandardUtilities()
   (Matthieu Casanova)
-
+  
+  
 }}}
 
 {{{ Miscellaneous
+
+- svn rev# 6512: The code for removing the .summary file from the 
+  jars-cache was moved from Roster.java to jEdit.removePluginJAR().
+  The .summary file now gets cleaned up every time the plugin is
+  unloaded. (Alan Ezust)
+
 - Ability to clear the Recent Files List from menu (Matthieu Casanova)
 
 - Beanshell 2.0b4 bundled (Matthieu Casanova)
@@ -92,10 +99,12 @@ Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
 
-- File System Browser keyboard handling bugs fixed.
+- (jedit-Bugs-1518537) FSB keyboard handling bugs fixed.
   Arrow keys, backspace, and return all do sensible things
-  from the table as well as the list view.
-  (jedit-Bugs-1518537) (Alan Ezust)
+  from the table as well as the list view. (Ezust)
+  
+- (jedit-bugs 1533925) Alpha-numerics are no longer being "passed through" 
+  from the FSB to the editpane.  (Alan Ezust)
 
 - When multiple views are open, closing a buffer will not change the active view
   (Bug #1518400) (Matthieu Casanova)

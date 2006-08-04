@@ -306,15 +306,14 @@
    </para>
   </sect2>
  </sect1>
- <sect1 id="vfs-browser"><title>The File System Browser</title>
+ <sect1 id="vfs-browser"><title>The File System Browser (FSB)</title>
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>File System
    Browser</guimenuitem> displays the file system browser.
    By default, the file system browser is shown in a floating window. This window can be docked using the commands in its top-left corner popup menu; see <xref linkend="docking" />.
   </para>
   <para>
-   The file system browser can be customized in the
-   <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+   The FSB can be customized in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
    dialog box; see <xref linkend="vfs-browser-pane"/>.
   </para>
   <sect2><title>Navigating the File System</title>
