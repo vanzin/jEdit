@@ -658,8 +658,8 @@
 			   debug="true"
 			   debuglevel="${build.debuglevel}"
 			   deprecation="true"
-			   source="${target.java.version}"
-			   target="${target.java.version}"
+			   source="1.4"
+			   target="1.4"
 			   compiler="modern" />
 	</target>
 	
