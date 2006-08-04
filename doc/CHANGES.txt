@@ -44,11 +44,6 @@ Marcelo Vanzin for contributing to this release.
 
 {{{ Miscellaneous
 
-- svn rev# 6512: The code for removing the .summary file from the 
-  jars-cache was moved from Roster.java to jEdit.removePluginJAR().
-  The .summary file now gets cleaned up every time the plugin is
-  unloaded. (Alan Ezust)
-
 - Ability to clear the Recent Files List from menu (Matthieu Casanova)
 
 - Beanshell 2.0b4 bundled (Matthieu Casanova)

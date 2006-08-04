@@ -42,8 +42,8 @@ class Roster
 	//{{{ Roster constructor
 	Roster()
 	{
-		operations = new ArrayList();
-		toLoad = new ArrayList();
+		operations = new ArrayList<Operation>();
+		toLoad = new ArrayList<String>();
 	} //}}}
 
 	//{{{ addRemove() method
@@ -135,8 +135,8 @@ class Roster
 	//{{{ Private members
 	private static File downloadDir;
 
-	private List operations;
-	private List toLoad;
+	private List<Operation> operations;
+	private List<String> toLoad;
 
 	//{{{ addOperation() method
 	private void addOperation(Operation op)
@@ -241,7 +241,10 @@ class Roster
 				{
 					toLoad.add(dependents[i]);
 					unloadPluginJAR(_jar);
-					// moved cache clearing code into the jEdit.removePluginJAR()
+					// clear cache file
+					String cachePath = jar.getCachePath();
+					if(cachePath != null)
+						new File(cachePath).delete();
 
 				}
 			}

@@ -1091,10 +1091,6 @@ public class jEdit
 			jars.removeElement(jar);
 			initKeyBindings();
 		}
-		// moved by ezust
-		String cachePath = jar.getCachePath();
-		if(cachePath != null)
-			new File(cachePath).delete();
 
 		EditBus.send(new PluginUpdate(jar,PluginUpdate.UNLOADED,exit));
 		if(!isMainThread() && !exit)
