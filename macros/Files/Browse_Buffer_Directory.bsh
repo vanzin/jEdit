@@ -1,5 +1,5 @@
 /*
- * Open_FSB_in_Buffer_dir.bsh - a BeanShell macro script for the
+ * Browse_Buffer_Directory.bsh - a BeanShell macro script for the
  * jEdit text editor - Opens the file system browser at the
  * current buffer's directory.
  * Copyright (C) 2006 Alan Ezust
@@ -20,8 +20,8 @@
  *
  * $Id$
  */
-// begin Open_FSB_in_Buffer_dir
-void Open_FSB_in_Buffer_dir()
+// begin browse_buffer_dir
+void Browse_Buffer_Directory()
 {
 	path = new File(buffer.getPath()).getParent();
     
@@ -32,16 +32,16 @@ void Open_FSB_in_Buffer_dir()
     
 }
 
-Open_FSB_in_Buffer_dir();
+Browse_Buffer_Directory();
 
 /*
 <listitem>
-    <para><filename>Open_FSB_in_Buffer_dir.bsh</filename></para>
+    <para><filename>Browse_Buffer_Directory.bsh</filename></para>
     <abstract><para>
         Opens a the current buffer's directory in the FSB.
     </para></abstract>
 </listitem>
 */
 
-// end Open_FSB_in_Buffer_dir.bsh
+// end Browse_Buffer_Directory.bsh
 
