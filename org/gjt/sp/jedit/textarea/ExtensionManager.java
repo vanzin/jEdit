@@ -26,21 +26,31 @@ import java.awt.Graphics2D;
 import java.util.*;
 import org.gjt.sp.util.Log;
 
+/**
+ * Manage the extensions for the gutter and the textarea.
+ *
+ * @author Slava Pestov
+ * @version $Id$
+ */
 class ExtensionManager
 {
 	//{{{ addExtension() method
+	/**
+	 * Add an extension.
+	 * See {@link Gutter} and {@link TextAreaPainter} to know the layers
+	 *
+	 * @param layer the layer. It could be defined in Gutter or TextAreaPainter
+	 * @param ext the extension to add
+	 */
 	void addExtension(int layer, TextAreaExtension ext)
 	{
 		Entry entry = new Entry(layer,ext);
 
 		int i = 0;
-		Iterator iter = extensions.iterator();
-		while(iter.hasNext())
-		{
-			int _layer = ((Entry)iter.next()).layer;
-			if(layer < _layer)
-			{
-				extensions.add(i,entry);
+		for (Entry extension : extensions) {
+			int _layer = extension.layer;
+			if (layer < _layer) {
+				extensions.add(i, entry);
 				return;
 			}
 			i++;
@@ -52,10 +62,10 @@ class ExtensionManager
 	//{{{ removeExtension() method
 	void removeExtension(TextAreaExtension ext)
 	{
-		Iterator iter = extensions.iterator();
+		Iterator<Entry> iter = extensions.iterator();
 		while(iter.hasNext())
 		{
-			if(((Entry)iter.next()).ext == ext)
+			if(iter.next().ext == ext)
 			{
 				iter.remove();
 				return;
@@ -68,12 +78,11 @@ class ExtensionManager
 	{
 		TextAreaExtension[] retVal = new TextAreaExtension[
 			extensions.size()];
-		Iterator iter = extensions.iterator();
+		Iterator<Entry> iter = extensions.iterator();
 		int i = 0;
 		while(iter.hasNext())
-		{
-			retVal[i++] = ((Entry)iter.next()).ext;
-		}
+			retVal[i++] = iter.next().ext;
+
 		return retVal;
 	} //}}}
 
@@ -109,8 +118,8 @@ class ExtensionManager
 		catch(Exception e)
 		{
 			Log.log(Log.ERROR,this,"Error repainting line"
-				+ " range {" + firstLine + ","
-				+ lastLine + "}:");
+				+ " range {" + firstLine + ','
+					+ lastLine + "}:");
 			Log.log(Log.ERROR,this,e);
 		}
 	} //}}}
@@ -120,7 +129,7 @@ class ExtensionManager
 	{
 		for(int i = 0; i < extensions.size(); i++)
 		{
-			TextAreaExtension ext = ((Entry)extensions.get(i)).ext;
+			TextAreaExtension ext = extensions.get(i).ext;
 			String toolTip = ext.getToolTipText(x,y);
 			if(toolTip != null)
 				return toolTip;
@@ -130,17 +139,17 @@ class ExtensionManager
 	} //}}}
 
 	//{{{ Private members
-	private List extensions = new LinkedList();
+	private final List<Entry> extensions = new LinkedList<Entry>();
 
 	//{{{ paintScreenLineRange() method
 	private void paintScreenLineRange(Graphics2D gfx, int firstLine,
 		int lastLine, int[] physicalLines, int[] start, int[] end,
 		int y, int lineHeight)
 	{
-		Iterator iter = extensions.iterator();
+		Iterator<Entry> iter = extensions.iterator();
 		while(iter.hasNext())
 		{
-			TextAreaExtension ext = ((Entry)iter.next()).ext;
+			TextAreaExtension ext = iter.next().ext;
 			try
 			{
 				ext.paintScreenLineRange(gfx,firstLine,lastLine,
@@ -160,6 +169,7 @@ class ExtensionManager
 	//}}}
 
 	//{{{ Entry class
+	/** This class represents an extension with his layer. */
 	static class Entry
 	{
 		int layer;
