@@ -3,6 +3,16 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre6
 
 
+Thanks to Matthieu Casanova for contributing to this release.
+
+{{{ Bug Fixes
+- Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
+
+}}}
+
+{{{ Version 4.3pre6
+
+
 Thanks to Björn "Vampire" Kautler, Alan Ezust,
 Matthieu Casanova, Nicholas O'Leary, Ollie Rutherfurd, and
 Marcelo Vanzin for contributing to this release.

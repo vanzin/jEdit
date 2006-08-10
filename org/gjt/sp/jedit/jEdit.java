@@ -78,7 +78,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "04.03.06.00";
+		return "04.03.07.00";
 	} //}}}
 
 	//{{{ main() method
@@ -423,7 +423,7 @@ public class jEdit
 		//{{{ Activate plugins that must be activated at startup
 		for(int i = 0; i < jars.size(); i++)
 		{
-			((PluginJAR)jars.elementAt(i)).activatePluginIfNecessary();
+			jars.elementAt(i).activatePluginIfNecessary();
 		} //}}}
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
@@ -876,7 +876,7 @@ public class jEdit
 	 */
 	public static String[] getNotLoadedPluginJARs()
 	{
-		Vector returnValue = new Vector();
+		Vector<String> returnValue = new Vector<String>();
 
 		if(jEditHome != null)
 		{
@@ -949,11 +949,10 @@ public class jEdit
 	 */
 	public static EditPlugin[] getPlugins()
 	{
-		Vector vector = new Vector();
+		Vector<EditPlugin> vector = new Vector<EditPlugin>();
 		for(int i = 0; i < jars.size(); i++)
 		{
-			EditPlugin plugin = ((PluginJAR)jars.elementAt(i))
-				.getPlugin();
+			EditPlugin plugin = jars.elementAt(i).getPlugin();
 			if(plugin != null)
 				vector.add(plugin);
 		}
@@ -985,7 +984,7 @@ public class jEdit
 	{
 		for(int i = 0; i < jars.size(); i++)
 		{
-			PluginJAR jar = (PluginJAR)jars.elementAt(i);
+			PluginJAR jar = jars.elementAt(i);
 			if(jar.getPath().equals(path))
 				return jar;
 		}
@@ -1223,7 +1222,7 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector(50);
+		modes = new Vector<Mode>(50);
 
 		//{{{ Load the global catalog
 		if(jEditHome == null)
@@ -1294,7 +1293,7 @@ public class jEdit
 	{
 		for(int i = 0; i < modes.size(); i++)
 		{
-			Mode mode = (Mode)modes.elementAt(i);
+			Mode mode = modes.elementAt(i);
 			if(mode.getName().equals(name))
 				return mode;
 		}
@@ -1442,7 +1441,7 @@ public class jEdit
 
 				if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
 				{
-					props.put(Buffer.CARET,new Integer(entry.caret));
+					props.put(Buffer.CARET, entry.caret);
 					/* if(entry.selection != null)
 					{
 						// getSelection() converts from string to
@@ -1682,7 +1681,7 @@ public class jEdit
 			if(view != null)
 				view.getEditPane().saveCaretInfo();
 			Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
-			int caret = (_caret == null ? 0 : _caret.intValue());
+			int caret = _caret == null ? 0 : _caret.intValue();
 
 			BufferHistory.setEntry(buffer.getPath(),caret,
 				(Selection[])buffer.getProperty(Buffer.SELECTION),
@@ -1772,7 +1771,7 @@ public class jEdit
 			if(!buffer.isNewFile() && saveRecent)
 			{
 				Integer _caret = (Integer)buffer.getProperty(Buffer.CARET);
-				int caret = (_caret == null ? 0 : _caret.intValue());
+				int caret = _caret == null ? 0 : _caret.intValue();
 				BufferHistory.setEntry(buffer.getPath(),caret,
 					(Selection[])buffer.getProperty(Buffer.SELECTION),
 					buffer.getStringProperty(JEditBuffer.ENCODING));
@@ -1912,7 +1911,7 @@ public class jEdit
 
 		synchronized(bufferListLock)
 		{
-			return (Buffer)bufferHash.get(path);
+			return bufferHash.get(path);
 		}
 	} //}}}
 
@@ -2313,18 +2312,17 @@ public class jEdit
 		int before = (int) (rt.freeMemory() / 1024);
 		System.gc();
 		int after = (int) (rt.freeMemory() / 1024);
-		int total = (int) (rt.maxMemory() / 1024);
+		int total = (int) (rt.totalMemory() / 1024);
 
 		JProgressBar progress = new JProgressBar(0,total);
 		progress.setValue(total - after);
 		progress.setStringPainted(true);
 		progress.setString(jEdit.getProperty("memory-status.use",
-			new Object[] { new Integer(total - after),
-			new Integer(total) }));
+			new Object[] { total - after, total }));
 
 		Object[] message = new Object[4];
 		message[0] = getProperty("memory-status.gc",
-			new Object[] { new Integer(after - before) });
+			new Object[] { after - before });
 		message[1] = Box.createVerticalStrut(12);
 		message[2] = progress;
 		message[3] = Box.createVerticalStrut(6);
@@ -2622,8 +2620,7 @@ public class jEdit
 					if(subst instanceof Throwable)
 						Log.log(Log.ERROR,this,subst);
 					if (subst instanceof SAXParseException) {
-						line = new Integer(
-							((SAXParseException)subst).getLineNumber());
+						line = ((SAXParseException)subst).getLineNumber();
 					}
 				}
 
@@ -2669,8 +2666,7 @@ public class jEdit
 				int line = ((SAXParseException)e).getLineNumber();
 				int col = ((SAXParseException)e).getColumnNumber();
 
-				Object[] args = { fileName, new Integer(line),
-						  new Integer(col), message };
+				Object[] args = { fileName, line, col, message };
 				GUIUtilities.error(null,"xmode-error",args);
 			}
 		}
@@ -2754,9 +2750,9 @@ public class jEdit
 	private static ActionContext actionContext;
 	private static ActionSet builtInActionSet;
 	private static Vector pluginErrors;
-	private static Object pluginErrorLock = new Object();
-	private static Vector jars;
-	private static Vector modes;
+	private static final Object pluginErrorLock = new Object();
+	private static Vector<PluginJAR> jars;
+	private static Vector<Mode> modes;
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
 
@@ -2766,12 +2762,12 @@ public class jEdit
 	private static int bufferCount;
 	private static Buffer buffersFirst;
 	private static Buffer buffersLast;
-	private static Map bufferHash;
+	private static Map<String, Buffer> bufferHash;
 
 	// makes openTemporary() thread-safe
-	private static Object bufferListLock 		= new Object();
+	private static final Object bufferListLock 		= new Object();
 
-	private static Object editBusOrderingLock	= new Object();
+	private static final Object editBusOrderingLock	= new Object();
 
 	// view link list
 	private static int viewCount;
@@ -2843,7 +2839,7 @@ public class jEdit
 		boolean newPlainView, String[] args,
 		String scriptFile)
 	{
-		StringBuffer script = new StringBuffer();
+		StringBuilder script = new StringBuilder();
 
 		String userDir = System.getProperty("user.dir");
 
@@ -2905,7 +2901,7 @@ public class jEdit
 	 */
 	private static void initMisc()
 	{
-		jars = new Vector();
+		jars = new Vector<PluginJAR>();
 		actionContext = new ActionContext()
 		{
 			public void invokeAction(EventObject evt,
@@ -2937,7 +2933,7 @@ public class jEdit
 			}
 		};
 
-		bufferHash = new HashMap();
+		bufferHash = new HashMap<String, Buffer>();
 
 		inputHandler = new DefaultInputHandler(null);
 
@@ -3464,7 +3460,7 @@ public class jEdit
 				if(count == 0)
 					newFile(null);
 
-				View view = null;
+				View view;
 
 				boolean restoreFiles = restore
 					&& jEdit.getBooleanProperty("restore")
@@ -3525,8 +3521,8 @@ public class jEdit
 			? "-1" : ""));
 
 		Frame frame = (PluginManager.getInstance() == null
-			? (Frame)viewsFirst
-			: (Frame)PluginManager.getInstance());
+			? viewsFirst
+			: PluginManager.getInstance());
 
 		new ErrorListDialog(frame,
 			getProperty("plugin-error.title"),
@@ -3535,7 +3531,7 @@ public class jEdit
 	} //}}}
 
 	//{{{ getNotLoadedPluginJARs() method
-	private static void getNotLoadedPluginJARs(List returnValue,
+	private static void getNotLoadedPluginJARs(List<String> returnValue,
 		String dir, String[] list)
 	{
 loop:		for(int i = 0; i < list.length; i++)
@@ -3548,8 +3544,7 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			for(int j = 0; j < jars.size(); j++)
 			{
-				PluginJAR jar = (PluginJAR)
-					jars.elementAt(j);
+				PluginJAR jar = jars.elementAt(j);
 				String jarPath = jar.getPath();
 				String jarName = MiscUtilities.getFileName(jarPath);
 
