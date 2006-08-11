@@ -50,6 +50,12 @@ class ChunkCache
 	} //}}}
 
 	//{{{ getMaxHorizontalScrollWidth() method
+	/**
+	 * Returns the max line width of the textarea.
+	 * It will check all lines the first invalid line.
+	 *
+	 * @return the max line width
+	 */
 	int getMaxHorizontalScrollWidth()
 	{
 		int max = 0;
@@ -697,7 +703,7 @@ class ChunkCache
 			{
 				info.firstSubregion = false;
 
-				chunks = (Chunk)out.get(0);
+				chunks = out.get(0);
 				out.remove(0);
 				offset = chunks.offset;
 				if (!out.isEmpty())
@@ -768,6 +774,7 @@ class ChunkCache
 	//}}}
 
 	//{{{ LineInfo class
+	/** The informations on a line. (for fast access) */
 	static class LineInfo
 	{
 		int physicalLine;
@@ -776,6 +783,7 @@ class ChunkCache
 		boolean firstSubregion;
 		boolean lastSubregion;
 		Chunk chunks;
+		/** The line width. */
 		int width;
 		TokenMarker.LineContext lineContext;
 	} //}}}
