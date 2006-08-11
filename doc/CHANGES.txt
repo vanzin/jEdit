@@ -8,6 +8,7 @@ Thanks to Matthieu Casanova for contributing to this release.
 {{{ Bug Fixes
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 
+- Shortcut sorting was broken (#1538452) (Matthieu Casanova)
 }}}
 
 {{{ Version 4.3pre6

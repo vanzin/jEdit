@@ -84,16 +84,15 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		if(keyTable.getCellEditor() != null)
 			keyTable.getCellEditor().stopCellEditing();
 
-		Enumeration e = models.elements();
-		while(e.hasMoreElements())
-			((ShortcutsModel)e.nextElement()).save();
+		for (ShortcutsModel model : models)
+			model.save();
 
 		Macros.loadMacros();
 	}
 
 	private void initModels()
 	{
-		models = new Vector();
+		models = new Vector<ShortcutsModel>();
 		ActionSet[] actionSets = jEdit.getActionSets();
 		for(int i = 0; i < actionSets.length; i++)
 		{
@@ -111,12 +110,12 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 		}
 		Collections.sort(models,new MiscUtilities.StringICaseCompare());
-		currentModel = (ShortcutsModel)models.elementAt(0);
+		currentModel = models.elementAt(0);
 	}
 
 	private ShortcutsModel createModel(String modelLabel, String[] actions)
 	{
-		Vector bindings = new Vector(actions.length);
+		Vector<GrabKeyDialog.KeyBinding[]> bindings = new Vector<GrabKeyDialog.KeyBinding[]>(actions.length);
 
 		for(int i = 0; i < actions.length; i++)
 		{
@@ -133,7 +132,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		return new ShortcutsModel(modelLabel,bindings);
 	}
 
-	private void addBindings(String name, String label, List bindings)
+	private void addBindings(String name, String label, List<GrabKeyDialog.KeyBinding[]> bindings)
 	{
 		GrabKeyDialog.KeyBinding[] b = new GrabKeyDialog.KeyBinding[2];
 
@@ -160,10 +159,10 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	// private members
 	private JTable keyTable;
-	private Vector models;
+	private Vector<ShortcutsModel> models;
 	private ShortcutsModel currentModel;
 	private JComboBox selectModel;
-	private Vector allBindings;
+	private Vector<GrabKeyDialog.KeyBinding> allBindings;
 
 	class HeaderMouseHandler extends MouseAdapter
 	{
@@ -221,10 +220,10 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	class ShortcutsModel extends AbstractTableModel
 	{
-		private Vector bindings;
+		private Vector<GrabKeyDialog.KeyBinding[]> bindings;
 		private String name;
 
-		ShortcutsModel(String name, Vector bindings)
+		ShortcutsModel(String name, Vector<GrabKeyDialog.KeyBinding[]> bindings)
 		{
 			this.name = name;
 			this.bindings = bindings;
@@ -291,12 +290,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public void save()
 		{
-			Enumeration e = bindings.elements();
-			while(e.hasMoreElements())
+			for (GrabKeyDialog.KeyBinding[] binding : bindings)
 			{
-				GrabKeyDialog.KeyBinding[] binding
-					= (GrabKeyDialog.KeyBinding[])
-						e.nextElement();
 				jEdit.setProperty(
 					binding[0].name + ".shortcut",
 					binding[0].shortcut);
@@ -308,9 +303,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public GrabKeyDialog.KeyBinding getBindingAt(int row, int nr)
 		{
-			GrabKeyDialog.KeyBinding[] binding
-				= (GrabKeyDialog.KeyBinding[])
-					bindings.elementAt(row);
+			GrabKeyDialog.KeyBinding[] binding = bindings.elementAt(row);
 			return binding[nr];
 		}
 
@@ -344,9 +337,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				else
 				{
 					String shortcut1, shortcut2;
-
-					// why this test ?
-					/* if(col == 1)
+					if(col == 1)
 					{
 						shortcut1 = k1[0].shortcut;
 						shortcut2 = k2[0].shortcut;
@@ -355,21 +346,16 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 					{
 						shortcut1 = k1[1].shortcut;
 						shortcut2 = k2[1].shortcut;
-					}*/
-					
-					shortcut1 = k1[1].shortcut;
-					shortcut2 = k2[1].shortcut;
+					}
 
 					if(shortcut1 == null && shortcut2 != null)
 						return 1;
-
-					if(shortcut2 == null && shortcut1 != null)
+					else if(shortcut2 == null && shortcut1 != null)
 						return -1;
-
-					if(shortcut1 == null)
+					else if(shortcut1 == null)
 						return StandardUtilities.compareStrings(label1,label2,true);
-
-					return StandardUtilities.compareStrings(shortcut1,shortcut2,true);
+					else
+						return StandardUtilities.compareStrings(shortcut1,shortcut2,true);
 				}
 			}
 		}
