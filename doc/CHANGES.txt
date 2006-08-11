@@ -12,6 +12,8 @@ Thanks to Matthieu Casanova for contributing to this release.
 
 - Actions to-lower and to-upper now selects the word at caret if
   there is no selection (#1538720) (Matthieu Casanova)
+
+- Quicklist of dockables windows is now sorted (#1538728) (Matthieu Casanova)
 }}}
 }}}
 

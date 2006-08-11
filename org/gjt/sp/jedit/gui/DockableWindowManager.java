@@ -32,16 +32,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -168,12 +162,12 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	private DockableWindowFactory factory;
 
 	/** A mapping from Strings to Entry objects. */
-	private HashMap<String, Entry> windows;
+	private Map<String, Entry> windows;
 	private PanelWindowContainer left;
 	private PanelWindowContainer right;
 	private PanelWindowContainer top;
 	private PanelWindowContainer bottom;
-	private ArrayList clones;
+	private List<Entry> clones;
 	
 	private Entry lastEntry;
 	public Stack showStack = new Stack();
@@ -206,7 +200,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		this.factory = factory;
 
 		windows = new HashMap<String, Entry>();
-		clones = new ArrayList();
+		clones = new ArrayList<Entry>();
 
 		top = new PanelWindowContainer(this,TOP,config.topPos);
 		left = new PanelWindowContainer(this,LEFT,config.leftPos);
@@ -232,10 +226,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	{
 		EditBus.addToBus(this);
 
-		Iterator entries = factory.getDockableWindowIterator();
+		Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
 
 		while(entries.hasNext())
-			addEntry((DockableWindowFactory.Window)entries.next());
+			addEntry(entries.next());
 
 		propertiesChanged();
 	} //}}}
@@ -279,7 +273,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public JComponent floatDockableWindow(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
+		Entry entry = windows.get(name);
 		if(entry == null)
 		{
 			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
@@ -311,7 +305,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public void showDockableWindow(String name)
 	{
-		lastEntry = (Entry)windows.get(name);
+		lastEntry = windows.get(name);
 		if(lastEntry == null)
 		{
 			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
@@ -364,7 +358,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	public void hideDockableWindow(String name)
 	{
 
-		Entry entry = (Entry)windows.get(name);
+		Entry entry = windows.get(name);
 		if(entry == null)
 		{
 			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
@@ -439,7 +433,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	public JComponent getDockable(String name)
 	{
 		
-		Entry entry = (Entry)windows.get(name);
+		Entry entry = windows.get(name);
 		if(entry == null || entry.win == null)
 			return null;
 		else
@@ -470,7 +464,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * 
 	 */
 	public void  setDockableTitle(String dockableName, String newTitle) {
-		Entry entry = (Entry)windows.get(dockableName);
+		Entry entry = windows.get(dockableName);
 		String propName = entry.factory.name + ".longtitle";
 		String oldTitle = jEdit.getProperty(propName);
 		jEdit.setProperty(propName, newTitle);
@@ -485,7 +479,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public boolean isDockableWindowVisible(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
+		Entry entry = windows.get(name);
 		if(entry == null || entry.win == null)
 			return false;
 		else
@@ -501,7 +495,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 */
 	public boolean isDockableWindowDocked(String name)
 	{
-		Entry entry = (Entry)windows.get(name);
+		Entry entry = windows.get(name);
 		if(entry == null)
 			return false;
 		else
@@ -561,24 +555,16 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	{
 		EditBus.removeFromBus(this);
 
-		Iterator iter = windows.values().iterator();
-		while(iter.hasNext())
+		for (Entry entry : windows.values())
 		{
-			Entry entry = (Entry)iter.next();
-			if(entry.win != null)
-			{
+			if (entry.win != null)
 				entry.container.unregister(entry);
-			}
 		}
 
-		iter = clones.iterator();
-		while(iter.hasNext())
+		for (Entry clone : clones)
 		{
-			Entry entry = (Entry)iter.next();
-			if(entry.win != null)
-			{
-				entry.container.unregister(entry);
-			}
+			if (clone.win != null)
+				clone.container.unregister(clone);
 		}
 	} //}}}
 
@@ -628,7 +614,13 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			for(int i = 0; i < dockables.length; i++)
 			{
 				String name = dockables[i];
-				JMenuItem item = new JMenuItem(getDockableTitle(name));
+				dockables[i] = getDockableTitle(name);
+			}
+			Arrays.sort(dockables);
+			for(int i = 0; i < dockables.length; i++)
+			{
+				String name = dockables[i];
+				JMenuItem item = new JMenuItem(name);
 				item.setActionCommand(name);
 				item.addActionListener(listener);
 				popup.add(item);
@@ -751,11 +743,11 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			PluginUpdate pmsg = (PluginUpdate)msg;
 			if(pmsg.getWhat() == PluginUpdate.LOADED)
 			{
-				Iterator iter = factory.getDockableWindowIterator();
+				Iterator<DockableWindowFactory.Window> iter = factory.getDockableWindowIterator();
 
 				while(iter.hasNext())
 				{
-					DockableWindowFactory.Window w = (DockableWindowFactory.Window)iter.next();
+					DockableWindowFactory.Window w = iter.next();
 					if(w.plugin == pmsg.getPluginJAR())
 						addEntry(w);
 				}
@@ -768,22 +760,22 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			}
 			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
 			{
-				Iterator iter = getAllPluginEntries(
+				Iterator<Entry> iter = getAllPluginEntries(
 					pmsg.getPluginJAR(),false);
 				while(iter.hasNext())
 				{
-					Entry entry = (Entry)iter.next();
+					Entry entry = iter.next();
 					if(entry.container != null)
 						entry.container.remove(entry);
 				}
 			}
 			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
 			{
-				Iterator iter = getAllPluginEntries(
+				Iterator<Entry> iter = getAllPluginEntries(
 					pmsg.getPluginJAR(),true);
 				while(iter.hasNext())
 				{
-					Entry entry = (Entry)iter.next();
+					Entry entry = iter.next();
 					if(entry.container != null)
 					{
 						entry.container.unregister(entry);
@@ -889,7 +881,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		for(int i = 0; i < windowList.length; i++)
 		{
 			String dockable = windowList[i];
-			Entry entry = (Entry)windows.get(dockable);
+			Entry entry = windows.get(dockable);
 
 			String newPosition = jEdit.getProperty(dockable
 				+ ".dock-position",FLOATING);
@@ -981,13 +973,13 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * If remove is false, only remove from clones list, otherwise remove
 	 * from both entries and clones.
 	 */
-	private Iterator getAllPluginEntries(PluginJAR plugin, boolean remove)
+	private Iterator<Entry> getAllPluginEntries(PluginJAR plugin, boolean remove)
 	{
-		java.util.List returnValue = new LinkedList();
-		Iterator iter = windows.values().iterator();
+		List<Entry> returnValue = new LinkedList<Entry>();
+		Iterator<Entry> iter = windows.values().iterator();
 		while(iter.hasNext())
 		{
-			Entry entry = (Entry)iter.next();
+			Entry entry = iter.next();
 			if(entry.factory.plugin == plugin)
 			{
 				returnValue.add(entry);
@@ -999,7 +991,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		iter = clones.iterator();
 		while(iter.hasNext())
 		{
-			Entry entry = (Entry)iter.next();
+			Entry entry = iter.next();
 			if(entry.factory.plugin == plugin)
 			{
 				returnValue.add(entry);
