@@ -611,17 +611,16 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 			String[] dockables = ((PanelWindowContainer)
 				container).getDockables();
-			for(int i = 0; i < dockables.length; i++)
+			Map<String,String> dockableMap = new TreeMap<String, String>();
+			for (int i = 0; i < dockables.length; i++)
 			{
-				String name = dockables[i];
-				dockables[i] = getDockableTitle(name);
+				String action = dockables[i];
+				dockableMap.put(getDockableTitle(action), action);
 			}
-			Arrays.sort(dockables);
-			for(int i = 0; i < dockables.length; i++)
+			for (Map.Entry<String, String> entry : dockableMap.entrySet())
 			{
-				String name = dockables[i];
-				JMenuItem item = new JMenuItem(name);
-				item.setActionCommand(name);
+				JMenuItem item = new JMenuItem(entry.getKey());
+				item.setActionCommand(entry.getValue());
 				item.addActionListener(listener);
 				popup.add(item);
 			}
