@@ -157,6 +157,17 @@
 		</java>
 	</target>
 	
+	<target name="run-debug"
+			depends="init,build"
+			description="run jEdit with debug listening enabled">
+		<java jar="${jar.location}/${jar.filename}"
+			  fork="true"
+			  spawn="true">
+			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5000" />
+			<arg value="-noserver" />
+		</java>
+	</target>
+	
 	<target name="generate-docbook-wrapper"
 			if="format"
 			depends="init">
