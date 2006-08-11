@@ -1,6 +1,6 @@
 JEDIT 4.3 VERSION HISTORY
 
-{{{ Version 4.3pre6
+{{{ Version 4.3pre7
 
 
 Thanks to Matthieu Casanova for contributing to this release.
@@ -9,6 +9,10 @@ Thanks to Matthieu Casanova for contributing to this release.
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 
 - Shortcut sorting was broken (#1538452) (Matthieu Casanova)
+
+- Actions to-lower and to-upper now selects the word at caret if
+  there is no selection (#1538720) (Matthieu Casanova)
+}}}
 }}}
 
 {{{ Version 4.3pre6

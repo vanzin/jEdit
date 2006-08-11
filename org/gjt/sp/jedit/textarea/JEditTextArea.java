@@ -4192,10 +4192,24 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void toUpperCase()
 	{
-		Selection[] selection = getSelection();
-
-		if(!buffer.isEditable() || selection.length == 0)
+		if(!buffer.isEditable())
 		{
+			getToolkit().beep();
+			return;
+		}
+
+		Selection[] selection = getSelection();
+		int caret = -1;
+		if (selection.length == 0)
+		{
+			caret = getCaretPosition();
+			selectWord();
+			selection = getSelection();
+		}
+		if (selection.length == 0)
+		{
+			if (caret != -1)
+				setCaretPosition(caret);
 			getToolkit().beep();
 			return;
 		}
@@ -4209,6 +4223,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 
 		buffer.endCompoundEdit();
+		if (caret != -1)
+			setCaretPosition(caret);
 	} //}}}
 
 	//{{{ toLowerCase() method
@@ -4218,23 +4234,39 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void toLowerCase()
 	{
-		Selection[] selection = getSelection();
-
-		if(!buffer.isEditable() || selection.length == 0)
+		if(!buffer.isEditable())
 		{
+			getToolkit().beep();
+			return;
+		}
+
+		Selection[] selection = getSelection();
+		int caret = -1;
+		if (selection.length == 0)
+		{
+			caret = getCaretPosition();
+			selectWord();
+			selection = getSelection();
+		}
+		if (selection.length == 0)
+		{
+			if (caret != -1)
+				setCaretPosition(caret);
 			getToolkit().beep();
 			return;
 		}
 
 		buffer.beginCompoundEdit();
 
-		for(int i = 0; i < selection.length; i++)
+		for (int i = 0; i < selection.length; i++)
 		{
 			Selection s = selection[i];
 			setSelectedText(s,getSelectedText(s).toLowerCase());
 		}
 
 		buffer.endCompoundEdit();
+		if (caret != -1)
+			setCaretPosition(caret);		
 	} //}}}
 
 	//{{{ removeTrailingWhiteSpace() method
@@ -5191,12 +5223,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		// to hide line highlight if selections are being added later on
 		invalidateLine(caretLine);
 
-		Iterator iter = selectionManager.selection.iterator();
-		while(iter.hasNext())
-		{
-			Selection s = (Selection)iter.next();
+		for (Selection s : selectionManager.selection)
 			invalidateLineRange(s.startLine,s.endLine);
-		}
 	} //}}}
 
 	//{{{ finishCaretUpdate() method
@@ -5549,10 +5577,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			&& !gutter.isStructureHighlightEnabled())
 			return;
 
-		Iterator<StructureMatcher> iter = structureMatchers.iterator();
-		while(iter.hasNext())
+		for (StructureMatcher matcher : structureMatchers)
 		{
-			StructureMatcher matcher = iter.next();
 			match = matcher.getMatch(this);
 			if(match != null)
 				break;
