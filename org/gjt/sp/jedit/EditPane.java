@@ -26,6 +26,7 @@ package org.gjt.sp.jedit;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.HashMap;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
@@ -275,16 +276,37 @@ public class EditPane extends JPanel implements EBComponent
 
 		buffer.setIntegerProperty(Buffer.CARET,
 			textArea.getCaretPosition());
+		
+		// save a map of buffer.getPath() -> CaretInfo, this is necessary for
+		// when the same buffer is open in more than one EditPane and the user
+		// is switching between buffers.  We want to keep the caret in the 
+		// right position in each EditPane, which won't be the case if we 
+		// just use the buffer caret property.
+		HashMap carets = (HashMap)getClientProperty(CARETS);
+		if ( carets == null ) {
+			carets = new HashMap();
+			putClientProperty(CARETS, carets);
+		}
+		CaretInfo caretInfo = (CaretInfo)carets.get(buffer.getPath());
+		if ( caretInfo == null ) {
+			caretInfo = new CaretInfo();	
+			carets.put(buffer.getPath(), caretInfo);
+		}
+		caretInfo.caret = new Integer(textArea.getCaretPosition());
+		
 
 		Selection[] selection = textArea.getSelection();
 		for(int i = 0; i < selection.length; i++)
 			selection[i] = (Selection)selection[i].clone();
 		buffer.setProperty(Buffer.SELECTION,selection);
+		caretInfo.selection = selection;
 
 		buffer.setIntegerProperty(Buffer.SCROLL_VERT,
 			textArea.getFirstPhysicalLine());
+		caretInfo.scrollVert = new Integer(textArea.getFirstPhysicalLine());
 		buffer.setIntegerProperty(Buffer.SCROLL_HORIZ,
 			textArea.getHorizontalOffset());
+		caretInfo.scrollHoriz = new Integer(textArea.getHorizontalOffset());
 		if (!buffer.isUntitled())
 		{
 			BufferHistory.setEntry(buffer.getPath(), textArea.getCaretPosition(),
@@ -295,12 +317,35 @@ public class EditPane extends JPanel implements EBComponent
 
 	//{{{ loadCaretInfo() method
 	/**
-	 * Loads the caret information from the current buffer.
+	 * Loads the caret and selection information from this EditPane, fall 
+	 * back to the information from the current buffer if none is already
+	 * in this EditPane.
 	 * @since jEdit 2.5pre2
 	 */
 	public void loadCaretInfo()
 	{
-		Integer caret = (Integer)buffer.getProperty(Buffer.CARET);
+		// get our internal map of buffer -> CaretInfo since there might
+		// be current info already
+		HashMap carets = (HashMap)getClientProperty(CARETS);
+		if ( carets == null ) {
+			carets = new HashMap();
+			putClientProperty(CARETS, carets);
+		}
+		CaretInfo caretInfo = (CaretInfo)carets.get(buffer.getPath());
+		if ( caretInfo == null ) {
+			caretInfo = new CaretInfo();	
+		}
+		
+		// set the position of the caret itself.
+		// Caret position could be stored in the internal map already,
+		// if so, use that one first.  Otherwise, fall back to any 
+		// previously saved caret position that was stored in the 
+		// buffer properties.
+		Integer caret = caretInfo.caret;	
+		if ( caret == null ) {
+			caret = (Integer)buffer.getProperty(Buffer.CARET);
+		}
+		
 
 		if(caret != null)
 		{
@@ -308,7 +353,11 @@ public class EditPane extends JPanel implements EBComponent
 				buffer.getLength()));
 		}
 
-		Selection[] selection = (Selection[])buffer.getProperty(Buffer.SELECTION);
+		// set any selections
+		Selection[] selection = caretInfo.selection;
+		if ( selection == null ) {
+			selection = (Selection[])buffer.getProperty(Buffer.SELECTION);
+		}
 		if(selection != null)
 		{
 			for(int i = 0; i < selection.length; i++)
@@ -322,11 +371,19 @@ public class EditPane extends JPanel implements EBComponent
 			textArea.setSelection(selection);
 		}
 
-		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		// set firstLine value
+		Integer firstLine = caretInfo.scrollVert;
+		if ( firstLine == null ) {
+			firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		}
 		if(firstLine != null)
 			textArea.setFirstPhysicalLine(firstLine.intValue());
 
-		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
+		// set horizontal offset
+		Integer horizontalOffset = caretInfo.scrollHoriz;
+		if ( horizontalOffset == null ) {
+			horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
+		}
 		if(horizontalOffset != null)
 			textArea.setHorizontalOffset(horizontalOffset.intValue());
 
@@ -342,6 +399,26 @@ public class EditPane extends JPanel implements EBComponent
 		 * appear at random when switching buffers, we simply hide the
 		 * message altogether. */
 		view.getStatus().setMessage(null);
+	} //}}}
+	
+	//{{{
+	/**
+
+	 * Need to track this info for each buffer that this EditPane might edit
+
+	 * since a buffer may be open in more than one EditPane at a time.  That
+
+	 * means we need to track this info at the EditPane level rather than
+
+	 * the buffer level.
+
+	 */
+
+	public class CaretInfo {
+		public Integer caret = null;
+		public Selection[] selection = null;
+		public Integer scrollVert = null;
+		public Integer scrollHoriz = null;
 	} //}}}
 
 	//{{{ goToNextMarker() method
@@ -580,6 +657,9 @@ public class EditPane extends JPanel implements EBComponent
 	private BufferSwitcher bufferSwitcher;
 	private JEditTextArea textArea;
 	private MarkerHighlight markerHighlight;
+
+	public static final String CARETS = "Buffer->caret";
+	
 	//}}}
 
 	//{{{ propertiesChanged() method
