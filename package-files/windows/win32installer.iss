@@ -34,7 +34,7 @@ WindowShowCaption=false
 WindowResizable=false
 WindowVisible=true
 AppVersion=@jedit.version@
-AppID={{10B7DCF9-FD90-4063-82B7-91C174D47338}
+AppID=jEdit
 UninstallDisplayName=jEdit @jedit.version@
 AppContact=devel@jEdit.org
 AppReadmeFile={app}\doc\README.txt
@@ -289,4 +289,3 @@ begin
 		DelTree(ExpandConstant('{app}\jars'),true,true,true);
 	end;
 end;
-
