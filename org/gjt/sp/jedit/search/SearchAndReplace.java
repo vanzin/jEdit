@@ -495,6 +495,14 @@ loop:			for(;;)
 					else
 						start = 0;
 
+					if (!_reverse && matcher.isMatchingEOL())
+					{
+						if (start < buffer.getLength())
+							start += 1;
+						else
+							break loop;
+					}
+
 					if(find(view,buffer,start,repeat,_reverse))
 						return true;
 				}
@@ -702,7 +710,7 @@ loop:			for(;;)
 				retVal += replaceInSelection(view,textArea,
 					buffer,matcher,smartCaseReplace,s);
 			}
-			
+
 			boolean _reverse = !regexp && reverse && fileset instanceof CurrentBufferSet;
 			if(_reverse)
 			{
@@ -725,7 +733,7 @@ loop:			for(;;)
 				view.getStatus().setMessageAndClear(jEdit.getProperty(
 					"view.status.replace-all",args));
 			}
-			
+
 			if(retVal == 0)
 			{
 				view.getToolkit().beep();
@@ -1153,6 +1161,14 @@ loop:		for(int counter = 0; ; counter++)
 				end += (length - found.length());
 				occurCount++;
 			}
+
+			if (matcher.isMatchingEOL())
+			{
+				if (offset < buffer.getLength())
+					offset += 1;
+				else
+					break loop;
+			}
 		}
 
 		return occurCount;
@@ -1185,7 +1201,8 @@ loop:		for(int counter = 0; ; counter++)
 			int start = offset + occur.start;
 			int end = offset + occur.end;
 
-			buffer.remove(start,end - start);
+			if (end - start > 0)
+				buffer.remove(start,end - start);
 			buffer.insert(start,subst);
 			return subst.length();
 		}

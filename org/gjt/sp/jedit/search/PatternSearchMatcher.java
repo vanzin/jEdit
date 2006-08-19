@@ -66,9 +66,6 @@ public class PatternSearchMatcher extends SearchMatcher
 	public SearchMatcher.Match nextMatch(CharSequence text, boolean start,
 		boolean end, boolean firstTime, boolean reverse)
 	{
-		if (text.length() == 0)
-			return null;
-
 		if (re == null)
 			re = Pattern.compile(pattern, flags);
 
@@ -99,14 +96,14 @@ public class PatternSearchMatcher extends SearchMatcher
 		int _start = match.start();
 		int _end = match.end();
 
-		// "$" will match right before the line break; so we need to
-		// adjust the end of the match to consider the line break.
-		if (pattern.charAt(pattern.length() - 1) == '$' && _end < text.length())
-				_end += 1;
-
 		returnValue.start = _start;
 		returnValue.end = _end;
 		return returnValue;
+	}
+
+	public boolean isMatchingEOL()
+	{
+		return pattern.charAt(pattern.length() - 1) == '$';
 	}
 
 	private int	flags;

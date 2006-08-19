@@ -262,6 +262,13 @@ loop:			for(int counter = 0; ; counter++)
 					offset + match.end);
 
 				offset += match.end;
+				if (matcher.isMatchingEOL())
+				{
+					if (offset < buffer.getLength())
+						offset += 1;
+					else
+						break loop;
+				}
 
 				resultCount++;
 			}
