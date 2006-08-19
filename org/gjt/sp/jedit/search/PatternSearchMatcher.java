@@ -66,8 +66,12 @@ public class PatternSearchMatcher extends SearchMatcher
 	public SearchMatcher.Match nextMatch(CharSequence text, boolean start,
 		boolean end, boolean firstTime, boolean reverse)
 	{
+		if (text.length() == 0)
+			return null;
+
 		if (re == null)
 			re = Pattern.compile(pattern, flags);
+
 		Matcher match = re.matcher(text);
 		if (!match.find())
 			return null;
@@ -77,15 +81,13 @@ public class PatternSearchMatcher extends SearchMatcher
 		// being matched, ignore the match and try the next one.
 		if (!start && match.start() == 0
 		    && re.pattern().charAt(0) == '^' && !match.find())
-		{
 			return null;
-		}
 
 		// similarly, if we're not at the end of the buffer and we
 		// match the end of the text, and the pattern ends with a "$",
 		// return null.
 		if (!end && match.end() == (text.length() - 1)
-		    && re.pattern().charAt(re.pattern().length()-1) == '$')
+		    && pattern.charAt(pattern.length()-1) == '$')
 			return null;
 
 		returnValue.substitutions = new String[match.groupCount() + 1];
@@ -96,6 +98,11 @@ public class PatternSearchMatcher extends SearchMatcher
 
 		int _start = match.start();
 		int _end = match.end();
+
+		// "$" will match right before the line break; so we need to
+		// adjust the end of the match to consider the line break.
+		if (pattern.charAt(pattern.length() - 1) == '$' && _end < text.length())
+				_end += 1;
 
 		returnValue.start = _start;
 		returnValue.end = _end;
