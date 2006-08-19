@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre7
 
 
-Thanks to Matthieu Casanova for contributing to this release.
+Thanks to Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
@@ -14,6 +14,12 @@ Thanks to Matthieu Casanova for contributing to this release.
   there is no selection (#1538720) (Matthieu Casanova)
 
 - Quicklist of dockables windows is now sorted (#1538728) (Matthieu Casanova)
+
+- SF Bug #1541009: 4.3pre6 regexp find: hangs + huge memory waste
+  "$" matches right before the end of line; so we need to adjust the end
+  of the matched region when that is used. Also, don't search in empty
+  strings. (Marcelo Vanzin)
+
 }}}
 }}}
 
@@ -55,8 +61,8 @@ Marcelo Vanzin for contributing to this release.
 
 - Moved MiscUtilities.objectsEqual() method to StandardUtilities()
   (Matthieu Casanova)
-  
-  
+
+
 }}}
 
 {{{ Miscellaneous
@@ -114,8 +120,8 @@ Marcelo Vanzin for contributing to this release.
 - (jedit-Bugs-1518537) FSB keyboard handling bugs fixed.
   Arrow keys, backspace, and return all do sensible things
   from the table as well as the list view. (Ezust)
-  
-- (jedit-bugs 1533925) Alpha-numerics are no longer being "passed through" 
+
+- (jedit-bugs 1533925) Alpha-numerics are no longer being "passed through"
   from the FSB to the editpane.  (Alan Ezust)
 
 - When multiple views are open, closing a buffer will not change the active view
