@@ -495,15 +495,16 @@ loop:			for(;;)
 					else
 						start = 0;
 
+					boolean _search = true;
 					if (!_reverse && matcher.isMatchingEOL())
 					{
 						if (start < buffer.getLength())
 							start += 1;
 						else
-							break loop;
+							_search = false;
 					}
 
-					if(find(view,buffer,start,repeat,_reverse))
+					if(_search && find(view,buffer,start,repeat,_reverse))
 						return true;
 				}
 
