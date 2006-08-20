@@ -21,7 +21,11 @@ Thanks to Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 - Actions to-lower and to-upper now selects the word at caret if
   there is no selection (#1538720) (Matthieu Casanova)
 
-- Quicklist of dockables windows is now sorted (#1538728) (Matthieu Casanova)
+- Quicklist of dockables windows is now sorted (#1538728) 
+  (Matthieu Casanova)
+
+- Updated text in Search dialog to reflect reality (#1542029) 
+  (Nicholas O'Leary)
 
 - SF Bug #1541009: 4.3pre6 regexp find: hangs + huge memory waste
   "$" matches right before the end of line; so we need to adjust the end
