@@ -392,6 +392,7 @@
             </filterset>
         </copy>
         <antcall target="docs-${docs-proc.target}" />
+        <antcall target="error-catalog" />
         <delete file="${build.docs}/users-guide.xsl" />
         <delete>
             <fileset dir="${build.docs}">
@@ -457,6 +458,11 @@
 				 file="${docbook.catalog}" />
         </exec>
     </target>
+    
+    <target name="error-catalog" unless="docbook.catalog" >
+        <echo message="docbook.catalog not set" />
+    </target>
+    
     <!-- ===============================================}}} -->
 
     <!-- {{{ Target: docs-xalan =========================== -->

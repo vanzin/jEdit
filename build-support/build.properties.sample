@@ -23,6 +23,7 @@
 # User settings directory
 #jedit.user.home=${user.home}/.jedit
 
+
 # Top-level of the plugins source tree
 #plugins.srcdir=..
 
@@ -104,7 +105,8 @@
 # Title for javadoc documentation
 #javadoc.title=${ant.project.name} API
 
-# Where to find the DocBook XML catalog file
+# Where to find the DocBook XML catalog file 
+# REQUIRED: xsltproc is skipped unless this is set.
 #docbook.catalog=C:\\Programme\\DocBook\\XML\\4.2\\docbook.cat
 
 # Where to find the DocBook XML DTD
