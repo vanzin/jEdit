@@ -29,10 +29,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ComponentAdapter;
@@ -974,30 +976,24 @@ public class GUIUtilities
 		int x, y, width, height;
 
 		Dimension size = win.getSize();
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		Component parent = win.getParent();
+
+		
+/*		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		Rectangle gcbounds = gd.getDefaultConfiguration().getBounds();
-
-		x = gcbounds.x;
-		y = gcbounds.y;
-
+*/
+		
 		width = jEdit.getIntegerProperty(name + ".width",size.width);
 		height = jEdit.getIntegerProperty(name + ".height",size.height);
-
-		Component parent = win.getParent();
-		if(parent == null)
+		x = jEdit.getIntegerProperty(name + ".x",50);
+		y = jEdit.getIntegerProperty(name + ".y",50);
+		
+		if(parent != null)
 		{
-			x += (gcbounds.width - width) / 2;
-			y += (gcbounds.height - height) / 2;
+			Point location = parent.getLocation();
+			x = location.x + x;
+			y = location.y + y;
 		}
-		else
-		{
-			Rectangle bounds = parent.getBounds();
-			x += bounds.x + (bounds.width - width) / 2;
-			y += bounds.y + (bounds.height - height) / 2;
-		}
-
-		x = jEdit.getIntegerProperty(name + ".x",x);
-		y = jEdit.getIntegerProperty(name + ".y",y);
 
 		int extState = jEdit.getIntegerProperty(name + ".extendedState", Frame.NORMAL);
 
@@ -1183,8 +1179,17 @@ public class GUIUtilities
 		}
 
 		Rectangle bounds = win.getBounds();
-		jEdit.setIntegerProperty(name + ".x",bounds.x);
-		jEdit.setIntegerProperty(name + ".y",bounds.y);
+		int x = bounds.x;
+		int y = bounds.y;
+		Component parent = win.getParent();
+		if (parent != null) 
+		{
+			Rectangle parentBounds = parent.getBounds();
+			x = x - parentBounds.x;
+			y = y - parentBounds.y;
+		}
+		jEdit.setIntegerProperty(name + ".x",x);
+		jEdit.setIntegerProperty(name + ".y",y);
 		jEdit.setIntegerProperty(name + ".width",bounds.width);
 		jEdit.setIntegerProperty(name + ".height",bounds.height);
 	} //}}}

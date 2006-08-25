@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre7
 
-
-Thanks to Matthieu Casanova and Marcelo Vanzin for contributing to this release.
+Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'leary
+and Alan Ezust for contributing to this release.
 
 {{{ API Changes
 
@@ -14,6 +14,11 @@ Thanks to Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 }}}
 
 {{{ Bug Fixes
+
+- GuiUtilities.load/save geometry now saves x and y coordinates
+  relative to the parent component. This makes dialogs pop
+  up on the same display as the parent view. (#1292706) (ezust)
+  
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 
 - Shortcut sorting was broken (#1538452) (Matthieu Casanova)
@@ -37,7 +42,6 @@ Thanks to Matthieu Casanova and Marcelo Vanzin for contributing to this release.
 }}}
 
 {{{ Version 4.3pre6
-
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust,
 Matthieu Casanova, Nicholas O'Leary, Ollie Rutherfurd, and

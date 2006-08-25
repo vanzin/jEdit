@@ -23,16 +23,13 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.KeyStroke;
-import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent;
-import java.awt.Toolkit;
 import java.util.Hashtable;
-import java.util.StringTokenizer;
-import org.gjt.sp.jedit.*;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
+
 import org.gjt.sp.util.Log;
-import org.gjt.sp.jedit.msg.*;
-import javax.swing.event.*;
 //}}}
 
 /**
