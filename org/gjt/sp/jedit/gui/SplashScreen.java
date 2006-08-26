@@ -21,6 +21,7 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.*;
 import java.awt.*;
+
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
@@ -53,8 +54,11 @@ public class SplashScreen extends JComponent
 		}
 
 		win = new JWindow();
-
-		Dimension screen = getToolkit().getScreenSize();
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice[] gs = ge.getScreenDevices();
+		int height = gs[0].getDisplayMode().getHeight();
+		int width = gs[0].getDisplayMode().getWidth();
+		Dimension screen = new Dimension(width, height);
 		Dimension size = new Dimension(image.getWidth(this) + 2,
 			image.getHeight(this) + 2 + PROGRESS_HEIGHT);
 		win.setSize(size);
