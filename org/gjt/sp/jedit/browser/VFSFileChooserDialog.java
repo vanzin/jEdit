@@ -45,9 +45,24 @@ import org.gjt.sp.util.*;
  */
 public class VFSFileChooserDialog extends EnhancedDialog
 {
+
 	//{{{ VFSFileChooserDialog constructor
 	public VFSFileChooserDialog(View view, String path,
 		int mode, boolean multipleSelection)
+	{
+		this(view,path,mode,multipleSelection,true);
+	} //}}}
+
+	//{{{ VFSFileChooserDialog constructor
+	/**
+	 * Constructs a new VFSFileChooserDialog. If <code>authoshow</code>
+	 * is true, the dialog will be show automatically and the call
+	 * will only return after the user disposes of the dialog.
+	 *
+	 * @since jEdit 4.3pre7
+	 */
+	public VFSFileChooserDialog(View view, String path,
+		int mode, boolean multipleSelection, boolean autoshow)
 	{
 		super(view,jEdit.getProperty("vfs.browser.title"),true);
 
@@ -136,7 +151,19 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		pack();
 		GUIUtilities.loadGeometry(this,"vfs.browser.dialog");
 		GUIUtilities.requestFocus(this,filenameField);
-		setVisible(true);
+		if (autoshow)
+			setVisible(true);
+	} //}}}
+
+	//{{{ getBrowser() method
+	/**
+	 * Returns the VFSBrowser instance used internally.
+	 *
+	 * @since jEdit 4.3pre7
+	 */
+	public VFSBrowser getBrowser()
+	{
+		return browser;
 	} //}}}
 
 	//{{{ dispose() method
@@ -342,7 +369,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		{
 			boolean choosingDir = (browser.getMode()
 				== VFSBrowser.CHOOSE_DIRECTORY_DIALOG);
-			
+
 			if(files.length == 0)
 			{
 				if(choosingDir)

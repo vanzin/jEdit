@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -157,7 +158,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		boolean multipleSelection, String position)
 	{
 		super(new BorderLayout());
-		
+
 		listenerList = new EventListenerList();
 
 		this.mode = mode;
@@ -184,7 +185,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		topBox.add(toolbarBox);
 
 		GridBagLayout layout = new GridBagLayout();
-		JPanel pathAndFilterPanel = new JPanel(layout);
+		pathAndFilterPanel = new JPanel(layout);
 
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridwidth = cons.gridheight = 1;
@@ -211,6 +212,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		pathField.addActionListener(actionHandler);
 		cons.gridx = 1;
 		cons.weightx = 1.0f;
+		cons.gridwidth = GridBagConstraints.REMAINDER;
 
 		layout.setConstraints(pathField,cons);
 		pathAndFilterPanel.add(pathField);
@@ -226,6 +228,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		if(mode != CHOOSE_DIRECTORY_DIALOG)
 		{
+			cons.gridwidth = 1;
 			cons.gridx = 0;
 			cons.weightx = 0.0f;
 			cons.gridy = 1;
@@ -233,25 +236,12 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			pathAndFilterPanel.add(filterCheckbox);
 		}
 
-		filterField = new HistoryTextField("vfs.browser.filter");
-		filterField.setInstantPopups(true);
-		filterField.setSelectAllOnFocus(true);
-		filterField.addActionListener(actionHandler);
-
-		if(mode != CHOOSE_DIRECTORY_DIALOG)
-		{
-			cons.gridx = 1;
-			cons.weightx = 1.0f;
-			layout.setConstraints(filterField,cons);
-			pathAndFilterPanel.add(filterField);
-		}
-
-		topBox.add(pathAndFilterPanel);
-		add(BorderLayout.NORTH,topBox);
-
-		add(BorderLayout.CENTER,browserView = new BrowserView(this));
-
-		propertiesChanged();
+		filterField = new JComboBox();
+		filterEditor = new HistoryComboBoxEditor("vfs.browser.filter");
+		filterEditor.setInstantPopups(true);
+		filterEditor.setSelectAllOnFocus(true);
+		filterEditor.addActionListener(actionHandler);
+		filterField.setRenderer(new VFSFileFilterRenderer());
 
 		String filter;
 		if(mode == BROWSER || !jEdit.getBooleanProperty(
@@ -271,8 +261,45 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 				filter = "*" + ext;
 		}
 
-		filterField.setText(filter);
-		filterField.addCurrentToHistory();
+		filterField.getEditor().setItem(new GlobVFSFileFilter(filter));
+		filterField.addItem(filterField.getEditor().getItem());
+		filterField.addItemListener(actionHandler);
+
+		// loads the registered VFSFileFilter services.
+		String[] _filters = ServiceManager.getServiceNames(VFSFileFilter.SERVICE_NAME);
+		for (int i = 0; i < _filters.length; i++)
+		{
+			VFSFileFilter _filter = (VFSFileFilter)
+				ServiceManager.getService(VFSFileFilter.SERVICE_NAME, _filters[i]);
+			filterField.addItem(_filter);
+		}
+
+		if(mode != CHOOSE_DIRECTORY_DIALOG)
+		{
+			cons.gridwidth = GridBagConstraints.REMAINDER;
+			cons.fill = GridBagConstraints.HORIZONTAL;
+			cons.gridx = 1;
+			cons.weightx = 1.0f;
+			if (filterField.getItemCount() > 1)
+			{
+				filterField.setEditor(filterEditor);
+				filterField.setEditable(true);
+				layout.setConstraints(filterField,cons);
+				pathAndFilterPanel.add(filterField);
+			}
+			else
+			{
+				layout.setConstraints(filterEditor,cons);
+				pathAndFilterPanel.add(filterEditor);
+			}
+		}
+
+		topBox.add(pathAndFilterPanel);
+		add(BorderLayout.NORTH,topBox);
+
+		add(BorderLayout.CENTER,browserView = new BrowserView(this));
+
+		propertiesChanged();
 
 		updateFilterEnabled();
 
@@ -350,8 +377,11 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		if(mode == BROWSER || !jEdit.getBooleanProperty(
 			"vfs.browser.currentBufferFilter"))
 		{
-			jEdit.setProperty("vfs.browser.last-filter",
-				filterField.getText());
+			VFSFileFilter selectedFilter =
+				(VFSFileFilter) filterField.getSelectedItem();
+			if (selectedFilter instanceof GlobVFSFileFilter)
+				jEdit.setProperty("vfs.browser.last-filter",
+					((GlobVFSFileFilter)selectedFilter).getGlob());
 		}
 		EditBus.removeFromBus(this);
 	} //}}}
@@ -423,12 +453,14 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	/**
 	 * Returns the file name filter glob.
 	 * @since jEdit 3.2pre2
+	 * @deprecated Use {@link #getVFSFileFilter()} instead. This method
+	 *             might return wrong information since jEdit 4.3pre6.
 	 */
 	public String getFilenameFilter()
 	{
 		if(filterCheckbox.isSelected())
 		{
-			String filter = filterField.getText();
+			String filter = filterField.getSelectedItem().toString();
 			if(filter.length() == 0)
 				return "*";
 			else
@@ -436,6 +468,47 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		}
 		else
 			return "*";
+	} //}}}
+
+	//{{{ getVFSFileFilter() method
+	/**
+	 * Returns the currently active VFSFileFilter.
+	 *
+	 * @since jEdit 4.3pre7
+	 */
+	public VFSFileFilter getVFSFileFilter()
+	{
+		if (mode == CHOOSE_DIRECTORY_DIALOG)
+			return new DirectoriesOnlyFilter();
+		return 	(VFSFileFilter) filterField.getSelectedItem();
+	} //}}}
+
+	//{{{ addVFSFileFilter() method
+	/**
+	 * Adds a file filter to the browser.
+	 *
+	 * @since jEdit 4.3pre7
+	 */
+	public void addVFSFileFilter(VFSFileFilter filter) {
+		filterField.addItem(filter);
+		if (filterField.getItemCount() == 2)
+		{
+			filterField.setEditor(filterEditor);
+			filterField.setEditable(true);
+
+			GridBagLayout layout = (GridBagLayout) pathAndFilterPanel.getLayout();
+			GridBagConstraints cons =layout.getConstraints(filterEditor);
+			cons.gridwidth = GridBagConstraints.REMAINDER;
+			cons.fill = GridBagConstraints.HORIZONTAL;
+			cons.gridx = 1;
+			cons.weightx = 1.0f;
+
+			pathAndFilterPanel.remove(filterEditor);
+			layout.setConstraints(filterField, cons);
+			pathAndFilterPanel.add(filterField);
+			pathAndFilterPanel.validate();
+			pathAndFilterPanel.repaint();
+		}
 	} //}}}
 
 	//{{{ setFilenameFilter() method
@@ -446,7 +519,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		else
 		{
 			filterCheckbox.setSelected(true);
-			filterField.setText(filter);
+			filterEditor.setItem(new GlobVFSFileFilter(filter));
 		}
 	} //}}}
 
@@ -473,7 +546,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		if(!startRequest())
 			return;
 
-		updateFilenameFilter();
 		browserView.saveExpansionState();
 		browserView.loadDirectory(null,path,true);
 		this.path = path;
@@ -512,7 +584,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		// used by FTP plugin to clear directory cache
 		VFSManager.getVFSForPath(path).reloadDirectory(path);
 
-		updateFilenameFilter();
 		browserView.saveExpansionState();
 		browserView.loadDirectory(null,path,false);
 	} //}}}
@@ -710,18 +781,18 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	public void searchInDirectory(String path, boolean directory)
 	{
 		String filter;
-
-		if(directory)
-		{
-			filter = getFilenameFilter();
-		}
+		VFSFileFilter vfsff = getVFSFileFilter();
+		if (vfsff instanceof GlobVFSFileFilter)
+			filter = ((GlobVFSFileFilter)vfsff).getGlob();
 		else
+			filter = "*";
+
+		if (!directory)
 		{
 			String name = MiscUtilities.getFileName(path);
 			String ext = MiscUtilities.getFileExtension(name);
 			filter = (ext == null || ext.length() == 0
-				? getFilenameFilter()
-				: "*" + ext);
+				? filter : "*" + ext);
 			path = MiscUtilities.getParentOfPath(path);
 		}
 
@@ -753,7 +824,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	 */
 	public void locateFile(final String path)
 	{
-		if(!filenameFilter.matcher(MiscUtilities.getFileName(path)).matches())
+		VFSFileFilter filter = getVFSFileFilter();
+		if(!filter.accept(MiscUtilities.getFileName(path)))
 			setFilenameFilter(null);
 
 		setDirectory(MiscUtilities.getParentOfPath(path));
@@ -951,26 +1023,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	String currentEncoding;
 	boolean autoDetectEncoding;
 
-	//{{{ updateFilenameFilter() method
-	void updateFilenameFilter()
-	{
-		try
-		{
-			String filter = filterField.getText();
-			if(filter.length() == 0)
-				filter = "*";
-			filenameFilter = Pattern.compile(MiscUtilities.globToRE(filter),
-							 Pattern.CASE_INSENSITIVE);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,VFSBrowser.this,e);
-			String[] args = { filterField.getText(),
-				e.getMessage() };
-			GUIUtilities.error(this,"vfs.browser.bad-filter",args);
-		}
-	} //}}}
-
 	//{{{ directoryLoaded() method
 	void directoryLoaded(Object node, Object[] loadInfo,
 		boolean addToHistory)
@@ -1034,14 +1086,15 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private View view;
 	private boolean horizontalLayout;
 	private String path;
+	private JPanel pathAndFilterPanel;
 	private HistoryTextField pathField;
 	private JCheckBox filterCheckbox;
-	private HistoryTextField filterField;
+	private HistoryComboBoxEditor filterEditor;
+	private JComboBox filterField;
 	private Box toolbarBox;
 	private FavoritesMenuButton favorites;
 	private PluginsMenuButton plugins;
 	private BrowserView browserView;
-	private Pattern filenameFilter;
 	private int mode;
 	private boolean multipleSelection;
 
@@ -1212,14 +1265,21 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ Inner classes
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	class ActionHandler implements ActionListener, ItemListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
+			if (isProcessingEvent)
+				return;
+
 			Object source = evt.getSource();
-			if(source == pathField || source == filterField
-				|| source == filterCheckbox)
+
+			if (source == pathField
+			    || source == filterCheckbox)
 			{
+				isProcessingEvent = true;
+				resetLater();
+
 				updateFilterEnabled();
 
 				String path = pathField.getText();
@@ -1228,7 +1288,62 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 				browserView.focusOnFileView();
 			}
+			else if (source == filterField.getEditor())
+			{
+				// force the editor to refresh.
+				filterField.getEditor().setItem(
+					filterField.getEditor().getItem());
+			}
 		}
+
+		public void itemStateChanged(ItemEvent e)
+		{
+			if (isProcessingEvent)
+				return;
+
+			if (e.getStateChange() != ItemEvent.SELECTED)
+				return;
+
+			isProcessingEvent = true;
+			resetLater();
+
+			filterField.setEditable(e.getItem() instanceof GlobVFSFileFilter);
+			updateFilterEnabled();
+			String path = pathField.getText();
+			if(path != null)
+				setDirectory(path);
+
+			browserView.focusOnFileView();
+		}
+
+		/**
+		 * Why this method exists: since both actionPerformed()
+		 * and itemStateChanged() above can change the combo box,
+		 * executing one of them can cause a chain reaction causing
+		 * the other method to be called. This would cause the
+		 * VFS subsystem to be called several times, which would
+		 * cause a warning to show up if the first operation is
+		 * still in progress, or cause a second operation to happen
+		 * which is not really wanted especially if we're talking
+		 * about a remove VFS. So the methods set a flag saying
+		 * that something is going on, and this method resets
+		 * the flag after the AWT thread is done with the
+		 * current events.
+		 */
+		private void resetLater() {
+			SwingUtilities.invokeLater(
+				new Runnable()
+				{
+					public void run()
+					{
+						isProcessingEvent = false;
+					}
+				}
+			);
+		}
+
+		private boolean isProcessingEvent = false;
+
 	} //}}}
 
 	//{{{ CommandsMenuButton class
@@ -1558,6 +1673,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 			if(list != null)
 			{
+				VFSFileFilter filter = getVFSFileFilter();
+
 				for(int i = 0; i < list.length; i++)
 				{
 					VFSFile file = list[i];
@@ -1567,10 +1684,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						continue;
 					}
 
-					if(file.getType() == VFSFile.FILE
-						&& filterEnabled
-						&& filenameFilter != null
-						&& !filenameFilter.matcher(file.getName()).matches())
+					if (filterEnabled && filter != null
+					    && !filter.accept(file))
 					{
 						invisible++;
 						continue;
@@ -1695,6 +1810,129 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				}
 			}
 		}
+	} //}}}
+
+	//{{{ HistoryComboBoxEditor class
+	private static class HistoryComboBoxEditor
+				extends HistoryTextField
+				implements ComboBoxEditor
+	{
+
+		public HistoryComboBoxEditor(String key)
+		{
+			super(key);
+		}
+
+		public Object getItem()
+		{
+			if (current == null)
+			{
+				current = new GlobVFSFileFilter(getText());
+			}
+
+			if (!current.getGlob().equals(getText()))
+			{
+				current.setGlob(getText());
+			}
+
+			return current;
+		}
+
+		public void setItem(Object item)
+		{
+			if (item == current)
+			{
+				// if we keep the same object, swing
+				// will cause an event to be fired
+				// on the default button of the dialog,
+				// causing a beep since no file is
+				// selected...
+				if (item != null)
+				{
+					GlobVFSFileFilter filter = (GlobVFSFileFilter) item;
+					current = new GlobVFSFileFilter(filter.getGlob());
+					setText(current.getGlob());
+				}
+				return;
+			}
+
+			// this happens when changing the selected item
+			// in the combo; the combo has not yet fired an
+			// itemStateChanged() event, so it's not put into
+			// non-editable mode by the handler above.
+			if (!(item instanceof GlobVFSFileFilter))
+				return;
+
+			if (item != null)
+			{
+				GlobVFSFileFilter filter = (GlobVFSFileFilter) item;
+				filter = new GlobVFSFileFilter(filter.getGlob());
+				setText(filter.getGlob());
+				addCurrentToHistory();
+				current = filter;
+			}
+			else
+			{
+				setText("*");
+				current = new GlobVFSFileFilter("*");
+			}
+		}
+
+		protected void processFocusEvent(FocusEvent e)
+		{
+			// AWT will call setItem() when the editor loses
+			// focus; that can cause weird and unwanted things
+			// to happen, so ignore lost focus events.
+			if (e.getID() != FocusEvent.FOCUS_LOST)
+				super.processFocusEvent(e);
+		}
+
+		public Component getEditorComponent()
+		{
+			return this;
+		}
+
+		private GlobVFSFileFilter current;
+
+	} //}}}
+
+	//{{{ VFSFileFilterRenderer class
+	private static class VFSFileFilterRenderer extends DefaultListCellRenderer
+	{
+
+		public Component getListCellRendererComponent(JList list,
+			Object value, int index, boolean isSelected,
+			boolean cellHasFocus)
+		{
+			assert (value instanceof VFSFileFilter) : "Filter is not a VFSFileFilter";
+			super.getListCellRendererComponent(
+				list, value, index, isSelected, cellHasFocus);
+			setText(((VFSFileFilter)value).getDescription());
+			return this;
+		}
+
+	} //}}}
+
+	//{{{ DirectoriesOnlyFilter class
+	public static class DirectoriesOnlyFilter implements VFSFileFilter
+	{
+
+		public boolean accept(VFSFile file)
+		{
+			return (file.getType() == VFSFile.DIRECTORY
+				|| file.getType() == VFSFile.FILESYSTEM);
+		}
+
+		public boolean accept(String url)
+		{
+			return false;
+		}
+
+		public String getDescription()
+		{
+			return jEdit.getProperty("vfs.browser.file_filter.dir_only");
+		}
+
 	} //}}}
 
 	//}}}

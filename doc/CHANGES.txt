@@ -11,6 +11,20 @@ and Alan Ezust for contributing to this release.
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.
   (Marcelo Vanzin)
 
+- added new class org.gjt.sp.jedit.io.VFSFileFilter; an interface that
+  defines a filter used by the VFS browser. (Marcelo Vanzin)
+
+- added VFSBrowser.addVFSFileFilter() and VFSBrowser.getVFSFileFilter().
+  Deprecated VFSBrowser.getFilenameFilter(). (Marcelo Vanzin)
+
+- added VFS._listDirectory(Object,String,VFSFileFilter,boolean,Component,boolean,boolean)
+  (Marcelo Vanzin)
+
+- moved MiscUtilities.globToRE() to StandardUtilities. (Marcelo Vanzin)
+
+- added org.gjt.sp.util.PropertiesBean. See javadoc for details.
+  (Marcelo Vanzin)
+
 }}}
 
 {{{ Bug Fixes
@@ -18,7 +32,7 @@ and Alan Ezust for contributing to this release.
 - GuiUtilities.load/save geometry now saves x and y coordinates
   relative to the parent component. This makes dialogs pop
   up on the same display as the parent view. (#1292706) (ezust)
-  
+
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 
 - Shortcut sorting was broken (#1538452) (Matthieu Casanova)
@@ -26,10 +40,10 @@ and Alan Ezust for contributing to this release.
 - Actions to-lower and to-upper now selects the word at caret if
   there is no selection (#1538720) (Matthieu Casanova)
 
-- Quicklist of dockables windows is now sorted (#1538728) 
+- Quicklist of dockables windows is now sorted (#1538728)
   (Matthieu Casanova)
 
-- Updated text in Search dialog to reflect reality (#1542029) 
+- Updated text in Search dialog to reflect reality (#1542029)
   (Nicholas O'Leary)
 
 - SF Bug #1541009: 4.3pre6 regexp find: hangs + huge memory waste
@@ -39,6 +53,17 @@ and Alan Ezust for contributing to this release.
   SearchMatcher, and users of that class should adjust the offsets of
   subsequent searches when an EOL is matched. (Marcelo Vanzin)
 }}}
+
+{{{ Miscellaneous
+
+- VFS browser is not restricted to the built-in "glob" filter anymore.
+  Plugins can register new filters to be used by the browser by
+  implementing the "VFSFileFilter" interface and providing a service
+  entry in service.xml, or by directly calling
+  VFSBrowser.addVFSFileFilter(). (Marcelo Vanzin)
+
+}}}
+
 }}}
 
 {{{ Version 4.3pre6

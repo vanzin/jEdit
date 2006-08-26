@@ -31,6 +31,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -970,7 +971,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				+ name + ".label", name);
 			try
 			{
-				filter = Pattern.compile(MiscUtilities.globToRE(
+				filter = Pattern.compile(StandardUtilities.globToRE(
 					jEdit.getProperty(
 					"macro-handler." + name + ".glob")));
 			}

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -82,7 +83,7 @@ public class AllBufferSet extends BufferListSet
 		Pattern filter;
 		try
 		{
-			filter = Pattern.compile(MiscUtilities.globToRE(glob));
+			filter = Pattern.compile(StandardUtilities.globToRE(glob));
 		}
 		catch(Exception e)
 		{

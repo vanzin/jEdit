@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.PropertiesBean;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -274,7 +275,7 @@ public class PluginJAR
 				int index2 = arg.indexOf(' ');
 				if(index2 == -1)
 				{
-					Log.log(Log.ERROR,this,name 
+					Log.log(Log.ERROR,this,name
 						+ " has an invalid dependency: "
 						+ dep + " (version is missing)");
 					ok = false;
@@ -283,7 +284,7 @@ public class PluginJAR
 
 				String pluginName = arg.substring(0,index2);
 				String needVersion = arg.substring(index2 + 1);
-				String currVersion = jEdit.getProperty("plugin." 
+				String currVersion = jEdit.getProperty("plugin."
 					+ pluginName + ".version");
 
 				EditPlugin plugin = jEdit.getPlugin(pluginName);
@@ -480,6 +481,7 @@ public class PluginJAR
 			startPluginLater();
 		}
 
+		PropertiesBean.clearPropertyCache();
 		EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED,false));
 	} //}}}
 
@@ -1052,7 +1054,7 @@ public class PluginJAR
 				plugin = new EditPlugin.Deferred(this,
 				     className);
 				label = _label;
-				
+
 				break;
 			}
 		}

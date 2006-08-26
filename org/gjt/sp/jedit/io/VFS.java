@@ -653,20 +653,41 @@ public abstract class VFS
 		boolean skipBinary, boolean skipHidden)
 		throws IOException
 	{
+		VFSFileFilter filter = new GlobVFSFileFilter(glob);
+		return _listDirectory(session, directory, filter,
+				      recursive, comp, skipBinary,
+				      skipHidden);
+	} //}}}
+
+	//{{{ _listDirectory() method
+	/**
+	 * A convinience method that filters the directory listing
+	 * according to a filter, and can optionally list the directory
+	 * recursively.
+	 * @param session The session
+	 * @param directory The directory. Note that this must be a full
+	 * URL, including the host name, path name, and so on. The
+	 * username and password (if needed by the VFS) is obtained from the
+	 * session instance.
+	 * @param filter The {@link VFSFileFilter} to use for filtering.
+	 * @param recursive If true, subdirectories will also be listed.
+	 * @param comp The component that will parent error dialog boxes
+	 * @exception IOException if an I/O error occurred
+	 * @param skipBinary ignore binary files (do not return them).
+	 *    This will slow down the process since it will open the files
+	 * @param skipHidden skips hidden files, directories, and
+	 *        backup files. Ignores any file beginning with . or #, or ending with ~
+	 *        or .bak
+	 *
+	 * @since jEdit 4.3pre7
+	 */
+	public String[] _listDirectory(Object session, String directory,
+		VFSFileFilter filter, boolean recursive, Component comp,
+		boolean skipBinary, boolean skipHidden)
+		throws IOException
+	{
 		Log.log(Log.DEBUG,this,"Listing " + directory);
 		List files = new ArrayList(100);
-
-		Pattern filter;
-		try
-		{
-			filter = Pattern.compile(MiscUtilities.globToRE(glob),
-						 Pattern.CASE_INSENSITIVE);
-		}
-		catch(PatternSyntaxException e)
-		{
-			Log.log(Log.ERROR,this,e);
-			return null;
-		}
 
 		listFiles(session,new ArrayList(),files,directory,filter,
 			recursive, comp, skipBinary, skipHidden);
@@ -1020,7 +1041,7 @@ public abstract class VFS
 
 	//{{{ recursive listFiles() method
 	private void listFiles(Object session, List stack,
-		List files, String directory, Pattern glob, boolean recursive,
+		List files, String directory, VFSFileFilter filter, boolean recursive,
 		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
 		if(stack.contains(directory))
@@ -1043,6 +1064,8 @@ public abstract class VFS
 			VFSFile file = _files[i];
 			if (skipHidden && (file.isHidden() || MiscUtilities.isBackup(file.getName())))
 				continue;
+			if(!filter.accept(file))
+				continue;
 			if(file.getType() == VFSFile.DIRECTORY
 				|| file.getType() == VFSFile.FILESYSTEM)
 			{
@@ -1055,16 +1078,13 @@ public abstract class VFS
 						canonPath = MiscUtilities.resolveSymlinks(canonPath);
 
 					listFiles(session,stack,files,
-						canonPath,glob,recursive,
+						canonPath,filter,recursive,
 						comp, skipBinary, skipHidden);
 				}
 
 			}
 			else // It's a regular file
 			{
-				if(!glob.matcher(file.getName()).matches())
-					continue;
-
 				if (skipBinary && file.isBinary(session))
 					continue;
 
@@ -1091,7 +1111,7 @@ public abstract class VFS
 				try
 				{
 					colors.addElement(new ColorEntry(
-						Pattern.compile(MiscUtilities.globToRE(glob)),
+						Pattern.compile(StandardUtilities.globToRE(glob)),
 						jEdit.getColorProperty(
 						"vfs.browser.colors." + i + ".color",
 						Color.black)));

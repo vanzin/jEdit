@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -66,14 +67,14 @@ public class Mode
 			String filenameGlob = (String)getProperty("filenameGlob");
 			if(filenameGlob != null && filenameGlob.length() != 0)
 			{
-				filenameRE = Pattern.compile(MiscUtilities.globToRE(filenameGlob),
+				filenameRE = Pattern.compile(StandardUtilities.globToRE(filenameGlob),
 							     Pattern.CASE_INSENSITIVE);
 			}
 
 			String firstlineGlob = (String)getProperty("firstlineGlob");
 			if(firstlineGlob != null && firstlineGlob.length() != 0)
 			{
-				firstlineRE = Pattern.compile(MiscUtilities.globToRE(firstlineGlob),
+				firstlineRE = Pattern.compile(StandardUtilities.globToRE(firstlineGlob),
 							      Pattern.CASE_INSENSITIVE);
 			}
 		}

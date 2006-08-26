@@ -2079,6 +2079,9 @@ vfs.browser.status.rw=Read/write
 vfs.browser.size=Size
 vfs.browser.modified=Last modified
 
+vfs.browser.file_filter.glob=Glob File Filter
+vfs.browser.file_filter.dir_only=Directories Only
+
 #{{{ Actions
 vfs.browser.browse-window.label=Browse in New Window
 vfs.browser.browse.label=Browse
