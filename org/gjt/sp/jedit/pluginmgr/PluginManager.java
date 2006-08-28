@@ -94,10 +94,10 @@ public class PluginManager extends JFrame implements EBComponent
 	} //}}}
 
 	//{{{ showPluginManager() method
-	public static void showPluginManager(Frame frame)
+	public static void showPluginManager(Frame parent)
 	{
 		if (instance == null)
-			instance = new PluginManager();
+			instance = new PluginManager(parent);
 		else
 		{
 			instance.toFront();
@@ -137,13 +137,24 @@ public class PluginManager extends JFrame implements EBComponent
 	private PluginList pluginList;
 	private boolean queuedUpdate;
 	private boolean downloadingPluginList;
+	private Frame parent = null;
 	//}}}
-
 	//{{{ PluginManager constructor
+
+	private PluginManager(Frame parent)
+	{
+		super(jEdit.getProperty("plugin-manager.title"));
+		this.parent = parent;
+		init();
+	}
+
 	private PluginManager()
 	{
 		super(jEdit.getProperty("plugin-manager.title"));
+		init();
+	}
 
+	private void init() {
 		EditBus.addToBus(this);
 
 		/* Setup panes */
@@ -191,8 +202,8 @@ public class PluginManager extends JFrame implements EBComponent
 		setIconImage(GUIUtilities.getPluginIcon());
 
 		pack();
-		GUIUtilities.loadGeometry(this,"plugin-manager");
-		GUIUtilities.addSizeSaver(this,"plugin-manager");
+		GUIUtilities.loadGeometry(this, parent, "plugin-manager");
+		GUIUtilities.addSizeSaver(this, parent, "plugin-manager");
 		setVisible(true);
 	} //}}}
 

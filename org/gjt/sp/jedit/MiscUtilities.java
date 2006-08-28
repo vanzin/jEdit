@@ -1427,12 +1427,11 @@ loop:		for(;;)
 	/**
 	 * Compares strings ignoring case.
 	 */
-	public static class StringICaseCompare implements Compare
+	public static class StringICaseCompare implements Comparator<Object>
 	{
 		public int compare(Object obj1, Object obj2)
 		{
-			return StandardUtilities.compareStrings(obj1.toString(),
-				obj2.toString(),true);
+			return StandardUtilities.compareStrings(obj1.toString(), obj2.toString(), true);
 		}
 	} //}}}
 

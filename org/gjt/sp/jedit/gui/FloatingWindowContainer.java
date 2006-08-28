@@ -23,13 +23,26 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Window;
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.gjt.sp.jedit.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
+
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.jEdit;
 //}}}
 
 /**
@@ -77,8 +90,9 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		getContentPane().add(BorderLayout.CENTER,entry.win);
 
 		pack();
-		GUIUtilities.loadGeometry(this,entry.factory.name);
-		GUIUtilities.addSizeSaver(this,entry.factory.name);
+		Container parent = dockableWindowManager.getView();
+		GUIUtilities.loadGeometry(this, parent, entry.factory.name);
+		GUIUtilities.addSizeSaver(this, parent, entry.factory.name);
 		setVisible(true);
 	} //}}}
 

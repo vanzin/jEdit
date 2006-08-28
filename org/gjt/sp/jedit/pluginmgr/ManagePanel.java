@@ -46,6 +46,14 @@ import org.gjt.sp.util.Log;
 
 public class ManagePanel extends JPanel
 {
+
+	//{{{ Private members
+	private JCheckBox hideLibraries;
+	private JTable table;
+	private PluginTableModel pluginModel;
+	private PluginManager window;
+	//}}}
+	
 	//{{{ ManagePanel constructor
 	public ManagePanel(PluginManager window)
 	{
@@ -65,7 +73,8 @@ public class ManagePanel extends JPanel
 		table.setIntercellSpacing(new Dimension(0,0));
 		table.setRowHeight(table.getRowHeight() + 2);
 		table.setPreferredScrollableViewportSize(new Dimension(500,300));
-		table.setRequestFocusEnabled(false);
+		table.setRequestFocusEnabled(true);
+		table.addKeyListener(new KeyHandler());
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));
 
@@ -99,6 +108,7 @@ public class ManagePanel extends JPanel
 		buttons.add(new HelpButton());
 
 		add(BorderLayout.SOUTH,buttons);
+		GUIUtilities.requestFocus(this.window, table);
 	} //}}}
 
 	//{{{ update() method
@@ -107,12 +117,6 @@ public class ManagePanel extends JPanel
 		pluginModel.update();
 	} //}}}
 
-	//{{{ Private members
-	private JCheckBox hideLibraries;
-	private JTable table;
-	private PluginTableModel pluginModel;
-	private PluginManager window;
-	//}}}
 
 	//{{{ Inner classes
 
@@ -127,11 +131,11 @@ public class ManagePanel extends JPanel
 		String jar;
 
 		String clazz, name, version, author, docs;
-		List jars;
+		List<String> jars;
 
 		Entry(String jar)
 		{
-			jars = new LinkedList();
+			jars = new LinkedList<String>();
 			this.jar = jar;
 			jars.add(this.jar);
 			status = NOT_LOADED;
@@ -139,7 +143,7 @@ public class ManagePanel extends JPanel
 
 		Entry(PluginJAR jar)
 		{
-			jars = new LinkedList();
+			jars = new LinkedList<String>();
 			this.jar = jar.getPath();
 			jars.add(this.jar);
 
@@ -176,13 +180,13 @@ public class ManagePanel extends JPanel
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
-		private List entries;
+		private List<Entry> entries;
 		private int sortType = EntryCompare.NAME;
 
 		//{{{ Constructor
 		public PluginTableModel()
 		{
-			entries = new ArrayList();
+			entries = new ArrayList<Entry>();
 			update();
 		} //}}}
 
@@ -223,7 +227,7 @@ public class ManagePanel extends JPanel
 		//{{{ getEntry() method
 		public Entry getEntry(int rowIndex)
 		{
-			return (Entry)entries.get(rowIndex);
+			return entries.get(rowIndex);
 		} //}}}
 
 		//{{{ getRowCount() method
@@ -239,9 +243,7 @@ public class ManagePanel extends JPanel
 			switch (columnIndex)
 			{
 				case 0:
-					return new Boolean(
-						!entry.status.equals(
-						Entry.NOT_LOADED));
+					return new Boolean(!entry.status.equals(Entry.NOT_LOADED));
 				case 1:
 					if(entry.name == null)
 					{
@@ -252,8 +254,7 @@ public class ManagePanel extends JPanel
 				case 2:
 					return entry.version;
 				case 3:
-					return jEdit.getProperty("plugin-manager.status."
-						+ entry.status);
+					return jEdit.getProperty("plugin-manager.status." + entry.status);
 				default:
 					throw new Error("Column out of range");
 			}
@@ -265,11 +266,28 @@ public class ManagePanel extends JPanel
 			return columnIndex == 0;
 		} //}}}
 
+		public void toggleCurrentRow() 
+		{
+			
+			final int row = table.getSelectedRow();
+			final ListSelectionModel lsm = table.getSelectionModel();
+			Boolean oldValue = (Boolean)getValueAt(row, 0);
+			Boolean newValue = !oldValue;
+			setValueAt(newValue, row, 0);
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					lsm.setSelectionInterval(row, row);
+					table.setSelectionModel(lsm);
+				}
+			});
+			
+		}
+		
 		//{{{ setValueAt() method
 		public void setValueAt(Object value, int rowIndex,
 			int columnIndex)
 		{
-			Entry entry = (Entry)entries.get(rowIndex);
+			Entry entry = entries.get(rowIndex);
 			if(columnIndex == 0)
 			{
 				PluginJAR jar = jEdit.getPluginJAR(entry.jar);
@@ -277,8 +295,10 @@ public class ManagePanel extends JPanel
 				{
 					if(value.equals(Boolean.FALSE))
 						return;
-
-					loadPluginJAR(entry.jar);
+					
+					
+					PluginJAR jar2 = new PluginJAR(new File(entry.jar));
+					jar2.load(true);
 				}
 				else
 				{
@@ -350,95 +370,35 @@ public class ManagePanel extends JPanel
 			sort(sortType);
 		} //}}}
 
-		//{{{ loadExtraJARsIfNecessary() method
-		/**
-		 * This should go into the core...
-		 */
-		private void loadPluginJAR(String jarPath)
-		{
-			jEdit.addPluginJAR(jarPath);
-			jEdit.unsetProperty("plugin-blacklist."+MiscUtilities.getFileName(jarPath));
-			PluginJAR jar = jEdit.getPluginJAR(jarPath);
-			if(jar == null || jar.getPlugin() == null)
-				return;
-
-			String jars = jEdit.getProperty("plugin."
-				+ jar.getPlugin().getClassName() + ".jars");
-
-			if(jars != null)
-			{
-				String dir = MiscUtilities.getParentOfPath(
-					jarPath);
-
-				StringTokenizer st = new StringTokenizer(jars);
-				while(st.hasMoreTokens())
-				{
-					String _jarPath
-						= MiscUtilities.constructPath(
-						dir,st.nextToken());
-					PluginJAR _jar = jEdit.getPluginJAR(
-						_jarPath);
-					if(_jar == null)
-					{
-						jEdit.addPluginJAR(_jarPath);
-					}
-				}
-			}
-
-			jar.checkDependencies();
-			jar.activatePluginIfNecessary();
-		} //}}}
 		private HashSet<String> unloaded;
-
 		//{{{ unloadPluginJARWithDialog() method
+		// Perhaps this should also be moved to PluginJAR class?
 		private void unloadPluginJARWithDialog(PluginJAR jar)
 		{
 			unloaded = new HashSet<String>();
-			String[] dependents = jar.getDependentPlugins();
-			if(dependents.length == 0)
+			Set<String> dependents = jar.getDependentPlugins();
+			if(dependents.size() == 0)
 				unloadPluginJAR(jar);
 			else
 			{
-				List<String> listModel = new LinkedList<String>();
-				transitiveClosure(dependents,listModel);
-				Collections.sort(listModel,new MiscUtilities.StringICaseCompare());
+				Set<String> closureSet = new LinkedHashSet<String>();
+				PluginJAR.transitiveClosure(dependents, closureSet);
+				ArrayList<String> listModel = new ArrayList<String>();
+				listModel.addAll(closureSet);
+				Collections.sort(listModel, new MiscUtilities.StringICaseCompare());
 
-				int button = GUIUtilities.listConfirm(
-					window,"plugin-manager.dependency",
-					new String[] { jar.getFile()
-					.getName() }, listModel.toArray());
+				int button = GUIUtilities.listConfirm(window,"plugin-manager.dependency",
+					new String[] { jar.getFile().getName() }, listModel.toArray());
 				if(button == JOptionPane.YES_OPTION)
 					unloadPluginJAR(jar);
 			}
 		} //}}}
 
-		//{{{ transitiveClosure() method
-		/**
-		 * If plugin A is needed by B, and B is needed by C, we want to
-		 * tell the user that A is needed by B and C when they try to
-		 * unload A.
-		 */
-		private void transitiveClosure(String[] dependents,
-			List listModel)
-		{
-			for(int i = 0; i < dependents.length; i++)
-			{
-				String jarPath = dependents[i];
-				if(!listModel.contains(jarPath))
-				{
-					listModel.add(jarPath);
-					PluginJAR jar = jEdit.getPluginJAR(
-						jarPath);
-					transitiveClosure(jar.getDependentPlugins(),
-						listModel);
-				}
-			}
-		} //}}}
 
 		//{{{ unloadPluginJAR() method
 		private void unloadPluginJAR(PluginJAR jar)
 		{
-			String[] dependents = jar.getDependentPlugins();
+			Set<String> dependents = jar.getDependentPlugins();
 
 			for (String dependent : dependents) {
 				if (!unloaded.contains(dependent)) 
@@ -572,21 +532,25 @@ public class ManagePanel extends JPanel
 					Entry entry = pluginModel.getEntry(table.getSelectedRow());
 					String label = entry.clazz;
 					String docs = entry.docs;
-					PluginJAR jar = jEdit.getPlugin(label)
-						.getPluginJAR();
-					if(jar != null && label != null && docs != null)
-					{
-						URL url = jar.getClassLoader()
-							.getResource(docs);
-						if(url != null)
+					if (label != null) {
+						EditPlugin plug = jEdit.getPlugin(label, false);
+						PluginJAR jar = null;
+						if (plug != null) jar = plug.getPluginJAR();
+						if(jar != null && label != null && docs != null)
 						{
-							docURL = url;
-							setEnabled(true);
-							return;
+							URL url = jar.getClassLoader().getResource(docs);
+							if(url != null)
+							{
+								docURL = url;
+								setEnabled(true);
+								return;
+							}
 						}
 					}
 				}
-				catch (Exception ex) {}
+				catch (Exception ex) {
+					Log.log(Log.ERROR, this, "ManagePanel HelpButton UPdate", ex);
+				}
 			}
 			setEnabled(false);
 		}
@@ -656,5 +620,34 @@ public class ManagePanel extends JPanel
 		}
 	} //}}}
 
+	class KeyHandler implements KeyListener 
+	{
+		public void keyTyped(KeyEvent e)
+		{
+			switch (e.getKeyChar())  
+			{
+				case ' ': pluginModel.toggleCurrentRow();
+					break;
+				case KeyEvent.VK_ESCAPE:
+					window.dispose();
+					break;
+			}
+		}
+		
+		public void keyPressed(KeyEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void keyReleased(KeyEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	}
+	
 	//}}}
 }

@@ -870,7 +870,7 @@ public class jEdit
 
 	//{{{ getNotLoadedPluginJARs() method
 	/**
-	 * Returns a list of plugin JARs that are not currently loaded
+	 * Returns a list of plugin JARs pathnames that are not currently loaded
 	 * by examining the user and system plugin directories.
 	 * @since jEdit 3.2pre1
 	 */
@@ -907,7 +907,8 @@ public class jEdit
 
 	//{{{ getPlugin() method
 	/**
-	 * Returns the plugin with the specified class name.
+	 * Returns the plugin with the specified class name. 
+	 * Only works for plugins that were loaded.
 	 */
 	public static EditPlugin getPlugin(String name)
 	{
@@ -916,9 +917,12 @@ public class jEdit
 
 	//{{{ getPlugin(String, boolean) method
 	/**
-	 * Returns the plugin with the specified class name. If
-	 * <code>loadIfNecessary</code> is true, the plugin will be activated in
-	 * case it has not yet been started.
+	 * Returns the plugin with the specified class name. 
+	 * If * <code>loadIfNecessary</code> is true, the plugin will be searched for,
+	 * loaded, and activated in case it has not yet been loaded.
+	 * 
+	 * @param name the classname of the main Plugin class.
+	 * @param loadIfNecessary - loads plugin + dependencies if it is not loaded yet.
 	 * @since jEdit 4.2pre4
 	 */
 	public static EditPlugin getPlugin(String name, boolean loadIfNecessary)
@@ -939,8 +943,15 @@ public class jEdit
 				}
 			}
 		}
-
-		return plugin;
+		if (!loadIfNecessary) return plugin;
+		String jarPath  = PluginJAR.findPlugin(name);
+		jEdit.addPluginJAR(jarPath);
+		PluginJAR pjar = jEdit.getPluginJAR(jarPath);
+		if (pjar != null) {
+			pjar.load(true);
+			return pjar.getPlugin();
+		}
+		return null;
 	} //}}}
 
 	//{{{ getPlugins() method
@@ -2697,6 +2708,11 @@ public class jEdit
 	} //}}}
 
 	//{{{ pluginError() method
+	/**
+	 * 
+	 * @param messageProp - a property of a message to print
+	 * @param args a list of arguments whch correspond to {0} and {1} in the string to print.
+	 */
 	static void pluginError(String path, String messageProp,
 		Object[] args)
 	{

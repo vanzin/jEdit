@@ -26,6 +26,7 @@ package org.gjt.sp.jedit;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -960,34 +961,20 @@ public class GUIUtilities
 	//}}}
 
 	//{{{ Loading, saving window geometry
-
-	//{{{ loadGeometry() method
 	/**
-	 * Loads a windows's geometry from the properties.
-	 * The geometry is loaded from the <code><i>name</i>.x</code>,
-	 * <code><i>name</i>.y</code>, <code><i>name</i>.width</code> and
-	 * <code><i>name</i>.height</code> properties.
-	 *
-	 * @param win The window
-	 * @param name The window name
+	 * @param win - the window to load geometry from
+	 * @param parent - the parent frame to be relative to.
+	 * @param name - the name of the window 
 	 */
-	public static void loadGeometry(Window win, String name)
-	{
+
+	public static void loadGeometry(Window win, Container parent, String name ) {
 		int x, y, width, height;
 
 		Dimension size = win.getSize();
-		Component parent = win.getParent();
-
-		
-/*		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		Rectangle gcbounds = gd.getDefaultConfiguration().getBounds();
-*/
-		
-		width = jEdit.getIntegerProperty(name + ".width",size.width);
-		height = jEdit.getIntegerProperty(name + ".height",size.height);
+		width = jEdit.getIntegerProperty(name + ".width", size.width);
+		height = jEdit.getIntegerProperty(name + ".height", size.height);
 		x = jEdit.getIntegerProperty(name + ".x",50);
 		y = jEdit.getIntegerProperty(name + ".y",50);
-		
 		if(parent != null)
 		{
 			Point location = parent.getLocation();
@@ -1017,8 +1004,24 @@ public class GUIUtilities
 			if(win instanceof Frame)
 				((Frame)win).setExtendedState(extState);
 		}
-	} //}}}
-
+		
+	}
+	
+	//{{{ loadGeometry() method
+	/**
+	 * Loads a windows's geometry from the properties.
+	 * The geometry is loaded from the <code><i>name</i>.x</code>,
+	 * <code><i>name</i>.y</code>, <code><i>name</i>.width</code> and
+	 * <code><i>name</i>.height</code> properties.
+	 *
+	 * @param win The window
+	 * @param name The window name
+	 */
+	public static void loadGeometry(Window win, String name)
+	{
+		loadGeometry(win, win.getParent(), name);
+	} // }}}
+		
 	//{{{ adjustForScreenBounds() method
 	/**
 	 * Gives a rectangle the specified bounds, ensuring it is within the
@@ -1161,6 +1164,10 @@ public class GUIUtilities
 		} //}}}
 	} //}}}
 
+	public static void saveGeometry(Window win, String name) {
+		saveGeometry (win, win.getParent(), name);
+	}
+	
 	//{{{ saveGeometry() method
 	/**
 	 * Saves a window's geometry to the properties.
@@ -1170,7 +1177,7 @@ public class GUIUtilities
 	 * @param win The window
 	 * @param name The window name
 	 */
-	public static void saveGeometry(Window win, String name)
+	public static void saveGeometry(Window win, Container parent, String name)
 	{
 		if(win instanceof Frame)
 		{
@@ -1181,7 +1188,6 @@ public class GUIUtilities
 		Rectangle bounds = win.getBounds();
 		int x = bounds.x;
 		int y = bounds.y;
-		Component parent = win.getParent();
 		if (parent != null) 
 		{
 			Rectangle parentBounds = parent.getBounds();
@@ -1190,8 +1196,8 @@ public class GUIUtilities
 		}
 		jEdit.setIntegerProperty(name + ".x",x);
 		jEdit.setIntegerProperty(name + ".y",y);
-		jEdit.setIntegerProperty(name + ".width",bounds.width);
-		jEdit.setIntegerProperty(name + ".height",bounds.height);
+		jEdit.setIntegerProperty(name + ".width", bounds.width);
+		jEdit.setIntegerProperty(name + ".height", bounds.height);
 	} //}}}
 
 	//{{{ centerOnScreen() method
@@ -1523,6 +1529,11 @@ public class GUIUtilities
 		return (View)getComponentParent(comp,View.class);
 	} //}}}
 
+	public static void addSizeSaver(Window window,  String name) 
+	{
+		addSizeSaver(window, window.getParent(), name);
+	}
+	
 	//{{{ addSizeSaver() method
 	/**
 	 * Adds a SizeSaver to the specified Frame.
@@ -1531,11 +1542,11 @@ public class GUIUtilities
 	 * @param name The prefix for the settings
 	 * @since jEdit 4.3pre6
 	 */
-	public static void addSizeSaver(Frame parent, String name)
+	public static void addSizeSaver(Window window, Container parent, String name)
 	{
-		SizeSaver ss = new SizeSaver(parent,name);
-		parent.addWindowStateListener(ss);
-		parent.addComponentListener(ss);
+		SizeSaver ss = new SizeSaver(window, parent, name);
+		window.addWindowStateListener(ss);
+		window.addComponentListener(ss);
 	} //}}}
 
 	//{{{ Package-private members
@@ -1588,22 +1599,31 @@ public class GUIUtilities
 	 */
 	static class SizeSaver extends ComponentAdapter implements WindowStateListener
 	{
-		private Frame parent;
+		private Window window;
+		private Container parent;
 		private String name;
 
+		
+		public SizeSaver(Window window, String name) {
+			this.window = window;
+			this.parent = window.getParent();
+		}
+		
 		/**
 		 * Constructs a new SizeSaver.
 		 * 
-		 * @param parent The Frame for which to save the size
+		 * @param theFrame - The Frame for which to save the size
+		 * @param parent - the parent Frame to be relative to.
 		 * @param name The prefix for the settings
 		 */
-		public SizeSaver(Frame parent, String name)
+		public SizeSaver(Window theFrame, Container parent, String name)
 		{
-			if ((null == parent) || (null == name))
+			if ((null == theFrame) || (null == name))
 			{
 				throw new NullPointerException();
 			}
 			this.parent = parent;
+			this.window = theFrame;
 			this.name = name;
 		}
 
@@ -1611,7 +1631,7 @@ public class GUIUtilities
 		{
 			int extendedState = wse.getNewState();
 			jEdit.setIntegerProperty(name + ".extendedState",extendedState);
-			Rectangle bounds = parent.getBounds();
+			Rectangle bounds = window.getBounds();
 			switch (extendedState)
 			{
 				case Frame.MAXIMIZED_VERT:
@@ -1625,10 +1645,12 @@ public class GUIUtilities
 					break;
 
 				case Frame.NORMAL:
+					saveGeometry(window, parent, name );
+					/*
 					jEdit.setIntegerProperty(name + ".x",bounds.x);
 					jEdit.setIntegerProperty(name + ".y",bounds.y);
 					jEdit.setIntegerProperty(name + ".width",bounds.width);
-					jEdit.setIntegerProperty(name + ".height",bounds.height);
+					jEdit.setIntegerProperty(name + ".height",bounds.height); */
 					break;
 			}
 		}
@@ -1640,29 +1662,35 @@ public class GUIUtilities
 
 		public void componentMoved(ComponentEvent ce)
 		{
-			final Rectangle bounds = parent.getBounds();
+			final Rectangle bounds = window.getBounds();
 			final Runnable sizeSaver = new Runnable()
 			{
 				public void run()
 				{
-					switch (parent.getExtendedState())
+					try 
 					{
-						case Frame.MAXIMIZED_VERT:
-							jEdit.setIntegerProperty(name + ".x",bounds.x);
-							jEdit.setIntegerProperty(name + ".width",bounds.width);
-							break;
-
-						case Frame.MAXIMIZED_HORIZ:
-							jEdit.setIntegerProperty(name + ".y",bounds.y);
-							jEdit.setIntegerProperty(name + ".height",bounds.height);
-							break;
-
-						case Frame.NORMAL:
-							jEdit.setIntegerProperty(name + ".x",bounds.x);
-							jEdit.setIntegerProperty(name + ".y",bounds.y);
-							jEdit.setIntegerProperty(name + ".width",bounds.width);
-							jEdit.setIntegerProperty(name + ".height",bounds.height);
-							break;
+						JFrame frame = (JFrame) window;
+						switch (frame.getExtendedState())	{
+							case Frame.MAXIMIZED_VERT:
+								jEdit.setIntegerProperty(name + ".x",bounds.x);
+								jEdit.setIntegerProperty(name + ".width",bounds.width);
+								break;
+	
+							case Frame.MAXIMIZED_HORIZ:
+								jEdit.setIntegerProperty(name + ".y",bounds.y);
+								jEdit.setIntegerProperty(name + ".height",bounds.height);
+								break;
+	
+							case Frame.NORMAL:
+								saveGeometry(window, parent, name);
+								break;
+							}
+					}
+					catch (ClassCastException cce) {
+						saveGeometry(window, parent, name);
+					}
+					catch (NullPointerException npe) {
+						saveGeometry(window, parent, name);
 					}
 				}
 			};

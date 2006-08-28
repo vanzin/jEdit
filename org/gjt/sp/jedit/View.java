@@ -1310,7 +1310,7 @@ public class View extends JFrame implements EBComponent
 
 		SearchDialog.preloadSearchDialog(this);
 
-		GUIUtilities.addSizeSaver(this,this.plainView ? "plain-view" : "view");
+		GUIUtilities.addSizeSaver(this, null, this.plainView ? "plain-view" : "view");
 	} //}}}
 
 	//{{{ close() method

@@ -7,6 +7,13 @@ and Alan Ezust for contributing to this release.
 
 {{{ API Changes
 
+-   Bug # 1538702 - PluginManager fixes: Automatically loads unloaded
+    dependent plugins.
+
+-   jEdit.getPlugin(className, bool) now will search for and
+    load plugins that were not yet loaded, given a className to search
+    for. (ezust)
+
 - added SearchMatcher.isMatchingEOL(); indicates whether the matched
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.
   (Marcelo Vanzin)
@@ -29,9 +36,18 @@ and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 
+- SplashScreen is now in the middle of the screen, instead of between
+  2 screens (ezust)
+
+- PluginManager enhancements - spacebar and escape keys work from
+    ManagePanel. (ezust)
+
 - GuiUtilities.load/save geometry now saves x and y coordinates
-  relative to the parent component. This makes dialogs pop
-  up on the same display as the parent view. (#1292706) (ezust)
+  relative to the parent component. This makes dialogs and floating
+  dockables pop up in a place relative to the parent view.
+  (#1292706) (ezust)
+
+-
 
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 

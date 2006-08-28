@@ -23,16 +23,37 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import javax.swing.SwingUtilities;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.util.*;
-import java.util.zip.*;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import javax.swing.SwingUtilities;
+
 import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.buffer.*;
+import org.gjt.sp.jedit.buffer.DummyFoldHandler;
+import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
-import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.PropertiesBean;
 import org.gjt.sp.util.StandardUtilities;
@@ -106,6 +127,81 @@ import org.gjt.sp.util.StandardUtilities;
  */
 public class PluginJAR
 {
+	//{{{ Instance variables
+	private String path;
+	private String cachePath;
+	private File file;
+
+	private JARClassLoader classLoader;
+	private ZipFile zipFile;
+	private Properties properties;
+	private String[] classes;
+	private ActionSet actions;
+	private ActionSet browserActions;
+	private EditPlugin plugin;
+	private URL dockablesURI;
+	private URL servicesURI;
+	private boolean activated;
+
+	// Lists of jarPaths
+	private LinkedHashSet<String> theseRequireMe = new LinkedHashSet<String>();
+	private LinkedHashSet<String> weRequireThese = new LinkedHashSet<String>();
+	//}}}
+
+
+	// {{{ load(String jarPath, boolean activateDependentIfNecessary)
+	/**
+	 * Loads a plugin, and its dependent plugins if necessary.
+	 *
+	 * @since jEdit 4.3pre7
+	 *
+	 */
+	public boolean load(boolean loadDependents) {
+		PluginJAR jar = jEdit.getPluginJAR(path);
+		if (jar != null) {
+			jar.activatePluginIfNecessary();
+			return jar.checkDependencies();
+		}
+		// Else, the plugin has not yet been loaded.
+		jEdit.addPluginJAR(path);
+		jar = jEdit.getPluginJAR(path);
+		String className = jar.getPlugin().getClassName();
+		if (loadDependents) {
+			Set<String> pluginLoadList = loadDependencies(className);
+			boolean ok = true;
+			for (String jarName: pluginLoadList) 
+			{
+				String jarPath = findPlugin(jarName);
+				if (jarPath == null) return false;
+				PluginJAR pjar = jEdit.getPluginJAR(jarPath);
+				if (pjar == null) {
+					jEdit.addPluginJAR(jarPath);
+					pjar = jEdit.getPluginJAR(jarPath);
+				}
+				pjar.load(true);
+			}
+		}
+		// Load extra jars that are part of this plugin
+		String jars = jEdit.getProperty("plugin." + className + ".jars");
+		if(jars != null)
+		{
+			String dir = MiscUtilities.getParentOfPath(path);
+			StringTokenizer st = new StringTokenizer(jars);
+			while(st.hasMoreTokens())
+			{
+				String _jarPath = MiscUtilities.constructPath(dir,st.nextToken());
+				PluginJAR _jar = jEdit.getPluginJAR(_jarPath);
+				if(_jar == null)
+				{
+					jEdit.addPluginJAR(_jarPath);
+				}
+			}
+		}
+
+		jar.activatePluginIfNecessary();
+		return jar.checkDependencies();
+	}
+
 	//{{{ getPath() method
 	/**
 	 * Returns the full path name of this plugin's JAR file.
@@ -114,6 +210,59 @@ public class PluginJAR
 	{
 		return path;
 	} //}}}
+
+	/**
+	 * Unlike getPlugin(), will return a PluginJAR that is not yet loaded, given its classname.
+	 *
+	 * @param className
+	 * @return the JARpath of the first PluginJAR it can find which contains this className,
+	 * 		    or null if not found.
+	 * @since 4.3pre7
+	 */
+	public static String findPlugin(String className)
+	{
+		PluginJAR pjar = null;
+		for (String JARpath: jEdit.getNotLoadedPluginJARs()) {
+			pjar = new PluginJAR(new File(JARpath));
+			if (pjar.containsClass(className))
+			{
+				return JARpath;
+			}
+		}
+		return null;
+	}
+
+
+	/**
+	 * @param className
+	 * @return true if this jar contains a class with that classname.
+	 * @since jedit 4.3pre7
+	 */
+	public boolean containsClass(String className) {
+
+		try {
+			getZipFile();
+		}
+		catch (IOException ioe) { throw new RuntimeException(ioe);}
+		Enumeration itr = zipFile.entries();
+		while (itr.hasMoreElements())
+		{
+			String entry = itr.nextElement().toString();
+			if (jarCompare(entry, className)) return true;
+		}
+		return false;
+
+	}
+
+	private static boolean jarCompare(String name1, String name2)
+	{
+		name1 = name1.replace('/','.');
+		name2 = name2.replace('/','.');
+		if (name1.contains(name2)) return true;
+		if (name2.contains(name1)) return true;
+		return false;
+	}
+
 
 	//{{{ getCachePath() method
 	/**
@@ -128,6 +277,59 @@ public class PluginJAR
 	{
 		return cachePath;
 	} //}}}
+
+	/**
+	 *
+	 * @param className of a plugin that we wish to load
+	 * @return an ordered set of JARpaths that contains the 
+	 *      plugins that need to be (re)loaded, in the correct order,
+	 */
+	public static Set<String> loadDependencies(String className) {
+		String dep;
+		Set<String> retval = new LinkedHashSet<String>();
+		int i=0;
+		while((dep = jEdit.getProperty("plugin." + className + ".depend." + i++)) != null)
+		{
+			boolean optional = false;
+			if(dep.startsWith("optional "))
+			{
+				optional = true;
+				dep = dep.substring("optional ".length());
+			}
+			else optional = false;
+
+			int index = dep.indexOf(' ');
+			if(index == -1)
+			{
+				Log.log(Log.ERROR, PluginJAR.class, 
+					className + " has an invalid dependency: " + dep);
+				continue;
+			}
+			String what = dep.substring(0,index);
+			String arg = dep.substring(index + 1);
+			if(what.equals("plugin"))
+			{
+				int index2 = arg.indexOf(' ');
+				if ( index2 == -1)
+				{
+					Log.log(Log.ERROR, PluginJAR.class, className
+						+ " has an invalid dependency: "
+						+ dep + " (version is missing)");
+					continue;
+				}
+
+				String pluginName = arg.substring(0,index2);
+				String needVersion = arg.substring(index2 + 1);
+				Set<String> loadTheseFirst = loadDependencies(pluginName);
+				loadTheseFirst.add(pluginName);
+				loadTheseFirst.addAll(retval);
+				retval = loadTheseFirst;
+			}
+		}
+		return retval;
+	}
+
+
 
 	//{{{ getFile() method
 	/**
@@ -199,19 +401,19 @@ public class PluginJAR
 		return browserActions;
 	} //}}}
 
+
+
 	//{{{ checkDependencies() method
 	/**
 	 * Returns true if all dependencies are satisified, false otherwise.
 	 * Also if dependencies are not satisfied, the plugin is marked as
 	 * "broken".
+	 *
 	 */
 	public boolean checkDependencies()
 	{
-		if(plugin == null)
-			return true;
-
+		if(plugin == null) return true;
 		int i = 0;
-
 		boolean ok = true;
 		boolean optional = false;
 
@@ -225,6 +427,7 @@ public class PluginJAR
 				optional = true;
 				dep = dep.substring("optional ".length());
 			}
+			else optional = false;
 
 			int index = dep.indexOf(' ');
 			if(index == -1)
@@ -287,8 +490,8 @@ public class PluginJAR
 				String currVersion = jEdit.getProperty("plugin."
 					+ pluginName + ".version");
 
-				EditPlugin plugin = jEdit.getPlugin(pluginName);
-				if(plugin == null)
+				EditPlugin editPlugin = jEdit.getPlugin(pluginName, false);
+				if(editPlugin == null)
 				{
 					if(!optional)
 					{
@@ -307,24 +510,22 @@ public class PluginJAR
 					{
 						String[] args = { needVersion,
 							pluginName, currVersion };
-						jEdit.pluginError(path,
-							"plugin-error.dep-plugin",args);
+						jEdit.pluginError(path, "plugin-error.dep-plugin",args);
 						ok = false;
 					}
 				}
-				else if(plugin instanceof EditPlugin.Broken)
+				else if(editPlugin instanceof EditPlugin.Broken)
 				{
 					if(!optional)
 					{
 						String[] args = { pluginName };
-						jEdit.pluginError(path,
-							"plugin-error.dep-plugin.broken",args);
+						jEdit.pluginError(path, "plugin-error.dep-plugin.broken",args);
 						ok = false;
 					}
 				}
 				else
 				{
-					PluginJAR jar = plugin.getPluginJAR();
+					PluginJAR jar = editPlugin.getPluginJAR();
 					jar.theseRequireMe.add(path);
 					weRequireThese.add(jar.getPath());
 				}
@@ -340,8 +541,7 @@ public class PluginJAR
 					catch(Exception e)
 					{
 						String[] args = { arg };
-						jEdit.pluginError(path,
-							"plugin-error.dep-class",args);
+						jEdit.pluginError(path, "plugin-error.dep-class",args);
 						ok = false;
 					}
 				}
@@ -371,8 +571,7 @@ public class PluginJAR
 				if(jar == null)
 				{
 					String[] args = { jarPath };
-					jEdit.pluginError(path,
-						"plugin-error.missing-jar",args);
+					jEdit.pluginError(path, "plugin-error.missing-jar",args);
 					ok = false;
 				}
 				else
@@ -389,15 +588,53 @@ public class PluginJAR
 		return ok;
 	} //}}}
 
+	
+	/**
+	 * If plugin A is needed by B, and B is needed by C, we want to
+	 * tell the user that A is needed by B and C when they try to
+	 * unload A.
+	 * 
+	 * @param dependents a set of plugins which we wish to disable
+	 * @param listModel a set of plugins which will be affected, and will need
+	 *  to be disabled also.
+	 */
+	
+	public static void transitiveClosure(Set<String> dependents,
+		Set<String> listModel) 
+	{
+		for (String jarPath: dependents) 
+		{ 
+			if(!listModel.contains(jarPath))
+			{
+				listModel.add(jarPath);
+				PluginJAR jar = jEdit.getPluginJAR(jarPath);
+				transitiveClosure(jar.getDependentPlugins(), listModel);
+			}
+		}
+	} //}}}
+
+		
 	//{{{ getDependentPlugins() method
 	/**
-	 * Returns an array of all plugins that depend on this one.
+	 * Returns set of all plugin JAR filenames that depend on this one.
 	 * @since jEdit 4.2pre2
 	 */
-	public String[] getDependentPlugins()
+	public Set<String> getDependentPlugins()
 	{
-		return (String[])theseRequireMe.toArray(
-			new String[theseRequireMe.size()]);
+		theseRequireMe = new LinkedHashSet<String>();
+		String myClass = getPlugin().getClassName();
+		for (PluginJAR pjar : jEdit.getPluginJARs()) {
+			EditPlugin ep = pjar.getPlugin();
+			if (ep == null) continue;
+			String jarClass = ep.getClassName();
+			for (String className : PluginJAR.loadDependencies(jarClass))
+				if (className.equals(myClass) ){
+					theseRequireMe.add(pjar.getPath());
+				}
+		}		
+		return theseRequireMe;
+		/* String[] retval = new String[theseRequireMe.size()];
+		return theseRequireMe.toArray(retval); */
 	} //}}}
 
 	//{{{ getPlugin() method
@@ -406,6 +643,7 @@ public class PluginJAR
 	 * plugin has not been activated, this will return an instance of
 	 * {@link EditPlugin.Deferred}. If you need the actual plugin core
 	 * class instance, call {@link #activatePlugin()} first.
+	 * If the plugin is not yet loaded, returns null
 	 *
 	 * @since jEdit 4.2pre1
 	 */
@@ -732,7 +970,11 @@ public class PluginJAR
 	//}}}
 
 	//{{{ PluginJAR constructor
-	PluginJAR(File file)
+	/**
+	 * Creates a PluginJAR object which is not necessarily loaded, but can be later.
+	 * @see load(boolean)
+	 */
+	public PluginJAR(File file)
 	{
 		this.path = file.getPath();
 		String jarCacheDir = jEdit.getJARCacheDirectory();
@@ -749,14 +991,13 @@ public class PluginJAR
 	//{{{ init() method
 	void init()
 	{
-		boolean initialized = false;
+		
 
 		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
 		{
 			loadCache(cache);
 			classLoader.activate();
-			initialized = true;
 		}
 		else
 		{
@@ -767,7 +1008,6 @@ public class PluginJAR
 				{
 					setPluginCache(this,cache);
 					classLoader.activate();
-					initialized = true;
 				}
 			}
 			catch(IOException io)
@@ -839,28 +1079,7 @@ public class PluginJAR
 
 	//{{{ Private members
 
-	//{{{ Instance variables
-	private String path;
-	private String cachePath;
-	private File file;
 
-	private JARClassLoader classLoader;
-	private ZipFile zipFile;
-	private Properties properties;
-	private String[] classes;
-	private ActionSet actions;
-	private ActionSet browserActions;
-
-	private EditPlugin plugin;
-
-	private URL dockablesURI;
-	private URL servicesURI;
-
-	private boolean activated;
-
-	private List theseRequireMe = new LinkedList();
-	private List weRequireThese = new LinkedList();
-	//}}}
 
 	//{{{ actionsPresentButNotCoreClass() method
 	private void actionsPresentButNotCoreClass()
@@ -933,8 +1152,7 @@ public class PluginJAR
 			// is already loaded
 			if(jEdit.getPlugin(cache.pluginClass) != null)
 			{
-				jEdit.pluginError(path,
-					"plugin-error.already-loaded",
+				jEdit.pluginError(path, "plugin-error.already-loaded",
 					null);
 				uninit(false);
 			}
@@ -1046,8 +1264,7 @@ public class PluginJAR
 				// is already loaded
 				if(jEdit.getPlugin(className) != null)
 				{
-					jEdit.pluginError(path,
-						"plugin-error.already-loaded",
+					jEdit.pluginError(path, "plugin-error.already-loaded",
 						null);
 					return null;
 				}
@@ -1142,7 +1359,7 @@ public class PluginJAR
 				"Error while starting plugin " + plugin.getClassName());
 			Log.log(Log.ERROR,PluginJAR.this,t);
 			String[] args = { t.toString() };
-			jEdit.pluginError(path,"plugin-error.start-error",args);
+			jEdit.pluginError(path, "plugin-error.start-error",args);
 		}
 
 		if(plugin instanceof EBPlugin)

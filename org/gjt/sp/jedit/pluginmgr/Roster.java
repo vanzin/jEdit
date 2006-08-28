@@ -232,14 +232,13 @@ class Roster
 		 */
 		private void unloadPluginJAR(PluginJAR jar)
 		{
-			String[] dependents = jar.getDependentPlugins();
-			for(int i = 0; i < dependents.length; i++)
+			Set<String> dependents = jar.getDependentPlugins();
+			for (String path: dependents) 
 			{
-				PluginJAR _jar = jEdit.getPluginJAR(
-					dependents[i]);
+				PluginJAR _jar = jEdit.getPluginJAR(path);
 				if(_jar != null)
 				{
-					toLoad.add(dependents[i]);
+					toLoad.add(path);
 					unloadPluginJAR(_jar);
 					// clear cache file
 					String cachePath = jar.getCachePath();

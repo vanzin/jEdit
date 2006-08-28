@@ -29,6 +29,7 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.pluginmgr.PluginManager;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -175,9 +176,7 @@ public class ErrorListDialog extends EnhancedDialog
 				dispose();
 			else if(evt.getSource() == pluginMgr)
 			{
-				org.gjt.sp.jedit.pluginmgr.PluginManager
-					.showPluginManager(JOptionPane
-					.getFrameForComponent(
+				PluginManager.showPluginManager(JOptionPane.getFrameForComponent(
 					ErrorListDialog.this));
 			}
 		} //}}}
