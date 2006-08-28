@@ -7,12 +7,22 @@ and Alan Ezust for contributing to this release.
 
 {{{ API Changes
 
--   Bug # 1538702 - PluginManager fixes: Automatically loads unloaded
-    dependent plugins.
+-  GUIUtilities.addSizeSaver(Frame parent, String name) changed to
+    GUIUtilities.addSizeSaver(Window window, Container parent, String name)
+    and refactored to use saveGeometry(). Saves/restores
+    sizes relative to a parent container. if parent=null, behaves
+    as before. (ezust)
 
--   jEdit.getPlugin(className, bool) now will search for and
-    load plugins that were not yet loaded, given a className to search
-    for. (ezust)
+- Bug # 1538702 - PluginManager fixes: Automatically loads unloaded
+    dependent plugins. (ezust)
+
+- jEdit.getPlugin(className, bool) now will search for and
+  load plugins that were not yet loaded, given a className to search
+  for. (ezust)
+
+- added PluginJAR.findPlugin() which is used by the above method.
+  added PluginJAR.load(), formerly a private method in the
+  moved from the ManagePanel class. (ezust)
 
 - added SearchMatcher.isMatchingEOL(); indicates whether the matched
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.
@@ -40,14 +50,14 @@ and Alan Ezust for contributing to this release.
   2 screens (ezust)
 
 - PluginManager enhancements - spacebar and escape keys work from
-    ManagePanel. (ezust)
+    ManagePanel (only for single selections though). (ezust)
 
 - GuiUtilities.load/save geometry now saves x and y coordinates
-  relative to the parent component. This makes dialogs and floating
-  dockables pop up in a place relative to the parent view.
-  (#1292706) (ezust)
+  relative to the parent component. Changed core to make dialogs
+  and floating dockables pop up in a place relative to the parent
+  view.  (#1292706) (ezust)
 
--
+- Added a "parent" to the
 
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 

@@ -148,7 +148,6 @@ public class PluginJAR
 	private LinkedHashSet<String> weRequireThese = new LinkedHashSet<String>();
 	//}}}
 
-
 	// {{{ load(String jarPath, boolean activateDependentIfNecessary)
 	/**
 	 * Loads a plugin, and its dependent plugins if necessary.
@@ -167,9 +166,9 @@ public class PluginJAR
 		jar = jEdit.getPluginJAR(path);
 		String className = jar.getPlugin().getClassName();
 		if (loadDependents) {
-			Set<String> pluginLoadList = loadDependencies(className);
+			Set<String> pluginLoadList = getDependencySet(className);
 			boolean ok = true;
-			for (String jarName: pluginLoadList) 
+			for (String jarName: pluginLoadList)
 			{
 				String jarPath = findPlugin(jarName);
 				if (jarPath == null) return false;
@@ -200,7 +199,7 @@ public class PluginJAR
 
 		jar.activatePluginIfNecessary();
 		return jar.checkDependencies();
-	}
+	} // }}}
 
 	//{{{ getPath() method
 	/**
@@ -211,8 +210,10 @@ public class PluginJAR
 		return path;
 	} //}}}
 
+	// {{{ findPlugin() method
 	/**
-	 * Unlike getPlugin(), will return a PluginJAR that is not yet loaded, given its classname.
+	 * Unlike getPlugin(), will return a PluginJAR that is not yet loaded,
+	 * given its classname.
 	 *
 	 * @param className
 	 * @return the JARpath of the first PluginJAR it can find which contains this className,
@@ -222,7 +223,8 @@ public class PluginJAR
 	public static String findPlugin(String className)
 	{
 		PluginJAR pjar = null;
-		for (String JARpath: jEdit.getNotLoadedPluginJARs()) {
+		for (String JARpath: jEdit.getNotLoadedPluginJARs())
+		{
 			pjar = new PluginJAR(new File(JARpath));
 			if (pjar.containsClass(className))
 			{
@@ -230,17 +232,19 @@ public class PluginJAR
 			}
 		}
 		return null;
-	}
+	} // }}}
 
-
+	// {{{ containsClass() function
 	/**
 	 * @param className
 	 * @return true if this jar contains a class with that classname.
 	 * @since jedit 4.3pre7
 	 */
-	public boolean containsClass(String className) {
+	boolean containsClass(String className)
+	{
 
-		try {
+		try
+		{
 			getZipFile();
 		}
 		catch (IOException ioe) { throw new RuntimeException(ioe);}
@@ -252,7 +256,9 @@ public class PluginJAR
 		}
 		return false;
 
-	}
+	} // }}}
+
+	// {{{ jarCompare() - compare function for a classname in a jarfile.
 
 	private static boolean jarCompare(String name1, String name2)
 	{
@@ -261,8 +267,7 @@ public class PluginJAR
 		if (name1.contains(name2)) return true;
 		if (name2.contains(name1)) return true;
 		return false;
-	}
-
+	} // }}}
 
 	//{{{ getCachePath() method
 	/**
@@ -278,13 +283,14 @@ public class PluginJAR
 		return cachePath;
 	} //}}}
 
+	// {{{ getDependencySet() method
 	/**
 	 *
 	 * @param className of a plugin that we wish to load
-	 * @return an ordered set of JARpaths that contains the 
-	 *      plugins that need to be (re)loaded, in the correct order,
+	 * @return an ordered set of JARpaths that contains the
+	 *      plugins that need to be (re)loaded, in the correct order.
 	 */
-	public static Set<String> loadDependencies(String className) {
+	public static Set<String> getDependencySet(String className) {
 		String dep;
 		Set<String> retval = new LinkedHashSet<String>();
 		int i=0;
@@ -301,7 +307,7 @@ public class PluginJAR
 			int index = dep.indexOf(' ');
 			if(index == -1)
 			{
-				Log.log(Log.ERROR, PluginJAR.class, 
+				Log.log(Log.ERROR, PluginJAR.class,
 					className + " has an invalid dependency: " + dep);
 				continue;
 			}
@@ -320,16 +326,14 @@ public class PluginJAR
 
 				String pluginName = arg.substring(0,index2);
 				String needVersion = arg.substring(index2 + 1);
-				Set<String> loadTheseFirst = loadDependencies(pluginName);
+				Set<String> loadTheseFirst = getDependencySet(pluginName);
 				loadTheseFirst.add(pluginName);
 				loadTheseFirst.addAll(retval);
 				retval = loadTheseFirst;
 			}
 		}
 		return retval;
-	}
-
-
+	} // }}}
 
 	//{{{ getFile() method
 	/**
@@ -400,8 +404,6 @@ public class PluginJAR
 	{
 		return browserActions;
 	} //}}}
-
-
 
 	//{{{ checkDependencies() method
 	/**
@@ -588,22 +590,22 @@ public class PluginJAR
 		return ok;
 	} //}}}
 
-	
+	// {{{ transitiveClosure()
 	/**
 	 * If plugin A is needed by B, and B is needed by C, we want to
 	 * tell the user that A is needed by B and C when they try to
 	 * unload A.
-	 * 
+	 *
 	 * @param dependents a set of plugins which we wish to disable
 	 * @param listModel a set of plugins which will be affected, and will need
 	 *  to be disabled also.
 	 */
-	
+
 	public static void transitiveClosure(Set<String> dependents,
-		Set<String> listModel) 
+		Set<String> listModel)
 	{
-		for (String jarPath: dependents) 
-		{ 
+		for (String jarPath: dependents)
+		{
 			if(!listModel.contains(jarPath))
 			{
 				listModel.add(jarPath);
@@ -613,7 +615,6 @@ public class PluginJAR
 		}
 	} //}}}
 
-		
 	//{{{ getDependentPlugins() method
 	/**
 	 * Returns set of all plugin JAR filenames that depend on this one.
@@ -627,11 +628,11 @@ public class PluginJAR
 			EditPlugin ep = pjar.getPlugin();
 			if (ep == null) continue;
 			String jarClass = ep.getClassName();
-			for (String className : PluginJAR.loadDependencies(jarClass))
+			for (String className : PluginJAR.getDependencySet(jarClass))
 				if (className.equals(myClass) ){
 					theseRequireMe.add(pjar.getPath());
 				}
-		}		
+		}
 		return theseRequireMe;
 		/* String[] retval = new String[theseRequireMe.size()];
 		return theseRequireMe.toArray(retval); */
@@ -991,7 +992,7 @@ public class PluginJAR
 	//{{{ init() method
 	void init()
 	{
-		
+
 
 		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
@@ -1078,8 +1079,6 @@ public class PluginJAR
 	//}}}
 
 	//{{{ Private members
-
-
 
 	//{{{ actionsPresentButNotCoreClass() method
 	private void actionsPresentButNotCoreClass()
