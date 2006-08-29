@@ -45,7 +45,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -147,8 +146,7 @@ public class PluginJAR
 
 	// Lists of jarPaths
 	private Set<String> theseRequireMe = new LinkedHashSet<String>();
-	private Set<String> weRequireThese = 
-		Collections.synchronizedSet(new LinkedHashSet<String>());
+	private Set<String> weRequireThese = new LinkedHashSet<String>();
 	//}}}
 
 	// {{{ load(String jarPath, boolean activateDependentIfNecessary)

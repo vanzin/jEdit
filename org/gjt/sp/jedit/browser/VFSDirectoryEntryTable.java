@@ -69,7 +69,7 @@ public class VFSDirectoryEntryTable extends JTable
 		setRowSelectionAllowed(true);
 
 		getColumnModel().addColumnModelListener(new ColumnHandler());
-		
+
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 	} //}}}
 
@@ -309,6 +309,16 @@ public class VFSDirectoryEntryTable extends JTable
 				EditAction ea = ac.getAction("vfs.browser.up");
 				ac.invokeAction(evt, ea);
 				break;
+			case KeyEvent.VK_DELETE:
+				evt.consume();
+				ea = ac.getAction("vfs.browser.delete");
+				ac.invokeAction(evt, ea);
+				break;
+			case KeyEvent.VK_F2:
+				ea = ac.getAction("vfs.browser.rename");
+				evt.consume();
+				ac.invokeAction(evt, ea);
+				break;
 		          case KeyEvent.VK_F5:
                                evt.consume();
                                ea = ac.getAction("vfs.browser.reload");
@@ -326,7 +336,7 @@ public class VFSDirectoryEntryTable extends JTable
 					if(!model.files[row].expanded)
 						toggleExpanded(row);
 				}
-				
+
 				break;
 			case KeyEvent.VK_ENTER:
 				evt.consume();
@@ -334,13 +344,13 @@ public class VFSDirectoryEntryTable extends JTable
 					(evt.isShiftDown()
 					? VFSBrowser.M_OPEN_NEW_VIEW
 					: VFSBrowser.M_OPEN),false);
-				
+
 				break;
 			}
 		}
 		else if(evt.getID() == KeyEvent.KEY_TYPED)
 		{
-			
+
 			if(evt.isControlDown() || evt.isAltDown()
 				|| evt.isMetaDown())
 			{
@@ -353,7 +363,7 @@ public class VFSDirectoryEntryTable extends JTable
 				evt.consume();
 				return;
 			}
-				
+
 
 			VFSBrowser browser = browserView.getBrowser();
 
@@ -418,7 +428,7 @@ public class VFSDirectoryEntryTable extends JTable
 	{
 		VFSFile[] files = ((VFSDirectoryEntryTableModel)
 			getModel()).getFiles();
-		
+
 		int index = VFSFile.findCompletion(files,start,end,str,dirsOnly);
 		if(index != -1)
 		{
@@ -492,14 +502,14 @@ public class VFSDirectoryEntryTable extends JTable
 	{
 		if(resizingColumns)
 			return;
-		
+
 		VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)getModel();
 		TableColumnModel columns = getColumnModel();
 
 		for(int i = 1; i < model.getColumnCount(); i++)
 			model.setColumnWidth(i,columns.getColumn(i).getWidth());
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ ClearTypeSelect class
@@ -510,7 +520,7 @@ public class VFSDirectoryEntryTable extends JTable
 			typeSelectBuffer.setLength(0);
 		}
 	} //}}}
-	
+
 	//{{{ ColumnHandler class
 	class ColumnHandler implements TableColumnModelListener
 	{
@@ -518,7 +528,7 @@ public class VFSDirectoryEntryTable extends JTable
 		public void columnRemoved(TableColumnModelEvent e) {}
 		public void columnMoved(TableColumnModelEvent e) {}
 		public void columnSelectionChanged(ListSelectionEvent e) {}
-		
+
 		public void columnMarginChanged(ChangeEvent e)
 		{
 			saveWidths();

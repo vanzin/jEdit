@@ -46,6 +46,9 @@ and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 
+- File System Browser now recognizes DEL and F2 to delete/rename
+  files. (1542365) (ezust)
+
 - SplashScreen is now in the middle of the screen, instead of between
   2 screens (ezust)
 
