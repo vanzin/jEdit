@@ -2087,9 +2087,9 @@ vfs.browser.browse-window.label=Browse in New Window
 vfs.browser.browse.label=Browse
 vfs.browser.close.label=Close
 vfs.browser.copy-path.label=Copy Path Name
-vfs.browser.delete.label=Delete...
+vfs.browser.delete.label=Delete... (DEL)
 vfs.browser.home.icon=Home.png
-vfs.browser.home.label=Home Directory
+vfs.browser.home.label=Home Directory (~)
 vfs.browser.insert.label=Insert
 vfs.browser.new-directory.icon=NewDir.png
 vfs.browser.new-directory.label=New Directory...
@@ -2099,17 +2099,17 @@ vfs.browser.open.label=Open
 vfs.browser.other-encoding-2.label=Other ({0})...
 vfs.browser.other-encoding.label=Other...
 vfs.browser.reload.icon=Reload.png
-vfs.browser.reload.label=Reload Directory
-vfs.browser.rename.label=Rename...
+vfs.browser.reload.label=Reload Directory (F5)
+vfs.browser.rename.label=Rename... (F2)
 vfs.browser.roots.icon=Drive.png
-vfs.browser.roots.label=Root Directory
+vfs.browser.roots.label=Root Directory (/)
 vfs.browser.search-directory.icon=FindInDir.png
 vfs.browser.search-directory.label=Search in Directory...
 vfs.browser.show-hidden-files.label=Show Hidden Files
 vfs.browser.synchronize.icon=CurrentDir.png
-vfs.browser.synchronize.label=Directory of Current Buffer
+vfs.browser.synchronize.label=Directory of Current Buffer (-)
 vfs.browser.up.icon=ParentDir.png
-vfs.browser.up.label=Parent Directory
+vfs.browser.up.label=Parent Directory (Backspace)
 #}}}
 
 #{{{ Tool bar
