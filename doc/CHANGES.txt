@@ -8,19 +8,16 @@ and Alan Ezust for contributing to this release.
 {{{ API Changes
 
 -  GUIUtilities.addSizeSaver(Frame parent, String name) changed to
-    GUIUtilities.addSizeSaver(Window window, Container parent, String name)
-    and refactored to use saveGeometry(). Saves/restores
-    sizes relative to a parent container. if parent=null, behaves
-    as before. (ezust)
-
-- Bug # 1538702 - PluginManager fixes: Automatically loads unloaded
-    dependent plugins. (ezust)
+   GUIUtilities.addSizeSaver(Window window, Container parent, String name)
+   and refactored to use saveGeometry(). Saves/restores
+   sizes relative to a parent container. if parent=null, behaves
+   as before. (ezust)
 
 - jEdit.getPlugin(className, bool) now will search for and
   load plugins that were not yet loaded, given a className to search
   for. (ezust)
 
-- added PluginJAR.findPlugin() which is used by the above method.
+- added PluginJAR.findPlugin() which is used by the above method (ezust).
 
 - added PluginJAR.load(), formerly a private method moved
   from the ManagePanel class. Also moved transitiveClosure() into
@@ -52,15 +49,13 @@ and Alan Ezust for contributing to this release.
 - SplashScreen is now in the middle of the screen, instead of between
   2 screens (ezust)
 
-- PluginManager enhancements - spacebar and escape keys work from
-    ManagePanel (only for single selections though). (ezust)
+- PluginManager fixes: Automatically loads unloaded
+    dependent plugins. (#1538702) (ezust)
 
 - GuiUtilities.load/save geometry now saves x and y coordinates
   relative to the parent component. Changed core to make dialogs
   and floating dockables pop up in a place relative to the parent
   view.  (#1292706) (ezust)
-
-- Added a "parent" to the
 
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 
@@ -91,6 +86,9 @@ and Alan Ezust for contributing to this release.
   entry in service.xml, or by directly calling
   VFSBrowser.addVFSFileFilter(). (Marcelo Vanzin)
 
+- PluginManager - ManagePanel enhancements - spacebar and escape
+  keys work.  (only for single selections though). (ezust)
+
 }}}
 
 }}}
@@ -113,8 +111,7 @@ Marcelo Vanzin for contributing to this release.
 
 - GUIUtilities.addSizeSaver(Frame parent, String name) added to
   save a Frames size and position correctly, even if it gets
-  maximized.
-  (Björn "Vampire" Kautler )
+  maximized.  (Björn "Vampire" Kautler )
 
 - EditPane.setBuffer(final Buffer buffer, boolean requestFocus) that allow
   to set a buffer without requesting the focus (default is to request focus)
@@ -143,8 +140,7 @@ Marcelo Vanzin for contributing to this release.
 - Beanshell 2.0b4 bundled (Matthieu Casanova)
 
 - Added an OptionPane "Encodings" to select which encodings to
-  show in encoding dialogs.
-  (Björn "Vampire" Kautler)
+  show in encoding dialogs.  (Björn "Vampire" Kautler)
 
 - Improved DockableWindowManager.closeCurrentArea() - closes more
   docked dockables than it did before. (Alan Ezust)
