@@ -232,7 +232,7 @@ class Roster
 		 */
 		private void unloadPluginJAR(PluginJAR jar)
 		{
-			Set<String> dependents = jar.getDependentPlugins();
+			String[] dependents = jar.getDependentPlugins();
 			for (String path: dependents) 
 			{
 				PluginJAR _jar = jEdit.getPluginJAR(path);

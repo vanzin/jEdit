@@ -38,6 +38,9 @@ import java.awt.Dimension;
 import java.io.File;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.help.*;
 import org.gjt.sp.jedit.*;
@@ -295,10 +298,8 @@ public class ManagePanel extends JPanel
 				{
 					if(value.equals(Boolean.FALSE))
 						return;
+					PluginJAR.load(entry.jar, true);
 					
-					
-					PluginJAR jar2 = new PluginJAR(new File(entry.jar));
-					jar2.load(true);
 				}
 				else
 				{
@@ -370,18 +371,20 @@ public class ManagePanel extends JPanel
 			sort(sortType);
 		} //}}}
 
-		private HashSet<String> unloaded;
+		private ConcurrentHashMap<String, Object> unloaded;
+		// private HashSet<String> unloaded;
 		//{{{ unloadPluginJARWithDialog() method
 		// Perhaps this should also be moved to PluginJAR class?
 		private void unloadPluginJARWithDialog(PluginJAR jar)
 		{
-			unloaded = new HashSet<String>();
-			Set<String> dependents = jar.getDependentPlugins();
-			if(dependents.size() == 0)
+			// unloaded = new HashSet<String>();
+			unloaded = new ConcurrentHashMap<String, Object>();
+			String[] dependents = jar.getDependentPlugins();
+			if(dependents.length == 0)
 				unloadPluginJAR(jar);
 			else
 			{
-				Set<String> closureSet = new LinkedHashSet<String>();
+				List<String> closureSet = new LinkedList<String>();
 				PluginJAR.transitiveClosure(dependents, closureSet);
 				ArrayList<String> listModel = new ArrayList<String>();
 				listModel.addAll(closureSet);
@@ -398,16 +401,15 @@ public class ManagePanel extends JPanel
 		//{{{ unloadPluginJAR() method
 		private void unloadPluginJAR(PluginJAR jar)
 		{
-			Set<String> dependents = jar.getDependentPlugins();
-
-			for (String dependent : dependents) {
-				if (!unloaded.contains(dependent)) 
+			String[] dependents = jar.getDependentPlugins();
+			for (String dependent : dependents) 
+			{
+				if (!unloaded.containsKey(dependent)) 
 				{
-					unloaded.add(dependent);
+					unloaded.put(dependent, Boolean.TRUE);
 					PluginJAR _jar = jEdit.getPluginJAR(dependent);
 					if(_jar != null)
 						unloadPluginJAR(_jar);
-					
 				}
 			}
 			jEdit.removePluginJAR(jar,false);

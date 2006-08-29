@@ -21,8 +21,11 @@ and Alan Ezust for contributing to this release.
   for. (ezust)
 
 - added PluginJAR.findPlugin() which is used by the above method.
-  added PluginJAR.load(), formerly a private method in the
-  moved from the ManagePanel class. (ezust)
+
+- added PluginJAR.load(), formerly a private method moved
+  from the ManagePanel class. Also moved transitiveClosure() into
+  the PluginJAR class. General refactoring to make the
+  plugin management code more centrally located.  (ezust)
 
 - added SearchMatcher.isMatchingEOL(); indicates whether the matched
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.

@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -44,6 +45,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -144,8 +146,9 @@ public class PluginJAR
 	private boolean activated;
 
 	// Lists of jarPaths
-	private LinkedHashSet<String> theseRequireMe = new LinkedHashSet<String>();
-	private LinkedHashSet<String> weRequireThese = new LinkedHashSet<String>();
+	private Set<String> theseRequireMe = new LinkedHashSet<String>();
+	private Set<String> weRequireThese = 
+		Collections.synchronizedSet(new LinkedHashSet<String>());
 	//}}}
 
 	// {{{ load(String jarPath, boolean activateDependentIfNecessary)
@@ -155,29 +158,20 @@ public class PluginJAR
 	 * @since jEdit 4.3pre7
 	 *
 	 */
-	public boolean load(boolean loadDependents) {
+	public static PluginJAR load(String path, boolean loadDependents) {
 		PluginJAR jar = jEdit.getPluginJAR(path);
-		if (jar != null) {
-			jar.activatePluginIfNecessary();
-			return jar.checkDependencies();
+		if (jar != null && jar.getPlugin() != null) {
+			return jar;
 		}
-		// Else, the plugin has not yet been loaded.
 		jEdit.addPluginJAR(path);
 		jar = jEdit.getPluginJAR(path);
 		String className = jar.getPlugin().getClassName();
 		if (loadDependents) {
-			Set<String> pluginLoadList = getDependencySet(className);
-			boolean ok = true;
+			Set<String> pluginLoadList = jar.getDependencySet(className);
 			for (String jarName: pluginLoadList)
 			{
 				String jarPath = findPlugin(jarName);
-				if (jarPath == null) return false;
-				PluginJAR pjar = jEdit.getPluginJAR(jarPath);
-				if (pjar == null) {
-					jEdit.addPluginJAR(jarPath);
-					pjar = jEdit.getPluginJAR(jarPath);
-				}
-				pjar.load(true);
+				load(jarPath, false);
 			}
 		}
 		// Load extra jars that are part of this plugin
@@ -196,9 +190,9 @@ public class PluginJAR
 				}
 			}
 		}
-
+		jar.checkDependencies();
 		jar.activatePluginIfNecessary();
-		return jar.checkDependencies();
+		return jar;
 	} // }}}
 
 	//{{{ getPath() method
@@ -222,6 +216,9 @@ public class PluginJAR
 	 */
 	public static String findPlugin(String className)
 	{
+		EditPlugin ep = jEdit.getPlugin(className);
+		if (ep != null) return ep.getPluginJAR().getPath();
+		
 		PluginJAR pjar = null;
 		for (String JARpath: jEdit.getNotLoadedPluginJARs())
 		{
@@ -600,43 +597,29 @@ public class PluginJAR
 	 * @param listModel a set of plugins which will be affected, and will need
 	 *  to be disabled also.
 	 */
-
-	public static void transitiveClosure(Set<String> dependents,
-		Set<String> listModel)
+  	static public void transitiveClosure(String[] dependents, List<String> listModel)
 	{
-		for (String jarPath: dependents)
-		{
-			if(!listModel.contains(jarPath))
-			{
-				listModel.add(jarPath);
-				PluginJAR jar = jEdit.getPluginJAR(jarPath);
-				transitiveClosure(jar.getDependentPlugins(), listModel);
-			}
-		}
-	} //}}}
-
+  		for(int i = 0; i < dependents.length; i++)
+  		{
+  			String jarPath = dependents[i];
+  			if(!listModel.contains(jarPath))
+  			{
+  				listModel.add(jarPath);
+  				PluginJAR jar = jEdit.getPluginJAR(
+  					jarPath);
+  				transitiveClosure(jar.getDependentPlugins(),
+  					listModel);
+  			}
+  		}
+  	} //}}}
+	  
+	  
+	
 	//{{{ getDependentPlugins() method
-	/**
-	 * Returns set of all plugin JAR filenames that depend on this one.
-	 * @since jEdit 4.2pre2
-	 */
-	public Set<String> getDependentPlugins()
-	{
-		theseRequireMe = new LinkedHashSet<String>();
-		String myClass = getPlugin().getClassName();
-		for (PluginJAR pjar : jEdit.getPluginJARs()) {
-			EditPlugin ep = pjar.getPlugin();
-			if (ep == null) continue;
-			String jarClass = ep.getClassName();
-			for (String className : PluginJAR.getDependencySet(jarClass))
-				if (className.equals(myClass) ){
-					theseRequireMe.add(pjar.getPath());
-				}
-		}
-		return theseRequireMe;
-		/* String[] retval = new String[theseRequireMe.size()];
-		return theseRequireMe.toArray(retval); */
-	} //}}}
+	  public String[] getDependentPlugins()
+	  {
+		  return (String[])theseRequireMe.toArray(new String[theseRequireMe.size()]);
+	  } //}}}
 
 	//{{{ getPlugin() method
 	/**
@@ -731,6 +714,9 @@ public class PluginJAR
 	 */
 	public void activatePluginIfNecessary()
 	{
+		String filename = MiscUtilities.getFileName(getPath());
+		jEdit.setBooleanProperty("plugin-blacklist." + filename, false);
+//		jEdit.setBooleanProperty("plugin-blacklist."+MiscUtilities.getFileName(getPath()),false);
 		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
 			return;
 
@@ -1282,21 +1268,20 @@ public class PluginJAR
 			actions.load();
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
-			cache.cachedActionToggleFlags = new boolean[
-				cache.cachedActionNames.length];
+			cache.cachedActionToggleFlags = 
+				new boolean[cache.cachedActionNames.length];
 			for(int i = 0; i < cache.cachedActionNames.length; i++)
 			{
-				 cache.cachedActionToggleFlags[i]
-				 	= jEdit.getBooleanProperty(
-					cache.cachedActionNames[i]
-					+ ".toggle");
+				 cache.cachedActionToggleFlags[i] = 
+					 jEdit.getBooleanProperty(
+						 cache.cachedActionNames[i] + ".toggle");
 			}
 		}
 
 		if(cache.browserActionsURI != null)
 		{
-			browserActions = new ActionSet(this,null,null,
-				cache.browserActionsURI);
+			browserActions = 
+				new ActionSet(this,null,null, cache.browserActionsURI);
 			browserActions.load();
 			VFSBrowser.getActionContext().addActionSet(browserActions);
 			cache.cachedBrowserActionNames =
@@ -1304,30 +1289,26 @@ public class PluginJAR
 			cache.cachedBrowserActionToggleFlags = new boolean[
 				cache.cachedBrowserActionNames.length];
 			for(int i = 0;
-				i < cache.cachedBrowserActionNames.length;
-				i++)
+				i < cache.cachedBrowserActionNames.length; i++)
 			{
 				 cache.cachedBrowserActionToggleFlags[i]
 				 	= jEdit.getBooleanProperty(
-					cache.cachedBrowserActionNames[i]
-					+ ".toggle");
+				 		cache.cachedBrowserActionNames[i] + ".toggle");
 			}
 		}
 
 		if(dockablesURI != null)
 		{
 			DockableWindowFactory.getInstance()
-				.loadDockableWindows(this,
-				dockablesURI,cache);
+				.loadDockableWindows(this, dockablesURI,cache);
 		}
 
 		if(actions.size() != 0)
 		{
 			if(label != null)
 			{
-				actions.setLabel(jEdit.getProperty(
-					"action-set.plugin",
-					new String[] { label }));
+				actions.setLabel(jEdit.getProperty( 
+					"action-set.plugin", new String[] { label }));
 			}
 			else
 				actionsPresentButNotCoreClass();
@@ -1354,7 +1335,7 @@ public class PluginJAR
 		{
 			breakPlugin();
 
-			Log.log(Log.ERROR,PluginJAR.this,
+			Log.log(Log.ERROR,PluginJAR.this, 
 				"Error while starting plugin " + plugin.getClassName());
 			Log.log(Log.ERROR,PluginJAR.this,t);
 			String[] args = { t.toString() };
@@ -1363,9 +1344,8 @@ public class PluginJAR
 
 		if(plugin instanceof EBPlugin)
 		{
-			if(jEdit.getProperty("plugin."
-				+ plugin.getClassName() + ".activate")
-				== null)
+			if(jEdit.getProperty("plugin." + plugin.getClassName() 
+				+ ".activate") == null)
 			{
 				// old plugins expected jEdit 4.1-style
 				// behavior, where a PropertiesChanged

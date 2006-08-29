@@ -945,13 +945,8 @@ public class jEdit
 		}
 		if (!loadIfNecessary) return plugin;
 		String jarPath  = PluginJAR.findPlugin(name);
-		jEdit.addPluginJAR(jarPath);
-		PluginJAR pjar = jEdit.getPluginJAR(jarPath);
-		if (pjar != null) {
-			pjar.load(true);
-			return pjar.getPlugin();
-		}
-		return null;
+		PluginJAR pjar = PluginJAR.load(jarPath, true);
+		return pjar.getPlugin();
 	} //}}}
 
 	//{{{ getPlugins() method
@@ -1026,7 +1021,7 @@ public class jEdit
 		PluginJAR jar = new PluginJAR(new File(path));
 		jars.addElement(jar);
 		jar.init();
-
+		jEdit.unsetProperty("plugin-blacklist."+MiscUtilities.getFileName(path));
 		EditBus.send(new PluginUpdate(jar,PluginUpdate.LOADED,false));
 		if(!isMainThread())
 		{
