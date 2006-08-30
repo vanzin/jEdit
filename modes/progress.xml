@@ -42,6 +42,12 @@
     <PROPERTY NAME="indentCloseBrackets" VALUE="}" />
   </PROPS>
 
+  <RULES SET="COMMENT" DEFAULT="COMMENT1" IGNORE_CASE="TRUE">
+      <SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
+      <BEGIN>/*</BEGIN> <END>*/</END>
+      </SPAN>
+  </RULES>
+
   <RULES ESCAPE="~" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
     <!-- COMMENT1   : Normal Progress comments -->
     <!-- LITERAL1   : text between ' or " -->
@@ -54,11 +60,10 @@
     <!-- NON INVALID: Correction for non-invalid keywords -->
 
     <!-- COMMENT1   : Normal Progress comments -->
-      <SPAN TYPE="COMMENT1">
-        <BEGIN>/*</BEGIN>
-        <END>*/</END>
-      </SPAN>
-
+    <SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
+     <BEGIN>/*</BEGIN>
+     <END>*/</END>
+    </SPAN>
     <!-- LITERAL1   : text between ' or " -->
       <SPAN TYPE="LITERAL1">
         <BEGIN>'</BEGIN>
@@ -3738,5 +3743,7 @@
 
     </KEYWORDS>
   </RULES>
+
+
 </MODE>
 
