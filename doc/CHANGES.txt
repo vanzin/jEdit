@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre7
 
-Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'leary
-and Alan Ezust for contributing to this release.
+Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'leary,
+Marcin Orlowski, and Alan Ezust for contributing to this release.
 
 {{{ API Changes
 
@@ -42,6 +42,15 @@ and Alan Ezust for contributing to this release.
 - added org.gjt.sp.util.PropertiesBean. See javadoc for details.
   (Marcelo Vanzin)
 
+}}}
+
+{{{ Edit Modes
+
+Interlis mode updated to version 2.3 (patch # 1464779)
+
+Progress mode supports nested comments (patch# 1211534)
+
+New edit mode: Pilrc *rcp mode by Marcin Orlowski
 }}}
 
 {{{ Bug Fixes
