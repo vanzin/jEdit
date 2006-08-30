@@ -356,7 +356,7 @@
 				FILE_NAME_GLOB="*.rtf" />
 
 <MODE NAME="ruby"		FILE="ruby.xml"
-				FILE_NAME_GLOB="*.{rb,rbw}" 
+				FILE_NAME_GLOB="*.{rb,rbw}"
 	            FIRST_LINE_GLOB="#!*/*ruby*" />
 
 <MODE NAME="rview"		FILE="rview.xml"
@@ -377,8 +377,10 @@
 <MODE NAME="sgml"		FILE="sgml.xml"
 				FILE_NAME_GLOB="*.{sgml,sgm,dtd}" />
 
+<MODE NAME="rcp" FILE="rcp.xml" FILE_NAME_GLOB="*.rcp" />
+
 <MODE NAME="shellscript"	FILE="shellscript.xml"
-				FILE_NAME_GLOB="*.{csh,sh}"
+				FILE_NAME_GLOB="*.{csh,sh,bash}"
 				FIRST_LINE_GLOB="#!/*sh*" />
 
 <MODE NAME="shtml"		FILE="shtml.xml"
