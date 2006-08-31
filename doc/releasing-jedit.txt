@@ -1,0 +1,79 @@
+==================================================
+Packaging jEdit for release
+==================================================
+
+This document contains/will contain instructions on how to create and release jEdit for distribution, with all of the installers.
+
+When releasing jEdit, we use the "ant dist" target, which builds installers for different operating systems.
+
+Filename Conventions
+--------------------
+
+The naming conventions of the target must be consistent with previous releases. Here is an example of how it *should* be with release 4.3pre6.
+
+ 	jedit_4.3pre6_all.deb 	Platform-Independent  	.deb
+  	jedit4.3pre6.dmg 	Platform-Independent 	.dmg
+  	jedit4.3pre6installer.exe 	i386 	.exe (32-bit Windows)
+    jedit4.3pre6install.jar   	Platform-Independent 	.jar * NOTE - pjo.py needs this.
+      	jedit4.3pre6source.tar.bz2
+  	jedit4.3pre6manual-A4.pdf
+  	jedit4.3pre6manual-USletter.pdf
+  	jedit-4.3pre6-noarch-1sao.tgz
+
+
+NOTE: This is not consistent with previous releases... Is it too late to make it so?
+
+Windows Installer
+-----------------
+
+To build the Windows installer, you need the following things:
+
+
+Mac Installer
+-------------
+
+To build the Mac installer, you need the following things:
+
+
+
+Debian Installer
+----------------
+
+To build the debian installer, you need the following things:
+
+
+
+Upload Step #1
+--------------
+
+After building the files, we upload them to the sf.net upload site.
+
+    ncftp ftp://upload.sf.net/incoming
+    Login successful.
+    Logged in to upload.sf.net.
+    Current remote directory is /incoming.
+    ncftp /incoming > mput jedit*
+
+File Release System
+-------------------
+
+Next, we add and describe the files for sourceforge.net's file release system.
+
+http://sourceforge.net/project/admin/editpackages.php?group_id=588
+
+For "pre" releases, we add files to the "devel" release.
+
+
+After Releasing
+---------------
+
+After the file has been released, we need to update the website in the following places:
+
+sftp://plugins.jedit.org//home/groups/j/je/jedit/htdocs/download.text
+sftp://plugins.jedit.org//home/groups/j/je/jedit/htdocs/jEdit-version.txt
+
+Wiz
+---
+
+Finally, go to plugins.jedit.org/wiz and create the release there, so that future releases of plugins can depend on it.
+
