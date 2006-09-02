@@ -1,0 +1,8 @@
+This plugin provides a dockable "scratch pad" for writing
+and displaying notes, to do lists or similar items as unformatted text.
+The text is automatically saved upon closing the plugin or exiting
+jEdit. It can also be saved manually. The user can change the file to be
+displayed during the current editing session. The path of the default
+notepad file can be changed as a user option. Finally, the text file can
+be copied to a new, untitled jEdit buffer so that it can be edited by the
+main program.

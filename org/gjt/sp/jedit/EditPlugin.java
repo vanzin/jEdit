@@ -55,6 +55,9 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * bundles external JAR files. Contains a whitespace-separated list of JAR
  * file names. Without this property, the plugin manager will leave behind the
  * external JAR files when removing the plugin.</li>
+ * <li><code>plugin.<i>className</i>.description</code></li> - the short description
+ * associated with the plugin.  The short description is used by the Plugin
+ * Manager and on the list pages on Plugin Central.
  * </ul>
  *
  * The following properties are optional but recommended:
@@ -63,6 +66,13 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * <li><code>plugin.<i>className</i>.author</code></li>
  * <li><code>plugin.<i>className</i>.docs</code> - the path to plugin
  * documentation in HTML format within the JAR file.</li>
+ * <li><code>plugin.<i>className</i>.longdescription</code></li> - the filename
+ * of the text file that contains the long description of your plugin.  The long
+ * description is used only on the plugin detail pages on Plugin Central.
+ * If this property is left out, you must supply this information in a file named
+ * &lt;pluginName&gt;.txt where &lt;pluginName&gt; is the the same name associated
+ * with <code>plugin.<i>className</i>.name</code>.  The long description text file
+ * must be in the same directory as your plugin's .props file.
  * </ul>
  *
  * <h3>Plugin dependency properties</h3>
@@ -70,8 +80,8 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * Plugin dependencies are also specified using properties.
  * Each dependency is defined in a property named with
  * <code>plugin.<i>className</i>.depend.</code> followed by a number.
- * Dependencies must be numbered in order, starting from zero. 
- 
+ * Dependencies must be numbered in order, starting from zero.
+
  * The value of a dependency property has one of the following forms:
  *
  * <ul>
@@ -83,15 +93,15 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * <code>04.02.01.00</code>.</li>
  * <li><code><i>pluginClassName pluginVersion</i></code> - the fully quailified
  * plugin class name with package must be specified.</li>
- * <li><code>optional <i>pluginClassName pluginVersion</i></code> - 
- * an optional dependency, indicating that the plugin will work without it, 
+ * <li><code>optional <i>pluginClassName pluginVersion</i></code> -
+ * an optional dependency, indicating that the plugin will work without it,
  * but that the dependency should be loaded before this plugin. </li>
 </ul>
 
  In this example, the ProjectViewer plugin is an optional dependency of
  the Console, beacause the Console only listens to events from the ProjectViewer.
  It requires Jedit 4.2 final.
- 
+
 <pre>
 plugin.console.ConsolePlugin.depend.0=jedit 04.02.99.00
 plugin.console.ConsolePlugin.depend.1=jdk 1.5
