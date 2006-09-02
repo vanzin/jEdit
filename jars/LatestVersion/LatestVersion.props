@@ -10,6 +10,7 @@ plugin.LatestVersionPlugin.depend.1=jdk 1.4
 
 plugin.LatestVersionPlugin.description=This plugin can be used to find out what \
     the latest available jEdit version is.
+plugin.LatestVersionPlugin.longdescription=LatestVersion.txt
 
 plugin.LatestVersionPlugin.menu-item=version-check
 

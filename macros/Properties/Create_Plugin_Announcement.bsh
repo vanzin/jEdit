@@ -132,8 +132,8 @@ void pluginTextDialog( View view, Buffer buffer )
     }
     if( longDescriptionFileName==null )
     {
-        longDescriptionFileName = pluginName + ".txt";
-        Macros.error(view, "setting default long description file");
+        longDescriptionFileName = "description.html";
+        // Macros.error(view, "setting default long description file");
     }
 
     //load the long description
