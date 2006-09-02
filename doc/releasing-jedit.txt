@@ -11,17 +11,15 @@ Filename Conventions
 
 The naming conventions of the target must be consistent with previous releases. Here is an example of how it *should* be with release 4.3pre6.
 
- 	jedit_4.3pre6_all.deb 	Platform-Independent  	.deb
+ 	jedit4.3pre6.deb 	Platform-Independent  	.deb
   	jedit4.3pre6.dmg 	Platform-Independent 	.dmg
-  	jedit4.3pre6installer.exe 	i386 	.exe (32-bit Windows)
+  	jedit4.3pre6install.exe 	i386 	.exe (32-bit Windows)
     jedit4.3pre6install.jar   	Platform-Independent 	.jar * NOTE - pjo.py needs this.
-      	jedit4.3pre6source.tar.bz2
-  	jedit4.3pre6manual-A4.pdf
-  	jedit4.3pre6manual-USletter.pdf
-  	jedit-4.3pre6-noarch-1sao.tgz
+    jedit4.3pre6source.tar.bz2
+  	jedit4.3pre6manual-a4.pdf
+  	jedit4.3pre6manual-letter.pdf
+  	jedit-4.3pre6-noarch-1sao.tgz  Platform-Independent slackware package
 
-
-NOTE: This is not consistent with previous releases... Is it too late to make it so?
 
 Windows Installer
 -----------------
@@ -72,8 +70,15 @@ After the file has been released, we need to update the website in the following
 sftp://plugins.jedit.org//home/groups/j/je/jedit/htdocs/download.text
 sftp://plugins.jedit.org//home/groups/j/je/jedit/htdocs/jEdit-version.txt
 
+
+Announcement
+------------
+
+Send an announcement to the jedit-devel list and jedit-announce list.  The announcement should contain the contents of the CHANGES.txt file in the jedit subversion repository under jedit/doc.  When you send the email to jedit-announce, please do it from your normal email address.  If you do it from one that looks like "joshuatiggonzalez@grsymphony.org" it'll get lost with all the spam we get to that list.  Yes, that's a real example.
+
 Wiz
 ---
 
 Finally, go to plugins.jedit.org/wiz and create the release there, so that future releases of plugins can depend on it.
 
+:wrap=soft:maxLineLen=120:folding=indent:
