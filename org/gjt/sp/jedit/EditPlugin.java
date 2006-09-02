@@ -46,8 +46,8 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * invoked; set it to <code>startup</code> if your plugin must be loaded at
  * startup regardless; set it to a whitespace-separated list of property names
  * if your plugin should be loaded if at least one of these properties is set.
- * Note that if this property is <b>not</b> set, the plugin is loaded like an
- * old-style jEdit 4.1 plugin.
+ * Note that if this property is <b>not</b> set, the plugin will not work with
+ * jEdit 4.3final.
  * </li>
  * <li><code>plugin.<i>className</i>.name</code></li>
  * <li><code>plugin.<i>className</i>.version</code></li>
@@ -55,9 +55,9 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * bundles external JAR files. Contains a whitespace-separated list of JAR
  * file names. Without this property, the plugin manager will leave behind the
  * external JAR files when removing the plugin.</li>
- * <li><code>plugin.<i>className</i>.description</code></li> - the short description
+ * <li><code>plugin.<i>className</i>.description</code> - the short description
  * associated with the plugin.  The short description is used by the Plugin
- * Manager and on the list pages on Plugin Central.
+ * Manager and on the list pages on Plugin Central. </li>
  * </ul>
  *
  * The following properties are optional but recommended:
@@ -65,15 +65,24 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * <ul>
  * <li><code>plugin.<i>className</i>.author</code></li>
  * <li><code>plugin.<i>className</i>.docs</code> - the path to plugin
- * documentation in HTML format within the JAR file.</li>
- * <li><code>plugin.<i>className</i>.longdescription</code></li> - the filename
- * of the text file that contains the long description of your plugin.  The long
- * description is used only on the plugin detail pages on Plugin Central.
- * If this property is left out, you must supply this information in a file named
- * &lt;pluginName&gt;.txt where &lt;pluginName&gt; is the the same name associated
- * with <code>plugin.<i>className</i>.name</code>.  The long description text file
- * must be in the same directory as your plugin's .props file.
- * </ul>
+ * documentation in HTML format. </li>
+ * <li><code>plugin.<i>className</i>.longdescription</code></li> - the path to
+ * the long description in HTML (no fancy stuff here, please - just
+	 h1,h2,p,li,ul,ol,a href,b,i,u, ok?)
+ * The long description is extracted from the plugin at various times,
+ * primarily at plugin packaging time to update the data on the
+ * plugin detail pages of Plugin Central.
+ * If this property is left out, the default will be to look in a file
+ * called &lt;description.html&gt;.
+ *
+ * For the previous two properties, if a relative path is supplied,
+ * it should be both
+ * 1. relative to the location of the .props file (when it is in the source tree)
+ * 2. relative to the root of the JAR (when it is packaged in the JAR file)
+ *
+ * Both conditions are easily satisfied if the .props file as well as
+ * description.html are both located in the root directory of the plugin,
+ * as well as the generated JAR.
  *
  * <h3>Plugin dependency properties</h3>
  *
@@ -81,7 +90,9 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * Each dependency is defined in a property named with
  * <code>plugin.<i>className</i>.depend.</code> followed by a number.
  * Dependencies must be numbered in order, starting from zero.
-
+ * This determines the order that dependent plugins get loaded and activated,
+ * so order is very important.
+*
  * The value of a dependency property has one of the following forms:
  *
  * <ul>
@@ -90,10 +101,10 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * a version number in the form returned by {@link jEdit#getBuild()},
  * not {@link jEdit#getVersion()}. Note that the documentation here describes
  * the jEdit 4.2 plugin API, so this dependency must be set to at least
- * <code>04.02.01.00</code>.</li>
+ * <code>04.02.99.00</code> (4.2final).</li>
  * <li><code><i>pluginClassName pluginVersion</i></code> - the fully quailified
  * plugin class name with package must be specified.</li>
- * <li><code>optional <i>pluginClassName pluginVersion</i></code> -
+ * <li><code>optional plugin <i>pluginClassName pluginVersion</i></code> -
  * an optional dependency, indicating that the plugin will work without it,
  * but that the dependency should be loaded before this plugin. </li>
 </ul>
@@ -156,7 +167,7 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * <li><code>plugin.<i>className</i>.option-pane=<i>paneName</i></code> - if this is defined,
  * a single option pane with this name is added to the <b>Plugin Options</b>
  * menu.</li>
- * <li><code>plugin.<i>className</i>.option-group=paneName1 [paneName2 paneName3 ...]</code> - if this is defined,
+ * <li><code>plugin.<i>className</i>.option-group=<i>paneName1</i> [<i>paneName2 paneName3</i> ...]</code> - if this is defined,
  * a branch node is added to the <b>Plugin Options</b> dialog box whose content
  * is the whitespace-separated list of <i>paneNames</i> in this property.</li>
  * </ul>

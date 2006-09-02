@@ -23,22 +23,31 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import bsh.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Stack;
 
+import javax.swing.JComponent;
+
+import org.gjt.sp.jedit.ActionSet;
+import org.gjt.sp.jedit.BeanShell;
+import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.PluginJAR;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.XMLUtilities;
+import bsh.NameSpace;
+import bsh.UtilEvalError;
 //}}}
 
 /**

@@ -67,7 +67,7 @@ import org.gjt.sp.util.Log;
  * <pre>&lt;?xml version="1.0"?&gt;
  *&lt;!DOCTYPE DOCKABLES SYSTEM "dockables.dtd"&gt;
  *&lt;DOCKABLES&gt;
- *    &lt;DOCKABLE NAME="name"&gt;
+ *    &lt;DOCKABLE NAME="<i>dockableName</i>"&gt;
  *        // Code to create the dockable
  *    &lt;/DOCKABLE&gt;
  *&lt;/DOCKABLES&gt;</pre>
@@ -82,17 +82,21 @@ import org.gjt.sp.util.Log;
  * The following properties must be defined for each dockable window:
  *
  * <ul>
- * <li><code><i>name</i>.title</code> - the string to show in the title bar
- * of the dockable.</li>
- * <li><code><i>name</i>.label</code> - the dockable's menu item label.</li>
+ * <li><code><i>dockableName</i>.title</code> - the string to show on the dockable
+ * button. </li>
+ * <li><code><i>dockableName</i>.label</code> - The string to use for generating
+ *    menu items and action names. </li> 
+ * <li><code><i>dockableName</i>.longtitle</code> - (optional) the string to use
+ *      in the dockable's floating window title (when it is floating).
+ *       If not specified, the <code><i>dockableName</i>.title</code> property is used. </li>
  * </ul>
  *
  * A number of actions are automatically created for each dockable window:
  *
  * <ul>
- * <li><code><i>name</i></code> - opens the dockable window.</li>
- * <li><code><i>name</i>-toggle</code> - toggles the dockable window's visibility.</li>
- * <li><code><i>name</i>-float</code> - opens the dockable window in a new
+ * <li><code><i>dockableName</i></code> - opens the dockable window.</li>
+ * <li><code><i>dockableName</i>-toggle</code> - toggles the dockable window's visibility.</li>
+ * <li><code><i>dockableName</i>-float</code> - opens the dockable window in a new
  * floating window.</li>
  * </ul>
  *
