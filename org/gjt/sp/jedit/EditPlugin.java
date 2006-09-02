@@ -66,34 +66,39 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * <li><code>plugin.<i>className</i>.author</code></li>
  * <li><code>plugin.<i>className</i>.docs</code> - the path to plugin
  * documentation in HTML format. </li>
- * <li><code>plugin.<i>className</i>.longdescription</code></li> - the path to
- * the long description in HTML (no fancy stuff here, please - just
-	 h1,h2,p,li,ul,ol,a href,b,i,u, ok?)
- * The long description is extracted from the plugin at various times,
+ * <li><code>plugin.<i>className</i>.longdescription</code> - the path to
+ * the long description in XHTML (no fancy stuff here, please - just proper
+ * XHTML subset with the basic tags: <tt>html, h1, h2, p, li, ul, ol, a href,b ,i, u, br/ </tt>)
+ * <p> The long description is extracted from the plugin at various times,
  * primarily at plugin packaging time to update the data on the
- * plugin detail pages of Plugin Central.
+ * plugin detail pages of Plugin Central. </p>
+ * <p>
  * If this property is left out, the default will be to look in a file
- * called &lt;description.html&gt;.
- *
+ * called &lt;description.html&gt;. </p>
+ *</li>
+ *</ul>
+ *<p>
  * For the previous two properties, if a relative path is supplied,
- * it should be both
- * 1. relative to the location of the .props file (when it is in the source tree)
- * 2. relative to the root of the JAR (when it is packaged in the JAR file)
+ * it should be both </p>
+ * <ol>
+ * <li> relative to the location of the .props file (when it is in the source tree) </li>
+ * <li> relative to the root of the JAR (when it is packaged in the JAR file) </li>
+ *</ol>
  *
- * Both conditions are easily satisfied if the .props file as well as
+ *<p> Both conditions are easily satisfied if the .props file as well as
  * description.html are both located in the root directory of the plugin,
- * as well as the generated JAR.
+ * as well as the generated JAR. </p>
  *
  * <h3>Plugin dependency properties</h3>
  *
- * Plugin dependencies are also specified using properties.
+ * <p>Plugin dependencies are also specified using properties.
  * Each dependency is defined in a property named with
  * <code>plugin.<i>className</i>.depend.</code> followed by a number.
  * Dependencies must be numbered in order, starting from zero.
  * This determines the order that dependent plugins get loaded and activated,
- * so order is very important.
+ * so order is very important. </p>
 *
- * The value of a dependency property has one of the following forms:
+ * <p> The value of a dependency property has one of the following forms: </p>
  *
  * <ul>
  * <li> <code>jdk <i>minimumJavaVersion</i></code> </li>
@@ -109,9 +114,9 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * but that the dependency should be loaded before this plugin. </li>
 </ul>
 
- In this example, the ProjectViewer plugin is an optional dependency of
+ <p>In this example, the ProjectViewer plugin is an optional dependency of
  the Console, beacause the Console only listens to events from the ProjectViewer.
- It requires Jedit 4.2 final.
+ It requires Jedit 4.2 final. </p>
 
 <pre>
 plugin.console.ConsolePlugin.depend.0=jedit 04.02.99.00
@@ -122,8 +127,8 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
 
  * <h3>Plugin menu item properties</h3>
  *
- * To add your plugin to the view's <b>Plugins</b> menu, define one of these two
- * properties:
+ *<p> To add your plugin to the view's <b>Plugins</b> menu, define one of these two
+ * properties: </p>
  *
  * <ul>
  * <li><code>plugin.<i>className</i>.menu-item</code> - if this is defined,
@@ -134,14 +139,14 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * be added to the sub-menu by listing <code>-</code> in the property.</li>
  * </ul>
  *
- * If you want the plugin's menu items to be determined at runtime, define a
+ * <p>If you want the plugin's menu items to be determined at runtime, define a
  * property <code>plugin.<i>className</i>.menu.code</code> to be BeanShell
- * code that evaluates to an implementation of
- * {@link org.gjt.sp.jedit.menu.DynamicMenuProvider}.<p>
- *
+ * code that evaluates to an implementation of 
+ * {@link org.gjt.sp.jedit.menu.DynamicMenuProvider}.</p>
+ *<p>
  * To add your plugin to the file system browser's <b>Plugins</b> menu, define
  * one of these two properties:
- *
+ *</p>
  * <ul>
  * <li><code>plugin.<i>className</i>.browser-menu-item</code> - if this is
  * defined, the action named by this property is added to the <b>Plugins</b>
@@ -152,17 +157,17 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * be added to the sub-menu by listing <code>-</code> in the property.</li>
  * </ul>
  *
- * In all cases, each action's
+ *<p> In all cases, each action's
  * menu item label is taken from the <code><i>actionName</i>.label</code>
  * property. View actions are defined in an <code>actions.xml</code>
  * file, file system browser actions are defined in a
  * <code>browser.actions.xml</code> file; see {@link ActionSet}.
- *
+ *</p>
  * <h3>Plugin option pane properties</h3>
  *
- * To add your plugin to the <b>Plugin Options</b> dialog box, define one of
+ * <p>To add your plugin to the <b>Plugin Options</b> dialog box, define one of
  * these two properties:
- *
+ *</p>
  * <ul>
  * <li><code>plugin.<i>className</i>.option-pane=<i>paneName</i></code> - if this is defined,
  * a single option pane with this name is added to the <b>Plugin Options</b>
