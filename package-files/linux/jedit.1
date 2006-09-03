@@ -20,13 +20,13 @@ menu item within \fBjEdit\fP or by invoking jedit -usage.
 
 \fBjEdit\fP  is a cross-platform text editor written in Java. It
 has an extensive feature set that includes syntax highlighting, auto indent,
-folding, word wrap, abbreviation expansion, multiple clipboards, powerful search
-and replace and much more.
+folding, word wrap, abbreviation expansion, multiple clipboards, powerful search and replace and much more.
 
-Furthermore, \fBjEdit\fP is extremely customizable, and extensible, using either macros
-written in the BeanShell scripting language, or plugins written in Java.
+Furthermore, \fBjEdit\fP is extremely customizable, and extensible, using either macros written in the BeanShell scripting language, or plugins written
+in Java. With plugins, you can create a very powerful development environment
+for HTML, XML, C/C++, Python, Perl, Ruby, Lisp, Scheme, and many others.
 
-\fBjEdit\fP requires Java 2 version 1.4.
+\fBjEdit\fP Requires Sun Java 2 version 1.5.
 
 \fBjEdit\fP is released under the GNU General Public License, which can be found in
 the online help.
@@ -34,7 +34,7 @@ the online help.
 
 .SH GENERAL COMMAND LINE USAGE
 
-When opening files from the command line, a line number or marker to position 
+When opening files from the command line, a line number or marker to position
 the caret on can be specified like so:
 
 $ jedit MyApplet.java +line:10
@@ -51,7 +51,7 @@ $ jedit -- -myfile
 .TP
 \fB\-log=level\fR
 Set the minimum log level to an integer between 1 and 9. Default is 7.
-Has no effect when connecting to 
+Has no effect when connecting to
 another instance via the edit server.
 .TP
 \fB\-usage\fR
@@ -83,24 +83,24 @@ Restore previously open files on startup. This is the default.
 Do not restore previously open files on startup.
 .TP
 \fB\-run=script\fR
-Run the specified BeanShell script. There can only be one of these parameters 
+Run the specified BeanShell script. There can only be one of these parameters
 on the command line.
 .TP
 \fB\-settings=dir\fR
 Store user-specific settings in the directory named "dir", instead
-of the default $HOME/.jedit. The directory will be created automatically 
-if it does not exist. Has no effect when connecting to another instance via 
+of the default $HOME/.jedit. The directory will be created automatically
+if it does not exist. Has no effect when connecting to another instance via
 the edit server.
 .TP
 \fB\-nosettings\fR
 Start \fBjEdit\fP without loading user-specific settings.
 .TP
 \fB\-startupscripts\fR
-Run startup scripts. This is the default. Has no effect when connecting to 
+Run startup scripts. This is the default. Has no effect when connecting to
 another instance via the edit server.
 .TP
 \fB\-nostartupscripts\fR
-Disable startup scripts. Has no effect when connecting to 
+Disable startup scripts. Has no effect when connecting to
 another instance via the edit server.
 
 .SH EDIT SERVER OPTIONS
@@ -115,31 +115,31 @@ listening for client connections even after all views are closed. Has no effect
 when connecting to another instance via the edit server.
 .TP
 \fB\-nobackground\fR
-Disable background mode. This is the default. Has no effect when connecting to 
+Disable background mode. This is the default. Has no effect when connecting to
 another instance via the edit server.
 .TP
 \fB\-gui\fR
 Open an initial view. This is the
-default. Has no effect when connecting to 
+default. Has no effect when connecting to
 another instance via the edit server.
 .TP
 \fB\-nogui\fR
-Do not open an initial view, and instead only open one when the first 
-client connects. Can only be used in combination with the -background switch. 
-You can use this switch to "pre-load" \fBjEdit\fP when you log in to your computer, 
-for example. Has no effect when connecting to 
+Do not open an initial view, and instead only open one when the first
+client connects. Can only be used in combination with the -background switch.
+You can use this switch to "pre-load" \fBjEdit\fP when you log in to your computer,
+for example. Has no effect when connecting to
 another instance via the edit server.
 .TP
 \fB\-server\fR
-Store the server port info in the file named "server" inside the settings 
+Store the server port info in the file named "server" inside the settings
 directory. This is the default.
 .TP
 \fB\-server=name\fR
-Store the server port info in the file named "name". File names for this 
+Store the server port info in the file named "name". File names for this
 parameter are relative to the settings directory.
 .TP
 \fB\-noserver\fR
-Do not attempt to connect to a running edit server, and does not start one 
+Do not attempt to connect to a running edit server, and does not start one
 either.
 
 .SH FILES
