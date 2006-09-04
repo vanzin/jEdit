@@ -263,7 +263,7 @@ public class TextUtilities
 	 * @since jedit 4.3pre3
 	 */
 	public static String join(Collection c, String delim) {
-		StringBuffer retval = new StringBuffer();
+		StringBuilder retval = new StringBuilder();
 		Iterator itr = c.iterator();
 		if (itr.hasNext()) {
 			retval.append( itr.next().toString() );
@@ -314,14 +314,7 @@ public class TextUtilities
 			noWordSep = "";
 
 		//{{{ the character under the cursor changes how we behave.
-		int type;
-		if(Character.isWhitespace(ch))
-			type = WHITESPACE;
-		else if(Character.isLetterOrDigit(ch)
-			|| noWordSep.indexOf(ch) != -1)
-			type = WORD_CHAR;
-		else
-			type = SYMBOL;
+		int type = getCharType(ch, noWordSep);
 		//}}}
 
 loop:		for(int i = pos; i >= 0; i--)
@@ -439,14 +432,7 @@ loop:		for(int i = pos; i >= 0; i--)
 			noWordSep = "";
 
 		//{{{ the character under the cursor changes how we behave.
-		int type;
-		if(Character.isWhitespace(ch))
-			type = WHITESPACE;
-		else if(Character.isLetterOrDigit(ch)
-			|| noWordSep.indexOf(ch) != -1)
-			type = WORD_CHAR;
-		else
-			type = SYMBOL;
+		int type = getCharType(ch, noWordSep);
 		//}}}
 
 loop:		for(int i = pos; i < line.length(); i++)
@@ -508,6 +494,26 @@ loop:		for(int i = pos; i < line.length(); i++)
 		return line.length();
 	} //}}}
 
+	/**
+	 * Returns the type of the char.
+	 *
+	 * @param ch the character
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @return the type of the char : {@link #WHITESPACE}, {@link #WORD_CHAR}, {@link #SYMBOL}
+	 */
+	private static int getCharType(char ch, String noWordSep) {
+		int type;
+		if(Character.isWhitespace(ch))
+			type = WHITESPACE;
+		else if(Character.isLetterOrDigit(ch)
+			|| noWordSep.indexOf(ch) != -1)
+			type = WORD_CHAR;
+		else
+			type = SYMBOL;
+		return type;
+	}
+
 	//{{{ spacesToTabs() method
 	/**
 	 * Converts consecutive spaces to tabs in the specified string.
@@ -516,7 +522,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 */
 	public static String spacesToTabs(String in, int tabSize)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		int width = 0;
 		int whitespace = 0;
 		for(int i = 0; i < in.length(); i++)
@@ -563,7 +569,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 				width - whitespace));
 		}
 
-                return buf.toString();
+		return buf.toString();
 	} //}}}
 
 	//{{{ tabsToSpaces() method
@@ -574,7 +580,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 */
 	public static String tabsToSpaces(String in, int tabSize)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		int width = 0;
 		for(int i = 0; i < in.length(); i++)
 		{
@@ -594,9 +600,9 @@ loop:		for(int i = pos; i < line.length(); i++)
 				width++;
 				buf.append(in.charAt(i));
 				break;
-                        }
-                }
-                return buf.toString();
+			}
+		}
+		return buf.toString();
 	} //}}}
 
 	//{{{ format() method
@@ -609,7 +615,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 */
 	public static String format(String text, int maxLineLength, int tabSize)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
 		int index = 0;
 
@@ -637,7 +643,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 	//{{{ indexIgnoringWhitespace() method
 	/**
 	 * Inverse of <code>ignoringWhitespaceIndex()</code>.
-	 * @param str A string
+	 * @param str a string (not an empty string)
 	 * @param index The index
 	 * @return The number of non-whitespace characters that precede the index.
 	 * @since jEdit 4.3pre2
@@ -653,7 +659,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 	//{{{ ignoringWhitespaceIndex() method
 	/**
 	 * Inverse of <code>indexIgnoringWhitespace()</code>.
-	 * @param str A string
+	 * @param str a string (not an empty string)
 	 * @param index The index
 	 * @return The index into the string where the number of non-whitespace
 	 * characters that precede the index is count.
@@ -754,7 +760,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 
 	//{{{ formatParagraph() method
 	private static void formatParagraph(String text, int maxLineLength,
-		int tabSize, StringBuffer buf)
+		int tabSize, StringBuilder buf)
 	{
 		// align everything to paragraph's leading indent
 		int leadingWhitespaceCount = StandardUtilities.getLeadingWhiteSpace(text);

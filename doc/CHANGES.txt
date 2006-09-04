@@ -88,6 +88,9 @@ New edit mode: Pilrc *rcp mode by Marcin Orlowski
   the expected replace behavior, a new method was added to
   SearchMatcher, and users of that class should adjust the offsets of
   subsequent searches when an EOL is matched. (Marcelo Vanzin)
+
+- Formatting an empty paragraph do not throw a StringIndexOutOfBoundsException
+  anymore (#1548902) (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous

@@ -4104,9 +4104,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 				text = TextUtilities.format(
 					text,maxLineLen,buffer.getTabSize());
 				buffer.insert(start,text);
-				moveCaretPosition(start + Math.min(text.length(),
+				int caretPos = start;
+				if (text.length() != 0)
+				{
+					caretPos += Math.min(text.length(),
 					TextUtilities.ignoringWhitespaceIndex(
-					text,noSpaceOffset)));
+					text,noSpaceOffset));
+				}
+				moveCaretPosition(caretPos);
 			}
 			finally
 			{
