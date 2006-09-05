@@ -7,8 +7,10 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
 
 {{{ API Changes
 
--  EditAction now can hold onto an optional protected List<Object> args;
-   Added a new ctor(String name, List args), and getArgs().
+-  Sf.net feature request # 1548301.
+   EditAction now can hold onto an protected Object[] args;
+   Added a convenience function invoke(View view, Object[] newArgs) which
+   calls new method setArgs(newArgs) and invoke(view). (ezust)
 
 -  GUIUtilities.addSizeSaver(Frame parent, String name) changed to
    GUIUtilities.addSizeSaver(Window window, Container parent, String name)
