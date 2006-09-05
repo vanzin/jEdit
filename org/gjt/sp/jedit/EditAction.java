@@ -26,6 +26,8 @@ package org.gjt.sp.jedit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
+import java.util.List;
+
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -41,6 +43,11 @@ import org.gjt.sp.util.Log;
  */
 public abstract class EditAction
 {
+	//{{{ Private members
+	private String name;
+	protected Object[] args;
+	//}}}
+	
 	//{{{ EditAction constructor
 	/**
 	 * Creates a new edit action with the specified name.
@@ -49,8 +56,29 @@ public abstract class EditAction
 	public EditAction(String name)
 	{
 		this.name = name;
+		this.args = null;
 	} //}}}
 
+	/**
+	 * 
+	 * @return null if there is no argument list, or a list of arguments
+	 * 		   which are parameters to this particular action.
+	 * @since jEdit 4.3pre7
+	 */
+	public Object[] getArgs() 
+	{
+		return args;
+	}
+	/**
+	 * An argument list attached to this action.
+	 * 
+	 * @param newArgs an array of objects.
+	 * @since jEdit 4.3pre7
+	 */
+	public void setArgs(Object[] newArgs) {
+		args = newArgs;
+	}
+	
 	//{{{ getName() method
 	/**
 	 * Returns the internal name of this action.
@@ -93,13 +121,31 @@ public abstract class EditAction
 
 	//{{{ invoke() method
 	/**
-	 * Invokes the action.
+	 * Invokes the action. This is an implementation of the Command pattern,
+	 * and concrete actions should override this.
+	 * 
 	 * @param view The view
 	 * @since jEdit 2.7pre2
 	 */
 	public void invoke(View view)
 	{
+
 	} //}}}
+
+	/**
+	 * Invokes the action, with an argument list. This is a
+	 * convenience function which simply calls
+	 *  setArgs() followed by invoke(view).
+	 *
+	 * @param view The view
+	 * @param args an optional argument list (may be null)
+	 *
+	 *@since jEdit 4.3pre7
+	 */
+	final public void invoke(View view, Object[] newArgs) {
+		setArgs(newArgs);
+		invoke(view);
+	}
 
 	//{{{ getView() method
 	/**
@@ -183,10 +229,6 @@ public abstract class EditAction
 		return name;
 	} //}}}
 
-	//{{{ Private members
-	private String name;
-	//}}}
-
 	//{{{ Wrapper class
 	/**
 	 * 'Wrap' EditActions in this class to turn them into AWT
@@ -194,6 +236,10 @@ public abstract class EditAction
 	 */
 	public static class Wrapper implements ActionListener
 	{
+
+		private ActionContext context;
+		private String actionName;
+		
 		/**
 		 * Creates a new action listener wrapper.
 		 * @since jEdit 4.2pre1
@@ -224,7 +270,6 @@ public abstract class EditAction
 				context.invokeAction(evt,action);
 		}
 
-		private ActionContext context;
-		private String actionName;
+
 	} //}}}
 }

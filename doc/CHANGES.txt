@@ -7,6 +7,9 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
 
 {{{ API Changes
 
+-  EditAction now can hold onto an optional protected List<Object> args;
+   Added a new ctor(String name, List args), and getArgs().
+
 -  GUIUtilities.addSizeSaver(Frame parent, String name) changed to
    GUIUtilities.addSizeSaver(Window window, Container parent, String name)
    and refactored to use saveGeometry(). Saves/restores

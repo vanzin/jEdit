@@ -818,6 +818,14 @@
 
 	<target name="prepare-dist-files"
 			depends="init">
+        <mkdir dir="${config.dist.dir}/jars" />
+        <copy todir="${config.dist.dir}/jars" >
+            <fileset dir="jars">
+             <include name="QuickNotepad.jar" />
+             <include name="LatestVersion.jar" />
+            </fileset>
+        </copy>
+
 		<antcall target="build">
 			<param name="build.debuglevel"
 				   value="lines,source" />
@@ -1029,7 +1037,7 @@
 			<datafileset dir="${dist.dir}/doc"
 						 includes="*.txt"
 						 prefix="usr/share/doc/jEdit/" />
-			<datafileset dir="${dist.dir}/jars"
+			<datafileset dir="${config.dist.dir}/jars"
 						 includes="LatestVersion.jar
 						 		   QuickNotepad.jar"
 						 prefix="usr/share/java/" />
