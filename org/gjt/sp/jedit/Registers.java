@@ -348,7 +348,10 @@ public class Registers
 		if(name == '$' || name == '%')
 			register.setValue("");
 		else
+		{
 			registers[name] = null;
+			modified = true;
+		}
 	} //}}}
 
 	//{{{ getRegisters() method
@@ -386,7 +389,7 @@ public class Registers
 		if(!loaded)
 			loadRegisters();
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder(registers.length << 1);
 		for(int i = 0; i < registers.length; i++)
 		{
 			if(registers[i] != null)
@@ -501,7 +504,13 @@ public class Registers
 	//{{{ Private members
 	private static Register[] registers;
 	private static long registersModTime;
-	private static boolean loaded, loading, modified;
+	private static boolean loaded, loading;
+
+	/**
+	 * Flag that tell if a register has been modified (except for '%' and '$' registers that aren't
+	 * saved to the xml file).
+	 */
+	private static boolean modified;
 
 	private Registers() {}
 
@@ -623,24 +632,24 @@ public class Registers
 						data flavor for this clipboard content (under J2RE 1.5.0_06-b05)
 						Thus, copying from clipboard seems to be plainly impossible.
 					*/
-					Log.log(Log.DEBUG,this,"clipboard.getContents(this)="+clipboard.getContents(this)+".");
+					Log.log(Log.DEBUG,this,"clipboard.getContents(this)="+clipboard.getContents(this)+'.');
 					debugListDataFlavors(clipboard.getContents(this));
 				}
 
-				String selection = (String)(clipboard
+				String selection = (String)clipboard
 					.getContents(this).getTransferData(
-					DataFlavor.stringFlavor));
+					DataFlavor.stringFlavor);
 
-				boolean trailingEOL = (selection.endsWith("\n")
+				boolean trailingEOL = selection.endsWith("\n")
 					|| selection.endsWith(System.getProperty(
-					"line.separator")));
+					"line.separator"));
 
 				// Some Java versions return the clipboard
 				// contents using the native line separator,
 				// so have to convert it here
 				BufferedReader in = new BufferedReader(
 					new StringReader(selection));
-				StringBuffer buf = new StringBuffer();
+				StringBuilder buf = new StringBuilder();
 				String line;
 				while((line = in.readLine()) != null)
 				{
@@ -673,7 +682,7 @@ public class Registers
 		for (int i = 0;i<dataFlavors.length;i++) {
 			DataFlavor dataFlavor = dataFlavors[i];
 
-			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): dataFlavor="+dataFlavor+".");
+			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): dataFlavor="+dataFlavor+'.');
 
 		}
 

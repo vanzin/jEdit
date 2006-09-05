@@ -91,6 +91,8 @@ New edit mode: Pilrc *rcp mode by Marcin Orlowski
 
 - Formatting an empty paragraph do not throw a StringIndexOutOfBoundsException
   anymore (#1548902) (Matthieu Casanova)
+
+- Clearing a register is now persistent (#1541821) (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous
