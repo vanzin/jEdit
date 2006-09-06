@@ -46,7 +46,7 @@
 </xsl:template>
 
 <xsl:param name="toc.list.type">ul</xsl:param>
-
+<xsl:param name="use.id.as.filename">1</xsl:param>
 <xsl:param name="shade.verbatim">1</xsl:param>
 
 <xsl:param name="funcsynopsis.style">ansi</xsl:param>
