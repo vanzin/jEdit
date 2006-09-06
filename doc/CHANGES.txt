@@ -24,6 +24,8 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
    (ezust)
    }}}
 
+-  Added GUIUtilities.loadMenuItem(EditAction, boolean).
+   
 -  Removed abstract EditAction.getCode() method. It really only applies
    to BeanShellAction, where it is used. We may want to make other
    EditActions which are written in Java rather than BeanShell.
