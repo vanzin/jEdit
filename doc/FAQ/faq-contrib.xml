@@ -7,15 +7,14 @@
 
 <appendix id="appendix"><title>Contributors</title>
 	<para>
-		Thanks to those who contributed both questions and answers, including
-		the following:
+		Thanks to those who contributed both questions and answers, including the following:
 	</para>
 	<itemizedlist>
-		<listitem><para>Dominic Stolerman</para></listitem>
-		<listitem><para>Frank Rocca</para></listitem>
-		<listitem><para>Kris Kopicki</para></listitem>
-		<listitem><para>Maik Schreiber</para></listitem>
 		<listitem><para>Mike Dillon</para></listitem>
+		<listitem><para>Kris Kopicki</para></listitem>
 		<listitem><para>Slava Pestov</para></listitem>
+		<listitem><para>Frank Rocca</para></listitem>
+		<listitem><para>Maik Schreiber</para></listitem>
+		<listitem><para>Dominic Stolerman</para></listitem>
 	</itemizedlist>
 </appendix>

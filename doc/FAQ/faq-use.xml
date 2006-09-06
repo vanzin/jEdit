@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties:                      -->
-<!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
+<!-- :indentSize=4:noTabs=false:tabSize=4: -->
 <!-- :xml.root=faq.xml:                                  -->
 
 <!-- jEdit FAQ                                           -->
@@ -13,7 +13,7 @@
 <qandaset defaultlabel="qanda">
 
 <!--********************************************************* Abrevs -->
-	
+
     <qandadiv id="text-abbrev"><title>Abbreviations</title>
 
       <qandaentry>
@@ -53,7 +53,7 @@
     </qandadiv>
 
 <!--********************************************************* Clippy -->
-	
+
     <qandadiv id="text-clipboard"><title>Clipboard features</title>
       <qandaentry>
         <question id="clip-multiple"><para>
@@ -64,11 +64,11 @@
         <answer><para>
             The <guimenuitem>Cut Append</guimenuitem>
             (<keycombo
-            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo> 
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>
             <keycombo action="simul"><keycap>CTRL</keycap><keycap>U</keycap></keycombo>)
             and <guimenuitem>Copy
             Append</guimenuitem> (<keycombo
-            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo> 
+            action="simul"><keycap>CTRL</keycap><keycap>E</keycap></keycombo>
             <keycombo action="simul"><keycap>CTRL</keycap><keycap>A</keycap></keycombo>)
             both add the selected text to the existing contents of the Clipboard. A single
             <guimenuitem>Paste</guimenuitem>
@@ -81,19 +81,9 @@
     </qandadiv>
 
 <!--********************************************************* Attrib -->
-   
+
    <qandadiv id="file-attributes"><title>File Attributes</title>
 
-    <qandaentry>
-        <question id="dirty-file"><para>
-            Why does the screen display continue to mark a file as
-            <quote>dirty</quote> after I undo all changes made to the buffer?
-        </para></question>
-        <answer><para>
-            This is a problem in jEdit 3.2.2 that has been fixed in version 4.0 or newer.
-            You should upgrade.
-         </para></answer>
-     </qandaentry>
 
     <qandaentry>
         <question id="file-owner-preserve"><para>
@@ -183,7 +173,7 @@
         </para></answer>
       </qandaentry>
    </qandadiv>
-	
+
 <!--********************************************************** Files -->
 
     <qandadiv id="file-manage"><title>File Management</title>
@@ -313,26 +303,6 @@
 	</answer>
 </qandaentry>
 
-
-<qandaentry>
-	<question id="text-display-lucida">
-		<para>
-			With JDK 1.3 and Lucida Console font I have problems displaying syntax
-			highlighting text. Sometimes the fonts become italicized or bold without any
-			reason.
-		</para>
-	</question>
-	<answer>
-		<para>
-			The Lucida Console font does not come in a bold style. Various platforms and
-			native applications will render the bold style by overprinting, but this appears
-			not to work correctly in your installation. Unfortunately, there is nothing
-			jEdit can do about this, and the best thing to do is to select another font.
-		</para>
-	</answer>
-</qandaentry>
-
-
 <qandaentry>
 	<question id="smart-quote">
 		<para>
@@ -346,8 +316,8 @@
 			While jEdit can display any character provided by a supported encoding set and
 			enter any character supported by a keyboard driver, it does not have the ability
 			to insert <quote>smart quote</quote> pairs automatically as some word processors
-			do. This would require a BeanShell macro to modify quoted text.
-		</para>
+			do. This would require a BeanShell macro to modify quoted text.</para>
+			<para> The accents plugin can also help you type international characters. </para>
     <para>
       You also have the option of using a TeX macro (or, in LaTeX, a pair of
       environment tags) to have the standard double quotation mark
@@ -436,7 +406,7 @@ of spaces, tabs, and other whitespace characters.
 </qandadiv>
 
 <!--******************************************************* Printing -->
-	
+
     <qandadiv id="text-print"><title>Printing text</title>
 
 <qandaentry>
@@ -487,11 +457,8 @@ of spaces, tabs, and other whitespace characters.
 			<application>Console</application> plugin, and you can run the
 			<userinput>compile</userinput> command for the current file, or the
 			<userinput>compilepkg</userinput> command on all of the current directory's
-			source code files. You can also use the <quote>Ant</quote> shell in the
-			<application>Console</application> plugin or the
-			<application>AntFarm</application> plugin to run complex builds on a project of
-			source code files, using a <filename>build.xml</filename> file to specify build
-			commands and dependencies.
+			source code files. You can also use the <quote>Ant</quote> commandos from the
+			<application>Console</application> plugin or the <application>AntFarm</application> plugin to run complex builds on a project of source code files, using a <filename>build.xml</filename> file to specify build commands and dependencies.
 		</para>
 	</answer>
 </qandaentry>
@@ -520,12 +487,13 @@ of spaces, tabs, and other whitespace characters.
 	</question>
 	<answer>
 		<para>
-			The application contains editing modes for both SGML and XML, and there are a
-			number of abbreviations in the SGML mode that create pairs of DocBook tags on
-			the fly. You can auto-complete closing tags with the XML plugin, and with the
-			XInsert or Template plugin you can create multi-layered DocBook elements. The
-			installation macro <filename>Insert_Tag.bsh</filename> is useful for creating
-			or inserting tag pairs in existing text, and there are other macros targeting
+			The application contains editing modes for both SGML and XML. Using jEdit abbreviations, you can quickly insert commonly-typed tags with a couple of keystroke. There are a number of abbreviations in the XML and SGML modes that create pairs of DocBook tags on the fly. </para>
+
+			<para> You can get validation, tree-browsing, auto-complete, and auto-closing tags with the XML plugin, a very advanced XML editing tool. </para>
+
+			<para> With whe XInsert or Template plugin you can create multi-layered DocBook elements. </para>
+
+			<para> There are other macros targeting
 			DocBook available from the <ulink url="http://community.jedit.org">jEdit
 			Community</ulink> web site that you can use or adapt for your own purposes.
 		</para>
@@ -536,6 +504,113 @@ of spaces, tabs, and other whitespace characters.
 
 <!--******************************************************* Settings -->
 
+<qandadiv id="emacs-tricks" >
+<title> Tips for Emacs users </title>
+<qandaentry>
+	<question id="settings-emacstab">
+		<para>
+			Can I have an emacs style tab key (tab anywhere in a line re-indents it)?
+		</para>
+	</question>
+	<answer>
+		<para>
+			Yes. You can do this by rebinding the <keycode>tab</keycode> key to
+			<command>Indent Selected Lines</command> in the <guimenuitem>Global Options</guimenuitem>.
+		</para>
+	</answer>
+</qandaentry>
+
+<qandaentry>
+	<question id="settings-emacsctrle">
+		<para>
+			How do I map Ctrl-E to go to the end of the line?
+		</para>
+	</question>
+	<answer>
+		<para>
+			jEdit has it set up as a 2-key shortcut.
+			In order to make Ctrl-E a one-key shortcut again, you first have to redefine all of the Ctrl-E prefix shortcuts to mean something else.
+			</para>
+			<para>
+			<literal>jedit_keys.props</literal> shows you all of the current keyboard bindings. As you can see, Ctrl-e is used for many things in jEdit. If you want to redefine it to be a single-key shortcut, first thing you need to do is decide on another Ctrl-key to use as a prefix, to redefine jEdit's fold features. I recommend using Ctrl-Q as the prefix, and if you want to use Ctrl-Q to quit, you have to hit Ctrl-Q twice. Cut and paste the below shortcuts into your own properties file (while jEdit is not running, of course).
+			</para>
+<programlisting>
+# emacs end of line
+end.shortcut2=C+e
+# Ctrl-Q twice to quit
+exit.shortcut=C+q C+q
+# C+q is our new C+e prefix
+#{{{ C+q C+X
+
+# Unused: f, h, q, y
+copy-append.shortcut=C+q C+a
+search-in-open-buffers.shortcut=C+q C+b
+range-comment.shortcut=C+q C+c
+search-in-directory.shortcut=C+q C+d
+replace-and-find-next.shortcut=C+q C+g
+ignore-case.shortcut=C+q C+i
+scroll-to-current-line.shortcut=C+q C+j
+line-comment.shortcut=C+q C+k
+select-line-range.shortcut=C+q C+l
+add-marker.shortcut=C+q C+m
+center-caret.shortcut=C+q C+n
+open-path.shortcut=C+q C+o
+vertical-paste.shortcut=C+q C+p
+replace-in-selection.shortcut=C+q C+r
+save-all.shortcut=C+q C+s
+toggle-line-numbers.shortcut=C+q C+t
+cut-append.shortcut=C+q C+u
+paste-previous.shortcut=C+q C+v
+close-all.shortcut=C+q C+w
+regexp.shortcut=C+q C+x
+paste-deleted.shortcut=C+q C+y
+redo.shortcut=C+q C+z
+#}}}
+
+#{{{ C+q C+non-alpha
+left-docking-area.shortcut=C+q C+LEFT
+top-docking-area.shortcut=C+q C+UP
+right-docking-area.shortcut=C+q C+RIGHT
+bottom-docking-area.shortcut=C+q C+DOWN
+
+prev-marker.shortcut=C+q C+COMMA
+next-marker.shortcut=C+q C+PERIOD
+prev-bracket.shortcut=C+q C+OPEN_BRACKET
+next-bracket.shortcut=C+q C+CLOSE_BRACKET
+close-docking-area.shortcut=C+q C+BACK_QUOTE
+#}}}
+
+#{{{ C+q X
+# Unused: b e g h j k m o q t y z
+add-explicit-fold.shortcut=C+q a
+collapse-all-folds.shortcut=C+q c
+delete-paragraph.shortcut=C+q d
+format-paragraph.shortcut=C+q f
+find-previous.shortcut=C+q g
+invert-selection.shortcut=C+q i
+select-line.shortcut=C+q l
+narrow-to-fold.shortcut=C+q n n
+narrow-to-selection.shortcut=C+q n s
+select-paragraph.shortcut=C+q p
+remove-trailing-ws.shortcut=C+q r
+select-fold.shortcut=C+q s
+insert-literal.shortcut=C+q v
+select-word.shortcut=C+q w
+parent-fold.shortcut=C+q u
+expand-all-folds.shortcut=C+q x
+#}}}
+</programlisting>
+</answer>
+</qandaentry>
+<qandaentry>
+  <question id="emacs-ctrl-k">
+    <para> What about ctrl-K? </para>
+	</question>
+	<answer>
+	<para> Check out  <literal>macros/Emacs_Ctrl_K.bsh</literal>. Bind it to Ctrl-k from the shortcuts option pane. </para>
+	</answer>
+</qandaentry>
+</qandadiv>
 <qandadiv id="customize-other"><title>Other Settings and Options</title>
 
 <qandaentry>
@@ -571,20 +646,6 @@ of spaces, tabs, and other whitespace characters.
 			the Downloads section of <ulink url="http://community.jedit.org">jEdit
 			Community</ulink>) should work if you know the path to a specific class
 			file or class archive.
-		</para>
-	</answer>
-</qandaentry>
-
-<qandaentry>
-	<question id="settings-emacstab">
-		<para>
-			Can I have an emacs style tab key (tab anywhere in a line re-indents it)?
-		</para>
-	</question>
-	<answer>
-		<para>
-			Yes. You can do this by rebinding the <keycode>tab</keycode> key to
-			<command>Indent Selected Lines</command> in the <guimenuitem>Global Options</guimenuitem>.
 		</para>
 	</answer>
 </qandaentry>

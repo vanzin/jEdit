@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no" ?>
 
 <!-- jEdit buffer-local properties:                       -->
-<!-- :indentSize=1:noTabs=true:maxLineLen=72:tabSize=2:   -->
+<!-- :indentSize=1   -->
 <!--                                                      -->
 <!-- jEdit FAQ                                            -->
 <!-- Copyright (C) 2001-2002 John Gellene                 -->
@@ -49,7 +49,13 @@
       <firstname>Kris</firstname><surname>Kopicki</surname>
       <affiliation><address><email>krisko@users.sourceforge.net</email></address></affiliation>
     </author>
+    <author>
+      <firstname>Alan</firstname><surname>Ezust</surname>
+      <affiliation><address><email>alan@jedit.org</email></address></affiliation>
+    </author>
+
     <copyright><year>2002</year><holder>John Gellene</holder></copyright>
+    <copyright><year>2006</year><holder>Alan Ezust</holder></copyright>
     <legalnotice><title>Legal Notice</title>
       <para>
         Permission is granted to copy, distribute and/or modify this document
@@ -116,11 +122,15 @@
       <date>Feb. 18, 2003</date>
       <revremark>New format &amp; additions for jEdit 4.1 release</revremark>
     </revision>
+    <revision>
+      <revnumber>1.1</revnumber>
+      <date>September 6, 2006</date>
+      <revremark>Revised for jEdit 4.3 release</revremark>
+    </revision>
     </revhistory>
 	<releaseinfo>
 		<emphasis>Note: </emphasis>
-		This draft incorporates material from the Interactive FAQ section
-    of the <ulink url=
+		This draft incorporates some material from the Interactive FAQ section of the <ulink url=
     "http://community.jedit.org/modules.php?op=modload&amp;name=faq&amp;file=index"
     >jEdit Community web site</ulink>.
 	</releaseinfo>

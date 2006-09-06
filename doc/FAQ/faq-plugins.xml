@@ -147,16 +147,22 @@
 <qandaentry>
 	<question id="plugin-cvs">
 		<para>
-			Can I work with CVS under jEdit? Is there a plugin for CVS? How can I send a
-			command from jEdit so as to use CVS from within jEdit?
+			Can I work with CVS/SVN/Perforce under jEdit? Is there a plugin for my favorite SCCS system? How can I send a
+			command from jEdit so as to use SVN from within jEdit?
 		</para>
 	</question>
 	<answer>
 		<para>
-			GruntSpud and jEditCvs are two such plugins. Under Windows and the WinCVS
-      Open Source package, you can specify <userinput>jedit.exe</userinput> as your default
-      viewer and editor to automate the opening of file.
-		</para>
+			GruntSpud and jEditCvs are not currently maintained, but did offer CVS support. There is no GUI interface for exploring SVN repositories at the moment. </para>
+		<para> You can use jEdit as your default editor from
+			CVS. Under Windows and the WinCVS
+			Open Source package, you can specify <userinput>jedit.exe</userinput> as your default
+			viewer and editor to automate the opening of file.
+			Under *NIX, the Console plugin has some ideas on how to use jEdit as the VISUAL editor when called from the command-line tool, which can also be run from the Console plugin. </para>
+			<para> The ProjectViewer plugin has some support for
+			reading the "entries" file for each directory, to decide which files to import. CVS/SVN are built-in </para>
+			<para> The P4Plugin adds Perforce support to ProjectViewer, and has some other advanced features for working with Perforce repositories. </para>
+
 	</answer>
 </qandaentry>
 
@@ -168,9 +174,8 @@
 	</question>
 	<answer>
 		<para>
-			A plugin based on the version 1.4 of the JSwat debugger application is currently
-			available for download using jEdit's Plugin Manager feature. The Debugger plugin
-      is also available.
+			A plugin based on the version 1.4 of the JSwat debugger application is currently available for download using jEdit's Plugin Manager feature. The JDebugger plugin
+			is also available.
 		</para>
 	</answer>
 </qandaentry>

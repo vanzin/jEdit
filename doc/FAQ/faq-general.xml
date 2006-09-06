@@ -4,7 +4,7 @@
 
 <!-- jEdit FAQ                                           -->
 <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
-
+<!-- Copyright (C) 2006 Alan Ezust				         -->
 <sect1 id="general"><title>General Questions</title>
 <para>
   This section deals with some background information, how to obtain the
@@ -20,10 +20,11 @@
         What is jEdit?
       </para></question>
       <answer><para>
-        jEdit is a programmer's text editor written in Java, being
-        developed by Slava Pestov and others. It has an easy to use
-        interface that resembles that of many other Windows and MacOS
-        text editors.  It is also highly customizable, and contains a
+        jEdit is a programmer's text editor written in Java, originally
+        developed by Slava Pestov, now maintained by others.
+		It has an easy to use interface that resembles that
+		of many other Windows and MacOS text editors.
+		It is also highly customizable, and contains a
         <quote>plugin</quote> architecture that allows its features to
         be extended by additional programs.
       </para></answer>
@@ -165,7 +166,7 @@
         window.
       </para>
       <para>
-        There are currently over 60 publicly available plugins that
+        There are currently over 120 publicly available plugins that
         provide such services as a Java source code browser, a
         command-line shell, templated text insertion, and source code
         project management. They can be downloaded, installed, and kept
@@ -321,8 +322,7 @@
         abbreviations and other programming support for over 60 programming
         languages and file types, including C, C++, C#,
         Cobol, HTML, Java, Javascript, Lisp, Pascal, Perl, PHP, Python,
-        TCL, Visual Basic and XML. The full list can be found on the
-        <ulink url="http://www.jedit.org/index.php?page=features">jEdit web
+        Ruby, TCL, Visual Basic and XML. The full list can be found on the <ulink url="http://www.jedit.org/index.php?page=features">jEdit web
         site</ulink>.
       </para></answer>
     </qandaentry>
@@ -356,9 +356,9 @@
         We recommend obtaining a JDK package.
       </para>
       <para>
-        The current version of jEdit, version 4.1, requires a Java runtime
-        environment having a release version of 1.3 or greater.  It will
-        not run on versions 1.1 or 1.2. The <ulink
+        The current version of jEdit, version 4.3, requires a Java runtime
+        environment having a release version of 1.5 or greater.  It will
+        not run on versions 1.4 or 1.3. The <ulink
         url="http://www.jedit.org/index.php?page=compatibility">jEdit web
         site</ulink> contains a detailed discussion on the compatibility of
         various publicly available JDK's for the major operating systems.
@@ -560,7 +560,7 @@
         <quote>development</quote> version includes new features or new elements
         of program design that require testing and possible further refinement.
         A development version contains the token <quote>pre</quote> in its
-        version number, as in <literal>4.1pre5</literal>.
+        version number, as in <literal>4.3pre5</literal>.
       </para>
       <para>
         The latest stable and development versions of jEdit are always
