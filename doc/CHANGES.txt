@@ -7,35 +7,30 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
 
 {{{ API Changes
 
--  Sf.net feature request # 1548301.
    {{{ EditAction changes:
-   Instances now inherit a protected Object[] args;
+-  Instances now inherit a protected Object[] args;
    Added a convenience function invoke(View view, Object[] newArgs) which
-   sets args and calls invoke(view).
+   sets args and calls invoke(view). Sf.net feature request # 1548301.
 
-   Made getCode() concrete (before it was abstract) and added
+-  Made getCode() concrete (before it was abstract) and added
    a sensible implementation so that people extending from it
    are no longer required to write a function that returns beanshell code
-   as long as they override the invoke(View) method properly.
+   as long as they override the invoke(View) method with valid Java code.
 
-   Made getLabel() non-final, so that people can override it and make
+-  Made getLabel() non-final, so that people can override it and make
    more interesting EditActions. If args is set, getLabel() uses them
-   for the label.
-   (ezust)
-   }}}
-
--  Added GUIUtilities.loadMenuItem(EditAction, boolean).
-   
--  Removed abstract EditAction.getCode() method. It really only applies
-   to BeanShellAction, where it is used. We may want to make other
-   EditActions which are written in Java rather than BeanShell.
+   for the label.   (Alan Ezust) }}}
+   {{{ GUIUtilities changes:
+-  Added GUIUtilities.loadMenuItem(EditAction, boolean) - calls
+    getLabel() to get the label instead of getting properties
+    directly
 
 -  GUIUtilities.addSizeSaver(Frame parent, String name) changed to
    GUIUtilities.addSizeSaver(Window window, Container parent, String name)
    and refactored to use saveGeometry(). Saves/restores
    sizes relative to a parent container. if parent=null, behaves
-   as before. (ezust)
-
+   as before.   (ezust) }}}
+   {{{ PluginJAR changes
 - jEdit.getPlugin(className, bool) now will search for and
   load plugins that were not yet loaded, given a className to search
   for. (ezust)
@@ -46,7 +41,7 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
   from the ManagePanel class. Also moved transitiveClosure() into
   the PluginJAR class. General refactoring to make the
   plugin management code more centrally located.  (ezust)
-
+  }}}
 - added SearchMatcher.isMatchingEOL(); indicates whether the matched
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.
   (Marcelo Vanzin)
@@ -66,16 +61,13 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
   (Marcelo Vanzin)
 
 }}}
+{{{ Syntax Highlighting
 
-{{{ Edit Modes
+- Interlis mode updated to version 2.3 (patch # 1464779)
+- Progress mode supports nested comments (patch# 1211534)
+- New edit mode: Pilrc *rcp mode by Marcin Orlowski
 
-Interlis mode updated to version 2.3 (patch # 1464779)
-
-Progress mode supports nested comments (patch# 1211534)
-
-New edit mode: Pilrc *rcp mode by Marcin Orlowski
 }}}
-
 {{{ Bug Fixes
 
 - File System Browser now recognizes DEL and F2 to delete/rename
@@ -117,7 +109,6 @@ New edit mode: Pilrc *rcp mode by Marcin Orlowski
 
 - Clearing a register is now persistent (#1541821) (Matthieu Casanova)
 }}}
-
 {{{ Miscellaneous
 
 - VFS browser is not restricted to the built-in "glob" filter anymore.
@@ -172,7 +163,6 @@ Marcelo Vanzin for contributing to this release.
 
 
 }}}
-
 {{{ Miscellaneous
 
 - Ability to clear the Recent Files List from menu (Matthieu Casanova)
@@ -221,7 +211,6 @@ Marcelo Vanzin for contributing to this release.
   (Marcelo Vanzin)
 
 }}}
-
 {{{ Bug Fixes
 
 - (jedit-Bugs-1518537) FSB keyboard handling bugs fixed.
@@ -284,7 +273,6 @@ Marcelo Vanzin for contributing to this release.
    with circular dependencies due to services. (Alan Ezust)
 
 }}}
-
 {{{ Syntax Highlighting
 - Added mysql mode.
 - Added django templates mode. (Ollie Rutherfurd)
@@ -297,8 +285,6 @@ Thanks to Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
 Björn "Vampire" Kautler, Matthieu Casanova, Xuân Baldauf,
 Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
-
-
 {{{ Reinstall required
 - Gnu.regexp is no longer used by jEdit, in favor of java.util.regex
   Since the regexp removal has also affected the modes handling and thus
@@ -306,7 +292,6 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   existing jEdit installation does not suffice. You would get weird
   errors in this case. Thus, a full reinstall is required.
 }}}
-
 {{{ Keyboard handling changes
 - There is a new option, "simplified keyboard handling"
   under "general options" to switch between two keyboard handling modes.
@@ -316,7 +301,6 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   this bug in bug 1488047).
   (Xuân Baldauf).
 }}}
-
 {{{ API Changes
 
 - DockableWindowManager has a new method, setDockableTitle()
@@ -372,7 +356,6 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 - Added Log.log(urgency, source, message, exception). (Xuân Baldauf)
 
 }}}
-
 {{{ Miscellaneous
 - SearchReplace dialog now supports additional options,
   for Directory Search: "skipHidden" and "skipBinary".
@@ -762,7 +745,7 @@ Nicholas O'Leary, and Simon Ruggier for contributing to this release.
 - Slate (http://slate.tunes.org) syntax highlighting.
 
 }}}
-{{{
+{{{ File System Browser
 
 - The file system now lazily retreives file system attributes. For
   plugins that use the VFS API, this has important implications; see

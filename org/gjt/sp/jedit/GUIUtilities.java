@@ -329,56 +329,16 @@ public class GUIUtilities
 		return loadMenuItem(jEdit.getActionContext(),name,true);
 	} //}}}
 
-	// {{{ loadMenuItem(EditAction, boolean) 
-	/**
-	 * loadMenuItem method 
-	 * @param editAction
-	 * @param setMnemonic
-	 * @return a JMenuItem based on this EditAction.
-	 * @since jEdit 4.3pre7
-	 */
-	public static JMenuItem loadMenuItem(EditAction editAction, boolean setMnemonic) 
-	{
-		String name = editAction.getName();
-		ActionContext context = jEdit.getActionContext();
-		String label = editAction.getLabel();
-		if(label == null)
-			label = name;
-
-		char mnemonic;
-		int index = label.indexOf('$');
-		if(index != -1 && label.length() - index > 1)
-		{
-			mnemonic = Character.toLowerCase(label.charAt(index + 1));
-			label = label.substring(0,index).concat(label.substring(++index));
-		}
-		else
-			mnemonic = '\0';
-
-		JMenuItem mi;
-		if(editAction.isToggle()) 
-			mi = new EnhancedCheckBoxMenuItem(label,name,context);
-		else
-			mi = new EnhancedMenuItem(label,name,context);
-
-		if(!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
-			mi.setMnemonic(mnemonic);
-
-		return mi;
-
-	} // }}}
-	
 	//{{{ loadMenuItem() method
 	/**
 	 * Creates a menu item.
 	 * @param name The menu item name
 	 * @param setMnemonic True if the menu item should have a mnemonic
 	 * @since jEdit 3.1pre1
-	 * 
 	 */
 	public static JMenuItem loadMenuItem(String name, boolean setMnemonic)
 	{
-		return loadMenuItem(jEdit.getAction(name), setMnemonic);
+		return loadMenuItem(jEdit.getActionContext(),name,setMnemonic);
 	} //}}}
 
 	//{{{ loadMenuItem() method
@@ -390,17 +350,14 @@ public class GUIUtilities
 	 * @param name The menu item name
 	 * @param setMnemonic True if the menu item should have a mnemonic
 	 * @since jEdit 4.2pre1
-	 * 
 	 */
 	public static JMenuItem loadMenuItem(ActionContext context, String name,
 		boolean setMnemonic)
 	{
-		if(name.startsWith("%")) {
-			return loadMenuItem(context, name.substring(1), setMnemonic);
-		}
-		EditAction ea = context.getAction(name);
-		if (ea != null) return loadMenuItem(ea, setMnemonic);
-		String label = jEdit.getProperty(name + ".label"); 
+		if(name.startsWith("%"))
+			return loadMenu(context,name.substring(1));
+
+		String label = jEdit.getProperty(name + ".label");
 		if(label == null)
 			label = name;
 
@@ -415,7 +372,7 @@ public class GUIUtilities
 			mnemonic = '\0';
 
 		JMenuItem mi;
-		if(jEdit.getBooleanProperty(name + ".toggle")) 
+		if(jEdit.getBooleanProperty(name + ".toggle"))
 			mi = new EnhancedCheckBoxMenuItem(label,name,context);
 		else
 			mi = new EnhancedMenuItem(label,name,context);
@@ -424,9 +381,42 @@ public class GUIUtilities
 			mi.setMnemonic(mnemonic);
 
 		return mi;
+	} //}}}
 
-		
-	}
+	// {{{ loadMenuItem(EditAction, boolean)
+	public static JMenuItem loadMenuItem(EditAction editAction,
+		boolean setMnemonic)
+	{
+		String name = editAction.getName();
+		ActionContext context = jEdit.getActionContext();
+
+		String label = jEdit.getProperty(name + ".label");
+		if(label == null)
+			label = name;
+
+		char mnemonic;
+		int index = label.indexOf('$');
+		if(index != -1 && label.length() - index > 1)
+		{
+			mnemonic = Character.toLowerCase(label.charAt(index + 1));
+			label = label.substring(0,index).concat(label.substring(++index));
+		}
+		else
+			mnemonic = '\0';
+
+		JMenuItem mi;
+		if(jEdit.getBooleanProperty(name + ".toggle"))
+			mi = new EnhancedCheckBoxMenuItem(label,name,context);
+		else
+			mi = new EnhancedMenuItem(label,name,context);
+
+		if(!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
+			mi.setMnemonic(mnemonic);
+
+		return mi;
+	} //}}}
+
+	
 	//{{{ loadToolBar() method
 	/**
 	 * Creates a toolbar.
