@@ -66,7 +66,7 @@ public abstract class ActionContext
 			if (actionHash.containsKey(actions[i])) 
 			{
 				/* Save it for plugin unloading time */
-				Object oldAction = actionHash.get(actions[i]);
+				ActionSet oldAction = actionHash.get(actions[i]);
 				overriddenActions.put(actions[i], oldAction);
 			}
 			actionHash.put(actions[i],actionSet);
@@ -89,7 +89,7 @@ public abstract class ActionContext
 			actionHash.remove(actions[i]);
 			if (overriddenActions.containsKey(actions[i])) 
 			{
-				Object oldAction = overriddenActions.remove(actions[i]);
+				ActionSet oldAction = overriddenActions.remove(actions[i]);
 				actionHash.put(actions[i], oldAction);
 			}
 		}
@@ -144,7 +144,7 @@ public abstract class ActionContext
 		{
 			List vec = new LinkedList();
 			for(int i = 0; i < actionSets.size(); i++)
-				((ActionSet)actionSets.elementAt(i)).getActionNames(vec);
+				(actionSets.elementAt(i)).getActionNames(vec);
 
 			actionNames = (String[])vec.toArray(
 				new String[vec.size()]);
@@ -157,13 +157,13 @@ public abstract class ActionContext
 
 	//{{{ Package-private members
 	String[] actionNames;
-	Hashtable actionHash = new Hashtable();
+	Hashtable<String, ActionSet> actionHash = new Hashtable<String, ActionSet>();
 	
 	/** A map of built-in actions that were overridden by plugins. */
-	Hashtable overriddenActions = new Hashtable(); 
+	Hashtable<String, ActionSet> overriddenActions = new Hashtable<String, ActionSet>(); 
 	//}}}
 
 	//{{{ Private members
-	private Vector actionSets = new Vector();
+	private Vector<ActionSet> actionSets = new Vector<ActionSet>();
 	//}}}
 }

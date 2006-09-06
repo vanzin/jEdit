@@ -8,9 +8,25 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
 {{{ API Changes
 
 -  Sf.net feature request # 1548301.
-   EditAction now can hold onto an protected Object[] args;
+   {{{ EditAction changes:
+   Instances now inherit a protected Object[] args;
    Added a convenience function invoke(View view, Object[] newArgs) which
-   calls new method setArgs(newArgs) and invoke(view). (ezust)
+   sets args and calls invoke(view).
+
+   Made getCode() concrete (before it was abstract) and added
+   a sensible implementation so that people extending from it
+   are no longer required to write a function that returns beanshell code
+   as long as they override the invoke(View) method properly.
+
+   Made getLabel() non-final, so that people can override it and make
+   more interesting EditActions. If args is set, getLabel() uses them
+   for the label.
+   (ezust)
+   }}}
+
+-  Removed abstract EditAction.getCode() method. It really only applies
+   to BeanShellAction, where it is used. We may want to make other
+   EditActions which are written in Java rather than BeanShell.
 
 -  GUIUtilities.addSizeSaver(Frame parent, String name) changed to
    GUIUtilities.addSizeSaver(Window window, Container parent, String name)

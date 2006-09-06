@@ -32,7 +32,7 @@ import org.gjt.sp.util.XMLUtilities;
 
 /**
  * A set of actions, either loaded from an XML file, or constructed at runtime
- * by a plugin.<p>
+ * by a plugin. <p>
  *
  * <h3>Action sets loaded from XML files</h3>
  *

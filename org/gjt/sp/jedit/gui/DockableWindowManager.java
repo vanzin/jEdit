@@ -246,6 +246,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * respond to this event, you need to add key listeners to each component
 	 * in your plugin that usually has keyboard focus. 
 	 * This function returns a key listener which does exactly that.
+	 * You should not need to call this method - it is used by FloatingWindowContainer.
 	 * 
 	 * @param dockableName the name of your dockable
 	 * @return a KeyListener you can add to that plugin's component.
@@ -1093,10 +1094,11 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				b2 = KeyEventTranslator.parseKey(shortcut2);
 			name = dockableName;
 		}
-		public void keyPressed(KeyEvent e)
+		public void keyTyped(KeyEvent e)
 		{
-			if ((b1 != null && e.getKeyChar() == b1.key) ||
-			    (b2 != null && e.getKeyChar() == b2.key)) 
+			char cc = e.getKeyChar();
+			if ((b1 != null && cc == b1.key) ||
+			     (b2 != null && cc == b2.key)) 
 				hideDockableWindow(name);
 		}
 

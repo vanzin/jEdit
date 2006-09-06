@@ -26,7 +26,6 @@ package org.gjt.sp.jedit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
-import java.util.List;
 
 import org.gjt.sp.util.Log;
 //}}}
@@ -40,15 +39,20 @@ import org.gjt.sp.util.Log;
  *
  * @author Slava Pestov
  * @version $Id$
+ * 
+ * TODO: refactor common shortcut1 and shortcut2 code here.
+ * 
  */
 public abstract class EditAction
 {
 	//{{{ Private members
 	private String name;
+	
 	protected Object[] args;
+
 	//}}}
 	
-	//{{{ EditAction constructor
+	//{{{ EditAction constructors
 	/**
 	 * Creates a new edit action with the specified name.
 	 * @param name The action name
@@ -56,29 +60,13 @@ public abstract class EditAction
 	public EditAction(String name)
 	{
 		this.name = name;
-		this.args = null;
-	} //}}}
-
-	/**
-	 * 
-	 * @return null if there is no argument list, or a list of arguments
-	 * 		   which are parameters to this particular action.
-	 * @since jEdit 4.3pre7
-	 */
-	public Object[] getArgs() 
-	{
-		return args;
-	}
-	/**
-	 * An argument list attached to this action.
-	 * 
-	 * @param newArgs an array of objects.
-	 * @since jEdit 4.3pre7
-	 */
-	public void setArgs(Object[] newArgs) {
-		args = newArgs;
 	}
 	
+	public EditAction(String name, Object[] newArgs) {
+		this.name = name;
+		this.args = newArgs;
+	}
+		
 	//{{{ getName() method
 	/**
 	 * Returns the internal name of this action.
@@ -102,9 +90,13 @@ public abstract class EditAction
 	 * Returns the action's label. This returns the
 	 * value of the property named by {@link #getName()} suffixed
 	 * with <code>.label</code>.
+	 * 
 	 */
-	public final String getLabel()
+	public String getLabel()
 	{
+		if (args != null) {
+			return jEdit.getProperty(name + ".label", args);
+		}
 		return jEdit.getProperty(name + ".label");
 	} //}}}
 
@@ -126,27 +118,21 @@ public abstract class EditAction
 	 * 
 	 * @param view The view
 	 * @since jEdit 2.7pre2
+	 * abstract since jEdit 4.3pre7
 	 */
-	public void invoke(View view)
-	{
-
-	} //}}}
+	abstract public void invoke(View view);
 
 	/**
-	 * Invokes the action, with an argument list. This is a
-	 * convenience function which simply calls
-	 *  setArgs() followed by invoke(view).
-	 *
-	 * @param view The view
-	 * @param args an optional argument list (may be null)
-	 *
-	 *@since jEdit 4.3pre7
+	 * 
+	 * @param view
+	 * @param newArgs new argument list
+	 * @since jEdit 4.3pre7
 	 */
 	final public void invoke(View view, Object[] newArgs) {
-		setArgs(newArgs);
+		args = newArgs;
 		invoke(view);
 	}
-
+	
 	//{{{ getView() method
 	/**
 	 * @deprecated Call <code>GUIUtilities.getView()</code> instead.
@@ -218,9 +204,19 @@ public abstract class EditAction
 	//{{{ getCode() method
 	/**
 	 * Returns the BeanShell code that will replay this action.
+	 * BeanShellAction.getCode() returns something more interesting for Actions that were loaded
+	 * from the actions.xml file. 
+	 * You do not need to override this method if your action name is unique,
+	 * this EditAction was added to an ActionSet and that to an ActionContext of jEdit.
+	 * 
+	 * concrete since jEdit 4.3pre7
 	 * @since jEdit 2.7pre2
+	 * 
 	 */
-	public abstract String getCode();
+	public String getCode() 
+	{
+		return "jEdit.getAction(" + name + ").invoke(view); ";
+	}
 	//}}}
 
 	//{{{ toString() method

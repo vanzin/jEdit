@@ -120,7 +120,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		for(int i = 0; i < actions.length; i++)
 		{
 			String name = actions[i];
-			String label = jEdit.getProperty(actions[i] + ".label");
+			EditAction ea = jEdit.getAction(name);
+			String label = ea.getLabel();
 			// Skip certain actions this way
 			if(label == null)
 				continue;

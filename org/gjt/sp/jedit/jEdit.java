@@ -1118,9 +1118,13 @@ public class jEdit
 
 	//{{{ addActionSet() method
 	/**
-	 * Adds a new action set to jEdit's list. Plugins probably won't
-	 * need to call this method.
+	 * Adds a new action set to jEdit's list of ActionSets (viewable from the shortcuts
+	 * option pane). By default, each plugin has one ActionSet,
+	 * but some plugins may create dynamic action sets, such as ProjectViewer and Console.
+	 * These plugins must call removeActionSet() when the plugin is unloaded.
+	 * 
 	 * @since jEdit 4.0pre1
+	 * @see removeActionSet()
 	 */
 	public static void addActionSet(ActionSet actionSet)
 	{
@@ -1129,8 +1133,9 @@ public class jEdit
 
 	//{{{ removeActionSet() method
 	/**
-	 * Removes an action set from jEdit's list. Plugins probably won't
-	 * need to call this method.
+	 * Removes an action set from jEdit's list.
+	 * Plugins that add a dynamic action set must call this method at plugin
+	 * unload time.
 	 * @since jEdit 4.2pre1
 	 */
 	public static void removeActionSet(ActionSet actionSet)

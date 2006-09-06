@@ -28,6 +28,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
 import java.awt.Dimension;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -60,6 +61,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		boolean clone)
 	{
 		this.dockableWindowManager = dockableWindowManager;
+
 		dockableWindowManager.addPropertyChangeListener(this);
 		this.clone = clone;
 		setIconImage(GUIUtilities.getPluginIcon());
@@ -76,6 +78,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		separatorBox.add(Box.createVerticalStrut(3));
 		caption.add(separatorBox);
 		getContentPane().add(BorderLayout.NORTH,caption);
+	
 		
 	} //}}}
 
@@ -84,15 +87,20 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	{
 		this.entry = entry;
 		dockableName = entry.factory.name;
-
+		
 		setTitle(entry.shortTitle());
 
 		getContentPane().add(BorderLayout.CENTER,entry.win);
 
 		pack();
 		Container parent = dockableWindowManager.getView();
-		GUIUtilities.loadGeometry(this, parent, entry.factory.name);
-		GUIUtilities.addSizeSaver(this, parent, entry.factory.name);
+		GUIUtilities.loadGeometry(this, parent, dockableName);
+		GUIUtilities.addSizeSaver(this, parent, dockableName);
+		KeyListener listener = dockableWindowManager.closeListener(dockableName);
+		addKeyListener(listener);
+		getContentPane().addKeyListener(listener);
+		menu.addKeyListener(listener);
+		entry.win.addKeyListener(listener);
 		setVisible(true);
 	} //}}}
 
@@ -197,4 +205,6 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		if (pn.startsWith(dockableName) && pn.endsWith("title"))
 			setTitle(evt.getNewValue().toString());
 	}
+	
 }
+

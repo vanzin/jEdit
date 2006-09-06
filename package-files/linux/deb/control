@@ -11,14 +11,15 @@ Description: A real editor for programmers
      It is possible to define complex macros in BeanShell or Jython,
  or other languages that fit into the BSF. jEdit offers a powerful and
  user-friendly keyboard mapping system, making it possible to give
- jEdit a very emacs-like feel, if you so desire.
-    Its functionality is easily extended by the use of 'plugins' which can be
- downloaded, updated, and installed, all without exiting the editor. These
- include tools for a built-in Console shell integration, which also lets
- you execute external commands and bind them to keyboard shortcuts, also
- without leaving the editor. Other plugins provide
- structure browsers and/or complection popups for Ant, HTML, Java, XML, Ruby,
- Python, Perl, Scheme, Lisp, and many other languages.
+ jEdit a very Emacs-like feel, if you so desire.
+    Its functionality is easily extended by the use of 'plugins' which
+ can be downloaded, updated, and installed, all without exiting the
+ editor. These include a built-in Console shell integration,
+ which also lets you execute external commands and bind them to
+ keyboard shortcuts, also without leaving the editor. Other plugins
+ provide structure browsers and/or completion popups for Ant, LaTeX,
+ HTML, Java, XML, Ruby, Python, Perl, Scheme, Lisp, and many other
+ languages.
     More information about jEdit, its plugins, macros, etc. can be
  found at http://www.jEdit.org/.
 Section: contrib/editors

@@ -71,7 +71,7 @@ public class DockableWindowFactory
 	//{{{ DockableWindowFactory constructor
 	public DockableWindowFactory()
 	{
-		dockableWindowFactories = new HashMap();
+		dockableWindowFactories = new HashMap<String, Window>();
 	} //}}}
 
 	//{{{ loadDockableWindows() method
@@ -137,7 +137,7 @@ public class DockableWindowFactory
 	public void registerDockableWindow(PluginJAR plugin,
 		String name, String code, boolean actions)
 	{
-		Window factory = (Window)dockableWindowFactories.get(name);
+		Window factory = dockableWindowFactories.get(name);
 		if(factory != null)
 		{
 			factory.code = code;
@@ -154,11 +154,11 @@ public class DockableWindowFactory
 	public String[] getRegisteredDockableWindows()
 	{
 		String[] retVal = new String[dockableWindowFactories.size()];
-		Iterator entries = dockableWindowFactories.values().iterator();
+		Iterator<Window> entries = dockableWindowFactories.values().iterator();
 		int i = 0;
 		while(entries.hasNext())
 		{
-			Window factory = (Window)entries.next();
+			Window factory = entries.next();
 			retVal[i++] = factory.name;
 		}
 
@@ -166,7 +166,7 @@ public class DockableWindowFactory
 	} //}}}
 
 	//{{{ getDockableWindowIterator() method
-	Iterator getDockableWindowIterator()
+	Iterator<Window> getDockableWindowIterator()
 	{
 		return dockableWindowFactories.values().iterator();
 	} //}}}
@@ -175,6 +175,10 @@ public class DockableWindowFactory
 	class DockableListHandler extends DefaultHandler
 	{
 		//{{{ DockableListHandler constructor
+		/**
+		 * @param plugin - the pluginJAR for which we are loading the dockables.xml
+		 * @param uri - the uri of the dockables.xml file?
+		 */
 		DockableListHandler(PluginJAR plugin, URL uri)
 		{
 			this.plugin = plugin;
@@ -183,7 +187,7 @@ public class DockableWindowFactory
 			actions = true;
 
 			code = new StringBuffer();
-			cachedDockableNames = new LinkedList();
+			cachedDockableNames = new LinkedList<String>();
 			cachedDockableActionFlags = new LinkedList();
 		} //}}}
 
@@ -285,9 +289,10 @@ public class DockableWindowFactory
 
 		//{{{ Instance variables
 		private PluginJAR plugin;
+		// What is the purpose of this?
 		private URL uri;
 
-		private java.util.List cachedDockableNames;
+		private java.util.List<String> cachedDockableNames;
 		private java.util.List cachedDockableActionFlags;
 
 		private String dockableName;
@@ -499,5 +504,5 @@ public class DockableWindowFactory
 	} //}}}
 
 	private static DockableWindowFactory instance;
-	private HashMap dockableWindowFactories;
+	private HashMap<String, Window> dockableWindowFactories;
 }
