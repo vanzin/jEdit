@@ -3,45 +3,55 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre7
 
 Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'leary,
-Marcin Orlowski, and Alan Ezust for contributing to this release.
+Marcin Orlowski, Alan Ezust, and Björn "Vampire" Kautler
+for contributing to this release.
 
 {{{ API Changes
 
-   {{{ EditAction changes:
--  Instances now inherit a protected Object[] args;
-   Added a convenience function invoke(View view, Object[] newArgs) which
-   sets args and calls invoke(view). Sf.net feature request # 1548301.
+  {{{ EditAction changes:
 
--  Made getCode() concrete (before it was abstract) and added
-   a sensible implementation so that people extending from it
-   are no longer required to write a function that returns beanshell code
-   as long as they override the invoke(View) method with valid Java code.
+- Instances now inherit a protected Object[] args;
+  Added a convenience function invoke(View view, Object[] newArgs) which
+  sets args and calls invoke(view). Sf.net feature request # 1548301.
 
--  Made getLabel() non-final, so that people can override it and make
-   more interesting EditActions. If args is set, getLabel() uses them
-   for the label.   (Alan Ezust) }}}
-   {{{ GUIUtilities changes:
--  Added GUIUtilities.loadMenuItem(EditAction, boolean) - calls
-    getLabel() to get the label instead of getting properties
-    directly
+- Made getCode() concrete (before it was abstract) and added
+  a sensible implementation so that people extending from it
+  are no longer required to write a function that returns beanshell code
+  as long as they override the invoke(View) method with valid Java code.
 
--  GUIUtilities.addSizeSaver(Frame parent, String name) changed to
-   GUIUtilities.addSizeSaver(Window window, Container parent, String name)
-   and refactored to use saveGeometry(). Saves/restores
-   sizes relative to a parent container. if parent=null, behaves
-   as before.   (ezust) }}}
-   {{{ PluginJAR changes
+- Made getLabel() non-final, so that people can override it and make
+  more interesting EditActions. If args is set, getLabel() uses them
+  for the label. (Alan Ezust)
+
+  }}}
+  {{{ GUIUtilities changes:
+
+- Added GUIUtilities.loadMenuItem(EditAction, boolean) - calls
+  getLabel() to get the label instead of getting properties
+  directly
+
+- GUIUtilities.addSizeSaver(Frame parent, String name) changed to
+  GUIUtilities.addSizeSaver(Window window, Container parent, String name)
+  and refactored to use saveGeometry(). Saves/restores
+  sizes relative to a parent container. if parent==null, behaves
+  as before. (Alan Ezust)
+
+  }}}
+  {{{ PluginJAR changes
+
 - jEdit.getPlugin(className, bool) now will search for and
   load plugins that were not yet loaded, given a className to search
-  for. (ezust)
+  for. (Alan Ezust)
 
-- added PluginJAR.findPlugin() which is used by the above method (ezust).
+- added PluginJAR.findPlugin() which is used by the above method (Alan Ezust).
 
 - added PluginJAR.load(), formerly a private method moved
   from the ManagePanel class. Also moved transitiveClosure() into
   the PluginJAR class. General refactoring to make the
-  plugin management code more centrally located.  (ezust)
+  plugin management code more centrally located. (Alan Ezust)
+
   }}}
+
 - added SearchMatcher.isMatchingEOL(); indicates whether the matched
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.
   (Marcelo Vanzin)
@@ -64,25 +74,39 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
 {{{ Syntax Highlighting
 
 - Interlis mode updated to version 2.3 (patch # 1464779)
+
 - Progress mode supports nested comments (patch# 1211534)
+
 - New edit mode: Pilrc *rcp mode by Marcin Orlowski
 
 }}}
 {{{ Bug Fixes
 
+- Plugin Manager: fixed some bugs about broken or missing behaviour
+  + toggle behaviour of spacebar (bug #1538700)
+  + closing behaviour of enter if in list (bug #1538695)
+  + disposing behaviour of ESC (bug #1538693)
+  + broken/weird focus behaviour (bug #1538692)
+  + now keeps selection if you cancel the installation or an I/O-Error
+    occures while installing or updating (bug #1538689)
+  + selection and checked state of plugins is now remembered if going to
+    other tabpanes or to the settings (feature request #974759)
+  + Install and Update Panels support now multiple selections too
+  (Björn "Vampire" Kautler)
+
 - File System Browser now recognizes DEL and F2 to delete/rename
-  files. (1542365) (ezust)
+  files. (1542365) (Alan Ezust)
 
 - SplashScreen is now in the middle of the screen, instead of between
-  2 screens (ezust)
+  2 screens (Alan Ezust)
 
 - PluginManager fixes: Automatically loads unloaded
-    dependent plugins. (#1538702) (ezust)
+  dependent plugins. (#1538702) (Alan Ezust)
 
 - GuiUtilities.load/save geometry now saves x and y coordinates
   relative to the parent component. Changed core to make dialogs
   and floating dockables pop up in a place relative to the parent
-  view.  (#1292706) (ezust)
+  view.  (#1292706) (Alan Ezust)
 
 - Memory dialog reports wrong values (#1538051) (Matthieu Casanova)
 
@@ -116,9 +140,6 @@ Marcin Orlowski, and Alan Ezust for contributing to this release.
   implementing the "VFSFileFilter" interface and providing a service
   entry in service.xml, or by directly calling
   VFSBrowser.addVFSFileFilter(). (Marcelo Vanzin)
-
-- PluginManager - ManagePanel enhancements - spacebar and escape
-  keys work.  (only for single selections though). (ezust)
 
 - Save and Backup Option Panel : the backup directory has now a button to browse using
   VFS file browser (#1540730) (Matthieu Casanova)
@@ -995,4 +1016,3 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 jEdit buffer local properties:
 :wrap=hard:maxLineLen=72:indentSize=2:
 :folding=explicit:collapseFolds=2:
-

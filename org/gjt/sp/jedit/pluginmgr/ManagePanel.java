@@ -23,27 +23,71 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-
-
-
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.*;
-import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import java.io.File;
+
 import java.net.URL;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
+
+import javax.swing.border.EmptyBorder;
+
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+
+import org.gjt.sp.jedit.*;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.gjt.sp.jedit.gui.*;
+
 import org.gjt.sp.jedit.help.*;
-import org.gjt.sp.jedit.*;
+
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -53,6 +97,7 @@ public class ManagePanel extends JPanel
 	//{{{ Private members
 	private JCheckBox hideLibraries;
 	private JTable table;
+	private JScrollPane scrollpane;
 	private PluginTableModel pluginModel;
 	private PluginManager window;
 	//}}}
@@ -76,10 +121,19 @@ public class ManagePanel extends JPanel
 		table.setIntercellSpacing(new Dimension(0,0));
 		table.setRowHeight(table.getRowHeight() + 2);
 		table.setPreferredScrollableViewportSize(new Dimension(500,300));
-		table.setRequestFocusEnabled(true);
-		table.addKeyListener(new KeyHandler());
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));
+		table.addFocusListener(new TableFocusHandler());
+		InputMap tableInputMap = table.getInputMap(JComponent.WHEN_FOCUSED);
+		ActionMap tableActionMap = table.getActionMap();
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,0),"tabOutForward");
+		tableActionMap.put("tabOutForward",new KeyboardAction(KeyboardCommand.TAB_OUT_FORWARD));
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_MASK),"tabOutBack");
+		tableActionMap.put("tabOutBack",new KeyboardAction(KeyboardCommand.TAB_OUT_BACK));
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0),"editPlugin");
+		tableActionMap.put("editPlugin",new KeyboardAction(KeyboardCommand.EDIT_PLUGIN));
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0),"closePluginManager");
+		tableActionMap.put("closePluginManager",new KeyboardAction(KeyboardCommand.CLOSE_PLUGIN_MANAGER));
 
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		TableColumn col2 = table.getColumnModel().getColumn(1);
@@ -99,7 +153,7 @@ public class ManagePanel extends JPanel
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new HeaderMouseHandler());
 
-		JScrollPane scrollpane = new JScrollPane(table);
+		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
 		add(BorderLayout.CENTER,scrollpane);
 
@@ -111,7 +165,6 @@ public class ManagePanel extends JPanel
 		buttons.add(new HelpButton());
 
 		add(BorderLayout.SOUTH,buttons);
-		GUIUtilities.requestFocus(this.window, table);
 	} //}}}
 
 	//{{{ update() method
@@ -120,8 +173,17 @@ public class ManagePanel extends JPanel
 		pluginModel.update();
 	} //}}}
 
-
 	//{{{ Inner classes
+
+	//{{{ KeyboardCommand enum
+	public enum KeyboardCommand
+	{
+		NONE,
+		TAB_OUT_FORWARD,
+		TAB_OUT_BACK,
+		EDIT_PLUGIN,
+		CLOSE_PLUGIN_MANAGER
+	} //}}}
 
 	//{{{ Entry class
 	class Entry
@@ -185,6 +247,8 @@ public class ManagePanel extends JPanel
 	{
 		private List<Entry> entries;
 		private int sortType = EntryCompare.NAME;
+		private ConcurrentHashMap<String, Object> unloaded;
+		// private HashSet<String> unloaded;
 
 		//{{{ Constructor
 		public PluginTableModel()
@@ -242,7 +306,7 @@ public class ManagePanel extends JPanel
 		//{{{ getValueAt() method
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
-			Entry entry = (Entry)entries.get(rowIndex);
+			Entry entry = entries.get(rowIndex);
 			switch (columnIndex)
 			{
 				case 0:
@@ -269,23 +333,6 @@ public class ManagePanel extends JPanel
 			return columnIndex == 0;
 		} //}}}
 
-		public void toggleCurrentRow() 
-		{
-			
-			final int row = table.getSelectedRow();
-			final ListSelectionModel lsm = table.getSelectionModel();
-			Boolean oldValue = (Boolean)getValueAt(row, 0);
-			Boolean newValue = !oldValue;
-			setValueAt(newValue, row, 0);
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					lsm.setSelectionInterval(row, row);
-					table.setSelectionModel(lsm);
-				}
-			});
-			
-		}
-		
 		//{{{ setValueAt() method
 		public void setValueAt(Object value, int rowIndex,
 			int columnIndex)
@@ -298,8 +345,8 @@ public class ManagePanel extends JPanel
 				{
 					if(value.equals(Boolean.FALSE))
 						return;
+
 					PluginJAR.load(entry.jar, true);
-					
 				}
 				else
 				{
@@ -323,14 +370,19 @@ public class ManagePanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
+			ArrayList<String> savedSelection = new ArrayList<String>();
+			saveSelection(savedSelection);
 			Collections.sort(entries,new EntryCompare(type));
 			fireTableChanged(new TableModelEvent(this));
+			restoreSelection(savedSelection);
 		}
 		//}}}
 
 		//{{{ update() method
 		public void update()
 		{
+			ArrayList<String> savedSelection = new ArrayList<String>();
+			saveSelection(savedSelection);
 			entries.clear();
 
 			String systemJarDir = MiscUtilities.constructPath(
@@ -369,10 +421,9 @@ public class ManagePanel extends JPanel
 			}
 
 			sort(sortType);
+			restoreSelection(savedSelection);
 		} //}}}
 
-		private ConcurrentHashMap<String, Object> unloaded;
-		// private HashSet<String> unloaded;
 		//{{{ unloadPluginJARWithDialog() method
 		// Perhaps this should also be moved to PluginJAR class?
 		private void unloadPluginJARWithDialog(PluginJAR jar)
@@ -397,7 +448,6 @@ public class ManagePanel extends JPanel
 			}
 		} //}}}
 
-
 		//{{{ unloadPluginJAR() method
 		private void unloadPluginJAR(PluginJAR jar)
 		{
@@ -414,6 +464,55 @@ public class ManagePanel extends JPanel
 			}
 			jEdit.removePluginJAR(jar,false);
 			jEdit.setBooleanProperty("plugin-blacklist."+MiscUtilities.getFileName(jar.getPath()),true);
+		} //}}}
+		
+		//{{{ saveSelection() method
+		public void saveSelection(ArrayList<String> savedSelection)
+		{
+			if (null != table)
+			{
+				int[] rows = table.getSelectedRows();
+				for (int i=0 ; i<rows.length ; i++)
+				{
+					savedSelection.add(new String((entries.get(rows[i])).jar));
+				}
+			}
+		} //}}}
+		
+		//{{{ restoreSelection() method
+		public void restoreSelection(ArrayList<String> savedSelection)
+		{
+			if (null != table)
+			{
+				table.setColumnSelectionInterval(0,0);
+				if (0 < savedSelection.size())
+				{
+					int i = 0;
+					int rowCount = getRowCount();
+					for ( ; i<rowCount ; i++)
+					{
+						if (savedSelection.contains((entries.get(i)).jar))
+						{
+							table.setRowSelectionInterval(i,i);
+							break;
+						}
+					}
+					ListSelectionModel lsm = table.getSelectionModel();
+					for ( ; i<rowCount ; i++)
+					{
+						if (savedSelection.contains((entries.get(i)).jar))
+						{
+							lsm.addSelectionInterval(i,i);
+						}
+					}
+				}
+				else
+				{
+					table.setRowSelectionInterval(0,0);
+					JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+					scrollbar.setValue(scrollbar.getMinimum());
+				}
+			}
 		} //}}}
 	} //}}}
 
@@ -495,6 +594,10 @@ public class ManagePanel extends JPanel
 			{
 				roster.performOperationsInAWTThread(window);
 				pluginModel.update();
+				table.setRowSelectionInterval(0,0);
+				table.setColumnSelectionInterval(0,0);
+				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+				scrollbar.setValue(scrollbar.getMinimum());
 			}
 		}
 
@@ -551,7 +654,7 @@ public class ManagePanel extends JPanel
 					}
 				}
 				catch (Exception ex) {
-					Log.log(Log.ERROR, this, "ManagePanel HelpButton UPdate", ex);
+					Log.log(Log.ERROR, this, "ManagePanel HelpButton Update", ex);
 				}
 			}
 			setEnabled(false);
@@ -622,34 +725,75 @@ public class ManagePanel extends JPanel
 		}
 	} //}}}
 
-	class KeyHandler implements KeyListener 
+	//{{{ KeyboardAction class
+	class KeyboardAction extends AbstractAction
 	{
-		public void keyTyped(KeyEvent e)
+		private KeyboardCommand command = KeyboardCommand.NONE;
+		
+		public KeyboardAction(KeyboardCommand command)
 		{
-			switch (e.getKeyChar())  
+			super();
+			this.command = command;
+		}
+		
+		public void actionPerformed(ActionEvent evt)
+		{
+			switch (command)
 			{
-				case ' ': pluginModel.toggleCurrentRow();
-					break;
-				case KeyEvent.VK_ESCAPE:
-					window.dispose();
-					break;
+			case TAB_OUT_FORWARD:
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent();
+				break;
+			case TAB_OUT_BACK:
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().focusPreviousComponent();
+				break;
+			case EDIT_PLUGIN:
+				ArrayList<String> savedSelection = new ArrayList<String>();
+				pluginModel.saveSelection(savedSelection);
+				int[] rows = table.getSelectedRows();
+				Object[] state = new Object[rows.length];
+				for (int i=0 ; i<rows.length ; i++)
+				{
+					state[i] = pluginModel.getValueAt(rows[i],0);
+				}
+				for (int i=0 ; i<rows.length ; i++)
+				{
+					for (int j=0, c=pluginModel.getRowCount() ; j<c ; j++)
+					{
+						if ((pluginModel.entries.get(j)).jar.equals(savedSelection.get(i)))
+						{
+							pluginModel.setValueAt(state[i].equals(Boolean.FALSE),j,0);
+							break;
+						}
+					}
+				}
+				pluginModel.restoreSelection(savedSelection);
+				break;
+			case CLOSE_PLUGIN_MANAGER:
+				window.ok();
+				break;
+			default:
+				throw new InternalError();
 			}
 		}
-		
-		public void keyPressed(KeyEvent e)
-		{
-			// TODO Auto-generated method stub
-			
-		}
+	} //}}}
 
-		public void keyReleased(KeyEvent e)
+	//{{{ TableFocusHandler class
+	class TableFocusHandler extends FocusAdapter
+	{
+		public void focusGained(FocusEvent fe)
 		{
-			// TODO Auto-generated method stub
-			
+			if (-1 == table.getSelectedRow())
+			{
+				table.setRowSelectionInterval(0,0);
+				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+				scrollbar.setValue(scrollbar.getMinimum());
+			}
+			if (-1 == table.getSelectedColumn())
+			{
+				table.setColumnSelectionInterval(0,0);
+			}
 		}
-		
-		
-	}
-	
+	} //}}}
+
 	//}}}
 }

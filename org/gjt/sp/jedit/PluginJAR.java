@@ -424,7 +424,10 @@ public class PluginJAR
 				optional = true;
 				dep = dep.substring("optional ".length());
 			}
-			else optional = false;
+			else
+			{
+				optional = false;
+			}
 
 			int index = dep.indexOf(' ');
 			if(index == -1)

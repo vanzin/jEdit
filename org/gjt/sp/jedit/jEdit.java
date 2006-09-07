@@ -3917,6 +3917,11 @@ loop:		for(int i = 0; i < list.length; i++)
 					else if(comp == null || comp instanceof Window
 						|| comp instanceof JEditTextArea)
 					{
+						if (comp instanceof PluginManager)
+						{
+							evt.setSource(comp);
+							((PluginManager)comp).processKeyEvents(evt);
+						}
 						break;
 					}
 					else

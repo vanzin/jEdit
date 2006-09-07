@@ -139,6 +139,7 @@ public class PluginManager extends JFrame implements EBComponent
 	private boolean downloadingPluginList;
 	private Frame parent = null;
 	//}}}
+
 	//{{{ PluginManager constructor
 
 	private PluginManager(Frame parent)
@@ -318,6 +319,17 @@ public class PluginManager extends JFrame implements EBComponent
 		});
 	} //}}}
 
+	//{{{ processKeyEvent() method
+	public void processKeyEvents(KeyEvent ke)
+	{
+		if ((KeyEvent.KEY_PRESSED == ke.getID()) &&
+		    (KeyEvent.VK_ESCAPE == ke.getKeyCode()))
+		{
+			cancel();
+			ke.consume();
+		}
+	} //}}}
+
 	//}}}
 
 	//{{{ Inner classes
@@ -353,5 +365,6 @@ public class PluginManager extends JFrame implements EBComponent
 				manager.update();
 		}
 	} //}}}
+
 	//}}}
 }

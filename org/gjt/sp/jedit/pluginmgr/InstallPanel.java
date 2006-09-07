@@ -63,10 +63,19 @@ class InstallPanel extends JPanel
 		table.setIntercellSpacing(new Dimension(0,0));
 		table.setRowHeight(table.getRowHeight() + 2);
 		table.setPreferredScrollableViewportSize(new Dimension(500,200));
-		table.setRequestFocusEnabled(false);
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));
+		table.addFocusListener(new TableFocusHandler());
+		InputMap tableInputMap = table.getInputMap(JComponent.WHEN_FOCUSED);
+		ActionMap tableActionMap = table.getActionMap();
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,0),"tabOutForward");
+		tableActionMap.put("tabOutForward",new KeyboardAction(KeyboardCommand.TAB_OUT_FORWARD));
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,InputEvent.SHIFT_MASK),"tabOutBack");
+		tableActionMap.put("tabOutBack",new KeyboardAction(KeyboardCommand.TAB_OUT_BACK));
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0),"editPlugin");
+		tableActionMap.put("editPlugin",new KeyboardAction(KeyboardCommand.EDIT_PLUGIN));
+		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0),"closePluginManager");
+		tableActionMap.put("closePluginManager",new KeyboardAction(KeyboardCommand.CLOSE_PLUGIN_MANAGER));
 
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		TableColumn col2 = table.getColumnModel().getColumn(1);
@@ -88,7 +97,7 @@ class InstallPanel extends JPanel
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new HeaderMouseHandler());
 
-		JScrollPane scrollpane = new JScrollPane(table);
+		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
 		split.setTopComponent(scrollpane);
 
@@ -123,6 +132,9 @@ class InstallPanel extends JPanel
 	//{{{ updateModel() method
 	public void updateModel()
 	{
+		final ArrayList<String> savedChecked = new ArrayList<String>();
+		final ArrayList<String> savedSelection = new ArrayList<String>();
+		pluginModel.saveSelection(savedChecked,savedSelection);
 		pluginModel.clear();
 		infoBox.setText(jEdit.getProperty("plugin-manager.list-download"));
 
@@ -132,6 +144,7 @@ class InstallPanel extends JPanel
 			{
 				infoBox.setText(null);
 				pluginModel.update();
+				pluginModel.restoreSelection(savedChecked,savedSelection);
 			}
 		});
 	} //}}}
@@ -140,6 +153,7 @@ class InstallPanel extends JPanel
 
 	//{{{ Variables
 	private JTable table;
+	private JScrollPane scrollpane;
 	private PluginTableModel pluginModel;
 	private PluginManager window;
 	private PluginInfoBox infoBox;
@@ -164,6 +178,16 @@ class InstallPanel extends JPanel
 	//}}}
 
 	//{{{ Inner classes
+
+	//{{{ KeyboardCommand enum
+	public enum KeyboardCommand
+	{
+		NONE,
+		TAB_OUT_FORWARD,
+		TAB_OUT_BACK,
+		EDIT_PLUGIN,
+		CLOSE_PLUGIN_MANAGER
+	} //}}}
 
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
@@ -348,6 +372,10 @@ class InstallPanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
+			ArrayList<String> savedChecked = new ArrayList<String>();
+			ArrayList<String> savedSelection = new ArrayList<String>();
+			saveSelection(savedChecked,savedSelection);
+
 			sortType = type;
 
 			if(isDownloadingList())
@@ -355,6 +383,7 @@ class InstallPanel extends JPanel
 
 			Collections.sort(entries,new EntryCompare(type));
 			fireTableChanged(new TableModelEvent(this));
+			restoreSelection(savedChecked,savedSelection);
 		}
 		//}}}
 
@@ -374,6 +403,10 @@ class InstallPanel extends JPanel
 		//{{{ update() method
 		public void update()
 		{
+			ArrayList<String> savedChecked = new ArrayList<String>();
+			ArrayList<String> savedSelection = new ArrayList<String>();
+			saveSelection(savedChecked,savedSelection);
+
 			PluginList pluginList = window.getPluginList();
 
 			if (pluginList == null) return;
@@ -413,6 +446,69 @@ class InstallPanel extends JPanel
 			sort(sortType);
 
 			fireTableChanged(new TableModelEvent(this));
+			restoreSelection(savedChecked,savedSelection);
+		} //}}}
+		
+		//{{{ saveSelection() method
+		public void saveSelection(ArrayList<String> savedChecked, ArrayList<String> savedSelection)
+		{
+			for (int i=0, c=getRowCount() ; i<c ; i++)
+			{
+				if ((Boolean)getValueAt(i,0))
+				{
+					savedChecked.add(new String(entries.get(i).toString()));
+				}
+			}
+
+			if (null != table)
+			{
+				int[] rows = table.getSelectedRows();
+				for (int i=0 ; i<rows.length ; i++)
+				{
+					savedSelection.add(new String(entries.get(rows[i]).toString()));
+				}
+			}
+		} //}}}
+		
+		//{{{ restoreSelection() method
+		public void restoreSelection(ArrayList<String> savedChecked, ArrayList<String> savedSelection)
+		{
+			for (int i=0, c=getRowCount() ; i<c ; i++)
+			{
+				setValueAt(savedChecked.contains(entries.get(i).toString()),i,0);
+			}
+
+			if (null != table)
+			{
+				table.setColumnSelectionInterval(0,0);
+				if (0 < savedSelection.size())
+				{
+					int i = 0;
+					int rowCount = getRowCount();
+					for ( ; i<rowCount ; i++)
+					{
+						if (savedSelection.contains(entries.get(i).toString()))
+						{
+							table.setRowSelectionInterval(i,i);
+							break;
+						}
+					}
+					ListSelectionModel lsm = table.getSelectionModel();
+					for ( ; i<rowCount ; i++)
+					{
+						if (savedSelection.contains(entries.get(i).toString()))
+						{
+							lsm.addSelectionInterval(i,i);
+						}
+					}
+				}
+				else
+				{
+					table.setRowSelectionInterval(0,0);
+					JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+					scrollbar.setValue(scrollbar.getMinimum());
+				}
+			}
 		} //}}}
 	} //}}}
 
@@ -719,6 +815,66 @@ class InstallPanel extends JPanel
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			return tcr.getTableCellRendererComponent(table,value,isSelected,false,row,column);
+		}
+	} //}}}
+
+	//{{{ KeyboardAction class
+	class KeyboardAction extends AbstractAction
+	{
+		private KeyboardCommand command = KeyboardCommand.NONE;
+		
+		public KeyboardAction(KeyboardCommand command)
+		{
+			super();
+			this.command = command;
+		}
+		
+		public void actionPerformed(ActionEvent evt)
+		{
+			switch (command)
+			{
+			case TAB_OUT_FORWARD:
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent();
+				break;
+			case TAB_OUT_BACK:
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().focusPreviousComponent();
+				break;
+			case EDIT_PLUGIN:
+				int[] rows = table.getSelectedRows();
+				Object[] state = new Object[rows.length];
+				for (int i=0 ; i<rows.length ; i++)
+				{
+					state[i] = pluginModel.getValueAt(rows[i],0);
+				}
+				for (int i=0 ; i<rows.length ; i++)
+				{
+					pluginModel.setValueAt(state[i].equals(Boolean.FALSE),rows[i],0);
+				}
+				break;
+			case CLOSE_PLUGIN_MANAGER:
+				window.ok();
+				break;
+			default:
+				throw new InternalError();
+			}
+		}
+	} //}}}
+
+	//{{{ TableFocusHandler class
+	class TableFocusHandler extends FocusAdapter
+	{
+		public void focusGained(FocusEvent fe)
+		{
+			if (-1 == table.getSelectedRow())
+			{
+				table.setRowSelectionInterval(0,0);
+				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+				scrollbar.setValue(scrollbar.getMinimum());
+			}
+			if (-1 == table.getSelectedColumn())
+			{
+				table.setColumnSelectionInterval(0,0);
+			}
 		}
 	} //}}}
 
