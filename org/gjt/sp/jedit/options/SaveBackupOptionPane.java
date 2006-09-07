@@ -25,10 +25,17 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.StringTokenizer;
+import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 //}}}
 
+/**
+ * The Save and Backup option panel.
+ * 
+ * @author Slava Pestov
+ * @author $Id$
+ */
 public class SaveBackupOptionPane extends AbstractOptionPane
 {
 	//{{{ SaveBackupOptionPane constructor
@@ -65,8 +72,13 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		/* Backup directory */
 		backupDirectory = new JTextField(jEdit.getProperty(
 			"backup.directory"));
+		JButton browseBackupDirectory = new JButton("...");
+		browseBackupDirectory.addActionListener(new MyActionListener());
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(backupDirectory);
+		panel.add(browseBackupDirectory, BorderLayout.EAST);
 		addComponent(jEdit.getProperty("options.save-back.backupDirectory"),
-			backupDirectory);
+			panel);
 
 		/* Backup filename prefix */
 		backupPrefix = new JTextField(jEdit.getProperty("backup.prefix"));
@@ -109,4 +121,18 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private JTextField backupSuffix;
 	private JCheckBox backupEverySave;
 	//}}}
+
+	private class MyActionListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			String[] choosenFolder = 
+				GUIUtilities.showVFSFileDialog(null,
+				   			       backupDirectory.getText(),
+				   			       VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
+				   			       false);
+			if (choosenFolder != null)
+				backupDirectory.setText(choosenFolder[0]);
+		}
+	}
 }
