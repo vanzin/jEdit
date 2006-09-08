@@ -1841,7 +1841,7 @@ forward_scan:	do
 	 */
 	public String getSelectedText(Selection s)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuffer buf = new StringBuffer(s.end - s.start);
 		s.getText(buffer,buf);
 		return buf.toString();
 	} //}}}
@@ -1995,7 +1995,7 @@ forward_scan:	do
 	 * This method is the most convenient way to iterate through selected
 	 * lines in a buffer. The line numbers in the array returned by this
 	 * method can be passed as a parameter to such methods as
-	 * {@link org.gjt.sp.jedit.Buffer#getLineText(int)}.
+	 * {@link JEditBuffer#getLineText(int)}.
 	 *
 	 * @since jEdit 3.2pre1
 	 */
@@ -3764,18 +3764,33 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void collapseFold()
 	{
+		collapseFold(caretLine);
+	} //}}}
+
+	//{{{ collapseFold() method
+	/**
+	 * Like {@link DisplayManager#collapseFold(int)}, but
+	 * also moves the caret to the first line of the fold.
+	 * @since jEdit 4.3pre7
+	 */
+	public void collapseFold(int line)
+	{
 		int x = chunkCache.subregionOffsetToX(caretLine,
 			caret - getLineStartOffset(caretLine));
 
-		displayManager.collapseFold(caretLine);
+		displayManager.collapseFold(line);
 
 		if(displayManager.isLineVisible(caretLine))
 			return;
 
-		int line = displayManager.getPrevVisibleLine(caretLine);
+		line = displayManager.getPrevVisibleLine(caretLine);
 
 		if(!multi)
-			selectNone();
+		{
+			// cannot use selectNone() beacause the finishCaretUpdate method will reopen the fold
+			invalidateSelectedLines();
+			selectionManager.setSelection((Selection) null);
+		}
 		moveCaretPosition(buffer.getLineStartOffset(line)
 			+ chunkCache.xToSubregionOffset(line,0,x,true));
 	} //}}}
@@ -3895,7 +3910,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 					selection = selections[i];
 					caretBack = addExplicitFold(selection.start, selection.end, selection.startLine,selection.endLine);
 				}
-				// Selection cannot ne null because there is at least 1 selection
+				// Selection cannot be null because there is at least 1 selection
 				setCaretPosition(selection.start - caretBack, false);
 			}
 		}
@@ -4894,7 +4909,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		if(s == null)
 			return false;
 		else
-			return (s instanceof Selection.Rect);
+			return s instanceof Selection.Rect;
 	} //}}}
 
 	//}}}
@@ -4925,8 +4940,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 	boolean scrollBarsInitialized;
 
-	/** Cursor location, measured as an offset (in pixels) from upper left corner
-	 *  of the TextArea.
+	/**
+	 * Cursor location, measured as an offset (in pixels) from upper left corner
+	 * of the TextArea.
 	 */
 	Point offsetXY;
 
@@ -5202,7 +5218,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private StructureMatcher.Match match;
 
 	private int magicCaret;
-
+	/** Flag that tells if multiple selection is on. */
 	private boolean multi;
 	private boolean overwrite;
 	private boolean rectangularSelectionMode;

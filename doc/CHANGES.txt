@@ -70,6 +70,9 @@ for contributing to this release.
 - added org.gjt.sp.util.PropertiesBean. See javadoc for details.
   (Marcelo Vanzin)
 
+- added JEditTextArea.collapseFold(int line) to collapse the fold at the
+  given line (Matthieu Casanova)
+
 }}}
 {{{ Syntax Highlighting
 
@@ -132,6 +135,9 @@ for contributing to this release.
   anymore (#1548902) (Matthieu Casanova)
 
 - Clearing a register is now persistent (#1541821) (Matthieu Casanova)
+
+- When collapsing a fold, if the caret is inside, it
+  is moved to the first line of the fold (#1541372) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
