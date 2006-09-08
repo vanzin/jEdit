@@ -138,6 +138,9 @@ for contributing to this release.
 
 - When collapsing a fold, if the caret is inside, it
   is moved to the first line of the fold (#1541372) (Matthieu Casanova)
+
+- action collapse-fold now works fine even if the caret is not on the
+  first line of the fold (#1538712) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
