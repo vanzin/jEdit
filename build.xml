@@ -50,6 +50,9 @@
 	<property name="mac.disk.image.filename"
 			  value="jedit${jedit.version}.dmg" />
 
+	<!-- Sane (debian) defaults for docbook related files -->
+	<property name="docbook.xsl" value="/usr/share/xml/docbook/stylesheet/nwalsh" />
+	<property name="docbook.catalog" value="/usr/share/xml/docbook/schema/dtd/4.2" />
 	<!-- Miscellaneous -->
 	<property name="build.debuglevel"
 			  value="lines,vars,source" />

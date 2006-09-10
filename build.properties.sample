@@ -28,6 +28,10 @@
 #docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.70.1\\
 #docbook.catalog=C:\\Programme\\DocBook\\XML\\4.2\\docbook.cat
 
+# Debian location
+#docbook.xsl=/usr/share/xml/docbook/stylesheet/nwalsh
+#docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.2
+
 ### If you want to build the PDF user's guide,
 ### set this to your local FOP install directory.
 ### (the above three properties are needed also)
