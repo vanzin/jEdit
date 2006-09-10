@@ -150,6 +150,11 @@ for contributing to this release.
   entry in service.xml, or by directly calling
   VFSBrowser.addVFSFileFilter(). (Marcelo Vanzin)
 
+- Updated FAQ for jEdit 4.3 (ezust)
+
+- New document: doc/releasing-jedit.txt - to be merged with
+README-src.txt
+
 - Save and Backup Option Panel : the backup directory has now a button to browse using
   VFS file browser (#1540730) (Matthieu Casanova)
 }}}

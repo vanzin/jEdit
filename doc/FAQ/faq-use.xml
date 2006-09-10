@@ -317,7 +317,7 @@
 			enter any character supported by a keyboard driver, it does not have the ability
 			to insert <quote>smart quote</quote> pairs automatically as some word processors
 			do. This would require a BeanShell macro to modify quoted text.</para>
-			<para> The accents plugin can also help you type international characters. </para>
+			<para> The Accents and CharacterMap plugins can also help you type international characters. </para>
     <para>
       You also have the option of using a TeX macro (or, in LaTeX, a pair of
       environment tags) to have the standard double quotation mark
@@ -335,12 +335,14 @@
 	</question>
 	<answer>
 		<para>
-			Beginning with version 4.0pre4, jEdit has soft wrap capability which can be activated
-      for a specific buffer, specific editing modes, or for all documents by default.
-      In prior versions, both the text wrap feature and the <guimenuitem>Edit&gt;Text&gt;Format
+			jEdit's 4.3's soft wrap mode, and especially its wrap to margin=0, is one of its many features that just works better than it does in most other editing environments.
+			Soft Wrap with margin=0 was unavailable in jEdit 4.2, but users of 4.1 will remember it well. When you set SOFT WRAP with a margin=0, you don't need to use the horizontal scroller anymore. It's just as simple as that.
+		</para>
+		<para>
+			jEdit wrap capability can be activated
+			for a specific buffer, specific editing modes, or for all documents by default. In prior versions, both the text wrap feature and the <guimenuitem>Edit&gt;Text&gt;Format
 			Paragraph</guimenuitem> command insert <quote>hard</quote> end of line
-			characters.  This <quote>hard wrap</quote> feature remains available as an option
-      for buffers and editing modes.
+			characters.  This <quote>hard wrap</quote> feature remains available as an option for buffers and editing modes.
 		</para>
 	</answer>
 </qandaentry>
@@ -441,7 +443,8 @@ of spaces, tabs, and other whitespace characters.
 
 <!--********************************************************* Source -->
 
-<qandadiv id="source-compile"><title>Compiling source code</title>
+<qandadiv id="source-compile">
+<title>Compiling source code</title>
 <qandaentry>
 	<question id="compile-java">
 		<para>
@@ -611,7 +614,8 @@ expand-all-folds.shortcut=C+q x
 	</answer>
 </qandaentry>
 </qandadiv>
-<qandadiv id="customize-other"><title>Other Settings and Options</title>
+<qandadiv id="customize-other">
+<title>Other Settings and Options</title>
 
 <qandaentry>
 	<question id="settings-change-font">
