@@ -42,6 +42,9 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
+/**
+ * @version $Id$
+ */
 class InstallPanel extends JPanel
 {
 	//{{{ InstallPanel constructor
@@ -192,6 +195,7 @@ class InstallPanel extends JPanel
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
+		/** This List can contains String and Entry. */
 		private List entries = new ArrayList();
 		private int sortType = EntryCompare.NAME;
 
@@ -253,7 +257,7 @@ class InstallPanel extends JPanel
 				switch (columnIndex)
 				{
 					case 0:
-						return Boolean.valueOf(entry.install);
+						return entry.install;
 					case 1:
 						return entry.name;
 					case 2:
@@ -288,7 +292,7 @@ class InstallPanel extends JPanel
 				else
 				{
 					Entry entry = (Entry)entries.get(i);
-					entry.parents = new LinkedList();
+					entry.parents = new LinkedList<Entry>();
 					entry.install = false;
 				}
 			}
@@ -450,7 +454,7 @@ class InstallPanel extends JPanel
 		} //}}}
 		
 		//{{{ saveSelection() method
-		public void saveSelection(ArrayList<String> savedChecked, ArrayList<String> savedSelection)
+		public void saveSelection(List<String> savedChecked, List<String> savedSelection)
 		{
 			for (int i=0, c=getRowCount() ; i<c ; i++)
 			{
@@ -471,7 +475,7 @@ class InstallPanel extends JPanel
 		} //}}}
 		
 		//{{{ restoreSelection() method
-		public void restoreSelection(ArrayList<String> savedChecked, ArrayList<String> savedSelection)
+		public void restoreSelection(List<String> savedChecked, List<String> savedSelection)
 		{
 			for (int i=0, c=getRowCount() ; i<c ; i++)
 			{
@@ -504,7 +508,8 @@ class InstallPanel extends JPanel
 				}
 				else
 				{
-					table.setRowSelectionInterval(0,0);
+					if (table.getRowCount() != 0)
+						table.setRowSelectionInterval(0,0);
 					JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
 					scrollbar.setValue(scrollbar.getMinimum());
 				}
@@ -519,7 +524,7 @@ class InstallPanel extends JPanel
 		int size;
 		boolean install;
 		PluginList.Plugin plugin;
-		LinkedList parents = new LinkedList();
+		List<Entry> parents = new LinkedList<Entry>();
 
 		Entry(PluginList.Plugin plugin, String set)
 		{
@@ -538,12 +543,12 @@ class InstallPanel extends JPanel
 			this.plugin = plugin;
 		}
 
-		private void getParents(List list)
+		private void getParents(List<Entry> list)
 		{
-			Iterator iter = parents.iterator();
+			Iterator<Entry> iter = parents.iterator();
 			while(iter.hasNext())
 			{
-				Entry entry = (Entry)iter.next();
+				Entry entry = iter.next();
 				if(entry.install && !list.contains(entry))
 				{
 					list.add(entry);
@@ -554,10 +559,9 @@ class InstallPanel extends JPanel
 
 		Entry[] getParents()
 		{
-			List list = new ArrayList();
+			List<Entry> list = new ArrayList<Entry>();
 			getParents(list);
-			Entry[] array = (Entry[])list.toArray(
-				new Entry[list.size()]);
+			Entry[] array = list.toArray(new Entry[list.size()]);
 			Arrays.sort(array,new MiscUtilities.StringICaseCompare());
 			return array;
 		}
