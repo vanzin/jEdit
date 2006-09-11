@@ -3886,6 +3886,11 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	 */
 	public void addExplicitFold()
 	{
+		if(!buffer.isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
 		if(!buffer.getStringProperty("folding").equals("explicit"))
 		{
 			GUIUtilities.error(view,"folding-not-explicit",null);

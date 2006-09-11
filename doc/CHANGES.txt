@@ -309,6 +309,8 @@ Marcelo Vanzin for contributing to this release.
    in ManagePanel.java when unloading certain plugins
    with circular dependencies due to services. (Alan Ezust)
 
+- No exception thrown when adding an explicit fold to a read only buffer.
+  (#1549282) (Matthieu Casanova)
 }}}
 {{{ Syntax Highlighting
 - Added mysql mode.
