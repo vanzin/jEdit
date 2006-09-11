@@ -311,6 +311,8 @@ Marcelo Vanzin for contributing to this release.
 
 - No exception thrown when adding an explicit fold to a read only buffer.
   (#1549282) (Matthieu Casanova)
+
+- Deep indent fixed when using tabs (Matthieu Casanova)
 }}}
 {{{ Syntax Highlighting
 - Added mysql mode.

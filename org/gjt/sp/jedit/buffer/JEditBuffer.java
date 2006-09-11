@@ -2258,9 +2258,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		indentRules.clear();
 
-		if (getBooleanProperty("deepIndent"))
-			indentRules.add(new DeepIndentRule());
-
 		String[] regexpProps = {
 			"indentNextLine",
 			"indentNextLines"
@@ -2296,6 +2293,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(rule != null)
 				indentRules.add(rule);
 		}
+
+		if (getBooleanProperty("deepIndent"))
+			indentRules.add(new DeepIndentRule());
+
 
 		String[] props = {
 			"indentOpenBrackets",
