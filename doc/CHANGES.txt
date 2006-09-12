@@ -141,6 +141,11 @@ for contributing to this release.
 
 - action collapse-fold now works fine even if the caret is not on the
   first line of the fold (#1538712) (Matthieu Casanova)
+
+- When saving a readonly buffer it will ask you if you want a two stage save.
+  If you say no it will not display any error dialog anymore.
+  (#1549282) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 

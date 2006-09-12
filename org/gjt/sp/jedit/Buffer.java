@@ -279,7 +279,7 @@ public class Buffer extends JEditBuffer
 	 *
 	 * @since 4.0pre1
 	 */
-	public boolean insertFile(final View view, String path)
+	public boolean insertFile(View view, String path)
 	{
 		if(isPerformingIO())
 		{
@@ -445,10 +445,7 @@ public class Buffer extends JEditBuffer
 						}
 						else
 						{
-							VFSManager.error(view,
-								newPath,
-								"ioerror.write-error-readonly",
-								null);
+							Log.log(Log.DEBUG,this, "Buffer not saved");
 							setPerformingIO(false);
 							return false;
 						}
@@ -846,24 +843,21 @@ public class Buffer extends JEditBuffer
 			setDefaultProperty(name,retVal);
 			return retVal;
 		}
-		else
-		{
-			// Now try buffer.<property>
-			String value = jEdit.getProperty("buffer." + name);
-			if(value == null)
-				return null;
+		// Now try buffer.<property>
+		String value = jEdit.getProperty("buffer." + name);
+		if(value == null)
+			return null;
 
-			// Try returning it as an integer first
-			try
-			{
-				retVal = new Integer(value);
-			}
-			catch(NumberFormatException nf)
-			{
-				retVal = value;
-			}
+		// Try returning it as an integer first
+		try
+		{
+			retVal = new Integer(value);
 		}
-		
+		catch(NumberFormatException nf)
+		{
+			retVal = value;
+		}
+
 		return retVal;
 	} //}}}
 
@@ -1121,7 +1115,7 @@ public class Buffer extends JEditBuffer
 	 * Returns a vector of markers.
 	 * @since jEdit 3.2pre1
 	 */
-	public Vector getMarkers()
+	public Vector<Marker> getMarkers()
 	{
 		return markers;
 	} //}}}
@@ -1146,10 +1140,10 @@ public class Buffer extends JEditBuffer
 	 */
 	public String getMarkerNameString()
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < markers.size(); i++)
 		{
-			Marker marker = (Marker)markers.elementAt(i);
+			Marker marker = markers.get(i);
 			if(marker.getShortcut() != '\0')
 			{
 				if(buf.length() != 0)
@@ -1203,7 +1197,7 @@ public class Buffer extends JEditBuffer
 
 			for(int i = 0; i < markers.size(); i++)
 			{
-				Marker marker = (Marker)markers.elementAt(i);
+				Marker marker = markers.get(i);
 				if(shortcut != '\0' && marker.getShortcut() == shortcut)
 					marker.setShortcut('\0');
 
@@ -1216,7 +1210,7 @@ public class Buffer extends JEditBuffer
 
 			for(int i = 0; i < markers.size(); i++)
 			{
-				Marker marker = (Marker)markers.elementAt(i);
+				Marker marker = markers.get(i);
 				if(marker.getPosition() > pos)
 				{
 					markers.insertElementAt(markerN,i);
@@ -1247,7 +1241,7 @@ public class Buffer extends JEditBuffer
 	{
 		for(int i = 0; i < markers.size(); i++)
 		{
-			Marker marker = (Marker)markers.elementAt(i);
+			Marker marker = markers.get(i);
 			int pos = marker.getPosition();
 			if(pos >= start && pos < end)
 				return marker;
@@ -1267,7 +1261,7 @@ public class Buffer extends JEditBuffer
 	{
 		for(int i = 0; i < markers.size(); i++)
 		{
-			Marker marker = (Marker)markers.elementAt(i);
+			Marker marker = markers.get(i);
 			if(getLineOfOffset(marker.getPosition()) == line)
 				return marker;
 		}
@@ -1285,7 +1279,7 @@ public class Buffer extends JEditBuffer
 	{
 		for(int i = 0; i < markers.size(); i++)
 		{
-			Marker marker = (Marker)markers.elementAt(i);
+			Marker marker = markers.get(i);
 			if(getLineOfOffset(marker.getPosition()) == line)
 			{
 				if(jEdit.getBooleanProperty("persistentMarkers"))
@@ -1312,7 +1306,7 @@ public class Buffer extends JEditBuffer
 			setDirty(true);
 
 		for(int i = 0; i < markers.size(); i++)
-			((Marker)markers.elementAt(i)).removePosition();
+			markers.get(i).removePosition();
 
 		markers.removeAllElements();
 
@@ -1331,10 +1325,10 @@ public class Buffer extends JEditBuffer
 	 */
 	public Marker getMarker(char shortcut)
 	{
-		Enumeration e = markers.elements();
+		Enumeration<Marker> e = markers.elements();
 		while(e.hasMoreElements())
 		{
-			Marker marker = (Marker)e.nextElement();
+			Marker marker = e.nextElement();
 			if(marker.getShortcut() == shortcut)
 				return marker;
 		}
@@ -1397,13 +1391,15 @@ public class Buffer extends JEditBuffer
 	 */
 	public String toString()
 	{
-		return name + " (" + directory + ")";
+		return name + " (" + directory + ')';
 	} //}}}
 
 	//}}}
 
 	//{{{ Package-private members
+	/** The previous buffer in the list. */
 	Buffer prev;
+	/** The next buffer in the list. */
 	Buffer next;
 
 	//{{{ Buffer constructor
@@ -1411,7 +1407,7 @@ public class Buffer extends JEditBuffer
 	{
 		super(props);
 
-		markers = new Vector();
+		markers = new Vector<Marker>();
 
 		setFlag(TEMPORARY,temp);
 
@@ -1515,7 +1511,7 @@ public class Buffer extends JEditBuffer
 	private long modTime;
 	private Mode mode;
 
-	private Vector markers;
+	private Vector<Marker> markers;
 
 	private Socket waitSocket;
 	//}}}
@@ -1644,7 +1640,7 @@ public class Buffer extends JEditBuffer
 	} //}}}
 
 	//{{{ checkFileForSave() method
-	private boolean checkFileForSave(View view, VFS vfs, String path)
+	private static boolean checkFileForSave(View view, VFS vfs, String path)
 	{
 		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
 		{
@@ -1711,7 +1707,7 @@ public class Buffer extends JEditBuffer
 		// Create marker positions
 		for(int i = 0; i < markers.size(); i++)
 		{
-			Marker marker = (Marker)markers.elementAt(i);
+			Marker marker = markers.get(i);
 			marker.removePosition();
 			int pos = marker.getPosition();
 			if(pos > getLength())
@@ -1818,11 +1814,11 @@ public class Buffer extends JEditBuffer
 						propertiesChanged();
 				}
 
-				EditBus.send(new BufferUpdate(Buffer.this,
+				EditBus.send(new BufferUpdate(this,
 					view,BufferUpdate.DIRTY_CHANGED));
 
 				// new message type introduced in 4.0pre4
-				EditBus.send(new BufferUpdate(Buffer.this,
+				EditBus.send(new BufferUpdate(this,
 					view,BufferUpdate.SAVED));
 			}
 		} //}}}
