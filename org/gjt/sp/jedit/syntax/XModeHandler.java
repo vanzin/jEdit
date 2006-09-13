@@ -38,6 +38,7 @@ import org.gjt.sp.util.XMLUtilities;
 
 /**
  * XML handler for mode definition files.
+ * @version $Id$
  */
 public abstract class XModeHandler extends DefaultHandler
 {
@@ -47,7 +48,7 @@ public abstract class XModeHandler extends DefaultHandler
 		this.modeName = modeName;
 		marker = new TokenMarker();
 		marker.addRuleSet(new ParserRuleSet(modeName,"MAIN"));
-		stateStack = new Stack();
+		stateStack = new Stack<TagDecl>();
 	} //}}}
 
 	//{{{ resolveEntity() method
@@ -129,7 +130,7 @@ public abstract class XModeHandler extends DefaultHandler
 				else
 					modeProps = props;
 
-				props = new Hashtable();
+				props = new Hashtable<String, String>();
 			} //}}}
 			//{{{ RULES
 			else if (tag.tagName.equals("RULES"))
@@ -328,7 +329,7 @@ public abstract class XModeHandler extends DefaultHandler
 	//{{{ startDocument() method
 	public void startDocument()
 	{
-		props = new Hashtable();
+		props = new Hashtable<String, String>();
 		pushElement(null, null);
 	} //}}}
 
@@ -343,13 +344,18 @@ public abstract class XModeHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ getTokenMarker() method
+	/**
+	 * Returns the TokenMarker.
+	 *
+	 * @return a TokenMarker it cannot be null
+	 */
 	public TokenMarker getTokenMarker()
 	{
 		return marker;
 	} //}}}
 
 	//{{{ getModeProperties() method
-	public Hashtable getModeProperties()
+	public Hashtable<String, String> getModeProperties()
 	{
 		return modeProps;
 	} //}}}
@@ -386,13 +392,15 @@ public abstract class XModeHandler extends DefaultHandler
 
 	//{{{ Instance variables
 	private String modeName;
-	private TokenMarker marker;
+	/** The token marker cannot be null. */
+	private final TokenMarker marker;
 	private KeywordMap keywords;
-	private Stack stateStack;
+	/** this stack can contains null elements. */
+	private Stack<TagDecl> stateStack;
 	private String propName;
 	private String propValue;
-	private Hashtable props;
-	private Hashtable modeProps;
+	private Hashtable<String, String> props;
+	private Hashtable<String, String> modeProps;
 	private ParserRuleSet rules;
 	//}}}
 
@@ -428,13 +436,13 @@ public abstract class XModeHandler extends DefaultHandler
 	//{{{ peekElement() method
 	private TagDecl peekElement()
 	{
-		return (TagDecl) stateStack.peek();
+		return stateStack.peek();
 	} //}}}
 
 	//{{{ popElement() method
 	private TagDecl popElement()
 	{
-		return (TagDecl) stateStack.pop();
+		return stateStack.pop();
 	} //}}}
 
 	//{{{ findElement() method
@@ -446,7 +454,7 @@ public abstract class XModeHandler extends DefaultHandler
 	{
 		for (int idx = stateStack.size() - 1; idx >= 0; idx--)
 		{
-			TagDecl tag = (TagDecl) stateStack.get(idx);
+			TagDecl tag = stateStack.get(idx);
 			if (tag.tagName.equals(tagName))
 				return tag;
 		}
@@ -510,8 +518,8 @@ public abstract class XModeHandler extends DefaultHandler
 				}
 			}
 
-			lastEscape = attrs.getValue("ESCAPE");;
-			lastSetName = attrs.getValue("SET");;
+			lastEscape = attrs.getValue("ESCAPE");
+			lastSetName = attrs.getValue("SET");
 
 			tmp = attrs.getValue("DELEGATE");
 			if (tmp != null)
@@ -591,7 +599,7 @@ public abstract class XModeHandler extends DefaultHandler
 			{
 				TagDecl target = this;
 				if (tagName.equals("BEGIN"))
-					target = (TagDecl) stateStack.get(stateStack.size() - 2);
+					target = stateStack.get(stateStack.size() - 2);
 
 				if (target.lastStart == null)
 				{
@@ -611,7 +619,7 @@ public abstract class XModeHandler extends DefaultHandler
 			}
 			else if (tagName.equals("END"))
 			{
-				TagDecl target = (TagDecl) stateStack.get(stateStack.size() - 2);
+				TagDecl target = stateStack.get(stateStack.size() - 2);
 				if (target.lastEnd == null)
 				{
 					target.lastEnd = new StringBuffer();
