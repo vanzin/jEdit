@@ -49,7 +49,7 @@
     <echo>${java.home}</echo>
     <property file="${user.home}/.build.properties" />
     <property file="${user.home}/build.properties" />
-    
+
     <!-- where to find jEdit and plugins    -->
     <property name="sourceforge.user.name"
     value="${user.name}" />
@@ -208,7 +208,10 @@
                 <filename name="**/README" />
             </or>
             <not>
-                <filename name="${build.dir}/**" />
+                <or>
+                    <filename name="${build.dir}/**" />
+                    <filename name="${build.extras/*"/>
+                </or>
             </not>
         </and>
     </selector>
@@ -400,7 +403,7 @@
             </fileset>
         </delete>
     </target>
-    
+
     <!-- =============================================== }}} -->
 
     <target name="upload.docs" depends="javadoc, userdocs"
@@ -409,8 +412,8 @@
       <arg line="-avz ./ ${sourceforge.user.name}@plugins.jedit.org:/home/groups/j/je/jedit-plugins/htdocs/plugindoc/${ant.project.name}" />
     </exec>
     </target>
-    
-    
+
+
     <!-- {{{ Target: javadoc ============================== -->
     <!-- Builds the javadoc documentation for the plugin,
          placing it under "build.javadoc". Your plugin
@@ -454,15 +457,15 @@
             <arg value="--catalogs" />
             <arg value="users-guide.xsl" />
             <arg value="${user-doc.xml}" />
-			<env key="SGML_CATALOG_FILES"
-				 file="${docbook.catalog}" />
+            <env key="SGML_CATALOG_FILES"
+                 file="${docbook.catalog}" />
         </exec>
     </target>
-    
+
     <target name="error-catalog" unless="docbook.catalog" >
         <echo message="docbook.catalog not set" />
     </target>
-    
+
     <!-- ===============================================}}} -->
 
     <!-- {{{ Target: docs-xalan =========================== -->
