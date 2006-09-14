@@ -31,10 +31,10 @@ for contributing to this release.
   directly
 
 - GUIUtilities.addSizeSaver(Frame parent, String name) changed to
-  GUIUtilities.addSizeSaver(Window window, Container parent, String name)
+  GUIUtilities.addSizeSaver(Frame frame, Container parent, String name)
   and refactored to use saveGeometry(). Saves/restores
   sizes relative to a parent container. if parent==null, behaves
-  as before. (Alan Ezust)
+  as before. (Björn "Vampire" Kautler)
 
   }}}
   {{{ PluginJAR changes
@@ -182,9 +182,9 @@ Marcelo Vanzin for contributing to this release.
   convenience method for creating keyboard listeners for floating
   dockables to respond to the "close-current-area" action. (Alan Ezust)
 
-- GUIUtilities.addSizeSaver(Frame parent, String name) added to
+- GUIUtilities.addSizeSaver(Frame frame, String name) added to
   save a Frames size and position correctly, even if it gets
-  maximized.  (Björn "Vampire" Kautler )
+  maximized.  (Björn "Vampire" Kautler)
 
 - EditPane.setBuffer(final Buffer buffer, boolean requestFocus) that allow
   to set a buffer without requesting the focus (default is to request focus)
