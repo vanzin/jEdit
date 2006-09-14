@@ -222,7 +222,7 @@ public class Mode
 	 * Should only be called by <code>XModeHandler</code>.
 	 * @since jEdit 4.0pre3
 	 */
-	public void setProperties(Map<String, Object> props)
+	public void setProperties(Map props)
 	{
 		if(props == null)
 			props = new Hashtable<String, Object>();
