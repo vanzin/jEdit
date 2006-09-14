@@ -228,7 +228,8 @@ public class GUIUtilities
 
 		while(st.hasMoreTokens())
 		{
-			mbar.add(loadMenu(context,st.nextToken()));
+			String menuName = st.nextToken();
+			mbar.add(loadMenu(context, menuName));
 		}
 
 		return mbar;

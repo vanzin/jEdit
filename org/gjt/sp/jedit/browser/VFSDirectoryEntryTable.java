@@ -29,9 +29,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.font.*;
 import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import org.gjt.sp.jedit.io.VFS;
@@ -276,6 +274,7 @@ public class VFSDirectoryEntryTable extends JTable
 				(VFSDirectoryEntryTableModel)getModel();
 			int row = getSelectedRow();
 			ActionContext ac = VFSBrowser.getActionContext();
+			ActionContext jac = jEdit.getActionContext();
 			VFSBrowser browser = browserView.getBrowser();
 			switch(evt.getKeyCode())
 			{
@@ -313,6 +312,11 @@ public class VFSDirectoryEntryTable extends JTable
 				evt.consume();
 				ea = ac.getAction("vfs.browser.delete");
 				ac.invokeAction(evt, ea);
+				break;
+			case KeyEvent.VK_ESCAPE:
+				ea = jac.getAction("close-docking-area");
+				ea.invoke(jEdit.getActiveView());
+				evt.consume();
 				break;
 			case KeyEvent.VK_F2:
 				ea = ac.getAction("vfs.browser.rename");

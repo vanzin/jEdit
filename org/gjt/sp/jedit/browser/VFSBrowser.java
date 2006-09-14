@@ -31,7 +31,6 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
-import java.util.regex.Pattern;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
@@ -165,6 +164,10 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		this.multipleSelection = multipleSelection;
 		this.view = view;
 
+		DockableWindowManager dwm = view.getDockableWindowManager();
+		KeyListener keyListener = dwm.closeListener(NAME);
+		addKeyListener(keyListener);
+		
 		currentEncoding = jEdit.getProperty("buffer.encoding",
 			System.getProperty("file.encoding"));
 		autoDetectEncoding = jEdit.getBooleanProperty(
@@ -199,6 +202,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		pathAndFilterPanel.add(label);
 
 		pathField = new HistoryTextField("vfs.browser.path");
+		pathField.addKeyListener(keyListener);
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
 		pathField.setSelectAllOnFocus(true);
@@ -225,7 +229,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			"vfs.browser.filter-enabled"));
 
 		filterCheckbox.addActionListener(actionHandler);
-
+		filterCheckbox.addKeyListener(keyListener);
 		if(mode != CHOOSE_DIRECTORY_DIALOG)
 		{
 			cons.gridwidth = 1;
@@ -242,7 +246,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		filterEditor.setSelectAllOnFocus(true);
 		filterEditor.addActionListener(actionHandler);
 		filterField.setRenderer(new VFSFileFilterRenderer());
-
+		filterEditor.addKeyListener(keyListener);
 		String filter;
 		if(mode == BROWSER || !jEdit.getBooleanProperty(
 			"vfs.browser.currentBufferFilter"))

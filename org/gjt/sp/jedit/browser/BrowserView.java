@@ -30,6 +30,8 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
+
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -47,8 +49,12 @@ class BrowserView extends JPanel
 		this.browser = browser;
 
 		tmpExpanded = new HashSet();
+		DockableWindowManager dwm = jEdit.getActiveView().getDockableWindowManager();
+		KeyListener keyListener = dwm.closeListener(VFSBrowser.NAME);
 
 		parentDirectories = new ParentDirectoryList();
+		parentDirectories.addKeyListener(keyListener);
+		
 		parentDirectories.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		parentDirectories.setCellRenderer(new ParentDirectoryRenderer());
 		parentDirectories.setVisibleRowCount(5);
