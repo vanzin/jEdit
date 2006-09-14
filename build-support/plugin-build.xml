@@ -210,7 +210,7 @@
             <not>
                 <or>
                     <filename name="${build.dir}/**" />
-                    <filename name="${build.extras/*"/>
+                    <filename name="${build.extras}/*"/>
                 </or>
             </not>
         </and>
