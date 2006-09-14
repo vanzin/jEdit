@@ -25,6 +25,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.gjt.sp.jedit.syntax.TokenMarker;
@@ -52,7 +53,7 @@ public class Mode
 	public Mode(String name)
 	{
 		this.name = name;
-		props = new Hashtable();
+		props = new Hashtable<String, Object>();
 	} //}}}
 
 	//{{{ init() method
@@ -122,7 +123,11 @@ public class Mode
 	public void loadIfNecessary()
 	{
 		if(marker == null)
+		{
 			jEdit.loadMode(this);
+			if (marker == null)
+				Log.log(Log.ERROR, this, "Mode not correctly loaded, token marker is still null");
+		}
 	} //}}}
 
 	//{{{ getProperty() method
@@ -134,7 +139,7 @@ public class Mode
 	 */
 	public Object getProperty(String key)
 	{
-		String prefix = "mode." + name + ".";
+		String prefix = "mode." + name + '.';
 
 		//if(jEdit.getBooleanProperty(prefix + "customSettings"))
 		//{
@@ -217,10 +222,10 @@ public class Mode
 	 * Should only be called by <code>XModeHandler</code>.
 	 * @since jEdit 4.0pre3
 	 */
-	public void setProperties(Hashtable props)
+	public void setProperties(Map<String, Object> props)
 	{
 		if(props == null)
-			props = new Hashtable();
+			props = new Hashtable<String, Object>();
 
 		// need to carry over file name and first line globs because they are
 		// not given to us by the XMode handler, but instead are filled in by
@@ -278,7 +283,7 @@ public class Mode
 
 	//{{{ Private members
 	private String name;
-	private Hashtable props;
+	private Map<String, Object> props;
 	private Pattern firstlineRE;
 	private Pattern filenameRE;
 	private TokenMarker marker;
