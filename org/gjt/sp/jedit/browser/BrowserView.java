@@ -49,8 +49,7 @@ class BrowserView extends JPanel
 		tmpExpanded = new HashSet();
 
 		parentDirectories = new ParentDirectoryList();
-		parentDirectories.getSelectionModel().setSelectionMode(
-			ListSelectionModel.SINGLE_SELECTION);
+		parentDirectories.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		parentDirectories.setCellRenderer(new ParentDirectoryRenderer());
 		parentDirectories.setVisibleRowCount(5);
 		parentDirectories.addMouseListener(new ParentMouseHandler());
@@ -582,10 +581,16 @@ class BrowserView extends JPanel
 					if (row > 0) 
 						parentDirectories.setSelectedIndex(--row);
 					break;
-				case KeyEvent.VK_F5: 
+				case KeyEvent.VK_BACK_SPACE:
 					e.consume();
 					ActionContext ac = VFSBrowser.getActionContext();
-					EditAction ea = ac.getAction("vfs.browser.reload");
+					EditAction ea = ac.getAction("vfs.browser.up");
+					ac.invokeAction(e, ea);
+					break;
+				case KeyEvent.VK_F5: 
+					e.consume();
+					ac = VFSBrowser.getActionContext();
+					ea = ac.getAction("vfs.browser.reload");
 					ac.invokeAction(e, ea);
 					break;
 				case KeyEvent.VK_ENTER: 
