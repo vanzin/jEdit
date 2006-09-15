@@ -32,14 +32,17 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.*;
 
+/**
+ * @version $Id$
+ */
 public class MirrorList
 {
-	public ArrayList mirrors;
+	public List<Mirror> mirrors;
 
 	//{{{ MirrorList constructor
 	public MirrorList() throws Exception
 	{
-		mirrors = new ArrayList();
+		mirrors = new ArrayList<Mirror>();
 
 		Mirror none = new Mirror();
 		none.id = Mirror.NONE;
@@ -99,13 +102,10 @@ public class MirrorList
 	} //}}}
 
 	//{{{ MirrorCompare class
-	class MirrorCompare implements Comparator
+	private class MirrorCompare implements Comparator<Mirror>
 	{
-		public int compare(Object o1,Object o2)
+		public int compare(Mirror m1,Mirror m2)
 		{
-			Mirror m1 = (Mirror)o1;
-			Mirror m2 = (Mirror)o2;
-
 			int result;
 			if ((result = m1.continent.compareToIgnoreCase(m2.continent)) == 0)
 				if ((result = m1.country.compareToIgnoreCase(m2.country)) == 0)
@@ -116,7 +116,7 @@ public class MirrorList
 
 		public boolean equals(Object obj)
 		{
-			return (obj instanceof MirrorCompare);
+			return obj instanceof MirrorCompare;
 		}
 	} //}}}
 

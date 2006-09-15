@@ -1744,6 +1744,7 @@ options.mouse.gutter.toggle-fold-fully=Collapse/expand fold fully
 options.plugin-manager.label=Plugin Manager
 options.plugin-manager.code=new PluginManagerOptionPane();
 options.plugin-manager.updateMirrors=Update mirror list
+options.plugin-manager.workthread=Updating mirror list ...
 options.plugin-manager.downloadSource=Download plugin source code
 options.plugin-manager.deleteDownloads=Delete archives from download \
 	directory after install

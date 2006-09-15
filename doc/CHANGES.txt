@@ -162,6 +162,9 @@ README-src.txt
 
 - Save and Backup Option Panel : the backup directory has now a button to browse using
   VFS file browser (#1540730) (Matthieu Casanova)
+
+- The PluginManager options do not allow anymore to ask for a mirror list update
+  twice (Matthieu Casanova)
 }}}
 
 }}}

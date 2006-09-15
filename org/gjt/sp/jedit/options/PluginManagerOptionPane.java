@@ -27,12 +27,16 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.pluginmgr.*;
 import org.gjt.sp.util.*;
 
 /**
+ * The plugin manager option pane.
+ * 
  * @version $Id$
  */
 public class PluginManagerOptionPane extends AbstractOptionPane
@@ -79,10 +83,14 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		buttonPanel.add(Box.createVerticalStrut(6));
 
 		/* Update mirror list */
-		JButton updateMirrors = new JButton(jEdit.getProperty(
+		updateMirrors = new JButton(jEdit.getProperty(
 			"options.plugin-manager.updateMirrors"));
 		updateMirrors.addActionListener(new ActionHandler());
-		buttonPanel.add(updateMirrors);
+		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		panel.add(updateMirrors);
+		panel.add(updateStatus);
+		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		buttonPanel.add(panel);
 
 		buttonPanel.add(Box.createVerticalStrut(6));
 
@@ -90,6 +98,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		downloadSource = new JCheckBox(jEdit.getProperty(
 			"options.plugin-manager.downloadSource"));
 		downloadSource.setSelected(jEdit.getBooleanProperty("plugin-manager.downloadSource"));
+		downloadSource.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonPanel.add(downloadSource);
 
 		buttonPanel.add(Box.createVerticalStrut(6));
@@ -98,6 +107,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		deleteDownloads = new JCheckBox(jEdit.getProperty(
 			"options.plugin-manager.deleteDownloads"));
 		deleteDownloads.setSelected(jEdit.getBooleanProperty("plugin-manager.deleteDownloads"));
+		deleteDownloads.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonPanel.add(deleteDownloads);
 
 		buttonPanel.add(Box.createVerticalStrut(6));
@@ -116,6 +126,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			locPanel.add(Box.createVerticalStrut(3));
 		}
 		locPanel.add(appDir);
+		locationLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+		locPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonPanel.add(locationLabel);
 		buttonPanel.add(locPanel);
 
@@ -166,6 +178,10 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 	private MirrorModel miraModel;
 	private JList miraList;
+	/** The button to update mirror list. */
+	private JButton updateMirrors;
+	/** A label telling if the mirror list is being updated. */
+	private final JLabel updateStatus = new JLabel();
 	//}}}
 
 	//{{{ updateMirrorLabel method
@@ -189,18 +205,18 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ MirrorModel class
-	class MirrorModel extends AbstractListModel
+	static class MirrorModel extends AbstractListModel
 	{
-		private ArrayList mirrors;
+		private List<MirrorList.Mirror> mirrors;
 
-		public MirrorModel()
+		MirrorModel()
 		{
-			mirrors = new ArrayList();
+			mirrors = new ArrayList<MirrorList.Mirror>();
 		}
 
 		public String getID(int index)
 		{
-			return ((MirrorList.Mirror)mirrors.get(index)).id;
+			return mirrors.get(index).id;
 		}
 
 		public int getSize()
@@ -210,14 +226,14 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 		public Object getElementAt(int index)
 		{
-			MirrorList.Mirror mirror = (MirrorList.Mirror)mirrors.get(index);
+			MirrorList.Mirror mirror = mirrors.get(index);
 			if(mirror.id.equals(MirrorList.Mirror.NONE))
 				return jEdit.getProperty("options.plugin-manager.none");
 			else
-				return mirror.continent+": "+mirror.description+" ("+mirror.location+")";
+				return mirror.continent+": "+mirror.description+" ("+mirror.location+')';
 		}
 
-		public void setList(ArrayList mirrors)
+		public void setList(List<MirrorList.Mirror> mirrors)
 		{
 			this.mirrors = mirrors;
 			fireContentsChanged(this,0,mirrors.size() - 1);
@@ -225,11 +241,10 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ SingleSelectionModel class
-	class SingleSelectionModel extends DefaultListSelectionModel
+	static class SingleSelectionModel extends DefaultListSelectionModel
 	{
-		public SingleSelectionModel()
+		SingleSelectionModel()
 		{
-			super();
 			setSelectionMode(SINGLE_SELECTION);
 		}
 
@@ -241,6 +256,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
+			updateMirrors.setEnabled(false);
+			updateStatus.setText(jEdit.getProperty("options.plugin-manager.workthread"));
 			VFSManager.runInWorkThread(new DownloadMirrorsThread());
 		}
 	} //}}}
@@ -250,42 +267,50 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	{
 		public void run()
 		{
-			setStatus(jEdit.getProperty("options.plugin-manager.workthread"));
-			setMaximum(1);
-			setValue(0);
-
-			final ArrayList mirrors = new ArrayList();
 			try
 			{
-				mirrors.addAll(new MirrorList().mirrors);
-			}
-			catch (Exception ex)
-			{
-				Log.log(Log.ERROR,this,ex);
-				GUIUtilities.error(PluginManagerOptionPane.this,
-					"ioerror",new String[] { ex.toString() });
-			}
+				setStatus(jEdit.getProperty("options.plugin-manager.workthread"));
+				setMaximum(1);
+				setValue(0);
 
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
+				final List<MirrorList.Mirror> mirrors = new ArrayList<MirrorList.Mirror>();
+				try
 				{
-					miraModel.setList(mirrors);
+					mirrors.addAll(new MirrorList().mirrors);
+				}
+				catch (Exception ex)
+				{
+					Log.log(Log.ERROR,this,ex);
+					GUIUtilities.error(PluginManagerOptionPane.this,
+						"ioerror",new String[] { ex.toString() });
+				}
 
-					String id = jEdit.getProperty("plugin-manager.mirror.id");
-					int size = miraModel.getSize();
-					for (int i=0; i < size; i++)
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
 					{
-						if (size == 1 || miraModel.getID(i).equals(id))
+						miraModel.setList(mirrors);
+
+						String id = jEdit.getProperty("plugin-manager.mirror.id");
+						int size = miraModel.getSize();
+						for (int i=0; i < size; i++)
 						{
-							miraList.setSelectedIndex(i);
-							break;
+							if (size == 1 || miraModel.getID(i).equals(id))
+							{
+								miraList.setSelectedIndex(i);
+								break;
+							}
 						}
 					}
-				}
-			});
+				});
 
-			setValue(1);
+				setValue(1);
+			}
+			finally
+			{
+				updateMirrors.setEnabled(true);
+				updateStatus.setText(null);
+			}
 		}
 	} //}}}
 }
