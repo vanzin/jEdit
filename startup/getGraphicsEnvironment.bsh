@@ -1,31 +1,25 @@
 import java.awt.*;
 
 /* Pre-fetches the device configurations in a separate thread
-   so that you don't get a win32 freeze before the first
+   so that you don't get a win32 freeze before the first 
    context menu popup.
-
+   
    @since jEdit 4.3pre6
 */
-
-void getEnv()
-{
-	Runnable r = new Runnable()
-	{
-		public void run()
-		{
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+   
+public class EnvGetter extends Thread {
+	public void run() {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice[] devices = ge.getScreenDevices();
-			for (int j = 0; j < devices.length; j++)
-			{
+			for (int j = 0; j < devices.length; j++) 
+			{ 
 				GraphicsDevice device = devices[j];
 				GraphicsConfiguration[] gc =
-				device.getConfigurations();
+					device.getConfigurations();
 			}
-		}
-	};
-	Thread t = new Thread(r);
-	t.start();
+	}
 }
 
-getEnv();
+
+SwingUtilities.invokeLater(new EnvGetter());
 
