@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.im.InputMethodRequests;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -4665,6 +4666,17 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		remove(comp);
 	} //}}}
 
+	//{{{ Input method support
+	private InputMethodSupport inputMethodSupport = null;
+	public InputMethodRequests getInputMethodRequests()
+	{
+		if(inputMethodSupport == null)
+		{
+			inputMethodSupport = new InputMethodSupport(this);
+			Log.log(Log.DEBUG, this, "InputMethodSupport is activated");
+		}
+		return inputMethodSupport;
+	} //}}}
 	//}}}
 
 	//{{{ addStatusListener() method
