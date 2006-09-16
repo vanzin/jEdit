@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre7
 
 Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'leary,
-Marcin Orlowski, Alan Ezust, and Björn "Vampire" Kautler
+Marcin Orlowski, Kazutoshi Satoda, Alan Ezust, and Björn "Vampire" Kautler
 for contributing to this release.
 
 {{{ API Changes
@@ -27,7 +27,7 @@ for contributing to this release.
   {{{ GUIUtilities changes:
 
 - Added GUIUtilities.loadMenuItem(EditAction, boolean) - calls
-  getLabel() to get the label instead of getting properties
+  EditAction.getLabel() to get the label instead of getting properties
   directly
 
 - GUIUtilities.addSizeSaver(Frame parent, String name) changed to
@@ -80,10 +80,17 @@ for contributing to this release.
 
 - Progress mode supports nested comments (patch# 1211534)
 
-- New edit mode: Pilrc *rcp mode by Marcin Orlowski
+- New edit mode: Pilrc *rcp mode by Marcin Orlowski (#1519983)
+
+- Perl.xml mode fixes: (#1549412, #1020484)
 
 }}}
 {{{ Bug Fixes
+
+- JEditTextArea now supports Java Input Methods. See
+    http://java.sun.com/j2se/1.5.0/docs/guide/imf/index.html
+    (#735962, #1555403) (Kazutoshi Satoda)
+
 
 - Plugin Manager: fixed some bugs about broken or missing behaviour
   + toggle behaviour of spacebar (bug #1538700)
@@ -97,14 +104,15 @@ for contributing to this release.
   + Install and Update Panels support now multiple selections too
   (Björn "Vampire" Kautler)
 
-- File System Browser now recognizes DEL and F2 to delete/rename
-  files. (1542365) (Alan Ezust)
+- Plugin Manager: Automatically loads unloaded dependent plugins.
+    (#1538702) (Alan Ezust)
+
+- File System Browser now recognizes Backspace, DEL and F2 to
+  go to parent dir, delete and rename files respectively.
+  (1542365) (Alan Ezust)
 
 - SplashScreen is now in the middle of the screen, instead of between
   2 screens (Alan Ezust)
-
-- PluginManager fixes: Automatically loads unloaded
-  dependent plugins. (#1538702) (Alan Ezust)
 
 - GuiUtilities.load/save geometry now saves x and y coordinates
   relative to the parent component. Changed core to make dialogs
@@ -157,11 +165,9 @@ for contributing to this release.
 
 - Updated FAQ for jEdit 4.3 (ezust)
 
-- New document: doc/releasing-jedit.txt - to be merged with
-README-src.txt
-
 - Save and Backup Option Panel : the backup directory has now a button to browse using
   VFS file browser (#1540730) (Matthieu Casanova)
+
 
 - The PluginManager options do not allow anymore to ask for a mirror list update
   twice (Matthieu Casanova)
