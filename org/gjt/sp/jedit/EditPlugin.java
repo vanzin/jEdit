@@ -141,7 +141,7 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  *
  * <p>If you want the plugin's menu items to be determined at runtime, define a
  * property <code>plugin.<i>className</i>.menu.code</code> to be BeanShell
- * code that evaluates to an implementation of 
+ * code that evaluates to an implementation of
  * {@link org.gjt.sp.jedit.menu.DynamicMenuProvider}.</p>
  *<p>
  * To add your plugin to the file system browser's <b>Plugins</b> menu, define

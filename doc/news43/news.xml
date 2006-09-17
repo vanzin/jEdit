@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+		"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!-- :folding=sidekick: -->
+<book>
+	<bookinfo>
+		<author>
+			<firstname>Alan </firstname><surname>Ezust</surname>
+            </author>
+            <author>
+            <firstname>Slava</firstname><surname>Pestov</surname> </author>
+
+		<copyright><year>2007</year>
+		<year>2007</year><holder>Alan Ezust</holder></copyright>
+		<legalnotice><title>Legal Notice</title>
+			<para>
+				Permission is granted to copy, distribute and/or modify this document
+				under the terms of the GNU Free Documentation License, Version 1.1 or
+				any later version published by the Free Software Foundation; with no
+				<quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
+				<quote>Back-Cover Texts</quote>, each as defined in the license. A copy of
+				the license is included in the file <filename>COPYING.DOC.txt</filename>
+				included with the jEdit distribution.
+			</para>
+		</legalnotice>
+		<title>What's New in jEdit 4.3</title>
+	</bookinfo>
+
+
+    <preface id="preface">
+    <title> Preface </title>
+
+    <para> jEdit is a very mature text editor, and has gone through quite a few changes. Many of the original developers, including Slava Pestov, have stopped working directly on jEdit development. Fortunately, because of the wonderful nature of open source, there are more and more eyeballs on this code than ever! We have received contributions of plugins, bugfixes, refactoring, and enhancements from around the globe, and our host sourceforge.net <ulink url = "http://sourceforge.net/project/stats/detail.php?group_id=588&amp;ugn=jedit&amp;type=prdownload&amp;mode=year&amp;package_id=0" >reports</ulink> that there are consistently on average at least a half-million downloads per year, and this has been true for the entire millenium.
+    </para>
+
+    <para> In terms of actual releases, there may have been a slight lull while Slava's absense was sinking in among the other members of the community, but in 2006, thanks to their generous donations of time, effort, and coding skills, we started releasing regular prereleases again, fixing bugs in the core and each other's plugins, making jEdit more stable, coherent, and useful than ever. </para>
+
+    <para> The thing that really excites me is seeing members of the community get more actively involved in improving jedit or its plugins. The core is huge, and there are over 164 plugins, so there is an endless source of things to do. I anticipate that the trackers will always have many open issues, but I see many of the old ones finally being closed, and that is very much satisfying. I can say with complete confidence that 4.3 is an improvement over 4.2 in many different ways. I hope that after you read this document, you will think so too, and perhaps want to join in the development of future versions of jEdit or its plugins. </para>
+
+    <para> I watch the commit logs (in the <literal>jedit-cvs</literal> mailing list) with fascination, learning new coding tricks, or new jEdit tricks. It's quite satisfying to be this imtimate with code that I find I am using every day. While it is true, there are parts of it that could be designed a little better, it is still the best open source editor I've seen, and as long as I am using it, I will be compelled to fix bugs that annoy me, be they in the core, or any of the plugins I happen to use. </para>
+    </preface>
+
+    <preface id="acknowledgements">
+    <title> Acknowledgements </title>
+
+    <para> This release would not have been possible if it were not for the *constant* help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin, Matthieu Casanova, and Bjorn "Vampire" Kautler. I would also like to give sincere thanks to all of the other core and plugin developers who have made <ulink url = "CHANGES.txt">significant contributions</ulink> to help keep this editor alive and on the cutting edge. </para>
+    </preface>
+
+    <chapter id="compatibility"><title> Compatibility </title>
+
+    <para> jEdit 4.2 ran on Java 1.3 or later, but jEdit 4.3 requires Sun Java 1.5.0 or later. Java 1.4 is no longer supported. </para>
+
+    </chapter>
+
+	<chapter id="user-changes"><title>User-Visible Changes</title>
+
+	<section id="readded"><title>Re-added Features</title>
+	<para>
+	 Soft wrapping to the text area, one of my personal favorite features, is possible again, by setting the wrap width to zero. Thank you Slava! I really missed that feature. It's probably the main reason I started using, testing, and later developing jEdit 4.3pre2.
+	</para>
+
+	</section>
+
+	<section id="plugin-manager"><title>Plugin Manager</title>
+
+	<para>
+ The three panes of the PluginManager have all been reworked and made more keyboard friendly. They handle multiple selections, the checkbox states don't get lost when you switch panes, and the manage panel now automatically loads dependent plugins if they are already downloaded. Anyone who is used to 4.2's plugin manager will notice the difference immediately.
+	</para>
+
+	<para>
+      Plugins that do not use the 4.2 API are not supported on jEdit 4.3final.
+	</para>
+
+	<para>
+	 If you are a plugin developer, see <xref linkend="api-changes"/>.
+	</para>
+
+	</section>
+
+		<section id="editing"><title>Text Editing</title>
+
+	<para>
+	 <ulink url="http://java.sun.com/j2se/1.5.0/docs/guide/imf/index.html">Input Methods</ulink> are now supported in jEdit. This should make it much easier for people to use alternate keyboard input methods to use jEdit and enter Chinese/Korean/Japanese characters, as well as other alternative input devices.
+	</para>
+
+	</section>
+
+	<section id="syntax"><title>Syntax Highlighting</title>
+	 <para>
+	  Many syntax highlighting modes were updated or rewritten to use the java.util.regex instead of gnu.regex. Some modes were added, bring the total now to 150 languages.
+	 </para>
+
+	</section>
+
+	<section id="search"><title>Search and Replace</title>
+
+	<para>
+	 Added <guimenuitem>Skip Binary</guimenuitem> and <guimenuitem>Skip Hidden</guimenuitem> options for Directory Search.
+	</para>
+
+	</section>
+
+	<section id="encodings"><title>Handling of Multiple Encodings</title>
+
+	<para>
+	 A full list of encodings supported by your Java implementation is now shown in the file system browser's <guimenu>Commands</guimenu>&gt;<guimenuitem>Encoding</guimenuitem> menu and other places. Previously only a small list of common encodings was shown.
+	</para>
+
+	<para>
+	 You can choose which of this list you want to display in the Encodings general options pane.
+	</para>
+
+	<para>
+	 The encoding used by XML files is (should be?) auto-detected if the file provides an XML declaration like the following:
+	</para>
+
+	<programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></programlisting>
+	</section>
+
+	<section id="vfs.browser"><title>File System Browser</title>
+
+	<para>
+	 The file system browser is much more keyboard friendly, and supports some common shortcuts set by default in KDE and Windows (del, f2, f5, backspace).
+	</para>
+
+
+	</section>
+
+	<section id="bundled-macros"><title>Bundled Macros</title>
+
+	<para>
+	 There are a number of new bundled macros, and most of the existing ones have undergone enhancements and bug fixes. jEdit 4.2 bundled 58 macros in 7 categories; jEdit 4.3 bundles 70 macros in 9 categories.
+	</para>
+
+	<para>
+	  Of course you can create new macros of your own, either by recording actions or writing them from scratch.
+	</para>
+
+	</section>
+
+	</chapter>
+
+	<chapter id="api-changes">
+    <title>API Changes</title>
+
+	<section id="beanshell">
+    <title>BeanShell</title>
+
+	<para>
+		BeanShell has been updated from version 2.0b1 to 2.0b4.
+	</para>
+
+	</section>
+
+	<section id="class-jeditbuffer">
+    <title>Buffer and JEditBuffer</title>
+    <para> Explain about the JEditBuffer and Buffer refactoring here. </para>
+    </section>
+
+    <section id="api-plugins">
+    <title> Plugin API changes </title>
+
+    <para> jEdit 4.2 used to run plugins that were designed only for the 1.4 interface, but plugins that are missing the "activate" property will not load properly in 4.3final. </para>
+
+    <para> There are two new properties that all plugins can have: <literal>description</literal> and <literal>longdescription</literal>. The former is just a string property, while the latter is a reference to a file. See EditPlugin for details. </para>
+
+    </section>
+	</chapter>
+
+    <chapter id="plugin-advances">
+    <title> The 4.3 plugins </title>
+
+    <para> This chapter showcases the new plugins or plugin versions that were under the most active development in conjunction with jEdit 4.3. Some of them influenced the development of the jEdit core, and others are good enough to be incorporated into the core, but are left as separate plugins simply because it makes it easier to maintain and debug. </para>
+
+    <bridgehead>SideKicks and Language Plugins </bridgehead>
+
+    <para> SideKick has a new combobox that lets you choose your parser. This is important since there are multiple parsers that can be used on a given file, especially when you are working with PHP, HTML, XML, or JavaScript files. </para>
+
+    <para> Many of the language-specific plugins have been redesigned to use the new and improved SideKick. In particular, check out the newly updated JPyDebug, JythonInterpreter, RubyPlugin, JavaSideKick, XML, and PerlSideKick plugins.
+    </para>
+
+    <para> In case you're looking for JavaCore, CodeAid, DotComplete, or PropertySideKick, have all been merged (in terms of functionality) into the JavaSideKick plugin. </para>
+
+    <para> As for HtmlSideKick, JavaScriptSideKick, and XmlIndenter, they have all been merged into the XML plugin. It has more completion services and sidekick parsers than you can shake a stick at! </para>
+
+    <para> If you use many different languages, you should also check out the very clever ContextMenu plugin, which I am seriously thinking of adding to the core one of these days. </para>
+
+    <formalpara><title>ProjectViewer</title>
+
+    <para> For managing groups of files and organizing them into trees, ProjectViewer is very useful. It's been under active development, and many bugs are fixed quickly after they are found.  Its ability to filter its input set based on regular expressions or the contents of CVS/SVN/Perforce entries makes it especially handy for other plugins that use it, such as FastOpen and OpenIt. </para>
+    </formalpara>
+
+    <formalpara><title>Console</title>
+    <para> Console has many new features added to it, improved error parsing, and more keyboard friendly. Many bugs were fixed. You should read the history in its documentation for more information. </para>
+    </formalpara>
+
+    <formalpara><title>Optional</title>
+    <para> This is my first plugin, I hope you like it! It combines the three option panes (global, plugin and buffer) under a single tab pane. It saves me a lot of mouse clicks.  </para>
+
+    </formalpara>
+
+    </chapter>
+
+
+
+</book>

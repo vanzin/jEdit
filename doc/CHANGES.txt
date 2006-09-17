@@ -18,6 +18,7 @@ for contributing to this release.
   a sensible implementation so that people extending from it
   are no longer required to write a function that returns beanshell code
   as long as they override the invoke(View) method with valid Java code.
+  (Alan Ezust)
 
 - Made getLabel() non-final, so that people can override it and make
   more interesting EditActions. If args is set, getLabel() uses them
@@ -28,7 +29,7 @@ for contributing to this release.
 
 - Added GUIUtilities.loadMenuItem(EditAction, boolean) - calls
   EditAction.getLabel() to get the label instead of getting properties
-  directly
+  directly (Alan Ezust)
 
 - GUIUtilities.addSizeSaver(Frame parent, String name) changed to
   GUIUtilities.addSizeSaver(Frame frame, Container parent, String name)
@@ -90,7 +91,6 @@ for contributing to this release.
 - JEditTextArea now supports Java Input Methods. See
     http://java.sun.com/j2se/1.5.0/docs/guide/imf/index.html
     (#735962, #1555403) (Kazutoshi Satoda)
-
 
 - Plugin Manager: fixed some bugs about broken or missing behaviour
   + toggle behaviour of spacebar (bug #1538700)

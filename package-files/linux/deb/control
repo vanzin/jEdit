@@ -5,10 +5,13 @@ Maintainer: Slava Pestov and others <devel@jEdit.org>
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Description: A real editor for programmers
-     As one of the most feature rich editors available, jEdit boasts
- support for syntax highlighting in more than 140 languages. But jEdit
- is more than just an editor.
-     It is possible to define complex macros in BeanShell or Jython,
+    As one of the most feature rich editors available, jEdit boasts
+ support for syntax highlighting in more than 140 languages. jEdit
+ combines the power of Emacs, the user-friendliness of Kate, and the
+ advanced editing features (such as vertical paste) of Ultraedit,
+ to bring you an open-source plugin-based programmer's editor
+ of professional quality.
+    It is possible to define complex macros in BeanShell or Jython,
  or other languages that fit into the BSF. jEdit offers a powerful and
  user-friendly keyboard mapping system, making it possible to give
  jEdit a very Emacs-like feel, if you so desire.
@@ -17,11 +20,12 @@ Description: A real editor for programmers
  editor. These include a built-in Console shell integration,
  which also lets you execute external commands and bind them to
  keyboard shortcuts, also without leaving the editor. Other plugins
- provide structure browsers and/or completion popups for Ant, LaTeX,
- HTML, Java, XML, Ruby, Python, Perl, Scheme, Lisp, and many other
- languages.
+ provide consoles, structure browsers and/or completion popups for
+ Ant, LaTeX, HTML, Java, XML, Ruby, Python, Perl, Scheme, Prolog,
+ and many other languages.
     More information about jEdit, its plugins, macros, etc. can be
  found at http://www.jEdit.org/.
 Section: contrib/editors
 Priority: optional
 Installed-Size: @deb.installed.size@
+
