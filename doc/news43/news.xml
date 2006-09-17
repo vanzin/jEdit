@@ -193,6 +193,7 @@
 
     <formalpara><title>Ant and Xerces</title>
     <para> Previously, Apache Ant was included in AntFarm, and Apache Xerces was included in the XML plugin. Both of these libraries were broken out of their respective plugins and given their own plugin status. This should help avoid some of the kinds of plugin conflicts that arose with previous versions of XML and AntFarm. </para>
+    </formalpara>
 
     <formalpara><title>ProjectViewer</title>
     <para> For managing groups of files and organizing them into trees, ProjectViewer is very useful. It's been under active development, and many bugs are fixed quickly after they are found.  Its ability to filter its input set based on regular expressions or the contents of CVS/SVN/Perforce entries makes it especially handy for other plugins that use it, such as <emphasis role="bold">FastOpen</emphasis> and <emphasis role="bold">OpenIt</emphasis>, both of which are also recently updated for 4.3. </para>
@@ -209,6 +210,7 @@
     <formalpara><title>FTP</title>
     <para> The FTP plugin strongly influences the development of the virtual file systems of JEdit, and on occasion, bugs in one place require fixes in the other. FTP is being developed in lock-step with the core, and the most recent FTP plugin is more bug-free than latest version that runs on jEdit 4.2final.
     </para>
+    </formalpara>
 
     <formalpara><title> InfoViewer </title>
     <para> This plugin uses jEdit 4.3's action overriding API to serve as a replacement to the HelpViewer. Since I use/work with this instead of the built-in HelpViewer, I do not notice or fix  bugs in HelpViewer. Try it out - you might like it! At some point, I might merge this into the jEdit core, but for now, it's a separate plugin.    </para>
