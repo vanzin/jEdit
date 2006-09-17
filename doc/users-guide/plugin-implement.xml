@@ -1,35 +1,36 @@
-<!-- jEdit 4.3 Plugin Guide, (C) 2005, 2006 Alan Ezust -->
+<chapter id="plugin-implement">
+<!-- jEdit 4.3 Plugin Guide, (C) 2005, 2006 Alan Ezust        -->
 <!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene      -->
 
 <!-- jEdit buffer-local properties:                           -->
-<!-- :indentSize=1:tabSize=2:noTabs=true                      -->
+<!-- :maxLineLen=72:wrap=soft:                                   -->
 <!-- :xml.root=users-guide.xml:                               -->
-<chapter id="plugin-implement">
+
 <title>Implementing a Simple Plugin</title>
 
 <para>
-  There are many applications for the leading operating systems that
-  provide a <quote>scratch-pad</quote> or <quote>sticky note</quote>
-  facility for the desktop display. A similar type of facility operating
-  within the jEdit display would be a convenience. The use of dockable
-  windows would allow the notepad to be displayed or hidden with a single
-  mouse click or keypress (if a keyboard shortcut were defined). The
-  contents of the notepad could be saved at program exit (or, if earlier,
-  deactivation of the plugin) and retrieved at program startup or plugin
-  activation.
+There are many applications for the leading operating systems
+that provide a <quote>scratch-pad</quote> or <quote>sticky note</quote>
+facility for the desktop display. A similar type of facility operating
+within the jEdit display would be a convenience. The use of dockable
+windows would allow the notepad to be displayed or hidden with a single
+mouse click or keypress (if a keyboard shortcut were defined). The
+contents of the notepad could be saved at program exit (or, if earlier,
+deactivation of the plugin) and retrieved at program startup or plugin
+activation.
 </para>
 
 <para>
-  We will keep the capabilities of this plugin modest, but a few
-  other features would be worthwhile. The user should be able to write
-  the contents of the notepad to storage on demand.  It should also be
-  possible to choose the name and location of the file that will be
-  used to hold the notepad text.  This would allow the user to load
-  other files into the notepad display.  The path of the notepad file
-  should be displayed in the plugin window, but will give the user the
-  option to hide the file name. Finally, there should be an action
-  by which a single click or keypress would cause the contents of the
-  notepad to be written to the new text buffer for further processing.
+We will keep the capabilities of this plugin modest, but a few
+other features would be worthwhile. The user should be able to write the
+contents of the notepad to storage on demand. It should also be possible
+to choose the name and location of the file that will be used to hold
+the notepad text. This would allow the user to load other files into the
+notepad display. The path of the notepad file should be displayed in the
+plugin window, but will give the user the option to hide the file name.
+Finally, there should be an action by which a single click or keypress
+would cause the contents of the notepad to be written to the new text
+buffer for further processing.
 </para>
 
 <para>
@@ -342,8 +343,8 @@ options.quicknotepad.filepath=
   accessed by the plugin using methods in the
   <ulink url="../api/org/gjt/sp/jedit/jEdit.html">
   <classname>jEdit</classname></ulink>
-  class.
-</para>
+  class. Others are accessed by the scripts used by plugin packagers <footnote><para>
+   See the <guimenuitem>Macros/Properties/Create Plugin Announcement</guimenuitem> macro for an example. </para></footnote>. </para>
 
 <para>
   Property files contained in plugin JARs must end with the filename
@@ -459,10 +460,13 @@ options.quicknotepad.fontsize=14
 # Setting not defined but supplied for completeness
 options.quicknotepad.filepath=</programlisting></informalexample>
 
+<tip> <title> PropertySideKick </title>
+<para> There is a SideKick for Property files, provided in the
+JavaSideKick plugin. This gives you a compact and sorted tree view of property files.
+</para></tip>
+
 <sidebar>
-
 <title>Updating 4.1 plugins</title>
-
 <para>
  jEdit 4.2 plugins are distinguished from jEdit 4.1 plugins by the presence of the <literal>plugin.<replaceable>name</replaceable>.activate</literal> property. If this property is set, the plugin is treated like a jEdit 4.2 plugin. Usually, this property should be set to <literal>defer</literal>. See the API documentation for the <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
   <classname>EditPlugin</classname></ulink> class for details. jEdit 4.1 plugins which have not been updated to use the 4.2 API will not be supported in jEdit 4.3.
@@ -1203,12 +1207,15 @@ predefined by the plugin API as the view in which the plugin window will reside,
   <listitem><para>
     Recheck the plugin to reload it.
   </para></listitem>
+
+
+
 </itemizedlist>
 
 
 <tip><para>
-  The Activator plugin provides a very convenient way to test the reloading behavior of your plugin, as well as restart it for debugging purposes. For plugins that offer services, it doesn't work so well.
-</para> </tip>
+  The Activator plugin provides a very convenient way to test the reloading behavior of your plugin, as well a convenient way to  restart it when you are debugging. Be sure to test your plugin's reloading behavior with it.
+  </para> </tip>
 
 <para>
   If you have reached this point in the text, you are probably serious
@@ -1219,3 +1226,4 @@ predefined by the plugin API as the view in which the plugin window will reside,
 </sect1>
 
 </chapter>
+
