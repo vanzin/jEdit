@@ -43,7 +43,7 @@
     <preface id="acknowledgements">
     <title> Acknowledgements </title>
 
-    <para> This release would not have been possible if it were not for the *constant* help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin, Matthieu Casanova, and Bjorn "Vampire" Kautler. I would also like to give sincere thanks to all of the other core and plugin developers who have made <ulink url = "CHANGES.txt">significant contributions</ulink> to help keep this editor alive and on the cutting edge. </para>
+    <para> This release would not have been possible if it were not for the *constant* help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin, Matthieu Casanova, and Bjorn "Vampire" Kautler. I would also like to give sincere thanks to all of the other core and plugin developers who have made <ulink url = "../CHANGES.txt">significant contributions</ulink> to help keep this editor alive and on the cutting edge. </para>
     </preface>
 
     <chapter id="compatibility"><title> Compatibility </title>
@@ -76,8 +76,8 @@
 	</para>
 
 	</section>
-
-		<section id="editing"><title>Text Editing</title>
+	<section id="editing">
+        <title>Text Editing</title>
 
 	<para>
 	 <ulink url="http://java.sun.com/j2se/1.5.0/docs/guide/imf/index.html">Input Methods</ulink> are now supported in jEdit. This should make it much easier for people to use alternate keyboard input methods to use jEdit and enter Chinese/Korean/Japanese characters, as well as other alternative input devices.
@@ -85,7 +85,8 @@
 
 	</section>
 
-	<section id="syntax"><title>Syntax Highlighting</title>
+	<section id="syntax">
+    <title>Syntax Highlighting</title>
 	 <para>
 	  Many syntax highlighting modes were updated or rewritten to use the java.util.regex instead of gnu.regex. Some modes were added, bring the total now to 150 languages.
 	 </para>
@@ -160,17 +161,16 @@
     <section id="api-plugins">
     <title> Plugin API changes </title>
 
-    <para> jEdit 4.2 used to run plugins that were designed only for the 1.4 interface, but plugins that are missing the "activate" property will not load properly in 4.3final. </para>
+    <para> jEdit 4.2 used to run plugins that were designed only for the 4.1 plugin API, but plugins that are missing the "activate" property will no longer load properly in 4.3final. </para>
 
-    <para> There are two new properties that all plugins can have: <literal>description</literal> and <literal>longdescription</literal>. The former is just a string property, while the latter is a reference to a file. See EditPlugin for details. </para>
-
+    <para> There are two new properties that all plugins can have: <literal>description</literal> and <literal>longdescription</literal>. The former is just a string property, while the latter is a reference to an html or text file. See EditPlugin API docs for details. </para>
     </section>
 	</chapter>
 
     <chapter id="plugin-advances">
     <title> The 4.3 plugins </title>
 
-    <para> This chapter showcases the new plugins or plugin versions that were under the most active development in conjunction with jEdit 4.3. Some of them influenced the development of the jEdit core, and others are good enough to be incorporated into the core, but are left as separate plugins simply because it makes it easier to maintain and debug. </para>
+    <para> This chapter showcases the new plugins or plugin versions that were under the most active development in conjunction with jEdit 4.3. Some of them influenced the development of the jEdit core, and others are good enough to be incorporated into the core, but are left as separate plugins simply because it makes it easier to maintain and debug them. </para>
 
     <bridgehead>SideKicks and Language Plugins </bridgehead>
 
@@ -179,9 +179,9 @@
     <para> Many of the language-specific plugins have been redesigned to use the new and improved SideKick. In particular, check out the newly updated JPyDebug, JythonInterpreter, RubyPlugin, JavaSideKick, XML, and PerlSideKick plugins.
     </para>
 
-    <para> In case you're looking for JavaCore, CodeAid, DotComplete, or PropertySideKick, have all been merged (in terms of functionality) into the JavaSideKick plugin. </para>
+    <para> In case you're looking for JavaCore, JBrowse, CodeAid, DotComplete, or PropertySideKick, they have all been merged (in terms of functionality) into the JavaSideKick plugin. This is the new "core" Java plugin of jEdit 4.3. </para>
 
-    <para> As for HtmlSideKick, JavaScriptSideKick, and XmlIndenter, they have all been merged into the XML plugin. It has more completion services and sidekick parsers than you can shake a stick at! </para>
+    <para> As for HtmlSideKick, JavaScriptSideKick, and XmlIndenter, they have all been merged into the XML 2.0 plugin, which now includes two parsers for CSS, one for Ecmascript, and completion popups for elements and attributes in XML, CSS, and HTML. </para>
 
     <para> If you use many different languages, you should also check out the very clever ContextMenu plugin, which I am seriously thinking of adding to the core one of these days. </para>
 
@@ -200,7 +200,4 @@
     </formalpara>
 
     </chapter>
-
-
-
 </book>
