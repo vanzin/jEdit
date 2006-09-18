@@ -504,6 +504,7 @@ public class Buffer extends JEditBuffer
 					finishSaving(view,oldPath,oldSymlinkPath,
 						newPath,rename,getBooleanProperty(
 							BufferIORequest.ERROR_OCCURRED));
+					updateMarkersFile(view);
 				}
 			});
 		
@@ -1190,8 +1191,7 @@ public class Buffer extends JEditBuffer
 		// don't sort markers while buffer is being loaded
 		if(isLoaded())
 		{
-			if(jEdit.getBooleanProperty("persistentMarkers"))
-				setDirty(true);
+			setFlag(MARKERS_CHANGED,true);
 
 			markerN.createPosition();
 
@@ -1282,9 +1282,7 @@ public class Buffer extends JEditBuffer
 			Marker marker = markers.get(i);
 			if(getLineOfOffset(marker.getPosition()) == line)
 			{
-				if(jEdit.getBooleanProperty("persistentMarkers"))
-					setDirty(true);
-
+				setFlag(MARKERS_CHANGED,true);
 				marker.removePosition();
 				markers.removeElementAt(i);
 				i--;
@@ -1302,8 +1300,7 @@ public class Buffer extends JEditBuffer
 	 */
 	public void removeAllMarkers()
 	{
-		if(jEdit.getBooleanProperty("persistentMarkers"))
-			setDirty(true);
+		setFlag(MARKERS_CHANGED,true);
 
 		for(int i = 0; i < markers.size(); i++)
 			markers.get(i).removePosition();
@@ -1333,6 +1330,54 @@ public class Buffer extends JEditBuffer
 				return marker;
 		}
 		return null;
+	} //}}}
+
+	//{{{ updateMarkersFile() method
+	/**
+	 * Save the markers file, or delete it when there are mo markers left
+	 * or when the "persistentMarkers" property is false. 
+	 * Handling markers is now independent from saving the buffer.
+	 * Changing markers will not set the buffer dirty any longer.
+	 * @param view The current view
+	 * @since jEdit 4.3pre7
+	 */
+	public boolean updateMarkersFile(View view)
+	{
+	// adapted from VFS.save 
+		VFS vfs = VFSManager.getVFSForPath(this.getPath());
+		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) {
+			VFSManager.error(view, path, "vfs.not-supported.save",
+				new String[] { "markers file" });
+			return false;
+			}
+		Object session = vfs.createVFSSession(path, view);
+		if(session == null)
+			return false;
+		VFSManager.runInWorkThread(
+			new MarkersSaveRequest(
+				view, this, session, vfs, path));
+		return true;
+	} //}}}
+
+	//{{{ markersChanged() method
+	/**
+	 * Return true when markers have changed and the markers file needs
+	 * to be updated
+	 * @since jEdit 4.3pre7
+	 */
+	public boolean markersChanged()
+	{
+		return getFlag(MARKERS_CHANGED);
+	} //}}}
+
+	//{{{ setMarkersChanged() method
+	/**
+	 * Sets/unsets the MARKERS_CHANGED flag
+	 * @since jEdit 4.3pre7
+	 */
+	public void setMarkersChanged(boolean changed)
+	{
+		setFlag(MARKERS_CHANGED, changed);
 	} //}}}
 
 	//}}}
@@ -1448,7 +1493,7 @@ public class Buffer extends JEditBuffer
 
 		if(autosaveFile != null)
 			autosaveFile.delete();
-
+		
 		// notify clients with -wait
 		if(waitSocket != null)
 		{
@@ -1495,6 +1540,7 @@ public class Buffer extends JEditBuffer
 	private static final int UNTITLED = 4;
 	private static final int AUTOSAVE_DIRTY = 5;
 	private static final int TEMPORARY = 10;
+	private static final int MARKERS_CHANGED = 12;
 	//}}}
 
 	private int flags;

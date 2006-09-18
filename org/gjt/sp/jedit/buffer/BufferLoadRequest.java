@@ -194,6 +194,7 @@ public class BufferLoadRequest extends BufferIORequest
 				int position = Integer.parseInt(line.substring(start + 1,end));
 				buffer.addMarker(shortcut,position);
 			}
+			buffer.setMarkersChanged(false);
 		}
 		finally
 		{

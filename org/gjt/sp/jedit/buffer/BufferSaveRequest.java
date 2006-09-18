@@ -146,22 +146,6 @@ public class BufferSaveRequest extends BufferIORequest
 							throw new IOException("Rename failed: " + savePath);
 					}
 
-					// We only save markers to VFS's that support deletion.
-					// Otherwise, we will accumilate stale marks files.
-					if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
-					{
-						if(jEdit.getBooleanProperty("persistentMarkers")
-							&& !buffer.getMarkers().isEmpty())
-						{
-							setStatus(jEdit.getProperty("vfs.status.save-markers",args));
-							setValue(0);
-							out = vfs._createOutputStream(session,markersPath,view);
-							if(out != null)
-								writeMarkers(buffer,out);
-						}
-						else
-							vfs._delete(session,markersPath,view);
-					}
 				}
 				else
 					buffer.setBooleanProperty(ERROR_OCCURRED,true);
@@ -210,34 +194,6 @@ public class BufferSaveRequest extends BufferIORequest
 			{
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
-		}
-	} //}}}
-
-	//{{{ writeMarkers() method
-	private static void writeMarkers(Buffer buffer, OutputStream out)
-		throws IOException
-	{
-		Writer o = new BufferedWriter(new OutputStreamWriter(out));
-		try
-		{
-			List markers = buffer.getMarkers();
-			for(int i = 0; i < markers.size(); i++)
-			{
-				Marker marker = (Marker)markers.get(i);
-				o.write('!');
-				o.write(marker.getShortcut());
-				o.write(';');
-
-				String pos = String.valueOf(marker.getPosition());
-				o.write(pos);
-				o.write(';');
-				o.write(pos);
-				o.write('\n');
-			}
-		}
-		finally
-		{
-			o.close();
 		}
 	} //}}}
 }

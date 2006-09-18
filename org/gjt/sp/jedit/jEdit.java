@@ -1712,6 +1712,7 @@ public class jEdit
 		DisplayManager.bufferClosed(buffer);
 
 		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSED));
+		buffer.updateMarkersFile(view);
 
 		// Create a new file when the last is closed
 		if(buffersFirst == null && buffersLast == null)
@@ -1795,6 +1796,7 @@ public class jEdit
 				EditBus.send(new BufferUpdate(buffer,view,
 					BufferUpdate.CLOSED));
 			}
+			buffer.updateMarkersFile(view);
 			buffer = buffer.next;
 		}
 
