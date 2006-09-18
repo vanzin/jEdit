@@ -31,6 +31,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.ProgressObserver;
+import org.gjt.sp.util.Log;
 
 /**
  * @version $Id$
@@ -38,9 +41,11 @@ import org.gjt.sp.jedit.*;
 public class MirrorList
 {
 	public List<Mirror> mirrors;
+	/** The xml mirror list. */
+	public String xml;
 
 	//{{{ MirrorList constructor
-	public MirrorList() throws Exception
+	public MirrorList(boolean download, ProgressObserver observer) throws Exception
 	{
 		mirrors = new ArrayList<Mirror>();
 
@@ -51,27 +56,87 @@ public class MirrorList
 
 		String path = jEdit.getProperty("plugin-manager.mirror-url");
 		MirrorListHandler handler = new MirrorListHandler(this,path);
+		if (download)
+		{
+			Log.log(Log.NOTICE, this, "Loading mirror list from internet");
+			downloadXml(path);
+		}
+		else
+		{
+			Log.log(Log.NOTICE, this, "Loading mirror list from cache");
+			readXml();
+		}
+		observer.setValue(1);
+		Reader in = new BufferedReader(new StringReader(xml));
 
-		XMLReader parser = XMLReaderFactory.createXMLReader();
-		Reader in = new BufferedReader(new InputStreamReader(
-			new URL(path).openStream()));
 		InputSource isrc = new InputSource(in);
 		isrc.setSystemId("jedit.jar");
+		XMLReader parser = XMLReaderFactory.createXMLReader();
 		parser.setContentHandler(handler);
 		parser.setDTDHandler(handler);
 		parser.setEntityResolver(handler);
 		parser.setErrorHandler(handler);
-		try
-		{
-			parser.parse(isrc);
-		}
-		finally
-		{
-			in.close();
-		}
+		parser.parse(isrc);
+		observer.setValue(2);
 	} //}}}
 
 	//{{{ Private members
+
+	//{{{ readXml() method
+	/**
+	 * Read and store the mirror list xml.
+	 * @throws IOException exception if it was not possible to read the
+	 * xml or if the url was invalid
+	 */
+	private void readXml() throws IOException
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory == null)
+			return;
+
+		File mirrorList = new File(MiscUtilities.constructPath(
+			settingsDirectory,"mirrorList.xml"));
+		if(!mirrorList.exists())
+			return;
+		InputStream inputStream = null;
+		try
+		{
+			inputStream = new BufferedInputStream(new FileInputStream(mirrorList));
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			IOUtilities.copyStream(null,inputStream,out, false);
+			xml = out.toString();
+		}
+		finally
+		{
+			IOUtilities.closeQuietly(inputStream);
+		}
+	} //}}}
+
+	//{{{ downloadXml() method
+	/**
+	 * Read and store the mirror list xml.
+	 *
+	 * @param path the url
+	 * @throws IOException exception if it was not possible to read the
+	 * xml or if the url was invalid
+	 */
+	private void downloadXml(String path) throws IOException
+	{
+		InputStream inputStream = null;
+		try
+		{
+			inputStream = new URL(path).openStream();
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			IOUtilities.copyStream(null,inputStream,out, false);
+			xml = out.toString();
+		}
+		finally
+		{
+			IOUtilities.closeQuietly(inputStream);
+		}
+	} //}}}
 
 	//{{{ add() method
 	void add(Mirror mirror)

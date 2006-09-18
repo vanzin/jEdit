@@ -171,6 +171,12 @@ for contributing to this release.
 
 - The PluginManager options do not allow anymore to ask for a mirror list update
   twice (Matthieu Casanova)
+
+- The mirror list of the plugin manager is now stored in a file : mirrorList.xml
+  and read from here where you open the option panel. The Update mirror list button
+  will refresh it from the web. 
+  (Matthieu Casanova)
+
 }}}
 
 }}}

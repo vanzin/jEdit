@@ -28,6 +28,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
+import java.io.*;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -52,7 +53,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout());
 
-		locationLabel = new JLabel(jEdit.getProperty(
+		JLabel locationLabel = new JLabel(jEdit.getProperty(
 			"options.plugin-manager.location"));
 
 		mirrorLabel = new JLabel();
@@ -65,8 +66,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			settingsDir.setToolTipText(MiscUtilities.constructPath(
 				jEdit.getSettingsDirectory(),"jars"));
 		}
-		appDir = new JRadioButton(jEdit.getProperty(
-			"options.plugin-manager.app-dir"));
+		JRadioButton appDir = new JRadioButton(jEdit.getProperty(
+				"options.plugin-manager.app-dir"));
 		appDir.setToolTipText(MiscUtilities.constructPath(
 			jEdit.getJEditHome(),"jars"));
 
@@ -86,6 +87,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		updateMirrors = new JButton(jEdit.getProperty(
 			"options.plugin-manager.updateMirrors"));
 		updateMirrors.addActionListener(new ActionHandler());
+		updateMirrors.setEnabled(false);
+		VFSManager.runInWorkThread(new UpdateMirrorsThread(false));
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panel.add(updateMirrors);
 		panel.add(updateStatus);
@@ -113,7 +116,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		buttonPanel.add(Box.createVerticalStrut(6));
 
 		/* Install location */
-		locGrp = new ButtonGroup();
+		ButtonGroup locGrp = new ButtonGroup();
 		if(jEdit.getSettingsDirectory() != null)
 			locGrp.add(settingsDir);
 		locGrp.add(appDir);
@@ -167,12 +170,9 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JLabel locationLabel;
 	private JLabel mirrorLabel;
 
-	private ButtonGroup locGrp;
 	private JRadioButton settingsDir;
-	private JRadioButton appDir;
 	private JCheckBox downloadSource;
 	private JCheckBox deleteDownloads;
 
@@ -258,31 +258,55 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		{
 			updateMirrors.setEnabled(false);
 			updateStatus.setText(jEdit.getProperty("options.plugin-manager.workthread"));
-			VFSManager.runInWorkThread(new DownloadMirrorsThread());
+			VFSManager.runInWorkThread(new UpdateMirrorsThread(true));
 		}
 	} //}}}
 
-	//{{{ DownloadMirrorsThread class
-	class DownloadMirrorsThread extends WorkRequest
+	//{{{ UpdateMirrorsThread class
+	/**
+	 * The thread that will update the mirror list.
+	 * It will read them from the cache or from the web.
+	 * It has 4 states :
+	 * 0 : started
+	 * 1 : xml downloaded
+	 * 2 : xml parsed
+	 * 3 : list updated
+	 */
+	class UpdateMirrorsThread extends WorkRequest
 	{
+		private boolean download;
+
+		UpdateMirrorsThread(boolean download)
+		{
+			this.download = download;
+		}
+
+		//{{{ run() method
 		public void run()
 		{
 			try
 			{
 				setStatus(jEdit.getProperty("options.plugin-manager.workthread"));
-				setMaximum(1);
+				setMaximum(3);
 				setValue(0);
 
 				final List<MirrorList.Mirror> mirrors = new ArrayList<MirrorList.Mirror>();
 				try
 				{
-					mirrors.addAll(new MirrorList().mirrors);
+					MirrorList mirrorList = new MirrorList(download, this);
+					if (download)
+						saveMirrorList(mirrorList.xml);
+
+					mirrors.addAll(mirrorList.mirrors);
 				}
 				catch (Exception ex)
 				{
-					Log.log(Log.ERROR,this,ex);
-					GUIUtilities.error(PluginManagerOptionPane.this,
-						"ioerror",new String[] { ex.toString() });
+					if (download)
+					{
+						Log.log(Log.ERROR,this,ex);
+						GUIUtilities.error(PluginManagerOptionPane.this,
+								"ioerror",new String[] { ex.toString() });
+					}
 				}
 
 				SwingUtilities.invokeLater(new Runnable()
@@ -304,13 +328,39 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 					}
 				});
 
-				setValue(1);
+				setValue(3);
 			}
 			finally
 			{
 				updateMirrors.setEnabled(true);
 				updateStatus.setText(null);
 			}
-		}
+		} //}}}
+
+		//{{{ saveMirrorList() method
+		private void saveMirrorList(String xml)
+		{
+			String settingsDirectory = jEdit.getSettingsDirectory();
+			if(settingsDirectory == null)
+				return;
+
+			File mirrorList = new File(MiscUtilities.constructPath(
+				settingsDirectory,"mirrorList.xml"));
+			OutputStream out = null;
+
+			try
+			{
+				out = new BufferedOutputStream(new FileOutputStream(mirrorList));
+				IOUtilities.copyStream(null, new ByteArrayInputStream(xml.getBytes()), out, false);
+			}
+			catch (IOException e)
+			{
+				Log.log(Log.ERROR,this, "Unable to write cached mirror list : " + mirrorList);
+			}
+			finally
+			{
+				IOUtilities.closeQuietly(out);
+			}
+		} //}}}
 	} //}}}
 }
