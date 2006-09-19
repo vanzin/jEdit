@@ -604,20 +604,7 @@ public class View extends JFrame implements EBComponent
 				|| inputHandler.isPrefixActive()
 				|| getTextArea().hasFocus())
 			{
-				KeyEventTranslator.Key keyStroke
-					= KeyEventTranslator
-					.translateKeyEvent(evt);
-				if(keyStroke != null)
-				{
-					if(Debug.DUMP_KEY_EVENTS)
-					{
-						Log.log(Log.DEBUG,this,
-							"Translated (key type ): "
-							+ keyStroke + " from " + from);
-					}
-					if(inputHandler.handleKey(keyStroke))
-						evt.consume();
-				}
+				processKeyEventKeyStrokeHandling(evt,from,"type ");
 			}
 
 
@@ -640,20 +627,7 @@ public class View extends JFrame implements EBComponent
 					prefixFocusOwner = null;
 				}
 
-				KeyEventTranslator.Key keyStroke
-					= KeyEventTranslator
-					.translateKeyEvent(evt);
-				if(keyStroke != null)
-				{
-					if(Debug.DUMP_KEY_EVENTS)
-					{
-						Log.log(Log.DEBUG,this,
-							"Translated (key press): "
-							+ keyStroke + " from " + from);
-					}
-					if(inputHandler.handleKey(keyStroke))
-						evt.consume();
-				}
+				processKeyEventKeyStrokeHandling(evt,from,"press");
 
 				processKeyEventSub(focusOnTextArea);
 				
@@ -664,16 +638,26 @@ public class View extends JFrame implements EBComponent
 				keyEventInterceptor.keyReleased(evt);
 			break;
 		}
-
-		switch(evt.getID()) {
-			case KeyEvent.KEY_TYPED:
-			case KeyEvent.KEY_PRESSED:
-			break;
-		}
 		
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 	} //}}}
+	
+	//{{{ processKeyEventKeyStrokeHandling() method
+	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode) {
+		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
+		
+		if(keyStroke != null)
+		{
+			if(Debug.DUMP_KEY_EVENTS)
+			{
+				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
+			}
+			if(inputHandler.handleKey(keyStroke))
+				evt.consume();
+		}
+	} //}}}
+	
 	
 	//{{{ processKeyEventSub() method
 	protected void processKeyEventSub(boolean focusOnTextArea) {
