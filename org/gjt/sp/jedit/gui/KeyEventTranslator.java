@@ -69,7 +69,7 @@ public class KeyEventTranslator
 
 			/**
 				A summary of Java key handling intricacies:
-				(1) No "key pressed" events are generated for umlaut keys and for "combined characters" (key for diacritic mark + key for base character), only "key typed" and "key relesed" events are generated for them
+				(1) No "key pressed" events are generated for umlaut keys and for "combined characters" (key for diacritic mark + key for base character), only "key typed" and "key released" events are generated for them
 				(2) The "key typed" event for Ctrl+J is indistinguishable from the "key typed" event for Ctrl+Return (in both cases: keycode=0, keychar=0xa) (in Java 1.5 under linux, but not in Java 1.6)
 				(3) If a key is pressed longer, not only additional "key typed" events but also additional "key released", "key pressed" events are generated.
 				(4) There are no proper key events generated for dead key + space (like '^' + ' ' resulting in '^') in Java 1.5 under linux. In Java 1.6, this bug is fixed. 
