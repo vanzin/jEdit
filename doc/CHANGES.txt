@@ -2,9 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre7
 
-Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'leary,
-Marcin Orlowski, Kazutoshi Satoda, Alan Ezust, and Björn "Vampire" Kautler
-for contributing to this release.
+Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'Leary,
+Marcin Orlowski, Martin Raspe, Kazutoshi Satoda, Alan Ezust,
+and Björn "Vampire" Kautler for contributing to this release.
 
 {{{ API Changes
 
@@ -53,6 +53,14 @@ for contributing to this release.
 
   }}}
 
+- added new class org.gjt.sp.jedit.buffer.MarkersSaveRequest; fixed 1527419: 
+  Setting or deleting markers does not dirty buffer anymore. Handling of 
+  the markers file is now factored out from BufferSaveRequest.
+  (Martin Raspe)
+
+- added new class org.gjt.sp.jedit.io.VFSFileFilter; an interface that
+  defines a filter used by the VFS browser. (Marcelo Vanzin)
+
 - added SearchMatcher.isMatchingEOL(); indicates whether the matched
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.
   (Marcelo Vanzin)
@@ -83,7 +91,8 @@ for contributing to this release.
 
 - New edit mode: Pilrc *rcp mode by Marcin Orlowski (#1519983)
 
-- Perl.xml mode fixes: (#1549412, #1020484)
+- Perl.xml mode fixes: (#1549412, #1020484), infinite loops in regexp, 
+  transliteration and hash highlighting, added several new features
 
 }}}
 {{{ Bug Fixes
