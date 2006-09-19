@@ -11,7 +11,9 @@
 		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
 		<PROPERTY NAME="indentNextLine" VALUE="[^#]*\.\s*$" />
 	</PROPS>
-	<RULES ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
+
+	<!-- no ESCAPE char because we need the backslash for references -->
+	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
 		<!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 
@@ -61,11 +63,6 @@
 			<END>=cut</END>
 		</SPAN>
 
-		<!-- Variables -->
-		<SEQ TYPE="KEYWORD2">$`</SEQ>
-		<SEQ TYPE="KEYWORD2">$'</SEQ>
-		<SEQ TYPE="KEYWORD2">$"</SEQ>
-
 		<!-- Some other things that confuse the mode file. -->
 		<SEQ TYPE="OPERATOR">*"</SEQ>
 		<SEQ TYPE="OPERATOR">*'</SEQ>
@@ -77,19 +74,39 @@
 			<END>}</END>
 		</SPAN>
 
-		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$(?:#|\w)+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="@" TYPE="KEYWORD2">@(?:#|\w)+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="%" TYPE="KEYWORD2">%(?:#|\w)+</SEQ_REGEXP>
+		<!-- Scalar variables -->
+		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$#?\w+</SEQ_REGEXP>
 
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-			<BEGIN>@{</BEGIN>
+		<!-- Perl predefined variables -->
+		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$\^[\p{Alnum}]</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$[\p{Punct}]</SEQ_REGEXP>
+
+		<!-- Array variables -->
+		<SEQ_REGEXP HASH_CHAR="@" TYPE="KEYWORD2">@\w+</SEQ_REGEXP>
+
+		<!-- Associative Array (= Hash) variables -->
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="KEYWORD2">%\w+</SEQ_REGEXP>
+
+		<!-- Scalar dereference -->
+		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD4">\$\$+\w+</SEQ_REGEXP>
+
+		<!-- Dereferences -->
+		<SEQ_REGEXP HASH_CHAR="@" TYPE="KEYWORD4">@\$\w+</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="KEYWORD4">%\$\w+</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="*" TYPE="KEYWORD4">\*\w+</SEQ_REGEXP>
+
+		<!-- references to vars and code, starting with a backslash -->
+		<SEQ_REGEXP HASH_CHAR="\" TYPE="KEYWORD4">\\[@%\$&amp;]\w+</SEQ_REGEXP>
+
+		<!-- complex code dereference -->
+		<SPAN TYPE="KEYWORD4" NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
+			<BEGIN>&amp;{</BEGIN>
 			<END>}</END>
 		</SPAN>
 
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
-			<BEGIN>%{</BEGIN>
-			<END>}</END>
-		</SPAN>
+		<!-- Function calls from variables -->
+		<SEQ_REGEXP HASH_CHAR="&amp;" TYPE="FUNCTION"
+		>&amp;\$\w*</SEQ_REGEXP>
 
 		<!-- Special handling for subs, since they can have a ' in the name;
 			 try to do highlight as well as possible - this version will
@@ -109,16 +126,57 @@
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		<SPAN TYPE="LITERAL1">
+
+		<!-- apostroph literals -->
+		<SPAN TYPE="LITERAL1" DELEGATE="APOSTR">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
+
+		<!-- options: -text -->
+		<SEQ_REGEXP HASH_CHAR="-" TYPE="LITERAL1">-[\p{Lower}]\w+</SEQ_REGEXP>
+		
+		<!-- file stat expressions -->
+		<SEQ_REGEXP HASH_CHAR="-" TYPE="KEYWORD3">-[\p{Lower}]</SEQ_REGEXP>
+
+		<!-- non-quoted literals in hashes -->
+		<SPAN_REGEXP HASH_CHAR="{" NO_LINE_BREAK="TRUE" DELEGATE="LITERAL">
+			<BEGIN>\{(?=\s*[\p{Alpha}_\-][\p{Alnum}_]*\s*\})</BEGIN>
+			<END>}</END>
+		</SPAN_REGEXP>
+
+		<!-- other blocks -->
+		<SPAN NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
+			<BEGIN>{</BEGIN>
+			<END>}</END>
+		</SPAN>
+
+		<!-- Array dereference -->
+		<SPAN TYPE="KEYWORD4" NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
+			<BEGIN>@{</BEGIN>
+			<END>}</END>
+		</SPAN>
+
+		<!-- Hash dereference -->
+		<SPAN TYPE="KEYWORD4" NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
+			<BEGIN>%{</BEGIN>
+			<END>}</END>
+		</SPAN>
+
+		<!-- labels, catches also package prefixes at line start :( -->
+		<MARK_PREVIOUS TYPE="LABEL" AT_LINE_START="TRUE" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+
+		<!-- __DATA__ and similar -->
+		<SEQ_REGEXP HASH_CHAR="_" TYPE="KEYWORD4">__\w+__</SEQ_REGEXP>
 
 		<!-- Exec -->
 		<SPAN TYPE="KEYWORD3" DELEGATE="EXEC">
 			<BEGIN>`</BEGIN>
 			<END>`</END>
 		</SPAN>
+
+		<!-- file globs / IO operators -->
+		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="KEYWORD4">[\p{Punct}\p{Alnum}_]+&gt;</SEQ_REGEXP>
 
 		<!-- Heredoc -->
 		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
@@ -133,10 +191,9 @@
 		<!-- jEdit 4.1 adds regular expression syntax rules so we can
 		     highlight this sort of crap. -->
 
-		<SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="/"
-                        AT_WORD_START="TRUE"
-                >/[^\p{Blank}]*?[^\\]/</SEQ_REGEXP>
+		<!-- /Regexp/, avoid confusion with a sequence of two divisions! -->
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/" 
+			AT_WORD_START="TRUE">/.*?[^\\]/[cgimosx]*(?!\s*[\d\$\@\(\-])</SEQ_REGEXP>
 
         <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
 		<SEQ_REGEXP TYPE="MARKUP"
@@ -165,47 +222,69 @@
 			<END>|</END>
 		</SPAN_REGEXP>
 
-		<SEQ_REGEXP TYPE="MARKUP"
-					HASH_CHAR="t"
-					AT_WORD_START="TRUE"
-		>tr([^_\-\+=\*\[\{\p{Alnum}\p{Space}])(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1[cds]*</SEQ_REGEXP>
+		<!-- transliterations -->
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="t"
+            AT_WORD_START="TRUE">tr\s*\{(?:.*?[^\\])*?\}\s*\{(?:.*?[^\\])*?\}[cds]*</SEQ_REGEXP>
 
-		<SEQ_REGEXP TYPE="MARKUP"
-					HASH_CHAR="y"
-					AT_WORD_START="TRUE"
-		>y([^_\-\+=\*\[\{\p{Alnum}\p{Space}])(?:.*?[^\\])*?\1(?:.*?[^\\])*?\1[cds]*</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="t"
+            AT_WORD_START="TRUE">tr([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[cds]*</SEQ_REGEXP>
 
-		<SEQ_REGEXP TYPE="MARKUP"
-					HASH_CHAR="m"
-					AT_WORD_START="TRUE"
-		>m\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="y"
+            AT_WORD_START="TRUE">y\s*\{(?:.*?[^\\])*?\}\s*\{(?:.*?[^\\])*?\}[cds]*</SEQ_REGEXP>
 
-		<SEQ_REGEXP TYPE="MARKUP"
-					HASH_CHAR="m"
-					AT_WORD_START="TRUE"
-		>m([^_\-\+=\*\[\{\p{Alnum}\p{Space}])(?:.*?[^\\])\1[sgicxom]*</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="y"
+            AT_WORD_START="TRUE">y([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[cds]*</SEQ_REGEXP>
 
-		<SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="s"
-                        AT_WORD_START="TRUE"
-                >s\s*\{(?:.*?[^\\])*?\}\s*\{(?:.*?[^\\])*?\}[sgiexom]*</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="MARKUP"
-                        HASH_CHAR="s"
-                        AT_WORD_START="TRUE"
-                >s([^_\-\+=\*\[\{\p{Alnum}\p{Space}])(?:.*?)\1(?:.*?)\1[sgiexom]*</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="MARKUP"
-			HASH_CHAR="/"
-			AT_WORD_START="TRUE"
-		>/[^\p{Blank}]*?/</SEQ_REGEXP>
+		<!-- regular expression matching with "m" -->
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="m"
+			AT_WORD_START="TRUE">m\{(?:.*?[^\\])*?\}[cgimosx]*</SEQ_REGEXP>
 
-		<!-- Operators -->
-		<SEQ TYPE="OPERATOR">|</SEQ>
-		<SEQ TYPE="OPERATOR">&amp;</SEQ>
-		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="m"
+			AT_WORD_START="TRUE">m([^\p{Alnum}\p{Space}\}])(?:.*?[^\\])\1[cgimosx]*</SEQ_REGEXP>
+
+		<!-- regular expression replacing with "s" -->
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="s"
+            AT_WORD_START="TRUE">s\s*\{(?:.*?[^\\])*?\}\s*\{(?:.*?[^\\])*?\}[egimosx]*</SEQ_REGEXP>
+
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="s"
+            AT_WORD_START="TRUE">s([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[egimosx]*</SEQ_REGEXP>
+
+		<!-- complex operators -->
+		<SEQ TYPE="OPERATOR">||</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">!=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;=&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">-&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">=&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">==</SEQ>
+		<SEQ TYPE="OPERATOR">=~</SEQ>
+		<SEQ TYPE="OPERATOR">!~</SEQ>
+
+		<SEQ TYPE="OPERATOR">+=</SEQ>
+		<SEQ TYPE="OPERATOR">-=</SEQ>
+		<SEQ TYPE="OPERATOR">/=</SEQ>
+		<SEQ TYPE="OPERATOR">*=</SEQ>
+		<SEQ TYPE="OPERATOR">.=</SEQ>
+		<SEQ TYPE="OPERATOR">%=</SEQ>
+
+		<SEQ TYPE="OPERATOR">&amp;=</SEQ>
+		<SEQ TYPE="OPERATOR">|=</SEQ>
+		<SEQ TYPE="OPERATOR">**=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;&lt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;&gt;=</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;&amp;=</SEQ>
+		<SEQ TYPE="OPERATOR">||=</SEQ>
+		<SEQ TYPE="OPERATOR">^=</SEQ>
+		<SEQ TYPE="OPERATOR">x=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+
+		<!-- simple operators -->
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
 		<SEQ TYPE="OPERATOR">+</SEQ>
@@ -528,9 +607,15 @@
 	</RULES>
 
 	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
-		<!-- Variables -->
+		<!-- Variables inside a Literal -->
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
 			<BEGIN>${</BEGIN>
+			<END>}</END>
+		</SPAN>
+
+		<!-- object method inside a Literal -->
+		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+			<BEGIN>->{</BEGIN>
 			<END>}</END>
 		</SPAN>
 
@@ -577,6 +662,14 @@
 		<SEQ TYPE="LITERAL1">:</SEQ>
 	</RULES>
 
+	<!-- Literals framed by apostrophs -->
+	<RULES SET="APOSTR" DEFAULT="LITERAL1" ESCAPE="\">
+
+		<!-- just a hack for sprintf -->
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL4">%\d*\.?\d*[dfis]</SEQ_REGEXP>
+
+	</RULES>
+
 	<RULES SET="EXEC" DEFAULT="KEYWORD3" ESCAPE="\">
 		<!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
@@ -606,15 +699,17 @@
 	</RULES>
 
 	<RULES SET="VARIABLE" DEFAULT="KEYWORD2" ESCAPE="\">
-		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+	<!-- this was creating infinite recursion -->
+<!-- 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
 			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
-
+ -->
 		<SEQ TYPE="OPERATOR">-&gt;</SEQ>
 	</RULES>
 
 	<RULES SET="REGEXP" DEFAULT="MARKUP" ESCAPE="\">
+		<!-- ??? -->
 		<SEQ TYPE="MARKUP">)(</SEQ>
 	</RULES>
 
