@@ -620,35 +620,9 @@ public class View extends JFrame implements EBComponent
 				}
 			}
 
-			// we might have been closed as a result of
-			// the above
-			if(isClosed())
-				return;
 
-			// this is a weird hack.
-			// we don't want C+e a to insert 'a' in the
-			// search bar if the search bar has focus...
-			if(inputHandler.isPrefixActive())
-			{
-				if(getFocusOwner() instanceof JTextComponent)
-				{
-					prefixFocusOwner = getFocusOwner();
-					getTextArea().requestFocus();
-				}
-				else if(focusOnTextArea)
-				{
-					getTextArea().requestFocus();
-				}
-				else
-				{
-					prefixFocusOwner = null;
-				}
-			}
-			else
-			{
-				prefixFocusOwner = null;
-			}
-
+			processKeyEventSub(focusOnTextArea);
+			
 			break;
 		case KeyEvent.KEY_PRESSED:
 			if(keyEventInterceptor != null)
@@ -681,34 +655,8 @@ public class View extends JFrame implements EBComponent
 						evt.consume();
 				}
 
-				// we might have been closed as a result of
-				// the above
-				if(isClosed())
-					return;
-
-				// this is a weird hack.
-				// we don't want C+e a to insert 'a' in the
-				// search bar if the search bar has focus...
-				if(inputHandler.isPrefixActive())
-				{
-					if(getFocusOwner() instanceof JTextComponent)
-					{
-						prefixFocusOwner = getFocusOwner();
-						getTextArea().requestFocus();
-					}
-					else if(focusOnTextArea)
-					{
-						getTextArea().requestFocus();
-					}
-					else
-					{
-						prefixFocusOwner = null;
-					}
-				}
-				else
-				{
-					prefixFocusOwner = null;
-				}
+				processKeyEventSub(focusOnTextArea);
+				
 			}
 			break;
 		case KeyEvent.KEY_RELEASED:
@@ -717,9 +665,48 @@ public class View extends JFrame implements EBComponent
 			break;
 		}
 
+		switch(evt.getID()) {
+			case KeyEvent.KEY_TYPED:
+			case KeyEvent.KEY_PRESSED:
+			break;
+		}
+		
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 	} //}}}
+	
+	//{{{ processKeyEventSub() method
+	protected void processKeyEventSub(boolean focusOnTextArea) {
+		// we might have been closed as a result of
+		// the above
+		if(isClosed())
+			return;
+		
+		// this is a weird hack.
+		// we don't want C+e a to insert 'a' in the
+		// search bar if the search bar has focus...
+		if(inputHandler.isPrefixActive())
+		{
+			if(getFocusOwner() instanceof JTextComponent)
+			{
+				prefixFocusOwner = getFocusOwner();
+				getTextArea().requestFocus();
+			}
+			else if(focusOnTextArea)
+			{
+				getTextArea().requestFocus();
+			}
+			else
+			{
+				prefixFocusOwner = null;
+			}
+		}
+		else
+		{
+			prefixFocusOwner = null;
+		}
+	}
+	//}}}
 
 	//}}}
 
