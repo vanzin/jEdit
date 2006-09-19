@@ -565,11 +565,12 @@ public class View extends JFrame implements EBComponent
 		{
 			Log.log(Log.DEBUG,this,"Key event                 : "
 				+ GrabKeyDialog.toString(evt) + " from " + from);
+//			Log.log(Log.DEBUG,this,this+".isFocused()="+(this.isFocused())+".",new Exception());
 		}
 
 		if(getTextArea().hasFocus() && from == VIEW)
 			return;
-
+		
 		evt = _preprocessKeyEvent(evt);
 		if(evt == null)
 			return;
