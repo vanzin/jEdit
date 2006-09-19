@@ -3902,36 +3902,90 @@ loop:		for(int i = 0; i < list.length; i++)
 
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
-			if(!evt.isConsumed())
-			{
-				Component comp = (Component)evt.getSource();
-				if(!comp.isShowing())
-					return true;
-
-				for(;;)
+			if (Debug.SIMPLIFIED_KEY_HANDLING) {
+				boolean result = super.postProcessKeyEvent(evt);
+				
+				/*
+					Commenting this out is experimental.
+					
+					This code (if not commented out) seems to be the cause for
+					https://sourceforge.net/tracker/index.php?func=detail&aid=1542026&group_id=588&atid=100588
+					
+					Because the simplified key handling is still experimental, breaking things here is still allowed. ;-)
+					
+					My intuition says that we should separate
+					(1) key sequences which invoke some special actions against
+					(2) key sequences which are ordinary input.
+					
+					While the former should be available in most or all jEdit windows,
+					the latter should be available only within jEdit buffers.
+					
+					Currently, it seems, both former and latter are handled globally, leading to the errorneous behaviour
+					of emitting keys to the buffer which are intendet to popup menus.
+				*/
+				/*
+				if(!evt.isConsumed())
 				{
-					if(comp instanceof View)
-					{
-						((View)comp).processKeyEvent(evt,
-							View.VIEW);
+					Component comp = (Component)evt.getSource();
+					if(!comp.isShowing())
 						return true;
-					}
-					else if(comp == null || comp instanceof Window
-						|| comp instanceof JEditTextArea)
+	
+					for(;;)
 					{
-						if (comp instanceof PluginManager)
+						if(comp instanceof View)
 						{
-							evt.setSource(comp);
-							((PluginManager)comp).processKeyEvents(evt);
+							((View)comp).processKeyEvent(evt,
+								View.VIEW);
+							return true;
 						}
-						break;
+						else if(comp == null || comp instanceof Window
+							|| comp instanceof JEditTextArea)
+						{
+							if (comp instanceof PluginManager)
+							{
+								evt.setSource(comp);
+								((PluginManager)comp).processKeyEvents(evt);
+							}
+							break;
+						}
+						else
+							comp = comp.getParent();
 					}
-					else
-						comp = comp.getParent();
 				}
+				*/
+				return result;
+			} else {
+				if(!evt.isConsumed())
+				{
+					Component comp = (Component)evt.getSource();
+					if(!comp.isShowing())
+						return true;
+	
+					for(;;)
+					{
+						if(comp instanceof View)
+						{
+							((View)comp).processKeyEvent(evt,
+								View.VIEW);
+							return true;
+						}
+						else if(comp == null || comp instanceof Window
+							|| comp instanceof JEditTextArea)
+						{
+							if (comp instanceof PluginManager)
+							{
+								evt.setSource(comp);
+								((PluginManager)comp).processKeyEvents(evt);
+							}
+							break;
+						}
+						else
+							comp = comp.getParent();
+					}
+				}
+	
+				return super.postProcessKeyEvent(evt);
 			}
-
-			return super.postProcessKeyEvent(evt);
 		}
 	} //}}}
 }
