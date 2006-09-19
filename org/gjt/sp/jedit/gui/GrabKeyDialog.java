@@ -57,13 +57,20 @@ public class GrabKeyDialog extends JDialog
 			id = "unknown type";
 			break;
 		}
+		
+		StringBuilder b = new StringBuilder(50);
 
-		return id + ",keyCode=0x"
+		b.append(id + ",keyCode=0x"
 			+ Integer.toString(evt.getKeyCode(),16)
 			+ ",keyChar=0x"
 			+ Integer.toString(evt.getKeyChar(),16)
 			+ ",modifiers=0x"
-			+ Integer.toString(evt.getModifiers(),16);
+			+ Integer.toString(evt.getModifiers(),16));
+		
+		b.append(",consumed=");
+		b.append(evt.isConsumed()?'1':'0');
+			
+		return b.toString();
 	} //}}}
 
 	//{{{ GrabKeyDialog constructor
