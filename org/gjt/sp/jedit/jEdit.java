@@ -3922,6 +3922,9 @@ loop:		for(int i = 0; i < list.length; i++)
 					
 					Currently, it seems, both former and latter are handled globally, leading to the errorneous behaviour
 					of emitting keys to the buffer which are intendet to popup menus.
+					
+					Commenting this out leads to an inavailability of keyboard shortcuts if other windows than a View have the focus. (This is a regression.)
+					In the long term, we should really separate global key-sequence triggered actions from local input.
 				*/
 				/*
 				if(!evt.isConsumed())
