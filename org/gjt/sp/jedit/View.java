@@ -565,7 +565,7 @@ public class View extends JFrame implements EBComponent
 		{
 			Log.log(Log.DEBUG,this,"Key event                 : "
 				+ GrabKeyDialog.toString(evt) + " from " + from);
-//			Log.log(Log.DEBUG,this,this+".isFocused()="+(this.isFocused())+".",new Exception());
+			Log.log(Log.DEBUG,this,this+".isFocused()="+(this.isFocused())+".",new Exception());
 		}
 
 		if(getTextArea().hasFocus() && from == VIEW)
@@ -653,8 +653,16 @@ public class View extends JFrame implements EBComponent
 			{
 				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
 			}
-			if(inputHandler.handleKey(keyStroke))
+			boolean consumed = false;
+			if(inputHandler.handleKey(keyStroke)) {
 				evt.consume();
+				
+				consumed = true;
+			}
+			if(Debug.DUMP_KEY_EVENTS)
+			{
+				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from+": consumed="+consumed+".");
+			}
 		}
 	} //}}}
 	
