@@ -556,6 +556,11 @@ public class KeyEventTranslator
 		public String modifiers;
 		public int key;
 		public char input;
+		
+		/**
+			Wether this Key event applies to all jEdit windows (and not only a specific jEdit GUI component). 
+		*/
+		protected boolean isFromGlobalContext;
 
 		public Key(String modifiers, int key, char input)
 		{
@@ -593,6 +598,14 @@ public class KeyEventTranslator
 				+ ','
 				+ Integer.toString(input,16)
 				+ '>';
+		}
+		
+		public void setIsFromGlobalContext(boolean to) {
+			this.isFromGlobalContext = to;
+		}
+		
+		public boolean isFromGlobalContext() {
+			return isFromGlobalContext;
 		}
 	} //}}}
 }

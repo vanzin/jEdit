@@ -561,6 +561,15 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void processKeyEvent(KeyEvent evt, int from)
 	{
+		processKeyEvent(evt,from,false);
+	}
+	/**
+	 * Forwards key events directly to the input handler.
+	 * This is slightly faster than using a KeyListener
+	 * because some Swing overhead is avoided.
+	 */
+	public void processKeyEvent(KeyEvent evt, int from, boolean global)
+	{
 		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event                 : "
@@ -604,7 +613,7 @@ public class View extends JFrame implements EBComponent
 				|| inputHandler.isPrefixActive()
 				|| getTextArea().hasFocus())
 			{
-				processKeyEventKeyStrokeHandling(evt,from,"type ");
+				processKeyEventKeyStrokeHandling(evt,from,"type ",global);
 			}
 
 
@@ -627,7 +636,7 @@ public class View extends JFrame implements EBComponent
 					prefixFocusOwner = null;
 				}
 
-				processKeyEventKeyStrokeHandling(evt,from,"press");
+				processKeyEventKeyStrokeHandling(evt,from,"press",global);
 
 				processKeyEventSub(focusOnTextArea);
 				
@@ -644,11 +653,12 @@ public class View extends JFrame implements EBComponent
 	} //}}}
 	
 	//{{{ processKeyEventKeyStrokeHandling() method
-	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode) {
+	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global) {
 		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
 		
 		if(keyStroke != null)
 		{
+			keyStroke.setIsFromGlobalContext(global);
 			if(Debug.DUMP_KEY_EVENTS)
 			{
 				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);

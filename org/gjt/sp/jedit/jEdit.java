@@ -3903,7 +3903,7 @@ loop:		for(int i = 0; i < list.length; i++)
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
 			if (Debug.SIMPLIFIED_KEY_HANDLING) {
-				boolean result = super.postProcessKeyEvent(evt);
+				boolean result;
 				
 				/*
 					Commenting this out is experimental.
@@ -3926,7 +3926,6 @@ loop:		for(int i = 0; i < list.length; i++)
 					Commenting this out leads to an inavailability of keyboard shortcuts if other windows than a View have the focus. (This is a regression.)
 					In the long term, we should really separate global key-sequence triggered actions from local input.
 				*/
-				/*
 				if(!evt.isConsumed())
 				{
 					Component comp = (Component)evt.getSource();
@@ -3937,8 +3936,7 @@ loop:		for(int i = 0; i < list.length; i++)
 					{
 						if(comp instanceof View)
 						{
-							((View)comp).processKeyEvent(evt,
-								View.VIEW);
+							((View)comp).processKeyEvent(evt,View.VIEW,true);
 							return true;
 						}
 						else if(comp == null || comp instanceof Window
@@ -3955,7 +3953,9 @@ loop:		for(int i = 0; i < list.length; i++)
 							comp = comp.getParent();
 					}
 				}
-				*/
+				
+				result = super.postProcessKeyEvent(evt);
+				
 				return result;
 			} else {
 				if(!evt.isConsumed())
