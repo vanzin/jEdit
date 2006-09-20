@@ -337,10 +337,11 @@ public class DefaultInputHandler extends InputHandler
 				repeatCount = 1;
 				setCurrentBindings(bindings);
 			}
-			else if(input != '\0')
-				userInput(input);
-			else
-			{
+			else if(input != '\0') {
+				if (!keyStroke.isFromGlobalContext()) { // let user input be only local
+					userInput(input);
+				}
+			} else	{
 				// this is retarded. excuse me while I drool
 				// and make stupid noises
 				if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
