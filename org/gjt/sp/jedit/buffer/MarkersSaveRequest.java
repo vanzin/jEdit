@@ -60,10 +60,8 @@ public class MarkersSaveRequest extends WorkRequest
 		this.session = session;
 		this.vfs = vfs;
 		this.path = path;
+		this.markersPath = buffer.getMarkersPath(vfs);
 
-		markersPath = vfs.getParentOfPath(path)
-			+ '.' + vfs.getFileName(path)
-			+ ".marks";
 	} //}}}
 	
 	//{{{ run() method
@@ -77,28 +75,22 @@ public class MarkersSaveRequest extends WorkRequest
 			setAbortable(true);
 			try
 			{
-					// We only save markers to VFS's that support deletion.
-					// Otherwise, we will accumilate stale marks files.
-					if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
+				// We only save markers to VFS's that support deletion.
+				// Otherwise, we will accumilate stale marks files.
+				if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
+				{
+					if(buffer.getMarkers().isEmpty())
+						vfs._delete(session,markersPath,view);
+					else
 					{
-						if(jEdit.getBooleanProperty("persistentMarkers")
-							&& !buffer.getMarkers().isEmpty())
-						{
-							// save markers file only if needed
-							if(buffer.markersChanged())
-							{
-								String[] args = { vfs.getFileName(path) };
-								setStatus(jEdit.getProperty("vfs.status.save-markers",args));
-								setValue(0);
-								out = vfs._createOutputStream(session,markersPath,view);
-								if(out != null)
-									writeMarkers(buffer,out);
-							}
+						String[] args = { vfs.getFileName(path) };
+						setStatus(jEdit.getProperty("vfs.status.save-markers",args));
+						setValue(0);
+						out = vfs._createOutputStream(session,markersPath,view);
+						if(out != null)
+							writeMarkers(out);
 						}
-						else
-							vfs._delete(session,markersPath,view);
-					}
-
+				}
 			}
 			catch(IOException io)
 			{
@@ -124,7 +116,7 @@ public class MarkersSaveRequest extends WorkRequest
 	} //}}}
 
 	//{{{ writeMarkers() method
-	private void writeMarkers(Buffer buffer, OutputStream out)
+	private void writeMarkers(OutputStream out)
 		throws IOException
 	{
 		Writer o = new BufferedWriter(new OutputStreamWriter(out));

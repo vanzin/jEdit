@@ -1332,10 +1332,22 @@ public class Buffer extends JEditBuffer
 		return null;
 	} //}}}
 
+	//{{{ getMarkersPath() method
+	/**
+	 * Returns the path for this buffer's markers file
+	 * @param vfs The appropriate VFS
+	 * @since jEdit 4.3pre7
+	 */
+	public String getMarkersPath(VFS vfs)
+	{
+		return vfs.getParentOfPath(path)
+			+ '.' + vfs.getFileName(path)
+			+ ".marks";
+	} //}}}
+
 	//{{{ updateMarkersFile() method
 	/**
 	 * Save the markers file, or delete it when there are mo markers left
-	 * or when the "persistentMarkers" property is false. 
 	 * Handling markers is now independent from saving the buffer.
 	 * Changing markers will not set the buffer dirty any longer.
 	 * @param view The current view
@@ -1343,7 +1355,9 @@ public class Buffer extends JEditBuffer
 	 */
 	public boolean updateMarkersFile(View view)
 	{
-	// adapted from VFS.save 
+		if(!markersChanged())
+			return true;
+		// adapted from VFS.save 
 		VFS vfs = VFSManager.getVFSForPath(this.getPath());
 		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) {
 			VFSManager.error(view, path, "vfs.not-supported.save",
