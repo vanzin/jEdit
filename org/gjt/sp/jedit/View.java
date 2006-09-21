@@ -654,7 +654,7 @@ public class View extends JFrame implements EBComponent
 	
 	//{{{ processKeyEventKeyStrokeHandling() method
 	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global) {
-		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
+		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent2(evt);
 		
 		if(keyStroke != null)
 		{
@@ -664,7 +664,7 @@ public class View extends JFrame implements EBComponent
 				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
 			}
 			boolean consumed = false;
-			if(inputHandler.handleKey(keyStroke)) {
+			if(inputHandler.handleKey(keyStroke,keyStroke.isPhantom())) {
 				evt.consume();
 				
 				consumed = true;

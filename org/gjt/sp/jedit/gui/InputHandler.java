@@ -101,9 +101,10 @@ public abstract class InputHandler
 	/**
 	 * Handles a keystroke.
 	 * @param keyStroke The key stroke.
+	 * @param dryRun only calculate the return value, do not have any other effect
 	 * @since jEdit 4.2pre5
 	 */
-	public abstract boolean handleKey(KeyEventTranslator.Key keyStroke);
+	public abstract boolean handleKey(KeyEventTranslator.Key keyStroke,boolean dryRun);
 	//}}}
 
 	//{{{ getRepeatCount() method

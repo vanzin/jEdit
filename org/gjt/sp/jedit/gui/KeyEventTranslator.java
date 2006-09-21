@@ -64,6 +64,24 @@ public class KeyEventTranslator
 	 */
 	public static Key translateKeyEvent(KeyEvent evt)
 	{
+		Key key = translateKeyEvent2(evt);
+		
+		if (key!=null) {
+			if (key.isPhantom()) {
+				key = null;
+			}
+		}
+		
+		return key;
+	}
+	
+	/**
+	 * Pass this an event from {@link
+	 * KeyEventWorkaround#processKeyEvent(java.awt.event.KeyEvent)}.
+	 * @since jEdit 4.2pre3
+	 */
+	public static Key translateKeyEvent2(KeyEvent evt)
+	{
 		if (Debug.SIMPLIFIED_KEY_HANDLING)
 		{	// This is still experimental code.
 
@@ -86,6 +104,7 @@ public class KeyEventTranslator
 			int	modifiers	= evt.getModifiers();
 			boolean usecooked	= !evt.isActionKey();
 			boolean accept		= false;
+			boolean	acceptAsPhantom	= false;
 
 //			Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): 1: keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+", usecooked="+usecooked+", event="+evt+".");
 			
@@ -141,6 +160,7 @@ public class KeyEventTranslator
 				switch(evt.getID()) {
 					case KeyEvent.KEY_PRESSED:
 						accept			= !usecooked;
+						acceptAsPhantom		= !accept;
 						lastKeyPressAccepted	= accept;
 						lastKeyPressEvent	= evt;
 					break;
@@ -150,6 +170,7 @@ public class KeyEventTranslator
 							// This works around the case where "Ctrl+J" and "Ctrl+Return" are indistinguishable in that "Ctrl+Return" is handled at the "key pressed" stage where "Ctrl+J" is handled at the "key typed" stage.
 						} else {
 							accept		= usecooked;
+							acceptAsPhantom	= !accept;
 						}
 					break;
 					default:
@@ -178,8 +199,20 @@ public class KeyEventTranslator
 				
 			Key returnValue = null;
 			
-			if (accept) {
+			if (accept||acceptAsPhantom) {
+				if ((!accept)&&acceptAsPhantom) {
+					if (keyChar!=0) {
+						keyCode = 0;
+					}
+				}
+				
 				returnValue = new Key(modifiersToString(modifiers),keyCode,keyChar);
+				
+				if ((!accept)&&acceptAsPhantom) {
+					if (keyChar!=0) {
+					}
+					returnValue.setIsPhantom(true);
+				}
 			}
 
 			return returnValue;
@@ -561,6 +594,14 @@ public class KeyEventTranslator
 			Wether this Key event applies to all jEdit windows (and not only a specific jEdit GUI component). 
 		*/
 		protected boolean isFromGlobalContext;
+		
+		/**
+			Wether this Key event is a phantom key event. A phantom key event is a kind of duplicate key event which
+			should not - due to its nature of being a duplicate - generate any action on data.
+			However, phantom key events may be necessary to notify the rest of the GUI that the key event, if it was not a phantom key event but a real key event,
+			would generate any action and thus would be consumed.
+		*/
+		protected boolean isPhantom;
 
 		public Key(String modifiers, int key, char input)
 		{
@@ -606,6 +647,14 @@ public class KeyEventTranslator
 		
 		public boolean isFromGlobalContext() {
 			return isFromGlobalContext;
+		}
+		
+		public void setIsPhantom(boolean to) {
+			this.isPhantom = to;
+		}
+		
+		public boolean isPhantom() {
+			return isPhantom;
 		}
 	} //}}}
 }

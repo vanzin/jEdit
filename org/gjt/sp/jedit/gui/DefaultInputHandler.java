@@ -286,9 +286,10 @@ public class DefaultInputHandler extends InputHandler
 	/**
 	 * Handles the given keystroke.
 	 * @param keyStroke The key stroke
+	 * @param dryRun only calculate the return value, do not have any other effect
 	 * @since jEdit 4.2pre5
 	 */
-	public boolean handleKey(KeyEventTranslator.Key keyStroke)
+	public boolean handleKey(KeyEventTranslator.Key keyStroke,boolean dryRun)
 	{
 		char input = '\0';
 		if(keyStroke.modifiers == null
@@ -310,67 +311,81 @@ public class DefaultInputHandler extends InputHandler
 		{
 			if(input != '\0')
 			{
-				setCurrentBindings(bindings);
-				invokeReadNextChar(input);
-				repeatCount = 1;
+				if (!dryRun) {
+					setCurrentBindings(bindings);
+					invokeReadNextChar(input);
+					repeatCount = 1;
+				}
 				return true;
 			}
 			else
 			{
-				readNextChar = null;
-				view.getStatus().setMessage(null);
+				if (!dryRun) {
+					readNextChar = null;
+					view.getStatus().setMessage(null);
+				}
 			}
 		}
 
 		Object o = currentBindings.get(keyStroke);
 		if(o == null)
 		{
-			// Don't beep if the user presses some
-			// key we don't know about unless a
-			// prefix is active. Otherwise it will
-			// beep when caps lock is pressed, etc.
-			if(currentBindings != bindings)
-			{
-				Toolkit.getDefaultToolkit().beep();
-				// F10 should be passed on, but C+e F10
-				// shouldn't
-				repeatCount = 1;
-				setCurrentBindings(bindings);
-			}
-			else if(input != '\0') {
-				if (!keyStroke.isFromGlobalContext()) { // let user input be only local
-					userInput(input);
+			if (!dryRun) {
+				// Don't beep if the user presses some
+				// key we don't know about unless a
+				// prefix is active. Otherwise it will
+				// beep when caps lock is pressed, etc.
+				if(currentBindings != bindings)
+				{
+					Toolkit.getDefaultToolkit().beep();
+					// F10 should be passed on, but C+e F10
+					// shouldn't
+					repeatCount = 1;
+					setCurrentBindings(bindings);
 				}
-			} else	{
-				// this is retarded. excuse me while I drool
-				// and make stupid noises
-				if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
-					KeyEventWorkaround.numericKeypadKey();
+				else if(input != '\0') {
+					if (!keyStroke.isFromGlobalContext()) { // let user input be only local
+						userInput(input);
+					}
+				} else	{
+					// this is retarded. excuse me while I drool
+					// and make stupid noises
+					if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
+						KeyEventWorkaround.numericKeypadKey();
+				}
+				sendShortcutPrefixOff();
 			}
-			sendShortcutPrefixOff();
 		}
 		else if(o instanceof Hashtable)
 		{
-			setCurrentBindings((Hashtable)o);
-			ShortcutPrefixActiveEvent.firePrefixStateChange(currentBindings, true);
-			shortcutOn = true;
+			if (!dryRun) {
+				setCurrentBindings((Hashtable)o);
+				ShortcutPrefixActiveEvent.firePrefixStateChange(currentBindings, true);
+				shortcutOn = true;
+			}
 			return true;
 		}
 		else if(o instanceof String)
 		{
-			setCurrentBindings(bindings);
-			sendShortcutPrefixOff();
-			invokeAction((String)o);
+			if (!dryRun) {
+				setCurrentBindings(bindings);
+				sendShortcutPrefixOff();
+				invokeAction((String)o);
+			}
 			return true;
 		}
 		else if(o instanceof EditAction)
 		{
-			setCurrentBindings(bindings);
-			sendShortcutPrefixOff();
-			invokeAction((EditAction)o);
+			if (!dryRun) {
+				setCurrentBindings(bindings);
+				sendShortcutPrefixOff();
+				invokeAction((EditAction)o);
+			}
 			return true;
 		}
-		sendShortcutPrefixOff();
+		if (!dryRun) {
+			sendShortcutPrefixOff();
+		}
 		return false;
 	} //}}}
 
