@@ -1476,13 +1476,10 @@ loop:		for(;;)
 		int beta = Integer.parseInt(build.substring(6,8));
 		// Finally the bug fix release
 		int bugfix = Integer.parseInt(build.substring(9,11));
-		StringBuffer retval = new StringBuffer(major + "." + minor);
-		if (beta < 7) retval.append("pre");
-		else retval.append(".");
-		if (beta > 0 && beta < 10) retval.append("0");
-		retval.append(beta);
-		if (bugfix != 0) retval.append("." + bugfix);
-		return retval.toString();
+
+		return major + "." + minor
+			+ (beta != 99 ? "pre" + beta :
+			(bugfix != 0 ? "." + bugfix : "final"));
 	} //}}}
 
 	//{{{ isToolsJarAvailable() method
