@@ -1,7 +1,24 @@
 /*
  * InputMethodSupport.java - Input method support for JEditTextArea
+ *
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2006 Kazutoshi Satoda
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 package org.gjt.sp.jedit.textarea;
@@ -19,6 +36,13 @@ import java.awt.font.TextLayout;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextHitInfo;
 // }}}
+
+/**
+ * Input method support for JEditTextArea
+ *
+ * @author Kazutoshi Satoda
+ * @since jEdit 4.3pre7
+ */
 
 class InputMethodSupport
 	extends TextAreaExtension
@@ -150,8 +174,12 @@ class InputMethodSupport
 				AttributedCharacterIterator canceled = (new AttributedString(sample)).getIterator();
 				owner.getBuffer().remove(offset, length);
 				owner.setCaretPosition(offset);
+				lastCommittedText = null;
 				return canceled;
 			}
+			// Cleare last committed information to prevent
+			// accidental match.
+			lastCommittedText = null;
 		}
 		return null;
 	}
@@ -173,25 +201,24 @@ class InputMethodSupport
 	{
 		composedTextLayout = null;
 		AttributedCharacterIterator text = event.getText();
-		if( text != null )
+		if(text != null)
 		{
 			int committed_count = event.getCommittedCharacterCount();
-			if( committed_count > 0 )
+			if(committed_count > 0)
 			{
-				StringBuffer committing = new StringBuffer(committed_count);
+				lastCommittedText = null;
+				lastCommittedAt = owner.getCaretPosition();
+				StringBuffer committed = new StringBuffer(committed_count);
 				char c;
 				int count;
 				for(c = text.first(), count = committed_count
 					; c != AttributedCharacterIterator.DONE && count > 0
 					; c = text.next(), --count)
 				{
-					committing.append(c);
+					owner.userInput(c);
+					committed.append(c);
 				}
-				int caret = owner.getCaretPosition();
-				String committing_text = committing.toString();
-				owner.getBuffer().insert(caret, committing_text);
-				lastCommittedAt = caret;
-				lastCommittedText = committing_text;
+				lastCommittedText = committed.toString();
 			}
 			int end_index = text.getEndIndex();
 			if(committed_count < end_index)
@@ -238,6 +265,14 @@ class InputMethodSupport
 			{
 				owner.setHorizontalOffset(owner.getHorizontalOffset() - adjustment);
 			}
+		}
+		else
+		{
+			// Cancel horizontal adjustment for composed text.
+			// FIXME:
+			//   The horizontal offset may be beyond the max
+			//   value of owner's horizontal scroll bar.
+			owner.scrollToCaret(false);
 		}
 		owner.invalidateLine(owner.getCaretLine());
 		event.consume();
