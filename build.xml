@@ -10,7 +10,7 @@
 
 	<!-- jEdit Version -->
 	<property name="jedit.version"
-			  value="4.3pre7" />
+			  value="4.3.07" />
 	<property name="jedit.build.number"
 			  value="04.03.07.00" />
 
