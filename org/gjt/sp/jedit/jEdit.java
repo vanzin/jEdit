@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import org.gjt.sp.jedit.buffer.BufferIORequest;
+import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.buffer.KillRing;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.msg.*;

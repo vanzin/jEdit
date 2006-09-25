@@ -20,12 +20,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package org.gjt.sp.jedit.buffer;
+package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
 import java.util.zip.*;
-import java.util.List;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;

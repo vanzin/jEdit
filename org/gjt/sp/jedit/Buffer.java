@@ -36,6 +36,9 @@ import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.bufferio.BufferIORequest;
+import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
+import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
 import org.gjt.sp.util.*;
 //}}}
 

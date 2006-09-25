@@ -45,7 +45,7 @@ import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
-import org.gjt.sp.jedit.buffer.BufferIORequest;
+import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}
 

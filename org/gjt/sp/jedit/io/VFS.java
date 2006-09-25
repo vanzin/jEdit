@@ -31,9 +31,12 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.bufferio.BufferLoadRequest;
+import org.gjt.sp.jedit.bufferio.BufferSaveRequest;
+import org.gjt.sp.jedit.bufferio.BufferInsertRequest;
+import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;

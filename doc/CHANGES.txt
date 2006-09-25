@@ -53,7 +53,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 
   }}}
 
-- added new class org.gjt.sp.jedit.buffer.MarkersSaveRequest; fixed 1527419: 
+- added new class org.gjt.sp.jedit.bufferio.MarkersSaveRequest; fixed 1527419:
   Setting or deleting markers does not dirty buffer anymore. Handling of 
   the markers file is now factored out from BufferSaveRequest.
   (Martin Raspe)
