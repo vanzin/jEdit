@@ -48,7 +48,7 @@ public class TokenMarker
 	//{{{ TokenMarker constructor
 	public TokenMarker()
 	{
-		ruleSets = new Hashtable(64);
+		ruleSets = new Hashtable<String, ParserRuleSet>(64);
 	} //}}}
 
 	//{{{ addRuleSet() method
@@ -69,7 +69,7 @@ public class TokenMarker
 	//{{{ getRuleSet() method
 	public ParserRuleSet getRuleSet(String setName)
 	{
-		return (ParserRuleSet) ruleSets.get(setName);
+		return ruleSets.get(setName);
 	} //}}}
 
 	//{{{ getRuleSets() method
@@ -78,7 +78,7 @@ public class TokenMarker
 	 */
 	public ParserRuleSet[] getRuleSets()
 	{
-		return (ParserRuleSet[])ruleSets.values().toArray(new ParserRuleSet[ruleSets.size()]);
+		return ruleSets.values().toArray(new ParserRuleSet[ruleSets.size()]);
 	} //}}}
 
 	//{{{ markTokens() method
@@ -262,7 +262,7 @@ unwind:		while(context.parent != null)
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private Hashtable ruleSets;
+	private Map<String, ParserRuleSet> ruleSets;
 	private ParserRuleSet mainRuleSet;
 
 	// Instead of passing these around to each method, we just store them
@@ -744,7 +744,7 @@ unwind:		while(context.parent != null)
 	//{{{ substitute() method
 	private static char[] substitute(Matcher match, char[] end)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < end.length; i++)
 		{
 			char ch = end[i];
@@ -782,7 +782,7 @@ unwind:		while(context.parent != null)
 	 */
 	public static class LineContext
 	{
-		private static Hashtable intern = new Hashtable();
+		private static final Map<LineContext, LineContext> intern = new HashMap<LineContext, LineContext>();
 
 		public LineContext parent;
 		public ParserRule inRule;
@@ -805,14 +805,14 @@ unwind:		while(context.parent != null)
 		//{{{ intern() method
 		public LineContext intern()
 		{
-			Object obj = intern.get(this);
+			LineContext obj = intern.get(this);
 			if(obj == null)
 			{
 				intern.put(this,this);
 				return this;
 			}
 			else
-				return (LineContext)obj;
+				return obj;
 		} //}}}
 
 		//{{{ hashCode() method
