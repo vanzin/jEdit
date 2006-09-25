@@ -16,7 +16,8 @@
 
 <ACTION NAME="vfs.browser.browse">
 	<CODE>
-		browser.setDirectory(files[0].path);
+		if (files.length != 0)
+			browser.setDirectory(files[0].path);
 	</CODE>
 </ACTION>
 
@@ -56,7 +57,8 @@
 
 <ACTION NAME="vfs.browser.delete">
 	<CODE>
-		browser.delete(files);
+		if (files.length != 0)
+			browser.delete(files);
 	</CODE>
 </ACTION>
 
@@ -116,7 +118,8 @@
 
 <ACTION NAME="vfs.browser.rename">
 	<CODE>
-		browser.rename(files[0].path);
+		if (files.length != 0)
+			browser.rename(files[0].path);
 	</CODE>
 </ACTION>
 

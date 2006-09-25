@@ -163,6 +163,10 @@ and Björn "Vampire" Kautler for contributing to this release.
   If you say no it will not display any error dialog anymore.
   (#1549282) (Matthieu Casanova)
 
+- ArrayOutOfBoundException fixed in VFS browser when choosing to delete, rename
+  or browse in right click popupmenu when no file are selected
+  (#1565286) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
