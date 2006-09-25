@@ -39,6 +39,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
+import org.gjt.sp.jedit.bufferio.JEditKillRing;
 import org.gjt.sp.jedit.buffer.KillRing;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.msg.*;
@@ -406,6 +407,7 @@ public class jEdit
 
 		HistoryModel.loadHistory();
 		BufferHistory.load();
+		KillRing.setInstance(new JEditKillRing());
 		KillRing.getInstance().load();
 		propertiesChanged();
 

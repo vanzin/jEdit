@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.buffer;
 
 import javax.swing.event.ListDataListener;
-import java.io.*;
 import java.util.*;
 
 import org.xml.sax.Attributes;
@@ -32,8 +31,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.MutableListModel;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
 
 /**
@@ -46,9 +43,13 @@ public class KillRing implements MutableListModel
 	//{{{ getInstance() method
 	public static KillRing getInstance()
 	{
-		if(killRing == null)
-			killRing = new KillRing();
 		return killRing;
+	} //}}}
+
+	//{{{ getInstance() method
+	public static void setInstance(KillRing killRing)
+	{
+		KillRing.killRing = killRing;
 	} //}}}
 
 	//{{{ propertiesChanged() method
@@ -78,116 +79,9 @@ public class KillRing implements MutableListModel
 		}
 	} //}}}
 
-	//{{{ load() method
-	public void load()
-	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
-			return;
+	public void load() {}
 
-		File killRing = new File(MiscUtilities.constructPath(
-			settingsDirectory,"killring.xml"));
-		if(!killRing.exists())
-			return;
-
-		killRingModTime = killRing.lastModified();
-		Log.log(Log.MESSAGE,KillRing.class,"Loading killring.xml");
-
-		KillRingHandler handler = new KillRingHandler();
-		try
-		{
-			XMLUtilities.parseXML(new FileInputStream(killRing), handler);
-		}
-		catch (IOException ioe)
-		{
-			Log.log(Log.ERROR, this, ioe);
-		}
-
-		ring = (UndoManager.Remove[])handler.list.toArray(
-			new UndoManager.Remove[handler.list.size()]);
-		count = 0;
-		wrap = true;
-	} //}}}
-
-	//{{{ save() method
-	public void save()
-	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
-			return;
-
-		File file1 = new File(MiscUtilities.constructPath(
-			settingsDirectory, "#killring.xml#save#"));
-		File file2 = new File(MiscUtilities.constructPath(
-			settingsDirectory, "killring.xml"));
-		if(file2.exists() && file2.lastModified() != killRingModTime)
-		{
-			Log.log(Log.WARNING,KillRing.class,file2
-				+ " changed on disk; will not save recent"
-				+ " files");
-			return;
-		}
-
-		jEdit.backupSettingsFile(file2);
-
-		Log.log(Log.MESSAGE,KillRing.class,"Saving killring.xml");
-
-		String lineSep = System.getProperty("line.separator");
-
-		BufferedWriter out = null;
-
-		try
-		{
-			out = new BufferedWriter(
-				new OutputStreamWriter(
-					new FileOutputStream(file1),
-					"UTF-8"));
-
-			out.write("<?xml version=\"1.1\" encoding=\"UTF-8\"?>");
-			out.write(lineSep);
-			out.write("<!DOCTYPE KILLRING SYSTEM \"killring.dtd\">");
-			out.write(lineSep);
-			out.write("<KILLRING>");
-			out.write(lineSep);
-
-			int size = getSize();
-			for(int i = size - 1; i >=0; i--)
-			{
-				out.write("<ENTRY>");
-				out.write(XMLUtilities.charsToEntities(
-					getElementAt(i).toString(),true));
-				out.write("</ENTRY>");
-				out.write(lineSep);
-			}
-
-			out.write("</KILLRING>");
-			out.write(lineSep);
-
-			out.close();
-
-			/* to avoid data loss, only do this if the above
-			 * completed successfully */
-			file2.delete();
-			file1.renameTo(file2);
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,KillRing.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(out != null)
-					out.close();
-			}
-			catch(IOException e)
-			{
-			}
-		}
-
-		killRingModTime = file2.lastModified();
-	} //}}}
+	public void save() {}
 
 	//{{{ MutableListModel implementation
 	public void addListDataListener(ListDataListener listener) {}
@@ -236,9 +130,6 @@ public class KillRing implements MutableListModel
 	//}}}
 
 	//{{{ Package-private members
-	UndoManager.Remove[] ring;
-	int count;
-	boolean wrap;
 
 	//{{{ changed() method
 	void changed(UndoManager.Remove rem)
@@ -349,8 +240,11 @@ public class KillRing implements MutableListModel
 	//}}}
 
 	//{{{ Private members
-	private long killRingModTime;
-	private static KillRing killRing;
+	protected UndoManager.Remove[] ring;
+	protected int count;
+	protected boolean wrap;
+	protected long killRingModTime;
+	private static KillRing killRing = new KillRing();
 
 	//{{{ virtualToPhysicalIndex() method
 	/**
@@ -373,9 +267,9 @@ public class KillRing implements MutableListModel
 	//}}}
 
 	//{{{ KillRingHandler class
-	class KillRingHandler extends DefaultHandler
+	public static class KillRingHandler extends DefaultHandler
 	{
-		List list = new LinkedList();
+		public List<UndoManager.Remove> list = new LinkedList<UndoManager.Remove>();
 
 		public InputSource resolveEntity(String publicId, String systemId)
 		{

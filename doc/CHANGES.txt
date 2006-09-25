@@ -82,6 +82,9 @@ and Björn "Vampire" Kautler for contributing to this release.
 - added JEditTextArea.collapseFold(int line) to collapse the fold at the
   given line (Matthieu Casanova)
 
+- New method KillRing.setInstance() that allow you to replace the default KillRing.
+  jEdit now uses a custom KillRing : JEditKillRing. The only difference is that it
+  can save itself to the disk (Matthieu Casanova)
 }}}
 {{{ Syntax Highlighting
 

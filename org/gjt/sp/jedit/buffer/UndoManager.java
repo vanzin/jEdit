@@ -351,7 +351,7 @@ public class UndoManager
 	} //}}}
 
 	//{{{ Remove class
-	static class Remove extends Edit
+	public static class Remove extends Edit
 	{
 		//{{{ Remove constructor
 		Remove(UndoManager mgr, int offset, int length, String str)
