@@ -861,7 +861,7 @@ public class jEdit
 		}
 
 		HistoryModel.propertiesChanged();
-		KillRing.getInstance().propertiesChanged();
+		KillRing.getInstance().propertiesChanged(getIntegerProperty("history",25));
 
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}

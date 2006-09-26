@@ -29,7 +29,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.MutableListModel;
 import org.gjt.sp.util.XMLUtilities;
 
@@ -53,9 +52,9 @@ public class KillRing implements MutableListModel
 	} //}}}
 
 	//{{{ propertiesChanged() method
-	public void propertiesChanged()
+	public void propertiesChanged(int historySize)
 	{
-		int newSize = Math.max(1,jEdit.getIntegerProperty("history",25));
+		int newSize = Math.max(1, historySize);
 		if(ring == null)
 			ring = new UndoManager.Remove[newSize];
 		else if(newSize != ring.length)
