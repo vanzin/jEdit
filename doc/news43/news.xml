@@ -30,15 +30,14 @@
     <preface id="preface">
     <title> Preface </title>
 
-    <para> jEdit is a very mature text editor, and has gone through quite a few changes. Many of the original developers, including Slava Pestov, have stopped working directly on jEdit development. Fortunately, because of the wonderful nature of open source, there are more and more eyeballs on this code than ever! We have received contributions of plugins, bugfixes, refactoring, and enhancements from around the globe, and our host sourceforge.net <ulink url = "http://sourceforge.net/project/stats/detail.php?group_id=588&amp;ugn=jedit&amp;type=prdownload&amp;mode=year&amp;package_id=0" >reports</ulink> that there are consistently on average at least a half-million downloads per year, and this has been true for the entire millenium.
+    <para> jEdit is a very mature text editor, and has gone through a very interesting phase of development. Left in a "prerelease" stage for about two years, it's had a long time to solifidy. Many of the original developers, including Slava Pestov, have stopped working directly on jEdit. Fortunately, because of the wonderful nature of open source, there are more and more eyeballs on this code than ever! We have received contributions of plugins, bugfixes, refactoring, and enhancements from around the globe, and our host, sourceforge.net <ulink url = "http://sourceforge.net/project/stats/detail.php?group_id=588&amp;ugn=jedit&amp;type=prdownload&amp;mode=year&amp;package_id=0"  >reports</ulink> that there are on average at least a half-million downloads per year, and this has been true for the entire millenium.
     </para>
 
     <para> In terms of actual releases, there may have been a slight lull while Slava's absense was sinking in among the other members of the community, but in 2006, thanks to their generous donations of time, effort, and coding skills, we started releasing regular prereleases again, fixing bugs in the core and each other's plugins, making jEdit more stable, coherent, and useful than ever. </para>
 
-    <para> The thing that really excites me is seeing members of the community get more actively involved in improving jedit or its plugins. The core is huge, and there are over 164 plugins, so there is an endless source of things to do. I anticipate that the trackers will always have many open issues, but I see many of the old ones finally being closed, and that is very much satisfying. I can say with complete confidence that 4.3 is an improvement over 4.2 in many different ways. I hope that after you read this document, you will think so too, and perhaps want to join in the development of future versions of jEdit or its plugins. </para>
+    <para> The thing that really excites me is seeing members of the community get more actively involved in improving jedit or its plugins. The core is huge, and there are over 164 plugins, so there is an endless source of things to do. I anticipate that the trackers will always have many open issues, but I see many of the old ones finally being closed, and that is very much satisfying. I can say with complete confidence that 4.3 is an improvement over 4.2 in many different ways. I hope that after you read this document, you will think so too, and perhaps want to join in on the development of future versions of jEdit or its plugins. </para>
 
-    <para> I watch the tracker traffic (<literal>jedit-devel</literal>) and commit logs (in the <literal>jedit-cvs</literal> mailing list) with fascination, learning new Java tricks, or new jEdit tricks. It's quite satisfying to be this imtimate with code that I find I am using every day. I also feel I am on a first-name basis with all of the active committers, and I've given and/or received help from every one of them. While it is true, there are parts of it that could be designed a little better, it is still the best open source editor I've seen. Thanks to the plugins themselves, because they are broken up into neat little packages, it is easier for us to isolate and fix bugs.
-    As long as I am using it, I will be compelled to fix bugs that annoy me, be they in the core, or any of the plugins I happen to use. </para>
+    <para> I watch the tracker traffic (<literal>jedit-devel</literal>) and commit logs (in the <literal>jedit-cvs</literal> mailing list) with fascination, learning new Java tricks, or new jEdit tricks. It's quite satisfying to be this imtimate with code that I find I am using every day. I feel I am on a first-name basis with all of the active committers, and I've given and/or received help from every one of them. While it is true, there are parts of it that could be designed a little better, it is still the best open source editor I've seen. Thanks to the plugins themselves, because they are broken up into neat little packages, it is easier for us to isolate and fix bugs. As long as I am using it, I will be compelled to fix bugs that annoy me, be they in the core, or any of the plugins I happen to use. </para>
 
     </preface>
 
@@ -57,7 +56,8 @@
     </chapter>
 
 
-	<chapter id="user-changes"><title>User-Visible Changes</title>
+	<chapter id="user-changes">
+    <title>User-Visible Changes</title>
 
 	<section id="readded"><title>Re-added Features</title>
 	<para>
@@ -67,13 +67,8 @@
 	</section>
 
 	<section id="plugin-manager"><title>Plugin Manager</title>
-
 	<para>
  The three panes of the PluginManager have all been reworked and made more keyboard friendly. They handle multiple selections, the checkbox states don't get lost when you switch panes, and the manage panel now automatically loads dependent plugins if they are already downloaded. Anyone who is used to 4.2's plugin manager will notice the difference immediately.
-	</para>
-
-	<para>
-      Plugins that do not use the 4.2 API are not supported on jEdit 4.3final.
 	</para>
 
 	<para>
@@ -81,6 +76,7 @@
 	</para>
 
 	</section>
+    
 	<section id="editing">
         <title>Text Editing</title>
 
@@ -98,6 +94,13 @@
 
 	</section>
 
+    
+    <section id="regexp-changes">
+    <title> Regular Expressions </title>
+    
+    <para> Most of the core code has been rewritten to use <literal>java.util.regex</literal> instead of <literal>gnu.regexp</literal>, so be sure to keep that in mind as you are composing your own regular expressions, whether they are in mode files, search expressions, or in your own plugins. </para>
+
+    </section>    
 	<section id="search"><title>Search and Replace</title>
 
 	<para>
@@ -148,21 +151,20 @@
 
 	<chapter id="api-changes">
     <title>API Changes</title>
+    
+    <para> There are quite a few API changes which are described in detail in the
+    API docs, as well as the <ulink url="../CHANGES.txt">CHANGES.txt</ulink> file. Some of the most important ones for a developer are emphasized in this document, btu this is by no means a complete list. If ever you find that some of the API documentation is lacking or needs further explanation, please post a feature request or a question onto the -devel mailing list. </para>
 
-	<section id="beanshell">
-    <title>BeanShell</title>
-
-	<para>
-		BeanShell has been updated from version 2.0b1 to 2.0b4.
-	</para>
-
-	</section>
-
-	<section id="class-jeditbuffer">
-    <title>Buffer and JEditBuffer</title>
-    <para> Explain about the JEditBuffer and Buffer refactoring here. </para>
+    
+    <section id="buffervsjeditbuffer">
+    <title> Buffer vs jEditBuffer </title>
+    <para> Now that the text area is independent of the rest of jEdit, various
+    text area-related APIs that used to take org.gjt.sp.jedit.Buffer
+    instances now take org.gjt.sp.jedit.buffer.JEditBuffers. </para>
+    <para> BufferChangeListener and BufferChangeAdapter are now deprecated. Use
+    BufferListener instead. </para>
     </section>
-
+  
     <section id="api-plugins">
     <title> Plugin API changes </title>
 
@@ -173,16 +175,22 @@
 	</chapter>
 
     <chapter id="new-plugins">
-    <title> The 4.3 plugins </title>
+    <title> The core 4.3 plugins </title>
 
-    <para> This chapter showcases the new plugins or plugin versions that were under the most active development in conjunction with jEdit 4.3. Some of them influenced the development of the jEdit core, and others are good enough to be incorporated into the core, but are left as separate plugins simply because it makes it easier for us to maintain and debug them. </para>
+    <para> This chapter showcases the new(er) plugins that were under the most active development during jEdit 4.3. Some of them influenced the development of the jEdit core, and others are good enough to be incorporated into the core, but are left as separate plugins simply because it makes it easier for us to maintain and debug them. </para>
 
+    <para> Navigator, providing a navigable history, is new and improved - it provides the user with Eclipse-like Navigation to previous locations, for each TextArea of each View. It uses new 4.3 EditBus messages which are now available in the public API, CaretChanging and BufferClosing. </para>
 
+    <bridgehead>ProjectViewer</bridgehead>
+    <para> For managing groups of files and organizing them into trees, ProjectViewer is very useful. It's been under active development, and many bugs are fixed quickly after they are found.  Its ability to filter its input set based on regular expressions or the contents of CVS/SVN/Perforce entries makes it especially handy for other plugins that use it, such as <emphasis role="bold">FastOpen</emphasis> and <emphasis role="bold">OpenIt</emphasis>, both of which are also recently updated for 4.3. </para>
+    
+    <para> ProjectViewer is also very important for language plugins that want to deal with file sets. It defines a project-wide property specification, that makes it possible to have different settings depending on what the active project is. </para>  
+
+    
     <bridgehead>SideKicks and Language Plugins </bridgehead>
-
     <para> SideKick has been debugged and the documentation has been improved. Further, there is a new combobox that lets you choose your parser, and a new SplitPane to show you the contents of the hovered element. The combobox is especially important since there are multiple parsers that can be used on a given file, especially when you are working with Python, PHP, HTML, XML, or JavaScript files. </para>
 
-    <para> Many language-specific plugins have been redesigned to use the new and improved SideKick. In particular, JPyDebug, JythonInterpreter, RubyPlugin, JavaSideKick, XML, and PerlSideKick. Be sure to try them out.
+    <para> Many language-specific plugins have been redesigned to use the new and improved SideKick. In particular, JPyDebug, JythonInterpreter, RubyPlugin, PHPParser, JavaSideKick, XML, and PerlSideKick. Be sure to try them out.
     </para>
 
     <para> In case you're looking for JavaCore, JBrowse, CodeAid, DotComplete, or PropertySideKick, they have all been merged (in terms of functionality) into the new JavaSideKick plugin. </para>
@@ -194,11 +202,7 @@
     <formalpara><title>Ant and Xerces</title>
     <para> Previously, Apache Ant was included in AntFarm, and Apache Xerces was included in the XML plugin. Both of these libraries were broken out of their respective plugins and given their own plugin status. This should help avoid some of the kinds of plugin conflicts that arose with previous versions of XML and AntFarm. </para>
     </formalpara>
-
-    <formalpara><title>ProjectViewer</title>
-    <para> For managing groups of files and organizing them into trees, ProjectViewer is very useful. It's been under active development, and many bugs are fixed quickly after they are found.  Its ability to filter its input set based on regular expressions or the contents of CVS/SVN/Perforce entries makes it especially handy for other plugins that use it, such as <emphasis role="bold">FastOpen</emphasis> and <emphasis role="bold">OpenIt</emphasis>, both of which are also recently updated for 4.3. </para>
-    </formalpara>
-
+    
     <formalpara><title>Console</title>
     <para> Console has many new features, improved error parsing, and more keyboard shortcuts. The command execution part was rewritten. You should read the changelog in the Console users guide for more details.  </para>
     </formalpara>
@@ -212,15 +216,13 @@
     </para>
     </formalpara>
 
-    <formalpara><title> InfoViewer </title>
+    <formalpara><title>InfoViewer </title>
     <para> This plugin uses jEdit 4.3's action overriding API to serve as a replacement to the HelpViewer. Since I use/work with this instead of the built-in HelpViewer, I do not notice or fix  bugs in HelpViewer. Try it out - you might like it! At some point, I might merge this into the jEdit core, but for now, it's a separate plugin.    </para>
     </formalpara>
 
-    <formalpara><title> XSearch </title>
+    <formalpara><title>XSearch</title>
     <para> XSearch is a replacement for the built-in search dialogs. Similarly, there are new features in XSearch which have not been put into the core yet. XSearch has good ProjectViewer integration too - you can search only the files that were added to the project. </para>
     </formalpara>
-
-
     </chapter>
 
     <chapter id="futureplans">

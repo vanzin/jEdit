@@ -121,6 +121,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 
 - File System Browser now recognizes Backspace, DEL and F2 to
   go to parent dir, delete and rename files respectively.
+  The "path:" textarea accepts environment variables and expands them too.
   (1542365) (Alan Ezust)
 
 - SplashScreen is now in the middle of the screen, instead of between
