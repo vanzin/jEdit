@@ -33,6 +33,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import org.xml.sax.InputSource;
@@ -151,6 +153,50 @@ public class MiscUtilities
 		else
 			return path;
 	} //}}}
+
+	//{{ expandVariables() method
+	/** Accepts a string from the user which may contain variables of various syntaxes.
+	 *  The goal is to support the following:
+	 *     $varname
+	 *     ${varname}
+	 *     %varname%?
+	 *     And expand each of these by looking at the system environment variables for possible 
+	 *     expansions.
+	 *     @return a string which is either the unchanged input string, or one with expanded variables.
+	 *     @since 4.3pre7  
+	 */
+	
+	static final String varPatternString = "([$%])([a-zA-Z0-9_]+)(\\1?)";
+	static final String varPatternString2 = "([$%])\\{([^}]+)\\}";
+	static final Pattern varPattern = Pattern.compile(varPatternString);
+	static final Pattern varPattern2 = Pattern.compile(varPatternString2);
+	public static String expandVariables(String arg) 
+	{
+		Pattern p = varPattern;
+		Matcher m = p.matcher(arg);
+		if (!m.find())
+		{
+			p = varPattern2;
+			m = p.matcher(arg);
+			if (!m.find()) // no variables to substitute
+				return arg;
+		}
+		String varName = m.group(2);
+		String expansion = System.getenv(varName);
+		if (expansion == null)
+		{ // try everything uppercase?
+			varName = varName.toUpperCase();
+			String uparg = arg.toUpperCase();
+			m = p.matcher(uparg);
+			expansion = System.getenv(varName);
+		}
+		if (expansion != null)
+		{
+			expansion = expansion.replace("\\", "\\\\");
+			return m.replaceFirst(expansion);
+		}
+		return arg;
+	}
 
 	//{{{ resolveSymlinks() method
 	/**
