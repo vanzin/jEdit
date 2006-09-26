@@ -192,7 +192,6 @@ public class MiscUtilities
 		}
 		if (expansion != null)
 		{
-			expansion = expansion.replace("\\", "\\\\");
 			return m.replaceFirst(expansion);
 		}
 		return arg;
