@@ -53,7 +53,7 @@ public class ParserRuleSet
 		this.setName = setName;
 		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
 		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
-		imports = new LinkedList();
+		imports = new LinkedList<ParserRuleSet>();
 	} //}}}
 
 	//{{{ getModeName() method
@@ -75,13 +75,13 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ getProperties() method
-	public Hashtable getProperties()
+	public Hashtable<String, String> getProperties()
 	{
 		return props;
 	} //}}}
 
 	//{{{ setProperties() method
-	public void setProperties(Hashtable props)
+	public void setProperties(Hashtable<String, String> props)
 	{
 		this.props = props;
 		_noWordSep = null;
@@ -94,23 +94,17 @@ public class ParserRuleSet
 	 */
 	public void resolveImports()
 	{
-		Iterator iter = imports.iterator();
-		while(iter.hasNext())
-		{
-			ParserRuleSet ruleset = (ParserRuleSet)iter.next();
-			for(int i = 0; i < ruleset.ruleMapFirst.length; i++)
-			{
+		for (ParserRuleSet ruleset : imports) {
+			for (int i = 0; i < ruleset.ruleMapFirst.length; i++) {
 				ParserRule rule = ruleset.ruleMapFirst[i];
-				while(rule != null)
-				{
+				while (rule != null) {
 					addRule(rule);
 					rule = rule.next;
 				}
 			}
 
-			if(ruleset.keywords != null)
-			{
-				if(keywords == null)
+			if (ruleset.keywords != null) {
+				if (keywords == null)
 					keywords = new KeywordMap(ignoreCase);
 				keywords.add(ruleset.keywords);
 			}
@@ -134,8 +128,7 @@ public class ParserRuleSet
 	{
 		ruleCount++;
 
-		int key = Character.toUpperCase(r.hashChar)
-			% RULE_BUCKET_COUNT;
+		int key = r.upHashChar % RULE_BUCKET_COUNT;
 		ParserRule last = ruleMapLast[key];
 		if(last == null)
 			ruleMapFirst[key] = ruleMapLast[key] = r;
@@ -304,7 +297,7 @@ public class ParserRuleSet
 	private static final int RULE_BUCKET_COUNT = 128;
 
 	private String modeName, setName;
-	private Hashtable props;
+	private Hashtable<String, String> props;
 
 	private KeywordMap keywords;
 
@@ -313,7 +306,7 @@ public class ParserRuleSet
 	private ParserRule[] ruleMapFirst;
 	private ParserRule[] ruleMapLast;
 
-	private LinkedList imports;
+	private final List<ParserRuleSet> imports;
 
 	/**
 	 * The number of chars that can be read before the parsing stops.

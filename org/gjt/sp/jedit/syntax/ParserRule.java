@@ -61,6 +61,8 @@ public class ParserRule
 
 	//{{{ Instance variables
 	public final char hashChar;
+	/** This is Character.toUpperCase(hashChar) because it's often used like that. */
+	public final char upHashChar;
 	public final int startPosMatch;
 	public final char[] start;
 	public final Pattern startRegexp;
@@ -202,6 +204,7 @@ public class ParserRule
 	{
 		this.action = action;
 		this.hashChar = hashChar;
+		this.upHashChar = Character.toUpperCase(hashChar);
 		this.startPosMatch = startPosMatch;
 		this.start = start;
 		this.startRegexp = startRegexp;
