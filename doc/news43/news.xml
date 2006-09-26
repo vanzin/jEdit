@@ -44,7 +44,7 @@
     <preface id="acknowledgements">
     <title> Acknowledgements </title>
 
-    <para> This release would not have been possible if it were not for the *constant* help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin, Matthieu Casanova, and Bjorn "Vampire" Kautler. I would also like to give sincere thanks to all of the other core and plugin developers who have made <ulink url = "../CHANGES.txt">significant contributions</ulink> to help keep this editor alive and on the cutting edge. </para>
+    <para> This release would not have been possible if it were not for the *constant* help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin, Matthieu Casanova, and Björn "Vampire" Kautler. I would also like to give sincere thanks to all of the other core and plugin developers who have made <ulink url = "../CHANGES.txt">significant contributions</ulink> to help keep this editor alive and on the cutting edge. </para>
     </preface>
 
     <chapter id="compatibility"><title> Java Compatibility </title>
