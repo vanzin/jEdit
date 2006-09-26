@@ -133,17 +133,7 @@ public class JEditTextArea extends JComponent
 		addFocusListener(new FocusHandler());
 		addMouseWheelListener(new MouseWheelHandler());
 
-		/* Drag and drop */
-		setTransferHandler(new TextAreaTransferHandler());
-		try
-		{
-			getDropTarget().addDropTargetListener(
-				new TextAreaDropHandler(this));
-		}
-		catch(TooManyListenersException e)
-		{
-			Log.log(Log.ERROR,this,e);
-		} //}}}
+		//}}}
 
 		// This doesn't seem very correct, but it fixes a problem
 		// when setting the initial caret position for a buffer
@@ -152,6 +142,21 @@ public class JEditTextArea extends JComponent
 
 		popupEnabled = true;
 	} //}}}
+
+
+	public void setTransferHandler(TransferHandler newHandler)
+	{
+		super.setTransferHandler(newHandler);
+		try
+		{
+			getDropTarget().addDropTargetListener(
+				new TextAreaDropHandler(this));
+		}
+		catch(TooManyListenersException e)
+		{
+			Log.log(Log.ERROR,this,e);
+		}
+	}
 
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -5159,10 +5164,14 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ startDragAndDrop() method
 	void startDragAndDrop(InputEvent evt, boolean copy)
 	{
-		Log.log(Log.DEBUG,this,"Drag and drop callback");
-		getTransferHandler().exportAsDrag(this,evt,
-			copy ? TransferHandler.COPY
-			: TransferHandler.MOVE);
+		TransferHandler transferHandler = getTransferHandler();
+		if (transferHandler != null)
+		{
+			Log.log(Log.DEBUG,this,"Drag and drop callback");
+			transferHandler.exportAsDrag(this,evt,
+				copy ? TransferHandler.COPY
+				: TransferHandler.MOVE);
+		}
 	} //}}}
 
 	//{{{ fireNarrowActive() method

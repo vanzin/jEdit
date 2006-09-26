@@ -36,7 +36,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
 
-class TextAreaTransferHandler extends TransferHandler
+public class TextAreaTransferHandler extends TransferHandler
 {
 	/* I assume that there can be only one drag operation at the time */
 	private static JEditTextArea dragSource;

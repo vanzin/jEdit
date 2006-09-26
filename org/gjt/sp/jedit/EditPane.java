@@ -616,7 +616,7 @@ public class EditPane extends JPanel implements EBComponent
 		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea(view);
-
+		textArea.setTransferHandler(new TextAreaTransferHandler());
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addExtension(markerHighlight);
 		textArea.addStatusListener(new StatusHandler());
