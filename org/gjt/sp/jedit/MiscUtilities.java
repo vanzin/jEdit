@@ -155,6 +155,11 @@ public class MiscUtilities
 	} //}}}
 
 	//{{ expandVariables() method
+	static final String varPatternString = "([$%])([a-zA-Z0-9_]+)(\\1?)";
+	static final String varPatternString2 = "([$%])\\{([^}]+)\\}";
+	static final Pattern varPattern = Pattern.compile(varPatternString);
+	static final Pattern varPattern2 = Pattern.compile(varPatternString2);
+
 	/** Accepts a string from the user which may contain variables of various syntaxes.
 	 *  The goal is to support the following:
 	 *     $varname
@@ -165,11 +170,6 @@ public class MiscUtilities
 	 *     @return a string which is either the unchanged input string, or one with expanded variables.
 	 *     @since 4.3pre7  
 	 */
-	
-	static final String varPatternString = "([$%])([a-zA-Z0-9_]+)(\\1?)";
-	static final String varPatternString2 = "([$%])\\{([^}]+)\\}";
-	static final Pattern varPattern = Pattern.compile(varPatternString);
-	static final Pattern varPattern2 = Pattern.compile(varPatternString2);
 	public static String expandVariables(String arg) 
 	{
 		Pattern p = varPattern;
