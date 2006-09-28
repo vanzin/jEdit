@@ -1160,15 +1160,12 @@ predefined by the plugin API as the view in which the plugin window will reside,
 
 <para>
   This build file imports another modular build file, <literal>plugin-build.xml</literal> included in the jEdit
-  source tree, after jEdit 4.3pre5. It can be checked out individually, or found online in the <ulink url= "http://jedit.cvs.sourceforge.net/jedit/jEdit/build-support/" >jEdit's CVS repository</ulink>. It contains common build steps
+  source tree, after jEdit 4.3pre5. It can be checked out individually, or found online in the <ulink url= "https://svn.sourceforge.net/svnroot/jedit/jEdit/build-support/" >jEdit's SVN repository</ulink>. It contains common build steps
   for jEdit plugins, and some example properties files which you can adapt for use with your plugin.
   </para>
-
+  
   <para>
-  For a full discussion of the <filename>Ant</filename> file format and
-  command syntax, you should consult the <ulink
-  url="http://jakarta.apache.org/ant/manual/index.html">Ant
-  documentation site</ulink>. Customizing this build file for a different plugin will likely only require three changes:
+  Customizing this build file for a different plugin will likely only require three changes:
   </para>
 
 <itemizedlist>
@@ -1182,12 +1179,19 @@ predefined by the plugin API as the view in which the plugin window will reside,
     The extra files that need to be copied into the jar.
   </para></listitem>
 </itemizedlist>
+
+  <tip>
+  <para> For a full discussion of the <filename>Ant</filename> file format and command syntax, you should consult the <ulink
+  url="http://jakarta.apache.org/ant/manual/index.html">Ant
+  documentation</ulink>, also available through jEdit's help system if you installed the Ant Plugin. Further, the XML plugin gives you completion for both elements <emphasis>and</emphasis> attributes when editing ANT files. The Console plugin provides you with an ANT button which you can bind to keyboard actions. Then, of course, there are the AntFarm and Antelope plugins which also proivde you with alternate means to execute Ant targets through the Console.  </para>
+  </tip>
+
 </sect1>
 
 <sect1 id="plugin-implement-reloading"><title>Reloading the Plugin</title>
 
 <para>
-  Once you have compiled your plugin you will need to reload it to test it. Follow these steps to reload your plugin without restarting jEdit:
+  Once you have compiled your plugin, you will need to test its behavior when it is reloaded. Follow these steps to reload your plugin without restarting jEdit:
 </para>
 
 <itemizedlist>
@@ -1214,7 +1218,7 @@ predefined by the plugin API as the view in which the plugin window will reside,
 
 
 <tip><para>
-  The Activator plugin provides a very convenient way to test the reloading behavior of your plugin, as well a convenient way to  restart it when you are debugging. Be sure to test your plugin's reloading behavior with it.
+  The Activator plugin provides a very convenient (dockable) way to test the activating and reloading behavior of your plugin. Be sure to test your plugin's reloading behavior with both the Activator and the Reloader tabs. 
   </para> </tip>
 
 <para>

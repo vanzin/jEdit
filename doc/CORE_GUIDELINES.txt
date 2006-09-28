@@ -1,4 +1,4 @@
-Guide to jEdit's core developpment
+Guide to jEdit's core development
 
 
 {{{Independant textarea
@@ -17,6 +17,7 @@ It will contains packages
 {{{Package dependencies requirement
 This part contains the packages and the allowed dependencies for them,
 and their status.
+
 {{{Default dependencies (always allowed)
 - org.gjt.sp.util.*
 - org.gjt.sp.util.jedit.Debug
