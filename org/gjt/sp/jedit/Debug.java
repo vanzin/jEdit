@@ -118,9 +118,6 @@ public class Debug
 	 */
 	public static boolean ALT_KEY_PRESSED_DISABLED = OperatingSystem.isMacOS();
 
-	
-	public static boolean SIMPLIFIED_KEY_HANDLING	= jEdit.getBooleanProperty("newkeyhandling");
-	
 	/**
 	 * Old key handling (SIMPLIFIED_KEY_HANDLING==false) and
 	 * new key handling (SIMPLIFIED_KEY_HANDLING==true) react on different

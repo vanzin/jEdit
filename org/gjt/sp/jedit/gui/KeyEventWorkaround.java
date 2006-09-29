@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.gui;
 import java.awt.event.*;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.Options;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -229,7 +230,7 @@ public class KeyEventWorkaround
 	//{{{ processKeyEvent() method
 	public static KeyEvent processKeyEvent(KeyEvent evt)
 	{
-		if (Debug.SIMPLIFIED_KEY_HANDLING)
+		if (Options.SIMPLIFIED_KEY_HANDLING)
 		{
 		}
 		else

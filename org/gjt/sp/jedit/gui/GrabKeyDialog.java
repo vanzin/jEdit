@@ -449,7 +449,7 @@ public class GrabKeyDialog extends JDialog
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
 
-			if (!Debug.SIMPLIFIED_KEY_HANDLING) {
+			if (!Options.SIMPLIFIED_KEY_HANDLING) {
 				if(key.modifiers != null)
 					keyString.append(key.modifiers).append('+');
 	

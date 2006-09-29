@@ -204,7 +204,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		boolean nkh = newKeyboardHandling.isSelected();
 		jEdit.setBooleanProperty("newkeyhandling", nkh);
-		Debug.SIMPLIFIED_KEY_HANDLING = nkh;
+		Options.SIMPLIFIED_KEY_HANDLING = nkh;
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());

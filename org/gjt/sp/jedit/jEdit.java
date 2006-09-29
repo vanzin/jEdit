@@ -3906,7 +3906,7 @@ loop:		for(int i = 0; i < list.length; i++)
 
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
-			if (Debug.SIMPLIFIED_KEY_HANDLING) {
+			if (Options.SIMPLIFIED_KEY_HANDLING) {
 				boolean result;
 				
 				/*

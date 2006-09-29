@@ -1714,7 +1714,7 @@ loop:		for(;;)
 		if(isClosed())
 			return null;
 
-		if (Debug.SIMPLIFIED_KEY_HANDLING)
+		if (Options.SIMPLIFIED_KEY_HANDLING)
 		{
 			/*
 				It seems that the "else" path below does

@@ -82,7 +82,7 @@ public class KeyEventTranslator
 	 */
 	public static Key translateKeyEvent2(KeyEvent evt)
 	{
-		if (Debug.SIMPLIFIED_KEY_HANDLING)
+		if (Options.SIMPLIFIED_KEY_HANDLING)
 		{	// This is still experimental code.
 
 			/**
