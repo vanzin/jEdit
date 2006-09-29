@@ -347,7 +347,10 @@ public class EditPane extends JPanel implements EBComponent
 		// buffer properties.
 		int caret = caretInfo.caret;
 		if (caret == -1)
-			caret = (Integer)buffer.getProperty(Buffer.CARET);
+		{
+			Integer i = (Integer) buffer.getProperty(Buffer.CARET);
+			caret = i == null ? -1 : i;
+		}
 
 
 		if(caret != -1)
@@ -375,16 +378,22 @@ public class EditPane extends JPanel implements EBComponent
 		// set firstLine value
 		int firstLine = caretInfo.scrollVert;
 		if ( firstLine == -1 )
-			firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		{
+			Integer i = (Integer) buffer.getProperty(Buffer.SCROLL_VERT);
+			firstLine = i == null ? -1 : i;
+		}
 
 		if(firstLine != -1)
 			textArea.setFirstPhysicalLine(firstLine);
 
 		// set horizontal offset
 		int horizontalOffset = caretInfo.scrollHoriz;
-		if (horizontalOffset == -1) {
-			horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
+		if (horizontalOffset == -1)
+		{
+			Integer i = (Integer) buffer.getProperty(Buffer.SCROLL_HORIZ);
+			horizontalOffset = i == null ? -1 : i;
 		}
+
 		if(horizontalOffset != -1)
 			textArea.setHorizontalOffset(horizontalOffset);
 
