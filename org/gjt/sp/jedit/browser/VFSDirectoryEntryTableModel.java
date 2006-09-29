@@ -24,11 +24,13 @@ package org.gjt.sp.jedit.browser;
 
 import javax.swing.table.*;
 import java.util.*;
+import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * @author Slava Pestov
@@ -41,6 +43,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	public VFSDirectoryEntryTableModel()
 	{
 		extAttrs = new ArrayList<ExtendedAttribute>();
+		sortColumn = 0;
+		ascending = true;
 	} //}}}
 
 	//{{{ setRoot() method
@@ -87,7 +91,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			{
 				newFiles[startIndex + i + 1] = new Entry(
 					list.get(i),
-					entry.level + 1);
+					entry.level + 1,
+					entry);
 			}
 			System.arraycopy(files,startIndex + 1,
 				newFiles,startIndex + list.size() + 1,
@@ -185,6 +190,33 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 			return files[row];
 	} //}}}
 
+	//{{{ getAscending() method
+	public boolean getAscending()
+	{
+		return ascending;
+	} //}}}
+
+	//{{{ getSortColumn() method
+	public int getSortColumn()
+	{
+		return sortColumn;
+	} //}}}
+
+	//{{{ sortByColumn() method
+	public boolean sortByColumn(int column)
+	{
+		// toggle ascending/descending if column was clicked again
+		ascending = (sortColumn == column) ? !ascending : true;
+		sortColumn = column;
+		String sortBy = (sortColumn == 0) ? "name" : getExtendedAttribute(sortColumn);
+		// we don't sort by these attributes
+		if(sortBy == VFS.EA_STATUS || sortBy == VFS.EA_TYPE)
+			return false;
+		Arrays.sort(files, new EntryCompare(sortBy, ascending));
+		fireTableStructureChanged();
+		return true;
+	} //}}}
+
 	//{{{ getExtendedAttribute() method
 	public String getExtendedAttribute(int index)
 	{
@@ -232,6 +264,8 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 	//{{{ Private members
 	private List<ExtendedAttribute> extAttrs;
+	private int sortColumn;
+	private boolean ascending;
 
 	//{{{ addExtendedAttributes() method
 	private void addExtendedAttributes(VFS vfs)
@@ -294,6 +328,14 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		boolean expanded;
 		// how deeply we are nested
 		int level;
+		Entry parent;
+
+		Entry(VFSFile dirEntry, int level, Entry parent)
+		{
+			this.dirEntry = dirEntry;
+			this.level = level;
+			this.parent = parent;
+		}
 
 		Entry(VFSFile dirEntry, int level)
 		{
@@ -318,4 +360,83 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 			ref = 1;
 		}
 	} //}}}
+
+	//{{{ EntryCompare class
+	/**
+	 * Implementation of {@link Comparator}
+	 * interface that compares {@link VFSDirectoryEntryTableModel.Entry} instances.
+	 * For sorting columns in the VFS Browser.
+	 * @since jEdit 4.3pre7
+	 */
+	static class EntryCompare implements Comparator
+	{
+		private boolean sortIgnoreCase, sortMixFilesAndDirs, sortAscending;
+		private String sortAttribute;
+		/**
+		 * Creates a new <code>EntryCompare</code>
+		 * Expanded branches are sorted, too, but keep with their parent entries
+		 * @param sortBy The extended attribute by which to sort the entries.
+		 * @param ascending If false, sort order is reversed.
+		 */
+		EntryCompare(String sortBy, boolean ascending)
+		{
+			this.sortMixFilesAndDirs = jEdit.getBooleanProperty(
+				"vfs.browser.sortMixFilesAndDirs");
+			this.sortIgnoreCase = jEdit.getBooleanProperty(
+				"vfs.browser.sortIgnoreCase");
+			this.sortAscending = ascending;
+			this.sortAttribute = sortBy;
+		}
+
+		public int compare(Object obj1, Object obj2)
+		{
+			Entry entry1 = (Entry)obj1;
+			Entry entry2 = (Entry)obj2;
+
+			// we want to compare sibling ancestors of the entries
+			if(entry1.level < entry2.level) 
+				return compare(entry1, entry2.parent);
+			if(entry1.level > entry2.level)
+				return compare(entry1.parent, entry2);
+
+			// here we have entries of the same level
+			if(entry1.parent != entry2.parent)
+				return compare(entry1.parent, entry2.parent);
+
+			// here we have siblings with the same parents
+			// let's do the real comparison
+
+			VFSFile file1 = entry1.dirEntry;
+			VFSFile file2 = entry2.dirEntry;
+
+			if(!sortMixFilesAndDirs)
+			{
+				if(file1.getType() != file2.getType())
+					return file2.getType() - file1.getType();
+			}
+
+			int result;
+
+			// if the modified attribute is present, then we have a LocalFile
+			if(sortAttribute == VFS.EA_MODIFIED)
+				result = (
+					(Long)((FileVFS.LocalFile)file1).getModified())
+					.compareTo(
+					(Long)((FileVFS.LocalFile)file2).getModified());
+			// sort by size
+			else if(sortAttribute == VFS.EA_SIZE)
+				result = (
+					(Long)file1.getLength())
+					.compareTo(
+					(Long)file2.getLength());
+			// default: sort by name
+			else
+				result = StandardUtilities.compareStrings(
+					file1.getName(),
+					file2.getName(),
+					sortIgnoreCase);
+			return (sortAscending) ? result : -result;
+		}
+	} //}}}
+
 }

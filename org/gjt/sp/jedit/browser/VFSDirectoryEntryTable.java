@@ -61,8 +61,9 @@ public class VFSDirectoryEntryTable extends JTable
 		setDefaultRenderer(VFSDirectoryEntryTableModel.Entry.class,
 			renderer = new FileCellRenderer());
 
-		JTableHeader header = getTableHeader();
+		header = getTableHeader();
 		header.setReorderingAllowed(false);
+		header.addMouseListener(new MouseHandler());
 
 		setRowSelectionAllowed(true);
 
@@ -421,6 +422,7 @@ public class VFSDirectoryEntryTable extends JTable
 
 	//{{{ Private members
 	private BrowserView browserView;
+	private JTableHeader header;
 	private FileCellRenderer renderer;
 	private StringBuffer typeSelectBuffer = new StringBuffer();
 	private Timer timer = new Timer(0,new ClearTypeSelect());
@@ -538,4 +540,28 @@ public class VFSDirectoryEntryTable extends JTable
 			saveWidths();
 		}
 	} //}}}
+
+	//{{{ MouseHandler class
+	class MouseHandler extends MouseInputAdapter
+	{
+		public void mousePressed(MouseEvent evt)
+		{
+			// double click on columns header
+			if (evt.getSource() == header && evt.getClickCount() == 2)
+			{
+				VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel) header.getTable().getModel();
+				TableColumnModel columnModel = header.getColumnModel();
+				int viewColumn = columnModel.getColumnIndexAtX(evt.getX());
+				int column = columnModel.getColumn(viewColumn).getModelIndex();
+				if(model.sortByColumn(column))
+					resizeColumns();
+				Log.log(Log.DEBUG,this,"VFSDirectoryEntryTable sorted by " + model.getColumnName(column)
+					+ (model.getAscending() ? " ascending" : " descending") );
+				return;
+			}
+		}
+	} //}}}
+
+
+
 }
