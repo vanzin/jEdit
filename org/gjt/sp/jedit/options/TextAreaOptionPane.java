@@ -27,11 +27,17 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
-import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.AntiAlias;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.AbstractOptionPane;
+import org.gjt.sp.jedit.gui.FontSelector;
+import org.gjt.sp.jedit.gui.ColorWellButton;
 //}}}
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class TextAreaOptionPane extends AbstractOptionPane
 {
 	//{{{ TextAreaOptionPane constructor
@@ -136,7 +142,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		
 		antiAlias = new JComboBox(AntiAlias.comboChoices);
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
-		AntiAlias antiAliasValue = AntiAlias.textArea();
+		AntiAlias antiAliasValue = new AntiAlias(jEdit.getProperty("view.antiAlias"));
 		font.setAntiAliasEnabled(antiAliasValue.val()>0);
 		antiAlias.addActionListener(new ActionListener()
 			{
@@ -199,8 +205,9 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			wrapGuideColor.getSelectedColor());
 		jEdit.setIntegerProperty("view.electricBorders",electricBorders
 			.isSelected() ? 3 : 0);
-		AntiAlias nv = AntiAlias.textArea();
+		AntiAlias nv = new AntiAlias(jEdit.getProperty("view.antiAlias"));
 		nv.set(antiAlias.getSelectedIndex());
+		jEdit.setProperty("view.antiAlias", nv.toString());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
 	} //}}}

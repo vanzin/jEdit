@@ -1,6 +1,25 @@
+/*
+ * EditPane.java - Text area and buffer switcher
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2006 Alan Ezust
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package org.gjt.sp.jedit.textarea;
-
-import org.gjt.sp.jedit.jEdit;
 
 /**
  * Class for representing AntiAlias values. The following modes are supported:
@@ -19,33 +38,9 @@ public class AntiAlias extends Object
 
 	public static final Object comboChoices[] = new Object[] { NONE, STANDARD, SUBPIXEL };
 
-	public static AntiAlias textArea()
-	{
-		AntiAlias al = new AntiAlias();
-		return al.load("view.antiAlias");
-		
-	}
-
 	public void set(int newValue)
 	{
 		m_val = newValue;
-		save();
-	}
-
-	public void save()
-	{
-		jEdit.setProperty(m_property, toString());
-	}
-
-	public AntiAlias load(String propName)
-	{
-		m_property = propName;
-		fromString(jEdit.getProperty(m_property));
-		return this;
-	}
-
-	private AntiAlias()
-	{
 	}
 
 	public AntiAlias(boolean isEnabled)
@@ -89,8 +84,6 @@ public class AntiAlias extends Object
 	{
 		return m_val;
 	}
-
-	private String m_property = null;
 
 	private int m_val = 0;
 }

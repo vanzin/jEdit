@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.syntax.Chunk;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.jEdit;
 
 import org.gjt.sp.util.Log;
 //}}}
@@ -823,7 +824,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			| AWTEvent.MOUSE_EVENT_MASK);
 
 		this.textArea = textArea;
-		antiAlias = AntiAlias.textArea();
+		antiAlias = new AntiAlias(jEdit.getProperty("view.antiAlias"));
 		fonts = new HashMap();
 		extensionMgr = new ExtensionManager();
 
@@ -854,7 +855,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private PaintCaret caretExtension;
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
-	private HashMap fonts;
+	private Map fonts;
 	//}}}
 
 	private static Object sm_hrgbRender = null;
@@ -879,7 +880,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ updateRenderingHints() method
 	private void updateRenderingHints()
 	{
-		HashMap hints = new HashMap();
+		Map<RenderingHints.Key,Object> hints = new HashMap<RenderingHints.Key,Object>();
 
 		hints.put(RenderingHints.KEY_FRACTIONALMETRICS,
 			fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON
@@ -890,7 +891,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 		}
 		/** LCD HRGB mode - works with JRE 1.6 only, which is why we use reflection */
-		else if ((antiAlias.val() == 2) && (sm_hrgbRender != null )) 
+		else if (antiAlias.val() == 2 && sm_hrgbRender != null )
 		{ 
 			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, sm_hrgbRender);
 			Object fontRenderHint = fracFontMetrics ? 
@@ -1023,10 +1024,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				? getMultipleSelectionColor()
 				: getSelectionColor());
 
-			Iterator iter = textArea.getSelectionIterator();
+			Iterator<Selection> iter = textArea.getSelectionIterator();
 			while(iter.hasNext())
 			{
-				Selection s = (Selection)iter.next();
+				Selection s = iter.next();
 				paintSelection(gfx,screenLine,physicalLine,y,s);
 			}
 		} //}}}

@@ -27,6 +27,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Map;
+
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
@@ -282,17 +284,19 @@ public class EditPane extends JPanel implements EBComponent
 		// is switching between buffers.  We want to keep the caret in the 
 		// right position in each EditPane, which won't be the case if we 
 		// just use the buffer caret property.
-		HashMap carets = (HashMap)getClientProperty(CARETS);
-		if ( carets == null ) {
-			carets = new HashMap();
+		Map<String, CaretInfo> carets = (Map<String, CaretInfo>)getClientProperty(CARETS);
+		if (carets == null) 
+		{
+			carets = new HashMap<String, CaretInfo>();
 			putClientProperty(CARETS, carets);
 		}
-		CaretInfo caretInfo = (CaretInfo)carets.get(buffer.getPath());
-		if ( caretInfo == null ) {
+		CaretInfo caretInfo = carets.get(buffer.getPath());
+		if (caretInfo == null)
+		{
 			caretInfo = new CaretInfo();	
 			carets.put(buffer.getPath(), caretInfo);
 		}
-		caretInfo.caret = new Integer(textArea.getCaretPosition());
+		caretInfo.caret = textArea.getCaretPosition();
 		
 
 		Selection[] selection = textArea.getSelection();
@@ -303,10 +307,10 @@ public class EditPane extends JPanel implements EBComponent
 
 		buffer.setIntegerProperty(Buffer.SCROLL_VERT,
 			textArea.getFirstPhysicalLine());
-		caretInfo.scrollVert = new Integer(textArea.getFirstPhysicalLine());
+		caretInfo.scrollVert = textArea.getFirstPhysicalLine();
 		buffer.setIntegerProperty(Buffer.SCROLL_HORIZ,
 			textArea.getHorizontalOffset());
-		caretInfo.scrollHoriz = new Integer(textArea.getHorizontalOffset());
+		caretInfo.scrollHoriz = textArea.getHorizontalOffset();
 		if (!buffer.isUntitled())
 		{
 			BufferHistory.setEntry(buffer.getPath(), textArea.getCaretPosition(),
@@ -326,12 +330,12 @@ public class EditPane extends JPanel implements EBComponent
 	{
 		// get our internal map of buffer -> CaretInfo since there might
 		// be current info already
-		HashMap carets = (HashMap)getClientProperty(CARETS);
+		Map<String, CaretInfo> carets = (Map<String, CaretInfo>)getClientProperty(CARETS);
 		if ( carets == null ) {
-			carets = new HashMap();
+			carets = new HashMap<String, CaretInfo>();
 			putClientProperty(CARETS, carets);
 		}
-		CaretInfo caretInfo = (CaretInfo)carets.get(buffer.getPath());
+		CaretInfo caretInfo = carets.get(buffer.getPath());
 		if ( caretInfo == null ) {
 			caretInfo = new CaretInfo();	
 		}
@@ -341,17 +345,14 @@ public class EditPane extends JPanel implements EBComponent
 		// if so, use that one first.  Otherwise, fall back to any 
 		// previously saved caret position that was stored in the 
 		// buffer properties.
-		Integer caret = caretInfo.caret;	
-		if ( caret == null ) {
+		int caret = caretInfo.caret;
+		if (caret == -1)
 			caret = (Integer)buffer.getProperty(Buffer.CARET);
-		}
-		
 
-		if(caret != null)
-		{
-			textArea.setCaretPosition(Math.min(caret.intValue(),
+
+		if(caret != -1)
+			textArea.setCaretPosition(Math.min(caret,
 				buffer.getLength()));
-		}
 
 		// set any selections
 		Selection[] selection = caretInfo.selection;
@@ -372,20 +373,20 @@ public class EditPane extends JPanel implements EBComponent
 		}
 
 		// set firstLine value
-		Integer firstLine = caretInfo.scrollVert;
-		if ( firstLine == null ) {
+		int firstLine = caretInfo.scrollVert;
+		if ( firstLine == -1 )
 			firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
-		}
-		if(firstLine != null)
-			textArea.setFirstPhysicalLine(firstLine.intValue());
+
+		if(firstLine != -1)
+			textArea.setFirstPhysicalLine(firstLine);
 
 		// set horizontal offset
-		Integer horizontalOffset = caretInfo.scrollHoriz;
-		if ( horizontalOffset == null ) {
+		int horizontalOffset = caretInfo.scrollHoriz;
+		if (horizontalOffset == -1) {
 			horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
 		}
-		if(horizontalOffset != null)
-			textArea.setHorizontalOffset(horizontalOffset.intValue());
+		if(horizontalOffset != -1)
+			textArea.setHorizontalOffset(horizontalOffset);
 
 		/* Silly bug workaround #8694. If you look at the above code,
 		 * note that we restore the saved caret position first, then
@@ -403,22 +404,17 @@ public class EditPane extends JPanel implements EBComponent
 	
 	//{{{
 	/**
-
 	 * Need to track this info for each buffer that this EditPane might edit
-
 	 * since a buffer may be open in more than one EditPane at a time.  That
-
 	 * means we need to track this info at the EditPane level rather than
-
 	 * the buffer level.
-
 	 */
-
-	public class CaretInfo {
-		public Integer caret = null;
-		public Selection[] selection = null;
-		public Integer scrollVert = null;
-		public Integer scrollHoriz = null;
+	private static class CaretInfo
+	{
+		public int caret = -1;
+		public Selection[] selection;
+		public int scrollVert = -1;
+		public int scrollHoriz = -1;
 	} //}}}
 
 	//{{{ goToNextMarker() method
@@ -428,7 +424,7 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void goToNextMarker(boolean select)
 	{
-		java.util.List markers = buffer.getMarkers();
+		java.util.List<Marker> markers = buffer.getMarkers();
 		if(markers.isEmpty())
 		{
 			getToolkit().beep();
@@ -441,16 +437,16 @@ public class EditPane extends JPanel implements EBComponent
 
 		for(int i = 0; i < markers.size(); i++)
 		{
-			Marker _marker = (Marker)markers.get(i);
+			Marker _marker = markers.get(i);
 			if(_marker.getPosition() > caret)
 			{
 				marker = _marker;
 				break;
 			}
 		}
-
+		// the markers list is not empty at this point
 		if(marker == null)
-			marker = (Marker)markers.get(0);
+			marker = markers.get(0);
 
 		if(select)
 			textArea.extendSelection(caret,marker.getPosition());
@@ -466,7 +462,7 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void goToPrevMarker(boolean select)
 	{
-		java.util.List markers = buffer.getMarkers();
+		java.util.List<Marker> markers = buffer.getMarkers();
 		if(markers.isEmpty())
 		{
 			getToolkit().beep();
@@ -478,7 +474,7 @@ public class EditPane extends JPanel implements EBComponent
 		Marker marker = null;
 		for(int i = markers.size() - 1; i >= 0; i--)
 		{
-			Marker _marker = (Marker)markers.get(i);
+			Marker _marker = markers.get(i);
 			if(_marker.getPosition() < caret)
 			{
 				marker = _marker;
@@ -487,7 +483,7 @@ public class EditPane extends JPanel implements EBComponent
 		}
 
 		if(marker == null)
-			marker = (Marker)markers.get(markers.size() - 1);
+			marker = markers.get(markers.size() - 1);
 
 		if(select)
 			textArea.extendSelection(caret,marker.getPosition());
@@ -650,12 +646,14 @@ public class EditPane extends JPanel implements EBComponent
 
 	//{{{ Instance variables
 	private boolean init;
-	private View view;
+	/** The View where the edit pane is. */
+	private final View view;
 	/** The current buffer. */
 	private Buffer buffer;
 	private Buffer recentBuffer;
 	private BufferSwitcher bufferSwitcher;
-	private JEditTextArea textArea;
+	/** The textArea inside the edit pane. */
+	private final JEditTextArea textArea;
 	private MarkerHighlight markerHighlight;
 
 	public static final String CARETS = "Buffer->caret";
@@ -696,7 +694,7 @@ public class EditPane extends JPanel implements EBComponent
 			"view.lineHighlight"));
 		painter.setLineHighlightColor(
 			jEdit.getColorProperty("view.lineHighlightColor"));
-		painter.setAntiAlias(AntiAlias.textArea());
+		painter.setAntiAlias(new AntiAlias(jEdit.getProperty("view.antiAlias")));
 		painter.setFractionalFontMetricsEnabled(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
 
@@ -941,17 +939,17 @@ public class EditPane extends JPanel implements EBComponent
 			case OVERWRITE_CHANGED:
 				status.setMessageAndClear(
 					jEdit.getProperty("view.status.overwrite-changed",
-					new Integer[] { new Integer(value ? 1 : 0) }));
+					new Integer[] { value ? 1 : 0 }));
 				break;
 			case MULTI_SELECT_CHANGED:
 				status.setMessageAndClear(
 					jEdit.getProperty("view.status.multi-changed",
-					new Integer[] { new Integer(value ? 1 : 0) }));
+					new Integer[] { value ? 1 : 0 }));
 				break;
 			case RECT_SELECT_CHANGED:
 				status.setMessageAndClear(
 					jEdit.getProperty("view.status.rect-select-changed",
-					new Integer[] { new Integer(value ? 1 : 0) }));
+					new Integer[] { value ? 1 : 0 }));
 				break;
 			}
 			
@@ -966,7 +964,7 @@ public class EditPane extends JPanel implements EBComponent
 			
 			status.setMessageAndClear(jEdit.getProperty(
 				"view.status.bracket",new Object[] {
-				new Integer(line), text }));
+				line, text }));
 		}
 	
 		public void narrowActive(JEditTextArea textArea)
