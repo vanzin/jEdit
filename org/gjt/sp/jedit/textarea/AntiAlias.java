@@ -19,16 +19,6 @@ public class AntiAlias extends Object
 
 	public static final Object comboChoices[] = new Object[] { NONE, STANDARD, SUBPIXEL };
 
-	/**
-	 * 
-	 * @return a AntiAlias object attached to a jedit property
-	 */
-	public static AntiAlias appearance()
-	{
-		AntiAlias al = new AntiAlias();
-		return al.load("options.appearance.font.antiAlias");
-	}
-
 	public static AntiAlias textArea()
 	{
 		AntiAlias al = new AntiAlias();

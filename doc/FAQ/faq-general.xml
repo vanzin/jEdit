@@ -606,7 +606,7 @@
       <para>
         If you are interested in testing the absolutely latest changes to jEdit,
         and you are familiar with compiling your own Java programs and working
-        with CVS, you can download the current code maintained in the <ulink
+        with Subversion, you can download the current code maintained in the <ulink
         url="http://sourceforge.net/cvs/?group_id=588">SourceForge
         CVS repository</ulink>.
       </para></answer>
