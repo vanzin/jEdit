@@ -26,7 +26,7 @@ import java.awt.event.MouseEvent;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.jEdit;
 
-public class MouseActions
+public class MouseActions implements MouseActionsProvider
 {
 	//{{{ MouseActions constructor
 	MouseActions(String name)
@@ -35,17 +35,17 @@ public class MouseActions
 	} //}}}
 
 	//{{{ getActionForEvent() method
-	String getActionForEvent(MouseEvent evt, String variant)
+	public String getActionForEvent(MouseEvent evt, String variant)
 	{
 		String modStr = DefaultInputHandler.getModifierString(evt);
 		if(modStr == null)
 		{
-			return jEdit.getProperty("view." + name + "."
+			return jEdit.getProperty("view." + name + '.'
 				+ variant + "Click");
 		}
 		else
 		{
-			return jEdit.getProperty("view." + name + "."
+			return jEdit.getProperty("view." + name + '.'
 				+ DefaultInputHandler.getModifierString(evt)
 				+ variant + "Click");
 		}

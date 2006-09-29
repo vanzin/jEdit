@@ -80,6 +80,7 @@ public class JEditTextArea extends JComponent
 		painter = new TextAreaPainter(this);
 		repaintMgr = new FastRepaintManager(this,painter);
 		gutter = new Gutter(this);
+		gutter.setMouseActionsProvider(new MouseActions("gutter"));
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
 		blink = true;

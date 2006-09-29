@@ -84,9 +84,9 @@ public class Gutter extends JComponent implements SwingConstants
 
 		extensionMgr = new ExtensionManager();
 
-		MouseHandler ml = new MouseHandler();
-		addMouseListener(ml);
-		addMouseMotionListener(ml);
+		mouseHandler = new MouseHandler();
+		addMouseListener(mouseHandler);
+		addMouseMotionListener(mouseHandler);
 
 		updateBorder();
 	} //}}}
@@ -492,6 +492,10 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	} //}}}
 
+	public void setMouseActionsProvider(MouseActionsProvider mouseActionsProvider)
+	{
+		mouseHandler.mouseActions = mouseActionsProvider;
+	}
 	//}}}
 
 	//{{{ Private members
@@ -499,8 +503,8 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ Instance variables
 	private static final int FOLD_MARKER_SIZE = 12;
 
-	private JEditTextArea textArea;
-
+	private final JEditTextArea textArea;
+	private MouseHandler mouseHandler;
 	private ExtensionManager extensionMgr;
 
 	private int baseline;
@@ -706,7 +710,7 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseInputAdapter
 	{
-		MouseActions mouseActions = new MouseActions("gutter");
+		MouseActionsProvider mouseActions;
 		boolean drag;
 		int toolTipInitialDelay, toolTipReshowDelay;
 
@@ -771,8 +775,11 @@ public class Gutter extends JComponent implements SwingConstants
 				else
 					return;
 
-				String action = mouseActions.getActionForEvent(
-					e,variant);
+				String action = null;
+
+				if (mouseActions != null)
+					action = mouseActions.getActionForEvent(
+						e,variant);
 
 				if(action == null)
 					action = defaultAction;
