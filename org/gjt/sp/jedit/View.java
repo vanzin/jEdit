@@ -24,7 +24,6 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import javax.swing.event.*;
-import javax.swing.text.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -33,11 +32,12 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.net.Socket;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -472,7 +472,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	public KeyListener getKeyEventInterceptor()
 	{
-		return keyEventInterceptor;
+		return inputHandler.getKeyEventInterceptor();
 	} //}}}
 
 	//{{{ setKeyEventInterceptor() method
@@ -485,7 +485,7 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void setKeyEventInterceptor(KeyListener listener)
 	{
-		this.keyEventInterceptor = listener;
+		inputHandler.setKeyEventInterceptor(listener);
 	} //}}}
 
 	//{{{ getInputHandler() method
@@ -534,7 +534,9 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void processKeyEvent(KeyEvent evt)
 	{
-		processKeyEvent(evt,VIEW);
+		inputHandler.processKeyEvent(evt,VIEW, false);
+		if(!evt.isConsumed())
+			super.processKeyEvent(evt);
 	} //}}}
 
 	//{{{ processKeyEvent() method
@@ -567,148 +569,15 @@ public class View extends JFrame implements EBComponent
 	 * Forwards key events directly to the input handler.
 	 * This is slightly faster than using a KeyListener
 	 * because some Swing overhead is avoided.
+	 * @deprecated do not use, try {@link org.gjt.sp.jedit.gui.InputHandler#processKeyEvent(java.awt.event.KeyEvent, int, boolean)}
 	 */
 	public void processKeyEvent(KeyEvent evt, int from, boolean global)
 	{
-		if(Debug.DUMP_KEY_EVENTS)
-		{
-			Log.log(Log.DEBUG,this,"Key event                 : "
-				+ GrabKeyDialog.toString(evt) + " from " + from);
-			Log.log(Log.DEBUG,this,this+".isFocused()="+(this.isFocused())+".",new Exception());
-		}
-
-		if(getTextArea().hasFocus() && from == VIEW)
-			return;
-		
-		evt = _preprocessKeyEvent(evt);
-		if(evt == null)
-			return;
-
-		if(Debug.DUMP_KEY_EVENTS)
-		{
-			Log.log(Log.DEBUG,this,"Key event after workaround: "
-				+ GrabKeyDialog.toString(evt) + " from " + from);
-		}
-
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_TYPED:
-			boolean focusOnTextArea = false;
-			// if the user pressed eg C+e n n in the
-			// search bar we want focus to go back there
-			// after the prefix is done
-			if(prefixFocusOwner != null)
-			{
-				if(prefixFocusOwner.isShowing())
-				{
-					prefixFocusOwner.requestFocus();
-					focusOnTextArea = true;
-				}
-			}
-
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyTyped(evt);
-			else if(from == ACTION_BAR
-				|| Debug.GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES
-				|| inputHandler.isPrefixActive()
-				|| getTextArea().hasFocus())
-			{
-				processKeyEventKeyStrokeHandling(evt,from,"type ",global);
-			}
-
-
-			processKeyEventSub(focusOnTextArea);
-			
-			break;
-		case KeyEvent.KEY_PRESSED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyPressed(evt);
-			else if(KeyEventWorkaround.isBindable(evt.getKeyCode()))
-			{
-				/* boolean */ focusOnTextArea = false;
-				if(prefixFocusOwner != null)
-				{
-					if(prefixFocusOwner.isShowing())
-					{
-						prefixFocusOwner.requestFocus();
-						focusOnTextArea = true;
-					}
-					prefixFocusOwner = null;
-				}
-
-				processKeyEventKeyStrokeHandling(evt,from,"press",global);
-
-				processKeyEventSub(focusOnTextArea);
-				
-			}
-			break;
-		case KeyEvent.KEY_RELEASED:
-			if(keyEventInterceptor != null)
-				keyEventInterceptor.keyReleased(evt);
-			break;
-		}
-		
+		inputHandler.processKeyEvent(evt, from, global);
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 	} //}}}
-	
-	//{{{ processKeyEventKeyStrokeHandling() method
-	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global) {
-		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent2(evt);
-		
-		if(keyStroke != null)
-		{
-			keyStroke.setIsFromGlobalContext(global);
-			if(Debug.DUMP_KEY_EVENTS)
-			{
-				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
-			}
-			boolean consumed = false;
-			if(inputHandler.handleKey(keyStroke,keyStroke.isPhantom())) {
-				evt.consume();
-				
-				consumed = true;
-			}
-			if(Debug.DUMP_KEY_EVENTS)
-			{
-				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from+": consumed="+consumed+".");
-			}
-		}
-	} //}}}
-	
-	
-	//{{{ processKeyEventSub() method
-	protected void processKeyEventSub(boolean focusOnTextArea) {
-		// we might have been closed as a result of
-		// the above
-		if(isClosed())
-			return;
-		
-		// this is a weird hack.
-		// we don't want C+e a to insert 'a' in the
-		// search bar if the search bar has focus...
-		if(inputHandler.isPrefixActive())
-		{
-			if(getFocusOwner() instanceof JTextComponent)
-			{
-				prefixFocusOwner = getFocusOwner();
-				getTextArea().requestFocus();
-			}
-			else if(focusOnTextArea)
-			{
-				getTextArea().requestFocus();
-			}
-			else
-			{
-				prefixFocusOwner = null;
-			}
-		}
-		else
-		{
-			prefixFocusOwner = null;
-		}
-	}
-	//}}}
+
 
 	//}}}
 
@@ -756,8 +625,8 @@ public class View extends JFrame implements EBComponent
 		newSplitPane.setMinimumSize(new Dimension(0,0));
 		newSplitPane.setResizeWeight(0.5);
 
-		int parentSize = (orientation == JSplitPane.VERTICAL_SPLIT
-			? oldEditPane.getHeight() : oldEditPane.getWidth());
+		int parentSize = orientation == JSplitPane.VERTICAL_SPLIT
+			? oldEditPane.getHeight() : oldEditPane.getWidth();
 		final int dividerPosition = (int)((parentSize
 			- newSplitPane.getDividerSize()) * 0.5);
 		newSplitPane.setDividerLocation(dividerPosition);
@@ -781,7 +650,7 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 		{
-			this.splitPane = newSplitPane;
+			splitPane = newSplitPane;
 
 			newSplitPane.setLeftComponent(oldEditPane);
 			newSplitPane.setRightComponent(editPane);
@@ -1057,10 +926,10 @@ public class View extends JFrame implements EBComponent
 		}
 		else
 		{
-			Vector vec = new Vector();
+			List<EditPane> vec = new ArrayList<EditPane>();
 			getEditPanes(vec,splitPane);
 			EditPane[] ep = new EditPane[vec.size()];
-			vec.copyInto(ep);
+			vec.toArray(ep);
 			return ep;
 		}
 	} //}}}
@@ -1075,7 +944,7 @@ public class View extends JFrame implements EBComponent
 		config.plainView = isPlainView();
 		config.splitConfig = getSplitConfig();
 		config.extState = getExtendedState();
-		String prefix = (config.plainView ? "plain-view" : "view");
+		String prefix = config.plainView ? "plain-view" : "view";
 		switch (config.extState)
 		{
 			case Frame.MAXIMIZED_BOTH:
@@ -1196,10 +1065,10 @@ public class View extends JFrame implements EBComponent
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "["
-			+ (jEdit.getActiveView() == this
+		return getClass().getName() + '['
+		       + (jEdit.getActiveView() == this
 			? "active" : "inactive")
-			+ "]";
+			+ ']';
 	} //}}}
 
 	//{{{ updateTitle() method
@@ -1208,16 +1077,16 @@ public class View extends JFrame implements EBComponent
 	 */
 	public void updateTitle()
 	{
-		Vector buffers = new Vector();
+		List<Buffer> buffers = new ArrayList<Buffer>();
 		EditPane[] editPanes = getEditPanes();
 		for(int i = 0; i < editPanes.length; i++)
 		{
 			Buffer buffer = editPanes[i].getBuffer();
 			if(buffers.indexOf(buffer) == -1)
-				buffers.addElement(buffer);
+				buffers.add(buffer);
 		}
 
-		StringBuffer title = new StringBuffer();
+		StringBuilder title = new StringBuilder();
 
 		/* On Mac OS X, apps are not supposed to show their name in the
 		title bar. */
@@ -1231,7 +1100,7 @@ public class View extends JFrame implements EBComponent
 			if(i != 0)
 				title.append(", ");
 
-			Buffer buffer = (Buffer)buffers.elementAt(i);
+			Buffer buffer = buffers.get(i);
 			title.append((showFullPath && !buffer.isNewFile())
 				? buffer.getPath() : buffer.getName());
 			if(buffer.isDirty())
@@ -1248,8 +1117,20 @@ public class View extends JFrame implements EBComponent
 		http://developer.apple.com/qa/qa2001/qa1146.html */
 		final String WINDOW_MODIFIED = "windowModified";
 		getRootPane().putClientProperty(WINDOW_MODIFIED,
-			Boolean.valueOf(unsavedChanges));
+			unsavedChanges);
 	} //}}}
+
+
+	public Component getPrefixFocusOwner()
+	{
+		return prefixFocusOwner;
+	}
+
+
+	public void setPrefixFocusOwner(Component prefixFocusOwner)
+	{
+		this.prefixFocusOwner = prefixFocusOwner;
+	}
 
 	//{{{ Package-private members
 	View prev;
@@ -1258,7 +1139,7 @@ public class View extends JFrame implements EBComponent
 	//{{{ View constructor
 	View(Buffer buffer, ViewConfig config)
 	{
-		this.plainView = config.plainView;
+		plainView = config.plainView;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 
@@ -1300,7 +1181,7 @@ public class View extends JFrame implements EBComponent
 
 		SearchDialog.preloadSearchDialog(this);
 
-		GUIUtilities.addSizeSaver(this, null, this.plainView ? "plain-view" : "view");
+		GUIUtilities.addSizeSaver(this, null, plainView ? "plain-view" : "view");
 	} //}}}
 
 	//{{{ close() method
@@ -1370,7 +1251,6 @@ public class View extends JFrame implements EBComponent
 
 	private StatusBar status;
 
-	private KeyListener keyEventInterceptor;
 	private InputHandler inputHandler;
 	private Macros.Recorder recorder;
 	private Component prefixFocusOwner;
@@ -1385,10 +1265,10 @@ public class View extends JFrame implements EBComponent
 	//}}}
 
 	//{{{ getEditPanes() method
-	private void getEditPanes(Vector vec, Component comp)
+	private static void getEditPanes(List<EditPane> vec, Component comp)
 	{
 		if(comp instanceof EditPane)
-			vec.addElement(comp);
+			vec.add((EditPane) comp);
 		else if(comp instanceof JSplitPane)
 		{
 			JSplitPane split = (JSplitPane)comp;
@@ -1400,7 +1280,7 @@ public class View extends JFrame implements EBComponent
 	//{{{ getSplitConfig() method
 	private String getSplitConfig()
 	{
-		StringBuffer splitConfig = new StringBuffer();
+		StringBuilder splitConfig = new StringBuilder();
 
 		if(splitPane != null)
 			getSplitConfig(splitPane,splitConfig);
@@ -1419,8 +1299,8 @@ public class View extends JFrame implements EBComponent
 	/*
 	 * The split config is recorded in a simple RPN "language".
 	 */
-	private void getSplitConfig(JSplitPane splitPane,
-		StringBuffer splitConfig)
+	private static void getSplitConfig(JSplitPane splitPane,
+		StringBuilder splitConfig)
 	{
 		Component right = splitPane.getRightComponent();
 		if(right instanceof JSplitPane)
@@ -1484,9 +1364,9 @@ public class View extends JFrame implements EBComponent
 	// a StringReader which can never throw an exception...
 	{
 		if(buffer != null)
-			return (editPane = createEditPane(buffer));
+			return editPane = createEditPane(buffer);
 		else if(splitConfig == null)
-			return (editPane = createEditPane(jEdit.getFirstBuffer()));
+			return editPane = createEditPane(jEdit.getFirstBuffer());
 
 		Buffer[] buffers = jEdit.getBuffers();
 
@@ -1552,7 +1432,7 @@ loop:		for(;;)
 				}
 				break;
 			case StreamTokenizer.TT_NUMBER:
-				stack.push(new Integer((int)st.nval));
+				stack.push((int)st.nval);
 				break;
 			case '"':
 				stack.push(st.sval);
@@ -1708,91 +1588,6 @@ loop:		for(;;)
 			editPanes[i].getTextArea().getGutter().updateBorder();
 	} //}}}
 
-	//{{{ _preprocessKeyEvent() method
-	private KeyEvent _preprocessKeyEvent(KeyEvent evt)
-	{
-		if(isClosed())
-			return null;
-
-		if (Options.SIMPLIFIED_KEY_HANDLING)
-		{
-			/*
-				It seems that the "else" path below does
-				not work. Apparently, is is there to prevent
-				some keyboard events to be "swallowed" by
-				jEdit when the keyboard event in fact should
-				be scheduled to swing for further handling.
-				
-				On some "key typed" events, the "return null;"
-				is triggered. However, these key events
-				actually do not seem to be handled elseewhere,
-				so they are not handled at all.
-				
-				This behaviour exists with old keyboard handling
-				as well as with new keyboard handling. However,
-				the new keyboard handling is more sensitive
-				about what kinds of key events it receives. It
-				expects to see all "key typed" events,
-				which is incompatible with the "return null;"
-				below.
-				
-				This bug triggers jEdit bug 1493185 ( https://sourceforge.net/tracker/?func=detail&aid=1493185&group_id=588&atid=100588 ).
-				
-				Thus, we disable the possibility of
-				key event swallowing for the new key event
-				handling.			
-				
-			*/
-		}
-		else
-		{		
-			if(getFocusOwner() instanceof JComponent)
-			{
-				JComponent comp = (JComponent)getFocusOwner();
-				InputMap map = comp.getInputMap();
-				ActionMap am = comp.getActionMap();
-	
-				if(map != null && am != null && comp.isEnabled())
-				{
-					KeyStroke	keyStroke	= KeyStroke.getKeyStrokeForEvent(evt); 
-					Object binding = map.get(keyStroke);
-					if(binding != null && am.get(binding) != null)
-					{
-						return null;
-					}
-				}
-			}
-		}
-
-		if(getFocusOwner() instanceof JTextComponent)
-		{
-			// fix for the bug where key events in JTextComponents
-			// inside views are also handled by the input handler
-			if(evt.getID() == KeyEvent.KEY_PRESSED)
-			{
-				switch(evt.getKeyCode())
-				{
-				case KeyEvent.VK_ENTER:
-				case KeyEvent.VK_TAB:
-				case KeyEvent.VK_BACK_SPACE:
-				case KeyEvent.VK_SPACE:
-					return null;
-				}
-			}
-		}
-		
-		if(evt.isConsumed())
-			return null;
-
-		if(Debug.DUMP_KEY_EVENTS)
-		{
-			Log.log(Log.DEBUG,this,"Key event (preprocessing) : "
-					+ GrabKeyDialog.toString(evt));
-		}
-
-		return KeyEventWorkaround.processKeyEvent(evt);
-	} //}}}
-
 	//}}}
 
 	//{{{ Inner classes
@@ -1847,7 +1642,7 @@ loop:		for(;;)
 		public void windowActivated(WindowEvent evt)
 		{
 			boolean editPaneChanged =
-				(jEdit.getActiveView() != View.this);
+				jEdit.getActiveView() != View.this;
 			jEdit.setActiveView(View.this);
 
 			// People have reported hangs with JDK 1.4; might be
@@ -1892,7 +1687,7 @@ loop:		for(;;)
 		public ViewConfig(boolean plainView)
 		{
 			this.plainView = plainView;
-			String prefix = (plainView ? "plain-view" : "view");
+			String prefix = plainView ? "plain-view" : "view";
 			x = jEdit.getIntegerProperty(prefix + ".x",0);
 			y = jEdit.getIntegerProperty(prefix + ".y",0);
 			width = jEdit.getIntegerProperty(prefix + ".width",0);

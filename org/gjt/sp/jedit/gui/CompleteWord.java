@@ -169,8 +169,8 @@ public class CompleteWord extends JWindow
 		// stupid scrollbar policy is an attempt to work around
 		// bugs people have been seeing with IBM's JDK -- 7 Sep 2000
 		JScrollPane scroller = new JScrollPane(words,
-			JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+			ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		getContentPane().add(scroller, BorderLayout.CENTER);
 
@@ -217,7 +217,7 @@ public class CompleteWord extends JWindow
 		{
 			String keywordNoWordSep = keywordMap.getNonAlphaNumericChars();
 			if(keywordNoWordSep != null)
-				noWordSep = noWordSep + keywordNoWordSep;
+				noWordSep += keywordNoWordSep;
 		}
 
 		return noWordSep;
@@ -253,9 +253,9 @@ public class CompleteWord extends JWindow
 		int caret)
 	{
 		// build a list of unique words in all visible buffers
-		Set completions = new TreeSet(new StandardUtilities
+		Set<Completion> completions = new TreeSet<Completion>(new StandardUtilities
 			.StringCompare());
-		Set buffers = new HashSet();
+		Set<Buffer> buffers = new HashSet<Buffer>();
 
 		// only complete current buffer's keyword map
 		KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
@@ -290,7 +290,7 @@ public class CompleteWord extends JWindow
 			views = views.getNext();
 		}
 
-		Completion[] completionArray = (Completion[])completions
+		Completion[] completionArray = completions
 			.toArray(new Completion[completions.size()]);
 
 		return completionArray;
@@ -299,7 +299,7 @@ public class CompleteWord extends JWindow
 	//{{{ getCompletions() method
 	private static void getCompletions(Buffer buffer, String word,
 		KeywordMap keywordMap, String noWordSep, int caret,
-		Set completions)
+		Set<Completion> completions)
 	{
 		int wordLen = word.length();
 
@@ -396,8 +396,8 @@ public class CompleteWord extends JWindow
 	//{{{ Completion class
 	static class Completion
 	{
-		String text;
-		boolean keyword;
+		final String text;
+		final boolean keyword;
 
 		Completion(String text, boolean keyword)
 		{
@@ -477,7 +477,7 @@ public class CompleteWord extends JWindow
 				if (getFocusOwner() == words) return;
 				evt.consume();
 				if(selected == 0) return;
-				selected = selected - 1;
+				selected--;
 				words.setSelectedIndex(selected);
 				words.ensureIndexIsVisible(selected);
 				break;
@@ -485,7 +485,7 @@ public class CompleteWord extends JWindow
 				if(getFocusOwner() == words) return;
 				evt.consume();
 				if(selected >= words.getModel().getSize()) break;
-				selected = selected + 1;
+				selected++;
 				words.setSelectedIndex(selected);
 				words.ensureIndexIsVisible(selected);
 				break;
@@ -543,7 +543,7 @@ public class CompleteWord extends JWindow
 					|| evt.isMetaDown())
 				{
 					dispose();
-					view.processKeyEvent(evt);
+					view.getInputHandler().processKeyEvent(evt, View.VIEW, false);
 				}
 				break;
 			}
@@ -593,7 +593,7 @@ public class CompleteWord extends JWindow
 
 				textArea.userInput(ch);
 
-				word = word + ch;
+				word += ch;
 				int caret = textArea.getCaretPosition();
 
 				Completion[] completions = getCompletions(

@@ -4642,8 +4642,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
-		view.processKeyEvent(evt,View.TEXT_AREA);
-
+		view.getInputHandler().processKeyEvent(evt,View.TEXT_AREA, false);
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 

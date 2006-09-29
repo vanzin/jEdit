@@ -878,7 +878,7 @@ public class jEdit
 	 */
 	public static String[] getNotLoadedPluginJARs()
 	{
-		Vector<String> returnValue = new Vector<String>();
+		List<String> returnValue = new ArrayList<String>();
 
 		if(jEditHome != null)
 		{
@@ -903,7 +903,7 @@ public class jEdit
 		}
 
 		String[] _returnValue = new String[returnValue.size()];
-		returnValue.copyInto(_returnValue);
+		returnValue.toArray(_returnValue);
 		return _returnValue;
 	} //}}}
 
@@ -957,7 +957,7 @@ public class jEdit
 	 */
 	public static EditPlugin[] getPlugins()
 	{
-		Vector<EditPlugin> vector = new Vector<EditPlugin>();
+		List<EditPlugin> vector = new ArrayList<EditPlugin>();
 		for(int i = 0; i < jars.size(); i++)
 		{
 			EditPlugin plugin = jars.elementAt(i).getPlugin();
@@ -966,7 +966,7 @@ public class jEdit
 		}
 
 		EditPlugin[] array = new EditPlugin[vector.size()];
-		vector.copyInto(array);
+		vector.toArray(array);
 		return array;
 	} //}}}
 
@@ -2725,7 +2725,7 @@ public class jEdit
 		synchronized(pluginErrorLock)
 		{
 			if(pluginErrors == null)
-				pluginErrors = new Vector();
+				pluginErrors = new Vector<ErrorListDialog.ErrorEntry>();
 
 			ErrorListDialog.ErrorEntry newEntry =
 				new ErrorListDialog.ErrorEntry(
@@ -2771,7 +2771,7 @@ public class jEdit
 	private static boolean background;
 	private static ActionContext actionContext;
 	private static ActionSet builtInActionSet;
-	private static Vector pluginErrors;
+	private static Vector<ErrorListDialog.ErrorEntry> pluginErrors;
 	private static final Object pluginErrorLock = new Object();
 	private static Vector<PluginJAR> jars;
 	private static Vector<Mode> modes;
@@ -3458,7 +3458,7 @@ public class jEdit
 	{
 		PasswordAuthentication pw;
 
-		public FirewallAuthenticator(PasswordAuthentication pw)
+		FirewallAuthenticator(PasswordAuthentication pw)
 		{
 			this.pw = pw;
 		}
@@ -3972,8 +3972,8 @@ loop:		for(int i = 0; i < list.length; i++)
 					{
 						if(comp instanceof View)
 						{
-							((View)comp).processKeyEvent(evt,
-								View.VIEW);
+							((View)comp).getInputHandler().processKeyEvent(evt,
+								View.VIEW, false);
 							return true;
 						}
 						else if(comp == null || comp instanceof Window

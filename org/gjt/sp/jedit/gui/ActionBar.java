@@ -38,7 +38,7 @@ import org.gjt.sp.jedit.*;
 public class ActionBar extends JPanel
 {
 	//{{{ ActionBar constructor
-	public ActionBar(final View view, boolean temp)
+	public ActionBar(View view, boolean temp)
 	{
 		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 
@@ -136,7 +136,7 @@ public class ActionBar extends JPanel
 							propValue) + "\");";
 					}
 
-					code = code + "\nbuffer.propertiesChanged();";
+					code += "\nbuffer.propertiesChanged();";
 				}
 				else if(propName.startsWith("!buffer."))
 				{
@@ -184,7 +184,7 @@ public class ActionBar extends JPanel
 		final String finalCmd = cmd;
 		final EditAction act = (finalCmd == null ? null : jEdit.getAction(finalCmd));
 		if(temp)
-			view.removeToolBar(ActionBar.this);
+			view.removeToolBar(this);
 
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -214,14 +214,14 @@ public class ActionBar extends JPanel
 	{
 		str = str.toLowerCase();
 		String[] actions = jEdit.getActionNames();
-		ArrayList returnValue = new ArrayList(actions.length);
+		ArrayList<String> returnValue = new ArrayList<String>(actions.length);
 		for(int i = 0; i < actions.length; i++)
 		{
-			if(actions[i].toLowerCase().indexOf(str) != -1)
+			if(actions[i].toLowerCase().contains(str))
 				returnValue.add(actions[i]);
 		}
 
-		return (String[])returnValue.toArray(new String[returnValue.size()]);
+		return returnValue.toArray(new String[returnValue.size()]);
 	} //}}}
 
 	//{{{ complete() method
@@ -240,7 +240,7 @@ public class ActionBar extends JPanel
 			{
 				String prefix = MiscUtilities.getLongestPrefix(
 					completions,true);
-				if(prefix.indexOf(text) != -1)
+				if(prefix.contains(text))
 					action.setText(prefix);
 			}
 
@@ -409,8 +409,8 @@ public class ActionBar extends JPanel
 				{
 					view.getTextArea().requestFocus();
 					view.getInputHandler().setRepeatCount(repeatCount);
-					view.processKeyEvent(evt,
-						View.ACTION_BAR);
+					view.getInputHandler().processKeyEvent(evt,
+						View.ACTION_BAR, false);
 				}
 			});
 		}
@@ -461,8 +461,8 @@ public class ActionBar extends JPanel
 			// stupid scrollbar policy is an attempt to work around
 			// bugs people have been seeing with IBM's JDK -- 7 Sep 2000
 			JScrollPane scroller = new JScrollPane(list,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 			getContentPane().add(scroller, BorderLayout.CENTER);
 

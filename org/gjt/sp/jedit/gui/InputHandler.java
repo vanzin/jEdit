@@ -23,9 +23,16 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
+
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.*;
 //}}}
 
 /**
@@ -114,11 +121,243 @@ public abstract class InputHandler
 	 * @return true if the input could be handled.
 	 * @since jEdit 4.2pre5
 	 */
-	final public boolean handleKey(KeyEventTranslator.Key keyStroke) {
+	public final boolean handleKey(KeyEventTranslator.Key keyStroke)
+	{
 		return handleKey(keyStroke, false);
 	}
+
+	/**
+	 * Forwards key events directly to the input handler.
+	 * This is slightly faster than using a KeyListener
+	 * because some Swing overhead is avoided.
+	 * @since 4.3pre7
+	 */
+	public void processKeyEvent(KeyEvent evt, int from, boolean global)
+	{
+		if(Debug.DUMP_KEY_EVENTS)
+		{
+			Log.log(Log.DEBUG,this,"Key event                 : "
+				+ GrabKeyDialog.toString(evt) + " from " + from);
+			Log.log(Log.DEBUG,this,view+".isFocused()="+view.isFocused()+'.',new Exception());
+		}
+
+		if(view.getTextArea().hasFocus() && from == View.VIEW)
+			return;
+
+		evt = _preprocessKeyEvent(evt);
+		if(evt == null)
+			return;
+
+		if(Debug.DUMP_KEY_EVENTS)
+		{
+			Log.log(Log.DEBUG,this,"Key event after workaround: "
+				+ GrabKeyDialog.toString(evt) + " from " + from);
+		}
+
+		Component prefixFocusOwner = view.getPrefixFocusOwner();
+		boolean focusOnTextArea = false;
+		switch(evt.getID())
+		{
+		case KeyEvent.KEY_TYPED:
+			// if the user pressed eg C+e n n in the
+			// search bar we want focus to go back there
+			// after the prefix is done
+			if(prefixFocusOwner != null)
+			{
+				if(prefixFocusOwner.isShowing())
+				{
+					prefixFocusOwner.requestFocus();
+					focusOnTextArea = true;
+				}
+			}
+
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyTyped(evt);
+			else if(from == View.ACTION_BAR
+				|| Debug.GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES
+				|| isPrefixActive()
+				|| view.getTextArea().hasFocus())
+			{
+				processKeyEventKeyStrokeHandling(evt,from,"type ",global);
+			}
+
+
+			processKeyEventSub(focusOnTextArea);
+
+			break;
+		case KeyEvent.KEY_PRESSED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyPressed(evt);
+			else if(KeyEventWorkaround.isBindable(evt.getKeyCode()))
+			{
+				if(prefixFocusOwner != null)
+				{
+					if(prefixFocusOwner.isShowing())
+					{
+						prefixFocusOwner.requestFocus();
+						focusOnTextArea = true;
+					}
+					view.setPrefixFocusOwner(null);
+				}
+
+				processKeyEventKeyStrokeHandling(evt,from,"press",global);
+
+				processKeyEventSub(focusOnTextArea);
+
+			}
+			break;
+		case KeyEvent.KEY_RELEASED:
+			if(keyEventInterceptor != null)
+				keyEventInterceptor.keyReleased(evt);
+			break;
+		}
+	} //}}}
 	
-	
+	//{{{ _preprocessKeyEvent() method
+	private KeyEvent _preprocessKeyEvent(KeyEvent evt)
+	{
+		if(view.isClosed())
+			return null;
+		Component focusOwner = view.getFocusOwner();
+		if (Options.SIMPLIFIED_KEY_HANDLING)
+		{
+			/*
+				It seems that the "else" path below does
+				not work. Apparently, is is there to prevent
+				some keyboard events to be "swallowed" by
+				jEdit when the keyboard event in fact should
+				be scheduled to swing for further handling.
+
+				On some "key typed" events, the "return null;"
+				is triggered. However, these key events
+				actually do not seem to be handled elseewhere,
+				so they are not handled at all.
+
+				This behaviour exists with old keyboard handling
+				as well as with new keyboard handling. However,
+				the new keyboard handling is more sensitive
+				about what kinds of key events it receives. It
+				expects to see all "key typed" events,
+				which is incompatible with the "return null;"
+				below.
+
+				This bug triggers jEdit bug 1493185 ( https://sourceforge.net/tracker/?func=detail&aid=1493185&group_id=588&atid=100588 ).
+
+				Thus, we disable the possibility of
+				key event swallowing for the new key event
+				handling.
+
+			*/
+		}
+		else
+		{
+			if(focusOwner instanceof JComponent)
+			{
+				JComponent comp = (JComponent)focusOwner;
+				InputMap map = comp.getInputMap();
+				ActionMap am = comp.getActionMap();
+
+				if(map != null && am != null && comp.isEnabled())
+				{
+					KeyStroke	keyStroke	= KeyStroke.getKeyStrokeForEvent(evt);
+					Object binding = map.get(keyStroke);
+					if(binding != null && am.get(binding) != null)
+					{
+						return null;
+					}
+				}
+			}
+		}
+
+		if(focusOwner instanceof JTextComponent)
+		{
+			// fix for the bug where key events in JTextComponents
+			// inside views are also handled by the input handler
+			if(evt.getID() == KeyEvent.KEY_PRESSED)
+			{
+				switch(evt.getKeyCode())
+				{
+				case KeyEvent.VK_ENTER:
+				case KeyEvent.VK_TAB:
+				case KeyEvent.VK_BACK_SPACE:
+				case KeyEvent.VK_SPACE:
+					return null;
+				}
+			}
+		}
+
+		if(evt.isConsumed())
+			return null;
+
+		if(Debug.DUMP_KEY_EVENTS)
+		{
+			Log.log(Log.DEBUG,this,"Key event (preprocessing) : "
+					+ GrabKeyDialog.toString(evt));
+		}
+
+		return KeyEventWorkaround.processKeyEvent(evt);
+	} //}}}
+
+	//{{{ processKeyEventKeyStrokeHandling() method
+	private void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global)
+	{
+		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent2(evt);
+
+		if(keyStroke != null)
+		{
+			keyStroke.setIsFromGlobalContext(global);
+			if(Debug.DUMP_KEY_EVENTS)
+			{
+				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
+			}
+			boolean consumed = false;
+			if(handleKey(keyStroke,keyStroke.isPhantom())) {
+				evt.consume();
+
+				consumed = true;
+			}
+			if(Debug.DUMP_KEY_EVENTS)
+			{
+				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from+": consumed="+consumed+".");
+			}
+		}
+	} //}}}
+
+	//{{{ processKeyEventSub() method
+	private void processKeyEventSub(boolean focusOnTextArea)
+	{
+		// we might have been closed as a result of
+		// the above
+		if(view.isClosed())
+			return;
+
+		// this is a weird hack.
+		// we don't want C+e a to insert 'a' in the
+		// search bar if the search bar has focus...
+		if(isPrefixActive())
+		{
+			Component focusOwner = view.getFocusOwner();
+			if(focusOwner instanceof JTextComponent)
+			{
+				view.setPrefixFocusOwner(focusOwner);
+				view.getTextArea().requestFocus();
+			}
+			else if(focusOnTextArea)
+			{
+				view.getTextArea().requestFocus();
+			}
+			else
+			{
+				view.setPrefixFocusOwner(null);
+			}
+		}
+		else
+		{
+			view.setPrefixFocusOwner(null);
+		}
+	}
+	//}}}
+
 	//{{{ getRepeatCount() method
 	/**
 	 * Returns the number of times the next action will be repeated.
@@ -251,7 +490,7 @@ public abstract class InputHandler
 				else
 					label = GUIUtilities.prettifyMenuLabel(label);
 
-				Object[] pp = { label, new Integer(_repeatCount) };
+				Object[] pp = { label, _repeatCount };
 
 				if(GUIUtilities.confirm(view,"large-repeat-count",pp,
 					JOptionPane.WARNING_MESSAGE,
@@ -305,9 +544,20 @@ public abstract class InputHandler
 			invokeAction(lastAction);
 	} //}}}
 
+
+	public KeyListener getKeyEventInterceptor()
+	{
+		return keyEventInterceptor;
+	}
+
+	public void setKeyEventInterceptor(KeyListener keyEventInterceptor)
+	{
+		this.keyEventInterceptor = keyEventInterceptor;
+	}
+
 	//{{{ Protected members
 	private static final int REPEAT_COUNT_THRESHOLD = 20;
-
+	private KeyListener keyEventInterceptor;
 	//{{{ Instance variables
 	protected View view;
 	protected int repeatCount;
@@ -337,7 +587,7 @@ public abstract class InputHandler
 			if(repeatCount > REPEAT_COUNT_THRESHOLD)
 			{
 				Object[] pp = { String.valueOf(ch),
-					new Integer(repeatCount) };
+					repeatCount };
 
 				if(GUIUtilities.confirm(view,
 					"large-repeat-count.user-input",pp,
