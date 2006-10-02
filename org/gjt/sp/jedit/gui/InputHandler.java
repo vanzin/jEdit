@@ -28,10 +28,11 @@ import javax.swing.text.JTextComponent;
 
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.util.Log;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.*;
 //}}}
 
@@ -47,7 +48,7 @@ import java.awt.*;
  * @version $Id$
  * @see org.gjt.sp.jedit.gui.DefaultInputHandler
  */
-public abstract class InputHandler
+public abstract class InputHandler extends AbstractInputHandler
 {
 	//{{{ InputHandler constructor
 	/**
@@ -56,8 +57,8 @@ public abstract class InputHandler
 	 */
 	public InputHandler(View view)
 	{
+		super();
 		this.view = view;
-		repeatCount = 1;
 	} //}}}
 
 	//{{{ addKeyBinding() method
@@ -93,26 +94,6 @@ public abstract class InputHandler
 	 * Removes all key bindings from this input handler.
 	 */
 	public abstract void removeAllKeyBindings();
-	//}}}
-
-	//{{{ isPrefixActive() method
-	/**
-	 * Returns if a prefix key has been pressed.
-	 */
-	public boolean isPrefixActive()
-	{
-		return readNextChar != null;
-	} //}}}
-
-	//{{{ handleKey() method
-	/**
-	 * Handles a keystroke.
-	 * @param keyStroke The key stroke.
-	 * @param dryRun only calculate the return value, do not have any other effect
-	 * @return true if the input could be handled.
-	 * @since jEdit 4.3pre7
-	 */
-	public abstract boolean handleKey(KeyEventTranslator.Key keyStroke,boolean dryRun);
 	//}}}
 
 	/**
@@ -390,16 +371,6 @@ public abstract class InputHandler
 		return lastAction;
 	} //}}}
 
-	//{{{ getLastActionCount() method
-	/**
-	 * Returns the number of times the last action was executed.
-	 * @since jEdit 2.5pre5
-	 */
-	public int getLastActionCount()
-	{
-		return lastActionCount;
-	} //}}}
-
 	//{{{ readNextChar() method
 	/**
 	 * Invokes the specified BeanShell code, replacing __char__ in the
@@ -423,18 +394,6 @@ public abstract class InputHandler
 		readNextChar = code;
 	} //}}}
 
-	//{{{ resetLastActionCount() method
-	/**
-	 * Resets the last action count. This should be called when an
-	 * editing operation that is not an action is invoked, for example
-	 * a mouse click.
-	 * @since jEdit 4.0pre1
-	 */
-	public void resetLastActionCount()
-	{
-		lastActionCount = 0;
-	} //}}}
-
 	//{{{ invokeAction() method
 	/**
 	 * Invokes the specified action, repeating and recording it as
@@ -455,7 +414,7 @@ public abstract class InputHandler
 	 */
 	public void invokeAction(EditAction action)
 	{
-		Buffer buffer = view.getBuffer();
+		JEditBuffer buffer = view.getBuffer();
 
 		/* if(buffer.insideCompoundEdit())
 			buffer.endCompoundEdit(); */
@@ -545,27 +504,11 @@ public abstract class InputHandler
 	} //}}}
 
 
-	public KeyListener getKeyEventInterceptor()
-	{
-		return keyEventInterceptor;
-	}
-
-	public void setKeyEventInterceptor(KeyListener keyEventInterceptor)
-	{
-		this.keyEventInterceptor = keyEventInterceptor;
-	}
-
-	//{{{ Protected members
-	private static final int REPEAT_COUNT_THRESHOLD = 20;
-	private KeyListener keyEventInterceptor;
 	//{{{ Instance variables
 	protected View view;
-	protected int repeatCount;
 
 	protected EditAction lastAction;
-	protected int lastActionCount;
 
-	protected String readNextChar;
 	//}}}
 
 	//{{{ userInput() method
@@ -601,7 +544,7 @@ public abstract class InputHandler
 				}
 			}
 
-			Buffer buffer = view.getBuffer();
+			JEditBuffer buffer = view.getBuffer();
 			try
 			{
 				if(repeatCount != 1)
@@ -630,7 +573,7 @@ public abstract class InputHandler
 	//{{{ invokeReadNextChar() method
 	protected void invokeReadNextChar(char ch)
 	{
-		Buffer buffer = view.getBuffer();
+		JEditBuffer buffer = view.getBuffer();
 
 		/* if(buffer.insideCompoundEdit())
 			buffer.endCompoundEdit(); */

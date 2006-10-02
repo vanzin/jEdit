@@ -105,6 +105,38 @@ public class JEditBuffer
 			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
 	} //}}}
 
+	//{{{ JEditBuffer constructor
+	public JEditBuffer()
+	{
+		bufferListeners = new Vector<Listener>();
+		lock = new ReadWriteLock();
+		contentMgr = new ContentManager();
+		lineMgr = new LineManager();
+		positionMgr = new PositionManager(this);
+		undoMgr = new UndoManager(this);
+		seg = new Segment();
+		integerArray = new IntegerArray();
+		propertyLock = new Object();
+		properties = new HashMap<Object, PropValue>();
+		indentRules = new ArrayList<IndentRule>();
+
+		properties.put("wrap",new PropValue("none",false));
+		
+		TokenMarker tokenMarker = new TokenMarker();
+		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
+		setTokenMarker(tokenMarker);
+
+		loadText(null,null);
+		// corresponding buffer.XXX properties not set
+		if(getProperty(ENCODING) == null)
+			properties.put(ENCODING,new PropValue(System.getProperty("file.encoding"),false));
+		if(getProperty(LINESEP) == null)
+			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
+
+		setFoldHandler(new DummyFoldHandler());
+		initIndentRules();
+	} //}}}
+
 	//{{{ Flags
 
 	//{{{ isDirty() method

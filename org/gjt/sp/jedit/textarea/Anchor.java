@@ -24,11 +24,13 @@ package org.gjt.sp.jedit.textarea;
 
 /**
  * A base point for physical line/screen line conversion.
+ * @author Slava Pestov
+ * @version $Id$
  */
 abstract class Anchor
 {
 	DisplayManager displayManager;
-	JEditTextArea textArea;
+	TextArea textArea;
 
 	int physicalLine;
 	int scrollLine;
@@ -37,7 +39,7 @@ abstract class Anchor
 
 	//{{{ Anchor constructor
 	Anchor(DisplayManager displayManager,
-		JEditTextArea textArea)
+		TextArea textArea)
 	{
 		this.displayManager = displayManager;
 		this.textArea = textArea;

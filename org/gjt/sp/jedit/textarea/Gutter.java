@@ -44,7 +44,7 @@ import org.gjt.sp.util.Log;
  * @see #addExtension(int,TextAreaExtension)
  * @see #removeExtension(TextAreaExtension)
  * @see TextAreaExtension
- * @see JEditTextArea
+ * @see TextArea
  *
  * @author Mike Dillon and Slava Pestov
  * @version $Id$
@@ -74,7 +74,7 @@ public class Gutter extends JComponent implements SwingConstants
 	//}}}
 
 	//{{{ Gutter constructor
-	public Gutter(JEditTextArea textArea)
+	public Gutter(TextArea textArea)
 	{
 		this.textArea = textArea;
 
@@ -503,7 +503,7 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ Instance variables
 	private static final int FOLD_MARKER_SIZE = 12;
 
-	private final JEditTextArea textArea;
+	private final TextArea textArea;
 	private MouseHandler mouseHandler;
 	private ExtensionManager extensionMgr;
 

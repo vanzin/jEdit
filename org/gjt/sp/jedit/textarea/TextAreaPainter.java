@@ -38,7 +38,6 @@ import org.gjt.sp.jedit.syntax.Chunk;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.jEdit;
 
 import org.gjt.sp.util.Log;
 //}}}
@@ -53,7 +52,7 @@ import org.gjt.sp.util.Log;
  * @see #addExtension(int,TextAreaExtension)
  * @see #removeExtension(TextAreaExtension)
  * @see TextAreaExtension
- * @see JEditTextArea
+ * @see TextArea
  *
  * @author Slava Pestov
  * @version $Id$
@@ -787,7 +786,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Instance variables
 	/* package-private since they are accessed by inner classes and we
 	 * want this to be fast */
-	JEditTextArea textArea;
+	TextArea textArea;
 
 	SyntaxStyle[] styles;
 	Color caretColor;
@@ -817,14 +816,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Creates a new painter. Do not create instances of this class
 	 * directly.
 	 */
-	TextAreaPainter(JEditTextArea textArea)
+	TextAreaPainter(TextArea textArea)
 	{
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK
 			| AWTEvent.KEY_EVENT_MASK
 			| AWTEvent.MOUSE_EVENT_MASK);
 
 		this.textArea = textArea;
-		antiAlias = new AntiAlias(jEdit.getProperty("view.antiAlias"));
+		antiAlias = new AntiAlias(0);
 		fonts = new HashMap();
 		extensionMgr = new ExtensionManager();
 
@@ -951,7 +950,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int physicalLine, int start, int end, int y)
 		{
 			// minimise access$ methods
-			JEditTextArea textArea = TextAreaPainter.this.textArea;
+			TextArea textArea = TextAreaPainter.this.textArea;
 			JEditBuffer buffer = textArea.getBuffer();
 
 			//{{{ Paint line highlight and collapsed fold highlight

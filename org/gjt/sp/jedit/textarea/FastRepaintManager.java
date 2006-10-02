@@ -36,7 +36,7 @@ import java.awt.*;
 class FastRepaintManager
 {
 	//{{{ FastRepaintManager constructor
-	FastRepaintManager(JEditTextArea textArea,
+	FastRepaintManager(TextArea textArea,
 		TextAreaPainter painter)
 	{
 		this.textArea = textArea;
@@ -142,7 +142,7 @@ class FastRepaintManager
 	} //}}}
 
 	//{{{ Private members
-	private JEditTextArea textArea;
+	private TextArea textArea;
 	private TextAreaPainter painter;
 	private Graphics2D gfx;
 	private Image img;

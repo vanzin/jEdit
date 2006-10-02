@@ -43,7 +43,7 @@ public class DisplayManager
 
 	//{{{ getDisplayManager() method
 	static DisplayManager getDisplayManager(JEditBuffer buffer,
-		JEditTextArea textArea)
+		TextArea textArea)
 	{
 		List l = (List)bufferMap.get(buffer);
 		DisplayManager dmgr;
@@ -89,7 +89,7 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ textAreaDisposed() method
-	static void textAreaDisposed(JEditTextArea textArea)
+	static void textAreaDisposed(TextArea textArea)
 	{
 		Iterator biter = bufferMap.values().iterator();
 		while(biter.hasNext())
@@ -704,11 +704,11 @@ public class DisplayManager
 	private boolean initialized;
 	private boolean inUse;
 	private JEditBuffer buffer;
-	private JEditTextArea textArea;
+	private TextArea textArea;
 	private BufferHandler bufferHandler;
 
 	//{{{ DisplayManager constructor
-	private DisplayManager(JEditBuffer buffer, JEditTextArea textArea,
+	private DisplayManager(JEditBuffer buffer, TextArea textArea,
 		DisplayManager copy)
 	{
 		this.buffer = buffer;

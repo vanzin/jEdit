@@ -38,7 +38,7 @@ class SelectionManager
 	List<Selection> selection;
 
 	//{{{ SelectionManager constructor
-	SelectionManager(JEditTextArea textArea)
+	SelectionManager(TextArea textArea)
 	{
 		this.textArea = textArea;
 		selection = new ArrayList<Selection>();
@@ -426,5 +426,5 @@ class SelectionManager
 			&& x <= selectionStartAndEnd[1];
 	} //}}}
 
-	private JEditTextArea textArea;
+	private TextArea textArea;
 }

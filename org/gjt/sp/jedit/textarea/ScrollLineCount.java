@@ -32,7 +32,7 @@ class ScrollLineCount extends Anchor
 {
 	//{{{ ScrollLineCount constructor
 	ScrollLineCount(DisplayManager displayManager,
-		JEditTextArea textArea)
+		TextArea textArea)
 	{
 		super(displayManager,textArea);
 	} //}}}

@@ -44,7 +44,7 @@ public interface StructureMatcher
 	 * caret position, or null.
 	 * @since jEdit 4.2pre3
 	 */
-	Match getMatch(JEditTextArea textArea);
+	Match getMatch(TextArea textArea);
 	//}}}
 
 	//{{{ selectMatch() method
@@ -53,13 +53,13 @@ public interface StructureMatcher
 	 * one, otherwise the behavior of this method is undefined).
 	 * @since jEdit 4.2pre3
 	 */
-	void selectMatch(JEditTextArea textArea);
+	void selectMatch(TextArea textArea);
 	//}}}
 
 	//{{{ BracketMatcher class
 	static class BracketMatcher implements StructureMatcher
 	{
-		public Match getMatch(JEditTextArea textArea)
+		public Match getMatch(TextArea textArea)
 		{
 			int offset = textArea.getCaretPosition()
 				- textArea.getLineStartOffset(
@@ -87,7 +87,7 @@ public interface StructureMatcher
 			return null;
 		}
 
-		public void selectMatch(JEditTextArea textArea)
+		public void selectMatch(TextArea textArea)
 		{
 			textArea.selectToMatchingBracket();
 		}
@@ -130,7 +130,7 @@ public interface StructureMatcher
 	 */
 	static class Highlight extends TextAreaExtension
 	{
-		Highlight(JEditTextArea textArea)
+		Highlight(TextArea textArea)
 		{
 			this.textArea = textArea;
 		}
@@ -234,6 +234,6 @@ public interface StructureMatcher
 			}
 		}
 
-		private JEditTextArea textArea;
+		private TextArea textArea;
 	} //}}}
 }

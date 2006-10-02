@@ -38,6 +38,8 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.input.InputHandlerProvider;
 //}}}
 
 /**
@@ -81,7 +83,7 @@ import org.gjt.sp.jedit.textarea.*;
  * @author John Gellene (API documentation)
  * @version $Id$
  */
-public class View extends JFrame implements EBComponent
+public class View extends JFrame implements EBComponent, InputHandlerProvider
 {
 	//{{{ User interface
 
@@ -496,6 +498,8 @@ public class View extends JFrame implements EBComponent
 	{
 		return inputHandler;
 	} //}}}
+
+
 
 	//{{{ setInputHandler() method
 	/**
@@ -1627,13 +1631,13 @@ loop:		for(;;)
 	//{{{ ScrollHandler class
 	class ScrollHandler implements ScrollListener
 	{
-		public void scrolledVertically(JEditTextArea textArea)
+		public void scrolledVertically(TextArea textArea)
 		{
 			if(getTextArea() == textArea)
 				status.updateCaretStatus();
 		}
 
-		public void scrolledHorizontally(JEditTextArea textArea) {}
+		public void scrolledHorizontally(TextArea textArea) {}
 	} //}}}
 
 	//{{{ WindowHandler class

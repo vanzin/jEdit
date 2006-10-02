@@ -87,7 +87,7 @@ class ExtensionManager
 	} //}}}
 
 	//{{{ paintScreenLineRange() method
-	void paintScreenLineRange(JEditTextArea textArea, Graphics2D gfx,
+	void paintScreenLineRange(TextArea textArea, Graphics2D gfx,
 		int firstLine, int lastLine, int y, int lineHeight)
 	{
 		try

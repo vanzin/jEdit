@@ -621,6 +621,8 @@ public class EditPane extends JPanel implements EBComponent
 		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea(view);
+		textArea.getPainter().setAntiAlias(new AntiAlias(jEdit.getProperty("view.antiAlias")));
+		textArea.setMouseHandler(new MouseHandler(textArea));
 		textArea.setTransferHandler(new TextAreaTransferHandler());
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addExtension(markerHighlight);
@@ -937,7 +939,7 @@ public class EditPane extends JPanel implements EBComponent
 	//{{{ StatusHandler class
 	class StatusHandler implements StatusListener
 	{
-		public void statusChanged(JEditTextArea textArea, int flag, boolean value)
+		public void statusChanged(org.gjt.sp.jedit.textarea.TextArea textArea, int flag, boolean value)
 		{
 			StatusBar status = view.getStatus();
 			if(status == null)
@@ -965,7 +967,7 @@ public class EditPane extends JPanel implements EBComponent
 			status.updateMiscStatus();
 		}
 	
-		public void bracketSelected(JEditTextArea textArea, int line, String text)
+		public void bracketSelected(org.gjt.sp.jedit.textarea.TextArea textArea, int line, String text)
 		{
 			StatusBar status = view.getStatus();
 			if(status == null)
@@ -976,7 +978,7 @@ public class EditPane extends JPanel implements EBComponent
 				line, text }));
 		}
 	
-		public void narrowActive(JEditTextArea textArea)
+		public void narrowActive(org.gjt.sp.jedit.textarea.TextArea textArea)
 		{
 			StatusBar status = view.getStatus();
 			if(status == null)

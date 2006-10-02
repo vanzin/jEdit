@@ -44,7 +44,7 @@ import org.gjt.sp.jedit.Debug;
 class BufferHandler implements BufferListener
 {
 	private DisplayManager displayManager;
-	private JEditTextArea textArea;
+	private TextArea textArea;
 	private JEditBuffer buffer;
 
 	boolean delayedUpdate;
@@ -54,7 +54,7 @@ class BufferHandler implements BufferListener
 
 	//{{{ BufferChangeHandler constructor
 	BufferHandler(DisplayManager displayManager,
-		JEditTextArea textArea,
+		TextArea textArea,
 		JEditBuffer buffer)
 	{
 		this.displayManager = displayManager;
@@ -135,16 +135,16 @@ class BufferHandler implements BufferListener
 			if(caret >= offset)
 			{
 				int scrollMode = (textArea.caretAutoScroll()
-					? JEditTextArea.ELECTRIC_SCROLL
-					: JEditTextArea.NO_SCROLL);
+					? TextArea.ELECTRIC_SCROLL
+					: TextArea.NO_SCROLL);
 				textArea.moveCaretPosition(
 					caret + length,scrollMode);
 			}
 			else
 			{
 				int scrollMode = (textArea.caretAutoScroll()
-					? JEditTextArea.NORMAL_SCROLL
-					: JEditTextArea.NO_SCROLL);
+					? TextArea.NORMAL_SCROLL
+					: TextArea.NO_SCROLL);
 				textArea.moveCaretPosition(
 					caret,scrollMode);
 			}
@@ -249,8 +249,8 @@ class BufferHandler implements BufferListener
 			if(caret >= start + length)
 			{
 				int scrollMode = (textArea.caretAutoScroll()
-					? JEditTextArea.ELECTRIC_SCROLL
-					: JEditTextArea.NO_SCROLL);
+					? TextArea.ELECTRIC_SCROLL
+					: TextArea.NO_SCROLL);
 				textArea.moveCaretPosition(
 					caret - length,
 					scrollMode);
@@ -258,16 +258,16 @@ class BufferHandler implements BufferListener
 			else if(caret >= start)
 			{
 				int scrollMode = (textArea.caretAutoScroll()
-					? JEditTextArea.ELECTRIC_SCROLL
-					: JEditTextArea.NO_SCROLL);
+					? TextArea.ELECTRIC_SCROLL
+					: TextArea.NO_SCROLL);
 				textArea.moveCaretPosition(
 					start,scrollMode);
 			}
 			else
 			{
 				int scrollMode = (textArea.caretAutoScroll()
-					? JEditTextArea.NORMAL_SCROLL
-					: JEditTextArea.NO_SCROLL);
+					? TextArea.NORMAL_SCROLL
+					: TextArea.NO_SCROLL);
 				textArea.moveCaretPosition(caret,scrollMode);
 			}
 		}

@@ -62,6 +62,7 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
+import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -1351,7 +1352,7 @@ public class GUIUtilities
 	 */
 	public static boolean isPopupTrigger(MouseEvent evt)
 	{
-		return isRightButton(evt.getModifiers());
+		return TextAreaMouseHandler.isRightButton(evt.getModifiers());
 	} //}}}
 
 	//{{{ isMiddleButton() method
@@ -1361,15 +1362,7 @@ public class GUIUtilities
 	 */
 	public static boolean isMiddleButton(int modifiers)
 	{
-		if (OperatingSystem.isMacOS())
-		{
-			if((modifiers & MouseEvent.BUTTON1_MASK) != 0)
-				return ((modifiers & MouseEvent.ALT_MASK) != 0);
-			else
-				return ((modifiers & MouseEvent.BUTTON2_MASK) != 0);
-		}
-		else
-			return ((modifiers & MouseEvent.BUTTON2_MASK) != 0);
+		return TextAreaMouseHandler.isMiddleButton(modifiers);
 	} //}}}
 
 	//{{{ isRightButton() method
@@ -1379,15 +1372,7 @@ public class GUIUtilities
 	 */
 	public static boolean isRightButton(int modifiers)
 	{
-		if (OperatingSystem.isMacOS())
-		{
-			if((modifiers & MouseEvent.BUTTON1_MASK) != 0)
-				return ((modifiers & MouseEvent.CTRL_MASK) != 0);
-			else
-				return ((modifiers & MouseEvent.BUTTON3_MASK) != 0);
-		}
-		else
-			return ((modifiers & MouseEvent.BUTTON3_MASK) != 0);
+		return TextAreaMouseHandler.isRightButton(modifiers);
 	} //}}}
 
 	//{{{ showPopupMenu() method

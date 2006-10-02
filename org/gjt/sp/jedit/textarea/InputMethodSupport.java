@@ -49,7 +49,7 @@ class InputMethodSupport
 	implements InputMethodRequests, InputMethodListener
 {
 	// The owner.
-	private JEditTextArea owner;
+	private TextArea owner;
 	// The composed text layout which was built from last InputMethodEvent.
 	private TextLayout composedTextLayout = null;
 	// The X offset to the caret in the composed text.
@@ -58,7 +58,7 @@ class InputMethodSupport
 	private int lastCommittedAt = 0;
 	private String lastCommittedText = null;
 
-	public InputMethodSupport(JEditTextArea owner)
+	public InputMethodSupport(TextArea owner)
 	{
 		this.owner = owner;
 		owner.addInputMethodListener(this);

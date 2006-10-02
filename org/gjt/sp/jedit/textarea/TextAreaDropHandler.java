@@ -32,11 +32,11 @@ import org.gjt.sp.util.Log;
 
 class TextAreaDropHandler extends DropTargetAdapter
 {
-	private JEditTextArea textArea;
+	private TextArea textArea;
 	private JEditBuffer savedBuffer;
 	private int savedCaret;
 
-	TextAreaDropHandler(JEditTextArea textArea)
+	TextAreaDropHandler(TextArea textArea)
 	{
 		this.textArea = textArea;
 	}
@@ -61,7 +61,7 @@ class TextAreaDropHandler extends DropTargetAdapter
 		if(pos != -1)
 		{
 			textArea.moveCaretPosition(pos,
-				JEditTextArea.ELECTRIC_SCROLL);
+				TextArea.ELECTRIC_SCROLL);
 		}
 	}
 
@@ -73,7 +73,7 @@ class TextAreaDropHandler extends DropTargetAdapter
 		if(textArea.getBuffer() == savedBuffer)
 		{
 			textArea.moveCaretPosition(savedCaret,
-				JEditTextArea.ELECTRIC_SCROLL);
+				TextArea.ELECTRIC_SCROLL);
 		}
 		savedBuffer = null;
 	}

@@ -25,13 +25,17 @@ package org.gjt.sp.jedit.textarea;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.Log;
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 class FirstLine extends Anchor
 {
 	int skew;
 
 	//{{{ FirstLine constructor
 	FirstLine(DisplayManager displayManager,
-		JEditTextArea textArea)
+		TextArea textArea)
 	{
 		super(displayManager,textArea);
 	} //}}}

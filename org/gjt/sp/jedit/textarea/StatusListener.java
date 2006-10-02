@@ -31,9 +31,9 @@ public interface StatusListener extends java.util.EventListener
 	int MULTI_SELECT_CHANGED = 1;
 	int RECT_SELECT_CHANGED = 2;
 
-	void statusChanged(JEditTextArea textArea, int flag, boolean value);
+	void statusChanged(TextArea textArea, int flag, boolean value);
 	
-	void bracketSelected(JEditTextArea textArea, int line, String text);
+	void bracketSelected(TextArea textArea, int line, String text);
 	
-	void narrowActive(JEditTextArea textArea);
+	void narrowActive(TextArea textArea);
 }

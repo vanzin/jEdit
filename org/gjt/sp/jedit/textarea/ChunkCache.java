@@ -42,7 +42,7 @@ import org.gjt.sp.util.Log;
 class ChunkCache
 {
 	//{{{ ChunkCache constructor
-	ChunkCache(JEditTextArea textArea)
+	ChunkCache(TextArea textArea)
 	{
 		this.textArea = textArea;
 		out = new ArrayList<Chunk>();
@@ -489,7 +489,7 @@ class ChunkCache
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JEditTextArea textArea;
+	private TextArea textArea;
 	private JEditBuffer buffer;
 	private LineInfo[] lineInfo;
 	private final List<Chunk> out;
