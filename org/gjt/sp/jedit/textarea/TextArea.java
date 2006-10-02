@@ -1,9 +1,11 @@
 /*
- * ServiceManager.java - Handles services.xml files in plugins
+ * TextArea.java - Handles services.xml files in plugins
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2006 Matthieu Casanova
+ * Copyright (C) 1999, 2005 Slava Pestov
+ * Portions copyright (C) 2000 Ollie Rutherfurd
+ * Portions copyright (C) 2006 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,8 +63,7 @@ import java.util.*;
  */
 public class TextArea extends JComponent
 {
-
-
+	//{{{ TextArea constructor
 	public TextArea()
 	{
 		this(null);
@@ -118,16 +119,9 @@ public class TextArea extends JComponent
 		buffer.setTokenMarker(tokenMarker);
 		buffer.insert(0,"ahaha coucou\ncaca");
 		setBuffer(buffer);
+	} //}}}
 
-
-
-
-
-
-
-	}
-
-	//{{{ JEditTextArea constructor
+	//{{{ TextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
 	 */
@@ -204,13 +198,15 @@ public class TextArea extends JComponent
 
 
 
+	//{{{ setMouseHandler() method
 	public void setMouseHandler(MouseInputAdapter mouseInputAdapter)
 	{
 		this.mouseHandler = mouseInputAdapter;
 		painter.addMouseListener(mouseHandler);
 		painter.addMouseMotionListener(mouseHandler);
-	}
+	} //}}}
 
+	//{{{ setTransferHandler() method
 	public void setTransferHandler(TransferHandler newHandler)
 	{
 		super.setTransferHandler(newHandler);
@@ -223,7 +219,7 @@ public class TextArea extends JComponent
 		{
 			Log.log(Log.ERROR,this,e);
 		}
-	}
+	} //}}}
 
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -252,7 +248,6 @@ public class TextArea extends JComponent
 	{
 		DisplayManager.textAreaDisposed(this);
 	} //}}}
-
 
 	//{{{ getInputHandler() method
 	/**
@@ -516,8 +511,6 @@ public class TextArea extends JComponent
 	{
 		this.joinNonWordChars = joinNonWordChars;
 	} //}}}
-
-	//}}}
 
 	//{{{ Scrolling
 
@@ -4467,8 +4460,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//}}}
-
-	//{{{ Right click popup
 
 	//{{{ AWT stuff
 
