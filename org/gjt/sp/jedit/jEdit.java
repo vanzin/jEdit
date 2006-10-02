@@ -374,6 +374,7 @@ public class jEdit
 			initSiteProperties();
 
 		initUserProperties();
+		Options.SIMPLIFIED_KEY_HANDLING	= jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
 
 		//{{{ Initialize server
