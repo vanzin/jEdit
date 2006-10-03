@@ -276,6 +276,16 @@
 			depends="init,docs-html,docs-javadoc"
 			description="generate HTML and JavaDoc API docs (needs xsltproc)" />
 
+    <target name="docs-upload" depends="userdocs"
+            description="upload generated documentation to public website" >
+            
+        <exec dir="${build.dir}/doc/" executable="rsync">
+          <arg line="-avz api FAQ users-guide plugins.jedit.org:/home/groups/j/je/jedit/htdocs/" />
+        </exec>
+        
+    </target>
+            
+            
 	<target name="docs-html"
 			depends="init"
 			description="generate HTML docs (needs xsltproc)">
