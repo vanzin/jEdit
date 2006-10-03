@@ -73,7 +73,7 @@ public class JEditBuffer
 	public static final String ENCODING = "encoding";
 
 	//{{{ JEditBuffer constructor
-	public JEditBuffer(Hashtable props)
+	public JEditBuffer(Map props)
 	{
 		bufferListeners = new Vector<Listener>();
 		lock = new ReadWriteLock();
@@ -88,13 +88,10 @@ public class JEditBuffer
 		indentRules = new ArrayList<IndentRule>();
 
 		//{{{ need to convert entries of 'props' to PropValue instances
-		Enumeration e = props.keys();
-		while(e.hasMoreElements())
+		Set<Map.Entry> set = props.entrySet();
+		for (Map.Entry entry : set)
 		{
-			Object key = e.nextElement();
-			Object value = props.get(key);
-
-			properties.put(key,new PropValue(value,false));
+			properties.put(entry.getKey(),new PropValue(entry.getValue(),false));
 		} //}}}
 
 		// fill in defaults for these from system properties if the
@@ -1326,7 +1323,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * <li>{@link #getStringProperty(String)}</li>
 	 * <li>{@link #getBooleanProperty(String)}</li>
 	 * <li>{@link #getIntegerProperty(String,int)}</li>
-	 * <li>{@link #getRegexpProperty(String,int,gnu.regexp.RESyntax)}</li>
 	 * </ul>
 	 *
 	 * This method is thread-safe.
@@ -1339,7 +1335,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		synchronized(propertyLock)
 		{
 			// First try the buffer-local properties
-			PropValue o = (PropValue)properties.get(name);
+			PropValue o = properties.get(name);
 			if(o != null)
 				return o.value;
 
@@ -1490,7 +1486,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		boolean defaultValueFlag;
 		Object obj;
-		PropValue value = (PropValue)properties.get(name);
+		PropValue value = properties.get(name);
 		if(value != null)
 		{
 			obj = value.value;
@@ -1542,7 +1538,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * Returns the value of a property as a regular expression.
 	 * This method is thread-safe.
 	 * @param name The property name
-	 * @param cflags Regular expression compilation flags
+	 * @param flags Regular expression compilation flags
 	 * @since jEdit 4.3pre5
 	 */
 	public Pattern getPatternProperty(String name, int flags) {
@@ -1550,7 +1546,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			boolean defaultValueFlag;
 			Object obj;
-			PropValue value = (PropValue)properties.get(name);
+			PropValue value = properties.get(name);
 			if(value != null)
 			{
 				obj = value.value;
@@ -1623,7 +1619,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		Object value = null;
 
-		Hashtable rulesetProps = rules.getProperties();
+		Map<String, String> rulesetProps = rules.getProperties();
 		if(rulesetProps != null)
 			value = rulesetProps.get(name);
 
@@ -1717,7 +1713,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(changed)
 			{
 				if(Debug.FOLD_DEBUG)
-					Log.log(Log.DEBUG,this,"fold level changed: " + firstInvalidFoldLevel + "," + line);
+					Log.log(Log.DEBUG,this,"fold level changed: " + firstInvalidFoldLevel + ',' + line);
 				fireFoldLevelChanged(firstInvalidFoldLevel,line);
 			}
 
@@ -1898,7 +1894,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	/**
 	 * Returns if an undo or compound edit is currently in progress. If this
 	 * method returns true, then eventually a
-	 * {@link org.gjt.sp.jedit.buffer.BufferChangeListener#transactionComplete(Buffer)}
+	 * {@link org.gjt.sp.jedit.buffer.BufferListener#transactionComplete(JEditBuffer)}
 	 * buffer event will get fired.
 	 * @since jEdit 4.0pre6
 	 */
@@ -2008,14 +2004,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 		Listener l = new Listener(listener,priority);
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			Listener _l = (Listener)bufferListeners.get(i);
+			Listener _l = bufferListeners.get(i);
 			if(_l.priority < priority)
 			{
-				bufferListeners.insertElementAt(l,i);
+				bufferListeners.add(i,l);
 				return;
 			}
 		}
-		bufferListeners.addElement(l);
+		bufferListeners.add(l);
 	} //}}}
 
 	//{{{ addBufferListener() method
@@ -2039,9 +2035,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
-			if(((Listener)bufferListeners.get(i)).listener == listener)
+			if(bufferListeners.get(i).listener == listener)
 			{
-				bufferListeners.removeElementAt(i);
+				bufferListeners.remove(i);
 				return;
 			}
 		}
@@ -2059,8 +2055,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			bufferListeners.size()];
 		for(int i = 0; i < returnValue.length; i++)
 		{
-			returnValue[i] = ((Listener)bufferListeners.get(i))
-				.listener;
+			returnValue[i] = bufferListeners.get(i).listener;
 		}
 		return returnValue;
 	} //}}}
@@ -2379,7 +2374,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ Private members
-	private Vector<Listener> bufferListeners;
+	private List<Listener> bufferListeners;
 	private ReadWriteLock lock;
 	private ContentManager contentMgr;
 	private LineManager lineMgr;
@@ -2402,7 +2397,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ getListener() method
 	private BufferListener getListener(int index)
 	{
-		return bufferListeners.elementAt(index).listener;
+		return bufferListeners.get(index).listener;
 	} //}}}
 
 	//{{{ contentInserted() method
