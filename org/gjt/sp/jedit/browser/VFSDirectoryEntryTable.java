@@ -38,6 +38,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.ActionContext;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
@@ -64,6 +65,8 @@ public class VFSDirectoryEntryTable extends JTable
 		header = getTableHeader();
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new MouseHandler());
+		header.setDefaultRenderer(new HeaderRenderer(
+			(DefaultTableCellRenderer)header.getDefaultRenderer()));
 
 		setRowSelectionAllowed(true);
 
@@ -562,6 +565,35 @@ public class VFSDirectoryEntryTable extends JTable
 		}
 	} //}}}
 
+	//{{{ HeaderRenderer
+	static class HeaderRenderer extends DefaultTableCellRenderer
+	{
+		private DefaultTableCellRenderer tcr;
 
+		public HeaderRenderer(DefaultTableCellRenderer tcr)
+		{
+			this.tcr = tcr;
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+			VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)table.getModel();
+			Icon icon = (column == model.getSortColumn())
+				? model.getAscending() ? ASC_ICON : DESC_ICON
+				: null;
+			l.setIcon(icon);
+			// l.setHorizontalTextPosition(l.LEADING);
+			return l;
+		}
+	} //}}}
+
+	//{{{ SortOrder Icons
+
+	static final Icon ASC_ICON  = GUIUtilities.loadIcon("arrow-asc.png");
+	static final Icon DESC_ICON = GUIUtilities.loadIcon("arrow-desc.png");
+
+	//}}}
 
 }
