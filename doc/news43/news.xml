@@ -152,9 +152,8 @@
 	<chapter id="api-changes">
     <title>API Changes</title>
     
-    <para> There are quite a few API changes which are described in detail in the
-    API docs, as well as the <ulink url="../CHANGES.txt">CHANGES.txt</ulink> file. Some of the most important ones for a developer are emphasized in this document, btu this is by no means a complete list. If ever you find that some of the API documentation is lacking or needs further explanation, please post a feature request or a question onto the -devel mailing list. </para>
-
+    <para> There are quite a few API changes which are documented, in the source as well as the <ulink url="../CORE_GUIDELINES.txt">core guidelines</ulink> and the <ulink url="../CHANGES.txt">CHANGES.txt</ulink> documents.
+    If ever you find that some of the API documentation is lacking or needs further explanation, please post a feature request or a question onto the -devel mailing list. </para>
     
     <section id="buffervsjeditbuffer">
     <title> Buffer vs jEditBuffer </title>
