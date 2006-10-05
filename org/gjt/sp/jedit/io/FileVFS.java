@@ -238,6 +238,7 @@ public class FileVFS extends VFS
 
 		public long getModified()
 		{
+			fetchAttrs();
 			return modified;
 		}
 

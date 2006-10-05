@@ -65,6 +65,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		/* if(files.length != 0)
 			fireTableRowsInserted(0,files.length - 1); */
 
+		Arrays.sort(files, new EntryCompare(getSortAttribute(sortColumn), ascending));
 		fireTableStructureChanged();
 	} //}}}
 
@@ -85,18 +86,27 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 		if(list != null)
 		{
+			// make a large enough destination array
 			Entry[] newFiles = new Entry[files.length + list.size()];
-			System.arraycopy(files,0,newFiles,0,startIndex + 1);
+			Entry[] subdirFiles = new Entry[list.size()];
+
 			for(int i = 0; i < list.size(); i++)
 			{
-				newFiles[startIndex + i + 1] = new Entry(
-					list.get(i),
-					entry.level + 1,
-					entry);
+				subdirFiles[i] = new Entry(
+					list.get(i),entry.level + 1,entry);
 			}
-			System.arraycopy(files,startIndex + 1,
-				newFiles,startIndex + list.size() + 1,
-				files.length - startIndex - 1);
+
+			// sort expanded entries according to current sort params
+			Arrays.sort(subdirFiles, new EntryCompare(
+				getSortAttribute(sortColumn), ascending));
+			
+			// make room after expanded entry for subdir files
+			int nextIndex = startIndex + 1;
+			System.arraycopy(files,0,newFiles,0,nextIndex);
+			System.arraycopy(subdirFiles,0,newFiles,nextIndex,list.size());
+			System.arraycopy(files,nextIndex,newFiles,nextIndex + list.size(),
+				files.length - nextIndex);
+
 			this.files = newFiles;
 
 			/* fireTableRowsInserted(startIndex + 1,
@@ -202,18 +212,29 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 		return sortColumn;
 	} //}}}
 
+	//{{{ getSortAttribute() method
+	public String getSortAttribute(int column)
+	{
+		return (column == 0) ? "name" : getExtendedAttribute(column);
+	} //}}}
+
 	//{{{ sortByColumn() method
 	public boolean sortByColumn(int column)
 	{
 		// toggle ascending/descending if column was clicked again
 		ascending = (sortColumn == column) ? !ascending : true;
-		sortColumn = column;
-		String sortBy = (sortColumn == 0) ? "name" : getExtendedAttribute(sortColumn);
-		// we don't sort by these attributes
+
+		// we don't sort by some attributes
+		String sortBy = getSortAttribute(column);
 		if(sortBy == VFS.EA_STATUS || sortBy == VFS.EA_TYPE)
 			return false;
+
 		Arrays.sort(files, new EntryCompare(sortBy, ascending));
+
+		// remember column
+		sortColumn = column;
 		fireTableStructureChanged();
+
 		return true;
 	} //}}}
 
