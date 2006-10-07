@@ -217,6 +217,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 
 		final int[] type = { -1 };
+		filename = MiscUtilities.expandVariables(filename);
 		final String path = MiscUtilities.constructPath(
 			browser.getDirectory(),filename);
 		final VFS vfs = VFSManager.getVFSForPath(path);

@@ -542,10 +542,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	//{{{ setDirectory() method
 	public void setDirectory(String path)
 	{
-		path = MiscUtilities.expandVariables(path);
 		if(path.startsWith("file:"))
 			path = path.substring(5);
-
+		path = MiscUtilities.expandVariables(path);
 		pathField.setText(path);
 
 		if(!startRequest())
@@ -1287,11 +1286,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 				updateFilterEnabled();
 
-				String path = pathField.getText();
+				String p = pathField.getText();
 				
-				if(path != null)
-					setDirectory(path);
-
+				if(p != null)
+					setDirectory(p);
 				browserView.focusOnFileView();
 			}
 			else if (source == filterField.getEditor())
