@@ -4,8 +4,8 @@
 #
 
 # Set jvm heap initial and maximum sizes (in megabytes).
-JAVA_HEAP_INIT_SIZE=32
-JAVA_HEAP_MAX_SIZE=64
+JAVA_HEAP_INIT_SIZE=64
+JAVA_HEAP_MAX_SIZE=192
 
 # Find a java installation.
 if [ -z "$JAVA_HOME" ]; then
@@ -25,4 +25,4 @@ fi
 
 # Launch application.
 cd /usr/share/jEdit
-exec $JAVA -Xms${JAVA_HEAP_INIT_SIZE}m -Xmx${JAVA_HEAP_MAX_SIZE}m -jar @jar.filename@ $@
+exec $JAVA -Xms${JAVA_HEAP_INIT_SIZE}m "-Dswing.aatext=true" -Xmx${JAVA_HEAP_MAX_SIZE}m -jar @jar.filename@ -reuseview $@
