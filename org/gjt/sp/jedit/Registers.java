@@ -27,16 +27,11 @@ import java.awt.datatransfer.*;
 import java.awt.Toolkit;
 import java.io.*;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.helpers.DefaultHandler;
-
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.msg.RegisterChanged;
-import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.gui.HistoryModel;
+import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.XMLUtilities;
 //}}}
 
 /**
@@ -75,7 +70,7 @@ public class Registers
 	 * @param register The register
 	 * @since jEdit 2.7pre2
 	 */
-	public static void copy(JEditTextArea textArea, char register)
+	public static void copy(TextArea textArea, char register)
 	{
 		String selection = textArea.getSelectedText();
 		if(selection == null)
@@ -95,7 +90,7 @@ public class Registers
 	 * @param register The register
 	 * @since jEdit 2.7pre2
 	 */
-	public static void cut(JEditTextArea textArea, char register)
+	public static void cut(TextArea textArea, char register)
 	{
 		if(textArea.isEditable())
 		{
@@ -119,7 +114,7 @@ public class Registers
 	 * @param textArea The text area
 	 * @param register The register
 	 */
-	public static void append(JEditTextArea textArea, char register)
+	public static void append(TextArea textArea, char register)
 	{
 		append(textArea,register,"\n",false);
 	} //}}}
@@ -131,7 +126,7 @@ public class Registers
 	 * @param register The register
 	 * @param separator The separator to insert between the old and new text
 	 */
-	public static void append(JEditTextArea textArea, char register,
+	public static void append(TextArea textArea, char register,
 		String separator)
 	{
 		append(textArea,register,separator,false);
@@ -146,7 +141,7 @@ public class Registers
 	 * @param cut Should the current selection be removed?
 	 * @since jEdit 3.2pre1
 	 */
-	public static void append(JEditTextArea textArea, char register,
+	public static void append(TextArea textArea, char register,
 		String separator, boolean cut)
 	{
 		if(cut && !textArea.isEditable())
@@ -187,7 +182,7 @@ public class Registers
 	 * @param register The register
 	 * @since jEdit 2.7pre2
 	 */
-	public static void paste(JEditTextArea textArea, char register)
+	public static void paste(TextArea textArea, char register)
 	{
 		paste(textArea,register,false);
 	} //}}}
@@ -200,7 +195,7 @@ public class Registers
 	 * @param vertical Vertical (columnar) paste
 	 * @since jEdit 4.1pre1
 	 */
-	public static void paste(JEditTextArea textArea, char register,
+	public static void paste(TextArea textArea, char register,
 		boolean vertical)
 	{
 		if(!textArea.isEditable())
@@ -216,61 +211,59 @@ public class Registers
 			textArea.getToolkit().beep();
 			return;
 		}
-		else
+
+		String selection = reg.toString();
+		if(selection == null)
 		{
-			String selection = reg.toString();
-			if(selection == null)
-			{
-				textArea.getToolkit().beep();
-				return;
-			}
-			JEditBuffer buffer = textArea.getBuffer();
-			try
-			{
-				buffer.beginCompoundEdit();
+			textArea.getToolkit().beep();
+			return;
+		}
+		JEditBuffer buffer = textArea.getBuffer();
+		try
+		{
+			buffer.beginCompoundEdit();
 
-				/* vertical paste */
-				if(vertical && textArea.getSelectionCount() == 0)
+			/* vertical paste */
+			if(vertical && textArea.getSelectionCount() == 0)
+			{
+				int caret = textArea.getCaretPosition();
+				int caretLine = textArea.getCaretLine();
+				Selection.Rect rect = new Selection.Rect(
+					caretLine,caret,caretLine,caret);
+				textArea.setSelectedText(rect,selection);
+				caretLine = textArea.getCaretLine();
+
+				if(caretLine != textArea.getLineCount() - 1)
 				{
-					int caret = textArea.getCaretPosition();
-					int caretLine = textArea.getCaretLine();
-					Selection.Rect rect = new Selection.Rect(
-						caretLine,caret,caretLine,caret);
-					textArea.setSelectedText(rect,selection);
-					caretLine = textArea.getCaretLine();
-
-					if(caretLine != textArea.getLineCount() - 1)
+					int startColumn = rect.getStartColumn(
+						buffer);
+					int offset = buffer
+						.getOffsetOfVirtualColumn(
+						caretLine + 1,startColumn,null);
+					if(offset == -1)
 					{
-						int startColumn = rect.getStartColumn(
-							buffer);
-						int offset = buffer
-							.getOffsetOfVirtualColumn(
-							caretLine + 1,startColumn,null);
-						if(offset == -1)
-						{
-							buffer.insertAtColumn(caretLine + 1,startColumn,"");
-							textArea.setCaretPosition(
-								buffer.getLineEndOffset(
-								caretLine + 1) - 1);
-						}
-						else
-						{
-							textArea.setCaretPosition(
-								buffer.getLineStartOffset(
-								caretLine + 1) + offset);
-						}
+						buffer.insertAtColumn(caretLine + 1,startColumn,"");
+						textArea.setCaretPosition(
+							buffer.getLineEndOffset(
+							caretLine + 1) - 1);
+					}
+					else
+					{
+						textArea.setCaretPosition(
+							buffer.getLineStartOffset(
+							caretLine + 1) + offset);
 					}
 				}
-				else /* Regular paste */
-				{
-					textArea.replaceSelection(selection);
-				}
 			}
-			finally {
-				buffer.endCompoundEdit();
+			else /* Regular paste */
+			{
+				textArea.replaceSelection(selection);
 			}
-			HistoryModel.getModel("clipboard").addItem(selection);
 		}
+		finally {
+			buffer.endCompoundEdit();
+		}
+		HistoryModel.getModel("clipboard").addItem(selection);
 	} //}}}
 
 	//{{{ getRegister() method
@@ -305,14 +298,15 @@ public class Registers
 		if(name >= registers.length)
 		{
 			Register[] newRegisters = new Register[
-				Math.min(1<<16,name * 2)];
+				Math.min(1<<16, name<<1)];
 			System.arraycopy(registers,0,newRegisters,0,
 				registers.length);
 			registers = newRegisters;
 		}
 
 		registers[name] = newRegister;
-		EditBus.send(new RegisterChanged(null,name));
+		if (listener != null)
+			listener.registerChanged(name);
 	} //}}}
 
 	//{{{ setRegister() method
@@ -328,7 +322,8 @@ public class Registers
 		if(register != null)
 		{
 			register.setValue(value);
-			EditBus.send(new RegisterChanged(null,name));
+			if (listener != null)
+				listener.registerChanged(name);
 		}
 		else
 			setRegister(name,new StringRegister(value));
@@ -374,8 +369,11 @@ public class Registers
 	 */
 	public static String getRegisterStatusPrompt(String action)
 	{
+		String registerNameString = getRegisterNameString();
 		return jEdit.getProperty("view.status." + action,
-			new String[] { getRegisterNameString() });
+			new String[] {registerNameString == null ?
+				      jEdit.getProperty("view.status.no-registers") :
+				      registerNameString});
 	} //}}}
 
 	//{{{ getRegisterNameString() method
@@ -401,7 +399,7 @@ public class Registers
 		}
 
 		if(buf.length() == 0)
-			return jEdit.getProperty("view.status.no-registers");
+			return null;
 		else
 			return buf.toString();
 	} //}}}
@@ -412,100 +410,42 @@ public class Registers
 		if(!loaded || !modified)
 			return;
 
-		Log.log(Log.MESSAGE,Registers.class,"Saving registers.xml");
-		File file1 = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(), "#registers.xml#save#"));
-		File file2 = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(), "registers.xml"));
-		if(file2.exists() && file2.lastModified() != registersModTime)
+		if (saver != null)
 		{
-			Log.log(Log.WARNING,Registers.class,file2 + " changed"
-				+ " on disk; will not save registers");
-			return;
+			saver.saveRegisters();
+			modified = false;
 		}
+	} //}}}
 
-		jEdit.backupSettingsFile(file2);
+	//{{{ setListener() method
+	public static void setListener(RegistersListener listener)
+	{
+		Registers.listener = listener;
+	} //}}}
 
-		String lineSep = System.getProperty("line.separator");
+	//{{{ setSaver() method
+	public static void setSaver(RegisterSaver saver)
+	{
+		Registers.saver = saver;
+	} //}}}
 
-		BufferedWriter out = null;
+	//{{{ isLoading() method
+	public static boolean isLoading()
+	{
+		return loading;
+	} //}}}
 
-		boolean ok = false;
-
-		try
-		{
-			out = new BufferedWriter(new FileWriter(file1));
-
-			out.write("<?xml version=\"1.0\"?>");
-			out.write(lineSep);
-			out.write("<!DOCTYPE REGISTERS SYSTEM \"registers.dtd\">");
-			out.write(lineSep);
-			out.write("<REGISTERS>");
-			out.write(lineSep);
-
-			Register[] registers = getRegisters();
-			for(int i = 0; i < registers.length; i++)
-			{
-				Register register = registers[i];
-				if(register == null ||
-                                   i == '$' ||
-                                   i == '%' ||
-                                   register.toString().length() == 0
-                                  )
-					continue;
-
-				out.write("<REGISTER NAME=\"");
-				if(i == '"')
-					out.write("&quot;");
-				else
-					out.write((char)i);
-				out.write("\">");
-
-				out.write(XMLUtilities.charsToEntities(
-					register.toString(), false));
-
-				out.write("</REGISTER>");
-				out.write(lineSep);
-			}
-
-			out.write("</REGISTERS>");
-			out.write(lineSep);
-
-			ok = true;
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,Registers.class,e);
-		}
-		finally
-		{
-			try
-			{
-				if(out != null)
-					out.close();
-			}
-			catch(IOException e)
-			{
-			}
-		}
-
-		if(ok)
-		{
-			/* to avoid data loss, only do this if the above
-			 * completed successfully */
-			file2.delete();
-			file1.renameTo(file2);
-		}
-
-		registersModTime = file2.lastModified();
-		modified = false;
+	//{{{ setLoading() method
+	public static void setLoading(boolean loading)
+	{
+		Registers.loading = loading;
 	} //}}}
 
 	//{{{ Private members
 	private static Register[] registers;
-	private static long registersModTime;
 	private static boolean loaded, loading;
-
+	private static RegisterSaver saver;
+	private static RegistersListener listener;
 	/**
 	 * Flag that tell if a register has been modified (except for '%' and '$' registers that aren't
 	 * saved to the xml file).
@@ -541,31 +481,10 @@ public class Registers
 	//{{{ loadRegisters() method
 	private static void loadRegisters()
 	{
-		loaded = true;
-
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
-			return;
-
-		File registerFile = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(),"registers.xml"));
-		if(!registerFile.exists())
-			return;
-
-		registersModTime = registerFile.lastModified();
-
-		Log.log(Log.MESSAGE,jEdit.class,"Loading registers.xml");
-
-		RegistersHandler handler = new RegistersHandler();
-		try {
-			loading = true;
-			XMLUtilities.parseXML(new FileInputStream(registerFile),
-						handler);
-		}
-		catch (IOException ioe) {
-			Log.log(Log.ERROR, Registers.class, ioe);
-		} finally {
-			loading = false;
+		if (saver != null)
+		{
+			loaded = true;
+			saver.loadRegisters();
 		}
 	} //}}}
 
@@ -729,51 +648,6 @@ public class Registers
 		 * implementation does nothing.
 		 */
 		public void dispose() {}
-	} //}}}
-
-	//{{{ RegistersHandler class
-	static class RegistersHandler extends DefaultHandler
-	{
-		//{{{ resolveEntity() method
-		public InputSource resolveEntity(String publicId, String systemId)
-		{
-			return XMLUtilities.findEntity(systemId, "registers.dtd", getClass());
-		} //}}}
-
-		//{{{ startElement() method
-		public void startElement(String uri, String localName,
-					 String qName, Attributes attrs)
-		{
-			registerName = attrs.getValue("NAME");
-			inRegister = "REGISTER".equals(qName);
-		} //}}}
-
-		//{{{ endElement() method
-		public void endElement(String uri, String localName, String name)
-		{
-			if(name.equals("REGISTER"))
-			{
-				if(registerName == null || registerName.length() != 1)
-					Log.log(Log.ERROR,this,"Malformed NAME: " + registerName);
-				else
-					setRegister(registerName.charAt(0),charData.toString());
-				inRegister = false;
-				charData.setLength(0);
-			}
-		} //}}}
-
-		//{{{ characters() method
-		public void characters(char[] ch, int start, int length)
-		{
-			if (inRegister)
-				charData.append(ch, start, length);
-		} //}}}
-
-		//{{{ Private members
-		private String registerName;
-		private StringBuffer charData = new StringBuffer();
-		private boolean inRegister;
-		//}}}
 	} //}}}
 
 	//}}}

@@ -406,6 +406,8 @@ public class jEdit
 		if(loadPlugins)
 			initPlugins();
 
+		Registers.setSaver(new JEditRegisterSaver());
+		Registers.setListener(new JEditRegistersListener());
 		HistoryModel.setSaver(new JEditHistoryModelSaver());
 		HistoryModel.loadHistory();
 		BufferHistory.load();
