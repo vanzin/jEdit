@@ -406,6 +406,7 @@ public class jEdit
 		if(loadPlugins)
 			initPlugins();
 
+		HistoryModel.setSaver(new JEditHistoryModelSaver());
 		HistoryModel.loadHistory();
 		BufferHistory.load();
 		KillRing.setInstance(new JEditKillRing());
@@ -861,7 +862,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		HistoryModel.propertiesChanged();
+		HistoryModel.setMax(getIntegerProperty("history",25));
 		KillRing.getInstance().propertiesChanged(getIntegerProperty("history",25));
 
 		EditBus.send(new PropertiesChanged(null));

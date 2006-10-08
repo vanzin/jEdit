@@ -24,11 +24,7 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.DefaultListModel;
-import java.io.*;
 import java.util.*;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.MiscUtilities;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -132,9 +128,9 @@ public class HistoryModel extends DefaultListModel
 	public static HistoryModel getModel(String name)
 	{
 		if(models == null)
-			models = new Hashtable();
+			models = Collections.synchronizedMap(new HashMap<String, HistoryModel>());
 
-		HistoryModel model = (HistoryModel)models.get(name);
+		HistoryModel model = models.get(name);
 		if(model == null)
 		{
 			model = new HistoryModel(name);
@@ -147,181 +143,36 @@ public class HistoryModel extends DefaultListModel
 	//{{{ loadHistory() method
 	public static void loadHistory()
 	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
-			return;
-
-		history = new File(MiscUtilities.constructPath(
-			settingsDirectory,"history"));
-		if(!history.exists())
-			return;
-
-		historyModTime = history.lastModified();
-
-		Log.log(Log.MESSAGE,HistoryModel.class,"Loading history");
-
-		if(models == null)
-			models = new Hashtable();
-
-		BufferedReader in = null;
-
-		try
-		{
-			in = new BufferedReader(new FileReader(history));
-
-			HistoryModel currentModel = null;
-			String line;
-
-			while((line = in.readLine()) != null)
-			{
-				if(line.startsWith("[") && line.endsWith("]"))
-				{
-					if(currentModel != null)
-					{
-						models.put(currentModel.getName(),
-							currentModel);
-					}
-
-					String modelName = MiscUtilities
-						.escapesToChars(line.substring(
-						1,line.length() - 1));
-					currentModel = new HistoryModel(
-						modelName);
-				}
-				else if(currentModel == null)
-				{
-					throw new IOException("History data starts"
-						+ " before model name");
-				}
-				else
-				{
-					currentModel.addElement(MiscUtilities
-						.escapesToChars(line));
-				}
-			}
-
-			if(currentModel != null)
-			{
-				models.put(currentModel.getName(),currentModel);
-			}
-		}
-		catch(FileNotFoundException fnf)
-		{
-			//Log.log(Log.DEBUG,HistoryModel.class,fnf);
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,HistoryModel.class,io);
-		}
-		finally
-		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-			}
-		}
+		if (saver != null)
+			models = saver.load(models);
 	} //}}}
 
 	//{{{ saveHistory() method
 	public static void saveHistory()
 	{
-		if(!modified)
-			return;
-
-		Log.log(Log.MESSAGE,HistoryModel.class,"Saving history");
-		File file1 = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(), "#history#save#"));
-		File file2 = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(), "history"));
-		if(file2.exists() && file2.lastModified() != historyModTime)
-		{
-			Log.log(Log.WARNING,HistoryModel.class,file2
-				+ " changed on disk; will not save history");
-			return;
-		}
-
-		jEdit.backupSettingsFile(file2);
-
-		String lineSep = System.getProperty("line.separator");
-
-		BufferedWriter out = null;
-
-		try
-		{
-			out = new BufferedWriter(new FileWriter(file1));
-
-			if(models != null)
-			{
-				Enumeration modelEnum = models.elements();
-				while(modelEnum.hasMoreElements())
-				{
-					HistoryModel model = (HistoryModel)modelEnum
-						.nextElement();
-					if(model.getSize() == 0)
-						continue;
-	
-					out.write('[');
-					out.write(MiscUtilities.charsToEscapes(
-						model.getName(),TO_ESCAPE));
-					out.write(']');
-					out.write(lineSep);
-	
-					for(int i = 0; i < model.getSize(); i++)
-					{
-						out.write(MiscUtilities.charsToEscapes(
-							model.getItem(i),
-							TO_ESCAPE));
-						out.write(lineSep);
-					}
-				}
-			}
-
-			out.close();
-
-			/* to avoid data loss, only do this if the above
-			 * completed successfully */
-			file2.delete();
-			file1.renameTo(file2);
+		if (saver != null && modified && saver.save(models))
 			modified = false;
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,HistoryModel.class,io);
-		}
-		finally
-		{
-			try
-			{
-				if(out != null)
-					out.close();
-			}
-			catch(IOException e)
-			{
-			}
-		}
-
-		historyModTime = file2.lastModified();
 	} //}}}
 
-	//{{{ propertiesChanged() method
-	public static void propertiesChanged()
+	//{{{ saveHistory() method
+	public static void setMax(int max)
 	{
-		max = jEdit.getIntegerProperty("history",25);
+		HistoryModel.max = max;
+	} //}}}
+
+	//{{{ setSaver() method
+	public static void setSaver(HistoryModelSaver saver)
+	{
+		HistoryModel.saver = saver;
 	} //}}}
 
 	//{{{ Private members
-	private static final String TO_ESCAPE = "\r\n\t\\\"'[]";
 	private static int max;
 
 	private String name;
-	private static Hashtable models;
+	private static Map<String, HistoryModel> models;
 
 	private static boolean modified;
-	private static File history;
-	private static long historyModTime;
+	private static HistoryModelSaver saver;
 	//}}}
 }
