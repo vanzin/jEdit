@@ -1,5 +1,5 @@
 /*
- * IOTools.java - IO related functions
+ * IOUtilities.java - IO related functions
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -22,10 +22,7 @@
 
 package org.gjt.sp.util;
 
-import java.io.OutputStream;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * IO tools that depends on JDK only.
@@ -36,7 +33,7 @@ import java.io.InputStream;
  */
 public class IOUtilities
 {
-		//{{{ copyStream() method
+	//{{{ copyStream() method
 	/**
 	 * Copy an input stream to an output stream.
 	 *
@@ -105,7 +102,7 @@ public class IOUtilities
 		}
 	} //}}}
 
-	//{{{ copyStream() method
+	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link OutputStream} ignoring it if it is null and ignoring exceptions.
 	 *
@@ -126,7 +123,7 @@ public class IOUtilities
 		}
 	} //}}}
 
-	//{{{ copyStream() method
+	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link Reader} ignoring it if it is null and ignoring exceptions.
 	 *
@@ -148,6 +145,27 @@ public class IOUtilities
 		}
 	} //}}}
 
+	//{{{ closeQuietly() method
+	/**
+	 * Method that will close an {@link java.io.Closeable} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param closeable the closeable to close.
+	 * @since jEdit 4.3pre8
+	 */
+	public static void closeQuietly(Closeable closeable)
+	{
+		if(closeable != null)
+		{
+			try
+			{
+				closeable.close();
+			}
+			catch (IOException e)
+			{
+				//ignore
+			}
+		}
+	}
 
 	private IOUtilities(){}
 }
