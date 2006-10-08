@@ -392,7 +392,8 @@ public class GUIUtilities
 		String name = editAction.getName();
 		ActionContext context = jEdit.getActionContext();
 
-		String label = jEdit.getProperty(name + ".label");
+		// String label = jEdit.getProperty(name + ".label");
+		String label = editAction.getLabel();
 		if(label == null)
 			label = name;
 
