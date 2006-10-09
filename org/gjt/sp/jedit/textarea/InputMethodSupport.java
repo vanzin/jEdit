@@ -29,6 +29,7 @@ import java.text.AttributedCharacterIterator;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
+import java.awt.FontMetrics;
 import java.awt.im.InputMethodRequests;
 import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
@@ -79,24 +80,27 @@ class InputMethodSupport
 
 
 	// {{{ extends TextAreaExtension
-	public void paintValidLine(Graphics2D gfx, int screenLine
-		, int physicalLine, int start, int end, int y)
+	public void paintValidLine(Graphics2D gfx, int screenLine,
+				   int physicalLine, int start, int end, int y)
 	{
 		if(composedTextLayout != null)
 		{
 			int caret = owner.getCaretPosition();
 			if(start <= caret && caret < end)
 			{
+				TextAreaPainter painter = owner.getPainter();
+				// The hight and baseline are taken from
+				// painter's FontMetrics instead of TextLayout
+				// so that the composed text is rendered at
+				// the same position with text in the TextArea.
+				FontMetrics fm = painter.getFontMetrics();
 				int x = owner.offsetToXY(caret).x;
 				int width = Math.round(composedTextLayout.getAdvance());
-				float leading = composedTextLayout.getLeading();
-				float ascent = composedTextLayout.getAscent();
-				float descent = composedTextLayout.getDescent();
-				int height = (int)Math.ceil(leading + ascent + descent);
-				int offset_to_baseline = (int)Math.ceil(leading + ascent);
+				int height = fm.getHeight();
+				int offset_to_baseline = height
+					- fm.getLeading() - fm.getDescent();
 				int caret_x = x + composedCaretX;
 
-				TextAreaPainter painter = owner.getPainter();
 				gfx.setColor(painter.getBackground());
 				gfx.fillRect(x, y, width, height);
 				gfx.setColor(painter.getForeground());
@@ -268,13 +272,18 @@ class InputMethodSupport
 		}
 		else
 		{
-			// Cancel horizontal adjustment for composed text.
-			// FIXME:
-			//   The horizontal offset may be beyond the max
-			//   value of owner's horizontal scroll bar.
+			/* Cancel horizontal adjustment for composed text.
+			   FIXME:
+			     The horizontal offset may be beyond the max
+			     value of owner's horizontal scroll bar.
+			*/
 			owner.scrollToCaret(false);
 		}
-		owner.invalidateLine(owner.getCaretLine());
+		/* Invalidate one more line below the caret because
+		   the underline for composed text goes beyond the caret
+		   line in some font settings. */
+		int caret_line = owner.getCaretLine();
+		owner.invalidateLineRange(caret_line, caret_line + 1);
 		event.consume();
 	}
 	// }}}
