@@ -35,9 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.net.URL;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -207,7 +205,7 @@ public class PluginJAR
 	 * Unlike getPlugin(), will return a PluginJAR that is not yet loaded,
 	 * given its classname.
 	 *
-	 * @param className
+	 * @param className a class name
 	 * @return the JARpath of the first PluginJAR it can find which contains this className,
 	 * 		    or null if not found.
 	 * @since 4.3pre7
@@ -231,7 +229,7 @@ public class PluginJAR
 
 	// {{{ containsClass() function
 	/**
-	 * @param className
+	 * @param className a class name
 	 * @return true if this jar contains a class with that classname.
 	 * @since jedit 4.3pre7
 	 */
@@ -598,7 +596,7 @@ public class PluginJAR
 	 * @param listModel a set of plugins which will be affected, and will need
 	 *  to be disabled also.
 	 */
-  	static public void transitiveClosure(String[] dependents, List<String> listModel)
+	public static void transitiveClosure(String[] dependents, List<String> listModel)
 	{
   		for(int i = 0; i < dependents.length; i++)
   		{
@@ -619,7 +617,7 @@ public class PluginJAR
 	//{{{ getDependentPlugins() method
 	  public String[] getDependentPlugins()
 	  {
-		  return (String[])theseRequireMe.toArray(new String[theseRequireMe.size()]);
+		  return theseRequireMe.toArray(new String[theseRequireMe.size()]);
 	  } //}}}
 
 	//{{{ getPlugin() method
@@ -1019,10 +1017,8 @@ public class PluginJAR
 
 		if(!exit)
 		{
-			Iterator iter = weRequireThese.iterator();
-			while(iter.hasNext())
+			for (String path : weRequireThese)
 			{
-				String path = (String)iter.next();
 				PluginJAR jar = jEdit.getPluginJAR(path);
 				if(jar != null)
 					jar.theseRequireMe.remove(this.path);
@@ -1166,21 +1162,20 @@ public class PluginJAR
 	{
 		properties = new Properties();
 
-		List classes = new LinkedList();
+		List<String> classes = new LinkedList<String>();
 
 		ZipFile zipFile = getZipFile();
 
-		List plugins = new LinkedList();
+		List<String> plugins = new LinkedList<String>();
 
 		PluginCacheEntry cache = new PluginCacheEntry();
 		cache.modTime = file.lastModified();
 		cache.cachedProperties = new Properties();
 
-		Enumeration entries = zipFile.entries();
+		Enumeration<? extends ZipEntry> entries = zipFile.entries();
 		while(entries.hasMoreElements())
 		{
-			ZipEntry entry = (ZipEntry)
-				entries.nextElement();
+			ZipEntry entry = entries.nextElement();
 			String name = entry.getName();
 			String lname = name.toLowerCase();
 			if(lname.equals("actions.xml"))
@@ -1223,16 +1218,13 @@ public class PluginJAR
 		jEdit.addPluginProps(properties);
 
 		this.classes = cache.classes =
-			(String[])classes.toArray(
+			classes.toArray(
 			new String[classes.size()]);
 
 		String label = null;
 
-		Iterator iter = plugins.iterator();
-		while(iter.hasNext())
+		for (String className : plugins)
 		{
-			String className = (String)iter.next();
-
 			String _label = jEdit.getProperty("plugin."
 				+ className + ".name");
 			String version = jEdit.getProperty("plugin."
@@ -1667,12 +1659,11 @@ public class PluginJAR
 			throws IOException
 		{
 			dout.writeInt(map.size());
-			Iterator iter = map.keySet().iterator();
-			while(iter.hasNext())
+			Set<Map.Entry<Object, Object>> set = map.entrySet();
+			for (Map.Entry<Object, Object> entry : set)
 			{
-				String key = (String)iter.next();
-				writeString(dout,key);
-				writeString(dout,map.get(key));
+				writeString(dout,entry.getKey());
+				writeString(dout,entry.getValue());
 			}
 		} //}}}
 
