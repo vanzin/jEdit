@@ -22,6 +22,8 @@
 package org.gjt.sp.jedit.input;
 
 import org.gjt.sp.jedit.gui.KeyEventTranslator;
+import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.util.Log;
 
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
@@ -96,7 +98,30 @@ public abstract class AbstractInputHandler
 	public abstract boolean handleKey(KeyEventTranslator.Key keyStroke,boolean dryRun);
 	//}}}
 
-	public abstract void processKeyEvent(KeyEvent evt, int from, boolean global)
-		//}}}
-		;
+	public abstract void processKeyEvent(KeyEvent evt, int from, boolean global);
+
+	//{{{ processKeyEventKeyStrokeHandling() method
+	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global)
+	{
+		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent2(evt);
+
+		if(keyStroke != null)
+		{
+			keyStroke.setIsFromGlobalContext(global);
+			if(Debug.DUMP_KEY_EVENTS)
+			{
+				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
+			}
+			boolean consumed = false;
+			if(handleKey(keyStroke,keyStroke.isPhantom())) {
+				evt.consume();
+
+				consumed = true;
+			}
+			if(Debug.DUMP_KEY_EVENTS)
+			{
+				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from+": consumed="+consumed+'.');
+			}
+		}
+	} //}}}
 }

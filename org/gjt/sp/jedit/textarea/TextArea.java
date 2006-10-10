@@ -23,7 +23,6 @@
  */
 package org.gjt.sp.jedit.textarea;
 
-import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
@@ -33,6 +32,8 @@ import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
@@ -4554,7 +4555,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
-		getInputHandler().processKeyEvent(evt,View.TEXT_AREA, false);
+		getInputHandler().processKeyEvent(evt,1, false);
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 
@@ -5484,38 +5485,6 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		/* only ever return true if space was pressed
 		 * with logicalLength == maxLineLen */
 		return returnValue;
-	} //}}}
-
-	//{{{ doWordCount() method
-	protected static void doWordCount(View view, String text)
-	{
-		char[] chars = text.toCharArray();
-		int characters = chars.length;
-		int words = 0;
-		int lines = 1;
-
-		boolean word = true;
-		for(int i = 0; i < chars.length; i++)
-		{
-			switch(chars[i])
-			{
-			case '\r': case '\n':
-				lines++;
-			case ' ': case '\t':
-				word = true;
-				break;
-			default:
-				if(word)
-				{
-					words++;
-					word = false;
-				}
-				break;
-			}
-		}
-
-		Object[] args = { characters, words, lines };
-		GUIUtilities.message(view,"wordcount",args);
 	} //}}}
 
 	//{{{ updateStructureHighlightWithDelay() method

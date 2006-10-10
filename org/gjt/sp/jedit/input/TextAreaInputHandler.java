@@ -173,31 +173,6 @@ public class TextAreaInputHandler extends AbstractInputHandler
 		return KeyEventWorkaround.processKeyEvent(evt);
 	} //}}}
 
-	//{{{ processKeyEventKeyStrokeHandling() method
-	private void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global)
-	{
-		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent2(evt);
-
-		if(keyStroke != null)
-		{
-			keyStroke.setIsFromGlobalContext(global);
-			if(Debug.DUMP_KEY_EVENTS)
-			{
-				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
-			}
-			boolean consumed = false;
-			if(handleKey(keyStroke,keyStroke.isPhantom())) {
-				evt.consume();
-
-				consumed = true;
-			}
-			if(Debug.DUMP_KEY_EVENTS)
-			{
-				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from+": consumed="+consumed+".");
-			}
-		}
-	} //}}}
-
 	//{{{ processKeyEventSub() method
 	private void processKeyEventSub(boolean focusOnTextArea)
 	{
