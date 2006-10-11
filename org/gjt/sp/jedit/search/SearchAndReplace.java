@@ -1169,6 +1169,9 @@ loop:		for(int counter = 0; ; counter++)
 					offset += 1;
 				else
 					break loop;
+
+				if (offset >= end)
+					break loop;
 			}
 		}
 

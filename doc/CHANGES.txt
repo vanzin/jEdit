@@ -1,5 +1,20 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre8
+
+Thanks to Marcelo Vanzin for contributing to this release.
+
+{{{ Bug Fixes
+
+- Fix SF Bug #1574562: 4.3pre7 regex find/replace fails
+  When adjusting the offset after an EOL match, need to check whether
+  the new value is larger than the end of the search region and break
+  the loop.
+
+}}}
+
+}}}
+
 {{{ Version 4.3pre7
 
 Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'Leary,
@@ -54,7 +69,7 @@ and Björn "Vampire" Kautler for contributing to this release.
   }}}
 
 - added new class org.gjt.sp.jedit.bufferio.MarkersSaveRequest; fixed 1527419:
-  Setting or deleting markers does not dirty buffer anymore. Handling of 
+  Setting or deleting markers does not dirty buffer anymore. Handling of
   the markers file is now factored out from BufferSaveRequest.
   (Martin Raspe)
 
@@ -94,7 +109,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 
 - New edit mode: Pilrc *rcp mode by Marcin Orlowski (#1519983)
 
-- Perl.xml mode fixes: (#1549412, #1020484), infinite loops in regexp, 
+- Perl.xml mode fixes: (#1549412, #1020484), infinite loops in regexp,
   transliteration and hash highlighting, added several new features
 
 }}}
@@ -175,7 +190,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 {{{ Miscellaneous
 
 - VFS browser is now able to sort files by double-clicking on column headers.
-  Files can be sorted by name, size and last modification date. Clicking again on 
+  Files can be sorted by name, size and last modification date. Clicking again on
   the same column header will reverse the sort order (#1442812) (Martin Raspe)
 
 - VFS browser is not restricted to the built-in "glob" filter anymore.
@@ -195,7 +210,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 
 - The mirror list of the plugin manager is now stored in a file : mirrorList.xml
   and read from here where you open the option panel. The Update mirror list button
-  will refresh it from the web. 
+  will refresh it from the web.
   (Matthieu Casanova)
 
 }}}
