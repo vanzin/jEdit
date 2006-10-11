@@ -529,25 +529,28 @@ public class Log
 		 * would be needed for the "other" printf method, but
 		 * I'll settle for the common case only.
 		 */
-		public synchronized PrintStream printf(String format, Object... args)
+		public PrintStream printf(String format, Object... args)
 		{
-			buffer.reset();
-			out = buffer;
-			super.printf(format, args);
-
-			try
-			{
-				byte[] data = buffer.toByteArray();
-				orig.write(data, 0, data.length);
-				out = orig;
-			}
-			catch (IOException ioe)
-			{
-				// don't do anything?
-			}
-			finally
+			synchronized (orig)
 			{
 				buffer.reset();
+				out = buffer;
+				super.printf(format, args);
+
+				try
+				{
+					byte[] data = buffer.toByteArray();
+					orig.write(data, 0, data.length);
+					out = orig;
+				}
+				catch (IOException ioe)
+				{
+					// don't do anything?
+				}
+				finally
+				{
+					buffer.reset();
+				}
 			}
 			return this;
 		}
