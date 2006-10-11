@@ -221,13 +221,13 @@ public class Log
 	 * Logs an exception with a message.
 	 *
 	 * If an exception is the cause of a call to {@link #log}, then
-	 * the exception should be explicitly provided so that it can 
+	 * the exception should be explicitly provided so that it can
 	 * be presented to the (debugging) user in a useful manner
 	 * (not just the exception message, but also the exception stack trace)
 	 *
 	 * @since jEdit 4.3pre5
 	 */
-	public static void log(int urgency, Object source, Object message, 
+	public static void log(int urgency, Object source, Object message,
 		Throwable exception)
 	{
 		// We can do nicer here, but this is a start...
@@ -335,19 +335,7 @@ public class Log
 	private static PrintStream createPrintStream(final int urgency,
 		final Object source)
 	{
-		return new PrintStream(new OutputStream() {
-			public void write(int b)
-			{
-				byte[] barray = { (byte)b };
-				write(barray,0,1);
-			}
-
-			public void write(byte[] b, int off, int len)
-			{
-				String str = new String(b,off,len);
-				log(urgency,source,str);
-			}
-		});
+		return new LogPrintStream(urgency, source);
 	} //}}}
 
 	//{{{ _logException() method
@@ -512,4 +500,82 @@ public class Log
 			});
 		}
 	} //}}}
+
+	/**
+	 * A print stream that uses the "Log" class to output the messages,
+	 * and has special treatment for the printf() function. Using this
+	 * stream has one caveat: printing messages that don't have a line
+	 * break at the end will have one added automatically...
+	 */
+	private static class LogPrintStream extends PrintStream {
+
+		private final ByteArrayOutputStream buffer;
+		private final OutputStream orig;
+
+		public LogPrintStream(int urgency, Object source)
+		{
+			super(new LogOutputStream(urgency, source));
+			buffer = new ByteArrayOutputStream();
+			orig = out;
+		}
+
+		/**
+		 * This is a hack to allow "printf" to not print weird
+		 * stuff to the output. Since "printf" doesn't seem to
+		 * print the whole message in one shot, our output
+		 * stream above would break a line of log into several
+		 * lines; so we buffer the result of the printf call and
+		 * print the whole thing in one shot. A similar hack
+		 * would be needed for the "other" printf method, but
+		 * I'll settle for the common case only.
+		 */
+		public synchronized PrintStream printf(String format, Object... args)
+		{
+			buffer.reset();
+			out = buffer;
+			super.printf(format, args);
+
+			try
+			{
+				byte[] data = buffer.toByteArray();
+				orig.write(data, 0, data.length);
+				out = orig;
+			}
+			catch (IOException ioe)
+			{
+				// don't do anything?
+			}
+			finally
+			{
+				buffer.reset();
+			}
+			return this;
+		}
+	}
+
+	private static class LogOutputStream extends OutputStream
+	{
+		private final int 	urgency;
+		private final Object 	source;
+
+		public LogOutputStream(int urgency, Object source)
+		{
+			this.urgency 	= urgency;
+			this.source 	= source;
+		}
+
+		public synchronized void write(int b)
+		{
+			byte[] barray = { (byte)b };
+			write(barray,0,1);
+		}
+
+		public synchronized void write(byte[] b, int off, int len)
+		{
+			String str = new String(b,off,len);
+			log(urgency,source,str);
+		}
+	}
+
 }
+

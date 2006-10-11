@@ -59,8 +59,10 @@
 			  value="xsltproc" />
 
 	<!-- Miscellaneous -->
-	<property name="build.debuglevel"
+	<property name="config.build.debuglevel"
 			  value="lines,vars,source" />
+	<property name="config.build.deprecation"
+			  value="on" />
 
 	<target name="init"
 			unless="init.done">
@@ -110,8 +112,8 @@
 		<javac srcdir="."
 			   destdir="${classes.dir}/core"
 			   debug="true"
-			   debuglevel="${build.debuglevel}"
-			   deprecation="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
 			   compiler="modern"
@@ -278,14 +280,14 @@
 
     <target name="docs-upload" depends="userdocs"
             description="upload generated documentation to public website" >
-            
+
         <exec dir="${build.dir}/doc/" executable="rsync">
           <arg line="-avz api FAQ users-guide plugins.jedit.org:/home/groups/j/je/jedit/htdocs/" />
         </exec>
-        
+
     </target>
-            
-            
+
+
 	<target name="docs-html"
 			depends="init"
 			description="generate HTML docs (needs xsltproc)">
@@ -346,8 +348,8 @@
 			   destdir="${classes.dir}/javadoc"
 			   includes="doclet/**"
 			   debug="true"
-			   debuglevel="${build.debuglevel}"
-			   deprecation="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
 			   compiler="modern" />
@@ -517,8 +519,8 @@
 			   destdir="${classes.dir}/installer"
 			   includes="installer/**"
 			   debug="true"
-			   debuglevel="${build.debuglevel}"
-			   deprecation="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
 			   compiler="modern" />
@@ -596,7 +598,7 @@
 			 includes="jedit.cmd"
 			 compression="bzip2" />
 		<antcall target="compile-installer">
-			<param name="build.debuglevel"
+			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
@@ -685,8 +687,8 @@
 			   destdir="${classes.dir}/jarbundler"
 			   includes="net/**"
 			   debug="true"
-			   debuglevel="${build.debuglevel}"
-			   deprecation="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
 			   source="1.4"
 			   target="1.4"
 			   compiler="modern" />
@@ -811,7 +813,7 @@
 			description="build the Mac OS X disk image (DMG-file)">
 		<antcall target="prepare-dist-files" />
 		<antcall target="compile-jarbundler">
-			<param name="build.debuglevel"
+			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
@@ -845,7 +847,7 @@
         </copy>
 
 		<antcall target="build">
-			<param name="build.debuglevel"
+			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
@@ -853,7 +855,7 @@
 				   location="${dist.dir}" />
 		</antcall>
 		<antcall target="docs-html">
-			<param name="build.debuglevel"
+			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
@@ -861,7 +863,7 @@
 				   location="${dist.dir}" />
 		</antcall>
 		<antcall target="docs-javadoc">
-			<param name="build.debuglevel"
+			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
@@ -963,8 +965,8 @@
 			   destdir="${classes.dir}/ar"
 			   includes="de/masters_of_disaster/ant/tasks/ar/**"
 			   debug="true"
-			   debuglevel="${build.debuglevel}"
-			   deprecation="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
 			   compiler="modern" />
@@ -980,8 +982,8 @@
 			   destdir="${classes.dir}/deb"
 			   includes="de/masters_of_disaster/ant/tasks/deb/**"
 			   debug="true"
-			   debuglevel="${build.debuglevel}"
-			   deprecation="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
 			   compiler="modern" />
@@ -992,13 +994,13 @@
 			description="build the DEB Package">
 		<antcall target="prepare-dist-files" />
 		<antcall target="compile-ar">
-			<param name="build.debuglevel"
+			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
 		</antcall>
 		<antcall target="compile-deb">
-			<param name="build.debuglevel"
+			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
