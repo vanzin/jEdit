@@ -245,7 +245,6 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		filterEditor.setInstantPopups(true);
 		filterEditor.setSelectAllOnFocus(true);
 		filterEditor.addActionListener(actionHandler);
-		filterField.setRenderer(new VFSFileFilterRenderer());
 		filterEditor.addKeyListener(keyListener);
 		String filter;
 		if(mode == BROWSER || !jEdit.getBooleanProperty(
@@ -265,9 +264,12 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 				filter = "*" + ext;
 		}
 
-		filterField.getEditor().setItem(new GlobVFSFileFilter(filter));
-		filterField.addItem(filterField.getEditor().getItem());
+		// filterField.getEditor().setItem(new GlobVFSFileFilter(filter));
+		// filterField.addItem(filterField.getEditor().getItem());
+		filterEditor.setItem(new GlobVFSFileFilter(filter));
+		filterField.addItem(filterEditor.getItem());
 		filterField.addItemListener(actionHandler);
+		filterField.setRenderer(new VFSFileFilterRenderer());
 
 		// loads the registered VFSFileFilter services.
 		String[] _filters = ServiceManager.getServiceNames(VFSFileFilter.SERVICE_NAME);
@@ -1212,6 +1214,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private void updateFilterEnabled()
 	{
 		filterField.setEnabled(filterCheckbox.isSelected());
+		filterEditor.setEnabled(filterCheckbox.isSelected());
 	} //}}}
 
 	//{{{ maybeReloadDirectory() method
@@ -1292,11 +1295,29 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					setDirectory(p);
 				browserView.focusOnFileView();
 			}
+
 			else if (source == filterField.getEditor())
 			{
 				// force the editor to refresh.
 				filterField.getEditor().setItem(
 					filterField.getEditor().getItem());
+			}
+
+			// depending on Swing look & feel, filterField.getEditor()
+			// returns some ComboBoxUI
+			else if (source == filterEditor)
+			{
+				// force the editor to refresh.
+				filterEditor.setItem(
+					filterEditor.getItem());
+				filterField.setSelectedItem(
+					filterEditor.getItem());
+				// ### ugly: 
+				// itemStateChanged does not seem to get fired
+				itemStateChanged(new ItemEvent(filterField,
+					ItemEvent.ITEM_STATE_CHANGED,
+					filterEditor.getItem(),
+					ItemEvent.SELECTED));
 			}
 		}
 
