@@ -251,7 +251,7 @@ public class VFSDirectoryEntryTable extends JTable
 	{
 		renderer.propertiesChanged();
 
-		VFS.DirectoryEntry template = new VFS.DirectoryEntry(
+		VFSFile template = new VFSFile(
 			"foo","foo","foo",VFSFile.FILE,0L,false);
 		setRowHeight(renderer.getTableCellRendererComponent(
 			this,new VFSDirectoryEntryTableModel.Entry(template,0),
