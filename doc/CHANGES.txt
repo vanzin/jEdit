@@ -13,6 +13,14 @@ Thanks to Marcelo Vanzin for contributing to this release.
 
 }}}
 
+{{{ Miscellaneous
+
+- VFS browser column headers now have little arrow icons indicating the
+  sorted column and sort direction. Clicking on the "Type" column header
+  now sorts the files by extension (Martin Raspe)
+
+}}}
+
 }}}
 
 {{{ Version 4.3pre7

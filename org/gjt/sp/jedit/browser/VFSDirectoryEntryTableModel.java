@@ -226,7 +226,7 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 
 		// we don't sort by some attributes
 		String sortBy = getSortAttribute(column);
-		if(sortBy == VFS.EA_STATUS || sortBy == VFS.EA_TYPE)
+		if(sortBy == VFS.EA_STATUS)
 			return false;
 
 		Arrays.sort(files, new EntryCompare(sortBy, ascending));
@@ -346,15 +346,18 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 	static class Entry
 	{
 		VFSFile dirEntry;
+		// is this branch an expanded dir?
 		boolean expanded;
 		// how deeply we are nested
 		int level;
+		// parent entry
 		Entry parent;
+		// file extension
+		String extension;
 
 		Entry(VFSFile dirEntry, int level, Entry parent)
 		{
-			this.dirEntry = dirEntry;
-			this.level = level;
+			this(dirEntry,level);
 			this.parent = parent;
 		}
 
@@ -362,6 +365,7 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 		{
 			this.dirEntry = dirEntry;
 			this.level = level;
+			this.extension = MiscUtilities.getFileExtension(dirEntry.getName());
 		}
 	} //}}}
 
@@ -450,6 +454,12 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 					(Long)file1.getLength())
 					.compareTo(
 					(Long)file2.getLength());
+			// sort by type (= extension)
+			else if(sortAttribute == VFS.EA_TYPE)
+				result = StandardUtilities.compareStrings(
+					entry1.extension,
+					entry2.extension,
+					sortIgnoreCase);
 			// default: sort by name
 			else
 				result = StandardUtilities.compareStrings(
