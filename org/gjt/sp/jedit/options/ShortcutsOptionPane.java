@@ -76,7 +76,10 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		add(BorderLayout.NORTH,north);
 		add(BorderLayout.CENTER,scroller);
-		selectModel.setSelectedIndex(jEdit.getIntegerProperty("options.shortcuts.select.index", 0));
+		try {
+			selectModel.setSelectedIndex(jEdit.getIntegerProperty("options.shortcuts.select.index", 0));
+		}
+		catch (IllegalArgumentException eae) {}
 	}
 
 	protected void _save()
