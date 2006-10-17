@@ -5,7 +5,7 @@
 [Setup]
 AppName=jEdit
 AppVerName=jEdit @jedit.version@
-AppPublisher=Slava Pestov and others
+AppPublisher=Contributors
 AppPublisherURL=http://www.jEdit.org
 AppSupportURL=http://www.jEdit.org
 AppUpdatesURL=http://www.jEdit.org
@@ -20,12 +20,12 @@ Compression=lzma
 SolidCompression=true
 SourceDir=@dist.dir@
 VersionInfoVersion=@jedit.build.number@
-VersionInfoCompany=Slava Pestov and others
+VersionInfoCompany=Contributors
 VersionInfoDescription=Programmer's Text Editor
 VersionInfoTextVersion=@jedit.version@
-VersionInfoCopyright=Copyright © 1998-@current.year@ Slava Pestov
+VersionInfoCopyright=Copyright © 1998-@current.year@ Contributors
 ShowLanguageDialog=yes
-AppCopyright=Copyright © 1998-@current.year@ Slava Pestov
+AppCopyright=Copyright © 1998-@current.year@ Contributors
 ChangesAssociations=true
 TimeStampsInUTC=true
 FlatComponentsList=false

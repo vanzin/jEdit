@@ -1,7 +1,7 @@
 Package: jedit
 Version: 4:@jedit.build.number@
 Architecture: all
-Maintainer: Slava Pestov and others <devel@jEdit.org>
+Maintainer: Contributors <devel@jEdit.org>
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Description: A real editor for programmers
