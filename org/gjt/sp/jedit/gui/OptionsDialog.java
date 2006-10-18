@@ -39,15 +39,32 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * An abstract tabbed options dialog box.
+ * An abstract options dialog box.
  * @author Slava Pestov
  * @version $Id$
- * 
  */
 public abstract class OptionsDialog extends EnhancedDialog
 	implements ActionListener, TreeSelectionListener
 {
+	//{{{ Instance variables
+	private String name;
+	private JSplitPane splitter;
+	protected JTree paneTree;
+	private JPanel stage;
+	private JButton ok;
+	private JButton cancel;
+	private JButton apply;
+	protected OptionPane currentPane;
+	private Map deferredOptionPanes;
+	//}}}
+
 	//{{{ OptionsDialog constructor
+	/**
+	 * @param frame - the parent frame for dialogs created
+	 * @param name the name of an option pane - it must have a .title and .code 
+	 *  		property defined in order to instantiate. 
+	 * @param pane the initial pane to show when this is created.
+	 */
 	public OptionsDialog(Frame frame, String name, String pane)
 	{
 		super(frame, jEdit.getProperty(name + ".title"), true);
@@ -265,19 +282,17 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 	//{{{ Private members
 
-	//{{{ Instance variables
-	private String name;
-	private JSplitPane splitter;
-	private JTree paneTree;
-	private JPanel stage;
-	private JButton ok;
-	private JButton cancel;
-	private JButton apply;
-	private OptionPane currentPane;
-	private Map deferredOptionPanes;
-	//}}}
 
 	//{{{ init() method
+	/**
+	 * @param name the name of this pane
+	 * @param pane - a sub-pane name to select (?)
+	 * Could someone please write better docs for this function?
+	 * Creates buttons, adds listeners, and makes the pane visible.
+	 * This method is called automatically from the constructor,
+	 * 
+	 * and also calls init on each of the optionPanes?
+	 */
 	private void init(String name, String pane)
 	{
 		this.name = name;
@@ -343,7 +358,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		// returns false if no such pane exists; calling with null
 		// param selects first option pane found
-		if(!selectPane(rootNode,pane))
+		if(!selectPane(rootNode, pane))
 			selectPane(rootNode,null);
 
 		splitter.setDividerLocation(paneTree.getPreferredSize().width

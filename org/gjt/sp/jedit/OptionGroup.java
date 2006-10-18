@@ -29,7 +29,7 @@ import org.gjt.sp.util.Log;
 /**
  * A set of option panes shown in one branch in the options dialog.<p>
  *
- * Plugins should not create instances of this class anymore. See
+ * Plugins should not create instances of this class directly. See
  * {@link EditPlugin} for information on how jEdit obtains and constructs
  * option pane instances.
  *
@@ -38,6 +38,14 @@ import org.gjt.sp.util.Log;
  */
 public class OptionGroup
 {
+	
+	// {{{ data members
+	private String name;
+	private String label;
+	private Vector members;
+	private boolean sort;
+	// }}}
+	
 	//{{{ OptionGroup constructor
 	/**
 	 * Creates an option group.
@@ -152,10 +160,7 @@ public class OptionGroup
 	} //}}}
 
 	//{{{ Private members
-	private String name;
-	private String label;
-	private Vector members;
-	private boolean sort;
+
 
 	//{{{ insertionSort() method
 	private void insertionSort(String newLabel, Object newObj)
