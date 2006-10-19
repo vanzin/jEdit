@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre8
 
-Thanks to Matthieu Casanova, Marcelo Vanzin for contributing to this release.
+Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin for contributing
+to this release.
 
 {{{ Bug Fixes
 
@@ -22,6 +23,9 @@ Thanks to Matthieu Casanova, Marcelo Vanzin for contributing to this release.
   sorted column and sort direction. Clicking on the "Type" column header
   now sorts the files by extension (Martin Raspe)
 
+- When the plugin manager fail to download a plugin or to read the downloaded
+  file, a new message dialog suggest the user to try another mirror
+  (Matthieu Casanova)
 }}}
 
 }}}

@@ -62,7 +62,7 @@ class Roster
 	//{{{ getOperation() method
 	public Operation getOperation(int i)
 	{
-		return (Operation)operations.get(i);
+		return operations.get(i);
 	} //}}}
 
 	//{{{ getOperationCount() method
@@ -82,7 +82,7 @@ class Roster
 	{
 		for(int i = 0; i < operations.size(); i++)
 		{
-			Operation op = (Operation)operations.get(i);
+			Operation op = operations.get(i);
 			op.runInWorkThread(progress);
 			progress.done();
 
@@ -96,7 +96,7 @@ class Roster
 	{
 		for(int i = 0; i < operations.size(); i++)
 		{
-			Operation op = (Operation)operations.get(i);
+			Operation op = operations.get(i);
 			op.runInAWTThread(comp);
 		}
 
@@ -104,7 +104,7 @@ class Roster
 		// require all JARs to be present
 		for(int i = 0; i < toLoad.size(); i++)
 		{
-			String pluginName = (String)toLoad.get(i);
+			String pluginName = toLoad.get(i);
 			if(jEdit.getPluginJAR(pluginName) != null)
 			{
 				Log.log(Log.WARNING,this,"Already loaded: "
@@ -116,7 +116,7 @@ class Roster
 
 		for(int i = 0; i < toLoad.size(); i++)
 		{
-			String pluginName = (String)toLoad.get(i);
+			String pluginName = toLoad.get(i);
 			PluginJAR plugin = jEdit.getPluginJAR(pluginName);
 			if(plugin != null)
 				plugin.checkDependencies();
@@ -125,7 +125,7 @@ class Roster
 		// now activate the plugins
 		for(int i = 0; i < toLoad.size(); i++)
 		{
-			String pluginName = (String)toLoad.get(i);
+			String pluginName = toLoad.get(i);
 			PluginJAR plugin = jEdit.getPluginJAR(pluginName);
 			if(plugin != null)
 				plugin.activatePluginIfNecessary();
@@ -229,6 +229,7 @@ class Roster
 		//{{{ unloadPluginJAR() method
 		/**
 		 * This should go into a public method somewhere.
+		 * @param jar the jar of the plugin
 		 */
 		private void unloadPluginJAR(PluginJAR jar)
 		{
@@ -254,15 +255,12 @@ class Roster
 		//{{{ equals() method
 		public boolean equals(Object o)
 		{
-			if(o instanceof Remove
-				&& ((Remove)o).plugin.equals(plugin))
-				return true;
-			else
-				return false;
+			return o instanceof Remove
+			       && ((Remove) o).plugin.equals(plugin);
 		} //}}}
 
 		//{{{ Private members
-		private String plugin;
+		private final String plugin;
 
 		private boolean deleteRecursively(File file)
 		{
@@ -336,10 +334,10 @@ class Roster
 			{
 				zipFile = new ZipFile(path);
 
-				Enumeration e = zipFile.entries();
+				Enumeration<? extends ZipEntry> e = zipFile.entries();
 				while(e.hasMoreElements())
 				{
-					ZipEntry entry = (ZipEntry)e.nextElement();
+					ZipEntry entry = e.nextElement();
 					String name = entry.getName().replace('/',File.separatorChar);
 					File file = new File(installDirectory,name);
 					if(entry.isDirectory())
@@ -371,7 +369,12 @@ class Roster
 			catch(InterruptedIOException iio)
 			{
 			}
-			catch(final IOException io)
+			catch(ZipException e)
+			{
+				Log.log(Log.ERROR,this,e);
+				GUIUtilities.error(null,"plugin-error-download",new Object[]{""});
+			}
+			catch(IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
 
@@ -405,19 +408,13 @@ class Roster
 		//{{{ equals() method
 		public boolean equals(Object o)
 		{
-			if(o instanceof Install
-				&& ((Install)o).url.equals(url))
-			{
-				/* even if installDirectory is different */
-				return true;
-			}
-			else
-				return false;
+			return o instanceof Install
+			       && ((Install) o).url.equals(url);
 		} //}}}
 
 		//{{{ Private members
 		private String installed;
-		private String url;
+		private final String url;
 		private String installDirectory;
 		private String path;
 
@@ -455,6 +452,20 @@ class Roster
 				// do nothing, user clicked 'Stop'
 				return null;
 			}
+			catch(FileNotFoundException e)
+			{
+				Log.log(Log.ERROR,this,e);
+
+				SwingUtilities.invokeLater(new Runnable()
+				{
+					public void run()
+					{
+						GUIUtilities.error(null,"plugin-error-download",new Object[]{""});
+					}
+				});
+
+				return null;
+			}
 			catch(final IOException io)
 			{
 				Log.log(Log.ERROR,this,io);
@@ -464,7 +475,7 @@ class Roster
 					public void run()
 					{
 						String[] args = { io.getMessage() };
-						GUIUtilities.error(null,"ioerror",args);
+						GUIUtilities.error(null,"plugin-error-download",args);
 					}
 				});
 

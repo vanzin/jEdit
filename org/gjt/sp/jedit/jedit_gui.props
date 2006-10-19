@@ -1486,6 +1486,9 @@ plugin-error.missing-jar=Requires JAR file {0}.\n\
 plugin-error.obsolete=This plugin is obsolete. Please remove it.
 plugin-error.not-42=This plugin does not support dynamic loading.\n\
 	You must restart jEdit after removing or installing this plugin.
+
+plugin-error-download.title=Plugin error
+plugin-error-download.message=Error while downloading the plugin, please try another mirror\n{0}
 #}}}
 
 #{{{ Macro dialogs
