@@ -11,7 +11,8 @@ Thanks to Matthieu Casanova, Marcelo Vanzin for contributing to this release.
   the new value is larger than the end of the search region and break
   the loop.
 
-- When having a single word selected, join line. (#1575505) (Matthieu Casanova)
+- When having a single word selected, join line was doing nothing.
+  (#1575505) (Matthieu Casanova)
 
 }}}
 
