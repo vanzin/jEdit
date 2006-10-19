@@ -4422,9 +4422,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			try
 			{
 				buffer.beginCompoundEdit();
+				String nextLineText = buffer.getLineText(caretLine + 1);
 				buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
-					buffer.getLineText(caretLine + 1)) + 1);
-				buffer.insert(end - 1, " ");
+					nextLineText) + 1);
+				if (nextLineText.length() != 0)
+					buffer.insert(end - 1, " ");
 			}
 			finally
 			{
@@ -4437,20 +4439,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			try
 			{
 				buffer.beginCompoundEdit();
-
-				int[] selectedLines = getSelectedLines();
-				int offset = 0;
-				for (int i = 0; i < selectedLines.length-1; i++)
+				Selection[] selections = selectionManager.getSelection();
+				for (int i = 0; i < selections.length; i++)
 				{
-					if (selectedLines[i+1] - selectedLines[i] > 1)
-						continue;
-
-					int end = getLineEndOffset(selectedLines[i]-offset);
-					buffer.remove(
-					end - 1,StandardUtilities.getLeadingWhiteSpace(
-						buffer.getLineText(selectedLines[i] + 1 - offset)) + 1);
-					buffer.insert(end - 1, " ");
-					offset++;
+					Selection selection = selections[i];
+					joinLines(selection);
 				}
 			}
 			finally
@@ -4460,6 +4453,29 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		}
 	} //}}}
 
+	//{{{ joinLines() method
+	/**
+	 * Join the lines in the selection.
+	 * If you use this method you have to lock the buffer in compound edit mode
+	 *
+	 * @param selection the selection
+	 * @since jEdit 4.3pre8
+	 */
+	private void joinLines(Selection selection)
+	{
+		do
+		{
+			if (selection.startLine == buffer.getLineCount() - 1)
+				return;
+			int end = getLineEndOffset(selection.startLine);
+			String nextLineText = buffer.getLineText(selection.startLine + 1);
+			buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
+				nextLineText) + 1);
+			if (nextLineText.length() != 0)
+				buffer.insert(end - 1, " ");
+		}
+		while (selection.startLine < selection.endLine);
+	} //}}}
 	//}}}
 
 	//{{{ AWT stuff
