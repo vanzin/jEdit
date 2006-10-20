@@ -1,1 +1,1 @@
-@"{app}\launchstub.exe" "{javaw.exe}" -jar "{jedit.jar}" -reuseview %*
+@"{app}\launchstub.exe" "{javaw.exe}" -Xms64M -Xmx192M -jar "{jedit.jar}" -reuseview %*

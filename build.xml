@@ -154,7 +154,8 @@
 			description="run jEdit">
 		<java jar="${jar.location}/${jar.filename}"
 			  fork="true"
-			  spawn="true">
+			  spawn="true"
+			  maxmemory="192M">
 			<arg value="-noserver" />
 		</java>
 	</target>
@@ -164,7 +165,8 @@
 			description="run jEdit with debug listening enabled">
 		<java jar="${jar.location}/${jar.filename}"
 			  fork="true"
-			  spawn="true">
+			  spawn="true"
+			  maxmemory="192M">
 			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5000" />
 			<arg value="-noserver" />
 		</java>
