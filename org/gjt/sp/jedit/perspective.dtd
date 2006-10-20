@@ -5,6 +5,9 @@
 
 <!-- BUFFER element -->
 <!ELEMENT BUFFER ( #PCDATA ) >
+<!ATTLIST BUFFER
+	AUTORELOAD %att-bool; "TRUE"
+	AUTORELOAD_DIALOG  %att-bool; "TRUE" >
 
 <!-- VIEW element -->
 <!ELEMENT VIEW ( PANES | GEOMETRY | DOCKING ) >

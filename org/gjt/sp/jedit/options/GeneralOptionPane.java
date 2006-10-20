@@ -78,15 +78,24 @@ public class GeneralOptionPane extends AbstractOptionPane
 		String[] modCheckOptions = {
 			jEdit.getProperty("options.general.checkModStatus.nothing"),
 			jEdit.getProperty("options.general.checkModStatus.prompt"),
-			jEdit.getProperty("options.general.checkModStatus.reload")
+			jEdit.getProperty("options.general.checkModStatus.reload"),
+			jEdit.getProperty("options.general.checkModStatus.silentreload")
 		};
 		checkModStatus = new JComboBox(modCheckOptions);
-		if(jEdit.getBooleanProperty("autoReload"))
-			checkModStatus.setSelectedIndex(2);
-		else if(jEdit.getBooleanProperty("autoReloadDialog"))
-			checkModStatus.setSelectedIndex(1);
-		else
-			checkModStatus.setSelectedIndex(0);
+		if(jEdit.getBooleanProperty("autoReload")) {
+			if(jEdit.getBooleanProperty("autoReloadDialog"))
+				// reload and notify
+				checkModStatus.setSelectedIndex(2);
+			else	// reload silently
+				checkModStatus.setSelectedIndex(3);
+			}
+		else {
+			if(jEdit.getBooleanProperty("autoReloadDialog"))
+				// prompt
+				checkModStatus.setSelectedIndex(1);
+			else	// do nothing
+				checkModStatus.setSelectedIndex(0);
+			}
 		addComponent(jEdit.getProperty("options.general.checkModStatus"),
 			checkModStatus);
 
@@ -197,6 +206,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		case 2:
 			jEdit.setBooleanProperty("autoReloadDialog",true);
+			jEdit.setBooleanProperty("autoReload",true);
+			break;
+		case 3:
+			jEdit.setBooleanProperty("autoReloadDialog",false);
 			jEdit.setBooleanProperty("autoReload",true);
 			break;
 		}

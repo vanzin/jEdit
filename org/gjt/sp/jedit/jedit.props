@@ -95,10 +95,13 @@ confirmSaveAll=true
 
 # Check modification status on focus?
 
-# If this is true, show a dialog; if false, do nothing
+# if false and autoReload == false, do nothing
+# if false and autoReload == true, autoreload silently
+# If true and autoReload == false, prompt for reloading
+# if true and autoReload == true, reload and notify user (message box)
 autoReloadDialog=true
 
-# If this is true, auto reload; if false, 'reload' button in dialog
+# If this is true, auto reload; if false, use 'reload' button in dialog
 autoReload=true
 
 #}}}

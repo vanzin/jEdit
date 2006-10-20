@@ -2010,12 +2010,9 @@ public class jEdit
 		// still need to call the status check even if the option is
 		// off, so that the write protection is updated if it changes
 		// on disk
-		boolean showDialogSetting = getBooleanProperty(
-			"autoReloadDialog");
 
 		// auto reload changed buffers?
-		boolean autoReloadSetting = getBooleanProperty(
-			"autoReload");
+		boolean autoReload = getBooleanProperty("autoReload");
 
 		// the problem with this is that if we have two edit panes
 		// looking at the same buffer and the file is reloaded both
@@ -2034,7 +2031,7 @@ public class jEdit
 		Buffer buffer = buffersFirst;
 		int[] states = new int[bufferCount];
 		int i = 0;
-		boolean show = false;
+		boolean notifyFileChanged = false;
 		while(buffer != null)
 		{
 			states[i] = buffer.checkFileStatus(view);
@@ -2042,15 +2039,21 @@ public class jEdit
 			switch(states[i])
 			{
 			case Buffer.FILE_CHANGED:
-				if(autoReloadSetting
-					&& showDialogSetting
-					&& !buffer.isDirty())
+				if(buffer.getAutoReload())
 				{
-					buffer.load(view,true);
+					if(buffer.isDirty())
+						notifyFileChanged = true;
+					else
+						buffer.load(view,true);
 				}
-				/* fall through */
+				else	// no automatic reload even if general setting is true
+					autoReload = false;
+				// don't notify user if "do nothing" was chosen
+				if(buffer.getAutoReloadDialog())
+					notifyFileChanged = true;
+				break;
 			case Buffer.FILE_DELETED:
-				show = true;
+				notifyFileChanged = true;
 				break;
 			}
 
@@ -2058,8 +2061,8 @@ public class jEdit
 			i++;
 		}
 
-		if(show && showDialogSetting)
-			new FilesChangedDialog(view,states,autoReloadSetting);
+		if(notifyFileChanged)
+			new FilesChangedDialog(view,states,autoReload);
 	} //}}}
 
 	//}}}

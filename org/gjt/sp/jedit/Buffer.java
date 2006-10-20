@@ -588,6 +588,49 @@ public class Buffer extends JEditBuffer
 		this.modTime = modTime;
 	} //}}}
 
+	//{{{ getAutoReload() method
+	/**
+	 * Returns the status of the AUTORELOAD flag
+	 * If true, reload changed files automatically
+	 */
+	public boolean getAutoReload()
+	{
+		return getFlag(AUTORELOAD);
+	} //}}}
+
+	//{{{ setAutoReload() method
+	/**
+	 * Sets the status of the AUTORELOAD flag
+	 * @param value # If true, reload changed files automatically
+	 */
+	public void setAutoReload(boolean value)
+	{
+		setFlag(AUTORELOAD, value);
+	} //}}}
+
+	//{{{ getAutoReloadDialog() method
+	/**
+	 * Returns the status of the AUTORELOAD_DIALOG flag
+	 * If true, prompt for reloading or notify user
+	 * when the file has changed on disk
+	 */
+	public boolean getAutoReloadDialog()
+	{
+		return getFlag(AUTORELOAD_DIALOG);
+	} //}}}
+
+	//{{{ setAutoReloadDialog() method
+	/**
+	 * Sets the status of the AUTORELOAD_DIALOG flag
+	 * @param value # If true, prompt for reloading or notify user
+	 * when the file has changed on disk
+
+	 */
+	public void setAutoReloadDialog(boolean value)
+	{
+		setFlag(AUTORELOAD_DIALOG, value);
+	} //}}}
+
 	//{{{ getVFS() method
 	/**
 	 * Returns the virtual filesystem responsible for loading and
@@ -1493,6 +1536,8 @@ public class Buffer extends JEditBuffer
 		 */
 		setFlag(UNTITLED,newFile);
 		setFlag(NEW_FILE,newFile);
+		setFlag(AUTORELOAD,jEdit.getBooleanProperty("autoReload"));
+		setFlag(AUTORELOAD_DIALOG,jEdit.getBooleanProperty("autoReloadDialog"));
 	} //}}}
 
 	//{{{ commitTemporary() method
@@ -1556,6 +1601,8 @@ public class Buffer extends JEditBuffer
 	private static final int NEW_FILE = 3;
 	private static final int UNTITLED = 4;
 	private static final int AUTOSAVE_DIRTY = 5;
+	private static final int AUTORELOAD = 6;
+	private static final int AUTORELOAD_DIALOG = 7;
 	private static final int TEMPORARY = 10;
 	private static final int MARKERS_CHANGED = 12;
 	//}}}
