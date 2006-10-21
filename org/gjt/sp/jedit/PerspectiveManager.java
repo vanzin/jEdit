@@ -153,7 +153,11 @@ public class PerspectiveManager
 				Buffer buffer = buffers[i];
 				if(buffer.isNewFile())
 					continue;
-				out.write("<BUFFER>");
+				out.write("<BUFFER AUTORELOAD=\"");
+				out.write(buffer.getAutoReload() ? "TRUE" : "FALSE");
+				out.write("\" AUTORELOAD_DIALOG=\"");
+				out.write(buffer.getAutoReloadDialog() ? "TRUE" : "FALSE");
+				out.write("\">");
 				out.write(XMLUtilities.charsToEntities(buffer.getPath(), false));
 				out.write("</BUFFER>");
 				out.write(lineSep);
@@ -254,9 +258,11 @@ public class PerspectiveManager
 	static class PerspectiveHandler extends DefaultHandler
 	{
 		View view;
+		Buffer currentBuffer;
 		StringBuffer charData;
 		View.ViewConfig config;
 		boolean restoreFiles;
+		String autoReload, autoReloadDialog;
 
 		PerspectiveHandler(boolean restoreFiles)
 		{
@@ -312,6 +318,10 @@ public class PerspectiveManager
 				config.bottomPos = Integer.parseInt(value);
 			else if(aname.equals("RIGHT_POS"))
 				config.rightPos = Integer.parseInt(value);
+			else if(aname.equals("AUTORELOAD"))
+				autoReload = value;
+			else if(aname.equals("AUTORELOAD_DIALOG"))
+				autoReloadDialog = value;
 		}
 
 		public void endElement(String uri, String localName, String name)
@@ -319,7 +329,15 @@ public class PerspectiveManager
 			if(name.equals("BUFFER"))
 			{
 				if(restoreFiles)
-					jEdit.openFile(null,charData.toString());
+				{
+					currentBuffer = jEdit.openFile(null,charData.toString());
+					// if the autoReload attributes are not present, don't set anything
+					// it's sufficient to check whether they are present on the first BUFFER element 
+					if(autoReload != null)
+						currentBuffer.setAutoReload("TRUE".equals(autoReload));
+					if(autoReloadDialog != null)
+						currentBuffer.setAutoReloadDialog("TRUE".equals(autoReloadDialog));
+				}
 			}
 			else if(name.equals("PANES"))
 				config.splitConfig = charData.toString();

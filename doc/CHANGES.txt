@@ -14,10 +14,20 @@ to this release.
 
 - When having a single word selected, join line was doing nothing.
   (#1575505) (Matthieu Casanova)
-
+  
+- Filters in the VFS Browser were not applied on Windows (#1571629)
+  (Martin Raspe)
 }}}
 
 {{{ Miscellaneous
+
+- Buffer options were factored out to a dedicated BufferOptionPane and
+  moved to .options (Martin Raspe)
+
+- Automatic reloading of buffers without notification is now possible.
+  The autoreload behaviour can now be set individually for each buffer
+  on the buffer option pane. Autoreload settings for open buffers are now
+  saved to and restored from "perspective.xml" (#1578785) (Martin Raspe) 
 
 - VFS browser column headers now have little arrow icons indicating the
   sorted column and sort direction. Clicking on the "Type" column header

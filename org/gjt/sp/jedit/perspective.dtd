@@ -1,7 +1,7 @@
 <!ENTITY % att-bool '( TRUE | FALSE )' >
 
 <!-- PERSPECTIVE element -->
-<!ELEMENT PERSPECTIVE ( BUFFER | VIEW )* >
+<!ELEMENT PERSPECTIVE ( BUFFER*, VIEW* ) >
 
 <!-- BUFFER element -->
 <!ELEMENT BUFFER ( #PCDATA ) >
@@ -10,7 +10,7 @@
 	AUTORELOAD_DIALOG  %att-bool; "TRUE" >
 
 <!-- VIEW element -->
-<!ELEMENT VIEW ( PANES | GEOMETRY | DOCKING ) >
+<!ELEMENT VIEW ( PANES, GEOMETRY, DOCKING ) >
 <!ATTLIST VIEW
 	PLAIN %att-bool; "FALSE" >
 
