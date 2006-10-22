@@ -582,44 +582,103 @@
 			description="build the Java-installer">
 		<antcall target="prepare-dist-files" />
 		<tar destfile="${dist.dir}/jedit-macros.tar.bz2"
-			 basedir="${dist.dir}"
-			 includes="macros/**"
-			 compression="bzip2" />
+			 compression="bzip2">
+			<tarfileset id="jedit-macros"
+					 dir="${dist.dir}"
+					 includes="macros/**" />
+		</tar>
 		<tar destfile="${dist.dir}/jedit-program.tar.bz2"
-			 basedir="${dist.dir}"
-			 includes="doc/**
-					   jars/LatestVersion.jar
-					   jars/QuickNotepad.jar
-					   modes/**
-					   properties/**
-					   startup/**
-					   ${jar.filename}"
-			 excludes="doc/api/**"
-			 compression="bzip2" />
+			 compression="bzip2">
+			<tarfileset id="jedit-program"
+					 dir="${dist.dir}"
+					 includes="doc/**
+							   jars/LatestVersion.jar
+							   jars/QuickNotepad.jar
+							   modes/**
+							   properties/**
+							   startup/**
+							   ${jar.filename}"
+					 excludes="doc/api/**" />
+		</tar>
 		<tar destfile="${dist.dir}/jedit-mac.tar.bz2"
-			 basedir="${dist.dir}"
-			 includes="jars/MacOS.jar"
-			 compression="bzip2" />
+			 compression="bzip2">
+			<tarfileset id="jedit-mac"
+					 dir="${dist.dir}"
+					 includes="jars/MacOS.jar" />
+		</tar>
 		<tar destfile="${dist.dir}/jedit-api.tar.bz2"
-			 basedir="${dist.dir}"
-			 includes="doc/api/**"
-			 compression="bzip2" />
+			 compression="bzip2">
+			<tarfileset id="jedit-api"
+					 dir="${dist.dir}"
+					 includes="doc/api/**" />
+		</tar>
 		<tar destfile="${dist.dir}/jedit-os2.tar.bz2"
-			 basedir="package-files/os2"
-			 includes="jedit.cmd"
-			 compression="bzip2" />
+			 compression="bzip2">
+			<tarfileset id="jedit-os2"
+					 dir="package-files/os2"
+					 includes="jedit.cmd" />
+		</tar>
 		<antcall target="compile-installer">
 			<param name="config.build.debuglevel"
 				   value="lines,source" />
 			<param name="classes.dir"
 				   location="${dist.dir}/classes" />
 		</antcall>
+		<antcall target="compile-calculatesize">
+			<param name="config.build.debuglevel"
+				   value="lines,source" />
+			<param name="classes.dir"
+				   location="${dist.dir}/classes" />
+		</antcall>
+		<taskdef name="calculatesize"
+				 classname="de.masters_of_disaster.ant.tasks.calculatesize.CalculateSize"
+				 classpath="${dist.dir}/classes/calculatesize" />
+		<calculatesize realsizeproperty="jedit-macros.realsize"
+					   disksizeproperty="jedit-macros.disksize">
+			<fileset refid="jedit-macros" />
+		</calculatesize>
+		<calculatesize realsizeproperty="jedit-program.realsize"
+					   disksizeproperty="jedit-program.disksize">
+			<fileset refid="jedit-program" />
+		</calculatesize>
+		<calculatesize realsizeproperty="jedit-mac.realsize"
+					   disksizeproperty="jedit-mac.disksize">
+			<fileset refid="jedit-mac" />
+		</calculatesize>
+		<calculatesize realsizeproperty="jedit-api.realsize"
+					   disksizeproperty="jedit-api.disksize">
+			<fileset refid="jedit-api" />
+		</calculatesize>
+		<calculatesize realsizeproperty="jedit-os2.realsize"
+					   disksizeproperty="jedit-os2.disksize">
+			<fileset refid="jedit-os2" />
+		</calculatesize>
 		<copy todir="${dist.dir}/classes/installer/installer"
 			  overwrite="true">
 			<fileset file="installer/install.props" />
 			<filterset>
 				<filter token="jedit.version"
 						value="${jedit.version}" />
+				<filter token="jedit-macros.realsize"
+						value="${jedit-macros.realsize}" />
+				<filter token="jedit-macros.disksize"
+						value="${jedit-macros.disksize}" />
+				<filter token="jedit-program.realsize"
+						value="${jedit-program.realsize}" />
+				<filter token="jedit-program.disksize"
+						value="${jedit-program.disksize}" />
+				<filter token="jedit-mac.realsize"
+						value="${jedit-mac.realsize}" />
+				<filter token="jedit-mac.disksize"
+						value="${jedit-mac.disksize}" />
+				<filter token="jedit-api.realsize"
+						value="${jedit-api.realsize}" />
+				<filter token="jedit-api.disksize"
+						value="${jedit-api.disksize}" />
+				<filter token="jedit-os2.realsize"
+						value="${jedit-os2.realsize}" />
+				<filter token="jedit-os2.disksize"
+						value="${jedit-os2.disksize}" />
 			</filterset>
 		</copy>
 		<jar destfile="${dist.dir}/${dist.jar.filename}"
@@ -992,6 +1051,23 @@
 			   compiler="modern" />
 	</target>
 	
+	<target name="compile-calculatesize"
+			depends="init">
+		<mkdir dir="${classes.dir}/calculatesize" />
+		<depend srcDir="."
+				destDir="${classes.dir}/calculatesize"
+				cache="${classes.dir}" />
+		<javac srcdir="."
+			   destdir="${classes.dir}/calculatesize"
+			   includes="de/masters_of_disaster/ant/tasks/calculatesize/**"
+			   debug="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
+			   compiler="modern" />
+	</target>
+	
 	<target name="dist-deb"
 			depends="init"
 			description="build the DEB Package">
@@ -1011,10 +1087,16 @@
 		<taskdef name="deb"
 				 classname="de.masters_of_disaster.ant.tasks.deb.Deb"
 				 classpath="${dist.dir}/classes/deb" />
-		<taskdef name="calculateinstalledsizefordeb"
-				 classname="de.masters_of_disaster.ant.tasks.deb.CalculateInstalledSizeForDeb"
-				 classpath="${dist.dir}/classes/deb" />
-		<calculateinstalledsizefordeb property="deb.installed.size">
+		<antcall target="compile-calculatesize">
+			<param name="config.build.debuglevel"
+				   value="lines,source" />
+			<param name="classes.dir"
+				   location="${dist.dir}/classes" />
+		</antcall>
+		<taskdef name="calculatesize"
+				 classname="de.masters_of_disaster.ant.tasks.calculatesize.CalculateSize"
+				 classpath="${dist.dir}/classes/calculatesize" />
+		<calculatesize realsizeproperty="deb.installed.size">
 			<fileset dir="${dist.dir}/doc"
 					 includes="*.txt" />
 			<fileset dir="${dist.dir}"
@@ -1030,7 +1112,7 @@
 						 	   properties/**
 						 	   startup/**
 						 	   ${jar.filename}" />
-		</calculateinstalledsizefordeb>
+		</calculatesize>
 		<copy todir="${dist.dir}/classes/package-files/linux/deb"
 			  overwrite="true">
 			<fileset file="package-files/linux/deb/control" />
