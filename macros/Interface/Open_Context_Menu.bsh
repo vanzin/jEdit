@@ -9,12 +9,18 @@
 */
 
 openContextMenu(){
-	// Get the caret's position
-	caretOffset = textArea.getCaretPosition();
-	caretPos = textArea.offsetToXY(caretOffset);
-	// Open the context menu near the caret
-	GUIUtilities.showPopupMenu(textArea.getRightClickPopup(),
-		textArea,caretPos.x+10,caretPos.y+20);
+	if (textArea.hasFocus()) {
+		// Get the caret's position
+		caretOffset = textArea.getCaretPosition();
+		caretPos = textArea.offsetToXY(caretOffset);
+		if (caretPos != null) {
+			// Open the context menu below the caret
+			painter = textArea.getPainter();
+			charHeight = painter.getFontMetrics().getHeight();
+			GUIUtilities.showPopupMenu(textArea.getRightClickPopup(),
+				painter,caretPos.x,caretPos.y + charHeight);
+		}
+	}
 }
 
 openContextMenu();
@@ -25,8 +31,7 @@ openContextMenu();
 <listitem>
     <para><filename>Open_Context_Menu.bsh</filename></para>
     <abstract><para>
-        Opens the text area context menu just below and to 
-		the right of the caret.
+        Opens the text area context menu just below the caret.
     </para></abstract>
 </listitem>
 
