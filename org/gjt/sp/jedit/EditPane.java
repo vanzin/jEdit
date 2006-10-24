@@ -371,9 +371,8 @@ public class EditPane extends JPanel implements EBComponent
 				if(s.getStart() > max || s.getEnd() > max)
 					selection[i] = null;
 			}
-
-			textArea.setSelection(selection);
 		}
+		textArea.setSelection(selection);
 
 		// set firstLine value
 		int firstLine = caretInfo.scrollVert;
