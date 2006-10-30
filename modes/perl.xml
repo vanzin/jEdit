@@ -135,7 +135,7 @@
 
 		<!-- options: -text -->
 		<SEQ_REGEXP HASH_CHAR="-" TYPE="LITERAL1">-[\p{Lower}]\w+</SEQ_REGEXP>
-		
+
 		<!-- file stat expressions -->
 		<SEQ_REGEXP HASH_CHAR="-" TYPE="KEYWORD3">-[\p{Lower}]</SEQ_REGEXP>
 
@@ -144,12 +144,6 @@
 			<BEGIN>\{(?=\s*[\p{Alpha}_\-][\p{Alnum}_]*\s*\})</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
-
-		<!-- other blocks -->
-		<SPAN NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
-			<BEGIN>{</BEGIN>
-			<END>}</END>
-		</SPAN>
 
 		<!-- Array dereference -->
 		<SPAN TYPE="KEYWORD4" NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
@@ -192,7 +186,7 @@
 		     highlight this sort of crap. -->
 
 		<!-- /Regexp/, avoid confusion with a sequence of two divisions! -->
-		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/" 
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/"
 			AT_WORD_START="TRUE">/.*?[^\\]/[cgimosx]*(?!\s*[\d\$\@\(\-])</SEQ_REGEXP>
 
         <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
@@ -293,8 +287,8 @@
 		<SEQ TYPE="OPERATOR">*</SEQ>
 		<SEQ TYPE="OPERATOR">^</SEQ>
 		<SEQ TYPE="OPERATOR">~</SEQ>
-		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">?</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 
