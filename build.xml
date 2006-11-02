@@ -1132,20 +1132,40 @@
 							includes="postinst
 									  postrm"
 							mode="755" />
+			<datafileset file="."
+						 fullpath="usr/" />
+			<datafileset file="."
+						 fullpath="usr/bin/" />
 			<datafileset file="${dist.dir}/classes/package-files/linux/jedit"
 						 fullpath="usr/bin/jedit"
 						 mode="755" />
+			<datafileset file="."
+						 fullpath="usr/lib/" />
+			<datafileset file="."
+						 fullpath="usr/lib/menu/" />
 			<datafileset file="${dist.dir}/classes/package-files/linux/deb/jedit"
 						 fullpath="usr/lib/menu/jedit" />
+			<datafileset file="."
+						 fullpath="usr/share/" />
+			<datafileset file="."
+						 fullpath="usr/share/applications/" />
 			<datafileset file="${dist.dir}/classes/package-files/linux/deb/jedit.desktop"
 						 fullpath="usr/share/applications/jedit.desktop" />
+			<datafileset file="."
+						 fullpath="usr/share/doc/" />
+			<datafileset file="."
+						 fullpath="usr/share/doc/jEdit/" />
 			<datafileset dir="${dist.dir}/doc"
 						 includes="*.txt"
 						 prefix="usr/share/doc/jEdit/" />
+			<datafileset file="."
+						 fullpath="usr/share/java/" />
 			<datafileset dir="${dist.dir}/jars"
 						 includes="LatestVersion.jar
 						 		   QuickNotepad.jar"
 						 prefix="usr/share/java/" />
+			<datafileset file="."
+						 fullpath="usr/share/jEdit/" />
 			<datafileset dir="${dist.dir}"
 						 includes="doc/**
 						 		   macros/**
@@ -1154,6 +1174,10 @@
 						 		   startup/**
 						 		   ${jar.filename}"
 						 prefix="usr/share/jEdit/" />
+			<datafileset file="."
+						 fullpath="usr/share/man/" />
+			<datafileset file="."
+						 fullpath="usr/share/man/man1/" />
 			<datafileset file="${dist.dir}/classes/package-files/linux/jedit.1.gz"
 						 fullpath="usr/share/man/man1/jedit.1.gz" />
 		</deb>
