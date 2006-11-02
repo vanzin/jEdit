@@ -10,13 +10,20 @@ to this release.
 - Fix SF Bug #1574562: 4.3pre7 regex find/replace fails
   When adjusting the offset after an EOL match, need to check whether
   the new value is larger than the end of the search region and break
-  the loop.
+  the loop. (Marcelo Vanzin)
 
 - When having a single word selected, join line was doing nothing.
   (#1575505) (Matthieu Casanova)
-  
+
 - Filters in the VFS Browser were not applied on Windows (#1571629)
   (Martin Raspe)
+
+- Fix SF Bug #1585327: Perl mode curly brackets highlighting and matching broken
+  There was a broken rule in perl.xml. (Marcelo Vanzin)
+
+- Fix SF Bug #1588002: Perl Mode - sub foo($) { broken
+  Correctly handle perl subroutine prototypes. (Marcelo Vanzin)
+
 }}}
 
 {{{ Miscellaneous
@@ -27,7 +34,7 @@ to this release.
 - Automatic reloading of buffers without notification is now possible.
   The autoreload behaviour can now be set individually for each buffer
   on the buffer option pane. Autoreload settings for open buffers are now
-  saved to and restored from "perspective.xml" (#1578785) (Martin Raspe) 
+  saved to and restored from "perspective.xml" (#1578785) (Martin Raspe)
 
 - VFS browser column headers now have little arrow icons indicating the
   sorted column and sort direction. Clicking on the "Type" column header
