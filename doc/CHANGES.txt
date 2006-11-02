@@ -45,6 +45,11 @@ to this release.
   (Matthieu Casanova)
 }}}
 
+{{{ API Changes
+
+- OptionsDialog - currentPane and paneTree are protected now,
+	to make it easier to extend it in SideKick plugin.
+
 }}}
 
 {{{ Version 4.3pre7
