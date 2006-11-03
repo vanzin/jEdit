@@ -473,6 +473,8 @@
     Newlines are not inserted at the wrap positions, and the wrapping is
     automatically updated when text is inserted or removed.
    </para>
+   <para> If the margin is set to 0, then the width of the text area window
+   is used to determine where to wrap lines. </para>
    <para>
     If end of line markers are enabled in the <guibutton>Text Area</guibutton>
     pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
