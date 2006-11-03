@@ -2,10 +2,14 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre8
 
-Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin for contributing
-to this release.
+Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin
+and Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
+
+- Fixed incorrect highlighting if in soft-wrap and rectangular selection
+  mode if drag highlighting with the mouse. (bug #1589360)
+  (Björn "Vampire" Kautler)
 
 - Fix SF Bug #1574562: 4.3pre7 regex find/replace fails
   When adjusting the offset after an EOL match, need to check whether
@@ -25,7 +29,6 @@ to this release.
   Correctly handle perl subroutine prototypes. (Marcelo Vanzin)
 
 }}}
-
 {{{ Miscellaneous
 
 - Buffer options were factored out to a dedicated BufferOptionPane and
@@ -43,12 +46,14 @@ to this release.
 - When the plugin manager fail to download a plugin or to read the downloaded
   file, a new message dialog suggest the user to try another mirror
   (Matthieu Casanova)
-}}}
 
+}}}
 {{{ API Changes
 
 - OptionsDialog - currentPane and paneTree are protected now,
-	to make it easier to extend it in SideKick plugin.
+  to make it easier to extend it in SideKick plugin.
+
+}}}
 
 }}}
 

@@ -125,9 +125,17 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		if(textArea.chunkCache.getLineInfo(
 			textArea.getLastScreenLine()).lastSubregion)
 		{
-			float dragStartLineWidth = textArea.offsetToXY(
-				dragStartLine,
-				textArea.getLineLength(dragStartLine)).x;
+			int dragStart = textArea.xyToOffset(x,evt.getY(),
+				!textArea.getPainter().isBlockCaretEnabled()
+				&& !textArea.isOverwriteEnabled());
+			int screenLine = textArea.getScreenLineOfOffset(dragStart);
+			ChunkCache.LineInfo lineInfo = textArea.chunkCache.getLineInfo(screenLine);
+			int offset = textArea.getScreenLineEndOffset(screenLine);
+			if ((1 != offset - dragStart) || (lineInfo.lastSubregion))
+			{
+				offset--;
+			}
+			float dragStartLineWidth = textArea.offsetToXY(offset).x;
 			if(x > dragStartLineWidth)
 			{
 				extraEndVirt = (int)(
@@ -333,8 +341,14 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			textArea.getLastScreenLine())
 			.lastSubregion)
 		{
-			float dotLineWidth = textArea.offsetToXY(
-				dotLine,textArea.getLineLength(dotLine)).x;
+			int screenLine = textArea.getScreenLineOfOffset(dot);
+			ChunkCache.LineInfo lineInfo = textArea.chunkCache.getLineInfo(screenLine);
+			int offset = textArea.getScreenLineEndOffset(screenLine);
+			if ((1 != offset - dot) || (lineInfo.lastSubregion))
+			{
+				offset--;
+			}
+			float dotLineWidth = textArea.offsetToXY(offset).x;
 			if(x > dotLineWidth)
 			{
 				extraEndVirt = (int)((x - dotLineWidth) / textArea.charWidth);
