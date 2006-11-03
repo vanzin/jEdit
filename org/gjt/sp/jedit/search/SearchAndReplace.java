@@ -678,10 +678,27 @@ loop:			for(;;)
 		boolean smartCaseReplace = getSmartCaseReplace();
 
 		Selection[] selection = textArea.getSelection();
-		if(selection.length == 0)
+		if (selection.length == 0)
 		{
-			view.getToolkit().beep();
-			return false;
+			try
+			{
+				SearchMatcher matcher = getSearchMatcher();
+				if ((matcher != null) && (matcher.isMatchingEOL()))
+				{
+					int caretPosition = textArea.getCaretPosition();
+					selection = new Selection[] { new Selection.Range(caretPosition,caretPosition) };
+				}
+				else
+				{
+					view.getToolkit().beep();
+					return false;
+				}
+			}
+			catch (Exception e)
+			{
+				handleError(comp,e);
+				return false;
+			}
 		}
 
 		record(view,"replace(view)",true,false);

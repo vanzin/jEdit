@@ -7,6 +7,9 @@ and Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed the impossibility to ReplaceAndFind if matching "$"
+  (Björn "Vampire" Kautler)
+
 - Fixed incorrect highlighting if in soft-wrap and rectangular selection
   mode if drag highlighting with the mouse. (bug #1589360)
   (Björn "Vampire" Kautler)
