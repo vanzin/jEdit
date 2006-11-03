@@ -1,17 +1,20 @@
 /**
-    ToggleHeaderSource.bsh
-    by Alan Ezust
+    ToggleHeaderSource.bsh V1.2
+    by Alan Ezust  alan at jedit dot org
     $Id$
-    alan dot ezust at gmail dot com
-    2005-11-09
+
+    2006-11-03
    
     A jedit beanshell macro that toggles your current buffer
     between the header file (.h) and the source file (.c(pp|xx)?).
 
     Enables you to switch the current text
     buffer between C/C++ header and sourcecode
-    file. If the file does not already exist, it opens a buffer
-    of that name for you (!).
+    file. If the file does not already exist, it opens a new buffer
+    of that name for you. 
+
+    New to 1.2: If another buffer is already open with the requested
+    filename, it is selected, even if located in another directory.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,6 +36,28 @@ String defaultSourceExtension = "cpp";
 
 String[] sourceExtensions = new String[]{"cpp", "c", "cxx" };
 
+
+/** Looks for an existing file in the same directory, or
+   an already open buffer with the given name in another directory.
+   @return the absolute path if found, NULL if not.
+   */
+String findBuffer(String fileName) {
+    File f = new File(fileName);
+    if (f.canRead()) return f.getPath();
+    String fn2 = f.getName();
+    Buffer[] bufs = jEdit.getBuffers();
+    bn = bufs.length;
+    for (int i=0; i<bn; ++i) {
+        Buffer b = bufs[i];
+        if (b.getName().equals(fn2)) return b.getPath();
+    }
+    return null;
+}
+   
+/** Given a header file, iterates through all sourcefile extensions checking if the sourcefile exists.
+   @return the absolute path of the sourcefile for this header
+*/
+
 String getSourceFile(String baseName)
 {
     int numExt = sourceExtensions.length;
@@ -40,9 +65,9 @@ String getSourceFile(String baseName)
     {
         String ext = sourceExtensions[i];
         String tryFile = baseName + "." + ext;
-        File f = new File(tryFile);
-        if (f.canRead()) return f.getPath();
-    }              
+        String path = findBuffer(tryFile);
+        if (path != null) return path;
+    }        
     return baseName + "." + defaultSourceExtension;
 }
 
@@ -63,7 +88,9 @@ void toggleHeaderSource()
     String baseName = currentFile.substring(0, pos);
     if (isSourceFile(extension)) 
     {
-        jEdit.openFile(view, baseName + ".h"); 
+        String path = findBuffer(baseName + ".h");
+        if (path != null) jEdit.openFile(view, path);
+        else jEdit.openFile(view, baseName + ".h");
     }
     else if (extension.equals("h")) {
         String sourceFile = getSourceFile(baseName);
