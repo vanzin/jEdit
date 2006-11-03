@@ -1,5 +1,5 @@
 /*
- * EditPane.java - Text area and buffer switcher
+ * AntiAlias.java - a small helper class for AntiAlias settings.
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *

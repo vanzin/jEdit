@@ -1698,6 +1698,7 @@ options.editing.folding=Folding mode:
 options.editing.collapseFolds=Initially collapse folds with level:
 options.editing.wrap=Word wrap:
 options.editing.maxLineLen=Wrap margin:
+options.editing.maxLineLen.tooltip=Select 0 for text area width
 options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:

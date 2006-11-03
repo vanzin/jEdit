@@ -92,8 +92,9 @@ public class EditingOptionPane extends AbstractOptionPane
 			wrap = new JComboBox(wrapModes));
 
 		String[] lineLens = { "0", "72", "76", "80" };
-		addComponent(jEdit.getProperty("options.editing.maxLineLen"),
-			maxLineLen = new JComboBox(lineLens));
+		maxLineLen = new JComboBox(lineLens);
+		maxLineLen.setToolTipText(jEdit.getProperty("options.editing.maxLineLen.tooltip"));
+		addComponent(jEdit.getProperty("options.editing.maxLineLen"), maxLineLen);
 		maxLineLen.setEditable(true);
 
 		String[] tabSizes = { "2", "4", "8" };
