@@ -2,8 +2,6 @@
     ToggleHeaderSource.bsh V1.2
     by Alan Ezust  alan at jedit dot org
     $Id$
-
-    2006-11-03
    
     A jedit beanshell macro that toggles your current buffer
     between the header file (.h) and the source file (.c(pp|xx)?).
