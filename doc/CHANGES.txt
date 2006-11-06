@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre8
 
-Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin
+Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin, Alan Ezust
 and Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
@@ -50,11 +50,15 @@ and Björn "Vampire" Kautler for contributing to this release.
   file, a new message dialog suggest the user to try another mirror
   (Matthieu Casanova)
 
+- ToggleHeaderSource.bsh (macros/C) now will find and open an already-open
+  buffer with the correct filename even if it is from another directory.
+  (Alan Ezust)
+
 }}}
 {{{ API Changes
 
 - OptionsDialog - currentPane and paneTree are protected now,
-  to make it easier to extend it in SideKick plugin.
+  to make it easier to extend it in SideKick plugin. (Alan Ezust)
 
 }}}
 
