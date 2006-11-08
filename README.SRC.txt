@@ -92,7 +92,7 @@ General jEdit documentation can be found in the 'doc' directory.
  - dist-mac           build the Mac OS X disk image (DMG-file)
   builds the Mac OS X internet-enabled disk image (DMG-file) if building on a box
   running Mac OS X. If building on a box running something else, there will be a file
-  called jEdit-<version_here>-dist-mac-finish.tar.bz2 in the dist-folder,
+  called jedit<version_here>-dist-mac-finish.tar.bz2 in the dist-folder,
   configured in build.properties. Give that to someone running Mac OS X and ask him
   to extract the archive and to execute "ant dist-mac-finish".
   The only thing that needs to be installed for this final step is Apache Ant.
@@ -116,7 +116,7 @@ General jEdit documentation can be found in the 'doc' directory.
  - dist-win           build the Windows installer (EXE-file)
   builds the windows installer in the dist-folder, configured in build.properties,
   on a box running Windows. If building on a box running something else, there will be
-  a file called jEdit-<version_here>-dist-win-finish.tar.bz2 in the dist-folder,
+  a file called jedit<version_here>-dist-win-finish.tar.bz2 in the dist-folder,
   configured in build.properties. Give that to someone running Windows and ask him
   to extract the archive and to execute "ant dist-win-finish".
   The only things that need to be installed for this final step is Apache Ant, and
