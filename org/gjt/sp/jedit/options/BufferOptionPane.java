@@ -93,7 +93,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		//}}}
 
 		//{{{ Encoding
-		String[] encodings = MiscUtilities.getEncodings();
+		String[] encodings = MiscUtilities.getEncodings(true);
 		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
 		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
