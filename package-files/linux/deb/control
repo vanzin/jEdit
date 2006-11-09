@@ -20,7 +20,7 @@ Description: A real editor for programmers
  editor. These include a built-in Console shell integration,
  which also lets you execute external commands and bind them to
  keyboard shortcuts, also without leaving the editor. Other plugins
- provide consoles, structure browsers and/or completion popups for
+ provide shells, structure browsers and/or completion popups for
  Ant, LaTeX, HTML, Java, XML, Ruby, Python, Perl, Scheme, Prolog,
  and many other languages.
     More information about jEdit, its plugins, macros, etc. can be
