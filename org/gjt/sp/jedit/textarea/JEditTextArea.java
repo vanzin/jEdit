@@ -58,7 +58,7 @@ public class JEditTextArea extends TextArea
 		this.view = view;
 	} //}}}
 
-		//{{{ smartHome() method
+	//{{{ smartHome() method
 	/**
 	 * On subsequent invocations, first moves the caret to the first
 	 * non-whitespace character of the line, then the beginning of the
@@ -125,7 +125,7 @@ public class JEditTextArea extends TextArea
 		}
 	} //}}}
 
-		//{{{ showGoToLineDialog() method
+	//{{{ showGoToLineDialog() method
 	/**
 	 * Displays the 'go to line' dialog box, and moves the caret to the
 	 * specified line number.
@@ -148,7 +148,7 @@ public class JEditTextArea extends TextArea
 		}
 	} //}}}
 
-		//{{{ userInput() method
+	//{{{ userInput() method
 	/**
 	 * Handles the insertion of the specified character. It performs the
 	 * following operations above and beyond simply inserting the text:
@@ -294,9 +294,7 @@ public class JEditTextArea extends TextArea
 
 	//}}}
 
-
 	//{{{ Private members
-
 
 	//{{{ Instance variables
 	private View view;

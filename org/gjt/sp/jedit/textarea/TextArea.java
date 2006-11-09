@@ -197,8 +197,6 @@ public class TextArea extends JComponent
 
 	} //}}}
 
-
-
 	//{{{ setMouseHandler() method
 	public void setMouseHandler(MouseInputAdapter mouseInputAdapter)
 	{
@@ -222,6 +220,7 @@ public class TextArea extends JComponent
 		}
 	} //}}}
 
+	//{{{ toString() method
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("caret: ").append(caret).append('\n');
@@ -237,8 +236,7 @@ public class TextArea extends JComponent
 		builder.append("firstPhysicalLine: ").append(getFirstPhysicalLine()).append('\n');
 		builder.append("physLastLine: ").append(physLastLine).append('\n');
 		return builder.toString();
-	}
-
+	} //}}}
 
 	//{{{ dispose() method
 	/**
@@ -6034,6 +6032,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		structureTimer.setRepeats(false);
 	} //}}}
 
+	//{{{ main() method
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame();
@@ -6041,5 +6040,5 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		frame.getContentPane().add(text);
 		frame.pack();
 		frame.setVisible(true);
-	}
+	} //}}}
 }

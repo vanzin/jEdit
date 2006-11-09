@@ -566,7 +566,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	protected int dragStart;
 	protected int clickCount;
 	protected boolean dragged;
-	private boolean quickCopyDrag;
+	protected boolean quickCopyDrag;
 	protected boolean control;
 	/* with drag and drop on, a mouse down in a selection does not
 	immediately deselect */

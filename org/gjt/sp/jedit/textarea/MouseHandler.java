@@ -164,7 +164,6 @@ public class MouseHandler extends TextAreaMouseHandler
 	} //}}}
 
 	//{{{ Private members
-	private boolean quickCopyDrag;
 	private JEditTextArea textArea;
 	//}}}
 }
