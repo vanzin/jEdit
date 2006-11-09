@@ -12,6 +12,12 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
   (Björn "Vampire" Kautler)
 
 }}}
+{{{ Editing
+
+New edit mode: quake.xml
+
+}}}
+
 {{{ Miscellaneous
 
 - Added a FIRST_LINE_GLOB to the "awk" mode in modes catalog (fr #1582241)
@@ -21,6 +27,7 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 }}}
 
+>>>>>>> .r8007
 {{{ Version 4.3pre8
 
 Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin, Alan Ezust
