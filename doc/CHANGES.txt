@@ -1,5 +1,20 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre9
+
+Thanks to  for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+
+}}}
+
 {{{ Version 4.3pre8
 
 Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin, Alan Ezust
@@ -1137,5 +1152,5 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 }}}
 
 jEdit buffer local properties:
-:wrap=hard:maxLineLen=72:indentSize=2:
+:maxLineLen=72:indentSize=2:
 :folding=explicit:collapseFolds=2:
