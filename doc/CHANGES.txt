@@ -2,14 +2,17 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre9
 
-Thanks to  for contributing to this release.
+Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed the broken quick copy behaviour (Björn "Vampire" Kautler)
 
 }}}
 {{{ Miscellaneous
 
+- Added a FIRST_LINE_GLOB to the "awk" mode in modes catalog (fr #1582241)
+  (Björn "Vampire" Kautler)
 
 }}}
 

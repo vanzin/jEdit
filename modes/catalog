@@ -47,7 +47,8 @@
 				FILE_NAME_GLOB="*.asm" />
 
 <MODE NAME="awk"		FILE="awk.xml"
-				FILE_NAME_GLOB="*.awk" />
+				FILE_NAME_GLOB="*.awk"
+				FIRST_LINE_GLOB="#!*awk*" />
 
 <MODE NAME="b"			FILE="b.xml"
 				FILE_NAME_GLOB="*.{imp,ref,mch}" />
