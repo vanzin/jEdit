@@ -26,11 +26,14 @@ package org.gjt.sp.jedit.browser;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.Timer;
 
+import org.gjt.sp.jedit.browser.VFSDirectoryEntryTable.ClearTypeSelect;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
@@ -571,43 +574,91 @@ class BrowserView extends JPanel
 			for (int i=1; i<=row; ++i) components.add(getModel().getElementAt(i).toString());
 			return getModel().getElementAt(0) + TextUtilities.join(components, File.separator);
 		}
-		protected void processKeyEvent(KeyEvent e)
+		protected void processKeyEvent(KeyEvent evt)
 		{
-			if (e.getID() == KeyEvent.KEY_PRESSED)  {
+			if (evt.getID() == KeyEvent.KEY_PRESSED)  {
+				ActionContext ac = VFSBrowser.getActionContext();
 				int row = parentDirectories.getSelectedIndex();
-				switch(e.getKeyCode()) {
-				
+				switch(evt.getKeyCode()) {
 				case KeyEvent.VK_DOWN:
-					e.consume();			
+					evt.consume();			
 					if (row < parentDirectories.getSize().height-1) 
 						parentDirectories.setSelectedIndex(++row);
 					break;
+				case KeyEvent.VK_TAB:
+			        	  table.requestFocus();
+			        	  evt.consume();
+			        	  break;
 				case KeyEvent.VK_UP :
-					e.consume();
+					evt.consume();
 					if (row > 0) 
 						parentDirectories.setSelectedIndex(--row);
 					break;
 				case KeyEvent.VK_BACK_SPACE:
-					e.consume();
-					ActionContext ac = VFSBrowser.getActionContext();
+					evt.consume();
 					EditAction ea = ac.getAction("vfs.browser.up");
-					ac.invokeAction(e, ea);
+					ac.invokeAction(evt, ea);
 					break;
 				case KeyEvent.VK_F5: 
-					e.consume();
+					evt.consume();
 					ac = VFSBrowser.getActionContext();
 					ea = ac.getAction("vfs.browser.reload");
-					ac.invokeAction(e, ea);
+					ac.invokeAction(evt, ea);
 					break;
 				case KeyEvent.VK_ENTER: 
-					e.consume();
+					evt.consume();
 					String path = getPath(row);
 					getBrowser().setDirectory(path);
 					table.requestFocus();
 					break;
+				case KeyEvent.VK_DELETE:
+					evt.consume();
+					ea = ac.getAction("vfs.browser.delete");
+					ac.invokeAction(evt, ea);
+					break;
+				case KeyEvent.CTRL_MASK | KeyEvent.VK_N:  
+					evt.consume();
+					ea = ac.getAction("vfs.browser.new-file");
+					ac.invokeAction(evt, ea);
+					break;
+				case KeyEvent.VK_INSERT:
+					evt.consume();
+					ea = ac.getAction("vfs.browser.new-directory");
+					ac.invokeAction(evt, ea);
+					break;					
 				}
 			}
-			if (!e.isConsumed()) super.processKeyEvent(e);
+			else if(evt.getID() == KeyEvent.KEY_TYPED) {
+				if(evt.isControlDown() || evt.isAltDown()
+					|| evt.isMetaDown())
+				{
+					evt.consume();
+					return;
+				}
+				switch(evt.getKeyChar())
+				{
+				case '~':
+					evt.consume();
+					if(browser.getMode() == VFSBrowser.BROWSER)
+						browser.setDirectory(System.getProperty(
+							"user.home"));
+					break;
+				case '/':
+					evt.consume();
+					if(browser.getMode() == VFSBrowser.BROWSER)
+						browser.rootDirectory();
+					break;
+				case '-':
+					evt.consume();
+					if(browser.getMode() == VFSBrowser.BROWSER)
+					{
+						browser.setDirectory(
+							browser.getView().getBuffer()
+							.getDirectory());
+					}
+					break;								}
+			}
+			if (!evt.isConsumed()) super.processKeyEvent(evt);
 		}	
 	}
 	

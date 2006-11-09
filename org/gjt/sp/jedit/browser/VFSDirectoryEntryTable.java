@@ -317,6 +317,16 @@ public class VFSDirectoryEntryTable extends JTable
 				ea = ac.getAction("vfs.browser.delete");
 				ac.invokeAction(evt, ea);
 				break;
+			case KeyEvent.CTRL_MASK | KeyEvent.VK_N:  
+				evt.consume();
+				ea = ac.getAction("vfs.browser.new-file");
+				ac.invokeAction(evt, ea);
+				break;
+			case KeyEvent.VK_INSERT:
+				evt.consume();
+				ea = ac.getAction("vfs.browser.new-directory");
+				ac.invokeAction(evt, ea);
+				break;
 			case KeyEvent.VK_ESCAPE:
 				ea = jac.getAction("close-docking-area");
 				ea.invoke(jEdit.getActiveView());
