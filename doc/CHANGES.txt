@@ -8,6 +8,9 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 - Fixed the broken quick copy behaviour (Björn "Vampire" Kautler)
 
+- Fixed the wrong text in SearchAndReplace Dialog (bug #1592529)
+  (Björn "Vampire" Kautler)
+
 }}}
 {{{ Miscellaneous
 
