@@ -119,8 +119,7 @@
     </question>
     <answer>
       <para>
-        The latest version of jEdit, version 4.3, requires MacOS X, because the
-        Java platforms of earlier MacOS version out outdated.
+        The latest version of jEdit, version 4.3, requires MacOS X (preferably 10.4 or later), because the Java platforms of earlier MacOS version out outdated.
       </para>
       <para>
         Once you have completed installing jEdit locate the jedit.jar

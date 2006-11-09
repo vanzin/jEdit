@@ -322,23 +322,7 @@
 				jEdit/jEdit.app/Contents/Resources/MRJApp.properties
 
 				You will need to add the line <userinput>com.apple.hwaccel=false</userinput>.
-				This is done for you in the Mac OS X package of jEdit 4.1.
-			</para>
-		</answer>
-	</qandaentry>
-	<qandaentry>
-		<question id="not-in-menubar">
-			<para>
-				Why are the menus not in the menubar?
-			</para>
-		</question>
-		<answer>
-			<para>
-				You can enable the use of OS X's menubar in the Mac OS Plugin settings.
-				You should note that the reason this is off by default is because of numerous
-				problems with using the Mac OS X menubar. For example dynamic menus, shortcuts
-				and check box menu items do not work correctly or at all. All bar the shortcut
-				issue is resolved in Java 1.4.1 (currently in beta).
+				This is done for you in the Mac OS X plugin. 
 			</para>
 		</answer>
 	</qandaentry>
