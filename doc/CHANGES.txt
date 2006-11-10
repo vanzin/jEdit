@@ -11,13 +11,15 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 - Fixed the wrong text in SearchAndReplace Dialog (bug #1592529)
   (Björn "Vampire" Kautler)
 
+- Fixed wrong highlighting of multiline strings in cobol editmode
+  (bug #785290) (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 
 New edit mode: quake.xml
 
 }}}
-
 {{{ Miscellaneous
 
 - Added a FIRST_LINE_GLOB to the "awk" mode in modes catalog (fr #1582241)
@@ -27,7 +29,6 @@ New edit mode: quake.xml
 
 }}}
 
->>>>>>> .r8007
 {{{ Version 4.3pre8
 
 Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin, Alan Ezust
