@@ -143,6 +143,27 @@ public class FileVFS extends VFS
 		return super.insert(view,buffer,path);
 	} //}}}
 
+	//{{{ recursiveDelete() method
+	/**
+	 * #
+	 * @param path the directory path to recursive delete
+	 * @return true if successful, else false
+	 */
+	public boolean recursiveDelete(File path) {
+	    if( path.exists() ) {
+	      File[] files = path.listFiles();
+	      for(int i=0; i<files.length; i++) {
+	         if(files[i].isDirectory()) {
+	           recursiveDelete(files[i]);
+	         }
+	         else {
+	           files[i].delete();
+	         }
+	      }
+	    }
+	    return( path.delete() );
+	  } //}}}
+	
 	//{{{ _canonPath() method
 	/**
 	 * Returns the canonical form if the specified path name. For example,
@@ -317,8 +338,15 @@ public class FileVFS extends VFS
 		{
 			canonPath = path;
 		}
-
-		boolean retVal = file.delete();
+		// if directory, do recursive delete
+		boolean retVal;
+		if (!file.isDirectory()) {
+			retVal = file.delete();
+		} 
+		else 
+		{
+			retVal = recursiveDelete(file);
+		}
 		if(retVal)
 			VFSManager.sendVFSUpdate(this,canonPath,true);
 		return retVal;

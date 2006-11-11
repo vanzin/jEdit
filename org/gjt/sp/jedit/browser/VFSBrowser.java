@@ -615,13 +615,17 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		}
 
 		StringBuffer buf = new StringBuffer();
+		String typeStr = "files";
 		for(int i = 0; i < files.length; i++)
 		{
 			buf.append(files[i].getPath());
 			buf.append('\n');
+			if (files[i].getType() == VFSFile.DIRECTORY)
+				typeStr = "directories and their contents";
 		}
 
-		Object[] args = { buf.toString() };
+		Object[] args = { buf.toString(), typeStr};
+		
 		int result = GUIUtilities.confirm(this,dialogType,args,
 			JOptionPane.YES_NO_OPTION,
 			JOptionPane.WARNING_MESSAGE);
