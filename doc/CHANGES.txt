@@ -21,6 +21,7 @@ New edit mode: quake.xml
 
 }}}
 {{{ Miscellaneous
+- patch 1593900 - Bug 1593389 - recursive delete from FSB works. (Akber Choudhry).
 
 - Added a FIRST_LINE_GLOB to the "awk" mode in modes catalog (fr #1582241)
   (Björn "Vampire" Kautler)
