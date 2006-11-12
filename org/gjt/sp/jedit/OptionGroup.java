@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit;
 
 import java.util.*;
-import org.gjt.sp.util.Log;
 
 /**
  * A set of option panes shown in one branch in the options dialog.<p>
@@ -40,9 +39,9 @@ public class OptionGroup
 {
 	
 	// {{{ data members
-	private String name;
-	private String label;
-	private Vector members;
+	private final String name;
+	private final String label;
+	private final Vector members;
 	private boolean sort;
 	// }}}
 	
@@ -189,7 +188,7 @@ public class OptionGroup
 				else
 					throw new InternalError();
 
-				if(newLabel.compareTo(label) < 0)
+				if(newLabel.compareToIgnoreCase(label) < 0)
 				{
 					members.insertElementAt(newObj,i);
 					return;

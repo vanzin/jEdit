@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre9
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -13,6 +13,8 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 - Fixed wrong highlighting of multiline strings in cobol editmode
   (bug #785290) (Björn "Vampire" Kautler)
+
+- Plugins in plugins options are now sorted insentively (#1593410) Matthieu Casanova
 
 }}}
 {{{ Editing
@@ -26,6 +28,8 @@ New edit mode: quake.xml
 - Added a FIRST_LINE_GLOB to the "awk" mode in modes catalog (fr #1582241)
   (Björn "Vampire" Kautler)
 
+- Incremental searchbar now use the invalid syntax color to show if the searched
+  text was found (Matthieu Casanova)
 }}}
 
 }}}

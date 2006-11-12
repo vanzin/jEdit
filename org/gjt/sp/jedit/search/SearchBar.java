@@ -28,6 +28,7 @@ import java.awt.*;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -35,6 +36,7 @@ import org.gjt.sp.util.Log;
 
 /**
  * Incremental search tool bar.
+ * @version $Id$
  */
 public class SearchBar extends JPanel
 {
@@ -52,7 +54,13 @@ public class SearchBar extends JPanel
 		add(Box.createHorizontalStrut(12));
 		add(find = new HistoryTextField("find"));
 		find.setSelectAllOnFocus(true);
-		Dimension max = find.getPreferredSize();
+
+        SyntaxStyle style = GUIUtilities.parseStyle(jEdit.getProperty("view.style.invalid"), "Dialog", 12);
+        errorBackground = style.getBackgroundColor();
+        errorForeground = style.getForegroundColor();
+        defaultBackground = find.getBackground();
+        defaultForeground = find.getForeground();
+        Dimension max = find.getPreferredSize();
 		max.width = Integer.MAX_VALUE;
 		find.setMaximumSize(max);
 		ActionHandler actionHandler = new ActionHandler();
@@ -157,7 +165,11 @@ public class SearchBar extends JPanel
 	private HistoryTextField find;
 	private JCheckBox ignoreCase, regexp, hyperSearch;
 	private Timer timer;
-
+    private boolean wasError;
+    private Color defaultBackground;
+    private Color defaultForeground;
+    private Color errorForeground;
+    private Color errorBackground;
 	// close button only there if 'temp' is true
 	private RolloverButton close;
 
@@ -186,7 +198,7 @@ public class SearchBar extends JPanel
 			{
 				view.removeToolBar(SearchBar.this);
 			}
-                        else
+            else
 				find.setText(null);
 
 			SearchAndReplace.setSearchString(text);
@@ -255,10 +267,11 @@ public class SearchBar extends JPanel
 		SearchAndReplace.setSearchString(find.getText());
 		SearchAndReplace.setReverseSearch(reverse);
 
-		try
+        boolean ret = false;
+        try
 		{
 			if(SearchAndReplace.find(view,view.getBuffer(),start,false,reverse))
-				return true;
+				ret = true;
 		}
 		catch(Exception e)
 		{
@@ -267,17 +280,36 @@ public class SearchBar extends JPanel
 			// invalid regexp, ignore
 			// return true to avoid annoying beeping while
 			// typing a re
-			return true;
+			ret = true;
 		}
+        if (ret)
+        {
+            if (wasError)
+            {
+                find.setForeground(defaultForeground);
+                find.setBackground(defaultBackground);
+                wasError = false;
+            }
+        }
+        else
+        {
+            if (!wasError)
+            {
+                find.setForeground(errorForeground);
+                find.setBackground(errorBackground);
+                wasError = true;
+            }
+        }
 
-		return false;
+
+        return ret;
 	} //}}}
 
 	//{{{ timerIncrementalSearch() method
 	private void timerIncrementalSearch(int start, boolean reverse)
 	{
-		this.searchStart = start;
-		this.searchReverse = reverse;
+		searchStart = start;
+		searchReverse = reverse;
 
 		timer.stop();
 		timer.setRepeats(false);
