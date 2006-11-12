@@ -390,6 +390,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		cons.insets = new Insets(0,0,0,0);
 
 		replace = new HistoryTextArea("replace");
+		replace.setToolTipText(jEdit.getProperty("search.find.tooltip"));
 		label.setLabelFor(replace);
 
 		cons.gridx = 0;
