@@ -327,11 +327,13 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		GridBagConstraints cons)
 	{
 		JLabel label = new JLabel(jEdit.getProperty("search.find"));
+		
 		label.setDisplayedMnemonic(jEdit.getProperty("search.find.mnemonic")
 			.charAt(0));
 		find = new HistoryTextArea("find");
 		find.setColumns(25);
-
+		find.setToolTipText(jEdit.getProperty("search.find.tooltip"));
+		label.setToolTipText(jEdit.getProperty("search.find.tooltip"));
 		label.setLabelFor(find);
 		label.setBorder(new EmptyBorder(12,0,2,0));
 
