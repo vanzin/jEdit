@@ -142,7 +142,11 @@ public abstract class XModeHandler extends DefaultHandler
 			//{{{ IMPORT
 			else if (tag.tagName.equals("IMPORT"))
 			{
-				rules.addRuleSet(tag.lastDelegateSet);
+				// prevent lockups
+				if (!rules.getSetName().equals(tag.lastDelegateSet.getSetName()))
+				{
+					rules.addRuleSet(tag.lastDelegateSet);
+				}
 			} //}}}
 			//{{{ TERMINATE
 			else if (tag.tagName.equals("TERMINATE"))

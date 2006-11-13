@@ -117,7 +117,6 @@ public class TokenMarker
 		//}}}
 
 		//{{{ Main parser loop
-		ParserRule rule;
 		int terminateChar = context.rules.getTerminateChar();
 		boolean terminated = false;
 main_loop:	for(pos = line.offset; pos < lineLength; pos++)
@@ -136,7 +135,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			//{{{ check for end of delegate
 			if(context.parent != null)
 			{
-				rule = context.parent.inRule;
+				ParserRule rule = context.parent.inRule;
 				if(rule != null)
 				{
 					if(checkDelegateEnd(rule))
@@ -148,10 +147,9 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			} //}}}
 
 			//{{{ check every rule
-			char ch = line.array[pos];
-
-			rule = context.rules.getRules(ch);
-			while(rule != null)
+			Character ch = Character.valueOf(line.array[pos]);
+			List<ParserRule> rules = context.rules.getRules(ch);
+			for (ParserRule rule : rules)
 			{
 				// stop checking rules if there was a match
 				if (handleRule(rule,false))
@@ -159,8 +157,6 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					seenWhitespaceEnd = true;
 					continue main_loop;
 				}
-
-				rule = rule.next;
 			} //}}}
 
 			//{{{ check if current character is a word separator
@@ -234,7 +230,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		//{{{ Unwind any NO_LINE_BREAK parent delegates
 unwind:		while(context.parent != null)
 		{
-			rule = context.parent.inRule;
+			ParserRule rule = context.parent.inRule;
 			if((rule != null && (rule.action
 				& ParserRule.NO_LINE_BREAK) == ParserRule.NO_LINE_BREAK)
 				|| terminated)

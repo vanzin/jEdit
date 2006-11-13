@@ -51,9 +51,8 @@ public class ParserRuleSet
 	{
 		this.modeName = modeName;
 		this.setName = setName;
-		ruleMapFirst = new ParserRule[RULE_BUCKET_COUNT];
-		ruleMapLast = new ParserRule[RULE_BUCKET_COUNT];
-		imports = new LinkedList<ParserRuleSet>();
+		ruleMap = new HashMap<Character, List<ParserRule>>();
+		imports = new ArrayList<ParserRuleSet>();
 	} //}}}
 
 	//{{{ getModeName() method
@@ -94,12 +93,20 @@ public class ParserRuleSet
 	 */
 	public void resolveImports()
 	{
-		for (ParserRuleSet ruleset : imports) {
-			for (int i = 0; i < ruleset.ruleMapFirst.length; i++) {
-				ParserRule rule = ruleset.ruleMapFirst[i];
-				while (rule != null) {
+		for (ParserRuleSet ruleset : imports)
+		{
+			if (!ruleset.imports.isEmpty())
+			{
+				//prevent infinite recursion
+				ruleset.imports.remove(this);
+				ruleset.resolveImports();
+			}
+			
+			for (List<ParserRule> rules : ruleset.ruleMap.values())
+			{
+				for (ParserRule rule : rules)
+				{
 					addRule(rule);
-					rule = rule.next;
 				}
 			}
 
@@ -127,23 +134,41 @@ public class ParserRuleSet
 	public void addRule(ParserRule r)
 	{
 		ruleCount++;
-
-		int key = r.upHashChar % RULE_BUCKET_COUNT;
-		ParserRule last = ruleMapLast[key];
-		if(last == null)
-			ruleMapFirst[key] = ruleMapLast[key] = r;
-		else
+		Character key = Character.valueOf(r.upHashChar);
+		List<ParserRule> rules = ruleMap.get(key);
+		if (null == rules)
 		{
-			last.next = r;
-			ruleMapLast[key] = r;
+			rules = new ArrayList<ParserRule>();
+			ruleMap.put(key,rules);
+		}
+		int ruleAmount = rules.size();
+		rules.add(r);
+		if (ruleAmount > 0)
+		{
+			rules.get(ruleAmount).next = r;
 		}
 	} //}}}
 
 	//{{{ getRules() method
+	/**
+	* @deprecated As the linking between rules is not anymore done within the rule, use {@link #getRules(Character)} instead
+	*/
 	public ParserRule getRules(char ch)
 	{
-		int key = Character.toUpperCase(ch) % RULE_BUCKET_COUNT;
-		return ruleMapFirst[key];
+		List<ParserRule> rules = getRules(Character.valueOf(ch));
+		return rules.get(0);
+	} //}}}
+
+	//{{{ getRules() method
+	public List<ParserRule> getRules(Character key)
+	{
+		Character upperKey = Character.valueOf(Character.toUpperCase(key.charValue()));
+		List<ParserRule> rules = ruleMap.get(upperKey);
+		if (null == rules)
+		{
+			rules = Collections.emptyList();
+		}
+		return rules;
 	} //}}}
 
 	//{{{ getRuleCount() method
@@ -294,8 +319,6 @@ public class ParserRuleSet
 		}
 	}
 
-	private static final int RULE_BUCKET_COUNT = 128;
-
 	private String modeName, setName;
 	private Hashtable<String, String> props;
 
@@ -303,8 +326,7 @@ public class ParserRuleSet
 
 	private int ruleCount;
 
-	private ParserRule[] ruleMapFirst;
-	private ParserRule[] ruleMapLast;
+	private Map<Character, List<ParserRule>> ruleMap;
 
 	private final List<ParserRuleSet> imports;
 

@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre9
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Akber Choudhry and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -14,22 +14,37 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this re
 - Fixed wrong highlighting of multiline strings in cobol editmode
   (bug #785290) (Björn "Vampire" Kautler)
 
-- Plugins in plugins options are now sorted insentively (#1593410) Matthieu Casanova
+- Plugins in plugins options are now sorted case-insentively
+  (bug #1593410) (Matthieu Casanova)
+
+- Fixed the not resolved IMPORTs in IMPORTs (bug #1569735)
+  (Björn "Vampire" Kautler)
 
 }}}
 {{{ Editing
 
-New edit mode: quake.xml
+- New edit mode: quake.xml
 
 }}}
 {{{ Miscellaneous
-- patch 1593900 - Bug 1593389 - recursive delete from FSB works. (Akber Choudhry).
+
+- FSB deletes directories recursively now
+  (bug #1593389) (patch #1593900) (Akber Choudhry)
 
 - Added a FIRST_LINE_GLOB to the "awk" mode in modes catalog (fr #1582241)
   (Björn "Vampire" Kautler)
 
 - Incremental searchbar now use the invalid syntax color to show if the searched
   text was found (Matthieu Casanova)
+
+}}}
+{{{ API Changes
+
+- Refactored the manually implemented HashSet of LinkedLists to use the
+  Java Collections HashSet and ArrayList. Therefore the ParserRule.next
+  and the ParserRuleSet.getRules(char) got deprecated in favor of
+  ParserRuleSet.getRules(Character) (Björn "Vampire" Kautler)
+
 }}}
 
 }}}

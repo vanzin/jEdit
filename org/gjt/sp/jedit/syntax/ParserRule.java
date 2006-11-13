@@ -75,6 +75,9 @@ public class ParserRule
 
 	public ParserRuleSet delegate;
 
+	/**
+	* @deprecated As the linking between rules is not anymore done within the rule but external. See {@link ParserRuleSet#getRules(Character)}
+	*/
 	public ParserRule next;
 	//}}}
 
