@@ -332,11 +332,14 @@ public class PerspectiveManager
 				{
 					currentBuffer = jEdit.openFile(null,charData.toString());
 					// if the autoReload attributes are not present, don't set anything
-					// it's sufficient to check whether they are present on the first BUFFER element 
-					if(autoReload != null)
-						currentBuffer.setAutoReload("TRUE".equals(autoReload));
-					if(autoReloadDialog != null)
-						currentBuffer.setAutoReloadDialog("TRUE".equals(autoReloadDialog));
+					// it's sufficient to check whether they are present on the first BUFFER element
+					if (currentBuffer != null)
+					{
+						if(autoReload != null)
+							currentBuffer.setAutoReload("TRUE".equals(autoReload));
+						if(autoReloadDialog != null)
+							currentBuffer.setAutoReloadDialog("TRUE".equals(autoReloadDialog));
+					}
 				}
 			}
 			else if(name.equals("PANES"))

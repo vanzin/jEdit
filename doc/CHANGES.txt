@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre9
 
-Thanks to Björn "Vampire" Kautler, Akber Choudhry and Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
+and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -19,6 +20,13 @@ Thanks to Björn "Vampire" Kautler, Akber Choudhry and Matthieu Casanova for cont
 
 - Fixed the not resolved IMPORTs in IMPORTs (bug #1569735)
   (Björn "Vampire" Kautler)
+
+- Fix SF Bug #1596756: Annoying problem with file system browser in 4.3pre7
+  When reopening the "recent" files on startup, a buffer might fail to
+  load (because, e.g., it's on a FTP server and the user canceled the
+  password dialog). So ignore the buffer if it's null when restoring the
+  view. (Marcelo Vanzin)
+
 
 }}}
 {{{ Editing
