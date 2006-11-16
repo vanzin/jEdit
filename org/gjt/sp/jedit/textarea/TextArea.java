@@ -3226,7 +3226,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			userInputTab();
 		else
 		{
-			boolean indent = buffer.isElectricKey(ch);
+			boolean indent = buffer.isElectricKey(ch, caretLine);
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{
@@ -4295,7 +4295,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 
 		buffer.endCompoundEdit();
 		if (caret != -1)
-			setCaretPosition(caret);		
+			setCaretPosition(caret);
 	} //}}}
 
 	//{{{ removeTrailingWhiteSpace() method
@@ -5812,8 +5812,13 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	protected int addExplicitFold(int caretStart, int caretEnd, int lineStart, int lineEnd)
 	{
-		int startCaret = caretStart > 0 ? caretStart - 1 : caretStart;
-		int endCaret = caretEnd < buffer.getLength() ? caretEnd + 1 : caretEnd;
+		// need to "fix" the caret position so that we get the right rule.
+		// taking the start offset one char ahead and the end offset one char
+		// behing makes sure we get the right rule for the text being
+		// wrapped (tricky around mode boundaries, e.g., php code embedded
+		// in HTML code)
+		int startCaret = caretStart < buffer.getLength() ? caretStart + 1 : caretStart;
+		int endCaret = caretEnd > 0 ? caretEnd - 1 : caretEnd;
 
 		String startLineComment = buffer.getContextSensitiveProperty(startCaret,"lineComment");
 		String startCommentStart = buffer.getContextSensitiveProperty(startCaret,"commentStart");
@@ -5825,14 +5830,27 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		String start, end;
 		int caretBack = 1;
 		if(startLineComment != null)
-			start = startLineComment + "{{{ \n";
+			start = startLineComment + "{{{ ";
 		else if(startCommentStart != null && startCommentEnd != null)
 		{
-			start = startCommentStart + "{{{  " + startCommentEnd + '\n';
+			start = startCommentStart + "{{{  " + startCommentEnd;
 			caretBack = 1 + startCommentStart.length();
 		}
 		else
-			start = "{{{ \n";
+			start = "{{{ ";
+
+		if (startLineComment != null) {
+			// add a new line if there's text after the comment
+			// we're inserting
+			int nextLineOffset = buffer.getLineStartOffset(lineStart+1);
+			if (nextLineOffset - caretStart != 1)
+				start += "\n";
+		}
+		else
+		{
+			// always insert a new line if there's no comment character.
+			start += "\n";
+		}
 
 		if(endLineComment != null)
 			end = endLineComment + "}}}";
@@ -5853,6 +5871,11 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			int nextLineOffset = buffer.getLineStartOffset(lineEnd+1);
 			if (nextLineOffset - caretEnd != 1)
 				end += "\n";
+		}
+		else
+		{
+			// always insert a new line if there's no comment character.
+			end += "\n";
 		}
 
 		if(caretEnd == buffer.getLineStartOffset(lineEnd))

@@ -32,6 +32,12 @@ and Marcelo Vanzin for contributing to this release.
   now it doesn't compare a char to -1. It would be interesting to see
   what happens if we have a corrupted jar file... (Marcelo Vanzin)
 
+- Fix SF Bug #1571752: 'Add Explicit Fold' in PHP mode - wrong comments
+  Be smarter when inserting explicit folds in mode boundaries by trying
+  harder to use the comment characters for the mode of the text that
+  is being wrapped. Also do some tweaking for when to insert new lines
+  and when not to.
+
 }}}
 {{{ Editing
 
