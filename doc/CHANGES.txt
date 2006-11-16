@@ -27,6 +27,10 @@ and Marcelo Vanzin for contributing to this release.
   password dialog). So ignore the buffer if it's null when restoring the
   view. (Marcelo Vanzin)
 
+- Fix SF Bug #1590250: Bad EOF handling code in CBzip2InputStream
+  The code seems to have other error handling problems, but at least
+  now it doesn't compare a char to -1. It would be interesting to see
+  what happens if we have a corrupted jar file... (Marcelo Vanzin)
 
 }}}
 {{{ Editing

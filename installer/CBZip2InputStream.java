@@ -425,20 +425,20 @@ public class CBZip2InputStream
             while( m_bsLive < 1 )
             {
                 int zzi;
-                char thech = 0;
                 try
                 {
-                    thech = (char)m_input.read();
+                    zzi = m_input.read();
                 }
                 catch( IOException e )
                 {
                     compressedStreamEOF();
+					break;
                 }
-                if( thech == -1 )
+                if( zzi == -1 )
                 {
                     compressedStreamEOF();
+					break;
                 }
-                zzi = thech;
                 m_bsBuff = ( m_bsBuff << 8 ) | ( zzi & 0xff );
                 m_bsLive += 8;
             }
