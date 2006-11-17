@@ -1174,6 +1174,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
 		Mode mode = jEdit.getMode(ctx.rules.getModeName());
+
+		// mode can be null, though that's probably an error "further up":
+		if( mode == null )
+			return false;
 		return mode.isElectricKey(ch);
 	} //}}}
 
