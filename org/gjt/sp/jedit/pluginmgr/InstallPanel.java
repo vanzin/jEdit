@@ -869,15 +869,9 @@ class InstallPanel extends JPanel
 	{
 		public void focusGained(FocusEvent fe)
 		{
-			if (-1 == table.getSelectedRow())
+			if (-1 == table.getSelectedRow() && table.getRowCount() > 0)
 			{
-				try
-				{
-					// TODO: blueyed> this throws an exception with an empty "Update" table. Please check, if this is the right fix.
-					table.setRowSelectionInterval(0,0);
-				}
-				catch(Exception e) {}
-
+				table.setRowSelectionInterval(0,0);
 				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
 				scrollbar.setValue(scrollbar.getMinimum());
 			}
