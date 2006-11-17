@@ -299,9 +299,28 @@ public class Mode
 		return indentRules;
 	}
 
-	public boolean isElectricKey(char ch)
+	public synchronized boolean isElectricKey(char ch)
 	{
-		return (electricKeys != null && electricKeys.indexOf(ch) >= 0);
+		if (electricKeys == null)
+		{
+			String[] props = {
+				"indentOpenBrackets",
+				"indentCloseBrackets",
+				"electricKeys"
+			};
+
+			StringBuilder buf = new StringBuilder();
+			for(int i = 0; i < props.length; i++)
+			{
+				String prop = (String) getProperty(props[i]);
+				if (prop != null)
+					buf.append(prop);
+			}
+
+			electricKeys = buf.toString();
+		}
+
+		return (electricKeys.indexOf(ch) >= 0);
 	}
 
 	private void initIndentRules()
@@ -347,22 +366,6 @@ public class Mode
 		if (getBooleanProperty("deepIndent"))
 			rules.add(new DeepIndentRule());
 
-
-		String[] props = {
-			"indentOpenBrackets",
-			"indentCloseBrackets",
-			"electricKeys"
-		};
-
-		StringBuilder buf = new StringBuilder();
-		for(int i = 0; i < props.length; i++)
-		{
-			String prop = (String) getProperty(props[i]);
-			if(prop != null)
-				buf.append(prop);
-		}
-
-		electricKeys = buf.toString();
 		indentRules = Collections.unmodifiableList(rules);
 	}
 
