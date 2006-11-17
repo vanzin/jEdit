@@ -452,7 +452,7 @@ class InstallPanel extends JPanel
 			fireTableChanged(new TableModelEvent(this));
 			restoreSelection(savedChecked,savedSelection);
 		} //}}}
-		
+
 		//{{{ saveSelection() method
 		public void saveSelection(List<String> savedChecked, List<String> savedSelection)
 		{
@@ -473,7 +473,7 @@ class InstallPanel extends JPanel
 				}
 			}
 		} //}}}
-		
+
 		//{{{ restoreSelection() method
 		public void restoreSelection(List<String> savedChecked, List<String> savedSelection)
 		{
@@ -565,7 +565,7 @@ class InstallPanel extends JPanel
 			Arrays.sort(array,new MiscUtilities.StringICaseCompare());
 			return array;
 		}
-		
+
 		public String toString()
 		{
 			return name;
@@ -728,11 +728,11 @@ class InstallPanel extends JPanel
 					JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.WARNING_MESSAGE) == JOptionPane.CANCEL_OPTION)
 					cancel = true;
-			
+
 			if (!cancel)
 			{
 				new PluginManagerProgress(window,roster);
-	
+
 				roster.performOperationsInAWTThread(window);
 				pluginModel.update();
 			}
@@ -826,13 +826,13 @@ class InstallPanel extends JPanel
 	class KeyboardAction extends AbstractAction
 	{
 		private KeyboardCommand command = KeyboardCommand.NONE;
-		
+
 		public KeyboardAction(KeyboardCommand command)
 		{
 			super();
 			this.command = command;
 		}
-		
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			switch (command)
@@ -871,7 +871,13 @@ class InstallPanel extends JPanel
 		{
 			if (-1 == table.getSelectedRow())
 			{
-				table.setRowSelectionInterval(0,0);
+				try
+				{
+					// TODO: blueyed> this throws an exception with an empty "Update" table. Please check, if this is the right fix.
+					table.setRowSelectionInterval(0,0);
+				}
+				catch(Exception e) {}
+
 				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
 				scrollbar.setValue(scrollbar.getMinimum());
 			}
