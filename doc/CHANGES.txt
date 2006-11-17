@@ -36,7 +36,15 @@ and Marcelo Vanzin for contributing to this release.
   Be smarter when inserting explicit folds in mode boundaries by trying
   harder to use the comment characters for the mode of the text that
   is being wrapped. Also do some tweaking for when to insert new lines
-  and when not to.
+  and when not to. (Marcelo Vanzin)
+
+- Fix SF Bug #1594910: Indentation of Javascript embedded in HTML is broken
+  The fix is more generic than what the bug suggest. The indent rules
+  were being kept locally by each buffer, and reflected the "top level"
+  mode's rules. So rules for sections of the buffer that were delegated
+  to other modes were ignored. The fix keeps the indent rules in the mode
+  instance, and the buffers retrieve the context-sensitive rules when
+  applying auto-indentation. (Marcelo Vanzin)
 
 }}}
 {{{ Editing
@@ -62,6 +70,10 @@ and Marcelo Vanzin for contributing to this release.
   Java Collections HashSet and ArrayList. Therefore the ParserRule.next
   and the ParserRuleSet.getRules(char) got deprecated in favor of
   ParserRuleSet.getRules(Character) (Björn "Vampire" Kautler)
+
+- Deprecated JEditBuffer.isElectricKey(char).
+  Added JEditBuffer.isElectricKey(char, int) to replace it.
+  (Marcelo Vanzin)
 
 }}}
 

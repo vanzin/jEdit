@@ -54,7 +54,7 @@ public class JEditTextArea extends TextArea
 	{
 		super(view);
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
-		popupEnabled = true;		
+		popupEnabled = true;
 		this.view = view;
 	} //}}}
 
@@ -185,7 +185,7 @@ public class JEditTextArea extends TextArea
 			userInputTab();
 		else
 		{
-			boolean indent = buffer.isElectricKey(ch);
+			boolean indent = buffer.isElectricKey(ch, caretLine);
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
 			{

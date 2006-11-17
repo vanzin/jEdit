@@ -24,10 +24,17 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import java.lang.reflect.Method;
 import java.util.Hashtable;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.gjt.sp.jedit.indent.DeepIndentRule;
+import org.gjt.sp.jedit.indent.IndentRule;
+import org.gjt.sp.jedit.indent.IndentRuleFactory;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -281,11 +288,143 @@ public class Mode
 		return name;
 	} //}}}
 
+	//{{{ Indent rules
+
+	public synchronized List<IndentRule> getIndentRules()
+	{
+		if (indentRules == null)
+		{
+			initIndentRules();
+		}
+		return indentRules;
+	}
+
+	public boolean isElectricKey(char ch)
+	{
+		return (electricKeys != null && electricKeys.indexOf(ch) >= 0);
+	}
+
+	private void initIndentRules()
+	{
+		List<IndentRule> rules = new LinkedList<IndentRule>();
+
+		String[] regexpProps = {
+			"indentNextLine",
+			"indentNextLines"
+		};
+
+		for(int i = 0; i < regexpProps.length; i++)
+		{
+			IndentRule rule = createRegexpIndentRule(regexpProps[i]);
+			if(rule != null)
+				rules.add(rule);
+		}
+
+		String[] bracketProps = {
+			"indentOpenBracket",
+			"indentCloseBracket",
+			"unalignedOpenBracket",
+			"unalignedCloseBracket",
+		};
+
+		for(int i = 0; i < bracketProps.length; i++)
+		{
+			createBracketIndentRules(bracketProps[i], rules);
+		}
+
+		String[] finalProps = {
+			"unindentThisLine",
+			"unindentNextLines"
+		};
+
+		for(int i = 0; i < finalProps.length; i++)
+		{
+			IndentRule rule = createRegexpIndentRule(finalProps[i]);
+			if(rule != null)
+				rules.add(rule);
+		}
+
+		if (getBooleanProperty("deepIndent"))
+			rules.add(new DeepIndentRule());
+
+
+		String[] props = {
+			"indentOpenBrackets",
+			"indentCloseBrackets",
+			"electricKeys"
+		};
+
+		StringBuilder buf = new StringBuilder();
+		for(int i = 0; i < props.length; i++)
+		{
+			String prop = (String) getProperty(props[i]);
+			if(prop != null)
+				buf.append(prop);
+		}
+
+		electricKeys = buf.toString();
+		indentRules = Collections.unmodifiableList(rules);
+	}
+
+	private IndentRule createRegexpIndentRule(String prop)
+	{
+		String value = (String) getProperty(prop);
+
+		try
+		{
+			if(value != null)
+			{
+				Method m = IndentRuleFactory.class.getMethod(
+					prop,new Class[] { String.class });
+				return (IndentRule)m.invoke(null, value);
+			}
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,"Bad indent rule " + prop
+				+ '=' + value + ':');
+			Log.log(Log.ERROR,this,e);
+		}
+
+		return null;
+	}
+
+	private void createBracketIndentRules(String prop,
+						List<IndentRule> rules)
+	{
+		String value = (String) getProperty(prop + 's');
+
+		try
+		{
+			if(value != null)
+			{
+				for(int i = 0; i < value.length(); i++)
+				{
+					char ch = value.charAt(i);
+
+					Method m = IndentRuleFactory.class.getMethod(
+						prop,new Class[] { char.class });
+					rules.add((IndentRule) m.invoke(null, ch));
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			Log.log(Log.ERROR,this,"Bad indent rule " + prop
+				+ '=' + value + ':');
+			Log.log(Log.ERROR,this,e);
+		}
+	}
+
+	//}}}
+
 	//{{{ Private members
 	private String name;
 	private Map<String, Object> props;
 	private Pattern firstlineRE;
 	private Pattern filenameRE;
 	private TokenMarker marker;
+	private List<IndentRule> indentRules;
+	private String electricKeys;
 	//}}}
 }

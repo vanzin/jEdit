@@ -82,7 +82,7 @@ public class Buffer extends JEditBuffer
 	 * @since jEdit 3.2pre1
 	 */
 	public static final String CARET = "Buffer__caret";
-	
+
 	/**
 	 * Stores a List of {@link Selection} instances.
 	 */
@@ -424,7 +424,7 @@ public class Buffer extends JEditBuffer
 			setPerformingIO(false);
 			return false;
 		}
-		
+
 		boolean overwriteReadOnly = false;
 		setBooleanProperty("overwriteReadonly",false);
 		try
@@ -463,8 +463,8 @@ public class Buffer extends JEditBuffer
 						return false;
 					}
 				}
-				
-				
+
+
 				if (overwriteReadOnly)
 					setBooleanProperty("overwriteReadonly",true);
 			}
@@ -496,7 +496,7 @@ public class Buffer extends JEditBuffer
 			setPerformingIO(false);
 			return false;
 		}
-		
+
 		// Once save is complete, do a few other things
 		VFSManager.runInAWTThread(new Runnable()
 			{
@@ -510,7 +510,7 @@ public class Buffer extends JEditBuffer
 					updateMarkersFile(view);
 				}
 			});
-		
+
 		return true;
 	} //}}}
 
@@ -830,7 +830,7 @@ public class Buffer extends JEditBuffer
 	public void removeBufferChangeListener(BufferChangeListener listener)
 	{
 		BufferListener[] listeners = getBufferListeners();
-		
+
 		for(int i = 0; i < listeners.length; i++)
 		{
 			BufferListener l = listeners[i];
@@ -870,8 +870,6 @@ public class Buffer extends JEditBuffer
 				Log.log(Log.WARNING, this, path + ": invalid 'folding' property: " + folding);
 			setFoldHandler(new DummyFoldHandler());
 		}
-
-		initIndentRules();
 
 		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
@@ -1403,7 +1401,7 @@ public class Buffer extends JEditBuffer
 	{
 		if(!markersChanged())
 			return true;
-		// adapted from VFS.save 
+		// adapted from VFS.save
 		VFS vfs = VFSManager.getVFSForPath(this.getPath());
 		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) {
 			VFSManager.error(view, path, "vfs.not-supported.save",
@@ -1555,7 +1553,7 @@ public class Buffer extends JEditBuffer
 
 		if(autosaveFile != null)
 			autosaveFile.delete();
-		
+
 		// notify clients with -wait
 		if(waitSocket != null)
 		{

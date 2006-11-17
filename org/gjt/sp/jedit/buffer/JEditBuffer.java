@@ -30,7 +30,9 @@ import java.awt.Toolkit;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.Pattern;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.indent.*;
 import org.gjt.sp.jedit.syntax.*;
@@ -85,7 +87,6 @@ public class JEditBuffer
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
 		properties = new HashMap<Object, PropValue>();
-		indentRules = new ArrayList<IndentRule>();
 
 		//{{{ need to convert entries of 'props' to PropValue instances
 		Set<Map.Entry> set = props.entrySet();
@@ -115,10 +116,9 @@ public class JEditBuffer
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
 		properties = new HashMap<Object, PropValue>();
-		indentRules = new ArrayList<IndentRule>();
 
 		properties.put("wrap",new PropValue("none",false));
-		
+
 		TokenMarker tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
 		setTokenMarker(tokenMarker);
@@ -131,7 +131,6 @@ public class JEditBuffer
 			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
 
 		setFoldHandler(new DummyFoldHandler());
-		initIndentRules();
 	} //}}}
 
 	//{{{ Flags
@@ -987,6 +986,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			getTabSize());
 		int newIndent = oldIndent;
 
+		List<IndentRule> indentRules = getIndentRules(lineIndex);
 		List<IndentAction> actions = new LinkedList<IndentAction>();
 		for (int i = 0;i<indentRules.size();i++)
 		{
@@ -1156,10 +1156,25 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * Should inserting this character trigger a re-indent of
 	 * the current line?
 	 * @since jEdit 4.3pre2
+	 * @deprecated Use #isElectricKey(char,int)
 	 */
 	public boolean isElectricKey(char ch)
 	{
-		return electricKeys.indexOf(ch) != -1;
+		Mode mode = jEdit.getMode(tokenMarker.getMainRuleSet().getModeName());
+		return mode.isElectricKey(ch);
+	} //}}}
+
+	//{{{ isElectricKey() method
+	/**
+	 * Should inserting this character trigger a re-indent of
+	 * the current line?
+	 * @since jEdit 4.3pre9
+	 */
+	public boolean isElectricKey(char ch, int line)
+	{
+		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
+		Mode mode = jEdit.getMode(ctx.rules.getModeName());
+		return mode.isElectricKey(ch);
 	} //}}}
 
 	//}}}
@@ -2280,68 +2295,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-	//{{{ initIndentRules() method
-	protected void initIndentRules()
-	{
-		indentRules.clear();
-
-		String[] regexpProps = {
-			"indentNextLine",
-			"indentNextLines"
-		};
-
-		for(int i = 0; i < regexpProps.length; i++)
-		{
-			IndentRule rule = createRegexpIndentRule(regexpProps[i]);
-			if(rule != null)
-				indentRules.add(rule);
-		}
-
-		String[] bracketProps = {
-			"indentOpenBracket",
-			"indentCloseBracket",
-			"unalignedOpenBracket",
-			"unalignedCloseBracket",
-		};
-
-		for(int i = 0; i < bracketProps.length; i++)
-		{
-			indentRules.addAll(createBracketIndentRules(bracketProps[i]));
-		}
-
-		String[] finalProps = {
-			"unindentThisLine",
-			"unindentNextLines"
-		};
-
-		for(int i = 0; i < finalProps.length; i++)
-		{
-			IndentRule rule = createRegexpIndentRule(finalProps[i]);
-			if(rule != null)
-				indentRules.add(rule);
-		}
-
-		if (getBooleanProperty("deepIndent"))
-			indentRules.add(new DeepIndentRule());
-
-
-		String[] props = {
-			"indentOpenBrackets",
-			"indentCloseBrackets",
-			"electricKeys"
-		};
-
-		StringBuilder buf = new StringBuilder();
-		for(int i = 0; i < props.length; i++)
-		{
-			String prop = getStringProperty(props[i]);
-			if(prop != null)
-				buf.append(prop);
-		}
-
-		electricKeys = buf.toString();
-	} //}}}
-
 	//{{{ Used to store property values
 	protected static class PropValue
 	{
@@ -2391,8 +2344,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean io;
 	private final Map<Object, PropValue> properties;
 	private final Object propertyLock;
-	private final List<IndentRule> indentRules;
-	private String electricKeys;
 
 	//{{{ getListener() method
 	private BufferListener getListener(int index)
@@ -2503,61 +2454,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-	//{{{ createRegexpIndentRule() method
-	private IndentRule createRegexpIndentRule(String prop)
+	//{{{ getIndentRules() method
+	private List<IndentRule> getIndentRules(int line)
 	{
-		String value = getStringProperty(prop);
-
-		try
-		{
-			if(value != null)
-			{
-				Method m = IndentRuleFactory.class.getMethod(
-					prop,new Class[] { String.class });
-				return (IndentRule)m.invoke(null,
-					new String[] { value });
-			}
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,"Bad indent rule " + prop
-				+ '=' + value + ':');
-			Log.log(Log.ERROR,this,e);
-		}
-
-		return null;
-	} //}}}
-
-	//{{{ createBracketIndentRules() method
-	private List<IndentRule> createBracketIndentRules(String prop)
-	{
-		List<IndentRule> returnValue = new ArrayList<IndentRule>();
-		String value = getStringProperty(prop + 's');
-
-		try
-		{
-			if(value != null)
-			{
-				for(int i = 0; i < value.length(); i++)
-				{
-					char ch = value.charAt(i);
-
-					Method m = IndentRuleFactory.class.getMethod(
-						prop,new Class[] { char.class });
-					returnValue.add((IndentRule)
-						m.invoke(null,new Character[]
-						{ ch }));
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,this,"Bad indent rule " + prop
-				+ '=' + value + ':');
-			Log.log(Log.ERROR,this,e);
-		}
-
-		return returnValue;
+		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
+		Mode mode = jEdit.getMode(ctx.rules.getModeName());
+		return mode.getIndentRules();
 	} //}}}
 
 	//}}}
