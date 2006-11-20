@@ -1,9 +1,9 @@
 /*
- * RecentFilesProvider.java - Recent file list menu
+ * ReloadWithEncodingProvider.java - Recent file list menu
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2003 Slava Pestov
+ * Copyright (C) 2006 Marcelo Vanzin
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,11 @@
 
 package org.gjt.sp.jedit.menu;
 
-//{{{ Imports
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -38,8 +40,13 @@ import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
-//}}}
 
+/**
+ * Menu provider for actions to reload the current buffer with a
+ * specific encoding.
+ *
+ * @version $Id$
+ */
 public class ReloadWithEncodingProvider
 		implements ActionListener, DynamicMenuProvider
 
@@ -115,6 +122,21 @@ public class ReloadWithEncodingProvider
 				JOptionPane.QUESTION_MESSAGE);
 			if (encoding == null)
 				return;
+
+			try
+			{
+				Charset.forName(encoding);
+			}
+			catch (UnsupportedCharsetException uce)
+			{
+				String msg = jEdit.getProperty("reload-encoding.error",
+						new Object[] { encoding });
+				JOptionPane.showMessageDialog(view,
+					msg,
+					jEdit.getProperty("common.error"),
+					JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 		}
 
 		if (encoding != null)

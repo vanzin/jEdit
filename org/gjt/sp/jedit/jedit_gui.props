@@ -23,6 +23,7 @@ defaultCatalog=<?xml version="1.0"?>\n\
 common.ok=OK
 common.cancel=Cancel
 common.close=Close
+common.error=Error
 common.apply=Apply
 common.more=More
 common.insert=Insert
@@ -211,6 +212,7 @@ clear-recent-files.label=Clear Recent Files
 
 reload-encoding.code=new ReloadWithEncodingProvider();
 reload-encoding.label=Reload with $Encoding
+reload-encoding.error={0} is not a valid encoding
 #}}}
 
 #{{{ Edit menu
