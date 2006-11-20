@@ -171,6 +171,7 @@ file=new-file \
      - \
      reload \
      reload-all \
+     %reload-encoding \
      - \
      close-buffer \
      close-all \
@@ -208,6 +209,8 @@ no-recent-files.label=No Recent Files
 clear-recent-files.label=Clear Recent Files
 #}}}
 
+reload-encoding.code=new ReloadWithEncodingProvider();
+reload-encoding.label=Reload with $Encoding
 #}}}
 
 #{{{ Edit menu

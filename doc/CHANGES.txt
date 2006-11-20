@@ -63,6 +63,9 @@ and Marcelo Vanzin for contributing to this release.
 - Incremental searchbar now use the invalid syntax color to show if the searched
   text was found (Matthieu Casanova)
 
+- FR #1599024: add a submenu to the file menu that allows reloading the
+  current buffer with a specific encoding.
+
 }}}
 {{{ API Changes
 
