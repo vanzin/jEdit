@@ -31,13 +31,15 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -215,7 +217,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		pathField.setPreferredSize(prefSize);
 		pathField.addActionListener(actionHandler);
 		cons.gridx = 1;
-		cons.weightx = 1.0f;
+		cons.weightx = 1;
 		cons.gridwidth = GridBagConstraints.REMAINDER;
 
 		layout.setConstraints(pathField,cons);
@@ -234,7 +236,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		{
 			cons.gridwidth = 1;
 			cons.gridx = 0;
-			cons.weightx = 0.0f;
+			cons.weightx = 0;
 			cons.gridy = 1;
 			layout.setConstraints(filterCheckbox,cons);
 			pathAndFilterPanel.add(filterCheckbox);
@@ -261,7 +263,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			if(ext.length() == 0)
 				filter = jEdit.getProperty("vfs.browser.default-filter");
 			else
-				filter = "*" + ext;
+				filter = '*' + ext;
 		}
 
 		// filterField.getEditor().setItem(new GlobVFSFileFilter(filter));
@@ -285,7 +287,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			cons.gridwidth = GridBagConstraints.REMAINDER;
 			cons.fill = GridBagConstraints.HORIZONTAL;
 			cons.gridx = 1;
-			cons.weightx = 1.0f;
+			cons.weightx = 1;
 			if (filterField.getItemCount() > 1)
 			{
 				filterField.setEditor(filterEditor);
@@ -407,8 +409,9 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		else if(msg instanceof PluginUpdate)
 		{
 			PluginUpdate pmsg = (PluginUpdate)msg;
-			if(pmsg.getWhat() == PluginUpdate.LOADED
-				|| pmsg.getWhat() == PluginUpdate.UNLOADED)
+			if((pmsg.getWhat() == PluginUpdate.LOADED ||
+			   pmsg.getWhat() == PluginUpdate.UNLOADED) &&
+				plugins != null /* plugins can be null if the VFSBrowser menu bar is hidden */)
 			{
 				plugins.updatePopupMenu();
 			}
@@ -507,7 +510,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			cons.gridwidth = GridBagConstraints.REMAINDER;
 			cons.fill = GridBagConstraints.HORIZONTAL;
 			cons.gridx = 1;
-			cons.weightx = 1.0f;
+			cons.weightx = 1;
 
 			pathAndFilterPanel.remove(filterEditor);
 			layout.setConstraints(filterField, cons);
@@ -569,7 +572,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	public static String getRootDirectory()
 	{
 		if(OperatingSystem.isMacOS() || OperatingSystem.isDOSDerived())
-			return FileRootsVFS.PROTOCOL + ":";
+			return FileRootsVFS.PROTOCOL + ':';
 		else
 			return "/";
 	} //}}}
@@ -614,7 +617,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			dialogType = "vfs.browser.delete-confirm";
 		}
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		String typeStr = "files";
 		for(int i = 0; i < files.length; i++)
 		{
@@ -777,7 +780,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		}
 		else
 		{
-			searchInDirectory(this.path,true);
+			searchInDirectory(path,true);
 		}
 	} //}}}
 
@@ -802,7 +805,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 			String name = MiscUtilities.getFileName(path);
 			String ext = MiscUtilities.getFileExtension(name);
 			filter = (ext == null || ext.length() == 0
-				? filter : "*" + ext);
+				? filter : '*' + ext);
 			path = MiscUtilities.getParentOfPath(path);
 		}
 
@@ -852,7 +855,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 	public JComponent createPluginsMenu(JComponent pluginMenu, boolean showManagerOptions)
 	{
 		ActionHandler actionHandler = new ActionHandler();
-		if(showManagerOptions && getMode() == VFSBrowser.BROWSER)
+		if(showManagerOptions && getMode() == BROWSER)
 		{
 			pluginMenu.add(GUIUtilities.loadMenuItem("plugin-manager",false));
 			pluginMenu.add(GUIUtilities.loadMenuItem("plugin-options",false));
@@ -865,7 +868,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		else
 			/* we're in a modal dialog */;
 
-		ArrayList vec = new ArrayList();
+		List<JMenuItem> vec = new ArrayList<JMenuItem>();
 
 		//{{{ old API
 		Enumeration e = VFSManager.getFilesystems();
@@ -885,18 +888,18 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		//{{{ new API
 		EditPlugin[] plugins = jEdit.getPlugins();
-		for(int i = 0; i < plugins.length; i++)
+		for (int i = 0; i < plugins.length; i++)
 		{
 			JMenuItem menuItem = plugins[i].createBrowserMenuItems();
 			if(menuItem != null)
 				vec.add(menuItem);
 		} //}}}
 
-		if(vec.size() != 0)
+		if (!vec.isEmpty())
 		{
 			Collections.sort(vec,new MiscUtilities.MenuItemCompare());
 			for(int i = 0; i < vec.size(); i++)
-				pluginMenu.add((JMenuItem)vec.get(i));
+				pluginMenu.add(vec.get(i));
 		}
 		else
 		{
@@ -965,9 +968,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				if(_buffer == null)
 				{
 					Hashtable props = new Hashtable();
-					props.put(Buffer.ENCODING,currentEncoding);
+					props.put(JEditBuffer.ENCODING,currentEncoding);
 					props.put(Buffer.ENCODING_AUTODETECT,
-                              Boolean.valueOf(autoDetectEncoding));
+						  Boolean.valueOf(autoDetectEncoding));
 					_buffer = jEdit.openFile(null,null,
 						file.getPath(),false,props);
 				}
@@ -1183,7 +1186,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 		}
 		else
+		{
+			plugins = null;
 			favorites = null;
+		}
 
 		toolbarBox.add(Box.createGlue());
 
@@ -1580,7 +1586,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					VFSFile[] selected = getSelectedFiles();
 					if(selected == null || selected.length == 0)
 					{
-						if(path.equals(FavoritesVFS.PROTOCOL + ":"))
+						if(path.equals(FavoritesVFS.PROTOCOL + ':'))
 						{
 							GUIUtilities.error(VFSBrowser.this,
 								"vfs.browser.recurse-favorites",
@@ -1694,7 +1700,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 			boolean filterEnabled = filterCheckbox.isSelected();
 
-			ArrayList directoryVector = new ArrayList();
+			ArrayList<VFSFile> directoryVector = new ArrayList<VFSFile>();
 
 			int directories = 0;
 			int files = 0;
@@ -1765,7 +1771,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		 * this is the currently selected files there. Otherwise, this
 		 * is the currently selected item in the parent directory list.
 		 */
-		private VFSFile[] getSelectedFiles(EventObject evt,
+		private static VFSFile[] getSelectedFiles(EventObject evt,
 			VFSBrowser browser)
 		{
 			Component source = (Component)evt.getSource();
@@ -1847,7 +1853,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				implements ComboBoxEditor
 	{
 
-		public HistoryComboBoxEditor(String key)
+		HistoryComboBoxEditor(String key)
 		{
 			super(key);
 		}
@@ -1933,7 +1939,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			Object value, int index, boolean isSelected,
 			boolean cellHasFocus)
 		{
-			assert (value instanceof VFSFileFilter) : "Filter is not a VFSFileFilter";
+			assert value instanceof VFSFileFilter : "Filter is not a VFSFileFilter";
 			super.getListCellRendererComponent(
 				list, value, index, isSelected, cellHasFocus);
 			setText(((VFSFileFilter)value).getDescription());
@@ -1948,8 +1954,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 		public boolean accept(VFSFile file)
 		{
-			return (file.getType() == VFSFile.DIRECTORY
-				|| file.getType() == VFSFile.FILESYSTEM);
+			return file.getType() == VFSFile.DIRECTORY
+				|| file.getType() == VFSFile.FILESYSTEM;
 		}
 
 		public boolean accept(String url)

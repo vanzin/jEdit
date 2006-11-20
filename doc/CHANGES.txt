@@ -46,6 +46,9 @@ and Marcelo Vanzin for contributing to this release.
   instance, and the buffers retrieve the context-sensitive rules when
   applying auto-indentation. (Marcelo Vanzin)
 
+- When deactivating a plugin if the VFS Browser was open but it's menubar
+  disabled, a NPE occured (#1593392) (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
