@@ -341,7 +341,7 @@ unwind:		while(context.parent != null)
 			if (null == checkRule.upHashChars)
 			{
 				if (null != checkRule.upHashChar &&
-				    !checkRule.upHashChar.equals(new String(line.array,pos,checkRule.upHashChar.length())))
+				    !checkRule.upHashChar.equals(new String(line.array,pos,checkRule.upHashChar.length()).toUpperCase()))
 				{
 					return false;
 				}

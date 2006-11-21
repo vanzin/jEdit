@@ -49,6 +49,9 @@ and Marcelo Vanzin for contributing to this release.
 - When deactivating a plugin if the VFS Browser was open but it's menubar
   disabled, a NPE occured (#1593392) (Matthieu Casanova)
 
+- Fixed a bug I introduced with the new HASH_CHAR handling
+  (bug #1600380) (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 
