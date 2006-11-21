@@ -78,7 +78,7 @@
 		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$#?\w+</SEQ_REGEXP>
 
 		<!-- Perl predefined variables -->
-		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$\^[\p{Alnum}]</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="$^" TYPE="KEYWORD2">\$\^[\p{Alnum}]</SEQ_REGEXP>
 		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$[\p{Punct}]</SEQ_REGEXP>
 
 		<!-- Array variables -->
@@ -88,11 +88,11 @@
 		<SEQ_REGEXP HASH_CHAR="%" TYPE="KEYWORD2">%\w+</SEQ_REGEXP>
 
 		<!-- Scalar dereference -->
-		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD4">\$\$+\w+</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="$$" TYPE="KEYWORD4">\$\$+\w+</SEQ_REGEXP>
 
 		<!-- Dereferences -->
-		<SEQ_REGEXP HASH_CHAR="@" TYPE="KEYWORD4">@\$\w+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="%" TYPE="KEYWORD4">%\$\w+</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="@$" TYPE="KEYWORD4">@\$\w+</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="%$" TYPE="KEYWORD4">%\$\w+</SEQ_REGEXP>
 		<SEQ_REGEXP HASH_CHAR="*" TYPE="KEYWORD4">\*\w+</SEQ_REGEXP>
 
 		<!-- references to vars and code, starting with a backslash -->
@@ -105,14 +105,14 @@
 		</SPAN>
 
 		<!-- Function calls from variables -->
-		<SEQ_REGEXP HASH_CHAR="&amp;" TYPE="FUNCTION"
+		<SEQ_REGEXP HASH_CHAR="&amp;$" TYPE="FUNCTION"
 		>&amp;\$\w*</SEQ_REGEXP>
 
 		<!-- Special handling for subs, since they can have a ' in the name;
 			 try to do highlight as well as possible - this version will
 			 highlight both 'sub' and the opening '{' as KEYWORD1, so the
 			 opening bracket will be different than other brackets. -->
-		<SPAN_REGEXP HASH_CHAR="s" TYPE="OPERATOR" NO_LINE_BREAK="FALSE" DELEGATE="SUB_NAME">
+		<SPAN_REGEXP HASH_CHAR="sub" TYPE="OPERATOR" NO_LINE_BREAK="FALSE" DELEGATE="SUB_NAME">
 			<BEGIN>sub\s</BEGIN>
 			<END>{</END>
 		</SPAN_REGEXP>
@@ -161,7 +161,7 @@
 		<MARK_PREVIOUS TYPE="LABEL" AT_LINE_START="TRUE" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
 
 		<!-- __DATA__ and similar -->
-		<SEQ_REGEXP HASH_CHAR="_" TYPE="KEYWORD4">__\w+__</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="__" TYPE="KEYWORD4">__\w+__</SEQ_REGEXP>
 
 		<!-- Exec -->
 		<SPAN TYPE="KEYWORD3" DELEGATE="EXEC">
@@ -170,14 +170,14 @@
 		</SPAN>
 
 		<!-- file globs / IO operators -->
-		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="KEYWORD4">[\p{Punct}\p{Alnum}_]+&gt;</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="KEYWORD4">&lt;[\p{Punct}\p{Alnum}_]*&gt;</SEQ_REGEXP>
 
 		<!-- Heredoc -->
-		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
+		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
 		<BEGIN><![CDATA[<<\p{Space}*(['"])([\p{Space}\p{Alnum}_]*)\1;?\s*]]></BEGIN>
 		<END>$2</END>
 		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
+		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
 		<BEGIN><![CDATA[<<([\p{Alpha}_][\p{Alnum}_]*);?\s*]]></BEGIN>
 		<END>$1</END>
 		</SPAN_REGEXP>
@@ -194,7 +194,7 @@
                 	HASH_CHAR="q"
                 	AT_WORD_START="TRUE">q(?:|[qx])\{.*\}</SEQ_REGEXP>
 		<SEQ_REGEXP TYPE="MARKUP"
-                	HASH_CHAR="q"
+                	HASH_CHAR="qr"
                 	AT_WORD_START="TRUE">qr\{.*\}[imosx]*</SEQ_REGEXP>
 
 		<!-- For multi-line 'q' statements.
@@ -217,10 +217,10 @@
 		</SPAN_REGEXP>
 
 		<!-- transliterations -->
-		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="t"
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="tr"
             AT_WORD_START="TRUE">tr\s*\{.*?[^\\]\}\s*\{(?:.*?[^\\])*\}[cds]*</SEQ_REGEXP>
 
-		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="t"
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="tr"
             AT_WORD_START="TRUE">tr([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[cds]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="y"

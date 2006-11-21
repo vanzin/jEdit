@@ -16,7 +16,7 @@
 			<END>"</END>
 		</SPAN>
 
-		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="MARKUP" DELEGATE="VHOST">
+		<SPAN_REGEXP HASH_CHAR="&lt;VirtualHost" TYPE="MARKUP" DELEGATE="VHOST">
 			<BEGIN><![CDATA[<(VirtualHost)[^>]*>]]></BEGIN>
 			<END><![CDATA[</$1>]]></END>
 		</SPAN_REGEXP>
@@ -328,7 +328,7 @@
 			<END>"</END>
 		</SPAN>
 
-		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="MARKUP" DELEGATE="VHOST">
+		<SPAN_REGEXP HASH_CHAR="&lt;VirtualHost" TYPE="MARKUP" DELEGATE="VHOST">
 			<BEGIN><![CDATA[<(VirtualHost)[^>]*>]]></BEGIN>
 			<END><![CDATA[</$1>]]></END>
 		</SPAN_REGEXP>

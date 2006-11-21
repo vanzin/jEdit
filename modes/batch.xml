@@ -63,7 +63,7 @@
 		<SEQ TYPE="KEYWORD2">%9</SEQ>
 		<!-- for-loop variable (one char after %%) -->
 		<SEQ_REGEXP TYPE="KEYWORD2"
-					HASH_CHAR="%"
+					HASH_CHAR="%%"
 					AT_WORD_START="TRUE"
 					>%%[\p{Alpha}]</SEQ_REGEXP>
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE">

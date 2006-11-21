@@ -23,7 +23,7 @@
 		<EOL_SPAN AT_LINE_START="TRUE" TYPE="COMMENT1">-- </EOL_SPAN>
 
 		<!-- header -->
-		<EOL_SPAN_REGEXP HASH_CHAR="-" 
+		<EOL_SPAN_REGEXP HASH_CHAR="---+" 
 			TYPE="KEYWORD1" 
 			AT_LINE_START="TRUE"
 			>-{3}[+]{1,6}(?:!!)?\s</EOL_SPAN_REGEXP>
@@ -37,7 +37,7 @@
 
 		<!-- bold and italic -->
 		<SEQ_REGEXP
-			HASH_CHAR="_"
+			HASH_CHAR="__"
 			AT_LINE_START="FALSE"
 			TYPE="KEYWORD4"
 		>__\w.*?\w__</SEQ_REGEXP>
@@ -51,7 +51,7 @@
 
 		<!-- bold and fixed font -->
 		<SEQ_REGEXP
-			HASH_CHAR="="
+			HASH_CHAR="=="
 			AT_LINE_START="FALSE"
 			TYPE="KEYWORD4"
 		>==\w.*?\w==</SEQ_REGEXP>
@@ -67,32 +67,7 @@
 		<EOL_SPAN AT_LINE_START="TRUE" TYPE="KEYWORD4">---</EOL_SPAN>
 
 		<!-- wiki words -->
-		<SEQ_REGEXP HASH_CHAR="A" AT_WORD_START="TRUE" TYPE="KEYWORD2">A[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="B" AT_WORD_START="TRUE" TYPE="KEYWORD2">B[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="C" AT_WORD_START="TRUE" TYPE="KEYWORD2">C[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="D" AT_WORD_START="TRUE" TYPE="KEYWORD2">D[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="E" AT_WORD_START="TRUE" TYPE="KEYWORD2">E[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="F" AT_WORD_START="TRUE" TYPE="KEYWORD2">F[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="G" AT_WORD_START="TRUE" TYPE="KEYWORD2">G[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="H" AT_WORD_START="TRUE" TYPE="KEYWORD2">H[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="I" AT_WORD_START="TRUE" TYPE="KEYWORD2">I[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="J" AT_WORD_START="TRUE" TYPE="KEYWORD2">J[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="K" AT_WORD_START="TRUE" TYPE="KEYWORD2">K[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="L" AT_WORD_START="TRUE" TYPE="KEYWORD2">L[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="M" AT_WORD_START="TRUE" TYPE="KEYWORD2">M[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="N" AT_WORD_START="TRUE" TYPE="KEYWORD2">N[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="O" AT_WORD_START="TRUE" TYPE="KEYWORD2">O[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="P" AT_WORD_START="TRUE" TYPE="KEYWORD2">P[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="Q" AT_WORD_START="TRUE" TYPE="KEYWORD2">Q[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="R" AT_WORD_START="TRUE" TYPE="KEYWORD2">R[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="S" AT_WORD_START="TRUE" TYPE="KEYWORD2">S[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="T" AT_WORD_START="TRUE" TYPE="KEYWORD2">T[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="U" AT_WORD_START="TRUE" TYPE="KEYWORD2">U[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="V" AT_WORD_START="TRUE" TYPE="KEYWORD2">V[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="W" AT_WORD_START="TRUE" TYPE="KEYWORD2">W[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="X" AT_WORD_START="TRUE" TYPE="KEYWORD2">X[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="Y" AT_WORD_START="TRUE" TYPE="KEYWORD2">Y[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="Z" AT_WORD_START="TRUE" TYPE="KEYWORD2">Z[A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_WORD_START="TRUE" TYPE="KEYWORD2">[A-Z][A-Z.]*[a-z.]+(?:[A-Z][A-Z.]*[a-z.]*[a-z])+</SEQ_REGEXP>
 
 		<!-- links -->
 		<SPAN TYPE="KEYWORD3">

@@ -158,92 +158,92 @@
 
     <!-- XSLT attributes that contains XPath expressions or match patterns -->
     <!-- count -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="c" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="count" DELEGATE="XPATH">
       <BEGIN>count[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="c" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="count" DELEGATE="XPATH">
       <BEGIN>count[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- from -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="f" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="from" DELEGATE="XPATH">
       <BEGIN>from[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="f" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="from" DELEGATE="XPATH">
       <BEGIN>from[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- group-adjacent -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-adjacent" DELEGATE="XPATH">
       <BEGIN>group-adjacent[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-adjacent" DELEGATE="XPATH">
       <BEGIN>group-adjacent[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- group-by -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-by" DELEGATE="XPATH">
       <BEGIN>group-by[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-by" DELEGATE="XPATH">
       <BEGIN>group-by[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- group-ending-with -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-ending-with" DELEGATE="XPATH">
       <BEGIN>group-ending-with[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-ending-with" DELEGATE="XPATH">
       <BEGIN>group-ending-with[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- group-starting-with -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-starting-with" DELEGATE="XPATH">
       <BEGIN>group-starting-with[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="g" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="group-starting-with" DELEGATE="XPATH">
       <BEGIN>group-starting-with[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- match -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="m" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="match" DELEGATE="XPATH">
       <BEGIN>match[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="m" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="match" DELEGATE="XPATH">
       <BEGIN>match[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- select -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="s" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="select" DELEGATE="XPATH">
       <BEGIN>select[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="s" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="select" DELEGATE="XPATH">
       <BEGIN>select[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- test -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="t" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="test" DELEGATE="XPATH">
       <BEGIN>test[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="t" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="test" DELEGATE="XPATH">
       <BEGIN>test[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
     <!-- use -->
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="u" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="use" DELEGATE="XPATH">
       <BEGIN>use[\p{Space}]*=[\p{Space}]*"</BEGIN>
       <END>"</END>
     </SPAN_REGEXP>
-    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="u" DELEGATE="XPATH">
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="use" DELEGATE="XPATH">
       <BEGIN>use[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>

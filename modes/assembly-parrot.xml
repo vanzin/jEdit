@@ -24,21 +24,9 @@
                 <SEQ TYPE="OPERATOR">,</SEQ>
 
                 <SEQ_REGEXP TYPE="LITERAL2"
-                        HASH_CHAR="I"
+                        HASH_CHARS="ISNP"
                         AT_WORD_START="TRUE"
-                >I\d{1,2}</SEQ_REGEXP>
-                <SEQ_REGEXP TYPE="LITERAL2"
-                        HASH_CHAR="S"
-                        AT_WORD_START="TRUE"
-                >S\d{1,2}</SEQ_REGEXP>
-                <SEQ_REGEXP TYPE="LITERAL2"
-                        HASH_CHAR="N"
-                        AT_WORD_START="TRUE"
-                >N\d{1,2}</SEQ_REGEXP>
-                <SEQ_REGEXP TYPE="LITERAL2"
-                        HASH_CHAR="P"
-                        AT_WORD_START="TRUE"
-                >P\d{1,2}</SEQ_REGEXP>
+                >[ISNP]\d{1,2}</SEQ_REGEXP>
 
                 <KEYWORDS>
                         <KEYWORD1>abs</KEYWORD1>

@@ -878,12 +878,12 @@
       <MARK_FOLLOWING TYPE="FUNCTION">:_dcm</MARK_FOLLOWING>
 
     <!-- INVALID    : Deprecated keywords -->
-      <SEQ_REGEXP TYPE="INVALID" HASH_CHAR="p" AT_WORD_START="TRUE">put\s+screen</SEQ_REGEXP>
+      <SEQ_REGEXP TYPE="INVALID" HASH_CHAR="put" AT_WORD_START="TRUE">put\s+screen</SEQ_REGEXP>
       <MARK_FOLLOWING TYPE="INVALID">:WHERE-STRING</MARK_FOLLOWING>
       <MARK_FOLLOWING TYPE="INVALID">:REPOSITION-PARENT-RELATION</MARK_FOLLOWING>
 
     <!-- NON INVALID: Correction for non-invalid keywords -->
-      <SEQ_REGEXP TYPE="KEYWORD3" HASH_CHAR="c" AT_WORD_START="TRUE">choose\s+of</SEQ_REGEXP>
+      <SEQ_REGEXP TYPE="KEYWORD3" HASH_CHAR="choose" AT_WORD_START="TRUE">choose\s+of</SEQ_REGEXP>
 
     <KEYWORDS>
       <!-- Keep the following sections in the specified order since -->

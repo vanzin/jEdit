@@ -46,40 +46,40 @@
 	<!-- Constants -->
 		<SEQ_REGEXP
 			TYPE="LITERAL2"
-			HASH_CHAR="a"
+			HASH_CHAR="application"
 			AT_WORD_START="TRUE"
 		>application[\t\s]+responses</SEQ_REGEXP>
 		<SEQ_REGEXP
 			TYPE="LITERAL2"
-			HASH_CHAR="c"
+			HASH_CHAR="current"
 			AT_WORD_START="TRUE"
 		>current[\t\s]+application</SEQ_REGEXP>
 		<SEQ_REGEXP
 			TYPE="LITERAL2"
-			HASH_CHAR="w"
+			HASH_CHAR="white"
 			AT_WORD_START="TRUE"
 		>white[\t\s]+space</SEQ_REGEXP>
 		
 		<!-- Text Styles -->
 		<SEQ_REGEXP
 			TYPE="LITERAL2"
-			HASH_CHAR="a"
+			HASH_CHAR="all"
 		>all[\t\s]+caps</SEQ_REGEXP>
 		<SEQ_REGEXP
 			TYPE="LITERAL2"
-			HASH_CHAR="a"
+			HASH_CHAR="all"
 			AT_WORD_START="TRUE"
 		>all[\t\s]+lowercase</SEQ_REGEXP>
 		<SEQ_REGEXP
 			TYPE="LITERAL2"
-			HASH_CHAR="s"
+			HASH_CHAR="small"
 			AT_WORD_START="TRUE"
 		>small[\t\s]+caps</SEQ_REGEXP>
 	
 	<!-- Predefined Variables -->
 		<SEQ_REGEXP
 			TYPE="KEYWORD3"
-			HASH_CHAR="m"
+			HASH_CHAR="missing"
 			AT_WORD_START="TRUE"
 		>missing[\t\s]+value</SEQ_REGEXP>
 		

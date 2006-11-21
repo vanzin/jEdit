@@ -181,13 +181,13 @@
 		<!-- XXX: this is wrong, {@link ..} is correct, see below -->
 		<!--<SEQ TYPE="COMMENT3">{</SEQ>-->
 
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{@" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
 			<BEGIN>\{@(link|linkplain|docRoot|code|literal)\s</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
 
 		<!-- for the common usage of the cvs keyword $Id$ -->
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@version" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
 			<BEGIN>@version\s+\$</BEGIN>
 			<END>$</END>
 		</SPAN_REGEXP>

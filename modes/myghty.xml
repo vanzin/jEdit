@@ -24,11 +24,11 @@
 		</SPAN>
 
 		<!-- def, closure, method -->
-		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL4" DELEGATE="DEF">
+		<SPAN_REGEXP HASH_CHAR="&lt;%" TYPE="LITERAL4" DELEGATE="DEF">
 			<BEGIN>&lt;%(def|closure|method)</BEGIN>
 			<END>&gt;</END>
 		</SPAN_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL4">&lt;/%(def|closure|method)&gt;</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="&lt;/%" TYPE="LITERAL4">&lt;/%(def|closure|method)&gt;</SEQ_REGEXP>
 
 		<!-- doc block -->
 		<SPAN TYPE="COMMENT4">
@@ -43,13 +43,13 @@
 		</SPAN>
 
 		<!-- python block -->
-		<SPAN_REGEXP HASH_CHAR="&lt;" DELEGATE="MYGHTY" TYPE="LITERAL4">
-			<BEGIN>&lt;%python[^>]*&gt;</BEGIN>
+		<SPAN_REGEXP HASH_CHAR="&lt;%python" DELEGATE="MYGHTY" TYPE="LITERAL4">
+			<BEGIN>&lt;%python[^&gt;]*&gt;</BEGIN>
 			<END>&lt;/%python&gt;</END>
 		</SPAN_REGEXP>
 
 		<!-- python block aliases - don't take args -->
-		<SPAN_REGEXP HASH_CHAR="&lt;" DELEGATE="MYGHTY" TYPE="LITERAL4">
+		<SPAN_REGEXP HASH_CHAR="&lt;%" DELEGATE="MYGHTY" TYPE="LITERAL4">
 			<BEGIN>&lt;%(args|cleanup|filter|global|init|once|requestlocal|requestonce|shared|threadlocal|threadonce)&gt;</BEGIN>
 			<END>&lt;/%$1&gt;</END>
 		</SPAN_REGEXP>
@@ -62,7 +62,7 @@
 
 		<!-- calling component -->
 		<SEQ TYPE="LITERAL4">&lt;/&amp;&gt;</SEQ>
-		<SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL4" DELEGATE="MYGHTY">
+		<SPAN_REGEXP HASH_CHAR="&lt;&amp;" TYPE="LITERAL4" DELEGATE="MYGHTY">
 			<BEGIN>&lt;&amp;[|]?</BEGIN>
 			<END>&amp;&gt;</END>
 		</SPAN_REGEXP>

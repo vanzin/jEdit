@@ -16,18 +16,18 @@
 		<EOL_SPAN AT_LINE_START="TRUE" TYPE="KEYWORD3">.. _</EOL_SPAN>
 
 		<!-- section titles -->
-		<SEQ_REGEXP HASH_CHAR="=" TYPE="LABEL">={3,}</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="-" TYPE="LABEL">-{3,}</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="~" TYPE="LABEL">~{3,}</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="#" TYPE="LABEL">#{3,}</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR='"' TYPE="LABEL">"{3,}</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR='^' TYPE="LABEL">\^{3,}</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR='+' TYPE="LABEL">\+{3,}</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR='*' TYPE="LABEL">\*{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="===" TYPE="LABEL">={3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="---" TYPE="LABEL">-{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="~~~" TYPE="LABEL">~{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="###" TYPE="LABEL">#{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR='"""' TYPE="LABEL">"{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="^^^" TYPE="LABEL">\^{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="+++" TYPE="LABEL">\+{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="***" TYPE="LABEL">\*{3,}</SEQ_REGEXP>
 
 		<!-- replacement -->
 		<SEQ_REGEXP
-			HASH_CHAR="."
+			HASH_CHAR=".."
 			AT_LINE_START="TRUE"
 			TYPE="LITERAL3"
 		>\.\.\s\|[^|]+\|</SEQ_REGEXP>
@@ -41,14 +41,14 @@
 
 		<!-- directives: .. name:: -->
 		<SEQ_REGEXP
-			HASH_CHAR="."
+			HASH_CHAR=".."
 			AT_LINE_START="TRUE"
 			TYPE="LITERAL2"
 		>\.\.\s[A-z][A-z0-9-_]+::</SEQ_REGEXP>
 
 		<!-- strong emphasis: **...** -->
 		<SEQ_REGEXP
-			HASH_CHAR="*"
+			HASH_CHAR="**"
 			AT_LINE_START="FALSE"
 			TYPE="KEYWORD2"
 		>\*\*[^*]+\*\*</SEQ_REGEXP>
@@ -77,15 +77,12 @@
 
 		<!-- footnote reference: [#]_ or [#foo]_ -->
 		<SEQ_REGEXP
-			HASH_CHAR="["
+			HASH_CHAR="[#"
 			TYPE="LABEL"
 		>\[#[A-z0-9_]*\]_</SEQ_REGEXP>
 
 		<!-- footnote reference: [*]_ -->
-		<SEQ_REGEXP
-			HASH_CHAR="["
-			TYPE="LABEL"
-		>\[*\]_</SEQ_REGEXP>
+		<SEQ TYPE="LABEL">[*]_</SEQ_REGEXP>
 
 		<!-- citation reference: [foo]_ -->
 		<SEQ_REGEXP
@@ -95,7 +92,7 @@
 
 		<!-- inline literal: ``...``-->
 		<!--<SEQ_REGEXP
-			HASH_CHAR="`"
+			HASH_CHAR="``"
 			TYPE="LITERAL1"
 		>``[^`]+``</SEQ_REGEXP>-->
 		<SPAN TYPE="LITERAL1">
@@ -115,7 +112,7 @@
 			<END>`</END>
 		</SPAN>
 
-		<SEQ_REGEXP HASH_CHAR="`" TYPE="LABEL">`{3,}</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="```" TYPE="LABEL">`{3,}</SEQ_REGEXP>
 
 		<!-- :field list: -->
 		<SEQ_REGEXP
@@ -125,11 +122,11 @@
 
 		<!-- table -->
 		<SEQ_REGEXP
-			HASH_CHAR="+"
+			HASH_CHAR="+-"
 			TYPE="LABEL"
 		>\+-[+-]+</SEQ_REGEXP>
 		<SEQ_REGEXP
-			HASH_CHAR="+"
+			HASH_CHAR="+?"
 			TYPE="LABEL"
 		>\+=[+=]+</SEQ_REGEXP>
 

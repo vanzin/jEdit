@@ -61,7 +61,7 @@
       <END>}</END>
     </SPAN>
 
-    <SPAN_REGEXP TYPE="KEYWORD1" HASH_CHAR="&lt;" DELEGATE="EXPRESSION">
+    <SPAN_REGEXP TYPE="KEYWORD1" HASH_CHAR="&lt;#ftl" DELEGATE="EXPRESSION">
       <BEGIN>&lt;#ftl\b</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
@@ -71,20 +71,20 @@
       <END>&gt;</END>
     </SPAN_REGEXP>
 
-    <SEQ_REGEXP TYPE="KEYWORD1" HASH_CHAR="&lt;"
+    <SEQ_REGEXP TYPE="KEYWORD1" HASH_CHAR="&lt;/"
 	>&lt;/#?(assign|local|global|if|switch|foreach|list|escape|macro|function|transform|compress|noescape)&gt;</SEQ_REGEXP>
 
     <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
-      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|nested|t|rt|lt|return|recurse)\&gt;</BEGIN>
+      <BEGIN>&lt;#?(else|compress|noescape|default|break|flush|nested|t|rt|lt|return|recurse)\b</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
-    <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;">
+    <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="INVALID" HASH_CHAR="&lt;/@">
       <BEGIN>&lt;/@(([_@\p{Alpha}][_@\p{Alnum}]*)(\.[_@\p{Alpha}][_@\p{Alnum}]*)*?)?</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>
 
-    <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;">
+    <SPAN_REGEXP TYPE="KEYWORD1" DELEGATE="EXPRESSION" HASH_CHAR="&lt;@">
       <BEGIN>&lt;@([_@\p{Alpha}][_@\p{Alnum}]*)(\.[_@\p{Alpha}][_@\p{Alnum}]*?)*</BEGIN>
       <END>&gt;</END>
     </SPAN_REGEXP>

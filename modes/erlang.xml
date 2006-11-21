@@ -57,62 +57,62 @@
 		<SEQ TYPE="OPERATOR">!</SEQ>
 
 		<!-- div -->
-		<SEQ_REGEXP HASH_CHAR="d" 
+		<SEQ_REGEXP HASH_CHAR="div" 
 			TYPE="OPERATOR" 
 			AT_WORD_START="TRUE"
 		>\bdiv\b</SEQ_REGEXP>
 		<!-- rem -->
-		<SEQ_REGEXP HASH_CHAR="r" 
+		<SEQ_REGEXP HASH_CHAR="rem" 
 			TYPE="OPERATOR" 
 			AT_WORD_START="TRUE"
 		>\brem\b</SEQ_REGEXP>
 		<!-- or -->
-		<SEQ_REGEXP HASH_CHAR="o" 
+		<SEQ_REGEXP HASH_CHAR="or" 
 			TYPE="OPERATOR" 
 			AT_WORD_START="TRUE"
 		>\bor\b</SEQ_REGEXP>
 		<!-- xor -->
-		<SEQ_REGEXP HASH_CHAR="x"
+		<SEQ_REGEXP HASH_CHAR="xor"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bxor\b</SEQ_REGEXP>
 		<!-- bor -->
-		<SEQ_REGEXP HASH_CHAR="b"
+		<SEQ_REGEXP HASH_CHAR="bor"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bbor\b</SEQ_REGEXP>
 		<!-- bxor -->
-		<SEQ_REGEXP HASH_CHAR="b"
+		<SEQ_REGEXP HASH_CHAR="bxor"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bbxor\b</SEQ_REGEXP>
 		<!-- bsl -->
-		<SEQ_REGEXP HASH_CHAR="b"
+		<SEQ_REGEXP HASH_CHAR="bsl"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bbsl\b</SEQ_REGEXP>
 		<!-- bsr -->
-		<SEQ_REGEXP HASH_CHAR="b"
+		<SEQ_REGEXP HASH_CHAR="bsr"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bbsr\b</SEQ_REGEXP>
 		<!-- and -->
-		<SEQ_REGEXP HASH_CHAR="a"
+		<SEQ_REGEXP HASH_CHAR="and"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\band\b</SEQ_REGEXP>
 		<!-- band -->
-		<SEQ_REGEXP HASH_CHAR="b"
+		<SEQ_REGEXP HASH_CHAR="band"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bband\b</SEQ_REGEXP>
 		<!-- not -->
-		<SEQ_REGEXP HASH_CHAR="n"
+		<SEQ_REGEXP HASH_CHAR="not"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bnot\b</SEQ_REGEXP>
 		<!-- bnot -->
-		<SEQ_REGEXP HASH_CHAR="b"
+		<SEQ_REGEXP HASH_CHAR="bnot"
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bbnot\b</SEQ_REGEXP>
