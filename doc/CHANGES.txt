@@ -52,6 +52,9 @@ and Marcelo Vanzin for contributing to this release.
 - Fixed a bug I introduced with the new HASH_CHAR handling
   (bug #1600380) (Björn "Vampire" Kautler)
 
+- Fixed another bug with the new HASH_CHAR handling
+  (bug #1600401) (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 
