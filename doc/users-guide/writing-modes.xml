@@ -5,8 +5,8 @@
 <chapter id="writing-modes"><title>Mode Definition Syntax</title>
 
  <para>
-  Edit modes are defined using XML, the <firstterm>extensible markup
-  language</firstterm>; mode files have the extension
+  Edit modes are defined using XML, the <firstterm>eXtensible Markup
+  Language</firstterm>; mode files have the extension
   <filename>.xml</filename>. XML is a very simple language, and as a result
   edit modes are easy to create and modify. This section will
   start with a short XML primer, followed by detailed information about
@@ -16,8 +16,8 @@
   Editing a mode or a mode catalog file within jEdit will cause the
   changes to take effect immediately. If you edit modes using another
   application, the changes will take effect after the
-  <guimenu>Utilities</guimenu>&gt;<guimenuitem>Reload Edit Modes</guimenuitem>
-  command is invoked.
+  <guimenu>Utilities</guimenu> &gt; <guisubmenu>Troubleshooting</guisubmenu> &gt;
+  <guimenuitem>Reload Edit Modes</guimenuitem> command is invoked.
  </para>
  <sect1 id="xml-primer"><title>An XML Primer</title>
   <para>
@@ -45,8 +45,7 @@
    If there is nothing between the opening and closing tags, for example
    <literal>&lt;TAG&gt;&lt;/TAG&gt;</literal>, the shorthand notation
    <literal>&lt;TAG /&gt;</literal> may be used. An example of this shorthand
-   can be seen
-   in the <literal>&lt;PROPERTY&gt;</literal> tags above.
+   can be seen in the <literal>&lt;PROPERTY&gt;</literal> tags above.
   </para>
   <para>
    XML is case sensitive. <literal>Span</literal> or <literal>span</literal>
@@ -56,7 +55,7 @@
    To insert a special character such as &lt; or &gt; literally in XML
    (for example, inside an attribute value), you must write it as
    an <firstterm>entity</firstterm>. An
-   entity consists of the character's symbolic name enclosed with
+   entity consists of the character's symbolic name enclosed within
    <quote>&amp;</quote> and <quote>;</quote>. The most frequently used entities
    are:
   </para>
@@ -208,8 +207,13 @@
     <!-- Auto indent -->
     <PROPERTY NAME="indentOpenBrackets" VALUE="{" />
     <PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+    <PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+    <PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
     <PROPERTY NAME="indentNextLine"
     	VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
+    <PROPERTY NAME="unindentThisLine"
+    	VALUE="^.*(default:\s*|case.*:.*)$" />
+    <PROPERTY NAME="electricKeys" VALUE=":" />
     <!-- set this to 'true' if you want to use GNU coding style -->
     <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
     <PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
@@ -283,7 +287,7 @@
     prefixed with <literal>0x</literal>, numbers suffixed with various
     type indicators, and floating point literals containing an exponent):
    </para>
-   <programlisting>DIGIT_RE="(0x\p{Xdigit}+|\d+(e\d*)?)[lLdDfF]?"</programlisting>
+   <programlisting>DIGIT_RE="(0[lL]?|[1-9]\d{0,9}(\d{0,9}[lL])?|0[xX]\p{XDigit}{1,8}(\p{XDigit}{0,8}[lL])?|0[0-7]{1,11}([0-7]{0,11}[lL])?|([0-9]+\.[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?[fFdD]?|[0-9]+([eE][+-]?[0-9]+[fFdD]?|([eE][+-]?[0-9]+)?[fFdD]))"</programlisting>
    <para>
     Regular expression syntax is described in <xref linkend="regexps" />.
    </para>
@@ -459,13 +463,27 @@
    The <literal>SPAN_REGEXP</literal> rule is similar to the
    <literal>SPAN</literal> rule except the start sequence is taken to be
    a regular expression. In addition to the attributes supported by
-   the <literal>SPAN</literal> tag, the
-   <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
-   the first character that
-   the regular expression matches.  This rules out using regular expressions
-   which can match more than one character at the start position. The regular expression match cannot span more than one line, either.
+   the <literal>SPAN</literal> tag, the following attributes are supported:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>HASH_CHAR</literal> - The start of what the regular
+   expression matches literally. This should be as long as possible to increase
+   performance.</para></listitem>
+   <listitem><para><literal>HASH_CHARS</literal> - The possible first characters
+   of what the regular expression matches literally.</para></listitem>
+  </itemizedlist>
+  <para>
+   Either the <literal>HASH_CHAR</literal> or the <literal>HASH_CHARS</literal>
+   attribute or none of them can be specified, but not both. If both are
+   specified, <literal>HASH_CHARS</literal> is ignored and an error is shown.
+   If possible, then always set one of them and if you know the starting
+   character definitely, use <literal>HASH_CHAR</literal> and give it as much
+   prefix as you know for sure. ONLY omit both attributes if there is no other
+   reliable way to get the highlighting you need, like for comments in
+   the Cobol programming language.
   </para>
   <para>
+   The regular expression match cannot span more than one line.
    Any text matched by groups in the <literal>BEGIN</literal> regular
    expression is substituted in the <literal>END</literal> string. See
    below for an example of where this is useful.
@@ -477,8 +495,8 @@
    Here is a <literal>SPAN_REGEXP</literal> rule that highlights
    <quote>read-ins</quote> in shell scripts:
   </para>
-  <programlisting>&lt;SPAN_REGEXP HASH_CHAR="&lt;" TYPE="LITERAL1" DELEGATE="LITERAL"&gt;
-    &lt;BEGIN&gt;&lt;![CDATA[&lt;&lt;['"\s]*(\p\w+)[\s'"]*]]&gt;&lt;/BEGIN&gt;
+  <programlisting>&lt;SPAN_REGEXP HASH_CHAR="&amp;lt;" TYPE="LITERAL1" DELEGATE="LITERAL"&gt;
+    &lt;BEGIN&gt;&lt;![CDATA[&lt;&lt;[\p{Space}'"]*([\p{Alnum}_]+)[\p{Space}'"]*]]&gt;&lt;/BEGIN&gt;
     &lt;END&gt;$1&lt;/END&gt;
 &lt;/SPAN_REGEXP&gt;</programlisting>
   <para>
@@ -487,7 +505,7 @@
    as long as the <literal>&lt;#ftl</literal> is followed by a word break:
   </para>
   <programlisting><![CDATA[<SPAN_REGEXP TYPE="KEYWORD1" HASH_CHAR="&lt;" DELEGATE="EXPRESSION">
-    <BEGIN>&lt;#ftl\&gt;</BEGIN>
+    <BEGIN>&lt;#ftl\b</BEGIN>
     <END>&gt;</END>
 </SPAN_REGEXP>]]></programlisting>
  </sect1>
@@ -534,11 +552,27 @@
    The <literal>EOL_SPAN_REGEXP</literal> rule is similar to the
    <literal>EOL_SPAN</literal> rule except the match sequence is taken to be
    a regular expression. In addition to the attributes supported by
-   the <literal>EOL_SPAN</literal> tag, the
-   <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
-   the first character that
-   the regular expression matches.  This rules out using regular expressions
-   which can match more than one character at the start position. The regular expression match cannot span more than one line, either.
+   the <literal>EOL_SPAN</literal> tag, the following attributes are supported:
+  </para>
+  <itemizedlist>
+   <listitem><para><literal>HASH_CHAR</literal> - The start of what the regular
+   expression matches literally. This should be as long as possible to increase
+   performance.</para></listitem>
+   <listitem><para><literal>HASH_CHARS</literal> - The possible first characters
+   of what the regular expression matches literally.</para></listitem>
+  </itemizedlist>
+  <para>
+   Either the <literal>HASH_CHAR</literal> or the <literal>HASH_CHARS</literal>
+   attribute or none of them can be specified, but not both. If both are
+   specified, <literal>HASH_CHARS</literal> is ignored and an error is shown.
+   If possible, then always set one of them and if you know the starting
+   character definitely, use <literal>HASH_CHAR</literal> and give it as much
+   prefix as you know for sure. ONLY omit both attributes if there is no other
+   reliable way to get the highlighting you need, like for comments in
+   the Cobol programming language.
+  </para>
+  <para>
+   The regular expression match cannot span more than one line.
   </para>
   <para>
    Regular expression syntax is described in <xref linkend="regexps" />.
@@ -546,7 +580,7 @@
   <para>
    Here is an <literal>EOL_SPAN_REGEXP</literal> that highlights MS-DOS batch file comments, which start with <literal>REM</literal>, followed by any whitespace character, and extend until the end of the line:
   </para>
-  <programlisting><![CDATA[<EOL_SPAN_REGEXP AT_WHITESPACE_END="TRUE" HASH_CHAR="R" TYPE="COMMENT1">REM\s</EOL_SPAN_REGEXP>]]></programlisting>
+  <programlisting><![CDATA[<EOL_SPAN_REGEXP AT_WHITESPACE_END="TRUE" HASH_CHAR="REM" TYPE="COMMENT1">REM\s</EOL_SPAN_REGEXP>]]></programlisting>
  </sect1>
  <sect1 id="mode-rule-mark-prev"><title>The MARK_PREVIOUS Tag</title>
   <para>
@@ -656,13 +690,28 @@
    The <literal>SEQ_REGEXP</literal> rule is similar to the
    <literal>SEQ</literal> rule except the match sequence is taken to be
    a regular expression. In addition to the attributes supported by
-   the <literal>SEQ</literal> tag, the
-   <literal>HASH_CHAR</literal> attribute must be specified. It must be set to
-   the first character that
-   the regular expression matches. This rules out using regular expressions
-   which can match more than one character at the start position. The regular expression match cannot span more than one line, either.
+   the <literal>SEQ</literal> tag, the following attributes are supported:
   </para>
-  
+  <itemizedlist>
+   <listitem><para><literal>HASH_CHAR</literal> - The start of what the regular
+   expression matches literally. This should be as long as possible to increase
+   performance.</para></listitem>
+   <listitem><para><literal>HASH_CHARS</literal> - The possible first characters
+   of what the regular expression matches literally.</para></listitem>
+  </itemizedlist>
+  <para>
+   Either the <literal>HASH_CHAR</literal> or the <literal>HASH_CHARS</literal>
+   attribute or none of them can be specified, but not both. If both are
+   specified, <literal>HASH_CHARS</literal> is ignored and an error is shown.
+   If possible, then always set one of them and if you know the starting
+   character definitely, use <literal>HASH_CHAR</literal> and give it as much
+   prefix as you know for sure. ONLY omit both attributes if there is no other
+   reliable way to get the highlighting you need, like for comments in
+   the Cobol programming language.
+  </para>
+  <para>
+   The regular expression match cannot span more than one line.
+  </para>
   <para>
    Regular expression syntax is described in <xref linkend="regexps" />.
   </para>

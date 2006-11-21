@@ -149,10 +149,10 @@
             <KEYWORD3>nullref</KEYWORD3>
             
             
-            <SEQ TYPE="OPERATOR">&amp;</SEQ>
-            <SEQ TYPE="OPERATOR">*</SEQ>
-            <SEQ TYPE="OPERATOR">}</SEQ>
-            <SEQ TYPE="OPERATOR">{</SEQ>
+            <OPERATOR>&amp;</OPERATOR>
+            <OPERATOR>*</OPERATOR>
+            <OPERATOR>}</OPERATOR>
+            <OPERATOR>{</OPERATOR>
             
             <!--arithmetic opcodes-->
             <FUNCTION>add</FUNCTION>

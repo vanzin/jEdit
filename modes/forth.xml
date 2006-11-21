@@ -7,12 +7,12 @@ easily. -->
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="indentNextLines" VALUE="^:[^;]*"/>>
-		<PROPERTY NAME="unindentNextLines" VALUE="^.*;$"/>
-		<PROPERTY NAME="commentStart" VALUE="("/>
-		<PROPERTY NAME="commentEnd" VALUE=")"/>
-		<PROPERTY NAME="lineComment" VALUE="|"/>
-		<PROPERTY NAME="noWordSep" VALUE="+-*=&gt;&lt;;.?/'()%,_|$"/>
+		<PROPERTY NAME="indentNextLines" VALUE="^:[^;]*" />
+		<PROPERTY NAME="unindentNextLines" VALUE="^.*;$" />
+		<PROPERTY NAME="commentStart" VALUE="(" />
+		<PROPERTY NAME="commentEnd" VALUE=")" />
+		<PROPERTY NAME="lineComment" VALUE="|" />
+		<PROPERTY NAME="noWordSep" VALUE="+-*=&gt;&lt;;.?/'()%,_|$" />
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE"
 		NO_WORD_SEP="+-*=&gt;&lt;;.?/'&quot;()%,_$"

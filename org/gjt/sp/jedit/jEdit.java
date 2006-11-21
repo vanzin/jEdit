@@ -2634,7 +2634,7 @@ public class jEdit
 			{
 				String msg;
 
-				Object line = "?";
+				Object line = "<unknown>";
 				if(subst == null)
 					msg = jEdit.getProperty("xmode-error." + what);
 				else

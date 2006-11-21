@@ -71,7 +71,7 @@
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 
-		<KEYWORDS IGNORE_CASE="FALSE">
+		<KEYWORDS>
 			<!-- ActionScript's reserved words (see AS:TDG p.332) -->
 			<KEYWORD1>add</KEYWORD1>   <!-- deprecated -->
 			<KEYWORD1>and</KEYWORD1>   <!-- deprecated -->
@@ -729,7 +729,7 @@
 			<LITERAL2>bytesLoaded</LITERAL2>
 			<LITERAL2>bytesTotal</LITERAL2>
 			<LITERAL2>pause</LITERAL2>
-			<LITERAL2>seek</LITERAL2>setBufferTime
+			<LITERAL2>seek</LITERAL2>
 			<LITERAL2>setBufferTime</LITERAL2>
 			<LITERAL2>time</LITERAL2>
 			
@@ -764,7 +764,7 @@
 			<LITERAL2>setField</LITERAL2>
 			<LITERAL2>sortItemsBy</LITERAL2>
 			
-			<!-- depricated-->
+			<!-- deprecated-->
 			<KEYWORD2>chr</KEYWORD2>
 			<KEYWORD2>mbchr</KEYWORD2>
 			<KEYWORD2>mblength</KEYWORD2>
@@ -812,8 +812,7 @@
 			<KEYWORD1>protected</KEYWORD1>
 			<KEYWORD1>public</KEYWORD1>
 			<KEYWORD1>dynamic</KEYWORD1>
-			
-			
+
 			<KEYWORD3>short</KEYWORD3>
 			<KEYWORD1>static</KEYWORD1>
 			<LITERAL2>super</LITERAL2>

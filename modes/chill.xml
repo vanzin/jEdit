@@ -14,7 +14,7 @@
         <PROPERTY NAME="commentEnd" VALUE="*/" />
     </PROPS>
 
-    <RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+    <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 
         <!-- Compiler directives. -->
         <SPAN TYPE="COMMENT2">
@@ -58,7 +58,7 @@
         <SEQ TYPE="OPERATOR">&gt;=</SEQ>
         <SEQ TYPE="OPERATOR">&lt;=</SEQ>
 
-        <KEYWORDS IGNORE_CASE="FALSE">
+        <KEYWORDS>
             <!-- Reserved words -->
             <KEYWORD1>AND</KEYWORD1>
             <KEYWORD1>BEGIN</KEYWORD1>

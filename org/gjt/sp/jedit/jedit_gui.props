@@ -1449,7 +1449,6 @@ xmode-error.title=XML Parse Error
 # {2} is the column number, but it's not too useful so we don't show it
 xmode-error.message=An error occurred while parsing {0}, line {1}:\n\
 	{3}
-
 xmode-error.dtd=The DTD could not be loaded\n({0})
 xmode-error.termchar-invalid=The value of the AT_CHAR attribute is invalid ({0})
 xmode-error.doctype-invalid=Expected a document type of MODE, found {0}
@@ -1457,7 +1456,7 @@ xmode-error.empty-tag=The {0} tag cannot be empty
 xmode-error.token-invalid=The token type {0} is invalid
 xmode-error.empty-keyword=The keyword text cannot be empty
 xmode-error.regexp=Invalid regular expression\n({0})
-xmode-error.hash-char-invalid=HASH_CHAR must be exactly one character
+xmode-error.hash-char-and-hash-chars-mutually-exclusive=HASH_CHAR and HASH_CHARS may not be specified both
 xmode-error.delegate-invalid=Invalid delegate: {0}
 #}}}
 

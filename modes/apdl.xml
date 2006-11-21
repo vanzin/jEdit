@@ -393,8 +393,8 @@
 		<SEQ TYPE="OPERATOR">)</SEQ>
 		<SEQ TYPE="OPERATOR">,</SEQ>
 		<SEQ TYPE="NULL">;</SEQ>
-		<SEQ TYPE="OPERATOR">*</SEQ>	-->
-		<SEQ TYPE="OPERATOR">/</SEQ>	-->
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
 
 		<!-- *msg command: variable formats -->
 		<SEQ TYPE="KEYWORD2">%C</SEQ>		<!-- alphamuneric format -->

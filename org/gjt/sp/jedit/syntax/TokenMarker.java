@@ -78,7 +78,7 @@ public class TokenMarker
 	 */
 	public ParserRuleSet[] getRuleSets()
 	{
-		return ruleSets.values().toArray(new ParserRuleSet[ruleSets.size()]);
+		return ruleSets.values().toArray(new ParserRuleSet[0]);
 	} //}}}
 
 	//{{{ markTokens() method
@@ -338,9 +338,20 @@ unwind:		while(context.parent != null)
 		//{{{ Some rules can only match in certain locations
 		if(!end)
 		{
-			if(checkRule.upHashChar != Character.toUpperCase(line.array[pos]))
+			if (null == checkRule.upHashChars)
 			{
-				return false;
+				if (null != checkRule.upHashChar &&
+				    !checkRule.upHashChar.equals(new String(line.array,pos,checkRule.upHashChar.length())))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				if (-1 == new String(checkRule.upHashChars).indexOf(Character.toUpperCase(line.array[pos])))
+				{
+					return false;
+				}
 			}
 		}
 
@@ -352,19 +363,25 @@ unwind:		while(context.parent != null)
 			== ParserRule.AT_LINE_START)
 		{
 			if(offset != line.offset)
+			{
 				return false;
+			}
 		}
 		else if((posMatch & ParserRule.AT_WHITESPACE_END)
 			== ParserRule.AT_WHITESPACE_END)
 		{
 			if(offset != whitespaceEnd)
+			{
 				return false;
+			}
 		}
 		else if((posMatch & ParserRule.AT_WORD_START)
 			== ParserRule.AT_WORD_START)
 		{
 			if(offset != lastOffset)
+			{
 				return false;
+			}
 		} //}}}
 
 		int matchedChars = 1;
@@ -405,9 +422,13 @@ unwind:		while(context.parent != null)
 								  line.count - (pos - line.offset));
 				match = checkRule.startRegexp.matcher(charSeq);
 				if(!match.lookingAt())
+				{
 					return false;
+				}
 				else if(match.start() != 0)
+				{
 					throw new InternalError("Can't happen");
+				}
 				else
 				{
 					matchedChars = match.end();
@@ -419,7 +440,6 @@ unwind:		while(context.parent != null)
 				}
 			}
 		} //}}}
-
 		//{{{ Check for an escape sequence
 		if((checkRule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
 		{

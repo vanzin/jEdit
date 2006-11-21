@@ -134,18 +134,43 @@ public class ParserRuleSet
 	public void addRule(ParserRule r)
 	{
 		ruleCount++;
-		Character key = Character.valueOf(r.upHashChar);
-		List<ParserRule> rules = ruleMap.get(key);
-		if (null == rules)
+		Character[] keys;
+		if (null == r.upHashChars)
 		{
-			rules = new ArrayList<ParserRule>();
-			ruleMap.put(key,rules);
+			keys = new Character[1];
+			if ((null == r.upHashChar) || (0 >= r.upHashChar.length()))
+			{
+				keys[0] = null;
+			}
+			else
+			{
+				keys[0] = Character.valueOf(r.upHashChar.charAt(0));
+			}
 		}
-		int ruleAmount = rules.size();
-		rules.add(r);
-		if (ruleAmount > 0)
+		else
 		{
-			rules.get(ruleAmount).next = r;
+			keys = new Character[r.upHashChars.length];
+			int i = 0;
+			for (char upHashChar : r.upHashChars)
+			{
+				keys[i++] = upHashChar;
+			}
+		}
+		for (Character key : keys)
+		{
+			List<ParserRule> rules = ruleMap.get(key);
+			if (null == rules)
+			{
+				rules = new ArrayList<ParserRule>();
+				ruleMap.put(key,rules);
+			}
+			int ruleAmount = rules.size();
+			rules.add(r);
+			// fill the deprecated ParserRule.next pointer
+			if (ruleAmount > 0)
+			{
+				rules.get(ruleAmount).next = r;
+			}
 		}
 	} //}}}
 
@@ -162,11 +187,28 @@ public class ParserRuleSet
 	//{{{ getRules() method
 	public List<ParserRule> getRules(Character key)
 	{
-		Character upperKey = Character.valueOf(Character.toUpperCase(key.charValue()));
+		Character upperKey = null == key ? null : Character.valueOf(Character.toUpperCase(key.charValue()));
 		List<ParserRule> rules = ruleMap.get(upperKey);
 		if (null == rules)
 		{
-			rules = Collections.emptyList();
+			rules = new ArrayList<ParserRule>();
+		}
+		else
+		{
+			rules = new ArrayList<ParserRule>(rules);
+		}
+		if (null != upperKey)
+		{
+			List<ParserRule> nullRules = ruleMap.get(null);
+			if (null != nullRules)
+			{
+				int rulesSize = rules.size();
+				if ((0 < rulesSize) && (0 < nullRules.size()))
+				{
+					rules.get(rulesSize-1).next = nullRules.get(0);
+				}
+				rules.addAll(nullRules);
+			}
 		}
 		return rules;
 	} //}}}

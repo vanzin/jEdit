@@ -54,6 +54,10 @@ and Marcelo Vanzin for contributing to this release.
 
 - New edit mode: quake.xml
 
+- Fixed some invalid mode files (Björn "Vampire" Kautler)
+
+- Updated some mode files that were still in jEdit 4.0 syntax (Björn "Vampire" Kautler)
+
 }}}
 {{{ Miscellaneous
 
@@ -69,6 +73,16 @@ and Marcelo Vanzin for contributing to this release.
 - FR #1599024: add a submenu to the file menu that allows reloading the
   current buffer with a specific encoding.
 
+- HASH_CHAR in mode-files is now optional and multicharacter
+  (Björn "Vampire" Kautler)
+
+- HASH_CHARS got invented for mode-files as alternative to HASH_CHAR,
+  whereby HASH_CHARS lists possible first characters of the matched
+  result literally (Björn "Vampire" Kautler)
+
+- Fixed some wrong documentation and added some new
+  about HASH_CHAR and HASH_CHARS (Björn "Vampire" Kautler)
+
 }}}
 {{{ API Changes
 
@@ -80,6 +94,11 @@ and Marcelo Vanzin for contributing to this release.
 - Deprecated JEditBuffer.isElectricKey(char).
   Added JEditBuffer.isElectricKey(char, int) to replace it.
   (Marcelo Vanzin)
+
+- Deprecated some of the ParserRule.createXXX() methods which accepted
+  only one character HASH_CHAR, while introduced new ones that accept
+  whole Strings. Additionally new ones for accepting HASH_CHARS got
+  added. (Björn "Vampire" Kautler)
 
 }}}
 
@@ -1222,5 +1241,5 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 }}}
 
 jEdit buffer local properties:
-:maxLineLen=72:indentSize=2:
+:maxLineLen=0:indentSize=2:
 :folding=explicit:collapseFolds=2:

@@ -157,6 +157,20 @@
 		<!-- Brace keywords -->
 		<SEQ_REGEXP TYPE="FUNCTION" HASH_CHAR="@">@(b|i|u|tt|url|pre|ref|code|expr|image)?(\{.*@\})</SEQ_REGEXP>
 
+		<!-- Attempt to get syntax highlighting of @decl-ed functions
+		     inside of the autodoc-rule.
+
+		     It works - but jEdit 4.1 has problems keeping it highlighted
+		     (the syntax highlighting works depending on how you travel
+		     past the @decl-ed region).
+		     Can't figure aout how to to proper coloring of the @decl
+		     keyword either.
+
+		     If there are problems with what regions are highlighted -
+		     try to uncomment this first.
+		-->
+		<EOL_SPAN TYPE="NULL" DELEGATE="MAIN">@decl</EOL_SPAN>
+
 		<KEYWORDS>
 		  <!-- Meta keywords -->
 		  <LABEL>@appears</LABEL>
@@ -217,20 +231,6 @@
 		  <LABEL>@endignore</LABEL>
 
 		</KEYWORDS>
-
-		<!-- Attempt to get syntax highlighting of @decl-ed functions
-		     inside of the autodoc-rule.
-
-		     It works - but jEdit 4.1 has problems keeping it highlighted
-		     (the syntax highlighting works depending on how you travel
-		     past the @decl-ed region).
-		     Can't figure aout how to to proper coloring of the @decl
-		     keyword either.
-
-		     If there are problems with what regions are highlighted -
-		     try to uncomment this first.
-		-->
-		<EOL_SPAN TYPE="NULL" DELEGATE="MAIN">@decl</EOL_SPAN>
 
 	</RULES>
 

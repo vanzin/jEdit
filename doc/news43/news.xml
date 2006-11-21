@@ -89,7 +89,7 @@
 	<section id="syntax">
     <title>Syntax Highlighting</title>
 	 <para>
-	  Many syntax highlighting modes were updated or rewritten to use the java.util.regex instead of gnu.regex. Some modes were added, bring the total now to 150 languages.
+	  Many syntax highlighting modes were updated or rewritten to use the java.util.regex instead of gnu.regexp. Some modes were added, bring the total now to 150 languages.
 	 </para>
 
 	</section>

@@ -14,7 +14,8 @@
 <!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool;
 	NO_WORD_BREAK %att-bool;
 	NO_ESCAPE %att-bool; '>
-<!ENTITY % att-hash-char 'HASH_CHAR CDATA #REQUIRED' >
+<!ENTITY % att-hash-char 'HASH_CHAR CDATA #IMPLIED
+	HASH_CHARS CDATA #IMPLIED' >
 
 <!-- MODE element -->
 <!ELEMENT MODE ( PROPS?, RULES* ) >

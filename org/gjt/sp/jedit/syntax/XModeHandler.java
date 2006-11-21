@@ -177,10 +177,20 @@ public abstract class XModeHandler extends DefaultHandler
 
 				try
 				{
-					rules.addRule(ParserRule.createRegexpSequenceRule(
-						tag.lastHashChar,tag.lastStartPosMatch,
-						tag.lastStart.toString(),tag.lastDelegateSet,
-						tag.lastTokenID,findParent("RULES").lastIgnoreCase));
+					if (null != tag.lastHashChars)
+					{
+						rules.addRule(ParserRule.createRegexpSequenceRule(
+							tag.lastStartPosMatch,tag.lastHashChars.toCharArray(),
+							tag.lastStart.toString(),tag.lastDelegateSet,
+							tag.lastTokenID,findParent("RULES").lastIgnoreCase));
+					}
+					else
+					{
+						rules.addRule(ParserRule.createRegexpSequenceRule(
+							tag.lastHashChar,tag.lastStartPosMatch,
+							tag.lastStart.toString(),tag.lastDelegateSet,
+							tag.lastTokenID,findParent("RULES").lastIgnoreCase));
+					}
 				}
 				catch(PatternSyntaxException re)
 				{
@@ -229,18 +239,36 @@ public abstract class XModeHandler extends DefaultHandler
 
 				try
 				{
-					rules.addRule(ParserRule
-						.createRegexpSpanRule(
-						tag.lastHashChar,
-						tag.lastStartPosMatch,tag.lastStart.toString(),
-						tag.lastEndPosMatch,tag.lastEnd.toString(),
-						tag.lastDelegateSet,
-						tag.lastTokenID,
-						tag.lastExcludeMatch,
-						tag.lastNoLineBreak,
-						tag.lastNoWordBreak,
-						findParent("RULES").lastIgnoreCase,
-						tag.lastNoEscape));
+					if (null != tag.lastHashChars)
+					{
+						rules.addRule(ParserRule
+							.createRegexpSpanRule(
+							tag.lastStartPosMatch,tag.lastHashChars.toCharArray(),
+							tag.lastStart.toString(),
+							tag.lastEndPosMatch,tag.lastEnd.toString(),
+							tag.lastDelegateSet,
+							tag.lastTokenID,
+							tag.lastExcludeMatch,
+							tag.lastNoLineBreak,
+							tag.lastNoWordBreak,
+							findParent("RULES").lastIgnoreCase,
+							tag.lastNoEscape));
+					}
+					else
+					{
+						rules.addRule(ParserRule
+							.createRegexpSpanRule(
+							tag.lastHashChar,
+							tag.lastStartPosMatch,tag.lastStart.toString(),
+							tag.lastEndPosMatch,tag.lastEnd.toString(),
+							tag.lastDelegateSet,
+							tag.lastTokenID,
+							tag.lastExcludeMatch,
+							tag.lastNoLineBreak,
+							tag.lastNoWordBreak,
+							findParent("RULES").lastIgnoreCase,
+							tag.lastNoEscape));
+					}
 				}
 				catch(PatternSyntaxException re)
 				{
@@ -272,11 +300,22 @@ public abstract class XModeHandler extends DefaultHandler
 
 				try
 				{
-					rules.addRule(ParserRule.createRegexpEOLSpanRule(
-						tag.lastHashChar,tag.lastStartPosMatch,
-						tag.lastStart.toString(),tag.lastDelegateSet,
-						tag.lastTokenID,tag.lastExcludeMatch,
-						findParent("RULES").lastIgnoreCase));
+					if (null != tag.lastHashChars)
+					{
+						rules.addRule(ParserRule.createRegexpEOLSpanRule(
+							tag.lastStartPosMatch,tag.lastHashChars.toCharArray(),
+							tag.lastStart.toString(),tag.lastDelegateSet,
+							tag.lastTokenID,tag.lastExcludeMatch,
+							findParent("RULES").lastIgnoreCase));
+					}
+					else
+					{
+						rules.addRule(ParserRule.createRegexpEOLSpanRule(
+							tag.lastHashChar,tag.lastStartPosMatch,
+							tag.lastStart.toString(),tag.lastDelegateSet,
+							tag.lastTokenID,tag.lastExcludeMatch,
+							findParent("RULES").lastIgnoreCase));
+					}
 				}
 				catch(PatternSyntaxException re)
 				{
@@ -449,7 +488,7 @@ public abstract class XModeHandler extends DefaultHandler
 		return stateStack.pop();
 	} //}}}
 
-	//{{{ findElement() method
+	//{{{ findParent() method
 	/**
 	 * Finds the first element whose tag matches 'tagName',
 	 * searching backwards in the stack.
@@ -577,16 +616,12 @@ public abstract class XModeHandler extends DefaultHandler
 				}
 			}
 
-			tmp = attrs.getValue("HASH_CHAR");
-			if (tmp != null)
+			lastHashChar = attrs.getValue("HASH_CHAR");
+			lastHashChars = attrs.getValue("HASH_CHARS");
+			if ((null != lastHashChar) && (null != lastHashChars))
 			{
-				if(tmp.length() != 1)
-				{
-					error("hash-char-invalid",tmp);
-					lastDefaultID = Token.NULL;
-				}
-				else
-					lastHashChar = tmp.charAt(0);
+				error("hash-char-and-hash-chars-mutually-exclusive",null);
+				lastHashChars = null;
 			}
 		}
 
@@ -672,8 +707,7 @@ public abstract class XModeHandler extends DefaultHandler
 		public int lastStartPosMatch;
 		public int lastEndPosMatch;
 		public String lastDigitRE;
-		public char lastHashChar;
-
+		public String lastHashChar;
+		public String lastHashChars;
 	}
-
 }
