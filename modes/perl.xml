@@ -140,13 +140,24 @@
 		<SEQ_REGEXP HASH_CHAR="-" TYPE="KEYWORD3">-[\p{Lower}]</SEQ_REGEXP>
 
 		<!-- non-quoted literals in hashes -->
-		<SPAN_REGEXP HASH_CHAR="{" NO_LINE_BREAK="TRUE" DELEGATE="LITERAL">
+		<SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR="{" NO_LINE_BREAK="TRUE" DELEGATE="LITERAL">
 			<BEGIN>\{(?=\s*[\p{Alpha}_\-][\p{Alnum}_]*\s*\})</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
 
+		<!-- Code blocks. This is a hack to correctly highlight some
+			 complex expressions that can have arbitrary perl code
+			 inside brackets (like array deferences below). Declaring
+			 this *before* the other rules is needed to maintain
+			 correct bracket matching.
+		-->
+		<SPAN TYPE="OPERATOR" NO_LINE_BREAK="FALSE" DELEGATE="MAIN">
+			<BEGIN>{</BEGIN>
+			<END>}</END>
+		</SPAN>
+
 		<!-- Array dereference -->
-		<SPAN TYPE="KEYWORD4" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
+		<SPAN TYPE="KEYWORD4" NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
 			<BEGIN>@{</BEGIN>
 			<END>}</END>
 		</SPAN>
