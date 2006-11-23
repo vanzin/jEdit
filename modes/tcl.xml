@@ -40,7 +40,7 @@
 	</PROPS>
 
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" 
-		DIGIT_RE="0x[[:xdigit:]]+|[[:digit:]]+">
+		DIGIT_RE="0x\p{XDigit}+|\d+">
 
 		<!-- Continuation line. Processed before anything else by Tcl. (Does not work)-->
 		<EOL_SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR="\">\\$</EOL_SPAN_REGEXP>
@@ -65,7 +65,7 @@
 		<!-- Avoid colouring substituted variables that are homonyms of a keyword -->
 		<!-- Indexed array variable. Delegate to MAIN, as the index string is evaluated by Tcl.-->
 		<SPAN_REGEXP TYPE="NULL" HASH_CHAR="$" DELEGATE="MAIN">
-			<BEGIN>\$([[:alnum:]_]|::)+\(</BEGIN>
+			<BEGIN>\$(\w|::)+\(</BEGIN>
 			<END>)</END>
 		</SPAN_REGEXP>
 		<!-- General scalar variable. Do not delegate, as the ${} block content is not evalutated by Tcl. -->
@@ -74,7 +74,7 @@
 			<END>}</END>
 		</SPAN>
 		<!-- Plain scalar variable. -->
-		<SEQ_REGEXP TYPE="NULL" HASH_CHAR="$">\$([[:alnum:]_]|::)+</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="NULL" HASH_CHAR="$">\$(\w|::)+</SEQ_REGEXP>
 
 		<!-- Sub-block -->
 		<SPAN TYPE="OPERATOR" NO_LINE_BREAK="FALSE" AT_WORD_START="TRUE" DELEGATE="MAIN">
@@ -692,14 +692,14 @@
 
 		<!-- Avoid colouring variables substituted inside strings -->
 		<SPAN_REGEXP TYPE="NULL" HASH_CHAR="$" DELEGATE="MAIN">
-			<BEGIN>\$([[:alnum:]_]|::)+\(</BEGIN>
+			<BEGIN>\$(\w|::)+\(</BEGIN>
 			<END>)</END>
 		</SPAN_REGEXP>
 		<SPAN_REGEXP TYPE="NULL" HASH_CHAR="$" DELEGATE="MAIN">
 			<BEGIN>\${</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
-		<SEQ_REGEXP TYPE="NULL" HASH_CHAR="$">\$([[:alnum:]_]|::)+</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="NULL" HASH_CHAR="$">\$(\w|::)+</SEQ_REGEXP>
 
 		<!-- Sub-commands to be substituted -->
 		<SPAN TYPE="OPERATOR" NO_LINE_BREAK="FALSE" DELEGATE="MAIN">
