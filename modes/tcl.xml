@@ -3,22 +3,112 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Tcl mode by Michael Jacobson.
-     cplusplus and pascal modes used as reference. -->
+     cplusplus and pascal modes used as reference.
+    2006/10/20 Jean-Francois Larvoire: 
+     - Fixed comments detection: Only # at the beginning of Tcl commands are comments!
+     - Quoted strings can span multiple lines.
+     - Added recursive in-string substituted command and variable analysis.
+     - Added numerous missing tcl keywords and variables up to version 8.4.14.
+     - Removed $ on global variable keywords, as they're often used with $::.
+     - Added Expect keywords, as KEYWORD2. (send was already in tk as KEYWORD2)
+     - Avoid colouring substituted variables that are homonyms of a keyword.
+     - Highlight hexadecimal numbers too.
+    2006/10/23 Jean-Francois Larvoire:
+     - Strings and blocks only begin at word start.
+     - Updated {# comment detection to manage the whole {} block. This catches
+       all { and }, and makes it unnecessary to define them as KEYWORDs.
+     - Bug fix: Do not delegate content evaluation for ${} scalar variables.
+    Limitations:
+     - Unbalanced quotes or brackets within braces, such as in regular expressions,
+	will confuse the analysis. Workaround: If possible, use a \ to escape the
+	unbalanced character. Else add a ;# comment with a closing " or ].
+    Known bugs:
+     - Continuation line detection does not work. Same bug as espace chars below.
+     - ; highlighting as an OPERATOR does not work.
+    Known bugs (Were there before, and I failed to fix them):
+     - \c escape colouring does not work for escapes embedded in words.
+           I attemted numerous workarounds using spans and regexps, but they
+	   all seem to fail to detect anything beginning with a \. And using
+	   NO_ESCAPE="TRUE" does not help.
+     - {} within quoted strings should not affect indentation. -->
+
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 	</PROPS>
 
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" 
+		DIGIT_RE="0x[[:xdigit:]]+|[[:digit:]]+">
+
+		<!-- Continuation line. Processed before anything else by Tcl. (Does not work)-->
+		<EOL_SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR="\">\\$</EOL_SPAN_REGEXP>
+
+		<!-- Comments after a ; command separator -->
+		<!-- Note: The ; isn't bolded as other operators. Why?-->
+		<EOL_SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR=";" DELEGATE="TCL_COMMENT">;\s*(?=#)</EOL_SPAN_REGEXP>
+		<!-- Comments at the { opening of a block -->
+		<SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR="{" DELEGATE="TCL_COMMENT">
+			<BEGIN>{\s*(?=#)</BEGIN>
+			<END>}</END>
+		</SPAN_REGEXP>
+		<!-- Comments on a line of their own. -->
+		<EOL_SPAN TYPE="COMMENT1" AT_WHITESPACE_END="TRUE">#</EOL_SPAN>
+
+		<!-- Quoted strings -->
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" AT_WORD_START="TRUE" DELEGATE="TCL_STRING">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
-		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
+		<!-- Avoid colouring substituted variables that are homonyms of a keyword -->
+		<!-- Indexed array variable. Delegate to MAIN, as the index string is evaluated by Tcl.-->
+		<SPAN_REGEXP TYPE="NULL" HASH_CHAR="$" DELEGATE="MAIN">
+			<BEGIN>\$([[:alnum:]_]|::)+\(</BEGIN>
+			<END>)</END>
+		</SPAN_REGEXP>
+		<!-- General scalar variable. Do not delegate, as the ${} block content is not evalutated by Tcl. -->
+		<SPAN TYPE="NULL">
+			<BEGIN>${</BEGIN>
+			<END>}</END>
+		</SPAN>
+		<!-- Plain scalar variable. -->
+		<SEQ_REGEXP TYPE="NULL" HASH_CHAR="$">\$([[:alnum:]_]|::)+</SEQ_REGEXP>
 
+		<!-- Sub-block -->
+		<SPAN TYPE="OPERATOR" NO_LINE_BREAK="FALSE" AT_WORD_START="TRUE" DELEGATE="MAIN">
+			<BEGIN>{</BEGIN>
+			<END>}</END>
+		</SPAN>
+
+		<!-- Sub-commands to be substituted -->
+		<SPAN TYPE="OPERATOR" NO_LINE_BREAK="FALSE" DELEGATE="MAIN">
+			<BEGIN>[</BEGIN>
+			<END>]</END>
+		</SPAN>
+
+		<!-- Escaped characters (Don't work; Would need NO_ESCAPE="TRUE"?)-->
+		<SPAN_REGEXP TYPE="KEYWORD3" NO_ESCAPE="TRUE" HASH_CHAR="\">
+			<BEGIN>\\(?=n)</BEGIN>
+			<END>n</END>
+		</SPAN_REGEXP>
+		<SEQ TYPE="KEYWORD3">\a</SEQ>
+		<SEQ TYPE="KEYWORD3">\b</SEQ>
+		<SEQ TYPE="KEYWORD3">\f</SEQ>
+		<SEQ TYPE="KEYWORD3">\n</SEQ>
+		<SEQ TYPE="KEYWORD3">\r</SEQ>
+		<SEQ TYPE="KEYWORD3">\t</SEQ>
+		<SEQ TYPE="KEYWORD3">\v</SEQ>
+		<SEQ TYPE="KEYWORD3">\</SEQ>
+
+		<!-- Tcl syntax operators. -->
+		<!-- Note that "{}[]" are already caught above.-->
+		<!-- Delegate to main, as a new command begins after the ; -->
+		<SEQ TYPE="OPERATOR" DELEGATE="MAIN">;</SEQ>
+		<SEQ TYPE="NULL">::</SEQ>
+
+		<!-- Math expression operators -->
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
@@ -26,7 +116,6 @@
 		<SEQ TYPE="OPERATOR">+</SEQ>
 		<SEQ TYPE="OPERATOR">-</SEQ>
 		<SEQ TYPE="OPERATOR">/</SEQ>
-
 		<SEQ TYPE="OPERATOR">*</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
@@ -35,13 +124,11 @@
 		<SEQ TYPE="OPERATOR">|</SEQ>
 		<SEQ TYPE="OPERATOR">^</SEQ>
 		<SEQ TYPE="OPERATOR">~</SEQ>
-		<SEQ TYPE="OPERATOR">}</SEQ>
-		<SEQ TYPE="OPERATOR">{</SEQ>
 
 		<KEYWORDS>
+			<!-- Tcl keywords-->
 			<KEYWORD1>append</KEYWORD1>
 			<KEYWORD1>array</KEYWORD1>
-			<KEYWORD1>auto_mkindex</KEYWORD1>
 			<KEYWORD1>concat</KEYWORD1>
 			<KEYWORD1>console</KEYWORD1>
 			<KEYWORD1>eval</KEYWORD1>
@@ -79,7 +166,7 @@
 			<KEYWORD1>proc</KEYWORD1>
 			<KEYWORD1>return</KEYWORD1>
 			<KEYWORD1>source</KEYWORD1>
-			<KEYWORD1>unkown</KEYWORD1>
+			<KEYWORD1>unknown</KEYWORD1>
 			<KEYWORD1>uplevel</KEYWORD1>
 			<KEYWORD1>cd</KEYWORD1>
 			<KEYWORD1>close</KEYWORD1>
@@ -104,11 +191,11 @@
 			<KEYWORD1>history</KEYWORD1>
 			<KEYWORD1>rename</KEYWORD1>
 			<KEYWORD1>info</KEYWORD1>
+			<!-- expr keywords-->
 			<KEYWORD1>ceil</KEYWORD1>
 			<KEYWORD1>floor</KEYWORD1>
 			<KEYWORD1>round</KEYWORD1>
 			<KEYWORD1>incr</KEYWORD1>
-			<KEYWORD1>hypot</KEYWORD1>
 			<KEYWORD1>abs</KEYWORD1>
 			<KEYWORD1>acos</KEYWORD1>
 			<KEYWORD1>cos</KEYWORD1>
@@ -128,7 +215,51 @@
 			<KEYWORD1>sqrt</KEYWORD1>
 			<KEYWORD1>double</KEYWORD1>
 			<KEYWORD1>int</KEYWORD1>
-			
+			<!-- New Tcl keywords up to tcl 8.4.14 -->
+			<KEYWORD1>bgerror</KEYWORD1>
+			<KEYWORD1>binary</KEYWORD1>
+			<KEYWORD1>clock</KEYWORD1>
+			<KEYWORD1>dde</KEYWORD1>
+			<KEYWORD1>encoding</KEYWORD1>
+			<KEYWORD1>fblocked</KEYWORD1>
+			<KEYWORD1>fconfigure</KEYWORD1>
+			<KEYWORD1>fcopy</KEYWORD1>
+			<KEYWORD1>fileevent</KEYWORD1>
+			<KEYWORD1>filename</KEYWORD1>
+			<KEYWORD1>http</KEYWORD1>
+			<KEYWORD1>interp</KEYWORD1>
+			<KEYWORD1>load</KEYWORD1>
+			<KEYWORD1>lset</KEYWORD1>
+			<KEYWORD1>memory</KEYWORD1>
+			<KEYWORD1>msgcat</KEYWORD1>
+			<KEYWORD1>namespace</KEYWORD1>
+			<KEYWORD1>package</KEYWORD1>
+			<KEYWORD1>pkg::create</KEYWORD1>
+			<KEYWORD1>pkg_mkIndex</KEYWORD1>
+			<KEYWORD1>registry</KEYWORD1>
+			<KEYWORD1>resource</KEYWORD1>
+			<KEYWORD1>socket</KEYWORD1>
+			<KEYWORD1>subst</KEYWORD1>
+			<KEYWORD1>update</KEYWORD1>
+			<KEYWORD1>variable</KEYWORD1>
+			<KEYWORD1>vwait</KEYWORD1>
+			<!-- Standard library of Tcl interpretor procedures -->
+			<KEYWORD1>auto_execok</KEYWORD1>
+			<KEYWORD1>auto_import</KEYWORD1>
+			<KEYWORD1>auto_load</KEYWORD1>
+			<KEYWORD1>auto_mkindex</KEYWORD1>
+			<KEYWORD1>auto_mkindex_old</KEYWORD1>
+			<KEYWORD1>auto_qualify</KEYWORD1>
+			<KEYWORD1>auto_reset</KEYWORD1>
+			<KEYWORD1>parray</KEYWORD1>
+			<KEYWORD1>tcl_endOfWord</KEYWORD1>
+			<KEYWORD1>tcl_findLibrary</KEYWORD1>
+			<KEYWORD1>tcl_startOfNextWord</KEYWORD1>
+			<KEYWORD1>tcl_startOfPreviousWord</KEYWORD1>
+			<KEYWORD1>tcl_wordBreakAfter</KEYWORD1>
+			<KEYWORD1>tcl_wordBreakBefore</KEYWORD1>
+
+			<!-- Tk keywords -->
 			<KEYWORD2>bind</KEYWORD2>
 			<KEYWORD2>button</KEYWORD2>
 			<KEYWORD2>canvas</KEYWORD2>
@@ -162,7 +293,54 @@
 			<KEYWORD2>update</KEYWORD2>
 			<KEYWORD2>winfo</KEYWORD2>
 			<KEYWORD2>wm</KEYWORD2>
-			
+
+			<!-- Expect keywords. Using KEYWORD2 as send is already one -->
+			<!-- KEYWORD2 close -->
+			<KEYWORD2>debug</KEYWORD2>
+			<KEYWORD2>disconnect</KEYWORD2>
+			<!-- KEYWORD2 exit -->
+			<KEYWORD2>exp_continue</KEYWORD2>
+			<KEYWORD2>exp_internal</KEYWORD2>
+			<KEYWORD2>exp_open</KEYWORD2>
+			<KEYWORD2>exp_pid</KEYWORD2>
+			<KEYWORD2>exp_version</KEYWORD2>
+			<KEYWORD2>expect</KEYWORD2>
+			<KEYWORD2>expect_after</KEYWORD2>
+			<KEYWORD2>expect_background</KEYWORD2>
+			<KEYWORD2>expect_before</KEYWORD2>
+			<KEYWORD2>expect_tty</KEYWORD2>
+			<KEYWORD2>expect_user</KEYWORD2>
+			<KEYWORD2>fork</KEYWORD2>
+			<KEYWORD2>inter_return</KEYWORD2>
+			<KEYWORD2>interact</KEYWORD2>
+			<KEYWORD2>interpreter</KEYWORD2>
+			<KEYWORD2>log_file</KEYWORD2>
+			<KEYWORD2>log_user</KEYWORD2>
+			<KEYWORD2>match_max</KEYWORD2>
+			<KEYWORD2>overlay</KEYWORD2>
+			<KEYWORD2>parity</KEYWORD2>
+			<KEYWORD2>promptl</KEYWORD2>
+			<KEYWORD2>prompt2</KEYWORD2>
+			<KEYWORD2>remove_nulls</KEYWORD2>
+			<!-- KEYWORD2 send -->
+			<KEYWORD2>send_error </KEYWORD2>
+			<KEYWORD2>send_log</KEYWORD2>
+			<KEYWORD2>send_tty</KEYWORD2>
+			<KEYWORD2>send_user</KEYWORD2>
+			<KEYWORD2>sleep</KEYWORD2>
+			<KEYWORD2>spawn</KEYWORD2>
+			<KEYWORD2>strace</KEYWORD2>
+			<KEYWORD2>stty</KEYWORD2>
+			<KEYWORD2>system</KEYWORD2>
+			<KEYWORD2>timestamp</KEYWORD2>
+			<KEYWORD2>trap</KEYWORD2>
+			<KEYWORD2>wait</KEYWORD2>
+			<!-- Arguments to expect commands-->
+			<KEYWORD3>full_buffer</KEYWORD3>
+			<KEYWORD3>timeout</KEYWORD3>
+			<!-- KEYWORD3 eof-->
+
+			<!-- Escaped characters (Do work, but only if isolated)-->
 			<KEYWORD3>\a</KEYWORD3>
 			<KEYWORD3>\b</KEYWORD3>
 			<KEYWORD3>\f</KEYWORD3>
@@ -172,12 +350,34 @@
 			<KEYWORD3>\v</KEYWORD3>
 			<KEYWORD3>\x</KEYWORD3>
 			<KEYWORD3>\</KEYWORD3>
-			<KEYWORD3>$argv0</KEYWORD3>
-			<KEYWORD3>$argv</KEYWORD3>
-			<KEYWORD3>$argc</KEYWORD3>
-			<KEYWORD3>$tk_version</KEYWORD3>
-			<KEYWORD3>$tk_library</KEYWORD3>
-			<KEYWORD3>$tk_strictMotif</KEYWORD3>
+
+			<!-- Global variables-->
+			<KEYWORD3>argv0</KEYWORD3>
+			<KEYWORD3>argv</KEYWORD3>
+			<KEYWORD3>argc</KEYWORD3>
+			<KEYWORD3>tk_version</KEYWORD3>
+			<KEYWORD3>tk_library</KEYWORD3>
+			<KEYWORD3>tk_strictMotif</KEYWORD3>
+			<!-- New global variables up to tcl 8.4.14 -->
+			<KEYWORD3>env</KEYWORD3>
+			<KEYWORD3>errorCode</KEYWORD3>
+			<KEYWORD3>errorInfo</KEYWORD3>
+			<KEYWORD3>geometry</KEYWORD3>
+			<KEYWORD3>tcl_library</KEYWORD3>
+			<KEYWORD3>tcl_patchLevel</KEYWORD3>
+			<KEYWORD3>tcl_pkgPath</KEYWORD3>
+			<KEYWORD3>tcl_platform</KEYWORD3>
+			<KEYWORD3>tcl_precision</KEYWORD3>
+			<KEYWORD3>tcl_rcFileName</KEYWORD3>
+			<KEYWORD3>tcl_rcRsrcName</KEYWORD3>
+			<KEYWORD3>tcl_traceCompile</KEYWORD3>
+			<KEYWORD3>tcl_traceExec</KEYWORD3>
+			<KEYWORD3>tcl_wordchars</KEYWORD3>
+			<KEYWORD3>tcl_nonwordchars</KEYWORD3>
+			<KEYWORD3>tcl_version</KEYWORD3>
+			<KEYWORD3>tcl_interactive</KEYWORD3>
+
+			<!-- Common arguments to tcl and Tk keywords -->
 			<KEYWORD3>exact</KEYWORD3>
 			<KEYWORD3>all</KEYWORD3>
 			<KEYWORD3>indices</KEYWORD3>
@@ -451,6 +651,84 @@
 			<KEYWORD3>MenuSelect</KEYWORD3>
 			<KEYWORD3>Triple</KEYWORD3>
 			<KEYWORD3>all</KEYWORD3>
+
+			<!-- Test available colours -->
+			<NULL     >tcNull</NULL>
+			<COMMENT1 >tcComment1</COMMENT1>
+			<COMMENT2 >tcComment2</COMMENT2>
+			<COMMENT3 >tcComment3</COMMENT3>
+			<COMMENT4 >tcComment4</COMMENT4>
+			<DIGIT    >tcDigit</DIGIT>
+			<FUNCTION >tcFunction</FUNCTION>
+			<INVALID  >tcInvalid</INVALID>
+			<KEYWORD1 >tcKeyword1</KEYWORD1>
+			<KEYWORD2 >tcKeyword2</KEYWORD2>
+			<KEYWORD3 >tcKeyword3</KEYWORD3>
+			<KEYWORD4 >tcKeyword4</KEYWORD4>
+			<LABEL    >tcLabel</LABEL>
+			<LITERAL1 >tcLiteral1</LITERAL1>
+			<LITERAL2 >tcLiteral2</LITERAL2>
+			<LITERAL3 >tcLiteral3</LITERAL3>
+			<LITERAL4 >tcLiteral4</LITERAL4>
+			<MARKUP   >tcMarkup</MARKUP>
+			<OPERATOR >tcOperator</OPERATOR>
+		</KEYWORDS>
+	</RULES>
+
+	<RULES SET="TCL_COMMENT" DEFAULT="OPERATOR">
+		<!-- Allows catching blocks starting with a comment.
+		    or comments following a ; -->
+		<SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="#" DELEGATE="MAIN">#.*</SEQ_REGEXP>
+	</RULES>
+
+	<RULES SET="TCL_STRING" DEFAULT="LITERAL1">
+		<PROPS>
+			<PROPERTY NAME="indentOpenBrackets" VALUE="" />
+			<PROPERTY NAME="indentCloseBrackets" VALUE="" />
+		</PROPS>
+
+		<!-- Continuation line. Processed before anything else by Tcl. (Does not work)-->
+		<EOL_SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR="\">\\$</EOL_SPAN_REGEXP>
+
+		<!-- Avoid colouring variables substituted inside strings -->
+		<SPAN_REGEXP TYPE="NULL" HASH_CHAR="$" DELEGATE="MAIN">
+			<BEGIN>\$([[:alnum:]_]|::)+\(</BEGIN>
+			<END>)</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP TYPE="NULL" HASH_CHAR="$" DELEGATE="MAIN">
+			<BEGIN>\${</BEGIN>
+			<END>}</END>
+		</SPAN_REGEXP>
+		<SEQ_REGEXP TYPE="NULL" HASH_CHAR="$">\$([[:alnum:]_]|::)+</SEQ_REGEXP>
+
+		<!-- Sub-commands to be substituted -->
+		<SPAN TYPE="OPERATOR" NO_LINE_BREAK="FALSE" DELEGATE="MAIN">
+			<BEGIN>[</BEGIN>
+			<END>]</END>
+		</SPAN>
+
+		<!-- Escaped characters (Don't work; Would need NO_ESCAPE="TRUE"?)-->
+		<SEQ TYPE="KEYWORD3">\a</SEQ>
+		<SEQ TYPE="KEYWORD3">\b</SEQ>
+		<SEQ TYPE="KEYWORD3">\f</SEQ>
+		<SEQ TYPE="KEYWORD3">\n</SEQ>
+		<SEQ TYPE="KEYWORD3">\r</SEQ>
+		<SEQ TYPE="KEYWORD3">\t</SEQ>
+		<SEQ TYPE="KEYWORD3">\v</SEQ>
+		<SEQ TYPE="KEYWORD3">\</SEQ>
+
+		<KEYWORDS>
+			<!-- Escaped characters (Do work, but only if isolated)-->
+			<KEYWORD3>\a</KEYWORD3>
+			<KEYWORD3>\b</KEYWORD3>
+			<KEYWORD3>\f</KEYWORD3>
+			<KEYWORD3>\n</KEYWORD3>
+			<KEYWORD3>\r</KEYWORD3>
+			<KEYWORD3>\t</KEYWORD3>
+			<KEYWORD3>\v</KEYWORD3>
+			<KEYWORD3>\</KEYWORD3>
 		</KEYWORDS>
 	</RULES>
 </MODE>
+
+ 	  	 

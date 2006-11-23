@@ -10,7 +10,7 @@
   <filename>.xml</filename>. XML is a very simple language, and as a result
   edit modes are easy to create and modify. This section will
   start with a short XML primer, followed by detailed information about
-  each supported tag and highlighting rule.
+  each supported tag and highlighting rule. 
  </para>
  <para>
   Editing a mode or a mode catalog file within jEdit will cause the

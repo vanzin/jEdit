@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre9
 
 Thanks to Björn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
-and Marcelo Vanzin for contributing to this release.
+Jean-Francois Larvoire, and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -59,6 +59,8 @@ and Marcelo Vanzin for contributing to this release.
 {{{ Editing
 
 - New edit mode: quake.xml
+
+- Updated TCL edit mode (Jean-Francois Larvoire)
 
 - Fixed some invalid mode files (Björn "Vampire" Kautler)
 
