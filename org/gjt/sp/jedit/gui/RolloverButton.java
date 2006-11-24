@@ -41,6 +41,7 @@ import org.gjt.sp.jedit.OperatingSystem;
  *
  * Note: You should not call <code>setBorder()</code> on your buttons,
  * as they probably won't work properly.
+ * @version $Id$
  */
 public class RolloverButton extends JButton
 {
@@ -50,8 +51,7 @@ public class RolloverButton extends JButton
 	 */
 	public RolloverButton()
 	{
-		if(OperatingSystem.hasJava15())
-			setContentAreaFilled(false);
+		setContentAreaFilled(false);
 
 		addMouseListener(new MouseOverHandler());
 	} //}}}
@@ -59,6 +59,8 @@ public class RolloverButton extends JButton
 	//{{{ RolloverButton constructor
 	/**
 	 * Setup the border (invisible initially)
+	 *
+	 * @param icon the icon of this button
 	 */
 	public RolloverButton(Icon icon)
 	{
@@ -138,7 +140,7 @@ public class RolloverButton extends JButton
 	} //}}}
 
 	//{{{ Private members
-	private static AlphaComposite c = AlphaComposite.getInstance(
+	private static final AlphaComposite c = AlphaComposite.getInstance(
 		AlphaComposite.SRC_OVER, 0.5f);
 
 	private boolean revalidateBlocked;
