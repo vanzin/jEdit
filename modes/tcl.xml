@@ -50,7 +50,7 @@
 		<EOL_SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR=";" DELEGATE="TCL_COMMENT">;\s*(?=#)</EOL_SPAN_REGEXP>
 		<!-- Comments at the { opening of a block -->
 		<SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR="{" DELEGATE="TCL_COMMENT">
-			<BEGIN>{\s*(?=#)</BEGIN>
+			<BEGIN>\{\s*(?=#)</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
 		<!-- Comments on a line of their own. -->
@@ -696,7 +696,7 @@
 			<END>)</END>
 		</SPAN_REGEXP>
 		<SPAN_REGEXP TYPE="NULL" HASH_CHAR="$" DELEGATE="MAIN">
-			<BEGIN>\${</BEGIN>
+			<BEGIN>\$\{</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
 		<SEQ_REGEXP TYPE="NULL" HASH_CHAR="$">\$(\w|::)+</SEQ_REGEXP>
