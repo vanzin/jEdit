@@ -27,6 +27,7 @@ import org.gjt.sp.util.Log;
 
 /**
  * The splash screen displayed on startup.
+ * @version $Id$
  */
 public class SplashScreen extends JComponent
 {
@@ -63,24 +64,12 @@ public class SplashScreen extends JComponent
 			image.getHeight(this) + 2 + PROGRESS_HEIGHT);
 		win.setSize(size);
 
-		win.getContentPane().add(BorderLayout.CENTER,this);
+		win.getContentPane().add(this, BorderLayout.CENTER);
 
 		win.setLocation((screen.width - size.width) / 2,
 			(screen.height - size.height) / 2);
 		win.validate();
 		win.setVisible(true);
-
-		/*synchronized(this)
-		{
-			try
-			{
-				wait();
-			}
-			catch(InterruptedException ie)
-			{
-				Log.log(Log.ERROR,this,ie);
-			}
-		}*/
 	}
 
 	public void dispose()
@@ -90,6 +79,7 @@ public class SplashScreen extends JComponent
 
 	public synchronized void advance()
 	{
+		logAdvanceTime(null);
 		progress++;
 		repaint();
 
@@ -105,6 +95,41 @@ public class SplashScreen extends JComponent
 		}
 	}
 
+	public synchronized void advance(String label)
+	{
+		logAdvanceTime(label);
+		progress++;
+		this.label = label;
+		repaint();
+
+		// wait for it to be painted to ensure progress is updated
+		// continuously
+		try
+		{
+			wait();
+		}
+		catch(InterruptedException ie)
+		{
+			Log.log(Log.ERROR,this,ie);
+		}
+	}
+
+	private void logAdvanceTime(String label)
+	{
+		long currentTime = System.currentTimeMillis();
+		if (lastLabel != null)
+		{
+			Log.log(Log.DEBUG, SplashScreen.class, lastLabel +':'+(currentTime - lastAdvanceTime) + "ms");
+		}
+		if (label != null)
+		{
+			lastLabel = label;
+			lastAdvanceTime = currentTime;
+
+		}
+
+	}
+
 	public synchronized void paintComponent(Graphics g)
 	{
 		Dimension size = getSize();
@@ -117,24 +142,34 @@ public class SplashScreen extends JComponent
 		// XXX: This should not be hardcoded
 		g.setColor(Color.white);
 		g.fillRect(1,image.getHeight(this) + 1,
-			((win.getWidth() - 2) * progress) / 5,PROGRESS_HEIGHT);
+			((win.getWidth() - 2) * progress) / PROGRESS_COUNT, PROGRESS_HEIGHT);
 
 		g.setColor(Color.black);
 
-		String str = "VERSION " + jEdit.getVersion();
+		if (label != null)
+		{
+			g.drawString(label,
+				     (getWidth() - fm.stringWidth(label)) / 2,
+				     image.getHeight(this) + (PROGRESS_HEIGHT
+							      + fm.getAscent() + fm.getDescent()) / 2);
+		}
 
-		g.drawString(str,
-			(getWidth() - fm.stringWidth(str)) / 2,
-			image.getHeight(this) + (PROGRESS_HEIGHT
-			+ fm.getAscent() + fm.getDescent()) / 2);
 
+		String version = jEdit.getVersion();
+		g.drawString(version,
+			getWidth() - fm.stringWidth(version) - 2,
+			image.getHeight(this) - fm.getDescent());
 		notify();
 	}
 
 	// private members
-	private FontMetrics fm;
-	private JWindow win;
-	private Image image;
+	private final FontMetrics fm;
+	private final JWindow win;
+	private final Image image;
 	private int progress;
 	private static final int PROGRESS_HEIGHT = 20;
+	private static final int PROGRESS_COUNT = 28;
+	private String label;
+	private String lastLabel;
+	private long lastAdvanceTime = System.currentTimeMillis();
 }

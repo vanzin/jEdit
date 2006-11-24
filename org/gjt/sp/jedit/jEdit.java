@@ -362,17 +362,21 @@ public class jEdit
 			+ settingsDirectory);
 
 		//{{{ Get things rolling
+		GUIUtilities.advanceSplashProgress("init");
 		initMisc();
+		GUIUtilities.advanceSplashProgress("init system properties");
 		initSystemProperties();
 
-		GUIUtilities.advanceSplashProgress();
-
+		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
+		GUIUtilities.advanceSplashProgress("init beanshell");
 		BeanShell.init();
 
+		GUIUtilities.advanceSplashProgress("loading site properties");
 		if(jEditHome != null)
 			initSiteProperties();
 
+		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
 		Options.SIMPLIFIED_KEY_HANDLING	= jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
@@ -380,12 +384,14 @@ public class jEdit
 		//{{{ Initialize server
 		if(portFile != null)
 		{
+			GUIUtilities.advanceSplashProgress("init server");
 			server = new EditServer(portFile);
 			if(!server.isOK())
 				server = null;
 		}
 		else
 		{
+			GUIUtilities.advanceSplashProgress();
 			if(background)
 			{
 				background = false;
@@ -395,27 +401,38 @@ public class jEdit
 		} //}}}
 
 		//{{{ Do more stuff
+		GUIUtilities.advanceSplashProgress("init look and feel");
 		initPLAF();
-
+		GUIUtilities.advanceSplashProgress("init VFS Manager");
 		VFSManager.init();
+		GUIUtilities.advanceSplashProgress("init resources");
 		initResources();
 		SearchAndReplace.load();
 
-		GUIUtilities.advanceSplashProgress();
+
 
 		if(loadPlugins)
+		{
+			GUIUtilities.advanceSplashProgress("init plugins");
 			initPlugins();
+		}
+		else
+			GUIUtilities.advanceSplashProgress();
 
 		Registers.setSaver(new JEditRegisterSaver());
 		Registers.setListener(new JEditRegistersListener());
+		GUIUtilities.advanceSplashProgress("init history model");
 		HistoryModel.setSaver(new JEditHistoryModelSaver());
 		HistoryModel.loadHistory();
+		GUIUtilities.advanceSplashProgress("init buffer history");
 		BufferHistory.load();
+		GUIUtilities.advanceSplashProgress("init killring");
 		KillRing.setInstance(new JEditKillRing());
 		KillRing.getInstance().load();
+		GUIUtilities.advanceSplashProgress("init various properties");
 		propertiesChanged();
 
-		GUIUtilities.advanceSplashProgress();
+		GUIUtilities.advanceSplashProgress("init modes");
 
 		// Buffer sort
 		sortBuffers = getBooleanProperty("sortBuffers");
@@ -423,7 +440,7 @@ public class jEdit
 
 		reloadModes();
 
-		GUIUtilities.advanceSplashProgress();
+		GUIUtilities.advanceSplashProgress("activate plugins");
 		//}}}
 
 		//{{{ Activate plugins that must be activated at startup
@@ -433,6 +450,7 @@ public class jEdit
 		} //}}}
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
+		GUIUtilities.advanceSplashProgress("init macros");
 		Macros.loadMacros();
 		Macros.getMacroActionSet().initKeyBindings();
 
@@ -441,22 +459,39 @@ public class jEdit
 			String path = MiscUtilities.constructPath(jEditHome,"startup");
 			File file = new File(path);
 			if(file.exists())
+			{
 				runStartupScripts(file);
+			}
+			else
+				GUIUtilities.advanceSplashProgress();
 		}
+		else
+			GUIUtilities.advanceSplashProgress("run startup scripts");
 
 		if(runStartupScripts && settingsDirectory != null)
 		{
 			String path = MiscUtilities.constructPath(settingsDirectory,"startup");
 			File file = new File(path);
-			if(!file.exists())
-				file.mkdirs();
-			else
+			if (file.exists())
+			{
+				GUIUtilities.advanceSplashProgress("run startup scripts");
 				runStartupScripts(file);
+			}
+			else
+			{
+				GUIUtilities.advanceSplashProgress();
+				file.mkdirs();
+			}
+		}
+		else
+		{
+			GUIUtilities.advanceSplashProgress();
 		} //}}}
 
 		//{{{ Run script specified with -run= parameter
 		if(scriptFile != null)
 		{
+			GUIUtilities.advanceSplashProgress("run script file");
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
 			try
 			{
@@ -467,7 +502,12 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
 			BeanShell.runScript(null,scriptFile,null,false);
-		} //}}}
+		}
+		else
+		{
+			GUIUtilities.advanceSplashProgress();
+		}
+		//}}}
 
 		GUIUtilities.advanceSplashProgress();
 

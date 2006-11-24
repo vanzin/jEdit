@@ -30,7 +30,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -48,6 +47,7 @@ import java.net.URL;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import java.util.Map;
 
 import javax.swing.*;
 
@@ -142,10 +142,10 @@ public class GUIUtilities
 	public static Icon loadIcon(String iconName)
 	{
 		if(icons == null)
-			icons = new Hashtable();
+			icons = new Hashtable<String, Icon>();
 
 		// check if there is a cached version first
-		Icon icon = (Icon)icons.get(iconName);
+		Icon icon = icons.get(iconName);
 		if(icon != null)
 			return icon;
 
@@ -356,7 +356,7 @@ public class GUIUtilities
 	public static JMenuItem loadMenuItem(ActionContext context, String name,
 		boolean setMnemonic)
 	{
-		if(name.startsWith("%"))
+		if(name.charAt(0) == '%')
 			return loadMenu(context,name.substring(1));
 
 		String label = jEdit.getProperty(name + ".label");
@@ -524,7 +524,7 @@ public class GUIUtilities
 				? " or " : "")
 				+ (shortcut2 != null
 				? shortcut2
-				: "") + ")";
+				: "") + ')';
 		}
 
 		return new EnhancedButton(icon,toolTip,name,context);
@@ -792,7 +792,7 @@ public class GUIUtilities
 	{
 		if(name == null)
 			return defaultColor;
-		else if(name.startsWith("#"))
+		else if(name.charAt(0) == '#')
 		{
 			try
 			{
@@ -922,26 +922,26 @@ public class GUIUtilities
 	 */
 	public static String getStyleString(SyntaxStyle style)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
-		if(style.getForegroundColor() != null)
+		if (style.getForegroundColor() != null)
 		{
 			buf.append("color:").append(getColorHexString(style.getForegroundColor()));
 		}
 
-		if(style.getBackgroundColor() != null)
+		if (style.getBackgroundColor() != null)
 		{
 			buf.append(" bgColor:").append(getColorHexString(style.getBackgroundColor()));
 		}
 
-        Font font = style.getFont();
-        if(!font.isPlain())
+		Font font = style.getFont();
+		if (!font.isPlain())
 		{
-            buf.append(" style:");
-            if (font.isItalic())
-                buf.append('i');
-            if (font.isBold())
-                buf.append('b');
+			buf.append(" style:");
+			if (font.isItalic())
+				buf.append('i');
+			if (font.isBold())
+				buf.append('b');
 		}
 
 		return buf.toString();
@@ -1142,7 +1142,7 @@ public class GUIUtilities
 			//{{{ componentMoved() method
 			public void componentMoved(ComponentEvent evt)
 			{
-				if(System.currentTimeMillis() - start < 1000)
+				if(System.currentTimeMillis() - start < 1000L)
 				{
 					Rectangle r = win.getBounds();
 					if(!windowOpened && r.equals(required))
@@ -1162,7 +1162,7 @@ public class GUIUtilities
 			//{{{ componentResized() method
 			public void componentResized(ComponentEvent evt)
 			{
-				if(System.currentTimeMillis() - start < 1000)
+				if(System.currentTimeMillis() - start < 1000L)
 				{
 					Rectangle r = win.getBounds();
 					if(!windowOpened && r.equals(required))
@@ -1307,7 +1307,7 @@ public class GUIUtilities
 		JPanel panel = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,1,1,1));
 		int lastOffset = 0;
-		for(;;)
+		while(true)
 		{
 			int index = str.indexOf('\n',lastOffset);
 			if(index == -1)
@@ -1533,7 +1533,7 @@ public class GUIUtilities
 	 */
 	public static Component getComponentParent(Component comp, Class clazz)
 	{
-		for(;;)
+		while(true)
 		{
 			if(comp == null)
 				break;
@@ -1629,11 +1629,18 @@ public class GUIUtilities
 			splash.advance();
 	} //}}}
 
+	//{{{ advanceSplashProgress() method
+	static void advanceSplashProgress(String label)
+	{
+		if(splash != null)
+			splash.advance(label);
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
 	private static SplashScreen splash;
-	private static Hashtable icons;
+	private static Map<String, Icon> icons;
 	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
 	private static String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
 
@@ -1658,17 +1665,20 @@ public class GUIUtilities
 		private Container parent;
 		private String name;
 		
+		//{{{ SizeSaver constructor
 		/**
 		 * Constructs a new SizeSaver.
 		 * 
 		 * @param frame The Frame for which to save the size
 		 * @param name The prefix for the settings
 		 */
-		public SizeSaver(Frame frame, String name) {
+		public SizeSaver(Frame frame, String name)
+		{
 			this.frame = frame;
 			this.parent = frame.getParent();
-		}
+		} //}}}
 		
+		//{{{ SizeSaver constructor
 		/**
 		 * Constructs a new SizeSaver.
 		 * 
@@ -1685,13 +1695,20 @@ public class GUIUtilities
 			this.frame = frame;
 			this.parent = parent;
 			this.name = name;
-		}
+		} //}}}
 
+		//{{{ windowStateChanged() method
 		public void windowStateChanged(WindowEvent wse)
 		{
 			int extendedState = wse.getNewState();
 			jEdit.setIntegerProperty(name + ".extendedState",extendedState);
 			Rectangle bounds = frame.getBounds();
+			save(extendedState, bounds);
+		} //}}}
+
+		//{{{ save() method 
+		private void save(int extendedState, Rectangle bounds)
+		{
 			switch (extendedState)
 			{
 				case Frame.MAXIMIZED_VERT:
@@ -1708,13 +1725,15 @@ public class GUIUtilities
 					saveGeometry(frame,parent,name );
 					break;
 			}
-		}
+		} //}}}
 
+		//{{{ componentResized() method
 		public void componentResized(ComponentEvent ce)
 		{
 			componentMoved(ce);
-		}
+		} //}}}
 
+		//{{{ componentMoved() method
 		public void componentMoved(ComponentEvent ce)
 		{
 			final Rectangle bounds = frame.getBounds();
@@ -1722,21 +1741,8 @@ public class GUIUtilities
 			{
 				public void run()
 				{
-					switch (frame.getExtendedState())	{
-						case Frame.MAXIMIZED_VERT:
-							jEdit.setIntegerProperty(name + ".x",bounds.x);
-							jEdit.setIntegerProperty(name + ".width",bounds.width);
-							break;
-
-						case Frame.MAXIMIZED_HORIZ:
-							jEdit.setIntegerProperty(name + ".y",bounds.y);
-							jEdit.setIntegerProperty(name + ".height",bounds.height);
-							break;
-
-						case Frame.NORMAL:
-							saveGeometry(frame,parent,name);
-							break;
-						}
+					int extendedState = frame.getExtendedState();
+					save(extendedState, bounds);
 				}
 			};
 			new Thread("Sizesavingdelay")
@@ -1745,7 +1751,7 @@ public class GUIUtilities
 				{
 					try
 					{
-						Thread.sleep(500);
+						Thread.sleep(500L);
 					}
 					catch (InterruptedException ie)
 					{
@@ -1753,7 +1759,7 @@ public class GUIUtilities
 					SwingUtilities.invokeLater(sizeSaver);
 				}
 			}.start();
-		}
+		} //}}}
 	} //}}}
 
 	//}}}

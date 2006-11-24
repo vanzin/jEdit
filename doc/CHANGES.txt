@@ -91,6 +91,8 @@ Jean-Francois Larvoire, and Marcelo Vanzin for contributing to this release.
 - Fixed some wrong documentation and added some new
   about HASH_CHAR and HASH_CHARS (Björn "Vampire" Kautler)
 
+- SplashScreen change : more step added for progress bar and it tells now
+  what jEdit is doing (Matthieu Casanova)
 }}}
 {{{ API Changes
 
