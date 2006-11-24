@@ -1706,6 +1706,12 @@ public class jEdit
 			else if(result != JOptionPane.NO_OPTION)
 				return false;
 		}
+		else
+		{
+			// if the buffer is untitled, not dirty and alone, no need to close it
+			if (buffer.isUntitled() && bufferCount == 1)
+				return false;
+		}
 
 		_closeBuffer(view,buffer);
 
