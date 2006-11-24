@@ -53,6 +53,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
 /**
@@ -1279,7 +1280,7 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector<Mode>(50);
+		modes = new Vector<Mode>(160);
 
 		//{{{ Load the global catalog
 		if(jEditHome == null)
@@ -1308,7 +1309,6 @@ public class jEdit
 				{
 					out = new FileWriter(userCatalog);
 					out.write(jEdit.getProperty("defaultCatalog"));
-					out.close();
 				}
 				catch(IOException io)
 				{
@@ -1316,14 +1316,7 @@ public class jEdit
 				}
 				finally
 				{
-					try
-					{
-						if(out != null)
-							out.close();
-					}
-					catch(IOException e)
-					{
-					}
+					IOUtilities.closeQuietly(out);
 				}
 			}
 
@@ -2742,15 +2735,7 @@ public class jEdit
 		}
 		finally
 		{
-			try
-			{
-				if(grammar != null)
-					grammar.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,jEdit.class,io);
-			}
+			IOUtilities.closeQuietly(grammar);
 		}
 	} //}}}
 
