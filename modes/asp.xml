@@ -11,10 +11,10 @@
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE">
-		<SEQ TYPE="MARKUP" DELEGATE="ASPVB">&lt;%@LANGUAGE="VBSCRIPT"%&gt;</SEQ>
-		<SEQ TYPE="MARKUP" DELEGATE="ASPJS">&lt;%@LANGUAGE="JSCRIPT"%&gt;</SEQ>
-		<SEQ TYPE="MARKUP" DELEGATE="ASPJS">&lt;%@LANGUAGE="JAVASCRIPT"%&gt;</SEQ>
-		<SEQ TYPE="MARKUP" DELEGATE="ASPPL">&lt;%@LANGUAGE="PERLSCRIPT"%&gt;</SEQ>
+		<SEQ TYPE="MARKUP" DELEGATE="ASPVB">&lt;%@LANGUAGE="VBSCRIPT"%</SEQ>
+		<SEQ TYPE="MARKUP" DELEGATE="ASPJS">&lt;%@LANGUAGE="JSCRIPT"%</SEQ>
+		<SEQ TYPE="MARKUP" DELEGATE="ASPJS">&lt;%@LANGUAGE="JAVASCRIPT"%</SEQ>
+		<SEQ TYPE="MARKUP" DELEGATE="ASPPL">&lt;%@LANGUAGE="PERLSCRIPT"%</SEQ>
 
 		<!-- Inlined server-side VBScript -->
 		<SPAN TYPE="MARKUP" DELEGATE="vbscript::MAIN">
@@ -127,12 +127,12 @@
 
 		<!-- Client-side javascript -->
 		<SPAN TYPE="MARKUP" DELEGATE="ASPVB_CSJS">
-			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
+			<BEGIN>&lt;script language="jscript"</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<SPAN TYPE="MARKUP" DELEGATE="ASPVB_CSJS">
-			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
+			<BEGIN>&lt;script language="javascript"</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
@@ -212,12 +212,12 @@
 
 		<!-- Client-side javascript -->
 		<SPAN TYPE="MARKUP" DELEGATE="ASPJS_CSJS">
-			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
+			<BEGIN>&lt;script language="jscript"</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<SPAN TYPE="MARKUP" DELEGATE="ASPJS_CSJS">
-			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
+			<BEGIN>&lt;script language="javascript"</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
@@ -285,7 +285,7 @@
 		</SPAN>
 
 		<SPAN TYPE="MARKUP" DELEGATE="javascript::MAIN">
-			<BEGIN>&lt;script language="javascript" runat="server"&gt;</BEGIN>
+			<BEGIN>&lt;script language="javascript" runat="server"</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
@@ -297,12 +297,12 @@
 
 		<!-- Client-side javascript -->
 		<SPAN TYPE="MARKUP" DELEGATE="ASPPL_CSJS">
-			<BEGIN>&lt;script language="jscript"&gt;</BEGIN>
+			<BEGIN>&lt;script language="jscript"</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
 		<SPAN TYPE="MARKUP" DELEGATE="ASPPL_CSJS">
-			<BEGIN>&lt;script language="javascript"&gt;</BEGIN>
+			<BEGIN>&lt;script language="javascript"</BEGIN>
 			<END>&lt;/script&gt;</END>
 		</SPAN>
 
