@@ -91,6 +91,9 @@ public class BufferAutosaveRequest extends BufferIORequest
 		}
 		catch(WorkThread.Abort a)
 		{
+		}
+		finally
+		{
 			IOUtilities.closeQuietly(out);
 		}
 	} //}}}

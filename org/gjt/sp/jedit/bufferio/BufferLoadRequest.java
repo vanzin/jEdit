@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
+import java.nio.charset.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -55,10 +56,9 @@ public class BufferLoadRequest extends BufferIORequest
 	//{{{ run() method
 	public void run()
 	{
-		InputStream in = null;
-
 		try
 		{
+			InputStream contents = null;
 			try
 			{
 				String[] args = { vfs.getFileName(path) };
@@ -79,31 +79,32 @@ public class BufferLoadRequest extends BufferIORequest
 				else
 					length = 0L;
 
-				in = vfs._createInputStream(session,path,
+				contents = vfs._createInputStream(session,path,
 					false,view);
-				if(in == null)
+				if(contents == null)
+				{
+					buffer.setBooleanProperty(ERROR_OCCURRED,true);
 					return;
+				}
 
-				read(autodetect(in),length,false);
+				read(autodetect(contents),length,false);
 				buffer.setNewFile(false);
 			}
-			catch(CharConversionException ch)
+			catch(CharConversionException e)
 			{
-				Log.log(Log.ERROR,this,ch);
-				Object[] pp = { buffer.getProperty(JEditBuffer.ENCODING),
-					ch.toString() };
-				VFSManager.error(view,path,"ioerror.encoding-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+				handleEncodingError(e);
 			}
-			catch(UnsupportedEncodingException uu)
+			catch(CharacterCodingException e)
 			{
-				Log.log(Log.ERROR,this,uu);
-				Object[] pp = { buffer.getProperty(JEditBuffer.ENCODING),
-					uu.toString() };
-				VFSManager.error(view,path,"ioerror.encoding-error",pp);
-
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+				handleEncodingError(e);
+			}
+			catch(UnsupportedEncodingException e)
+			{
+				handleEncodingError(e);
+			}
+			catch(UnsupportedCharsetException e)
+			{
+				handleEncodingError(e);
 			}
 			catch(IOException io)
 			{
@@ -120,9 +121,14 @@ public class BufferLoadRequest extends BufferIORequest
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
+			finally
+			{
+				IOUtilities.closeQuietly(contents);
+			}
 
 			if(jEdit.getBooleanProperty("persistentMarkers"))
 			{
+				InputStream markers = null;
 				try
 				{
 					String[] args = { vfs.getFileName(path) };
@@ -130,19 +136,22 @@ public class BufferLoadRequest extends BufferIORequest
 						setStatus(jEdit.getProperty("vfs.status.load-markers",args));
 					setAbortable(true);
 
-					in = vfs._createInputStream(session,markersPath,true,view);
-					if(in != null)
-						readMarkers(buffer,in);
+					markers = vfs._createInputStream(session,markersPath,true,view);
+					if(markers != null)
+						readMarkers(buffer,markers);
 				}
 				catch(IOException io)
 				{
 					// ignore
 				}
+				finally
+				{
+					IOUtilities.closeQuietly(markers);
+				}
 			}
 		}
 		catch(WorkThread.Abort a)
 		{
-			IOUtilities.closeQuietly(in);
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
@@ -164,6 +173,17 @@ public class BufferLoadRequest extends BufferIORequest
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
+	} //}}}
+
+	//{{{ handleEncodingError() method
+	private void handleEncodingError(Exception e)
+	{
+		Log.log(Log.ERROR,this,e);
+		Object[] pp = { buffer.getProperty(JEditBuffer.ENCODING),
+			e.toString() };
+		VFSManager.error(view,path,"ioerror.encoding-error",pp);
+
+		buffer.setBooleanProperty(ERROR_OCCURRED,true);
 	} //}}}
 
 	//{{{ readMarkers() method

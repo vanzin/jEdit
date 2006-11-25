@@ -39,9 +39,9 @@ public class OptionGroup
 {
 	
 	// {{{ data members
-	private final String name;
-	private final String label;
-	private final Vector members;
+	protected final String name;
+	protected final String label;
+	protected final Vector members;
 	private boolean sort;
 	// }}}
 	

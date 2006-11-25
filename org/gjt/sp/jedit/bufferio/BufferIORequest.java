@@ -25,6 +25,9 @@ package org.gjt.sp.jedit.bufferio;
 //{{{ Imports
 import javax.swing.text.Segment;
 import java.io.*;
+import java.nio.charset.*;
+import java.nio.CharBuffer;
+import java.nio.ByteBuffer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -338,43 +341,56 @@ public abstract class BufferIORequest extends WorkRequest
 	} //}}}
 
 	//{{{ write() method
-	protected void write(Buffer buffer, OutputStream _out)
+	protected void write(Buffer buffer, OutputStream out)
 		throws IOException
 	{
-		BufferedWriter out = null;
-
 		try
 		{
 			String encoding = buffer.getStringProperty(Buffer.ENCODING);
 			if(encoding.equals(MiscUtilities.UTF_8_Y))
 			{
 				// not supported by Java...
-				_out.write(UTF8_MAGIC_1);
-				_out.write(UTF8_MAGIC_2);
-				_out.write(UTF8_MAGIC_3);
-				_out.flush();
+				out.write(UTF8_MAGIC_1);
+				out.write(UTF8_MAGIC_2);
+				out.write(UTF8_MAGIC_3);
+				out.flush();
 				encoding = "UTF-8";
 			}
 			else if (encoding.equals("UTF-16LE"))
 			{
-				_out.write(UNICODE_MAGIC_2);
-				_out.write(UNICODE_MAGIC_1);
-				_out.flush();
+				out.write(UNICODE_MAGIC_2);
+				out.write(UNICODE_MAGIC_1);
+				out.flush();
 			}
 			else if (encoding.equals("UTF-16BE"))
 			{
-				_out.write(UNICODE_MAGIC_1);
-				_out.write(UNICODE_MAGIC_2);
-				_out.flush();
+				out.write(UNICODE_MAGIC_1);
+				out.write(UNICODE_MAGIC_2);
+				out.flush();
 			}
-			out = new BufferedWriter(
-				new OutputStreamWriter(_out,encoding),
-				IOBUFSIZE);
+			CharsetEncoder encoder = Charset.forName(encoding).newEncoder();
 
 			Segment lineSegment = new Segment();
 			String newline = buffer.getStringProperty(Buffer.LINESEP);
 			if(newline == null)
 				newline = System.getProperty("line.separator");
+			// Convert newline to bytes here to not get bothered
+			// with encoding at every newline.
+			ByteBuffer newlineBuffer = encoder.encode(CharBuffer.wrap(newline));
+			byte[] newlineBytes = new byte[newlineBuffer.limit()];
+			newlineBuffer.get(newlineBytes);
+			encoder.reset();
+
+			// This buffer is required to report encoding error
+			// with the line number. Without this, some lines are
+			// buffered in the Writer, and encoded together when
+			// the Writer is flushed.
+			ByteArrayOutputStream lineBuffer = new ByteArrayOutputStream(IOBUFSIZE);
+			// Pass the encoder explicitly to report a encode error
+			// as an exception.
+			// The form "OutputStreamWriter(..., encoding)" seemed
+			// to use CodingErrorAction.REPLACE internally.
+			Writer lineWriter = new OutputStreamWriter(lineBuffer, encoder);
 
 			setMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
 			setValue(0);
@@ -383,12 +399,26 @@ public abstract class BufferIORequest extends WorkRequest
 			while(i < buffer.getLineCount())
 			{
 				buffer.getLineText(i,lineSegment);
-				out.write(lineSegment.array,lineSegment.offset,
-					lineSegment.count);
+				try
+				{
+					lineWriter.write(lineSegment.array,
+						lineSegment.offset,
+						lineSegment.count);
+					lineWriter.flush();
+				}
+				catch(CharacterCodingException e)
+				{
+					String message = "Failed to encode the line " + (i + 1);
+					IOException wrapping = new CharConversionException(message);
+					wrapping.initCause(e);
+					throw wrapping;
+				}
+				lineBuffer.writeTo(out);
+				lineBuffer.reset();
 
 				if(i != buffer.getLineCount() - 1)
 				{
-					out.write(newline);
+					out.write(newlineBytes);
 				}
 
 				if(++i % PROGRESS_INTERVAL == 0)
@@ -398,15 +428,12 @@ public abstract class BufferIORequest extends WorkRequest
 			if(jEdit.getBooleanProperty("stripTrailingEOL")
 				&& buffer.getBooleanProperty(Buffer.TRAILING_EOL))
 			{
-				out.write(newline);
+				out.write(newlineBytes);
 			}
 		}
 		finally
 		{
-			if(out != null)
-				out.close();
-			else
-				_out.close();
+			out.close();
 		}
 	} //}}}
 

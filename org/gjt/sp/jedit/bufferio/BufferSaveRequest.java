@@ -56,8 +56,6 @@ public class BufferSaveRequest extends BufferIORequest
 	//{{{ run() method
 	public void run()
 	{
-		OutputStream out = null;
-
 		boolean vfsRenameCap = (vfs.getCapabilities() &
 			VFS.RENAME_CAP) != 0;
 
@@ -89,36 +87,35 @@ public class BufferSaveRequest extends BufferIORequest
 			if(!MiscUtilities.isURL(path))
 				path = MiscUtilities.resolveSymlinks(path);
 
-
-			// Only backup once per session
-			if(buffer.getProperty(Buffer.BACKED_UP) == null
-				|| jEdit.getBooleanProperty("backupEverySave"))
-			{
-				vfs._backup(session,path,view);
-				buffer.setBooleanProperty(Buffer.BACKED_UP,true);
-			}
-
 			String savePath;
 			if(twoStageSave)
 			{
 				savePath = vfs.getTwoStageSaveName(path);
 				if (savePath == null)
 				{
-					twoStageSave = false;
-					savePath = path;
+					throw new IOException(
+						"Can't get a temporary path for two-stage save: "
+						+ path);
 				}
 			}
 			else
+			{
+				makeBackup();
 				savePath = path;
+			}
 
-			out = vfs._createOutputStream(session,savePath,view);
-
+			OutputStream out = vfs._createOutputStream(session,savePath,view);
+			if(out == null)
+			{
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+				return;
+			}
 			try
 			{
 				// this must be after the stream is created or
 				// we deadlock with SSHTools.
 				buffer.readLock();
-				if(out != null)
+				try
 				{
 					// Can't use buffer.getName() here because
 					// it is not changed until the save is
@@ -141,20 +138,22 @@ public class BufferSaveRequest extends BufferIORequest
 
 					if(twoStageSave)
 					{
+						makeBackup();
 						if(!vfs._rename(session,savePath,path,view))
 							throw new IOException("Rename failed: " + savePath);
 					}
 
+					if(!twoStageSave)
+						VFSManager.sendVFSUpdate(vfs,path,true);
 				}
-				else
-					buffer.setBooleanProperty(ERROR_OCCURRED,true);
-
-				if(!twoStageSave)
-					VFSManager.sendVFSUpdate(vfs,path,true);
+				finally
+				{
+					buffer.readUnlock();
+				}
 			}
 			finally
 			{
-				buffer.readUnlock();
+				IOUtilities.closeQuietly(out);
 			}
 		}
 		catch(IOException io)
@@ -167,7 +166,6 @@ public class BufferSaveRequest extends BufferIORequest
 		}
 		catch(WorkThread.Abort a)
 		{
-			IOUtilities.closeQuietly(out);
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		finally
@@ -196,6 +194,21 @@ public class BufferSaveRequest extends BufferIORequest
 			{
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
+		}
+	} //}}}
+
+	//{{{ makeBackup() method
+	/**
+	 * Make the backup.
+	 */
+	private void makeBackup() throws IOException
+	{
+		// Only backup once per session
+		if(buffer.getProperty(Buffer.BACKED_UP) == null
+			|| jEdit.getBooleanProperty("backupEverySave"))
+		{
+			vfs._backup(session,path,view);
+			buffer.setBooleanProperty(Buffer.BACKED_UP,true);
 		}
 	} //}}}
 }
