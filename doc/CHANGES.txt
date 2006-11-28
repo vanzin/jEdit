@@ -3,7 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre9
 
 Thanks to Björn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
-Jean-Francois Larvoire, Kazutoshi Satoda, and Marcelo Vanzin for contributing to this release.
+Jean-Francois Larvoire, Martin Raspe, Kazutoshi Satoda, and Marcelo Vanzin
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -70,6 +71,9 @@ Jean-Francois Larvoire, Kazutoshi Satoda, and Marcelo Vanzin for contributing to
 - Fixed some invalid mode files (Björn "Vampire" Kautler)
 
 - Updated some mode files that were still in jEdit 4.0 syntax (Björn "Vampire" Kautler)
+
+- Perl edit mode - support for fully qualified variable names like $Some::Module::test.
+  (Martin Raspe)
 
 }}}
 {{{ Miscellaneous
@@ -176,7 +180,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 - ToggleHeaderSource.bsh (macros/C) now will find and open an already-open
   buffer with the correct filename even if it is from another directory.
   (Alan Ezust)
-
+  
 }}}
 {{{ API Changes
 
