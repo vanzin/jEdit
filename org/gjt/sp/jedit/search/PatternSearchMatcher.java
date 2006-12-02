@@ -37,17 +37,17 @@ public class PatternSearchMatcher extends SearchMatcher
 
 	/**
 	 * Creates a new regular expression string matcher.
-         * @see java.util.regex.Pattern
-         * @param search the search pattern
-         * @param ignoreCase <code>true</code> if you want to ignore case
+	 * @see java.util.regex.Pattern
+	 * @param search the search pattern
+	 * @param ignoreCase <code>true</code> if you want to ignore case
 	 * @since jEdit 4.3pre5
 	 */
 	public PatternSearchMatcher(String search, boolean ignoreCase)
 	{
 		pattern = search;
-		flags  = Pattern.MULTILINE;
+		flags = Pattern.MULTILINE;
 		if (ignoreCase)
-			flags  |= Pattern.CASE_INSENSITIVE;
+			flags |= Pattern.CASE_INSENSITIVE;
 	}
 
 	/**
@@ -82,14 +82,14 @@ public class PatternSearchMatcher extends SearchMatcher
 		// begins with "^" and matched the beginning of the region
 		// being matched, ignore the match and try the next one.
 		if (!start && match.start() == 0
-		    && re.pattern().charAt(0) == '^' && !match.find())
+			&& re.pattern().charAt(0) == '^' && !match.find())
 			return null;
 
 		// similarly, if we're not at the end of the buffer and we
 		// match the end of the text, and the pattern ends with a "$",
 		// return null.
 		if (!end && match.end() == (text.length() - 1)
-		    && pattern.charAt(pattern.length()-1) == '$')
+			&& pattern.charAt(pattern.length() - 1) == '$')
 			return null;
 
 		returnValue.substitutions = new String[match.groupCount() + 1];
@@ -111,10 +111,11 @@ public class PatternSearchMatcher extends SearchMatcher
 		return pattern.charAt(pattern.length() - 1) == '$';
 	}
 
-
-        public String toString() {
-                return "PatternSearchMatcher[" + pattern + ']';
-        }
+	//{{{ toString() method
+	public String toString()
+	{
+		return "PatternSearchMatcher[" + pattern + ']';
+	} //}}}
 
         private int	flags;
 	private Pattern	re;
