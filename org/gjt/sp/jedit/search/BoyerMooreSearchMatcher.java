@@ -34,8 +34,8 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	//{{{ BoyerMooreSearchMatcher constructor
 	/**
 	 * Creates a new string literal matcher.
-         * @param pattern the search pattern
-         * @param ignoreCase <code>true</code> if you want to ignore case
+	 * @param pattern the search pattern
+	 * @param ignoreCase <code>true</code> if you want to ignore case
 	 */
 	public BoyerMooreSearchMatcher(String pattern, boolean ignoreCase)
 	{
@@ -192,13 +192,13 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 		return -1;
 	} //}}}
 
+	//{{{ toString() method
+	public String toString()
+	{
+		return "BoyerMooreSearchMatcher[" + new String(pattern) + ']';
+	} //}}}
 
-        public String toString()
-        {
-                return "BoyerMooreSearchMatcher[" + new String(pattern) + ']';
-        }
-
-        //{{{ Private members
+	//{{{ Private members
 	private char[] pattern;
 	private int pattern_end;
 	private boolean ignoreCase;
