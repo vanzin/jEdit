@@ -27,12 +27,15 @@ package org.gjt.sp.jedit.search;
 
 /**
  * Implements literal search using the Boyer-Moore algorithm.
+ * @version $Id$
  */
 public class BoyerMooreSearchMatcher extends SearchMatcher
 {
 	//{{{ BoyerMooreSearchMatcher constructor
 	/**
 	 * Creates a new string literal matcher.
+         * @param pattern the search pattern
+         * @param ignoreCase <code>true</code> if you want to ignore case
 	 */
 	public BoyerMooreSearchMatcher(String pattern, boolean ignoreCase)
 	{
@@ -189,7 +192,13 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 		return -1;
 	} //}}}
 
-	//{{{ Private members
+
+        public String toString()
+        {
+                return "BoyerMooreSearchMatcher[" + new String(pattern) + ']';
+        }
+
+        //{{{ Private members
 	private char[] pattern;
 	private int pattern_end;
 	private boolean ignoreCase;
