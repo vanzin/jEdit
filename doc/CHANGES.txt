@@ -63,6 +63,9 @@ for contributing to this release.
 - Fixed precedence of Recent Files List caretposition over commanline
   supplied caret position (Björn "Vampire" Kautler)
 
+- SearchMatcher in SearchAndReplace cannot match empty Strings anymore
+  (#1601718) (Matthieu Casanova)
+
 }}}
 {{{ Editing
 

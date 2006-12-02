@@ -276,24 +276,28 @@ public class SearchAndReplace
 	//{{{ getSearchMatcher() method
 	/**
 	 * Returns the current search string matcher.
+	 * @return a SearchMatcher or null if there is no search or if the matcher can match empty String
+	 *
 	 * @exception IllegalArgumentException if regular expression search
 	 * is enabled, the search string or replacement string is invalid
 	 * @since jEdit 4.1pre7
 	 */
 	public static SearchMatcher getSearchMatcher()
-		throws Exception
-	{
-		if(matcher != null)
+		throws Exception {
+		if (matcher != null)
 			return matcher;
 
-		if(search == null || "".equals(search))
+		if (search == null || "".equals(search))
 			return null;
 
-		if(regexp)
-			matcher = new PatternSearchMatcher(search,ignoreCase);
+		if (regexp)
+			matcher = new PatternSearchMatcher(search, ignoreCase);
 		else
-		{
-			matcher = new BoyerMooreSearchMatcher(search,ignoreCase);
+			matcher = new BoyerMooreSearchMatcher(search, ignoreCase);
+
+		if (matcher.nextMatch("", true, true, true, false) != null) {
+			Log.log(Log.WARNING, SearchAndReplace.class, "The matcher " + matcher + " can match empty string !");
+			matcher = null;
 		}
 
 		return matcher;
@@ -367,7 +371,7 @@ public class SearchAndReplace
 		if(comp == null)
 			comp = view;
 
-		record(view,"hyperSearch(view," + selection + ")",false,
+		record(view,"hyperSearch(view," + selection + ')',false,
 			!selection);
 
 		view.getDockableWindowManager().addDockableWindow(
@@ -424,8 +428,7 @@ public class SearchAndReplace
 		if(comp == null || !comp.isShowing())
 			comp = view;
 
-		boolean repeat = false;
-		String path = fileset.getNextFile(view,null);
+                String path = fileset.getNextFile(view,null);
 		if(path == null)
 		{
 			GUIUtilities.error(comp,"empty-fileset",null);
@@ -452,6 +455,7 @@ public class SearchAndReplace
 
 			record(view,"find(view)",false,true);
 
+                        boolean repeat = false;
 loop:			for(;;)
 			{
 				while(path != null)
@@ -546,7 +550,7 @@ loop:			for(;;)
 				}
 				else
 				{
-					Integer[] args = { new Integer(_reverse ? 1 : 0) };
+					Integer[] args = {Integer.valueOf(_reverse ? 1 : 0)};
 					int result = GUIUtilities.confirm(comp,
 						"keepsearching",args,
 						JOptionPane.YES_NO_OPTION,
@@ -597,8 +601,7 @@ loop:			for(;;)
 	 * @param view The view
 	 * @param buffer The buffer
 	 * @param start Location where to start the search
-	 * @param firstTime See {@link SearchMatcher#nextMatch(CharIndexed,
-	 * boolean,boolean,boolean,boolean)}.
+	 * @param firstTime See {@link SearchMatcher#nextMatch(CharSequence,boolean,boolean,boolean,boolean)}.
 	 * @since jEdit 4.1pre7
 	 */
 	public static boolean find(View view, Buffer buffer, int start,
@@ -746,8 +749,8 @@ loop:			for(;;)
 
 			if(!BeanShell.isScriptRunning())
 			{
-				Object[] args = { new Integer(retVal),
-					new Integer(1) };
+				Object[] args = {Integer.valueOf(retVal),
+                                        Integer.valueOf(1)};
 				view.getStatus().setMessageAndClear(jEdit.getProperty(
 					"view.status.replace-all",args));
 			}
@@ -836,10 +839,7 @@ loop:			for(;;)
 		if(comp == null)
 			comp = view;
 
-		int fileCount = 0;
-		int occurCount = 0;
-
-		if(fileset.getFileCount(view) == 0)
+                if(fileset.getFileCount(view) == 0)
 		{
 			GUIUtilities.error(comp,"empty-fileset",null);
 			return false;
@@ -853,7 +853,9 @@ loop:			for(;;)
 			&& TextUtilities.getStringCase(replace)
 			== TextUtilities.LOWER_CASE);
 
-		try
+                int fileCount = 0;
+                int occurCount = 0;
+                try
 		{
 			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
@@ -923,8 +925,8 @@ loop:			while(path != null)
 		/* Don't do this when playing a macro, cos it's annoying */
 		if(!BeanShell.isScriptRunning())
 		{
-			Object[] args = { new Integer(occurCount),
-				new Integer(fileCount) };
+			Object[] args = {Integer.valueOf(occurCount),
+                                Integer.valueOf(fileCount)};
 			view.getStatus().setMessageAndClear(jEdit.getProperty(
 				"view.status.replace-all",args));
 			if(occurCount == 0)
@@ -1075,7 +1077,7 @@ loop:			while(path != null)
 					+ fileset.getCode() + ");");
 			}
 
-			recorder.record("SearchAndReplace." + action + ";");
+			recorder.record("SearchAndReplace." + action + ';');
 		}
 	} //}}}
 
@@ -1274,9 +1276,9 @@ loop:		for(int counter = 0; ; counter++)
 	private static String regexpReplace(SearchMatcher.Match occur,
 		String found) throws Exception
 	{
-		StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
 
-		for(int i = 0; i < replace.length(); i++)
+        for(int i = 0; i < replace.length(); i++)
 		{
 			char ch = replace.charAt(i);
 			switch(ch)
