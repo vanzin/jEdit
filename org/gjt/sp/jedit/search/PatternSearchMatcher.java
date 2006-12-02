@@ -26,6 +26,8 @@ import java.util.regex.Pattern;
 
 /**
  * A regular expression string matcher using java.util.regex.
+ * @see java.util.regex.Pattern
+ *
  * @author Marcelo Vanzin
  * @version $Id$
  * @since jEdit 4.3pre5
@@ -35,14 +37,17 @@ public class PatternSearchMatcher extends SearchMatcher
 
 	/**
 	 * Creates a new regular expression string matcher.
+         * @see java.util.regex.Pattern
+         * @param search the search pattern
+         * @param ignoreCase <code>true</code> if you want to ignore case
 	 * @since jEdit 4.3pre5
 	 */
 	public PatternSearchMatcher(String search, boolean ignoreCase)
 	{
-		this.pattern = search;
-		this.flags  = Pattern.MULTILINE;
+		pattern = search;
+		flags  = Pattern.MULTILINE;
 		if (ignoreCase)
-			this.flags  |= Pattern.CASE_INSENSITIVE;
+			flags  |= Pattern.CASE_INSENSITIVE;
 	}
 
 	/**
@@ -106,7 +111,12 @@ public class PatternSearchMatcher extends SearchMatcher
 		return pattern.charAt(pattern.length() - 1) == '$';
 	}
 
-	private int	flags;
+
+        public String toString() {
+                return "PatternSearchMatcher[" + pattern + ']';
+        }
+
+        private int	flags;
 	private Pattern	re;
 	private String 	pattern;
 
