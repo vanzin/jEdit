@@ -2881,7 +2881,7 @@ public class jEdit
 		System.out.println("	-wait: Wait until the user closes the specified buffer in the server");
 		System.out.println("	 instance. Does nothing if passed to the initial jEdit instance.");
 		System.out.println();
-		System.out.println("Report bugs to Slava Pestov <slava@jedit.org>.");
+		System.out.println("Report bugs to http://sourceforge.net/tracker/?group_id=588&atid=100588");
 	} //}}}
 
 	//{{{ version() method
@@ -3669,11 +3669,15 @@ loop:		for(int i = 0; i < list.length; i++)
 				else
 					throw new InternalError();
 
-				if(view != null && view.getBuffer() == buffer)
+				if(view != null && view.getBuffer() == buffer) {
 					view.getTextArea().setCaretPosition(pos);
+					buffer.setIntegerProperty(Buffer.CARET,pos);
+					buffer.setBooleanProperty(Buffer.CARET_POSITIONED,true);
+				}
 				else
 				{
 					buffer.setIntegerProperty(Buffer.CARET,pos);
+					buffer.setBooleanProperty(Buffer.CARET_POSITIONED,true);
 					buffer.unsetProperty(Buffer.SCROLL_VERT);
 				}
 			}

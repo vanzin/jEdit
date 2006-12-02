@@ -8,7 +8,6 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
-
 - bufferio operations are now exception-safe (patch# 1597168) (Kazutoshi Satoda)
 
 - Encoding errors properly reported on save (patch# 1601830) (Kazutoshi Satoda)
@@ -61,6 +60,9 @@ for contributing to this release.
 - Fixed another bug with the new HASH_CHAR handling
   (bug #1600401) (Björn "Vampire" Kautler)
 
+- Fixed precedence of Recent Files List caretposition over commanline
+  supplied caret position (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 
@@ -103,9 +105,10 @@ for contributing to this release.
 - SplashScreen change : more step added for progress bar and it tells now
   what jEdit is doing (Matthieu Casanova)
 
-- When closing the current buffer, it there is only one buffer, untitled and
+- When closing the current buffer, if there is only one buffer, untitled and
   not dirty it is not closed (not needed since another one would be created)
   (Matthieu Casanova)
+
 }}}
 {{{ API Changes
 

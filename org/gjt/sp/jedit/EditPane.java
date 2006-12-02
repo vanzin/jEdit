@@ -346,11 +346,12 @@ public class EditPane extends JPanel implements EBComponent
 		// previously saved caret position that was stored in the 
 		// buffer properties.
 		int caret = caretInfo.caret;
-		if (caret == -1)
+		if ((caret == -1) || buffer.getBooleanProperty(Buffer.CARET_POSITIONED))
 		{
 			Integer i = (Integer) buffer.getProperty(Buffer.CARET);
 			caret = i == null ? -1 : i;
 		}
+		buffer.unsetProperty(Buffer.CARET_POSITIONED);
 
 
 		if(caret != -1)

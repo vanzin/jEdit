@@ -82,6 +82,7 @@ public class Buffer extends JEditBuffer
 	 * @since jEdit 3.2pre1
 	 */
 	public static final String CARET = "Buffer__caret";
+	public static final String CARET_POSITIONED = "Buffer__caretPositioned";
 
 	/**
 	 * Stores a List of {@link Selection} instances.
