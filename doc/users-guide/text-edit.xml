@@ -85,7 +85,8 @@
  <sect1 id="selection"><title>Selecting Text</title>
   <para>
    A <firstterm>selection</firstterm> is a block of text marked for further
-   manipulation. Range selections are equivalent to selections in most other text editors; they cover text between two points in a buffer. jEdit also allows rectangular selections that cover a rectangular area (some text editors refer to these as <quote>column selections</quote>). Furthermore, several chunks of text can be
+   manipulation. Range selections are equivalent to selections in most other text editors; they cover text between two points in a buffer. In addition to the standard text-selection mode, jEdit also allows <emphasis role="bold">rectangular selections</emphasis> that cover a rectangular area (some text editors refer to these as <quote>column selections</quote>).
+    Furthermore, several chunks of text can be
    selected and operated on simultaneously.
   </para>
   <sect2><title>Range Selection</title>
@@ -117,7 +118,7 @@
     rectangular selection. Holding down
     <keycap>Shift</keycap> and <keycap>Control</keycap> while clicking a
     location in the buffer will create a rectangular selection from the caret
-    position to the clicked location.
+    position to the clicked location.  
    </para>
    <para>
     Alternatively, invoking
