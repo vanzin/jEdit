@@ -245,19 +245,18 @@
    <literal>FALSE</literal>, matches will be case sensitive. Otherwise, case
    will not matter. Default is <literal>TRUE</literal>.
    </para></listitem>
-   <listitem><para><literal>ESCAPE</literal> - if this character sequence appears
+   <listitem><para><literal>ESCAPE</literal> - specifies a character sequence for escaping literals. If it appears
     <itemizedlist>
      <listitem><para>in front of a token, the token is not highlighted.
      </para></listitem>
-     <listitem><para>as part of a rule at its beginning, it is considered as part
-     of the match and not as escape sequence.
+     <listitem><para>as part of a rule at its beginning, it is considered 
+     part of the match and not as an escape sequence.
      </para></listitem>
-     <listitem><para>in front of the ending sequence of a SPAN or SPAN_REGEXP,
-     the SPAN is not closed unless its NO_ESCAPE attribute is set to TRUE.
+     <listitem><para>in front of the ending sequence of a <literal>SPAN</literal> or <literal>SPAN_REGEXP</literal>,
+     the <literal>SPAN</literal> is not closed unless its <literal>NO_ESCAPE</literal> attribute is set to <literal>TRUE</literal>.
      See <xref linkend="mode-rule-span" />.
      </para></listitem>
-     <listitem><para>two times consecutive, the first occurence escapes the second
-     one and so the second one does not escape what is following.
+     <listitem><para>two times consecutively, the first occurence escapes the second. In other words, the escaped escape sequence is treated as a single occurrance of the string, instead of an escape sequence. 
      </para></listitem>
     </itemizedlist>
    </para></listitem>
