@@ -88,11 +88,7 @@
 			<END>]</END>
 		</SPAN>
 
-		<!-- Escaped characters (Don't work; Would need NO_ESCAPE="TRUE"?)-->
-		<SPAN_REGEXP TYPE="KEYWORD3" NO_ESCAPE="TRUE" HASH_CHAR="\">
-			<BEGIN>\\(?=n)</BEGIN>
-			<END>n</END>
-		</SPAN_REGEXP>
+		<!-- Escaped characters -->
 		<SEQ TYPE="KEYWORD3">\a</SEQ>
 		<SEQ TYPE="KEYWORD3">\b</SEQ>
 		<SEQ TYPE="KEYWORD3">\f</SEQ>
@@ -100,7 +96,6 @@
 		<SEQ TYPE="KEYWORD3">\r</SEQ>
 		<SEQ TYPE="KEYWORD3">\t</SEQ>
 		<SEQ TYPE="KEYWORD3">\v</SEQ>
-		<SEQ TYPE="KEYWORD3">\</SEQ>
 
 		<!-- Tcl syntax operators. -->
 		<!-- Note that "{}[]" are already caught above.-->
@@ -339,17 +334,6 @@
 			<KEYWORD3>full_buffer</KEYWORD3>
 			<KEYWORD3>timeout</KEYWORD3>
 			<!-- KEYWORD3 eof-->
-
-			<!-- Escaped characters (Do work, but only if isolated)-->
-			<KEYWORD3>\a</KEYWORD3>
-			<KEYWORD3>\b</KEYWORD3>
-			<KEYWORD3>\f</KEYWORD3>
-			<KEYWORD3>\n</KEYWORD3>
-			<KEYWORD3>\r</KEYWORD3>
-			<KEYWORD3>\t</KEYWORD3>
-			<KEYWORD3>\v</KEYWORD3>
-			<KEYWORD3>\x</KEYWORD3>
-			<KEYWORD3>\</KEYWORD3>
 
 			<!-- Global variables-->
 			<KEYWORD3>argv0</KEYWORD3>
@@ -651,27 +635,6 @@
 			<KEYWORD3>MenuSelect</KEYWORD3>
 			<KEYWORD3>Triple</KEYWORD3>
 			<KEYWORD3>all</KEYWORD3>
-
-			<!-- Test available colours -->
-			<NULL     >tcNull</NULL>
-			<COMMENT1 >tcComment1</COMMENT1>
-			<COMMENT2 >tcComment2</COMMENT2>
-			<COMMENT3 >tcComment3</COMMENT3>
-			<COMMENT4 >tcComment4</COMMENT4>
-			<DIGIT    >tcDigit</DIGIT>
-			<FUNCTION >tcFunction</FUNCTION>
-			<INVALID  >tcInvalid</INVALID>
-			<KEYWORD1 >tcKeyword1</KEYWORD1>
-			<KEYWORD2 >tcKeyword2</KEYWORD2>
-			<KEYWORD3 >tcKeyword3</KEYWORD3>
-			<KEYWORD4 >tcKeyword4</KEYWORD4>
-			<LABEL    >tcLabel</LABEL>
-			<LITERAL1 >tcLiteral1</LITERAL1>
-			<LITERAL2 >tcLiteral2</LITERAL2>
-			<LITERAL3 >tcLiteral3</LITERAL3>
-			<LITERAL4 >tcLiteral4</LITERAL4>
-			<MARKUP   >tcMarkup</MARKUP>
-			<OPERATOR >tcOperator</OPERATOR>
 		</KEYWORDS>
 	</RULES>
 
@@ -687,7 +650,7 @@
 			<PROPERTY NAME="indentCloseBrackets" VALUE="" />
 		</PROPS>
 
-		<!-- Continuation line. Processed before anything else by Tcl. (Does not work)-->
+		<!-- Continuation line. Processed before anything else by Tcl.-->
 		<EOL_SPAN_REGEXP TYPE="OPERATOR" HASH_CHAR="\">\\$</EOL_SPAN_REGEXP>
 
 		<!-- Avoid colouring variables substituted inside strings -->
@@ -707,7 +670,7 @@
 			<END>]</END>
 		</SPAN>
 
-		<!-- Escaped characters (Don't work; Would need NO_ESCAPE="TRUE"?)-->
+		<!-- Escaped characters -->
 		<SEQ TYPE="KEYWORD3">\a</SEQ>
 		<SEQ TYPE="KEYWORD3">\b</SEQ>
 		<SEQ TYPE="KEYWORD3">\f</SEQ>
@@ -715,20 +678,5 @@
 		<SEQ TYPE="KEYWORD3">\r</SEQ>
 		<SEQ TYPE="KEYWORD3">\t</SEQ>
 		<SEQ TYPE="KEYWORD3">\v</SEQ>
-		<SEQ TYPE="KEYWORD3">\</SEQ>
-
-		<KEYWORDS>
-			<!-- Escaped characters (Do work, but only if isolated)-->
-			<KEYWORD3>\a</KEYWORD3>
-			<KEYWORD3>\b</KEYWORD3>
-			<KEYWORD3>\f</KEYWORD3>
-			<KEYWORD3>\n</KEYWORD3>
-			<KEYWORD3>\r</KEYWORD3>
-			<KEYWORD3>\t</KEYWORD3>
-			<KEYWORD3>\v</KEYWORD3>
-			<KEYWORD3>\</KEYWORD3>
-		</KEYWORDS>
 	</RULES>
 </MODE>
-
- 	  	 

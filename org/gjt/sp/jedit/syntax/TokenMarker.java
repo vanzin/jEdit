@@ -152,8 +152,22 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			for (ParserRule rule : rules)
 			{
 				// stop checking rules if there was a match
-				if (handleRule(rule,false))
+				if (handleRule(rule,false,false))
 				{
+escape_checking:			if ((rule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
+					{
+						int escapeSequenceCount = pattern.count;
+						for (ParserRule innerRule : rules)
+						{
+							if (((innerRule.action & ParserRule.IS_ESCAPE) != ParserRule.IS_ESCAPE) &&
+							    (handleRule(innerRule,false)))
+							{
+								break escape_checking;
+							}
+						} //}}}
+						escaped = !escaped;
+						pos += escapeSequenceCount - 1;
+					}
 					seenWhitespaceEnd = true;
 					continue main_loop;
 				}
@@ -321,8 +335,22 @@ unwind:		while(context.parent != null)
 		if((rule.action & ParserRule.NO_ESCAPE) == 0)
 		{
 			ParserRule escape = context.parent.rules.getEscapeRule();
-			if(escape != null && handleRule(escape,false))
+escape_checking:	if (escape != null && handleRule(escape,false,false))
+			{
+				int escapeSequenceCount = pattern.count;
+				Character ch = Character.valueOf(escape.upHashChar.charAt(0));
+				List<ParserRule> rules = context.rules.getRules(ch);
+				for (ParserRule innerRule : rules)
+				{
+					if (handleRule(innerRule,false))
+					{
+						break escape_checking;
+					}
+				} //}}}
+				escaped = !escaped;
+				pos += escapeSequenceCount - 1;
 				return true;
+			}
 		}
 
 		return false;
@@ -334,6 +362,16 @@ unwind:		while(context.parent != null)
 	 * and handles the rule if it does match
 	 */
 	private boolean handleRule(ParserRule checkRule, boolean end)
+	{
+		return handleRule(checkRule,end,true);
+	} //}}}
+	
+	//{{{ handleRule() method
+	/**
+	 * Checks if the rule matches the line at the current position
+	 * and handles the rule if it does match
+	 */
+	private boolean handleRule(ParserRule checkRule, boolean end, boolean processEscape)
 	{
 		//{{{ Some rules can only match in certain locations
 		if(!end)
@@ -446,9 +484,11 @@ unwind:		while(context.parent != null)
 		{
 			if(context.inRule != null)
 				handleRule(context.inRule,true);
-
-			escaped = !escaped;
-			pos += pattern.count - 1;
+			if (processEscape)
+			{
+				escaped = !escaped;
+				pos += pattern.count - 1;
+			}
 		}
 		else if(escaped)
 		{

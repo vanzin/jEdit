@@ -245,6 +245,22 @@
    <literal>FALSE</literal>, matches will be case sensitive. Otherwise, case
    will not matter. Default is <literal>TRUE</literal>.
    </para></listitem>
+   <listitem><para><literal>ESCAPE</literal> - if this character sequence appears
+    <itemizedlist>
+     <listitem><para>in front of a token, the token is not highlighted.
+     </para></listitem>
+     <listitem><para>as part of a rule at its beginning, it is considered as part
+     of the match and not as escape sequence.
+     </para></listitem>
+     <listitem><para>in front of the ending sequence of a SPAN or SPAN_REGEXP,
+     the SPAN is not closed unless its NO_ESCAPE attribute is set to TRUE.
+     See <xref linkend="mode-rule-span" />.
+     </para></listitem>
+     <listitem><para>two times consecutive, the first occurence escapes the second
+     one and so the second one does not escape what is following.
+     </para></listitem>
+    </itemizedlist>
+   </para></listitem>
    <listitem><para><literal>NO_WORD_SEP</literal> - any non-alphanumeric
    character <emphasis>not</emphasis> in this list is treated as a word separator
    for the purposes of syntax highlighting.
@@ -415,9 +431,9 @@
    <literal>TRUE</literal>, the start and end sequences will not be highlighted,
    only the text between them will.</para></listitem>
    <listitem><para><literal>NO_ESCAPE</literal> - If set to
-   <literal>TRUE</literal>, the ruleset's escape character will have no
+   <literal>TRUE</literal>, the ruleset's escape character sequence will have no
    effect before the span's end string. Otherwise, the presence of the escape
-   character will cause that occurrence of the end string to be ignored.</para></listitem>
+   character sequence will cause that occurrence of the end string to be ignored.</para></listitem>
    <listitem><para><literal>NO_LINE_BREAK</literal> - If set to
    <literal>TRUE</literal>, the span will not cross line breaks.</para></listitem>
    <listitem><para><literal>NO_WORD_BREAK</literal> - If set to

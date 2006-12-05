@@ -70,6 +70,10 @@ for contributing to this release.
   where you cannot write, a dialog will ask you if you want to save using
   normal method (#1609303) (Matthieu Casanova)
 
+- Fixed that ESCAPE sequence of RULES tag couldn't appear at the beginning
+  of a rule. Now this is possible. Also added documentation about the
+  ESCAPE attribute. (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 
