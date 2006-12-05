@@ -24,7 +24,7 @@ package org.gjt.sp.util;
  * @author Slava Pestov
  * @version $Id$
  */
-public class WorkThread extends Thread
+public class WorkThread extends Thread implements ThreadAbortMonitor
 {
 	public WorkThread(WorkThreadPool pool, ThreadGroup group, String name)
 	{
@@ -58,7 +58,16 @@ public class WorkThread extends Thread
 		return requestRunning;
 	}
 
-	/**
+
+    public boolean isAborted()
+    {
+        synchronized(abortLock)
+        {
+            return aborted;
+        }
+    }
+
+    /**
 	 * Returns the status text.
 	 */
 	public String getStatus()

@@ -408,8 +408,8 @@ public class Buffer extends JEditBuffer
 		setPerformingIO(true);
 
 		final String oldPath = this.path;
-		final String oldSymlinkPath = this.symlinkPath;
-		final String newPath = (path == null ? this.path : path);
+		final String oldSymlinkPath = symlinkPath;
+		final String newPath = path == null ? this.path : path;
 
 		VFS vfs = VFSManager.getVFSForPath(newPath);
 
@@ -426,8 +426,8 @@ public class Buffer extends JEditBuffer
 			return false;
 		}
 
-		boolean overwriteReadOnly = false;
-		setBooleanProperty("overwriteReadonly",false);
+		unsetProperty("overwriteReadonly");
+		unsetProperty("forbidTwoStageSave");
 		try
 		{
 			VFSFile file = vfs._getFile(session,newPath,view);
@@ -436,26 +436,47 @@ public class Buffer extends JEditBuffer
 				boolean vfsRenameCap = (vfs.getCapabilities() & VFS.RENAME_CAP) != 0;
 				if (!file.isWriteable())
 				{
+					Log.log(Log.WARNING, this, "Buffer saving : File " + file + " is readOnly");
 					if (vfsRenameCap)
 					{
-						int result = GUIUtilities.confirm(
-							view, "vfs.overwrite-readonly",
-							new Object[]{newPath},
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE);
-						if (result == JOptionPane.YES_OPTION)
+						Log.log(Log.DEBUG, this, "Buffer saving : VFS can rename files");
+						String savePath = vfs._canonPath(session,newPath,view);
+						if(!MiscUtilities.isURL(savePath))
+							savePath = MiscUtilities.resolveSymlinks(savePath);
+						savePath = vfs.getTwoStageSaveName(savePath);
+						if (savePath == null)
 						{
-							overwriteReadOnly = true;
+							Log.log(Log.DEBUG, this, "Buffer saving : two stage save impossible in path " + savePath);
+							VFSManager.error(view,
+								newPath,
+								"ioerror.save-readonly-twostagefail",
+								null);
+							setPerformingIO(false);
+							return false;
 						}
 						else
 						{
-							Log.log(Log.DEBUG,this, "Buffer not saved");
-							setPerformingIO(false);
-							return false;
+							int result = GUIUtilities.confirm(
+								view, "vfs.overwrite-readonly",
+								new Object[]{newPath},
+								JOptionPane.YES_NO_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+							if (result == JOptionPane.YES_OPTION)
+							{
+								Log.log(Log.WARNING, this, "Buffer saving : two stage save will be used to save buffer");
+								setBooleanProperty("overwriteReadonly",true);
+							}
+							else
+							{
+								Log.log(Log.DEBUG,this, "Buffer not saved");
+								setPerformingIO(false);
+								return false;
+							}
 						}
 					}
 					else
 					{
+						Log.log(Log.WARNING, this, "Buffer saving : file is readonly and vfs cannot do two stage save");
 						VFSManager.error(view,
 							newPath,
 							"ioerror.write-error-readonly",
@@ -464,10 +485,37 @@ public class Buffer extends JEditBuffer
 						return false;
 					}
 				}
+				else
+				{
+					String savePath = vfs._canonPath(session,newPath,view);
+					if(!MiscUtilities.isURL(savePath))
+						savePath = MiscUtilities.resolveSymlinks(savePath);
+					savePath = vfs.getTwoStageSaveName(savePath);
+					if (jEdit.getBooleanProperty("twoStageSave") && (!vfsRenameCap || savePath == null))
+					{
+						// the file is writeable but the vfs cannot do two stage. We must overwrite
+						// readonly flag
 
 
-				if (overwriteReadOnly)
-					setBooleanProperty("overwriteReadonly",true);
+						int result = GUIUtilities.confirm(
+								view, "vfs.twostageimpossible",
+								new Object[]{newPath},
+								JOptionPane.YES_NO_OPTION,
+								JOptionPane.WARNING_MESSAGE);
+						if (result == JOptionPane.YES_OPTION)
+						{
+							Log.log(Log.WARNING, this, "Buffer saving : two stage save cannot be used");
+							setBooleanProperty("forbidTwoStageSave",true);
+						}
+						else
+						{
+							Log.log(Log.DEBUG,this, "Buffer not saved");
+							setPerformingIO(false);
+							return false;
+						}
+
+					}
+				}
 			}
 		}
 		catch(IOException io)
@@ -1478,7 +1526,7 @@ public class Buffer extends JEditBuffer
 	{
 		int count = 0;
 		Buffer buffer = prev;
-		for(;;)
+		while (true)
 		{
 			if(buffer == null)
 				break;
@@ -1632,8 +1680,8 @@ public class Buffer extends JEditBuffer
 		VFS vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 			setFileReadOnly(true);
-		this.name = vfs.getFileName(path);
-		this.directory = vfs.getParentOfPath(path);
+		name = vfs.getFileName(path);
+		directory = vfs.getParentOfPath(path);
 
 		if(vfs instanceof FileVFS)
 		{

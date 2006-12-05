@@ -56,11 +56,6 @@ public class BufferSaveRequest extends BufferIORequest
 	//{{{ run() method
 	public void run()
 	{
-		boolean vfsRenameCap = (vfs.getCapabilities() &
-			VFS.RENAME_CAP) != 0;
-
-		boolean overwriteReadOnly = buffer.getBooleanProperty("overwriteReadonly");
-
 		/* if the VFS supports renaming files, we first
 		 * save to #<filename>#save#, then rename that
 		 * to <filename>, so that if the save fails,
@@ -71,9 +66,11 @@ public class BufferSaveRequest extends BufferIORequest
 		 * since some VFS's might not allow # in filenames.
 		 */
 
-		boolean twoStageSave = overwriteReadOnly ||
-			(vfsRenameCap &&
-			jEdit.getBooleanProperty("twoStageSave"));
+		boolean vfsRenameCap = (vfs.getCapabilities() &
+			VFS.RENAME_CAP) != 0;
+
+		boolean wantTwoStage = wantTwoStageSave(buffer);
+		boolean twoStageSave = vfsRenameCap && wantTwoStage;
 
 		try
 		{
@@ -211,4 +208,12 @@ public class BufferSaveRequest extends BufferIORequest
 			buffer.setBooleanProperty(Buffer.BACKED_UP,true);
 		}
 	} //}}}
+
+	//{{{ wantTwoStageSave() method
+	public static boolean wantTwoStageSave(Buffer buffer)
+	{
+		return !buffer.getBooleanProperty("forbidTwoStageSave") &&
+			(buffer.getBooleanProperty("overwriteReadonly") ||
+			jEdit.getBooleanProperty("twoStageSave"));
+	}//}}}
 }

@@ -1054,6 +1054,7 @@ ioerror.save-directory=Cannot save buffer over a directory.
 ioerror.no-read=Insufficent permissions to load file.
 ioerror.no-write=Insufficent permissions to save file.
 ioerror.write-error-readonly=Unable to save, the file is readonly.
+ioerror.save-readonly-twostagefail=Unable to save, the file is readonly and it two stage save is impossible.
 ioerror.badurl=Malformed URL: {0}
 ioerror.delete-error=Cannot delete file.
 ioerror.rename-exists=Cannot overwrite existing file {0}.
@@ -1069,6 +1070,9 @@ vfs.overwrite-readonly.message=The file {0} is readonly.\n\
 	Would you like to save it anyway, resetting the readonly flag\n\
 	it will use two stage save (resets file owner on Unix)
 
+vfs.twostageimpossible.title=Two stage save cannot be used
+vfs.twostageimpossible.message=Two stage save cannot be used, do you want to\n\
+	save anyway ?
 
 out-of-memory-error=There was insufficent Java heap memory to complete\n\
 	this request. Try increasing the maximum heap size.\n\

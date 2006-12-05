@@ -66,6 +66,10 @@ for contributing to this release.
 - SearchMatcher in SearchAndReplace cannot match empty Strings anymore
   (#1601718) (Matthieu Casanova)
 
+- If you use two stage save and your file is writeable but in a	 folder
+  where you cannot write, a dialog will ask you if you want to save using
+  normal method (#1609303) (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
