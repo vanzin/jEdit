@@ -800,6 +800,7 @@ view.status.io.done=Input/output complete
 view.status.io=I/O: {0} operations in progress
 view.status.linesep-changed=Line separator set to {0}
 view.status.linesep-tooltip=Line separator (click to change)
+view.status.ignorefilechange-tooltip=Ignore file change (click to change)
 view.status.memory-tooltip=Java heap memory: {0}Kb/{1}Kb
 view.status.mode-tooltip=Current edit mode, fold mode, and encoding
 view.status.multi-changed=Multiple selection mode is {0,choice,0#off|1#on}
@@ -835,6 +836,7 @@ view.status.show-wrap=true
 view.status.show-multi-select=true
 view.status.show-overwrite=true
 view.status.show-line-seperator=true
+view.status.show-ignore-file-change=true
 view.status.show-memory=true
 #}}}
 
@@ -1428,6 +1430,8 @@ files-changed.select-all=Select All
 files-changed.select-all.mnemonic=a
 files-changed.reload=Reload
 files-changed.reload.mnemonic=r
+files-changed.ignore=Ignore
+files-changed.ignore.mnemonic=i
 #}}}
 
 #{{{ Abbrev dialogs
@@ -1872,6 +1876,7 @@ options.status.show-multi-select=Show multiple selection status
 options.status.show-rect-select=Show rectangular selection status
 options.status.show-overwrite=Show overwrite status
 options.status.show-line-seperator=Show buffer line seperator
+options.status.show-ignore-file-change=Show buffer ignore file change status
 options.status.show-memory=Show memory indicator
 options.status.memory.foreground=Memory indicator foreground:
 options.status.memory.background=Memory indicator background:

@@ -29,7 +29,6 @@ import javax.swing.tree.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -76,6 +75,8 @@ public class FilesChangedDialog extends EnhancedDialog
 		for(int i = 0; i < states.length; i++)
 		{
 			Buffer buffer = buffers[i];
+			if (buffer.isIgnoreFileState())
+				continue;
 			DefaultMutableTreeNode addTo;
 			switch(states[i])
 			{
@@ -83,7 +84,7 @@ public class FilesChangedDialog extends EnhancedDialog
 				addTo = deleted;
 				break;
 			case Buffer.FILE_CHANGED:
-				addTo = (buffer.isDirty() ? changedDirty : changed);
+				addTo = buffer.isDirty() ? changedDirty : changed;
 				break;
 			default:
 				addTo = null;
@@ -146,6 +147,14 @@ public class FilesChangedDialog extends EnhancedDialog
 			reload.addActionListener(new ActionHandler());
 
 			buttons.add(Box.createHorizontalStrut(12));
+
+			ignore = new JButton(jEdit.getProperty("files-changed.ignore"));
+			ignore.setMnemonic(jEdit.getProperty(
+				"files-changed.ignore.mnemonic").charAt(0));
+			buttons.add(ignore);
+			ignore.addActionListener(new ActionHandler());
+
+			buttons.add(Box.createHorizontalStrut(12));
 		}
 
 		close = new JButton(jEdit.getProperty("common.close"));
@@ -205,6 +214,7 @@ public class FilesChangedDialog extends EnhancedDialog
 	private boolean selectAllInProgress;
 
 	private JButton reload;
+	private JButton ignore;
 	private JButton close;
 
 	//{{{ updateEnabled() method
@@ -258,7 +268,7 @@ public class FilesChangedDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ reload() method
-	private void reload()
+	private void action(String action)
 	{
 		TreePath[] paths = bufferTree
 			.getSelectionPaths();
@@ -287,7 +297,11 @@ public class FilesChangedDialog extends EnhancedDialog
 			if(buffer == null)
 				return;
 
-			buffer.reload(view);
+			if ("RELOAD".equals(action))
+				buffer.reload(view);
+			else
+				buffer.setIgnoreFileChange(true);
+
 			DefaultMutableTreeNode parent =
 				(DefaultMutableTreeNode)
 				node.getParent();
@@ -348,9 +362,11 @@ public class FilesChangedDialog extends EnhancedDialog
 			if(source == selectAll)
 				selectAll();
 			else if(source == reload)
-				reload();
+				action("RELOAD");
 			else if(source == close)
 				dispose();
+			else if (source == ignore)
+				action("RELOAD");
 		}
 	} //}}}
 
@@ -382,9 +398,9 @@ public class FilesChangedDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ Renderer class
-	class Renderer extends DefaultTreeCellRenderer
+	static class Renderer extends DefaultTreeCellRenderer
 	{
-		public Renderer()
+		Renderer()
 		{
 			entryFont = UIManager.getFont("Tree.font");
 			if(entryFont == null)
@@ -402,9 +418,9 @@ public class FilesChangedDialog extends EnhancedDialog
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
 
 			if(node.getParent() == tree.getModel().getRoot())
-				this.setFont(groupFont);
+				setFont(groupFont);
 			else
-				this.setFont(entryFont);
+				setFont(entryFont);
 
 			setIcon(null);
 

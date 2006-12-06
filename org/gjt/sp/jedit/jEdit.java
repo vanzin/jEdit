@@ -525,7 +525,7 @@ public class jEdit
 	 * new collection, not the existing properties instance.
 	 * @since jEdit 3.1pre4
 	 */
-	public static final Properties getProperties()
+	public static Properties getProperties()
 	{
 		return propMgr.getProperties();
 	} //}}}
@@ -535,7 +535,7 @@ public class jEdit
 	 * Fetches a property, returning null if it's not defined.
 	 * @param name The property
 	 */
-	public static final String getProperty(String name)
+	public static String getProperty(String name)
 	{
 		return propMgr.getProperty(name);
 	} //}}}
@@ -547,7 +547,7 @@ public class jEdit
 	 * @param name The property
 	 * @param def The default value
 	 */
-	public static final String getProperty(String name, String def)
+	public static String getProperty(String name, String def)
 	{
 		String value = propMgr.getProperty(name);
 		if(value == null)
@@ -572,7 +572,7 @@ public class jEdit
 	 * @param name The property
 	 * @param args The positional parameters
 	 */
-	public static final String getProperty(String name, Object[] args)
+	public static String getProperty(String name, Object[] args)
 	{
 		if(name == null)
 			return null;
@@ -593,7 +593,7 @@ public class jEdit
 	 * Returns the value of a boolean property.
 	 * @param name The property
 	 */
-	public static final boolean getBooleanProperty(String name)
+	public static boolean getBooleanProperty(String name)
 	{
 		return getBooleanProperty(name,false);
 	} //}}}
@@ -604,7 +604,7 @@ public class jEdit
 	 * @param name The property
 	 * @param def The default value
 	 */
-	public static final boolean getBooleanProperty(String name, boolean def)
+	public static boolean getBooleanProperty(String name, boolean def)
 	{
 		String value = getProperty(name);
 		if(value == null)
@@ -626,7 +626,7 @@ public class jEdit
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final int getIntegerProperty(String name, int def)
+	public static int getIntegerProperty(String name, int def)
 	{
 		String value = getProperty(name);
 		if(value == null)
@@ -678,7 +678,7 @@ public class jEdit
 	 * @param name The property
 	 * @since jEdit 4.0pre1
 	 */
-	public static final Font getFontProperty(String name)
+	public static Font getFontProperty(String name)
 	{
 		return getFontProperty(name,null);
 	} //}}}
@@ -698,7 +698,7 @@ public class jEdit
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final Font getFontProperty(String name, Font def)
+	public static Font getFontProperty(String name, Font def)
 	{
 		String family = getProperty(name);
 		String sizeString = getProperty(name + "size");
@@ -708,7 +708,7 @@ public class jEdit
 			return def;
 		else
 		{
-			int size, style;
+			int size;
 
 			try
 			{
@@ -719,6 +719,7 @@ public class jEdit
 				return def;
 			}
 
+			int style;
 			try
 			{
 				style = Integer.parseInt(styleString);
@@ -777,7 +778,7 @@ public class jEdit
 	 * @param name The property
 	 * @param value The new value
 	 */
-	public static final void setProperty(String name, String value)
+	public static void setProperty(String name, String value)
 	{
 		propMgr.setProperty(name,value);
 	} //}}}
@@ -790,7 +791,7 @@ public class jEdit
 	 * @param value The new value
 	 * @since jEdit 2.3final
 	 */
-	public static final void setTemporaryProperty(String name, String value)
+	public static void setTemporaryProperty(String name, String value)
 	{
 		propMgr.setTemporaryProperty(name,value);
 	} //}}}
@@ -801,7 +802,7 @@ public class jEdit
 	 * @param name The property
 	 * @param value The value
 	 */
-	public static final void setBooleanProperty(String name, boolean value)
+	public static void setBooleanProperty(String name, boolean value)
 	{
 		setProperty(name,value ? "true" : "false");
 	} //}}}
@@ -813,13 +814,13 @@ public class jEdit
 	 * @param value The value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final void setIntegerProperty(String name, int value)
+	public static void setIntegerProperty(String name, int value)
 	{
 		setProperty(name,String.valueOf(value));
 	} //}}}
 
 	//{{{ setDoubleProperty() method
-	public static final void setDoubleProperty(String name, double value)
+	public static void setDoubleProperty(String name, double value)
 	{
 		setProperty(name,String.valueOf(value));
 	}
@@ -840,7 +841,7 @@ public class jEdit
 	 * @param value The value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final void setFontProperty(String name, Font value)
+	public static void setFontProperty(String name, Font value)
 	{
 		setProperty(name,value.getFamily());
 		setIntegerProperty(name + "size",value.getSize());
@@ -852,7 +853,7 @@ public class jEdit
 	 * Unsets (clears) a property.
 	 * @param name The property
 	 */
-	public static final void unsetProperty(String name)
+	public static void unsetProperty(String name)
 	{
 		propMgr.unsetProperty(name);
 	} //}}}
@@ -864,7 +865,7 @@ public class jEdit
 	 *
 	 * @since jEdit 2.5pre3
 	 */
-	public static final void resetProperty(String name)
+	public static void resetProperty(String name)
 	{
 		propMgr.resetProperty(name);
 	} //}}}
@@ -2073,27 +2074,30 @@ public class jEdit
 		boolean notifyFileChanged = false;
 		while(buffer != null)
 		{
-			states[i] = buffer.checkFileStatus(view);
-
-			switch(states[i])
+			if (!buffer.isIgnoreFileState())
 			{
-			case Buffer.FILE_CHANGED:
-				if(buffer.getAutoReload())
+				states[i] = buffer.checkFileStatus(view);
+
+				switch(states[i])
 				{
-					if(buffer.isDirty())
+					case Buffer.FILE_CHANGED:
+						if(buffer.getAutoReload())
+						{
+							if(buffer.isDirty())
+								notifyFileChanged = true;
+							else
+								buffer.load(view,true);
+						}
+						else	// no automatic reload even if general setting is true
+							autoReload = false;
+						// don't notify user if "do nothing" was chosen
+						if(buffer.getAutoReloadDialog())
+							notifyFileChanged = true;
+						break;
+					case Buffer.FILE_DELETED:
 						notifyFileChanged = true;
-					else
-						buffer.load(view,true);
+						break;
 				}
-				else	// no automatic reload even if general setting is true
-					autoReload = false;
-				// don't notify user if "do nothing" was chosen
-				if(buffer.getAutoReloadDialog())
-					notifyFileChanged = true;
-				break;
-			case Buffer.FILE_DELETED:
-				notifyFileChanged = true;
-				break;
 			}
 
 			buffer = buffer.next;
@@ -3245,7 +3249,7 @@ public class jEdit
 	//{{{ fontStyleToString() method
 	private static String fontStyleToString(int style)
 	{
-		if(style == 0)
+		if(style == Font.PLAIN)
 			return "PLAIN";
 		else if(style == Font.BOLD)
 			return "BOLD";
@@ -3520,8 +3524,6 @@ public class jEdit
 				if(count == 0)
 					newFile(null);
 
-				View view;
-
 				boolean restoreFiles = restore
 					&& jEdit.getBooleanProperty("restore")
 					&& (count == 0 ||
@@ -3529,9 +3531,9 @@ public class jEdit
 
 				if(gui || count != 0)
 				{
-					view = PerspectiveManager
+					View view = PerspectiveManager
 						.loadPerspective(
-						restoreFiles);
+							restoreFiles);
 
 					if(view == null)
 						view = newView(null,buffer);
@@ -3949,8 +3951,6 @@ loop:		for(int i = 0; i < list.length; i++)
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
 			if (Options.SIMPLIFIED_KEY_HANDLING) {
-				boolean result;
-				
 				/*
 					Commenting this out is experimental.
 					
@@ -4000,7 +4000,7 @@ loop:		for(int i = 0; i < list.length; i++)
 					}
 				}
 				
-				result = super.postProcessKeyEvent(evt);
+				boolean result = super.postProcessKeyEvent(evt);
 				
 				return result;
 			} else {
