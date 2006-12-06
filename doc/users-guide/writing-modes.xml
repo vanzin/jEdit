@@ -256,7 +256,7 @@
      the <literal>SPAN</literal> is not closed unless its <literal>NO_ESCAPE</literal> attribute is set to <literal>TRUE</literal>.
      See <xref linkend="mode-rule-span" />.
      </para></listitem>
-     <listitem><para>two times consecutively, the first occurence escapes the second. In other words, the escaped escape sequence is treated as a single occurrance of the string, instead of an escape sequence. 
+     <listitem><para>two times consecutively, the first occurence escapes the second. In other words, the escaped escape sequence is painted with the <literal>DEFAULT</literal> token id, for this context.
      </para></listitem>
     </itemizedlist>
    </para></listitem>
