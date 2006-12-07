@@ -123,13 +123,6 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			"view.status.show-line-seperator"));
 		addComponent(showLineSeperator);
 
-		/* Ignore file change */
-		showIgnoreFileChange = new JCheckBox(jEdit.getProperty(
-			"options.status.show-ignore-file-change"));
-		showIgnoreFileChange.setSelected(jEdit.getBooleanProperty(
-			"view.status.show-ignore-file-change"));
-		addComponent(showIgnoreFileChange);
-
 		/* Memory status */
 		showMemory = new JCheckBox(jEdit.getProperty(
 			"options.status.show-memory"));
@@ -188,8 +181,6 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			showOverwrite.isSelected());
 		jEdit.setBooleanProperty("view.status.show-line-seperator",
 			showLineSeperator.isSelected());
-		jEdit.setBooleanProperty("view.status.show-ignore-file-change",
-			showIgnoreFileChange.isSelected());
 		jEdit.setBooleanProperty("view.status.show-memory",
 			showMemory.isSelected());
 		jEdit.setColorProperty("view.status.memory.foreground",memForegroundColor
@@ -213,7 +204,6 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private JCheckBox showRectSelect;
 	private JCheckBox showOverwrite;
 	private JCheckBox showLineSeperator;
-	private JCheckBox showIgnoreFileChange;
 	private JCheckBox showMemory;
 	private ColorWellButton memForegroundColor;
 	private ColorWellButton memBackgroundColor;

@@ -1536,22 +1536,6 @@ public class Buffer extends JEditBuffer
 		return count;
 	} //}}}
 
-	//{{{ isIgnoreFileState() method
-	public boolean isIgnoreFileState()
-	{
-		return ignoreFileState;
-	} //}}}
-
-	//{{{ setIgnoreFileChange() method
-	public void setIgnoreFileChange(boolean ignoreFileState)
-	{
-		if (ignoreFileState != this.ignoreFileState)
-		{
-			this.ignoreFileState = ignoreFileState;
-			EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
-		}
-	} //}}}
-
 	//{{{ toString() method
 	/**
 	 * Returns a string representation of this buffer.
@@ -1687,7 +1671,6 @@ public class Buffer extends JEditBuffer
 	private Vector<Marker> markers;
 
 	private Socket waitSocket;
-	private boolean ignoreFileState = false;
 	//}}}
 
 	//{{{ setPath() method

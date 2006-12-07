@@ -120,9 +120,8 @@ for contributing to this release.
   not dirty it is not closed (not needed since another one would be created)
   (Matthieu Casanova)
 
-- New Buffer flag : ignoreFileChange. You can set it to true if you don't want jEdit
-  warn your if the buffer changes on the disk. This can be useful if you are editing
-  log files. There is also a status bar widget for it (Matthieu Casanova)
+- The Files change dialog has now an ignore button to set the
+  autoreload and autoreloaddialog flags to false (Matthieu Casanova)
 
 }}}
 {{{ API Changes

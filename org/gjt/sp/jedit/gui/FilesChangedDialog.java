@@ -75,8 +75,6 @@ public class FilesChangedDialog extends EnhancedDialog
 		for(int i = 0; i < states.length; i++)
 		{
 			Buffer buffer = buffers[i];
-			if (buffer.isIgnoreFileState())
-				continue;
 			DefaultMutableTreeNode addTo;
 			switch(states[i])
 			{
@@ -235,6 +233,9 @@ public class FilesChangedDialog extends EnhancedDialog
 
 		if(reload != null)
 			reload.setEnabled(enabled);
+
+		if (ignore != null)
+			ignore.setEnabled(enabled);
 	} //}}}
 
 	//{{{ selectAll() method
@@ -300,7 +301,10 @@ public class FilesChangedDialog extends EnhancedDialog
 			if ("RELOAD".equals(action))
 				buffer.reload(view);
 			else
-				buffer.setIgnoreFileChange(true);
+			{
+				buffer.setAutoReload(false);
+				buffer.setAutoReloadDialog(false);
+			}
 
 			DefaultMutableTreeNode parent =
 				(DefaultMutableTreeNode)
@@ -366,7 +370,7 @@ public class FilesChangedDialog extends EnhancedDialog
 			else if(source == close)
 				dispose();
 			else if (source == ignore)
-				action("RELOAD");
+				action("IGNORE");
 		}
 	} //}}}
 

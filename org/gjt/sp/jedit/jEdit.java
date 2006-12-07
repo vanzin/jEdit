@@ -525,7 +525,7 @@ public class jEdit
 	 * new collection, not the existing properties instance.
 	 * @since jEdit 3.1pre4
 	 */
-	public static Properties getProperties()
+	public static final Properties getProperties()
 	{
 		return propMgr.getProperties();
 	} //}}}
@@ -535,7 +535,7 @@ public class jEdit
 	 * Fetches a property, returning null if it's not defined.
 	 * @param name The property
 	 */
-	public static String getProperty(String name)
+	public static final String getProperty(String name)
 	{
 		return propMgr.getProperty(name);
 	} //}}}
@@ -547,7 +547,7 @@ public class jEdit
 	 * @param name The property
 	 * @param def The default value
 	 */
-	public static String getProperty(String name, String def)
+	public static final String getProperty(String name, String def)
 	{
 		String value = propMgr.getProperty(name);
 		if(value == null)
@@ -572,7 +572,7 @@ public class jEdit
 	 * @param name The property
 	 * @param args The positional parameters
 	 */
-	public static String getProperty(String name, Object[] args)
+	public static final String getProperty(String name, Object[] args)
 	{
 		if(name == null)
 			return null;
@@ -593,7 +593,7 @@ public class jEdit
 	 * Returns the value of a boolean property.
 	 * @param name The property
 	 */
-	public static boolean getBooleanProperty(String name)
+	public static final boolean getBooleanProperty(String name)
 	{
 		return getBooleanProperty(name,false);
 	} //}}}
@@ -604,7 +604,7 @@ public class jEdit
 	 * @param name The property
 	 * @param def The default value
 	 */
-	public static boolean getBooleanProperty(String name, boolean def)
+	public static final boolean getBooleanProperty(String name, boolean def)
 	{
 		String value = getProperty(name);
 		if(value == null)
@@ -626,7 +626,7 @@ public class jEdit
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
-	public static int getIntegerProperty(String name, int def)
+	public static final int getIntegerProperty(String name, int def)
 	{
 		String value = getProperty(name);
 		if(value == null)
@@ -678,7 +678,7 @@ public class jEdit
 	 * @param name The property
 	 * @since jEdit 4.0pre1
 	 */
-	public static Font getFontProperty(String name)
+	public static final Font getFontProperty(String name)
 	{
 		return getFontProperty(name,null);
 	} //}}}
@@ -698,7 +698,7 @@ public class jEdit
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
-	public static Font getFontProperty(String name, Font def)
+	public static final Font getFontProperty(String name, Font def)
 	{
 		String family = getProperty(name);
 		String sizeString = getProperty(name + "size");
@@ -708,7 +708,7 @@ public class jEdit
 			return def;
 		else
 		{
-			int size;
+			int size, style;
 
 			try
 			{
@@ -719,7 +719,6 @@ public class jEdit
 				return def;
 			}
 
-			int style;
 			try
 			{
 				style = Integer.parseInt(styleString);
@@ -778,7 +777,7 @@ public class jEdit
 	 * @param name The property
 	 * @param value The new value
 	 */
-	public static void setProperty(String name, String value)
+	public static final void setProperty(String name, String value)
 	{
 		propMgr.setProperty(name,value);
 	} //}}}
@@ -791,7 +790,7 @@ public class jEdit
 	 * @param value The new value
 	 * @since jEdit 2.3final
 	 */
-	public static void setTemporaryProperty(String name, String value)
+	public static final void setTemporaryProperty(String name, String value)
 	{
 		propMgr.setTemporaryProperty(name,value);
 	} //}}}
@@ -802,7 +801,7 @@ public class jEdit
 	 * @param name The property
 	 * @param value The value
 	 */
-	public static void setBooleanProperty(String name, boolean value)
+	public static final void setBooleanProperty(String name, boolean value)
 	{
 		setProperty(name,value ? "true" : "false");
 	} //}}}
@@ -814,13 +813,13 @@ public class jEdit
 	 * @param value The value
 	 * @since jEdit 4.0pre1
 	 */
-	public static void setIntegerProperty(String name, int value)
+	public static final void setIntegerProperty(String name, int value)
 	{
 		setProperty(name,String.valueOf(value));
 	} //}}}
 
 	//{{{ setDoubleProperty() method
-	public static void setDoubleProperty(String name, double value)
+	public static final void setDoubleProperty(String name, double value)
 	{
 		setProperty(name,String.valueOf(value));
 	}
@@ -841,7 +840,7 @@ public class jEdit
 	 * @param value The value
 	 * @since jEdit 4.0pre1
 	 */
-	public static void setFontProperty(String name, Font value)
+	public static final void setFontProperty(String name, Font value)
 	{
 		setProperty(name,value.getFamily());
 		setIntegerProperty(name + "size",value.getSize());
@@ -853,7 +852,7 @@ public class jEdit
 	 * Unsets (clears) a property.
 	 * @param name The property
 	 */
-	public static void unsetProperty(String name)
+	public static final void unsetProperty(String name)
 	{
 		propMgr.unsetProperty(name);
 	} //}}}
@@ -865,7 +864,7 @@ public class jEdit
 	 *
 	 * @since jEdit 2.5pre3
 	 */
-	public static void resetProperty(String name)
+	public static final void resetProperty(String name)
 	{
 		propMgr.resetProperty(name);
 	} //}}}
@@ -955,7 +954,7 @@ public class jEdit
 
 	//{{{ getPlugin() method
 	/**
-	 * Returns the plugin with the specified class name. 
+	 * Returns the plugin with the specified class name.
 	 * Only works for plugins that were loaded.
 	 */
 	public static EditPlugin getPlugin(String name)
@@ -965,10 +964,10 @@ public class jEdit
 
 	//{{{ getPlugin(String, boolean) method
 	/**
-	 * Returns the plugin with the specified class name. 
+	 * Returns the plugin with the specified class name.
 	 * If * <code>loadIfNecessary</code> is true, the plugin will be searched for,
 	 * loaded, and activated in case it has not yet been loaded.
-	 * 
+	 *
 	 * @param name the classname of the main Plugin class.
 	 * @param loadIfNecessary - loads plugin + dependencies if it is not loaded yet.
 	 * @since jEdit 4.2pre4
@@ -1170,7 +1169,7 @@ public class jEdit
 	 * option pane). By default, each plugin has one ActionSet,
 	 * but some plugins may create dynamic action sets, such as ProjectViewer and Console.
 	 * These plugins must call removeActionSet() when the plugin is unloaded.
-	 * 
+	 *
 	 * @since jEdit 4.0pre1
 	 * @see removeActionSet()
 	 */
@@ -2074,30 +2073,27 @@ public class jEdit
 		boolean notifyFileChanged = false;
 		while(buffer != null)
 		{
-			if (!buffer.isIgnoreFileState())
-			{
-				states[i] = buffer.checkFileStatus(view);
+			states[i] = buffer.checkFileStatus(view);
 
-				switch(states[i])
+			switch(states[i])
+			{
+			case Buffer.FILE_CHANGED:
+				if(buffer.getAutoReload())
 				{
-					case Buffer.FILE_CHANGED:
-						if(buffer.getAutoReload())
-						{
-							if(buffer.isDirty())
-								notifyFileChanged = true;
-							else
-								buffer.load(view,true);
-						}
-						else	// no automatic reload even if general setting is true
-							autoReload = false;
-						// don't notify user if "do nothing" was chosen
-						if(buffer.getAutoReloadDialog())
-							notifyFileChanged = true;
-						break;
-					case Buffer.FILE_DELETED:
+					if(buffer.isDirty())
 						notifyFileChanged = true;
-						break;
+					else
+						buffer.load(view,true);
 				}
+				else	// no automatic reload even if general setting is true
+					autoReload = false;
+				// don't notify user if "do nothing" was chosen
+				if(buffer.getAutoReloadDialog())
+					notifyFileChanged = true;
+				break;
+			case Buffer.FILE_DELETED:
+				notifyFileChanged = true;
+				break;
 			}
 
 			buffer = buffer.next;
@@ -2757,7 +2753,7 @@ public class jEdit
 
 	//{{{ pluginError() method
 	/**
-	 * 
+	 *
 	 * @param messageProp - a property of a message to print
 	 * @param args a list of arguments whch correspond to {0} and {1} in the string to print.
 	 */
@@ -3249,7 +3245,7 @@ public class jEdit
 	//{{{ fontStyleToString() method
 	private static String fontStyleToString(int style)
 	{
-		if(style == Font.PLAIN)
+		if(style == 0)
 			return "PLAIN";
 		else if(style == Font.BOLD)
 			return "BOLD";
@@ -3524,6 +3520,8 @@ public class jEdit
 				if(count == 0)
 					newFile(null);
 
+				View view;
+
 				boolean restoreFiles = restore
 					&& jEdit.getBooleanProperty("restore")
 					&& (count == 0 ||
@@ -3531,9 +3529,9 @@ public class jEdit
 
 				if(gui || count != 0)
 				{
-					View view = PerspectiveManager
+					view = PerspectiveManager
 						.loadPerspective(
-							restoreFiles);
+						restoreFiles);
 
 					if(view == null)
 						view = newView(null,buffer);
@@ -3951,24 +3949,26 @@ loop:		for(int i = 0; i < list.length; i++)
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
 			if (Options.SIMPLIFIED_KEY_HANDLING) {
+				boolean result;
+
 				/*
 					Commenting this out is experimental.
-					
+
 					This code (if not commented out) seems to be the cause for
 					https://sourceforge.net/tracker/index.php?func=detail&aid=1542026&group_id=588&atid=100588
-					
+
 					Because the simplified key handling is still experimental, breaking things here is still allowed. ;-)
-					
+
 					My intuition says that we should separate
 					(1) key sequences which invoke some special actions against
 					(2) key sequences which are ordinary input.
-					
+
 					While the former should be available in most or all jEdit windows,
 					the latter should be available only within jEdit buffers.
-					
+
 					Currently, it seems, both former and latter are handled globally, leading to the errorneous behaviour
 					of emitting keys to the buffer which are intendet to popup menus.
-					
+
 					Commenting this out leads to an inavailability of keyboard shortcuts if other windows than a View have the focus. (This is a regression.)
 					In the long term, we should really separate global key-sequence triggered actions from local input.
 				*/
@@ -3977,7 +3977,7 @@ loop:		for(int i = 0; i < list.length; i++)
 					Component comp = (Component)evt.getSource();
 					if(!comp.isShowing())
 						return true;
-	
+
 					for(;;)
 					{
 						if(comp instanceof View)
@@ -3999,8 +3999,8 @@ loop:		for(int i = 0; i < list.length; i++)
 							comp = comp.getParent();
 					}
 				}
-				
-				boolean result = super.postProcessKeyEvent(evt);
+
+				result = super.postProcessKeyEvent(evt);
 				
 				return result;
 			} else {
