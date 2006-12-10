@@ -35,18 +35,23 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.*;
 //}}}
 
+/**
+ * HyperSearch results window.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 class HyperSearchRequest extends WorkRequest
 {
 	//{{{ HyperSearchRequest constructor
-	public HyperSearchRequest(View view, SearchMatcher matcher,
+	HyperSearchRequest(View view, SearchMatcher matcher,
 		HyperSearchResults results, Selection[] selection)
 	{
 		this.view = view;
 		this.matcher = matcher;
 
 		this.results = results;
-		this.searchString = SearchAndReplace.getSearchString();
-		this.rootSearchNode = new DefaultMutableTreeNode(new HyperSearchOperationNode(searchString));
+		searchString = SearchAndReplace.getSearchString();
+		rootSearchNode = new DefaultMutableTreeNode(new HyperSearchOperationNode(searchString));
 
 		this.selection = selection;
 	} //}}}
@@ -77,7 +82,6 @@ class HyperSearchRequest extends WorkRequest
 		// show a status message at most twice a second
 
 		// initially zero, so that we always show the first message
-		long lastStatusTime = 0;
 		String searchingCaption = jEdit.getProperty("hypersearch-results.searching") + ' ';
 		try
 		{
@@ -91,6 +95,7 @@ class HyperSearchRequest extends WorkRequest
 			{
 				int current = 0;
 
+				long lastStatusTime = 0;
 loop:				for(int i = 0; i < files.length; i++)
 				{
 					String file = files[i];
@@ -203,11 +208,11 @@ loop:				for(int i = 0; i < files.length; i++)
 	{
 		setAbortable(false);
 
-		final DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(
-			new HyperSearchFileNode(buffer.getPath()));
+		HyperSearchFileNode hyperSearchFileNode = new HyperSearchFileNode(buffer.getPath());
+		DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(hyperSearchFileNode);
 
 		int resultCount = doHyperSearch(buffer,start,end,bufferNode);
-
+		hyperSearchFileNode.setCount(resultCount);
 		if(resultCount != 0)
 			rootSearchNode.insert(bufferNode,rootSearchNode.getChildCount());
 
@@ -226,8 +231,8 @@ loop:				for(int i = 0; i < files.length; i++)
 		{
 			buffer.readLock();
 
-			boolean endOfLine = (buffer.getLineEndOffset(
-				buffer.getLineOfOffset(end)) - 1 == end);
+			boolean endOfLine = buffer.getLineEndOffset(
+				buffer.getLineOfOffset(end)) - 1 == end;
 
 			Segment text = new Segment();
 			int offset = start;
@@ -236,8 +241,8 @@ loop:				for(int i = 0; i < files.length; i++)
 
 loop:			for(int counter = 0; ; counter++)
 			{
-				boolean startOfLine = (buffer.getLineStartOffset(
-					buffer.getLineOfOffset(offset)) == offset);
+				boolean startOfLine = buffer.getLineStartOffset(
+					buffer.getLineOfOffset(offset)) == offset;
 
 				buffer.getText(offset,end - offset,text);
 				SearchMatcher.Match match = matcher.nextMatch(

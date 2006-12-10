@@ -27,6 +27,11 @@ import org.gjt.sp.jedit.EditPane;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.jEdit;
 
+/**
+ * HyperSearch results window.
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class HyperSearchFileNode implements HyperSearchNode
 {
 	public String path;
@@ -55,7 +60,7 @@ public class HyperSearchFileNode implements HyperSearchNode
 	} //}}}
 
 	//{{{ goTo() method
-	public void goTo(final EditPane editPane)
+	public void goTo(EditPane editPane)
 	{
 		Buffer buffer = getBuffer();
 		if(buffer == null)
@@ -69,7 +74,7 @@ public class HyperSearchFileNode implements HyperSearchNode
 	{
 		if (showFullPath)
 			return path;
-		String paths[] = path.split(fileSep);
+		String[] paths = path.split(fileSep);
 		return paths[paths.length - 1];
 	} //}}}
 	
@@ -83,5 +88,28 @@ public class HyperSearchFileNode implements HyperSearchNode
 		return path.equals(MiscUtilities.resolveSymlinks(otherResult.path))
 			&& buffer.equals(otherResult.buffer);		
 	}//}}}
-	
+
+	/**
+	 * Returns the result count.
+	 *
+	 * @return the result count
+	 * @since jEdit 4.3pre9
+	 */
+	public int getCount()
+	{
+		return count;
+	}
+
+	/**
+	 * Set the result count.
+	 *
+	 * @param count the result count
+	 * @since jEdit 4.3pre9
+	 */
+	public void setCount(int count)
+	{
+		this.count = count;
+	}
+
+	private int count;
 }

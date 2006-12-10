@@ -158,7 +158,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	} //}}}
 
 	//{{{ traverseNodes() method
-	public boolean traverseNodes(DefaultMutableTreeNode node, 
+	public static boolean traverseNodes(DefaultMutableTreeNode node, 
 			HyperSearchTreeNodeCallback callbackInterface)
 	{
 		if (!callbackInterface.processNode(node))
@@ -470,7 +470,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ RemoveTreeNodeAction class
 	class RemoveTreeNodeAction extends AbstractAction
 	{
-		public RemoveTreeNodeAction()
+		RemoveTreeNodeAction()
 		{
 			super(jEdit.getProperty("hypersearch-results.remove-node"));
 		}
@@ -491,7 +491,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ RemoveAllTreeNodesAction class
 	class RemoveAllTreeNodesAction extends AbstractAction
 	{
-		public RemoveAllTreeNodesAction()
+		RemoveAllTreeNodesAction()
 		{
 			super(jEdit.getProperty("hypersearch-results.remove-all-nodes"));
 		}
@@ -507,7 +507,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ NewSearchAction class
 	class NewSearchAction extends AbstractAction
 	{
-		public NewSearchAction()
+		NewSearchAction()
 		{
 			super(jEdit.getProperty("hypersearch-results.new-search"));
 		}
@@ -532,7 +532,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ ExpandChildTreeNodesAction class
 	class ExpandChildTreeNodesAction extends AbstractAction
 	{
-		public ExpandChildTreeNodesAction()
+		ExpandChildTreeNodesAction()
 		{
 			super(jEdit.getProperty("hypersearch-results.expand-child-nodes"));
 		}
@@ -548,7 +548,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ CollapseChildTreeNodesAction class
 	class CollapseChildTreeNodesAction extends AbstractAction
 	{
-		public CollapseChildTreeNodesAction()
+		CollapseChildTreeNodesAction()
 		{
 			super(jEdit.getProperty("hypersearch-results.collapse-child-nodes"));
 		}
@@ -630,7 +630,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	{
 		private int mode;
 
-		public GoToNodeAction(String labelProp, int mode)
+		GoToNodeAction(String labelProp, int mode)
 		{
 			super(jEdit.getProperty(labelProp));
 			this.mode = mode;
@@ -669,21 +669,9 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 			if (node.getUserObject() instanceof HyperSearchOperationNode)
 			{
-				ResultCellRenderer.this.setFont(boldFont);
+				setFont(boldFont);
 	
-				class CountNodes implements HyperSearchTreeNodeCallback
-				{
-					int bufferCount = 0, resultCount = 0;
-					public boolean processNode(DefaultMutableTreeNode node) 
-					{
-						Object userObject = node.getUserObject();
-						if (userObject instanceof HyperSearchResult)
-							resultCount++;
-						else if (userObject instanceof HyperSearchFileNode)
-							bufferCount++;
-						return true;
-					}
-				}
+
 				CountNodes countNodes = new CountNodes();
 				traverseNodes(node, countNodes);
 
@@ -693,43 +681,73 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 					property += countNodes.resultCount == 1 ? "1" : "2";
 				}
 				
-				Object[] pp = { node.toString(), new Integer(countNodes.resultCount), 
-						new Integer(countNodes.bufferCount) };
+				Object[] pp = { node.toString(), Integer.valueOf(countNodes.resultCount),
+						Integer.valueOf(countNodes.bufferCount)};
 				setText(jEdit.getProperty(property,pp));
 			}
 			else if(node.getUserObject() instanceof HyperSearchFolderNode)
 			{
-				ResultCellRenderer.this.setFont(plainFont);
+				setFont(plainFont);
 				setText(node.toString() + " (" + node.getChildCount() + " files/folders)");
 			}
 			else if(node.getUserObject() instanceof HyperSearchFileNode)
 			{
 				// file name
-				ResultCellRenderer.this.setFont(boldFont);
+				setFont(boldFont);
 				int count = node.getChildCount();
+				HyperSearchFileNode hyperSearchFileNode = (HyperSearchFileNode) node.getUserObject();
 				if(count == 1)
 				{
-					setText(jEdit.getProperty("hypersearch-results"
-						+ ".file-caption1",new Object[] {
-						node.getUserObject()
+					if (hyperSearchFileNode.getCount() == 1)
+					{
+						setText(jEdit.getProperty("hypersearch-results"
+									  + ".file-caption1",new Object[] {
+							hyperSearchFileNode
 						}));
+					}
+					else
+					{
+						setText(jEdit.getProperty("hypersearch-results"
+									  + ".file-caption2",new Object[] {
+							hyperSearchFileNode,
+							Integer.valueOf(hyperSearchFileNode.getCount())
+						}));
+					}
 				}
 				else
 				{
 					setText(jEdit.getProperty("hypersearch-results"
 						+ ".file-caption",new Object[] {
-						node.getUserObject(),
-						new Integer(count)
-						}));
+						hyperSearchFileNode,
+						Integer.valueOf(hyperSearchFileNode.getCount()),
+						Integer.valueOf(count)
+					}));
 				}
 			}
 			else
 			{
-				ResultCellRenderer.this.setFont(plainFont);
+				setFont(plainFont);
 			}
 
 			return this;
 		} //}}}
+
+		//{{{ CountNodes class
+		class CountNodes implements HyperSearchTreeNodeCallback
+		{
+			int bufferCount;
+			int resultCount;
+			public boolean processNode(DefaultMutableTreeNode node)
+			{
+				Object userObject = node.getUserObject();
+				if (userObject instanceof HyperSearchFileNode)
+				{
+					resultCount += ((HyperSearchFileNode)userObject).getCount();
+					bufferCount++;
+				}
+				return true;
+			}
+		}//}}}
 	} //}}}
 
 	// these are used to eliminate code duplication. i don't normally use
@@ -739,11 +757,11 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ ResultVisitor interface
 	interface ResultVisitor
 	{
-		public void visit(Buffer buffer, HyperSearchResult result);
+		void visit(Buffer buffer, HyperSearchResult result);
 	} //}}}
 
 	//{{{ BufferLoadedVisitor class
-	class BufferLoadedVisitor implements ResultVisitor
+	static class BufferLoadedVisitor implements ResultVisitor
 	{
 		public void visit(Buffer buffer, HyperSearchResult result)
 		{
@@ -752,7 +770,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	} //}}}
 
 	//{{{ BufferClosedVisitor class
-	class BufferClosedVisitor implements ResultVisitor
+	static class BufferClosedVisitor implements ResultVisitor
 	{
 		public void visit(Buffer buffer, HyperSearchResult result)
 		{
@@ -761,7 +779,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	} //}}}
 	
 	//{{{ TreeNodeCallbackAdapter class
-	class TreeNodeCallbackAdapter implements HyperSearchTreeNodeCallback
+	static class TreeNodeCallbackAdapter implements HyperSearchTreeNodeCallback
 	{
 		public boolean processNode(DefaultMutableTreeNode node) {
 			return false;
