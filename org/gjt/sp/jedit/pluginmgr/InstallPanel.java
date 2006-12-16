@@ -30,13 +30,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
+
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.StandardUtilities;
@@ -135,8 +131,8 @@ class InstallPanel extends JPanel
 	//{{{ updateModel() method
 	public void updateModel()
 	{
-		final ArrayList<String> savedChecked = new ArrayList<String>();
-		final ArrayList<String> savedSelection = new ArrayList<String>();
+		final Set<String> savedChecked = new HashSet<String>();
+		final Set<String> savedSelection = new HashSet<String>();
 		pluginModel.saveSelection(savedChecked,savedSelection);
 		pluginModel.clear();
 		infoBox.setText(jEdit.getProperty("plugin-manager.list-download"));
@@ -155,7 +151,7 @@ class InstallPanel extends JPanel
 	//{{{ Private members
 
 	//{{{ Variables
-	private JTable table;
+	private final JTable table;
 	private JScrollPane scrollpane;
 	private PluginTableModel pluginModel;
 	private PluginManager window;
@@ -346,11 +342,11 @@ class InstallPanel extends JPanel
 			if (!entry.install)
 				deselectParents(entry);
 
-			List deps = entry.plugin.getCompatibleBranch().deps;
+			List<PluginList.Dependency> deps = entry.plugin.getCompatibleBranch().deps;
 
 			for (int i = 0; i < deps.size(); i++)
 			{
-				PluginList.Dependency dep = (PluginList.Dependency)deps.get(i);
+				PluginList.Dependency dep = deps.get(i);
 				if (dep.what.equals("plugin"))
 				{
 					for (int j = 0; j < entries.size(); j++)
@@ -376,8 +372,8 @@ class InstallPanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
-			ArrayList<String> savedChecked = new ArrayList<String>();
-			ArrayList<String> savedSelection = new ArrayList<String>();
+			Set<String> savedChecked = new HashSet<String>();
+			Set<String> savedSelection = new HashSet<String>();
 			saveSelection(savedChecked,savedSelection);
 
 			sortType = type;
@@ -407,8 +403,8 @@ class InstallPanel extends JPanel
 		//{{{ update() method
 		public void update()
 		{
-			ArrayList<String> savedChecked = new ArrayList<String>();
-			ArrayList<String> savedSelection = new ArrayList<String>();
+			Set<String> savedChecked = new HashSet<String>();
+			Set<String> savedSelection = new HashSet<String>();
 			saveSelection(savedChecked,savedSelection);
 
 			PluginList pluginList = window.getPluginList();
@@ -454,28 +450,26 @@ class InstallPanel extends JPanel
 		} //}}}
 
 		//{{{ saveSelection() method
-		public void saveSelection(List<String> savedChecked, List<String> savedSelection)
+		public void saveSelection(Set<String> savedChecked, Set<String> savedSelection)
 		{
+			if (entries.isEmpty())
+				return;
 			for (int i=0, c=getRowCount() ; i<c ; i++)
 			{
 				if ((Boolean)getValueAt(i,0))
 				{
-					savedChecked.add(new String(entries.get(i).toString()));
+					savedChecked.add(entries.get(i).toString());
 				}
 			}
-
-			if (null != table)
+			int[] rows = table.getSelectedRows();
+			for (int i=0 ; i<rows.length ; i++)
 			{
-				int[] rows = table.getSelectedRows();
-				for (int i=0 ; i<rows.length ; i++)
-				{
-					savedSelection.add(new String(entries.get(rows[i]).toString()));
-				}
+				savedSelection.add(entries.get(rows[i]).toString());
 			}
 		} //}}}
 
 		//{{{ restoreSelection() method
-		public void restoreSelection(List<String> savedChecked, List<String> savedSelection)
+		public void restoreSelection(Set<String> savedChecked, Set<String> savedSelection)
 		{
 			for (int i=0, c=getRowCount() ; i<c ; i++)
 			{
@@ -485,7 +479,7 @@ class InstallPanel extends JPanel
 			if (null != table)
 			{
 				table.setColumnSelectionInterval(0,0);
-				if (0 < savedSelection.size())
+				if (!savedSelection.isEmpty())
 				{
 					int i = 0;
 					int rowCount = getRowCount();
@@ -545,11 +539,9 @@ class InstallPanel extends JPanel
 
 		private void getParents(List<Entry> list)
 		{
-			Iterator<Entry> iter = parents.iterator();
-			while(iter.hasNext())
+			for (Entry entry : parents)
 			{
-				Entry entry = iter.next();
-				if(entry.install && !list.contains(entry))
+				if (entry.install && !list.contains(entry))
 				{
 					list.add(entry);
 					entry.getParents(list);
@@ -575,7 +567,7 @@ class InstallPanel extends JPanel
 	//{{{ PluginInfoBox class
 	class PluginInfoBox extends JTextArea implements ListSelectionListener
 	{
-		public PluginInfoBox()
+		PluginInfoBox()
 		{
 			setEditable(false);
 			setLineWrap(true);
@@ -604,7 +596,7 @@ class InstallPanel extends JPanel
 	{
 		private int size;
 
-		public SizeLabel()
+		SizeLabel()
 		{
 			size = 0;
 			setText(jEdit.getProperty("install-plugins.totalSize")+formatSize(size));
@@ -635,7 +627,7 @@ class InstallPanel extends JPanel
 	//{{{ SelectallButton class
 	class SelectallButton extends JCheckBox implements ActionListener, TableModelListener
 	{
-		public SelectallButton()
+		SelectallButton()
 		{
 			super(jEdit.getProperty("install-plugins.select-all"));
 			addActionListener(this);
@@ -672,7 +664,7 @@ class InstallPanel extends JPanel
 	//{{{ InstallButton class
 	class InstallButton extends JButton implements ActionListener, TableModelListener
 	{
-		public InstallButton()
+		InstallButton()
 		{
 			super(jEdit.getProperty("install-plugins.install"));
 			pluginModel.addTableModelListener(this);
@@ -765,7 +757,7 @@ class InstallPanel extends JPanel
 
 		private int type;
 
-		public EntryCompare(int type)
+		EntryCompare(int type)
 		{
 			this.type = type;
 		}
@@ -806,11 +798,11 @@ class InstallPanel extends JPanel
 	} //}}}
 
 	//{{{ TextRenderer
-	class TextRenderer extends DefaultTableCellRenderer
+	static class TextRenderer extends DefaultTableCellRenderer
 	{
 		private DefaultTableCellRenderer tcr;
 
-		public TextRenderer(DefaultTableCellRenderer tcr)
+		TextRenderer(DefaultTableCellRenderer tcr)
 		{
 			this.tcr = tcr;
 		}
@@ -827,9 +819,8 @@ class InstallPanel extends JPanel
 	{
 		private KeyboardCommand command = KeyboardCommand.NONE;
 
-		public KeyboardAction(KeyboardCommand command)
+		KeyboardAction(KeyboardCommand command)
 		{
-			super();
 			this.command = command;
 		}
 
