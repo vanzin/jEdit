@@ -1288,7 +1288,7 @@ search.synchronize.tooltip=Sets filter and directory to current buffer's extensi
 search.findBtn=Find
 search.findBtn.mnemonic=f
 search.replaceAndFindBtn=Replace & Find
-search.replaceAndFindBtn.mnemonic=n
+search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Replace All
 search.replaceAllBtn.mnemonic=a
 
