@@ -1277,6 +1277,7 @@ search.directoryField=Directory:
 search.directoryField.mnemonic=y
 search.filterField=Filter:
 search.filterField.mnemonic=f
+search.filterField.tooltip={*.c,*.h} for multiple extensions
 search.subdirs=Search subdirectories
 search.subdirs.mnemonic=u
 search.choose=Choose...

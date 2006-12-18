@@ -524,6 +524,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		MultiFileActionHandler actionListener = new MultiFileActionHandler();
 		filter = new HistoryTextField("search.filter");
+		
+		filter.setToolTipText(jEdit.getProperty("search.filterField.tooltip"));
 		filter.addActionListener(actionListener);
 
 		cons.insets = new Insets(0,0,3,0);
