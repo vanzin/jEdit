@@ -63,6 +63,7 @@
 
 # Generate debugging code
 #compiler.debug=off
+#compiler.debuglevel=lines,vars,source
 
 # Gererate optimized code
 #compiler.optimize=off

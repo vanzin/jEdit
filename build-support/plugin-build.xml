@@ -73,6 +73,7 @@
 
     <!-- default compiler flags -->
     <property name="compiler.debug"         value="off" />
+    <property name="compiler.debuglevel"    value="lines,source" />
     <property name="compiler.optimize"      value="off" />
     <property name="compiler.deprecation"   value="off" />
     <property name="compiler.verbose"       value="off" />
@@ -147,6 +148,7 @@
     <presetdef name="jp.javac">
         <javac destdir="${build.classes}"
                 debug="${compiler.debug}"
+                debuglevel="${compiler.debuglevel}"
                 optimize="${compiler.optimize}"
                 deprecation="${compiler.deprecation}"
                 verbose="${compiler.verbose}"
@@ -201,6 +203,7 @@
         <and>
             <or>
                 <filename name="**/actions.xml" />
+                <filename name="**/browser.actions.xml" />
                 <filename name="**/dockables.xml" />
                 <filename name="**/services.xml" />
                 <filename name="**/*.props" />
@@ -225,12 +228,13 @@
          the compiler (relates to options to the javac
          ant task, defaults in parethesis):
          compiler.debug: the debug option (off)
+         compiler.debuglevel: the debug level (lines,source)
          compiler.optimize: the optimize option (off)
          compiler.deprecation: deprecation option (off)
          compiler.verbose: the verbose option (off)
          compiler.nowarn: the nowarn option (off)
-         compiler.target: the target option (1.3)
-         compiler.source: the source option (1.3)
+         compiler.target: the target option (1.4)
+         compiler.source: the source option (1.4)
          compiler.listfiles: the listfiles option (no)      -->
     <target name="compile"
             description="Compile the plugin's classes">

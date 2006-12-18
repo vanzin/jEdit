@@ -158,7 +158,7 @@ begin
 
 	// try to find JDK "javaw.exe"
 	javaVersion := getJDKVersion;
-	if (Length(javaVersion) > 0) and (javaVersion >= '1.4') then begin
+	if (Length(javaVersion) > 0) and (javaVersion >= '1.5') then begin
 		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Development Kit\' + javaVersion,'JavaHome',javaHome);
 		path := javaHome + '\bin\javaw.exe';
 		if FileExists(path) then begin
@@ -172,7 +172,7 @@ begin
 	// if we didn't find a JDK "javaw.exe", try for a JRE one
 	Log('(JRE) JDK not found or too old, looking for JRE');
 	javaVersion := getJREVersion;
-	if (Length(javaVersion) > 0) and (javaVersion >= '1.4') then begin
+	if (Length(javaVersion) > 0) and (javaVersion >= '1.5') then begin
 		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion,'JavaHome',javaHome);
 		path := javaHome + '\bin\javaw.exe';
 		if FileExists(path) then begin

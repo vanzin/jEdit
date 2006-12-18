@@ -37,32 +37,58 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowStateListener;
+
 import java.net.URL;
+
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.StringTokenizer;
 import java.util.Map;
+import java.util.StringTokenizer;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.Spring;
+import javax.swing.SpringLayout;
+import javax.swing.SpringLayout.Constraints;
+import javax.swing.SwingUtilities;
 
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
+
 import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
 import org.gjt.sp.jedit.gui.SplashScreen;
-
 import org.gjt.sp.jedit.gui.VariableGridLayout;
+
 import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
+
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
+
 import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
+
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -1600,6 +1626,80 @@ public class GUIUtilities
 		SizeSaver ss = new SizeSaver(frame,parent,name);
 		frame.addWindowStateListener(ss);
 		frame.addComponentListener(ss);
+	} //}}}
+
+	//{{{ makeCompactGrid() method
+	/**
+	 * Aligns the first <code>rows</code> * <code>cols</code>
+	 * components of <code>parent</code> in a grid.
+	 * Each component in a column is as wide as the maximum
+	 * preferred width of the components in that column;
+	 * height is similarly determined for each row.
+	 * The parent is made just big enough to fit them all.
+	 * This method is a variant of the one found at
+	 * &quot;The Java Tutorial&quot; in the section
+	 * &quot;How to Use SpringLayout&quot;
+	 *
+	 * @param parent The parent in which to layout the children
+	 * @param layout The parents LayoutManager
+	 * @param rows The number of rows
+	 * @param cols The number of columns
+	 * @param initialX The x location to start the grid at
+	 * @param initialY The y location to start the grid at
+	 * @param xPad The x padding between cells
+	 * @param yPad The y padding between cells
+	 * @param distanceToRightBorder The distance to the right border
+	 * @param distanceToBottomBorder The distance to the bottom border
+	 * @since jEdit 4.3pre9
+	 */
+	public static void makeCompactGrid(Container parent, SpringLayout layout,
+					   int rows, int cols,
+					   int initialX, int initialY,
+					   int xPad, int yPad,
+					   int distanceToRightBorder, int distanceToBottomBorder)
+	{
+		//Align all cells in each column and make them the same width.
+		Spring x = Spring.constant(initialX);
+		for (int c = 0; c < cols; c++)
+		{
+			Spring width = Spring.constant(0);
+			for (int r = 0; r < rows; r++)
+			{
+				width = Spring.max(width,layout.getConstraints(parent.getComponent(r * cols + c)).getWidth());
+			}
+			for (int r = 0; r < rows; r++)
+			{
+				SpringLayout.Constraints constraints = layout.getConstraints(parent.getComponent(r * cols + c));
+				constraints.setX(x);
+				constraints.setWidth(width);
+			}
+			x = Spring.sum(x, Spring.sum(width, Spring.constant(xPad)));
+		}
+
+		//Align all cells in each row and make them the same height.
+		Spring y = Spring.constant(initialY);
+		for (int r = 0; r < rows; r++)
+		{
+			Spring height = Spring.constant(0);
+			for (int c = 0; c < cols; c++)
+			{
+				height = Spring.max(height,layout.getConstraints(parent.getComponent(r * cols + c)).getHeight());
+			}
+			for (int c = 0; c < cols; c++)
+			{
+				SpringLayout.Constraints constraints = layout.getConstraints(parent.getComponent(r * cols + c));
+				constraints.setY(y);
+				constraints.setHeight(height);
+			}
+			y = Spring.sum(y, Spring.sum(height, Spring.constant(yPad)));
+		}
+
+		//Set the parent's size.
+		SpringLayout.Constraints pCons = layout.getConstraints(parent);
+		x = Spring.sum(Spring.sum(x,Spring.minus(Spring.constant(xPad))),Spring.constant(distanceToRightBorder));
+		pCons.setConstraint(SpringLayout.EAST, x);
+		y = Spring.sum(Spring.sum(y,Spring.minus(Spring.constant(yPad))),Spring.constant(distanceToBottomBorder));
+		pCons.setConstraint(SpringLayout.SOUTH, y);
 	} //}}}
 
 	//{{{ Package-private members

@@ -146,6 +146,9 @@ for contributing to this release.
   whole Strings. Additionally new ones for accepting HASH_CHARS got
   added. (Björn "Vampire" Kautler)
 
+- GUIUtilities has a new method makeCompactGrid() to help building
+  nice GUIs with SpringLayout. (Björn "Vampire" Kautler)
+
 }}}
 
 }}}
