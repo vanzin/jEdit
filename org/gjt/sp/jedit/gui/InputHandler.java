@@ -155,7 +155,8 @@ public abstract class InputHandler extends AbstractInputHandler
 			if(keyEventInterceptor != null)
 				keyEventInterceptor.keyTyped(evt);
 			else if(from == View.ACTION_BAR
-				|| Debug.GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES
+				|| (Debug.GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES &&
+				    Options.SIMPLIFIED_KEY_HANDLING)
 				|| isPrefixActive()
 				|| view.getTextArea().hasFocus())
 			{

@@ -80,6 +80,9 @@ for contributing to this release.
 - An exception fixed when you update a plugin from the plugin manager
   (Matthieu Casanova)
 
+- When simplified keyboard handling was off, typing Alt+F o to open
+  a file, the o was also written in the textarea. (#1593359) (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
