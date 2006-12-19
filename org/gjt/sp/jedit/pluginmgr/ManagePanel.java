@@ -38,18 +38,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import java.io.File;
-
 import java.net.URL;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -82,9 +73,6 @@ import javax.swing.table.TableColumn;
 import org.gjt.sp.jedit.*;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import org.gjt.sp.jedit.gui.*;
 
 import org.gjt.sp.jedit.help.*;
 
@@ -95,11 +83,11 @@ public class ManagePanel extends JPanel
 {
 
 	//{{{ Private members
-	private JCheckBox hideLibraries;
-	private JTable table;
-	private JScrollPane scrollpane;
-	private PluginTableModel pluginModel;
-	private PluginManager window;
+	private final JCheckBox hideLibraries;
+	private final JTable table;
+	private final JScrollPane scrollpane;
+	private final PluginTableModel pluginModel;
+	private final PluginManager window;
 	//}}}
 	
 	//{{{ ManagePanel constructor
@@ -165,6 +153,8 @@ public class ManagePanel extends JPanel
 		buttons.add(new HelpButton());
 
 		add(BorderLayout.SOUTH,buttons);
+
+		pluginModel.update();
 	} //}}}
 
 	//{{{ update() method
@@ -186,17 +176,17 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ Entry class
-	class Entry
+	static class Entry
 	{
 		static final String ERROR = "error";
 		static final String LOADED = "loaded";
 		static final String NOT_LOADED = "not-loaded";
 
-		String status;
-		String jar;
+		final String status;
+		final String jar;
 
 		String clazz, name, version, author, docs;
-		List<String> jars;
+		final List<String> jars;
 
 		Entry(String jar)
 		{
@@ -215,8 +205,8 @@ public class ManagePanel extends JPanel
 			EditPlugin plugin = jar.getPlugin();
 			if(plugin != null)
 			{
-				status = (plugin instanceof EditPlugin.Broken
-					? ERROR : LOADED);
+				status = plugin instanceof EditPlugin.Broken
+					? ERROR : LOADED;
 				clazz = plugin.getClassName();
 				name = jEdit.getProperty("plugin."+clazz+".name");
 				version = jEdit.getProperty("plugin."+clazz+".version");
@@ -245,16 +235,15 @@ public class ManagePanel extends JPanel
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
-		private List<Entry> entries;
+		private final List<Entry> entries;
 		private int sortType = EntryCompare.NAME;
 		private ConcurrentHashMap<String, Object> unloaded;
 		// private HashSet<String> unloaded;
 
 		//{{{ Constructor
-		public PluginTableModel()
+		PluginTableModel()
 		{
 			entries = new ArrayList<Entry>();
-			update();
 		} //}}}
 
 		//{{{ getColumnCount() method
@@ -310,7 +299,7 @@ public class ManagePanel extends JPanel
 			switch (columnIndex)
 			{
 				case 0:
-					return new Boolean(!entry.status.equals(Entry.NOT_LOADED));
+					return Boolean.valueOf(!entry.status.equals(Entry.NOT_LOADED));
 				case 1:
 					if(entry.name == null)
 					{
@@ -467,31 +456,31 @@ public class ManagePanel extends JPanel
 		} //}}}
 		
 		//{{{ saveSelection() method
-		public void saveSelection(ArrayList<String> savedSelection)
+		public void saveSelection(List<String> savedSelection)
 		{
 			if (null != table)
 			{
 				int[] rows = table.getSelectedRows();
 				for (int i=0 ; i<rows.length ; i++)
 				{
-					savedSelection.add(new String((entries.get(rows[i])).jar));
+					savedSelection.add(entries.get(rows[i]).jar);
 				}
 			}
 		} //}}}
 		
 		//{{{ restoreSelection() method
-		public void restoreSelection(ArrayList<String> savedSelection)
+		public void restoreSelection(List<String> savedSelection)
 		{
 			if (null != table)
 			{
 				table.setColumnSelectionInterval(0,0);
-				if (0 < savedSelection.size())
+				if (!savedSelection.isEmpty())
 				{
 					int i = 0;
 					int rowCount = getRowCount();
 					for ( ; i<rowCount ; i++)
 					{
-						if (savedSelection.contains((entries.get(i)).jar))
+						if (savedSelection.contains(entries.get(i).jar))
 						{
 							table.setRowSelectionInterval(i,i);
 							break;
@@ -500,7 +489,7 @@ public class ManagePanel extends JPanel
 					ListSelectionModel lsm = table.getSelectionModel();
 					for ( ; i<rowCount ; i++)
 					{
-						if (savedSelection.contains((entries.get(i)).jar))
+						if (savedSelection.contains(entries.get(i).jar))
 						{
 							lsm.addSelectionInterval(i,i);
 						}
@@ -508,7 +497,8 @@ public class ManagePanel extends JPanel
 				}
 				else
 				{
-					table.setRowSelectionInterval(0,0);
+					if (table.getRowCount() != 0)
+						table.setRowSelectionInterval(0,0);
 					JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
 					scrollbar.setValue(scrollbar.getMinimum());
 				}
@@ -519,9 +509,9 @@ public class ManagePanel extends JPanel
 	//{{{ TextRenderer class
 	class TextRenderer extends DefaultTableCellRenderer
 	{
-		private DefaultTableCellRenderer tcr;
+		private final DefaultTableCellRenderer tcr;
 
-		public TextRenderer(DefaultTableCellRenderer tcr)
+		TextRenderer(DefaultTableCellRenderer tcr)
 		{
 			this.tcr = tcr;
 		}
@@ -561,7 +551,7 @@ public class ManagePanel extends JPanel
 	//{{{ RemoveButton class
 	class RemoveButton extends JButton implements ListSelectionListener, ActionListener
 	{
-		public RemoveButton()
+		RemoveButton()
 		{
 			super(jEdit.getProperty("manage-plugins.remove"));
 			table.getSelectionModel().addListSelectionListener(this);
@@ -573,20 +563,18 @@ public class ManagePanel extends JPanel
 		{
 			int[] selected = table.getSelectedRows();
 
-			List listModel = new LinkedList();
+			List<String> listModel = new LinkedList<String>();
 			Roster roster = new Roster();
 			for(int i = 0; i < selected.length; i++)
 			{
 				Entry entry = pluginModel.getEntry(selected[i]);
-				Iterator iter = entry.jars.iterator();
-				while(iter.hasNext())
+				for (String jar : entry.jars)
 				{
-					String jar = (String)iter.next();
 					listModel.add(jar);
 					roster.addRemove(jar);
+					table.getSelectionModel().removeSelectionInterval(selected[i], selected[i]);
 				}
 			}
-
 			int button = GUIUtilities.listConfirm(window,
 				"plugin-manager.remove-confirm",
 				null,listModel.toArray());
@@ -594,7 +582,8 @@ public class ManagePanel extends JPanel
 			{
 				roster.performOperationsInAWTThread(window);
 				pluginModel.update();
-				table.setRowSelectionInterval(0,0);
+				if (table.getRowCount() != 0)
+					table.setRowSelectionInterval(0,0);
 				table.setColumnSelectionInterval(0,0);
 				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
 				scrollbar.setValue(scrollbar.getMinimum());
@@ -615,7 +604,7 @@ public class ManagePanel extends JPanel
 	{
 		private URL docURL;
 
-		public HelpButton()
+		HelpButton()
 		{
 			super(jEdit.getProperty("manage-plugins.help"));
 			table.getSelectionModel().addListSelectionListener(this);
@@ -641,7 +630,7 @@ public class ManagePanel extends JPanel
 						EditPlugin plug = jEdit.getPlugin(label, false);
 						PluginJAR jar = null;
 						if (plug != null) jar = plug.getPluginJAR();
-						if(jar != null && label != null && docs != null)
+						if(jar != null && docs != null)
 						{
 							URL url = jar.getClassLoader().getResource(docs);
 							if(url != null)
@@ -662,23 +651,20 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ EntryCompare class
-	static class EntryCompare implements Comparator
+	private static class EntryCompare implements Comparator<ManagePanel.Entry>
 	{
 		public static final int NAME = 1;
 		public static final int STATUS = 2;
 
-		private int type;
+		private final int type;
 
-		public EntryCompare(int type)
+		EntryCompare(int type)
 		{
 			this.type = type;
 		}
 
-		public int compare(Object o1, Object o2)
+		public int compare(ManagePanel.Entry e1, ManagePanel.Entry e2)
 		{
-			ManagePanel.Entry e1 = (ManagePanel.Entry)o1;
-			ManagePanel.Entry e2 = (ManagePanel.Entry)o2;
-
 			if (type == NAME)
 				return compareNames(e1,e2);
 			else
@@ -690,13 +676,14 @@ public class ManagePanel extends JPanel
 			}
 		}
 
-		private int compareNames(ManagePanel.Entry e1, ManagePanel.Entry e2)
+		private static int compareNames(ManagePanel.Entry e1, ManagePanel.Entry e2)
 		{
-			String s1, s2;
+			String s1;
 			if(e1.name == null)
 				s1 = MiscUtilities.getFileName(e1.jar);
 			else
 				s1 = e1.name;
+			String s2;
 			if(e2.name == null)
 				s2 = MiscUtilities.getFileName(e2.jar);
 			else
@@ -730,9 +717,8 @@ public class ManagePanel extends JPanel
 	{
 		private KeyboardCommand command = KeyboardCommand.NONE;
 		
-		public KeyboardAction(KeyboardCommand command)
+		KeyboardAction(KeyboardCommand command)
 		{
-			super();
 			this.command = command;
 		}
 		
@@ -747,7 +733,7 @@ public class ManagePanel extends JPanel
 				KeyboardFocusManager.getCurrentKeyboardFocusManager().focusPreviousComponent();
 				break;
 			case EDIT_PLUGIN:
-				ArrayList<String> savedSelection = new ArrayList<String>();
+				List<String> savedSelection = new ArrayList<String>();
 				pluginModel.saveSelection(savedSelection);
 				int[] rows = table.getSelectedRows();
 				Object[] state = new Object[rows.length];
@@ -759,7 +745,7 @@ public class ManagePanel extends JPanel
 				{
 					for (int j=0, c=pluginModel.getRowCount() ; j<c ; j++)
 					{
-						if ((pluginModel.entries.get(j)).jar.equals(savedSelection.get(i)))
+						if (pluginModel.entries.get(j).jar.equals(savedSelection.get(i)))
 						{
 							pluginModel.setValueAt(state[i].equals(Boolean.FALSE),j,0);
 							break;

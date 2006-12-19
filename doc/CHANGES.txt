@@ -77,7 +77,7 @@ for contributing to this release.
 - Hypersearch now report occurences count and line count (#1565447)
   (Matthieu Casanova)
 
-- An exception fixed when you update a plugin from the plugin manager
+- Several exceptions fixed in plugin manager after update or remove plugins
   (Matthieu Casanova)
 
 - When simplified keyboard handling was off, typing Alt+F o to open
