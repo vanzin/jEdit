@@ -152,6 +152,8 @@ for contributing to this release.
 - GUIUtilities has a new method makeCompactGrid() to help building
   nice GUIs with SpringLayout. (Björn "Vampire" Kautler)
 
+- SearchDialog.preloadSearchDialog(View) is removed, this is
+  not necessary on our big computers and JVM with JIT (Matthieu Casanova)
 }}}
 
 }}}

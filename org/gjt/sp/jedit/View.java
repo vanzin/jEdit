@@ -1070,7 +1070,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	public String toString()
 	{
 		return getClass().getName() + '['
-		       + (jEdit.getActiveView() == this
+			+ (jEdit.getActiveView() == this
 			? "active" : "inactive")
 			+ ']';
 	} //}}}
@@ -1182,8 +1182,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		setFocusTraversalPolicy(new MyFocusTraversalPolicy());
 
 		EditBus.addToBus(this);
-
-		SearchDialog.preloadSearchDialog(this);
 
 		GUIUtilities.addSizeSaver(this, null, plainView ? "plain-view" : "view");
 	} //}}}
