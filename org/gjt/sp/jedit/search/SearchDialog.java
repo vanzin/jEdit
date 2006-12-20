@@ -61,7 +61,16 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		if(Debug.DISABLE_SEARCH_DIALOG_POOL)
 			return new SearchDialog(view);
 		else
-			return viewHash.get(view);
+		{
+
+			SearchDialog searchDialog = viewHash.get(view);
+			if (searchDialog == null)
+			{
+				searchDialog = new SearchDialog(view);
+				viewHash.put(view, searchDialog);
+			}
+			return searchDialog;
+		}
 	} //}}}
 
 	//{{{ showSearchDialog() method
