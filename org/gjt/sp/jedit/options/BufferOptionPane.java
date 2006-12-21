@@ -37,8 +37,11 @@ import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 
-
+/**
+ * @version $Id: MiscUtilities.java 7183 2006-10-07 04:46:25Z ezust $
+ */
 public class BufferOptionPane extends AbstractOptionPane
 {
 	JComboBox encoding;
@@ -79,7 +82,7 @@ public class BufferOptionPane extends AbstractOptionPane
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
 		lineSeparator = new JComboBox(lineSeps);
-		String lineSep = buffer.getStringProperty(Buffer.LINESEP);
+		String lineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
 		if(lineSep == null)
 			lineSep = System.getProperty("line.separator");
 		if("\n".equals(lineSep))
@@ -97,7 +100,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
 		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
-		encoding.setSelectedItem(buffer.getStringProperty(Buffer.ENCODING));
+		encoding.setSelectedItem(buffer.getStringProperty(JEditBuffer.ENCODING));
 		addComponent(jEdit.getProperty("buffer-options.encoding"),
 			encoding);
 		//}}}
@@ -141,7 +144,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		//{{{ Edit mode
 		modes = jEdit.getModes();
-		MiscUtilities.quicksort(modes,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(modes,new MiscUtilities.StringICaseCompare());
 		mode = new JComboBox(modes);
 		mode.setSelectedItem(buffer.getMode());
 		ActionHandler actionListener = new ActionHandler();
@@ -219,7 +222,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		else
 			throw new InternalError();
 
-		String oldLineSep = buffer.getStringProperty(Buffer.LINESEP);
+		String oldLineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
 		if(oldLineSep == null)
 			oldLineSep = System.getProperty("line.separator");
 		if(!oldLineSep.equals(lineSep))
@@ -229,10 +232,10 @@ public class BufferOptionPane extends AbstractOptionPane
 		}
 
 		String encoding = (String)this.encoding.getSelectedItem();
-		String oldEncoding = buffer.getStringProperty(Buffer.ENCODING);
+		String oldEncoding = buffer.getStringProperty(JEditBuffer.ENCODING);
 		if(!oldEncoding.equals(encoding))
 		{
-			buffer.setStringProperty(Buffer.ENCODING,encoding);
+			buffer.setStringProperty(JEditBuffer.ENCODING,encoding);
 			buffer.setDirty(true);
 		}
 
