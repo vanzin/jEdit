@@ -26,11 +26,11 @@ package org.gjt.sp.jedit.syntax;
 import javax.swing.text.*;
 import java.awt.font.*;
 import java.util.List;
-import org.gjt.sp.jedit.syntax.*;
 //}}}
 
 /**
  * Creates {@link Chunk} objects that can be painted on screen.
+ * @version $Id$
  */
 public class DisplayTokenHandler extends DefaultTokenHandler
 {
@@ -40,7 +40,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ init() method
 	public void init(SyntaxStyle[] styles,
 		FontRenderContext fontRenderContext,
-		TabExpander expander, List out,
+		TabExpander expander, List<Chunk> out,
 		float wrapMargin)
 	{
 		super.init();
@@ -69,7 +69,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	 * Returns the list of chunks.
 	 * @since jEdit 4.1pre7
 	 */
-	public List getChunkList()
+	public List<Chunk> getChunkList()
 	{
 		return out;
 	} //}}}
@@ -156,7 +156,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	private TabExpander expander;
 	private float x;
 
-	private List out;
+	private List<Chunk> out;
 	private float wrapMargin;
 	private float endX;
 	private Token end;
@@ -217,7 +217,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ canMerge() method
-	private boolean canMerge(Chunk c1, Chunk c2, Segment seg)
+	private static boolean canMerge(Chunk c1, Chunk c2, Segment seg)
 	{
 		if(!c1.accessable || !c2.accessable)
 			return false;

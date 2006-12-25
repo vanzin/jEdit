@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit.print;
 
 //{{{ Imports
-import javax.swing.text.Segment;
 import javax.swing.text.TabExpander;
 import javax.swing.SwingUtilities;
 import java.awt.font.*;
@@ -33,11 +32,16 @@ import java.awt.print.*;
 import java.awt.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 //}}}
 
+/**
+ * @version $Id$
+ */
 class BufferPrintable implements Printable
 {
 	//{{{ BufferPrintable constructor
@@ -72,7 +76,7 @@ class BufferPrintable implements Printable
 			}
 		}
 
-		lineList = new ArrayList();
+		lineList = new ArrayList<Chunk>();
 
 		tokenHandler = new DisplayTokenHandler();
 	} //}}}
@@ -197,7 +201,7 @@ class BufferPrintable implements Printable
 	private boolean end;
 
 	private LineMetrics lm;
-	private ArrayList lineList;
+	private final List<Chunk> lineList;
 
 	private FontRenderContext frc;
 
@@ -208,7 +212,7 @@ class BufferPrintable implements Printable
 	private void printPage(Graphics _gfx, PageFormat pageFormat, int pageIndex,
 		boolean actuallyPaint)
 	{
-		Log.log(Log.DEBUG,this,"printPage(" + pageIndex + "," + actuallyPaint + ")");
+		Log.log(Log.DEBUG,this,"printPage(" + pageIndex + ',' + actuallyPaint + ')');
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setFont(font);
 
@@ -218,7 +222,7 @@ class BufferPrintable implements Printable
 		double pageHeight = pageFormat.getImageableHeight();
 
 		Log.log(Log.DEBUG,this,"#1 - Page dimensions: " + pageWidth
-			+ "x" + pageHeight);
+			+ 'x' + pageHeight);
 
 		if(header)
 		{
@@ -259,7 +263,7 @@ class BufferPrintable implements Printable
 
 		Log.log(Log.DEBUG,this,"#2 - Page dimensions: "
 			+ (pageWidth - lineNumberWidth)
-			+ "x" + pageHeight);
+			+ 'x' + pageHeight);
 
 		//{{{ calculate tab size
 		int tabSize = jEdit.getIntegerProperty("print.tabSize",8);
@@ -271,11 +275,10 @@ class BufferPrintable implements Printable
 		PrintTabExpander e = new PrintTabExpander(tabWidth);
 		//}}}
 
-		double y = 0.0;
-
 		lm = font.getLineMetrics("gGyYX",frc);
 		Log.log(Log.DEBUG,this,"Line height is " + lm.getHeight());
 
+		double y = 0.0;
 print_loop:	for(;;)
 		{
 			if(currentPhysicalLine == buffer.getLineCount())
@@ -299,7 +302,7 @@ print_loop:	for(;;)
 				(float)(pageWidth - lineNumberWidth));
 
 			buffer.markTokens(currentPhysicalLine,tokenHandler);
-			if(lineList.size() == 0)
+			if(lineList.isEmpty())
 				lineList.add(null);
 
 			if(y + (lm.getHeight() * lineList.size()) >= pageHeight)
@@ -319,7 +322,7 @@ print_loop:	for(;;)
 			for(int i = 0; i < lineList.size(); i++)
 			{
 				y += lm.getHeight();
-				Chunk chunks = (Chunk)lineList.get(i);
+				Chunk chunks = lineList.get(i);
 				if(chunks != null && actuallyPaint)
 				{
 					Chunk.paintChunkBackgrounds(chunks,gfx,
@@ -368,7 +371,7 @@ print_loop:	for(;;)
 		boolean actuallyPaint)
 	{
 		String footerText = jEdit.getProperty("print.footerText",
-			new Object[] { new Date(), new Integer(pageIndex + 1) });
+			new Object[] { new Date(), Integer.valueOf(pageIndex + 1)});
 		FontRenderContext frc = gfx.getFontRenderContext();
 		lm = font.getLineMetrics(footerText,frc);
 
@@ -399,7 +402,7 @@ print_loop:	for(;;)
 		private double tabWidth;
 
 		//{{{ PrintTabExpander constructor
-		public PrintTabExpander(double tabWidth)
+		PrintTabExpander(double tabWidth)
 		{
 			this.tabWidth = tabWidth;
 		} //}}}
