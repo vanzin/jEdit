@@ -616,10 +616,7 @@
 
 <ACTION NAME="page-setup">
 	<CODE>
-		if(OperatingSystem.hasJava14())
-			BufferPrinter1_4.pageSetup(view);
-		else
-			BufferPrinter1_3.pageSetup(view);
+		BufferPrinter1_4.pageSetup(view);
 	</CODE>
 </ACTION>
 
@@ -737,12 +734,10 @@
 
 <ACTION NAME="print">
 	<CODE>
-
-	if(OperatingSystem.hasJava14() &amp;&amp;
-		!jEdit.getBooleanProperty("print.force13"))
-		BufferPrinter1_4.print(view,buffer,false);
-	else
+	if(jEdit.getBooleanProperty("print.force13"))
 		BufferPrinter1_3.print(view,buffer,false);
+	else
+		BufferPrinter1_4.print(view,buffer,false);
 	</CODE>
 </ACTION>
 
