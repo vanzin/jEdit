@@ -34,23 +34,15 @@
   A leading or trailing dash will be interpreted literally</para></listitem>
  </itemizedlist>
  <para>
-  In addition to the above, a number of <quote>character class
-  expressions</quote> may be used as well:
- </para>
+  In addition to the above, a number of java.util.regex <quote>character class
+  metacharacters</quote> may be used, but their usefulness is limited since the regex quantifier metacharacters (asterisk, questionmark, and curly brackets) are redefined to mean something else in glob language.
+</para>  
  <itemizedlist>
-  <listitem><para><literal>[[:alnum:]]</literal> matches any alphanumeric
+  <listitem><para><literal>\w</literal> matches any alphanumeric
   character</para></listitem>
-  <listitem><para><literal>[[:alpha:]]</literal> matches any alphabetical character</para></listitem>
-  <listitem><para><literal>[[:blank:]]</literal> matches a space or horizontal tab</para></listitem>
-  <listitem><para><literal>[[:cntrl:]]</literal> matches a control character</para></listitem>
-  <listitem><para><literal>[[:digit:]]</literal> matches a decimal digit</para></listitem>
-  <listitem><para><literal>[[:graph:]]</literal> matches a non-space, non-control character</para></listitem>
-  <listitem><para><literal>[[:lower:]]</literal> matches a lowercase letter</para></listitem>
-  <listitem><para><literal>[[:print:]]</literal> same as <literal>[[:graph:]]</literal>, but also space and tab</para></listitem>
-  <listitem><para><literal>[[:punct:]]</literal> matches a punctuation character</para></listitem>
-  <listitem><para><literal>[[:space:]]</literal> matches any whitespace character, including newlines</para></listitem>
-  <listitem><para><literal>[[:upper:]]</literal> matches an uppercase letter</para></listitem>
-  <listitem><para><literal>[[:xdigit:]]</literal> matches a valid hexadecimal digit</para></listitem>
+  <listitem><para><literal>\s</literal> matches a space or horizontal tab</para></listitem>
+  <listitem><para><literal>\d</literal> matches a decimal digit</para></listitem>
+  <listitem><para><literal>\S</literal> matches a non-space, non-control character</para></listitem>
  </itemizedlist>
  <para>
   Here are some examples of glob patterns:
@@ -66,3 +58,4 @@
   start with <quote>#</quote>.</para></listitem>
  </itemizedlist>
 </appendix>
+
