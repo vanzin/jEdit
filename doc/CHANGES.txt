@@ -86,7 +86,7 @@ for contributing to this release.
 - VariableGridLayout resized Components to sizes bigger than their maximum size,
   now it resizes it only up to its maximum size and positions the Components
   according to their alignmentX/alignmentY values if the cell is bigger than
-  the Components size. (Björn "Vampire" Kautler)
+  the Component's size. (Björn "Vampire" Kautler)
 
 }}}
 {{{ Editing
@@ -137,11 +137,10 @@ for contributing to this release.
 - The Files change dialog has now an ignore button to set the
   autoreload and autoreloaddialog flags to false (Matthieu Casanova)
 
-- VariableGridLayout got improved by two new capabilities. Now it can
-  take Components minimum and maximum sizes into account when
+- VariableGridLayout, two new capabilities: it can
+  take minimum and maximum sizes of a Component into account when
   distributing free space and you can supply distances to the borders
-  of the container. The new capabilites are useable by the two new
-  constructors. For more information, see the JavaDoc documentation.
+  of the Container. The new capabilites are useable by the two new constructors. For more information, see the JavaDoc documentation.
   (Björn "Vampire" Kautler)
 
 }}}

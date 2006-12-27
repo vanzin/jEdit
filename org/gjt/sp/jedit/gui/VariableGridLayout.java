@@ -138,8 +138,9 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 
 	/**
 	 * Creates a variable grid layout manager with the specified mode,
-	 * size, horizontal and vertical gap, not taking minimum and maximum
-	 * sizes into account when distributing free space and zero distance to borders.
+	 * size, horizontal and vertical gap, and zero distance to borders.
+	 * The minimum and maximum Component sizes are not taken into account
+	 * when distributing free space.
 	 *
 	 * @param mode The mode in which to operate. Either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS
 	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS
@@ -154,9 +155,9 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 
 	/**
 	 * Creates a variable grid layout manager with the specified mode
-	 * and size, zero horizontal and vertical gap, not
-	 * taking minimum and maximum sizes into account when distributing
-	 * free space and zero distance to borders.
+	 * and size, zero horizontal and vertical gap, and zero distance to borders. 
+	 * Does not take minimum and maximum Component sizes into account when distributing
+	 * free space.
 	 *
 	 * @param mode The mode in which to operate. Either FIXED_NUM_ROWS or FIXED_NUM_COLUMNS
 	 * @param size The amount of rows for mode FIXED_NUM_ROWS or the amount of columns for mode FIXED_NUM_COLUMNS
@@ -169,9 +170,9 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 
 	/**
 	 * Creates a variable grid layout manager with mode FIXED_NUM_ROWS,
-	 * number of rows == 1, zero horizontal and vertical gap, not
-	 * taking minimum and maximum sizes into account when distributing
-	 * free space and zero distance to borders.
+	 * number of rows == 1, zero horizontal and vertical gap, and zero distance to borders.
+	 * Does not take minimum and maximum Component sizes into account when
+	 * distributing free space.
 	 */
 	public VariableGridLayout()
 	{
