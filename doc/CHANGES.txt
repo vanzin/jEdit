@@ -60,7 +60,7 @@ for contributing to this release.
 - Fixed another bug with the new HASH_CHAR handling
   (bug #1600401) (Björn "Vampire" Kautler)
 
-- Fixed precedence of Recent Files List caretposition over commanline
+- Fixed precedence of Recent Files List caretposition over commandline
   supplied caret position (Björn "Vampire" Kautler)
 
 - SearchMatcher in SearchAndReplace cannot match empty Strings anymore
@@ -82,6 +82,11 @@ for contributing to this release.
 
 - When simplified keyboard handling was off, typing Alt+F o to open
   a file, the o was also written in the textarea. (#1593359) (Matthieu Casanova)
+
+- VariableGridLayout resized Components to sizes bigger than their maximum size,
+  now it resizes it only up to its maximum size and positions the Components
+  according to their alignmentX/alignmentY values if the cell is bigger than
+  the Components size. (Björn "Vampire" Kautler)
 
 }}}
 {{{ Editing
@@ -132,6 +137,13 @@ for contributing to this release.
 - The Files change dialog has now an ignore button to set the
   autoreload and autoreloaddialog flags to false (Matthieu Casanova)
 
+- VariableGridLayout got improved by two new capabilities. Now it can
+  take Components minimum and maximum sizes into account when
+  distributing free space and you can supply distances to the borders
+  of the container. The new capabilites are useable by the two new
+  constructors. For more information, see the JavaDoc documentation.
+  (Björn "Vampire" Kautler)
+
 }}}
 {{{ API Changes
 
@@ -149,11 +161,12 @@ for contributing to this release.
   whole Strings. Additionally new ones for accepting HASH_CHARS got
   added. (Björn "Vampire" Kautler)
 
-- GUIUtilities has a new method makeCompactGrid() to help building
-  nice GUIs with SpringLayout. (Björn "Vampire" Kautler)
-
 - SearchDialog.preloadSearchDialog(View) is deprecated, this is
   not necessary on our big computers and JVM with JIT (Matthieu Casanova)
+
+- VariableGridLayout has two new constructors to use the new capabilites.
+  For more information see section Miscellaneous. (Björn "Vampire" Kautler)
+
 }}}
 
 }}}

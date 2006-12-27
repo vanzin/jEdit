@@ -154,7 +154,7 @@ public class HistoryModel extends DefaultListModel
 			modified = false;
 	} //}}}
 
-	//{{{ saveHistory() method
+	//{{{ setMax() method
 	public static void setMax(int max)
 	{
 		HistoryModel.max = max;
