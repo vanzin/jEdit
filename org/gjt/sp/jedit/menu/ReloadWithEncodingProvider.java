@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit.menu;
 
+//{{{ Imports
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -35,11 +36,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
+//}}}
 
 /**
  * Menu provider for actions to reload the current buffer with a
@@ -47,18 +49,17 @@ import org.gjt.sp.jedit.View;
  *
  * @version $Id$
  */
-public class ReloadWithEncodingProvider
-		implements ActionListener, DynamicMenuProvider
-
+public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuProvider
 {
-
 	private View view;
 
+	//{{{ updateEveryTime() method
 	public boolean updateEveryTime()
 	{
 		return false;
-	}
+	} //}}}
 
+	//{{{ update() method
 	public void update(JMenu menu)
 	{
 		view = GUIUtilities.getView(menu);
@@ -84,11 +85,18 @@ public class ReloadWithEncodingProvider
 
 		Arrays.sort(encodings);
 
+		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
 		for (int i = 0; i < encodings.length; i++)
 		{
 			JMenuItem mi = new JMenuItem(encodings[i]);
 			mi.setActionCommand("encoding@" + encodings[i]);
 			mi.addActionListener(this);
+			if ((menu.getMenuComponentCount() >= maxItems) && (i < encodings.length))
+			{
+				JMenu newMenu = new JMenu(jEdit.getProperty("common.more"));
+				menu.add(newMenu);
+				menu = newMenu;
+			}
 			menu.add(mi);
 		}
 
@@ -100,9 +108,9 @@ public class ReloadWithEncodingProvider
 		other.setActionCommand("other-encoding");
 		other.addActionListener(this);
 		menu.add(other);
+	} //}}}
 
-	}
-
+	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent ae)
 	{
 		JMenuItem mi = (JMenuItem) ae.getSource();
@@ -148,7 +156,5 @@ public class ReloadWithEncodingProvider
 		String path = view.getBuffer().getPath();
 		jEdit.closeBuffer(view, view.getBuffer());
 		jEdit.openFile(view,null,path,false,props);
-	}
-
+	} //}}}
 }
-
