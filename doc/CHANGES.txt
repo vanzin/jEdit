@@ -140,7 +140,8 @@ for contributing to this release.
 - VariableGridLayout, two new capabilities: it can
   take minimum and maximum sizes of a Component into account when
   distributing free space and you can supply distances to the borders
-  of the Container. The new capabilites are useable by the two new constructors. For more information, see the JavaDoc documentation.
+  of the Container. The new capabilites are useable by the two new
+  constructors. For more information, see the JavaDoc documentation.
   (Björn "Vampire" Kautler)
 
 }}}
