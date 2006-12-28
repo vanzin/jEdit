@@ -12,6 +12,8 @@ for contributing to this release.
 
 - Encoding errors properly reported on save (patch# 1601830) (Kazutoshi Satoda)
 
+- Filter Box lose focus bug (patch # 1608948) (kuljc)
+
 - Fixed the broken quick copy behaviour (Björn "Vampire" Kautler)
 
 - Fixed the wrong text in SearchAndReplace Dialog (bug #1592529)

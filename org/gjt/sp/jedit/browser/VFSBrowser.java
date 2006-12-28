@@ -1920,6 +1920,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			// to happen, so ignore lost focus events.
 			if (e.getID() != FocusEvent.FOCUS_LOST)
 				super.processFocusEvent(e);
+			else 
+			{
+				setCaretPosition(0);
+				this.getCaret().setVisible(false);
+			}
 		}
 
 		public Component getEditorComponent()
