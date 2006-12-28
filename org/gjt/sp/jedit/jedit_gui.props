@@ -206,6 +206,7 @@ exit.label=E$xit
 #{{{ Recent Files menu
 recent-files.code=new RecentFilesProvider();
 recent-files.label=Recent $Files
+recent-files.textfield.tooltip=a filter prefix can be entered here
 no-recent-files.label=No Recent Files
 clear-recent-files.label=Clear Recent Files
 #}}}
