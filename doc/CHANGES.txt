@@ -105,6 +105,9 @@ for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Textfield for filtering recent files menu (Patch # 1546200)
+  (Joerg - spj)
+
 - FSB deletes directories recursively now
   (bug #1593389) (patch #1593900) (Akber Choudhry)
 

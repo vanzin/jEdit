@@ -95,7 +95,29 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			return;
 		}
 
-		List menuItems = new ArrayList();
+        final List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
+        final JTextField text = new JTextField();
+        menu.add(text);
+        text.addKeyListener(new KeyAdapter()
+        {
+            public void keyReleased(KeyEvent e)
+            {
+                String typedText = text.getText();
+                for (JMenuItem tempMenuItem : menuItems)
+                {
+                    if (typedText.length() == 0)
+                    {
+                        tempMenuItem.setEnabled(true);
+                    }
+                    else 
+                    {
+                        String fileName = tempMenuItem.getText();
+                        boolean matchesStart = fileName.toLowerCase().startsWith(typedText.toLowerCase());
+                        tempMenuItem.setEnabled(matchesStart);
+                    }
+                }
+            }
+        });
 
 		boolean sort = jEdit.getBooleanProperty("sortRecent");
 
@@ -114,10 +136,9 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			
 			menuItem.setIcon(FileCellRenderer.fileIcon);
 
-			if(sort)
-				menuItems.add(menuItem);
-			else
-			{
+            menuItems.add(menuItem);
+            if(!sort)
+            {
 				if(menu.getMenuComponentCount() >= maxItems
 					&& iter.hasNext())
 				{
