@@ -81,59 +81,60 @@ class ChunkCache
 			return -1;
 		if(line < textArea.getFirstPhysicalLine())
 			return -1;
-		else if(line == textArea.getFirstPhysicalLine()
+		if(line == textArea.getFirstPhysicalLine()
 			&& offset < getLineInfo(0).offset)
 			return -1;
-		else if(line > textArea.getLastPhysicalLine())
+		if(line > textArea.getLastPhysicalLine())
 			return -1;
-		else
+		
+		if(line == lastScreenLineP)
 		{
-			if(line == lastScreenLineP)
-			{
-				LineInfo last = getLineInfo(lastScreenLine);
+			LineInfo last = getLineInfo(lastScreenLine);
 
-				if(offset >= last.offset
-					&& offset < last.offset + last.length) {
-					return lastScreenLine;
-				}
-			}
-
-			int screenLine = -1;
-
-			// Find the screen line containing this offset
-			for(int i = 0; i < textArea.getVisibleLines(); i++)
-			{
-				LineInfo info = getLineInfo(i);
-				if(info.physicalLine > line)
-				{
-					// line is invisible?
-					return i - 1;
-					//return -1;
-				}
-				else if(info.physicalLine == line)
-				{
-					if(offset >= info.offset
-						&& offset < info.offset + info.length)
-					{
-						screenLine = i;
-						break;
-					}
-				}
-			}
-
-			if(screenLine == -1)
-				return -1;
-			else
-			{
-				lastScreenLineP = line;
-				lastScreenLine = screenLine;
-
-				return screenLine;
+			if(offset >= last.offset
+				&& offset < last.offset + last.length) {
+				return lastScreenLine;
 			}
 		}
+
+		int screenLine = -1;
+
+		// Find the screen line containing this offset
+		for(int i = 0; i < textArea.getVisibleLines(); i++)
+		{
+			LineInfo info = getLineInfo(i);
+			if(info.physicalLine > line)
+			{
+				// line is invisible?
+				return i - 1;
+				//return -1;
+			}
+			if(info.physicalLine == line)
+			{
+				if(offset >= info.offset
+					&& offset < info.offset + info.length)
+				{
+					screenLine = i;
+					break;
+				}
+			}
+		}
+
+		if(screenLine == -1)
+			return -1;
+
+
+		lastScreenLineP = line;
+		lastScreenLine = screenLine;
+
+		return screenLine;
 	} //}}}
 
 	//{{{ recalculateVisibleLines() method
+	/**
+	 * Recalculate visible lines.
+	 * This is called when the TextArea geometry is changed or when the font is changed.
+	 */
 	void recalculateVisibleLines()
 	{
 		LineInfo[] newLineInfo = new LineInfo[textArea.getVisibleLines()];
@@ -276,8 +277,14 @@ class ChunkCache
 	/**
 	 * Returns the subregion containing the specified offset. A subregion
 	 * is a subset of a physical line. Each screen line corresponds to one
-	 * subregion. Unlike the {@link #getScreenLineOfOffset()} method,
+	 * subregion. Unlike the {@link #getScreenLineOfOffset(int, int)} method,
 	 * this method works with non-visible lines too.
+	 *
+	 * @param offset the offset
+	 * @param lineInfos a lineInfos array. Usualy the array is the result of
+	 *	{@link #getLineInfosForPhysicalLine(int)} call
+	 *
+	 * @return the subregion of the offset, or -1 if the offset was not in one of the given lineInfos
 	 */
 	static int getSubregionOfOffset(int offset, LineInfo[] lineInfos)
 	{
@@ -489,18 +496,24 @@ class ChunkCache
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private TextArea textArea;
+	private final TextArea textArea;
 	private JEditBuffer buffer;
+	/**
+	 * The lineInfo array. There is LineInfo for each line that is visible in the textArea.
+	 * it can be resized by {@link #recalculateVisibleLines()}.
+	 * The content is valid from 0 to {@link #firstInvalidLine}
+	 */
 	private LineInfo[] lineInfo;
 	private final List<Chunk> out;
 
+	/** The first invalid line. All lines before this one are valid. */
 	private int firstInvalidLine;
 	private int lastScreenLineP;
 	private int lastScreenLine;
 
 	private boolean needFullRepaint;
 
-	private DisplayTokenHandler tokenHandler;
+	private final DisplayTokenHandler tokenHandler;
 	//}}}
 
 	//{{{ getLineInfosForPhysicalLine() method
@@ -690,8 +703,7 @@ class ChunkCache
 								out.remove(0);
 						}
 					}
-					chunks = (Chunk)out.get(0);
-					out.remove(0);
+					chunks = out.remove(0);
 					offset = chunks.offset;
 					if (!out.isEmpty())
 						length = out.get(0).offset - offset;
@@ -703,8 +715,7 @@ class ChunkCache
 			{
 				info.firstSubregion = false;
 
-				chunks = out.get(0);
-				out.remove(0);
+				chunks = out.remove(0);
 				offset = chunks.offset;
 				if (!out.isEmpty())
 					length = out.get(0).offset - offset;
