@@ -97,6 +97,8 @@ for contributing to this release.
 
 - Updated TCL edit mode (Jean-Francois Larvoire)
 
+- Updated Lilypond edit mode (Bertalan Fodor)
+
 - Fixed some invalid mode files (Björn "Vampire" Kautler)
 
 - Updated some mode files that were still in jEdit 4.0 syntax (Björn "Vampire" Kautler)
