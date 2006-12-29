@@ -85,7 +85,7 @@
 				FILE_NAME_GLOB="*.cbl" />
 
 <MODE NAME="coldfusion"		FILE="coldfusion.xml"
-				FILE_NAME_GLOB="*.{cfm,dbm}" />
+				FILE_NAME_GLOB="*.{cfm,dbm,cfc}" />
 
 <MODE NAME="c++"		FILE="cplusplus.xml"
 				FILE_NAME_GLOB="*.{cc,cpp,hh,hpp,cxx}" />
