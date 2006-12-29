@@ -4939,6 +4939,10 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			horizontal.setUnitIncrement(10);
 			horizontal.setBlockIncrement(painter.getWidth());
 		}
+		else if (horizontal.getValue() != -getHorizontalOffset())
+		{
+			horizontal.setValue(-getHorizontalOffset());
+		}
 	} //}}}
 
 	//{{{ recalculateVisibleLines() method

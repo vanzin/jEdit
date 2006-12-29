@@ -90,6 +90,9 @@ for contributing to this release.
   according to their alignmentX/alignmentY values if the cell is bigger than
   the Component's size. (Björn "Vampire" Kautler)
 
+- Horizontal scrollbar in the textarea was not always updated
+  (#1534016, #1617483) (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
