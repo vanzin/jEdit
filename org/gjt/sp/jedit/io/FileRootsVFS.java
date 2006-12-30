@@ -31,7 +31,6 @@ import java.io.File;
 import java.util.LinkedList;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
-import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -53,7 +52,7 @@ public class FileRootsVFS extends VFS
 	//{{{ getParentOfPath() method
 	public String getParentOfPath(String path)
 	{
-		return PROTOCOL + ":";
+		return PROTOCOL + ':';
 	} //}}}
 
 	//{{{ _listFiles() method
@@ -89,7 +88,7 @@ public class FileRootsVFS extends VFS
 		{
 			// Nasty hardcoded values
 			File[] volumes = new File("/Volumes").listFiles();
-			LinkedList roots = new LinkedList();
+			LinkedList<File> roots = new LinkedList<File>();
 
 			roots.add(new File("/"));
 
@@ -100,7 +99,7 @@ public class FileRootsVFS extends VFS
 					roots.add(volumes[i]);
 			}
 
-			return (File[])roots.toArray(new File[0]);
+			return roots.toArray(new File[roots.size()]);
 		}
 		else
 		{
@@ -140,7 +139,7 @@ public class FileRootsVFS extends VFS
 			else if(fsView.isDrive(file))
 			{
 				setType(VFSFile.FILESYSTEM);
-				setName(path + " "
+				setName(path + ' '
 					+ fsView.getSystemDisplayName(file));
 			}
 			else if(file.isDirectory())
