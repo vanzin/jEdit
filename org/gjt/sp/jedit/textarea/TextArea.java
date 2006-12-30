@@ -141,7 +141,6 @@ public class TextArea extends JComponent
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
 		blink = true;
-		lineSegment = new Segment();
 		offsetXY = new Point();
 		structureMatchers = new LinkedList<StructureMatcher>();
 		structureMatchers.add(new StructureMatcher.BracketMatcher());
@@ -200,7 +199,7 @@ public class TextArea extends JComponent
 	//{{{ setMouseHandler() method
 	public void setMouseHandler(MouseInputAdapter mouseInputAdapter)
 	{
-		this.mouseHandler = mouseInputAdapter;
+		mouseHandler = mouseInputAdapter;
 		painter.addMouseListener(mouseHandler);
 		painter.addMouseMotionListener(mouseHandler);
 	} //}}}
@@ -754,8 +753,8 @@ public class TextArea extends JComponent
 			extraEndVirt = 0;
 
 		int _electricScroll = doElectricScroll
-			&& visibleLines - 1 > electricScroll * 2
-			? electricScroll : 0;
+			&& visibleLines - 1 > (electricScroll << 1)
+				      ? electricScroll : 0;
 		//}}}
 
 		if(visibleLines <= 1)
@@ -819,7 +818,7 @@ public class TextArea extends JComponent
 					Log.log(Log.DEBUG,this,"Last physical line is " + getLastPhysicalLine());
 				}
 				setFirstPhysicalLine(line,subregion
-					- visibleLines / 2);
+					- (visibleLines >> 1));
 				if(Debug.SCROLL_TO_DEBUG)
 				{
 					Log.log(Log.DEBUG,this,"Last physical line is " + getLastPhysicalLine());
@@ -1670,10 +1669,11 @@ forward_scan:	do
 	 * Returns the selection with the specified index. This must be
 	 * between 0 and the return value of <code>getSelectionCount()</code>.
 	 * @since jEdit 4.3pre1
+	 * @param index the index of the selection you want
 	 */
 	public Selection getSelection(int index)
 	{
-		return (Selection)selectionManager.selection.get(index);
+		return selectionManager.selection.get(index);
 	} //}}}
 
 	//{{{ selectNone() method
@@ -2128,7 +2128,7 @@ forward_scan:	do
 	 */
 	public void centerCaret()
 	{
-		int offset = getScreenLineStartOffset(visibleLines / 2);
+		int offset = getScreenLineStartOffset(visibleLines >> 1);
 		if(offset == -1)
 			getToolkit().beep();
 		else
@@ -2284,6 +2284,7 @@ forward_scan:	do
 	//{{{ goToNextBracket() method
 	/**
 	 * Moves the caret to the next closing bracket.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2.
 	 */
 	public void goToNextBracket(boolean select)
@@ -2321,6 +2322,7 @@ loop:			for(int i = 0; i < text.length(); i++)
 	//{{{ goToNextCharacter() method
 	/**
 	 * Moves the caret to the next character.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2.
 	 */
 	public void goToNextCharacter(boolean select)
@@ -2408,6 +2410,7 @@ loop:			for(int i = 0; i < text.length(); i++)
 	//{{{ goToNextLine() method
 	/**
 	 * Move the caret to the next line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToNextLine(boolean select)
@@ -2431,35 +2434,15 @@ loop:			for(int i = 0; i < text.length(); i++)
 				newCaret = end;
 		}
 
-		if(select)
-		{
-			RectParams params = getRectParams(caret,newCaret);
-			int extraStartVirt;
-			int extraEndVirt;
-			if(params == null)
-			{
-				extraStartVirt = 0;
-				extraEndVirt = 0;
-			}
-			else
-			{
-				extraStartVirt = params.extraStartVirt;
-				extraEndVirt = params.extraEndVirt;
-				newCaret = params.newCaret;
-			}
-			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
-		}
-		else if(!multi)
-			selectNone();
-
-		moveCaretPosition(newCaret);
+		_changeLine(select, newCaret);
 
 		setMagicCaretPosition(magic);
-	} //}}}
+	}//}}}
 
 	//{{{ goToNextPage() method
 	/**
 	 * Moves the caret to the next screenful.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2.
 	 */
 	public void goToNextPage(boolean select)
@@ -2504,6 +2487,7 @@ loop:			for(int i = 0; i < text.length(); i++)
 	//{{{ goToNextParagraph() method
 	/**
 	 * Moves the caret to the start of the next paragraph.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToNextParagraph(boolean select)
@@ -2554,6 +2538,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	 * Moves the caret to the start of the next word.
 	 * Note that if the "view.eatWhitespace" boolean propery is false,
 	 * this method moves the caret to the end of the current word instead.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToNextWord(boolean select)
@@ -2602,6 +2587,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ goToPrevBracket() method
 	/**
 	 * Moves the caret to the previous bracket.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevBracket(boolean select)
@@ -2635,6 +2621,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	//{{{ goToPrevCharacter() method
 	/**
 	 * Moves the caret to the previous character.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2.
 	 */
 	public void goToPrevCharacter(boolean select)
@@ -2715,6 +2702,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	//{{{ goToPrevLine() method
 	/**
 	 * Moves the caret to the previous line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevLine(boolean select)
@@ -2739,28 +2727,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				newCaret = start;
 		}
 
-		if(select)
-		{
-			RectParams params = getRectParams(caret,newCaret);
-			int extraStartVirt;
-			int extraEndVirt;
-			if(params == null)
-			{
-				extraStartVirt = 0;
-				extraEndVirt = 0;
-			}
-			else
-			{
-				extraStartVirt = params.extraStartVirt;
-				extraEndVirt = params.extraEndVirt;
-				newCaret = params.newCaret;
-			}
-			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
-		}
-		else if(!multi)
-			selectNone();
-
-		moveCaretPosition(newCaret);
+		_changeLine(select, newCaret);
 
 		setMagicCaretPosition(magic);
 	} //}}}
@@ -2768,6 +2735,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	//{{{ goToPrevPage() method
 	/**
 	 * Moves the caret to the previous screenful.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevPage(boolean select)
@@ -2811,6 +2779,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	//{{{ goToPrevParagraph() method
 	/**
 	 * Moves the caret to the start of the previous paragraph.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevParagraph(boolean select)
@@ -2858,6 +2827,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToPrevWord() method
 	/**
 	 * Moves the caret to the start of the previous word.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToPrevWord(boolean select)
@@ -2916,6 +2886,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * On subsequent invocations, first moves the caret to the first
 	 * non-whitespace character of the line, then the beginning of the
 	 * line, then to the first visible line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 4.3pre7
 	 */
 	public void smartHome(boolean select)
@@ -2939,6 +2910,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * On subsequent invocations, first moves the caret to the last
 	 * non-whitespace character of the line, then the end of the
 	 * line, then to the last visible line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 4.3pre7
 	 */
 	public void smartEnd(boolean select)
@@ -2960,6 +2932,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToStartOfLine() method
 	/**
 	 * Moves the caret to the beginning of the current line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToStartOfLine(boolean select)
@@ -2977,6 +2950,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToEndOfLine() method
 	/**
 	 * Moves the caret to the end of the current line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToEndOfLine(boolean select)
@@ -2999,6 +2973,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	/**
 	 * Moves the caret to the first non-whitespace character of the current
 	 * line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToStartOfWhiteSpace(boolean select)
@@ -3036,6 +3011,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	/**
 	 * Moves the caret to the last non-whitespace character of the current
 	 * line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToEndOfWhiteSpace(boolean select)
@@ -3077,6 +3053,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToFirstVisibleLine() method
 	/**
 	 * Moves the caret to the first visible line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToFirstVisibleLine(boolean select)
@@ -3099,6 +3076,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToLastVisibleLine() method
 	/**
 	 * Moves the caret to the last visible line.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 2.7pre2
 	 */
 	public void goToLastVisibleLine(boolean select)
@@ -3136,6 +3114,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToBufferStart() method
 	/**
 	 * Moves the caret to the beginning of the buffer.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 4.0pre3
 	 */
 	public void goToBufferStart(boolean select)
@@ -3152,6 +3131,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToBufferEnd() method
 	/**
 	 * Moves the caret to the end of the buffer.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 4.0pre3
 	 */
 	public void goToBufferEnd(boolean select)
@@ -3430,52 +3410,29 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-		int start = 0, end = buffer.getLength();
-
-loop:		for(int i = caretLine - 1; i >= 0; i--)
+		// find the beginning of the paragraph.
+		int start = 0;
+		for(int i = caretLine - 1; i >= 0; i--)
 		{
-			//if(!displayManager.isLineVisible(i))
-			//	continue loop;
-
-			getLineText(i,lineSegment);
-
-			for(int j = 0; j < lineSegment.count; j++)
+			if (lineContainsSpaceAndTabs(i))
 			{
-				switch(lineSegment.array[lineSegment.offset + j])
-				{
-				case ' ':
-				case '\t':
-					break;
-				default:
-					continue loop;
-				}
+				start = getLineStartOffset(i);
+				break;
 			}
-
-			start = getLineStartOffset(i);
-			break loop;
 		}
 
-loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
+		// Find the end of the paragraph
+		int end = buffer.getLength();
+		for(int i = caretLine + 1; i < getLineCount(); i++)
 		{
 			//if(!displayManager.isLineVisible(i))
 			//	continue loop;
 
-			getLineText(i,lineSegment);
-
-			for(int j = 0; j < lineSegment.count; j++)
+			if (lineContainsSpaceAndTabs(i))
 			{
-				switch(lineSegment.array[lineSegment.offset + j])
-				{
-				case ' ':
-				case '\t':
-					break;
-				default:
-					continue loop;
-				}
+				end = getLineEndOffset(i) - 1;
+				break;
 			}
-
-			end = getLineEndOffset(i) - 1;
-			break loop;
 		}
 
 		buffer.remove(start,end - start);
@@ -3691,6 +3648,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	//{{{ goToNextFold() method
 	/**
 	 * Moves the caret to the next fold.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 4.0pre3
 	 */
 	public void goToNextFold(boolean select)
@@ -3728,6 +3686,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 	//{{{ goToPrevFold() method
 	/**
 	 * Moves the caret to the previous fold.
+	 * @param select true if you want to extend selection
 	 * @since jEdit 4.0pre3
 	 */
 	public void goToPrevFold(boolean select)
@@ -3921,6 +3880,7 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 					caretBack = addExplicitFold(selection.start, selection.end, selection.startLine,selection.endLine);
 				}
 				// Selection cannot be null because there is at least 1 selection
+				assert selection != null;
 				setCaretPosition(selection.start - caretBack, false);
 			}
 		}
@@ -4076,44 +4036,22 @@ loop:		for(int i = caretLine + 1; i < getLineCount(); i++)
 
 			int start = 0, end = buffer.getLength();
 
-loop:			for(int i = lineNo - 1; i >= 0; i--)
+			for(int i = lineNo - 1; i >= 0; i--)
 			{
-				getLineText(i,lineSegment);
-
-				for(int j = 0; j < lineSegment.count; j++)
+				if (lineContainsSpaceAndTabs(i))
 				{
-					switch(lineSegment.array[lineSegment.offset + j])
-					{
-					case ' ':
-					case '\t':
-						break;
-					default:
-						continue loop;
-					}
+					start = getLineEndOffset(i);
+					break;
 				}
-
-				start = getLineEndOffset(i);
-				break loop;
 			}
 
-loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
+			for(int i = lineNo + 1; i < getLineCount(); i++)
 			{
-				getLineText(i,lineSegment);
-
-				for(int j = 0; j < lineSegment.count; j++)
+				if (lineContainsSpaceAndTabs(i))
 				{
-					switch(lineSegment.array[lineSegment.offset + j])
-					{
-					case ' ':
-					case '\t':
-						break;
-					default:
-						continue loop;
-					}
+					end = getLineStartOffset(i) - 1;
+					break;
 				}
-
-				end = getLineStartOffset(i) - 1;
-				break loop;
 			}
 
 			try
@@ -4598,7 +4536,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	} //}}}
 
 	//{{{ Input method support
-	private InputMethodSupport inputMethodSupport = null;
+	private InputMethodSupport inputMethodSupport;
 	public InputMethodRequests getInputMethodRequests()
 	{
 		if(inputMethodSupport == null)
@@ -4724,7 +4662,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public final void setSelectionStart(int selectionStart)
 	{
-		select(selectionStart,getSelectionEnd(),true);
+		int selectionEnd = getSelectionCount() == 1 ? getSelection(0).getEnd() : caret;
+		select(selectionStart,selectionEnd,true);
 	} //}}}
 
 	//{{{ getSelectionEnd() method
@@ -4734,10 +4673,8 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public final int getSelectionEnd()
 	{
-		if(getSelectionCount() != 1)
-			return caret;
+		return getSelectionCount() == 1 ? getSelection(0).getEnd() : caret;
 
-		return getSelection(0).getEnd();
 	} //}}}
 
 	//{{{ getSelectionEnd() method
@@ -4854,10 +4791,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	public boolean isSelectionRectangular()
 	{
 		Selection s = getSelectionAtOffset(caret);
-		if(s == null)
-			return false;
-		else
-			return s instanceof Selection.Rect;
+		return s != null && s instanceof Selection.Rect;
 	} //}}}
 
 	//}}}
@@ -4867,12 +4801,12 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	static TextArea focusedComponent;
 
 	//{{{ Instance variables
-	Segment lineSegment;
+	final Segment lineSegment = new Segment();
 	MouseInputAdapter mouseHandler;
-	ChunkCache chunkCache;
-	FastRepaintManager repaintMgr;
+	final ChunkCache chunkCache;
+	final FastRepaintManager repaintMgr;
 	DisplayManager displayManager;
-	SelectionManager selectionManager;
+	final SelectionManager selectionManager;
 	boolean bufferChanging;
 
 	int maxHorizontalScrollWidth;
@@ -4892,7 +4826,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	 * Cursor location, measured as an offset (in pixels) from upper left corner
 	 * of the TextArea.
 	 */
-	Point offsetXY;
+	final Point offsetXY;
 
 	boolean lastLinePartial;
 
@@ -4939,9 +4873,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			horizontal.setUnitIncrement(10);
 			horizontal.setBlockIncrement(painter.getWidth());
 		}
-		else if (horizontal.getValue() != -getHorizontalOffset())
+		else if (horizontal.getValue() != -horizontalOffset)
 		{
-			horizontal.setValue(-getHorizontalOffset());
+			horizontal.setValue(-horizontalOffset);
 		}
 	} //}}}
 
@@ -5130,18 +5064,18 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static Timer caretTimer;
-	private static Timer structureTimer;
+	private static final Timer caretTimer;
+	private static final Timer structureTimer;
 	//}}}
 
 	//{{{ Instance variables
 	protected Cursor hiddenCursor;
 
-	private Gutter gutter;
-	protected TextAreaPainter painter;
+	private final Gutter gutter;
+	protected final TextAreaPainter painter;
 
-	private EventListenerList listenerList;
-	private MutableCaretEvent caretEvent;
+	private final EventListenerList listenerList;
+	private final MutableCaretEvent caretEvent;
 
 	private boolean caretBlinks;
 	private InputHandlerProvider inputHandlerProvider;
@@ -5157,9 +5091,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	private boolean quickCopy;
 
 	// JDiff, error list add stuff here
-	private Box verticalBox;
-	private JScrollBar vertical;
-	private JScrollBar horizontal;
+	private final Box verticalBox;
+	private final JScrollBar vertical;
+	private final JScrollBar horizontal;
 
 	protected JEditBuffer buffer;
 
@@ -5309,6 +5243,58 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			}
 		}
 	} //}}}
+
+	//{{{ _changeLine() method
+	private void _changeLine(boolean select, int newCaret)
+	{
+		if(select)
+		{
+			RectParams params = getRectParams(caret,newCaret);
+			int extraStartVirt;
+			int extraEndVirt;
+			if(params == null)
+			{
+				extraStartVirt = 0;
+				extraEndVirt = 0;
+			}
+			else
+			{
+				extraStartVirt = params.extraStartVirt;
+				extraEndVirt = params.extraEndVirt;
+				newCaret = params.newCaret;
+			}
+			extendSelection(caret,newCaret,extraStartVirt,extraEndVirt);
+		}
+		else if(!multi)
+			selectNone();
+
+		moveCaretPosition(newCaret);
+	}//}}}
+
+	
+	/**
+	 * Check if the line contains only spaces and tabs.
+	 *
+	 * @param lineIndex the line index
+	 * @return <code>true</code> if the line contains only spaces and tabs
+	 */
+	private boolean lineContainsSpaceAndTabs(int lineIndex)
+	{
+		getLineText(lineIndex,lineSegment);
+
+		for(int j = 0; j < lineSegment.count; j++)
+		{
+			switch(lineSegment.array[lineSegment.offset + j])
+			{
+			case ' ':
+			case '\t':
+				break;
+			default:
+				return false;
+			}
+		}
+		return true;
+	}
 
 	//{{{ insert() method
 	protected void insert(String str, boolean indent)
@@ -5584,9 +5570,9 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 	//{{{ getRectParams() method
 	static class RectParams
 	{
-		int extraStartVirt;
-		int extraEndVirt;
-		int newCaret;
+		final int extraStartVirt;
+		final int extraEndVirt;
+		final int newCaret;
 
 		RectParams(int extraStartVirt, int extraEndVirt, int newCaret)
 		{
@@ -5831,7 +5817,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 		String endCommentStart = buffer.getContextSensitiveProperty(endCaret,"commentStart");
 		String endCommentEnd = buffer.getContextSensitiveProperty(endCaret,"commentEnd");
 
-		String start, end;
+		String start;
 		int caretBack = 1;
 		if(startLineComment != null)
 			start = startLineComment + "{{{ ";
@@ -5856,6 +5842,7 @@ loop:			for(int i = lineNo + 1; i < getLineCount(); i++)
 			start += "\n";
 		}
 
+		String end;
 		if(endLineComment != null)
 			end = endLineComment + "}}}";
 		else if(endCommentStart != null && endCommentEnd != null)

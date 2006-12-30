@@ -326,13 +326,8 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 				path = System.getProperty("user.dir");
 			else if(defaultPath.equals("buffer"))
 			{
-				if(view != null)
-				{
-					Buffer buffer = view.getBuffer();
-					path = buffer.getDirectory();
-				}
-				else
-					path = userHome;
+				Buffer buffer = view.getBuffer();
+				path = buffer.getDirectory();
 			}
 			else if(defaultPath.equals("last"))
 			{
@@ -871,7 +866,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 		List<JMenuItem> vec = new ArrayList<JMenuItem>();
 
 		//{{{ old API
-		Enumeration e = VFSManager.getFilesystems();
+		Enumeration<VFS> e = VFSManager.getFilesystems();
 
 		while(e.hasMoreElements())
 		{
@@ -1377,7 +1372,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			);
 		}
 
-		private boolean isProcessingEvent = false;
+		private boolean isProcessingEvent;
 
 	} //}}}
 
@@ -1923,7 +1918,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			else 
 			{
 				setCaretPosition(0);
-				this.getCaret().setVisible(false);
+				getCaret().setVisible(false);
 			}
 		}
 
