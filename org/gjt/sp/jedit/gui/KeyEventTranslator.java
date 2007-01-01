@@ -53,13 +53,14 @@ public class KeyEventTranslator
 
 	//{{{ translateKeyEvent() method
 	
-	protected static KeyEvent	lastKeyPressEvent	= null;
+	protected static KeyEvent lastKeyPressEvent;
 	
-	protected static boolean	lastKeyPressAccepted 	= false;
+	protected static boolean lastKeyPressAccepted;
 
 	/**
 	 * Pass this an event from {@link
 	 * KeyEventWorkaround#processKeyEvent(java.awt.event.KeyEvent)}.
+	 * @param evt the KeyEvent to translate
 	 * @since jEdit 4.2pre3
 	 */
 	public static Key translateKeyEvent(KeyEvent evt)
@@ -78,6 +79,7 @@ public class KeyEventTranslator
 	/**
 	 * Pass this an event from {@link
 	 * KeyEventWorkaround#processKeyEvent(java.awt.event.KeyEvent)}.
+	 * @param evt the KeyEvent to translate
 	 * @since jEdit 4.2pre3
 	 */
 	public static Key translateKeyEvent2(KeyEvent evt)
@@ -103,8 +105,6 @@ public class KeyEventTranslator
 			int	keyCode		= evt.getKeyCode();
 			int	modifiers	= evt.getModifiers();
 			boolean usecooked	= !evt.isActionKey();
-			boolean accept		= false;
-			boolean	acceptAsPhantom	= false;
 
 //			Log.log(Log.DEBUG,"KeyEventTranslator","translateKeyEvent(): 1: keyChar="+((int) keyChar)+",keyCode="+keyCode+",modifiers="+modifiers+", usecooked="+usecooked+", event="+evt+".");
 			
@@ -156,6 +156,8 @@ public class KeyEventTranslator
 					keyChar		= 0;
 			}
 
+			boolean accept = false;
+			boolean acceptAsPhantom = false;
 			if (true) {
 				switch(evt.getID()) {
 					case KeyEvent.KEY_PRESSED:
@@ -200,7 +202,7 @@ public class KeyEventTranslator
 			Key returnValue = null;
 			
 			if (accept||acceptAsPhantom) {
-				if ((!accept)&&acceptAsPhantom) {
+				if (!accept && acceptAsPhantom) {
 					if (keyChar!=0) {
 						keyCode = 0;
 					}
@@ -208,7 +210,7 @@ public class KeyEventTranslator
 				
 				returnValue = new Key(modifiersToString(modifiers),keyCode,keyChar);
 				
-				if ((!accept)&&acceptAsPhantom) {
+				if (!accept && acceptAsPhantom) {
 					if (keyChar!=0) {
 					}
 					returnValue.setIsPhantom(true);
@@ -220,7 +222,7 @@ public class KeyEventTranslator
 		else
 		{
 			int modifiers = evt.getModifiers();
-			Key returnValue = null;
+			Key returnValue;
 	
 			switch(evt.getID())
 			{
@@ -341,7 +343,7 @@ public class KeyEventTranslator
 			/* I guess translated events do not have the 'evt' field set
 			so consuming won't work. I don't think this is a problem as
 			nothing uses translation anyway */
-			Key trans = (Key)transMap.get(returnValue);
+			Key trans = transMap.get(returnValue);
 			if(trans == null)
 				return returnValue;
 			else
@@ -395,7 +397,7 @@ public class KeyEventTranslator
 		}
 		else if(key.length() == 0)
 		{
-			Log.log(Log.ERROR,DefaultInputHandler.class,
+			Log.log(Log.ERROR,KeyEventTranslator.class,
 				"Invalid key stroke: " + keyStroke);
 			return null;
 		}
@@ -414,7 +416,7 @@ public class KeyEventTranslator
 			}
 			catch(Exception e)
 			{
-				Log.log(Log.ERROR,DefaultInputHandler.class,
+				Log.log(Log.ERROR,KeyEventTranslator.class,
 					"Invalid key stroke: "
 					+ keyStroke);
 				return null;
@@ -502,7 +504,7 @@ public class KeyEventTranslator
 	} //}}}
 
 	//{{{ modifiersToString() method
-	private static int[] MODS = {
+	private static final int[] MODS = {
 		InputEvent.CTRL_MASK,
 		InputEvent.ALT_MASK,
 		InputEvent.META_MASK,
@@ -536,7 +538,7 @@ public class KeyEventTranslator
 	 */
 	public static String getModifierString(InputEvent evt)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if(evt.isControlDown())
 			buf.append(getSymbolicModifierName(InputEvent.CTRL_MASK));
 		if(evt.isAltDown())
@@ -551,7 +553,8 @@ public class KeyEventTranslator
 	static int c, a, m, s;
 
 	//{{{ Private members
-	private static Map transMap = new HashMap();
+	/** This map is a pool of Key. */
+	private static final Map<Key, Key> transMap = new HashMap<Key, Key>();
 
 	private static StringBuffer lazyAppend(StringBuffer buf, char ch)
 	{
@@ -586,10 +589,11 @@ public class KeyEventTranslator
 	//{{{ Key class
 	public static class Key
 	{
-		public String modifiers;
-		public int key;
-		public char input;
-		
+		public final String modifiers;
+		public final int key;
+		public final char input;
+
+		private final int hashCode;
 		/**
 			Wether this Key event applies to all jEdit windows (and not only a specific jEdit GUI component). 
 		*/
@@ -608,11 +612,12 @@ public class KeyEventTranslator
 			this.modifiers = modifiers;
 			this.key = key;
 			this.input = input;
+			hashCode = key + input;
 		}
 
 		public int hashCode()
 		{
-			return key + input;
+			return hashCode;
 		}
 
 		public boolean equals(Object o)
@@ -642,7 +647,7 @@ public class KeyEventTranslator
 		}
 		
 		public void setIsFromGlobalContext(boolean to) {
-			this.isFromGlobalContext = to;
+			isFromGlobalContext = to;
 		}
 		
 		public boolean isFromGlobalContext() {
@@ -650,7 +655,7 @@ public class KeyEventTranslator
 		}
 		
 		public void setIsPhantom(boolean to) {
-			this.isPhantom = to;
+			isPhantom = to;
 		}
 		
 		public boolean isPhantom() {
