@@ -127,6 +127,8 @@ public class Buffer extends JEditBuffer
 	 */
 	public void reload(View view)
 	{
+		if (getFlag(NEW_FILE))
+			return;
 		if(isDirty())
 		{
 			String[] args = { path };
@@ -135,8 +137,7 @@ public class Buffer extends JEditBuffer
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
 				return;
-		}
-
+		}		
 		view.getEditPane().saveCaretInfo();
 		load(view,true);
 	} //}}}

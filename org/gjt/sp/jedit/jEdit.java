@@ -1916,7 +1916,7 @@ public class jEdit
 		Buffer[] buffers = jEdit.getBuffers();
 
 		for(int i = 0; i < buffers.length && !hasDirty; i++)
-			hasDirty = buffers[i].isDirty();
+			hasDirty = !buffers[i].isNewFile() && buffers[i].isDirty();
 
 		if(confirm && hasDirty)
 		{
@@ -1943,6 +1943,8 @@ public class jEdit
 		for(int i = 0; i < buffers.length; i++)
 		{
 			Buffer buffer = buffers[i];
+			if (buffer.isNewFile())
+				continue;
 			buffer.load(view,true);
 		}
 	} //}}}

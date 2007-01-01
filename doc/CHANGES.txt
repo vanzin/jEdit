@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
 Jean-Francois Larvoire, Martin Raspe, Kazutoshi Satoda, and Marcelo Vanzin
-for contributing to this release.
+Nicholas O'Leary for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -153,6 +153,10 @@ for contributing to this release.
   of the Container. The new capabilites are useable by the two new
   constructors. For more information, see the JavaDoc documentation.
   (Björn "Vampire" Kautler)
+
+- Reload/ReloadAll now ignores buffers with the NEW_FILE flag set. This
+  was causing IO error messages when the Untitled buffers could not
+  be reloaded. (Nicholas O'Leary)
 
 }}}
 {{{ API Changes
