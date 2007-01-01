@@ -47,9 +47,7 @@ public class TokenMarker
 {
 	//{{{ TokenMarker constructor
 	public TokenMarker()
-	{
-		ruleSets = new Hashtable<String, ParserRuleSet>(64);
-	} //}}}
+	{} //}}}
 
 	//{{{ addRuleSet() method
 	public void addRuleSet(ParserRuleSet rules)
@@ -78,7 +76,7 @@ public class TokenMarker
 	 */
 	public ParserRuleSet[] getRuleSets()
 	{
-		return ruleSets.values().toArray(new ParserRuleSet[0]);
+		return ruleSets.values().toArray(new ParserRuleSet[ruleSets.size()]);
 	} //}}}
 
 	//{{{ markTokens() method
@@ -272,16 +270,17 @@ unwind:		while(context.parent != null)
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private Map<String, ParserRuleSet> ruleSets;
+	private final Map<String, ParserRuleSet> ruleSets = new Hashtable<String, ParserRuleSet>(64);
 	private ParserRuleSet mainRuleSet;
 
 	// Instead of passing these around to each method, we just store them
 	// as instance variables. Note that this is not thread-safe.
 	private TokenHandler tokenHandler;
+	/** The line from which we will mark the tokens. */
 	private Segment line;
 	private LineContext context;
 	private KeywordMap keywords;
-	private Segment pattern = new Segment();
+	private final Segment pattern = new Segment();
 	private int lastOffset;
 	private int lineLength;
 	private int pos;
@@ -396,7 +395,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 
 		int offset = ((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
 			lastOffset : pos;
-		int posMatch = (end ? checkRule.endPosMatch : checkRule.startPosMatch);
+		int posMatch = end ? checkRule.endPosMatch : checkRule.startPosMatch;
 
 		if((posMatch & ParserRule.AT_LINE_START)
 			== ParserRule.AT_LINE_START)
