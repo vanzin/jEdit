@@ -415,12 +415,10 @@ class InstallPanel extends JPanel
 
 			for(int i = 0; i < pluginList.pluginSets.size(); i++)
 			{
-				PluginList.PluginSet set = (PluginList.PluginSet)
-					pluginList.pluginSets.get(i);
+				PluginList.PluginSet set = pluginList.pluginSets.get(i);
 				for(int j = 0; j < set.plugins.size(); j++)
 				{
-					PluginList.Plugin plugin = (PluginList.Plugin)
-						pluginList.pluginHash.get(set.plugins.get(j));
+					PluginList.Plugin plugin = pluginList.pluginHash.get(set.plugins.get(j));
 					PluginList.Branch branch = plugin.getCompatibleBranch();
 					String installedVersion =
 						plugin.getInstalledVersion();
