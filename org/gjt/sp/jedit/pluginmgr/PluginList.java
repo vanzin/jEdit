@@ -25,8 +25,7 @@ package org.gjt.sp.jedit.pluginmgr;
 //{{{ Imports
 import java.io.*;
 import java.net.URL;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
@@ -51,9 +50,9 @@ class PluginList
 	public static final int GZIP_MAGIC_1 = 0x1f;
 	public static final int GZIP_MAGIC_2 = 0x8b;
 
-	Vector plugins;
-	Hashtable pluginHash;
-	Vector pluginSets;
+	final List<Plugin> plugins = new ArrayList<Plugin>();
+	final Map<String, Plugin> pluginHash = new HashMap<String, Plugin>();
+	final List<PluginSet> pluginSets = new ArrayList<PluginSet>();
 
 	/**
 	 * The mirror id.
@@ -64,10 +63,6 @@ class PluginList
 	//{{{ PluginList constructor
 	PluginList(WorkRequest workRequest) throws Exception
 	{
-		plugins = new Vector();
-		pluginHash = new Hashtable();
-		pluginSets = new Vector();
-
 		String path = jEdit.getProperty("plugin-manager.export-url");
 		id = jEdit.getProperty("plugin-manager.mirror.id");
 		if (!id.equals(MirrorList.Mirror.NONE))
@@ -111,14 +106,14 @@ class PluginList
 	void addPlugin(Plugin plugin)
 	{
 		plugin.checkIfInstalled();
-		plugins.addElement(plugin);
+		plugins.add(plugin);
 		pluginHash.put(plugin.name,plugin);
 	} //}}}
 
 	//{{{ addPluginSet() method
 	void addPluginSet(PluginSet set)
 	{
-		pluginSets.addElement(set);
+		pluginSets.add(set);
 	} //}}}
 
 	//{{{ finished() method
@@ -128,15 +123,15 @@ class PluginList
 		// in dependencies
 		for(int i = 0; i < plugins.size(); i++)
 		{
-			Plugin plugin = (Plugin)plugins.elementAt(i);
+			Plugin plugin = plugins.get(i);
 			for(int j = 0; j < plugin.branches.size(); j++)
 			{
-				Branch branch = (Branch)plugin.branches.elementAt(j);
+				Branch branch = plugin.branches.get(j);
 				for(int k = 0; k < branch.deps.size(); k++)
 				{
-					Dependency dep = (Dependency)branch.deps.elementAt(k);
+					Dependency dep = branch.deps.get(k);
 					if(dep.what.equals("plugin"))
-						dep.plugin = (Plugin)pluginHash.get(dep.pluginName);
+						dep.plugin = pluginHash.get(dep.pluginName);
 				}
 			}
 		}
@@ -147,7 +142,7 @@ class PluginList
 	{
 		for(int i = 0; i < plugins.size(); i++)
 		{
-			System.err.println(plugins.elementAt(i));
+			System.err.println(plugins.get(i));
 			System.err.println();
 		}
 	} //}}}
@@ -169,7 +164,7 @@ class PluginList
 	{
 		String name;
 		String description;
-		Vector plugins = new Vector();
+		final List<String> plugins = new ArrayList<String>();
 
 		public String toString()
 		{
@@ -184,7 +179,7 @@ class PluginList
 		String name;
 		String description;
 		String author;
-		Vector branches = new Vector();
+		final List<Branch> branches = new ArrayList<Branch>();
 		//String installed;
 		//String installedVersion;
 
@@ -272,7 +267,7 @@ class PluginList
 		{
 			for(int i = 0; i < branches.size(); i++)
 			{
-				Branch branch = (Branch)branches.elementAt(i);
+				Branch branch = branches.get(i);
 				if(branch.canSatisfyDependencies())
 					return branch;
 			}
@@ -310,9 +305,9 @@ class PluginList
 
 			roster.addInstall(
 				installed,
-				(downloadSource ? branch.downloadSource : branch.download),
+				downloadSource ? branch.downloadSource : branch.download,
 				installDirectory,
-				(downloadSource ? branch.downloadSourceSize : branch.downloadSize));
+				downloadSource ? branch.downloadSourceSize : branch.downloadSize);
 
 		}
 
@@ -332,13 +327,13 @@ class PluginList
 		int downloadSourceSize;
 		String downloadSource;
 		boolean obsolete;
-		Vector deps = new Vector();
+		final List<Dependency> deps = new ArrayList<Dependency>();
 
 		boolean canSatisfyDependencies()
 		{
 			for(int i = 0; i < deps.size(); i++)
 			{
-				Dependency dep = (Dependency)deps.elementAt(i);
+				Dependency dep = deps.get(i);
 				if(!dep.canSatisfy())
 					return false;
 			}
@@ -351,7 +346,7 @@ class PluginList
 		{
 			for(int i = 0; i < deps.size(); i++)
 			{
-				Dependency dep = (Dependency)deps.elementAt(i);
+				Dependency dep = deps.get(i);
 				dep.satisfy(roster,installDirectory,downloadSource);
 			}
 		}
@@ -366,11 +361,11 @@ class PluginList
 	//{{{ Dependency class
 	static class Dependency
 	{
-		String what;
-		String from;
-		String to;
+		final String what;
+		final String from;
+		final String to;
 		// only used if what is "plugin"
-		String pluginName;
+		final String pluginName;
 		Plugin plugin;
 
 		Dependency(String what, String from, String to, String pluginName)
@@ -439,12 +434,9 @@ class PluginList
 		{
 			if(isSatisfied())
 				return true;
-			else if(what.equals("plugin"))
-			{
+			if (what.equals("plugin"))
 				return plugin.canBeInstalled();
-			}
-			else
-				return false;
+			return false;
 		}
 
 		void satisfy(Roster roster, String installDirectory,
@@ -455,8 +447,7 @@ class PluginList
 				String installedVersion = plugin.getInstalledVersion();
 				for(int i = 0; i < plugin.branches.size(); i++)
 				{
-					Branch branch = (Branch)plugin.branches
-						.elementAt(i);
+					Branch branch = plugin.branches.get(i);
 					if((installedVersion == null
 						||
 					StandardUtilities.compareStrings(

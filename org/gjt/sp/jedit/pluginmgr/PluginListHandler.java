@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
-import java.io.*;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -29,13 +28,16 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 
+/**
+ * @version $Id$
+ */
+
 class PluginListHandler extends DefaultHandler
 {
 	PluginListHandler(PluginList pluginList, String path)
 	{
 		this.pluginList = pluginList;
 		this.path = path;
-		stateStack = new Stack();
 
 		author = new StringBuffer();
 		description = new StringBuffer();
@@ -100,7 +102,7 @@ class PluginListHandler extends DefaultHandler
 	}
 
 	public void startElement(String uri, String localName,
-							 String tag, Attributes attrs)
+				 String tag, Attributes attrs)
 	{
 		for (int i = 0; i < attrs.getLength(); i++)
 		{
@@ -148,7 +150,7 @@ class PluginListHandler extends DefaultHandler
 		}
 		else if(tag.equals("PLUGIN_SET_ENTRY"))
 		{
-			pluginSet.plugins.addElement(pluginSetEntry.toString());
+			pluginSet.plugins.add(pluginSetEntry.toString());
 			pluginSetEntry.setLength(0);
 		}
 		else if(tag.equals("PLUGIN"))
@@ -172,7 +174,7 @@ class PluginListHandler extends DefaultHandler
 			branch.downloadSource = downloadSource.toString();
 			branch.downloadSourceSize = downloadSourceSize;
 			branch.obsolete = obsolete;
-			plugin.branches.addElement(branch);
+			plugin.branches.add(branch);
 			version = null;
 			download.setLength(0);
 			downloadSource.setLength(0);
@@ -182,7 +184,7 @@ class PluginListHandler extends DefaultHandler
 		{
 			PluginList.Dependency dep = new PluginList.Dependency(
 				depWhat,depFrom,depTo,depPlugin);
-			branch.deps.addElement(dep);
+			branch.deps.add(dep);
 			depWhat = null;
 			depFrom = null;
 			depTo = null;
@@ -237,7 +239,7 @@ class PluginListHandler extends DefaultHandler
 	private String name;
 	private StringBuffer description;
 
-	private Stack stateStack;
+	private final Stack<String> stateStack = new Stack<String>();
 
 	private String pushElement(String name)
 	{
@@ -247,11 +249,11 @@ class PluginListHandler extends DefaultHandler
 
 	private String peekElement()
 	{
-		return (String) stateStack.peek();
+		return stateStack.peek();
 	}
 
 	private String popElement()
 	{
-		return (String) stateStack.pop();
+		return stateStack.pop();
 	}
 }
