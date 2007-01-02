@@ -118,7 +118,7 @@ public class PluginManager extends JFrame implements EBComponent
 	} //}}}
 
 	//{{{ getPluginList() method
-	public PluginList getPluginList()
+	PluginList getPluginList()
 	{
 		return pluginList;
 	} //}}}
@@ -248,8 +248,8 @@ public class PluginManager extends JFrame implements EBComponent
 				{
 					downloadingPluginList = true;
 					setStatus(jEdit.getProperty(
-						"plugin-manager.list-download"));
-					pluginList = new PluginList();
+						"plugin-manager.list-download-connect"));
+					pluginList = new PluginList(this);
 				}
 				catch(Exception e)
 				{

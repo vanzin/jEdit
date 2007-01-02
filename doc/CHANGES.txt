@@ -160,6 +160,8 @@ Nicholas O'Leary for contributing to this release.
   was causing IO error messages when the Untitled buffers could not
   be reloaded. (Nicholas O'Leary)
 
+- More infos about the socket connection when the plugin manager updates it's
+  plugin list (Matthieu Casanova)
 }}}
 {{{ API Changes
 
@@ -183,6 +185,9 @@ Nicholas O'Leary for contributing to this release.
 - VariableGridLayout has two new constructors to use the new capabilites.
   For more information see section Miscellaneous. (Björn "Vampire" Kautler)
 
+- PluginManager.getPluginList() is not public anymore. It was not useful
+  since the PluginList class cannot be accessed outside of it's package
+  (Matthieu Casanova)
 }}}
 
 }}}

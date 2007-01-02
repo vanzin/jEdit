@@ -33,6 +33,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.WorkRequest;
+import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -60,7 +62,7 @@ class PluginList
 	private final String id;
 
 	//{{{ PluginList constructor
-	PluginList() throws Exception
+	PluginList(WorkRequest workRequest) throws Exception
 	{
 		plugins = new Vector();
 		pluginHash = new Hashtable();
@@ -72,9 +74,13 @@ class PluginList
 			path += "?mirror="+id;
 		PluginListHandler handler = new PluginListHandler(this,path);
 		XMLReader parser = XMLReaderFactory.createXMLReader();
-		InputStream in = new BufferedInputStream(new URL(path).openStream());
+		InputStream in = null;
+		InputStream inputStream = null;
 		try
 		{
+			inputStream = new URL(path).openStream();
+			workRequest.setStatus(jEdit.getProperty("plugin-manager.list-download"));
+			in = new BufferedInputStream(inputStream);
 			if(in.markSupported())
 			{
 				in.mark(2);
@@ -96,7 +102,8 @@ class PluginList
 		}
 		finally
 		{
-			in.close();
+			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly(inputStream);
 		}
 	} //}}}
 
