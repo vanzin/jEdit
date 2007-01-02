@@ -2461,15 +2461,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ getIndentRules() method
 	private List<IndentRule> getIndentRules(int line)
 	{
+		String modeName = null;
 		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
-		Mode mode;
-
-		if (ctx.rules.getModeName() == null)
-			mode = jEdit.getMode(tokenMarker.getMainRuleSet().getModeName());
-		else
-			mode = jEdit.getMode(ctx.rules.getModeName());
-
-		return mode.getIndentRules();
+		if (ctx != null && ctx.rules != null)
+			modeName = ctx.rules.getModeName();
+		if (modeName == null)
+			modeName = tokenMarker.getMainRuleSet().getModeName();
+		return jEdit.getMode(modeName).getIndentRules();
 	} //}}}
 
 	//}}}

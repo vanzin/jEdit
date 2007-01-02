@@ -8,6 +8,8 @@ Nicholas O'Leary for contributing to this release.
 
 {{{ Bug Fixes
 
+- avoid NPE from getIndentRules (patch # 1611766) (Kazutoshi Satoda)  
+
 - bufferio operations are now exception-safe (patch# 1597168) (Kazutoshi Satoda)
 
 - Encoding errors properly reported on save (patch# 1601830) (Kazutoshi Satoda)
