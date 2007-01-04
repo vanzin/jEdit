@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre9
 
 Thanks to Björn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
-Jean-Francois Larvoire, Martin Raspe, Kazutoshi Satoda, and Marcelo Vanzin
-Nicholas O'Leary for contributing to this release.
+Jean-Francois Larvoire, Martin Raspe, Kazutoshi Satoda, Alan Ezust, Marcelo
+Vanzin, and Nicholas O'Leary for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -113,6 +113,9 @@ Nicholas O'Leary for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- BufferSwitcher has a hovertip to give you full filename
+  (request # 1628053) (Alan Ezust)
 
 - Textfield for filtering recent files menu (Patch # 1546200)
   (Joerg - spj)
@@ -1329,5 +1332,5 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 }}}
 
 jEdit buffer local properties:
-:maxLineLen=0:indentSize=2:
+:maxLineLen=80:indentSize=2:
 :folding=explicit:collapseFolds=2:

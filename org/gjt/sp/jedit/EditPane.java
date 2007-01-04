@@ -108,6 +108,7 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void setBuffer(final Buffer buffer, boolean requestFocus)
 	{
+
 		if(buffer == null)
 			throw new NullPointerException();
 
@@ -123,7 +124,7 @@ public class EditPane extends JPanel implements EBComponent
 		this.buffer = buffer;
 
 		textArea.setBuffer(buffer);
-
+		    
 		if(!init)
 		{
 			view.updateTitle();
@@ -132,6 +133,7 @@ public class EditPane extends JPanel implements EBComponent
 			{
 				if(bufferSwitcher.getSelectedItem() != buffer)
 					bufferSwitcher.setSelectedItem(buffer);
+				bufferSwitcher.setToolTipText(buffer.getPath());				
 			}
 
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
