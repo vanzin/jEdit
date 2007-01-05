@@ -94,10 +94,13 @@ public class BufferSwitcher extends JComboBox
 			super.getListCellRendererComponent(list,value,index,
 				isSelected,cellHasFocus);
 			Buffer buffer = (Buffer)value;
+			
 			if(buffer == null)
 				setIcon(null);
-			else
+			else {
 				setIcon(buffer.getIcon());
+				setToolTipText(buffer.getPath());
+			}
 			return this;
 		}
 	}
