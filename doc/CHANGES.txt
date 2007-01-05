@@ -111,6 +111,8 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Perl edit mode - support for fully qualified variable names like $Some::Module::test.
   (Martin Raspe)
 
+- Updated python edit mode to unindent lines after "pass" (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
