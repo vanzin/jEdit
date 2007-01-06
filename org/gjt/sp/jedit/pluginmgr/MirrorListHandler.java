@@ -22,16 +22,19 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
-import java.io.*;
 import java.util.*;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.options.PluginOptions;
 
+/**
+ * @version $Id$
+ */
 class MirrorListHandler extends DefaultHandler
 {
 	//{{{ Constructor
@@ -39,26 +42,19 @@ class MirrorListHandler extends DefaultHandler
 	{
 		this.mirrors = mirrors;
 		this.path = path;
-		stateStack = new Stack();
-
-		description = new StringBuffer();
-		location = new StringBuffer();
-		country = new StringBuffer();
-		continent = new StringBuffer();
 	} //}}}
 
 	//{{{ resolveEntity() method
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "mirrors.dtd",
-					org.gjt.sp.jedit.options.PluginOptions.class);
+					PluginOptions.class);
 	} //}}}
 
 	//{{{ characters() method
 	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
-		String text = new String(c, off, len);
 
 		if(tag == "DESCRIPTION")
 			description.append(c, off, len);
@@ -112,7 +108,7 @@ class MirrorListHandler extends DefaultHandler
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR, this, e);
 		}
 	} //}}}
 
@@ -126,35 +122,33 @@ class MirrorListHandler extends DefaultHandler
 
 	//{{{ Variables
 	private String id;
-	private StringBuffer description;
-	private StringBuffer location;
-	private StringBuffer country;
-	private StringBuffer continent;
+	private final StringBuilder description = new StringBuilder();
+	private final StringBuilder location = new StringBuilder();
+	private final StringBuilder country = new StringBuilder();
+	private final StringBuilder continent = new StringBuilder();
 
-	private MirrorList mirrors;
+	private final MirrorList mirrors;
 	private MirrorList.Mirror mirror;
 
-	private Stack stateStack;
-	private String path;
+	private final Stack<String> stateStack = new Stack<String>();
+	private final String path;
 	//}}}
 
 	private String pushElement(String name)
 	{
-		name = (name == null) ? null : name.intern();
-
+		name = name == null ? null : name.intern();
 		stateStack.push(name);
-
 		return name;
 	}
 
 	private String peekElement()
 	{
-		return (String) stateStack.peek();
+		return stateStack.peek();
 	}
 
-	private String popElement()
+	private void popElement()
 	{
-		return (String) stateStack.pop();
+		stateStack.pop();
 	}
 
 	//}}}

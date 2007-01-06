@@ -22,14 +22,13 @@
 
 package org.gjt.sp.jedit.search;
 
+//{{{ Imports
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -37,15 +36,14 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
-//{{{ Imports
 
 //}}}
 
 public class HyperSearchOperationNode 
 {
-	private boolean treeViewDisplayed = false;
-	private String searchString;
-	private List resultNodes;
+	private boolean treeViewDisplayed;
+	private final String searchString;
+	private List<DefaultMutableTreeNode> resultNodes;
 	
 	//{{{ HyperSearchOperationNode constructor
 	public HyperSearchOperationNode(String searchString) 
@@ -74,8 +72,9 @@ public class HyperSearchOperationNode
 	//{{{ restoreFlatNodes() method
 	public void restoreFlatNodes(JTree resultTree, DefaultMutableTreeNode operNode)
 	{
-		for (Iterator iter = resultNodes.iterator(); iter.hasNext();) {
-			DefaultMutableTreeNode element = (DefaultMutableTreeNode) iter.next();
+		for (int i = 0; i < resultNodes.size(); i++)
+		{
+			DefaultMutableTreeNode element = resultNodes.get(i);
 			operNode.insert(element, operNode.getChildCount());
 		}
 
@@ -93,13 +92,13 @@ public class HyperSearchOperationNode
 	//{{{ cacheFlatNodes() method
 	public void cacheResultNodes(DefaultMutableTreeNode operNode) 
 	{
-		resultNodes = new ArrayList();
+		resultNodes = new ArrayList<DefaultMutableTreeNode>(operNode.getChildCount());
 		for (Enumeration e = operNode.children(); e.hasMoreElements();)
-			resultNodes.add(e.nextElement());
+			resultNodes.add((DefaultMutableTreeNode) e.nextElement());
 	}//}}}
 	
 	//{{{ removeNodeFromCache() method
-	public static void removeNodeFromCache (MutableTreeNode mnode)
+	public static void removeNodeFromCache(MutableTreeNode mnode)
 	{
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)mnode;
 		if (node.getUserObject() instanceof HyperSearchOperationNode)
@@ -124,18 +123,18 @@ public class HyperSearchOperationNode
 	//{{{ insertTreeNodes() method
 	public void insertTreeNodes(JTree resultTree, DefaultMutableTreeNode operNode)
 	{
-		Map pathElementCountFile = new TreeMap();
 		String fileSep = System.getProperty("file.separator");
 		String fileSepRegex = System.getProperty("file.separator");
 		if (fileSep.equals("\\"))
 			fileSepRegex = "\\\\";
 		
 		//find the highest level common path
-		String topPathTmp[] = null;
+		String[] topPathTmp = null;
 		int topPathNdx = -1;
-		for (Iterator it = resultNodes.iterator(); it.hasNext();)
+
+		for (int i = 0;i < resultNodes.size();i++)
 		{
-			DefaultMutableTreeNode fileTreeNode = (DefaultMutableTreeNode)it.next();
+			DefaultMutableTreeNode fileTreeNode = resultNodes.get(i);
 			Object obj = fileTreeNode.getUserObject();
 			if (!(obj instanceof HyperSearchFileNode))
 				continue;
@@ -143,7 +142,7 @@ public class HyperSearchOperationNode
 
 			int pos = fileNode.path.lastIndexOf(fileSep);
 			String pathName = fileNode.path.substring(0, pos);
-			String paths[] = pathName.split(fileSepRegex);
+			String[] paths = pathName.split(fileSepRegex);
 			if (topPathNdx == -1)
 			{
 				topPathNdx = paths.length;
@@ -166,23 +165,23 @@ public class HyperSearchOperationNode
 				}
 			}
 		}
-		String topPath[] = new String[topPathNdx];
+		String[] topPath = new String[topPathNdx];
 		String topPathPath = "";
 		for (int ndx = 0 ; ndx < topPathNdx; ndx++)
 		{
 			topPath[ndx] = topPathTmp[ndx];
 			topPathPath = topPathPath.concat(topPath[ndx] + fileSep);
 		}
-		Map treeNodes = new HashMap();
+		Map<String, DefaultMutableTreeNode> treeNodes = new HashMap<String, DefaultMutableTreeNode>();
 		HyperSearchFolderNode folderNode = 
 			new HyperSearchFolderNode(new File(topPathPath), true);
 		DefaultMutableTreeNode folderTreeNode = new DefaultMutableTreeNode(folderNode);
 		operNode.insert(folderTreeNode, operNode.getChildCount());
 		treeNodes.put(topPathPath, folderTreeNode);
 		
-		for (Iterator it = resultNodes.iterator(); it.hasNext();)
+		for (int i = 0;i < resultNodes.size();i++)
 		{
-			DefaultMutableTreeNode fileTreeNode = (DefaultMutableTreeNode)it.next();
+			DefaultMutableTreeNode fileTreeNode = resultNodes.get(i);
 			Object obj = fileTreeNode.getUserObject();
 			if (!(obj instanceof HyperSearchFileNode))
 				continue;
@@ -191,14 +190,14 @@ public class HyperSearchOperationNode
 			fileNode.showFullPath = false;
 			int pos = fileNode.path.lastIndexOf(fileSep);
 			String pathName = fileNode.path.substring(0, pos);
-			String paths[] = pathName.split(fileSepRegex);
+			String[] paths = pathName.split(fileSepRegex);
 			
 			DefaultMutableTreeNode insNode = folderTreeNode;
 			String partialPath = topPathPath;
 			for (int ndx = topPathNdx; ndx < paths.length; ndx++)
 			{
 				partialPath = partialPath.concat(paths[ndx] + fileSep);
-				DefaultMutableTreeNode tmpNode = (DefaultMutableTreeNode) treeNodes.get(partialPath);
+				DefaultMutableTreeNode tmpNode = treeNodes.get(partialPath);
 				if (tmpNode == null)
 				{
 					HyperSearchFolderNode tmpFolderNode = 
