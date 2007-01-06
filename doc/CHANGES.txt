@@ -95,6 +95,8 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Horizontal scrollbar in the textarea was not always updated
   (#1534016, #1617483) (Matthieu Casanova)
 
+- In hypersearch when switching to flat nodes, the full path is displayed
+  correctly (#1593523) (Matthieu Casanova)
 }}}
 {{{ Editing
 

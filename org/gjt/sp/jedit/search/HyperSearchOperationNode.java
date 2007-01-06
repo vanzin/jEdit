@@ -35,11 +35,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
-
-
 //}}}
 
-public class HyperSearchOperationNode 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
+public class HyperSearchOperationNode
 {
 	private boolean treeViewDisplayed;
 	private final String searchString;
@@ -75,6 +77,9 @@ public class HyperSearchOperationNode
 		for (int i = 0; i < resultNodes.size(); i++)
 		{
 			DefaultMutableTreeNode element = resultNodes.get(i);
+			if (element.getUserObject() instanceof HyperSearchFileNode)
+				((HyperSearchFileNode)element.getUserObject()).showFullPath = true;
+
 			operNode.insert(element, operNode.getChildCount());
 		}
 
