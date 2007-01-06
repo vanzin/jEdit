@@ -447,7 +447,7 @@ public class Buffer extends JEditBuffer
 						savePath = vfs.getTwoStageSaveName(savePath);
 						if (savePath == null)
 						{
-							Log.log(Log.DEBUG, this, "Buffer saving : two stage save impossible in path " + savePath);
+							Log.log(Log.DEBUG, this, "Buffer saving : two stage save impossible because path is null");
 							VFSManager.error(view,
 								newPath,
 								"ioerror.save-readonly-twostagefail",
