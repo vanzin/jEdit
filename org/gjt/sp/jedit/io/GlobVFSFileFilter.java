@@ -51,7 +51,7 @@ public class GlobVFSFileFilter implements VFSFileFilter
 		}
 		else
 		{
-			return accept(file.getPath());
+			return accept(file.getName());
 		}
 	}
 
@@ -78,7 +78,7 @@ public class GlobVFSFileFilter implements VFSFileFilter
 	public void setGlob(String glob)
 	{
 		this.glob = glob;
-		this.pattern = null;
+		pattern = null;
 	}
 
 	public String getGlob()

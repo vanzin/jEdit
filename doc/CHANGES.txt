@@ -97,7 +97,11 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - In hypersearch when switching to flat nodes, the full path is displayed
   correctly (#1593523) (Matthieu Casanova)
+
+- The VFS Browser filter was not working as expected
+  (#1617509) (Matthieu Casanova)
 }}}
+
 {{{ Editing
 
 - New edit mode: quake.xml
