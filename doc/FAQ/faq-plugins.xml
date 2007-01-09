@@ -181,23 +181,6 @@
 </qandaentry>
 
 <qandaentry>
-	<question id="plugin-antfarm-cmdlineprop">
-		<para>
-			Using AntFarm, how do I pass a command-line property to my build
-			(for example, <userinput>ant build -Dtarget=test</userinput>)?
-		</para>
-	</question>
-	<answer>
-		<para>
-			In general, you would need to run Ant from a command line to pass specific
-			parameters. The AntFarm plugin currently does allow you specify the target
-			to be built from its graphical display, so the example given in the question
-			could be run using the plugin.
-		</para>
-	</answer>
-</qandaentry>
-
-<qandaentry>
 	<question id="plugins-xslt">
 		<para>
 			Any development on integrating an XSL parser? It would be great to have the
@@ -207,9 +190,7 @@
 	</question>
 	<answer>
 		<para>
-			There is currently one plugin available called XSLT. The XSLT plugin provides
-      features for: transforming XML using XSL transformation stylesheets; evaluating
-      XPath expressions on XML and displaying results; and indenting XML.
+There is currently one plugin available called XSLT. The XSLT plugin provides features for: transforming XML using XSL transformation stylesheets; evaluating XPath expressions on XML and displaying results; and indenting XML. 
 		</para>
 	</answer>
 </qandaentry>
@@ -217,14 +198,12 @@
 <qandaentry>
 	<question id="plugins-ssh">
 		<para>
-			Is there a plugin to enable opening of files across networks using SSH?
+			Is there a plugin to enable editing of remote files over FTP or SSH?
 		</para>
 	</question>
 	<answer>
 		<para>
-			Yes, the FTP plugin privides this functionality as of version 0.5. You will
-      need to have Java 1.4 or newer to use it. Prior versions of java can still be
-      used with the plugin, however you will only be able to use the FTP protocol.
+			The FTP plugin allows remote editing of files over the <literal>SFTP://</literal> and <literal>FTP://</literal> protocols. <literal>HTTP://</literal> is supported natively in jEdit. The <literal>FTPS://</literal> and <literal>FISH://</literal> protocols are not supported yet.
 		</para>
 	</answer>
 </qandaentry>
