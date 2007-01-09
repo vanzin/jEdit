@@ -881,6 +881,15 @@ public class EditPane extends JPanel implements EBComponent
 			}
 			else if(_buffer == recentBuffer)
 				recentBuffer = null;
+
+			Buffer closedBuffer = msg.getBuffer();
+			if (closedBuffer.isUntitled())
+			{
+				// the buffer was a new file so I do not need to keep it's informations
+				Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
+				if (carets != null)
+					carets.remove(closedBuffer.getPath());
+			}
 		}
 		else if(msg.getWhat() == BufferUpdate.LOAD_STARTED)
 		{

@@ -103,6 +103,9 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - When reloading a buffer, the markers were not saved for each EditPanes
   (Matthieu Casanova)
+
+- When closing an untitled buffer is is removed from the CaretInfo map
+  of the EditPanes (Matthieu Casanova)
 }}}
 
 {{{ Editing
