@@ -173,6 +173,11 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - More infos about the socket connection when the plugin manager updates it's
   plugin list (Matthieu Casanova)
+
+- Now the multiple selection and rectangular selection flags are saved
+  for each buffer on each edit pane. So you can now in a textarea edit
+  a buffer using rectangular selection, and use normal selection with another one
+   (Matthieu Casanova)
 }}}
 {{{ API Changes
 

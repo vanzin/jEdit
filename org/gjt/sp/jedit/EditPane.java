@@ -307,6 +307,9 @@ public class EditPane extends JPanel implements EBComponent
 		buffer.setProperty(Buffer.SELECTION,selection);
 		caretInfo.selection = selection;
 
+		caretInfo.rectangularSelection = textArea.isRectangularSelectionEnabled();
+		caretInfo.multipleSelection = textArea.isMultipleSelectionEnabled();
+
 		buffer.setIntegerProperty(Buffer.SCROLL_VERT,
 			textArea.getFirstPhysicalLine());
 		caretInfo.scrollVert = textArea.getFirstPhysicalLine();
@@ -332,13 +335,15 @@ public class EditPane extends JPanel implements EBComponent
 	{
 		// get our internal map of buffer -> CaretInfo since there might
 		// be current info already
-		Map<String, CaretInfo> carets = (Map<String, CaretInfo>)getClientProperty(CARETS);
-		if ( carets == null ) {
+		Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
+		if (carets == null)
+		{
 			carets = new HashMap<String, CaretInfo>();
 			putClientProperty(CARETS, carets);
 		}
 		CaretInfo caretInfo = carets.get(buffer.getPath());
-		if ( caretInfo == null ) {
+		if (caretInfo == null)
+		{
 			caretInfo = new CaretInfo();	
 		}
 		
@@ -348,7 +353,7 @@ public class EditPane extends JPanel implements EBComponent
 		// previously saved caret position that was stored in the 
 		// buffer properties.
 		int caret = caretInfo.caret;
-		if ((caret == -1) || buffer.getBooleanProperty(Buffer.CARET_POSITIONED))
+		if (caret == -1 || buffer.getBooleanProperty(Buffer.CARET_POSITIONED))
 		{
 			Integer i = (Integer) buffer.getProperty(Buffer.CARET);
 			caret = i == null ? -1 : i;
@@ -376,7 +381,8 @@ public class EditPane extends JPanel implements EBComponent
 			}
 		}
 		textArea.setSelection(selection);
-
+		textArea.setRectangularSelectionEnabled(caretInfo.rectangularSelection);
+		textArea.setMultipleSelectionEnabled(caretInfo.multipleSelection);
 		// set firstLine value
 		int firstLine = caretInfo.scrollVert;
 		if ( firstLine == -1 )
@@ -426,6 +432,8 @@ public class EditPane extends JPanel implements EBComponent
 		public Selection[] selection;
 		public int scrollVert = -1;
 		public int scrollHoriz = -1;
+		public boolean rectangularSelection;
+		public boolean multipleSelection;
 	} //}}}
 
 	//{{{ goToNextMarker() method
@@ -667,9 +675,9 @@ public class EditPane extends JPanel implements EBComponent
 	private BufferSwitcher bufferSwitcher;
 	/** The textArea inside the edit pane. */
 	private final JEditTextArea textArea;
-	private MarkerHighlight markerHighlight;
+	private final MarkerHighlight markerHighlight;
 
-	public static final String CARETS = "Buffer->caret";
+	private static final String CARETS = "Buffer->caret";
 	
 	//}}}
 
