@@ -100,6 +100,9 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - The VFS Browser filter was not working as expected
   (#1617509) (Matthieu Casanova)
+
+- When reloading a buffer, the markers were not saved for each EditPanes
+  (Matthieu Casanova)
 }}}
 
 {{{ Editing

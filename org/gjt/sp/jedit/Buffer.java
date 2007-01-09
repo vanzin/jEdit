@@ -137,8 +137,10 @@ public class Buffer extends JEditBuffer
 				JOptionPane.WARNING_MESSAGE);
 			if(result != JOptionPane.YES_OPTION)
 				return;
-		}		
-		view.getEditPane().saveCaretInfo();
+		}
+		EditPane[] editPanes = view.getEditPanes();
+		for (int i = 0; i < editPanes.length; i++)
+			editPanes[i].saveCaretInfo();
 		load(view,true);
 	} //}}}
 
@@ -1452,7 +1454,7 @@ public class Buffer extends JEditBuffer
 		if(!markersChanged())
 			return true;
 		// adapted from VFS.save
-		VFS vfs = VFSManager.getVFSForPath(this.getPath());
+		VFS vfs = VFSManager.getVFSForPath(getPath());
 		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) {
 			VFSManager.error(view, path, "vfs.not-supported.save",
 				new String[] { "markers file" });
@@ -1669,7 +1671,7 @@ public class Buffer extends JEditBuffer
 	private long modTime;
 	private Mode mode;
 
-	private Vector<Marker> markers;
+	private final Vector<Marker> markers;
 
 	private Socket waitSocket;
 	//}}}
