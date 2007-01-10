@@ -24,5 +24,4 @@ else
 fi
 
 # Launch application.
-cd /usr/share/jEdit
-exec $JAVA -Xms${JAVA_HEAP_INIT_SIZE}M -Xmx${JAVA_HEAP_MAX_SIZE}M -jar @jar.filename@ -reuseview $@
+exec $JAVA -Xms${JAVA_HEAP_INIT_SIZE}M -Xmx${JAVA_HEAP_MAX_SIZE}M -jar /usr/share/jEdit/@jar.filename@ -reuseview $@
