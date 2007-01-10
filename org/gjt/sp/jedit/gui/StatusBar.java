@@ -153,7 +153,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		Font font = new JLabel().getFont();
 		//UIManager.getFont("Label.font");
 		FontMetrics fm = getFontMetrics(font);
-		Dimension dim = null;
+		Dimension dim;
 
 		if (showCaretStatus)
 		{
@@ -278,7 +278,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				}
 				else
 				{
-					Object[] args = { new Integer(requestCount) };
+					Object[] args = {Integer.valueOf(requestCount)};
 					setMessage(jEdit.getProperty(
 						"view.status.io",args));
 					currentMessageIsIO = true;
@@ -485,18 +485,18 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				if (showFoldMode)
 				{
 					if (showEditMode)
-						buf.append(",");
+						buf.append(',');
 					buf.append((String)view.getBuffer().getProperty("folding"));
 				}
 				if (showEncoding)
 				{
 					if (showEditMode || showFoldMode)
-						buf.append(",");
+						buf.append(',');
 					buf.append(buffer.getStringProperty("encoding"));
 				}
 			}
 
-			mode.setText("(" + buf.toString() + ")");
+			mode.setText('(' + buf.toString() + ')');
 		}
 	} //}}}
 
@@ -534,7 +534,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private JLabel rectSelect;
 	private JLabel overwrite;
 	private JLabel lineSep;
-	/* package-private for speed */ StringBuffer buf = new StringBuffer();
+	/* package-private for speed */ StringBuilder buf = new StringBuilder();
 	private Timer tempTimer;
 	private boolean currentMessageIsIO;
 
@@ -585,7 +585,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	} //}}}
 
 	//{{{ ToolTipLabel class
-	class ToolTipLabel extends JLabel
+	static class ToolTipLabel extends JLabel
 	{
 		//{{{ getToolTipLocation() method
 		public Point getToolTipLocation(MouseEvent event)
@@ -598,7 +598,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	class MemoryStatus extends JComponent implements ActionListener
 	{
 		//{{{ MemoryStatus constructor
-		public MemoryStatus()
+		MemoryStatus()
 		{
 			// fucking GTK look and feel
 			Font font = new JLabel().getFont();
@@ -647,11 +647,11 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		public String getToolTipText()
 		{
 			Runtime runtime = Runtime.getRuntime();
-			int freeMemory = (int)(runtime.freeMemory() / 1024);
-			int totalMemory = (int)(runtime.maxMemory() / 1024);
-			int usedMemory = (totalMemory - freeMemory);
-			Integer[] args = { new Integer(usedMemory),
-				new Integer(totalMemory) };
+			int freeMemory = (int)(runtime.freeMemory() >> 10);
+			int totalMemory = (int)(runtime.totalMemory() >> 10);
+			int usedMemory = totalMemory - freeMemory;
+			args[0] = new Integer(usedMemory);
+			args[1] = new Integer(totalMemory);
 			return jEdit.getProperty("view.status.memory-tooltip",args);
 		} //}}}
 
@@ -673,9 +673,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			Insets insets = new Insets(0,0,0,0);//MemoryStatus.this.getBorder().getBorderInsets(this);
 
 			Runtime runtime = Runtime.getRuntime();
-			int freeMemory = (int)(runtime.freeMemory() / 1024);
-			int totalMemory = (int)(runtime.totalMemory() / 1024);
-			int usedMemory = (totalMemory - freeMemory);
+			int freeMemory = (int)(runtime.freeMemory() >> 10);
+			int totalMemory = (int)(runtime.totalMemory() >> 10);
+			int usedMemory = totalMemory - freeMemory;
 
 			int width = MemoryStatus.this.getWidth()
 				- insets.left - insets.right;
@@ -690,8 +690,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				(int)(width * fraction),
 				height);
 
-			String str = (usedMemory / 1024) + "/"
-				+ (totalMemory / 1024) + "Mb";
+			String str = (usedMemory >> 10) + "/"
+				+ (totalMemory >> 10) + "Mb";
 
 			FontRenderContext frc = new FontRenderContext(null,false,false);
 
@@ -705,7 +705,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			g2.setColor(progressForeground);
 
 			g2.drawString(str,
-				insets.left + (int)(width - bounds.getWidth()) / 2,
+				insets.left + ((int) (width - bounds.getWidth()) >> 1),
 				(int)(insets.top + lm.getAscent()));
 
 			g2.dispose();
@@ -720,7 +720,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			g2.setColor(MemoryStatus.this.getForeground());
 
 			g2.drawString(str,
-				insets.left + (int)(width - bounds.getWidth()) / 2,
+				insets.left + ((int) (width - bounds.getWidth()) >> 1),
 				(int)(insets.top + lm.getAscent()));
 
 			g2.dispose();
@@ -729,9 +729,12 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		//{{{ Private members
 		private static final String memoryTestStr = "999/999Mb";
 
-		private LineMetrics lm;
-		private Color progressForeground;
-		private Color progressBackground;
+		private final LineMetrics lm;
+		private final Color progressForeground;
+		private final Color progressBackground;
+
+		private final Integer[] args = new Integer[2];
+
 
 		private Timer timer;
 		//}}}
@@ -751,10 +754,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	} //}}}
 
 	//{{{ Clock class
-	class Clock extends JLabel implements ActionListener
+	static class Clock extends JLabel implements ActionListener
 	{
 		//{{{ Clock constructor
-		public Clock()
+		Clock()
 		{
 			/* FontRenderContext frc = new FontRenderContext(
 				null,false,false);
@@ -816,7 +819,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		private Timer timer;
 
 		//{{{ getTime() method
-		private String getTime()
+		private static String getTime()
 		{
 			return DateFormat.getTimeInstance(
 				DateFormat.SHORT).format(new Date());
