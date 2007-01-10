@@ -430,16 +430,17 @@
   </para>
  </sect1>
  <sect1 id="word-wrap"><title>Wrapping Long Lines</title>
-  <para>
-   The <firstterm>word wrap</firstterm> feature splits lines at word
-   boundaries in
-   order to fit text within a specified wrap margin.
-   The wrap margin
-   position is indicated in the text are as a faint blue vertical line.
-   There are two <quote>wrap modes</quote>, <quote>soft</quote> and
-   <quote>hard</quote>; they are described below. The current wrap mode is shown in the status bar; see <xref linkend="status-bar"/>. The wrap mode can be
-   changed in one of the following ways:
-  </para>
+ <para> 
+ The <firstterm>word wrap</firstterm> feature splits lines at word
+ boundaries in order to fit text within a specified wrap margin. A word
+ boundary, for the purposes of jEdit, means whitespace. Long lines without
+ whitespace are not wrapped by jEdit. The wrap margin position is indicated in
+ the text are as a faint blue vertical line. There are two <quote>wrap
+ modes</quote>, <quote>soft</quote> and <quote>hard</quote>; they are described
+ below. The current wrap mode is shown in the status bar; see <xref
+ linkend="status-bar"/>. The wrap mode can be changed in one of the following
+ ways: 
+ </para>
   <itemizedlist>
    <listitem><para>On a global or mode-specific
    basis in the
