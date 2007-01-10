@@ -107,6 +107,9 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - When closing an untitled buffer is is removed from the CaretInfo map
   of the EditPanes (Matthieu Casanova)
 
+- When a buffer is renamed the key is changed in the CaretInfo map
+  of the EditPanes (Matthieu Casanova)
+
 - Memory tooltip in status bar reports wrong values (#1538051) (Matthieu Casanova)
 }}}
 

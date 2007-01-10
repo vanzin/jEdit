@@ -418,7 +418,24 @@ public class EditPane extends JPanel implements EBComponent
 		 * message altogether. */
 		view.getStatus().setMessage(null);
 	} //}}}
-	
+
+	//{{{ bufferRenamed() method
+	/**
+	 * This method should be called by the Buffer when the path is changing.
+	 * @param oldPath the old path of the buffer
+	 * @param newPath the new path of the buffer
+	 */
+	void bufferRenamed(String oldPath, String newPath)
+	{
+		Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
+		if (carets == null)
+			return;
+		CaretInfo caretInfo = carets.remove(oldPath);
+		if (caretInfo != null)
+			carets.put(newPath, caretInfo);
+
+	} //}}}
+
 	//{{{
 	/**
 	 * Need to track this info for each buffer that this EditPane might edit

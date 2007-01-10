@@ -1679,6 +1679,15 @@ public class Buffer extends JEditBuffer
 	//{{{ setPath() method
 	private void setPath(String path)
 	{
+		View[] views = jEdit.getViews();
+		for (int i = 0; i < views.length; i++)
+		{
+			View view = views[i];
+			EditPane[] editPanes = view.getEditPanes();
+			for (int j = 0; j < editPanes.length; j++)
+				editPanes[j].bufferRenamed(this.path, path);
+		}
+
 		this.path = path;
 		VFS vfs = VFSManager.getVFSForPath(path);
 		if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
