@@ -122,7 +122,7 @@ public class Log
 		for(int i = 0; i < props.length; i++)
 		{
 			log(MESSAGE,Log.class,
-				props[i] + "=" + System.getProperty(props[i]));
+				props[i] + '=' + System.getProperty(props[i]));
 		}
 	} //}}}
 
@@ -306,16 +306,16 @@ public class Log
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private static Object LOCK = new Object();
-	private static String[] log;
+	private static final Object LOCK = new Object();
+	private static final String[] log;
 	private static int logLineCount;
 	private static boolean wrap;
 	private static int level = WARNING;
 	private static Writer stream;
-	private static String lineSep;
-	private static PrintStream realOut;
-	private static PrintStream realErr;
-	private static LogListModel listModel;
+	private static final String lineSep;
+	private static final PrintStream realOut;
+	private static final PrintStream realErr;
+	private static final LogListModel listModel;
 	//}}}
 
 	//{{{ Class initializer
@@ -354,7 +354,7 @@ public class Log
 	//{{{ _log() method
 	private static void _log(int urgency, String source, String message)
 	{
-		String fullMessage = "[" + urgencyToString(urgency) + "] " + source
+		String fullMessage = '[' + urgencyToString(urgency) + "] " + source
 			+ ": " + message;
 
 		try
@@ -411,14 +411,13 @@ public class Log
 	//{{{ LogListModel class
 	static class LogListModel implements ListModel
 	{
-		Vector listeners = new Vector();
+		final List<ListDataListener> listeners = new ArrayList<ListDataListener>();
 
 		private void fireIntervalAdded(int index1, int index2)
 		{
 			for(int i = 0; i < listeners.size(); i++)
 			{
-				ListDataListener listener = (ListDataListener)
-					listeners.elementAt(i);
+				ListDataListener listener = listeners.get(i);
 				listener.intervalAdded(new ListDataEvent(this,
 					ListDataEvent.INTERVAL_ADDED,
 					index1,index2));
@@ -429,8 +428,7 @@ public class Log
 		{
 			for(int i = 0; i < listeners.size(); i++)
 			{
-				ListDataListener listener = (ListDataListener)
-					listeners.elementAt(i);
+				ListDataListener listener = listeners.get(i);
 				listener.intervalRemoved(new ListDataEvent(this,
 					ListDataEvent.INTERVAL_REMOVED,
 					index1,index2));
@@ -439,12 +437,12 @@ public class Log
 
 		public void addListDataListener(ListDataListener listener)
 		{
-			listeners.addElement(listener);
+			listeners.add(listener);
 		}
 
 		public void removeListDataListener(ListDataListener listener)
 		{
-			listeners.removeElement(listener);
+			listeners.remove(listener);
 		}
 
 		public Object getElementAt(int index)
@@ -470,7 +468,7 @@ public class Log
 
 		void update(final int lineCount, final boolean oldWrap)
 		{
-			if(lineCount == 0 || listeners.size() == 0)
+			if(lineCount == 0 || listeners.isEmpty())
 				return;
 
 			SwingUtilities.invokeLater(new Runnable()
@@ -512,7 +510,7 @@ public class Log
 		private final ByteArrayOutputStream buffer;
 		private final OutputStream orig;
 
-		public LogPrintStream(int urgency, Object source)
+		LogPrintStream(int urgency, Object source)
 		{
 			super(new LogOutputStream(urgency, source));
 			buffer = new ByteArrayOutputStream();
@@ -561,7 +559,7 @@ public class Log
 		private final int 	urgency;
 		private final Object 	source;
 
-		public LogOutputStream(int urgency, Object source)
+		LogOutputStream(int urgency, Object source)
 		{
 			this.urgency 	= urgency;
 			this.source 	= source;
