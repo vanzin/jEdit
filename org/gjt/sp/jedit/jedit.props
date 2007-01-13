@@ -386,6 +386,7 @@ vfs.browser.sortMixFilesAndDirs=false
 vfs.browser.sortIgnoreCase=true
 vfs.browser.doubleClickClose=false
 vfs.browser.currentBufferFilter=false
+vfs.browser.useDefaultIcons=true
 
 # Can be one of: buffer, home, favorites, last
 vfs.browser.defaultPath=buffer

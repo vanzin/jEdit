@@ -28,6 +28,10 @@ import org.gjt.sp.jedit.*;
 //}}}
 
 //{{{ BrowserOptionPane class
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class BrowserOptionPane extends AbstractOptionPane
 {
 	//{{{ BrowserOptionPane constructor
@@ -118,6 +122,11 @@ public class BrowserOptionPane extends AbstractOptionPane
 		currentBufferFilter.setSelected(jEdit.getBooleanProperty("vfs.browser"
 			+ ".currentBufferFilter"));
 		addComponent(currentBufferFilter);
+
+		/* use default icons. */
+		useDefaultIcons = new JCheckBox(jEdit.getProperty("options.browser.general.useDefaultIcons"));
+		useDefaultIcons.setSelected(jEdit.getBooleanProperty("vfs.browser.useDefaultIcons"));
+		addComponent(useDefaultIcons);
 	} //}}}
 
 	//{{{ _save() method
@@ -142,6 +151,8 @@ public class BrowserOptionPane extends AbstractOptionPane
 			doubleClickClose.isSelected());
 		jEdit.setBooleanProperty("vfs.browser.currentBufferFilter",
 			currentBufferFilter.isSelected());
+		jEdit.setBooleanProperty("vfs.browser.useDefaultIcons",
+			useDefaultIcons.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -154,5 +165,6 @@ public class BrowserOptionPane extends AbstractOptionPane
 	private JCheckBox sortMixFilesAndDirs;
 	private JCheckBox doubleClickClose;
 	private JCheckBox currentBufferFilter;
+	private JCheckBox useDefaultIcons;
 	//}}}
 } //}}}

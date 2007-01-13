@@ -5,6 +5,7 @@
  *
  * Copyright (C) 1999 Jason Ginchereau
  * Portions copyright (C) 2001, 2003 Slava Pestov
+ * Portions copyright (C) 2007 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,11 +30,14 @@ import java.awt.font.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
-import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.*;
 //}}}
 
+/**
+ * Local filesystem VFS.
+ * @version $Id$
+ */
 public class FileCellRenderer extends DefaultTableCellRenderer
 {
 	public static Icon fileIcon = GUIUtilities.loadIcon("File.png");
@@ -82,7 +86,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 					path = file.getPath();
 				else
 					path = file.getSymlinkPath();
-				openBuffer = (jEdit._getBuffer(path) != null);
+				openBuffer = jEdit._getBuffer(path) != null;
 
 				setIcon(showIcons
 					? getIconForFile(file,entry.expanded,
@@ -169,25 +173,22 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	public static Icon getIconForFile(VFSFile file,
 		boolean expanded, boolean openBuffer)
 	{
-		if(file.getType() == VFSFile.DIRECTORY)
-			return (expanded ? openDirIcon : dirIcon);
-		else if(file.getType() == VFSFile.FILESYSTEM)
-			return filesystemIcon;
-		else if(openBuffer)
-			return openFileIcon;
-		else
-			return fileIcon;
+		if (defaultIcons)
+			return file.getDefaultIcon(expanded, openBuffer);
+		return file.getIcon(expanded, openBuffer);
 	} //}}}
 
 	//{{{ Package-private members
 	Font plainFont;
 	Font boldFont;
 	boolean showIcons;
+	private static boolean defaultIcons = true;
 
 	//{{{ propertiesChanged() method
 	void propertiesChanged()
 	{
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
+		defaultIcons = jEdit.getBooleanProperty("vfs.browser.useDefaultIcons");
 	} //}}}
 
 	//{{{ getEntryWidth() method
@@ -230,7 +231,7 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		static final int STATE_EXPANDED = 2;
 
 		//{{{ ExpansionToggleBorder constructor
-		public ExpansionToggleBorder(int state, int level)
+		ExpansionToggleBorder(int state, int level)
 		{
 			this.state = state;
 			this.level = level;

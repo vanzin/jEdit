@@ -5,6 +5,7 @@
  *
  * Copyright (C) 1998, 2005 Slava Pestov
  * Portions copyright (C) 1998, 1999, 2000 Peter Graves
+ * Portions copyright (C) 2007 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +26,7 @@ package org.gjt.sp.jedit.io;
 
 //{{{ Imports
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.*;
 import java.awt.Component;
 import java.io.*;
 import java.text.*;
@@ -59,9 +61,9 @@ public class FileVFS extends VFS
 		if(OperatingSystem.isDOSDerived())
 		{
 			if(path.length() == 2 && path.charAt(1) == ':')
-				return FileRootsVFS.PROTOCOL + ":";
+				return FileRootsVFS.PROTOCOL + ':';
 			else if(path.length() == 3 && path.endsWith(":\\"))
-				return FileRootsVFS.PROTOCOL + ":";
+				return FileRootsVFS.PROTOCOL + ':';
 			else if(path.startsWith("\\\\") && path.indexOf('\\',2) == -1)
 				return path;
 		}
@@ -161,7 +163,7 @@ public class FileVFS extends VFS
 	         }
 	      }
 	    }
-	    return( path.delete() );
+	    return path.delete();
 	  } //}}}
 	
 	//{{{ _canonPath() method
@@ -232,7 +234,27 @@ public class FileVFS extends VFS
 			setLength(file.length());
 			setModified(file.lastModified());
 		}
-		
+
+		/**
+		 * Returns the file system icon for the file.
+		 *
+		 * @param expanded not used here
+		 * @param openBuffer not used here
+		 * @return the file system icon
+		 * @since 4.3pre9
+		 */
+		public Icon getIcon(boolean expanded, boolean openBuffer)
+		{
+			if (icon == null)
+			{
+				if (fsView == null)
+					fsView = FileSystemView.getFileSystemView();
+
+				icon = fsView.getSystemIcon(file);
+			}
+			return icon;  
+		}
+
 		public String getSymlinkPath()
 		{
 			fetchAttrs();
@@ -267,6 +289,9 @@ public class FileVFS extends VFS
 		{
 			this.modified = modified;
 		}
+
+		private FileSystemView fsView;
+		private Icon icon;
 	} //}}}
 
 	//{{{ _listFiles() method

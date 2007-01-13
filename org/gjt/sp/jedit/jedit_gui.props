@@ -1979,6 +1979,7 @@ options.browser.general.sortMixFilesAndDirs=Mix files and directories
 options.browser.general.doubleClickClose=Double-clicking an open file closes it
 options.browser.general.currentBufferFilter=Filter in file dialogs is \
 	current buffer extension
+options.browser.general.useDefaultIcons=Use default icons
 #}}}
 
 #{{{ Font selector

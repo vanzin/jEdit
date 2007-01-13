@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1998, 2005 Slava Pestov
+ * Portions copyright (C) 2007 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +28,11 @@ import java.awt.Color;
 import java.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.browser.FileCellRenderer;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
+
+import javax.swing.*;
 //}}}
 
 /**
@@ -73,8 +77,8 @@ public class VFSFile implements Serializable
 	public static String findCompletion(String path, String complete,
 		VFSBrowser browser, boolean dirsOnly)
 	{
-		Log.log(Log.DEBUG,VFSFile.class,"findCompletion(" + path + "," + complete
-			+ "," + dirsOnly + ")");
+		Log.log(Log.DEBUG,VFSFile.class,"findCompletion(" + path + ',' + complete
+			+ ',' + dirsOnly + ')');
 
 		if(complete.equals("~"))
 			return System.getProperty("user.home");
@@ -122,6 +126,56 @@ public class VFSFile implements Serializable
 		}
 		
 		return null;
+	} //}}}
+
+	//{{{ getIcon() method
+	/**
+	 * Returns the icon for the file.
+	 *
+	 * @since jEdit 4.3pre9
+	 */
+	public final Icon getIcon(boolean expanded)
+	{
+		return getIcon(expanded, jEdit._getBuffer(getSymlinkPath()) != null);
+	} //}}}
+
+	//{{{ getIcon() method
+	/**
+	 * Returns the icon for the file.
+	 * Implementations of File system browsers can override this method
+	 *  
+	 * @since jEdit 4.3pre9
+	 */
+	public Icon getIcon(boolean expanded, boolean openBuffer)
+	{
+		return getDefaultIcon(expanded, openBuffer);
+	} //}}}
+
+	//{{{ getDefaultIcon() method
+	/**
+	 * Returns the default icon for the file.
+	 *
+	 * @since jEdit 4.3pre9
+	 */
+	public final Icon getDefaultIcon(boolean expanded, boolean openBuffer)
+	{
+		if(getType() == DIRECTORY)
+			return expanded ? FileCellRenderer.openDirIcon : FileCellRenderer.dirIcon;
+		else if(getType() == FILESYSTEM)
+			return FileCellRenderer.filesystemIcon;
+		else if(openBuffer)
+			return FileCellRenderer.openFileIcon;
+		else
+			return FileCellRenderer.fileIcon;
+	} //}}}
+
+	//{{{ getDefaultIcon() method
+	/**
+	 * @since jEdit 4.3pre9
+	 */
+	public final Icon getDefaultIcon(boolean expanded)
+	{
+		return getDefaultIcon(expanded, jEdit._getBuffer(getSymlinkPath()) != null);
 	} //}}}
 
 	//{{{ File types

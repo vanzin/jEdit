@@ -191,6 +191,11 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
    (Matthieu Casanova)
 
 - Option panes are now in a JSCrollPane (feature #1593735) (Matthieu Casanova)
+
+- New option for the File System Manager : use default icons.
+  If you uncheck the checkbox, some customs icons can be used.
+  At this time only local file system have custom icons (feature #1593464)
+  (Matthieu Casanova)
 }}}
 {{{ API Changes
 
@@ -234,6 +239,8 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   that plugin developpers should overload to tell jEdit if they use this new folder
   The default is false (Matthieu Casanova)
 
+- VFSFile.getIcon() and VFSFile.getDefaultIcon(). The getIcon() method
+  can be override to use a custom icon for some VFS (Matthieu Casanova)
 }}}
 
 }}}
