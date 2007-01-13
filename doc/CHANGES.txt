@@ -189,6 +189,8 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   for each buffer on each edit pane. So you can now in a textarea edit
   a buffer using rectangular selection, and use normal selection with another one
    (Matthieu Casanova)
+
+- Option panes are now in a JSCrollPane (feature #1593735) (Matthieu Casanova)
 }}}
 {{{ API Changes
 
