@@ -455,6 +455,7 @@ public class MiscUtilities
 	/**
 	 * @deprecated Call getParentOfPath() instead
 	 */
+	@Deprecated
 	public static String getFileParent(String path)
 	{
 		return getParentOfPath(path);
@@ -475,6 +476,7 @@ public class MiscUtilities
 	/**
 	 * @deprecated Call getProtocolOfURL() instead
 	 */
+	@Deprecated
 	public static String getFileProtocol(String url)
 	{
 		return getProtocolOfURL(url);
@@ -584,7 +586,7 @@ public class MiscUtilities
 					{
 						backupFile.delete();
 						if (!file.renameTo(backupFile))
-							moveFile(file, backupFile);
+							IOUtilities.moveFile(file, backupFile);
 					}
 			}
 		// If backups > 1, move old ~n~ files, create ~1~ file
@@ -623,7 +625,7 @@ public class MiscUtilities
 												   backupPrefix + name + backupSuffix
 												   + "1" + backupSuffix);
 						if (!file.renameTo(backupFile))
-							moveFile(file, backupFile);
+							IOUtilities.moveFile(file, backupFile);
 					}
 			}
 	} //}}}
@@ -642,46 +644,12 @@ public class MiscUtilities
 	 * @return true on success, false otherwise.
 	 *
 	 * @since jEdit 4.3pre1
+	 * @deprecated use {@link org.gjt.sp.util.IOUtilities#moveFile(java.io.File, java.io.File)}
 	 */
+	@Deprecated
 	public static boolean moveFile(File source, File dest)
 	{
-		boolean ok = false;
-
-		if ((dest.exists() && dest.canWrite())
-			|| (!dest.exists() && dest.getParentFile().canWrite()))
-			{
-				OutputStream fos = null;
-				InputStream fis = null;
-				try
-					{
-						fos = new FileOutputStream(dest);
-						fis = new FileInputStream(source);
-						ok = copyStream(32768,null,fis,fos,false);
-					}
-				catch (IOException ioe)
-					{
-						Log.log(Log.WARNING, MiscUtilities.class,
-								"Error moving file: " + ioe + " : " + ioe.getMessage());
-					}
-				finally
-					{
-						try
-							{
-								if(fos != null)
-									fos.close();
-								if(fis != null)
-									fis.close();
-							}
-						catch(Exception e)
-							{
-								Log.log(Log.ERROR,MiscUtilities.class,e);
-							}
-					}
-
-				if(ok)
-					source.delete();
-			}
-		return ok;
+		return IOUtilities.moveFile(source, dest);
 	} //}}}
 
 	//{{{ copyStream() method
@@ -698,6 +666,7 @@ public class MiscUtilities
 	 * @since jEdit 4.3pre3
 	 * @deprecated use {@link IOUtilities#copyStream(int, org.gjt.sp.util.ProgressObserver, java.io.InputStream, java.io.OutputStream, boolean)}
 	 */
+	@Deprecated
 	public static boolean copyStream(int bufferSize, ProgressObserver progress,
 									 InputStream in, OutputStream out, boolean canStop)
 		throws IOException
@@ -718,11 +687,11 @@ public class MiscUtilities
 	 * @since jEdit 4.3pre3
 	 * @deprecated use {@link IOUtilities#copyStream(org.gjt.sp.util.ProgressObserver, java.io.InputStream, java.io.OutputStream, boolean)}
 	 */
-	public static boolean copyStream(ProgressObserver progress,
-									 InputStream in, OutputStream out, boolean canStop)
+	@Deprecated
+	public static boolean copyStream(ProgressObserver progress, InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
-		return copyStream(4096,progress, in, out, canStop);
+		return IOUtilities.copyStream(4096,progress, in, out, canStop);
 	} //}}}
 
 	//{{{ isBinaryFile() method
@@ -916,6 +885,7 @@ public class MiscUtilities
 	 * @since jEdit 4.3pre3
 	 * @deprecated use {@link IOUtilities#closeQuietly(java.io.InputStream)}
 	 */
+	@Deprecated
 	public static void closeQuietly(InputStream in)
 	{
 		IOUtilities.closeQuietly(in);
@@ -929,6 +899,7 @@ public class MiscUtilities
 	 * @since jEdit 4.3pre3
 	 * @deprecated use {@link IOUtilities#closeQuietly(java.io.OutputStream)}
 	 */
+	@Deprecated
 	public static void closeQuietly(OutputStream out)
 	{
 		IOUtilities.closeQuietly(out);
@@ -999,6 +970,7 @@ public class MiscUtilities
 	 * @param str The string
 	 * @deprecated use {@link StandardUtilities#getLeadingWhiteSpace(String)}
 	 */
+	@Deprecated
 	public static int getLeadingWhiteSpace(String str)
 	{
 		return StandardUtilities.getLeadingWhiteSpace(str);
@@ -1012,6 +984,7 @@ public class MiscUtilities
 	 * @since jEdit 2.5pre5
 	 * @deprecated use {@link StandardUtilities#getTrailingWhiteSpace(String)}
 	 */
+	@Deprecated
 	public static int getTrailingWhiteSpace(String str)
 	{
 		return StandardUtilities.getTrailingWhiteSpace(str);
@@ -1025,6 +998,7 @@ public class MiscUtilities
 	 * @param tabSize The tab size
 	 * @deprecated use {@link StandardUtilities#getLeadingWhiteSpace(String)}
 	 */
+	@Deprecated
 	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
 	{
 		return StandardUtilities.getLeadingWhiteSpaceWidth(str, tabSize);
@@ -1040,6 +1014,7 @@ public class MiscUtilities
 	 * @since jEdit 4.1pre1
 	 * @deprecated use {@link StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
 	 */
+	@Deprecated
 	public static int getVirtualWidth(Segment seg, int tabSize)
 	{
 		return StandardUtilities.getVirtualWidth(seg, tabSize);
@@ -1062,6 +1037,7 @@ public class MiscUtilities
 	 * @since jEdit 4.1pre1
 	 * @deprecated use {@link StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
 	 */
+	@Deprecated
 	public static int getOffsetOfVirtualColumn(Segment seg, int tabSize,
 					    int column, int[] totalVirtualWidth)
 	{
@@ -1083,6 +1059,7 @@ public class MiscUtilities
 	 * @param tabSize The tab size, or 0 if tabs are not to be used
 	 * @deprecated use {@link StandardUtilities#createWhiteSpace(int, int)}
 	 */
+	@Deprecated
 	public static String createWhiteSpace(int len, int tabSize)
 	{
 		return StandardUtilities.createWhiteSpace(len,tabSize,0);
@@ -1105,6 +1082,7 @@ public class MiscUtilities
 	 * @since jEdit 4.2pre1
 	 * @deprecated use {@link StandardUtilities#createWhiteSpace(int, int, int)}
 	 */
+	@Deprecated
 	public static String createWhiteSpace(int len, int tabSize, int start)
 	{
 		return StandardUtilities.createWhiteSpace(len, tabSize, start);
@@ -1118,6 +1096,7 @@ public class MiscUtilities
 	 * @param glob The glob pattern
 	 * @deprecated Use {@link StandardUtilities#globToRE(String)}.
 	 */
+	@Deprecated
 	public static String globToRE(String glob)
 	{
 		return StandardUtilities.globToRE(glob);
@@ -1212,6 +1191,7 @@ public class MiscUtilities
 	/**
 	 * @deprecated Call <code>compareStrings()</code> instead
 	 */
+	@Deprecated
 	public static int compareVersions(String v1, String v2)
 	{
 		return StandardUtilities.compareStrings(v1,v2,false);
@@ -1233,6 +1213,7 @@ public class MiscUtilities
 	 * @since jEdit 4.0pre1
 	 * @deprecated use {@link StandardUtilities#compareStrings(String, String, boolean)}
 	 */
+	@Deprecated
 	public static int compareStrings(String str1, String str2, boolean ignoreCase)
 	{
 		return StandardUtilities.compareStrings(str1, str2, ignoreCase);
@@ -1242,6 +1223,7 @@ public class MiscUtilities
 	/**
 	 * @deprecated Call <code>objectsEqual()</code> instead.
 	 */
+	@Deprecated
 	public static boolean stringsEqual(String s1, String s2)
 	{
 		return StandardUtilities.objectsEqual(s1,s2);
@@ -1254,6 +1236,7 @@ public class MiscUtilities
 	 * @since jEdit 4.2pre1
 	 * @deprecated use {@link StandardUtilities#objectsEqual(Object, Object)}
 	 */
+	@Deprecated
 	public static boolean objectsEqual(Object o1, Object o2)
 	{
 		return StandardUtilities.objectsEqual(o1, o2);
@@ -1265,8 +1248,9 @@ public class MiscUtilities
 	 * equivalents.
 	 * @param str The string
 	 * @since jEdit 4.2pre1
-	 * @deprecated	Use {@link XMLUtilities#charToEntiries(String,boolean)}.
+	 * @deprecated	Use {@link org.gjt.sp.util.XMLUtilities#charsToEntities(String, boolean)}.
 	 */
+	@Deprecated
 	public static String charsToEntities(String str)
 	{
 		return XMLUtilities.charsToEntities(str,false);
@@ -1286,7 +1270,7 @@ public class MiscUtilities
 	{
 		if(length < 1024)
 			return length + " bytes";
-		else if(length < 1024*1024)
+		else if(length < 1024 << 10)
 			return KB_FORMAT.format((double)length / 1024);
 		else
 			return MB_FORMAT.format((double)length / 1024 / 1024);
@@ -1386,6 +1370,7 @@ loop:		for(;;)
 	 * @since jEdit 4.0pre4
 	 * @deprecated use <code>Arrays.sort()</code>
 	 */
+	@Deprecated
 	public static void quicksort(Object[] obj, Comparator compare)
 	{
 		Arrays.sort(obj,compare);
@@ -1399,6 +1384,7 @@ loop:		for(;;)
 	 * @since jEdit 4.0pre4
 	 * @deprecated <code>Collections.sort()</code>
 	 */
+	@Deprecated
 	public static void quicksort(Vector vector, Comparator compare)
 	{
 		Collections.sort(vector,compare);
@@ -1412,6 +1398,7 @@ loop:		for(;;)
 	 * @since jEdit 4.0pre4
 	 * @deprecated <code>Collections.sort()</code>
 	 */
+	@Deprecated
 	public static void quicksort(List list, Comparator compare)
 	{
 		Collections.sort(list,compare);
@@ -1425,6 +1412,7 @@ loop:		for(;;)
 	 * @param compare Compares the objects
 	 * @deprecated use <code>Arrays.sort()</code>
 	 */
+	@Deprecated
 	public static void quicksort(Object[] obj, Compare compare)
 	{
 		Arrays.sort(obj,compare);
@@ -1437,6 +1425,7 @@ loop:		for(;;)
 	 * @param compare Compares the objects
 	 * @deprecated <code>Collections.sort()</code>
 	 */
+	@Deprecated
 	public static void quicksort(Vector vector, Compare compare)
 	{
 		Collections.sort(vector,compare);
@@ -1450,6 +1439,7 @@ loop:		for(;;)
 	 * instead.
 	 * @deprecated
 	 */
+	@Deprecated
 	public interface Compare extends Comparator
 	{
 		int compare(Object obj1, Object obj2);
@@ -1460,6 +1450,7 @@ loop:		for(;;)
 	 * Compares strings.
 	 * @deprecated use {@link StandardUtilities.StringCompare}
 	 */
+	@Deprecated
 	public static class StringCompare implements Compare
 	{
 		public int compare(Object obj1, Object obj2)
@@ -1700,6 +1691,7 @@ loop:		for(;;)
 	 * @since jEdit 4.2pre5
 	 * @deprecated See #getEncodings( boolean )
 	 */
+	@Deprecated
 	public static String[] getEncodings()
 	{
 		return getEncodings(false);
@@ -1758,6 +1750,7 @@ loop:		for(;;)
 	 * @since jEdit 4.3pre5
 	 * @deprecated Use {@link XMLUtilities#parseXML(InputStream,DefaultHandler)}.
 	 */
+	@Deprecated
 	public static boolean parseXML(InputStream in, DefaultHandler handler)
 		throws IOException
 	{
@@ -1771,6 +1764,7 @@ loop:		for(;;)
 	 *
 	 * @deprecated Use {@link XMLUtilities#findEntity(String,String,Class)}.
 	 */
+	@Deprecated
 	public static InputSource findEntity(String systemId, String test, Class where)
 	{
 		return XMLUtilities.findEntity(systemId, test, where);

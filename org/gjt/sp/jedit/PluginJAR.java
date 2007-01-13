@@ -677,6 +677,12 @@ public class PluginJAR
 			}
 
 			plugin = (EditPlugin)clazz.newInstance();
+			String settingsDirectory = jEdit.getSettingsDirectory();
+			if (settingsDirectory != null)
+			{
+				File file = new File(settingsDirectory, "plugins");
+				plugin.pluginHome = new File(file, className).getPath();
+			}
 			plugin.jar = this;
 		}
 		catch(Throwable t)

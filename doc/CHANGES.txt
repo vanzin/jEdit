@@ -215,6 +215,23 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - PluginManager.getPluginList() is not public anymore. It was not useful
   since the PluginList class cannot be accessed outside of it's package
   (Matthieu Casanova)
+
+- MiscUtilities.moveFile(File, File) is deprecated, use
+  IOUtilities.moveFile(File, File) instead (Matthieu Casanova)
+
+- Plugin API : now the EditPlugin has two new methods :
+  EditPlugin.getPluginHome() that will returns the path where the plugin
+  should write it's data (it can return null if you run with nosettings).
+  It is a folder build like that
+  jEditSettingsDirectory/plugins/pluginClassName
+  ex :
+  ~/.jedit/plugins/sidekick.SidekickPlugin
+  I hope this will help to make some cleanup in the jEdit settings directory folder
+  (this folder is not created by jEdit, plugin developpers must create it themselves)
+  The second method is EditPlugin.usePluginHome()
+  that plugin developpers should overload to tell jEdit if they use this new folder
+  The default is false (Matthieu Casanova)
+
 }}}
 
 }}}

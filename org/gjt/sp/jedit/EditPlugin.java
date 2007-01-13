@@ -304,6 +304,30 @@ public abstract class EditPlugin
 	 */
 	public void stop() {} //}}}
 
+	/**
+	 * Returns true if the plugin uses the standard plugin home
+	 *
+	 * @return true if the plugin stores it's datas in the folder given by {@link #getPluginHome()}
+	 * default is false
+	 * @since 4.3pre9
+	 */
+	public boolean usePluginHome()
+	{
+		return false;
+	}
+
+	//{{{ getPluginHome() method
+	/**
+	 * Returns the home of your plugin.
+	 *
+	 * @return the home of your plugin. It can be null if there is no settings directory
+	 * @since 4.3pre9
+	 */
+	public final String getPluginHome()
+	{
+		return pluginHome;
+	} //}}}
+
 	//{{{ getClassName() method
 	/**
 	 * Returns the plugin's class name. This might not be the same as
@@ -414,6 +438,11 @@ public abstract class EditPlugin
 
 	//{{{ Package-private members
 	PluginJAR jar;
+	/**
+	 * This is the plugin home path. Please never access it directly and use
+	 * {@link #getPluginHome()} instead 
+	 */
+	String pluginHome;
 	//}}}
 
 	//{{{ Broken class
