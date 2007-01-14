@@ -10,6 +10,12 @@
 		<!-- Comment -->
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
 
+		<!-- Function calls -->
+		<SPAN_REGEXP TYPE="FUNCTION" HASH_CHAR="$" DELEGATE="MAIN">
+			<BEGIN>\$\([a-zA-Z][\w-]* </BEGIN>
+			<END>)</END>
+		</SPAN_REGEXP>
+
 		<!-- $(...) variables -->
 		<SPAN TYPE="KEYWORD2" NO_LINE_BREAK="TRUE" DELEGATE="VARIABLE">
 			<BEGIN>$(</BEGIN>
