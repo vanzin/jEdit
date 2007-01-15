@@ -30,6 +30,7 @@ import java.nio.CharBuffer;
 import java.nio.ByteBuffer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.*;
 //}}}
 
@@ -89,7 +90,7 @@ public abstract class BufferIORequest extends WorkRequest
 	 * @param vfs The VFS
 	 * @param path The path
 	 */
-	public BufferIORequest(View view, Buffer buffer,
+	protected BufferIORequest(View view, Buffer buffer,
 		Object session, VFS vfs, String path)
 	{
 		this.view = view;
@@ -106,18 +107,18 @@ public abstract class BufferIORequest extends WorkRequest
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "[" + buffer + "]";
+		return getClass().getName() + '[' + buffer + ']';
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Instance variables
-	protected View view;
-	protected Buffer buffer;
-	protected Object session;
-	protected VFS vfs;
+	protected final View view;
+	protected final Buffer buffer;
+	protected final Object session;
+	protected final VFS vfs;
 	protected String path;
-	protected String markersPath;
+	protected final String markersPath;
 	//}}}
 
 	//{{{ autodetect() method
@@ -139,7 +140,7 @@ public abstract class BufferIORequest extends WorkRequest
 			Math.max(1,(int)(length / 50)));
 
 		// only true if the file size is known
-		boolean trackProgress = (!buffer.isTemporary() && length != 0);
+		boolean trackProgress = !buffer.isTemporary() && length != 0;
 
 		if(trackProgress)
 		{
@@ -333,7 +334,7 @@ public abstract class BufferIORequest extends WorkRequest
 			buffer.setProperty(END_OFFSETS,endOffsets);
 			buffer.setProperty(NEW_PATH,path);
 			if(lineSeparator != null)
-				buffer.setProperty(Buffer.LINESEP,lineSeparator);
+				buffer.setProperty(JEditBuffer.LINESEP,lineSeparator);
 		}
 
 		// used in insert()
@@ -346,7 +347,8 @@ public abstract class BufferIORequest extends WorkRequest
 	{
 		try
 		{
-			String encoding = buffer.getStringProperty(Buffer.ENCODING);
+			out = new BufferedOutputStream(out);
+			String encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
 			if(encoding.equals(MiscUtilities.UTF_8_Y))
 			{
 				// not supported by Java...
@@ -371,7 +373,7 @@ public abstract class BufferIORequest extends WorkRequest
 			CharsetEncoder encoder = Charset.forName(encoding).newEncoder();
 
 			Segment lineSegment = new Segment();
-			String newline = buffer.getStringProperty(Buffer.LINESEP);
+			String newline = buffer.getStringProperty(JEditBuffer.LINESEP);
 			if(newline == null)
 				newline = System.getProperty("line.separator");
 			// Convert newline to bytes here to not get bothered
@@ -433,7 +435,7 @@ public abstract class BufferIORequest extends WorkRequest
 		}
 		finally
 		{
-			out.close();
+			IOUtilities.closeQuietly(out);
 		}
 	} //}}}
 

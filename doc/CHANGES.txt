@@ -196,6 +196,9 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   If you uncheck the checkbox, some customs icons can be used.
   At this time only local file system have custom icons (feature #1593464)
   (Matthieu Casanova)
+
+- Buffer saving is now buffered, it changes everything with large files
+  (Matthieu Casanova)
 }}}
 {{{ API Changes
 
