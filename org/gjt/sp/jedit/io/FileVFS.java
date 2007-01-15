@@ -290,8 +290,8 @@ public class FileVFS extends VFS
 			this.modified = modified;
 		}
 
-		private FileSystemView fsView;
-		private Icon icon;
+		private transient FileSystemView fsView;
+		private transient Icon icon;
 	} //}}}
 
 	//{{{ _listFiles() method
