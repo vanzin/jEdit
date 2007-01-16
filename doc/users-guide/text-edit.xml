@@ -433,8 +433,8 @@
  <para> 
  The <firstterm>word wrap</firstterm> feature splits lines at word
  boundaries in order to fit text within a specified wrap margin. A word
- boundary, for the purposes of jEdit, means whitespace. Long lines without
- whitespace are not wrapped by jEdit. The wrap margin position is indicated in
+ boundary, for the purposes of word wrap, means whitespace. Long lines without
+ whitespace are currently not wrapped by jEdit. The wrap margin position is indicated in
  the text are as a faint blue vertical line. There are two <quote>wrap
  modes</quote>, <quote>soft</quote> and <quote>hard</quote>; they are described
  below. The current wrap mode is shown in the status bar; see <xref
