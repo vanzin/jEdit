@@ -472,6 +472,9 @@
 
     <!-- ===============================================}}} -->
 
+    <target name="docs-none"
+        description="no xslt step - HTML docs" />
+    
     <!-- {{{ Target: docs-xalan =========================== -->
     <!-- Generate docs with Xalan tool from
          xml.apache.org . Same properties as the
