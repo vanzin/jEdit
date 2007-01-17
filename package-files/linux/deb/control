@@ -3,10 +3,12 @@ Version: 4:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <devel@jEdit.org>
 Section: non-free/editors
+Homepage: http://www.jedit.org/ 
 Architecture: all
 Depends: sun-java5-jre
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
+Recommends: exuberant-ctags, cscope, sun-java5-jdk
 Priority: optional
 Installed-Size: @deb.installed.size@
 Description: A plugin-based editor for programmers. 
@@ -28,5 +30,4 @@ Description: A plugin-based editor for programmers.
  the editor. The FTP plugin lets you browse and edit files on remote file systems
  via FTP or SFTP. Other plugins provide shells, structure browsers and/or completion 
  popups for Ant, LaTeX, HTML, Java, XML, Ruby, Python, Perl, C,
- C++, bash, Scheme, Prolog, and many other languages. More information about
- jEdit, its plugins, macros, etc. can be found at http://www.jEdit.org/
+ C++, bash, Scheme, Prolog, and many other languages. 
