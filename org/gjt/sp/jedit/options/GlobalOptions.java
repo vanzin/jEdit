@@ -96,13 +96,25 @@ public class GlobalOptions extends OptionsDialog
 		return paneTreeModel;
 	} //}}}
 
+	//{{{ setVisible() method
 	public void setVisible(boolean flag)
 	{
 		if (flag) {
-			EditBus.send(new PropertiesChanging(null));
+			EditBus.send(
+				new PropertiesChanging(null,
+					PropertiesChanging.State.LOADING));
 		}
 		super.setVisible(flag);
-	}
+	} //}}}
+
+	//{{{ cancel() method
+	public void cancel()
+	{
+		EditBus.send(
+			new PropertiesChanging(null,
+				PropertiesChanging.State.CANCELED));
+		super.cancel();
+	} //}}}
 
 	//{{{ getDefaultGroup() method
 	protected OptionGroup getDefaultGroup()

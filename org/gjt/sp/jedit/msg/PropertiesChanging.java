@@ -34,12 +34,29 @@ import org.gjt.sp.jedit.EBMessage;
  */
 public class PropertiesChanging extends EBMessage
 {
+
+	public enum State {
+		LOADING,
+		CANCELED
+	}
+
 	/**
 	 * Creates a new properties changing message.
-	 * @param source The message source
+	 * @param source 	The message source
+	 * @param what		Object describing what's happening.
 	 */
-	public PropertiesChanging(EBComponent source)
+	public PropertiesChanging(EBComponent source, State state)
 	{
 		super(source);
+		assert (state != null) : "state shouldn't be null";
+		this.state = state;
 	}
+
+	public State getState()
+	{
+		return state;
+	}
+
+	private final State state;
+
 }
