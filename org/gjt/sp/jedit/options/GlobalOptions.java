@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.options;
 import java.awt.Dialog;
 import java.awt.Frame;
 import org.gjt.sp.jedit.gui.OptionsDialog;
+import org.gjt.sp.jedit.msg.PropertiesChanging;
 import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -94,6 +95,14 @@ public class GlobalOptions extends OptionsDialog
 
 		return paneTreeModel;
 	} //}}}
+
+	public void setVisible(boolean flag)
+	{
+		if (flag) {
+			EditBus.send(new PropertiesChanging(null));
+		}
+		super.setVisible(flag);
+	}
 
 	//{{{ getDefaultGroup() method
 	protected OptionGroup getDefaultGroup()

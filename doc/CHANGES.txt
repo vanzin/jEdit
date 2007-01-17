@@ -8,7 +8,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 {{{ Bug Fixes
 
-- avoid NPE from getIndentRules (patch # 1611766) (Kazutoshi Satoda)  
+- avoid NPE from getIndentRules (patch # 1611766) (Kazutoshi Satoda)
 
 - bufferio operations are now exception-safe (patch# 1597168) (Kazutoshi Satoda)
 
@@ -130,6 +130,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - Updated python edit mode to unindent lines after "pass" (Matthieu Casanova)
 
+- Better highlighting of function calls in makefiles. (Marcelo Vanzin)
 }}}
 {{{ Miscellaneous
 
@@ -244,6 +245,11 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - VFSFile.getIcon() and VFSFile.getDefaultIcon(). The getIcon() method
   can be override to use a custom icon for some VFS (Matthieu Casanova)
+
+- Added org.gjt.sp.jedit.msg.PropertiesChanging; an EditBus message that is
+  sent right before the global options dialog is show, to allow plugins to
+  flush any data that might be used by the option panes.
+  (Marcelo Vanzin)
 }}}
 
 }}}
@@ -301,7 +307,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 - ToggleHeaderSource.bsh (macros/C) now will find and open an already-open
   buffer with the correct filename even if it is from another directory.
   (Alan Ezust)
-  
+
 }}}
 {{{ API Changes
 
@@ -369,9 +375,6 @@ and Björn "Vampire" Kautler for contributing to this release.
   Setting or deleting markers does not dirty buffer anymore. Handling of
   the markers file is now factored out from BufferSaveRequest.
   (Martin Raspe)
-
-- added new class org.gjt.sp.jedit.io.VFSFileFilter; an interface that
-  defines a filter used by the VFS browser. (Marcelo Vanzin)
 
 - added SearchMatcher.isMatchingEOL(); indicates whether the matched
   region ends at an EOL character. Part of bug fix for SF Bug #1541009.
