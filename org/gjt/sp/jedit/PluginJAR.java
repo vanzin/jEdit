@@ -56,6 +56,7 @@ import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.PropertiesBean;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
 /**
@@ -127,11 +128,11 @@ import org.gjt.sp.util.StandardUtilities;
 public class PluginJAR
 {
 	//{{{ Instance variables
-	private String path;
+	private final String path;
 	private String cachePath;
-	private File file;
+	private final File file;
 
-	private JARClassLoader classLoader;
+	private final JARClassLoader classLoader;
 	private ZipFile zipFile;
 	private Properties properties;
 	private String[] classes;
@@ -143,8 +144,11 @@ public class PluginJAR
 	private boolean activated;
 
 	// Lists of jarPaths
-	private Set<String> theseRequireMe = new LinkedHashSet<String>();
-	private Set<String> weRequireThese = new LinkedHashSet<String>();
+	private final Set<String> theseRequireMe = new LinkedHashSet<String>();
+	/** The plugins that uses me as optional dependency. */
+	private final Set<String> theseUseMe = new LinkedHashSet<String>();
+	private final Set<String> weRequireThese = new LinkedHashSet<String>();
+	private final Set<String> weUseThese = new LinkedHashSet<String>();
 	//}}}
 
 	// {{{ load(String jarPath, boolean activateDependentIfNecessary)
@@ -163,7 +167,7 @@ public class PluginJAR
 		jar = jEdit.getPluginJAR(path);
 		String className = jar.getPlugin().getClassName();
 		if (loadDependents) {
-			Set<String> pluginLoadList = jar.getDependencySet(className);
+			Set<String> pluginLoadList = getDependencySet(className);
 			for (String jarName: pluginLoadList)
 			{
 				String jarPath = findPlugin(jarName);
@@ -214,11 +218,10 @@ public class PluginJAR
 	{
 		EditPlugin ep = jEdit.getPlugin(className);
 		if (ep != null) return ep.getPluginJAR().getPath();
-		
-		PluginJAR pjar = null;
+
 		for (String JARpath: jEdit.getNotLoadedPluginJARs())
 		{
-			pjar = new PluginJAR(new File(JARpath));
+			PluginJAR pjar = new PluginJAR(new File(JARpath));
 			if (pjar.containsClass(className))
 			{
 				return JARpath;
@@ -235,7 +238,6 @@ public class PluginJAR
 	 */
 	boolean containsClass(String className)
 	{
-
 		try
 		{
 			getZipFile();
@@ -289,26 +291,21 @@ public class PluginJAR
 		int i=0;
 		while((dep = jEdit.getProperty("plugin." + className + ".depend." + i++)) != null)
 		{
-			boolean optional = false;
-			if(dep.startsWith("optional "))
+			PluginDepends pluginDepends;
+			try
 			{
-				optional = true;
-				dep = dep.substring("optional ".length());
+				pluginDepends = getPluginDepends(dep);
 			}
-			else optional = false;
-
-			int index = dep.indexOf(' ');
-			if(index == -1)
+			catch (IllegalArgumentException e)
 			{
 				Log.log(Log.ERROR, PluginJAR.class,
 					className + " has an invalid dependency: " + dep);
 				continue;
 			}
-			String what = dep.substring(0,index);
-			String arg = dep.substring(index + 1);
-			if(what.equals("plugin"))
+
+			if(pluginDepends.what.equals("plugin"))
 			{
-				int index2 = arg.indexOf(' ');
+				int index2 = pluginDepends.arg.indexOf(' ');
 				if ( index2 == -1)
 				{
 					Log.log(Log.ERROR, PluginJAR.class, className
@@ -317,8 +314,9 @@ public class PluginJAR
 					continue;
 				}
 
-				String pluginName = arg.substring(0,index2);
-				String needVersion = arg.substring(index2 + 1);
+				String pluginName = pluginDepends.arg.substring(0,index2);
+				String needVersion = pluginDepends.arg.substring(index2 + 1);
+				//todo : check version ?
 				Set<String> loadTheseFirst = getDependencySet(pluginName);
 				loadTheseFirst.add(pluginName);
 				loadTheseFirst.addAll(retval);
@@ -407,28 +405,22 @@ public class PluginJAR
 	 */
 	public boolean checkDependencies()
 	{
-		if(plugin == null) return true;
+		if(plugin == null)
+			return true;
 		int i = 0;
 		boolean ok = true;
-		boolean optional = false;
 
 		String name = plugin.getClassName();
 
 		String dep;
 		while((dep = jEdit.getProperty("plugin." + name + ".depend." + i++)) != null)
 		{
-			if(dep.startsWith("optional "))
+			PluginDepends pluginDepends;
+			try
 			{
-				optional = true;
-				dep = dep.substring("optional ".length());
+				pluginDepends = getPluginDepends(dep);
 			}
-			else
-			{
-				optional = false;
-			}
-
-			int index = dep.indexOf(' ');
-			if(index == -1)
+			catch (IllegalArgumentException e)
 			{
 				Log.log(Log.ERROR,this,name + " has an invalid"
 					+ " dependency: " + dep);
@@ -436,34 +428,31 @@ public class PluginJAR
 				continue;
 			}
 
-			String what = dep.substring(0,index);
-			String arg = dep.substring(index + 1);
-
-			if(what.equals("jdk"))
+			if(pluginDepends.what.equals("jdk"))
 			{
-				if(!optional && StandardUtilities.compareStrings(
+				if(!pluginDepends.optional && StandardUtilities.compareStrings(
 					System.getProperty("java.version"),
-					arg,false) < 0)
+					pluginDepends.arg,false) < 0)
 				{
-					String[] args = { arg,
+					String[] args = { pluginDepends.arg,
 						System.getProperty("java.version") };
 					jEdit.pluginError(path,"plugin-error.dep-jdk",args);
 					ok = false;
 				}
 			}
-			else if(what.equals("jedit"))
+			else if(pluginDepends.what.equals("jedit"))
 			{
-				if(arg.length() != 11)
+				if(pluginDepends.arg.length() != 11)
 				{
 					Log.log(Log.ERROR,this,"Invalid jEdit version"
-						+ " number: " + arg);
+						+ " number: " + pluginDepends.arg);
 					ok = false;
 				}
 
-				if(!optional && StandardUtilities.compareStrings(
-					jEdit.getBuild(),arg,false) < 0)
+				if(!pluginDepends.optional && StandardUtilities.compareStrings(
+					jEdit.getBuild(),pluginDepends.arg,false) < 0)
 				{
-					String needs = MiscUtilities.buildToVersion(arg);
+					String needs = MiscUtilities.buildToVersion(pluginDepends.arg);
 					String[] args = { needs,
 						jEdit.getVersion() };
 					jEdit.pluginError(path,
@@ -471,9 +460,9 @@ public class PluginJAR
 					ok = false;
 				}
 			}
-			else if(what.equals("plugin"))
+			else if(pluginDepends.what.equals("plugin"))
 			{
-				int index2 = arg.indexOf(' ');
+				int index2 = pluginDepends.arg.indexOf(' ');
 				if(index2 == -1)
 				{
 					Log.log(Log.ERROR,this,name
@@ -483,15 +472,15 @@ public class PluginJAR
 					continue;
 				}
 
-				String pluginName = arg.substring(0,index2);
-				String needVersion = arg.substring(index2 + 1);
+				String pluginName = pluginDepends.arg.substring(0,index2);
+				String needVersion = pluginDepends.arg.substring(index2 + 1);
 				String currVersion = jEdit.getProperty("plugin."
 					+ pluginName + ".version");
 
 				EditPlugin editPlugin = jEdit.getPlugin(pluginName, false);
 				if(editPlugin == null)
 				{
-					if(!optional)
+					if(!pluginDepends.optional)
 					{
 						String[] args = { needVersion,
 							pluginName };
@@ -504,7 +493,7 @@ public class PluginJAR
 				else if(StandardUtilities.compareStrings(
 					currVersion,needVersion,false) < 0)
 				{
-					if(!optional)
+					if(!pluginDepends.optional)
 					{
 						String[] args = { needVersion,
 							pluginName, currVersion };
@@ -514,7 +503,7 @@ public class PluginJAR
 				}
 				else if(editPlugin instanceof EditPlugin.Broken)
 				{
-					if(!optional)
+					if(!pluginDepends.optional)
 					{
 						String[] args = { pluginName };
 						jEdit.pluginError(path, "plugin-error.dep-plugin.broken",args);
@@ -524,21 +513,29 @@ public class PluginJAR
 				else
 				{
 					PluginJAR jar = editPlugin.getPluginJAR();
-					jar.theseRequireMe.add(path);
-					weRequireThese.add(jar.getPath());
+					if (pluginDepends.optional)
+					{
+						jar.theseUseMe.add(path);
+						weUseThese.add(jar.getPath());
+					}
+					else
+					{
+						jar.theseRequireMe.add(path);
+						weRequireThese.add(jar.getPath());
+					}
 				}
 			}
-			else if(what.equals("class"))
+			else if(pluginDepends.what.equals("class"))
 			{
-				if(!optional)
+				if(!pluginDepends.optional)
 				{
 					try
 					{
-						classLoader.loadClass(arg,false);
+						classLoader.loadClass(pluginDepends.arg,false);
 					}
 					catch(Exception e)
 					{
-						String[] args = { arg };
+						String[] args = { pluginDepends.arg };
 						jEdit.pluginError(path, "plugin-error.dep-class",args);
 						ok = false;
 					}
@@ -585,6 +582,38 @@ public class PluginJAR
 
 		return ok;
 	} //}}}
+
+	private static PluginDepends getPluginDepends(String dep) throws IllegalArgumentException
+	{
+		boolean optional;
+		if(dep.startsWith("optional "))
+		{
+			optional = true;
+			dep = dep.substring("optional ".length());
+		}
+		else
+		{
+			optional = false;
+		}
+
+		int index = dep.indexOf(' ');
+		if(index == -1)
+			throw new IllegalArgumentException("wrong dependency");
+
+		String what = dep.substring(0,index);
+		String arg = dep.substring(index + 1);
+		PluginDepends depends = new PluginDepends();
+		depends.what = what;
+		depends.arg = arg;
+		depends.optional = optional;
+		return depends;
+	}
+	private static class PluginDepends
+	{
+		String what;
+		String arg;
+		boolean optional;
+	}
 
 	// {{{ transitiveClosure()
 	/**
@@ -913,15 +942,7 @@ public class PluginJAR
 		}
 		finally
 		{
-			try
-			{
-				if(din != null)
-					din.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,PluginJAR.class,io);
-			}
+			IOUtilities.closeQuietly(din);
 		}
 	} //}}}
 
@@ -946,15 +967,7 @@ public class PluginJAR
 		catch(IOException io)
 		{
 			Log.log(Log.ERROR,PluginJAR.class,io);
-			try
-			{
-				if(dout != null)
-					dout.close();
-			}
-			catch(IOException io2)
-			{
-				Log.log(Log.ERROR,PluginJAR.class,io2);
-			}
+			IOUtilities.closeQuietly(dout);
 			new File(jarCachePath).delete();
 		}
 	} //}}}
@@ -964,7 +977,7 @@ public class PluginJAR
 	//{{{ PluginJAR constructor
 	/**
 	 * Creates a PluginJAR object which is not necessarily loaded, but can be later.
-	 * @see load(boolean)
+	 * @see {@link #load(String, boolean)}
 	 */
 	public PluginJAR(File file)
 	{
@@ -1028,6 +1041,13 @@ public class PluginJAR
 				PluginJAR jar = jEdit.getPluginJAR(path);
 				if(jar != null)
 					jar.theseRequireMe.remove(this.path);
+			}
+
+			for (String path : weUseThese)
+			{
+				PluginJAR jar = jEdit.getPluginJAR(path);
+				if(jar != null)
+					jar.theseUseMe.remove(this.path);
 			}
 
 			classLoader.deactivate();
@@ -1429,7 +1449,7 @@ public class PluginJAR
 		public String[] cachedDockableNames;
 		public boolean[] cachedDockableActionFlags;
 		public URL servicesURI;
-		public ServiceManager.Descriptor[] cachedServices;
+		ServiceManager.Descriptor[] cachedServices;
 
 		public Properties cachedProperties;
 		public String pluginClass;
