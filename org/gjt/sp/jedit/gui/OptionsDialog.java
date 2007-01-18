@@ -61,8 +61,8 @@ public abstract class OptionsDialog extends EnhancedDialog
 	//{{{ OptionsDialog constructor
 	/**
 	 * @param frame - the parent frame for dialogs created
-	 * @param name the name of an option pane - it must have a .title and .code 
-	 *  		property defined in order to instantiate. 
+	 * @param name the name of an option pane - it must have a .title and .code
+	 *  		property defined in order to instantiate.
 	 * @param pane the initial pane to show when this is created.
 	 */
 	protected OptionsDialog(Frame frame, String name, String pane)
@@ -277,9 +277,6 @@ public abstract class OptionsDialog extends EnhancedDialog
 	protected abstract OptionGroup getDefaultGroup();
 	//}}}
 
-	//{{{ Private members
-
-
 	//{{{ init() method
 	/**
 	 * @param name the name of this pane
@@ -287,10 +284,12 @@ public abstract class OptionsDialog extends EnhancedDialog
 	 * Could someone please write better docs for this function?
 	 * Creates buttons, adds listeners, and makes the pane visible.
 	 * This method is called automatically from the constructor,
-	 * 
+	 *
 	 * and also calls init on each of the optionPanes?
+	 *
+	 * @since jEdit 4.3pre9 (was private before)
 	 */
-	private void init(String name, String pane)
+	protected void init(String name, String pane)
 	{
 		this.name = name;
 
@@ -371,6 +370,8 @@ public abstract class OptionsDialog extends EnhancedDialog
 
 		setVisible(true);
 	} //}}}
+
+	//{{{ Private members
 
 	//{{{ selectPane() method
 	private boolean selectPane(OptionGroup node, String name)

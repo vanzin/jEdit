@@ -252,6 +252,10 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   sent right before the global options dialog is show, to allow plugins to
   flush any data that might be used by the option panes.
   (Marcelo Vanzin)
+
+- OptionsDialog.init(String,String) was made protected (was private).
+  (Marcelo Vanzin)
+
 }}}
 
 }}}

@@ -96,17 +96,6 @@ public class GlobalOptions extends OptionsDialog
 		return paneTreeModel;
 	} //}}}
 
-	//{{{ setVisible() method
-	public void setVisible(boolean flag)
-	{
-		if (flag) {
-			EditBus.send(
-				new PropertiesChanging(null,
-					PropertiesChanging.State.LOADING));
-		}
-		super.setVisible(flag);
-	} //}}}
-
 	//{{{ cancel() method
 	public void cancel()
 	{
@@ -114,6 +103,15 @@ public class GlobalOptions extends OptionsDialog
 			new PropertiesChanging(null,
 				PropertiesChanging.State.CANCELED));
 		super.cancel();
+	} //}}}
+
+	//{{{ init() method
+	protected void init(String name, String pane)
+	{
+		EditBus.send(
+			new PropertiesChanging(null,
+				PropertiesChanging.State.LOADING));
+		super.init(name, pane);
 	} //}}}
 
 	//{{{ getDefaultGroup() method
