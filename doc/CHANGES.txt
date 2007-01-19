@@ -260,6 +260,9 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - OptionsDialog.init(String,String) was made protected (was private).
   (Marcelo Vanzin)
 
+- New GUIUtilities.initContinuousLayout(JSplitPane) method that will
+  init the JSplitPane with the appearance.continuousLayout property.
+  It can be used by plugins that has JSplitPane when receiving a PropertiesChanged
 }}}
 
 }}}
