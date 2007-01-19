@@ -259,6 +259,8 @@ class InstallPanel extends JPanel
 					case 2:
 						return entry.set;
 					case 3:
+						if (updates)
+							return entry.installedVersion + "->" + entry.version;
 						return entry.version;
 					case 4:
 						return formatSize(entry.size);
@@ -512,7 +514,7 @@ class InstallPanel extends JPanel
 	//{{{ Entry class
 	class Entry
 	{
-		String name, version, author, date, description, set;
+		String name, installedVersion, version, author, date, description, set;
 		int size;
 		boolean install;
 		PluginList.Plugin plugin;
@@ -526,6 +528,7 @@ class InstallPanel extends JPanel
 
 			this.name = plugin.name;
 			this.author = plugin.author;
+			this.installedVersion = plugin.getInstalledVersion();
 			this.version = branch.version;
 			this.size = size;
 			this.date = branch.date;

@@ -206,6 +206,9 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - jEdit can now use continuous layout in it's JSplitPane.
   You can change this option in the Appearance panel (#1638642)
   (Matthieu Casanova)
+
+- The update panel of the plugin manager now shows the installed version
+  and the version existing on the plugin central server (Matthieu Casanova)
 }}}
 {{{ API Changes
 
