@@ -54,7 +54,7 @@ class InstallPanel extends JPanel
 		setBorder(new EmptyBorder(12,12,12,12));
 
 		final JSplitPane split = new JSplitPane(
-			JSplitPane.VERTICAL_SPLIT,true);
+			JSplitPane.VERTICAL_SPLIT, jEdit.getBooleanProperty("appearance.continuousLayout"));
 
 		/* Setup the table */
 		table = new JTable(pluginModel = new PluginTableModel());
@@ -168,7 +168,7 @@ class InstallPanel extends JPanel
 		df.setMinimumFractionDigits(0);
 		String sizeText;
 		if (size < 1048576)
-			sizeText = size/1024 + "KB";
+			sizeText = (size >> 10) + "KB";
 		else
 			sizeText = df.format(size/ 1048576.0d) + "MB";
 		return sizeText;

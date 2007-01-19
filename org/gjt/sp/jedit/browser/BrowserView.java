@@ -31,9 +31,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
-import java.util.Timer;
 
-import org.gjt.sp.jedit.browser.VFSDirectoryEntryTable.ClearTypeSelect;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
@@ -47,7 +45,7 @@ import org.gjt.sp.jedit.*;
 class BrowserView extends JPanel
 {
 	//{{{ BrowserView constructor
-	public BrowserView(final VFSBrowser browser)
+	BrowserView(final VFSBrowser browser)
 	{
 		this.browser = browser;
 
@@ -75,6 +73,7 @@ class BrowserView extends JPanel
 		splitPane = new JSplitPane(
 			browser.isHorizontalLayout()
 			? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
+			jEdit.getBooleanProperty("appearance.continuousLayout"),
 			parentScroller,tableScroller);
 		splitPane.setOneTouchExpandable(true);
 
@@ -273,7 +272,7 @@ class BrowserView extends JPanel
 	{
 		showIcons = jEdit.getBooleanProperty("vfs.browser.showIcons");
 		table.propertiesChanged();
-
+		GUIUtilities.initContinuousLayout(splitPane);
 		splitPane.setBorder(null);
 	} //}}}
 
@@ -479,7 +478,7 @@ class BrowserView extends JPanel
 				}
 			}
 
-			if((evt.getModifiers() & MouseEvent.BUTTON1_MASK) != 0
+			if((evt.getModifiers() & InputEvent.BUTTON1_MASK) != 0
 				&& evt.getClickCount() % 2 == 0)
 			{
 				browser.filesActivated((evt.isShiftDown()

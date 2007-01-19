@@ -52,23 +52,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
 
@@ -1625,6 +1609,21 @@ public class GUIUtilities
 		frame.addComponentListener(ss);
 	} //}}}
 
+	//{{{ initContinuousLayout() method
+	/**
+	 * Init the continuous layout flag using the jEdit's property
+	 * appearance.continuousLayout
+	 *
+	 * @param split the split. It must never be null
+	 * @since jEdit 4.3pre9
+	 */
+	public static void initContinuousLayout(JSplitPane split)
+	{
+		boolean continuousLayout = split.isContinuousLayout();
+		if (continuousLayout != jEdit.getBooleanProperty("appearance.continuousLayout"))
+			split.setContinuousLayout(!continuousLayout);
+	} //}}}
+
 	//{{{ Package-private members
 
 	//{{{ init() method
@@ -1695,7 +1694,7 @@ public class GUIUtilities
 		 * @param frame The Frame for which to save the size
 		 * @param name The prefix for the settings
 		 */
-		public SizeSaver(Frame frame, String name)
+		SizeSaver(Frame frame, String name)
 		{
 			this.frame = frame;
 			this.parent = frame.getParent();

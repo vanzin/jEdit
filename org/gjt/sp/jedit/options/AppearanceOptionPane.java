@@ -25,12 +25,11 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
 import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
-import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
 public class AppearanceOptionPane extends AbstractOptionPane
@@ -99,6 +98,11 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		menuSpillover = new JTextField(jEdit.getProperty("menu.spillover"));
 		addComponent(jEdit.getProperty("options.appearance.menuSpillover"),menuSpillover);
 
+		continuousLayout = new JCheckBox(jEdit.getProperty(
+			"options.appearance.continuousLayout.label"));
+		continuousLayout.setSelected(jEdit.getBooleanProperty("appearance.continuousLayout"));
+		addComponent(continuousLayout);
+
 		addSeparator("options.appearance.startup.label");
 
 		/* Show splash screen */
@@ -150,7 +154,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
-		
+		jEdit.setBooleanProperty("appearance.continuousLayout",continuousLayout.isSelected());
+
 		/* AntiAlias nv = AntiAlias.appearance();
 		 int idx = antiAliasExtras.getSelectedIndex();
 		nv.set(idx);
@@ -183,14 +188,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 				}
 				finally
 				{
-					try
-					{
-						if(out != null)
-							out.close();
-					}
-					catch(IOException e)
-					{
-					}
+					IOUtilities.closeQuietly(out);
 				}
 			}
 		}
@@ -209,6 +207,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JTextField history;
 	private JTextField menuSpillover;
 	private JCheckBox showTips;
+	private JCheckBox continuousLayout;
 	private JCheckBox showSplash;
 	private JCheckBox textColors;
 	private JCheckBox decorateFrames;

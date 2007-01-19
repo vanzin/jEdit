@@ -202,6 +202,10 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - Buffer saving is now buffered, it changes everything with large files
   (Matthieu Casanova)
+
+- jEdit can now use continuous layout in it's JSplitPane.
+  You can change this option in the Appearance panel (#1638642)
+  (Matthieu Casanova)
 }}}
 {{{ API Changes
 

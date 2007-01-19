@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.help;
 
 //{{{ Imports
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.text.html.*;
 import java.awt.*;
@@ -32,8 +31,8 @@ import java.awt.event.*;
 import java.beans.*;
 import java.io.*;
 import java.net.*;
-import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.msg.PluginUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -123,7 +122,9 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 		rightPanel.add(BorderLayout.CENTER,new JScrollPane(viewer));
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			tabs,rightPanel);
+					  jEdit.getBooleanProperty("appearance.continuousLayout"),
+					  tabs,
+					  rightPanel);
 		splitter.setBorder(null);
 
 
@@ -195,10 +196,9 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 		// stick around
 		viewer.setCursor(Cursor.getDefaultCursor());
 
-		URL _url = null;
 		try
 		{
-			_url = new URL(url);
+			URL _url = new URL(url);
 
 			if(!_url.equals(viewer.getPage()))
 				title.setText(jEdit.getProperty("helpviewer.loading"));
@@ -259,6 +259,10 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 					queuedTOCReload = true;
 				}
 			}
+		}
+		else if (msg instanceof PropertiesChanged)
+		{
+			GUIUtilities.initContinuousLayout(splitter);
 		}
 	} //}}}
 
@@ -321,7 +325,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 		{
 			Object source = evt.getSource();
 			String url = evt.getActionCommand();
-			if (!url.equals(""))
+			if (url.length() != 0)
 			{
 				gotoURL(url,false,0);
 				return;

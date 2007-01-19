@@ -623,7 +623,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();
 
-		final JSplitPane newSplitPane = new JSplitPane(orientation);
+		final JSplitPane newSplitPane = new JSplitPane(orientation,
+							       jEdit.getBooleanProperty("appearance.continuousLayout"));
 		newSplitPane.setOneTouchExpandable(true);
 		newSplitPane.setBorder(null);
 		newSplitPane.setMinimumSize(new Dimension(0,0));
@@ -1384,8 +1385,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		st.commentChar('!');
 		st.quoteChar('"');
 		st.eolIsSignificant(false);
-
-loop:		for(;;)
+		boolean continuousLayout = jEdit.getBooleanProperty("appearance.continuousLayout");
+loop:		while (true)
 		{
 			switch(st.nextToken())
 			{
@@ -1403,6 +1404,7 @@ loop:		for(;;)
 						.intValue();
 					stack.push(splitPane = new JSplitPane(
 						orientation,
+						continuousLayout,
 						(Component)stack.pop(),
 						(Component)stack.pop()));
 					splitPane.setOneTouchExpandable(true);
@@ -1484,6 +1486,8 @@ loop:		for(;;)
 
 		getRootPane().revalidate();
 
+		if (splitPane != null)
+			GUIUtilities.initContinuousLayout(splitPane);
 		//SwingUtilities.updateComponentTreeUI(getRootPane());
 	} //}}}
 

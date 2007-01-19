@@ -30,7 +30,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.RegisterChanged;
-import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
 
 public class RegisterViewer extends JPanel implements EBComponent, ActionListener
@@ -85,11 +85,10 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 			position.equals(DockableWindowManager.RIGHT))
 			orientation = JSplitPane.VERTICAL_SPLIT;
 
-		add(BorderLayout.CENTER,new JSplitPane(orientation,
-			true,
+		add(BorderLayout.CENTER,splitPane = new JSplitPane(orientation,
+			jEdit.getBooleanProperty("appearance.continuousLayout"),
 			new JScrollPane(registerList),
-			new JScrollPane(contentTextArea)
-			));
+			new JScrollPane(contentTextArea)));
 
 		refreshList();
 	} //}}}
@@ -121,6 +120,11 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 			if (((RegisterChanged)msg).getRegisterName() != '%')
 				refreshList();
 		}
+		else if (msg instanceof PropertiesChanged)
+		{
+			GUIUtilities.initContinuousLayout(splitPane);
+		}
+
 	}//}}}
 
 	//{{{ addNotify() method
@@ -145,6 +149,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	private DocumentHandler documentHandler;
 	private View view;
 	private boolean editing;
+	private JSplitPane splitPane;
 	//}}}
 
 	//{{{ refreshList
@@ -152,7 +157,6 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	{
 		DefaultListModel registerModel = (DefaultListModel)registerList.getModel();
 		Object o = registerList.getSelectedValue();
-		int index = 0;
 		int selected = -1;
 		if (o != null && o instanceof Character)
 			selected = ((Character)o).charValue();
@@ -160,6 +164,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 		registerModel.removeAllElements();
 		Registers.Register[] registers = Registers.getRegisters();
 
+		int index = 0;
 		for(int i = 0; i < registers.length; i++)
 		{
 			Registers.Register reg = registers[i];
@@ -229,7 +234,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	//{{{ Inner classes
 
 	//{{{ Renderer Class
-	class Renderer extends DefaultListCellRenderer
+	static class Renderer extends DefaultListCellRenderer
 	{
 		public Component getListCellRendererComponent(
 			JList list, Object value, int index,
