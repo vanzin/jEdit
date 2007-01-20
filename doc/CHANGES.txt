@@ -1,5 +1,20 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre10
+
+Thanks to  for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+
+}}}
+
 {{{ Version 4.3pre9
 
 Thanks to Björn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
@@ -8,13 +23,13 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 {{{ Bug Fixes
 
-- avoid NPE from getIndentRules (patch # 1611766) (Kazutoshi Satoda)
+- avoid NPE from getIndentRules (patch #1611766) (Kazutoshi Satoda)
 
-- bufferio operations are now exception-safe (patch# 1597168) (Kazutoshi Satoda)
+- bufferio operations are now exception-safe (patch #1597168) (Kazutoshi Satoda)
 
-- Encoding errors properly reported on save (patch# 1601830) (Kazutoshi Satoda)
+- Encoding errors properly reported on save (patch #1601830) (Kazutoshi Satoda)
 
-- Filter Box lose focus bug (patch # 1608948) (kuljc)
+- Filter Box lose focus bug (patch #1608948) (kuljc)
 
 - Fixed the broken quick copy behaviour (Björn "Vampire" Kautler)
 
@@ -70,7 +85,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - SearchMatcher in SearchAndReplace cannot match empty Strings anymore
   (#1601718) (Matthieu Casanova)
 
-- If you use two stage save and your file is writeable but in a	 folder
+- If you use two stage save and your file is writeable but in a folder
   where you cannot write, a dialog will ask you if you want to save using
   normal method (#1609303) (Matthieu Casanova)
 
@@ -116,8 +131,8 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - Fixed some cursor changes when dragging the dockable panel split bar
   (Matthieu Casanova)
-}}}
 
+}}}
 {{{ Editing
 
 - New edit mode: quake.xml
@@ -136,6 +151,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Updated python edit mode to unindent lines after "pass" (Matthieu Casanova)
 
 - Better highlighting of function calls in makefiles. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 
@@ -194,12 +210,12 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Now the multiple selection and rectangular selection flags are saved
   for each buffer on each edit pane. So you can now in a textarea edit
   a buffer using rectangular selection, and use normal selection with another one
-   (Matthieu Casanova)
+  (Matthieu Casanova)
 
-- Option panes are now in a JSCrollPane (feature #1593735) (Matthieu Casanova)
+- Option panes are now in a JScrollPane (feature #1593735) (Matthieu Casanova)
 
 - New option for the File System Manager : use default icons.
-  If you uncheck the checkbox, some customs icons can be used.
+  If you uncheck the checkbox, some custom icons can be used.
   At this time only local file system have custom icons (feature #1593464)
   (Matthieu Casanova)
 
@@ -212,6 +228,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - The update panel of the plugin manager now shows the installed version
   and the version existing on the plugin central server (Matthieu Casanova)
+
 }}}
 {{{ API Changes
 
@@ -250,16 +267,16 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   ex :
   ~/.jedit/plugins/sidekick.SidekickPlugin
   I hope this will help to make some cleanup in the jEdit settings directory folder
-  (this folder is not created by jEdit, plugin developpers must create it themselves)
+  (this folder is not created by jEdit, plugin developers must create it themselves)
   The second method is EditPlugin.usePluginHome()
-  that plugin developpers should overload to tell jEdit if they use this new folder
+  that plugin developers should overload to tell jEdit if they use this new folder
   The default is false (Matthieu Casanova)
 
 - VFSFile.getIcon() and VFSFile.getDefaultIcon(). The getIcon() method
   can be override to use a custom icon for some VFS (Matthieu Casanova)
 
 - Added org.gjt.sp.jedit.msg.PropertiesChanging; an EditBus message that is
-  sent right before the global options dialog is show, to allow plugins to
+  sent right before the global options dialog is shown, to allow plugins to
   flush any data that might be used by the option panes.
   (Marcelo Vanzin)
 
@@ -269,6 +286,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - New GUIUtilities.initContinuousLayout(JSplitPane) method that will
   init the JSplitPane with the appearance.continuousLayout property.
   It can be used by plugins that has JSplitPane when receiving a PropertiesChanged
+
 }}}
 
 }}}
