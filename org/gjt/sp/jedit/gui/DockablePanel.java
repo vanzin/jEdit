@@ -36,6 +36,9 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 //}}}
 
+/**
+ * @version $Id$
+ */
 class DockablePanel extends JPanel
 {
 	private PanelWindowContainer panel;
@@ -136,6 +139,7 @@ class DockablePanel extends JPanel
 	//{{{ ResizeMouseHandler class
 	class ResizeMouseHandler extends MouseAdapter implements MouseMotionListener
 	{
+		/** This is true if the mouse is on the split bar. */
 		boolean canDrag;
 		Point dragStart;
 
@@ -223,9 +227,6 @@ class DockablePanel extends JPanel
 			if(dragStart == null) // can't happen?
 				return;
 
-			wm.setCursor(Cursor.getPredefinedCursor(
-				getAppropriateCursor()));
-
 			int dimension = panel.getDimension();
 
 			String position = panel.getPosition();
@@ -264,8 +265,11 @@ class DockablePanel extends JPanel
 		//{{{ mouseExited() method
 		public void mouseExited(MouseEvent evt)
 		{
-			wm.setCursor(Cursor.getPredefinedCursor(
-				Cursor.DEFAULT_CURSOR));
+			if (dragStart == null)
+			{
+				wm.setCursor(Cursor.getPredefinedCursor(
+					Cursor.DEFAULT_CURSOR));
+			}
 		} //}}}
 
 		//{{{ getCursor() method

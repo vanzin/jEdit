@@ -793,6 +793,10 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 	//{{{ Package-private members
 	int resizePos;
+	/**
+	 * This is the rectangle you drag to resize the split.
+	 * It is used with non continuous layout.
+	 */
 	Rectangle resizeRect;
 
 	//{{{ setResizePos() method

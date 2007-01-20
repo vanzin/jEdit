@@ -112,7 +112,10 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - Memory tooltip in status bar reports wrong values (#1538051) (Matthieu Casanova)
 
-- Better handling of optional dependencies (Matthieu Casanova)
+- Better handling of plugin optional dependencies (Matthieu Casanova)
+
+- Fixed some cursor changes when dragging the dockable panel split bar
+  (Matthieu Casanova)
 }}}
 
 {{{ Editing
