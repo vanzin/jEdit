@@ -759,6 +759,7 @@ public abstract class VFS
 	 * @exception IOException if an I/O error occurred
 	 * @return The specified directory entry, or null if it doesn't exist.
 	 * @since jEdit 2.7pre1
+	 * @deprecated Use <code>_getFile()</code> instead.
 	 */
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)

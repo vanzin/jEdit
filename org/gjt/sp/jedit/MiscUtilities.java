@@ -154,7 +154,7 @@ public class MiscUtilities
 			return path;
 	} //}}}
 
-	//{{ expandVariables() method
+	//{{{ expandVariables() method
 	static final String varPatternString = "(\\$([a-zA-Z0-9_]+))";
 	static final String varPatternString2 = "(\\$\\{([^}]+)\\})";
 	static final Pattern varPattern = Pattern.compile(varPatternString);
@@ -196,7 +196,7 @@ public class MiscUtilities
 			return m.replaceFirst(expansion);
 		}
 		return arg;
-	}
+	} //}}}
 
 	//{{{ resolveSymlinks() method
 	/**
