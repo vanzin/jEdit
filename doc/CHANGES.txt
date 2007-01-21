@@ -2,14 +2,18 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre10
 
-Thanks to  for contributing to this release.
+Thanks to Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
-
+- A minor bug of cursor changing when dragging dockable panels
+  using non contiguous layout (Matthieu Casanova)
 }}}
+
 {{{ Miscellaneous
 
+- The dockable panel splitter can now use continuous layout
+  (Matthieu Casanova)
 
 }}}
 

@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import org.gjt.sp.jedit.jEdit;
+
 import java.awt.CardLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -136,18 +138,21 @@ class DockablePanel extends JPanel
 		super.setBounds(x,y,width,height);
 	} //}}}
 
+	/** This belong to ResizeMouseHandler but requires to be static. */
+	static Point dragStart;
+	
 	//{{{ ResizeMouseHandler class
 	class ResizeMouseHandler extends MouseAdapter implements MouseMotionListener
 	{
 		/** This is true if the mouse is on the split bar. */
 		boolean canDrag;
-		Point dragStart;
 
 		//{{{ mousePressed() method
 		public void mousePressed(MouseEvent evt)
 		{
 			if(canDrag)
 			{
+				continuousLayout = jEdit.getBooleanProperty("appearance.continuousLayout");
 				wm.setResizePos(panel.getDimension(),panel);
 				dragStart = evt.getPoint();
 			}
@@ -206,15 +211,18 @@ class DockablePanel extends JPanel
 					canDrag = true;
 			} //}}}
 
-			if(canDrag)
+			if (dragStart == null)
 			{
-				wm.setCursor(Cursor.getPredefinedCursor(
-					getAppropriateCursor()));
-			}
-			else
-			{
-				wm.setCursor(Cursor.getPredefinedCursor(
-					Cursor.DEFAULT_CURSOR));
+				if(canDrag)
+				{
+					wm.setCursor(Cursor.getPredefinedCursor(
+						getAppropriateCursor()));
+				}
+				else
+				{
+					wm.setCursor(Cursor.getPredefinedCursor(
+						Cursor.DEFAULT_CURSOR));
+				}
 			}
 		} //}}}
 
@@ -231,9 +239,11 @@ class DockablePanel extends JPanel
 
 			String position = panel.getPosition();
 
+			int newSize = 0;
 			//{{{ Top...
 			if(position.equals(DockableWindowManager.TOP))
 			{
+				newSize = evt.getY();
 				wm.setResizePos(
 					evt.getY() - dragStart.y
 					+ dimension,
@@ -242,6 +252,7 @@ class DockablePanel extends JPanel
 			//{{{ Left...
 			else if(position.equals(DockableWindowManager.LEFT))
 			{
+				newSize = evt.getX();
 				wm.setResizePos(evt.getX() - dragStart.x
 					+ dimension,
 					panel);
@@ -249,6 +260,7 @@ class DockablePanel extends JPanel
 			//{{{ Bottom...
 			else if(position.equals(DockableWindowManager.BOTTOM))
 			{
+				newSize = dimension - evt.getY();
 				wm.setResizePos(dimension - evt.getY()
 					+ dragStart.y,
 					panel);
@@ -256,10 +268,18 @@ class DockablePanel extends JPanel
 			//{{{ Right...
 			else if(position.equals(DockableWindowManager.RIGHT))
 			{
+				newSize = dimension - evt.getX();
 				wm.setResizePos(dimension - evt.getX()
 					+ dragStart.x,
 					panel);
 			} //}}}
+
+			if (continuousLayout)
+			{
+				panel.setDimension(newSize
+						   + PanelWindowContainer.SPLITTER_WIDTH);
+				wm.revalidate();
+			}
 		} //}}}
 
 		//{{{ mouseExited() method
@@ -288,5 +308,7 @@ class DockablePanel extends JPanel
 			else
 				throw new InternalError();
 		} //}}}
+
+		private boolean continuousLayout;
 	} //}}}
 }

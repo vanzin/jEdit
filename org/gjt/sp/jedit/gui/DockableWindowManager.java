@@ -723,7 +723,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	{
 		super.paintChildren(g);
 
-		if(resizeRect != null)
+		if(!continuousLayout && resizeRect != null)
 		{
 			g.setColor(Color.darkGray);
 			g.fillRect(resizeRect.x,resizeRect.y,
@@ -937,6 +937,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		bottom.sortDockables();
 		right.sortDockables();
 
+		continuousLayout = jEdit.getBooleanProperty("appearance.continuousLayout");
 		revalidate();
 		repaint();
 	} //}}}
@@ -1009,6 +1010,8 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 		return returnValue.iterator();
 	} //}}}
+
+	private boolean continuousLayout;
 
 	//{{{ Entry class
 	class Entry
