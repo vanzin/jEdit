@@ -723,7 +723,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	{
 		super.paintChildren(g);
 
-		if(!continuousLayout && resizeRect != null)
+		if(resizeRect != null)
 		{
 			g.setColor(Color.darkGray);
 			g.fillRect(resizeRect.x,resizeRect.y,
@@ -806,6 +806,9 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 		if(resizePos < 0)
 			resizePos = 0;
+
+		if (continuousLayout)
+			return;
 
 		Rectangle newResizeRect = new Rectangle(0,0,
 			PanelWindowContainer.SPLITTER_WIDTH - 2,
