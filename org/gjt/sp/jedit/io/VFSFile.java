@@ -61,7 +61,7 @@ public class VFSFile implements Serializable
 			String matchAgainst = (MiscUtilities.isAbsolutePath(str)
 				? file.getPath() : file.getName());
 
-			if(dirsOnly && file.getType() == VFSFile.FILE)
+			if(dirsOnly && file.getType() == FILE)
 				continue;
 			/* try exact match first */
 			else if(matchAgainst.equals(str))
@@ -171,6 +171,9 @@ public class VFSFile implements Serializable
 
 	//{{{ getDefaultIcon() method
 	/**
+	 * Returns the default icon of the file.
+	 *
+	 * @return the default icon of the file
 	 * @since jEdit 4.3pre9
 	 */
 	public final Icon getDefaultIcon(boolean expanded)
@@ -459,6 +462,11 @@ public class VFSFile implements Serializable
 	} //}}}
 
 	//{{{ getColor() method
+	/**
+	 * Returns the color that will be used to display the file.
+	 *
+	 * @return the color of the file
+	 */
 	public Color getColor()
 	{
 		if(!colorCalculated)
@@ -477,16 +485,30 @@ public class VFSFile implements Serializable
 	} //}}}
 	
 	//{{{ fetchedAttrs() method
+	/**
+	 * Returns true if the attributes are already fetched.
+	 *
+	 * @see #fetchAttrs()
+	 * @return <code>true</code> if the attributes are already fetched
+	 */
 	protected boolean fetchedAttrs()
 	{
 		return fetchedAttrs;
 	} //}}}
 	
 	//{{{ fetchAttrs() method
+	/**
+	 * Fetch some attributes of the file.
+	 * Some attributes are not fetched during
+	 * file initialization because it takes time.
+	 * They are fetched here.
+	 * VFS implementation should overwrite this
+	 */
 	protected void fetchAttrs()
 	{
 		fetchedAttrs = true;
 	} //}}}
-	
+
+	/** This is true if the attributes are already fetched. */
 	private boolean fetchedAttrs;
 }

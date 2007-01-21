@@ -44,7 +44,7 @@ public class FileVFS extends VFS
 {
 	public static final String PERMISSIONS_PROPERTY = "FileVFS__perms";
 
-	//{{{ FileVFS method
+	//{{{ FileVFS constructor
 	public FileVFS()
 	{
 		super("file",READ_CAP | WRITE_CAP | DELETE_CAP
@@ -196,6 +196,7 @@ public class FileVFS extends VFS
 		 */
 		public long modified;
 
+		//{{{ LocalFile() class
 		public LocalFile(File file)
 		{
 			this.file = file;
@@ -210,16 +211,19 @@ public class FileVFS extends VFS
 			setType(file.isDirectory()
 				? VFSFile.DIRECTORY
 				: VFSFile.FILE);
-		}
+		} //}}}
 
+		//{{{ getExtendedAttribute() method
 		public String getExtendedAttribute(String name)
 		{
 			if(name.equals(EA_MODIFIED))
 				return DATE_FORMAT.format(new Date(modified));
 			else
 				return super.getExtendedAttribute(name);
-		}
-		
+		} //}}}
+
+		//{{{ fetchAttrs() method
+		/** Fetch the attributes of the local file. */
 		protected void fetchAttrs()
 		{
 			if(fetchedAttrs())
@@ -233,8 +237,9 @@ public class FileVFS extends VFS
 			setWriteable(file.canWrite());
 			setLength(file.length());
 			setModified(file.lastModified());
-		}
+		} //}}}
 
+		//{{{ getIcon() method
 		/**
 		 * Returns the file system icon for the file.
 		 *
@@ -253,42 +258,48 @@ public class FileVFS extends VFS
 				icon = fsView.getSystemIcon(file);
 			}
 			return icon;  
-		}
+		} //}}}
 
+		//{{{ getSymlinkPath() method
 		public String getSymlinkPath()
 		{
 			fetchAttrs();
 			return super.getSymlinkPath();
-		}
-		
+		} //}}}
+
+		//{{{ getLength() method
 		public long getLength()
 		{
 			fetchAttrs();
 			return super.getLength();
-		}
-		
+		} //}}}
+
+		//{{{ isReadable() method
 		public boolean isReadable()
 		{
 			fetchAttrs();
 			return super.isReadable();
-		}
-		
+		} //}}}
+
+		//{{{ isWriteable() method
 		public boolean isWriteable()
 		{
 			fetchAttrs();
 			return super.isWriteable();
-		}
+		} //}}}
 
+		//{{{ getModified() method
 		public long getModified()
 		{
 			fetchAttrs();
 			return modified;
-		}
+		} //}}}
 
+		//{{{ setModified() method
 		public void setModified(long modified)
 		{
 			this.modified = modified;
-		}
+		} //}}}
 
 		private transient FileSystemView fsView;
 		private transient Icon icon;
