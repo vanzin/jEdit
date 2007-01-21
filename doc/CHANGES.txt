@@ -8,6 +8,10 @@ Thanks to Matthieu Casanova for contributing to this release.
 
 - A minor bug of cursor changing when dragging dockable panels
   using non contiguous layout (Matthieu Casanova)
+
+- In the logviewer if the tail checkbox is on,
+  the last line was not visible after resizing the panel
+  (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous

@@ -33,6 +33,9 @@ import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * @version $Id$
+ */
 public class LogViewer extends JPanel implements DefaultFocusComponent,
 	EBComponent
 {
@@ -83,6 +86,13 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 		propertiesChanged();
 	} //}}}
 
+	//{{{ setBounds() method
+	public void setBounds(int x, int y, int width, int height)
+	{
+		super.setBounds(x, y, width, height);
+		scrollLaterIfRequired();
+	} //}}}
+
 	//{{{ handleMessage() method
 	public void handleMessage(EBMessage msg)
 	{
@@ -95,10 +105,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 	{
 		super.addNotify();
 		if(tailIsOn)
-		{
-			int index = list.getModel().getSize() - 1;
-			list.ensureIndexIsVisible(index);
-		}
+			scrollToTail();
 
 		EditBus.addToBus(this);
 	} //}}}
@@ -118,9 +125,9 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 	} //}}}
 
 	//{{{ Private members
-	private JList list;
-	private JButton copy;
-	private JCheckBox tail;
+	private final JList list;
+	private final JButton copy;
+	private final JCheckBox tail;
 	private boolean tailIsOn;
 
 	//{{{ propertiesChanged() method
@@ -129,6 +136,28 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 		list.setFont(jEdit.getFontProperty("view.font"));
 		list.setFixedCellHeight(list.getFontMetrics(list.getFont())
 			.getHeight());
+	} //}}}
+
+	//{{{ scrollToTail() method
+	/** Scroll to the tail of the logs. */
+	private void scrollToTail()
+	{
+		int index = list.getModel().getSize();
+		if(index != 0)
+			list.ensureIndexIsVisible(index - 1);
+	} //}}}
+
+	//{{{ scrollLaterIfRequired() method
+	private void scrollLaterIfRequired()
+	{
+		if (tailIsOn)
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					scrollToTail();
+				}
+			});
 	} //}}}
 
 	//}}}
@@ -145,16 +174,12 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 				jEdit.setBooleanProperty("log-viewer.tail",tailIsOn);
 				if(tailIsOn)
 				{
-					int index = list.getModel().getSize();
-					if(index != 0)
-					{
-						list.ensureIndexIsVisible(index - 1);
-					}
+					scrollToTail();
 				}
 			}
 			else if(src == copy)
 			{
-				StringBuffer buf = new StringBuffer();
+				StringBuilder buf = new StringBuilder();
 				Object[] selected = list.getSelectedValues();
 				if(selected != null && selected.length != 0)
 				{
@@ -193,17 +218,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 
 		public void contentsChanged(ListDataEvent e)
 		{
-			if(tailIsOn)
-			{
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					public void run()
-					{
-						int index = list.getModel().getSize() - 1;
-						list.ensureIndexIsVisible(index);
-					}
-				});
-			}
+			scrollLaterIfRequired();
 		}
 	} //}}}
 
