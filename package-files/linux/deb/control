@@ -5,7 +5,7 @@ Maintainer: Contributors <devel@jEdit.org>
 Section: non-free/editors
 Homepage: http://www.jedit.org/ 
 Architecture: all
-Depends: sun-java5-jre
+Depends: java-package
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Recommends: exuberant-ctags, cscope, sun-java5-jdk
