@@ -977,7 +977,7 @@ public class PluginJAR
 	//{{{ PluginJAR constructor
 	/**
 	 * Creates a PluginJAR object which is not necessarily loaded, but can be later.
-	 * @see {@link #load(String, boolean)}
+	 * @see #load(String, boolean)
 	 */
 	public PluginJAR(File file)
 	{

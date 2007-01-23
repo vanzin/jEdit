@@ -43,7 +43,7 @@ public class PropertiesChanging extends EBMessage
 	/**
 	 * Creates a new properties changing message.
 	 * @param source 	The message source
-	 * @param what		Object describing what's happening.
+	 * @param state		An enum describing what is happening.
 	 */
 	public PropertiesChanging(EBComponent source, State state)
 	{

@@ -1448,7 +1448,7 @@ loop:		for(;;)
 	//{{{ StringCompare class
 	/**
 	 * Compares strings.
-	 * @deprecated use {@link StandardUtilities.StringCompare}
+	 * @deprecated use {@link org.gjt.sp.jedit.StandardUtilities.StringCompare}
 	 */
 	@Deprecated
 	public static class StringCompare implements Compare

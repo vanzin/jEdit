@@ -47,7 +47,7 @@ public class VFSFile implements Serializable
 	 * in a case-insensitive manner. Exact matches are preferred.
 	 * @param files The list of files
 	 * @param start The start index, inclusive
-	 * @param start The end index, exclusive
+	 * @param end The end index, exclusive
 	 * @param str The string to match
 	 * @param dirsOnly Only match directories?
 	 * @since jEdit 4.3pre3
