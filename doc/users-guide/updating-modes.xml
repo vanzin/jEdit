@@ -57,7 +57,7 @@
   gnu.regexp</ulink>.
  </para></listitem>
  <listitem><para>
-   <literal>HASH_CHAR</literal> handling of <tt>SPAN_xxx</tt> elements has been updated, as explained in <xref linkend="mode-rule-span-regexp"/>. </para></listitem>
+   <literal>HASH_CHAR</literal> handling of <literal>SPAN_xxx</literal> elements has been updated, as explained in <xref linkend="mode-rule-span-regexp"/>. </para></listitem>
  </orderedlist>   
  
  </section>
