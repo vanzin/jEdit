@@ -35,6 +35,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 - Removed class VFSBrowser.PluginsMenuButton.ActionHandler as it isn't used
   anymore. (Björn "Vampire" Kautler)
 
+- New static method EditPlugin.getPluginHome(Class<? extends EditPlugin>)
+  that will return the path where a plugin should store it's data.
+  It can be null if running without settings (Matthieu Casanova)
 }}}
 
 }}}

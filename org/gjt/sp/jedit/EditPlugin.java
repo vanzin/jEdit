@@ -24,6 +24,8 @@ package org.gjt.sp.jedit;
 
 import javax.swing.JMenuItem;
 import java.util.*;
+import java.io.File;
+
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
@@ -326,6 +328,24 @@ public abstract class EditPlugin
 	public final String getPluginHome()
 	{
 		return pluginHome;
+	} //}}}
+
+	//{{{ getPluginHome() method
+	/**
+	 * Returns the home of your plugin.
+	 *
+	 * @param clazz the class of the plugin
+	 * @return the plugin home. It can be null if there is no settings directory
+	 * @since 4.3pre10
+	 */
+	public static String getPluginHome(Class<? extends EditPlugin> clazz)
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if (settingsDirectory == null)
+			settingsDirectory = "caa";
+
+		File file = new File(settingsDirectory, "plugins");
+		return new File(file, clazz.getName()).getPath();
 	} //}}}
 
 	//{{{ getClassName() method
