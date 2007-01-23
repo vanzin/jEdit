@@ -322,18 +322,6 @@ public abstract class EditPlugin
 	/**
 	 * Returns the home of your plugin.
 	 *
-	 * @return the home of your plugin. It can be null if there is no settings directory
-	 * @since 4.3pre9
-	 */
-	public final String getPluginHome()
-	{
-		return pluginHome;
-	} //}}}
-
-	//{{{ getPluginHome() method
-	/**
-	 * Returns the home of your plugin.
-	 *
 	 * @param clazz the class of the plugin
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
@@ -458,11 +446,6 @@ public abstract class EditPlugin
 
 	//{{{ Package-private members
 	PluginJAR jar;
-	/**
-	 * This is the plugin home path. Please never access it directly and use
-	 * {@link #getPluginHome()} instead 
-	 */
-	String pluginHome;
 	//}}}
 
 	//{{{ Broken class
@@ -518,7 +501,7 @@ public abstract class EditPlugin
 
 		public String toString()
 		{
-			return "Deferred[" + clazz + "]";
+			return "Deferred[" + clazz + ']';
 		}
 
 		// private members
