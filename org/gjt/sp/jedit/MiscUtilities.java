@@ -1359,9 +1359,7 @@ loop:		for(;;)
 
 	//}}}
 
-	//{{{ Sorting methods
-
-	//{{{ quicksort() method
+	//{{{ quicksort() deprecated methods
 	/**
 	 * Sorts the specified array. Equivalent to calling
 	 * <code>Arrays.sort()</code>.
@@ -1374,9 +1372,9 @@ loop:		for(;;)
 	public static void quicksort(Object[] obj, Comparator compare)
 	{
 		Arrays.sort(obj,compare);
-	} //}}}
+	} 
 
-	//{{{ quicksort() method
+
 	/**
 	 * Sorts the specified vector.
 	 * @param vector The vector
@@ -1388,9 +1386,8 @@ loop:		for(;;)
 	public static void quicksort(Vector vector, Comparator compare)
 	{
 		Collections.sort(vector,compare);
-	} //}}}
+	} 
 
-	//{{{ quicksort() method
 	/**
 	 * Sorts the specified list.
 	 * @param list The list
@@ -1402,9 +1399,8 @@ loop:		for(;;)
 	public static void quicksort(List list, Comparator compare)
 	{
 		Collections.sort(list,compare);
-	} //}}}
+	}
 
-	//{{{ quicksort() method
 	/**
 	 * Sorts the specified array. Equivalent to calling
 	 * <code>Arrays.sort()</code>.
@@ -1416,9 +1412,8 @@ loop:		for(;;)
 	public static void quicksort(Object[] obj, Compare compare)
 	{
 		Arrays.sort(obj,compare);
-	} //}}}
+	}
 
-	//{{{ quicksort() method
 	/**
 	 * Sorts the specified vector.
 	 * @param vector The vector
@@ -1431,11 +1426,11 @@ loop:		for(;;)
 		Collections.sort(vector,compare);
 	} //}}}
 
-	//{{{ Compare interface
+	//{{{ Compare deprecated interface
 	/**
 	 * An interface for comparing objects. This is a hold-over from
 	 * they days when jEdit had its own sorting API due to JDK 1.1
-	 * compatibility requirements. Use <code>java.util.Comparable</code>
+	 * compatibility requirements. Use <code>java.util.Comparator</code>
 	 * instead.
 	 * @deprecated
 	 */
@@ -1492,8 +1487,6 @@ loop:		for(;;)
 					((JMenuItem)obj2).getText(),true);
 		}
 	} //}}}
-
-	//}}}
 
 	//{{{ buildToVersion() method
 	/**

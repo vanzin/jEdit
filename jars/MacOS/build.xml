@@ -5,11 +5,13 @@
         This is an ant build.xml file for building the MacOS plugin for jEdit.
     </description>
     
+	<property file="../../build.properties" />
 	<property name="jedit.install.dir"
 			  location="../../build" />
 	<property name="docs-proc.target"
-			  value="xalan" />
-    <import file="../../build-support/plugin-build.xml" />
+			  value="none" />
+              
+    <import file="${build-support}/plugin-build.xml" />
     
     <target name="build.prepare">
         <mkdir dir="${build.dir}/stubclasses" />
