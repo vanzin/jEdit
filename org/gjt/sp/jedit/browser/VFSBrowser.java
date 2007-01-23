@@ -1455,19 +1455,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			popup = (JPopupMenu)createPluginsMenu(new JPopupMenu(),true);
 		} //}}}
 
-		//{{{ ActionHandler class
-		class ActionHandler implements ActionListener
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				VFS vfs = VFSManager.getVFSByName(evt.getActionCommand());
-				String directory = vfs.showBrowseDialog(null,
-					VFSBrowser.this);
-				if(directory != null)
-					setDirectory(directory);
-			}
-		} //}}}
-
 		//{{{ MouseHandler class
 		class MouseHandler extends MouseAdapter
 		{

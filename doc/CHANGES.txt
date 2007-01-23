@@ -29,6 +29,12 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
   jEdit that no markers file should be saved or loaded to/from this VFS.
   (Björn "Vampire" Kautler)
 
+- Deprecated VFS.showBrowseDialog() as it is not used in the jEdit core anymore,
+  so it doesn't have to be provided anymore. (Björn "Vampire" Kautler)
+
+- Removed class VFSBrowser.PluginsMenuButton.ActionHandler as it isn't used
+  anymore. (Björn "Vampire" Kautler)
+
 }}}
 
 }}}

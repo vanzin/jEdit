@@ -282,7 +282,12 @@ public abstract class VFS
 	 * @param comp The component that will parent error dialog boxes
 	 * @return The URL
 	 * @since jEdit 2.7pre1
+	 * @deprecated This function is not used in the jEdit core anymore,
+	 *             so it doesn't have to be provided anymore. If you want
+	 *             to use it for another purpose like in the FTP plugin,
+	 *             feel free to do so.
 	 */
+	@Deprecated
 	public String showBrowseDialog(Object[] session, Component comp)
 	{
 		return null;
