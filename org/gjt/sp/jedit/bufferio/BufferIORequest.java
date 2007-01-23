@@ -99,9 +99,7 @@ public abstract class BufferIORequest extends WorkRequest
 		this.vfs = vfs;
 		this.path = path;
 
-		markersPath = vfs.getParentOfPath(path)
-			+ '.' + vfs.getFileName(path)
-			+ ".marks";
+		markersPath = buffer.getMarkersPath(vfs);
 	} //}}}
 
 	//{{{ toString() method

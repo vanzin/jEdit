@@ -2,25 +2,32 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre10
 
-Thanks to Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
 - A minor bug of cursor changing when dragging dockable panels
-  using non contiguous layout (Matthieu Casanova)
+  using non continuous layout (Matthieu Casanova)
 
 - In the logviewer if the tail checkbox is on,
   the last line was not visible after resizing the panel
   (Matthieu Casanova)
 
 - Autoreload buffer without notification was not available in
-  General option pane (1641997) (Matthieu Casanova)
-}}}
+  General option pane (bug #1641997) (Matthieu Casanova)
 
+}}}
 {{{ Miscellaneous
 
 - The dockable panel splitter can now use continuous layout
   (Matthieu Casanova)
+
+}}}
+{{{ API Changes
+
+- VFS.isMarkersFileSupported() added to give a VFS the chance to tell
+  jEdit that no markers file should be saved or loaded to/from this VFS.
+  (Björn "Vampire" Kautler)
 
 }}}
 

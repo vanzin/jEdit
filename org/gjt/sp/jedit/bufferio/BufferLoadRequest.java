@@ -126,7 +126,8 @@ public class BufferLoadRequest extends BufferIORequest
 				IOUtilities.closeQuietly(contents);
 			}
 
-			if(jEdit.getBooleanProperty("persistentMarkers"))
+			if (jEdit.getBooleanProperty("persistentMarkers") &&
+			    (vfs.isMarkersFileSupported()))
 			{
 				InputStream markers = null;
 				try

@@ -1455,7 +1455,8 @@ public class Buffer extends JEditBuffer
 			return true;
 		// adapted from VFS.save
 		VFS vfs = VFSManager.getVFSForPath(getPath());
-		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) {
+		if (((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) || 
+		    (!vfs.isMarkersFileSupported())) {
 			VFSManager.error(view, path, "vfs.not-supported.save",
 				new String[] { "markers file" });
 			return false;
