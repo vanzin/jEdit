@@ -509,6 +509,9 @@ of spaces, tabs, and other whitespace characters.
 
 <qandadiv id="emacs-tricks" >
 <title> Tips for Emacs users </title>
+
+<para> For more emacs help, check out <ulink url="http://www.clapper.org/software/jedit/">this site</ulink> for more emacs macros. </para>
+
 <qandaentry>
 	<question id="settings-emacstab">
 		<para>

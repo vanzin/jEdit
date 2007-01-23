@@ -375,7 +375,7 @@
    stores printing settings when running under Java 2 version 1.4.
    </para></listitem>
    <listitem><para><filename>properties</filename> - a plain text file that
-   stores the majority of jEdit's settings.</para></listitem>
+   stores the majority of jEdit's and its plugins settings. For more information see <xref linkend="propertiesfile"/>. </para></listitem>
    <listitem><para><filename>recent.xml</filename> - an XML file which stores
    the list of recently opened files. jEdit remembers the caret position and
    character encoding of each recent file, and
@@ -393,5 +393,11 @@
    contains numbered backups of all automatically-written settings files.
    </para></listitem>
   </itemizedlist>
+  <sect2 id="propertiesfile">
+    <title> The jEdit properties file </title> 
+    <para> The jEdit <literal>properties</literal> file uses the Java properties syntax to store key/value pairs. All of the values are stored as strings, but are interpreted as other types (such as integer or boolean) by plugins at runtime. 
+    </para>  
+    </sect2>
  </sect1>
+ 
 </chapter>
