@@ -1,4 +1,4 @@
-SOURCE CODE NOTES
+SOURCE CODE NOTES 
 
 This file only contains information about compiling from source.
 General jEdit documentation can be found in the 'doc' directory.
