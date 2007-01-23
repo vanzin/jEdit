@@ -12,6 +12,9 @@ Thanks to Matthieu Casanova for contributing to this release.
 - In the logviewer if the tail checkbox is on,
   the last line was not visible after resizing the panel
   (Matthieu Casanova)
+
+- Autoreload buffer without notification was not available in
+  General option pane (1641997) (Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous

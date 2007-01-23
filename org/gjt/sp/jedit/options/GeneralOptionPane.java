@@ -79,23 +79,25 @@ public class GeneralOptionPane extends AbstractOptionPane
 			jEdit.getProperty("options.general.checkModStatus.nothing"),
 			jEdit.getProperty("options.general.checkModStatus.prompt"),
 			jEdit.getProperty("options.general.checkModStatus.reload"),
-			jEdit.getProperty("options.general.checkModStatus.silentreload")
+			jEdit.getProperty("options.general.checkModStatus.silentReload")
 		};
 		checkModStatus = new JComboBox(modCheckOptions);
-		if(jEdit.getBooleanProperty("autoReload")) {
-			if(jEdit.getBooleanProperty("autoReloadDialog"))
+		if(jEdit.getBooleanProperty("autoReload"))
+		{
+			if (jEdit.getBooleanProperty("autoReloadDialog"))
 				// reload and notify
 				checkModStatus.setSelectedIndex(2);
 			else	// reload silently
 				checkModStatus.setSelectedIndex(3);
-			}
-		else {
-			if(jEdit.getBooleanProperty("autoReloadDialog"))
+		}
+		else
+		{
+			if (jEdit.getBooleanProperty("autoReloadDialog"))
 				// prompt
 				checkModStatus.setSelectedIndex(1);
 			else	// do nothing
 				checkModStatus.setSelectedIndex(0);
-			}
+		}
 		addComponent(jEdit.getProperty("options.general.checkModStatus"),
 			checkModStatus);
 
