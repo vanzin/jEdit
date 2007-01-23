@@ -163,9 +163,12 @@ class DockablePanel extends JPanel
 		{
 			if(canDrag)
 			{
-				panel.setDimension(wm.resizePos
-					+ PanelWindowContainer
-					.SPLITTER_WIDTH);
+				if (!continuousLayout)
+				{
+					panel.setDimension(wm.resizePos
+							   + PanelWindowContainer
+						.SPLITTER_WIDTH);
+				}
 				wm.finishResizing();
 				dragStart = null;
 				wm.revalidate();
