@@ -64,7 +64,8 @@ public class BufferOptionPane extends AbstractOptionPane
 		super("Buffer Options");
 		init();
 	}
-	
+
+	//{{{ _init() method
 	protected void _init() 
 	{
 		
@@ -121,20 +122,22 @@ public class BufferOptionPane extends AbstractOptionPane
 			jEdit.getProperty("options.general.checkModStatus.silentReload")
 		};
 		checkModStatus = new JComboBox(modCheckOptions);
-		if(buffer.getAutoReload()) {
+		if(buffer.getAutoReload())
+		{
 			if(buffer.getAutoReloadDialog())
 				// reload and notify
 				checkModStatus.setSelectedIndex(2);
 			else	// reload silently
 				checkModStatus.setSelectedIndex(3);
-			}
-		else {
+		}
+		else
+		{
 			if(buffer.getAutoReloadDialog())
 				// prompt
 				checkModStatus.setSelectedIndex(1);
 			else	// do nothing
 				checkModStatus.setSelectedIndex(0);
-			}
+		}
 		addComponent(jEdit.getProperty("options.general.checkModStatus"),
 			checkModStatus);
 
@@ -205,10 +208,9 @@ public class BufferOptionPane extends AbstractOptionPane
 			"options.editing.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
 		addComponent(noTabs);
-
-	}
+	} //}}}
 	
-
+	//{{{ _save() method
 	protected void _save()
 	{
 		int index = lineSeparator.getSelectedIndex();
@@ -302,9 +304,9 @@ public class BufferOptionPane extends AbstractOptionPane
 			buffer.setAutoReload(true);
 			break;
 		}
-	}
+	} //}}}
 
-	
+	//{{{ ActionHandler() class
 	class ActionHandler implements ActionListener
 	{
 		//{{{ actionPerformed() method
