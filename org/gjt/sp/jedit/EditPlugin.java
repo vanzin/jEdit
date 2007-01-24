@@ -309,7 +309,7 @@ public abstract class EditPlugin
 	/**
 	 * Returns true if the plugin uses the standard plugin home
 	 *
-	 * @return true if the plugin stores it's datas in the folder given by {@link #getPluginHome()}
+	 * @return true if the plugin stores it's datas in the folder given by {@link #getPluginHome(Class)}
 	 * default is false
 	 * @since 4.3pre9
 	 */
@@ -330,7 +330,7 @@ public abstract class EditPlugin
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if (settingsDirectory == null)
-			settingsDirectory = "caa";
+			return null;
 
 		File file = new File(settingsDirectory, "plugins");
 		return new File(file, clazz.getName()).getPath();
