@@ -883,7 +883,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjï¿½rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1050,6 +1050,7 @@ ioerror.encoding-error=Cannot load with "{0}" encoding.\n\
 	of the file system browser.
 ioerror.read-error=Cannot load: {0}
 ioerror.write-error=Cannot save: {0}
+ioerror.unsupported-encoding-error={0} charset is not supported by your JVM
 ioerror.open-directory=Cannot open directory as a buffer.
 ioerror.save-directory=Cannot save buffer over a directory.
 ioerror.no-read=Insufficent permissions to load file.

@@ -29,6 +29,7 @@ import java.util.zip.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
+import java.nio.charset.UnsupportedCharsetException;
 //}}}
 
 /**
@@ -152,6 +153,14 @@ public class BufferSaveRequest extends BufferIORequest
 			{
 				IOUtilities.closeQuietly(out);
 			}
+		}
+		catch(UnsupportedCharsetException e)
+		{
+			String[] pp = { e.getCharsetName() };
+			Log.log(Log.ERROR,this,jEdit.getProperty("ioerror.unsupported-encoding-error",pp));
+			VFSManager.error(view,path,"ioerror.unsupported-encoding-error",pp);
+
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		catch(IOException io)
 		{

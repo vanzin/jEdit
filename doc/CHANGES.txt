@@ -16,6 +16,8 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 - Autoreload buffer without notification was not available in
   General option pane (bug #1641997) (Matthieu Casanova)
 
+- When saving a buffer, if the encoding is unsupported,
+  an error dialog appears (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
@@ -1455,3 +1457,4 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 jEdit buffer local properties:
 :maxLineLen=80:indentSize=2:
 :folding=explicit:collapseFolds=2:
+:encoding=ISO-8859-1:
