@@ -242,7 +242,10 @@ public class PluginJAR
 		{
 			getZipFile();
 		}
-		catch (IOException ioe) { throw new RuntimeException(ioe);}
+		catch (IOException ioe)
+		{
+			throw new RuntimeException(ioe);
+		}
 		Enumeration itr = zipFile.entries();
 		while (itr.hasMoreElements())
 		{
@@ -256,21 +259,6 @@ public class PluginJAR
 		}
 		return false;
 
-	} // }}}
-
-	// {{{ jarCompare() - compare function for a classname in a jarfile.
-
-	private static boolean jarCompare(String name1, String name2)
-	{
-		if (name1.endsWith(".class"))
-			name1 = name1.substring(0,name1.length()-5);
-		if (name2.endsWith(".class"))
-			name2 = name2.substring(0,name2.length()-5);
-		name1 = name1.replace('/','.');
-		name2 = name2.replace('/','.');
-		if (name1.contains(name2)) return true;
-		if (name2.contains(name1)) return true;
-		return false;
 	} // }}}
 
 	//{{{ getCachePath() method
