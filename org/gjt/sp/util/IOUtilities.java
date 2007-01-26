@@ -128,6 +128,31 @@ public class IOUtilities
 		return copyStream(4096,progress, in, out, canStop);
 	} //}}}
 
+	//{{{ fileLength() method
+	/**
+	 * Returns the length of a file. If it is a directory it will calculate recursively the length.
+	 *
+	 * @param file the file or directory
+	 * @return the length of the file or directory. If the file doesn't exists it will return 0
+	 * @since 4.3pre10
+	 */
+	public static long fileLength(File file)
+	{
+		long length = 0L;
+		if (file.isFile())
+			length = file.length();
+		else if (file.isDirectory())
+		{
+			File[] files = file.listFiles();
+			for (int i = 0; i < files.length; i++)
+			{
+				length += fileLength(files[i]);
+			}
+		}
+		return length;
+	} // }}}
+
+
 	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link InputStream} ignoring it if it is null and ignoring exceptions.

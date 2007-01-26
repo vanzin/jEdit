@@ -41,6 +41,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
   that will return the path where a plugin should store it's data and
   remplace the EditPlugin.getPluginHome() introduced in 4.3pre9.
   It can be null if running without settings (Matthieu Casanova)
+
+- New method IOUtilities.fileLength() that compute a file or directory length
+  (Matthieu Casanova)
 }}}
 
 }}}
