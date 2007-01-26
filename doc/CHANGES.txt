@@ -18,6 +18,13 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 
 - When saving a buffer, if the encoding is unsupported,
   an error dialog appears (Matthieu Casanova)
+
+- A bug when loading a plugin the dependency check had errors :
+  for example when you have Sidekick, JavaSidekick and another plugin
+  that requires Sidekick (PHPParser, XML ...)
+  in your jar folder, all unloaded, try to load the third one,
+  the dependency check will try to load JavaSidekick instead of
+  Sidekick (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

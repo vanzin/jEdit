@@ -247,7 +247,12 @@ public class PluginJAR
 		while (itr.hasMoreElements())
 		{
 			String entry = itr.nextElement().toString();
-			if (jarCompare(entry, className)) return true;
+			if (entry.endsWith(".class"))
+			{
+				String name = entry.substring(0, entry.length() - 6).replace('/', '.');
+				if (name.equals(className))
+					return true;
+			}
 		}
 		return false;
 
@@ -257,6 +262,10 @@ public class PluginJAR
 
 	private static boolean jarCompare(String name1, String name2)
 	{
+		if (name1.endsWith(".class"))
+			name1 = name1.substring(0,name1.length()-5);
+		if (name2.endsWith(".class"))
+			name2 = name2.substring(0,name2.length()-5);
 		name1 = name1.replace('/','.');
 		name2 = name2.replace('/','.');
 		if (name1.contains(name2)) return true;
