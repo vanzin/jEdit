@@ -99,10 +99,7 @@ public class PluginManager extends JFrame implements EBComponent
 		if (instance == null)
 			instance = new PluginManager(parent);
 		else
-		{
 			instance.toFront();
-			return;
-		}
 	} //}}}
 
 	//{{{ ok() method
@@ -137,24 +134,18 @@ public class PluginManager extends JFrame implements EBComponent
 	private PluginList pluginList;
 	private boolean queuedUpdate;
 	private boolean downloadingPluginList;
-	private Frame parent = null;
+	private final Frame parent;
 	//}}}
 
 	//{{{ PluginManager constructor
-
 	private PluginManager(Frame parent)
 	{
 		super(jEdit.getProperty("plugin-manager.title"));
 		this.parent = parent;
 		init();
-	}
+	} //}}}
 
-	private PluginManager()
-	{
-		super(jEdit.getProperty("plugin-manager.title"));
-		init();
-	}
-
+	//{{{ init() method
 	private void init() {
 		EditBus.addToBus(this);
 
@@ -275,7 +266,7 @@ public class PluginManager extends JFrame implements EBComponent
 					String path = jEdit.getProperty(
 						"plugin-manager.export-url");
 					String message = se.getMessage();
-					Log.log(Log.ERROR,this,path + ":" + line
+					Log.log(Log.ERROR,this,path + ':' + line
 						+ ": " + message);
 					String[] pp = { path,
 						String.valueOf(line),
@@ -322,8 +313,8 @@ public class PluginManager extends JFrame implements EBComponent
 	//{{{ processKeyEvent() method
 	public void processKeyEvents(KeyEvent ke)
 	{
-		if ((KeyEvent.KEY_PRESSED == ke.getID()) &&
-		    (KeyEvent.VK_ESCAPE == ke.getKeyCode()))
+		if ((ke.getID() == KeyEvent.KEY_PRESSED) &&
+		    (ke.getKeyCode() == KeyEvent.VK_ESCAPE))
 		{
 			cancel();
 			ke.consume();
@@ -354,7 +345,7 @@ public class PluginManager extends JFrame implements EBComponent
 	{
 		public void stateChanged(ChangeEvent e)
 		{
-			final Component selected = tabPane.getSelectedComponent();
+			Component selected = tabPane.getSelectedComponent();
 			if(selected == installer || selected == updater)
 			{
 				updatePluginList();
