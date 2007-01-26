@@ -24,6 +24,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 - The dockable panel splitter can now use continuous layout
   (Matthieu Casanova)
 
+- The plugin manager now shows you the size of the datas stored by
+  each plugin that use the new plugin home folder (Matthieu Casanova)
+
 }}}
 {{{ API Changes
 

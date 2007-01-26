@@ -73,12 +73,17 @@ import javax.swing.table.TableColumn;
 import org.gjt.sp.jedit.*;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.File;
 
 import org.gjt.sp.jedit.help.*;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
+/**
+ * The ManagerPanel is the JPanel that shows the installed plugins.
+ */
 public class ManagePanel extends JPanel
 {
 
@@ -188,6 +193,9 @@ public class ManagePanel extends JPanel
 		String clazz, name, version, author, docs;
 		final List<String> jars;
 
+		/** The data size. */
+		String dataSize;
+
 		Entry(String jar)
 		{
 			jars = new LinkedList<String>();
@@ -249,7 +257,7 @@ public class ManagePanel extends JPanel
 		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
-			return 4;
+			return 5;
 		} //}}}
 
 		//{{{ getColumnClass() method
@@ -275,6 +283,8 @@ public class ManagePanel extends JPanel
 					return jEdit.getProperty("manage-plugins.info.version");
 				case 3:
 					return jEdit.getProperty("manage-plugins.info.status");
+				case 4:
+					return "Datas";
 				default:
 					throw new Error("Column out of range");
 			}
@@ -311,6 +321,20 @@ public class ManagePanel extends JPanel
 					return entry.version;
 				case 3:
 					return jEdit.getProperty("plugin-manager.status." + entry.status);
+				case 4:
+					if (entry.dataSize == null && entry.clazz != null)
+					{
+						String settingsDirectory = jEdit.getSettingsDirectory();
+						if (settingsDirectory == null)
+							return null;
+						String pluginDirectory = MiscUtilities.constructPath(settingsDirectory, "plugins", entry.clazz);
+						File file = new File(pluginDirectory);
+						if (file.exists())
+							entry.dataSize = MiscUtilities.formatFileSize(IOUtilities.fileLength(file));
+						else
+							entry.dataSize = "";
+					}
+					return entry.dataSize;
 				default:
 					throw new Error("Column out of range");
 			}
@@ -377,12 +401,13 @@ public class ManagePanel extends JPanel
 			String systemJarDir = MiscUtilities.constructPath(
 				jEdit.getJEditHome(),"jars");
 			String userJarDir;
-			if(jEdit.getSettingsDirectory() == null)
+			String settingsDirectory = jEdit.getSettingsDirectory();
+			if(settingsDirectory == null)
 				userJarDir = null;
 			else
 			{
 				userJarDir = MiscUtilities.constructPath(
-					jEdit.getSettingsDirectory(),"jars");
+					settingsDirectory,"jars");
 			}
 
 			PluginJAR[] plugins = jEdit.getPluginJARs();
