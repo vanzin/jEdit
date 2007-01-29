@@ -25,6 +25,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
   in your jar folder, all unloaded, try to load the third one,
   the dependency check will try to load JavaSidekick instead of
   Sidekick (Matthieu Casanova)
+
+- Escape char ignored in some edit modes (bug #1630805)
+  (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
