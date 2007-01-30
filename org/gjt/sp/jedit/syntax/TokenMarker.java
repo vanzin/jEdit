@@ -82,6 +82,10 @@ public class TokenMarker
 	//{{{ markTokens() method
 	/**
 	 * Do not call this method directly; call Buffer.markTokens() instead.
+	 *
+	 * @param prevContext the context of the previous line, it can be null
+	 * @param tokenHandler the token handler
+	 * @param line a segment containing the content of the line
 	 */
 	public LineContext markTokens(LineContext prevContext,
 		TokenHandler tokenHandler, Segment line)
@@ -278,6 +282,7 @@ unwind:		while(context.parent != null)
 	private TokenHandler tokenHandler;
 	/** The line from which we will mark the tokens. */
 	private Segment line;
+	/** The context of the current line. */
 	private LineContext context;
 	private KeywordMap keywords;
 	private final Segment pattern = new Segment();
@@ -377,8 +382,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 		{
 			if (null == checkRule.upHashChars)
 			{
-				if ((null != checkRule.upHashChar) &&
-				    (pos + checkRule.upHashChar.length() < line.array.length) &&
+				if ((pos + checkRule.upHashChar.length() < line.array.length) &&
 				    !checkRule.upHashChar.equals(new String(line.array,pos,checkRule.upHashChar.length()).toUpperCase()))
 				{
 					return false;
@@ -393,8 +397,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			}
 		}
 
-		int offset = ((checkRule.action & ParserRule.MARK_PREVIOUS) != 0) ?
-			lastOffset : pos;
+		int offset = (checkRule.action & ParserRule.MARK_PREVIOUS) != 0 ? lastOffset : pos;
 		int posMatch = end ? checkRule.endPosMatch : checkRule.startPosMatch;
 
 		if((posMatch & ParserRule.AT_LINE_START)
