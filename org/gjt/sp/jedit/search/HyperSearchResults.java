@@ -326,8 +326,43 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				throw new IllegalArgumentException("Bad mode: " + mode);
 			}
 
-			((HyperSearchNode)value).goTo(pane);
+			n.goTo(pane);
 		}
+	} //}}}
+
+	//{{{ removeSelectedNode() method
+	private void removeSelectedNode()
+	{
+		TreePath path = resultTree.getSelectionPath();
+		if(path == null)
+			return;
+
+		MutableTreeNode value = (MutableTreeNode)path
+			.getLastPathComponent();
+
+		// Adjust selection so that repeating some removals
+		// behave naturally.
+		TreePath parentPath = path.getParentPath();
+		if(parentPath.getPathCount() > 0)
+		{
+			MutableTreeNode parent = (MutableTreeNode)parentPath
+				.getLastPathComponent();
+			int removingIndex = parent.getIndex(value);
+			int nextIndex = removingIndex + 1;
+			if(nextIndex < parent.getChildCount())
+			{
+				TreeNode next = parent.getChildAt(nextIndex);
+				resultTree.setSelectionPath(
+					parentPath.pathByAddingChild(next));
+			}
+			else
+			{
+				resultTree.setSelectionPath(parentPath);
+			}
+		}
+
+		HyperSearchOperationNode.removeNodeFromCache(value);
+		resultTreeModel.removeNodeFromParent(value);
 	} //}}}
 
 	//}}}
@@ -366,8 +401,9 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	{
 		public void keyPressed(KeyEvent evt)
 		{
-			if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+			switch(evt.getKeyCode())
 			{
+			case KeyEvent.VK_SPACE:
 				goToSelectedNode(M_OPEN);
 
 				// fuck me dead
@@ -380,6 +416,17 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				});
 
 				evt.consume();
+				break;
+			case KeyEvent.VK_ENTER:
+				goToSelectedNode(M_OPEN);
+				evt.consume();
+				break;
+			case KeyEvent.VK_DELETE:
+				removeSelectedNode();
+				evt.consume();
+				break;
+			default:
+				break;
 			}
 		}
 	} //}}}
@@ -404,10 +451,6 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			else
 			{
 				goToSelectedNode(M_OPEN);
-
-				view.toFront();
-				view.requestFocus();
-				view.getTextArea().requestFocus();
 			}
 		} //}}}
 
@@ -477,14 +520,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		public void actionPerformed(ActionEvent evt)
 		{
-			TreePath path = resultTree.getSelectionPath();
-			if(path == null)
-				return;
-
-			MutableTreeNode value = (MutableTreeNode)path
-				.getLastPathComponent();
-			HyperSearchOperationNode.removeNodeFromCache(value);
-			resultTreeModel.removeNodeFromParent(value);
+			removeSelectedNode();
 		}
 	}//}}}
 
@@ -527,7 +563,6 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			SearchDialog.showSearchDialog(view,null,SearchDialog.DIRECTORY);
 		}
 	}//}}}
-	
 
 	//{{{ ExpandChildTreeNodesAction class
 	class ExpandChildTreeNodesAction extends AbstractAction
@@ -570,7 +605,6 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ TreeDisplayAction class
 	class TreeDisplayAction extends AbstractAction
 	{
-		//{{{ actionPerformed method
 		public void actionPerformed(ActionEvent evt)
 		{
 			JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) evt.getSource();
@@ -613,6 +647,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		}
 	}//}}}
 	
+	//{{{ expandAllNodes() method
 	public void expandAllNodes(DefaultMutableTreeNode node)
 	{
 		
@@ -623,7 +658,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				return true;
 			}
 		});
-	}
+	} //}}}
 	
 	//{{{ GoToNodeAction class
 	class GoToNodeAction extends AbstractAction
