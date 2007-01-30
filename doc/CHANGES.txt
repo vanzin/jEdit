@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre10
 
-Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, and Matthieu Casanova 
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -40,6 +41,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 - The plugin manager now shows you the size of the datas stored by
   each plugin that use the new plugin home folder (Matthieu Casanova)
 
+- GeneralOptionPane - new checkbox (restore remote files on startup) 
+  (Alan Ezust).
+  
 }}}
 {{{ API Changes
 

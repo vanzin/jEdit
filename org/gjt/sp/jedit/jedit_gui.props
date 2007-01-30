@@ -1627,6 +1627,7 @@ options.general.sortRecent=Sort recent file list
 options.general.saveCaret=Save caret positions in recent file list
 options.general.persistentMarkers=Save marker positions
 options.general.restore=Restore previously open files on startup
+options.general.restore.remote=... including remote files over VFS
 options.general.restore.cli=... even if file names were specified on the \
 	command line
 options.general.sortBuffers=Sort buffer list (takes effect after restart)

@@ -28,6 +28,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
+import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 
@@ -324,11 +325,22 @@ public class PerspectiveManager
 				autoReloadDialog = value;
 		}
 
+		/**  @return true if the uri points to a remote file */
+		public static boolean skipRemote(String uri) {
+			if (jEdit.getBooleanProperty("restore.remote")) return false;
+			VFS vfs = null;
+			if(MiscUtilities.isURL(uri)) {
+				String protocol = MiscUtilities.getProtocolOfURL(uri);
+				if (protocol.equals("file")) return false;
+			}
+			return true;
+		}
+		
 		public void endElement(String uri, String localName, String name)
 		{
 			if(name.equals("BUFFER"))
 			{
-				if(restoreFiles)
+				if (restoreFiles && !skipRemote(uri))
 				{
 					currentBuffer = jEdit.openFile(null,charData.toString());
 					// if the autoReload attributes are not present, don't set anything

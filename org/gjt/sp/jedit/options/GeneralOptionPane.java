@@ -33,6 +33,23 @@ import org.gjt.sp.jedit.*;
 
 public class GeneralOptionPane extends AbstractOptionPane
 {
+	//{{{ Private members
+	private JComboBox lineSeparator;
+	private JComboBox encoding;
+	private JCheckBox encodingAutodetect;
+	private JComboBox checkModStatus;
+	private JTextField recentFiles;
+	private JCheckBox saveCaret;
+	private JCheckBox sortRecent;
+	private JCheckBox persistentMarkers;
+	private JCheckBox restore;
+	private JCheckBox restoreRemote;
+	private JCheckBox restoreCLI;
+	private JCheckBox sortBuffers;
+	private JCheckBox sortByName;
+	private JCheckBox newKeyboardHandling;
+	//}}}
+	
 	//{{{ GeneralOptionPane constructor
 	public GeneralOptionPane()
 	{
@@ -130,16 +147,25 @@ public class GeneralOptionPane extends AbstractOptionPane
 		/* Session management */
 		restore = new JCheckBox(jEdit.getProperty(
 			"options.general.restore"));
+		
 		restore.setSelected(jEdit.getBooleanProperty("restore"));
 		restore.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent evt)
 			{
 				restoreCLI.setEnabled(restore.isSelected());
+				restoreRemote.setEnabled(restore.isSelected());
 			}
 		});
 
 		addComponent(restore);
+		
+		restoreRemote = new JCheckBox(jEdit.getProperty(
+			"options.general.restore.remote"));
+		restoreRemote.setSelected(jEdit.getBooleanProperty("restore.remote", false));
+		restoreRemote.setEnabled(restore.isSelected());
+		addComponent(restoreRemote);
+		
 		restoreCLI = new JCheckBox(jEdit.getProperty(
 			"options.general.restore.cli"));
 		restoreCLI.setSelected(jEdit.getBooleanProperty("restore.cli"));
@@ -225,23 +251,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 			persistentMarkers.isSelected());
 		jEdit.setBooleanProperty("restore",restore.isSelected());
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
+		jEdit.setBooleanProperty("restore.remote", restoreRemote.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 	} //}}}
 
-	//{{{ Private members
-	private JComboBox lineSeparator;
-	private JComboBox encoding;
-	private JCheckBox encodingAutodetect;
-	private JComboBox checkModStatus;
-	private JTextField recentFiles;
-	private JCheckBox saveCaret;
-	private JCheckBox sortRecent;
-	private JCheckBox persistentMarkers;
-	private JCheckBox restore;
-	private JCheckBox restoreCLI;
-	private JCheckBox sortBuffers;
-	private JCheckBox sortByName;
-	private JCheckBox newKeyboardHandling;
-	//}}}
+
 }
