@@ -9,6 +9,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 - A minor bug of cursor changing when dragging dockable panels
   using non continuous layout (Matthieu Casanova)
 
+- HyperSearch Results does not lose focus on enter (Bug 1260023,
+  Patch 1646058) (Kazutoshi Satoda)
+
 - In the logviewer if the tail checkbox is on,
   the last line was not visible after resizing the panel
   (Matthieu Casanova)
