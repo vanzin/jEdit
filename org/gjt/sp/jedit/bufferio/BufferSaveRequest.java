@@ -156,8 +156,8 @@ public class BufferSaveRequest extends BufferIORequest
 		}
 		catch(UnsupportedCharsetException e)
 		{
+			Log.log(Log.ERROR, this, e, e);
 			String[] pp = { e.getCharsetName() };
-			Log.log(Log.ERROR,this,jEdit.getProperty("ioerror.unsupported-encoding-error",pp));
 			VFSManager.error(view,path,"ioerror.unsupported-encoding-error",pp);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
