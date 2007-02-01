@@ -380,6 +380,7 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
 		Options.SIMPLIFIED_KEY_HANDLING	= jEdit.getBooleanProperty("newkeyhandling");
+		Options.X_AUTODETECT	= jEdit.getBooleanProperty("xAutodetect");
 		//}}}
 
 		//{{{ Initialize server

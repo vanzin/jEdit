@@ -46,6 +46,9 @@ for contributing to this release.
 
 - New popup menu in the plugin manager to remove plugin datas when
   the plugin uses the new plugin api (Matthieu Casanova)
+
+- Option to allow jEdit to autodetect :encoding= properties in the loaded
+  buffer (only in the 10 first lines) (Matthieu Casanova)
 }}}
 {{{ API Changes
 

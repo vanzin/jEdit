@@ -830,7 +830,19 @@ public class MiscUtilities
 
 				String xmlEncoding = getXMLEncoding(new String(
 					_xmlPI,0,offset,"ASCII"));
-				if(xmlEncoding != null)
+
+				if (xmlEncoding == null)
+				{
+
+					if (Options.X_AUTODETECT)
+					{
+						in.reset();
+						String coding = xAutodetect(in);
+						if (coding != null)
+							encoding = coding;
+					}
+				}
+				else
 				{
 					encoding = xmlEncoding;
 					if (buffer != null)
@@ -845,6 +857,28 @@ public class MiscUtilities
 		}
 
 		return new InputStreamReader(in,encoding);
+	} //}}}
+
+	//{{{ getXMLEncoding() method
+	private static String xAutodetect(InputStream in) throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		int i = 0;
+		while (i < 10)
+		{
+			i++;
+			String line = reader.readLine();
+			if (line == null)
+				return null;
+			int pos = line.indexOf(":encoding=");
+			if (pos != -1)
+			{
+				int p2 = line.indexOf(':', pos + 10);
+				String encoding = line.substring(pos + 10, p2);
+				return encoding;
+			}
+		}
+		return null;
 	} //}}}
 
 	//{{{ getXMLEncoding() method

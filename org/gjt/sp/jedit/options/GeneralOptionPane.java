@@ -48,6 +48,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox newKeyboardHandling;
+	private JCheckBox xAutodetect;
 	//}}}
 	
 	//{{{ GeneralOptionPane constructor
@@ -196,7 +197,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 		newKeyboardHandling = new JCheckBox(jEdit.getProperty("options.general.newkeyhandling"));
 		newKeyboardHandling.setSelected(jEdit.getBooleanProperty("newkeyhandling"));
 		addComponent(newKeyboardHandling);
-		
+
+		xAutodetect = new JCheckBox(jEdit.getProperty("options.general.xAutodetect"));
+		xAutodetect.setSelected(jEdit.getBooleanProperty("xAutodetect"));
+		addComponent(xAutodetect);
 
 	} //}}}
 
@@ -246,6 +250,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 		boolean nkh = newKeyboardHandling.isSelected();
 		jEdit.setBooleanProperty("newkeyhandling", nkh);
 		Options.SIMPLIFIED_KEY_HANDLING = nkh;
+		jEdit.setBooleanProperty("xAutodetect", xAutodetect.isSelected());
+		Options.X_AUTODETECT = xAutodetect.isSelected();
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());

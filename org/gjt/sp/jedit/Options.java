@@ -30,4 +30,10 @@ package org.gjt.sp.jedit;
 public class Options
 {
 	public static boolean SIMPLIFIED_KEY_HANDLING;
+
+	/**
+	 * Activate this to activate autodetection of the buffer.
+	 * This is an experimental feature and can fail
+	 */
+	public static boolean X_AUTODETECT;
 }
