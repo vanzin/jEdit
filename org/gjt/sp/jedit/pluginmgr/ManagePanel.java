@@ -23,11 +23,7 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
+import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,23 +37,9 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 
 import java.util.*;
+import java.util.List;
 
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import javax.swing.border.EmptyBorder;
 
@@ -71,6 +53,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.io.FileVFS;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
@@ -93,6 +76,7 @@ public class ManagePanel extends JPanel
 	private final JScrollPane scrollpane;
 	private final PluginTableModel pluginModel;
 	private final PluginManager window;
+	private JPopupMenu popup;
 	//}}}
 	
 	//{{{ ManagePanel constructor
@@ -144,8 +128,9 @@ public class ManagePanel extends JPanel
 
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
-		header.addMouseListener(new HeaderMouseHandler());
-
+		HeaderMouseHandler mouseHandler = new HeaderMouseHandler();
+		header.addMouseListener(mouseHandler);
+		table.addMouseListener(mouseHandler);
 		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
 		add(BorderLayout.CENTER,scrollpane);
@@ -167,6 +152,11 @@ public class ManagePanel extends JPanel
 	{
 		pluginModel.update();
 	} //}}}
+
+	private static File getPluginHome(String clazz, String settingsDirectory)
+	{
+		return new File(MiscUtilities.constructPath(settingsDirectory, "plugins", clazz));
+	}
 
 	//{{{ Inner classes
 
@@ -284,7 +274,7 @@ public class ManagePanel extends JPanel
 				case 3:
 					return jEdit.getProperty("manage-plugins.info.status");
 				case 4:
-					return "Datas";
+					return jEdit.getProperty("manage-plugins.info.datas");
 				default:
 					throw new Error("Column out of range");
 			}
@@ -723,16 +713,72 @@ public class ManagePanel extends JPanel
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
-			switch(table.getTableHeader().columnAtPoint(evt.getPoint()))
+			if (evt.getSource() == table.getTableHeader())
 			{
-				case 1:
-					pluginModel.setSortType(EntryCompare.NAME);
-					break;
-				case 3:
-					pluginModel.setSortType(EntryCompare.STATUS);
-					break;
-				default:
-					break;
+				switch(table.getTableHeader().columnAtPoint(evt.getPoint()))
+				{
+					case 1:
+						pluginModel.setSortType(EntryCompare.NAME);
+						break;
+					case 3:
+						pluginModel.setSortType(EntryCompare.STATUS);
+						break;
+					default:
+						break;
+				}
+			}
+			else
+			{
+				if (GUIUtilities.isPopupTrigger(evt))
+				{
+					if (popup == null)
+					{
+						popup = new JPopupMenu();
+						JMenuItem item = GUIUtilities.loadMenuItem("plugin-manager.cleanup");
+						item.addActionListener(new CleanupActionListener());
+						popup.add(item);
+					}
+					GUIUtilities.showPopupMenu(popup, table, evt.getX(), evt.getY());
+				}
+			}
+		}
+
+		private class CleanupActionListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				int[] ints = table.getSelectedRows();
+				List<String> list = new ArrayList<String>(ints.length);
+				List<Entry> entries = new ArrayList<Entry>(ints.length);
+				for (int i = 0; i < ints.length; i++)
+				{
+					Entry entry = pluginModel.getEntry(ints[i]);
+					if (entry.clazz != null)
+					{
+						list.add(entry.name);
+						entries.add(entry);
+					}
+				}
+
+				String[] strings = list.toArray(new String[list.size()]);
+				int ret = GUIUtilities.listConfirm(ManagePanel.this,
+								   "plugin-manager.cleanup",
+								   null,
+								   strings);
+				if (ret != JOptionPane.OK_OPTION)
+					return;
+
+				String settingsDirectory = jEdit.getSettingsDirectory();
+				for (int i = 0; i < entries.size(); i++)
+				{
+					Entry entry = entries.get(i);
+					String clazz = entry.clazz;
+					File path = getPluginHome(clazz, settingsDirectory);
+					Log.log(Log.NOTICE, this, "Removing datas of plugin " + entry.name + " home="+path);
+					FileVFS.recursiveDelete(path);
+					entry.dataSize = null;
+				}
+				table.repaint();
 			}
 		}
 	} //}}}

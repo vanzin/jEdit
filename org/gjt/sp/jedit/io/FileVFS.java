@@ -151,7 +151,8 @@ public class FileVFS extends VFS
 	 * @param path the directory path to recursive delete
 	 * @return true if successful, else false
 	 */
-	public boolean recursiveDelete(File path) {
+	public static boolean recursiveDelete(File path)
+	{
 	    if( path.exists() ) {
 	      File[] files = path.listFiles();
 	      for(int i=0; i<files.length; i++) {
