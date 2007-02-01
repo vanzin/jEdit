@@ -2237,7 +2237,7 @@ public class jEdit
 				}
 			}
 			else
-				GUIUtilities.centerOnScreen(newView);
+				newView.setLocationRelativeTo(view);
 
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 

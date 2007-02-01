@@ -66,6 +66,10 @@ for contributing to this release.
 
 - New method IOUtilities.fileLength() that compute a file or directory length
   (Matthieu Casanova)
+
+- GUIUtilities.centerOnScreen() method is deprecated, use
+  javax.swing.JWindow#setLocationRelativeTo(java.awt.Component) instead
+  (Matthieu Casanova)
 }}}
 
 }}}

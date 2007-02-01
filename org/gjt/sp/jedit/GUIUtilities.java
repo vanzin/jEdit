@@ -1271,7 +1271,9 @@ public class GUIUtilities
 	 * JDK 1.3 does not have a <code>JWindow.setLocationRelativeTo()</code>
 	 * method.
 	 * @since jEdit 4.2pre3
+	 * @deprecated use {@link javax.swing.JWindow#setLocationRelativeTo(java.awt.Component)}
 	 */
+	@Deprecated
 	public static void centerOnScreen(Window win)
 	{
 		GraphicsDevice gd = GraphicsEnvironment
