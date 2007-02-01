@@ -282,6 +282,9 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 				}
 				if (takeSizesIntoAccount)
 				{
+					// correct cases where
+					// minimum_row_heights[row] <= row_heights[row] <= maximum_row_heights[row]
+					// is not true by clipping to the minimum_row_heights and maximum_row_heights
 					if (minimum_row_heights[r] >= maximum_row_heights[r])
 					{
 						maximum_row_heights[r] = minimum_row_heights[r];
@@ -304,6 +307,9 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 			{
 				if (takeSizesIntoAccount)
 				{
+					// correct cases where
+					// minimum_col_widths[col] <= col_widths[col] <= maximum_col_widths[col]
+					// is not true by clipping to the minimum_col_widths and maximum_col_widths
 					if (minimum_col_widths[c] >= maximum_col_widths[c])
 					{
 						maximum_col_widths[c] = minimum_col_widths[c];
@@ -422,19 +428,18 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 							case MINIMUM:
 								row_height = Math.max(row_height, parent.getComponent(i).getMinimumSize().height);
 								break;
+							
 							case MAXIMUM:
-								row_height = Math.max(row_height, parent.getComponent(i).getMaximumSize().height);
+								row_height = Math.min(row_height, parent.getComponent(i).getMaximumSize().height);
 								break;
+							
 							case PREFERRED:
 								row_height = Math.max(row_height, parent.getComponent(i).getPreferredSize().height);
 								break;
+							
 							default:
-								throw new InternalError("missing case branch for LayoutSize " + which);
+								throw new InternalError("Missing case branch for LayoutSize: " + which);
 						}
-					}
-					else
-					{
-						break;
 					}
 				}
 				h += row_height;
@@ -453,19 +458,18 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 							case MINIMUM:
 								col_width = Math.max(col_width, parent.getComponent(i).getMinimumSize().width);
 								break;
+							
 							case MAXIMUM:
-								col_width = Math.max(col_width, parent.getComponent(i).getMaximumSize().width);
+								col_width = Math.min(col_width, parent.getComponent(i).getMaximumSize().width);
 								break;
+							
 							case PREFERRED:
 								col_width = Math.max(col_width, parent.getComponent(i).getPreferredSize().width);
 								break;
+							
 							default:
-								throw new InternalError("missing case branch for LayoutSize " + which);
+								throw new InternalError("Missing case branch for LayoutSize: " + which);
 						}
-					}
-					else
-					{
-						break;
 					}
 				}
 				w += col_width;
@@ -528,9 +532,12 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 			if (takeSizesIntoAccount)
 			{
 				boolean grow = total_size < free_size;
+				// calculate the size that is available for redistribution
 				free_size = (free_size - total_size) * (grow ? 1 : -1);
 				while (free_size != 0)
 				{
+					// calculate the amount of elements that can be resized without violating
+					// the minimum and maximum sizes and their current cumulated size
 					int modifyableAmount = 0;
 					int modifySize = 0;
 					for (int i = 0 ; i < nelements ; i++)
@@ -543,6 +550,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 						}
 					}
 					boolean checkBounds = true;
+					// if all elements are at their minimum or maximum size, resize all elements
 					if (0 == modifyableAmount)
 					{
 						for (int i = 0 ; i < nelements ; i++)
@@ -552,6 +560,12 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 						checkBounds = false;
 						modifyableAmount = nelements;
 					}
+					// to prevent an endless loop if the container gets resized to a very small amount
+					if (modifySize == 0)
+					{
+						break;
+					}
+					// resize the elements
 					if (free_size < modifyableAmount)
 					{
 						for (int i = 0 ; i < nelements ; i++)
