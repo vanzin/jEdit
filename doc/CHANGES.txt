@@ -64,7 +64,7 @@ for contributing to this release.
 
 - New static method EditPlugin.getPluginHome(Class<? extends EditPlugin>)
   that will return the path where a plugin should store it's data and
-  remplace the EditPlugin.getPluginHome() introduced in 4.3pre9.
+  replaces the EditPlugin.getPluginHome() introduced in 4.3pre9.
   It can be null if running without settings (Matthieu Casanova)
 
 - New method IOUtilities.fileLength() that compute a file or directory length
