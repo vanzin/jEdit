@@ -4,14 +4,14 @@
 	<description>
 		This is an ant build.xml file for building the LatestVersion plugin for jEdit.
 	</description>
-	<property file="../../build.properties" />
+	
 	<property name="jedit.install.dir"
 			  location="../../build" />
 	<property name="docs-proc.target"
 			  value="none" />
-    <import file="${build-support}/plugin-build.xml" />
-    
-    <selector id="packageFiles">
-        <filename name="LatestVersion.html" />
-    </selector>
+	<import file="../../build-support/plugin-build.xml" />
+	
+	<selector id="packageFiles">
+		<filename name="LatestVersion.html" />
+	</selector>
 </project>
