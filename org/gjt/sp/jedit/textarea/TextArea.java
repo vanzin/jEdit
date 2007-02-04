@@ -1249,7 +1249,7 @@ public class TextArea extends JComponent
 	//{{{ getLineStartOffset() method
 	/**
 	 * Returns the start offset of the specified line.
-	 * @param line The line
+	 * @param line The line (physical line)
 	 * @return The start offset of the specified line, or -1 if the line is
 	 * invalid
 	 */
@@ -1261,7 +1261,7 @@ public class TextArea extends JComponent
 	//{{{ getLineEndOffset() method
 	/**
 	 * Returns the end offset of the specified line.
-	 * @param line The line
+	 * @param line The line (physical line)
 	 * @return The end offset of the specified line, or -1 if the line is
 	 * invalid.
 	 */
@@ -1319,7 +1319,8 @@ public class TextArea extends JComponent
 	/**
 	 * Copies the text on the specified line into a segment. If the line
 	 * is invalid, the segment will contain a null string.
-	 * @param lineIndex The line
+	 * @param lineIndex The line (physical line)
+	 * @param the segment to which the datas will be stored
 	 */
 	public final void getLineText(int lineIndex, Segment segment)
 	{
@@ -1338,6 +1339,7 @@ public class TextArea extends JComponent
 	//{{{ setText() method
 	/**
 	 * Sets the entire text of this text area.
+	 * @param text the nex content of the buffer
 	 */
 	public void setText(String text)
 	{
