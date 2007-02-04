@@ -32,6 +32,7 @@ for contributing to this release.
 
 - Escape char ignored in some edit modes (bug #1630805)
   (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
@@ -49,6 +50,10 @@ for contributing to this release.
 
 - Option to allow jEdit to autodetect :encoding= properties in the loaded
   buffer (only in the 10 first lines) (Matthieu Casanova)
+
+- New LayoutManager ExtendedGridLayout added. For further explanations see
+  its JavaDoc. (Björn "Vampire" Kautler)
+
 }}}
 {{{ API Changes
 
@@ -73,6 +78,11 @@ for contributing to this release.
 - GUIUtilities.centerOnScreen() method is deprecated, use
   javax.swing.JWindow#setLocationRelativeTo(java.awt.Component) instead
   (Matthieu Casanova)
+
+- plugin.className.files added as property for plugins. This property specifies
+  external non-JAR files, e. g. libraries, which are in the jars directory.
+  (Björn "Vampire" Kautler)
+
 }}}
 
 }}}

@@ -153,10 +153,11 @@ public class ManagePanel extends JPanel
 		pluginModel.update();
 	} //}}}
 
+	//{{{ getPluginHome() method
 	private static File getPluginHome(String clazz, String settingsDirectory)
 	{
 		return new File(MiscUtilities.constructPath(settingsDirectory, "plugins", clazz));
-	}
+	} //}}}
 
 	//{{{ Inner classes
 
@@ -218,6 +219,20 @@ public class ManagePanel extends JPanel
 					String directory = MiscUtilities.getParentOfPath(this.jar);
 
 					StringTokenizer st = new StringTokenizer(jarsProp);
+					while(st.hasMoreElements())
+					{
+						jars.add(MiscUtilities.constructPath(
+							directory,st.nextToken()));
+					}
+				}
+
+				String filesProp = jEdit.getProperty("plugin."+clazz+".files");
+
+				if(filesProp != null)
+				{
+					String directory = MiscUtilities.getParentOfPath(this.jar);
+
+					StringTokenizer st = new StringTokenizer(filesProp);
 					while(st.hasMoreElements())
 					{
 						jars.add(MiscUtilities.constructPath(

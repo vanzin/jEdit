@@ -57,6 +57,11 @@ import org.gjt.sp.jedit.menu.EnhancedMenu;
  * bundles external JAR files. Contains a whitespace-separated list of JAR
  * file names. Without this property, the plugin manager will leave behind the
  * external JAR files when removing the plugin.</li>
+ * <li><code>plugin.<i>className</i>.files</code> - only needed if your plugin
+ * bundles external files like libraries which MUST reside in the local
+ * filesystem. Contains a whitespace-separated list of file names.
+ * Without this property, the plugin manager will leave behind the
+ * external files when removing the plugin.</li>
  * <li><code>plugin.<i>className</i>.description</code> - the short description
  * associated with the plugin.  The short description is used by the Plugin
  * Manager and on the list pages on Plugin Central. </li>
@@ -306,6 +311,7 @@ public abstract class EditPlugin
 	 */
 	public void stop() {} //}}}
 
+	//{{{ usePluginHome() method
 	/**
 	 * Returns true if the plugin uses the standard plugin home
 	 *
@@ -316,7 +322,7 @@ public abstract class EditPlugin
 	public boolean usePluginHome()
 	{
 		return false;
-	}
+	} //}}}
 
 	//{{{ getPluginHome() method
 	/**
