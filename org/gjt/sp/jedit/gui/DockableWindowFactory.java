@@ -51,7 +51,7 @@ import bsh.UtilEvalError;
 //}}}
 
 /**
- * This class loads <code>dockable.xml</code> files and manages creation
+ * Loads <code>dockable.xml</code> files and manages creation
  * of new dockable windows.
  *
  * @see DockableWindowManager

@@ -32,7 +32,7 @@ import org.gjt.sp.jedit.*;
 //}}}
 
 /**
- * Text area with a history.
+ * Controller (manager of models) for HistoryTextArea.
  * @author Slava Pestov
  * @version $Id$
  */

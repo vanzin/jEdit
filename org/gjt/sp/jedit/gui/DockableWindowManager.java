@@ -55,14 +55,16 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * The <code>DockableWindowManager</code> keeps track of dockable windows.
- * Each {@link org.gjt.sp.jedit.View} has an instance of this class.<p>
+ * <p>Keeps track of all dockable windows for a single View, and provides
+ * an API for getting/showing/hiding them. </p>
+ * 
+ * <p>Each {@link org.gjt.sp.jedit.View} has an instance of this class.</p>
  *
- * <b>dockables.xml:</b><p>
+ * <p><b>dockables.xml:</b></p>
  *
- * Dockable window definitions are read from <code>dockables.xml</code> files
+ * <p>Dockable window definitions are read from <code>dockables.xml</code> files
  * contained inside plugin JARs. A dockable definition file has the following
- * form:
+ * form: </p>
  *
  * <pre>&lt;?xml version="1.0"?&gt;
  *&lt;!DOCTYPE DOCKABLES SYSTEM "dockables.dtd"&gt;
@@ -72,14 +74,14 @@ import org.gjt.sp.util.Log;
  *    &lt;/DOCKABLE&gt;
  *&lt;/DOCKABLES&gt;</pre>
  *
- * More than one <code>&lt;DOCKABLE&gt;<code> tag may be present. The code that
+ * <p>More than one <code>&lt;DOCKABLE&gt;<code> tag may be present. The code that
  * creates the dockable can reference any BeanShell built-in variable
  * (see {@link org.gjt.sp.jedit.BeanShell}), along with a variable
  * <code>position</code> whose value is one of
  * {@link #FLOATING}, {@link #TOP}, {@link #LEFT}, {@link #BOTTOM},
- * and {@link #RIGHT}.<p>
+ * and {@link #RIGHT}. </p>
  *
- * The following properties must be defined for each dockable window:
+ * <p>The following properties must be defined for each dockable window: </p>
  *
  * <ul>
  * <li><code><i>dockableName</i>.title</code> - the string to show on the dockable
@@ -103,22 +105,22 @@ import org.gjt.sp.util.Log;
  * Note that only the first action needs a <code>label</code> property, the
  * rest have automatically-generated labels.
  *
- * <b>Implementation details:</b><p>
+ * <p> <b>Implementation details:</b></p>
  *
- * When an instance of this class is initialized by the {@link org.gjt.sp.jedit.View}
+ * <p> When an instance of this class is initialized by the {@link org.gjt.sp.jedit.View}
  * class, it
  * iterates through the list of registered dockable windows (from jEdit itself,
  * and any loaded plugins) and
  * examines options supplied by the user in the <b>Global
  * Options</b> dialog box. Any plugins designated for one of the
- * four docking positions are displayed.<p>
+ * four docking positions are displayed.</p>
  *
- * To create an instance of a dockable window, the <code>DockableWindowManager</code>
+ * <p> To create an instance of a dockable window, the <code>DockableWindowManager</code>
  * finds and executes the BeanShell code extracted from the appropriate
  * <code>dockables.xml</code> file. This code will typically consist of a call
  * to the constructor of the dockable window component. The result of the
  * BeanShell expression, typically a newly constructed component, is placed
- * in a window managed by this class.
+ * in a window managed by this class. </p>
  *
  * @see org.gjt.sp.jedit.View#getDockableWindowManager()
  *
