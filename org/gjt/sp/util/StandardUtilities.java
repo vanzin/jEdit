@@ -341,7 +341,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 	//{{{ StringCompare class
 	/**
-	 * Compares strings.
+	 * Compares objects as strings.
 	 */
 	public static class StringCompare implements Comparator
 		{

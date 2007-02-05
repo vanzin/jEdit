@@ -33,21 +33,19 @@ import java.util.Set;
 
 import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
 
-/**
-  * The {@code ExtendedGridLayout} class is a layout manager
-  * that lays out a container's components in a rectangular grid
-  * with variable cell sizes that supports colspans and rowspans.
+/** A layout manager that places components in a rectangular grid
+  * with variable cell sizes to support colspans and rowspans.
   * <p>
-  * The container is divided into rectangles, and one component is placed
+  * The container is divided into rectangles, and each component is placed
   * in a rectangular space defined by its colspan and rowspan.
   * Each row is as large as the largest component in
   * that row, and each column is as wide as the widest component in
-  * that column.
+  * that column. </p>
   * <p>
-  * This behavior is basically the same as in
+  * This behavior is similar to 
   * <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/GridLayout.html">{@code java.awt.GridLayout}</a>
-  * but with different row heights and
-  * column widths for each row/column.
+  * but it supports different row heights and
+  * column widths for each row/column. </p>
   * <p>
   * For example, the following is a Dialog that lays out ten buttons
   * exactly the same as in the example of the JavaDoc of
@@ -106,23 +104,23 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * moved rightside. If a rowspan hits a colspan, the colspan ends and the
   * rowspan takes precedence.
   * <p>
-  * Components for which {@code isVisible() == false} are ignored. With this,
-  * components can be replaced in the grid at runtime if you add a component
-  * that is visible and next to it a component that is invisible. If you then
-  * make the visible component invisible and the invisible one visible, the
-  * component gets replaced.
+  * Components for which {@code isVisible() == false} are ignored. Because
+  * of this, components can be replaced "in-place" by adding two components next to
+  * each other, with different <tt>isVisible()</tt> values, and toggling the 
+  * <tt>setVisible()</tt> values of both when we wish to swap the currently
+  * visible component with the one that is hidden. </p>
+  *
   * <p>
-  * If you want to preserve free space without any component in the grid,
-  * use a <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/Box.Filler.html">{@code javax.swing.Box.Filler}</a>
-  * as component if the free space is within a row, or just don't add components
-  * if the free space should be at the end of a row.
+  * If you want to reserve free space in a row inbetween components,  
+  * add a <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/Box.Filler.html">{@code javax.swing.Box.Filler}</a>
+  * to the layout. </p>
   * <p>
-  * If a row is higher, or a column is wider than the maximumSize of a component
+  * If a row is taller, or a column is wider than the <tt>maximumSize</tt> of a component,
   * the component is resized to its maximum size and aligned according to its
-  * alignmentX and alignmentY values.
+  * <tt>alignmentX</tt> and <tt>alignmentY</tt> values. </p>
   * <p>
   * One instance of this class can be used to layout multiple
-  * containers at the same time.
+  * containers at the same time. </p>
   *
   * @author Björn "Vampire" Kautler
   * @version 1.0

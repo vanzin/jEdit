@@ -98,7 +98,7 @@ public class MiscUtilities
 
 	//{{{ canonPath() method
 	/**
-	 * Returns the canonical form of the specified path name. Currently
+	 * @return the canonical form of the specified path name. Currently
 	 * only expands a leading <code>~</code>. <b>For local path names
 	 * only.</b>
 	 * @param path The path name
@@ -1002,7 +1002,7 @@ public class MiscUtilities
 	 * Returns the number of leading white space characters in the
 	 * specified string.
 	 * @param str The string
-	 * @deprecated use {@link StandardUtilities#getLeadingWhiteSpace(String)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#getLeadingWhiteSpace(String)}
 	 */
 	@Deprecated
 	public static int getLeadingWhiteSpace(String str)
@@ -1016,7 +1016,7 @@ public class MiscUtilities
 	 * specified string.
 	 * @param str The string
 	 * @since jEdit 2.5pre5
-	 * @deprecated use {@link StandardUtilities#getTrailingWhiteSpace(String)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#getTrailingWhiteSpace(String)}
 	 */
 	@Deprecated
 	public static int getTrailingWhiteSpace(String str)
@@ -1030,7 +1030,7 @@ public class MiscUtilities
 	 * string.
 	 * @param str The string
 	 * @param tabSize The tab size
-	 * @deprecated use {@link StandardUtilities#getLeadingWhiteSpace(String)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#getLeadingWhiteSpace(String)}
 	 */
 	@Deprecated
 	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
@@ -1046,7 +1046,7 @@ public class MiscUtilities
 	 * @param seg The segment
 	 * @param tabSize The tab size
 	 * @since jEdit 4.1pre1
-	 * @deprecated use {@link StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
 	 */
 	@Deprecated
 	public static int getVirtualWidth(Segment seg, int tabSize)
@@ -1069,7 +1069,7 @@ public class MiscUtilities
 	 * @return -1 if the column is out of bounds
 	 *
 	 * @since jEdit 4.1pre1
-	 * @deprecated use {@link StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#getVirtualWidth(javax.swing.text.Segment, int)}
 	 */
 	@Deprecated
 	public static int getOffsetOfVirtualColumn(Segment seg, int tabSize,
@@ -1091,7 +1091,7 @@ public class MiscUtilities
 	 *
 	 * @param len The length
 	 * @param tabSize The tab size, or 0 if tabs are not to be used
-	 * @deprecated use {@link StandardUtilities#createWhiteSpace(int, int)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#createWhiteSpace(int, int)}
 	 */
 	@Deprecated
 	public static String createWhiteSpace(int len, int tabSize)
@@ -1114,7 +1114,7 @@ public class MiscUtilities
 	 * @param tabSize The tab size, or 0 if tabs are not to be used
 	 * @param start The start offset, for tab alignment
 	 * @since jEdit 4.2pre1
-	 * @deprecated use {@link StandardUtilities#createWhiteSpace(int, int, int)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#createWhiteSpace(int, int, int)}
 	 */
 	@Deprecated
 	public static String createWhiteSpace(int len, int tabSize, int start)
@@ -1128,7 +1128,7 @@ public class MiscUtilities
 	 *
 	 * ? becomes ., * becomes .*, {aa,bb} becomes (aa|bb).
 	 * @param glob The glob pattern
-	 * @deprecated Use {@link StandardUtilities#globToRE(String)}.
+	 * @deprecated Use {@link org.gjt.sp.util.StandardUtilities#globToRE(String)}.
 	 */
 	@Deprecated
 	public static String globToRE(String glob)
@@ -1245,7 +1245,7 @@ public class MiscUtilities
 	 * @return negative If str1 &lt; str2, 0 if both are the same,
 	 * positive if str1 &gt; str2
 	 * @since jEdit 4.0pre1
-	 * @deprecated use {@link StandardUtilities#compareStrings(String, String, boolean)}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#compareStrings(String, String, boolean)}
 	 */
 	@Deprecated
 	public static int compareStrings(String str1, String str2, boolean ignoreCase)
@@ -1260,7 +1260,7 @@ public class MiscUtilities
 	@Deprecated
 	public static boolean stringsEqual(String s1, String s2)
 	{
-		return StandardUtilities.objectsEqual(s1,s2);
+		return org.gjt.sp.util.StandardUtilities.objectsEqual(s1,s2);
 	} //}}}
 
 	//{{{ objectsEqual() method
@@ -1477,7 +1477,7 @@ loop:		for(;;)
 	//{{{ StringCompare class
 	/**
 	 * Compares strings.
-	 * @deprecated use {@link org.gjt.sp.jedit.StandardUtilities.StringCompare}
+	 * @deprecated use {@link org.gjt.sp.jedit.util.StandardUtilities#StringCompare}
 	 */
 	@Deprecated
 	public static class StringCompare implements Compare

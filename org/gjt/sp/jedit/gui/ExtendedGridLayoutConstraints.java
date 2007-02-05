@@ -18,8 +18,7 @@ package org.gjt.sp.jedit.gui;
 import java.awt.Component;
 
 /**
- * The {@code ExtendedGridLayoutConstraints}
- * class specifies constraints for components
+ * Specifies constraints for components
  * that are laid out using the {@code ExtendedGridLayout} class.
  *
  * @version 1.0
