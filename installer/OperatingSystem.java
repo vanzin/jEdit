@@ -186,7 +186,7 @@ public abstract class OperatingSystem
 					+ name.toLowerCase() + ".jar";
 
 				out.write("-classpath \"" + getExtraClassPath()
-					+ jar + "\" org.gjt.sp.jedit.jEdit -reuseview $@\n");
+					+ jar + "\" org.gjt.sp.jedit.jEdit -reuseview \"$@\"\n");
 
 				out.close();
 
