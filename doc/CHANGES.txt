@@ -30,6 +30,9 @@ Nicholas O'Leary for contributing to this release.
   the dependency check will try to load JavaSidekick instead of
   Sidekick (Matthieu Casanova)
 
+- VFSBrowser.filesActivated() - passed proper View to jEdit.openFile()
+  from FSB open action (Alan Ezust).
+  
 - Escape char ignored in some edit modes (bug #1630805)
   (Matthieu Casanova)
 
