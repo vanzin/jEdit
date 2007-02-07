@@ -966,7 +966,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					props.put(JEditBuffer.ENCODING,currentEncoding);
 					props.put(Buffer.ENCODING_AUTODETECT,
 						  Boolean.valueOf(autoDetectEncoding));
-					_buffer = jEdit.openFile(null,null,
+					_buffer = jEdit.openFile(view, null,
 						file.getPath(),false,props);
 				}
 				else if(doubleClickClose && canDoubleClickClose
