@@ -1,5 +1,4 @@
-/* {{{ StringList.java - a List of Strings
- *  with split() and join() methods
+/* {{{ StringList.java - a List of Strings with split() and join() methods
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -58,7 +57,9 @@ public class StringList extends ArrayList<String>
 
 	// {{{ split()
 	/**
-	 * Splits a string on a delimiter, returning a StringList.
+	 * @param orig the original string
+	 * @param delim a delimiter to use for splitting
+	 * @return a new StringList containing the split strings.
 	 */
 	public static StringList split(String orig, Object delim)
 	{
@@ -70,6 +71,8 @@ public class StringList extends ArrayList<String>
 	// {{{ toString()
 	/**
 	 * Joins each string in the list with a newline.
+	 * @return a joined string representation of this, 
+	 * with the newline (\n) as delimiter. 
 	 */
 	public String toString()
 	{
@@ -77,7 +80,9 @@ public class StringList extends ArrayList<String>
 	}  // }}}
 
 	// {{{ toArray()
-	public String[] toArray() {
+	/** @return an array of String */
+	public String[] toArray() 
+	{
 		int siz = size();
 		String[] result = new String[siz];
 		System.arraycopy(super.toArray(), 0, result, 0, siz);
@@ -107,7 +112,8 @@ public class StringList extends ArrayList<String>
 	 * @return a single string with each element in arr converted to a string and concatenated,
 	 * separated by delim.
 	 */
-	public static String join(Object[] arr, String delim) {
+	public static String join(Object[] arr, String delim) 
+	{
 		StringList sl = new StringList();
 		sl.addAll(arr);
 		return sl.join(delim);
@@ -116,10 +122,10 @@ public class StringList extends ArrayList<String>
 
 	/**
 	 * Non-static version, that joins "this" StringList.
-	 * @param delim
-	 * @return
+	 * @param delim the delimiter
+	 * @return a joined string with delim inbetween each element
 	 */
-	public String join(String delim)
+	public String join(String delim) 
 	{
 		int s = size();
 		if (s < 1)

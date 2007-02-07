@@ -1,5 +1,5 @@
 <!-- jEdit buffer-local properties: -->
-<!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
+<!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=0: -->
 <!-- :xml.root=users-guide.xml: -->
 
 <chapter id="customizing"><title>Customizing jEdit</title>
@@ -226,12 +226,23 @@
    in mode files. To find out how to edit mode files directly, see
    <xref linkend="writing-modes-part" />.
   </para>
-  </sect2><sect2 id="general-pane"><title>The General Pane</title>
+  </sect2>
+  <sect2 id="encodings-pane"><title>The Encodings Pane</title>
+  <para>
+    While jEdit allows you to edit files in a variety of different encodings, 
+    the average user only switches between 2 or 3. In other parts of jEdit,
+    where the list of encodings are listed (such as the buffer options), it may be desirable to display only a subset of encodings, those that are in common use. The Encodings option pane allows the user to select the subset of supported encodings to display in an encoding list combo box.
+    </para>
+  </sect2>
+  <sect2 id="general-pane"><title>The General Pane</title>
   <para>
    The <guibutton>General</guibutton> pane contains various
    miscellaneous settings, such as the default line separator and file encoding, the number of recent files to remember,
-   if the buffer list should be sorted, and so on.
-  </para>
+   if the buffer list should be sorted, and so on. Most of these options are self-explanatory, but the <emphasis role="bold">simplified keyboard handling</emphasis> option deserves a bit of explanation. Basically, this is a newer keyboard handling mode which is not compatible with JDK 1.4, and behaves better under Linux than the standard keyboard handling. If you find that some of your keys are not being registered properly, it is worthwhile to try this option. When all of the keyboard handling bugs are fixed under all platforms, we will remove one of them and the other will disappear.
+   </para>
+
+   <indexterm><primary>keyboard handling</primary><secondary>simplified</secondary></indexterm>
+  
   </sect2><sect2 id="gutter-pane"><title>The Gutter Pane</title>
   <para>
    The <guibutton>Gutter</guibutton> option pane contains settings to
