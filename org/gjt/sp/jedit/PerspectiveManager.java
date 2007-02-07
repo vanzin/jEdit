@@ -329,9 +329,9 @@ public class PerspectiveManager
 			if (jEdit.getBooleanProperty("restore.remote")) return false;
 			if(MiscUtilities.isURL(uri)) {
 				String protocol = MiscUtilities.getProtocolOfURL(uri);
-				if (protocol.equals("file")) return false;
+				if (!protocol.equals("file")) return true;
 			}
-			return true;
+			return false;
 		}
 		
 		public void endElement(String uri, String localName, String name)
