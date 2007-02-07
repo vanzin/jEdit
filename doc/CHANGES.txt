@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre10
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, and Matthieu Casanova 
-for contributing to this release.
+Nicholas O'Leary for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -32,6 +32,9 @@ for contributing to this release.
 
 - Escape char ignored in some edit modes (bug #1630805)
   (Matthieu Casanova)
+
+- Bug #1649695: jEdit shell script doesn't handle spaces in filenames
+  (Nicholas O'Leary)
 
 }}}
 {{{ Miscellaneous
