@@ -83,10 +83,11 @@ import org.gjt.sp.util.Log;
  * <li>{@link #confirm(Component,String,Object[],int,int)}</li>
  * <li>{@link #error(Component,String,Object[])}</li>
  * <li>{@link #message(Component,String,Object[])}</li>
- * <li>{@link #showPopupMenu(JPopupMenu,Component,int,int)}</li>
+
  * <li>{@link #showVFSFileDialog(View,String,int,boolean)}</li>
  * <li>{@link #loadGeometry(Window,String)}</li>
  * <li>{@link #saveGeometry(Window,String)}</li>
+ * <li>{@link #showPopupMenu(JPopupMenu,Component,int,int)}</li> 
  * </ul>
  *
  * @author Slava Pestov
@@ -1399,6 +1400,9 @@ public class GUIUtilities
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
 	 * @since jEdit 4.0pre1
+	 * @deprecated - use {@link javax.swing.JComponent#setComponentPopupMenu()}, 
+	 * which works better and is simpler to use: you don't have to write the code to 
+	 * show/hide popups in response to mouse events anymore.
 	 */
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y)

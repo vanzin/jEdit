@@ -1307,8 +1307,8 @@ public class TextArea extends JComponent
 	//{{{ getLineText() method
 	/**
 	 * Returns the text on the specified line.
-	 * @param lineIndex The line
-	 * @return The text, or null if the line is invalid
+	 * @param lineIndex the line number
+	 * @return The text, or null if the lineIndex is invalid
 	 */
 	public final String getLineText(int lineIndex)
 	{
@@ -1317,10 +1317,10 @@ public class TextArea extends JComponent
 
 	//{{{ getLineText() method
 	/**
-	 * Copies the text on the specified line into a segment. If the line
+	 * Copies the text on the specified line into a Segment. If lineIndex
 	 * is invalid, the segment will contain a null string.
-	 * @param lineIndex The line (physical line)
-	 * @param the segment to which the datas will be stored
+	 * @param lineIndex The line number (physical line)
+	 * @param segment the segment into which the datas will be stored.
 	 */
 	public final void getLineText(int lineIndex, Segment segment)
 	{

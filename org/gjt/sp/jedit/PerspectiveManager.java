@@ -338,7 +338,7 @@ public class PerspectiveManager
 		{
 			if(name.equals("BUFFER"))
 			{
-				if (restoreFiles && !skipRemote(uri))
+				if (restoreFiles && !skipRemote(charData.toString()))
 				{
 					currentBuffer = jEdit.openFile(null,charData.toString());
 					// if the autoReload attributes are not present, don't set anything
