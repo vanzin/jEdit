@@ -73,7 +73,7 @@
 
     <!-- default compiler flags -->
     <property name="compiler.debug"         value="off" />
-    <property name="compiler.debuglevel"    value="lines,source" />
+    <property name="compiler.debuglevel"    value="lines,vars,source" />
     <property name="compiler.optimize"      value="off" />
     <property name="compiler.deprecation"   value="off" />
     <property name="compiler.verbose"       value="off" />
