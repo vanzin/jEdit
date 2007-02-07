@@ -237,8 +237,10 @@
   <sect2 id="general-pane"><title>The General Pane</title>
   <para>
    The <guibutton>General</guibutton> pane contains various
-   miscellaneous settings, such as the default line separator and file encoding, the number of recent files to remember,
-   if the buffer list should be sorted, and so on. Most of these options are self-explanatory, but the <emphasis role="bold">simplified keyboard handling</emphasis> option deserves a bit of explanation. Basically, this is a newer keyboard handling mode which is not compatible with JDK 1.4, and behaves better under Linux than the standard keyboard handling. If you find that some of your keys are not being registered properly, it is worthwhile to try this option. When all of the keyboard handling bugs are fixed under all platforms, we will remove one of them and the other will disappear.
+   settings, such as the default line separator and file encoding, the number of recent files to remember,
+   if the buffer list should be sorted, and so on. </para>
+
+   <para> Most of these options are self-explanatory, but the <emphasis role="bold">simplified keyboard handling</emphasis> option deserves a bit of explanation. This is a newer keyboard handling mode which is not compatible with JDK 1.4, and behaves better under Linux than the standard keyboard handling. If you find that some of your keys are not being registered properly, it is worthwhile to try this option. If you are using Windows, probably not. When all of the keyboard handling bugs are fixed under all platforms, we will remove one of the keyboard handling modes and make the other jEdit's default handling mode.
    </para>
 
    <indexterm><primary>keyboard handling</primary><secondary>simplified</secondary></indexterm>
