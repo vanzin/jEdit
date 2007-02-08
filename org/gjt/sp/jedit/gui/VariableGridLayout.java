@@ -430,7 +430,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 								break;
 							
 							case MAXIMUM:
-								row_height = Math.min(row_height, parent.getComponent(i).getMaximumSize().height);
+								row_height = Math.max(row_height, parent.getComponent(i).getMaximumSize().height);
 								break;
 							
 							case PREFERRED:
@@ -460,7 +460,7 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 								break;
 							
 							case MAXIMUM:
-								col_width = Math.min(col_width, parent.getComponent(i).getMaximumSize().width);
+								col_width = Math.max(col_width, parent.getComponent(i).getMaximumSize().width);
 								break;
 							
 							case PREFERRED:
