@@ -830,6 +830,11 @@ public class EditPane extends JPanel implements EBComponent
 			"view.joinNonWordChars"));
 
 		textArea.propertiesChanged();
+		
+		if (bufferSwitcher != null) {
+			bufferSwitcher.setMaximumRowCount(jEdit.getIntegerProperty(
+				"bufferSwitcher.maxRowCount",10));
+		}
 	} //}}}
 
 	//{{{ loadBufferSwitcher() method

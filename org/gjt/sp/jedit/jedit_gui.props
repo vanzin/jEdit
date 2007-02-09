@@ -1953,6 +1953,7 @@ options.view.showFullPath=Show full path of buffer in title bar
 options.view.showSearchbar=Always show search bar
 options.view.beepOnSearchAutoWrap=Beep when searching automatically wraps
 options.view.showBufferSwitcher=Show buffer switcher
+options.view.bufferSwitcherMaxRowsCount=Visible rows in buffer switcher:
 #}}}
 
 #{{{ File System Browser panes

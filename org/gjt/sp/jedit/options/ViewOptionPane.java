@@ -109,6 +109,14 @@ public class ViewOptionPane extends AbstractOptionPane
 		showBufferSwitcher.setSelected(jEdit.getBooleanProperty(
 			"view.showBufferSwitcher"));
 		addComponent(showBufferSwitcher);
+
+
+		/* Buffer switcher max row count */
+		bufferSwitcherMaxRowCount = new JTextField(jEdit.getProperty("bufferSwitcher.maxRowCount"));
+		addComponent(jEdit.getProperty("options.view.bufferSwitcherMaxRowsCount"),
+			bufferSwitcherMaxRowCount);
+
+
 	} //}}}
 
 	//{{{ _save() method
@@ -128,6 +136,8 @@ public class ViewOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.showBufferSwitcher",
 			showBufferSwitcher.isSelected());
+		jEdit.setProperty("bufferSwitcher.maxRowCount",
+			bufferSwitcherMaxRowCount.getText());
 	} //}}}
 
 	//{{{ Private members
@@ -138,6 +148,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	private JCheckBox showSearchbar;
 	private JCheckBox beepOnSearchAutoWrap;
 	private JCheckBox showBufferSwitcher;
+	private JTextField bufferSwitcherMaxRowCount;
 	//}}}
 
 	//{{{ ActionHandler class
