@@ -230,8 +230,9 @@
   <sect2 id="encodings-pane"><title>The Encodings Pane</title>
   <para>
     While jEdit allows you to edit files in a variety of different encodings, 
-    the average user only switches between 2 or 3. In other parts of jEdit,
-    where the list of encodings are listed (such as the buffer options), it may be desirable to display only a subset of encodings, those that are in common use. The Encodings option pane allows the user to select the subset of supported encodings to display in an encoding list combo box.
+    the average user switches between only 2 or 3. In other parts of jEdit,
+    where the list of encodings is displayed in a combobox (such as the buffer options) or a menu (such as <guimenuitem>File - Reload with Encoding</guimenuitem> submenu)
+    it may be desirable to display only a subset of available encodings, those that are in common local use. The Encodings option pane allows the user to select the subset of supported encodings to display in other GUI components that list all of the encodings.
     </para>
   </sect2>
   <sect2 id="general-pane"><title>The General Pane</title>
@@ -410,6 +411,9 @@
     <title> The jEdit properties file </title> 
     <para> The jEdit <literal>properties</literal> file uses the Java properties syntax to store key/value pairs. All of the values are stored as strings, but are interpreted as other types (such as integer or boolean) by plugins at runtime. 
     </para>  
+    
+    <para> Editing and saving this file while jEdit is running means that until you restart jEdit again, all other changed settings will be lost.
+    </para>
     </sect2>
  </sect1>
  

@@ -44,3 +44,8 @@
 ### set this to your local FOP install directory.
 ### (the above three properties are needed also)
 #fop.dir=C:\\Programme\\FOP
+
+# debug settings
+build.debug=true
+build.debuglevel=lines,vars,source
+

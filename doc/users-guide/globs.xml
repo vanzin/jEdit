@@ -7,9 +7,7 @@
   jEdit uses glob patterns similar to those in the various
   Unix shells to implement file name filters in the file system browser.
   Glob patterns resemble regular expressions somewhat,
-  but have a much simpler
-  syntax. The following character sequences have special meaning within a glob
-  pattern:
+  but have a much simpler syntax. The following character sequences have special meaning within a glob pattern:
  </para>
  <itemizedlist>
   <listitem><para><literal>?</literal> matches any one character</para></listitem>
@@ -33,11 +31,13 @@
   range <replaceable>a</replaceable> to <replaceable>z</replaceable>, inclusive.
   A leading or trailing dash will be interpreted literally</para></listitem>
  </itemizedlist>
+
  <para>
-  In addition to the above, a number of java.util.regex <quote>character class
-  metacharacters</quote> may be used, but their usefulness is limited since the regex quantifier metacharacters (asterisk, questionmark, and curly brackets) are redefined to mean something else in glob language.
+  Since we use <literal>java.util.regex</literal> patterns to implement globs, this means that in addition to the above, a number of <quote>character class
+  metacharacters</quote> may be used. Keep in mind, their usefulness is limited since the regex quantifier metacharacters (asterisk, questionmark, and curly brackets) are redefined to mean something else in filename glob language.
 </para>  
- <itemizedlist>
+ 
+  <itemizedlist>
   <listitem><para><literal>\w</literal> matches any alphanumeric
   character</para></listitem>
   <listitem><para><literal>\s</literal> matches a space or horizontal tab</para></listitem>

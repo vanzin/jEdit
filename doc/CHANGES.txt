@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre10
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, and Matthieu Casanova 
-Nicholas O'Leary for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
+Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -41,6 +41,9 @@ Nicholas O'Leary for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- New View option: # of max visible rows in buffer switcher 
+  (Patch 1642574 - Jakub  Roztocil )
 
 - The dockable panel splitter can now use continuous layout
   (Matthieu Casanova)
