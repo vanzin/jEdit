@@ -39,6 +39,8 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 - Bug #1649695: jEdit shell script doesn't handle spaces in filenames
   (Nicholas O'Leary)
 
+- Macro Single_Space_Buffer was broken (#1525313) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 

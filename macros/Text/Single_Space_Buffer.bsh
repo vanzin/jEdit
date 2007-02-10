@@ -17,6 +17,7 @@ void singleSpaceBuffer(View view)
 
 	try
 	{
+		buffer.beginCompoundEdit();
 		while(line < buffer.getLineCount())
 		{
 			if(buffer.getLineText(line).equals(""))
