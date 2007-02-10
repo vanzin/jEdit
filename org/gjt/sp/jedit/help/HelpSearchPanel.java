@@ -91,7 +91,7 @@ public class HelpSearchPanel extends JPanel
 
 		static
 		{
-			HashMap hints = new HashMap();
+			Map<RenderingHints.Key, Object> hints = new HashMap<RenderingHints.Key, Object>();
 
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -133,7 +133,7 @@ public class HelpSearchPanel extends JPanel
 	} //}}}
 
 	//{{{ ResultRenderer class
-	class ResultRenderer extends DefaultListCellRenderer
+	static class ResultRenderer extends DefaultListCellRenderer
 	{
 		public Component getListCellRendererComponent(
 			JList list,
@@ -177,12 +177,10 @@ public class HelpSearchPanel extends JPanel
 	} //}}}
 
 	//{{{ ResultCompare class
-	static class ResultCompare implements Comparator
+	static class ResultCompare implements Comparator<Result>
 	{
-		public int compare(Object o1, Object o2)
+		public int compare(Result r1, Result r2)
 		{
-			Result r1 = (Result)o1;
-			Result r2 = (Result)o2;
 			if(r1.rank == r2.rank)
 				return r1.title.compareTo(r2.title);
 			else
@@ -203,7 +201,7 @@ public class HelpSearchPanel extends JPanel
 				"helpviewer.searching") });
 
 			final String text = searchField.getText();
-			final Vector resultModel = new Vector();
+			final Vector<Result> resultModel = new Vector<Result>();
 
 			VFSManager.runInWorkThread(new Runnable()
 			{
@@ -230,7 +228,7 @@ public class HelpSearchPanel extends JPanel
 							HelpIndex.HelpFile file = index.getFile(occur.file);
 							for(int j = 0; j < resultModel.size(); j++)
 							{
-								Result result = (Result)resultModel.elementAt(j);
+								Result result = resultModel.elementAt(j);
 								if(result.file.equals(file.file))
 								{
 									result.rank += occur.count;
@@ -254,7 +252,7 @@ public class HelpSearchPanel extends JPanel
 						// turn the rankings into relative rankings, from 1 to 4
 						for(int i = 0; i < resultModel.size(); i++)
 						{
-							Result result = (Result)resultModel.elementAt(i);
+							Result result = resultModel.elementAt(i);
 							result.rank = (int)Math.ceil((double)result.rank * 4 / maxRank);
 						}
 
@@ -267,7 +265,7 @@ public class HelpSearchPanel extends JPanel
 			{
 				public void run()
 				{
-					if(resultModel.size() == 0)
+					if(resultModel.isEmpty())
 					{
 						results.setListData(new String[] {
 							jEdit.getProperty(
