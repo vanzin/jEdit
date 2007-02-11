@@ -119,10 +119,10 @@ class BufferHandler implements BufferListener
 			delayUpdate(startLine,endLine);
 
 			//{{{ resize selections if necessary
-			Iterator iter = textArea.getSelectionIterator();
+			Iterator<Selection> iter = textArea.getSelectionIterator();
 			while(iter.hasNext())
 			{
-				Selection s = (Selection)iter.next();
+				Selection s = iter.next();
 
 				if(s.contentInserted(buffer,startLine,offset,
 					numLines,length))
@@ -230,10 +230,10 @@ class BufferHandler implements BufferListener
 		if(textArea.getDisplayManager() == displayManager)
 		{
 			//{{{ resize selections if necessary
-			Iterator iter = textArea.getSelectionIterator();
+			Iterator<Selection> iter = textArea.getSelectionIterator();
 			while(iter.hasNext())
 			{
-				Selection s = (Selection)iter.next();
+				Selection s = iter.next();
 
 				if(s.contentRemoved(buffer,startLine,
 					start,numLines,length))
@@ -293,11 +293,11 @@ class BufferHandler implements BufferListener
 		//{{{ Debug code
 		if(Debug.SCROLL_VERIFY)
 		{
-			int scrollLineCount = 0;
 			int line = delayedUpdateStart;
 			if(!displayManager.isLineVisible(line))
 				line = displayManager.getNextVisibleLine(line);
-			System.err.println(delayedUpdateStart + ":" + delayedUpdateEnd + ":" + textArea.getLineCount());
+			System.err.println(delayedUpdateStart + ":" + delayedUpdateEnd + ':' + textArea.getLineCount());
+			int scrollLineCount = 0;
 			while(line != -1 && line <= delayedUpdateEnd)
 			{
 				scrollLineCount += displayManager.getScreenLineCount(line);
