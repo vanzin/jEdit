@@ -38,7 +38,7 @@ abstract class Anchor
 	boolean callReset;
 
 	//{{{ Anchor constructor
-	Anchor(DisplayManager displayManager,
+	protected Anchor(DisplayManager displayManager,
 		TextArea textArea)
 	{
 		this.displayManager = displayManager;
@@ -51,46 +51,49 @@ abstract class Anchor
 	//{{{ toString() method
 	public String toString()
 	{
-		return getClass().getName() + "[" + physicalLine + ","
-			+ scrollLine + "]";
+		return getClass().getName() + '[' + physicalLine + ','
+		       + scrollLine + ']';
 	} //}}}
 
 	//{{{ contentInserted() method
 	void contentInserted(int startLine, int numLines)
 	{
-		if(this.physicalLine >= startLine)
+		if(physicalLine >= startLine)
 		{
-			if(this.physicalLine != startLine)
-				this.physicalLine += numLines;
-			this.callChanged = true;
+			if(physicalLine != startLine)
+				physicalLine += numLines;
+			callChanged = true;
 		}
 	} //}}}
 
 	//{{{ preContentRemoved() method
+	/**
+	 * Method called before a content is removed from a buffer.
+	 *
+	 * @param startLine the first line of the removed content
+	 * @param numLines the number of removed lines
+	 */
 	void preContentRemoved(int startLine, int numLines)
 	{
-		if(this.physicalLine >= startLine)
+		// The removed content starts before the Anchor, we need to pull the anchor up
+		if(physicalLine >= startLine)
 		{
-			if(this.physicalLine == startLine)
-				this.callChanged = true;
-			else
+			callChanged = true;
+			int end = Math.min(startLine + numLines, physicalLine);
+			//Check the lines from the beginning of the removed content to the end (or the physical
+			//line of the Anchor if it is before the end of the removed content
+			for(int i = startLine + 1; i <= end; i++)
 			{
-				int end = Math.min(startLine + numLines,
-					this.physicalLine);
-				for(int i = startLine + 1; i <= end; i++)
+				//XXX
+				if(displayManager.isLineVisible(i - 1))
 				{
-					//XXX
-					if(displayManager.isLineVisible(i - 1))
-					{
-						this.scrollLine -=
-							displayManager
-							.screenLineMgr
-							.getScreenLineCount(i);
-					}
+					scrollLine -=
+						displayManager
+						.screenLineMgr
+						.getScreenLineCount(i);
 				}
-				this.physicalLine -= (end - startLine);
-				this.callChanged = true;
 			}
+			physicalLine -= end - startLine;
 		}
 	} //}}}
 }
