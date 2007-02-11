@@ -94,7 +94,7 @@ public interface BufferListener
 	 * @param length The number of characters to be removed
 	 * @since jEdit 4.3pre3
 	 */
-	public void preContentRemoved(JEditBuffer buffer, int startLine, int offset,
+	void preContentRemoved(JEditBuffer buffer, int startLine, int offset,
 		int numLines, int length);
 	//}}}
 
