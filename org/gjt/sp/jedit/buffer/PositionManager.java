@@ -48,7 +48,7 @@ public class PositionManager
 	public synchronized Position createPosition(int offset)
 	{
 		PosBottomHalf bh = new PosBottomHalf(offset);
-		PosBottomHalf existing = (PosBottomHalf)positions.get(bh);
+		PosBottomHalf existing = positions.get(bh);
 		if(existing == null)
 		{
 			positions.put(bh,bh);
@@ -61,38 +61,34 @@ public class PositionManager
 	//{{{ contentInserted() method
 	public synchronized void contentInserted(int offset, int length)
 	{
-		if(positions.size() == 0)
+		if(positions.isEmpty())
 			return;
 
 		/* get all positions from offset to the end, inclusive */
-		Iterator iter = positions.tailMap(new PosBottomHalf(offset))
-			.keySet().iterator();
+		Set<PosBottomHalf> bottomHalfs = positions.tailMap(new PosBottomHalf(offset))
+			.keySet();
 
 		iteration = true;
-		while(iter.hasNext())
-		{
-			((PosBottomHalf)iter.next())
-				.contentInserted(offset,length);
-		}
+		for (PosBottomHalf bottomHalf : bottomHalfs)
+			bottomHalf.contentInserted(offset,length);
+
 		iteration = false;
 	} //}}}
 
 	//{{{ contentRemoved() method
 	public synchronized void contentRemoved(int offset, int length)
 	{
-		if(positions.size() == 0)
+		if(positions.isEmpty())
 			return;
 
 		/* get all positions from offset to the end, inclusive */
-		Iterator iter = positions.tailMap(new PosBottomHalf(offset))
-			.keySet().iterator();
+		Set<PosBottomHalf> bottomHalfs = positions.tailMap(new PosBottomHalf(offset)).keySet();
+
 
 		iteration = true;
-		while(iter.hasNext())
-		{
-			((PosBottomHalf)iter.next())
-				.contentRemoved(offset,length);
-		}
+		for (PosBottomHalf bottomHalf : bottomHalfs)
+			bottomHalf.contentRemoved(offset,length);
+
 		iteration = false;
 
 	} //}}}
@@ -101,7 +97,7 @@ public class PositionManager
 
 	//{{{ Private members
 	private JEditBuffer buffer;
-	private SortedMap positions = new TreeMap();
+	private SortedMap<PosBottomHalf, PosBottomHalf> positions = new TreeMap<PosBottomHalf, PosBottomHalf>();
 	//}}}
 
 	//{{{ Inner classes
@@ -135,7 +131,7 @@ public class PositionManager
 	} //}}}
 
 	//{{{ PosBottomHalf class
-	class PosBottomHalf implements Comparable
+	class PosBottomHalf implements Comparable<PosBottomHalf>
 	{
 		int offset;
 		int ref;
@@ -190,11 +186,11 @@ public class PositionManager
 		} //}}}
 
 		//{{{ compareTo() method
-		public int compareTo(Object o)
+		public int compareTo(PosBottomHalf posBottomHalf)
 		{
 			if(iteration)
 				Log.log(Log.ERROR,this,"Consistency failure");
-			return offset - ((PosBottomHalf)o).offset;
+			return offset - posBottomHalf.offset;
 		} //}}}
 		
 		//{{{ checkInvariants() method
