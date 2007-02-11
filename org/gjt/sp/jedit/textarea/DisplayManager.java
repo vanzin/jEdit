@@ -45,21 +45,21 @@ public class DisplayManager
 	static DisplayManager getDisplayManager(JEditBuffer buffer,
 		TextArea textArea)
 	{
-		List l = (List)bufferMap.get(buffer);
-		DisplayManager dmgr;
+		List<DisplayManager> l = bufferMap.get(buffer);
 		if(l == null)
 		{
-			l = new LinkedList();
+			l = new LinkedList<DisplayManager>();
 			bufferMap.put(buffer,l);
 		}
 
 		/* An existing display manager's fold visibility map
 		that a new display manager will inherit */
 		DisplayManager copy = null;
-		Iterator liter = l.iterator();
+		Iterator<DisplayManager> liter = l.iterator();
+		DisplayManager dmgr;
 		while(liter.hasNext())
 		{
-			dmgr = (DisplayManager)liter.next();
+			dmgr = liter.next();
 			copy = dmgr;
 			if(!dmgr.inUse && dmgr.textArea == textArea)
 			{
@@ -91,15 +91,12 @@ public class DisplayManager
 	//{{{ textAreaDisposed() method
 	static void textAreaDisposed(TextArea textArea)
 	{
-		Iterator biter = bufferMap.values().iterator();
-		while(biter.hasNext())
+		for (List<DisplayManager> l : bufferMap.values())
 		{
-			List l = (List)biter.next();
-			Iterator liter = l.iterator();
+			Iterator<DisplayManager> liter = l.iterator();
 			while(liter.hasNext())
 			{
-				DisplayManager dmgr = (DisplayManager)
-					liter.next();
+				DisplayManager dmgr = liter.next();
 				if(dmgr.textArea == textArea)
 				{
 					dmgr.dispose();
@@ -109,7 +106,7 @@ public class DisplayManager
 		}
 	} //}}}
 
-	private static Map bufferMap = new HashMap();
+	private static final Map<JEditBuffer, List<DisplayManager>> bufferMap = new HashMap<JEditBuffer, List<DisplayManager>>();
 	//}}}
 
 	//{{{ getBuffer() method
@@ -424,7 +421,6 @@ public class DisplayManager
 		if(digit < '1' || digit > '9')
 		{
 			Toolkit.getDefaultToolkit().beep();
-			return;
 		}
 		else
 			expandFolds((digit - '1') + 1);
@@ -712,7 +708,7 @@ public class DisplayManager
 		DisplayManager copy)
 	{
 		this.buffer = buffer;
-		this.screenLineMgr = new ScreenLineManager(this,buffer);
+		this.screenLineMgr = new ScreenLineManager(buffer);
 		this.textArea = textArea;
 
 		scrollLineCount = new ScrollLineCount(this,textArea);
@@ -749,7 +745,7 @@ public class DisplayManager
 		if(Debug.FOLD_VIS_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"showLineRange(" + start
-				+ "," + end + ")");
+				+ ',' + end + ')');
 		}
 
 		for(int i = start; i <= end; i++)
@@ -780,7 +776,7 @@ public class DisplayManager
 		if(Debug.FOLD_VIS_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"hideLineRange(" + start
-				+ "," + end + ")");
+				+ ',' + end + ')');
 		}
 
 		int i = start;
@@ -852,12 +848,12 @@ public class DisplayManager
 				firstLine.callChanged = true;
 			else
 			{
-				firstLine.scrollLine += (count - oldCount);
+				firstLine.scrollLine += count - oldCount;
 				firstLine.callChanged = true;
 			}
 		}
 
-		scrollLineCount.scrollLine += (count - oldCount);
+		scrollLineCount.scrollLine += count - oldCount;
 		scrollLineCount.callChanged = true;
 	} //}}}
 
