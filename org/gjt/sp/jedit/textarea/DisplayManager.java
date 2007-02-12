@@ -498,9 +498,9 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ Package-private members
-	FirstLine firstLine;
-	ScrollLineCount scrollLineCount;
-	ScreenLineManager screenLineMgr;
+	final FirstLine firstLine;
+	final ScrollLineCount scrollLineCount;
+	final ScreenLineManager screenLineMgr;
 	RangeMap folds;
 
 	//{{{ init() method

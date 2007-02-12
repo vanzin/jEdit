@@ -52,6 +52,13 @@ class ScreenLineManager
 	} //}}}
 
 	//{{{ getScreenLineCount() method
+	/**
+	 * Returns how many screen lines contains the given physical line.
+	 * It can be greater than 1 when using soft wrap
+	 *
+	 * @param line the physical line
+	 * @return the screen line count
+	 */
 	int getScreenLineCount(int line)
 	{
 		return screenLines[line] >> SCREEN_LINES_SHIFT;
@@ -67,7 +74,7 @@ class ScreenLineManager
 		}
 
 		if(Debug.SCREEN_LINES_DEBUG)
-			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + "," + count + ")"));
+			Log.log(Log.DEBUG,this,new Exception("setScreenLineCount(" + line + ',' + count + ')'));
 		screenLines[line] = (short)(count << SCREEN_LINES_SHIFT
 			| SCREEN_LINES_VALID_MASK);
 	} //}}}
@@ -100,7 +107,7 @@ class ScreenLineManager
 		{
 			if(screenLines.length <= lineCount)
 			{
-				short[] screenLinesN = new short[(lineCount + 1) * 2];
+				short[] screenLinesN = new short[((lineCount + 1) << 1)];
 				System.arraycopy(screenLines,0,screenLinesN,0,
 						 screenLines.length);
 				screenLines = screenLinesN;

@@ -150,19 +150,19 @@ public abstract class Selection implements Cloneable
 	int startLine, endLine;
 
 	//{{{ Selection constructor
-	Selection()
+	protected Selection()
 	{
 	} //}}}
 
 	//{{{ Selection constructor
-	Selection(Selection sel)
+	protected Selection(Selection sel)
 	{
 		this.start = sel.start;
 		this.end = sel.end;
 	} //}}}
 
 	//{{{ Selection constructor
-	Selection(int start, int end)
+	protected Selection(int start, int end)
 	{
 		this.start = start;
 		this.end = end;
@@ -170,6 +170,13 @@ public abstract class Selection implements Cloneable
 
 	// should the next two be public, maybe?
 	abstract void getText(JEditBuffer buffer, StringBuffer buf);
+
+	/**
+	 * Replace the selection with the given text
+	 * @param buffer the buffer
+	 * @param text the text
+	 * @return the offset at the end of the inserted text
+	 */
 	abstract int setText(JEditBuffer buffer, String text);
 
 	abstract boolean contentInserted(JEditBuffer buffer, int startLine, int start,
@@ -229,6 +236,12 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ setText() method
+		/**
+		 * Replace the selection with the given text
+		 * @param buffer the buffer
+		 * @param text the text
+		 * @return the offset at the end of the inserted text
+		 */
 		int setText(JEditBuffer buffer, String text)
 		{
 			buffer.remove(start,end - start);
@@ -442,6 +455,12 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ setText() method
+		/**
+		 * Replace the selection with the given text
+		 * @param buffer the buffer
+		 * @param text the text
+		 * @return the offset at the end of the inserted text
+		 */
 		int setText(JEditBuffer buffer, String text)
 		{
 			int startColumn = getStartColumn(buffer);
