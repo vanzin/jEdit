@@ -31,6 +31,7 @@ import org.gjt.sp.util.Log;
  */
 class FirstLine extends Anchor
 {
+	/** The skew is the scroll count from the beginning of the line. Used with soft wrap. */
 	int skew;
 
 	//{{{ FirstLine constructor
@@ -47,8 +48,8 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"changed() before: "
-				+ physicalLine + ":" + scrollLine
-				+ ":" + skew);
+				+ physicalLine + ':' + scrollLine
+				+ ':' + skew);
 		} //}}}
 
 		ensurePhysicalLineIsVisible();
@@ -87,8 +88,8 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"changed() after: "
-				+ physicalLine + ":" + scrollLine
-				+ ":" + skew);
+				+ physicalLine + ':' + scrollLine
+				+ ':' + skew);
 		} //}}}
 	} //}}}
 
@@ -139,7 +140,7 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physDown() start: "
-				+ physicalLine + ":" + scrollLine);
+				+ physicalLine + ':' + scrollLine);
 		}
 
 		skew = 0;
@@ -152,7 +153,7 @@ class FirstLine extends Anchor
 			else
 			{
 				int nextPhysicalLine = displayManager.getNextVisibleLine(physicalLine);
-				amount -= (nextPhysicalLine - physicalLine);
+				amount -= nextPhysicalLine - physicalLine;
 				scrollLine += displayManager.getScreenLineCount(physicalLine);
 				physicalLine = nextPhysicalLine;
 			}
@@ -169,7 +170,7 @@ class FirstLine extends Anchor
 			else
 			{
 				scrollLine += displayManager.getScreenLineCount(physicalLine);
-				amount -= (nextPhysicalLine - physicalLine);
+				amount -= nextPhysicalLine - physicalLine;
 				physicalLine = nextPhysicalLine;
 			}
 		}
@@ -177,7 +178,7 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physDown() end: "
-				+ physicalLine + ":" + scrollLine);
+				+ physicalLine + ':' + scrollLine);
 		}
 
 		callChanged = true;
@@ -197,7 +198,7 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physUp() start: "
-				+ physicalLine + ":" + scrollLine);
+				+ physicalLine + ':' + scrollLine);
 		}
 
 		skew = 0;
@@ -210,7 +211,7 @@ class FirstLine extends Anchor
 			else
 			{
 				int prevPhysicalLine = displayManager.getPrevVisibleLine(physicalLine);
-				amount -= (physicalLine - prevPhysicalLine);
+				amount -= physicalLine - prevPhysicalLine;
 			}
 		}
 
@@ -224,7 +225,7 @@ class FirstLine extends Anchor
 				break;
 			else
 			{
-				amount -= (physicalLine - prevPhysicalLine);
+				amount -= physicalLine - prevPhysicalLine;
 				physicalLine = prevPhysicalLine;
 				scrollLine -= displayManager.getScreenLineCount(
 					prevPhysicalLine);
@@ -234,7 +235,7 @@ class FirstLine extends Anchor
 		if(Debug.SCROLL_DEBUG)
 		{
 			Log.log(Log.DEBUG,this,"physUp() end: "
-				+ physicalLine + ":" + scrollLine);
+				+ physicalLine + ':' + scrollLine);
 		}
 
 		callChanged = true;
@@ -347,5 +348,11 @@ class FirstLine extends Anchor
 				scrollLine += displayManager.getScreenLineCount(physicalLine);
 			}
 		}
+	} //}}}
+
+	//{{{ toString() method
+	public String toString()
+	{
+		return "FirstLine["+physicalLine+','+scrollLine+','+skew+']';
 	} //}}}
 }
