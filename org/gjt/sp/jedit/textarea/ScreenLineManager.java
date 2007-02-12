@@ -38,9 +38,8 @@ import org.gjt.sp.util.Log;
 class ScreenLineManager
 {
 	//{{{ ScreenLineManager constructor
-	ScreenLineManager(DisplayManager displayManager, JEditBuffer buffer)
+	ScreenLineManager(JEditBuffer buffer)
 	{
-		this.displayManager = displayManager;
 		this.buffer = buffer;
 		if(!buffer.isLoading())
 			reset();
@@ -132,7 +131,6 @@ class ScreenLineManager
 	private static final int SCREEN_LINES_SHIFT = 1;
 	private static final int SCREEN_LINES_VALID_MASK = 1;
 
-	private DisplayManager displayManager;
 	private JEditBuffer buffer;
 	private short[] screenLines;
 	//}}}
