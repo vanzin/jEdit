@@ -29,10 +29,14 @@ package org.gjt.sp.jedit.textarea;
  */
 abstract class Anchor
 {
-	DisplayManager displayManager;
-	TextArea textArea;
-
+	final DisplayManager displayManager;
+	final TextArea textArea;
+	/** The physical line. */
 	int physicalLine;
+	/**
+	 * The visible line index. (from the top of the buffer). It can be different from physical line
+	 * when using soft wrap.
+	 */
 	int scrollLine;
 	boolean callChanged;
 	boolean callReset;
@@ -56,8 +60,15 @@ abstract class Anchor
 	} //}}}
 
 	//{{{ contentInserted() method
+	/**
+	 * Some content is inserted.
+	 *
+	 * @param startLine the start of the insert
+	 * @param numLines the number of insterted lines
+	 */
 	void contentInserted(int startLine, int numLines)
 	{
+		// The Anchor is changed only if the content was inserted before
 		if(physicalLine >= startLine)
 		{
 			if(physicalLine != startLine)
