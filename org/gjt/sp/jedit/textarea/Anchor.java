@@ -78,22 +78,27 @@ abstract class Anchor
 		// The removed content starts before the Anchor, we need to pull the anchor up
 		if(physicalLine >= startLine)
 		{
-			callChanged = true;
-			int end = Math.min(startLine + numLines, physicalLine);
-			//Check the lines from the beginning of the removed content to the end (or the physical
-			//line of the Anchor if it is before the end of the removed content
-			for(int i = startLine + 1; i <= end; i++)
+			if(physicalLine == startLine)
+				callChanged = true;
+			else
 			{
-				//XXX
-				if(displayManager.isLineVisible(i - 1))
+				int end = Math.min(startLine + numLines, physicalLine);
+				//Check the lines from the beginning of the removed content to the end (or the physical
+				//line of the Anchor if it is before the end of the removed content
+				for(int i = startLine + 1; i <= end; i++)
 				{
-					scrollLine -=
-						displayManager
-						.screenLineMgr
-						.getScreenLineCount(i);
+					//XXX
+					if(displayManager.isLineVisible(i - 1))
+					{
+						scrollLine -=
+							displayManager
+								.screenLineMgr
+								.getScreenLineCount(i);
+					}
 				}
+				physicalLine -= end - startLine;
+				callChanged = true;
 			}
-			physicalLine -= end - startLine;
 		}
 	} //}}}
 }
