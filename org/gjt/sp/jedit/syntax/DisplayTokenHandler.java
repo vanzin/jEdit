@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+
 import javax.swing.text.*;
 import java.awt.font.*;
 import java.util.List;
@@ -38,6 +40,18 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	public static final int MAX_CHUNK_LEN = 100;
 
 	//{{{ init() method
+	/**
+	 * Init some variables that will be used when marking tokens.
+	 * This is called before {@link JEditBuffer#markTokens(int, TokenHandler)}
+	 * to store some datas that will be required and that we don't want
+	 * to put in the parameters
+	 *
+	 * @param styles
+	 * @param fontRenderContext
+	 * @param expander
+	 * @param out
+	 * @param wrapMargin
+	 */
 	public void init(SyntaxStyle[] styles,
 		FontRenderContext fontRenderContext,
 		TabExpander expander, List<Chunk> out,
