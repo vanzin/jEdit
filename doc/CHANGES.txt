@@ -66,6 +66,9 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
   its JavaDoc. (Björn "Vampire" Kautler)
 
 }}}
+
+{{{ Editing
+- New edit mode: csv (jaco de groot).
 {{{ API Changes
 
 - VFS.isMarkersFileSupported() added to give a VFS the chance to tell

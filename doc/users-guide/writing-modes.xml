@@ -735,6 +735,8 @@
    Regular expression syntax is described in <xref linkend="regexps" />.
   </para>
 
+  <para> <emphasis role="bold">NOTE</emphasis>: c-style character escaping for literals (such as the tab char: \t) do not work as attribute values in XML. Use the XML character entity instead. For example: &amp;#09; instead of \t. </para>
+  
   <para> Here is a <literal>SEQ_REGEXP</literal> rule from moin.xml that uses the <literal>HASH_CHARS</literal> attribute, to describe a keyword (wikiword) that can start with any uppercase letter and contain lower case letters and at least one uppercase letter in the middle. </para>
  
   <programlisting><![CDATA[

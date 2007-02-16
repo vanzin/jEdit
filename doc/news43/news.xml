@@ -189,7 +189,7 @@
     <bridgehead>SideKicks and Language Plugins </bridgehead>
     <para> SideKick has been debugged and the documentation has been improved. Further, there is a new combobox that lets you choose your parser, and a new SplitPane to show you the contents of the hovered element. The combobox is especially important since there are multiple parsers that can be used on a given file, especially when you are working with Python, PHP, HTML, XML, or JavaScript files. </para>
 
-    <para> Many language-specific plugins have been redesigned to use the new and improved SideKick. In particular, JPyDebug, JythonInterpreter, RubyPlugin, PHPParser, JavaSideKick, XML, and PerlSideKick. Be sure to try them out.
+    <para> Many language-specific plugins have been redesigned to use the new and improved SideKick. In particular, CtagsSideKick (a replacement for CodeBrowser), JPyDebug, JythonInterpreter, RubyPlugin, PHPParser, JavaSideKick, XML, and PerlSideKick. Be sure to try them out.
     </para>
 
     <para> In case you're looking for JavaCore, JBrowse, CodeAid, DotComplete, or PropertySideKick, they have all been merged (in terms of functionality) into the new JavaSideKick plugin. </para>
@@ -215,8 +215,8 @@
     </para>
     </formalpara>
 
-    <formalpara><title>InfoViewer </title>
-    <para> This plugin uses jEdit 4.3's action overriding API to serve as a replacement to the HelpViewer. Since I use/work with this instead of the built-in HelpViewer, I do not notice or fix  bugs in HelpViewer. Try it out - you might like it! At some point, I might merge this into the jEdit core, but for now, it's a separate plugin.    </para>
+    <formalpara><title>InfoViewer</title>
+    <para> This plugin uses jEdit 4.3's action overriding API to serve as a replacement to the HelpViewer. Since I use/work with this instead of the built-in HelpViewer, I do not notice or fix  bugs in HelpViewer. Try it out - you might like it! At some point, I might merge this into the jEdit core, but for now, it's a separate plugin.  </para>
     </formalpara>
 
     <formalpara><title>XSearch</title>
