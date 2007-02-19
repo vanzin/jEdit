@@ -34,15 +34,15 @@
 
  <para>
   Since we use <literal>java.util.regex</literal> patterns to implement globs, this means that in addition to the above, a number of <quote>character class
-  metacharacters</quote> may be used. Keep in mind, their usefulness is limited since the regex quantifier metacharacters (asterisk, questionmark, and curly brackets) are redefined to mean something else in filename glob language.
+  metacharacters</quote> may be used. Keep in mind, their usefulness is limited since the regex quantifier metacharacters (asterisk, questionmark, and curly brackets) are redefined to mean something else in filename glob language, and the regex quantifiers are not available in glob language.
 </para>  
  
   <itemizedlist>
   <listitem><para><literal>\w</literal> matches any alphanumeric
-  character</para></listitem>
+  character or underscore</para></listitem>
   <listitem><para><literal>\s</literal> matches a space or horizontal tab</para></listitem>
+  <listitem><para><literal>\S</literal> matches a printable non-whitespace. </para></listitem>
   <listitem><para><literal>\d</literal> matches a decimal digit</para></listitem>
-  <listitem><para><literal>\S</literal> matches a non-space, non-control character</para></listitem>
  </itemizedlist>
  <para>
   Here are some examples of glob patterns:
@@ -54,6 +54,8 @@
   <listitem><para><userinput>*.[ch]</userinput> - all files whose names end
   with either
   <quote>.c</quote> or <quote>.h</quote>.</para></listitem>
+  <listitem><para><userinput>*.{c,cpp,h,hpp,cxx,hxx}</userinput> - all C or C++ files.
+  </para></listitem>
   <listitem><para><userinput>[^#]*</userinput> - all files whose names do not
   start with <quote>#</quote>.</para></listitem>
  </itemizedlist>
