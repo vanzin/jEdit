@@ -8,6 +8,7 @@ Architecture: all
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Recommends: sun-java5-jre
+Build-depends: sun-java5-jdk, ant
 Suggests: exuberant-ctags, cscope, sun-java5-jdk, sun-java6-jdk
 Priority: optional
 Installed-Size: @deb.installed.size@
@@ -26,7 +27,8 @@ Description: A plugin-based editor for programmers.
  Its functionality is easily extended by the use of 'plugins' which can be
  downloaded, updated, and installed, all without exiting the editor. These
  include a built-in Console shell integration, which lets you execute
- interactive external commands inside your editor, as well as bind them to keyboard shortcuts. The FTP plugin lets you browse and edit files on remote systems
+ interactive external commands inside your editor, as well as bind them to 
+ keyboard shortcuts. The FTP plugin lets you browse and edit files on remote systems
  over FTP or SFTP. Other plugins provide shells, object oriented structure/code 
  browsers, or completion popups for Java, XML, HTML, Ant, LaTeX, Python, Ruby, 
  Perl, C, C++, bash, Scheme, Prolog, and many other languages. 
