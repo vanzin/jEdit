@@ -292,16 +292,19 @@ class FirstLine extends Anchor
 	void scrollUp(int amount)
 	{
 		if(Debug.SCROLL_DEBUG)
-			Log.log(Log.DEBUG,this,"scrollUp()");
+			Log.log(Log.DEBUG,this,"scrollUp() before:" + this);
 
 		ensurePhysicalLineIsVisible();
 
 		if(amount <= skew)
 		{
+			// the amount is less than the skew, so we stay in the same like, just going
+			// upper
 			skew -= amount;
 		}
 		else
 		{
+			// moving to the first screen line of the current physical line
 			amount -= skew;
 			skew = 0;
 
@@ -310,6 +313,7 @@ class FirstLine extends Anchor
 				int prevLine = displayManager.getPrevVisibleLine(physicalLine);
 				if(prevLine == -1)
 					break;
+				// moving to the previous visible physical line
 				physicalLine = prevLine;
 
 				int screenLines = displayManager.getScreenLineCount(physicalLine);
@@ -324,6 +328,8 @@ class FirstLine extends Anchor
 			}
 		}
 
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"scrollUp() after:" + this);
 		callChanged = true;
 	} //}}}
 
