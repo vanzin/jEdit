@@ -844,19 +844,7 @@ public class TextArea extends JComponent
 			return;
 
 		Point point = offsetToXY(line,offset,offsetXY);
-		if(point == null)
-		// FIXME - we need to reset the state of this window so that it has the right
-		// dimensions again.
-		{
 
-			Log.log(Log.ERROR,this,"BUG: screenLine=" + screenLine
-				+ ",visibleLines=" + visibleLines
-				+ ",physicalLine=" + line
-				+ ",offset=" + offset
-				+ ",firstPhysicalLine=" + getFirstPhysicalLine()
-				+ ",lastPhysicalLine=" + getLastPhysicalLine());
-
-		}
 		point.x += extraEndVirt;
 
 		if(point.x < 0)

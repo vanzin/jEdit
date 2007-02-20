@@ -41,6 +41,8 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 
 - Macro Single_Space_Buffer was broken (#1525313) (Matthieu Casanova)
 
+- Scrolling up broken after content removing (#1584436) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
