@@ -166,7 +166,8 @@ public class DisplayManager
 	//{{{ getPrevVisibleLine() method
 	/**
 	 * Returns the previous visible line before the specified line index.
-	 * @param line A physical line index
+	 * @param line a physical line index
+	 * @return the previous visible physical line or -1 if there is no visible line
 	 * @since jEdit 4.0pre1
 	 */
 	public int getPrevVisibleLine(int line)
@@ -178,6 +179,13 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ getScreenLineCount() method
+	/**
+	 * Returns how many screen lines contains the given physical line.
+	 * It can be greater than 1 when using soft wrap
+	 *
+	 * @param line the physical line
+	 * @return the screen line count
+	 */
 	public final int getScreenLineCount(int line)
 	{
 		if(!screenLineMgr.isScreenLineCountValid(line))
