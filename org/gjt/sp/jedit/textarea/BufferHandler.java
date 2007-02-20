@@ -157,6 +157,15 @@ class BufferHandler implements BufferListener
 	} //}}}
 
 	//{{{ preContentRemoved() method
+	/**
+	 * Method called before some content is removed.
+	 *
+	 * @param buffer the buffer
+	 * @param startLine the first removed line
+	 * @param offset the offset where starts the removed content
+	 * @param numLines the number of removed lines
+	 * @param length the removed length
+	 */
 	public void preContentRemoved(JEditBuffer buffer, int startLine,
 		int offset, int numLines, int length)
 	{
