@@ -10,6 +10,9 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 - A minor bug of cursor changing when dragging dockable panels
   using non continuous layout (Matthieu Casanova)
 
+- special characters in file:// URLs passed on to jEdit.openFile()
+  were not being properly decoded (1663617).
+  
 - HyperSearch Results does not lose focus on enter (Bug 1260023,
   Patch 1646058) (Kazutoshi Satoda)
 
