@@ -1462,13 +1462,18 @@ public class jEdit
 		if(view != null && parent == null)
 			parent = view.getBuffer().getDirectory();
 
-		if(MiscUtilities.isURL(path))
-		{
-			if(MiscUtilities.getProtocolOfURL(path).equals("file"))
-				path = path.substring(5);
+		try {
+			URL u = new URL(path);
+			if (u.getProtocol().equals("file")) 
+				path = URLDecoder.decode(u.getPath(), view.getBuffer().getProperty("encoding").toString());
 		}
-
-		path = MiscUtilities.constructPath(parent,path);
+		catch (MalformedURLException mue) {
+			path = MiscUtilities.constructPath(parent,path);	
+		}
+		catch (UnsupportedEncodingException uee) {
+			Log.log(Log.ERROR, jEdit.class, "can't decode URL:" + path, uee);
+		}
+		
 
 		Buffer newBuffer;
 
