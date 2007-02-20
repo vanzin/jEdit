@@ -22,6 +22,9 @@
 
 package org.gjt.sp.jedit.textarea;
 
+import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.util.Log;
+
 /**
  * A base point for physical line/screen line conversion.
  * @author Slava Pestov
@@ -86,6 +89,8 @@ abstract class Anchor
 	 */
 	void preContentRemoved(int startLine, int numLines)
 	{
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"preContentRemoved() before:" + this);
 		// The removed content starts before the Anchor, we need to pull the anchor up
 		if(physicalLine >= startLine)
 		{
@@ -104,12 +109,14 @@ abstract class Anchor
 						scrollLine -=
 							displayManager
 								.screenLineMgr
-								.getScreenLineCount(i);
+								.getScreenLineCount(i - 1);
 					}
 				}
 				physicalLine -= end - startLine;
 				callChanged = true;
 			}
 		}
+		if(Debug.SCROLL_DEBUG)
+			Log.log(Log.DEBUG,this,"preContentRemoved() after:" + this);
 	} //}}}
 }
