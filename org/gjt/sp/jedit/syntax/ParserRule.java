@@ -63,11 +63,7 @@ public class ParserRule
 	//}}}
 
 	//{{{ Instance variables
-	public final String hashChar;
-	/** This is hashChar.toUpperCase() because it's often used like that. */
 	public final String upHashChar;
-	public final char[] hashChars;
-	/** This is for (int i=0 ; i&lt;hashChars.length ; i++) { upHashChars[i] = Character.toUpperCase(hashChars[i]) } because it's often used like that. */
 	public final char[] upHashChars;
 	public final int startPosMatch;
 	public final char[] start;
@@ -313,9 +309,7 @@ public class ParserRule
 		result.append(",IS_ESCAPE=").append((actionHints & IS_ESCAPE) != 0);
 		result.append(",NO_ESCAPE=").append((actionHints & NO_ESCAPE) != 0);
 		result.append(",REGEXP=").append((actionHints & REGEXP) != 0);
-		result.append("],hashChar=").append(hashChar);
 		result.append(",upHashChar=").append(upHashChar);
-		result.append(",hashChars=").append(Arrays.toString(hashChars));
 		result.append(",upHashChars=").append(Arrays.toString(upHashChars));
 		result.append(",startPosMatch=");
 		result.append("[AT_LINE_START=").append((startPosMatch & AT_LINE_START) != 0);
@@ -340,9 +334,7 @@ public class ParserRule
 		ParserRuleSet delegate, byte token)
 	{
 		this.action = action;
-		this.hashChar = hashChar;
 		this.upHashChar = null == hashChar ? null : hashChar.toUpperCase();
-		this.hashChars = null;
 		this.upHashChars = null;
 		this.startPosMatch = startPosMatch;
 		this.start = start;
@@ -367,30 +359,19 @@ public class ParserRule
 		ParserRuleSet delegate, byte token)
 	{
 		this.action = action;
-		this.hashChar = null;
 		this.upHashChar = null;
 		Set<Character> hashCharsSet = new HashSet<Character>();
-		for (char c : hashChars)
-		{
-			hashCharsSet.add(c);
-		}
-		this.hashChars = new char[hashCharsSet.size()];
-		int i = 0;
-		for (Character c : hashCharsSet)
-		{
-			this.hashChars[i++] = c;
-		}
-		hashCharsSet = new HashSet<Character>();
 		for (char c : hashChars)
 		{
 			hashCharsSet.add(Character.toUpperCase(c));
 		}
 		this.upHashChars = new char[hashCharsSet.size()];
-		i = 0;
+		int i = 0;
 		for (Character c : hashCharsSet)
 		{
 			this.upHashChars[i++] = c;
 		}
+		Arrays.sort(this.upHashChars);
 		this.startPosMatch = startPosMatch;
 		this.start = start;
 		this.startRegexp = startRegexp;

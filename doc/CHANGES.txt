@@ -3,7 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre10
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
-Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
+Matthieu Casanova, Nicholas O'Leary and Marcelo Vanzin for contributing
+to this release.
 
 {{{ Bug Fixes
 
@@ -12,7 +13,7 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 
 - special characters in file:// URLs passed on to jEdit.openFile()
   were not being properly decoded (1663617).
-  
+
 - HyperSearch Results does not lose focus on enter (Bug 1260023,
   Patch 1646058) (Kazutoshi Satoda)
 
@@ -35,7 +36,7 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 
 - VFSBrowser.filesActivated() - passed proper View to jEdit.openFile()
   from FSB open action (Alan Ezust).
-  
+
 - Escape char ignored in some edit modes (bug #1630805)
   (Matthieu Casanova)
 
@@ -46,10 +47,16 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 
 - Scrolling up broken after content removing (#1584436) (Matthieu Casanova)
 
+- SF Patch #1663901: Improve performance in TokenMarker.handleRule()
+  Daniel Hahler reported that jProfiler found some unoptimized code in
+  TokenMarker.handleRule(). Instead of applying has patch directly, I
+  implemented another approach and also took care of the other case
+  of allocating a new string to do a comparison. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 
-- New View option: # of max visible rows in buffer switcher 
+- New View option: # of max visible rows in buffer switcher
   (Patch 1642574 - Jakub  Roztocil )
 
 - The dockable panel splitter can now use continuous layout
@@ -58,7 +65,7 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 - The plugin manager now shows you the size of the datas stored by
   each plugin that use the new plugin home folder (Matthieu Casanova)
 
-- GeneralOptionPane - new checkbox (restore remote files on startup) 
+- GeneralOptionPane - new checkbox (restore remote files on startup)
   (Alan Ezust).
 
 - New popup menu in the plugin manager to remove plugin datas when
@@ -74,6 +81,8 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 
 {{{ Editing
 - New edit mode: csv (jaco de groot).
+}}}
+
 {{{ API Changes
 
 - VFS.isMarkersFileSupported() added to give a VFS the chance to tell
@@ -101,6 +110,9 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
 - plugin.className.files added as property for plugins. This property specifies
   external non-JAR files, e. g. libraries, which are in the jars directory.
   (Björn "Vampire" Kautler)
+
+- ParserRule.hashChar and ParserRule.hashChars have been removed, since they
+  weren't used anywhere. (Marcelo Vanzin)
 
 }}}
 

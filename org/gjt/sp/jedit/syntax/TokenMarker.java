@@ -369,7 +369,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 	{
 		return handleRule(checkRule,end,true);
 	} //}}}
-	
+
 	//{{{ handleRule() method
 	/**
 	 * Checks if the rule matches the line at the current position
@@ -383,14 +383,16 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			if (null == checkRule.upHashChars)
 			{
 				if ((pos + checkRule.upHashChar.length() < line.array.length) &&
-				    !checkRule.upHashChar.equals(new String(line.array,pos,checkRule.upHashChar.length()).toUpperCase()))
+				    !checkHashString(checkRule))
 				{
 					return false;
 				}
 			}
 			else
 			{
-				if (-1 == new String(checkRule.upHashChars).indexOf(Character.toUpperCase(line.array[pos])))
+				if (-1 == Arrays.binarySearch(
+						checkRule.upHashChars,
+						Character.toUpperCase(line.array[pos])))
 				{
 					return false;
 				}
@@ -830,6 +832,19 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 		char[] returnValue = new char[buf.length()];
 		buf.getChars(0,buf.length(),returnValue,0);
 		return returnValue;
+	} //}}}
+
+	//{{{ checkHashString() method
+	private boolean checkHashString(ParserRule rule)
+	{
+		for (int i = 0; i < rule.upHashChar.length(); i++)
+		{
+			if (Character.toUpperCase(line.array[pos+i]) != rule.upHashChar.charAt(i))
+			{
+				return false;
+			}
+		}
+		return true;
 	} //}}}
 
 	//}}}
