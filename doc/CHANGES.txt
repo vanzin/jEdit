@@ -91,7 +91,7 @@ Matthieu Casanova, and Nicholas O'Leary for contributing to this release.
   replaces the EditPlugin.getPluginHome() introduced in 4.3pre9.
   It can be null if running without settings (Matthieu Casanova)
 
-- New method IOUtilities.fileLength() that compute a file or directory length
+- New method IOUtilities.fileLength() that computes a file or directory length
   (Matthieu Casanova)
 
 - GUIUtilities.centerOnScreen() method is deprecated, use
