@@ -55,19 +55,19 @@ public class BufferOptionPane extends AbstractOptionPane
 	JComboBox checkModStatus;
 	JCheckBox noTabs;
 	Buffer buffer;
-	
-	
-	public BufferOptionPane() 
+
+
+	public BufferOptionPane()
 	{
 		super("Buffer Options");
 		init();
 	}
 
 	//{{{ _init() method
-	protected void _init() 
+	protected void _init()
 	{
-		
-		
+
+
 		buffer = jEdit.getActiveView().getBuffer();
 		String filename = buffer.getName();
 		setName("Buffer: " + filename);
@@ -206,8 +206,9 @@ public class BufferOptionPane extends AbstractOptionPane
 			"options.editing.noTabs"));
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
 		addComponent(noTabs);
+		//}}}
 	} //}}}
-	
+
 	//{{{ _save() method
 	protected void _save()
 	{
@@ -237,6 +238,9 @@ public class BufferOptionPane extends AbstractOptionPane
 		{
 			buffer.setStringProperty(JEditBuffer.ENCODING,encoding);
 			buffer.setDirty(true);
+			// Disable auto-detect because user explicitly
+			// specify an encoding.
+			buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT,false);
 		}
 
 		boolean gzippedValue = gzipped.isSelected();

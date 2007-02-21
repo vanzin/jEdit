@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -131,11 +130,7 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 			if (encoding == null)
 				return;
 
-			try
-			{
-				Charset.forName(encoding);
-			}
-			catch (UnsupportedCharsetException uce)
+			if (!Charset.isSupported(encoding))
 			{
 				String msg = jEdit.getProperty("reload-encoding.error",
 						new Object[] { encoding });
@@ -151,6 +146,9 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 		{
 			props = new Hashtable();
 			props.put(Buffer.ENCODING, encoding);
+			// Disable auto-detect because user explicitly
+			// specify an encoding.
+			props.put(Buffer.ENCODING_AUTODETECT, false);
 		}
 
 		String path = view.getBuffer().getPath();
@@ -158,3 +156,4 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 		jEdit.openFile(view,null,path,false,props);
 	} //}}}
 }
+

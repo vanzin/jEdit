@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre10
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
-Matthieu Casanova, Nicholas O'Leary and Marcelo Vanzin for contributing
-to this release.
+Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin and Kazutoshi Satoda
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -49,11 +49,17 @@ to this release.
 
 - SF Patch #1663901: Improve performance in TokenMarker.handleRule()
   Daniel Hahler reported that jProfiler found some unoptimized code in
-  TokenMarker.handleRule(). Instead of applying has patch directly, I
+  TokenMarker.handleRule(). Instead of applying his patch directly, I
   implemented another approach and also took care of the other case
   of allocating a new string to do a comparison. (Marcelo Vanzin)
 
+- SF Patch #1656225: Disable encoding auto detection which overrides a selection
+  When reloading a file with a specific encoding or changing the encoding in
+  the buffer options, disable encoding auto-detection for the buffer.
+  (Kazutoshi Satoda)
+
 }}}
+
 {{{ Miscellaneous
 
 - New View option: # of max visible rows in buffer switcher
