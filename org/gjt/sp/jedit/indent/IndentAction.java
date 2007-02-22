@@ -49,11 +49,7 @@ public interface IndentAction
 	 */
 	boolean keepChecking();
 
-	/**
-	 * This handles the following Java code:
-	 * if(something)
-	 * { // no indentation on this line, even though previous matches a rule
-	 */
+	/** See comments for each instance of this class below. */
 	class Collapse implements IndentAction
 	{
 		/**
@@ -65,15 +61,14 @@ public interface IndentAction
 		{
 			return newIndent;
 		}
-		
+
 		public boolean keepChecking()
 		{
 			return true;
 		}
-		
-		public boolean equals(Object o)
+
+		private Collapse()
 		{
-			return (o instanceof Collapse);
 		}
 	}
 
@@ -84,7 +79,7 @@ public interface IndentAction
 		{
 			return oldIndent;
 		}
-		
+
 		public boolean keepChecking()
 		{
 			return true;
@@ -94,28 +89,28 @@ public interface IndentAction
 	class Increase implements IndentAction
 	{
 		private int amount;
-		
+
 		public Increase()
 		{
 			amount = 1;
 		}
-		
+
 		public Increase(int amount)
 		{
 			this.amount = amount;
 		}
-		
+
 		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 			int newIndent)
 		{
 			return newIndent + buffer.getIndentSize() * amount;
 		}
-		
+
 		public boolean keepChecking()
 		{
 			return true;
 		}
-		
+
 		public boolean equals(Object o)
 		{
 			if(o instanceof Increase)
@@ -132,7 +127,7 @@ public interface IndentAction
 		{
 			return newIndent - buffer.getIndentSize();
 		}
-		
+
 		public boolean keepChecking()
 		{
 			return true;
@@ -151,7 +146,7 @@ public interface IndentAction
 		{
 			this.line = line;
 			this.offset = offset;
-			
+
 			int openBracketIndex = TextUtilities.findMatchingBracket(
 				buffer,this.line,this.offset);
 			if(openBracketIndex == -1)
@@ -169,17 +164,17 @@ public interface IndentAction
 		{
 			return extraIndent;
 		}
-		
+
 		public void setExtraIndent(int extraIndent)
 		{
 			this.extraIndent = extraIndent;
 		}
-		
+
 		public int getOpenBracketColumn()
 		{
 			return openBracketColumn;
 		}
-		
+
 		public String getOpenBracketLine()
 		{
 			return openBracketLineText;
@@ -197,7 +192,7 @@ public interface IndentAction
 					+ (extraIndent * buffer.getIndentSize());
 			}
 		}
-		
+
 		public boolean keepChecking()
 		{
 			return false;
@@ -210,7 +205,7 @@ public interface IndentAction
 	class AlignOffset implements IndentAction
 	{
 		private int offset;
-		
+
 		public AlignOffset(int offset)
 		{
 			this.offset = offset;
@@ -254,4 +249,22 @@ public interface IndentAction
 			return false;
 		}
 	}
+
+
+	/**
+	 * This handles the following Java code:
+	 * if(something)
+	 * { // no indentation on this line, even though previous matches a rule
+	 */
+	Collapse PrevCollapse		= new Collapse();
+	/**
+	 * This handles cases like:
+	 * if (foo)
+	 *     bar;
+	 * for (something; condition; action) {
+	 * }
+	 * Without this the "for" line would be incorrectly indented.
+	 */
+	Collapse PrevPrevCollapse	= new Collapse();
 }
+

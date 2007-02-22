@@ -56,31 +56,27 @@ public class RegexpIndentRule implements IndentRule
 		int prevLineIndex, int prevPrevLineIndex,
 		List<IndentAction> indentActions)
 	{
-		boolean match = false;
-
 		if(thisAction != null
 			&& isMatch(buffer.getLineText(thisLineIndex)))
 		{
 			indentActions.add(thisAction);
-			match = true;
 		}
 		if(prevAction != null
 			&& prevLineIndex != -1
 			&& isMatch(buffer.getLineText(prevLineIndex)))
 		{
 			indentActions.add(prevAction);
-			match = true;
+			if (collapse)
+				indentActions.add(IndentAction.PrevCollapse);
 		}
 		if(prevPrevAction != null
 			&& prevPrevLineIndex != -1
 			&& isMatch(buffer.getLineText(prevPrevLineIndex)))
 		{
 			indentActions.add(prevPrevAction);
-			match = true;
+			if (collapse)
+				indentActions.add(IndentAction.PrevPrevCollapse);
 		}
-
-		if(match && collapse)
-			indentActions.add(new IndentAction.Collapse());
 	} //}}}
 
 	//{{{ isMatch() method

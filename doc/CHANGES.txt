@@ -58,6 +58,14 @@ for contributing to this release.
   the buffer options, disable encoding auto-detection for the buffer.
   (Kazutoshi Satoda)
 
+- SF Bug #1664900: Auto-indent breaks if previous line is a single line indent
+  The "collapse" action used as a hint for the OpenBracketIndentRule needs to
+  differentiate between the actions being triggered by code in the previous
+  line or by code in the "previous previous" line. This way, for example, a
+  "for" declared after an "if" that didn't use brackets will, correctly, not
+  be indented one level below the if. See the bug for more "graphical"
+  depictions. (Marcelo Vanzin)
+
 }}}
 
 {{{ Miscellaneous
