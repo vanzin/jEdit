@@ -35,6 +35,7 @@ import java.util.regex.PatternSyntaxException;
 import org.gjt.sp.jedit.indent.DeepIndentRule;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.indent.IndentRuleFactory;
+import org.gjt.sp.jedit.indent.WhitespaceRule;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -60,6 +61,7 @@ public class Mode
 	public Mode(String name)
 	{
 		this.name = name;
+		this.ignoreWhitespace = true;
 		props = new Hashtable<String, Object>();
 	} //}}}
 
@@ -234,6 +236,9 @@ public class Mode
 		if(props == null)
 			props = new Hashtable<String, Object>();
 
+		ignoreWhitespace = !"false".equalsIgnoreCase(
+					(String)props.get("ignoreWhitespace"));
+
 		// need to carry over file name and first line globs because they are
 		// not given to us by the XMode handler, but instead are filled in by
 		// the catalog loader.
@@ -286,6 +291,12 @@ public class Mode
 	public String toString()
 	{
 		return name;
+	} //}}}
+
+	//{{{ getIgnoreWhitespace() method
+	public boolean getIgnoreWhitespace()
+	{
+		return ignoreWhitespace;
 	} //}}}
 
 	//{{{ Indent rules
@@ -366,6 +377,9 @@ public class Mode
 		if (getBooleanProperty("deepIndent"))
 			rules.add(new DeepIndentRule());
 
+		if (!getIgnoreWhitespace())
+			rules.add(new WhitespaceRule());
+
 		indentRules = Collections.unmodifiableList(rules);
 	}
 
@@ -429,5 +443,6 @@ public class Mode
 	private TokenMarker marker;
 	private List<IndentRule> indentRules;
 	private String electricKeys;
+	private boolean ignoreWhitespace;
 	//}}}
 }

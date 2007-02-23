@@ -250,6 +250,26 @@ public interface IndentAction
 		}
 	}
 
+	/**
+	 * Used to cancel increases in indentation.
+	 *
+	 * @author Marcelo Vanzin
+	 */
+	class NoIncrease implements IndentAction
+	{
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
+				           int newIndent)
+		{
+			int current = StandardUtilities.getLeadingWhiteSpaceWidth(
+					buffer.getLineText(line),buffer.getTabSize());
+			return (current < newIndent) ? current : newIndent;
+		}
+
+		public boolean keepChecking()
+		{
+			return true;
+		}
+	}
 
 	/**
 	 * This handles the following Java code:

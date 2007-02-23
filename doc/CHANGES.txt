@@ -95,6 +95,14 @@ for contributing to this release.
 
 {{{ Editing
 - New edit mode: csv (jaco de groot).
+
+- Make the auto-indent code more friendly to languages where whitespace matters
+  more than usual, such as Python. A new mode property (ignoreWhitespace) was
+  added, which, when false, triggers some whitespace-related indent rules. Right
+  now it's tuned to Python, since I'm not familiar with other languages that
+  share the same characteristics. This also fixes SF bug #1382388. There are
+  some cases when some weird behavior still happens, when deep indent is
+  turned on. (Marcelo Vanzin)
 }}}
 
 {{{ API Changes
@@ -127,6 +135,12 @@ for contributing to this release.
 
 - ParserRule.hashChar and ParserRule.hashChars have been removed, since they
   weren't used anywhere. (Marcelo Vanzin)
+
+- In Buffer.java, the private "mode" field was moved to JEditBuffer.java as
+  a protected field. (Marcelo Vanzin)
+
+- New IndentRule (WhitespaceRule) and new indent action (NoIncrease)
+  were added. (Marcelo Vanzin)
 
 }}}
 

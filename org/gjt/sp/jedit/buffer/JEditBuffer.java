@@ -416,6 +416,11 @@ public class JEditBuffer
 	{
 		int returnValue = -1;
 
+		if (!mode.getIgnoreWhitespace())
+		{
+			return lineIndex - 1;
+		}
+
 		for(int i = lineIndex - 1; i >= 0; i--)
 		{
 			getLineText(i,seg);
@@ -1160,7 +1165,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public boolean isElectricKey(char ch)
 	{
-		Mode mode = jEdit.getMode(tokenMarker.getMainRuleSet().getModeName());
 		return mode.isElectricKey(ch);
 	} //}}}
 
@@ -2083,6 +2087,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Protected members
 
+	protected Mode mode;
 	protected Segment seg;
 	protected boolean textMode;
 	protected UndoManager undoMgr;

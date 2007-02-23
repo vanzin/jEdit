@@ -20,8 +20,13 @@
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="indentNextLines" VALUE="\s*[^#]{3,}:\s*(#.*)?" />
-		<PROPERTY NAME="unindentNextLines" VALUE="^\s*pass$" />
+		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+		<PROPERTY NAME="unindentNextLines" VALUE="^\s*(pass|else\s*:|elif\s.*:)$" />
+		<PROPERTY NAME="unindentThisLine" VALUE="^\s*(else|elif\s*.*)\s*:" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
+		<PROPERTY NAME="electricKeys" VALUE=":" />
+		<PROPERTY NAME="ignoreWhitespace" VALUE="false" />
 	</PROPS>
 	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- Comment -->
@@ -66,6 +71,7 @@
 		<SEQ TYPE="OPERATOR">|</SEQ>
 		<SEQ TYPE="OPERATOR">^</SEQ>
 		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="KEYWORD1">:</SEQ>
 
 		<MARK_PREVIOUS TYPE="FUNCTION"
 			EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
