@@ -42,6 +42,7 @@ import java.util.List;
  *
  * @author Marcelo Vanzin
  * @version $Id$
+ * @since jEdit 4.3pre10
  */
 public class WhitespaceRule implements IndentRule
 {
