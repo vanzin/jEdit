@@ -757,7 +757,8 @@ public class MiscUtilities
 	 */
 	public static Reader autodetect(InputStream in, Buffer buffer) throws IOException
 	{
-		in = new BufferedInputStream(in);
+		in = new BufferedInputStream(in
+			, BufferIORequest.ByteIOBufferSize());
 
 		String encoding;
 		if (buffer == null)

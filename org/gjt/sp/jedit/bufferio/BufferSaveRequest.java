@@ -133,16 +133,6 @@ public class BufferSaveRequest extends BufferIORequest
 						out = new GZIPOutputStream(out);
 
 					write(buffer,out);
-
-					if(twoStageSave)
-					{
-						makeBackup();
-						if(!vfs._rename(session,savePath,path,view))
-							throw new IOException("Rename failed: " + savePath);
-					}
-
-					if(!twoStageSave)
-						VFSManager.sendVFSUpdate(vfs,path,true);
 				}
 				finally
 				{
@@ -153,6 +143,16 @@ public class BufferSaveRequest extends BufferIORequest
 			{
 				IOUtilities.closeQuietly(out);
 			}
+
+			if(twoStageSave)
+			{
+				makeBackup();
+				if(!vfs._rename(session,savePath,path,view))
+					throw new IOException("Rename failed: " + savePath);
+			}
+
+			if(!twoStageSave)
+				VFSManager.sendVFSUpdate(vfs,path,true);
 		}
 		catch(UnsupportedCharsetException e)
 		{

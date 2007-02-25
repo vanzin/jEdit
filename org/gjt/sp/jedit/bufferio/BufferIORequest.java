@@ -66,6 +66,23 @@ public abstract class BufferIORequest extends WorkRequest
 	public static final int IOBUFSIZE = 32768;
 
 	/**
+	 * Size of character I/O buffers.
+	 */
+	public static final int CharIOBufferSize()
+	{
+		return IOBUFSIZE;
+	}
+
+	/**
+	 * Size of byte I/O buffers.
+	 */
+	public static final int ByteIOBufferSize()
+	{
+		// 2 is sizeof char in byte;
+		return IOBUFSIZE * 2;
+	}
+
+	/**
 	 * Number of lines per progress increment.
 	 */
 	public static final int PROGRESS_INTERVAL = 300;
@@ -296,8 +313,6 @@ public abstract class BufferIORequest extends WorkRequest
 		else
 			lineSeparator = "\n";
 
-		in.close();
-
 		// Chop trailing newline and/or ^Z (if any)
 		int bufferLength = seg.count;
 		if(bufferLength != 0)
@@ -343,98 +358,70 @@ public abstract class BufferIORequest extends WorkRequest
 	protected void write(Buffer buffer, OutputStream out)
 		throws IOException
 	{
-		try
+		out = new BufferedOutputStream(out, ByteIOBufferSize());
+		String encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
+		if(encoding.equals(MiscUtilities.UTF_8_Y))
 		{
-			out = new BufferedOutputStream(out);
-			String encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
-			if(encoding.equals(MiscUtilities.UTF_8_Y))
-			{
-				// not supported by Java...
-				out.write(UTF8_MAGIC_1);
-				out.write(UTF8_MAGIC_2);
-				out.write(UTF8_MAGIC_3);
-				out.flush();
-				encoding = "UTF-8";
-			}
-			else if (encoding.equals("UTF-16LE"))
-			{
-				out.write(UNICODE_MAGIC_2);
-				out.write(UNICODE_MAGIC_1);
-				out.flush();
-			}
-			else if (encoding.equals("UTF-16BE"))
-			{
-				out.write(UNICODE_MAGIC_1);
-				out.write(UNICODE_MAGIC_2);
-				out.flush();
-			}
-			CharsetEncoder encoder = Charset.forName(encoding).newEncoder();
-
-			Segment lineSegment = new Segment();
-			String newline = buffer.getStringProperty(JEditBuffer.LINESEP);
-			if(newline == null)
-				newline = System.getProperty("line.separator");
-			// Convert newline to bytes here to not get bothered
-			// with encoding at every newline.
-			ByteBuffer newlineBuffer = encoder.encode(CharBuffer.wrap(newline));
-			byte[] newlineBytes = new byte[newlineBuffer.limit()];
-			newlineBuffer.get(newlineBytes);
-			encoder.reset();
-
-			// This buffer is required to report encoding error
-			// with the line number. Without this, some lines are
-			// buffered in the Writer, and encoded together when
-			// the Writer is flushed.
-			ByteArrayOutputStream lineBuffer = new ByteArrayOutputStream(IOBUFSIZE);
-			// Pass the encoder explicitly to report a encode error
-			// as an exception.
-			// The form "OutputStreamWriter(..., encoding)" seemed
-			// to use CodingErrorAction.REPLACE internally.
-			Writer lineWriter = new OutputStreamWriter(lineBuffer, encoder);
-
-			setMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
-			setValue(0);
-
-			int i = 0;
-			while(i < buffer.getLineCount())
-			{
-				buffer.getLineText(i,lineSegment);
-				try
-				{
-					lineWriter.write(lineSegment.array,
-						lineSegment.offset,
-						lineSegment.count);
-					lineWriter.flush();
-				}
-				catch(CharacterCodingException e)
-				{
-					String message = "Failed to encode the line " + (i + 1);
-					IOException wrapping = new CharConversionException(message);
-					wrapping.initCause(e);
-					throw wrapping;
-				}
-				lineBuffer.writeTo(out);
-				lineBuffer.reset();
-
-				if(i != buffer.getLineCount() - 1)
-				{
-					out.write(newlineBytes);
-				}
-
-				if(++i % PROGRESS_INTERVAL == 0)
-					setValue(i / PROGRESS_INTERVAL);
-			}
-
-			if(jEdit.getBooleanProperty("stripTrailingEOL")
-				&& buffer.getBooleanProperty(Buffer.TRAILING_EOL))
-			{
-				out.write(newlineBytes);
-			}
+			// not supported by Java...
+			out.write(UTF8_MAGIC_1);
+			out.write(UTF8_MAGIC_2);
+			out.write(UTF8_MAGIC_3);
+			encoding = "UTF-8";
 		}
-		finally
+		else if (encoding.equals("UTF-16LE"))
 		{
-			IOUtilities.closeQuietly(out);
+			out.write(UNICODE_MAGIC_2);
+			out.write(UNICODE_MAGIC_1);
 		}
+		else if (encoding.equals("UTF-16BE"))
+		{
+			out.write(UNICODE_MAGIC_1);
+			out.write(UNICODE_MAGIC_2);
+		}
+		// Pass the encoder explicitly to report a encode error
+		// as an exception.
+		// The form "OutputStreamWriter(..., encoding)" seemed
+		// to use CodingErrorAction.REPLACE internally.
+		Writer writer = new OutputStreamWriter(out
+			, Charset.forName(encoding).newEncoder());
+
+		Segment lineSegment = new Segment();
+		String newline = buffer.getStringProperty(JEditBuffer.LINESEP);
+		if(newline == null)
+			newline = System.getProperty("line.separator");
+
+		final int bufferLineCount = buffer.getLineCount();
+		setMaximum(bufferLineCount / PROGRESS_INTERVAL);
+		setValue(0);
+
+		int i = 0;
+		while(i < bufferLineCount)
+		{
+			buffer.getLineText(i,lineSegment);
+			try
+			{
+				writer.write(lineSegment.array,
+					lineSegment.offset,
+					lineSegment.count);
+				if(i < bufferLineCount - 1
+					|| (jEdit.getBooleanProperty("stripTrailingEOL")
+						&& buffer.getBooleanProperty(Buffer.TRAILING_EOL)))
+				{
+					writer.write(newline);
+				}
+			}
+			catch(CharacterCodingException e)
+			{
+				String message = "Failed to encode the line " + (i + 1);
+				IOException wrapping = new CharConversionException(message);
+				wrapping.initCause(e);
+				throw wrapping;
+			}
+
+			if(++i % PROGRESS_INTERVAL == 0)
+				setValue(i / PROGRESS_INTERVAL);
+		}
+		writer.flush();
 	} //}}}
 
 	//}}}

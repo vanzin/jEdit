@@ -14,6 +14,8 @@ for contributing to this release.
 - special characters in file:// URLs passed on to jEdit.openFile()
   were not being properly decoded (1663617).
 
+- 1667659 - Fix for FTP I/O regression in 4.3pre9 (Kazutoshi Satoda)
+  
 - HyperSearch Results does not lose focus on enter (Bug 1260023,
   Patch 1646058) (Kazutoshi Satoda)
 
