@@ -23,15 +23,28 @@
 package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
+import java.io.BufferedOutputStream;
+import java.io.CharConversionException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+
 import javax.swing.text.Segment;
-import java.io.*;
-import java.nio.charset.*;
-import java.nio.CharBuffer;
-import java.nio.ByteBuffer;
-import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.*;
+
+import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.util.*;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.util.IntegerArray;
+import org.gjt.sp.util.SegmentBuffer;
+import org.gjt.sp.util.WorkRequest;
 //}}}
 
 /**
@@ -66,23 +79,6 @@ public abstract class BufferIORequest extends WorkRequest
 	public static final int IOBUFSIZE = 32768;
 
 	/**
-	 * Size of character I/O buffers.
-	 */
-	public static final int getCharIOBufferSize()
-	{
-		return IOBUFSIZE;
-	}
-
-	/**
-	 * Size of byte I/O buffers.
-	 */
-	public static final int getByteIOBufferSize()
-	{
-		// 2 is sizeof char in byte;
-		return IOBUFSIZE * 2;
-	}
-
-	/**
 	 * Number of lines per progress increment.
 	 */
 	public static final int PROGRESS_INTERVAL = 300;
@@ -97,6 +93,16 @@ public abstract class BufferIORequest extends WorkRequest
 	public static final String ERROR_OCCURRED = "BufferIORequest__error";
 
 	//}}}
+
+	//{{{ Instance variables
+	protected final View view;
+	protected final Buffer buffer;
+	protected final Object session;
+	protected final VFS vfs;
+	protected String path;
+	protected final String markersPath;
+	//}}}
+
 
 	//{{{ BufferIORequest constructor
 	/**
@@ -125,17 +131,24 @@ public abstract class BufferIORequest extends WorkRequest
 		return getClass().getName() + '[' + buffer + ']';
 	} //}}}
 
-	//{{{ Private members
 
-	//{{{ Instance variables
-	protected final View view;
-	protected final Buffer buffer;
-	protected final Object session;
-	protected final VFS vfs;
-	protected String path;
-	protected final String markersPath;
-	//}}}
+	/**
+	 * Size of character I/O buffers.
+	 */
+	public static final int getCharIOBufferSize()
+	{
+		return IOBUFSIZE;
+	}
 
+	/**
+	 * Size of byte I/O buffers.
+	 */
+	public static final int getByteIOBufferSize()
+	{
+		// 2 is sizeof char in byte;
+		return IOBUFSIZE * 2;
+	}
+	
 	//{{{ autodetect() method
 	/**
 	 * Tries to detect if the stream is gzipped, and if it has an encoding
@@ -172,11 +185,11 @@ public abstract class BufferIORequest extends WorkRequest
 
 		char[] buf = new char[IOBUFSIZE];
 
-		// Number of characters in 'buf' array.
-		// InputStream.read() doesn't always fill the
-		// array (eg, the file size is not a multiple of
-		// IOBUFSIZE, or it is a GZipped file, etc)
-		int len;
+		/* Number of characters in 'buf' array.
+		 InputStream.read() doesn't always fill the
+		 array (eg, the file size is not a multiple of
+		 IOBUFSIZE, or it is a GZipped file, etc) */
+ 		int len;
 
 		// True if a \n was read after a \r. Usually
 		// means this is a DOS/Windows file
@@ -237,28 +250,20 @@ public abstract class BufferIORequest extends WorkRequest
 					lastLine = i + 1;
 					break;
 				case '\n':
-					// If lastWasCR is true,
-					// we just read a \r followed
-					// by a \n. We specify that
-					// this is a Windows file,
-					// but take no further
-					// action and just ignore
-					// the \r.
+					/* If lastWasCR is true, we just read a \r followed
+					 by a \n. We specify that this is a Windows file,
+					 but take no further action and just ignore the \r. */
 					if(lastWasCR)
 					{
 						CROnly = false;
 						CRLF = true;
 						lastWasCR = false;
-						// Bump lastLine so
-						// that the next line
-						// doesn't erronously
-						// pick up the \r
-						lastLine = i + 1;
+						/* Bump lastLine so that the next line doesn't erronously
+						  pick up the \r */ 
+						lastLine = i + 1; 
 					}
-					// Otherwise, we found a \n
-					// that follows some other
-					// character, hence we have
-					// a Unix file
+					/* Otherwise, we found a \n that follows some other
+					 *  character, hence we have a Unix file */
 					else
 					{
 						CROnly = false;
@@ -273,11 +278,9 @@ public abstract class BufferIORequest extends WorkRequest
 					}
 					break;
 				default:
-					// If we find some other
-					// character that follows
-					// a \r, so it is not a
-					// Windows file, and probably
-					// a Mac file
+					/*  If we find some other character that follows
+					 a \r, so it is not a Windows file, and probably
+					 a Mac file */
 					if(lastWasCR)
 					{
 						CROnly = true;
