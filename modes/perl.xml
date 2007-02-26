@@ -224,27 +224,28 @@
 			<END>|</END>
 		</SPAN_REGEXP>
 
-		<!-- transliterations -->
+		<!-- tr/// transliteration -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="tr"
             AT_WORD_START="TRUE">tr\s*\{.*?[^\\]\}\s*\{(?:.*?[^\\])*\}[cds]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="tr"
             AT_WORD_START="TRUE">tr([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[cds]*</SEQ_REGEXP>
 
+		<!-- y/// translation -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="y"
             AT_WORD_START="TRUE">y\s*\{.*?[^\\]\}\s*\{(?:.*?[^\\])*\}[cds]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="y"
             AT_WORD_START="TRUE">y([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[cds]*</SEQ_REGEXP>
 
-		<!-- regular expression matching with "m" -->
+		<!-- m// regular expression matching -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="m"
 			AT_WORD_START="TRUE">m\s*\{.*?[^\\]\}[cgimosx]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="m"
 			AT_WORD_START="TRUE">m([^\p{Alnum}\p{Space}\}])(?:.*?[^\\])\1[cgimosx]*</SEQ_REGEXP>
 
-		<!-- regular expression replacing with "s" -->
+		<!-- s/// regular expression substitution -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="s"
             AT_WORD_START="TRUE">s\s*\{.*?[^\\]\}\s*\{(?:.*?[^\\])*\}[egimosx]*</SEQ_REGEXP>
 

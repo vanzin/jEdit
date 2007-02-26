@@ -15,7 +15,7 @@ for contributing to this release.
   were not being properly decoded (1663617).
 
 - 1667659 - Fix for FTP I/O regression in 4.3pre9 (Kazutoshi Satoda)
-  
+
 - HyperSearch Results does not lose focus on enter (Bug 1260023,
   Patch 1646058) (Kazutoshi Satoda)
 
@@ -107,6 +107,7 @@ for contributing to this release.
   turned on. (Marcelo Vanzin)
 
 - Applied SF Patch #1663485: perl.xml patch for variables
+- Applied SF patch #1667234: clearer comments in certain parts of perl.xml
 
 }}}
 
