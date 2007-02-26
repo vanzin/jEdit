@@ -105,6 +105,9 @@ for contributing to this release.
   share the same characteristics. This also fixes SF bug #1382388. There are
   some cases when some weird behavior still happens, when deep indent is
   turned on. (Marcelo Vanzin)
+
+- Applied SF Patch #1663485: perl.xml patch for variables
+
 }}}
 
 {{{ API Changes
