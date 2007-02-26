@@ -68,7 +68,7 @@ public abstract class BufferIORequest extends WorkRequest
 	/**
 	 * Size of character I/O buffers.
 	 */
-	public static final int CharIOBufferSize()
+	public static final int getCharIOBufferSize()
 	{
 		return IOBUFSIZE;
 	}
@@ -76,7 +76,7 @@ public abstract class BufferIORequest extends WorkRequest
 	/**
 	 * Size of byte I/O buffers.
 	 */
-	public static final int ByteIOBufferSize()
+	public static final int getByteIOBufferSize()
 	{
 		// 2 is sizeof char in byte;
 		return IOBUFSIZE * 2;
@@ -358,7 +358,7 @@ public abstract class BufferIORequest extends WorkRequest
 	protected void write(Buffer buffer, OutputStream out)
 		throws IOException
 	{
-		out = new BufferedOutputStream(out, ByteIOBufferSize());
+		out = new BufferedOutputStream(out, getByteIOBufferSize());
 		String encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
 		if(encoding.equals(MiscUtilities.UTF_8_Y))
 		{
