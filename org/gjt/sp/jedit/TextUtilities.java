@@ -85,12 +85,12 @@ public class TextUtilities
 	{
 		switch(ch)
 		{
-		case '(': direction[0] = true;  return ')';
-		case ')': direction[0] = false; return '(';
-		case '[': direction[0] = true;  return ']';
-		case ']': direction[0] = false; return '[';
-		case '{': direction[0] = true;  return '}';
-		case '}': direction[0] = false; return '{';
+		case '(': if (direction != null) direction[0] = true;  return ')';
+		case ')': if (direction != null) direction[0] = false; return '(';
+		case '[': if (direction != null) direction[0] = true;  return ']';
+		case ']': if (direction != null) direction[0] = false; return '[';
+		case '{': if (direction != null) direction[0] = true;  return '}';
+		case '}': if (direction != null) direction[0] = false; return '{';
 		default:  return '\0';
 		}
 	} //}}}
@@ -252,14 +252,14 @@ public class TextUtilities
 		return findWordStart(line, pos, noWordSep, true, false);
 	} //}}}
 
-	
+
 	/** Similar to perl's join() method on lists,
 	 *    but works with all collections.
-	 * 
+	 *
 	 * @param c An iterable collection of Objects
 	 * @param delim a string to put between each object
 	 * @return a joined toString() representation of the collection
-	 * 
+	 *
 	 * @since jedit 4.3pre3
 	 */
 	public static String join(Collection c, String delim) {
@@ -275,7 +275,7 @@ public class TextUtilities
 		}
 		return retval.toString();
 	}
-	
+
 	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.
@@ -793,7 +793,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 			lineLength += word.length();
 		}
 	} //}}}
-	
+
 	//{{{ indexIgnoringWhitespace() method
 	public static void indexIgnoringWhitespace(String text, int maxLineLength,
 		int tabSize, StringBuffer buf)

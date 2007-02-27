@@ -28,6 +28,7 @@ import javax.swing.text.Segment;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.SegmentCharSequence;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -135,17 +136,12 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			} //}}}
 
 			//{{{ check for end of delegate
-			if(context.parent != null)
+			if (context.parent != null
+			    && context.parent.inRule != null
+			    && checkDelegateEnd(context.parent.inRule))
 			{
-				ParserRule rule = context.parent.inRule;
-				if(rule != null)
-				{
-					if(checkDelegateEnd(rule))
-					{
-						seenWhitespaceEnd = true;
-						continue main_loop;
-					}
-				}
+				seenWhitespaceEnd = true;
+				continue main_loop;
 			} //}}}
 
 			//{{{ check every rule
@@ -166,7 +162,7 @@ escape_checking:			if ((rule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESC
 							{
 								break escape_checking;
 							}
-						} //}}}
+						}
 						escaped = !escaped;
 						pos += escapeSequenceCount - 1;
 					}
@@ -808,7 +804,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 		for(int i = 0; i < end.length; i++)
 		{
 			char ch = end[i];
-			if(ch == '$')
+			if(ch == '$' || ch == '~')
 			{
 				if(i == end.length - 1)
 					buf.append(ch);
@@ -817,10 +813,24 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 					char digit = end[i + 1];
 					if(!Character.isDigit(digit))
 						buf.append(ch);
-					else
+					else if (ch == '$')
 					{
 						buf.append(match.group(
 							digit - '0'));
+						i++;
+					}
+					else
+					{
+						String s = match.group(digit - '0');
+						if (s.length() == 1)
+						{
+							char b = TextUtilities.getComplementaryBracket(s.charAt(0), null);
+							if (b == '\0')
+								b = s.charAt(0);
+							buf.append(b);
+						}
+						else
+							buf.append(ch);
 						i++;
 					}
 				}

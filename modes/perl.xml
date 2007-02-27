@@ -197,31 +197,10 @@
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/"
 			AT_WORD_START="TRUE">/.*?[^\\]/[cgimosx]*(?!\s*[\d\$\@\(\-])</SEQ_REGEXP>
 
-        <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
-		<SEQ_REGEXP TYPE="MARKUP"
-                	HASH_CHAR="q"
-                	AT_WORD_START="TRUE">q(?:|[qx])\{.*\}</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="MARKUP"
-                	HASH_CHAR="qr"
-                	AT_WORD_START="TRUE">qr\{.*\}[imosx]*</SEQ_REGEXP>
-
-		<!-- For multi-line 'q' statements.
-			 Do we really need one entry per possible delimiter? {, (, etc... -->
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\{</BEGIN>
-			<END>}</END>
-		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\(</BEGIN>
-			<END>)</END>
-		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\/</BEGIN>
-			<END>/</END>
-		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\|</BEGIN>
-			<END>|</END>
+        <!-- q//, qq//, qr//, qx// -->
+		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" DELEGATE="QUOTED" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
+			<BEGIN>q(?:|[qrxw])([#\[{(/|])</BEGIN>
+			<END>~1</END>
 		</SPAN_REGEXP>
 
 		<!-- tr/// transliteration -->
@@ -730,6 +709,14 @@
 		<SEQ TYPE="LITERAL2">&amp;</SEQ>
 		<SEQ TYPE="LITERAL2">*</SEQ>
 		<SEQ TYPE="LITERAL3">\</SEQ>
+	</RULES>
+
+	<!-- Used for quote-like operators; just makes sure the brackets are balanced. -->
+	<RULES SET="QUOTED" DEFAULT="LITERAL1">
+		<SPAN_REGEXP NO_LINE_BREAK="FALSE" TYPE="LITERAL1" DELEGATE="QUOTED" HASH_CHARS="|[{(/">
+			<BEGIN>([|\[{\(])</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
 	</RULES>
 
 </MODE>

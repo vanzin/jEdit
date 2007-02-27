@@ -109,6 +109,16 @@ for contributing to this release.
 - Applied SF Patch #1663485: perl.xml patch for variables
 - Applied SF patch #1667234: clearer comments in certain parts of perl.xml
 
+- Change the way perl "quote operators" are matched. See SF Patch #1659666
+  for discussion. The fix is twofold: first, add a new "special" value for the
+  end tag in SPAN_REGEXP, "~[digit]", which tries to find the matching bracket
+  of the matched reference (if can't find the matching bracket, just use the tag
+  body as a literal string). Second, add a new rule that highlights everything
+  as "LITERAL1", used to maintain balanced brackets, and use it to highlight
+  everything inside a "q" operator. This probably needs more tweaking, i.e.,
+  supporting quote operators that allow interpolation, and change the other
+  operators that look like "q" (such as tr). (Marcelo Vanzin)
+
 }}}
 
 {{{ API Changes
