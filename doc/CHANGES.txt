@@ -69,7 +69,6 @@ for contributing to this release.
   depictions. (Marcelo Vanzin)
 
 }}}
-
 {{{ Miscellaneous
 
 - New View option: # of max visible rows in buffer switcher
@@ -95,7 +94,6 @@ for contributing to this release.
 
 - New popup menu in Register dockable panel (Matthieu Casanova)
 }}}
-
 {{{ Editing
 - New edit mode: csv (jaco de groot).
 
@@ -120,8 +118,10 @@ for contributing to this release.
   supporting quote operators that allow interpolation, and change the other
   operators that look like "q" (such as tr). (Marcelo Vanzin)
 
-}}}
+- Added some support to EL and better css and javascript coloration 
+  in jsp.xml (Matthieu Casanova)
 
+}}}
 {{{ API Changes
 
 - VFS.isMarkersFileSupported() added to give a VFS the chance to tell
