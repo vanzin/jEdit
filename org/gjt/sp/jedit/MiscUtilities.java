@@ -751,14 +751,14 @@ public class MiscUtilities
 	 *
 	 * @param in the input stream reader that must be autodetected
 	 * @param buffer a buffer. It can be null if you only want to autodetect the encoding of a file
-	 * @return a reader using the detected encoding
+	 * @return a Reader using the detected encoding
 	 * @throws IOException io exception during read
 	 * @since jEdit 4.3pre5
 	 */
 	public static Reader autodetect(InputStream in, Buffer buffer) throws IOException
 	{
-		in = new BufferedInputStream(in
-			, BufferIORequest.ByteIOBufferSize());
+		in = new BufferedInputStream(in,
+				BufferIORequest.getByteIOBufferSize());
 
 		String encoding;
 		if (buffer == null)
@@ -857,7 +857,7 @@ public class MiscUtilities
 			}
 		}
 
-		return new InputStreamReader(in,encoding);
+		return new InputStreamReader(in, encoding);
 	} //}}}
 
 	//{{{ getXMLEncoding() method
