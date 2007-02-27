@@ -778,6 +778,7 @@ public class MiscUtilities
 			if(b1 == BufferIORequest.GZIP_MAGIC_1 && b2 == BufferIORequest.GZIP_MAGIC_2)
 			{
 				in.reset();
+				Log.log(Log.DEBUG, MiscUtilities.class, "Stream is Gzipped");
 				in = new GZIPInputStream(in);
 				if (buffer != null)
 					buffer.setBooleanProperty(Buffer.GZIPPED,true);
@@ -856,7 +857,7 @@ public class MiscUtilities
 				in.reset();
 			}
 		}
-
+		Log.log(Log.DEBUG, MiscUtilities.class, "Stream encoding detected is " + encoding);
 		return new InputStreamReader(in, encoding);
 	} //}}}
 
@@ -1478,7 +1479,7 @@ loop:		for(;;)
 	//{{{ StringCompare class
 	/**
 	 * Compares strings.
-	 * @deprecated use {@link org.gjt.sp.jedit.util.StandardUtilities#StringCompare}
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities.StringCompare}
 	 */
 	@Deprecated
 	public static class StringCompare implements Compare
