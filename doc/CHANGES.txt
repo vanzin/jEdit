@@ -93,6 +93,7 @@ for contributing to this release.
 - New LayoutManager ExtendedGridLayout added. For further explanations see
   its JavaDoc. (Björn "Vampire" Kautler)
 
+- New popup menu in Register dockable panel (Matthieu Casanova)
 }}}
 
 {{{ Editing
