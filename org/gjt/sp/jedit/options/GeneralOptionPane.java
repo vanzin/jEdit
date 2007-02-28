@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.util.Arrays;
 import org.gjt.sp.jedit.*;
@@ -66,7 +67,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
 		lineSeparator = new JComboBox(lineSeps);
-		String lineSep = jEdit.getProperty("buffer.lineSeparator",
+		String lineSep = jEdit.getProperty("buffer."+Buffer.LINESEP,
 			System.getProperty("line.separator"));
 		if("\n".equals(lineSep))
 			lineSeparator.setSelectedIndex(0);
@@ -82,7 +83,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
 		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
-		encoding.setSelectedItem(jEdit.getProperty("buffer.encoding",
+		encoding.setSelectedItem(jEdit.getProperty("buffer."+Buffer.ENCODING,
 			System.getProperty("file.encoding")));
 		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
 
@@ -221,8 +222,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			lineSep = "\r";
 			break;
 		}
-		jEdit.setProperty("buffer.lineSeparator",lineSep);
-		jEdit.setProperty("buffer.encoding",(String)
+		jEdit.setProperty("buffer."+Buffer.LINESEP,lineSep);
+		jEdit.setProperty("buffer."+Buffer.ENCODING,(String)
 			encoding.getSelectedItem());
 		jEdit.setBooleanProperty("buffer.encodingAutodetect",
 			encodingAutodetect.isSelected());

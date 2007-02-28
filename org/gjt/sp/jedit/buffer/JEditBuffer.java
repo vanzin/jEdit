@@ -2475,5 +2475,10 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return jEdit.getMode(modeName).getIndentRules();
 	} //}}}
 
+	//{{{ getUndoManager() method
+	public UndoManager getUndoManager() {
+		return undoMgr;
+	} //}}}
+
 	//}}}
 }

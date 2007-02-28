@@ -81,7 +81,7 @@ public class BufferSaveRequest extends BufferIORequest
 			// the entire save operation can be aborted...
 			setAbortable(true);
 
-			path = vfs._canonPath(session,path,view);			
+			path = vfs._canonPath(session,path,view);
 			if(!MiscUtilities.isURL(path))
 				path = MiscUtilities.resolveSymlinks(path);
 
@@ -137,6 +137,9 @@ public class BufferSaveRequest extends BufferIORequest
 				finally
 				{
 					buffer.readUnlock();
+					if(jEdit.getBooleanProperty("resetUndoOnSave")){
+						buffer.getUndoManager().clear();
+					}
 				}
 			}
 			finally

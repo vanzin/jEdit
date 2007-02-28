@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre10
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
-Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin and Kazutoshi Satoda
-for contributing to this release.
+Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda
+and Joseph Erickson for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -118,8 +118,11 @@ for contributing to this release.
   supporting quote operators that allow interpolation, and change the other
   operators that look like "q" (such as tr). (Marcelo Vanzin)
 
-- Added some support to EL and better css and javascript coloration 
+- Added some support to EL and better css and javascript coloration
   in jsp.xml (Matthieu Casanova)
+
+- SF Patch #1666690: No Undo past file save option
+  Add option to reset the "undos" when a buffer is saved. (Joseph Erickson)
 
 }}}
 {{{ API Changes
@@ -158,6 +161,8 @@ for contributing to this release.
 
 - New IndentRule (WhitespaceRule) and new indent action (NoIncrease)
   were added. (Marcelo Vanzin)
+
+- new method: JEditBuffer.getUndoManager(). (Joseph Erickson)
 
 }}}
 

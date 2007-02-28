@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.util.Arrays;
 
@@ -130,6 +131,13 @@ public class EditingOptionPane extends AbstractOptionPane
 
 		undoCount = new JTextField(jEdit.getProperty("buffer.undoCount"));
 		addComponent(jEdit.getProperty("options.editing.undoCount"),undoCount);
+		
+		//{{{ Reset Undo Manager On Save
+		resetUndoOnSave = new JCheckBox(jEdit.getProperty("options.general.resetUndo"));
+		resetUndoOnSave.setSelected(jEdit.getBooleanProperty("resetUndoOnSave"));
+		addComponent(resetUndoOnSave);
+		//}}}
+
 	} //}}}
 
 	//{{{ _save() method
@@ -138,6 +146,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		jEdit.setProperty("buffer.defaultMode",
 			((Mode)defaultMode.getSelectedItem()).getName());
 		jEdit.setProperty("buffer.undoCount",undoCount.getText());
+		jEdit.setBooleanProperty("resetUndoOnSave", resetUndoOnSave.isSelected());
 
 		saveMode();
 
@@ -154,6 +163,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	//{{{ Instance variables
 	private JComboBox defaultMode;
 	private JTextField undoCount;
+	private JCheckBox resetUndoOnSave;
 	private ModeProperties global;
 	private ModeProperties[] modeProps;
 	private ModeProperties current;

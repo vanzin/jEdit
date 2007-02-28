@@ -1626,6 +1626,7 @@ options.general.recentFiles=Recent files to remember:
 options.general.sortRecent=Sort recent file list
 options.general.saveCaret=Save caret positions in recent file list
 options.general.persistentMarkers=Save marker positions
+options.general.resetUndo=Reset undo history on save
 options.general.restore=Restore previously open files on startup
 options.general.restore.remote=... including remote files over VFS
 options.general.restore.cli=... including file names specified on the command line
