@@ -155,3 +155,5 @@
 # Where to find the ant-contrib jar.
 #ant-contrib.jar=ant-contrib-1.0b1.jar
 
+# Where to find the findbugs lib dir.
+#findbugs.lib.dir=<findbugs-install-dir>/lib

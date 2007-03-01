@@ -74,7 +74,7 @@ import org.gjt.sp.util.Log;
  *    &lt;/DOCKABLE&gt;
  *&lt;/DOCKABLES&gt;</pre>
  *
- * <p>More than one <code>&lt;DOCKABLE&gt;<code> tag may be present. The code that
+ * <p>More than one <code>&lt;DOCKABLE&gt;</code> tag may be present. The code that
  * creates the dockable can reference any BeanShell built-in variable
  * (see {@link org.gjt.sp.jedit.BeanShell}), along with a variable
  * <code>position</code> whose value is one of

@@ -68,6 +68,11 @@ and Joseph Erickson for contributing to this release.
   be indented one level below the if. See the bug for more "graphical"
   depictions. (Marcelo Vanzin)
 
+- Some bugfixes and improvements to ExtendedGridLayout. (Björn "Vampire" Kautler)
+
+- Fixed that files were shown in VFSBrowser in choose directory mode.
+  (Björn "Vampire" Kautler)
+
 }}}
 {{{ Miscellaneous
 
@@ -93,8 +98,10 @@ and Joseph Erickson for contributing to this release.
   its JavaDoc. (Björn "Vampire" Kautler)
 
 - New popup menu in Register dockable panel (Matthieu Casanova)
+
 }}}
 {{{ Editing
+
 - New edit mode: csv (jaco de groot).
 
 - Make the auto-indent code more friendly to languages where whitespace matters
@@ -106,6 +113,7 @@ and Joseph Erickson for contributing to this release.
   turned on. (Marcelo Vanzin)
 
 - Applied SF Patch #1663485: perl.xml patch for variables
+
 - Applied SF patch #1667234: clearer comments in certain parts of perl.xml
 
 - Change the way perl "quote operators" are matched. See SF Patch #1659666
@@ -163,6 +171,9 @@ and Joseph Erickson for contributing to this release.
   were added. (Marcelo Vanzin)
 
 - new method: JEditBuffer.getUndoManager(). (Joseph Erickson)
+
+- new method: SearchAndReplace.replaceAll(View,boolean) to do a replace all,
+  but not open files that were not open before. (Björn "Vampire" Kautler)
 
 }}}
 

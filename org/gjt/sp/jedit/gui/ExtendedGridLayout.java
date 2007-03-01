@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import static java.awt.Component.CENTER_ALIGNMENT;
+
 import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
 
 /** A layout manager that places components in a rectangular grid
@@ -138,7 +140,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  *
 	  * @see ExtendedGridLayoutConstraints
 	  */
-	private Hashtable<Component,ExtendedGridLayoutConstraints> comptable;
+	private final Hashtable<Component,ExtendedGridLayoutConstraints> comptable;
 	
 	/**
 	  * Specifies the horizontal space between two columns.
@@ -147,7 +149,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @see #distanceToBorders
 	  * @see #vgap
 	  */
-	private int hgap;
+	private final int hgap;
 	
 	/**
 	  * Specifies the vertical space between two rows.
@@ -156,7 +158,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @see #distanceToBorders
 	  * @see #hgap
 	  */
-	private int vgap;
+	private final int vgap;
 	
 	/**
 	  * Specifies the gap between the grid and the borders of the parent container.
@@ -165,7 +167,7 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @see #hgap
 	  * @see #vgap
 	  */
-	private Insets distanceToBorders;
+	private final Insets distanceToBorders;
 	
 	/**
 	  * An enum to tell the {@code getSize()} method which size is requested.
@@ -306,11 +308,11 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * the furthest away from the origin, 0.5 is centered, etc.
 	  * 
 	  * @param container The container for which the alignment should be returned
-	  * @return The alignment along the X axis for the container
+	  * @return {@code java.awt.Component.CENTER_ALIGNMENT}
 	  */
 	public float getLayoutAlignmentX(Container container)
 	{
-		return container.getAlignmentX();
+		return CENTER_ALIGNMENT;
 	}
 	
 	/**
@@ -321,11 +323,11 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * the furthest away from the origin, 0.5 is centered, etc.
 	  * 
 	  * @param container The container for which the alignment should be returned
-	  * @return The alignment along the Y axis for the container
+	  * @return {@code java.awt.Component.CENTER_ALIGNMENT}
 	  */
 	public float getLayoutAlignmentY(Container container)
 	{
-		return container.getAlignmentY();
+		return CENTER_ALIGNMENT;
 	}
 	
 	/**
@@ -439,13 +441,13 @@ public class ExtendedGridLayout implements LayoutManager2
 					 - distanceToBorders.top - distanceToBorders.bottom;
 			redistributeSpace(preferredSize.width,
 					  freeWidth,
-					  gridSize.width,
+					  0,gridSize.width,
 					  preferredColWidths,
 					  minimumColWidths,
 					  maximumColWidths);
 			redistributeSpace(preferredSize.height,
 					  freeHeight,
-					  gridSize.height,
+					  0,gridSize.height,
 					  preferredRowHeights,
 					  minimumRowHeights,
 					  maximumRowHeights);
@@ -508,7 +510,8 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @param freeSize              The available space for displaying components
 	  *                              without any gaps between components or between
 	  *                              the grid and the borders of the parent container
-	  * @param nelements             The amount of rows or columns
+	  * @param start                 The start in the arrays of rows or columns inclusive
+	  * @param stop                  The stop in the arrays of rows or columns exclusive
 	  * @param preferredElementSizes The preferredSizes of the rows or columns.
 	  *                              After invocation of this method, this array
 	  *                              holds the sizes that should be used
@@ -516,21 +519,23 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @param maximumElementSizes   The maximumSizes of the rows or columns
 	  */
 	private void redistributeSpace(int totalSize, int freeSize,
-				       int nelements, int[] preferredElementSizes,
-				       int[] minimumElementSizes, int[] maximumElementSizes)
+				       int start, int stop,
+				       int[] preferredElementSizes,
+				       int[] minimumElementSizes,
+				       int[] maximumElementSizes)
 	{
 		if (totalSize != freeSize)
 		{
 			boolean grow = totalSize < freeSize;
 			// calculate the size that is available for redistribution
 			freeSize = (freeSize - totalSize) * (grow ? 1 : -1);
-			while (freeSize != 0)
+			while (freeSize > 0)
 			{
 				// calculate the amount of elements that can be resized without violating
 				// the minimum and maximum sizes and their current cumulated size
 				int modifyableAmount = 0;
-				int modifySize = 0;
-				for (int i=0 ; i<nelements ; i++)
+				long modifySize = 0;
+				for (int i=start ; i<stop ; i++)
 				{
 					if ((grow && (preferredElementSizes[i] < maximumElementSizes[i])) ||
 					    (!grow && (preferredElementSizes[i] > minimumElementSizes[i])))
@@ -543,12 +548,12 @@ public class ExtendedGridLayout implements LayoutManager2
 				// if all elements are at their minimum or maximum size, resize all elements
 				if (0 == modifyableAmount)
 				{
-					for (int i= 0 ; i<nelements ; i++)
+					for (int i=start ; i<stop ; i++)
 					{
 						modifySize += preferredElementSizes[i];
 					}
 					checkBounds = false;
-					modifyableAmount = nelements;
+					modifyableAmount = stop - start;
 				}
 				// to prevent an endless loop if the container gets resized to a very small amount
 				if (modifySize == 0)
@@ -558,7 +563,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				// resize the elements
 				if (freeSize < modifyableAmount)
 				{
-					for (int i=0 ; i<nelements ; i++)
+					for (int i=start ; i<stop ; i++)
 					{
 						if ((freeSize != 0) &&
 						    (!checkBounds ||
@@ -577,11 +582,12 @@ public class ExtendedGridLayout implements LayoutManager2
 				}
 				else
 				{
-					int modifySizeAddition = 0;
-					for (int i=0 ; i<nelements ; i++)
+					long modifySizeAddition = 0;
+					double factor = (double)(freeSize + modifySize) / (double)modifySize;
+					for (int i=start ; i<stop ; i++)
 					{
-						int modifyableSize = (checkBounds ? (grow ? maximumElementSizes[i] - preferredElementSizes[i] : preferredElementSizes[i] - minimumElementSizes[i]) : Integer.MAX_VALUE - preferredElementSizes[i]);
-						int elementModifySize = (int)((double)freeSize / (double)modifySize * (double)preferredElementSizes[i]);
+						long modifyableSize = (checkBounds ? (grow ? maximumElementSizes[i] - preferredElementSizes[i] : preferredElementSizes[i] - minimumElementSizes[i]) : Integer.MAX_VALUE - preferredElementSizes[i]);
+						long elementModifySize = Math.abs(Math.round((factor * preferredElementSizes[i]) - preferredElementSizes[i]));
 						if (elementModifySize <= modifyableSize)
 						{
 							preferredElementSizes[i] += (grow ? elementModifySize : -elementModifySize);
@@ -648,18 +654,18 @@ public class ExtendedGridLayout implements LayoutManager2
 		{
 			throw new IllegalArgumentException("If fillRawSizes is true, resultArrays.length must be >= 6 (" + resultArrays.length + ')');
 		}
-		long[] minimumColWidths = new long[gridSize.width];
-		long[] minimumRowHeights = new long[gridSize.height];
-		long[] preferredColWidths = new long[gridSize.width];
-		long[] preferredRowHeights = new long[gridSize.height];
-		long[] maximumColWidths = new long[gridSize.width];
-		long[] maximumRowHeights = new long[gridSize.height];
+		int[] minimumColWidths = new int[gridSize.width];
+		int[] minimumRowHeights = new int[gridSize.height];
+		int[] preferredColWidths = new int[gridSize.width];
+		int[] preferredRowHeights = new int[gridSize.height];
+		int[] maximumColWidths = new int[gridSize.width];
+		int[] maximumRowHeights = new int[gridSize.height];
 		Arrays.fill(minimumColWidths,0);
 		Arrays.fill(minimumRowHeights,0);
 		Arrays.fill(preferredColWidths,0);
 		Arrays.fill(preferredRowHeights,0);
-		Arrays.fill(maximumColWidths,Long.MAX_VALUE);
-		Arrays.fill(maximumRowHeights,Long.MAX_VALUE);
+		Arrays.fill(maximumColWidths,0);
+		Arrays.fill(maximumRowHeights,0);
 		
 		// get the maximum of the minimum sizes,
 		//     the maximum of the preferred sizes and
@@ -669,7 +675,6 @@ public class ExtendedGridLayout implements LayoutManager2
 		for (int row=0 ; row<gridSize.height ; row++)
 		{
 			List<ExtendedGridLayoutConstraints> gridRow = gridRows.get(row);
-			int rowHeight = 0;
 			for (int col=0 ; col<gridSize.width ; col++)
 			{
 				ExtendedGridLayoutConstraints cell = gridRow.get(col);
@@ -683,15 +688,35 @@ public class ExtendedGridLayout implements LayoutManager2
 					{
 						minimumColWidths[col] = Math.max(minimumColWidths[col],minimumSize.width);
 						preferredColWidths[col] = Math.max(preferredColWidths[col],preferredSize.width);
-						maximumColWidths[col] = Math.min(maximumColWidths[col],maximumSize.width);
+						maximumColWidths[col] = Math.max(maximumColWidths[col],maximumSize.width);
 					}
 					if (!rowspans.contains(cell))
 					{
 						minimumRowHeights[row] = Math.max(minimumRowHeights[row],minimumSize.height);
 						preferredRowHeights[row] = Math.max(preferredRowHeights[row],preferredSize.height);
-						maximumRowHeights[row] = Math.min(maximumRowHeights[row],maximumSize.height);
+						maximumRowHeights[row] = Math.max(maximumRowHeights[row],maximumSize.height);
 					}
 				}
+			}
+		}
+		
+		// correct cases where
+		// minimumColWidths[col] <= preferredColWidths[col] <= maximumColWidths[col]
+		// is not true by clipping to the minimumColWidths and maximumColWidths
+		for (int col=0 ; col<gridSize.width ; col++)
+		{
+			if (minimumColWidths[col] >= maximumColWidths[col])
+			{
+				maximumColWidths[col] = minimumColWidths[col];
+				preferredColWidths[col] = minimumColWidths[col];
+			}
+			else if (preferredColWidths[col] < minimumColWidths[col])
+			{
+				preferredColWidths[col] = minimumColWidths[col];
+			}
+			else if (preferredColWidths[col] > maximumColWidths[col])
+			{
+				preferredColWidths[col] = maximumColWidths[col];
 			}
 		}
 		
@@ -702,88 +727,60 @@ public class ExtendedGridLayout implements LayoutManager2
 			int fromCol = cell.getCol();
 			int colspan = cell.getEffectiveColspan();
 			int toCol = fromCol + colspan;
-			int currentMinimumColWidth = (colspan - 1) * hgap;
-			int currentPreferredColWidth = (colspan - 1) * hgap;
-			int currentMaximumColWidth = (colspan - 1) * hgap;
+			int currentMinimumColWidth = 0;
+			int currentPreferredColWidth = 0;
+			int currentMaximumColWidth = 0;
 			for (int col=fromCol ; col<toCol ; col++)
 			{
-				currentMinimumColWidth += minimumColWidths[col];
-				currentPreferredColWidth += preferredColWidths[col];
-				currentMaximumColWidth += maximumColWidths[col];
+				int minimumColWidth = minimumColWidths[col];
+				if ((Integer.MAX_VALUE-minimumColWidth) < currentMinimumColWidth) {
+					currentMinimumColWidth = Integer.MAX_VALUE;
+				} else {
+					currentMinimumColWidth += minimumColWidth;
+				}
+				int preferredColWidth = preferredColWidths[col];
+				if ((Integer.MAX_VALUE-preferredColWidth) < currentPreferredColWidth) {
+					currentPreferredColWidth = Integer.MAX_VALUE;
+				} else {
+					currentPreferredColWidth += preferredColWidth;
+				}
+				int maximumColWidth = maximumColWidths[col];
+				if ((Integer.MAX_VALUE-maximumColWidth) < currentMaximumColWidth) {
+					currentMaximumColWidth = Integer.MAX_VALUE;
+				} else {
+					currentMaximumColWidth += maximumColWidth;
+				}
 			}
 			Component component = cell.getComponent();
-			int wantedMinimumColWidth = component.getMinimumSize().width;
+			int wantedMaximumColWidth = component.getMaximumSize().width - ((colspan - 1) * hgap);
+			if (currentMaximumColWidth < wantedMaximumColWidth)
+			{
+				redistributeSpace(currentMaximumColWidth,
+						  wantedMaximumColWidth,
+						  fromCol,toCol,
+						  maximumColWidths,
+						  maximumColWidths,
+						  maximumColWidths);
+			}
+			int wantedMinimumColWidth = component.getMinimumSize().width - ((colspan - 1) * hgap);
 			if (currentMinimumColWidth < wantedMinimumColWidth)
 			{
-				double factor = (double)wantedMinimumColWidth / (double)currentMinimumColWidth;
-				for (int col=fromCol ; col<toCol ; col++)
-				{
-					minimumColWidths[col] = (int)(minimumColWidths[col] * factor);
-				}
+				redistributeSpace(currentMinimumColWidth,
+						  wantedMinimumColWidth,
+						  fromCol,toCol,
+						  minimumColWidths,
+						  minimumColWidths,
+						  maximumColWidths);
 			}
-			int wantedPreferredColWidth = component.getPreferredSize().width;
+			int wantedPreferredColWidth = component.getPreferredSize().width - ((colspan - 1) * hgap);
 			if (currentPreferredColWidth < wantedPreferredColWidth)
 			{
-				double factor = (double)wantedPreferredColWidth / (double)currentPreferredColWidth;
-				for (int col=fromCol ; col<toCol ; col++)
-				{
-					preferredColWidths[col] = (int)(preferredColWidths[col] * factor);
-				}
-			}
-			int wantedMaximumColWidth = component.getMaximumSize().width;
-			if (currentMaximumColWidth > wantedMaximumColWidth)
-			{
-				double factor = (double)wantedMaximumColWidth / (double)currentMaximumColWidth;
-				for (int col=fromCol ; col<toCol ; col++)
-				{
-					maximumColWidths[col] = (int)(maximumColWidths[col] * factor);
-				}
-			}
-		}
-		
-		// plug in the rowspans and correct the minimum, preferred and
-		// maximum row heights the rowspans are part of
-		for (ExtendedGridLayoutConstraints cell : rowspans)
-		{
-			int fromRow = cell.getRow();
-			int rowspan = cell.getEffectiveRowspan();
-			int toRow = fromRow + rowspan;
-			int currentMinimumRowHeight = (rowspan - 1) * vgap;
-			int currentPreferredRowHeight = (rowspan - 1) * vgap;
-			int currentMaximumRowHeight = (rowspan - 1) * vgap;
-			for (int row=fromRow ; row<toRow ; row++)
-			{
-				currentMinimumRowHeight += minimumRowHeights[row];
-				currentPreferredRowHeight += preferredRowHeights[row];
-				currentMaximumRowHeight += maximumRowHeights[row];
-			}
-			Component component = cell.getComponent();
-			int wantedMinimumRowHeight = component.getMinimumSize().height;
-			if (currentMinimumRowHeight < wantedMinimumRowHeight)
-			{
-				double factor = (double)wantedMinimumRowHeight / (double)currentMinimumRowHeight;
-				for (int row=fromRow ; row<toRow ; row++)
-				{
-					minimumRowHeights[row] = (int)(minimumRowHeights[row] * factor);
-				}
-			}
-			int wantedPreferredRowHeight = component.getPreferredSize().height;
-			if (currentPreferredRowHeight < wantedPreferredRowHeight)
-			{
-				double factor = (double)wantedPreferredRowHeight / (double)currentPreferredRowHeight;
-				for (int row=fromRow ; row<toRow ; row++)
-				{
-					preferredRowHeights[row] = (int)(preferredRowHeights[row] * factor);
-				}
-			}
-			int wantedMaximumRowHeight = component.getMaximumSize().height;
-			if (currentMaximumRowHeight > wantedMaximumRowHeight)
-			{
-				double factor = (double)wantedMaximumRowHeight / (double)currentMaximumRowHeight;
-				for (int row=fromRow ; row<toRow ; row++)
-				{
-					maximumRowHeights[row] = (int)(maximumRowHeights[row] * factor);
-				}
+				redistributeSpace(currentPreferredColWidth,
+						  wantedPreferredColWidth,
+						  fromCol,toCol,
+						  preferredColWidths,
+						  minimumColWidths,
+						  maximumColWidths);
 			}
 		}
 		
@@ -827,44 +824,104 @@ public class ExtendedGridLayout implements LayoutManager2
 			}
 		}
 		
+		// plug in the rowspans and correct the minimum, preferred and
+		// maximum row heights the rowspans are part of
+		for (ExtendedGridLayoutConstraints cell : rowspans)
+		{
+			int fromRow = cell.getRow();
+			int rowspan = cell.getEffectiveRowspan();
+			int toRow = fromRow + rowspan;
+			int currentMinimumRowHeight = 0;
+			int currentPreferredRowHeight = 0;
+			int currentMaximumRowHeight = 0;
+			for (int row=fromRow ; row<toRow ; row++)
+			{
+				int minimumRowHeight = minimumRowHeights[row];
+				if ((Integer.MAX_VALUE-minimumRowHeight) < currentMinimumRowHeight) {
+					currentMinimumRowHeight = Integer.MAX_VALUE;
+				} else {
+					currentMinimumRowHeight += minimumRowHeight;
+				}
+				int preferredRowHeight = preferredRowHeights[row];
+				if ((Integer.MAX_VALUE-preferredRowHeight) < currentPreferredRowHeight) {
+					currentPreferredRowHeight = Integer.MAX_VALUE;
+				} else {
+					currentPreferredRowHeight += preferredRowHeight;
+				}
+				int maximumRowHeight = maximumRowHeights[row];
+				if ((Integer.MAX_VALUE-maximumRowHeight) < currentMaximumRowHeight) {
+					currentMaximumRowHeight = Integer.MAX_VALUE;
+				} else {
+					currentMaximumRowHeight += maximumRowHeight;
+				}
+			}
+			Component component = cell.getComponent();
+			int wantedMaximumRowHeight = component.getMaximumSize().height - ((rowspan - 1) * vgap);
+			if (currentMaximumRowHeight < wantedMaximumRowHeight)
+			{
+				redistributeSpace(currentMaximumRowHeight,
+						  wantedMaximumRowHeight,
+						  fromRow,toRow,
+						  maximumRowHeights,
+						  maximumRowHeights,
+						  maximumRowHeights);
+			}
+			int wantedMinimumRowHeight = component.getMinimumSize().height - ((rowspan - 1) * vgap);
+			if (currentMinimumRowHeight < wantedMinimumRowHeight)
+			{
+				redistributeSpace(currentMinimumRowHeight,
+						  wantedMinimumRowHeight,
+						  fromRow,toRow,
+						  minimumRowHeights,
+						  minimumRowHeights,
+						  maximumRowHeights);
+			}
+			int wantedPreferredRowHeight = component.getPreferredSize().height - ((rowspan - 1) * vgap);
+			if (currentPreferredRowHeight < wantedPreferredRowHeight)
+			{
+				redistributeSpace(currentPreferredRowHeight,
+						  wantedPreferredRowHeight,
+						  fromRow,toRow,
+						  preferredRowHeights,
+						  minimumRowHeights,
+						  maximumRowHeights);
+			}
+		}
+		
+		// correct cases where
+		// minimumRowHeights[row] <= preferredRowHeights[row] <= maximumRowHeights[row]
+		// is not true by clipping to the minimumRowHeights and maximumRowHeights
+		for (int row=0 ; row<gridSize.height ; row++)
+		{
+			if (minimumRowHeights[row] >= maximumRowHeights[row])
+			{
+				maximumRowHeights[row] = minimumRowHeights[row];
+				preferredRowHeights[row] = minimumRowHeights[row];
+			}
+			else if (preferredRowHeights[row] < minimumRowHeights[row])
+			{
+				preferredRowHeights[row] = minimumRowHeights[row];
+			}
+			else if (preferredRowHeights[row] > maximumRowHeights[row])
+			{
+				preferredRowHeights[row] = maximumRowHeights[row];
+			}
+		}
+		
 		// copies the computed sizes to the result arrays
 		if (fillRawSizes)
 		{
-			int[] resultMinimumColWidths = new int[minimumColWidths.length];
-			int[] resultMinimumRowHeights = new int[minimumRowHeights.length];
-			int[] resultPreferredColWidths = new int[preferredColWidths.length];
-			int[] resultPreferredRowHeights = new int[preferredRowHeights.length];
-			int[] resultMaximumColWidths = new int[maximumColWidths.length];
-			int[] resultMaximumRowHeights = new int[maximumRowHeights.length];
-			for (int col=0 ; col<gridSize.width ; col++)
-			{
-				long minimumColWidth = minimumColWidths[col];
-				long preferredColWidth = preferredColWidths[col];
-				long maximumColWidth = maximumColWidths[col];
-				resultMinimumColWidths[col] = minimumColWidth > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)minimumColWidth;
-				resultPreferredColWidths[col] = preferredColWidth > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)preferredColWidth;
-				resultMaximumColWidths[col] = maximumColWidth > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)maximumColWidth;
-			}
-			for (int row=0 ; row<gridSize.height ; row++)
-			{
-				long minimumRowHeight = minimumRowHeights[row];
-				long preferredRowHeight = preferredRowHeights[row];
-				long maximumRowHeight = maximumRowHeights[row];
-				resultMinimumRowHeights[row] = minimumRowHeight > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)minimumRowHeight;
-				resultPreferredRowHeights[row] = preferredRowHeight > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)preferredRowHeight;
-				resultMaximumRowHeights[row] = maximumRowHeight > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)maximumRowHeight;
-			}
-			resultArrays[0] = resultMinimumColWidths;
-			resultArrays[1] = resultMinimumRowHeights;
-			resultArrays[2] = resultPreferredColWidths;
-			resultArrays[3] = resultPreferredRowHeights;
-			resultArrays[4] = resultMaximumColWidths;
-			resultArrays[5] = resultMaximumRowHeights;
+			resultArrays[0] = minimumColWidths;
+			resultArrays[1] = minimumRowHeights;
+			resultArrays[2] = preferredColWidths;
+			resultArrays[3] = preferredRowHeights;
+			resultArrays[4] = maximumColWidths;
+			resultArrays[5] = maximumRowHeights;
 		}
 		
 		// sums up the sizes for return value
-		long[] colWidths;
-		long[] rowHeights;
+		int[] colWidths;
+		int[] rowHeights;
 		switch (layoutSize)
 		{
 			case MINIMUM:
@@ -887,11 +944,11 @@ public class ExtendedGridLayout implements LayoutManager2
 		}
 		long totalWidth = 0;
 		long totalHeight = 0;
-		for (long width : colWidths)
+		for (int width : colWidths)
 		{
 			totalWidth += width;
 		}
-		for (long height : rowHeights)
+		for (int height : rowHeights)
 		{
 			totalHeight += height;
 		}
@@ -1070,41 +1127,9 @@ public class ExtendedGridLayout implements LayoutManager2
 		
 		// check the last gridRow for rowspans and probably add rows for these
 		haveNext = false;
-		ListIterator<ExtendedGridLayoutConstraints> gridRowIterator = gridRows.get(gridRows.size()-1).listIterator();
-		while (gridRowIterator.hasNext())
-		{
-			ExtendedGridLayoutConstraints cell = gridRowIterator.next();
-			if ((null != cell) &&
-			    ((REMAINDER != cell.getRowspan()) &&
-			     (null != cell.getRowspanPlaceholder(false))))
-			{
-				haveNext = true;
-				break;
-			}
-		}
-		while (haveNext)
-		{
-			haveNext = false;
-			gridRowIterator = gridRows.get(gridRows.size()-1).listIterator();
-			List<ExtendedGridLayoutConstraints> gridRow = new ArrayList<ExtendedGridLayoutConstraints>();
-			gridRows.add(gridRow);
-			ListIterator<ExtendedGridLayoutConstraints> newGridRowIterator = gridRow.listIterator();
-			while (gridRowIterator.hasNext())
-			{
-				ExtendedGridLayoutConstraints cell = gridRowIterator.next();
-				if ((null != cell) &&
-				    (null != cell.getRowspanPlaceholder(false)))
-				{
-					rowspans.add(cell);
-					ExtendedGridLayoutConstraints rowspanPlaceholder = cell.getRowspanPlaceholder(true);
-					newGridRowIterator.add(rowspanPlaceholder);
-				}
-				else
-				{
-					newGridRowIterator.add(null);
-				}
-			}
-			gridRowIterator = gridRow.listIterator();
+		int gridRowsSize = gridRows.size();
+		if (gridRowsSize > 0) {
+			ListIterator<ExtendedGridLayoutConstraints> gridRowIterator = gridRows.get(gridRows.size()-1).listIterator();
 			while (gridRowIterator.hasNext())
 			{
 				ExtendedGridLayoutConstraints cell = gridRowIterator.next();
@@ -1114,6 +1139,41 @@ public class ExtendedGridLayout implements LayoutManager2
 				{
 					haveNext = true;
 					break;
+				}
+			}
+			while (haveNext)
+			{
+				haveNext = false;
+				gridRowIterator = gridRows.get(gridRows.size()-1).listIterator();
+				List<ExtendedGridLayoutConstraints> gridRow = new ArrayList<ExtendedGridLayoutConstraints>();
+				gridRows.add(gridRow);
+				ListIterator<ExtendedGridLayoutConstraints> newGridRowIterator = gridRow.listIterator();
+				while (gridRowIterator.hasNext())
+				{
+					ExtendedGridLayoutConstraints cell = gridRowIterator.next();
+					if ((null != cell) &&
+					    (null != cell.getRowspanPlaceholder(false)))
+					{
+						rowspans.add(cell);
+						ExtendedGridLayoutConstraints rowspanPlaceholder = cell.getRowspanPlaceholder(true);
+						newGridRowIterator.add(rowspanPlaceholder);
+					}
+					else
+					{
+						newGridRowIterator.add(null);
+					}
+				}
+				gridRowIterator = gridRow.listIterator();
+				while (gridRowIterator.hasNext())
+				{
+					ExtendedGridLayoutConstraints cell = gridRowIterator.next();
+					if ((null != cell) &&
+					    ((REMAINDER != cell.getRowspan()) &&
+					     (null != cell.getRowspanPlaceholder(false))))
+					{
+						haveNext = true;
+						break;
+					}
 				}
 			}
 		}
