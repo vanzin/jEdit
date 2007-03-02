@@ -170,8 +170,6 @@ and Joseph Erickson for contributing to this release.
 - New IndentRule (WhitespaceRule) and new indent action (NoIncrease)
   were added. (Marcelo Vanzin)
 
-- new method: JEditBuffer.getUndoManager(). (Joseph Erickson)
-
 - new method: SearchAndReplace.replaceAll(View,boolean) to do a replace all,
   but not open files that were not open before. (Björn "Vampire" Kautler)
 

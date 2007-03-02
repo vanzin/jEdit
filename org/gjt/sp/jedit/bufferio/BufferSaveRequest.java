@@ -137,9 +137,6 @@ public class BufferSaveRequest extends BufferIORequest
 				finally
 				{
 					buffer.readUnlock();
-					if(jEdit.getBooleanProperty("resetUndoOnSave")){
-						buffer.getUndoManager().clear();
-					}
 				}
 			}
 			finally
