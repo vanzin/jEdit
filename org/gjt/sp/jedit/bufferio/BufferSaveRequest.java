@@ -185,7 +185,7 @@ public class BufferSaveRequest extends BufferIORequest
 				}
 				// clean up left-over markers file
 				if(!jEdit.getBooleanProperty("persistentMarkers"))
-					vfs._delete(session,buffer.getMarkersPath(vfs),view);
+					vfs._delete(session,Buffer.getMarkersPath(vfs, path),view);
 				vfs._endVFSSession(session,view);
 			}
 			catch(IOException io)

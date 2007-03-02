@@ -283,6 +283,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * Loads a file from disk, and inserts it into this buffer.
 	 * @param view The view
+	 * @param path the path of the file to insert
 	 *
 	 * @since 4.0pre1
 	 */
@@ -1433,8 +1434,23 @@ public class Buffer extends JEditBuffer
 	 * Returns the path for this buffer's markers file
 	 * @param vfs The appropriate VFS
 	 * @since jEdit 4.3pre7
+	 * @deprecated it will fail if you save to another VFS. use {@link #getMarkersPath(VFS, String)}
 	 */
+	@Deprecated
 	public String getMarkersPath(VFS vfs)
+	{
+		return getMarkersPath(vfs, path);
+	} //}}}
+
+	//{{{ getMarkersPath() method
+	/**
+	 * Returns the path for this buffer's markers file
+	 * @param vfs The appropriate VFS
+	 * @param path the path of the buffer, it can be different from the field
+	 * when using save-as
+	 * @since jEdit 4.3pre10
+	 */
+	public static String getMarkersPath(VFS vfs, String path)
 	{
 		return vfs.getParentOfPath(path)
 			+ '.' + vfs.getFileName(path)

@@ -73,6 +73,9 @@ and Joseph Erickson for contributing to this release.
 - Fixed that files were shown in VFSBrowser in choose directory mode.
   (Björn "Vampire" Kautler)
 
+- Saving a buffer to another VFS was not working (some bugs with markers)
+  (#1644479) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
@@ -172,6 +175,9 @@ and Joseph Erickson for contributing to this release.
 
 - new method: SearchAndReplace.replaceAll(View,boolean) to do a replace all,
   but not open files that were not open before. (Björn "Vampire" Kautler)
+
+- Buffer.getMarkersPath(VFS) deprecated and replaced by static method
+  Buffer.getMarkersPath(VFS,path), see bug #1644479 (Matthieu Casanova)
 
 }}}
 

@@ -122,7 +122,7 @@ public abstract class BufferIORequest extends WorkRequest
 		this.vfs = vfs;
 		this.path = path;
 
-		markersPath = buffer.getMarkersPath(vfs);
+		markersPath = Buffer.getMarkersPath(vfs, path);
 	} //}}}
 
 	//{{{ toString() method
@@ -135,7 +135,7 @@ public abstract class BufferIORequest extends WorkRequest
 	/**
 	 * Size of character I/O buffers.
 	 */
-	public static final int getCharIOBufferSize()
+	public static int getCharIOBufferSize()
 	{
 		return IOBUFSIZE;
 	}
@@ -143,7 +143,7 @@ public abstract class BufferIORequest extends WorkRequest
 	/**
 	 * Size of byte I/O buffers.
 	 */
-	public static final int getByteIOBufferSize()
+	public static int getByteIOBufferSize()
 	{
 		// 2 is sizeof char in byte;
 		return IOBUFSIZE * 2;
