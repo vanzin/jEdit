@@ -143,7 +143,7 @@ public abstract class XModeHandler extends DefaultHandler
 			else if (tag.tagName.equals("IMPORT"))
 			{
 				// prevent lockups
-				if (!rules.getSetName().equals(tag.lastDelegateSet.getSetName()))
+				if (!rules.equals(tag.lastDelegateSet))
 				{
 					rules.addRuleSet(tag.lastDelegateSet);
 				}
