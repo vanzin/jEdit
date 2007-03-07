@@ -76,6 +76,11 @@ and Joseph Erickson for contributing to this release.
 - Saving a buffer to another VFS was not working (some bugs with markers)
   (#1644479) (Matthieu Casanova)
 
+- SF Bug #1668893: Wrong conversion to UTF-16 (with BOM)
+  A previous change of mine trying to fix another UTF-16 issue actually
+  implemented the reverse of what the spec says: UTF-16LE and UTF-16BE don't
+  have a BOM, while UTF-16 needs a BOM at the start. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 

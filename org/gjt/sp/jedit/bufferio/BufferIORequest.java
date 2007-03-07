@@ -92,6 +92,11 @@ public abstract class BufferIORequest extends WorkRequest
 	 */
 	public static final String ERROR_OCCURRED = "BufferIORequest__error";
 
+	/**
+	 * BOM to use when saving a UTF-16 file. Used internally *only*.
+	 * @since 4.3pre10
+	 */
+	public static final String BOM_PROP = "BufferIORequest__utf16bom";
 	//}}}
 
 	//{{{ Instance variables
@@ -103,6 +108,7 @@ public abstract class BufferIORequest extends WorkRequest
 	protected final String markersPath;
 	//}}}
 
+	//{{{ Public members
 
 	//{{{ BufferIORequest constructor
 	/**
@@ -148,7 +154,7 @@ public abstract class BufferIORequest extends WorkRequest
 		// 2 is sizeof char in byte;
 		return IOBUFSIZE * 2;
 	}
-	
+
 	//{{{ autodetect() method
 	/**
 	 * Tries to detect if the stream is gzipped, and if it has an encoding
@@ -259,8 +265,8 @@ public abstract class BufferIORequest extends WorkRequest
 						CRLF = true;
 						lastWasCR = false;
 						/* Bump lastLine so that the next line doesn't erronously
-						  pick up the \r */ 
-						lastLine = i + 1; 
+						  pick up the \r */
+						lastLine = i + 1;
 					}
 					/* Otherwise, we found a \n that follows some other
 					 *  character, hence we have a Unix file */
@@ -371,15 +377,14 @@ public abstract class BufferIORequest extends WorkRequest
 			out.write(UTF8_MAGIC_3);
 			encoding = "UTF-8";
 		}
-		else if (encoding.equals("UTF-16LE"))
+		else if (encoding.equals("UTF-16"))
 		{
-			out.write(UNICODE_MAGIC_2);
-			out.write(UNICODE_MAGIC_1);
-		}
-		else if (encoding.equals("UTF-16BE"))
-		{
-			out.write(UNICODE_MAGIC_1);
-			out.write(UNICODE_MAGIC_2);
+			UTF_BOM bom = (UTF_BOM) buffer.getProperty(BOM_PROP);
+			if (bom != null)
+			{
+				bom.writeTo(out);
+				encoding = bom.getEncoding();
+			}
 		}
 		// Pass the encoder explicitly to report a encode error
 		// as an exception.
@@ -427,5 +432,44 @@ public abstract class BufferIORequest extends WorkRequest
 		writer.flush();
 	} //}}}
 
+	/**
+	 * The BOM used to mark a UTF-16 file.
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public enum UTF_BOM {
+		LE {
+			public void writeTo(OutputStream out) throws IOException
+			{
+				out.write(UNICODE_MAGIC_2);
+				out.write(UNICODE_MAGIC_1);
+			}
+
+			public String getEncoding()
+			{
+				return "UTF-16LE";
+			}
+		},
+
+		BE {
+			public void writeTo(OutputStream out) throws IOException
+			{
+				out.write(UNICODE_MAGIC_1);
+				out.write(UNICODE_MAGIC_2);
+			}
+
+			public String getEncoding()
+			{
+				return "UTF-16BE";
+			}
+		};
+
+		public abstract void writeTo(OutputStream out) throws IOException;
+		public abstract String getEncoding();
+
+	}
+
 	//}}}
+
 }
+

@@ -164,13 +164,13 @@ public class MiscUtilities
 	 *  The goal is to support the following:
 	 *     $varname
 	 *     ${varname}
-	 *     And expand each of these by looking at the system environment variables for possible 
+	 *     And expand each of these by looking at the system environment variables for possible
 	 *     expansions.
 	 *     @return a string which is either the unchanged input string, or one with expanded variables.
-	 *     @since 4.3pre7  
+	 *     @since 4.3pre7
 	 *     @author ezust
 	 */
-	public static String expandVariables(String arg) 
+	public static String expandVariables(String arg)
 	{
 		Pattern p = varPattern;
 		Matcher m = p.matcher(arg);
@@ -791,9 +791,12 @@ public class MiscUtilities
 				in.reset();
 				in.read();
 				in.read();
-				encoding = "UTF-16BE";
+				encoding = "UTF-16";
 				if (buffer != null)
+				{
 					buffer.setProperty(JEditBuffer.ENCODING,encoding);
+					buffer.setProperty(BufferIORequest.BOM_PROP,BufferIORequest.UTF_BOM.BE);
+				}
 			}
 			else if (b1 == BufferIORequest.UNICODE_MAGIC_2
 				&& b2 == BufferIORequest.UNICODE_MAGIC_1)
@@ -801,9 +804,12 @@ public class MiscUtilities
 				in.reset();
 				in.read();
 				in.read();
-				encoding = "UTF-16LE";
+				encoding = "UTF-16";
 				if (buffer != null)
+				{
 					buffer.setProperty(JEditBuffer.ENCODING,encoding);
+					buffer.setProperty(BufferIORequest.BOM_PROP,BufferIORequest.UTF_BOM.LE);
+				}
 			}
 			else if(b1 == BufferIORequest.UTF8_MAGIC_1 && b2 == BufferIORequest.UTF8_MAGIC_2
 				&& b3 == BufferIORequest.UTF8_MAGIC_3)
@@ -1408,7 +1414,7 @@ loop:		for(;;)
 	public static void quicksort(Object[] obj, Comparator compare)
 	{
 		Arrays.sort(obj,compare);
-	} 
+	}
 
 
 	/**
@@ -1422,7 +1428,7 @@ loop:		for(;;)
 	public static void quicksort(Vector vector, Comparator compare)
 	{
 		Collections.sort(vector,compare);
-	} 
+	}
 
 	/**
 	 * Sorts the specified list.
