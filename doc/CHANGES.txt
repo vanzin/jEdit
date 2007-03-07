@@ -81,6 +81,10 @@ and Joseph Erickson for contributing to this release.
   implemented the reverse of what the spec says: UTF-16LE and UTF-16BE don't
   have a BOM, while UTF-16 needs a BOM at the start. (Marcelo Vanzin)
 
+- SF Patch #1649033: Correct the focus after choosing the directory to search
+  Focus the search dialog after choosing the search directory, instead of
+  focusing the view. (Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 
@@ -183,6 +187,9 @@ and Joseph Erickson for contributing to this release.
 
 - Buffer.getMarkersPath(VFS) deprecated and replaced by static method
   Buffer.getMarkersPath(VFS,path), see bug #1644479 (Matthieu Casanova)
+
+- Added a new GUIUtilities.showVFSFileDialog() method that can use a dialog as
+  the browser's parent, instead of the view. (Kazutoshi Satoda)
 
 }}}
 
