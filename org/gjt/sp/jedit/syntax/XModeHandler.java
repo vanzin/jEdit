@@ -217,7 +217,7 @@ public abstract class XModeHandler extends DefaultHandler
 					tag.lastStartPosMatch,tag.lastStart.toString(),
 					tag.lastEndPosMatch,tag.lastEnd.toString(),
 					tag.lastDelegateSet,
-					tag.lastTokenID,tag.lastExcludeMatch,
+					tag.lastTokenID,tag.lastMatchType,
 					tag.lastNoLineBreak,
 					tag.lastNoWordBreak,
 					tag.lastNoEscape));
@@ -248,7 +248,7 @@ public abstract class XModeHandler extends DefaultHandler
 							tag.lastEndPosMatch,tag.lastEnd.toString(),
 							tag.lastDelegateSet,
 							tag.lastTokenID,
-							tag.lastExcludeMatch,
+							tag.lastMatchType,
 							tag.lastNoLineBreak,
 							tag.lastNoWordBreak,
 							findParent("RULES").lastIgnoreCase,
@@ -263,7 +263,7 @@ public abstract class XModeHandler extends DefaultHandler
 							tag.lastEndPosMatch,tag.lastEnd.toString(),
 							tag.lastDelegateSet,
 							tag.lastTokenID,
-							tag.lastExcludeMatch,
+							tag.lastMatchType,
 							tag.lastNoLineBreak,
 							tag.lastNoWordBreak,
 							findParent("RULES").lastIgnoreCase,
@@ -287,7 +287,7 @@ public abstract class XModeHandler extends DefaultHandler
 				rules.addRule(ParserRule.createEOLSpanRule(
 					tag.lastStartPosMatch,tag.lastStart.toString(),
 					tag.lastDelegateSet,tag.lastTokenID,
-					tag.lastExcludeMatch));
+					tag.lastMatchType));
 			} //}}}
 			//{{{ EOL_SPAN_REGEXP
 			else if (tag.tagName.equals("EOL_SPAN_REGEXP"))
@@ -305,7 +305,7 @@ public abstract class XModeHandler extends DefaultHandler
 						rules.addRule(ParserRule.createRegexpEOLSpanRule(
 							tag.lastStartPosMatch,tag.lastHashChars.toCharArray(),
 							tag.lastStart.toString(),tag.lastDelegateSet,
-							tag.lastTokenID,tag.lastExcludeMatch,
+							tag.lastTokenID,tag.lastMatchType,
 							findParent("RULES").lastIgnoreCase));
 					}
 					else
@@ -313,7 +313,7 @@ public abstract class XModeHandler extends DefaultHandler
 						rules.addRule(ParserRule.createRegexpEOLSpanRule(
 							tag.lastHashChar,tag.lastStartPosMatch,
 							tag.lastStart.toString(),tag.lastDelegateSet,
-							tag.lastTokenID,tag.lastExcludeMatch,
+							tag.lastTokenID,tag.lastMatchType,
 							findParent("RULES").lastIgnoreCase));
 					}
 				}
@@ -334,7 +334,7 @@ public abstract class XModeHandler extends DefaultHandler
 				rules.addRule(ParserRule
 					.createMarkFollowingRule(
 					tag.lastStartPosMatch,tag.lastStart.toString(),
-					tag.lastTokenID,tag.lastExcludeMatch));
+					tag.lastTokenID,tag.lastMatchType));
 			} //}}}
 			//{{{ MARK_PREVIOUS
 			else if (tag.tagName.equals("MARK_PREVIOUS"))
@@ -348,7 +348,7 @@ public abstract class XModeHandler extends DefaultHandler
 				rules.addRule(ParserRule
 					.createMarkPreviousRule(
 					tag.lastStartPosMatch,tag.lastStart.toString(),
-					tag.lastTokenID,tag.lastExcludeMatch));
+					tag.lastTokenID,tag.lastMatchType));
 			} //}}}
 			//{{{ Keywords
 			else if (
@@ -531,13 +531,45 @@ public abstract class XModeHandler extends DefaultHandler
 					error("token-invalid",tmp);
 			}
 
+			lastMatchType = ParserRule.MATCH_TYPE_RULE;
+			// check for the deprecated "EXCLUDE_MATCH" and
+			// warn if found.
+			tmp = attrs.getValue("EXCLUDE_MATCH");
+			if (tmp != null)
+			{
+				Log.log(Log.WARNING, this, modeName + ": EXCLUDE_MATCH is deprecated");
+				if ("TRUE".equalsIgnoreCase(tmp))
+				{
+					lastMatchType = ParserRule.MATCH_TYPE_DEFAULT;
+				}
+			}
+
+			// override with the newer MATCH_TYPE if present
+			tmp = attrs.getValue("MATCH_TYPE");
+			if (tmp != null)
+			{
+				if ("DEFAULT".equals(tmp))
+				{
+					lastMatchType = ParserRule.MATCH_TYPE_DEFAULT;
+				}
+				else if ("RULE".equals(tmp))
+				{
+					lastMatchType = ParserRule.MATCH_TYPE_RULE;
+				}
+				else
+				{
+					lastMatchType = Token.stringToToken(tmp);
+					if(lastMatchType == -1)
+						error("token-invalid",tmp);
+				}
+			}
+
 			lastAtLineStart = "TRUE".equals(attrs.getValue("AT_LINE_START"));
 			lastAtWhitespaceEnd = "TRUE".equals(attrs.getValue("AT_WHITESPACE_END"));
 			lastAtWordStart = "TRUE".equals(attrs.getValue("AT_WORD_START"));
 			lastNoLineBreak = "TRUE".equals(attrs.getValue("NO_LINE_BREAK"));
 			lastNoWordBreak = "TRUE".equals(attrs.getValue("NO_WORD_BREAK"));
 			lastNoEscape = "TRUE".equals(attrs.getValue("NO_ESCAPE"));
-			lastExcludeMatch = "TRUE".equals(attrs.getValue("EXCLUDE_MATCH"));
 			lastIgnoreCase = (attrs.getValue("IGNORE_CASE") == null ||
 					"TRUE".equals(attrs.getValue("IGNORE_CASE")));
 			lastHighlightDigits = "TRUE".equals(attrs.getValue("HIGHLIGHT_DIGITS"));;
@@ -694,10 +726,10 @@ public abstract class XModeHandler extends DefaultHandler
 		public ParserRuleSet rules;
 		public byte lastDefaultID = Token.NULL;
 		public byte lastTokenID;
+		public byte lastMatchType;
 		public int termChar = -1;
 		public boolean lastNoLineBreak;
 		public boolean lastNoWordBreak;
-		public boolean lastExcludeMatch;
 		public boolean lastIgnoreCase = true;
 		public boolean lastHighlightDigits;
 		public boolean lastAtLineStart;
@@ -711,3 +743,4 @@ public abstract class XModeHandler extends DefaultHandler
 		public String lastHashChars;
 	}
 }
+

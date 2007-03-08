@@ -10,7 +10,7 @@
   <filename>.xml</filename>. XML is a very simple language, and as a result
   edit modes are easy to create and modify. This section will
   start with a short XML primer, followed by detailed information about
-  each supported tag and highlighting rule. 
+  each supported tag and highlighting rule.
  </para>
  <para>
   Editing a mode or a mode catalog file within jEdit will cause the
@@ -249,7 +249,7 @@
     <itemizedlist>
      <listitem><para>in front of a token, the token is not highlighted.
      </para></listitem>
-     <listitem><para>as part of a rule at its beginning, it is considered 
+     <listitem><para>as part of a rule at its beginning, it is considered
      part of the match and not as an escape sequence.
      </para></listitem>
      <listitem><para>in front of the ending sequence of a <literal>SPAN</literal> or <literal>SPAN_REGEXP</literal>,
@@ -306,9 +306,9 @@
    <para>
     Regular expression syntax is described in <xref linkend="regexps" />.
    </para>
-   
+
   </sect2>
-  
+
   <sect2 id="rule-ordering"><title>Rule Ordering Requirements</title>
    <para>
     You might encounter this very common pitfall when writing your own modes.
@@ -333,7 +333,7 @@
 </SPAN>]]></programlisting>
    <para>
     If you write the above in a rule set, any occurrence of <quote>[</quote>
-    (even things like <quote>[!DEFINE</quote>, etc) 
+    (even things like <quote>[!DEFINE</quote>, etc)
     will be highlighted using the first rule, because it will be the
     first to match. This is most likely not the intended behavior.
    </para>
@@ -426,9 +426,8 @@
    <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
    Note that the first (unnamed) ruleset in a mode is called
    <quote>MAIN</quote>.</para></listitem>
-   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-   <literal>TRUE</literal>, the start and end sequences will not be highlighted,
-   only the text between them will.</para></listitem>
+   <listitem><para><literal>MATCH_TYPE</literal> - Controls how the start of
+   the sequence will be highlighted.</para></listitem>
    <listitem><para><literal>NO_ESCAPE</literal> - If set to
    <literal>TRUE</literal>, the ruleset's escape character sequence will have no
    effect before the span's end string. Otherwise, the presence of the escape
@@ -485,7 +484,7 @@
    <listitem><para><literal>HASH_CHARS</literal> - a list of possible literal characters, one of which must match at the start of the regular expression. </para></listitem>
   </itemizedlist>
 
-  <para> 
+  <para>
    <literal>HASH_CHAR</literal> and <literal>HASH_CHARS</literal>
    attributes are both optional, but you may only specify one, not both.  If
    both are specified, <literal>HASH_CHARS</literal> is ignored and an error
@@ -525,7 +524,7 @@
     <END>&gt;</END>
 </SPAN_REGEXP>]]></programlisting>
 
- 
+
 
  </sect1>
  <sect1 id="mode-rule-eol-span"><title>The EOL_SPAN Tag</title>
@@ -557,9 +556,8 @@
   <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
   Note that the first (unnamed) ruleset in a mode is called
   <quote>MAIN</quote>.</para></listitem>
-  <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-  <literal>TRUE</literal>, the start and end sequences will not be highlighted,
-  only the text between them will.</para></listitem>
+  <listitem><para><literal>MATCH_TYPE</literal> - Controls how the start
+  and the end of the sequence will be highlighted.</para></listitem>
   </itemizedlist>
   <para>
    Here is an <literal>EOL_SPAN</literal> that highlights C++ comments:
@@ -578,7 +576,7 @@
    <listitem><para><literal>HASH_CHARS</literal> - a list of possible literal characters, one of which must match at the start of the regular expression. </para></listitem>
   </itemizedlist>
 
-  <para> 
+  <para>
    <literal>HASH_CHAR</literal> and <literal>HASH_CHARS</literal>
    attributes are both optional, but you may only specify one, not both.  If
    both are specified, <literal>HASH_CHARS</literal> is ignored and an error
@@ -624,16 +622,15 @@
    <listitem><para><literal>AT_WORD_START</literal> - If set to
    <literal>TRUE</literal>, the sequence will only be highlighted if
    it occurs at the beginning of a word.</para></listitem>
-   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-   <literal>TRUE</literal>, the match will not be highlighted,
-   only the text before it will.</para></listitem>
+   <listitem><para><literal>MATCH_TYPE</literal> - Controls how the
+   matched region will be highlighted.</para></listitem>
   </itemizedlist>
   <para>
    Here is a rule that highlights labels in Java mode (for example,
    <quote>XXX:</quote>):
   </para>
   <programlisting>&lt;MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
-   EXCLUDE_MATCH="TRUE"&gt;:&lt;/MARK_PREVIOUS&gt;</programlisting>
+   MATCH_TYPE="DEFAULT"&gt;:&lt;/MARK_PREVIOUS&gt;</programlisting>
  </sect1>
  <sect1 id="mode-rule-mark-following"><title>The MARK_FOLLOWING Tag</title>
   <para>
@@ -657,9 +654,8 @@
    <listitem><para><literal>AT_WORD_START</literal> - If set to
    <literal>TRUE</literal>, the sequence will only be highlighted if
    it occurs at the beginning of a word.</para></listitem>
-   <listitem><para><literal>EXCLUDE_MATCH</literal> - If set to
-   <literal>TRUE</literal>, the match will not be highlighted,
-   only the text after it will.</para></listitem>
+   <listitem><para><literal>MATCH_TYPE</literal> - Controls how the matched
+   region will be highlighted.</para></listitem>
   </itemizedlist>
   <para>
    Here is a rule that highlights variables in Unix shell scripts
@@ -716,7 +712,7 @@
    <listitem><para><literal>HASH_CHAR</literal> - a literal string which must be at the start of a regular expression. </para></listitem>
    <listitem><para><literal>HASH_CHARS</literal> - a list of possible literal characters, one of which must match at the start of the regular expression. </para></listitem>
   </itemizedlist>
-  <para> 
+  <para>
    <literal>HASH_CHAR</literal> and <literal>HASH_CHARS</literal>
    attributes are both optional, but you may only specify one, not both.  If
    both are specified, <literal>HASH_CHARS</literal> is ignored and an error
@@ -727,7 +723,7 @@
    both attributes, such as the case where there is no other reliable way to get
    the highlighting you need, for example, with comments in the Cobol
    programming language.
-  </para>  
+  </para>
     <para>
    The regular expression match cannot span more than one line.
   </para>
@@ -736,13 +732,13 @@
   </para>
 
   <para> <emphasis role="bold">NOTE</emphasis>: c-style character escaping for literals (such as the tab char: \t) do not work as attribute values in XML. Use the XML character entity instead. For example: &amp;#09; instead of \t. </para>
-  
+
   <para> Here is a <literal>SEQ_REGEXP</literal> rule from moin.xml that uses the <literal>HASH_CHARS</literal> attribute, to describe a keyword (wikiword) that can start with any uppercase letter and contain lower case letters and at least one uppercase letter in the middle. </para>
- 
+
   <programlisting><![CDATA[
  		<SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_WORD_START="TRUE" TYPE="KEYWORD2">[A-Z][a-z]+[A-Z][a-zA-Z]+</SEQ_REGEXP>
  ]]></programlisting>
-  
+
  </sect1>
  <sect1 id="mode-rule-import"><title>The IMPORT Tag</title>
   <para>
@@ -769,12 +765,12 @@
        <BEGIN>&lt;?php</BEGIN>
        <END>?&gt;</END>
    </SPAN>
-   
+
    <SPAN TYPE="MARKUP" DELEGATE="php::PHP">
        <BEGIN>&lt;?</BEGIN>
        <END>?&gt;</END>
    </SPAN>
-   
+
    <SPAN TYPE="MARKUP" DELEGATE="php::PHP">
        <BEGIN>&lt;%=</BEGIN>
        <END>%&gt;</END>
@@ -856,5 +852,37 @@
   <listitem><para><literal>OPERATOR</literal>
   </para></listitem>
   </itemizedlist>
+ </sect1>
+ <sect1 id="mode-match-type"><title>The MATCH_TYPE Attribute</title>
+  <para>The MATCH_TYPE attribute is used by some of the rules to control
+  how the region matched by the rule will be highlighted.</para>
+
+  <para>For example, when using a MARK_PREVIOUS rule to highlight a
+  function call of the form <code>fcall()</code>, the following
+  rule could be used:</para>
+
+  <programlisting>
+   <![CDATA[
+   <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+   ]]>
+  </programlisting>
+
+  <para>This would cause <code>fcall</code> to be highlighted as FUNCTION,
+  and <code>(</code> to be highlighted as OPERATOR. In this case, to
+  maintain bracket matching working, a SEQ rule would have to be added
+  to match <code>)</code> and mark it as OPERATOR.</para>
+
+  <para>The MATCH_TYPE attribute value can be any of the valid token
+  types, or the following special values:</para>
+
+  <itemizedlist>
+  <listitem><para><literal>RULE</literal>: this is the default value.
+  It tells the syntax system to use the same token type as the TYPE
+  attribute of the rule.</para></listitem>
+  <listitem><para><literal>DEFAULT</literal>: using this value tells the
+  syntax system to mark the matched region using the default token type
+  for the current rule set.</para></listitem>
+  </itemizedlist>
+
  </sect1>
 </chapter>

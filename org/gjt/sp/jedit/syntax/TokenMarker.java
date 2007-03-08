@@ -315,10 +315,7 @@ unwind:		while(context.parent != null)
 			context = (LineContext)context.parent.clone();
 
 			tokenHandler.handleToken(line,
-				(context.inRule.action & ParserRule.EXCLUDE_MATCH)
-				== ParserRule.EXCLUDE_MATCH
-				? context.rules.getDefault()
-				: context.inRule.token,
+				matchToken(context.inRule, context.inRule, context),
 				pos - line.offset,pattern.count,context);
 
 			keywords = context.rules.getKeywords();
@@ -542,9 +539,8 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			case ParserRule.EOL_SPAN:
 				context.inRule = checkRule;
 
-				byte tokenType = (checkRule.action & ParserRule.EXCLUDE_MATCH)
-					== ParserRule.EXCLUDE_MATCH
-					? context.rules.getDefault() : checkRule.token;
+				byte tokenType = matchToken(checkRule,
+							context.inRule, context);
 
 				if((checkRule.action & ParserRule.REGEXP) != 0)
 				{
@@ -587,11 +583,9 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			//}}}
 			//{{{ MARK_FOLLOWING
 			case ParserRule.MARK_FOLLOWING:
-				tokenHandler.handleToken(line,(checkRule.action
-					& ParserRule.EXCLUDE_MATCH)
-					== ParserRule.EXCLUDE_MATCH ?
-					context.rules.getDefault()
-					: checkRule.token,pos - line.offset,
+				tokenHandler.handleToken(line,
+					matchToken(checkRule, checkRule, context),
+					pos - line.offset,
 					pattern.count,context);
 
 				context.spanEndSubst = null;
@@ -602,31 +596,19 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			case ParserRule.MARK_PREVIOUS:
 				context.spanEndSubst = null;
 
-				if ((checkRule.action & ParserRule.EXCLUDE_MATCH)
-					== ParserRule.EXCLUDE_MATCH)
-				{
-					if(pos != lastOffset)
-					{
-						tokenHandler.handleToken(line,
-							checkRule.token,
-							lastOffset - line.offset,
-							pos - lastOffset,
-							context);
-					}
-
-					tokenHandler.handleToken(line,
-						context.rules.getDefault(),
-						pos - line.offset,pattern.count,
-						context);
-				}
-				else
+				if(pos != lastOffset)
 				{
 					tokenHandler.handleToken(line,
 						checkRule.token,
 						lastOffset - line.offset,
-						pos - lastOffset + pattern.count,
+						pos - lastOffset,
 						context);
 				}
+
+				tokenHandler.handleToken(line,
+					matchToken(checkRule, checkRule, context),
+					pos - line.offset,pattern.count,
+					context);
 
 				break;
 			//}}}
@@ -842,6 +824,20 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 		char[] returnValue = new char[buf.length()];
 		buf.getChars(0,buf.length(),returnValue,0);
 		return returnValue;
+	} //}}}
+
+	//{{{ matchToken() method
+	private byte matchToken(ParserRule rule, ParserRule base, LineContext ctx) {
+		switch (rule.matchType) {
+			case ParserRule.MATCH_TYPE_RULE:
+				return base.token;
+
+			case ParserRule.MATCH_TYPE_DEFAULT:
+				return context.rules.getDefault();
+
+			default:
+				return rule.matchType;
+		}
 	} //}}}
 
 	//{{{ checkHashString() method

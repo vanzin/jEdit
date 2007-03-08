@@ -148,6 +148,22 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
   Add option to enable separating camel cased words when selecting with the
   keyboard. (Horst Eff)
 
+- New attribute "MATCH_TYPE" that substitutes "EXCLUDE_MATCH" in mode files,
+  and code to handle it in the ParserRule and TokenMarker classes. This allows
+  highlighting the matched region with a different type as the rest of the
+  region the rule applies to; so, for example, it's possible to use
+  MARK_PREVIOUS on "foobar(" and highlight the function name as "FUNCTION" and
+  the parenthesis as "OPERATOR". There are two special values for the
+  attribute: "DEFAULT" is the default type for the current rule set (same
+  behavior as EXCLUDE_MATCH="TRUE"), and "RULE", the default value, is the same
+  type as the current rule (same as EXCLUDE_MATCH="FALSE"). This is part 1 of
+  the fix for SF Bug #1658252. (Marcelo Vanzin)
+
+- New mode for C, and refactored the C++ and Objective-C modes to take
+  advantage of the new C mode. This is part 2 of the fix for
+  SF Bug #1658252. (Kazutoshi Satoda and Marcelo Vanzin)
+
+
 }}}
 {{{ API Changes
 
