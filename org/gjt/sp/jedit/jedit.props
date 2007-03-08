@@ -150,6 +150,9 @@ buffer.wordBreakChars=
 # Non-alphanumeric word characters
 buffer.noWordSep=_
 
+# Whether to separate "CamelCased" words
+buffer.camelCasedWords=false
+
 # Fold mode (explicit, indent, or none)
 buffer.folding=none
 

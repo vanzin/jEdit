@@ -1445,8 +1445,10 @@ public class TextArea extends JComponent
 		if(offset == getLineLength(line))
 			offset--;
 
-		int wordStart = TextUtilities.findWordStart(lineText,offset,noWordSep);
-		int wordEnd = TextUtilities.findWordEnd(lineText,offset+1,noWordSep);
+		int wordStart = TextUtilities.findWordStart(lineText,offset,
+					noWordSep,true,false,false);
+		int wordEnd = TextUtilities.findWordEnd(lineText,offset+1,
+					noWordSep,true,false,false);
 
 		Selection s = new Selection.Range(lineStart + wordStart,
 			lineStart + wordEnd);
@@ -2561,8 +2563,10 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
+			boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
 			newCaret = TextUtilities.findWordEnd(lineText,
-				newCaret + 1,noWordSep,true,eatWhitespace);
+				newCaret + 1,noWordSep,true,camelCasedWords,
+				eatWhitespace);
 
 			newCaret += lineStart;
 		}
@@ -2858,8 +2862,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
+			boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
 			newCaret = TextUtilities.findWordStart(lineText,
-				newCaret - 1,noWordSep,true,eatWhitespace);
+				newCaret - 1,noWordSep,true,camelCasedWords,eatWhitespace);
 
 			newCaret += lineStart;
 		}
@@ -3299,8 +3304,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
+			boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
 			_caret = TextUtilities.findWordStart(lineText,_caret-1,
-				noWordSep,true,eatWhitespace);
+				noWordSep,true,camelCasedWords,eatWhitespace);
 		}
 
 		buffer.remove(_caret + lineStart,
@@ -3493,8 +3499,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			String noWordSep = buffer.getStringProperty("noWordSep");
+			boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
 			_caret = TextUtilities.findWordEnd(lineText,
-				_caret+1,noWordSep,true,eatWhitespace);
+				_caret+1,noWordSep,true,camelCasedWords,eatWhitespace);
 		}
 
 		buffer.remove(caret,(_caret + lineStart) - caret);
@@ -5261,7 +5268,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		moveCaretPosition(newCaret);
 	}//}}}
 
-	
+
 	/**
 	 * Check if the line contains only spaces and tabs.
 	 *

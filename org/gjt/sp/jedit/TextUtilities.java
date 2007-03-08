@@ -308,6 +308,26 @@ public class TextUtilities
 	public static int findWordStart(String line, int pos, String noWordSep,
 		boolean joinNonWordChars, boolean eatWhitespace)
 	{
+		return findWordStart(line, pos, noWordSep, joinNonWordChars, false, eatWhitespace);
+	} //}}}
+
+	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @param camelCasedWords Treat "camelCased" parts as words
+	 * @param eatWhitespace Include whitespace at start of word
+	 * @since jEdit 4.3pre10
+	 */
+	public static int findWordStart(String line, int pos, String noWordSep,
+		boolean joinNonWordChars, boolean camelCasedWords,
+		boolean eatWhitespace)
+	{
 		char ch = line.charAt(pos);
 
 		if(noWordSep == null)
@@ -319,6 +339,7 @@ public class TextUtilities
 
 loop:		for(int i = pos; i >= 0; i--)
 		{
+			char lastCh = ch;
 			ch = line.charAt(i);
 			switch(type)
 			{
@@ -332,8 +353,21 @@ loop:		for(int i = pos; i >= 0; i--)
 					return i + 1; //}}}
 			//{{{ Word character...
 			case WORD_CHAR:
+				// stop at next last (in writing direction) upper case char if camel cased
+				// (don't stop at every upper case char, don't treat noWordSep as word chars)
+				if (camelCasedWords && Character.isUpperCase(ch) && !Character.isUpperCase(lastCh)
+						&& Character.isLetterOrDigit(lastCh))
+				{
+					return i;
+				}
+				// stop at next first (in writing direction) upper case char if camel cased
+				// (don't stop at every upper case char)
+				else if (camelCasedWords && !Character.isUpperCase(ch) && Character.isUpperCase(lastCh))
+				{
+					return i + 1;
+				}
 				// word char; keep going
-				if(Character.isLetterOrDigit(ch) ||
+				else if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
 				{
 					break;
@@ -423,6 +457,26 @@ loop:		for(int i = pos; i >= 0; i--)
 	public static int findWordEnd(String line, int pos, String noWordSep,
 		boolean joinNonWordChars, boolean eatWhitespace)
 	{
+		return findWordEnd(line, pos, noWordSep, joinNonWordChars, false, eatWhitespace);
+	} //}}}
+
+	//{{{ findWordEnd() method
+	/**
+	 * Locates the end of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @param camelCasedWords Treat "camelCased" parts as words
+	 * @param eatWhitespace Include whitespace at end of word
+	 * @since jEdit 4.3pre10
+	 */
+	public static int findWordEnd(String line, int pos, String noWordSep,
+		boolean joinNonWordChars, boolean camelCasedWords,
+		boolean eatWhitespace)
+	{
 		if(pos != 0)
 			pos--;
 
@@ -437,6 +491,7 @@ loop:		for(int i = pos; i >= 0; i--)
 
 loop:		for(int i = pos; i < line.length(); i++)
 		{
+			char lastCh = ch;
 			ch = line.charAt(i);
 			switch(type)
 			{
@@ -449,7 +504,19 @@ loop:		for(int i = pos; i < line.length(); i++)
 					return i; //}}}
 			//{{{ Word character...
 			case WORD_CHAR:
-				if(Character.isLetterOrDigit(ch) ||
+				// stop at next last upper case char if camel cased
+				// (don't stop at every upper case char, don't treat noWordSep as word chars)
+				if (camelCasedWords && i > pos + 1 && !Character.isUpperCase(ch) && Character.isLetterOrDigit(ch)
+						&& Character.isUpperCase(lastCh))
+				{
+					return i - 1;
+				}
+				// stop at next first upper case char if camel caseg (don't stop at every upper case char)
+				else if (camelCasedWords && Character.isUpperCase(ch) && !Character.isUpperCase(lastCh))
+				{
+					return i;
+				}
+				else if(Character.isLetterOrDigit(ch) ||
 					noWordSep.indexOf(ch) != -1)
 				{
 					break;

@@ -1720,6 +1720,7 @@ options.editing.maxLineLen.tooltip=Select 0 for text area width (soft wrap only)
 options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
+options.editing.camelCasedWords=Separate "CamelCased" words
 options.editing.noTabs=Soft (emulated with spaces) tabs
 options.editing.deepIndent=Deep indent
 #}}}
