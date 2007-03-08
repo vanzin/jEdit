@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre10
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
-Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda
-and Joseph Erickson for contributing to this release.
+Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
+Joseph Erickson and David Moss for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -331,6 +331,8 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Updated python edit mode to unindent lines after "pass" (Matthieu Casanova)
 
 - Better highlighting of function calls in makefiles. (Marcelo Vanzin)
+
+- Updated PL/SQL Mode. (David Moss)
 
 }}}
 {{{ Miscellaneous
