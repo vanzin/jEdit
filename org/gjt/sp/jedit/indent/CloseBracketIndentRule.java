@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.indent;
 import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * @author Slava Pestov
@@ -41,31 +42,23 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ apply() method
-	public void apply(JEditBuffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex,
-		List<IndentAction> indentActions)
+	public void apply(IndentContext ctx)
 	{
-		int index;
-		if(aligned)
-			index = thisLineIndex;
-		else
-			index = prevLineIndex;
-
-		if(index == -1)
+		int lOffset = aligned ? 0 : -1;
+		CharSequence line = ctx.getLineText(lOffset);
+		if (line == null)
 			return;
 
-		String line = buffer.getLineText(index);
-
-		int offset = line.lastIndexOf(closeBracket);
+		int offset = StandardUtilities.getLastIndexOf(line, closeBracket);
 		if(offset == -1)
 			return;
 
-		int closeCount = getBrackets(line).closeCount;
+		int closeCount = getBrackets(ctx, lOffset).closeCount;
 		if(closeCount != 0)
 		{
 			IndentAction.AlignBracket alignBracket
 				= new IndentAction.AlignBracket(
-				buffer,index,offset);
+				ctx.getBuffer(),ctx.getLineIndex(lOffset),offset);
 			/*
 			Consider the following Common Lisp code (with one more opening
 			bracket than closing):
@@ -80,24 +73,19 @@ public class CloseBracketIndentRule extends BracketIndentRule
 			the next line must be indented relative to the
 			corresponding opening bracket from line 1.
 			*/
-			String openLine = alignBracket.getOpenBracketLine();
+			CharSequence openLine = alignBracket.getOpenBracketLine();
 			int column = alignBracket.getOpenBracketColumn();
 			if(openLine != null)
 			{
-				String leadingBrackets = openLine.substring(0,column);
-				alignBracket.setExtraIndent(getBrackets(leadingBrackets)
-					.openCount);
+				CharSequence leadingBrackets = openLine.subSequence(0,column);
+				alignBracket.setExtraIndent(
+					getBrackets(ctx, leadingBrackets).openCount);
 			}
 
-			indentActions.add(alignBracket);
+			ctx.addAction(alignBracket);
 		}
-	} //}}}
-
-	//{{{ isMatch() method
-	public boolean isMatch(String line)
-	{
-		return getBrackets(line).closeCount != 0;
 	} //}}}
 
 	private boolean aligned;
 }
+

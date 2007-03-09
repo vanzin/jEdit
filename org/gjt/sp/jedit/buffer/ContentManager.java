@@ -88,6 +88,20 @@ public class ContentManager
 		}
 	} //}}}
 
+	//{{{ getSegment() method
+	public CharSequence getSegment(int start, int len)
+	{
+		if(start >= gapStart)
+			return new BufferSegment(text,start + gapEnd - gapStart,len);
+		else if(start + len <= gapStart)
+			return new BufferSegment(text,start,len);
+		else
+		{
+			return new BufferSegment(text,start,gapStart - start)
+				.concat(new BufferSegment(text,gapEnd,start + len - gapStart));
+		}
+	} //}}}
+
 	//{{{ insert() method
 	public void insert(int start, String str)
 	{

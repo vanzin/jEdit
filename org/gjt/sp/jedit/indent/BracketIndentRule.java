@@ -28,60 +28,28 @@ package org.gjt.sp.jedit.indent;
  */
 public abstract class BracketIndentRule implements IndentRule
 {
-	//{{{ BracketIndentRule constructor
+
 	public BracketIndentRule(char openBracket, char closeBracket)
 	{
 		this.openBracket = openBracket;
 		this.closeBracket = closeBracket;
-	} //}}}
+	}
 
-	//{{{ Brackets class
-	public static class Brackets
+	protected IndentContext.Brackets getBrackets(IndentContext ctx, int offset)
 	{
-		int openCount;
-		int closeCount;
-	} //}}}
+		return ctx.getBrackets(offset, openBracket, closeBracket);
+	}
 
-	//{{{ getBrackets() method
-	public Brackets getBrackets(String line)
+	protected IndentContext.Brackets getBrackets(IndentContext ctx, CharSequence line)
 	{
-		Brackets brackets = new Brackets();
+		return ctx.getBrackets(line, openBracket, closeBracket);
+	}
 
-		for(int i = 0; i < line.length(); i++)
-		{
-			char ch = line.charAt(i);
-			if(ch == openBracket)
-			{
-				/* Don't increase indent when we see
-				an explicit fold. */
-				if(line.length() - i >= 3)
-				{
-					if(line.substring(i,i+3).equals("{{{")) /* }}} */
-					{
-						i += 2;
-						continue;
-					}
-				}
-				brackets.openCount++;
-			}
-			else if(ch == closeBracket)
-			{
-				if(brackets.openCount != 0)
-					brackets.openCount--;
-				else
-					brackets.closeCount++;
-			}
-		}
-
-		return brackets;
-	} //}}}
-
-	//{{{ toString() method
 	public String toString()
 	{
 		return getClass().getName() + "[" + openBracket + ","
 			+ closeBracket + "]";
-	} //}}}
+	}
 
 	protected char openBracket, closeBracket;
 }

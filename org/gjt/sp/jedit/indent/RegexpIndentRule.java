@@ -47,43 +47,40 @@ public class RegexpIndentRule implements IndentRule
 		prevPrevAction = prevPrev;
 		prevAction = prev;
 		thisAction = thisLine;
-		this.regexp = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE );
+		this.regexp = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
 		this.collapse = collapse;
 	} //}}}
 
 	//{{{ apply() method
-	public void apply(JEditBuffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex,
-		List<IndentAction> indentActions)
+	public void apply(IndentContext ctx)
 	{
 		if(thisAction != null
-			&& isMatch(buffer.getLineText(thisLineIndex)))
+			&& isMatch(ctx.getLineText(0)))
 		{
-			indentActions.add(thisAction);
+			ctx.addAction(thisAction);
 		}
 		if(prevAction != null
-			&& prevLineIndex != -1
-			&& isMatch(buffer.getLineText(prevLineIndex)))
+			&& isMatch(ctx.getLineText(-1)))
 		{
-			indentActions.add(prevAction);
+			ctx.addAction(prevAction);
 			if (collapse)
-				indentActions.add(IndentAction.PrevCollapse);
+				ctx.addAction(IndentAction.PrevCollapse);
 		}
 		if(prevPrevAction != null
-			&& prevPrevLineIndex != -1
-			&& isMatch(buffer.getLineText(prevPrevLineIndex)))
+			&& isMatch(ctx.getLineText(-2)))
 		{
-			indentActions.add(prevPrevAction);
+			ctx.addAction(prevPrevAction);
 			if (collapse)
-				indentActions.add(IndentAction.PrevPrevCollapse);
+				ctx.addAction(IndentAction.PrevPrevCollapse);
 		}
 	} //}}}
 
 	//{{{ isMatch() method
-	public boolean isMatch(String line)
+	public boolean isMatch(CharSequence line)
 	{
+		if (line == null)
+			return false;
 		Matcher m = regexp.matcher(line);
-//		return regexp.isMatch(line);
 		return m.matches();
 	} //}}}
 

@@ -22,9 +22,6 @@
 
 package org.gjt.sp.jedit.indent;
 
-import java.util.List;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-
 /**
  * @author Slava Pestov
  * @version $Id$
@@ -32,9 +29,8 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 public interface IndentRule
 {
 	/**
-	 * Apply the indent rule to this line, and return an indent action.
+	 * Apply the indent rule to the given context.
 	 */
-	void apply(JEditBuffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex,
-		List<IndentAction> indentActions);
+	void apply(IndentContext ctx);
 }
+

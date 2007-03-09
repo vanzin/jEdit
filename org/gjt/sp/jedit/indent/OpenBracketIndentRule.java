@@ -41,39 +41,38 @@ public class OpenBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ apply() method
-	public void apply(JEditBuffer buffer, int thisLineIndex,
-		int prevLineIndex, int prevPrevLineIndex,
-		List<IndentAction> indentActions)
+	public void apply(IndentContext ctx)
 	{
-		int prevOpenBracketCount = getOpenBracketCount(buffer,prevLineIndex);
+		int prevOpenBracketCount =
+			getOpenBracketCount(ctx, -1);
 		if(prevOpenBracketCount != 0)
 		{
-			handleCollapse(indentActions, true);
-			boolean multiple = buffer.getBooleanProperty(
+			handleCollapse(ctx.getActions(), true);
+			boolean multiple = ctx.getBuffer().getBooleanProperty(
 				"multipleBracketIndent");
 			IndentAction increase = new IndentAction.Increase(
 				multiple ? prevOpenBracketCount : 1);
-			indentActions.add(increase);
+			ctx.addAction(increase);
 		}
-		else if(getOpenBracketCount(buffer,thisLineIndex) != 0)
+		else if(getOpenBracketCount(ctx, 0) != 0)
 		{
-			handleCollapse(indentActions, false);
+			handleCollapse(ctx.getActions(), false);
 		}
 	} //}}}
 
 	//{{{ getOpenBracketCount() method
-	private int getOpenBracketCount(JEditBuffer buffer, int line)
+	private int getOpenBracketCount(IndentContext ctx, int offset)
 	{
-		if(line == -1)
-			return 0;
-		else
-			return getBrackets(buffer.getLineText(line)).openCount;
+		CharSequence line = ctx.getLineText(offset);
+		return (line != null) ? getBrackets(ctx, line).openCount : 0;
 	} //}}}
 
 	//{{{ handleCollapse() method
 	private static void handleCollapse(List<IndentAction> indentActions,
 					   boolean delPrevPrevCollapse)
 	{
+		if (indentActions == null)
+			return;
 		if (indentActions.contains(IndentAction.PrevCollapse))
 		{
 			indentActions.clear();
@@ -89,3 +88,4 @@ public class OpenBracketIndentRule extends BracketIndentRule
 
 	private boolean aligned;
 }
+

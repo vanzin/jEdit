@@ -51,6 +51,18 @@ public class StandardUtilities
 	 */
 	public static int getLeadingWhiteSpace(String str)
 	{
+		return getLeadingWhiteSpace((CharSequence)str);
+	} //}}}
+
+	//{{{ getLeadingWhiteSpace() method
+	/**
+	 * Returns the number of leading white space characters in the
+	 * specified string.
+	 * @param str The string
+	 * @since jEdit 4.3pre10
+	 */
+	public static int getLeadingWhiteSpace(CharSequence str)
+	{
 		int whitespace = 0;
 loop:		for(;whitespace < str.length();)
 		{
@@ -100,6 +112,19 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 	 */
 	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
 	{
+		return getLeadingWhiteSpaceWidth((CharSequence)str, tabSize);
+	} //}}}
+
+	//{{{ getLeadingWhiteSpaceWidth() method
+	/**
+	 * Returns the width of the leading white space in the specified
+	 * string.
+	 * @param str The string
+	 * @param tabSize The tab size
+	 * @since jEdit 4.3pre10
+	 */
+	public static int getLeadingWhiteSpaceWidth(CharSequence str, int tabSize)
+	{
 		int whitespace = 0;
 loop:		for(int i = 0; i < str.length(); i++)
 		{
@@ -117,6 +142,34 @@ loop:		for(int i = 0; i < str.length(); i++)
 			}
 		}
 		return whitespace;
+	} //}}}
+
+	//{{{ getLastIndexOf() method
+	/**
+	 * An implementation of String.lastIndexOf(char) for CharSequence
+	 * instances.
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public static int getLastIndexOf(CharSequence seq, char ch)
+	{
+		return getLastIndexOf(seq, ch, seq.length());
+	} //}}}
+
+	//{{{ getLastIndexOf() method
+	/**
+	 * An implementation of String.lastIndexOf(char) for CharSequence
+	 * instances.
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public static int getLastIndexOf(CharSequence seq, char ch, int pos)
+	{
+		assert (pos <= seq.length()) : "invalid start position";
+		for (int i = pos - 1; i >= 0; i--)
+			if (seq.charAt(i) == ch)
+				return i;
+		return -1;
 	} //}}}
 
 	//{{{ createWhiteSpace() method
@@ -460,5 +513,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 	} //}}}
 
 	//}}}
+
 	private StandardUtilities(){}
 }

@@ -23,9 +23,6 @@
 package org.gjt.sp.jedit.indent;
 
 import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-
-import java.util.List;
 
 /**
  * Whitespace rule. This rule cancels all indent actions in the
@@ -47,12 +44,10 @@ import java.util.List;
 public class WhitespaceRule implements IndentRule
 {
 
-	public void apply(JEditBuffer buffer, int thisLineIndex,
-			  int prevLineIndex, int prevPrevLineIndex,
-			  List<IndentAction> indentActions)
+	public void apply(IndentContext ctx)
 	{
 		/* Don't apply this rule if the current line is empty. */
-		String current = buffer.getLineText(thisLineIndex);
+		CharSequence current = ctx.getLineText(0);
 		boolean found = false;
 		for (int i = 0; i < current.length(); i++)
 		{
@@ -66,13 +61,13 @@ public class WhitespaceRule implements IndentRule
 			return;
 
 		/* Check if the previous line is empty. */
-		String previous = buffer.getLineText(prevLineIndex);
+		CharSequence previous = ctx.getLineText(-1);
 		for (int i = 0; i < previous.length(); i++)
 		{
 			if (!Character.isWhitespace(previous.charAt(i)))
 				return;
 		}
-		indentActions.add(new IndentAction.NoIncrease());
+		ctx.addAction(new IndentAction.NoIncrease());
 	}
 
 }

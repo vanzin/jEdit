@@ -139,7 +139,7 @@ public interface IndentAction
 		private int line, offset;
 		private int openBracketLine;
 		private int openBracketColumn;
-		private String openBracketLineText;
+		private CharSequence openBracketLineText;
 		private int extraIndent;
 
 		public AlignBracket(JEditBuffer buffer, int line, int offset)
@@ -156,7 +156,7 @@ public interface IndentAction
 				openBracketLine = buffer.getLineOfOffset(openBracketIndex);
 				openBracketColumn = openBracketIndex -
 					buffer.getLineStartOffset(openBracketLine);
-				openBracketLineText = buffer.getLineText(openBracketLine);
+				openBracketLineText = buffer.getLineSegment(openBracketLine);
 			}
 		}
 
@@ -175,7 +175,7 @@ public interface IndentAction
 			return openBracketColumn;
 		}
 
-		public String getOpenBracketLine()
+		public CharSequence getOpenBracketLine()
 		{
 			return openBracketLineText;
 		}
@@ -230,9 +230,9 @@ public interface IndentAction
 	class AlignParameter implements IndentAction
 	{
 		private int openParensColumn;
-		private String openParensLineText;
+		private CharSequence openParensLineText;
 
-		public AlignParameter(int openParensColumn, String openParensLineText)
+		public AlignParameter(int openParensColumn, CharSequence openParensLineText)
 		{
 			this.openParensLineText = openParensLineText;
 			this.openParensColumn = openParensColumn;

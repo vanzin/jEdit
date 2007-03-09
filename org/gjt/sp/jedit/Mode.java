@@ -239,6 +239,18 @@ public class Mode
 		ignoreWhitespace = !"false".equalsIgnoreCase(
 					(String)props.get("ignoreWhitespace"));
 
+		String tmp;
+		tmp = (String) props.get("indentOpenBracket");
+		if (tmp != null && tmp.length() > 0)
+			indentOpenBracket = tmp.charAt(0);
+		else
+			indentOpenBracket = 0;
+		tmp = (String) props.get("unalignedOpenBracket");
+		if (tmp != null && tmp.length() > 0)
+			unalignedOpenBracket = tmp.charAt(0);
+		else
+			unalignedOpenBracket = 0;
+
 		// need to carry over file name and first line globs because they are
 		// not given to us by the XMode handler, but instead are filled in by
 		// the catalog loader.
@@ -297,6 +309,28 @@ public class Mode
 	public boolean getIgnoreWhitespace()
 	{
 		return ignoreWhitespace;
+	} //}}}
+
+	//{{{ getIndentOpenBracket() method
+	/**
+	 * Returns the open bracket character, or 0 if none set.
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public char getIndentOpenBracket()
+	{
+		return indentOpenBracket;
+	} //}}}
+
+	//{{{ getUnalignedOpenBracket()
+	/**
+	 * Returns the unaligned open bracket character, or 0 if none set.
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public char getUnalignedOpenBracket()
+	{
+		return unalignedOpenBracket;
 	} //}}}
 
 	//{{{ Indent rules
@@ -444,5 +478,7 @@ public class Mode
 	private List<IndentRule> indentRules;
 	private String electricKeys;
 	private boolean ignoreWhitespace;
+	private char indentOpenBracket;
+	private char unalignedOpenBracket;
 	//}}}
 }

@@ -471,6 +471,34 @@ public class JEditBuffer
 		}
 	} //}}}
 
+	//{{{ getLineSegment() method
+	/**
+	 * Returns the text on the specified line.
+	 * This method is thread-safe.
+	 * @param line The line index.
+	 * @return The text, or null if the line is invalid
+	 * @since jEdit 4.3pre10
+	 */
+	public CharSequence getLineSegment(int line)
+	{
+		if(line < 0 || line >= lineMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
+		try
+		{
+			readLock();
+
+			int start = line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1);
+			int end = lineMgr.getLineEndOffset(line);
+
+			return getSegment(start,end - start - 1);
+		}
+		finally
+		{
+			readUnlock();
+		}
+	} //}}}
+
 	//{{{ getLineText() method
 	/**
 	 * Returns the specified line in a <code>Segment</code>.<p>
@@ -521,6 +549,31 @@ public class JEditBuffer
 				throw new ArrayIndexOutOfBoundsException(start + ":" + length);
 
 			return contentMgr.getText(start,length);
+		}
+		finally
+		{
+			readUnlock();
+		}
+	} //}}}
+
+	//{{{ getSegment() method
+	/**
+	 * Returns the specified text range. This method is thread-safe.
+	 * @param start The start offset
+	 * @param length The number of characters to get
+	 * @since jEdit 4.3pre10
+	 */
+	public CharSequence getSegment(int start, int length)
+	{
+		try
+		{
+			readLock();
+
+			if(start < 0 || length < 0
+				|| start + length > contentMgr.getLength())
+				throw new ArrayIndexOutOfBoundsException(start + ":" + length);
+
+			return contentMgr.getSegment(start,length);
 		}
 		finally
 		{
@@ -981,35 +1034,27 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public int getIdealIndentForLine(int lineIndex)
 	{
-		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
-		int prevPrevLineIndex = prevLineIndex < 0 ? -1
-			: getPriorNonEmptyLine(prevLineIndex);
-
-		int oldIndent = prevLineIndex == -1 ? 0 :
-			StandardUtilities.getLeadingWhiteSpaceWidth(
-			getLineText(prevLineIndex),
-			getTabSize());
-		int newIndent = oldIndent;
-
 		List<IndentRule> indentRules = getIndentRules(lineIndex);
-		List<IndentAction> actions = new LinkedList<IndentAction>();
-		for (int i = 0;i<indentRules.size();i++)
+		IndentContext ctx = new IndentContext(this, lineIndex);
+		for (int i = 0; i < indentRules.size(); i++)
 		{
 			IndentRule rule = indentRules.get(i);
-			rule.apply(this,lineIndex,prevLineIndex,
-				prevPrevLineIndex,actions);
+			rule.apply(ctx);
 		}
 
-
-		for (IndentAction action : actions)
+		int newIndent = ctx.getOldIndent();
+		if (ctx.getActions() != null)
 		{
-			newIndent = action.calculateIndent(this, lineIndex,
-					oldIndent, newIndent);
-			if (newIndent < 0)
-				newIndent = 0;
+			for (IndentAction action : ctx.getActions())
+			{
+				newIndent = action.calculateIndent(this, lineIndex,
+						ctx.getOldIndent(), newIndent);
+				if (newIndent < 0)
+					newIndent = 0;
 
-			if (!action.keepChecking())
-				break;
+				if (!action.keepChecking())
+					break;
+			}
 		}
 
 		return newIndent;
@@ -1188,6 +1233,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ Syntax highlighting
+
+	//{{{ getMode() method
+	public Mode getMode()
+	{
+		return mode;
+	} //}}}
 
 	//{{{ markTokens() method
 	/**

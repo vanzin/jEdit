@@ -647,6 +647,18 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 */
 	public static String tabsToSpaces(String in, int tabSize)
 	{
+		return tabsToSpaces((CharSequence)in, tabSize);
+	} //}}}
+
+	//{{{ tabsToSpaces() method
+	/**
+	 * Converts tabs to consecutive spaces in the specified string.
+	 * @param in The string
+	 * @param tabSize The tab size
+	 * @since jEdit 4.3pre10
+	 */
+	public static String tabsToSpaces(CharSequence in, int tabSize)
+	{
 		StringBuilder buf = new StringBuilder();
 		int width = 0;
 		for(int i = 0; i < in.length(); i++)

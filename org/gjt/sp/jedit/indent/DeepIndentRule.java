@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.indent;
 
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.StandardUtilities;
 
 import java.util.List;
 
@@ -44,61 +45,60 @@ public class DeepIndentRule implements IndentRule
 	 *
 	 * @return the last pos of the parens in the line
 	 */
-	private static Parens getLastParens(String s, int pos)
+	private static Parens getLastParens(CharSequence s, int pos)
 	{
 		int lastClose;
 		int lastOpen;
 		if (pos == -1)
 		{
-			lastClose = s.lastIndexOf(')');
-			lastOpen = s.lastIndexOf('(');
+			lastClose = StandardUtilities.getLastIndexOf(s, ')');
+			lastOpen = StandardUtilities.getLastIndexOf(s, '(');
 		}
 		else
 		{
-			lastClose = s.lastIndexOf(')', pos);
-			lastOpen = s.lastIndexOf('(', pos);
+			lastClose = StandardUtilities.getLastIndexOf(s, ')', pos);
+			lastOpen = StandardUtilities.getLastIndexOf(s, '(', pos);
 		}
 		return new Parens(lastOpen, lastClose);
 	} //}}}
 
 	//{{{ apply() method
-	public void apply(JEditBuffer buffer, int thisLineIndex,
-			  int prevLineIndex, int prevPrevLineIndex,
-			  List<IndentAction> indentActions)
+	public void apply(IndentContext ctx)
 	{
-		if (prevLineIndex == -1)
+		int lineIndex = ctx.getLineIndex(-1);
+		if (lineIndex == -1)
 			return;
-		
-		int lineIndex = prevLineIndex;
+
 		int oldLineIndex = lineIndex;
-		String lineText = buffer.getLineText(lineIndex);
+		CharSequence lineText = ctx.getLineText(-1);
+
 		int searchPos = -1;
 		while (true)
 		{
 			if (lineIndex != oldLineIndex)
 			{
-				lineText = buffer.getLineText(lineIndex);
+				lineText = ctx.getBuffer().getLineText(lineIndex);
 				oldLineIndex = lineIndex;
 			}
 			Parens parens = getLastParens(lineText, searchPos);
 			if (parens.openOffset > parens.closeOffset)
 			{
 				// recalculate column (when using tabs instead of spaces)
-				int indent = parens.openOffset + TextUtilities.tabsToSpaces(lineText, buffer.getTabSize()).length() - lineText.length();
-				indentActions.add(new IndentAction.AlignParameter(indent, lineText));
+				int indent = parens.openOffset + TextUtilities.tabsToSpaces(lineText, ctx.getBuffer().getTabSize()).length() - lineText.length();
+				ctx.addAction(new IndentAction.AlignParameter(indent, lineText));
 				return;
 			}
-			
+
 			// No parens on prev line
 			if (parens.openOffset == -1 && parens.closeOffset == -1)
 			{
 				return;
 			}
-			int openParenOffset = TextUtilities.findMatchingBracket(buffer, lineIndex, parens.closeOffset);
+			int openParenOffset = TextUtilities.findMatchingBracket(ctx.getBuffer(), lineIndex, parens.closeOffset);
 			if (openParenOffset >= 0)
 			{
-				lineIndex = buffer.getLineOfOffset(openParenOffset);
-				searchPos = openParenOffset - buffer.getLineStartOffset(lineIndex) - 1;
+				lineIndex = ctx.getBuffer().getLineOfOffset(openParenOffset);
+				searchPos = openParenOffset - ctx.getBuffer().getLineStartOffset(lineIndex) - 1;
 				if (searchPos < 0)
 				 	break;
 			}
@@ -112,14 +112,13 @@ public class DeepIndentRule implements IndentRule
 	{
 		final int openOffset;
 		final int closeOffset;
-		
+
 		Parens(int openOffset, int closeOffset)
 		{
 			this.openOffset = openOffset;
 			this.closeOffset = closeOffset;
 		}
-		
-		@Override
+
 		public String toString()
 		{
 			return "Parens(" + openOffset + ',' + closeOffset + ')';
