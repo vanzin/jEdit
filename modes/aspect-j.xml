@@ -68,11 +68,12 @@
                 <SEQ TYPE="OPERATOR">~</SEQ>
                 <SEQ TYPE="OPERATOR">}</SEQ>
                 <SEQ TYPE="OPERATOR">{</SEQ>
-                <MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+                <MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR"
                         AT_WHITESPACE_END="TRUE">:</MARK_PREVIOUS>
 
                 <!-- Function calls -->
-                <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+                <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+				<SEQ TYPE="OPERATOR">)</SEQ>
 
                 <KEYWORDS>
                         <KEYWORD1>abstract</KEYWORD1>

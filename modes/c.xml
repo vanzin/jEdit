@@ -86,12 +86,6 @@
             <END>'</END>
         </SPAN>
 
-        <!-- Function calls -->
-        <MARK_PREVIOUS
-			TYPE="FUNCTION"
-			MATCH_TYPE="OPERATOR"
-			EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
-
 		<!-- Labels. -->
         <MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
             MATCH_TYPE="OPERATOR"
@@ -107,6 +101,11 @@
         <SEQ TYPE="LITERAL4">??&gt;</SEQ>
         <SEQ TYPE="LITERAL4">??-</SEQ>
         <SEQ TYPE="LITERAL4">??=</SEQ>
+
+        <!-- Function calls -->
+        <MARK_PREVIOUS
+			TYPE="FUNCTION"
+			MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
 
         <!-- Alternate tokens -->
         <SEQ TYPE="LITERAL4">&lt;:</SEQ>

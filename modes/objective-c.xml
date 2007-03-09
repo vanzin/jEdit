@@ -67,15 +67,13 @@
             <KEYWORD1>@endcode</KEYWORD1>
             <KEYWORD1>@defs</KEYWORD1>
 
-            <LITERAL2>true</LITERAL2>
-            <LITERAL2>false</LITERAL2>
             <LITERAL2>TRUE</LITERAL2>
             <LITERAL2>FALSE</LITERAL2>
             <LITERAL2>YES</LITERAL2>
             <LITERAL2>NO</LITERAL2>
             <LITERAL2>NULL</LITERAL2>
             <LITERAL2>nil</LITERAL2>
-            <LITERAL2>NIl</LITERAL2>
+            <LITERAL2>Nil</LITERAL2>
         </KEYWORDS>
     </RULES>
 

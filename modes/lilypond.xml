@@ -62,7 +62,7 @@ Recommended jEdit/modes/catalog entry:
 
 	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHARS="1234567890">\d+\b</SEQ_REGEXP>
 
-	<MARK_FOLLOWING TYPE="LITERAL3" EXCLUDE_MATCH="TRUE">.</MARK_FOLLOWING>
+	<MARK_FOLLOWING TYPE="LITERAL3" MATCH_TYPE="OPERATOR">.</MARK_FOLLOWING>
 
 <!-- Generated part follows -->
 <!-- internal commands -->
@@ -816,4 +816,4 @@ Recommended jEdit/modes/catalog entry:
 
 </RULES>
 
-</MODE> 
+</MODE>

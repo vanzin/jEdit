@@ -23,7 +23,7 @@
 			<BEGIN>&lt;jsp:directive&gt;</BEGIN>
 			<END>&lt;/jsp:directive&gt;</END>
 		</SPAN>
-		
+
 		<!-- JSP scriptlet expression -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
@@ -34,7 +34,7 @@
 			<END>&lt;/jsp:expression&gt;</END>
 		</SPAN>
 
-		
+
 		<!-- JSP scriptlet code block -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%!</BEGIN>
@@ -44,7 +44,7 @@
 			<BEGIN>&lt;jsp:declaration&gt;</BEGIN>
 			<END>&lt;/jsp:declaration&gt;</END>
 		</SPAN>
-		
+
 		<!-- JSP scriptlet -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%</BEGIN>
@@ -108,7 +108,7 @@
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
-		
+
 		<!-- JSP scriptlet -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%</BEGIN>
@@ -133,7 +133,7 @@
 		</SPAN>
 
 		<SEQ TYPE="MARKUP">/</SEQ>
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 
 		<KEYWORDS>
@@ -182,12 +182,12 @@
 			<BEGIN>&lt;%=</BEGIN>
 			<END>%&gt;</END>
 		</SPAN>
-		
+
 		<SPAN TYPE="MARKUP" DELEGATE="CSS+JSP">
 			<BEGIN>style='</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 		<SPAN TYPE="MARKUP" DELEGATE="CSS+JSP">
 			<BEGIN>style="</BEGIN>
 			<END>"</END>
@@ -202,14 +202,14 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 		<SEQ TYPE="MARKUP">/</SEQ>
-			<MARK_FOLLOWING TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">:</MARK_FOLLOWING>
+		<MARK_FOLLOWING TYPE="FUNCTION" MATCH_TYPE="OPERATOR">:</MARK_FOLLOWING>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 	</RULES>
-	
-	
-	
+
+
+
 	<RULES SET="CSS+JSP" DEFAULT="LITERAL1">
 		<SPAN TYPE="KEYWORD2" DELEGATE="java::MAIN">
 			<BEGIN>&lt;%=</BEGIN>
@@ -221,7 +221,7 @@
 		</SPAN>
 		<IMPORT DELEGATE="css::MAIN"/>
 	</RULES>
-	
+
 	<RULES SET="ATTRVALUE" DEFAULT="LITERAL1" ESCAPE="\">
 		<!-- JSP scriptlet expression -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
@@ -234,8 +234,8 @@
 		</SPAN>
 		<SEQ TYPE="LITERAL1" DELEGATE="JAVASCRIPT+JSP">javascript:</SEQ>
 	</RULES>
-	
-	
+
+
 	<RULES SET="JAVASCRIPT+JSP">
 		<!-- JSP scriptlet expression -->
 		<SPAN TYPE="KEYWORD2" DELEGATE="java::MAIN">
@@ -248,9 +248,9 @@
 		</SPAN>
 		<IMPORT DELEGATE="javascript::MAIN"/>
 	</RULES>
-	
+
 	<RULES SET="EL" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0[lL]?|[1-9]\d{0,9}(\d{0,9}[lL])?|0[xX]\p{XDigit}{1,8}(\p{XDigit}{0,8}[lL])?|0[0-7]{1,11}([0-7]{0,11}[lL])?|([0-9]+\.[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?[fFdD]?|[0-9]+([eE][+-]?[0-9]+[fFdD]?|([eE][+-]?[0-9]+)?[fFdD]))">
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 		<IMPORT DELEGATE="java::MAIN"/>
 	</RULES>
 </MODE>

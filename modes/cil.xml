@@ -24,18 +24,19 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-        
+
         <EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
-        
-        <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
-        
+
+        <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
+
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-        
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE" AT_LINE_START="TRUE">:</MARK_PREVIOUS>
-        
+
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR" AT_LINE_START="TRUE">:</MARK_PREVIOUS>
+
 		<KEYWORDS>
         <KEYWORD1>public</KEYWORD1>
             <KEYWORD1>private</KEYWORD1>
@@ -87,7 +88,7 @@
             <KEYWORD1>fault</KEYWORD1>
             <KEYWORD1>filter</KEYWORD1>
             <KEYWORD1>handler</KEYWORD1>
-            
+
             <!--Assembly Directives (Meta-Data)-->
             <KEYWORD2>.assembly</KEYWORD2>
             <KEYWORD2>.assembly extern</KEYWORD2>
@@ -125,14 +126,14 @@
             <KEYWORD2>.entrypoint</KEYWORD2>
             <KEYWORD2>.pack</KEYWORD2>
             <KEYWORD2>.size</KEYWORD2>
-            
+
             <!--Implementation Specific Metadata-->
             <KEYWORD2>.file alignment</KEYWORD2>
             <KEYWORD2>.imagebase</KEYWORD2>
             <KEYWORD2>.language</KEYWORD2>
             <KEYWORD2>.namespace</KEYWORD2>
-            
-            
+
+
             <KEYWORD3>string</KEYWORD3>
             <KEYWORD3>object</KEYWORD3>
             <KEYWORD3>bool</KEYWORD3>
@@ -147,13 +148,13 @@
             <KEYWORD3>int32</KEYWORD3>
             <KEYWORD3>int64</KEYWORD3>
             <KEYWORD3>nullref</KEYWORD3>
-            
-            
+
+
             <OPERATOR>&amp;</OPERATOR>
             <OPERATOR>*</OPERATOR>
             <OPERATOR>}</OPERATOR>
             <OPERATOR>{</OPERATOR>
-            
+
             <!--arithmetic opcodes-->
             <FUNCTION>add</FUNCTION>
             <FUNCTION>add.ovf</FUNCTION>
@@ -166,13 +167,13 @@
             <FUNCTION>sub</FUNCTION>
             <FUNCTION>sub.ovf</FUNCTION>
             <FUNCTION>sub.ovf.un</FUNCTION>
-            
+
             <!--logical-->
             <FUNCTION>and</FUNCTION>
             <FUNCTION>not</FUNCTION>
             <FUNCTION>or</FUNCTION>
             <FUNCTION>xor</FUNCTION>
-            
+
             <!--Branches-->
             <FUNCTION>beq</FUNCTION>
             <FUNCTION>beq.s</FUNCTION>
@@ -200,7 +201,7 @@
             <FUNCTION>brtrue</FUNCTION>
             <FUNCTION>brtrue.s</FUNCTION>
             <FUNCTION>br.s</FUNCTION>
-            
+
             <!--Conversions-->
             <FUNCTION>conv.i</FUNCTION>
             <FUNCTION>conv.i1</FUNCTION>
@@ -235,7 +236,7 @@
             <FUNCTION>conv.u2</FUNCTION>
             <FUNCTION>conv.u4</FUNCTION>
             <FUNCTION>conv.u8</FUNCTION>
-            
+
             <!--Loads and Stores-->
             <FUNCTION>ldarg</FUNCTION>
             <FUNCTION>ldarga</FUNCTION>
@@ -329,7 +330,7 @@
             <FUNCTION>stloc.s</FUNCTION>
             <FUNCTION>stobj</FUNCTION>
             <FUNCTION>stsfld</FUNCTION>
-            
+
             <FUNCTION>call</FUNCTION>
             <FUNCTION>calli</FUNCTION>
             <FUNCTION>callvirt</FUNCTION>
@@ -342,12 +343,12 @@
             <FUNCTION>clt.un</FUNCTION>
             <FUNCTION>cpblk</FUNCTION>
             <FUNCTION>cpobj</FUNCTION>
-            
+
             <FUNCTION>initblk</FUNCTION>
             <FUNCTION>initobj</FUNCTION>
             <FUNCTION>newarr</FUNCTION>
             <FUNCTION>newobj</FUNCTION>
-            
+
             <FUNCTION>dup</FUNCTION>
             <FUNCTION>endfilter</FUNCTION>
             <FUNCTION>isinst</FUNCTION>

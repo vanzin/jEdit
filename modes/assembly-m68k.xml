@@ -33,7 +33,7 @@
 
 		<MARK_FOLLOWING TYPE="KEYWORD2" AT_LINE_START="TRUE">$</MARK_FOLLOWING>
 
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR"
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 
 		<SEQ TYPE="NULL">,</SEQ>
@@ -61,10 +61,10 @@
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 
 		<KEYWORDS>
-		
+
 			<!-- ************************* REGISTERS ********************************* -->
 			<!-- For sake of commonality with existing asm86 mode we use Keyword3 for registers-->
-			
+
 			<!-- General-purpose data registers -->
 			<KEYWORD3>D0</KEYWORD3>
 			<KEYWORD3>D1</KEYWORD3>
@@ -74,7 +74,7 @@
 			<KEYWORD3>D5</KEYWORD3>
 			<KEYWORD3>D6</KEYWORD3>
 			<KEYWORD3>D7</KEYWORD3>
-			
+
 			<!-- Address registers -->
 			<KEYWORD3>A0</KEYWORD3>
 			<KEYWORD3>A1</KEYWORD3>
@@ -94,16 +94,16 @@
 			<KEYWORD3>FP5</KEYWORD3>
 			<KEYWORD3>FP6</KEYWORD3>
 			<KEYWORD3>FP7</KEYWORD3>
-			
+
 			<KEYWORD3>SP</KEYWORD3>
 			<KEYWORD3>CCR</KEYWORD3>
 
 			<!-- ************************** DIRECTIVES ********************************** -->
-			
+
 			<!-- Assembler directives give instructions to the assembler (not the 68000 chip which will execute
-			your program) on how to assemble your program.			
+			your program) on how to assemble your program.
 			These directives may be grouped into the following categories.-->
-			
+
 			<!-- Miscellaneous  -->
 			<KEYWORD1>OPT</KEYWORD1>
 			<KEYWORD1>INCLUDE</KEYWORD1>
@@ -117,18 +117,18 @@
 			<KEYWORD1>NOLIST</KEYWORD1>
 			<KEYWORD1>SPC</KEYWORD1>
 			<KEYWORD1>TTL</KEYWORD1>
-			
+
 			<!-- Section Control -->
 			<KEYWORD1>ORG</KEYWORD1>
-			
+
 			<!-- Symbol Definition  -->
 			<KEYWORD1>EQU</KEYWORD1>
 			<KEYWORD1>SET</KEYWORD1>
-			
+
 			<!-- Data Definition -->
 			<KEYWORD1>DS</KEYWORD1>
 			<KEYWORD1>DC</KEYWORD1>
-			
+
 			<!-- Structured Programming Constructs -->
 			<KEYWORD1>FOR</KEYWORD1>
 			<KEYWORD1>ENDF</KEYWORD1>
@@ -141,9 +141,9 @@
 			<KEYWORD1>WHILE</KEYWORD1>
 			<KEYWORD1>DO</KEYWORD1>
 			<KEYWORD1>ENDW</KEYWORD1>
-			
+
 			<KEYWORD1>MACRO</KEYWORD1>
-			
+
 
 			<!-- *************************** INSTRUCTIONS **************************************** -->
 			<FUNCTION>ABCD</FUNCTION>
@@ -265,7 +265,7 @@
 				<FUNCTION>DBPL</FUNCTION>
 				<FUNCTION>DBVC</FUNCTION>
 				<FUNCTION>DBVS</FUNCTION>
-			
+
 			<FUNCTION>DIVS</FUNCTION>
 			<FUNCTION>DIVSL</FUNCTION>
 			<FUNCTION>DIVU</FUNCTION>
@@ -450,7 +450,7 @@
 				<FUNCTION>ST</FUNCTION>
 				<FUNCTION>SVC</FUNCTION>
 				<FUNCTION>SVS</FUNCTION>
-			
+
 			<FUNCTION>STOP</FUNCTION>
 			<FUNCTION>SUB</FUNCTION>
 				<FUNCTION>SUB.B</FUNCTION>
@@ -493,7 +493,7 @@
 				<FUNCTION>TRAPT</FUNCTION>
 				<FUNCTION>TRAPVC</FUNCTION>
 				<FUNCTION>TRAPVS</FUNCTION>
-			
+
 			<FUNCTION>TRAPV</FUNCTION>
 			<FUNCTION>TST</FUNCTION>
 				<FUNCTION>TST.B</FUNCTION>
@@ -501,7 +501,7 @@
 				<FUNCTION>TST.L</FUNCTION>
 			<FUNCTION>UNLK</FUNCTION>
 			<FUNCTION>UNPK</FUNCTION>
-			
+
 
 		</KEYWORDS>
 	</RULES>

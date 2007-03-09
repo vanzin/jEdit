@@ -7,9 +7,9 @@ Sybase PowerDynamo mode file for jEdit - v 1.0
 
 By Ben Williams (benw@webmedia.com.au)
 
-1.0  2003-11-13  
-Initial release - supports dynamo script, SQL tags, and mostly complete support 
-for the other tags (data, document, etc). more support planned for future.  
+1.0  2003-11-13
+Initial release - supports dynamo script, SQL tags, and mostly complete support
+for the other tags (data, document, etc). more support planned for future.
 
 -->
 <MODE>
@@ -69,7 +69,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<BEGIN>&lt;!--label</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
-		
+
 		<SPAN TYPE="LABEL" DELEGATE="transact-sql::MAIN">
 			<BEGIN>&lt;!--sql</BEGIN>
 			<END>--&gt;</END>
@@ -89,7 +89,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<BEGIN>&lt;!--sql_state</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
-		
+
 		<SPAN TYPE="LABEL" DELEGATE="powerdynamo-tag-general">
 			<BEGIN>&lt;!--sql_on_no_error</BEGIN>
 			<END>--&gt;</END>
@@ -125,7 +125,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<BEGIN>&lt;!--/sql_on_rows</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
- 
+
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>&lt;!--</BEGIN>
@@ -238,13 +238,8 @@ for the other tags (data, document, etc). more support planned for future.
 		<SEQ TYPE="OPERATOR">@</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
 
-		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
-
-		<!-- <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE"
-			NO_WORD_BREAK="TRUE"> (</MARK_PREVIOUS> -->
-
-		<!-- <MARK_FOLLOWING TYPE="FUNCTION" EXCLUDE_MATCH="TRUE"
-			NO_WORD_BREAK="TRUE">class </MARK_FOLLOWING> -->
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
 
 		<KEYWORDS>
 			<!-- Language constructs (24) -->
@@ -301,7 +296,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<KEYWORD1>var</KEYWORD1>
 			<KEYWORD1>void</KEYWORD1>
 			<KEYWORD1>while</KEYWORD1>
-			
+
 			<!-- objects -->
 			<KEYWORD2></KEYWORD2>
 			<KEYWORD2>document</KEYWORD2>
@@ -312,7 +307,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<KEYWORD2>site</KEYWORD2>
 			<KEYWORD2>system</KEYWORD2>
 			<KEYWORD2>typeof</KEYWORD2>
-			
+
 			<!-- methods & attributes -->
 			<KEYWORD3>AskQuestion</KEYWORD3>
 			<KEYWORD3>autoCommit</KEYWORD3>
@@ -416,7 +411,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<KEYWORD3>writeln</KEYWORD3>
 		</KEYWORDS>
 	</RULES>
-	
+
 	<RULES IGNORE_CASE="TRUE" SET="powerdynamo-tag-general">
 		<SPAN TYPE="LITERAL1" DELEGATE="powerdynamo_LITERAL">
 			<BEGIN>"</BEGIN>
@@ -426,12 +421,12 @@ for the other tags (data, document, etc). more support planned for future.
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 		<KEYWORDS>
 			<KEYWORD2>NAME</KEYWORD2>
 		</KEYWORDS>
 	</RULES>
-	
+
 	<RULES IGNORE_CASE="TRUE" SET="powerdynamo-tag-data">
 		<SPAN TYPE="LITERAL1" DELEGATE="powerdynamo_LITERAL">
 			<BEGIN>"</BEGIN>
@@ -441,7 +436,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 		<KEYWORDS>
 			<KEYWORD2>NAME</KEYWORD2>
 			<KEYWORD2>QUERY</KEYWORD2>
@@ -457,7 +452,7 @@ for the other tags (data, document, etc). more support planned for future.
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 		<KEYWORDS>
 			<KEYWORD2>CONTENT_TYPE</KEYWORD2>
 			<KEYWORD2>REDIRECT</KEYWORD2>

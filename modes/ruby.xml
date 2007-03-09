@@ -278,7 +278,7 @@
         </SPAN_REGEXP>
 
         <!-- (/regexp/) -->
-        <SPAN DELEGATE="RegexpLiteral" EXCLUDE_MATCH="TRUE" TYPE="LITERAL3">
+        <SPAN DELEGATE="RegexpLiteral" MATCH_TYPE="OPERATOR" TYPE="LITERAL3">
             <BEGIN>(/</BEGIN>
             <END>/</END>
         </SPAN>

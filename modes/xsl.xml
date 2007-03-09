@@ -118,7 +118,7 @@
     <SEQ TYPE="OPERATOR">xmlns</SEQ>
 
     <!-- Namespace prefixes -->
-    <MARK_PREVIOUS EXCLUDE_MATCH="FALSE" TYPE="LABEL">:</MARK_PREVIOUS>
+    <MARK_PREVIOUS TYPE="LABEL">:</MARK_PREVIOUS>
 
   </RULES>
 
@@ -254,7 +254,7 @@
     <SEQ TYPE="OPERATOR">xmlns</SEQ>
 
     <!-- Namespace prefixes -->
-    <MARK_PREVIOUS EXCLUDE_MATCH="FALSE" TYPE="LABEL">:</MARK_PREVIOUS>
+    <MARK_PREVIOUS TYPE="LABEL">:</MARK_PREVIOUS>
 
     <!-- XSLT 2.0 element names -->
     <KEYWORDS>
@@ -329,7 +329,7 @@
     </SPAN>
 
     <!-- Axes specifiers -->
-    <MARK_PREVIOUS TYPE="KEYWORD4" EXCLUDE_MATCH="FALSE">::</MARK_PREVIOUS>
+    <MARK_PREVIOUS TYPE="KEYWORD4">::</MARK_PREVIOUS>
     <!-- Abbreviated 'attribute::' -->
     <SEQ TYPE="KEYWORD4">@</SEQ>
 
@@ -366,10 +366,11 @@
     </SPAN>
 
     <!-- Namespace prefixes -->
-    <MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="FALSE">:</MARK_PREVIOUS>
+    <MARK_PREVIOUS TYPE="LABEL">:</MARK_PREVIOUS>
 
     <!-- Functions -->
-    <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+    <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+	<SEQ TYPE="OPERATOR">)</SEQ>
 
     <!-- Variables -->
     <MARK_FOLLOWING TYPE="LITERAL2">$</MARK_FOLLOWING>

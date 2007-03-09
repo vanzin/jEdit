@@ -9,7 +9,7 @@
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="lineComment" VALUE=";;;" />
     </PROPS>
-    
+
 	<RULES SET="MAIN" ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- Normal comments. -->
 		<SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
@@ -18,7 +18,7 @@
 		</SPAN>
 
         <EOL_SPAN TYPE="COMMENT1">;;;</EOL_SPAN>
-        
+
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="STRING">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
@@ -28,39 +28,40 @@
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-        
+
         <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="STRING">
 			<BEGIN>`</BEGIN>
 			<END>`</END>
 		</SPAN>
-        
+
         <SPAN TYPE="LITERAL1" DELEGATE="LIST">
 			<BEGIN>[</BEGIN>
 			<END>]</END>
 		</SPAN>
-        
+
         <SPAN TYPE="LITERAL1" DELEGATE="LIST">
 			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
-        
+
         <SPAN TYPE="LITERAL1" DELEGATE="LIST">
 			<BEGIN>![</BEGIN>
 			<END>]</END>
 		</SPAN>
-        
+
         <!-- Functions -->
-		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
-        
-		<MARK_PREVIOUS AT_LINE_START="TRUE" TYPE="LABEL" EXCLUDE_MATCH="FALSE">:</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
+
+		<MARK_PREVIOUS AT_LINE_START="TRUE" TYPE="LABEL" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 
         <!-- Needs to be before conditional compilation or won't work -->
         <SEQ TYPE="NULL">#_&lt;</SEQ>
         <SEQ TYPE="NULL">&gt;_#</SEQ>
-        
+
         <!-- Conditional compilation -->
-        <MARK_FOLLOWING AT_LINE_START="TRUE" TYPE="LABEL" EXCLUDE_MATCH="FALSE">#_</MARK_FOLLOWING>
-        
+        <MARK_FOLLOWING AT_LINE_START="TRUE" TYPE="LABEL">#_</MARK_FOLLOWING>
+
 		<SEQ TYPE="NULL">)</SEQ>
 		<SEQ TYPE="NULL">(</SEQ>
 		<SEQ TYPE="NULL">.</SEQ>
@@ -82,12 +83,12 @@
 		<SEQ TYPE="OPERATOR">*</SEQ>
 
 		<KEYWORDS>
-		    <LITERAL2>false</LITERAL2> 
+		    <LITERAL2>false</LITERAL2>
 		    <LITERAL2>true</LITERAL2>
 		    <LITERAL2>database</LITERAL2>
 		    <LITERAL2>it</LITERAL2>
 		    <LITERAL2>undef</LITERAL2>
-            
+
             <!-- keywords -->
             <KEYWORD1>define</KEYWORD1>
             <KEYWORD1>class</KEYWORD1>
@@ -122,8 +123,8 @@
             <KEYWORD1>string</KEYWORD1>
             <KEYWORD1>termin</KEYWORD1>
             <KEYWORD1>vector</KEYWORD1>
-            <KEYWORD1>word</KEYWORD1>        
-            
+            <KEYWORD1>word</KEYWORD1>
+
             <!-- flow control -->
             <KEYWORD3>if</KEYWORD3>
             <KEYWORD3>forevery</KEYWORD3>
@@ -150,7 +151,7 @@
             <KEYWORD3>by</KEYWORD3>
             <KEYWORD3>in</KEYWORD3>
             <KEYWORD3>return</KEYWORD3>
-            
+
             <!-- other statements -->
             <KEYWORD2>and</KEYWORD2>
             <KEYWORD2>or</KEYWORD2>
@@ -161,7 +162,7 @@
             <KEYWORD2>trace</KEYWORD2>
             <KEYWORD2>cons_with</KEYWORD2>
             <KEYWORD2>consstring</KEYWORD2>
-            
+
             <!-- Built in functions -->
             <LITERAL2>interrupt</LITERAL2>
             <LITERAL2>partapply</LITERAL2>
@@ -198,7 +199,7 @@
             <LITERAL2>delete</LITERAL2>
             <LITERAL2>valof</LITERAL2>
             <LITERAL2>dataword</LITERAL2>
-            
+
             <!-- input validation functions -->
             <LITERAL2>isnumber</LITERAL2>
             <LITERAL2>isinteger</LITERAL2>
@@ -206,23 +207,23 @@
             <LITERAL2>isboolean</LITERAL2>
 		</KEYWORDS>
 	</RULES>
-    
-    <RULES SET="LIST" DEFAULT="LITERAL1" HIGHLIGHT_DIGITS="TRUE">		
+
+    <RULES SET="LIST" DEFAULT="LITERAL1" HIGHLIGHT_DIGITS="TRUE">
         <SPAN TYPE="LITERAL1" DELEGATE="LIST">
 			<BEGIN>[</BEGIN>
 			<END>]</END>
 		</SPAN>
-        
+
         <SPAN TYPE="LITERAL1" DELEGATE="LIST">
 			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
-        
+
         <SPAN TYPE="LITERAL1" DELEGATE="LIST">
 			<BEGIN>![</BEGIN>
 			<END>]</END>
 		</SPAN>
-        
+
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" DELEGATE="STRING">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
@@ -232,12 +233,12 @@
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-        
+
         <SPAN DELEGATE="MAIN" TYPE="NULL">
 			<BEGIN>%</BEGIN>
 			<END>%</END>
 		</SPAN>
-        
+
 		<SPAN TYPE="COMMENT1" DELEGATE="COMMENT">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
@@ -246,16 +247,16 @@
         <EOL_SPAN TYPE="COMMENT1">;;;</EOL_SPAN>
 		<SEQ TYPE="LITERAL2">=</SEQ>
 		<SEQ TYPE="LITERAL2">==</SEQ>
-		
+
         <MARK_FOLLOWING TYPE="LITERAL2">^</MARK_FOLLOWING>
 		<MARK_FOLLOWING TYPE="LITERAL2">?</MARK_FOLLOWING>
 	</RULES>
-    
+
     <RULES SET="STRING" ESCAPE="\" DEFAULT="LITERAL1" HIGHLIGHT_DIGITS="FALSE">
     </RULES>
-    
+
     <RULES NO_WORD_SEP="." SET="COMMENT" DEFAULT="COMMENT1" HIGHLIGHT_DIGITS="FALSE">
-        <MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="FALSE">:</MARK_PREVIOUS>
+        <MARK_PREVIOUS TYPE="LABEL">:</MARK_PREVIOUS>
 		<SEQ TYPE="COMMENT1">*</SEQ>
     </RULES>
 </MODE>

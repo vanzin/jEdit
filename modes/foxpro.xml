@@ -73,7 +73,7 @@
 		<!-- EOL Continuation -->
 		<!-- <SEQ TYPE="NULL">_</SEQ>-->
 		<!-- Instruction separator -->
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR"
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 
 		<KEYWORDS>

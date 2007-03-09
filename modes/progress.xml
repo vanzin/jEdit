@@ -100,7 +100,7 @@
       <!-- Better would be to search for regexp  ^[[:blank:]]*[[:graph:]]+:$ -->
       <!-- but this is not (yet) implemented since regexps cannot match     -->
       <!-- anything that does not have a fixed starting character.          -->
-      <MARK_PREVIOUS TYPE="LABEL" AT_WHITESPACE_END="TRUE" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+      <MARK_PREVIOUS TYPE="LABEL" AT_WHITESPACE_END="TRUE" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 
     <!-- FUNCTION   : attributes and methods -->
       <MARK_FOLLOWING TYPE="FUNCTION">:accelerator</MARK_FOLLOWING>

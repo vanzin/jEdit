@@ -166,7 +166,7 @@
 		</SPAN>
 
 		<!-- labels, catches also package prefixes at line start :( -->
-		<MARK_PREVIOUS TYPE="LABEL" AT_LINE_START="TRUE" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="LABEL" AT_LINE_START="TRUE" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 
 		<!-- __DATA__ and similar -->
 		<SEQ_REGEXP HASH_CHAR="__" TYPE="KEYWORD4">__\w+__</SEQ_REGEXP>
