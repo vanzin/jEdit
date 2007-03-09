@@ -21,8 +21,8 @@ date above. If I've left something out, please let me know.
                 <EOL_SPAN TYPE="COMMENT2">#</EOL_SPAN>
 
                 <MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
-				<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">::</MARK_PREVIOUS>
-                <MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+				<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">::</MARK_PREVIOUS>
+                <MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 
                 <SPAN TYPE="LITERAL1" DELEGATE="NSIS_LITERAL">
                         <BEGIN>"</BEGIN>
@@ -38,12 +38,12 @@ date above. If I've left something out, please let me know.
                         <BEGIN>`</BEGIN>
                         <END>`</END>
                 </SPAN>
-				
+
                 <KEYWORDS>
 						<!-- Deprecated stuff -->
 						<INVALID>dim</INVALID>
 						<INVALID>uninstallexename</INVALID>
-						
+
 						<!-- Global variables -->
                         <KEYWORD3>$0</KEYWORD3>
                         <KEYWORD3>$1</KEYWORD3>
@@ -237,7 +237,7 @@ date above. If I've left something out, please let me know.
 						<KEYWORD4>/oname</KEYWORD4>
 						<KEYWORD4>/r</KEYWORD4>
 						<KEYWORD4>/windows</KEYWORD4>
-						
+
 						<!-- Compiler utility commands -->
                         <KEYWORD2>!addincludedir</KEYWORD2>
 						<KEYWORD2>!addplugindir</KEYWORD2>
@@ -470,7 +470,7 @@ date above. If I've left something out, please let me know.
                         <KEYWORD3>un.onuserabort</KEYWORD3>
                 </KEYWORDS>
         </RULES>
-		
+
 		<RULES SET="NSIS_LITERAL" ESCAPE="$\" DEFAULT="LITERAL1" NO_WORD_SEP="-{}_">
 		        <MARK_FOLLOWING TYPE="KEYWORD3">$</MARK_FOLLOWING>
 		</RULES>

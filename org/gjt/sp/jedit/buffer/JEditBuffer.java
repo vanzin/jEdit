@@ -234,7 +234,7 @@ public class JEditBuffer
 			{
 				// this ensures that undo can clear the dirty flag properly
 				// when all edits up to a save are undone
-				undoMgr.bufferSaved();
+				undoMgr.resetClearDirty();
 			}
 		}
 	} //}}}

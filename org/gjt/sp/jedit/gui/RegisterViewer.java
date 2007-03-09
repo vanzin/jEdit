@@ -100,18 +100,9 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 		if (cmd.equals("paste-string-register"))
 			insertRegister();
 		else if (cmd.equals("clear-string-register"))
-		{
-			Object o = registerList.getSelectedValue();
-			if (o == null)
-				return;
-			else if (o instanceof Character)
-			{
-				Registers.clearRegister(((Character)o).charValue());
-				refreshList();
-			}
-		}
+			clearSelectedIndex();
 	} //}}}
-	
+
 	//{{{ handleMessage
 	public void handleMessage(EBMessage msg)
 	{
@@ -143,6 +134,17 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 
 	//{{{ Private members
 
+	//{{{ clearSelectedIndex() method
+	private void clearSelectedIndex()
+	{
+		Object o = registerList.getSelectedValue();
+		if (o != null && o instanceof Character)
+		{
+			Registers.clearRegister(((Character)o).charValue());
+			refreshList();
+		}
+	} //}}}
+
 	//{{{ Instance variables
 	private JList registerList;
 	private JTextArea contentTextArea;
@@ -150,6 +152,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	private View view;
 	private boolean editing;
 	private JSplitPane splitPane;
+	private JPopupMenu popup;
 	//}}}
 
 	//{{{ refreshList
@@ -268,6 +271,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 			}
 
 			return this;
+
 		}
 	} //}}}
 
@@ -292,18 +296,31 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	//{{{ MouseHandler Class
 	class MouseHandler extends MouseAdapter
 	{
-		/*public void mousePressed(MouseEvent evt)
-		{
-			if(evt.isConsumed())
-				return;
-			int index = registerList.locationToIndex(
-				evt.getPoint());
-			registerList.setSelectedIndex(index);
-		} */
-
 		public void mouseClicked(MouseEvent evt)
 		{
-			if (evt.getClickCount() % 2 == 0)
+			int i = registerList.locationToIndex(evt.getPoint());
+			if (i != -1)
+				registerList.setSelectedIndex(i);
+			if (GUIUtilities.isPopupTrigger(evt))
+			{
+				if (popup == null)
+				{
+					popup = new JPopupMenu();
+					JMenuItem item = GUIUtilities.loadMenuItem("paste");
+					popup.add(item);
+					item = new JMenuItem(jEdit.getProperty("clear-string-register.label"));
+					item.addActionListener(new ActionListener()
+					{
+						public void actionPerformed(ActionEvent e)
+						{
+							clearSelectedIndex();
+						}
+					});
+					popup.add(item);
+				}
+				GUIUtilities.showPopupMenu(popup, registerList, evt.getX(), evt.getY(), false);
+			}
+			else if (evt.getClickCount() % 2 == 0)
 				insertRegister();
 		}
 	} //}}}

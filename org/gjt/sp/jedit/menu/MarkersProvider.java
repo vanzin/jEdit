@@ -23,11 +23,11 @@
 package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
-import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -45,9 +45,9 @@ public class MarkersProvider implements DynamicMenuProvider
 		final View view = GUIUtilities.getView(menu);
 		Buffer buffer = view.getBuffer();
 
-		Vector markers = buffer.getMarkers();
+		List<Marker> markers = buffer.getMarkers();
 
-		if(markers.size() == 0)
+		if(markers.isEmpty())
 		{
 			JMenuItem mi = new JMenuItem(jEdit.getProperty(
 				"no-markers.label"));
@@ -62,7 +62,7 @@ public class MarkersProvider implements DynamicMenuProvider
 
 		for(int i = 0; i < markers.size(); i++)
 		{
-			final Marker marker = (Marker)markers.elementAt(i);
+			final Marker marker = markers.get(i);
 			int lineNo = buffer.getLineOfOffset(marker.getPosition());
 
 			if(current.getItemCount() >= maxItems && i != markers.size() - 1)
@@ -161,7 +161,7 @@ public class MarkersProvider implements DynamicMenuProvider
 					return null;
 				else
 				{
-					return shortcutPrefix + " " + shortcut;
+					return shortcutPrefix + ' ' + shortcut;
 				}
 			}
 		} //}}}

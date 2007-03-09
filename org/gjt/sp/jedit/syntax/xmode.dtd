@@ -1,7 +1,8 @@
 <!-- Syntax tokens -->
-<!ENTITY % tokens "( NULL | COMMENT1 | COMMENT2 | COMMENT3 | COMMENT4 |
+<!ENTITY % token_values "NULL | COMMENT1 | COMMENT2 | COMMENT3 | COMMENT4 |
 	DIGIT | FUNCTION | INVALID | KEYWORD1 | KEYWORD2 | KEYWORD3 | KEYWORD4 |
-	LABEL | LITERAL1 | LITERAL2 | LITERAL3 | LITERAL4 | MARKUP | OPERATOR )" >
+	LABEL | LITERAL1 | LITERAL2 | LITERAL3 | LITERAL4 | MARKUP | OPERATOR" >
+<!ENTITY % tokens "( %token_values; )" >
 
 <!-- Entities for attributes shared by multiple rules -->
 <!ENTITY % att-bool '( TRUE | FALSE ) #IMPLIED' >
@@ -10,6 +11,7 @@
 	AT_WHITESPACE_END %att-bool;
 	AT_WORD_START %att-bool; ' >
 <!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; ' >
+<!ENTITY % att-match-type 'MATCH_TYPE ( %token_values; | DEFAULT | RULE ) #IMPLIED' >
 <!ENTITY % att-delegate 'DELEGATE CDATA #IMPLIED' >
 <!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool;
 	NO_WORD_BREAK %att-bool;
@@ -81,10 +83,11 @@
 	%att-position-mix;
 	%att-span-mix;
 	%att-exclude-match;
+	%att-match-type;
 	%att-delegate; >
 
 <!-- SPAN_REGEXP element -->
-<!ELEMENT SPAN_REGEXP ( BEGIN, END ) >
+<!ELEMENT SPAN_REGEXP ( BEGIN, END, END_REGEXP ) >
 
 <!-- SPAN_REGEXP attributes -->
 <!ATTLIST SPAN_REGEXP
@@ -93,6 +96,7 @@
 	%att-position-mix;
 	%att-span-mix;
 	%att-exclude-match;
+	%att-match-type;
 	%att-delegate; >
 
 <!-- SPAN and SPAN_REGEXP children -->
@@ -100,6 +104,7 @@
 <!ATTLIST BEGIN %att-position-mix; >
 <!ELEMENT END ( #PCDATA ) >
 <!ATTLIST END %att-position-mix; >
+<!ELEMENT END_REGEXP ( #PCDATA ) >
 
 <!-- EOL_SPAN element -->
 <!ELEMENT EOL_SPAN ( #PCDATA ) >
@@ -109,6 +114,7 @@
 	%att-type;
 	%att-position-mix;
 	%att-exclude-match;
+	%att-match-type;
 	%att-delegate; >
 
 <!-- EOL_SPAN_REGEXP element -->
@@ -120,6 +126,7 @@
 	%att-type;
 	%att-position-mix;
 	%att-exclude-match;
+	%att-match-type;
 	%att-delegate; >
 
 <!-- MARK_FOLLOWING element -->
@@ -129,7 +136,8 @@
 <!ATTLIST MARK_FOLLOWING
 	%att-type;
 	%att-position-mix;
-	%att-exclude-match; >
+	%att-exclude-match;
+	%att-match-type; >
 
 <!-- MARK_PREVIOUS element -->
 <!ELEMENT MARK_PREVIOUS ( #PCDATA ) >
@@ -138,7 +146,8 @@
 <!ATTLIST MARK_PREVIOUS
 	%att-type;
 	%att-position-mix;
-	%att-exclude-match; >
+	%att-exclude-match;
+	%att-match-type; >
 
 <!-- KEYWORDS element -->
 <!ELEMENT KEYWORDS (%tokens;)+ >

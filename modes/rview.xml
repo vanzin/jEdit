@@ -44,7 +44,8 @@
                 <SEQ TYPE="OPERATOR">=</SEQ>
 
                 <!-- Function calls -->
-                <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+                <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+				<SEQ TYPE="OPERATOR">)</SEQ>
 
                 <EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
@@ -169,7 +170,8 @@
                 <MARK_FOLLOWING TYPE="LABEL">:</MARK_FOLLOWING>
 
                 <!-- Function calls (these can happen even inside quotes) -->
-                <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+                <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+				<SEQ TYPE="OPERATOR">)</SEQ>
 
                 <KEYWORDS>
                         <KEYWORD1>SELECT</KEYWORD1>

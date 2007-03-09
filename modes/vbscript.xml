@@ -44,14 +44,14 @@
 		<!-- Concatenation operators -->
 		<SEQ TYPE="OPERATOR">&amp;</SEQ>
 		<!-- <SEQ TYPE="OPERATOR">+</SEQ> -->
- 
+
 		<!-- Logical operators -->
 		<!-- See in keywords: and, or, not, xor, eqv -->
 
 		<!-- EOL Continuation -->
 <!--		<SEQ TYPE="NULL">_</SEQ>-->
 		<!-- Instruction separator -->
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR"
 			AT_LINE_START="TRUE">:</MARK_PREVIOUS>
 
 		<KEYWORDS>
@@ -103,12 +103,12 @@
 			<KEYWORD1>redim</KEYWORD1>
 			<KEYWORD1>preserve</KEYWORD1>
 			<KEYWORD1>as</KEYWORD1>
-			
+
 			<!-- Object Assignement/Instantiation -->
 			<KEYWORD1>set</KEYWORD1>
 			<KEYWORD1>with</KEYWORD1>
 			<KEYWORD1>new</KEYWORD1>
-			
+
 			<!-- Visibility -->
 			<KEYWORD1>public</KEYWORD1>
 			<KEYWORD1>default</KEYWORD1>
@@ -369,7 +369,7 @@
 			<LITERAL2>adOpenKeyset</LITERAL2>
 			<LITERAL2>adOpenDynamic</LITERAL2>
 			<LITERAL2>adOpenStatic</LITERAL2>
-			
+
 			<!-- CursorOptionEnum Values -->
 <!--		<LITERAL2>adHoldRecords</LITERAL2>
 			<LITERAL2>adMovePrevious</LITERAL2>
@@ -384,34 +384,34 @@
 			<LITERAL2>adFind</LITERAL2>
 			<LITERAL2>adSeek</LITERAL2>
 			<LITERAL2>adIndex</LITERAL2>
--->			
+-->
 			<!-- LockTypeEnum Values -->
 			<LITERAL2>adLockReadOnly</LITERAL2>
 			<LITERAL2>adLockPessimistic</LITERAL2>
 			<LITERAL2>adLockOptimistic</LITERAL2>
 			<LITERAL2>adLockBatchOptimistic</LITERAL2>
-			
+
 			<!-- ExecuteOptionEnum Values -->
 			<LITERAL2>adRunAsync</LITERAL2>
 			<LITERAL2>adAsyncExecute</LITERAL2>
 			<LITERAL2>adAsyncFetch</LITERAL2>
 			<LITERAL2>adAsyncFetchNonBlocking</LITERAL2>
 			<LITERAL2>adExecuteNoRecords</LITERAL2>
-			
+
 			<!-- ConnectOptionEnum Values -->
 <!--			<LITERAL2>adAsyncConnect</LITERAL2>
--->			
+-->
 			<!-- ObjectStateEnum Values -->
 			<LITERAL2>adStateClosed</LITERAL2>
 			<LITERAL2>adStateOpen</LITERAL2>
 			<LITERAL2>adStateConnecting</LITERAL2>
 			<LITERAL2>adStateExecuting</LITERAL2>
 			<LITERAL2>adStateFetching</LITERAL2>
-			
+
 			<!-- CursorLocationEnum Values -->
 			<LITERAL2>adUseServer</LITERAL2>
 			<LITERAL2>adUseClient</LITERAL2>
-			
+
 			<!-- DataTypeEnum Values -->
 			<LITERAL2>adEmpty</LITERAL2>
 			<LITERAL2>adTinyInt</LITERAL2>
@@ -466,14 +466,14 @@
 			<LITERAL2>adFldRowVersion</LITERAL2>
 			<LITERAL2>adFldCacheDeferred</LITERAL2>
 			<LITERAL2>adFldKeyColumn</LITERAL2>
--->			
+-->
 
 			<!-- EditModeEnum Values -->
 <!--			<LITERAL2>adEditNone</LITERAL2>
 			<LITERAL2>adEditInProgress</LITERAL2>
 			<LITERAL2>adEditAdd</LITERAL2>
 			<LITERAL2>adEditDelete</LITERAL2>
--->			
+-->
 			<!-- RecordStatusEnum Values -->
 <!--			<LITERAL2>adRecOK</LITERAL2>
 			<LITERAL2>adRecNew</LITERAL2>
@@ -493,44 +493,44 @@
 			<LITERAL2>adRecPermissionDenied</LITERAL2>
 			<LITERAL2>adRecSchemaViolation</LITERAL2>
 			<LITERAL2>adRecDBDeleted</LITERAL2>
--->	
+-->
 			<!-- GetRowsOptionEnum Values -->
 <!--			<LITERAL2>adGetRowsRest</LITERAL2>
 -->
-			
+
 			<!-- PositionEnum Values -->
 <!--			<LITERAL2>adPosUnknown</LITERAL2>
 			<LITERAL2>adPosBOF</LITERAL2>
 			<LITERAL2>adPosEOF</LITERAL2>
--->			
+-->
 
 			<!-- enum Values -->
 <!--			<LITERAL2>adBookmarkCurrent</LITERAL2>
 			<LITERAL2>adBookmarkFirst</LITERAL2>
 			<LITERAL2>adBookmarkLast</LITERAL2>
--->			
+-->
 			<!-- MarshalOptionsEnum Values -->
 <!--			<LITERAL2>adMarshalAll</LITERAL2>
 			<LITERAL2>adMarshalModifiedOnly</LITERAL2>
--->			
+-->
 			<!-- AffectEnum Values -->
 <!--			<LITERAL2>adAffectCurrent</LITERAL2>
 			<LITERAL2>adAffectGroup</LITERAL2>
 			<LITERAL2>adAffectAll</LITERAL2>
 			<LITERAL2>adAffectAllChapters</LITERAL2>
--->			
+-->
 
 			<!-- ResyncEnum Values -->
 <!--			<LITERAL2>adResyncUnderlyingValues</LITERAL2>
 			<LITERAL2>adResyncAllValues</LITERAL2>
--->	
+-->
 			<!-- CompareEnum Values -->
 <!--			<LITERAL2>adCompareLessThan</LITERAL2>
 			<LITERAL2>adCompareEqual</LITERAL2>
 			<LITERAL2>adCompareGreaterThan</LITERAL2>
 			<LITERAL2>adCompareNotEqual</LITERAL2>
 			<LITERAL2>adCompareNotComparable</LITERAL2>
--->			
+-->
 			<!-- FilterGroupEnum Values -->
 <!--			<LITERAL2>adFilterNone</LITERAL2>
 			<LITERAL2>adFilterPendingRecords</LITERAL2>
@@ -538,27 +538,27 @@
 			<LITERAL2>adFilterFetchedRecords</LITERAL2>
 			<LITERAL2>adFilterPredicate</LITERAL2>
 			<LITERAL2>adFilterConflictingRecords</LITERAL2>
--->			
+-->
 			<!-- SearchDirectionEnum Values -->
 <!--			<LITERAL2>adSearchForward</LITERAL2>
 			<LITERAL2>adSearchBackward</LITERAL2>
--->			
+-->
 
 			<!-- PersistFormatEnum Values -->
 			<LITERAL2>adPersistADTG</LITERAL2>
 			<LITERAL2>adPersistXML</LITERAL2>
-			
+
 			<!-- StringFormatEnum Values -->
 <!--			<LITERAL2>adStringXML</LITERAL2>
 			<LITERAL2>adStringHTML</LITERAL2>
 			<LITERAL2>adClipString</LITERAL2>
--->			
+-->
 			<!-- ConnectPromptEnum Values -->
 <!--			<LITERAL2>adPromptAlways</LITERAL2>
 			<LITERAL2>adPromptComplete</LITERAL2>
 			<LITERAL2>adPromptCompleteRequired</LITERAL2>
 			<LITERAL2>adPromptNever</LITERAL2>
--->			
+-->
 			<!-- ConnectModeEnum Values -->
 <!--			<LITERAL2>adModeUnknown</LITERAL2>
 			<LITERAL2>adModeRead</LITERAL2>
@@ -568,7 +568,7 @@
 			<LITERAL2>adModeShareDenyWrite</LITERAL2>
 			<LITERAL2>adModeShareExclusive</LITERAL2>
 			<LITERAL2>adModeShareDenyNone</LITERAL2>
--->			
+-->
 			<!-- IsolationLevelEnum Values -->
 <!--			<LITERAL2>adXactUnspecified</LITERAL2>
 			<LITERAL2>adXactChaos</LITERAL2>
@@ -579,18 +579,18 @@
 			<LITERAL2>adXactRepeatableRead</LITERAL2>
 			<LITERAL2>adXactSerializable</LITERAL2>
 			<LITERAL2>adXactIsolated</LITERAL2>
--->			
+-->
 			<!-- XactAttributeEnum Values -->
 <!--			<LITERAL2>adXactCommitRetaining</LITERAL2>
 			<LITERAL2>adXactAbortRetaining</LITERAL2>
--->			
+-->
 			<!-- PropertyAttributesEnum Values -->
 <!--			<LITERAL2>adPropNotSupported</LITERAL2>
 			<LITERAL2>adPropRequired</LITERAL2>
 			<LITERAL2>adPropOptional</LITERAL2>
 			<LITERAL2>adPropRead</LITERAL2>
 			<LITERAL2>adPropWrite</LITERAL2>
--->			
+-->
 			<!-- ErrorValueEnum Values -->
 <!--			<LITERAL2>adErrInvalidArgument</LITERAL2>
 			<LITERAL2>adErrNoCurrentRecord</LITERAL2>
@@ -613,19 +613,19 @@
 			<LITERAL2>adErrStillConnecting</LITERAL2>
 			<LITERAL2>adErrNotExecuting</LITERAL2>
 			<LITERAL2>adErrUnsafeOperation</LITERAL2>
--->			
+-->
 			<!-- ParameterAttributesEnum Values -->
 			<LITERAL2>adParamSigned</LITERAL2>
 			<LITERAL2>adParamNullable</LITERAL2>
 			<LITERAL2>adParamLong</LITERAL2>
-			
+
 			<!-- ParameterDirectionEnum Values -->
 			<LITERAL2>adParamUnknown</LITERAL2>
 			<LITERAL2>adParamInput</LITERAL2>
 			<LITERAL2>adParamOutput</LITERAL2>
 			<LITERAL2>adParamInputOutput</LITERAL2>
 			<LITERAL2>adParamReturnValue</LITERAL2>
-			
+
 			<!-- CommandTypeEnum Values -->
 			<LITERAL2>adCmdUnknown</LITERAL2>
 			<LITERAL2>adCmdText</LITERAL2>
@@ -633,14 +633,14 @@
 			<LITERAL2>adCmdStoredProc</LITERAL2>
 			<LITERAL2>adCmdFile</LITERAL2>
 			<LITERAL2>adCmdTableDirect</LITERAL2>
-			
+
 			<!-- EventStatusEnum Values -->
 <!--			<LITERAL2>adStatusOK</LITERAL2>
 			<LITERAL2>adStatusErrorsOccurred</LITERAL2>
 			<LITERAL2>adStatusCantDeny</LITERAL2>
 			<LITERAL2>adStatusCancel</LITERAL2>
 			<LITERAL2>adStatusUnwantedEvent</LITERAL2>
--->			
+-->
 			<!-- EventReasonEnum Values -->
 <!--			<LITERAL2>adRsnAddNew</LITERAL2>
 			<LITERAL2>adRsnDelete</LITERAL2>
@@ -657,7 +657,7 @@
 			<LITERAL2>adRsnMoveNext</LITERAL2>
 			<LITERAL2>adRsnMovePrevious</LITERAL2>
 			<LITERAL2>adRsnMoveLast</LITERAL2>
--->			
+-->
 			<!-- SchemaEnum Values -->
 <!--			<LITERAL2>adSchemaProviderSpecific</LITERAL2>
 			<LITERAL2>adSchemaAsserts</LITERAL2>
@@ -699,7 +699,7 @@
 			<LITERAL2>adSchemaMeasures</LITERAL2>
 			<LITERAL2>adSchemaProperties</LITERAL2>
 			<LITERAL2>adSchemaMembers</LITERAL2>
--->			
+-->
 			<!-- SeekEnum Values -->
 <!--			<LITERAL2>adSeekFirstEQ</LITERAL2>
 			<LITERAL2>adSeekLastEQ</LITERAL2>
@@ -707,20 +707,20 @@
 			<LITERAL2>adSeekAfter</LITERAL2>
 			<LITERAL2>adSeekBeforeEQ</LITERAL2>
 			<LITERAL2>adSeekBefore</LITERAL2>
--->			
+-->
 			<!-- ADCPROP_UPDATECRITERIA_ENUM Values -->
 <!--			<LITERAL2>adCriteriaKey</LITERAL2>
 			<LITERAL2>adCriteriaAllCols</LITERAL2>
 			<LITERAL2>adCriteriaUpdCols</LITERAL2>
 			<LITERAL2>adCriteriaTimeStamp</LITERAL2>
--->			
+-->
 			<!-- ADCPROP_ASYNCTHREADPRIORITY_ENUM Values -->
 <!--			<LITERAL2>adPriorityLowest</LITERAL2>
 			<LITERAL2>adPriorityBelowNormal</LITERAL2>
 			<LITERAL2>adPriorityNormal</LITERAL2>
 			<LITERAL2>adPriorityAboveNormal</LITERAL2>
 			<LITERAL2>adPriorityHighest</LITERAL2>
--->			
+-->
 			<!-- CEResyncEnum Values -->
 <!--			<LITERAL2>adResyncNone</LITERAL2>
 			<LITERAL2>adResyncAutoIncrement</LITERAL2>
@@ -728,7 +728,7 @@
 			<LITERAL2>adResyncUpdates</LITERAL2>
 			<LITERAL2>adResyncInserts</LITERAL2>
 			<LITERAL2>adResyncAll</LITERAL2>
--->			
+-->
 			<!-- ADCPROP_AUTORECALC_ENUM Values -->
 <!--			<LITERAL2>adRecalcUpFront</LITERAL2>
 			<LITERAL2>adRecalcAlways</LITERAL2>

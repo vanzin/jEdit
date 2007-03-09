@@ -23,7 +23,8 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
-import java.util.Vector;
+import java.util.List;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.*;
@@ -60,7 +61,7 @@ public class MarkersSaveRequest extends WorkRequest
 		this.session = session;
 		this.vfs = vfs;
 		this.path = path;
-		this.markersPath = buffer.getMarkersPath(vfs);
+		this.markersPath = Buffer.getMarkersPath(vfs, path);
 
 	} //}}}
 	
@@ -122,10 +123,10 @@ public class MarkersSaveRequest extends WorkRequest
 		Writer o = new BufferedWriter(new OutputStreamWriter(out));
 		try
 		{
-			Vector markers = buffer.getMarkers();
+			List<Marker> markers = buffer.getMarkers();
 			for(int i = 0; i < markers.size(); i++)
 			{
-				Marker marker = (Marker)markers.elementAt(i);
+				Marker marker = markers.get(i);
 				o.write('!');
 				o.write(marker.getShortcut());
 				o.write(';');

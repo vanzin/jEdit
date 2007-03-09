@@ -417,7 +417,7 @@ public class SearchAndReplace
 
 	//{{{ find() method
 	/**
-	 * Finds the next occurance of the search string.
+	 * Finds the next occurrence of the search string.
 	 * @param view The view
 	 * @return True if the operation was successful, false otherwise
 	 */
@@ -828,11 +828,23 @@ loop:			for(;;)
 
 	//{{{ replaceAll() method
 	/**
-	 * Replaces all occurances of the search string with the replacement
+	 * Replaces all occurrences of the search string with the replacement
 	 * string.
 	 * @param view The view
 	 */
 	public static boolean replaceAll(View view)
+	{
+		return replaceAll(view,false);
+	} //}}}
+	
+	//{{{ replaceAll() method
+	/**
+	 * Replaces all occurrences of the search string with the replacement
+	 * string.
+	 * @param view The view
+	 * @param dontOpenChangedFiles Whether to open changed files or to autosave them quietly
+	 */
+	public static boolean replaceAll(View view, boolean dontOpenChangedFiles)
 	{
 		// component that will parent any dialog boxes
 		Component comp = SearchDialog.getSearchDialog(view);
@@ -909,7 +921,14 @@ loop:			while(path != null)
 				{
 					fileCount++;
 					occurCount += retVal;
-					jEdit.commitTemporary(buffer);
+					if (dontOpenChangedFiles)
+					{
+						buffer.save(null,null);
+					}
+					else
+					{
+						jEdit.commitTemporary(buffer);
+					}
 				}
 			}
 		}
@@ -1131,7 +1150,7 @@ loop:			while(path != null)
 
 	//{{{ _replace() method
 	/**
-	 * Replaces all occurances of the search string with the replacement
+	 * Replaces all occurrences of the search string with the replacement
 	 * string.
 	 * @param view The view
 	 * @param buffer The buffer

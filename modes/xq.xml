@@ -25,8 +25,8 @@
 			<BEGIN>&lt;!--</BEGIN>
 			<END>--&gt;</END>
 		</SPAN>
-		
-		
+
+
 		<!-- DTD Entity declarations -->
 		<SPAN TYPE="KEYWORD2" DELEGATE="ENTITY-TAGS">
 			<BEGIN>&lt;!ENTITY</BEGIN>
@@ -63,7 +63,7 @@
 			<END>;</END>
 		</SPAN>
 	</RULES>
-	
+
 	<RULES SET="TAGS" DEFAULT="MARKUP" NO_WORD_SEP="-_">
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
@@ -80,13 +80,12 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 
 		<SEQ TYPE="MARKUP">/</SEQ>
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
-<!-- 		<SEQ TYPE="OPERATOR">:</SEQ>
- --> 		</RULES>
-	
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
+	</RULES>
+
 	<RULES SET="DTD-TAGS" DEFAULT="KEYWORD2" IGNORE_CASE="FALSE">
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
@@ -141,7 +140,7 @@
 			<KEYWORD1>#REQUIRED</KEYWORD1>
 		</KEYWORDS>
 	</RULES>
-	
+
 	<RULES SET="ENTITY-TAGS" DEFAULT="KEYWORD2">
 		<!-- SGML comment -->
 		<SPAN TYPE="COMMENT1">
@@ -173,7 +172,7 @@
 			<KEYWORD1>SYSTEM</KEYWORD1>
 		</KEYWORDS>
 	</RULES>
-	
+
 	<RULES SET="CDATA" DEFAULT="COMMENT2">
 		<!-- no rules -->
 	</RULES>
@@ -197,109 +196,110 @@
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
-		
+
 		<MARK_FOLLOWING TYPE="KEYWORD2">$</MARK_FOLLOWING>
 
-		
+
 
 		<!-- Function calls -->
-		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
-	
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
+
 		<SEQ TYPE="OPERATOR">,</SEQ>
-		
+
 		<SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">!=</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=</SEQ>
-		
+
 		<SEQ TYPE="OPERATOR">&lt;&lt;</SEQ>
 		<SEQ TYPE="OPERATOR">&gt;&gt;</SEQ>
-		
+
 		<SEQ TYPE="OPERATOR">+</SEQ>
-<!-- 
+<!--
 		<SEQ TYPE="OPERATOR">-</SEQ>
  -->
  		<SEQ TYPE="OPERATOR">*</SEQ>
-		
+
 		<!-- unary -/+ ? -->
-		
+
 		<SEQ TYPE="OPERATOR">|</SEQ>
-		
+
 		<SEQ TYPE="OPERATOR">/</SEQ>
 		<SEQ TYPE="OPERATOR">//</SEQ>
-		
+
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
-		
+
 		<KEYWORDS>
 			<OPERATOR>some</OPERATOR>
 			<OPERATOR>every</OPERATOR>
 
 			<OPERATOR>or</OPERATOR>
 			<OPERATOR>and</OPERATOR>
-			
+
 			<OPERATOR>instance of</OPERATOR>
-			
+
 			<OPERATOR>treat as</OPERATOR>
-			
+
 			<OPERATOR>castable as</OPERATOR>
-			
+
 			<OPERATOR>cast as</OPERATOR>
-			
+
 			<OPERATOR>eq</OPERATOR>
 			<OPERATOR>ne</OPERATOR>
 			<OPERATOR>lt</OPERATOR>
 			<OPERATOR>gt</OPERATOR>
 			<OPERATOR>ge</OPERATOR>
 			<OPERATOR>is</OPERATOR>
-			
+
 			<OPERATOR>to</OPERATOR>
-			
+
 			<OPERATOR>div</OPERATOR>
 			<OPERATOR>idiv</OPERATOR>
 			<OPERATOR>mod</OPERATOR>
-			
+
 			<OPERATOR>union</OPERATOR>
-			
+
 			<OPERATOR>intersect</OPERATOR>
 			<OPERATOR>except</OPERATOR>
-			
+
 			<KEYWORD1>return</KEYWORD1>
 			<KEYWORD1>for</KEYWORD1>
 			<KEYWORD1>in</KEYWORD1>
 			<KEYWORD1>to</KEYWORD1>
 			<KEYWORD1>at</KEYWORD1>
-			
+
 			<KEYWORD1>let</KEYWORD1>
 			<KEYWORD1>:=</KEYWORD1>
-			
+
 			<KEYWORD1>where</KEYWORD1>
-			
+
 			<KEYWORD1>stable</KEYWORD1>
 			<KEYWORD1>order</KEYWORD1>
 			<KEYWORD1>by</KEYWORD1>
-			
+
 			<LITERAL2>ascending</LITERAL2>
 			<LITERAL2>descending</LITERAL2>
-			
+
 			<LITERAL2>greatest</LITERAL2>
 			<LITERAL2>least</LITERAL2>
 			<LITERAL2>collation</LITERAL2>
-			
+
 			<KEYWORD3>typeswitch</KEYWORD3>
 			<KEYWORD3>default</KEYWORD3>
-			
+
 			<KEYWORD1>cast</KEYWORD1>
 			<KEYWORD1>as</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
 			<KEYWORD1>then</KEYWORD1>
 			<KEYWORD1>else</KEYWORD1>
-			
+
 			<LITERAL2>true</LITERAL2>
 			<LITERAL2>false</LITERAL2>
-			
+
 			<KEYWORD3>xquery</KEYWORD3>
 			<KEYWORD3>version</KEYWORD3>
 
@@ -329,7 +329,7 @@
 			<KEYWORD3>following-sibling</KEYWORD3>
 			<KEYWORD3>following</KEYWORD3>
 			<KEYWORD3>preceding</KEYWORD3>
-			
+
 			<KEYWORD4>xs:integer</KEYWORD4>
 			<KEYWORD4>xs:decimal</KEYWORD4>
 			<KEYWORD4>xs:double</KEYWORD4>
@@ -458,5 +458,5 @@
 
 		</KEYWORDS>
 	</RULES>
-	
+
 </MODE>

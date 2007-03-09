@@ -23,15 +23,28 @@
 package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
+import java.io.BufferedOutputStream;
+import java.io.CharConversionException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+
 import javax.swing.text.Segment;
-import java.io.*;
-import java.nio.charset.*;
-import java.nio.CharBuffer;
-import java.nio.ByteBuffer;
-import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.*;
+
+import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.util.*;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.util.IntegerArray;
+import org.gjt.sp.util.SegmentBuffer;
+import org.gjt.sp.util.WorkRequest;
 //}}}
 
 /**
@@ -66,23 +79,6 @@ public abstract class BufferIORequest extends WorkRequest
 	public static final int IOBUFSIZE = 32768;
 
 	/**
-	 * Size of character I/O buffers.
-	 */
-	public static final int CharIOBufferSize()
-	{
-		return IOBUFSIZE;
-	}
-
-	/**
-	 * Size of byte I/O buffers.
-	 */
-	public static final int ByteIOBufferSize()
-	{
-		// 2 is sizeof char in byte;
-		return IOBUFSIZE * 2;
-	}
-
-	/**
 	 * Number of lines per progress increment.
 	 */
 	public static final int PROGRESS_INTERVAL = 300;
@@ -96,7 +92,23 @@ public abstract class BufferIORequest extends WorkRequest
 	 */
 	public static final String ERROR_OCCURRED = "BufferIORequest__error";
 
+	/**
+	 * BOM to use when saving a UTF-16 file. Used internally *only*.
+	 * @since 4.3pre10
+	 */
+	public static final String BOM_PROP = "BufferIORequest__utf16bom";
 	//}}}
+
+	//{{{ Instance variables
+	protected final View view;
+	protected final Buffer buffer;
+	protected final Object session;
+	protected final VFS vfs;
+	protected String path;
+	protected final String markersPath;
+	//}}}
+
+	//{{{ Public members
 
 	//{{{ BufferIORequest constructor
 	/**
@@ -116,7 +128,7 @@ public abstract class BufferIORequest extends WorkRequest
 		this.vfs = vfs;
 		this.path = path;
 
-		markersPath = buffer.getMarkersPath(vfs);
+		markersPath = Buffer.getMarkersPath(vfs, path);
 	} //}}}
 
 	//{{{ toString() method
@@ -125,16 +137,23 @@ public abstract class BufferIORequest extends WorkRequest
 		return getClass().getName() + '[' + buffer + ']';
 	} //}}}
 
-	//{{{ Private members
 
-	//{{{ Instance variables
-	protected final View view;
-	protected final Buffer buffer;
-	protected final Object session;
-	protected final VFS vfs;
-	protected String path;
-	protected final String markersPath;
-	//}}}
+	/**
+	 * Size of character I/O buffers.
+	 */
+	public static int getCharIOBufferSize()
+	{
+		return IOBUFSIZE;
+	}
+
+	/**
+	 * Size of byte I/O buffers.
+	 */
+	public static int getByteIOBufferSize()
+	{
+		// 2 is sizeof char in byte;
+		return IOBUFSIZE * 2;
+	}
 
 	//{{{ autodetect() method
 	/**
@@ -172,11 +191,11 @@ public abstract class BufferIORequest extends WorkRequest
 
 		char[] buf = new char[IOBUFSIZE];
 
-		// Number of characters in 'buf' array.
-		// InputStream.read() doesn't always fill the
-		// array (eg, the file size is not a multiple of
-		// IOBUFSIZE, or it is a GZipped file, etc)
-		int len;
+		/* Number of characters in 'buf' array.
+		 InputStream.read() doesn't always fill the
+		 array (eg, the file size is not a multiple of
+		 IOBUFSIZE, or it is a GZipped file, etc) */
+ 		int len;
 
 		// True if a \n was read after a \r. Usually
 		// means this is a DOS/Windows file
@@ -237,28 +256,20 @@ public abstract class BufferIORequest extends WorkRequest
 					lastLine = i + 1;
 					break;
 				case '\n':
-					// If lastWasCR is true,
-					// we just read a \r followed
-					// by a \n. We specify that
-					// this is a Windows file,
-					// but take no further
-					// action and just ignore
-					// the \r.
+					/* If lastWasCR is true, we just read a \r followed
+					 by a \n. We specify that this is a Windows file,
+					 but take no further action and just ignore the \r. */
 					if(lastWasCR)
 					{
 						CROnly = false;
 						CRLF = true;
 						lastWasCR = false;
-						// Bump lastLine so
-						// that the next line
-						// doesn't erronously
-						// pick up the \r
+						/* Bump lastLine so that the next line doesn't erronously
+						  pick up the \r */
 						lastLine = i + 1;
 					}
-					// Otherwise, we found a \n
-					// that follows some other
-					// character, hence we have
-					// a Unix file
+					/* Otherwise, we found a \n that follows some other
+					 *  character, hence we have a Unix file */
 					else
 					{
 						CROnly = false;
@@ -273,11 +284,9 @@ public abstract class BufferIORequest extends WorkRequest
 					}
 					break;
 				default:
-					// If we find some other
-					// character that follows
-					// a \r, so it is not a
-					// Windows file, and probably
-					// a Mac file
+					/*  If we find some other character that follows
+					 a \r, so it is not a Windows file, and probably
+					 a Mac file */
 					if(lastWasCR)
 					{
 						CROnly = true;
@@ -358,7 +367,7 @@ public abstract class BufferIORequest extends WorkRequest
 	protected void write(Buffer buffer, OutputStream out)
 		throws IOException
 	{
-		out = new BufferedOutputStream(out, ByteIOBufferSize());
+		out = new BufferedOutputStream(out, getByteIOBufferSize());
 		String encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
 		if(encoding.equals(MiscUtilities.UTF_8_Y))
 		{
@@ -368,15 +377,14 @@ public abstract class BufferIORequest extends WorkRequest
 			out.write(UTF8_MAGIC_3);
 			encoding = "UTF-8";
 		}
-		else if (encoding.equals("UTF-16LE"))
+		else if (encoding.equals("UTF-16"))
 		{
-			out.write(UNICODE_MAGIC_2);
-			out.write(UNICODE_MAGIC_1);
-		}
-		else if (encoding.equals("UTF-16BE"))
-		{
-			out.write(UNICODE_MAGIC_1);
-			out.write(UNICODE_MAGIC_2);
+			UTF_BOM bom = (UTF_BOM) buffer.getProperty(BOM_PROP);
+			if (bom != null)
+			{
+				bom.writeTo(out);
+				encoding = bom.getEncoding();
+			}
 		}
 		// Pass the encoder explicitly to report a encode error
 		// as an exception.
@@ -424,5 +432,44 @@ public abstract class BufferIORequest extends WorkRequest
 		writer.flush();
 	} //}}}
 
+	/**
+	 * The BOM used to mark a UTF-16 file.
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public enum UTF_BOM {
+		LE {
+			public void writeTo(OutputStream out) throws IOException
+			{
+				out.write(UNICODE_MAGIC_2);
+				out.write(UNICODE_MAGIC_1);
+			}
+
+			public String getEncoding()
+			{
+				return "UTF-16LE";
+			}
+		},
+
+		BE {
+			public void writeTo(OutputStream out) throws IOException
+			{
+				out.write(UNICODE_MAGIC_1);
+				out.write(UNICODE_MAGIC_2);
+			}
+
+			public String getEncoding()
+			{
+				return "UTF-16BE";
+			}
+		};
+
+		public abstract void writeTo(OutputStream out) throws IOException;
+		public abstract String getEncoding();
+
+	}
+
 	//}}}
+
 }
+

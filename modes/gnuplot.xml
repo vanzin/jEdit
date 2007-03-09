@@ -10,10 +10,10 @@
 	</PROPS>
 
 	<RULES ESCAPE="\"  IGNORE_CASE="FALSE">
-	
+
 	<!-- Comments -->
 	<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
-	
+
 	<!-- Literals -->
 	<SPAN TYPE="LITERAL1">
 		<BEGIN>"</BEGIN>
@@ -23,17 +23,17 @@
 		<BEGIN>'</BEGIN>
 		<END>'</END>
 	</SPAN>
-	
+
 	<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 		<BEGIN>[</BEGIN>
 		<END>]</END>
   	</SPAN>
-	
+
 	<SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE">
 		<BEGIN>{</BEGIN>
 		<END>}</END>
   	</SPAN>
-	
+
 	<!-- Operators -->
 	<SEQ TYPE="OPERATOR">-</SEQ>
 	<SEQ TYPE="OPERATOR">+</SEQ>
@@ -52,14 +52,15 @@
 	<SEQ TYPE="OPERATOR">^</SEQ>
 	<SEQ TYPE="OPERATOR">?</SEQ>
 	<SEQ TYPE="OPERATOR">:</SEQ>
-	
-	<!-- Function calls -->
-	<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
 
-	
+	<!-- Function calls -->
+	<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+	<SEQ TYPE="OPERATOR">)</SEQ>
+
+
 	<!-- Keywords -->
 	<KEYWORDS>
-	
+
 		<!-- GNUplot Commands -->
 		<KEYWORD1>cd</KEYWORD1>
 		<KEYWORD1>call</KEYWORD1>
@@ -94,7 +95,7 @@
 		<KEYWORD1>test</KEYWORD1>
 		<KEYWORD1>unset</KEYWORD1>
 		<KEYWORD1>update</KEYWORD1>
-		
+
 		<!-- GNUplot Functions -->
 		<KEYWORD2>abs</KEYWORD2>
 		<KEYWORD2>acos</KEYWORD2>
@@ -147,7 +148,7 @@
 		<KEYWORD2>tm_yday</KEYWORD2>
 		<KEYWORD2>tm_year</KEYWORD2>
 		<KEYWORD2>valid</KEYWORD2>
-		
+
 		<!-- GNUplot Built-in Variables -->
 		<KEYWORD3>angles</KEYWORD3>
 		<KEYWORD3>arrow</KEYWORD3>
@@ -262,8 +263,8 @@
 		<KEYWORD3>cbmtics</KEYWORD3>
 		<KEYWORD3>cbrange</KEYWORD3>
 		<KEYWORD3>cbtics</KEYWORD3>
-		
+
 	</KEYWORDS>
-	
+
 	</RULES>
 </MODE>

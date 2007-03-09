@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre10
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
-Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin and Kazutoshi Satoda
-for contributing to this release.
+Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
+Joseph Erickson, David Moss and Horst Eff for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -68,8 +68,24 @@ for contributing to this release.
   be indented one level below the if. See the bug for more "graphical"
   depictions. (Marcelo Vanzin)
 
-}}}
+- Some bugfixes and improvements to ExtendedGridLayout. (Björn "Vampire" Kautler)
 
+- Fixed that files were shown in VFSBrowser in choose directory mode.
+  (Björn "Vampire" Kautler)
+
+- Saving a buffer to another VFS was not working (some bugs with markers)
+  (#1644479) (Matthieu Casanova)
+
+- SF Bug #1668893: Wrong conversion to UTF-16 (with BOM)
+  A previous change of mine trying to fix another UTF-16 issue actually
+  implemented the reverse of what the spec says: UTF-16LE and UTF-16BE don't
+  have a BOM, while UTF-16 needs a BOM at the start. (Marcelo Vanzin)
+
+- SF Patch #1649033: Correct the focus after choosing the directory to search
+  Focus the search dialog after choosing the search directory, instead of
+  focusing the view. (Kazutoshi Satoda)
+
+}}}
 {{{ Miscellaneous
 
 - New View option: # of max visible rows in buffer switcher
@@ -93,9 +109,11 @@ for contributing to this release.
 - New LayoutManager ExtendedGridLayout added. For further explanations see
   its JavaDoc. (Björn "Vampire" Kautler)
 
-}}}
+- New popup menu in Register dockable panel (Matthieu Casanova)
 
+}}}
 {{{ Editing
+
 - New edit mode: csv (jaco de groot).
 
 - Make the auto-indent code more friendly to languages where whitespace matters
@@ -107,10 +125,46 @@ for contributing to this release.
   turned on. (Marcelo Vanzin)
 
 - Applied SF Patch #1663485: perl.xml patch for variables
+
 - Applied SF patch #1667234: clearer comments in certain parts of perl.xml
 
-}}}
+- Change the way perl "quote operators" are matched. See SF Patch #1659666
+  for discussion. The fix is twofold: first, add a new "special" value for the
+  end tag in SPAN_REGEXP, "~[digit]", which tries to find the matching bracket
+  of the matched reference (if can't find the matching bracket, just use the tag
+  body as a literal string). Second, add a new rule that highlights everything
+  as "LITERAL1", used to maintain balanced brackets, and use it to highlight
+  everything inside a "q" operator. This probably needs more tweaking, i.e.,
+  supporting quote operators that allow interpolation, and change the other
+  operators that look like "q" (such as tr). (Marcelo Vanzin)
 
+- Added some support to EL and better css and javascript coloration
+  in jsp.xml (Matthieu Casanova)
+
+- SF Patch #1666690: No Undo past file save option
+  Add option to reset the "undos" when a buffer is saved. (Joseph Erickson)
+
+- SF Patch #1676041: "CamelHumps" words
+  Add option to enable separating camel cased words when selecting with the
+  keyboard. (Horst Eff)
+
+- New attribute "MATCH_TYPE" that substitutes "EXCLUDE_MATCH" in mode files,
+  and code to handle it in the ParserRule and TokenMarker classes. This allows
+  highlighting the matched region with a different type as the rest of the
+  region the rule applies to; so, for example, it's possible to use
+  MARK_PREVIOUS on "foobar(" and highlight the function name as "FUNCTION" and
+  the parenthesis as "OPERATOR". There are two special values for the
+  attribute: "DEFAULT" is the default type for the current rule set (same
+  behavior as EXCLUDE_MATCH="TRUE"), and "RULE", the default value, is the same
+  type as the current rule (same as EXCLUDE_MATCH="FALSE"). This is part 1 of
+  the fix for SF Bug #1658252. (Marcelo Vanzin)
+
+- New mode for C, and refactored the C++ and Objective-C modes to take
+  advantage of the new C mode. This is part 2 of the fix for
+  SF Bug #1658252. (Kazutoshi Satoda and Marcelo Vanzin)
+
+
+}}}
 {{{ API Changes
 
 - VFS.isMarkersFileSupported() added to give a VFS the chance to tell
@@ -147,6 +201,15 @@ for contributing to this release.
 
 - New IndentRule (WhitespaceRule) and new indent action (NoIncrease)
   were added. (Marcelo Vanzin)
+
+- new method: SearchAndReplace.replaceAll(View,boolean) to do a replace all,
+  but not open files that were not open before. (Björn "Vampire" Kautler)
+
+- Buffer.getMarkersPath(VFS) deprecated and replaced by static method
+  Buffer.getMarkersPath(VFS,path), see bug #1644479 (Matthieu Casanova)
+
+- Added a new GUIUtilities.showVFSFileDialog() method that can use a dialog as
+  the browser's parent, instead of the view. (Kazutoshi Satoda)
 
 }}}
 
@@ -288,6 +351,8 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Updated python edit mode to unindent lines after "pass" (Matthieu Casanova)
 
 - Better highlighting of function calls in makefiles. (Marcelo Vanzin)
+
+- Updated PL/SQL Mode. (David Moss)
 
 }}}
 {{{ Miscellaneous

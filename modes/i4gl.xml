@@ -17,7 +17,7 @@
   </PROPS>
 
   <RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
-    
+
     <SPAN TYPE="LITERAL1">
       <BEGIN>'</BEGIN>
       <END>'</END>
@@ -59,7 +59,8 @@
     <SEQ TYPE="OPERATOR">||</SEQ>
 
      <!-- Function calls -->
-    <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+    <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+	<SEQ TYPE="OPERATOR">)</SEQ>
 
     <KEYWORDS>
 
@@ -652,13 +653,13 @@
       <KEYWORD1>YELLOW</KEYWORD1>
       <KEYWORD1>ZEROFILL</KEYWORD1>
 
-      
+
       <!-- special, keywords/literals -->
       <LITERAL2>FALSE</LITERAL2>
       <LITERAL2>NULL</LITERAL2>
       <LITERAL2>TRUE</LITERAL2>
-        
-      
+
+
       </KEYWORDS>
    </RULES>
 </MODE>

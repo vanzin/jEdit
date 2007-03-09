@@ -40,7 +40,8 @@
 		<SEQ TYPE="DIGIT">'o</SEQ>
 
 		<!-- Function calls, module instantiation, system tasks with args -->
-		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
 
 		<!-- Operators -->
 		<SEQ TYPE="OPERATOR">=</SEQ>

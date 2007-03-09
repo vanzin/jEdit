@@ -331,9 +331,8 @@
 		<!-- }}} -->
 
 		<!-- highlight function/method name as token type FUNCTION -->
-		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
-
-		<!-- <MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE" NO_WORD_BREAK="TRUE"> (</MARK_PREVIOUS> -->
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
 
 		<!-- Fix this variables to not start class definitions -->
 		<SEQ_REGEXP HASH_CHAR="$class" TYPE="KEYWORD3">\$class\w*</SEQ_REGEXP>

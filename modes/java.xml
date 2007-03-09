@@ -73,11 +73,12 @@
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">{</SEQ>
-		<MARK_PREVIOUS TYPE="LABEL" EXCLUDE_MATCH="TRUE"
+		<MARK_PREVIOUS TYPE="LABEL" MATCH_TYPE="OPERATOR"
 			AT_WHITESPACE_END="TRUE">:</MARK_PREVIOUS>
 
 		<!-- Function calls -->
-		<MARK_PREVIOUS TYPE="FUNCTION" EXCLUDE_MATCH="TRUE">(</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
 
 		<!-- Annotation types -->
 		<MARK_FOLLOWING TYPE="KEYWORD4">@</MARK_FOLLOWING>
@@ -181,13 +182,13 @@
 		<!-- XXX: this is wrong, {@link ..} is correct, see below -->
 		<!--<SEQ TYPE="COMMENT3">{</SEQ>-->
 
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{@" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="{@" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
 			<BEGIN>\{@(link|linkplain|docRoot|code|literal)\s</BEGIN>
 			<END>}</END>
 		</SPAN_REGEXP>
 
 		<!-- for the common usage of the cvs keyword $Id$ -->
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@version" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@version" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
 			<BEGIN>@version\s+\$</BEGIN>
 			<END>$</END>
 		</SPAN_REGEXP>
@@ -195,7 +196,7 @@
 		<!-- This works only when you use the same whitespace before and after the param's name,
 			 eg. a tab before and after, but mixing space and tab won't work.
 			 The reason is that you can't enter a regexp in END, except for the backreference operator $n -->
-		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" EXCLUDE_MATCH="FALSE" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
+		<SPAN_REGEXP TYPE="LABEL" HASH_CHAR="@" NO_WORD_BREAK="FALSE" DELEGATE="JAVADOC_PARAM">
 			<BEGIN>@(?:param|throws|exception|serialField)(\s)</BEGIN>
 			<END>$1</END>
 		</SPAN_REGEXP>

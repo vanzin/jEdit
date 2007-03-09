@@ -217,10 +217,10 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 
 		boolean joinNonWordChars = textArea.getJoinNonWordChars();
 		int wordStart = TextUtilities.findWordStart(lineText,dragStartOffset,
-			noWordSep,textArea.getJoinNonWordChars());
+			noWordSep,joinNonWordChars,false,false);
 		int wordEnd = TextUtilities.findWordEnd(lineText,
 			dragStartOffset+1,noWordSep,
-			textArea.getJoinNonWordChars());
+			joinNonWordChars,false,false);
 
 		int lineStart = textArea.getLineStartOffset(dragStartLine);
 		Selection sel = new Selection.Range(

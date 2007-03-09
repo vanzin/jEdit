@@ -883,7 +883,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Bj�rn "Vampire" Kautler\n\
+	Bj\u00F6rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -918,9 +918,11 @@ about.text=jEdit is brought to you by\n\
 	Giulio Piancastelli\n\
 	Greg Cooper\n\
 	Greg Merrill\n\
+	Horst Eff\n\
 	Ian Maclean\n\
 	Igor Lesik\n\
 	Israel Olalla\n\
+	Jakub Rozto\u010Dil\n\
 	Jamie LaScolea\n\
 	Jason Ginchereau\n\
 	Jeffrey Hoyt\n\
@@ -932,11 +934,13 @@ about.text=jEdit is brought to you by\n\
 	John Perry\n\
 	Jonathan Revusky\n\
 	Jorg Winter\n\
+	Joseph Erickson\n\
 	Joseph Schroer\n\
 	Juha Lindfors\n\
 	Justin Dieters\n\
 	Justin Hagstrom\n\
 	Kasper Graversen\n\
+	Kazutoshi Satoda\n\
 	Kenrick Drew\n\
 	Kevin Burton\n\
 	Kevin McWhirter\n\
@@ -1626,6 +1630,7 @@ options.general.recentFiles=Recent files to remember:
 options.general.sortRecent=Sort recent file list
 options.general.saveCaret=Save caret positions in recent file list
 options.general.persistentMarkers=Save marker positions
+options.general.resetUndo=Reset undo history on save
 options.general.restore=Restore previously open files on startup
 options.general.restore.remote=... including remote files over VFS
 options.general.restore.cli=... including file names specified on the command line
@@ -1719,6 +1724,7 @@ options.editing.maxLineLen.tooltip=Select 0 for text area width (soft wrap only)
 options.editing.tabSize=Tab width:
 options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
+options.editing.camelCasedWords=Separate "CamelCased" words
 options.editing.noTabs=Soft (emulated with spaces) tabs
 options.editing.deepIndent=Deep indent
 #}}}

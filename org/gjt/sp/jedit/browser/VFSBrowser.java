@@ -1701,7 +1701,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 						continue;
 					}
 
-					if (filterEnabled && filter != null
+					if (filter != null && (filterEnabled || filter instanceof DirectoriesOnlyFilter)
 					    && !filter.accept(file))
 					{
 						invisible++;

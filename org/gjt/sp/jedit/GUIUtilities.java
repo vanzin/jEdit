@@ -37,6 +37,7 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.Dialog;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -771,11 +772,24 @@ public class GUIUtilities
 
 		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
 			view,path,type,multipleSelection);
-		String[] selectedFiles = fileChooser.getSelectedFiles();
-		if(selectedFiles == null)
-			return null;
+		return fileChooser.getSelectedFiles();
+	} //}}}
 
-		return selectedFiles;
+	//{{{ showVFSFileDialog() method
+	/**
+	 * Displays a VFS file selection dialog box.
+	 * This version can specify a dialog as the parent instead
+	 * of the view.
+	 * @since jEdit 4.3pre10
+	 */
+	public static String[] showVFSFileDialog(Dialog parent, View view,
+		String path, int type, boolean multipleSelection)
+	{
+		hideSplashScreen();
+
+		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
+			parent,view,path,type,multipleSelection,true);
+		return fileChooser.getSelectedFiles();
 	} //}}}
 
 	//}}}

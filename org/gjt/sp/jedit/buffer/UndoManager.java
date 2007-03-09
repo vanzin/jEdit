@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -222,6 +223,17 @@ public class UndoManager
 
 	//{{{ bufferSaved() method
 	public void bufferSaved()
+	{
+		if(jEdit.getBooleanProperty("resetUndoOnSave")){
+			clear();
+		} else {
+			resetClearDirty();
+		}
+
+	} //}}}
+
+	//{{{ resetClearDirty method
+	public void resetClearDirty()
 	{
 		redoClearDirty = getLastEdit();
 		if(redosFirst instanceof CompoundEdit)

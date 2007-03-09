@@ -35,8 +35,8 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	//{{{ CloseBracketIndentRule constructor
 	public CloseBracketIndentRule(char closeBracket, boolean aligned)
 	{
-		super(TextUtilities.getComplementaryBracket(closeBracket,
-			new boolean[1]),closeBracket);
+		super(TextUtilities.getComplementaryBracket(closeBracket,null),
+			closeBracket);
 		this.aligned = aligned;
 	} //}}}
 

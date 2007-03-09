@@ -75,26 +75,26 @@
 		</SPAN>
 
 		<!-- Scalar variables -->
-		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$#?(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$#?((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
 
 		<!-- Array variables -->
-		<SEQ_REGEXP HASH_CHAR="@" TYPE="KEYWORD2">@(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="@" TYPE="KEYWORD2">@((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
 
 		<!-- Associative Array (= Hash) variables -->
-		<SEQ_REGEXP HASH_CHAR="%" TYPE="KEYWORD2">%(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="%" TYPE="KEYWORD2">%((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
 
 		<!-- Dereferences -->
-		<SEQ_REGEXP HASH_CHAR="$$" TYPE="KEYWORD4">\$\$+(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="@$" TYPE="KEYWORD4">@\$(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="%$" TYPE="KEYWORD4">%\$(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
-		<SEQ_REGEXP HASH_CHAR="*" TYPE="KEYWORD4">\*(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="$$" TYPE="KEYWORD4">\$\$+((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="@$" TYPE="KEYWORD4">@\$((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="%$" TYPE="KEYWORD4">%\$((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="*" TYPE="KEYWORD4">\*((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
 
 		<!-- Perl predefined variables -->
 		<SEQ_REGEXP HASH_CHAR="$^" TYPE="KEYWORD2">\$\^\p{Alpha}</SEQ_REGEXP>
 		<SEQ_REGEXP HASH_CHAR="$" TYPE="KEYWORD2">\$\p{Punct}</SEQ_REGEXP>
 
 		<!-- references to vars and code, starting with a backslash -->
-		<SEQ_REGEXP HASH_CHAR="\" TYPE="KEYWORD4">\\[@%\$&amp;](([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="\" TYPE="KEYWORD4">\\[@%\$&amp;]((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
 
 		<!-- complex code dereference -->
 		<SPAN TYPE="KEYWORD4" NO_LINE_BREAK="TRUE" DELEGATE="MAIN">
@@ -103,7 +103,7 @@
 		</SPAN>
 
 		<!-- Function calls from variables -->
-		<SEQ_REGEXP HASH_CHAR="&amp;$" TYPE="FUNCTION">&amp;\$(([\p{Alpha}_]\w+)?::)*([\p{Alpha}_]\w+|\d+)</SEQ_REGEXP>
+		<SEQ_REGEXP HASH_CHAR="&amp;$" TYPE="FUNCTION">&amp;\$((\p{Alpha}\w*|_\w+)?::)*(\p{Alpha}\w*|_\w+|\d+)</SEQ_REGEXP>
 
 		<!-- Special handling for subs, since they can have a ' in the name;
 			 try to do highlight as well as possible - this version will
@@ -166,7 +166,7 @@
 		</SPAN>
 
 		<!-- labels, catches also package prefixes at line start :( -->
-		<MARK_PREVIOUS TYPE="LABEL" AT_LINE_START="TRUE" EXCLUDE_MATCH="TRUE">:</MARK_PREVIOUS>
+		<MARK_PREVIOUS TYPE="LABEL" AT_LINE_START="TRUE" MATCH_TYPE="OPERATOR">:</MARK_PREVIOUS>
 
 		<!-- __DATA__ and similar -->
 		<SEQ_REGEXP HASH_CHAR="__" TYPE="KEYWORD4">__\w+__</SEQ_REGEXP>
@@ -197,31 +197,10 @@
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/"
 			AT_WORD_START="TRUE">/.*?[^\\]/[cgimosx]*(?!\s*[\d\$\@\(\-])</SEQ_REGEXP>
 
-        <!-- q//, qq//, qr//, qx//, tr///, y///, m//, s/// -->
-		<SEQ_REGEXP TYPE="MARKUP"
-                	HASH_CHAR="q"
-                	AT_WORD_START="TRUE">q(?:|[qx])\{.*\}</SEQ_REGEXP>
-		<SEQ_REGEXP TYPE="MARKUP"
-                	HASH_CHAR="qr"
-                	AT_WORD_START="TRUE">qr\{.*\}[imosx]*</SEQ_REGEXP>
-
-		<!-- For multi-line 'q' statements.
-			 Do we really need one entry per possible delimiter? {, (, etc... -->
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\{</BEGIN>
-			<END>}</END>
-		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\(</BEGIN>
-			<END>)</END>
-		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\/</BEGIN>
-			<END>/</END>
-		</SPAN_REGEXP>
-		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])\|</BEGIN>
-			<END>|</END>
+        <!-- q//, qq//, qr//, qx// -->
+		<SPAN_REGEXP HASH_CHAR="q" TYPE="MARKUP" DELEGATE="QUOTED" AT_WORD_START="TRUE" NO_LINE_BREAK="FALSE">
+			<BEGIN>q(?:|[qrxw])([#\[{(/|])</BEGIN>
+			<END>~1</END>
 		</SPAN_REGEXP>
 
 		<!-- tr/// transliteration -->
@@ -730,6 +709,14 @@
 		<SEQ TYPE="LITERAL2">&amp;</SEQ>
 		<SEQ TYPE="LITERAL2">*</SEQ>
 		<SEQ TYPE="LITERAL3">\</SEQ>
+	</RULES>
+
+	<!-- Used for quote-like operators; just makes sure the brackets are balanced. -->
+	<RULES SET="QUOTED" DEFAULT="LITERAL1">
+		<SPAN_REGEXP NO_LINE_BREAK="FALSE" TYPE="LITERAL1" DELEGATE="QUOTED" HASH_CHARS="|[{(/">
+			<BEGIN>([|\[{\(])</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
 	</RULES>
 
 </MODE>

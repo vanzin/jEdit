@@ -81,7 +81,7 @@ public class BufferSaveRequest extends BufferIORequest
 			// the entire save operation can be aborted...
 			setAbortable(true);
 
-			path = vfs._canonPath(session,path,view);			
+			path = vfs._canonPath(session,path,view);
 			if(!MiscUtilities.isURL(path))
 				path = MiscUtilities.resolveSymlinks(path);
 
@@ -185,7 +185,7 @@ public class BufferSaveRequest extends BufferIORequest
 				}
 				// clean up left-over markers file
 				if(!jEdit.getBooleanProperty("persistentMarkers"))
-					vfs._delete(session,buffer.getMarkersPath(vfs),view);
+					vfs._delete(session,Buffer.getMarkersPath(vfs, path),view);
 				vfs._endVFSSession(session,view);
 			}
 			catch(IOException io)

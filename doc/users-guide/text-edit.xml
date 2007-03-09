@@ -269,7 +269,8 @@
   </para>
   <para>
    By default, the last 100 edits is retained; older edits cannot be undone.
-   The maximum number of undos can be changed in the <guibutton>Editing</guibutton> pane
+   The maximum number of undos and whether undos are reset when a buffer is saved
+   can be changed in the <guibutton>Editing</guibutton> pane
    of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
    Options</guimenuitem> dialog box; see <xref linkend="editing-pane"/>.
   </para>

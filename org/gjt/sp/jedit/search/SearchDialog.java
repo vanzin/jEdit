@@ -973,6 +973,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			if(evt.getSource() == choose)
 			{
 				String[] dirs = GUIUtilities.showVFSFileDialog(
+					SearchDialog.this,
 					view,directory.getText(),
 					VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
 					false);

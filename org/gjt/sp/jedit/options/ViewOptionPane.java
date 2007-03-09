@@ -26,9 +26,7 @@ import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 
 public class ViewOptionPane extends AbstractOptionPane
 {
@@ -69,10 +67,11 @@ public class ViewOptionPane extends AbstractOptionPane
 		buttons.setBorder(new EmptyBorder(0,12,12,12));
 		buttons.add(alternateDockingLayout = new JButton(jEdit.getProperty(
 			"options.view.alternateDockingLayout")));
-		alternateDockingLayout.addActionListener(new ActionHandler());
+		ActionHandler actionHandler = new ActionHandler();
+		alternateDockingLayout.addActionListener(actionHandler);
 		buttons.add(alternateToolBarLayout = new JButton(jEdit.getProperty(
 			"options.view.alternateToolBarLayout")));
-		alternateToolBarLayout.addActionListener(new ActionHandler());
+		alternateToolBarLayout.addActionListener(actionHandler);
 		layoutPanel.add(BorderLayout.SOUTH,buttons);
 
 		TitledBorder border = new TitledBorder(jEdit.getProperty(
@@ -109,14 +108,14 @@ public class ViewOptionPane extends AbstractOptionPane
 		showBufferSwitcher.setSelected(jEdit.getBooleanProperty(
 			"view.showBufferSwitcher"));
 		addComponent(showBufferSwitcher);
+		showBufferSwitcher.addActionListener(actionHandler);
 
 
 		/* Buffer switcher max row count */
 		bufferSwitcherMaxRowCount = new JTextField(jEdit.getProperty("bufferSwitcher.maxRowCount"));
 		addComponent(jEdit.getProperty("options.view.bufferSwitcherMaxRowsCount"),
 			bufferSwitcherMaxRowCount);
-
-
+		bufferSwitcherMaxRowCount.setEditable(showBufferSwitcher.isSelected());
 	} //}}}
 
 	//{{{ _save() method
@@ -152,7 +151,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -177,6 +176,10 @@ public class ViewOptionPane extends AbstractOptionPane
 					layout.setIcon(layoutIcon4);
 				else if(layout.getIcon() == layoutIcon4)
 					layout.setIcon(layoutIcon2);
+			}
+			else if (evt.getSource() == showBufferSwitcher)
+			{
+				bufferSwitcherMaxRowCount.setEditable(showBufferSwitcher.isSelected());
 			}
 		}
 	} //}}}

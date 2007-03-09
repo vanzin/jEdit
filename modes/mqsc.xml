@@ -13,22 +13,22 @@
   </PROPS>
   <!-- ignore case, highlight numbers -->
   <RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
-  
+
     <!-- lines beginning with asterisk are comments -->
     <EOL_SPAN TYPE="COMMENT1" AT_LINE_START="TRUE">*</EOL_SPAN>
-    
+
     <!-- brackets on one line delimit parameter values, don't parse -->
     <!-- case 1: string values using apostrophe marks -->
-    <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" EXCLUDE_MATCH="TRUE">
+    <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" MATCH_TYPE="OPERATOR">
       <BEGIN>('</BEGIN>
       <END>')</END>
     </SPAN>
     <!-- case 2: literal values and object names -->
-    <SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" EXCLUDE_MATCH="TRUE">
+    <SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" MATCH_TYPE="OPERATOR">
       <BEGIN>(</BEGIN>
       <END>)</END>
     </SPAN>
-    
+
     <!-- line continuation symbol -->
     <SEQ TYPE="OPERATOR">+</SEQ>
 
@@ -55,8 +55,8 @@
       <KEYWORD1>start</KEYWORD1>
       <KEYWORD1>stop</KEYWORD1>
       <KEYWORD1>suspend</KEYWORD1>
-    
-      <!-- KEYWORD2 are object types -->    
+
+      <!-- KEYWORD2 are object types -->
       <KEYWORD2>channel</KEYWORD2>
       <KEYWORD2>chl</KEYWORD2>
       <KEYWORD2>chstatus</KEYWORD2>
@@ -78,7 +78,7 @@
       <KEYWORD2>qremote</KEYWORD2>
       <KEYWORD2>qr</KEYWORD2>
       <KEYWORD2>queue</KEYWORD2>
-    
+
       <!-- MARKUP are object attributes -->
       <MARKUP>altdate</MARKUP>
       <MARKUP>alttime</MARKUP>
