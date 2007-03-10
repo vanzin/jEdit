@@ -380,7 +380,8 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 		{
 			if (null == checkRule.upHashChars)
 			{
-				if ((pos + checkRule.upHashChar.length() < line.array.length) &&
+				if (checkRule.upHashChar != null &&
+				    (pos + checkRule.upHashChar.length() < line.array.length) &&
 				    !checkHashString(checkRule))
 				{
 					return false;
