@@ -98,13 +98,13 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
 - The dockable panel splitter can now use continuous layout
   (Matthieu Casanova)
 
-- The plugin manager now shows you the size of the datas stored by
+- The plugin manager now shows you the size of the data stored by
   each plugin that use the new plugin home folder (Matthieu Casanova)
 
 - GeneralOptionPane - new checkbox (restore remote files on startup)
   (Alan Ezust)
 
-- New popup menu in the plugin manager to remove plugin datas when
+- New popup menu in the plugin manager to remove plugin data when
   the plugin uses the new plugin api (Matthieu Casanova)
 
 - Option to allow jEdit to autodetect :encoding= properties in the loaded

@@ -43,7 +43,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	/**
 	 * Init some variables that will be used when marking tokens.
 	 * This is called before {@link JEditBuffer#markTokens(int, TokenHandler)}
-	 * to store some datas that will be required and that we don't want
+	 * to store some data that will be required and that we don't want
 	 * to put in the parameters
 	 *
 	 * @param styles

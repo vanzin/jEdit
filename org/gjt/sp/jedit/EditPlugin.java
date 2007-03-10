@@ -315,7 +315,7 @@ public abstract class EditPlugin
 	/**
 	 * Returns true if the plugin uses the standard plugin home
 	 *
-	 * @return true if the plugin stores it's datas in the folder given by {@link #getPluginHome(Class)}
+	 * @return true if the plugin stores it's data in the folder given by {@link #getPluginHome(Class)}
 	 * default is false
 	 * @since 4.3pre9
 	 */

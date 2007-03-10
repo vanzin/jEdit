@@ -2263,8 +2263,8 @@ plugin-manager.dependency.message={0} is required by the following plugins.\n\
 	Deselecting {0} will also deselect the below plugins:
 
 plugin-manager.cleanup.label=Cleanup
-plugin-manager.cleanup.title=Cleanup plugin datas
-plugin-manager.cleanup.message=Remove the datas of the following plugins:
+plugin-manager.cleanup.title=Cleanup plugin data
+plugin-manager.cleanup.message=Remove the data of the following plugins:
 
 install-plugins.depend.title=Dependency Required
 install-plugins.depend.message=One or more of the plugins you are installing\n\
@@ -2299,7 +2299,7 @@ manage-plugins.title=Manage
 manage-plugins.info.name=Name
 manage-plugins.info.version=Version
 manage-plugins.info.status=Status
-manage-plugins.info.datas=Datas
+manage-plugins.info.data=Data
 
 manage-plugins.remove=Remove...
 manage-plugins.help=Help...
