@@ -315,7 +315,7 @@ public class ParserRule
 		result.append(",IS_ESCAPE=").append((actionHints & IS_ESCAPE) != 0);
 		result.append(",NO_ESCAPE=").append((actionHints & NO_ESCAPE) != 0);
 		result.append(",REGEXP=").append((actionHints & REGEXP) != 0);
-		result.append(",upHashChar=").append(upHashChar);
+		result.append("],upHashChar=").append(upHashChar);
 		result.append(",upHashChars=").append(Arrays.toString(upHashChars));
 		result.append(",startPosMatch=");
 		result.append("[AT_LINE_START=").append((startPosMatch & AT_LINE_START) != 0);
