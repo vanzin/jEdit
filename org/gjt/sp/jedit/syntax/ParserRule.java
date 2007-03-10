@@ -85,8 +85,9 @@ public class ParserRule
 
 	/**
 	 * matchType is the type of the token for the matched region. Special
-	 * values are: -1 = default token for the context, -2 = same token as
-	 * the rule itself.
+	 * values are: MATCH_TYPE_DEFAULT = default token for the context,
+	 * MATCH_TYPE_RULE = same token as the rule itself.
+	 * 
 	 * @since jEdit 4.3pre10
 	 */
 	public final byte matchType;
@@ -105,7 +106,7 @@ public class ParserRule
 	{
 		return new ParserRule(SEQ, seq.substring(0,1),
 			posMatch, seq.toCharArray(), null,
-			0, null, delegate, id, (byte)-1);
+			0, null, delegate, id, MATCH_TYPE_DEFAULT);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
@@ -129,7 +130,7 @@ public class ParserRule
 	{
 		return new ParserRule(SEQ | REGEXP, hashChar, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, (byte)-1);
+			0, null, delegate, id, MATCH_TYPE_DEFAULT);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
@@ -140,7 +141,7 @@ public class ParserRule
 	{
 		return new ParserRule(hashChars, SEQ | REGEXP, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, (byte)-1);
+			0, null, delegate, id, MATCH_TYPE_DEFAULT);
 	} //}}}
 
 	//{{{ createSpanRule() method
@@ -290,7 +291,7 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, seq.substring(0,1),
 			0, seq.toCharArray(), null, 0, null,
-			null, Token.NULL, (byte)-1);
+			null, Token.NULL, MATCH_TYPE_DEFAULT);
 	} //}}}
 
 	//{{{ toString() method
@@ -308,7 +309,7 @@ public class ParserRule
 			default: result.append("UNKNOWN"); break;
 		}
 		int actionHints = action & ACTION_HINTS;
-		result.append("[MATCH_TYPE=").append((matchType) != 0);
+		result.append("[matchType=").append(matchType == MATCH_TYPE_DEFAULT ? "MATCH_TYPE_DEFAULT" : (matchType == MATCH_TYPE_RULE ? "MATCH_TYPE_RULE" : Token.tokenToString(matchType)));
 		result.append(",NO_LINE_BREAK=").append((actionHints & NO_LINE_BREAK) != 0);
 		result.append(",NO_WORD_BREAK=").append((actionHints & NO_WORD_BREAK) != 0);
 		result.append(",IS_ESCAPE=").append((actionHints & IS_ESCAPE) != 0);

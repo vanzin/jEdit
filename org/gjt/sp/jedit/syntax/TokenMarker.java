@@ -114,6 +114,7 @@ public class TokenMarker
 
 		keywords = context.rules.getKeywords();
 		escaped = false;
+		delegateEndEscaped = false;
 
 		seenWhitespaceEnd = false;
 		whitespaceEnd = line.offset;
@@ -199,6 +200,7 @@ escape_checking:			if ((rule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESC
 				lastOffset = pos + 1;
 
 				escaped = false;
+				delegateEndEscaped = false;
 			}
 			else
 			{
@@ -226,6 +228,7 @@ escape_checking:			if ((rule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESC
 
 				seenWhitespaceEnd = true;
 				escaped = false;
+				delegateEndEscaped = false;
 			} //}}}
 		} //}}}
 
@@ -286,6 +289,7 @@ unwind:		while(context.parent != null)
 	private int lineLength;
 	private int pos;
 	private boolean escaped;
+	private boolean delegateEndEscaped;
 
 	private int whitespaceEnd;
 	private boolean seenWhitespaceEnd;
@@ -300,12 +304,12 @@ unwind:		while(context.parent != null)
 		LineContext tempContext = context;
 		context = context.parent;
 		keywords = context.rules.getKeywords();
-		boolean tempEscaped = escaped;
+		boolean tempDelegateEndEscaped = delegateEndEscaped;
 		boolean b = handleRule(rule,true);
 		context = tempContext;
 		keywords = context.rules.getKeywords();
 
-		if(b && !tempEscaped)
+		if(b && !tempDelegateEndEscaped)
 		{
 			if(context.inRule != null)
 				handleRule(context.inRule,true);
@@ -339,12 +343,13 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 				List<ParserRule> rules = context.rules.getRules(ch);
 				for (ParserRule innerRule : rules)
 				{
-					if (handleRule(innerRule,false))
+					if (handleRule(innerRule,false,false))
 					{
+						delegateEndEscaped = !delegateEndEscaped;
 						break escape_checking;
 					}
-				} //}}}
-				escaped = !escaped;
+				}
+				delegateEndEscaped = !delegateEndEscaped;
 				pos += escapeSequenceCount - 1;
 				return true;
 			}

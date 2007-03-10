@@ -74,7 +74,7 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
   (Björn "Vampire" Kautler)
 
 - Saving a buffer to another VFS was not working (some bugs with markers)
-  (#1644479) (Matthieu Casanova)
+  (bug #1644479) (Matthieu Casanova)
 
 - SF Bug #1668893: Wrong conversion to UTF-16 (with BOM)
   A previous change of mine trying to fix another UTF-16 issue actually
@@ -84,6 +84,10 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
 - SF Patch #1649033: Correct the focus after choosing the directory to search
   Focus the search dialog after choosing the search directory, instead of
   focusing the view. (Kazutoshi Satoda)
+
+- Fixed a problem with escape sequences where a delegate has the same as
+  its parent and so the parents got overridden and was not able to
+  escape the delegates end sequence. (bug #1630805) (Björn "Vampire" Kautler)
 
 }}}
 {{{ Miscellaneous
