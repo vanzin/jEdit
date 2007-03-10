@@ -867,7 +867,7 @@ public class MiscUtilities
 		return new InputStreamReader(in, encoding);
 	} //}}}
 
-	//{{{ getXMLEncoding() method
+	//{{{ xAutodetect() method
 	private static String xAutodetect(InputStream in) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));

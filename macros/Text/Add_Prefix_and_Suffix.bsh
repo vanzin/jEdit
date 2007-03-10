@@ -34,7 +34,7 @@
  * past entries for the prefix and suffix.
  */
 
-// beginning of Add_suffix_and_prefix.bsh
+// beginning of Add_Prefix_and_Suffix.bsh
 
 // import statements
 import javax.swing.border.*;
@@ -118,7 +118,6 @@ void prefixSuffixDialog(View view)
 
         // text manipulation begins here using calls
         // to jEdit methods
-        buffer.beginCompoundEdit();
         selectedLines = textArea.getSelectedLines();
         for(i = 0; i < selectedLines.length; ++i)
         {
@@ -130,7 +129,6 @@ void prefixSuffixDialog(View view)
             if(text == null) text = "";
             textArea.setSelectedText(prefix + text + suffix);
         }
-        buffer.endCompoundEdit();
     }
 }
 

@@ -92,8 +92,8 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- New View option: # of max visible rows in buffer switcher
-  (Patch 1642574 - Jakub  Roztocil )
+- New View option: amount of maximum visible rows in buffer switcher
+  (Patch #1642574) (Jakub Roztocil)
 
 - The dockable panel splitter can now use continuous layout
   (Matthieu Casanova)
@@ -102,7 +102,7 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
   each plugin that use the new plugin home folder (Matthieu Casanova)
 
 - GeneralOptionPane - new checkbox (restore remote files on startup)
-  (Alan Ezust).
+  (Alan Ezust)
 
 - New popup menu in the plugin manager to remove plugin datas when
   the plugin uses the new plugin api (Matthieu Casanova)
@@ -114,6 +114,10 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
   its JavaDoc. (Björn "Vampire" Kautler)
 
 - New popup menu in Register dockable panel (Matthieu Casanova)
+
+- Removed the calls to begin- and endCompoundEdit() in macros as
+  macroinvokations are always automatically embedded inside a compound
+  edit (Björn "Vampire" Kautler)
 
 }}}
 {{{ Editing

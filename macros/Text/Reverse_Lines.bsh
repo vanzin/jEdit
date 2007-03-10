@@ -27,8 +27,6 @@ void reverseLines(textArea)
 		}
 	}
 
-	buffer.beginCompoundEdit();
-
 	// do whole buffer if no selections
 	if(selections.length == 0)
 	{
@@ -75,7 +73,6 @@ void reverseLines(textArea)
 			}
 		}
 	}
-	buffer.endCompoundEdit();
 }
 
 if(buffer.isReadOnly())

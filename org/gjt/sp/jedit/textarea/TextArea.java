@@ -1327,7 +1327,7 @@ public class TextArea extends JComponent
 	//{{{ setText() method
 	/**
 	 * Sets the entire text of this text area.
-	 * @param text the nex content of the buffer
+	 * @param text the new content of the buffer
 	 */
 	public void setText(String text)
 	{

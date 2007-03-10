@@ -15,34 +15,25 @@ void singleSpaceBuffer(View view)
 	int line = 1;	// start on second line
 	Vector lines = new java.util.Stack();
 
-	try
+	while(line < buffer.getLineCount())
 	{
-		buffer.beginCompoundEdit();
-		while(line < buffer.getLineCount())
+		if(buffer.getLineText(line).equals(""))
+			lines.addElement(new Integer(line));
+		else
 		{
-			if(buffer.getLineText(line).equals(""))
-				lines.addElement(new Integer(line));
-			else
-			{
-				StringBuffer msg = new StringBuffer();
-				msg.append(buffer.getPath() + " doesn't appear to be double-spaced:\n");
-				msg.append("Line " + (line + 1) + " isn't blank.");
-				Macros.error(view, msg.toString());
-				return;
-			}
-			line += 2;
+			StringBuffer msg = new StringBuffer();
+			msg.append(buffer.getPath() + " doesn't appear to be double-spaced:\n");
+			msg.append("Line " + (line + 1) + " isn't blank.");
+			Macros.error(view, msg.toString());
+			return;
 		}
-		while(!lines.empty())
-		{
-			Integer lineno = (Integer)lines.pop();
-			int offset = buffer.getLineStartOffset(lineno.intValue());
-			buffer.remove(offset-1,1);
-		}
+		line += 2;
 	}
-	finally
+	while(!lines.empty())
 	{
-		if(buffer.insideCompoundEdit())
-			buffer.endCompoundEdit();
+		Integer lineno = (Integer)lines.pop();
+		int offset = buffer.getLineStartOffset(lineno.intValue());
+		buffer.remove(offset-1,1);
 	}
 }
 

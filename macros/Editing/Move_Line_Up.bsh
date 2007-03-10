@@ -37,8 +37,6 @@ if (!buffer.isEditable() || lineNo == 0) {
    textArea.getToolkit().beep();
    return 1;
 }
-// Start the edit
-buffer.beginCompoundEdit();
 // Get the caret position on the line
 int lineCaretOffset = textArea.getCaretPosition()-buffer.getLineStartOffset(lineNo);
 // Get the line text to move
@@ -53,8 +51,6 @@ buffer.insert(newLinePos,line+"\n");
 textArea.setCaretPosition(newLinePos+lineCaretOffset);
 // Indent this line
 buffer.indentLine(lineNo-1,true);
-// End the edit
-buffer.endCompoundEdit();
 
 /*
 
