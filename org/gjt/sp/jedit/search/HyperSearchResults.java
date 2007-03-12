@@ -705,20 +705,16 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			if (node.getUserObject() instanceof HyperSearchOperationNode)
 			{
 				setFont(boldFont);
-	
 
 				CountNodes countNodes = new CountNodes();
 				traverseNodes(node, countNodes);
 
-				String property = "hypersearch-results.result-caption";
-				if (countNodes.bufferCount == 1)
-				{
-					property += countNodes.resultCount == 1 ? "1" : "2";
-				}
-				
-				Object[] pp = { node.toString(), Integer.valueOf(countNodes.resultCount),
-						Integer.valueOf(countNodes.bufferCount)};
-				setText(jEdit.getProperty(property,pp));
+				setText(jEdit.getProperty("hypersearch-results.result-caption",
+							  new Object[] {
+							  node.toString(),
+							  Integer.valueOf(countNodes.resultCount),
+							  Integer.valueOf(countNodes.bufferCount)
+				}));
 			}
 			else if(node.getUserObject() instanceof HyperSearchFolderNode)
 			{
@@ -729,35 +725,13 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			{
 				// file name
 				setFont(boldFont);
-				int count = node.getChildCount();
 				HyperSearchFileNode hyperSearchFileNode = (HyperSearchFileNode) node.getUserObject();
-				if(count == 1)
-				{
-					if (hyperSearchFileNode.getCount() == 1)
-					{
-						setText(jEdit.getProperty("hypersearch-results"
-									  + ".file-caption1",new Object[] {
-							hyperSearchFileNode
-						}));
-					}
-					else
-					{
-						setText(jEdit.getProperty("hypersearch-results"
-									  + ".file-caption2",new Object[] {
-							hyperSearchFileNode,
-							Integer.valueOf(hyperSearchFileNode.getCount())
-						}));
-					}
-				}
-				else
-				{
-					setText(jEdit.getProperty("hypersearch-results"
-						+ ".file-caption",new Object[] {
-						hyperSearchFileNode,
-						Integer.valueOf(hyperSearchFileNode.getCount()),
-						Integer.valueOf(count)
-					}));
-				}
+				setText(jEdit.getProperty("hypersearch-results.file-caption",
+							  new Object[] {
+							  hyperSearchFileNode,
+							  Integer.valueOf(hyperSearchFileNode.getCount()),
+							  Integer.valueOf(node.getChildCount())
+				}));
 			}
 			else
 			{

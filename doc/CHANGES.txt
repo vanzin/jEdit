@@ -117,7 +117,11 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
 
 - Removed the calls to begin- and endCompoundEdit() in macros as
   macroinvokations are always automatically embedded inside a compound
-  edit (Björn "Vampire" Kautler)
+  edit. (Björn "Vampire" Kautler)
+
+- Refactored the use of hypersearch-results.file-caption and
+  hypersearch-results.result-caption to only use one property instead of three
+  depending on the amount of found occurrences. (Björn "Vampire" Kautler)
 
 }}}
 {{{ Editing
@@ -170,7 +174,6 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
 - New mode for C, and refactored the C++ and Objective-C modes to take
   advantage of the new C mode. This is part 2 of the fix for
   SF Bug #1658252. (Kazutoshi Satoda and Marcelo Vanzin)
-
 
 }}}
 {{{ API Changes
