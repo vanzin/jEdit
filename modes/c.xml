@@ -16,11 +16,11 @@
         <PROPERTY NAME="indentCloseBrackets" VALUE="}" />
         <PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
         <PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
-		<PROPERTY NAME="indentNextLine"
-			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
-		<PROPERTY NAME="unindentThisLine"
-			VALUE="^.*(default:\s*|case.*:.*)$" />
-		<PROPERTY NAME="electricKeys" VALUE=":" />
+        <PROPERTY NAME="indentNextLine"
+            VALUE=".*(\)|\b(else|do)\b)[^{;]*$" />
+        <PROPERTY NAME="unindentThisLine"
+            VALUE="^\s*((case\b.*|[\p{Alpha}_][\p{Alnum}_]*)\s*:(?!:)).*$" />
+        <PROPERTY NAME="electricKeys" VALUE=":" />
     </PROPS>
 
     <RULES
@@ -86,11 +86,6 @@
             <END>'</END>
         </SPAN>
 
-		<!-- Labels. -->
-        <MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
-            MATCH_TYPE="OPERATOR"
-            TYPE="LABEL">:</MARK_PREVIOUS>
-
 		<!-- Trigraphs -->
         <SEQ TYPE="LITERAL4">??(</SEQ>
         <SEQ TYPE="LITERAL4">??/</SEQ>
@@ -102,17 +97,25 @@
         <SEQ TYPE="LITERAL4">??-</SEQ>
         <SEQ TYPE="LITERAL4">??=</SEQ>
 
-        <!-- Function calls -->
-        <MARK_PREVIOUS
-			TYPE="FUNCTION"
-			MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
-
         <!-- Alternate tokens -->
         <SEQ TYPE="LITERAL4">&lt;:</SEQ>
         <SEQ TYPE="LITERAL4">:&gt;</SEQ>
         <SEQ TYPE="LITERAL4">&lt;%</SEQ>
         <SEQ TYPE="LITERAL4">%&gt;</SEQ>
         <SEQ TYPE="LITERAL4">%:</SEQ>
+
+        <!-- Labels.
+            This is a part of core language syntax, but must be here
+            because it can't work after SEQ for ':'. -->
+        <MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
+            MATCH_TYPE="OPERATOR"
+            TYPE="LABEL">:</MARK_PREVIOUS>
+
+        <!-- Function-like macro or function calls.
+            This can't work after SEQ for '('. -->
+        <MARK_PREVIOUS
+            TYPE="FUNCTION"
+            MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
 
         <SEQ TYPE="OPERATOR">=</SEQ>
         <SEQ TYPE="OPERATOR">!</SEQ>
@@ -289,40 +292,6 @@
             <KEYWORD3>struct</KEYWORD3>
             <KEYWORD3>union</KEYWORD3>
             <KEYWORD3>unsigned</KEYWORD3>
-			<!-- More types, from ISO C99 -->
-            <KEYWORD3>intptr_t</KEYWORD3>
-            <KEYWORD3>uintptr_t</KEYWORD3>
-            <KEYWORD3>intmax_t</KEYWORD3>
-            <KEYWORD3>uintmax_t</KEYWORD3>
-            <KEYWORD3>int8_t</KEYWORD3>
-            <KEYWORD3>uint8_t</KEYWORD3>
-            <KEYWORD3>int_least8_t</KEYWORD3>
-            <KEYWORD3>uint_least8_t</KEYWORD3>
-            <KEYWORD3>int_fast8_t</KEYWORD3>
-			<KEYWORD3>uint_fast8_t</KEYWORD3>
-            <KEYWORD3>int16_t</KEYWORD3>
-            <KEYWORD3>uint16_t</KEYWORD3>
-            <KEYWORD3>int_least16_t</KEYWORD3>
-            <KEYWORD3>uint_least16_t</KEYWORD3>
-            <KEYWORD3>int_fast16_t</KEYWORD3>
-			<KEYWORD3>uint_fast16_t</KEYWORD3>
-            <KEYWORD3>int32_t</KEYWORD3>
-            <KEYWORD3>uint32_t</KEYWORD3>
-            <KEYWORD3>int_least32_t</KEYWORD3>
-            <KEYWORD3>uint_least32_t</KEYWORD3>
-            <KEYWORD3>int_fast32_t</KEYWORD3>
-			<KEYWORD3>uint_fast32_t</KEYWORD3>
-            <KEYWORD3>int64_t</KEYWORD3>
-            <KEYWORD3>uint64_t</KEYWORD3>
-            <KEYWORD3>int_least64_t</KEYWORD3>
-            <KEYWORD3>uint_least64_t</KEYWORD3>
-            <KEYWORD3>int_fast64_t</KEYWORD3>
-			<KEYWORD3>uint_fast64_t</KEYWORD3>
-			<KEYWORD3>size_t</KEYWORD3>
-			<KEYWORD3>clock_t</KEYWORD3>
-			<KEYWORD3>time_t</KEYWORD3>
-            <KEYWORD3>wchar_t</KEYWORD3>
-			<KEYWORD3>wint_t</KEYWORD3>
             <!-- Keywords from ISO C++ Standard 2003 -->
             <KEYWORD2>asm</KEYWORD2>
             <KEYWORD1>auto</KEYWORD1>
@@ -333,8 +302,6 @@
             <KEYWORD1>default</KEYWORD1>
             <KEYWORD1>do</KEYWORD1>
             <KEYWORD1>else</KEYWORD1>
-            <KEYWORD1>explicit</KEYWORD1>
-            <KEYWORD2>export</KEYWORD2>
             <KEYWORD2>extern</KEYWORD2>
             <LITERAL2>false</LITERAL2>
             <KEYWORD1>for</KEYWORD1>

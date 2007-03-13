@@ -2,7 +2,7 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!-- Extension of c.xml to add C++ keywords. -->
+<!-- Extension of c.xml to add C++ specific syntax. -->
 <MODE>
     <PROPS>
         <PROPERTY NAME="commentStart" VALUE="/*" />
@@ -16,11 +16,11 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
 		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
-		<PROPERTY NAME="indentNextLine"
-			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
-		<PROPERTY NAME="unindentThisLine"
-			VALUE="^.*(default:\s*|case.*:.*)$" />
-		<PROPERTY NAME="electricKeys" VALUE=":" />
+        <PROPERTY NAME="indentNextLine"
+            VALUE=".*(\)|\b(else|do)\b)[^{;]*$" />
+        <PROPERTY NAME="unindentThisLine"
+            VALUE="^\s*((case\b.*|[\p{Alpha}_][\p{Alnum}_]*)\s*:(?!:)).*$" />
+        <PROPERTY NAME="electricKeys" VALUE=":" />
     </PROPS>
 
     <RULES
@@ -28,16 +28,31 @@
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
         <EOL_SPAN TYPE="KEYWORD2" AT_WHITESPACE_END="TRUE" DELEGATE="CPP">#</EOL_SPAN>
 
-        <IMPORT DELEGATE="c::LEX"/>
-        <IMPORT DELEGATE="c::CORE"/>
+        <IMPORT DELEGATE="LEX"/>
         <IMPORT DELEGATE="CORE"/>
+    </RULES>
+
+    <!-- Core C++ language -->
+    <RULES SET="LEX"
+        ESCAPE="\" IGNORE_CASE="FALSE"
+        HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
+
+        <!-- A hack not to mark namespace qualification like "std::"
+            as labels. -->
+        <SEQ TYPE="OPERATOR">::</SEQ>
+
+        <IMPORT DELEGATE="c::LEX"/>
     </RULES>
 
     <!-- Core C++ language -->
     <RULES SET="CORE"
         ESCAPE="\" IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
+
+        <IMPORT DELEGATE="c::CORE"/>
+
         <KEYWORDS>
+            <KEYWORD3>catch</KEYWORD3>
             <KEYWORD3>class</KEYWORD3>
             <KEYWORD3>const_cast</KEYWORD3>
             <KEYWORD1>delete</KEYWORD1>
@@ -77,7 +92,7 @@
         <EOL_SPAN_REGEXP HASH_CHAR="elif" TYPE="MARKUP" DELEGATE="c::CONDITION">elif\b</EOL_SPAN_REGEXP>
         <EOL_SPAN_REGEXP HASH_CHAR="if" TYPE="MARKUP" DELEGATE="c::CONDITION">if\b</EOL_SPAN_REGEXP>
 
-        <IMPORT DELEGATE="c::LEX"/>
+        <IMPORT DELEGATE="LEX"/>
 
         <!-- Directives -->
         <KEYWORDS>
@@ -99,8 +114,7 @@
         ESCAPE="\" IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
         <SEQ TYPE="OPERATOR">#</SEQ>
-        <IMPORT DELEGATE="c::LEX"/>
-        <IMPORT DELEGATE="c::CORE"/>
+        <IMPORT DELEGATE="LEX"/>
         <IMPORT DELEGATE="CORE"/>
     </RULES>
 
