@@ -123,6 +123,11 @@ public class TextUtilities
 		// corresponding character
 		char cprime = getComplementaryBracket(c,direction);
 
+		if( cprime == '\0' )
+		{ // c is no bracket
+			return -1;
+		}
+
 		// 1 because we've already 'seen' the first bracket
 		int count = 1;
 

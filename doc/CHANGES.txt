@@ -4,7 +4,8 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
-Joseph Erickson, David Moss and Horst Eff for contributing to this release.
+Joseph Erickson, David Moss, Horst Eff and Daniel Hahler for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -122,6 +123,9 @@ Joseph Erickson, David Moss and Horst Eff for contributing to this release.
 - Refactored the use of hypersearch-results.file-caption and
   hypersearch-results.result-caption to only use one property instead of three
   depending on the amount of found occurrences. (Björn "Vampire" Kautler)
+
+- SF Patch #1678608: Improve performace in findMatchingBracket
+  Return earlier if matching bracket is unknown. (Daniel Hahler)
 
 }}}
 {{{ Editing
