@@ -127,6 +127,9 @@ contributing to this release.
 - SF Patch #1678608: Improve performace in findMatchingBracket
   Return earlier if matching bracket is unknown. (Daniel Hahler)
 
+- Added the time in Log._log() so that events and exceptions could easier be
+  assigned to interactions. (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 

@@ -22,10 +22,28 @@
 
 package org.gjt.sp.util;
 
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
+//{{{ Imports
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.Writer;
+
+import java.text.DateFormat;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+
+import static java.text.DateFormat.MEDIUM;
+//}}}
 
 /**
  * This class provides methods for logging events. In terms of functionality,
@@ -306,21 +324,23 @@ public class Log
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private static final Object LOCK = new Object();
+	private static final Object LOCK;
 	private static final String[] log;
 	private static int logLineCount;
 	private static boolean wrap;
-	private static int level = WARNING;
+	private static int level;
 	private static Writer stream;
 	private static final String lineSep;
 	private static final PrintStream realOut;
 	private static final PrintStream realErr;
 	private static final LogListModel listModel;
+	private static final DateFormat timeFormat;
 	//}}}
 
 	//{{{ Class initializer
 	static
 	{
+		LOCK = new Object();
 		level = WARNING;
 
 		realOut = System.out;
@@ -329,6 +349,8 @@ public class Log
 		log = new String[MAXLINES];
 		lineSep = System.getProperty("line.separator");
 		listModel = new LogListModel();
+		
+		timeFormat = DateFormat.getTimeInstance(MEDIUM);
 	} //}}}
 
 	//{{{ createPrintStream() method
@@ -354,7 +376,7 @@ public class Log
 	//{{{ _log() method
 	private static void _log(int urgency, String source, String message)
 	{
-		String fullMessage = '[' + urgencyToString(urgency) + "] " + source
+		String fullMessage = timeFormat.format(new Date()) + " [" + urgencyToString(urgency) + "] " + source
 			+ ": " + message;
 
 		try
@@ -413,6 +435,7 @@ public class Log
 	{
 		final List<ListDataListener> listeners = new ArrayList<ListDataListener>();
 
+		//{{{ fireIntervalAdded() method
 		private void fireIntervalAdded(int index1, int index2)
 		{
 			for(int i = 0; i < listeners.size(); i++)
@@ -422,8 +445,9 @@ public class Log
 					ListDataEvent.INTERVAL_ADDED,
 					index1,index2));
 			}
-		}
+		} //}}}
 
+		//{{{ fireIntervalRemoved() method
 		private void fireIntervalRemoved(int index1, int index2)
 		{
 			for(int i = 0; i < listeners.size(); i++)
@@ -433,18 +457,21 @@ public class Log
 					ListDataEvent.INTERVAL_REMOVED,
 					index1,index2));
 			}
-		}
+		} //}}}
 
+		//{{{ addListDataListener() method
 		public void addListDataListener(ListDataListener listener)
 		{
 			listeners.add(listener);
-		}
+		} //}}}
 
+		//{{{ removeListDataListener() method
 		public void removeListDataListener(ListDataListener listener)
 		{
 			listeners.remove(listener);
-		}
+		} //}}}
 
+		//{{{ getElementAt() method
 		public Object getElementAt(int index)
 		{
 			if(wrap)
@@ -456,16 +483,18 @@ public class Log
 			}
 			else
 				return log[index];
-		}
+		} //}}}
 
+		//{{{ getSize() method
 		public int getSize()
 		{
 			if(wrap)
 				return MAXLINES;
 			else
 				return logLineCount;
-		}
+		} //}}}
 
+		//{{{ update() method
 		void update(final int lineCount, final boolean oldWrap)
 		{
 			if(lineCount == 0 || listeners.isEmpty())
@@ -496,9 +525,10 @@ public class Log
 					}
 				}
 			});
-		}
+		} //}}}
 	} //}}}
 
+	//{{{ LogPrintStream class
 	/**
 	 * A print stream that uses the "Log" class to output the messages,
 	 * and has special treatment for the printf() function. Using this
@@ -510,13 +540,15 @@ public class Log
 		private final ByteArrayOutputStream buffer;
 		private final OutputStream orig;
 
+		//{{{ LogPrintStream constructor
 		LogPrintStream(int urgency, Object source)
 		{
 			super(new LogOutputStream(urgency, source));
 			buffer = new ByteArrayOutputStream();
 			orig = out;
-		}
+		} //}}}
 
+		//{{{ printf() method
 		/**
 		 * This is a hack to allow "printf" to not print weird
 		 * stuff to the output. Since "printf" doesn't seem to
@@ -551,32 +583,34 @@ public class Log
 				}
 			}
 			return this;
-		}
-	}
+		} //}}}
+	} //}}}
 
+	//{{{ LogOutputStream class
 	private static class LogOutputStream extends OutputStream
 	{
 		private final int 	urgency;
 		private final Object 	source;
 
+		//{{{ LogOutputStream constructor
 		LogOutputStream(int urgency, Object source)
 		{
 			this.urgency 	= urgency;
 			this.source 	= source;
-		}
+		} //}}}
 
+		//{{{ write() method
 		public synchronized void write(int b)
 		{
 			byte[] barray = { (byte)b };
 			write(barray,0,1);
-		}
+		} //}}}
 
+		//{{{ write() method
 		public synchronized void write(byte[] b, int off, int len)
 		{
 			String str = new String(b,off,len);
 			log(urgency,source,str);
-		}
-	}
-
+		} //}}}
+	} //}}}
 }
-
