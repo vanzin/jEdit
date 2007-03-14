@@ -22,8 +22,8 @@
 		<PROPERTY NAME="indentNextLines" VALUE="\s*[^#]{3,}:\s*(#.*)?" />
 		<PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
 		<PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
-		<PROPERTY NAME="unindentNextLines" VALUE="^\s*(pass|else\s*:|elif\s.*:)$" />
-		<PROPERTY NAME="unindentThisLine" VALUE="^\s*(else|elif\s*.*)\s*:" />
+		<PROPERTY NAME="unindentNextLines" VALUE="^\s*(pass|else\s*:|elif\s.*:|except\s*:|finally\s*:)$" />
+		<PROPERTY NAME="unindentThisLine" VALUE="^\s*(else|elif\s*.*|except|finally)\s*:" />
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="electricKeys" VALUE=":" />
 		<PROPERTY NAME="ignoreWhitespace" VALUE="false" />
