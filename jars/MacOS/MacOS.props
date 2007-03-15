@@ -27,6 +27,7 @@ MacOSPlugin.default.creator=1246057296
 MacOSPlugin.default.useScreenMenuBar=true
 MacOSPlugin.default.preserveCodes=true
 MacOSPlugin.default.useSelection=false
+MacOSPlugin.default.setTypeCreator=false
 
 #
 # Options dialog
@@ -37,6 +38,7 @@ options.MacOSPlugin.menubar.label=Enable Mac OS style menubar
 options.MacOSPlugin.preserve.label=Preserve existing file/creator codes on save
 options.MacOSPlugin.scripts.label=Script folder search depth:
 options.MacOSPlugin.useSelection.label=Use system highlight colour for Text Area
+options.MacOSPlugin.setTypeCreator.label=Save the file type/creator on save
 
 #
 # Error dialogs

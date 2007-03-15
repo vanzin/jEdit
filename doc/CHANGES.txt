@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
-Joseph Erickson, David Moss, Horst Eff and Daniel Hahler for
+Joseph Erickson, David Moss, Horst Eff, Daniel Hahler and Mike Gorski for
 contributing to this release.
 
 {{{ Bug Fixes
@@ -129,6 +129,9 @@ contributing to this release.
 
 - Added the time in Log._log() so that events and exceptions could easier be
   assigned to interactions. (Björn "Vampire" Kautler)
+
+- SF Patch #1469586: Allow setting Mac OS type and creator to be optional
+  Change to MacOS plugin. (Mike Gorski)
 
 }}}
 {{{ Editing

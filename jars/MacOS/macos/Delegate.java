@@ -1,4 +1,4 @@
-/* 
+/*
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -42,10 +42,10 @@ public class Delegate extends ApplicationAdapter
 {
 	//{{{ Variables
 	private final NSSelector actionSel = new NSSelector("doAction", new Class[] {});
-	
+
 	private List filenames = new LinkedList();
 	//}}}
-	
+
 	//{{{ Constructor
 	public Delegate()
 	{
@@ -56,9 +56,9 @@ public class Delegate extends ApplicationAdapter
 		else
 			System.setProperty("apple.laf.useScreenMenuBar","false");
 	} //}}}
-	
+
 	//{{{ Handlers
-	
+
 	//{{{ handleAbout() method
 	public void handleAbout(ApplicationEvent event)
 	{
@@ -70,41 +70,54 @@ public class Delegate extends ApplicationAdapter
 	public void handleFileCodes(BufferUpdate msg)
 	{
 		Buffer buffer = msg.getBuffer();
-		
-		// Set type/creator on save
-		if (!buffer.isDirty() && msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
+
+		if (jEdit.getBooleanProperty("MacOSPlugin.setTypeCreator",
+			jEdit.getBooleanProperty("MacOSPlugin.default.setTypeCreator")))
 		{
-			try {
-				FileManager.setFileTypeAndCreator(buffer.getPath(),
-					buffer.getIntegerProperty("MacOSPlugin.type",
-						jEdit.getIntegerProperty("MacOSPlugin.default.type",0)),
-					buffer.getIntegerProperty("MacOSPlugin.creator",
-						jEdit.getIntegerProperty("MacOSPlugin.default.creator",0)));
-			} catch (Exception e) {
-				// Fail silently, since we may be using UFS
-			}
-		}
-		// Add type/creator to local buffer property list on open
-		else if (msg.getWhat() == BufferUpdate.CREATED)
-		{			
-			if ("true".equals(
-				jEdit.getProperty("MacOSPlugin.preserveCodes")))
+			// Set type/creator on save
+			if (!buffer.isDirty() && msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 			{
 				try {
 					int type = FileManager.getFileType(buffer.getPath());
 					int creator = FileManager.getFileCreator(buffer.getPath());
-					
+
 					if (type != 0)
 						buffer.setIntegerProperty("MacOSPlugin.type",type);
 					if (creator != 0)
 						buffer.setIntegerProperty("MacOSPlugin.creator",creator);
+					FileManager.setFileTypeAndCreator(buffer.getPath(),
+						buffer.getIntegerProperty("MacOSPlugin.type",
+							jEdit.getIntegerProperty("MacOSPlugin.default.type",0)),
+						buffer.getIntegerProperty("MacOSPlugin.creator",
+							jEdit.getIntegerProperty("MacOSPlugin.default.creator",0)));
 				} catch (Exception e) {
 					// This will happen when a new file is created
+					// Fail silently, since we may be using UFS
+				}
+			}
+			// Add type/creator to local buffer property list on open
+			else if (msg.getWhat() == BufferUpdate.CREATED)
+			{
+				if (jEdit.getBooleanProperty("MacOSPlugin.preserveCodes",
+					jEdit.getBooleanProperty("MacOSPlugin.default.preserveCodes")))
+				{
+					try {
+						int type = FileManager.getFileType(buffer.getPath());
+						int creator = FileManager.getFileCreator(buffer.getPath());
+
+						if (type != 0)
+							buffer.setIntegerProperty("MacOSPlugin.type",type);
+						if (creator != 0)
+							buffer.setIntegerProperty("MacOSPlugin.creator",creator);
+					} catch (Exception e) {
+						// This will happen when a new file is created
+					}
 				}
 			}
 		}
+
 	} //}}}
-	
+
 	//{{{ handleOpenFile() method
 	public void handleOpenFile(ApplicationEvent event)
 	{
@@ -125,14 +138,14 @@ public class Delegate extends ApplicationAdapter
 			app.setServicesProvider(new Delegate());
 		}
 	} //}}}
-	
+
 	//{{{ handlePreferences() method
 	public void handlePreferences(ApplicationEvent event)
 	{
 		event.setHandled(true);
 		new GlobalOptions(jEdit.getActiveView());
 	} //}}}
-	
+
 	//{{{ handleQuit() method
 	/**
 	 * This never seems to be called when used with a delegate
@@ -144,9 +157,9 @@ public class Delegate extends ApplicationAdapter
 	//} //}}}
 
 	//}}}
-	
+
 	//{{{ Delegate methods
-	
+
 	//{{{ applicationDockMenu() method
 	public NSMenu applicationDockMenu(NSApplication sender)
 	{
@@ -158,23 +171,23 @@ public class Delegate extends ApplicationAdapter
 		NSMenuItem showCurrItem;
 		NSMenuItem showCurrDirItem;
 		NSMenuItem newViewItem;
-		
+
 		// Buffers
 		NSMenuItem miBuff = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.buffers.label"),null,"");
 		miBuff.setSubmenu(bufMenu = new BufferMenu());
-		
+
 		// Recent Buffers
 		NSMenuItem miRec = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.recent.label"),null,"");
 		miRec.setSubmenu(recMenu = new RecentMenu());
-		
+
 		// Recent Directories
 		NSMenuItem miDir = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.recentDir.label"),null,"");
 		miDir.setSubmenu(dirMenu = new RecentDirMenu());
-		
+
 		// Macros
 		NSMenuItem miMac = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.macros.label"),null,"");
 		miMac.setSubmenu(macMenu = new MacrosMenu());
-		
+
 		dockMenu = new NSMenu();
 		newViewItem = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.newView"),actionSel,"");
 		newViewItem.setTarget(new NewViewAction());
@@ -192,12 +205,12 @@ public class Delegate extends ApplicationAdapter
 		//dockMenu.addItem(miMac);
 		if (jEdit.getViewCount() == 0)
 			miMac.setEnabled(false);
-		
+
 		bufMenu.updateMenu();
 		recMenu.updateMenu();
 		dirMenu.updateMenu();
 		macMenu.updateMenu();
-		
+
 		View view = jEdit.getActiveView();
 		if (view != null)
 		{
@@ -213,10 +226,10 @@ public class Delegate extends ApplicationAdapter
 			showCurrItem.setEnabled(false);
 			showCurrDirItem.setEnabled(false);
 		}
-		
+
 		return dockMenu;
 	} //}}}
-	
+
 	//{{{ applicationOpenFiles() method
 	public void applicationOpenFiles(NSApplication sender, NSArray filenames)
 	{
@@ -225,22 +238,22 @@ public class Delegate extends ApplicationAdapter
 		{
 			File file = new File((String)filenames.objectAtIndex(i));
 			Buffer buffer;
-			
+
 			View view = jEdit.getActiveView();
 			if(view == null)
 				view = PerspectiveManager.loadPerspective(true);
-			
+
 			if (file.isDirectory())
 			{
 				VFSBrowser.browseDirectory(jEdit.getActiveView(),file.getPath());
 				return;
 			}
-			
+
 			if (jEdit.openFile(view,file.getPath()) == null)
 				Log.log(Log.ERROR,this,"Error opening file.");
 		}
 	} //}}}
-	
+
 	//{{{ applicationShouldHandleReopen() method
 	public boolean applicationShouldHandleReopen(NSApplication theApplication, boolean flag)
 	{
@@ -252,10 +265,10 @@ public class Delegate extends ApplicationAdapter
 					new NewViewAction().doAction();
 			}
 		});
-		
+
 		return false;
 	} //}}}
-	
+
 	//{{{ applicationShouldTerminate() method
 	public boolean applicationShouldTerminate(NSApplication sender)
 	{
@@ -269,17 +282,17 @@ public class Delegate extends ApplicationAdapter
 		return false;
 	}
 	//}}}
-	
+
 	//}}}
-	
+
 	//{{{ Services
-	
+
 	//{{{ openFile() method
 	public String openFile(NSPasteboard pboard, String userData)
 	{
 		if (jEdit.getViewCount() == 0)
 			return null;
-		
+
 		NSData data = pboard.dataForType("NSFilenamesPboardType");
 		String[] error = new String[1];
 		int[] format = new int[1];
@@ -296,10 +309,10 @@ public class Delegate extends ApplicationAdapter
 			else
 				jEdit.openFile(jEdit.getActiveView(),file.getPath());
 		}
-		
+
 		return null;
 	} //}}}
-	
+
 	//{{{ insertSelection() method
 	public String insertSelection(NSPasteboard pboard, String userData)
 	{
@@ -311,7 +324,7 @@ public class Delegate extends ApplicationAdapter
 		}
 		return null;
 	} //}}}
-	
+
 	//{{{ openSelection() method
 	public String openSelection(NSPasteboard pboard, String userData)
 	{
@@ -321,11 +334,11 @@ public class Delegate extends ApplicationAdapter
 		jEdit.newFile(jEdit.getActiveView()).insert(0,pboard.stringForType("NSStringPboardType"));
 		return null;
 	} //}}}
-	
+
 	//}}}
-	
+
 	//{{{ Dock Menu
-	
+
 	//{{{ BufferMenu class
 	class BufferMenu extends NSMenu
 	{
@@ -333,13 +346,13 @@ public class Delegate extends ApplicationAdapter
 		{
 			super();
 		}
-		
+
 		public void updateMenu()
 		{
 			NSMenuItem item;
 			for (int i=0; i<numberOfItems(); i++)
 				removeItemAtIndex(0);
-			
+
 			Buffer[] buffs = jEdit.getBuffers();
 			for (int i=0; i < buffs.length; i++)
 			{
@@ -354,7 +367,7 @@ public class Delegate extends ApplicationAdapter
 					addItem(item);
 				}
 			}
-			
+
 			if (numberOfItems() == 0)
 			{
 				item = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.buffers.none"),null,"");
@@ -363,7 +376,7 @@ public class Delegate extends ApplicationAdapter
 			}
 		}
 	} //}}}
-	
+
 	//{{{ MacrosMenu class
 	class MacrosMenu extends NSMenu
 	{
@@ -371,18 +384,18 @@ public class Delegate extends ApplicationAdapter
 		{
 			super();
 		}
-		
+
 		public void updateMenu()
 		{
 			Vector macroVector = Macros.getMacroHierarchy();
 			NSMenuItem item;
 			File file;
 			int max = macroVector.size();
-			
+
 			int length = numberOfItems();
 			for (int i=0; i<length; i++)
 				removeItemAtIndex(0);
-			
+
 			if (max == 0)
 			{
 				item = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.macros.none"),null,"");
@@ -390,10 +403,10 @@ public class Delegate extends ApplicationAdapter
 				addItem(item);
 				return;
 			}
-			
+
 			createMenu(this,macroVector);
 		}
-		
+
 		public void createMenu(NSMenu menu, Vector vector)
 		{
 			for(int i=0; i < vector.size(); i++)
@@ -422,7 +435,7 @@ public class Delegate extends ApplicationAdapter
 			}
 		}
 	} //}}}
-	
+
 	//{{{ RecentMenu class
 	class RecentMenu extends NSMenu
 	{
@@ -430,7 +443,7 @@ public class Delegate extends ApplicationAdapter
 		{
 			super();
 		}
-		
+
 		public void updateMenu()
 		{
 			List recent = BufferHistory.getHistory();
@@ -438,11 +451,11 @@ public class Delegate extends ApplicationAdapter
 			File file;
 			int max = recent.size();
 			int min = max - 20;
-			
+
 			int length = numberOfItems();
 			for (int i=0; i<length; i++)
 				removeItemAtIndex(0);
-			
+
 			if (max == 0)
 			{
 				item = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.recent.none"),null,"");
@@ -450,10 +463,10 @@ public class Delegate extends ApplicationAdapter
 				addItem(item);
 				return;
 			}
-			
+
 			if (min < 0)
 				min = 0;
-			
+
 			for (int i=max-1; i >= min ; i--)
 			{
 				file = new File(((BufferHistory.Entry)recent.get(i)).path);
@@ -465,7 +478,7 @@ public class Delegate extends ApplicationAdapter
 			}
 		}
 	} //}}}
-	
+
 	//{{{ RecentDirMenu class
 	class RecentDirMenu extends NSMenu
 	{
@@ -473,18 +486,18 @@ public class Delegate extends ApplicationAdapter
 		{
 			super();
 		}
-		
+
 		public void updateMenu()
 		{
 			HistoryModel model = HistoryModel.getModel("vfs.browser.path");
 			NSMenuItem item;
 			File file;
 			int max = model.getSize();
-			
+
 			int length = numberOfItems();
 			for (int i=0; i<length; i++)
 				removeItemAtIndex(0);
-			
+
 			if (max == 0)
 			{
 				item = new NSMenuItem(jEdit.getProperty("MacOSPlugin.menu.recentDir.none"),null,"");
@@ -492,7 +505,7 @@ public class Delegate extends ApplicationAdapter
 				addItem(item);
 				return;
 			}
-			
+
 			for (int i=0; i < max ; i++)
 			{
 				file = new File(model.getItem(i));
@@ -504,23 +517,23 @@ public class Delegate extends ApplicationAdapter
 			}
 		}
 	} //}}}
-	
+
 	//{{{ MacroAction class
 	class MacroAction
 	{
 		private Macros.Macro macro;
-		
+
 		public MacroAction(Macros.Macro macro)
 		{
 			this.macro = macro;
 		}
-		
+
 		public void doAction()
 		{
 			macro.invoke(jEdit.getActiveView());
 		}
 	} //}}}
-	
+
 	//{{{ NewViewAction class
 	class NewViewAction
 	{
@@ -538,22 +551,22 @@ public class Delegate extends ApplicationAdapter
 			});
 		}
 	} //}}}
-	
+
 	//{{{ ShowFileAction class
 	class ShowFileAction
 	{
 		private String path;
-		
+
 		public ShowFileAction(String path)
 		{
 			this.path = path;
 		}
-		
+
 		public void doAction()
 		{
 			MacOSActions.showInFinder(path);
 		}
 	} //}}}
-	
+
 	//}}}
 }
