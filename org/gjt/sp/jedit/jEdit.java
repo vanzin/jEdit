@@ -1464,16 +1464,16 @@ public class jEdit
 
 		try {
 			URL u = new URL(path);
-			if (u.getProtocol().equals("file")) 
+			if (u.getProtocol().equals("file"))
 				path = URLDecoder.decode(u.getPath(), view.getBuffer().getProperty("encoding").toString());
 		}
 		catch (MalformedURLException mue) {
-			path = MiscUtilities.constructPath(parent,path);	
+			path = MiscUtilities.constructPath(parent,path);
 		}
 		catch (UnsupportedEncodingException uee) {
 			Log.log(Log.ERROR, jEdit.class, "can't decode URL:" + path, uee);
 		}
-		
+
 
 		Buffer newBuffer;
 
@@ -2803,6 +2803,17 @@ public class jEdit
 		jEdit.activeView = view;
 	} //}}}
 
+	//{{{ getActiveViewInternal() method
+	/**
+	 * Returns the internal active view, which might be null.
+	 *
+	 * @since 4.3pre10
+	 */
+	public static View getActiveViewInternal()
+	{
+		return activeView;
+	} //}}}
+
 	//}}}
 
 	//{{{ Private members
@@ -4009,7 +4020,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				}
 
 				result = super.postProcessKeyEvent(evt);
-				
+
 				return result;
 			} else {
 				if(!evt.isConsumed())
@@ -4017,7 +4028,7 @@ loop:		for(int i = 0; i < list.length; i++)
 					Component comp = (Component)evt.getSource();
 					if(!comp.isShowing())
 						return true;
-	
+
 					for(;;)
 					{
 						if(comp instanceof View)
@@ -4040,7 +4051,7 @@ loop:		for(int i = 0; i < list.length; i++)
 							comp = comp.getParent();
 					}
 				}
-	
+
 				return super.postProcessKeyEvent(evt);
 			}
 		}

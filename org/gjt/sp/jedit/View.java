@@ -1648,7 +1648,7 @@ loop:		while (true)
 		public void windowActivated(WindowEvent evt)
 		{
 			boolean editPaneChanged =
-				jEdit.getActiveView() != View.this;
+				jEdit.getActiveViewInternal() != View.this;
 			jEdit.setActiveView(View.this);
 
 			// People have reported hangs with JDK 1.4; might be

@@ -90,6 +90,9 @@ contributing to this release.
   its parent and so the parents got overridden and was not able to
   escape the delegates end sequence. (bug #1630805) (Björn "Vampire" Kautler)
 
+- Correctly send a ViewUpdate.ACTIVATED message when the user closes a view
+  and focuses the first opened view. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 
