@@ -143,6 +143,8 @@ contributing to this release.
   the invisible caret hits page boundaries. Additionally the history remembers
   the vertical scroll position now. (Björn "Vampire" Kautler)
 
+- Pressing "escape" key in the HistoryTextField selects all (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
