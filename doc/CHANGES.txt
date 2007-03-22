@@ -136,6 +136,13 @@ contributing to this release.
 - SF Patch #1469586: Allow setting Mac OS type and creator to be optional
   Change to MacOS plugin. (Mike Gorski)
 
+- Some HelpViewer usability fixes. Now only one node is selectable in the TOC,
+  Enter key opens the selected topic, on topic changing the focus travels to
+  the JEditorPane and the arrow keys can be used to scroll horizontally and
+  vertically instead of moving the invisible caret which scrolls only when
+  the invisible caret hits page boundaries. Additionally the history remembers
+  the vertical scroll position now. (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 

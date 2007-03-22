@@ -48,25 +48,20 @@ public class HistoryButton extends JPanel implements ActionListener
 	private RolloverButton drop_button;
 	private JPopupMenu historyList;
 	private ActionListener arrowActionListener;
-	//}}}	
-	
-	//{{{ HistoryButton
+	//}}}
+
+	//{{{ HistoryButton constructor
 	public HistoryButton(int type, HelpHistoryModel model)
 	{
 		super();
 		arrow_button = new RolloverButton(GUIUtilities.loadIcon(
-			jEdit.getProperty(
-				(type==BACK?
-					"helpviewer.back.icon"
-					:
-					"helpviewer.forward.icon"
-					))));
+			jEdit.getProperty(type==BACK
+						? "helpviewer.back.icon"
+						: "helpviewer.forward.icon")));
 		arrow_button.setToolTipText(
-			jEdit.getProperty((type==BACK?
-				"helpviewer.back.label"
-				:
-				"helpviewer.forward.label"
-				)));
+			jEdit.getProperty(type==BACK
+						? "helpviewer.back.label"
+						: "helpviewer.forward.label"));
 		Box box = new Box(BoxLayout.X_AXIS);
 		drop_button = new RolloverButton(GUIUtilities.loadIcon("ToolbarMenu.gif"));
 		drop_button.addActionListener(new DropActionHandler());
@@ -76,29 +71,29 @@ public class HistoryButton extends JPanel implements ActionListener
 			drop_button.getPreferredSize().width +
 			arrow_button.getPreferredSize().width +
 			5,
-			arrow_button.getPreferredSize().height+10)
+			arrow_button.getPreferredSize().height + 10)
 			);
 		this.add(box);
 		this.type = type;
 		this.history = model;
 	} //}}}
-	
-	//{{{ setEnabled
+
+	//{{{ setEnabled() method
 	public void setEnabled(boolean state)
 	{
 		super.setEnabled(state);
 		drop_button.setEnabled(state);
 		arrow_button.setEnabled(state);
 	} //}}}
-	
-	//{{{ addActionListener
+
+	//{{{ addActionListener() method
 	public void addActionListener(ActionListener al)
 	{
 		arrow_button.addActionListener(this);
 		arrowActionListener = al;
 	} //}}}
-	
-	//{{{ actionPerformed
+
+	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent evt)
 	{
 		arrowActionListener.actionPerformed(
@@ -110,68 +105,78 @@ public class HistoryButton extends JPanel implements ActionListener
 				)
 			);
 	} //}}}
-	
-	//{{{ getParentHistoryButton
+
+	//{{{ getParentHistoryButton() method
 	private HistoryButton getParentHistoryButton()
 	{
 		return this;
 	} //}}}
-	
+
 	//{{{ Inner Classes
-	
-	//{{{ DropActionHandler
+
+	//{{{ DropActionHandler class
 	class DropActionHandler implements ActionListener
 	{
-		//{{{ actionPerformed
+		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent evt)
 		{
 			historyList = new JPopupMenu();
 			HelpHistoryModel.HistoryEntry[] urls;
 			if (type == BACK)
+			{
 				urls = history.getPreviousURLs();
+			}
 			else
+			{
 				urls = history.getNextURLs();
+			}
 			if (urls != null)
 			{
-				if (type==BACK) {				
-					for (int i=urls.length-1;i>=0;i--)
-						if (urls[i]!=null)
+				if (type == BACK) {
+					for (int i=urls.length-1 ; i>=0 ; i--)
+					{
+						if (urls[i] != null)
+						{
 							historyList.add(new HistoryListActionHandler(urls[i]));
+						}
+					}
 				}
 				else
-				{					
-					for (int i=0;i<urls.length;i++)
-						if (urls[i]!=null)
+				{
+					for (int i=0 ; i<urls.length ; i++)
+					{
+						if (urls[i] != null)
+						{
 							historyList.add(new HistoryListActionHandler(urls[i]));
+						}
+					}
 				}
 
-					
 				historyList.show((JComponent)evt.getSource(),0,0);
 			}
 		} //}}}
 	} //}}}
-	
-	//{{{ HistoryListActionHandler
+
+	//{{{ HistoryListActionHandler class
 	class HistoryListActionHandler extends AbstractAction
 	{
 		HelpHistoryModel.HistoryEntry entry;
-		
-		//{{{ HistoryListActionHandler
+
+		//{{{ HistoryListActionHandler constructor
 		HistoryListActionHandler(HelpHistoryModel.HistoryEntry entry)
 		{
 			super(entry.title);
 			this.entry = entry;
-			this.putValue(Action.ACTION_COMMAND_KEY,entry.url);
+			this.putValue(Action.ACTION_COMMAND_KEY,entry.url + ':' + entry.scrollPosition);
 		} //}}}
-		
-		//{{{ actionPerformed
+
+		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent ae)
 		{
-			history.setCurrentEntry(entry);
 			getParentHistoryButton().actionPerformed(ae);
+			history.setCurrentEntry(entry);
 		} //}}}
 	} //}}}
 
 	//}}}
 }
-

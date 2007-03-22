@@ -41,6 +41,8 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
+
+import static javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION;
 //}}}
 
 public class HelpTOCPanel extends JPanel
@@ -312,6 +314,7 @@ public class HelpTOCPanel extends JPanel
 		TOCTree()
 		{
 			ToolTipManager.sharedInstance().registerComponent(this);
+			selectionModel.setSelectionMode(SINGLE_TREE_SELECTION);
 		} //}}}
 
 		//{{{ getToolTipText() method
@@ -341,6 +344,35 @@ public class HelpTOCPanel extends JPanel
 			}
 			return null;
 		} */ //}}}
+
+		//{{{ processKeyEvent() method
+		public void processKeyEvent(KeyEvent evt)
+		{
+			if ((KeyEvent.KEY_PRESSED == evt.getID()) &&
+			    (KeyEvent.VK_ENTER == evt.getKeyCode()))
+			{
+				TreePath path = getSelectionPath();
+				if(path != null)
+				{
+					Object obj = ((DefaultMutableTreeNode)
+						path.getLastPathComponent())
+						.getUserObject();
+					if(!(obj instanceof HelpNode))
+					{
+						this.expandPath(path);
+						return;
+					}
+
+					HelpNode node = (HelpNode)obj;
+					helpViewer.gotoURL(node.href,true,0);
+				}
+				evt.consume();
+			}
+			else
+			{
+				super.processKeyEvent(evt);
+			}
+		} //}}}
 
 		//{{{ processMouseEvent() method
 		protected void processMouseEvent(MouseEvent evt)
