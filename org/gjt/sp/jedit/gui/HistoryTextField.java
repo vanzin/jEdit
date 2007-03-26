@@ -284,10 +284,6 @@ public class HistoryTextField extends JTextField
 					evt.consume();
 				}
 				break;
-			case KeyEvent.VK_ESCAPE:
-				selectAll();
-				evt.consume();
-				break;
 			}
 		}
 
