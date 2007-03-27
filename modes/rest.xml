@@ -82,7 +82,7 @@
 		>\[#[A-z0-9_]*\]_</SEQ_REGEXP>
 
 		<!-- footnote reference: [*]_ -->
-		<SEQ TYPE="LABEL">[*]_</SEQ_REGEXP>
+		<SEQ TYPE="LABEL">[*]_</SEQ>
 
 		<!-- citation reference: [foo]_ -->
 		<SEQ_REGEXP
