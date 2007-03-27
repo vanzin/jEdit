@@ -96,6 +96,9 @@
 <MODE NAME="css"		FILE="css.xml"
 				FILE_NAME_GLOB="*.css" />
 
+<MODE NAME="csv" 		FILE="csv.xml"
+				FILE_NAME_GLOB="*.csv" />
+
 <MODE NAME="cvs-commit"		FILE="cvs-commit.xml"
 				FILE_NAME_GLOB="cvs*.tmp"/>
 
