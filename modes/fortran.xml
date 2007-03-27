@@ -2,8 +2,7 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 <!--  FORTRAN edit mode
-      Version 1.1
-      April 21, 2002
+      Version $Id$
 -->
 <!-- This is a mode for FORTRAN source files.  In general, this supports
 common features of the F90 specification.  This may however contain some
@@ -16,10 +15,13 @@ platform or vendor specific keywords (in paticular COMPAQ(Digital) FORTRAN).
  -->
 <MODE>
     <PROPS>
-         <PROPERTY NAME="blockComment" VALUE="C" />
+         <!-- To get the line comment inserted correctly at line start:
+              use the "toggle-line-comment"-action of TextTools plugin 
+              with the active option "Insert line comments at start of line" -->
+         <PROPERTY NAME="lineComment"    VALUE="C" />
+         
          <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
-	 <PROPERTY NAME="indentNextLine"
-			VALUE="\s*((if\s*\(.*\)\s*then|else\s*|do\s*)*)" />
+         <PROPERTY NAME="indentNextLine" VALUE="\s*((if\s*\(.*\)\s*then|else\s*|do\s*)*)" />
     </PROPS>
 
     <RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
