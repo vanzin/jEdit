@@ -201,6 +201,9 @@ contributing to this release.
 }}}
 {{{ API Changes
 
+- ReadWriteLock in org.gjt.sp.util is deprecated in favor
+  of java.util.concurrent.locks.ReentrantReadWriteLock (1687268 - Kazutoshi Satoda).
+
 - VFS.isMarkersFileSupported() added to give a VFS the chance to tell
   jEdit that no markers file should be saved or loaded to/from this VFS.
   (Björn "Vampire" Kautler)

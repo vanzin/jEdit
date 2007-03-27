@@ -24,20 +24,38 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import javax.swing.*;
-import javax.swing.text.*;
 import java.awt.Toolkit;
-import java.lang.reflect.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
-import org.gjt.sp.jedit.jEdit;
+
+import javax.swing.SwingUtilities;
+import javax.swing.text.Position;
+import javax.swing.text.Segment;
+
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.indent.*;
-import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.util.*;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.indent.IndentAction;
+import org.gjt.sp.jedit.indent.IndentRule;
+import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
+import org.gjt.sp.jedit.syntax.DummyTokenHandler;
+import org.gjt.sp.jedit.syntax.KeywordMap;
+import org.gjt.sp.jedit.syntax.ParserRuleSet;
+import org.gjt.sp.jedit.syntax.Token;
+import org.gjt.sp.jedit.syntax.TokenHandler;
+import org.gjt.sp.jedit.syntax.TokenMarker;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.util.IntegerArray;
+import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -78,7 +96,7 @@ public class JEditBuffer
 	public JEditBuffer(Map props)
 	{
 		bufferListeners = new Vector<Listener>();
-		lock = new ReadWriteLock();
+		lock = new ReentrantReadWriteLock();
 		contentMgr = new ContentManager();
 		lineMgr = new LineManager();
 		positionMgr = new PositionManager(this);
@@ -107,7 +125,7 @@ public class JEditBuffer
 	public JEditBuffer()
 	{
 		bufferListeners = new Vector<Listener>();
-		lock = new ReadWriteLock();
+		lock = new ReentrantReadWriteLock();
 		contentMgr = new ContentManager();
 		lineMgr = new LineManager();
 		positionMgr = new PositionManager(this);
@@ -250,7 +268,7 @@ public class JEditBuffer
 	 */
 	public void readLock()
 	{
-		lock.readLock();
+		lock.readLock().lock();
 	} //}}}
 
 	//{{{ readUnlock() method
@@ -260,7 +278,7 @@ public class JEditBuffer
 	 */
 	public void readUnlock()
 	{
-		lock.readUnlock();
+		lock.readLock().unlock();
 	} //}}}
 
 	//{{{ writeLock() method
@@ -270,7 +288,7 @@ public class JEditBuffer
 	 */
 	public void writeLock()
 	{
-		lock.writeLock();
+		lock.writeLock().lock();
 	} //}}}
 
 	//{{{ writeUnlock() method
@@ -280,7 +298,7 @@ public class JEditBuffer
 	 */
 	public void writeUnlock()
 	{
-		lock.writeUnlock();
+		lock.writeLock().unlock();
 	} //}}}
 
 	//}}}
@@ -2337,7 +2355,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Private members
 	private List<Listener> bufferListeners;
-	private ReadWriteLock lock;
+	private final ReentrantReadWriteLock lock;
 	private ContentManager contentMgr;
 	private LineManager lineMgr;
 	private PositionManager positionMgr;
