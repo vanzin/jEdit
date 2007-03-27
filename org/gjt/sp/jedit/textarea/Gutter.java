@@ -693,9 +693,7 @@ public class Gutter extends JComponent implements SwingConstants
 			{
 				gfx.setColor(currentLineHighlight);
 			}
-			else if (interval > 1 && (line
-				+ textArea.getFirstLine() + 1)
-				% interval == 0)
+			else if (interval > 1 && (physicalLine + 1) % interval == 0)
 				gfx.setColor(intervalHighlight);
 			else
 				gfx.setColor(getForeground());
