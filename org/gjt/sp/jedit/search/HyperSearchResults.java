@@ -340,11 +340,11 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		MutableTreeNode value = (MutableTreeNode)path
 			.getLastPathComponent();
 
-		// Adjust selection so that repeating some removals
-		// behave naturally.
-		TreePath parentPath = path.getParentPath();
-		if(parentPath.getPathCount() > 0)
+		if(path.getPathCount() > 1)
 		{
+			// Adjust selection so that repeating some removals
+			// behave naturally.
+			TreePath parentPath = path.getParentPath();
 			MutableTreeNode parent = (MutableTreeNode)parentPath
 				.getLastPathComponent();
 			int removingIndex = parent.getIndex(value);
@@ -359,10 +359,11 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			{
 				resultTree.setSelectionPath(parentPath);
 			}
+
+			resultTreeModel.removeNodeFromParent(value);
 		}
 
 		HyperSearchOperationNode.removeNodeFromCache(value);
-		resultTreeModel.removeNodeFromParent(value);
 	} //}}}
 
 	//}}}
