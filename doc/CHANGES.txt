@@ -22,6 +22,9 @@ contributing to this release.
 
 - HyperSearch Results does not lose focus on enter (Bug 1260023,
   Patch 1646058) (Kazutoshi Satoda)
+  
+- Use encoding in buffer histories for temporary buffers (Patch
+  1687284) (Kazutoshi Satoda)
 
 - In the logviewer if the tail checkbox is on,
   the last line was not visible after resizing the panel

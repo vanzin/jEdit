@@ -1475,6 +1475,10 @@ public class jEdit
 		}
 
 
+		if(props == null)
+			props = new Hashtable();
+		composeBufferPropsFromHistory(props, path);
+
 		Buffer newBuffer;
 
 		synchronized (editBusOrderingLock)
@@ -1488,28 +1492,6 @@ public class jEdit
 						view.setBuffer(buffer);
 
 					return buffer;
-				}
-
-				if(props == null)
-					props = new Hashtable();
-
-				BufferHistory.Entry entry = BufferHistory.getEntry(path);
-
-				if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
-				{
-					props.put(Buffer.CARET, entry.caret);
-					/* if(entry.selection != null)
-					{
-						// getSelection() converts from string to
-						// Selection[]
-						props.put(Buffer.SELECTION,entry.getSelection());
-					} */
-				}
-
-				if(entry != null && props.get(JEditBuffer.ENCODING) == null)
-				{
-					if(entry.encoding != null)
-						props.put(JEditBuffer.ENCODING,entry.encoding);
 				}
 
 				newBuffer = new Buffer(path,newFile,false,props);
@@ -1545,6 +1527,26 @@ public class jEdit
 	public static Buffer openTemporary(View view, String parent,
 		String path, boolean newFile)
 	{
+		return openTemporary(view, parent, path, newFile, null);
+	} //}}}
+
+	//{{{ openTemporary() method
+	/**
+	 * Opens a temporary buffer. A temporary buffer is like a normal
+	 * buffer, except that an event is not fired, the the buffer is
+	 * not added to the buffers list.
+	 *
+	 * @param view The view to open the file in
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param newFile True if the file should not be loaded from disk
+	 * @param props Buffer-local properties to set in the buffer
+	 *
+	 * @since jEdit 4.3pre10
+	 */
+	public static Buffer openTemporary(View view, String parent,
+		String path, boolean newFile, Hashtable props)
+	{
 		if(view != null && parent == null)
 			parent = view.getBuffer().getDirectory();
 
@@ -1556,13 +1558,17 @@ public class jEdit
 
 		path = MiscUtilities.constructPath(parent,path);
 
+		if(props == null)
+			props = new Hashtable();
+		composeBufferPropsFromHistory(props, path);
+
 		synchronized(bufferListLock)
 		{
 			Buffer buffer = getBuffer(path);
 			if(buffer != null)
 				return buffer;
 
-			buffer = new Buffer(path,newFile,true,new Hashtable());
+			buffer = new Buffer(path,newFile,true,props);
 			if(!buffer.load(view,false))
 				return null;
 			else
@@ -3952,6 +3958,34 @@ loop:		for(int i = 0; i < list.length; i++)
 		for(int i = 0; i < actionSets.length; i++)
 		{
 			actionSets[i].initKeyBindings();
+		}
+	} //}}}
+
+	//{{{ composeBufferPropsFromHistory() method
+	/**
+	 * Compose buffer-local properties which can be got from history.
+	 * @since 4.3pre10
+	 */
+	private static void composeBufferPropsFromHistory(Hashtable props,
+		String path)
+	{
+		BufferHistory.Entry entry = BufferHistory.getEntry(path);
+
+		if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
+		{
+			props.put(Buffer.CARET, entry.caret);
+			/* if(entry.selection != null)
+			{
+				// getSelection() converts from string to
+				// Selection[]
+				props.put(Buffer.SELECTION,entry.getSelection());
+			} */
+		}
+
+		if(entry != null && props.get(JEditBuffer.ENCODING) == null)
+		{
+			if(entry.encoding != null)
+				props.put(JEditBuffer.ENCODING,entry.encoding);
 		}
 	} //}}}
 
