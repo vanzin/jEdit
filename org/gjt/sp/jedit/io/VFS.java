@@ -1106,8 +1106,19 @@ public abstract class VFS
 			}
 			else // It's a regular file
 			{
-				if (skipBinary && file.isBinary(session))
-					continue;
+				if (skipBinary)
+				{
+					try
+					{
+						if (file.isBinary(session))
+							continue;
+					}
+					catch(IOException e)
+					{
+						Log.log(Log.ERROR,this,e);
+						// may be not binary...
+					}
+				}
 
 				Log.log(Log.DEBUG,this,file.getPath());
 				files.add(file.getPath());

@@ -21,4 +21,22 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.buffer.FoldHandler" NAME="none">
 		new DummyFoldHandler();
 	</SERVICE>
+
+	<!-- Extended encodings -->
+	<!-- Not supported by Java -->
+	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="UTF-8Y">
+		new EncodingWithBOM("UTF-8");
+	</SERVICE>
+	<!-- Supported by Java SE 6.
+		The followings are workarounds (and used only) for older
+		environments. -->
+	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="x-UTF-16LE-BOM">
+		new EncodingWithBOM("UTF-16LE");
+	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="X-UTF-32LE-BOM">
+		new EncodingWithBOM("UTF-32LE");
+	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="X-UTF-32BE-BOM">
+		new EncodingWithBOM("UTF-32BE");
+	</SERVICE>
 </SERVICES>

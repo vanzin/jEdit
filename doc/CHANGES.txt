@@ -23,6 +23,8 @@ contributing to this release.
 - HyperSearch Results does not lose focus on enter (Bug 1260023,
   Patch 1646058) (Kazutoshi Satoda)
   
+- Improved handling of file encoding (patch 1687684) (Kazutoshi Satoda)
+  
 - Use encoding in buffer histories for temporary buffers (Patch
   1687284) (Kazutoshi Satoda)
 

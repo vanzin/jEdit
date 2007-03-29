@@ -28,11 +28,9 @@ import java.io.CharConversionException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
 
 import javax.swing.text.Segment;
 
@@ -42,6 +40,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.EncodingServer;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.SegmentBuffer;
 import org.gjt.sp.util.WorkRequest;
@@ -55,17 +54,12 @@ import org.gjt.sp.util.WorkRequest;
 public abstract class BufferIORequest extends WorkRequest
 {
 	//{{{ Constants
-	public static final int UTF8_MAGIC_1 = 0xef;
-	public static final int UTF8_MAGIC_2 = 0xbb;
-	public static final int UTF8_MAGIC_3 = 0xbf;
 
 	/**
-	 * Magic numbers used for auto-detecting Unicode and GZIP files.
+	 * Magic numbers used for auto-detecting GZIP files.
 	 */
 	public static final int GZIP_MAGIC_1 = 0x1f;
 	public static final int GZIP_MAGIC_2 = 0x8b;
-	public static final int UNICODE_MAGIC_1 = 0xfe;
-	public static final int UNICODE_MAGIC_2 = 0xff;
 
 	/**
 	 * Length of longest XML PI used for encoding detection.<p>
@@ -92,11 +86,13 @@ public abstract class BufferIORequest extends WorkRequest
 	 */
 	public static final String ERROR_OCCURRED = "BufferIORequest__error";
 
-	/**
-	 * BOM to use when saving a UTF-16 file. Used internally *only*.
-	 * @since 4.3pre10
-	 */
-	public static final String BOM_PROP = "BufferIORequest__utf16bom";
+	// These are no longer used but still here only for compatibility.
+	@Deprecated public static final int UTF8_MAGIC_1 = 0xef;
+	@Deprecated public static final int UTF8_MAGIC_2 = 0xbb;
+	@Deprecated public static final int UTF8_MAGIC_3 = 0xbf;
+	@Deprecated public static final int UNICODE_MAGIC_1 = 0xfe;
+	@Deprecated public static final int UNICODE_MAGIC_2 = 0xff;
+
 	//}}}
 
 	//{{{ Instance variables
@@ -367,31 +363,9 @@ public abstract class BufferIORequest extends WorkRequest
 	protected void write(Buffer buffer, OutputStream out)
 		throws IOException
 	{
-		out = new BufferedOutputStream(out, getByteIOBufferSize());
-		String encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
-		if(encoding.equals(MiscUtilities.UTF_8_Y))
-		{
-			// not supported by Java...
-			out.write(UTF8_MAGIC_1);
-			out.write(UTF8_MAGIC_2);
-			out.write(UTF8_MAGIC_3);
-			encoding = "UTF-8";
-		}
-		else if (encoding.equals("UTF-16"))
-		{
-			UTF_BOM bom = (UTF_BOM) buffer.getProperty(BOM_PROP);
-			if (bom != null)
-			{
-				bom.writeTo(out);
-				encoding = bom.getEncoding();
-			}
-		}
-		// Pass the encoder explicitly to report a encode error
-		// as an exception.
-		// The form "OutputStreamWriter(..., encoding)" seemed
-		// to use CodingErrorAction.REPLACE internally.
-		Writer writer = new OutputStreamWriter(out
-			, Charset.forName(encoding).newEncoder());
+		Writer writer = EncodingServer.getTextWriter(
+			new BufferedOutputStream(out, getByteIOBufferSize()),
+			buffer.getStringProperty(JEditBuffer.ENCODING));
 
 		Segment lineSegment = new Segment();
 		String newline = buffer.getStringProperty(JEditBuffer.LINESEP);
@@ -431,44 +405,6 @@ public abstract class BufferIORequest extends WorkRequest
 		}
 		writer.flush();
 	} //}}}
-
-	/**
-	 * The BOM used to mark a UTF-16 file.
-	 *
-	 * @since jEdit 4.3pre10
-	 */
-	public enum UTF_BOM {
-		LE {
-			public void writeTo(OutputStream out) throws IOException
-			{
-				out.write(UNICODE_MAGIC_2);
-				out.write(UNICODE_MAGIC_1);
-			}
-
-			public String getEncoding()
-			{
-				return "UTF-16LE";
-			}
-		},
-
-		BE {
-			public void writeTo(OutputStream out) throws IOException
-			{
-				out.write(UNICODE_MAGIC_1);
-				out.write(UNICODE_MAGIC_2);
-			}
-
-			public String getEncoding()
-			{
-				return "UTF-16BE";
-			}
-		};
-
-		public abstract void writeTo(OutputStream out) throws IOException;
-		public abstract String getEncoding();
-
-	}
-
 	//}}}
 
 }

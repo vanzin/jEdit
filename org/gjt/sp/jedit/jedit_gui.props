@@ -1050,9 +1050,10 @@ ioerror.directory-error=Cannot list directory: {0}
 ioerror.directory-error-nomsg=Cannot list directory.
 ioerror.encoding-error=Cannot load with "{0}" encoding.\n\
 	({1})\n\
-	Try disabling selecting a different encoding and\n\
-	disabling auto-detection in the Commands menu\n\
-	of the file system browser.
+	Try selecting a different encoding. It can be selected\n\
+	- with the File->Reload with Encoding menu.\n\
+	- in the Commands menu of the file system browser.\n\
+	- in the Utilities->Buffer Options dialog.
 ioerror.read-error=Cannot load: {0}
 ioerror.write-error=Cannot save: {0}
 ioerror.unsupported-encoding-error={0} charset is not supported by your JVM

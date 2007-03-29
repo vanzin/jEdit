@@ -48,7 +48,6 @@ import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}
 
 /**
@@ -91,8 +90,11 @@ public class MiscUtilities
 	/**
 	 * This encoding is not supported by Java, yet it is useful.
 	 * A UTF-8 file that begins with 0xEFBBBF.
+	 * @deprecated
+	 *   Extended encodings are now supported as services.
+	 *   This value is no longer used.
 	 */
-	public static final String UTF_8_Y = "UTF-8Y";
+	@Deprecated public static final String UTF_8_Y = "UTF-8Y";
 
 	//{{{ Path name methods
 
@@ -764,18 +766,14 @@ public class MiscUtilities
 		if (buffer == null)
 			encoding = System.getProperty("file.encoding");
 		else
-			encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
+			encoding = buffer.getStringProperty(Buffer.ENCODING);
 
-		if(!in.markSupported())
-			Log.log(Log.WARNING,MiscUtilities.class,"Mark not supported: " + in);
-		else if(buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
+		if(buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
 		{
 			in.mark(BufferIORequest.XML_PI_LENGTH);
-			int b1 = in.read();
-			int b2 = in.read();
-			int b3 = in.read();
 
-			if(b1 == BufferIORequest.GZIP_MAGIC_1 && b2 == BufferIORequest.GZIP_MAGIC_2)
+			if(in.read() == BufferIORequest.GZIP_MAGIC_1
+				&& in.read() == BufferIORequest.GZIP_MAGIC_2)
 			{
 				in.reset();
 				Log.log(Log.DEBUG, MiscUtilities.class, "Stream is Gzipped");
@@ -785,46 +783,16 @@ public class MiscUtilities
 				// auto-detect encoding within the gzip stream.
 				return autodetect(in, buffer);
 			}
-			else if (b1 == BufferIORequest.UNICODE_MAGIC_1
-				&& b2 == BufferIORequest.UNICODE_MAGIC_2)
-			{
-				in.reset();
-				in.read();
-				in.read();
-				encoding = "UTF-16";
-				if (buffer != null)
-				{
-					buffer.setProperty(JEditBuffer.ENCODING,encoding);
-					buffer.setProperty(BufferIORequest.BOM_PROP,BufferIORequest.UTF_BOM.BE);
-				}
-			}
-			else if (b1 == BufferIORequest.UNICODE_MAGIC_2
-				&& b2 == BufferIORequest.UNICODE_MAGIC_1)
-			{
-				in.reset();
-				in.read();
-				in.read();
-				encoding = "UTF-16";
-				if (buffer != null)
-				{
-					buffer.setProperty(JEditBuffer.ENCODING,encoding);
-					buffer.setProperty(BufferIORequest.BOM_PROP,BufferIORequest.UTF_BOM.LE);
-				}
-			}
-			else if(b1 == BufferIORequest.UTF8_MAGIC_1 && b2 == BufferIORequest.UTF8_MAGIC_2
-				&& b3 == BufferIORequest.UTF8_MAGIC_3)
-			{
-				// do not reset the stream and just treat it
-				// like a normal UTF-8 file.
-				if (buffer != null)
-					buffer.setProperty(JEditBuffer.ENCODING, MiscUtilities.UTF_8_Y);
 
-				encoding = "UTF-8";
+			in.reset();
+			String detectedByBOM = EncodingWithBOM.detectEncoding(in);
+			if (detectedByBOM != null)
+			{
+				encoding = detectedByBOM;
 			}
 			else
 			{
 				in.reset();
-
 				byte[] _xmlPI = new byte[BufferIORequest.XML_PI_LENGTH];
 				int offset = 0;
 				int count;
@@ -853,18 +821,19 @@ public class MiscUtilities
 				else
 				{
 					encoding = xmlEncoding;
-					if (buffer != null)
-						buffer.setProperty(JEditBuffer.ENCODING,encoding);
 				}
-
-				if(encoding.equals(MiscUtilities.UTF_8_Y))
-					encoding = "UTF-8";
-
-				in.reset();
 			}
 		}
+
 		Log.log(Log.DEBUG, MiscUtilities.class, "Stream encoding detected is " + encoding);
-		return new InputStreamReader(in, encoding);
+		in.reset();
+		Reader result = EncodingServer.getTextReader(in, encoding);
+		if (buffer != null)
+		{
+			// Store the successfull encoding.
+			buffer.setProperty(Buffer.ENCODING, encoding);
+		}
+		return result;
 	} //}}}
 
 	//{{{ xAutodetect() method
@@ -1740,29 +1709,16 @@ loop:		for(;;)
 	 */
 	public static String[] getEncodings(boolean getSelected)
 	{
-		List returnValue = new ArrayList();
-
-		Map map = Charset.availableCharsets();
-		Iterator iter = map.keySet().iterator();
-
-		if ((getSelected && !jEdit.getBooleanProperty("encoding.opt-out."+UTF_8_Y,false)) ||
-			!getSelected)
+		Set<String> set;
+		if (getSelected)
 		{
-			returnValue.add(UTF_8_Y);
+			set = EncodingServer.getSelectedNames();
 		}
-
-		while(iter.hasNext())
+		else
 		{
-			String encoding = (String)iter.next();
-			if ((getSelected && !jEdit.getBooleanProperty("encoding.opt-out."+encoding,false)) ||
-				!getSelected)
-			{
-				returnValue.add(encoding);
-			}
+			set = EncodingServer.getAvailableNames();
 		}
-
-		return (String[])returnValue.toArray(
-			new String[returnValue.size()]);
+		return set.toArray(new String[0]);
 	} //}}}
 
 	//{{{ throwableToString() method

@@ -26,8 +26,6 @@ package org.gjt.sp.jedit.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import java.nio.charset.Charset;
-
 import java.util.Arrays;
 import java.util.Hashtable;
 
@@ -40,6 +38,7 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.io.EncodingServer;
 //}}}
 
 /**
@@ -130,7 +129,7 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 			if (encoding == null)
 				return;
 
-			if (!Charset.isSupported(encoding))
+			if (!EncodingServer.hasEncoding(encoding))
 			{
 				String msg = jEdit.getProperty("reload-encoding.error",
 						new Object[] { encoding });
