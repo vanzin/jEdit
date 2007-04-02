@@ -4,10 +4,13 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
-Joseph Erickson, David Moss, Horst Eff, Daniel Hahler and Mike Gorski for
-contributing to this release.
+Joseph Erickson, David Moss, Horst Eff, Daniel Hahler, Stephen Co,
+and Mike Gorski for contributing to this release.
 
 {{{ Bug Fixes
+
+- Autoindenting copies exact whitespace from previous line (1593576
+  patch 1687138, Stephen Co).
 
 - A minor bug of cursor changing when dragging dockable panels
   using non continuous layout (Matthieu Casanova)
@@ -15,8 +18,8 @@ contributing to this release.
 - special characters in file:// URLs passed on to jEdit.openFile()
   were not being properly decoded (1663617).
 
-- 1687147 - Gutter line number interval highlighting corrected
-  when used with soft wrap (nyte7).
+- Gutter line number interval highlighting corrected
+  when used with soft wrap (patch 1687147 - Stephen Co).
 
 - 1667659 - Fix for FTP I/O regression in 4.3pre9 (Kazutoshi Satoda)
 

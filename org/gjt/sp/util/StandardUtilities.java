@@ -42,11 +42,33 @@ public class StandardUtilities
 {
 
 	//{{{ Text methods
+	
+	//{{{ getPrevIndentStyle() method
+	/**
+	 * @param string A java string
+  	 * @return the leading whitespace of that string, for indenting subsequent lines.
+	 * @since jEdit 4.3pre10
+	 */
+	public static String getIndentString(String str)
+	{
+		
+		StringBuffer indentString = new StringBuffer();
+		int idx = 0;
+		char ch = str.charAt(idx);
+		while (idx < str.length() && Character.isWhitespace(ch)) {
+			indentString.append(ch);
+			idx++;
+			ch = str.charAt(idx);
+		}
+		return indentString.toString();
+		
+	} //}}}
 
 	//{{{ getLeadingWhiteSpace() method
 	/**
 	 * Returns the number of leading white space characters in the
 	 * specified string.
+	 * 
 	 * @param str The string
 	 */
 	public static int getLeadingWhiteSpace(String str)

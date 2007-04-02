@@ -49,7 +49,7 @@ public class PluginUpdate extends EBMessage
 	public static final Object ACTIVATED = "ACTIVATED";
 
 	/**
-	 * Plugin activated. This is sent after the plugin core class
+	 * Plugin deactivated. This is sent after the plugin core class
 	 * <code>stop()</code> method is called.
 	 * @since jEdit 4.2pre2
 	 */
