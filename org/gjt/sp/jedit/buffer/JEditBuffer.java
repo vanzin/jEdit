@@ -735,7 +735,7 @@ public class JEditBuffer
 	//}}}
 
 	//{{{ Indentation
-	
+
 	//{{{ removeTrailingWhiteSpace() method
 	/**
 	 * Removes trailing whitespace from all lines in the specified list.
@@ -925,11 +925,12 @@ public class JEditBuffer
 	public boolean indentLine(int lineIndex, boolean canDecreaseIndent)
 	{
 		int[] whitespaceChars = new int[1];
-		int currentIndent = getCurrentIndentForLine(lineIndex, whitespaceChars);
-		
+		int currentIndent = getCurrentIndentForLine(lineIndex,
+			whitespaceChars);
 		int idealIndent = getIdealIndentForLine(lineIndex);
 
-		if(idealIndent == -1 || !canDecreaseIndent)
+		if(idealIndent == -1 || idealIndent == currentIndent
+			|| (!canDecreaseIndent && idealIndent < currentIndent))
 			return false;
 
 		// Do it
@@ -939,12 +940,9 @@ public class JEditBuffer
 
 			int start = getLineStartOffset(lineIndex);
 
-			remove(start, whitespaceChars[0]);
-			// Insert the autoindent (with rules)
-			insert(start, StandardUtilities.createWhiteSpace(idealIndent, getBooleanProperty("noTabs") ? 0 : getTabSize()));
-			// Insert the preserved indentation style
-			String previousLine = getLineText(getPriorNonEmptyLine(lineIndex));
-			insert(start, StandardUtilities.getIndentString(previousLine));
+			remove(start,whitespaceChars[0]);
+			insert(start,StandardUtilities.createWhiteSpace(
+				idealIndent, getBooleanProperty("noTabs") ? 0 : getTabSize()));
 		}
 		finally
 		{
@@ -995,8 +993,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ getIdealIndentForLine() method
 	/**
-	 * Returns the ideal leading indent for the specified line assuming the line
-	 *  is at zero offset (ie. no leading whitespace).
+	 * Returns the ideal leading indent for the specified line.
 	 * This will apply the various auto-indent rules.
 	 * @param lineIndex The line number
 	 */
@@ -1006,8 +1003,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 		int prevPrevLineIndex = prevLineIndex < 0 ? -1
 			: getPriorNonEmptyLine(prevLineIndex);
 
-		int oldIndent = 0;
+		int oldIndent = prevLineIndex == -1 ? 0 :
+			StandardUtilities.getLeadingWhiteSpaceWidth(
+			getLineText(prevLineIndex),
+			getTabSize());
 		int newIndent = oldIndent;
+
 		List<IndentRule> indentRules = getIndentRules(lineIndex);
 		List<IndentAction> actions = new LinkedList<IndentAction>();
 		for (int i = 0;i<indentRules.size();i++)
@@ -1016,6 +1017,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			rule.apply(this,lineIndex,prevLineIndex,
 				prevPrevLineIndex,actions);
 		}
+
 
 		for (IndentAction action : actions)
 		{
