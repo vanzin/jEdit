@@ -1,5 +1,5 @@
 /*
-* Emacs-Ctrl-k.bsh - a BeanShell macro for jEdit
+* Emacs_Ctrl-k.bsh - a BeanShell macro for jEdit
 * which cuts either the selected text, or the current line 
 * if no text is selected, to the clipboard.
 *
