@@ -234,7 +234,6 @@ loop:				for(int i = 0; i < files.length; i++)
 			boolean endOfLine = buffer.getLineEndOffset(
 				buffer.getLineOfOffset(end)) - 1 == end;
 
-			Segment text = new Segment();
 			int offset = start;
 
 			HyperSearchResult lastResult = null;
@@ -244,11 +243,10 @@ loop:			for(int counter = 0; ; counter++)
 				boolean startOfLine = buffer.getLineStartOffset(
 					buffer.getLineOfOffset(offset)) == offset;
 
-				buffer.getText(offset,end - offset,text);
+				CharSequence segment = buffer.getSegment(offset,end - offset);
 				SearchMatcher.Match match = matcher.nextMatch(
-					new SegmentCharSequence(text,false),
-					startOfLine,endOfLine,counter == 0,
-					false);
+					segment, startOfLine, endOfLine,
+					counter == 0, false);
 				if(match == null)
 					break loop;
 

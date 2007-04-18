@@ -119,6 +119,27 @@ public class ContentManager
 	} //}}}
 
 	//{{{ insert() method
+	/**
+	 * @since jEdit ???
+	 */
+	public void insert(int start, CharSequence str)
+	{
+		int len = str.length();
+		moveGapStart(start);
+		if(gapEnd - gapStart < len)
+		{
+			ensureCapacity(length + len + 1024);
+			moveGapEnd(start + len + 1024);
+		}
+
+		for (int i = 0; i < len; i++) {
+			text[start+i] = str.charAt(i);
+		}
+		gapStart += len;
+		length += len;
+	} //}}}
+
+	//{{{ insert() method
 	public void insert(int start, Segment seg)
 	{
 		moveGapStart(start);

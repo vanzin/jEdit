@@ -179,6 +179,22 @@ public abstract class Selection implements Cloneable
 	 */
 	abstract int setText(JEditBuffer buffer, String text);
 
+	/**
+	 * Replace the selection with the given text
+	 * @param buffer the buffer
+	 * @param text the text
+	 * @return the offset at the end of the inserted text
+	 * @since jEdit ???
+	 */
+	int setText(JEditBuffer buffer, CharSequence text)
+	{
+		/*
+		 * TODO: is there a way to avoid toString()?
+		 * Need to investigate implementations below.
+		 */
+		return setText(buffer, text.toString());
+	}
+
 	abstract boolean contentInserted(JEditBuffer buffer, int startLine, int start,
 		int numLines, int length);
 	abstract boolean contentRemoved(JEditBuffer buffer, int startLine, int start,
@@ -232,7 +248,7 @@ public abstract class Selection implements Cloneable
 		//{{{ getText() method
 		void getText(JEditBuffer buffer, StringBuffer buf)
 		{
-			buf.append(buffer.getText(start,end - start));
+			buf.append(buffer.getSegment(start,end - start));
 		} //}}}
 
 		//{{{ setText() method
@@ -446,7 +462,7 @@ public abstract class Selection implements Cloneable
 				if(rectEnd < rectStart)
 					System.err.println(i + ":::" + start + ':' + end
 						+ " ==> " + rectStart + ':' + rectEnd);
-				buf.append(buffer.getText(lineStart + rectStart,
+				buf.append(buffer.getSegment(lineStart + rectStart,
 					rectEnd - rectStart));
 
 				if(i != endLine)

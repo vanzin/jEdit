@@ -232,17 +232,15 @@ public class JEditTextArea extends TextArea
 	} //}}}
 
 	//{{{ doWordCount() method
-	protected static void doWordCount(View view, String text)
+	protected static void doWordCount(View view, CharSequence text)
 	{
-		char[] chars = text.toCharArray();
-		int characters = chars.length;
 		int words = 0;
 		int lines = 1;
 
 		boolean word = true;
-		for(int i = 0; i < chars.length; i++)
+		for(int i = 0; i < text.length(); i++)
 		{
-			switch(chars[i])
+			switch(text.charAt(i))
 			{
 			case '\r': case '\n':
 				lines++;
@@ -259,7 +257,7 @@ public class JEditTextArea extends TextArea
 			}
 		}
 
-		Object[] args = { characters, words, lines };
+		Object[] args = { text.length(), words, lines };
 		GUIUtilities.message(view,"wordcount",args);
 	} //}}}
 
@@ -277,7 +275,7 @@ public class JEditTextArea extends TextArea
 			return;
 		}
 
-		doWordCount(view,buffer.getText(0,buffer.getLength()));
+		doWordCount(view,getBufferText());
 	} //}}}
 
 	//{{{ Getters and setters

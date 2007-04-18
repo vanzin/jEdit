@@ -667,6 +667,62 @@ public class JEditBuffer
 	/**
 	 * Inserts a string into the buffer.
 	 * @param offset The offset
+	 * @param str The string
+	 * @since jEdit ???
+	 */
+	public void insert(int offset, CharSequence str)
+	{
+		if(str == null)
+			return;
+
+		int len = str.length();
+
+		if(len == 0)
+			return;
+
+		if(isReadOnly())
+			throw new RuntimeException("buffer read-only");
+
+		try
+		{
+			writeLock();
+
+			if(offset < 0 || offset > contentMgr.getLength())
+				throw new ArrayIndexOutOfBoundsException(offset);
+
+			contentMgr.insert(offset,str);
+
+			integerArray.clear();
+
+			for(int i = 0; i < len; i++)
+			{
+				if(str.charAt(i) == '\n')
+					integerArray.add(i + 1);
+			}
+
+			if(!undoInProgress)
+			{
+				/*
+				 * We want to make a copy in this case
+				 * because the undo manager has to hold
+				 * the old data.
+				 */
+				undoMgr.contentInserted(offset,len,
+						str.toString(),!dirty);
+			}
+
+			contentInserted(offset,len,integerArray);
+		}
+		finally
+		{
+			writeUnlock();
+		}
+	} //}}}
+
+	//{{{ insert() method
+	/**
+	 * Inserts a string into the buffer.
+	 * @param offset The offset
 	 * @param seg The segment
 	 * @since jEdit 4.0pre1
 	 */
@@ -2342,7 +2398,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	protected void parseBufferLocalProperties()
 	{
 		int lastLine = Math.min(9,getLineCount() - 1);
-		parseBufferLocalProperties(getText(0,getLineEndOffset(lastLine) - 1));
+		parseBufferLocalProperties(getSegment(0,getLineEndOffset(lastLine) - 1));
 
 		// first line for last 10 lines, make sure not to overlap
 		// with the first 10
@@ -2351,7 +2407,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			int length = getLineEndOffset(getLineCount() - 1)
 				- (getLineStartOffset(firstLine) + 1);
-			parseBufferLocalProperties(getText(getLineStartOffset(firstLine),length));
+			parseBufferLocalProperties(getSegment(getLineStartOffset(firstLine),length));
 		}
 	} //}}}
 
@@ -2444,7 +2500,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//{{{ parseBufferLocalProperties() method
-	private void parseBufferLocalProperties(String prop)
+	private void parseBufferLocalProperties(CharSequence prop)
 	{
 		StringBuilder buf = new StringBuilder();
 		String name = null;

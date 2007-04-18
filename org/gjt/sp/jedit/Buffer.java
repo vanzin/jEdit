@@ -303,7 +303,7 @@ public class Buffer extends JEditBuffer
 		if(buffer != null)
 		{
 			view.getTextArea().setSelectedText(
-				buffer.getText(0,buffer.getLength()));
+				buffer.getSegment(0,buffer.getLength()));
 			return true;
 		}
 

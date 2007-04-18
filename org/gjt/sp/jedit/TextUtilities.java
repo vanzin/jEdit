@@ -589,6 +589,18 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 */
 	public static String spacesToTabs(String in, int tabSize)
 	{
+		return spacesToTabs((CharSequence)in, tabSize);
+	} //}}}
+
+	//{{{ spacesToTabs() method
+	/**
+	 * Converts consecutive spaces to tabs in the specified string.
+	 * @param in The string
+	 * @param tabSize The tab size
+	 * @since jEdit ???
+	 */
+	public static String spacesToTabs(CharSequence in, int tabSize)
+	{
 		StringBuilder buf = new StringBuilder();
 		int width = 0;
 		int whitespace = 0;
@@ -694,17 +706,31 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 */
 	public static String format(String text, int maxLineLength, int tabSize)
 	{
+		return format((CharSequence)text, maxLineLength, tabSize);
+	} //}}}
+
+	//{{{ format() method
+	/**
+	 * Formats the specified text by merging and breaking lines to the
+	 * specified width.
+	 * @param text The text
+	 * @param maxLineLength The maximum line length
+	 * @param tabSize The tab size
+	 * @since jEdit ???
+	 */
+	public static String format(CharSequence text, int maxLineLength, int tabSize)
+	{
 		StringBuilder buf = new StringBuilder();
 
 		int index = 0;
 
 		for(;;)
 		{
-			int newIndex = text.indexOf("\n\n",index);
+			int newIndex = indexOf("\n\n", text, index);
 			if(newIndex == -1)
 				break;
 
-			formatParagraph(text.substring(index,newIndex),
+			formatParagraph(text.subSequence(index,newIndex),
 				maxLineLength,tabSize,buf);
 			buf.append("\n\n");
 			index = newIndex + 2;
@@ -712,7 +738,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 
 		if(index != text.length())
 		{
-			formatParagraph(text.substring(index),
+			formatParagraph(text.subSequence(index, text.length()),
 				maxLineLength,tabSize,buf);
 		}
 
@@ -728,6 +754,19 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 * @since jEdit 4.3pre2
 	 */
 	public static int indexIgnoringWhitespace(String str, int index)
+	{
+		return indexIgnoringWhitespace((CharSequence)str, index);
+	} //}}}
+
+	//{{{ indexIgnoringWhitespace() method
+	/**
+	 * Inverse of <code>ignoringWhitespaceIndex()</code>.
+	 * @param str a string (not an empty string)
+	 * @param index The index
+	 * @return The number of non-whitespace characters that precede the index.
+	 * @since jEdit ???
+	 */
+	public static int indexIgnoringWhitespace(CharSequence str, int index)
 	{
 		int j = 0;
 		for(int i = 0; i < index; i++)
@@ -745,6 +784,20 @@ loop:		for(int i = pos; i < line.length(); i++)
 	 * @since jEdit 4.3pre2
 	 */
 	public static int ignoringWhitespaceIndex(String str, int index)
+	{
+		return ignoringWhitespaceIndex((CharSequence)str, index);
+	} //}}}
+
+	//{{{ ignoringWhitespaceIndex() method
+	/**
+	 * Inverse of <code>indexIgnoringWhitespace()</code>.
+	 * @param str a string (not an empty string)
+	 * @param index The index
+	 * @return The index into the string where the number of non-whitespace
+	 * characters that precede the index is count.
+	 * @since jEdit ???
+	 */
+	public static int ignoringWhitespaceIndex(CharSequence str, int index)
 	{
 		int j = 0;
 		for(int i = 0;;i++)
@@ -832,6 +885,51 @@ loop:		for(int i = pos; i < line.length(); i++)
 		}
 	} //}}}
 
+	//{{{ indexOf() method
+	/**
+	 * Implement String.indexOf() for CharSequence.
+	 * @param str The string being to be found.
+	 * @param seq The character sequence where to search.
+	 * @since jEdit ???
+ 	 */
+	public static int indexOf(String str, CharSequence seq)
+	{
+		return indexOf(str, seq, 0);
+	}
+
+	//{{{ indexOf() method
+	/**
+	 * Implement String.indexOf() for CharSequence.
+	 * @param str The string being to be found.
+	 * @param seq The character sequence where to search.\
+	 * @param idx Index where to start the search.
+	 * @since jEdit ???
+ 	 */
+	public static int indexOf(String str, CharSequence seq, int idx)
+	{
+		int strIdx = 0;
+		if (str.length() == 0)
+		{
+			return 0;
+		}
+		for (int i = idx; i < seq.length(); i++)
+		{
+			if (str.length() > seq.length() - 1)
+			{
+				return -1;
+			}
+			if (str.charAt(strIdx) ==  seq.charAt(i))
+			{
+				if (strIdx == str.length())
+					return i - strIdx;
+				strIdx++;
+			}
+			else
+				strIdx = 0;
+		}
+		return -1;
+	} //}}}
+
 	//{{{ Private members
 	private static final int WHITESPACE = 0;
 	private static final int WORD_CHAR = 1;
@@ -841,15 +939,24 @@ loop:		for(int i = pos; i < line.length(); i++)
 	private static void formatParagraph(String text, int maxLineLength,
 		int tabSize, StringBuilder buf)
 	{
+		formatParagraph((CharSequence)text, maxLineLength,
+				tabSize, buf);
+	} //}}}
+
+	//{{{ formatParagraph() method
+	private static void formatParagraph(CharSequence text,
+		int maxLineLength, int tabSize, StringBuilder buf)
+	{
 		// align everything to paragraph's leading indent
 		int leadingWhitespaceCount = StandardUtilities.getLeadingWhiteSpace(text);
-		String leadingWhitespace = text.substring(0,leadingWhitespaceCount);
+		CharSequence leadingWhitespace = text.subSequence(0,leadingWhitespaceCount);
 		int leadingWhitespaceWidth = StandardUtilities.getLeadingWhiteSpaceWidth(text,tabSize);
 
 		buf.append(leadingWhitespace);
 
 		int lineLength = leadingWhitespaceWidth;
-		StringTokenizer st = new StringTokenizer(text);
+		/* TODO: Don't use StringTokenizer to avoid a copy. */
+		StringTokenizer st = new StringTokenizer(text.toString());
 		while(st.hasMoreTokens())
 		{
 			String word = st.nextToken();
@@ -877,15 +984,26 @@ loop:		for(int i = pos; i < line.length(); i++)
 	public static void indexIgnoringWhitespace(String text, int maxLineLength,
 		int tabSize, StringBuffer buf)
 	{
+		indexIgnoringWhitespace((CharSequence)text,maxLineLength,tabSize,buf);
+	} //}}}
+
+	//{{{ indexIgnoringWhitespace() method
+	/**
+	 * @since jEdit ???
+	 */
+	public static void indexIgnoringWhitespace(CharSequence text,
+		int maxLineLength, int tabSize, StringBuffer buf)
+	{
 		// align everything to paragraph's leading indent
 		int leadingWhitespaceCount = StandardUtilities.getLeadingWhiteSpace(text);
-		String leadingWhitespace = text.substring(0,leadingWhitespaceCount);
+		CharSequence leadingWhitespace = text.subSequence(0,leadingWhitespaceCount);
 		int leadingWhitespaceWidth = StandardUtilities.getLeadingWhiteSpaceWidth(text,tabSize);
 
 		buf.append(leadingWhitespace);
 
 		int lineLength = leadingWhitespaceWidth;
-		StringTokenizer st = new StringTokenizer(text);
+		/* TODO: don't use StringTokenizer to avoid a copy. */
+		StringTokenizer st = new StringTokenizer(text.toString());
 		while(st.hasMoreTokens())
 		{
 			String word = st.nextToken();

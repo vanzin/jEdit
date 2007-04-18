@@ -1292,6 +1292,19 @@ public class TextArea extends JComponent
 		buffer.getText(start,len,segment);
 	} //}}}
 
+	//{{{ getSegment() method
+	/**
+	 * Returns the specified substring of the buffer.
+	 * @param start The start offset
+	 * @param len The length of the substring
+	 * @return The substring
+	 * @since jEdit ???
+	 */
+	public final CharSequence getSegment(int start, int len)
+	{
+		return buffer.getSegment(start,len);
+	} //}}}
+
 	//{{{ getLineText() method
 	/**
 	 * Returns the text on the specified line.
@@ -1341,6 +1354,17 @@ public class TextArea extends JComponent
 		{
 			buffer.endCompoundEdit();
 		}
+	} //}}}
+
+	//{{{ getBufferText()
+	/**
+	 * Returns the whole buffer text as a character sequence.
+	 *
+	 * @since jEdit ???
+	 */
+	public CharSequence getBufferText()
+	{
+		return buffer.getSegment(0,buffer.getLength());
 	} //}}}
 
 	//}}}
@@ -1532,7 +1556,7 @@ public class TextArea extends JComponent
 			end = s.end;
 		}
 
-		String text = getText(0,buffer.getLength());
+		CharSequence text = getBufferText();
 
 		// We can't do the backward scan if start == 0
 		if(start == 0)
@@ -1967,10 +1991,19 @@ forward_scan:	do
 	 */
 	public void setSelectedText(String selectedText)
 	{
-		int newCaret = replaceSelection(selectedText);
-		if(newCaret != -1)
-			moveCaretPosition(newCaret);
-		selectNone();
+		setSelectedText(selectedText, true);
+	} //}}}
+
+	//{{{ setSelectedText() method
+	/**
+	 * Replaces the selection at the caret with the specified text.
+	 * If there is no selection at the caret, the text is inserted at
+	 * the caret position.
+	 * @since jEdit ???
+	 */
+	public void setSelectedText(CharSequence selectedText)
+	{
+		setSelectedText(selectedText, true);
 	} //}}}
 
 	//{{{ setSelectedText() method
@@ -1990,6 +2023,23 @@ forward_scan:	do
 		selectNone();
 	} //}}}
 
+	//{{{ setSelectedText() method
+	/**
+	 * Replaces the selection at the caret with the specified text.
+	 * If there is no selection at the caret, the text is inserted at
+	 * the caret position.
+	 * @param selectedText The new selection
+	 * @param moveCaret Move caret to insertion location if necessary
+	 * @since jEdit ???
+	 */
+	public void setSelectedText(CharSequence selectedText, boolean moveCaret)
+	{
+		int newCaret = replaceSelection(selectedText);
+		if(moveCaret && newCaret != -1)
+			moveCaretPosition(newCaret);
+		selectNone();
+	} //}}}
+
 	//{{{ replaceSelection() method
 	/**
 	 * Set the selection, but does not deactivate it, and does not move the
@@ -2002,6 +2052,22 @@ forward_scan:	do
 	 * @since 4.3pre1
 	 */
 	public int replaceSelection(String selectedText)
+	{
+		return replaceSelection((CharSequence)selectedText);
+	} //}}}
+
+	//{{{ replaceSelection() method
+	/**
+	 * Set the selection, but does not deactivate it, and does not move the
+	 * caret.
+	 *
+	 * Please use {@link #setSelectedText(String)} instead.
+	 *
+	 * @param selectedText The new selection
+	 * @return The new caret position
+	 * @since jEdit ???
+	 */
+	public int replaceSelection(CharSequence selectedText)
 	{
 		if(!isEditable())
 			throw new RuntimeException("Text component read only");
@@ -2285,8 +2351,8 @@ forward_scan:	do
 
 		if(caret != buffer.getLength())
 		{
-			String text = getText(caret,buffer.getLength()
-				- caret - 1);
+			CharSequence text = getSegment(caret,buffer.getLength()
+								- caret - 1);
 
 loop:			for(int i = 0; i < text.length(); i++)
 			{
@@ -2586,7 +2652,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void goToPrevBracket(boolean select)
 	{
-		String text = getText(0,caret);
+		CharSequence text = getSegment(0,caret);
 
 		int newCaret = -1;
 
@@ -4055,7 +4121,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				buffer.beginCompoundEdit();
 
-				String text = buffer.getText(start,end - start);
+				CharSequence text = buffer.getSegment(start,end - start);
 				int offset = getCaretPosition() - start;
 				int noSpaceOffset = TextUtilities.indexIgnoringWhitespace(
 					text,offset);
@@ -4099,7 +4165,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(selection.length == 0)
 		{
 			setText(TextUtilities.spacesToTabs(
-				getText(), buffer.getTabSize()));
+				getBufferText(), buffer.getTabSize()));
 		}
 		else
 		{
@@ -4134,7 +4200,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(selection.length == 0)
 		{
 			setText(TextUtilities.tabsToSpaces(
-				getText(), buffer.getTabSize()));
+				getBufferText(), buffer.getTabSize()));
 		}
 		else
 		{
@@ -5330,7 +5396,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			int lineStart = getLineStartOffset(caretLine);
 
-			String line = getText(lineStart,caret - lineStart);
+			CharSequence line = getSegment(lineStart,caret - lineStart);
 
 			int pos = 0;
 
@@ -5870,7 +5936,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			buffer.insert(caretEnd,end);
 		else
 		{
-			String lineText = buffer.getText(caretEnd - 1, 1);
+			CharSequence lineText = buffer.getSegment(caretEnd - 1, 1);
 			if (Character.isWhitespace(lineText.charAt(0)))
 				buffer.insert(caretEnd, end);
 			else
