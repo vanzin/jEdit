@@ -823,10 +823,11 @@ public class MiscUtilities
 					encoding = xmlEncoding;
 				}
 			}
+
+			in.reset();
 		}
 
 		Log.log(Log.DEBUG, MiscUtilities.class, "Stream encoding detected is " + encoding);
-		in.reset();
 		Reader result = EncodingServer.getTextReader(in, encoding);
 		if (buffer != null)
 		{
