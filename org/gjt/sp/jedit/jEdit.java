@@ -3912,6 +3912,7 @@ loop:		for(int i = 0; i < list.length; i++)
 			EditBus.send(new ViewUpdate(view,ViewUpdate.CLOSED));
 
 			view.close();
+			view.dispose();
 			removeViewFromList(view);
 
 			if(view == activeView)
