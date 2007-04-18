@@ -56,18 +56,6 @@ public abstract class BufferIORequest extends WorkRequest
 	//{{{ Constants
 
 	/**
-	 * Magic numbers used for auto-detecting GZIP files.
-	 */
-	public static final int GZIP_MAGIC_1 = 0x1f;
-	public static final int GZIP_MAGIC_2 = 0x8b;
-
-	/**
-	 * Length of longest XML PI used for encoding detection.<p>
-	 * &lt;?xml version="1.0" encoding="................"?&gt;
-	 */
-	public static final int XML_PI_LENGTH = 50;
-
-	/**
 	 * Size of I/O buffers.
 	 */
 	public static final int IOBUFSIZE = 32768;
@@ -92,6 +80,9 @@ public abstract class BufferIORequest extends WorkRequest
 	@Deprecated public static final int UTF8_MAGIC_3 = 0xbf;
 	@Deprecated public static final int UNICODE_MAGIC_1 = 0xfe;
 	@Deprecated public static final int UNICODE_MAGIC_2 = 0xff;
+	@Deprecated public static final int XML_PI_LENGTH = 50;
+	@Deprecated public static final int GZIP_MAGIC_1 = 0x1f;
+	@Deprecated public static final int GZIP_MAGIC_2 = 0x8b;
 
 	//}}}
 
@@ -408,4 +399,5 @@ public abstract class BufferIORequest extends WorkRequest
 	//}}}
 
 }
+
 

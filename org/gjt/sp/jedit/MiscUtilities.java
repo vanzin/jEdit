@@ -30,7 +30,6 @@ import javax.swing.JMenuItem;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -47,7 +46,6 @@ import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
-import org.gjt.sp.jedit.bufferio.BufferIORequest;
 //}}}
 
 /**
@@ -759,134 +757,47 @@ public class MiscUtilities
 	 */
 	public static Reader autodetect(InputStream in, Buffer buffer) throws IOException
 	{
-		in = new BufferedInputStream(in,
-				BufferIORequest.getByteIOBufferSize());
-
 		String encoding;
 		if (buffer == null)
 			encoding = System.getProperty("file.encoding");
 		else
 			encoding = buffer.getStringProperty(Buffer.ENCODING);
+		boolean gzipped = false;
 
-		if(buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
+		BufferedInputStream markedStream
+			= AutoDetection.getMarkedStream(in);
+		if (buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
 		{
-			in.mark(BufferIORequest.XML_PI_LENGTH);
-
-			if(in.read() == BufferIORequest.GZIP_MAGIC_1
-				&& in.read() == BufferIORequest.GZIP_MAGIC_2)
+			gzipped = AutoDetection.isGzipped(markedStream);
+			if (gzipped)
 			{
-				in.reset();
 				Log.log(Log.DEBUG, MiscUtilities.class, "Stream is Gzipped");
-				in = new GZIPInputStream(in);
-				if (buffer != null)
-					buffer.setBooleanProperty(Buffer.GZIPPED,true);
-				// auto-detect encoding within the gzip stream.
-				return autodetect(in, buffer);
+				markedStream.reset();
+				markedStream = AutoDetection.getMarkedStream(
+					new GZIPInputStream(markedStream));
 			}
 
-			in.reset();
-			String detectedByBOM = EncodingWithBOM.detectEncoding(in);
-			if (detectedByBOM != null)
+			markedStream.reset();
+			String detected = AutoDetection.getDetectedEncoding(markedStream);
+			if (detected != null)
 			{
-				encoding = detectedByBOM;
+				encoding = detected;
 			}
-			else
-			{
-				in.reset();
-				byte[] _xmlPI = new byte[BufferIORequest.XML_PI_LENGTH];
-				int offset = 0;
-				int count;
-				while((count = in.read(_xmlPI,offset,
-					BufferIORequest.XML_PI_LENGTH - offset)) != -1)
-				{
-					offset += count;
-					if(offset == BufferIORequest.XML_PI_LENGTH)
-						break;
-				}
-
-				String xmlEncoding = getXMLEncoding(new String(
-					_xmlPI,0,offset,"ASCII"));
-
-				if (xmlEncoding == null)
-				{
-
-					if (Options.X_AUTODETECT)
-					{
-						in.reset();
-						String coding = xAutodetect(in);
-						if (coding != null)
-							encoding = coding;
-					}
-				}
-				else
-				{
-					encoding = xmlEncoding;
-				}
-			}
-
-			in.reset();
 		}
 
 		Log.log(Log.DEBUG, MiscUtilities.class, "Stream encoding detected is " + encoding);
-		Reader result = EncodingServer.getTextReader(in, encoding);
+		markedStream.reset();
+		Reader result = EncodingServer.getTextReader(markedStream, encoding);
 		if (buffer != null)
 		{
-			// Store the successfull encoding.
+			// Store the successfull properties.
+			if (gzipped)
+			{
+				buffer.setBooleanProperty(Buffer.GZIPPED,true);
+			}
 			buffer.setProperty(Buffer.ENCODING, encoding);
 		}
 		return result;
-	} //}}}
-
-	//{{{ xAutodetect() method
-	private static String xAutodetect(InputStream in) throws IOException
-	{
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-		int i = 0;
-		while (i < 10)
-		{
-			i++;
-			String line = reader.readLine();
-			if (line == null)
-				return null;
-			int pos = line.indexOf(":encoding=");
-			if (pos != -1)
-			{
-				int p2 = line.indexOf(':', pos + 10);
-				String encoding = line.substring(pos + 10, p2);
-				return encoding;
-			}
-		}
-		return null;
-	} //}}}
-
-	//{{{ getXMLEncoding() method
-	/**
-	 * Extract XML encoding name from PI.
-	 */
-	private static String getXMLEncoding(String xmlPI)
-	{
-		if(!xmlPI.startsWith("<?xml"))
-			return null;
-
-		int index = xmlPI.indexOf("encoding=");
-		if(index == -1 || index + 9 == xmlPI.length())
-			return null;
-
-		char ch = xmlPI.charAt(index + 9);
-		int endIndex = xmlPI.indexOf(ch,index + 10);
-		if(endIndex == -1)
-			return null;
-
-		String encoding = xmlPI.substring(index + 10,endIndex);
-
-		if(Charset.isSupported(encoding))
-			return encoding;
-		else
-		{
-			Log.log(Log.WARNING,MiscUtilities.class,"XML PI specifies "
-				+ "unsupported encoding: " + encoding);
-			return null;
-		}
 	} //}}}
 
 	//{{{ closeQuietly() method

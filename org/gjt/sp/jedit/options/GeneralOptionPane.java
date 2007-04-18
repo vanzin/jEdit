@@ -49,7 +49,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox newKeyboardHandling;
-	private JCheckBox xAutodetect;
+	private JTextField encodingDetectors;
 	//}}}
 	
 	//{{{ GeneralOptionPane constructor
@@ -199,9 +199,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 		newKeyboardHandling.setSelected(jEdit.getBooleanProperty("newkeyhandling"));
 		addComponent(newKeyboardHandling);
 
-		xAutodetect = new JCheckBox(jEdit.getProperty("options.general.xAutodetect"));
-		xAutodetect.setSelected(jEdit.getBooleanProperty("xAutodetect"));
-		addComponent(xAutodetect);
+		encodingDetectors = new JTextField(jEdit.getProperty(
+			"options.general.encodingDetectors"));
+		encodingDetectors.setText(jEdit.getProperty("encodingDetectors",
+			"BOM XML-PI"));
+		addComponent(jEdit.getProperty("options.general.encodingDetectors"),
+			encodingDetectors);
 
 	} //}}}
 
@@ -251,8 +254,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		boolean nkh = newKeyboardHandling.isSelected();
 		jEdit.setBooleanProperty("newkeyhandling", nkh);
 		Options.SIMPLIFIED_KEY_HANDLING = nkh;
-		jEdit.setBooleanProperty("xAutodetect", xAutodetect.isSelected());
-		Options.X_AUTODETECT = xAutodetect.isSelected();
+		jEdit.setProperty("encodingDetectors",encodingDetectors.getText());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());

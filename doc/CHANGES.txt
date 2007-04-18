@@ -122,9 +122,6 @@ and Mike Gorski for contributing to this release.
 - New popup menu in the plugin manager to remove plugin data when
   the plugin uses the new plugin api (Matthieu Casanova)
 
-- Option to allow jEdit to autodetect :encoding= properties in the loaded
-  buffer (only in the 10 first lines) (Matthieu Casanova)
-
 - New LayoutManager ExtendedGridLayout added. For further explanations see
   its JavaDoc. (Björn "Vampire" Kautler)
 
@@ -153,6 +150,15 @@ and Mike Gorski for contributing to this release.
   vertically instead of moving the invisible caret which scrolls only when
   the invisible caret hits page boundaries. Additionally the history remembers
   the vertical scroll position now. (Björn "Vampire" Kautler)
+
+- Added a new option "encoding autodetector names" in General Option pane
+  to extend encoding autodetection with the new EncodingDetector services.
+  (Kazutoshi Satoda)
+
+- Allow jEdit to autodetect :encoding= properties in the loaded buffer
+  (only in the 10 first lines) by adding "buffer-local-property" to
+  the new option "encoding autodetector names" in General Option pane.
+  (Matthieu Casanova and Kazutoshi Satoda)
 
 }}}
 {{{ Editing
@@ -255,6 +261,9 @@ and Mike Gorski for contributing to this release.
 
 - Added a new GUIUtilities.showVFSFileDialog() method that can use a dialog as
   the browser's parent, instead of the view. (Kazutoshi Satoda)
+
+- Added two new builtin service interfaces org.gjt.sp.jedit.io.Encoding
+  and org.gjt.sp.jedit.io.EncodingDetector. (Kazutoshi Satoda)
 
 }}}
 

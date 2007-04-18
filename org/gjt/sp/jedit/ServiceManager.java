@@ -68,6 +68,7 @@ import org.gjt.sp.util.XMLUtilities;
  * <li>{@link org.gjt.sp.jedit.buffer.FoldHandler}</li>
  * <li>{@link org.gjt.sp.jedit.io.VFS}</li>
  * <li>{@link org.gjt.sp.jedit.io.Encoding}</li>
+ * <li>{@link org.gjt.sp.jedit.io.EncodingDetector}</li>
  * </ul>
  *
  * Plugins may provide more.<p>

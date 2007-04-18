@@ -39,4 +39,15 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="X-UTF-32BE-BOM">
 		new EncodingWithBOM("UTF-32BE");
 	</SERVICE>
+
+	<!-- Encoding detectors -->
+	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="BOM">
+		new EncodingWithBOM.Detector();
+	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="XML-PI">
+		new XMLEncodingDetector();
+	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="buffer-local-property">
+		new BufferLocalEncodingDetector();
+	</SERVICE>
 </SERVICES>

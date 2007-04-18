@@ -72,61 +72,64 @@ public class EncodingWithBOM implements Encoding
 	}
 	//}}}
 
-	//{{{ detectEncoding() method
-	public static String detectEncoding(InputStream sample) throws IOException
+	//{{{ class Detector
+	public static class Detector implements EncodingDetector
 	{
-		byte[] mark = new byte[4];
-		int count = sample.read(mark);
-
-		byte low = (byte)(BOM16 & 0xff);
-		byte high = (byte)((BOM16 >> 8) & 0xff);
-		if (count >= 4)
+		public String detectEncoding(InputStream sample) throws IOException
 		{
-			if (mark[0] == low && mark[1] == high
-				&& mark[2] == 0x00 && mark[3] == 0x00)
+			byte[] mark = new byte[4];
+			int count = sample.read(mark);
+	
+			byte low = (byte)(BOM16 & 0xff);
+			byte high = (byte)((BOM16 >> 8) & 0xff);
+			if (count >= 4)
 			{
-				return "X-UTF-32LE-BOM";
-			}
-			else if (mark[0] == 0x00 && mark[1] == 0x00
-				&& mark[2] == high && mark[3] == low)
-			{
-				return "X-UTF-32BE-BOM";
-			}
-		}
-		if (count >= 2)
-		{
-			if (mark[0] == low && mark[1] == high)
-			{
-				return "x-UTF-16LE-BOM";
-			}
-			else if (mark[0] == high && mark[1] == low)
-			{
-				// "x-UTF-16BE-BOM" does not available.
-				// But an encoder for "UTF-16" actually uses
-				// big endian with corresponding BOM. It just
-				// works as "UTF-16BE with BOM".
-				return "UTF-16";
-			}
-		}
-
-		if (count >= UTF8BOM.length)
-		{
-			int i = 0;
-			while (i < UTF8BOM.length)
-			{
-				if (mark[i] != UTF8BOM[i])
+				if (mark[0] == low && mark[1] == high
+					&& mark[2] == 0x00 && mark[3] == 0x00)
 				{
-					break;
+					return "X-UTF-32LE-BOM";
 				}
-				++i;
+				else if (mark[0] == 0x00 && mark[1] == 0x00
+					&& mark[2] == high && mark[3] == low)
+				{
+					return "X-UTF-32BE-BOM";
+				}
 			}
-			if (i == UTF8BOM.length)
+			if (count >= 2)
 			{
-				return "UTF-8Y";
+				if (mark[0] == low && mark[1] == high)
+				{
+					return "x-UTF-16LE-BOM";
+				}
+				else if (mark[0] == high && mark[1] == low)
+				{
+					// "x-UTF-16BE-BOM" does not available.
+					// But an encoder for "UTF-16" actually uses
+					// big endian with corresponding BOM. It just
+					// works as "UTF-16BE with BOM".
+					return "UTF-16";
+				}
 			}
+	
+			if (count >= UTF8BOM.length)
+			{
+				int i = 0;
+				while (i < UTF8BOM.length)
+				{
+					if (mark[i] != UTF8BOM[i])
+					{
+						break;
+					}
+					++i;
+				}
+				if (i == UTF8BOM.length)
+				{
+					return "UTF-8Y";
+				}
+			}
+	
+			return null;
 		}
-
-		return null;
 	} //}}}
 
 	//{{{ Private members

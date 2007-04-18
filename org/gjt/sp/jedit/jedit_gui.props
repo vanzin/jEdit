@@ -1635,7 +1635,7 @@ options.general.restore.cli=... including file names specified on the command li
 options.general.sortBuffers=Sort buffer list (takes effect after restart)
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.newkeyhandling=Use new keyboard handling (experimental)
-options.general.xAutodetect=Autodetect encoding using buffer local properties (experimental)
+options.general.encodingDetectors=Ordered list of encoding autodetector names (experimental)
 #}}}
 
 #{{{ Abbreviations pane
