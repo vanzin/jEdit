@@ -4,13 +4,11 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
+
 Joseph Erickson, David Moss, Horst Eff, Daniel Hahler, Stephen Co,
 and Mike Gorski for contributing to this release.
 
 {{{ Bug Fixes
-
-- Autoindenting copies exact whitespace from previous line (1593576
-  patch 1687138, Stephen Co).
 
 - A minor bug of cursor changing when dragging dockable panels
   using non continuous layout (Matthieu Casanova)
