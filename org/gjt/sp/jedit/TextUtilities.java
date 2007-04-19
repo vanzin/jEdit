@@ -895,7 +895,7 @@ loop:		for(int i = pos; i < line.length(); i++)
 	public static int indexOf(String str, CharSequence seq)
 	{
 		return indexOf(str, seq, 0);
-	}
+	} //}}}
 
 	//{{{ indexOf() method
 	/**
@@ -914,13 +914,13 @@ loop:		for(int i = pos; i < line.length(); i++)
 		}
 		for (int i = idx; i < seq.length(); i++)
 		{
-			if (str.length() > seq.length() - 1)
+			if (str.length() - strIdx > seq.length() - i)
 			{
 				return -1;
 			}
 			if (str.charAt(strIdx) ==  seq.charAt(i))
 			{
-				if (strIdx == str.length())
+				if (strIdx == str.length() - 1)
 					return i - strIdx;
 				strIdx++;
 			}
