@@ -60,11 +60,11 @@ public class EncodingServer
 		{
 			return new CharsetEncoding(name);
 		}
-		catch (java.nio.charset.IllegalCharsetNameException e)
+		catch (IllegalCharsetNameException e)
 		{
 			// just failed
 		}
-		catch (java.nio.charset.UnsupportedCharsetException e)
+		catch (UnsupportedCharsetException e)
 		{
 			// just failed
 		}
@@ -75,7 +75,10 @@ public class EncodingServer
 			return (Encoding)namedService;
 		}
 
-		throw new IllegalArgumentException("No such encoding: \"" + name + "\"");
+		// UnsupportedCharsetException is for java.nio.charset,
+		// but throw this here too so that this can be caught as
+		// an encoding error by catch clause for general I/O code.
+		throw new UnsupportedCharsetException("No such encoding: \"" + name + "\"");
 	} //}}}
 
 	//{{{ getAvailableNames() method
