@@ -900,8 +900,8 @@ loop:		for(int i = pos; i < line.length(); i++)
 	//{{{ indexOf() method
 	/**
 	 * Implement String.indexOf() for CharSequence.
-	 * @param str The string being to be found.
-	 * @param seq The character sequence where to search.\
+	 * @param str The string to be found.
+	 * @param seq The character sequence where to search.
 	 * @param idx Index where to start the search.
 	 * @since jEdit ???
  	 */
