@@ -244,6 +244,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		filterField = new JComboBox();
 		filterEditor = new HistoryComboBoxEditor("vfs.browser.filter");
+		filterEditor.setToolTipText(jEdit.getProperty("glob.tooltip"));
 		filterEditor.setInstantPopups(true);
 		filterEditor.setSelectAllOnFocus(true);
 		filterEditor.addActionListener(actionHandler);

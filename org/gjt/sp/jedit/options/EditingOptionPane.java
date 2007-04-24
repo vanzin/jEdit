@@ -116,8 +116,10 @@ public class EditingOptionPane extends AbstractOptionPane
 		addComponent(deepIndent = new JCheckBox(jEdit.getProperty(
 			"options.editing.deepIndent")));
 
+		filenameGlob = new JTextField();
+		filenameGlob.setToolTipText(jEdit.getProperty("glob.tooltip"));
 		addComponent(jEdit.getProperty("options.editing.filenameGlob"),
-			filenameGlob = new JTextField());
+			filenameGlob);
 
 		addComponent(jEdit.getProperty("options.editing.firstlineGlob"),
 			firstlineGlob = new JTextField());
