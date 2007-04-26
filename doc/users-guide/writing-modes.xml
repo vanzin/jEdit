@@ -853,12 +853,12 @@
   </para></listitem>
   </itemizedlist>
  </sect1>
- <sect1 id="mode-match-type"><title>The MATCH_TYPE Attribute</title>
-  <para>The MATCH_TYPE attribute is used by some of the rules to control
+ <sect1 id="mode-match-type"><title>The <literal>MATCH_TYPE</literal> Attribute</title>
+  <para>The <literal>MATCH_TYPE</literal> attribute is used by some of the rules to control
   how the region matched by the rule will be highlighted.</para>
 
-  <para>For example, when using a MARK_PREVIOUS rule to highlight a
-  function call of the form <code>fcall()</code>, the following
+  <para>For example, when using a <literal>MARK_PREVIOUS</literal> rule to highlight a
+  function call of the form <literal>fcall()</literal>, the following
   rule could be used:</para>
 
   <programlisting>
@@ -867,12 +867,11 @@
    ]]>
   </programlisting>
 
-  <para>This would cause <code>fcall</code> to be highlighted as FUNCTION,
-  and <code>(</code> to be highlighted as OPERATOR. In this case, to
-  maintain bracket matching working, a SEQ rule would have to be added
-  to match <code>)</code> and mark it as OPERATOR.</para>
+  <para>This would cause <literal>fcall</literal> to be highlighted as <literal>FUNCTION</literal>,  and <literal>(</literal> to be highlighted as <literal>OPERATOR</literal>. In this case, to
+  maintain bracket matching working, a <literal>SEQ</literal> rule would have to be added
+  to match <literal>)</literal> and mark it as <literal>OPERATOR</literal>.</para>
 
-  <para>The MATCH_TYPE attribute value can be any of the valid token
+  <para>The <literal>MATCH_TYPE</literal> attribute value can be any of the valid token
   types, or the following special values:</para>
 
   <itemizedlist>
