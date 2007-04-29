@@ -10,6 +10,9 @@ and Mike Gorski for contributing to this release.
 
 {{{ Bug Fixes
 
+- 1592085 - Now able to abort collection of files for search in directory
+  (Alan Ezust)
+
 - A minor bug of cursor changing when dragging dockable panels
   using non continuous layout (Matthieu Casanova)
 

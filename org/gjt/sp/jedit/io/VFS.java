@@ -42,6 +42,7 @@ import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
+import org.gjt.sp.util.WorkThread;
 
 /**
  * A virtual filesystem implementation.<p>
@@ -1075,6 +1076,13 @@ public abstract class VFS
 
 		stack.add(directory);
 
+		Thread ct = Thread.currentThread();
+		WorkThread wt = null;
+		if (ct instanceof WorkThread) {
+			wt = (WorkThread) ct;
+		}
+		
+		
 		VFSFile[] _files = _listFiles(session,directory,
 			comp);
 		if(_files == null || _files.length == 0)
@@ -1082,6 +1090,7 @@ public abstract class VFS
 
 		for(int i = 0; i < _files.length; i++)
 		{
+			if (wt != null && wt.isAborted()) break;
 			VFSFile file = _files[i];
 			if (skipHidden && (file.isHidden() || MiscUtilities.isBackup(file.getName())))
 				continue;
