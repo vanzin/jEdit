@@ -1,4 +1,3 @@
-// {{{ QuickNotepad
 /*
  * QuickNotepad.java
  * part of the QuickNotepad plugin for the jEdit text editor

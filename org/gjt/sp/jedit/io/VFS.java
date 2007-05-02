@@ -644,7 +644,7 @@ public abstract class VFS
 		String[] retval = null;
 		retval = _listDirectory(session, directory, glob, recursive, comp, true, false);
 		return retval;
-	}
+	} //}}}
 
 
 	//{{{ _listDirectory() method

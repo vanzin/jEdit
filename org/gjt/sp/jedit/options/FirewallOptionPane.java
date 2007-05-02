@@ -126,5 +126,5 @@ public class FirewallOptionPane extends AbstractOptionPane {
 			socksHost.setEnabled(socksEnabled.isSelected());
 			socksPort.setEnabled(socksEnabled.isSelected());
 		}
-	}
+	} //}}}
 }

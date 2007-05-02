@@ -162,4 +162,5 @@ public class RolloverButton extends JButton
 			setBorderPainted(false);
 		}
 	} //}}}
+	//}}}
 }

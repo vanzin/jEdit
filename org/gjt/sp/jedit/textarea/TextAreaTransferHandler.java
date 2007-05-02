@@ -165,7 +165,7 @@ public class TextAreaTransferHandler extends TransferHandler
 		return true;
 	} //}}}
 
-	//{{{ importText
+	//{{{ importURIList
 	private boolean importURIList(JComponent c, Transferable t,DataFlavor uriListStringDataFlavor)
 		throws Exception
 	{
@@ -214,7 +214,7 @@ public class TextAreaTransferHandler extends TransferHandler
 		}
 		
 		return true;
-	}
+	} //}}}
 	
 	//{{{ importText
 	private boolean importText(JComponent c, Transferable t)

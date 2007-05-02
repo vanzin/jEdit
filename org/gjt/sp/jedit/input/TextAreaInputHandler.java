@@ -47,6 +47,7 @@ public class TextAreaInputHandler extends AbstractInputHandler
 		this.textArea = textArea;
 	}
 
+	//{{{ processKeyEvent() method
 	/**
 	 * Forwards key events directly to the input handler.
 	 * This is slightly faster than using a KeyListener
@@ -263,7 +264,7 @@ public class TextAreaInputHandler extends AbstractInputHandler
 		return false;
 	} //}}}
 
-		//{{{ userInput() method
+	//{{{ userInput() method
 	protected void userInput(char ch)
 	{
 		lastActionCount = 0;

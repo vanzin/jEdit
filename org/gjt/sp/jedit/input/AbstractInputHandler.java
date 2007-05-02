@@ -38,7 +38,7 @@ public abstract class AbstractInputHandler
 	protected KeyListener keyEventInterceptor;
 	protected String readNextChar;
 	protected int repeatCount;
-	//{{{ Protected members
+
 	protected static final int REPEAT_COUNT_THRESHOLD = 20;
 
 	public AbstractInputHandler()

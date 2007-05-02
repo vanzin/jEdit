@@ -208,7 +208,6 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	private int[] fwd_suffix;
 	private int[] back_skip;
 	private int[] back_suffix;
-	//}}}
 
 	// Boyer-Moore helper methods
 

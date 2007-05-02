@@ -48,9 +48,9 @@ public class ShortcutPrefixActiveEvent extends ChangeEvent
     /**
      *  Description of the Field
      */
-    protected boolean active;//}}}
+    protected boolean active;
 
-        /**
+    /**
      *  Description of the Field
      */
     protected static EventListenerList listenerList = new EventListenerList();

@@ -136,5 +136,6 @@ public class BufferOptions extends EnhancedDialog
 
 	} //}}}
 
+	//}}}
 }
 
