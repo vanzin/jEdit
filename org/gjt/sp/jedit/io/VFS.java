@@ -1120,7 +1120,11 @@ public abstract class VFS
 					try
 					{
 						if (file.isBinary(session))
+						{
+							Log.log(Log.NOTICE,this
+								,file.getPath() + ": skipped as a binary file");
 							continue;
+						}
 					}
 					catch(IOException e)
 					{
