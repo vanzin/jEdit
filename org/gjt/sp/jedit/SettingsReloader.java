@@ -57,7 +57,8 @@ class SettingsReloader implements EBComponent
 		{
 			path = path.toLowerCase();
 			jEditHome = jEditHome.toLowerCase();
-			settingsDirectory = settingsDirectory.toLowerCase();
+			if(settingsDirectory != null)
+				settingsDirectory = settingsDirectory.toLowerCase();
 		}
 
 		// XXX: does this really belong here?
