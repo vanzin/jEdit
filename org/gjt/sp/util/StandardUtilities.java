@@ -45,7 +45,7 @@ public class StandardUtilities
 	
 	//{{{ getPrevIndentStyle() method
 	/**
-	 * @param string A java string
+	 * @param str A java string
   	 * @return the leading whitespace of that string, for indenting subsequent lines.
 	 * @since jEdit 4.3pre10
 	 */

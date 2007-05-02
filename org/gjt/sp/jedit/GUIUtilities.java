@@ -1414,7 +1414,7 @@ public class GUIUtilities
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
 	 * @since jEdit 4.0pre1
-	 * @deprecated - use {@link javax.swing.JComponent#setComponentPopupMenu()}, 
+	 * @deprecated use {@link javax.swing.JComponent#setComponentPopupMenu(javax.swing.JPopupMenu)},
 	 * which works better and is simpler to use: you don't have to write the code to 
 	 * show/hide popups in response to mouse events anymore.
 	 */

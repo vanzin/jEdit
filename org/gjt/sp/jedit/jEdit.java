@@ -1171,7 +1171,7 @@ public class jEdit
 	 * These plugins must call removeActionSet() when the plugin is unloaded.
 	 *
 	 * @since jEdit 4.0pre1
-	 * @see #removeActionSet()
+	 * @see #removeActionSet(ActionSet)
 	 */
 	public static void addActionSet(ActionSet actionSet)
 	{

@@ -163,7 +163,7 @@ public class ParserRule
 
 	//{{{ createRegexpSpanRule() method
 	/**
-	 * @deprecated Use {@link #createRegexpSpanRule(String,int,String,int,String,ParserRuleSet,byte,boolean,boolean,boolean,boolean,boolean)} instead
+	 * @deprecated Use {@link #createRegexpSpanRule(String,int,String,int,String,ParserRuleSet,byte,byte,boolean,boolean,boolean,boolean)} instead
 	 */
 	public static final ParserRule createRegexpSpanRule(
 		char hashChar, int startPosMatch, String start,
@@ -227,7 +227,7 @@ public class ParserRule
 
 	//{{{ createRegexpEOLSpanRule() method
 	/**
-	 * @deprecated Use {@link #createRegexpEOLSpanRule(String,int,String,ParserRuleSet,byte,boolean,boolean)} instead
+	 * @deprecated Use {@link #createRegexpEOLSpanRule(String,int,String,ParserRuleSet,byte,byte,boolean)} instead
 	 */
 	public static final ParserRule createRegexpEOLSpanRule(
 		char hashChar, int posMatch, String seq, ParserRuleSet delegate,
