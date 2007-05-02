@@ -33,6 +33,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.zip.GZIPInputStream;
 
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.ServiceManager;
@@ -139,6 +140,76 @@ public class AutoDetection
 			}
 		}
 		return null;
+	} //}}}
+
+	//{{{ class Result
+	/**
+	 * An utility class to hold the result of some auto detections.
+	 */
+	public static class Result
+	{
+		//{{{ Constructor
+		/**
+		 * Do some auto detection for a stream and hold the
+		 * result in this instance.
+		 * @param in the stream
+		 */
+		public Result(InputStream in) throws IOException
+		{
+			BufferedInputStream marked = getMarkedStream(in);
+
+			gzipped = isGzipped(marked);
+			if (gzipped)
+			{
+				marked.reset();
+				marked = getMarkedStream(
+					new GZIPInputStream(marked));
+			}
+
+			marked.reset();
+			encoding = AutoDetection.getDetectedEncoding(marked);
+
+			markedStream = marked;
+		} //}}}
+
+		//{{{ getRewindedStream()
+		/**
+		 * Returns the stream which can be read the contents of
+		 * the original stream.
+		 * Some bytes ware read from original stream for auto
+		 * detections. But they are rewinded at this method.
+		 */
+		public BufferedInputStream getRewindedStream()
+			throws IOException
+		{
+			markedStream.reset();
+			return markedStream;
+		} //}}}
+
+		//{{{ streamIsGzipped()
+		/**
+		 * Returns true if the stream is gzipped.
+		 */
+		public boolean streamIsGzipped()
+		{
+			return gzipped;
+		} //}}}
+
+		//{{{ getDetectedEncoding()
+		/**
+		 * Returns the auto detected encoding.
+		 * Returns null if no encoding was detected.
+		 */
+		public String getDetectedEncoding()
+		{
+			return encoding;
+		} //}}}
+
+		//{{{ Private members
+		private final BufferedInputStream markedStream;
+		private final boolean gzipped;
+		private final String encoding;
+		//}}}
 	} //}}}
 
 	//{{{ Private members

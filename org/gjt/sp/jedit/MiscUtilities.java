@@ -34,7 +34,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -694,39 +693,49 @@ public class MiscUtilities
 		return IOUtilities.copyStream(4096,progress, in, out, canStop);
 	} //}}}
 
-	//{{{ isBinaryFile() method
+	//{{{ isBinary() method
 	/**
-	* Check if a Reader is binary.
-	* To check if a file is binary, we will check the first characters 100
-	* (jEdit property vfs.binaryCheck.length)
-	* If more than 1 (jEdit property vfs.binaryCheck.count), the
-	* file is declared binary.
-	* This is not 100% because sometimes the autodetection could fail.
-	* This method will not close your reader. You have to do it yourself
-	*
-	* @param reader the reader
-	* @return <code>true</code> if the Reader was detected as binary
-	* @throws IOException IOException If an I/O error occurs
-	* @since jEdit 4.3pre5
-	*/
-	public static boolean isBinary(Reader reader)
-	throws IOException
+	 * Check if a Reader is binary.
+	 * @deprecated
+	 *   Use isBinary(InputStream) instead.
+	 */
+	@Deprecated
+	public static boolean isBinary(Reader reader) throws IOException
 	{
-		int nbChars = jEdit.getIntegerProperty("vfs.binaryCheck.length",100);
-		int authorized = jEdit.getIntegerProperty("vfs.binaryCheck.count",1);
-		for (long i = 0L;i < nbChars;i++)
+		return containsNullCharacter(reader);
+	} //}}}
+
+	//{{{ isBinary() method
+	/**
+	 * Check if an InputStream is binary.
+	 * First this tries encoding auto detection. If an encoding is
+	 * detected, the stream should be a text stream. Otherwise, this
+	 * will check the first characters 100
+	 * (jEdit property vfs.binaryCheck.length) in the system default
+	 * encoding. If more than 1 (jEdit property vfs.binaryCheck.count)
+	 * NUL(\u0000) was found, the stream is declared binary.
+	 * 
+	 * This is not 100% because sometimes the autodetection could fail.
+	 * 
+	 * This method will not close the stream. You have to do it yourself
+	 *
+	 * @param in the stream
+	 * @return <code>true</code> if the stream was detected as binary
+	 * @throws IOException IOException If an I/O error occurs
+	 * @since jEdit 4.3pre10
+	 */
+	public static boolean isBinary(InputStream in) throws IOException
+	{
+		AutoDetection.Result detection = new AutoDetection.Result(in);
+		// If an encoding is detected, this is a text stream
+		if (detection.getDetectedEncoding() != null)
 		{
-			int c = reader.read();
-			if (c == -1)
-				return false;
-			if (c == 0)
-			{
-				authorized--;
-				if (authorized == 0)
-					return true;
-			}
+			return false;
 		}
-		return false;
+		// Read the stream in system default encoding. The encoding
+		// might be wrong. But enough for binary detection.
+		return containsNullCharacter(
+			new InputStreamReader(detection.getRewindedStream()));
 	} //}}}
 
 	//{{{ isBackup() method
@@ -764,33 +773,34 @@ public class MiscUtilities
 			encoding = buffer.getStringProperty(Buffer.ENCODING);
 		boolean gzipped = false;
 
-		BufferedInputStream markedStream
-			= AutoDetection.getMarkedStream(in);
 		if (buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
 		{
-			gzipped = AutoDetection.isGzipped(markedStream);
+			AutoDetection.Result detection = new AutoDetection.Result(in);
+			gzipped = detection.streamIsGzipped();
 			if (gzipped)
 			{
-				Log.log(Log.DEBUG, MiscUtilities.class, "Stream is Gzipped");
-				markedStream.reset();
-				markedStream = AutoDetection.getMarkedStream(
-					new GZIPInputStream(markedStream));
+				Log.log(Log.DEBUG, MiscUtilities.class
+					, "Stream is Gzipped");
 			}
-
-			markedStream.reset();
-			String detected = AutoDetection.getDetectedEncoding(markedStream);
+			String detected = detection.getDetectedEncoding();
 			if (detected != null)
 			{
 				encoding = detected;
+				Log.log(Log.DEBUG, MiscUtilities.class
+					, "Stream encoding detected is " + detected);
 			}
+			in = detection.getRewindedStream();
+		}
+		else
+		{
+			// Make the stream buffered in the same way.
+			in = AutoDetection.getMarkedStream(in);
 		}
 
-		Log.log(Log.DEBUG, MiscUtilities.class, "Stream encoding detected is " + encoding);
-		markedStream.reset();
-		Reader result = EncodingServer.getTextReader(markedStream, encoding);
+		Reader result = EncodingServer.getTextReader(in, encoding);
 		if (buffer != null)
 		{
-			// Store the successfull properties.
+			// Store the successful properties.
 			if (gzipped)
 			{
 				buffer.setBooleanProperty(Buffer.GZIPPED,true);
@@ -1700,6 +1710,27 @@ loop:		for(;;)
 			return 3;
 		else
 			return 0;
+	} //}}}
+
+	//{{{ containsNullCharacter()
+	private static boolean containsNullCharacter(Reader reader)
+		throws IOException
+	{
+		int nbChars = jEdit.getIntegerProperty("vfs.binaryCheck.length",100);
+		int authorized = jEdit.getIntegerProperty("vfs.binaryCheck.count",1);
+		for (long i = 0L;i < nbChars;i++)
+		{
+			int c = reader.read();
+			if (c == -1)
+				return false;
+			if (c == 0)
+			{
+				authorized--;
+				if (authorized == 0)
+					return true;
+			}
+		}
+		return false;
 	} //}}}
 
 	//}}}

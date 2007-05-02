@@ -278,11 +278,6 @@ public class VFSFile implements Serializable
 	//{{{ isBinary() method
 	/**
 	 * Check if a file is binary file.
-	 * To check if a file is binary, we will check the first characters 100
-	 * (jEdit property vfs.binaryCheck.length)
-	 * If more than 1 (jEdit property vfs.binaryCheck.count), the
-	 * file is declared binary.
-	 * This is not 100% because sometimes the autodetection could fail.
 	 *
 	 * @param session the VFS session
 	 * @return <code>true</code> if the file was detected as binary
@@ -292,7 +287,6 @@ public class VFSFile implements Serializable
 	public boolean isBinary(Object session)
 		throws IOException
 	{
-		Reader reader = null;
 		InputStream in = getVFS()._createInputStream(session,getPath(),
 			false,jEdit.getActiveView());
 		if(in == null)
@@ -300,12 +294,11 @@ public class VFSFile implements Serializable
 
 		try
 		{
-			reader = MiscUtilities.autodetect(in, null);
-			return MiscUtilities.isBinary(reader);
+			return MiscUtilities.isBinary(in);
 		}
 		finally
 		{
-			IOUtilities.closeQuietly(reader);
+			IOUtilities.closeQuietly(in);
 		}
 	} //}}}
 

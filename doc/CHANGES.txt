@@ -266,6 +266,9 @@ and Mike Gorski for contributing to this release.
 - Added two new builtin service interfaces org.gjt.sp.jedit.io.Encoding
   and org.gjt.sp.jedit.io.EncodingDetector. (Kazutoshi Satoda)
 
+- MiscUtilities.isBinary(Reader) is now deprecated in favor of a new
+  method MiscUtilities.isBinary(InputStream). (Kazutoshi Satoda)
+
 }}}
 
 }}}
