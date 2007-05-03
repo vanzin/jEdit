@@ -414,8 +414,8 @@ public class MiscUtilities
 	 */
 	public static String getFileExtension(String path)
 	{
-		int fsIndex = getLastSeparatorIndex(path);
-		int index = path.indexOf('.',fsIndex);
+		// int fsIndex = getLastSeparatorIndex(path);
+		int index = path.lastIndexOf('.');
 		if(index == -1)
 			return "";
 		else
