@@ -566,10 +566,14 @@ public class VFSDirectoryEntryTable extends JTable
 				TableColumnModel columnModel = header.getColumnModel();
 				int viewColumn = columnModel.getColumnIndexAtX(evt.getX());
 				int column = columnModel.getColumn(viewColumn).getModelIndex();
+				saveWidths();
 				if(model.sortByColumn(column))
+				{
 					resizeColumns();
-				Log.log(Log.DEBUG,this,"VFSDirectoryEntryTable sorted by " + model.getColumnName(column)
+					Log.log(Log.DEBUG,this,"VFSDirectoryEntryTable sorted by "
+					+ model.getColumnName(column)
 					+ (model.getAscending() ? " ascending" : " descending") );
+				};
 				return;
 			}
 		}
