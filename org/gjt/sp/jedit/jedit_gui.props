@@ -1052,7 +1052,8 @@ ioerror.encoding-error=Cannot load with the encoding "{0}".\n\
 	({1})\n\
 	Try selecting a different encoding.\n\
 	It can be selected with the menu File->Reload with Encoding.
-ioerror.write-encoding-error=Failed to encode the character {3} at column {2} in line {1} with the encoding "{0}".
+ioerror.write-encoding-error=Failed to encode the character\n\
+	{3} at column {2} in line {1} with the encoding "{0}".
 ioerror.read-error=Cannot load: {0}
 ioerror.write-error=Cannot save: {0}
 ioerror.unsupported-encoding-error={0} charset is not supported by your JVM
