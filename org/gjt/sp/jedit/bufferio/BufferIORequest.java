@@ -95,8 +95,6 @@ public abstract class BufferIORequest extends WorkRequest
 	protected final String markersPath;
 	//}}}
 
-	//{{{ Public members
-
 	//{{{ BufferIORequest constructor
 	/**
 	 * Creates a new buffer I/O request.
@@ -124,15 +122,16 @@ public abstract class BufferIORequest extends WorkRequest
 		return getClass().getName() + '[' + buffer + ']';
 	} //}}}
 
-
+	//{{{ getCharIOBufferSize() method
 	/**
 	 * Size of character I/O buffers.
 	 */
 	public static int getCharIOBufferSize()
 	{
 		return IOBUFSIZE;
-	}
+	} //}}}
 
+	//{{{ getByteIOBufferSize() method
 	/**
 	 * Size of byte I/O buffers.
 	 */
@@ -140,7 +139,7 @@ public abstract class BufferIORequest extends WorkRequest
 	{
 		// 2 is sizeof char in byte;
 		return IOBUFSIZE * 2;
-	}
+	} //}}}
 
 	//{{{ autodetect() method
 	/**
@@ -396,8 +395,4 @@ public abstract class BufferIORequest extends WorkRequest
 		}
 		writer.flush();
 	} //}}}
-	//}}}
-
 }
-
-
