@@ -40,6 +40,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.Encoding;
 import org.gjt.sp.jedit.io.EncodingServer;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.SegmentBuffer;
@@ -353,9 +354,11 @@ public abstract class BufferIORequest extends WorkRequest
 	protected void write(Buffer buffer, OutputStream out)
 		throws IOException
 	{
-		Writer writer = EncodingServer.getTextWriter(
-			new BufferedOutputStream(out, getByteIOBufferSize()),
-			buffer.getStringProperty(JEditBuffer.ENCODING));
+		String encodingName
+			= buffer.getStringProperty(JEditBuffer.ENCODING);
+		Encoding encoding = EncodingServer.getEncoding(encodingName);
+		Writer writer = encoding.getTextWriter(
+			new BufferedOutputStream(out, getByteIOBufferSize()));
 
 		Segment lineSegment = new Segment();
 		String newline = buffer.getStringProperty(JEditBuffer.LINESEP);
@@ -384,7 +387,9 @@ public abstract class BufferIORequest extends WorkRequest
 			}
 			catch(CharacterCodingException e)
 			{
-				String message = "Failed to encode the line " + (i + 1);
+				String message = getWriteEncodingErrorMessage(
+					encodingName, encoding,
+					lineSegment, i);
 				IOException wrapping = new CharConversionException(message);
 				wrapping.initCause(e);
 				throw wrapping;
@@ -395,4 +400,68 @@ public abstract class BufferIORequest extends WorkRequest
 		}
 		writer.flush();
 	} //}}}
+
+	//{{{ Private members
+
+	//{{{ createEncodingErrorMessage() method
+	private static String getWriteEncodingErrorMessage(
+		String encodingName, Encoding encoding,
+		Segment line, int lineIndex)
+	{
+		String args[] = {
+			encodingName,
+			Integer.toString(lineIndex + 1),
+			"UNKNOWN", // column
+			"UNKNOWN"  // the character
+		};
+		try
+		{
+			int charIndex = getFirstGuiltyCharacterIndex(encoding, line);
+			if(0 <= charIndex && charIndex < line.count)
+			{
+				char c = line.array[line.offset + charIndex];
+				args[2] = Integer.toString(charIndex + 1);
+				args[3] = "'" + c + "' (U+" + Integer.toHexString(c).toUpperCase() + ")";
+			}
+		}
+		catch(Exception e)
+		{
+			// Ignore.
+		}
+		return jEdit.getProperty("ioerror.write-encoding-error", args);
+	} //}}}
+
+	//{{{ getFirstGuiltyCharacterIndex() method
+	// Look for the first character which causes encoding error.
+	private static int getFirstGuiltyCharacterIndex(Encoding encoding,
+		Segment line) throws IOException
+	{
+		if(line.count < 1)
+		{
+			return -1;
+		}
+		else if(line.count == 1)
+		{
+			return 0;
+		}
+
+		Writer tester = encoding.getTextWriter(
+			new OutputStream() {
+				public void write(int b) {}
+			});
+		for(int i = 0; i < line.count; ++i)
+		{
+			try
+			{
+				tester.write(line.array[line.offset + i]);
+			}
+			catch(CharacterCodingException e)
+			{
+				return i;
+			}
+		}
+		return -1;
+	} //}}}
+
+	//}}}
 }

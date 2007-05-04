@@ -161,6 +161,10 @@ and Mike Gorski for contributing to this release.
   the new option "encoding autodetector names" in General Option pane.
   (Matthieu Casanova and Kazutoshi Satoda)
 
+- Improved the error message of encoding errors on saving. It now shows
+  the first guilty character with column number, line number and the name
+  of actual encoding. (Kazutoshi Satoda)
+
 }}}
 {{{ Editing
 
