@@ -414,9 +414,10 @@ public class MiscUtilities
 	 */
 	public static String getFileExtension(String path)
 	{
-		// int fsIndex = getLastSeparatorIndex(path);
+		int fsIndex = getLastSeparatorIndex(path);
 		int index = path.lastIndexOf('.');
-		if(index == -1)
+		// there could be a dot in the path and no file extension
+		if(index == -1 || index < fsIndex )
 			return "";
 		else
 			return path.substring(index);
