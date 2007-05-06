@@ -460,11 +460,13 @@ public class ActionSet
 		{
 			Log.log(Log.DEBUG,this,"Loading actions from " + uri);
 			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
-			XMLUtilities.parseXML(uri.openStream(), ah);
+			if (! XMLUtilities.parseXML(uri.openStream(), ah)) {
+				Log.log(Log.ERROR, this, "Unable to parse: " + uri);
+			}
 		}
 		catch(IOException e)
 		{
-			Log.log(Log.ERROR,uri,e);
+			Log.log(Log.ERROR,this,uri,e);
 		}
 	} //}}}
 
