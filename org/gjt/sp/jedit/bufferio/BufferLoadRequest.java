@@ -106,10 +106,10 @@ public class BufferLoadRequest extends BufferIORequest
 			{
 				handleEncodingError(e);
 			}
-			catch(IOException io)
+			catch(Exception e)
 			{
-				Log.log(Log.ERROR,this,io);
-				Object[] pp = { io.toString() };
+				Log.log(Log.ERROR,this,e);
+				Object[] pp = { e.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
@@ -141,7 +141,7 @@ public class BufferLoadRequest extends BufferIORequest
 					if(markers != null)
 						readMarkers(buffer,markers);
 				}
-				catch(IOException io)
+				catch(Exception e)
 				{
 					// ignore
 				}
@@ -161,10 +161,10 @@ public class BufferLoadRequest extends BufferIORequest
 			{
 				vfs._endVFSSession(session,view);
 			}
-			catch(IOException io)
+			catch(Exception e)
 			{
-				Log.log(Log.ERROR,this,io);
-				String[] pp = { io.toString() };
+				Log.log(Log.ERROR,this,e);
+				String[] pp = { e.toString() };
 				VFSManager.error(view,path,"ioerror.read-error",pp);
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);

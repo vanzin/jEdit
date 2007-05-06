@@ -162,10 +162,10 @@ public class BufferSaveRequest extends BufferIORequest
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
-		catch(IOException io)
+		catch(Exception e)
 		{
-			Log.log(Log.ERROR,this,io);
-			String[] pp = { io.toString() };
+			Log.log(Log.ERROR,this,e);
+			String[] pp = { e.toString() };
 			VFSManager.error(view,path,"ioerror.write-error",pp);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
@@ -188,10 +188,10 @@ public class BufferSaveRequest extends BufferIORequest
 					vfs._delete(session,Buffer.getMarkersPath(vfs, path),view);
 				vfs._endVFSSession(session,view);
 			}
-			catch(IOException io)
+			catch(Exception e)
 			{
-				Log.log(Log.ERROR,this,io);
-				String[] pp = { io.toString() };
+				Log.log(Log.ERROR,this,e);
+				String[] pp = { e.toString() };
 				VFSManager.error(view,path,"ioerror.write-error",pp);
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
