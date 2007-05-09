@@ -381,7 +381,8 @@ public class Mode
 			{
 				char openChar = unalignedOpenBrackets.charAt(i);
 				char closeChar = TextUtilities.getComplementaryBracket(openChar, null);
-				rules.add(new DeepIndentRule(openChar, closeChar));
+				if (closeChar != '\0')
+					rules.add(new DeepIndentRule(openChar, closeChar));
 			}
 		}
 
