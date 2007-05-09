@@ -105,6 +105,10 @@ and Mike Gorski for contributing to this release.
 - Correctly send a ViewUpdate.ACTIVATED message when the user closes a view
   and focuses the first opened view. (Marcelo Vanzin)
 
+- Fixed deep indent : now the deep indent works with the chars found in unalignedOpenBrackets
+  property of the edit mode, and the matching end char is automatically set.
+  (#1666815) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 

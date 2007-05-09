@@ -35,6 +35,15 @@ import java.util.List;
  */
 public class DeepIndentRule implements IndentRule
 {
+	private final char openChar;
+	private final char closeChar;
+
+	public DeepIndentRule(char openChar, char closeChar)
+	{
+		this.openChar = openChar;
+		this.closeChar = closeChar;
+	}
+
 	//{{{ getLastParens() method
 	/**
 	 * Return the indexes of the last closing and the last opening parens in a line
@@ -44,19 +53,19 @@ public class DeepIndentRule implements IndentRule
 	 *
 	 * @return the last pos of the parens in the line
 	 */
-	private static Parens getLastParens(String s, int pos)
+	private Parens getLastParens(String s, int pos)
 	{
 		int lastClose;
 		int lastOpen;
 		if (pos == -1)
 		{
-			lastClose = s.lastIndexOf(')');
-			lastOpen = s.lastIndexOf('(');
+			lastClose = s.lastIndexOf(closeChar);
+			lastOpen = s.lastIndexOf(openChar);
 		}
 		else
 		{
-			lastClose = s.lastIndexOf(')', pos);
-			lastOpen = s.lastIndexOf('(', pos);
+			lastClose = s.lastIndexOf(closeChar, pos);
+			lastOpen = s.lastIndexOf(openChar, pos);
 		}
 		return new Parens(lastOpen, lastClose);
 	} //}}}

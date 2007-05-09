@@ -375,7 +375,15 @@ public class Mode
 		}
 
 		if (getBooleanProperty("deepIndent"))
-			rules.add(new DeepIndentRule());
+		{
+			String unalignedOpenBrackets = (String) getProperty("unalignedOpenBrackets");
+			for (int i = 0 ; i < unalignedOpenBrackets.length();i++)
+			{
+				char openChar = unalignedOpenBrackets.charAt(i);
+				char closeChar = TextUtilities.getComplementaryBracket(openChar, null);
+				rules.add(new DeepIndentRule(openChar, closeChar));
+			}
+		}
 
 		if (!getIgnoreWhitespace())
 			rules.add(new WhitespaceRule());
