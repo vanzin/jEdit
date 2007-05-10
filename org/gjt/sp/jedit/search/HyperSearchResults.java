@@ -378,6 +378,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			{
 				resultTreeRoot.removeAllChildren();
 				resultTreeModel.reload(resultTreeRoot);
+				setSearchStatus(null);
 			}
 			else if(source == multi)
 			{
