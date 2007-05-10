@@ -187,9 +187,9 @@ void pluginTextDialog( View view, Buffer buffer )
     descriptionPanel.setLayout( new BoxLayout( descriptionPanel, BoxLayout.Y_AXIS ) );
     descriptionPanel.setBorder(new EmptyBorder(12, 5, 0, 5));
 
-    descriptionPanel.add( new JLabel( "Source Code Location (CVS|SVN and tag, or URL): " ) );
+    descriptionPanel.add( new JLabel( "Source Code Location (SVN and tag, or URL): " ) );
     sourceArea = new JEditorPane();
-    sourceArea.setText("Source code is in CVS|SVN with the tag XXXX");
+    sourceArea.setText("Source code is in SVN with the tag XXXX (no SVN release numbers, please)");
     sourceArea.setPreferredSize( new Dimension( 250, 36 ) );
     descriptionPanel.add( new JScrollPane( sourceArea ) );
 
