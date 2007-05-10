@@ -46,11 +46,13 @@ public class HyperSearchOperationNode
 	private boolean treeViewDisplayed;
 	private final String searchString;
 	private List<DefaultMutableTreeNode> resultNodes;
+	private SearchMatcher searchMatcher;
 	
 	//{{{ HyperSearchOperationNode constructor
-	public HyperSearchOperationNode(String searchString) 
+	public HyperSearchOperationNode(String searchString, SearchMatcher searchMatcher)
 	{
 		this.searchString = searchString;
+		this.searchMatcher = searchMatcher;
 	}//}}}
 	
 	//{{{ toString() method
@@ -217,5 +219,11 @@ public class HyperSearchOperationNode
 			treeNodes.put(fileNode.path, insNode);
 		}
 		
+	}//}}}
+
+	//{{{ getSearchMatcher() method
+	SearchMatcher getSearchMatcher()
+	{
+		return searchMatcher;
 	}//}}}
 }

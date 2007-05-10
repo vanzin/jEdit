@@ -169,6 +169,8 @@ and Mike Gorski for contributing to this release.
   the first guilty character with column number, line number and the name
   of actual encoding. (Kazutoshi Satoda)
 
+- A new action on the popup menu in the Hypersearch dockable panel to redo the 
+  hypersearch (Matthieu Casanova)
 }}}
 {{{ Editing
 

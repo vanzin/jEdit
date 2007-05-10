@@ -51,7 +51,7 @@ class HyperSearchRequest extends WorkRequest
 
 		this.results = results;
 		searchString = SearchAndReplace.getSearchString();
-		rootSearchNode = new DefaultMutableTreeNode(new HyperSearchOperationNode(searchString));
+		rootSearchNode = new DefaultMutableTreeNode(new HyperSearchOperationNode(searchString, matcher));
 
 		this.selection = selection;
 	} //}}}

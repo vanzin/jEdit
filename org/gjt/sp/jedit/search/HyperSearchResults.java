@@ -502,6 +502,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 							resultNode.isTreeViewDisplayed());
 				chkItem.addActionListener(new TreeDisplayAction());
 				popupMenu.add(chkItem);
+
+				popupMenu.add(new RedoSearchAction((HyperSearchOperationNode)userObj));
 			}
 
 			GUIUtilities.showPopupMenu(popupMenu,evt.getComponent(),
@@ -603,6 +605,27 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 					new TreePath(operNode.getPath()));
 		}
 	}//}}}
+
+	//{{{ RedoSearchAction class
+	class RedoSearchAction extends AbstractAction
+	{
+		private HyperSearchOperationNode hyperSearchOperationNode;
+		public RedoSearchAction(HyperSearchOperationNode hyperSearchOperationNode)
+		{
+			super(jEdit.getProperty("hypersearch-results.redo"));
+			this.hyperSearchOperationNode = hyperSearchOperationNode;
+		}
+
+		/**
+		 * Invoked when an action occurs.
+		 */
+		public void actionPerformed(ActionEvent e)
+		{
+			SearchAndReplace.setSearchMatcher(hyperSearchOperationNode.getSearchMatcher());
+			removeSelectedNode();
+			SearchAndReplace.hyperSearch(view, false);
+		}
+	}
 
 	//{{{ TreeDisplayAction class
 	class TreeDisplayAction extends AbstractAction
