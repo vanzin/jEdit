@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.indent;
 import java.util.List;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * @author Slava Pestov
@@ -54,18 +55,15 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		if(index == -1)
 			return;
 
-		String line = buffer.getLineText(index);
-
-		int offset = line.lastIndexOf(closeBracket);
+		int offset = buffer.getLineText(index).lastIndexOf(closeBracket);
 		if(offset == -1)
 			return;
 
-		int closeCount = getBrackets(line).closeCount;
+		int closeCount = getBrackets(buffer, index).closeCount;
 		if(closeCount != 0)
 		{
-			IndentAction.AlignBracket alignBracket
-				= new IndentAction.AlignBracket(
-				buffer,index,offset);
+			AlignBracket alignBracket
+				= new AlignBracket(buffer,index,offset);
 			/*
 			Consider the following Common Lisp code (with one more opening
 			bracket than closing):
@@ -80,13 +78,13 @@ public class CloseBracketIndentRule extends BracketIndentRule
 			the next line must be indented relative to the
 			corresponding opening bracket from line 1.
 			*/
-			String openLine = alignBracket.getOpenBracketLine();
-			int column = alignBracket.getOpenBracketColumn();
-			if(openLine != null)
+			int openLine = alignBracket.getOpenBracketLine();
+			if(openLine != -1)
 			{
-				String leadingBrackets = openLine.substring(0,column);
-				alignBracket.setExtraIndent(getBrackets(leadingBrackets)
-					.openCount);
+				int column = alignBracket.getOpenBracketColumn();
+				alignBracket.setExtraIndent(
+					getBrackets(buffer, openLine,
+						0, column).openCount);
 			}
 
 			indentActions.add(alignBracket);
@@ -94,10 +92,82 @@ public class CloseBracketIndentRule extends BracketIndentRule
 	} //}}}
 
 	//{{{ isMatch() method
+	/**
+	 * @deprecated
+	 *   This method calls BracketIndentRule#getBrackets(String)
+	 *   which has been deprecated.
+	 */
+	@Deprecated
 	public boolean isMatch(String line)
 	{
 		return getBrackets(line).closeCount != 0;
 	} //}}}
 
 	private boolean aligned;
+
+	//{{{ AlignBracket class
+	private static class AlignBracket implements IndentAction
+	{
+		private int line, offset;
+		private int openBracketLine;
+		private int openBracketColumn;
+		private String openBracketLineText;
+		private int extraIndent;
+
+		public AlignBracket(JEditBuffer buffer, int line, int offset)
+		{
+			this.line = line;
+			this.offset = offset;
+
+			int openBracketIndex = TextUtilities.findMatchingBracket(
+				buffer,this.line,this.offset);
+			if(openBracketIndex == -1)
+				openBracketLine = -1;
+			else
+			{
+				openBracketLine = buffer.getLineOfOffset(openBracketIndex);
+				openBracketColumn = openBracketIndex -
+					buffer.getLineStartOffset(openBracketLine);
+				openBracketLineText = buffer.getLineText(openBracketLine);
+			}
+		}
+
+		public int getExtraIndent()
+		{
+			return extraIndent;
+		}
+
+		public void setExtraIndent(int extraIndent)
+		{
+			this.extraIndent = extraIndent;
+		}
+
+		public int getOpenBracketColumn()
+		{
+			return openBracketColumn;
+		}
+
+		public int getOpenBracketLine()
+		{
+			return openBracketLine;
+		}
+
+		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
+			int newIndent)
+		{
+			if(openBracketLineText == null)
+				return newIndent;
+			else
+			{
+				return StandardUtilities.getLeadingWhiteSpaceWidth(
+					openBracketLineText,buffer.getTabSize())
+					+ (extraIndent * buffer.getIndentSize());
+			}
+		}
+
+		public boolean keepChecking()
+		{
+			return false;
+		}
+	} //}}}
 }

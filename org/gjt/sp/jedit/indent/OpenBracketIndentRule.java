@@ -67,7 +67,7 @@ public class OpenBracketIndentRule extends BracketIndentRule
 		if(line == -1)
 			return 0;
 		else
-			return getBrackets(buffer.getLineText(line)).openCount;
+			return getBrackets(buffer, line).openCount;
 	} //}}}
 
 	//{{{ handleCollapse() method

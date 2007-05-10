@@ -4,7 +4,6 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
-
 Joseph Erickson, David Moss, Horst Eff, Daniel Hahler, Stephen Co,
 and Mike Gorski for contributing to this release.
 
@@ -108,6 +107,10 @@ and Mike Gorski for contributing to this release.
 - Fixed deep indent : now the deep indent works with the chars found in unalignedOpenBrackets
   property of the edit mode, and the matching end char is automatically set.
   (#1666815) (Matthieu Casanova)
+
+- Brackets in comments or literals (in terms of token types in edit mode)
+  are now ignored for indent. (SF.net bugs #747769, #1229283, #1592989)
+  (Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous
