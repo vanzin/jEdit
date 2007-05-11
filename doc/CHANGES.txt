@@ -111,6 +111,8 @@ and Mike Gorski for contributing to this release.
 - Brackets in comments or literals (in terms of token types in edit mode)
   are now ignored for indent. (SF.net bugs #747769, #1229283, #1592989)
   (Kazutoshi Satoda)
+  
+- Encodings option pane rewrote using a JTable. (1540578) (Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous

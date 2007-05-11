@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2006 Björn Kautler
+ * Portions copyright (C) 2007 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,31 +25,34 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableColumn;
+import javax.swing.table.AbstractTableModel;
+
 import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
-import org.gjt.sp.jedit.MiscUtilities.StringICaseCompare;
 //}}}
 
 //{{{ EncodingsOptionPane class
 /**
  * Encodings editor.
  * @author Björn Kautler
+ * @author Matthieu Casanova
  * @since jEdit 4.3pre6
  * @version $Id$
  */
 public class EncodingsOptionPane extends AbstractOptionPane
 {
+	private JTable table;
+
+	private int selectedCount;
+
 	//{{{ EncodingsOptionPane constructor
 	public EncodingsOptionPane()
 	{
@@ -62,19 +66,20 @@ public class EncodingsOptionPane extends AbstractOptionPane
 
 		add(new JLabel(jEdit.getProperty("options.encodings.selectEncodings")),BorderLayout.NORTH);
 
-		Box encodingsBox = Box.createVerticalBox();
 		String[] encodings = MiscUtilities.getEncodings(false);
 		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
-		int encodingsAmount = encodings.length;
-		encodingCheckBoxArray = new JCheckBox[encodingsAmount];
-		for (int i=0 ; i<encodingsAmount ; i++) {
-			String encoding = encodings[i];
-			JCheckBox encodingCheckBox = new JCheckBox(encoding,!jEdit.getBooleanProperty("encoding.opt-out."+encoding,false));
-			encodingCheckBoxArray[i] = encodingCheckBox;
-			encodingsBox.add(encodingCheckBox);
-		}
-		JScrollPane encodingsScrollPane = new JScrollPane(encodingsBox);
-		Dimension d = encodingsBox.getPreferredSize();
+		this.encodings = new EncodingTableModel(encodings);
+
+		table = new JTable(this.encodings);
+
+		TableColumn col1 = table.getColumnModel().getColumn(0);
+		col1.setPreferredWidth(30);
+		col1.setMinWidth(30);
+		col1.setMaxWidth(30);
+		col1.setResizable(false);
+
+		JScrollPane encodingsScrollPane = new JScrollPane(table);
+		Dimension d = table.getPreferredSize();
 		d.height = Math.min(d.height,200);
 		encodingsScrollPane.setPreferredSize(d);
 		add(encodingsScrollPane,BorderLayout.CENTER);
@@ -88,21 +93,23 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		selectNoneButton.addActionListener(actionHandler);
 		buttonsBox.add(selectNoneButton);
 		add(buttonsBox,BorderLayout.SOUTH);
+		updateButton();
 	} //}}}
 
 	//{{{ _save() method
 	protected void _save()
 	{
-		for (int i=0, c=encodingCheckBoxArray.length ; i<c ; i++)
+		for (int i=0, c=encodings.getRowCount(); i<c ; i++)
 		{
-			JCheckBox encodingCheckBox = encodingCheckBoxArray[i];
-			if (encodingCheckBox.isSelected())
+			boolean encodingValue = ((Boolean) encodings.getValueAt(i, 0)).booleanValue();
+			String encoding = (String) encodings.getValueAt(i, 1);
+			if (encodingValue)
 			{
-				jEdit.unsetProperty("encoding.opt-out."+encodingCheckBox.getText());
+				jEdit.unsetProperty("encoding.opt-out."+encoding);
 			}
 			else
 			{
-				jEdit.setBooleanProperty("encoding.opt-out."+encodingCheckBox.getText(),true);
+				jEdit.setBooleanProperty("encoding.opt-out."+encoding,true);
 			}
 		}
 	} //}}}
@@ -110,10 +117,17 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JCheckBox[] encodingCheckBoxArray;
 	private JButton selectAllButton;
 	private JButton selectNoneButton;
+	private EncodingTableModel encodings;
 	//}}}
+
+	//{{{ updateButton() method
+	private void updateButton()
+	{
+		selectAllButton.setEnabled(selectedCount != encodings.encodingsSelected.length);
+		selectNoneButton.setEnabled(selectedCount != 0);
+	} //}}}
 
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
@@ -125,21 +139,117 @@ public class EncodingsOptionPane extends AbstractOptionPane
 			if (source == selectAllButton)
 			{
 				select = true;
+				selectedCount = encodings.encodingsSelected.length;
 			}
 			else if (source == selectNoneButton)
 			{
 				select = false;
+				selectedCount = 0;
 			}
 			else
 			{
 				return;
 			}
-			for (int i=0, c=encodingCheckBoxArray.length ; i<c ; i++)
+			int rowCount = encodings.getRowCount();
+			for (int i=0 ; i < rowCount; i++)
 			{
-				encodingCheckBoxArray[i].setSelected(select);
+				encodings.encodingsSelected[i] = select;
 			}
+			updateButton();
+			encodings.fireTableDataChanged();
+			table.repaint();
+
 		}
 	} //}}}
 
 	//}}}
+
+	//{{{ EncodingTableModel class
+	private class EncodingTableModel extends AbstractTableModel
+	{
+		private final String[] encodings;
+
+		private final boolean[] encodingsSelected;
+
+		EncodingTableModel(String[] encodings)
+		{
+			this.encodings = encodings;
+			encodingsSelected = new boolean[encodings.length];
+
+			int encodingsAmount = encodings.length;
+			for (int i=0 ; i<encodingsAmount ; i++) {
+				String encoding = encodings[i];
+				boolean selected = !jEdit.getBooleanProperty("encoding.opt-out." + encoding, false);
+				encodingsSelected[i] = selected;
+				if (selected)
+					selectedCount++;
+			}
+		}
+
+		public String getColumnName(int columnIndex)
+		{
+			return null;
+		}
+
+		public Class<?> getColumnClass(int columnIndex)
+		{
+			switch (columnIndex)
+			{
+				case 0 : return Boolean.class;
+				case 1 : return String.class;
+				default: throw new IllegalArgumentException("Unexpected column value " + columnIndex);
+			}
+		}
+
+		public boolean isCellEditable(int rowIndex, int columnIndex)
+		{
+			return columnIndex == 0;
+		}
+
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+		{
+			if (columnIndex == 0)
+			{
+				boolean value = ((Boolean) aValue).booleanValue();
+				if (value != encodingsSelected[rowIndex])
+				{
+					encodingsSelected[rowIndex] = value;
+					fireTableCellUpdated(rowIndex, columnIndex);
+					if (value)
+						selectedCount++;
+					else
+						selectedCount--;
+					updateButton();
+				}
+			}
+		}
+
+		public void addTableModelListener(TableModelListener l)
+		{
+		}
+
+		public void removeTableModelListener(TableModelListener l)
+		{
+		}
+
+		public int getRowCount()
+		{
+			return encodings.length;
+		}
+
+		public int getColumnCount()
+		{
+			return 2;
+		}
+
+		public Object getValueAt(int rowIndex, int columnIndex)
+		{
+			switch (columnIndex)
+			{
+				case 0 : return Boolean.valueOf(encodingsSelected[rowIndex]);
+				case 1 : return encodings[rowIndex];
+				default: throw new IllegalArgumentException("Unexpected column value " + columnIndex);
+			}
+		}
+	} //}}}
 } //}}}
