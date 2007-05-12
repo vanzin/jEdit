@@ -107,7 +107,7 @@ public class XMLUtilities
 	 * <p>The given stream is closed before the method returns,
 	 * regardless whether there were errors or not.</p>
 	 *
-	 * @return Whether any error occured during parsing.
+	 * @return true if any error occured during parsing, false if success.
 	 */
 	public static boolean parseXML(InputStream in, DefaultHandler handler)
 		throws IOException
