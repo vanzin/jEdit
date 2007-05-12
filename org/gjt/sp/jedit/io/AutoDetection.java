@@ -73,9 +73,10 @@ public class AutoDetection
 	public static boolean isGzipped(InputStream sample)
 		throws IOException
 	{
-		final byte[] GZIP_MAGIC = { (byte)0x1f, (byte)0x8b };
-		return sample.read() == GZIP_MAGIC[0]
-			&& sample.read() == GZIP_MAGIC[1];
+		int magic1 = GZIPInputStream.GZIP_MAGIC & 0xff;
+		int magic2 = (GZIPInputStream.GZIP_MAGIC >> 8) & 0xff;
+		return sample.read() == magic1
+			&& sample.read() == magic2;
 	} //}}}
 
 	//{{{ getEncodingDetectors() method
