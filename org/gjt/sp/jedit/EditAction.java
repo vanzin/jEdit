@@ -65,7 +65,7 @@ public abstract class EditAction
 	public EditAction(String name, Object[] newArgs) {
 		this.name = name;
 		this.args = newArgs;
-	}
+	} //}}}
 		
 	//{{{ getName() method
 	/**
@@ -76,6 +76,7 @@ public abstract class EditAction
 		return name;
 	} //}}}
 	
+	// {{{ setName() method
 	/**
 	 * Changes the name of an action
 	 * @param newName
@@ -83,7 +84,7 @@ public abstract class EditAction
 	 */
 	public void setName(String newName) {
 		name = newName;
-	}
+	}// }}}
 
 	//{{{ getLabel() method
 	/**
@@ -131,7 +132,7 @@ public abstract class EditAction
 	final public void invoke(View view, Object[] newArgs) {
 		args = newArgs;
 		invoke(view);
-	}
+	} //}}}
 	
 	//{{{ getView() method
 	/**
