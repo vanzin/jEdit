@@ -176,6 +176,10 @@ and Mike Gorski for contributing to this release.
 
 - A new action on the popup menu in the Hypersearch dockable panel to redo the 
   hypersearch (Matthieu Casanova)
+  
+- When calling "line-comment" action, if the edit mode doesn't have a line 
+  comment property, the lines are surrounded by range comments 
+  (Matthieu Casanova)
 }}}
 {{{ Editing
 

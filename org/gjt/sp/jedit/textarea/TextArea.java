@@ -3897,10 +3897,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void lineComment()
 	{
-		String comment = buffer.getContextSensitiveProperty(caret,"lineComment");
-		if(!buffer.isEditable() || comment == null || comment.length() == 0)
+		if(!buffer.isEditable())
 		{
 			getToolkit().beep();
+			return;
+		}
+		String comment = buffer.getContextSensitiveProperty(caret,"lineComment");
+		if(comment == null || comment.length() == 0)
+		{
+			rangeLineComment();
 			return;
 		}
 
@@ -3926,6 +3931,50 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 
 		selectNone();
+	} //}}}
+
+	//{{{ rangeLineComment() method
+	/**
+	 * This method will surround each selected line with a range comment.
+	 * This is used when calling line comment if the edit mode doesn't have
+	 * a line comment property
+	 * @since jEdit 4.3pre10
+	 */
+	private void rangeLineComment()
+	{
+		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
+		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
+		if(!buffer.isEditable() || commentStart == null || commentEnd == null
+			|| commentStart.length() == 0 || commentEnd.length() == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		commentStart += ' ';
+		commentEnd = ' ' + commentEnd;
+
+
+		try
+		{
+			buffer.beginCompoundEdit();
+			int[] lines = getSelectedLines();
+			for(int i = 0; i < lines.length; i++)
+			{
+				String text = getLineText(lines[i]);
+				if (text.trim().length() == 0)
+					continue;
+				buffer.insert(getLineEndOffset(lines[i]) - 1,
+					commentEnd);
+				buffer.insert(getLineStartOffset(lines[i])
+					+ StandardUtilities.getLeadingWhiteSpace(text),
+					commentStart);
+			}
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
 	} //}}}
 
 	//{{{ rangeComment() method
