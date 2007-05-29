@@ -49,7 +49,7 @@ class BrowserView extends JPanel
 	{
 		this.browser = browser;
 
-		tmpExpanded = new HashSet();
+		tmpExpanded = new HashSet<String>();
 		DockableWindowManager dwm = jEdit.getActiveView().getDockableWindowManager();
 		KeyListener keyListener = dwm.closeListener(VFSBrowser.NAME);
 
@@ -173,7 +173,7 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ directoryLoaded() method
-	public void directoryLoaded(Object node, String path, ArrayList directory)
+	public void directoryLoaded(Object node, String path, java.util.List<VFSFile> directory)
 	{
 		//{{{ If reloading root, update parent directory list
 		if(node == null)
@@ -306,7 +306,7 @@ class BrowserView extends JPanel
 	private JSplitPane splitPane;
 	private JList parentDirectories;
 	private VFSDirectoryEntryTable table;
-	private Set tmpExpanded;
+	private Set<String> tmpExpanded;
 	private BrowserCommandsMenu popup;
 	private boolean showIcons;
 	//}}}
@@ -658,7 +658,8 @@ class BrowserView extends JPanel
 							browser.getView().getBuffer()
 							.getDirectory());
 					}
-					break;								}
+					break;
+				}
 			}
 			if (!evt.isConsumed()) super.processKeyEvent(evt);
 		}	

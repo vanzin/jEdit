@@ -29,7 +29,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.font.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Set;
 import org.gjt.sp.jedit.io.VFS;
@@ -121,18 +120,17 @@ public class VFSDirectoryEntryTable extends JTable
 		VFSDirectoryEntryTableModel model
 			= (VFSDirectoryEntryTableModel)getModel();
 
-		LinkedList returnValue = new LinkedList();
+		LinkedList<VFSFile> returnValue = new LinkedList<VFSFile>();
 		int[] selectedRows = getSelectedRows();
 		for(int i = 0; i < selectedRows.length; i++)
 		{
 			returnValue.add(model.files[selectedRows[i]].dirEntry);
 		}
-		return (VFSFile[])returnValue.toArray(new
-		VFSFile[returnValue.size()]);
+		return returnValue.toArray(new VFSFile[returnValue.size()]);
 	} //}}}
 
 	//{{{ getExpandedDirectories() method
-	public void getExpandedDirectories(Set set)
+	public void getExpandedDirectories(Set<String> set)
 	{
 		VFSDirectoryEntryTableModel model
 			= (VFSDirectoryEntryTableModel)getModel();
@@ -180,8 +178,8 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ setDirectory() method
-	public void setDirectory(VFS vfs, Object node, ArrayList list,
-		Set tmpExpanded)
+	public void setDirectory(VFS vfs, Object node, java.util.List<VFSFile> list,
+		Set<String> tmpExpanded)
 	{
 		timer.stop();
 		typeSelectBuffer.setLength(0);
@@ -573,8 +571,7 @@ public class VFSDirectoryEntryTable extends JTable
 					Log.log(Log.DEBUG,this,"VFSDirectoryEntryTable sorted by "
 					+ model.getColumnName(column)
 					+ (model.getAscending() ? " ascending" : " descending") );
-				};
-				return;
+				}
 			}
 		}
 	} //}}}
@@ -584,7 +581,7 @@ public class VFSDirectoryEntryTable extends JTable
 	{
 		private DefaultTableCellRenderer tcr;
 
-		public HeaderRenderer(DefaultTableCellRenderer tcr)
+		HeaderRenderer(DefaultTableCellRenderer tcr)
 		{
 			this.tcr = tcr;
 		}
