@@ -7,8 +7,8 @@ Homepage: http://www.jedit.org/
 Architecture: all
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
-Recommends: sun-java5-jre
-Build-depends: sun-java5-jdk, ant
+Recommends: sun-java5-jre | sun-java6-jre
+Build-depends: sun-java5-jdk | sun-java5-jdk, ant
 Suggests: exuberant-ctags, cscope, sun-java5-jdk, sun-java6-jdk
 Priority: optional
 Installed-Size: @deb.installed.size@
