@@ -1,5 +1,5 @@
 Package: jedit
-Version: 4:@jedit.build.number@
+Version: 4:@jedit.version@
 Architecture: all
 Maintainer: Contributors <devel@jEdit.org>
 Section: contrib/editors
@@ -8,7 +8,7 @@ Architecture: all
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Recommends: sun-java5-jre | sun-java6-jre
-Build-depends: sun-java5-jdk | sun-java5-jdk, ant
+Build-depends: sun-java5-jdk | sun-java6-jdk, ant
 Suggests: exuberant-ctags, cscope, sun-java5-jdk, sun-java6-jdk
 Priority: optional
 Installed-Size: @deb.installed.size@
