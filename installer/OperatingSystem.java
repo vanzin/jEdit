@@ -100,7 +100,9 @@ public abstract class OperatingSystem
 			return os;
 
 		if(System.getProperty("mrj.version") != null)
+		{
 			os = new MacOS();
+		}
 		else
 		{
 			String osName = System.getProperty("os.name");
@@ -123,7 +125,9 @@ public abstract class OperatingSystem
 		{
 			String dir = "/usr/local/share/";
 			if(!new File(dir).canWrite())
+			{
 				dir = System.getProperty("user.home");
+			}
 
 			return new File(dir,name.toLowerCase() + "/" + version).getPath();
 		}
@@ -144,7 +148,9 @@ public abstract class OperatingSystem
 			{
 				String dir = "/usr/local/";
 				if(!new File(dir).canWrite())
+				{
 					dir = System.getProperty("user.home");
+				}
 
 				return new File(dir,"bin").getPath();
 			}
@@ -153,7 +159,9 @@ public abstract class OperatingSystem
 				Vector filesets) throws IOException
 			{
 				if(!enabled)
+				{
 					return;
+				}
 
 				mkdirs(directory);
 
@@ -169,25 +177,40 @@ public abstract class OperatingSystem
 				// Write simple script
 				FileWriter out = new FileWriter(script);
 				out.write("#!/bin/sh\n");
-				out.write("# Java heap size, in megabytes\n");
-				out.write("JAVA_HEAP_SIZE=192\n");
+				out.write("#\n");
+				out.write("# Runs jEdit - Programmer's Text Editor.\n");
+				out.write("#\n");
+				out.write("\n");
+				out.write("# Set jvm heap initial and maximum sizes (in megabytes).\n");
+				out.write("JAVA_HEAP_INIT_SIZE=64\n");
+				out.write("JAVA_HEAP_MAX_SIZE=192\n");
+				out.write("\n");
 				out.write("DEFAULT_JAVA_HOME=\""
 					+ System.getProperty("java.home")
 					+ "\"\n");
-				out.write("if [ \"$JAVA_HOME\" = \"\" ]; then\n");
-				out.write("JAVA_HOME=\"$DEFAULT_JAVA_HOME\"\n");
+				out.write("if [ -z \"$JAVA_HOME\" ]; then\n");
+				out.write("\tJAVA_HOME=\"$DEFAULT_JAVA_HOME\"\n");
 				out.write("fi\n");
-
-				out.write("exec \"$JAVA_HOME"
-					+ "/bin/java\" -server -mx${JAVA_HEAP_SIZE}m ${"
-					+ name.toUpperCase() + "} ");
-
+				out.write("\n");
+				out.write("# Launch application.\n");
+				out.write("\n");
+				out.write("while [ $# -gt 9 ]; do\n");
 				String jar = installDir + File.separator
 					+ name.toLowerCase() + ".jar";
-
-				out.write("-classpath \"" + getExtraClassPath()
-					+ jar + "\" org.gjt.sp.jedit.jEdit -reuseview \"$@\"\n");
-
+				out.write("\texec \"$JAVA_HOME/bin/java\"" +
+					  " -Xms${JAVA_HEAP_INIT_SIZE}M" +
+					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
+					  jar + " -reuseview \"$1\" \"$2\"" +
+					  " \"$3\" \"$4\" \"$5\" \"$6\"" +
+					  " \"$7\" \"$8\" \"$9\"\n");
+				out.write("\tshift 9\n");
+				out.write("done\n");
+				out.write("exec \"$JAVA_HOME/bin/java\"" +
+					  " -Xms${JAVA_HEAP_INIT_SIZE}M" +
+					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
+					  jar + " -reuseview \"$1\" \"$2\"" +
+					  " \"$3\" \"$4\" \"$5\" \"$6\"" +
+					  " \"$7\" \"$8\" \"$9\"\n");
 				out.close();
 
 				// Make it executable

@@ -152,7 +152,6 @@ public class IOUtilities
 		return length;
 	} // }}}
 
-
 	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link InputStream} ignoring it if it is null and ignoring exceptions.
@@ -239,5 +238,8 @@ public class IOUtilities
 		}
 	} //}}}
 
-	private IOUtilities(){}
+	//{{{ IOUtilities() constructor
+	private IOUtilities()
+	{
+	} //}}}
 }

@@ -672,9 +672,9 @@ public class PluginJAR
 	 */
 	public void activatePlugin()
 	{
-		synchronized(this)
+		synchronized (this)
 		{
-			if(activated)
+			if (activated)
 			{
 				// recursive call
 				return;
@@ -683,8 +683,10 @@ public class PluginJAR
 			activated = true;
 		}
 
-		if(!(plugin instanceof EditPlugin.Deferred))
+		if (!(plugin instanceof EditPlugin.Deferred))
+		{
 			return;
+		}
 
 		String className = plugin.getClassName();
 
@@ -704,8 +706,15 @@ public class PluginJAR
 
 			plugin = (EditPlugin)clazz.newInstance();
 			plugin.jar = this;
+
+			String pluginHome = EditPlugin.getPluginHome(clazz);
+			if ((null != pluginHome) &&
+			    (plugin.usePluginHome()))
+			{
+				new File(pluginHome).mkdirs();
+			}
 		}
-		catch(Throwable t)
+		catch (Throwable t)
 		{
 			breakPlugin();
 
@@ -717,7 +726,7 @@ public class PluginJAR
 			return;
 		}
 
-		if(jEdit.isMainThread()
+		if (jEdit.isMainThread()
 			|| SwingUtilities.isEventDispatchThread())
 		{
 			startPlugin();
@@ -741,9 +750,10 @@ public class PluginJAR
 	{
 		String filename = MiscUtilities.getFileName(getPath());
 		jEdit.setBooleanProperty("plugin-blacklist." + filename, false);
-//		jEdit.setBooleanProperty("plugin-blacklist."+MiscUtilities.getFileName(getPath()),false);
 		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
+		{
 			return;
+		}
 
 		String className = plugin.getClassName();
 
@@ -762,7 +772,9 @@ public class PluginJAR
 				jEdit.pluginError(path,"plugin-error.not-42",null);
 			}
 			else
+			{
 				activatePlugin();
+			}
 		}
 		else
 		{
@@ -787,7 +799,9 @@ public class PluginJAR
 			}
 
 			if(load)
+			{
 				activatePlugin();
+			}
 		}
 	} //}}}
 
@@ -987,8 +1001,6 @@ public class PluginJAR
 	//{{{ init() method
 	void init()
 	{
-
-
 		PluginCacheEntry cache = getPluginCache(this);
 		if(cache != null)
 		{

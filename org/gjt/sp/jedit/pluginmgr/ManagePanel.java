@@ -154,9 +154,14 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ getPluginHome() method
-	private static File getPluginHome(String clazz, String settingsDirectory)
+	static File getPluginHome(String clazz)
 	{
-		return new File(MiscUtilities.constructPath(settingsDirectory, "plugins", clazz));
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if (null == settingsDirectory)
+		{
+			return null;
+		}
+		return new File(MiscUtilities.constructPath(settingsDirectory,"plugins",clazz));
 	} //}}}
 
 	//{{{ Inner classes
@@ -321,7 +326,9 @@ public class ManagePanel extends JPanel
 						return MiscUtilities.getFileName(entry.jar);
 					}
 					else
+					{
 						return entry.name;
+					}
 				case 2:
 					return entry.version;
 				case 3:
@@ -329,15 +336,19 @@ public class ManagePanel extends JPanel
 				case 4:
 					if (entry.dataSize == null && entry.clazz != null)
 					{
-						String settingsDirectory = jEdit.getSettingsDirectory();
-						if (settingsDirectory == null)
+						File pluginDirectory = getPluginHome(entry.clazz);
+						if (null == pluginDirectory)
+						{
 							return null;
-						String pluginDirectory = MiscUtilities.constructPath(settingsDirectory, "plugins", entry.clazz);
-						File file = new File(pluginDirectory);
-						if (file.exists())
-							entry.dataSize = MiscUtilities.formatFileSize(IOUtilities.fileLength(file));
+						}
+						if (pluginDirectory.exists())
+						{
+							entry.dataSize = MiscUtilities.formatFileSize(IOUtilities.fileLength(pluginDirectory));
+						}
 						else
-							entry.dataSize = "";
+						{
+							entry.dataSize = jEdit.getProperty("manage-plugins.data-size.unknown");
+						}
 					}
 					return entry.dataSize;
 				default:
@@ -484,7 +495,7 @@ public class ManagePanel extends JPanel
 			jEdit.removePluginJAR(jar,false);
 			jEdit.setBooleanProperty("plugin-blacklist."+MiscUtilities.getFileName(jar.getPath()),true);
 		} //}}}
-		
+
 		//{{{ saveSelection() method
 		public void saveSelection(List<String> savedSelection)
 		{
@@ -497,7 +508,7 @@ public class ManagePanel extends JPanel
 				}
 			}
 		} //}}}
-		
+
 		//{{{ restoreSelection() method
 		public void restoreSelection(List<String> savedSelection)
 		{
@@ -613,7 +624,9 @@ public class ManagePanel extends JPanel
 				roster.performOperationsInAWTThread(window);
 				pluginModel.update();
 				if (table.getRowCount() != 0)
+				{
 					table.setRowSelectionInterval(0,0);
+				}
 				table.setColumnSelectionInterval(0,0);
 				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
 				scrollbar.setValue(scrollbar.getMinimum());
@@ -746,6 +759,11 @@ public class ManagePanel extends JPanel
 			{
 				if (GUIUtilities.isPopupTrigger(evt))
 				{
+					int row = table.rowAtPoint(evt.getPoint());
+					if ((-1 != row) &&
+					    (!table.isRowSelected(row))) {
+						table.setRowSelectionInterval(row,row);
+					}
 					if (popup == null)
 					{
 						popup = new JPopupMenu();
@@ -783,13 +801,12 @@ public class ManagePanel extends JPanel
 				if (ret != JOptionPane.OK_OPTION)
 					return;
 
-				String settingsDirectory = jEdit.getSettingsDirectory();
 				for (int i = 0; i < entries.size(); i++)
 				{
 					Entry entry = entries.get(i);
 					String clazz = entry.clazz;
-					File path = getPluginHome(clazz, settingsDirectory);
-					Log.log(Log.NOTICE, this, "Removing datas of plugin " + entry.name + " home="+path);
+					File path = getPluginHome(clazz);
+					Log.log(Log.NOTICE, this, "Removing data of plugin " + entry.name + " home="+path);
 					FileVFS.recursiveDelete(path);
 					entry.dataSize = null;
 				}

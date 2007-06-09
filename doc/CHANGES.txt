@@ -51,11 +51,8 @@ and Mike Gorski for contributing to this release.
 - VFSBrowser.filesActivated() - passed proper View to jEdit.openFile()
   from FSB open action (Alan Ezust).
 
-- Escape char ignored in some edit modes (bug #1630805)
-  (Matthieu Casanova)
-
-- Bug #1649695: jEdit shell script doesn't handle spaces in filenames
-  (Nicholas O'Leary)
+- jEdit shell scripts and batch files didn't handle spaces
+  in filenames (#1649695) (Björn "Vampire" Kautler)
 
 - Macro Single_Space_Buffer was broken (#1525313) (Matthieu Casanova)
 
@@ -231,6 +228,9 @@ and Mike Gorski for contributing to this release.
 - New mode for C, and refactored the C++ and Objective-C modes to take
   advantage of the new C mode. This is part 2 of the fix for
   SF Bug #1658252. (Kazutoshi Satoda and Marcelo Vanzin)
+
+- Added an option to deactivate that rectangular selection mode
+  is active if Ctrl is pressed. (Björn "Vampire" Kautler)
 
 }}}
 {{{ API Changes

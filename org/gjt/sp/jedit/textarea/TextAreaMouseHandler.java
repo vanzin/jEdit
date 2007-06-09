@@ -49,6 +49,8 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		control = (OperatingSystem.isMacOS() && evt.isMetaDown())
 			|| (!OperatingSystem.isMacOS() && evt.isControlDown());
 
+		ctrlForRectangularSelection = true;
+
 		// so that Home <mouse click> Home is not the same
 		// as pressing Home twice in a row
 		textArea.getInputHandler().resetLastActionCount();
@@ -151,7 +153,8 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			}
 		}
 
-		if((control || textArea.isRectangularSelectionEnabled())
+		if(((control && ctrlForRectangularSelection) ||
+		    textArea.isRectangularSelectionEnabled())
 			&& textArea.isEditable())
 		{
 			int screenLine = (evt.getY() / textArea.getPainter()
@@ -177,7 +180,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			textArea.resizeSelection(
 				textArea.getMarkPosition(),dragStart,extraEndVirt,
 				textArea.isRectangularSelectionEnabled()
-				|| control);
+				|| (control && ctrlForRectangularSelection));
 
 			if(!quickCopyDrag)
 				textArea.moveCaretPosition(dragStart,false);
@@ -361,7 +364,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 
 		textArea.resizeSelection(dragStart,dot,extraEndVirt,
 			textArea.isRectangularSelectionEnabled()
-			|| control);
+			|| (control && ctrlForRectangularSelection));
 
 		if(quickCopyDrag)
 		{
@@ -568,6 +571,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	protected boolean dragged;
 	protected boolean quickCopyDrag;
 	protected boolean control;
+	protected boolean ctrlForRectangularSelection;
 	/* with drag and drop on, a mouse down in a selection does not
 	immediately deselect */
 	protected boolean maybeDragAndDrop;

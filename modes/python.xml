@@ -355,12 +355,12 @@
 	</RULES>
 
 	<!-- rulesets to syntax highlight string interpolation sequences -->
-	<RULES SET="LITERAL_ONE" DEFAULT="LITERAL1">
+	<RULES SET="LITERAL_ONE" DEFAULT="LITERAL1" ESCAPE="\">
 		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL4">%[.]?\d*[diouxXeEfFgGcrs]</SEQ_REGEXP>
 		<SEQ_REGEXP HASH_CHAR="%(" TYPE="LITERAL4">%\([^)]+\)[+ -]?\d*[diouxXeEfFgGcrs]</SEQ_REGEXP>
 	</RULES>
 	<!-- triple-quoted strings has its own, since it's LITERAL2 by default -->
-	<RULES SET="LITERAL_TWO" DEFAULT="LITERAL2">
+	<RULES SET="LITERAL_TWO" DEFAULT="LITERAL2" ESCAPE="\">
 		<SEQ_REGEXP HASH_CHAR="%" TYPE="LITERAL4">%\d*[diouxXeEfFgGcrs]</SEQ_REGEXP>
 		<SEQ_REGEXP HASH_CHAR="%(" TYPE="LITERAL4">%\([^)]+\)[+ -]?\d*[diouxXeEfFgGcrs]</SEQ_REGEXP>
 		<SPAN TYPE="LITERAL3">

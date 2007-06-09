@@ -32,6 +32,8 @@ import java.util.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
+
+import static org.gjt.sp.jedit.io.FileVFS.recursiveDelete;
 //}}}
 
 /**
@@ -199,6 +201,7 @@ class Roster
 		{
 			// close JAR file and all JARs that depend on this
 			PluginJAR jar = jEdit.getPluginJAR(plugin);
+			File pluginHome = ManagePanel.getPluginHome(jar.getPlugin().getClassName());
 			if(jar != null)
 			{
 				unloadPluginJAR(jar);
@@ -217,7 +220,11 @@ class Roster
 			boolean ok = jarFile.delete();
 
 			if(srcFile.exists())
-				ok &= deleteRecursively(srcFile);
+			{
+				ok &= recursiveDelete(srcFile);
+			}
+
+			pluginHome.delete();
 
 			if(!ok)
 			{
@@ -261,27 +268,7 @@ class Roster
 
 		//{{{ Private members
 		private final String plugin;
-
-		private boolean deleteRecursively(File file)
-		{
-			Log.log(Log.NOTICE,this,"Deleting " + file + " recursively");
-
-			boolean ok = true;
-
-			if(file.isDirectory())
-			{
-				String path = file.getPath();
-				String[] children = file.list();
-				for(int i = 0; i < children.length; i++)
-				{
-					ok &= deleteRecursively(new File(path,children[i]));
-				}
-			}
-
-			ok &= file.delete();
-
-			return ok;
-		} //}}}
+		//}}}
 	} //}}}
 
 	//{{{ Install class

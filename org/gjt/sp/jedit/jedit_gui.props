@@ -1759,9 +1759,9 @@ options.gutter.noFocusBorderColor=Unfocused gutter border:
 options.mouse.label=Mouse
 options.mouse.code=new MouseOptionPane();
 options.mouse.dragAndDrop=Drag and drop in text area
-options.mouse.joinNonWordChars=Double-click drag joins non-alphanumeric \
-	characters
+options.mouse.joinNonWordChars=Double-click drag joins non-alphanumeric characters
 options.mouse.middleMousePaste=Quick copy using middle mouse button
+options.mouse.ctrlForRectangularSelection=Switch to rectangular selection while Ctrl is pressed
 options.mouse.gutter.foldClick=Click in gutter:
 options.mouse.gutter.SfoldClick=Shift-click in gutter:
 options.mouse.gutter.toggle-fold=Collapse/expand fold
@@ -2299,6 +2299,8 @@ manage-plugins.info.name=Name
 manage-plugins.info.version=Version
 manage-plugins.info.status=Status
 manage-plugins.info.data=Data
+
+manage-plugins.data-size.unknown=<unknown>
 
 manage-plugins.remove=Remove...
 manage-plugins.help=Help...

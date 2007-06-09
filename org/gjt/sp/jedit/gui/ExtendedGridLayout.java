@@ -35,8 +35,9 @@ import static java.awt.Component.CENTER_ALIGNMENT;
 
 import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
 
-/** A layout manager that places components in a rectangular grid
-  * with variable cell sizes to support colspans and rowspans.
+/**
+  * A layout manager that places components in a rectangular grid
+  * with variable cell sizes that supports colspans and rowspans.
   * <p>
   * The container is divided into rectangles, and each component is placed
   * in a rectangular space defined by its colspan and rowspan.
@@ -108,18 +109,20 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * <p>
   * Components for which {@code isVisible() == false} are ignored. Because
   * of this, components can be replaced "in-place" by adding two components next to
-  * each other, with different <tt>isVisible()</tt> values, and toggling the 
-  * <tt>setVisible()</tt> values of both when we wish to swap the currently
+  * each other, with different {@code isVisible()} values, and toggling the 
+  * {@code setVisible()} values of both when we wish to swap the currently
   * visible component with the one that is hidden. </p>
   *
   * <p>
   * If you want to reserve free space in a row inbetween components,  
   * add a <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/Box.Filler.html">{@code javax.swing.Box.Filler}</a>
-  * to the layout. </p>
+  * to the layout if the free space is in the middle of a row,
+  * or just don't add components if the free space
+  * should be at the end of a row.</p>
   * <p>
-  * If a row is taller, or a column is wider than the <tt>maximumSize</tt> of a component,
+  * If a row is taller, or a column is wider than the {@code maximumSize} of a component,
   * the component is resized to its maximum size and aligned according to its
-  * <tt>alignmentX</tt> and <tt>alignmentY</tt> values. </p>
+  * {@code alignmentX} and {@code alignmentY} values. </p>
   * <p>
   * One instance of this class can be used to layout multiple
   * containers at the same time. </p>

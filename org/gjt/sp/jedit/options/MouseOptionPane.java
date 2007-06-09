@@ -64,6 +64,16 @@ public class MouseOptionPane extends AbstractOptionPane
 			"view.middleMousePaste"));
 		addComponent(middleMousePaste);
 
+		/*
+		 * Pressing Ctrl while mouse actions makes them as if
+		 * selection mode were rectangular mode
+		 */
+		ctrlForRectangularSelection = new JCheckBox(jEdit.getProperty(
+			"options.mouse.ctrlForRectangularSelection"));
+		ctrlForRectangularSelection.setSelected(jEdit.getBooleanProperty(
+			"view.ctrlForRectangularSelection"));
+		addComponent(ctrlForRectangularSelection);
+
 		/* Gutter mouse actions */
 		int c = clickActionKeys.length;
 		String[] clickActionNames = new String[c];
@@ -104,10 +114,14 @@ public class MouseOptionPane extends AbstractOptionPane
 	//{{{ _save() method
 	public void _save()
 	{
-		jEdit.setBooleanProperty("view.dragAndDrop",dragAndDrop.isSelected());
-		jEdit.setBooleanProperty("view.joinNonWordChars",joinNonWordChars.isSelected());
+		jEdit.setBooleanProperty("view.dragAndDrop",
+					 dragAndDrop.isSelected());
+		jEdit.setBooleanProperty("view.joinNonWordChars",
+					 joinNonWordChars.isSelected());
 		jEdit.setBooleanProperty("view.middleMousePaste",
-			middleMousePaste.isSelected());
+					 middleMousePaste.isSelected());
+		jEdit.setBooleanProperty("view.ctrlForRectangularSelection",
+					 ctrlForRectangularSelection.isSelected());
 
 		int c = clickModifierKeys.length;
 		for(int i = 0; i < c; i++)
@@ -120,8 +134,9 @@ public class MouseOptionPane extends AbstractOptionPane
 
 	//{{{ Private members
 	private JCheckBox dragAndDrop;
-	private JCheckBox middleMousePaste;
 	private JCheckBox joinNonWordChars;
+	private JCheckBox middleMousePaste;
+	private JCheckBox ctrlForRectangularSelection;
 
 	private JComboBox[] gutterClickActions;
 
