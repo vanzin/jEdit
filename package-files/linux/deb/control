@@ -1,5 +1,5 @@
 Package: jedit
-Version: 4:@jedit.version@
+Version: 4:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <devel@jEdit.org>
 Section: contrib/editors
