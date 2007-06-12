@@ -248,10 +248,25 @@ and Mike Gorski for contributing to this release.
 - Removed class VFSBrowser.PluginsMenuButton.ActionHandler as it isn't used
   anymore. (Björn "Vampire" Kautler)
 
-- New static method EditPlugin.getPluginHome(Class<? extends EditPlugin>)
-  that will return the path where a plugin should store it's data and
-  replaces the EditPlugin.getPluginHome() introduced in 4.3pre9.
-  It can be null if running without settings (Matthieu Casanova)
+- New static methods EditPlugin.getPluginHome(Class<? extends EditPlugin>),
+  EditPlugin.getPluginHome(EditPlugin>,
+  EditPlugin.getPluginHome(String) that will return the path where a plugin 
+  should store it's data. It can be null if running without settings (Matthieu Casanova)
+
+- New static methods EditPlugin.getResourceAsStream(Class<? extends EditPlugin>),
+  EditPlugin.getResourceAsStream(EditPlugin>,
+  EditPlugin.getResourceAsStream(String) that returns a stream on a file in the
+  plugin home directory It can be null if running without settings (Matthieu Casanova)
+
+- New static methods EditPlugin.getResourceAsOutputStream(Class<? extends EditPlugin>),
+  EditPlugin.getResourceAsOutputStream(EditPlugin>,
+  EditPlugin.getResourceAsOutputStream(String) that returns a stream on a file in the
+  plugin home directory It can be null if running without settings (Matthieu Casanova)
+
+- New static methods EditPlugin.getResourcePath(Class<? extends EditPlugin>),
+  EditPlugin.getResourcePath(EditPlugin>,
+  EditPlugin.getResourcePath(String) that returns the path of a file in the
+  plugin home directory It can be null if running without settings (Matthieu Casanova)
 
 - New method IOUtilities.fileLength() that computes a file or directory length
   (Matthieu Casanova)

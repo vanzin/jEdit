@@ -706,13 +706,6 @@ public class PluginJAR
 
 			plugin = (EditPlugin)clazz.newInstance();
 			plugin.jar = this;
-
-			String pluginHome = EditPlugin.getPluginHome(clazz);
-			if ((null != pluginHome) &&
-			    (plugin.usePluginHome()))
-			{
-				new File(pluginHome).mkdirs();
-			}
 		}
 		catch (Throwable t)
 		{

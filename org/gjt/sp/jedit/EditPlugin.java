@@ -22,13 +22,14 @@
 
 package org.gjt.sp.jedit;
 
-import javax.swing.JMenuItem;
-import java.util.*;
-import java.io.File;
-
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
+import org.gjt.sp.util.Log;
+
+import javax.swing.*;
+import java.io.*;
+import java.util.Vector;
 
 /**
  * The abstract base class that every plugin must implement.
@@ -311,17 +312,16 @@ public abstract class EditPlugin
 	 */
 	public void stop() {} //}}}
 
-	//{{{ usePluginHome() method
+	//{{{ getPluginHome() method
 	/**
-	 * Returns true if the plugin uses the standard plugin home
+	 * Returns the home of your plugin.
 	 *
-	 * @return true if the plugin stores it's data in the folder given by {@link #getPluginHome(Class)}
-	 * default is false
-	 * @since 4.3pre9
+	 * @return the plugin home. It can be null if there is no settings directory
+	 * @since 4.3pre10
 	 */
-	public boolean usePluginHome()
+	public File getPluginHome()
 	{
-		return false;
+		return getPluginHome(getClassName());
 	} //}}}
 
 	//{{{ getPluginHome() method
@@ -332,14 +332,222 @@ public abstract class EditPlugin
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
 	 */
-	public static String getPluginHome(Class<? extends EditPlugin> clazz)
+	public static File getPluginHome(Class<? extends EditPlugin> clazz)
+	{
+		return getPluginHome(clazz.getName());
+	} //}}}
+
+	//{{{ getPluginHome() method
+	/**
+	 * Returns the home of your plugin.
+	 *
+	 * @param plugin the plugin
+	 * @return the plugin home. It can be null if there is no settings directory
+	 * @since 4.3pre10
+	 */
+	public static File getPluginHome(EditPlugin plugin)
+	{
+		return getPluginHome(plugin.getClassName());
+	} //}}}
+
+	//{{{ getPluginHome() method
+	/**
+	 * Returns the home of your plugin.
+	 *
+	 * @param pluginClassName the plugin class name
+	 * @return the plugin home. It can be null if there is no settings directory
+	 * @since 4.3pre10
+	 */
+	public static File getPluginHome(String pluginClassName)
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if (settingsDirectory == null)
 			return null;
 
 		File file = new File(settingsDirectory, "plugins");
-		return new File(file, clazz.getName()).getPath();
+		return new File(file, pluginClassName);
+	} //}}}
+
+	//{{{ getResourceAsStream() method
+	/**
+	 * Returns an input stream to the specified resource, or <code>null</code>
+	 * if none is found.
+	 *
+	 * @param clazz the plugin class
+	 * @param path The path to the resource to be returned, relative to
+	 * the plugin's resource path.
+	 * @return An input stream for the resource, or <code>null</code>.
+	 * @since 4.3pre10
+	 */
+	public static InputStream getResourceAsStream(Class<? extends EditPlugin> clazz, String path)
+	{
+		return getResourceAsStream(clazz.getName(), path);
+	} //}}}
+
+	//{{{ getResourceAsStream() method
+	/**
+	 * Returns an input stream to the specified resource, or <code>null</code>
+	 * if none is found.
+	 *
+	 * @param plugin the plugin
+	 * @param path The path to the resource to be returned, relative to
+	 * the plugin's resource path.
+	 * @return An input stream for the resource, or <code>null</code>.
+	 * @since 4.3pre10
+	 */
+	public static InputStream getResourceAsStream(EditPlugin plugin, String path)
+	{
+		return getResourceAsStream(plugin.getClassName(), path);
+	} //}}}
+
+	//{{{ getResourceAsStream() method
+	/**
+	 * Returns an input stream to the specified resource, or <code>null</code>
+	 * if none is found.
+	 * 
+	 * @param pluginClassName the plugin class name
+	 * @param path The path to the resource to be returned, relative to
+	 * the plugin's resource path.
+	 * @return An input stream for the resource, or <code>null</code>.
+	 * @since 4.3pre10
+	 */
+	public static InputStream getResourceAsStream(String pluginClassName, String path)
+	{
+		try 
+		{
+			File file = getResourcePath(pluginClassName, path);
+			if (file == null)
+				return null;
+			File parentFile = file.getParentFile();
+			if (!parentFile.exists())
+			{
+				if (!parentFile.mkdirs())
+				{
+					Log.log(Log.ERROR, EditPlugin.class, "Unable to create folder " + parentFile.getPath());
+					return null;
+				}
+			}
+			return new FileInputStream(file);
+		} 
+		catch (IOException e)
+		{
+			return null;
+		}
+	} //}}}
+
+	//{{{ getResourceAsOutputStream() method
+	/**
+	 * Returns an output stream to the specified resource, or <code>null</node> if access
+	 * to that resource is denied.
+	 *
+	 * @param clazz the plugin class
+	 * @param path The path to the resource to be returned, relative to
+	 * the plugin's resource path.
+	 * @return An output stream for the resource, or <code>null</code>.
+	 * @since 4.3pre10
+	 */
+	public static OutputStream getResourceAsOutputStream(Class<? extends EditPlugin> clazz, String path)
+	{
+		return getResourceAsOutputStream(clazz.getName(), path);
+	} //}}}
+
+	//{{{ getResourceAsOutputStream() method
+	/**
+	 * Returns an output stream to the specified resource, or <code>null</node> if access
+	 * to that resource is denied.
+	 *
+	 * @param plugin the plugin
+	 * @param path The path to the resource to be returned, relative to
+	 * the plugin's resource path.
+	 * @return An output stream for the resource, or <code>null</code>.
+	 * @since 4.3pre10
+	 */
+	public static OutputStream getResourceAsOutputStream(EditPlugin plugin, String path)
+	{
+		return getResourceAsOutputStream(plugin.getClassName(), path);
+	} //}}}
+
+	//{{{ getResourceAsOutputStream() method
+	/**
+	 * Returns an output stream to the specified resource, or <code>null</node> if access
+	 * to that resource is denied.
+	 * 
+	 * @param pluginClassName the plugin class name
+	 * @param path The path to the resource to be returned, relative to
+	 * the plugin's resource path.
+	 * @return An output stream for the resource, or <code>null</code>.
+	 * @since 4.3pre10
+	 */
+	public static OutputStream getResourceAsOutputStream(String pluginClassName, String path)
+	{
+		try 
+		{
+			File file = getResourcePath(pluginClassName, path);
+			if (file == null)
+				return null;
+			File parentFile = file.getParentFile();
+			if (!parentFile.exists())
+			{
+				if (!parentFile.mkdirs())
+				{
+					Log.log(Log.ERROR, EditPlugin.class, "Unable to create folder " + parentFile.getPath());
+					return null;
+				}
+			}
+			return new FileOutputStream(file);
+		}
+		catch (IOException e)
+		{
+			return null;
+		}
+	} //}}}
+
+	//{{{ getResourcePath() method
+	/**
+	 * Returns the full path of the specified plugin resource.
+	 *
+	 * @param clazz the plugin class
+	 * @param path The relative path to the resource from the plugin's
+	 * resource path.
+	 * @return The absolute path to the resource or null if there is no plugin home.
+	 * @since 4.3pre10
+	 */
+	public static File getResourcePath(Class<? extends EditPlugin> clazz, String path)
+	{
+		return getResourcePath(clazz.getName(), path);
+	} //}}}
+
+	//{{{ getResourcePath() method
+	/**
+	 * Returns the full path of the specified plugin resource.
+	 *
+	 * @param plugin the plugin
+	 * @param path The relative path to the resource from the plugin's
+	 * resource path.
+	 * @return The absolute path to the resource or null if there is no plugin home.
+	 * @since 4.3pre10
+	 */
+	public static File getResourcePath(EditPlugin plugin, String path)
+	{
+		return getResourcePath(plugin.getClassName(), path);
+	} //}}}
+
+	//{{{ getResourcePath() method
+	/**
+	 * Returns the full path of the specified plugin resource.
+	 *
+	 * @param pluginClassName the plugin class name
+	 * @param path The relative path to the resource from the plugin's
+	 * resource path.
+	 * @return The absolute path to the resource or null if there is no plugin home.
+	 * @since 4.3pre10
+	 */
+	public static File getResourcePath(String pluginClassName, String path)
+	{
+		File home = getPluginHome(pluginClassName);
+		if (home == null)
+			return null;
+		return new File(home, path);
 	} //}}}
 
 	//{{{ getClassName() method
