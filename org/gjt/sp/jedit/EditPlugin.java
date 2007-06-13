@@ -354,7 +354,7 @@ public abstract class EditPlugin
 	/**
 	 * Returns the home of your plugin.
 	 *
-	 * @param pluginClassName the plugin class name
+	 * @param pluginClassName the plugin class name (fully qualified)
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
 	 */
@@ -405,7 +405,7 @@ public abstract class EditPlugin
 	 * Returns an input stream to the specified resource, or <code>null</code>
 	 * if none is found.
 	 * 
-	 * @param pluginClassName the plugin class name
+	 * @param pluginClassName the plugin class name (fully qualified)
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
 	 * @return An input stream for the resource, or <code>null</code>.
@@ -418,15 +418,6 @@ public abstract class EditPlugin
 			File file = getResourcePath(pluginClassName, path);
 			if (file == null)
 				return null;
-			File parentFile = file.getParentFile();
-			if (!parentFile.exists())
-			{
-				if (!parentFile.mkdirs())
-				{
-					Log.log(Log.ERROR, EditPlugin.class, "Unable to create folder " + parentFile.getPath());
-					return null;
-				}
-			}
 			return new FileInputStream(file);
 		} 
 		catch (IOException e)
@@ -472,7 +463,7 @@ public abstract class EditPlugin
 	 * Returns an output stream to the specified resource, or <code>null</node> if access
 	 * to that resource is denied.
 	 * 
-	 * @param pluginClassName the plugin class name
+	 * @param pluginClassName the plugin class name (fully qualified)
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
 	 * @return An output stream for the resource, or <code>null</code>.
@@ -536,7 +527,7 @@ public abstract class EditPlugin
 	/**
 	 * Returns the full path of the specified plugin resource.
 	 *
-	 * @param pluginClassName the plugin class name
+	 * @param pluginClassName the plugin class name (fully qualified)
 	 * @param path The relative path to the resource from the plugin's
 	 * resource path.
 	 * @return The absolute path to the resource or null if there is no plugin home.
