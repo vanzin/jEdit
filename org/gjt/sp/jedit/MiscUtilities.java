@@ -271,14 +271,16 @@ public class MiscUtilities
 	/**
 	 * Constructs an absolute path name from a directory and another
 	 * path name. This method is VFS-aware.
-	 * @param parent The directory (should not be empty).
+	 * @param parent The directory
 	 * @param path The path name
 	 */
 	public static String constructPath(String parent, String path)
 	{
-		assert (parent != null && parent.length() > 0) : "Invalid parent path";
 		if(isAbsolutePath(path))
 			return canonPath(path);
+
+		if (parent == null)
+			parent = System.getProperty("user.dir");
 
 		if (path == null || path.length() == 0)
 			return parent;
@@ -300,9 +302,6 @@ public class MiscUtilities
 
 		String dd = ".." + File.separator;
 		String d = '.' + File.separator;
-
-		if(parent == null)
-			parent = System.getProperty("user.dir");
 
 		for(;;)
 		{
