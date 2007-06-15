@@ -279,6 +279,7 @@
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<SEQ TYPE="OPERATOR">?</SEQ>
 		<SEQ TYPE="OPERATOR">:</SEQ>
+		<SEQ TYPE="OPERATOR">**</SEQ>
 
 		<!-- Keywords -->
 		<KEYWORDS>
