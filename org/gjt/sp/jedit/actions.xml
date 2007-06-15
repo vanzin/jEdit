@@ -348,7 +348,7 @@
 	</CODE>
 </ACTION>
 
-	
+
 <ACTION NAME="goto-line">
 	<CODE>
 		textArea.showGoToLineDialog();
@@ -1191,6 +1191,12 @@
 <ACTION NAME="show-buffer-switcher">
 	<CODE>
 		editPane.showBufferSwitcher();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="show-context-menu">
+	<CODE>
+		textArea.showPopupMenu();
 	</CODE>
 </ACTION>
 

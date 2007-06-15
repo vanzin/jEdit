@@ -25,9 +25,9 @@ and Mike Gorski for contributing to this release.
 
 - HyperSearch Results does not lose focus on enter (Bug 1260023,
   Patch 1646058) (Kazutoshi Satoda)
-  
+
 - Improved handling of file encoding (patch 1687684) (Kazutoshi Satoda)
-  
+
 - Use encoding in buffer histories for temporary buffers (Patch
   1687284) (Kazutoshi Satoda)
 
@@ -108,7 +108,7 @@ and Mike Gorski for contributing to this release.
 - Brackets in comments or literals (in terms of token types in edit mode)
   are now ignored for indent. (SF.net bugs #747769, #1229283, #1592989)
   (Kazutoshi Satoda)
-  
+
 - Encodings option pane rewrote using a JTable. (1540578) (Matthieu Casanova)
 
 }}}
@@ -171,12 +171,17 @@ and Mike Gorski for contributing to this release.
   the first guilty character with column number, line number and the name
   of actual encoding. (Kazutoshi Satoda)
 
-- A new action on the popup menu in the Hypersearch dockable panel to redo the 
+- A new action on the popup menu in the Hypersearch dockable panel to redo the
   hypersearch (Matthieu Casanova)
-  
-- When calling "line-comment" action, if the edit mode doesn't have a line 
-  comment property, the lines are surrounded by range comments 
+
+- When calling "line-comment" action, if the edit mode doesn't have a line
+  comment property, the lines are surrounded by range comments
   (Matthieu Casanova)
+
+- SF Bug 1723506: Context menu key not functional on Windows
+  There was no action to show the popup menu. Added one such action, and
+  bound it to CONTEXT_MENU by default. (Marcelo Vanzin)
+
 }}}
 {{{ Editing
 
@@ -250,7 +255,7 @@ and Mike Gorski for contributing to this release.
 
 - New static methods EditPlugin.getPluginHome(Class<? extends EditPlugin>),
   EditPlugin.getPluginHome(EditPlugin>,
-  EditPlugin.getPluginHome(String) that will return the path where a plugin 
+  EditPlugin.getPluginHome(String) that will return the path where a plugin
   should store it's data. It can be null if running without settings (Matthieu Casanova)
 
 - New static methods EditPlugin.getResourceAsStream(Class<? extends EditPlugin>),
@@ -302,6 +307,9 @@ and Mike Gorski for contributing to this release.
 
 - MiscUtilities.isBinary(Reader) is now deprecated in favor of a new
   method MiscUtilities.isBinary(InputStream). (Kazutoshi Satoda)
+
+- Added JEditTextArea.showPopupMenu(), which pops up the context menu
+  at the current caret position.
 
 }}}
 

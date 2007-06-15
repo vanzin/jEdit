@@ -368,4 +368,18 @@ public class JEditTextArea extends TextArea
 			GUIUtilities.showPopupMenu(popup,painter,x,y);
 		}
 	} //}}}
+
+	//{{{ showPopupMenu() method
+	/**
+	 * Shows the popup menu at the current caret position.
+	 * @since 4.3pre10
+	 */
+	public void showPopupMenu()
+	{
+		if (!popup.isVisible())
+		{
+			Point p = offsetToXY(getCaretPosition());
+			GUIUtilities.showPopupMenu(popup,painter,p.x,p.y);
+		}
+	} //}}}
 }
