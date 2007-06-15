@@ -271,28 +271,32 @@ public class MiscUtilities
 	/**
 	 * Constructs an absolute path name from a directory and another
 	 * path name. This method is VFS-aware.
-	 * @param parent The directory
+	 * @param parent The directory (should not be empty).
 	 * @param path The path name
 	 */
 	public static String constructPath(String parent, String path)
 	{
+		assert (parent != null && parent.length() > 0) : "Invalid parent path";
 		if(isAbsolutePath(path))
 			return canonPath(path);
+
+		if (path == null || path.length() == 0)
+			return parent;
 
 		// have to handle this case specially on windows.
 		// insert \ between, eg A: and myfile.txt.
 		if(OperatingSystem.isDOSDerived())
+		{
+			if(path.length() == 2 && path.charAt(1) == ':')
+				return path;
+			else if(path.length() > 2 && path.charAt(1) == ':'
+					&& path.charAt(2) != '\\')
 			{
-				if(path.length() == 2 && path.charAt(1) == ':')
-					return path;
-				else if(path.length() > 2 && path.charAt(1) == ':'
-						&& path.charAt(2) != '\\')
-					{
-						path = path.substring(0,2) + '\\'
-							+ path.substring(2);
-						return canonPath(path);
-					}
+				path = path.substring(0,2) + '\\'
+					+ path.substring(2);
+				return canonPath(path);
 			}
+		}
 
 		String dd = ".." + File.separator;
 		String d = '.' + File.separator;
@@ -301,21 +305,21 @@ public class MiscUtilities
 			parent = System.getProperty("user.dir");
 
 		for(;;)
+		{
+			if(path.equals("."))
+				return parent;
+			else if(path.equals(".."))
+				return getParentOfPath(parent);
+			else if(path.startsWith(dd) || path.startsWith("../"))
 			{
-				if(path.equals("."))
-					return parent;
-				else if(path.equals(".."))
-					return getParentOfPath(parent);
-				else if(path.startsWith(dd) || path.startsWith("../"))
-					{
-						parent = getParentOfPath(parent);
-						path = path.substring(3);
-					}
-				else if(path.startsWith(d) || path.startsWith("./"))
-					path = path.substring(2);
-				else
-					break;
+				parent = getParentOfPath(parent);
+				path = path.substring(3);
 			}
+			else if(path.startsWith(d) || path.startsWith("./"))
+				path = path.substring(2);
+			else
+				break;
+		}
 
 		if(OperatingSystem.isDOSDerived()
 			&& !isURL(parent)
@@ -715,9 +719,9 @@ public class MiscUtilities
 	 * (jEdit property vfs.binaryCheck.length) in the system default
 	 * encoding. If more than 1 (jEdit property vfs.binaryCheck.count)
 	 * NUL(\u0000) was found, the stream is declared binary.
-	 * 
+	 *
 	 * This is not 100% because sometimes the autodetection could fail.
-	 * 
+	 *
 	 * This method will not close the stream. You have to do it yourself
 	 *
 	 * @param in the stream
