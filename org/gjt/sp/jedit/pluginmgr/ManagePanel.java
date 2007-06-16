@@ -69,7 +69,6 @@ import org.gjt.sp.util.IOUtilities;
  */
 public class ManagePanel extends JPanel
 {
-
 	//{{{ Private members
 	private final JCheckBox hideLibraries;
 	private final JTable table;
@@ -78,7 +77,7 @@ public class ManagePanel extends JPanel
 	private final PluginManager window;
 	private JPopupMenu popup;
 	//}}}
-	
+
 	//{{{ ManagePanel constructor
 	public ManagePanel(PluginManager window)
 	{
@@ -246,7 +245,9 @@ public class ManagePanel extends JPanel
 				}
 			}
 			else
+			{
 				status = LOADED;
+			}
 		}
 	} //}}}
 

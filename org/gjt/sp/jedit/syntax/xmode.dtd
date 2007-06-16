@@ -10,7 +10,6 @@
 <!ENTITY % att-position-mix 'AT_LINE_START %att-bool;
 	AT_WHITESPACE_END %att-bool;
 	AT_WORD_START %att-bool; ' >
-<!ENTITY % att-exclude-match 'EXCLUDE_MATCH %att-bool; ' >
 <!ENTITY % att-match-type 'MATCH_TYPE ( %token_values; | DEFAULT | RULE ) #IMPLIED' >
 <!ENTITY % att-delegate 'DELEGATE CDATA #IMPLIED' >
 <!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool;
@@ -82,12 +81,11 @@
 	%att-type;
 	%att-position-mix;
 	%att-span-mix;
-	%att-exclude-match;
 	%att-match-type;
 	%att-delegate; >
 
 <!-- SPAN_REGEXP element -->
-<!ELEMENT SPAN_REGEXP ( BEGIN, END, END_REGEXP ) >
+<!ELEMENT SPAN_REGEXP ( BEGIN, END ) >
 
 <!-- SPAN_REGEXP attributes -->
 <!ATTLIST SPAN_REGEXP
@@ -95,7 +93,6 @@
 	%att-type;
 	%att-position-mix;
 	%att-span-mix;
-	%att-exclude-match;
 	%att-match-type;
 	%att-delegate; >
 
@@ -104,7 +101,6 @@
 <!ATTLIST BEGIN %att-position-mix; >
 <!ELEMENT END ( #PCDATA ) >
 <!ATTLIST END %att-position-mix; >
-<!ELEMENT END_REGEXP ( #PCDATA ) >
 
 <!-- EOL_SPAN element -->
 <!ELEMENT EOL_SPAN ( #PCDATA ) >
@@ -113,7 +109,6 @@
 <!ATTLIST EOL_SPAN
 	%att-type;
 	%att-position-mix;
-	%att-exclude-match;
 	%att-match-type;
 	%att-delegate; >
 
@@ -125,7 +120,6 @@
 	%att-hash-char;
 	%att-type;
 	%att-position-mix;
-	%att-exclude-match;
 	%att-match-type;
 	%att-delegate; >
 
@@ -136,7 +130,6 @@
 <!ATTLIST MARK_FOLLOWING
 	%att-type;
 	%att-position-mix;
-	%att-exclude-match;
 	%att-match-type; >
 
 <!-- MARK_PREVIOUS element -->
@@ -146,7 +139,6 @@
 <!ATTLIST MARK_PREVIOUS
 	%att-type;
 	%att-position-mix;
-	%att-exclude-match;
 	%att-match-type; >
 
 <!-- KEYWORDS element -->

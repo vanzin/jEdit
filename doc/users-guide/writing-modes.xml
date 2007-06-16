@@ -426,7 +426,7 @@
    <literal><replaceable>mode</replaceable>::<replaceable>ruleset</replaceable></literal>.
    Note that the first (unnamed) ruleset in a mode is called
    <quote>MAIN</quote>.</para></listitem>
-   <listitem><para><literal>MATCH_TYPE</literal> - Controls how the start of
+   <listitem><para><literal>MATCH_TYPE</literal> - Controls how the start and end of
    the sequence will be highlighted.</para></listitem>
    <listitem><para><literal>NO_ESCAPE</literal> - If set to
    <literal>TRUE</literal>, the ruleset's escape character sequence will have no
@@ -557,7 +557,7 @@
   Note that the first (unnamed) ruleset in a mode is called
   <quote>MAIN</quote>.</para></listitem>
   <listitem><para><literal>MATCH_TYPE</literal> - Controls how the start
-  and the end of the sequence will be highlighted.</para></listitem>
+  of the sequence will be highlighted.</para></listitem>
   </itemizedlist>
   <para>
    Here is an <literal>EOL_SPAN</literal> that highlights C++ comments:
@@ -853,7 +853,7 @@
   </para></listitem>
   </itemizedlist>
  </sect1>
- <sect1 id="mode-match-type"><title>The <literal>MATCH_TYPE</literal> Attribute</title>
+ <sect1 id="mode-match-type"><title>The MATCH_TYPE Attribute</title>
   <para>The <literal>MATCH_TYPE</literal> attribute is used by some of the rules to control
   how the region matched by the rule will be highlighted.</para>
 
@@ -862,10 +862,7 @@
   rule could be used:</para>
 
   <programlisting>
-   <![CDATA[
-   <MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
-   ]]>
-  </programlisting>
+   <![CDATA[<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>]]></programlisting>
 
   <para>This would cause <literal>fcall</literal> to be highlighted as <literal>FUNCTION</literal>,  and <literal>(</literal> to be highlighted as <literal>OPERATOR</literal>. In this case, to
   maintain bracket matching working, a <literal>SEQ</literal> rule would have to be added

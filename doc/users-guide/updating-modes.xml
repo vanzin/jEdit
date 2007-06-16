@@ -58,6 +58,8 @@
  </para></listitem>
  <listitem><para>
    <literal>HASH_CHAR</literal> handling of <literal>xxx_REGEXP</literal> elements has been updated, as explained in <xref linkend="mode-rule-span-regexp"/>. </para></listitem>
+ <listitem><para>
+   <literal>EXCLUDE_MATCH</literal> got superseded by <literal>MATCH_TYPE</literal>. For more information see <xref linkend="mode-match-type"/>. </para></listitem>
  </orderedlist>   
  
  </section>

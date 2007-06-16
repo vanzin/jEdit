@@ -151,7 +151,7 @@ public class PluginJAR
 	private final Set<String> weUseThese = new LinkedHashSet<String>();
 	//}}}
 
-	// {{{ load(String jarPath, boolean activateDependentIfNecessary)
+	//{{{ load(String jarPath, boolean activateDependentIfNecessary)
 	/**
 	 * Loads a plugin, and its dependent plugins if necessary.
 	 *
@@ -204,7 +204,7 @@ public class PluginJAR
 		return path;
 	} //}}}
 
-	// {{{ findPlugin() method
+	//{{{ findPlugin() method
 	/**
 	 * Unlike getPlugin(), will return a PluginJAR that is not yet loaded,
 	 * given its classname.
@@ -230,7 +230,7 @@ public class PluginJAR
 		return null;
 	} // }}}
 
-	// {{{ containsClass() function
+	//{{{ containsClass() function
 	/**
 	 * @param className a class name
 	 * @return true if this jar contains a class with that classname.
@@ -275,7 +275,7 @@ public class PluginJAR
 		return cachePath;
 	} //}}}
 
-	// {{{ getDependencySet() method
+	//{{{ getDependencySet() method
 	/**
 	 *
 	 * @param className of a plugin that we wish to load
@@ -580,6 +580,7 @@ public class PluginJAR
 		return ok;
 	} //}}}
 
+	//{{{ getPluginDepends() method
 	private static PluginDepends getPluginDepends(String dep) throws IllegalArgumentException
 	{
 		boolean optional;
@@ -604,15 +605,17 @@ public class PluginJAR
 		depends.arg = arg;
 		depends.optional = optional;
 		return depends;
-	}
+	} //}}}
+	
+	//{{{ PluginDepends class
 	private static class PluginDepends
 	{
 		String what;
 		String arg;
 		boolean optional;
-	}
+	} //}}}
 
-	// {{{ transitiveClosure()
+	//{{{ transitiveClosure()
 	/**
 	 * If plugin A is needed by B, and B is needed by C, we want to
 	 * tell the user that A is needed by B and C when they try to
@@ -637,9 +640,7 @@ public class PluginJAR
   			}
   		}
   	} //}}}
-	  
-	  
-	
+
 	//{{{ getDependentPlugins() method
 	  public String[] getDependentPlugins()
 	  {
