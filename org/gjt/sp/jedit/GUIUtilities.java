@@ -88,7 +88,7 @@ import org.gjt.sp.util.Log;
  * <li>{@link #showVFSFileDialog(View,String,int,boolean)}</li>
  * <li>{@link #loadGeometry(Window,String)}</li>
  * <li>{@link #saveGeometry(Window,String)}</li>
- * <li>{@link #showPopupMenu(JPopupMenu,Component,int,int)}</li> 
+ * <li>{@link #showPopupMenu(JPopupMenu,Component,int,int)}</li>
  * </ul>
  *
  * @author Slava Pestov
@@ -1029,7 +1029,7 @@ public class GUIUtilities
 	 *
 	 * @param win The window to load geometry from
 	 * @param parent The parent frame to be relative to.
-	 * @param name The name of the window 
+	 * @param name The name of the window
 	 */
 	public static void loadGeometry(Window win, Container parent, String name ) {
 		int x, y, width, height;
@@ -1068,7 +1068,7 @@ public class GUIUtilities
 			if(win instanceof Frame)
 				((Frame)win).setExtendedState(extState);
 		}
-		
+
 	} //}}}
 
 	//{{{ loadGeometry() method
@@ -1079,7 +1079,7 @@ public class GUIUtilities
 	 * <code><i>name</i>.height</code> properties.
 	 *
 	 * @param win The window to load geometry from
-	 * @param name The name of the window 
+	 * @param name The name of the window
 	 */
 	public static void loadGeometry(Window win, String name)
 	{
@@ -1237,7 +1237,7 @@ public class GUIUtilities
 	 * For Frame's and descendents use {@link #addSizeSaver(Frame,String)} to save the sizes
 	 * correct even if the Frame is in maximized or iconified state.
 	 * @param win The window to load geometry from
-	 * @param name The name of the window 
+	 * @param name The name of the window
 	 * @see #addSizeSaver(Frame,String)
 	 */
 	public static void saveGeometry(Window win, String name) {
@@ -1254,7 +1254,7 @@ public class GUIUtilities
 	 * correct even if the Frame is in maximized or iconified state.
 	 * @param win The window to load geometry from
 	 * @param parent The parent frame to be relative to.
-	 * @param name The name of the window 
+	 * @param name The name of the window
 	 * @see #addSizeSaver(Frame,Container,String)
 	 */
 	public static void saveGeometry(Window win, Container parent, String name)
@@ -1268,7 +1268,7 @@ public class GUIUtilities
 		Rectangle bounds = win.getBounds();
 		int x = bounds.x;
 		int y = bounds.y;
-		if (parent != null) 
+		if (parent != null)
 		{
 			Rectangle parentBounds = parent.getBounds();
 			x = x - parentBounds.x;
@@ -1414,8 +1414,8 @@ public class GUIUtilities
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
 	 * @since jEdit 4.0pre1
-	 * @deprecated use {@link javax.swing.JComponent#setComponentPopupMenu(javax.swing.JPopupMenu)},
-	 * which works better and is simpler to use: you don't have to write the code to 
+	 * @see {@link javax.swing.JComponent#setComponentPopupMenu(javax.swing.JPopupMenu)},
+	 * which works better and is simpler to use: you don't have to write the code to
 	 * show/hide popups in response to mouse events anymore.
 	 */
 	public static void showPopupMenu(JPopupMenu popup, Component comp,
@@ -1459,26 +1459,26 @@ public class GUIUtilities
 			Dimension size = popup.getPreferredSize();
 
 			Rectangle screenSize = new Rectangle();
-            
+
 			GraphicsEnvironment ge = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
-			
+
 			GraphicsDevice[] devices = ge.getScreenDevices();
-			
-			for (int j = 0; j < devices.length; j++) 
-			{ 
+
+			for (int j = 0; j < devices.length; j++)
+			{
 				GraphicsDevice device = devices[j];
-                
+
 				GraphicsConfiguration[] gc =
 					device.getConfigurations();
-                
-				for (int i=0; i < gc.length; i++) 
+
+				for (int i=0; i < gc.length; i++)
 				{
 					screenSize =
 						screenSize.union(
 							gc[i].getBounds());
 				}
-			} 
+			}
 
 			if(x + offsetX + size.width + win.getX() > screenSize.width
 				&& x + offsetX + win.getX() >= size.width)
@@ -1607,7 +1607,7 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre6
 	 * @see #saveGeometry(Window,String)
 	 */
-	public static void addSizeSaver(Frame frame, String name) 
+	public static void addSizeSaver(Frame frame, String name)
 	{
 		addSizeSaver(frame,frame.getParent(),name);
 	} //}}}
@@ -1706,11 +1706,11 @@ public class GUIUtilities
 		private Frame frame;
 		private Container parent;
 		private String name;
-		
+
 		//{{{ SizeSaver constructor
 		/**
 		 * Constructs a new SizeSaver.
-		 * 
+		 *
 		 * @param frame The Frame for which to save the size
 		 * @param name The prefix for the settings
 		 */
@@ -1719,11 +1719,11 @@ public class GUIUtilities
 			this.frame = frame;
 			this.parent = frame.getParent();
 		} //}}}
-		
+
 		//{{{ SizeSaver constructor
 		/**
 		 * Constructs a new SizeSaver.
-		 * 
+		 *
 		 * @param frame The Frame for which to save the size
 		 * @param parent The parent to be relative to.
 		 * @param name The prefix for the settings
@@ -1748,7 +1748,7 @@ public class GUIUtilities
 			save(extendedState, bounds);
 		} //}}}
 
-		//{{{ save() method 
+		//{{{ save() method
 		private void save(int extendedState, Rectangle bounds)
 		{
 			switch (extendedState)

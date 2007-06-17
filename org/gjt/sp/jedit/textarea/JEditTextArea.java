@@ -371,15 +371,21 @@ public class JEditTextArea extends TextArea
 
 	//{{{ showPopupMenu() method
 	/**
-	 * Shows the popup menu at the current caret position.
+	 * Shows the popup menu below the current caret position.
 	 * @since 4.3pre10
 	 */
 	public void showPopupMenu()
 	{
-		if (!popup.isVisible())
+		if (!popup.isVisible() && hasFocus())
 		{
-			Point p = offsetToXY(getCaretPosition());
-			GUIUtilities.showPopupMenu(popup,painter,p.x,p.y);
+			Point caretPos = offsetToXY(getCaretPosition());
+			if (caretPos != null) {
+				// Open the context menu below the caret
+				int charHeight = getPainter().getFontMetrics().getHeight();
+				GUIUtilities.showPopupMenu(popup,
+					painter,caretPos.x,caretPos.y + charHeight,true);
+			}
 		}
 	} //}}}
+
 }
