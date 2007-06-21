@@ -185,6 +185,8 @@ and Mike Gorski for contributing to this release.
 }}}
 {{{ Editing
 
+- New Edit Mode: sql-loader (David Moss)
+
 - New edit mode: csv (jaco de groot).
 
 - Make the auto-indent code more friendly to languages where whitespace matters
@@ -1727,6 +1729,6 @@ Nicholas O'Leary and Trevor Harmon for contributing to this release.
 }}}
 
 jEdit buffer local properties:
-:maxLineLen=80:indentSize=2:
+:mode=text:maxLineLen=80:indentSize=2:
 :folding=explicit:collapseFolds=2:
 :encoding=ISO-8859-1:

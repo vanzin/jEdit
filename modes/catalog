@@ -399,6 +399,9 @@
 <MODE NAME="sdl/pr"		FILE="sdl_pr.xml"
 				FILE_NAME_GLOB="*.pr"/>
 
+<MODE NAME="sql-loader" 	FILE="sql-loader.xml"
+				FILE_NAME_GLOB="*.ctl" />
+
 <MODE NAME="smi-mib"		FILE="smi-mib.xml"
 				FILE_NAME_GLOB="*{.mib,-MIB.txt}" />
 
