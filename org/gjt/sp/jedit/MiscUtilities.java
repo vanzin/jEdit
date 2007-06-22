@@ -587,6 +587,10 @@ public class MiscUtilities
 				if(System.currentTimeMillis() - modTime
 				   >= backupTimeDistance)
 					{
+						Log.log(Log.DEBUG,MiscUtilities.class,
+							"Saving backup of file \"" +
+							file.getAbsolutePath() + "\" to \"" +
+							backupFile.getAbsolutePath() + '"');
 						backupFile.delete();
 						if (!file.renameTo(backupFile))
 							IOUtilities.moveFile(file, backupFile);
@@ -627,6 +631,10 @@ public class MiscUtilities
 						File backupFile = new File(backupDirectory,
 												   backupPrefix + name + backupSuffix
 												   + "1" + backupSuffix);
+						Log.log(Log.DEBUG,MiscUtilities.class,
+							"Saving backup of file \"" +
+							file.getAbsolutePath() + "\" to \"" +
+							backupFile.getAbsolutePath() + '"');
 						if (!file.renameTo(backupFile))
 							IOUtilities.moveFile(file, backupFile);
 					}
