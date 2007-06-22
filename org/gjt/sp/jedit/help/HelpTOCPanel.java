@@ -162,7 +162,7 @@ public class HelpTOCPanel extends JPanel
 		loadTOC(tocRoot,"news43/toc.xml");
 		loadTOC(tocRoot,"users-guide/toc.xml");
 		loadTOC(tocRoot,"FAQ/toc.xml");
-		loadTOC(tocRoot,"api/toc.xml");
+
 
 		DefaultMutableTreeNode pluginTree = new DefaultMutableTreeNode(
 			jEdit.getProperty("helpviewer.toc.plugins"),true);
@@ -195,7 +195,7 @@ public class HelpTOCPanel extends JPanel
 			// so that HelpViewer constructor doesn't try to expand
 			pluginTree = null;
 		}
-
+		loadTOC(tocRoot,"api/toc.xml");
 		tocModel = new DefaultTreeModel(tocRoot);
 	} //}}}
 
