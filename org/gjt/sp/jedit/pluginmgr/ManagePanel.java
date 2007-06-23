@@ -152,17 +152,6 @@ public class ManagePanel extends JPanel
 		pluginModel.update();
 	} //}}}
 
-	//{{{ getPluginHome() method
-	static File getPluginHome(String clazz)
-	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if (null == settingsDirectory)
-		{
-			return null;
-		}
-		return new File(MiscUtilities.constructPath(settingsDirectory,"plugins",clazz));
-	} //}}}
-
 	//{{{ Inner classes
 
 	//{{{ KeyboardCommand enum
@@ -183,14 +172,27 @@ public class ManagePanel extends JPanel
 		static final String NOT_LOADED = "not-loaded";
 
 		final String status;
+		/** The jar path. */
 		final String jar;
 
 		String clazz, name, version, author, docs;
+
+		EditPlugin plugin;
+		/**
+		 * The jars referenced in the props file of the plugin.
+		 * plugin.clazz.jars property and
+		 * plugin.clazz.files property
+		 */
 		final List<String> jars;
 
 		/** The data size. */
 		String dataSize;
 
+		/**
+		 * Constructor used for jars that aren't loaded.
+		 *
+		 * @param jar jar file name
+		 */
 		Entry(String jar)
 		{
 			jars = new LinkedList<String>();
@@ -199,13 +201,18 @@ public class ManagePanel extends JPanel
 			status = NOT_LOADED;
 		}
 
+		/**
+		 * Constructor used for loaded jars.
+		 *
+		 * @param jar the pluginJar
+		 */
 		Entry(PluginJAR jar)
 		{
 			jars = new LinkedList<String>();
 			this.jar = jar.getPath();
 			jars.add(this.jar);
 
-			EditPlugin plugin = jar.getPlugin();
+			plugin = jar.getPlugin();
 			if(plugin != null)
 			{
 				status = plugin instanceof EditPlugin.Broken
@@ -335,9 +342,9 @@ public class ManagePanel extends JPanel
 				case 3:
 					return jEdit.getProperty("plugin-manager.status." + entry.status);
 				case 4:
-					if (entry.dataSize == null && entry.clazz != null)
+					if (entry.dataSize == null && entry.plugin != null)
 					{
-						File pluginDirectory = getPluginHome(entry.clazz);
+						File pluginDirectory = entry.plugin.getPluginHome();
 						if (null == pluginDirectory)
 						{
 							return null;
@@ -348,7 +355,15 @@ public class ManagePanel extends JPanel
 						}
 						else
 						{
-							entry.dataSize = jEdit.getProperty("manage-plugins.data-size.unknown");
+							if (jEdit.getBooleanProperty("plugin." + entry.clazz + ".usePluginHome"))
+							{
+								entry.dataSize = MiscUtilities.formatFileSize(0);
+							}
+							else
+							{
+								entry.dataSize = jEdit.getProperty("manage-plugins.data-size.unknown");
+							}
+
 						}
 					}
 					return entry.dataSize;
@@ -787,7 +802,7 @@ public class ManagePanel extends JPanel
 				for (int i = 0; i < ints.length; i++)
 				{
 					Entry entry = pluginModel.getEntry(ints[i]);
-					if (entry.clazz != null)
+					if (entry.plugin != null)
 					{
 						list.add(entry.name);
 						entries.add(entry);
@@ -805,8 +820,7 @@ public class ManagePanel extends JPanel
 				for (int i = 0; i < entries.size(); i++)
 				{
 					Entry entry = entries.get(i);
-					String clazz = entry.clazz;
-					File path = getPluginHome(clazz);
+					File path = entry.plugin.getPluginHome();
 					Log.log(Log.NOTICE, this, "Removing data of plugin " + entry.name + " home="+path);
 					FileVFS.recursiveDelete(path);
 					entry.dataSize = null;

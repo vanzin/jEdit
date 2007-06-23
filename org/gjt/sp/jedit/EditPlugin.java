@@ -358,7 +358,7 @@ public abstract class EditPlugin
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
 	 */
-	public static File getPluginHome(String pluginClassName)
+	private static File getPluginHome(String pluginClassName)
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if (settingsDirectory == null)
@@ -411,12 +411,12 @@ public abstract class EditPlugin
 	 * @return An input stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
 	 */
-	public static InputStream getResourceAsStream(String pluginClassName, String path)
+	private static InputStream getResourceAsStream(String pluginClassName, String path)
 	{
 		try 
 		{
 			File file = getResourcePath(pluginClassName, path);
-			if (file == null)
+			if (file == null || !file.exists())
 				return null;
 			return new FileInputStream(file);
 		} 
@@ -469,7 +469,7 @@ public abstract class EditPlugin
 	 * @return An output stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
 	 */
-	public static OutputStream getResourceAsOutputStream(String pluginClassName, String path)
+	private static OutputStream getResourceAsOutputStream(String pluginClassName, String path)
 	{
 		try 
 		{
@@ -533,7 +533,7 @@ public abstract class EditPlugin
 	 * @return The absolute path to the resource or null if there is no plugin home.
 	 * @since 4.3pre10
 	 */
-	public static File getResourcePath(String pluginClassName, String path)
+	private static File getResourcePath(String pluginClassName, String path)
 	{
 		File home = getPluginHome(pluginClassName);
 		if (home == null)

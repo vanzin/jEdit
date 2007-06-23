@@ -201,7 +201,6 @@ class Roster
 		{
 			// close JAR file and all JARs that depend on this
 			PluginJAR jar = jEdit.getPluginJAR(plugin);
-			File pluginHome = ManagePanel.getPluginHome(jar.getPlugin().getClassName());
 			if(jar != null)
 			{
 				unloadPluginJAR(jar);
@@ -223,8 +222,6 @@ class Roster
 			{
 				ok &= recursiveDelete(srcFile);
 			}
-
-			pluginHome.delete();
 
 			if(!ok)
 			{
