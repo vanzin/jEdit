@@ -66,11 +66,13 @@ public class WhitespaceRule implements IndentRule
 			return;
 
 		/* Check if the previous line is empty. */
-		String previous = buffer.getLineText(prevLineIndex);
-		for (int i = 0; i < previous.length(); i++)
-		{
-			if (!Character.isWhitespace(previous.charAt(i)))
-				return;
+		if (prevLineIndex >= 0) {
+			String previous = buffer.getLineText(prevLineIndex);
+			for (int i = 0; i < previous.length(); i++)
+			{
+				if (!Character.isWhitespace(previous.charAt(i)))
+					return;
+			}
 		}
 		indentActions.add(new IndentAction.NoIncrease());
 	}
