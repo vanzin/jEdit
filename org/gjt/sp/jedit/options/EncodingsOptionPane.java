@@ -146,8 +146,6 @@ public class EncodingsOptionPane extends AbstractOptionPane
 			if (source == selectAllButton)
 			{
 				encodingsList.selectAll();
-//				selectAllButton.setEnabled(false);
-//				selectNoneButton.setEnabled(true);
 			}
 			else if (source == selectNoneButton)
 			{
@@ -155,8 +153,6 @@ public class EncodingsOptionPane extends AbstractOptionPane
 				{
 					encodingsList.setValueAt(false,i,0);
 				}
-//				selectAllButton.setEnabled(true);
-//				selectNoneButton.setEnabled(false);
 			}
 		}
 	} //}}}
