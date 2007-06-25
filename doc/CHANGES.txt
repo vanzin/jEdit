@@ -101,15 +101,17 @@ and Mike Gorski for contributing to this release.
 - Correctly send a ViewUpdate.ACTIVATED message when the user closes a view
   and focuses the first opened view. (Marcelo Vanzin)
 
-- Fixed deep indent : now the deep indent works with the chars found in unalignedOpenBrackets
-  property of the edit mode, and the matching end char is automatically set.
-  (#1666815) (Matthieu Casanova)
+- Fixed deep indent : now the deep indent works with the chars found in
+  unalignedOpenBrackets property of the edit mode, and the matching
+  end char is automatically set. (bug #1666815) (Matthieu Casanova)
 
 - Brackets in comments or literals (in terms of token types in edit mode)
   are now ignored for indent. (SF.net bugs #747769, #1229283, #1592989)
   (Kazutoshi Satoda)
 
-- Encodings option pane rewrote using a JTable. (1540578) (Matthieu Casanova)
+- Encodings option pane rewritten using a JCheckBoxList, fixed the too small
+  scroll amount and enabled/disabled the buttons where appropriate.
+  (bug #1540578) (Björn "Vampire" Kautler)
 
 }}}
 {{{ Miscellaneous

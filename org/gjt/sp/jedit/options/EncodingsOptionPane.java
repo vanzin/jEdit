@@ -1,10 +1,9 @@
 /*
  * EncodingsOptionPane.java - Encodings options panel
- * :tabSize=4:indentSize=4:noTabs=false:
+ * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2006 Björn Kautler
- * Portions copyright (C) 2007 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,33 +25,49 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import javax.swing.*;
+
+import java.util.Vector;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.TableColumn;
-import javax.swing.table.AbstractTableModel;
 
 import org.gjt.sp.jedit.AbstractOptionPane;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.MiscUtilities;
+
+import org.gjt.sp.jedit.MiscUtilities.StringICaseCompare;
+
+import org.gjt.sp.jedit.gui.JCheckBoxList;
+
+import org.gjt.sp.jedit.gui.JCheckBoxList.Entry;
+
+import static java.util.Arrays.sort;
+
+import static javax.swing.Box.createHorizontalBox;
+
+import static org.gjt.sp.jedit.jEdit.getBooleanProperty;
+import static org.gjt.sp.jedit.jEdit.getProperty;
+import static org.gjt.sp.jedit.jEdit.setBooleanProperty;
+import static org.gjt.sp.jedit.jEdit.unsetProperty;
+
+import static org.gjt.sp.jedit.MiscUtilities.getEncodings;
 //}}}
 
 //{{{ EncodingsOptionPane class
 /**
  * Encodings editor.
  * @author Björn Kautler
- * @author Matthieu Casanova
  * @since jEdit 4.3pre6
  * @version $Id$
  */
 public class EncodingsOptionPane extends AbstractOptionPane
 {
-	private JTable table;
-
-	private int selectedCount;
-
 	//{{{ EncodingsOptionPane constructor
 	public EncodingsOptionPane()
 	{
@@ -64,52 +79,52 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout());
 
-		add(new JLabel(jEdit.getProperty("options.encodings.selectEncodings")),BorderLayout.NORTH);
+		add(new JLabel(getProperty("options.encodings.selectEncodings")),BorderLayout.NORTH);
 
-		String[] encodings = MiscUtilities.getEncodings(false);
-		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
-		this.encodings = new EncodingTableModel(encodings);
-
-		table = new JTable(this.encodings);
-
-		TableColumn col1 = table.getColumnModel().getColumn(0);
-		col1.setPreferredWidth(30);
-		col1.setMinWidth(30);
-		col1.setMaxWidth(30);
-		col1.setResizable(false);
-
-		JScrollPane encodingsScrollPane = new JScrollPane(table);
-		Dimension d = table.getPreferredSize();
+		String[] encodings = getEncodings(false);
+		sort(encodings,new StringICaseCompare());
+		Vector<Entry> encodingEntriesVector = new Vector<Entry>();
+		boolean enableSelectAll = false;
+		boolean enableSelectNone = false;
+		for (String encoding : encodings) {
+			boolean selected = !getBooleanProperty("encoding.opt-out."+encoding,false);
+			enableSelectAll = enableSelectAll || !selected;
+			enableSelectNone = enableSelectNone || selected;
+			encodingEntriesVector.add(new Entry(selected,encoding));
+		}
+		encodingsList = new JCheckBoxList(encodingEntriesVector);
+		encodingsList.getModel().addTableModelListener(new TableModelHandler());
+		JScrollPane encodingsScrollPane = new JScrollPane(encodingsList);
+		Dimension d = encodingsList.getPreferredSize();
 		d.height = Math.min(d.height,200);
 		encodingsScrollPane.setPreferredSize(d);
 		add(encodingsScrollPane,BorderLayout.CENTER);
 
 		ActionHandler actionHandler = new ActionHandler();
-		Box buttonsBox = Box.createHorizontalBox();
-		selectAllButton = new JButton(jEdit.getProperty("options.encodings.selectAll"));
+		Box buttonsBox = createHorizontalBox();
+		selectAllButton = new JButton(getProperty("options.encodings.selectAll"));
 		selectAllButton.addActionListener(actionHandler);
+		selectAllButton.setEnabled(enableSelectAll);
 		buttonsBox.add(selectAllButton);
-		selectNoneButton = new JButton(jEdit.getProperty("options.encodings.selectNone"));
+		selectNoneButton = new JButton(getProperty("options.encodings.selectNone"));
 		selectNoneButton.addActionListener(actionHandler);
+		selectNoneButton.setEnabled(enableSelectNone);
 		buttonsBox.add(selectNoneButton);
 		add(buttonsBox,BorderLayout.SOUTH);
-		updateButton();
 	} //}}}
 
 	//{{{ _save() method
 	protected void _save()
 	{
-		for (int i=0, c=encodings.getRowCount(); i<c ; i++)
+		for (Entry entry : encodingsList.getValues())
 		{
-			boolean encodingValue = ((Boolean) encodings.getValueAt(i, 0)).booleanValue();
-			String encoding = (String) encodings.getValueAt(i, 1);
-			if (encodingValue)
+			if (entry.isChecked())
 			{
-				jEdit.unsetProperty("encoding.opt-out."+encoding);
+				unsetProperty("encoding.opt-out."+entry.getValue());
 			}
 			else
 			{
-				jEdit.setBooleanProperty("encoding.opt-out."+encoding,true);
+				setBooleanProperty("encoding.opt-out."+entry.getValue(),true);
 			}
 		}
 	} //}}}
@@ -117,139 +132,60 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private JCheckBoxList encodingsList;
 	private JButton selectAllButton;
 	private JButton selectNoneButton;
-	private EncodingTableModel encodings;
 	//}}}
-
-	//{{{ updateButton() method
-	private void updateButton()
-	{
-		selectAllButton.setEnabled(selectedCount != encodings.encodingsSelected.length);
-		selectNoneButton.setEnabled(selectedCount != 0);
-	} //}}}
 
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener
 	{
-		public void actionPerformed(ActionEvent e)
+		public void actionPerformed(ActionEvent ae)
 		{
-			boolean select;
-			Object source = e.getSource();
+			Object source = ae.getSource();
 			if (source == selectAllButton)
 			{
-				select = true;
-				selectedCount = encodings.encodingsSelected.length;
+				encodingsList.selectAll();
+//				selectAllButton.setEnabled(false);
+//				selectNoneButton.setEnabled(true);
 			}
 			else if (source == selectNoneButton)
 			{
-				select = false;
-				selectedCount = 0;
+				for (int i=0, c=encodingsList.getRowCount() ; i<c ; i++)
+				{
+					encodingsList.setValueAt(false,i,0);
+				}
+//				selectAllButton.setEnabled(true);
+//				selectNoneButton.setEnabled(false);
+			}
+		}
+	} //}}}
+
+	//{{{ TableModelHandler class
+	class TableModelHandler implements TableModelListener
+	{
+		public void tableChanged(TableModelEvent tme)
+		{
+			int checkedAmount = encodingsList.getCheckedValues().length;
+			if (0 == checkedAmount)
+			{
+				selectNoneButton.setEnabled(false);
 			}
 			else
 			{
-				return;
+				selectNoneButton.setEnabled(true);
 			}
-			int rowCount = encodings.getRowCount();
-			for (int i=0 ; i < rowCount; i++)
+			if (encodingsList.getValues().length == checkedAmount)
 			{
-				encodings.encodingsSelected[i] = select;
+				selectAllButton.setEnabled(false);
 			}
-			updateButton();
-			encodings.fireTableDataChanged();
-			table.repaint();
-
+			else
+			{
+				selectAllButton.setEnabled(true);
+			}
 		}
 	} //}}}
 
 	//}}}
 
-	//{{{ EncodingTableModel class
-	private class EncodingTableModel extends AbstractTableModel
-	{
-		private final String[] encodings;
-
-		private final boolean[] encodingsSelected;
-
-		EncodingTableModel(String[] encodings)
-		{
-			this.encodings = encodings;
-			encodingsSelected = new boolean[encodings.length];
-
-			int encodingsAmount = encodings.length;
-			for (int i=0 ; i<encodingsAmount ; i++) {
-				String encoding = encodings[i];
-				boolean selected = !jEdit.getBooleanProperty("encoding.opt-out." + encoding, false);
-				encodingsSelected[i] = selected;
-				if (selected)
-					selectedCount++;
-			}
-		}
-
-		public String getColumnName(int columnIndex)
-		{
-			return null;
-		}
-
-		public Class<?> getColumnClass(int columnIndex)
-		{
-			switch (columnIndex)
-			{
-				case 0 : return Boolean.class;
-				case 1 : return String.class;
-				default: throw new IllegalArgumentException("Unexpected column value " + columnIndex);
-			}
-		}
-
-		public boolean isCellEditable(int rowIndex, int columnIndex)
-		{
-			return columnIndex == 0;
-		}
-
-		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
-		{
-			if (columnIndex == 0)
-			{
-				boolean value = ((Boolean) aValue).booleanValue();
-				if (value != encodingsSelected[rowIndex])
-				{
-					encodingsSelected[rowIndex] = value;
-					fireTableCellUpdated(rowIndex, columnIndex);
-					if (value)
-						selectedCount++;
-					else
-						selectedCount--;
-					updateButton();
-				}
-			}
-		}
-
-		public void addTableModelListener(TableModelListener l)
-		{
-		}
-
-		public void removeTableModelListener(TableModelListener l)
-		{
-		}
-
-		public int getRowCount()
-		{
-			return encodings.length;
-		}
-
-		public int getColumnCount()
-		{
-			return 2;
-		}
-
-		public Object getValueAt(int rowIndex, int columnIndex)
-		{
-			switch (columnIndex)
-			{
-				case 0 : return Boolean.valueOf(encodingsSelected[rowIndex]);
-				case 1 : return encodings[rowIndex];
-				default: throw new IllegalArgumentException("Unexpected column value " + columnIndex);
-			}
-		}
-	} //}}}
 } //}}}

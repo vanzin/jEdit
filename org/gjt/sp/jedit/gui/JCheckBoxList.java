@@ -91,7 +91,9 @@ public class JCheckBoxList extends JTable
 		{
 			Entry entry = (Entry)model.items.elementAt(i);
 			if(entry.checked && !entry.caption)
+			{
 				values.addElement(entry.value);
+			}
 		}
 
 		Object[] retVal = new Object[values.size()];
@@ -127,9 +129,13 @@ public class JCheckBoxList extends JTable
 	{
 		int row = getSelectedRow();
 		if(row == -1)
+		{
 			return null;
+		}
 		else
+		{
 			return getModel().getValueAt(row,1);
+		}
 	} //}}}
 
 	//{{{ getCellRenderer() method
@@ -241,6 +247,7 @@ public class JCheckBoxList extends JTable
 	} //}}}
 }
 
+//{{{ CheckBoxListModel class
 class CheckBoxListModel extends AbstractTableModel
 {
 	Vector items;
@@ -331,4 +338,4 @@ class CheckBoxListModel extends AbstractTableModel
 			}
 		}
 	}
-}
+} //}}}
