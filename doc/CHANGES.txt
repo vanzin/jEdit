@@ -184,6 +184,10 @@ and Mike Gorski for contributing to this release.
   There was no action to show the popup menu. Added one such action, and
   bound it to CONTEXT_MENU by default. (Marcelo Vanzin)
 
+- Added a new option "fallback encoding names" in General Option pane
+  to automate trial-and-error cycle with a known set of encodings to load
+  a buffer. (Kazutoshi Satoda)
+
 }}}
 {{{ Editing
 

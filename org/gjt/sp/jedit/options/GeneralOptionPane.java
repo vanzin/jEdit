@@ -50,6 +50,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortByName;
 	private JCheckBox newKeyboardHandling;
 	private JTextField encodingDetectors;
+	private JTextField fallbackEncodings;
 	//}}}
 	
 	//{{{ GeneralOptionPane constructor
@@ -206,6 +207,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.encodingDetectors"),
 			encodingDetectors);
 
+		fallbackEncodings = new JTextField(jEdit.getProperty(
+			"options.general.fallbackEncodings"));
+		fallbackEncodings.setText(jEdit.getProperty("fallbackEncodings",
+			""));
+		addComponent(jEdit.getProperty("options.general.fallbackEncodings"),
+			fallbackEncodings);
 	} //}}}
 
 	//{{{ _save() method
@@ -255,6 +262,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("newkeyhandling", nkh);
 		Options.SIMPLIFIED_KEY_HANDLING = nkh;
 		jEdit.setProperty("encodingDetectors",encodingDetectors.getText());
+		jEdit.setProperty("fallbackEncodings",fallbackEncodings.getText());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());
