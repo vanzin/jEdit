@@ -211,6 +211,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 			"options.general.fallbackEncodings"));
 		fallbackEncodings.setText(jEdit.getProperty("fallbackEncodings",
 			""));
+		fallbackEncodings.setToolTipText(jEdit.getProperty(
+			"options.general.fallbackEncodings.tooltip"));
 		addComponent(jEdit.getProperty("options.general.fallbackEncodings"),
 			fallbackEncodings);
 	} //}}}
