@@ -22,10 +22,7 @@
 
 package org.gjt.sp.jedit.buffer;
 
-import java.util.*;
 import javax.swing.text.Segment;
-import org.gjt.sp.jedit.ServiceManager;
-import org.gjt.sp.util.StandardUtilities;
 
 /**
  * Interface for obtaining the fold level of a specified line.<p>
@@ -48,8 +45,13 @@ public abstract class FoldHandler
 	/**
 	 * The service type. See {@link org.gjt.sp.jedit.ServiceManager}.
 	 * @since jEdit 4.2pre1
+	 * @deprecated use {@link org.gjt.sp.jedit.ServiceManager.ServiceFoldHandlerProvider}
 	 */
+	@Deprecated
 	public static final String SERVICE = "org.gjt.sp.jedit.buffer.FoldHandler";
+
+	/** The FoldHandlerProvider. */
+	public static FoldHandlerProvider foldHandlerProvider;
 
 	//{{{ getName() method
 	/**
@@ -105,9 +107,7 @@ public abstract class FoldHandler
 	 */
 	public static FoldHandler getFoldHandler(String name)
 	{
-		FoldHandler handler = (FoldHandler)ServiceManager
-			.getService(SERVICE,name);
-		return handler;
+		return foldHandlerProvider.getFoldHandler(name);
 	}
 	//}}}
 
@@ -120,9 +120,7 @@ public abstract class FoldHandler
 	 */
 	public static String[] getFoldModes()
 	{
-		String[] handlers = ServiceManager.getServiceNames(SERVICE);
-		Arrays.sort(handlers,new StandardUtilities.StringCompare());
-		return handlers;
+		return foldHandlerProvider.getFoldModes();
 	}
 	//}}}
 

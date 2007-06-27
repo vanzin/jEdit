@@ -27,6 +27,9 @@ import java.net.URL;
 import java.util.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.jedit.buffer.FoldHandlerProvider;
+import org.gjt.sp.jedit.buffer.FoldHandler;
 
 /**
  * A generic way for plugins to provide various API extensions.<p>
@@ -319,4 +322,44 @@ public class ServiceManager
 				return false;
 		}
 	} //}}}
+
+	/**
+	 * A FoldHandler based on the ServiceManager
+	 * @author Matthieu Casanova
+	 * @since jEdit 4.3pre10
+	 */
+	public static class ServiceFoldHandlerProvider implements FoldHandlerProvider
+	{
+		/**
+		 * The service type. See {@link org.gjt.sp.jedit.ServiceManager}.
+		 * @since jEdit 4.3pre10
+		 */
+		public static final String SERVICE = "org.gjt.sp.jedit.buffer.FoldHandler";
+
+		/**
+		 * Returns the fold handler with the specified name, or null if
+		 * there is no registered handler with that name.
+		 * @param name The name of the desired fold handler
+		 * @return the FoldHandler or null if it doesn't exists
+		 * @since jEdit 4.3pre10
+		 */
+		public FoldHandler getFoldHandler(String name)
+		{
+			FoldHandler handler = (FoldHandler) getService(SERVICE,name);
+			return handler;
+		}
+
+		/**
+		 * Returns an array containing the names of all registered fold
+		 * handlers.
+		 *
+		 * @since jEdit 4.3pre10
+		 */
+		public String[] getFoldModes()
+		{
+			String[] handlers = getServiceNames(SERVICE);
+			Arrays.sort(handlers,new StandardUtilities.StringCompare());
+			return handlers;
+		}
+	}
 }

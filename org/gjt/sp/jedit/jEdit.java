@@ -42,6 +42,7 @@ import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.JEditKillRing;
 import org.gjt.sp.jedit.buffer.KillRing;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.help.HelpViewer;
@@ -2986,6 +2987,7 @@ public class jEdit
 	private static void initMisc()
 	{
 		jars = new Vector<PluginJAR>();
+		FoldHandler.foldHandlerProvider = new ServiceManager.ServiceFoldHandlerProvider();
 		actionContext = new ActionContext()
 		{
 			public void invokeAction(EventObject evt,
