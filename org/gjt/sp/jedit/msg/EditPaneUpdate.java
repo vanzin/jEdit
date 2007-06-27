@@ -22,7 +22,7 @@ package org.gjt.sp.jedit.msg;
 import org.gjt.sp.jedit.*;
 
 /**
- * Message sent when an edit pane-related change occurs.
+ * Message sent when an edit pane-related change occurs. 
  * @author Slava Pestov
  * @version $Id$
  *
@@ -41,12 +41,15 @@ public class EditPaneUpdate extends EBMessage
 	public static final Object DESTROYED = "DESTROYED";
 
 	/**
-	 * Edit pane buffer changed.
+	 * The current buffer in the EditPane has changed to show a different buffer. This
+     * happens when an action results in a call to EditPane.setBuffer().
 	 */
 	public static final Object BUFFER_CHANGED = "BUFFER_CHANGED";
 
 	/**
-	 * Edit pane buffer about to change. Note: this could be an instance of BufferChanging class,
+	 * Edit pane buffer is about to change. You should see this before BUFFER_CHANGED.
+     * Navigator uses this message to save the cursor position in its history.
+     * Note: this could be an instance of BufferChanging class,
 	 * which also contains information about the new buffer that is about to be opened.
 	 * @since 4.3pre3
 	 */
