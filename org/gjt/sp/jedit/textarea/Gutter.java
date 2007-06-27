@@ -29,7 +29,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
@@ -735,7 +734,7 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			textArea.requestFocus();
 
-			if(GUIUtilities.isPopupTrigger(e)
+			if(TextAreaMouseHandler.isPopupTrigger(e)
 				|| e.getX() >= getWidth() - borderWidth * 2)
 			{
 				e.translatePoint(-getWidth(),0);
