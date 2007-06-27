@@ -31,18 +31,28 @@ and their status.
 - org.gjt.sp.util : No dependency (OK)
 
 - org.gjt.sp.jedit.indent : (OK)
+        {{{ imports
         -org.gjt.sp.jedit.buffer.*
-        -org.gjt.sp.jedit.TextUtilities
+        -org.gjt.sp.jedit.TextUtilities }}}
+
 
 - org.gjt.sp.jedit.syntax : No dependency (OK)
 
 - org.gjt.sp.jedit.buffer : (NOK)
+        {{{ imports 
         -org.gjt.sp.jedit.textarea.*
-        -org.gjt.sp.jedit.syntax.*
+        -org.gjt.sp.jedit.syntax.* }}}
+        {{{ misc informations
+        -BufferChangeAdapter will not be part of the independent TextArea
+        -BufferChangeListener will not be part of the independent TextArea
+        JEditBuffer has a dependency on jEdit that must be removed }}}
+
         
 - org.gjt.sp.jedit.textarea : (NOK)
+        {{{ imports
         -org.gjt.sp.jedit.buffer.*
-        -org.gjt.sp.jedit.syntax.*
+        -org.gjt.sp.jedit.syntax.* }}}
+
 
         
 }}}
