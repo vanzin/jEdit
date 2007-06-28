@@ -5,9 +5,13 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
 Joseph Erickson, David Moss, Horst Eff, Daniel Hahler, Stephen Co,
-and Mike Gorski for contributing to this release.
+Shlomy Reinstein and Mike Gorski for contributing to this release.
 
 {{{ Bug Fixes
+
+- When clicking on an hypersearch result, if the buffer was not opened,
+  the BufferUpdate.LOADED message was sent with a null view
+  (patch 1744674) (Shlomy Reinstein)
 
 - 1592085 - Now able to abort collection of files for search in directory
   (Alan Ezust)

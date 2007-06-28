@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.search;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditPane;
 import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 
 /**
@@ -52,17 +53,17 @@ public class HyperSearchFileNode implements HyperSearchNode
 	} //}}}
 
 	//{{{ getBuffer() method
-	public Buffer getBuffer()
+	public Buffer getBuffer(View view)
 	{
 		if(buffer == null)
-			buffer = jEdit.openFile(null,path);
+			buffer = jEdit.openFile(view,path);
 		return buffer;
 	} //}}}
 
 	//{{{ goTo() method
 	public void goTo(EditPane editPane)
 	{
-		Buffer buffer = getBuffer();
+		Buffer buffer = getBuffer(editPane.getView());
 		if(buffer == null)
 			return;
 

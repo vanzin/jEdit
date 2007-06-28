@@ -1,5 +1,5 @@
 /*
- * HyperSearchResult.java - HyperSearch result
+ * HyperSearchNode.java - HyperSearch node
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -24,9 +24,13 @@ package org.gjt.sp.jedit.search;
 
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditPane;
+import org.gjt.sp.jedit.View;
 
+/**
+ * @author Slava Pestov
+ */
 public interface HyperSearchNode
 {
-	public Buffer getBuffer();
-	public void goTo(EditPane editPane);
+    Buffer getBuffer(View view);
+	void goTo(EditPane editPane);
 }

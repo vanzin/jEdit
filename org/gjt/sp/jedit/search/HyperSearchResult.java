@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.*;
 
 /**
  * A set of occurrences of the search string on a given line in a buffer.
+ * @author Slava Pestov
  */
 public class HyperSearchResult implements HyperSearchNode
 {
@@ -42,10 +43,10 @@ public class HyperSearchResult implements HyperSearchNode
 	public int occurCount;
 
 	//{{{ getBuffer() method
-	public Buffer getBuffer()
+	public Buffer getBuffer(View view)
 	{
 		if(buffer == null)
-			buffer = jEdit.openFile(null,path);
+			buffer = jEdit.openFile(view,path);
 		return buffer;
 	} //}}}
 
@@ -79,7 +80,7 @@ public class HyperSearchResult implements HyperSearchNode
 	//{{{ goTo() method
 	public void goTo(final EditPane editPane)
 	{
-		final Buffer buffer = getBuffer();
+		final Buffer buffer = getBuffer(editPane.getView());
 		if(buffer == null)
 			return;
 		editPane.setBuffer(buffer);
