@@ -59,5 +59,20 @@
   <listitem><para><userinput>[^#]*</userinput> - all files whose names do not
   start with <quote>#</quote>.</para></listitem>
  </itemizedlist>
+ 
+ <bridgehead> Using regexes instead of globs </bridgehead>
+ <para> Sometimes it is desirable to use a regular expression instead of a glob for specifying file sets. This is because regular expressions are more powerful than globs and can provide the user with more specific filename matching criteria. To avoid the glob-to-regex transformation, prefix your pattern with the string <literal>(re)</literal>, which will tell jEdit to not translate the following pattern into a glob. For example: </para>
+
+ 
+ <glosslist>
+ <glossentry> 
+   <glossterm> <literal> (re).*\.(h|c(c|pp)?) </literal>  </glossterm> 
+   <glossdef><para> Matches *.c, *.cpp, *.h, *.cc </para> </glossdef>
+  </glossentry>
+  </glosslist>
+
+  <para> If you need to match files that begin with the glob-translate-disable prefix <literal>(re)</literal>, you can escape it with a leading backslash and the metacharacters will be translated into globs as before. </para>
+  
+ 
 </appendix>
 
