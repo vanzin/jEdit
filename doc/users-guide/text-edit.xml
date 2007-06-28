@@ -846,6 +846,12 @@
     Regular expression syntax is described in
     <xref linkend="regexps" />.
    </para>
+   
+   <note> <title> On regex search</title>
+   <para> There are some known issues with the <literal>java.util.regex</literal> library, as it stands in Sun's Java 1.5 and 1.6. In particular, it is possible to create regular expressions that hang the JVM, or cause stack overflow errors, which was not as easy to accomplish using the legacy <literal>gnu.regexp</literal> library. If you find that <literal>gnu.regexp</literal>, used in jEdit 4.2 and earlier, is more suitable for your search/replace needs, you can try the <emphasis role="bold">XSearch plugin</emphasis>, which still uses it and can provide a replacement to the built-in search dialog.
+   </para>
+   </note>
+    
    <para>
     The <guibutton>Backward</guibutton> and <guibutton>Forward</guibutton>
     buttons specify the search direction.
