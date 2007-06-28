@@ -405,6 +405,11 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static String globToRE(String glob)
 	{
+		if (glob.startsWith("(re)"))
+		{
+			return glob.substring(4);
+		}
+		
 		final Object NEG = new Object();
 		final Object GROUP = new Object();
 		Stack state = new Stack();

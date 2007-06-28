@@ -192,6 +192,13 @@ Shlomy Reinstein and Mike Gorski for contributing to this release.
   to automate trial-and-error cycle with a known set of encodings to load
   a buffer. (Kazutoshi Satoda)
 
+- Glob translation to regexes got a new feature. If you start a glob now
+  with the sequence "(re)" this prefix is discarded and the remaining
+  string is interpreted unchanged as regex. If you need a glob starting
+  with "(re)" you have to escape it and write "\(re)" instead. So now you
+  can use EVERYWHERE a glob is expected a normal regex instead and use
+  their full power. (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 
