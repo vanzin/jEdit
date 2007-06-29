@@ -37,6 +37,7 @@ import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.indent.IndentRuleFactory;
 import org.gjt.sp.jedit.indent.WhitespaceRule;
 import org.gjt.sp.jedit.syntax.TokenMarker;
+import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -133,7 +134,7 @@ public class Mode
 	{
 		if(marker == null)
 		{
-			jEdit.loadMode(this);
+			ModeProvider.instance.loadMode(this);
 			if (marker == null)
 				Log.log(Log.ERROR, this, "Mode not correctly loaded, token marker is still null");
 		}
@@ -148,44 +149,10 @@ public class Mode
 	 */
 	public Object getProperty(String key)
 	{
-		String prefix = "mode." + name + '.';
-
-		//if(jEdit.getBooleanProperty(prefix + "customSettings"))
-		//{
-			String property = jEdit.getProperty(prefix + key);
-			if(property != null)
-			{
-				Object value;
-				try
-				{
-					value = new Integer(property);
-				}
-				catch(NumberFormatException nf)
-				{
-					value = property;
-				}
-				return value;
-			}
-		//}
-
 		Object value = props.get(key);
 		if(value != null)
 			return value;
-
-		String global = jEdit.getProperty("buffer." + key);
-		if(global != null)
-		{
-			try
-			{
-				return new Integer(global);
-			}
-			catch(NumberFormatException nf)
-			{
-				return global;
-			}
-		}
-		else
-			return null;
+		return null;
 	} //}}}
 
 	//{{{ getBooleanProperty() method
@@ -448,11 +415,11 @@ public class Mode
 	//}}}
 
 	//{{{ Private members
-	private String name;
-	private Map<String, Object> props;
+	protected String name;
+	protected Map<String, Object> props;
 	private Pattern firstlineRE;
 	private Pattern filenameRE;
-	private TokenMarker marker;
+	protected TokenMarker marker;
 	private List<IndentRule> indentRules;
 	private String electricKeys;
 	private boolean ignoreWhitespace;

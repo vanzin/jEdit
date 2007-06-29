@@ -19,28 +19,34 @@
 
 package org.gjt.sp.jedit;
 
-import java.io.*;
-
+//{{{ Imports
+import org.gjt.sp.jedit.syntax.ModeProvider;
+import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
+//}}}
 
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.XMLUtilities;
-
+/**
+ * @author Slava Pestov
+ */
 class ModeCatalogHandler extends DefaultHandler
 {
+	//{{{ ModeCatalogHandler constructor
 	ModeCatalogHandler(String directory, boolean resource)
 	{
 		this.directory = directory;
 		this.resource = resource;
-	}
+	} //}}}
 
+	//{{{ resolveEntity() method
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "catalog.dtd", getClass());
-	}
+	} //}}}
 
+	//{{{ startElement() method
 	public void startElement(String uri, String localName,
 							 String qName, Attributes attrs)
 	{
@@ -60,11 +66,11 @@ class ModeCatalogHandler extends DefaultHandler
 			String firstlineGlob = attrs.getValue("FIRST_LINE_GLOB");
 
 
-			Mode mode = jEdit.getMode(modeName);
+			Mode mode = ModeProvider.instance.getMode(modeName);
 			if(mode == null)
 			{
-				mode = new Mode(modeName);
-				jEdit.addMode(mode);
+				mode = instantiateMode(modeName);
+				ModeProvider.instance.addMode(mode);
 			}
 
 			Object path;
@@ -86,6 +92,11 @@ class ModeCatalogHandler extends DefaultHandler
 
 			mode.init();
 		}
+	} //}}}
+
+	protected Mode instantiateMode(String modeName)
+	{
+		return new Mode(modeName);
 	}
 
 	private String directory;

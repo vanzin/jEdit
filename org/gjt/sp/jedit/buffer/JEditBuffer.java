@@ -24,38 +24,26 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-import java.awt.Toolkit;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.regex.Pattern;
-
-import javax.swing.SwingUtilities;
-import javax.swing.text.Position;
-import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.indent.IndentAction;
 import org.gjt.sp.jedit.indent.IndentRule;
-import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
-import org.gjt.sp.jedit.syntax.DummyTokenHandler;
-import org.gjt.sp.jedit.syntax.KeywordMap;
-import org.gjt.sp.jedit.syntax.ParserRuleSet;
-import org.gjt.sp.jedit.syntax.Token;
-import org.gjt.sp.jedit.syntax.TokenHandler;
-import org.gjt.sp.jedit.syntax.TokenMarker;
+import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+
+import javax.swing.*;
+import javax.swing.text.Position;
+import javax.swing.text.Segment;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.regex.Pattern;
 //}}}
 
 /**
@@ -1195,7 +1183,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public boolean isElectricKey(char ch, int line)
 	{
 		TokenMarker.LineContext ctx = lineMgr.getLineContext(line);
-		Mode mode = jEdit.getMode(ctx.rules.getModeName());
+		Mode mode = ModeProvider.instance.getMode(ctx.rules.getModeName());
 
 		// mode can be null, though that's probably an error "further up":
 		if( mode == null )
@@ -2490,7 +2478,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			modeName = ctx.rules.getModeName();
 		if (modeName == null)
 			modeName = tokenMarker.getMainRuleSet().getModeName();
-		return jEdit.getMode(modeName).getIndentRules();
+		return ModeProvider.instance.getMode(modeName).getIndentRules();
 	} //}}}
 
 	//}}}

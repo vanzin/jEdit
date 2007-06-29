@@ -23,33 +23,35 @@
  */
 package org.gjt.sp.jedit.textarea;
 
-import org.gjt.sp.jedit.input.InputHandlerProvider;
+//{{{ Imports
+import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.jedit.buffer.DefaultFoldHandlerProvider;
+import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
+import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.input.TextAreaInputHandler;
-import org.gjt.sp.jedit.syntax.Chunk;
-import org.gjt.sp.jedit.syntax.TokenMarker;
-import org.gjt.sp.jedit.syntax.ParserRuleSet;
-import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
+import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.CaretListener;
-import javax.swing.event.CaretEvent;
-import javax.swing.text.Segment;
-import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.text.Segment;
 import java.awt.*;
-import java.awt.im.InputMethodRequests;
 import java.awt.event.*;
-import java.util.*;
-
+import java.awt.im.InputMethodRequests;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.TooManyListenersException;
+//}}}
 /**
  * jEdit's text component.<p>
  *
@@ -114,12 +116,16 @@ public class TextArea extends JComponent
 		setCaretBlinkEnabled(true);
 		setElectricScroll(3);
 
+		FoldHandler.foldHandlerProvider = new DefaultFoldHandlerProvider();
 		JEditBuffer buffer = new JEditBuffer();
 		TokenMarker tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
 		buffer.setTokenMarker(tokenMarker);
 		buffer.insert(0,"ahaha coucou\ncaca");
 		setBuffer(buffer);
+		Mode mode = new Mode("text");
+		mode.setTokenMarker(tokenMarker);
+		ModeProvider.instance.addMode(mode);
 	} //}}}
 
 	//{{{ TextArea constructor

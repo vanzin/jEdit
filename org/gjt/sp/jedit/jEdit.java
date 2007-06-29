@@ -1281,7 +1281,7 @@ public class jEdit
 	{
 		/* Try to guess the eventual size to avoid unnecessary
 		 * copying */
-		modes = new Vector<Mode>(160);
+		ModeProvider.instance.removeAll();
 
 		//{{{ Load the global catalog
 		if(jEditHome == null)
@@ -1342,13 +1342,7 @@ public class jEdit
 	 */
 	public static Mode getMode(String name)
 	{
-		for(int i = 0; i < modes.size(); i++)
-		{
-			Mode mode = modes.elementAt(i);
-			if(mode.getName().equals(name))
-				return mode;
-		}
-		return null;
+		return ModeProvider.instance.getMode(name);
 	} //}}}
 
 	//{{{ getModes() method
@@ -1357,9 +1351,7 @@ public class jEdit
 	 */
 	public static Mode[] getModes()
 	{
-		Mode[] array = new Mode[modes.size()];
-		modes.copyInto(array);
-		return array;
+		return ModeProvider.instance.getModes();
 	} //}}}
 
 	//}}}
@@ -2649,20 +2641,6 @@ public class jEdit
 		}
 	} //}}}
 
-	//{{{ addMode() method
-	/**
-	 * Do not call this method. It is only public so that classes
-	 * in the org.gjt.sp.jedit.syntax package can access it.
-	 * @param mode The edit mode
-	 */
-	public static void addMode(Mode mode)
-	{
-		//Log.log(Log.DEBUG,jEdit.class,"Adding edit mode "
-		//	+ mode.getName());
-
-		modes.addElement(mode);
-	} //}}}
-
 	//{{{ loadMode() method
 	/**
 	 * Loads an XML-defined edit mode from the specified reader.
@@ -2671,16 +2649,6 @@ public class jEdit
 	/* package-private */ static void loadMode(Mode mode)
 	{
 		final String fileName = (String)mode.getProperty("file");
-
-		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
-
-		XMLReader parser = null;
-		try {
-			parser = XMLReaderFactory.createXMLReader();
-		} catch (SAXException saxe) {
-			Log.log(Log.ERROR, jEdit.class, saxe);
-			return;
-		}
 		XModeHandler xmh = new XModeHandler(mode.getName())
 		{
 			public void error(String what, Object subst)
@@ -2714,43 +2682,7 @@ public class jEdit
 					return mode.getTokenMarker();
 			}
 		};
-
-		mode.setTokenMarker(xmh.getTokenMarker());
-
-		Reader grammar = null;
-
-		try
-		{
-			grammar = new BufferedReader(new FileReader(fileName));
-
-			InputSource isrc = new InputSource(grammar);
-			isrc.setSystemId("jedit.jar");
-			parser.setContentHandler(xmh);
-			parser.setDTDHandler(xmh);
-			parser.setEntityResolver(xmh);
-			parser.setErrorHandler(xmh);
-			parser.parse(isrc);
-
-			mode.setProperties(xmh.getModeProperties());
-		}
-		catch (Throwable e)
-		{
-			Log.log(Log.ERROR, jEdit.class, e);
-
-			if (e instanceof SAXParseException)
-			{
-				String message = e.getMessage();
-				int line = ((SAXParseException)e).getLineNumber();
-				int col = ((SAXParseException)e).getColumnNumber();
-
-				Object[] args = { fileName, line, col, message };
-				GUIUtilities.error(null,"xmode-error",args);
-			}
-		}
-		finally
-		{
-			IOUtilities.closeQuietly(grammar);
-		}
+		ModeProvider.instance.loadMode(mode, xmh);
 	} //}}}
 
 	//{{{ addPluginProps() method
@@ -2837,7 +2769,7 @@ public class jEdit
 	private static Vector<ErrorListDialog.ErrorEntry> pluginErrors;
 	private static final Object pluginErrorLock = new Object();
 	private static Vector<PluginJAR> jars;
-	private static Vector<Mode> modes;
+
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
 
@@ -3931,7 +3863,13 @@ loop:		for(int i = 0; i < list.length; i++)
 		Log.log(Log.MESSAGE,jEdit.class,"Loading mode catalog file " + path);
 
 		ModeCatalogHandler handler = new ModeCatalogHandler(
-			MiscUtilities.getParentOfPath(path),resource);
+			MiscUtilities.getParentOfPath(path),resource)
+		{
+			protected Mode instantiateMode(String modeName)
+			{
+				return new JEditMode(modeName);
+			}
+		};
 		try
 		{
 			InputStream _in;
