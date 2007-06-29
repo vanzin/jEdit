@@ -829,6 +829,9 @@ public class EditPane extends JPanel implements EBComponent
 		textArea.setJoinNonWordChars(jEdit.getBooleanProperty(
 			"view.joinNonWordChars"));
 
+		textArea.setCtrlForRectangularSelection(jEdit.getBooleanProperty(
+			"view.ctrlForRectangularSelection"));
+
 		textArea.propertiesChanged();
 		
 		if (bufferSwitcher != null) {

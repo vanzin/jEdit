@@ -28,8 +28,6 @@ import java.awt.event.*;
 
 import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.OperatingSystem;
-
-import static org.gjt.sp.jedit.jEdit.getBooleanProperty;
 //}}}
 
 /**
@@ -52,7 +50,7 @@ public class MouseHandler extends TextAreaMouseHandler
 		control = (OperatingSystem.isMacOS() && evt.isMetaDown())
 			|| (!OperatingSystem.isMacOS() && evt.isControlDown());
 
-		ctrlForRectangularSelection = getBooleanProperty("view.ctrlForRectangularSelection");
+		ctrlForRectangularSelection = textArea.isCtrlForRectangularSelection();
 
 		// so that Home <mouse click> Home is not the same
 		// as pressing Home twice in a row
