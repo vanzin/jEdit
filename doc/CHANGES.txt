@@ -9,6 +9,8 @@ Shlomy Reinstein and Mike Gorski for contributing to this release.
 
 {{{ Bug Fixes
 
+- typing in multiple select works now (1724940) (Shlomy Reinstein)
+
 - When clicking on an hypersearch result, if the buffer was not opened,
   the BufferUpdate.LOADED message was sent with a null view
   (patch 1744674) (Shlomy Reinstein)
