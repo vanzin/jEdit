@@ -48,8 +48,8 @@ public class EditPaneUpdate extends EBMessage
 
 	/**
 	 * Edit pane buffer is about to change. You should see this before BUFFER_CHANGED.
-     * Navigator uses this message to save the cursor position in its history.
-     * Note: this could be an instance of BufferChanging class,
+         * Navigator uses this message to save the cursor position in its history.
+         * Note: this could be an instance of BufferChanging class,
 	 * which also contains information about the new buffer that is about to be opened.
 	 * @since 4.3pre3
 	 */

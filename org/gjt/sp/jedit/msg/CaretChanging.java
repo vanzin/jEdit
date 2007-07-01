@@ -25,16 +25,15 @@ package org.gjt.sp.jedit.msg;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 
 /**
-   a message emitted by various plugins, including
-   CodeBrowser, Tags, CscopeFinder, and SideKick, whenever the plugin
-   takes an action to change the caret to another location. 
-   It is not necessary to emit this signal when changing buffers,
-   since the BufferChanging is automatically sent by jEdit.
-   However, if you wish to navigate from one point in a buffer to 
-   another, without changing buffers, it is appropriate to 
-   EditBus.send(new CaretChanging(view.getTextArea()));
+   A message currently emitted not by jEdit's TextArea, but by various plugins, 
+   including CodeBrowser, Tags, CscopeFinder, and SideKick, 
+   whenever the plugin takes an action to change the caret to another location.
+
+   @deprecated use @ref BufferChanging instead. It serves the same purpose, alerting plugins
+   that the navigation position for the EditPane is about to change. The name of this class is misleading
+   since a TextArea does not emit a caretChanging message each time the caret changes.
    
-   @author ezust
+   @author Alan Ezust
    @since jEdit 4.3pre3
 */
 
