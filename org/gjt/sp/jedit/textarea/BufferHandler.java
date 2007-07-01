@@ -46,8 +46,6 @@ class BufferHandler implements BufferListener
 	private DisplayManager displayManager;
 	private TextArea textArea;
 	private JEditBuffer buffer;
-	// number of Selections
-	int nSel = 0;
 	boolean delayedUpdate;
 	boolean delayedMultilineUpdate;
 	int delayedUpdateStart;
@@ -120,7 +118,7 @@ class BufferHandler implements BufferListener
 			delayUpdate(startLine,endLine);
 
 			//{{{ resize selections if necessary
-			nSel = textArea.getSelectionCount();
+			
 			Iterator<Selection> iter = textArea.getSelectionIterator();
 			while(iter.hasNext())
 			{
@@ -241,6 +239,7 @@ class BufferHandler implements BufferListener
 		if(textArea.getDisplayManager() == displayManager)
 		{
 			//{{{ resize selections if necessary
+			int nSel = textArea.getSelectionCount();
 			Iterator<Selection> iter = textArea.getSelectionIterator();
 			while(iter.hasNext())
 			{
