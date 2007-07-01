@@ -334,6 +334,10 @@ Shlomy Reinstein and Mike Gorski for contributing to this release.
 - Added JEditTextArea.showPopupMenu(), which pops up the context menu
   at the current caret position.
 
+- For TextArea, userInput('\b') now behaves as backspace(), and
+  userInput('\u007F') now behaves as delete(). See background of this
+  change at SF.net patch #1692315. (Kazutoshi Satoda)
+
 }}}
 
 }}}

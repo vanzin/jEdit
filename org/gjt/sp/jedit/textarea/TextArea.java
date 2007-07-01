@@ -3200,8 +3200,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * following operations above and beyond simply inserting the text:
 	 * <ul>
 	 * <li>Inserting a TAB with a selection will shift to the right
-	 * <li>Inserting a space with automatic abbrev expansion enabled will
-	 * try to expand the abbrev
+	 * <li>Inserting a BACK_SPACE or a DELETE will remove a character
 	 * <li>Inserting an indent open/close bracket will re-indent the current
 	 * line as necessary
 	 * </ul>
@@ -3223,10 +3222,18 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(hiddenCursor != null)
 			getPainter().setCursor(hiddenCursor);
 
-		if(ch == '\t')
-			userInputTab();
-		else
+		switch(ch)
 		{
+		case '\t':
+			userInputTab();
+			break;
+		case '\b':
+			backspace();
+			break;
+		case '\u007F':
+			delete();
+			break;
+		default:
 			boolean indent = buffer.isElectricKey(ch, caretLine);
 			String str = String.valueOf(ch);
 			if(getSelectionCount() == 0)
@@ -3236,6 +3243,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 			else
 				replaceSelection(str);
+			break;
 		}
 	} //}}}
 

@@ -151,50 +151,22 @@ public class JEditTextArea extends TextArea
 	//{{{ userInput() method
 	/**
 	 * Handles the insertion of the specified character. It performs the
-	 * following operations above and beyond simply inserting the text:
+	 * following operations in addition to TextArea#userInput(char):
 	 * <ul>
-	 * <li>Inserting a TAB with a selection will shift to the right
 	 * <li>Inserting a space with automatic abbrev expansion enabled will
 	 * try to expand the abbrev
-	 * <li>Inserting an indent open/close bracket will re-indent the current
-	 * line as necessary
 	 * </ul>
 	 *
 	 * @param ch The character
-	 * @see #setSelectedText(String)
-	 * @see #isOverwriteEnabled()
 	 * @since jEdit 2.7pre3
 	 */
 	public void userInput(char ch)
 	{
-		if(!isEditable())
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		/* Null before addNotify() */
-		if(hiddenCursor != null)
-			getPainter().setCursor(hiddenCursor);
-
 		if(ch == ' ' && Abbrevs.getExpandOnInput()
 			&& Abbrevs.expandAbbrev(view,false))
 			return;
 
-		if(ch == '\t')
-			userInputTab();
-		else
-		{
-			boolean indent = buffer.isElectricKey(ch, caretLine);
-			String str = String.valueOf(ch);
-			if(getSelectionCount() == 0)
-			{
-				if(!doWordWrap(ch == ' '))
-					insert(str,indent);
-			}
-			else
-				replaceSelection(str);
-		}
+		super.userInput(ch);
 	} //}}}
 
 	//{{{ addExplicitFold() method
