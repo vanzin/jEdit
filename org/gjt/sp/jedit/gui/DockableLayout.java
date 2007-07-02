@@ -23,11 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.*;
-import java.awt.event.*;
 import java.awt.*;
-import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class DockableLayout implements LayoutManager2
@@ -56,8 +52,18 @@ public class DockableLayout implements LayoutManager2
 
 	private Component topButtons, leftButtons, bottomButtons, rightButtons;
 
-	//{{{ getAlternateLayout() method
-	public boolean setAlternateLayout()
+	/** @deprecated use isAlternateLayout */
+	public boolean setAlternateLayout() {
+		return isAlternateLayout();
+	}
+	
+	//{{{ isAlternateLayout() method
+	
+	/**
+	 * jEdit View option: wide horizontal docking areas versus tall vertical docking areas 
+	 * @returns true if using the "alternate layout"
+	 */
+	public boolean isAlternateLayout()
 	{
 		return alternateLayout;
 	} //}}}
@@ -71,7 +77,7 @@ public class DockableLayout implements LayoutManager2
 	//{{{ addLayoutComponent() method
 	public void addLayoutComponent(String name, Component comp)
 	{
-		addLayoutComponent(comp,name);
+		addLayoutComponent(comp, name);
 	} //}}}
 
 	//{{{ addLayoutComponent() method
