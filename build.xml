@@ -148,7 +148,43 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
+	<target name="textArea"
+			depends="init,compile"
+			description="build the textArea JAR-file with full debug-information">
+		<mkdir dir="${jar.location}" />
+		<jar destfile="${jar.location}/jEdit-TextArea.jar"
+			 compress="false"
+			 duplicate="fail"
+			 index="true">
+			<fileset dir="${classes.dir}/core/">
+				<include name="org/gjt/sp/jedit/buffer/*.class"/>
+				<include name="org/gjt/sp/jedit/indent/*.class"/>
+				<include name="org/gjt/sp/jedit/syntax/*.class"/>
+				<include name="org/gjt/sp/jedit/textarea/*.class"/>
+				<include name="org/gjt/sp/jedit/input/AbstractInputHandler.class"/>
+				<include name="org/gjt/sp/jedit/input/TextAreaInputHandler.class"/>
+				<include name="org/gjt/sp/jedit/input/InputHandlerProvider.class"/>
+				<include name="org/gjt/sp/jedit/input/DefaultInputHandlerProvider.class"/>
+				<include name="org/gjt/sp/jedit/gui/KeyEventWorkaround.class"/>
+				<include name="org/gjt/sp/jedit/gui/KeyEventTranslator*.class"/>
+				<include name="org/gjt/sp/jedit/gui/MutableListModel.class"/>
+				<include name="org/gjt/sp/jedit/Mode.class"/>
+				<include name="org/gjt/sp/jedit/Debug.class"/>
+				<include name="org/gjt/sp/jedit/OperatingSystem.class"/>
+				<include name="org/gjt/sp/jedit/TextUtilities.class"/>
+				<include name="org/gjt/sp/jedit/Options.class"/>
+				<include name="org/gjt/sp/util/IntegerArray.class"/>
+				<include name="org/gjt/sp/util/StandardUtilities.class"/>
+				<include name="org/gjt/sp/util/XMLUtilities.class"/>
+				<include name="org/gjt/sp/util/Log*.class"/>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="org.gjt.sp.jedit.textarea.TextArea"/>
+			</manifest>
+		</jar>
+	</target>
+
 	<target name="run"
 			depends="init,build"
 			description="run jEdit">

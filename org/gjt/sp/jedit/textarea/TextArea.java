@@ -27,9 +27,7 @@ package org.gjt.sp.jedit.textarea;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.buffer.DefaultFoldHandlerProvider;
-import org.gjt.sp.jedit.buffer.FoldHandler;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
@@ -126,6 +124,9 @@ public class TextArea extends JComponent
 		Mode mode = new Mode("text");
 		mode.setTokenMarker(tokenMarker);
 		ModeProvider.instance.addMode(mode);
+		KillRing.KillRingHandler handler = new KillRing.KillRingHandler();
+		KillRing.setInstance(new KillRing());
+		KillRing.getInstance().propertiesChanged(100);
 	} //}}}
 
 	//{{{ TextArea constructor
