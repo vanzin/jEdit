@@ -29,10 +29,10 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.WeakHashMap;
 
 /**
  * A "java bean" that can serialize itself into a java.util.Properties
@@ -294,7 +294,7 @@ public abstract class PropertiesBean
 
 	/** Holds a cache of class name -> PropertyDescriptor[] mappings. */
 	private static final Map<String,PropertyDescriptor[]> PROPERTY_CACHE
-		= new HashMap<String,PropertyDescriptor[]>();
+		= new WeakHashMap<String,PropertyDescriptor[]>();
 
 	// Instance variables
 
