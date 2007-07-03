@@ -484,7 +484,7 @@ JavaSideKick plugin. This gives you a compact and sorted tree view of property f
   package.
 </para>
 
-<para> For example, the ViewUpdate messages are all related to the jEdit View, or the top-level window. If the user creates multiple Views, a plugin may need to when they are created or destroyed, so it would monitor ViewUpdate messages.
+<para> For example, the ViewUpdate messages are all related to the jEdit View, or the top-level window. If the user creates multiple Views, a plugin may need to know when they are created or destroyed, so it would monitor ViewUpdate messages.
 </para>
 
 <para> BufferUpdate messages are all related to jEdit buffers. They let plugins know when a buffer has become dirty, when it is about to be closed, after it is closed, created, loaded, or saved. Each of these messages are described in further detail in the API docs.  
