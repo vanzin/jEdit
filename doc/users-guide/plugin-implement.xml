@@ -490,6 +490,9 @@ JavaSideKick plugin. This gives you a compact and sorted tree view of property f
 <para> BufferUpdate messages are all related to jEdit buffers. They let plugins know when a buffer has become dirty, when it is about to be closed, after it is closed, created, loaded, or saved. Each of these messages are described in further detail in the API docs.  
 </para>
 
+<para> As another example, The Navigator plugin monitors a newly added (to jEdit 4.3) EBMessage of the kind <ulink url="../api/org/gjt/sp/jedit/BufferChanging.html">BufferChanging</ulink>. The BufferChanging event provides Navigator enough advance notice to save the TextArea's caret just before the current EditPane changes its active Buffer. The <literal>BufferChanged</literal> event, another <literal>EditPaneUpdate</literal> message, is thrown shortly afterward. This is not used by Navigator, but it is used by SideKick to determine when it is time to reparse the buffer.
+</para>
+
 <para>
   Plugins register <ulink url="../api/org/gjt/sp/jedit/EBComponent.html">
   <function>EBComponent</function></ulink> instances with the
@@ -535,12 +538,6 @@ else if(msg instanceof ViewUpdate) {
   <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
   <classname>EditPlugin</classname></ulink> will suffice as a
   plugin base class. Note that QuickNotepad uses the latter.
-</para>
-
-<para> The Navigator plugin monitors two newly added (to jEdit 4.3) EBMessages of the kind <ulink url="../api/org/gjt/sp/jedit/CaretChanging.html">CaretChanging</ulink> and <ulink url="../api/org/gjt/sp/jedit/BufferChanging.html">BufferChanging</ulink>. The BufferChanging event provides Navigator enough advance notice to save the TextArea's caret just before current EditPane changes its active Buffer. The <literal>BufferChanged</literal> event, another <literal>EditPaneUpdate</literal> message, is thrown shortly afterward. This is not used by Navigator, but it could be handy for SideKick to  determine when it is time to reparse.
-</para>
-
-<para> The <literal>CaretChanging</literal> EBMessage is an odd one though. This was invented purely for the benefit of the Navigator plugin, although other plugins may choose to listen to these messages too. We don't want a CaretChanging event thrown every time the a cursor key was used in a TextArea, so the TextArea does not actually emit a <literal>CaretChanging</literal> message, even though this is a <literal>TextAreaUpdate</literal>. There are several plugins which all provide some kind of navigation ability and should emit this message for the benefit of the <literal>Navigator</literal> and other interested plugins. 
 </para>
 
 </sect1>
