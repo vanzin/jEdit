@@ -32,11 +32,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
 
-import org.xml.sax.XMLReader;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.JEditKillRing;
@@ -2522,8 +2518,19 @@ public class jEdit
 		// Wait for pending I/O requests
 		VFSManager.waitForRequests();
 
+		// Create a new EditorExitRequested
+		EditorExitRequested eer = new EditorExitRequested(view);
+		
 		// Send EditorExitRequested
-		EditBus.send(new EditorExitRequested(view));
+		EditBus.send(eer);
+		
+		// Check if the ExitRequest has been cancelled
+		// if so, do not proceed anymore in the exiting
+		if (eer.hasBeenExitCancelled())
+		{
+			Log.log(Log.MESSAGE, jEdit.class, "Exit has been cancelled");
+			return;
+		}
 
 		// Even if reallyExit is false, we still exit properly
 		// if background mode is off

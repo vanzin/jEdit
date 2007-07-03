@@ -5,7 +5,7 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
 Joseph Erickson, David Moss, Horst Eff, Daniel Hahler, Stephen Co,
-Shlomy Reinstein and Mike Gorski for contributing to this release.
+Shlomy Reinstein, javacorner and Mike Gorski for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -338,6 +338,8 @@ Shlomy Reinstein and Mike Gorski for contributing to this release.
   userInput('\u007F') now behaves as delete(). See background of this
   change at SF.net patch #1692315. (Kazutoshi Satoda)
 
+- New method EditorExitRequested.cancelExit() that allows EBMessage listeners to
+  cancel jEdit exit request (patch #1737563) (javacorner)
 }}}
 
 }}}

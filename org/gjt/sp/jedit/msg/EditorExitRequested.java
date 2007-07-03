@@ -36,6 +36,8 @@ import org.gjt.sp.jedit.View;
  */
 public class EditorExitRequested extends EBMessage
 {
+	private boolean hasBeenExitCancelled;
+	
 	/**
 	 * Creates a new editor exiting started message.
 	 * @param view The view from which this exit was called
@@ -52,4 +54,21 @@ public class EditorExitRequested extends EBMessage
 	{
 		return (View)getSource();
 	}
+	
+	/**
+	 * Cancels the exit process. If a plugin calls this method, jEdit will not
+	 * exit anymore
+	 */
+	public void cancelExit()
+	{
+		hasBeenExitCancelled = true;
+	}
+	
+	/**
+	 * Check if the exit process has been cancelled.
+	 */ 
+	 public boolean hasBeenExitCancelled()
+	 {
+		 return hasBeenExitCancelled;
+	 }
 }
