@@ -116,7 +116,7 @@
 	</para>
 
 	<para>
-	 You can choose which of this list you want to display in the Encodings general options pane.
+	 You can choose which of this list you want to display in the Encodings general options pane. You can also choose the fallback order of encodings to try in the event of decode errors in the General option pane.
 	</para>
 
 	<para>
