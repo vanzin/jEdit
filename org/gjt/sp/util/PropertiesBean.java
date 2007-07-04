@@ -55,16 +55,6 @@ import java.util.WeakHashMap;
 public abstract class PropertiesBean
 {
 
-	/**
-	 * Mostly for internal use by jEdit. Clear the entries in the
-	 * internal cache, so that new classes are re-scanned. Used when
-	 * loading/unloading plugins, to avoid having stale data in the cache.
-	 */
-	public static void clearPropertyCache()
-	{
-		PROPERTY_CACHE.clear();
-	}
-
 	// Constructors
 
 	/**
@@ -197,18 +187,8 @@ public abstract class PropertiesBean
 	private PropertyDescriptor[] getPropertyDescriptors()
 		throws IntrospectionException
 	{
-		PropertyDescriptor[] _props;
-		synchronized (PROPERTY_CACHE)
-		{
-			_props = PROPERTY_CACHE.get(getClass().getName());
-			if (_props == null)
-			{
-				BeanInfo _info = Introspector.getBeanInfo(getClass());
-				_props = _info.getPropertyDescriptors();
-				PROPERTY_CACHE.put(getClass().getName(), _props);
-			}
-		}
-		return _props;
+		BeanInfo _info = Introspector.getBeanInfo(getClass());
+		return _info.getPropertyDescriptors();
 	}
 
 	private String encode(Object value)
@@ -289,12 +269,6 @@ public abstract class PropertiesBean
 		}
 		return _ret;
 	}
-
-	// Static variables
-
-	/** Holds a cache of class name -> PropertyDescriptor[] mappings. */
-	private static final Map<String,PropertyDescriptor[]> PROPERTY_CACHE
-		= new WeakHashMap<String,PropertyDescriptor[]>();
 
 	// Instance variables
 

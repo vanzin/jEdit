@@ -606,7 +606,7 @@ public class PluginJAR
 		depends.optional = optional;
 		return depends;
 	} //}}}
-	
+
 	//{{{ PluginDepends class
 	private static class PluginDepends
 	{
@@ -731,7 +731,6 @@ public class PluginJAR
 			startPluginLater();
 		}
 
-		PropertiesBean.clearPropertyCache();
 		EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED,false));
 	} //}}}
 
@@ -1284,11 +1283,11 @@ public class PluginJAR
 			actions.load();
 			cache.cachedActionNames =
 				actions.getCacheableActionNames();
-			cache.cachedActionToggleFlags = 
+			cache.cachedActionToggleFlags =
 				new boolean[cache.cachedActionNames.length];
 			for(int i = 0; i < cache.cachedActionNames.length; i++)
 			{
-				 cache.cachedActionToggleFlags[i] = 
+				 cache.cachedActionToggleFlags[i] =
 					 jEdit.getBooleanProperty(
 						 cache.cachedActionNames[i] + ".toggle");
 			}
@@ -1296,7 +1295,7 @@ public class PluginJAR
 
 		if(cache.browserActionsURI != null)
 		{
-			browserActions = 
+			browserActions =
 				new ActionSet(this,null,null, cache.browserActionsURI);
 			browserActions.load();
 			VFSBrowser.getActionContext().addActionSet(browserActions);
@@ -1323,7 +1322,7 @@ public class PluginJAR
 		{
 			if(label != null)
 			{
-				actions.setLabel(jEdit.getProperty( 
+				actions.setLabel(jEdit.getProperty(
 					"action-set.plugin", new String[] { label }));
 			}
 			else
@@ -1351,7 +1350,7 @@ public class PluginJAR
 		{
 			breakPlugin();
 
-			Log.log(Log.ERROR,PluginJAR.this, 
+			Log.log(Log.ERROR,PluginJAR.this,
 				"Error while starting plugin " + plugin.getClassName());
 			Log.log(Log.ERROR,PluginJAR.this,t);
 			String[] args = { t.toString() };
@@ -1360,7 +1359,7 @@ public class PluginJAR
 
 		if(plugin instanceof EBPlugin)
 		{
-			if(jEdit.getProperty("plugin." + plugin.getClassName() 
+			if(jEdit.getProperty("plugin." + plugin.getClassName()
 				+ ".activate") == null)
 			{
 				// old plugins expected jEdit 4.1-style
