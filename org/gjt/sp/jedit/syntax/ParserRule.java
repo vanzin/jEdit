@@ -60,7 +60,7 @@ public class ParserRule
 	//}}}
 
 	//{{{ Special Match Token Types
-	public static final byte MATCH_TYPE_DEFAULT 	= -1;
+	public static final byte MATCH_TYPE_CONTEXT 	= -1;
 	public static final byte MATCH_TYPE_RULE 	= -2;
 	//}}}
 
@@ -85,9 +85,9 @@ public class ParserRule
 
 	/**
 	 * matchType is the type of the token for the matched region. Special
-	 * values are: MATCH_TYPE_DEFAULT = default token for the context,
+	 * values are: MATCH_TYPE_CONTEXT = default token for the context,
 	 * MATCH_TYPE_RULE = same token as the rule itself.
-	 * 
+	 *
 	 * @since jEdit 4.3pre10
 	 */
 	public final byte matchType;
@@ -106,7 +106,7 @@ public class ParserRule
 	{
 		return new ParserRule(SEQ, seq.substring(0,1),
 			posMatch, seq.toCharArray(), null,
-			0, null, delegate, id, MATCH_TYPE_DEFAULT);
+			0, null, delegate, id, MATCH_TYPE_CONTEXT);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
@@ -130,7 +130,7 @@ public class ParserRule
 	{
 		return new ParserRule(SEQ | REGEXP, hashChar, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, MATCH_TYPE_DEFAULT);
+			0, null, delegate, id, MATCH_TYPE_CONTEXT);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
@@ -141,7 +141,7 @@ public class ParserRule
 	{
 		return new ParserRule(hashChars, SEQ | REGEXP, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, MATCH_TYPE_DEFAULT);
+			0, null, delegate, id, MATCH_TYPE_CONTEXT);
 	} //}}}
 
 	//{{{ createSpanRule() method
@@ -291,7 +291,7 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, seq.substring(0,1),
 			0, seq.toCharArray(), null, 0, null,
-			null, Token.NULL, MATCH_TYPE_DEFAULT);
+			null, Token.NULL, MATCH_TYPE_CONTEXT);
 	} //}}}
 
 	//{{{ toString() method
@@ -309,7 +309,7 @@ public class ParserRule
 			default: result.append("UNKNOWN"); break;
 		}
 		int actionHints = action & ACTION_HINTS;
-		result.append("[matchType=").append(matchType == MATCH_TYPE_DEFAULT ? "MATCH_TYPE_DEFAULT" : (matchType == MATCH_TYPE_RULE ? "MATCH_TYPE_RULE" : Token.tokenToString(matchType)));
+		result.append("[matchType=").append(matchType == MATCH_TYPE_CONTEXT ? "MATCH_TYPE_CONTEXT" : (matchType == MATCH_TYPE_RULE ? "MATCH_TYPE_RULE" : Token.tokenToString(matchType)));
 		result.append(",NO_LINE_BREAK=").append((actionHints & NO_LINE_BREAK) != 0);
 		result.append(",NO_WORD_BREAK=").append((actionHints & NO_WORD_BREAK) != 0);
 		result.append(",IS_ESCAPE=").append((actionHints & IS_ESCAPE) != 0);

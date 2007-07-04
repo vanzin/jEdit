@@ -10,7 +10,7 @@
 <!ENTITY % att-position-mix 'AT_LINE_START %att-bool;
 	AT_WHITESPACE_END %att-bool;
 	AT_WORD_START %att-bool; ' >
-<!ENTITY % att-match-type 'MATCH_TYPE ( %token_values; | DEFAULT | RULE ) #IMPLIED' >
+<!ENTITY % att-match-type 'MATCH_TYPE ( %token_values; | CONTEXT | RULE ) #IMPLIED' >
 <!ENTITY % att-delegate 'DELEGATE CDATA #IMPLIED' >
 <!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool;
 	NO_WORD_BREAK %att-bool;

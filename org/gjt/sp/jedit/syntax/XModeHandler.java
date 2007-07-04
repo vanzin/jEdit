@@ -540,7 +540,7 @@ public abstract class XModeHandler extends DefaultHandler
 				Log.log(Log.WARNING, this, modeName + ": EXCLUDE_MATCH is deprecated");
 				if ("TRUE".equalsIgnoreCase(tmp))
 				{
-					lastMatchType = ParserRule.MATCH_TYPE_DEFAULT;
+					lastMatchType = ParserRule.MATCH_TYPE_CONTEXT;
 				}
 			}
 
@@ -548,9 +548,9 @@ public abstract class XModeHandler extends DefaultHandler
 			tmp = attrs.getValue("MATCH_TYPE");
 			if (tmp != null)
 			{
-				if ("DEFAULT".equals(tmp))
+				if ("CONTEXT".equals(tmp))
 				{
-					lastMatchType = ParserRule.MATCH_TYPE_DEFAULT;
+					lastMatchType = ParserRule.MATCH_TYPE_CONTEXT;
 				}
 				else if ("RULE".equals(tmp))
 				{

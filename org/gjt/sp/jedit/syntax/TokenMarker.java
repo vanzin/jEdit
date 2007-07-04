@@ -838,7 +838,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			case ParserRule.MATCH_TYPE_RULE:
 				return base.token;
 
-			case ParserRule.MATCH_TYPE_DEFAULT:
+			case ParserRule.MATCH_TYPE_CONTEXT:
 				return context.rules.getDefault();
 
 			default:

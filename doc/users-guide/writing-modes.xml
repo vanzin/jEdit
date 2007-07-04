@@ -876,7 +876,7 @@
   <listitem><para><literal>RULE</literal>: this is the default value.
   It tells the syntax system to use the same token type as the TYPE
   attribute of the rule. This is equivalent to <literal>EXCLUDE_MATCH="FALSE"</literal> in 4.2 and earlier mode files. </para></listitem>
-  <listitem><para><literal>DEFAULT</literal>: using this value tells the
+  <listitem><para><literal>CONTEXT</literal>: using this value tells the
   syntax system to mark the matched region using the default token type
   for the current rule set. In 4.2 and earlier mode files, this was specified by <literal>EXCLUDE_MATCH="TRUE"</literal>. </para></listitem>
   </itemizedlist>
