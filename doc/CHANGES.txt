@@ -274,33 +274,34 @@ Shlomy Reinstein, javacorner and Mike Gorski for contributing to this release.
 - Removed class VFSBrowser.PluginsMenuButton.ActionHandler as it isn't used
   anymore. (Björn "Vampire" Kautler)
 
-- New static methods EditPlugin.getPluginHome(Class<? extends EditPlugin>),
-  EditPlugin.getPluginHome(EditPlugin> that will return the path where a plugin
-  should store it's data. It can be null if running without settings 
-  (Matthieu Casanova)
-
-- New static methods 
-  EditPlugin.getResourceAsStream(Class<? extends EditPlugin>),
-  EditPlugin.getResourceAsStream(EditPlugin> that returns a stream on a file in 
-  the plugin home directory It can be null if running without settings
+- New static methods EditPlugin.getPluginHome(Class<? extends EditPlugin>) and
+  EditPlugin.getPluginHome(EditPlugin) that return the path where a plugin
+  should store it's data. It can be null if running without settings.
   (Matthieu Casanova)
 
 - New static methods
-  EditPlugin.getResourceAsOutputStream(Class<? extends EditPlugin>),
-  EditPlugin.getResourceAsOutputStream(EditPlugin> that returns a stream on a
-  file in the plugin home directory It can be null if running without settings
+  EditPlugin.getResourceAsStream(Class<? extends EditPlugin>,String) and
+  EditPlugin.getResourceAsStream(EditPlugin,String) that return a stream on a
+  file in the plugin home directory. It can be null if running without settings.
   (Matthieu Casanova)
 
-- New static methods EditPlugin.getResourcePath(Class<? extends EditPlugin>),
-  EditPlugin.getResourcePath(EditPlugin> that returns the path of a file in the
-  plugin home directory It can be null if running without settings
+- New static methods
+  EditPlugin.getResourceAsOutputStream(Class<? extends EditPlugin>,String) and
+  EditPlugin.getResourceAsOutputStream(EditPlugin,String) that return
+  a stream on a file in the plugin home directory.
+  It can be null if running without settings. (Matthieu Casanova)
+
+- New static methods
+  EditPlugin.getResourcePath(Class<? extends EditPlugin>,String) and
+  EditPlugin.getResourcePath(EditPlugin,String) that return the path of a file
+  in the plugin home directory. It can be null if running without settings.
   (Matthieu Casanova)
 
-- New method IOUtilities.fileLength() that computes a file or directory length
+- New method IOUtilities.fileLength() that computes a file or directory length.
   (Matthieu Casanova)
 
 - GUIUtilities.centerOnScreen() method is deprecated, use
-  javax.swing.JWindow#setLocationRelativeTo(java.awt.Component) instead
+  javax.swing.JWindow#setLocationRelativeTo(java.awt.Component) instead.
   (Matthieu Casanova)
 
 - plugin.className.files added as property for plugins. This property specifies

@@ -72,6 +72,10 @@ import java.util.Vector;
  *
  * <ul>
  * <li><code>plugin.<i>className</i>.author</code></li>
+ * <li><code>plugin.<i>className</i>.usePluginHome</code> - whether
+ * the plugin uses the EditPlugin.getPluginHome API or not. Even
+ * if the plugin doesn't store any data, this property should be set
+ * so that the plugin manager can tell that there is no data stored.</li>
  * <li><code>plugin.<i>className</i>.docs</code> - the path to plugin
  * documentation in HTML format. </li>
  * <li><code>plugin.<i>className</i>.longdescription</code> - the path to
@@ -211,6 +215,7 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  *plugin.QuickNotepadPlugin.option-pane=quicknotepad
  *
  * plugin.QuickNotepadPlugin.option-pane=quicknotepad
+ * plugin.QuickNotepadPlugin.usePluginHome=false
  * options.quicknotepad.code=new QuickNotepadOptionPane();
  * options.quicknotepad.label=QuickNotepad
  * options.quicknotepad.file=File:
@@ -318,6 +323,9 @@ public abstract class EditPlugin
 	 *
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
+	 * @see #getResourceAsStream
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourcePath
 	 */
 	public File getPluginHome()
 	{
@@ -326,11 +334,20 @@ public abstract class EditPlugin
 
 	//{{{ getPluginHome() method
 	/**
-	 * Returns the home of your plugin.
+	 * Returns the home of the specified plugin.
+	 * As you need a reference to the {@code Class} instance for the plugin
+	 * this method needs the plugin to be activated. If you use the
+	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
+	 * to be activated. So if you don't have the {@code Class} instance
+	 * anyways, consider using the {@code EditPlugin} method.
 	 *
 	 * @param clazz the class of the plugin
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
+	 * @see #getPluginHome(EditPlugin)
+	 * @see #getResourceAsStream
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourcePath
 	 */
 	public static File getPluginHome(Class<? extends EditPlugin> clazz)
 	{
@@ -339,11 +356,22 @@ public abstract class EditPlugin
 
 	//{{{ getPluginHome() method
 	/**
-	 * Returns the home of your plugin.
+	 * Returns the home of the specified plugin.
+	 * This method doesn't need the plugin to be activated. You can pass
+	 * an {@code EditPlugin.Deferred} instance that you get from
+	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
+	 * the plugin in question is not activated yet and this method doesn't
+	 * cause the plugin to get activated. If you have a reference to the
+	 * plugins {@code Class} instance anyways, consider using the
+	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
+	 * @see #getPluginHome(Class)
+	 * @see #getResourceAsStream
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourcePath
 	 */
 	public static File getPluginHome(EditPlugin plugin)
 	{
@@ -352,11 +380,14 @@ public abstract class EditPlugin
 
 	//{{{ getPluginHome() method
 	/**
-	 * Returns the home of your plugin.
+	 * Returns the home of the specified plugin.
 	 *
 	 * @param pluginClassName the plugin class name (fully qualified)
 	 * @return the plugin home. It can be null if there is no settings directory
 	 * @since 4.3pre10
+	 * @see #getResourceAsStream
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourcePath
 	 */
 	private static File getPluginHome(String pluginClassName)
 	{
@@ -372,12 +403,21 @@ public abstract class EditPlugin
 	/**
 	 * Returns an input stream to the specified resource, or <code>null</code>
 	 * if none is found.
+	 * As you need a reference to the {@code Class} instance for the plugin
+	 * this method needs the plugin to be activated. If you use the
+	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
+	 * to be activated. So if you don't have the {@code Class} instance
+	 * anyways, consider using the {@code EditPlugin} method.
 	 *
 	 * @param clazz the plugin class
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
 	 * @return An input stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsStream(EditPlugin,String)
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourcePath
 	 */
 	public static InputStream getResourceAsStream(Class<? extends EditPlugin> clazz, String path)
 	{
@@ -388,12 +428,23 @@ public abstract class EditPlugin
 	/**
 	 * Returns an input stream to the specified resource, or <code>null</code>
 	 * if none is found.
+	 * This method doesn't need the plugin to be activated. You can pass
+	 * an {@code EditPlugin.Deferred} instance that you get from
+	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
+	 * the plugin in question is not activated yet and this method doesn't
+	 * cause the plugin to get activated. If you have a reference to the
+	 * plugins {@code Class} instance anyways, consider using the
+	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
 	 * @return An input stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsStream(Class,String)
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourcePath
 	 */
 	public static InputStream getResourceAsStream(EditPlugin plugin, String path)
 	{
@@ -410,6 +461,9 @@ public abstract class EditPlugin
 	 * the plugin's resource path.
 	 * @return An input stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourcePath
 	 */
 	private static InputStream getResourceAsStream(String pluginClassName, String path)
 	{
@@ -430,12 +484,21 @@ public abstract class EditPlugin
 	/**
 	 * Returns an output stream to the specified resource, or <code>null</node> if access
 	 * to that resource is denied.
+	 * As you need a reference to the {@code Class} instance for the plugin
+	 * this method needs the plugin to be activated. If you use the
+	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
+	 * to be activated. So if you don't have the {@code Class} instance
+	 * anyways, consider using the {@code EditPlugin} method.
 	 *
 	 * @param clazz the plugin class
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
 	 * @return An output stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsOutputStream(EditPlugin,String)
+	 * @see #getResourceAsStream
+	 * @see #getResourcePath
 	 */
 	public static OutputStream getResourceAsOutputStream(Class<? extends EditPlugin> clazz, String path)
 	{
@@ -446,12 +509,23 @@ public abstract class EditPlugin
 	/**
 	 * Returns an output stream to the specified resource, or <code>null</node> if access
 	 * to that resource is denied.
+	 * This method doesn't need the plugin to be activated. You can pass
+	 * an {@code EditPlugin.Deferred} instance that you get from
+	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
+	 * the plugin in question is not activated yet and this method doesn't
+	 * cause the plugin to get activated. If you have a reference to the
+	 * plugins {@code Class} instance anyways, consider using the
+	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin
 	 * @param path The path to the resource to be returned, relative to
 	 * the plugin's resource path.
 	 * @return An output stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsOutputStream(Class,String)
+	 * @see #getResourceAsStream
+	 * @see #getResourcePath
 	 */
 	public static OutputStream getResourceAsOutputStream(EditPlugin plugin, String path)
 	{
@@ -468,6 +542,9 @@ public abstract class EditPlugin
 	 * the plugin's resource path.
 	 * @return An output stream for the resource, or <code>null</code>.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsStream
+	 * @see #getResourcePath
 	 */
 	private static OutputStream getResourceAsOutputStream(String pluginClassName, String path)
 	{
@@ -496,12 +573,21 @@ public abstract class EditPlugin
 	//{{{ getResourcePath() method
 	/**
 	 * Returns the full path of the specified plugin resource.
+	 * As you need a reference to the {@code Class} instance for the plugin
+	 * this method needs the plugin to be activated. If you use the
+	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
+	 * to be activated. So if you don't have the {@code Class} instance
+	 * anyways, consider using the {@code EditPlugin} method.
 	 *
 	 * @param clazz the plugin class
 	 * @param path The relative path to the resource from the plugin's
 	 * resource path.
 	 * @return The absolute path to the resource or null if there is no plugin home.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourceAsStream
+	 * @see #getResourcePath(EditPlugin,String)
 	 */
 	public static File getResourcePath(Class<? extends EditPlugin> clazz, String path)
 	{
@@ -511,12 +597,23 @@ public abstract class EditPlugin
 	//{{{ getResourcePath() method
 	/**
 	 * Returns the full path of the specified plugin resource.
+	 * This method doesn't need the plugin to be activated. You can pass
+	 * an {@code EditPlugin.Deferred} instance that you get from
+	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
+	 * the plugin in question is not activated yet and this method doesn't
+	 * cause the plugin to get activated. If you have a reference to the
+	 * plugins {@code Class} instance anyways, consider using the
+	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin
 	 * @param path The relative path to the resource from the plugin's
 	 * resource path.
 	 * @return The absolute path to the resource or null if there is no plugin home.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourceAsStream
+	 * @see #getResourcePath(Class,String)
 	 */
 	public static File getResourcePath(EditPlugin plugin, String path)
 	{
@@ -532,6 +629,9 @@ public abstract class EditPlugin
 	 * resource path.
 	 * @return The absolute path to the resource or null if there is no plugin home.
 	 * @since 4.3pre10
+	 * @see #getPluginHome
+	 * @see #getResourceAsOutputStream
+	 * @see #getResourceAsStream
 	 */
 	private static File getResourcePath(String pluginClassName, String path)
 	{
