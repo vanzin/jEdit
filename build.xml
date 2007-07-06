@@ -833,7 +833,8 @@
 					shortname="jEdit"
 					signature="JESP"
 					stubfile="jedit"
-					version="${jedit.version}">
+					version="${jedit.version}"
+					vmoptions="-Xms64M -Xmx192M">
 			<javaproperty name="apple.awt.antialiasing"
 						  value="true" />
 			<javaproperty name="apple.awt.textantialiasing"
@@ -971,8 +972,6 @@
 		<antcall target="compile-default-plugins-for-dist" />
 		<copy todir="${dist.dir}/classes/package-files"
 			  overwrite="true">
-			<fileset dir="package-files"
-					 excludes="windows/launchstub.exe" />
 			<filterset>
 				<filter token="jar.filename"
 						value="${jar.filename}" />
@@ -983,9 +982,6 @@
 				<filter token="slackware.target.java.version"
 						value="${slackware.target.java.version}" />
 			</filterset>
-		</copy>
-		<copy todir="${dist.dir}/classes/package-files/windows">
-			<fileset file="package-files/windows/launchstub.exe" />
 		</copy>
 		<gzip src="${dist.dir}/classes/package-files/linux/jedit.1"
 			  destfile="${dist.dir}/classes/package-files/linux/jedit.1.gz" />
