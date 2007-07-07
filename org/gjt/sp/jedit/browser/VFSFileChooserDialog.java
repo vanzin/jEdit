@@ -30,6 +30,8 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -83,6 +85,20 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
 
+	/**
+	 * Constructs a new VFSFileChooserDialog.
+	 * This version can specify a Frame as the parent instead
+	 * of the view.
+	 * @since jEdit 4.3pre10
+	 */
+	public VFSFileChooserDialog(Frame parent, View view, String path,
+		int mode, boolean multipleSelection, boolean autoshow)
+	{
+		super(parent, getDefaultTitle(),true);
+		_init(view,path,mode,multipleSelection,autoshow);
+	} //}}}
+
+	
 	//{{{ getBrowser() method
 	/**
 	 * Returns the VFSBrowser instance used internally.

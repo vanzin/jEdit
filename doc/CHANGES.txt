@@ -122,6 +122,8 @@ Shlomy Reinstein, javacorner and Mike Gorski for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Plugin Manager: persistent Plugin Install Sets (1748509 - Alan Ezust)
+
 - New View option: amount of maximum visible rows in buffer switcher
   (Patch #1642574) (Jakub Roztocil)
 

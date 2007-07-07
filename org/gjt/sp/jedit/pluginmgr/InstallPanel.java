@@ -23,26 +23,91 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.InputStream;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.gui.RolloverButton;
+import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
-//}}}
+import org.gjt.sp.util.XMLUtilities;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+// }}}
 
 /**
  * @version $Id$
  */
 class InstallPanel extends JPanel
 {
+	//{{{ Variables
+	private final JTable table;
+	private JScrollPane scrollpane;
+	private PluginTableModel pluginModel;
+	private PluginManager window;
+	private PluginInfoBox infoBox;
+	ChoosePluginSet chooseButton;
+	private boolean updates;
+	final HashSet<String> pluginSet = new HashSet<String>();
+	public final String PROPERTY_PLUGINSET = "plugin-manager.pluginset.path";
+	//}}}
+	
 	//{{{ InstallPanel constructor
 	InstallPanel(PluginManager window, boolean updates)
 	{
@@ -122,12 +187,40 @@ class InstallPanel extends JPanel
 		buttons.add(new InstallButton());
 		buttons.add(Box.createHorizontalStrut(12));
 		buttons.add(new SelectallButton());
+		buttons.add(chooseButton = new ChoosePluginSet());
+		buttons.add(new ClearPluginSet());
 		buttons.add(Box.createGlue());
 		buttons.add(new SizeLabel());
 
+		
 		add(BorderLayout.SOUTH,buttons);
+		String path = jEdit.getProperty(PROPERTY_PLUGINSET, "");
+		if (!path.equals("")) {
+			loadPluginSet(path);
+		}
 	} //}}}
 
+	//{{{ loadPluginSet() method
+	/** loads a pluginSet xml file and updates the model to reflect 
+	    certain checked selections 
+	    @since jEdit 4.3pre10 
+	    @author Alan Ezust
+	*/
+	boolean loadPluginSet(String path) {
+		VFS vfs = VFSManager.getVFSForPath(path);
+		Object session = vfs.createVFSSession(path, InstallPanel.this);
+		try {
+			InputStream is = vfs._createInputStream(session, path, false, InstallPanel.this);
+			XMLUtilities.parseXML(is, new StringMapHandler());
+		}
+		catch (Exception e) {
+			Log.log(Log.ERROR, this, "Loading Pluginset Error", e);
+			return false;
+		}
+		pluginModel.update();
+		return true;
+	} // }}}
+	
 	//{{{ updateModel() method
 	public void updateModel()
 	{
@@ -149,16 +242,6 @@ class InstallPanel extends JPanel
 	} //}}}
 
 	//{{{ Private members
-
-	//{{{ Variables
-	private final JTable table;
-	private JScrollPane scrollpane;
-	private PluginTableModel pluginModel;
-	private PluginManager window;
-	private PluginInfoBox infoBox;
-
-	private boolean updates;
-	//}}}
 
 	//{{{ formatSize() method
 	private static String formatSize(int size)
@@ -473,7 +556,10 @@ class InstallPanel extends JPanel
 		{
 			for (int i=0, c=getRowCount() ; i<c ; i++)
 			{
-				setValueAt(savedChecked.contains(entries.get(i).toString()),i,0);
+				String name = entries.get(i).toString();
+				if (pluginSet.contains(name))
+					setValueAt(true, i, 0);
+				else setValueAt(savedChecked.contains(name), i, 0);
 			}
 
 			if (null != table)
@@ -485,7 +571,8 @@ class InstallPanel extends JPanel
 					int rowCount = getRowCount();
 					for ( ; i<rowCount ; i++)
 					{
-						if (savedSelection.contains(entries.get(i).toString()))
+						String name = entries.get(i).toString();
+						if (savedSelection.contains(name))
 						{
 							table.setRowSelectionInterval(i,i);
 							break;
@@ -494,7 +581,8 @@ class InstallPanel extends JPanel
 					ListSelectionModel lsm = table.getSelectionModel();
 					for ( ; i<rowCount ; i++)
 					{
-						if (savedSelection.contains(entries.get(i).toString()))
+						String name = entries.get(i).toString();
+						if (savedSelection.contains(name)) 
 						{
 							lsm.addSelectionInterval(i,i);
 						}
@@ -662,6 +750,71 @@ class InstallPanel extends JPanel
 		}
 	} //}}}
 
+	// {{{ class StringMapHandler
+	/** For parsing the pluginset xml files into pluginSet */
+	class StringMapHandler extends DefaultHandler {
+		StringMapHandler() {
+			pluginSet.clear();
+		}
+		public void startElement(String uri, String localName, String qName, Attributes attrs) throws SAXException
+		{
+			if (localName.equals("plugin")) {
+				pluginSet.add(attrs.getValue("name"));
+			}
+		}
+	} // }}}
+	
+	// {{{ ChoosePluginSet button
+	class ChoosePluginSet extends RolloverButton implements ActionListener {
+		String path;
+		ChoosePluginSet() {
+			setIcon(GUIUtilities.loadIcon("OpenFile.png"));
+			addActionListener(this);
+			updateUI();
+		}
+		// {{{ updateUI method
+		public void updateUI() {
+			path = jEdit.getProperty(PROPERTY_PLUGINSET, "");
+			if (path.length()<1) setToolTipText ("Click here to choose a predefined plugin set");
+			else setToolTipText ("Choose pluginset (" + path + ")");
+			super.updateUI();
+		}// }}}
+		
+
+		// {{{
+		public void actionPerformed(ActionEvent ae)
+		{
+			path = jEdit.getProperty(PROPERTY_PLUGINSET, 
+				jEdit.getSettingsDirectory() + File.separator); 
+			String[] selectedFiles = GUIUtilities.showVFSFileDialog(InstallPanel.this.window, 
+				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
+			if (selectedFiles.length != 1) return;
+			path = selectedFiles[0];
+			boolean success = loadPluginSet(path);
+			if (success) {
+				jEdit.setProperty(PROPERTY_PLUGINSET, path); 
+			}
+			updateUI();
+		} // }}}
+	}// }}}
+	
+	// {{{ class ClearPluginSet
+	class ClearPluginSet extends RolloverButton implements ActionListener {
+
+		ClearPluginSet() {
+			setIcon(GUIUtilities.loadIcon("Clear.png"));
+			setToolTipText("clear plugin set");
+			addActionListener(this);
+		}
+		public void actionPerformed(ActionEvent e)
+		{
+			pluginSet.clear();
+			// clear checked entries all?
+			jEdit.unsetProperty("plugin-manager.pluginset.path");
+			chooseButton.updateUI();
+		}
+	} // }}}
+	
 	//{{{ InstallButton class
 	class InstallButton extends JButton implements ActionListener, TableModelListener
 	{

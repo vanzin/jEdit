@@ -54,18 +54,26 @@ import javax.swing.table.TableColumn;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.FileVFS;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
+import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
+import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.help.*;
 
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.StringList;
 //}}}
 
 /**
- * The ManagerPanel is the JPanel that shows the installed plugins.
+ * The ManagePanel is the JPanel that shows the installed plugins.
  */
 public class ManagePanel extends JPanel
 {
@@ -76,6 +84,7 @@ public class ManagePanel extends JPanel
 	private final PluginTableModel pluginModel;
 	private final PluginManager window;
 	private JPopupMenu popup;
+	 
 	//}}}
 
 	//{{{ ManagePanel constructor
@@ -138,6 +147,7 @@ public class ManagePanel extends JPanel
 		Box buttons = new Box(BoxLayout.X_AXIS);
 
 		buttons.add(new RemoveButton());
+		buttons.add(new SaveButton());
 		buttons.add(Box.createGlue());
 		buttons.add(new HelpButton());
 
@@ -604,6 +614,69 @@ public class ManagePanel extends JPanel
 			ManagePanel.this.update();
 		}
 	} //}}}
+
+	//{{{ SaveButton class
+	/**
+	 * Permits the user to save the state of the ManagePanel,
+	 * which in this case, is nothing more than a list of
+	 * all plugins currently loaded.
+	 * @since jEdit 4.3pre10
+	 * @author Alan Ezust
+	 */
+	class SaveButton extends RolloverButton implements ActionListener
+	{
+		SaveButton()
+		{
+			setIcon(GUIUtilities.loadIcon("Save.png"));
+			setToolTipText("Save Currently Checked Plugins Set");
+			addActionListener(this);
+			setEnabled(true);
+		}
+
+		void saveState(String vfsURL, StringList pluginList) {
+			StringBuffer sb = new StringBuffer("<pluginset>\n ");
+			
+			for (String pluginName: pluginList) {
+				sb.append("   <plugin name=\"" + pluginName + "\" />\n ");
+			}
+			sb.append("</pluginset>\n");
+			
+			VFS vfs = VFSManager.getVFSForPath(vfsURL);
+			Object session = vfs.createVFSSession(vfsURL, ManagePanel.this);
+			try {
+				OutputStream os = vfs._createOutputStream(session, vfsURL, ManagePanel.this);
+				OutputStreamWriter writer = new OutputStreamWriter(os);
+				writer.write(sb.toString());
+				writer.close();
+				os.close();
+			}
+			catch (Exception e) {
+				Log.log(Log.ERROR, this, "Saving State Error", e);
+			}
+			
+		}
+		
+		public void actionPerformed(ActionEvent e)
+		{
+			String path = jEdit.getProperty("plugin-manager.pluginset.path", jEdit.getSettingsDirectory() + File.separator);
+			VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
+				ManagePanel.this.window, jEdit.getActiveView(),
+				path, VFSBrowser.SAVE_DIALOG, false , true);
+			String[] fileselections = fileChooser.getSelectedFiles();
+			StringList pluginSelections = new StringList();
+			if (fileselections.length != 1) return;
+			
+			PluginJAR[] jars = jEdit.getPluginJARs();
+			for (PluginJAR jar : jars) {
+				if (jar.getPlugin() != null) {
+					Entry entry = new Entry (jar);
+					pluginSelections.add(entry.name);
+				}
+			}
+			saveState(fileselections[0], pluginSelections);
+			jEdit.setProperty("plugin-manager.pluginset.path", fileselections[0]);
+		}
+	}//}}}
 
 	//{{{ RemoveButton class
 	class RemoveButton extends JButton implements ListSelectionListener, ActionListener

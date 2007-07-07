@@ -70,6 +70,8 @@
 	<para>
  The three panes of the PluginManager have all been reworked and made more keyboard friendly. They handle multiple selections, the checkbox states don't get lost when you switch panes, and the manage panel now automatically loads dependent plugins if they are already downloaded. Anyone who is used to 4.2's plugin manager will notice the difference immediately.
 	</para>
+    <para> From the Manage tab, it is now possible to save a set of installed plugins as a PluginSet. This is an XML file which can be located locally on your machine, or remotely on a network. Each time the Install tab is instantiated, the PluginSet is loaded and the set of plugins are checked for you to download and install.
+    </para>
 
 	<para>
 	 If you are a plugin developer, see <xref linkend="api-changes"/>.

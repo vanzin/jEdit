@@ -18,7 +18,7 @@
  <sect1 id="plugin-manager"><title>The Plugin Manager</title>
   <para>
    <guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin Manager</guimenuitem>
-   displays the plugin manager window. The plugin manager lists all installed
+   displays the plugin manager window. It consists of three tabs: Manage, Update and Install. The Manage tab lists all installed
    plugins; clicking on a plugin in the list will display information about it.
   </para>
   <para>
@@ -29,6 +29,7 @@
   <para>
    To view plugin documentation, select a plugin and click <guibutton>Help</guibutton>. Note that plugin documentation can also be accessed by invoking <guimenu>Help</guimenu>&gt;<guimenuitem>jEdit Help</guimenuitem>.
   </para>
+  <para> The <guibutton>Save</guibutton> button allows you to save the list of installed plugins to an XML file. </para>
   <para>
    <guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin Options</guimenuitem> displays a dialog box for changing plugin settings.
   </para>
@@ -51,6 +52,7 @@
    about available plugins from the jEdit web site, and present a list of
    plugins compatible with your jEdit release.
   </para>
+
   <para>
    Click on a plugin in the list to see some information about it. To select
    plugins for installation, click the check box next to their names in the list.
@@ -59,6 +61,8 @@
    The <guibutton>Total size</guibutton> field shows the total size
    of all plugins chosen for installation, along with any plugins that will be
    automatically downloaded in order to fulfill dependencies.
+  </para>
+    <para> If a PluginSet was saved from the Manage tab, that set will be loaded here, and any plugins which were on that list but not yet installed will be checked in the table. You can clear the PluginSet selection with the <guibutton>clear</guibutton> button, or choose a different PluginSet xml file with the <guibutton>choose</guibutton> button.
   </para>
   <para>
    Once you have specified plugins to install, click <guibutton>Install</guibutton> to begin the download process.

@@ -91,7 +91,7 @@
     <property name="user-doc.xml"           value="docs/users-guide.xml" />
     <property name="user-doc.out"           value="users-guide.html" />
     <property name="javadoc.title"          value="${ant.project.name} API" />
-    <property name="docbook.xsl.sheet"      value="html/chunk.xsl" />
+    <property name="docbook.xsl.sheet"      value="html/onechunk.xsl" />
     <pathconvert property="docs.style.sheet"
                  dirsep="/">
         <path location="${docbook.xsl}/${docbook.xsl.sheet}" />
