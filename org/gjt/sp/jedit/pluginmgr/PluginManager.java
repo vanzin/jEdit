@@ -42,6 +42,7 @@ import org.gjt.sp.util.WorkRequest;
  */
 public class PluginManager extends JFrame implements EBComponent
 {
+	
 	//{{{ getInstance() method
 	/**
 	 * Returns the currently visible plugin manager window, or null.
@@ -136,6 +137,8 @@ public class PluginManager extends JFrame implements EBComponent
 	private boolean downloadingPluginList;
 	private final Frame parent;
 	//}}}
+
+	static public final String PROPERTY_PLUGINSET = "plugin-manager.pluginset.path";
 
 	//{{{ PluginManager constructor
 	private PluginManager(Frame parent)

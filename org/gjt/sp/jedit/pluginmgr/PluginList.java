@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
+import java.awt.Component;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
@@ -36,6 +37,7 @@ import org.gjt.sp.util.WorkRequest;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
+
 
 /**
  * Plugin list downloaded from server.
@@ -59,22 +61,55 @@ class PluginList
 	 * @since jEdit 4.3pre3
 	 */
 	private final String id;
-
+	private String cachedURL;
+	private WorkRequest workRequest;
+	String gzipURL;
 	//{{{ PluginList constructor
-	PluginList(WorkRequest workRequest) throws Exception
+	PluginList(WorkRequest workRequest) 
 	{
-		String path = jEdit.getProperty("plugin-manager.export-url");
 		id = jEdit.getProperty("plugin-manager.mirror.id");
+		this.workRequest = workRequest;
+		readPluginList();
+	}
+	
+	void readPluginList() {
+		boolean cache=true;
+		gzipURL = jEdit.getProperty("plugin-manager.export-url");	
 		if (!id.equals(MirrorList.Mirror.NONE))
-			path += "?mirror="+id;
-		PluginListHandler handler = new PluginListHandler(this,path);
-		XMLReader parser = XMLReaderFactory.createXMLReader();
-		InputStream in = null;
-		InputStream inputStream = null;
-		try
-		{
-			inputStream = new URL(path).openStream();
-			workRequest.setStatus(jEdit.getProperty("plugin-manager.list-download"));
+			gzipURL += "?mirror="+id;		
+		String path = null;
+		if (jEdit.getSettingsDirectory() == null) {
+			cachedURL=gzipURL;
+		}
+		path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
+		cachedURL= "file://" + path;
+		boolean downloadIt = false;
+		if (path != null) try {
+			File f = new File(path);
+			if (! f.canRead()) downloadIt = true;
+			long currentTime = System.currentTimeMillis();
+			long age = currentTime - f.lastModified();
+			/* By default only download plugin lists every 5 minutes */
+			long interval = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 5) * 60 * 1000;
+			if (age > interval) {
+				Log.log (Log.MESSAGE, this, "PluginList cached copy too old. Downloading from mirror. ");
+				downloadIt = true;
+			}
+		}
+		catch (Exception e) {
+			Log.log (Log.MESSAGE, this, "No cached copy. Downloading from mirror. ");
+			downloadIt = true;
+		}
+		if (downloadIt && cachedURL != gzipURL) {
+			downloadPluginList();
+		}
+		InputStream in = null, inputStream = null;
+		try {
+			if (cachedURL != gzipURL) 
+				Log.log(Log.MESSAGE, this, "Using cached pluginlist");
+			inputStream = new URL(cachedURL).openStream();
+			XMLReader parser = XMLReaderFactory.createXMLReader();
+			PluginListHandler handler = new PluginListHandler(this, cachedURL);
 			in = new BufferedInputStream(inputStream);
 			if(in.markSupported())
 			{
@@ -86,7 +121,6 @@ class PluginList
 				if(b1 == GZIP_MAGIC_1 && b2 == GZIP_MAGIC_2)
 					in = new GZIPInputStream(in);
 			}
-
 			InputSource isrc = new InputSource(new InputStreamReader(in,"UTF8"));
 			isrc.setSystemId("jedit.jar");
 			parser.setContentHandler(handler);
@@ -94,14 +128,43 @@ class PluginList
 			parser.setEntityResolver(handler);
 			parser.setErrorHandler(handler);
 			parser.parse(isrc);
+				
 		}
-		finally
-		{
+		catch (Exception e) {
+			Log.log (Log.ERROR, this, "readpluginlist: error", e);
+		}
+		finally {
 			IOUtilities.closeQuietly(in);
 			IOUtilities.closeQuietly(inputStream);
 		}
-	} //}}}
-
+		
+	}
+	
+	/** Caches it locally */
+	void downloadPluginList() {
+		InputStream inputStream = null;
+		try {
+			
+			workRequest.setStatus(jEdit.getProperty("plugin-manager.list-download"));
+			inputStream = new URL(gzipURL).openStream();
+			FileOutputStream fos = new FileOutputStream(cachedURL.replaceFirst("file://", ""));
+			boolean finished = false;
+			BufferedInputStream is = new BufferedInputStream(inputStream);
+			while (!finished) 
+			{
+				int ch = is.read();
+				if (ch == -1) 	finished = true;
+				else fos.write(ch);
+			}
+			fos.close();
+			inputStream.close();
+			Log.log(Log.MESSAGE, this, "Updated cached pluginlist");
+		}
+		catch (Exception e) {
+			Log.log (Log.ERROR, this, "CacheRemotePluginList: error", e);
+		}
+	}
+	
 	//{{{ addPlugin() method
 	void addPlugin(Plugin plugin)
 	{

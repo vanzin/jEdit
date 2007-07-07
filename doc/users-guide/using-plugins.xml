@@ -29,7 +29,7 @@
   <para>
    To view plugin documentation, select a plugin and click <guibutton>Help</guibutton>. Note that plugin documentation can also be accessed by invoking <guimenu>Help</guimenu>&gt;<guimenuitem>jEdit Help</guimenuitem>.
   </para>
-  <para> The <guibutton>Save</guibutton> button allows you to save the list of installed plugins to an XML file. </para>
+  <para> The <guibutton>Save</guibutton> rollover button allows you to save the list of installed and loaded plugins to an XML file. The <guibutton>Open</guibutton> button next to it will load a file and select/deselect your plugins as they were when the file was saved. </para>
   <para>
    <guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin Options</guimenuitem> displays a dialog box for changing plugin settings.
   </para>
@@ -62,7 +62,7 @@
    of all plugins chosen for installation, along with any plugins that will be
    automatically downloaded in order to fulfill dependencies.
   </para>
-    <para> If a PluginSet was saved from the Manage tab, that set will be loaded here, and any plugins which were on that list but not yet installed will be checked in the table. You can clear the PluginSet selection with the <guibutton>clear</guibutton> button, or choose a different PluginSet xml file with the <guibutton>choose</guibutton> button.
+    <para> If a PluginSet was saved or loaded from the <guilabel>Manage</guilabel> tab, that set will be also loaded here. Any plugins which were on that list but not yet installed will be checked in this table. You can clear the active PluginSet with the <guibutton>clear</guibutton> button next to it, or choose a different PluginSet xml file with the <guibutton>choose</guibutton> button.
   </para>
   <para>
    Once you have specified plugins to install, click <guibutton>Install</guibutton> to begin the download process.

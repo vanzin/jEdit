@@ -56,9 +56,12 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.pluginmgr.InstallPanel.StringMapHandler;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
@@ -71,6 +74,10 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StringList;
 //}}}
+import org.gjt.sp.util.XMLUtilities;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * The ManagePanel is the JPanel that shows the installed plugins.
@@ -84,7 +91,8 @@ public class ManagePanel extends JPanel
 	private final PluginTableModel pluginModel;
 	private final PluginManager window;
 	private JPopupMenu popup;
-	 
+	private HashSet<String> selectedPlugins = null;
+	private HashSet<String> jarNames = null;
 	//}}}
 
 	//{{{ ManagePanel constructor
@@ -148,6 +156,7 @@ public class ManagePanel extends JPanel
 
 		buttons.add(new RemoveButton());
 		buttons.add(new SaveButton());
+		buttons.add(new RestoreButton());
 		buttons.add(Box.createGlue());
 		buttons.add(new HelpButton());
 
@@ -162,6 +171,75 @@ public class ManagePanel extends JPanel
 		pluginModel.update();
 	} //}}}
 
+	// {{{ class ManagePanelRestoreHandler
+	/**
+	 * For handling the XML parse events of a plugin set. 
+	 * Selects the same plugins that are in that set.
+	 * @since jEdit 4.3pre10
+	 */
+	class ManagePanelRestoreHandler extends DefaultHandler {
+		ManagePanelRestoreHandler() {
+			selectedPlugins = new HashSet<String>();
+			jarNames = new HashSet<String>();
+		}
+
+
+
+		public void startElement(String uri, String localName, 
+							String qName, Attributes attrs) throws SAXException 
+		{
+			if (localName.equals("plugin")) {
+				String jarName = attrs.getValue("jar");
+				String name = attrs.getValue("name");
+				Entry e = new Entry(jarName);
+				e.name=name;
+				selectedPlugins.add(name);
+				jarNames.add(jarName);
+			}
+		}
+	}//}}}
+	
+	//{{{ loadPluginSet() method
+	boolean loadPluginSet(String path) {
+		VFS vfs = VFSManager.getVFSForPath(path);
+		Object session = vfs.createVFSSession(path, ManagePanel.this);
+		try {
+			InputStream is = vfs._createInputStream(session, path, false, ManagePanel.this);
+			XMLUtilities.parseXML(is, new ManagePanelRestoreHandler());
+			is.close();
+			int rowCount = pluginModel.getRowCount();
+			for (int i=0 ; i<rowCount ; i++) 
+			{
+				Entry ent = pluginModel.getEntry(i);
+				String name = ent.name;
+				if (name != null) 
+				{
+					pluginModel.setValueAt(selectedPlugins.contains(name), i, 0);
+				}
+				else 
+				{
+					String jarPath = ent.jar;
+					String jarName = jarPath.substring(1 + jarPath.lastIndexOf(File.separatorChar));
+					try {
+						pluginModel.setValueAt(jarNames.contains(jarName), i, 0);
+					}
+					catch (Exception e) {
+						Log.log(Log.WARNING, this, "Exception thrown loading: " + jarName);
+					}
+				}
+			}			
+		}
+		catch (Exception e) 
+		{
+			Log.log(Log.ERROR, this, "Loading Pluginset Error", e);
+			return false;
+		}
+		pluginModel.update();
+		return true;
+	} // }}}		
+		
+	
+	//}}}
 	//{{{ Inner classes
 
 	//{{{ KeyboardCommand enum
@@ -615,6 +693,44 @@ public class ManagePanel extends JPanel
 		}
 	} //}}}
 
+	//{{{ RestoreButton class
+	/**
+	 * Permits the user to restore the state of the ManagePanel
+	 * based on a PluginSet.
+	 * 
+	 * Selects all loaded plugins that appear in an .XML file, and deselects
+	 * all others, and also sets the pluginset to that .XML file. Does not install any plugins
+	 * that were not previously installed.
+	 *
+	 * @since jEdit 4.3pre10
+	 * @author Alan Ezust
+	 */
+	class RestoreButton extends RolloverButton implements ActionListener
+	{
+		RestoreButton()
+		{
+			setIcon(GUIUtilities.loadIcon("OpenFile.png"));
+			addActionListener(this);
+			setToolTipText("Choose a PluginSet, select/deselect plugins based on set.");
+		}
+
+		public void actionPerformed(ActionEvent e)
+		{
+			String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, 
+				jEdit.getSettingsDirectory() + File.separator); 
+			String[] selectedFiles = GUIUtilities.showVFSFileDialog(ManagePanel.this.window, 
+				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
+			if (selectedFiles.length != 1) return;
+			path = selectedFiles[0];
+			boolean success = loadPluginSet(path);
+			if (success) {
+				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path); 
+				EditBus.send(new PropertiesChanged(jEdit.getActiveView()));
+			}
+			
+		}
+	}//}}}
+	
 	//{{{ SaveButton class
 	/**
 	 * Permits the user to save the state of the ManagePanel,
@@ -633,11 +749,13 @@ public class ManagePanel extends JPanel
 			setEnabled(true);
 		}
 
-		void saveState(String vfsURL, StringList pluginList) {
+		void saveState(String vfsURL, List<Entry> pluginList) 
+		{
 			StringBuffer sb = new StringBuffer("<pluginset>\n ");
 			
-			for (String pluginName: pluginList) {
-				sb.append("   <plugin name=\"" + pluginName + "\" />\n ");
+			for (Entry entry: pluginList) {
+				String jarName = entry.jar.substring(1+entry.jar.lastIndexOf(File.separatorChar));
+				sb.append("   <plugin name=\"" + entry.name + "\" jar=\""+ jarName + "\" />\n ");
 			}
 			sb.append("</pluginset>\n");
 			
@@ -663,14 +781,14 @@ public class ManagePanel extends JPanel
 				ManagePanel.this.window, jEdit.getActiveView(),
 				path, VFSBrowser.SAVE_DIALOG, false , true);
 			String[] fileselections = fileChooser.getSelectedFiles();
-			StringList pluginSelections = new StringList();
-			if (fileselections.length != 1) return;
+			ArrayList<Entry> pluginSelections = new ArrayList<Entry>();
+			if (fileselections == null || fileselections.length != 1) return;
 			
 			PluginJAR[] jars = jEdit.getPluginJARs();
 			for (PluginJAR jar : jars) {
 				if (jar.getPlugin() != null) {
 					Entry entry = new Entry (jar);
-					pluginSelections.add(entry.name);
+					pluginSelections.add(entry);
 				}
 			}
 			saveState(fileselections[0], pluginSelections);

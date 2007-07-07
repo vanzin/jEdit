@@ -76,6 +76,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.jEdit;
@@ -83,6 +86,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -105,9 +109,6 @@ class InstallPanel extends JPanel
 	ChoosePluginSet chooseButton;
 	private boolean updates;
 	final HashSet<String> pluginSet = new HashSet<String>();
-	public final String PROPERTY_PLUGINSET = "plugin-manager.pluginset.path";
-	//}}}
-	
 	//{{{ InstallPanel constructor
 	InstallPanel(PluginManager window, boolean updates)
 	{
@@ -194,7 +195,7 @@ class InstallPanel extends JPanel
 
 		
 		add(BorderLayout.SOUTH,buttons);
-		String path = jEdit.getProperty(PROPERTY_PLUGINSET, "");
+		String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
 		if (!path.equals("")) {
 			loadPluginSet(path);
 		}
@@ -274,7 +275,7 @@ class InstallPanel extends JPanel
 	//{{{ PluginTableModel class
 	class PluginTableModel extends AbstractTableModel
 	{
-		/** This List can contains String and Entry. */
+		/** This List can contain String or Entry. */
 		private List entries = new ArrayList();
 		private int sortType = EntryCompare.NAME;
 
@@ -515,7 +516,7 @@ class InstallPanel extends JPanel
 							&& StandardUtilities.compareStrings(branch.version,
 							installedVersion,false) > 0)
 						{
-							entries.add(new Entry(plugin,set.name));
+							entries.add(new Entry(plugin, set.name));
 						}
 					}
 					else
@@ -765,16 +766,17 @@ class InstallPanel extends JPanel
 	} // }}}
 	
 	// {{{ ChoosePluginSet button
-	class ChoosePluginSet extends RolloverButton implements ActionListener {
+	class ChoosePluginSet extends RolloverButton implements ActionListener, EBComponent {
 		String path;
 		ChoosePluginSet() {
 			setIcon(GUIUtilities.loadIcon("OpenFile.png"));
 			addActionListener(this);
 			updateUI();
+			EditBus.addToBus(this);
 		}
 		// {{{ updateUI method
 		public void updateUI() {
-			path = jEdit.getProperty(PROPERTY_PLUGINSET, "");
+			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
 			if (path.length()<1) setToolTipText ("Click here to choose a predefined plugin set");
 			else setToolTipText ("Choose pluginset (" + path + ")");
 			super.updateUI();
@@ -784,18 +786,29 @@ class InstallPanel extends JPanel
 		// {{{
 		public void actionPerformed(ActionEvent ae)
 		{
-			path = jEdit.getProperty(PROPERTY_PLUGINSET, 
+			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, 
 				jEdit.getSettingsDirectory() + File.separator); 
 			String[] selectedFiles = GUIUtilities.showVFSFileDialog(InstallPanel.this.window, 
 				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
-			if (selectedFiles.length != 1) return;
+			if (selectedFiles == null || selectedFiles.length != 1) return;
 			path = selectedFiles[0];
 			boolean success = loadPluginSet(path);
 			if (success) {
-				jEdit.setProperty(PROPERTY_PLUGINSET, path); 
+				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path); 
 			}
 			updateUI();
 		} // }}}
+		public void handleMessage(EBMessage message)
+		{
+			if (message instanceof PropertiesChanged) {
+				path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
+				if (path.length() > 0) {
+					loadPluginSet(path);
+					updateUI();
+				}
+			}
+			
+		}
 	}// }}}
 	
 	// {{{ class ClearPluginSet

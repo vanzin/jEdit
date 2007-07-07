@@ -53,18 +53,27 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	{
 		setLayout(new BorderLayout());
 
-		JLabel locationLabel = new JLabel(jEdit.getProperty(
-			"options.plugin-manager.location"));
 
 		mirrorLabel = new JLabel();
 		updateMirrorLabel();
-
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
+		JPanel spinnerPanel = null;
 		if(jEdit.getSettingsDirectory() != null)
 		{
 			settingsDir = new JRadioButton(jEdit.getProperty(
 				"options.plugin-manager.settings-dir"));
 			settingsDir.setToolTipText(MiscUtilities.constructPath(
 				jEdit.getSettingsDirectory(),"jars"));
+			int delay = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 10);
+			spinnerModel = new SpinnerNumberModel(delay, 0, 240, 5);
+			cacheForSpinner = new JSpinner(spinnerModel);
+			spinnerPanel = new JPanel();
+			spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));
+			spinnerPanel.add(new JLabel("Cache plugin list for: (minutes)"));
+			spinnerPanel.add(cacheForSpinner);
+			spinnerPanel.add(Box.createGlue());
+			
 		}
 		JRadioButton appDir = new JRadioButton(jEdit.getProperty(
 				"options.plugin-manager.app-dir"));
@@ -78,8 +87,6 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		add(BorderLayout.NORTH,mirrorLabel);
 		add(BorderLayout.CENTER,new JScrollPane(miraList));
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new BoxLayout(buttonPanel,BoxLayout.Y_AXIS));
 
 		buttonPanel.add(Box.createVerticalStrut(6));
 
@@ -91,6 +98,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		VFSManager.runInWorkThread(new UpdateMirrorsThread(false));
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panel.add(updateMirrors);
+		if (spinnerPanel != null) panel.add(spinnerPanel);
 		panel.add(updateStatus);
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		buttonPanel.add(panel);
@@ -121,17 +129,17 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			locGrp.add(settingsDir);
 		locGrp.add(appDir);
 		JPanel locPanel = new JPanel();
-		locPanel.setBorder(new EmptyBorder(3,12,0,0));
 		locPanel.setLayout(new BoxLayout(locPanel,BoxLayout.Y_AXIS));
+		
 		if(jEdit.getSettingsDirectory() != null)
 		{
 			locPanel.add(settingsDir);
 			locPanel.add(Box.createVerticalStrut(3));
 		}
+		locPanel.setBorder(new TitledBorder(
+			jEdit.getProperty("options.plugin-manager.location")));
 		locPanel.add(appDir);
-		locationLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		locPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		buttonPanel.add(locationLabel);
 		buttonPanel.add(locPanel);
 
 		buttonPanel.add(Box.createGlue());
@@ -151,7 +159,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			settingsDir != null && settingsDir.isSelected());
 		jEdit.setBooleanProperty("plugin-manager.downloadSource",downloadSource.isSelected());
 		jEdit.setBooleanProperty("plugin-manager.deleteDownloads",deleteDownloads.isSelected());
-
+		jEdit.setIntegerProperty("plugin-manager.list-cache.minutes", spinnerModel.getNumber().intValue());
 		if(miraList.getSelectedIndex() != -1)
 		{
 			String currentMirror = miraModel.getID(miraList.getSelectedIndex());
@@ -175,6 +183,8 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	private JRadioButton settingsDir;
 	private JCheckBox downloadSource;
 	private JCheckBox deleteDownloads;
+	private JSpinner cacheForSpinner;
+	private SpinnerNumberModel spinnerModel;
 
 	private MirrorModel miraModel;
 	private JList miraList;
