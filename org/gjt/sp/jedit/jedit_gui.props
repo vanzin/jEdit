@@ -2094,7 +2094,7 @@ abort.message=Are you sure you want to abort the currently executing\n\
 #}}}
 
 #{{{ VFS browser
-vfs.browser.title=Browser
+vfs.browser.title=File Browser
 vfs.browser.longtitle=File System Browser
 vfs.browser.path=Path:
 vfs.browser.path.mnemonic=p
