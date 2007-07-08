@@ -98,8 +98,9 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * @version $Id$
  */
-class InstallPanel extends JPanel
+class InstallPanel extends JPanel implements EBComponent
 {
+	
 	//{{{ Variables
 	private final JTable table;
 	private JScrollPane scrollpane;
@@ -108,6 +109,7 @@ class InstallPanel extends JPanel
 	private PluginInfoBox infoBox;
 	ChoosePluginSet chooseButton;
 	private boolean updates;
+
 	final HashSet<String> pluginSet = new HashSet<String>();
 	//{{{ InstallPanel constructor
 	InstallPanel(PluginManager window, boolean updates)
@@ -200,6 +202,11 @@ class InstallPanel extends JPanel
 			loadPluginSet(path);
 		}
 	} //}}}
+
+	
+	
+
+
 
 	//{{{ loadPluginSet() method
 	/** loads a pluginSet xml file and updates the model to reflect 
@@ -766,14 +773,14 @@ class InstallPanel extends JPanel
 	} // }}}
 	
 	// {{{ ChoosePluginSet button
-	class ChoosePluginSet extends RolloverButton implements ActionListener, EBComponent {
+	class ChoosePluginSet extends RolloverButton implements ActionListener {
 		String path;
 		ChoosePluginSet() {
 			setIcon(GUIUtilities.loadIcon("OpenFile.png"));
 			addActionListener(this);
 			updateUI();
-			EditBus.addToBus(this);
 		}
+		
 		// {{{ updateUI method
 		public void updateUI() {
 			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
@@ -794,21 +801,15 @@ class InstallPanel extends JPanel
 			path = selectedFiles[0];
 			boolean success = loadPluginSet(path);
 			if (success) {
-				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path); 
+				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path);
 			}
 			updateUI();
 		} // }}}
-		public void handleMessage(EBMessage message)
-		{
-			if (message instanceof PropertiesChanged) {
-				path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
-				if (path.length() > 0) {
-					loadPluginSet(path);
-					updateUI();
-				}
-			}
+		
 			
-		}
+		
+		
+		
 	}// }}}
 	
 	// {{{ class ClearPluginSet
@@ -822,8 +823,8 @@ class InstallPanel extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			pluginSet.clear();
-			// clear checked entries all?
-			jEdit.unsetProperty("plugin-manager.pluginset.path");
+			pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+			jEdit.unsetProperty(PluginManager.PROPERTY_PLUGINSET);
 			chooseButton.updateUI();
 		}
 	} // }}}
@@ -1039,6 +1040,20 @@ class InstallPanel extends JPanel
 			}
 		}
 	} //}}}
+
+	public void handleMessage(EBMessage message)
+	{
+		 if (message.getSource()==PluginManager.getInstance()) {
+			 chooseButton.path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
+			 if (chooseButton.path.length() > 0) {
+				 loadPluginSet(chooseButton.path);
+				 pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+				 chooseButton.updateUI();
+			 }
+		}
+		
+		
+	}
 
 	//}}}
 }

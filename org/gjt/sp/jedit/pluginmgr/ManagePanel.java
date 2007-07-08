@@ -57,7 +57,6 @@ import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
-import org.gjt.sp.jedit.pluginmgr.InstallPanel.StringMapHandler;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
@@ -72,7 +71,6 @@ import org.gjt.sp.jedit.help.*;
 
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
-import org.gjt.sp.util.StringList;
 //}}}
 import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
@@ -724,8 +722,8 @@ public class ManagePanel extends JPanel
 			path = selectedFiles[0];
 			boolean success = loadPluginSet(path);
 			if (success) {
-				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path); 
-				EditBus.send(new PropertiesChanged(jEdit.getActiveView()));
+				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path);
+				EditBus.send(new PropertiesChanged(PluginManager.getInstance()));
 			}
 			
 		}
@@ -793,6 +791,7 @@ public class ManagePanel extends JPanel
 			}
 			saveState(fileselections[0], pluginSelections);
 			jEdit.setProperty("plugin-manager.pluginset.path", fileselections[0]);
+			EditBus.send(new PropertiesChanged(PluginManager.getInstance()));
 		}
 	}//}}}
 

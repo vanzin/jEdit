@@ -58,6 +58,7 @@ public class PluginManager extends JFrame implements EBComponent
 	{
 		instance = null;
 		EditBus.removeFromBus(this);
+		EditBus.removeFromBus(installer);
 		super.dispose();
 	} //}}}
 
@@ -151,6 +152,7 @@ public class PluginManager extends JFrame implements EBComponent
 	//{{{ init() method
 	private void init() {
 		EditBus.addToBus(this);
+		
 
 		/* Setup panes */
 		JPanel content = new JPanel(new BorderLayout(12,12));
@@ -164,7 +166,7 @@ public class PluginManager extends JFrame implements EBComponent
 			updater = new InstallPanel(this,true));
 		tabPane.addTab(jEdit.getProperty("install-plugins.title"),
 			installer = new InstallPanel(this,false));
-
+		EditBus.addToBus(installer);
 		content.add(BorderLayout.CENTER,tabPane);
 
 		tabPane.addChangeListener(new ListUpdater());
