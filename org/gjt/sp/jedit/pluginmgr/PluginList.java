@@ -83,7 +83,7 @@ class PluginList
 		}
 		else {
 			path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
-			cachedURL= "file://" + path;
+			cachedURL= "file:///" + path;
 		}
 		boolean downloadIt = false;
 		if (path != null) try {
@@ -149,7 +149,8 @@ class PluginList
 			
 			workRequest.setStatus(jEdit.getProperty("plugin-manager.list-download"));
 			inputStream = new URL(gzipURL).openStream();
-			FileOutputStream fos = new FileOutputStream(cachedURL.replaceFirst("file://", ""));
+			String fileName = cachedURL.replaceFirst("file:///", "");
+			FileOutputStream fos = new FileOutputStream(fileName);
 			boolean finished = false;
 			BufferedInputStream is = new BufferedInputStream(inputStream);
 			while (!finished) 
