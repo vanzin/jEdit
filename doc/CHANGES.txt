@@ -334,8 +334,8 @@ for contributing to this release.
 - Buffer.getMarkersPath(VFS) deprecated and replaced by static method
   Buffer.getMarkersPath(VFS,path), see bug #1644479 (Matthieu Casanova)
 
-- Added a new GUIUtilities.showVFSFileDialog() method that can use a dialog as
-  the browser's parent, instead of the view. (Kazutoshi Satoda)
+- Added a new GUIUtilities.showVFSFileDialog() methods that can use a dialog
+  or a Window as the browser's parent, instead of the view. (Kazutoshi Satoda)
 
 - Added two new builtin service interfaces org.gjt.sp.jedit.io.Encoding
   and org.gjt.sp.jedit.io.EncodingDetector. (Kazutoshi Satoda)
