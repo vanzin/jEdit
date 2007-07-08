@@ -322,7 +322,7 @@ public abstract class EditPlugin
 	 * Returns the home of your plugin.
 	 *
 	 * @return the plugin home. It can be null if there is no 
-	 settings directory
+	 *	   settings directory
 	 * @since 4.3pre10
 	 * @see #getResourceAsStream
 	 * @see #getResourceAsOutputStream
@@ -333,22 +333,22 @@ public abstract class EditPlugin
 		return getPluginHome(getClassName());
 	} //}}}
 
-	//{{{ static getPluginHome() method
+	//{{{ getPluginHome() method
 	/**
-	 * Returns the home of the specified plugin.
-	 * 
-	 * Since the first parameter is a reference to the
-	 * {@code Class} instance for the plugin, 
-	 * this method requires the plugin to be activated.
+	 * <p>Returns the home of the specified plugin.</p>
 	 *
-	 * @see {@link getPluginHome(EditPlugin)} method, as
+	 * <p>Since the first parameter is a reference to the
+	 * {@code Class} instance for the plugin,
+	 * this method requires the plugin to be activated.</p>
+	 *
+	 * <p>See {@link #getPluginHome(EditPlugin)} method, as
 	 * an alternate, for when the plugin doesn't need
 	 * to be activated, or when you do not have the
-	 * {@code Class} instance available.
+	 * {@code Class} instance available.</p>
 	 *
 	 * @param clazz the class of the plugin
 	 * @return the plugin home. It can be null if there is no
-	 * settings directory
+	 * 	   settings directory
 	 * @since 4.3pre10
 	 * @see #getPluginHome(EditPlugin)
 	 * @see #getResourceAsStream
@@ -362,14 +362,15 @@ public abstract class EditPlugin
 
 	//{{{ getPluginHome() method
 	/**
-	 * Returns the home of the specified plugin.
-	 * This method doesn't need the plugin to be activated. You can pass
+	 * <p>Returns the home of the specified plugin.</p>
+	 * 
+	 * <p>This method doesn't need the plugin to be activated. You can pass
 	 * an {@code EditPlugin.Deferred} instance that you get from
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
 	 * plugins {@code Class} instance available, consider using the
-	 * {@code Class} method.
+	 * {@code Class} method.</p>
 	 *
 	 * @param plugin the plugin
 	 * @return the plugin home. It can be null if there is no settings directory
@@ -407,13 +408,17 @@ public abstract class EditPlugin
 
 	//{{{ getResourceAsStream() method
 	/**
-	 * Returns an input stream to the specified resource, or <code>null</code>
-	 * if none is found.
-	 * As you need a reference to the {@code Class} instance for the plugin
-	 * this method needs the plugin to be activated. If you use the
-	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
-	 * to be activated. So if you don't have the {@code Class} instance
-	 * available, consider using the {@code EditPlugin} method.
+	 * <p>Returns an input stream to the specified resource, or {@code null}
+	 * if none is found.</p>
+	 *
+	 * <p>Since the first parameter is a reference to the
+	 * {@code Class} instance for the plugin,
+	 * this method requires the plugin to be activated.</p>
+	 *
+	 * <p>See {@link #getResourceAsStream(EditPlugin,String)} method, as
+	 * an alternate, for when the plugin doesn't need
+	 * to be activated, or when you do not have the
+	 * {@code Class} instance available.</p>
 	 *
 	 * @param clazz the plugin class
 	 * @param path The path to the resource to be returned, relative to
@@ -432,15 +437,16 @@ public abstract class EditPlugin
 
 	//{{{ getResourceAsStream() method
 	/**
-	 * Returns an input stream to the specified resource, or <code>null</code>
-	 * if none is found.
-	 * This method doesn't need the plugin to be activated. You can pass
+	 * <p>Returns an input stream to the specified resource, or <code>null</code>
+	 * if none is found.</p>
+	 * 
+	 * <p>This method doesn't need the plugin to be activated. You can pass
 	 * an {@code EditPlugin.Deferred} instance that you get from
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
 	 * plugins {@code Class} instance available, consider using the
-	 * {@code Class} method.
+	 * {@code Class} method.</p>
 	 *
 	 * @param plugin the plugin
 	 * @param path The path to the resource to be returned, relative to
@@ -488,13 +494,17 @@ public abstract class EditPlugin
 
 	//{{{ getResourceAsOutputStream() method
 	/**
-	 * Returns an output stream to the specified resource, or <code>null</node> if access
-	 * to that resource is denied.
-	 * As you need a reference to the {@code Class} instance for the plugin
-	 * this method needs the plugin to be activated. If you use the
-	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
-	 * to be activated. So if you don't have the {@code Class} instance
-	 * available, consider using the {@code EditPlugin} method.
+	 * <p>Returns an output stream to the specified resource, or {@code null}
+	 * if access to that resource is denied.</p>
+	 *
+	 * <p>Since the first parameter is a reference to the
+	 * {@code Class} instance for the plugin,
+	 * this method requires the plugin to be activated.</p>
+	 *
+	 * <p>See {@link #getResourceAsOutputStream(EditPlugin,String)} method, as
+	 * an alternate, for when the plugin doesn't need
+	 * to be activated, or when you do not have the
+	 * {@code Class} instance available.</p>
 	 *
 	 * @param clazz the plugin class
 	 * @param path The path to the resource to be returned, relative to
@@ -513,15 +523,16 @@ public abstract class EditPlugin
 
 	//{{{ getResourceAsOutputStream() method
 	/**
-	 * Returns an output stream to the specified resource, or <code>null</node> if access
-	 * to that resource is denied.
-	 * This method doesn't need the plugin to be activated. You can pass
+	 * <p>Returns an output stream to the specified resource, or <code>null</node> if access
+	 * to that resource is denied.</p>
+	 *
+	 * <p>This method doesn't need the plugin to be activated. You can pass
 	 * an {@code EditPlugin.Deferred} instance that you get from
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
 	 * plugins {@code Class} instance available, consider using the
-	 * {@code Class} method.
+	 * {@code Class} method.</p>
 	 *
 	 * @param plugin the plugin
 	 * @param path The path to the resource to be returned, relative to
@@ -578,12 +589,16 @@ public abstract class EditPlugin
 
 	//{{{ getResourcePath() method
 	/**
-	 * Returns the full path of the specified plugin resource.
-	 * As you need a reference to the {@code Class} instance for the plugin
-	 * this method needs the plugin to be activated. If you use the
-	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
-	 * to be activated. So if you don't have the {@code Class} instance
-	 * available, consider using the {@code EditPlugin} method.
+	 * <p>Returns the full path of the specified plugin resource.</p>
+	 *
+	 * <p>Since the first parameter is a reference to the
+	 * {@code Class} instance for the plugin,
+	 * this method requires the plugin to be activated.</p>
+	 *
+	 * <p>See {@link #getResourcePath(EditPlugin,String)} method, as
+	 * an alternate, for when the plugin doesn't need
+	 * to be activated, or when you do not have the
+	 * {@code Class} instance available.</p>
 	 *
 	 * @param clazz the plugin class
 	 * @param path The relative path to the resource from the plugin's
@@ -602,14 +617,15 @@ public abstract class EditPlugin
 
 	//{{{ getResourcePath() method
 	/**
-	 * Returns the full path of the specified plugin resource.
-	 * This method doesn't need the plugin to be activated. You can pass
+	 * <p>Returns the full path of the specified plugin resource.</p>
+	 *
+	 * <p>This method doesn't need the plugin to be activated. You can pass
 	 * an {@code EditPlugin.Deferred} instance that you get from
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
 	 * plugins {@code Class} instance available, consider using the
-	 * {@code Class} method.
+	 * {@code Class} method.</p>
 	 *
 	 * @param plugin the plugin
 	 * @param path The relative path to the resource from the plugin's
