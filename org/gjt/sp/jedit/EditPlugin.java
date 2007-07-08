@@ -321,7 +321,8 @@ public abstract class EditPlugin
 	/**
 	 * Returns the home of your plugin.
 	 *
-	 * @return the plugin home. It can be null if there is no settings directory
+	 * @return the plugin home. It can be null if there is no 
+	 settings directory
 	 * @since 4.3pre10
 	 * @see #getResourceAsStream
 	 * @see #getResourceAsOutputStream
@@ -332,17 +333,22 @@ public abstract class EditPlugin
 		return getPluginHome(getClassName());
 	} //}}}
 
-	//{{{ getPluginHome() method
+	//{{{ static getPluginHome() method
 	/**
 	 * Returns the home of the specified plugin.
-	 * As you need a reference to the {@code Class} instance for the plugin
-	 * this method needs the plugin to be activated. If you use the
-	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
-	 * to be activated. So if you don't have the {@code Class} instance
-	 * anyways, consider using the {@code EditPlugin} method.
+	 * 
+	 * Since the first parameter is a reference to the
+	 * {@code Class} instance for the plugin, 
+	 * this method requires the plugin to be activated.
+	 *
+	 * @see {@link getPluginHome(EditPlugin)} method, as
+	 * an alternate, for when the plugin doesn't need
+	 * to be activated, or when you do not have the
+	 * {@code Class} instance available.
 	 *
 	 * @param clazz the class of the plugin
-	 * @return the plugin home. It can be null if there is no settings directory
+	 * @return the plugin home. It can be null if there is no
+	 * settings directory
 	 * @since 4.3pre10
 	 * @see #getPluginHome(EditPlugin)
 	 * @see #getResourceAsStream
@@ -362,7 +368,7 @@ public abstract class EditPlugin
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
-	 * plugins {@code Class} instance anyways, consider using the
+	 * plugins {@code Class} instance available, consider using the
 	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin
@@ -407,7 +413,7 @@ public abstract class EditPlugin
 	 * this method needs the plugin to be activated. If you use the
 	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
 	 * to be activated. So if you don't have the {@code Class} instance
-	 * anyways, consider using the {@code EditPlugin} method.
+	 * available, consider using the {@code EditPlugin} method.
 	 *
 	 * @param clazz the plugin class
 	 * @param path The path to the resource to be returned, relative to
@@ -433,7 +439,7 @@ public abstract class EditPlugin
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
-	 * plugins {@code Class} instance anyways, consider using the
+	 * plugins {@code Class} instance available, consider using the
 	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin
@@ -488,7 +494,7 @@ public abstract class EditPlugin
 	 * this method needs the plugin to be activated. If you use the
 	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
 	 * to be activated. So if you don't have the {@code Class} instance
-	 * anyways, consider using the {@code EditPlugin} method.
+	 * available, consider using the {@code EditPlugin} method.
 	 *
 	 * @param clazz the plugin class
 	 * @param path The path to the resource to be returned, relative to
@@ -514,7 +520,7 @@ public abstract class EditPlugin
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
-	 * plugins {@code Class} instance anyways, consider using the
+	 * plugins {@code Class} instance available, consider using the
 	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin
@@ -577,7 +583,7 @@ public abstract class EditPlugin
 	 * this method needs the plugin to be activated. If you use the
 	 * {@link getPluginHome(EditPlugin)} method, the plugin doesn't need
 	 * to be activated. So if you don't have the {@code Class} instance
-	 * anyways, consider using the {@code EditPlugin} method.
+	 * available, consider using the {@code EditPlugin} method.
 	 *
 	 * @param clazz the plugin class
 	 * @param path The relative path to the resource from the plugin's
@@ -602,7 +608,7 @@ public abstract class EditPlugin
 	 * {@code jEdit.getPlugin(String)} or {@code jEdit.getPlugins()} if
 	 * the plugin in question is not activated yet and this method doesn't
 	 * cause the plugin to get activated. If you have a reference to the
-	 * plugins {@code Class} instance anyways, consider using the
+	 * plugins {@code Class} instance available, consider using the
 	 * {@code Class} method.
 	 *
 	 * @param plugin the plugin

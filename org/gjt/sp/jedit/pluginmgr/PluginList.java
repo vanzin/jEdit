@@ -72,8 +72,8 @@ class PluginList
 		readPluginList();
 	}
 	
-	void readPluginList() {
-		boolean cache=true;
+	void readPluginList() 
+	{
 		gzipURL = jEdit.getProperty("plugin-manager.export-url");	
 		if (!id.equals(MirrorList.Mirror.NONE))
 			gzipURL += "?mirror="+id;		
