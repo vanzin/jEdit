@@ -81,8 +81,10 @@ class PluginList
 		if (jEdit.getSettingsDirectory() == null) {
 			cachedURL=gzipURL;
 		}
-		path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
-		cachedURL= "file://" + path;
+		else {
+			path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
+			cachedURL= "file://" + path;
+		}
 		boolean downloadIt = false;
 		if (path != null) try {
 			File f = new File(path);
