@@ -144,28 +144,32 @@ public class EnhancedMenuItem extends JMenuItem
 	{
 		String shortcutFont;
 		if (OperatingSystem.isMacOSLF())
+		{
 			shortcutFont = "Lucida Grande";
+		}
 		else
+		{
 			shortcutFont = "Monospaced";
+		}
 		
 		acceleratorFont = UIManager.getFont("MenuItem.acceleratorFont");
 		if(acceleratorFont == null)
-			acceleratorFont = new Font(shortcutFont,Font.PLAIN,12);
-		else
 		{
-			acceleratorFont = new Font(shortcutFont,
-				acceleratorFont.getStyle(),
-				acceleratorFont.getSize());
+			acceleratorFont = new Font(shortcutFont,Font.PLAIN,12);
 		}
 		acceleratorForeground = UIManager
 			.getColor("MenuItem.acceleratorForeground");
 		if(acceleratorForeground == null)
+		{
 			acceleratorForeground = Color.black;
+		}
 
 		acceleratorSelectionForeground = UIManager
 			.getColor("MenuItem.acceleratorSelectionForeground");
 		if(acceleratorSelectionForeground == null)
+		{
 			acceleratorSelectionForeground = Color.black;
+		}
 	} //}}}
 
 	//}}}
