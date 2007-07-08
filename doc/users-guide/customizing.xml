@@ -150,6 +150,22 @@
    panes, and information about them can be found in the documentation
    for the plugins in question.
   </para>
+  
+  <sect2 id="general-pane"><title>The General Pane</title>
+  <para>
+   The <guibutton>General</guibutton> pane contains various
+   settings, such as the default line separator and file encoding, the number of recent files to remember,
+   if the buffer list should be sorted, and so on. </para>
+   
+   
+   <para> <emphasis role="bold">simplified keyboard handling</emphasis>. This is an experimental keyboard handling mode which is not compatible with JDK 1.4, and behaves better for some international users under Linux than the standard keyboard handling. If you find that some of your keys are not being registered properly, it is worthwhile to try this option. If you are using Windows, probably not. When all of the classic keyboard handling bugs are fixed under all platforms, we will remove this option.
+   </para>
+
+   <indexterm><primary>keyboard handling</primary><secondary>simplified</secondary></indexterm>
+  
+  </sect2>
+  
+  
   <sect2 id="abbrevs-pane">
   <title>The Abbreviations Pane</title>
 
@@ -228,25 +244,22 @@
   </para>
   </sect2>
   <sect2 id="encodings-pane"><title>The Encodings Pane</title>
+  <para> This option pane is new to jEdit 4.3, and offers international users of jEdit many flexible options for defining how Encodings are handled in jEdit. </para>
+
+  <para> The list of Encoding Autodetector Names is an experimental feature that allows for plugins to offer additional encoding autodetector routines. At the moment, there are two techniques known by jEdit: the BOM (byte-ordered magic), and the XML-PI (XML processing instruction) techniques. Others can be defined as services and added to this list. </para>
+
+  <para> The ordered list of fallback encodings is used when a file fails to open in the default encoding, and the Encoding Autodetectors also fail.  This is especially handle when doing directory searches through files of different encodings.
+  </para>
+
   <para>
-    While jEdit allows you to edit files in a variety of different encodings, 
+    While jEdit allows you to edit files in a variety of different encodings,
     the average user switches between only 2 or 3. In other parts of jEdit,
     where the list of encodings is displayed in a combobox (such as the buffer options) or a menu (such as <guimenuitem>File - Reload with Encoding</guimenuitem> submenu)
-    it may be desirable to display only a subset of available encodings, those that are in common local use. The Encodings option pane allows the user to select the subset of supported encodings to display in other GUI components that list all of the encodings.
+    it may be desirable to display only a subset of available encodings, those that are in common local use. The Encodings checkbox list allows the user to select the subset of supported encodings to display in other GUI components that list all of the encodings.
     </para>
   </sect2>
-  <sect2 id="general-pane"><title>The General Pane</title>
-  <para>
-   The <guibutton>General</guibutton> pane contains various
-   settings, such as the default line separator and file encoding, the number of recent files to remember,
-   if the buffer list should be sorted, and so on. </para>
-
-   <para> Most of these options are self-explanatory, but the <emphasis role="bold">simplified keyboard handling</emphasis> option deserves a bit of explanation. This is a newer keyboard handling mode which is not compatible with JDK 1.4, and behaves better under Linux than the standard keyboard handling. If you find that some of your keys are not being registered properly, it is worthwhile to try this option. If you are using Windows, probably not. When all of the keyboard handling bugs are fixed under all platforms, we will remove one of the keyboard handling modes and make the other jEdit's default handling mode.
-   </para>
-
-   <indexterm><primary>keyboard handling</primary><secondary>simplified</secondary></indexterm>
   
-  </sect2><sect2 id="gutter-pane"><title>The Gutter Pane</title>
+  <sect2 id="gutter-pane"><title>The Gutter Pane</title>
   <para>
    The <guibutton>Gutter</guibutton> option pane contains settings to
    customize the appearance of the gutter. See <xref linkend="overview"/>.

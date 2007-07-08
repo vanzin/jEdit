@@ -26,18 +26,17 @@ package org.gjt.sp.jedit.options;
 import javax.swing.*;
 
 import java.awt.event.*;
-import java.util.Arrays;
 import org.gjt.sp.jedit.*;
 //}}}
 
-
+/**
+ * jEdit's General Options Pane
+ */
 
 public class GeneralOptionPane extends AbstractOptionPane
 {
 	//{{{ Private members
 	private JComboBox lineSeparator;
-	private JComboBox encoding;
-	private JCheckBox encodingAutodetect;
 	private JComboBox checkModStatus;
 	private JTextField recentFiles;
 	private JCheckBox saveCaret;
@@ -49,8 +48,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox newKeyboardHandling;
-	private JTextField encodingDetectors;
-	private JTextField fallbackEncodings;
 	//}}}
 	
 	//{{{ GeneralOptionPane constructor
@@ -79,20 +76,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.general.lineSeparator"),
 			lineSeparator);
 
-		/* Default file encoding */
-		String[] encodings = MiscUtilities.getEncodings(true);
-		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
-		encoding = new JComboBox(encodings);
-		encoding.setEditable(true);
-		encoding.setSelectedItem(jEdit.getProperty("buffer."+Buffer.ENCODING,
-			System.getProperty("file.encoding")));
-		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
-
-		/* Auto detect encoding */
-		encodingAutodetect = new JCheckBox(jEdit.getProperty(
-			"options.general.encodingAutodetect"));
-		encodingAutodetect.setSelected(jEdit.getBooleanProperty("buffer.encodingAutodetect"));
-		addComponent(encodingAutodetect);
 
 		/* Check mod status on focus */
 		String[] modCheckOptions = {
@@ -197,24 +180,10 @@ public class GeneralOptionPane extends AbstractOptionPane
 		addComponent(sortByName);
 		
 		newKeyboardHandling = new JCheckBox(jEdit.getProperty("options.general.newkeyhandling"));
+		newKeyboardHandling.setToolTipText(jEdit.getProperty("options.general.newkeyhandling.tooltip"));
 		newKeyboardHandling.setSelected(jEdit.getBooleanProperty("newkeyhandling"));
 		addComponent(newKeyboardHandling);
 
-		encodingDetectors = new JTextField(jEdit.getProperty(
-			"options.general.encodingDetectors"));
-		encodingDetectors.setText(jEdit.getProperty("encodingDetectors",
-			"BOM XML-PI"));
-		addComponent(jEdit.getProperty("options.general.encodingDetectors"),
-			encodingDetectors);
-
-		fallbackEncodings = new JTextField(jEdit.getProperty(
-			"options.general.fallbackEncodings"));
-		fallbackEncodings.setText(jEdit.getProperty("fallbackEncodings",
-			""));
-		fallbackEncodings.setToolTipText(jEdit.getProperty(
-			"options.general.fallbackEncodings.tooltip"));
-		addComponent(jEdit.getProperty("options.general.fallbackEncodings"),
-			fallbackEncodings);
 	} //}}}
 
 	//{{{ _save() method
@@ -235,10 +204,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 			break;
 		}
 		jEdit.setProperty("buffer."+Buffer.LINESEP,lineSep);
-		jEdit.setProperty("buffer."+Buffer.ENCODING,(String)
-			encoding.getSelectedItem());
-		jEdit.setBooleanProperty("buffer.encodingAutodetect",
-			encodingAutodetect.isSelected());
 		switch(checkModStatus.getSelectedIndex())
 		{
 		case 0:
@@ -263,8 +228,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		boolean nkh = newKeyboardHandling.isSelected();
 		jEdit.setBooleanProperty("newkeyhandling", nkh);
 		Options.SIMPLIFIED_KEY_HANDLING = nkh;
-		jEdit.setProperty("encodingDetectors",encodingDetectors.getText());
-		jEdit.setProperty("fallbackEncodings",fallbackEncodings.getText());
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());

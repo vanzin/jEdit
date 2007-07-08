@@ -49,7 +49,7 @@
 
  <copyright><year>1999</year><year>2004</year><holder>Slava Pestov</holder></copyright>
  <copyright><year>2001</year><year>2002</year><holder>John Gellene</holder></copyright>
- <copyright><year>2005</year><year>2006</year><holder>Alan Ezust</holder></copyright>
+ <copyright><year>2005</year><year>2007</year><holder>Alan Ezust</holder></copyright>
 
  <legalnotice><title>Legal Notice</title>
   <para>
@@ -70,10 +70,8 @@
    This part of the user's guide covers jEdit's text editing commands, along
    with basic usage of macros and plugins.
   </para>
-
   <para>
-   This part of the user's guide was written by Slava Pestov
-   <email>slava@jedit.org</email>.
+   This part of the user's guide was originally written by Slava Pestov and is maintained by the jEdit core development team.
   </para>
  </partintro>
 
@@ -110,7 +108,7 @@
 
   <para>
    This part of the user's guide was written by Slava Pestov
-   <email>slava@jedit.org</email>.
+   and is maintained by the jEdit core development team.
   </para>
  </partintro>
 
@@ -145,7 +143,8 @@
  &bsh-commands;
 </part>
 
-<part id="writing-plugins-part"><title>Writing Plugins</title>
+<part id="writing-plugins-part">
+<title>Writing Plugins</title>
  <partintro>
   <para>
    This part of the user's guide covers writing plugins for jEdit.
@@ -159,8 +158,7 @@
   </para>
 
   <para>
-   This part of the user's guide was written by John Gellene
-   <email>jgellene@nyc.rr.com</email>.
+   This part of the user's guide was originally written by John Gellene. As of jEdit 4.3, it is maintained by Alan Ezust with help from others in the jEdit core development team.
   </para>
  </partintro>
 

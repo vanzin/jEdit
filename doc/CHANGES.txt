@@ -131,6 +131,8 @@ for contributing to this release.
 - Plugin Manager: Option to cache PluginList for a period of minutes
     (Alan Ezust)
 
+- Moved Encodings options out of General and into Encodings option pane.    
+    
 - New View option: amount of maximum visible rows in buffer switcher
   (Patch #1642574) (Jakub Roztocil)
 

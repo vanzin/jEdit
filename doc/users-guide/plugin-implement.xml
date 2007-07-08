@@ -61,15 +61,12 @@ How Plugins are Loaded</title>
 </para>
 
 <para>
-  Additionally, plugins using the new jEdit 4.2 plugin API can be
+  Additionally, plugins using the jEdit 4.2 plugin API can be
   loaded and unloaded at any time. This is a great help when
   developing your own plugins -- there is no need to restart the
   editor after making changes (see <xref linkend="plugin-implement-reloading"/> ).
 </para>
 
-<para>
-  Note that plugins using the older jEdit 4.1 API are still only loaded on editor startup, and unloaded on editor exit. The jEdit 4.1 API is deprecated and will not be described in this guide.
-</para>
 
 <para>
   Plugins are loaded from files with the <filename>.jar</filename>
@@ -545,9 +542,12 @@ else if(msg instanceof ViewUpdate) {
 <sect1 id="plugin-implement-actions"><title>The Actions Catalog</title>
 <para>
   Actions define procedures that can be bound to a menu
-  item, a toolbar button or a keyboard shortcut. Actions are short
-  scripts written in BeanShell, jEdit's macro scripting
-  language.  These scripts either direct the action themselves,
+  item, a toolbar button or a keyboard shortcut. Most plugin
+  Actions <footnote>
+  <para> Some plugins, such as Sidekick, Console, and ProjectViewer,
+  create pure Java EditAction-derived Actions, based which services are available, or which files are found in a certain path.
+  However, this  is an advanced topic you can explore further in the source and API docs of those plugins.  </para></footnote>
+  are short scripts written in BeanShell, jEdit's macro scripting language. These scripts either direct the action themselves,
   delegate to a method in one of the plugin's classes that
   encapsulates the action, or do a little of both.  The scripts are
   usually short; elaborate action protocols are usually contained in
