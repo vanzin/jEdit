@@ -177,13 +177,13 @@ for contributing to this release.
   the invisible caret hits page boundaries. Additionally the history remembers
   the vertical scroll position now. (Björn "Vampire" Kautler)
 
-- Added a new option "encoding autodetector names" in General Option pane
+- Added a new option "List of encoding autodetectors" in Encoding Option pane
   to extend encoding autodetection with the new EncodingDetector services.
   (Kazutoshi Satoda)
 
 - Allow jEdit to autodetect :encoding= properties in the loaded buffer
   (only in the 10 first lines) by adding "buffer-local-property" to
-  the new option "encoding autodetector names" in General Option pane.
+  the new option "List of encoding autodetectors" in Encoding Option pane.
   (Matthieu Casanova and Kazutoshi Satoda)
 
 - Improved the error message of encoding errors on saving. It now shows
@@ -201,7 +201,7 @@ for contributing to this release.
   There was no action to show the popup menu. Added one such action, and
   bound it to CONTEXT_MENU by default. (Marcelo Vanzin)
 
-- Added a new option "fallback encoding names" in General Option pane
+- Added a new option "List of fallback encodings" in Encoding Option pane
   to automate trial-and-error cycle with a known set of encodings to load
   a buffer. (Kazutoshi Satoda)
 
