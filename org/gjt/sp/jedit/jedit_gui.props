@@ -1054,7 +1054,7 @@ ioerror.encoding-error=Cannot load with the encoding "{0}".\n\
 	Try selecting a different encoding.\n\
 	It can be selected with the menu File->Reload with Encoding.\n\
 	If you want it to be done automatically, add the candidates into\n\
-	"List of fallback encodings" in Encoding pane of Global Options.
+	"List of fallback encodings" in Encodings pane of Global Options.
 ioerror.write-encoding-error=Failed to encode the character\n\
 	{3} at column {2} in line {1} with the encoding "{0}".
 ioerror.read-error=Cannot load: {0}
