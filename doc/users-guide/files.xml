@@ -233,16 +233,16 @@
    A character encoding is a mapping from a set of characters to their on-disk representation. jEdit can use any encoding supported by the Java platform.
   </para>
   <para>
-   Buffers in memory are always stored in <literal>UTF-16</literal> encoding, which means each character is mapped to an integer between 0 and 65535. <literal>UTF-16</literal> is the native encoding supported by Java, and has a large enough range of characters to support most human languages.
+   Buffers in memory are always stored in <literal>UTF-16</literal> encoding, which means each character is mapped to an integer between 0 and 65535. <literal>UTF-16</literal> is the native encoding supported by Java, and has a large enough range of characters to support most modern languages.
   </para>
   <para>
    When a buffer is loaded, it is converted from its on-disk representation to <literal>UTF-16</literal> using a specified encoding.
   </para>
   <para>
    The default encoding, used to load files for which no
-   other encoding is specified, can be set in the <guibutton>General</guibutton> pane of the
+   other encoding is specified, can be set in the <guibutton>Encodings</guibutton> pane of the
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-   dialog box; see <xref linkend="general-pane"/>. Unless you change this setting, it will be your operating system's native encoding, for example <literal>MacRoman</literal> on the MacOS,
+   dialog box; see <xref linkend="encodings-pane"/>. Unless you change this setting, it will be your operating system's native encoding, for example <literal>MacRoman</literal> on the MacOS,
    <literal>windows-1252</literal> on Windows, and <literal>ISO-8859-1</literal> on
    Unix.
   </para>
@@ -260,7 +260,7 @@
   </itemizedlist>
   <para>
    The encoding that will be used to save the current buffer is shown in the status bar, and can be changed in the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
-   Options</guimenuitem> dialog box. Note that changing this setting has no effect on the buffer's contents; if you opened a file with the wrong encoding and got garbage, you will need to reload it.
+   Options</guimenuitem> dialog box. Note that changing this setting has no effect on the buffer's contents; if you opened a file with the wrong encoding and got garbage, you will need to reload it. <guimenu>File</guimenu>&gt;<guimenuitem>Reload with Encoding</guimenuitem> is a easy way.
   </para>
   <para>
    If a file is opened
@@ -277,7 +277,7 @@
     Standard Code for Information Interchange</quote>. ASCII encodes Latin
     letters used in English, in addition to numbers and a range of punctuation
     characters.
-    Each each ASCII character consists of 7 bits, there is a limit of 128 distinct characters, which makes it unsuitable for anything other than English text. jEdit will load and save files as
+    Each ASCII character consists of 7 bits, there is a limit of 128 distinct characters, which makes it unsuitable for anything other than English text. jEdit will load and save files as
     ASCII if the <literal>US-ASCII</literal> encoding is used.
    </para>
    <para>

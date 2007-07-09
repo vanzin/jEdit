@@ -242,11 +242,11 @@
   </para>
   </sect2>
   <sect2 id="encodings-pane"><title>The Encodings Pane</title>
-  <para> This option pane is new to jEdit 4.3, and offers international users of jEdit many flexible options for defining how Encodings are handled in jEdit.
+  <para> This option pane is new to jEdit 4.3, and offers international users of jEdit many flexible options for defining how Encodings are handled in jEdit. See <xref linkend="encodings"/> for the basics.
   </para>
 
-  <para> The <literal>List of Encoding Autodetector Names</literal> is an experimental feature that allows for jEdit and plugins to offer additional encoding autodetector routines. At the moment, there are two techniques known by jEdit: the BOM (byte-ordered magic), and the XML-PI (XML processing instruction) techniques. Others can be defined as services and added to this space-separated list.
-  See <ulink url="../api/org/gjt/sp/jedit/io/EncodingDetector.html">EncodingDetector</ulink>  for details of how to offer this service. </para>
+  <para> The <literal>List of Encoding Autodetector Names</literal> is an experimental feature that allows for jEdit and plugins to offer additional encoding autodetector routines. At the moment, there are two techniques known by jEdit: the <literal>BOM</literal> (byte-order mark), and the <literal>XML-PI</literal> (XML processing instruction) techniques. Others can be defined as services and added to this space-separated list.
+  See <ulink url="../api/org/gjt/sp/jedit/io/EncodingDetector.html">EncodingDetector</ulink> for details of how to offer this service. </para>
 
   <para> The <literal>List of Fallback Encodings</literal> is used when a file fails to open in the default encoding, and the Encoding Autodetectors also fail.  The list order determines the order of encodings that are tried. Each is separated by a space. This is especially handy when doing directory searches through files of different encodings. We suggest using <literal>UTF-8</literal> as either your default or one of the fallback encodings.
   </para>
