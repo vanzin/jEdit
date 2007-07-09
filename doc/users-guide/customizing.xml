@@ -1,9 +1,10 @@
+<chapter id="customizing">
+<title>Customizing jEdit</title>
 <!-- jEdit buffer-local properties: -->
 <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=0: -->
 <!-- :xml.root=users-guide.xml: -->
 
-<chapter id="customizing"><title>Customizing jEdit</title>
- <sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
+<sect1 id="buffer-opts"><title>The Buffer Options Dialog Box</title>
   <para>
    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer Options</guimenuitem>
    displays a dialog box for changing editor settings on a per-buffer basis.
@@ -154,9 +155,8 @@
   <sect2 id="general-pane"><title>The General Pane</title>
   <para>
    The <guibutton>General</guibutton> pane contains various
-   settings, such as the default line separator and file encoding, the number of recent files to remember,
+   settings, such as the default line separator, the number of recent files to remember,
    if the buffer list should be sorted, and so on. </para>
-   
    
    <para> <emphasis role="bold">simplified keyboard handling</emphasis>. This is an experimental keyboard handling mode which is not compatible with JDK 1.4, and behaves better for some international users under Linux than the standard keyboard handling. If you find that some of your keys are not being registered properly, it is worthwhile to try this option. If you are using Windows, probably not. When all of the classic keyboard handling bugs are fixed under all platforms, we will remove this option.
    </para>
@@ -170,9 +170,7 @@
   <title>The Abbreviations Pane</title>
 
   <indexterm><primary>Abbreviations</primary> <secondary> creating and editing </secondary> </indexterm>
-  
 
-  
   <para>
    The <guibutton>Abbreviations</guibutton> option pane can be used to enable or
    disable automatic abbreviation expansion, and to edit currently defined
@@ -244,12 +242,13 @@
   </para>
   </sect2>
   <sect2 id="encodings-pane"><title>The Encodings Pane</title>
-  <para> This option pane is new to jEdit 4.3, and offers international users of jEdit many flexible options for defining how Encodings are handled in jEdit. </para>
+  <para> This option pane is new to jEdit 4.3, and offers international users of jEdit many flexible options for defining how Encodings are handled in jEdit.
+  </para>
 
-  <para> The list of Encoding Autodetector Names is an experimental feature that allows for plugins to offer additional encoding autodetector routines. At the moment, there are two techniques known by jEdit: the BOM (byte-ordered magic), and the XML-PI (XML processing instruction) techniques. Others can be defined as services and added to this list.
-  See <ulink url="../api/org/gjt/sp/jedit/io/EncodingDetector.html">EncodingDetector</ulink>  details of how to offer this service. </para>
+  <para> The <literal>List of Encoding Autodetector Names</literal> is an experimental feature that allows for jEdit and plugins to offer additional encoding autodetector routines. At the moment, there are two techniques known by jEdit: the BOM (byte-ordered magic), and the XML-PI (XML processing instruction) techniques. Others can be defined as services and added to this space-separated list.
+  See <ulink url="../api/org/gjt/sp/jedit/io/EncodingDetector.html">EncodingDetector</ulink>  for details of how to offer this service. </para>
 
-  <para> The ordered list of fallback encodings is used when a file fails to open in the default encoding, and the Encoding Autodetectors also fail.  This is especially handle when doing directory searches through files of different encodings.
+  <para> The <literal>List of Fallback Encodings</literal> is used when a file fails to open in the default encoding, and the Encoding Autodetectors also fail.  The list order determines the order of encodings that are tried. Each is separated by a space. This is especially handy when doing directory searches through files of different encodings. We suggest using <literal>UTF-8</literal> as either your default or one of the fallback encodings.
   </para>
 
   <para>
