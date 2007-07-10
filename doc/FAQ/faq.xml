@@ -1,28 +1,19 @@
-<?xml version="1.0" standalone="no" ?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- jEdit buffer-local properties:                       -->
 <!-- :indentSize=1   -->
 <!--                                                      -->
 <!-- jEdit FAQ                                            -->
 <!-- Copyright (C) 2001-2002 John Gellene                 -->
-
 <!-- $Id$
 -->
-
 <!-- Changes required for posting on jEdit Community:     -->
 <!-- Title should be <h2> without class;                  -->
 <!-- all <h1> headings should be changed to <h2>          -->
-
 <!-- Command line for processing:                         -->
 <!--                                                      -->
 <!-- xsltproc -catalogs -output .\html\ faq.xsl faq.xml -->
-
-
-
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-		"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-
-
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!-- Changes required for posting on jEdit Community: -->
 <!-- Title should be <h2> without class;              -->
 <!-- all <h1> headings should be changed to <h2>      -->
@@ -36,40 +27,68 @@
 <!ENTITY faq-problems SYSTEM "faq-problems.xml">
 <!ENTITY faq-contrib SYSTEM "faq-contrib.xml">
 <!ENTITY faq-legal SYSTEM "faq-legal.xml">
-
 ]>
-
 <article class="faq" id="faq">
-  <articleinfo>
-    <author>
-      <firstname>John</firstname><surname>Gellene</surname>
-      <affiliation><address><email>jgellene@nyc.rr.com</email></address></affiliation>
-    </author>
-    <author>
-      <firstname>Kris</firstname><surname>Kopicki</surname>
-      <affiliation><address><email>krisko@users.sourceforge.net</email></address></affiliation>
-    </author>
-    <author>
-      <firstname>Alan</firstname><surname>Ezust</surname>
-      <affiliation><address><email>alan@jedit.org</email></address></affiliation>
-    </author>
+    <articleinfo>
+        <author>
+            <firstname>John</firstname>
 
-    <copyright><year>2002</year><holder>John Gellene</holder></copyright>
-    <copyright><year>2006</year><holder>Alan Ezust</holder></copyright>
-    <legalnotice><title>Legal Notice</title>
-      <para>
-        Permission is granted to copy, distribute and/or modify this document
-        under the terms of the GNU Free Documentation License, Version 1.1 or
-        any later version published by the Free Software Foundation; with no
-        <quote>Invariant Sections</quote>, <quote>Front-Cover Texts</quote> or
-        <quote>Back-Cover Texts</quote>, each as defined in the license. A copy of
-        the license is contained in the file <filename>COPYING.DOC.txt</filename>
-        included with jEdit.
-      </para>
-    </legalnotice>
-    <title>jEdit Frequently Asked Questions</title>
-    <revhistory>
-<!--       <revision>
+            <surname>Gellene</surname>
+
+            <affiliation>
+                <address><email>jgellene@nyc.rr.com</email></address>
+            </affiliation>
+        </author>
+
+        <author>
+            <firstname>Kris</firstname>
+
+            <surname>Kopicki</surname>
+
+            <affiliation>
+                <address><email>krisko@users.sourceforge.net</email></address>
+            </affiliation>
+        </author>
+
+        <author>
+            <firstname>Alan</firstname>
+
+            <surname>Ezust</surname>
+
+            <affiliation>
+                <address><email>alan@jedit.org</email></address>
+            </affiliation>
+        </author>
+
+        <copyright>
+            <year>2002</year>
+
+            <holder>John Gellene</holder>
+        </copyright>
+
+        <copyright>
+            <year>2006</year>
+
+            <holder>Alan Ezust</holder>
+        </copyright>
+
+        <legalnotice>
+            <title>Legal Notice</title>
+
+            <para>Permission is granted to copy, distribute and/or modify this
+            document under the terms of the GNU Free Documentation License,
+            Version 1.1 or any later version published by the Free Software
+            Foundation; with no <quote>Invariant Sections</quote>,
+            <quote>Front-Cover Texts</quote> or <quote>Back-Cover Texts</quote>,
+            each as defined in the license. A copy of the license is contained
+            in the file <filename>COPYING.DOC.txt</filename> included with
+            jEdit.</para>
+        </legalnotice>
+
+        <title>jEdit Frequently Asked Questions</title>
+
+        <revhistory>
+            <!--       <revision>
         <revnumber>0.1</revnumber>
         <date>Sept. 23, 2001</date>
         <revremark>Initial draft.</revremark>
@@ -107,44 +126,64 @@
       Interactive FAQ</revremark>
     </revision>
 -->
-    <revision>
-      <revnumber>0.8</revnumber>
-      <date>Feb. 17, 2002</date>
-      <revremark>Additional revisions for jEdit 4.0 release</revremark>
-    </revision>
-    <revision>
-      <revnumber>0.9</revnumber>
-      <date>Feb. 9, 2003</date>
-      <revremark>Additional revisions for jEdit 4.1 release</revremark>
-    </revision>
-    <revision>
-      <revnumber>1.0</revnumber>
-      <date>Feb. 18, 2003</date>
-      <revremark>New format &amp; additions for jEdit 4.1 release</revremark>
-    </revision>
-    <revision>
-      <revnumber>1.1</revnumber>
-      <date>September 6, 2006</date>
-      <revremark>Revised for jEdit 4.3 release</revremark>
-    </revision>
-    </revhistory>
-	<releaseinfo>
-		<emphasis>Note: </emphasis>
-		This draft incorporates some material from the Interactive FAQ section of the <ulink url=
-    "http://community.jedit.org/modules.php?op=modload&amp;name=faq&amp;file=index"
-    >jEdit Community web site</ulink>.
-	</releaseinfo>
-  </articleinfo>
 
-&faq-intro;
-&faq-general;
-&faq-install;
-&faq-use;
-&faq-macros;
-&faq-plugins;
-&faq-problems;
-&faq-contrib;
-&faq-legal;
+            <revision>
+                <revnumber>0.8</revnumber>
 
+                <date>Feb. 17, 2002</date>
+
+                <revremark>Additional revisions for jEdit 4.0
+                release</revremark>
+            </revision>
+
+            <revision>
+                <revnumber>0.9</revnumber>
+
+                <date>Feb. 9, 2003</date>
+
+                <revremark>Additional revisions for jEdit 4.1
+                release</revremark>
+            </revision>
+
+            <revision>
+                <revnumber>1.0</revnumber>
+
+                <date>Feb. 18, 2003</date>
+
+                <revremark>New format &amp; additions for jEdit 4.1
+                release</revremark>
+            </revision>
+
+            <revision>
+                <revnumber>1.1</revnumber>
+
+                <date>September 6, 2006</date>
+
+                <revremark>Revised for jEdit 4.3 release</revremark>
+            </revision>
+        </revhistory>
+
+        <releaseinfo><emphasis>Note: </emphasis> This draft incorporates some
+        material from the Interactive FAQ section of the <ulink
+        url="http://community.jedit.org/modules.php?op=modload&amp;name=faq&amp;file=index">jEdit
+        Community web site</ulink>.</releaseinfo>
+    </articleinfo>
+
+    &faq-intro;
+
+    &faq-general;
+
+    &faq-install;
+
+    &faq-use;
+
+    &faq-macros;
+
+    &faq-plugins;
+
+    &faq-problems;
+
+    &faq-contrib;
+
+    &faq-legal;
 </article>
-

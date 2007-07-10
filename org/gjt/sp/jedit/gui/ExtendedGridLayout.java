@@ -4,7 +4,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Originally written by Björn Kautler for the jEdit project. This work has been
+ * Originally written by BjÃ¶rn Kautler for the jEdit project. This work has been
  * placed into the public domain. You may use this work in any way and for any
  * purpose you wish.
  *
@@ -71,10 +71,10 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * <font color="#000000">  13:</font>        <font color="#cc00cc">super</font>(<font color="#cc00cc">null</font>,<font color="#ff00cc">&quot;</font><font color="#ff00cc">Example</font><font color="#ff00cc"> </font><font color="#ff00cc">Dialog</font><font color="#ff00cc">&quot;</font>,<font color="#cc00cc">true</font>);
   * <font color="#000000">  14:</font>        <font color="#9966ff">setLayout</font>(<font color="#006699"><strong>new</strong></font> <font color="#9966ff">ExtendedGridLayout</font>(<font color="#ff0000">5</font>,<font color="#ff0000">5</font>,<font color="#006699"><strong>new</strong></font> <font color="#9966ff">Insets</font>(<font color="#ff0000">5</font>,<font color="#ff0000">5</font>,<font color="#ff0000">5</font>,<font color="#ff0000">5</font>)));
   * <font color="#990066">  15:</font>        
-  * <font color="#000000">  16:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button1</font><font color="#ff00cc">&quot;</font>),<font color="#cc00cc">null</font>);
-  * <font color="#000000">  17:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button2</font><font color="#ff00cc">&quot;</font>),<font color="#cc00cc">null</font>);
-  * <font color="#000000">  18:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button3</font><font color="#ff00cc">&quot;</font>),<font color="#cc00cc">null</font>);
-  * <font color="#000000">  19:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button4</font><font color="#ff00cc">&quot;</font>),<font color="#cc00cc">null</font>);
+  * <font color="#000000">  16:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button1</font><font color="#ff00cc">&quot;</font>));
+  * <font color="#000000">  17:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button2</font><font color="#ff00cc">&quot;</font>));
+  * <font color="#000000">  18:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button3</font><font color="#ff00cc">&quot;</font>));
+  * <font color="#000000">  19:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button4</font><font color="#ff00cc">&quot;</font>));
   * <font color="#990066">  20:</font>        Button button <font color="#000000"><strong>=</strong></font> <font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button5</font><font color="#ff00cc">&quot;</font>);
   * <font color="#000000">  21:</font>        <font color="#9966ff">add</font>(button,<font color="#006699"><strong>new</strong></font> <font color="#9966ff">ExtendedGridLayoutConstraints</font>(<font color="#ff0000">1</font>,REMAINDER,<font color="#ff0000">1</font>,button));
   * <font color="#000000">  22:</font>        button <font color="#000000"><strong>=</strong></font> <font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button6</font><font color="#ff00cc">&quot;</font>);
@@ -127,7 +127,7 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * One instance of this class can be used to layout multiple
   * containers at the same time. </p>
   *
-  * @author Björn "Vampire" Kautler
+  * @author BjÃ¶rn "Vampire" Kautler
   * @version 1.0
   * @see ExtendedGridLayoutConstraints
   * @see <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/Component.html"><code>java.awt.Component</code></a>

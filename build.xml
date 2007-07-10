@@ -109,7 +109,7 @@
 			   source="${target.java.version}"
 			   target="${target.java.version}"
 			   compiler="modern"
-			   encoding="ISO8859-1">
+			   encoding="UTF-8">
 			<include name="bsh/**" />
 			<include name="org/**" />
 			<include name="com/**" />

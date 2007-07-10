@@ -10,7 +10,7 @@
 	<property name="docs-proc.target"
 			  value="none" />
 	
-	<import file="../../build-support/plugin-build.xml" />
+	<import file="../../../build-support/plugin-build.xml" />
 	
 	<target name="build.prepare">
 		<mkdir dir="${build.dir}/stubclasses" />

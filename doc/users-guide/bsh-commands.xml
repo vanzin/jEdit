@@ -1,31 +1,38 @@
-<!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene                -->
-<!-- Thu Jun 21 23:49:14 EDT 2001 @200 /Internet Time/           -->
-<!--                                                             -->
-<!-- jEdit buffer-local properties:                              -->
-<!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
-<!-- :xml.root=users-guide.xml:                                  -->
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="bsh-commands">
+    <title>BeanShell Commands</title>
 
-<chapter id="bsh-commands"><title>BeanShell Commands</title>
+    <!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene                -->
 
-<para>
-  BeanShell includes a set of <firstterm>commands</firstterm>;
-  subroutines that
-  can be called from any script or macro.  The following is a summary of
-  those commands which may be useful within jEdit.
-</para>
+    <!-- Thu Jun 21 23:49:14 EDT 2001 @200 /Internet Time/           -->
 
-<note>
- <para>
-  Java classes in plugins cannot make use of BeanShell commands directly. However, these commands can be called from BeanShell code that is part of a plugin, for example the snippets in <filename>actions.xml</filename>, or any BeanShell scripts shipped with the plugin and loaded on startup.
- </para>
-</note>
+    <!--                                                             -->
 
-<sect1 id="bsh-commands-output"><title>Output Commands</title>
+    <!-- jEdit buffer-local properties:                              -->
 
-  <itemizedlist>
+    <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
 
-    <!-- one day jEdit will provide its own error() implementation -->
-    <!-- <listitem>
+    <!-- :xml.root=users-guide.xml:                                  -->
+
+    <para>BeanShell includes a set of <firstterm>commands</firstterm>;
+    subroutines that can be called from any script or macro. The following is a
+    summary of those commands which may be useful within jEdit.</para>
+
+    <note>
+        <para>Java classes in plugins cannot make use of BeanShell commands
+        directly. However, these commands can be called from BeanShell code that
+        is part of a plugin, for example the snippets in
+        <filename>actions.xml</filename>, or any BeanShell scripts shipped with
+        the plugin and loaded on startup.</para>
+    </note>
+
+    <sect1 id="bsh-commands-output">
+        <title>Output Commands</title>
+
+        <itemizedlist>
+            <!-- one day jEdit will provide its own error() implementation -->
+
+            <!-- <listitem>
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>error</function></funcdef>
@@ -38,239 +45,255 @@
       </para>
     </listitem> -->
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>cat</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Writes the contents of <parameter>filename</parameter>
-        to the activity log.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>cat</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>javap</function></funcdef>
-          <paramdef>String | Object | Class <parameter>target</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Writes the public fields and methods of the specified class to
-        the output stream of the current process.  Requires Java 2
-        version 1.3 or greater.
-      </para>
-    </listitem>
+                        <paramdef>String
+                        <parameter>filename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>print</function></funcdef>
-          <paramdef><parameter>arg</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Writes the string value of the argument to the activity log,
-        or if run from the <application>Console</application> plugin,
-        to the current output window.  If <parameter>arg</parameter> is
-        an array, <function>print</function> runs itself recursively
-        on the array's elements.
-      </para>
-    </listitem>
+                <para>Writes the contents of <parameter>filename</parameter> to
+                the activity log.</para>
+            </listitem>
 
-  </itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>javap</function></funcdef>
 
-</sect1>
+                        <paramdef>String | Object | Class
+                        <parameter>target</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-<sect1 id="bsh-commands-file"><title>File Management Commands</title>
+                <para>Writes the public fields and methods of the specified
+                class to the output stream of the current process. Requires Java
+                2 version 1.3 or greater.</para>
+            </listitem>
 
-  <itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>print</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>cd</function></funcdef>
-          <paramdef>String <parameter>dirname</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Changes the working directory of the BeanShell interpreter
-        to <parameter>dirname</parameter>.
-      </para>
-    </listitem>
+                        <paramdef><parameter>arg</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>cp</function></funcdef>
-          <paramdef>String <parameter>fromFile</parameter></paramdef>
-          <paramdef>String <parameter>toFile</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Copy <parameter>fromFile</parameter> to <parameter>toFile</parameter>.
-      </para>
-    </listitem>
+                <para>Writes the string value of the argument to the activity
+                log, or if run from the <application>Console</application>
+                plugin, to the current output window. If
+                <parameter>arg</parameter> is an array,
+                <function>print</function> runs itself recursively on the
+                array's elements.</para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>dir</function></funcdef>
-          <paramdef>String <parameter>dirname</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Displays the contents of directory <parameter>dirname</parameter>.
-        The format of the display is similar to the Unix
-        <function>ls -l</function> command.
-      </para>
-    </listitem>
+    <sect1 id="bsh-commands-file">
+        <title>File Management Commands</title>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>mv</function></funcdef>
-          <paramdef>String <parameter>fromFile</parameter></paramdef>
-          <paramdef>String <parameter>toFile</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Moves the file named by <parameter>fromFile</parameter> to
-        <parameter>toFile</parameter>.
-      </para>
-    </listitem>
+        <itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>cd</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>File <function>pathToFile</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Create a <classname>File</classname> object corresponding to
-        <function>filename</function>.  Relative paths are resolved with
-        reference to the BeanShell interpreter's working
-        directory.
-      </para>
-    </listitem>
+                        <paramdef>String
+                        <parameter>dirname</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>pwd</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Writes the current working directory of the BeanShell interpreter
-        to the output stream of the current process.
-      </para>
-    </listitem>
+                <para>Changes the working directory of the BeanShell interpreter
+                to <parameter>dirname</parameter>.</para>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>rm</function></funcdef>
-          <paramdef>String <parameter>pathname</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Deletes the file name by <parameter>pathname</parameter>.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>cp</function></funcdef>
 
-  </itemizedlist>
+                        <paramdef>String
+                        <parameter>fromFile</parameter></paramdef>
 
-</sect1>
-<sect1 id="bsh-commands-serial"><title>Component Commands</title>
+                        <paramdef>String
+                        <parameter>toFile</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-  <itemizedlist>
+                <para>Copy <parameter>fromFile</parameter> to
+                <parameter>toFile</parameter>.</para>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>JFrame <function>frame</function></funcdef>
-          <paramdef>Component <parameter>frame</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Displays the component in a top-level <classname>JFrame</classname>,
-        centered and packed.  Returns the <classname>JFrame</classname> object.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>dir</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Object <function>load</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Loads and returns a serialized Java object from
-        <parameter>filename</parameter>.
-      </para>
-    </listitem>
+                        <paramdef>String
+                        <parameter>dirname</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>save</function></funcdef>
-          <paramdef>Component <parameter>component</parameter></paramdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Saves <parameter>component</parameter> in serialized form
-        to <parameter>filename</parameter>.
-      </para>
-    </listitem>
+                <para>Displays the contents of directory
+                <parameter>dirname</parameter>. The format of the display is
+                similar to the Unix <function>ls -l</function> command.</para>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Font <function>setFont</function></funcdef>
-          <paramdef>Component <parameter>comp</parameter></paramdef>
-          <paramdef>int <parameter>ptsize</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Set the font size of <parameter>component</parameter> to
-        <parameter>ptsize</parameter> and returns the new
-        font.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>mv</function></funcdef>
 
-  </itemizedlist>
+                        <paramdef>String
+                        <parameter>fromFile</parameter></paramdef>
 
-</sect1>
+                        <paramdef>String
+                        <parameter>toFile</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
+                <para>Moves the file named by <parameter>fromFile</parameter> to
+                <parameter>toFile</parameter>.</para>
+            </listitem>
 
-<sect1 id="bsh-commands-resource">
-<title>Resource Management Commands</title>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>File <function>pathToFile</function></funcdef>
 
-  <itemizedlist>
+                        <paramdef>String
+                        <parameter>filename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>URL <function>getResource</function></funcdef>
-          <paramdef>String <parameter>path</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Returns the resource specified by <parameter>path</parameter>.
-        An absolute path must be used to return any resource available in
-        the current classpath.
-      </para>
-    </listitem>
+                <para>Create a <classname>File</classname> object corresponding
+                to <function>filename</function>. Relative paths are resolved
+                with reference to the BeanShell interpreter's working
+                directory.</para>
+            </listitem>
 
-    <!-- bsh.classpath not supported in jEdit -->
-    <!--
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>pwd</function></funcdef>
+
+                        <void />
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Writes the current working directory of the BeanShell
+                interpreter to the output stream of the current process.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>rm</function></funcdef>
+
+                        <paramdef>String
+                        <parameter>pathname</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Deletes the file name by
+                <parameter>pathname</parameter>.</para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+
+    <sect1 id="bsh-commands-serial">
+        <title>Component Commands</title>
+
+        <itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>JFrame <function>frame</function></funcdef>
+
+                        <paramdef>Component
+                        <parameter>frame</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Displays the component in a top-level
+                <classname>JFrame</classname>, centered and packed. Returns the
+                <classname>JFrame</classname> object.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>Object <function>load</function></funcdef>
+
+                        <paramdef>String
+                        <parameter>filename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Loads and returns a serialized Java object from
+                <parameter>filename</parameter>.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>save</function></funcdef>
+
+                        <paramdef>Component
+                        <parameter>component</parameter></paramdef>
+
+                        <paramdef>String
+                        <parameter>filename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Saves <parameter>component</parameter> in serialized form
+                to <parameter>filename</parameter>.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>Font <function>setFont</function></funcdef>
+
+                        <paramdef>Component
+                        <parameter>comp</parameter></paramdef>
+
+                        <paramdef>int <parameter>ptsize</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Set the font size of <parameter>component</parameter> to
+                <parameter>ptsize</parameter> and returns the new font.</para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+
+    <sect1 id="bsh-commands-resource">
+        <title>Resource Management Commands</title>
+
+        <itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>URL <function>getResource</function></funcdef>
+
+                        <paramdef>String <parameter>path</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Returns the resource specified by
+                <parameter>path</parameter>. An absolute path must be used to
+                return any resource available in the current classpath.</para>
+            </listitem>
+
+            <!-- bsh.classpath not supported in jEdit -->
+
+            <!--
     <listitem>
       <funcsynopsis>
         <funcprototype>
@@ -357,100 +380,111 @@
         classes and packages as well as reloaded classes.
       </para>
     </listitem> -->
+        </itemizedlist>
+    </sect1>
 
-  </itemizedlist>
+    <sect1 id="bsh-commands-script">
+        <title>Script Execution Commands</title>
 
-</sect1>
+        <itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>Thread <function>bg</function></funcdef>
 
-<sect1 id="bsh-commands-script"><title>Script Execution Commands</title>
+                        <paramdef>String
+                        <parameter>filename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-  <itemizedlist>
+                <para>Run the BeanShell script named by
+                <parameter>filename</parameter> in a copy of the existing
+                namespace and in a separate thread. Returns the
+                <classname>Thread</classname> object so created.</para>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Thread <function>bg</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Run the BeanShell script named by <parameter>filename</parameter>
-        in a copy of the existing namespace and in a separate thread.  Returns
-        the <classname>Thread</classname> object so created.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>exec</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>exec</function></funcdef>
-          <paramdef>String <parameter>cmdline</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Start the external process by calling
-        <function>Runtime.exec()</function> on
-        <parameter>cmdline</parameter>. Any output is directed to the
-        output stream of the calling process.
-      </para>
-    </listitem>
+                        <paramdef>String
+                        <parameter>cmdline</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>Object <function>eval</function></funcdef>
-          <paramdef>String <parameter>expression</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Evaluates the string <parameter>expression</parameter> as
-        a BeanShell script in the interpreter's current namespace.
-        Returns the result of the evaluation of <constant>null</constant>.
-      </para>
-    </listitem>
+                <para>Start the external process by calling
+                <function>Runtime.exec()</function> on
+                <parameter>cmdline</parameter>. Any output is directed to the
+                output stream of the calling process.</para>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>run</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Run the BeanShell script named by <parameter>filename</parameter>
-        in a copy of the existing namespace.  The return value represent
-        the object context of the script, allowing you to access its variables
-        and methods.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>Object <function>eval</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>setAccessibility</function></funcdef>
-          <paramdef>boolean <parameter>flag</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        If <parameter>flag</parameter> is <literal>true</literal>,
-        BeanShell scripts are allowed to change and modify private variables, and call private methods. The default is <literal>false</literal>.
-      </para>
-    </listitem>
+                        <paramdef>String
+                        <parameter>expression</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>setStrictJava</function></funcdef>
-          <paramdef>boolean <parameter>flag</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        If <parameter>flag</parameter> is <literal>true</literal>,
-        BeanShell scripts must follow a much more strict, Java-like syntax, and are not able to use the convenience features described in <xref linkend="macro-tips-BeanShell-convenience" />.
-      </para>
-    </listitem>
+                <para>Evaluates the string <parameter>expression</parameter> as
+                a BeanShell script in the interpreter's current namespace.
+                Returns the result of the evaluation of
+                <constant>null</constant>.</para>
+            </listitem>
 
-    <!-- <listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>bsh.This <function>run</function></funcdef>
+
+                        <paramdef>String
+                        <parameter>filename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Run the BeanShell script named by
+                <parameter>filename</parameter> in a copy of the existing
+                namespace. The return value represent the object context of the
+                script, allowing you to access its variables and methods.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void
+                        <function>setAccessibility</function></funcdef>
+
+                        <paramdef>boolean <parameter>flag</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>If <parameter>flag</parameter> is <literal>true</literal>,
+                BeanShell scripts are allowed to change and modify private
+                variables, and call private methods. The default is
+                <literal>false</literal>.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void
+                        <function>setStrictJava</function></funcdef>
+
+                        <paramdef>boolean <parameter>flag</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>If <parameter>flag</parameter> is <literal>true</literal>,
+                BeanShell scripts must follow a much more strict, Java-like
+                syntax, and are not able to use the convenience features
+                described in <xref
+                linkend="macro-tips-BeanShell-convenience" />.</para>
+            </listitem>
+
+            <!-- <listitem>
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>server</function></funcdef>
@@ -475,155 +509,171 @@
       </para></caution>
     </listitem> -->
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>source</function></funcdef>
-          <paramdef>String <parameter>filename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Evaluates the contents of <parameter>filename</parameter>
-        as a BeanShell script in the interpreter's current namespace.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>source</function></funcdef>
 
-  </itemizedlist>
+                        <paramdef>String
+                        <parameter>filename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-</sect1>
+                <para>Evaluates the contents of <parameter>filename</parameter>
+                as a BeanShell script in the interpreter's current
+                namespace.</para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
 
-<sect1 id="bsh-commands-object">
-<title>BeanShell Object Management Commands</title>
+    <sect1 id="bsh-commands-object">
+        <title>BeanShell Object Management Commands</title>
 
-  <itemizedlist>
+        <itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef><function>bind</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>bind</function></funcdef>
-          <paramdef>bsh.This <parameter>ths</parameter></paramdef>
-          <paramdef>bsh.Namespace <parameter>namespace</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Binds the scripted object <parameter>ths</parameter> to
-        <parameter>namespace</parameter>.
-      </para>
-    </listitem>
+                        <paramdef>bsh.This <parameter>ths</parameter></paramdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>clear</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Clear all variables, methods, and imports from this namespace.
-        If this namespace is the root, it will be reset to the default
-        imports.
-      </para>
-    </listitem>
+                        <paramdef>bsh.Namespace
+                        <parameter>namespace</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>extend</function></funcdef>
-          <paramdef>bsh.This <parameter>object</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Creates a new BeanShell <classname>This</classname> scripted object
-        that is a child of the parameter <parameter>object</parameter>.
-      </para>
-    </listitem>
+                <para>Binds the scripted object <parameter>ths</parameter> to
+                <parameter>namespace</parameter>.</para>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>importObject</function></funcdef>
-           <paramdef>Object <parameter>object</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Import an object into this namespace. This is somewhat similar to Java 1.5 static class imports, except you can import the methods and fields of a Java object instance into
-        a BeanShell namespace, for example:
-      </para>
-      <informalexample><programlisting><![CDATA[Map map = new HashMap();
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>clear</function></funcdef>
+
+                        <void />
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Clear all variables, methods, and imports from this
+                namespace. If this namespace is the root, it will be reset to
+                the default imports.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>bsh.This <function>extend</function></funcdef>
+
+                        <paramdef>bsh.This
+                        <parameter>object</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Creates a new BeanShell <classname>This</classname>
+                scripted object that is a child of the parameter
+                <parameter>object</parameter>.</para>
+            </listitem>
+
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void
+                        <function>importObject</function></funcdef>
+
+                        <paramdef>Object
+                        <parameter>object</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Import an object into this namespace. This is somewhat
+                similar to Java 1.5 static class imports, except you can import
+                the methods and fields of a Java object instance into a
+                BeanShell namespace, for example:</para>
+
+                <informalexample>
+                    <programlisting>Map map = new HashMap();
     importObject( map );
     put("foo", "bar");
-    print( get("foo") ); // "bar"]]></programlisting></informalexample>
-    </listitem>
+    print( get("foo") ); // "bar"</programlisting>
+                </informalexample>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>object</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Creates a new BeanShell <classname>This</classname> scripted object which
-        can hold data members. You can use this to create an object for
-        storing miscellaneous crufties, like so:
-      </para>
-      <informalexample><programlisting>crufties = object();
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>bsh.This <function>object</function></funcdef>
+
+                        <void />
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Creates a new BeanShell <classname>This</classname>
+                scripted object which can hold data members. You can use this to
+                create an object for storing miscellaneous crufties, like
+                so:</para>
+
+                <informalexample>
+                    <programlisting>crufties = object();
 crufties.foo = "hello world";
 crufties.counter = 5;
-...</programlisting></informalexample>
-    </listitem>
+...</programlisting>
+                </informalexample>
+            </listitem>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>setNameSpace</function></funcdef>
-          <paramdef>bsh.Namespace <parameter>namespace</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Set the namespace of the current scope to
-        <parameter>namespace</parameter>.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef><function>setNameSpace</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>bsh.This <function>super</function></funcdef>
-          <paramdef>String <parameter>scopename</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Returns a reference to the BeanShell <classname>This</classname>
-        object representing the enclosing method scope specified
-        by <parameter>scopename</parameter>.  This method work similar to
-        the <function>super</function> keyword but can refer to enclosing
-        scope at higher levels in a hierarchy of scopes.
-      </para>
-    </listitem>
+                        <paramdef>bsh.Namespace
+                        <parameter>namespace</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>unset</function></funcdef>
-          <paramdef>String <parameter>name</parameter></paramdef>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Removes the variable named by <parameter>name</parameter> from
-        the current interpreter namespace.  This has the effect of
-        <quote>undefining</quote> the variable.
-      </para>
-    </listitem>
+                <para>Set the namespace of the current scope to
+                <parameter>namespace</parameter>.</para>
+            </listitem>
 
-  </itemizedlist>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>bsh.This <function>super</function></funcdef>
 
-</sect1>
+                        <paramdef>String
+                        <parameter>scopename</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
 
-<sect1 id="bsh-commands-other"><title>Other Commands</title>
+                <para>Returns a reference to the BeanShell
+                <classname>This</classname> object representing the enclosing
+                method scope specified by <parameter>scopename</parameter>. This
+                method work similar to the <function>super</function> keyword
+                but can refer to enclosing scope at higher levels in a hierarchy
+                of scopes.</para>
+            </listitem>
 
-  <itemizedlist>
-    <!-- <listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>unset</function></funcdef>
+
+                        <paramdef>String <parameter>name</parameter></paramdef>
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Removes the variable named by <parameter>name</parameter>
+                from the current interpreter namespace. This has the effect of
+                <quote>undefining</quote> the variable.</para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+
+    <sect1 id="bsh-commands-other">
+        <title>Other Commands</title>
+
+        <itemizedlist>
+            <!-- <listitem>
       <funcsynopsis>
         <funcprototype>
           <funcdef>void <function>exit</function></funcdef>
@@ -640,34 +690,31 @@ crufties.counter = 5;
       </para></caution>
     </listitem> -->
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef>void <function>debug</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Toggles BeanShell's internal debug reporting to the
-        output stream of the current process.
-      </para>
-    </listitem>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef>void <function>debug</function></funcdef>
 
-    <listitem>
-      <funcsynopsis>
-        <funcprototype>
-          <funcdef><function>getSourceFileInfo</function></funcdef>
-          <void/>
-        </funcprototype>
-      </funcsynopsis>
-      <para>
-        Returns the name of the file or other source from which the
-        BeanShell interpreter is reading.
-      </para>
-    </listitem>
+                        <void />
+                    </funcprototype>
+                </funcsynopsis>
 
-  </itemizedlist>
+                <para>Toggles BeanShell's internal debug reporting to the output
+                stream of the current process.</para>
+            </listitem>
 
-</sect1>
+            <listitem>
+                <funcsynopsis>
+                    <funcprototype>
+                        <funcdef><function>getSourceFileInfo</function></funcdef>
 
+                        <void />
+                    </funcprototype>
+                </funcsynopsis>
+
+                <para>Returns the name of the file or other source from which
+                the BeanShell interpreter is reading.</para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
 </chapter>

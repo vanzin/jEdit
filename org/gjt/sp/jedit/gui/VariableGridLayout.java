@@ -67,7 +67,7 @@ import java.util.Arrays;
  * <li>Ability to span components over more than one cell horizontally and vertically.
  * </ul>
  *
- * @author Dirk Moebius, Björn "Vampire" Kautler
+ * @author Dirk Moebius, BjÃ¶rn "Vampire" Kautler
  * @version 1.5
  * @see java.awt.GridLayout
  */

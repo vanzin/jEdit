@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Originally written by Björn Kautler for the jEdit project. This work has been
+ * Originally written by BjÃ¶rn Kautler for the jEdit project. This work has been
  * placed into the public domain. You may use this work in any way and for any
  * purpose you wish.
  *
@@ -22,7 +22,7 @@ import java.awt.Component;
  * that are laid out using the {@code ExtendedGridLayout} class.
  *
  * @version 1.0
- * @author  Björn "Vampire" Kautler
+ * @author  BjÃ¶rn "Vampire" Kautler
  * @see     ExtendedGridLayout
  * @since   jEdit 4.3pre10
  */

@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -36,7 +35,6 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Vector;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -47,6 +45,7 @@ import javax.swing.JTextField;
 
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -54,15 +53,22 @@ import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.jEdit;
+
 import org.gjt.sp.jedit.MiscUtilities.StringICaseCompare;
+
+import org.gjt.sp.jedit.gui.ExtendedGridLayout;
+import org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints;
 import org.gjt.sp.jedit.gui.JCheckBoxList;
+
 import org.gjt.sp.jedit.gui.JCheckBoxList.Entry;
+
 import static java.util.Arrays.sort;
-import static javax.swing.Box.createHorizontalBox;
+
 import static org.gjt.sp.jedit.jEdit.getBooleanProperty;
 import static org.gjt.sp.jedit.jEdit.getProperty;
 import static org.gjt.sp.jedit.jEdit.setBooleanProperty;
 import static org.gjt.sp.jedit.jEdit.unsetProperty;
+
 import static org.gjt.sp.jedit.MiscUtilities.getEncodings;
 //}}}
 
@@ -77,8 +83,7 @@ import static org.gjt.sp.jedit.MiscUtilities.getEncodings;
 public class EncodingsOptionPane extends AbstractOptionPane
 {
 	//{{{ Instance variables
-	private JPanel optionsPanel;
-	private JComboBox encoding;
+	private JComboBox defaultEncoding;
 	private JCheckBox encodingAutodetect;
 	private JTextField encodingDetectors;
 	private JTextField fallbackEncodings;
@@ -88,95 +93,63 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	private JButton selectNoneButton;
 	//}}}
 
-	
 	//{{{ EncodingsOptionPane constructor
 	public EncodingsOptionPane()
 	{
 		super("encodings");
-		optionsPanel = new JPanel();
-		optionsPanel.setLayout(gridBag = new GridBagLayout());
 	} //}}}
 
-	//{{{ addComponent() method
-	/**
-	 * Adds a labeled component to the option pane. Components are
-	 * added in a vertical fashion, one per row. The label is
-	 * displayed to the left of the component.
-	 * @param comp1 The label
-	 * @param comp2 The component
-	 * @param fill Fill parameter to GridBagConstraints for the right
-	 * component
-	 *
-	 * 
-	 */
-	public void addComponent(Component comp1, Component comp2, int fill)
-	{
-		GridBagConstraints cons = new GridBagConstraints();
-		cons.gridy = y++;
-		cons.gridheight = 1;
-		cons.gridwidth = 1;
-		cons.weightx = 0.0f;
-		cons.insets = new Insets(1,0,1,0);
-		cons.fill = GridBagConstraints.BOTH;
-
-		gridBag.setConstraints(comp1,cons);
-		optionsPanel.add(comp1);
-
-		cons.fill = fill;
-		cons.gridx = 1;
-		cons.weightx = 1.0f;
-		gridBag.setConstraints(comp2,cons);
-		optionsPanel.add(comp2);
-	} //}}}
-
-	
 	//{{{ _init() method
 	protected void _init()
 	{
-		setLayout(new BorderLayout());
-//		add(new JLabel(getProperty("options.encodings.selectEncodings")),BorderLayout.NORTH);
+		setLayout(new ExtendedGridLayout(5,5,new Insets(5,5,5,5)));
 		
-		/* Default file encoding */
-		String[] encodings = MiscUtilities.getEncodings(true);
-		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
-		encoding = new JComboBox(encodings);
-		encoding.setEditable(true);
-		encoding.setSelectedItem(jEdit.getProperty("buffer."+Buffer.ENCODING,
+		// Default file encoding
+		String[] encodings = getEncodings(true);
+		sort(encodings,new StringICaseCompare());
+		defaultEncoding = new JComboBox(encodings);
+		defaultEncoding.setEditable(true);
+		defaultEncoding.setSelectedItem(jEdit.getProperty("buffer."+Buffer.ENCODING,
 			System.getProperty("file.encoding")));
-		addComponent(jEdit.getProperty("options.general.encoding"),encoding);
+		add(newLabel(jEdit.getProperty("options.general.encoding"),defaultEncoding));
+		add(defaultEncoding);
 
-		/* Auto detect encoding */
+		// Auto detect encoding
 		encodingAutodetect = new JCheckBox(jEdit.getProperty(
 			"options.general.encodingAutodetect"));
-		encodingAutodetect.setSelected(jEdit.getBooleanProperty("buffer.encodingAutodetect"));
-		addComponent(encodingAutodetect);
+		encodingAutodetect.setSelected(jEdit.getBooleanProperty(
+			"buffer.encodingAutodetect"));
+		add(encodingAutodetect,new ExtendedGridLayoutConstraints(1,2,1,encodingAutodetect));
 		
+		// Encoding detectors
 		encodingDetectors = new JTextField(jEdit.getProperty(
-			"options.general.encodingDetectors"));
-		encodingDetectors.setText(jEdit.getProperty("encodingDetectors",
-			"BOM XML-PI"));
-		addComponent(jEdit.getProperty("options.general.encodingDetectors"),
-			encodingDetectors);
+			"encodingDetectors","BOM XML-PI"));
+		JLabel label = newLabel(jEdit.getProperty("options.general.encodingDetectors"),
+					encodingDetectors);
+		add(label,new ExtendedGridLayoutConstraints(2,label));
+		add(encodingDetectors,new ExtendedGridLayoutConstraints(2,encodingDetectors));
 
+		// Fallback Encodings
 		fallbackEncodings = new JTextField(jEdit.getProperty(
-			"options.general.fallbackEncodings"));
-		fallbackEncodings.setText(jEdit.getProperty("fallbackEncodings",
-			""));
+			"fallbackEncodings",""));
 		fallbackEncodings.setToolTipText(jEdit.getProperty(
 			"options.general.fallbackEncodings.tooltip"));
-		addComponent(jEdit.getProperty("options.general.fallbackEncodings"),
-			fallbackEncodings);
+		label = newLabel(jEdit.getProperty("options.general.fallbackEncodings"),
+				 fallbackEncodings);
+		add(label,new ExtendedGridLayoutConstraints(3,label));
+		add(fallbackEncodings,new ExtendedGridLayoutConstraints(3,fallbackEncodings));
 
+		// Encodings to display
 		encodings = getEncodings(false);
 		sort(encodings,new StringICaseCompare());
 		Vector<Entry> encodingEntriesVector = new Vector<Entry>();
 		boolean enableSelectAll = false;
 		boolean enableSelectNone = false;
-		for (String encodstr : encodings) {
-			boolean selected = !getBooleanProperty("encoding.opt-out."+encodstr,false);
+		for (String encoding : encodings) {
+			boolean selected = !getBooleanProperty("encoding.opt-out."+encoding,false);
 			enableSelectAll = enableSelectAll || !selected;
 			enableSelectNone = enableSelectNone || selected;
-			encodingEntriesVector.add(new Entry(selected,encodstr));
+			encodingEntriesVector.add(new Entry(selected,encoding));
 		}
 		encodingsList = new JCheckBoxList(encodingEntriesVector);
 		encodingsList.getModel().addTableModelListener(new TableModelHandler());
@@ -187,20 +160,20 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		d.height = Math.min(d.height,200);
 		encodingsScrollPane.setPreferredSize(d);
 
-		add(optionsPanel, BorderLayout.NORTH);
-		add(encodingsScrollPane,BorderLayout.CENTER);
+		add(encodingsScrollPane,new ExtendedGridLayoutConstraints(4,2,1,encodingsScrollPane));
 
+		// Select All/None Buttons
 		ActionHandler actionHandler = new ActionHandler();
-		Box buttonsBox = createHorizontalBox();
 		selectAllButton = new JButton(getProperty("options.encodings.selectAll"));
 		selectAllButton.addActionListener(actionHandler);
 		selectAllButton.setEnabled(enableSelectAll);
-		buttonsBox.add(selectAllButton);
+
 		selectNoneButton = new JButton(getProperty("options.encodings.selectNone"));
 		selectNoneButton.addActionListener(actionHandler);
 		selectNoneButton.setEnabled(enableSelectNone);
-		buttonsBox.add(selectNoneButton);
-		add(buttonsBox,BorderLayout.SOUTH);
+		
+		add(selectAllButton,new ExtendedGridLayoutConstraints(5,selectAllButton));
+		add(selectNoneButton,new ExtendedGridLayoutConstraints(5,selectNoneButton));
 	} //}}}
 
 	//{{{ _save() method
@@ -208,7 +181,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	{
 		
 		jEdit.setProperty("buffer."+Buffer.ENCODING,(String)
-			encoding.getSelectedItem());
+			defaultEncoding.getSelectedItem());
 		jEdit.setBooleanProperty("buffer.encodingAutodetect",
 			encodingAutodetect.isSelected());
 		jEdit.setProperty("encodingDetectors",encodingDetectors.getText());

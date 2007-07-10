@@ -884,7 +884,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Bj\u00F6rn "Vampire" Kautler\n\
+	Björn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1640,8 +1640,8 @@ options.general.sortBuffers=Sort buffer list (takes effect after restart)
 options.general.sortByName=Sort buffer list by file name, instead of path name
 options.general.newkeyhandling=Use simplified keyboard handling
 options.general.newkeyhandling.tooltip=(Experimental) some international Linux users prefer this mode, but it may go away soon since regular keyboard handling works better.
-options.general.encodingDetectors=List of encoding autodetectors 
-options.general.fallbackEncodings=List of fallback encodings 
+options.general.encodingDetectors=List of encoding autodetectors:
+options.general.fallbackEncodings=List of fallback encodings:
 options.general.fallbackEncodings.tooltip=(Experimental) A whitespace-separated list of encodings to try against encoding errors on loading
 #}}}
 

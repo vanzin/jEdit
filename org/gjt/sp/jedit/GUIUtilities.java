@@ -1725,7 +1725,7 @@ public class GUIUtilities
 	 * A combined ComponentListener and WindowStateListener to continually save a Frames size.<br />
 	 * For non-Frame's use {@link #saveGeometry(Window,String)}
 	 *
-	 * @author Björn Kautler
+	 * @author BjÃ¶rn Kautler
 	 * @version $Id$
 	 * @since jEdit 4.3pre6
 	 * @see #saveGeometry(Window,Container,String)
