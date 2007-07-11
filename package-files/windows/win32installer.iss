@@ -82,7 +82,6 @@ Source: startup\*; DestDir: {app}\startup; Flags: ignoreversion recursesubdirs c
 Source: @base.dir@\icons\jedit.ico; DestDir: {app}; Flags: ignoreversion sortfilesbyextension; Components: main
 Source: doc\README.txt; DestDir: {app}\doc; Flags: isreadme ignoreversion sortfilesbyextension; Components: main
 Source: classes\package-files\windows\jedit.bat; DestDir: {app}; Flags: ignoreversion sortfilesbyextension; AfterInstall: UpdateBatchfile; Components: batchfile
-Source: classes\package-files\windows\launchstub.exe; DestDir: {app}; Flags: ignoreversion sortfilesbyextension; Components: batchfile
 
 [INI]
 Filename: {app}\jEdit.url; Section: InternetShortcut; Key: URL; String: http://www.jEdit.org
