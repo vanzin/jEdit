@@ -119,22 +119,22 @@
     
     <para> A <emphasis role="bold">PluginSet</emphasis> is a collection of
     plugins, represented as an XML file. These XML files can be created from the
-    <guibutton>save</guibutton> button of the Manage panel of the Plugin Manager.
+    <guibutton>save</guibutton> button of the Manage tab of the Plugin Manager.
     Saving a PluginSet remembers all of the currently loaded plugins. </para>
     
     <para> When a PluginSet has been saved, it becomes the "default pluginset",
     which means that if you remove plugins in that set and go back to the
-    InstallPanel, you should see them selected for download again. To clear this
+    Install tab, you should see them selected for download again. To clear this
     setting, click on the <guibutton>clear</guibutton> button in the
-    InstallPanel. 
+    Install tab. 
     </para>
 
-    <para> It is posisble to Choose/Open a PluginSet from the Manage or the Install 
-    panel.  The behavior of choosing a PluginSet depends on which panel you are
-    on when you choose it.
-    From the ManagePanel, it unloads plugins that are loaded but not in the
-    list. From the InstallPanel, it selects plugins that are not loaded
-    for download from Plugin Central. </para>
+    <para> It is posisble to Choose/Open a PluginSet from the Manage or the
+    Install tab. The behavior of choosing a PluginSet depends on which tab
+    you are on when you choose it. From the Manage tab, it unloads plugins that
+    are loaded but not in the list. From the Install tab, it selects plugins
+    from that list that are not loaded, marking them for download from Plugin
+    Central. </para>
         
     <para> When choosing a PluginSet, the path can be given as a remote URL.
     This helps teachers and sysadmins direct the students/slaves to a standard
