@@ -1163,16 +1163,16 @@ else if(msg instanceof ViewUpdate) {
         This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
     &lt;/description&gt;
 
-    &lt;import file="../../build-support/plugin-build.xml" /&gt;
+    &lt;import file="${build.support}/plugin-build.xml" /&gt;
 &lt;/project&gt;
 </programlisting>
         </informalexample>
 
         <para>This build file imports another modular build file,
-        <literal>plugin-build.xml</literal> included in the jEdit source tree,
-        after jEdit 4.3pre5. It can be checked out individually, or found online
-        in the <ulink
-        url="https://svn.sourceforge.net/svnroot/jedit/jEdit/build-support/">jEdit's
+        <literal>plugin-build.xml</literal> from the <literal>build-support</literal>
+        project. It is not included with jEdit or any of the plugins, but it
+        can be checked out from subversion, or found online in the <ulink
+        url="https://jedit.svn.sourceforge.net/svnroot/jedit/build-support/trunk/">jEdit's
         SVN repository</ulink>. It contains common build steps for jEdit
         plugins, and some example properties files which you can adapt for use
         with your plugin.</para>
