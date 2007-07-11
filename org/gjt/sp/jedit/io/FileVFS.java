@@ -100,7 +100,7 @@ public class FileVFS extends VFS
 	public String getTwoStageSaveName(String path)
 	{
 		File parent = new File(getParentOfPath(path));
-		return (parent.canWrite())
+		return (parent.canWrite() || OperatingSystem.isWindows())
 			? super.getTwoStageSaveName(path)
 			: null;
 	} //}}}
@@ -166,7 +166,7 @@ public class FileVFS extends VFS
 	    }
 	    return path.delete();
 	  } //}}}
-	
+
 	//{{{ _canonPath() method
 	/**
 	 * Returns the canonical form if the specified path name. For example,

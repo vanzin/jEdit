@@ -10,10 +10,14 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
+- On windows the read-only flag on folders is ignored now for finding
+  the two-stage save name because it has not write protecting function
+  in windows. (bug #1719711) (Björn "Vampire" Kautler)
+
 - Menu Shorcuts are displayed with the L&F font now if one is
   present for accelerator keys. (patch #1733221) (Daniel Johnson)
 
-- typing in multiple select works now. (1724940) (Shlomy Reinstein)
+- typing in multiple select works now. (#1724940) (Shlomy Reinstein)
 
 - When clicking on an hypersearch result, if the buffer was not opened,
   the BufferUpdate.LOADED message was sent with a null view
