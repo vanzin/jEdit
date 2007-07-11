@@ -972,6 +972,7 @@
 		<antcall target="compile-default-plugins-for-dist" />
 		<copy todir="${dist.dir}/classes/package-files"
 			  overwrite="true">
+			<fileset dir="package-files" />
 			<filterset>
 				<filter token="jar.filename"
 						value="${jar.filename}" />
