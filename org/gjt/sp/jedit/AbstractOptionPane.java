@@ -120,7 +120,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 			_save();
 	} //}}}
 
-	// {{{ newLabel()
+	//{{{ newLabel()
 	/**
 	 *@return a label which has the same tooltiptext as the Component
 	 *    that it is a label for. This is used to create labels from inside
@@ -144,7 +144,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		}
 		return retval;
 	}// }}}
-	
+
 	//{{{ addComponent() method
 	/**
 	 * Adds a labeled component to the option pane. Components are
@@ -269,6 +269,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 		add(comp);
 	} //}}}
 
+	//{{{ copyToolTips() method
 	private void copyToolTips (Component c1, Component c2) {
 		int tooltips = 0;
 		int jc=0;
@@ -296,7 +297,8 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 			jc2.setToolTipText(text);
 		}
 		
-	}
+	} //}}}
+
 	//{{{ addSeparator() method
 	/**
 	 * Adds a separator component.
