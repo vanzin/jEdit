@@ -37,14 +37,19 @@
         accessed by invoking <guimenu>Help</guimenu>&gt;<guimenuitem>jEdit
         Help</guimenuitem>.</para>
 
+        <para> After you have tuned jEdit to your liking and want to install the same set of plugins onto another host, or another user's profile, you can export your currently installed plugin list as an xml file, known as a <emphasis role="bold">PluginSet</emphasis>. </para> 
+        
         <para>The <guibutton>Save</guibutton> rollover button allows you to save
-        the list of installed and loaded plugins to an XML file. The
+        the list of installed and loaded plugins to an XML file. </para>
+        
+        <para> The
         <guibutton>Open</guibutton> button next to it will load a file and
         select/deselect your plugins as they were when the file was
-        saved.</para>
-
+        saved. <footnote><para> The Open button only unloads plugins from the Manage panel, so it is not so useful here. The main benefit of a PluginSet comes from the Install panel, as explained in the following section. </para></footnote>
+        </para>
+        
         <para><guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin
-        Options</guimenuitem> displays a dialog box for changing plugin
+        Options</guimenuitem> displays a dialog box for changing plugin 
         settings.</para>
     </sect1>
 
@@ -73,10 +78,10 @@
         of all plugins chosen for installation, along with any plugins that will
         be automatically downloaded in order to fulfill dependencies.</para>
 
-        <para>If a PluginSet was saved or loaded from the
-        <guilabel>Manage</guilabel> tab, that set will be also loaded here. Any
-        plugins which were on that list but not yet installed will be checked in
-        this table. You can clear the active PluginSet with the
+        <para>If a previously saved PluginSet was selected, 
+        it will automatically be loaded whenever the Install tab is created, and you will see the filename in the hovertip of the <guibutton>choose</guibutton> rolloverbutton, as well as all of the plugins in that set already checked for you. </para>
+        
+        <para> You can clear the active PluginSet with the
         <guibutton>clear</guibutton> button next to it, or choose a different
         PluginSet xml file with the <guibutton>choose</guibutton> button.</para>
 

@@ -387,7 +387,7 @@
 
             <para>The <guibutton>Plugin Manager</guibutton> pane contains a
             chooser for the desired download mirror, as well as various settings
-            such as the directory where plugins are to be installed. See <xref
+            such as the directory where plugins are to be installed. In addition, you can set the time in minutes that the pluginlist can be cached from jedit.org, helping to reduce the server load. See <xref
             linkend="using-plugins" />.</para>
         </sect2>
 

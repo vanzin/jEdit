@@ -3,9 +3,7 @@
     <title>Working With Files</title>
 
     <!-- jEdit buffer-local properties: -->
-
     <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
     <sect1 id="creating">
@@ -413,9 +411,9 @@
             view.</para>
 
             <para>Clicking a file or directory with the right mouse button
-            displays a popup menu containing various commands. <!-- Note that attempting to delete
-    a directory containing files will give an error;
-    only empty directories can be deleted. --></para>
+            displays a popup menu containing various commands. 
+            <!-- Note that attempting to delete a directory containing files will give an error; only empty directories can be deleted. -->
+            </para>
 
             <tip>
                 <para>The file list sorting algorithm used in jEdit handles

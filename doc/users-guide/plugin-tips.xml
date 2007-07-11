@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="plugin-tips">
     <title>Plugin Tips and Techniques</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :tabSize=1:indentSize=1:noTabs=true: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
     <sect1 id="plugin-tips-libraries">
