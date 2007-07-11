@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="plugin-intro">
     <title>Introducing the Plugin API</title>
-
-    <!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene          -->
-
-    <!-- jEdit buffer-local properties:                         -->
-
     <!-- :indentSize=1:tabSize=2:noTabs=true:wrap=soft:maxLineLen=0:     -->
-
     <!-- :xml.root=users-guide.xml: -->
-
+    <!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene          -->
+    <!-- jEdit buffer-local properties:                         -->
     <!-- This is the introduction of the jEdit 4.0 Plugin Guide -->
-
-    <!-- $Id$
--->
+    <!-- $Id$ -->
 
     <indexterm>
         <primary>Plugin API</primary>
-
         <secondary>introduction</secondary>
     </indexterm>
 
@@ -132,8 +124,8 @@
         although efforts are made to maintain or deprecate plugin-related code
         on a transitional basis. While the majority of plugins are unaffected by
         most changes and will continue working, it is a good idea to monitor the
-        jEdit change log, the mailing lists and <ulink
-        url="http://community.jedit.org">community.jedit.org</ulink> for API
-        changes so that you can update your plugin if necessary.</para>
+        jEdit change log, and join the <literal>jedit-devel</literal> mailing list, to keep updated on changes and bug reports, so that you will know when your
+        plugin needs to be updated.
+        </para>
     </sidebar>
 </chapter>

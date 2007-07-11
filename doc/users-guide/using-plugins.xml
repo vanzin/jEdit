@@ -3,9 +3,7 @@
     <title>Installing and Using Plugins</title>
 
     <!-- jEdit buffer-local properties: -->
-
-    <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
-
+    <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=hard:maxLineLen=80: -->
     <!-- :xml.root=users-guide.xml: -->
 
     <para>A <firstterm>plugin</firstterm> is an application which is loaded and
@@ -37,16 +35,14 @@
         accessed by invoking <guimenu>Help</guimenu>&gt;<guimenuitem>jEdit
         Help</guimenuitem>.</para>
 
-        <para> After you have tuned jEdit to your liking and want to install the same set of plugins onto another host, or another user's profile, you can export your currently installed plugin list as an xml file, known as a <emphasis role="bold">PluginSet</emphasis>. </para> 
+        <para> After you have tuned jEdit to your liking and want to install the
+        same set of plugins onto another host, or another user's profile, you
+        can export your currently installed plugin list as an xml file, known as
+        a <emphasis role="bold">PluginSet</emphasis>. The
+        <guibutton>Save</guibutton> rollover button allows you to save the list
+        of installed and loaded plugins to an XML file.  See <xref
+        linkend="plugin-sets" /> for more information. </para>
         
-        <para>The <guibutton>Save</guibutton> rollover button allows you to save
-        the list of installed and loaded plugins to an XML file. </para>
-        
-        <para> The
-        <guibutton>Open</guibutton> button next to it will load a file and
-        select/deselect your plugins as they were when the file was
-        saved. <footnote><para> The Open button only unloads plugins from the Manage panel, so it is not so useful here. The main benefit of a PluginSet comes from the Install panel, as explained in the following section. </para></footnote>
-        </para>
         
         <para><guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin
         Options</guimenuitem> displays a dialog box for changing plugin 
@@ -78,12 +74,16 @@
         of all plugins chosen for installation, along with any plugins that will
         be automatically downloaded in order to fulfill dependencies.</para>
 
-        <para>If a previously saved PluginSet was selected, 
-        it will automatically be loaded whenever the Install tab is created, and you will see the filename in the hovertip of the <guibutton>choose</guibutton> rolloverbutton, as well as all of the plugins in that set already checked for you. </para>
+        <para>If a previously saved PluginSet was selected, it will
+        automatically be loaded whenever the Install tab is created, and you
+        will see the filename in the hovertip of the
+        <guibutton>choose</guibutton> rolloverbutton, as well as all of the
+        plugins in that set already checked for you. </para>
         
         <para> You can clear the active PluginSet with the
         <guibutton>clear</guibutton> button next to it, or choose a different
-        PluginSet xml file with the <guibutton>choose</guibutton> button.</para>
+        PluginSet xml file with the <guibutton>choose</guibutton> button. See
+        <xref linkend="plugin-sets" /> for more information. </para>
 
         <para>Once you have specified plugins to install, click
         <guibutton>Install</guibutton> to begin the download process.</para>
@@ -113,4 +113,33 @@
             linkend="firewall-pane" />.</para>
         </sidebar>
     </sect1>
+    
+    <sect1 id="plugin-sets">
+    <title>Plugin Sets</title>
+    
+    <para> A <emphasis role="bold">PluginSet</emphasis> is a collection of
+    plugins, represented as an XML file. These XML files can be created from the
+    <guibutton>save</guibutton> button of the Manage panel of the Plugin Manager.
+    Saving a PluginSet remembers all of the currently loaded plugins. </para>
+    
+    <para> When a PluginSet has been saved, it becomes the "default pluginset",
+    which means that if you remove plugins in that set and go back to the
+    InstallPanel, you should see them selected for download again. To clear this
+    setting, click on the <guibutton>clear</guibutton> button in the
+    InstallPanel. 
+    </para>
+
+    <para> It is posisble to Choose/Open a PluginSet from the Manage or the Install 
+    panel.  The behavior of choosing a PluginSet depends on which panel you are
+    on when you choose it.
+    From the ManagePanel, it unloads plugins that are loaded but not in the
+    list. From the InstallPanel, it selects plugins that are not loaded
+    for download from Plugin Central. </para>
+        
+    <para> When choosing a PluginSet, the path can be given as a remote URL.
+    This helps teachers and sysadmins direct the students/slaves to a standard
+    set of plugins that are required for the course/job. </para>
+    
+    </sect1>
+     
 </chapter>

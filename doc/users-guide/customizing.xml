@@ -326,6 +326,9 @@
             users of jEdit many flexible options for defining how Encodings are
             handled in jEdit. See <xref linkend="encodings" /> for the
             basics.</para>
+            
+            <para> In previous versions of jEdit, there was very little encoding autodetection, so <guilabel>use autodetection when possible</guilabel> is an option you can switch on or off.
+            </para>
 
             <para>The <literal>List of Encoding Autodetector Names</literal> is
             an experimental feature that allows for jEdit and plugins to offer
@@ -335,11 +338,12 @@
             instruction) techniques. Others can be defined as services and added
             to this space-separated list. See <ulink
             url="../api/org/gjt/sp/jedit/io/EncodingDetector.html">EncodingDetector</ulink>
-            for details on how to offer this service.</para>
+            for details on how to offer this service. The order they appear in this
+            list determines the order of detectors that are tried on each file. </para>
 
             <para>The <literal>List of Fallback Encodings</literal> is used when
             a file fails to open in the default encoding, and the Encoding
-            Autodetectors also fail. The list order determines the order of
+            Autodetectors also fail. The list order here determines the order of
             encodings that are tried. Each is separated by a space. This is
             especially handy when doing directory searches through files of
             different encodings. We suggest using <literal>UTF-8</literal> as
