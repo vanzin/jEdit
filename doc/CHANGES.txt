@@ -20,8 +20,8 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
 Joseph Erickson, David Moss, Horst Eff, Daniel Hahler, Stephen Co,
-Shlomy Reinstein, Daniel Johnson, javacorner and Mike Gorski
-for contributing to this release.
+Shlomy Reinstein, Daniel Johnson, javacorner, Chris Grindstaff,
+and Mike Gorski for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -32,6 +32,8 @@ for contributing to this release.
 - Menu Shorcuts are displayed with the L&F font now if one is
   present for accelerator keys. (patch #1733221) (Daniel Johnson)
 
+- Memory leak in jEdit.closeView() fixed (Chris Grindstaff).  
+  
 - typing in multiple select works now. (#1724940) (Shlomy Reinstein)
 
 - When clicking on an hypersearch result, if the buffer was not opened,
