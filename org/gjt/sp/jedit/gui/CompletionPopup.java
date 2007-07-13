@@ -22,30 +22,31 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import java.awt.Point;
-import java.awt.Component;
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
+
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
-import javax.swing.JWindow;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-import javax.swing.ListCellRenderer;
 import javax.swing.AbstractListModel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JWindow;
+import javax.swing.ListSelectionModel;
+import javax.swing.ListCellRenderer;
 import javax.swing.ScrollPaneConstants;
 
-import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.View;
 //}}}
 
 /**
@@ -223,7 +224,6 @@ public class CompletionPopup extends JWindow
 		return false;
 	} //}}}
 
-
 	//{{{ keyPressed() medhod
 	/**
 	 * Handle key pressed events.
@@ -241,7 +241,6 @@ public class CompletionPopup extends JWindow
 	protected void keyTyped(KeyEvent e)
 	{
 	} //}}}
-
 
 	//{{{ Private members
 

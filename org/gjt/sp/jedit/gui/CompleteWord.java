@@ -23,24 +23,30 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import java.awt.Point;
-import java.awt.Font;
 import java.awt.Component;
-import java.awt.event.KeyEvent;
-import java.util.TreeSet;
-import java.util.Set;
+import java.awt.Font;
+import java.awt.Point;
 
-import javax.swing.JList;
+import java.awt.event.KeyEvent;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
-import org.gjt.sp.jedit.syntax.KeywordMap;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.EditPane;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.jedit.View;
+
+import org.gjt.sp.jedit.syntax.KeywordMap;
+
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 
 import org.gjt.sp.util.StandardUtilities;
 //}}}
