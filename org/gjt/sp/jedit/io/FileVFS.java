@@ -100,6 +100,14 @@ public class FileVFS extends VFS
 	public String getTwoStageSaveName(String path)
 	{
 		File parent = new File(getParentOfPath(path));
+		// the ignorance of the canWrite() method for windows
+		// is, because the read-only flag on windows has
+		// not the effect of preventing the creation of new files.
+		// The only way to make a directory read-only in this means
+		// the ACL of the directory has to be set to read-only,
+		// which is not checkable by java.
+		// The " || OperatingSystem.isWindows()" can be removed
+		// if the canWrite() method gives back the right value.
 		return (parent.canWrite() || OperatingSystem.isWindows())
 			? super.getTwoStageSaveName(path)
 			: null;
