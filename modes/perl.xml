@@ -226,7 +226,7 @@
 
 		<!-- s/// regular expression substitution -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="s"
-            AT_WORD_START="TRUE">s\s*\{.*?[^\\]\}\s*\{(?:.*?[^\\])*\}[egimosx]*</SEQ_REGEXP>
+            AT_WORD_START="TRUE">s\s*\{.*?\}\s*\{.*?\}[egimosx]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="s"
             AT_WORD_START="TRUE">s([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[egimosx]*</SEQ_REGEXP>
