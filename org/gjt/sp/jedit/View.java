@@ -1190,6 +1190,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ close() method
 	void close()
 	{
+		EditBus.send(new ViewUpdate(this,ViewUpdate.CLOSED));
 		closed = true;
 
 		// save dockable window geometry, and close 'em

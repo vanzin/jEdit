@@ -2520,10 +2520,10 @@ public class jEdit
 
 		// Create a new EditorExitRequested
 		EditorExitRequested eer = new EditorExitRequested(view);
-		
+
 		// Send EditorExitRequested
 		EditBus.send(eer);
-		
+
 		// Check if the ExitRequest has been cancelled
 		// if so, do not proceed anymore in the exiting
 		if (eer.hasBeenExitCancelled())
@@ -2573,7 +2573,10 @@ public class jEdit
 		{
 			// Save view properties here
 			if(view != null)
+			{
 				view.close();
+				removeViewFromList(view);
+			}
 
 			// Stop autosave timer
 			Autosave.stop();
@@ -3849,8 +3852,6 @@ loop:		for(int i = 0; i < list.length; i++)
 			exit(view,false); /* exit does editor event & save */
 		else
 		{
-			EditBus.send(new ViewUpdate(view,ViewUpdate.CLOSED));
-
 			view.close();
 			view.dispose();
 			removeViewFromList(view);

@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre11
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Marcelo Vanzin for contributing to
+this release.
 
 {{{ Bug Fixes
 
@@ -10,6 +11,9 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- ViewUpdate.CLOSED is now sent for all views. Previously, the view from where
+  the exit request originated would fail to send a ViewUpdate.CLOSED message.
+  (Marcelo Vanzin)
 
 }}}
 {{{ API Changes
@@ -37,8 +41,8 @@ and Mike Gorski for contributing to this release.
 - Menu Shorcuts are displayed with the L&F font now if one is
   present for accelerator keys. (patch #1733221) (Daniel Johnson)
 
-- Memory leak in jEdit.closeView() fixed (Chris Grindstaff).  
-  
+- Memory leak in jEdit.closeView() fixed (Chris Grindstaff).
+
 - typing in multiple select works now. (#1724940) (Shlomy Reinstein)
 
 - When clicking on an hypersearch result, if the buffer was not opened,
@@ -157,8 +161,8 @@ and Mike Gorski for contributing to this release.
 - Plugin Manager: Option to cache PluginList for a period of minutes
     (Alan Ezust)
 
-- Moved Encodings options out of General and into Encodings option pane.    
-    
+- Moved Encodings options out of General and into Encodings option pane.
+
 - New View option: amount of maximum visible rows in buffer switcher
   (Patch #1642574) (Jakub Roztocil)
 
