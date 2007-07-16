@@ -2,11 +2,14 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre11
 
-Thanks to Björn "Vampire" Kautler and Marcelo Vanzin for contributing to
+Thanks to Matthieu Casanova, Kazutoshi Satoda,
+Björn "Vampire" Kautler and Marcelo Vanzin for contributing to
 this release.
 
 {{{ Bug Fixes
 
+-When changing download mirror, the plugin list cache was not refreshed
+ (Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous
