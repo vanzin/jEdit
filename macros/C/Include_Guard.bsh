@@ -60,10 +60,12 @@ void includeGuard()
 
     guardName = buffer.getName().toUpperCase().replace('.', '_') ;
     pos = textArea.getCaretPosition();
-    textArea.setSelectedText("#ifndef " + guardName + "\n#define " + guardName + "\n");
+	textArea.setCaretPosition(0);
+    textArea.setSelectedText("#ifndef " + guardName + "\n#define " + guardName + "\n\n");
+	pos1 = textArea.getCaretPosition();
     textArea.setCaretPosition(buffer.getLength());
     textArea.setSelectedText("\n#endif        //  #ifndef " + guardName + "\n");
-    textArea.setCaretPosition(pos);
+    textArea.setCaretPosition(pos + pos1);
 }
 
 if( buffer.isReadOnly() ) 
