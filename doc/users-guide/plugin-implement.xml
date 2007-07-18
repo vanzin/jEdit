@@ -1142,7 +1142,7 @@ else if(msg instanceof ViewUpdate) {
     </sect1>
 
     <sect1 id="plugin-implement-building">
-        <title>Compiling the Plugin</title>
+        <title>build.xml - the build file</title>
 
         <para>We have already outlined the contents of the user action catalog,
         the properties file and the documentation file in our earlier
@@ -1162,7 +1162,8 @@ else if(msg instanceof ViewUpdate) {
     &lt;description&gt;
         This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
     &lt;/description&gt;
-
+    &lt;property file=&quot;../build.properties&quot; /&gt;
+    &lt;property file=&quot;build.properties&quot; /&gt;
     &lt;import file="${build.support}/plugin-build.xml" /&gt;
 &lt;/project&gt;
 </programlisting>
@@ -1170,13 +1171,13 @@ else if(msg instanceof ViewUpdate) {
 
         <para>This build file imports another modular build file,
         <literal>plugin-build.xml</literal> from the <literal>build-support</literal>
-        project. It is not included with jEdit or any of the plugins, but it
-        can be checked out from subversion, or found online in the <ulink
+        project. It is available as a package you can check out from subversion, or found online in the <ulink
         url="https://jedit.svn.sourceforge.net/svnroot/jedit/build-support/trunk/">jEdit's
-        SVN repository</ulink>. It contains common build steps for jEdit
-        plugins, and some example properties files which you can adapt for use
-        with your plugin.</para>
+        SVN repository</ulink>. It contains the common build steps used to build the core jEdit plugins, and some example <literal>build.properties.sample</literal> files which you can adapt for use with your development environment.</para>
 
+        <para>Because this build file and most other core plugins import a <literal>build.properties</literal> file from the current and the parent directories, it is possible in most cases for you to locate all the necessary properties in a single property file. 
+        </para>
+        
         <para>Customizing this build file for a different plugin will likely
         only require three changes:</para>
 
