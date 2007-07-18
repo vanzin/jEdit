@@ -773,7 +773,7 @@ public class GUIUtilities
 		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
 			view,path,type,multipleSelection);
 		return fileChooser.getSelectedFiles();
-	} 
+	}
 
 	/**
 	 * Displays a VFS file selection dialog box.
@@ -786,7 +786,7 @@ public class GUIUtilities
 	 * {@link org.gjt.sp.jedit.browser.VFSBrowser#SAVE_DIALOG}, or
 	 * {@link org.gjt.sp.jedit.browser.VFSBrowser#CHOOSE_DIRECTORY_DIALOG}.
 	 * @param multipleSelection True if multiple selection should be allowed
-	 * @return The selected file(s)	 
+	 * @return The selected file(s)
 	 * @since jEdit 4.3pre10
 	 */
 	public static String[] showVFSFileDialog(Dialog parent, View view,
@@ -797,7 +797,7 @@ public class GUIUtilities
 		VFSFileChooserDialog fileChooser = new VFSFileChooserDialog(
 			parent, view, path, type, multipleSelection, true);
 		return fileChooser.getSelectedFiles();
-	} 
+	}
 
 	/**
 	 * Displays a VFS file selection dialog box.
@@ -811,7 +811,7 @@ public class GUIUtilities
 	 * {@link org.gjt.sp.jedit.browser.VFSBrowser#SAVE_DIALOG}, or
 	 * {@link org.gjt.sp.jedit.browser.VFSBrowser#CHOOSE_DIRECTORY_DIALOG}.
 	 * @param multipleSelection True if multiple selection should be allowed
-	 * @return The selected file(s)	 
+	 * @return The selected file(s)
 	 * @since jEdit 4.3pre10
 	 */
 	public static String[] showVFSFileDialog(Frame parent, View view,
@@ -841,7 +841,7 @@ public class GUIUtilities
 	//{{{ parseColor() method
 	public static Color parseColor(String name, Color defaultColor)
 	{
-		if(name == null)
+		if(name == null || name.length() == 0)
 			return defaultColor;
 		else if(name.charAt(0) == '#')
 		{
@@ -1221,8 +1221,8 @@ public class GUIUtilities
 
 					if(!r.equals(desired))
 					{
- 						Log.log(Log.DEBUG,GUIUtilities.class,
- 							"Window resize blocked: " + win.getBounds());
+						Log.log(Log.DEBUG,GUIUtilities.class,
+							"Window resize blocked: " + win.getBounds());
 						win.setBounds(desired);
 					}
 				}
@@ -1240,8 +1240,8 @@ public class GUIUtilities
 				windowOpened = true;
 
 				Rectangle r = win.getBounds();
- 				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
- 					+ name + ": bounds after opening: " + r);
+				Log.log(Log.DEBUG,GUIUtilities.class,"Window "
+					+ name + ": bounds after opening: " + r);
 
 				jEdit.setIntegerProperty(name + ".dx",
 					r.x - required.x);
