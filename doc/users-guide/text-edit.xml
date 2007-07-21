@@ -921,27 +921,13 @@
             <quote>Hello</quote> will match <quote>hello</quote>,
             <quote>HELLO</quote> and <quote>HeLlO</quote>.</para>
 
-            <para>Selecting the <guibutton>Regular expressions</guibutton> check
-            box allows a regular expression to be used in the search string.
-            Regular expressions can match inexact sequences of text that
-            optionally span more than one line. Regular expression syntax is
-            described in <xref linkend="regexps" />.</para>
-
-            <note>
-                <title>On regex search</title>
-
-                <para>There are some known issues with the
-                <literal>java.util.regex</literal> library, as it stands in
-                Sun's Java 1.5 and 1.6. In particular, it is possible to create
-                regular expressions that hang the JVM, or cause stack overflow
-                errors, which was not as easy to accomplish using the legacy
-                <literal>gnu.regexp</literal> library. If you find that
-                <literal>gnu.regexp</literal>, used in jEdit 4.2 and earlier, is
-                more suitable for your search/replace needs, you can try the
-                <emphasis role="bold">XSearch plugin</emphasis>, which still
-                uses it and can provide a replacement to the built-in search
-                dialog.</para>
-            </note>
+            <para>To search for special characters (such as newlines or 
+            non-printable characters), inexact sequences of text, or strings
+            that span multiple lines, we use
+            <emphasis role="bold">Regular Expressions</emphasis>. 
+            Selecting the <guibutton>Regular expressions</guibutton> check
+            box allows special characters to be used in the search string.
+            Regular expression syntax is described in <xref linkend="regexps" />.</para>
 
             <para>The <guibutton>Backward</guibutton> and
             <guibutton>Forward</guibutton> buttons specify the search direction.
