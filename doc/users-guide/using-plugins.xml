@@ -123,7 +123,7 @@
     Saving a PluginSet remembers all of the currently loaded plugins. </para>
     
     <para> When a PluginSet has been saved, it becomes the "default pluginset",
-    which means that if you remove plugins in that set and go back to the
+    which means that if you unload/uninstall plugins from that set and go back to the
     Install tab, you should see them selected for download again. To clear this
     setting, click on the <guibutton>clear</guibutton> button in the
     Install tab. 

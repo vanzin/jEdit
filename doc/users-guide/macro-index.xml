@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appendix id="macro-index">
     <title>Macros Included With jEdit</title>
-
     <!-- jEdit 4.0 Macro Guide, (C) 2001 John Gellene      -->
-
     <!-- jEdit buffer-local properties:                    -->
-
-    <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2: -->
-
+    <!-- :indentSize=2:noTabs=yes:maxLineLen=80:tabSize=2: -->
     <!-- :xml.root=users-guide.xml:                        -->
-
     <!-- covers index to installed macro set               -->
 
     <para>jEdit comes with a large number of sample macros that perform a
@@ -23,6 +18,24 @@
     are detailed descriptions for each macro as well as a search
     facility.</para>
 
+    <sect1 id="macros-c" >
+        <title>C/C++ macros </title>
+         <para> These macros are useful for C/C++ programming. </para>
+         <itemizedlist>
+         <listitem><para> <filename>Include_Guard.bsh</filename> </para>
+         <para> Inserts conditional preprocessor directives around a header
+         file, to prevent it from being included multiple times. </para>
+         <para>The name of the generated preprocessor macro is based on the
+          buffer's name. </para>
+        </listitem>
+
+         <listitem><para><filename> Toggle_Header_Source</filename></para>
+         <para> Toggles between the header and the implementation file. Works for .c, .cxx, and .cpp extensions. </para>
+         </listitem>
+         </itemizedlist>
+    </sect1>
+         
+    
     <sect1 id="macros-clipboard">
         <title>Clipboard Macros</title>
 
@@ -83,6 +96,11 @@
         <para>These macros automate various text editing tasks.</para>
 
         <itemizedlist>
+            <listitem>
+                <para><filename>Emacs_Ctrl-K.bsh</filename></para>
+                <para>Cuts and appends text, from the cursor to the end of the line, into the copy buffer.   </para>
+            </listitem>
+        
             <listitem>
                 <para><filename>Emacs_Next_Line.bsh</filename></para>
 
@@ -316,6 +334,14 @@
             </listitem>
 
             <listitem>
+               <para><filename>Splitpane_Grow</filename> </para>
+               <para> When inside a split EditPane, this macro moves the
+               splitter away from the cursor, effectively increasing the size of
+               the currently active split pane. </para>
+             </listitem>
+               
+            
+            <listitem>
                 <para><filename>Toggle_Left_Docking_Area.bsh</filename></para>
 
                 <para>Expands or collapses the left docking area, depending on
@@ -508,19 +534,6 @@
                 <para>Writes HyperSeach results to a new buffer.</para>
             </listitem>
 
-            <listitem>
-                <para><filename>Include_Guard.bsh</filename></para>
-
-                <para>Intended for C/C++ header files, this macro inserts a
-                preprocessor directive in the current buffer to ensure that the
-                header is included only once per compilation unit.</para>
-
-                <para>To use the macro, first place the caret at the beginning
-                of the header file before any uncommented text. The macro will
-                return to this position upon completion. The defined term that
-                triggers the <quote>include guard</quote> is taken from the
-                buffer's name.</para>
-            </listitem>
 
             <listitem>
                 <para><filename>Make_Bug_Report.bsh</filename></para>
