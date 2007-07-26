@@ -244,7 +244,6 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				infoBox.setText(null);
 				pluginModel.update();
-				pluginModel.restoreSelection(savedChecked,savedSelection);
 			}
 		});
 	} //}}}
@@ -537,7 +536,6 @@ class InstallPanel extends JPanel implements EBComponent
 			sort(sortType);
 
 			fireTableChanged(new TableModelEvent(this));
-			restoreSelection(savedChecked,savedSelection);
 		} //}}}
 
 		//{{{ saveSelection() method
