@@ -335,7 +335,11 @@ unwind:		while(context.parent != null)
 		// check escape rule of parent
 		if((rule.action & ParserRule.NO_ESCAPE) == 0)
 		{
-			ParserRule escape = context.parent.rules.getEscapeRule();
+			ParserRule escape = context.rules.getEscapeRule();
+			if (escape == null)
+			{
+				escape = context.parent.rules.getEscapeRule();
+			}
 escape_checking:	if (escape != null && handleRule(escape,false,false))
 			{
 				int escapeSequenceCount = pattern.count;

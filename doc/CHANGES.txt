@@ -11,6 +11,12 @@ this release.
 -When changing download mirror, the plugin list cache was not refreshed
  (Matthieu Casanova)
 
+- SF Bug #1760646: perl colorization
+  Escape rules for child rule sets were being ignored. Since the perl mode
+  doesn't define a top-level escape char, escaped sequences inside strings
+  were not being properly recognized. Fix looks for the contextual escape
+  rule before trying to delegate to the parent's escape rule. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 
