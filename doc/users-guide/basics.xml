@@ -393,12 +393,15 @@
         <bridgehead renderas="sect3">Command repetition</bridgehead>
 
         <para>To repeat a command multiple times, enter a number in the action
-        bar, then invoke the command. For example,
+        bar, then press the key-combination that invokes the command.
+        For example,
         <quote><keycap>C+ENTER</keycap> <keycap>1</keycap> <keycap>4</keycap>
         <keycap>C+d</keycap></quote> will delete 14 lines;
         <quote><keycap>C+ENTER</keycap> <keycap>9</keycap>
         <keycap>#</keycap></quote> will insert <quote>#########</quote> in the
-        buffer.</para>
+        buffer.
+        Note: The space characters in these examples should not be typed;
+        they are only here to visually separate the keys to be typed.</para>
 
         <para>If you specify a repeat count greater than 20, a confirmation
         dialog box will be displayed, asking if you really want to perform the
