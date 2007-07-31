@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sect1 id="plugins">
     <title>Plugin Questions</title>
-
     <!-- jEdit buffer-local properties:                      -->
-
-    <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
-
+    <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
-
     <!-- jEdit FAQ                                           -->
-
     <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
 
     <para>This section deals with questions concerning the use of jEdit's
@@ -44,18 +39,13 @@
                 </question>
 
                 <answer>
-                    <para>Many plugin developers make beta versions of their
-                    plugins available for downloading on the <ulink
-                    url="http://community.jedit.org">jEdit Community</ulink> web
-                    site. Check the <quote>Plugin beta versions</quote> section
-                    of the web site's <quote>Downloads</quote> area.</para>
+                    <para>We encourage plugin developers to join the <email>jedit-devel@lists.sourceforge.net</email> mailing list. There, you will find the greatest concentration of people who are also familiar with the core and its plugins. </para>
                 </answer>
             </qandaentry>
 
             <qandaentry>
                 <question id="plugin-install-manual">
-                    <para>How do I install a plugin manually, without using the
-                    Plugin Manager?</para>
+                    <para>How do I install a plugin manually, without using the Plugin Manager?</para>
                 </question>
 
                 <answer>
@@ -65,20 +55,6 @@
                     installed, or (b) your user settings directory (which you
                     can find by evaluating the BeanShell expression
                     <userinput>jEdit.getSettingsDirectory()</userinput>.</para>
-                </answer>
-            </qandaentry>
-
-            <qandaentry>
-                <question id="plugin-loading">
-                    <para>Why can't plugins be loaded dynamically (i.e. not
-                    having to restart)?</para>
-                </question>
-
-                <answer>
-                    <para>There are plans to support such a feature in jEdit
-                    4.2, however it will likely require a different plugin API,
-                    so existing plugins will need to be updated to take
-                    advantage of it.</para>
                 </answer>
             </qandaentry>
 
@@ -127,44 +103,39 @@
 
                 <answer>
                     <para>Yes. You can use the System shell of the Console
-                    plugin to run you application. The only limitation is that
-                    the plugin does not provide access to the application's
-                    standard input stream, so you will not be able to provide
-                    command-line input once the application is running. If the
-                    application requires such input, it will hang and you will
-                    have to terminate its process. Details are available in the
-                    help documentation for the Console plugin.</para>
+                    plugin to run you application. </para>
                 </answer>
             </qandaentry>
 
             <qandaentry>
                 <question id="plugin-cvs">
-                    <para>Can I work with CVS/SVN/Perforce under jEdit? Is there
-                    a plugin for my favorite SCCS system? How can I send a
-                    command from jEdit so as to use SVN from within
-                    jEdit?</para>
-                </question>
+					<para>Can I work with cvs/svn/Perforce/cogito/mercurial
+					under jEdit? Is there a plugin for my favorite SCCS system?
+					How can I send a command from jEdit to cvs/svn without
+					leaving my editor? </para></question>
+					<answer>
+				 	<para>The SVNPlugin supports Subversion browsing, diffing (via JDiff) and other common operations. </para>
 
-                <answer>
-                    <para>GruntSpud and jEditCvs are not currently maintained,
-                    but did offer CVS support. There is no GUI interface for
-                    exploring SVN repositories at the moment.</para>
+					<para> With *NIX (or cygwin), the Console plugin
+					documentation has some ideas on how to use jEdit as the
+					<literal>VISUAL</literal> editor when called from the
+					cvs/svn/hg command-line tools, all of which can be run from
+					the Console dockable.</para>
 
-                    <para>You can use jEdit as your default editor from CVS.
-                    Under Windows and the WinCVS Open Source package, you can
-                    specify <userinput>jedit.exe</userinput> as your default
-                    viewer and editor to automate the opening of file. Under
-                    *NIX, the Console plugin has some ideas on how to use jEdit
-                    as the VISUAL editor when called from the command-line tool,
-                    which can also be run from the Console plugin.</para>
-
-                    <para>The ProjectViewer plugin has some support for reading
+					<para>The ProjectViewer plugin has some support for reading
                     the "entries" file for each directory, to decide which files
-                    to import. CVS/SVN are built-in</para>
+                    to import. CVS/SVN are built-in.</para>
 
                     <para>The P4Plugin adds Perforce support to ProjectViewer,
                     and has some other advanced features for working with
                     Perforce repositories.</para>
+                    
+                    <para>You can use jEdit as your default editor from WinCVS:
+                    specify <userinput>jedit.exe</userinput> as your default
+                    viewer and editor to automate the opening of file.</para>
+				
+                    <para>GruntSpud and jEditCvs are not maintained,
+                    but do offer CVS support on jEdit 4.2final. </para>	
                 </answer>
             </qandaentry>
 
@@ -174,10 +145,13 @@
                 </question>
 
                 <answer>
-                    <para>A plugin based on the version 1.4 of the JSwat
+                    <para> 
+					A plugin based on the version 1.4 of the JSwat
                     debugger application is currently available for download
                     using jEdit's Plugin Manager feature. The JDebugger plugin
-                    is also available.</para>
+                    is also available. JPyDebugger offers debugging for Python.
+					The GdbPlugin provides gdb/mi support for C/C++ programs.
+					</para>
                 </answer>
             </qandaentry>
 
