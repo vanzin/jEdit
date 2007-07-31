@@ -550,7 +550,7 @@
                     bug tracker database</ulink> that the jEdit project
                     maintains on the <ulink
                     url="http://sourceforge.net/">SourceForge web site</ulink>.
-                    You do not need to be a SourceForge member to post a bug
+                    You need to be a SourceForge member to post a bug
                     report.</para>
 
                     <para>Before posting a bug report, spend a few moments
@@ -560,7 +560,7 @@
                     criteria. If you find a similar bug report, and you have
                     additional information to contribute, post a comment to the
                     report. If you do not find a similar bug report, submit a
-                    new report.</para>
+                    new report.  </para>
                 </answer>
             </qandaentry>
 
@@ -720,8 +720,8 @@
                     changes to jEdit, and you are familiar with compiling your
                     own Java programs and working with Subversion, you can
                     download the current code maintained in the <ulink
-                    url="http://sourceforge.net/cvs/?group_id=588">SourceForge
-                    CVS repository</ulink>.</para>
+                    url="http://jedit.svn.sourceforge.net/viewvc/jedit/">SourceForge
+                    SVN repository</ulink>.</para>
                 </answer>
             </qandaentry>
 
@@ -732,24 +732,22 @@
                 </question>
 
                 <answer>
-                    <para>The latest release of this document is available at
-                    the <ulink
-                    url="http://jedit-community.sourceforge.net/modules.php?op=modload&amp;name=Include_Pages&amp;file=index&amp;req=viewarticle&amp;artid=5">
-                    jEdit Community web site</ulink>.</para>
+                    <para>The latest release of this document is available <ulink
+                    url="http://www.jedit.org/FAQ/index.html">here</ulink>.
+					</para>
                 </answer>
             </qandaentry>
 
             <qandaentry>
                 <question id="jedit-compile">
-                    <para>How do you set the classpath and compile the Java
-                    files in jEdit?</para>
+                    <para>How do you set the classpath and compile the Java files in jEdit?</para>
                 </question>
 
                 <answer>
                     <para>Consult an article on the <ulink
                     url="http://community.jedit.org">jEdit Community</ulink> web
-                    site entitled <quote>Build jEdit yourself: the 'Open' in
-                    Open Source</quote>.</para>
+                    site entitled <quote>Build jEdit yourself: the
+					'Open' in Open Source</quote>.</para>
                 </answer>
             </qandaentry>
         </qandadiv>
