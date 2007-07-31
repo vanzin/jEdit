@@ -17,6 +17,8 @@ this release.
   were not being properly recognized. Fix looks for the contextual escape
   rule before trying to delegate to the parent's escape rule. (Marcelo Vanzin)
 
+- Explicit folds are now expanded when deleting the {{{ at the fold start
+  (#1193683) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

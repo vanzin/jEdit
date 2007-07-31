@@ -177,6 +177,32 @@ class BufferHandler implements BufferListener
 
 		if(textArea.getDisplayManager() == displayManager)
 		{
+			//{{{ fix for black hole bug
+			// if you remove the {{{ at a fold start, the fold is removed so it must be expanded otherwise }}}
+			// the text remains invisible
+			int endLine = startLine + numLines;
+			if (buffer.isFoldStart(endLine))
+			{
+				if (numLines == 0)
+				{
+					String endLineText = buffer.getLineText(endLine);
+					int i = endLineText.indexOf("{{{"); // }}}
+					if (i != -1)
+					{
+						int lineStartOffset = buffer.getLineStartOffset(endLine);
+						if (offset < lineStartOffset + i + 3 && offset + length > lineStartOffset + i)
+						{
+							displayManager.expandFold(endLine, false);
+						}
+					}
+				}
+				else
+				{
+					displayManager.expandFold(endLine, false);
+				}
+			}
+			// }}}
+
 			if(numLines != 0)
 			{
 				firstLine.preContentRemoved(startLine,numLines);
