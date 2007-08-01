@@ -11,6 +11,9 @@ this release.
 -When changing download mirror, the plugin list cache was not refreshed
  (Matthieu Casanova)
 
+- Reload/ReloadAll now ignores buffers with the UNTITLED flag set (instead
+  of NEW_FILE). (#1720572) (Matthieu Casanova)
+
 - SF Bug #1760646: perl colorization
   Escape rules for child rule sets were being ignored. Since the perl mode
   doesn't define a top-level escape char, escaped sequences inside strings
