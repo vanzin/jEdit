@@ -336,7 +336,7 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="format-paragraph" NO_RECORD="TRUE">
+<ACTION NAME="format-paragraph">
 	<CODE>
 		textArea.formatParagraph();
 	</CODE>

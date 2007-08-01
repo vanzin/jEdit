@@ -8,8 +8,8 @@ this release.
 
 {{{ Bug Fixes
 
--When changing download mirror, the plugin list cache was not refreshed
- (Matthieu Casanova)
+- When changing download mirror, the plugin list cache was not refreshed
+  (Matthieu Casanova)
 
 - Reload/ReloadAll now ignores buffers with the UNTITLED flag set (instead
   of NEW_FILE). (#1720572) (Matthieu Casanova)
@@ -22,6 +22,9 @@ this release.
 
 - Explicit folds are now expanded when deleting the {{{ at the fold start
   (#1193683) (Matthieu Casanova)
+
+- The format-paragraph action was not recorded in macros (#1726207)
+  (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
