@@ -65,6 +65,12 @@ class ScreenLineManager
 	} //}}}
 
 	//{{{ setScreenLineCount() method
+	/**
+	 * Sets the number of screen lines that the specified physical line
+	 * is split into.
+	 * @param line the line number
+	 * @param count the line count (1 if no wrap)
+	 */
 	void setScreenLineCount(int line, int count)
 	{
 		if(count > Short.MAX_VALUE)
@@ -91,8 +97,6 @@ class ScreenLineManager
 	void reset()
 	{
 		screenLines = new short[buffer.getLineCount()];
-		for(int i = 0; i < screenLines.length; i++)
-			screenLines[i] = 0;
 	} //}}}
 
 	//{{{ contentInserted() method
@@ -139,6 +143,7 @@ class ScreenLineManager
 	private static final int SCREEN_LINES_VALID_MASK = 1;
 
 	private JEditBuffer buffer;
+	/** This array contains the line count for each physical line. */
 	private short[] screenLines;
 	//}}}
 }
