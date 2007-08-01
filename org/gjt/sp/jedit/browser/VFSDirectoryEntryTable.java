@@ -31,11 +31,15 @@ import java.awt.font.*;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.Set;
+
+import org.gjt.sp.jedit.browser.VFSDirectoryEntryTableModel.Entry;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.msg.VFSPathSelected;
 import org.gjt.sp.jedit.ActionContext;
 import org.gjt.sp.jedit.EditAction;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
@@ -63,14 +67,15 @@ public class VFSDirectoryEntryTable extends JTable
 
 		header = getTableHeader();
 		header.setReorderingAllowed(false);
+		addMouseListener(new MainMouseHandler());
 		header.addMouseListener(new MouseHandler());
 		header.setDefaultRenderer(new HeaderRenderer(
 			(DefaultTableCellRenderer)header.getDefaultRenderer()));
 
 		setRowSelectionAllowed(true);
-
+		
 		getColumnModel().addColumnModelListener(new ColumnHandler());
-
+		
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 	} //}}}
 
@@ -552,6 +557,21 @@ public class VFSDirectoryEntryTable extends JTable
 		}
 	} //}}}
 
+	//{{{ class MainMouseHandler
+	class MainMouseHandler extends MouseInputAdapter {
+
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
+			super.mouseClicked(e);
+			int ind = getSelectionModel().getMinSelectionIndex();
+			Entry node = (Entry) (getModel().getValueAt(ind, 0));
+			EditBus.send(new VFSPathSelected(this, node.dirEntry));
+		}
+		
+	
+	} //}}}
+	
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseInputAdapter
 	{

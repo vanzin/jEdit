@@ -35,6 +35,9 @@ this release.
 }}}
 {{{ API Changes
 
+- new class: org.gjt.sp.jedit.msg.VFSPathSelected EBMessage gets sent
+  whenever a node in the VFSBrowser is clicked. (#1730075 - Alan Ezust)
+
 - org.gjt.sp.jedit.gui.CompletionPopup has been extracted to provide basic
   UI of word completion. (SF.net patch #1752044 - Kazutoshi Satoda).
 }}}

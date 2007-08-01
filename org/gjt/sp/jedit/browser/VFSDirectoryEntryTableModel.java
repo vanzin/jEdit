@@ -360,13 +360,15 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 			this(dirEntry,level);
 			this.parent = parent;
 		}
-
+		
 		Entry(VFSFile dirEntry, int level)
 		{
 			this.dirEntry = dirEntry;
 			this.level = level;
 			this.extension = MiscUtilities.getFileExtension(dirEntry.getName());
 		}
+		
+		
 	} //}}}
 
 	//{{{ ExtendedAttribute class

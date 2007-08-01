@@ -74,7 +74,7 @@ class BrowserView extends JPanel
 			browser.isHorizontalLayout()
 			? JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
 			jEdit.getBooleanProperty("appearance.continuousLayout"),
-			parentScroller,tableScroller);
+			parentScroller, tableScroller);
 		splitPane.setOneTouchExpandable(true);
 
 		SwingUtilities.invokeLater(new Runnable()
