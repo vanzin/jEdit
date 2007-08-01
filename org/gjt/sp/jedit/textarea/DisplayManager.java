@@ -833,6 +833,8 @@ public class DisplayManager
 	/**
 	 * Sets the number of screen lines that the specified physical line
 	 * is split into.
+	 * @param line the line number
+	 * @param count the line count (1 if no wrap)
 	 * @since jEdit 4.2pre1
 	 */
 	private void setScreenLineCount(int line, int count)

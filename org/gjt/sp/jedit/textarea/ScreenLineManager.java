@@ -142,7 +142,7 @@ class ScreenLineManager
 	private static final int SCREEN_LINES_SHIFT = 1;
 	private static final int SCREEN_LINES_VALID_MASK = 1;
 
-	private JEditBuffer buffer;
+	private final JEditBuffer buffer;
 	/** This array contains the line count for each physical line. */
 	private short[] screenLines;
 	//}}}
