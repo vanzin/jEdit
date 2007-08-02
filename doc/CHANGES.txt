@@ -20,11 +20,14 @@ this release.
   were not being properly recognized. Fix looks for the contextual escape
   rule before trying to delegate to the parent's escape rule. (Marcelo Vanzin)
 
-- Explicit folds are now expanded when deleting the {{{ at the fold start
+- Explicit folds are now expanded when deleting the '{' at the fold start
   (#1193683) (Matthieu Casanova)
 
 - The format-paragraph action was not recorded in macros (#1726207)
   (Matthieu Casanova)
+
+- Changed the encoding of "history" file to UTF-8.
+  (SF.net Bug #1691638 - Kazutoshi Satoda)
 }}}
 {{{ Miscellaneous
 
