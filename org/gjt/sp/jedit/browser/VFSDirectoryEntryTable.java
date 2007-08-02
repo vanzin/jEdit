@@ -566,7 +566,7 @@ public class VFSDirectoryEntryTable extends JTable
 			super.mouseClicked(e);
 			int ind = getSelectionModel().getMinSelectionIndex();
 			Entry node = (Entry) (getModel().getValueAt(ind, 0));
-			EditBus.send(new VFSPathSelected(this, node.dirEntry));
+			EditBus.send(new VFSPathSelected(jEdit.getActiveView(), node.dirEntry));
 		}
 		
 	
