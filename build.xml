@@ -399,6 +399,7 @@
 				 use="true"
 				 author="true"
 				 splitindex="true"
+                 locale="en"
 				 windowtitle="jEdit API"
 				 doctitle="jEdit API"
 				 failonerror="true"
