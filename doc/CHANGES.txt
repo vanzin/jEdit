@@ -28,6 +28,10 @@ this release.
 
 - Changed the encoding of "history" file to UTF-8.
   (SF.net Bug #1691638 - Kazutoshi Satoda)
+
+- Fixed ArrayOutOfBoundsException when adding explicit fold at the end of
+  a buffer with a mode that has a "line comment" property (#1560584)
+  (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

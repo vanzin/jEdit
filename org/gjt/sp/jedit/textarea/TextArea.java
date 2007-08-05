@@ -5914,9 +5914,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if (startLineComment != null) {
 			// add a new line if there's text after the comment
 			// we're inserting
-			int nextLineOffset = buffer.getLineStartOffset(lineStart+1);
-			if (nextLineOffset - caretStart != 1)
-				start += "\n";
+			if (buffer.getLineLength(lineStart) != caretStart)
+			{
+				start += '\n';
+			}
 		}
 		else
 		{
@@ -5941,9 +5942,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			// if we're inserting a line comment into a non-empty
 			// line, we'll need to add a line break so we don't
 			// comment out existing code.
-			int nextLineOffset = buffer.getLineStartOffset(lineEnd+1);
-			if (nextLineOffset - caretEnd != 1)
-				end += "\n";
+			if (buffer.getLineLength(lineEnd) != caretEnd)
+			{
+				end += '\n';
+			}
 		}
 		else
 		{
