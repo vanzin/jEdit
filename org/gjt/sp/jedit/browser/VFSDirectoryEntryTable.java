@@ -73,9 +73,9 @@ public class VFSDirectoryEntryTable extends JTable
 			(DefaultTableCellRenderer)header.getDefaultRenderer()));
 
 		setRowSelectionAllowed(true);
-		
+
 		getColumnModel().addColumnModelListener(new ColumnHandler());
-		
+
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 	} //}}}
 
@@ -320,7 +320,7 @@ public class VFSDirectoryEntryTable extends JTable
 				ea = ac.getAction("vfs.browser.delete");
 				ac.invokeAction(evt, ea);
 				break;
-			case KeyEvent.CTRL_MASK | KeyEvent.VK_N:  
+			case KeyEvent.CTRL_MASK | KeyEvent.VK_N:
 				evt.consume();
 				ea = ac.getAction("vfs.browser.new-file");
 				ac.invokeAction(evt, ea);
@@ -558,7 +558,8 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ class MainMouseHandler
-	class MainMouseHandler extends MouseInputAdapter {
+	class MainMouseHandler extends MouseInputAdapter
+	{
 
 		@Override
 		public void mouseClicked(MouseEvent e)
@@ -566,12 +567,12 @@ public class VFSDirectoryEntryTable extends JTable
 			super.mouseClicked(e);
 			int ind = getSelectionModel().getMinSelectionIndex();
 			Entry node = (Entry) (getModel().getValueAt(ind, 0));
-			EditBus.send(new VFSPathSelected(jEdit.getActiveView(), node.dirEntry));
+			EditBus.send(new VFSPathSelected(jEdit.getActiveView(),
+							 node.dirEntry.getPath()));
 		}
-		
-	
+
 	} //}}}
-	
+
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseInputAdapter
 	{
