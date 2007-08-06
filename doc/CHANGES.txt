@@ -39,6 +39,9 @@ this release.
   the exit request originated would fail to send a ViewUpdate.CLOSED message.
   (Marcelo Vanzin)
 
+- When clearing all hypersearch results the Hypersearch dockable panel will
+  hide (Matthieu Casanova)
+  
 }}}
 {{{ API Changes
 
