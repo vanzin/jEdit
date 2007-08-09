@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- jEdit buffer-local properties:                           -->
+<!-- :xml.root=users-guide.xml:                               -->
+<!-- :maxLineLen=80:wrap=soft:                                   -->
 <chapter id="plugin-implement">
     <title>Implementing a Simple Plugin</title>
-
-    <!-- jEdit 4.3 Plugin Guide, (C) 2005, 2006 Alan Ezust        -->
-
+    <!-- jEdit 4.3 Plugin Guide, (C) 2005, 2007 Alan Ezust        -->
     <!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene      -->
-
-    <!-- jEdit buffer-local properties:                           -->
-
-    <!-- :maxLineLen=72:wrap=soft:                                   -->
-
-    <!-- :xml.root=users-guide.xml:                               -->
 
     <para>There are many applications for the leading operating systems that
     provide a <quote>scratch-pad</quote> or <quote>sticky note</quote> facility
@@ -492,6 +487,8 @@ options.quicknotepad.filepath=</programlisting>
         url="../api/org/gjt/sp/jedit/msg/package-summary.html">org.gjt.sp.jedit.msg</ulink>
         package.</para>
 
+        
+        
         <para>For example, the ViewUpdate messages are all related to the jEdit
         View, or the top-level window. If the user creates multiple Views, a
         plugin may need to know when they are created or destroyed, so it would
@@ -549,6 +546,18 @@ else if(msg instanceof ViewUpdate) {
         url="../api/org/gjt/sp/jedit/EditPlugin.html">
         <classname>EditPlugin</classname></ulink> will suffice as a plugin base
         class. Note that QuickNotepad uses the latter.</para>
+        
+        <tip>
+        <title>Using the Activity Log to see the EditBus</title>
+        
+        <para> To determine precisely which EditBus messages are being sent by
+        jEdit or the plugins, start up jEdit with an additional argument,
+        <literal>-log=5</literal>. You can set an even lower log level to see
+        further details (the default is 7). With a log level of 5 or lower, the
+        Activity Log will include [notice]s, which will show us exactly which
+        EditBus is sent and when. See <xref linkend="activity-log" /> for more
+        details. </para> </tip>
+        
     </sect1>
 
     <sect1 id="plugin-implement-actions">

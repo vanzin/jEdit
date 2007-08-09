@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- jEdit buffer-local properties: -->
+<!-- :indentSize=4:noTabs=true: -->
+<!-- :xml.root=users-guide.xml: -->
 <appendix id="activity-log">
     <title>The Activity Log</title>
-
-    <!-- jEdit buffer-local properties: -->
-
-    <!-- :indentSize=1:noTabs=true: -->
-
-    <!-- :xml.root=users-guide.xml: -->
 
     <para>The <firstterm>activity log</firstterm> is very useful for
     troubleshooting problems, and helps when developing plugins.</para>
@@ -43,6 +40,7 @@
         <listitem>
             <para>Information about loaded plugins.</para>
         </listitem>
+
     </itemizedlist>
 
     <para>While jEdit is running, the log file on disk may not always accurately
