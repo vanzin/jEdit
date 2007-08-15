@@ -47,7 +47,7 @@ public class FileVFS extends VFS
 	//{{{ FileVFS constructor
 	public FileVFS()
 	{
-		super("file",READ_CAP | WRITE_CAP | DELETE_CAP
+		super("file",READ_CAP | WRITE_CAP | BROWSE_CAP | DELETE_CAP
 			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP
 			| ((OperatingSystem.isCaseInsensitiveFS())
 			? CASE_INSENSITIVE_CAP : 0),
