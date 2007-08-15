@@ -32,8 +32,10 @@
 		<KEYWORDS>
 			<KEYWORD1>as</KEYWORD1>
 			<KEYWORD1>block</KEYWORD1>
+			<KEYWORD1>blocktrans</KEYWORD1>
 			<KEYWORD1>by</KEYWORD1>
 			<KEYWORD1>endblock</KEYWORD1>
+			<KEYWORD1>endblocktrans</KEYWORD1>
 			<KEYWORD1>comment</KEYWORD1>
 			<KEYWORD1>endcomment</KEYWORD1>
 			<KEYWORD1>cycle</KEYWORD1>
@@ -60,6 +62,7 @@
 			<KEYWORD1>parsed</KEYWORD1>
 			<KEYWORD1>regroup</KEYWORD1>
 			<KEYWORD1>ssi</KEYWORD1>
+			<KEYWORD1>trans</KEYWORD1>
 			<KEYWORD1>with</KEYWORD1>
 			<KEYWORD1>widthratio</KEYWORD1>
 		</KEYWORDS>
