@@ -50,6 +50,9 @@ this release.
 
 - org.gjt.sp.jedit.gui.CompletionPopup has been extracted to provide basic
   UI of word completion. (SF.net patch #1752044 - Kazutoshi Satoda).
+
+- org.gjt.sp.jedit.io.VFS.BROWSE_CAP is not deprecated anymore and browseable
+  VFS must define this property (Matthieu Casanova)
 }}}
 
 }}}

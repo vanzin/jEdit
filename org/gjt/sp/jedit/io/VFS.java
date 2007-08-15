@@ -120,7 +120,8 @@ public abstract class VFS
 	public static final int WRITE_CAP = 1 << 1;
 
 	/**
-	 * @deprecated Do not define this capability.<p>
+	 * Browse capability
+	 * @since jEdit 4.3pre11
 	 *
 	 * This was the official API for adding items to a file
 	 * system browser's <b>Plugins</b> menu in jEdit 4.1 and earlier. In
@@ -708,12 +709,12 @@ public abstract class VFS
 		throws IOException
 	{
 		Log.log(Log.DEBUG,this,"Listing " + directory);
-		List files = new ArrayList(100);
+		List<String> files = new ArrayList<String>(100);
 
-		listFiles(session,new ArrayList(),files,directory,filter,
+		listFiles(session,new HashSet<String>(), files,directory,filter,
 			recursive, comp, skipBinary, skipHidden);
 
-		String[] retVal = (String[])files.toArray(new String[files.size()]);
+		String[] retVal = files.toArray(new String[files.size()]);
 
 		Arrays.sort(retVal,new MiscUtilities.StringICaseCompare());
 
@@ -987,7 +988,7 @@ public abstract class VFS
 
 			for(int i = 0; i < colors.size(); i++)
 			{
-				ColorEntry entry = (ColorEntry)colors.elementAt(i);
+				ColorEntry entry = colors.get(i);
 				if(entry.re.matcher(name).matches())
 					return entry.color;
 			}
@@ -1040,8 +1041,8 @@ public abstract class VFS
 	private String name;
 	private int caps;
 	private String[] extAttrs;
-	private static Vector colors;
-	private static Object lock = new Object();
+	private static List<ColorEntry> colors;
+	private static final Object lock = new Object();
 
 	//{{{ Class initializer
 	static
@@ -1061,9 +1062,10 @@ public abstract class VFS
 		});
 	} //}}}
 
+	private long val;
 	//{{{ recursive listFiles() method
-	private void listFiles(Object session, List stack,
-		List files, String directory, VFSFileFilter filter, boolean recursive,
+	private void listFiles(Object session, Collection<String> stack,
+		List<String> files, String directory, VFSFileFilter filter, boolean recursive,
 		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
 		if(stack.contains(directory))
@@ -1144,7 +1146,7 @@ public abstract class VFS
 	{
 		synchronized(lock)
 		{
-			colors = new Vector();
+			colors = new ArrayList<ColorEntry>();
 
 			if(!jEdit.getBooleanProperty("vfs.browser.colorize"))
 				return;
@@ -1155,7 +1157,7 @@ public abstract class VFS
 			{
 				try
 				{
-					colors.addElement(new ColorEntry(
+					colors.add(new ColorEntry(
 						Pattern.compile(StandardUtilities.globToRE(glob)),
 						jEdit.getColorProperty(
 						"vfs.browser.colors." + i + ".color",
