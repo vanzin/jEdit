@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre11
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda,
-Björn "Vampire" Kautler and Marcelo Vanzin for contributing to
-this release.
+Björn "Vampire" Kautler, Marcelo Vanzin and Daniel Hahler for contributing
+to this release.
 
 {{{ Bug Fixes
 
@@ -42,6 +42,12 @@ this release.
 - When clearing all hypersearch results the Hypersearch dockable panel will
   hide (Matthieu Casanova)
   
+}}}
+{{{ Editing
+
+- Improvements to PHP edit mode, SF patch 1740618 and bug 1716134
+  (Daniel Hahler)
+
 }}}
 {{{ API Changes
 
