@@ -85,6 +85,8 @@
 
 		<SEQ TYPE="OPERATOR" DELEGATE="PROP_VALUE">:</SEQ>
 
+		<IMPORT DELEGATE="GLOBAL" />
+
 		<KEYWORDS>
 			<!-- CSS2 properties -->
 
@@ -245,8 +247,6 @@
 			<KEYWORD2>speak-numeral</KEYWORD2>
 			<KEYWORD2>speak-header-cell</KEYWORD2>
 		</KEYWORDS>
-
-		<IMPORT DELEGATE="GLOBAL" />
 	</RULES>
 
 
@@ -282,6 +282,8 @@
 		<!-- Delegate back: -->
 		<SEQ TYPE="OPERATOR" DELEGATE="PROPERTIES">;</SEQ>
 		<SEQ TYPE="INVALID" DELEGATE="MAIN">}</SEQ> <!-- end properties block, but it's invalid -->
+
+		<IMPORT DELEGATE="GLOBAL" />
 
 		<KEYWORDS>
 			<KEYWORD3>left</KEYWORD3>
@@ -632,8 +634,6 @@
 			<KEYWORD1>rgb</KEYWORD1>
 			<KEYWORD1>url</KEYWORD1>
 		</KEYWORDS>
-
-		<IMPORT DELEGATE="GLOBAL" />
 	</RULES>
 
 
@@ -676,4 +676,4 @@
 
 </MODE>
 
- 	  	 
+
