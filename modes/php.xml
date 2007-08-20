@@ -41,10 +41,12 @@ TODO:
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
-		<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
-		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+		<!-- Default comment props (used when a ruleset has no other props) -->
+		<PROPERTY NAME="commentStart" VALUE="/*" />
+		<PROPERTY NAME="commentEnd" VALUE="*/" />
+		<PROPERTY NAME="lineComment" VALUE="//" />
 
+		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 
 		<!-- Auto indent -->
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
@@ -61,7 +63,14 @@ TODO:
 
 
 	<RULES IGNORE_CASE="TRUE">
-		<!-- PHP -->
+		<PROPS>
+			<!-- comment props for "HTML"/not-PHP: -->
+			<PROPERTY NAME="commentStart" VALUE="&lt;!--" />
+			<PROPERTY NAME="commentEnd" VALUE="--&gt;" />
+			<PROPERTY NAME="lineComment" VALUE="" />
+		</PROPS>
+
+		<!-- regular PHP tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="PHP">
 			<BEGIN>&lt;?php</BEGIN>
 			<END>?&gt;</END>
@@ -153,6 +162,11 @@ TODO:
 	</RULES>
 
 	<RULES SET="CSS" DEFAULT="MARKUP">
+		<!-- CSS has no line comment: -->
+		<PROPS>
+			<PROPERTY NAME="lineComment" VALUE="" />
+		</PROPS>
+
 		<SPAN DELEGATE="CSS"><!-- give priority to PHP -->
 			<BEGIN>(</BEGIN>
 			<END>)</END>
@@ -286,12 +300,6 @@ TODO:
 
 
 	<RULES SET="PHP" ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
-		<PROPS>
-			<PROPERTY NAME="commentStart" VALUE="/*" />
-			<PROPERTY NAME="commentEnd" VALUE="*/" />
-			<PROPERTY NAME="lineComment" VALUE="//" />
-		</PROPS>
-
 		<!-- Silly comment -->
 		<SEQ TYPE="COMMENT1">/**/</SEQ>
 

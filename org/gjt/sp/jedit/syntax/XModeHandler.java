@@ -32,6 +32,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 //}}}
@@ -117,6 +119,16 @@ public abstract class XModeHandler extends DefaultHandler
 		TagDecl tag = popElement();
 		if (name.equals(tag.tagName))
 		{
+			if(tag.lastDelegateSet != null
+					&& ! tag.tagName.equals("IMPORT")
+					&& ! tag.lastDelegateSet.getModeName().equals(modeName))
+			{
+				Mode mode = jEdit.getMode(tag.lastDelegateSet.getModeName());
+				if( ! reloadModes.contains(mode) )
+				{
+					reloadModes.add(mode);
+				}
+			}
 			//{{{ PROPERTY
 			if (tag.tagName.equals("PROPERTY"))
 			{
@@ -374,6 +386,7 @@ public abstract class XModeHandler extends DefaultHandler
 	{
 		props = new Hashtable<String, String>();
 		pushElement(null, null);
+		reloadModes = new Vector<Mode>();
 	} //}}}
 
 	//{{{ endDocument() method
@@ -383,6 +396,11 @@ public abstract class XModeHandler extends DefaultHandler
 		for(int i = 0; i < rulesets.length; i++)
 		{
 			rulesets[i].resolveImports();
+		}
+		for(Mode mode : reloadModes)
+		{
+			mode.setTokenMarker(null);
+			mode.loadIfNecessary();
 		}
 	} //}}}
 
@@ -445,6 +463,11 @@ public abstract class XModeHandler extends DefaultHandler
 	private Hashtable<String, String> props;
 	private Hashtable<String, String> modeProps;
 	private ParserRuleSet rules;
+	/**
+	 *  A list of modes to be reloaded at the end, loaded through DELEGATEs
+	 *  @see http://sourceforge.net/tracker/index.php?func=detail&aid=1742250&group_id=588&atid=100588
+	 */
+	private Vector<Mode> reloadModes;
 	//}}}
 
 	//{{{ addKeyword() method

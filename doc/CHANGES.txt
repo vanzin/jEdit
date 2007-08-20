@@ -45,7 +45,7 @@ to this release.
 }}}
 {{{ Editing
 
-- Improvements to PHP edit mode, SF patch 1740618 and bug 1716134
+- Improvements to PHP edit mode (patch #1740618, bugs #1716134, #1504855)
   (Daniel Hahler)
 
 }}}
