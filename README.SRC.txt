@@ -160,12 +160,14 @@ General jEdit documentation can be found in the 'doc' directory.
  - org.gjt.sp.util.WorkThreadPool: a pool of threads executing requests
    from a queue, enforcing various concurrency requirements.
 
-Tips for Eclipse users:
-  Some of the source directories are only needed for building packages on
-certain platforms. If you add jEdit source to an IDE like eclipse that tries
+* Tips for Eclipse users:
+
+Some of the source directories are only needed for building packages on
+certain platforms. If you add jEdit source to an IDE like Eclipse that tries
 to build everything, you'll get some errors from these directories unless
-you have the right libraries. However, if you tell eclipse to exclude these
+you have the right libraries. However, if you tell Eclipse to exclude these
 directories, you can still build jEdit from source. Follow these steps:
 
-  Project properties - java build path - source - excluded - edit - add multiple
-  Add these subdirs: jars, net, de, build
+ - Project properties - Java build path 
+ - Source - Excluded dirs - Edit - Add multiple
+ - Add these subdirs: jars, net, de, build
