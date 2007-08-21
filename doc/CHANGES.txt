@@ -41,6 +41,9 @@ to this release.
 
 - When clearing all hypersearch results the Hypersearch dockable panel will
   hide (Matthieu Casanova)
+
+- The release note of the plugins in the PluginManager install panel now displays
+  html (Matthieu Casanova)
   
 }}}
 {{{ Editing

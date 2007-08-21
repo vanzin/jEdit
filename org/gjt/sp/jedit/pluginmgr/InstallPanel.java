@@ -47,25 +47,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.AbstractAction;
-import javax.swing.ActionMap;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.InputMap;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -78,7 +61,6 @@ import javax.swing.table.TableColumn;
 
 import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
-import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.jEdit;
@@ -86,7 +68,6 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -660,13 +641,14 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ PluginInfoBox class
-	class PluginInfoBox extends JTextArea implements ListSelectionListener
+	class PluginInfoBox extends JTextPane implements ListSelectionListener
 	{
 		PluginInfoBox()
 		{
 			setEditable(false);
-			setLineWrap(true);
-			setWrapStyleWord(true);
+            setEditorKit(new HTMLEditorKit());
+//			setLineWrap(true);
+//			setWrapStyleWord(true);
 			table.getSelectionModel().addListSelectionListener(this);
 		}
 
@@ -680,7 +662,9 @@ class InstallPanel extends JPanel implements EBComponent
 					.get(table.getSelectedRow());
 				text = jEdit.getProperty("install-plugins.info",
 					new String[] {entry.author,entry.date,entry.description});
-			}
+                text = text.replace("\n","<br/>");
+                text = "<html>"+text+"</html>";
+            }
 			setText(text);
 			setCaretPosition(0);
 		}
