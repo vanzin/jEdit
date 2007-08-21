@@ -32,6 +32,9 @@ to this release.
 - Fixed ArrayOutOfBoundsException when adding explicit fold at the end of
   a buffer with a mode that has a "line comment" property (#1560584)
   (Matthieu Casanova)
+
+- SF Bug #1742250: use of DELEGATE in mode rules can cause rules to be
+  missing. (Daniel Hahler)
 }}}
 {{{ Miscellaneous
 
