@@ -83,6 +83,24 @@ public class BufferAutosaveRequest extends BufferIORequest
 			}
 			catch(Exception e)
 			{
+				Log.log(Log.ERROR,this,e);
+				String[] pp = { e.toString() };
+				VFSManager.error(view,path,"ioerror.write-error",pp);
+
+				// Incomplete autosave file should not exist.
+				if(out != null)
+				{
+					try
+					{
+						out.close();
+						out = null;
+						vfs._delete(session,path,view);
+					}
+					catch(IOException ioe)
+					{
+						Log.log(Log.ERROR,this,ioe);
+					}
+				}
 			}
 			//finally
 			//{

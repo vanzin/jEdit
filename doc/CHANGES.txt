@@ -35,6 +35,9 @@ to this release.
 
 - SF Bug #1742250: use of DELEGATE in mode rules can cause rules to be
   missing. (Daniel Hahler)
+
+- Failure of autosave which was silently ignored is now handled and reported.
+  (SF.net Bug #1775281 - Kazutoshi Satoda)
 }}}
 {{{ Miscellaneous
 
