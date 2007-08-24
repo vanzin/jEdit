@@ -1,3 +1,8 @@
+Mac OS Plugin 3.1
+- Fixes a thread-safety issue that often hangs jEdit when opening files using
+	Mac machinery -- i.e. the Finder, drag-n-drop on the Dock icon, or the "open"
+	tool from the command line. (#1780421 - ian davis)
+
 Mac OS Plugin 3.0
 - All native calls now use the Cocoa API. (Java 1.4.1 is required)
 - Old MRJ methods replaced with com.apple.eawt.

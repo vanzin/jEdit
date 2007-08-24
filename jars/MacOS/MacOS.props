@@ -7,7 +7,7 @@ plugin.macos.MacOSPlugin.menu.code=new macos.menu.MacOSMenu();
 #
 plugin.macos.MacOSPlugin.name=Mac OS Plugin
 plugin.macos.MacOSPlugin.author=Kris Kopicki
-plugin.macos.MacOSPlugin.version=3.0b
+plugin.macos.MacOSPlugin.version=3.1
 plugin.macos.MacOSPlugin.docs=MacOS.html
 
 #
