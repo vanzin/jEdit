@@ -470,4 +470,5 @@
 <MODE NAME="zpt"		FILE="zpt.xml"
 				FILE_NAME_GLOB="*.{pt,zpt}"/>
 
+<MODE NAME="rfc" FILE="rfc.xml" FILE_NAME_GLOB="rfc*.txt" />
 </MODES>

@@ -56,6 +56,8 @@ to this release.
 
 - Improvements to PHP edit mode (patch #1740618, bugs #1716134, #1504855)
   (Daniel Hahler)
+  
+- Added RFC edit mode (Matthieu Casanova)
 
 }}}
 {{{ API Changes
