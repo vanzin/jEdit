@@ -233,25 +233,34 @@ public class Delegate extends ApplicationAdapter
 	//{{{ applicationOpenFiles() method
 	public void applicationOpenFiles(NSApplication sender, NSArray filenames)
 	{
+		// Must be declared final to be used by inner class
+		final Collection files = new ArrayList();
 		int count = filenames.count();
 		for (int i=0; i<count; i++)
+			files.add(new File((String)filenames.objectAtIndex(i)));
+		
+		SwingUtilities.invokeLater(new Runnable()
 		{
-			File file = new File((String)filenames.objectAtIndex(i));
-			Buffer buffer;
-
-			View view = jEdit.getActiveView();
-			if(view == null)
-				view = PerspectiveManager.loadPerspective(true);
-
-			if (file.isDirectory())
+			public void run()
 			{
-				VFSBrowser.browseDirectory(jEdit.getActiveView(),file.getPath());
-				return;
+				for(Iterator iter = files.iterator(); iter.hasNext(); )
+				{
+					File file = (File) iter.next();
+					View view = jEdit.getActiveView();
+					if(view == null)
+						view = PerspectiveManager.loadPerspective(true);
+					
+					if (file.isDirectory())
+					{
+						VFSBrowser.browseDirectory(jEdit.getActiveView(),file.getPath());
+						return;
+					}
+					
+					if (jEdit.openFile(view,file.getPath()) == null)
+						Log.log(Log.ERROR,this,"Error opening file.");
+				}
 			}
-
-			if (jEdit.openFile(view,file.getPath()) == null)
-				Log.log(Log.ERROR,this,"Error opening file.");
-		}
+		});
 	} //}}}
 
 	//{{{ applicationShouldHandleReopen() method
