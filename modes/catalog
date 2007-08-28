@@ -153,6 +153,9 @@
 <!-- Used by Andre Kaplan's Hex plugin -->
 <MODE NAME="hex"		FILE="hex.xml" />
 
+<MODE NAME="hlsl"		FILE="hlsl.xml"
+				FILE_NAME_GLOB="*.fx" />
+
 <MODE NAME="htaccess"			FILE="htaccess.xml"
 				FILE_NAME_GLOB=".htaccess" />
 

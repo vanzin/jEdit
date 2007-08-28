@@ -62,6 +62,8 @@ to this release.
 - reST mode: improved handling of comments and literal blocks (SF: #1748471)
   (strank)
 
+- Added HLSL edit mode (SF: #1724921) (Adam Sawicki)
+
 }}}
 {{{ API Changes
 
