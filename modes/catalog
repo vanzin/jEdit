@@ -81,6 +81,9 @@
 <MODE NAME="cil"		FILE="cil.xml"
 				FILE_NAME_GLOB="*.il" />
 
+<MODE NAME="clips"		FILE="clips.xml"
+				FILE_NAME_GLOB="*.clp" />
+
 <MODE NAME="cobol"		FILE="cobol.xml"
 				FILE_NAME_GLOB="*.cbl" />
 

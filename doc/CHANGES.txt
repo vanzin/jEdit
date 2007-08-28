@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre11
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda,
-Björn "Vampire" Kautler, Marcelo Vanzin and Daniel Hahler for contributing
-to this release.
+Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki
+and Orhan Alkan for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -63,6 +63,8 @@ to this release.
   (strank)
 
 - Added HLSL edit mode (SF: #1724921) (Adam Sawicki)
+
+- Added CLIPS edit mode (SF: #1745999) (Orhan Alkan)
 
 }}}
 {{{ API Changes
