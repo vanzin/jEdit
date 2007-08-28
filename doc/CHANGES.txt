@@ -59,6 +59,9 @@ to this release.
   
 - Added RFC edit mode (Matthieu Casanova)
 
+- reST mode: improved handling of comments and literal blocks (SF: #1748471)
+  (strank)
+
 }}}
 {{{ API Changes
 

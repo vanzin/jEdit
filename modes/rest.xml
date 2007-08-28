@@ -4,9 +4,9 @@
 
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="lineComment" VALUE=".."/>
+		<PROPERTY NAME="lineComment" VALUE=".. "/>
 		<!-- indent after literal blocks and directives -->
-		<PROPERTY NAME="indentNextLines" VALUE=".+::$"/>
+		<PROPERTY NAME="indentNextLines" VALUE=".*::$"/>
 	</PROPS>
 
 	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="FALSE" ESCAPE="\">
@@ -61,7 +61,7 @@
 		>\*[^\s*][^*]*\*</SEQ_REGEXP>
 
 		<!-- comments -->
-		<EOL_SPAN AT_LINE_START="TRUE" TYPE="COMMENT1">..</EOL_SPAN>
+		<EOL_SPAN AT_LINE_START="TRUE" TYPE="COMMENT1">.. </EOL_SPAN>
 
 		<!-- links: `...`_ or `...`__ -->
 		<SEQ_REGEXP
