@@ -346,12 +346,11 @@
                 <answer>
                     <para>The jEdit application is free, <quote>Open
                     Source</quote> software released under the <ulink
-                    url="http://www.gnu.org/licenses/licenses.html#GPL"> GNU
-                    General Public License</ulink>. This ensures that jEdit and
+                    url="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html"> GNU
+                    General Public License 2.0</ulink>. This ensures that jEdit and
                     its source code remains freely available for use and
                     distribution by the public. For specific copyright
-                    questions, you should review the General Public License and
-                    seek appropriate advice. Broadly speaking, there are no
+                    questions, you should review the GPL 2.0 and seek appropriate advice. Broadly speaking, there are no
                     restrictions on the use of the program as a text editor, and
                     its source code can be copied or modified for use in another
                     program that is governed by the General Public

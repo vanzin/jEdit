@@ -555,8 +555,8 @@ else if(msg instanceof ViewUpdate) {
         <literal>-log=5</literal>. You can set an even lower log level to see
         further details (the default is 7). With a log level of 5 or lower, the
         Activity Log will include [notice]s, which will show us exactly which
-        EditBus is sent and when. See <xref linkend="activity-log" /> for more
-        details. </para> </tip>
+        EditBus message is sent and when. See <xref linkend="activity-log" />
+        for more details. </para> </tip>
         
     </sect1>
 
@@ -1151,7 +1151,7 @@ else if(msg instanceof ViewUpdate) {
     </sect1>
 
     <sect1 id="plugin-implement-building">
-        <title>build.xml - the build file</title>
+        <title>The build.xml Ant build file</title>
 
         <para>We have already outlined the contents of the user action catalog,
         the properties file and the documentation file in our earlier
@@ -1184,11 +1184,9 @@ else if(msg instanceof ViewUpdate) {
         url="https://jedit.svn.sourceforge.net/svnroot/jedit/build-support/trunk/">jEdit's
         SVN repository</ulink>. It contains the common build steps used to build the core jEdit plugins, and some example <literal>build.properties.sample</literal> files which you can adapt for use with your development environment.</para>
 
-        <para>Because this build file and most other core plugins import a <literal>build.properties</literal> file from the current and the parent directories, it is possible in most cases for you to locate all the necessary properties in a single property file. 
-        </para>
         
         <para>Customizing this build file for a different plugin will likely
-        only require three changes:</para>
+        only require three changes to build.xml file:</para>
 
         <itemizedlist>
             <listitem>
@@ -1205,20 +1203,23 @@ else if(msg instanceof ViewUpdate) {
             </listitem>
         </itemizedlist>
 
-        <tip>
-            <para>For a full discussion of the <filename>Ant</filename> file
-            format and command syntax, you should consult the <ulink
-            url="http://jakarta.apache.org/ant/manual/index.html">Ant
-            documentation</ulink>, also available through jEdit's help system if
-            you installed the Ant Plugin. Further, the XML plugin gives you
-            completion for both elements <emphasis>and</emphasis> attributes
-            when editing ANT files. The Console plugin provides you with an ANT
-            button which you can bind to keyboard actions. Then, of course,
-            there are the AntFarm and Antelope plugins which also proivde you
-            with alternate means to execute Ant targets through the
-            Console.</para>
-        </tip>
-    </sect1>
+        <para>Because this build file and the one of most plugins import a
+        <literal>build.properties</literal> file from the current and the parent
+        directories, it is possible to build most of jEdit's plugins in a
+        uniform way by setting the common properties in a single
+        <literal>build.properties</literal> file, placed in the plugin source's
+        parent directory. </para>
+        
+        <tip> <para>For a full discussion of the <filename>Ant</filename> file
+        format and command syntax, you should consult the <ulink
+        url="http://jakarta.apache.org/ant/manual/index.html">Ant
+        documentation</ulink>, also available through jEdit's help system if you
+        installed the Ant Plugin. When editing Ant build files, the XML plugin
+        gives you completion tips for both elements <emphasis>and</emphasis>
+        attributes. The Console plugin provides you with an ANT button which you
+        can bind to keyboard actions. In addition, there are the AntFarm and
+        Antelope plugins which also proivde you with alternate means to execute
+        Ant targets through the Console.</para> </tip> </sect1>
 
     <sect1 id="plugin-implement-reloading">
         <title>Reloading the Plugin</title>
