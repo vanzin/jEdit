@@ -53,6 +53,9 @@ Scott LeBaron, and Orhan Alkan for contributing to this release.
 
 - The release note of the plugins in the PluginManager install panel now displays
   html (Matthieu Casanova)
+
+- When dropping a directory on the textarea, the VFSBrowser will now browse to it
+  (Matthieu Casanova)
   
 }}}
 {{{ Editing

@@ -23,19 +23,28 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import javax.swing.*;
-import java.awt.datatransfer.*;
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-import java.net.URI;
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.EditPane;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.jEdit;
+
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.io.FileVFS;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.WorkRequest;
+
+import javax.swing.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.net.URI;
+import java.util.List;
 //}}}
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 public class TextAreaTransferHandler extends TransferHandler
 {
 	/* I assume that there can be only one drag operation at the time */
@@ -100,13 +109,15 @@ public class TextAreaTransferHandler extends TransferHandler
 				
 				for (int i = 0;i<dataFlavors.length;i++) {
 					DataFlavor dataFlavor = dataFlavors[i];
-					if (dataFlavor.getPrimaryType().equals("text")&&dataFlavor.getSubType().equals("uri-list")&&(dataFlavor.getRepresentationClass()==String.class)) {
+					if ("text".equals(dataFlavor.getPrimaryType()) &&
+					    "uri-list".equals(dataFlavor.getSubType()) &&
+					    dataFlavor.getRepresentationClass() == String.class) {
 						uriListStringDataFlavor = dataFlavor;
 						break;
 					}
  				}
 				
-				if ((uriListStringDataFlavor!=null)&&t.isDataFlavorSupported(uriListStringDataFlavor))
+				if (uriListStringDataFlavor != null &&t.isDataFlavorSupported(uriListStringDataFlavor))
 				{
 					returnValue = importURIList(c,t,uriListStringDataFlavor);
 				}
@@ -137,29 +148,34 @@ public class TextAreaTransferHandler extends TransferHandler
 		EditPane editPane = (EditPane)
 			GUIUtilities.getComponentParent(
 			c,EditPane.class);
-
+		View view = editPane.getView();
 		Buffer buffer = null;
 
-		Object data = t.getTransferData(
-			DataFlavor.javaFileListFlavor);
+		List<File> data = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
 
-		Iterator iterator = ((List)data)
-			.iterator();
+		boolean browsedDirectory = false;
 
-		while(iterator.hasNext())
+		for (File file : data)
 		{
-			File file = (File)
-				iterator.next();
+			if (file.isDirectory())
+			{
+				if (!browsedDirectory)
+				{
+					VFSBrowser.browseDirectory(view, file.getPath());
+					browsedDirectory = true;
+				}
+				continue;
+			}
 			Buffer _buffer = jEdit.openFile(null,
-				file.getPath());
-			if(_buffer != null)
+							file.getPath());
+			if (_buffer != null)
 				buffer = _buffer;
 		}
 
 		if(buffer != null)
 			editPane.setBuffer(buffer);
-		editPane.getView().toFront();
-		editPane.getView().requestFocus();
+		view.toFront();
+		view.requestFocus();
 		editPane.requestFocus();
 
 		return true;
@@ -171,7 +187,7 @@ public class TextAreaTransferHandler extends TransferHandler
 	{
 		String str = (String) t.getTransferData(uriListStringDataFlavor);
 
-		Log.log(Log.DEBUG,this,"=> URIList \""+str+"\"");
+		Log.log(Log.DEBUG,this,"=> URIList \""+str+ '\"');
 		
 		JEditTextArea textArea = (JEditTextArea) c;
 		if (dragSource == null)
@@ -189,7 +205,7 @@ public class TextAreaTransferHandler extends TransferHandler
 					
 					if ("file".equals(uri.getScheme()))
 					{
-						org.gjt.sp.jedit.io.VFSManager.runInWorkThread(new DraggedURLLoader(textArea,uri.getPath()));
+						VFSManager.runInWorkThread(new DraggedURLLoader(textArea,uri.getPath()));
 						found = true;
 					}
 					else
@@ -223,7 +239,7 @@ public class TextAreaTransferHandler extends TransferHandler
 		String str = (String)t.getTransferData(
 			DataFlavor.stringFlavor);
 		str = str.trim();
-		Log.log(Log.DEBUG,this,"=> String \""+str+"\"");
+		Log.log(Log.DEBUG,this,"=> String \""+str+ '\"');
 		
 		JEditTextArea textArea = (JEditTextArea)c;
 		if (dragSource == null)
@@ -237,8 +253,8 @@ public class TextAreaTransferHandler extends TransferHandler
 				String str0 = components[i];
 				// Only examine the string for a URL if it came from
 				// outside of jEdit.
-				org.gjt.sp.jedit.io.VFS vfs = org.gjt.sp.jedit.io.VFSManager.getVFSForPath(str0);
-				if (!(vfs instanceof org.gjt.sp.jedit.io.FileVFS) || str.startsWith("file://"))
+				VFS vfs = VFSManager.getVFSForPath(str0);
+				if (!(vfs instanceof FileVFS) || str.startsWith("file://"))
 				{
 				
 //					str = str.replace('\n',' ').replace('\r',' ').trim();
@@ -247,7 +263,7 @@ public class TextAreaTransferHandler extends TransferHandler
 						str0 = str0.substring(7);
 					}
 					
-					org.gjt.sp.jedit.io.VFSManager.runInWorkThread(new DraggedURLLoader(textArea,str0));
+					VFSManager.runInWorkThread(new DraggedURLLoader(textArea,str0));
 				}
 				found = true;
 				
@@ -267,7 +283,7 @@ public class TextAreaTransferHandler extends TransferHandler
 		}
 		
 		
-		sameTextArea = (textArea == dragSource);
+		sameTextArea = textArea == dragSource;
 
 		int caret = textArea.getCaretPosition();
 		Selection s = textArea.getSelectionAtOffset(caret);
@@ -295,8 +311,8 @@ public class TextAreaTransferHandler extends TransferHandler
 				Selection[] selections = textArea.getSelection();
 				for (int i=0;i<selections.length;i++)
 				{
-					if (selections[i].end<(insertPos+insertOffset))
-						insertOffset-=(selections[i].end-selections[i].start);
+					if (selections[i].end < insertPos + insertOffset)
+						insertOffset -= selections[i].end - selections[i].start;
 				}
 			}
 			else
@@ -418,14 +434,13 @@ public class TextAreaTransferHandler extends TransferHandler
 	} //}}}
 
 	//{{{ DraggedURLLoader
-	class DraggedURLLoader extends org.gjt.sp.util.WorkRequest
+	static class DraggedURLLoader extends WorkRequest
 	{
 		private JEditTextArea textArea;
 		private String url;
 		
-		public DraggedURLLoader(JEditTextArea textArea, String url)
+		DraggedURLLoader(JEditTextArea textArea, String url)
 		{
-			super();
 			this.textArea = textArea;
 			this.url = url;
 		}
