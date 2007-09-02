@@ -205,8 +205,8 @@ class BufferHandler implements BufferListener
 
 			if(numLines != 0)
 			{
-				firstLine.preContentRemoved(startLine,numLines);
-				scrollLineCount.preContentRemoved(startLine,numLines);
+				firstLine.preContentRemoved(startLine,offset, numLines);
+				scrollLineCount.preContentRemoved(startLine, offset, numLines);
 			}
 
 			if(delayedUpdateEnd >= startLine)

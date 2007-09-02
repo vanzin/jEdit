@@ -85,9 +85,10 @@ abstract class Anchor
 	 * Method called before a content is removed from a buffer.
 	 *
 	 * @param startLine the first line of the removed content
+	 * @param offset the offset in the start line
 	 * @param numLines the number of removed lines
 	 */
-	void preContentRemoved(int startLine, int numLines)
+	void preContentRemoved(int startLine, int offset, int numLines)
 	{
 		if(Debug.SCROLL_DEBUG)
 			Log.log(Log.DEBUG,this,"preContentRemoved() before:" + this);
@@ -101,15 +102,44 @@ abstract class Anchor
 				int end = Math.min(startLine + numLines, physicalLine);
 				//Check the lines from the beginning of the removed content to the end (or the physical
 				//line of the Anchor if it is before the end of the removed content
-				for(int i = startLine + 1; i <= end; i++)
+
+				int loopStart = startLine + 1;
+				if (!textArea.softWrap)
 				{
-					//XXX
-					if(displayManager.isLineVisible(i - 1))
+					// If no soft wrap, we don't need all this code
+					scrollLine -= end - startLine;
+				}
+				else
+				{
+					//{{{ treatment if the beginning of the deleted content is inside a physical line that has several line counts
+					if (displayManager.isLineVisible(startLine))
 					{
-						scrollLine -=
-							displayManager
-								.screenLineMgr
-								.getScreenLineCount(i - 1);
+						int screenLineCount = displayManager.screenLineMgr.getScreenLineCount(startLine);
+						if (screenLineCount > 1)
+						{
+							int lineStartOffset = textArea.getLineStartOffset(startLine);
+
+							int startScreenLine = textArea.getScreenLineOfOffset(lineStartOffset);
+							int deleteStartScreenLine = textArea.getScreenLineOfOffset(offset);
+							if (startScreenLine != deleteStartScreenLine)
+							{
+								loopStart = startLine + 2;
+								scrollLine -= screenLineCount - deleteStartScreenLine + startScreenLine;
+							}
+						}
+					}
+					//}}}
+
+					for(int i = loopStart; i <= end; i++)
+					{
+						//XXX
+						if(displayManager.isLineVisible(i - 1))
+						{
+							scrollLine -=
+								displayManager
+									.screenLineMgr
+									.getScreenLineCount(i - 1);
+						}
 					}
 				}
 				physicalLine -= end - startLine;

@@ -26,6 +26,8 @@ import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.util.Log;
 
 /**
+ * This Anchor is the first visible line of the textarea.
+ *
  * @author Slava Pestov
  * @version $Id$
  */

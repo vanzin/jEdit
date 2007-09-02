@@ -8,6 +8,9 @@ Scott LeBaron, and Orhan Alkan for contributing to this release.
 
 {{{ Bug Fixes
 
+- When removing content in a buffer when having softwrap on a NPE was
+  happenning in some case (#1775258) (Matthieu Casanova)
+
 - When changing download mirror, the plugin list cache was not refreshed
   (Matthieu Casanova)
 
