@@ -884,7 +884,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjï¿½rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1842,6 +1842,9 @@ options.shortcuts.select.tooltip=You can select globals, macros, or plugin short
 options.shortcuts.name=Command
 options.shortcuts.shortcut1=Primary shortcut
 options.shortcuts.shortcut2=Alternative shortcut
+options.shortcuts.filter.label=Filter:
+options.shortcuts.filter.tooltip=Show only actions whose name contains this text
+options.shortcuts.clear.label=Clear
 
 grab-key.title=Specify Shortcut
 grab-key.caption=Press the desired shortcut for "{0}", then click OK.

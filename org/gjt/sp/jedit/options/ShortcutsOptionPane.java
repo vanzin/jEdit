@@ -23,6 +23,8 @@
 
 package org.gjt.sp.jedit.options;
 
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -31,6 +33,7 @@ import java.util.*;
 import java.util.List;
 
 import org.gjt.sp.jedit.gui.GrabKeyDialog;
+import org.gjt.sp.jedit.gui.GrabKeyDialog.KeyBinding;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -50,7 +53,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	// protected members
 	protected void _init()
 	{
-		allBindings = new Vector();
+		allBindings = new Vector<KeyBinding>();
 
 		setLayout(new BorderLayout(12,12));
 
@@ -65,6 +68,33 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		north.add(Box.createHorizontalStrut(6));
 		north.add(selectModel);
 
+		filterTF = new JTextField(40);
+		filterTF.setToolTipText(jEdit.getProperty("options.shortcuts.filter.tooltip"));
+		filterTF.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				setFilter();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				setFilter();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				setFilter();
+			}
+		});
+		JButton clearButton = new JButton(jEdit.getProperty(
+				"options.shortcuts.clear.label"));
+		clearButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				filterTF.setText("");
+				filterTF.requestFocus();
+			}
+		});
+
+		JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		filterPanel.add(new JLabel(jEdit.getProperty("options.shortcuts.filter.label")));
+		filterPanel.add(filterTF);
+		filterPanel.add(clearButton);
+
 		keyTable = new JTable(currentModel);
 		keyTable.getTableHeader().setReorderingAllowed(false);
 		keyTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
@@ -73,13 +103,20 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		d.height = Math.min(d.height,200);
 		JScrollPane scroller = new JScrollPane(keyTable);
 		scroller.setPreferredSize(d);
-
+		JPanel tableFilterPanel = new JPanel(new BorderLayout());
+		tableFilterPanel.add(BorderLayout.NORTH,filterPanel);
+		tableFilterPanel.add(BorderLayout.CENTER,scroller);
+		
 		add(BorderLayout.NORTH,north);
-		add(BorderLayout.CENTER,scroller);
+		add(BorderLayout.CENTER,tableFilterPanel);
 		try {
 			selectModel.setSelectedIndex(jEdit.getIntegerProperty("options.shortcuts.select.index", 0));
 		}
 		catch (IllegalArgumentException eae) {}
+	}
+
+	private void setFilter() {
+		currentModel.setFilter(filterTF.getText());
 	}
 
 	protected void _save()
@@ -95,6 +132,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	private void initModels()
 	{
+		Vector<KeyBinding[]> allBindings = new Vector<KeyBinding[]>();
 		models = new Vector<ShortcutsModel>();
 		ActionSet[] actionSets = jEdit.getActionSets();
 		for(int i = 0; i < actionSets.length; i++)
@@ -108,10 +146,14 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 					Log.log(Log.ERROR,this,"Empty action set: "
 						+ actionSet.getPluginJAR());
 				}
-				models.addElement(createModel(modelLabel,
-					actionSet.getActionNames()));
+				ShortcutsModel model = createModel(modelLabel,
+						actionSet.getActionNames()); 
+				models.addElement(model);
+				allBindings.addAll(model.getBindings());
 			}
 		}
+		if (models.size() > 1)
+			models.addElement(new ShortcutsModel("All", allBindings));
 		Collections.sort(models,new MiscUtilities.StringICaseCompare());
 		currentModel = models.elementAt(0);
 	}
@@ -167,6 +209,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private ShortcutsModel currentModel;
 	private JComboBox selectModel;
 	private Vector<GrabKeyDialog.KeyBinding> allBindings;
+	private JTextField filterTF;
 
 	class HeaderMouseHandler extends MouseAdapter
 	{
@@ -226,14 +269,47 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	{
 		private Vector<GrabKeyDialog.KeyBinding[]> bindings;
 		private String name;
-
+		private Vector<Integer> filteredIndices = null;
+		
 		ShortcutsModel(String name, Vector<GrabKeyDialog.KeyBinding[]> bindings)
 		{
 			this.name = name;
 			this.bindings = bindings;
 			sort(0);
+			resetFilter();
 		}
 
+		private void resetFilter()
+		{
+			filteredIndices = new Vector<Integer>();
+			for (int i = 0; i < bindings.size(); i++)
+				filteredIndices.add(new Integer(i));
+		}
+		
+		public void setFilter(String filter)
+		{
+			if (filter != null && filter.length() > 0)
+			{
+				filter = filter.toLowerCase();
+				Vector<Integer> indices = new Vector<Integer>();
+				for (int i = 0; i < bindings.size(); i++)
+				{
+					String name = getBindingAt(i, 0).label.toLowerCase();
+					if (name.contains(filter))
+						indices.add(new Integer(i));
+				}
+				filteredIndices = indices;
+			}
+			else
+				resetFilter();
+			fireTableDataChanged();
+		}
+		
+		public Vector<GrabKeyDialog.KeyBinding[]> getBindings()
+		{
+			return bindings;
+		}
+		
 		public void sort(int col)
 		{
 			Collections.sort(bindings,new KeyCompare(col));
@@ -247,11 +323,12 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public int getRowCount()
 		{
-			return bindings.size();
+			return filteredIndices.size();
 		}
 
 		public Object getValueAt(int row, int col)
 		{
+			row = filteredIndices.get(row).intValue();
 			switch(col)
 			{
 			case 0:
@@ -270,6 +347,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			if(col == 0)
 				return;
 
+			row = filteredIndices.get(row).intValue();
 			getBindingAt(row,col-1).shortcut = (String)value;
 
 			// redraw the whole table because a second shortcut
