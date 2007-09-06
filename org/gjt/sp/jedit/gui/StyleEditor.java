@@ -115,7 +115,7 @@ public class StyleEditor extends EnhancedDialog implements ActionListener
 		content.add(BorderLayout.SOUTH,box);
 
 		pack();
-		setLocationRelativeTo(GUIUtilities.getParentDialog(comp));
+		setLocationRelativeTo(comp);
 
 		setResizable(false);
 		setVisible(true);

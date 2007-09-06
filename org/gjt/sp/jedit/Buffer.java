@@ -1771,7 +1771,7 @@ public class Buffer extends JEditBuffer
 	{
 		if((vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0)
 		{
-			Object session = vfs.createVFSSession(path,view);
+			Object session = vfs.createVFSSession(path, view);
 			if(session == null)
 				return false;
 
@@ -2036,7 +2036,7 @@ public class Buffer extends JEditBuffer
 		}
 		if (token.id == Token.END || token.id == Token.NULL)
 		{
-			JOptionPane.showMessageDialog(textArea,
+			JOptionPane.showMessageDialog(jEdit.getActiveView(),
 				jEdit.getProperty("syntax-style-no-token.message"),
 				jEdit.getProperty("syntax-style-no-token.title"),
 				JOptionPane.PLAIN_MESSAGE);
@@ -2046,9 +2046,7 @@ public class Buffer extends JEditBuffer
 		String property = "view.style." + typeName.toLowerCase();
 		SyntaxStyle currentStyle = GUIUtilities.parseStyle(
 				jEdit.getProperty(property), "Dialog",12);
-		SyntaxStyle style = new StyleEditor(
-				(JFrame)SwingUtilities.getAncestorOfClass(
-						JFrame.class, textArea),
+		SyntaxStyle style = new StyleEditor(jEdit.getActiveView(),
 				currentStyle, typeName).getStyle();
 		if(style != null)
 			jEdit.setProperty(property, GUIUtilities.getStyleString(style));
