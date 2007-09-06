@@ -241,7 +241,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				 GrabKeyDialog gkd = new GrabKeyDialog(
 					GUIUtilities.getParentDialog(
 					ShortcutsOptionPane.this),
-					currentModel.getBindingAt(row,col-1),
+					currentModel.getFilteredBindingAt(row,col-1),
 					allBindings,null);
 				if(gkd.isOK())
 					currentModel.setValueAt(
@@ -328,15 +328,14 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public Object getValueAt(int row, int col)
 		{
-			row = filteredIndices.get(row).intValue();
 			switch(col)
 			{
 			case 0:
-				return getBindingAt(row,0).label;
+				return getFilteredBindingAt(row,0).label;
 			case 1:
-				return getBindingAt(row,0).shortcut;
+				return getFilteredBindingAt(row,0).shortcut;
 			case 2:
-				return getBindingAt(row,1).shortcut;
+				return getFilteredBindingAt(row,1).shortcut;
 			default:
 				return null;
 			}
@@ -347,8 +346,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			if(col == 0)
 				return;
 
-			row = filteredIndices.get(row).intValue();
-			getBindingAt(row,col-1).shortcut = (String)value;
+			getFilteredBindingAt(row,col-1).shortcut = (String)value;
 
 			// redraw the whole table because a second shortcut
 			// might have changed, too
@@ -383,6 +381,12 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 		}
 
+		public GrabKeyDialog.KeyBinding getFilteredBindingAt(int row, int nr)
+		{
+			row = filteredIndices.get(row).intValue();
+			return getBindingAt(row, nr);
+		}
+		
 		public GrabKeyDialog.KeyBinding getBindingAt(int row, int nr)
 		{
 			GrabKeyDialog.KeyBinding[] binding = bindings.elementAt(row);
