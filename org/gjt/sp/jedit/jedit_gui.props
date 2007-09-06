@@ -567,7 +567,9 @@ utils=vfs.browser \
       last-action \
       - \
       buffer-options \
-      global-options
+      global-options \
+      - \
+      %quick-options
 utils.label=$Utilities
 vfs.browser.label=$File System Browser
 action-bar.label=$Action Bar
@@ -633,6 +635,11 @@ keyboard-tester.label=$Keyboard Tester...
 memory-status.label=$Memory Status...
 reload-modes.label=$Reload Edit Modes
 #}}}
+
+#{{{ Quick options menu
+quick-options=edit-syntax-style
+quick-options.label=$Quick settings
+edit-syntax-style.label=Edit syntax style of token under caret
 
 #}}}
 
@@ -1010,6 +1017,7 @@ about.text=jEdit is brought to you by\n\
 	Scott Wyatt\n\
 	Sebastien Pierre\n\
 	Sergey Udaltsov\n\
+	Shlomy Reinstein\n\
 	Silas Smith\n\
 	Stefan Kost\n\
 	Stefano Maestri\n\
@@ -1594,6 +1602,12 @@ format-maxlinelen.message=The wrap margin must be set to a non-zero value\n\
 	for this command to work.
 #}}}
 
+#{{{ Text under caret does not have a syntax style (token type)
+syntax-style-no-token.title=Syntax Style Configuration
+syntax-style-no-token.message=The text under the caret has no associated \
+	syntax style to configure.
+#}}}
+
 #}}}
 
 #{{{ Buffer options dialog
@@ -2019,6 +2033,7 @@ colorChooser.title=Pick a Color
 
 #{{{ Style editor, used by options.syntaxs
 style-editor.title=Style Editor
+style-editor.tokenType=Token type:
 style-editor.italics=Italics
 style-editor.bold=Bold
 style-editor.fgColor=Text color:

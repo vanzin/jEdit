@@ -252,6 +252,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="edit-syntax-style">
+	<CODE>
+		buffer.editSyntaxStyle(textArea);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="end" NO_RECORD="TRUE">
 	<CODE>
 		textArea.smartEnd(false);

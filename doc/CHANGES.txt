@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre11
 
-Thanks to Matthieu Casanova, Kazutoshi Satoda,
+Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
 Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
 Scott LeBaron, and Orhan Alkan for contributing to this release.
 
@@ -56,7 +56,9 @@ Scott LeBaron, and Orhan Alkan for contributing to this release.
 
 - When dropping a directory on the textarea, the VFSBrowser will now browse to it
   (Matthieu Casanova)
-  
+
+- A new action "edit-syntax-style" that opens a dialog to change the token
+  under the caret (patch #1788847) (Shlomy Reinstein)
 }}}
 {{{ Editing
 
