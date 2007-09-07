@@ -269,7 +269,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	{
 		private Vector<GrabKeyDialog.KeyBinding[]> bindings;
 		private String name;
-		private Vector<Integer> filteredIndices = null;
+		private Vector<Integer> filteredIndices;
 		
 		ShortcutsModel(String name, Vector<GrabKeyDialog.KeyBinding[]> bindings)
 		{
@@ -283,7 +283,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		{
 			filteredIndices = new Vector<Integer>();
 			for (int i = 0; i < bindings.size(); i++)
-				filteredIndices.add(new Integer(i));
+				filteredIndices.add(Integer.valueOf(i));
 		}
 		
 		public void setFilter(String filter)
@@ -296,7 +296,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				{
 					String name = getBindingAt(i, 0).label.toLowerCase();
 					if (name.contains(filter))
-						indices.add(new Integer(i));
+						indices.add(Integer.valueOf(i));
 				}
 				filteredIndices = indices;
 			}
@@ -398,7 +398,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			return name;
 		}
 
-		class KeyCompare implements Comparator
+		class KeyCompare implements Comparator<GrabKeyDialog.KeyBinding[]>
 		{
 			int col;
 
@@ -407,13 +407,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				this.col = col;
 			}
 
-			public int compare(Object obj1, Object obj2)
+			public int compare(GrabKeyDialog.KeyBinding[] k1, GrabKeyDialog.KeyBinding[] k2)
 			{
-				GrabKeyDialog.KeyBinding[] k1
-					= (GrabKeyDialog.KeyBinding[])obj1;
-				GrabKeyDialog.KeyBinding[] k2
-					= (GrabKeyDialog.KeyBinding[])obj2;
-
 				String label1 = k1[0].label.toLowerCase();
 				String label2 = k2[0].label.toLowerCase();
 
