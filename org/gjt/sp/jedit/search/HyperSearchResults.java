@@ -627,7 +627,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			removeSelectedNode();
 			SearchAndReplace.hyperSearch(view, false);
 		}
-	}
+	} //}}}
 
 	//{{{ TreeDisplayAction class
 	class TreeDisplayAction extends AbstractAction

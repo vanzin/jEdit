@@ -643,6 +643,8 @@ edit-syntax-style.label=Edit syntax style of token under caret
 
 #}}}
 
+#}}}
+
 #{{{ Macros menu
 macros=record-macro \
        stop-recording \
