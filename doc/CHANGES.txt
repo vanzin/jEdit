@@ -41,6 +41,10 @@ Scott LeBaron, and Orhan Alkan for contributing to this release.
 
 - Failure of autosave which was silently ignored is now handled and reported.
   (SF.net Bug #1775281 - Kazutoshi Satoda)
+
+- IllegalCharsetNameException was not handled. It could be thrown for XML
+  encoding declaration or [Reload with Encoding] action. (Kazutoshi Satoda)
+  (This bug was reported by Andre Rudlaff as SF.net Patch #1789707)
 }}}
 {{{ Miscellaneous
 

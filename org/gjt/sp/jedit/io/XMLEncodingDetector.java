@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 
 import org.gjt.sp.util.Log;
 //}}}
@@ -77,14 +78,25 @@ public class XMLEncodingDetector implements EncodingDetector
 
 		String encoding = xmlPI.substring(index + 10,endIndex);
 
-		if(Charset.isSupported(encoding))
-			return encoding;
-		else
+		try
+		{
+			if(Charset.isSupported(encoding))
+			{
+				return encoding;
+			}
+			else
+			{
+				Log.log(Log.WARNING, XMLEncodingDetector.class,
+					"XML PI specifies unsupported encoding: " + encoding);
+			}
+		}
+		catch(IllegalCharsetNameException e)
 		{
 			Log.log(Log.WARNING, XMLEncodingDetector.class,
-				"XML PI specifies unsupported encoding: " + encoding);
-			return null;
+				"XML PI specifies illegal encoding: " + encoding,
+				e);
 		}
+		return null;
 	}
 	//}}}
 }
