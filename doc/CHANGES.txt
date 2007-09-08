@@ -59,6 +59,9 @@ Scott LeBaron, and Orhan Alkan for contributing to this release.
 
 - A new action "edit-syntax-style" that opens a dialog to change the token
   under the caret (patch #1788847) (Shlomy Reinstein)
+
+- The plugin install panel now has a sortable column containing the release date
+  of the plugin (Matthieu Casanova)
 }}}
 {{{ Editing
 

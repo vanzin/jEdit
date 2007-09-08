@@ -23,47 +23,8 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.InputStream;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
-import javax.swing.*;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-
-import org.gjt.sp.jedit.EBComponent;
-import org.gjt.sp.jedit.EBMessage;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.MiscUtilities;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.io.VFS;
@@ -74,6 +35,27 @@ import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.text.html.HTMLEditorKit;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.InputStream;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.List;
 // }}}
 
 /**
@@ -275,7 +257,8 @@ class InstallPanel extends JPanel implements EBComponent
 				case 1:
 				case 2:
 				case 3:
-				case 4: return Object.class;
+				case 4:
+				case 5: return Object.class;
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
@@ -283,7 +266,7 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ getColumnCount() method
 		public int getColumnCount()
 		{
-			return 5;
+			return 6;
 		} //}}}
 
 		//{{{ getColumnName() method
@@ -296,6 +279,7 @@ class InstallPanel extends JPanel implements EBComponent
 				case 2: return ' '+jEdit.getProperty("install-plugins.info.category");
 				case 3: return ' '+jEdit.getProperty("install-plugins.info.version");
 				case 4: return ' '+jEdit.getProperty("install-plugins.info.size");
+				case 5: return ' '+"Release date";
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
@@ -335,6 +319,8 @@ class InstallPanel extends JPanel implements EBComponent
 						return entry.version;
 					case 4:
 						return formatSize(entry.size);
+					case 5:
+						return entry.date;
 					default:
 						throw new Error("Column out of range");
 				}
@@ -590,6 +576,8 @@ class InstallPanel extends JPanel implements EBComponent
 	class Entry
 	{
 		String name, installedVersion, version, author, date, description, set;
+
+		long timestamp;
 		int size;
 		boolean install;
 		PluginList.Plugin plugin;
@@ -611,6 +599,15 @@ class InstallPanel extends JPanel implements EBComponent
 			this.set = set;
 			this.install = false;
 			this.plugin = plugin;
+			SimpleDateFormat format = new SimpleDateFormat("d MMMM yyyy", Locale.ENGLISH);
+			try
+			{
+				timestamp = format.parse(date).getTime();
+			}
+			catch (ParseException e)
+			{
+				Log.log(Log.ERROR, this, e);
+			}
 		}
 
 		private void getParents(List<Entry> list)
@@ -643,12 +640,14 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ PluginInfoBox class
 	class PluginInfoBox extends JTextPane implements ListSelectionListener
 	{
+		private final String[] params;
 		PluginInfoBox()
 		{
 			setEditable(false);
-            setEditorKit(new HTMLEditorKit());
+			setEditorKit(new HTMLEditorKit());
 //			setLineWrap(true);
 //			setWrapStyleWord(true);
+			params = new String[3];
 			table.getSelectionModel().addListSelectionListener(this);
 		}
 
@@ -658,13 +657,15 @@ class InstallPanel extends JPanel implements EBComponent
 			String text = "";
 			if (table.getSelectedRowCount() == 1)
 			{
-				Entry entry = (Entry)pluginModel.entries
+				Entry entry = (Entry) pluginModel.entries
 					.get(table.getSelectedRow());
-				text = jEdit.getProperty("install-plugins.info",
-					new String[] {entry.author,entry.date,entry.description});
-                text = text.replace("\n","<br/>");
-                text = "<html>"+text+"</html>";
-            }
+				params[0] = entry.author;
+				params[1] = entry.date;
+				params[2] = entry.description;
+				text = jEdit.getProperty("install-plugins.info", params);
+				text = text.replace("\n", "<br>");
+				text = "<html>" + text + "</html>";
+			}
 			setText(text);
 			setCaretPosition(0);
 		}
@@ -767,7 +768,7 @@ class InstallPanel extends JPanel implements EBComponent
 		public void updateUI() {
 			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
 			if (path.length()<1) setToolTipText ("Click here to choose a predefined plugin set");
-			else setToolTipText ("Choose pluginset (" + path + ")");
+			else setToolTipText ("Choose pluginset (" + path + ')');
 			super.updateUI();
 		}// }}}
 		
@@ -777,7 +778,7 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, 
 				jEdit.getSettingsDirectory() + File.separator); 
-			String[] selectedFiles = GUIUtilities.showVFSFileDialog(InstallPanel.this.window, 
+			String[] selectedFiles = GUIUtilities.showVFSFileDialog(InstallPanel.this.window,
 				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
 			if (selectedFiles == null || selectedFiles.length != 1) return;
 			path = selectedFiles[0];
@@ -904,6 +905,10 @@ class InstallPanel extends JPanel implements EBComponent
 	{
 		public static final int NAME = 0;
 		public static final int CATEGORY = 1;
+		public static final int SIZE = 2;
+		public static final int N_SIZE = 3;
+		public static final int DATE = 4;
+		public static final int N_DATE = 5;
 
 		private int type;
 
@@ -919,6 +924,22 @@ class InstallPanel extends JPanel implements EBComponent
 
 			if (type == NAME)
 				return e1.name.compareToIgnoreCase(e2.name);
+			else if (type == SIZE)
+			{
+				return sizeCompare(e1, e2);
+			}
+			else if (type == N_SIZE)
+			{
+				return -sizeCompare(e1, e2);
+			}
+			else if (type == DATE)
+			{
+				return dateCompare(e1, e2);
+			}
+			else if (type == N_DATE)
+			{
+				return -dateCompare(e1, e2);
+			}
 			else
 			{
 				int result;
@@ -926,6 +947,24 @@ class InstallPanel extends JPanel implements EBComponent
 					return e1.name.compareToIgnoreCase(e2.name);
 				return result;
 			}
+		}
+
+		private int sizeCompare(Entry e1, Entry e2)
+		{
+			if (e1.size == e2.size)
+				return e1.name.compareToIgnoreCase(e2.name);
+			else if (e1.size > e2.size)
+				return 1;
+			return -1;
+		}
+
+		private int dateCompare(Entry e1, Entry e2)
+		{
+			if (e1.timestamp == e2.timestamp)
+				return e1.name.compareToIgnoreCase(e2.name);
+			else if (e1.timestamp > e2.timestamp)
+				return -1;
+			return 1;
 		}
 	} //}}}
 
@@ -941,6 +980,18 @@ class InstallPanel extends JPanel implements EBComponent
 					break;
 				case 2:
 					pluginModel.sort(EntryCompare.CATEGORY);
+					break;
+				case 4:
+					if (pluginModel.sortType == EntryCompare.SIZE)
+						pluginModel.sort(EntryCompare.N_SIZE);
+					else
+						pluginModel.sort(EntryCompare.SIZE);
+					break;
+				case 5:
+					if (pluginModel.sortType == EntryCompare.DATE)
+						pluginModel.sort(EntryCompare.N_DATE);
+					else
+						pluginModel.sort(EntryCompare.DATE);
 					break;
 				default:
 			}
