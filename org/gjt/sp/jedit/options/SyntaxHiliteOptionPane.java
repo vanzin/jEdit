@@ -115,10 +115,18 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 			if(row == -1)
 				return;
 
-			SyntaxStyle style = new StyleEditor(
-					GUIUtilities.getParentDialog(SyntaxHiliteOptionPane.this),
-				(SyntaxStyle)styleModel.getValueAt(
-				row,1), (String) styleModel.getValueAt(row, 0)).getStyle();
+			SyntaxStyle style;
+			SyntaxStyle current = (SyntaxStyle)styleModel.getValueAt(row,1);
+			String token = (String) styleModel.getValueAt(row, 0);
+			JDialog dialog = GUIUtilities.getParentDialog(
+					SyntaxHiliteOptionPane.this);
+			if (dialog != null)
+				style = new StyleEditor(dialog, current, token).getStyle();
+			else
+			{
+				View view = GUIUtilities.getView(SyntaxHiliteOptionPane.this);
+				style = new StyleEditor(view, current, token).getStyle();
+			}
 			if(style != null)
 				styleModel.setValueAt(style,row,1);
 		}
