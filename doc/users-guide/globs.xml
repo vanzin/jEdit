@@ -118,7 +118,8 @@
     powerful than globs and can provide the user with more specific filename
     matching criteria. To avoid the glob-to-regex transformation, prefix your
     pattern with the string <literal>(re)</literal>, which will tell jEdit to
-    not translate the following pattern into a glob. For example:</para>
+    not translate the following pattern into a regex (since it already is one).
+    For example:</para>
 
     <glosslist>
         <glossentry>
