@@ -304,7 +304,17 @@ public abstract class OperatingSystem
 	{
 		public String getInstallDirectory(String name, String version)
 		{
-			return "C:\\Program Files\\" + name + " " + version;
+			String programDir = System.getenv("ProgramFiles");
+			// Here is a workaround for the case that the environment
+			// variable is not defined. Windows 98 and ME are known as
+			// such environments. This makes sense while jEdit supports
+			// JRE 5. JRE 6 doesn't support Windows 98 and ME.
+			if(programDir == null)
+			{
+				// This is a hint for what is needed here.
+				programDir = "%ProgramFiles%";
+			}
+			return programDir + "\\" + name + " " + version;
 		}
 
 		public class JEditLauncherOSTask extends OSTask

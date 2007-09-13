@@ -45,6 +45,10 @@ Scott LeBaron, and Orhan Alkan for contributing to this release.
 - IllegalCharsetNameException was not handled. It could be thrown for XML
   encoding declaration or [Reload with Encoding] action. (Kazutoshi Satoda)
   (This bug was reported by Andre Rudlaff as SF.net Patch #1789707)
+
+- Removed hard coded "C:\Program Files" from Java based installer. It now
+  uses %ProgramFiles% (a builin environment variable) instead.
+  (SF.net Bug #917669 - Kazutoshi Satoda)
 }}}
 {{{ Miscellaneous
 
