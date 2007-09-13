@@ -34,7 +34,14 @@ void pluginTextDialog( View view, Buffer buffer )
     File propsFile = new File( buffer.getPath() );
     Properties props = new Properties();
     InputStream in = new FileInputStream( propsFile );
-    props.load( in );
+    try
+    {
+        props.load( in );
+    }
+    finally
+    {
+        in.close();
+    }
 
     //setup the strings we are interested in and can get from the props file
     String fileName = propsFile.getName();
@@ -144,10 +151,17 @@ void pluginTextDialog( View view, Buffer buffer )
         return;
     }
     BufferedReader reader = new BufferedReader( new FileReader( descriptionFile ) );
-    String line;
-    while( (line = reader.readLine())!=null )
+    try
     {
-        longDescription = longDescription + line + "\n";
+        String line;
+        while( (line = reader.readLine())!=null )
+        {
+            longDescription = longDescription + line + "\n";
+        }
+    }
+    finally
+    {
+        reader.close();
     }
 
     // create dialog object and set its features
