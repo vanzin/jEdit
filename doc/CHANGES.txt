@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
 Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
-Scott LeBaron, and Orhan Alkan for contributing to this release.
+Scott LeBaron, Joerg Spieler, and Orhan Alkan for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -62,6 +62,8 @@ Scott LeBaron, and Orhan Alkan for contributing to this release.
 - The release note of the plugins in the PluginManager install panel now displays
   html (Matthieu Casanova)
 
+- PluginManager InstallPanel: All columns are sortable in either directions (#1781853 -  Joerg Spieler)  
+  
 - When dropping a directory on the textarea, the VFSBrowser will now browse to it
   (Matthieu Casanova)
 

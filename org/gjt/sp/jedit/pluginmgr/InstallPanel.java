@@ -126,6 +126,8 @@ class InstallPanel extends JPanel implements EBComponent
 		JTableHeader header = table.getTableHeader();
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new HeaderMouseHandler());
+		header.setDefaultRenderer(new HeaderRenderer(
+		    (DefaultTableCellRenderer)header.getDefaultRenderer()));
 
 		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
@@ -246,7 +248,8 @@ class InstallPanel extends JPanel implements EBComponent
 	{
 		/** This List can contain String or Entry. */
 		private List entries = new ArrayList();
-		private int sortType = EntryCompare.NAME;
+		private int sortType = EntryCompare.COLUMN_NAME;
+		int sortDirection = 1;
 
 		//{{{ getColumnClass() method
 		public Class getColumnClass(int columnIndex)
@@ -435,14 +438,19 @@ class InstallPanel extends JPanel implements EBComponent
 			Set<String> savedSelection = new HashSet<String>();
 			saveSelection(savedChecked,savedSelection);
 
+			if (sortType != type)
+			{
+			  sortDirection = 1;
+			}
 			sortType = type;
 
 			if(isDownloadingList())
 				return;
 
-			Collections.sort(entries,new EntryCompare(type));
+			Collections.sort(entries,new EntryCompare(type, sortDirection));
 			fireTableChanged(new TableModelEvent(this));
 			restoreSelection(savedChecked,savedSelection);
+			table.getTableHeader().repaint();
 		}
 		//}}}
 
@@ -903,68 +911,61 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ EntryCompare class
 	static class EntryCompare implements Comparator
 	{
-		public static final int NAME = 0;
-		public static final int CATEGORY = 1;
-		public static final int SIZE = 2;
-		public static final int N_SIZE = 3;
-		public static final int DATE = 4;
-		public static final int N_DATE = 5;
+	    private static final int COLUMN_INSTALL = 0;
+	    private static final int COLUMN_NAME = 1;
+	    private static final int COLUMN_CATEGORY = 2;
+	    private static final int COLUMN_VERSION = 3;
+	    private static final int COLUMN_SIZE = 4;
+	    private static final int COLUMN_RELEASE = 5;
 
 		private int type;
+        /** 1=up, -1=down */
+		private int sortDirection;
 
-		EntryCompare(int type)
+		EntryCompare(int type, int sortDirection)
 		{
 			this.type = type;
+			this.sortDirection = sortDirection;
 		}
 
 		public int compare(Object o1, Object o2)
 		{
 			InstallPanel.Entry e1 = (InstallPanel.Entry)o1;
 			InstallPanel.Entry e2 = (InstallPanel.Entry)o2;
+			int result;
 
-			if (type == NAME)
-				return e1.name.compareToIgnoreCase(e2.name);
-			else if (type == SIZE)
+			switch (type) 
 			{
-				return sizeCompare(e1, e2);
+			  case COLUMN_INSTALL:
+			    result = (e1.install == e2.install) ? 0 : (e1.install ? 1 : -1);
+			    break;
+			  case COLUMN_NAME:
+			    result = e1.name.compareToIgnoreCase(e2.name);
+			    break;
+			  case COLUMN_CATEGORY:
+			    result = e1.set.compareToIgnoreCase(e2.set);
+			    if (result == 0)
+			    {
+			      result = e1.name.compareToIgnoreCase(e2.name);
+			    }
+			    break;
+			  case COLUMN_VERSION:
+			    // lets avoid NPE. Maybe we should move this code to StandardUtilities.compareStrings
+			    if     (e1.version == e2.version)   result = 0;
+			    else if(e1.version == null)         result = -1;
+			    else if(e2.version == null)         result = 1;
+			    else result = StandardUtilities.compareStrings(e1.version, e2.version, true);
+			    break;
+			  case COLUMN_SIZE:
+			    result = (e1.size < e2.size ? -1 : (e1.size==e2.size ? 0 : 1));
+			    break;
+			  case COLUMN_RELEASE:
+			    result = (e1.timestamp < e2.timestamp ? -1 : (e1.timestamp==e2.timestamp ? 0 : 1));
+			    break;
+			  default:
+			    result = 0;
 			}
-			else if (type == N_SIZE)
-			{
-				return -sizeCompare(e1, e2);
-			}
-			else if (type == DATE)
-			{
-				return dateCompare(e1, e2);
-			}
-			else if (type == N_DATE)
-			{
-				return -dateCompare(e1, e2);
-			}
-			else
-			{
-				int result;
-				if ((result = e1.set.compareToIgnoreCase(e2.set)) == 0)
-					return e1.name.compareToIgnoreCase(e2.name);
-				return result;
-			}
-		}
-
-		private int sizeCompare(Entry e1, Entry e2)
-		{
-			if (e1.size == e2.size)
-				return e1.name.compareToIgnoreCase(e2.name);
-			else if (e1.size > e2.size)
-				return 1;
-			return -1;
-		}
-
-		private int dateCompare(Entry e1, Entry e2)
-		{
-			if (e1.timestamp == e2.timestamp)
-				return e1.name.compareToIgnoreCase(e2.name);
-			else if (e1.timestamp > e2.timestamp)
-				return -1;
-			return 1;
+			return result *= sortDirection;
 		}
 	} //}}}
 
@@ -973,28 +974,9 @@ class InstallPanel extends JPanel implements EBComponent
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
-			switch(table.getTableHeader().columnAtPoint(evt.getPoint()))
-			{
-				case 1:
-					pluginModel.sort(EntryCompare.NAME);
-					break;
-				case 2:
-					pluginModel.sort(EntryCompare.CATEGORY);
-					break;
-				case 4:
-					if (pluginModel.sortType == EntryCompare.SIZE)
-						pluginModel.sort(EntryCompare.N_SIZE);
-					else
-						pluginModel.sort(EntryCompare.SIZE);
-					break;
-				case 5:
-					if (pluginModel.sortType == EntryCompare.DATE)
-						pluginModel.sort(EntryCompare.N_DATE);
-					else
-						pluginModel.sort(EntryCompare.DATE);
-					break;
-				default:
-			}
+		  int column = table.getTableHeader().columnAtPoint(evt.getPoint());
+		  pluginModel.sortDirection *= -1;
+		  pluginModel.sort(column);
 		}
 	} //}}}
 
@@ -1089,4 +1071,32 @@ class InstallPanel extends JPanel implements EBComponent
 	}
 
 	//}}}
+	
+    
+    //{{{ HeaderRenderer
+	static class HeaderRenderer extends DefaultTableCellRenderer
+	{
+	  private DefaultTableCellRenderer tcr;
+
+	  HeaderRenderer(DefaultTableCellRenderer tcr)
+	  {
+	    this.tcr = tcr;
+	  }
+
+	  public Component getTableCellRendererComponent(JTable table, Object value,
+	      boolean isSelected, boolean hasFocus, int row, int column)
+	  {
+	    JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+	    PluginTableModel model = (PluginTableModel) table.getModel();
+	    Icon icon = (column == model.sortType)
+	    ? (model.sortDirection == 1) ? ASC_ICON : DESC_ICON
+	        : null;
+	    l.setIcon(icon);
+	    // l.setHorizontalTextPosition(l.LEADING);
+	    return l;
+	  }
+	} //}}}
+
+	static final Icon ASC_ICON  = GUIUtilities.loadIcon("arrow-asc.png");
+	static final Icon DESC_ICON = GUIUtilities.loadIcon("arrow-desc.png");	
 }
