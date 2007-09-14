@@ -4,7 +4,8 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
 Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
-Scott LeBaron, Joerg Spieler, and Orhan Alkan for contributing to this release.
+Scott LeBaron, Seph M. Soliman, Joerg Spieler, Alan Ezust, and Orhan Alkan 
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -36,6 +37,8 @@ Scott LeBaron, Joerg Spieler, and Orhan Alkan for contributing to this release.
   a buffer with a mode that has a "line comment" property (#1560584)
   (Matthieu Casanova)
 
+- 1755430 - HistoryTextField looks bad with native GTK+ LnF (Seph M. Soliman)  
+  
 - SF Bug #1742250: use of DELEGATE in mode rules can cause rules to be
   missing. (Daniel Hahler)
 
@@ -105,21 +108,10 @@ Scott LeBaron, Joerg Spieler, and Orhan Alkan for contributing to this release.
   VFS must define this property (Matthieu Casanova)
   
 - A new boolean attribute, 'MOVABLE', can now be specified for <DOCKABLE> tags
-  in the 'dockables.xml' file. This attribute specifies the behavior when the
-  docking position of the dockable window is changed. If true, the existing
-  instance of the dockable window is moved to the new docking position, thus
-  maintaining its state after the move (this is the new behavior). If false,
-  the BeanShell code is invoked to get the instance to put in the new docking
-  position (this is the existing behavior). The BeanShell code typically returns
-  a new instance of the dockable, cause the state to be lost as a result of the
-  change in docking position.
-  The default value of this attribute is FALSE for backward compatibility.
+  in the 'dockables.xml' file. (1782091 - Shlomy Reinstein)
   
 - A new interface, DockableWindow, is introduced for MOVABLE dockable windows to
-  be notified before their docking position is changed. This enables dockable
-  windows to react to this change, e.g. by changing their layout depending on
-  whether they are docked at the top/bottom or the left/right. This interface is
-  meaningless (for now) for non-MOVABLE dockable windows.
+  be notified before their docking position is changed. (1782091 - Shlomy Reinstein)
   
 }}}
 
