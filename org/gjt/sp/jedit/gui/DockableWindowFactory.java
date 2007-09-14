@@ -93,6 +93,7 @@ public class DockableWindowFactory
 			{
 				cache.cachedDockableNames = dh.getCachedDockableNames();
 				cache.cachedDockableActionFlags = dh.getCachedDockableActionFlags();
+				cache.cachedDockableMovableFlags = dh.getCachedDockableMovableFlags();
 			}
 		}
 		catch(IOException e)
@@ -123,19 +124,19 @@ public class DockableWindowFactory
 	 * @since jEdit 4.2pre1
 	 */
 	public void cacheDockableWindows(PluginJAR plugin,
-		String[] name, boolean[] actions)
+		String[] name, boolean[] actions, boolean[] movable)
 	{
 		for(int i = 0; i < name.length; i++)
 		{
 			Window factory = new Window(plugin,
-				name[i],null,actions[i]);
+				name[i],null,actions[i],movable[i]);
 			dockableWindowFactories.put(name[i],factory);
 		}
 	} //}}}
 
 	//{{{ registerDockableWindow() method
 	public void registerDockableWindow(PluginJAR plugin,
-		String name, String code, boolean actions)
+		String name, String code, boolean actions, boolean movable)
 	{
 		Window factory = dockableWindowFactories.get(name);
 		if(factory != null)
@@ -145,7 +146,7 @@ public class DockableWindowFactory
 		}
 		else
 		{
-			factory = new Window(plugin,name,code,actions);
+			factory = new Window(plugin,name,code,actions, movable);
 			dockableWindowFactories.put(name,factory);
 		}
 	} //}}}
@@ -185,10 +186,12 @@ public class DockableWindowFactory
 			this.uri = uri;
 			stateStack = new Stack();
 			actions = true;
+			movable = MOVABLE_DEFAULT;
 
 			code = new StringBuffer();
 			cachedDockableNames = new LinkedList<String>();
 			cachedDockableActionFlags = new LinkedList();
+			cachedDockableMovableFlags = new LinkedList();
 		} //}}}
 
 		//{{{ resolveEntity() method
@@ -214,6 +217,9 @@ public class DockableWindowFactory
 			{
 				dockableName = attrs.getValue("NAME");
 				actions = "FALSE".equals(attrs.getValue("NO_ACTIONS"));
+				String movableAttr = attrs.getValue("MOVABLE");
+				if (movableAttr != null)
+					movable = movableAttr.equalsIgnoreCase("TRUE");
 			}
 		} //}}}
 
@@ -230,13 +236,16 @@ public class DockableWindowFactory
 				if(tag.equals("DOCKABLE"))
 				{
 					registerDockableWindow(plugin,
-						dockableName,code.toString(),actions);
+						dockableName,code.toString(),actions, movable);
 					cachedDockableNames.add(dockableName);
 					cachedDockableActionFlags.add(
 						new Boolean(actions));
+					cachedDockableMovableFlags.add(
+							new Boolean(movable));
 					// make default be true for the next
 					// action
 					actions = true;
+					movable = MOVABLE_DEFAULT;
 					code.setLength(0);
 				}
 
@@ -285,6 +294,23 @@ public class DockableWindowFactory
 			return returnValue;
 		} //}}}
 
+		//{{{ getCachedDockableMovableFlags() method
+		public boolean[] getCachedDockableMovableFlags()
+		{
+			boolean[] returnValue = new boolean[
+				cachedDockableMovableFlags.size()];
+			Iterator iter = cachedDockableMovableFlags.iterator();
+			int i = 0;
+			while(iter.hasNext())
+			{
+				boolean flag = ((Boolean)iter.next())
+					.booleanValue();
+				returnValue[i++] = flag;
+			}
+
+			return returnValue;
+		} //}}}
+
 		//{{{ Private members
 
 		//{{{ Instance variables
@@ -294,11 +320,14 @@ public class DockableWindowFactory
 
 		private java.util.List<String> cachedDockableNames;
 		private java.util.List cachedDockableActionFlags;
-
+		private java.util.List cachedDockableMovableFlags;
+		
 		private String dockableName;
 		private StringBuffer code;
 		private boolean actions;
-
+		private boolean movable;
+		final boolean MOVABLE_DEFAULT = false;
+		
 		private Stack stateStack;
 		//}}}
 
@@ -334,15 +363,17 @@ public class DockableWindowFactory
 		String name;
 		String code;
 		boolean loaded;
+		boolean movable;
 
 		//{{{ Window constructor
 		Window(PluginJAR plugin, String name, String code,
-			boolean actions)
+			boolean actions, boolean movable)
 		{
 			this.plugin = plugin;
 			this.name = name;
 			this.code = code;
-
+			this.movable = movable;
+			
 			if(code != null)
 				loaded = true;
 

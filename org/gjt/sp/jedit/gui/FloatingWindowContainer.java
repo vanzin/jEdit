@@ -107,14 +107,16 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	//{{{ remove() method
 	public void remove(DockableWindowManager.Entry entry)
 	{
-		entry.container = null;
 		dispose();
 	} //}}}
 
 	//{{{ unregister() method
 	public void unregister(DockableWindowManager.Entry entry)
 	{
-		dispose();
+		this.entry = null;
+		entry.btn = null;
+		entry.container = null;
+		super.dispose();
 	} //}}}
 
 	//{{{ show() method

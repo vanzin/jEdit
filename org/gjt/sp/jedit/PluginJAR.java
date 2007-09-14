@@ -1125,13 +1125,15 @@ public class PluginJAR
 
 		if(cache.dockablesURI != null
 			&& cache.cachedDockableNames != null
-			&& cache.cachedDockableActionFlags != null)
+			&& cache.cachedDockableActionFlags != null
+			&& cache.cachedDockableMovableFlags != null)
 		{
 			dockablesURI = cache.dockablesURI;
 			DockableWindowFactory.getInstance()
 				.cacheDockableWindows(this,
 				cache.cachedDockableNames,
-				cache.cachedDockableActionFlags);
+				cache.cachedDockableActionFlags,
+				cache.cachedDockableMovableFlags);
 		}
 
 		if(actions.size() != 0)
@@ -1428,7 +1430,7 @@ public class PluginJAR
 	 */
 	public static class PluginCacheEntry
 	{
-		public static final int MAGIC = 0xB7A2E420;
+		public static final int MAGIC = 0xB7A2E421;
 
 		//{{{ Instance variables
 		public PluginJAR plugin;
@@ -1444,6 +1446,7 @@ public class PluginJAR
 		public URL dockablesURI;
 		public String[] cachedDockableNames;
 		public boolean[] cachedDockableActionFlags;
+		public boolean[] cachedDockableMovableFlags;
 		public URL servicesURI;
 		ServiceManager.Descriptor[] cachedServices;
 
@@ -1482,6 +1485,7 @@ public class PluginJAR
 			dockablesURI = readURI(din);
 			cachedDockableNames = readStringArray(din);
 			cachedDockableActionFlags = readBooleanArray(din);
+			cachedDockableMovableFlags = readBooleanArray(din);
 
 			servicesURI = readURI(din);
 			int len = din.readInt();
@@ -1530,6 +1534,7 @@ public class PluginJAR
 			writeString(dout,dockablesURI);
 			writeStringArray(dout,cachedDockableNames);
 			writeBooleanArray(dout,cachedDockableActionFlags);
+			writeBooleanArray(dout,cachedDockableMovableFlags);
 
 			writeString(dout,servicesURI);
 			if(cachedServices == null)

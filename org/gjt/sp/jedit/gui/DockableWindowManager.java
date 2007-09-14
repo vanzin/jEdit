@@ -69,11 +69,23 @@ import org.gjt.sp.util.Log;
  * <pre>&lt;?xml version="1.0"?&gt;
  *&lt;!DOCTYPE DOCKABLES SYSTEM "dockables.dtd"&gt;
  *&lt;DOCKABLES&gt;
- *    &lt;DOCKABLE NAME="<i>dockableName</i>"&gt;
+ *    &lt;DOCKABLE NAME="<i>dockableName</i>" MOVABLE="TRUE|FALSE"&gt;
  *        // Code to create the dockable
  *    &lt;/DOCKABLE&gt;
  *&lt;/DOCKABLES&gt;</pre>
  *
+ * <p>The MOVABLE attribute specifies the behavior when the docking position of
+ * the dockable window is changed. If MOVABLE is TRUE, the existing instance of
+ * the dockable window is moved to the new docking position, and if the dockable
+ * window implements the DockableWindow interface (see {@link DockableWindow}),
+ * it is also notified about the change in docking position before it is moved.
+ * If MOVABLE is FALSE, the BeanShell code is invoked to get the instance of
+ * the dockable window to put in the new docking position. Typically, the
+ * BeanShell code returns a new instance of the dockable window, and the state
+ * of the existing instance is not preserved after the change. It is therefore
+ * recommended to set MOVABLE to TRUE for all dockables in order to make them
+ * preserve their state when they are moved. For backward compatibility reasons,
+ * this attribute is set to FALSE by default.</p>
  * <p>More than one <code>&lt;DOCKABLE&gt;</code> tag may be present. The code that
  * creates the dockable can reference any BeanShell built-in variable
  * (see {@link org.gjt.sp.jedit.BeanShell}), along with a variable
@@ -908,7 +920,13 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			{
 				entry.container.unregister(entry);
 				entry.container = null;
-				entry.win = null;
+				if (entry.factory.movable)
+				{
+					if (entry.win instanceof DockableWindow)
+						((DockableWindow)entry.win).move(newPosition);
+				}
+				else
+					entry.win = null;
 			}
 
 			if(newPosition.equals(FLOATING)) 

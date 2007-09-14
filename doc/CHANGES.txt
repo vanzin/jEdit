@@ -56,6 +56,9 @@ Scott LeBaron, Joerg Spieler, and Orhan Alkan for contributing to this release.
   the exit request originated would fail to send a ViewUpdate.CLOSED message.
   (Marcelo Vanzin)
 
+- New Interface: DockableWindow.java, an interface for jEdit dockable windows.
+
+  
 - When clearing all hypersearch results the Hypersearch dockable panel will
   hide (Matthieu Casanova)
 
@@ -100,6 +103,24 @@ Scott LeBaron, Joerg Spieler, and Orhan Alkan for contributing to this release.
 
 - org.gjt.sp.jedit.io.VFS.BROWSE_CAP is not deprecated anymore and browseable
   VFS must define this property (Matthieu Casanova)
+  
+- A new boolean attribute, 'MOVABLE', can now be specified for <DOCKABLE> tags
+  in the 'dockables.xml' file. This attribute specifies the behavior when the
+  docking position of the dockable window is changed. If true, the existing
+  instance of the dockable window is moved to the new docking position, thus
+  maintaining its state after the move (this is the new behavior). If false,
+  the BeanShell code is invoked to get the instance to put in the new docking
+  position (this is the existing behavior). The BeanShell code typically returns
+  a new instance of the dockable, cause the state to be lost as a result of the
+  change in docking position.
+  The default value of this attribute is FALSE for backward compatibility.
+  
+- A new interface, DockableWindow, is introduced for MOVABLE dockable windows to
+  be notified before their docking position is changed. This enables dockable
+  windows to react to this change, e.g. by changing their layout depending on
+  whether they are docked at the top/bottom or the left/right. This interface is
+  meaningless (for now) for non-MOVABLE dockable windows.
+  
 }}}
 
 }}}

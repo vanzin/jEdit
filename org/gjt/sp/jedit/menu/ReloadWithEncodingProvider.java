@@ -48,7 +48,7 @@ import org.gjt.sp.jedit.io.EncodingServer;
  * @version $Id$
  */
 public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuProvider
-{
+{	
 	private View view;
 
 	//{{{ updateEveryTime() method
@@ -69,7 +69,6 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 		auto.addActionListener(this);
 		menu.add(auto);
 		menu.addSeparator();
-
 		// all the enabled encodings + the system encoding
 		String[] encodings = MiscUtilities.getEncodings(true);
 		String systemEncoding = System.getProperty("file.encoding");
