@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-<!-- :folding=sidekick: -->
-<book>
+<?xml version="1.0"?>
+<book xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd' >
+<!-- :maxLineLen=76:wrap=hard: -->
     <bookinfo>
         <author>
             <firstname>Alan</firstname>
@@ -27,15 +26,15 @@
         <legalnotice>
             <title>Legal Notice</title>
 
-            <para>Permission is granted to copy, distribute and/or modify this
-            document under the terms of the GNU Free Documentation License,
-            Version 1.1 or any later version published by the Free Software
-            Foundation; with no <quote>Invariant Sections</quote>,
-            <quote>Front-Cover Texts</quote> or <quote>Back-Cover Texts</quote>,
-            each as defined in the license. A copy of the license is included in
-            the file <filename>COPYING.DOC.txt</filename> included with the
-            jEdit distribution.</para>
-        </legalnotice>
+            <para>Permission is granted to copy, distribute and/or modify
+            this document under the terms of the GNU Free Documentation
+            License, Version 1.1 or any later version published by the Free
+            Software Foundation; with no <quote>Invariant Sections</quote>,
+            <quote>Front-Cover Texts</quote> or <quote>Back-Cover
+            Texts</quote>, each as defined in the license. A copy of the
+            license is included in the file
+            <filename>COPYING.DOC.txt</filename> included with the jEdit
+            distribution.</para> </legalnotice>
 
         <title>What's New in jEdit 4.3</title>
     </bookinfo>
@@ -127,12 +126,14 @@
         <section id="plugin-manager">
             <title>Plugin Manager</title>
 
-            <para>The three panes of the PluginManager have all been reworked
-            and made more keyboard friendly. They handle multiple selections,
-            the checkbox states don't get lost when you switch panes, and the
-            manage panel now automatically loads dependent plugins if they are
-            already downloaded. Anyone who is used to 4.2's plugin manager will
-            notice the difference immediately.</para>
+            <para>The three panes of the PluginManager have all been
+            reworked and made more keyboard friendly. They handle multiple
+            selections, show more information, allow sorting on more
+            columns, the checkbox states don't get lost when you switch
+            panes, and the manage panel now automatically loads dependent
+            plugins if they are already downloaded. Anyone who is used to
+            4.2's plugin manager will notice the difference
+            immediately.</para>
 
             <para>From the Manage tab, it is now possible to save a set of
             installed plugins as a PluginSet. This is an XML file which can be
@@ -199,6 +200,7 @@
             if the file provides an XML declaration like the following:</para>
 
             <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</programlisting>
+            
         </section>
 
         <section id="vfs.browser">
@@ -258,6 +260,30 @@
             property, while the latter is a reference to an html or text file.
             See EditPlugin API docs for details.</para>
         </section>
+        
+        <section id="dockable-interface" >
+         <title> Dockable Interface </title>
+
+<para> A new boolean attribute, <literal>MOVABLE</literal>, can now be
+specified for <literal>DOCKABLE</literal> tags in the
+<literal>dockables.xml</literal> file. This attribute specifies the behavior
+when the docking position of the dockable window is changed. If true, the
+existing instance of the dockable window is moved to the new docking
+position, thus maintaining its state after the move (this is the new
+behavior). If false, the BeanShell code is invoked to get the instance to
+put in the new docking position (this is the existing behavior). The
+BeanShell code typically returns a new instance of the dockable, cause the
+state to be lost as a result of the change in docking position. The default
+value of this attribute is false for backward compatibility. </para>
+
+<para> A new interface, <ulink
+url="../api/org/gjt/sp/jedit/gui/DockableWindow.html">DockableWindow</ulink>,
+is introduced for <literal>MOVABLE</literal> dockable windows to be notified
+before their docking position is changed. This enables dockable windows to
+react to this change, e.g. by changing their layout depending on whether
+they are docked at the top/bottom or the left/right. This interface is
+meaningless (for now) for non-MOVABLE dockable windows. </para>
+</section>
     </chapter>
 
     <chapter id="new-plugins">
