@@ -38,7 +38,7 @@ for contributing to this release.
   (Matthieu Casanova)
 
 - 1755430 - HistoryTextField looks bad with native GTK+ LnF (Seph M. Soliman)  
-  
+
 - SF Bug #1742250: use of DELEGATE in mode rules can cause rules to be
   missing. (Daniel Hahler)
 
@@ -52,6 +52,10 @@ for contributing to this release.
 - Removed hard coded "C:\Program Files" from Java based installer. It now
   uses %ProgramFiles% (a builin environment variable) instead.
   (SF.net Bug #917669 - Kazutoshi Satoda)
+
+- Changed the default mirror from NONE to switch.
+  (bug #1757229) (Björn "Vampire" Kautler)
+
 }}}
 {{{ Miscellaneous
 
@@ -61,7 +65,6 @@ for contributing to this release.
 
 - New Interface: DockableWindow.java, an interface for jEdit dockable windows.
 
-  
 - When clearing all hypersearch results the Hypersearch dockable panel will
   hide (Matthieu Casanova)
 
@@ -69,7 +72,7 @@ for contributing to this release.
   html (Matthieu Casanova)
 
 - PluginManager InstallPanel: All columns are sortable in either directions (#1781853 -  Joerg Spieler)  
-  
+
 - When dropping a directory on the textarea, the VFSBrowser will now browse to it
   (Matthieu Casanova)
 
@@ -78,12 +81,13 @@ for contributing to this release.
 
 - The plugin install panel now has a sortable column containing the release date
   of the plugin (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
 - Improvements to PHP edit mode (patch #1740618, bugs #1716134, #1504855)
   (Daniel Hahler)
-  
+
 - Added RFC edit mode (Matthieu Casanova)
 
 - reST mode: improved handling of comments and literal blocks (SF: #1748471)
@@ -106,10 +110,10 @@ for contributing to this release.
 
 - org.gjt.sp.jedit.io.VFS.BROWSE_CAP is not deprecated anymore and browseable
   VFS must define this property (Matthieu Casanova)
-  
+
 - A new boolean attribute, 'MOVABLE', can now be specified for <DOCKABLE> tags
   in the 'dockables.xml' file. (1782091 - Shlomy Reinstein)
-  
+
 - A new interface, DockableWindow, is introduced for MOVABLE dockable windows to
   be notified before their docking position is changed. (1782091 - Shlomy Reinstein)
   
