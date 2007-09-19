@@ -63,7 +63,7 @@ import java.util.List;
  */
 class InstallPanel extends JPanel implements EBComponent
 {
-	
+
 	//{{{ Variables
 	private final JTable table;
 	private JScrollPane scrollpane;
@@ -74,6 +74,8 @@ class InstallPanel extends JPanel implements EBComponent
 	private boolean updates;
 
 	final HashSet<String> pluginSet = new HashSet<String>();
+	//}}}
+
 	//{{{ InstallPanel constructor
 	InstallPanel(PluginManager window, boolean updates)
 	{
@@ -168,11 +170,6 @@ class InstallPanel extends JPanel implements EBComponent
 		}
 	} //}}}
 
-	
-	
-
-
-
 	//{{{ loadPluginSet() method
 	/** loads a pluginSet xml file and updates the model to reflect 
 	    certain checked selections 
@@ -193,7 +190,7 @@ class InstallPanel extends JPanel implements EBComponent
 		pluginModel.update();
 		return true;
 	} // }}}
-	
+
 	//{{{ updateModel() method
 	public void updateModel()
 	{
@@ -1071,30 +1068,30 @@ class InstallPanel extends JPanel implements EBComponent
 	}
 
 	//}}}
-	
-    
-    //{{{ HeaderRenderer
+
+	//{{{ HeaderRenderer
 	static class HeaderRenderer extends DefaultTableCellRenderer
 	{
-	  private DefaultTableCellRenderer tcr;
+		private DefaultTableCellRenderer tcr;
 
-	  HeaderRenderer(DefaultTableCellRenderer tcr)
-	  {
-	    this.tcr = tcr;
-	  }
+		HeaderRenderer(DefaultTableCellRenderer tcr)
+		{
+			this.tcr = tcr;
+		}
 
-	  public Component getTableCellRendererComponent(JTable table, Object value,
-	      boolean isSelected, boolean hasFocus, int row, int column)
-	  {
-	    JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
-	    PluginTableModel model = (PluginTableModel) table.getModel();
-	    Icon icon = (column == model.sortType)
-	    ? (model.sortDirection == 1) ? ASC_ICON : DESC_ICON
-	        : null;
-	    l.setIcon(icon);
-	    // l.setHorizontalTextPosition(l.LEADING);
-	    return l;
-	  }
+		public Component getTableCellRendererComponent(JTable table, Object value,
+							       boolean isSelected, boolean hasFocus,
+							       int row, int column)
+		{
+			JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+			PluginTableModel model = (PluginTableModel) table.getModel();
+			Icon icon = (column == model.sortType)
+				? (model.sortDirection == 1) ? ASC_ICON : DESC_ICON
+				: null;
+			l.setIcon(icon);
+			// l.setHorizontalTextPosition(l.LEADING);
+			return l;
+		}
 	} //}}}
 
 	static final Icon ASC_ICON  = GUIUtilities.loadIcon("arrow-asc.png");
