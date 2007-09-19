@@ -56,6 +56,12 @@ for contributing to this release.
 - Changed the default mirror from NONE to switch.
   (bug #1757229) (Björn "Vampire" Kautler)
 
+- Fixed the "Evaluate Buffer in BeanShell" macro so that it does what its
+  description states, that is evaluating the buffer in current state. Before
+  the macro used the last saved state. Additionally the result of the toString()
+  method of the return value of the scirpt, if any, is added to the newly
+  created buffer in a new line. (bug #1554769) (Björn "Vampire" Kautler)
+
 }}}
 {{{ Miscellaneous
 

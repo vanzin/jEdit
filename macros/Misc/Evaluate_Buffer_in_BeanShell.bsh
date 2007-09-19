@@ -26,8 +26,12 @@
  *
  */
 
-jEdit.newFile(view);
-BeanShell.runScript(view, buffer.getPath(), false, false);
+script = buffer.getText(0,buffer.getLength());
+buffer = jEdit.newFile(view);
+result = BeanShell.eval(view,BeanShell.getNameSpace(),script);
+if (null != result) {
+    buffer.insert(buffer.getLength(),"\n" + result);
+}
 
 /*
 	Macro index data (in DocBook format)
@@ -43,9 +47,10 @@ BeanShell.runScript(view, buffer.getPath(), false, false);
         This is a quick way to test a macro script even before its text
         is saved to a file.  Opening a new buffer for output is a precaution
         to prevent the macro from inadvertently erasing or overwriting
-        itself.  BeanShell scripts that operate on the contents of the
+        itself. BeanShell scripts that operate on the contents of the
         current buffer will not work meaningfully when tested using this
-        macro.
+        macro. If the script returns any value, the result of its toString()
+        method is appended in a new line to the newly created buffer.
     </para>
 </listitem>
 
