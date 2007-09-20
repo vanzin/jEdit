@@ -102,6 +102,8 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 		menu.addKeyListener(listener);
 		entry.win.addKeyListener(listener);
 		setVisible(true);
+		if (! entry.win.isVisible())
+			entry.win.setVisible(true);
 	} //}}}
 
 	//{{{ remove() method
