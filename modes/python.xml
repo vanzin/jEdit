@@ -112,6 +112,7 @@
 			<KEYWORD1>while</KEYWORD1>
 			<KEYWORD1>with</KEYWORD1>
 			<KEYWORD1>yield</KEYWORD1>
+			<KEYWORD1>self</KEYWORD1>
 
 			<!-- builtins -->
 			<KEYWORD2>abs</KEYWORD2>

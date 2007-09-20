@@ -105,6 +105,10 @@ for contributing to this release.
 
 - Added macros Editing/Open_Line_(Above|Below).bsh (Scott LeBaron) (sf: 1746798)
 
+- Added "self" keyword in python edit mode (Matthieu Casanova)
+
+- Added the "indent" properties to pl-sql edit mode (Matthieu Casanova)
+
 }}}
 {{{ API Changes
 

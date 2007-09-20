@@ -7,6 +7,9 @@
 		<PROPERTY NAME="commentStart" VALUE="/*" />
 		<PROPERTY NAME="commentEnd" VALUE="*/" />
 		<PROPERTY NAME="lineComment" VALUE="--" />
+        <PROPERTY NAME="indentNextLines" VALUE="\s*(.*THEN|ELSE|LOOP).*" />
+		<PROPERTY NAME="unindentNextLines" VALUE="^\s*(ELSE|ELSIF|END IF|END LOOP).*" />
+		<PROPERTY NAME="unindentThisLine" VALUE="^\s*(ELSE|ELSIF|END IF|END LOOP).*" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<SPAN TYPE="LABEL">
