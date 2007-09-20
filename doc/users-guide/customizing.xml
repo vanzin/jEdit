@@ -305,18 +305,21 @@
 
             <para>The <guibutton>Editing</guibutton> option pane contains
             settings such as the tab size, syntax highlighting and soft tabs on
-            a global or mode-specific basis.</para>
+            a global or mode-specific basis. </para>
 
-            <para>When changing mode-specific settings, the <guibutton>File name
-            glob</guibutton> and <guibutton>First line glob</guibutton> text
+            <para>Changing options from this optionpane does not change XML mode definition files on disk; it merely writes values to the user properties file which
+            override those set in mode files. To find out how to edit mode files directly, see <xref linkend="writing-modes-part" />. Some of these options can be further overridden on an individual file basis through the use of buffer-local properties. </para>
+            
+            <para>The <literal>File name
+            glob</literal> and <literal>First line glob</literal> text
             fields let you specify a glob pattern that names and first lines of
             buffers will be matched against to determine the edit mode. See
             <xref linkend="globs" /> for information about glob patterns.</para>
 
-            <para>This option pane does not change XML mode definition files on
-            disk; it merely writes values to the user properties file which
-            override those set in mode files. To find out how to edit mode files
-            directly, see <xref linkend="writing-modes-part" />.</para>
+            <para> The <literal>Extra Word Characters</literal> allows you to set the <literal>noLineSep</literal> buffer property on a mode-wide basis, allowing you to define what is considered part of a word when double-clicking on it in the text area.
+            </para>
+            
+            
         </sect2>
 
         <sect2 id="encodings-pane">
@@ -375,6 +378,13 @@
             <para>The <guibutton>Mouse</guibutton> option pane contains settings
             for toggling drag and drop of text, as well as gutter mouse click
             behavior.</para>
+            
+            <para> The only option that may not be self-explanatory is the  <emphasis role="bold">Double-Click drag joins non-alphanumeric characters</emphasis>. This option means that double-click will select a region that includes the non-alphabetical characters, as defined for the current mode. The actual set of characters can be defined for an indiviual file via buffer-local properties (<literal>noWordSep</literal>) or on a mode-wide basis from the Editing option pane (<literal>Extra Word Characters</literal>).
+            </para>
+            
+            
+            
+            
         </sect2>
 
         <sect2 id="printing-pane">
