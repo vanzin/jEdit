@@ -188,24 +188,38 @@ public class TextAreaTransferHandler extends TransferHandler
 		String str = (String) t.getTransferData(uriListStringDataFlavor);
 
 		Log.log(Log.DEBUG,this,"=> URIList \""+str+ '\"');
-		
+		EditPane editPane = (EditPane) GUIUtilities.getComponentParent(c, EditPane.class);
+		View view = editPane.getView();
 		JEditTextArea textArea = (JEditTextArea) c;
 		if (dragSource == null)
 		{
-			String		maybeManyFileURI	= str;
-			boolean		found			= false;			
+			boolean		found			= false;
 			String[]	components		= str.split("\r\n");
-			
+
+			boolean browsedDirectory = false;
 			for (int i = 0;i<components.length;i++)
 			{
 				String	str0	= components[i];
 				
-				if (str0.length()>0) {
+				if (str0.length() > 0)
+				{
 					URI	uri	= new URI(str0); // this handles the URI-decoding
 					
 					if ("file".equals(uri.getScheme()))
 					{
-						VFSManager.runInWorkThread(new DraggedURLLoader(textArea,uri.getPath()));
+						File file = new File(uri.getPath());
+						if (file.isDirectory())
+						{
+							if (!browsedDirectory)
+							{
+								VFSBrowser.browseDirectory(view, file.getPath());
+								browsedDirectory = true;
+							}
+						}
+						else
+						{
+							VFSManager.runInWorkThread(new DraggedURLLoader(textArea,uri.getPath()));
+						}
 						found = true;
 					}
 					else
@@ -244,10 +258,9 @@ public class TextAreaTransferHandler extends TransferHandler
 		JEditTextArea textArea = (JEditTextArea)c;
 		if (dragSource == null)
 		{
-			String		maybeManyFileNames	= str;
 			boolean		found			= false;			
 			String[]	components		= str.split("\n");
-			
+
 			for (int i = 0;i<components.length;i++)
 			{
 				String str0 = components[i];
@@ -262,7 +275,7 @@ public class TextAreaTransferHandler extends TransferHandler
 					{
 						str0 = str0.substring(7);
 					}
-					
+
 					VFSManager.runInWorkThread(new DraggedURLLoader(textArea,str0));
 				}
 				found = true;
