@@ -579,9 +579,9 @@
     <sect1 id="scrolling">
         <title>Scrolling</title>
 
-        <para>If you have a mouse with a scroll wheel and are running Java 2
-        version 1.4, you can use the wheel to scroll up and down in the text
-        area. Various modifier keys change the action of the wheel:</para>
+        <para>If you have a mouse with a scroll wheel, you can use the wheel to
+        scroll up and down in the text area. Various modifier keys change the
+        action of the wheel:</para>
 
         <itemizedlist>
             <listitem>
