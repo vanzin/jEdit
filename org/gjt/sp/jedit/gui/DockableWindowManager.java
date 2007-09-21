@@ -723,6 +723,13 @@ public class DockableWindowManager extends JPanel implements EBComponent
 							DockableWindowUpdate.PROPERTIES_CHANGED,
 							null
 						));
+						// Reset the window, propertiesChanged() doesn't
+						// reset it for MOVABLE windows.
+						Entry entry = windows.get(dockable);
+						if (entry == null)
+							Log.log(Log.ERROR,this,"Unknown dockable window: " + dockable);
+						else
+							entry.win = null;
 					}
 				});
 				popup.add(undockMenuItem);
