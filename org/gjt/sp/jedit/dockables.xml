@@ -6,7 +6,7 @@
 	<DOCKABLE NAME="log-viewer" MOVABLE="TRUE">
 		new LogViewer();
 	</DOCKABLE>
-	<DOCKABLE NAME="vfs.browser">
+	<DOCKABLE NAME="vfs.browser" MOVABLE="TRUE">
 		new VFSBrowser(view,position);
 	</DOCKABLE>
 	<DOCKABLE NAME="hypersearch-results" MOVABLE="TRUE">

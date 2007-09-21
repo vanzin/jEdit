@@ -47,7 +47,8 @@ import org.gjt.sp.util.Log;
  * @author Slava Pestov
  * @version $Id$
  */
-public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusComponent
+public class VFSBrowser extends JPanel implements EBComponent,
+	DefaultFocusComponent, DockableWindow
 {
 	public static final String NAME = "vfs.browser";
 
@@ -177,8 +178,7 @@ public class VFSBrowser extends JPanel implements EBComponent, DefaultFocusCompo
 
 		ActionHandler actionHandler = new ActionHandler();
 
-		Box topBox = new Box(BoxLayout.Y_AXIS);
-
+		topBox = new Box(BoxLayout.Y_AXIS);
 		horizontalLayout = (mode != BROWSER
 			|| DockableWindowManager.TOP.equals(position)
 			|| DockableWindowManager.BOTTOM.equals(position));
@@ -1101,6 +1101,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private HistoryComboBoxEditor filterEditor;
 	private JComboBox filterField;
 	private Box toolbarBox;
+	private Box topBox;
 	private FavoritesMenuButton favorites;
 	private PluginsMenuButton plugins;
 	private BrowserView browserView;
@@ -1957,6 +1958,21 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		}
 
 	} //}}}
+
+	public void move(String newPosition) {
+		boolean horz = (mode != BROWSER
+				|| DockableWindowManager.TOP.equals(newPosition)
+				|| DockableWindowManager.BOTTOM.equals(newPosition));
+		if (horz == horizontalLayout)
+			return;
+		horizontalLayout = horz;
+		topBox.remove(toolbarBox);
+		toolbarBox = new Box(horizontalLayout
+				? BoxLayout.X_AXIS
+				: BoxLayout.Y_AXIS);
+		topBox.add(toolbarBox, 0);
+		propertiesChanged();
+	}
 
 	//}}}
 }
