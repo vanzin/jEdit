@@ -134,17 +134,17 @@ class BufferHandler implements BufferListener
 			int caret = textArea.getCaretPosition();
 			if(caret >= offset)
 			{
-				int scrollMode = (textArea.caretAutoScroll()
+				int scrollMode = textArea.caretAutoScroll()
 					? TextArea.ELECTRIC_SCROLL
-					: TextArea.NO_SCROLL);
+					: TextArea.NO_SCROLL;
 				textArea.moveCaretPosition(
 					caret + length,scrollMode);
 			}
 			else
 			{
-				int scrollMode = (textArea.caretAutoScroll()
+				int scrollMode = textArea.caretAutoScroll()
 					? TextArea.NORMAL_SCROLL
-					: TextArea.NO_SCROLL);
+					: TextArea.NO_SCROLL;
 				textArea.moveCaretPosition(
 					caret,scrollMode);
 			}
@@ -155,6 +155,32 @@ class BufferHandler implements BufferListener
 			scrollLineCount.callReset = true;
 		}
 	} //}}}
+
+	/**
+	 * Called when text is about to be removed from the buffer, but is
+	 * still present.
+	 *
+	 * @param buffer    The buffer in question
+	 * @param startLine The first line
+	 * @param offset    The start offset, from the beginning of the buffer
+	 * @param numLines  The number of lines to be removed
+	 * @param length    The number of characters to be removed
+	 * @since jEdit 4.3pre11
+	 */
+	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
+	{
+		if (textArea.getDisplayManager() == displayManager && numLines != 0)
+		{
+			//{{{ fix for black hole bug
+			// if you remove the {{{ at a fold start, the fold is removed so it must be expanded otherwise }}}
+			// the text remains invisible
+			if (buffer.isFoldStart(startLine))
+			{
+				displayManager.expandFold(startLine, false);
+			}
+			// }}}
+		}
+	}
 
 	//{{{ preContentRemoved() method
 	/**
@@ -284,26 +310,26 @@ class BufferHandler implements BufferListener
 
 			if(caret >= start + length)
 			{
-				int scrollMode = (textArea.caretAutoScroll()
+				int scrollMode = textArea.caretAutoScroll()
 					? TextArea.ELECTRIC_SCROLL
-					: TextArea.NO_SCROLL);
+					: TextArea.NO_SCROLL;
 				textArea.moveCaretPosition(
 					caret - length,
 					scrollMode);
 			}
 			else if(caret >= start)
 			{
-				int scrollMode = (textArea.caretAutoScroll()
+				int scrollMode = textArea.caretAutoScroll()
 					? TextArea.ELECTRIC_SCROLL
-					: TextArea.NO_SCROLL);
+					: TextArea.NO_SCROLL;
 				textArea.moveCaretPosition(
 					start,scrollMode);
 			}
 			else
 			{
-				int scrollMode = (textArea.caretAutoScroll()
+				int scrollMode = textArea.caretAutoScroll()
 					? TextArea.NORMAL_SCROLL
-					: TextArea.NO_SCROLL);
+					: TextArea.NO_SCROLL;
 				textArea.moveCaretPosition(caret,scrollMode);
 			}
 		}

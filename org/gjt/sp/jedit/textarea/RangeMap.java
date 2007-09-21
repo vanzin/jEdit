@@ -52,7 +52,7 @@ class RangeMap
 	//{{{ RangeMap constructor
 	RangeMap(RangeMap copy)
 	{
-		this.fvm = (int[])copy.fvm.clone();
+		this.fvm = copy.fvm.clone();
 		this.fvmcount = copy.fvmcount;
 	} //}}}
 
@@ -151,7 +151,10 @@ loop:		for(;;)
 	{
 		if(Debug.FOLD_VIS_DEBUG)
 		{
-			StringBuffer buf = new StringBuffer("{");
+			StringBuilder buf = new StringBuilder(50);
+			buf.append("fvmput(").append(start).append(',');
+			buf.append(end).append(',');
+			buf.append('{');
 			if(put != null)
 			{
 				for(int i = 0; i < put.length; i++)
@@ -161,16 +164,15 @@ loop:		for(;;)
 					buf.append(put[i]);
 				}
 			}
-			buf.append("}");
-			Log.log(Log.DEBUG,this,"fvmput(" + start + ","
-				+ end + "," + buf + ")");
+			buf.append("})");
+			Log.log(Log.DEBUG,this,buf.toString());
 		}
-		int putl = (put == null ? 0 : put.length);
+		int putl = put == null ? 0 : put.length;
 
 		int delta = putl - (end - start);
 		if(fvmcount + delta > fvm.length)
 		{
-			int[] newfvm = new int[fvm.length * 2 + 1];
+			int[] newfvm = new int[(fvm.length << 1) + 1];
 			System.arraycopy(fvm,0,newfvm,0,fvmcount);
 			fvm = newfvm;
 		}
@@ -384,14 +386,14 @@ loop:		for(;;)
 	{
 		if(Debug.FOLD_VIS_DEBUG)
 		{
-			StringBuffer buf = new StringBuffer("{");
+			StringBuilder buf = new StringBuilder("{");
 			for(int i = 0; i < fvmcount; i++)
 			{
 				if(i != 0)
 					buf.append(',');
 				buf.append(fvm[i]);
 			}
-			buf.append("}");
+			buf.append('}');
 			Log.log(Log.DEBUG,this,"fvm = " + buf);
 		}
 	} //}}}

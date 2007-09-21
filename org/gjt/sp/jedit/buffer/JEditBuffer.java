@@ -2104,13 +2104,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
+			BufferListener listener = getListener(i);
 			try
 			{
-				getListener(i).foldLevelChanged(this,start,end);
+				listener.foldLevelChanged(this,start,end);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -2122,14 +2123,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
+			BufferListener listener = getListener(i);
 			try
 			{
-				getListener(i).contentInserted(this,startLine,
+				listener.contentInserted(this,startLine,
 					offset,numLines,length);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -2141,14 +2143,35 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
+			BufferListener listener = getListener(i);
 			try
 			{
-				getListener(i).contentRemoved(this,startLine,
+				listener.contentRemoved(this,startLine,
 					offset,numLines,length);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+		//{{{ fireContentInserted() method
+	protected void firePreContentInserted(int startLine, int offset,
+		int numLines, int length)
+	{
+		for(int i = 0; i < bufferListeners.size(); i++)
+		{
+			BufferListener listener = getListener(i);
+			try
+			{
+				listener.preContentInserted(this,startLine,
+					offset,numLines,length);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -2160,14 +2183,15 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
+			BufferListener listener = getListener(i);
 			try
 			{
-				getListener(i).preContentRemoved(this,startLine,
+				listener.preContentRemoved(this,startLine,
 					offset,numLines,length);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -2178,13 +2202,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
+			BufferListener listener = getListener(i);
 			try
 			{
-				getListener(i).transactionComplete(this);
+				listener.transactionComplete(this);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -2195,13 +2220,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
+			BufferListener listener = getListener(i);
 			try
 			{
-				getListener(i).foldHandlerChanged(this);
+				listener.foldHandlerChanged(this);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -2212,13 +2238,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 	{
 		for(int i = 0; i < bufferListeners.size(); i++)
 		{
+			BufferListener listener = getListener(i);
 			try
 			{
-				getListener(i).bufferLoaded(this);
+				listener.bufferLoaded(this);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+getListener(i)+" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}
@@ -2268,6 +2295,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			fireContentRemoved(0,0,getLineCount()
 				- 1,length);
 
+			firePreContentInserted(0, 0, endOffsets.getSize() - 1, seg.count - 1);
 			// theoretically a segment could
 			// have seg.offset != 0 but
 			// SegmentBuffer never does that
@@ -2375,6 +2403,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			int startLine = lineMgr.getLineOfOffset(offset);
 			int numLines = endOffsets.getSize();
+
+			if (!loading)
+			{
+				firePreContentInserted(startLine, offset, numLines, length);
+			}
 
 			lineMgr.contentInserted(startLine,offset,numLines,length,
 				endOffsets);
