@@ -1011,12 +1011,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			newIndent = action.calculateIndent(this, lineIndex,
 					oldIndent, newIndent);
-			if (newIndent < 0)
-				newIndent = 0;
-
 			if (!action.keepChecking())
 				break;
 		}
+		if (newIndent < 0)
+			newIndent = 0;
 
 		return newIndent;
 	} //}}}
