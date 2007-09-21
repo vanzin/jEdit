@@ -92,6 +92,9 @@ for contributing to this release.
 - The plugin install panel now has a sortable column containing the release date
   of the plugin (Matthieu Casanova)
 
+- When editing toolbar the dialog now remembers the last action set
+  (#1538743) (Matthieu Casanova)
+
 }}}
 {{{ Editing
 

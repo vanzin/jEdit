@@ -168,7 +168,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.showToolbar",showToolbar
 			.isSelected());
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < listModel.getSize(); i++)
 		{
 			if(i != 0)
@@ -209,13 +209,13 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	//{{{ Inner classes
 
 	//{{{ ButtonCompare class
-	static class ButtonCompare implements Comparator
+	static class ButtonCompare implements Comparator<Button>
 	{
-		public int compare(Object obj1, Object obj2)
+		public int compare(Button button1, Button button2)
 		{
 			return StandardUtilities.compareStrings(
-				((Button)obj1).label,
-				((Button)obj2).label,
+				button1.label,
+				button2.label,
 				true);
 		}
 	} //}}}
@@ -429,15 +429,28 @@ class ToolBarEditDialog extends EnhancedDialog
 		JPanel actionPanel = new JPanel(new BorderLayout(6,6));
 
 		ActionSet[] actionsList = jEdit.getActionSets();
-		Vector vec = new Vector(actionsList.length);
+		String selectedActionSet = jEdit.getProperty("options.toolbar.selectedActionSet");
+		ActionSet selectedItem = null;
+		Vector<ActionSet> vec = new Vector<ActionSet>(actionsList.length);
 		for(int i = 0; i < actionsList.length; i++)
 		{
 			ActionSet actionSet = actionsList[i];
 			if(actionSet.getActionCount() != 0)
-				vec.addElement(actionSet);
+			{
+				vec.add(actionSet);
+				if (actionSet.getLabel().equals(selectedActionSet))
+				{
+					selectedItem = actionSet;
+				}
+			}
 		}
 		combo = new JComboBox(vec);
+		if (selectedItem != null)
+			combo.setSelectedItem(selectedItem);
+		else
+			jEdit.unsetProperty("options.toolbar.selectedActionSet");
 		combo.addActionListener(actionHandler);
+
 		actionPanel.add(BorderLayout.NORTH,combo);
 
 		list = new JList();
@@ -646,8 +659,10 @@ class ToolBarEditDialog extends EnhancedDialog
 	private void updateList()
 	{
 		ActionSet actionSet = (ActionSet)combo.getSelectedItem();
+		String actionSetLabel = actionSet.getLabel();
+		jEdit.setProperty("options.toolbar.selectedActionSet", actionSetLabel);
 		EditAction[] actions = actionSet.getActions();
-		Vector listModel = new Vector(actions.length);
+		Vector<ToolBarOptionPane.Button> listModel = new Vector<ToolBarOptionPane.Button>(actions.length);
 
 		for(int i = 0; i < actions.length; i++)
 		{
@@ -656,7 +671,7 @@ class ToolBarEditDialog extends EnhancedDialog
 			if(label == null)
 				continue;
 
-			listModel.addElement(new ToolBarOptionPane.Button(
+			listModel.add(new ToolBarOptionPane.Button(
 				action.getName(),null,null,label));
 		}
 
