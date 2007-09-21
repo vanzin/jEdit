@@ -3,22 +3,22 @@
 <!DOCTYPE DOCKABLES SYSTEM "dockables.dtd">
 
 <DOCKABLES>
-	<DOCKABLE NAME="log-viewer">
+	<DOCKABLE NAME="log-viewer" MOVABLE="TRUE">
 		new LogViewer();
 	</DOCKABLE>
 	<DOCKABLE NAME="vfs.browser">
 		new VFSBrowser(view,position);
 	</DOCKABLE>
-	<DOCKABLE NAME="hypersearch-results">
+	<DOCKABLE NAME="hypersearch-results" MOVABLE="TRUE">
 		new HyperSearchResults(view);
 	</DOCKABLE>
 	<DOCKABLE NAME="view-registers">
 		new RegisterViewer(view,position);
 	</DOCKABLE>
-	<DOCKABLE NAME="view-markers">
+	<DOCKABLE NAME="view-markers" MOVABLE="TRUE">
 		new MarkerViewer(view);
 	</DOCKABLE>
-	<DOCKABLE NAME="io-progress-monitor">
+	<DOCKABLE NAME="io-progress-monitor" MOVABLE="TRUE">
 		new IOProgressMonitor();
 	</DOCKABLE>
 </DOCKABLES>
