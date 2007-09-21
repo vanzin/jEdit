@@ -30,11 +30,13 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -173,6 +175,13 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ directoryLoaded() method
+	/**
+	 * Rebuild the parent view after a directory has been loaded.
+	 *
+	 * @param node
+	 * @param path
+	 * @param directory  
+	 */
 	public void directoryLoaded(Object node, String path, java.util.List<VFSFile> directory)
 	{
 		//{{{ If reloading root, update parent directory list
@@ -184,17 +193,41 @@ class BrowserView extends JPanel
 
 			for(;;)
 			{
-				VFS _vfs = VFSManager.getVFSForPath(
-					parent);
-				// create a DirectoryEntry manually
-				// instead of using _vfs._getFile()
-				// since so many VFS's have broken
-				// implementations of this method
-				parentList.insertElementAt(new VFSFile(
+				VFS _vfs = VFSManager.getVFSForPath(parent);
+				VFSFile file = null;
+				if (_vfs instanceof FileVFS)
+				{
+					Object session = _vfs.createVFSSession(path, browser);
+					try
+					{
+						file = _vfs._getFile(session, parent, browser);
+						file.setName(_vfs.getFileName(parent));
+					}
+					catch (IOException e)
+					{
+						Log.log(Log.ERROR, this, e, e);
+					}
+				}
+				if (file == null)
+				{
+					// create a DirectoryEntry manually
+					// instead of using _vfs._getFile()
+					// since so many VFS's have broken
+					// implementations of this method
+					file = new VFSFile(
+							_vfs.getFileName(parent),
+							parent,parent,
+							VFSFile.DIRECTORY,
+							0L,false);
+				}
+
+
+				/*parentList.insertElementAt(new VFSFile(
 					_vfs.getFileName(parent),
 					parent,parent,
 					VFSFile.DIRECTORY,
-					0L,false),0);
+					0L,false),0);*/
+				parentList.insertElementAt(file,0);
 				String newParent = _vfs.getParentOfPath(parent);
 
 				if(newParent == null ||
