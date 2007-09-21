@@ -33,7 +33,8 @@ import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
 
-public class RegisterViewer extends JPanel implements EBComponent, ActionListener
+public class RegisterViewer extends JPanel implements EBComponent, ActionListener,
+	DockableWindow
 {
 	//{{{ RegisterViewer constructor
 	public RegisterViewer(View view, String position)
@@ -130,6 +131,16 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	{
 		super.removeNotify();
 		EditBus.removeFromBus(this);
+	} //}}}
+
+	//{{{ move() method
+	public void move(String newPosition) {
+		int orientation = JSplitPane.HORIZONTAL_SPLIT;
+		if (newPosition.equals(DockableWindowManager.LEFT) ||
+			newPosition.equals(DockableWindowManager.RIGHT))
+			orientation = JSplitPane.VERTICAL_SPLIT;
+		splitPane.setOrientation(orientation);
+		revalidate();
 	} //}}}
 
 	//{{{ Private members

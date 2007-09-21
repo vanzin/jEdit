@@ -1028,6 +1028,23 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		}
 	} //}}}
 
+
+	//{{{ move() method
+	public void move(String newPosition) {
+		boolean horz = (mode != BROWSER
+				|| DockableWindowManager.TOP.equals(newPosition)
+				|| DockableWindowManager.BOTTOM.equals(newPosition));
+		if (horz == horizontalLayout)
+			return;
+		horizontalLayout = horz;
+		topBox.remove(toolbarBox);
+		toolbarBox = new Box(horizontalLayout
+				? BoxLayout.X_AXIS
+				: BoxLayout.Y_AXIS);
+		topBox.add(toolbarBox, 0);
+		propertiesChanged();
+	} //}}}
+	
 	//{{{ Package-private members
 	String currentEncoding;
 	boolean autoDetectEncoding;
@@ -1958,21 +1975,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		}
 
 	} //}}}
-
-	public void move(String newPosition) {
-		boolean horz = (mode != BROWSER
-				|| DockableWindowManager.TOP.equals(newPosition)
-				|| DockableWindowManager.BOTTOM.equals(newPosition));
-		if (horz == horizontalLayout)
-			return;
-		horizontalLayout = horz;
-		topBox.remove(toolbarBox);
-		toolbarBox = new Box(horizontalLayout
-				? BoxLayout.X_AXIS
-				: BoxLayout.Y_AXIS);
-		topBox.add(toolbarBox, 0);
-		propertiesChanged();
-	}
 
 	//}}}
 }

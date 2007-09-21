@@ -12,7 +12,7 @@
 	<DOCKABLE NAME="hypersearch-results" MOVABLE="TRUE">
 		new HyperSearchResults(view);
 	</DOCKABLE>
-	<DOCKABLE NAME="view-registers">
+	<DOCKABLE NAME="view-registers" MOVABLE="TRUE">
 		new RegisterViewer(view,position);
 	</DOCKABLE>
 	<DOCKABLE NAME="view-markers" MOVABLE="TRUE">
