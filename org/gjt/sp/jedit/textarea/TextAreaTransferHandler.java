@@ -427,6 +427,13 @@ public class TextAreaTransferHandler extends TransferHandler
 				if(textArea.isEditable())
 					returnValue = true;
 			}
+			else if (flavors[i].getRepresentationClass().equals(java.io.InputStream.class))
+			{
+				//workaround for Ubuntu/Gnome/Nautilus import flavors, otherwise
+				//doesn't work on all Ubuntu installations
+				returnValue = true;
+				break;
+			}
 		}
 
 		Log.log(Log.DEBUG,this,"canImport() returning "

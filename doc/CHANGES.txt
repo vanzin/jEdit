@@ -4,7 +4,8 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
 Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
-Scott LeBaron, Seph M. Soliman, Joerg Spieler, Alan Ezust, and Orhan Alkan 
+Scott LeBaron, Seph M. Soliman, Joerg Spieler, Alan Ezust, xlinuks, 
+and Orhan Alkan 
 for contributing to this release.
 
 {{{ Bug Fixes
@@ -71,6 +72,9 @@ for contributing to this release.
 - Fixed inconsistent indentation which happened when adjucent lines both
   match with "unindentThisLine" pattern and they should be placed at first
   column. (Kazutoshi Satoda)
+  
+- Dropping files was broken when using Gnome Nautilus (patch #1795592)
+  (xlinuks)
 
 }}}
 {{{ Miscellaneous
