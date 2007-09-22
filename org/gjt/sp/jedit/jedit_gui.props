@@ -2303,6 +2303,7 @@ plugin-manager.status.error=Error
 
 plugin-manager.list-download-connect=Connecting to plugins.jedit.org
 plugin-manager.list-download=Downloading plugin list from plugins.jedit.org
+plugin-manager.filterField=Show only plugins whose name contains this text
 
 #{{{ Error while loading plugin list
 plugin-list.ioerror.title=I/O Error

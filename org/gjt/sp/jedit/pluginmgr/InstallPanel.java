@@ -27,6 +27,7 @@ package org.gjt.sp.jedit.pluginmgr;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.RolloverButton;
+import org.gjt.sp.jedit.gui.FilteredTableModel;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.Log;
@@ -38,10 +39,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -67,7 +65,8 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ Variables
 	private final JTable table;
 	private JScrollPane scrollpane;
-	private PluginTableModel pluginModel;
+	private FilteredTableModel<PluginTableModel> filteredTableModel;
+	private JTextField filterTF;
 	private PluginManager window;
 	private PluginInfoBox infoBox;
 	ChoosePluginSet chooseButton;
@@ -90,7 +89,21 @@ class InstallPanel extends JPanel implements EBComponent
 			JSplitPane.VERTICAL_SPLIT, jEdit.getBooleanProperty("appearance.continuousLayout"));
 
 		/* Setup the table */
-		table = new JTable(pluginModel = new PluginTableModel());
+		PluginTableModel tableModel = new PluginTableModel();
+		filteredTableModel = new FilteredTableModel<PluginTableModel>(tableModel)
+		{
+			public String prepareFilter(String filter)
+			{
+				return filter.toLowerCase();
+			}
+
+			public boolean passFilter(int row, String filter)
+			{
+				String pluginName = (String) delegated.getValueAt(row, 1);
+				return pluginName.toLowerCase().contains(filter);
+			}
+		};
+		table = new JTable(filteredTableModel);
 		table.setShowGrid(false);
 		table.setIntercellSpacing(new Dimension(0,0));
 		table.setRowHeight(table.getRowHeight() + 2);
@@ -135,6 +148,24 @@ class InstallPanel extends JPanel implements EBComponent
 		scrollpane.getViewport().setBackground(table.getBackground());
 		split.setTopComponent(scrollpane);
 
+		filterTF = new JTextField(40);
+		filterTF.setToolTipText(jEdit.getProperty("plugin-manager.filterField"));
+		filterTF.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void changedUpdate(DocumentEvent e)
+			{
+				filteredTableModel.setFilter(filterTF.getText().trim());
+			}
+			public void insertUpdate(DocumentEvent e)
+			{
+				filteredTableModel.setFilter(filterTF.getText().trim());
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				filteredTableModel.setFilter(filterTF.getText().trim());
+			}
+		});
+
 		/* Create description */
 		JScrollPane infoPane = new JScrollPane(
 			infoBox = new PluginInfoBox());
@@ -161,11 +192,12 @@ class InstallPanel extends JPanel implements EBComponent
 		buttons.add(new ClearPluginSet());
 		buttons.add(Box.createGlue());
 		buttons.add(new SizeLabel());
+		buttons.add(filterTF);
 
 		
 		add(BorderLayout.SOUTH,buttons);
 		String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
-		if (!path.equals("")) {
+		if (path.length() != 0) {
 			loadPluginSet(path);
 		}
 	} //}}}
@@ -187,17 +219,17 @@ class InstallPanel extends JPanel implements EBComponent
 			Log.log(Log.ERROR, this, "Loading Pluginset Error", e);
 			return false;
 		}
-		pluginModel.update();
+		filteredTableModel.getDelegated().update();
 		return true;
 	} // }}}
 
 	//{{{ updateModel() method
 	public void updateModel()
 	{
-		final Set<String> savedChecked = new HashSet<String>();
-		final Set<String> savedSelection = new HashSet<String>();
-		pluginModel.saveSelection(savedChecked,savedSelection);
-		pluginModel.clear();
+		Set<String> savedChecked = new HashSet<String>();
+		Set<String> savedSelection = new HashSet<String>();
+		filteredTableModel.getDelegated().saveSelection(savedChecked,savedSelection);
+		filteredTableModel.getDelegated().clear();
 		infoBox.setText(jEdit.getProperty("plugin-manager.list-download"));
 
 		VFSManager.runInAWTThread(new Runnable()
@@ -205,7 +237,7 @@ class InstallPanel extends JPanel implements EBComponent
 			public void run()
 			{
 				infoBox.setText(null);
-				pluginModel.update();
+				filteredTableModel.getDelegated().update();
 			}
 		});
 	} //}}}
@@ -525,7 +557,7 @@ class InstallPanel extends JPanel implements EBComponent
 			int[] rows = table.getSelectedRows();
 			for (int i=0 ; i<rows.length ; i++)
 			{
-				savedSelection.add(entries.get(rows[i]).toString());
+				savedSelection.add(entries.get(filteredTableModel.getTrueRow(rows[i])).toString());
 			}
 		} //}}}
 
@@ -540,16 +572,16 @@ class InstallPanel extends JPanel implements EBComponent
 				else setValueAt(savedChecked.contains(name), i, 0);
 			}
 
-			if (null != table)
+			if (table != null)
 			{
 				table.setColumnSelectionInterval(0,0);
 				if (!savedSelection.isEmpty())
 				{
 					int i = 0;
-					int rowCount = getRowCount();
+					int rowCount = table.getRowCount();
 					for ( ; i<rowCount ; i++)
 					{
-						String name = entries.get(i).toString();
+						String name = entries.get(filteredTableModel.getTrueRow(i)).toString();
 						if (savedSelection.contains(name))
 						{
 							table.setRowSelectionInterval(i,i);
@@ -559,7 +591,7 @@ class InstallPanel extends JPanel implements EBComponent
 					ListSelectionModel lsm = table.getSelectionModel();
 					for ( ; i<rowCount ; i++)
 					{
-						String name = entries.get(i).toString();
+						String name = entries.get(filteredTableModel.getTrueRow(i)).toString();
 						if (savedSelection.contains(name)) 
 						{
 							lsm.addSelectionInterval(i,i);
@@ -662,8 +694,8 @@ class InstallPanel extends JPanel implements EBComponent
 			String text = "";
 			if (table.getSelectedRowCount() == 1)
 			{
-				Entry entry = (Entry) pluginModel.entries
-					.get(table.getSelectedRow());
+				Entry entry = (Entry) filteredTableModel.getDelegated().entries
+					.get(filteredTableModel.getTrueRow(table.getSelectedRow()));
 				params[0] = entry.author;
 				params[1] = entry.date;
 				params[2] = entry.description;
@@ -685,21 +717,21 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			size = 0;
 			setText(jEdit.getProperty("install-plugins.totalSize")+formatSize(size));
-			pluginModel.addTableModelListener(this);
+			filteredTableModel.addTableModelListener(this);
 		}
 
 		public void tableChanged(TableModelEvent e)
 		{
 			if (e.getType() == TableModelEvent.UPDATE)
 			{
-				if(pluginModel.isDownloadingList())
+				if(filteredTableModel.getDelegated().isDownloadingList())
 					return;
 
 				size = 0;
-				int length = pluginModel.getRowCount();
+				int length = filteredTableModel.getDelegated().getRowCount();
 				for (int i = 0; i < length; i++)
 				{
-					Entry entry = (Entry)pluginModel
+					Entry entry = (Entry)filteredTableModel.getDelegated()
 						.entries.get(i);
 					if (entry.install)
 						size += entry.size;
@@ -716,26 +748,26 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			super(jEdit.getProperty("install-plugins.select-all"));
 			addActionListener(this);
-			pluginModel.addTableModelListener(this);
+			filteredTableModel.addTableModelListener(this);
 			setEnabled(false);
 		}
 
 		public void actionPerformed(ActionEvent evt)
 		{
-			pluginModel.setSelectAll(isSelected());
+			filteredTableModel.getDelegated().setSelectAll(isSelected());
 		}
 
 		public void tableChanged(TableModelEvent e)
 		{
-			if(pluginModel.isDownloadingList())
+			if(filteredTableModel.getDelegated().isDownloadingList())
 				return;
 
-			setEnabled(pluginModel.getRowCount() != 0);
+			setEnabled(filteredTableModel.getDelegated().getRowCount() != 0);
 			if (e.getType() == TableModelEvent.UPDATE)
 			{
-				int length = pluginModel.getRowCount();
+				int length = filteredTableModel.getDelegated().getRowCount();
 				for (int i = 0; i < length; i++)
-					if (!((Boolean)pluginModel.getValueAt(i,0)).booleanValue())
+					if (!((Boolean)filteredTableModel.getDelegated().getValueAt(i,0)).booleanValue())
 					{
 						setSelected(false);
 						return;
@@ -811,7 +843,7 @@ class InstallPanel extends JPanel implements EBComponent
 		public void actionPerformed(ActionEvent e)
 		{
 			pluginSet.clear();
-			pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+			filteredTableModel.getDelegated().restoreSelection(new HashSet<String>(), new HashSet<String>());
 			jEdit.unsetProperty(PluginManager.PROPERTY_PLUGINSET);
 			chooseButton.updateUI();
 		}
@@ -823,14 +855,14 @@ class InstallPanel extends JPanel implements EBComponent
 		InstallButton()
 		{
 			super(jEdit.getProperty("install-plugins.install"));
-			pluginModel.addTableModelListener(this);
+			filteredTableModel.getDelegated().addTableModelListener(this);
 			addActionListener(this);
 			setEnabled(false);
 		}
 
 		public void actionPerformed(ActionEvent evt)
 		{
-			if(pluginModel.isDownloadingList())
+			if(filteredTableModel.getDelegated().isDownloadingList())
 				return;
 
 			boolean downloadSource = jEdit.getBooleanProperty(
@@ -850,11 +882,11 @@ class InstallPanel extends JPanel implements EBComponent
 					jEdit.getJEditHome(),"jars");
 			}
 
-			int length = pluginModel.getRowCount();
+			int length = filteredTableModel.getDelegated().getRowCount();
 			int instcount = 0;
 			for (int i = 0; i < length; i++)
 			{
-				Entry entry = (Entry)pluginModel.entries.get(i);
+				Entry entry = (Entry)filteredTableModel.getDelegated().entries.get(i);
 				if (entry.install)
 				{
 					entry.plugin.install(roster,installDirectory,downloadSource);
@@ -882,20 +914,20 @@ class InstallPanel extends JPanel implements EBComponent
 				new PluginManagerProgress(window,roster);
 
 				roster.performOperationsInAWTThread(window);
-				pluginModel.update();
+				filteredTableModel.getDelegated().update();
 			}
 		}
 
 		public void tableChanged(TableModelEvent e)
 		{
-			if(pluginModel.isDownloadingList())
+			if(filteredTableModel.getDelegated().isDownloadingList())
 				return;
 
 			if (e.getType() == TableModelEvent.UPDATE)
 			{
-				int length = pluginModel.getRowCount();
+				int length = filteredTableModel.getDelegated().getRowCount();
 				for (int i = 0; i < length; i++)
-					if (((Boolean)pluginModel.getValueAt(i,0)).booleanValue())
+					if (((Boolean)filteredTableModel.getDelegated().getValueAt(i,0)).booleanValue())
 					{
 						setEnabled(true);
 						return;
@@ -972,8 +1004,8 @@ class InstallPanel extends JPanel implements EBComponent
 		public void mouseClicked(MouseEvent evt)
 		{
 		  int column = table.getTableHeader().columnAtPoint(evt.getPoint());
-		  pluginModel.sortDirection *= -1;
-		  pluginModel.sort(column);
+		  filteredTableModel.getDelegated().sortDirection *= -1;
+		  filteredTableModel.getDelegated().sort(column);
 		}
 	} //}}}
 
@@ -1019,11 +1051,11 @@ class InstallPanel extends JPanel implements EBComponent
 				Object[] state = new Object[rows.length];
 				for (int i=0 ; i<rows.length ; i++)
 				{
-					state[i] = pluginModel.getValueAt(rows[i],0);
+					state[i] = filteredTableModel.getValueAt(rows[i],0);
 				}
 				for (int i=0 ; i<rows.length ; i++)
 				{
-					pluginModel.setValueAt(state[i].equals(Boolean.FALSE),rows[i],0);
+					filteredTableModel.setValueAt(state[i].equals(Boolean.FALSE),rows[i],0);
 				}
 				break;
 			case CLOSE_PLUGIN_MANAGER:
@@ -1059,7 +1091,7 @@ class InstallPanel extends JPanel implements EBComponent
 			 chooseButton.path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
 			 if (chooseButton.path.length() > 0) {
 				 loadPluginSet(chooseButton.path);
-				 pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+				 filteredTableModel.getDelegated().restoreSelection(new HashSet<String>(), new HashSet<String>());
 				 chooseButton.updateUI();
 			 }
 		}
@@ -1084,7 +1116,7 @@ class InstallPanel extends JPanel implements EBComponent
 							       int row, int column)
 		{
 			JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
-			PluginTableModel model = (PluginTableModel) table.getModel();
+			PluginTableModel model = (PluginTableModel) ((FilteredTableModel) table.getModel()).getDelegated();
 			Icon icon = (column == model.sortType)
 				? (model.sortDirection == 1) ? ASC_ICON : DESC_ICON
 				: null;

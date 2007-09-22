@@ -599,9 +599,15 @@ public class ManagePanel extends JPanel
 		} //}}}
 
 		//{{{ saveSelection() method
+		/**
+		 * Save the selection in the given list.
+		 * The list will be filled with the jar names of the selected entries
+		 *
+		 * @param savedSelection the list where to save the selection
+		 */
 		public void saveSelection(List<String> savedSelection)
 		{
-			if (null != table)
+			if (table != null)
 			{
 				int[] rows = table.getSelectedRows();
 				for (int i=0 ; i<rows.length ; i++)
@@ -612,6 +618,11 @@ public class ManagePanel extends JPanel
 		} //}}}
 
 		//{{{ restoreSelection() method
+		/**
+		 * Restore the selection.
+		 *
+		 * @param savedSelection the selection list that contains the jar names of the selected items
+		 */
 		public void restoreSelection(List<String> savedSelection)
 		{
 			if (null != table)
@@ -1041,26 +1052,12 @@ public class ManagePanel extends JPanel
 				KeyboardFocusManager.getCurrentKeyboardFocusManager().focusPreviousComponent();
 				break;
 			case EDIT_PLUGIN:
-				List<String> savedSelection = new ArrayList<String>();
-				pluginModel.saveSelection(savedSelection);
 				int[] rows = table.getSelectedRows();
-				Object[] state = new Object[rows.length];
-				for (int i=0 ; i<rows.length ; i++)
+				for (int i = 0; i < rows.length; i++)
 				{
-					state[i] = pluginModel.getValueAt(rows[i],0);
+					Object st = pluginModel.getValueAt(rows[i], 0);
+					pluginModel.setValueAt(st.equals(Boolean.FALSE), rows[i], 0);
 				}
-				for (int i=0 ; i<rows.length ; i++)
-				{
-					for (int j=0, c=pluginModel.getRowCount() ; j<c ; j++)
-					{
-						if (pluginModel.entries.get(j).jar.equals(savedSelection.get(i)))
-						{
-							pluginModel.setValueAt(state[i].equals(Boolean.FALSE),j,0);
-							break;
-						}
-					}
-				}
-				pluginModel.restoreSelection(savedSelection);
 				break;
 			case CLOSE_PLUGIN_MANAGER:
 				window.ok();
