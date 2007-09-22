@@ -9,6 +9,9 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed a bug when calling a macro during macro recording (#1765738)
+  (Matthieu Casanova)
+
 - When removing content in a buffer when having softwrap on a NPE was
   happenning in some case (#1775258) (Matthieu Casanova)
 

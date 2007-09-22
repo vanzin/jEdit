@@ -24,14 +24,19 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import java.util.regex.Pattern;
-import org.gjt.sp.jedit.msg.*;
+
+import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.Reader;
+import java.util.*;
+import java.util.List;
+import java.util.regex.Pattern;
 //}}}
 
 /**
@@ -299,7 +304,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	public static Handler[] getHandlers()
 	{
 		Handler[] handlers = new Handler[macroHandlers.size()];
-		return (Handler[])macroHandlers.toArray(handlers);
+		return macroHandlers.toArray(handlers);
 	} //}}}
 
 	//{{{ getHandlerForFileName() method
@@ -312,7 +317,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	{
 		for (int i = 0; i < macroHandlers.size(); i++)
 		{
-			Handler handler = (Handler)macroHandlers.get(i);
+			Handler handler = macroHandlers.get(i);
 			if (handler.accept(pathName))
 				return handler;
 		}
@@ -328,11 +333,11 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 */
 	public static Handler getHandler(String name)
 	{
-		Handler handler = null;
 		for (int i = 0; i < macroHandlers.size(); i++)
 		{
-			handler = (Handler)macroHandlers.get(i);
-			if (handler.getName().equals(name)) return handler;
+			Handler handler = macroHandlers.get(i);
+			if (handler.getName().equals(name))
+				return handler;
 		}
 
 		return null;
@@ -371,7 +376,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 */
 	public static Macro getMacro(String macro)
 	{
-		return (Macro)macroHash.get(macro);
+		return macroHash.get(macro);
 	} //}}}
 
 	//{{{ getLastMacro() method
@@ -609,11 +614,11 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	private static String systemMacroPath;
 	private static String userMacroPath;
 
-	private static ArrayList macroHandlers;
+	private static List<Handler> macroHandlers;
 
 	private static ActionSet macroActionSet;
 	private static Vector macroHierarchy;
-	private static Hashtable macroHash;
+	private static Map<String, Macro> macroHash;
 
 	private static Macro lastMacro;
 	//}}}
@@ -621,12 +626,12 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	//{{{ Class initializer
 	static
 	{
-		macroHandlers = new ArrayList();
+		macroHandlers = new ArrayList<Handler>();
 		registerHandler(new BeanShellHandler());
 		macroActionSet = new ActionSet(jEdit.getProperty("action-set.macros"));
 		jEdit.addActionSet(macroActionSet);
 		macroHierarchy = new Vector();
-		macroHash = new Hashtable();
+		macroHash = new Hashtable<String, Macro>();
 	} //}}}
 
 	//{{{ loadMacros() method
@@ -658,7 +663,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 					if(obj instanceof Vector)
 					{
 						Vector vec = (Vector)obj;
-						if(((String)vec.get(0)).equals(submenuName))
+						if(submenuName.equals(vec.get(0)))
 						{
 							submenu = vec;
 							break;
@@ -668,8 +673,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				if(submenu == null)
 				{
 					submenu = new Vector();
-					submenu.addElement(submenuName);
-					vector.addElement(submenu);
+					submenu.add(submenuName);
+					vector.add(submenu);
 				}
 
 				loadMacros(submenu,path + fileName + '/',file);
@@ -703,7 +708,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			if(macroHash.get(newMacro.getName()) != null)
 				return;
 
-			vector.addElement(newMacro.getName());
+			vector.add(newMacro.getName());
 			jEdit.setTemporaryProperty(newMacro.getName()
 				+ ".label",
 				newMacro.label);
@@ -765,6 +770,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		//{{{ record() method
 		public void record(String code)
 		{
+			if (BeanShell.isScriptRunning())
+				return;
 			flushInput();
 
 			append("\n");
@@ -780,8 +787,8 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			{
 				record("for(int i = 1; i <= " + repeat + "; i++)\n"
 					+ "{\n"
-					+ code + "\n"
-					+ "}");
+					+ code + '\n'
+					+ '}');
 			}
 		} //}}}
 
@@ -799,7 +806,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				record(repeat,"textArea.userInput(\'\\t\');");
 			else
 			{
-				StringBuffer buf = new StringBuffer();
+				StringBuilder buf = new StringBuilder(repeat);
 				for(int i = 0; i < repeat; i++)
 					buf.append(ch);
 				recordInput(buf.toString(),overwrite);
@@ -911,7 +918,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 * Encapsulates creating and invoking macros in arbitrary scripting languages
 	 * @since jEdit 4.0pre6
 	 */
-	public static abstract class Handler
+	public abstract static class Handler
 	{
 		//{{{ getName() method
 		public String getName()
