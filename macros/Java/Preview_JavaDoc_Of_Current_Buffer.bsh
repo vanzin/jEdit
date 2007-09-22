@@ -2,6 +2,8 @@
  * Preview_JavaDoc_Of_Current_Buffer.bsh
  * version 1.8
  * A BeanShell macro script for the jEdit text editor
+ * :tabSize=2:indentSize=2:noTabs=true:
+ * :folding=explicit:collapseFolds=1:
  *
  *  $Header$
  *  Copyright (C) 2001-2003 Tom Gutwin
@@ -74,7 +76,7 @@
 USA.
  */
 
-
+//{{{ _getClassName() method
 String _getClassName()
 {
   /*
@@ -102,8 +104,9 @@ String _getClassName()
   name = buffer.getName();
   index = name.lastIndexOf('.');
   return (index != -1 ? name.substring(0, index) : name);
-}
+} //}}}
 
+//{{{ _determinePackageName() method
 /** Trys to obtain the package name from the file **/
 String _determinePackageName()
 {
@@ -127,8 +130,9 @@ String _determinePackageName()
       packageName = text.substring(packageWord+8,packageEOLine);
   }
   return packageName;
-}
+} //}}}
 
+//{{{ _chooseADir() method
 /** Chooses a directory and returns the path. **/
 /* Use this method if you want to customize the macro to choose
    output and input directorys for things */
@@ -144,8 +148,9 @@ String _chooseADir(String dialogTitle, String startDir)
     retVal = chooser.getSelectedFile().getAbsolutePath();
   }
   return retVal;
-}
+} //}}}
 
+//{{{ _infoView() method
 void _infoView(View view, String urlStr)
 {
   // first, check if the plugin is installed.
@@ -176,20 +181,27 @@ void _infoView(View view, String urlStr)
   {
       Macros.error(view,"Cannot find the url " + urlStr);
   }
-}
+} //}}}
 
+//{{{ _returnSystemCommand() method
 String _returnSystemCommand(View view, String command)
 {
-  // first, check if the plugin is installed.
+  //{{{ first, check if the plugin is installed.
   if(jEdit.getPlugin("console.ConsolePlugin") == null)
   {
           Macros.error(view,"You must install the Console plugin"
                   + " to use this macro.");
           return;
-  }
+  } //}}}
+
   //Macros.message(view, "Getting window manager.");
   manager = view.getDockableWindowManager();
   _console = (console.Console) manager.getDockable("console");
+  if (_console == null)
+  {
+      manager.showDockableWindow("console");
+      _console = (console.Console) manager.getDockable("console");
+  }
   outputPane = _console.getOutputPane();
 
   text = outputPane.getText();
@@ -200,8 +212,9 @@ String _returnSystemCommand(View view, String command)
   textLength = text.length();
   text = outputPane.getText().substring(textLength);
   return text;
-}
+} //}}}
 
+//{{{ _ensureFolderExists() method
 /**
  * Ensures that a folder exists.
  * <TABLE WIDTH="100%" BORDER="0" CELLSPACING="1" CELLPADDING="2">
@@ -225,7 +238,8 @@ void _ensureFolderExists(File folder)
       _ensureFolderExists(folder.getParentFile());
       folder.mkdir();
   }
-}
+} //}}}
+
 
 String versionStr = "1.8";
 String SYSTEM_FILE_SEPERATOR = File.separator;
@@ -475,7 +489,7 @@ else
         String java_home=System.getProperty("java.home");
 
         // Construct the command which will be executed
-        StringBuffer command = new StringBuffer(java_home);
+        StringBuilder command = new StringBuilder(java_home);
         if (java_home.toLowerCase().endsWith("jre"))
           command.append(File.separator).append("..");
         command.append(File.separator).append("bin");
@@ -483,7 +497,7 @@ else
 
         if (!((String)proceed).equals((String)options[0]))
         {
-          // general parms for 'other' doclets
+          //{{{ general parms for 'other' doclets
           command.append("-doclet \"");
           command.append(docletClassName[docletChoice]);
           command.append("\" ");
@@ -494,8 +508,9 @@ else
           command.append(SYSTEM_FILE_SEPERATOR);
           command.append(docletClassPath[docletChoice]);
           command.append("\" ");
+          //}}}
 
-          // Bouvard Doclet
+          //{{{ Bouvard Doclet
           // This assumes the Bouvard.jar already exists
           // in the jeditUser/jars dir
           if (((String)proceed).equals((String)options[1]))
@@ -504,9 +519,9 @@ else
             command.append("-d \"");
             command.append(outputDir);
             command.append("\" ");
-          }
+          } //}}}
 
-          // the DocBookDoclet has an extra parm
+          //{{{ the DocBookDoclet has an extra parm
           if (((String)proceed).equals((String)options[2]))
           {
             command.append("-properties \"");
@@ -517,18 +532,18 @@ else
             command.append("Java");
             command.append(SYSTEM_FILE_SEPERATOR);
             command.append("dbdoclet-xml.properties\" ");
-          }
+          } //}}}
 
-          // the XMLDoclet has an extra parm
+          //{{{ the XMLDoclet has an extra parm
           if (((String)proceed).equals((String)options[3]))
           {
             /* Specify the output dir */
             //command.append("-d \"");
             //command.append(outputDir);
             //command.append("\" ");
-          }
+          } //}}}
 
-          // the PDFDoclet has an extra parm
+          //{{{ the PDFDoclet has an extra parm
           if (((String)proceed).equals((String)options[4]))
           {
             command.append("-pdf \"");
@@ -552,10 +567,12 @@ else
               command.append(PDFDocletConfigPropertiesFile);
               command.append("\"");
             }
-          }
+          } //}}}
+
         }
         else
-        { // standard doclet parms
+        { 
+          //{{{ standard doclet parms
           if (addWindowTitle)
             command.append(windowTitle.toString());
           if (addDocTitle)
@@ -578,13 +595,16 @@ else
           command.append("-d \"");
           command.append(outputDir);
           command.append("\" ");
+          
+          //}}}
+
         }
 
         /* Set the Level of detail to show */
-          command.append(" ");
+        command.append(" ");
         command.append(showOnlyStr[showOnlyLevel]);
 
-        /* if not found add your source dir to the 'extraClassesdir' var */
+        //{{{ if not found add your source dir to the 'extraClassesdir' var
         command.append(" -classpath \"");
         command.append(SYSTEM_TEMP_DIR);
         command.append(SYSTEM_PATH_SEPERATOR);
@@ -592,6 +612,7 @@ else
         command.append(SYSTEM_PATH_SEPERATOR);
         command.append(extraClassesDir);
         command.append("\" ");
+        //}}}
 
         /* **** Done with the options ***** */
         /* Specify the package or file name */
@@ -641,7 +662,7 @@ else
         }
         else
         {
-          // add the base sourcepath
+          //{{{ add the base sourcepath
           command.append("-sourcepath \"");
           command.append(savedBufferdir);
           command.append(SYSTEM_PATH_SEPERATOR);
@@ -651,16 +672,22 @@ else
           command.append(SYSTEM_PATH_SEPERATOR);
           command.append(extraSourceDir);
           command.append("\" ");
+          //}}}
 
-          // now add the file to javadoc
+          //{{{ now add the file to javadoc
           command.append("\"");
           command.append(currBufferPath);
           command.append("\"");
-        }
+          //}}}
 
+        }
+System.out.println("****************************************************************");
+System.out.println(command.toString());
+System.out.println("****************************************************************");
         retVal = _returnSystemCommand(view, command.toString());
         if (retVal.indexOf("error") == -1)
         {
+            
           // Build the url for the Viewer
           // If you don't want to use the InfoViewer plugin...
           // easy, change the implementation in this macros _infoView method
