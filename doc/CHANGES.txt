@@ -98,6 +98,9 @@ for contributing to this release.
 - When editing toolbar the dialog now remembers the last action set
   (#1538743) (Matthieu Casanova)
 
+- The shortcuts option panel and plugin manager install panel now have a textfield
+  filter on their table (Matthieu Casanova, Shlomy Reinstein)
+
 }}}
 {{{ Editing
 
@@ -138,6 +141,9 @@ for contributing to this release.
   be notified before their docking position is changed. (1782091 - Shlomy Reinstein)
 
 - The BufferListener has a new method preContentInserted() (Matthieu Casanova)
+
+- New FilteredTableModel class that helps creating a filtered JTable
+  (Matthieu Casanova, Shlomy Reinstein)
 
 }}}
 
