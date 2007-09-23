@@ -538,7 +538,7 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 
 			sort(sortType);
-
+			filteredTableModel.setFilter(filterTF.getText().trim());
 			fireTableChanged(new TableModelEvent(this));
 		} //}}}
 
