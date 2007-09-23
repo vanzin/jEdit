@@ -70,12 +70,18 @@ class InstallPanel extends JPanel implements EBComponent
 	private PluginManager window;
 	private PluginInfoBox infoBox;
 	ChoosePluginSet chooseButton;
+	/** This flag is true if it is the update panel, false for the install panel. */
 	private boolean updates;
 
-	final HashSet<String> pluginSet = new HashSet<String>();
+	final Set<String> pluginSet = new HashSet<String>();
 	//}}}
 
 	//{{{ InstallPanel constructor
+
+	/**
+	 * @param window the plugin manager
+	 * @param updates true if it is an update panel, false if it is the install panel
+	 */
 	InstallPanel(PluginManager window, boolean updates)
 	{
 		super(new BorderLayout(12,12));
@@ -938,17 +944,17 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ EntryCompare class
-	static class EntryCompare implements Comparator
+	static class EntryCompare implements Comparator<Entry>
 	{
-	    private static final int COLUMN_INSTALL = 0;
-	    private static final int COLUMN_NAME = 1;
-	    private static final int COLUMN_CATEGORY = 2;
-	    private static final int COLUMN_VERSION = 3;
-	    private static final int COLUMN_SIZE = 4;
-	    private static final int COLUMN_RELEASE = 5;
+		private static final int COLUMN_INSTALL = 0;
+		private static final int COLUMN_NAME = 1;
+		private static final int COLUMN_CATEGORY = 2;
+		private static final int COLUMN_VERSION = 3;
+		private static final int COLUMN_SIZE = 4;
+		private static final int COLUMN_RELEASE = 5;
 
 		private int type;
-        /** 1=up, -1=down */
+		/** 1=up, -1=down */
 		private int sortDirection;
 
 		EntryCompare(int type, int sortDirection)
@@ -957,42 +963,40 @@ class InstallPanel extends JPanel implements EBComponent
 			this.sortDirection = sortDirection;
 		}
 
-		public int compare(Object o1, Object o2)
+		public int compare(Entry e1, Entry e2)
 		{
-			InstallPanel.Entry e1 = (InstallPanel.Entry)o1;
-			InstallPanel.Entry e2 = (InstallPanel.Entry)o2;
 			int result;
 
 			switch (type) 
 			{
-			  case COLUMN_INSTALL:
-			    result = (e1.install == e2.install) ? 0 : (e1.install ? 1 : -1);
-			    break;
-			  case COLUMN_NAME:
-			    result = e1.name.compareToIgnoreCase(e2.name);
-			    break;
-			  case COLUMN_CATEGORY:
-			    result = e1.set.compareToIgnoreCase(e2.set);
-			    if (result == 0)
-			    {
-			      result = e1.name.compareToIgnoreCase(e2.name);
-			    }
-			    break;
-			  case COLUMN_VERSION:
-			    // lets avoid NPE. Maybe we should move this code to StandardUtilities.compareStrings
-			    if     (e1.version == e2.version)   result = 0;
-			    else if(e1.version == null)         result = -1;
-			    else if(e2.version == null)         result = 1;
-			    else result = StandardUtilities.compareStrings(e1.version, e2.version, true);
-			    break;
-			  case COLUMN_SIZE:
-			    result = (e1.size < e2.size ? -1 : (e1.size==e2.size ? 0 : 1));
-			    break;
-			  case COLUMN_RELEASE:
-			    result = (e1.timestamp < e2.timestamp ? -1 : (e1.timestamp==e2.timestamp ? 0 : 1));
-			    break;
-			  default:
-			    result = 0;
+				case COLUMN_INSTALL:
+					result = (e1.install == e2.install) ? 0 : (e1.install ? 1 : -1);
+					break;
+				case COLUMN_NAME:
+					result = e1.name.compareToIgnoreCase(e2.name);
+					break;
+				case COLUMN_CATEGORY:
+					result = e1.set.compareToIgnoreCase(e2.set);
+					if (result == 0)
+					{
+						result = e1.name.compareToIgnoreCase(e2.name);
+					}
+					break;
+				case COLUMN_VERSION:
+					// lets avoid NPE. Maybe we should move this code to StandardUtilities.compareStrings
+					if (e1.version == e2.version) result = 0;
+					else if (e1.version == null) result = -1;
+					else if (e2.version == null) result = 1;
+					else result = StandardUtilities.compareStrings(e1.version, e2.version, true);
+					break;
+				case COLUMN_SIZE:
+					result = (e1.size < e2.size ? -1 : (e1.size == e2.size ? 0 : 1));
+					break;
+				case COLUMN_RELEASE:
+					result = (e1.timestamp < e2.timestamp ? -1 : (e1.timestamp == e2.timestamp ? 0 : 1));
+					break;
+				default:
+					result = 0;
 			}
 			return result *= sortDirection;
 		}
