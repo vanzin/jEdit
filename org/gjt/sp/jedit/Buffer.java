@@ -1985,7 +1985,8 @@ public class Buffer extends JEditBuffer
 
 				if(!getPath().equals(oldPath))
 				{
-					jEdit.updatePosition(oldSymlinkPath,this);
+					if (!isTemporary())
+						jEdit.updatePosition(oldSymlinkPath,this);
 					setMode();
 				}
 				else
@@ -2000,12 +2001,15 @@ public class Buffer extends JEditBuffer
 						propertiesChanged();
 				}
 
-				EditBus.send(new BufferUpdate(this,
-					view,BufferUpdate.DIRTY_CHANGED));
+				if (!isTemporary())
+				{
+					EditBus.send(new BufferUpdate(this,
+								      view,BufferUpdate.DIRTY_CHANGED));
 
-				// new message type introduced in 4.0pre4
-				EditBus.send(new BufferUpdate(this,
-					view,BufferUpdate.SAVED));
+					// new message type introduced in 4.0pre4
+					EditBus.send(new BufferUpdate(this,
+								      view,BufferUpdate.SAVED));
+				}
 			}
 		} //}}}
 	} //}}}
