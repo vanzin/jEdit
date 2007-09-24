@@ -34,7 +34,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -103,6 +102,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		filterPanel.add(clearButton);
 
 		keyTable = new JTable(filteredModel);
+		filteredModel.setTable(keyTable);
 		keyTable.getTableHeader().setReorderingAllowed(false);
 		keyTable.getTableHeader().addMouseListener(new HeaderMouseHandler());
 		keyTable.addMouseListener(new TableMouseHandler());

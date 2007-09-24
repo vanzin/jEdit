@@ -22,13 +22,44 @@
  */
 package org.gjt.sp.jedit.gui;
 
-import javax.swing.event.TableModelListener;
+import javax.swing.*;
 import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
-import java.util.Vector;
+import java.util.*;
 
 /**
+ * This TableModel delegates another model to add some filtering features to any
+ * JTable.
+ * To use it you must implement the abstract method passFilter().
+ * This method is called for each row, and must return true if the row should be
+ * visible, and false otherwise.
+ * It is also possible to override the method prepareFilter() that allow you to
+ * transform the filter String. Usually you can return it as lowercase
+ * <p/>
+ * Here is an example of how to use it extracted from the InstallPanel
+ * <code>
+ * PluginTableModel tableModel = new PluginTableModel();
+ * filteredTableModel = new FilteredTableModel<PluginTableModel>(tableModel)
+ * {
+ * public String prepareFilter(String filter)
+ * {
+ * return filter.toLowerCase();
+ * }
+ * <p/>
+ * public boolean passFilter(int row, String filter)
+ * {
+ * String pluginName = (String) delegated.getValueAt(row, 1);
+ * return pluginName.toLowerCase().contains(filter);
+ * }
+ * };
+ * table = new JTable(filteredTableModel);
+ * filteredTableModel.setTable(table);
+ * </code>
+ * It is not mandatory but highly recommended to give the JTable instance to the
+ * model in order to keep the selection after the filter has been updated
+ *
  * @author Shlomy Reinstein
  * @author Matthieu Casanova
  * @version $Id: Buffer.java 8190 2006-12-07 07:58:34Z kpouer $
@@ -36,12 +67,21 @@ import java.util.Vector;
  */
 public abstract class FilteredTableModel<E extends TableModel> extends AbstractTableModel implements TableModelListener
 {
-	/** The delegated table model. */
+	/**
+	 * The delegated table model.
+	 */
 	protected E delegated;
 
 	private Vector<Integer> filteredIndices;
 
+	/**
+	 * This map contains the delegated indices as key and true indices as values.
+	 */
+	private Map<Integer, Integer> invertedIndices;
+
 	private String filter;
+
+	private JTable table;
 
 	//{{{ FilteredTableModel() constructor
 	protected FilteredTableModel(E delegated)
@@ -50,6 +90,22 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 		delegated.addTableModelListener(this);
 		resetFilter();
 	} //}}}
+
+	//{{{ setTable() method
+	/**
+	 * Set the JTable that uses this model.
+	 * It is used to restore the selection after the filter has been applied
+	 * If it is null,
+	 *
+	 * @param table the table that uses the model
+	 */
+	public void setTable(JTable table)
+	{
+		if (table.getModel() != this)
+			throw new IllegalArgumentException("The given table " + table + " doesn't use this model " + this);
+		this.table = table;
+	} //}}}
+
 
 	//{{{ getDelegated() method
 	public E getDelegated()
@@ -69,30 +125,38 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	private void resetFilter()
 	{
 		int size = delegated.getRowCount();
-		filteredIndices = new Vector<Integer>(size);
-		for (int i = 0; i < size; i++)
-			filteredIndices.add(Integer.valueOf(i));
+		filteredIndices = null;
 	} //}}}
 
 	//{{{ setFilter() method
 	public void setFilter(String filter)
 	{
+		Set<Integer> selectedIndices = saveSelection();
 		this.filter = filter;
 		if (filter != null && filter.length() > 0)
 		{
 			int size = delegated.getRowCount();
 			filter = prepareFilter(filter);
 			Vector<Integer> indices = new Vector<Integer>(size);
+			Map<Integer, Integer> invertedIndices = new HashMap<Integer, Integer>();
 			for (int i = 0; i < size; i++)
 			{
 				if (passFilter(i, filter))
-					indices.add(Integer.valueOf(i));
+				{
+					Integer delegatedIndice = Integer.valueOf(i);
+					indices.add(delegatedIndice);
+
+					invertedIndices.put(delegatedIndice, indices.size() - 1);
+				}
 			}
+			this.invertedIndices = invertedIndices;
 			filteredIndices = indices;
 		}
 		else
 			resetFilter();
+
 		fireTableDataChanged();
+		restoreSelection(selectedIndices);
 	} //}}}
 
 	//{{{ prepareFilter() method
@@ -105,17 +169,50 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	/**
 	 * This callback indicates if a row passes the filter.
 	 *
-	 * @param row the row number the delegate row count
+	 * @param row    the row number the delegate row count
 	 * @param filter the filter string
 	 * @return true if the row must be visible
 	 */
 	public abstract boolean passFilter(int row, String filter);
 	//}}}
 
+	//{{{ saveSelection()
+
+	private Set<Integer> saveSelection()
+	{
+		if (table == null)
+			return null;
+		int[] rows = table.getSelectedRows();
+		if (rows.length == 0)
+			return null;
+
+		Set<Integer> selectedRows = new HashSet<Integer>(rows.length);
+		for (int row : rows)
+		{
+			selectedRows.add(getTrueRow(row));
+		}
+		return selectedRows;
+	} //}}}
+
+	//{{{ restoreSelection() method
+	private void restoreSelection(Set<Integer> selectedIndices)
+	{
+		if (selectedIndices == null)
+			return;
+
+		for (Integer selectedIndice : selectedIndices)
+		{
+			int i = getInternal2ExternalRow(selectedIndice.intValue());
+			if (i != -1)
+				table.getSelectionModel().setSelectionInterval(i, i);
+		}
+	}  //}}}
 
 	//{{{ getRowCount() method
 	public int getRowCount()
 	{
+		if (filteredIndices == null)
+			return delegated.getRowCount();
 		return filteredIndices.size();
 	} //}}}
 
@@ -159,9 +256,36 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	} //}}}
 
 	//{{{ getTrueRow() method
+	/**
+	 * Converts a row index from the JTable to an internal row index from the delegated model.
+	 *
+	 * @param rowIndex the row index
+	 * @return the row index in the delegated model
+	 */
 	public int getTrueRow(int rowIndex)
 	{
+		if (filteredIndices == null)
+			return rowIndex;
 		return filteredIndices.get(rowIndex).intValue();
+	} //}}}
+
+	//{{{ getInternal2ExternalRow() method
+	/**
+	 * Converts a row index from the delegated table model into a row index of the JTable.
+	 *
+	 * @param internalRowIndex the internal row index
+	 * @return the table row index or -1 if this row is not visible
+	 */
+	public int getInternal2ExternalRow(int internalRowIndex)
+	{
+		if (invertedIndices == null)
+			return internalRowIndex;
+
+		Integer externalRowIndex = invertedIndices.get(internalRowIndex);
+		if (externalRowIndex == null)
+			return -1;
+
+		return externalRowIndex.intValue();
 	} //}}}
 
 	/**

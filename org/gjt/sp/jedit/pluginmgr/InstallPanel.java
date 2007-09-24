@@ -110,6 +110,7 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 		};
 		table = new JTable(filteredTableModel);
+		filteredTableModel.setTable(table);
 		table.setShowGrid(false);
 		table.setIntercellSpacing(new Dimension(0,0));
 		table.setRowHeight(table.getRowHeight() + 2);
@@ -587,7 +588,7 @@ class InstallPanel extends JPanel implements EBComponent
 					int rowCount = table.getRowCount();
 					for ( ; i<rowCount ; i++)
 					{
-						String name = entries.get(filteredTableModel.getTrueRow(i)).toString();
+						String name = (String) filteredTableModel.getValueAt(i, 1);
 						if (savedSelection.contains(name))
 						{
 							table.setRowSelectionInterval(i,i);
