@@ -68,21 +68,23 @@ class PluginList
 	{
 		id = jEdit.getProperty("plugin-manager.mirror.id");
 		this.workRequest = workRequest;
-		readPluginList();
+		readPluginList(true);
 	}
 	
-	void readPluginList() 
+	void readPluginList(boolean allowRetry)
 	{
 		gzipURL = jEdit.getProperty("plugin-manager.export-url");	
 		if (!id.equals(MirrorList.Mirror.NONE))
 			gzipURL += "?mirror="+id;		
 		String path = null;
-		if (jEdit.getSettingsDirectory() == null) {
-			cachedURL=gzipURL;
+		if (jEdit.getSettingsDirectory() == null)
+		{
+			cachedURL = gzipURL;
 		}
-		else {
+		else
+		{
 			path = jEdit.getSettingsDirectory() + File.separator + "pluginMgr-Cached.xml.gz";
-			cachedURL= "file:///" + path;
+			cachedURL = "file:///" + path;
 		}
 		boolean downloadIt = !id.equals(jEdit.getProperty("plugin-manager.mirror.cached-id"));
 		if (path != null)
@@ -108,11 +110,13 @@ class PluginList
 				downloadIt = true;
 			}
 		}
-		if (downloadIt && cachedURL != gzipURL) {
+		if (downloadIt && cachedURL != gzipURL)
+		{
 			downloadPluginList();
 		}
 		InputStream in = null, inputStream = null;
-		try {
+		try
+		{
 			if (cachedURL != gzipURL) 
 				Log.log(Log.MESSAGE, this, "Using cached pluginlist");
 			inputStream = new URL(cachedURL).openStream();
@@ -138,10 +142,24 @@ class PluginList
 			parser.parse(isrc);
 				
 		}
-		catch (Exception e) {
-			Log.log (Log.ERROR, this, "readpluginlist: error", e);
+		catch (Exception e)
+		{
+			Log.log(Log.ERROR, this, "readpluginlist: error", e);
+			if (cachedURL.startsWith("file:///"))
+			{
+				Log.log(Log.DEBUG, this, "Unable to read plugin list, deleting cached file and try again");
+				new File(cachedURL.substring(8)).delete();
+				if (allowRetry)
+				{
+					plugins.clear();
+					pluginHash.clear();
+					pluginSets.clear();
+					readPluginList(false);
+				}
+			}
 		}
-		finally {
+		finally
+		{
 			IOUtilities.closeQuietly(in);
 			IOUtilities.closeQuietly(inputStream);
 		}
@@ -149,10 +167,12 @@ class PluginList
 	}
 	
 	/** Caches it locally */
-	void downloadPluginList() {
+	void downloadPluginList()
+	{
 		BufferedInputStream is = null;
 		BufferedOutputStream out = null;
-		try {
+		try
+		{
 			
 			workRequest.setStatus(jEdit.getProperty("plugin-manager.list-download"));
 			InputStream inputStream = new URL(gzipURL).openStream();

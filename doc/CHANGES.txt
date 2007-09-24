@@ -10,6 +10,9 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
+- If the cached plugin list xml is broken, it is deleted and reloaded
+  (Matthieu Casanova)
+
 - Fixed a bug when calling a macro during macro recording (#1765738)
   (Matthieu Casanova)
 
