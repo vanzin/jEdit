@@ -30,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.IOUtilities;
 
 /**
  * Manages persistence of open buffers and views across jEdit sessions.
@@ -238,14 +239,7 @@ public class PerspectiveManager
 		}
 		finally
 		{
-			try
-			{
-				if(out != null)
-					out.close();
-			}
-			catch(IOException e)
-			{
-			}
+			IOUtilities.closeQuietly(out);
 		}
 
 		file2.delete();
@@ -324,10 +318,15 @@ public class PerspectiveManager
 				autoReloadDialog = value;
 		}
 
-		/**  @return true if the uri points to a remote file */
-		public static boolean skipRemote(String uri) {
-			if (jEdit.getBooleanProperty("restore.remote")) return false;
-			if(MiscUtilities.isURL(uri)) {
+		/**
+		 * @return true if the uri points to a remote file
+		 */
+		public static boolean skipRemote(String uri)
+		{
+			if (jEdit.getBooleanProperty("restore.remote"))
+				return false;
+			if(MiscUtilities.isURL(uri))
+			{
 				String protocol = MiscUtilities.getProtocolOfURL(uri);
 				if (!protocol.equals("file")) return true;
 			}
