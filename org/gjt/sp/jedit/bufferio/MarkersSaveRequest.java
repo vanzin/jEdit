@@ -101,17 +101,7 @@ public class MarkersSaveRequest extends WorkRequest
 		}
 		catch(WorkThread.Abort a)
 		{
-			if(out != null)
-			{
-				try
-				{
-					out.close();
-				}
-				catch(IOException io)
-				{
-				}
-			}
-
+			IOUtilities.closeQuietly(out);
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 	} //}}}

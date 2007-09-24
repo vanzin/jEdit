@@ -28,6 +28,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.IOUtilities;
 
 import java.io.*;
 
@@ -135,14 +136,7 @@ public class JEditKillRing extends KillRing
 		}
 		finally
 		{
-			try
-			{
-				if(out != null)
-					out.close();
-			}
-			catch(IOException e)
-			{
-			}
+			IOUtilities.closeQuietly(out);
 		}
 
 		killRingModTime = file2.lastModified();
