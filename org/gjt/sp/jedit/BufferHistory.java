@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.IOUtilities;
 //}}}
 
 /**
@@ -45,10 +46,8 @@ public class BufferHistory
 	//{{{ getEntry() method
 	public static Entry getEntry(String path)
 	{
-		Iterator iter = history.iterator();
-		while(iter.hasNext())
+		for (Entry entry : history)
 		{
-			Entry entry = (Entry)iter.next();
 			if(MiscUtilities.pathsEqual(entry.path,path))
 				return entry;
 		}
@@ -79,9 +78,10 @@ public class BufferHistory
 
 	//{{{ getHistory() method
 	/**
+	 * @return the buffer history list
 	 * @since jEdit 4.2pre2
 	 */
-	public static List getHistory()
+	public static List<Entry> getHistory()
 	{
 		return history;
 	} //}}}
@@ -153,13 +153,10 @@ public class BufferHistory
 			out.write("<RECENT>");
 			out.write(lineSep);
 
-			Iterator iter = history.iterator();
-			while(iter.hasNext())
+			for (Entry entry : history)
 			{
 				out.write("<ENTRY>");
 				out.write(lineSep);
-
-				Entry entry = (Entry)iter.next();
 
 				out.write("<PATH>");
 				out.write(XMLUtilities.charsToEntities(entry.path,false));
@@ -205,14 +202,7 @@ public class BufferHistory
 		}
 		finally
 		{
-			try
-			{
-				if(out != null)
-					out.close();
-			}
-			catch(IOException e)
-			{
-			}
+			IOUtilities.closeQuietly(out);
 		}
 
 		if(ok)
@@ -227,13 +217,13 @@ public class BufferHistory
 	} //}}}
 
 	//{{{ Private members
-	private static LinkedList history;
+	private static LinkedList<Entry> history;
 	private static long recentModTime;
 
 	//{{{ Class initializer
 	static
 	{
-		history = new LinkedList();
+		history = new LinkedList<Entry>();
 	} //}}}
 
 	//{{{ addEntry() method
@@ -248,10 +238,10 @@ public class BufferHistory
 	//{{{ removeEntry() method
 	/* private */ static void removeEntry(String path)
 	{
-		Iterator iter = history.iterator();
+		Iterator<Entry> iter = history.iterator();
 		while(iter.hasNext())
 		{
-			Entry entry = (Entry)iter.next();
+			Entry entry = iter.next();
 			if(MiscUtilities.pathsEqual(path,entry.path))
 			{
 				iter.remove();
@@ -292,7 +282,7 @@ public class BufferHistory
 		if(s == null)
 			return null;
 
-		Vector selection = new Vector();
+		Vector<Selection> selection = new Vector<Selection>();
 		StringTokenizer st = new StringTokenizer(s);
 
 		while(st.hasMoreTokens())
@@ -314,7 +304,7 @@ public class BufferHistory
 			else //if(type.equals("rect"))
 				sel = new Selection.Rect(start,end);
 
-			selection.addElement(sel);
+			selection.add(sel);
 		}
 
 		Selection[] returnValue = new Selection[selection.size()];
