@@ -197,12 +197,12 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	//{{{ restoreSelection() method
 	private void restoreSelection(Set<Integer> selectedIndices)
 	{
-		if (selectedIndices == null)
-			return;
-
-		for (Integer selectedIndice : selectedIndices)
+		if (selectedIndices == null || getRowCount() == 0)
+			return; 
+		
+		for (Integer selectedIndex : selectedIndices)
 		{
-			int i = getInternal2ExternalRow(selectedIndice.intValue());
+			int i = getInternal2ExternalRow(selectedIndex.intValue());
 			if (i != -1)
 				table.getSelectionModel().setSelectionInterval(i, i);
 		}
