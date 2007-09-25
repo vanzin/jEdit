@@ -124,7 +124,6 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	//{{{ resetFilter() method
 	private void resetFilter()
 	{
-		int size = delegated.getRowCount();
 		filteredIndices = null;
 	} //}}}
 
