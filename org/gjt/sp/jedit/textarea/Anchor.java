@@ -104,42 +104,35 @@ abstract class Anchor
 				//line of the Anchor if it is before the end of the removed content
 
 				int loopStart = startLine + 1;
-				if (!textArea.softWrap)
-				{
-					// If no soft wrap, we don't need all this code
-					scrollLine -= end - startLine;
-				}
-				else
-				{
-					//{{{ treatment if the beginning of the deleted content is inside a physical line that has several line counts
-					if (displayManager.isLineVisible(startLine))
-					{
-						int screenLineCount = displayManager.screenLineMgr.getScreenLineCount(startLine);
-						if (screenLineCount > 1)
-						{
-							int lineStartOffset = textArea.getLineStartOffset(startLine);
 
-							int startScreenLine = textArea.getScreenLineOfOffset(lineStartOffset);
-							int deleteStartScreenLine = textArea.getScreenLineOfOffset(offset);
-							if (startScreenLine != deleteStartScreenLine)
-							{
-								loopStart = startLine + 2;
-								scrollLine -= screenLineCount - deleteStartScreenLine + startScreenLine;
-							}
+				//{{{ treatment if the beginning of the deleted content is inside a physical line that has several line counts
+				if (displayManager.isLineVisible(startLine))
+				{
+					int screenLineCount = displayManager.screenLineMgr.getScreenLineCount(startLine);
+					if (screenLineCount > 1)
+					{
+						int lineStartOffset = textArea.getLineStartOffset(startLine);
+
+						int startScreenLine = textArea.getScreenLineOfOffset(lineStartOffset);
+						int deleteStartScreenLine = textArea.getScreenLineOfOffset(offset);
+						if (startScreenLine != deleteStartScreenLine)
+						{
+							loopStart = startLine + 2;
+							scrollLine -= screenLineCount - deleteStartScreenLine + startScreenLine;
 						}
 					}
-					//}}}
+				}
+				//}}}
 
-					for(int i = loopStart; i <= end; i++)
+				for(int i = loopStart; i <= end; i++)
+				{
+					//XXX
+					if(displayManager.isLineVisible(i - 1))
 					{
-						//XXX
-						if(displayManager.isLineVisible(i - 1))
-						{
-							scrollLine -=
-								displayManager
-									.screenLineMgr
-									.getScreenLineCount(i - 1);
-						}
+						scrollLine -=
+							displayManager
+								.screenLineMgr
+								.getScreenLineCount(i - 1);
 					}
 				}
 				physicalLine -= end - startLine;

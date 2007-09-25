@@ -10,6 +10,9 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
+- NPE in scroll code when deleting some content with no wrap but some
+  closed folds (#1763932) (Matthieu Casanova)
+
 - If the cached plugin list xml is broken, it is deleted and reloaded
   (Matthieu Casanova)
 
