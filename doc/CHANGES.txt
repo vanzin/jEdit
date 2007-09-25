@@ -108,8 +108,8 @@ for contributing to this release.
 - When editing toolbar the dialog now remembers the last action set
   (#1538743) (Matthieu Casanova)
 
-- The shortcuts option panel and plugin manager install panel now have a textfield
-  filter on their table (Matthieu Casanova, Shlomy Reinstein)
+- The shortcuts option panel now have a textfield filter
+  (Matthieu Casanova, Shlomy Reinstein)
 
 }}}
 {{{ Editing
