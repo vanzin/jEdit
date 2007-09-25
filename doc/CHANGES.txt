@@ -5,7 +5,7 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
 Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
 Scott LeBaron, Seph M. Soliman, Joerg Spieler, Alan Ezust, xlinuks, 
-and Orhan Alkan 
+Orhan Alkan and Krassimir Berov
 for contributing to this release.
 
 {{{ Bug Fixes
@@ -125,6 +125,8 @@ for contributing to this release.
 - Added HLSL edit mode (SF: #1724921) (Adam Sawicki)
 
 - Added CLIPS edit mode (SF: #1745999) (Orhan Alkan)
+
+- Added Template Toolkit edit mode (SF: #1738800) (Krassimir Berov)
 
 - Added macros Editing/Open_Line_(Above|Below).bsh (Scott LeBaron) (sf: 1746798)
 

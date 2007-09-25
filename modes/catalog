@@ -440,6 +440,9 @@
 <MODE NAME="transact-sql"	FILE="tsql.xml"
 				FILE_NAME_GLOB="*.sql" />
 
+<MODE NAME="template-toolkit"	FILE="tthtml.xml"
+				FILE_NAME_GLOB="*.tt{html,css,js}" />
+
 <MODE NAME="twiki"		FILE="twiki.xml"
 				FILE_NAME_GLOB="*.twiki"/>
 
