@@ -53,6 +53,8 @@ import org.gjt.sp.jedit.View;
 /**
  * Popup window for word completion in text area.
  * This class provides basic UI of completion popup.
+ *
+ * @since jEdit 4.3pre11
  */
 public class CompletionPopup extends JWindow
 {
