@@ -641,10 +641,10 @@ public class TextArea extends JComponent
 
 	//{{{ getLastScreenLine() method
 	/**
-     * Returns the last screen line index, it is different from
-     * {@link #getVisibleLines()} because the buffer can have less lines than
-     * the visible lines
-     * @return the last screen line index. 
+	 * Returns the last screen line index, it is different from
+	 * {@link #getVisibleLines()} because the buffer can have less lines than
+	 * the visible lines
+	 * @return the last screen line index.
 	 * @since jEdit 4.3pre1
 	 */
 	public int getLastScreenLine()
@@ -655,7 +655,7 @@ public class TextArea extends JComponent
 	//{{{ getVisibleLines() method
 	/**
 	 * Returns the number of lines visible in this text area.
-     * @return the number of visible lines in the textarea
+	 * @return the number of visible lines in the textarea
 	 */
 	public final int getVisibleLines()
 	{
@@ -5166,14 +5166,16 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private boolean caretBlinks;
 	private InputHandlerProvider inputHandlerProvider;
 
-    /** The last visible physical line index. */
-    private int physLastLine;
+	/** The last visible physical line index. */
+	private int physLastLine;
 
-    /** The last screen line index. */
-    private int screenLastLine;
+	/**
+	 * The last screen line index.
+	 */
+	private int screenLastLine;
 
-    /** The visible lines count. */
-    private int visibleLines;
+	/** The visible lines count. */
+	private int visibleLines;
 	private int electricScroll;
 
 	private int horizontalOffset;
