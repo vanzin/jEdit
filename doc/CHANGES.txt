@@ -72,7 +72,7 @@ for contributing to this release.
   method of the return value of the scirpt, if any, is added to the newly
   created buffer in a new line. (bug #1554769) (Björn "Vampire" Kautler)
 
-- Fixed inconsistent indentation which happened when adjucent lines both
+- Fixed inconsistent indentation which happened when adjacent lines both
   match with "unindentThisLine" pattern and they should be placed at first
   column. (Kazutoshi Satoda)
   
