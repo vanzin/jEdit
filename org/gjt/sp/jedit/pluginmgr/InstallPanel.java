@@ -196,7 +196,7 @@ class InstallPanel extends JPanel implements EBComponent
 	{
 		final Set<String> savedChecked = new HashSet<String>();
 		final Set<String> savedSelection = new HashSet<String>();
-		pluginModel.saveSelection(savedChecked,savedSelection);
+		pluginModel.saveSelection(savedChecked, savedSelection);
 		pluginModel.clear();
 		infoBox.setText(jEdit.getProperty("plugin-manager.list-download"));
 
@@ -206,6 +206,7 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				infoBox.setText(null);
 				pluginModel.update();
+				pluginModel.restoreSelection(savedChecked, savedSelection);
 			}
 		});
 	} //}}}
@@ -508,6 +509,7 @@ class InstallPanel extends JPanel implements EBComponent
 			sort(sortType);
 
 			fireTableChanged(new TableModelEvent(this));
+			restoreSelection(savedChecked, savedSelection);
 		} //}}}
 
 		//{{{ saveSelection() method
