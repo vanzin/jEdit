@@ -15,7 +15,7 @@
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="--" />
 
-		<PROPERTY NAME="noWordSep" VALUE="-" />
+		<PROPERTY NAME="noWordSep" VALUE="-_" />
 
 		<!-- Auto indent -->
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
