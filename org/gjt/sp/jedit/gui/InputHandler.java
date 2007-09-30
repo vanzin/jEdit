@@ -96,6 +96,7 @@ public abstract class InputHandler extends AbstractInputHandler
 	public abstract void removeAllKeyBindings();
 	//}}}
 
+	//{{{ handleKey() method
 	/**
  	 * Handles a keystroke.
 	 * @param keyStroke The key stroke.
@@ -105,8 +106,9 @@ public abstract class InputHandler extends AbstractInputHandler
 	public final boolean handleKey(KeyEventTranslator.Key keyStroke)
 	{
 		return handleKey(keyStroke, false);
-	}
+	} //}}}
 
+	//{{{ processKeyEvent() method
 	/**
 	 * Forwards key events directly to the input handler.
 	 * This is slightly faster than using a KeyListener
@@ -479,9 +481,8 @@ public abstract class InputHandler extends AbstractInputHandler
 			invokeAction(lastAction);
 	} //}}}
 
-
 	//{{{ Instance variables
-	protected View view;
+	protected final View view;
 
 	protected EditAction lastAction;
 
@@ -592,6 +593,4 @@ public abstract class InputHandler extends AbstractInputHandler
 
 		readNextChar = null;
 	} //}}}
-
-	//}}}
 }
