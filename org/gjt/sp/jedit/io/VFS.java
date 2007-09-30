@@ -755,7 +755,7 @@ public abstract class VFS
 	//{{{ _getFile() method
 	/**
 	 * Returns the specified directory entry.
-	 * @param session The session
+	 * @param session The session get it with {@link VFS#createVFSSession(String, Component)}
 	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
@@ -772,7 +772,7 @@ public abstract class VFS
 	//{{{ _getDirectoryEntry() method
 	/**
 	 * Returns the specified directory entry.
-	 * @param session The session
+	 * @param session The session get it with {@link VFS#createVFSSession(String, Component)}
 	 * @param path The path
 	 * @param comp The component that will parent error dialog boxes
 	 * @exception IOException if an I/O error occurred
