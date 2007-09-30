@@ -1,5 +1,5 @@
 /*
- * ServiceManager.java - Handles services.xml files in plugins
+ * AbstractInputHandler.java - Manages key bindings and executes actions
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -35,16 +35,18 @@ import java.awt.event.KeyEvent;
 public abstract class AbstractInputHandler
 {
 	protected int lastActionCount;
+	/** This listener will receive keyboard events if it is not null. */
 	protected KeyListener keyEventInterceptor;
 	protected String readNextChar;
 	protected int repeatCount;
 
 	protected static final int REPEAT_COUNT_THRESHOLD = 20;
 
+	//{{{ AbstractInputHandler constructor
 	public AbstractInputHandler()
 	{
 		repeatCount = 1;
-	}
+	} //}}}
 
 	//{{{ getLastActionCount() method
 	/**
@@ -68,15 +70,24 @@ public abstract class AbstractInputHandler
 		lastActionCount = 0;
 	} //}}}
 
+	//{{{ getKeyEventInterceptor() method
 	public KeyListener getKeyEventInterceptor()
 	{
 		return keyEventInterceptor;
-	}
+	} //}}}
 
+	//{{{ setKeyEventInterceptor() method
+	/**
+	 * Sets the listener that will handle all key events in this
+	 * view. For example, the complete word command uses this so
+	 * that all key events are passed to the word list popup while
+	 * it is visible.
+	 * @param keyEventInterceptor the KeyListener that will receive the events
+	 */
 	public void setKeyEventInterceptor(KeyListener keyEventInterceptor)
 	{
 		this.keyEventInterceptor = keyEventInterceptor;
-	}
+	} //}}}
 
 	//{{{ isPrefixActive() method
 	/**
@@ -98,7 +109,9 @@ public abstract class AbstractInputHandler
 	public abstract boolean handleKey(KeyEventTranslator.Key keyStroke,boolean dryRun);
 	//}}}
 
-	public abstract void processKeyEvent(KeyEvent evt, int from, boolean global);
+	//{{{ processKeyEvent() method
+	public abstract void processKeyEvent(KeyEvent evt, int from, boolean global); 
+	//}}}
 
 	//{{{ processKeyEventKeyStrokeHandling() method
 	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global)
