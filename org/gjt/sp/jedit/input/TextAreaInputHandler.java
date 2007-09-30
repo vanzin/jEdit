@@ -1,5 +1,5 @@
 /*
- * ServiceManager.java - Handles services.xml files in plugins
+ * TextAreaInputHandler.java - Manages key bindings and executes actions
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -39,13 +39,13 @@ import java.awt.*;
  */
 public class TextAreaInputHandler extends AbstractInputHandler
 {
-	private TextArea textArea;
+	private final TextArea textArea;
 
-
+	//{{{ TextAreaInputHandler constructor
 	public TextAreaInputHandler(TextArea textArea)
 	{
 		this.textArea = textArea;
-	}
+	} //}}}
 
 	//{{{ processKeyEvent() method
 	/**
@@ -325,5 +325,4 @@ public class TextAreaInputHandler extends AbstractInputHandler
 		}
 		readNextChar = null;
 	} //}}}
-
 }
