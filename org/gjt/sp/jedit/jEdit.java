@@ -1741,7 +1741,8 @@ public class jEdit
 
 			BufferHistory.setEntry(buffer.getPath(),caret,
 				(Selection[])buffer.getProperty(Buffer.SELECTION),
-				buffer.getStringProperty(JEditBuffer.ENCODING));
+				buffer.getStringProperty(JEditBuffer.ENCODING),
+				buffer.getMode().getName());
 		}
 
 		String path = buffer.getSymlinkPath();
@@ -1832,7 +1833,8 @@ public class jEdit
 				int caret = _caret == null ? 0 : _caret.intValue();
 				BufferHistory.setEntry(buffer.getPath(),caret,
 					(Selection[])buffer.getProperty(Buffer.SELECTION),
-					buffer.getStringProperty(JEditBuffer.ENCODING));
+					buffer.getStringProperty(JEditBuffer.ENCODING),
+					buffer.getMode().getName());
 			}
 
 			buffer.close();
@@ -3934,6 +3936,13 @@ loop:		for(int i = 0; i < list.length; i++)
 		{
 			if(entry.encoding != null)
 				props.put(JEditBuffer.ENCODING,entry.encoding);
+		}
+
+		if (entry != null && entry.mode != null)
+		{
+			Mode mode = getMode(entry.mode);
+			if (mode != null)
+				props.put("mode", mode);
 		}
 	} //}}}
 

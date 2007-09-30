@@ -57,11 +57,11 @@ public class BufferHistory
 
 	//{{{ setEntry() method
 	public static void setEntry(String path, int caret, Selection[] selection,
-		String encoding)
+		String encoding, String mode)
 	{
 		removeEntry(path);
 		addEntry(new Entry(path,caret,selectionToString(selection),
-			encoding));
+			encoding, mode));
 		EditBus.send(new DynamicMenuChanged("recent-files"));
 	} //}}}
 
@@ -182,6 +182,14 @@ public class BufferHistory
 					out.write("<ENCODING>");
 					out.write(entry.encoding);
 					out.write("</ENCODING>");
+					out.write(lineSep);
+				}
+
+				if (entry.mode != null)
+				{
+					out.write("<MODE>");
+					out.write(entry.mode);
+					out.write("</MODE>");
 					out.write(lineSep);
 				}
 
@@ -324,18 +332,20 @@ public class BufferHistory
 		public int caret;
 		public String selection;
 		public String encoding;
+		public String mode;
 
 		public Selection[] getSelection()
 		{
 			return stringToSelection(selection);
 		}
 
-		public Entry(String path, int caret, String selection, String encoding)
+		public Entry(String path, int caret, String selection, String encoding, String mode)
 		{
 			this.path = path;
 			this.caret = caret;
 			this.selection = selection;
 			this.encoding = encoding;
+			this.mode = mode;
 		}
 
 		public String toString()
@@ -365,11 +375,13 @@ public class BufferHistory
 			{
 				history.addLast(new Entry(
 					path,caret,selection,
-					encoding));
+					encoding,
+					mode));
 				path = null;
 				caret = 0;
 				selection = null;
 				encoding = null;
+				mode = null;
 			}
 			else if(name.equals("PATH"))
 				path = charData.toString();
@@ -379,6 +391,8 @@ public class BufferHistory
 				selection = charData.toString();
 			else if(name.equals("ENCODING"))
 				encoding = charData.toString();
+			else if(name.equals("MODE"))
+				mode = charData.toString();
 			charData.setLength(0);
 		}
 
@@ -394,6 +408,7 @@ public class BufferHistory
 		private int caret;
 		private String selection;
 		private String encoding;
+		private String mode;
 		private StringBuffer charData = new StringBuffer();
 	} //}}}
 }

@@ -320,7 +320,8 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			BufferHistory.setEntry(buffer.getPath(), textArea.getCaretPosition(),
 				(Selection[])buffer.getProperty(Buffer.SELECTION),
-				buffer.getStringProperty(JEditBuffer.ENCODING));
+				buffer.getStringProperty(JEditBuffer.ENCODING),
+				buffer.getMode().getName());
 		}
 	} //}}}
 

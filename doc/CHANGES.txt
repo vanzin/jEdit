@@ -114,6 +114,9 @@ for contributing to this release.
 - The shortcuts option panel now have a textfield filter
   (Matthieu Casanova, Shlomy Reinstein)
 
+- The recent files now remembers the edit mode (feature #1593543)
+  (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
