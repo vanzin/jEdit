@@ -585,6 +585,10 @@
                 plugin manager is downloading a plugin. For information about
                 the plugin manager, see <xref linkend="using-plugins" />.</para>
             </listitem>
+            <listitem><para>
+              <filename>pluginMgr-Cached.xml.gz</filename> - 
+                this contains a cached copy of the last XML plugin list downloaded from plugin central. If you delete this file, a new one will be created next time you try to install a plugin via Plugin Manager. </para>
+            </listitem>
 
             <listitem>
                 <para><filename>printspec</filename> - a binary file that stores
