@@ -9,7 +9,9 @@
 			  location="../../build" />
 	<property name="docs-proc.target"
 			  value="none" />
-	<import file="../../../build-support/plugin-build.xml" />
+	<property name="build.support"
+			  value="../../../build-support" />
+	<import file="${build.support}/plugin-build.xml" />
 	
 	<selector id="packageFiles">
 		<filename name="LatestVersion.html" />

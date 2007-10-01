@@ -39,16 +39,6 @@ public class Deb extends MatchingTask {
 
     {
         fileset = dataTarGz.createTarFileSet();
-        TarFileSet tarFileSet = controlTarGz.createTarFileSet();
-        tarFileSet.setFile(new File(System.getProperty("user.dir")));
-        tarFileSet.setUserName("root");
-        tarFileSet.setGroup("root");
-        tarFileSet.setFullpath("./");
-        tarFileSet = dataTarGz.createTarFileSet();
-        tarFileSet.setFile(new File(System.getProperty("user.dir")));
-        tarFileSet.setUserName("root");
-        tarFileSet.setGroup("root");
-        tarFileSet.setFullpath("./");
     }
 
     /**
@@ -128,6 +118,20 @@ public class Deb extends MatchingTask {
      * @throws BuildException on error
      */
     public void execute() throws BuildException {
+        prepareTask(controlTarGz);
+        prepareTask(dataTarGz);
+        prepareTask(debPackage);
+        TarFileSet tarFileSet = controlTarGz.createTarFileSet();
+        tarFileSet.setFile(new File(System.getProperty("user.dir")));
+        tarFileSet.setUserName("root");
+        tarFileSet.setGroup("root");
+        tarFileSet.setFullpath("./");
+        tarFileSet = dataTarGz.createTarFileSet();
+        tarFileSet.setFile(new File(System.getProperty("user.dir")));
+        tarFileSet.setUserName("root");
+        tarFileSet.setGroup("root");
+        tarFileSet.setFullpath("./");
+
         if (null == tempDir) {
             tempDir = getProject().getBaseDir();
         }
@@ -187,34 +191,35 @@ public class Deb extends MatchingTask {
         log("Building deb: " + destFile.getAbsolutePath(), Project.MSG_INFO);
 
         Mkdir mkdir = new Mkdir();
-        mkdir.setDir(tempDir);
         prepareTask(mkdir);
+        mkdir.setDir(tempDir);
         mkdir.perform();
 
         Echo echo = new Echo();
+        prepareTask(echo);
         EchoLevel echoLevel = new EchoLevel();
         echoLevel.setValue("error");
         File debianBinaryFile = new File(tempDir,"debian-binary");
         echo.setFile(debianBinaryFile);
         echo.setLevel(echoLevel);
         echo.setMessage("2.0\n");
-        prepareTask(echo);
         echo.perform();
 
         for (Enumeration e=controlFileSets.elements() ; e.hasMoreElements() ; ) {
             TarFileSet fileSet = (TarFileSet)e.nextElement();
             String prefix = fileSet.getPrefix();
-            if (!prefix.startsWith("./")) {
+            String fullpath = fileSet.getFullpath();
+            if ("".equals(fullpath) && !prefix.startsWith("./")) {
                 if (prefix.startsWith("/")) {
-                	fileSet.setPrefix("." + prefix);
+                    fileSet.setPrefix("." + prefix);
                 } else {
                     fileSet.setPrefix("./" + prefix);
                 }
             }
-            String fullpath = fileSet.getFullpath();
             if ((fullpath.length() > 0) && !fullpath.startsWith("./")) {
+                fileSet.setPrefix("");
                 if (fullpath.startsWith("/")) {
-                	fileSet.setFullpath("." + fullpath);
+                    fileSet.setFullpath("." + fullpath);
                 } else {
                     fileSet.setFullpath("./" + fullpath);
                 }
@@ -230,17 +235,18 @@ public class Deb extends MatchingTask {
         for (Enumeration e=dataFileSets.elements() ; e.hasMoreElements() ; ) {
             TarFileSet fileSet = (TarFileSet)e.nextElement();
             String prefix = fileSet.getPrefix();
-            if (!prefix.startsWith("./")) {
+            String fullpath = fileSet.getFullpath();
+            if ("".equals(fullpath) && !prefix.startsWith("./")) {
                 if (prefix.startsWith("/")) {
-                	fileSet.setPrefix("." + prefix);
+                    fileSet.setPrefix("." + prefix);
                 } else {
                     fileSet.setPrefix("./" + prefix);
                 }
             }
-            String fullpath = fileSet.getFullpath();
             if ((fullpath.length() > 0) && !fullpath.startsWith("./")) {
+                fileSet.setPrefix("");
                 if (fullpath.startsWith("/")) {
-                	fileSet.setFullpath("." + fullpath);
+                    fileSet.setFullpath("." + fullpath);
                 } else {
                     fileSet.setFullpath("./" + fullpath);
                 }
@@ -255,9 +261,9 @@ public class Deb extends MatchingTask {
 
         File md5sumsFile = new File(tempDir,"md5sums");
         if (includeMd5sums) {
-        	Checksum md5 = new Checksum();
-        	prepareTask(md5);
-        	int md5Count = 0;
+            Checksum md5 = new Checksum();
+            prepareTask(md5);
+            int md5Count = 0;
             StringBuffer md5sums = new StringBuffer();
             for (Enumeration e=dataFileSets.elements() ; e.hasMoreElements() ; ) {
                 TarFileSet fileSet = (TarFileSet)e.nextElement();
@@ -281,11 +287,11 @@ public class Deb extends MatchingTask {
             echo.setFile(md5sumsFile);
             echo.setMessage(md5sums.toString());
             echo.perform();
-	        TarFileSet tarFileSet = controlTarGz.createTarFileSet();
-	        tarFileSet.setFile(md5sumsFile);
-	        tarFileSet.setUserName("root");
-	        tarFileSet.setGroup("root");
-	        tarFileSet.setPrefix("./");
+            tarFileSet = controlTarGz.createTarFileSet();
+            tarFileSet.setFile(md5sumsFile);
+            tarFileSet.setUserName("root");
+            tarFileSet.setGroup("root");
+            tarFileSet.setPrefix("./");
         }
 
         TarCompressionMethod tarCompressionMethod = new TarCompressionMethod();
@@ -293,13 +299,11 @@ public class Deb extends MatchingTask {
         controlTarGz.setCompression(tarCompressionMethod);
         File controlTarGzFile = new File(tempDir,"control.tar.gz");
         controlTarGz.setDestFile(controlTarGzFile);
-        prepareTask(controlTarGz);
         controlTarGz.perform();
 
         dataTarGz.setCompression(tarCompressionMethod);
         File dataTarGzFile = new File(tempDir,"data.tar.gz");
         dataTarGz.setDestFile(dataTarGzFile);
-        prepareTask(dataTarGz);
         dataTarGz.perform();
 
         FileUtils.delete(destFile);
@@ -309,7 +313,6 @@ public class Deb extends MatchingTask {
         fileSet.setFile(controlTarGzFile);
         fileSet = debPackage.createArFileSet();
         fileSet.setFile(dataTarGzFile);
-        prepareTask(debPackage);
         debPackage.perform();
 
         if (deleteTempFiles) {

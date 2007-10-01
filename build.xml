@@ -781,6 +781,8 @@
 								  **/build.properties
 								  doc/docbook-wrapper-*.xsl"
 						prefix="jEdit/" />
+			<tarfileset dir="../build-support"
+						prefix="build-support/" />
 		</tar>
 	</target>
 	

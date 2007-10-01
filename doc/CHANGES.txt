@@ -117,6 +117,8 @@ for contributing to this release.
 - The recent files now remembers the edit mode (feature #1593543)
   (Matthieu Casanova)
 
+- The Deb Ant Task now works with Ant 1.7 too. (Björn "Vampire" Kautler)
+
 }}}
 {{{ Editing
 

@@ -7,13 +7,19 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For all tasks:
 
-  - Apache Ant. I use version 1.6.5; older versions might or might not
-    work. Get it from <http://ant.apache.org>.
+  - Apache Ant. I use version 1.7; older or newer versions might or might not
+    work. If an older version doesn't work, install an update. If a newer
+    version doesn't work, please submit a bug report.
+    Get it from <http://ant.apache.org>.
   - The Ant Optional package. This is included in the download from ants website,
     but not in some default installs on various *nix systems.
     There you should get the ant-optional package through your
     package management system.
-  - Configure the build.properties file with your local paths.
+  - Configure the build.properties.sample file with your local paths and save it
+    as build.properties.
+  - Make sure you also have the build-support module.
+  - Configure the build.properties.sample file from build-support with your
+    local paths and save it as build.properties in the folder jars.
 
  For building jEdit, the API documentation or any of the
  distribution files except of the source package:
@@ -34,7 +40,7 @@ General jEdit documentation can be found in the 'doc' directory.
     of the ".0" version.
     Get it from <http://www.sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608>
   - xsltproc. This is originally a *nix program, but there are ports
-    for e. g. Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html>
+    e. g. for Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html>
 
  For building the online help in PDF-format:
 
@@ -159,6 +165,8 @@ General jEdit documentation can be found in the 'doc' directory.
 
  - org.gjt.sp.util.WorkThreadPool: a pool of threads executing requests
    from a queue, enforcing various concurrency requirements.
+
+
 
 * Tips for Eclipse users:
 

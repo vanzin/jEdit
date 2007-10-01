@@ -9,7 +9,9 @@
 			  location="../../build" />
 	<property name="user-doc.xml"
 			  value="users-guide.xml" />
-	<import file="../../../build-support/plugin-build.xml" />
+	<property name="build.support"
+			  value="../../../build-support" />
+	<import file="${build.support}/plugin-build.xml" />
 
 	<selector id="docSrcFiles">
 		<filename name="users-guide.xml" />
