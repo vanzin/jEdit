@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- jEdit buffer-local properties:                           -->
-<!-- :xml.root=users-guide.xml:                               -->
-<!-- :maxLineLen=80:wrap=soft:                                   -->
+
 <chapter id="plugin-implement">
+    <!-- jEdit buffer-local properties: -->
+    <!-- :xml.root=users-guide.xml: -->
+    <!-- :maxLineLen=80:wrap=soft: -->
     <title>Implementing a Simple Plugin</title>
     <!-- jEdit 4.3 Plugin Guide, (C) 2005, 2007 Alan Ezust        -->
     <!-- jEdit 4.0 Plugin Guide, (C) 2001, 2002 John Gellene      -->

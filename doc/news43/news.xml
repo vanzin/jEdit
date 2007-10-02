@@ -1,47 +1,37 @@
-<?xml version="1.0"?>
-<book xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd' >
-<!-- :maxLineLen=76:wrap=hard: -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<book>
+    <!-- :maxLineLen=76:wrap=hard: -->
     <bookinfo>
         <author>
             <firstname>Alan</firstname>
-
             <surname>Ezust</surname>
         </author>
-
         <author>
             <firstname>Slava</firstname>
-
             <surname>Pestov</surname>
         </author>
-
         <copyright>
             <year>2007</year>
-
             <year>2007</year>
-
             <holder>Alan Ezust</holder>
         </copyright>
-
         <legalnotice>
             <title>Legal Notice</title>
-
-            <para>Permission is granted to copy, distribute and/or modify
-            this document under the terms of the GNU Free Documentation
-            License, Version 1.1 or any later version published by the Free
-            Software Foundation; with no <quote>Invariant Sections</quote>,
-            <quote>Front-Cover Texts</quote> or <quote>Back-Cover
-            Texts</quote>, each as defined in the license. A copy of the
-            license is included in the file
-            <filename>COPYING.DOC.txt</filename> included with the jEdit
-            distribution.</para> </legalnotice>
-
+            <para>Permission is granted to copy, distribute and/or modify this
+            document under the terms of the GNU Free Documentation License,
+            Version 1.1 or any later version published by the Free Software
+            Foundation; with no <quote>Invariant Sections</quote>,
+            <quote>Front-Cover Texts</quote> or <quote>Back-Cover Texts</quote>,
+            each as defined in the license. A copy of the license is included in
+            the file <filename>COPYING.DOC.txt</filename> included with the
+            jEdit distribution.</para>
+        </legalnotice>
         <title>What's New in jEdit 4.3</title>
     </bookinfo>
-
     <preface id="preface">
         <title>Preface</title>
-
         <para>jEdit is a very mature text editor, and has gone through a very
         interesting phase of development. Left in a "prerelease" stage for about
         two years, it's had a long time to solifidy. Many of the original
@@ -53,14 +43,12 @@
         url="http://sourceforge.net/project/stats/detail.php?group_id=588&amp;ugn=jedit&amp;type=prdownload&amp;mode=year&amp;package_id=0">reports</ulink>
         that there are on average at least a half-million downloads per year,
         and this has been true for the entire millenium.</para>
-
         <para>In terms of actual releases, there may have been a slight lull
         while Slava's absense was sinking in among the other members of the
         community, but in 2006, thanks to their generous donations of time,
         effort, and coding skills, we started releasing regular prereleases
         again, fixing bugs in the core and each other's plugins, making jEdit
         more stable, coherent, and useful than ever.</para>
-
         <para>The thing that really excites me is seeing members of the
         community get more actively involved in improving jedit or its plugins.
         The core is huge, and there are over 164 plugins, so there is an endless
@@ -71,7 +59,6 @@
         after you read this document, you will think so too, and perhaps want to
         join in on the development of future versions of jEdit or its
         plugins.</para>
-
         <para>I watch the tracker traffic (<literal>jedit-devel</literal>) and
         commit logs (in the <literal>jedit-cvs</literal> mailing list) with
         fascination, learning new Java tricks, or new jEdit tricks. It's quite
@@ -85,10 +72,8 @@
         using it, I will be compelled to fix bugs that annoy me, be they in the
         core, or any of the plugins I happen to use.</para>
     </preface>
-
     <preface id="acknowledgements">
         <title>Acknowledgements</title>
-
         <para>This release would not have been possible if it were not for the
         *constant* help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin,
         Matthieu Casanova, and Björn "Vampire" Kautler. I would also like to
@@ -96,58 +81,45 @@
         have made <ulink url="../CHANGES.txt">significant contributions</ulink>
         to help keep this editor alive and on the cutting edge.</para>
     </preface>
-
     <chapter id="compatibility">
         <title>Java Compatibility</title>
-
         <para>jEdit 4.2 runs on Java 1.3 or later, but jEdit 4.3 requires Sun
         Java 1.5.0 or later. Older versions of Java are not supported.</para>
-
         <para>If you want to use the new LCD Antialiasing feature of Java 1.6,
         it is supported. From <guimenuitem>Global Options - Text Area -
         Antialiased Smooth Text</guimenuitem>: select <emphasis
         role="bold">Subpixel</emphasis>, and un-check the <emphasis
         role="bold">Fractional Font Metrics</emphasis> checkbox.</para>
     </chapter>
-
     <chapter id="user-changes">
         <title>User-Visible Changes</title>
-
         <section id="readded">
             <title>Re-added Features</title>
-
             <para>Soft wrapping to the text area, one of my personal favorite
             features, is possible again, by setting the wrap width to zero.
             Thank you Slava! I really missed that feature. It's probably the
             main reason I started using, testing, and later developing jEdit
             4.3.</para>
         </section>
-
         <section id="plugin-manager">
             <title>Plugin Manager</title>
-
-            <para>The three panes of the PluginManager have all been
-            reworked and made more keyboard friendly. They handle multiple
-            selections, show more information, allow sorting on more
-            columns, the checkbox states don't get lost when you switch
-            panes, and the manage panel now automatically loads dependent
-            plugins if they are already downloaded. Anyone who is used to
-            4.2's plugin manager will notice the difference
-            immediately.</para>
-
+            <para>The three panes of the PluginManager have all been reworked
+            and made more keyboard friendly. They handle multiple selections,
+            show more information, allow sorting on more columns, the checkbox
+            states don't get lost when you switch panes, and the manage panel
+            now automatically loads dependent plugins if they are already
+            downloaded. Anyone who is used to 4.2's plugin manager will notice
+            the difference immediately.</para>
             <para>From the Manage tab, it is now possible to save a set of
             installed plugins as a PluginSet. This is an XML file which can be
             located locally on your machine, or remotely on a network. Each time
             the Install tab is instantiated, the PluginSet is loaded and the set
             of plugins are checked for you to download and install.</para>
-
             <para>If you are a plugin developer, see <xref
             linkend="api-changes" />.</para>
         </section>
-
         <section id="editing">
             <title>Text Editing</title>
-
             <para><ulink
             url="http://java.sun.com/j2se/1.5.0/docs/guide/imf/index.html">Input
             Methods</ulink> are now supported in jEdit. This should make it much
@@ -155,78 +127,59 @@
             jEdit and enter Chinese/Korean/Japanese characters, as well as other
             alternative input devices.</para>
         </section>
-
         <section id="syntax">
             <title>Syntax Highlighting</title>
-
             <para>Many syntax highlighting modes were updated or rewritten to
             use the java.util.regex instead of gnu.regexp. Some modes were
             added, bring the total now to 150 languages.</para>
         </section>
-
         <section id="regexp-changes">
             <title>Regular Expressions</title>
-
             <para>Most of the core code has been rewritten to use
             <literal>java.util.regex</literal> instead of
             <literal>gnu.regexp</literal>, so be sure to keep that in mind as
             you are composing your own regular expressions, whether they are in
             mode files, search expressions, or in your own plugins.</para>
         </section>
-
         <section id="search">
             <title>Search and Replace</title>
-
             <para>Added <guimenuitem>Skip Binary</guimenuitem> and
             <guimenuitem>Skip Hidden</guimenuitem> options for Directory
             Search.</para>
         </section>
-
         <section id="encodings">
             <title>Handling of Multiple Encodings</title>
-
             <para>A full list of encodings supported by your Java implementation
             is now shown in the file system browser's
             <guimenu>Commands</guimenu>&gt;<guimenuitem>Encoding</guimenuitem>
             menu and other places. Previously only a small list of common
             encodings was shown.</para>
-
             <para>You can choose which of this list you want to display in the
             Encodings general options pane. You can also choose the fallback
             order of encodings to try in the event of decode errors in the
             General option pane.</para>
-
             <para>The encoding used by XML files is (should be?) auto-detected
             if the file provides an XML declaration like the following:</para>
-
             <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</programlisting>
-            
         </section>
-
         <section id="vfs.browser">
             <title>File System Browser</title>
-
             <para>The file system browser is much more keyboard friendly, and
             supports some common shortcuts set by default in KDE and Windows
             (del, f2, f5, backspace).</para>
         </section>
-
         <section id="bundled-macros">
             <title>Bundled Macros</title>
-
             <para>There are a number of new bundled macros, and most of the
             existing ones have undergone enhancements and bug fixes. jEdit 4.2
             bundled 58 macros in 7 categories; jEdit 4.3 bundles 70 macros in 9
             categories.</para>
-
             <para>Of course you can create new macros of your own, either by
             recording actions or writing them from scratch.</para>
         </section>
     </chapter>
-
     <chapter id="api-changes">
         <title>API Changes</title>
-
         <para>There are quite a few API changes which are documented, in the
         source as well as the <ulink url="../CORE_GUIDELINES.txt">core
         guidelines</ulink> and the <ulink
@@ -234,75 +187,63 @@
         that some of the API documentation is lacking or needs further
         explanation, please post a feature request or a question onto the -devel
         mailing list.</para>
-
         <section id="buffervsjeditbuffer">
             <title>Buffer vs jEditBuffer</title>
-
             <para>Now that the text area is independent of the rest of jEdit,
             various text area-related APIs that used to take
             org.gjt.sp.jedit.Buffer instances now take
             org.gjt.sp.jedit.buffer.JEditBuffers.</para>
-
             <para>BufferChangeListener and BufferChangeAdapter are now
             deprecated. Use BufferListener instead.</para>
         </section>
-
         <section id="api-plugins">
             <title>Plugin API changes</title>
-
             <para>jEdit 4.2 used to run plugins that were designed only for the
             4.1 plugin API, but plugins that are missing the "activate" property
             will no longer load properly in 4.3final.</para>
-
             <para>There are two new properties that all plugins can have:
             <literal>description</literal> and
             <literal>longdescription</literal>. The former is just a string
             property, while the latter is a reference to an html or text file.
             See EditPlugin API docs for details.</para>
         </section>
-        
-        <section id="dockable-interface" >
-         <title> Dockable Interface </title>
-
-<para> A new boolean attribute, <literal>MOVABLE</literal>, can now be
-specified for <literal>DOCKABLE</literal> tags in the
-<literal>dockables.xml</literal> file. This attribute specifies the behavior
-when the docking position of the dockable window is changed. If true, the
-existing instance of the dockable window is moved to the new docking
-position, thus maintaining its state after the move (this is the new
-behavior). If false, the BeanShell code is invoked to get the instance to
-put in the new docking position (this is the existing behavior). The
-BeanShell code typically returns a new instance of the dockable, cause the
-state to be lost as a result of the change in docking position. The default
-value of this attribute is false for backward compatibility. </para>
-
-<para> A new interface, <ulink
-url="../api/org/gjt/sp/jedit/gui/DockableWindow.html">DockableWindow</ulink>,
-is introduced for <literal>MOVABLE</literal> dockable windows to be notified
-before their docking position is changed. This enables dockable windows to
-react to this change, e.g. by changing their layout depending on whether
-they are docked at the top/bottom or the left/right. This interface is
-meaningless (for now) for non-MOVABLE dockable windows. </para>
-</section>
+        <section id="dockable-interface">
+            <title>Dockable Interface</title>
+            <para>A new boolean attribute, <literal>MOVABLE</literal>, can now
+            be specified for <literal>DOCKABLE</literal> tags in the
+            <literal>dockables.xml</literal> file. This attribute specifies the
+            behavior when the docking position of the dockable window is
+            changed. If true, the existing instance of the dockable window is
+            moved to the new docking position, thus maintaining its state after
+            the move (this is the new behavior). If false, the BeanShell code is
+            invoked to get the instance to put in the new docking position (this
+            is the existing behavior). The BeanShell code typically returns a
+            new instance of the dockable, cause the state to be lost as a result
+            of the change in docking position. The default value of this
+            attribute is false for backward compatibility.</para>
+            <para>A new interface, <ulink
+            url="../api/org/gjt/sp/jedit/gui/DockableWindow.html">DockableWindow</ulink>,
+            is introduced for <literal>MOVABLE</literal> dockable windows to be
+            notified before their docking position is changed. This enables
+            dockable windows to react to this change, e.g. by changing their
+            layout depending on whether they are docked at the top/bottom or the
+            left/right. This interface is meaningless (for now) for non-MOVABLE
+            dockable windows.</para>
+        </section>
     </chapter>
-
     <chapter id="new-plugins">
         <title>The core 4.3 plugins</title>
-
         <para>This chapter showcases the new(er) plugins that were under the
         most active development during jEdit 4.3. Some of them influenced the
         development of the jEdit core, and others are good enough to be
         incorporated into the core, but are left as separate plugins simply
         because it makes it easier for us to maintain and debug them.</para>
-
         <para>Navigator, providing a navigable history, is new and improved - it
         provides the user with Eclipse-like Navigation to previous locations,
         for each TextArea of each View. It uses new 4.3 EditBus messages which
         are now available in the public API, CaretChanging and
         BufferClosing.</para>
-
         <bridgehead>ProjectViewer</bridgehead>
-
         <para>For managing groups of files and organizing them into trees,
         ProjectViewer is very useful. It's been under active development, and
         many bugs are fixed quickly after they are found. Its ability to filter
@@ -311,80 +252,63 @@ meaningless (for now) for non-MOVABLE dockable windows. </para>
         that use it, such as <emphasis role="bold">FastOpen</emphasis> and
         <emphasis role="bold">OpenIt</emphasis>, both of which are also recently
         updated for 4.3.</para>
-
         <para>ProjectViewer is also very important for language plugins that
         want to deal with file sets. It defines a project-wide property
         specification, that makes it possible to have different settings
         depending on what the active project is.</para>
-
         <bridgehead>SideKicks and Language Plugins</bridgehead>
-
         <para>SideKick has been debugged and the documentation has been
         improved. Further, there is a new combobox that lets you choose your
         parser, and a new SplitPane to show you the contents of the hovered
         element. The combobox is especially important since there are multiple
         parsers that can be used on a given file, especially when you are
         working with Python, PHP, HTML, XML, or JavaScript files.</para>
-
         <para>Many language-specific plugins have been redesigned to use the new
         and improved SideKick. In particular, CtagsSideKick (a replacement for
         CodeBrowser), JPyDebug, JythonInterpreter, RubyPlugin, PHPParser,
         JavaSideKick, XML, and PerlSideKick. Be sure to try them out.</para>
-
         <para>In case you're looking for JavaCore, JBrowse, CodeAid,
         DotComplete, or PropertySideKick, they have all been merged (in terms of
         functionality) into the new JavaSideKick plugin.</para>
-
         <para>As for HtmlSideKick, JavaScriptSideKick, and XmlIndenter, they
         have all been merged into the new XML 2 plugin, which now includes two
         parsers for CSS, one for Ecmascript, and completion popups for elements
         and attributes in XML, CSS, and HTML.</para>
-
         <para>If you use many different languages, you should also try out the
         very clever ContextMenu plugin, which I am seriously thinking of adding
         to the core one of these days.</para>
-
         <formalpara>
             <title>Ant and Xerces</title>
-
             <para>Previously, Apache Ant was included in AntFarm, and Apache
             Xerces was included in the XML plugin. Both of these libraries were
             broken out of their respective plugins and given their own plugin
             status. This should help avoid some of the kinds of plugin conflicts
             that arose with previous versions of XML and AntFarm.</para>
         </formalpara>
-
         <formalpara>
             <title>Console</title>
-
             <para>Console has many new features, improved error parsing, and
             more keyboard shortcuts. The command execution part was rewritten.
             You should read the changelog in the Console users guide for more
             details.</para>
         </formalpara>
-
         <formalpara>
             <title>Optional</title>
-
             <para>This is my first plugin, I hope you like it! It combines the
             three option panes (global, plugin and buffer) under a single tab
             pane. It saves me a lot of mouse clicks when I want to switch from
             plugin options ot shortcuts.</para>
         </formalpara>
-
         <formalpara>
             <title>FTP</title>
-
             <para>The FTP plugin strongly influences the development of the
             virtual file systems of JEdit, and on occasion, bugs in one place
             require fixes in the other. FTP is being developed in lock-step with
             the core, and the most recent FTP plugin is more bug-free than
             latest version that runs on jEdit 4.2final.</para>
         </formalpara>
-
         <formalpara>
             <title>InfoViewer</title>
-
             <para>This plugin uses jEdit 4.3's action overriding API to serve as
             a replacement to the HelpViewer. Since I use/work with this instead
             of the built-in HelpViewer, I do not notice or fix bugs in
@@ -392,20 +316,16 @@ meaningless (for now) for non-MOVABLE dockable windows. </para>
             merge this into the jEdit core, but for now, it's a separate
             plugin.</para>
         </formalpara>
-
         <formalpara>
             <title>XSearch</title>
-
             <para>XSearch is a replacement for the built-in search dialogs.
             Similarly, there are new features in XSearch which have not been put
             into the core yet. XSearch has good ProjectViewer integration too -
             you can search only the files that were added to the project.</para>
         </formalpara>
     </chapter>
-
     <chapter id="futureplans">
         <title>Future Plans</title>
-
         <para>During this process of cleaning up jEdit, I started on many
         projects and did not finish them. They are still worthwhile projects,
         ones I would like to get back to. As always, if there are any volunteers
@@ -414,7 +334,6 @@ meaningless (for now) for non-MOVABLE dockable windows. </para>
         bugs and feature requests, and see if you can do any of them. Feel free
         to ask for help if you are stuck. The other developers are always happy
         to initiate someone new into the code.</para>
-
         <para>Also take a look at the <ulink url="../TODO.txt">TODO</ulink> file
         for examples of some of the work that was started but not finished yet
         on the core. Some plugins also have their own TODO lists.</para>

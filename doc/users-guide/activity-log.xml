@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- jEdit buffer-local properties: -->
-<!-- :indentSize=4:noTabs=true: -->
-<!-- :xml.root=users-guide.xml: -->
+
 <appendix id="activity-log">
+    <!-- jEdit buffer-local properties: -->
+    <!-- :indentSize=4:noTabs=true: -->
+    <!-- :xml.root=users-guide.xml: -->
     <title>The Activity Log</title>
 
     <para>The <firstterm>activity log</firstterm> is very useful for

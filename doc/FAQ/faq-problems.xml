@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sect1 id="problems">
     <title>Problems</title>
-
     <!-- jEdit buffer-local properties:                      -->
-
     <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
-
     <!-- :xml.root=faq.xml:                                  -->
-
     <!-- jEdit FAQ                                           -->
-
     <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
-
     <para>This section deals with problems you may experience while using or
     installing jEdit. Problems that aren't OS specific are listed under <link
     linkend="general-problems"><quote>General Problems</quote></link>.</para>
-
     <qandaset defaultlabel="qanda">
         <qandadiv id="general-problems">
             <title>General Problems</title>
-
             <qandaentry>
                 <question id="wont-start">
                     <para>jEdit won't start. What should I do?</para>
                 </question>
-
                 <answer>
                     <para>If you don't have a clue as to why you cannot run
                     jEdit, it's best to perform a step-by-step diagnosis. If it
@@ -36,12 +27,10 @@
                     window. If you can't find the Java application loader, your
                     Java runtime environment package may be missing or
                     incomplete.</para>
-
                     <para>Next, find where you have installed jEdit. You should
                     look for the file <filename>jedit.jar</filename> which
                     contains all of the application's Java class files in a
                     compressed archive.</para>
-
                     <para>Once you have both files, run the Java loader with the
                     <userinput>-jar</userinput> option and with
                     <filename>jedit.jar</filename> as the target. Make sure that
@@ -51,11 +40,9 @@
                     does not load at this point, the likely problem is a corrupt
                     <filename>jedit.jar</filename> file. Try downloading the
                     application again.</para>
-
                     <para>If jEdit does load using this procedure, you need to
                     examine the <quote>shortcut</quote> loading mechanism you
                     wish to use.</para>
-
                     <para>On Linux and MacOS X, you need to find and examine the
                     <filename>jedit</filename> shell script provided by the
                     installation routine to confirm that the script's commands
@@ -64,7 +51,6 @@
                     the script or elsewhere in your shell's environment. Don't
                     forget to make sure that the script's file permissions allow
                     you to execute it as a shell script.</para>
-
                     <para>On Windows, if you are using a batch script to run
                     jEdit, the same points (other than file permissions) apply
                     to examining <filename>jedit.bat</filename>. If you are
@@ -79,10 +65,8 @@
                     reinstalling the launcher by running <userinput>jedit
                     /u</userinput> followed by <userinput>jedit
                     /i</userinput>.</para>
-
                     <bridgehead>But it worked before! It just stopped working
                     after an upgrade. What should I do?</bridgehead>
-
                     <para>If it used to work for an older version and no longer
                     works, it could be that you have some old crud in your jEdit
                     settings directory (<literal>$HOME/.jedit</literal>). You
@@ -96,20 +80,17 @@
                     <literal>.jedit/jars-cache</literal> while jEdit is not
                     actually running, and it will be rebuilt next time you start
                     it.</para>
-
                     <para>If at this point you're still stuck, ask for help on
                     the jedit-users mailing list, the jEdit Community
                     <quote>Installation</quote> message board or on IRC. You're
                     bound to find someone quickly.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="start-missing-plugins">
                     <para>After jEdit starts, I can't see all of the plugins I
                     have downloaded. How can I make them appear?</para>
                 </question>
-
                 <answer>
                     <para>If you use jEdit's Plugin Manager to download and
                     install plugins, your plugins will be found in the
@@ -118,13 +99,11 @@
                     installed, or the current user's settings directory. These
                     are the only location jEdit examines when it loads plugins
                     at startup.</para>
-
                     <para>The default location of the settings directory depends
                     on your operating system. You can find out its location
                     during a jEdit session by evaluating
                     <userinput>jedit.getSettingsDirectory()</userinput> in
                     BeanShell.</para>
-
                     <para>The settings directory can be changed by using the
                     <userinput>-settings</userinput> command line parameter. If
                     you change the location of the settings directory with this
@@ -134,7 +113,6 @@
                     plugins don't get left behind.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="problems-out-of-memory">
                     <para>During an editing session I get an error message about
@@ -143,7 +121,6 @@
                     reappears every time I retry the operation. How can I
                     prevent this?</para>
                 </question>
-
                 <answer>
                     <para>One solution that often works is to set or increase
                     the allocation of memory to the heap for Java objects
@@ -158,14 +135,12 @@
                     increase the numeric portion of the
                     <userinput>-mxXXm</userinput> parameter in increments of
                     64.</para>
-
                     <para>If you are using the <userinput>-jar</userinput>
                     command line option with Java to run jEdit, remember that
                     the <userinput>-jar</userinput> parameter must be the last
                     Java option, followed immediately by the path to
                     <filename>jedit.jar</filename> and then any jEdit command
                     line options.</para>
-
                     <para>If out of memory errors occur while running a build or
                     compilation operation from within jEdit, you can also have
                     the operation run in an external process rather than inside
@@ -178,24 +153,27 @@
                     error information.</para>
                 </answer>
             </qandaentry>
-			
-			<qandaentry>
+            <qandaentry>
                 <question id="textarea-corruption">
-				  <para> My textarea gets corrupted every now and then. What should I do? </para>
-				  </question>
-				<answer>
-				  <para> If you split and un-split the EditPane, jEdit creates a new TextArea for you, and that one won't be corrupt. This can help avoid the need to restart jEdit. If you can reproduce it on the latest jEdit, please submit a bug report that details what plugins/versions you were using, and how to reproduce it.  Are you using Sidekick? XML plugin? What folding mode? Try disabling folding for that edit mode and see if the problem persists. 
-				  </para>
-				</answer>
-		   </qandaentry>
-			
-			
+                    <para>My textarea gets corrupted every now and then. What
+                    should I do?</para>
+                </question>
+                <answer>
+                    <para>If you split and un-split the EditPane, jEdit creates
+                    a new TextArea for you, and that one won't be corrupt. This
+                    can help avoid the need to restart jEdit. If you can
+                    reproduce it on the latest jEdit, please submit a bug report
+                    that details what plugins/versions you were using, and how
+                    to reproduce it. Are you using Sidekick? XML plugin? What
+                    folding mode? Try disabling folding for that edit mode and
+                    see if the problem persists.</para>
+                </answer>
+            </qandaentry>
             <qandaentry>
                 <question id="general-borders">
                     <para>Why is jEdit's window movement and resizing so
                     buggy?</para>
                 </question>
-
                 <answer>
                     <para>Perhaps the option to let Java draw window borders is
                     enabled. This option can lead to strange behavior on some
@@ -205,13 +183,11 @@
                     Options</guimenuitem> dialog box.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="install-no-such-file">
                     <para>What should I do when the installer displays the
                     message, <screen>No such file or directory</screen>?</para>
                 </question>
-
                 <answer>
                     <para>The full message that you may receive from the Java
                     application launcher begins as follows: <screen>Exception in thread "main" java.util.zip.ZipException: No such file or directory
@@ -226,7 +202,6 @@
                     web site</ulink>.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="install-noclassdef">
                     <para>After downloading
@@ -237,7 +212,6 @@
                     <screen>Exception in main(), NoClassDefFoundError: jeditXXXinstall/jar.</screen>
                     What am I doing wrong?</para>
                 </question>
-
                 <answer>
                     <para>You need to specify the <userinput>-jar</userinput>
                     option for the Java application loader so that the loader
@@ -248,12 +222,10 @@
                     jeditXXXinstall.jar</userinput>.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="jedit-crashed">
                     <para>jEdit crashed the JVM, what gives?</para>
                 </question>
-
                 <answer>
                     <para>It's important to realise that java applications
                     should never do this. The problem is almost certainly a bug
@@ -268,51 +240,43 @@
                     drivers.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="general-slowstart">
                     <para>Why is jEdit so slow to start up?</para>
                 </question>
-
                 <answer>
                     <para>Some plugins require a lot of setup - chances are if
                     you disable one, you will be able to determine the culprit.
                     jEdit normally starts up quite quickly without
                     plugins.</para>
-
                     <procedure>
                         <step>
                             <para>To go the <guimenu>Utilities</guimenu> menu and
                             select <guimenuitem>Activity
                             Log</guimenuitem>.</para>
                         </step>
-
                         <step>
                             <para>Scroll to the area where you see lines like
                             <quote>[notice] JARClassLoader: Starting plugin
                             XXX</quote>.</para>
                         </step>
                     </procedure>
-
                     <para>You should be able to see which (if any) plugins are
                     causing an excesively long delay.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="general-slow">
                     <para>Why is jEdit so slow?</para>
                 </question>
-
                 <answer>
                     <para>There may be many causes for this. Java by nature is
                     more demanding on hardware than native applications. Modern
                     computers should not have much problem with this.</para>
-
                     <para>The most likely cause is plugins that parse buffers or
                     do other computationally expensive operations. These include
-                    XML, JavaSideKick, and CodeAid. If performance is important to
-                    you, installing a whole batch of plugins in one go is
+                    XML, JavaSideKick, and CodeAid. If performance is important
+                    to you, installing a whole batch of plugins in one go is
                     probably not a very good idea. Install them one at a time,
                     so you can evaluate the effects of each. <note>
                             <para>If you are experiencing slow downs when
@@ -323,13 +287,11 @@
                         </note></para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="general-docking">
                     <para>Go to left/top/bottom/right docking area does not work
                     for some plugins?</para>
                 </question>
-
                 <answer>
                     <para>The plugin is missing a
                     <methodname>requestDefaultFocus()</methodname> method.
@@ -339,18 +301,14 @@
                 </answer>
             </qandaentry>
         </qandadiv>
-
         <!--********************************************************* Mac OS -->
-
         <qandadiv id="macos-problems">
             <title>Mac OS Problems</title>
-
             <qandaentry>
                 <question id="blurry-tabs">
                     <para>Why are the tabs for docked windows blurry under OS X
                     10.2?</para>
                 </question>
-
                 <answer>
                     <para>In Mac OS X 10.2 Apple enabled Hardware Acceleration
                     for Java by default. Unfortunately it had some bugs. This is
@@ -364,14 +322,10 @@
                     for you in the Mac OS X plugin.</para>
                 </answer>
             </qandaentry>
-
-			</qandadiv>
-
+        </qandadiv>
         <!--***************************************************** Unix/Linux -->
-
         <qandadiv id="unix-problems">
             <title>Unix/Linux Problems</title>
-
             <qandaentry>
                 <question id="install-jedit-home">
                     <para>After installing jEdit on Linux, running the
@@ -379,7 +333,6 @@
                     message: <screen>Warning: JAVA_HOME environment variable not set</screen>
                     How can I fix this?</para>
                 </question>
-
                 <answer>
                     <para>Your <filename>jedit</filename> shell script should be
                     modified to set the <userinput>JAVA_HOME</userinput>
@@ -387,20 +340,15 @@
                     desired Java runtime environment (JRE).</para>
                 </answer>
             </qandaentry>
-
         </qandadiv>
-
         <!--******************************************************** Windows -->
-
         <qandadiv id="windows-problems">
             <title>Windows Problems</title>
-
             <qandaentry>
                 <question id="install-windows-errmessage">
                     <para>When I try to run <filename>jedit.exe</filename> I get
                     the message <screen>The JEditLauncher component does not appear to be installed.</screen></para>
                 </question>
-
                 <answer>
                     <para>The dialog presenting this message asks if you would
                     like to install the launcher. Select
@@ -413,7 +361,6 @@
                     running jEdit with the launcher package.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="install-error-regkey">
                     <para>When I try to run the jEdit installation package in
@@ -421,7 +368,6 @@
 				"software\javasoft\java runtime	environment".</screen> How can I fix
                     this?</para>
                 </question>
-
                 <answer>
                     <para>The problem is not with jEdit but may be caused by
                     your installation of the Java runtime environment. Under
@@ -435,7 +381,6 @@
                     and reinstall the JDK.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="install-windows-badcommand">
                     <para>When trying to install jEdit on Windows Me with an
@@ -444,7 +389,6 @@
                     <userinput>bad command or file name</userinput>. I have
                     tried various alternatives but still cannot install.</para>
                 </question>
-
                 <answer>
                     <para>You should confirm that you have a Java runtime
                     environment installed, which will include
@@ -458,21 +402,18 @@
                     command line.</para>
                 </answer>
             </qandaentry>
-
             <qandaentry>
                 <question id="general-windows-ddraw">
                     <para>When I run jEdit on Windows, it flashes, blinks, and
                     doesn't display correctly! Why is your program so
                     buggy?</para>
                 </question>
-
                 <answer>
                     <para>A frequent cause of this problem is buggy video
                     drivers and/or a buggy DirectDraw implementation. A
                     workaround is to disable Java's use of DirectDraw by adding
                     the following option to the Java virtual machine command
                     line:</para>
-
                     <programlisting>-Dsun.java2d.noddraw=true</programlisting>
                 </answer>
             </qandaentry>
