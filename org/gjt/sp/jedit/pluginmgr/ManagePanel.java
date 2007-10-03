@@ -59,10 +59,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
@@ -823,16 +820,39 @@ public class ManagePanel extends JPanel
 
 			List<String> listModel = new LinkedList<String>();
 			Roster roster = new Roster();
+			Set<String> jarsToRemove = new HashSet<String>();
 			for(int i = 0; i < selected.length; i++)
 			{
 				Entry entry = pluginModel.getEntry(selected[i]);
-				for (String jar : entry.jars)
+				if (entry.status.equals(Entry.NOT_LOADED))
 				{
-					listModel.add(jar);
-					roster.addRemove(jar);
-					table.getSelectionModel().removeSelectionInterval(selected[i], selected[i]);
+					if (entry.jar != null)
+					{
+						try
+						{
+							Set<String> jarList = new HashSet<String>();
+							getDeclaredJars(jarList, entry.jar);
+							jarsToRemove.addAll(jarList);
+						}
+						catch (IOException e)
+						{
+							Log.log(Log.ERROR, this, e);
+						}
+					}
 				}
+				else
+				{
+                    jarsToRemove.addAll(entry.jars);
+				}
+				table.getSelectionModel().removeSelectionInterval(selected[i], selected[i]);
 			}
+
+			for (String jar : jarsToRemove)
+			{
+				listModel.add(jar);
+				roster.addRemove(jar);
+			}
+
 			int button = GUIUtilities.listConfirm(window,
 				"plugin-manager.remove-confirm",
 				null,listModel.toArray());
@@ -849,6 +869,32 @@ public class ManagePanel extends JPanel
 				scrollbar.setValue(scrollbar.getMinimum());
 			}
 		}
+		
+		private void getDeclaredJars(Collection<String> jarList, String jarName) throws IOException
+		{
+            PluginJAR pluginJAR = new PluginJAR(new File(jarName));
+            PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
+            if (pluginCacheEntry == null)
+            {
+                pluginCacheEntry = pluginJAR.generateCache();
+            }
+            Properties cachedProperties = pluginCacheEntry.cachedProperties;
+
+            String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
+
+            if(jars != null)
+            {
+                String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
+                StringTokenizer st = new StringTokenizer(jars);
+                while(st.hasMoreTokens())
+                {
+                    String _jarPath = MiscUtilities.constructPath(dir,st.nextToken());
+                    if (new File(_jarPath).exists())
+                        jarList.add(_jarPath);
+                }
+            }
+            jarList.add(jarName);
+        }
 
 		public void valueChanged(ListSelectionEvent e)
 		{

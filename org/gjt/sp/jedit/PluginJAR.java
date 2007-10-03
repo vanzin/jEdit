@@ -906,7 +906,7 @@ public class PluginJAR
 	//{{{ Static methods
 
 	//{{{ getPluginCache() method
-	static PluginCacheEntry getPluginCache(PluginJAR plugin)
+	public static PluginCacheEntry getPluginCache(PluginJAR plugin)
 	{
 		String jarCachePath = plugin.getCachePath();
 		if(jarCachePath == null)
@@ -1182,7 +1182,7 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ generateCache() method
-	private PluginCacheEntry generateCache() throws IOException
+	public PluginCacheEntry generateCache() throws IOException
 	{
 		properties = new Properties();
 

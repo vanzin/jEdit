@@ -49,9 +49,13 @@ class Roster
 	} //}}}
 
 	//{{{ addRemove() method
-	void addRemove(String plugin)
+	/**
+	 * Add a remove operation for the given jar
+	 * @param jar the jar name
+	 */
+	void addRemove(String jar)
 	{
-		addOperation(new Remove(plugin));
+		addOperation(new Remove(jar));
 	} //}}}
 
 	//{{{ addInstall() method
@@ -191,28 +195,28 @@ class Roster
 	class Remove extends Operation
 	{
 		//{{{ Remove constructor
-		Remove(String plugin)
+		Remove(String jar)
 		{
-			this.plugin = plugin;
+			this.jar = jar;
 		} //}}}
 
 		//{{{ runInAWTThread() method
 		public void runInAWTThread(Component comp)
 		{
 			// close JAR file and all JARs that depend on this
-			PluginJAR jar = jEdit.getPluginJAR(plugin);
+			PluginJAR jar = jEdit.getPluginJAR(this.jar);
 			if(jar != null)
 			{
 				unloadPluginJAR(jar);
 			}
 
-			toLoad.remove(plugin);
+			toLoad.remove(this.jar);
 
 			// remove cache file
 
 			// move JAR first
-			File jarFile = new File(plugin);
-			File srcFile = new File(plugin.substring(0,plugin.length() - 4));
+			File jarFile = new File(this.jar);
+			File srcFile = new File(this.jar.substring(0, this.jar.length() - 4));
 
 			Log.log(Log.NOTICE,this,"Deleting " + jarFile);
 
@@ -225,7 +229,7 @@ class Roster
 
 			if(!ok)
 			{
-				String[] args = { plugin };
+				String[] args = {this.jar};
 				GUIUtilities.error(comp,"plugin-manager.remove-failed",args);
 			}
 		} //}}}
@@ -260,11 +264,11 @@ class Roster
 		public boolean equals(Object o)
 		{
 			return o instanceof Remove
-			       && ((Remove) o).plugin.equals(plugin);
+			       && ((Remove) o).jar.equals(jar);
 		} //}}}
 
 		//{{{ Private members
-		private final String plugin;
+		private final String jar;
 		//}}}
 	} //}}}
 

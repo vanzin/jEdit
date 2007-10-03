@@ -1,5 +1,28 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre12
+
+Thanks to Matthieu Casanova for contributing to this release.
+
+{{{ Bug Fixes
+
+- When removing a plugin that is not loaded, it's declared jars are now removed 
+  too (Matthieu Casanova)
+
+}}}
+{{{ Miscellaneous
+
+}}}
+{{{ Editing
+
+}}}
+{{{ API Changes
+
+}}}
+
+}}}
+
+
 {{{ Version 4.3pre11
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
