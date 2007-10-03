@@ -129,7 +129,7 @@ class InstallPanel extends JPanel implements EBComponent
 		header.setReorderingAllowed(false);
 		header.addMouseListener(new HeaderMouseHandler());
 		header.setDefaultRenderer(new HeaderRenderer(
-		    (DefaultTableCellRenderer)header.getDefaultRenderer()));
+			(DefaultTableCellRenderer)header.getDefaultRenderer()));
 
 		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
@@ -438,7 +438,7 @@ class InstallPanel extends JPanel implements EBComponent
 
 			if (sortType != type)
 			{
-			  sortDirection = 1;
+				sortDirection = 1;
 			}
 			sortType = type;
 
@@ -910,15 +910,16 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ EntryCompare class
 	static class EntryCompare implements Comparator
 	{
-	    private static final int COLUMN_INSTALL = 0;
-	    private static final int COLUMN_NAME = 1;
-	    private static final int COLUMN_CATEGORY = 2;
-	    private static final int COLUMN_VERSION = 3;
-	    private static final int COLUMN_SIZE = 4;
-	    private static final int COLUMN_RELEASE = 5;
+		private static final int COLUMN_INSTALL = 0;
+		private static final int COLUMN_NAME = 1;
+		private static final int COLUMN_CATEGORY = 2;
+		private static final int COLUMN_VERSION = 3;
+		private static final int COLUMN_SIZE = 4;
+		private static final int COLUMN_RELEASE = 5;
 
 		private int type;
-        /** 1=up, -1=down */
+
+		/** 1=up, -1=down */
 		private int sortDirection;
 
 		EntryCompare(int type, int sortDirection)
@@ -935,36 +936,59 @@ class InstallPanel extends JPanel implements EBComponent
 
 			switch (type)
 			{
-			  case COLUMN_INSTALL:
-			    result = (e1.install == e2.install) ? 0 : (e1.install ? 1 : -1);
-			    break;
-			  case COLUMN_NAME:
-			    result = e1.name.compareToIgnoreCase(e2.name);
-			    break;
-			  case COLUMN_CATEGORY:
-			    result = e1.set.compareToIgnoreCase(e2.set);
-			    if (result == 0)
-			    {
-			      result = e1.name.compareToIgnoreCase(e2.name);
-			    }
-			    break;
-			  case COLUMN_VERSION:
-			    // lets avoid NPE. Maybe we should move this code to StandardUtilities.compareStrings
-			    if     (e1.version == e2.version)   result = 0;
-			    else if(e1.version == null)         result = -1;
-			    else if(e2.version == null)         result = 1;
-			    else result = StandardUtilities.compareStrings(e1.version, e2.version, true);
-			    break;
-			  case COLUMN_SIZE:
-			    result = (e1.size < e2.size ? -1 : (e1.size==e2.size ? 0 : 1));
-			    break;
-			  case COLUMN_RELEASE:
-			    result = (e1.timestamp < e2.timestamp ? -1 : (e1.timestamp==e2.timestamp ? 0 : 1));
-			    break;
-			  default:
-			    result = 0;
+				case COLUMN_INSTALL:
+					result = (e1.install == e2.install) ? 0 : (e1.install ? 1 : -1);
+					break;
+				case COLUMN_NAME:
+					result = e1.name.compareToIgnoreCase(e2.name);
+					break;
+				case COLUMN_CATEGORY:
+					result = e1.set.compareToIgnoreCase(e2.set);
+					if (result == 0)
+					{
+						result = e1.name.compareToIgnoreCase(e2.name);
+					}
+					break;
+				case COLUMN_VERSION:
+					// lets avoid NPE. Maybe we should move
+					// this code to StandardUtilities.compareStrings
+					if (e1.version == e2.version)
+					{
+						result = 0;
+					}
+					else if (e1.version == null)
+					{
+						result = -1;
+					}
+					else if(e2.version == null)
+					{
+						result = 1;
+					}
+					else
+					{
+						result = StandardUtilities.compareStrings(e1.version,
+											  e2.version,
+											  true);
+					}
+					break;
+				case COLUMN_SIZE:
+					result = (e1.size < e2.size)
+						 ? -1
+						 : ((e1.size == e2.size)
+						    ? 0
+						    : 1);
+					break;
+				case COLUMN_RELEASE:
+					result = (e1.timestamp < e2.timestamp)
+						 ? -1
+						 : ((e1.timestamp == e2.timestamp)
+						    ? 0
+						    : 1);
+					break;
+				default:
+					result = 0;
 			}
-			return result *= sortDirection;
+			return result * sortDirection;
 		}
 	} //}}}
 
@@ -973,9 +997,9 @@ class InstallPanel extends JPanel implements EBComponent
 	{
 		public void mouseClicked(MouseEvent evt)
 		{
-		  int column = table.getTableHeader().columnAtPoint(evt.getPoint());
-		  pluginModel.sortDirection *= -1;
-		  pluginModel.sort(column);
+			int column = table.getTableHeader().columnAtPoint(evt.getPoint());
+			pluginModel.sortDirection *= -1;
+			pluginModel.sort(column);
 		}
 	} //}}}
 
