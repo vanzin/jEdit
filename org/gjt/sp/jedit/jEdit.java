@@ -77,7 +77,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "04.03.11.00";
+		return "04.03.12.00";
 	} //}}}
 
 	//{{{ main() method
@@ -3958,7 +3958,8 @@ loop:		for(int i = 0; i < list.length; i++)
 
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
-			if (Options.SIMPLIFIED_KEY_HANDLING) {
+			if (Options.SIMPLIFIED_KEY_HANDLING)
+			{
 				boolean result;
 
 				/*
@@ -4013,7 +4014,9 @@ loop:		for(int i = 0; i < list.length; i++)
 				result = super.postProcessKeyEvent(evt);
 
 				return result;
-			} else {
+			}
+			else
+			{
 				if(!evt.isConsumed())
 				{
 					Component comp = (Component)evt.getSource();
