@@ -201,8 +201,10 @@ class BrowserView extends JPanel
 					try
 					{
 						file = _vfs._getFile(session, parent, browser);
-                        if (file != null)
-                            file.setName(_vfs.getFileName(parent));
+						if (file != null)
+						{
+							file.setName(_vfs.getFileName(parent));
+						}
 					}
 					catch (IOException e)
 					{

@@ -225,11 +225,15 @@ public class FileVFS extends VFS
 		//{{{ getExtendedAttribute() method
 		public String getExtendedAttribute(String name)
 		{
-            fetchAttrs();
-            if(name.equals(EA_MODIFIED))
+			fetchAttrs();
+			if (name.equals(EA_MODIFIED))
+			{
 				return DATE_FORMAT.format(new Date(modified));
+			}
 			else
+			{
 				return super.getExtendedAttribute(name);
+			}
 		} //}}}
 
 		//{{{ fetchAttrs() method
