@@ -49,12 +49,12 @@
 
 		<SEQ TYPE="OPERATOR" DELEGATE="PROPERTIES">{</SEQ>
 
-		<SPAN_REGEXP HASH_CHAR="L" TYPE="KEYWORD4">
+		<SPAN_REGEXP HASH_CHAR="lang" TYPE="KEYWORD4">
 			<BEGIN>lang\s*\(</BEGIN>
 			<END>)</END>
 		</SPAN_REGEXP>
 
-		<SPAN_REGEXP HASH_CHAR="L" TYPE="KEYWORD4">
+		<SPAN_REGEXP HASH_CHAR="lang" TYPE="KEYWORD4">
 			<BEGIN>lang\s*\(</BEGIN>
 			<END>)</END>
 		</SPAN_REGEXP>
@@ -274,7 +274,7 @@
 		<SEQ_REGEXP HASH_CHAR="!" TYPE="KEYWORD2">!\s*important</SEQ_REGEXP>
 
 		<!-- proprietary IE function: -->
-		<SPAN_REGEXP TYPE="FUNCTION" DELEGATE="javascript::MAIN" HASH_CHAR="e">
+		<SPAN_REGEXP TYPE="FUNCTION" DELEGATE="javascript::MAIN" HASH_CHAR="expression">
 			<BEGIN>expression\s*\(</BEGIN>
 			<END>)</END>
 		</SPAN_REGEXP>
