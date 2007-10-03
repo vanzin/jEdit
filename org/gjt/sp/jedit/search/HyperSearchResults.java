@@ -380,8 +380,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				resultTreeRoot.removeAllChildren();
 				resultTreeModel.reload(resultTreeRoot);
 				setSearchStatus(null);
-                view.getDockableWindowManager().hideDockableWindow(NAME);
-            }
+				view.getDockableWindowManager().hideDockableWindow(NAME);
+			}
 			else if(source == multi)
 			{
 				multiStatus = !multiStatus;
