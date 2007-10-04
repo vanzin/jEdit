@@ -109,10 +109,9 @@ public class JEditRegisterSaver implements RegisterSaver
 			{
 				Registers.Register register = registers[i];
 				if(register == null ||
-                                   i == '$' ||
-                                   i == '%' ||
-                                   register.toString().length() == 0
-                                  )
+				   i == '$' ||
+				   i == '%' ||
+				   register.toString().length() == 0)
 					continue;
 
 				out.write("<REGISTER NAME=\"");

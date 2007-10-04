@@ -341,10 +341,10 @@ public class VFSDirectoryEntryTable extends JTable
 				ac.invokeAction(evt, ea);
 				break;
 		          case KeyEvent.VK_F5:
-                               evt.consume();
-                               ea = ac.getAction("vfs.browser.reload");
-                               ac.invokeAction(evt, ea);
-                               break;
+			          evt.consume();
+			          ea = ac.getAction("vfs.browser.reload");
+			          ac.invokeAction(evt, ea);
+			          break;
 		          case KeyEvent.VK_F6:
 		          case KeyEvent.VK_TAB:
 		        	  browser.focusOnDefaultComponent();
