@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre12
 
-Thanks to Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -12,16 +12,18 @@ Thanks to Matthieu Casanova for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+
 }}}
 {{{ Editing
+
 
 }}}
 {{{ API Changes
 
-}}}
 
 }}}
 
+}}}
 
 {{{ Version 4.3pre11
 
