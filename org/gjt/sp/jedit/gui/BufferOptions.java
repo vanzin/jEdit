@@ -112,7 +112,7 @@ public class BufferOptions extends EnhancedDialog
 		dispose();
 	} //}}}
 
-        //{{{ Private members
+	//{{{ Private members
 
 	private View view;
 	private Buffer buffer;

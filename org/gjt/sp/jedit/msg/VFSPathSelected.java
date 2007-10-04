@@ -2,7 +2,6 @@ package org.gjt.sp.jedit.msg;
 
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.io.VFSFile;
 
 /** Message sent when a file system tree node,
  * or a ProjectViewer tree node, is selected.
@@ -15,21 +14,21 @@ public class VFSPathSelected extends EBMessage
 	 * @param path The selected path.
 	 */
 	public VFSPathSelected(View source, String path)
-    {
+	{
 		super(source);
 		this.path = path;
 	}
 
-    public View getView()
-    {
-        return (View) getSource();
-    }
+	public View getView()
+	{
+		return (View) getSource();
+	}
 
 	/**
-     *  @return The selected URL (or file path).
+	 *  @return The selected URL (or file path).
 	 */
 	public String getPath()
-    {
+	{
 		return path;
 	}
 

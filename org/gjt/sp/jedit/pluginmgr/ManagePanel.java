@@ -842,7 +842,7 @@ public class ManagePanel extends JPanel
 				}
 				else
 				{
-                    jarsToRemove.addAll(entry.jars);
+					jarsToRemove.addAll(entry.jars);
 				}
 				table.getSelectionModel().removeSelectionInterval(selected[i], selected[i]);
 			}
@@ -872,29 +872,29 @@ public class ManagePanel extends JPanel
 		
 		private void getDeclaredJars(Collection<String> jarList, String jarName) throws IOException
 		{
-            PluginJAR pluginJAR = new PluginJAR(new File(jarName));
-            PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
-            if (pluginCacheEntry == null)
-            {
-                pluginCacheEntry = pluginJAR.generateCache();
-            }
-            Properties cachedProperties = pluginCacheEntry.cachedProperties;
+			PluginJAR pluginJAR = new PluginJAR(new File(jarName));
+			PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
+			if (pluginCacheEntry == null)
+			{
+				pluginCacheEntry = pluginJAR.generateCache();
+			}
+			Properties cachedProperties = pluginCacheEntry.cachedProperties;
 
-            String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
+			String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
 
-            if(jars != null)
-            {
-                String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
-                StringTokenizer st = new StringTokenizer(jars);
-                while(st.hasMoreTokens())
-                {
-                    String _jarPath = MiscUtilities.constructPath(dir,st.nextToken());
-                    if (new File(_jarPath).exists())
-                        jarList.add(_jarPath);
-                }
-            }
-            jarList.add(jarName);
-        }
+			if (jars != null)
+			{
+				String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
+				StringTokenizer st = new StringTokenizer(jars);
+				while (st.hasMoreTokens())
+				{
+					String _jarPath = MiscUtilities.constructPath(dir, st.nextToken());
+					if (new File(_jarPath).exists())
+						jarList.add(_jarPath);
+				}
+			}
+			jarList.add(jarName);
+		}
 
 		public void valueChanged(ListSelectionEvent e)
 		{
