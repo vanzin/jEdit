@@ -38,6 +38,9 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	/**
 	 * Sets if the current request can be aborted.
+	 * If set to true and already aborted, the thread will be stopped
+	 *
+	 * @param abortable true if the WorkThread is abortable
 	 * @since jEdit 2.6pre1
 	 */
 	public void setAbortable(boolean abortable)
@@ -52,6 +55,7 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	/**
 	 * Returns if the work thread is currently running a request.
+	 * @return true if a request is currently running
 	 */
 	public boolean isRequestRunning()
 	{
@@ -59,16 +63,17 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 	}
 
 
-    public boolean isAborted()
-    {
-        synchronized(abortLock)
-        {
-            return aborted;
-        }
-    }
+	public boolean isAborted()
+	{
+		synchronized (abortLock)
+		{
+			return aborted;
+		}
+	}
 
-    /**
+	/**
 	 * Returns the status text.
+	 * @return the status label
 	 */
 	public String getStatus()
 	{
@@ -77,6 +82,7 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	/**
 	 * Sets the status text.
+	 * @param status the new status of the thread
 	 * @since jEdit 2.6pre1
 	 */
 	public void setStatus(String status)
@@ -87,6 +93,7 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	/**
 	 * Returns the progress value.
+	 * @return the progress value
 	 */
 	public int getProgressValue()
 	{
@@ -95,6 +102,7 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	/**
 	 * Sets the progress value.
+	 * @param progressValue the new progress value
 	 * @since jEdit 2.6pre1
 	 */
 	public void setProgressValue(int progressValue)
@@ -105,6 +113,7 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	/**
 	 * Returns the progress maximum.
+	 * @return the maximum value of the progression
 	 */
 	public int getProgressMaximum()
 	{
@@ -113,6 +122,7 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	/**
 	 * Sets the maximum progress value.
+	 * @param progressMaximum the maximum value of the progression
 	 * @since jEdit 2.6pre1
 	 */
 	public void setProgressMaximum(int progressMaximum)
@@ -147,7 +157,7 @@ public class WorkThread extends Thread implements ThreadAbortMonitor
 
 	// private members
 	private WorkThreadPool pool;
-	private Object abortLock = new Object();
+	private final Object abortLock = new Object();
 	private boolean requestRunning;
 	private boolean abortable;
 	private boolean aborted;

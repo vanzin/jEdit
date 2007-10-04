@@ -198,6 +198,7 @@ public class WorkThreadPool
 	//{{{ getRequestCount() method
 	/**
 	 * Returns the number of pending requests.
+	 * @return the pending request count
 	 */
 	public int getRequestCount()
 	{
@@ -207,6 +208,7 @@ public class WorkThreadPool
 	//{{{ getThreadCount() method
 	/**
 	 * Returns the number of threads in this pool.
+	 * @return the thread count
 	 */
 	public int getThreadCount()
 	{
@@ -220,6 +222,7 @@ public class WorkThreadPool
 	/**
 	 * Returns the specified thread.
 	 * @param index The index of the thread
+	 * @return a WorkThread
 	 */
 	public WorkThread getThread(int index)
 	{
@@ -247,8 +250,8 @@ public class WorkThreadPool
 	} //}}}
 
 	//{{{ Package-private members
-	Object lock = new Object();
-	Object waitForAllLock = new Object();
+	final Object lock = new Object();
+	final Object waitForAllLock = new Object();
 
 	//{{{ fireStatusChanged() method
 	void fireStatusChanged(WorkThread thread)
@@ -382,7 +385,10 @@ public class WorkThreadPool
 	} //}}}
 
 	//{{{ doAWTRequest() method
-	/** Must always be called with the lock held. */
+	/**
+	 * Must always be called with the lock held.
+	 * @param request the request to run
+	 */
 	private void doAWTRequest(Request request)
 	{
 //		Log.log(Log.DEBUG,this,"Running in AWT thread: " + request);
