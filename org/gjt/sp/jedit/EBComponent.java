@@ -43,12 +43,12 @@ public interface EBComponent
 	 * which the component has an interest. For example:
 	 *
 	 * <pre> if(msg instanceof BufferUpdate) {
-         *     // a buffer's state has changed!
-         * }
-         * else if(msg instanceof ViewUpdate) {
-         *     // a view's state has changed!
-         * }
-         * // ... and so on</pre>
+	 *     // a buffer's state has changed!
+	 * }
+	 * else if(msg instanceof ViewUpdate) {
+	 *     // a view's state has changed!
+	 * }
+	 * // ... and so on</pre>
 	 *
 	 * @param message The message
 	 */
