@@ -69,7 +69,7 @@ public abstract class Selection implements Cloneable
 	/**
 	 * Returns the beginning of the portion of the selection
 	 * falling on the specified line. Used to manipulate
-         * selection text on a line-by-line basis.
+	 * selection text on a line-by-line basis.
 	 * @param buffer The buffer
 	 * @param line The line number
 	 * @since jEdit 4.1pre1
@@ -81,7 +81,7 @@ public abstract class Selection implements Cloneable
 	/**
 	 * Returns the end of the portion of the selection
 	 * falling on the specified line. Used to manipulate
-         * selection text on a line-by-line basis.
+	 * selection text on a line-by-line basis.
 	 * @param buffer The buffer
 	 * @param line The line number
 	 * @since jEdit 4.1pre1
@@ -387,20 +387,20 @@ public abstract class Selection implements Cloneable
 			if(startOffset == -1)
 			{
 				extraStartVirt = startColumn - width[0];
-				startOffset = buffer.getLineEndOffset(startLine) - 1;
+				//startOffset = buffer.getLineEndOffset(startLine) - 1;
 			}
-			else
-				startOffset += buffer.getLineStartOffset(startLine);
+			/*else
+				startOffset += buffer.getLineStartOffset(startLine);*/
 
 			int endOffset = buffer.getOffsetOfVirtualColumn(endLine,
 				endColumn,width);
 			if(endOffset == -1)
 			{
 				extraEndVirt = endColumn - width[0];
-				endOffset = buffer.getLineEndOffset(endLine) - 1;
+				//endOffset = buffer.getLineEndOffset(endLine) - 1;
 			}
-			else
-				endOffset += buffer.getLineStartOffset(endLine);
+			/*else
+				endOffset += buffer.getLineStartOffset(endLine);*/
 		} //}}}
 
 		//{{{ getStartColumn() method
@@ -489,6 +489,7 @@ public abstract class Selection implements Cloneable
 
 			int maxWidth = 0;
 			int totalLines = 0;
+			/** This list will contains Strings and Integer. */
 			List lines = new ArrayList();
 
 			//{{{ Split the text into lines
