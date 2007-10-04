@@ -117,7 +117,7 @@ public class PatternSearchMatcher extends SearchMatcher
 		return "PatternSearchMatcher[" + pattern + ']';
 	} //}}}
 
-        private int	flags;
+	private int flags;
 	private Pattern	re;
 	private String 	pattern;
 

@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.View;
  */
 public interface HyperSearchNode
 {
-    Buffer getBuffer(View view);
+	Buffer getBuffer(View view);
+
 	void goTo(EditPane editPane);
 }

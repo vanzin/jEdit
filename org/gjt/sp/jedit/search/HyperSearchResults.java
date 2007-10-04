@@ -181,8 +181,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ getTree() method
 	/**
 	 * Returns the result tree.
-     *
-     * @return the result tree
+	 *
+	 * @return the result tree
 	 * @since jEdit 4.1pre9
 	 */
 	public JTree getTree()
@@ -245,9 +245,9 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				resultTreeModel.reload(resultTreeRoot);
 
 
-                for(int i = 0; i < nodeCount; i++)
+				for (int i = 0; i < nodeCount; i++)
 				{
-                    TreePath lastNode = new TreePath(
+					TreePath lastNode = new TreePath(
 						((DefaultMutableTreeNode)
 						searchNode.getChildAt(i))
 						.getPath());

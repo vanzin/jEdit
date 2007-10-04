@@ -55,12 +55,12 @@ public class SearchBar extends JPanel
 		add(find = new HistoryTextField("find"));
 		find.setSelectAllOnFocus(true);
 
-        SyntaxStyle style = GUIUtilities.parseStyle(jEdit.getProperty("view.style.invalid"), "Dialog", 12);
-        errorBackground = style.getBackgroundColor();
-        errorForeground = style.getForegroundColor();
-        defaultBackground = find.getBackground();
-        defaultForeground = find.getForeground();
-        Dimension max = find.getPreferredSize();
+		SyntaxStyle style = GUIUtilities.parseStyle(jEdit.getProperty("view.style.invalid"), "Dialog", 12);
+		errorBackground = style.getBackgroundColor();
+		errorForeground = style.getForegroundColor();
+		defaultBackground = find.getBackground();
+		defaultForeground = find.getForeground();
+		Dimension max = find.getPreferredSize();
 		max.width = Integer.MAX_VALUE;
 		find.setMaximumSize(max);
 		ActionHandler actionHandler = new ActionHandler();
@@ -165,11 +165,11 @@ public class SearchBar extends JPanel
 	private HistoryTextField find;
 	private JCheckBox ignoreCase, regexp, hyperSearch;
 	private Timer timer;
-    private boolean wasError;
-    private Color defaultBackground;
-    private Color defaultForeground;
-    private Color errorForeground;
-    private Color errorBackground;
+	private boolean wasError;
+	private Color defaultBackground;
+	private Color defaultForeground;
+	private Color errorForeground;
+	private Color errorBackground;
 	// close button only there if 'temp' is true
 	private RolloverButton close;
 
@@ -198,7 +198,7 @@ public class SearchBar extends JPanel
 			{
 				view.removeToolBar(SearchBar.this);
 			}
-            else
+			else
 				find.setText(null);
 
 			SearchAndReplace.setSearchString(text);
@@ -267,8 +267,8 @@ public class SearchBar extends JPanel
 		SearchAndReplace.setSearchString(find.getText());
 		SearchAndReplace.setReverseSearch(reverse);
 
-        boolean ret = false;
-        try
+		boolean ret = false;
+		try
 		{
 			if(SearchAndReplace.find(view,view.getBuffer(),start,false,reverse))
 				ret = true;
@@ -282,27 +282,27 @@ public class SearchBar extends JPanel
 			// typing a re
 			ret = true;
 		}
-        if (ret)
-        {
-            if (wasError)
-            {
-                find.setForeground(defaultForeground);
-                find.setBackground(defaultBackground);
-                wasError = false;
-            }
-        }
-        else
-        {
-            if (!wasError)
-            {
-                find.setForeground(errorForeground);
-                find.setBackground(errorBackground);
-                wasError = true;
-            }
-        }
+		if (ret)
+		{
+			if (wasError)
+			{
+				find.setForeground(defaultForeground);
+				find.setBackground(defaultBackground);
+				wasError = false;
+			}
+		}
+		else
+		{
+			if (!wasError)
+			{
+				find.setForeground(errorForeground);
+				find.setBackground(errorBackground);
+				wasError = true;
+			}
+		}
 
 
-        return ret;
+		return ret;
 	} //}}}
 
 	//{{{ timerIncrementalSearch() method

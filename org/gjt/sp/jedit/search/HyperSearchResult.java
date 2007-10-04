@@ -98,7 +98,7 @@ public class HyperSearchResult implements HyperSearchNode
 					textArea.addToSelection(s);
 				else
 					textArea.setSelection(s);
-                
+
 				textArea.moveCaretPosition(occur.endPos.getOffset());
 			}
 		});

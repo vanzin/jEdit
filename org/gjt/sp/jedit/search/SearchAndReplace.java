@@ -428,7 +428,7 @@ public class SearchAndReplace
 		if(comp == null || !comp.isShowing())
 			comp = view;
 
-                String path = fileset.getNextFile(view,null);
+		String path = fileset.getNextFile(view,null);
 		if(path == null)
 		{
 			GUIUtilities.error(comp,"empty-fileset",null);
@@ -455,7 +455,7 @@ public class SearchAndReplace
 
 			record(view,"find(view)",false,true);
 
-                        boolean repeat = false;
+			boolean repeat = false;
 loop:			for(;;)
 			{
 				while(path != null)
@@ -750,7 +750,7 @@ loop:			for(;;)
 			if(!BeanShell.isScriptRunning())
 			{
 				Object[] args = {Integer.valueOf(retVal),
-                                        Integer.valueOf(1)};
+				                 Integer.valueOf(1)};
 				view.getStatus().setMessageAndClear(jEdit.getProperty(
 					"view.status.replace-all",args));
 			}
@@ -851,7 +851,7 @@ loop:			for(;;)
 		if(comp == null)
 			comp = view;
 
-                if(fileset.getFileCount(view) == 0)
+		if(fileset.getFileCount(view) == 0)
 		{
 			GUIUtilities.error(comp,"empty-fileset",null);
 			return false;
@@ -865,9 +865,9 @@ loop:			for(;;)
 			&& TextUtilities.getStringCase(replace)
 			== TextUtilities.LOWER_CASE);
 
-                int fileCount = 0;
-                int occurCount = 0;
-                try
+		int fileCount = 0;
+		int occurCount = 0;
+		try
 		{
 			SearchMatcher matcher = getSearchMatcher();
 			if(matcher == null)
@@ -945,7 +945,7 @@ loop:			while(path != null)
 		if(!BeanShell.isScriptRunning())
 		{
 			Object[] args = {Integer.valueOf(occurCount),
-                                Integer.valueOf(fileCount)};
+			                 Integer.valueOf(fileCount)};
 			view.getStatus().setMessageAndClear(jEdit.getProperty(
 				"view.status.replace-all",args));
 			if(occurCount == 0)
@@ -1295,9 +1295,9 @@ loop:		for(int counter = 0; ; counter++)
 	private static String regexpReplace(SearchMatcher.Match occur,
 		String found) throws Exception
 	{
-        StringBuilder buf = new StringBuilder();
+		StringBuilder buf = new StringBuilder();
 
-        for(int i = 0; i < replace.length(); i++)
+		for(int i = 0; i < replace.length(); i++)
 		{
 			char ch = replace.charAt(i);
 			switch(ch)
