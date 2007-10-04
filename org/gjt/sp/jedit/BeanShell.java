@@ -23,8 +23,8 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import bsh.*;
-import bsh.classpath.ClassManagerImpl;
+import org.gjt.sp.jedit.bsh.*;
+import org.gjt.sp.jedit.bsh.classpath.ClassManagerImpl;
 
 import java.io.*;
 import java.lang.ref.*;

@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
-import bsh.*;
+import org.gjt.sp.jedit.bsh.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import javax.swing.*;

@@ -22,7 +22,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import bsh.UtilEvalError;
+import org.gjt.sp.jedit.bsh.UtilEvalError;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.*;

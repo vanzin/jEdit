@@ -8,6 +8,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 
 - When removing a plugin that is not loaded, it's declared jars are now removed 
   too (Matthieu Casanova)
+  
+- jEdit will not crash anymore if a beanshell.jar is already in the classpath
+  (#893349) (Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous
@@ -20,6 +23,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 }}}
 {{{ API Changes
 
+- The bsh package was refactored to org.gjt.sp.jedit.bsh, all plugins that uses
+  classes from this package will have to be repaired. This was necessary to fix
+  bug (893349) (Matthieu Casanova)
 
 }}}
 

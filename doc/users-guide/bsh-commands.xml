@@ -438,7 +438,8 @@
             <listitem>
                 <funcsynopsis>
                     <funcprototype>
-                        <funcdef>bsh.This <function>run</function></funcdef>
+                        <funcdef>org.gjt.sp.jedit.bsh.This
+                            <function>run</function></funcdef>
 
                         <paramdef>String
                         <parameter>filename</parameter></paramdef>
@@ -535,9 +536,10 @@
                     <funcprototype>
                         <funcdef><function>bind</function></funcdef>
 
-                        <paramdef>bsh.This <parameter>ths</parameter></paramdef>
+                        <paramdef>org.gjt.sp.jedit.bsh.This
+                            <parameter>ths</parameter></paramdef>
 
-                        <paramdef>bsh.Namespace
+                        <paramdef>org.gjt.sp.jedit.bsh.Namespace
                         <parameter>namespace</parameter></paramdef>
                     </funcprototype>
                 </funcsynopsis>
@@ -563,9 +565,10 @@
             <listitem>
                 <funcsynopsis>
                     <funcprototype>
-                        <funcdef>bsh.This <function>extend</function></funcdef>
+                        <funcdef>org.gjt.sp.jedit.bsh.This
+                            <function>extend</function></funcdef>
 
-                        <paramdef>bsh.This
+                        <paramdef>org.gjt.sp.jedit.bsh.This
                         <parameter>object</parameter></paramdef>
                     </funcprototype>
                 </funcsynopsis>
@@ -602,7 +605,8 @@
             <listitem>
                 <funcsynopsis>
                     <funcprototype>
-                        <funcdef>bsh.This <function>object</function></funcdef>
+                        <funcdef>org.gjt.sp.jedit.bsh.This
+                            <function>object</function></funcdef>
 
                         <void />
                     </funcprototype>
@@ -626,7 +630,7 @@ crufties.counter = 5;
                     <funcprototype>
                         <funcdef><function>setNameSpace</function></funcdef>
 
-                        <paramdef>bsh.Namespace
+                        <paramdef>org.gjt.sp.jedit.bsh.Namespace
                         <parameter>namespace</parameter></paramdef>
                     </funcprototype>
                 </funcsynopsis>
@@ -638,7 +642,8 @@ crufties.counter = 5;
             <listitem>
                 <funcsynopsis>
                     <funcprototype>
-                        <funcdef>bsh.This <function>super</function></funcdef>
+                        <funcdef>org.gjt.sp.jedit.bsh.This
+                            <function>super</function></funcdef>
 
                         <paramdef>String
                         <parameter>scopename</parameter></paramdef>

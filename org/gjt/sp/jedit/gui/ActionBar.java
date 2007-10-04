@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import bsh.NameSpace;
+import org.gjt.sp.jedit.bsh.NameSpace;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.ArrayList;

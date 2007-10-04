@@ -46,8 +46,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import bsh.NameSpace;
-import bsh.UtilEvalError;
+import org.gjt.sp.jedit.bsh.NameSpace;
+import org.gjt.sp.jedit.bsh.UtilEvalError;
 //}}}
 
 /**

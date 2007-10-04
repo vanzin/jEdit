@@ -22,7 +22,7 @@
 
 package org.gjt.sp.jedit;
 
-import bsh.*;
+import org.gjt.sp.jedit.bsh.*;
 import java.awt.Component;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.util.Log;

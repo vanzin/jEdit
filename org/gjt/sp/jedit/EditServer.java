@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import bsh.NameSpace;
+import org.gjt.sp.jedit.bsh.NameSpace;
 import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
@@ -342,7 +342,7 @@ public class EditServer extends Thread
 						ns.setVariable("socket",client);
 						BeanShell.eval(null,ns,script);
 					}
-					catch(bsh.UtilEvalError e)
+					catch(org.gjt.sp.jedit.bsh.UtilEvalError e)
 					{
 						Log.log(Log.ERROR,this,e);
 					}
@@ -352,7 +352,7 @@ public class EditServer extends Thread
 						{
 							BeanShell.getNameSpace().setVariable("socket",null);
 						}
-						catch(bsh.UtilEvalError e)
+						catch(org.gjt.sp.jedit.bsh.UtilEvalError e)
 						{
 							Log.log(Log.ERROR,this,e);
 						}

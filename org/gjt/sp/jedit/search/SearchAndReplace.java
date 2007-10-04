@@ -24,7 +24,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import bsh.*;
+import org.gjt.sp.jedit.bsh.*;
 import java.awt.*;
 import javax.swing.JOptionPane;
 import javax.swing.text.Segment;
