@@ -15,6 +15,8 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 }}}
 {{{ Miscellaneous
 
+- After an hypersearch, if a result is on the caret line, it is automatically selected
+  in the tree (Matthieu Casanova)
 
 }}}
 {{{ Editing

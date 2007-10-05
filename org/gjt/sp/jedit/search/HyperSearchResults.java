@@ -218,7 +218,12 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	} //}}}
 
 	//{{{ searchDone() method
-	public void searchDone(final DefaultMutableTreeNode searchNode)
+	/**
+	 * @param searchNode the result node
+	 * @param selectNode the node that must be selected, or null
+	 * @since jEdit 4.3pre12
+	 */
+	public void searchDone(final DefaultMutableTreeNode searchNode, final DefaultMutableTreeNode selectNode)
 	{
 		final int nodeCount = searchNode.getChildCount();
 		if (nodeCount < 1)
@@ -254,12 +259,27 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 					resultTree.expandPath(lastNode);
 				}
-
+				TreePath treePath;
+				if (selectNode == null)
+				{
+					treePath = new TreePath(new Object[]{
+						resultTreeRoot, searchNode});
+				}
+				else
+				{
+					treePath = new TreePath(selectNode.getPath());
+				}
+				resultTree.setSelectionPath(treePath);
 				resultTree.scrollPathToVisible(
-					new TreePath(new Object[] {
-					resultTreeRoot,searchNode }));
+					treePath);
 			}
 		});
+	} //}}}
+
+	//{{{ searchDone() method
+	public void searchDone(final DefaultMutableTreeNode searchNode)
+	{
+		searchDone(searchNode, null);
 	} //}}}
 
 	//{{{ Private members

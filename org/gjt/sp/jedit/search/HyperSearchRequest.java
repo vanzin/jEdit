@@ -27,6 +27,7 @@ import javax.swing.text.Segment;
 import javax.swing.tree.*;
 import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.textarea.Selection;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
@@ -137,7 +138,7 @@ loop:				for(int i = 0; i < files.length; i++)
 			{
 				public void run()
 				{
-					results.searchDone(rootSearchNode);
+					results.searchDone(rootSearchNode, selectNode);
 				}
 			});
 		}
@@ -152,6 +153,7 @@ loop:				for(int i = 0; i < files.length; i++)
 	private DefaultMutableTreeNode rootSearchNode;
 	private Selection[] selection;
 	private String searchString;
+	private DefaultMutableTreeNode selectNode;
 	//}}}
 
 	//{{{ searchInSelection() method
@@ -226,7 +228,8 @@ loop:				for(int i = 0; i < files.length; i++)
 		DefaultMutableTreeNode bufferNode)
 	{
 		int resultCount = 0;
-
+		JEditTextArea textArea = jEdit.getActiveView().getTextArea();
+		int caretLine = textArea.getBuffer() == buffer ? textArea.getCaretLine() : -1;
 		try
 		{
 			buffer.readLock();
@@ -258,9 +261,11 @@ loop:			for(int counter = 0; ; counter++)
 				{
 					lastResult = new HyperSearchResult(
 						buffer,newLine);
-					bufferNode.add(
-						new DefaultMutableTreeNode(
-						lastResult,false));
+					DefaultMutableTreeNode child = new DefaultMutableTreeNode(
+						lastResult, false);
+					if (lastResult.line == caretLine)
+						selectNode = child;
+					bufferNode.add(child);
 				}
 
 				lastResult.addOccur(offset + match.start,
