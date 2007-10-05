@@ -17,6 +17,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
 
 - After an hypersearch, if a result is on the caret line, it is automatically selected
   in the tree (Matthieu Casanova)
+  
+- If you remove the last node of the HyperSearch dockable, it will hide
+  (Feature Request #1593526) (Matthieu Casanova)
 
 }}}
 {{{ Editing

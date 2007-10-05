@@ -385,6 +385,10 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		}
 
 		HyperSearchOperationNode.removeNodeFromCache(value);
+		if (resultTreeRoot.getChildCount() == 0)
+		{
+			view.getDockableWindowManager().hideDockableWindow(NAME);
+		}
 	} //}}}
 
 	//}}}
