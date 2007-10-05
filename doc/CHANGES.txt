@@ -20,6 +20,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
   
 - If you remove the last node of the HyperSearch dockable, it will hide
   (Feature Request #1593526) (Matthieu Casanova)
+  
+- A new option introduced in Saving & backups option panel to turn off autosave
+  of untitled buffers (Feature Request #1520769)  (Matthieu Casanova)
 
 }}}
 {{{ Editing

@@ -70,6 +70,8 @@ class Autosave implements ActionListener
 	//{{{ actionPerformed() method
 	public void actionPerformed(ActionEvent evt)
 	{
+		if (jEdit.getIntegerProperty("autosave",0) == 0)
+				return;
 		// might come in handy useful some time
 		/* Runtime runtime = Runtime.getRuntime();
 		int freeMemory = (int)(runtime.freeMemory() / 1024);
@@ -87,10 +89,14 @@ class Autosave implements ActionListener
 			PerspectiveManager.setPerspectiveDirty(false);
 			PerspectiveManager.savePerspective(true);
 		}
-
+		boolean autosaveUntitled = jEdit.getBooleanProperty("autosaveUntitled");
 		Buffer[] bufferArray = jEdit.getBuffers();
 		for(int i = 0; i < bufferArray.length; i++)
-			bufferArray[i].autosave();
+		{
+			Buffer buffer = bufferArray[i];
+			if (autosaveUntitled || !buffer.isUntitled())
+				buffer.autosave();
+		}
 
 		// flush log
 		Log.flushStream();

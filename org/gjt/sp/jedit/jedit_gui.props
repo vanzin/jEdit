@@ -893,7 +893,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjï¿½rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1848,6 +1848,7 @@ options.save-back.backupSuffix=Backup filename suffix:
 options.save-back.backupEverySave=Backup on every save
 options.save-back.twoStageSave=Two-stage save (safer but resets file owner on Unix)
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
+options.save-back.autosaveUntitled=Autosave untitled buffers
 #}}}
 
 #{{{ Shortcuts pane

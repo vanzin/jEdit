@@ -65,6 +65,13 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		autosave = new JTextField(jEdit.getProperty("autosave"));
 		addComponent(jEdit.getProperty("options.save-back.autosave"),autosave);
 
+		/* Autosave untitled buffers */
+		autosaveUntitled = new JCheckBox(jEdit.getProperty(
+			"options.save-back.autosaveUntitled"));
+		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
+		addComponent(autosaveUntitled);
+
+
 		/* Backup count */
 		backups = new JTextField(jEdit.getProperty("backups"));
 		addComponent(jEdit.getProperty("options.save-back.backups"),backups);
@@ -103,18 +110,34 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
 		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
-		jEdit.setProperty("autosave",autosave.getText());
+		jEdit.setProperty("autosave", this.autosave.getText());
 		jEdit.setProperty("backups",backups.getText());
 		jEdit.setProperty("backup.directory",backupDirectory.getText());
 		jEdit.setProperty("backup.prefix",backupPrefix.getText());
 		jEdit.setProperty("backup.suffix",backupSuffix.getText());
 		jEdit.setBooleanProperty("backupEverySave", backupEverySave.isSelected());
+		boolean newAutosave = autosaveUntitled.isSelected();
+		boolean oldAutosave = jEdit.getBooleanProperty("autosaveUntitled");
+		jEdit.setBooleanProperty("autosaveUntitled", newAutosave);
+
+		if ((!newAutosave || jEdit.getIntegerProperty("autosave",0) == 0) && oldAutosave)
+		{
+			Buffer[] buffers = jEdit.getBuffers();
+			for (Buffer buffer : buffers)
+			{
+				if (buffer.isUntitled())
+				{
+					buffer.removeAutosaveFile();
+				}
+			}
+		}
 	} //}}}
 
 	//{{{ Private members
 	private JCheckBox twoStageSave;
 	private JCheckBox confirmSaveAll;
 	private JTextField autosave;
+	private JCheckBox autosaveUntitled;
 	private JTextField backups;
 	private JTextField backupDirectory;
 	private JTextField backupPrefix;
