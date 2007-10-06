@@ -364,7 +364,7 @@ public class Buffer extends JEditBuffer
 	 */
 	public boolean save(View view, String path)
 	{
-		return save(view,path,true);
+		return save(view,path,true,false);
 	} //}}}
 
 	//{{{ save() method
@@ -379,6 +379,23 @@ public class Buffer extends JEditBuffer
 	 * @since jEdit 2.6pre5
 	 */
 	public boolean save(final View view, String path, final boolean rename)
+	{
+		return save(view,path,rename,false);
+	}
+
+	//{{{ save() method
+	/**
+	 * Saves this buffer to the specified path name, or the current path
+	 * name if it's null.
+	 * @param view The view
+	 * @param path The path name to save the buffer to, or null to use
+	 * the existing path
+	 * @param rename True if the buffer's path should be changed, false
+	 * if only a copy should be saved to the specified filename
+	 * @param disableFileStatusCheck  Disables file status checking
+	 * regardless of the state of the checkFileStatus property
+	 */
+	public boolean save(final View view, String path, final boolean rename, boolean disableFileStatusCheck)
 	{
 		if(isPerformingIO())
 		{
@@ -564,6 +581,10 @@ public class Buffer extends JEditBuffer
 					updateMarkersFile(view);
 				}
 			});
+		
+		int check = jEdit.getIntegerProperty("checkFileStatus"); 
+		if((! disableFileStatusCheck) && (check == 1 || check == 2))
+			jEdit.checkBufferStatus(view,false);
 
 		return true;
 	} //}}}

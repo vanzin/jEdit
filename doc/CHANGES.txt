@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre12
 
-Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Joe Walp, and Matthieu Casanova 
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -23,6 +24,11 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this
   
 - A new option introduced in Saving & backups option panel to turn off autosave
   of untitled buffers (Feature Request #1520769)  (Matthieu Casanova)
+  
+- New option in General Options: Check for File Change upon. Many options
+  to customize when jEdit checks for file changes, especially useful when many 
+  files are mounted on remote/slow file systems. (Joe Walp - Patch # 1768638)
+ 
 
 }}}
 {{{ Editing

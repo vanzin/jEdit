@@ -855,10 +855,27 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ setBuffer() method
 	/**
 	 * Sets the current edit pane's buffer.
+	 * @param buffer The buffer
 	 */
 	public void setBuffer(Buffer buffer)
 	{
+		setBuffer(buffer,true);
+	} //}}}
+
+	//{{{ setBuffer() method
+	/**
+	 * Sets the current edit pane's buffer.
+	 * @param buffer The buffer
+	 * @param disableFileStatusCheck Disables file status checking
+	 * regardless of the state of the checkFileStatus property
+	 */
+	public void setBuffer(Buffer buffer, boolean disableFileStatusCheck)
+	{
 		editPane.setBuffer(buffer);
+
+		int check = jEdit.getIntegerProperty("checkFileStatus"); 
+		if((! disableFileStatusCheck) && (check == 1 || check == 2 || check == 3))
+			jEdit.checkBufferStatus(this, true);
 	} //}}}
 
 	//{{{ goToBuffer() method
@@ -892,7 +909,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			}
 		}
 
-		setBuffer(buffer);
+		setBuffer(buffer,false);
 		return editPane;
 	} //}}}
 
@@ -1660,7 +1677,11 @@ loop:		while (true)
 			{
 				public void run()
 				{
-					jEdit.checkBufferStatus(View.this);
+					int check = jEdit.getIntegerProperty("checkFileStatus"); 
+					if(check == 0 || check == 1)
+						jEdit.checkBufferStatus(View.this,false);
+					else if(check == 3)
+						jEdit.checkBufferStatus(View.this,true);
 				}
 			});
 

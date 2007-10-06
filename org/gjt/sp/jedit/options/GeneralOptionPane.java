@@ -38,6 +38,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ Private members
 	private JComboBox lineSeparator;
 	private JComboBox checkModStatus;
+	private JComboBox checkModStatusUpon;
 	private JTextField recentFiles;
 	private JCheckBox saveCaret;
 	private JCheckBox sortRecent;
@@ -77,7 +78,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			lineSeparator);
 
 
-		/* Check mod status on focus */
+		/* Check mod status */
 		String[] modCheckOptions = {
 			jEdit.getProperty("options.general.checkModStatus.nothing"),
 			jEdit.getProperty("options.general.checkModStatus.prompt"),
@@ -103,6 +104,19 @@ public class GeneralOptionPane extends AbstractOptionPane
 		}
 		addComponent(jEdit.getProperty("options.general.checkModStatus"),
 			checkModStatus);
+
+		/* Check mod status upon */
+		String[] modCheckUponOptions = {
+			jEdit.getProperty("options.general.checkModStatusUpon.focus"),
+			jEdit.getProperty("options.general.checkModStatusUpon.all"),
+			jEdit.getProperty("options.general.checkModStatusUpon.operations"),
+			jEdit.getProperty("options.general.checkModStatusUpon.focusBuffer"),
+			jEdit.getProperty("options.general.checkModStatusUpon.none")
+		};
+		checkModStatusUpon = new JComboBox(modCheckUponOptions);
+		checkModStatusUpon.setSelectedIndex(jEdit.getIntegerProperty("checkFileStatus"));
+		addComponent(jEdit.getProperty("options.general.checkModStatusUpon"),
+			checkModStatusUpon);
 
 		/* Recent file list size */
 		recentFiles = new JTextField(jEdit.getProperty(
@@ -223,6 +237,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			jEdit.setBooleanProperty("autoReload",true);
 			break;
 		}
+		jEdit.setIntegerProperty("checkFileStatus",checkModStatusUpon.getSelectedIndex());
 		jEdit.setProperty("recentFiles",recentFiles.getText());
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
 		boolean nkh = newKeyboardHandling.isSelected();

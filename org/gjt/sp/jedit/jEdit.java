@@ -620,6 +620,16 @@ public class jEdit
 	/**
 	 * Returns the value of an integer property.
 	 * @param name The property
+	 */
+	public static final int getIntegerProperty(String name)
+	{
+		return getIntegerProperty(name,0);
+	} //}}}
+
+	//{{{ getIntegerProperty() method
+	/**
+	 * Returns the value of an integer property.
+	 * @param name The property
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
@@ -1387,12 +1397,12 @@ public class jEdit
 		}
 
 		if(view != null && retVal != null)
-			view.setBuffer(retVal);
+			view.setBuffer(retVal,true);
 
 		return retVal;
 	} //}}}
 
-	//{{{ openFile() method
+	//{{{ openFile() methods
 	/**
 	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
 	 * null if the buffer could not be opened.
@@ -1404,9 +1414,7 @@ public class jEdit
 	public static Buffer openFile(View view, String path)
 	{
 		return openFile(view,null,path,false,new Hashtable());
-	} //}}}
-
-	//{{{ openFile() method
+	} 
 	/**
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
@@ -1415,9 +1423,7 @@ public class jEdit
 		String path, boolean readOnly, boolean newFile)
 	{
 		return openFile(view,parent,path,newFile,new Hashtable());
-	} //}}}
-
-	//{{{ openFile() method
+	} 
 	/**
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
@@ -1427,9 +1433,7 @@ public class jEdit
 		Hashtable props)
 	{
 		return openFile(view,parent,path,newFile,props);
-	} //}}}
-
-	//{{{ openFile() method
+	}
 	/**
 	 * Opens a file. This may return null if the buffer could not be
 	 * opened for some reason.
@@ -1477,7 +1481,7 @@ public class jEdit
 				if(buffer != null)
 				{
 					if(view != null)
-						view.setBuffer(buffer);
+						view.setBuffer(buffer,true);
 
 					return buffer;
 				}
@@ -1494,12 +1498,12 @@ public class jEdit
 		}
 
 		if(view != null)
-			view.setBuffer(newBuffer);
+			view.setBuffer(newBuffer,true);
 
 		return newBuffer;
 	} //}}}
 
-	//{{{ openTemporary() method
+	//{{{ openTemporary() methods
 	/**
 	 * Opens a temporary buffer. A temporary buffer is like a normal
 	 * buffer, except that an event is not fired, the the buffer is
@@ -1516,9 +1520,7 @@ public class jEdit
 		String path, boolean newFile)
 	{
 		return openTemporary(view, parent, path, newFile, null);
-	} //}}}
-
-	//{{{ openTemporary() method
+	}
 	/**
 	 * Opens a temporary buffer. A temporary buffer is like a normal
 	 * buffer, except that an event is not fired, the the buffer is
@@ -1766,7 +1768,7 @@ public class jEdit
 			newFile(view);
 	} //}}}
 
-	//{{{ closeAllBuffers() method
+	//{{{ closeAllBuffers() methods
 	/**
 	 * Closes all open buffers.
 	 * @param view The view
@@ -1774,9 +1776,7 @@ public class jEdit
 	public static boolean closeAllBuffers(View view)
 	{
 		return closeAllBuffers(view,false);
-	} //}}}
-
-	//{{{ closeAllBuffers() method
+	}
 	/**
 	 * Closes all open buffers.
 	 * @param view The view
@@ -1894,14 +1894,14 @@ public class jEdit
 			if(buffer.isDirty())
 			{
 				if(buffer.isNewFile())
-					view.setBuffer(buffer);
-				buffer.save(view,null,true);
+					view.setBuffer(buffer,true);
+				buffer.save(view,null,true,true);
 			}
 
 			buffer = buffer.next;
 		}
 
-		view.setBuffer(current);
+		view.setBuffer(current,true);
 	} //}}}
 
 	//{{{ reloadAllBuffers() method
@@ -2041,7 +2041,7 @@ public class jEdit
 		return buffersLast;
 	} //}}}
 
-	//{{{ checkBufferStatus() method
+	//{{{ checkBufferStatus() methods
 	/**
 	 * Checks each buffer's status on disk and shows the dialog box
 	 * informing the user that buffers changed on disk, if necessary.
@@ -2049,6 +2049,18 @@ public class jEdit
 	 * @since jEdit 4.2pre1
 	 */
 	public static void checkBufferStatus(View view)
+	{
+		checkBufferStatus(view,false);
+	}
+
+	/**
+	 * Checks buffer status on disk and shows the dialog box
+	 * informing the user that buffers changed on disk, if necessary.
+	 * @param view The view
+	 * @param currentBuffer indicates whether to check only the current buffer
+	 * @since jEdit 4.2pre1
+	 */
+	public static void checkBufferStatus(View view, boolean currentBuffer)
 	{
 		// still need to call the status check even if the option is
 		// off, so that the write protection is updated if it changes
@@ -2070,13 +2082,22 @@ public class jEdit
 			}
 			_view = _view.next;
 		}
-
-		Buffer buffer = buffersFirst;
+		
+		Buffer buffer;
+		buffer = buffersFirst;
+		
 		int[] states = new int[bufferCount];
 		int i = 0;
 		boolean notifyFileChanged = false;
 		while(buffer != null)
 		{
+			if(currentBuffer && buffer != view.getBuffer())
+			{
+				buffer = buffer.next;
+				i++;
+				continue;
+			}
+			
 			states[i] = buffer.checkFileStatus(view);
 
 			switch(states[i])
@@ -2099,7 +2120,7 @@ public class jEdit
 				notifyFileChanged = true;
 				break;
 			}
-
+			
 			buffer = buffer.next;
 			i++;
 		}
@@ -2134,7 +2155,7 @@ public class jEdit
 		System.err.println(System.currentTimeMillis() - time);
 	} */
 
-	//{{{ newView() method
+	//{{{ newView() methods
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -2143,9 +2164,7 @@ public class jEdit
 	public static View newView(View view)
 	{
 		return newView(view,null,false);
-	} //}}}
-
-	//{{{ newView() method
+	} 
 	/**
 	 * Creates a new view of a buffer.
 	 * @param view An existing view
@@ -2154,9 +2173,7 @@ public class jEdit
 	public static View newView(View view, Buffer buffer)
 	{
 		return newView(view,buffer,false);
-	} //}}}
-
-	//{{{ newView() method
+	} 
 	/**
 	 * Creates a new view of a buffer.
 	 * @param view An existing view
@@ -2174,9 +2191,7 @@ public class jEdit
 		else
 			config = new View.ViewConfig(plainView);
 		return newView(view,buffer,config);
-	} //}}}
-
-	//{{{ newView() method
+	} 
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -3506,7 +3521,7 @@ public class jEdit
 					if(view == null)
 						view = newView(null,buffer);
 					else if(buffer != null)
-						view.setBuffer(buffer);
+						view.setBuffer(buffer,true);
 				}
 
 				// Start I/O threads

@@ -175,7 +175,7 @@ public class CloseDialog extends EnhancedDialog
 				{
 					String path = (String)paths[i];
 					Buffer buffer = jEdit.getBuffer(path);
-					if(!buffer.save(view,null,true))
+					if(!buffer.save(view,null,true,true))
 						return;
 					VFSManager.waitForRequests();
 					if(buffer.getBooleanProperty(BufferIORequest

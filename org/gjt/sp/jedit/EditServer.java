@@ -222,7 +222,7 @@ public class EditServer extends Thread
 				view = jEdit.newView(null,buffer);
 			}
 			else if(buffer != null)
-				view.setBuffer(buffer);
+				view.setBuffer(buffer,false);
 
 			return buffer;
 		}
