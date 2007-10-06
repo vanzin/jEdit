@@ -1447,8 +1447,8 @@ System.out.println("experiment: creating class manager");
 	/**
 		Import standard packages.  Currently:
 		<pre>
-			importClass("bsh.EvalError");
-			importClass("bsh.Interpreter");
+			importClass("org.gjt.sp.jedit.bsh.EvalError");
+			importClass("org.gjt.sp.jedit.bsh.Interpreter");
 			importPackage("javax.swing.event");
 			importPackage("javax.swing");
 			importPackage("java.awt.event");
@@ -1457,7 +1457,7 @@ System.out.println("experiment: creating class manager");
 			importPackage("java.util");
 			importPackage("java.io");
 			importPackage("java.lang");
-			addCommandPath("/bsh/commands",getClass());
+			addCommandPath("/org/gjt/sp/jedit/bsh/commands",getClass());
 		</pre>
 	*/
     public void loadDefaultImports()
@@ -1477,10 +1477,7 @@ System.out.println("experiment: creating class manager");
 		importPackage("java.util");
 		importPackage("java.io");
 		importPackage("java.lang");
-	    	// {{{ jEdit modification
-		//importCommands("/bsh/commands");
-	    	addCommandPath("/bsh/commands",getClass());
-	   	 // }}}
+		addCommandPath("/org/gjt/sp/jedit/bsh/commands",getClass());
     }
 
 	/**
