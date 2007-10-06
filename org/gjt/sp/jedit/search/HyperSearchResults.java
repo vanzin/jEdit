@@ -387,8 +387,23 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		HyperSearchOperationNode.removeNodeFromCache(value);
 		if (resultTreeRoot.getChildCount() == 0)
 		{
-			view.getDockableWindowManager().hideDockableWindow(NAME);
+			hideDockable();
 		}
+	} //}}}
+
+	//{{{ removeAllNodes() method
+	private void removeAllNodes()
+	{
+		resultTreeRoot.removeAllChildren();
+		resultTreeModel.reload(resultTreeRoot);
+		setSearchStatus(null);
+		hideDockable();
+	} //}}}
+
+	//{{{ hideDockable() method
+	private void hideDockable()
+	{
+		view.getDockableWindowManager().hideDockableWindow(NAME);
 	} //}}}
 
 	//}}}
@@ -401,10 +416,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			Object source = evt.getSource();
 			if(source == clear)
 			{
-				resultTreeRoot.removeAllChildren();
-				resultTreeModel.reload(resultTreeRoot);
-				setSearchStatus(null);
-				view.getDockableWindowManager().hideDockableWindow(NAME);
+				removeAllNodes();
 			}
 			else if(source == multi)
 			{
@@ -564,9 +576,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		public void actionPerformed(ActionEvent evt)
 		{
-			resultTreeRoot = new DefaultMutableTreeNode();
-			resultTreeModel = new DefaultTreeModel(resultTreeRoot);
-			resultTree.setModel(resultTreeModel);
+			removeAllNodes();
 		}
 	}//}}}
 	
