@@ -25,7 +25,8 @@ package org.gjt.sp.jedit.search;
 //{{{ Imports
 import javax.swing.text.Segment;
 import javax.swing.tree.*;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -97,8 +98,26 @@ class HyperSearchRequest extends WorkRequest
 				int current = 0;
 
 				long lastStatusTime = 0;
+				int resultCount = 0;
+				boolean asked = false;
+				int maxResults = jEdit.getIntegerProperty("hypersearch.maxWarningResults");
 loop:				for(int i = 0; i < files.length; i++)
 				{
+					if (!asked && resultCount > maxResults && maxResults != 0)
+					{
+						Log.log(Log.DEBUG, this, "Search in progress, " + resultCount +
+									 " occurrences found, asking the user to stop");
+						asked = true;
+						int ret = GUIUtilities.confirm(view, "hypersearch.tooManyResults",
+									       new Object[]{resultCount},
+									       JOptionPane.YES_NO_OPTION,
+									       JOptionPane.QUESTION_MESSAGE);
+						if (ret == JOptionPane.YES_OPTION)
+						{
+							Log.log(Log.MESSAGE, this, "Search stopped by user action");
+							break;
+						}
+					}
 					String file = files[i];
 					current++;
 
@@ -114,8 +133,9 @@ loop:				for(int i = 0; i < files.length; i++)
 					if(buffer == null)
 						continue loop;
 
-					doHyperSearch(buffer);
+					resultCount += doHyperSearch(buffer, 0, buffer.getLength());
 				}
+				Log.log(Log.MESSAGE, this, resultCount +" OCCURENCES");
 			}
 		}
 		catch(final Exception e)
@@ -195,13 +215,6 @@ loop:				for(int i = 0; i < files.length; i++)
 		setAbortable(true);
 
 		return resultCount;
-	} //}}}
-
-	//{{{ doHyperSearch() method
-	private int doHyperSearch(Buffer buffer)
-		throws Exception
-	{
-		return doHyperSearch(buffer, 0, buffer.getLength());
 	} //}}}
 
 	//{{{ doHyperSearch() method

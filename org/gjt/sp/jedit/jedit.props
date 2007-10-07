@@ -94,6 +94,9 @@ firewall.enabled=false
 # Keep dialog on by default
 search.keepDialog.toggle=true
 
+# When this limit is reached a dialog appears to cancel the search
+hypersearch.maxWarningResults=1000
+
 # Confirm dialogs
 confirmSaveAll=true
 

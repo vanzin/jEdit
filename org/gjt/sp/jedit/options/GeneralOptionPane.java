@@ -23,10 +23,16 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
-import javax.swing.*;
 
-import java.awt.event.*;
-import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.AbstractOptionPane;
+import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.Options;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Log;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 //}}}
 
 /**
@@ -40,6 +46,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JComboBox checkModStatus;
 	private JComboBox checkModStatusUpon;
 	private JTextField recentFiles;
+	private JTextField hypersearchResultsWarning;
 	private JCheckBox saveCaret;
 	private JCheckBox sortRecent;
 	private JCheckBox persistentMarkers;
@@ -198,6 +205,12 @@ public class GeneralOptionPane extends AbstractOptionPane
 		newKeyboardHandling.setSelected(jEdit.getBooleanProperty("newkeyhandling"));
 		addComponent(newKeyboardHandling);
 
+		hypersearchResultsWarning = new JTextField(jEdit.getProperty("hypersearch.maxWarningResults"));
+		addComponent(jEdit.getProperty("options.general.hypersearch.maxWarningResults"),
+			hypersearchResultsWarning);
+
+
+
 	} //}}}
 
 	//{{{ _save() method
@@ -251,6 +264,14 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore.remote", restoreRemote.isSelected());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
+		try
+		{
+			jEdit.setIntegerProperty("hypersearch.maxWarningResults", Integer.parseInt(hypersearchResultsWarning.getText()));
+		}
+		catch (NumberFormatException e)
+		{
+			Log.log(Log.WARNING, this, "hypersearchResultsWarning: " + hypersearchResultsWarning.getText() + " is not a valid value for this option");
+		}
 	} //}}}
 
 

@@ -35,6 +35,11 @@ for contributing to this release.
   It will find the jars that are in your jars directory and do not belong to any
   plugin. Be careful some plugins like SQL can use jars without declaring them
   like the JDBC drivers (Matthieu Casanova)
+  
+- A new option is introduced in the general option panel. Now jEdit will ask
+  the user if he wants to stop hypersearch if a result count limit is reached.
+  By default the count is 1000. It checks the limit before each file so it is 
+  possible that a few more results are found before asking (Matthieu Casanova)
 }}}
 {{{ Editing
 
