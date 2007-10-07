@@ -24,54 +24,25 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Window;
-import java.awt.Dialog;
-
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
-
-import java.net.URL;
-
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Map;
-import java.util.StringTokenizer;
-
-import javax.swing.*;
-
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
-
 import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
 import org.gjt.sp.jedit.gui.SplashScreen;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
-
 import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
-
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
-
 import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
-
 import org.gjt.sp.util.Log;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.net.URL;
+import java.util.*;
+import java.util.List;
 //}}}
 
 /**
@@ -724,6 +695,11 @@ public class GUIUtilities
 	 * from the <code><i>name</i>.message</code> property. The dialog
 	 * also shows a list of entries given by the <code>listModel</code>
 	 * parameter.
+	 * @param comp the parent component
+	 * @param name the name of the confirm dialog
+	 * @param args the for the message
+	 * @param listModel the items in the list
+	 * @return an integer indicating the option selected by the user
 	 * @since jEdit 4.3pre1
 	 */
 	public static int listConfirm(Component comp, String name, String[] args,
@@ -742,6 +718,48 @@ public class GUIUtilities
 			jEdit.getProperty(name + ".title"),
 			JOptionPane.YES_NO_OPTION,
 			JOptionPane.QUESTION_MESSAGE);
+	} //}}}
+
+	//{{{ listConfirm() method
+	/**
+	 * Displays a confirm dialog box and returns the button pushed by the
+	 * user. The title of the dialog is fetched from the
+	 * <code><i>name</i>.title</code> property. The message is fetched
+	 * from the <code><i>name</i>.message</code> property. The dialog
+	 * also shows a list of entries given by the <code>listModel</code>
+	 * parameter.
+	 * @param comp the parent component
+	 * @param name the name of the confirm dialog
+	 * @param args the for the message
+	 * @param listModel the items in the list
+	 * @param selectedItems give an empty list, it will contains in return the selected items
+	 * @return an integer indicating the option selected by the user
+	 * @since jEdit 4.3pre12
+	 */
+	public static int listConfirm(Component comp, String name, String[] args,
+		Object[] listModel, List selectedItems)
+	{
+		JList list = new JList(listModel);
+		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		list.setVisibleRowCount(8);
+		list.addSelectionInterval(0,listModel.length - 1);
+
+		Object[] message = {
+			jEdit.getProperty(name + ".message",args),
+			new JScrollPane(list)
+		};
+
+		int ret = JOptionPane.showConfirmDialog(comp,
+												message,
+												jEdit.getProperty(name + ".title"),
+												JOptionPane.YES_NO_OPTION,
+												JOptionPane.QUESTION_MESSAGE);
+		Object[] selectedValues = list.getSelectedValues();
+		for (Object selectedValue : selectedValues)
+		{
+			selectedItems.add(selectedValue);
+		}
+		return ret;
 	} //}}}
 
 	//{{{ showVFSFileDialog() methods
@@ -1723,12 +1741,12 @@ public class GUIUtilities
 	//{{{ SizeSaver class
 	/**
 	 * A combined ComponentListener and WindowStateListener to continually save a Frames size.<br />
-	 * For non-Frame's use {@link #saveGeometry(Window,String)}
+	 * For non-Frame's use {@link GUIUtilities#saveGeometry(Window,String)}
 	 *
 	 * @author Björn Kautler
 	 * @version $Id$
 	 * @since jEdit 4.3pre6
-	 * @see #saveGeometry(Window,Container,String)
+	 * @see GUIUtilities#saveGeometry(Window,Container,String)
 	 */
 	static class SizeSaver extends ComponentAdapter implements WindowStateListener
 	{
