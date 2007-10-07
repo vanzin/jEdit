@@ -152,6 +152,7 @@ public class ManagePanel extends JPanel
 		buttons.add(new RemoveButton());
 		buttons.add(new SaveButton());
 		buttons.add(new RestoreButton());
+		buttons.add(new FindOrphan());
 		buttons.add(Box.createGlue());
 		buttons.add(new HelpButton());
 
@@ -231,8 +232,46 @@ public class ManagePanel extends JPanel
 		}
 		pluginModel.update();
 		return true;
-	} // }}}		
-		
+	}//}}}
+
+	//{{{ getDeclaredJars() method
+	/**
+	 * Returns a collection of declared jars in the plugin.
+	 * If the plugin is loaded use {@link org.gjt.sp.jedit.PluginJAR#getRequiredJars()}
+	 * instead
+	 *
+	 * @param jarName the jar name of the plugin
+	 * @return a collection containing jars path
+	 * @throws IOException if jEdit cannot generate cache
+	 * @since jEdit 4.3pre12
+	 */
+	private Collection<String> getDeclaredJars(String jarName) throws IOException
+	{
+		Collection<String> jarList = new ArrayList<String>();
+		PluginJAR pluginJAR = new PluginJAR(new File(jarName));
+		PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
+		if (pluginCacheEntry == null)
+		{
+			pluginCacheEntry = pluginJAR.generateCache();
+		}
+		Properties cachedProperties = pluginCacheEntry.cachedProperties;
+
+		String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
+
+		if (jars != null)
+		{
+			String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
+			StringTokenizer st = new StringTokenizer(jars);
+			while (st.hasMoreTokens())
+			{
+				String _jarPath = MiscUtilities.constructPath(dir, st.nextToken());
+				if (new File(_jarPath).exists())
+					jarList.add(_jarPath);
+			}
+		}
+		jarList.add(jarName);
+		return jarList;
+	}//}}}
 	
 	//}}}
 	//{{{ Inner classes
@@ -830,8 +869,7 @@ public class ManagePanel extends JPanel
 					{
 						try
 						{
-							Set<String> jarList = new HashSet<String>();
-							getDeclaredJars(jarList, entry.jar);
+							Collection<String> jarList = getDeclaredJars(entry.jar);
 							jarsToRemove.addAll(jarList);
 						}
 						catch (IOException e)
@@ -869,32 +907,6 @@ public class ManagePanel extends JPanel
 				scrollbar.setValue(scrollbar.getMinimum());
 			}
 		}
-		
-		private void getDeclaredJars(Collection<String> jarList, String jarName) throws IOException
-		{
-			PluginJAR pluginJAR = new PluginJAR(new File(jarName));
-			PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
-			if (pluginCacheEntry == null)
-			{
-				pluginCacheEntry = pluginJAR.generateCache();
-			}
-			Properties cachedProperties = pluginCacheEntry.cachedProperties;
-
-			String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
-
-			if (jars != null)
-			{
-				String dir = MiscUtilities.getParentOfPath(pluginJAR.getPath());
-				StringTokenizer st = new StringTokenizer(jars);
-				while (st.hasMoreTokens())
-				{
-					String _jarPath = MiscUtilities.constructPath(dir, st.nextToken());
-					if (new File(_jarPath).exists())
-						jarList.add(_jarPath);
-				}
-			}
-			jarList.add(jarName);
-		}
 
 		public void valueChanged(ListSelectionEvent e)
 		{
@@ -902,6 +914,122 @@ public class ManagePanel extends JPanel
 				setEnabled(false);
 			else
 				setEnabled(true);
+		}
+	} //}}}
+
+	//{{{ FindOrphanActionListener class
+	private class FindOrphan extends JButton implements ActionListener
+	{
+		private FindOrphan()
+		{
+			super(jEdit.getProperty("plugin-manager.findOrphan.label"));
+			addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent e)
+		{
+			PluginJAR[] pluginJARs = jEdit.getPluginJARs();
+			Set<String> neededJars = new HashSet<String>();
+
+			Map<String, String> jarlibs = new HashMap<String, String>();
+			for (PluginJAR pluginJAR : pluginJARs)
+			{
+				EditPlugin plugin = pluginJAR.getPlugin();
+				if (plugin == null)
+				{
+					jarlibs.put(new File(pluginJAR.getPath()).getName(), pluginJAR.getPath());
+				}
+				else
+				{
+					Set<String> strings = plugin.getPluginJAR().getRequiredJars();
+					for (String string : strings)
+					{
+						neededJars.add(new File(string).getName());
+					}
+				}
+			}
+
+			String[] notLoadedJars = jEdit.getNotLoadedPluginJARs();
+			for (int i = 0; i < notLoadedJars.length; i++)
+			{
+				PluginJAR pluginJAR = new PluginJAR(new File(notLoadedJars[i]));
+				PluginJAR.PluginCacheEntry pluginCacheEntry = PluginJAR.getPluginCache(pluginJAR);
+				try
+				{
+					if (pluginCacheEntry == null)
+					{
+						pluginCacheEntry = pluginJAR.generateCache();
+					}
+					if (pluginCacheEntry.pluginClass == null)
+					{
+						// Not a plugin
+						jarlibs.put(new File(notLoadedJars[i]).getName(), notLoadedJars[i]);
+						continue;
+					}
+
+
+					Properties cachedProperties = pluginCacheEntry.cachedProperties;
+
+					String jars = cachedProperties.getProperty("plugin." + pluginCacheEntry.pluginClass + ".jars");
+
+					if (jars != null)
+					{
+						StringTokenizer st = new StringTokenizer(jars);
+						while (st.hasMoreTokens())
+						{
+							neededJars.add(st.nextToken());
+						}
+					}
+				}
+				catch (IOException e1)
+				{
+					Log.log(Log.ERROR, this, e);
+				}
+			}
+
+			List<String> removingJars = new ArrayList<String>();
+			Set<String> jarlibsKeys = jarlibs.keySet();
+			for (String jar : jarlibsKeys)
+			{
+				if (!neededJars.contains(jar))
+				{
+					removingJars.add(jar);
+					Log.log(Log.MESSAGE, this, "It seems that this jar do not belong to any plugin " +jar);
+				}
+			}
+			if(removingJars.isEmpty())
+			{
+				GUIUtilities.message(ManagePanel.this, "plugin-manager.noOrphan", null);
+				return;
+			}
+
+			String[] strings = removingJars.toArray(new String[removingJars.size()]);
+			List<String> mustRemove = new ArrayList<String>();
+			int ret = GUIUtilities.listConfirm(ManagePanel.this,
+							   "plugin-manager.findOrphan",
+							   null,
+							   strings,
+							   mustRemove);
+			if (ret != JOptionPane.OK_OPTION || mustRemove.isEmpty())
+				return;
+
+			Roster roster = new Roster();
+			for (int i = 0; i < mustRemove.size(); i++)
+			{
+				String entry = mustRemove.get(i);
+				roster.addRemove(jarlibs.get(entry));
+			}
+
+			roster.performOperationsInAWTThread(window);
+			pluginModel.update();
+			if (table.getRowCount() != 0)
+			{
+				table.setRowSelectionInterval(0,0);
+			}
+			table.setColumnSelectionInterval(0,0);
+			JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+			scrollbar.setValue(scrollbar.getMinimum());
+			table.repaint();
 		}
 	} //}}}
 
@@ -1039,10 +1167,12 @@ public class ManagePanel extends JPanel
 			}
 		}
 
+		//{{{ CleanupActionListener class
 		private class CleanupActionListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+
 				int[] ints = table.getSelectedRows();
 				List<String> list = new ArrayList<String>(ints.length);
 				List<Entry> entries = new ArrayList<Entry>(ints.length);
@@ -1074,7 +1204,7 @@ public class ManagePanel extends JPanel
 				}
 				table.repaint();
 			}
-		}
+		} //}}}
 	} //}}}
 
 	//{{{ KeyboardAction class

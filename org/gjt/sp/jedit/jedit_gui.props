@@ -2299,6 +2299,16 @@ plugin-manager.cleanup.label=Cleanup
 plugin-manager.cleanup.title=Cleanup plugin data
 plugin-manager.cleanup.message=Remove the data of the following plugins:
 
+plugin-manager.noOrphan.label=Find orphan
+plugin-manager.noOrphan.title=No orphan jars found
+plugin-manager.noOrphan.message=There was no orphan jars in your jEdit installation
+
+plugin-manager.findOrphan.label=Find orphan
+plugin-manager.findOrphan.title=Find orphan jars
+plugin-manager.findOrphan.message=The following jars do not belong to any plugin\n\
+	remove them ?\n (be careful, they can be declared dynamically in some \n\
+  plugins like JDBC drivers):
+
 install-plugins.depend.title=Dependency Required
 install-plugins.depend.message=One or more of the plugins you are installing\n\
 	require additional plugins. They will be automatically\n\

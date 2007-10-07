@@ -29,7 +29,10 @@ for contributing to this release.
   to customize when jEdit checks for file changes, especially useful when many 
   files are mounted on remote/slow file systems. (Joe Walp - Patch # 1768638)
  
-
+- A new button is introduced in the plugin manager : "Find Orphans".
+  It will find the jars that are in your jars directory and do not belong to any
+  plugin. Be careful some plugins like SQL can use jars without declaring them
+  like the JDBC drivers (Matthieu Casanova)
 }}}
 {{{ Editing
 
@@ -40,6 +43,9 @@ for contributing to this release.
 - The bsh package was refactored to org.gjt.sp.jedit.bsh, all plugins that uses
   classes from this package will have to be repaired. This was necessary to fix
   bug (893349) (Matthieu Casanova)
+  
+- A new GUIUtilities.listConfirm() method that returns also the selected items
+  in the list (Matthieu Casanova)
 
 }}}
 
