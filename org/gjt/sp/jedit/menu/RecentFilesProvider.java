@@ -93,6 +93,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			} 
 		}; //}}}
 
+		BufferHistory.readLock();
 		List<BufferHistory.Entry> recentVector = BufferHistory.getHistory();
 
 		if(recentVector.isEmpty())
@@ -101,6 +102,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 				jEdit.getProperty("no-recent-files.label"));
 			menuItem.setEnabled(false);
 			menu.add(menuItem);
+			BufferHistory.readUnlock();
 			return;
 		}
 
@@ -161,6 +163,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 				menu.add(menuItem);
 			}
 		}
+		BufferHistory.readUnlock();
 
 		if(sort)
 		{

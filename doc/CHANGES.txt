@@ -12,6 +12,8 @@ for contributing to this release.
   
 - jEdit will not crash anymore if a beanshell.jar is already in the classpath
   (#893349) (Matthieu Casanova)
+  
+- The BufferHistory is now thread safe (#1808797) (Matthieu Casanova) 
 
 }}}
 {{{ Miscellaneous
@@ -46,6 +48,10 @@ for contributing to this release.
   
 - A new GUIUtilities.listConfirm() method that returns also the selected items
   in the list (Matthieu Casanova)
+  
+- BufferHistory has 2 new methods : readLock() and readUnlock(). They must be
+  used when you get the List with getHistory(). Careful you aren't allowed to
+  change the content of this list (Matthieu Casanova)
 
 }}}
 

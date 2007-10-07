@@ -455,6 +455,7 @@ public class Delegate extends ApplicationAdapter
 
 		public void updateMenu()
 		{
+			BufferHistory.readLock();
 			List recent = BufferHistory.getHistory();
 			NSMenuItem item;
 			File file;
@@ -485,6 +486,7 @@ public class Delegate extends ApplicationAdapter
 					item.setEnabled(false);
 				addItem(item);
 			}
+			BufferHistory.readUnlock();
 		}
 	} //}}}
 

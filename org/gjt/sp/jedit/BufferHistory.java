@@ -25,6 +25,7 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -46,10 +47,18 @@ public class BufferHistory
 	//{{{ getEntry() method
 	public static Entry getEntry(String path)
 	{
-		for (Entry entry : history)
+		historyLock.readLock().lock();
+		try
 		{
-			if(MiscUtilities.pathsEqual(entry.path,path))
-				return entry;
+			for (Entry entry : history)
+			{
+				if(MiscUtilities.pathsEqual(entry.path,path))
+					return entry;
+			}
+		}
+		finally
+		{
+			historyLock.readLock().unlock();
 		}
 
 		return null;
@@ -72,12 +81,17 @@ public class BufferHistory
 	 */
 	public static void clear()
 	{
+		historyLock.writeLock().lock();
 		history.clear();
+		historyLock.writeLock().unlock();
 		EditBus.send(new DynamicMenuChanged("recent-files"));
 	} //}}}
 
 	//{{{ getHistory() method
 	/**
+	 * Returns the Buffer list. It must be protected by the read lock
+	 * @see BufferHistory#readLock()
+	 * @see BufferHistory#readUnlock()  
 	 * @return the buffer history list
 	 * @since jEdit 4.2pre2
 	 */
@@ -85,6 +99,26 @@ public class BufferHistory
 	{
 		return history;
 	} //}}}
+
+	/**
+	 * Get a read lock on the BufferHistory.
+	 * @since jEdit 4.3pre12
+	 */
+	public static void readLock()
+	{
+		historyLock.readLock().lock();
+	}
+
+	/**
+	 * Release the read lock on the BufferHistory.
+	 * @since jEdit 4.3pre12
+	 */
+	public static void readUnlock()
+	{
+	    historyLock.readLock().unlock();
+	}
+
+
 
 	//{{{ load() method
 	public static void load()
@@ -153,6 +187,7 @@ public class BufferHistory
 			out.write("<RECENT>");
 			out.write(lineSep);
 
+			historyLock.readLock().lock();
 			for (Entry entry : history)
 			{
 				out.write("<ENTRY>");
@@ -200,8 +235,6 @@ public class BufferHistory
 			out.write("</RECENT>");
 			out.write(lineSep);
 
-			out.close();
-
 			ok = true;
 		}
 		catch(Exception e)
@@ -210,6 +243,7 @@ public class BufferHistory
 		}
 		finally
 		{
+			historyLock.readLock().unlock();
 			IOUtilities.closeQuietly(out);
 		}
 
@@ -226,35 +260,47 @@ public class BufferHistory
 
 	//{{{ Private members
 	private static LinkedList<Entry> history;
+	private static ReentrantReadWriteLock historyLock;
 	private static long recentModTime;
 
 	//{{{ Class initializer
 	static
 	{
 		history = new LinkedList<Entry>();
+		historyLock = new ReentrantReadWriteLock();
 	} //}}}
 
 	//{{{ addEntry() method
 	/* private */ static void addEntry(Entry entry)
 	{
+		historyLock.writeLock().lock();
 		history.addFirst(entry);
 		int max = jEdit.getIntegerProperty("recentFiles",50);
 		while(history.size() > max)
 			history.removeLast();
+		historyLock.writeLock().unlock();
 	} //}}}
 
 	//{{{ removeEntry() method
 	/* private */ static void removeEntry(String path)
 	{
-		Iterator<Entry> iter = history.iterator();
-		while(iter.hasNext())
+		historyLock.writeLock().lock();
+		try
+		{
+			Iterator<Entry> iter = history.iterator();
+			while(iter.hasNext())
 		{
 			Entry entry = iter.next();
-			if(MiscUtilities.pathsEqual(path,entry.path))
-			{
-				iter.remove();
-				return;
+				if(MiscUtilities.pathsEqual(path,entry.path))
+				{
+					iter.remove();
+					return;
+				}
 			}
+		}
+		finally
+		{
+			historyLock.writeLock().unlock();
 		}
 	} //}}}
 
@@ -360,8 +406,10 @@ public class BufferHistory
 		public void endDocument()
 		{
 			int max = jEdit.getIntegerProperty("recentFiles",50);
+			historyLock.writeLock().lock();
 			while(history.size() > max)
 				history.removeLast();
+			historyLock.writeLock().unlock();
 		}
 
 		public InputSource resolveEntity(String publicId, String systemId)
@@ -373,10 +421,12 @@ public class BufferHistory
 		{
 			if(name.equals("ENTRY"))
 			{
+				historyLock.writeLock().lock();
 				history.addLast(new Entry(
 					path,caret,selection,
 					encoding,
 					mode));
+				historyLock.writeLock().unlock();
 				path = null;
 				caret = 0;
 				selection = null;
