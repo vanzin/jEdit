@@ -44,6 +44,38 @@ import org.gjt.sp.util.IOUtilities;
  */
 public class BufferHistory
 {
+	//{{{ Entry class
+	/**
+	 * Recent file list entry.
+	 */
+	public static class Entry
+	{
+		public String path;
+		public int caret;
+		public String selection;
+		public String encoding;
+		public String mode;
+
+		public Selection[] getSelection()
+		{
+			return stringToSelection(selection);
+		}
+
+		public Entry(String path, int caret, String selection, String encoding, String mode)
+		{
+			this.path = path;
+			this.caret = caret;
+			this.selection = selection;
+			this.encoding = encoding;
+			this.mode = mode;
+		}
+
+		public String toString()
+		{
+			return path + ": " + caret;
+		}
+	} //}}}
+
 	//{{{ getEntry() method
 	public static Entry getEntry(String path)
 	{
@@ -281,7 +313,7 @@ public class BufferHistory
 	} //}}}
 
 	//{{{ addEntry() method
-	/* private */ static void addEntry(Entry entry)
+	private static void addEntry(Entry entry)
 	{
 		historyLock.writeLock().lock();
 		try
@@ -296,7 +328,7 @@ public class BufferHistory
 	} //}}}
 
 	//{{{ removeEntry() method
-	/* private */ static void removeEntry(String path)
+	private static void removeEntry(String path)
 	{
 		historyLock.writeLock().lock();
 		try
@@ -394,42 +426,8 @@ public class BufferHistory
 		EditBus.send(new DynamicMenuChanged("recent-files"));
 	} //}}}
 
-	//}}}
-
-	//{{{ Entry class
-	/**
-	 * Recent file list entry.
-	 */
-	public static class Entry
-	{
-		public String path;
-		public int caret;
-		public String selection;
-		public String encoding;
-		public String mode;
-
-		public Selection[] getSelection()
-		{
-			return stringToSelection(selection);
-		}
-
-		public Entry(String path, int caret, String selection, String encoding, String mode)
-		{
-			this.path = path;
-			this.caret = caret;
-			this.selection = selection;
-			this.encoding = encoding;
-			this.mode = mode;
-		}
-
-		public String toString()
-		{
-			return path + ": " + caret;
-		}
-	} //}}}
-
 	//{{{ RecentHandler class
-	static class RecentHandler extends DefaultHandler
+	private static class RecentHandler extends DefaultHandler
 	{
 		public LinkedList<Entry> result = new LinkedList<Entry>();
 
@@ -480,4 +478,6 @@ public class BufferHistory
 		private String mode;
 		private StringBuffer charData = new StringBuffer();
 	} //}}}
+
+	//}}}
 }
