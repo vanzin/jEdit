@@ -80,7 +80,7 @@ public class BufferHistory
 		{
 			historyLock.writeLock().unlock();
 		}
-		EditBus.send(new DynamicMenuChanged("recent-files"));
+		notifyChange();
 	} //}}}
 
 	//{{{ clear() method
@@ -99,7 +99,7 @@ public class BufferHistory
 		{
 			historyLock.writeLock().unlock();
 		}
-		EditBus.send(new DynamicMenuChanged("recent-files"));
+		notifyChange();
 	} //}}}
 
 	//{{{ getHistory() method
@@ -151,6 +151,7 @@ public class BufferHistory
 		{
 			Log.log(Log.ERROR,BufferHistory.class,e);
 		}
+		trimToLimit(handler.result);
 		history = handler.result;
 	} //}}}
 
@@ -286,9 +287,7 @@ public class BufferHistory
 		try
 		{
 			history.addFirst(entry);
-			int max = jEdit.getIntegerProperty("recentFiles",50);
-			while(history.size() > max)
-				history.removeLast();
+			trimToLimit(history);
 		}
 		finally
 		{
@@ -304,8 +303,8 @@ public class BufferHistory
 		{
 			Iterator<Entry> iter = history.iterator();
 			while(iter.hasNext())
-		{
-			Entry entry = iter.next();
+			{
+				Entry entry = iter.next();
 				if(MiscUtilities.pathsEqual(path,entry.path))
 				{
 					iter.remove();
@@ -381,6 +380,20 @@ public class BufferHistory
 		return returnValue;
 	} //}}}
 
+	//{{{ trimToLimit() method
+	private static void trimToLimit(LinkedList<Entry> list)
+	{
+		int max = jEdit.getIntegerProperty("recentFiles",50);
+		while(list.size() > max)
+			list.removeLast();
+	} //}}}
+
+	//{{{ notifyChange() method
+	private static void notifyChange()
+	{
+		EditBus.send(new DynamicMenuChanged("recent-files"));
+	} //}}}
+
 	//}}}
 
 	//{{{ Entry class
@@ -419,13 +432,6 @@ public class BufferHistory
 	static class RecentHandler extends DefaultHandler
 	{
 		public LinkedList<Entry> result = new LinkedList<Entry>();
-
-		public void endDocument()
-		{
-			int max = jEdit.getIntegerProperty("recentFiles",50);
-			while(result.size() > max)
-				result.removeLast();
-		}
 
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
