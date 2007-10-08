@@ -68,9 +68,18 @@ public class BufferHistory
 	public static void setEntry(String path, int caret, Selection[] selection,
 		String encoding, String mode)
 	{
-		removeEntry(path);
-		addEntry(new Entry(path,caret,selectionToString(selection),
-			encoding, mode));
+		Entry entry = new Entry(path,caret,
+			selectionToString(selection), encoding, mode);
+		historyLock.writeLock().lock();
+		try
+		{
+			removeEntry(path);
+			addEntry(entry);
+		}
+		finally
+		{
+			historyLock.writeLock().unlock();
+		}
 		EditBus.send(new DynamicMenuChanged("recent-files"));
 	} //}}}
 
@@ -82,43 +91,40 @@ public class BufferHistory
 	public static void clear()
 	{
 		historyLock.writeLock().lock();
-		history.clear();
-		historyLock.writeLock().unlock();
+		try
+		{
+			history.clear();
+		}
+		finally
+		{
+			historyLock.writeLock().unlock();
+		}
 		EditBus.send(new DynamicMenuChanged("recent-files"));
 	} //}}}
 
 	//{{{ getHistory() method
 	/**
-	 * Returns the Buffer list. It must be protected by the read lock
-	 * @see BufferHistory#readLock()
-	 * @see BufferHistory#readUnlock()  
+	 * Returns the Buffer list.
 	 * @return the buffer history list
 	 * @since jEdit 4.2pre2
 	 */
 	public static List<Entry> getHistory()
 	{
-		return history;
-	} //}}}
+		// Returns a snapshot to avoid concurrent access to the
+		// history. This requires O(n) time, but it should be ok
+		// because this method should be used only by external
+		// O(n) operation.
 
-	/**
-	 * Get a read lock on the BufferHistory.
-	 * @since jEdit 4.3pre12
-	 */
-	public static void readLock()
-	{
 		historyLock.readLock().lock();
-	}
-
-	/**
-	 * Release the read lock on the BufferHistory.
-	 * @since jEdit 4.3pre12
-	 */
-	public static void readUnlock()
-	{
-	    historyLock.readLock().unlock();
-	}
-
-
+		try
+		{
+			return (List<Entry>)history.clone();
+		}
+		finally
+		{
+			historyLock.readLock().unlock();
+		}
+	} //}}}
 
 	//{{{ load() method
 	public static void load()
@@ -145,6 +151,7 @@ public class BufferHistory
 		{
 			Log.log(Log.ERROR,BufferHistory.class,e);
 		}
+		history = handler.result;
 	} //}}}
 
 	//{{{ save() method
@@ -187,8 +194,11 @@ public class BufferHistory
 			out.write("<RECENT>");
 			out.write(lineSep);
 
-			historyLock.readLock().lock();
-			for (Entry entry : history)
+			// Make a snapshot to avoid long locking period
+			// which may be required by file I/O.
+			List<Entry> snapshot = getHistory();
+
+			for (Entry entry : snapshot)
 			{
 				out.write("<ENTRY>");
 				out.write(lineSep);
@@ -243,7 +253,6 @@ public class BufferHistory
 		}
 		finally
 		{
-			historyLock.readLock().unlock();
 			IOUtilities.closeQuietly(out);
 		}
 
@@ -274,11 +283,17 @@ public class BufferHistory
 	/* private */ static void addEntry(Entry entry)
 	{
 		historyLock.writeLock().lock();
-		history.addFirst(entry);
-		int max = jEdit.getIntegerProperty("recentFiles",50);
-		while(history.size() > max)
-			history.removeLast();
-		historyLock.writeLock().unlock();
+		try
+		{
+			history.addFirst(entry);
+			int max = jEdit.getIntegerProperty("recentFiles",50);
+			while(history.size() > max)
+				history.removeLast();
+		}
+		finally
+		{
+			historyLock.writeLock().unlock();
+		}
 	} //}}}
 
 	//{{{ removeEntry() method
@@ -403,13 +418,13 @@ public class BufferHistory
 	//{{{ RecentHandler class
 	static class RecentHandler extends DefaultHandler
 	{
+		public LinkedList<Entry> result = new LinkedList<Entry>();
+
 		public void endDocument()
 		{
 			int max = jEdit.getIntegerProperty("recentFiles",50);
-			historyLock.writeLock().lock();
-			while(history.size() > max)
-				history.removeLast();
-			historyLock.writeLock().unlock();
+			while(result.size() > max)
+				result.removeLast();
 		}
 
 		public InputSource resolveEntity(String publicId, String systemId)
@@ -421,12 +436,10 @@ public class BufferHistory
 		{
 			if(name.equals("ENTRY"))
 			{
-				historyLock.writeLock().lock();
-				history.addLast(new Entry(
+				result.addLast(new Entry(
 					path,caret,selection,
 					encoding,
 					mode));
-				historyLock.writeLock().unlock();
 				path = null;
 				caret = 0;
 				selection = null;

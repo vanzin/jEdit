@@ -53,10 +53,6 @@ for contributing to this release.
   
 - A new GUIUtilities.listConfirm() method that returns also the selected items
   in the list (Matthieu Casanova)
-  
-- BufferHistory has 2 new methods : readLock() and readUnlock(). They must be
-  used when you get the List with getHistory(). Careful you aren't allowed to
-  change the content of this list (Matthieu Casanova)
 
 }}}
 

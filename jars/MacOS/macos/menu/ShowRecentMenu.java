@@ -45,7 +45,6 @@ public class ShowRecentMenu extends JMenu implements MenuListener
 	//{{{ construct() method
 	private void construct()
 	{
-		BufferHistory.readLock();
 		List recent = BufferHistory.getHistory();
 		JMenuItem item;
 		File file;
@@ -70,7 +69,6 @@ public class ShowRecentMenu extends JMenu implements MenuListener
 			item.setIcon(FileCellRenderer.fileIcon);
 			add(item);
 		}
-		BufferHistory.readUnlock();
 	} //}}}
 	
 	//{{{ menuSelected() method
