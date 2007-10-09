@@ -255,7 +255,12 @@ public class TextAreaInputHandler extends AbstractInputHandler
 						case KeyEvent.VK_DOWN:
 							textArea.goToNextLine("S".equals(keyStroke.modifiers));
 							break;
-
+						case KeyEvent.VK_BACK_SPACE:
+							textArea.backspace();
+							break;
+						case KeyEvent.VK_DELETE:
+							textArea.delete();
+							break;
 					}
 				}
 
