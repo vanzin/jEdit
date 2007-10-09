@@ -859,7 +859,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 */
 	public void setBuffer(Buffer buffer)
 	{
-		setBuffer(buffer,true);
+		setBuffer(buffer,false);
 	} //}}}
 
 	//{{{ setBuffer() method
