@@ -19,7 +19,7 @@
         <PROPERTY NAME="indentNextLine"
             VALUE="(?!^\s*(#|//)).*(\b(if|while|for)\s*\(.*\)|\b(else|do)\b)[^{;]*$" />
         <PROPERTY NAME="unindentThisLine"
-            VALUE="^\s*((slots|.*case\b.*|[\p{Alpha}_][\p{Alnum}_]*)\s*(signals)?:(?!:)).*$" />
+            VALUE="^\s*((.*case\b.*|[\p{Alpha}_][\p{Alnum}_]*)\s*(slots)?:(?!:)).*$" />
         <PROPERTY NAME="electricKeys" VALUE=":" />
     </PROPS>
 
