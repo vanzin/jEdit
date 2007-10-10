@@ -24,14 +24,13 @@
 package org.gjt.sp.jedit.buffer;
 
 //{{{ Imports
-
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.indent.IndentAction;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -1847,7 +1846,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 *
 	 * @since jEdit 4.0pre1
 	 */
-	public void undo(JEditTextArea textArea)
+	public void undo(TextArea textArea)
 	{
 		if(undoMgr == null)
 			return;
@@ -1886,7 +1885,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 *
 	 * @since jEdit 2.7pre2
 	 */
-	public void redo(JEditTextArea textArea)
+	public void redo(TextArea textArea)
 	{
 		if(undoMgr == null)
 			return;

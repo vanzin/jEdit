@@ -54,6 +54,9 @@ for contributing to this release.
 - A new GUIUtilities.listConfirm() method that returns also the selected items
   in the list (Matthieu Casanova)
 
+- JEditBuffer.undo() and JEditBuffer.redo() now takes a
+  org.gjt.sp.jedit.textarea.TextArea as parameter (Matthieu Casanova) 
+
 }}}
 
 }}}
