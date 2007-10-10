@@ -3,13 +3,13 @@
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- Extension of c.xml to add C++ specific syntax. -->
+<!-- With some Qt keywords added -->
 <MODE>
     <PROPS>
         <PROPERTY NAME="commentStart" VALUE="/*" />
         <PROPERTY NAME="commentEnd" VALUE="*/" />
         <PROPERTY NAME="lineComment" VALUE="//" />
         <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
-
 
         <!-- Auto indent -->
         <PROPERTY NAME="indentOpenBrackets" VALUE="{" />
@@ -19,7 +19,7 @@
         <PROPERTY NAME="indentNextLine"
             VALUE="(?!^\s*(#|//)).*(\b(if|while|for)\s*\(.*\)|\b(else|do)\b)[^{;]*$" />
         <PROPERTY NAME="unindentThisLine"
-            VALUE="^\s*((case\b.*|[\p{Alpha}_][\p{Alnum}_]*)\s*:(?!:)).*$" />
+            VALUE="^\s*((slots|.*case\b.*|[\p{Alpha}_][\p{Alnum}_]*)\s*(signals)?:(?!:)).*$" />
         <PROPERTY NAME="electricKeys" VALUE=":" />
     </PROPS>
 
@@ -67,6 +67,8 @@
             <KEYWORD1>private</KEYWORD1>
             <KEYWORD1>protected</KEYWORD1>
             <KEYWORD1>public</KEYWORD1>
+            <KEYWORD1>signals</KEYWORD1>
+            <KEYWORD1>slots</KEYWORD1>
             <KEYWORD3>reinterpret_cast</KEYWORD3>
             <KEYWORD3>static_assert</KEYWORD3>
             <KEYWORD3>static_cast</KEYWORD3>
@@ -78,6 +80,7 @@
             <KEYWORD3>typename</KEYWORD3>
             <KEYWORD2>using</KEYWORD2>
             <KEYWORD1>virtual</KEYWORD1>
+            
         </KEYWORDS>
     </RULES>
 
