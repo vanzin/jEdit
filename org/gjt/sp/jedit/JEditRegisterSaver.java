@@ -88,6 +88,7 @@ public class JEditRegisterSaver implements RegisterSaver
 		jEdit.backupSettingsFile(file2);
 
 		String lineSep = System.getProperty("line.separator");
+		String encoding = "UTF-8";
 
 		BufferedWriter out = null;
 
@@ -95,9 +96,11 @@ public class JEditRegisterSaver implements RegisterSaver
 
 		try
 		{
-			out = new BufferedWriter(new FileWriter(file1));
+			out = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(file1), encoding));
 
-			out.write("<?xml version=\"1.0\"?>");
+			out.write("<?xml version=\"1.0\""
+				+ " encoding=\"" + encoding + "\"?>");
 			out.write(lineSep);
 			out.write("<!DOCTYPE REGISTERS SYSTEM \"registers.dtd\">");
 			out.write(lineSep);

@@ -34,9 +34,9 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 //}}}
@@ -119,11 +119,12 @@ public class ModeProvider
 		}
 		mode.setTokenMarker(xmh.getTokenMarker());
 
-		Reader grammar = null;
+		InputStream grammar = null;
 
 		try
 		{
-			grammar = new BufferedReader(new FileReader(fileName));
+			grammar = new BufferedInputStream(
+				new FileInputStream(fileName));
 
 			InputSource isrc = new InputSource(grammar);
 			isrc.setSystemId("jedit.jar");

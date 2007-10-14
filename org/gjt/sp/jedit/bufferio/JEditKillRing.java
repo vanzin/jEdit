@@ -83,7 +83,7 @@ public class JEditKillRing extends KillRing
 		if(file2.exists() && file2.lastModified() != killRingModTime)
 		{
 			Log.log(Log.WARNING,KillRing.class,file2
-				+ " changed on disk; will not save recent"
+				+ " changed on disk; will not save killring"
 				+ " files");
 			return;
 		}
@@ -93,17 +93,17 @@ public class JEditKillRing extends KillRing
 		Log.log(Log.MESSAGE,KillRing.class,"Saving killring.xml");
 
 		String lineSep = System.getProperty("line.separator");
+		String encoding = "UTF-8";
 
 		BufferedWriter out = null;
 
 		try
 		{
-			out = new BufferedWriter(
-				new OutputStreamWriter(
-					new FileOutputStream(file1),
-					"UTF-8"));
+			out = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(file1), encoding));
 
-			out.write("<?xml version=\"1.1\" encoding=\"UTF-8\"?>");
+			out.write("<?xml version=\"1.1\""
+				+ " encoding=\"" + encoding + "\"?>");
 			out.write(lineSep);
 			out.write("<!DOCTYPE KILLRING SYSTEM \"killring.dtd\">");
 			out.write(lineSep);

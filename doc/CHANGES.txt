@@ -15,6 +15,20 @@ for contributing to this release.
   
 - The BufferHistory is now thread safe (#1808797) (Matthieu Casanova) 
 
+- Parsing XML files now uses correct encoding (which is declared in its
+  source or UTF-8 by default) instead of the system default encoding.
+  (Kazutoshi Satoda)
+
+  NOTE: Related to this fix, some characters in xml files which are saved
+  by older jEdit may not be correctly loaded. They used the system
+  default encoding and didn't declare the encoding (meaning they should
+  use UTF-8). recent.xml, perspective.xml and registers.xml are known
+  (and fixed).
+
+- Changed the encodings of recent.xml, perspective.xml and registers.xml
+  to UTF-8 to allow characters which are not covered by the system default
+  encoding in them. (Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 

@@ -211,6 +211,7 @@ public class BufferHistory
 		Log.log(Log.MESSAGE,BufferHistory.class,"Saving " + file1);
 
 		String lineSep = System.getProperty("line.separator");
+		String encoding = "UTF-8";
 
 		boolean ok = false;
 
@@ -218,9 +219,11 @@ public class BufferHistory
 
 		try
 		{
-			out = new BufferedWriter(new FileWriter(file1));
+			out = new BufferedWriter(new OutputStreamWriter(
+				new FileOutputStream(file1), encoding));
 
-			out.write("<?xml version=\"1.0\"?>");
+			out.write("<?xml version=\"1.0\""
+				+ " encoding=\"" + encoding + "\"?>");
 			out.write(lineSep);
 			out.write("<!DOCTYPE RECENT SYSTEM \"recent.dtd\">");
 			out.write(lineSep);

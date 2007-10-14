@@ -24,9 +24,8 @@
 
 package org.gjt.sp.util;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -112,12 +111,11 @@ public class XMLUtilities
 	public static boolean parseXML(InputStream in, DefaultHandler handler)
 		throws IOException
 	{
-		Reader r = null;
 		try
 		{
 			XMLReader parser = XMLReaderFactory.createXMLReader();
-			r = new BufferedReader(new InputStreamReader(in));
-			InputSource isrc = new InputSource(r);
+			InputSource isrc = new InputSource(
+				new BufferedInputStream(in));
 			isrc.setSystemId("jedit.jar");
 			parser.setContentHandler(handler);
 			parser.setDTDHandler(handler);
@@ -171,9 +169,8 @@ public class XMLUtilities
 		{
 			try
 			{
-				return new InputSource(new BufferedReader(
-					new InputStreamReader(
-						where.getResourceAsStream(test))));
+				return new InputSource(new BufferedInputStream(
+					where.getResourceAsStream(test)));
 			}
 			catch (Exception e)
 			{
