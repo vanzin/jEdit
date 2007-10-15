@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.gui.TextAreaDialog;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.SegmentCharSequence;
 import org.gjt.sp.util.Log;
 //}}}

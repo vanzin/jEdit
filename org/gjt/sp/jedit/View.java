@@ -36,6 +36,8 @@ import java.util.List;
 
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.textarea.TextArea;
