@@ -2,18 +2,18 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre12
 
-Thanks to Björn "Vampire" Kautler, Joe Walp, and Matthieu Casanova 
-for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Joe Walp, Matthieu Casanova and
+Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
 
-- When removing a plugin that is not loaded, it's declared jars are now removed 
+- When removing a plugin that is not loaded, it's declared jars are now removed
   too (Matthieu Casanova)
-  
+
 - jEdit will not crash anymore if a beanshell.jar is already in the classpath
   (#893349) (Matthieu Casanova)
-  
-- The BufferHistory is now thread safe (#1808797) (Matthieu Casanova) 
+
+- The BufferHistory is now thread safe (#1808797) (Matthieu Casanova)
 
 - Parsing XML files now uses correct encoding (which is declared in its
   source or UTF-8 by default) instead of the system default encoding.
@@ -29,30 +29,36 @@ for contributing to this release.
   to UTF-8 to allow characters which are not covered by the system default
   encoding in them. (Kazutoshi Satoda)
 
+- SF Bug #1764090: Slight Error in jedit.desktop file
+  There was actually an error in jEdit.java that caused it to hit an
+  NPE when processing URLs provided in the command line. Fix it by not
+  trying to find an open buffer when trying to parse an URL in the
+  openFile() method. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 
 - After an hypersearch, if a result is on the caret line, it is automatically selected
   in the tree (Matthieu Casanova)
-  
+
 - If you remove the last node of the HyperSearch dockable, it will hide
   (Feature Request #1593526) (Matthieu Casanova)
-  
+
 - A new option introduced in Saving & backups option panel to turn off autosave
   of untitled buffers (Feature Request #1520769)  (Matthieu Casanova)
-  
+
 - New option in General Options: Check for File Change upon. Many options
-  to customize when jEdit checks for file changes, especially useful when many 
+  to customize when jEdit checks for file changes, especially useful when many
   files are mounted on remote/slow file systems. (Joe Walp - Patch # 1768638)
- 
+
 - A new button is introduced in the plugin manager : "Find Orphans".
   It will find the jars that are in your jars directory and do not belong to any
   plugin. Be careful some plugins like SQL can use jars without declaring them
   like the JDBC drivers (Matthieu Casanova)
-  
+
 - A new option is introduced in the general option panel. Now jEdit will ask
   the user if he wants to stop hypersearch if a result count limit is reached.
-  By default the count is 1000. It checks the limit before each file so it is 
+  By default the count is 1000. It checks the limit before each file so it is
   possible that a few more results are found before asking (Matthieu Casanova)
 }}}
 {{{ Editing
@@ -64,12 +70,12 @@ for contributing to this release.
 - The bsh package was refactored to org.gjt.sp.jedit.bsh, all plugins that uses
   classes from this package will have to be repaired. This was necessary to fix
   bug (893349) (Matthieu Casanova)
-  
+
 - A new GUIUtilities.listConfirm() method that returns also the selected items
   in the list (Matthieu Casanova)
 
 - JEditBuffer.undo() and JEditBuffer.redo() now takes a
-  org.gjt.sp.jedit.textarea.TextArea as parameter (Matthieu Casanova) 
+  org.gjt.sp.jedit.textarea.TextArea as parameter (Matthieu Casanova)
 
 }}}
 
@@ -79,7 +85,7 @@ for contributing to this release.
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
 Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
-Scott LeBaron, Seph M. Soliman, Joerg Spieler, Alan Ezust, xlinuks, 
+Scott LeBaron, Seph M. Soliman, Joerg Spieler, Alan Ezust, xlinuks,
 Orhan Alkan and Krassimir Berov
 for contributing to this release.
 
@@ -125,7 +131,7 @@ for contributing to this release.
   a buffer with a mode that has a "line comment" property (#1560584)
   (Matthieu Casanova)
 
-- 1755430 - HistoryTextField looks bad with native GTK+ LnF (Seph M. Soliman)  
+- 1755430 - HistoryTextField looks bad with native GTK+ LnF (Seph M. Soliman)
 
 - SF Bug #1742250: use of DELEGATE in mode rules can cause rules to be
   missing. (Daniel Hahler)
@@ -153,7 +159,7 @@ for contributing to this release.
 - Fixed inconsistent indentation which happened when adjacent lines both
   match with "unindentThisLine" pattern and they should be placed at first
   column. (Kazutoshi Satoda)
-  
+
 - Dropping files was broken when using Gnome Nautilus (patch #1795592)
   (xlinuks)
 
@@ -172,7 +178,7 @@ for contributing to this release.
 - The release note of the plugins in the PluginManager install panel now displays
   html (Matthieu Casanova)
 
-- PluginManager InstallPanel: All columns are sortable in either directions (#1781853 -  Joerg Spieler)  
+- PluginManager InstallPanel: All columns are sortable in either directions (#1781853 -  Joerg Spieler)
 
 - When dropping a directory on the textarea, the VFSBrowser will now browse to it
   (Matthieu Casanova)

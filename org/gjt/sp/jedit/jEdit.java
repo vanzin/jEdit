@@ -1416,7 +1416,7 @@ public class jEdit
 	public static Buffer openFile(View view, String path)
 	{
 		return openFile(view,null,path,false,new Hashtable());
-	} 
+	}
 	/**
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
@@ -1425,7 +1425,7 @@ public class jEdit
 		String path, boolean readOnly, boolean newFile)
 	{
 		return openFile(view,parent,path,newFile,new Hashtable());
-	} 
+	}
 	/**
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
@@ -1459,13 +1459,10 @@ public class jEdit
 		try {
 			URL u = new URL(path);
 			if (u.getProtocol().equals("file"))
-				path = URLDecoder.decode(u.getPath(), view.getBuffer().getProperty("encoding").toString());
+				path = URLDecoder.decode(u.getPath());
 		}
 		catch (MalformedURLException mue) {
 			path = MiscUtilities.constructPath(parent,path);
-		}
-		catch (UnsupportedEncodingException uee) {
-			Log.log(Log.ERROR, jEdit.class, "can't decode URL:" + path, uee);
 		}
 
 
@@ -2084,10 +2081,10 @@ public class jEdit
 			}
 			_view = _view.next;
 		}
-		
+
 		Buffer buffer;
 		buffer = buffersFirst;
-		
+
 		int[] states = new int[bufferCount];
 		int i = 0;
 		boolean notifyFileChanged = false;
@@ -2099,7 +2096,7 @@ public class jEdit
 				i++;
 				continue;
 			}
-			
+
 			states[i] = buffer.checkFileStatus(view);
 
 			switch(states[i])
@@ -2122,7 +2119,7 @@ public class jEdit
 				notifyFileChanged = true;
 				break;
 			}
-			
+
 			buffer = buffer.next;
 			i++;
 		}
@@ -2166,7 +2163,7 @@ public class jEdit
 	public static View newView(View view)
 	{
 		return newView(view,null,false);
-	} 
+	}
 	/**
 	 * Creates a new view of a buffer.
 	 * @param view An existing view
@@ -2175,7 +2172,7 @@ public class jEdit
 	public static View newView(View view, Buffer buffer)
 	{
 		return newView(view,buffer,false);
-	} 
+	}
 	/**
 	 * Creates a new view of a buffer.
 	 * @param view An existing view
@@ -2193,7 +2190,7 @@ public class jEdit
 		else
 			config = new View.ViewConfig(plainView);
 		return newView(view,buffer,config);
-	} 
+	}
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
