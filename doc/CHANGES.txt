@@ -35,6 +35,13 @@ Marcelo Vanzin for contributing to this release.
   trying to find an open buffer when trying to parse an URL in the
   openFile() method. (Marcelo Vanzin)
 
+- SF Bug #1729313: BeanShell Error on Loading jEdit 4.3pre9
+  We need to force the default encoding to UTF-8 when running startup scripts,
+  otherwise jEdit will fail to run the scripts shiped with it. On the flip
+  side, if the user wants to use a different (non-compatible) encoding that
+  is not trivially detected (such as anything with a BOM), a buffer-local
+  property defining the encoding should be provided. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 

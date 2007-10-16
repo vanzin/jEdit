@@ -1558,6 +1558,7 @@ public class jEdit
 				return buffer;
 
 			buffer = new Buffer(path,newFile,true,props);
+			buffer.setBooleanProperty(Buffer.ENCODING_AUTODETECT, true);
 			if(!buffer.load(view,false))
 				return null;
 			else
@@ -3372,6 +3373,17 @@ public class jEdit
 		Arrays.sort(snippets,
 			new MiscUtilities.StringICaseCompare());
 
+		/*
+		 * Force the default encoding to UTF-8 temporarily.
+		 * The shipped scripts use that encoding, so we need
+		 * to make sure we can load them correctly. If users
+		 * want to write script with a different encoding,
+		 * they can use buffer-local properties on the
+		 * script to set it.
+		 */
+		String defaultEncoding = getProperty("buffer.encoding");
+		setProperty("buffer.encoding", "UTF-8");
+
 		for(int i = 0; i < snippets.length; ++i)
 		{
 			File snippet = snippets[i];
@@ -3393,6 +3405,8 @@ public class jEdit
 				Log.log(Log.ERROR,jEdit.class,e);
 			}
 		}
+
+		setProperty("buffer.encoding", defaultEncoding);
 	} //}}}
 
 	//{{{ initProxy() method
