@@ -70,6 +70,8 @@ Marcelo Vanzin for contributing to this release.
 }}}
 {{{ Editing
 
+- Some enhancements to the IDL mode, and made some definitions in the C mode
+  more reusable. (Marcelo Vanzin)
 
 }}}
 {{{ API Changes
