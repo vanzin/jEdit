@@ -221,8 +221,17 @@ public class BufferSaveRequest extends BufferIORequest
 	//{{{ wantTwoStageSave() method
 	public static boolean wantTwoStageSave(Buffer buffer)
 	{
-		return !buffer.getBooleanProperty("forbidTwoStageSave") &&
+		
+		boolean wantTwoStageSave = !buffer.getBooleanProperty("forbidTwoStageSave") &&
 			(buffer.getBooleanProperty("overwriteReadonly") ||
 			jEdit.getBooleanProperty("twoStageSave"));
+			
+		if (wantTwoStageSave)
+		{
+			VFS vfs = VFSManager.getVFSForPath(buffer.getPath());
+			boolean vfsLowLatencyCap = (vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0;
+			return vfsLowLatencyCap || jEdit.getBooleanProperty("twoStageSaveLowLatency");
+		}
+		return false;
 	}//}}}
 }

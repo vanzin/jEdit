@@ -24,23 +24,37 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+
+import org.gjt.sp.jedit.browser.VFSBrowser;
+import org.gjt.sp.jedit.buffer.*;
+import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
+import org.gjt.sp.jedit.bufferio.BufferIORequest;
+import org.gjt.sp.jedit.bufferio.BufferSaveRequest;
+import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
+import org.gjt.sp.jedit.gui.StyleEditor;
+import org.gjt.sp.jedit.io.FileVFS;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSFile;
+import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
+import org.gjt.sp.jedit.syntax.ParserRuleSet;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.syntax.Token;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.Selection;
+import org.gjt.sp.util.IntegerArray;
+import org.gjt.sp.util.Log;
+
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Segment;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.*;
-import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.gui.StyleEditor;
-import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.bufferio.BufferIORequest;
-import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
-import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
-import org.gjt.sp.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 //}}}
 
 /**
@@ -513,7 +527,7 @@ public class Buffer extends JEditBuffer
 					if(!MiscUtilities.isURL(savePath))
 						savePath = MiscUtilities.resolveSymlinks(savePath);
 					savePath = vfs.getTwoStageSaveName(savePath);
-					if (jEdit.getBooleanProperty("twoStageSave") && (!vfsRenameCap || savePath == null))
+					if (BufferSaveRequest.wantTwoStageSave(this) && (!vfsRenameCap || savePath == null))
 					{
 						// the file is writeable but the vfs cannot do two stage. We must overwrite
 						// readonly flag

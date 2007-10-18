@@ -53,7 +53,17 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		twoStageSave.setSelected(jEdit.getBooleanProperty(
 			"twoStageSave"));
 		addComponent(twoStageSave);
+		ActionListener myActionListener = new MyActionListener();
+		twoStageSave.addActionListener(myActionListener);
 
+		/* Two-stage save low latency */
+		twoStageSaveLowLatency = new JCheckBox(jEdit.getProperty(
+			"options.save-back.twoStageSaveLowLatency"));
+		twoStageSaveLowLatency.setSelected(jEdit.getBooleanProperty(
+			"twoStageSaveLowLatency"));
+		twoStageSaveLowLatency.setEnabled(twoStageSave.isSelected());
+		addComponent(twoStageSaveLowLatency);
+		
 		/* Confirm save all */
 		confirmSaveAll = new JCheckBox(jEdit.getProperty(
 			"options.save-back.confirmSaveAll"));
@@ -80,7 +90,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		backupDirectory = new JTextField(jEdit.getProperty(
 			"backup.directory"));
 		JButton browseBackupDirectory = new JButton("...");
-		browseBackupDirectory.addActionListener(new MyActionListener());
+		browseBackupDirectory.addActionListener(myActionListener);
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(backupDirectory);
 		panel.add(browseBackupDirectory, BorderLayout.EAST);
@@ -109,6 +119,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	protected void _save()
 	{
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());
+		jEdit.setBooleanProperty("twoStageSaveLowLatency",twoStageSaveLowLatency.isSelected());
 		jEdit.setBooleanProperty("confirmSaveAll",confirmSaveAll.isSelected());
 		jEdit.setProperty("autosave", this.autosave.getText());
 		jEdit.setProperty("backups",backups.getText());
@@ -135,6 +146,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 
 	//{{{ Private members
 	private JCheckBox twoStageSave;
+	private JCheckBox twoStageSaveLowLatency;
 	private JCheckBox confirmSaveAll;
 	private JTextField autosave;
 	private JCheckBox autosaveUntitled;
@@ -145,17 +157,26 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private JCheckBox backupEverySave;
 	//}}}
 
+	//{{{ MyActionListener class
 	private class MyActionListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			String[] choosenFolder = 
-				GUIUtilities.showVFSFileDialog(null,
+			if (e.getSource() == twoStageSave)
+			{
+				twoStageSaveLowLatency.setEnabled(twoStageSave.isSelected());
+			}
+			else
+			{
+				String[] choosenFolder = 
+					GUIUtilities.showVFSFileDialog(null,
 				   			       backupDirectory.getText(),
 				   			       VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
 				   			       false);
-			if (choosenFolder != null)
-				backupDirectory.setText(choosenFolder[0]);
+				if (choosenFolder != null)
+					backupDirectory.setText(choosenFolder[0]);
+			}
 		}
-	}
+	} //}}}
+
 }

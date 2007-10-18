@@ -1862,6 +1862,7 @@ options.save-back.backupPrefix=Backup filename prefix:
 options.save-back.backupSuffix=Backup filename suffix:
 options.save-back.backupEverySave=Backup on every save
 options.save-back.twoStageSave=Two-stage save (safer but resets file owner on Unix)
+options.save-back.twoStageSaveLowLatency=Activate two stage save on low latency FS
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
 #}}}
