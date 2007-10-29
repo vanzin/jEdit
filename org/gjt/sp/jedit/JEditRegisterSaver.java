@@ -1,5 +1,4 @@
 /*
- * JEditRegisterSaver.java - Handles services.xml files in plugins
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -31,10 +30,11 @@ import org.xml.sax.Attributes;
 import java.io.*;
 
 /**
+ * The concrete RegisterSaver for jEdit.
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
-public class JEditRegisterSaver implements RegisterSaver
+class JEditRegisterSaver implements RegisterSaver
 {
 	//{{{ loadRegisters() method
 	public void loadRegisters()
@@ -160,7 +160,7 @@ public class JEditRegisterSaver implements RegisterSaver
 
 	//{{{ RegistersHandler class
 	static class RegistersHandler extends DefaultHandler
-		{
+	{
 		//{{{ resolveEntity() method
 		public InputSource resolveEntity(String publicId, String systemId)
 		{

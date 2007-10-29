@@ -29,7 +29,7 @@ import org.gjt.sp.util.Log;
  * @version $Id: Buffer.java 8190 2006-12-07 07:58:34Z kpouer $
  * @since jEdit 4.3pre10
  */
-public class JEditMode extends Mode
+class JEditMode extends Mode
 {
 	//{{{ JEditMode constructor
 	public JEditMode(String name)

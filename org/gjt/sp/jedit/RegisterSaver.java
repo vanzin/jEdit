@@ -1,5 +1,4 @@
 /*
- * RegisterSaver.java - Handles services.xml files in plugins
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -21,9 +20,8 @@
  */
 package org.gjt.sp.jedit;
 
-import java.io.File;
-
 /**
+ * An interface to delegate save/load operations of registers.
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */

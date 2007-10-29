@@ -1,5 +1,4 @@
 /*
- * JEditRegistersListener.java - Handles services.xml files in plugins
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -24,10 +23,11 @@ package org.gjt.sp.jedit;
 import org.gjt.sp.jedit.msg.RegisterChanged;
 
 /**
+ * The concrete RegistersListener of jEdit.
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
-public class JEditRegistersListener implements RegistersListener
+class JEditRegistersListener implements RegistersListener
 {
 	public void registerChanged(char name)
 	{

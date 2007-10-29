@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.gjt.sp.jedit.bufferio;
+package org.gjt.sp.jedit;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -30,17 +30,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.jedit.buffer.KillRing;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
 
 /**
+ * The basic KillRing of jEdit.
  * @author Matthieu Casanova
  * @version $Id: ParserRuleSet.java 5471 2006-06-22 06:31:23Z kpouer $
  */
-public class JEditKillRing extends KillRing
+class JEditKillRing extends KillRing
 {
 	//{{{ load() method
 	public void load()
