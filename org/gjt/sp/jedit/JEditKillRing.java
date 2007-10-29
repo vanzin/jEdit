@@ -23,7 +23,7 @@ package org.gjt.sp.jedit;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.io.*;
+import java.io.IOException;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -41,25 +41,31 @@ import org.gjt.sp.util.IOUtilities;
  */
 class JEditKillRing extends KillRing
 {
+	//{{{ Constructor
+	public JEditKillRing()
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			killringXML = new SettingsXML(settingsDirectory, "killring");
+		}
+	} //}}}
+
 	//{{{ load() method
 	public void load()
 	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
+		if(killringXML == null)
 			return;
 
-		File killRing = new File(MiscUtilities.constructPath(
-			settingsDirectory,"killring.xml"));
-		if(!killRing.exists())
+		if(!killringXML.fileExists())
 			return;
 
-		killRingModTime = killRing.lastModified();
-		Log.log(Log.MESSAGE,KillRing.class,"Loading killring.xml");
+		Log.log(Log.MESSAGE,KillRing.class,"Loading " + killringXML);
 
 		KillRingHandler handler = new KillRingHandler();
 		try
 		{
-			XMLUtilities.parseXML(new FileInputStream(killRing), handler);
+			killringXML.load(handler);
 		}
 		catch (IOException ioe)
 		{
@@ -71,39 +77,28 @@ class JEditKillRing extends KillRing
 	//{{{ save() method
 	public void save()
 	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
+		if(killringXML == null)
 			return;
 
-		File file1 = new File(MiscUtilities.constructPath(
-			settingsDirectory, "#killring.xml#save#"));
-		File file2 = new File(MiscUtilities.constructPath(
-			settingsDirectory, "killring.xml"));
-		if(file2.exists() && file2.lastModified() != killRingModTime)
+		if(killringXML.hasChangedOnDisk())
 		{
-			Log.log(Log.WARNING,KillRing.class,file2
+			Log.log(Log.WARNING,KillRing.class,killringXML
 				+ " changed on disk; will not save killring"
 				+ " files");
 			return;
 		}
 
-		jEdit.backupSettingsFile(file2);
-
-		Log.log(Log.MESSAGE,KillRing.class,"Saving killring.xml");
+		Log.log(Log.MESSAGE,KillRing.class,"Saving " + killringXML);
 
 		String lineSep = System.getProperty("line.separator");
-		String encoding = "UTF-8";
 
-		BufferedWriter out = null;
+		SettingsXML.Saver out = null;
 
 		try
 		{
-			out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(file1), encoding));
+			out = killringXML.openSaver();
+			out.writeXMLDeclaration("1.1");
 
-			out.write("<?xml version=\"1.1\""
-				+ " encoding=\"" + encoding + "\"?>");
-			out.write(lineSep);
 			out.write("<!DOCTYPE KILLRING SYSTEM \"killring.dtd\">");
 			out.write(lineSep);
 			out.write("<KILLRING>");
@@ -122,12 +117,7 @@ class JEditKillRing extends KillRing
 			out.write("</KILLRING>");
 			out.write(lineSep);
 
-			out.close();
-
-			/* to avoid data loss, only do this if the above
-			 * completed successfully */
-			file2.delete();
-			file1.renameTo(file2);
+			out.finish();
 		}
 		catch(Exception e)
 		{
@@ -140,7 +130,7 @@ class JEditKillRing extends KillRing
 	} //}}}
 
 	//{{{ Private members
-	private long killRingModTime;
+	private SettingsXML killringXML;
 
 	//{{{ KillRingHandler class
 	private static class KillRingHandler extends DefaultHandler

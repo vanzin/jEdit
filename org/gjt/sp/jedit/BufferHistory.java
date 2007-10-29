@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -161,23 +161,18 @@ public class BufferHistory
 	//{{{ load() method
 	public static void load()
 	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
+		if(recentXML == null)
 			return;
 
-		File recent = new File(MiscUtilities.constructPath(
-			settingsDirectory,"recent.xml"));
-		if(!recent.exists())
+		if(!recentXML.fileExists())
 			return;
 
-		recentModTime = recent.lastModified();
-
-		Log.log(Log.MESSAGE,BufferHistory.class,"Loading recent.xml");
+		Log.log(Log.MESSAGE,BufferHistory.class,"Loading " + recentXML);
 
 		RecentHandler handler = new RecentHandler();
 		try
 		{
-			XMLUtilities.parseXML(new FileInputStream(recent), handler);
+			recentXML.load(handler);
 		}
 		catch(IOException e)
 		{
@@ -190,41 +185,28 @@ public class BufferHistory
 	//{{{ save() method
 	public static void save()
 	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
+		if(recentXML == null)
 			return;
 
-		File file1 = new File(MiscUtilities.constructPath(
-			settingsDirectory, "#recent.xml#save#"));
-		File file2 = new File(MiscUtilities.constructPath(
-			settingsDirectory, "recent.xml"));
-		if(file2.exists() && file2.lastModified() != recentModTime)
+		if(recentXML.hasChangedOnDisk())
 		{
-			Log.log(Log.WARNING,BufferHistory.class,file2
+			Log.log(Log.WARNING,BufferHistory.class,recentXML
 				+ " changed on disk; will not save recent"
 				+ " files");
 			return;
 		}
 
-		jEdit.backupSettingsFile(file2);
-
-		Log.log(Log.MESSAGE,BufferHistory.class,"Saving " + file1);
+		Log.log(Log.MESSAGE,BufferHistory.class,"Saving " + recentXML);
 
 		String lineSep = System.getProperty("line.separator");
-		String encoding = "UTF-8";
 
-		boolean ok = false;
-
-		BufferedWriter out = null;
+		SettingsXML.Saver out = null;
 
 		try
 		{
-			out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(file1), encoding));
+			out = recentXML.openSaver();
+			out.writeXMLDeclaration();
 
-			out.write("<?xml version=\"1.0\""
-				+ " encoding=\"" + encoding + "\"?>");
-			out.write(lineSep);
 			out.write("<!DOCTYPE RECENT SYSTEM \"recent.dtd\">");
 			out.write(lineSep);
 			out.write("<RECENT>");
@@ -281,7 +263,7 @@ public class BufferHistory
 			out.write("</RECENT>");
 			out.write(lineSep);
 
-			ok = true;
+			out.finish();
 		}
 		catch(Exception e)
 		{
@@ -291,28 +273,23 @@ public class BufferHistory
 		{
 			IOUtilities.closeQuietly(out);
 		}
-
-		if(ok)
-		{
-			/* to avoid data loss, only do this if the above
-			 * completed successfully */
-			file2.delete();
-			file1.renameTo(file2);
-		}
-
-		recentModTime = file2.lastModified();
 	} //}}}
 
 	//{{{ Private members
 	private static LinkedList<Entry> history;
 	private static ReentrantReadWriteLock historyLock;
-	private static long recentModTime;
+	private static SettingsXML recentXML;
 
 	//{{{ Class initializer
 	static
 	{
 		history = new LinkedList<Entry>();
 		historyLock = new ReentrantReadWriteLock();
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			recentXML = new SettingsXML(settingsDirectory, "recent");
+		}
 	} //}}}
 
 	//{{{ addEntry() method

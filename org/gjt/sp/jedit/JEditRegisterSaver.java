@@ -27,7 +27,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.Attributes;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * The concrete RegisterSaver for jEdit.
@@ -36,28 +36,32 @@ import java.io.*;
  */
 class JEditRegisterSaver implements RegisterSaver
 {
+	//{{{ Constructor
+	public JEditRegisterSaver()
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			registersXML = new SettingsXML(settingsDirectory, "registers");
+		}
+	} //}}}
+
 	//{{{ loadRegisters() method
 	public void loadRegisters()
 	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
+		if(registersXML == null)
 			return;
 
-		File registerFile = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(),"registers.xml"));
-		if(!registerFile.exists())
+		if(!registersXML.fileExists())
 			return;
 
-		registersModTime = registerFile.lastModified();
-
-		Log.log(Log.MESSAGE,jEdit.class,"Loading registers.xml");
+		Log.log(Log.MESSAGE,jEdit.class,"Loading " + registersXML);
 
 		RegistersHandler handler = new RegistersHandler();
 		try
 		{
 			Registers.setLoading(true);
-			XMLUtilities.parseXML(new FileInputStream(registerFile),
-						handler);
+			registersXML.load(handler);
 		}
 		catch (IOException ioe)
 		{
@@ -72,36 +76,27 @@ class JEditRegisterSaver implements RegisterSaver
 	//{{{ saveRegisters() method
 	public void saveRegisters()
 	{
+		if(registersXML == null)
+			return;
 
-		Log.log(Log.MESSAGE,Registers.class,"Saving registers.xml");
-		File file1 = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(), "#registers.xml#save#"));
-		File file2 = new File(MiscUtilities.constructPath(
-			jEdit.getSettingsDirectory(), "registers.xml"));
-		if(file2.exists() && file2.lastModified() != registersModTime)
+		if(registersXML.hasChangedOnDisk())
 		{
-			Log.log(Log.WARNING,Registers.class,file2 + " changed"
-				+ " on disk; will not save registers");
+			Log.log(Log.WARNING,Registers.class,registersXML
+				+ " changed on disk; will not save registers");
 			return;
 		}
 
-		jEdit.backupSettingsFile(file2);
+		Log.log(Log.MESSAGE,Registers.class,"Saving " + registersXML);
 
 		String lineSep = System.getProperty("line.separator");
-		String encoding = "UTF-8";
 
-		BufferedWriter out = null;
-
-		boolean ok = false;
+		SettingsXML.Saver out = null;
 
 		try
 		{
-			out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(file1), encoding));
+			out = registersXML.openSaver();
+			out.writeXMLDeclaration();
 
-			out.write("<?xml version=\"1.0\""
-				+ " encoding=\"" + encoding + "\"?>");
-			out.write(lineSep);
 			out.write("<!DOCTYPE REGISTERS SYSTEM \"registers.dtd\">");
 			out.write(lineSep);
 			out.write("<REGISTERS>");
@@ -134,7 +129,7 @@ class JEditRegisterSaver implements RegisterSaver
 			out.write("</REGISTERS>");
 			out.write(lineSep);
 
-			ok = true;
+			out.finish();
 		}
 		catch(Exception e)
 		{
@@ -144,22 +139,13 @@ class JEditRegisterSaver implements RegisterSaver
 		{
 			IOUtilities.closeQuietly(out);
 		}
-
-		if(ok)
-		{
-			/* to avoid data loss, only do this if the above
-			 * completed successfully */
-			file2.delete();
-			file1.renameTo(file2);
-		}
-
-		registersModTime = file2.lastModified();
 	} //}}}
 
-	private static long registersModTime;
+	//{{{ Private members
+	private SettingsXML registersXML;
 
 	//{{{ RegistersHandler class
-	static class RegistersHandler extends DefaultHandler
+	private static class RegistersHandler extends DefaultHandler
 	{
 		//{{{ resolveEntity() method
 		public InputSource resolveEntity(String publicId, String systemId)
@@ -202,4 +188,5 @@ class JEditRegisterSaver implements RegisterSaver
 		private boolean inRegister;
 		//}}}
 	} //}}}
+	//}}}
 }

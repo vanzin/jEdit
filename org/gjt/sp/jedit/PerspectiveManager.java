@@ -22,7 +22,7 @@
 
 package org.gjt.sp.jedit;
 
-import java.io.*;
+import java.io.IOException;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -87,22 +87,18 @@ public class PerspectiveManager
 	//{{{ loadPerspective() method
 	public static View loadPerspective(boolean restoreFiles)
 	{
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
+		if(perspectiveXML == null)
 			return null;
 
-		File perspective = new File(MiscUtilities.constructPath(
-			settingsDirectory,"perspective.xml"));
-
-		if(!perspective.exists())
+		if(!perspectiveXML.fileExists())
 			return null;
 
-		Log.log(Log.MESSAGE,PerspectiveManager.class,"Loading " + perspective);
+		Log.log(Log.MESSAGE,PerspectiveManager.class,"Loading " + perspectiveXML);
 
 		PerspectiveHandler handler = new PerspectiveHandler(restoreFiles);
 		try
 		{
-			XMLUtilities.parseXML(new FileInputStream(perspective), handler);
+			perspectiveXML.load(handler);
 		}
 		catch(IOException e)
 		{
@@ -117,8 +113,7 @@ public class PerspectiveManager
 		if(!isPerspectiveEnabled())
 			return;
 
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory == null)
+		if(perspectiveXML == null)
 			return;
 
 		// backgrounded
@@ -126,26 +121,17 @@ public class PerspectiveManager
 			return;
 
 		if(!autosave)
-			Log.log(Log.MESSAGE,PerspectiveManager.class,"Saving perspective.xml");
-
-		File file1 = new File(MiscUtilities.constructPath(
-			settingsDirectory,"#perspective.xml#save#"));
-		File file2 = new File(MiscUtilities.constructPath(
-			settingsDirectory,"perspective.xml"));
+			Log.log(Log.MESSAGE,PerspectiveManager.class,"Saving " + perspectiveXML);
 
 		String lineSep = System.getProperty("line.separator");
-		String encoding = "UTF-8";
 
-		BufferedWriter out = null;
+		SettingsXML.Saver out = null;
 
 		try
 		{
-			out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(file1), encoding));
+			out = perspectiveXML.openSaver();
+			out.writeXMLDeclaration();
 
-			out.write("<?xml version=\"1.0\""
-				+ " encoding=\"" + encoding + "\"?>");
-			out.write(lineSep);
 			out.write("<!DOCTYPE PERSPECTIVE SYSTEM \"perspective.dtd\">");
 			out.write(lineSep);
 			out.write("<PERSPECTIVE>");
@@ -234,25 +220,36 @@ public class PerspectiveManager
 
 			out.write("</PERSPECTIVE>");
 			out.write(lineSep);
+
+			out.finish();
 		}
 		catch(IOException io)
 		{
-			Log.log(Log.ERROR,PerspectiveManager.class,"Error saving " + file1);
+			Log.log(Log.ERROR,PerspectiveManager.class,"Error saving " + perspectiveXML);
 			Log.log(Log.ERROR,PerspectiveManager.class,io);
 		}
 		finally
 		{
 			IOUtilities.closeQuietly(out);
 		}
-
-		file2.delete();
-		file1.renameTo(file2);
 	} //}}}
 
+	//{{{ Private members
 	private static boolean dirty, enabled = true;
+	private static SettingsXML perspectiveXML;
+
+	//{{{ Class initializer
+	static
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			perspectiveXML = new SettingsXML(settingsDirectory, "perspective");
+		}
+	} //}}}
 
 	//{{{ PerspectiveHandler class
-	static class PerspectiveHandler extends DefaultHandler
+	private static class PerspectiveHandler extends DefaultHandler
 	{
 		View view;
 		Buffer currentBuffer;
@@ -368,4 +365,6 @@ public class PerspectiveManager
 			charData.append(ch,start,length);
 		}
 	} //}}}
+
+	//}}}
 }
