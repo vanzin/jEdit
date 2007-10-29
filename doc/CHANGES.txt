@@ -89,6 +89,16 @@ Marcelo Vanzin for contributing to this release.
 - JEditBuffer.undo() and JEditBuffer.redo() now takes a
   org.gjt.sp.jedit.textarea.TextArea as parameter (Matthieu Casanova)
 
+- Cleaned up org.gjt.sp.jedit.buffer.KillRing to improve independence
+  from jEdit's core. This narrowed a few parts of API. This can break
+  some existing macros of plugins.
+    - It no longer has any protected data field. Use public or protected
+      methods including a new protected method reset() instead.
+    - KillRing.KillRingHandler was removed because it should be a part
+      of the core which does save the killring into a XML file. It
+      became a private part of the core.
+  (Kazutoshi Satoda)
+
 }}}
 
 }}}

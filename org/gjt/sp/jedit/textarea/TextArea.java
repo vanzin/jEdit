@@ -124,7 +124,6 @@ public class TextArea extends JComponent
 		Mode mode = new Mode("text");
 		mode.setTokenMarker(tokenMarker);
 		ModeProvider.instance.addMode(mode);
-		KillRing.KillRingHandler handler = new KillRing.KillRingHandler();
 		KillRing.setInstance(new KillRing());
 		KillRing.getInstance().propertiesChanged(100);
 	} //}}}

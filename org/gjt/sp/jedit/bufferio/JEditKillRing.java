@@ -1,5 +1,4 @@
 /*
- * KillRing.java - Stores deleted text
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -22,15 +21,20 @@
  */
 package org.gjt.sp.jedit.bufferio;
 
+import java.util.List;
+import java.util.LinkedList;
+import java.io.*;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
+
 import org.gjt.sp.jedit.buffer.KillRing;
-import org.gjt.sp.jedit.buffer.UndoManager;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
-
-import java.io.*;
 
 /**
  * @author Matthieu Casanova
@@ -62,11 +66,7 @@ public class JEditKillRing extends KillRing
 		{
 			Log.log(Log.ERROR, this, ioe);
 		}
-
-		ring = handler.list.toArray(
-			new UndoManager.Remove[handler.list.size()]);
-		count = 0;
-		wrap = true;
+		reset(handler.list);
 	} //}}}
 
 	//{{{ save() method
@@ -138,7 +138,45 @@ public class JEditKillRing extends KillRing
 		{
 			IOUtilities.closeQuietly(out);
 		}
-
-		killRingModTime = file2.lastModified();
 	} //}}}
+
+	//{{{ Private members
+	private long killRingModTime;
+
+	//{{{ KillRingHandler class
+	private static class KillRingHandler extends DefaultHandler
+	{
+		public List<String> list = new LinkedList<String>();
+
+		public InputSource resolveEntity(String publicId, String systemId)
+		{
+			return XMLUtilities.findEntity(systemId, "killring.dtd", getClass());
+		}
+
+		public void startElement(String uri, String localName,
+					 String qName, Attributes attrs)
+		{
+			inEntry = qName.equals("ENTRY");
+		}
+
+		public void endElement(String uri, String localName, String name)
+		{
+			if(name.equals("ENTRY"))
+			{
+				list.add(charData.toString());
+				inEntry = false;
+				charData.setLength(0);
+			}
+		}
+
+		public void characters(char[] ch, int start, int length)
+		{
+			if (inEntry)
+				charData.append(ch, start, length);
+		}
+
+		private StringBuffer charData = new StringBuffer();
+		private boolean inEntry;
+	} //}}}
+	//}}}
 }

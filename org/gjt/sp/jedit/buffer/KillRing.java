@@ -23,14 +23,9 @@
 package org.gjt.sp.jedit.buffer;
 
 import javax.swing.event.ListDataListener;
-import java.util.*;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.helpers.DefaultHandler;
+import java.util.List;
 
 import org.gjt.sp.jedit.gui.MutableListModel;
-import org.gjt.sp.util.XMLUtilities;
 
 /**
  * The kill ring retains deleted text. This class is a singleton -- only one
@@ -45,7 +40,7 @@ public class KillRing implements MutableListModel
 		return killRing;
 	} //}}}
 
-	//{{{ getInstance() method
+	//{{{ setInstance() method
 	public static void setInstance(KillRing killRing)
 	{
 		KillRing.killRing = killRing;
@@ -81,6 +76,45 @@ public class KillRing implements MutableListModel
 	public void load() {}
 
 	public void save() {}
+
+	//{{{ reset() method
+	/**
+	 * This method is made to be used by implementation of load()
+	 * method to initialize (or reset) the killring by a loaded
+	 * sequence of objects.
+	 *
+	 * Each element is converted to an element of the killring as
+	 * followings:
+	 *   - If it is a String, it is converted as if it is a result of
+	 *     getElementAt(n).toString().
+	 *   - Otherwise, it is converted as if it is a Object which was
+	 *     obtained by getElementAt(n).
+	 *
+	 * @since jEdit 4.3pre12
+	 */
+	protected void reset(List source)
+	{
+		UndoManager.Remove[] newRing
+			= new UndoManager.Remove[source.size()];
+		int i = 0;
+		for(Object x: source)
+		{
+			UndoManager.Remove element;
+			if(x instanceof String)
+			{
+				element = new UndoManager.Remove(
+					null,0,0,(String)x);
+			}
+			else
+			{
+				element = (UndoManager.Remove)x;
+			}
+			newRing[i++] = element;
+		}
+		ring = newRing;
+		count = 0;
+		wrap = true;
+	} //}}}
 
 	//{{{ MutableListModel implementation
 	public void addListDataListener(ListDataListener listener) {}
@@ -239,10 +273,9 @@ public class KillRing implements MutableListModel
 	//}}}
 
 	//{{{ Private members
-	protected UndoManager.Remove[] ring;
-	protected int count;
-	protected boolean wrap;
-	protected long killRingModTime;
+	private UndoManager.Remove[] ring;
+	private int count;
+	private boolean wrap;
 	private static KillRing killRing = new KillRing();
 
 	//{{{ virtualToPhysicalIndex() method
@@ -264,40 +297,4 @@ public class KillRing implements MutableListModel
 	} //}}}
 
 	//}}}
-
-	//{{{ KillRingHandler class
-	public static class KillRingHandler extends DefaultHandler
-	{
-		public List<UndoManager.Remove> list = new LinkedList<UndoManager.Remove>();
-
-		public InputSource resolveEntity(String publicId, String systemId)
-		{
-			return XMLUtilities.findEntity(systemId, "killring.dtd", getClass());
-		}
-
-		public void startElement(String uri, String localName,
-					 String qName, Attributes attrs)
-		{
-			inEntry = qName.equals("ENTRY");
-		}
-
-		public void endElement(String uri, String localName, String name)
-		{
-			if(name.equals("ENTRY"))
-			{
-				list.add(new UndoManager.Remove(null,0,0,charData.toString()));
-				inEntry = false;
-				charData.setLength(0);
-			}
-		}
-
-		public void characters(char[] ch, int start, int length)
-		{
-			if (inEntry)
-				charData.append(ch, start, length);
-		}
-
-		private StringBuffer charData = new StringBuffer();
-		private boolean inEntry;
-	} //}}}
 }
