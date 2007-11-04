@@ -25,12 +25,6 @@ package org.gjt.sp.jedit.io;
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.io.Writer;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.zip.GZIPInputStream;
@@ -38,7 +32,6 @@ import java.util.zip.GZIPInputStream;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.Log;
 //}}}
 
