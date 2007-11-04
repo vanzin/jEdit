@@ -19,11 +19,10 @@ Marcelo Vanzin for contributing to this release.
   source or UTF-8 by default) instead of the system default encoding.
   (Kazutoshi Satoda)
 
-  NOTE: Related to this fix, some characters in xml files which are saved
-  by older jEdit may not be correctly loaded. They used the system
-  default encoding and didn't declare the encoding (meaning they should
-  use UTF-8). recent.xml, perspective.xml and registers.xml are known
-  (and fixed).
+  NOTE: Related to this fix, some XML files which are saved by older jEdit
+  may not be correctly loaded. They used the system default encoding and
+  didn't declare the encoding (meaning they should use UTF-8). recent.xml,
+  perspective.xml and registers.xml are known (and fixed).
 
 - Changed the encodings of recent.xml, perspective.xml and registers.xml
   to UTF-8 to allow characters which are not covered by the system default
@@ -91,7 +90,7 @@ Marcelo Vanzin for contributing to this release.
 
 - Cleaned up org.gjt.sp.jedit.buffer.KillRing to improve independence
   from jEdit's core. This narrowed a few parts of API. This can break
-  some existing macros of plugins.
+  some existing macros or plugins.
     - It no longer has any protected data field. Use public or protected
       methods including a new protected method reset() instead.
     - KillRing.KillRingHandler was removed because it should be a part
@@ -105,11 +104,11 @@ Marcelo Vanzin for contributing to this release.
     - org.gjt.sp.jedit.bufferio.JEditKillRing
       -> org.gjt.sp.jedit.buffer.KillRing
     - org.gjt.sp.jedit.JEditMode
-      ->org.gjt.sp.jedit.Mode
+      -> org.gjt.sp.jedit.Mode
     - org.gjt.sp.jedit.JEditRegisterSaver
-      ->org.gjt.sp.jedit.RegisterSaver
+      -> org.gjt.sp.jedit.RegisterSaver
     - org.gjt.sp.jedit.JEditRegistersListener
-      ->org.gjt.sp.jedit.RegistersListener
+      -> org.gjt.sp.jedit.RegistersListener
   (Kazutoshi Satoda)
 
 }}}
