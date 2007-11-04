@@ -41,6 +41,10 @@ Marcelo Vanzin for contributing to this release.
   is not trivially detected (such as anything with a BOM), a buffer-local
   property defining the encoding should be provided. (Marcelo Vanzin)
 
+- registers.dtd now allow zero ENTRY element in ENTRIES. It required at
+  least one ENTRY while jEdit creates zero ENTRY case in registers.xml.
+  (Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 

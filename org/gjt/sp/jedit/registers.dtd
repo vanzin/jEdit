@@ -1,5 +1,5 @@
 <!-- REGISTERS element -->
-<!ELEMENT REGISTERS ( REGISTER+ ) >
+<!ELEMENT REGISTERS ( REGISTER* ) >
 
 <!-- REGISTER element -->
 <!ELEMENT REGISTER ( #PCDATA ) >
