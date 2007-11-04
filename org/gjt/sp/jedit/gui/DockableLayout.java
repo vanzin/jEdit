@@ -61,7 +61,7 @@ public class DockableLayout implements LayoutManager2
 	
 	/**
 	 * jEdit View option: wide horizontal docking areas versus tall vertical docking areas 
-	 * @returns true if using the "alternate layout"
+	 * @return true if using the "alternate layout"
 	 */
 	public boolean isAlternateLayout()
 	{
