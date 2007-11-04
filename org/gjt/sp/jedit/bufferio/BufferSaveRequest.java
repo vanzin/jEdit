@@ -70,7 +70,7 @@ public class BufferSaveRequest extends BufferIORequest
 		boolean vfsRenameCap = (vfs.getCapabilities() &
 			VFS.RENAME_CAP) != 0;
 
-		boolean wantTwoStage = wantTwoStageSave(buffer);
+		boolean wantTwoStage = wantTwoStageSave(buffer, path);
 		boolean twoStageSave = vfsRenameCap && wantTwoStage;
 
 		try
@@ -219,7 +219,7 @@ public class BufferSaveRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ wantTwoStageSave() method
-	public static boolean wantTwoStageSave(Buffer buffer)
+	public static boolean wantTwoStageSave(Buffer buffer, String path)
 	{
 		
 		boolean wantTwoStageSave = !buffer.getBooleanProperty("forbidTwoStageSave") &&
@@ -228,7 +228,7 @@ public class BufferSaveRequest extends BufferIORequest
 			
 		if (wantTwoStageSave)
 		{
-			VFS vfs = VFSManager.getVFSForPath(buffer.getPath());
+			VFS vfs = VFSManager.getVFSForPath(path);
 			boolean vfsLowLatencyCap = (vfs.getCapabilities() & VFS.LOW_LATENCY_CAP) != 0;
 			return vfsLowLatencyCap || jEdit.getBooleanProperty("twoStageSaveLowLatency");
 		}
