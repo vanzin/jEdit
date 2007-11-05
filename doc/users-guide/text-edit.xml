@@ -388,7 +388,12 @@
             <para>The default behavior of the <keycap>C+LEFT</keycap>,
             <keycap>C+RIGHT</keycap>, <keycap>C+BACKSPACE</keycap> and
             <keycap>C+DELETE</keycap> commands is to stop both at the beginning
-            and the end of each word. However this can be changed by remapping
+            and the end of each word. Normally, a word is a sequence of
+            alphanumerics, but you can add other characters as part of 
+            what jEdit considers to be a 'word', set on a global or mode basis
+            from <guimenuitem>Global Options -  Editing - Extra Word
+            Characters</guimenuitem>. 
+            In addition, this behavior can be changed by remapping
             these keystrokes to alternative actions whose names end with
             <guimenuitem>(Eat Whitespace)</guimenuitem> in the
             <guibutton>Shortcuts</guibutton> pane of the
