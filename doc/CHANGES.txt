@@ -115,6 +115,8 @@ Marcelo Vanzin for contributing to this release.
       -> org.gjt.sp.jedit.RegistersListener
   (Kazutoshi Satoda)
 
+- Added a new method ModeProvider.getModeForFile() that will try to find an
+  appropriate mode for a filename (Matthieu Casanova)
 }}}
 
 }}}

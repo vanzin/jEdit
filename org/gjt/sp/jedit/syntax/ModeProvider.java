@@ -80,6 +80,33 @@ public class ModeProvider
 		return null;
 	} //}}}
 
+	//{{{ getModeForFile() method
+	/**
+	 * Get the appropriate mode that must be used for the file
+	 * @param filename the filename
+	 * @param firstLine the first line of the file
+	 * @return the edit mode, or null if no mode match the file
+	 * @since jEdit 4.3pre12
+	 */
+	public Mode getModeForFile(String filename, String firstLine)
+	{
+		String nogzName = filename.substring(0,filename.length() -
+			(filename.endsWith(".gz") ? 3 : 0));
+		Mode[] modes = getModes();
+
+		// this must be in reverse order so that modes from the user
+		// catalog get checked first!
+		for(int i = modes.length - 1; i >= 0; i--)
+		{
+			if(modes[i].accept(nogzName,firstLine))
+			{
+				return modes[i];
+			}
+		}
+		return null;
+	} //}}}
+
+	
 	//{{{ getModes() method
 	/**
 	 * Returns an array of installed edit modes.
@@ -104,6 +131,7 @@ public class ModeProvider
 		modes.add(mode);
 	} //}}}
 
+	//{{{ loadMode() method
 	public void loadMode(Mode mode, XModeHandler xmh)
 	{
 		String fileName = (String)mode.getProperty("file");
@@ -154,8 +182,9 @@ public class ModeProvider
 		{
 			IOUtilities.closeQuietly(grammar);
 		}
-	}
+	} //}}}
 
+	//{{{ loadMode() method
 	public void loadMode(Mode mode)
 	{
 		XModeHandler xmh = new XModeHandler(mode.getName())
@@ -175,5 +204,6 @@ public class ModeProvider
 			}
 		};
 		loadMode(mode, xmh);
-	}
+	} //}}}
+
 }
