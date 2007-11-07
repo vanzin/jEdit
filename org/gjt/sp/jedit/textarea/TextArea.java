@@ -67,7 +67,20 @@ public class TextArea extends JComponent
 	//{{{ TextArea constructor
 	public TextArea()
 	{
+		this(false);
+	} //}}}
+
+	//{{{ TextArea constructor
+	/**
+	 * Instantiate a TextArea.
+	 * @param insideJEdit must be set to true if the textarea is embedded in jEdit
+	 */
+	public TextArea(boolean insideJEdit)
+	{
 		this(null);
+		if (insideJEdit)
+			return;
+
 		inputHandlerProvider = new DefaultInputHandlerProvider(new TextAreaInputHandler(this));
 		setMouseHandler(new TextAreaMouseHandler(this));
 		Font font1 = new Font("Monospaced", Font.PLAIN, 12);
@@ -119,7 +132,6 @@ public class TextArea extends JComponent
 		TokenMarker tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
 		buffer.setTokenMarker(tokenMarker);
-		buffer.insert(0,"ahaha coucou\ncaca");
 		setBuffer(buffer);
 		Mode mode = new Mode("text");
 		mode.setTokenMarker(tokenMarker);

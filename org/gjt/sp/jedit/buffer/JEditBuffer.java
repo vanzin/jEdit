@@ -27,6 +27,8 @@ package org.gjt.sp.jedit.buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.indent.IndentAction;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.syntax.*;
@@ -1305,6 +1307,29 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Property methods
 
+	//{{{ propertiesChanged() method
+	/**
+	 * Reloads settings from the properties. This should be called
+	 * after the <code>syntax</code> or <code>folding</code>
+	 * buffer-local properties are changed.
+	 */
+	public void propertiesChanged()
+	{
+		String folding = getStringProperty("folding");
+		FoldHandler handler = FoldHandler.getFoldHandler(folding);
+
+		if(handler != null)
+		{
+			setFoldHandler(handler);
+		}
+		else
+		{
+			if (folding != null)
+				Log.log(Log.WARNING, this, "invalid 'folding' property: " + folding);
+			setFoldHandler(new DummyFoldHandler());
+		}
+	} //}}}
+
 	//{{{ getTabSize() method
 	/**
 	 * Returns the tab size used in this buffer. This is equivalent
@@ -1654,6 +1679,52 @@ loop:		for(int i = 0; i < seg.count; i++)
 			return null;
 		else
 			return String.valueOf(value);
+	} //}}}
+	
+	//{{{ getMode() method
+	/**
+	 * Returns this buffer's edit mode. This method is thread-safe.
+	 */
+	public Mode getMode()
+	{
+		return mode;
+	} //}}}
+
+	//{{{ setMode() method
+	/**
+	 * Sets this buffer's edit mode. Note that calling this before a buffer
+	 * is loaded will have no effect; in that case, set the "mode" property
+	 * to the name of the mode. A bit inelegant, I know...
+	 * @param mode The mode name
+	 * @since jEdit 4.2pre1
+	 */
+	public void setMode(String mode)
+	{
+		setMode(ModeProvider.instance.getMode(mode));
+	} //}}}
+
+	//{{{ setMode() method
+	/**
+	 * Sets this buffer's edit mode. Note that calling this before a buffer
+	 * is loaded will have no effect; in that case, set the "mode" property
+	 * to the name of the mode. A bit inelegant, I know...
+	 * @param mode The mode
+	 */
+	public void setMode(Mode mode)
+	{
+		/* This protects against stupid people (like me)
+		 * doing stuff like buffer.setMode(jEdit.getMode(...)); */
+		if(mode == null)
+			throw new NullPointerException("Mode must be non-null");
+
+		this.mode = mode;
+
+		textMode = "text".equals(mode.getName());
+
+		setTokenMarker(mode.getTokenMarker());
+
+		resetCachedProperties();
+		propertiesChanged();
 	} //}}}
 
 	//}}}

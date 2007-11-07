@@ -37,10 +37,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
-import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
-import org.gjt.sp.jedit.syntax.ParserRuleSet;
-import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.syntax.Token;
+import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.IntegerArray;
@@ -960,20 +957,7 @@ public class Buffer extends JEditBuffer
 	 */
 	public void propertiesChanged()
 	{
-		String folding = getStringProperty("folding");
-		FoldHandler handler = FoldHandler.getFoldHandler(folding);
-
-		if(handler != null)
-		{
-			setFoldHandler(handler);
-		}
-		else
-		{
-			if (folding != null)
-				Log.log(Log.WARNING, this, path + ": invalid 'folding' property: " + folding);
-			setFoldHandler(new DummyFoldHandler());
-		}
-
+		super.propertiesChanged();
 		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
 
@@ -1100,52 +1084,6 @@ public class Buffer extends JEditBuffer
 
 	//{{{ Edit modes, syntax highlighting
 
-	//{{{ getMode() method
-	/**
-	 * Returns this buffer's edit mode. This method is thread-safe.
-	 */
-	public Mode getMode()
-	{
-		return mode;
-	} //}}}
-
-	//{{{ setMode() method
-	/**
-	 * Sets this buffer's edit mode. Note that calling this before a buffer
-	 * is loaded will have no effect; in that case, set the "mode" property
-	 * to the name of the mode. A bit inelegant, I know...
-	 * @param mode The mode name
-	 * @since jEdit 4.2pre1
-	 */
-	public void setMode(String mode)
-	{
-		setMode(jEdit.getMode(mode));
-	} //}}}
-
-	//{{{ setMode() method
-	/**
-	 * Sets this buffer's edit mode. Note that calling this before a buffer
-	 * is loaded will have no effect; in that case, set the "mode" property
-	 * to the name of the mode. A bit inelegant, I know...
-	 * @param mode The mode
-	 */
-	public void setMode(Mode mode)
-	{
-		/* This protects against stupid people (like me)
-		 * doing stuff like buffer.setMode(jEdit.getMode(...)); */
-		if(mode == null)
-			throw new NullPointerException("Mode must be non-null");
-
-		this.mode = mode;
-
-		textMode = "text".equals(mode.getName());
-
-		setTokenMarker(mode.getTokenMarker());
-
-		resetCachedProperties();
-		propertiesChanged();
-	} //}}}
-
 	//{{{ setMode() method
 	/**
 	 * Sets this buffer's edit mode by calling the accept() method
@@ -1156,7 +1094,7 @@ public class Buffer extends JEditBuffer
 		String userMode = getStringProperty("mode");
 		if(userMode != null)
 		{
-			Mode m = jEdit.getMode(userMode);
+			Mode m = ModeProvider.instance.getMode(userMode);
 			if(m != null)
 			{
 				setMode(m);
@@ -1164,21 +1102,13 @@ public class Buffer extends JEditBuffer
 			}
 		}
 
-		String nogzName = name.substring(0,name.length() -
-			(name.endsWith(".gz") ? 3 : 0));
-		Mode[] modes = jEdit.getModes();
-
 		String firstLine = getLineText(0);
 
-		// this must be in reverse order so that modes from the user
-		// catalog get checked first!
-		for(int i = modes.length - 1; i >= 0; i--)
+		Mode mode = ModeProvider.instance.getModeForFile(name, firstLine);
+		if (mode != null)
 		{
-			if(modes[i].accept(nogzName,firstLine))
-			{
-				setMode(modes[i]);
-				return;
-			}
+			setMode(mode);
+			return;
 		}
 
 		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
