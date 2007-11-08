@@ -27,8 +27,6 @@ package org.gjt.sp.jedit.buffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.indent.IndentAction;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.syntax.*;
@@ -125,7 +123,7 @@ public class JEditBuffer
 		properties = new HashMap<Object, PropValue>();
 
 		properties.put("wrap",new PropValue("none",false));
-
+		properties.put("folding",new PropValue("none",false));
 		TokenMarker tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
 		setTokenMarker(tokenMarker);
