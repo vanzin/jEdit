@@ -11,12 +11,14 @@ public class VFSPathSelected extends EBMessage
 {
 	/**
 	 * @param source the View that is considered the "source" of this event
+	 * @param isDirectory true if the path is pointing to a folder, false if it's a regular file
 	 * @param path The selected path.
 	 */
-	public VFSPathSelected(View source, String path)
+	public VFSPathSelected(View source, String path, boolean isDirectory)
 	{
 		super(source);
 		this.path = path;
+		this.isDir = isDirectory;
 	}
 
 	public View getView()
@@ -32,7 +34,15 @@ public class VFSPathSelected extends EBMessage
 		return path;
 	}
 
-	private final String path;
+	/**
+	 * 
+	 * @return true if this is a directory node
+	 */
+	public boolean isDirectory() {
+		return isDir;
+	}
 
+	private final String path;
+	private boolean isDir;
 }
 
