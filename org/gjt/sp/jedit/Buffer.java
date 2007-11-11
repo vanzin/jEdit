@@ -392,7 +392,7 @@ public class Buffer extends JEditBuffer
 	public boolean save(final View view, String path, final boolean rename)
 	{
 		return save(view,path,rename,false);
-	}
+	} //}}}
 
 	//{{{ save() method
 	/**
@@ -2035,7 +2035,5 @@ public class Buffer extends JEditBuffer
 			jEdit.setProperty(property, GUIUtilities.getStyleString(style));
 		jEdit.propertiesChanged();
 	} //}}}
-	//}}}
-
 	//}}}
 }
