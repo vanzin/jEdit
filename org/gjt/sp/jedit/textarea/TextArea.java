@@ -78,10 +78,10 @@ public class TextArea extends JComponent
 	public TextArea(boolean insideJEdit)
 	{
 		this(null);
+		inputHandlerProvider = new DefaultInputHandlerProvider(new TextAreaInputHandler(this));
+		setMouseHandler(new TextAreaMouseHandler(this));
 		if (insideJEdit)
 		{
-			inputHandlerProvider = new DefaultInputHandlerProvider(new TextAreaInputHandler(this));
-			setMouseHandler(new TextAreaMouseHandler(this));
 			return;
 		}
 		
