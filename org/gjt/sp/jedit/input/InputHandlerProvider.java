@@ -1,5 +1,5 @@
 /*
- * ServiceManager.java - Handles services.xml files in plugins
+ * InputHandlerProvider.java - The input handler provider
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *

@@ -1,5 +1,5 @@
 /*
- * ServiceManager.java - Handles services.xml files in plugins
+ * DefaultInputHandlerProvider.java - This class provide the input handler
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -22,6 +22,8 @@
 package org.gjt.sp.jedit.input;
 
 /**
+ * This class provide the input handler used by the textarea.
+ *
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
