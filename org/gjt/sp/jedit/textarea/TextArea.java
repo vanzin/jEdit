@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TooManyListenersException;
 //}}}
+
 /**
  * jEdit's text component.<p>
  *
@@ -393,8 +394,9 @@ public class TextArea extends JComponent
 
 	//{{{ setBuffer() method
 	/**
-	 * Sets the buffer this text area is editing. Do not call this method -
-	 * use {@link org.gjt.sp.jedit.EditPane#setBuffer(Buffer)} instead.
+	 * Sets the buffer this text area is editing.
+	 * If you don't run a standalone textarea in jEdit please do not call this method -
+	 * use {@link org.gjt.sp.jedit.EditPane#setBuffer(org.gjt.sp.jedit.Buffer)} instead.
 	 * @param buffer The buffer
 	 */
 	public void setBuffer(JEditBuffer buffer)
