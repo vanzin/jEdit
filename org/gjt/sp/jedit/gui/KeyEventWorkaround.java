@@ -42,7 +42,7 @@ public class KeyEventWorkaround
 {
 	//{{{ isBindable() method
 	public static boolean isBindable(int keyCode)
-	{
+	{                                      
 		switch(keyCode)
 		{
 		case KeyEvent.VK_ALT:

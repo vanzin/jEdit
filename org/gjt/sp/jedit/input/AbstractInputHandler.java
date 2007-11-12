@@ -29,6 +29,10 @@ import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
 /**
+ * The abstract input handler manage the keyboard handling.
+ * The entry point is
+ * {@link #processKeyEvent(java.awt.event.KeyEvent, int, boolean)}
+ * 
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
@@ -51,6 +55,8 @@ public abstract class AbstractInputHandler
 	//{{{ getLastActionCount() method
 	/**
 	 * Returns the number of times the last action was executed.
+	 * It can be used with smartHome and smartEnd
+	 * @return the number of times the last action was executed
 	 * @since jEdit 2.5pre5
 	 */
 	public int getLastActionCount()
@@ -110,11 +116,30 @@ public abstract class AbstractInputHandler
 	//}}}
 
 	//{{{ processKeyEvent() method
+
+	/**
+	 * Process a keyboard event.
+	 * This is the entry point of the keyboard handling
+	 *
+	 * @param evt the keyboard event
+	 * @param from the source, it can be {@link org.gjt.sp.jedit.View#VIEW},
+	 * {@link org.gjt.sp.jedit.View#ACTION_BAR} or {@link org.gjt.sp.jedit.View#TEXT_AREA}
+	 * @param global tell if the event comes from the DefaultKeyboardFocusManager or not
+	 */
 	public abstract void processKeyEvent(KeyEvent evt, int from, boolean global); 
 	//}}}
 
 	//{{{ processKeyEventKeyStrokeHandling() method
-	protected void processKeyEventKeyStrokeHandling(KeyEvent evt,int from,String mode,boolean global)
+
+	/**
+	 *
+	 * @param evt the keyboard event
+	 * @param from the source, it can be {@link org.gjt.sp.jedit.View#VIEW},
+	 * {@link org.gjt.sp.jedit.View#ACTION_BAR} or {@link org.gjt.sp.jedit.View#TEXT_AREA}
+	 * @param mode the mode is "press" or "type" and is used for debug only  
+	 * @param global tell if the event comes from the DefaultKeyboardFocusManager or not
+	 */
+	protected void processKeyEventKeyStrokeHandling(KeyEvent evt, int from, String mode, boolean global)
 	{
 		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent2(evt);
 
@@ -126,7 +151,8 @@ public abstract class AbstractInputHandler
 				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
 			}
 			boolean consumed = false;
-			if(handleKey(keyStroke,keyStroke.isPhantom())) {
+			if(handleKey(keyStroke,keyStroke.isPhantom()))
+			{
 				evt.consume();
 
 				consumed = true;

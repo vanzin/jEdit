@@ -4608,7 +4608,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ processKeyEvent() method
 	public void processKeyEvent(KeyEvent evt)
 	{
-		getInputHandler().processKeyEvent(evt,1, false);
+		getInputHandler().processKeyEvent(evt, 1 /* source=TEXTAREA (1) */, false);
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
 

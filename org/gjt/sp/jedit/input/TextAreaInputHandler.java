@@ -34,8 +34,8 @@ import java.awt.event.KeyEvent;
 import java.awt.*;
 
 /**
- * This class manage the key bindings and execute the actions binded on th
- * keyboard events.
+ * This class manage the key bindings and execute the actions binded on the
+ * keyboard events for the standalone textarea.
  *
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
@@ -55,6 +55,9 @@ public class TextAreaInputHandler extends AbstractInputHandler
 	 * Forwards key events directly to the input handler.
 	 * This is slightly faster than using a KeyListener
 	 * because some Swing overhead is avoided.
+	 * @param evt the keyboard event
+	 * @param from the source of the event. Since this is the input handler of the textarea, it should always be 1
+	 * @param global it is only true if the event comes from the DefaultKeyboardFocusManager
 	 * @since 4.3pre7
 	 */
 	public void processKeyEvent(KeyEvent evt, int from, boolean global)
@@ -115,6 +118,13 @@ public class TextAreaInputHandler extends AbstractInputHandler
 	} //}}}
 
 	//{{{ _preprocessKeyEvent() method
+	/**
+	 * This method returns if the keyboard event can be handled or not.
+	 *
+	 * @param evt the keyboard event
+	 * @return null if the keyboard event cannot be handled, or the keyboard event itself
+	 * otherwise
+	 */
 	private KeyEvent _preprocessKeyEvent(KeyEvent evt)
 	{
 		Component focusOwner = textArea;
