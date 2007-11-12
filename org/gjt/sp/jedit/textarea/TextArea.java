@@ -79,10 +79,12 @@ public class TextArea extends JComponent
 	{
 		this(null);
 		if (insideJEdit)
+		{
+			inputHandlerProvider = new DefaultInputHandlerProvider(new TextAreaInputHandler(this));
+			setMouseHandler(new TextAreaMouseHandler(this));
 			return;
-
-		inputHandlerProvider = new DefaultInputHandlerProvider(new TextAreaInputHandler(this));
-		setMouseHandler(new TextAreaMouseHandler(this));
+		}
+		
 		Font font1 = new Font("Monospaced", Font.PLAIN, 12);
 		painter.setFont(font1);
 		SyntaxStyle[] styles = new SyntaxStyle[1];
