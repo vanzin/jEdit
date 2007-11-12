@@ -34,6 +34,9 @@ import java.awt.event.KeyEvent;
 import java.awt.*;
 
 /**
+ * This class manage the key bindings and execute the actions binded on th
+ * keyboard events.
+ *
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
@@ -153,7 +156,7 @@ public class TextAreaInputHandler extends AbstractInputHandler
 
 			if(map != null && am != null && comp.isEnabled())
 			{
-				KeyStroke	keyStroke	= KeyStroke.getKeyStrokeForEvent(evt);
+				KeyStroke keyStroke = KeyStroke.getKeyStrokeForEvent(evt);
 				Object binding = map.get(keyStroke);
 				if(binding != null && am.get(binding) != null)
 				{
@@ -215,7 +218,8 @@ public class TextAreaInputHandler extends AbstractInputHandler
 		{
 			if(input != '\0')
 			{
-				if (!dryRun) {
+				if (!dryRun)
+				{
 					invokeReadNextChar(input);
 					repeatCount = 1;
 				}
@@ -223,18 +227,23 @@ public class TextAreaInputHandler extends AbstractInputHandler
 			}
 			else
 			{
-				if (!dryRun) {
+				if (!dryRun)
+				{
 					readNextChar = null;
 				}
 			}
 		}
 		if (!dryRun)
 		{
-			if(input != '\0') {
-				if (!keyStroke.isFromGlobalContext()) { // let user input be only local
+			if(input != '\0')
+			{
+				if (!keyStroke.isFromGlobalContext())
+				{ // let user input be only local
 					userInput(input);
 				}
-			} else	{
+			}
+			else
+			{
 				// this is retarded. excuse me while I drool
 				// and make stupid noises
 				if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
