@@ -235,9 +235,7 @@
                     Unix type systems you will likely get an error in the
                     console (and for Mac OS X you may also get a report in
                     ~/Library/Logs/CrashReporter/JavaApplicationStub.crash.log).
-                    Some recent problems with Java 1.4.x and Windows were the
-                    result of a bug in the JVM and certain graphics card
-                    drivers.</para>
+					</para>
                 </answer>
             </qandaentry>
             <qandaentry>
@@ -278,13 +276,7 @@
                     XML, JavaSideKick, and CodeAid. If performance is important
                     to you, installing a whole batch of plugins in one go is
                     probably not a very good idea. Install them one at a time,
-                    so you can evaluate the effects of each. <note>
-                            <para>If you are experiencing slow downs when
-                            switching and saving buffers (up to 20 second delays)
-                            and you have the TaskList plugin installed, check
-                            that the version is greater than 0.4. Versions after
-                            0.4 fix the problem.</para>
-                        </note></para>
+                    so you can evaluate the effects of each. </para>
                 </answer>
             </qandaentry>
             <qandaentry>
@@ -327,6 +319,23 @@
         <qandadiv id="unix-problems">
             <title>Unix/Linux Problems</title>
             <qandaentry>
+			    <question id="using-older-jre">
+				  <para>I'm trying to install jEdit on Linux, but I keep getting strange error messages.
+				  </para>
+<programlisting>
+Exception in thread "main" java.lang.UnsupportedClassVersionError:
+installer/Install (Unsupported major.minor version 49.0)
+Exception in thread "main" java.awt.AWTError: Cannot load AWT toolkit: gnu.java.awt.peer.gtk.GtkToolkit
+</programlisting>
+				</question>
+				<answer>
+				 <para> Make sure the version of Java you are running is 1.5 or higher. Default installations of Linux still  include a gij compiler which is only 1.4 compliant. 
+				 the do not normally include a java5 jre or even jdk, so you often must install it manually. In debian/ubuntu, 
+				 <literal> apt-get install sun-java5-jdk </literal>
+				 </para>
+		        </answer>
+				</qandaentry>
+		     <qandaentry>
                 <question id="install-jedit-home">
                     <para>After installing jEdit on Linux, running the
                     <userinput>jedit</userinput> command causes the error

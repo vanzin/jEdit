@@ -341,7 +341,7 @@
         issuing the <guimenu>Edit</guimenu>&gt;<guimenuitem>Expand
         Abbreviation</guimenuitem> (keyboard shortcut: <keycap>C+;</keycap>),
         which takes the word before the caret as the abbreviation name. If that
-        particular abbreviation was not yet yet, a dialog will pop up, and you
+        particular abbreviation was not yet set, a dialog will pop up, and you
         can enter the text to insert before and after the caret. After the
         abbreviation is created, it can be viewed or edited from the
         <guibutton>Abbreviations</guibutton> pane of the

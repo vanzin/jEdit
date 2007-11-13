@@ -1263,4 +1263,15 @@ else if(msg instanceof ViewUpdate) {
         serious about writing a plugin for jEdit. Good luck with your efforts,
         and thank you for contributing to the jEdit project.</para>
     </sect1>
+    
+    <sect1 id="plugin-debugging" >
+    <title> Tips for debugging plugins </title>
+      <bridgehead> BeanShell </bridgehead>
+      <para> jEdit includes a Beanshell interface into its currently running JVM at all times. You can access it a variety of ways, but one way is from <literal>Plugins - Console - Shells - BeanShell</literal>. From here, you can interactively inspect the values of any object in memory, call any of its member functions, or create new instances of any class that is currently loaded by jEdit or any of its plugins. All this, without setting any breakpoints!
+      </para>
+      <para> If you're too lazy to type each Beanshell statement interactively, you can also create debugging code snippets as macros and invoke them from <literal>utilities - beanshell - evaluate selection</literal>, or <literal>Macros - Misc - Evaluate Buffer in Beanshell</literal>, or place the file in your own macros directory and bind it to its own keyboard shortcut. </para>
+      <bridgehead> Other useful tips </bridgehead>
+      <para> This section is new but will be expanded shortly. Please post suggestions to the <literal>jedit-devel</literal> mailing list. </para>
+      </sect1>
+    
 </chapter>

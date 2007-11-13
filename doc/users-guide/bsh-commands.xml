@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="bsh-commands">
+<!-- jEdit buffer local properties:
+      :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:
+      :xml.root=users-guide.xml: 
+      jEdit 3.2 Macro Guide, (C) 2001 John Gellene
+      Thu Jun 21 23:49:14 EDT 2001 @200 /Internet Time/ --> 
+
     <title>BeanShell Commands</title>
-
-    <!-- jEdit 3.2 Macro Guide, (C) 2001 John Gellene                -->
-
-    <!-- Thu Jun 21 23:49:14 EDT 2001 @200 /Internet Time/           -->
-
-    <!--                                                             -->
-
-    <!-- jEdit buffer-local properties:                              -->
-
-    <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
-
-    <!-- :xml.root=users-guide.xml:                                  -->
 
     <para>BeanShell includes a set of <firstterm>commands</firstterm>;
     subroutines that can be called from any script or macro. The following is a

@@ -134,7 +134,7 @@
                     using jEdit's Plugin Manager feature. The JDebugger plugin
                     is also available. JPyDebugger offers debugging for Python.
                     The GdbPlugin provides gdb/mi support for C/C++
-                    programs.</para>
+                    programs. Also, the Console BeanShell can be used to debug Java classes in the current running JVM. See <xref linkend="plugin-debugging" /> for more info. </para>
                 </answer>
             </qandaentry>
             <qandaentry>
