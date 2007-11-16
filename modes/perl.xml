@@ -220,7 +220,7 @@
             AT_WORD_START="TRUE">y\s*\{.*?[^\\]\}\s*\{(?:.*?[^\\])*\}[cds]*</SEQ_REGEXP>
 
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="y"
-            AT_WORD_START="TRUE">y([^\p{Alnum}\p{Space}\}])(?:.*?)\1(?:.*?)\1[cds]*</SEQ_REGEXP>
+            AT_WORD_START="TRUE">y([^\p{Alnum}\p{Space}\}_])(?:.*?)\1(?:.*?)\1[cds]*</SEQ_REGEXP>
 
 		<!-- m// regular expression matching -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="m"

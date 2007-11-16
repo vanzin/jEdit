@@ -19,7 +19,7 @@
           Ignoring case is bad.
           Digits may be returned from functions.
         -->
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
                 <SEQ TYPE="COMMENT1">/**/</SEQ>
 
 		<!-- Javadoc comment -->

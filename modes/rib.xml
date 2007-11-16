@@ -13,7 +13,7 @@ for TextPad text editor by Kharitonov Konstantin (aqua@sm.bmstu.ru)
         <PROPERTY NAME="indentNextLines" VALUE="Begin|WorldBegin|FrameBegin|TransformBegin|AttributeBegin|SolidBegin|ObjectBegin|MotionBegin" />
         <PROPERTY NAME="doubleBracketIndent" VALUE="false" />
     </PROPS>
-    <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="([\p{Digit}]+(e[\p{Digit}]*)?)">
+    <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="([\p{Digit}]+(e[\p{Digit}]*)?)">
 		<EOL_SPAN AT_WHITESPACE_END="TRUE" TYPE="COMMENT1">#</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT2">#</EOL_SPAN>
 		<SEQ TYPE="OPERATOR">-</SEQ>

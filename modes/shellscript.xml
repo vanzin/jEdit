@@ -8,7 +8,7 @@
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT2">#!</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
@@ -51,7 +51,7 @@
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" ESCAPE="\">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>

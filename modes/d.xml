@@ -21,8 +21,7 @@
 	<PROPERTY NAME="electricKeys" VALUE=":" />
     </PROPS>
 
-    <RULES ESCAPE="\"
-        IGNORE_CASE="FALSE"
+    <RULES IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE"
         DIGIT_RE="(0x[0-9a-fA-F_]+[uUlL]?|[0-9_]+(e[0-9_]*)?[uUlLdDfF]?)">
 
@@ -56,27 +55,27 @@
         <EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
         <!-- Wysiwyg string literal -->
-        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" NO_ESCAPE="TRUE">
+        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
             <BEGIN>r"</BEGIN>
             <END>"</END>
         </SPAN>
         <!-- Alternate Wysiwyg string literal -->
-        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" NO_ESCAPE="TRUE">
+        <SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
             <BEGIN>`</BEGIN>
             <END>`</END>
         </SPAN>
         <!-- Doublequoted string literal -->
-        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+        <SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
             <BEGIN>"</BEGIN>
             <END>"</END>
         </SPAN>
         <!-- Hex string literal -->
-        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+        <SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
             <BEGIN>x"</BEGIN>
             <END>"</END>
         </SPAN>
         <!-- Character literal -->
-        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+        <SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
             <BEGIN>'</BEGIN>
             <END>'</END>
         </SPAN>
@@ -204,7 +203,7 @@
             <KEYWORD2>with</KEYWORD2>
         </KEYWORDS>
     </RULES>
-    <RULES SET="NESTED_COMMENT" DEFAULT="COMMENT1" ESCAPE="\">
+    <RULES SET="NESTED_COMMENT" DEFAULT="COMMENT1">
         <SPAN TYPE="COMMENT1" DELEGATE="NESTED_COMMENT">
             <BEGIN>/+</BEGIN>
             <END>+/</END>

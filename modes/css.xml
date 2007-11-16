@@ -12,8 +12,7 @@
 		<PROPERTY NAME="noWordSep" VALUE="_" />
 	</PROPS>
 
-	<RULES ESCAPE="\"
-		IGNORE_CASE="TRUE"
+	<RULES IGNORE_CASE="TRUE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="-?[\p{Digit}]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
 		NO_WORD_SEP="-_%">
@@ -72,10 +71,6 @@
 			<KEYWORD4>hover</KEYWORD4>
 			<KEYWORD4>focus</KEYWORD4>
 		</KEYWORDS>
-	</RULES>
-
-
-	<RULES SET="LITERAL" DEFAULT="LITERAL1" ESCAPE="\">
 	</RULES>
 
 	<!-- Properties: -->
@@ -254,10 +249,9 @@
 	<RULES SET="PROP_VALUE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="-?[\p{Digit}]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
-		NO_WORD_SEP="-_%"
-		ESCAPE="\">
+		NO_WORD_SEP="-_%">
 
-		<SPAN DELEGATE="LITERAL">
+		<SPAN ESCAPE="\">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
@@ -640,7 +634,7 @@
 	<RULES SET="GLOBAL">
 		<SEQ TYPE="OPERATOR">:</SEQ>
 		<SEQ TYPE="NULL">;</SEQ>
-		<SPAN TYPE="NULL" DELEGATE="LITERAL">
+		<SPAN TYPE="NULL" ESCAPE="\">
 			<BEGIN>(</BEGIN>
 			<END>)</END>
 		</SPAN>

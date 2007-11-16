@@ -45,6 +45,13 @@ Marcelo Vanzin for contributing to this release.
   least one ENTRY while jEdit creates zero ENTRY case in registers.xml.
   (Kazutoshi Satoda)
 
+- Fix escape handling in the syntax highlighter. The handling of escape rules
+  is now much more simplified: it's not only a lot less code but it's much
+  easier to understand what it's actually doing. This fixes the following
+  bugs: 1812205, 1807549, 1760646 and 1600458 (although the last one is fixed
+  as a side effect, not because the root cause of the bug was fixed.)
+  (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 
@@ -70,14 +77,18 @@ Marcelo Vanzin for contributing to this release.
   the user if he wants to stop hypersearch if a result count limit is reached.
   By default the count is 1000. It checks the limit before each file so it is
   possible that a few more results are found before asking (Matthieu Casanova)
-  
-- It is now possible to deactivate two stage save on slow VFS in the Saving & 
+
+- It is now possible to deactivate two stage save on slow VFS in the Saving &
   backups option panel (Feature #1811747) (Matthieu Casanova)
 }}}
 {{{ Editing
 
 - Some enhancements to the IDL mode, and made some definitions in the C mode
   more reusable. (Marcelo Vanzin)
+
+- NO_ESCAPE is now deprecated and ignored by the parsing engine. ESCAPE is now
+  a valid attribute for SPAN and SPAN_REGEXP rules. All mode files updated to
+  follow the new escape rule semantics. (Marcelo Vanzin)
 
 }}}
 {{{ API Changes

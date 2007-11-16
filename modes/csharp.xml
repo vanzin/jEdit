@@ -19,8 +19,7 @@
 			VALUE="^.*(default:\s*|case.*:.*)$" />
 		<PROPERTY NAME="electricKeys" VALUE=":" />
 	</PROPS>
-	<RULES ESCAPE="\"
-		IGNORE_CASE="FALSE"
+	<RULES IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
 
@@ -35,17 +34,17 @@
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
 		<!-- verbatim strings -->
-		<SPAN TYPE="LITERAL3" NO_LINE_BREAK="FALSE" NO_ESCAPE="TRUE">
+		<SPAN TYPE="LITERAL3" NO_LINE_BREAK="FALSE">
 			<BEGIN>@"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>

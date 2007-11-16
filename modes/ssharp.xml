@@ -14,9 +14,9 @@
 		<PROPERTY NAME="indentCloseBrackets" VALUE="]" />
 
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- Standard literals -->
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE">
+		<SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="FALSE">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
@@ -29,7 +29,7 @@
 			<END>"</END>
 		</SPAN>
 
-        <SPAN TYPE="LITERAL2" >
+        <SPAN TYPE="LITERAL2" ESCAPE="\">
             <BEGIN>«</BEGIN>
             <END>»</END>
         </SPAN>

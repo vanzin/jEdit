@@ -14,7 +14,7 @@
 <!ENTITY % att-delegate 'DELEGATE CDATA #IMPLIED' >
 <!ENTITY % att-span-mix 'NO_LINE_BREAK %att-bool;
 	NO_WORD_BREAK %att-bool;
-	NO_ESCAPE %att-bool; '>
+    ESCAPE CDATA #IMPLIED '>
 <!ENTITY % att-hash-char 'HASH_CHAR CDATA #IMPLIED
 	HASH_CHARS CDATA #IMPLIED' >
 

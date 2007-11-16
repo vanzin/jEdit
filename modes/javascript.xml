@@ -21,7 +21,7 @@
 		<PROPERTY NAME="electricKeys" VALUE=":" />
 	</PROPS>
 
-	<RULES ESCAPE="\"
+	<RULES
 		IGNORE_CASE="FALSE"
 		HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="(0x[\p{XDigit}]+[lL]?|[\p{Digit}]+(e[\p{Digit}]*)?[lLdDfF]?)">
@@ -33,12 +33,12 @@
 			<END>*/</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>

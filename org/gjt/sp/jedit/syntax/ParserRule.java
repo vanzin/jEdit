@@ -55,7 +55,10 @@ public class ParserRule
 	public static final int NO_LINE_BREAK = 1 << 9;
 	public static final int NO_WORD_BREAK = 1 << 10;
 	public static final int IS_ESCAPE = 1 << 11;
+
+	@Deprecated
 	public static final int NO_ESCAPE = 1 << 12;
+
 	public static final int REGEXP = 1 << 13;
 	//}}}
 
@@ -92,6 +95,16 @@ public class ParserRule
 	 */
 	public final byte matchType;
 
+	/**
+	 * escapeRule is the rule-specific sequence used to escape other
+	 * characters while the rule is in effect. If this character is
+	 * non-zero, the character following the escape char will be skipped
+	 * during parsing, and highlighted with the rule's token.
+	 *
+	 * @since jEdit 4.3pre12
+	 */
+	public final ParserRule escapeRule;
+
 	public ParserRuleSet delegate;
 
 	/**
@@ -106,7 +119,7 @@ public class ParserRule
 	{
 		return new ParserRule(SEQ, seq.substring(0,1),
 			posMatch, seq.toCharArray(), null,
-			0, null, delegate, id, MATCH_TYPE_CONTEXT);
+			0, null, delegate, id, MATCH_TYPE_CONTEXT, null);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
@@ -130,7 +143,7 @@ public class ParserRule
 	{
 		return new ParserRule(SEQ | REGEXP, hashChar, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, MATCH_TYPE_CONTEXT);
+			0, null, delegate, id, MATCH_TYPE_CONTEXT, null);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
@@ -141,40 +154,23 @@ public class ParserRule
 	{
 		return new ParserRule(hashChars, SEQ | REGEXP, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, MATCH_TYPE_CONTEXT);
+			0, null, delegate, id, MATCH_TYPE_CONTEXT, null);
 	} //}}}
 
 	//{{{ createSpanRule() method
 	public static final ParserRule createSpanRule(
 		int startPosMatch, String start, int endPosMatch, String end,
 		ParserRuleSet delegate, byte id, byte matchType,
-		boolean noLineBreak, boolean noWordBreak, boolean noEscape)
+		boolean noLineBreak, boolean noWordBreak, String escape)
 	{
 		int ruleAction = SPAN |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
-			((noWordBreak) ? NO_WORD_BREAK : 0) |
-			((noEscape) ? NO_ESCAPE : 0);
+			((noWordBreak) ? NO_WORD_BREAK : 0);
 
 		return new ParserRule(ruleAction, start.substring(0,1), startPosMatch,
 			start.toCharArray(), null,
 			endPosMatch, end.toCharArray(),
-			delegate, id, matchType);
-	} //}}}
-
-	//{{{ createRegexpSpanRule() method
-	/**
-	 * @deprecated Use {@link #createRegexpSpanRule(String,int,String,int,String,ParserRuleSet,byte,byte,boolean,boolean,boolean,boolean)} instead
-	 */
-	public static final ParserRule createRegexpSpanRule(
-		char hashChar, int startPosMatch, String start,
-		int endPosMatch, String end, ParserRuleSet delegate, byte id,
-		byte matchType, boolean noLineBreak, boolean noWordBreak,
-		boolean ignoreCase, boolean noEscape)
-		throws PatternSyntaxException
-	{
-		return createRegexpSpanRule(String.valueOf(hashChar),startPosMatch,
-			start,endPosMatch,end,delegate,id,matchType,
-			noLineBreak,noWordBreak,ignoreCase,noEscape);
+			delegate, id, matchType, escape);
 	} //}}}
 
 	//{{{ createRegexpSpanRule() method
@@ -182,17 +178,17 @@ public class ParserRule
 		String hashChar, int startPosMatch, String start,
 		int endPosMatch, String end, ParserRuleSet delegate, byte id,
 		byte matchType, boolean noLineBreak, boolean noWordBreak,
-		boolean ignoreCase, boolean noEscape)
+		boolean ignoreCase, String escape)
 		throws PatternSyntaxException
 	{
 		int ruleAction = SPAN | REGEXP |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
-			((noWordBreak) ? NO_WORD_BREAK : 0) |
-			((noEscape) ? NO_ESCAPE : 0);
+			((noWordBreak) ? NO_WORD_BREAK : 0);
 
 		return new ParserRule(ruleAction, hashChar, startPosMatch, null,
 			Pattern.compile(start,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			endPosMatch, end.toCharArray(), delegate, id, matchType);
+			endPosMatch, end.toCharArray(), delegate, id, matchType,
+			escape);
 	} //}}}
 
 	//{{{ createRegexpSpanRule() method
@@ -200,17 +196,17 @@ public class ParserRule
 		int startPosMatch, char[] hashChars, String start,
 		int endPosMatch, String end, ParserRuleSet delegate, byte id,
 		byte matchType, boolean noLineBreak, boolean noWordBreak,
-		boolean ignoreCase, boolean noEscape)
+		boolean ignoreCase, String escape)
 		throws PatternSyntaxException
 	{
 		int ruleAction = SPAN | REGEXP |
 			((noLineBreak) ? NO_LINE_BREAK : 0) |
-			((noWordBreak) ? NO_WORD_BREAK : 0) |
-			((noEscape) ? NO_ESCAPE : 0);
+			((noWordBreak) ? NO_WORD_BREAK : 0);
 
 		return new ParserRule(hashChars, ruleAction, startPosMatch, null,
 			Pattern.compile(start,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			endPosMatch, end.toCharArray(), delegate, id, matchType);
+			endPosMatch, end.toCharArray(), delegate, id,
+			matchType, escape);
 	} //}}}
 
 	//{{{ createEOLSpanRule() method
@@ -222,7 +218,7 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, seq.substring(0,1), posMatch,
 			seq.toCharArray(), null, 0, null,
-			delegate, id, matchType);
+			delegate, id, matchType, null);
 	} //}}}
 
 	//{{{ createRegexpEOLSpanRule() method
@@ -248,7 +244,7 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, hashChar, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, matchType);
+			0, null, delegate, id, matchType, null);
 	} //}}}
 
 	//{{{ createRegexpEOLSpanRule() method
@@ -261,7 +257,7 @@ public class ParserRule
 
 		return new ParserRule(hashChars, ruleAction, posMatch,
 			null, Pattern.compile(seq,(ignoreCase ? Pattern.CASE_INSENSITIVE : 0)),
-			0, null, delegate, id, matchType);
+			0, null, delegate, id, matchType, null);
 	} //}}}
 
 	//{{{ createMarkFollowingRule() method
@@ -271,7 +267,8 @@ public class ParserRule
 		int ruleAction = MARK_FOLLOWING;
 
 		return new ParserRule(ruleAction, seq.substring(0,1), posMatch,
-			seq.toCharArray(), null, 0, null, null, id, matchType);
+			seq.toCharArray(), null, 0, null, null, id, matchType,
+			null);
 	} //}}}
 
 	//{{{ createMarkPreviousRule() method
@@ -281,7 +278,8 @@ public class ParserRule
 		int ruleAction = MARK_PREVIOUS;
 
 		return new ParserRule(ruleAction, seq.substring(0,1), posMatch,
-			seq.toCharArray(), null, 0, null, null, id, matchType);
+			seq.toCharArray(), null, 0, null, null, id, matchType,
+			null);
 	} //}}}
 
 	//{{{ createEscapeRule() method
@@ -291,7 +289,7 @@ public class ParserRule
 
 		return new ParserRule(ruleAction, seq.substring(0,1),
 			0, seq.toCharArray(), null, 0, null,
-			null, Token.NULL, MATCH_TYPE_CONTEXT);
+			null, Token.NULL, MATCH_TYPE_CONTEXT, null);
 	} //}}}
 
 	//{{{ toString() method
@@ -313,7 +311,6 @@ public class ParserRule
 		result.append(",NO_LINE_BREAK=").append((actionHints & NO_LINE_BREAK) != 0);
 		result.append(",NO_WORD_BREAK=").append((actionHints & NO_WORD_BREAK) != 0);
 		result.append(",IS_ESCAPE=").append((actionHints & IS_ESCAPE) != 0);
-		result.append(",NO_ESCAPE=").append((actionHints & NO_ESCAPE) != 0);
 		result.append(",REGEXP=").append((actionHints & REGEXP) != 0);
 		result.append("],upHashChar=").append(upHashChar);
 		result.append(",upHashChars=").append(Arrays.toString(upHashChars));
@@ -329,6 +326,7 @@ public class ParserRule
 		result.append(",AT_WORD_START=").append((endPosMatch & AT_WORD_START) != 0);
 		result.append("],end=").append(null==end?null:String.valueOf(end));
 		result.append(",delegate=").append(delegate);
+		result.append(",escapeRule=").append(escapeRule);
 		result.append(",token=").append(Token.tokenToString(token)).append(']');
 		return result.toString();
 	} //}}}
@@ -337,7 +335,8 @@ public class ParserRule
 	private ParserRule(int action, String hashChar,
 		int startPosMatch, char[] start, Pattern startRegexp,
 		int endPosMatch, char[] end,
-		ParserRuleSet delegate, byte token, byte matchType)
+		ParserRuleSet delegate, byte token, byte matchType,
+		String escape)
 	{
 		this.action = action;
 		this.upHashChar = null == hashChar ? null : hashChar.toUpperCase();
@@ -350,6 +349,8 @@ public class ParserRule
 		this.delegate = delegate;
 		this.token = token;
 		this.matchType = matchType;
+		this.escapeRule = (escape != null && escape.length() > 0) ?
+					createEscapeRule(escape) : null;
 
 		if(this.delegate == null)
 		{
@@ -363,7 +364,8 @@ public class ParserRule
 	private ParserRule(char[] hashChars, int action,
 		int startPosMatch, char[] start, Pattern startRegexp,
 		int endPosMatch, char[] end,
-		ParserRuleSet delegate, byte token, byte matchType)
+		ParserRuleSet delegate, byte token, byte matchType,
+		String escape)
 	{
 		this.action = action;
 		this.upHashChar = null;
@@ -387,6 +389,8 @@ public class ParserRule
 		this.delegate = delegate;
 		this.token = token;
 		this.matchType = matchType;
+		this.escapeRule = (escape != null && escape.length() > 0) ?
+					createEscapeRule(escape) : null;
 
 		if(this.delegate == null)
 		{

@@ -101,7 +101,7 @@ public class ParserRuleSet
 				ruleset.imports.remove(this);
 				ruleset.resolveImports();
 			}
-			
+
 			for (List<ParserRule> rules : ruleset.ruleMap.values())
 			{
 				for (ParserRule rule : rules)
@@ -294,7 +294,6 @@ public class ParserRuleSet
 	//{{{ setEscapeRule() method
 	public void setEscapeRule(ParserRule escapeRule)
 	{
-		addRule(escapeRule);
 		this.escapeRule = escapeRule;
 	} //}}}
 

@@ -228,33 +228,10 @@
             </listitem>
             <listitem>
                 <para><literal>ESCAPE</literal> - specifies a character sequence
-                for escaping literals. If it appears <itemizedlist>
-                        <listitem>
-                            <para>in front of a token, the token is not
-                            highlighted.</para>
-                        </listitem>
-                        <listitem>
-                            <para>as part of a rule at its beginning, it is
-                            considered part of the match and not as an escape
-                            sequence.</para>
-                        </listitem>
-                        <listitem>
-                            <para>in front of the ending sequence of a
-                            <literal>SPAN</literal> or
-                            <literal>SPAN_REGEXP</literal>, the
-                            <literal>SPAN</literal> is not closed unless its
-                            <literal>NO_ESCAPE</literal> attribute is set to
-                            <literal>TRUE</literal>. See <xref
-                            linkend="mode-rule-span" />.</para>
-                        </listitem>
-                        <listitem>
-                            <para>two times consecutively, the first occurence
-                            escapes the second. In other words, the escaped
-                            escape sequence is painted with the
-                            <literal>DEFAULT</literal> token id, for this
-                            context.</para>
-                        </listitem>
-                    </itemizedlist></para>
+                for escaping literals. The first character following the escape
+                sequence is not considered as input for syntax highlighting,
+                thus being highlighted with default token for the rule set.
+                </para>
             </listitem>
             <listitem>
                 <para><literal>NO_WORD_SEP</literal> - any non-alphanumeric
@@ -423,11 +400,11 @@
                 linkend="mode-match-type" /> for more information.</para>
             </listitem>
             <listitem>
-                <para><literal>NO_ESCAPE</literal> - If set to
-                <literal>TRUE</literal>, the ruleset's escape character sequence
-                will have no effect before the span's end string. Otherwise, the
-                presence of the escape character sequence will cause that
-                occurrence of the end string to be ignored.</para>
+                <para><literal>ESCAPE</literal> - specifies a character sequence
+                for escaping characters. The first character following the escape
+                sequence is not considered as input for syntax highlighting,
+                thus being highlighted with rule's token.
+                </para>
             </listitem>
             <listitem>
                 <para><literal>NO_LINE_BREAK</literal> - If set to

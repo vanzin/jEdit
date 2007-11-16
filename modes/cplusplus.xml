@@ -24,7 +24,7 @@
     </PROPS>
 
     <RULES
-        ESCAPE="\" IGNORE_CASE="FALSE"
+        IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
         <EOL_SPAN TYPE="KEYWORD2" AT_WHITESPACE_END="TRUE" DELEGATE="CPP">#</EOL_SPAN>
 
@@ -34,7 +34,7 @@
 
     <!-- Core C++ language -->
     <RULES SET="LEX"
-        ESCAPE="\" IGNORE_CASE="FALSE"
+        IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
 
         <!-- A hack not to mark namespace qualification like "std::"
@@ -46,7 +46,7 @@
 
     <!-- Core C++ language -->
     <RULES SET="CORE"
-        ESCAPE="\" IGNORE_CASE="FALSE"
+        IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
 
         <IMPORT DELEGATE="c::CORE"/>
@@ -80,13 +80,13 @@
             <KEYWORD3>typename</KEYWORD3>
             <KEYWORD2>using</KEYWORD2>
             <KEYWORD1>virtual</KEYWORD1>
-            
+
         </KEYWORDS>
     </RULES>
 
     <!-- Preprocessor specific rules -->
     <RULES SET="CPP"
-        ESCAPE="\" IGNORE_CASE="FALSE"
+        IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
 
         <EOL_SPAN_REGEXP HASH_CHAR="include" TYPE="MARKUP" DELEGATE="c::INCLUDE">include\b</EOL_SPAN_REGEXP>
@@ -114,7 +114,7 @@
     <!-- Almost same as the normal code,
         except two additional operators # and ##. -->
     <RULES SET="DEFINE"
-        ESCAPE="\" IGNORE_CASE="FALSE"
+        IGNORE_CASE="FALSE"
         HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
         <SEQ TYPE="OPERATOR">#</SEQ>
         <IMPORT DELEGATE="LEX"/>

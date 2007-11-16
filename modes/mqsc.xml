@@ -12,19 +12,19 @@
     <PROPERTY NAME="lineComment" VALUE="*"/>
   </PROPS>
   <!-- ignore case, highlight numbers -->
-  <RULES ESCAPE="\" IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
+  <RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 
     <!-- lines beginning with asterisk are comments -->
     <EOL_SPAN TYPE="COMMENT1" AT_LINE_START="TRUE">*</EOL_SPAN>
 
     <!-- brackets on one line delimit parameter values, don't parse -->
     <!-- case 1: string values using apostrophe marks -->
-    <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" MATCH_TYPE="OPERATOR">
+    <SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE" MATCH_TYPE="OPERATOR">
       <BEGIN>('</BEGIN>
       <END>')</END>
     </SPAN>
     <!-- case 2: literal values and object names -->
-    <SPAN TYPE="LITERAL2" NO_LINE_BREAK="TRUE" MATCH_TYPE="OPERATOR">
+    <SPAN TYPE="LITERAL2" ESCAPE="\" NO_LINE_BREAK="TRUE" MATCH_TYPE="OPERATOR">
       <BEGIN>(</BEGIN>
       <END>)</END>
     </SPAN>

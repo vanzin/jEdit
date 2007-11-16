@@ -4,7 +4,7 @@
 
 <!-- Tcl mode by Michael Jacobson.
      cplusplus and pascal modes used as reference.
-    2006/10/20 Jean-Francois Larvoire: 
+    2006/10/20 Jean-Francois Larvoire:
      - Fixed comments detection: Only # at the beginning of Tcl commands are comments!
      - Quoted strings can span multiple lines.
      - Added recursive in-string substituted command and variable analysis.
@@ -39,7 +39,7 @@
 		<PROPERTY NAME="lineUpClosingBracket" VALUE="true" />
 	</PROPS>
 
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" 
+	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="0x\p{XDigit}+|\d+">
 
 		<!-- Continuation line. Processed before anything else by Tcl. (Does not work)-->
@@ -644,7 +644,7 @@
 		<SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="#" DELEGATE="MAIN">#.*</SEQ_REGEXP>
 	</RULES>
 
-	<RULES SET="TCL_STRING" DEFAULT="LITERAL1">
+	<RULES SET="TCL_STRING" DEFAULT="LITERAL1" ESCAPE="\">
 		<PROPS>
 			<PROPERTY NAME="indentOpenBrackets" VALUE="" />
 			<PROPERTY NAME="indentCloseBrackets" VALUE="" />

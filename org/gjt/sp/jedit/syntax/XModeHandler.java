@@ -232,7 +232,7 @@ public abstract class XModeHandler extends DefaultHandler
 					tag.lastTokenID,tag.lastMatchType,
 					tag.lastNoLineBreak,
 					tag.lastNoWordBreak,
-					tag.lastNoEscape));
+					tag.lastEscape));
 			} //}}}
 			//{{{ SPAN_REGEXP
 			else if (tag.tagName.equals("SPAN_REGEXP"))
@@ -264,7 +264,7 @@ public abstract class XModeHandler extends DefaultHandler
 							tag.lastNoLineBreak,
 							tag.lastNoWordBreak,
 							findParent("RULES").lastIgnoreCase,
-							tag.lastNoEscape));
+							tag.lastEscape));
 					}
 					else
 					{
@@ -279,7 +279,7 @@ public abstract class XModeHandler extends DefaultHandler
 							tag.lastNoLineBreak,
 							tag.lastNoWordBreak,
 							findParent("RULES").lastIgnoreCase,
-							tag.lastNoEscape));
+							tag.lastEscape));
 					}
 				}
 				catch(PatternSyntaxException re)
@@ -592,7 +592,6 @@ public abstract class XModeHandler extends DefaultHandler
 			lastAtWordStart = "TRUE".equals(attrs.getValue("AT_WORD_START"));
 			lastNoLineBreak = "TRUE".equals(attrs.getValue("NO_LINE_BREAK"));
 			lastNoWordBreak = "TRUE".equals(attrs.getValue("NO_WORD_BREAK"));
-			lastNoEscape = "TRUE".equals(attrs.getValue("NO_ESCAPE"));
 			lastIgnoreCase = (attrs.getValue("IGNORE_CASE") == null ||
 					"TRUE".equals(attrs.getValue("IGNORE_CASE")));
 			lastHighlightDigits = "TRUE".equals(attrs.getValue("HIGHLIGHT_DIGITS"));;
@@ -758,7 +757,6 @@ public abstract class XModeHandler extends DefaultHandler
 		public boolean lastAtLineStart;
 		public boolean lastAtWhitespaceEnd;
 		public boolean lastAtWordStart;
-		public boolean lastNoEscape;
 		public int lastStartPosMatch;
 		public int lastEndPosMatch;
 		public String lastDigitRE;

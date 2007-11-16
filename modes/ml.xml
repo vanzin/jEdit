@@ -9,7 +9,7 @@
 		<PROPERTY NAME="commentEnd" VALUE="*)"/>
 	</PROPS>
 
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
+	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 		<!-- comments -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>(*</BEGIN>
@@ -17,13 +17,13 @@
 		</SPAN>
 
 		<!-- character literals -->
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
 			<BEGIN>#"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
 		<!-- string literals -->
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
+		<SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>

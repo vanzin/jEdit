@@ -17,7 +17,7 @@
         <PROPERTY NAME="lineComment" VALUE="#"/>
         <PROPERTY NAME="indentNextLines" VALUE="\s*((if\s+.*|elsif\s+.*|else\s*|do(\s*|\s+.*)|case\s+.*|when\s+.*|while\s+.*|for\s+.*|until\s+.*|loop\s+.*|def\s+.*|class\s+.*|module\s+.*|begin.*|unless\s+.*)*)"/>
     </PROPS>
-    <RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0b[01]([01_]*[01])?)|(0x[\p{XDigit}]([\p{XDigit}_]*[\p{XDigit}])?)|(0([0-7_]*[0-7])?)|(0d[0-9]([0-9_]*[0-9])?)|([1-9]([0-9_]*[0-9])?)|([0-9]([0-9_]*[0-9])?[Ee]([0-9]([0-9_]*[0-9])?)?)">
+    <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0b[01]([01_]*[01])?)|(0x[\p{XDigit}]([\p{XDigit}_]*[\p{XDigit}])?)|(0([0-7_]*[0-7])?)|(0d[0-9]([0-9_]*[0-9])?)|([1-9]([0-9_]*[0-9])?)|([0-9]([0-9_]*[0-9])?[Ee]([0-9]([0-9_]*[0-9])?)?)">
         <!--       ^ Binary literal    | ^ Hex literal                               | ^ Octal literal  | ^ "0d" Style Dec lit   | ^ Normal Dec literal | ^ Float literal w/out dec point, with exp. -->
 
         <!-- Ruby comment (Inline Documentation ) -->
@@ -40,7 +40,7 @@
             <END>"</END>
         </SPAN>
 
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>'</BEGIN>
             <END>'</END>
         </SPAN>
@@ -52,7 +52,7 @@
         </SPAN_REGEXP>
 
         <!-- %q(Hello world) -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%q(</BEGIN>
             <END>)</END>
         </SPAN>
@@ -64,7 +64,7 @@
         </SPAN_REGEXP>
 
         <!-- %q{Hello world} -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%q{</BEGIN>
             <END>}</END>
         </SPAN>
@@ -76,7 +76,7 @@
         </SPAN_REGEXP>
 
         <!-- %q[Hello world] -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%q[</BEGIN>
             <END>]</END>
         </SPAN>
@@ -88,7 +88,7 @@
         </SPAN_REGEXP>
 
         <!-- %q<Hello world> -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%q&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN>
@@ -103,7 +103,7 @@
         </SPAN_REGEXP>
 
         <!-- %q$Hello world$ -->
-        <SPAN_REGEXP HASH_CHAR="%q" TYPE="LITERAL1">
+        <SPAN_REGEXP HASH_CHAR="%q" TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%q([^\p{Alnum}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
@@ -121,7 +121,7 @@
         </SPAN>
 
         <!-- %w(Array of strings) -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%w(</BEGIN>
             <END>)</END>
         </SPAN>
@@ -133,7 +133,7 @@
         </SPAN>
 
         <!-- %w{Array of strings} -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%w{</BEGIN>
             <END>}</END>
         </SPAN>
@@ -145,7 +145,7 @@
         </SPAN>
 
         <!-- %w[Array of strings] -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%w[</BEGIN>
             <END>]</END>
         </SPAN>
@@ -157,7 +157,7 @@
         </SPAN>
 
         <!-- %w<Array of strings> -->
-        <SPAN TYPE="LITERAL1">
+        <SPAN TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%w&lt;</BEGIN>
             <END>&gt;</END>
         </SPAN>
@@ -169,7 +169,7 @@
         </SPAN_REGEXP>
 
         <!-- %w@Array of strings@ -->
-        <SPAN_REGEXP HASH_CHAR="%w" TYPE="LITERAL1">
+        <SPAN_REGEXP HASH_CHAR="%w" TYPE="LITERAL1" ESCAPE="\">
             <BEGIN>%w([^\p{Alnum}\p{Space}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
@@ -426,7 +426,7 @@
 
     <!-- Delegate contents of #{} expression in double quotes to MAIN so that
      it will be syntax highlighted as well -->
-    <RULES DEFAULT="LITERAL1" SET="doubleQuoteLiteral">
+    <RULES DEFAULT="LITERAL1" SET="doubleQuoteLiteral" ESCAPE="\">
         <SPAN DELEGATE="MAIN" TYPE="OPERATOR">
             <BEGIN>#{</BEGIN>
             <END>}</END>
@@ -438,7 +438,7 @@
 
     <!-- Delegate contents of #{} expression in backquotes to MAIN so that
      it will be syntax highlighted as well -->
-    <RULES DEFAULT="LITERAL2" SET="BackquoteLiteral">
+    <RULES DEFAULT="LITERAL2" SET="BackquoteLiteral" ESCAPE="\">
         <SPAN DELEGATE="MAIN" TYPE="OPERATOR">
             <BEGIN>#{</BEGIN>
             <END>}</END>
@@ -450,7 +450,7 @@
 
     <!-- Delegate contents of #{} expression in a regexp to MAIN so that
      it will be syntax highlighted as well -->
-    <RULES DEFAULT="LITERAL3" SET="RegexpLiteral">
+    <RULES DEFAULT="LITERAL3" SET="RegexpLiteral" ESCAPE="\">
         <SPAN DELEGATE="MAIN" TYPE="OPERATOR">
             <BEGIN>#{</BEGIN>
             <END>}</END>

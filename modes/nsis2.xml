@@ -17,7 +17,7 @@ This file should be accurate as of the version of NSIS 2.25. If I've left someth
 		<PROPERTY NAME="indentNextLine" VALUE="\s*(.*:|(function\s+.*)|(section\s+.*)|(subsection\s+.*))" />
 	</PROPS>
 
-	<RULES IGNORE_CASE="TRUE" ESCAPE="$\" HIGHLIGHT_DIGITS="TRUE" DEFAULT="NULL">
+	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" DEFAULT="NULL">
 		<EOL_SPAN TYPE="COMMENT1">;</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT2">#</EOL_SPAN>
 
@@ -474,7 +474,7 @@ This file should be accurate as of the version of NSIS 2.25. If I've left someth
 		</KEYWORDS>
 	</RULES>
 
-	<RULES SET="NSIS_LITERAL" DEFAULT="LITERAL1" NO_WORD_SEP="-{}_">
+	<RULES SET="NSIS_LITERAL" ESCAPE="$\" DEFAULT="LITERAL1" NO_WORD_SEP="-{}_">
 	</RULES>
 
 </MODE>

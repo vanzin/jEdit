@@ -19,7 +19,7 @@
 		<PROPERTY NAME="noWordSep" VALUE="_'" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
 	</PROPS>
-	<RULES ESCAPE="\" IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"
+	<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"
 		DIGIT_RE="([\p{Digit}]|_)+" NO_WORD_SEP="'">
 		<!-- Comments -->
 		<SPAN TYPE="COMMENT1">
@@ -29,7 +29,7 @@
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
 
 		<!--String Literals -->
-		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE">
+		<SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="FALSE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>

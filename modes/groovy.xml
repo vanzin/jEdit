@@ -17,7 +17,7 @@
 			VALUE="\s*(((if|while)\s*\(|else\s*|else\s+if\s*\(|for\s*\(.*\))[^{;]*)" />
 	</PROPS>
 
-	<RULES ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
+	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="FALSE">
 		<!-- Silly comment -->
 		<SEQ TYPE="COMMENT1">/**/</SEQ>
 
@@ -37,7 +37,7 @@
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
-		<SPAN TYPE="LITERAL1">
+		<SPAN TYPE="LITERAL1" ESCAPE="\">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>

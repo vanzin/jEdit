@@ -103,18 +103,19 @@ public class TokenMarker
 		context = new LineContext();
 
 		if(prevContext == null)
+		{
 			context.rules = getMainRuleSet();
+			context.escapeRule = context.rules.getEscapeRule();
+		}
 		else
 		{
 			context.parent = prevContext.parent;
-			context.inRule = prevContext.inRule;
+			context.setInRule(prevContext.inRule);
 			context.rules = prevContext.rules;
 			context.spanEndSubst = prevContext.spanEndSubst;
 		}
 
 		keywords = context.rules.getKeywords();
-		escaped = false;
-		delegateEndEscaped = false;
 
 		seenWhitespaceEnd = false;
 		whitespaceEnd = line.offset;
@@ -136,6 +137,13 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 				keywords = context.rules.getKeywords();
 			} //}}}
 
+			//{{{ Check for the escape rule before anything else.
+			if (context.escapeRule != null &&
+				handleRule(context.escapeRule,false))
+			{
+				continue main_loop;
+			} //}}}
+
 			//{{{ check for end of delegate
 			if (context.parent != null
 			    && context.parent.inRule != null
@@ -151,22 +159,8 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			for (ParserRule rule : rules)
 			{
 				// stop checking rules if there was a match
-				if (handleRule(rule,false,false))
+				if (handleRule(rule,false))
 				{
-escape_checking:			if ((rule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
-					{
-						int escapeSequenceCount = pattern.count;
-						for (ParserRule innerRule : rules)
-						{
-							if (((innerRule.action & ParserRule.IS_ESCAPE) != ParserRule.IS_ESCAPE) &&
-							    (handleRule(innerRule,false)))
-							{
-								break escape_checking;
-							}
-						}
-						escaped = !escaped;
-						pos += escapeSequenceCount - 1;
-					}
 					seenWhitespaceEnd = true;
 					continue main_loop;
 				}
@@ -198,9 +192,6 @@ escape_checking:			if ((rule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESC
 					context.rules.getDefault(),
 					pos - line.offset,1,context);
 				lastOffset = pos + 1;
-
-				escaped = false;
-				delegateEndEscaped = false;
 			}
 			else
 			{
@@ -227,8 +218,6 @@ escape_checking:			if ((rule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESC
 				}
 
 				seenWhitespaceEnd = true;
-				escaped = false;
-				delegateEndEscaped = false;
 			} //}}}
 		} //}}}
 
@@ -252,7 +241,7 @@ unwind:		while(context.parent != null)
 			{
 				context = context.parent;
 				keywords = context.rules.getKeywords();
-				context.inRule = null;
+				context.setInRule(null);
 			}
 			else
 				break unwind;
@@ -288,8 +277,6 @@ unwind:		while(context.parent != null)
 	private int lastOffset;
 	private int lineLength;
 	private int pos;
-	private boolean escaped;
-	private boolean delegateEndEscaped;
 
 	private int whitespaceEnd;
 	private boolean seenWhitespaceEnd;
@@ -304,12 +291,11 @@ unwind:		while(context.parent != null)
 		LineContext tempContext = context;
 		context = context.parent;
 		keywords = context.rules.getKeywords();
-		boolean tempDelegateEndEscaped = delegateEndEscaped;
-		boolean b = handleRule(rule,true);
+		boolean handled = handleRule(rule,true);
 		context = tempContext;
 		keywords = context.rules.getKeywords();
 
-		if(b && !tempDelegateEndEscaped)
+		if (handled)
 		{
 			if(context.inRule != null)
 				handleRule(context.inRule,true);
@@ -323,40 +309,13 @@ unwind:		while(context.parent != null)
 				pos - line.offset,pattern.count,context);
 
 			keywords = context.rules.getKeywords();
-			context.inRule = null;
+			context.setInRule(null);
 			lastOffset = pos + pattern.count;
 
 			// move pos to last character of match sequence
 			pos += pattern.count - 1;
 
 			return true;
-		}
-
-		// check escape rule of parent
-		if((rule.action & ParserRule.NO_ESCAPE) == 0)
-		{
-			ParserRule escape = context.rules.getEscapeRule();
-			if (escape == null)
-			{
-				escape = context.parent.rules.getEscapeRule();
-			}
-escape_checking:	if (escape != null && handleRule(escape,false,false))
-			{
-				int escapeSequenceCount = pattern.count;
-				Character ch = Character.valueOf(escape.upHashChar.charAt(0));
-				List<ParserRule> rules = context.rules.getRules(ch);
-				for (ParserRule innerRule : rules)
-				{
-					if (handleRule(innerRule,false,false))
-					{
-						delegateEndEscaped = !delegateEndEscaped;
-						break escape_checking;
-					}
-				}
-				delegateEndEscaped = !delegateEndEscaped;
-				pos += escapeSequenceCount - 1;
-				return true;
-			}
 		}
 
 		return false;
@@ -368,16 +327,6 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 	 * and handles the rule if it does match
 	 */
 	private boolean handleRule(ParserRule checkRule, boolean end)
-	{
-		return handleRule(checkRule,end,true);
-	} //}}}
-
-	//{{{ handleRule() method
-	/**
-	 * Checks if the rule matches the line at the current position
-	 * and handles the rule if it does match
-	 */
-	private boolean handleRule(ParserRule checkRule, boolean end, boolean processEscape)
 	{
 		//{{{ Some rules can only match in certain locations
 		if(!end)
@@ -489,18 +438,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 		//{{{ Check for an escape sequence
 		if((checkRule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
 		{
-			if(context.inRule != null)
-				handleRule(context.inRule,true);
-			if (processEscape)
-			{
-				escaped = !escaped;
-				pos += pattern.count - 1;
-			}
-		}
-		else if(escaped)
-		{
-			escaped = false;
-			pos += pattern.count - 1;
+			pos += pattern.count;
 		} //}}}
 		//{{{ Handle start of rule
 		else if(!end)
@@ -547,7 +485,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			//{{{ SPAN, EOL_SPAN
 			case ParserRule.SPAN:
 			case ParserRule.EOL_SPAN:
-				context.inRule = checkRule;
+				context.setInRule(checkRule);
 
 				byte tokenType = matchToken(checkRule,
 							context.inRule, context);
@@ -599,7 +537,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 					pattern.count,context);
 
 				context.spanEndSubst = null;
-				context.inRule = checkRule;
+				context.setInRule(checkRule);
 				break;
 			//}}}
 			//{{{ MARK_PREVIOUS
@@ -644,7 +582,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			}
 
 			lastOffset = pos;
-			context.inRule = null;
+			context.setInRule(null);
 		} //}}}
 
 		return true;
@@ -670,7 +608,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 				lastOffset = pos;
 				context = context.parent;
 				keywords = context.rules.getKeywords();
-				context.inRule = null;
+				context.setInRule(null);
 			}
 		}
 	} //}}}
@@ -878,12 +816,22 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 		public ParserRuleSet rules;
 		// used for SPAN_REGEXP rules; otherwise null
 		public char[] spanEndSubst;
+		public ParserRule escapeRule;
 
 		//{{{ LineContext constructor
 		public LineContext(ParserRuleSet rs, LineContext lc)
 		{
 			rules = rs;
 			parent = (lc == null ? null : (LineContext)lc.clone());
+			/*
+			 * SPANs with no delegate need to propagate the
+			 * escape rule to the child context, so this is
+			 * needed.
+			 */
+			if (rs.getModeName() != null)
+				escapeRule = rules.getEscapeRule();
+			else
+				escapeRule = lc.escapeRule;
 		} //}}}
 
 		//{{{ LineContext constructor
@@ -937,6 +885,7 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 			lc.rules = rules;
 			lc.parent = (parent == null) ? null : (LineContext) parent.clone();
 			lc.spanEndSubst = spanEndSubst;
+			lc.escapeRule = escapeRule;
 
 			return lc;
 		} //}}}
@@ -962,5 +911,24 @@ escape_checking:	if (escape != null && handleRule(escape,false,false))
 
 			return true;
 		} //}}}
+
+		//{{{ setInRule() method
+		/**
+		 * Sets the current rule being processed and adjusts the
+		 * escape rule for the context based on the rule.
+		 */
+		public void setInRule(ParserRule rule)
+		{
+			inRule = rule;
+			if (rule != null && rule.escapeRule != null)
+				escapeRule = rule.escapeRule;
+			else if (rules != null && rules.getName() != null)
+				escapeRule = rules.getEscapeRule();
+			else if (parent != null)
+				escapeRule = parent.escapeRule;
+			else
+				escapeRule = null;
+		} //}}}
+
 	} //}}}
 }
