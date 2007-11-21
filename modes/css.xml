@@ -251,13 +251,13 @@
 		DIGIT_RE="-?[\p{Digit}]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
 		NO_WORD_SEP="-_%">
 
-		<SPAN ESCAPE="\">
+		<SPAN TYPE="LITERAL1" ESCAPE="\">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
 		</SPAN>
 
 		<!-- "functions" -->
-		<SPAN_REGEXP DELEGATE="LITERAL" HASH_CHARS="RU" TYPE="KEYWORD1">
+		<SPAN_REGEXP TYPE="LITERAL1" HASH_CHARS="RU" MATCH_TYPE="KEYWORD1">
 			<BEGIN>(rgb|url)\s*\(</BEGIN>
 			<END>)</END>
 		</SPAN_REGEXP>
