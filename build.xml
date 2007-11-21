@@ -110,7 +110,6 @@
 			   target="${target.java.version}"
 			   compiler="modern"
 			   encoding="UTF-8">
-			<include name="bsh/**" />
 			<include name="org/**" />
 			<include name="com/**" />
 			<include name="gnu/**" />
@@ -128,7 +127,7 @@
 			 duplicate="fail"
 			 index="true">
 			<fileset dir=".">
-				<include name="bsh/commands/*.bsh" />
+				<include name="org/gjt/sp/jedit/bsh/commands/*.bsh" />
 				<include name="org/gjt/sp/jedit/**/*.dtd" />
 				<include name="org/gjt/sp/jedit/default.abbrevs" />
 				<include name="org/gjt/sp/jedit/*.props" />
@@ -391,7 +390,7 @@
 			   compiler="modern" />
 		<javadoc sourcepath="."
 				 destdir="${classes.dir}/javadoc/api"
-				 packagenames="bsh.*,org.*,com.*,gnu.*"
+				 packagenames="org.*,com.*,gnu.*"
 				 classpath="${classes.dir}/core"
 				 doclet="doclet.GenerateTocXML"
 				 docletpath="${classes.dir}/javadoc"
@@ -406,8 +405,6 @@
 				 source="${target.java.version}">
 			<group title="jEdit"
 				   packages="org.gjt.sp*" />
-			<group title="BeanShell"
-				   packages="bsh*:org.objectweb.asm*" />
 			<group title="Microstar XML Parser"
 				   packages="com.microstar.xml*" />
 			<group title="GNU Regular Expression Implementation"
@@ -421,8 +418,6 @@
 		<dependset>
 			<srcfileset dir=".">
 				<include name="doclet/**/*.java" />
-				<include name="bsh/**/*.java" />
-				<include name="bsh/**/package.html" />
 				<include name="org/**/*.java" />
 				<include name="org/**/package.html" />
 				<include name="com/**/*.java" />
