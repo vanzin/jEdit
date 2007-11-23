@@ -78,8 +78,6 @@ Marcelo Vanzin for contributing to this release.
   By default the count is 1000. It checks the limit before each file so it is
   possible that a few more results are found before asking (Matthieu Casanova)
 
-- It is now possible to deactivate two stage save on slow VFS in the Saving &
-  backups option panel (Feature #1811747) (Matthieu Casanova)
 }}}
 {{{ Editing
 

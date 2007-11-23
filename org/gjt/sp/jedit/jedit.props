@@ -56,9 +56,6 @@ persistentMarkers=true
 # Two-stage save (save to #filename#save# first, then filename)
 twoStageSave=true
 
-# Two-stage save on low latency (it will be activated only if twoStageSave is on)
-twoStageSaveLowLatency=true
-
 # Strip trailing EOL
 stripTrailingEOL=true
 

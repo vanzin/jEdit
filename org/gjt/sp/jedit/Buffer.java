@@ -524,7 +524,7 @@ public class Buffer extends JEditBuffer
 					if(!MiscUtilities.isURL(savePath))
 						savePath = MiscUtilities.resolveSymlinks(savePath);
 					savePath = vfs.getTwoStageSaveName(savePath);
-					if (BufferSaveRequest.wantTwoStageSave(this, newPath) && (!vfsRenameCap || savePath == null))
+					if (BufferSaveRequest.wantTwoStageSave(this) && (!vfsRenameCap || savePath == null))
 					{
 						// the file is writeable but the vfs cannot do two stage. We must overwrite
 						// readonly flag
