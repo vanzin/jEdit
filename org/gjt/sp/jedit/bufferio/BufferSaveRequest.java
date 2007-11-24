@@ -203,6 +203,8 @@ public class BufferSaveRequest extends BufferIORequest
 		}
 	} //}}}
 
+	//{{{ Private members
+
 	//{{{ makeBackup() method
 	/**
 	 * Make the backup.
@@ -219,10 +221,12 @@ public class BufferSaveRequest extends BufferIORequest
 	} //}}}
 
 	//{{{ wantTwoStageSave() method
-	public static boolean wantTwoStageSave(Buffer buffer)
+	private static boolean wantTwoStageSave(Buffer buffer)
 	{
 		return !buffer.getBooleanProperty("forbidTwoStageSave") &&
 			(buffer.getBooleanProperty("overwriteReadonly") ||
 			jEdit.getBooleanProperty("twoStageSave"));
 	}//}}}
+
+	//}}}
 }
