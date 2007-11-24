@@ -29,7 +29,6 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
-import org.gjt.sp.jedit.bufferio.BufferSaveRequest;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
 import org.gjt.sp.jedit.gui.StyleEditor;
 import org.gjt.sp.jedit.io.FileVFS;
@@ -524,7 +523,7 @@ public class Buffer extends JEditBuffer
 					if(!MiscUtilities.isURL(savePath))
 						savePath = MiscUtilities.resolveSymlinks(savePath);
 					savePath = vfs.getTwoStageSaveName(savePath);
-					if (BufferSaveRequest.wantTwoStageSave(this) && (!vfsRenameCap || savePath == null))
+					if (jEdit.getBooleanProperty("twoStageSave") && (!vfsRenameCap || savePath == null))
 					{
 						// the file is writeable but the vfs cannot do two stage. We must overwrite
 						// readonly flag
