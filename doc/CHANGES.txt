@@ -91,6 +91,8 @@ Marcelo Vanzin and Daniel Hahler for contributing to this release.
 - Use MARKUP for tags in HTML mode and delegate css "style" attributes to the
   CSS mode. (Daniel Hahler - Patch # 1783634)
 
+- Improved ml mode. (Lucas Dixon - Patch # 1834109)
+
 }}}
 {{{ API Changes
 
