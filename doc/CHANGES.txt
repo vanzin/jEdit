@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre12
 
-Thanks to Björn "Vampire" Kautler, Joe Walp, Matthieu Casanova and
-Marcelo Vanzin for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Joe Walp, Matthieu Casanova,
+Marcelo Vanzin and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -87,6 +87,9 @@ Marcelo Vanzin for contributing to this release.
 - NO_ESCAPE is now deprecated and ignored by the parsing engine. ESCAPE is now
   a valid attribute for SPAN and SPAN_REGEXP rules. All mode files updated to
   follow the new escape rule semantics. (Marcelo Vanzin)
+
+- Use MARKUP for tags in HTML mode and delegate css "style" attributes to the
+  CSS mode. (Daniel Hahler - Patch # 1783634)
 
 }}}
 {{{ API Changes
