@@ -4,11 +4,11 @@
 
 <!--
 Nullsoft Scriptable Installation System mode by Ryan Grove 2003
-Updated by Uwe (donovaly@users.sourceforge.net) 2007
+Updated by Uwe Stöhr (donovaly@users.sourceforge.net) 2007
 Updated for 4.3pre9 by Alan Ezust 2007
 $Id$
 
-This file should be accurate as of the version of NSIS 2.25. If I've left something out, please let me know.
+This file should be accurate as of the version of NSIS 2.30. If I've left something out, please let me know.
 -->
 
 <MODE>
@@ -113,6 +113,7 @@ This file should be accurate as of the version of NSIS 2.25. If I've left someth
 			<LITERAL3>SW_SHOWMINIMIZED</LITERAL3>
 			<LITERAL3>SW_SHOWNORMAL</LITERAL3>
 			<LITERAL3>a</LITERAL3>
+			<LITERAL3>admin</LITERAL3>
 			<LITERAL3>all</LITERAL3>
 			<LITERAL3>alwaysoff</LITERAL3>
 			<LITERAL3>auto</LITERAL3>
@@ -128,6 +129,7 @@ This file should be accurate as of the version of NSIS 2.25. If I've left someth
 			<LITERAL3>false</LITERAL3>
 			<LITERAL3>force</LITERAL3>
 			<LITERAL3>hide</LITERAL3>
+			<LITERAL3>highest</LITERAL3>
 			<LITERAL3>ifnewer</LITERAL3>
 			<LITERAL3>instfiles</LITERAL3>
 			<LITERAL3>license</LITERAL3>
@@ -148,6 +150,7 @@ This file should be accurate as of the version of NSIS 2.25. If I've left someth
 			<LITERAL3>true</LITERAL3>
 			<LITERAL3>try</LITERAL3>
 			<LITERAL3>uninstConfirm</LITERAL3>
+			<LITERAL3>user</LITERAL3>
 			<LITERAL3>w</LITERAL3>
 			<LITERAL3>zlib</LITERAL3>
 			<LITERAL3>$$</LITERAL3>
@@ -371,6 +374,7 @@ This file should be accurate as of the version of NSIS 2.25. If I've left someth
 			<KEYWORD2>readregstr</KEYWORD2>
 			<KEYWORD2>regdll</KEYWORD2>
 			<KEYWORD2>rename</KEYWORD2>
+			<KEYWORD2>requestexecutionlevel</KEYWORD2>
 			<KEYWORD2>reservefile</KEYWORD2>
 			<KEYWORD2>rmdir</KEYWORD2>
 			<KEYWORD2>searchpath</KEYWORD2>
