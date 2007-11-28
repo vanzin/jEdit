@@ -43,16 +43,8 @@
 			<END>'</END>
 		</SPAN>
 
-		<SPAN_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ_" TYPE="FUNCTION" DELEGATE="FUNCTION_PARAMS">
-			<BEGIN>[A-Za-z_][\w_-]*\s*\(</BEGIN>
-			<END>)</END>
-		</SPAN_REGEXP>
-
-		<!-- Keep brackets together: -->
-		<SPAN TYPE="OPERATOR" DELEGATE="MAIN">
-			<BEGIN>(</BEGIN>
-			<END>)</END>
-		</SPAN>
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<SEQ TYPE="OPERATOR">)</SEQ>
 
 		<SEQ TYPE="COMMENT2">//--&gt;</SEQ>
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
@@ -557,16 +549,5 @@
 			<LITERAL2>adRecalcAlways</LITERAL2>
 -->
 		</KEYWORDS>
-	</RULES>
-
-	<RULES SET="FUNCTION_PARAMS">
-		<!-- Keep brackets together: -->
-		<SPAN TYPE="OPERATOR" DELEGATE="MAIN">
-			<BEGIN>(</BEGIN>
-			<END>)</END>
-		</SPAN>
-
-		<IMPORT DELEGATE="MAIN" />
-		<!-- <SEQ TYPE="OPERATOR">)</SEQ> -->
 	</RULES>
 </MODE>
