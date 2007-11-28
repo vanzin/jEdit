@@ -14,7 +14,7 @@
 
 	<RULES IGNORE_CASE="TRUE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="-?[\p{Digit}]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
+		DIGIT_RE="-?\d+(\.\d+)?(pt|pc|in|mm|cm|em|ex|px|ms|s|%|)"
 		NO_WORD_SEP="-_%">
 
 		<!-- classes: -->
@@ -248,7 +248,7 @@
 	<!-- Values: -->
 	<RULES SET="PROP_VALUE"
 		HIGHLIGHT_DIGITS="TRUE"
-		DIGIT_RE="-?[\p{Digit}]+(pt|pc|in|mm|cm|em|ex|px|ms|s|%)"
+		DIGIT_RE="-?\d+(\.\d+)?(pt|pc|in|mm|cm|em|ex|px|ms|s|%|)"
 		NO_WORD_SEP="-_%">
 
 		<SPAN TYPE="LITERAL1" ESCAPE="\">
