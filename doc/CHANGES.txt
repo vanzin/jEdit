@@ -52,6 +52,9 @@ Marcelo Vanzin and Daniel Hahler for contributing to this release.
   as a side effect, not because the root cause of the bug was fixed.)
   (Marcelo Vanzin)
 
+- Binding simple "+" (not VK_ADD nor VK_PLUS) as a shortcut is now possible.
+  (SF.net Bug #1166530 - Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 

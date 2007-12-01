@@ -366,11 +366,16 @@ public class KeyEventTranslator
 	{
 		if(keyStroke == null)
 			return null;
-		int index = keyStroke.indexOf('+');
 		int modifiers = 0;
-		if(index != -1)
+		String key;
+		int endOfModifiers = keyStroke.indexOf('+');
+		if(endOfModifiers <= 0)	// not found or found at first
 		{
-			for(int i = 0; i < index; i++)
+			key = keyStroke;
+		}
+		else
+		{
+			for(int i = 0; i < endOfModifiers; i++)
 			{
 				switch(Character.toUpperCase(keyStroke
 					.charAt(i)))
@@ -389,8 +394,8 @@ public class KeyEventTranslator
 					break;
 				}
 			}
+			key = keyStroke.substring(endOfModifiers + 1);
 		}
-		String key = keyStroke.substring(index + 1);
 		if(key.length() == 1)
 		{
 			return new Key(modifiersToString(modifiers),0,key.charAt(0));
