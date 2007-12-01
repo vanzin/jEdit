@@ -141,9 +141,9 @@ begin
 	Result := jdkVersion;
 end;
 
-// Finds path to "javaw.exe" by looking up JDK or JRE locations
-// in the registry.  Ensures the file actually exists.  If none
-// is found, an empty string is returned.
+// Finds path to "javaw.exe" by looking up System directory or JDK/JRE
+// locations in the registry.  Ensures the file actually exists.  If
+// none is found, an empty string is returned.
 function javaPath(Param: String): String;
 var
 	javaVersion : String;
@@ -151,6 +151,14 @@ var
 	path : String;
 begin
 	if Length(javawExePath) > 0 then begin
+		Result := javawExePath;
+		exit;
+	end;
+
+	path := GetSystemDir + '\javaw.exe';
+	if FileExists(path) then begin
+		Log('(SystemDir) found javaw.exe: ' + path);
+		javawExePath := path;
 		Result := javawExePath;
 		exit;
 	end;

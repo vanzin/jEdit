@@ -55,6 +55,11 @@ Marcelo Vanzin and Daniel Hahler for contributing to this release.
 - Binding simple "+" (not VK_ADD nor VK_PLUS) as a shortcut is now possible.
   (SF.net Bug #1166530 - Kazutoshi Satoda)
 
+- Windows installer now prefer the path of javaw.exe in system directory
+  to JDK/JRE directory, which was dependant on Java's version. Now you can
+  update Java without reinstalling jEdit.
+  (SF.net bug #1227497 - Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 
