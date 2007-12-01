@@ -365,7 +365,7 @@ public class GUIUtilities
 		return mi;
 	} //}}}
 
-	// {{{ loadMenuItem(EditAction, boolean)
+	//{{{ loadMenuItem(EditAction, boolean)
 	public static JMenuItem loadMenuItem(EditAction editAction,
 		boolean setMnemonic)
 	{
@@ -493,18 +493,10 @@ public class GUIUtilities
 		}
 
 		String toolTip = prettifyMenuLabel(label);
-		String shortcut1 = jEdit.getProperty(name + ".shortcut");
-		String shortcut2 = jEdit.getProperty(name + ".shortcut2");
-		if(shortcut1 != null || shortcut2 != null)
+		String shortcutLabel = getShortcutLabel(name);
+		if(shortcutLabel != null)
 		{
-			toolTip = toolTip + " ("
-				+ (shortcut1 != null
-				? shortcut1 : "")
-				+ ((shortcut1 != null && shortcut2 != null)
-				? " or " : "")
-				+ (shortcut2 != null
-				? shortcut2
-				: "") + ')';
+			toolTip = toolTip + " (" + shortcutLabel + ')';
 		}
 
 		return new EnhancedButton(icon,toolTip,name,context);
@@ -525,6 +517,37 @@ public class GUIUtilities
 				.concat(label.substring(index + 1));
 		}
 		return label;
+	} //}}}
+
+	//{{{ getShortcutLabel() method
+	/**
+	 * Returns a label string to show users what shortcut are
+	 * assigned to the action.
+	 */
+	public static String getShortcutLabel(String action)
+	{
+		if(action == null)
+			return null;
+		else
+		{
+			String shortcut1 = jEdit.getProperty(action + ".shortcut");
+			String shortcut2 = jEdit.getProperty(action + ".shortcut2");
+
+			if(shortcut1 == null || shortcut1.length() == 0)
+			{
+				if(shortcut2 == null || shortcut2.length() == 0)
+					return null;
+				else
+					return shortcut2;
+			}
+			else
+			{
+				if(shortcut2 == null || shortcut2.length() == 0)
+					return shortcut1;
+				else
+					return shortcut1 + " or " + shortcut2;
+			}
+		}
 	} //}}}
 
 	//}}}
@@ -840,6 +863,8 @@ public class GUIUtilities
 			parent, view, path, type, multipleSelection, true);
 		return fileChooser.getSelectedFiles();
 	} //}}}
+
+	//}}}
 
 	//{{{ Colors and styles
 

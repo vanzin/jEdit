@@ -137,6 +137,10 @@ Marcelo Vanzin and Daniel Hahler for contributing to this release.
 
 - Added a new method EditPane.initPainter() that can be used when using a
   TextArea in the core or a plugin (Matthieu Casanova)
+
+- Added a new method GUIUtilities.getShortcutLabel() that makes a label
+  string to show users what shortcut are assigned to an action.
+
 }}}
 
 }}}

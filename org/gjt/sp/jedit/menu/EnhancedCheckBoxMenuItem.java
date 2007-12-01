@@ -49,7 +49,7 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	{
 		this.context = context;
 		this.action = action;
-		this.shortcut = getShortcut();
+		this.shortcut = GUIUtilities.getShortcutLabel(action);
 		if(OperatingSystem.hasScreenMenuBar() && shortcut != null)
 		{
 			setText(label + " (" + shortcut + ")");
@@ -112,33 +112,6 @@ public class EnhancedCheckBoxMenuItem extends JCheckBoxMenuItem
 	private String shortcut;
 	private String action;
 	//}}}
-
-	//{{{ getShortcut() method
-	private String getShortcut()
-	{
-		if(action == null)
-			return null;
-		else
-		{
-			String shortcut1 = jEdit.getProperty(action + ".shortcut");
-			String shortcut2 = jEdit.getProperty(action + ".shortcut2");
-
-			if(shortcut1 == null || shortcut1.length() == 0)
-			{
-				if(shortcut2 == null || shortcut2.length() == 0)
-					return null;
-				else
-					return shortcut2;
-			}
-			else
-			{
-				if(shortcut2 == null || shortcut2.length() == 0)
-					return shortcut1;
-				else
-					return shortcut1 + " or " + shortcut2;
-			}
-		}
-	} //}}}
 
 	//}}}
 

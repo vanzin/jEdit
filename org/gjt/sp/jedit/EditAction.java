@@ -39,9 +39,6 @@ import org.gjt.sp.util.Log;
  *
  * @author Slava Pestov
  * @version $Id$
- * 
- * TODO: refactor common shortcut1 and shortcut2 code here.
- * 
  */
 public abstract class EditAction
 {
