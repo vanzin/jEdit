@@ -138,7 +138,7 @@ public class MouseHandler extends TextAreaMouseHandler
 			if(quickCopyDrag)
 			{
 				textArea.removeFromSelection(sel);
-				Registers.paste((JEditTextArea) TextArea.focusedComponent,
+				Registers.paste(TextArea.focusedComponent,
 					'%',sel instanceof Selection.Rect);
 
 				TextArea.focusedComponent.requestFocus();
@@ -154,7 +154,7 @@ public class MouseHandler extends TextAreaMouseHandler
 			if(!textArea.isEditable())
 				textArea.getToolkit().beep();
 			else
-				Registers.paste((JEditTextArea) textArea,'%',control);
+				Registers.paste(textArea,'%',control);
 		}
 		else if(maybeDragAndDrop
 			&& !textArea.isMultipleSelectionEnabled())
