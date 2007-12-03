@@ -21,17 +21,18 @@
  */
 package org.gjt.sp.jedit.input;
 
-import org.gjt.sp.jedit.textarea.TextArea;
-import org.gjt.sp.jedit.gui.GrabKeyDialog;
-import org.gjt.sp.jedit.gui.KeyEventWorkaround;
-import org.gjt.sp.jedit.gui.KeyEventTranslator;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.MiscUtilities;
+import org.gjt.sp.jedit.Registers;
+import org.gjt.sp.jedit.gui.GrabKeyDialog;
+import org.gjt.sp.jedit.gui.KeyEventTranslator;
+import org.gjt.sp.jedit.gui.KeyEventWorkaround;
+import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * This class manage the key bindings and execute the actions binded on the
@@ -258,15 +259,51 @@ public class TextAreaInputHandler extends AbstractInputHandler
 				// and make stupid noises
 				if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
 					KeyEventWorkaround.numericKeypadKey();
+				else if (keyStroke.key == 0)
+				{
+					if ("C".equals(keyStroke.modifiers))
+					{
+						switch (keyStroke.input)
+						{
+							case 'c':
+								Registers.copy(textArea, '$');
+								break;
+							case 'x':
+								Registers.cut(textArea, '$');
+								break;
+							case 'v':
+								Registers.paste(textArea, '$');
+								break;
+						}
+					}
+				}
 				else
 				{
 					switch (keyStroke.key)
 					{
+						case KeyEvent.VK_HOME:
+							if ("C".equals(keyStroke.modifiers))
+								textArea.goToBufferStart("S".equals(keyStroke.modifiers));
+							else
+								textArea.goToStartOfLine("S".equals(keyStroke.modifiers));
+							break;
+						case KeyEvent.VK_END:
+							if ("C".equals(keyStroke.modifiers))
+								textArea.goToBufferEnd("S".equals(keyStroke.modifiers));
+							else
+								textArea.goToBufferEnd("S".equals(keyStroke.modifiers));
+							break;
 						case KeyEvent.VK_LEFT:
-							textArea.goToPrevCharacter("S".equals(keyStroke.modifiers));
+							if ("C".equals(keyStroke.modifiers))
+								textArea.goToPrevWord("S".equals(keyStroke.modifiers));
+							else
+								textArea.goToPrevCharacter("S".equals(keyStroke.modifiers));
 							break;
 						case KeyEvent.VK_RIGHT:
-							textArea.goToNextCharacter("S".equals(keyStroke.modifiers));
+							if ("C".equals(keyStroke.modifiers))
+								textArea.goToNextWord("S".equals(keyStroke.modifiers));
+							else
+								textArea.goToNextCharacter("S".equals(keyStroke.modifiers));
 							break;
 						case KeyEvent.VK_UP:
 							textArea.goToPrevLine("S".equals(keyStroke.modifiers));

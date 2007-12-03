@@ -165,12 +165,14 @@
 				<include name="org/gjt/sp/jedit/input/TextAreaInputHandler.class"/>
 				<include name="org/gjt/sp/jedit/input/InputHandlerProvider.class"/>
 				<include name="org/gjt/sp/jedit/input/DefaultInputHandlerProvider.class"/>
+				<include name="org/gjt/sp/jedit/gui/HistoryModel.class"/>
 				<include name="org/gjt/sp/jedit/gui/KeyEventWorkaround.class"/>
 				<include name="org/gjt/sp/jedit/gui/KeyEventTranslator*.class"/>
 				<include name="org/gjt/sp/jedit/gui/MutableListModel.class"/>
 				<include name="org/gjt/sp/jedit/Mode.class"/>
 				<include name="org/gjt/sp/jedit/Debug.class"/>
 				<include name="org/gjt/sp/jedit/OperatingSystem.class"/>
+				<include name="org/gjt/sp/jedit/Registers.class"/>
 				<include name="org/gjt/sp/jedit/TextUtilities.class"/>
 				<include name="org/gjt/sp/jedit/Options.class"/>
 				<include name="org/gjt/sp/util/IntegerArray.class"/>
