@@ -86,6 +86,7 @@ Marcelo Vanzin and Daniel Hahler for contributing to this release.
   By default the count is 1000. It checks the limit before each file so it is
   possible that a few more results are found before asking (Matthieu Casanova)
 
+- The release date in the plugin install panel is now aligned to the right (Matthieu Casanova)
 }}}
 {{{ Editing
 
