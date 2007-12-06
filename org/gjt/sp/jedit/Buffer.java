@@ -1093,6 +1093,7 @@ public class Buffer extends JEditBuffer
 		String userMode = getStringProperty("mode");
 		if(userMode != null)
 		{
+			unsetProperty("mode");
 			Mode m = ModeProvider.instance.getMode(userMode);
 			if(m != null)
 			{
