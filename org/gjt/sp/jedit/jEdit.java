@@ -3965,11 +3965,10 @@ loop:		for(int i = 0; i < list.length; i++)
 				props.put(JEditBuffer.ENCODING,entry.encoding);
 		}
 
-		if (entry != null && entry.mode != null)
+		if (entry != null && props.get("mode") == null)
 		{
-			Mode mode = getMode(entry.mode);
-			if (mode != null)
-				props.put("mode", mode);
+			if (entry.mode != null)
+				props.put("mode", entry.mode);
 		}
 	} //}}}
 
