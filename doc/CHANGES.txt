@@ -60,6 +60,9 @@ Marcelo Vanzin and Daniel Hahler for contributing to this release.
   update Java without reinstalling jEdit.
   (SF.net bug #1227497 - Kazutoshi Satoda)
 
+- Manually changed edit mode was reset by the mode in recent files at
+  saving the buffer. (Kazutoshi Satoda)
+
 - Explicit "mode" value in props for jEdit.openFile() or
   jEdit.openTemporary() was overwritten by the mode in recent files.
   (Kazutoshi Satoda)
