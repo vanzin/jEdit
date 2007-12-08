@@ -24,8 +24,11 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.event.*;
-import java.util.*;
-import org.gjt.sp.jedit.*;
+import java.util.HashMap;
+import java.util.Map;
+import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.Options;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -620,11 +623,13 @@ public class KeyEventTranslator
 			hashCode = key + input;
 		}
 
+		@Override
 		public int hashCode()
 		{
 			return hashCode;
 		}
 
+		@Override
 		public boolean equals(Object o)
 		{
 			if(o instanceof Key)
@@ -641,6 +646,7 @@ public class KeyEventTranslator
 			return false;
 		}
 
+		@Override
 		public String toString()
 		{
 			return (modifiers == null ? "" : modifiers)
