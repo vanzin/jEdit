@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre13
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova for contributing to this 
-release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova and xlinuks for
+contributing to this release.
 
 {{{ Bug Fixes
 -After some keystroke like alt+tab the numpad stopped working until another 
@@ -12,6 +12,8 @@ printable key is pressed (#1788460) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
+- [About jEdit] dialog is refined. It now performs smoother animation
+  and fade out effect. (xlinuks)
 
 }}}
 
