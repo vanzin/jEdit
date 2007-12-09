@@ -621,12 +621,14 @@ public class EditPane extends JPanel implements EBComponent
 	/**
 	 * Returns 0,0 for split pane compatibility.
 	 */
+	@Override
 	public final Dimension getMinimumSize()
 	{
 		return new Dimension(0,0);
 	} //}}}
 
 	//{{{ toString() method
+	@Override
 	public String toString()
 	{
 		return getClass().getName() + '['
@@ -796,8 +798,8 @@ public class EditPane extends JPanel implements EBComponent
 				"bufferSwitcher.maxRowCount",10));
 		}
 	} //}}}
-
-	//{{{ propertiesChanged() method
+	
+	//{{{ initPainter() method
 	/**
 	 * Init the painter of a textarea.
 	 *
@@ -1077,6 +1079,7 @@ public class EditPane extends JPanel implements EBComponent
 		} //}}}
 	
 		//{{{ paintValidLine() method
+		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
@@ -1094,6 +1097,7 @@ public class EditPane extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ getToolTipText() method
+		@Override
 		public String getToolTipText(int x, int y)
 		{
 			if(isMarkerHighlightEnabled())
