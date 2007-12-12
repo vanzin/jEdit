@@ -339,30 +339,7 @@ public class GUIUtilities
 		if(name.charAt(0) == '%')
 			return loadMenu(context,name.substring(1));
 
-		String label = jEdit.getProperty(name + ".label");
-		if(label == null)
-			label = name;
-
-		char mnemonic;
-		int index = label.indexOf('$');
-		if(index != -1 && label.length() - index > 1)
-		{
-			mnemonic = Character.toLowerCase(label.charAt(index + 1));
-			label = label.substring(0,index).concat(label.substring(++index));
-		}
-		else
-			mnemonic = '\0';
-
-		JMenuItem mi;
-		if(jEdit.getBooleanProperty(name + ".toggle"))
-			mi = new EnhancedCheckBoxMenuItem(label,name,context);
-		else
-			mi = new EnhancedMenuItem(label,name,context);
-
-		if(!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
-			mi.setMnemonic(mnemonic);
-
-		return mi;
+		return _loadMenuItem(name, context, setMnemonic);
 	} //}}}
 
 	//{{{ loadMenuItem(EditAction, boolean)
@@ -372,31 +349,7 @@ public class GUIUtilities
 		String name = editAction.getName();
 		ActionContext context = jEdit.getActionContext();
 
-		// String label = jEdit.getProperty(name + ".label");
-		String label = editAction.getLabel();
-		if(label == null)
-			label = name;
-
-		char mnemonic;
-		int index = label.indexOf('$');
-		if(index != -1 && label.length() - index > 1)
-		{
-			mnemonic = Character.toLowerCase(label.charAt(index + 1));
-			label = label.substring(0,index).concat(label.substring(++index));
-		}
-		else
-			mnemonic = '\0';
-
-		JMenuItem mi;
-		if(jEdit.getBooleanProperty(name + ".toggle"))
-			mi = new EnhancedCheckBoxMenuItem(label,name,context);
-		else
-			mi = new EnhancedMenuItem(label,name,context);
-
-		if(!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
-			mi.setMnemonic(mnemonic);
-
-		return mi;
+		return _loadMenuItem(name, context, setMnemonic);
 	} //}}}
 
 	//{{{ loadToolBar() method
@@ -773,10 +726,10 @@ public class GUIUtilities
 		};
 
 		int ret = JOptionPane.showConfirmDialog(comp,
-												message,
-												jEdit.getProperty(name + ".title"),
-												JOptionPane.YES_NO_OPTION,
-												JOptionPane.QUESTION_MESSAGE);
+							message,
+							jEdit.getProperty(name + ".title"),
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE);
 		Object[] selectedValues = list.getSelectedValues();
 		for (Object selectedValue : selectedValues)
 		{
@@ -1758,6 +1711,33 @@ public class GUIUtilities
 	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
 	private static String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
 
+	//{{{ _loadMenuItem() method
+	private static JMenuItem _loadMenuItem(String name, ActionContext context, boolean setMnemonic) {
+
+		String label = jEdit.getProperty(name + ".label");
+		if (label == null) {
+			label = name;
+		}
+		char mnemonic;
+		int index = label.indexOf('$');
+		if (index != -1 && label.length() - index > 1) {
+			mnemonic = Character.toLowerCase(label.charAt(index + 1));
+			label = label.substring(0, index).concat(label.substring(++index));
+		} else {
+			mnemonic = '\0';
+		}
+		JMenuItem mi;
+		if (jEdit.getBooleanProperty(name + ".toggle")) {
+			mi = new EnhancedCheckBoxMenuItem(label, name, context);
+		} else {
+			mi = new EnhancedMenuItem(label, name, context);
+		}
+		if (!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0') {
+			mi.setMnemonic(mnemonic);
+		}
+		return mi;
+	} //}}}
+	
 	private GUIUtilities() {}
 	//}}}
 
