@@ -27,6 +27,10 @@ import org.gjt.sp.util.Log;
 
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import org.gjt.sp.jedit.JEditAbstractEditAction;
+import org.gjt.sp.jedit.gui.ShortcutPrefixActiveEvent;
 
 /**
  * The abstract input handler manage the keyboard handling.
@@ -36,13 +40,15 @@ import java.awt.event.KeyEvent;
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
-public abstract class AbstractInputHandler
+public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 {
 	protected int lastActionCount;
 	/** This listener will receive keyboard events if it is not null. */
 	protected KeyListener keyEventInterceptor;
 	protected String readNextChar;
 	protected int repeatCount;
+	protected E lastAction;
+
 
 	protected static final int REPEAT_COUNT_THRESHOLD = 20;
 
@@ -50,6 +56,177 @@ public abstract class AbstractInputHandler
 	public AbstractInputHandler()
 	{
 		repeatCount = 1;
+	} //}}}
+	
+		//{{{ addKeyBinding() method
+	/**
+	 * Adds a key binding to this input handler. The key binding is
+	 * a list of white space separated key strokes of the form
+	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
+	 * or S for Shift, and key is either a character (a-z) or a field
+	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
+	 * @param keyBinding The key binding
+	 * @param action The action
+	 * @since jEdit 4.2pre1
+	 */
+	public void addKeyBinding(String keyBinding, String action)
+	{
+		addKeyBinding(keyBinding,(Object)action);
+	} //}}}
+
+	//{{{ addKeyBinding() method
+	/**
+	 * Adds a key binding to this input handler. The key binding is
+	 * a list of white space separated key strokes of the form
+	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
+	 * or S for Shift, and key is either a character (a-z) or a field
+	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
+	 * @param keyBinding The key binding
+	 * @param action The action
+	 */
+	public void addKeyBinding(String keyBinding, E action)
+	{
+		addKeyBinding(keyBinding,(Object)action);
+	} //}}}
+
+	//{{{ addKeyBinding() method
+	/**
+	 * Adds a key binding to this input handler. The key binding is
+	 * a list of white space separated key strokes of the form
+	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
+	 * or S for Shift, and key is either a character (a-z) or a field
+	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
+	 * @param keyBinding The key binding
+	 * @param action The action
+	 * @since jEdit 4.3pre1
+	 */
+	public void addKeyBinding(String keyBinding, Object action)
+	{
+		Hashtable current = bindings;
+
+		String prefixStr = null;
+
+		StringTokenizer st = new StringTokenizer(keyBinding);
+		while(st.hasMoreTokens())
+		{
+			String keyCodeStr = st.nextToken();
+			if(prefixStr == null)
+				prefixStr = keyCodeStr;
+			else
+				prefixStr = prefixStr + " " + keyCodeStr;
+
+			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
+			if(keyStroke == null)
+				return;
+
+			if(st.hasMoreTokens())
+			{
+				Object o = current.get(keyStroke);
+				if(o instanceof Hashtable)
+					current = (Hashtable)o;
+				else
+				{
+					Hashtable hash = new Hashtable();
+					hash.put(PREFIX_STR,prefixStr);
+					o = hash;
+					current.put(keyStroke,o);
+					current = (Hashtable)o;
+				}
+			}
+			else
+				current.put(keyStroke,action);
+		}
+	} //}}}
+
+	//{{{ removeKeyBinding() method
+	/**
+	 * Removes a key binding from this input handler. This is not yet
+	 * implemented.
+	 * @param keyBinding The key binding
+	 */
+	public void removeKeyBinding(String keyBinding)
+	{
+		Hashtable current = bindings;
+
+		StringTokenizer st = new StringTokenizer(keyBinding);
+		while(st.hasMoreTokens())
+		{
+			String keyCodeStr = st.nextToken();
+			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
+			if(keyStroke == null)
+				return;
+
+			if(st.hasMoreTokens())
+			{
+				Object o = current.get(keyStroke);
+				if(o instanceof Hashtable)
+					current = ((Hashtable)o);
+				else if(o != null)
+				{
+					// we have binding foo
+					// but user asks to remove foo bar?
+					current.remove(keyStroke);
+					return;
+				}
+				else
+				{
+					// user asks to remove non-existent
+					return;
+				}
+			}
+			else
+				current.remove(keyStroke);
+		}
+	} //}}}
+
+	//{{{ removeAllKeyBindings() method
+	/**
+	 * Removes all key bindings from this input handler.
+	 */
+	public void removeAllKeyBindings()
+	{
+		bindings.clear();
+	} //}}}
+
+	//{{{ getKeyBinding() method
+	/**
+	 * Returns either an edit action, or a hashtable if the specified key
+	 * is a prefix.
+	 * @param keyBinding The key binding
+	 * @since jEdit 3.2pre5
+	 */
+	public Object getKeyBinding(String keyBinding)
+	{
+		Hashtable current = bindings;
+		StringTokenizer st = new StringTokenizer(keyBinding);
+
+		while(st.hasMoreTokens())
+		{
+			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(
+				st.nextToken());
+			if(keyStroke == null)
+				return null;
+
+			if(st.hasMoreTokens())
+			{
+				Object o = current.get(keyStroke);
+				if(o instanceof Hashtable)
+				{
+					if(!st.hasMoreTokens())
+						return o;
+					else
+						current = (Hashtable)o;
+				}
+				else
+					return o;
+			}
+			else
+			{
+				return current.get(keyStroke);
+			}
+		}
+
+		return null;
 	} //}}}
 
 	//{{{ getLastActionCount() method
@@ -103,6 +280,22 @@ public abstract class AbstractInputHandler
 	{
 		return readNextChar != null;
 	} //}}}
+	
+	//{{{ setBindings() method
+	/**
+	 * Replace the set of key bindings.
+	 * @since jEdit 4.3pre1
+	 */
+	public void setBindings(Hashtable bindings)
+	{
+		this.bindings = this.currentBindings = bindings;
+	} //}}}
+	
+	//{{{ setCurrentBindings() method
+	public void setCurrentBindings(Hashtable bindings)
+	{
+		currentBindings = bindings;
+	} //}}}
 
 	//{{{ handleKey() method
 	/**
@@ -131,6 +324,23 @@ public abstract class AbstractInputHandler
 
 	//{{{ processKeyEventKeyStrokeHandling() method
 
+	//{{{ handleKey() methodprotected void sendShortcutPrefixOff()
+	/**
+	 *  If 
+	 */
+	protected void sendShortcutPrefixOff()
+	{
+		if(shortcutOn)
+		{
+			ShortcutPrefixActiveEvent.firePrefixStateChange(null, false);
+			shortcutOn = false;
+		}
+	} //}}}
+	
+	public abstract void invokeAction(String action);
+	
+	public abstract void invokeAction(E action);
+	
 	/**
 	 *
 	 * @param evt the keyboard event
@@ -163,4 +373,15 @@ public abstract class AbstractInputHandler
 			}
 		}
 	} //}}}
+	
+	//{{{ Private members
+
+	// Stores prefix name in bindings hashtable
+	public static Object PREFIX_STR = "PREFIX_STR";
+	protected boolean shortcutOn = false;
+	
+
+	protected Hashtable bindings;
+	protected Hashtable currentBindings;
+	//}}}
 }

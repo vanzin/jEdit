@@ -1,9 +1,9 @@
 /*
- * ActionContext.java - For code sharing between jEdit and VFSBrowser
+ * IPropertyManager.java - An interface for class that returns properties
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 2003 Slava Pestov
+ * Copyright (C) 2007 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,21 +22,20 @@
 
 package org.gjt.sp.jedit;
 
+import java.io.*;
 import java.util.*;
 
 /**
- * Manages a collection of action sets. There are two instances of this class
- * in jEdit:
- * <ul>
- * <li>{@link org.gjt.sp.jedit.jEdit#getActionContext()} - editor actions
- * <li>{@link org.gjt.sp.jedit.browser.VFSBrowser#getActionContext()} - browser
- * actions
- * </ul>
- *
- * @since jEdit 4.2pre1
- * @author Slava Pestov
- * @version $Id$
+ * Manage properties.
+ * @author Matthieu Casanova
+ * @since 4.3pre13
  */
-public abstract class ActionContext extends JEditActionContext<EditAction, ActionSet>
+public interface IPropertyManager
 {
+	/**
+	 * Returns a String property
+	 * @param name the name of the property
+	 * @return the string property or null if it doesn't exists
+	 */
+	String getProperty(String name);
 }

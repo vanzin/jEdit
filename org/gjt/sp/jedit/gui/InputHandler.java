@@ -48,7 +48,7 @@ import java.awt.*;
  * @version $Id$
  * @see org.gjt.sp.jedit.gui.DefaultInputHandler
  */
-public abstract class InputHandler extends AbstractInputHandler
+public abstract class InputHandler extends AbstractInputHandler<EditAction>
 {
 	//{{{ InputHandler constructor
 	/**
@@ -60,41 +60,6 @@ public abstract class InputHandler extends AbstractInputHandler
 		super();
 		this.view = view;
 	} //}}}
-
-	//{{{ addKeyBinding() method
-	/**
-	 * Adds a key binding to this input handler.
-	 * @param keyBinding The key binding (the format of this is
-	 * input-handler specific)
-	 * @param action The action
-	 */
-	public abstract void addKeyBinding(String keyBinding, String action);
-	//}}}
-
-	//{{{ addKeyBinding() method
-	/**
-	 * Adds a key binding to this input handler.
-	 * @param keyBinding The key binding (the format of this is
-	 * input-handler specific)
-	 * @param action The action
-	 */
-	public abstract void addKeyBinding(String keyBinding, EditAction action);
-	//}}}
-
-	//{{{ removeKeyBinding() method
-	/**
-	 * Removes a key binding from this input handler.
-	 * @param keyBinding The key binding
-	 */
-	public abstract void removeKeyBinding(String keyBinding);
-	//}}}
-
-	//{{{ removeAllKeyBindings() method
-	/**
-	 * Removes all key bindings from this input handler.
-	 */
-	public abstract void removeAllKeyBindings();
-	//}}}
 
 	//{{{ handleKey() method
 	/**
@@ -483,8 +448,6 @@ public abstract class InputHandler extends AbstractInputHandler
 
 	//{{{ Instance variables
 	protected final View view;
-
-	protected EditAction lastAction;
 
 	//}}}
 

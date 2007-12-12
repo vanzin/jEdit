@@ -101,7 +101,7 @@ public class ShortcutPrefixActiveEvent extends ChangeEvent
 	 * @param bindings                       Description of the Parameter
 	 * @param listeningForShortcutCompletion Description of the Parameter
 	 */
-	protected static void firePrefixStateChange(Hashtable bindings, boolean listeningForShortcutCompletion)
+	public static void firePrefixStateChange(Hashtable bindings, boolean listeningForShortcutCompletion)
 	{
 		//Log.log( Log.DEBUG, ShortcutPrefixActiveEvent.class, "firePrefixStateChange() called, listening? " + listeningForShortcutCompletion );
 		// Guaranteed to return a non-null array

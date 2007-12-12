@@ -33,6 +33,11 @@ import org.gjt.sp.util.Log;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Hashtable;
+import org.gjt.sp.jedit.JEditBeanShell;
+import org.gjt.sp.jedit.JEditBeanShellAction;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.gui.ShortcutPrefixActiveEvent;
 
 /**
  * This class manage the key bindings and execute the actions binded on the
@@ -41,7 +46,7 @@ import java.awt.event.KeyEvent;
  * @author Matthieu Casanova
  * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
-public class TextAreaInputHandler extends AbstractInputHandler
+public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBeanShellAction>
 {
 	private final TextArea textArea;
 
@@ -49,6 +54,7 @@ public class TextAreaInputHandler extends AbstractInputHandler
 	public TextAreaInputHandler(TextArea textArea)
 	{
 		this.textArea = textArea;
+		bindings = currentBindings = new Hashtable();
 	} //}}}
 
 	//{{{ processKeyEvent() method
@@ -199,7 +205,102 @@ public class TextAreaInputHandler extends AbstractInputHandler
 			textArea.requestFocus();
 		}
 	} //}}}
+	
+	protected abstract JEditBeanShellAction getAction(String action);
+	
+	//{{{ invokeAction() method
+	/**
+	 * Invokes the specified action, repeating and recording it as
+	 * necessary.
+	 * @param action The action
+	 * @since jEdit 4.2pre1
+	 */
+	public void invokeAction(String action)
+	{
+		invokeAction(getAction(action));
+	} //}}}
 
+	//{{{ invokeAction() method
+	/**
+	 * Invokes the specified action, repeating and recording it as
+	 * necessary.
+	 * @param action The action
+	 */
+	public void invokeAction(JEditBeanShellAction action)
+	{
+		JEditBuffer buffer = textArea.getBuffer();
+
+		/* if(buffer.insideCompoundEdit())
+			buffer.endCompoundEdit(); */
+
+		// remember the last executed action
+		if(!action.noRememberLast())
+		{
+			if(lastAction == action)
+				lastActionCount++;
+			else
+			{
+				lastAction = action;
+				lastActionCount = 1;
+			}
+		}
+
+		// remember old values, in case action changes them
+		int _repeatCount = repeatCount;
+
+		// execute the action
+		if(action.noRepeat() || _repeatCount == 1)
+			action.invoke(textArea);
+		else
+		{
+			// stop people doing dumb stuff like C+ENTER 100 C+n
+			if(_repeatCount > REPEAT_COUNT_THRESHOLD)
+			{
+				/*String label = action.getLabel();
+				if(label == null)
+					label = action.getName();
+				else
+					label = GUIUtilities.prettifyMenuLabel(label);
+
+				Object[] pp = { label, _repeatCount };
+
+				if(GUIUtilities.confirm(view,"large-repeat-count",pp,
+					JOptionPane.WARNING_MESSAGE,
+					JOptionPane.YES_NO_OPTION)
+					!= JOptionPane.YES_OPTION)
+				{
+					repeatCount = 1;
+					view.getStatus().setMessage(null);
+					return;
+				}*/
+			}
+
+			try
+			{
+				buffer.beginCompoundEdit();
+
+				for(int i = 0; i < _repeatCount; i++)
+					action.invoke(textArea);
+			}
+			finally
+			{
+				buffer.endCompoundEdit();
+			}
+		}
+
+		// If repeat was true originally, clear it
+		// Otherwise it might have been set by the action, etc
+		if(_repeatCount != 1)
+		{
+			// first of all, if this action set a
+			// readNextChar, do not clear the repeat
+			if(readNextChar != null)
+				return;
+
+			repeatCount = 1;
+		}
+	} //}}}
+	
 	//{{{ handleKey() method
 	/**
 	 * Handles the given keystroke.
@@ -229,8 +330,9 @@ public class TextAreaInputHandler extends AbstractInputHandler
 		{
 			if(input != '\0')
 			{
-				if (!dryRun)
+				if (!dryRun) 
 				{
+					setCurrentBindings(bindings);
 					invokeReadNextChar(input);
 					repeatCount = 1;
 				}
@@ -238,89 +340,80 @@ public class TextAreaInputHandler extends AbstractInputHandler
 			}
 			else
 			{
-				if (!dryRun)
+				if (!dryRun) 
 				{
 					readNextChar = null;
 				}
 			}
 		}
-		if (!dryRun)
+
+		Object o = currentBindings.get(keyStroke);
+		if(o == null)
 		{
-			if(input != '\0')
+			if (!dryRun)
 			{
-				if (!keyStroke.isFromGlobalContext())
-				{ // let user input be only local
-					userInput(input);
-				}
-			}
-			else
-			{
-				// this is retarded. excuse me while I drool
-				// and make stupid noises
-				if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
-					KeyEventWorkaround.numericKeypadKey();
-				else if (keyStroke.key == 0)
+				// Don't beep if the user presses some
+				// key we don't know about unless a
+				// prefix is active. Otherwise it will
+				// beep when caps lock is pressed, etc.
+				if(currentBindings != bindings)
 				{
-					if ("C".equals(keyStroke.modifiers))
-					{
-						switch (keyStroke.input)
-						{
-							case 'c':
-								Registers.copy(textArea, '$');
-								break;
-							case 'x':
-								Registers.cut(textArea, '$');
-								break;
-							case 'v':
-								Registers.paste(textArea, '$');
-								break;
-						}
-					}
+					Toolkit.getDefaultToolkit().beep();
+					// F10 should be passed on, but C+e F10
+					// shouldn't
+					repeatCount = 1;
+					setCurrentBindings(bindings);
 				}
+				else if(input != '\0')
+				{
+					if (!keyStroke.isFromGlobalContext())
+					{ // let user input be only local
+						userInput(input);
+					}
+				} 
 				else
 				{
-					switch (keyStroke.key)
-					{
-						case KeyEvent.VK_HOME:
-							if ("C".equals(keyStroke.modifiers))
-								textArea.goToBufferStart("S".equals(keyStroke.modifiers));
-							else
-								textArea.goToStartOfLine("S".equals(keyStroke.modifiers));
-							break;
-						case KeyEvent.VK_END:
-							if ("C".equals(keyStroke.modifiers))
-								textArea.goToBufferEnd("S".equals(keyStroke.modifiers));
-							else
-								textArea.goToBufferEnd("S".equals(keyStroke.modifiers));
-							break;
-						case KeyEvent.VK_LEFT:
-							if ("C".equals(keyStroke.modifiers))
-								textArea.goToPrevWord("S".equals(keyStroke.modifiers));
-							else
-								textArea.goToPrevCharacter("S".equals(keyStroke.modifiers));
-							break;
-						case KeyEvent.VK_RIGHT:
-							if ("C".equals(keyStroke.modifiers))
-								textArea.goToNextWord("S".equals(keyStroke.modifiers));
-							else
-								textArea.goToNextCharacter("S".equals(keyStroke.modifiers));
-							break;
-						case KeyEvent.VK_UP:
-							textArea.goToPrevLine("S".equals(keyStroke.modifiers));
-							break;
-						case KeyEvent.VK_DOWN:
-							textArea.goToNextLine("S".equals(keyStroke.modifiers));
-							break;
-						case KeyEvent.VK_BACK_SPACE:
-							textArea.backspace();
-							break;
-						case KeyEvent.VK_DELETE:
-							textArea.delete();
-							break;
-					}
+					// this is retarded. excuse me while I drool
+					// and make stupid noises
+					if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
+						KeyEventWorkaround.numericKeypadKey();
 				}
-
+				sendShortcutPrefixOff();
 			}
+		}
+		else if(o instanceof Hashtable)
+		{
+			if (!dryRun)
+			{
+				setCurrentBindings((Hashtable)o);
+				ShortcutPrefixActiveEvent.firePrefixStateChange(currentBindings, true);
+				shortcutOn = true;
+			}
+			return true;
+		}
+		else if(o instanceof String)
+		{
+			if (!dryRun)
+			{
+				setCurrentBindings(bindings);
+				sendShortcutPrefixOff();
+				invokeAction((String)o);
+			}
+			return true;
+		}
+		else if(o instanceof JEditBeanShell)
+		{
+			if (!dryRun)
+			{
+				setCurrentBindings(bindings);
+				sendShortcutPrefixOff();
+				invokeAction((JEditBeanShellAction)o);
+			}
+			return true;
+		}
+		if (!dryRun)
+		{
+			sendShortcutPrefixOff();
 		}
 		return false;
 	} //}}}

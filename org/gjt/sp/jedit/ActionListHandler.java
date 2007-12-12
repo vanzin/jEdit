@@ -35,19 +35,24 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 //}}}
 
+/**
+ * This class loads the actions.xml files into a {@link JEditActionSet}. * @author Slava Pestov
+ * @author Mike Dillon
+ */
 class ActionListHandler extends DefaultHandler
 {
 	//{{{ ActionListHandler constructor
-	ActionListHandler(String path, ActionSet actionSet)
+	ActionListHandler(String path, JEditActionSet actionSet)
 	{
 		this.path = path;
 		this.actionSet = actionSet;
-		stateStack = new Stack();
-		code = new StringBuffer();
-		isSelected = new StringBuffer();
+		stateStack = new Stack<String>();
+		code = new StringBuilder();
+		isSelected = new StringBuilder();
 	} //}}}
 
 	//{{{ resolveEntity() method
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "actions.dtd", getClass());
@@ -70,6 +75,7 @@ class ActionListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ characters() method
+	@Override
 	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
@@ -84,6 +90,7 @@ class ActionListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ startElement() method
+	@Override
 	public void startElement(String uri, String localName,
 				 String qName, Attributes attrs)
 	{
@@ -101,6 +108,7 @@ class ActionListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ endElement() method
+	@Override
 	public void endElement(String uri, String localName, String qName)
 	{
 		String tag = peekElement();
@@ -111,9 +119,14 @@ class ActionListHandler extends DefaultHandler
 			{
 				String selected = (isSelected.length() > 0) ?
 					isSelected.toString() : null;
-				actionSet.addAction(new BeanShellAction(actionName,
-					code.toString(),selected,
-					noRepeat,noRecord,noRememberLast));
+				JEditAbstractEditAction action = 
+					actionSet.createBeanShellAction(actionName,
+									code.toString(),
+									selected,
+									noRepeat,
+									noRecord,
+									noRememberLast);
+				actionSet.addAction(action);
 				noRepeat = noRecord = noRememberLast = false;
 				code.setLength(0);
 				isSelected.setLength(0);
@@ -129,6 +142,7 @@ class ActionListHandler extends DefaultHandler
 	} //}}}
 
 	//{{{ startDocument() method
+	@Override
 	public void startDocument()
 	{
 		try
@@ -137,7 +151,7 @@ class ActionListHandler extends DefaultHandler
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR,this, e);
 		}
 	} //}}}
 
@@ -145,17 +159,17 @@ class ActionListHandler extends DefaultHandler
 
 	//{{{ Instance variables
 	private String path;
-	private ActionSet actionSet;
+	private JEditActionSet actionSet;
 
 	private String actionName;
-	private StringBuffer code;
-	private StringBuffer isSelected;
+	private final StringBuilder code;
+	private final StringBuilder isSelected;
 
 	private boolean noRepeat;
 	private boolean noRecord;
 	private boolean noRememberLast;
 
-	private Stack stateStack;
+	private final Stack<String> stateStack;
 	//}}}
 
 	//{{{ pushElement() method
@@ -171,15 +185,14 @@ class ActionListHandler extends DefaultHandler
 	//{{{ peekElement() method
 	private String peekElement()
 	{
-		return (String) stateStack.peek();
+		return stateStack.peek();
 	} //}}}
 
 	//{{{ popElement() method
 	private String popElement()
 	{
-		return (String) stateStack.pop();
+		return stateStack.pop();
 	} //}}}
 
 	//}}}
-
 }

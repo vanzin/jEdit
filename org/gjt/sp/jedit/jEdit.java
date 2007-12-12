@@ -22,10 +22,18 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.DefaultKeyboardFocusManager;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.KeyboardFocusManager;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
@@ -377,7 +385,7 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
-		Options.SIMPLIFIED_KEY_HANDLING	= jEdit.getBooleanProperty("newkeyhandling");
+		Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
 
 		//{{{ Initialize server
@@ -1208,15 +1216,19 @@ public class jEdit
 		return builtInActionSet;
 	} //}}}
 
-	//{{{ getActionSets() method
+	// {{{ getActionSets() method
 	/**
 	 * Returns all registered action sets.
+	 * as of 4.3pre13 it returns a JEditActionSet[] instead of ActionSet[]
+	 * 
+	 * @return the ActionSet(s) (it is a JEditActionSet array but it contains
+	 *         only ActionSet
 	 * @since jEdit 4.0pre1
 	 */
-	public static ActionSet[] getActionSets()
+	public static JEditActionSet[] getActionSets() 
 	{
 		return actionContext.getActionSets();
-	} //}}}
+	} // }}}
 
 	//{{{ getAction() method
 	/**
@@ -2515,6 +2527,31 @@ public class jEdit
 			propsModTime = file2.lastModified();
 		}
 	} //}}}
+	
+	// {{{ createTextArea() method
+	/**
+	 * Create a standalone TextArea.
+	 * 
+	 * @return a textarea
+	 * @since 4.3pre13
+	 */
+	public static TextArea createTextArea()
+	{
+		final TextArea textArea = TextArea._createTextArea(true, new IPropertyManager()
+		{
+
+			public String getProperty(String name) 
+			{
+				return jEdit.getProperty(name);
+			}
+		});
+
+		EditPane.initPainter(textArea.getPainter());
+		textArea.setBuffer(new JEditBuffer());
+		textArea.getBuffer().setMode(ModeProvider.instance.getMode("text"));
+
+		return textArea;
+	} // }}}
 
 	//{{{ exit() method
 	/**
@@ -3925,15 +3962,15 @@ loop:		for(int i = 0; i < list.length; i++)
 	//{{{ initKeyBindings() method
 	/**
 	 * Loads all key bindings from the properties.
+	 * 
 	 * @since 3.1pre1
 	 */
 	private static void initKeyBindings()
 	{
 		inputHandler.removeAllKeyBindings();
 
-		ActionSet[] actionSets = getActionSets();
-		for(int i = 0; i < actionSets.length; i++)
-		{
+		JEditActionSet[] actionSets = getActionSets();
+		for (int i = 0; i < actionSets.length; i++) {
 			actionSets[i].initKeyBindings();
 		}
 	} //}}}

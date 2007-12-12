@@ -24,6 +24,10 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
+import java.io.IOException;
+import java.util.EventObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
@@ -46,10 +50,17 @@ import javax.swing.text.Segment;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.im.InputMethodRequests;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Properties;
 import java.util.TooManyListenersException;
+import org.gjt.sp.jedit.IPropertyManager;
+import org.gjt.sp.jedit.JEditActionContext;
+import org.gjt.sp.jedit.JEditActionSet;
+import org.gjt.sp.jedit.JEditBeanShellAction;
 //}}}
+import org.gjt.sp.util.IOUtilities;
 
 /**
  * jEdit's text component.<p>
@@ -66,12 +77,6 @@ import java.util.TooManyListenersException;
 public class TextArea extends JComponent
 {
 	//{{{ TextArea constructor
-	public TextArea()
-	{
-		this(false);
-	} //}}}
-
-	//{{{ TextArea constructor
 	/**
 	 * Instantiate a TextArea.
 	 * @param insideJEdit must be set to true if the textarea is embedded in jEdit
@@ -79,8 +84,26 @@ public class TextArea extends JComponent
 	public TextArea(boolean insideJEdit)
 	{
 		this(null);
-		inputHandlerProvider = new DefaultInputHandlerProvider(new TextAreaInputHandler(this));
+		actionContext = new JEditActionContext<JEditBeanShellAction, JEditActionSet<JEditBeanShellAction>>() 
+		{
+			@Override
+			public void invokeAction(EventObject evt, JEditBeanShellAction action)
+			{
+				action.invoke(TextArea.this);
+			}
+		};
+		
 		setMouseHandler(new TextAreaMouseHandler(this));
+		TextAreaInputHandler inputHandler = new TextAreaInputHandler(this)
+		{
+			@Override
+			protected JEditBeanShellAction getAction(String action) 
+			{
+				return TextArea.this.actionContext.getAction(action);
+			}
+		};
+		
+		inputHandlerProvider = new DefaultInputHandlerProvider(inputHandler);
 		if (insideJEdit)
 		{
 			return;
@@ -274,6 +297,7 @@ public class TextArea extends JComponent
 	 */
 	public AbstractInputHandler getInputHandler()
 	{
+		
 		return inputHandlerProvider.getInputHandler();
 	} //}}}
 
@@ -4715,6 +4739,19 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		gutter.repaint();
 		painter.repaint();
 	} //}}}
+	
+	//{{{ addActionSet() method
+	/**
+	 * Adds a new action set to the textarea's list of ActionSets.
+	 * Call this only on standalone textarea
+	 * 
+	 * @param actionSet the actionSet to add
+	 * @since jEdit 4.3pre13
+	 */
+	public void addActionSet(JEditActionSet<JEditBeanShellAction> actionSet)
+	{
+		actionContext.addActionSet(actionSet);
+	} //}}}
 
 	//{{{ Deprecated methods
 
@@ -4908,6 +4945,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	final FastRepaintManager repaintMgr;
 	DisplayManager displayManager;
 	final SelectionManager selectionManager;
+	/** 
+	 * The action context. 
+	 * It is used only when the textarea is standalone
+	 */
+	private JEditActionContext<JEditBeanShellAction,JEditActionSet<JEditBeanShellAction>> actionContext;
 	boolean bufferChanging;
 
 	int maxHorizontalScrollWidth;
@@ -6155,12 +6197,104 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		structureTimer.setInitialDelay(100);
 		structureTimer.setRepeats(false);
 	} //}}}
+	
+	//{{{ _createTextArea() method
+	public static TextArea _createTextArea(boolean insidejEdit, final IPropertyManager iPropertyManager)
+	{
+		final TextArea textArea = new TextArea(insidejEdit);
+		textArea.setMouseHandler(new TextAreaMouseHandler(textArea));
+		textArea.setTransferHandler(new TextAreaTransferHandler());
+
+		JEditActionSet<JEditBeanShellAction> actionSet = new JEditActionSet<JEditBeanShellAction>(
+				null, TextArea.class.getResource("textarea.actions.xml")) 
+		{
+			@Override
+			protected JEditBeanShellAction[] getArray(int size) 
+			{
+				return new JEditBeanShellAction[size];
+			}
+
+			@Override
+			protected String getProperty(String name)
+			{
+				return iPropertyManager.getProperty(name);
+			}
+
+			public AbstractInputHandler getInputHandler()
+			{
+				return textArea.getInputHandler();
+			}
+			
+			protected JEditBeanShellAction createBeanShellAction(String actionName,
+									     String code,
+									     String selected,
+									     boolean noRepeat,
+									     boolean noRecord,
+									     boolean noRememberLast)
+			{
+				return new JEditBeanShellAction(actionName,code,selected,noRepeat,noRecord,noRememberLast);
+			}
+		};
+		textArea.addActionSet(actionSet);
+		actionSet.load();
+		actionSet.initKeyBindings();
+		return textArea;
+	}
+	
+	// {{{ createTextArea() method
+	/**
+	 * Create a standalone TextArea.
+	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
+	 * 
+	 * @param iPropertyManager the properties where key bindings are stored
+	 * @return a textarea
+	 * @since 4.3pre13
+	 */
+	public static TextArea createTextArea(IPropertyManager iPropertyManager)
+	{
+		final TextArea textArea = _createTextArea(false, iPropertyManager);
+		return textArea;
+	} // }}}
+	
+	// {{{ createTextArea() method
+	/**
+	 * Create a standalone TextArea.
+	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
+	 * 
+	 * @return a textarea
+	 * @since 4.3pre13
+	 */
+	public static TextArea createTextArea()
+	{
+		final Properties props = new Properties();
+		InputStream in = TextArea.class.getResourceAsStream("/org/gjt/sp/jedit/jedit_keys.props");
+		try
+		{
+			props.load(in);
+		}
+		catch (IOException e)
+		{
+			Log.log(Log.ERROR, TextArea.class, e);
+		}		
+		finally
+		{
+			IOUtilities.closeQuietly(in);
+		}
+		final TextArea textArea = _createTextArea(false, new IPropertyManager() {
+
+			public String getProperty(String name) {
+				return (String) props.get(name);
+			}
+		});
+		textArea.getBuffer().setProperty("folding", "explicit");
+		return textArea;
+	} // }}}
 
 	//{{{ main() method
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame();
-		TextArea text = new TextArea();
+		TextArea text = createTextArea();
 		frame.getContentPane().add(text);
 		frame.pack();
 		frame.setVisible(true);

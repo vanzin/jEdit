@@ -272,11 +272,11 @@ class ContextAddDialog extends EnhancedDialog
 
 		JPanel actionPanel = new JPanel(new BorderLayout(6,6));
 
-		ActionSet[] actionsList = jEdit.getActionSets();
+		JEditActionSet[] actionsList = jEdit.getActionSets();
 		Vector vec = new Vector(actionsList.length);
 		for(int i = 0; i < actionsList.length; i++)
 		{
-			ActionSet actionSet = actionsList[i];
+			ActionSet actionSet = (ActionSet) actionsList[i];
 			if(actionSet.getActionCount() != 0)
 				vec.addElement(actionSet);
 		}

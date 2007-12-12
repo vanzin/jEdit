@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.gui;
 import java.awt.event.InputEvent;
 import java.awt.Toolkit;
 import java.util.Hashtable;
-import java.util.StringTokenizer;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -79,198 +78,19 @@ public class DefaultInputHandler extends InputHandler
 		this(view,copy.bindings);
 	} //}}}
 
-	//{{{ addKeyBinding() method
-	/**
-	 * Adds a key binding to this input handler. The key binding is
-	 * a list of white space separated key strokes of the form
-	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
-	 * or S for Shift, and key is either a character (a-z) or a field
-	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
-	 * @param keyBinding The key binding
-	 * @param action The action
-	 * @since jEdit 4.2pre1
-	 */
-	public void addKeyBinding(String keyBinding, String action)
-	{
-		addKeyBinding(keyBinding,(Object)action);
-	} //}}}
-
-	//{{{ addKeyBinding() method
-	/**
-	 * Adds a key binding to this input handler. The key binding is
-	 * a list of white space separated key strokes of the form
-	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
-	 * or S for Shift, and key is either a character (a-z) or a field
-	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
-	 * @param keyBinding The key binding
-	 * @param action The action
-	 */
-	public void addKeyBinding(String keyBinding, EditAction action)
-	{
-		addKeyBinding(keyBinding,(Object)action);
-	} //}}}
-
-	//{{{ addKeyBinding() method
-	/**
-	 * Adds a key binding to this input handler. The key binding is
-	 * a list of white space separated key strokes of the form
-	 * <i>[modifiers+]key</i> where modifier is C for Control, A for Alt,
-	 * or S for Shift, and key is either a character (a-z) or a field
-	 * name in the KeyEvent class prefixed with VK_ (e.g., BACK_SPACE)
-	 * @param keyBinding The key binding
-	 * @param action The action
-	 * @since jEdit 4.3pre1
-	 */
-	public void addKeyBinding(String keyBinding, Object action)
-	{
-		Hashtable current = bindings;
-
-		String prefixStr = null;
-
-		StringTokenizer st = new StringTokenizer(keyBinding);
-		while(st.hasMoreTokens())
-		{
-			String keyCodeStr = st.nextToken();
-			if(prefixStr == null)
-				prefixStr = keyCodeStr;
-			else
-				prefixStr = prefixStr + " " + keyCodeStr;
-
-			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
-			if(keyStroke == null)
-				return;
-
-			if(st.hasMoreTokens())
-			{
-				Object o = current.get(keyStroke);
-				if(o instanceof Hashtable)
-					current = (Hashtable)o;
-				else
-				{
-					Hashtable hash = new Hashtable();
-					hash.put(PREFIX_STR,prefixStr);
-					o = hash;
-					current.put(keyStroke,o);
-					current = (Hashtable)o;
-				}
-			}
-			else
-				current.put(keyStroke,action);
-		}
-	} //}}}
-
-	//{{{ removeKeyBinding() method
-	/**
-	 * Removes a key binding from this input handler. This is not yet
-	 * implemented.
-	 * @param keyBinding The key binding
-	 */
-	public void removeKeyBinding(String keyBinding)
-	{
-		Hashtable current = bindings;
-
-		StringTokenizer st = new StringTokenizer(keyBinding);
-		while(st.hasMoreTokens())
-		{
-			String keyCodeStr = st.nextToken();
-			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
-			if(keyStroke == null)
-				return;
-
-			if(st.hasMoreTokens())
-			{
-				Object o = current.get(keyStroke);
-				if(o instanceof Hashtable)
-					current = ((Hashtable)o);
-				else if(o != null)
-				{
-					// we have binding foo
-					// but user asks to remove foo bar?
-					current.remove(keyStroke);
-					return;
-				}
-				else
-				{
-					// user asks to remove non-existent
-					return;
-				}
-			}
-			else
-				current.remove(keyStroke);
-		}
-	} //}}}
-
-	//{{{ removeAllKeyBindings() method
-	/**
-	 * Removes all key bindings from this input handler.
-	 */
-	public void removeAllKeyBindings()
-	{
-		bindings.clear();
-	} //}}}
-
-	//{{{ getKeyBinding() method
-	/**
-	 * Returns either an edit action, or a hashtable if the specified key
-	 * is a prefix.
-	 * @param keyBinding The key binding
-	 * @since jEdit 3.2pre5
-	 */
-	public Object getKeyBinding(String keyBinding)
-	{
-		Hashtable current = bindings;
-		StringTokenizer st = new StringTokenizer(keyBinding);
-
-		while(st.hasMoreTokens())
-		{
-			KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(
-				st.nextToken());
-			if(keyStroke == null)
-				return null;
-
-			if(st.hasMoreTokens())
-			{
-				Object o = current.get(keyStroke);
-				if(o instanceof Hashtable)
-				{
-					if(!st.hasMoreTokens())
-						return o;
-					else
-						current = (Hashtable)o;
-				}
-				else
-					return o;
-			}
-			else
-			{
-				return current.get(keyStroke);
-			}
-		}
-
-		return null;
-	} //}}}
-
 	//{{{ isPrefixActive() method
 	/**
 	 * Returns if a prefix key has been pressed.
 	 */
+	@Override
 	public boolean isPrefixActive()
 	{
 		return bindings != currentBindings
 			|| super.isPrefixActive();
 	} //}}}
 
-	//{{{ setBindings() method
-	/**
-	 * Replace the set of key bindings.
-	 * @since jEdit 4.3pre1
-	 */
-	public void setBindings(Hashtable bindings)
-	{
-		this.bindings = this.currentBindings = bindings;
-	} //}}}
-
 	//{{{ setCurrentBindings() method
+	@Override
 	public void setCurrentBindings(Hashtable bindings)
 	{
 		view.getStatus().setMessage((String)bindings.get(PREFIX_STR));
@@ -306,7 +126,8 @@ public class DefaultInputHandler extends InputHandler
 		{
 			if(input != '\0')
 			{
-				if (!dryRun) {
+				if (!dryRun)
+				{
 					setCurrentBindings(bindings);
 					invokeReadNextChar(input);
 					repeatCount = 1;
@@ -315,7 +136,8 @@ public class DefaultInputHandler extends InputHandler
 			}
 			else
 			{
-				if (!dryRun) {
+				if (!dryRun) 
+				{
 					readNextChar = null;
 					view.getStatus().setMessage(null);
 				}
@@ -325,7 +147,8 @@ public class DefaultInputHandler extends InputHandler
 		Object o = currentBindings.get(keyStroke);
 		if(o == null)
 		{
-			if (!dryRun) {
+			if (!dryRun) 
+			{
 				// Don't beep if the user presses some
 				// key we don't know about unless a
 				// prefix is active. Otherwise it will
@@ -338,11 +161,15 @@ public class DefaultInputHandler extends InputHandler
 					repeatCount = 1;
 					setCurrentBindings(bindings);
 				}
-				else if(input != '\0') {
-					if (!keyStroke.isFromGlobalContext()) { // let user input be only local
+				else if(input != '\0') 
+				{
+					if (!keyStroke.isFromGlobalContext()) 
+					{ // let user input be only local
 						userInput(input);
 					}
-				} else	{
+				} 
+				else
+				{
 					// this is retarded. excuse me while I drool
 					// and make stupid noises
 					if(KeyEventWorkaround.isNumericKeypad(keyStroke.key))
@@ -353,7 +180,8 @@ public class DefaultInputHandler extends InputHandler
 		}
 		else if(o instanceof Hashtable)
 		{
-			if (!dryRun) {
+			if (!dryRun) 
+			{
 				setCurrentBindings((Hashtable)o);
 				ShortcutPrefixActiveEvent.firePrefixStateChange(currentBindings, true);
 				shortcutOn = true;
@@ -362,7 +190,8 @@ public class DefaultInputHandler extends InputHandler
 		}
 		else if(o instanceof String)
 		{
-			if (!dryRun) {
+			if (!dryRun) 
+			{
 				setCurrentBindings(bindings);
 				sendShortcutPrefixOff();
 				invokeAction((String)o);
@@ -371,33 +200,20 @@ public class DefaultInputHandler extends InputHandler
 		}
 		else if(o instanceof EditAction)
 		{
-			if (!dryRun) {
+			if (!dryRun)
+			{
 				setCurrentBindings(bindings);
 				sendShortcutPrefixOff();
 				invokeAction((EditAction)o);
 			}
 			return true;
 		}
-		if (!dryRun) {
+		if (!dryRun)
+		{
 			sendShortcutPrefixOff();
 		}
 		return false;
 	} //}}}
-
-	//{{{ handleKey() methodprotected void sendShortcutPrefixOff()
-	/**
-	 *  If 
-	 */
-	protected void sendShortcutPrefixOff()
-	{
-		if( shortcutOn)
-		{
-			ShortcutPrefixActiveEvent.firePrefixStateChange(null, false);
-			shortcutOn = false;
-		}
-	} //}}}
-	
-	protected boolean shortcutOn=false;
 	
 	//{{{ getSymbolicModifierName() method
 	/**
@@ -426,14 +242,4 @@ public class DefaultInputHandler extends InputHandler
 	{
 		return KeyEventTranslator.getModifierString(evt);
 	} //}}}
-
-	//{{{ Private members
-
-	// Stores prefix name in bindings hashtable
-	public static Object PREFIX_STR = "PREFIX_STR";
-
-	private Hashtable bindings;
-	private Hashtable currentBindings;
-	//}}}
-
 }
