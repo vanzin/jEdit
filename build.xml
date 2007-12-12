@@ -132,6 +132,7 @@
 				<include name="org/gjt/sp/jedit/default.abbrevs" />
 				<include name="org/gjt/sp/jedit/*.props" />
 				<include name="org/gjt/sp/jedit/*.xml" />
+				<include name="org/gjt/sp/jedit/textarea/*.xml" />
 				<include name="org/gjt/sp/jedit/icons/*.gif" />
 				<include name="org/gjt/sp/jedit/icons/*.jpg" />
 				<include name="org/gjt/sp/jedit/icons/*.png" />
@@ -175,10 +176,21 @@
 				<include name="org/gjt/sp/jedit/Registers.class"/>
 				<include name="org/gjt/sp/jedit/TextUtilities.class"/>
 				<include name="org/gjt/sp/jedit/Options.class"/>
+				<include name="org/gjt/sp/jedit/IPropertyManager.class"/>
+				<include name="org/gjt/sp/jedit/JEditActionContext.class"/>
+				<include name="org/gjt/sp/jedit/JEditActionSet.class"/>
+				<include name="org/gjt/sp/jedit/JEditAbstractEditAction.class"/>
+				<include name="org/gjt/sp/jedit/JEditBeanShellAction.class"/>
+				<include name="org/gjt/sp/jedit/ActionListHandler.class"/>
 				<include name="org/gjt/sp/util/IntegerArray.class"/>
+				<include name="org/gjt/sp/util/IOUtilities.class"/>
 				<include name="org/gjt/sp/util/StandardUtilities.class"/>
 				<include name="org/gjt/sp/util/XMLUtilities.class"/>
 				<include name="org/gjt/sp/util/Log*.class"/>
+				<include name="org/gjt/sp/jedit/textarea/*.xml" />
+			</fileset>
+            <fileset dir=".">
+				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
 			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="org.gjt.sp.jedit.textarea.TextArea"/>
