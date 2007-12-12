@@ -6239,9 +6239,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		actionSet.load();
 		actionSet.initKeyBindings();
 		return textArea;
-	}
+	} //}}}
 	
-	// {{{ createTextArea() method
+	//{{{ createTextArea() method
 	/**
 	 * Create a standalone TextArea.
 	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
@@ -6256,7 +6256,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		return textArea;
 	} // }}}
 	
-	// {{{ createTextArea() method
+	//{{{ createTextArea() method
 	/**
 	 * Create a standalone TextArea.
 	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
@@ -6280,9 +6280,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			IOUtilities.closeQuietly(in);
 		}
-		final TextArea textArea = _createTextArea(false, new IPropertyManager() {
-
-			public String getProperty(String name) {
+		TextArea textArea = _createTextArea(false, new IPropertyManager() 
+		{
+			public String getProperty(String name) 
+			{
 				return (String) props.get(name);
 			}
 		});
