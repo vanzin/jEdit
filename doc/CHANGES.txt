@@ -6,8 +6,15 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova and xlinuks for
 contributing to this release.
 
 {{{ Bug Fixes
--After some keystroke like alt+tab the numpad stopped working until another 
-printable key is pressed (#1788460) (Matthieu Casanova)
+
+- After some keystroke like alt+tab the numpad stopped working until another
+  printable key is pressed (#1788460) (Matthieu Casanova)
+
+- Windows installer now look for javaw.exe in SysWOW64 directory before
+  in System32. This is required on 64-bit Windows XP and Sun's
+  JRE(1.6.0u3) though 64-bit package is installed. Nothing is changed on
+  32-bit environment because it doesn't have SysWOW64 directory.
+  (Kazutoshi Satoda - SF.net Bug #1849762)
 
 }}}
 {{{ Miscellaneous

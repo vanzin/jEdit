@@ -148,11 +148,37 @@ function javaPath(Param: String): String;
 var
 	javaVersion : String;
 	javaHome : String;
+	sysWow64 : String;
 	path : String;
 begin
 	if Length(javawExePath) > 0 then begin
 		Result := javawExePath;
 		exit;
+	end;
+
+	// Workaround for 64-bit Windows.
+	// GetSysWow64Dir must be checked before GetSystemDir because of
+	// the following reasons.
+	//   - Sun's JRE 1.6.0_03 puts javaw.exe in SysWOW64 even if user
+	//     chose the 64-bit installer. This is not documented. But an
+	//     user reports this. See SF.net bug #1849762 for more detail.
+	//   - "File System Redirector"
+	//     http://msdn2.microsoft.com/en-us/library/aa384187.aspx
+	//   - This installer is a 32-bit program while installed paths are
+	//     used by 64-bit programs.
+	// Without this workaround, the installer finds javaw.exe in
+	// System32 which is mimiced by the redirector. But all links
+	// pointing there doesn't work for 64-bit programs (including
+	// Windows Explorer) because javaw.exe really is in SysWOW64.
+	sysWow64 := GetSysWow64Dir;
+	if sysWow64 <> '' then begin
+		path := sysWow64 + '\javaw.exe';
+		if FileExists(path) then begin
+			Log('(SysWow64Dir) found javaw.exe: ' + path);
+			javawExePath := path;
+			Result := javawExePath;
+			exit;
+		end;
 	end;
 
 	path := GetSystemDir + '\javaw.exe';
