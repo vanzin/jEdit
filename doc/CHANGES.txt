@@ -2,11 +2,10 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre13
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova and xlinuks for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, xlinuks,
+Kazutoshi Satoda and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
-
 - After some keystroke like alt+tab the numpad stopped working until another
   printable key is pressed (#1788460) (Matthieu Casanova)
 
@@ -21,6 +20,13 @@ contributing to this release.
 
 - [About jEdit] dialog is refined. It now performs smoother animation
   and fade out effect. (xlinuks)
+
+}}}
+{{{ API Changes
+
+- Added class AbstractContextOptionPane for plugins which want to provide a
+  panel similar to jEdit's context menu editor. The API is sort of restrictive
+  right now, but can be enhanced later, if needed. (Marcelo Vanzin)
 
 }}}
 
