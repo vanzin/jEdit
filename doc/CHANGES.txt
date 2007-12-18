@@ -14,6 +14,9 @@ Kazutoshi Satoda and Marcelo Vanzin for contributing to this release.
   JRE(1.6.0u3) though 64-bit package is installed. Nothing is changed on
   32-bit environment because it doesn't have SysWOW64 directory.
   (Kazutoshi Satoda - SF.net Bug #1849762)
+  
+- If the autosave file path do not exists, it is ignored silently. As soon as 
+  this path exists again it will work as it should (#1825720) (Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous

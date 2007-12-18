@@ -81,6 +81,13 @@ public class BufferAutosaveRequest extends BufferIORequest
 
 				write(buffer,out);
 			}
+			catch (FileNotFoundException e)
+			{
+				// Do not log because it will happens every 30 seconds.
+				// If the path reappears it will work again
+				// No need to delete the file since it doesn't exists
+				// No need to close the outputstream, it is done in the finally
+			}
 			catch(Exception e)
 			{
 				Log.log(Log.ERROR,this,e);
