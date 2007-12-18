@@ -428,13 +428,13 @@ class ToolBarEditDialog extends EnhancedDialog
 
 		JPanel actionPanel = new JPanel(new BorderLayout(6,6));
 
-		JEditActionSet[] actionsList = jEdit.getActionSets();
+		ActionSet[] actionsList = jEdit.getActionSets();
 		String selectedActionSet = jEdit.getProperty("options.toolbar.selectedActionSet");
 		ActionSet selectedItem = null;
 		Vector<ActionSet> vec = new Vector<ActionSet>(actionsList.length);
 		for(int i = 0; i < actionsList.length; i++)
 		{
-			ActionSet actionSet = (ActionSet) actionsList[i];
+			ActionSet actionSet = actionsList[i];
 			if(actionSet.getActionCount() != 0)
 			{
 				vec.add(actionSet);

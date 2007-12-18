@@ -1219,13 +1219,11 @@ public class jEdit
 	// {{{ getActionSets() method
 	/**
 	 * Returns all registered action sets.
-	 * as of 4.3pre13 it returns a JEditActionSet[] instead of ActionSet[]
 	 * 
-	 * @return the ActionSet(s) (it is a JEditActionSet array but it contains
-	 *         only ActionSet
+	 * @return the ActionSet(s)
 	 * @since jEdit 4.0pre1
 	 */
-	public static JEditActionSet[] getActionSets() 
+	public static ActionSet[] getActionSets() 
 	{
 		return actionContext.getActionSets();
 	} // }}}
@@ -3969,7 +3967,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	{
 		inputHandler.removeAllKeyBindings();
 
-		JEditActionSet[] actionSets = getActionSets();
+		ActionSet[] actionSets = getActionSets();
 		for (int i = 0; i < actionSets.length; i++) {
 			actionSets[i].initKeyBindings();
 		}

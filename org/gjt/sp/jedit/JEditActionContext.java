@@ -23,6 +23,7 @@
 
 package org.gjt.sp.jedit;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -99,12 +100,14 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 	//{{{ getActionSets() method
 	/**
 	 * Returns all registered action sets.
-	 * @since jEdit 4.23pre13
+	 * @since jEdit 4.3pre13
 	 */
-	public JEditActionSet[] getActionSets()
+	public E[] getActionSets()
 	{
-		// todo : test this method
-		JEditActionSet[] retVal = new JEditActionSet[actionSets.size()];
+		if (actionSets.isEmpty())
+			return null;
+		Class clazz = actionSets.get(0).getClass();
+		E[] retVal =(E[]) Array.newInstance(clazz, actionSets.size());
 		actionSets.copyInto(retVal);
 		return retVal;
 	} //}}}
@@ -113,7 +116,8 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 	/**
 	 * Returns the specified action.
 	 * @param name The action name
-	 * @since jEdit 4.2pre1
+	 * @return a JEditAbstractEditAction or null if it doesn't exists
+	 * @since jEdit 4.3pre13
 	 */
 	public F getAction(String name)
 	{
@@ -129,7 +133,8 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 	 * Returns the action set that contains the specified action.
 	 *
 	 * @param action The action
-	 * @since jEdit 4.2pre1
+	 * @return the actionSet that contains the given action
+	 * @since jEdit 4.3pre13
 	 */
 	public E getActionSetForAction(String action)
 	{
@@ -158,6 +163,10 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 
 	//{{{ Package-private members
 	String[] actionNames;
+	/** 
+	 * This map contains as key an action name, 
+	 * and as value the JEditActionSet that contains this action
+	 */
 	Hashtable<String, E> actionHash = new Hashtable<String, E>();
 	
 	/** A map of built-in actions that were overridden by plugins. */

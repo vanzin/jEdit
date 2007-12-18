@@ -39,4 +39,33 @@ import java.util.*;
  */
 public abstract class ActionContext extends JEditActionContext<EditAction, ActionSet>
 {
+	//{{{ getActionSetForAction() method
+	/**
+	 * Returns the action set that contains the specified action.
+	 * This method is still here for binary compatility
+	 *
+	 * @param action The action
+	 * @return the actionSet that contains the given action
+	 * @since jEdit 4.2pre1
+	 */
+	@Override
+	public ActionSet getActionSetForAction(String action)
+	{
+		return super.getActionSetForAction(action);
+	} //}}}
+
+	//{{{ getAction() method
+	/**
+	 * Returns the specified action.
+	 * @param name The action name
+	 * @return a EditAction or null if it doesn't exists
+	 * @since jEdit 4.2pre1
+	 */
+	@Override
+	public EditAction getAction(String name)
+	{
+		return super.getAction(name);
+	} //}}}
+	
+	
 }

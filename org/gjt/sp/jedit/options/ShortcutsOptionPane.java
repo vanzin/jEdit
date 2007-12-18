@@ -142,10 +142,10 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	{
 		Vector<KeyBinding[]> allBindings = new Vector<KeyBinding[]>();
 		models = new Vector<ShortcutsModel>();
-		JEditActionSet[] actionSets = jEdit.getActionSets();
+		ActionSet[] actionSets = jEdit.getActionSets();
 		for(int i = 0; i < actionSets.length; i++)
 		{
-			ActionSet actionSet = (ActionSet) actionSets[i];
+			ActionSet actionSet = actionSets[i];
 			if(actionSet.getActionCount() != 0)
 			{
 				String modelLabel = actionSet.getLabel();
