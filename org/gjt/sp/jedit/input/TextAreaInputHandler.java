@@ -21,9 +21,9 @@
  */
 package org.gjt.sp.jedit.input;
 
+//{{{ Imports
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.MiscUtilities;
-import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.gui.KeyEventTranslator;
 import org.gjt.sp.jedit.gui.KeyEventWorkaround;
@@ -34,10 +34,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
-import org.gjt.sp.jedit.JEditBeanShell;
 import org.gjt.sp.jedit.JEditBeanShellAction;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.ShortcutPrefixActiveEvent;
+//}}}
 
 /**
  * This class manage the key bindings and execute the actions binded on the
@@ -206,8 +206,10 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 		}
 	} //}}}
 	
+	//{{{ getAction() method
 	protected abstract JEditBeanShellAction getAction(String action);
-	
+	//}}}
+
 	//{{{ invokeAction() method
 	/**
 	 * Invokes the specified action, repeating and recording it as
@@ -401,7 +403,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 			}
 			return true;
 		}
-		else if(o instanceof JEditBeanShell)
+		else if(o instanceof JEditBeanShellAction)
 		{
 			if (!dryRun)
 			{
