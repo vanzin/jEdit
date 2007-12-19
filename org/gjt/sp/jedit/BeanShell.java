@@ -24,11 +24,9 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import org.gjt.sp.jedit.bsh.*;
-import org.gjt.sp.jedit.bsh.classpath.ClassManagerImpl;
 
 import java.io.*;
 import java.lang.ref.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
@@ -58,7 +56,12 @@ import org.gjt.sp.util.Log;
  */
 public class BeanShell
 {
-	private static final String REQUIRED_VERSION = "2.0b1.1-jedit-1";
+	private static final BeanShellFacade<View> bsh = new MyBeanShellFacade();
+	
+	static void init()
+	{
+		Log.log(Log.MESSAGE, BeanShell.class, "Beanshell Init");
+	}
 
 	//{{{ evalSelection() method
 	/**
@@ -67,15 +70,7 @@ public class BeanShell
 	 */
 	public static void evalSelection(View view, JEditTextArea textArea)
 	{
-		String command = textArea.getSelectedText();
-		if(command == null)
-		{
-			view.getToolkit().beep();
-			return;
-		}
-		Object returnValue = eval(view,global,command);
-		if(returnValue != null)
-			textArea.setSelectedText(returnValue.toString());
+		bsh.evalSelection(view, textArea);
 	} //}}}
 
 	//{{{ showEvaluateDialog() method
@@ -103,14 +98,14 @@ public class BeanShell
 			{
 				for(int i = 0; i < repeat; i++)
 				{
-					returnValue = _eval(view,global,command);
+					returnValue = bsh._eval(view,bsh.getNameSpace(),command);
 				}
 			}
 			catch(Throwable e)
 			{
 				Log.log(Log.ERROR,BeanShell.class,e);
 
-				handleException(view,null,e);
+				bsh.handleException(view,null,e);
 			}
 
 			if(returnValue != null)
@@ -169,7 +164,7 @@ public class BeanShell
 		{
 			buffer.beginCompoundEdit();
 
-			BeanShell.eval(view,global,script);
+			bsh.eval(view,script);
 		}
 		finally
 		{
@@ -215,7 +210,7 @@ public class BeanShell
 		{
 			Log.log(Log.ERROR,BeanShell.class,e);
 
-			handleException(view,path,e);
+			bsh.handleException(view,path,e);
 		}
 	} //}}}
 
@@ -250,7 +245,7 @@ public class BeanShell
 		{
 			Log.log(Log.ERROR,BeanShell.class,e);
 
-			handleException(view,path,e);
+			bsh.handleException(view,path,e);
 		}
 	} //}}}
 
@@ -284,8 +279,8 @@ public class BeanShell
 		boolean ownNamespace) throws Exception
 	{
 		_runScript(view,path,in,ownNamespace
-			? new NameSpace(global,"namespace")
-			: global);
+			? new NameSpace(bsh.getNameSpace(),"namespace")
+			: bsh.getNameSpace());
 	} //}}}
 
 	//{{{ _runScript() method
@@ -314,7 +309,7 @@ public class BeanShell
 	{
 		Log.log(Log.MESSAGE,BeanShell.class,"Running script " + path);
 
-		Interpreter interp = createInterpreter(namespace);
+		Interpreter interp =bsh.createInterpreter(namespace);
 
 		VFS vfs = null;
 		Object session = null;
@@ -333,7 +328,7 @@ public class BeanShell
 					buffer.getLength()));
 			}
 
-			setupDefaultVariables(namespace,view);
+			bsh.setupDefaultVariables(namespace,view);
 			interp.set("scriptPath",path);
 
 			running = true;
@@ -342,7 +337,7 @@ public class BeanShell
 		}
 		catch(Exception e)
 		{
-			unwrapException(e);
+			BeanShellFacade.unwrapException(e);
 		}
 		finally
 		{
@@ -365,9 +360,9 @@ public class BeanShell
 			try
 			{
 				// no need to do this for macros!
-				if(namespace == global)
+				if(namespace == bsh.getNameSpace())
 				{
-					resetDefaultVariables(namespace);
+					bsh.resetDefaultVariables(namespace);
 					interp.unset("scriptPath");
 				}
 			}
@@ -391,18 +386,7 @@ public class BeanShell
 	 */
 	public static Object eval(View view, NameSpace namespace, String command)
 	{
-		try
-		{
-			return _eval(view,namespace,command);
-		}
-		catch(Throwable e)
-		{
-			Log.log(Log.ERROR,BeanShell.class,e);
-
-			handleException(view,null,e);
-		}
-
-		return null;
+		return bsh.eval(view, namespace, command);
 	} //}}}
 
 	//{{{ _eval() method
@@ -422,32 +406,7 @@ public class BeanShell
 	public static Object _eval(View view, NameSpace namespace, String command)
 		throws Exception
 	{
-		Interpreter interp = createInterpreter(namespace);
-
-		try
-		{
-			setupDefaultVariables(namespace,view);
-			if(Debug.BEANSHELL_DEBUG)
-				Log.log(Log.DEBUG,BeanShell.class,command);
-			return interp.eval(command);
-		}
-		catch(Exception e)
-		{
-			unwrapException(e);
-			// never called
-			return null;
-		}
-		finally
-		{
-			try
-			{
-				resetDefaultVariables(namespace);
-			}
-			catch(UtilEvalError e)
-			{
-				// do nothing
-			}
-		}
+		return bsh._eval(view, namespace, command);
 	} //}}}
 
 	//{{{ cacheBlock() method
@@ -464,19 +423,7 @@ public class BeanShell
 	public static BshMethod cacheBlock(String id, String code, boolean namespace)
 		throws Exception
 	{
-		String name = "__internal_" + id;
-
-		// evaluate a method declaration
-		if(namespace)
-		{
-			_eval(null,global,name + "(ns) {\nthis.callstack.set(0,ns);\n" + code + "\n}");
-			return global.getMethod(name,new Class[] { NameSpace.class });
-		}
-		else
-		{
-			_eval(null,global,name + "() {\n" + code + "\n}");
-			return global.getMethod(name,new Class[0]);
-		}
+		return bsh.cacheBlock(id, code, namespace);
 	} //}}}
 
 	//{{{ runCachedBlock() method
@@ -493,43 +440,7 @@ public class BeanShell
 	public static Object runCachedBlock(BshMethod method, View view,
 		NameSpace namespace) throws Exception
 	{
-		boolean useNamespace;
-		if(namespace == null)
-		{
-			useNamespace = false;
-			namespace = global;
-		}
-		else
-			useNamespace = true;
-
-		try
-		{
-			setupDefaultVariables(namespace,view);
-
-			Object retVal = method.invoke(useNamespace
-				? new Object[] { namespace }
-				: NO_ARGS,
-				interpForMethods,new CallStack(), null);
-			if(retVal instanceof Primitive)
-			{
-				if(retVal == Primitive.VOID)
-					return null;
-				else
-					return ((Primitive)retVal).getValue();
-			}
-			else
-				return retVal;
-		}
-		catch(Exception e)
-		{
-			unwrapException(e);
-			// never called
-			return null;
-		}
-		finally
-		{
-			resetDefaultVariables(namespace);
-		}
+		return bsh.runCachedBlock(method, view, namespace);
 	} //}}}
 
 	//{{{ isScriptRunning() method
@@ -549,7 +460,7 @@ public class BeanShell
 	 */
 	public static NameSpace getNameSpace()
 	{
-		return global;
+		return bsh.getNameSpace();
 	} //}}}
 
 	//{{{ Deprecated functions
@@ -586,7 +497,7 @@ public class BeanShell
 	public static Object eval(View view, String command,
 		boolean rethrowBshErrors)
 	{
-		return eval(view,global,command);
+		return bsh.eval(view,command);
 	} //}}}
 
 	//{{{ eval() method
@@ -604,45 +515,6 @@ public class BeanShell
 
 	//{{{ Package-private members
 
-	//{{{ init() method
-	static void init()
-	{
-		/*try
-		{
-			NameSpace.class.getMethod("addCommandPath",
-				new Class[] { String.class, Class.class });
-		}
-		catch(Exception e)
-		{
-			Log.log(Log.ERROR,BeanShell.class,"You have BeanShell version " + getVersion() + " in your CLASSPATH.");
-			Log.log(Log.ERROR,BeanShell.class,"Please remove it from the CLASSPATH since jEdit can only run with the bundled BeanShell version " + REQUIRED_VERSION);
-			System.exit(1);
-		} */
-
-		classManager = new ClassManagerImpl();
-		classManager.setClassLoader(new JARClassLoader());
-
-		global = new NameSpace(classManager,
-			"jEdit embedded BeanShell interpreter");
-		global.importPackage("org.gjt.sp.jedit");
-		global.importPackage("org.gjt.sp.jedit.browser");
-		global.importPackage("org.gjt.sp.jedit.buffer");
-		global.importPackage("org.gjt.sp.jedit.gui");
-		global.importPackage("org.gjt.sp.jedit.help");
-		global.importPackage("org.gjt.sp.jedit.io");
-		global.importPackage("org.gjt.sp.jedit.menu");
-		global.importPackage("org.gjt.sp.jedit.msg");
-		global.importPackage("org.gjt.sp.jedit.options");
-		global.importPackage("org.gjt.sp.jedit.pluginmgr");
-		global.importPackage("org.gjt.sp.jedit.print");
-		global.importPackage("org.gjt.sp.jedit.search");
-		global.importPackage("org.gjt.sp.jedit.syntax");
-		global.importPackage("org.gjt.sp.jedit.textarea");
-		global.importPackage("org.gjt.sp.util");
-
-		interpForMethods = createInterpreter(global);
-	} //}}}
-
 	//{{{ resetClassManager() method
 	/**
 	 * Causes BeanShell internal structures to drop references to cached
@@ -650,7 +522,7 @@ public class BeanShell
 	 */
 	static void resetClassManager()
 	{
-		classManager.reset();
+		bsh.resetClassManager();
 	} //}}}
 
 	//}}}
@@ -658,157 +530,64 @@ public class BeanShell
 	//{{{ Private members
 
 	//{{{ Static variables
-	private static final Object[] NO_ARGS = new Object[0];
-	private static BshClassManager classManager;
-	private static Interpreter interpForMethods;
-	private static NameSpace global;
 	private static boolean running;
 	//}}}
 
-	//{{{ setupDefaultVariables() method
-	private static void setupDefaultVariables(NameSpace namespace, View view)
-		throws UtilEvalError
-	{
-		if(view != null)
-		{
-			EditPane editPane = view.getEditPane();
-			namespace.setVariable("view",view, false);
-			namespace.setVariable("editPane",editPane, false);
-			namespace.setVariable("buffer",editPane.getBuffer(), false);
-			namespace.setVariable("textArea",editPane.getTextArea(), false);
-			namespace.setVariable("wm",view.getDockableWindowManager(), false);
-		}
-	} //}}}
-
-	//{{{ resetDefaultVariables() method
-	private static void resetDefaultVariables(NameSpace namespace)
-		throws UtilEvalError
-	{
-		namespace.setVariable("view",null, false);
-		namespace.setVariable("editPane",null, false);
-		namespace.setVariable("buffer",null, false);
-		namespace.setVariable("textArea",null, false);
-		namespace.setVariable("wm",null, false);
-	} //}}}
-
-	//{{{ unwrapException() method
-	/**
-	 * This extracts an exception from a 'wrapping' exception, as BeanShell
-	 * sometimes throws. This gives the user a more accurate error traceback
-	 */
-	private static void unwrapException(Exception e) throws Exception
-	{
-		if(e instanceof TargetError)
-		{
-			Throwable t = ((TargetError)e).getTarget();
-			if(t instanceof Exception)
-				throw (Exception)t;
-			else if(t instanceof Error)
-				throw (Error)t;
-		}
-
-		if(e instanceof InvocationTargetException)
-		{
-			Throwable t = ((InvocationTargetException)e).getTargetException();
-			if(t instanceof Exception)
-				throw (Exception)t;
-			else if(t instanceof Error)
-				throw (Error)t;
-		}
-
-		throw e;
-	} //}}}
-
-	//{{{ handleException() method
-	private static void handleException(View view, String path, Throwable t)
-	{
-		if(t instanceof IOException)
-		{
-			VFSManager.error(view,path,"ioerror.read-error",
-				new String[] { t.toString() });
-		}
-		else
-			new BeanShellErrorDialog(view,t);
-	} //}}}
-
-	//{{{ createInterpreter() method
-	private static Interpreter createInterpreter(NameSpace nameSpace)
-	{
-		return new Interpreter(null,System.out,System.err,false,nameSpace);
-	} //}}}
-
-	//{{{ getVersion() method
-	private static String getVersion()
-	{
-		try
-		{
-			return (String)Interpreter.class.getField("VERSION").get(null);
-		}
-		catch(Exception e)
-		{
-			return "unknown";
-		}
-	} //}}}
-
 	//}}}
-
-	//{{{ CustomClassManager class
-	static class CustomClassManager extends ClassManagerImpl
+	
+	private static class MyBeanShellFacade extends BeanShellFacade<View>
 	{
-		private LinkedList listeners = new LinkedList();
-		private ReferenceQueue refQueue = new ReferenceQueue();
-
-		// copy and paste from bsh/classpath/ClassManagerImpl.java...
-		public synchronized void addListener( Listener l )
+		@Override
+		protected void init()
 		{
-			listeners.add( new WeakReference( l, refQueue) );
-
-			// clean up old listeners
-			Reference deadref;
-			while ( (deadref = refQueue.poll()) != null )
+			super.init();
+			global.importPackage("org.gjt.sp.jedit.browser");
+			global.importPackage("org.gjt.sp.jedit.gui");
+			global.importPackage("org.gjt.sp.jedit.help");
+			global.importPackage("org.gjt.sp.jedit.io");
+			global.importPackage("org.gjt.sp.jedit.menu");
+			global.importPackage("org.gjt.sp.jedit.msg");
+			global.importPackage("org.gjt.sp.jedit.options");
+			global.importPackage("org.gjt.sp.jedit.pluginmgr");
+			global.importPackage("org.gjt.sp.jedit.print");
+			global.importPackage("org.gjt.sp.jedit.search");
+		}
+		
+		@Override
+		protected void setupDefaultVariables(NameSpace namespace, View view) throws UtilEvalError 
+		{
+			if(view != null)
 			{
-				boolean ok = listeners.remove( deadref );
-				if ( ok )
-				{
-					//System.err.println("cleaned up weak ref: "+deadref);
-				}
-				else
-				{
-					if ( Interpreter.DEBUG ) Interpreter.debug(
-						"tried to remove non-existent weak ref: "+deadref);
-				}
+				EditPane editPane = view.getEditPane();
+				namespace.setVariable("view",view, false);
+				namespace.setVariable("editPane",editPane, false);
+				namespace.setVariable("buffer",editPane.getBuffer(), false);
+				namespace.setVariable("textArea",editPane.getTextArea(), false);
+				namespace.setVariable("wm",view.getDockableWindowManager(), false);
 			}
 		}
 
-		public void removeListener( Listener l )
+		@Override
+		protected void resetDefaultVariables(NameSpace namespace) throws UtilEvalError
 		{
-			throw new Error("unimplemented");
+			namespace.setVariable("view",null, false);
+			namespace.setVariable("editPane",null, false);
+			namespace.setVariable("buffer",null, false);
+			namespace.setVariable("textArea",null, false);
+			namespace.setVariable("wm",null, false);
 		}
 
-		public void reset()
+		@Override
+		protected void handleException(View view, String path, Throwable t)
 		{
-			classLoaderChanged();
-		}
-
-		protected synchronized void classLoaderChanged()
-		{
-			// clear the static caches in BshClassManager
-			clearCaches();
-			if (listeners != null)
+			if(t instanceof IOException)
 			{
-
-				for (Iterator iter = listeners.iterator();
-				     iter.hasNext(); )
-				{
-					WeakReference wr = (WeakReference)
-						iter.next();
-					Listener l = (Listener)wr.get();
-					if ( l == null )  // garbage collected
-						iter.remove();
-					else
-						l.classLoaderChanged();
-				}
+				VFSManager.error(view,path,"ioerror.read-error",
+					new String[] { t.toString() });
 			}
+			else
+				new BeanShellErrorDialog(view,t);
 		}
-	} //}}}
+		
+	}
 }

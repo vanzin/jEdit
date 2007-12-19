@@ -1,9 +1,10 @@
 /*
- * BeanShellAction.java - BeanShell action
+ * JEditBeanShellAction.java - jEdit BeanShell action
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2000, 2003 Slava Pestov
+ * Copyright (C) 2007 Matthieu Casanova
+ * Portions Copyright (C) 2000, 2003 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +25,7 @@ package org.gjt.sp.jedit;
 
 import org.gjt.sp.jedit.bsh.*;
 import java.awt.Component;
+import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.Log;
 
@@ -38,6 +40,7 @@ import org.gjt.sp.util.Log;
  * @see ActionSet
  *
  * @author Slava Pestov
+ * @author Matthieu Casanova
  * @version $Id: BeanShellAction.java 10803 2007-10-04 20:45:31Z kpouer $
  */
 public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
@@ -67,11 +70,11 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 			if(cachedCode == null)
 			{
 				String cachedCodeName = "action_" + sanitizedName;
-				cachedCode = JEditBeanShell.cacheBlock(cachedCodeName,code,true);
+				cachedCode = bsh.cacheBlock(cachedCodeName,code,true);
 			}
 
-			JEditBeanShell.runCachedBlock(cachedCode,textArea,
-				new NameSpace(JEditBeanShell.getNameSpace(),
+			bsh.runCachedBlock(cachedCode,textArea,
+				new NameSpace(bsh.getNameSpace(),
 				"BeanShellAction.invoke()"));
 		}
 		catch(Throwable e)
@@ -86,14 +89,14 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 		if(isSelected == null)
 			return false;
 
-		NameSpace global = JEditBeanShell.getNameSpace();
+		NameSpace global = bsh.getNameSpace();
 
 		try
 		{
 			if(cachedIsSelected == null)
 			{
 				String cachedIsSelectedName = "selected_" + sanitizedName;
-				cachedIsSelected = JEditBeanShell.cacheBlock(cachedIsSelectedName,
+				cachedIsSelected = bsh.cacheBlock(cachedIsSelectedName,
 					isSelected,true);
 			}
 
@@ -101,9 +104,9 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 			// XXX - clean up in 4.3
 			global.setVariable("_comp",comp);
 
-			return Boolean.TRUE.equals(JEditBeanShell.runCachedBlock(
+			return Boolean.TRUE.equals(bsh.runCachedBlock(
 				cachedIsSelected,null,
-				new NameSpace(JEditBeanShell.getNameSpace(),
+				new NameSpace(bsh.getNameSpace(),
 				"BeanShellAction.isSelected()")));
 		}
 		catch(Throwable e)
@@ -170,5 +173,34 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 	private BshMethod cachedCode;
 	private BshMethod cachedIsSelected;
 	private String sanitizedName;
+	private static final BeanShellFacade<TextArea> bsh = new MyBeanShellFacade();
 	//}}}
+	
+	//{{{ MyBeanShellFacade class
+	private static class MyBeanShellFacade extends BeanShellFacade<TextArea>
+	{
+		@Override
+		protected void setupDefaultVariables(NameSpace namespace, TextArea textArea) throws UtilEvalError 
+		{
+			if(textArea != null)
+			{
+				namespace.setVariable("buffer",textArea.getBuffer(), false);
+				namespace.setVariable("textArea",textArea, false);
+			}
+		}
+
+		@Override
+		protected void resetDefaultVariables(NameSpace namespace) throws UtilEvalError
+		{
+			namespace.setVariable("buffer",null, false);
+			namespace.setVariable("textArea",null, false);
+		}
+
+		@Override
+		protected void handleException(TextArea textArea, String path, Throwable t)
+		{
+			new BeanShellErrorDialog(null,t);
+		}
+	} //}}}
+
 }
