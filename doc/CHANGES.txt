@@ -25,6 +25,14 @@ Kazutoshi Satoda and Marcelo Vanzin for contributing to this release.
   and fade out effect. (xlinuks)
 
 }}}
+{{{ Editing
+
+- SF Bug #1853797: perl syntax highlighting: broken '\' after var interpolation
+  The rule for matching literals was wrongly highlighting perl variables.
+  Fix is to use the same rule used in the main rule set to match those
+  variables. (Marcelo Vanzin)
+
+}}}
 {{{ API Changes
 
 - Added class AbstractContextOptionPane for plugins which want to provide a
