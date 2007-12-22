@@ -396,7 +396,7 @@ public class FilesChangedDialog extends EnhancedDialog
 				Buffer buffer = jEdit.getBuffer(
 					(String)node.getUserObject());
 				if(buffer != null)
-					view.goToBuffer(buffer);
+					view.showBuffer(buffer);
 			}
 		}
 	} //}}}

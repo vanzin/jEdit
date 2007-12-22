@@ -21,7 +21,10 @@ this release.
 
 - (Mac OS X only?) Fixed a focus problem with Unsaved Changes dialog.
   Textarea had focus when the dialog pop up.
-  (Jeff Robertson - SF.net Bug #1779849, SF.net Patch #1852805)
+  (Jeff Robertson - SF.net Bug #1779849, Patch #1852805)
+
+- Files Changed on Disk dialog moved focus to textarea when a file is
+  selected in the list. (Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous
