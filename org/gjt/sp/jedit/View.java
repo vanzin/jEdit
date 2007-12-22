@@ -873,7 +873,21 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 */
 	public void setBuffer(Buffer buffer, boolean disableFileStatusCheck)
 	{
-		editPane.setBuffer(buffer);
+		setBuffer(buffer, disableFileStatusCheck, true);
+	} //}}}
+	
+	//{{{ setBuffer() method
+	/**
+	 * Sets the current edit pane's buffer.
+	 * @param buffer The buffer
+	 * @param disableFileStatusCheck Disables file status checking
+	 * regardless of the state of the checkFileStatus property
+	 * @param focus Whether the textarea should request focus
+	 * @since jEdit 4.3pre13
+	 */
+	public void setBuffer(Buffer buffer, boolean disableFileStatusCheck, boolean focus)
+	{
+		editPane.setBuffer(buffer, focus);
 
 		int check = jEdit.getIntegerProperty("checkFileStatus"); 
 		if((! disableFileStatusCheck) && (check == 1 || check == 2 || check == 3))
@@ -890,29 +904,20 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 */
 	public EditPane goToBuffer(Buffer buffer)
 	{
-		if(editPane.getBuffer() == buffer
-			&& editPane.getTextArea().getVisibleLines() > 1)
-		{
-			editPane.focusOnTextArea();
-			return editPane;
-		}
+		return showBuffer(buffer, true);
+	} //}}}
 
-		EditPane[] editPanes = getEditPanes();
-		for(int i = 0; i < editPanes.length; i++)
-		{
-			EditPane ep = editPanes[i];
-			if(ep.getBuffer() == buffer
-				/* ignore zero-height splits, etc */
-				&& ep.getTextArea().getVisibleLines() > 1)
-			{
-				setEditPane(ep);
-				ep.focusOnTextArea();
-				return ep;
-			}
-		}
-
-		setBuffer(buffer,false);
-		return editPane;
+	//{{{ showBuffer() method
+	/**
+	 * If this buffer is open in one of the view's edit panes, activates
+	 * that edit pane. Otherwise, opens the buffer in the currently
+	 * active edit pane. But the focus is not moved.
+	 * @param buffer The buffer
+	 * @since jEdit 4.3pre13
+	 */
+	public EditPane showBuffer(Buffer buffer)
+	{
+		return showBuffer(buffer, false);
 	} //}}}
 
 	//{{{ getTextArea() method
@@ -1299,6 +1304,36 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			getEditPanes(vec,split.getLeftComponent());
 			getEditPanes(vec,split.getRightComponent());
 		}
+	} //}}}
+
+	//{{{ showBuffer() method
+	private EditPane showBuffer(Buffer buffer, boolean focus)
+	{
+		if(editPane.getBuffer() == buffer
+			&& editPane.getTextArea().getVisibleLines() > 1)
+		{
+			if (focus)
+				editPane.focusOnTextArea();
+			return editPane;
+		}
+
+		EditPane[] editPanes = getEditPanes();
+		for(int i = 0; i < editPanes.length; i++)
+		{
+			EditPane ep = editPanes[i];
+			if(ep.getBuffer() == buffer
+				/* ignore zero-height splits, etc */
+				&& ep.getTextArea().getVisibleLines() > 1)
+			{
+				setEditPane(ep);
+				if (focus)
+					ep.focusOnTextArea();
+				return ep;
+			}
+		}
+
+		setBuffer(buffer,false, focus);
+		return editPane;
 	} //}}}
 
 	//{{{ getSplitConfig() method

@@ -3,7 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre13
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, xlinuks,
-Kazutoshi Satoda and Marcelo Vanzin for contributing to this release.
+Kazutoshi Satoda, Marcelo Vanzin and Jeff Robertson for contributing to
+this release.
 
 {{{ Bug Fixes
 - After some keystroke like alt+tab the numpad stopped working until another
@@ -17,6 +18,10 @@ Kazutoshi Satoda and Marcelo Vanzin for contributing to this release.
   
 - If the autosave file path do not exists, it is ignored silently. As soon as 
   this path exists again it will work as it should (#1825720) (Kazutoshi Satoda)
+
+- (Mac OS X only?) Fixed a focus problem with Unsaved Changes dialog.
+  Textarea had focus when the dialog pop up.
+  (Jeff Robertson - SF.net Bug #1779849, SF.net Patch #1852805)
 
 }}}
 {{{ Miscellaneous
@@ -38,6 +43,14 @@ Kazutoshi Satoda and Marcelo Vanzin for contributing to this release.
 - Added class AbstractContextOptionPane for plugins which want to provide a
   panel similar to jEdit's context menu editor. The API is sort of restrictive
   right now, but can be enhanced later, if needed. (Marcelo Vanzin)
+
+- Added a new method View#setBuffer(Buffer, boolean, boolean). The third
+  parameter "focus" specifies whether the textarea should request focus.
+  (Jeff Robertson - SF.net Patch #1852805)
+
+- Added a new method View#showBuffer(Buffer), which is similer with
+  goToBuffer() but doesn't move focus to the textarea.
+  (Kazutoshi Satoda, based on Jeff Robertson's patch #1852805)
 
 }}}
 

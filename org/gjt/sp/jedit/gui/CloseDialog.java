@@ -94,13 +94,10 @@ public class CloseDialog extends EnhancedDialog
 		buttons.add(cancel = new JButton(jEdit.getProperty("common.cancel")));
 		cancel.addActionListener(actionListener);
 		buttons.add(Box.createGlue());
-
 		bufferList.setSelectedIndex(0);
-
 		content.add(BorderLayout.SOUTH,buttons);
-
+		content.getRootPane().setDefaultButton(cancel);
 		GUIUtilities.requestFocus(this,bufferList);
-
 		pack();
 		setLocationRelativeTo(view);
 		setVisible(true);
@@ -234,7 +231,7 @@ public class CloseDialog extends EnhancedDialog
 
 			int index = bufferList.getSelectedIndex();
 			if(index != -1)
-				view.goToBuffer(jEdit.getBuffer((String)
+				view.showBuffer(jEdit.getBuffer((String)
 					bufferModel.getElementAt(index)));
 
 			updateButtons();
