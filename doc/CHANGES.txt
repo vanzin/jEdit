@@ -55,6 +55,9 @@ this release.
   It copies the current buffer in a new untitled buffer
   (Request #1849184) (Matthieu Casanova)
 
+- Added macro Clipboard/Paste_Indent.bsh that paste and indent the clipboard
+  (Request #1827083) (Matthieu Casanova)
+
 }}}
 {{{ API Changes
 
