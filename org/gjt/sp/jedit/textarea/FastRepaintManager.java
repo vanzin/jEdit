@@ -44,6 +44,10 @@ class FastRepaintManager
 	} //}}}
 
 	//{{{ updateGraphics() method
+	/**
+	 * Prepare the graphics environment.
+	 * This is only called by the TextAreaPainter when it is resized
+	 */
 	void updateGraphics()
 	{
 		if(gfx != null)
@@ -70,7 +74,7 @@ class FastRepaintManager
 		return gfx;
 	} //}}}
 
-	//{{{ prepareGraphics() method
+	//{{{ RepaintLines class
 	static class RepaintLines
 	{
 		final int first;
@@ -81,6 +85,12 @@ class FastRepaintManager
 			this.first = first;
 			this.last = last;
 		}
+		
+		@Override
+		public String toString()
+		{
+			return "RepaintLines[" + first + ',' + last + ']';
+		}
 	} //}}}
 
 	//{{{ prepareGraphics() method
@@ -90,17 +100,17 @@ class FastRepaintManager
 		gfx.setFont(painter.getFont());
 		gfx.setColor(painter.getBackground());
 
-		int height = gfx.getFontMetrics().getHeight();
+		int lineHeight = gfx.getFontMetrics().getHeight();
 
 		if(fastScroll)
 		{
 			int lineDelta = this.firstLine - firstLine;
-			int yDelta = lineDelta * height;
 			int visibleLines = textArea.getVisibleLines();
 
 			if(lineDelta > -visibleLines
 				&& lineDelta < visibleLines)
 			{
+				int yDelta = lineDelta * lineHeight;
 				if(lineDelta < 0)
 				{
 					gfx.copyArea(0,-yDelta,painter.getWidth(),
@@ -124,8 +134,8 @@ class FastRepaintManager
 		// of the font height, we subtract 1 from it, otherwise one
 		// too many lines will always be painted.
 		return new RepaintLines(
-			clipRect.y / height,
-			(clipRect.y + clipRect.height - 1) / height);
+			clipRect.y / lineHeight,
+			(clipRect.y + clipRect.height - 1) / lineHeight);
 	} //}}}
 
 	//{{{ paint() method
@@ -142,8 +152,8 @@ class FastRepaintManager
 	} //}}}
 
 	//{{{ Private members
-	private TextArea textArea;
-	private TextAreaPainter painter;
+	private final TextArea textArea;
+	private final TextAreaPainter painter;
 	private Graphics2D gfx;
 	private Image img;
 	private boolean fastScroll;
