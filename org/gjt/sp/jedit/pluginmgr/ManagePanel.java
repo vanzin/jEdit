@@ -61,6 +61,7 @@ import org.gjt.sp.jedit.msg.PropertiesChanged;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.*;
 
+import java.util.ArrayList;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
 import org.gjt.sp.jedit.gui.RolloverButton;
@@ -173,18 +174,22 @@ public class ManagePanel extends JPanel
 	 * Selects the same plugins that are in that set.
 	 * @since jEdit 4.3pre10
 	 */
-	class ManagePanelRestoreHandler extends DefaultHandler {
-		ManagePanelRestoreHandler() {
+	class ManagePanelRestoreHandler extends DefaultHandler 
+	{
+		ManagePanelRestoreHandler()
+		{
 			selectedPlugins = new HashSet<String>();
 			jarNames = new HashSet<String>();
 		}
 
 
 
+		@Override
 		public void startElement(String uri, String localName, 
 							String qName, Attributes attrs) throws SAXException 
 		{
-			if (localName.equals("plugin")) {
+			if (localName.equals("plugin")) 
+			{
 				String jarName = attrs.getValue("jar");
 				String name = attrs.getValue("name");
 				Entry e = new Entry(jarName);
@@ -196,10 +201,12 @@ public class ManagePanel extends JPanel
 	}//}}}
 	
 	//{{{ loadPluginSet() method
-	boolean loadPluginSet(String path) {
+	boolean loadPluginSet(String path) 
+	{
 		VFS vfs = VFSManager.getVFSForPath(path);
 		Object session = vfs.createVFSSession(path, ManagePanel.this);
-		try {
+		try
+		{
 			InputStream is = vfs._createInputStream(session, path, false, ManagePanel.this);
 			XMLUtilities.parseXML(is, new ManagePanelRestoreHandler());
 			is.close();
@@ -273,7 +280,6 @@ public class ManagePanel extends JPanel
 		return jarList;
 	}//}}}
 	
-	//}}}
 	//{{{ Inner classes
 
 	//{{{ KeyboardCommand enum
@@ -401,6 +407,7 @@ public class ManagePanel extends JPanel
 		} //}}}
 
 		//{{{ getColumnClass() method
+		@Override
 		public Class getColumnClass(int columnIndex)
 		{
 			switch (columnIndex)
@@ -411,6 +418,7 @@ public class ManagePanel extends JPanel
 		} //}}}
 
 		//{{{ getColumnName() method
+		@Override
 		public String getColumnName(int column)
 		{
 			switch (column)
@@ -495,12 +503,14 @@ public class ManagePanel extends JPanel
 		} //}}}
 
 		//{{{ isCellEditable() method
+		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
 			return columnIndex == 0;
 		} //}}}
 
 		//{{{ setValueAt() method
+		@Override
 		public void setValueAt(Object value, int rowIndex,
 			int columnIndex)
 		{
@@ -706,6 +716,7 @@ public class ManagePanel extends JPanel
 			this.tcr = tcr;
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
@@ -843,6 +854,10 @@ public class ManagePanel extends JPanel
 	}//}}}
 
 	//{{{ RemoveButton class
+	/**
+	 * The Remove button is the button pressed to remove the selected 
+	 * plugin.
+	 */
 	class RemoveButton extends JButton implements ListSelectionListener, ActionListener
 	{
 		RemoveButton()
@@ -896,15 +911,30 @@ public class ManagePanel extends JPanel
 				null,listModel.toArray());
 			if(button == JOptionPane.YES_OPTION)
 			{
-				roster.performOperationsInAWTThread(window);
-				pluginModel.update();
-				if (table.getRowCount() != 0)
+				List<String> closureSet = new ArrayList<String>();
+				PluginJAR.transitiveClosure(jarsToRemove.toArray(new String[jarsToRemove.size()]), closureSet);
+				closureSet.removeAll(listModel);
+				Collections.sort(closureSet, new MiscUtilities.StringICaseCompare());
+
+				button = GUIUtilities.listConfirm(window,"plugin-manager.remove-dependencies",
+					null, closureSet.toArray());
+				if(button == JOptionPane.YES_OPTION)
 				{
-					table.setRowSelectionInterval(0,0);
+					for (String jarName:closureSet)
+					{
+						PluginJAR pluginJAR = jEdit.getPluginJAR(jarName);
+						jEdit.removePluginJAR(pluginJAR, false);
+					}
+					roster.performOperationsInAWTThread(window);
+					pluginModel.update();
+					if (table.getRowCount() != 0)
+					{
+						table.setRowSelectionInterval(0,0);
+					}
+					table.setColumnSelectionInterval(0,0);
+					JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+					scrollbar.setValue(scrollbar.getMinimum());
 				}
-				table.setColumnSelectionInterval(0,0);
-				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
-				scrollbar.setValue(scrollbar.getMinimum());
 			}
 		}
 
@@ -1130,6 +1160,7 @@ public class ManagePanel extends JPanel
 	//{{{ HeaderMouseHandler class
 	class HeaderMouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			if (evt.getSource() == table.getTableHeader())
@@ -1247,6 +1278,7 @@ public class ManagePanel extends JPanel
 	//{{{ TableFocusHandler class
 	class TableFocusHandler extends FocusAdapter
 	{
+		@Override
 		public void focusGained(FocusEvent fe)
 		{
 			if (-1 == table.getSelectedRow())

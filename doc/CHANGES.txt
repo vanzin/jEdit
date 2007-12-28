@@ -30,6 +30,9 @@ this release.
   Registers view is open (Matthieu Casanova)
   
 - When clearing a register, the listeners are now notified (Matthieu Casanova)
+
+- If you delete a plugin, the plugins that depends on will be unloaded (after a
+  confirmation) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

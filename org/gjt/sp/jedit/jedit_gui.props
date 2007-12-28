@@ -894,7 +894,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjï¿½rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -2305,6 +2305,10 @@ plugin-manager.remove-confirm.message=Are you sure you want to remove the \
 plugin-manager.dependency.title=Plugin Dependency
 plugin-manager.dependency.message={0} is required by the following plugins.\n\
 	Deselecting {0} will also deselect the below plugins:
+
+plugin-manager.remove-dependencies.title=Plugin Dependency
+plugin-manager.remove-dependencies.message=The removed plugins are required by the following plugins.\n\
+	Removing them will also deselect the below plugins:
 
 plugin-manager.cleanup.label=Cleanup
 plugin-manager.cleanup.title=Cleanup plugin data
