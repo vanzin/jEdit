@@ -44,6 +44,13 @@ this release.
   Fix is to use the same rule used in the main rule set to match those
   variables. (Marcelo Vanzin)
 
+- Handling of /regexp/ in ruby mode is refined. (Kazutoshi Satoda)
+
+  NOTE: If a regexp begins with a whitespace (including a newline), the
+  beginning "/" is wrongly treated as a division operator. But such regexp
+  is rare enough and one can use %r notations or write like "/\ ..." to
+  force jEdit to treat it as a regexp.
+
 }}}
 {{{ API Changes
 

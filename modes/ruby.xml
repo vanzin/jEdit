@@ -29,10 +29,6 @@
         <!-- Class and instance vars -->
         <MARK_FOLLOWING TYPE="KEYWORD4">@</MARK_FOLLOWING>
 
-		<!-- Perl-style regexps - from perl.xml -->
-		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/" AT_WORD_START="TRUE"
-		>/[^\p{Blank}]*?/</SEQ_REGEXP>
-
         <!-- String literals -->
 
         <SPAN TYPE="LITERAL1" DELEGATE="doubleQuoteLiteral">
@@ -239,13 +235,20 @@
             <END>$1</END>
         </SPAN_REGEXP>
 
-        <!-- Regular expressions   -->
+        <!-- Regular expressions -->
 
-        <!-- /regexp?/i -->
-        <!-- This doesn't really work well, because it can't distinguish a regexp
-         from multiple instances of the "/" division operator on the same line. -->
-        <!-- <SEQ_REGEXP HASH_CHAR="/" AT_WORD_START="TRUE"
-            TYPE="LITERAL3">/[^/]+/[iomx]*</SEQ_REGEXP> -->
+        <!-- /regexp?/ -->
+        <!-- If a regexp begins with a whitespace (including a newline),
+            the beginning "/" is wrongly treated as a division operator.
+            But such regexp is rare enough and one can use %r notations
+            or write like "/\ ..." to force jEdit to treat it as a
+            regexp. -->
+        <SEQ_REGEXP HASH_CHAR="/" TYPE="OPERATOR">/=?($|\s)</SEQ_REGEXP>
+        <!-- AT_WORD_START is TRUE not to handle "a/b/c". -->
+        <SPAN AT_WORD_START="TRUE" TYPE="LITERAL3" DELEGATE="RegexpLiteral">
+            <BEGIN>/</BEGIN>
+            <END>/</END>
+        </SPAN>
 
         <!-- %r(regexp?) -->
         <SPAN TYPE="LITERAL3" DELEGATE="RegexpLiteral">
@@ -276,21 +279,6 @@
             <BEGIN>%r([^\p{Alnum}\p{Space}])</BEGIN>
             <END>$1</END>
         </SPAN_REGEXP>
-
-        <!-- (/regexp/) -->
-        <SPAN DELEGATE="RegexpLiteral" MATCH_TYPE="OPERATOR" TYPE="LITERAL3">
-            <BEGIN>(/</BEGIN>
-            <END>/</END>
-        </SPAN>
-
-        <!-- Nested code block -->
-        <!-- I included this just because it can appear in a "/" delimited
-        regular expression, handling of which is commented out above. So this
-        would otherwise be colored as a comment. -->
-        <SPAN TYPE="OPERATOR" DELEGATE="MAIN">
-            <BEGIN>#{</BEGIN>
-            <END>}</END>
-        </SPAN>
 
         <!-- Std Comment -->
         <EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
