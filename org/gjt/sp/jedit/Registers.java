@@ -346,6 +346,8 @@ public class Registers
 		{
 			registers[name] = null;
 			modified = true;
+			if (listener != null)
+				listener.registerChanged(name);
 		}
 	} //}}}
 

@@ -893,7 +893,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjï¿½rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1431,6 +1431,7 @@ view-registers.selection=% (selection)
 view-registers.none=No registers defined
 view-registers.register=Register:
 view-registers.contents=Contents:
+view-registers.undefined=__UNDEFINED__
 #}}}
 
 #{{{ Close all buffers dialog

@@ -29,6 +29,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.Registers.Register;
 import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
@@ -120,6 +121,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	}//}}}
 
 	//{{{ addNotify() method
+	@Override
 	public void addNotify()
 	{
 		super.addNotify();
@@ -127,6 +129,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	} //}}}
 
 	//{{{ removeNotify() method
+	@Override
 	public void removeNotify()
 	{
 		super.removeNotify();
@@ -192,7 +195,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 				continue;
 			if (i == selected)
 				index = registerModel.size();
-			registerModel.addElement(new Character((char)i));
+			registerModel.addElement(Character.valueOf((char)i));
 		}
 
 		if(registerModel.getSize() == 0)
@@ -204,33 +207,6 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 			registerList.setEnabled(true);
 		registerList.setSelectedIndex(index);
 	} //}}}
-
-	//{{{ updateSelected
-	private void updateSelected()
-	{
-		Object o = registerList.getSelectedValue();
-		if (o == null)
-			return;
-		else if (o instanceof Character)
-		{
-			Registers.Register reg = Registers.getRegister(((Character)o).charValue());
-			if (!editing)
-			{
-				contentTextArea.setText(reg.toString());
-				contentTextArea.setEditable(true);
-			}
-		}
-		else
-		{
-			if (!editing)
-			{
-				contentTextArea.setText("");
-				contentTextArea.setEditable(false);
-			}
-		}
-		if (!editing)
-			contentTextArea.setCaretPosition(0);
-	}//}}}
 
 	//{{{ insertRegister
 	private void insertRegister()
@@ -250,6 +226,7 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	//{{{ Renderer Class
 	static class Renderer extends DefaultListCellRenderer
 	{
+		@Override
 		public Component getListCellRendererComponent(
 			JList list, Object value, int index,
 			boolean isSelected, boolean cellHasFocus)
@@ -273,12 +250,23 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 					label = jEdit.getProperty("view-registers.selection");
 				else
 					label = String.valueOf(name);
-				String registerValue = Registers.getRegister(name).toString();
-				if (registerValue.length() > 100)
-					registerValue = registerValue.substring(0,100)+"...";
-				registerValue = registerValue.replaceAll("\n"," ");
-				registerValue = registerValue.replaceAll("\t"," ");
-				setText(label+" : "+registerValue);
+				Register register = Registers.getRegister(name);
+				String registerValue;
+				if (register == null)
+				{
+					// The register is not defined anymore, it has been removed before
+					// the painting event
+					registerValue = jEdit.getProperty("view-registers.undefined");
+				}
+				else
+				{
+					registerValue = register.toString();
+					if (registerValue.length() > 100)
+						registerValue = registerValue.substring(0,100)+"...";
+					registerValue = registerValue.replaceAll("\n"," ");
+					registerValue = registerValue.replaceAll("\t"," ");
+				}
+				setText(label + " : " + registerValue);
 			}
 
 			return this;
@@ -290,23 +278,45 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
-		{
+		{			
 			Object value = registerList.getSelectedValue();
 			if(!(value instanceof Character))
+			{
+				if (!editing)
+				{
+					contentTextArea.setText("");
+					contentTextArea.setEditable(false);
+				}
 				return;
+			}
 
 			char name = ((Character)value).charValue();
 
 			Registers.Register reg = Registers.getRegister(name);
 			if(reg == null)
+			{
+				if (!editing)
+				{
+					contentTextArea.setText("");
+					contentTextArea.setEditable(false);
+				}	
 				return;
-			updateSelected();
+			}
+			
+			
+			if (!editing)
+			{
+				contentTextArea.setText(reg.toString());
+				contentTextArea.setEditable(true);
+				contentTextArea.setCaretPosition(0);
+			}
 		}
 	} //}}}
 
 	//{{{ MouseHandler Class
 	class MouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			int i = registerList.locationToIndex(evt.getPoint());
