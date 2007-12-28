@@ -50,6 +50,10 @@ this release.
   beginning "/" is wrongly treated as a division operator. But such regexp
   is rare enough and one can use %r notations or write like "/\ ..." to
   force jEdit to treat it as a regexp.
+  
+- Added macro Files/Duplicate_Buffer.bsh
+  It copies the current buffer in a new untitled buffer
+  (Request #1849184) (Matthieu Casanova)
 
 }}}
 {{{ API Changes
