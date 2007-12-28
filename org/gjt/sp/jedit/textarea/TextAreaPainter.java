@@ -152,6 +152,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * It is a bad idea to override this, but we need to get the component
 	 * event before the first repaint.
 	 */
+	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
 		if(x == getX() && y == getY() && width == getWidth()
@@ -177,6 +178,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Makes the tab key work in Java 1.4.
 	 * @since jEdit 3.2pre4
 	 */
+	@Override
 	public boolean getFocusTraversalKeysEnabled()
 	{
 		return false;
@@ -188,6 +190,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/**
 	 * Returns the syntax styles used to paint colorized text. Entry <i>n</i>
 	 * will be used to paint tokens with id = <i>n</i>.
+	 * @return 
 	 * @see org.gjt.sp.jedit.syntax.Token
 	 */
 	public final SyntaxStyle[] getStyles()
@@ -501,6 +504,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/**
 	 * @deprecated use setAntiAlias(AntiAlias newMode)
 	 */
+	@Deprecated
 	public void setAntiAliasEnabled(boolean isEnabled) {
 		
 		setAntiAlias(new AntiAlias(isEnabled));
@@ -530,6 +534,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @since jEdit 3.2pre6
 	 * @deprecated - use @ref getAntiAlias()
 	 */
+	@Deprecated
 	public boolean isAntiAliasEnabled()
 	{
 		return antiAlias.val() > 0;
@@ -626,6 +631,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Returns the tool tip to display at the specified location.
 	 * @param evt The mouse event
 	 */
+	@Override
 	public String getToolTipText(MouseEvent evt)
 	{
 		if(textArea.getBuffer().isLoading())
@@ -649,6 +655,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * cached font metrics and to recalculate which lines are visible.
 	 * @param font The font
 	 */
+	@Override
 	public void setFont(Font font)
 	{
 		super.setFont(font);
@@ -683,6 +690,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Repaints the text.
 	 * @param _gfx The graphics context
 	 */
+	@Override
 	public void update(Graphics _gfx)
 	{
 		paint(_gfx);
@@ -693,6 +701,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * Repaints the text.
 	 * @param _gfx The graphics context
 	 */
+	@Override
 	public void paint(Graphics _gfx)
 	{
 		Graphics2D gfx = textArea.repaintMgr.getGraphics();
@@ -703,8 +712,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		Rectangle clipRect = _gfx.getClipBounds();
 
 		JEditBuffer buffer = textArea.getBuffer();
-		int height = fm.getHeight();
-		if(height == 0 || buffer.isLoading())
+		int lineHeight = fm.getHeight();
+		if(lineHeight == 0 || buffer.isLoading())
 		{
 			_gfx.setColor(getBackground());
 			_gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
@@ -720,11 +729,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			long linesTime = System.currentTimeMillis();
 			int numLines = (lines.last - lines.first + 1);
 
-			int y = lines.first * height;
-			gfx.fillRect(0,y,getWidth(),numLines * height);
+			int y = lines.first * lineHeight;
+			gfx.fillRect(0,y,getWidth(),numLines * lineHeight);
 
 			extensionMgr.paintScreenLineRange(textArea,gfx,
-				lines.first,lines.last,y,height);
+				lines.first,lines.last,y,lineHeight);
 			linesTime = (System.currentTimeMillis() - linesTime);
 
 			textArea.repaintMgr.setFastScroll(
@@ -760,6 +769,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/**
 	 * Returns the painter's preferred size.
 	 */
+	@Override
 	public Dimension getPreferredSize()
 	{
 		Dimension dim = new Dimension();
@@ -776,6 +786,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/**
 	 * Returns the painter's minimum size.
 	 */
+	@Override
 	public Dimension getMinimumSize()
 	{
 		return getPreferredSize();
@@ -850,11 +861,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private ExtensionManager extensionMgr;
-	private PaintCaret caretExtension;
+	private final ExtensionManager extensionMgr;
+	private final PaintCaret caretExtension;
 	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
-	private Map fonts;
+	private final Map fonts;
 	//}}}
 
 	private static Object sm_hrgbRender = null;
@@ -862,19 +873,19 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	
 	static 
 	{
-			try
-			{
-				Field f = RenderingHints.class.getField("VALUE_TEXT_ANTIALIAS_LCD_HRGB");
-				sm_hrgbRender = f.get(null);
-				Class[] fracFontMetricsTypeList = new Class[] {AffineTransform.class, Object.class, Object.class};
-				sm_frcConstructor = FontRenderContext.class.getConstructor(fracFontMetricsTypeList);
-			}
-			catch (NullPointerException npe) {}
-			catch (SecurityException se) {}
-			catch (NoSuchFieldException nsfe) {}
-			catch (IllegalArgumentException iae) {}
-			catch (IllegalAccessException iae) {}
-			catch (NoSuchMethodException nsme) {}
+		try
+		{
+			Field f = RenderingHints.class.getField("VALUE_TEXT_ANTIALIAS_LCD_HRGB");
+			sm_hrgbRender = f.get(null);
+			Class[] fracFontMetricsTypeList = new Class[] {AffineTransform.class, Object.class, Object.class};
+			sm_frcConstructor = FontRenderContext.class.getConstructor(fracFontMetricsTypeList);
+		}
+		catch (NullPointerException npe) {}
+		catch (SecurityException se) {}
+		catch (NoSuchFieldException nsfe) {}
+		catch (IllegalArgumentException iae) {}
+		catch (IllegalAccessException iae) {}
+		catch (NoSuchMethodException nsme) {}
 	}
 	//{{{ updateRenderingHints() method
 	private void updateRenderingHints()
@@ -946,6 +957,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		} //}}}
 		
 		//{{{ paintValidLine() method
+		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
@@ -1013,6 +1025,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	class PaintSelection extends TextAreaExtension
 	{
 		//{{{ paintValidLine() method
+		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
@@ -1052,6 +1065,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ PaintWrapGuide class
 	class PaintWrapGuide extends TextAreaExtension
 	{
+		@Override
 		public void paintScreenLineRange(Graphics2D gfx, int firstLine,
 			int lastLine, int[] physicalLines, int[] start,
 			int[] end, int y, int lineHeight)
@@ -1068,6 +1082,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 		}
 
+		@Override
 		public String getToolTipText(int x, int y)
 		{
 			if(textArea.wrapMargin != 0
@@ -1090,6 +1105,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ PaintText class
 	class PaintText extends TextAreaExtension
 	{
+		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
@@ -1182,6 +1198,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ PaintCaret class
 	class PaintCaret extends TextAreaExtension
 	{
+		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
 			int physicalLine, int start, int end, int y)
 		{
@@ -1193,21 +1210,24 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				return;
 
 			int offset = caret - textArea.getLineStartOffset(physicalLine);
-			textArea.offsetToXY(physicalLine, offset, textArea.offsetXY);
+			textArea.offsetToXY(physicalLine, 
+					    offset, textArea.offsetXY);
 			int caretX = textArea.offsetXY.x;
-			int height = fm.getHeight();
+			int lineHeight = fm.getHeight();
 
 			gfx.setColor(caretColor);
 
 			if(textArea.isOverwriteEnabled())
 			{
-				gfx.drawLine(caretX,y + height - 1,
-					caretX + textArea.charWidth,y + height - 1);
+				gfx.drawLine(caretX,y + lineHeight - 1,
+					     caretX + textArea.charWidth,
+					     y + lineHeight - 1);
 			}
 			else if(blockCaret)
-				gfx.drawRect(caretX,y,textArea.charWidth - 1,height - 1);
+				gfx.drawRect(caretX,y,textArea.charWidth - 1,
+					     lineHeight - 1);
 			else
-				gfx.drawLine(caretX,y,caretX,y + height - 1);
+				gfx.drawLine(caretX,y,caretX,y + lineHeight - 1);
 		}
 	} //}}}
 
