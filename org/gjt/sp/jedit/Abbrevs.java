@@ -132,7 +132,7 @@ public class Abbrevs
 			m_pp.addElement(abbrev.substring(lastIndex));
 
 			// the first element of pp is the abbrev itself
-			abbrev = (String)m_pp.elementAt(0);
+			abbrev = m_pp.elementAt(0);
 			m_pp.removeElementAt(0);
 		} //}}}
 		//{{{ Handle ordinary abbrevs
@@ -180,8 +180,8 @@ public class Abbrevs
 				view.getStatus().setMessageAndClear(
 					jEdit.getProperty(
 					"view.status.incomplete-abbrev",
-					new Integer[] { new Integer(m_pp.size()),
-					new Integer(expand.posParamCount) }));
+					new Integer[] { Integer.valueOf(m_pp.size()),
+					Integer.valueOf(expand.posParamCount) }));
 			}
 
 			return true;
@@ -193,7 +193,7 @@ public class Abbrevs
 	 * Returns the global abbreviation set.
 	 * @since jEdit 2.3pre1
 	 */
-	public static Hashtable getGlobalAbbrevs()
+	public static Hashtable<String,String> getGlobalAbbrevs()
 	{
 		if(!loaded)
 			load();
@@ -207,7 +207,7 @@ public class Abbrevs
 	 * @param globalAbbrevs The new global abbrev set
 	 * @since jEdit 2.3pre1
 	 */
-	public static void setGlobalAbbrevs(Hashtable globalAbbrevs)
+	public static void setGlobalAbbrevs(Hashtable<String,String> globalAbbrevs)
 	{
 		abbrevsChanged = true;
 		Abbrevs.globalAbbrevs = globalAbbrevs;
@@ -218,7 +218,7 @@ public class Abbrevs
 	 * Returns the mode-specific abbreviation set.
 	 * @since jEdit 2.3pre1
 	 */
-	public static Hashtable getModeAbbrevs()
+	public static Hashtable<String,Hashtable<String,String>> getModeAbbrevs()
 	{
 		if(!loaded)
 			load();
@@ -232,7 +232,7 @@ public class Abbrevs
 	 * @param modes The new mode abbrev set
 	 * @since jEdit 2.3pre1
 	 */
-	public static void setModeAbbrevs(Hashtable modes)
+	public static void setModeAbbrevs(Hashtable<String,Hashtable<String,String>> modes)
 	{
 		abbrevsChanged = true;
 		Abbrevs.modes = modes;
@@ -267,10 +267,10 @@ public class Abbrevs
 		if(!loaded)
 			load();
 
-		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
+		Hashtable<String,String> modeAbbrevs = modes.get(mode);
 		if(modeAbbrevs == null)
 		{
-			modeAbbrevs = new Hashtable();
+			modeAbbrevs = new Hashtable<String,String>();
 			modes.put(mode,modeAbbrevs);
 		}
 		modeAbbrevs.put(abbrev,expansion);
@@ -321,11 +321,11 @@ public class Abbrevs
 	private static boolean abbrevsChanged;
 	private static long abbrevsModTime;
 	private static boolean expandOnInput;
-	private static Hashtable globalAbbrevs;
-	private static Hashtable modes;
+	private static Hashtable<String,String> globalAbbrevs;
+	private static Hashtable<String,Hashtable<String,String>> modes;
 	
 	/**  Vector of Positional Parameters */
-	private static Vector m_pp = new Vector();
+	private static Vector<String> m_pp = new Vector<String>();
 	//}}}
 
 	private Abbrevs() {}
@@ -338,8 +338,8 @@ public class Abbrevs
 	//{{{ load() method
 	private static void load()
 	{
-		globalAbbrevs = new Hashtable();
-		modes = new Hashtable();
+		globalAbbrevs = new Hashtable<String,String>();
+		modes = new Hashtable<String,Hashtable<String,String>>();
 
 		String settings = jEdit.getSettingsDirectory();
 		if(settings != null)
@@ -397,7 +397,7 @@ public class Abbrevs
 
 	//{{{ expandAbbrev() method
 	private static Expansion expandAbbrev(String mode, String abbrev,
-		int softTabSize, Vector pp)
+		int softTabSize, Vector<String> pp)
 	{
 		m_pp = pp;
 		if(!loaded)
@@ -405,12 +405,12 @@ public class Abbrevs
 
 		// try mode-specific abbrevs first
 		String expand = null;
-		Hashtable modeAbbrevs = (Hashtable)modes.get(mode);
+		Hashtable<String,String> modeAbbrevs = modes.get(mode);
 		if(modeAbbrevs != null)
-			expand = (String)modeAbbrevs.get(abbrev);
+			expand = modeAbbrevs.get(abbrev);
 
 		if(expand == null)
-			expand = (String)globalAbbrevs.get(abbrev);
+			expand = globalAbbrevs.get(abbrev);
 
 		if(expand == null)
 			return null;
@@ -425,7 +425,7 @@ public class Abbrevs
 
 		try
 		{
-			Hashtable currentAbbrevs = globalAbbrevs;
+			Hashtable<String,String> currentAbbrevs = globalAbbrevs;
 
 			String line;
 			while((line = in.readLine()) != null)
@@ -442,10 +442,10 @@ public class Abbrevs
 					{
 						String mode = line.substring(1,
 							line.length() - 1);
-						currentAbbrevs = (Hashtable)modes.get(mode);
+						currentAbbrevs = modes.get(mode);
 						if(currentAbbrevs == null)
 						{
-							currentAbbrevs = new Hashtable();
+							currentAbbrevs = new Hashtable<String,String>();
 							modes.put(mode,currentAbbrevs);
 						}
 					}
@@ -476,34 +476,34 @@ public class Abbrevs
 		saveAbbrevs(out,globalAbbrevs);
 
 		// write mode abbrevs
-		Enumeration keys = modes.keys();
-		Enumeration values = modes.elements();
+		Enumeration<String> keys = modes.keys();
+		Enumeration<Hashtable<String,String>> values = modes.elements();
 		while(keys.hasMoreElements())
 		{
 			out.write('[');
-			out.write((String)keys.nextElement());
+			out.write(keys.nextElement());
 			out.write(']');
 			out.write(lineSep);
-			saveAbbrevs(out,(Hashtable)values.nextElement());
+			saveAbbrevs(out,values.nextElement());
 		}
 
 		out.close();
 	} //}}}
 
 	//{{{ saveAbbrevs() method
-	private static void saveAbbrevs(Writer out, Hashtable abbrevs)
+	private static void saveAbbrevs(Writer out, Hashtable<String,String> abbrevs)
 		throws Exception
 	{
 		String lineSep = System.getProperty("line.separator");
 
-		Enumeration keys = abbrevs.keys();
-		Enumeration values = abbrevs.elements();
+		Enumeration<String> keys = abbrevs.keys();
+		Enumeration<String> values = abbrevs.elements();
 		while(keys.hasMoreElements())
 		{
-			String abbrev = (String)keys.nextElement();
+			String abbrev = keys.nextElement();
 			out.write(abbrev);
 			out.write('|');
-			out.write(values.nextElement().toString());
+			out.write(values.nextElement());
 			out.write(lineSep);
 		}
 	} //}}}
@@ -521,9 +521,9 @@ public class Abbrevs
 		int posParamCount;
 
 		//{{{ Expansion constructor
-		Expansion(String text, int softTabSize, Vector pp)
+		Expansion(String text, int softTabSize, List<String> pp)
 		{
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			boolean backslash = false;
 
 			for(int i = 0; i < text.length(); i++)
@@ -572,7 +572,7 @@ public class Abbrevs
 							// $n is 1-indexed, but vector
 							// contents is zero indexed
 							if(pos <= pp.size())
-								buf.append(pp.elementAt(pos - 1));
+								buf.append(pp.get(pos - 1));
 						}
 						else
 						{
