@@ -26,6 +26,10 @@ this release.
 - Files Changed on Disk dialog moved focus to textarea when a file is
   selected in the list. (Kazutoshi Satoda)
 
+- A NPE fixed when creating and clearing a register quickly in a macro if the 
+  Registers view is open (Matthieu Casanova)
+  
+- When clearing a register, the listeners are now notified (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
