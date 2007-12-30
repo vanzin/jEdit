@@ -184,23 +184,25 @@ public class DockableWindowFactory
 		{
 			this.plugin = plugin;
 			this.uri = uri;
-			stateStack = new Stack();
+			stateStack = new Stack<String>();
 			actions = true;
 			movable = MOVABLE_DEFAULT;
 
 			code = new StringBuffer();
 			cachedDockableNames = new LinkedList<String>();
-			cachedDockableActionFlags = new LinkedList();
-			cachedDockableMovableFlags = new LinkedList();
+			cachedDockableActionFlags = new LinkedList<Boolean>();
+			cachedDockableMovableFlags = new LinkedList<Boolean>();
 		} //}}}
 
 		//{{{ resolveEntity() method
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
 			return XMLUtilities.findEntity(systemId, "dockables.dtd", MiscUtilities.class);
 		} //}}}
 
 		//{{{ characters() method
+		@Override
 		public void characters(char[] c, int off, int len)
 		{
 			String tag = peekElement();
@@ -209,6 +211,7 @@ public class DockableWindowFactory
 		} //}}}
 
 		//{{{ startElement() method
+		@Override
 		public void startElement(String uri, String localName,
 					 String qName, Attributes attrs)
 		{
@@ -224,6 +227,7 @@ public class DockableWindowFactory
 		} //}}}
 
 		//{{{ endElement() method
+		@Override
 		public void endElement(String uri, String localName, String name)
 		{
 			if(name == null)
@@ -239,9 +243,9 @@ public class DockableWindowFactory
 						dockableName,code.toString(),actions, movable);
 					cachedDockableNames.add(dockableName);
 					cachedDockableActionFlags.add(
-						new Boolean(actions));
+						Boolean.valueOf(actions));
 					cachedDockableMovableFlags.add(
-							new Boolean(movable));
+							Boolean.valueOf(movable));
 					// make default be true for the next
 					// action
 					actions = true;
@@ -259,6 +263,7 @@ public class DockableWindowFactory
 		} //}}}
 
 		//{{{ startDocument() method
+		@Override
 		public void startDocument()
 		{
 			try
@@ -267,45 +272,42 @@ public class DockableWindowFactory
 			}
 			catch (Exception e)
 			{
-				e.printStackTrace();
+				Log.log(Log.ERROR, this, e);
 			}
 		} //}}}
 
 		//{{{ getCachedDockableNames() method
 		public String[] getCachedDockableNames()
 		{
-			return (String[])cachedDockableNames.toArray(new String[cachedDockableNames.size()]);
+			return cachedDockableNames.toArray(new String[cachedDockableNames.size()]);
 		} //}}}
 
 		//{{{ getCachedDockableActionFlags() method
 		public boolean[] getCachedDockableActionFlags()
 		{
-			boolean[] returnValue = new boolean[
-				cachedDockableActionFlags.size()];
-			Iterator iter = cachedDockableActionFlags.iterator();
-			int i = 0;
-			while(iter.hasNext())
-			{
-				boolean flag = ((Boolean)iter.next())
-					.booleanValue();
-				returnValue[i++] = flag;
-			}
-
-			return returnValue;
+			return booleanListToArray(cachedDockableActionFlags);
 		} //}}}
 
 		//{{{ getCachedDockableMovableFlags() method
 		public boolean[] getCachedDockableMovableFlags()
 		{
-			boolean[] returnValue = new boolean[
-				cachedDockableMovableFlags.size()];
-			Iterator iter = cachedDockableMovableFlags.iterator();
+			return booleanListToArray(cachedDockableMovableFlags);
+		} //}}}
+		
+		//{{{ booleanListToArray() method
+		/**
+		 * This method transforms a List<Boolean> into the corresponding
+		 * boolean[] array
+		 * @param list the List<Boolean> you want to convert
+		 * @return a boolean[] array
+		 */
+		private boolean[] booleanListToArray(java.util.List<Boolean> list)
+		{
+			boolean[] returnValue = new boolean[list.size()];
 			int i = 0;
-			while(iter.hasNext())
+			for (Boolean value : list)
 			{
-				boolean flag = ((Boolean)iter.next())
-					.booleanValue();
-				returnValue[i++] = flag;
+				returnValue[i++] = value.booleanValue();
 			}
 
 			return returnValue;
@@ -319,8 +321,8 @@ public class DockableWindowFactory
 		private URL uri;
 
 		private java.util.List<String> cachedDockableNames;
-		private java.util.List cachedDockableActionFlags;
-		private java.util.List cachedDockableMovableFlags;
+		private java.util.List<Boolean> cachedDockableActionFlags;
+		private java.util.List<Boolean> cachedDockableMovableFlags;
 		
 		private String dockableName;
 		private StringBuffer code;
@@ -328,7 +330,7 @@ public class DockableWindowFactory
 		private boolean movable;
 		final boolean MOVABLE_DEFAULT = false;
 		
-		private Stack stateStack;
+		private Stack<String> stateStack;
 		//}}}
 
 		//{{{ pushElement() method
@@ -344,13 +346,13 @@ public class DockableWindowFactory
 		//{{{ peekElement() method
 		private String peekElement()
 		{
-			return (String) stateStack.peek();
+			return stateStack.peek();
 		} //}}}
 
 		//{{{ popElement() method
 		private String popElement()
 		{
-			return (String) stateStack.pop();
+			return stateStack.pop();
 		} //}}}
 
 		//}}}
@@ -465,6 +467,7 @@ public class DockableWindowFactory
 			} //}}}
 
 			//{{{ getCode() method
+			@Override
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
@@ -499,6 +502,7 @@ public class DockableWindowFactory
 			} //}}}
 
 			//{{{ getCode() method
+			@Override
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
@@ -526,6 +530,7 @@ public class DockableWindowFactory
 			} //}}}
 
 			//{{{ getCode() method
+			@Override
 			public String getCode()
 			{
 				return "view.getDockableWindowManager()"
@@ -535,5 +540,5 @@ public class DockableWindowFactory
 	} //}}}
 
 	private static DockableWindowFactory instance;
-	private HashMap<String, Window> dockableWindowFactories;
+	private final Map<String, Window> dockableWindowFactories;
 }
