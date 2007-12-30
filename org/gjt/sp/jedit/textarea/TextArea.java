@@ -26,8 +26,6 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.io.IOException;
 import java.util.EventObject;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.TextUtilities;
@@ -59,8 +57,8 @@ import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.JEditActionContext;
 import org.gjt.sp.jedit.JEditActionSet;
 import org.gjt.sp.jedit.JEditBeanShellAction;
-//}}}
 import org.gjt.sp.util.IOUtilities;
+//}}}
 
 /**
  * jEdit's text component.<p>
@@ -169,6 +167,7 @@ public class TextArea extends JComponent
 	//{{{ TextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
+	 * @param inputHandlerProvider the inputHandlerProvider
 	 */
 	public TextArea(InputHandlerProvider inputHandlerProvider)
 	{
@@ -249,6 +248,7 @@ public class TextArea extends JComponent
 	} //}}}
 
 	//{{{ setTransferHandler() method
+	@Override
 	public void setTransferHandler(TransferHandler newHandler)
 	{
 		super.setTransferHandler(newHandler);
@@ -264,7 +264,9 @@ public class TextArea extends JComponent
 	} //}}}
 
 	//{{{ toString() method
-	public String toString() {
+	@Override
+	public String toString() 
+	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("caret: ").append(caret).append('\n');
 		builder.append("caretLine: ").append(caretLine).append('\n');
@@ -4572,6 +4574,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * Called by the AWT when this component is added to a parent.
 	 * Adds document listener.
 	 */
+	@Override
 	public void addNotify()
 	{
 		super.addNotify();
@@ -4597,6 +4600,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * This clears the pointer to the currently focused component.
 	 * Also removes document listener.
 	 */
+	@Override
 	public void removeNotify()
 	{
 		super.removeNotify();
@@ -4613,6 +4617,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * Java 1.4 compatibility fix to make Tab key work.
 	 * @since jEdit 3.2pre4
 	 */
+	@Override
 	public boolean getFocusTraversalKeysEnabled()
 	{
 		return false;
@@ -4630,6 +4635,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ processKeyEvent() method
+	@Override
 	public void processKeyEvent(KeyEvent evt)
 	{
 		getInputHandler().processKeyEvent(evt, 1 /* source=TEXTAREA (1) */, false);
@@ -4662,6 +4668,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	//{{{ Input method support
 	private InputMethodSupport inputMethodSupport;
+	@Override
 	public InputMethodRequests getInputMethodRequests()
 	{
 		if(inputMethodSupport == null)
@@ -4753,107 +4760,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		actionContext.addActionSet(actionSet);
 	} //}}}
 
-	//{{{ Deprecated methods
-
-	//{{{ getSelectionStart() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getStart()</code> method
-	 */
-	public final int getSelectionStart()
-	{
-		if(getSelectionCount() != 1)
-			return caret;
-
-		return getSelection(0).getStart();
-	} //}}}
-
-	//{{{ getSelectionStart() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getStart(int)</code> method
-	 */
-	public int getSelectionStart(int line)
-	{
-		if(getSelectionCount() != 1)
-			return caret;
-
-		return getSelection(0).getStart(buffer,line);
-	} //}}}
-
-	//{{{ getSelectionStartLine() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getStartLine()</code> method
-	 */
-	public final int getSelectionStartLine()
-	{
-		if(getSelectionCount() != 1)
-			return caret;
-
-		return getSelection(0).getStartLine();
-	} //}}}
-
-	//{{{ setSelectionStart() method
-	/**
-	 * @deprecated Do not use.
-	 */
-	public final void setSelectionStart(int selectionStart)
-	{
-		int selectionEnd = getSelectionCount() == 1 ? getSelection(0).getEnd() : caret;
-		select(selectionStart,selectionEnd,true);
-	} //}}}
-
-	//{{{ getSelectionEnd() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getEnd()</code> method
-	 */
-	public final int getSelectionEnd()
-	{
-		return getSelectionCount() == 1 ? getSelection(0).getEnd() : caret;
-
-	} //}}}
-
-	//{{{ getSelectionEnd() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getEnd(int)</code> method
-	 */
-	public int getSelectionEnd(int line)
-	{
-		if(getSelectionCount() != 1)
-			return caret;
-
-		return getSelection(0).getEnd(buffer,line);
-	} //}}}
-
-	//{{{ getSelectionEndLine() method
-	/**
-	 * @deprecated Instead, obtain a Selection instance using
-	 * any means, and call its <code>getEndLine()</code> method
-	 */
-	public final int getSelectionEndLine()
-	{
-		if(getSelectionCount() != 1)
-			return caret;
-
-		return getSelection(0).getEndLine();
-	} //}}}
-
-	//{{{ setSelectionEnd() method
-	/**
-	 * @deprecated Do not use.
-	 */
-	public final void setSelectionEnd(int selectionEnd)
-	{
-		select(getSelectionStart(),selectionEnd,true);
-	} //}}}
-
 	//{{{ getMarkPosition() method
 	/**
 	 * @deprecated Do not use.
 	 */
+	@Deprecated
 	public final int getMarkPosition()
 	{
 		Selection s = getSelectionAtOffset(caret);
@@ -4867,11 +4778,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 			return caret;
 	} //}}}
-
+	
 	//{{{ getMarkLine() method
 	/**
 	 * @deprecated Do not use.
 	 */
+	@Deprecated
 	public final int getMarkLine()
 	{
 		if(getSelectionCount() != 1)
@@ -4885,55 +4797,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 			return caretLine;
 	} //}}}
-
-	//{{{ select() method
-	/**
-	 * @deprecated Instead, call either <code>addToSelection()</code>,
-	 * or <code>setSelection()</code> with a new Selection instance.
-	 */
-	public void select(int start, int end)
-	{
-		select(start,end,true);
-	} //}}}
-
-	//{{{ select() method
-	/**
-	 * @deprecated Instead, call either <code>addToSelection()</code>,
-	 * or <code>setSelection()</code> with a new Selection instance.
-	 */
-	public void select(int start, int end, boolean doElectricScroll)
-	{
-		selectNone();
-
-		int newStart, newEnd;
-		if(start < end)
-		{
-			newStart = start;
-			newEnd = end;
-		}
-		else
-		{
-			newStart = end;
-			newEnd = start;
-		}
-
-		setSelection(new Selection.Range(newStart,newEnd));
-		moveCaretPosition(end,doElectricScroll);
-	} //}}}
-
-	//{{{ isSelectionRectangular() method
-	/**
-	 * @deprecated Instead, check if the appropriate Selection
-	 * is an instance of the Selection.Rect class.
-	 */
-	public boolean isSelectionRectangular()
-	{
-		Selection s = getSelectionAtOffset(caret);
-		return s != null && s instanceof Selection.Rect;
-	} //}}}
-
-	//}}}
-
+	
 	//{{{ Package-private members
 
 	static TextArea focusedComponent;

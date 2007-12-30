@@ -65,6 +65,7 @@ public class JEditTextArea extends TextArea
 	 * line, then to the first visible line.
 	 * @since jEdit 2.7pre2
 	 */
+	@Override
 	public void smartHome(boolean select)
 	{
 		Macros.Recorder recorder = view.getMacroRecorder();
@@ -99,6 +100,7 @@ public class JEditTextArea extends TextArea
 	 * line, then to the last visible line.
 	 * @since jEdit 2.7pre2
 	 */
+	@Override
 	public void smartEnd(boolean select)
 	{
 		Macros.Recorder recorder = view.getMacroRecorder();
@@ -160,6 +162,7 @@ public class JEditTextArea extends TextArea
 	 * @param ch The character
 	 * @since jEdit 2.7pre3
 	 */
+	@Override
 	public void userInput(char ch)
 	{
 		if(ch == ' ' && Abbrevs.getExpandOnInput()
@@ -174,6 +177,7 @@ public class JEditTextArea extends TextArea
 	 * Surrounds the selection with explicit fold markers.
 	 * @since jEdit 4.0pre3
 	 */
+	@Override
 	public void addExplicitFold()
 	{
 		try
@@ -191,6 +195,7 @@ public class JEditTextArea extends TextArea
 	 * Formats the paragraph containing the caret.
 	 * @since jEdit 2.7pre2
 	 */
+	@Override
 	public void formatParagraph()
 	{
 		try
@@ -262,6 +267,162 @@ public class JEditTextArea extends TextArea
 	public View getView()
 	{
 		return view;
+	} //}}}
+
+	//}}}
+
+	//{{{ Deprecated methods
+
+	//{{{ getSelectionStart() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getStart()</code> method
+	 */
+	@Deprecated
+	public final int getSelectionStart()
+	{
+		if(getSelectionCount() != 1)
+			return caret;
+
+		return getSelection(0).getStart();
+	} //}}}
+
+	//{{{ getSelectionStart() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getStart(int)</code> method
+	 */
+	@Deprecated
+	public int getSelectionStart(int line)
+	{
+		if(getSelectionCount() != 1)
+			return caret;
+
+		return getSelection(0).getStart(buffer,line);
+	} //}}}
+
+	//{{{ getSelectionStartLine() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getStartLine()</code> method
+	 */
+	@Deprecated
+	public final int getSelectionStartLine()
+	{
+		if(getSelectionCount() != 1)
+			return caret;
+
+		return getSelection(0).getStartLine();
+	} //}}}
+
+	//{{{ setSelectionStart() method
+	/**
+	 * @deprecated Do not use.
+	 */
+	@Deprecated
+	public final void setSelectionStart(int selectionStart)
+	{
+		int selectionEnd = getSelectionCount() == 1 ? getSelection(0).getEnd() : caret;
+		select(selectionStart,selectionEnd,true);
+	} //}}}
+
+	//{{{ getSelectionEnd() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getEnd()</code> method
+	 */
+	@Deprecated
+	public final int getSelectionEnd()
+	{
+		return getSelectionCount() == 1 ? getSelection(0).getEnd() : caret;
+
+	} //}}}
+
+	//{{{ getSelectionEnd() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getEnd(int)</code> method
+	 */
+	@Deprecated
+	public int getSelectionEnd(int line)
+	{
+		if(getSelectionCount() != 1)
+			return caret;
+
+		return getSelection(0).getEnd(buffer,line);
+	} //}}}
+
+	//{{{ getSelectionEndLine() method
+	/**
+	 * @deprecated Instead, obtain a Selection instance using
+	 * any means, and call its <code>getEndLine()</code> method
+	 */
+	@Deprecated
+	public final int getSelectionEndLine()
+	{
+		if(getSelectionCount() != 1)
+			return caret;
+
+		return getSelection(0).getEndLine();
+	} //}}}
+
+	//{{{ setSelectionEnd() method
+	/**
+	 * @deprecated Do not use.
+	 */
+	@Deprecated
+	public final void setSelectionEnd(int selectionEnd)
+	{
+		select(getSelectionStart(),selectionEnd,true);
+	} //}}}
+
+	//{{{ select() method
+	/**
+	 * @deprecated Instead, call either <code>addToSelection()</code>,
+	 * or <code>setSelection()</code> with a new Selection instance.
+	 */
+	@Deprecated
+	public void select(int start, int end)
+	{
+		select(start,end,true);
+	} //}}}
+
+	//{{{ select() method
+	/**
+	 * @deprecated Instead, call either <code>addToSelection()</code>,
+	 * or <code>setSelection()</code> with a new Selection instance.
+	 */
+	@Deprecated
+	public void select(int start, int end, boolean doElectricScroll)
+	{
+		selectNone();
+
+		int newStart, newEnd;
+		if(start < end)
+		{
+			newStart = start;
+			newEnd = end;
+		}
+		else
+		{
+			newStart = end;
+			newEnd = start;
+		}
+
+		setSelection(new Selection.Range(newStart,newEnd));
+		moveCaretPosition(end,doElectricScroll);
+	} //}}}
+
+	//{{{ isSelectionRectangular() method
+	/**
+	 * @deprecated Instead, check if the appropriate Selection
+	 * is an instance of the Selection.Rect class.
+	 */
+	@Deprecated
+	public boolean isSelectionRectangular()
+	{
+		Selection s = getSelectionAtOffset(caret);
+		return s != null && s instanceof Selection.Rect;
 	} //}}}
 
 	//}}}
