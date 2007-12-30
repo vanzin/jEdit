@@ -74,6 +74,7 @@ public class StringList extends ArrayList<String>
 	 * @return a joined string representation of this, 
 	 * with the newline (\n) as delimiter. 
 	 */
+	@Override
 	public String toString()
 	{
 		return join("\n");
@@ -81,6 +82,7 @@ public class StringList extends ArrayList<String>
 
 	// {{{ toArray()
 	/** @return an array of String */
+	@Override
 	public String[] toArray() 
 	{
 		int siz = size();
@@ -131,7 +133,7 @@ public class StringList extends ArrayList<String>
 		if (s < 1)
 			return "";
 		if (s == 1)
-			return get(0).toString();
+			return get(0);
 		else
 		{
 			StringBuffer retval = new StringBuffer();
@@ -148,7 +150,7 @@ public class StringList extends ArrayList<String>
 	{
 		String teststr = "a,b,c,d,e,f";
 		StringList sl = StringList.split(teststr, ",");
-		String joinstr = sl.join(",");
+		//String joinstr = sl.join(",");
 		// assert(teststr.equals(joinstr));
 		System.out.println("Test Passed");
 
