@@ -50,6 +50,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -69,8 +70,8 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		label.setBorder(new EmptyBorder(0,0,0,12));
 		panel2.add(label);
 
-		Hashtable _modeAbbrevs = Abbrevs.getModeAbbrevs();
-		modeAbbrevs = new Hashtable();
+		Map<String,Hashtable<String,String>> _modeAbbrevs = Abbrevs.getModeAbbrevs();
+		modeAbbrevs = new HashMap<String,AbbrevsModel>();
 		Mode[] modes = jEdit.getModes();
 		Arrays.sort(modes,new MiscUtilities.StringICaseCompare());
 		String[] sets = new String[modes.length + 1];
@@ -79,7 +80,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		{
 			String name = modes[i].getName();
 			sets[i+1] = name;
-			modeAbbrevs.put(name,new AbbrevsModel((Hashtable)_modeAbbrevs.get(name)));
+			modeAbbrevs.put(name,new AbbrevsModel(_modeAbbrevs.get(name)));
 		}
 
 		setsComboBox = new JComboBox(sets);
@@ -133,6 +134,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		if(abbrevsTable.getCellEditor() != null)
@@ -142,13 +144,11 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 
 		Abbrevs.setGlobalAbbrevs(globalAbbrevs.toHashtable());
 
-		Hashtable modeHash = new Hashtable();
-		Enumeration keys = modeAbbrevs.keys();
-		Enumeration values = modeAbbrevs.elements();
-		while(keys.hasMoreElements())
+		Hashtable<String,Hashtable<String,String>> modeHash = new Hashtable<String,Hashtable<String,String>>();
+		Set<Map.Entry<String,AbbrevsModel>> entrySet = modeAbbrevs.entrySet();
+		for (Map.Entry<String,AbbrevsModel> entry : entrySet)
 		{
-			modeHash.put(keys.nextElement(),((AbbrevsModel)values.nextElement())
-				.toHashtable());
+			modeHash.put(entry.getKey(),entry.getValue().toHashtable());
 		}
 		Abbrevs.setModeAbbrevs(modeHash);
 	} //}}}
@@ -160,7 +160,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	private JCheckBox expandOnInput;
 	private JTable abbrevsTable;
 	private AbbrevsModel globalAbbrevs;
-	private Hashtable modeAbbrevs;
+	private Map<String,AbbrevsModel> modeAbbrevs;
 	private JButton add;
 	private JButton edit;
 	private JButton remove;
@@ -227,6 +227,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	//{{{ HeaderMouseHandler class
 	class HeaderMouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			switch(abbrevsTable.getTableHeader().columnAtPoint(evt.getPoint()))
@@ -244,6 +245,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	//{{{ TableMouseHandler class
 	class TableMouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			if(evt.getClickCount() == 2)
@@ -278,8 +280,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 				}
 				else
 				{
-					abbrevsTable.setModel((AbbrevsModel)
-						modeAbbrevs.get(selected));
+					abbrevsTable.setModel(modeAbbrevs.get(selected));
 				}
 				updateEnabled();
 			}
@@ -313,6 +314,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	//{{{ Renderer class
 	static class Renderer extends DefaultTableCellRenderer
 	{
+		@Override
 		public Component getTableCellRendererComponent(
 			JTable table,
 			Object value,
@@ -336,25 +338,22 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 //{{{ AbbrevsModel class
 class AbbrevsModel extends AbstractTableModel
 {
-	Vector abbrevs;
+	Vector<Abbrev> abbrevs;
 	int lastSort;
 
 	//{{{ AbbrevsModel constructor
-	AbbrevsModel(Hashtable abbrevHash)
+	AbbrevsModel(Map<String,String> abbrevHash)
 	{
-		abbrevs = new Vector();
+		abbrevs = new Vector<Abbrev>();
 
 		if(abbrevHash != null)
 		{
-			Enumeration abbrevEnum = abbrevHash.keys();
-			Enumeration expandEnum = abbrevHash.elements();
-
-			while(abbrevEnum.hasMoreElements())
+			Set<Map.Entry<String,String>> entrySet = abbrevHash.entrySet();
+			for (Map.Entry<String,String> entry : entrySet)
 			{
-				abbrevs.addElement(new Abbrev((String)abbrevEnum.nextElement(),
-					(String)expandEnum.nextElement()));
+				abbrevs.add(new Abbrev(entry.getKey(),
+					entry.getValue()));
 			}
-
 			sort(0);
 		}
 	} //}}}
@@ -370,7 +369,7 @@ class AbbrevsModel extends AbstractTableModel
 	//{{{ add() method
 	void add(String abbrev, String expansion)
 	{
-		abbrevs.addElement(new Abbrev(abbrev,expansion));
+		abbrevs.add(new Abbrev(abbrev,expansion));
 		sort(lastSort);
 	} //}}}
 
@@ -382,12 +381,12 @@ class AbbrevsModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ toHashtable() method
-	public Hashtable toHashtable()
+	public Hashtable<String,String> toHashtable()
 	{
-		Hashtable hash = new Hashtable();
+		Hashtable<String,String> hash = new Hashtable<String,String>();
 		for(int i = 0; i < abbrevs.size(); i++)
 		{
-			Abbrev abbrev = (Abbrev)abbrevs.elementAt(i);
+			Abbrev abbrev = abbrevs.get(i);
 			if(abbrev.abbrev.length() > 0
 				&& abbrev.expand.length() > 0)
 			{
@@ -412,7 +411,7 @@ class AbbrevsModel extends AbstractTableModel
 	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
-		Abbrev abbrev = (Abbrev)abbrevs.elementAt(row);
+		Abbrev abbrev = abbrevs.get(row);
 		switch(col)
 		{
 		case 0:
@@ -424,19 +423,14 @@ class AbbrevsModel extends AbstractTableModel
 		}
 	} //}}}
 
-	//{{{ isCellEditable() method
-	public boolean isCellEditable(int row, int col)
-	{
-		return false;
-	} //}}}
-
 	//{{{ setValueAt() method
+	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
 		if(value == null)
 			value = "";
 
-		Abbrev abbrev = (Abbrev)abbrevs.elementAt(row);
+		Abbrev abbrev = abbrevs.get(row);
 
 		if(col == 0)
 			abbrev.abbrev = (String)value;
@@ -447,6 +441,7 @@ class AbbrevsModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ getColumnName() method
+	@Override
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -461,7 +456,7 @@ class AbbrevsModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ AbbrevCompare class
-	static class AbbrevCompare implements Comparator
+	static class AbbrevCompare implements Comparator<Abbrev>
 	{
 		int col;
 
@@ -470,11 +465,8 @@ class AbbrevsModel extends AbstractTableModel
 			this.col = col;
 		}
 
-		public int compare(Object obj1, Object obj2)
+		public int compare(Abbrev a1, Abbrev a2)
 		{
-			Abbrev a1 = (Abbrev)obj1;
-			Abbrev a2 = (Abbrev)obj2;
-
 			if(col == 0)
 			{
 				String abbrev1 = a1.abbrev.toLowerCase();
