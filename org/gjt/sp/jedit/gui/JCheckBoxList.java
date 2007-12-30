@@ -89,10 +89,10 @@ public class JCheckBoxList extends JTable
 		CheckBoxListModel model = (CheckBoxListModel)getModel();
 		for(int i = 0; i < model.items.size(); i++)
 		{
-			Entry entry = (Entry)model.items.elementAt(i);
+			Entry entry = model.items.get(i);
 			if(entry.checked && !entry.caption)
 			{
-				values.addElement(entry.value);
+				values.add(entry.value);
 			}
 		}
 
@@ -102,12 +102,13 @@ public class JCheckBoxList extends JTable
 	} //}}}
 
 	//{{{ selectAll() method
+	@Override
 	public void selectAll()
 	{
 		CheckBoxListModel model = (CheckBoxListModel)getModel();
 		for(int i = 0; i < model.items.size(); i++)
 		{
-			Entry entry = (Entry)model.items.elementAt(i);
+			Entry entry = model.items.elementAt(i);
 			if(!entry.caption)
 				entry.checked = true;
 		}
@@ -139,11 +140,12 @@ public class JCheckBoxList extends JTable
 	} //}}}
 
 	//{{{ getCellRenderer() method
+	@Override
 	public TableCellRenderer getCellRenderer(int row, int column)
 	{
 		if(column == 0)
 		{
-			Entry entry = (Entry)((CheckBoxListModel)getModel()).items.get(row);
+			Entry entry = ((CheckBoxListModel)getModel()).items.get(row);
 			if(entry.caption)
 				return dummy;
 		}
@@ -212,6 +214,7 @@ public class JCheckBoxList extends JTable
 	//{{{ DummyRenderer class
 	private class DummyRenderer extends DefaultTableCellRenderer
 	{
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
@@ -231,13 +234,14 @@ public class JCheckBoxList extends JTable
 			boldFont = plainFont.deriveFont(Font.BOLD);
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			super.getTableCellRendererComponent(table,value,isSelected,
 				hasFocus,row,column);
 
-			Entry entry = (Entry)((CheckBoxListModel)getModel()).items.get(row);
+			Entry entry = ((CheckBoxListModel)getModel()).items.get(row);
 			if(entry.caption)
 				setFont(boldFont);
 			else
@@ -250,23 +254,23 @@ public class JCheckBoxList extends JTable
 //{{{ CheckBoxListModel class
 class CheckBoxListModel extends AbstractTableModel
 {
-	Vector items;
+	Vector<JCheckBoxList.Entry> items;
 
 	CheckBoxListModel(Vector _items)
 	{
-		items = new Vector(_items.size());
+		items = new Vector<JCheckBoxList.Entry>(_items.size());
 		for(int i = 0; i < _items.size(); i++)
 		{
-			items.addElement(createEntry(_items.elementAt(i)));
+			items.add(createEntry(_items.elementAt(i)));
 		}
 	}
 
 	CheckBoxListModel(Object[] _items)
 	{
-		items = new Vector(_items.length);
+		items = new Vector<JCheckBoxList.Entry>(_items.length);
 		for(int i = 0; i < _items.length; i++)
 		{
-			items.addElement(createEntry(_items[i]));
+			items.add(createEntry(_items[i]));
 		}
 	}
 
@@ -288,6 +292,7 @@ class CheckBoxListModel extends AbstractTableModel
 		return 2;
 	}
 
+	@Override
 	public String getColumnName(int col)
 	{
 		return null;
@@ -295,11 +300,11 @@ class CheckBoxListModel extends AbstractTableModel
 
 	public Object getValueAt(int row, int col)
 	{
-		JCheckBoxList.Entry entry = (JCheckBoxList.Entry)items.elementAt(row);
+		JCheckBoxList.Entry entry = items.get(row);
 		switch(col)
 		{
 		case 0:
-			return new Boolean(entry.checked);
+			return Boolean.valueOf(entry.checked);
 		case 1:
 			return entry.value;
 		default:
@@ -307,6 +312,7 @@ class CheckBoxListModel extends AbstractTableModel
 		}
 	}
 
+	@Override
 	public Class getColumnClass(int col)
 	{
 		switch(col)
@@ -320,17 +326,19 @@ class CheckBoxListModel extends AbstractTableModel
 		}
 	}
 
+	@Override
 	public boolean isCellEditable(int row, int col)
 	{
-		JCheckBoxList.Entry entry = (JCheckBoxList.Entry)items.elementAt(row);
+		JCheckBoxList.Entry entry = items.get(row);
 		return col == 0 && !entry.caption;
 	}
 
+	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
 		if(col == 0)
 		{
-			JCheckBoxList.Entry entry = (JCheckBoxList.Entry)items.elementAt(row);
+			JCheckBoxList.Entry entry = items.get(row);
 			if(!entry.caption)
 			{
 				entry.checked = (value.equals(Boolean.TRUE));
