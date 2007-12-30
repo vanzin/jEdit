@@ -323,7 +323,8 @@ public class JEditTextArea extends TextArea
 	public final void setSelectionStart(int selectionStart)
 	{
 		int selectionEnd = getSelectionCount() == 1 ? getSelection(0).getEnd() : caret;
-		select(selectionStart,selectionEnd,true);
+		setSelection(new Selection.Range(selectionStart, selectionEnd));
+		moveCaretPosition(selectionEnd,true);
 	} //}}}
 
 	//{{{ getSelectionEnd() method
@@ -373,7 +374,9 @@ public class JEditTextArea extends TextArea
 	@Deprecated
 	public final void setSelectionEnd(int selectionEnd)
 	{
-		select(getSelectionStart(),selectionEnd,true);
+		int selectionStart = getSelectionCount() == 1 ?	getSelection(0).getStart() : caret;
+		setSelection(new Selection.Range(selectionStart, selectionEnd));
+		moveCaretPosition(selectionEnd,true);
 	} //}}}
 
 	//{{{ select() method
@@ -384,7 +387,8 @@ public class JEditTextArea extends TextArea
 	@Deprecated
 	public void select(int start, int end)
 	{
-		select(start,end,true);
+		setSelection(new Selection.Range(start, end));
+		moveCaretPosition(end,true);
 	} //}}}
 
 	//{{{ select() method
