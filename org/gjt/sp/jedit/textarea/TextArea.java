@@ -3842,6 +3842,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	/**
 	 * Like {@link DisplayManager#expandFold(int,boolean)}, but
 	 * also moves the caret to the first sub-fold.
+	 * @param fully If true, all subfolds will also be expanded
 	 * @since jEdit 4.0pre3
 	 */
 	public void expandFold(boolean fully)
@@ -3925,6 +3926,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ addExplicitFold() method
 	/**
 	 * Surrounds the selection with explicit fold markers.
+	 * @throws TextAreaException an exception thrown if the folding mode is 
+	 * not explicit
 	 * @since jEdit 4.0pre3
 	 */
 	public void addExplicitFold() throws TextAreaException
