@@ -875,6 +875,10 @@ public class ManagePanel extends JPanel
 			List<String> listModel = new LinkedList<String>();
 			Roster roster = new Roster();
 			Set<String> jarsToRemove = new HashSet<String>();
+			// this one will contains the loaded jars to remove. They
+			// are the only one we need to check to unload plugins
+			// that depends on them
+			Set<String> loadedJarsToRemove = new HashSet<String>();
 			for(int i = 0; i < selected.length; i++)
 			{
 				Entry entry = pluginModel.getEntry(selected[i]);
@@ -896,6 +900,7 @@ public class ManagePanel extends JPanel
 				else
 				{
 					jarsToRemove.addAll(entry.jars);
+					loadedJarsToRemove.addAll(entry.jars);
 				}
 				table.getSelectionModel().removeSelectionInterval(selected[i], selected[i]);
 			}
@@ -911,13 +916,20 @@ public class ManagePanel extends JPanel
 				null,listModel.toArray());
 			if(button == JOptionPane.YES_OPTION)
 			{
+				
 				List<String> closureSet = new ArrayList<String>();
-				PluginJAR.transitiveClosure(jarsToRemove.toArray(new String[jarsToRemove.size()]), closureSet);
+				PluginJAR.transitiveClosure(loadedJarsToRemove.toArray(new String[loadedJarsToRemove.size()]), closureSet);
 				closureSet.removeAll(listModel);
-				Collections.sort(closureSet, new MiscUtilities.StringICaseCompare());
-
-				button = GUIUtilities.listConfirm(window,"plugin-manager.remove-dependencies",
-					null, closureSet.toArray());
+				if (closureSet.isEmpty())
+				{
+					button = JOptionPane.YES_OPTION;
+				}
+				else
+				{
+					button = GUIUtilities.listConfirm(window,"plugin-manager.remove-dependencies",
+						null, closureSet.toArray());
+					Collections.sort(closureSet, new MiscUtilities.StringICaseCompare());
+				}
 				if(button == JOptionPane.YES_OPTION)
 				{
 					for (String jarName:closureSet)
