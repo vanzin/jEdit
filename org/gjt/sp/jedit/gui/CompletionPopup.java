@@ -100,15 +100,15 @@ public class CompletionPopup extends JWindow
 	 * It is not shown until reset() method is called with valid
 	 * candidates. All key events for the view are intercepted by
 	 * this popup untill end of completion.
+	 * @since jEdit 4.3pre13
 	 */ 
-	public CompletionPopup(View view, Point location)
+	public CompletionPopup(View view)
 	{
 		super(view);
 		this.view = view;
+		this.keyHandler = new KeyHandler();
 		this.candidates = null;
 		this.list = new JList();
-
-		KeyHandler keyHandler = new KeyHandler();
 
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setCellRenderer(new CellRenderer());
@@ -125,9 +125,15 @@ public class CompletionPopup extends JWindow
 		content.add(scroller, BorderLayout.CENTER);
 		setContentPane(content);
 		addWindowFocusListener(new WindowFocusHandler());
+	}
 
-		setLocation(location);
-		view.setKeyEventInterceptor(keyHandler);
+	public CompletionPopup(View view, Point location)
+	{
+		this(view);
+		if (location != null)
+		{
+			setLocation(location);
+		}
 	} //}}}
 
 	//{{{ dispose() method
@@ -138,7 +144,10 @@ public class CompletionPopup extends JWindow
 	{
 		if (isDisplayable())
 		{
-			view.setKeyEventInterceptor(null);
+			if (view.getKeyEventInterceptor() == keyHandler)
+			{
+				view.setKeyEventInterceptor(null);
+			}
 			super.dispose();
 
 			// This is a workaround to ensure setting the
@@ -187,6 +196,7 @@ public class CompletionPopup extends JWindow
 			GUIUtilities.requestFocus(this,list);
 		}
 		setVisible(true);
+		view.setKeyEventInterceptor(keyHandler);
 	} //}}}
 
 	//{{{ getCandidates() method
@@ -266,6 +276,7 @@ public class CompletionPopup extends JWindow
 
 	//{{{ Instance variables
 	private final View view;
+	private final KeyHandler keyHandler;
 	private Candidates candidates;
 	private final JList list;
 	//}}}
@@ -319,10 +330,20 @@ public class CompletionPopup extends JWindow
 	private void passKeyEventToView(KeyEvent e)
 	{
 		// Remove intercepter to avoid infinite recursion.
-		KeyListener interceptor = view.getKeyEventInterceptor();
+		assert (view.getKeyEventInterceptor() == keyHandler);
 		view.setKeyEventInterceptor(null);
-		view.getInputHandler().processKeyEvent(e, View.VIEW, false);
-		view.setKeyEventInterceptor(interceptor);
+
+		// Here depends on an implementation detail.
+		// Use ACTION_BAR to force processing KEY_TYPED event in
+		// the implementation of gui.InputHandler.processKeyEvent().
+		view.getInputHandler().processKeyEvent(e, View.ACTION_BAR, false);
+
+		// Restore keyHandler only if this popup is still alive.
+		// The key event might trigger dispose() of this popup.
+		if (this.isDisplayable())
+		{
+			view.setKeyEventInterceptor(keyHandler);
+		}
 	} //}}}
 
 	//{{{ CandidateListModel class

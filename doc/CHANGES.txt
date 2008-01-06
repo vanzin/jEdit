@@ -76,6 +76,14 @@ this release.
   goToBuffer() but doesn't move focus to the textarea.
   (Kazutoshi Satoda, based on Jeff Robertson's patch #1852805)
 
+- Some improvements are made in CompletionPopup.
+  - Eliminated possibe undesired effects of setKeyEventInterceptor()
+    while the popup is not shown yet or already disposed.
+  - KeyEvents which are not consumed in keyTyped() now work as if they
+    were passed to View.
+  - Added a new constructor which does not require a position.
+  (Kazutoshi Satoda)
+
 }}}
 
 }}}
