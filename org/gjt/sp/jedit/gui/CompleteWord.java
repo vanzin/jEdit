@@ -98,7 +98,7 @@ public class CompleteWord extends CompletionPopup
 			}
 			else
 			{
-				textArea.setSelectedText(c.text.substring(
+				textArea.replaceSelection(c.text.substring(
 					word.length()));
 			}
 		} //}}}
@@ -217,18 +217,18 @@ public class CompleteWord extends CompletionPopup
 
 				buffers.add(b);
 
-				// only complete current buffer's keyword map
-				KeywordMap _keywordMap;
-				if(b == buffer)
-					_keywordMap = keywordMap;
-				else
-					_keywordMap = null;
+			// only complete current buffer's keyword map
+			KeywordMap _keywordMap;
+			if(b == buffer)
+				_keywordMap = keywordMap;
+			else
+				_keywordMap = null;
 
-				int offset = (b == buffer ? caret : 0);
+			int offset = (b == buffer ? caret : 0);
 
-				getCompletions(b,word,keywordMap,noWordSep,
-					offset,completions);
-			}
+			getCompletions(b,word,keywordMap,noWordSep,
+				offset,completions);
+		}
 
 			views = views.getNext();
 		}
@@ -381,7 +381,7 @@ public class CompleteWord extends CompletionPopup
 		public void complete(int index)
 		{
 			String insertion = completions[index].toString().substring(word.length());
-			textArea.setSelectedText(insertion);
+			textArea.replaceSelection(insertion);
 		}
 	
 		public Component getCellRenderer(JList list, int index,

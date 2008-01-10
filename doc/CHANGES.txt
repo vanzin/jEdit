@@ -33,6 +33,12 @@ this release.
 
 - If you delete a plugin, the plugins that depends on will be unloaded (after a
   confirmation) (Matthieu Casanova)
+
+- Column cursor (zero width rectangular selection) is now kept after
+  completion. Only the built in word completion (C+b by default) is
+  changed. Other completions provided by some plugins are not changed.
+  (Kazutoshi Satoda - SF.net Bug #1866836)
+
 }}}
 {{{ Miscellaneous
 
