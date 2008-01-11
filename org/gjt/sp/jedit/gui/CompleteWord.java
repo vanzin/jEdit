@@ -217,18 +217,18 @@ public class CompleteWord extends CompletionPopup
 
 				buffers.add(b);
 
-			// only complete current buffer's keyword map
-			KeywordMap _keywordMap;
-			if(b == buffer)
-				_keywordMap = keywordMap;
-			else
-				_keywordMap = null;
+				// only complete current buffer's keyword map
+				KeywordMap _keywordMap;
+				if(b == buffer)
+					_keywordMap = keywordMap;
+				else
+					_keywordMap = null;
 
-			int offset = (b == buffer ? caret : 0);
+				int offset = (b == buffer ? caret : 0);
 
-			getCompletions(b,word,keywordMap,noWordSep,
-				offset,completions);
-		}
+				getCompletions(b,word,keywordMap,noWordSep,
+					offset,completions);
+			}
 
 			views = views.getNext();
 		}
