@@ -5288,7 +5288,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		moveCaretPosition(newCaret);
 	}//}}}
 
-
+	//{{{ lineContainsSpaceAndTabs() method
 	/**
 	 * Check if the line contains only spaces and tabs.
 	 *
@@ -5311,7 +5311,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 		}
 		return true;
-	}
+	} //}}}
 
 	//{{{ insert() method
 	protected void insert(String str, boolean indent)
