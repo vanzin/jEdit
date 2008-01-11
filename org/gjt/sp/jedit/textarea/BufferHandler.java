@@ -43,9 +43,9 @@ import org.gjt.sp.jedit.Debug;
  */
 class BufferHandler implements BufferListener
 {
-	private DisplayManager displayManager;
-	private TextArea textArea;
-	private JEditBuffer buffer;
+	private final DisplayManager displayManager;
+	private final TextArea textArea;
+	private final JEditBuffer buffer;
 	boolean delayedUpdate;
 	boolean delayedMultilineUpdate;
 	int delayedUpdateStart;
@@ -156,6 +156,7 @@ class BufferHandler implements BufferListener
 		}
 	} //}}}
 
+	//{{{ preContentInserted() method
 	/**
 	 * Called when text is about to be removed from the buffer, but is
 	 * still present.
@@ -180,7 +181,7 @@ class BufferHandler implements BufferListener
 			}
 			// }}}
 		}
-	}
+	} //}}}
 
 	//{{{ preContentRemoved() method
 	/**
