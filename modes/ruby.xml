@@ -1,21 +1,29 @@
 <?xml version="1.0"?>
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
-<!-- Ruby mode by Ian Maclean (Ruby edit mode v0.6.2) -->
+<!-- Ruby mode by Ian Maclean (Ruby edit mode v0.7.4) -->
 <!-- tweakage by Chris Morris - clabs.org -->
 <!-- further tweakage by Christophe Grandsire -->
 <!-- further tweakage by Robert McKinnon 2004 -->
 <!-- Major overhaul by Karl von Laudermann -->
+<!-- More tweakage by Jim Morris (wolfmanjm), adds electric unindent for else, elsif, rescue, end -->
+<!-- More tweakage by Jim Morris (wolfmanjm), fixed when statements for most cases -->
 <!-- recommended mode catalog entry:
     <MODE NAME="ruby" FILE="ruby.xml" FILE_NAME_GLOB="*.{rb,rbw}" FIRST_LINE_GLOB="#!*/*ruby*" /> -->
 <MODE>
     <PROPS>
-        <PROPERTY NAME="indentOpenBrackets" VALUE=""/>
+        <PROPERTY NAME="indentOpenBrackets" VALUE="{"/>
         <PROPERTY NAME="indentCloseBrackets" VALUE="}"/>
+        <PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+        <PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
         <PROPERTY NAME="lineUpClosingBracket" VALUE="true"/>
         <PROPERTY NAME="commentStart" VALUE="=begin"/>
         <PROPERTY NAME="commentEnd" VALUE="=end"/>
         <PROPERTY NAME="lineComment" VALUE="#"/>
-        <PROPERTY NAME="indentNextLines" VALUE="\s*((if\s+.*|elsif\s+.*|else\s*|do(\s*|\s+.*)|case\s+.*|when\s+.*|while\s+.*|for\s+.*|until\s+.*|loop\s+.*|def\s+.*|class\s+.*|module\s+.*|begin.*|unless\s+.*)*)"/>
+        <PROPERTY NAME="indentNextLines" VALUE="([^#]*\s+do(\s*|(\s+\|.+\|\s*)))|(\s*((if\s+.*|elsif.*|else.*|do(\s*|\s+.*)|case\s+.*|when\s+.*|while\s+.*|for\s+.*|until\s+.*|loop\s+.*|def\s+.*|class\s+.*|module\s+.*|begin.*|unless\s+.*|rescue.*)*))"/>
+        <PROPERTY NAME="unindentThisLine" VALUE="^\s*(else.*|end\s*|elsif.*|rescue.*|when.*)$" />
+        <PROPERTY NAME="unindentNextLines" VALUE="^\s*(end\s*|else.*|rescue.*|elsif.*|when.*)$" />
+        <PROPERTY NAME="indentNextLine" VALUE="^[^#]*([^$](:|\+|~|\*|-|%|&lt;|&gt;|&amp;|\^|\.|\?|=)|\s(/|\!|\|)|not|and|or|\\)\s*$" />
+	<PROPERTY NAME="electricKeys" VALUE="edfn" />
     </PROPS>
     <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0b[01]([01_]*[01])?)|(0x[\p{XDigit}]([\p{XDigit}_]*[\p{XDigit}])?)|(0([0-7_]*[0-7])?)|(0d[0-9]([0-9_]*[0-9])?)|([1-9]([0-9_]*[0-9])?)|([0-9]([0-9_]*[0-9])?[Ee]([0-9]([0-9_]*[0-9])?)?)">
         <!--       ^ Binary literal    | ^ Hex literal                               | ^ Octal literal  | ^ "0d" Style Dec lit   | ^ Normal Dec literal | ^ Float literal w/out dec point, with exp. -->
@@ -334,7 +342,7 @@
         <SEQ TYPE="OPERATOR">?</SEQ>
 
         <!-- Symbols -->
-        <SEQ_REGEXP AT_WORD_START="TRUE" HASH_CHAR=":" TYPE="LABEL">:[\p{Alpha}_][\p{Alnum}_]*</SEQ_REGEXP>
+        <SEQ_REGEXP AT_WORD_START="TRUE" HASH_CHAR=":" TYPE="LABEL">:[\p{Alpha}_][\p{Alnum}_]*[?]?</SEQ_REGEXP>
 
         <SEQ TYPE="OPERATOR">:</SEQ>
 
