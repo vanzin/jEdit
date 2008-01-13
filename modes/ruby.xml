@@ -22,7 +22,7 @@
         <PROPERTY NAME="indentNextLines" VALUE="([^#]*\s+do(\s*|(\s+\|.+\|\s*)))|(\s*((if\s+.*|elsif.*|else.*|do(\s*|\s+.*)|case\s+.*|when\s+.*|while\s+.*|for\s+.*|until\s+.*|loop\s+.*|def\s+.*|class\s+.*|module\s+.*|begin.*|unless\s+.*|rescue.*)*))"/>
         <PROPERTY NAME="unindentThisLine" VALUE="^\s*(else.*|end\s*|elsif.*|rescue.*|when.*)$" />
         <PROPERTY NAME="unindentNextLines" VALUE="^\s*(end\s*|else.*|rescue.*|elsif.*|when.*)$" />
-        <PROPERTY NAME="indentNextLine" VALUE="^[^#]*([^$](:|\+|~|\*|-|%|&lt;|&gt;|&amp;|\^|\.|\?|=|,)|\s(/|\!|\|)|not|and|or|\\)\s*$" />
+        <PROPERTY NAME="indentNextLine" VALUE="^[^#]*([^$](:|\+|~|\*|-|%|&lt;|&gt;|&amp;|\^|\.|\?|=)|\s(/|\!|\|)|not|and|or|\\)\s*$" />
 	<PROPERTY NAME="electricKeys" VALUE="edfn" />
     </PROPS>
     <RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0b[01]([01_]*[01])?)|(0x[\p{XDigit}]([\p{XDigit}_]*[\p{XDigit}])?)|(0([0-7_]*[0-7])?)|(0d[0-9]([0-9_]*[0-9])?)|([1-9]([0-9_]*[0-9])?)|([0-9]([0-9_]*[0-9])?[Ee]([0-9]([0-9_]*[0-9])?)?)">
