@@ -1465,12 +1465,14 @@ public class jEdit
 		if(view != null && parent == null)
 			parent = view.getBuffer().getDirectory();
 
-		try {
+		try
+		{
 			URL u = new URL(path);
 			if (u.getProtocol().equals("file"))
 				path = URLDecoder.decode(u.getPath());
 		}
-		catch (MalformedURLException mue) {
+		catch (MalformedURLException mue) 
+		{
 			path = MiscUtilities.constructPath(parent,path);
 		}
 
@@ -2725,7 +2727,8 @@ public class jEdit
 						new String[] { subst.toString() });
 					if(subst instanceof Throwable)
 						Log.log(Log.ERROR,this,subst);
-					if (subst instanceof SAXParseException) {
+					if (subst instanceof SAXParseException) 
+					{
 						line = ((SAXParseException)subst).getLineNumber();
 					}
 				}
@@ -3543,7 +3546,8 @@ public class jEdit
 	private static void finishStartup(final boolean gui, final boolean restore,
 		final String userDir, final String[] args)
 	{
-		SwingUtilities.invokeLater(new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() 
+		{
 			public void run()
 			{
 				Buffer buffer = openFiles(null,userDir,args);
@@ -3701,7 +3705,8 @@ loop:		for(int i = 0; i < list.length; i++)
 				else
 					throw new InternalError();
 
-				if(view != null && view.getBuffer() == buffer) {
+				if(view != null && view.getBuffer() == buffer) 
+				{
 					view.getTextArea().setCaretPosition(pos);
 					buffer.setIntegerProperty(Buffer.CARET,pos);
 					buffer.setBooleanProperty(Buffer.CARET_POSITIONED,true);
@@ -3968,7 +3973,8 @@ loop:		for(int i = 0; i < list.length; i++)
 		inputHandler.removeAllKeyBindings();
 
 		ActionSet[] actionSets = getActionSets();
-		for (int i = 0; i < actionSets.length; i++) {
+		for (int i = 0; i < actionSets.length; i++) 
+		{
 			actionSets[i].initKeyBindings();
 		}
 	} //}}}
