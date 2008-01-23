@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre13
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, xlinuks,
-Kazutoshi Satoda, Marcelo Vanzin, Jeff Robertson and Jim Morris for
-contributing to this release.
+Kazutoshi Satoda, Marcelo Vanzin, Jeff Robertson, Jim Morris
+and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
 - After some keystroke like alt+tab the numpad stopped working until another
@@ -67,9 +67,21 @@ contributing to this release.
 - Added macro Clipboard/Paste_Indent.bsh that paste and indent the clipboard
   (Request #1827083) (Matthieu Casanova)
 
-- Imporved auto indentation in Ruby edit mode. It now unindents things
+- Improved auto indentation in Ruby edit mode. It now unindents things
   like else, end, require etc on the fly.
   (SF.net patch #1726646 - Jim Morris and Kazutoshi Satoda)
+
+- Improved PHP edit mode (Daniel Hahler):
+  - handle "${foo}" (SF Bug 1818619) and other valid expressions in literal,
+    backticks and heredoc blocks
+  - fix comment props for HTML in TAGS ruleset (C-e C-c/range-comment uses
+    proper comment syntax there now)
+  - fix delegating back from various rulesets (OBJECT_PHP, ...) to PHP
+    ruleset; includes fixed handling of comments
+  - fix matching of PHP vars (using SEQ_REGEXP instead of MATCH_FOLLOWING),
+    so that it does not match "$foo\" completely; now uses the exact regexp
+    for valid variable names
+  - add ruleset PHP_COMMENTS (re-factored)
 
 }}}
 {{{ API Changes
