@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.syntax;
 
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.Mode;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.xml.sax.InputSource;
@@ -136,13 +135,13 @@ public class ModeProvider
 	{
 		String fileName = (String)mode.getProperty("file");
 
-		Log.log(Log.NOTICE,jEdit.class,"Loading edit mode " + fileName);
+		Log.log(Log.NOTICE,this,"Loading edit mode " + fileName);
 
 		XMLReader parser = null;
 		try {
 			parser = XMLReaderFactory.createXMLReader();
 		} catch (SAXException saxe) {
-			Log.log(Log.ERROR, jEdit.class, saxe);
+			Log.log(Log.ERROR, this, saxe);
 			return;
 		}
 		mode.setTokenMarker(xmh.getTokenMarker());
@@ -166,7 +165,7 @@ public class ModeProvider
 		}
 		catch (Throwable e)
 		{
-			Log.log(Log.ERROR, jEdit.class, e);
+			Log.log(Log.ERROR, this, e);
 
 			if (e instanceof SAXParseException)
 			{
