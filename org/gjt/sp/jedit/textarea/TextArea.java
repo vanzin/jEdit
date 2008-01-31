@@ -2193,11 +2193,10 @@ forward_scan:	do
 	 */
 	public void centerCaret()
 	{
-		int offset = getScreenLineStartOffset(visibleLines >> 1);
-		if(offset == -1)
-			getToolkit().beep();
-		else
-			setCaretPosition(offset);
+		int physicalLine = getCaretLine();
+		int midPhysicalLine = getPhysicalLineOfScreenLine(visibleLines >> 1);
+		int diff = physicalLine -  midPhysicalLine; 
+		setFirstLine(getFirstLine() + diff);
 	} //}}}
 
 	//{{{ setCaretPosition() method

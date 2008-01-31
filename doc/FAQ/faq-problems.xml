@@ -155,18 +155,21 @@
             </qandaentry>
             <qandaentry>
                 <question id="textarea-corruption">
-                    <para>My textarea gets corrupted every now and then. What
+                    <para>My textarea gets confused about the end of the buffer or in some other way corrupted (the characters are in the wrong place on the screen) every now and then. What
                     should I do?</para>
                 </question>
                 <answer>
-                    <para>If you split and un-split the EditPane, jEdit creates
-                    a new TextArea for you, and that one won't be corrupt. This
+                    <para>It happens to me sometimes too. I have this macro to work around it for now:
+<programlisting>
+/** Reset_TextArea.bsh */
+view.splitVertically();
+view.unsplitCurrent();
+</programlisting>
+					Run this, and jEdit creates
+                    a new TextArea for you, and that one won't be confused. This
                     can help avoid the need to restart jEdit. If you can
-                    reproduce it on the latest jEdit, please submit a bug report
-                    that details what plugins/versions you were using, and how
-                    to reproduce it. Are you using Sidekick? XML plugin? What
-                    folding mode? Try disabling folding for that edit mode and
-                    see if the problem persists.</para>
+                    reproduce the steps you took to cause this, please submit a bug report
+                    that details what plugins/versions you were using, and how to reproduce it. Especially take note of what linewrap mode - and fyi, we have received no reports of this from people who use hard/no line wrap. </para>
                 </answer>
             </qandaentry>
             <qandaentry>

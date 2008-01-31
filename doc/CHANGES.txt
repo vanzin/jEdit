@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre13
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, xlinuks,
-Kazutoshi Satoda, Marcelo Vanzin, Jeff Robertson, Jim Morris
+Kazutoshi Satoda, Alan Ezust, Marcelo Vanzin, Jeff Robertson, Jim Morris
 and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
@@ -41,6 +41,9 @@ and Daniel Hahler for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- Center Caret On Screen now scrolls your document so your caret doesn't 
+  change. [ 1883809 - ezust ]
 
 - [About jEdit] dialog is refined. It now performs smoother animation
   and fade out effect. (xlinuks)
