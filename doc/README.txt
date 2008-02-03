@@ -115,8 +115,9 @@ jEdit bundles the following libraries:
   The BeanShell web site is <http://www.beanshell.org>.
 
 - ASM bytecode generation library from Objectweb. This class library is
-  released under a BSD-style license. The ASM homepage can be found at
-  <http://asm.objectweb.org/>.
+  released under the 'GNU Lesser General Public License'.
+  The ASM homepage can be found at <http://asm.objectweb.org/>.
+  The library is in org/gjt/sp/jedit/bsh/org/objectweb/asm/.
 
 The jEdit installer bundles the following libraries:
 
