@@ -1,11 +1,13 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=jEdit
-Comment=Programmer's Text Editor
+GenericName=Programmer's Text Editor
+GenericName[de]=Texteditor für Programmierer
+Comment=Edit text files
+Comment[de]=Editiere Textdateien
 Exec=jedit %U
 Icon=/usr/share/jEdit/doc/jedit.png
 Terminal=false
 Type=Application
-Categories=Application;Development;
+Categories=Development;TextEditor;
 StartupNotify=true
 MimeType=text/plain;
