@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
+//{{{ Imports
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
@@ -27,30 +28,33 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+//}}}
 
 /**
  * @version $Id$
  */
-
 class PluginListHandler extends DefaultHandler
 {
+	//{{{ PluginListHandler constructor
 	PluginListHandler(PluginList pluginList, String path)
 	{
 		this.pluginList = pluginList;
 		this.path = path;
 
-		author = new StringBuffer();
-		description = new StringBuffer();
-		pluginSetEntry = new StringBuffer();
-		download = new StringBuffer();
-		downloadSource = new StringBuffer();
-	}
+		author = new StringBuilder();
+		description = new StringBuilder();
+		pluginSetEntry = new StringBuilder();
+		download = new StringBuilder();
+		downloadSource = new StringBuilder();
+	} //}}}
 
+	//{{{ resolveEntity() method
 	public InputSource resolveEntity(String publicId, String systemId)
 	{
 		return XMLUtilities.findEntity(systemId, "plugins.dtd", getClass());
-	}
+	} //}}}
 
+	//{{{ attribute() method
 	public void attribute(String aname, String value, boolean isSpecified)
 	{
 		if(aname == "NAME")
@@ -77,8 +81,9 @@ class PluginListHandler extends DefaultHandler
 			if(size == 0)
 				Log.log(Log.WARNING,this,"SIZE = 0");
 		}
-	}
+	} //}}}
 
+	//{{{ characters() method
 	public void characters(char[] c, int off, int len)
 	{
 		String tag = peekElement();
@@ -99,8 +104,9 @@ class PluginListHandler extends DefaultHandler
 			download.append(c, off, len);
 		else if(tag.equals("DOWNLOAD_SOURCE"))
 			downloadSource.append(c, off, len);
-	}
+	} //}}}
 
+	//{{{ startElement() method
 	public void startElement(String uri, String localName,
 				 String tag, Attributes attrs)
 	{
@@ -136,8 +142,9 @@ class PluginListHandler extends DefaultHandler
 			downloadSize = size;
 		else if(tag.equals("DOWNLOAD_SOURCE"))
 			downloadSourceSize = size;
-	}
+	} //}}}
 
+	//{{{ endElement() method
 	public void endElement(String uri, String localName, String tag)
 	{
 		popElement();
@@ -190,8 +197,9 @@ class PluginListHandler extends DefaultHandler
 			depTo = null;
 			depPlugin = null;
 		}
-	}
+	} //}}}
 
+	//{{{ startDocument() method
 	public void startDocument()
 	{
 		try
@@ -200,35 +208,39 @@ class PluginListHandler extends DefaultHandler
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR, this, e);
 		}
-	}
+	} //}}}
 
+	//{{{ endDocument() method
 	public void endDocument()
 	{
 		pluginList.finished();
-	}
+	} //}}}
+
 	// end HandlerBase implementation
 
-	// private members
-	private String path;
+	//{{{ private members
+	
+	//{{{ Instance variables
+	private final String path;
 
-	private PluginList pluginList;
+	private final PluginList pluginList;
 
 	private PluginList.PluginSet pluginSet;
-	private StringBuffer pluginSetEntry;
+	private final StringBuilder pluginSetEntry;
 
 	private PluginList.Plugin plugin;
 	private String jar;
-	private StringBuffer author;
+	private StringBuilder author;
 
 	private PluginList.Branch branch;
 	private boolean obsolete;
 	private String version;
 	private String date;
-	private StringBuffer download;
+	private StringBuilder download;
 	private int downloadSize;
-	private StringBuffer downloadSource;
+	private StringBuilder downloadSource;
 	private int downloadSourceSize;
 	private int size;
 	private String depWhat;
@@ -237,23 +249,29 @@ class PluginListHandler extends DefaultHandler
 	private String depPlugin;
 
 	private String name;
-	private StringBuffer description;
+	private StringBuilder description;
 
 	private final Stack<String> stateStack = new Stack<String>();
+	//}}}
 
+	//{{{ pushElement() method
 	private String pushElement(String name)
 	{
 		stateStack.push(name);
 		return name;
-	}
+	} //}}}
 
+	//{{{ peekElement() method
 	private String peekElement()
 	{
 		return stateStack.peek();
-	}
+	} //}}}
 
+	//{{{ popElement() method
 	private String popElement()
 	{
 		return stateStack.pop();
-	}
+	} //}}}
+
+	//}}}
 }
