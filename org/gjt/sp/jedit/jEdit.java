@@ -54,12 +54,15 @@ import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
 import org.gjt.sp.jedit.search.SearchAndReplace;
-import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.syntax.ModeProvider;
+import org.gjt.sp.jedit.syntax.TokenMarker;
+import org.gjt.sp.jedit.syntax.XModeHandler;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.SyntaxUtilities;
 //}}}
 
 /**
@@ -116,7 +119,7 @@ public class jEdit
 		// MacOS users expect the app to keep running after all windows
 		// are closed
 		background = OperatingSystem.isMacOS();
-
+		
 		//{{{ Parse command line
 		boolean endOpts = false;
 		int level = Log.WARNING;
@@ -519,6 +522,7 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress();
 
 		// Open files, create the view and hide the splash screen.
+		SyntaxUtilities.propertyManager = jEdit.propertyManager;
 		finishStartup(gui,restore,userDir,args);
 	} //}}}
 
@@ -2537,14 +2541,7 @@ public class jEdit
 	 */
 	public static TextArea createTextArea()
 	{
-		final TextArea textArea = TextArea._createTextArea(true, new IPropertyManager()
-		{
-
-			public String getProperty(String name) 
-			{
-				return jEdit.getProperty(name);
-			}
-		});
+		final TextArea textArea = TextArea._createTextArea(true, propertyManager);
 
 		EditPane.initPainter(textArea.getPainter());
 		textArea.setBuffer(new JEditBuffer());
@@ -4117,4 +4114,15 @@ loop:		for(int i = 0; i < list.length; i++)
 			}
 		}
 	} //}}}
+
+	//{{{ JEditPropertyManager class
+	public static class JEditPropertyManager implements IPropertyManager
+	{
+		public String getProperty(String name) 
+		{
+			return jEdit.getProperty(name);
+		}
+	} //}}}
+	
+	private static final JEditPropertyManager propertyManager = new JEditPropertyManager(); 
 }

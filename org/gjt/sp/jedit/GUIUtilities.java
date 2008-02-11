@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
 import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
@@ -33,9 +32,9 @@ import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.SyntaxUtilities;
 
 import javax.swing.*;
 import java.awt.*;
@@ -835,49 +834,13 @@ public class GUIUtilities
 	} //}}}
 
 	//{{{ parseColor() method
+	/**
+	 * @deprecated use {@link SyntaxUtilities#parseColor(String,Color)}
+	 */
+	@Deprecated
 	public static Color parseColor(String name, Color defaultColor)
 	{
-		if(name == null || name.length() == 0)
-			return defaultColor;
-		else if(name.charAt(0) == '#')
-		{
-			try
-			{
-				return Color.decode(name);
-			}
-			catch(NumberFormatException nf)
-			{
-				return defaultColor;
-			}
-		}
-		else if("red".equals(name))
-			return Color.red;
-		else if("green".equals(name))
-			return Color.green;
-		else if("blue".equals(name))
-			return Color.blue;
-		else if("yellow".equals(name))
-			return Color.yellow;
-		else if("orange".equals(name))
-			return Color.orange;
-		else if("white".equals(name))
-			return Color.white;
-		else if("lightGray".equals(name))
-			return Color.lightGray;
-		else if("gray".equals(name))
-			return Color.gray;
-		else if("darkGray".equals(name))
-			return Color.darkGray;
-		else if("black".equals(name))
-			return Color.black;
-		else if("cyan".equals(name))
-			return Color.cyan;
-		else if("magenta".equals(name))
-			return Color.magenta;
-		else if("pink".equals(name))
-			return Color.pink;
-		else
-			return defaultColor;
+		return SyntaxUtilities.parseColor(name, defaultColor);
 	} //}}}
 
 	//{{{ getColorHexString() method
@@ -885,11 +848,12 @@ public class GUIUtilities
 	 * Converts a color object to its hex value. The hex value
 	 * prefixed is with `#', for example `#ff0088'.
 	 * @param c The color object
+	 * @deprecated use {@link SyntaxUtilities#parseStyle(String,String,int,boolean)}
 	 */
+	@Deprecated
 	public static String getColorHexString(Color c)
 	{
-		String colString = Integer.toHexString(c.getRGB() & 0xffffff);
-		return "#000000".substring(0,7 - colString.length()).concat(colString);
+		return SyntaxUtilities.getColorHexString(c);
 	} //}}}
 
 	//{{{ parseStyle() method
@@ -916,50 +880,14 @@ public class GUIUtilities
 	 * @param color If false, the styles will be monochrome
 	 * @exception IllegalArgumentException if the style is invalid
 	 * @since jEdit 4.0pre4
+	 * @deprecated use {@link SyntaxUtilities#parseStyle(String,String,int,boolean)}
 	 */
+	@Deprecated
 	public static SyntaxStyle parseStyle(String str, String family, int size,
 		boolean color)
 		throws IllegalArgumentException
 	{
-		Color fgColor = Color.black;
-		Color bgColor = null;
-		boolean italic = false;
-		boolean bold = false;
-		StringTokenizer st = new StringTokenizer(str);
-		while(st.hasMoreTokens())
-		{
-			String s = st.nextToken();
-			if(s.startsWith("color:"))
-			{
-				if(color)
-					fgColor = GUIUtilities.parseColor(s.substring(6), Color.black);
-			}
-			else if(s.startsWith("bgColor:"))
-			{
-				if(color)
-					bgColor = GUIUtilities.parseColor(s.substring(8), null);
-			}
-			else if(s.startsWith("style:"))
-			{
-				for(int i = 6; i < s.length(); i++)
-				{
-					if(s.charAt(i) == 'i')
-						italic = true;
-					else if(s.charAt(i) == 'b')
-						bold = true;
-					else
-						throw new IllegalArgumentException(
-							"Invalid style: " + s);
-				}
-			}
-			else
-				throw new IllegalArgumentException(
-					"Invalid directive: " + s);
-		}
-		return new SyntaxStyle(fgColor,bgColor,
-			new Font(family,
-			(italic ? Font.ITALIC : 0) | (bold ? Font.BOLD : 0),
-			size));
+		return SyntaxUtilities.parseStyle(str,family,size,color);
 	} //}}}
 
 	//{{{ getStyleString() method
@@ -1001,13 +929,14 @@ public class GUIUtilities
 	 * @param family The font family
 	 * @param size The font size
 	 * @since jEdit 3.2pre6
+	 * @deprecated use {@link SyntaxUtilities#loadStyles(String,int)}
 	 */
+	@Deprecated
 	public static SyntaxStyle[] loadStyles(String family, int size)
 	{
-		return loadStyles(family,size,true);
-	} //}}}
+		return SyntaxUtilities.loadStyles(family,size,true);
+	}
 
-	//{{{ loadStyles() method
 	/**
 	 * Loads the syntax styles from the properties, giving them the specified
 	 * base font family and size.
@@ -1015,30 +944,12 @@ public class GUIUtilities
 	 * @param size The font size
 	 * @param color If false, the styles will be monochrome
 	 * @since jEdit 4.0pre4
+	 * @deprecated use {@link SyntaxUtilities#loadStyles(String,int,boolean)}
 	 */
+	@Deprecated
 	public static SyntaxStyle[] loadStyles(String family, int size, boolean color)
 	{
-		SyntaxStyle[] styles = new SyntaxStyle[Token.ID_COUNT];
-
-		// start at 1 not 0 to skip Token.NULL
-		for(int i = 1; i < styles.length; i++)
-		{
-			try
-			{
-				String styleName = "view.style."
-					+ Token.tokenToString((byte)i)
-					.toLowerCase(Locale.ENGLISH);
-				styles[i] = GUIUtilities.parseStyle(
-					jEdit.getProperty(styleName),
-					family,size,color);
-			}
-			catch(Exception e)
-			{
-				Log.log(Log.ERROR,GUIUtilities.class,e);
-			}
-		}
-
-		return styles;
+		return SyntaxUtilities.loadStyles(family, size, color);
 	} //}}}
 
 	//}}}

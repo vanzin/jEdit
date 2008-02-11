@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre13
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova, xlinuks,
+Thanks to Bjï¿½rn "Vampire" Kautler, Matthieu Casanova, xlinuks,
 Kazutoshi Satoda, Alan Ezust, Marcelo Vanzin, Jeff Robertson, Jim Morris
 and Daniel Hahler for contributing to this release.
 
@@ -109,13 +109,17 @@ and Daniel Hahler for contributing to this release.
   - Added a new constructor which does not require a position.
   (Kazutoshi Satoda)
 
+- Added org.gjt.sp.util.SyntaxUtilities that will contains some syntax methods
+  most of them comes from GUIUtilities
+  (Matthieu Casanova)
+
 }}}
 
 }}}
 
 {{{ Version 4.3pre12
 
-Thanks to Björn "Vampire" Kautler, Joe Walp, Matthieu Casanova,
+Thanks to Bjï¿½rn "Vampire" Kautler, Joe Walp, Matthieu Casanova,
 Marcelo Vanzin and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
@@ -274,7 +278,7 @@ Marcelo Vanzin and Daniel Hahler for contributing to this release.
 {{{ Version 4.3pre11
 
 Thanks to Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein,
-Björn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
+Bjï¿½rn "Vampire" Kautler, Marcelo Vanzin, Daniel Hahler, strank, Adam Sawicki,
 Scott LeBaron, Seph M. Soliman, Joerg Spieler, Alan Ezust, xlinuks,
 Orhan Alkan and Krassimir Berov
 for contributing to this release.
@@ -338,13 +342,13 @@ for contributing to this release.
   (SF.net Bug #917669 - Kazutoshi Satoda)
 
 - Changed the default mirror from NONE to switch.
-  (bug #1757229) (Björn "Vampire" Kautler)
+  (bug #1757229) (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed the "Evaluate Buffer in BeanShell" macro so that it does what its
   description states, that is evaluating the buffer in current state. Before
   the macro used the last saved state. Additionally the result of the toString()
   method of the return value of the scirpt, if any, is added to the newly
-  created buffer in a new line. (bug #1554769) (Björn "Vampire" Kautler)
+  created buffer in a new line. (bug #1554769) (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed inconsistent indentation which happened when adjacent lines both
   match with "unindentThisLine" pattern and they should be placed at first
@@ -388,7 +392,7 @@ for contributing to this release.
 - The recent files now remembers the edit mode (feature #1593543)
   (Matthieu Casanova)
 
-- The Deb Ant Task now works with Ant 1.7 too. (Björn "Vampire" Kautler)
+- The Deb Ant Task now works with Ant 1.7 too. (Bjï¿½rn "Vampire" Kautler)
 
 }}}
 {{{ Editing
@@ -442,7 +446,7 @@ for contributing to this release.
 
 {{{ Version 4.3pre10
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
+Thanks to Bjï¿½rn "Vampire" Kautler, Alan Ezust, Jakub Roztocil,
 Matthieu Casanova, Nicholas O'Leary, Marcelo Vanzin, Kazutoshi Satoda,
 Joseph Erickson, David Moss, Horst Eff, Daniel Hahler, Stephen Co,
 Shlomy Reinstein, Daniel Johnson, javacorner, Chris Grindstaff,
@@ -452,7 +456,7 @@ and Mike Gorski for contributing to this release.
 
 - On windows the read-only flag on folders is ignored now for finding
   the two-stage save name because it has not write protecting function
-  in windows. (bug #1719711) (Björn "Vampire" Kautler)
+  in windows. (bug #1719711) (Bjï¿½rn "Vampire" Kautler)
 
 - Menu Shorcuts are displayed with the L&F font now if one is
   present for accelerator keys. (patch #1733221) (Daniel Johnson)
@@ -508,7 +512,7 @@ and Mike Gorski for contributing to this release.
   from FSB open action (Alan Ezust).
 
 - jEdit shell scripts and batch files didn't handle spaces
-  in filenames (#1649695) (Björn "Vampire" Kautler)
+  in filenames (#1649695) (Bjï¿½rn "Vampire" Kautler)
 
 - Macro Single_Space_Buffer was broken (#1525313) (Matthieu Casanova)
 
@@ -533,10 +537,10 @@ and Mike Gorski for contributing to this release.
   be indented one level below the if. See the bug for more "graphical"
   depictions. (Marcelo Vanzin)
 
-- Some bugfixes and improvements to ExtendedGridLayout. (Björn "Vampire" Kautler)
+- Some bugfixes and improvements to ExtendedGridLayout. (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed that files were shown in VFSBrowser in choose directory mode.
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Saving a buffer to another VFS was not working (some bugs with markers)
   (bug #1644479) (Matthieu Casanova)
@@ -552,7 +556,7 @@ and Mike Gorski for contributing to this release.
 
 - Fixed a problem with escape sequences where a delegate has the same as
   its parent and so the parents got overridden and was not able to
-  escape the delegates end sequence. (bug #1630805) (Björn "Vampire" Kautler)
+  escape the delegates end sequence. (bug #1630805) (Bjï¿½rn "Vampire" Kautler)
 
 - Correctly send a ViewUpdate.ACTIVATED message when the user closes a view
   and focuses the first opened view. (Marcelo Vanzin)
@@ -567,7 +571,7 @@ and Mike Gorski for contributing to this release.
 
 - Encodings option pane rewritten using a JCheckBoxList, fixed the too small
   scroll amount and enabled/disabled the buttons where appropriate.
-  (bug #1540578) (Björn "Vampire" Kautler)
+  (bug #1540578) (Bjï¿½rn "Vampire" Kautler)
 
 }}}
 {{{ Miscellaneous
@@ -595,23 +599,23 @@ and Mike Gorski for contributing to this release.
   the plugin uses the new plugin api (Matthieu Casanova)
 
 - New LayoutManager ExtendedGridLayout added. For further explanations see
-  its JavaDoc. (Björn "Vampire" Kautler)
+  its JavaDoc. (Bjï¿½rn "Vampire" Kautler)
 
 - New popup menu in Register dockable panel (Matthieu Casanova)
 
 - Removed the calls to begin- and endCompoundEdit() in macros as
   macroinvokations are always automatically embedded inside a compound
-  edit. (Björn "Vampire" Kautler)
+  edit. (Bjï¿½rn "Vampire" Kautler)
 
 - Refactored the use of hypersearch-results.file-caption and
   hypersearch-results.result-caption to only use one property instead of three
-  depending on the amount of found occurrences. (Björn "Vampire" Kautler)
+  depending on the amount of found occurrences. (Bjï¿½rn "Vampire" Kautler)
 
 - SF Patch #1678608: Improve performace in findMatchingBracket
   Return earlier if matching bracket is unknown. (Daniel Hahler)
 
 - Added the time in Log._log() so that events and exceptions could easier be
-  assigned to interactions. (Björn "Vampire" Kautler)
+  assigned to interactions. (Bjï¿½rn "Vampire" Kautler)
 
 - SF Patch #1469586: Allow setting Mac OS type and creator to be optional
   Change to MacOS plugin. (Mike Gorski)
@@ -621,7 +625,7 @@ and Mike Gorski for contributing to this release.
   the JEditorPane and the arrow keys can be used to scroll horizontally and
   vertically instead of moving the invisible caret which scrolls only when
   the invisible caret hits page boundaries. Additionally the history remembers
-  the vertical scroll position now. (Björn "Vampire" Kautler)
+  the vertical scroll position now. (Bjï¿½rn "Vampire" Kautler)
 
 - Added a new option "List of encoding autodetectors" in Encodings option pane
   to extend encoding autodetection with the new EncodingDetector services.
@@ -656,7 +660,7 @@ and Mike Gorski for contributing to this release.
   string is interpreted unchanged as regex. If you need a glob starting
   with "(re)" you have to escape it and write "\(re)" instead. So now you
   can use EVERYWHERE a glob is expected a normal regex instead and use
-  their full power. (Björn "Vampire" Kautler)
+  their full power. (Bjï¿½rn "Vampire" Kautler)
 
 }}}
 {{{ Editing
@@ -713,7 +717,7 @@ and Mike Gorski for contributing to this release.
   SF Bug #1658252. (Kazutoshi Satoda and Marcelo Vanzin)
 
 - Added an option to deactivate that rectangular selection mode
-  is active if Ctrl is pressed. (Björn "Vampire" Kautler)
+  is active if Ctrl is pressed. (Bjï¿½rn "Vampire" Kautler)
 
 }}}
 {{{ API Changes
@@ -723,13 +727,13 @@ and Mike Gorski for contributing to this release.
 
 - VFS.isMarkersFileSupported() added to give a VFS the chance to tell
   jEdit that no markers file should be saved or loaded to/from this VFS.
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Deprecated VFS.showBrowseDialog() as it is not used in the jEdit core anymore,
-  so it doesn't have to be provided anymore. (Björn "Vampire" Kautler)
+  so it doesn't have to be provided anymore. (Bjï¿½rn "Vampire" Kautler)
 
 - Removed class VFSBrowser.PluginsMenuButton.ActionHandler as it isn't used
-  anymore. (Björn "Vampire" Kautler)
+  anymore. (Bjï¿½rn "Vampire" Kautler)
 
 - New static methods EditPlugin.getPluginHome(Class<? extends EditPlugin>) and
   EditPlugin.getPluginHome(EditPlugin) that return the path where a plugin
@@ -763,7 +767,7 @@ and Mike Gorski for contributing to this release.
 
 - plugin.className.files added as property for plugins. This property specifies
   external non-JAR files, e. g. libraries, which are in the jars directory.
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - ParserRule.hashChar and ParserRule.hashChars have been removed, since they
   weren't used anywhere. (Marcelo Vanzin)
@@ -775,7 +779,7 @@ and Mike Gorski for contributing to this release.
   were added. (Marcelo Vanzin)
 
 - new method: SearchAndReplace.replaceAll(View,boolean) to do a replace all,
-  but not open files that were not open before. (Björn "Vampire" Kautler)
+  but not open files that were not open before. (Bjï¿½rn "Vampire" Kautler)
 
 - Buffer.getMarkersPath(VFS) deprecated and replaced by static method
   Buffer.getMarkersPath(VFS,path), see bug #1644479 (Matthieu Casanova)
@@ -804,7 +808,7 @@ and Mike Gorski for contributing to this release.
 
 {{{ Version 4.3pre9
 
-Thanks to Björn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
+Thanks to Bjï¿½rn "Vampire" Kautler, Akber Choudhry, Matthieu Casanova
 Jean-Francois Larvoire, Martin Raspe, Kazutoshi Satoda, Alan Ezust, Marcelo
 Vanzin, and Nicholas O'Leary for contributing to this release.
 
@@ -818,19 +822,19 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - Filter Box lose focus bug (patch #1608948) (kuljc)
 
-- Fixed the broken quick copy behaviour (Björn "Vampire" Kautler)
+- Fixed the broken quick copy behaviour (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed the wrong text in SearchAndReplace Dialog (bug #1592529)
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed wrong highlighting of multiline strings in cobol editmode
-  (bug #785290) (Björn "Vampire" Kautler)
+  (bug #785290) (Bjï¿½rn "Vampire" Kautler)
 
 - Plugins in plugins options are now sorted case-insentively
   (bug #1593410) (Matthieu Casanova)
 
 - Fixed the not resolved IMPORTs in IMPORTs (bug #1569735)
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Fix SF Bug #1596756: Annoying problem with file system browser in 4.3pre7
   When reopening the "recent" files on startup, a buffer might fail to
@@ -861,13 +865,13 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   disabled, a NPE occured (#1593392) (Matthieu Casanova)
 
 - Fixed a bug I introduced with the new HASH_CHAR handling
-  (bug #1600380) (Björn "Vampire" Kautler)
+  (bug #1600380) (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed another bug with the new HASH_CHAR handling
-  (bug #1600401) (Björn "Vampire" Kautler)
+  (bug #1600401) (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed precedence of Recent Files List caretposition over commandline
-  supplied caret position (Björn "Vampire" Kautler)
+  supplied caret position (Bjï¿½rn "Vampire" Kautler)
 
 - SearchMatcher in SearchAndReplace cannot match empty Strings anymore
   (#1601718) (Matthieu Casanova)
@@ -878,7 +882,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - Fixed that ESCAPE sequence of RULES tag couldn't appear at the beginning
   of a rule. Now this is possible. Also added documentation about the
-  ESCAPE attribute. (Björn "Vampire" Kautler)
+  ESCAPE attribute. (Bjï¿½rn "Vampire" Kautler)
 
 - Hypersearch now report occurences count and line count (#1565447)
   (Matthieu Casanova)
@@ -892,7 +896,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - VariableGridLayout resized Components to sizes bigger than their maximum size,
   now it resizes it only up to its maximum size and positions the Components
   according to their alignmentX/alignmentY values if the cell is bigger than
-  the Component's size. (Björn "Vampire" Kautler)
+  the Component's size. (Bjï¿½rn "Vampire" Kautler)
 
 - Horizontal scrollbar in the textarea was not always updated
   (#1534016, #1617483) (Matthieu Casanova)
@@ -928,9 +932,9 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 
 - Updated Lilypond edit mode (Bertalan Fodor)
 
-- Fixed some invalid mode files (Björn "Vampire" Kautler)
+- Fixed some invalid mode files (Bjï¿½rn "Vampire" Kautler)
 
-- Updated some mode files that were still in jEdit 4.0 syntax (Björn "Vampire" Kautler)
+- Updated some mode files that were still in jEdit 4.0 syntax (Bjï¿½rn "Vampire" Kautler)
 
 - Perl edit mode - support for fully qualified variable names like $Some::Module::test.
   (Martin Raspe)
@@ -954,7 +958,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   (bug #1593389) (patch #1593900) (Akber Choudhry)
 
 - Added a FIRST_LINE_GLOB to the "awk" mode in modes catalog (fr #1582241)
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Incremental searchbar now use the invalid syntax color to show if the searched
   text was found (Matthieu Casanova)
@@ -963,14 +967,14 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   current buffer with a specific encoding.
 
 - HASH_CHAR in mode-files is now optional and multicharacter
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - HASH_CHARS got invented for mode-files as alternative to HASH_CHAR,
   whereby HASH_CHARS lists possible first characters of the matched
-  result literally (Björn "Vampire" Kautler)
+  result literally (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed some wrong documentation and added some new
-  about HASH_CHAR and HASH_CHARS (Björn "Vampire" Kautler)
+  about HASH_CHAR and HASH_CHARS (Bjï¿½rn "Vampire" Kautler)
 
 - SplashScreen change : more step added for progress bar and it tells now
   what jEdit is doing (Matthieu Casanova)
@@ -987,7 +991,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
   distributing free space and you can supply distances to the borders
   of the Container. The new capabilites are useable by the two new
   constructors. For more information, see the JavaDoc documentation.
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Reload/ReloadAll now ignores buffers with the NEW_FILE flag set. This
   was causing IO error messages when the Untitled buffers could not
@@ -1024,7 +1028,7 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Refactored the manually implemented HashSet of LinkedLists to use the
   Java Collections HashSet and ArrayList. Therefore the ParserRule.next
   and the ParserRuleSet.getRules(char) got deprecated in favor of
-  ParserRuleSet.getRules(Character) (Björn "Vampire" Kautler)
+  ParserRuleSet.getRules(Character) (Bjï¿½rn "Vampire" Kautler)
 
 - Deprecated JEditBuffer.isElectricKey(char).
   Added JEditBuffer.isElectricKey(char, int) to replace it.
@@ -1033,13 +1037,13 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 - Deprecated some of the ParserRule.createXXX() methods which accepted
   only one character HASH_CHAR, while introduced new ones that accept
   whole Strings. Additionally new ones for accepting HASH_CHARS got
-  added. (Björn "Vampire" Kautler)
+  added. (Bjï¿½rn "Vampire" Kautler)
 
 - SearchDialog.preloadSearchDialog(View) is deprecated, this is
   not necessary on our big computers and JVM with JIT (Matthieu Casanova)
 
 - VariableGridLayout has two new constructors to use the new capabilites.
-  For more information see section Miscellaneous. (Björn "Vampire" Kautler)
+  For more information see section Miscellaneous. (Bjï¿½rn "Vampire" Kautler)
 
 - PluginManager.getPluginList() is not public anymore. It was not useful
   since the PluginList class cannot be accessed outside of it's package
@@ -1083,16 +1087,16 @@ Vanzin, and Nicholas O'Leary for contributing to this release.
 {{{ Version 4.3pre8
 
 Thanks to Matthieu Casanova, Martin Raspe, Marcelo Vanzin, Alan Ezust
-and Björn "Vampire" Kautler for contributing to this release.
+and Bjï¿½rn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
 - Fixed the impossibility to ReplaceAndFind if matching "$"
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed incorrect highlighting if in soft-wrap and rectangular selection
   mode if drag highlighting with the mouse. (bug #1589360)
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Fix SF Bug #1574562: 4.3pre7 regex find/replace fails
   When adjusting the offset after an EOL match, need to check whether
@@ -1148,7 +1152,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 
 Thanks to Matthieu Casanova, Marcelo Vanzin, Nicholas O'Leary,
 Marcin Orlowski, Martin Raspe, Kazutoshi Satoda, Alan Ezust,
-and Björn "Vampire" Kautler for contributing to this release.
+and Bjï¿½rn "Vampire" Kautler for contributing to this release.
 
 {{{ API Changes
 
@@ -1179,7 +1183,7 @@ and Björn "Vampire" Kautler for contributing to this release.
   GUIUtilities.addSizeSaver(Frame frame, Container parent, String name)
   and refactored to use saveGeometry(). Saves/restores
   sizes relative to a parent container. if parent==null, behaves
-  as before. (Björn "Vampire" Kautler)
+  as before. (Bjï¿½rn "Vampire" Kautler)
 
   }}}
   {{{ PluginJAR changes
@@ -1255,7 +1259,7 @@ and Björn "Vampire" Kautler for contributing to this release.
   + selection and checked state of plugins is now remembered if going to
     other tabpanes or to the settings (feature request #974759)
   + Install and Update Panels support now multiple selections too
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Plugin Manager: Automatically loads unloaded dependent plugins.
     (#1538702) (Alan Ezust)
@@ -1345,7 +1349,7 @@ and Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Version 4.3pre6
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust,
+Thanks to Bjï¿½rn "Vampire" Kautler, Alan Ezust,
 Matthieu Casanova, Nicholas O'Leary, Ollie Rutherfurd, and
 Marcelo Vanzin for contributing to this release.
 
@@ -1353,7 +1357,7 @@ Marcelo Vanzin for contributing to this release.
 - MiscUtilities.getEncodings(boolean getSelected) added
   to get only the user-chosen encodings, e. g. in encoding dialogs.
   getEncodings() is deprecated in favor of getEncodings(false).
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - DockableWindowManager.closeListener(String dockableName) - a new
   convenience method for creating keyboard listeners for floating
@@ -1361,7 +1365,7 @@ Marcelo Vanzin for contributing to this release.
 
 - GUIUtilities.addSizeSaver(Frame frame, String name) added to
   save a Frames size and position correctly, even if it gets
-  maximized.  (Björn "Vampire" Kautler)
+  maximized.  (Bjï¿½rn "Vampire" Kautler)
 
 - EditPane.setBuffer(final Buffer buffer, boolean requestFocus) that allow
   to set a buffer without requesting the focus (default is to request focus)
@@ -1389,14 +1393,14 @@ Marcelo Vanzin for contributing to this release.
 - Beanshell 2.0b4 bundled (Matthieu Casanova)
 
 - Added an OptionPane "Encodings" to select which encodings to
-  show in encoding dialogs.  (Björn "Vampire" Kautler)
+  show in encoding dialogs.  (Bjï¿½rn "Vampire" Kautler)
 
 - Improved DockableWindowManager.closeCurrentArea() - closes more
   docked dockables than it did before. (Alan Ezust)
 
 - Fixed the storing of Frame size and position
   if the Frame gets maximized. (bug #1325358)
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 
 - Fixed VFS.copy() method when the returned session is null
   (Matthieu Casanova)
@@ -1505,7 +1509,7 @@ Marcelo Vanzin for contributing to this release.
 {{{ Version 4.3pre5
 
 Thanks to Alan Ezust, Jeffrey Hoyt, Daniel Hahler, Dale Anson,
-Björn "Vampire" Kautler, Matthieu Casanova, Xuân Baldauf,
+Bjï¿½rn "Vampire" Kautler, Matthieu Casanova, Xuï¿½n Baldauf,
 Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 
 {{{ Reinstall required
@@ -1522,7 +1526,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   a fix to bug 1488047). This may greatly affect the way your keys work.
   Please report any bugs regarding this (and please drop a note about
   this bug in bug 1488047).
-  (Xuân Baldauf).
+  (Xuï¿½n Baldauf).
 }}}
 {{{ API Changes
 
@@ -1537,7 +1541,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   after the macro is invoked opposed to end the compoundEdit on the buffer it was started on.
   JEditTextArea.setBuffer() has been rewritten to end a compoundEdit on the old buffer and start
   a new compoundEdit on the new buffer if there were a compoundEdit in progress.
-  (bug #1469996).   (Björn "Vampire" Kautler )
+  (bug #1469996).   (Bjï¿½rn "Vampire" Kautler )
 
 - New class: org.gjt.sp.jedit.msg.CaretChanging, for alerting
   other plugins that the caret position is about to change.
@@ -1576,7 +1580,7 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   This means that any plugin that uses SearchMatcher or one of its
   implementations directly will break. (Marcelo Vanzin)
 
-- Added Log.log(urgency, source, message, exception). (Xuân Baldauf)
+- Added Log.log(urgency, source, message, exception). (Xuï¿½n Baldauf)
 
 }}}
 {{{ Miscellaneous
@@ -1586,17 +1590,17 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   as binary files. (Matthieu Casanova & Alan Ezust)
 
 - Updated Ruby Edit-mode to v0.6.2
-  The Ruby-Mode now highlights numbers correctly (bug #1489847). (Björn "Vampire" Kautler)
+  The Ruby-Mode now highlights numbers correctly (bug #1489847). (Bjï¿½rn "Vampire" Kautler)
 
 - The "Recent files" menu can now be reaches with the keystroke sequence
-  "Alt+F F" (bug 1488066) (Xuân Baldauf)
+  "Alt+F F" (bug 1488066) (Xuï¿½n Baldauf)
 
 - The "Recent files" menu displays pathname information in the status
   line now also in cases the keyboard is used to choose menu items
-  (bug 1488060) (Xuân Baldauf)
+  (bug 1488060) (Xuï¿½n Baldauf)
 
 - Drag&Drop now accepts multiple files in KDE environment. (bug 1487647)
-  (Xuân Baldauf)
+  (Xuï¿½n Baldauf)
 
 - Mode_Switcher macro fixed to stop InvocationTargetException
   (Nicholas O'Leary)
@@ -1629,15 +1633,15 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
 - The build.xml got rebuilt to allow building the MacOS-Plugin on any platform
   and to make it easier to build the distribution files (DEB, Java-Installer,
   Mac OS X DMG, TGZ Slackware Package, Windows-Installer, SRC-package, PDF-Manuals).
-  (Björn "Vampire" Kautler)
+  (Bjï¿½rn "Vampire" Kautler)
 }}}
 }}}
 
 {{{ Version 4.3pre4
 
-Thanks to Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuân Balduf,
+Thanks to Neil Bertram, Onur Turgay, Ollie Rutherfurd, Dale Anson, Xuï¿½n Balduf,
 Nathan Blair, Peter Adolphs, Carmine Lucarelli, Matthieu Casanova, Alan Ezust,
-Daniel Hahler, Marcello Vanzin, Slava Pestov, Björn "Vampire" Kautler, and Jeffrey Hoyt for
+Daniel Hahler, Marcello Vanzin, Slava Pestov, Bjï¿½rn "Vampire" Kautler, and Jeffrey Hoyt for
 contributing to this release.
 
 {{{ Syntax Highlighting
@@ -1665,9 +1669,9 @@ contributing to this release.
 {{{ Miscellaneous
 
 
-- TextAreaTransferHandler patch 1487647 Drag 'n' drop from KDE now works. (Xuân Baldauf)
+- TextAreaTransferHandler patch 1487647 Drag 'n' drop from KDE now works. (Xuï¿½n Baldauf)
 
-- GUIUtilities patch 1275607 for "find" dialog (Xuân Baldauf)
+- GUIUtilities patch 1275607 for "find" dialog (Xuï¿½n Baldauf)
 
 - GUIUtilities patch 1467821 for dual-head displays applied (Nathan Blair)
 
@@ -1703,7 +1707,7 @@ contributing to this release.
 
 {{{ Version 4.3pre3
 
-Thanks to Bertalan Fodor, Björn "Vampire" Kautler, David Chan, James Turk,
+Thanks to Bertalan Fodor, Bjï¿½rn "Vampire" Kautler, David Chan, James Turk,
 Loren Charnley, Matthieu Casanova, Michael Macnair, Nicholas O'Leary,
 Alan Ezust, Slava Pestov, Ollie Rutherfurd, Jeffrey Hoyt, Marcelo Vanzin,
 Rob (copy_paste), and Simon Ruggier for contributing to this release.
@@ -1767,7 +1771,7 @@ Rob (copy_paste), and Simon Ruggier for contributing to this release.
 - Updated "Display Abbreviations", "Hex Convert" and "HyperSearch
   Results to Buffer" macros.
 
-- Updated "Insert Buffer Properties" macro (Björn "Vampire" Kautler).
+- Updated "Insert Buffer Properties" macro (Bjï¿½rn "Vampire" Kautler).
 
 - The plugin manager option pane now displays the name of the mirror
   currently used (Matthieu Casanova).

@@ -34,9 +34,14 @@ import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.input.TextAreaInputHandler;
-import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.syntax.Chunk;
+import org.gjt.sp.jedit.syntax.TokenMarker;
+import org.gjt.sp.jedit.syntax.ParserRuleSet;
+import org.gjt.sp.jedit.syntax.ModeProvider;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.SyntaxUtilities;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
@@ -107,15 +112,92 @@ public class TextArea extends JComponent
 			return;
 		}
 		
-		Font font1 = new Font("Monospaced", Font.PLAIN, 12);
+		
+		//{{{ init Style property manager
+		if (SyntaxUtilities.propertyManager == null)
+		{
+			final Properties props = new Properties();
+			InputStream in = TextArea.class.getResourceAsStream("/org/gjt/sp/jedit/jedit.props");
+			try
+			{
+				props.load(in);
+			}
+			catch (IOException e)
+			{
+				Log.log(Log.ERROR, TextArea.class, e);
+			}		
+			finally
+			{
+				IOUtilities.closeQuietly(in);
+			}
+			SyntaxUtilities.propertyManager = new IPropertyManager()
+			{
+				public String getProperty(String name)
+				{
+					return (String) props.get(name);
+				}
+			};
+		}
+		//}}}
+
+		String defaultFont = SyntaxUtilities.propertyManager.getProperty("view.font");
+		int defaultFontSize;
+		try
+		{
+			defaultFontSize = Integer.parseInt(SyntaxUtilities.propertyManager.getProperty("view.fontsize"));
+		}
+		catch (NumberFormatException e)
+		{
+			defaultFontSize = 12;
+		}
+		
+		painter.setStyles(SyntaxUtilities.loadStyles(defaultFont,defaultFontSize));
+		
+		/*Font font1 = new Font("Monospaced", Font.PLAIN, 12);
 		painter.setFont(font1);
 		SyntaxStyle[] styles = new SyntaxStyle[1];
-		styles[0] = new SyntaxStyle(Color.black, Color.white, font1);
-		painter.setStyles(styles);
+		styles[0] = new SyntaxStyle(Color.black, Color.white, font1);*/
+		//painter.setStyles(styles);
+		
+		
 		painter.setBlockCaretEnabled(false);
 
+		String name = SyntaxUtilities.propertyManager.getProperty("view.font");
+		String family = SyntaxUtilities.propertyManager.getProperty(name);
+		String sizeString = SyntaxUtilities.propertyManager.getProperty(name + "size");
+		String styleString = SyntaxUtilities.propertyManager.getProperty(name + "style");
 
+		//{{{ get font, copy of jEdit.getFontPropert()
+		Font font = null;
+		if(family == null || sizeString == null || styleString == null)
+			font = new Font("Monospaced", Font.PLAIN, 12);
+		else
+		{
+			int size, style;
 
+			try
+			{
+				size = Integer.parseInt(sizeString);
+			}
+			catch(NumberFormatException nf)
+			{
+				size = 12;
+			}
+
+			try
+			{
+				style = Integer.parseInt(styleString);
+			}
+			catch(NumberFormatException nf)
+			{
+				style = Font.PLAIN;
+			}
+			font = new Font(family,style,size);
+			
+		} //}}}
+
+		
+		painter.setFont(font);
 		painter.setStructureHighlightEnabled(true);
 		painter.setStructureHighlightColor(Color.black);
 		painter.setEOLMarkersPainted(false);
@@ -150,8 +232,13 @@ public class TextArea extends JComponent
 
 		setCaretBlinkEnabled(true);
 		setElectricScroll(3);
-
-		FoldHandler.foldHandlerProvider = new DefaultFoldHandlerProvider();
+		
+		DefaultFoldHandlerProvider foldHandlerProvider = new DefaultFoldHandlerProvider(); 
+		
+		FoldHandler.foldHandlerProvider = foldHandlerProvider;
+		foldHandlerProvider.addFoldHandler(new ExplicitFoldHandler());
+		foldHandlerProvider.addFoldHandler(new IndentFoldHandler());
+		foldHandlerProvider.addFoldHandler(new DummyFoldHandler());
 		JEditBuffer buffer = new JEditBuffer();
 		TokenMarker tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
@@ -6162,7 +6249,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		JFrame frame = new JFrame();
 		TextArea text = createTextArea();
+		Mode mode = new Mode("xml");
+		mode.setProperty("file","modes/xml.xml");
+		ModeProvider.instance.addMode(mode);
+		text.getBuffer().setMode(mode);
 		frame.getContentPane().add(text);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
 	} //}}}
