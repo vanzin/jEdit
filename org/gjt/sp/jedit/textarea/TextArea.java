@@ -151,8 +151,6 @@ public class TextArea extends JComponent
 			defaultFontSize = 12;
 		}
 		
-		painter.setStyles(SyntaxUtilities.loadStyles(defaultFont,defaultFontSize));
-		
 		/*Font font1 = new Font("Monospaced", Font.PLAIN, 12);
 		painter.setFont(font1);
 		SyntaxStyle[] styles = new SyntaxStyle[1];
@@ -198,6 +196,8 @@ public class TextArea extends JComponent
 
 		
 		painter.setFont(font);
+		
+		
 		painter.setStructureHighlightEnabled(true);
 		painter.setStructureHighlightColor(Color.black);
 		painter.setEOLMarkersPainted(false);
@@ -215,6 +215,7 @@ public class TextArea extends JComponent
 		painter.setAntiAlias(new AntiAlias(0));
 		painter.setFractionalFontMetricsEnabled(false);
 
+		painter.setStyles(SyntaxUtilities.loadStyles(defaultFont,defaultFontSize));
 
 		gutter.setExpanded(false);
 		gutter.setHighlightInterval(5);
