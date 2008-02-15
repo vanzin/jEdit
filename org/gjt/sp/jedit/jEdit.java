@@ -22,6 +22,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import org.gjt.sp.jedit.visitors.JEditVisitor;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.DefaultKeyboardFocusManager;
@@ -58,6 +59,7 @@ import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.XModeHandler;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -1945,17 +1947,8 @@ public class jEdit
 		}
 
 		// save caret info. Buffer.load() will load it.
-		View _view = viewsFirst;
-		while(_view != null)
-		{
-			EditPane[] panes = _view.getEditPanes();
-			for(int i = 0; i < panes.length; i++)
-			{
-				panes[i].saveCaretInfo();
-			}
-
-			_view = _view.next;
-		}
+		visit(new SaveCaretInfoVisitor());
+		
 
 		for(int i = 0; i < buffers.length; i++)
 		{
@@ -2087,16 +2080,7 @@ public class jEdit
 		// the problem with this is that if we have two edit panes
 		// looking at the same buffer and the file is reloaded both
 		// will jump to the same location
-		View _view = viewsFirst;
-		while(_view != null)
-		{
-			EditPane[] editPanes = _view.getEditPanes();
-			for(int i = 0; i < editPanes.length; i++)
-			{
-				editPanes[i].saveCaretInfo();
-			}
-			_view = _view.next;
-		}
+		visit(new SaveCaretInfoVisitor());
 
 		Buffer buffer;
 		buffer = buffersFirst;

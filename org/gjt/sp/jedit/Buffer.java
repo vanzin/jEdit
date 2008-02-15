@@ -52,6 +52,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 //}}}
+import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 
 /**
  * A <code>Buffer</code> represents the contents of an open text
@@ -149,9 +150,7 @@ public class Buffer extends JEditBuffer
 			if(result != JOptionPane.YES_OPTION)
 				return;
 		}
-		EditPane[] editPanes = view.getEditPanes();
-		for (int i = 0; i < editPanes.length; i++)
-			editPanes[i].saveCaretInfo();
+		view.visit(new SaveCaretInfoVisitor());
 		load(view,true);
 	} //}}}
 

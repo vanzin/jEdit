@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
+import org.gjt.sp.jedit.visitors.JEditVisitor;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
@@ -297,13 +299,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		{
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 			setCursor(cursor);
-			EditPane[] editPanes = getEditPanes();
-			for(int i = 0; i < editPanes.length; i++)
-			{
-				EditPane editPane = editPanes[i];
-				editPane.getTextArea().getPainter()
-					.setCursor(cursor);
-			}
+			visit(new SetCursorVisitor(cursor));
 		}
 	} //}}}
 
@@ -323,13 +319,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 			setCursor(cursor);
 			cursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
-			EditPane[] editPanes = getEditPanes();
-			for(int i = 0; i < editPanes.length; i++)
-			{
-				EditPane editPane = editPanes[i];
-				editPane.getTextArea().getPainter()
-					.setCursor(cursor);
-			}
+			visit(new SetCursorVisitor(cursor));
 		}
 	} //}}}
 
@@ -1684,6 +1674,7 @@ loop:		while (true)
 	//{{{ FocusHandler class
 	class FocusHandler extends FocusAdapter
 	{
+		@Override
 		public void focusGained(FocusEvent evt)
 		{
 			// walk up hierarchy, looking for an EditPane
@@ -1718,6 +1709,7 @@ loop:		while (true)
 	//{{{ WindowHandler class
 	class WindowHandler extends WindowAdapter
 	{
+		@Override
 		public void windowActivated(WindowEvent evt)
 		{
 			boolean editPaneChanged =
@@ -1794,11 +1786,28 @@ loop:		while (true)
 	//{{{ MyFocusTraversalPolicy class
 	static class MyFocusTraversalPolicy extends LayoutFocusTraversalPolicy
 	{
+		@Override
 		public Component getDefaultComponent(Container focusCycleRoot)
 		{
 			return GUIUtilities.getView(focusCycleRoot).getTextArea();
 		}
 	} //}}}
 
+	//{{{ SetCursorVisitor class
+	private static class SetCursorVisitor extends JEditVisitorAdapter
+	{
+		private final Cursor cursor;
+
+		public SetCursorVisitor(Cursor cursor)
+		{
+			this.cursor = cursor;
+		}
+		
+		@Override
+		public void visit(EditPane editPane)
+		{
+			editPane.setCursor(cursor);
+		}
+	}//}}}
 	//}}}
 }

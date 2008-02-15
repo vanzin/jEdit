@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.EditPane;
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.TextUtilities;
@@ -192,28 +193,26 @@ public class CompleteWord extends CompletionPopup
 	} //}}}
 
 	//{{{ getCompletions() method
-	private static Completion[] getCompletions(Buffer buffer, String word,
-		int caret)
+	private static Completion[] getCompletions(final Buffer buffer, final String word,
+		final int caret)
 	{
 		// build a list of unique words in all visible buffers
-		Set<Completion> completions = new TreeSet<Completion>(new StandardUtilities
+		final Set<Completion> completions = new TreeSet<Completion>(new StandardUtilities
 			.StringCompare());
-		Set<Buffer> buffers = new HashSet<Buffer>();
+		final Set<Buffer> buffers = new HashSet<Buffer>();
 
 		// only complete current buffer's keyword map
-		KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
-		String noWordSep = getNonAlphaNumericWordChars(
+		final KeywordMap keywordMap = buffer.getKeywordMapAtOffset(caret);
+		final String noWordSep = getNonAlphaNumericWordChars(
 			buffer,keywordMap);
-
-		View views = jEdit.getFirstView();
-		while(views != null)
+		jEdit.visit(new JEditVisitorAdapter()
 		{
-			EditPane[] panes = views.getEditPanes();
-			for(int i = 0; i < panes.length; i++)
+			@Override
+			public void visit(EditPane editPane)
 			{
-				Buffer b = panes[i].getBuffer();
+				Buffer b = editPane.getBuffer();
 				if(buffers.contains(b))
-					continue;
+					return;
 
 				buffers.add(b);
 
@@ -229,9 +228,7 @@ public class CompleteWord extends CompletionPopup
 				getCompletions(b,word,keywordMap,noWordSep,
 					offset,completions);
 			}
-
-			views = views.getNext();
-		}
+		});
 
 		Completion[] completionArray = completions
 			.toArray(new Completion[completions.size()]);
