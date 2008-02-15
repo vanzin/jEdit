@@ -1150,18 +1150,35 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			unsavedChanges);
 	} //}}}
 
-
+	//{{{ getPrefixFocusOwner() method
 	public Component getPrefixFocusOwner()
 	{
 		return prefixFocusOwner;
-	}
+	} //}}}
 
-
+	//{{{ setPrefixFocusOwner() method
 	public void setPrefixFocusOwner(Component prefixFocusOwner)
 	{
 		this.prefixFocusOwner = prefixFocusOwner;
-	}
+	} //}}}
 
+	//{{{ visit() method
+	/**
+	 * Visit the the editpanes and textareas of the view
+	 * @param visitor the visitor
+	 * @since jEdit 4.3pre13
+	 */
+	public void visit(JEditVisitor visitor)
+	{
+		EditPane[] panes = getEditPanes();
+		for (int i = 0; i < panes.length; i++)
+		{
+			EditPane editPane = panes[i];
+			visitor.visit(editPane);
+			visitor.visit(editPane.getTextArea());
+		}
+	} //}}}
+	
 	//{{{ Package-private members
 	View prev;
 	View next;

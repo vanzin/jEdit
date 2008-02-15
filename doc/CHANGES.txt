@@ -116,6 +116,10 @@ and Daniel Hahler for contributing to this release.
 - Added org.gjt.sp.util.SyntaxUtilities that will contains some syntax methods
   most of them comes from GUIUtilities
   (Matthieu Casanova)
+  
+- A new interface JEditVisitor is added and implements the pattern Visitor.
+  It can visit the views, edit panes and textareas using the method 
+  jEdit.visit(JEditVisitor) or View.visit(JEditVisitor) (Matthieu Casanova)
 
 }}}
 
