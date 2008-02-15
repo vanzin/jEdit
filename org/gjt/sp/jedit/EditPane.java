@@ -88,7 +88,7 @@ public class EditPane extends JPanel implements EBComponent
 		return buffer;
 	} //}}}
 
-	//{{{ setBuffer() method
+	//{{{ setBuffer() methods
 	/**
 	 * Sets the current buffer.
 	 * @param buffer The buffer to edit.
@@ -97,9 +97,8 @@ public class EditPane extends JPanel implements EBComponent
 	public void setBuffer(Buffer buffer)
 	{
 		setBuffer(buffer, true);
-	} //}}}
+	}
 
-	//{{{ setBuffer() method
 	/**
 	 * Sets the current buffer.
 	 * @param buffer The buffer to edit.
@@ -437,7 +436,7 @@ public class EditPane extends JPanel implements EBComponent
 
 	} //}}}
 
-	//{{{
+	//{{{ CaretInfo class
 	/**
 	 * Need to track this info for each buffer that this EditPane might edit
 	 * since a buffer may be open in more than one EditPane at a time.  That
