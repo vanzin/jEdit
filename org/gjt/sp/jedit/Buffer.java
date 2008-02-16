@@ -52,6 +52,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 //}}}
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 
 /**
@@ -844,6 +845,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * Sets the 'dirty' (changed since last save) flag of this buffer.
 	 */
+	@Override
 	public void setDirty(boolean d)
 	{
 		boolean old_d = isDirty();
@@ -954,6 +956,7 @@ public class Buffer extends JEditBuffer
 	 * after the <code>syntax</code> or <code>folding</code>
 	 * buffer-local properties are changed.
 	 */
+	@Override
 	public void propertiesChanged()
 	{
 		super.propertiesChanged();
@@ -1541,6 +1544,7 @@ public class Buffer extends JEditBuffer
 	 * Returns a string representation of this buffer.
 	 * This simply returns the path name.
 	 */
+	@Override
 	public String toString()
 	{
 		return name + " (" + directory + ')';
@@ -1673,16 +1677,16 @@ public class Buffer extends JEditBuffer
 	//}}}
 
 	//{{{ setPath() method
-	private void setPath(String path)
+	private void setPath(final String path)
 	{
-		View[] views = jEdit.getViews();
-		for (int i = 0; i < views.length; i++)
+		jEdit.visit(new JEditVisitorAdapter()
 		{
-			View view = views[i];
-			EditPane[] editPanes = view.getEditPanes();
-			for (int j = 0; j < editPanes.length; j++)
-				editPanes[j].bufferRenamed(this.path, path);
-		}
+			@Override
+			public void visit(EditPane editPane)
+			{
+				editPane.bufferRenamed(Buffer.this.path, path);
+			}
+		});
 
 		this.path = path;
 		VFS vfs = VFSManager.getVFSForPath(path);
