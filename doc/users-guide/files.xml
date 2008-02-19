@@ -383,7 +383,7 @@
             <guimenu>Utilities</guimenu>&gt;<guisubmenu>Recent
             Directories</guisubmenu> menu; selecting one opens it in the file
             system browser.</para>
-
+            
             <para>To browse a listed directory, double-click it (or if you have
             a three-button mouse, you can click the middle mouse button as
             well). Alternatively, click the disclosure widget next to a
@@ -398,6 +398,9 @@
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box.</para>
 
+            <para>The <guibutton>Path:</guibutton> Text Box can be used to 
+            navigate to a specific directory. Shell variables are expanded here, allowing for both <literal>$VARNAME</literal> or <literal>%VARNAME%</literal> syntax. </para>
+            
             <para>To see a specific set of files only (for example, those whose
             names end with <filename>.java</filename>), enter a glob pattern in
             the <guibutton>Filter</guibutton> text field. This text fields
