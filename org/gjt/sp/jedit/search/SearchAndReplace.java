@@ -33,7 +33,6 @@ import org.gjt.sp.jedit.gui.TextAreaDialog;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.SegmentCharSequence;
 import org.gjt.sp.util.Log;
 //}}}
@@ -1306,18 +1305,43 @@ loop:		for(int counter = 0; ; counter++)
 			case '$':
 				if(i == replace.length() - 1)
 				{
+					// last character of the replace string, 
+					// it is not a capturing group
 					buf.append(ch);
 					break;
 				}
 
 				ch = replace.charAt(++i);
 				if(ch == '$')
+				{
+					// It was $$, so it is an escaped $
 					buf.append('$');
+				}
 				else if(ch == '0')
+				{
+					// $0 meaning the first capturing group :
+					// the found value
 					buf.append(found);
+				}
 				else if(Character.isDigit(ch))
 				{
 					int n = ch - '0';
+					while (i < replace.length() - 1)
+					{
+						ch = replace.charAt(++i);
+						if (Character.isDigit(ch))
+						{
+							n = n * 10 + (ch - '0');
+						}
+						else
+						{
+							// The character is not 
+							// a digit, going back and
+							// end loop
+							i--;
+							break;
+						}
+					}
 					if(n < occur
 						.substitutions
 						.length)
