@@ -41,7 +41,15 @@ abstract class Anchor
 	 * when using soft wrap.
 	 */
 	int scrollLine;
+	/** 
+	 * If this is set to true, the changed() method will be called in
+	 * {@link DisplayManager#notifyScreenLineChanges()}
+	 */
 	boolean callChanged;
+	/** 
+	 * If this is set to true, the reset() method will be called in
+	 * {@link DisplayManager#notifyScreenLineChanges()}
+	 */
 	boolean callReset;
 
 	//{{{ Anchor constructor
@@ -52,10 +60,12 @@ abstract class Anchor
 		this.textArea = textArea;
 	} //}}}
 
+	/** This method recalculates the scrollLine from the beginning. */
 	abstract void reset();
 	abstract void changed();
 
 	//{{{ toString() method
+	@Override
 	public String toString()
 	{
 		return getClass().getName() + '[' + physicalLine + ','
