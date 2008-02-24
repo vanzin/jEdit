@@ -53,6 +53,12 @@ and Daniel Hahler for contributing to this release.
 
 - [About jEdit] dialog is refined. It now performs smoother animation
   and fade out effect. (xlinuks)
+  
+- [Macros] Copying/cutting/moving/duplicating multiple vs.  single lines 
+    [ 1849180 - encorejane ]
+    renamed Move_Line_(Down|Up) to Move_Lines_$1, 
+    renamed (Copy|Cut)_Selection_Or_Line to $1_Lines
+    new macros: Duplicate_Lines_(Above|Below)
 
 }}}
 {{{ Editing

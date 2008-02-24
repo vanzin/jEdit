@@ -1,8 +1,8 @@
 /*
- * Move_Line_Up.bsh - a BeanShell macro for moving lines up.
+ * Move_Lines_Up.bsh - a BeanShell macro for moving lines up.
  *
  * Copyright (C) 2004 Nicholas O'Leary nol@deferential.net
- * 
+ *
  * :mode=beanshell:tabSize=3:indentSize=3:maxLineLen=0:noTabs=true:
  * :indentOnTab=true:indentOnEnter=true:folding=explicit:collapseFolds=1:
  *
@@ -22,44 +22,35 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * }}}
  *
- *  
  * Changes:
  *  05-Jul-04: Initial Implementation
  *
+ * based on: Move_Line_Up.bsh 9126 2007-03-10 19:14:30Z Vampire0
  * $Id$
  */
 
-// Get the current line
-int lineNo = textArea.getCaretLine();
 
-// Make sure we are allowed to edit the buffer, and that we're not at the start
-if (!buffer.isEditable() || lineNo == 0) {
-   textArea.getToolkit().beep();
-   return 1;
+selections = textArea.getSelectedLines();
+if(selections.length == 0){
+   selections = new int [] {textArea.getCaretLine()};
 }
-// Get the caret position on the line
-int lineCaretOffset = textArea.getCaretPosition()-buffer.getLineStartOffset(lineNo);
-// Get the line text to move
-String line = buffer.getLineText(lineNo);
-// Remove the line
-textArea.deleteLine();
-// Get the position to insert the line at
-int newLinePos = buffer.getLineStartOffset(lineNo-1);
-// Inser the line
-buffer.insert(newLinePos,line+"\n");
-// Move the cursor into the same position on the new line
-textArea.setCaretPosition(newLinePos+lineCaretOffset);
-// Indent this line
-buffer.indentLine(lineNo-1,true);
+start = textArea.getLineStartOffset(selections[0]);
+stop = textArea.getLineEndOffset(selections[selections.length-1]);
+if(start == 0) {return;}
+linestart = textArea.getLineStartOffset(selections[0]-1);
+text = textArea.getText(linestart, start-linestart);
+buffer.insert(stop, text);
+buffer.remove(linestart, start-linestart);
+return;
 
 /*
 
 Macro index data (in DocBook format)
 
    <listitem>
-      <para><filename>Move_Line_Up.bsh</filename></para>
-      <abstract><para>Moves the current line up one, with automatic 
-      indentation.</para></abstract>   
+      <para><filename>Move_Lines_Up.bsh</filename></para>
+      <abstract><para>Moves the current line or selected lines up one, with automatic
+      indentation.</para></abstract>
       </listitem>
 
 */
