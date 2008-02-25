@@ -101,6 +101,8 @@ and Daniel Hahler for contributing to this release.
 }}}
 {{{ API Changes
 
+- Moved gnu.regexp out of jedit core and into the XSearch plugin.
+
 - Added class AbstractContextOptionPane for plugins which want to provide a
   panel similar to jEdit's context menu editor. The API is sort of restrictive
   right now, but can be enhanced later, if needed. (Marcelo Vanzin)
