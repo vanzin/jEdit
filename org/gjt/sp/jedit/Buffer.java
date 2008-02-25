@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
@@ -38,9 +37,10 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
+import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -52,8 +52,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 //}}}
-import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
-import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 
 /**
  * A <code>Buffer</code> represents the contents of an open text
