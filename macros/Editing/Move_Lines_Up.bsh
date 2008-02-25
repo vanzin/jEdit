@@ -41,6 +41,7 @@ linestart = textArea.getLineStartOffset(selections[0]-1);
 text = textArea.getText(linestart, start-linestart);
 buffer.insert(stop, text);
 buffer.remove(linestart, start-linestart);
+buffer.indentLines(selections[0] - 1, selections[selections.length - 1] - 1);
 return;
 
 /*
