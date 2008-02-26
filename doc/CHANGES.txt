@@ -43,8 +43,10 @@ and Daniel Hahler for contributing to this release.
 - Fixed a bug where screens were shown off-screen because of a typo in
   GUIUtilities.adjustForScreenBounds() (Björn "Vampire" Kautler)
 
-- The in replace dialog, the replace string can now use capturing groups above 9
+- In the replace dialog, the replace string can now use capturing groups above 9
   (#1834620) (Matthieu Casanova)
+  
+- untitled buffer were not closed with 2 views (#1869978) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

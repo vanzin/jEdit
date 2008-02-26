@@ -39,7 +39,6 @@ import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.List;
 
 import org.xml.sax.SAXParseException;
 
@@ -49,8 +48,6 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.gui.InputHandler;
-import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
@@ -3733,7 +3730,7 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			// if only one, clean, 'untitled' buffer is open, we
 			// replace it
-			if(viewCount <= 1 && buffersFirst != null
+			if(buffersFirst != null
 				&& buffersFirst == buffersLast
 				&& buffersFirst.isUntitled()
 				&& !buffersFirst.isDirty())
