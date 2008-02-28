@@ -24,9 +24,7 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Window;
 import java.awt.Dimension;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -159,6 +157,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ dispose() method
+	@Override
 	public void dispose()
 	{
 		entry.container = null;
@@ -173,16 +172,17 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ getMinimumSize() method
+	@Override
 	public Dimension getMinimumSize()
 	{
 		return new Dimension(0,0);
 	} //}}}
 
 	//{{{ Private members
-	private DockableWindowManager dockableWindowManager;
-	private boolean clone;
+	private final DockableWindowManager dockableWindowManager;
+	private final boolean clone;
 	private DockableWindowManager.Entry entry;
-	private JButton menu;
+	private final JButton menu;
 	//}}}
 
 	//{{{ MouseHandler class
@@ -190,6 +190,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	{
 		JPopupMenu popup;
 
+		@Override
 		public void mousePressed(MouseEvent evt)
 		{
 			if(popup != null && popup.isVisible())
