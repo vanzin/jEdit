@@ -16,8 +16,8 @@ and Daniel Hahler for contributing to this release.
   JRE(1.6.0u3) though 64-bit package is installed. Nothing is changed on
   32-bit environment because it doesn't have SysWOW64 directory.
   (Kazutoshi Satoda - SF.net Bug #1849762)
-  
-- If the autosave file path do not exists, it is ignored silently. As soon as 
+
+- If the autosave file path do not exists, it is ignored silently. As soon as
   this path exists again it will work as it should (#1825720) (Kazutoshi Satoda)
 
 - (Mac OS X only?) Fixed a focus problem with Unsaved Changes dialog.
@@ -27,9 +27,9 @@ and Daniel Hahler for contributing to this release.
 - Files Changed on Disk dialog moved focus to textarea when a file is
   selected in the list. (Kazutoshi Satoda)
 
-- A NPE fixed when creating and clearing a register quickly in a macro if the 
+- A NPE fixed when creating and clearing a register quickly in a macro if the
   Registers view is open (Matthieu Casanova)
-  
+
 - When clearing a register, the listeners are now notified (Matthieu Casanova)
 
 - If you delete a plugin, the plugins that depends on will be unloaded (after a
@@ -45,20 +45,20 @@ and Daniel Hahler for contributing to this release.
 
 - In the replace dialog, the replace string can now use capturing groups above 9
   (#1834620) (Matthieu Casanova)
-  
+
 - untitled buffer were not closed with 2 views (#1869978) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
-- Center Caret On Screen now scrolls your document so your caret doesn't 
+- Center Caret On Screen now scrolls your document so your caret doesn't
   change. [ 1883809 - ezust ]
 
 - [About jEdit] dialog is refined. It now performs smoother animation
   and fade out effect. (xlinuks)
-  
-- [Macros] Copying/cutting/moving/duplicating multiple vs.  single lines 
+
+- [Macros] Copying/cutting/moving/duplicating multiple vs.  single lines
     [ 1849180 - encorejane ]
-    renamed Move_Line_(Down|Up) to Move_Lines_$1, 
+    renamed Move_Line_(Down|Up) to Move_Lines_$1,
     renamed (Copy|Cut)_Selection_Or_Line to $1_Lines
     new macros: Duplicate_Lines_(Above|Below)
 
@@ -76,7 +76,7 @@ and Daniel Hahler for contributing to this release.
   beginning "/" is wrongly treated as a division operator. But such regexp
   is rare enough and one can use %r notations or write like "/\ ..." to
   force jEdit to treat it as a regexp.
-  
+
 - Added macro Files/Duplicate_Buffer.bsh
   It copies the current buffer in a new untitled buffer
   (Request #1849184) (Matthieu Casanova)
@@ -99,6 +99,8 @@ and Daniel Hahler for contributing to this release.
     so that it does not match "$foo\" completely; now uses the exact regexp
     for valid variable names
   - add ruleset PHP_COMMENTS (re-factored)
+
+- tpl mode: delegate {php} tags to PHP mode (Daniel Hahler)
 
 }}}
 {{{ API Changes
@@ -128,9 +130,9 @@ and Daniel Hahler for contributing to this release.
 - Added org.gjt.sp.util.SyntaxUtilities that will contains some syntax methods
   most of them comes from GUIUtilities
   (Matthieu Casanova)
-  
+
 - A new interface JEditVisitor is added and implements the pattern Visitor.
-  It can visit the views, edit panes and textareas using the method 
+  It can visit the views, edit panes and textareas using the method
   jEdit.visit(JEditVisitor) or View.visit(JEditVisitor) (Matthieu Casanova)
 
 }}}
