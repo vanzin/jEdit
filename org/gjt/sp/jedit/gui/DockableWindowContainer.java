@@ -26,7 +26,7 @@ package org.gjt.sp.jedit.gui;
  * @version $Id$
  * @since jEdit 2.6pre3
  */
-public interface DockableWindowContainer
+interface DockableWindowContainer
 {
 	void register(DockableWindowManager.Entry entry);
 	void remove(DockableWindowManager.Entry entry);
