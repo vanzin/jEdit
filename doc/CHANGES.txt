@@ -108,6 +108,7 @@ and Daniel Hahler for contributing to this release.
 
 - tpl mode: delegate {php} tags to PHP mode (Daniel Hahler)
 
+- Added regex highlight in javascript mode (#1042013) (Matthieu Casanova)
 }}}
 {{{ API Changes
 
