@@ -775,7 +775,7 @@ public class jEdit
 		if(value == null)
 			return def;
 		else
-			return GUIUtilities.parseColor(value,def);
+			return SyntaxUtilities.parseColor(value, def);
 	} //}}}
 
 	//{{{ setColorProperty() method
@@ -787,7 +787,7 @@ public class jEdit
 	 */
 	public static void setColorProperty(String name, Color value)
 	{
-		setProperty(name,GUIUtilities.getColorHexString(value));
+		setProperty(name, SyntaxUtilities.getColorHexString(value));
 	} //}}}
 
 	//{{{ setProperty() method
