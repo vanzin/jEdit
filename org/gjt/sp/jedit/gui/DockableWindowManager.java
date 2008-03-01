@@ -176,16 +176,16 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	//}}}
 	
 	//{{{ Data members
-	private View view;
-	private DockableWindowFactory factory;
+	private final View view;
+	private final DockableWindowFactory factory;
 
 	/** A mapping from Strings to Entry objects. */
-	private Map<String, Entry> windows;
-	private PanelWindowContainer left;
-	private PanelWindowContainer right;
-	private PanelWindowContainer top;
-	private PanelWindowContainer bottom;
-	private List<Entry> clones;
+	private final Map<String, Entry> windows;
+	private final PanelWindowContainer left;
+	private final PanelWindowContainer right;
+	private final PanelWindowContainer top;
+	private final PanelWindowContainer bottom;
+	private final List<Entry> clones;
 	
 	private Entry lastEntry;
 	public Stack showStack = new Stack();
@@ -388,8 +388,6 @@ public class DockableWindowManager extends JPanel implements EBComponent
 
 		if(entry.win == null)
 			return;
-		Object reason = DockableWindowUpdate.DEACTIVATED;
-		EditBus.send(new DockableWindowUpdate(this, reason, name));
 
 		entry.container.show(null);
 	} //}}}
@@ -1110,19 +1108,20 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		} //}}}
 	} //}}}
 
+	//{{{ KeyHandler class
 	/**
 	 * This keyhandler responds to only two key events - those corresponding to
 	 * the close-docking-area action event. 
 	 * 
 	 * @author ezust
-	 *
 	 */
 	class KeyHandler extends KeyAdapter {
 		static final String action = "close-docking-area";  
 		Key b1, b2;
 		String name;
 		
-		public KeyHandler(String dockableName) {
+		public KeyHandler(String dockableName) 
+		{
 			String shortcut1=jEdit.getProperty(action + ".shortcut");
 			String shortcut2=jEdit.getProperty(action + ".shortcut2");
 			if (shortcut1 != null)
@@ -1131,6 +1130,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 				b2 = KeyEventTranslator.parseKey(shortcut2);
 			name = dockableName;
 		}
+		
 		public void keyTyped(KeyEvent e)
 		{
 			char cc = e.getKeyChar();
@@ -1138,8 +1138,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			     (b2 != null && cc == b2.key)) 
 				hideDockableWindow(name);
 		}
+	} //}}}
 
-
-	}
 	
 }

@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.List;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -256,6 +257,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 		}
 		else
 		{
+			if (current != null)
+			{
+				
+				Object reason = DockableWindowUpdate.DEACTIVATED;
+				EditBus.send(new DockableWindowUpdate(wm, reason, current.factory.name));
+			}
 			current = null;
 			nullButton.setSelected(true);
 			// removing last component, so remove border
@@ -371,12 +378,12 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//}}}
 
 	//{{{ Private members
-	private DockableWindowManager wm;
-	private String position;
-	private JButton closeBox;
-	private JButton menuBtn;
-	private ButtonGroup buttonGroup;
-	private JToggleButton nullButton;
+	private final DockableWindowManager wm;
+	private final String position;
+	private final JButton closeBox;
+	private final JButton menuBtn;
+	private final ButtonGroup buttonGroup;
+	private final JToggleButton nullButton;
 	private int dimension;
 	private final List<DockableWindowManager.Entry> dockables;
 	private final List<AbstractButton> buttons;
@@ -692,14 +699,14 @@ public class PanelWindowContainer implements DockableWindowContainer
 		} //}}}
 
 		//{{{ Private members
-		private int rotate;
-		private Font font;
-		private String text;
-		private GlyphVector glyphs;
-		private float width;
-		private float height;
-		private float ascent;
-		private RenderingHints renderHints;
+		private final int rotate;
+		private final Font font;
+		private final String text;
+		private final GlyphVector glyphs;
+		private final float width;
+		private final float height;
+		private final float ascent;
+		private final RenderingHints renderHints;
 		//}}}
 	} //}}}
 

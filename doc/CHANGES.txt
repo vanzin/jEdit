@@ -47,8 +47,14 @@ and Daniel Hahler for contributing to this release.
   (#1834620) (Matthieu Casanova)
 
 - untitled buffer were not closed with 2 views (#1869978) (Matthieu Casanova)
+
+- When closing a dockable panel, the DockableWindowUpdate.DEACTIVATED message is
+  sent (#1075058) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
+
+- In a directory search, if you use a regex, it is tested before, before listing 
+  files (#1556663) Matthieu Casanova
 
 - Center Caret On Screen now scrolls your document so your caret doesn't
   change. [ 1883809 - ezust ]
