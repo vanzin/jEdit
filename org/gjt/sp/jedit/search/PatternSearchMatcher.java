@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public class PatternSearchMatcher extends SearchMatcher
 {
-
+	//{{{ PatternSearchMatcher constructors
 	/**
 	 * Creates a new regular expression string matcher.
 	 * @see java.util.regex.Pattern
@@ -45,11 +45,23 @@ public class PatternSearchMatcher extends SearchMatcher
 	public PatternSearchMatcher(String search, boolean ignoreCase)
 	{
 		pattern = search;
-		flags = Pattern.MULTILINE;
-		if (ignoreCase)
-			flags |= Pattern.CASE_INSENSITIVE;
+		flags = getFlag(ignoreCase);
 	}
+	
+	/**
+	 * Creates a new regular expression already compiled.
+	 * @see java.util.regex.Pattern
+	 * @param re the compiled regex
+	 * @param ignoreCase <code>true</code> if you want to ignore case
+	 * @since jEdit 4.3pre13
+	 */
+	public PatternSearchMatcher(Pattern re, boolean ignoreCase)
+	{
+		this(re.pattern(), ignoreCase);
+		this.re = re;
+	} //}}}
 
+	//{{{ nextMatch() method
 	/**
 	 * Returns the offset of the first match of the specified text
 	 * within this matcher.
@@ -104,22 +116,34 @@ public class PatternSearchMatcher extends SearchMatcher
 		returnValue.start = _start;
 		returnValue.end = _end;
 		return returnValue;
-	}
+	} //}}}
 
+	//{{{ isMatchingEOL() method
+	@Override
 	public boolean isMatchingEOL()
 	{
 		return pattern.charAt(pattern.length() - 1) == '$';
-	}
+	} //}}}
 
 	//{{{ toString() method
+	@Override
 	public String toString()
 	{
 		return "PatternSearchMatcher[" + pattern + ']';
 	} //}}}
+	
+	static int getFlag(boolean ignoreCase)
+	{
+		int flags = Pattern.MULTILINE;
+		if (ignoreCase)
+			flags |= Pattern.CASE_INSENSITIVE;
+		return flags;
+	}
 
+	//{{{ Private members
 	private int flags;
 	private Pattern	re;
-	private String 	pattern;
-
+	private final String pattern;
+	//}}}
 }
 

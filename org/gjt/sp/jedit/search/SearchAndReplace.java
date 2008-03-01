@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.search;
 //{{{ Imports
 import org.gjt.sp.jedit.bsh.*;
 import java.awt.*;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.text.Segment;
 import org.gjt.sp.jedit.*;
@@ -291,12 +292,19 @@ public class SearchAndReplace
 			return null;
 
 		if (regexp)
-			matcher = new PatternSearchMatcher(search, ignoreCase);
+		{
+			Pattern re = Pattern.compile(search, 
+				PatternSearchMatcher.getFlag(ignoreCase));
+			matcher = new PatternSearchMatcher(re, ignoreCase);
+		}
 		else
 			matcher = new BoyerMooreSearchMatcher(search, ignoreCase);
 
-		if (matcher.nextMatch("", true, true, true, false) != null) {
-			Log.log(Log.WARNING, SearchAndReplace.class, "The matcher " + matcher + " can match empty string !");
+		if (matcher.nextMatch("", true, true, true, false) != null) 
+		{
+			Log.log(Log.WARNING, SearchAndReplace.class, 
+				"The matcher " + matcher + 
+				" can match empty string !");
 			matcher = null;
 		}
 
