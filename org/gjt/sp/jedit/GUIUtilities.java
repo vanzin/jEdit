@@ -830,7 +830,7 @@ public class GUIUtilities
 	 */
 	public static Color parseColor(String name)
 	{
-		return parseColor(name, Color.black);
+		return SyntaxUtilities.parseColor(name, Color.black);
 	} //}}}
 
 	//{{{ parseColor() method
@@ -868,7 +868,7 @@ public class GUIUtilities
 	public static SyntaxStyle parseStyle(String str, String family, int size)
 		throws IllegalArgumentException
 	{
-		return parseStyle(str,family,size,true);
+		return SyntaxUtilities.parseStyle(str,family,size,true);
 	} //}}}
 
 	//{{{ parseStyle() method
@@ -901,12 +901,12 @@ public class GUIUtilities
 
 		if (style.getForegroundColor() != null)
 		{
-			buf.append("color:").append(getColorHexString(style.getForegroundColor()));
+			buf.append("color:").append(SyntaxUtilities.getColorHexString(style.getForegroundColor()));
 		}
 
 		if (style.getBackgroundColor() != null)
 		{
-			buf.append(" bgColor:").append(getColorHexString(style.getBackgroundColor()));
+			buf.append(" bgColor:").append(SyntaxUtilities.getColorHexString(style.getBackgroundColor()));
 		}
 
 		Font font = style.getFont();
@@ -1108,6 +1108,7 @@ public class GUIUtilities
 		class ComponentHandler extends ComponentAdapter
 		{
 			//{{{ componentMoved() method
+			@Override
 			public void componentMoved(ComponentEvent evt)
 			{
 				if(System.currentTimeMillis() - start < 1000L)
@@ -1128,6 +1129,7 @@ public class GUIUtilities
 			} //}}}
 
 			//{{{ componentResized() method
+			@Override
 			public void componentResized(ComponentEvent evt)
 			{
 				if(System.currentTimeMillis() - start < 1000L)
@@ -1152,6 +1154,7 @@ public class GUIUtilities
 		class WindowHandler extends WindowAdapter
 		{
 			//{{{ windowOpened() method
+			@Override
 			public void windowOpened(WindowEvent evt)
 			{
 				windowOpened = true;
@@ -1306,6 +1309,7 @@ public class GUIUtilities
 	{
 		win.addWindowFocusListener(new WindowAdapter()
 		{
+			@Override
 			public void windowGainedFocus(WindowEvent evt)
 			{
 				SwingUtilities.invokeLater(new Runnable(){
@@ -1743,12 +1747,14 @@ public class GUIUtilities
 		} //}}}
 
 		//{{{ componentResized() method
+		@Override
 		public void componentResized(ComponentEvent ce)
 		{
 			componentMoved(ce);
 		} //}}}
 
 		//{{{ componentMoved() method
+		@Override
 		public void componentMoved(ComponentEvent ce)
 		{
 			final Rectangle bounds = frame.getBounds();
@@ -1762,6 +1768,7 @@ public class GUIUtilities
 			};
 			new Thread("Sizesavingdelay")
 			{
+				@Override
 				public void run()
 				{
 					try
