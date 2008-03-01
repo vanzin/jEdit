@@ -58,7 +58,7 @@ class BufferPrintable implements Printable
 		this.footer = footer;
 		this.lineNumbers = lineNumbers;
 
-		styles = GUIUtilities.loadStyles(jEdit.getProperty("print.font"),
+		styles = org.gjt.sp.util.SyntaxUtilities.loadStyles(jEdit.getProperty("print.font"),
 			jEdit.getIntegerProperty("print.fontsize",10),color);
 		styles[Token.NULL] = new SyntaxStyle(textColor,null,font);
 
