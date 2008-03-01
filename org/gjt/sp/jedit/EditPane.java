@@ -36,6 +36,7 @@ import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.SyntaxUtilities;
 //}}}
 
 /**
@@ -842,7 +843,7 @@ public class EditPane extends JPanel implements EBComponent
 
 		String defaultFont = jEdit.getProperty("view.font");
 		int defaultFontSize = jEdit.getIntegerProperty("view.fontsize",12);
-		painter.setStyles(GUIUtilities.loadStyles(defaultFont,defaultFontSize));
+		painter.setStyles(SyntaxUtilities.loadStyles(defaultFont,defaultFontSize));
 
 		SyntaxStyle[] foldLineStyle = new SyntaxStyle[4];
 		for(int i = 0; i <= 3; i++)
