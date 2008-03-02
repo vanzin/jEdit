@@ -84,13 +84,6 @@ You may also e-mail me directly by e-mailing <slava@jedit.org>.
 
 jEdit bundles the following libraries:
 
-- gnu.regexp by the Free Software Foundation.
-  This is DEPRECATED, and being phased out, in favor of java.util.regex.
-  jEdit bundles the gnu.regexp 1.1.5 CVS snapshot.
-
-  gnu.regexp is released under the 'GNU Lesser General Public License'.
-  The gnu.regexp homepage is <http://www.cacas.org/java/gnu/regexp/>.
-
 - AElfred XML parser by Microstar corporation.
   This class is also DEPRECATED in favor of JDK 1.5's XmlReaderFactory class,
   or the supplied XMLUtilities helper classes.
