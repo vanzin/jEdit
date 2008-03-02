@@ -51,11 +51,10 @@ if (buffer.isNewFile() && buffer.getPath() != null)
       
       // At most, check the first 250 lines - this sounds reasonable to me
       int maxLine = Math.min(buffer.getLineCount(),250);
-      import gnu.regexp.RE;
-      import gnu.regexp.REMatch;
+      import java.util.regex.Pattern;
+      import java.util.regex.Matcher;
       // Build the regex - based on the offical java language spec.
-      RE regex = new RE("^\\s*(public|protected|private|static|abstract|final|native|synchronized|transient|volatile|strictfp)?\\s*(class|interface)\\s*([^ {/]*)");
-      int regexMinimum = regex.getMinimumLength();
+      Pattern regex = Pattern.compile("^\\s*(public|protected|private|static|abstract|final|native|synchronized|transient|volatile|strictfp)?\\s*(class|interface)\\s*([^ {/]*)");
       boolean inComment = false;
       for(int i=0;i<maxLine;i++)
       {
@@ -105,17 +104,11 @@ if (buffer.isNewFile() && buffer.getPath() != null)
 			// We now know if the remainder of the line is in a comment or not
          if (!inComment)
          {
-            // Ignore lines that are too short for the regex
-            if (txt.length() < regexMinimum)
-               continue;
-            REMatch match = regex.getMatch(txt);
-            // See if it matches
-            if (match!=null)
+            Matcher matcher = regex.matcher(txt);
+            if (matcher.matches())
             {
-               int startIndex = match.getStartIndex(3);
-               int endIndex = match.getEndIndex(3);
                // Extract the class/interface name
-               name = txt.substring(startIndex,endIndex)+".java";
+               name = matcher.group(3)+".java";
                break;
             }
          }
