@@ -112,7 +112,6 @@
 			   encoding="UTF-8">
 			<include name="org/**" />
 			<include name="com/**" />
-			<include name="gnu/**" />
 		</javac>
 	</target>
 	
@@ -136,7 +135,6 @@
 				<include name="org/gjt/sp/jedit/icons/*.gif" />
 				<include name="org/gjt/sp/jedit/icons/*.jpg" />
 				<include name="org/gjt/sp/jedit/icons/*.png" />
-				<include name="gnu/regexp/MessagesBundle.properties" />
 			</fileset>
 		</jar>
 		<copy todir="${jar.location}">
@@ -407,7 +405,7 @@
 			   compiler="modern" />
 		<javadoc sourcepath="."
 				 destdir="${classes.dir}/javadoc/api"
-				 packagenames="org.*,com.*,gnu.*"
+				 packagenames="org.*,com.*"
 				 classpath="${classes.dir}/core"
 				 doclet="doclet.GenerateTocXML"
 				 docletpath="${classes.dir}/javadoc"
@@ -424,8 +422,6 @@
 				   packages="org.gjt.sp*" />
 			<group title="Microstar XML Parser"
 				   packages="com.microstar.xml*" />
-			<group title="GNU Regular Expression Implementation"
-				   packages="gnu.regexp*" />
 		</javadoc>
 	</target>
 	
@@ -439,8 +435,6 @@
 				<include name="org/**/package.html" />
 				<include name="com/**/*.java" />
 				<include name="com/**/package.html" />
-				<include name="gnu/**/*.java" />
-				<include name="gnu/**/package.html" />
 			</srcfileset>
 			<targetfileset dir="${classes.dir}/javadoc" />
 		</dependset>
