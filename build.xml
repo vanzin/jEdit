@@ -752,7 +752,7 @@
 		</jar>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -775,7 +775,7 @@
 		</antcall>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -905,7 +905,7 @@
 		</exec>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -946,13 +946,13 @@
 			</not>
 		</condition>
 		<antcall target="dist-mac-finish">
-			<param name="dont.wipe.dist.files"
+			<param name="config.dont.wipe.dist.files"
 				   value="true" />
 		</antcall>
 		<antcall target="prepare-dist-mac-finish" />
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -1059,7 +1059,7 @@
 		</tar>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -1231,7 +1231,7 @@
 		</deb>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -1281,7 +1281,7 @@
 		</exec>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -1319,13 +1319,13 @@
 			</not>
 		</condition>
 		<antcall target="dist-win-finish">
-			<param name="dont.wipe.dist.files"
+			<param name="config.dont.wipe.dist.files"
 				   value="true" />
 		</antcall>
 		<antcall target="prepare-dist-win-finish" />
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="dont.wipe.dist.files" />
+				<isset property="config.dont.wipe.dist.files" />
 			</not>
 		</condition>
 		<antcall target="dist-cleanup" />
@@ -1334,7 +1334,7 @@
 	<target name="dist"
 			depends="init"
 			description="build all distribution files">
-		<property name="dont.wipe.dist.files"
+		<property name="config.dont.wipe.dist.files"
 				  value="true" />
 		<antcall target="dist-java" />
 		<antcall target="dist-manuals" />
