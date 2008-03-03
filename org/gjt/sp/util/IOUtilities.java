@@ -80,7 +80,7 @@ public class IOUtilities
 		return ok;
 	} //}}}
 
-	//{{{ copyStream() method
+	//{{{ copyStream() methods
 	/**
 	 * Copy an input stream to an output stream.
 	 *
@@ -96,6 +96,8 @@ public class IOUtilities
 					InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
+		if(progress != null)
+			progress.setStatus("Copying");
 		byte[] buffer = new byte[bufferSize];
 		int n;
 		long copied = 0L;
@@ -108,9 +110,8 @@ public class IOUtilities
 			if(canStop && Thread.interrupted()) return false;
 		}
 		return true;
-	} //}}}
+	}
 
-	//{{{ copyStream() method
 	/**
 	 * Copy an input stream to an output stream with a buffer of 4096 bytes.
 	 *
@@ -152,7 +153,7 @@ public class IOUtilities
 		return length;
 	} // }}}
 
-	//{{{ closeQuietly() method
+	//{{{ closeQuietly() methods
 	/**
 	 * Method that will close an {@link InputStream} ignoring it if it is null and ignoring exceptions.
 	 *
@@ -171,9 +172,8 @@ public class IOUtilities
 				//ignore
 			}
 		}
-	} //}}}
+	}
 
-	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link OutputStream} ignoring it if it is null and ignoring exceptions.
 	 *
@@ -192,9 +192,8 @@ public class IOUtilities
 				//ignore
 			}
 		}
-	} //}}}
+	}
 
-	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link Reader} ignoring it if it is null and ignoring exceptions.
 	 *
@@ -214,9 +213,8 @@ public class IOUtilities
 				//ignore
 			}
 		}
-	} //}}}
+	}
 
-	//{{{ closeQuietly() method
 	/**
 	 * Method that will close an {@link java.io.Closeable} ignoring it if it is null and ignoring exceptions.
 	 *
