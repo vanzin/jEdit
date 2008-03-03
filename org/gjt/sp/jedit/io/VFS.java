@@ -41,8 +41,8 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
-//}}}
 import org.gjt.sp.util.WorkThread;
+//}}}
 
 /**
  * A virtual filesystem implementation.<p>
@@ -194,7 +194,7 @@ public abstract class VFS
 
 	public static int IOBUFSIZE = 32678;
 
-	//{{{ VFS constructor
+	//{{{ VFS constructors
 	/**
 	 * @deprecated Use the form where the constructor takes a capability
 	 * list.
@@ -202,9 +202,8 @@ public abstract class VFS
 	public VFS(String name)
 	{
 		this(name,0);
-	} //}}}
+	}
 
-	//{{{ VFS constructor
 	/**
 	 * Creates a new virtual filesystem.
 	 * @param name The name
@@ -216,9 +215,8 @@ public abstract class VFS
 		this.caps = caps;
 		// reasonable defaults (?)
 		this.extAttrs = new String[] { EA_SIZE, EA_TYPE };
-	} //}}}
+	} 
 
-	//{{{ VFS constructor
 	/**
 	 * Creates a new virtual filesystem.
 	 * @param name The name
@@ -497,7 +495,7 @@ public abstract class VFS
 		return true;
 	} //}}}
 
-	//{{{ copy() method
+	//{{{ copy() methods	
 	/**
 	 * Copy a file to another using VFS.
 	 *
@@ -510,6 +508,7 @@ public abstract class VFS
 	 * @param targetSession the target session
 	 * @param targetPath the target path
 	 * @param comp comp The component that will parent error dialog boxes
+	 * @param canStop could this copy be stopped ?
 	 * @return true if the copy was successful
 	 * @throws IOException  IOException If an I/O error occurs
 	 * @since jEdit 4.3pre3
@@ -525,13 +524,19 @@ public abstract class VFS
 		OutputStream out = null;
 		try
 		{
+			VFSFile sourceVFSFile = sourceVFS._getFile(sourceSession, sourcePath, comp);
+			if (sourceVFSFile == null)
+				throw new FileNotFoundException(sourcePath);
 			if (progress != null)
 			{
-				VFSFile sourceVFSFile = sourceVFS._getFile(sourceSession, sourcePath, comp);
-				if (sourceVFSFile == null)
-					throw new FileNotFoundException(sourcePath);
-
 				progress.setMaximum(sourceVFSFile.getLength());
+			}
+			VFSFile targetVFSFile = targetVFS._getFile(targetSession, targetPath, comp);
+			if (targetVFSFile.getType() == VFSFile.DIRECTORY)
+			{
+				if (targetVFSFile.getPath().equals(sourceVFSFile.getPath()))
+					return false;
+				targetPath = MiscUtilities.constructPath(targetPath, sourceVFSFile.getName());
 			}
 			in = new BufferedInputStream(sourceVFS._createInputStream(sourceSession, sourcePath, false, comp));
 			out = new BufferedOutputStream(targetVFS._createOutputStream(targetSession, targetPath, comp));
@@ -544,9 +549,8 @@ public abstract class VFS
 			IOUtilities.closeQuietly(in);
 			IOUtilities.closeQuietly(out);
 		}
-	} //}}}
+	}
 
-	//{{{ copy() method
 	/**
 	 * Copy a file to another using VFS.
 	 *
