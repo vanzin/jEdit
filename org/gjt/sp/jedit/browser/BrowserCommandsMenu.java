@@ -119,6 +119,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 				add(createMenuItem("delete"));
 
 			add(createMenuItem("copy-path"));
+			add(createMenuItem("paste"));
 			addSeparator();
 		}
 

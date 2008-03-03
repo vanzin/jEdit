@@ -44,7 +44,7 @@
 
 <ACTION NAME="vfs.browser.copy-path">
 	<CODE>
-		buf = new StringBuffer();
+		buf = new StringBuilder();
 		for(int i = 0; i &lt; files.length; i++)
 		{
 			if(i != 0)
@@ -52,6 +52,21 @@
 			buf.append(files[i].path);
 		}
 		Registers.setRegister('$',buf.toString());
+	</CODE>
+</ACTION>
+
+<ACTION NAME="vfs.browser.paste">
+	<CODE>
+		buf = new StringBuilder();
+		for(int i = 0; i &lt; files.length; i++)
+		{
+			if(i != 0)
+				buf.append('\n');
+			buf.append(files[i].path);
+		}
+		String source = Registers.getRegister('$').toString();
+		String target = buf.toString();
+		VFSManager.runInWorkThread(new CopyFileWorker(view, source, target));
 	</CODE>
 </ACTION>
 

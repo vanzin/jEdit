@@ -68,6 +68,9 @@ and Daniel Hahler for contributing to this release.
     renamed (Copy|Cut)_Selection_Or_Line to $1_Lines
     new macros: Duplicate_Lines_(Above|Below)
 
+- The VFS Browser has a new command to paste a file.
+  After copying the path name of a file, you can paste it in any folder to
+  copy the file (Matthieu Casanova)
 }}}
 {{{ Editing
 
