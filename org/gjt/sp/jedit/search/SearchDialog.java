@@ -115,8 +115,10 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		// I'm not sure if calling requestFocus() is strictly necessary
 		// (focus looks fine without this, on Linux at least), but
 		// it doesn't hurt to leave it here.
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+		SwingUtilities.invokeLater(new Runnable() 
+		{
+			public void run() 
+			{
 				dialog.toFront();
 				dialog.requestFocus();
 					// Ensure that the dialog gets the focus. Just bringing
@@ -143,7 +145,12 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		replace.setText(null);
 
 		if(searchString == null)
+		{
 			searchCurrentBuffer.setSelected(true);
+			HistoryModel model = find.getModel();
+			find.setText(model.getItem(0));
+			find.selectAll();
+		}
 		else
 		{
 			if(searchString.indexOf('\n') == -1)

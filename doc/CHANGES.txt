@@ -71,6 +71,9 @@ and Daniel Hahler for contributing to this release.
 - The VFS Browser has a new command to paste a file.
   After copying the path name of a file, you can paste it in any folder to
   copy the file (Matthieu Casanova)
+  
+- When opening the search dialog if no text is selected the searched string will
+  be filled with the previous entered string (feature #1500938) (Matthieu Casanova)
 }}}
 {{{ Editing
 
