@@ -235,7 +235,7 @@
             language statements are taken into account and indent is added and
             removed as necessary.</para>
 
-            <para><guimenu>Edit</guimenu>&gt;<guisubmenu>Source</guisubmenu>&gt;<guisubmenu>Indent
+            <para><guimenu>Edit</guimenu>&gt;<guisubmenu>Indent</guisubmenu>&gt;<guisubmenu>Indent
             Selected Lines</guisubmenu> (shortcut: <keycap>C+i</keycap>) indents
             all selected lines, or the current line if there is no
             selection.</para>
