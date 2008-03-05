@@ -115,6 +115,8 @@ and Daniel Hahler for contributing to this release.
 - tpl mode: delegate {php} tags to PHP mode (Daniel Hahler)
 
 - Added regex highlight in javascript mode (#1042013) (Matthieu Casanova)
+
+- assembly-mcs51 mode was missing in the catalog (#1887865) (Matthieu Casanova)
 }}}
 {{{ API Changes
 

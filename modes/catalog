@@ -37,6 +37,8 @@
 <MODE NAME="assembly-macro32"	FILE="assembly-macro32.xml"
 				FILE_NAME_GLOB="*.mar" />
 
+<MODE NAME="assembly-mcs51"	FILE="assembly-mcs51.xml" />
+
 <MODE NAME="assembly-r2000"	FILE="assembly-r2000.xml"
 				FILE_NAME_GLOB="*.mips" />
 
