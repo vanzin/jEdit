@@ -54,7 +54,7 @@ import org.gjt.sp.util.Log;
 public class VFSDirectoryEntryTable extends JTable
 {
 	//{{{ VFSDirectoryEntryTable constructor
-	public VFSDirectoryEntryTable(BrowserView browserView)
+	VFSDirectoryEntryTable(BrowserView browserView)
 	{
 		super(new VFSDirectoryEntryTableModel());
 		this.browserView = browserView;
@@ -265,6 +265,7 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ scrollRectToVisible() method
+	@Override
 	public void scrollRectToVisible(Rectangle rect)
 	{
 		// avoid scrolling to the right
@@ -273,6 +274,7 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ processKeyEvent() method
+	@Override
 	public void processKeyEvent(KeyEvent evt)
 	{
 		if(evt.getID() == KeyEvent.KEY_PRESSED)
@@ -340,17 +342,17 @@ public class VFSDirectoryEntryTable extends JTable
 				evt.consume();
 				ac.invokeAction(evt, ea);
 				break;
-		          case KeyEvent.VK_F5:
-			          evt.consume();
-			          ea = ac.getAction("vfs.browser.reload");
-			          ac.invokeAction(evt, ea);
-			          break;
-		          case KeyEvent.VK_F6:
-		          case KeyEvent.VK_TAB:
-		        	  browser.focusOnDefaultComponent();
-		        	  evt.consume();
-		        	  break;
-		          case KeyEvent.VK_RIGHT:
+			case KeyEvent.VK_F5:
+				evt.consume();
+				ea = ac.getAction("vfs.browser.reload");
+				ac.invokeAction(evt, ea);
+				break;
+			case KeyEvent.VK_F6:
+			case KeyEvent.VK_TAB:
+				browser.focusOnDefaultComponent();
+				evt.consume();
+				break;
+			case KeyEvent.VK_RIGHT:
 				evt.consume();
 				if(row != -1)
 				{
@@ -437,11 +439,11 @@ public class VFSDirectoryEntryTable extends JTable
 	} //}}}
 
 	//{{{ Private members
-	private BrowserView browserView;
-	private JTableHeader header;
-	private FileCellRenderer renderer;
-	private StringBuffer typeSelectBuffer = new StringBuffer();
-	private Timer timer = new Timer(0,new ClearTypeSelect());
+	private final BrowserView browserView;
+	private final JTableHeader header;
+	private final FileCellRenderer renderer;
+	private final StringBuffer typeSelectBuffer = new StringBuffer();
+	private final Timer timer = new Timer(0,new ClearTypeSelect());
 	private boolean resizingColumns;
 
 	//{{{ doTypeSelect() method
@@ -577,6 +579,7 @@ public class VFSDirectoryEntryTable extends JTable
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseInputAdapter
 	{
+		@Override
 		public void mousePressed(MouseEvent evt)
 		{
 			// double click on columns header
@@ -601,13 +604,14 @@ public class VFSDirectoryEntryTable extends JTable
 	//{{{ HeaderRenderer
 	static class HeaderRenderer extends DefaultTableCellRenderer
 	{
-		private DefaultTableCellRenderer tcr;
+		private final DefaultTableCellRenderer tcr;
 
 		HeaderRenderer(DefaultTableCellRenderer tcr)
 		{
 			this.tcr = tcr;
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
