@@ -74,6 +74,9 @@ and Daniel Hahler for contributing to this release.
   
 - When opening the search dialog if no text is selected the searched string will
   be filled with the previous entered string (feature #1500938) (Matthieu Casanova)
+  
+- The Activity Log option panel now have a textfield filter
+  (feature #1593375) (Matthieu Casanova)
 }}}
 {{{ Editing
 
@@ -150,6 +153,8 @@ and Daniel Hahler for contributing to this release.
   It can visit the views, edit panes and textareas using the method
   jEdit.visit(JEditVisitor) or View.visit(JEditVisitor) (Matthieu Casanova)
 
+- New FilteredListModel class that helps creating a filtered JList
+  (Matthieu Casanova)
 }}}
 
 }}}

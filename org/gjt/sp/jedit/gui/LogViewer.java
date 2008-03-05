@@ -64,6 +64,27 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 		tail = new JCheckBox(
 			jEdit.getProperty("log-viewer.tail.label"),tailIsOn);
 		tail.addActionListener(new ActionHandler());
+
+
+		filter = new JTextField();
+		filter.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void changedUpdate(DocumentEvent e) 
+			{
+				setFilter();
+			}
+			
+			public void insertUpdate(DocumentEvent e) 
+			{
+				setFilter();
+			}
+			
+			public void removeUpdate(DocumentEvent e) 
+			{
+				setFilter();
+			}
+		});
+		caption.add(filter);
 		caption.add(tail);
 
 		caption.add(Box.createHorizontalStrut(12));
@@ -73,9 +94,23 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 		caption.add(copy);
 
 		ListModel model = Log.getLogListModel();
+		listModel = new FilteredListModel(model) 
+		{
+			@Override
+			public String prepareFilter(String filter) 
+			{
+				return filter.toLowerCase();
+			}
+			
+			@Override
+			public boolean passFilter(int row, String filter) 
+			{
+				return delegated.getElementAt(row).toString().toLowerCase().contains(filter);
+			}
+		};
 		model.addListDataListener(new ListHandler());
-		list = new LogList(model);
-
+		list = new LogList(listModel);
+		listModel.setList(list);
 		add(BorderLayout.NORTH,caption);
 		JScrollPane scroller = new JScrollPane(list);
 		Dimension dim = scroller.getPreferredSize();
@@ -87,6 +122,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 	} //}}}
 
 	//{{{ setBounds() method
+	@Override
 	public void setBounds(int x, int y, int width, int height)
 	{
 		super.setBounds(x, y, width, height);
@@ -101,6 +137,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 	} //}}}
 
 	//{{{ addNotify() method
+	@Override
 	public void addNotify()
 	{
 		super.addNotify();
@@ -111,6 +148,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 	} //}}}
 
 	//{{{ removeNotify() method
+	@Override
 	public void removeNotify()
 	{
 		super.removeNotify();
@@ -125,10 +163,19 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 	} //}}}
 
 	//{{{ Private members
+	private final FilteredListModel listModel;
 	private final JList list;
 	private final JButton copy;
 	private final JCheckBox tail;
+	private final JTextField filter;
 	private boolean tailIsOn;
+
+	//{{{ setFilter() method
+	private void setFilter()
+	{
+		listModel.setFilter(filter.getText());
+		scrollLaterIfRequired();
+	} //}}}
 
 	//{{{ propertiesChanged() method
 	private void propertiesChanged()
@@ -234,6 +281,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 			setAutoscrolls(true);
 		}
 
+		@Override
 		public void processMouseEvent(MouseEvent evt)
 		{
 			if(evt.getID() == MouseEvent.MOUSE_PRESSED)
@@ -244,6 +292,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 			super.processMouseEvent(evt);
 		}
 
+		@Override
 		public void processMouseMotionEvent(MouseEvent evt)
 		{
 			if(evt.getID() == MouseEvent.MOUSE_DRAGGED)
