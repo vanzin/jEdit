@@ -1162,8 +1162,9 @@ else if(msg instanceof ViewUpdate) {
 
         <para>Publicly released plugins include with their source a makefile in
         XML format for the <application>Ant</application> utility. The format
-        for this file requires few changes from plugin to plugin. Here is the
-        version of <filename>build.xml</filename> used by QuickNotepad:</para>
+        for this file requires few changes from plugin to plugin. Here is a
+        version of <filename>build.xml</filename> that could be used by
+        QuickNotepad:</para>
 
         <informalexample>
             <programlisting>
@@ -1172,8 +1173,12 @@ else if(msg instanceof ViewUpdate) {
     &lt;description&gt;
         This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
     &lt;/description&gt;
+    &lt;property name=&quot;user-doc.xml&quot;
+          value=&quot;users-guide.xml&quot; /&gt;
     &lt;property file=&quot;build.properties&quot; /&gt;
     &lt;property file=&quot;../build.properties&quot; /&gt;
+	&lt;property name=&quot;build.support&quot;
+			  value=&quot;../../../build-support&quot; /&gt;    
     &lt;import file="${build.support}/plugin-build.xml" /&gt;
 &lt;/project&gt;
 </programlisting>
