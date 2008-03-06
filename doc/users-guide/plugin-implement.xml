@@ -1172,8 +1172,8 @@ else if(msg instanceof ViewUpdate) {
     &lt;description&gt;
         This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
     &lt;/description&gt;
-    &lt;property file=&quot;../build.properties&quot; /&gt;
     &lt;property file=&quot;build.properties&quot; /&gt;
+    &lt;property file=&quot;../build.properties&quot; /&gt;
     &lt;import file="${build.support}/plugin-build.xml" /&gt;
 &lt;/project&gt;
 </programlisting>
