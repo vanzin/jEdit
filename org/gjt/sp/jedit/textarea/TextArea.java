@@ -967,7 +967,7 @@ public class TextArea extends JComponent
 				if(Debug.SCROLL_TO_DEBUG)
 					Log.log(Log.DEBUG,this,line + " == " + nextLine);
 				setFirstPhysicalLine(nextLine,
-					subregion + electricScroll
+					subregion + _electricScroll
 					- visibleLines
 					+ (lastLinePartial ? 2 : 1));
 			}
