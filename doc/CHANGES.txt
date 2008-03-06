@@ -4,7 +4,7 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, xlinuks,
 Kazutoshi Satoda, Alan Ezust, Marcelo Vanzin, Jeff Robertson, Jim Morris
-and Daniel Hahler for contributing to this release.
+zoniie, and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -45,6 +45,8 @@ and Daniel Hahler for contributing to this release.
 
 - In the replace dialog, the replace string can now use capturing groups above 9
   (#1834620) (Matthieu Casanova)
+
+- Electric scrolling done where it should not (#1906301 - zoniie)
 
 - untitled buffer were not closed with 2 views (#1869978) (Matthieu Casanova)
 

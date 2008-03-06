@@ -125,7 +125,10 @@
             Methods</ulink> are now supported in jEdit. This should make it much
             easier for people to use alternate keyboard input methods to use
             jEdit and enter Chinese/Korean/Japanese characters, as well as other
-            alternative input devices.</para>
+            alternative input devices. Thank you, Kazutoshi Satoda, for 
+            fixing that and many other encoding and internationalization problems that 
+            prevented non-English speaking users from using jEdit properly
+            in their native language.</para>
         </section>
         <section id="syntax">
             <title>Syntax Highlighting</title>
@@ -172,7 +175,7 @@
             <title>Bundled Macros</title>
             <para>There are a number of new bundled macros, and most of the
             existing ones have undergone enhancements and bug fixes. jEdit 4.2
-            bundled 58 macros in 7 categories; jEdit 4.3 bundles 70 macros in 9
+            bundled 58 macros in 7 categories; jEdit 4.3 bundles 75 macros in 9
             categories.</para>
             <para>Of course you can create new macros of your own, either by
             recording actions or writing them from scratch.</para>
