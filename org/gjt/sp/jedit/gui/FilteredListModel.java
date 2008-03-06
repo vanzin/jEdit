@@ -150,7 +150,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	//}}}
 
 	//{{{ saveSelection()
-	private Set<Integer> saveSelection()
+	protected Set<Integer> saveSelection()
 	{
 		if (list == null)
 			return null;
@@ -167,7 +167,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	} //}}}
 
 	//{{{ restoreSelection() method
-	private void restoreSelection(Set<Integer> selectedIndices)
+	protected void restoreSelection(Set<Integer> selectedIndices)
 	{
 		if (selectedIndices == null || getSize() == 0)
 			return; 

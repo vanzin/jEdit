@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Set;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
@@ -96,6 +97,19 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 		ListModel model = Log.getLogListModel();
 		listModel = new FilteredListModel(model) 
 		{
+
+			@Override
+			protected void restoreSelection(Set selectedIndices) 
+			{
+				super.restoreSelection(selectedIndices);
+			}
+			
+			@Override
+			protected Set saveSelection() 
+			{
+				return super.saveSelection();
+			}
+
 			@Override
 			public String prepareFilter(String filter) 
 			{
@@ -107,6 +121,8 @@ public class LogViewer extends JPanel implements DefaultFocusComponent,
 			{
 				return delegated.getElementAt(row).toString().toLowerCase().contains(filter);
 			}
+			
+			
 		};
 		model.addListDataListener(new ListHandler());
 		list = new LogList(listModel);
