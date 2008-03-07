@@ -1311,17 +1311,17 @@ public class ManagePanel extends JPanel
 		}
 	} //}}}
 	
+	//{{{ TableSelectionListener class
 	private class TableSelectionListener implements ListSelectionListener
 	{
+		public void valueChanged(ListSelectionEvent e)
+		{
+			int row = table.getSelectedRow();
+			Entry entry = pluginModel.getEntry(row);
+			pluginDetailPanel.setPlugin(entry);
+		}
+	} //}}}
 
-	    public void valueChanged(ListSelectionEvent e)
-	    {
-		int row = table.getSelectedRow();
-		Entry entry = pluginModel.getEntry(row);
-		pluginDetailPanel.setPlugin(entry);
-	    }
-	    
-	}
 
 	//}}}
 }
