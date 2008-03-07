@@ -79,6 +79,9 @@ zoniie, and Daniel Hahler for contributing to this release.
   
 - The Activity Log option panel now have a textfield filter
   (feature #1593375) (Matthieu Casanova)
+  
+- In the plugin manager, a new panel shows detailed informations about the 
+  installed plugins (Matthieu Casanova)
 }}}
 {{{ Editing
 

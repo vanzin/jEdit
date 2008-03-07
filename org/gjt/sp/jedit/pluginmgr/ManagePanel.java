@@ -61,7 +61,6 @@ import org.gjt.sp.jedit.msg.PropertiesChanged;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.*;
 
-import java.util.ArrayList;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
 import org.gjt.sp.jedit.gui.RolloverButton;
@@ -69,11 +68,11 @@ import org.gjt.sp.jedit.help.*;
 
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
-//}}}
 import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+//}}}
 
 /**
  * The ManagePanel is the JPanel that shows the installed plugins.
@@ -84,11 +83,12 @@ public class ManagePanel extends JPanel
 	private final JCheckBox hideLibraries;
 	private final JTable table;
 	private final JScrollPane scrollpane;
+	private final PluginDetailPanel pluginDetailPanel;
 	private final PluginTableModel pluginModel;
 	private final PluginManager window;
 	private JPopupMenu popup;
-	private HashSet<String> selectedPlugins = null;
-	private HashSet<String> jarNames = null;
+	private Set<String> selectedPlugins = null;
+	private Set<String> jarNames = null;
 	//}}}
 
 	//{{{ ManagePanel constructor
@@ -113,6 +113,7 @@ public class ManagePanel extends JPanel
 		table.setDefaultRenderer(Object.class, new TextRenderer(
 			(DefaultTableCellRenderer)table.getDefaultRenderer(Object.class)));
 		table.addFocusListener(new TableFocusHandler());
+		table.getSelectionModel().addListSelectionListener(new TableSelectionListener());
 		InputMap tableInputMap = table.getInputMap(JComponent.WHEN_FOCUSED);
 		ActionMap tableActionMap = table.getActionMap();
 		tableInputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_TAB,0),"tabOutForward");
@@ -145,7 +146,10 @@ public class ManagePanel extends JPanel
 		table.addMouseListener(mouseHandler);
 		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
-		add(BorderLayout.CENTER,scrollpane);
+		pluginDetailPanel = new PluginDetailPanel();
+		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
+			true, scrollpane, pluginDetailPanel);
+		add(BorderLayout.CENTER, split);
 
 		/* Create button panel */
 		Box buttons = new Box(BoxLayout.X_AXIS);
@@ -304,7 +308,8 @@ public class ManagePanel extends JPanel
 		final String jar;
 
 		String clazz, name, version, author, docs;
-
+		/** The description property of the plugin. */
+		String description;
 		EditPlugin plugin;
 		/**
 		 * The jars referenced in the props file of the plugin.
@@ -350,7 +355,7 @@ public class ManagePanel extends JPanel
 				version = jEdit.getProperty("plugin."+clazz+".version");
 				author = jEdit.getProperty("plugin."+clazz+".author");
 				docs = jEdit.getProperty("plugin."+clazz+".docs");
-
+				description = jEdit.getProperty("plugin."+clazz+".description");
 				String jarsProp = jEdit.getProperty("plugin."+clazz+".jars");
 
 				if(jarsProp != null)
@@ -1305,6 +1310,18 @@ public class ManagePanel extends JPanel
 			}
 		}
 	} //}}}
+	
+	private class TableSelectionListener implements ListSelectionListener
+	{
+
+	    public void valueChanged(ListSelectionEvent e)
+	    {
+		int row = table.getSelectedRow();
+		Entry entry = pluginModel.getEntry(row);
+		pluginDetailPanel.setPlugin(entry);
+	    }
+	    
+	}
 
 	//}}}
 }
