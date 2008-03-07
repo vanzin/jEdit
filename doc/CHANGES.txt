@@ -122,6 +122,9 @@ zoniie, and Daniel Hahler for contributing to this release.
 - Added regex highlight in javascript mode (#1042013) (Matthieu Casanova)
 
 - assembly-mcs51 mode was missing in the catalog (#1887865) (Matthieu Casanova)
+
+- transact-sql (tsql) mode: Fix escaping in string literals (#1007881) and
+  highlight identifiers (`foo`) as LITERAL2 (Daniel Hahler)
 }}}
 {{{ API Changes
 
