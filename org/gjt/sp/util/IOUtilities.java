@@ -96,8 +96,6 @@ public class IOUtilities
 					InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
-		if(progress != null)
-			progress.setStatus("Copying");
 		byte[] buffer = new byte[bufferSize];
 		int n;
 		long copied = 0L;
