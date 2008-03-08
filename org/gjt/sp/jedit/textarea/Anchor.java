@@ -113,10 +113,10 @@ abstract class Anchor
 				//Check the lines from the beginning of the removed content to the end (or the physical
 				//line of the Anchor if it is before the end of the removed content
 
-				int loopStart = startLine + 1;
+				//int loopStart = startLine + 1;
 
 				//{{{ treatment if the beginning of the deleted content is inside a physical line that has several line counts
-				if (displayManager.isLineVisible(startLine))
+				/*if (displayManager.isLineVisible(startLine))
 				{
 					int screenLineCount = displayManager.screenLineMgr.getScreenLineCount(startLine);
 					if (screenLineCount > 1)
@@ -131,18 +131,18 @@ abstract class Anchor
 							scrollLine -= screenLineCount - deleteStartScreenLine + startScreenLine;
 						}
 					}
-				}
+				}*/
 				//}}}
 
-				for(int i = loopStart; i <= end; i++)
+				for(int i = startLine + 1; i <= end; i++)
 				{
 					//XXX
-					if(displayManager.isLineVisible(i - 1))
+					if(displayManager.isLineVisible(i))
 					{
 						scrollLine -=
 							displayManager
 								.screenLineMgr
-								.getScreenLineCount(i - 1);
+								.getScreenLineCount(i);
 					}
 				}
 				physicalLine -= end - startLine;

@@ -52,6 +52,9 @@ zoniie, and Daniel Hahler for contributing to this release.
 
 - When closing a dockable panel, the DockableWindowUpdate.DEACTIVATED message is
   sent (#1075058) (Matthieu Casanova)
+  
+- ScrollLineCount was not calculated correctly (#1906288, #1868923)
+  (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
