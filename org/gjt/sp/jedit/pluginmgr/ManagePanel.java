@@ -1258,7 +1258,7 @@ public class ManagePanel extends JPanel
 	//{{{ KeyboardAction class
 	class KeyboardAction extends AbstractAction
 	{
-		private KeyboardCommand command = KeyboardCommand.NONE;
+		private final KeyboardCommand command = KeyboardCommand.NONE;
 		
 		KeyboardAction(KeyboardCommand command)
 		{
@@ -1317,11 +1317,12 @@ public class ManagePanel extends JPanel
 		public void valueChanged(ListSelectionEvent e)
 		{
 			int row = table.getSelectedRow();
-			Entry entry = pluginModel.getEntry(row);
-			pluginDetailPanel.setPlugin(entry);
+			if (row != -1)
+			{
+				Entry entry = pluginModel.getEntry(row);
+				pluginDetailPanel.setPlugin(entry);				
+			}
 		}
 	} //}}}
-
-
 	//}}}
 }
