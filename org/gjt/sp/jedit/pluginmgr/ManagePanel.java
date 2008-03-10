@@ -1258,7 +1258,7 @@ public class ManagePanel extends JPanel
 	//{{{ KeyboardAction class
 	class KeyboardAction extends AbstractAction
 	{
-		private final KeyboardCommand command = KeyboardCommand.NONE;
+		private KeyboardCommand command = KeyboardCommand.NONE;
 		
 		KeyboardAction(KeyboardCommand command)
 		{
