@@ -147,7 +147,7 @@ public class ManagePanel extends JPanel
 		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
 		pluginDetailPanel = new PluginDetailPanel();
-		JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, 
+		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
 			true, scrollpane, pluginDetailPanel);
 		add(BorderLayout.CENTER, split);
 
