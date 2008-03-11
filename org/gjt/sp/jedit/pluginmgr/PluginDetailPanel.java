@@ -28,6 +28,8 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.pluginmgr.ManagePanel.Entry;
 //}}}
 
@@ -49,7 +51,8 @@ class PluginDetailPanel extends JPanel
 		pluginDetail = new JEditorPane();
 		pluginDetail.setEditable(false);
 		pluginDetail.setContentType("text/html");
-		
+		pluginDetail.setBackground(jEdit.getColorProperty("view.bgColor"));
+		pluginDetail.setForeground(jEdit.getColorProperty("view.fgColor"));
 		title = new JLabel();
 		add(title, BorderLayout.NORTH);
 		JScrollPane scroll = new JScrollPane(pluginDetail);

@@ -669,6 +669,8 @@ class InstallPanel extends JPanel implements EBComponent
 		private final String[] params;
 		PluginInfoBox()
 		{
+			setBackground(jEdit.getColorProperty("view.bgColor"));
+			setForeground(jEdit.getColorProperty("view.fgColor"));
 			setEditable(false);
 			setEditorKit(new HTMLEditorKit());
 //			setLineWrap(true);
