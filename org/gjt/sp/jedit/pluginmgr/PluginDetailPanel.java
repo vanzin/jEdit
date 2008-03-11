@@ -24,6 +24,8 @@ package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,6 +37,7 @@ import org.gjt.sp.jedit.pluginmgr.ManagePanel.Entry;
 
 /**
  * @author Matthieu Casanova
+ * 
  */
 class PluginDetailPanel extends JPanel
 {

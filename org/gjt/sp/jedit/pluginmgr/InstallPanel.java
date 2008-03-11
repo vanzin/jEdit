@@ -88,7 +88,7 @@ class InstallPanel extends JPanel implements EBComponent
 
 		final JSplitPane split = new JSplitPane(
 			JSplitPane.VERTICAL_SPLIT, jEdit.getBooleanProperty("appearance.continuousLayout"));
-
+		split.setResizeWeight(.75);
 		/* Setup the table */
 		table = new JTable(pluginModel = new PluginTableModel());
 		table.setShowGrid(false);
@@ -664,6 +664,9 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ PluginInfoBox class
+	/**
+	 * @TODO refactor to use the PluginDetailPanel?
+	 */
 	class PluginInfoBox extends JTextPane implements ListSelectionListener
 	{
 		private final String[] params;

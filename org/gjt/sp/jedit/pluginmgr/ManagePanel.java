@@ -147,16 +147,11 @@ public class ManagePanel extends JPanel
 		scrollpane = new JScrollPane(table);
 		scrollpane.getViewport().setBackground(table.getBackground());
 		pluginDetailPanel = new PluginDetailPanel();
+		scrollpane.setPreferredSize(new Dimension(400,400));
 		final JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
 			true, scrollpane, pluginDetailPanel);
 		add(BorderLayout.CENTER, split);
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				split.setDividerLocation(0.75);
-			}
-		});
+		split.setResizeWeight(0.75);
 		/* Create button panel */
 		Box buttons = new Box(BoxLayout.X_AXIS);
 
