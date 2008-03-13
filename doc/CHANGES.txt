@@ -1,5 +1,20 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre14
+
+Thanks to Björn "Vampire" Kautler for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+
+}}}
+
 {{{ Version 4.3pre13
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, xlinuks,
