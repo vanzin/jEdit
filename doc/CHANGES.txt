@@ -13,6 +13,12 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 }}}
 
+{{{ API Changes
+
+- New status bar api (Matthieu Casanova)
+
+}}}
+
 }}}
 
 {{{ Version 4.3pre13
