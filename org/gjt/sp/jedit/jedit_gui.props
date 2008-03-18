@@ -839,6 +839,8 @@ view.status.wrap-tooltip=Word wrap mode (click to change)
 #}}}
 
 #{{{ Status bar component visibility
+view.status=( mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock
+
 view.status.show-caret-status=true
 view.status.show-edit-mode=true
 view.status.show-fold-mode=true
@@ -894,7 +896,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjï¿½rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
