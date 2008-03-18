@@ -5,7 +5,8 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
-
+- Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
+  install (#1913979) (Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous

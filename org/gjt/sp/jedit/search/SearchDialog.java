@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 
@@ -148,8 +149,11 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		{
 			searchCurrentBuffer.setSelected(true);
 			HistoryModel model = find.getModel();
-			find.setText(model.getItem(0));
-			find.selectAll();
+			if (!model.isEmpty())
+			{
+				find.setText(model.getItem(0));
+				find.selectAll();
+			}
 		}
 		else
 		{
@@ -272,6 +276,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 	} //}}}
 
 	//{{{ dispose() method
+	@Override
 	public void dispose()
 	{
 		EditBus.removeFromBus(this);
@@ -939,6 +944,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			super(label);
 		}
 
+		@Override
 		public boolean isFocusable()
 		{
 			return false;
