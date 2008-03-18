@@ -451,6 +451,9 @@ TODO:
 
 	<!-- Comments in PHP -->
 	<RULES SET="PHP_COMMENTS">
+		<!-- special case -->
+		<SEQ TYPE="COMMENT1">/**/</SEQ>
+
 		<!-- PHPdoc comment -->
 		<SPAN TYPE="COMMENT3" DELEGATE="PHPDOC">
 			<BEGIN>/**</BEGIN>
@@ -481,6 +484,9 @@ TODO:
 
 
 	<RULES SET="PHP" ESCAPE="\" HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="(0x[0-9a-f]+|([0-9]*\.)?[0-9]+(e[+-]?[0-9]+)?)">
+		<!-- special case -->
+		<SEQ TYPE="COMMENT1">/**/</SEQ>
+
 		<!-- PHPdoc comment -->
 		<SPAN TYPE="COMMENT3" DELEGATE="PHPDOC">
 			<BEGIN>/**</BEGIN>
