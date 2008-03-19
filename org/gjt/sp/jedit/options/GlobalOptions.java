@@ -27,9 +27,7 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.msg.PropertiesChanging;
-import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 //}}}
 
 public class GlobalOptions extends OptionsDialog
@@ -65,7 +63,7 @@ public class GlobalOptions extends OptionsDialog
 		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
 
 		// initialize the jEdit branch of the options tree
-		jEditGroup = new OptionGroup("jedit");
+		OptionGroup jEditGroup = new OptionGroup("jedit");
 
 		jEditGroup.addOptionPane("general");
 		jEditGroup.addOptionPane("abbrevs");
@@ -88,7 +86,7 @@ public class GlobalOptions extends OptionsDialog
 		jEditGroup.addOptionPane("view");
 		rootGroup.addOptionGroup(jEditGroup);
 
-		browserGroup = new OptionGroup("browser");
+		OptionGroup browserGroup = new OptionGroup("browser");
 		browserGroup.addOptionPane("browser.general");
 		browserGroup.addOptionPane("browser.colors");
 		rootGroup.addOptionGroup(browserGroup);
@@ -97,6 +95,7 @@ public class GlobalOptions extends OptionsDialog
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		EditBus.send(
@@ -106,6 +105,7 @@ public class GlobalOptions extends OptionsDialog
 	} //}}}
 
 	//{{{ init() method
+	@Override
 	protected void init(String name, String pane)
 	{
 		EditBus.send(
@@ -119,9 +119,4 @@ public class GlobalOptions extends OptionsDialog
 	{
 		return null;
 	} //}}}
-
-	//{{{ Private members
-	private OptionGroup jEditGroup;
-	private OptionGroup browserGroup;
-	//}}}
 }
