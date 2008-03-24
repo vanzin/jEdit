@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -56,6 +55,7 @@ class PluginDetailPanel extends JPanel
 		pluginDetail.setContentType("text/html");
 		pluginDetail.setBackground(jEdit.getColorProperty("view.bgColor"));
 		pluginDetail.setForeground(jEdit.getColorProperty("view.fgColor"));
+		pluginDetail.putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
 		title = new JLabel();
 		add(title, BorderLayout.NORTH);
 		JScrollPane scroll = new JScrollPane(pluginDetail);

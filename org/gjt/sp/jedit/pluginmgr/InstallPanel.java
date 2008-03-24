@@ -674,6 +674,7 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			setBackground(jEdit.getColorProperty("view.bgColor"));
 			setForeground(jEdit.getColorProperty("view.fgColor"));
+			putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true);
 			setEditable(false);
 			setEditorKit(new HTMLEditorKit());
 //			setLineWrap(true);
