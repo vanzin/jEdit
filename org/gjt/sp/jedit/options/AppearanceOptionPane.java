@@ -81,8 +81,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		String[] themes = IconTheme.builtInNames();
 		iconThemes = new JComboBox(themes);
 		addComponent(jEdit.getProperty("options.appearance.iconTheme"), iconThemes);
-		
-		oldTheme = jEdit.getProperty("icon-theme");
+		oldTheme = IconTheme.get();
 		for (int i=0; i<themes.length; ++i) {
 			if (themes[i].equals(oldTheme)) {
 				iconThemes.setSelectedIndex(i);
