@@ -12,7 +12,7 @@ public class IconTheme extends Object
 	}
 
 	public static String get() {
-		return jEdit.getProperty("icon-theme", "classic");
+		return jEdit.getProperty("icon-theme", "tango");
 	}
 	
 	public static void set(String name) {
