@@ -132,10 +132,10 @@
 				<include name="org/gjt/sp/jedit/*.props" />
 				<include name="org/gjt/sp/jedit/*.xml" />
 				<include name="org/gjt/sp/jedit/textarea/*.xml" />
-				<include name="org/gjt/sp/jedit/icons/*.gif" />
-				<include name="org/gjt/sp/jedit/icons/*.jpg" />
-				<include name="org/gjt/sp/jedit/icons/*.png" />
-			</fileset>
+				<include name="org/gjt/sp/jedit/icons/**/*.gif" />
+				<include name="org/gjt/sp/jedit/icons/**/*.jpg" />
+				<include name="org/gjt/sp/jedit/icons/**/*.png" />
+            </fileset>
 		</jar>
 		<copy todir="${jar.location}">
 			<fileset dir=".">

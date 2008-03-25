@@ -120,10 +120,18 @@ public class GUIUtilities
 	 */
 	public static Icon loadIcon(String iconName)
 	{
+		if(iconName == null)
+			return null;
+		
+		// * Enable old icon naming scheme support
+		if(deprecatedIcons != null && deprecatedIcons.containsKey(iconName))
+			iconName = deprecatedIcons.get(iconName);
+			
 		if(icons == null)
 			icons = new Hashtable<String, Icon>();
 
 		// check if there is a cached version first
+		Log.log(Log.DEBUG, GUIUtilities.class, "Icon name loading: "+iconName);
 		Icon icon = icons.get(iconName);
 		if(icon != null)
 			return icon;
@@ -132,6 +140,8 @@ public class GUIUtilities
 
 		try
 		{
+			Log.log(Log.DEBUG, GUIUtilities.class, "Loading (is url: "+MiscUtilities.isURL(iconName)+") icon: "+iconPath + iconName);
+			
 			// get the icon
 			if(MiscUtilities.isURL(iconName))
 				url = new URL(iconName);
@@ -165,7 +175,7 @@ public class GUIUtilities
 	 */
 	public static Image getEditorIcon()
 	{
-		return ((ImageIcon)loadIcon("jedit-icon.gif")).getImage();
+		return ((ImageIcon)loadIcon(jEdit.getProperty("logo.icon.medium"))).getImage();
 	} //}}}
 
 	//{{{ getPluginIcon() method
@@ -436,12 +446,12 @@ public class GUIUtilities
 		Icon icon;
 		String iconName = jEdit.getProperty(name + ".icon");
 		if(iconName == null)
-			icon = loadIcon("BrokenImage.png");
+			icon = loadIcon(jEdit.getProperty("broken-image.icon"));
 		else
 		{
 			icon = loadIcon(iconName);
 			if(icon == null)
-				icon = loadIcon("BrokenImage.png");
+				icon = loadIcon(jEdit.getProperty("broken-image.icon"));
 		}
 
 		String toolTip = prettifyMenuLabel(label);
@@ -1596,16 +1606,110 @@ public class GUIUtilities
 
 	//{{{ Package-private members
 
+	//{{{ initializeDeprecatedIcons() method
+	/**
+	 * Initializes a list of mappings between old icon names and new names
+	 */
+	private static void initializeDeprecatedIcons()
+	{
+		deprecatedIcons.put("File.png",       "16x16/text-x-generic.png");
+		deprecatedIcons.put("Folder.png",     "16x16/folder.png");
+		deprecatedIcons.put("OpenFolder.png", "16x16/open-folder.png");
+		deprecatedIcons.put("OpenFile.png",   "16x16/edit-select-all.png");
+		deprecatedIcons.put("ReloadSmall.png","16x16/view-reload.png");
+		deprecatedIcons.put("DriveSmall.png", "16x16/drive-harddisk.png");
+		deprecatedIcons.put("New.png",        "22x22/document-new.png");
+		deprecatedIcons.put("NewDir.png",     "22x22/folder-new.png");
+		deprecatedIcons.put("Reload.png",     "22x22/view-refresh.png");
+		deprecatedIcons.put("Load.png",       "22x22/plugin.png");
+		deprecatedIcons.put("Save.png",       "22x22/document-save.png");
+		deprecatedIcons.put("SaveAs.png",     "22x22/document-save-as.png");
+		deprecatedIcons.put("SaveAll.png",    "22x22/document-save-all.png");
+		deprecatedIcons.put("Open.png",       "22x22/document-open.png");
+		deprecatedIcons.put("Print.png",      "22x22/document-print.png");
+		deprecatedIcons.put("Drive.png",      "22x22/drive-harddisk.png");
+		deprecatedIcons.put("Clear.png",      "22x22/edit-clear.png");
+		deprecatedIcons.put("Run.png",        "22x22/application-run.png");
+		deprecatedIcons.put("RunAgain.png",   "22x22/application-run-again.png");
+		deprecatedIcons.put("RunToBuffer.png",  "22x22/run-to-buffer.png");
+		deprecatedIcons.put("CopyToBuffer.png", "22x22/copy-to-buffer.png");
+		deprecatedIcons.put("Plus.png",       "22x22/list-add.png");
+		deprecatedIcons.put("Minus.png",      "22x22/list-remove.png");
+		deprecatedIcons.put("Find.png",       "22x22/edit-find.png");
+		deprecatedIcons.put("FindAgain.png",  "22x22/edit-find-next.png");
+		deprecatedIcons.put("FindInDir.png",  "22x22/edit-find-in-folder.png");
+		deprecatedIcons.put("Parse.png",      "22x22/document-reload2.png");
+		deprecatedIcons.put("Delete.png",     "22x22/edit-delete.png");
+		deprecatedIcons.put("Paste.png",      "22x22/edit-paste.png");
+		deprecatedIcons.put("Cut.png",        "22x22/edit-cut.png");
+		deprecatedIcons.put("Copy.png",       "22x22/edit-copy.png");
+		deprecatedIcons.put("Undo.png",       "22x22/edit-undo.png");
+		deprecatedIcons.put("Redo.png",       "22x22/edit-redo.png");
+		deprecatedIcons.put("CurrentDir.png", "22x22/folder-visiting.png");
+		deprecatedIcons.put("ParentDir.png",  "22x22/go-parent.png");
+		deprecatedIcons.put("PageSetup.png",  "22x22/printer-setup.png");
+		deprecatedIcons.put("Plugins.png",    "22x22/system-installer.png");
+		deprecatedIcons.put("Floppy.png",     "22x22/media-floppy.png");
+		deprecatedIcons.put("Stop.png",       "22x22/process-stop.png");
+		deprecatedIcons.put("Cancel.png",     "22x22/process-stop.png");
+		deprecatedIcons.put("Home.png",       "22x22/go-home.png");
+		deprecatedIcons.put("Help.png",       "22x22/help-browser.png");
+		deprecatedIcons.put("Properties.png", "22x22/document-properties.png");
+		deprecatedIcons.put("Preferences.png","22x22/preferences-system.png");
+		deprecatedIcons.put("ZoomIn.png",     "22x22/zoom-in.png");
+		deprecatedIcons.put("ZoomOut.png",    "22x22/zoom-out.png");
+		deprecatedIcons.put("BrokenImage.png","22x22/image-missing.png");
+		deprecatedIcons.put("AdjustWidth.png","22x22/resize-horisontal.png");
+		deprecatedIcons.put("ToolbarMenu.gif","ToolbarMenu.gif");
+		
+		deprecatedIcons.put("Play.png","22x22/media-playback-start.png");
+		deprecatedIcons.put("Pause.png","22x22/media-playback-pause.png");
+		
+		deprecatedIcons.put("MultipleResults.png", "22x22/hypersearch-results-multiple.png");
+		deprecatedIcons.put("SingleResult.png",    "22x22/hypersearch-results-single.png");
+
+		deprecatedIcons.put("NextFile.png",    "22x22/go-last.png");
+		deprecatedIcons.put("PreviousFile.png","22x22/go-first.png");
+		
+		deprecatedIcons.put("closebox.gif",   "8x8/misc-close.png");
+		deprecatedIcons.put("normal.gif",   "8x8/document-status-unmodified.png");
+		deprecatedIcons.put("dirty.gif",    "8x8/document-status-modified.png");
+		
+		deprecatedIcons.put("ArrowU.png", "22x22/go-up.png");
+		deprecatedIcons.put("ArrowR.png", "22x22/go-next.png");
+		deprecatedIcons.put("ArrowD.png", "22x22/go-down.png");
+		deprecatedIcons.put("ArrowL.png", "22x22/go-previous.png");
+		deprecatedIcons.put("arrow1.png", "16x16/group-expand.png");
+		deprecatedIcons.put("arrow2.png", "16x16/group-collapse.png");
+		
+		deprecatedIcons.put("NewView.png", "22x22/window-new.png");
+		deprecatedIcons.put("UnSplit.png", "22x22/window-unsplit.png");
+		deprecatedIcons.put("SplitVertical.png", "22x22/window-split-vertical.png");
+		deprecatedIcons.put("SplitHorizontal.png", "22x22/window-split-horizontal.png");
+		
+		deprecatedIcons.put("ButtonProperties.png", "22x22/document-properties.png");
+		
+	}
+	//}}}
+	
 	//{{{ init() method
 	static void init()
 	{
+		initializeDeprecatedIcons();
+		
+		// Load the icon theme but fallback on the old icons
+		String theme = jEdit.getProperty("icon-theme", "classic"); // * e.g. "tango"/"classic"
+		Log.log(Log.DEBUG, GUIUtilities.class, "Icon theme set to: "+theme);	
+		setIconPath("jeditresource:/org/gjt/sp/jedit/icons/themes/" + theme + "/");
+		Log.log(Log.DEBUG, GUIUtilities.class, "Loading icon theme from: "+iconPath);
+		
 		// don't do this in static{} since we need jEdit.initMisc()
 		// run first so we have the jeditresource: protocol
 		NEW_BUFFER_ICON = loadIcon("new.gif");
 		DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
 		READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
 		NORMAL_BUFFER_ICON = loadIcon("normal.gif");
-		WINDOW_ICON = loadIcon("jedit-icon.gif");
+		WINDOW_ICON = loadIcon(jEdit.getProperty("logo.icon.medium"));
 	} //}}}
 
 	//{{{ showSplashScreen() method
@@ -1633,8 +1737,9 @@ public class GUIUtilities
 	//{{{ Private members
 	private static SplashScreen splash;
 	private static Map<String, Icon> icons;
-	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
-	private static String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/";
+	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
+	private static String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
+	private static HashMap<String, String> deprecatedIcons = new HashMap<String, String>();
 
 	//{{{ _loadMenuItem() method
 	private static JMenuItem _loadMenuItem(String name, ActionContext context, boolean setMnemonic) {
@@ -1660,6 +1765,11 @@ public class GUIUtilities
 		if (!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0') {
 			mi.setMnemonic(mnemonic);
 		}
+		Icon itemIcon = loadIcon(jEdit.getProperty(name + ".icon.small"));
+		if(itemIcon != null) {
+			mi.setIcon(itemIcon);
+		}
+		
 		return mi;
 	} //}}}
 	

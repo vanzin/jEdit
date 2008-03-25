@@ -34,6 +34,12 @@ import org.gjt.sp.util.IOUtilities;
 
 public class AppearanceOptionPane extends AbstractOptionPane
 {
+	/**
+	 * List of icon themes that are supported in jEdit core.
+	 * Possible values of the jedit property 'icon-theme'
+	 */
+	public static final String[] builtInIconThemes = new String[] {"tango", "old" };
+	
 	//{{{ AppearanceOptionPane constructor
 	public AppearanceOptionPane()
 	{
@@ -67,9 +73,23 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			}
 		});
 
+		
 		addComponent(jEdit.getProperty("options.appearance.lf"),
 			lookAndFeel);
 
+		/* Icon Theme */
+		String[] themes = IconTheme.builtInNames();
+		iconThemes = new JComboBox(themes);
+		addComponent(jEdit.getProperty("options.appearance.iconTheme"), iconThemes);
+		
+		oldTheme = jEdit.getProperty("icon-theme");
+		for (int i=0; i<themes.length; ++i) {
+			if (themes[i].equals(oldTheme)) {
+				iconThemes.setSelectedIndex(i);
+				break;
+			}
+		}
+		
 		/* Primary Metal L&F font */
 		primaryFont = new FontSelector(jEdit.getFontProperty(
 			"metal.primary.font"));
@@ -155,7 +175,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
 		jEdit.setBooleanProperty("appearance.continuousLayout",continuousLayout.isSelected());
-
+		IconTheme.set(iconThemes.getSelectedItem().toString());
+		
 		/* AntiAlias nv = AntiAlias.appearance();
 		 int idx = antiAliasExtras.getSelectedIndex();
 		nv.set(idx);
@@ -200,6 +221,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private String oldTheme;
 	private UIManager.LookAndFeelInfo[] lfs;
 	private JComboBox lookAndFeel;
 	private FontSelector primaryFont;
@@ -213,6 +235,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JCheckBox decorateFrames;
 	private JCheckBox decorateDialogs;
 	private JComboBox antiAliasExtras;
+	private JComboBox iconThemes;
 	//}}}
 
 	//{{{ updateEnabled() method

@@ -376,8 +376,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress("init system properties");
 		initSystemProperties();
 
-		GUIUtilities.advanceSplashProgress("init GUI");
-		GUIUtilities.init();
 		GUIUtilities.advanceSplashProgress("init beanshell");
 		BeanShell.init();
 
@@ -387,6 +385,10 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
+		
+		GUIUtilities.advanceSplashProgress("init GUI");
+		GUIUtilities.init();
+		
 		Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
 

@@ -29,13 +29,20 @@ common.apply=Apply
 common.more=More
 common.insert=Insert
 common.add=Add
+common.add.icon=22x22/list-add.png
 common.remove=Remove
+common.remove.icon=22x22/list-remove.png
 common.moveUp=Move Up
+common.moveUp.icon=22x22/go-up.png
 common.moveDown=Move Down
+common.moveDown.icon=22x22/go-down.png
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
 lineSep.mac=MacOS (\\r)
+
+logo.icon.small=16x16/jedit_icon.png
+logo.icon.medium=32x32/jedit_icon.png
 
 #}}}
 
@@ -56,95 +63,96 @@ macro-handler.beanshell.glob=*.bsh
 # Plugin activation hooks
 defer=false
 startup=true
+
+broken-image.icon=22x22/image-missing.png
+dropdown-arrow.icon=ToolbarMenu.gif
 #}}}
 
 #{{{ Tool bar
-view.toolbar=new-file open-file close-buffer save - print page-setup - \
-	undo redo cut copy paste - find find-next - new-view unsplit \
-	split-horizontal split-vertical - buffer-options global-options - \
+view.toolbar=new-file open-file save - print - \
+	undo redo - cut copy paste - find find-next - \
+	unsplit split-horizontal split-vertical - \
+	buffer-options global-options - \
 	plugin-manager - help
 
-new-file.icon=New.png
-open-file.icon=Open.png
-save.icon=Save.png
-close-buffer.icon=Cancel.png
-print.icon=Print.png
-page-setup.icon=PageSetup.png
-undo.icon=Undo.png
-redo.icon=Redo.png
-cut.icon=Cut.png
-copy.icon=Copy.png
-paste.icon=Paste.png
-find.icon=Find.png
-find-next.icon=FindAgain.png
-new-view.icon=NewView.png
-unsplit.icon=UnSplit.png
-split-horizontal.icon=SplitHorizontal.png
-split-vertical.icon=SplitVertical.png
-buffer-options.icon=Properties.png
-global-options.icon=Preferences.png
+new-file.icon=22x22/document-new.png
+open-file.icon=22x22/document-open.png
+save.icon=22x22/document-save.png
+close-buffer.icon=22x22/document-close.png
+print.icon=22x22/document-print.png
+page-setup.icon=22x22/printer-setup.png
+undo.icon=22x22/edit-undo.png
+redo.icon=22x22/edit-redo.png
+cut.icon=22x22/edit-cut.png
+copy.icon=22x22/edit-copy.png
+paste.icon=22x22/edit-paste.png
+find.icon=22x22/edit-find.png
+find-next.icon=22x22/edit-find-next.png
+new-view.icon=22x22/window-new.png
+unsplit.icon=22x22/window-unsplit.png
+split-horizontal.icon=22x22/window-split-horizontal.png
+split-vertical.icon=22x22/window-split-vertical.png
+buffer-options.icon=22x22/document-properties.png
+global-options.icon=22x22/preferences-system.png
 
-plugin-manager.icon=Plugins.png
-help.icon=Help.png
+plugin-manager.icon=22x22/plugin.png
+help.icon=22x22/help-browser.png
 
 #{{{ Icon list for tool bar editor
-icons=AdjustWidth.png \
-	ArrowD.png \
-	ArrowL.png \
-	ArrowR.png \
-	ArrowU.png \
-	BrokenImage.png \
-	ButtonProperties.png \
-	Cancel.png \
-	Clear.png \
-	Copy.png \
-	CopyToBuffer.png \
-	CurrentDir.png \
-	Cut.png \
-	Delete.png \
-	Drive.png \
-	FindAgain.png \
-	FindInDir.png \
-	Find.png \
-	Floppy.png \
-	Help.png \
-	Home.png \
-	Load.png \
-	Minus.png \
-	MultipleResults.png \
-	NewDir.png \
-	New.png \
-	NewView.png \
-	NextFile.png \
-	Open.png \
-	PageSetup.png \
-	ParentDir.png \
-	Parse.png \
-	Paste.png \
-	Pause.png \
-	Play.png \
-	Plugins.png \
-	Plus.png \
-	Preferences.png \
-	PreviousFile.png \
-	Print.png \
-	Properties.png \
-	Redo.png \
-	Reload.png \
-	Run.png \
-	RunAgain.png \
-	RunToBuffer.png \
-	Save.png \
-	SaveAll.png \
-	SaveAs.png \
-	SingleResult.png \
-	SplitHorizontal.png \
-	SplitVertical.png \
-	Stop.png \
-	Undo.png \
-	UnSplit.png \
-	ZoomIn.png \
-	ZoomOut.png \
+icons=22x22/resize-horisontal.png \
+	22x22/go-down.png \
+	22x22/go-previous.png \
+	22x22/go-next.png \
+	22x22/go-home.png \
+	22x22/go-up.png \
+	22x22/go-first.png \
+	22x22/go-last.png \
+	22x22/go-parent.png \
+	22x22/image-missing.png \
+	22x22/document-close.png \
+	22x22/folder-visiting.png \
+	22x22/drive-harddisk.png \
+	22x22/edit-undo.png \
+	22x22/edit-redo.png \
+	22x22/edit-cut.png \
+	22x22/edit-paste.png \
+	22x22/edit-delete.png \
+	22x22/edit-clear.png \
+	22x22/edit-find-next.png \
+	22x22/edit-find-in-folder.png \
+	22x22/edit-find.png \
+	22x22/edit-copy.png \
+	22x22/copy-to-buffer.png \
+	22x22/media-floppy.png \
+	22x22/help-browser.png \
+	22x22/plugin.png \
+	22x22/list-remove.png \
+	22x22/list-add.png \
+	22x22/folder-new.png \
+	22x22/window-new.png \
+	22x22/document-new.png \
+	22x22/document-open.png \
+	22x22/document-reload2.png \
+	22x22/document-properties.png \
+	22x22/document-save.png \
+	22x22/document-save-all.png \
+	22x22/document-save-as.png \
+	22x22/printer-setup.png \
+	22x22/process-stop.png \
+	22x22/media-playback-pause.png \
+	22x22/media-playback-start.png \
+	22x22/system-installer.png \
+	22x22/preferences-system.png \
+	22x22/printer.png \
+	22x22/view-refresh.png \
+	22x22/application-run.png \
+	22x22/hypersearch-results-multiple.png \
+	22x22/hypersearch-results-single.png \
+	22x22/window-split-horizontal.png \
+	22x22/window-split-vertical.png \
+	22x22/window-unsplit.png \
+	22x22/zoom-in.png \
+	22x22/zoom-out.png \
 	Blank24.gif
 #}}}
 
@@ -189,16 +197,21 @@ file=new-file \
      exit
 file.label=$File
 new-file.label=$New
+new-file.icon.small=16x16/document-new.png
 open-file.label=$Open...
+open-file.icon.small=16x16/document-open.png
 reload.label=$Reload
+reload.icon.small=16x16/view-reload.png
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
 close-all.label=Clos$e All
 save.label=$Save
+save.icon.small=16x16/document-save.png
 save-as.label=S$ave As...
 save-a-copy-as.label=Save a Cop$y As...
 save-all.label=Save A$ll...
 print.label=$Print...
+print.icon.small=16x16/document-print.png
 page-setup.label=Pa$ge Setup...
 # Print selection not yet implemented
 #print-selection.label=Prin$t Selection...
@@ -1340,7 +1353,10 @@ hypersearch-results.collapse-child-nodes=Collapse Child Nodes
 hypersearch-results.redo=Redo hypersearch
 hypersearch-results.tree-view=Toggle Tree View
 hypersearch-results.clear.label=Remove All Nodes
+hypersearch-results.clear.icon=22x22/edit-clear.png
 hypersearch-results.multi.label=Toggle Multiple Results
+hypersearch-results.multi.multiple.icon=22x22/hypersearch-results-multiple.png
+hypersearch-results.multi.single.icon=22x22/hypersearch-results-single.png
 hypersearch-results.file-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} occurrences in '{2,choice,1#1 line|1<{2,number,integer} lines}'})
 hypersearch-results.searching=Searching...
 hypersearch-results.no-results=Not found.
@@ -1690,11 +1706,15 @@ options.abbrevs.expand=Expansion
 options.abbrevs.add=Add...
 options.abbrevs.edit=Edit...
 options.abbrevs.remove=Remove
+options.abbrevs.add.icon=22x22/list-add.png
+options.abbrevs.edit.icon=22x22/document-properties.png
+options.abbrevs.remove.icon=22x22/list-remove.png
 #}}}
 
 #{{{ Appearance pane
 options.appearance.label=Appearance
 options.appearance.code=new AppearanceOptionPane();
+options.appearance.iconTheme=Icon Theme:
 options.appearance.fonts.antialias=Anti-alias Non-TextArea fonts
 options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
@@ -1977,16 +1997,20 @@ options.toolbar.label=Tool Bar
 options.toolbar.code=new ToolBarOptionPane();
 options.toolbar.showToolbar=Show tool bar
 options.toolbar.caption=Buttons to display on tool bar:
+options.toolbar.add.icon=22x22/list-add.png
 options.toolbar.add=Add...
 options.toolbar.edit=Edit...
 options.toolbar.remove=Remove
+options.toolbar.remove.icon=22x22/list-remove.png
 options.toolbar.moveUp=Move Up
+options.toolbar.moveUp.icon=22x22/go-up.png
 options.toolbar.moveDown=Move Down
+options.toolbar.moveDown.icon=22x22/go-down.png
 options.toolbar.edit.title=Edit Tool Bar Entry
 options.toolbar.edit.caption=Type:
 options.toolbar.edit.separator=Separator
 options.toolbar.edit.action=Command or macro:
-options.toolbar.edit.icon=Icon:
+options.toolbar.edit.icon=22x22/document-properties.png
 options.toolbar.edit.builtin=Use built-in icon:
 options.toolbar.edit.file=Load icon from file:
 options.toolbar.edit.choose=Choose
@@ -2143,6 +2167,14 @@ vfs.browser.filter=Filter:
 vfs.browser.default-filter=*[^~#]
 vfs.browser.filter-enabled=true
 vfs.browser.tree.loading=Loading...
+vfs.browser.file.icon=16x16/text-x-generic.png
+vfs.browser.open-file.icon=16x16/edit-select-all.png
+vfs.browser.dir.icon=16x16/folder.png
+vfs.browser.open-dir.icon=16x16/folder-open.png
+vfs.browser.filesystem.icon=16x16/drive-harddisk.png
+vfs.browser.loading.icon=16x16/image-loading.png
+vfs.browser.expand.icon=16x16/group-expand.png
+vfs.browser.collapse.icon=16x16/group-collapse.png
 
 vfs.browser.name=Name
 vfs.browser.type=Type
@@ -2167,34 +2199,34 @@ vfs.browser.close.label=Close
 vfs.browser.copy-path.label=Copy Path Name
 vfs.browser.delete.label=Delete...
 vfs.browser.delete.shortcut=DELETE
-vfs.browser.home.icon=Home.png
+vfs.browser.home.icon=22x22/go-home.png
 vfs.browser.home.label=Home Directory
 vfs.browser.home.shortcut=~
 vfs.browser.insert.label=Insert
-vfs.browser.new-directory.icon=NewDir.png
+vfs.browser.new-directory.icon=22x22/folder-new.png
 vfs.browser.new-directory.label=New Directory...
 vfs.browser.new-directory.shortcut=INSERT
-vfs.browser.new-file.icon=New.png
+vfs.browser.new-file.icon=22x22/document-new.png
 vfs.browser.new-file.label=New File
 vfs.browser.new-file.shortcut=C+n
 vfs.browser.open.label=Open
 vfs.browser.other-encoding-2.label=Other ({0})...
 vfs.browser.other-encoding.label=Other...
-vfs.browser.reload.icon=Reload.png
+vfs.browser.reload.icon=22x22/view-refresh.png
 vfs.browser.reload.label=Reload Directory
 vfs.browser.reload.shortcut=F5
 vfs.browser.rename.label=Rename...
 vfs.browser.rename.shortcut=F2
-vfs.browser.roots.icon=Drive.png
+vfs.browser.roots.icon=22x22/drive-harddisk.png
 vfs.browser.roots.label=Root Directory
 vfs.browser.roots.shortcut=/
-vfs.browser.search-directory.icon=FindInDir.png
+vfs.browser.search-directory.icon=22x22/edit-find-in-folder.png
 vfs.browser.search-directory.label=Search in Directory...
 vfs.browser.show-hidden-files.label=Show Hidden Files
-vfs.browser.synchronize.icon=CurrentDir.png
+vfs.browser.synchronize.icon=22x22/folder-visiting.png
 vfs.browser.synchronize.label=Directory of Current Buffer
 vfs.browser.synchronize.shortcut=-
-vfs.browser.up.icon=ParentDir.png
+vfs.browser.up.icon=22x22/go-parent.png
 vfs.browser.up.label=Parent Directory
 vfs.browser.up.shortcut=BACK_SPACE
 
@@ -2366,6 +2398,8 @@ manage-plugins.data-size.unknown=<unknown>
 
 manage-plugins.remove=Remove...
 manage-plugins.help=Help...
+manage-plugins.restore.icon=22x22/document-open.png
+manage-plugins.save.icon=22x22/document-save.png
 #}}}
 
 #{{{ Plugin installation
@@ -2380,6 +2414,8 @@ install-plugins.totalSize=Total Size:\
 install-plugins.select-all=Select All
 install-plugins.install=Install
 install-plugins.show-updates=Show Updates
+install-plugins.choose-plugin-set.icon=22x22/document-open.png
+install-plugins.clear-plugin-set.icon=22x22/edit-clear.png
 
 install-plugins.info=Author: {0}\n\
 	Released: {1}\n\
@@ -2398,3 +2434,6 @@ plugin-manager.remove-failed.message=The plugin {0}\n\
 #}}}
 
 #}}}
+
+
+

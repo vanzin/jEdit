@@ -61,7 +61,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		ActionHandler ah = new ActionHandler();
 
-		clear = new RolloverButton(GUIUtilities.loadIcon("Clear.png"));
+		clear = new RolloverButton(GUIUtilities.loadIcon(
+			jEdit.getProperty("hypersearch-results.clear.icon")));
 		clear.setToolTipText(jEdit.getProperty(
 			"hypersearch-results.clear.label"));
 		clear.addActionListener(ah);
@@ -298,9 +299,9 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	private void updateMultiStatus()
 	{
 		if(multiStatus)
-			multi.setIcon(GUIUtilities.loadIcon("MultipleResults.png"));
+			multi.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.multi.multiple.icon")));
 		else
-			multi.setIcon(GUIUtilities.loadIcon("SingleResult.png"));
+			multi.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.multi.single.icon")));
 	} //}}}
 	
 	//{{{ goToSelectedNode() method

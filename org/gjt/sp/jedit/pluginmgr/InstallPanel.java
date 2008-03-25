@@ -797,7 +797,7 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ ChoosePluginSet constructor
 		ChoosePluginSet()
 		{
-			setIcon(GUIUtilities.loadIcon("OpenFile.png"));
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("install-plugins.choose-plugin-set.icon")));
 			addActionListener(this);
 			updateUI();
 		} //}}}
@@ -835,7 +835,7 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ ClearPluginSet constructor
 		ClearPluginSet()
 		{
-			setIcon(GUIUtilities.loadIcon("Clear.png"));
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("install-plugins.clear-plugin-set.icon")));
 			setToolTipText("clear plugin set");
 			addActionListener(this);
 		} //}}}

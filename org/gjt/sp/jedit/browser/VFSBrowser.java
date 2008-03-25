@@ -1402,7 +1402,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		CommandsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.commands.label"));
-			setIcon(GUIUtilities.loadIcon("ToolbarMenu.gif"));
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			popup = new BrowserCommandsMenu(VFSBrowser.this,null);
@@ -1446,7 +1446,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		PluginsMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.plugins.label"));
-			setIcon(GUIUtilities.loadIcon("ToolbarMenu.gif"));
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			PluginsMenuButton.this.setRequestFocusEnabled(false);
@@ -1503,7 +1503,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		FavoritesMenuButton()
 		{
 			setText(jEdit.getProperty("vfs.browser.favorites.label"));
-			setIcon(GUIUtilities.loadIcon("ToolbarMenu.gif"));
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 			setHorizontalTextPosition(SwingConstants.LEADING);
 
 			FavoritesMenuButton.this.setRequestFocusEnabled(false);

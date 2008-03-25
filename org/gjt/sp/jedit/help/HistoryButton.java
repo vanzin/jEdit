@@ -63,7 +63,7 @@ public class HistoryButton extends JPanel implements ActionListener
 						? "helpviewer.back.label"
 						: "helpviewer.forward.label"));
 		Box box = new Box(BoxLayout.X_AXIS);
-		drop_button = new RolloverButton(GUIUtilities.loadIcon("ToolbarMenu.gif"));
+		drop_button = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 		drop_button.addActionListener(new DropActionHandler());
 		box.add(arrow_button);
 		box.add(drop_button);

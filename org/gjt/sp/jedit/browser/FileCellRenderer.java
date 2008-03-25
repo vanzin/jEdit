@@ -40,12 +40,12 @@ import org.gjt.sp.jedit.*;
  */
 public class FileCellRenderer extends DefaultTableCellRenderer
 {
-	public static Icon fileIcon = GUIUtilities.loadIcon("File.png");
-	public static Icon openFileIcon = GUIUtilities.loadIcon("OpenFile.png");
-	public static Icon dirIcon = GUIUtilities.loadIcon("Folder.png");
-	public static Icon openDirIcon = GUIUtilities.loadIcon("OpenFolder.png");
-	public static Icon filesystemIcon = GUIUtilities.loadIcon("DriveSmall.png");
-	public static Icon loadingIcon = GUIUtilities.loadIcon("ReloadSmall.png");
+	public static Icon fileIcon = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.file.icon"));
+	public static Icon openFileIcon = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.open-file.icon"));
+	public static Icon dirIcon = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.dir.icon"));
+	public static Icon openDirIcon = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.open-dir.icon"));
+	public static Icon filesystemIcon = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.filesystem.icon"));
+	public static Icon loadingIcon = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.loading.icon"));
 
 	//{{{ FileCellRenderer constructor
 	public FileCellRenderer()
@@ -220,11 +220,11 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 	//{{{ ExpansionToggleBorder class
 	static class ExpansionToggleBorder implements Border
 	{
-		static final Icon COLLAPSED_ICON;
-		static final Icon EXPANDED_ICON;
+		static final Icon COLLAPSE_ICON;
+		static final Icon EXPAND_ICON;
 		static final int ICON_WIDTH;
 
-		static final int LEVEL_WIDTH = 15;
+		static final int LEVEL_WIDTH = 10;
 
 		static final int STATE_NONE = 0;
 		static final int STATE_COLLAPSED = 1;
@@ -241,17 +241,18 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 		public void paintBorder(Component c, Graphics g,
 			int x, int y, int width, int height)
 		{
+			// paint the opposite icon of what the state is
 			switch(state)
 			{
 			case STATE_COLLAPSED:
-				COLLAPSED_ICON.paintIcon(c,g,
+				EXPAND_ICON.paintIcon(c,g,
 					x + level * LEVEL_WIDTH + 2,
-					y + (height - COLLAPSED_ICON.getIconHeight()) / 2);
+					y + (height - EXPAND_ICON.getIconHeight()) / 2);
 				break;
 			case STATE_EXPANDED:
-				EXPANDED_ICON.paintIcon(c,g,
+				COLLAPSE_ICON.paintIcon(c,g,
 					x + level * LEVEL_WIDTH + 2,
-					y + 2 + (height - EXPANDED_ICON.getIconHeight()) / 2);
+					y + (height - COLLAPSE_ICON.getIconHeight()) / 2);
 				break;
 			}
 		} //}}}
@@ -282,10 +283,9 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 
 		static
 		{
-			COLLAPSED_ICON = GUIUtilities.loadIcon("arrow1.png");
-			EXPANDED_ICON = GUIUtilities.loadIcon("arrow2.png");
-			ICON_WIDTH = Math.max(COLLAPSED_ICON.getIconWidth(),
-				EXPANDED_ICON.getIconWidth());
+			COLLAPSE_ICON = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.collapse.icon"));
+			EXPAND_ICON = GUIUtilities.loadIcon(jEdit.getProperty("vfs.browser.expand.icon"));
+			ICON_WIDTH = Math.max(COLLAPSE_ICON.getIconWidth(), EXPAND_ICON.getIconWidth());
 		} //}}}
 	} //}}}
 }

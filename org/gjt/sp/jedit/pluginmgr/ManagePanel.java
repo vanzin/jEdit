@@ -771,7 +771,7 @@ public class ManagePanel extends JPanel
 	{
 		RestoreButton()
 		{
-			setIcon(GUIUtilities.loadIcon("OpenFile.png"));
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("manage-plugins.restore.icon")));
 			addActionListener(this);
 			setToolTipText("Choose a PluginSet, select/deselect plugins based on set.");
 		}
@@ -805,7 +805,7 @@ public class ManagePanel extends JPanel
 	{
 		SaveButton()
 		{
-			setIcon(GUIUtilities.loadIcon("Save.png"));
+			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("manage-plugins.save.icon")));
 			setToolTipText("Save Currently Checked Plugins Set");
 			addActionListener(this);
 			setEnabled(true);

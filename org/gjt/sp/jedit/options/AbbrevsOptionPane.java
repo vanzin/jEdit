@@ -114,15 +114,15 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 		buttons.setBorder(new EmptyBorder(6,0,0,0));
 
-		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
+		add = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.abbrevs.add.icon")));
 		add.setToolTipText(jEdit.getProperty("options.abbrevs.add"));
 		add.addActionListener(actionHandler);
 		buttons.add(add);
-		remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
+		remove = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.abbrevs.remove.icon")));
 		remove.setToolTipText(jEdit.getProperty("options.abbrevs.remove"));
 		remove.addActionListener(actionHandler);
 		buttons.add(remove);
-		edit = new RolloverButton(GUIUtilities.loadIcon("ButtonProperties.png"));
+		edit = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.abbrevs.edit.icon")));
 		edit.setToolTipText(jEdit.getProperty("options.abbrevs.edit"));
 		edit.addActionListener(actionHandler);
 		buttons.add(edit);

@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre14
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Seph M. Soliman, and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
@@ -11,6 +11,7 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- New Tango icon set (Seph M. Soliman - # 1755992)
 
 }}}
 {{{ Editing

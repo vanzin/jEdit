@@ -97,12 +97,12 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				{
 					iconName = jEdit.getProperty(actionName + ".icon");
 					if(iconName == null)
-						icon = GUIUtilities.loadIcon("BrokenImage.png");
+						icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
 					else
 					{
 						icon = GUIUtilities.loadIcon(iconName);
 						if(icon == null)
-							icon = GUIUtilities.loadIcon("BrokenImage.png");
+							icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
 					}
 				}
 				listModel.addElement(new Button(actionName,iconName,icon,label));
@@ -121,27 +121,27 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		buttons.setBorder(new EmptyBorder(3,0,0,0));
 		buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
 		ActionHandler actionHandler = new ActionHandler();
-		add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
+		add = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.add.icon")));
 		add.setToolTipText(jEdit.getProperty("options.toolbar.add"));
 		add.addActionListener(actionHandler);
 		buttons.add(add);
 		buttons.add(Box.createHorizontalStrut(6));
-		remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
+		remove = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.remove.icon")));
 		remove.setToolTipText(jEdit.getProperty("options.toolbar.remove"));
 		remove.addActionListener(actionHandler);
 		buttons.add(remove);
 		buttons.add(Box.createHorizontalStrut(6));
-		moveUp = new RolloverButton(GUIUtilities.loadIcon("ArrowU.png"));
+		moveUp = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.moveUp.icon")));
 		moveUp.setToolTipText(jEdit.getProperty("options.toolbar.moveUp"));
 		moveUp.addActionListener(actionHandler);
 		buttons.add(moveUp);
 		buttons.add(Box.createHorizontalStrut(6));
-		moveDown = new RolloverButton(GUIUtilities.loadIcon("ArrowD.png"));
+		moveDown = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.moveDown.icon")));
 		moveDown.setToolTipText(jEdit.getProperty("options.toolbar.moveDown"));
 		moveDown.addActionListener(actionHandler);
 		buttons.add(moveDown);
 		buttons.add(Box.createHorizontalStrut(6));
-		edit = new RolloverButton(GUIUtilities.loadIcon("ButtonProperties.png"));
+		edit = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.edit.icon")));
 		edit.setToolTipText(jEdit.getProperty("options.toolbar.edit"));
 		edit.addActionListener(actionHandler);
 		buttons.add(edit);

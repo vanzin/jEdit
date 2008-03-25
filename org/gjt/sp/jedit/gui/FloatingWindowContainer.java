@@ -67,7 +67,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 
 		Box caption = new Box(BoxLayout.X_AXIS);
 		caption.add(menu = new RolloverButton(GUIUtilities
-			.loadIcon("ToolbarMenu.gif")));
+			.loadIcon(jEdit.getProperty("dropdown-arrow.icon"))));
 		menu.addMouseListener(new MouseHandler());
 		menu.setToolTipText(jEdit.getProperty("docking.menu.label"));
 		Box separatorBox = new Box(BoxLayout.Y_AXIS);

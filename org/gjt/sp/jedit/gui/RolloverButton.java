@@ -29,7 +29,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.basic.BasicBorders.ButtonBorder;
 import org.gjt.sp.jedit.OperatingSystem;
+
 //}}}
 
 /**
@@ -51,8 +53,7 @@ public class RolloverButton extends JButton
 	 */
 	public RolloverButton()
 	{
-		setContentAreaFilled(false);
-
+		//setContentAreaFilled(true);
 		addMouseListener(new MouseOverHandler());
 	} //}}}
 
@@ -72,25 +73,11 @@ public class RolloverButton extends JButton
 	//{{{ updateUI() method
 	public void updateUI()
 	{
-		if(OperatingSystem.isWindows())
-		{
-			/* Workaround for uncooperative Windows L&F */
-			setUI(new BasicButtonUI());
-		}
-		else
-			super.updateUI();
-
-		setBorder(new EtchedBorder());
+		super.updateUI();
+		//setBorder(originalBorder);
 		setBorderPainted(false);
-		setMargin(new Insets(1,1,1,1));
-
 		setRequestFocusEnabled(false);
-	} //}}}
-
-	//{{{ isOpaque() method
-	public boolean isOpaque()
-	{
-		return false;
+		setMargin(new Insets(1,1,1,1));
 	} //}}}
 
 	//{{{ setEnabled() method
@@ -108,6 +95,7 @@ public class RolloverButton extends JButton
 		{
 			revalidateBlocked = true;
 			super.setBorderPainted(b);
+			setContentAreaFilled(b);
 		}
 		finally
 		{
@@ -153,12 +141,13 @@ public class RolloverButton extends JButton
 	{
 		public void mouseEntered(MouseEvent e)
 		{
-			if (isEnabled())
-				setBorderPainted(true);
+			setContentAreaFilled(true);
+			setBorderPainted(isEnabled());
 		}
 
 		public void mouseExited(MouseEvent e)
 		{
+			setContentAreaFilled(false);
 			setBorderPainted(false);
 		}
 	} //}}}
