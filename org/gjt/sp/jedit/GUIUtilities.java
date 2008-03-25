@@ -1614,7 +1614,7 @@ public class GUIUtilities
 	{
 		deprecatedIcons.put("File.png",       "16x16/text-x-generic.png");
 		deprecatedIcons.put("Folder.png",     "16x16/folder.png");
-		deprecatedIcons.put("OpenFolder.png", "16x16/open-folder.png");
+		deprecatedIcons.put("OpenFolder.png", "16x16/folder-open.png");
 		deprecatedIcons.put("OpenFile.png",   "16x16/edit-select-all.png");
 		deprecatedIcons.put("ReloadSmall.png","16x16/view-reload.png");
 		deprecatedIcons.put("DriveSmall.png", "16x16/drive-harddisk.png");

@@ -107,8 +107,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			fm = getFontMetrics( defaultFont );
 			iLineHeight = fm.getHeight();
 			vLines = new Vector<String>(50);
-			image = new ImageIcon(getClass().getResource(
-				"/org/gjt/sp/jedit/icons/about.png"));
+			image = (ImageIcon)GUIUtilities.loadIcon("about.png");
 			MediaTracker tracker = new MediaTracker( this );
 			tracker.addImage( image.getImage(), 0 );
 
