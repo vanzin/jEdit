@@ -13,7 +13,11 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 
 }}}
+{{{ Editing
 
+- fortran.xml indentation fixed (patch # 1740179 - honestguvnor + Robert Schwenn)
+
+}}}
 {{{ API Changes
 
 - New status bar api (Matthieu Casanova)
