@@ -1,57 +1,98 @@
 /*
- * Move_Lines_Up.bsh - a BeanShell macro for moving lines up.
- *
- * Copyright (C) 2004 Nicholas O'Leary nol@deferential.net
- *
- * :mode=beanshell:tabSize=3:indentSize=3:maxLineLen=0:noTabs=true:
- * :indentOnTab=true:indentOnEnter=true:folding=explicit:collapseFolds=1:
- *
- * {{{ License
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with the jEdit program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * }}}
- *
- * Changes:
- *  05-Jul-04: Initial Implementation
- *
- * based on: Move_Line_Up.bsh 9126 2007-03-10 19:14:30Z Vampire0
- * $Id$
- */
+Move_Lines_Up.bsh - Beanshell macro to move a selection of lines up by one line.
+This should handle multiple selections, but doesn't work quite right.
 
+Copyright (c) Dale Anson, 2004
 
-selections = textArea.getSelectedLines();
-if(selections.length == 0){
-   selections = new int [] {textArea.getCaretLine()};
-}
-start = textArea.getLineStartOffset(selections[0]);
-stop = textArea.getLineEndOffset(selections[selections.length-1]);
-if(start == 0) {return;}
-linestart = textArea.getLineStartOffset(selections[0]-1);
-text = textArea.getText(linestart, start-linestart);
-buffer.insert(stop, text);
-buffer.remove(linestart, start-linestart);
-buffer.indentLines(selections[0] - 1, selections[selections.length - 1] - 1);
-return;
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-/*
+   1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+   3. The name of the author may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
 
-Macro index data (in DocBook format)
-
-   <listitem>
-      <para><filename>Move_Lines_Up.bsh</filename></para>
-      <abstract><para>Moves the current line or selected lines up one, with automatic
-      indentation.</para></abstract>
-      </listitem>
-
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+
+// check buffer read-only status
+if ( buffer.isReadOnly() ) {
+   Macros.error( view, "File is read only." );
+   return ;
+}
+
+// get the current selection or the current line if no selection
+Selection[] selections = textArea.getSelection();
+
+// this doesn't work right with multiple selection, so don't do anything
+if (selections.length > 1) {
+   Macros.error( view, "Line move does not work with multiple selection." );
+   return ;
+}
+
+String ls = buffer.getStringProperty( "lineSeparator" );
+
+int line = textArea.getCaretLine();
+if (line == 0) {
+    return;  // at top, nowhere to go from here
+}
+if (line == textArea.getLineCount() - 1) {
+    // on last line, make sure it ends with a line separator
+    String line_text = textArea.getLineText(line);
+    if (!line_text.endsWith(ls)) {
+        buffer.insert(buffer.getLength(), ls);
+    }
+}
+
+// if nothing is selected, select current line
+if (selection == null || selections.length == 0) {
+   selections = new Selection[1];
+   int start_offset = textArea.getLineStartOffset(line);
+   int end_offset = textArea.getLineEndOffset(line);
+   selections[0] = new Selection.Range(start_offset, end_offset);
+   textArea.addToSelection(selections[0]);
+}
+
+// adjust the start and end line offsets to reselect after the move
+int[] startLines = new int[selections.length];
+int[] endLines = new int[selections.length];
+for (int i = 0; i < selections.length; i++) {
+    if (selections[i].getStartLine() == 0) {
+        return;  // at top, nowhere to go from here
+    }
+   startLines[i] = selections[i].getStartLine() - 1;
+   endLines[i] = selections[i].getEndLine() - 1;
+}
+
+// cut the selected text, move up one line, and paste it back in
+Registers.cut( textArea, '_' );
+textArea.goToPrevLine( false );
+Registers.paste( textArea, '_', false );
+textArea.goToPrevLine( false );
+
+// indent lines
+for (int i = 0; i < startLines.length; i++) {
+    buffer.indentLines( startLines[i], endLines[i] + 1 );
+}
+
+// reselect the moved text
+textArea.selectNone();
+for (int i = 0; i < startLines.length; i++) {
+   selection = new Selection.Range(
+      textArea.getLineStartOffset( startLines[i] ),
+      textArea.getLineStartOffset( endLines[i] )
+   );
+   textArea.addToSelection(selection);
+}

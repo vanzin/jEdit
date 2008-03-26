@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre14
 
-Thanks to Björn "Vampire" Kautler, Seph M. Soliman, and Alan Ezust for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson,
+and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
@@ -15,6 +16,9 @@ Thanks to Björn "Vampire" Kautler, Seph M. Soliman, and Alan Ezust for contribut
 
 }}}
 {{{ Editing
+
+- Move_Lines_(Up|Down).bsh replaced by Dale Anson to handle edge conditions
+    (#1915824)
 
 - fortran.xml indentation fixed (patch # 1740179 - honestguvnor + Robert Schwenn)
 
