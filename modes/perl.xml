@@ -124,11 +124,12 @@
 			<END>"</END>
 		</SPAN>
 
-		<!-- apostroph literals -->
+		<!-- apostrophe literals -->
 		<SPAN TYPE="LITERAL1" DELEGATE="APOSTR">
 			<BEGIN>'</BEGIN>
 			<END>'</END>
 		</SPAN>
+		<SEQ_REGEXP TYPE="LITERAL1">\b\w+\b(?=\s*=>)</SEQ_REGEXP>
 
 		<!-- options: -text -->
 		<SEQ_REGEXP HASH_CHAR="-" TYPE="LITERAL1">-[\p{Lower}]\w+</SEQ_REGEXP>
@@ -195,18 +196,78 @@
 
 		<!-- /Regexp/, avoid confusion with a sequence of two divisions! -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/"
-			AT_WORD_START="TRUE">/.*?[^\\]/[cgimosx]*(?!\s*[\d\$\@\(\-])</SEQ_REGEXP>
+			AT_WORD_START="TRUE">/.*?[^\\]/([cgimosx]+\b|(?=[^cgimosx])|$)(?!\s*[\d\$\@\(\{\-A-Z"'])</SEQ_REGEXP>
 
-        <!-- q//, qq//, qr//, qx// -->
+		<!-- q//, qq//, qx// -->
 		<SPAN_REGEXP HASH_CHAR="q"
-					 TYPE="MARKUP"
+					 TYPE="LITERAL1"
+					 ESCAPE="\"
 					 MATCH_TYPE="OPERATOR"
-					 DELEGATE="QUOTED"
 					 AT_WORD_START="TRUE"
 					 NO_LINE_BREAK="FALSE">
-			<BEGIN>q(?:|[qrxw])([#\[{(/|])</BEGIN>
+			<BEGIN>q[qxw]?([#/\|])</BEGIN>
 			<END>~1</END>
 		</SPAN_REGEXP>
+		<SPAN_REGEXP HASH_CHAR="q"
+					 MATCH_TYPE="OPERATOR"
+					 DELEGATE="QUOTED_BRACKET"
+					 AT_WORD_START="TRUE"
+					 NO_LINE_BREAK="FALSE">
+			<BEGIN>q[qxw]?(\[)</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP HASH_CHAR="q"
+					 MATCH_TYPE="OPERATOR"
+					 DELEGATE="QUOTED_BRACE"
+					 AT_WORD_START="TRUE"
+					 NO_LINE_BREAK="FALSE">
+			<BEGIN>q[qxw]?(\{)</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP HASH_CHAR="q"
+					 MATCH_TYPE="OPERATOR"
+					 DELEGATE="QUOTED_PAREN"
+					 AT_WORD_START="TRUE"
+					 NO_LINE_BREAK="FALSE">
+			<BEGIN>q[qxw]?(\()</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
+
+		<!-- qr// should match other regex highlight colors -->
+		<SPAN_REGEXP HASH_CHAR="q"
+					 ESCAPE="\"
+					 TYPE="LITERAL1"
+					 MATCH_TYPE="OPERATOR"
+					 AT_WORD_START="TRUE"
+					 NO_LINE_BREAK="FALSE">
+			<BEGIN>qr([#/\|])</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP HASH_CHAR="q"
+					 DELEGATE="QUOTED_BRACKET"
+					 MATCH_TYPE="OPERATOR"
+					 AT_WORD_START="TRUE"
+					 NO_LINE_BREAK="FALSE">
+			<BEGIN>qr(\[)</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP HASH_CHAR="q"
+					 DELEGATE="QUOTED_BRACE"
+					 MATCH_TYPE="OPERATOR"
+					 AT_WORD_START="TRUE"
+					 NO_LINE_BREAK="FALSE">
+			<BEGIN>qr(\{)</BEGIN>
+			<END>~1</END>
+		</SPAN_REGEXP>
+		<SPAN_REGEXP HASH_CHAR="q"
+					 DELEGATE="QUOTED_PAREN"
+					 ESCAPE="\"
+					 MATCH_TYPE="OPERATOR"
+					 AT_WORD_START="TRUE"
+					 NO_LINE_BREAK="FALSE">
+			<BEGIN>qr(\()</BEGIN>
+ 			<END>~1</END>
+ 		</SPAN_REGEXP>
 
 		<!-- tr/// transliteration -->
 		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="tr"
@@ -717,15 +778,35 @@
 	</RULES>
 
 	<!-- Used for quote-like operators; just makes sure the brackets are balanced. -->
-	<RULES SET="QUOTED" DEFAULT="LITERAL1">
-		<SPAN_REGEXP NO_LINE_BREAK="FALSE"
+	<RULES SET="QUOTED_BRACKET" DEFAULT="LITERAL1" ESCAPE="\">
+		<SPAN NO_LINE_BREAK="FALSE"
 					 TYPE="LITERAL1"
 					 MATCH_TYPE="OPERATOR"
-					 DELEGATE="QUOTED"
-					 HASH_CHARS="|[{(/">
-			<BEGIN>([\[{\(])</BEGIN>
-			<END>~1</END>
-		</SPAN_REGEXP>
+					 DELEGATE="QUOTED_BRACKET"
+					 HASH_CHARS="[">
+			<BEGIN>[</BEGIN>
+			<END>]</END>
+		</SPAN>
+	</RULES>
+	<RULES SET="QUOTED_BRACE" DEFAULT="LITERAL1" ESCAPE="\">
+		<SPAN NO_LINE_BREAK="FALSE"
+					 TYPE="LITERAL1"
+					 MATCH_TYPE="OPERATOR"
+					 DELEGATE="QUOTED_BRACE"
+					 HASH_CHARS="{">
+			<BEGIN>{</BEGIN>
+			<END>}</END>
+		</SPAN>
+	</RULES>
+	<RULES SET="QUOTED_PAREN" DEFAULT="LITERAL1" ESCAPE="\">
+		<SPAN NO_LINE_BREAK="FALSE"
+					 TYPE="LITERAL1"
+					 MATCH_TYPE="OPERATOR"
+					 DELEGATE="QUOTED_PAREN"
+					 HASH_CHARS="(">
+			<BEGIN>(</BEGIN>
+			<END>)</END>
+		</SPAN>
 	</RULES>
 
 </MODE>
