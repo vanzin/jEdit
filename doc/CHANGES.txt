@@ -3,7 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre14
 
 Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson,
-and Alan Ezust for contributing to this release.
+Alan Ezust, Chris Petersen,  Marcelo Vanzin and Kazutoshi Satoda
+for contributing to this release.
 
 {{{ Bug Fixes
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
@@ -21,6 +22,13 @@ and Alan Ezust for contributing to this release.
     (#1915824)
 
 - fortran.xml indentation fixed (patch # 1740179 - honestguvnor + Robert Schwenn)
+
+- SF Patch #1845842: perl.xml qq([test) syntax higlighting broken
+  The q and qr operators were being highlighted wrong. The right way to do it
+  is kinda messy, though, requiring a separate delegate depending on which
+  character was used to start the quoted sequence. Applied patch is very
+  similar to one in SF.net, with fixes for handling escaped characters
+  correctly. (Chris Petersen, Marcelo Vanzin)
 
 - Comments and literals are now filtered before matching with regexps in
   indentNextLines, indentNextLine, unindentThisLine, and unindentNextLines.
@@ -90,13 +98,13 @@ zoniie, and Daniel Hahler for contributing to this release.
 
 - When closing a dockable panel, the DockableWindowUpdate.DEACTIVATED message is
   sent (#1075058) (Matthieu Casanova)
-  
+
 - ScrollLineCount was not calculated correctly (#1906288, #1868923)
   (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
-- In a directory search, if you use a regex, it is tested before, before listing 
+- In a directory search, if you use a regex, it is tested before, before listing
   files (#1556663) Matthieu Casanova
 
 - Center Caret On Screen now scrolls your document so your caret doesn't
@@ -114,14 +122,14 @@ zoniie, and Daniel Hahler for contributing to this release.
 - The VFS Browser has a new command to paste a file.
   After copying the path name of a file, you can paste it in any folder to
   copy the file (Matthieu Casanova)
-  
+
 - When opening the search dialog if no text is selected the searched string will
   be filled with the previous entered string (feature #1500938) (Matthieu Casanova)
-  
+
 - The Activity Log option panel now have a textfield filter
   (feature #1593375) (Matthieu Casanova)
-  
-- In the plugin manager, a new panel shows detailed informations about the 
+
+- In the plugin manager, a new panel shows detailed informations about the
   installed plugins (Matthieu Casanova)
 }}}
 {{{ Editing
