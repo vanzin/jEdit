@@ -205,7 +205,7 @@
 					 MATCH_TYPE="OPERATOR"
 					 AT_WORD_START="TRUE"
 					 NO_LINE_BREAK="FALSE">
-			<BEGIN>q[qxw]?([#/\|])</BEGIN>
+			<BEGIN>q[qxw]?([#/\|!])</BEGIN>
 			<END>~1</END>
 		</SPAN_REGEXP>
 		<SPAN_REGEXP HASH_CHAR="q"
@@ -240,7 +240,7 @@
 					 MATCH_TYPE="OPERATOR"
 					 AT_WORD_START="TRUE"
 					 NO_LINE_BREAK="FALSE">
-			<BEGIN>qr([#/\|])</BEGIN>
+			<BEGIN>qr([#/\|!])</BEGIN>
 			<END>~1</END>
 		</SPAN_REGEXP>
 		<SPAN_REGEXP HASH_CHAR="q"

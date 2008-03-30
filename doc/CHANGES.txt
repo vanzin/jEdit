@@ -41,6 +41,10 @@ for contributing to this release.
   alignment is only appied to actual code. Also, deep indent rules, if enabled,
   should have precedence over the open/close bracket rules. (Marcelo Vanzin)
 
+- SF Bug #1927869: Perl edit mode: qr/"/ breaks highlighting
+  If was not really qr/"/, but qr!"!. Added "!" to list of allowed characters
+  to delimit quote operators. (Marcelo Vanzin)
+
 }}}
 {{{ API Changes
 
