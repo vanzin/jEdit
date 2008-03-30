@@ -317,6 +317,21 @@ public class Mode
 				rules.add(rule);
 		}
 
+		if (getBooleanProperty("deepIndent"))
+		{
+			String unalignedOpenBrackets = (String) getProperty("unalignedOpenBrackets");
+			if (unalignedOpenBrackets != null)
+			{
+				for (int i = 0 ; i < unalignedOpenBrackets.length();i++)
+				{
+					char openChar = unalignedOpenBrackets.charAt(i);
+					char closeChar = TextUtilities.getComplementaryBracket(openChar, null);
+					if (closeChar != '\0')
+						rules.add(new DeepIndentRule(openChar, closeChar));
+				}
+			}
+		}
+
 		String[] bracketProps = {
 			"indentOpenBracket",
 			"indentCloseBracket",
@@ -339,21 +354,6 @@ public class Mode
 			IndentRule rule = createRegexpIndentRule(finalProps[i]);
 			if(rule != null)
 				rules.add(rule);
-		}
-
-		if (getBooleanProperty("deepIndent"))
-		{
-			String unalignedOpenBrackets = (String) getProperty("unalignedOpenBrackets");
-			if (unalignedOpenBrackets != null)
-			{
-				for (int i = 0 ; i < unalignedOpenBrackets.length();i++)
-				{
-					char openChar = unalignedOpenBrackets.charAt(i);
-					char closeChar = TextUtilities.getComplementaryBracket(openChar, null);
-					if (closeChar != '\0')
-						rules.add(new DeepIndentRule(openChar, closeChar));
-				}
-			}
 		}
 
 		if (!getIgnoreWhitespace())

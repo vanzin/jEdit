@@ -165,18 +165,16 @@ public interface IndentAction
 	class AlignParameter implements IndentAction
 	{
 		private int openParensColumn;
-		private String openParensLineText;
 
-		public AlignParameter(int openParensColumn, String openParensLineText)
+		public AlignParameter(int openParensColumn)
 		{
-			this.openParensLineText = openParensLineText;
 			this.openParensColumn = openParensColumn;
 		}
 
 		public int calculateIndent(JEditBuffer buffer, int line, int oldIndent,
 				     int newIndent)
 		{
-			return openParensLineText == null ? newIndent : openParensColumn + 1;
+			return openParensColumn + 1;
 		}
 
 		public boolean keepChecking()

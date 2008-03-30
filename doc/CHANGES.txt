@@ -37,6 +37,10 @@ for contributing to this release.
   which means a simple integer literal in most programming languages.
   (Kazutoshi Satoda - SF.net Patch #1868690)
 
+- Tweaks to deep indent: ignore anything inside comments and literals, so
+  alignment is only appied to actual code. Also, deep indent rules, if enabled,
+  should have precedence over the open/close bracket rules. (Marcelo Vanzin)
+
 }}}
 {{{ API Changes
 
