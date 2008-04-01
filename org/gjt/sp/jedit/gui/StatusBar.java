@@ -139,10 +139,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		else
 			panel.remove(caretStatus);
 
-		box.removeAll();
 		String statusBar = jEdit.getProperty("view.status");
 		if (!StandardUtilities.objectsEqual(currentBar, statusBar))
 		{
+			box.removeAll();
 			StringTokenizer tokenizer = new StringTokenizer(statusBar);
 			while (tokenizer.hasMoreTokens())
 			{
@@ -150,6 +150,11 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				if (Character.isLetter(token.charAt(0)))
 				{
 					Widget widget = getWidget(token);
+					if (widget == null)
+					{
+					    Log.log(Log.WARNING, this, "Widget " + token + " doesn't exists");
+					    continue;
+					}
 					Component c = widget.getComponent();
 					c.setBackground(bg);
 					c.setForeground(fg);

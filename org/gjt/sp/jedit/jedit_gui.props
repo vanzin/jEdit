@@ -1941,19 +1941,18 @@ options.status.code=new StatusBarOptionPane();
 options.status.visible=Show status bar
 options.status.foreground=Status bar text:
 options.status.background=Status bar background:
-options.status.show-caret-status=Show caret status
-options.status.show-encoding=Show buffer encoding
-options.status.show-edit-mode=Show edit mode
-options.status.show-fold-mode=Show fold mode
-options.status.show-wrap=Show wrap mode
-options.status.show-multi-select=Show multiple selection status
-options.status.show-rect-select=Show rectangular selection status
-options.status.show-overwrite=Show overwrite status
-options.status.show-line-seperator=Show buffer line seperator
-options.status.show-memory=Show memory indicator
 options.status.memory.foreground=Memory indicator foreground:
 options.status.memory.background=Memory indicator background:
-options.status.show-clock=Show time
+options.status.edit.title=Edit Status Bar Entry
+options.status.edit.labelRadioButton=label
+options.status.edit.widgetRadioButton=widget
+options.status.edit.labelLabel=Type a label:
+options.status.edit.widgetLabel=Choose a widget:
+#}}}
+
+#{{{ Status bar pane
+
+
 #}}}
 
 #{{{ Syntax Highlighting pane
@@ -2229,6 +2228,7 @@ vfs.browser.synchronize.shortcut=-
 vfs.browser.up.icon=22x22/go-parent.png
 vfs.browser.up.label=Parent Directory
 vfs.browser.up.shortcut=BACK_SPACE
+vfs.browser.paste.label=Paste File Here
 
 #}}}
 
