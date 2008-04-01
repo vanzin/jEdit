@@ -465,6 +465,7 @@ public class CompleteWord extends CompletionPopup
 				setSelectedIndex(index);
 				if(doSelectedCompletion())
 				{
+					e.consume();
 					dispose();
 				}
 				return;

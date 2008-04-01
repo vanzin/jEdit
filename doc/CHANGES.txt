@@ -10,6 +10,10 @@ for contributing to this release.
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
   install (#1913979) (Matthieu Casanova)
 
+- When a digit is typed for a completion popup to select a completion,
+  the digit was inserted after the completed word.
+  (SF.net Bug #1931333 - Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 
