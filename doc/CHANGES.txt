@@ -19,6 +19,9 @@ for contributing to this release.
 
 - New Tango icon set (Seph M. Soliman - # 1755992)
 
+- Change the behavior of the directory chooser dialog slightly.
+  (SF Bug #1932733 - Marcelo Vanzin)
+
 }}}
 {{{ Editing
 

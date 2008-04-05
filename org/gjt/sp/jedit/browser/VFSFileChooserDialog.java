@@ -98,7 +98,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
 
-	
+
 	//{{{ getBrowser() method
 	/**
 	 * Returns the VFSBrowser instance used internally.
@@ -128,7 +128,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		if(files.length != 0)
 		{
-			if(files.length > 1 && choosingDir)
+			if(choosingDir)
 			{
 				isOK = true;
 				dispose();
@@ -391,15 +391,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
-			{
-				if(!browser.getDirectory().equals(
-					browser.getDirectoryField().getText()))
-				{
-					browser.setDirectory(browser.getDirectoryField().getText());
-				}
-				else
-					ok();
-			}
+				ok();
 			else if(evt.getSource() == cancel)
 				cancel();
 		}
@@ -428,7 +420,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				if(choosingDir)
 				{
 					ok.setText(jEdit.getProperty(
-						"vfs.browser.dialog.open"));
+						"vfs.browser.dialog.choose-dir"));
 				}
 
 				VFSFile file = files[0];
