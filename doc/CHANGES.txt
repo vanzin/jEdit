@@ -7,6 +7,10 @@ Alan Ezust, Chris Petersen,  Marcelo Vanzin and Kazutoshi Satoda
 for contributing to this release.
 
 {{{ Bug Fixes
+
+- Fixed NPE on SplashScreen init on certain strange X-window displays. 
+    (#1628432 - ezust)
+
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
   install (#1913979) (Matthieu Casanova)
 

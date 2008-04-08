@@ -53,13 +53,17 @@ public class SplashScreen extends JComponent
 		{
 			Log.log(Log.ERROR,this,e);
 		}
-
+		Dimension screen = getToolkit().getScreenSize(); // sane default
 		win = new JWindow();
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
-		int height = gs[0].getDisplayMode().getHeight();
-		int width = gs[0].getDisplayMode().getWidth();
-		Dimension screen = new Dimension(width, height);
+		GraphicsDevice gd = gs[0];
+		if (gd != null) {
+			DisplayMode dm = gd.getDisplayMode();
+			if (dm != null) {
+				screen = new Dimension(dm.getWidth(), dm.getHeight());
+			}
+		}
 		Dimension size = new Dimension(image.getWidth(this) + 2,
 			image.getHeight(this) + 2 + PROGRESS_HEIGHT);
 		win.setSize(size);
