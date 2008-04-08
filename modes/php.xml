@@ -460,7 +460,7 @@ TODO:
 			<END>*/</END>
 		</SPAN>
 
-		<!-- block comments -->
+		<!-- range comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
@@ -493,6 +493,7 @@ TODO:
 			<END>*/</END>
 		</SPAN>
 
+		<!-- range comment -->
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
@@ -516,6 +517,9 @@ TODO:
 
 		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
 		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR"> (</MARK_PREVIOUS>
+
+		<!-- Variable functions, e.g. $foo() -->
+		<SEQ_REGEXP HASH_CHAR="$" TYPE="FUNCTION">\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\s*(?=\()</SEQ_REGEXP>
 
 		<!-- Readins/Heredoc -->
 		<SPAN_REGEXP HASH_CHAR="&lt;&lt;&lt;" TYPE="LITERAL4" DELEGATE="PHP_LITERAL4">
