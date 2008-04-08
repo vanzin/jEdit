@@ -184,11 +184,11 @@
 		<!-- Heredoc -->
 		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
 		<BEGIN><![CDATA[<<\p{Space}*(['"])([\p{Space}\p{Alnum}_]*)\1;?\s*]]></BEGIN>
-		<END>$2</END>
+		<END AT_LINE_START="TRUE">$2</END>
 		</SPAN_REGEXP>
 		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL2" DELEGATE="LITERAL">
 		<BEGIN><![CDATA[<<([\p{Alpha}_][\p{Alnum}_]*);?\s*]]></BEGIN>
-		<END>$1</END>
+		<END AT_LINE_START="TRUE">$1</END>
 		</SPAN_REGEXP>
 
 		<!-- jEdit 4.1 adds regular expression syntax rules so we can

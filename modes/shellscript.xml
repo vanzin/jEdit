@@ -59,7 +59,7 @@
 		<!-- Readins -->
 		<SPAN_REGEXP HASH_CHAR="&lt;&lt;" TYPE="LITERAL1" DELEGATE="LITERAL">
 			<BEGIN><![CDATA[<<[\p{Space}'"]*([\p{Alnum}_]+)[\p{Space}'"]*]]></BEGIN>
-			<END>$1</END>
+			<END AT_LINE_START="TRUE">$1</END>
 		</SPAN_REGEXP>
 
 		<!-- Operators -->

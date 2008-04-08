@@ -717,9 +717,9 @@ public abstract class XModeHandler extends DefaultHandler
 				{
 					target.lastEnd = new StringBuffer();
 					target.lastEnd.append(c, off, len);
-					target.lastEndPosMatch = ((target.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
-						| (target.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
-						| (target.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+					target.lastEndPosMatch = ((this.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
+						| (this.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
+						| (this.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
 					target.lastAtLineStart = false;
 					target.lastAtWordStart = false;
 					target.lastAtWhitespaceEnd = false;

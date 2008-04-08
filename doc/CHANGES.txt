@@ -14,6 +14,12 @@ for contributing to this release.
   the digit was inserted after the completed word.
   (SF.net Bug #1931333 - Kazutoshi Satoda)
 
+- SF Bug #1873290: perl heredoc syntax highlighting is broken
+  Thanks to Valeri Mytinski for pointing out that it was fixable with the
+  current code. :-) The mode parser wasn't honoring AT_LINE_START for end
+  tags, so that is fixed. Also, add AT_LINE_START="TRUE" to the perl and
+  shellscript heredoc rules' END tags. (Marcelo Vanzin)
+
 }}}
 {{{ Miscellaneous
 
