@@ -8,7 +8,7 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
-- Fixed NPE on SplashScreen init on certain strange X-window displays. 
+- Fixed NPE on SplashScreen init on certain strange X-window displays.
     (#1628432 - ezust)
 
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
@@ -24,6 +24,8 @@ for contributing to this release.
   tags, so that is fixed. Also, add AT_LINE_START="TRUE" to the perl and
   shellscript heredoc rules' END tags. (Marcelo Vanzin)
 
+- When typing quickly in the activity logs filter, some exceptions were happening
+  (patch #1938174) (Dale Anson)
 }}}
 {{{ Miscellaneous
 

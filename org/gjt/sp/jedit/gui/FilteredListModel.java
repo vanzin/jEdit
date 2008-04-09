@@ -102,34 +102,40 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	} //}}}
 
 	//{{{ setFilter() method
-	public void setFilter(String filter)
+	public void setFilter(final String filter)
 	{
-		Set<Integer> selectedIndices = saveSelection();
-		this.filter = filter;
-		if (filter != null && filter.length() > 0)
-		{
-			int size = delegated.getSize();
-			filter = prepareFilter(filter);
-			Vector<Integer> indices = new Vector<Integer>(size);
-			Map<Integer, Integer> invertedIndices = new HashMap<Integer, Integer>();
-			for (int i = 0; i < size; i++)
+		Runnable runner = new Runnable() {
+			public void run()
 			{
-				if (passFilter(i, filter))
+				Set<Integer> selectedIndices = saveSelection();
+				FilteredListModel.this.filter = filter;
+				if (filter != null && filter.length() > 0)
 				{
-					Integer delegatedIndice = Integer.valueOf(i);
-					indices.add(delegatedIndice);
+					int size = delegated.getSize();
+					String prepped_filter = prepareFilter(filter);
+					Vector<Integer> indices = new Vector<Integer>(size);
+					Map<Integer, Integer> invertedIndices = new HashMap<Integer, Integer>();
+					for (int i = 0; i < size; i++)
+					{
+						if (passFilter(i, prepped_filter))
+						{
+							Integer delegatedIndice = Integer.valueOf(i);
+							indices.add(delegatedIndice);
 
-					invertedIndices.put(delegatedIndice, indices.size() - 1);
+							invertedIndices.put(delegatedIndice, indices.size() - 1);
+						}
+					}
+					FilteredListModel.this.invertedIndices = invertedIndices;
+					filteredIndices = indices;
 				}
-			}
-			this.invertedIndices = invertedIndices;
-			filteredIndices = indices;
-		}
-		else
-			resetFilter();
+				else
+					resetFilter();
 
-                fireContentsChanged(this, 0, getSize());		
-		restoreSelection(selectedIndices);
+				fireContentsChanged(this, 0, getSize());
+				restoreSelection(selectedIndices);
+			}
+		};
+		SwingUtilities.invokeLater(runner);
 	} //}}}
 
 	//{{{ prepareFilter() method
@@ -170,7 +176,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	protected void restoreSelection(Set<Integer> selectedIndices)
 	{
 		if (selectedIndices == null || getSize() == 0)
-			return; 
+			return;
 
 		for (Integer selectedIndex : selectedIndices)
 		{
@@ -214,36 +220,35 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	} //}}}
 
 	//{{{ getElementAt() method
-	public Object getElementAt(int index) 
+	public Object getElementAt(int index)
 	{
 		int trueRowIndex = getTrueRow(index);
 		return delegated.getElementAt(trueRowIndex);
 	} //}}}
 
 	//{{{ getSize() method
-	public int getSize() 
+	public int getSize()
 	{
 		if (filteredIndices == null)
 			return delegated.getSize();
 		return filteredIndices.size();
 	} //}}}
-	
+
 	//{{{ contentsChanged() method
 	public void contentsChanged(ListDataEvent e)
 	{
 		setFilter(filter);
 	} //}}}
-	
+
 	//{{{ intervalAdded() method
-	public void intervalAdded(ListDataEvent e) 
-	{
-		setFilter(filter);
-	} //}}}
-	
-	//{{{ intervalRemoved() method
-	public void intervalRemoved(ListDataEvent e) 
+	public void intervalAdded(ListDataEvent e)
 	{
 		setFilter(filter);
 	} //}}}
 
+	//{{{ intervalRemoved() method
+	public void intervalRemoved(ListDataEvent e)
+	{
+		setFilter(filter);
+	} //}}}
 }
