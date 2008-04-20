@@ -13,8 +13,8 @@ for contributing to this release.
 - Reworked fold expansions [patch #1945472], which addresses #1942313
   and #1538715 (halyavin)
 
-- Fixed NPE on SplashScreen init on certain strange X-window displays.
-    (#1628432 - ezust)
+- Fixed NPE on SplashScreen init on NX and older X-window displays.
+    (#1628432, #1930320 - ezust, kazutoshi satoda).
 
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
   install (#1913979) (Matthieu Casanova)
