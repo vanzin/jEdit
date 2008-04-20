@@ -1190,14 +1190,14 @@
 
             <para><guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search
             Bar</guimenuitem> (shortcut: <keycap>C+COMMA</keycap>) displays the
-            search bar if necessary, and gives it keyboard focus. If this
-            command is invoked while there is a selection, the selection is
-            placed in the search string field.</para>
+            search bar if necessary, and gives it keyboard focus. </para>
 
             <para><guimenu>Search</guimenu>&gt;<guimenuitem>Incremental Search
             for Word</guimenuitem> (shortcut: <keycap>A+COMMA</keycap>) behaves
             like the above command except it places the word at the caret in the
-            search string field.</para>
+            search string field. If this command is invoked while there is a
+            selection, the selection is placed in the search string
+            field instead.</para>
 
             <para>Unless the <guibutton>HyperSearch</guibutton> check box is
             selected, the search bar will perform an <firstterm>incremental
