@@ -1075,7 +1075,8 @@ ioerror.caption-1=The following I/O operation could not be completed:
 ioerror={0}
 ioerror.directory-error=Cannot list directory: {0}
 ioerror.directory-error-nomsg=Cannot list directory.
-ioerror.encoding-error=Cannot load with the encoding "{0}".\n\
+ioerror.encoding-error=The file could not be loaded correctly (some data might be lost) with\n\
+	the encoding "{0}".\n\
 	({1})\n\
 	Try selecting a different encoding.\n\
 	It can be selected with the menu File->Reload with Encoding.\n\

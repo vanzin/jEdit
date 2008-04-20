@@ -339,7 +339,15 @@ public class BufferLoadRequest extends BufferIORequest
 				pp[1] = "See details in Activity Log";
 			}
 			VFSManager.error(view,path,"ioerror.encoding-error",pp);
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
+			markedStream = rewindContentsStream(markedStream, gzipped);
+			read(EncodingServer.getEncoding(
+				buffer.getStringProperty(Buffer.ENCODING)
+				).getPermissiveTextReader(markedStream)
+				, length, false);
+			if(autodetect && gzipped)
+			{
+				buffer.setBooleanProperty(Buffer.GZIPPED,true);
+			}
 		}
 		finally
 		{

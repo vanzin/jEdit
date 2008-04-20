@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 //}}}
 
 /**
@@ -49,7 +51,7 @@ public class CharsetEncoding implements Encoding
 	public Reader getTextReader(InputStream in) throws IOException
 	{
 		// Pass the decoder explicitly to report a decode error
-		// as an exception instead of replacing with \xFFFD.
+		// as an exception instead of replacing with "\uFFFD".
 		// The form "InputStreamReader(in, encoding)" seemed to use
 		// CodingErrorAction.REPLACE internally.
 		return new InputStreamReader(in, body.newDecoder());
@@ -60,6 +62,16 @@ public class CharsetEncoding implements Encoding
 		// Pass the encoder explicitly because of same reason
 		// in getTextReader();
 		return new OutputStreamWriter(out, body.newEncoder());
+	}
+
+	public Reader getPermissiveTextReader(InputStream in) throws IOException
+	{
+		// Use REPLACE action to indicate where the coding error
+		// happened by the replacement character "\uFFFD".
+		CharsetDecoder permissive = body.newDecoder();
+		permissive.onMalformedInput(CodingErrorAction.REPLACE);
+		permissive.onUnmappableCharacter(CodingErrorAction.REPLACE);
+		return new InputStreamReader(in, permissive);
 	}
 	//}}}
 

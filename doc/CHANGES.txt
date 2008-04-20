@@ -34,6 +34,9 @@ for contributing to this release.
 - Change the behavior of the directory chooser dialog slightly.
   (SF Bug #1932733 - Marcelo Vanzin)
 
+- When a file could not be loaded due to strict error about encoding,
+  the file is now loaded permissively. (Kazutoshi Satoda)
+
 }}}
 {{{ Editing
 
@@ -68,6 +71,9 @@ for contributing to this release.
 {{{ API Changes
 
 - New status bar api (Matthieu Casanova)
+
+- Added a method getPermissiveTextReader() to the interface
+  org.gjt.sp.jedit.io.Encoding. (Kazutoshi Satoda)
 
 }}}
 
