@@ -124,7 +124,7 @@ public class JEditBuffer
 
 		properties.put("wrap",new PropValue("none",false));
 		properties.put("folding",new PropValue("none",false));
-		TokenMarker tokenMarker = new TokenMarker();
+		tokenMarker = new TokenMarker();
 		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
 		setTokenMarker(tokenMarker);
 
@@ -1241,7 +1241,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			context = tokenMarker.markTokens(prevContext,
 				(i == lineIndex ? tokenHandler
-				: DummyTokenHandler.INSTANCE),seg);
+				: DummyTokenHandler.INSTANCE), seg);
 			lineMgr.setLineContext(i,context);
 		}
 
