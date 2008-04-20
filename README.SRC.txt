@@ -11,9 +11,10 @@ General jEdit documentation can be found in the 'doc' directory.
     work. If an older version doesn't work, install an update. If a newer
     version doesn't work, please submit a bug report.
     Get it from <http://ant.apache.org>.
-  - The Ant Optional package. This is included in the download from ants website,
+  - The Ant-nodeps package. This is included in the download from ants website,
+    as well as the AntPlugin from the Plugin Manager,  
     but not in some default installs on various *nix systems.
-    There you should get the ant-optional package through your
+    There you should get the ant-nodeps package through your
     package management system.
   - Configure the build.properties.sample file with your local paths and save it
     as build.properties.
