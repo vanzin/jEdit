@@ -8,6 +8,9 @@ for contributing to this release.
 
 {{{ Bug Fixes
 
+- SearchBar appear/disapper fixes (# 1894235 - elvez671) - addresses
+  bug # 1887293
+
 - Fixed NPE with tokenMarker in jEditBuffer.java (Ezust)
 
 - Reworked fold expansions [patch #1945472], which addresses #1942313

@@ -113,9 +113,9 @@ public class SearchBar extends JPanel
 		}); //}}}
 
 		// if 'temp' is true, hide search bar after user is done with it
-		this.temp = temp;
+		this.isRemovable = temp;
 
-		propertiesChanged();
+		setCloseButtonVisibility();
 	} //}}}
 
 	//{{{ getField() method
@@ -143,19 +143,13 @@ public class SearchBar extends JPanel
 	//{{{ propertiesChanged() method
 	public void propertiesChanged()
 	{
-		if(temp)
-		{
-			if(close == null)
-			{
-				close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
-				close.addActionListener(new ActionHandler());
-				close.setToolTipText(jEdit.getProperty(
-					"view.search.close-tooltip"));
-			}
-			add(close);
-		}
-		else if(close != null)
-			remove(close);
+		// Option may have been changed
+		isRemovable = !(jEdit.getBooleanProperty("view.showSearchbar"));
+		
+		Log.log(Log.DEBUG, this, "in SearchBar.propertiesChanged(), isRemovable = " + isRemovable);
+		
+		setCloseButtonVisibility();
+		
 	} //}}}
 
 	//{{{ Private members
@@ -170,12 +164,12 @@ public class SearchBar extends JPanel
 	private Color defaultForeground;
 	private Color errorForeground;
 	private Color errorBackground;
-	// close button only there if 'temp' is true
+	// close button only there if 'isRemovable' is true
 	private RolloverButton close;
 
 	private int searchStart;
 	private boolean searchReverse;
-	private boolean temp;
+	private boolean isRemovable;
 	//}}}
 
 	//{{{ find() method
@@ -194,7 +188,7 @@ public class SearchBar extends JPanel
 		//{{{ HyperSearch
 		else if(hyperSearch.isSelected())
 		{
-			if(temp)
+			if(isRemovable)
 			{
 				view.removeToolBar(SearchBar.this);
 			}
@@ -316,6 +310,25 @@ public class SearchBar extends JPanel
 		timer.setInitialDelay(150);
 		timer.start();
 	} //}}}
+	
+	//{{{ setCloseButtonVisibility() method
+	private void setCloseButtonVisibility()
+	{
+		if(isRemovable)
+		{
+			if(close == null)
+			{
+				close = new RolloverButton(GUIUtilities.loadIcon("closebox.gif"));
+				close.addActionListener(new ActionHandler());
+				close.setToolTipText(jEdit.getProperty(
+					"view.search.close-tooltip"));
+			}
+			add(close);
+		}
+		else if(close != null)
+			remove(close);
+	}
+	//}}}
 
 	//}}}
 
@@ -427,7 +440,7 @@ public class SearchBar extends JPanel
 			switch(evt.getKeyCode())
 			{
 			case KeyEvent.VK_ESCAPE:
-				if(temp)
+				if(isRemovable)
 				{
 					view.removeToolBar(SearchBar.this);
 				}

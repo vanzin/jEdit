@@ -1573,13 +1573,15 @@ loop:		while (true)
 		}
 
 		if(searchBar != null)
+		{
+			searchBar.propertiesChanged();
 			removeToolBar(searchBar);
+		}
 
 		if(jEdit.getBooleanProperty("view.showSearchbar") && !plainView)
 		{
 			if(searchBar == null)
 				searchBar = new SearchBar(this,false);
-			searchBar.propertiesChanged();
 			addToolBar(TOP_GROUP,SEARCH_BAR_LAYER,searchBar);
 		}
 	} //}}}
