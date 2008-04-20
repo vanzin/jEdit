@@ -302,33 +302,30 @@ public class DisplayManager
 		int end = lineCount - 1;
 
 		int initialFoldLevel = buffer.getFoldLevel(line);
+		if (line == lineCount - 1 || !isLineVisible(line))
+		{
+			return -1;
+		}
+		if (isLineVisible(line+1) && !fully)
+		{
+			return -1;
+		}
 
 		//{{{ Find fold start and fold end...
-		if(line != lineCount - 1
-			&& isLineVisible(line)
-			&& !isLineVisible(line + 1)
-			&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
+		if (buffer.getFoldLevel(line + 1) > initialFoldLevel)
 		{
 			// this line is the start of a fold
-
-			int index = folds.search(line + 1);
-			if(index == -1)
+			start = line;
+			if (!isLineVisible(line + 1) && folds.search(line + 1) != folds.count() - 1)
 			{
-				expandAllFolds();
-				return -1;
-			}
-
-			start = folds.lookup(index);
-			if(index != folds.count() - 1)
+				int index = folds.search(line + 1);
 				end = folds.lookup(index + 1) - 1;
+			}
 			else
 			{
-				start = line + 1;
-
-				for(int i = line + 1; i < lineCount; i++)
+				for (int i = line + 1; i < lineCount; i++)
 				{
-					if(/* isLineVisible(i) && */
-						buffer.getFoldLevel(i) <= initialFoldLevel)
+					if (buffer.getFoldLevel(i) <= initialFoldLevel)
 					{
 						end = i - 1;
 						break;
@@ -338,31 +335,25 @@ public class DisplayManager
 		}
 		else
 		{
-			int index = folds.search(line);
-			if(index == -1)
+			if (!fully)
 			{
-				expandAllFolds();
 				return -1;
 			}
-
-			start = folds.lookup(index);
-			if(index != folds.count() - 1)
-				end = folds.lookup(index + 1) - 1;
-			else
+			start = line;
+			while (start > 0 && buffer.getFoldLevel(start) >= initialFoldLevel)
 			{
-				for(int i = line + 1; i < lineCount; i++)
+				start--;
+			}
+			initialFoldLevel = buffer.getFoldLevel(start);
+			for (int i = line + 1; i < lineCount; i++)
+			{
+				if (buffer.getFoldLevel(i) <= initialFoldLevel)
 				{
-					//XXX
-					if((isLineVisible(i) &&
-						buffer.getFoldLevel(i) < initialFoldLevel)
-						|| i == getLastVisibleLine())
-					{
-						end = i - 1;
-						break;
-					}
+					end = i - 1;
+					break;
 				}
 			}
-		} //}}}
+		} // }}}
 
 		//{{{ Expand the fold...
 		if(fully)
@@ -371,42 +362,22 @@ public class DisplayManager
 		}
 		else
 		{
-			// we need a different value of initialFoldLevel here!
-			initialFoldLevel = buffer.getFoldLevel(start);
-
-			int firstVisible = start;
-
-			for(int i = start; i <= end; i++)
+			for (int i = start + 1; i <= end;)
 			{
-				if(buffer.getFoldLevel(i) > initialFoldLevel)
+				if (returnValue == -1 && buffer.isFoldStart(i))
 				{
-					if(returnValue == -1
-						&& i != 0
-						&& buffer.isFoldStart(i - 1))
-					{
-						returnValue = i - 1;
-					}
+					returnValue = i;
+				}
 
-					if(firstVisible != i)
-					{
-						showLineRange(firstVisible,i - 1);
-					}
-					firstVisible = i + 1;
+				showLineRange(i, i);
+				int fold = buffer.getFoldLevel(i);
+				i++;
+				while (i <= end && buffer.getFoldLevel(i) > fold)
+				{
+					i++;
 				}
 			}
-
-			if(firstVisible == end + 1)
-				returnValue = -1;
-			else
-				showLineRange(firstVisible,end);
-
-			if(!isLineVisible(line))
-			{
-				// this is a hack, and really needs to be done better.
-				expandFold(line,false);
-				return returnValue;
-			}
-		} //}}}
+		} // }}}
 
 		notifyScreenLineChanges();
 		textArea.foldStructureChanged();
