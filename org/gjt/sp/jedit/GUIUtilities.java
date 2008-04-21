@@ -131,7 +131,6 @@ public class GUIUtilities
 			icons = new Hashtable<String, Icon>();
 
 		// check if there is a cached version first
-		// Log.log(Log.DEBUG, GUIUtilities.class, "Icon name loading: "+iconName);
 		Icon icon = icons.get(iconName);
 		if(icon != null)
 			return icon;
@@ -140,8 +139,6 @@ public class GUIUtilities
 
 		try
 		{
-			Log.log(Log.DEBUG, GUIUtilities.class, "Loading (is url: "+MiscUtilities.isURL(iconName)+") icon: "+iconPath + iconName);
-			
 			// get the icon
 			if(MiscUtilities.isURL(iconName))
 				url = new URL(iconName);
