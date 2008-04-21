@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre14
 
-Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson,
+Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson, elvez671
 Alan Ezust, Andrey Khalyavin, Chris Petersen,  Marcelo Vanzin
 and Kazutoshi Satoda for contributing to this release.
 
@@ -17,7 +17,7 @@ and Kazutoshi Satoda for contributing to this release.
   and #1538715 (Andrey Khalyavin)
 
 - Fixed NPE on SplashScreen init on NX and older X-window displays.
-    (#1628432, #1930320 - ezust, kazutoshi satoda).
+    (#1628432, #1930320 - ezust, marcelo vanzin).
 
 - Fixed an ArrayIndexOutOfBoundsException when opening search dialog on a fresh
   install (#1913979) (Matthieu Casanova)
