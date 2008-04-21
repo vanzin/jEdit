@@ -584,6 +584,8 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 
 		synchronize = new JButton(jEdit.getProperty(
 			"search.synchronize"));
+		synchronize.setToolTipText(jEdit.getProperty(
+			"search.synchronize.tooltip"));
 		synchronize.setMnemonic(jEdit.getProperty(
 			"search.synchronize.mnemonic")
 			.charAt(0));
