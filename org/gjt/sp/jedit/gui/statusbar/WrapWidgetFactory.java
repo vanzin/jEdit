@@ -60,7 +60,7 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		{
 			wrap = new ToolTipLabel();
 			wrap.setHorizontalAlignment(SwingConstants.CENTER);
-			wrap.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
+			wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip"));
 			this.view = view;
 			wrap.addMouseListener(new MouseAdapter() 
 					      {
