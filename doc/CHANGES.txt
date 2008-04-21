@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre14
 
 Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson,
-Alan Ezust, Halyavin, Chris Petersen,  Marcelo Vanzin and Kazutoshi Satoda
-for contributing to this release.
+Alan Ezust, Andrey Khalyavin, Chris Petersen,  Marcelo Vanzin
+and Kazutoshi Satoda for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -14,7 +14,7 @@ for contributing to this release.
 - Fixed NPE with tokenMarker in jEditBuffer.java (Ezust)
 
 - Reworked fold expansions [patch #1945472], which addresses #1942313
-  and #1538715 (halyavin)
+  and #1538715 (Andrey Khalyavin)
 
 - Fixed NPE on SplashScreen init on NX and older X-window displays.
     (#1628432, #1930320 - ezust, kazutoshi satoda).
