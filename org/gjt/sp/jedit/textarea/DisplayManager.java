@@ -302,9 +302,22 @@ public class DisplayManager
 		int end = lineCount - 1;
 
 		int initialFoldLevel = buffer.getFoldLevel(line);
-		if (line == lineCount - 1 || !isLineVisible(line))
+		if (line == lineCount - 1)
 		{
 			return -1;
+		}
+		while (!isLineVisible(line))
+		{
+			int prevLine = folds.lookup(folds.search(line)) - 1;
+			if (!isLineVisible(prevLine))
+			{
+				return -1;
+			}
+			expandFold(prevLine, fully);
+			if (!isLineVisible(prevLine + 1))
+			{
+				return -1;
+			}
 		}
 		if (isLineVisible(line+1) && !fully)
 		{
