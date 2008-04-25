@@ -213,7 +213,7 @@
 				FILE_NAME_GLOB="*.jmk" />
 
 <MODE NAME="jsp"		FILE="jsp.xml"
-				FILE_NAME_GLOB="*.{jsp,jsf,jspf}" />
+				FILE_NAME_GLOB="*.{jsp,jsf,jspf,tag}" />
 
 <!-- Note that a generic 'tex.xml' is included as well, for minimal
      plain TeX/AMSTeX highlighting. -->
