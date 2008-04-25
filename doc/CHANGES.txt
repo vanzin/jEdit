@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre14
 
 Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson, elvez671
-Alan Ezust, Andrey Khalyavin, Chris Petersen,  Marcelo Vanzin
+Alan Ezust, Andrey Khalyavin, Chris Petersen,  Marcelo Vanzin, Joerg Spieler
 and Kazutoshi Satoda for contributing to this release.
 
 {{{ Bug Fixes
@@ -36,6 +36,10 @@ and Kazutoshi Satoda for contributing to this release.
   (patch #1938174) (Dale Anson)
 }}}
 {{{ Miscellaneous
+
+- Edit History Text
+  Clicking on "Previously Entered Strings" pops up a dialog that lets you 
+  edit previously entered strings (Joerg Spieler - 1818140) 
 
 - New Tango icon set (Seph M. Soliman - # 1755992)
 

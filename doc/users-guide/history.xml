@@ -26,6 +26,8 @@
     <para>Clicking the triangle to the right of the text field, or clicking with
     the right-mouse button anywhere else will display a pop-up menu of all
     previously entered strings; selecting one will input it into the text field.
+    Selecting the first item, "previously entered strings:" pops up
+    a dialog that lets you change previously entered strings.
     Holding down <keycap>Shift</keycap> while clicking will display a menu of
     all previously entered strings that begin with the text already
     entered.</para>

@@ -287,7 +287,13 @@ public class HistoryText
 		popup = new JPopupMenu();
 		JMenuItem caption = new JMenuItem(jEdit.getProperty(
 			"history.caption"));
-		caption.getModel().setEnabled(false);
+		caption.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e) 
+		  {
+		    new ListModelEditor().open(historyModel);
+		  }
+		});		
  		popup.add(caption);
  		popup.addSeparator();
 
