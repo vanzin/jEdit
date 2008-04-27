@@ -1,5 +1,20 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre15
+
+Thanks to Björn "Vampire" Kautler for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+
+}}}
+
 {{{ Version 4.3pre14
 
 Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson, elvez671
@@ -34,6 +49,7 @@ Michael Schlotter, and Kazutoshi Satoda for contributing to this release.
 
 - When typing quickly in the activity logs filter, some exceptions were happening
   (patch #1938174) (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
@@ -53,7 +69,7 @@ Michael Schlotter, and Kazutoshi Satoda for contributing to this release.
 {{{ Editing
 
 - Move_Lines_(Up|Down).bsh replaced by Dale Anson to handle edge conditions
-    (#1915824)
+  (#1915824)
 
 - fortran.xml indentation fixed (patch # 1740179 - honestguvnor + Robert Schwenn)
 
