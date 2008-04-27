@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre14
 
 Thanks to Björn "Vampire" Kautler, Seph M. Soliman, Dale Anson, elvez671
-Alan Ezust, Andrey Khalyavin, Chris Petersen,  Marcelo Vanzin, Joerg Spieler
-and Kazutoshi Satoda for contributing to this release.
+Alan Ezust, Andrey Khalyavin, Chris Petersen, Marcelo Vanzin, Joerg Spieler,
+Michael Schlotter, and Kazutoshi Satoda for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -56,6 +56,8 @@ and Kazutoshi Satoda for contributing to this release.
     (#1915824)
 
 - fortran.xml indentation fixed (patch # 1740179 - honestguvnor + Robert Schwenn)
+
+- Rewritten latex.xml mode (Patch # 1928855 - Michael Schlotter)
 
 - SF Patch #1845842: perl.xml qq([test) syntax higlighting broken
   The q and qr operators were being highlighted wrong. The right way to do it
