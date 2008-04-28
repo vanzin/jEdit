@@ -194,7 +194,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ searchStarted() method
 	public void searchStarted()
 	{
-		caption.setText(jEdit.getProperty("hypersearch-results.searching"));
+		caption.setText(jEdit.getProperty("hypersearch-results.searching",
+				new String[] { SearchAndReplace.getSearchString() }));
 	} //}}}
 
 	//{{{ setSearchStatus() method
@@ -206,7 +207,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ searchFailed() method
 	public void searchFailed()
 	{
-		caption.setText(jEdit.getProperty("hypersearch-results.no-results"));
+		caption.setText(jEdit.getProperty("hypersearch-results.no-results",
+				new String[] { SearchAndReplace.getSearchString() }));
 
 		// collapse all nodes, as suggested on user mailing list...
 		for(int i = 0; i < resultTreeRoot.getChildCount(); i++)
@@ -233,7 +235,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			return;
 		}
 
-		caption.setText(jEdit.getProperty("hypersearch-results.done"));
+		caption.setText(jEdit.getProperty("hypersearch-results.done",
+				new String [] { SearchAndReplace.getSearchString() }));
 
 		SwingUtilities.invokeLater(new Runnable()
 		{

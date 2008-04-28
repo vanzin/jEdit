@@ -1359,9 +1359,9 @@ hypersearch-results.multi.label=Toggle Multiple Results
 hypersearch-results.multi.multiple.icon=22x22/hypersearch-results-multiple.png
 hypersearch-results.multi.single.icon=22x22/hypersearch-results-single.png
 hypersearch-results.file-caption={0} ({1,choice,1#1 occurrence|1<{1,number,integer} occurrences in '{2,choice,1#1 line|1<{2,number,integer} lines}'})
-hypersearch-results.searching=Searching...
-hypersearch-results.no-results=Not found.
-hypersearch-results.done=Done.
+hypersearch-results.searching=Searching for "{0}"...
+hypersearch-results.no-results=No results found for "{0}".
+hypersearch-results.done=Results for "{0}":
 
 hypersearch-status=Searching
 #}}}

@@ -84,7 +84,8 @@ class HyperSearchRequest extends WorkRequest
 		// show a status message at most twice a second
 
 		// initially zero, so that we always show the first message
-		String searchingCaption = jEdit.getProperty("hypersearch-results.searching") + ' ';
+		String searchingCaption = jEdit.getProperty("hypersearch-results.searching",
+				new String[] { SearchAndReplace.getSearchString() }) + ' ';
 		try
 		{
 			if(selection != null)
