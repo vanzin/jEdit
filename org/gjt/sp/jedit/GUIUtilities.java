@@ -458,7 +458,9 @@ public class GUIUtilities
 			toolTip = toolTip + " (" + shortcutLabel + ')';
 		}
 
-		return new EnhancedButton(icon,toolTip,name,context);
+		EnhancedButton b = new EnhancedButton(icon,toolTip,name,context);
+		b.setPreferredSize(new Dimension(32,32));
+		return b;
 	} //}}}
 
 	//{{{ prettifyMenuLabel() method
