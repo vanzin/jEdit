@@ -59,20 +59,20 @@ public class DeepIndentRule implements IndentRule
 
 		int lineIndex = prevLineIndex;
 		int oldLineIndex = lineIndex;
-		String lineText = buffer.getLineText(lineIndex);
+		CharSequence lineText = buffer.getLineSegment(lineIndex);
 		int searchPos = -1;
 		while (true)
 		{
 			if (lineIndex != oldLineIndex)
 			{
-				lineText = buffer.getLineText(lineIndex);
+				lineText = buffer.getLineSegment(lineIndex);
 				oldLineIndex = lineIndex;
 			}
 			Parens parens = new Parens(buffer, lineIndex, searchPos);
 			if (parens.openOffset > parens.closeOffset)
 			{
 				// recalculate column (when using tabs instead of spaces)
-				int indent = parens.openOffset + TextUtilities.tabsToSpaces(lineText, buffer.getTabSize()).length() - lineText.length();
+				int indent = parens.openOffset + getIndent(lineText, buffer.getTabSize()) - lineText.length();
 				indentActions.add(new IndentAction.AlignParameter(indent));
 				return;
 			}
@@ -94,6 +94,33 @@ public class DeepIndentRule implements IndentRule
 				break;
 		}
 	} //}}}
+
+
+	/**
+	 * Returns the length of the string as if it were indented with
+	 * spaces instead of tabs.
+	 */
+	private int getIndent(CharSequence line, int tabSize)
+	{
+		int cnt = 0;
+		for (int i = 0;  i < line.length(); i++)
+		{
+			if (line.charAt(i) == '\t')
+			{
+				cnt += tabSize;
+			}
+			else
+			{
+				if (!Character.isWhitespace(line.charAt(i)))
+				{
+					cnt += (line.length() - i);
+					break;
+				}
+				cnt++;
+			}
+		}
+		return cnt;
+	}
 
 
 	/**

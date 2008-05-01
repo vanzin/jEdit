@@ -171,7 +171,7 @@ public class CompleteWord extends CompletionPopup
 	private static String getWordToComplete(Buffer buffer, int caretLine,
 		int caret, String noWordSep)
 	{
-		String line = buffer.getLineText(caretLine);
+		CharSequence line = buffer.getLineSegment(caretLine);
 		int dot = caret - buffer.getLineStartOffset(caretLine);
 		if(dot == 0)
 			return null;
@@ -185,11 +185,11 @@ public class CompleteWord extends CompletionPopup
 		}
 
 		int wordStart = TextUtilities.findWordStart(line,dot-1,noWordSep);
-		String word = line.substring(wordStart,dot);
+		CharSequence word = line.subSequence(wordStart,dot);
 		if(word.length() == 0)
 			return null;
 
-		return word;
+		return word.toString();
 	} //}}}
 
 	//{{{ getCompletions() method
@@ -265,12 +265,13 @@ public class CompleteWord extends CompletionPopup
 		//{{{ loop through all lines of current buffer
 		for(int i = 0; i < buffer.getLineCount(); i++)
 		{
-			String line = buffer.getLineText(i);
+			CharSequence line = buffer.getLineSegment(i);
 			int start = buffer.getLineStartOffset(i);
 
 			// check for match at start of line
 
-			if(line.startsWith(word) && caret != start + word.length())
+			if (StandardUtilities.startsWith(line, word) &&
+			    caret != start + word.length())
 			{
 				String _word = completeWord(line,0,noWordSep);
 				Completion comp = new Completion(_word,false);
@@ -289,7 +290,7 @@ public class CompleteWord extends CompletionPopup
 				char c = line.charAt(j);
 				if(!Character.isLetterOrDigit(c) && noWordSep.indexOf(c) == -1)
 				{
-					if(line.regionMatches(j + 1,word,0,wordLen)
+					if (StandardUtilities.regionMatches(line,j + 1,word,0,wordLen)
 						&& caret != start + j + word.length() + 1)
 					{
 						String _word = completeWord(line,j + 1,noWordSep);
@@ -307,11 +308,11 @@ public class CompleteWord extends CompletionPopup
 	} //}}}
 
 	//{{{ completeWord() method
-	private static String completeWord(String line, int offset, String noWordSep)
+	private static String completeWord(CharSequence line, int offset, String noWordSep)
 	{
 		// '+ 1' so that findWordEnd() doesn't pick up the space at the start
 		int wordEnd = TextUtilities.findWordEnd(line,offset + 1,noWordSep);
-		return line.substring(offset,wordEnd);
+		return line.subSequence(offset,wordEnd).toString();
 	} //}}}
 
 	//{{{ Instance variables
@@ -380,7 +381,7 @@ public class CompleteWord extends CompletionPopup
 			String insertion = completions[index].toString().substring(word.length());
 			textArea.replaceSelection(insertion);
 		}
-	
+
 		public Component getCellRenderer(JList list, int index,
 			boolean isSelected, boolean cellHasFocus)
 		{

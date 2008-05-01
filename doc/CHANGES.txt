@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre15
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Marcelo Vanzin for contributing to this
+release.
 
 {{{ Bug Fixes
 
@@ -10,6 +11,19 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- In the auto-indent code, use read-only "CharSequence" instances to avoid
+  creating new strings (which results in a copy of the original data). This
+  should reduce a little the memory usage of that code. Also change some other
+  code that can avoid the user of strings (such as the word completion action).
+  (Marcelo Vanzin)
+
+}}}
+{{{ API Changes
+
+- New methods were added to jEditBuffer to return CharSequence instead of
+  String. StandardUtilities / TextUtilities were enhanced to provide functions
+  that are not present in the CharSequence class, or were only available for
+  Strings before. (Marcelo Vanzin)
 
 }}}
 
@@ -54,8 +68,8 @@ Michael Schlotter, and Kazutoshi Satoda for contributing to this release.
 {{{ Miscellaneous
 
 - Edit History Text
-  Clicking on "Previously Entered Strings" pops up a dialog that lets you 
-  edit previously entered strings (Joerg Spieler - 1818140) 
+  Clicking on "Previously Entered Strings" pops up a dialog that lets you
+  edit previously entered strings (Joerg Spieler - 1818140)
 
 - New Tango icon set (Seph M. Soliman - # 1755992)
 

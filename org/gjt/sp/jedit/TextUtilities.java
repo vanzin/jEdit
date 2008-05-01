@@ -257,6 +257,22 @@ public class TextUtilities
 		return findWordStart(line, pos, noWordSep, true, false);
 	} //}}}
 
+	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @since jEdit 4.3pre15
+	 */
+	public static int findWordStart(CharSequence line,
+					int pos,
+					String noWordSep)
+	{
+		return findWordStart(line, pos, noWordSep, true, false, false);
+	} //}}}
+
 
 	/** Similar to perl's join() method on lists,
 	 *    but works with all collections.
@@ -332,6 +348,31 @@ public class TextUtilities
 	public static int findWordStart(String line, int pos, String noWordSep,
 		boolean joinNonWordChars, boolean camelCasedWords,
 		boolean eatWhitespace)
+	{
+		return findWordStart((CharSequence) line, pos, noWordSep,
+				     joinNonWordChars, camelCasedWords,
+				     eatWhitespace);
+	} //}}}
+
+	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @param camelCasedWords Treat "camelCased" parts as words
+	 * @param eatWhitespace Include whitespace at start of word
+	 * @since jEdit 4.3pre15
+	 */
+	public static int findWordStart(CharSequence line,
+					int pos,
+					String noWordSep,
+					boolean joinNonWordChars,
+					boolean camelCasedWords,
+					boolean eatWhitespace)
 	{
 		char ch = line.charAt(pos);
 
@@ -437,6 +478,22 @@ loop:		for(int i = pos; i >= 0; i--)
 	 * @param pos The position
 	 * @param noWordSep Characters that are non-alphanumeric, but
 	 * should be treated as word characters anyway
+	 * @since jEdit 4.3pre15
+	 */
+	public static int findWordEnd(CharSequence line,
+				      int pos,
+				      String noWordSep)
+	{
+		return findWordEnd(line, pos, noWordSep, true, false, false);
+	} //}}}
+
+	//{{{ findWordEnd() method
+	/**
+	 * Locates the end of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
 	 * @param joinNonWordChars Treat consecutive non-alphanumeric
 	 * characters as one word
 	 * @since jEdit 4.1pre2
@@ -481,6 +538,31 @@ loop:		for(int i = pos; i >= 0; i--)
 	public static int findWordEnd(String line, int pos, String noWordSep,
 		boolean joinNonWordChars, boolean camelCasedWords,
 		boolean eatWhitespace)
+	{
+		return findWordEnd((CharSequence)line, pos, noWordSep,
+				   joinNonWordChars, camelCasedWords,
+				   eatWhitespace);
+	} //}}}
+
+	//{{{ findWordEnd() method
+	/**
+	 * Locates the end of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @param camelCasedWords Treat "camelCased" parts as words
+	 * @param eatWhitespace Include whitespace at end of word
+	 * @since jEdit 4.3pre15
+	 */
+	public static int findWordEnd(CharSequence line,
+				      int pos,
+				      String noWordSep,
+				      boolean joinNonWordChars,
+				      boolean camelCasedWords,
+				      boolean eatWhitespace)
 	{
 		if(pos != 0)
 			pos--;

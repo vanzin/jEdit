@@ -42,7 +42,7 @@ public class StandardUtilities
 {
 
 	//{{{ Text methods
-	
+
 	//{{{ getPrevIndentStyle() method
 	/**
 	 * @param str A java string
@@ -51,7 +51,7 @@ public class StandardUtilities
 	 */
 	public static String getIndentString(String str)
 	{
-		
+
 		StringBuffer indentString = new StringBuffer();
 		int idx = 0;
 		char ch = str.charAt(idx);
@@ -61,17 +61,30 @@ public class StandardUtilities
 			ch = str.charAt(idx);
 		}
 		return indentString.toString();
-		
+
 	} //}}}
 
 	//{{{ getLeadingWhiteSpace() method
 	/**
 	 * Returns the number of leading white space characters in the
 	 * specified string.
-	 * 
+	 *
 	 * @param str The string
 	 */
 	public static int getLeadingWhiteSpace(String str)
+	{
+		return getLeadingWhiteSpace((CharSequence)str);
+	} //}}}
+
+	//{{{ getLeadingWhiteSpace() method
+	/**
+	 * Returns the number of leading white space characters in the
+	 * specified string.
+	 *
+	 * @param str The string
+	 * @since jEdit 4.3pre15
+	 */
+	public static int getLeadingWhiteSpace(CharSequence str)
 	{
 		int whitespace = 0;
 loop:		for(;whitespace < str.length();)
@@ -121,6 +134,19 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 	 * @param tabSize The tab size
 	 */
 	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
+	{
+		return getLeadingWhiteSpaceWidth((CharSequence)str, tabSize);
+	} //}}}
+
+	//{{{ getLeadingWhiteSpaceWidth() method
+	/**
+	 * Returns the width of the leading white space in the specified
+	 * string.
+	 * @param str The string
+	 * @param tabSize The tab size
+	 * @since jEdit 4.3pre15
+	 */
+	public static int getLeadingWhiteSpaceWidth(CharSequence str, int tabSize)
 	{
 		int whitespace = 0;
 loop:		for(int i = 0; i < str.length(); i++)
@@ -409,7 +435,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		{
 			return glob.substring(4);
 		}
-		
+
 		final Object NEG = new Object();
 		final Object GROUP = new Object();
 		Stack state = new Stack();
@@ -484,6 +510,86 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 
 		return buf.toString();
+	} //}}}
+
+	//{{{ regionMatches() method
+	/**
+	 * Implementation of String.regionMatches() for CharSequence.
+	 *
+	 * @param seq The test CharSequence.
+	 * @param toff Offset for the test sequence.
+	 * @param other The sequence to compare to.
+	 * @param ooff Offset of the comparison sequence.
+	 * @param len How many characters to compare.
+	 * @return Whether the two subsequences are equal.
+	 * @see String#regionMatches(int,String,int,int)
+	 *
+	 * @since jEdit 4.3pre15
+	 */
+	public static boolean regionMatches(CharSequence seq,
+					    int toff,
+					    CharSequence other,
+					    int ooff,
+					    int len)
+	{
+		boolean ret = true;
+
+		if (toff < 0 || ooff < 0 || len < 0)
+			return false;
+
+		for (int i = 0; i < len; i++)
+		{
+			char c1, c2;
+
+			if (i + toff < seq.length())
+				c1 = seq.charAt(i + toff);
+			else
+			{
+				ret = false;
+				break;
+			}
+
+			if (i + ooff < other.length())
+				c2 = other.charAt(i + ooff);
+			else
+			{
+				ret = false;
+				break;
+			}
+
+			if (c1 != c2)
+			{
+				ret = false;
+				break;
+			}
+		}
+
+		return ret;
+	} //}}}
+
+	//{{{ startsWith() method
+	/**
+	 * Implementation of String.startsWith() for CharSequence.
+	 *
+	 * @param seq The CharSequence.
+	 * @param str String to test.
+	 * @return Whether the sequence starts with the test string.
+	 *
+	 * @since jEdit 4.3pre15
+	 */
+	public static boolean startsWith(CharSequence seq, String str)
+	{
+		boolean ret = true;
+		for (int i = 0; i < str.length(); i++)
+		{
+			if (i >= seq.length() ||
+			    seq.charAt(i) != str.charAt(i))
+			{
+				ret = false;
+				break;
+			}
+		}
+		return ret;
 	} //}}}
 
 	//}}}

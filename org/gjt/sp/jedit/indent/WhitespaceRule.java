@@ -52,7 +52,7 @@ public class WhitespaceRule implements IndentRule
 			  List<IndentAction> indentActions)
 	{
 		/* Don't apply this rule if the current line is empty. */
-		String current = buffer.getLineText(thisLineIndex);
+		CharSequence current = buffer.getLineSegment(thisLineIndex);
 		boolean found = false;
 		for (int i = 0; i < current.length(); i++)
 		{
@@ -67,7 +67,7 @@ public class WhitespaceRule implements IndentRule
 
 		/* Check if the previous line is empty. */
 		if (prevLineIndex >= 0) {
-			String previous = buffer.getLineText(prevLineIndex);
+			CharSequence previous = buffer.getLineSegment(prevLineIndex);
 			for (int i = 0; i < previous.length(); i++)
 			{
 				if (!Character.isWhitespace(previous.charAt(i)))

@@ -509,6 +509,36 @@ public class JEditBuffer
 		}
 	} //}}}
 
+	//{{{ getLineSegment() method
+	/**
+	 * Returns the text on the specified line.
+	 * This method is thread-safe.
+	 *
+	 * @param line The line index.
+	 * @return The text, or null if the line is invalid
+	 *
+	 * @since jEdit 4.3pre15
+	 */
+	public CharSequence getLineSegment(int line)
+	{
+		if(line < 0 || line >= lineMgr.getLineCount())
+			throw new ArrayIndexOutOfBoundsException(line);
+
+		try
+		{
+			readLock();
+
+			int start = line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1);
+			int end = lineMgr.getLineEndOffset(line);
+
+			return getSegment(start,end - start - 1);
+		}
+		finally
+		{
+			readUnlock();
+		}
+	} //}}}
+
 	//{{{ getText() method
 	/**
 	 * Returns the specified text range. This method is thread-safe.
@@ -558,6 +588,33 @@ public class JEditBuffer
 				throw new ArrayIndexOutOfBoundsException(start + ":" + length);
 
 			contentMgr.getText(start,length,seg);
+		}
+		finally
+		{
+			readUnlock();
+		}
+	} //}}}
+
+	//{{{ getSegment() method
+	/**
+	 * Returns the specified text range. This method is thread-safe.
+	 *
+	 * @param start The start offset
+	 * @param length The number of characters to get
+	 *
+	 * @since jEdit 4.3pre15
+	 */
+	public CharSequence getSegment(int start, int length)
+	{
+		try
+		{
+			readLock();
+
+			if(start < 0 || length < 0
+				|| start + length > contentMgr.getLength())
+				throw new ArrayIndexOutOfBoundsException(start + ":" + length);
+
+			return contentMgr.getSegment(start,length);
 		}
 		finally
 		{
@@ -786,7 +843,7 @@ public class JEditBuffer
 			for(int i = 0; i < lines.length; i++)
 			{
 				int lineStart = getLineStartOffset(lines[i]);
-				String line = getLineText(lines[i]);
+				CharSequence line = getLineSegment(lines[i]);
 				int whiteSpace = StandardUtilities
 					.getLeadingWhiteSpace(line);
 				if(whiteSpace == 0)
@@ -826,7 +883,7 @@ public class JEditBuffer
 			for(int i = 0; i < lines.length; i++)
 			{
 				int lineStart = getLineStartOffset(lines[i]);
-				String line = getLineText(lines[i]);
+				CharSequence line = getLineSegment(lines[i]);
 				int whiteSpace = StandardUtilities
 					.getLeadingWhiteSpace(line);
 
@@ -992,7 +1049,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		int oldIndent = prevLineIndex == -1 ? 0 :
 			StandardUtilities.getLeadingWhiteSpaceWidth(
-			getLineText(prevLineIndex),
+			getLineSegment(prevLineIndex),
 			getTabSize());
 		int newIndent = oldIndent;
 
@@ -1132,7 +1189,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			// obtain the leading indent for later use
 			int firstLine = getLineOfOffset(offset);
-			String lineText = getLineText(firstLine);
+			CharSequence lineText = getLineSegment(firstLine);
 			int leadingIndent
 				= StandardUtilities.getLeadingWhiteSpaceWidth(
 				lineText,getTabSize());
@@ -1678,7 +1735,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		else
 			return String.valueOf(value);
 	} //}}}
-	
+
 	//{{{ getMode() method
 	/**
 	 * Returns this buffer's edit mode. This method is thread-safe.
@@ -2392,7 +2449,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	protected void parseBufferLocalProperties()
 	{
 		int lastLine = Math.min(9,getLineCount() - 1);
-		parseBufferLocalProperties(getText(0,getLineEndOffset(lastLine) - 1));
+		parseBufferLocalProperties(getSegment(0,getLineEndOffset(lastLine) - 1));
 
 		// first line for last 10 lines, make sure not to overlap
 		// with the first 10
@@ -2499,7 +2556,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//{{{ parseBufferLocalProperties() method
-	private void parseBufferLocalProperties(String prop)
+	private void parseBufferLocalProperties(CharSequence prop)
 	{
 		StringBuilder buf = new StringBuilder();
 		String name = null;

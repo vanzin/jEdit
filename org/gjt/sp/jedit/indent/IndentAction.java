@@ -194,7 +194,7 @@ public interface IndentAction
 				           int newIndent)
 		{
 			int current = StandardUtilities.getLeadingWhiteSpaceWidth(
-					buffer.getLineText(line),buffer.getTabSize());
+					buffer.getLineSegment(line),buffer.getTabSize());
 			return (current < newIndent) ? current : newIndent;
 		}
 

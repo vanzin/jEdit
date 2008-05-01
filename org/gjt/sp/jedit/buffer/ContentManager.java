@@ -88,6 +88,25 @@ public class ContentManager
 		}
 	} //}}}
 
+	//{{{ getSegment() method
+	/**
+	 * Returns a read-only segment of the buffer.
+	 *
+	 * @since jEdit 4.3pre15
+	 */
+	public CharSequence getSegment(int start, int len)
+	{
+		if(start >= gapStart)
+			return new BufferSegment(text,start + gapEnd - gapStart,len);
+		else if(start + len <= gapStart)
+			return new BufferSegment(text,start,len);
+		else
+		{
+			return new BufferSegment(text,start,gapStart - start)
+				.concat(new BufferSegment(text,gapEnd,start + len - gapStart));
+		}
+	} //}}}
+
 	//{{{ insert() method
 	public void insert(int start, String str)
 	{
@@ -100,6 +119,29 @@ public class ContentManager
 		}
 
 		str.getChars(0,len,text,start);
+		gapStart += len;
+		length += len;
+	} //}}}
+
+	//{{{ insert() method
+	/**
+	 * Inserts the given data into the buffer.
+	 *
+	 * @since jEdit 4.3pre15
+	 */
+	public void insert(int start, CharSequence str)
+	{
+		int len = str.length();
+		moveGapStart(start);
+		if(gapEnd - gapStart < len)
+		{
+			ensureCapacity(length + len + 1024);
+			moveGapEnd(start + len + 1024);
+		}
+
+		for (int i = 0; i < len; i++) {
+			text[start+i] = str.charAt(i);
+		}
 		gapStart += len;
 		length += len;
 	} //}}}

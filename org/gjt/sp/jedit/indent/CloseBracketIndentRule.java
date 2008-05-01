@@ -55,7 +55,13 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		if(index == -1)
 			return;
 
-		int offset = buffer.getLineText(index).lastIndexOf(closeBracket);
+		CharSequence lineText = buffer.getLineSegment(index);
+		int offset;
+		for (offset = lineText.length() - 1; offset >= 0; offset--)
+		{
+			if (lineText.charAt(offset) == closeBracket)
+				break;
+		}
 		if(offset == -1)
 			return;
 
@@ -111,7 +117,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		private int line, offset;
 		private int openBracketLine;
 		private int openBracketColumn;
-		private String openBracketLineText;
+		private CharSequence openBracketLineText;
 		private int extraIndent;
 
 		public AlignBracket(JEditBuffer buffer, int line, int offset)
@@ -128,7 +134,7 @@ public class CloseBracketIndentRule extends BracketIndentRule
 				openBracketLine = buffer.getLineOfOffset(openBracketIndex);
 				openBracketColumn = openBracketIndex -
 					buffer.getLineStartOffset(openBracketLine);
-				openBracketLineText = buffer.getLineText(openBracketLine);
+				openBracketLineText = buffer.getLineSegment(openBracketLine);
 			}
 		}
 
