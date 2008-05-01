@@ -18,6 +18,13 @@ release.
   (Marcelo Vanzin)
 
 }}}
+{{{ Editing
+
+- SF Patch #1947143: remove the hack to support sub names with apostrophes in
+  perl mode. Hopefully no one will complain (the hack had its own problems,
+  as the SF entry shows). (Marcelo Vanzin)
+
+}}}
 {{{ API Changes
 
 - New methods were added to jEditBuffer to return CharSequence instead of
