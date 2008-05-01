@@ -65,20 +65,23 @@ public class BufferSwitcher extends JComboBox
 	 * @return the next buffer in the switcher, selecting it in the process
 	 */
 	public Buffer nextBuffer() {
-		int idx = getSelectedIndex();
-		idx ++;
+		ensureNonEmpty();
+		int idx = getSelectedIndex() + 1;
 		if (idx >= getModel().getSize()) idx=0;
-		setSelectedIndex(idx);
-		return (Buffer)getSelectedItem();
+		return (Buffer) getItemAt(idx);
 	}
 	
 	public Buffer previousBuffer() {
+		ensureNonEmpty();
 		int idx = getSelectedIndex()-1;
-		if (idx<0) idx = getModel().getSize()-1;
-		setSelectedIndex(idx);
-		return (Buffer) getSelectedItem();
+		if (idx<0) idx = getModel().getSize()-1; 
+		return (Buffer) getItemAt(idx);
 	}
 
+	private void ensureNonEmpty() {
+		if (getModel().getSize() == 0) updateBufferList(editPane.getView());
+	}
+	
     /**
       * @param view If non-null, (and view option "show all buffers" is false) 
       *              only list buffers belonging to that view. */             
