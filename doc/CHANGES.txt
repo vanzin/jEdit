@@ -2,14 +2,17 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre15
 
-Thanks to Björn "Vampire" Kautler and Marcelo Vanzin for contributing to this
-release.
+Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, and
+Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 
 
 }}}
 {{{ Miscellaneous
+
+ - New View option: Buffer list shows only buffers belonging to the View that
+   last opened it. (Alan Ezust)
 
 - In the auto-indent code, use read-only "CharSequence" instances to avoid
   creating new strings (which results in a copy of the original data). This

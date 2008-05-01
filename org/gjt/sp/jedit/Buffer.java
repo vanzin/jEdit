@@ -164,6 +164,7 @@ public class Buffer extends JEditBuffer
 	 */
 	public boolean load(final View view, final boolean reload)
 	{
+		owningView = view;
 		if(isPerformingIO())
 		{
 			GUIUtilities.error(view,"buffer-multiple-io",null);
@@ -652,6 +653,20 @@ public class Buffer extends JEditBuffer
 
 	//{{{ Getters/setter methods for various buffer meta-data
 
+	/**
+	 * @since jEdit 4.3pre15
+	 */
+	public View getView() {
+		return owningView;
+	}
+	/**
+	 * @since jEdit 4.3pre15
+	 * @param v the view that owns this buffer.
+	 */
+	public void setView(View v) {
+		owningView = v;
+	}
+	
 	//{{{ getLastModified() method
 	/**
 	 * Returns the last time jEdit modified the file on disk.
@@ -1668,6 +1683,9 @@ public class Buffer extends JEditBuffer
 	private File file;
 	private File autosaveFile;
 	private long modTime;
+	/** When a buffer is opened from a View, the buffer remembers the View.
+	 */
+	private View owningView;
 
 	private final Vector<Marker> markers;
 

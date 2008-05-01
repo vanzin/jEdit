@@ -124,13 +124,16 @@ public class EditPane extends JPanel implements EBComponent
 		this.buffer = buffer;
 
 		textArea.setBuffer(buffer);
-		    
 		if(!init)
 		{
 			view.updateTitle();
 
 			if(bufferSwitcher != null)
 			{
+				if (buffer.getView() != view) {
+					buffer.setView(view);
+					bufferSwitcher.updateBufferList(view);
+				}
 				if(bufferSwitcher.getSelectedItem() != buffer)
 					bufferSwitcher.setSelectedItem(buffer);
 				bufferSwitcher.setToolTipText(buffer.getPath());				
@@ -182,7 +185,9 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void prevBuffer()
 	{
-		Buffer buffer = this.buffer.getPrev();
+		Buffer buffer = null;
+		if (bufferSwitcher != null) buffer = bufferSwitcher.previousBuffer();
+		else buffer = this.buffer.getPrev();
 		if(buffer == null)
 			setBuffer(jEdit.getLastBuffer());
 		else
@@ -196,11 +201,16 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void nextBuffer()
 	{
-		Buffer buffer = this.buffer.getNext();
+		Buffer buffer = null;
+		if (bufferSwitcher != null) 
+			buffer = bufferSwitcher.nextBuffer();
+		else buffer = this.buffer.getNext();
+		
 		if(buffer == null)
 			setBuffer(jEdit.getFirstBuffer());
 		else
 			setBuffer(buffer);
+		
 	} //}}}
 
 	//{{{ recentBuffer() method
@@ -864,7 +874,7 @@ public class EditPane extends JPanel implements EBComponent
 			{
 				bufferSwitcher = new BufferSwitcher(this);
 				add(BorderLayout.NORTH,bufferSwitcher);
-				bufferSwitcher.updateBufferList();
+				bufferSwitcher.updateBufferList(view);
 				revalidate();
 			}
 		}
@@ -883,7 +893,7 @@ public class EditPane extends JPanel implements EBComponent
 		if(msg.getWhat() == BufferUpdate.CREATED)
 		{
 			if(bufferSwitcher != null)
-				bufferSwitcher.updateBufferList();
+				bufferSwitcher.updateBufferList(msg.getView());
 
 			/* When closing the last buffer, the BufferUpdate.CLOSED
 			 * handler doesn't call setBuffer(), because null buffers
@@ -900,7 +910,7 @@ public class EditPane extends JPanel implements EBComponent
 		else if(msg.getWhat() == BufferUpdate.CLOSED)
 		{
 			if(bufferSwitcher != null)
-				bufferSwitcher.updateBufferList();
+				bufferSwitcher.updateBufferList(msg.getView());
 
 			if(_buffer == buffer)
 			{
@@ -945,7 +955,7 @@ public class EditPane extends JPanel implements EBComponent
 			{
 				textArea.repaint();
 				if(bufferSwitcher != null)
-					bufferSwitcher.updateBufferList();
+					bufferSwitcher.updateBufferList(view);
 
 				if(view.getEditPane() == this)
 				{
@@ -968,7 +978,7 @@ public class EditPane extends JPanel implements EBComponent
 					if(buffer.isDirty())
 						bufferSwitcher.repaint();
 					else
-						bufferSwitcher.updateBufferList();
+						bufferSwitcher.updateBufferList(view);
 				}
 			}
 		}
