@@ -2020,8 +2020,11 @@ public class jEdit
 			Buffer buffer = buffersFirst;
 			for(int i = 0; i < bufferCount; i++)
 			{
-				if (v == null) buffers.add(buffer);
-				else {
+				if ( v == null || v.getBuffer() == buffer || 
+				   v.getEditPane() != null && v.getEditPane().getBuffer() == buffer)
+				   buffers.add(buffer);
+				else 
+				{
 					View v2 = buffer.getView();
 					if (v2 == null) buffer.setView(v);
 					if (v2 == v) buffers.add(buffer);
