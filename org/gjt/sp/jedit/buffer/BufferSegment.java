@@ -75,8 +75,6 @@ public class BufferSegment implements CharSequence
 	{
 		StringBuilder sb = new StringBuilder();
 		toString(sb);
-		if (next != null)
-			next.toString(sb);
 		return sb.toString();
 	}
 
@@ -93,6 +91,8 @@ public class BufferSegment implements CharSequence
 	private void toString(StringBuilder sb)
 	{
 		sb.append(data,offset,len);
+		if (next != null)
+			next.toString(sb);
 	}
 
 	private BufferSegment subSegment(int start,
