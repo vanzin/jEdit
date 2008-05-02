@@ -68,7 +68,7 @@ public class BufferSegment implements CharSequence
 	public CharSequence subSequence(int start,
 					int end)
 	{
-		if (start >= 0 && end - start < len)
+		if (0 <= start && start <= end && end <= len)
 			return new BufferSegment(data,offset+start,end-start);
 		else
 			throw new ArrayIndexOutOfBoundsException();
