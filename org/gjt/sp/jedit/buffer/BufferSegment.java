@@ -68,10 +68,7 @@ public class BufferSegment implements CharSequence
 	public CharSequence subSequence(int start,
 					int end)
 	{
-		if (0 <= start && start <= end && end <= len)
-			return new BufferSegment(data,offset+start,end-start);
-		else
-			throw new ArrayIndexOutOfBoundsException();
+		return subSegment(start, end);
 	}
 
 	public String toString()
@@ -96,6 +93,28 @@ public class BufferSegment implements CharSequence
 	private void toString(StringBuilder sb)
 	{
 		sb.append(data,offset,len);
+	}
+
+	private BufferSegment subSegment(int start,
+					int end)
+	{
+		if (0 <= start && start <= end)
+			if (end <= len)
+				return new BufferSegment(data,offset+start,
+					end-start);
+			else if (next != null)
+				if (start < len)
+					return new BufferSegment(data,
+						offset+start,len-start,
+						next.subSegment(0,
+							end-(len-start)));
+				else
+					return next.subSegment(start-len,
+						end-len);
+			else
+				throw new ArrayIndexOutOfBoundsException();
+		else
+			throw new ArrayIndexOutOfBoundsException();
 	}
 
 	private char[] data;
