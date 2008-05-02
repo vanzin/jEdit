@@ -122,11 +122,11 @@ public class GUIUtilities
 	{
 		if(iconName == null)
 			return null;
-		
+
 		// * Enable old icon naming scheme support
 		if(deprecatedIcons != null && deprecatedIcons.containsKey(iconName))
 			iconName = deprecatedIcons.get(iconName);
-			
+
 		if(icons == null)
 			icons = new Hashtable<String, Icon>();
 
@@ -1654,56 +1654,56 @@ public class GUIUtilities
 		deprecatedIcons.put("Home.png",       "22x22/actions/go-home.png");
 		deprecatedIcons.put("Help.png",       "22x22/apps/help-browser.png");
 		deprecatedIcons.put("Properties.png", "22x22/actions/document-properties.png");
-		deprecatedIcons.put("Preferences.png","22x22/places/preferences-system.png");
+		deprecatedIcons.put("Preferences.png","22x22/categories/preferences-system.png");
 		deprecatedIcons.put("ZoomIn.png",     "22x22/actions/zoom-in.png");
 		deprecatedIcons.put("ZoomOut.png",    "22x22/actions/zoom-out.png");
 		deprecatedIcons.put("BrokenImage.png","22x22/status/image-missing.png");
 		deprecatedIcons.put("AdjustWidth.png","22x22/actions/resize-horisontal.png");
 		deprecatedIcons.put("ToolbarMenu.gif","ToolbarMenu.gif");
-		
+
 		deprecatedIcons.put("Play.png","22x22/actions/media-playback-start.png");
 		deprecatedIcons.put("Pause.png","22x22/actions/media-playback-pause.png");
-		
+
 		deprecatedIcons.put("MultipleResults.png", "22x22/actions/edit-find-multiple.png");
 		deprecatedIcons.put("SingleResult.png",    "22x22/actions/edit-find-single.png");
 
 		deprecatedIcons.put("NextFile.png",    "22x22/go-last.png");
 		deprecatedIcons.put("PreviousFile.png","22x22/go-first.png");
-		
+
 		deprecatedIcons.put("closebox.gif",   "10x10/actions/close.png");
 		deprecatedIcons.put("normal.gif",   "10x10/status/document-unmodified.png");
 		deprecatedIcons.put("readonly.gif",   "10x10/emblem/emblem-readonly.png");
 		deprecatedIcons.put("dirty.gif",    "10x10/status/document-modified.png");
 		deprecatedIcons.put("new.gif",    "10x10/status/document-new.png");
-		
+
 		deprecatedIcons.put("ArrowU.png", "22x22/actions/go-up.png");
 		deprecatedIcons.put("ArrowR.png", "22x22/actions/go-next.png");
 		deprecatedIcons.put("ArrowD.png", "22x22/actions/go-down.png");
 		deprecatedIcons.put("ArrowL.png", "22x22/actions/go-previous.png");
 		deprecatedIcons.put("arrow1.png", "16x16/actions/group-expand.png");
 		deprecatedIcons.put("arrow2.png", "16x16/actions/group-collapse.png");
-		
+
 		deprecatedIcons.put("NewView.png", "22x22/actions/window-new.png");
 		deprecatedIcons.put("UnSplit.png", "22x22/actions/window-unsplit.png");
 		deprecatedIcons.put("SplitVertical.png", "22x22/actions/window-split-vertical.png");
 		deprecatedIcons.put("SplitHorizontal.png", "22x22/actions/window-split-horizontal.png");
-		
+
 		deprecatedIcons.put("ButtonProperties.png", "22x22/actions/document-properties.png");
-		
+
 	}
 	//}}}
-	
+
 	//{{{ init() method
 	static void init()
 	{
 		initializeDeprecatedIcons();
-		
+
 		// Load the icon theme but fallback on the old icons
 		String theme = jEdit.getProperty("icon-theme", "tango");
-		Log.log(Log.DEBUG, GUIUtilities.class, "Icon theme set to: "+theme);	
+		Log.log(Log.DEBUG, GUIUtilities.class, "Icon theme set to: "+theme);
 		setIconPath("jeditresource:/org/gjt/sp/jedit/icons/themes/" + theme + "/");
 		Log.log(Log.DEBUG, GUIUtilities.class, "Loading icon theme from: "+iconPath);
-		
+
 		// don't do this in static{} since we need jEdit.initMisc()
 		// run first so we have the jeditresource: protocol
 		NEW_BUFFER_ICON = loadIcon("new.gif");
@@ -1770,10 +1770,10 @@ public class GUIUtilities
 		if(itemIcon != null) {
 			mi.setIcon(itemIcon);
 		}
-		
+
 		return mi;
 	} //}}}
-	
+
 	private GUIUtilities() {}
 	//}}}
 
