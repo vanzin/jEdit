@@ -38,8 +38,6 @@ import java.util.List;
 
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.gui.InputHandler;
-import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.textarea.TextArea;
@@ -175,7 +173,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	/**
 	 * @deprecated Status bar no longer added as a tool bar.
 	 */
-	public static final int ABOVE_ACTION_BAR_LAYER = -50;
+	@Deprecated
+    public static final int ABOVE_ACTION_BAR_LAYER = -50;
 
 	/**
 	 * Action bar layer.
@@ -529,7 +528,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * This is slightly faster than using a KeyListener
 	 * because some Swing overhead is avoided.
 	 */
-	public void processKeyEvent(KeyEvent evt)
+	@Override
+    public void processKeyEvent(KeyEvent evt)
 	{
 		inputHandler.processKeyEvent(evt,VIEW, false);
 		if(!evt.isConsumed())
@@ -568,7 +568,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * because some Swing overhead is avoided.
 	 * @deprecated do not use, try {@link org.gjt.sp.jedit.gui.InputHandler#processKeyEvent(java.awt.event.KeyEvent, int, boolean)}
 	 */
-	public void processKeyEvent(KeyEvent evt, int from, boolean global)
+	@Deprecated
+    public void processKeyEvent(KeyEvent evt, int from, boolean global)
 	{
 		inputHandler.processKeyEvent(evt, from, global);
 		if(!evt.isConsumed())
@@ -913,6 +914,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getTextArea() method
 	/**
 	 * Returns the current edit pane's text area.
+     * @return the current edit pane's text area, or <b>null</b> if there is no edit pane yet
 	 */
 	public JEditTextArea getTextArea()
 	{
@@ -1068,7 +1070,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	} //}}}
 
 	//{{{ getMinimumSize() method
-	public Dimension getMinimumSize()
+	@Override
+    public Dimension getMinimumSize()
 	{
 		return new Dimension(0,0);
 	} //}}}
@@ -1083,7 +1086,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	} //}}}
 
 	//{{{ toString() method
-	public String toString()
+	@Override
+    public String toString()
 	{
 		return getClass().getName() + '['
 			+ (jEdit.getActiveView() == this
@@ -1102,7 +1106,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		for(int i = 0; i < editPanes.length; i++)
 		{
 			Buffer buffer = editPanes[i].getBuffer();
-			if(buffers.indexOf(buffer) == -1)
+			if(!buffers.contains(buffer))
 				buffers.add(buffer);
 		}
 
@@ -1740,7 +1744,8 @@ loop:		while (true)
 			}
 		}
 
-		public void windowClosing(WindowEvent evt)
+		@Override
+        public void windowClosing(WindowEvent evt)
 		{
 			jEdit.closeView(View.this);
 		}
@@ -1800,7 +1805,7 @@ loop:		while (true)
 	{
 		private final Cursor cursor;
 
-		public SetCursorVisitor(Cursor cursor)
+		SetCursorVisitor(Cursor cursor)
 		{
 			this.cursor = cursor;
 		}
