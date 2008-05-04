@@ -11,8 +11,8 @@ Alan Ezust for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- New View option: Buffer list shows only buffers belonging to the View that
-  last opened it. (Alan Ezust)
+ - New View option: Buffer list shows only buffers belonging to the View that
+   last opened it. (Alan Ezust)
 
 - In the auto-indent code, use read-only "CharSequence" instances to avoid
   creating new strings (which results in a copy of the original data). This
