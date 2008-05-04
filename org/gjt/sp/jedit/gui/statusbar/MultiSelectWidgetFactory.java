@@ -35,53 +35,60 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 //}}}
 
 /**
  * @author Matthieu Casanova
- * @since jEdit 4.3pre14 
+ * @since jEdit 4.3pre14
  */
 public class MultiSelectWidgetFactory implements StatusWidgetFactory
 {
-	//{{{ getWidget() method 
-	public Widget getWidget(View view) 
+	//{{{ getWidget() method
+	public Widget getWidget(View view)
 	{
-		MultiSelectWidget mode = new MultiSelectWidget(view);
+		Widget mode = new MultiSelectWidget(view);
 		return mode;
 	} //}}}
-	
+
 	//{{{ MultiSelectWidget class
 	private static class MultiSelectWidget implements Widget
 	{
 		private final JLabel multiSelect;
 		private final View view;
-		public MultiSelectWidget(final View view) 
+		MultiSelectWidget(final View view)
 		{
 			multiSelect = new ToolTipLabel();
 			multiSelect.setHorizontalAlignment(SwingConstants.CENTER);
 			multiSelect.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
 			this.view = view;
-			multiSelect.addMouseListener(new MouseAdapter() 
+			multiSelect.addMouseListener(new MouseAdapter()
 						     {
 							     @Override
-							     public void mouseClicked(MouseEvent evt)
+							     public void mouseClicked(MouseEvent e)
 							     {
-								     view.getTextArea().toggleMultipleSelectionEnabled();
+								     JEditTextArea textArea = view.getTextArea();
+								     if (textArea != null)
+									     textArea.toggleMultipleSelectionEnabled();
 							     }
 						     });
 		}
-		
-		public JComponent getComponent() 
+
+		public JComponent getComponent()
 		{
 			return multiSelect;
 		}
-		
-		public void update() 
+
+		public void update()
 		{
-			multiSelect.setText(view.getTextArea().isMultipleSelectionEnabled()
-					    ? "M" : "-");
+			JEditTextArea textArea = view.getTextArea();
+			if (textArea != null)
+			{
+				multiSelect.setText(textArea.isMultipleSelectionEnabled()
+						    ? "M" : "-");
+			}
 		}
-		
+
 		public void propertiesChanged()
 		{
 			// retarded GTK look and feel!
