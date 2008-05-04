@@ -2,12 +2,11 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre15
 
-Thanks to Björn "Vampire" Kautler and Marcelo Vanzin for contributing to this
-release.
+Thanks to Björn "Vampire" Kautler, Marcelo Vanzin and Matthieu Casanova for
+contributing to this release.
 
 {{{ Bug Fixes
-
-
+- The autosave feature was broken (#1957237) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

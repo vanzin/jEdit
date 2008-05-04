@@ -332,7 +332,7 @@ public class Buffer extends JEditBuffer
 	{
 		if(autosaveFile == null || !getFlag(AUTOSAVE_DIRTY)
 			|| !isDirty() || isPerformingIO() ||
-			autosaveFile.getParentFile().exists())
+			!autosaveFile.getParentFile().exists())
 			return;
 
 		setFlag(AUTOSAVE_DIRTY,false);
@@ -907,6 +907,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Call {@link JEditBuffer#addBufferListener(BufferListener,int)}.
 	 */
+	@Deprecated
 	public void addBufferChangeListener(BufferChangeListener listener,
 		int priority)
 	{
@@ -917,6 +918,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Call {@link JEditBuffer#addBufferListener(BufferListener)}.
 	 */
+	@Deprecated
 	public void addBufferChangeListener(BufferChangeListener listener)
 	{
 		addBufferChangeListener(listener,NORMAL_PRIORITY);
@@ -926,6 +928,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Call {@link JEditBuffer#removeBufferListener(BufferListener)}.
 	 */
+	@Deprecated
 	public void removeBufferChangeListener(BufferChangeListener listener)
 	{
 		BufferListener[] listeners = getBufferListeners();
@@ -962,6 +965,7 @@ public class Buffer extends JEditBuffer
 	} //}}}
 
 	//{{{ getDefaultProperty() method
+	@Override
 	public Object getDefaultProperty(String name)
 	{
 		Object retVal;
@@ -1059,6 +1063,7 @@ public class Buffer extends JEditBuffer
 	 * @param name The property name
 	 * @since jEdit 4.0pre3
 	 */
+	@Override
 	public String getContextSensitiveProperty(int offset, String name)
 	{
 		Object value = super.getContextSensitiveProperty(offset,name);
@@ -1126,6 +1131,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Call <code>setProperty()</code> instead.
 	 */
+	@Deprecated
 	public void putProperty(Object name, Object value)
 	{
 		// for backwards compatibility
@@ -1139,6 +1145,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Call <code>setBooleanProperty()</code> instead
 	 */
+	@Deprecated
 	public void putBooleanProperty(String name, boolean value)
 	{
 		setBooleanProperty(name,value);
@@ -1148,6 +1155,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Use org.gjt.sp.jedit.syntax.DefaultTokenHandler instead
 	 */
+	@Deprecated
 	public static class TokenList extends DefaultTokenHandler
 	{
 		public Token getFirstToken()
@@ -1159,6 +1167,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Use the other form of <code>markTokens()</code> instead
 	 */
+	@Deprecated
 	public TokenList markTokens(int lineIndex)
 	{
 		TokenList list = new TokenList();
@@ -1170,6 +1179,7 @@ public class Buffer extends JEditBuffer
 	/**
 	 * @deprecated Call <code>insert()</code> instead.
 	 */
+	@Deprecated
 	public void insertString(int offset, String str, AttributeSet attr)
 	{
 		insert(offset,str);
@@ -1180,6 +1190,7 @@ public class Buffer extends JEditBuffer
 	 * @deprecated Do not call this method, use {@link #getPath()}
 	 * instead.
 	 */
+	@Deprecated
 	public File getFile()
 	{
 		return file;
