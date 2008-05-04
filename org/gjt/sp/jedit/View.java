@@ -174,7 +174,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * @deprecated Status bar no longer added as a tool bar.
 	 */
 	@Deprecated
-    public static final int ABOVE_ACTION_BAR_LAYER = -50;
+	public static final int ABOVE_ACTION_BAR_LAYER = -50;
 
 	/**
 	 * Action bar layer.
@@ -529,7 +529,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * because some Swing overhead is avoided.
 	 */
 	@Override
-    public void processKeyEvent(KeyEvent evt)
+	public void processKeyEvent(KeyEvent evt)
 	{
 		inputHandler.processKeyEvent(evt,VIEW, false);
 		if(!evt.isConsumed())
@@ -569,7 +569,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * @deprecated do not use, try {@link org.gjt.sp.jedit.gui.InputHandler#processKeyEvent(java.awt.event.KeyEvent, int, boolean)}
 	 */
 	@Deprecated
-    public void processKeyEvent(KeyEvent evt, int from, boolean global)
+	public void processKeyEvent(KeyEvent evt, int from, boolean global)
 	{
 		inputHandler.processKeyEvent(evt, from, global);
 		if(!evt.isConsumed())
@@ -866,7 +866,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	{
 		setBuffer(buffer, disableFileStatusCheck, true);
 	} //}}}
-	
+
 	//{{{ setBuffer() method
 	/**
 	 * Sets the current edit pane's buffer.
@@ -880,7 +880,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	{
 		editPane.setBuffer(buffer, focus);
 		buffer.setView(this);
-		int check = jEdit.getIntegerProperty("checkFileStatus"); 
+		int check = jEdit.getIntegerProperty("checkFileStatus");
 		if((! disableFileStatusCheck) && (check == 1 || check == 2 || check == 3))
 			jEdit.checkBufferStatus(this, true);
 	} //}}}
@@ -914,7 +914,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getTextArea() method
 	/**
 	 * Returns the current edit pane's text area.
-     * @return the current edit pane's text area, or <b>null</b> if there is no edit pane yet
+	 * @return the current edit pane's text area, or <b>null</b> if there is no edit pane yet
 	 */
 	public JEditTextArea getTextArea()
 	{
@@ -1071,7 +1071,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	//{{{ getMinimumSize() method
 	@Override
-    public Dimension getMinimumSize()
+	public Dimension getMinimumSize()
 	{
 		return new Dimension(0,0);
 	} //}}}
@@ -1087,7 +1087,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	//{{{ toString() method
 	@Override
-    public String toString()
+	public String toString()
 	{
 		return getClass().getName() + '['
 			+ (jEdit.getActiveView() == this
@@ -1172,7 +1172,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			visitor.visit(editPane.getTextArea());
 		}
 	} //}}}
-	
+
 	//{{{ Package-private members
 	View prev;
 	View next;
@@ -1729,7 +1729,7 @@ loop:		while (true)
 			{
 				public void run()
 				{
-					int check = jEdit.getIntegerProperty("checkFileStatus"); 
+					int check = jEdit.getIntegerProperty("checkFileStatus");
 					if(check == 0 || check == 1)
 						jEdit.checkBufferStatus(View.this,false);
 					else if(check == 3)
@@ -1745,7 +1745,7 @@ loop:		while (true)
 		}
 
 		@Override
-        public void windowClosing(WindowEvent evt)
+		public void windowClosing(WindowEvent evt)
 		{
 			jEdit.closeView(View.this);
 		}
@@ -1809,7 +1809,7 @@ loop:		while (true)
 		{
 			this.cursor = cursor;
 		}
-		
+
 		@Override
 		public void visit(EditPane editPane)
 		{
