@@ -1,6 +1,7 @@
 /*
  * BufferSwitcher.java - Status bar
  * Copyright (C) 2000, 2004 Slava Pestov
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -60,29 +61,7 @@ public class BufferSwitcher extends JComboBox
 		});
 	}
 
-	/**
-	 * 
-	 * @return the next buffer in the switcher, selecting it in the process
-	 */
-	public Buffer nextBuffer() {
-		int idx = getSelectedIndex();
-		idx ++;
-		if (idx >= getModel().getSize()) idx=0;
-		setSelectedIndex(idx);
-		return (Buffer)getSelectedItem();
-	}
-	
-	public Buffer previousBuffer() {
-		int idx = getSelectedIndex()-1;
-		if (idx<0) idx = getModel().getSize()-1;
-		setSelectedIndex(idx);
-		return (Buffer) getSelectedItem();
-	}
-
-    /**
-      * @param view If non-null, (and view option "show all buffers" is false) 
-      *              only list buffers belonging to that view. */             
-	public void updateBufferList(View view)
+	public void updateBufferList()
 	{
 		// if the buffer count becomes 0, then it is guaranteed to
 		// become 1 very soon, so don't do anything in that case.
@@ -91,18 +70,12 @@ public class BufferSwitcher extends JComboBox
 
 		updating = true;
 		setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
-		if (jEdit.getBooleanProperty("view.showAllBuffers", true)) {
-			setModel(new DefaultComboBoxModel(jEdit.getBuffers()));
-		}
-		else {
-			setModel(new DefaultComboBoxModel(jEdit.getBuffers(view)));
-		}
+		setModel(new DefaultComboBoxModel(jEdit.getBuffers()));
 		setSelectedItem(editPane.getBuffer());
 		setToolTipText(editPane.getBuffer().getPath());
 		updating = false;
 	}
 
-	
 	class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)

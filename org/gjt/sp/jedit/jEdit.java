@@ -22,44 +22,47 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import org.gjt.sp.jedit.visitors.JEditVisitor;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.DefaultKeyboardFocusManager;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.KeyboardFocusManager;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
-import org.gjt.sp.jedit.buffer.FoldHandler;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.buffer.KillRing;
+import javax.swing.*;
+import java.awt.event.KeyEvent;
+import java.io.*;
+import java.net.*;
+import java.text.MessageFormat;
+import java.util.*;
+
+import org.xml.sax.SAXParseException;
+
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
+import org.gjt.sp.jedit.buffer.KillRing;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.help.HelpViewer;
-import org.gjt.sp.jedit.io.FavoritesVFS;
-import org.gjt.sp.jedit.io.VFS;
-import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
 import org.gjt.sp.jedit.search.SearchAndReplace;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.XModeHandler;
-import org.gjt.sp.jedit.textarea.DisplayManager;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.textarea.Selection;
-import org.gjt.sp.jedit.textarea.TextArea;
-import org.gjt.sp.jedit.visitors.JEditVisitor;
+import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
-import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.SyntaxUtilities;
 import org.gjt.sp.util.XMLUtilities;
-
-import java.util.*;
-import javax.swing.*;
-
-import java.util.List;
-import java.io.*;
-import java.net.*;
-import java.text.MessageFormat;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import org.xml.sax.SAXParseException;
+import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.SyntaxUtilities;
+//}}}
 
 /**
  * The main class of the jEdit text editor.
@@ -1494,6 +1497,7 @@ public class jEdit
 				{
 					if(view != null)
 						view.setBuffer(buffer,true);
+
 					return buffer;
 				}
 
@@ -1594,11 +1598,11 @@ public class jEdit
 
 		addBufferToList(buffer);
 		buffer.commitTemporary();
-		View v = buffer.getView();
+
 		// send full range of events to avoid breaking plugins
-		EditBus.send(new BufferUpdate(buffer,v,BufferUpdate.CREATED));
-		EditBus.send(new BufferUpdate(buffer,v,BufferUpdate.LOAD_STARTED));
-		EditBus.send(new BufferUpdate(buffer,v,BufferUpdate.LOADED));
+		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.CREATED));
+		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.LOAD_STARTED));
+		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.LOADED));
 	} //}}}
 
 	//{{{ newFile() method
@@ -1927,7 +1931,7 @@ public class jEdit
 	public static void reloadAllBuffers(View view, boolean confirm)
 	{
 		boolean hasDirty = false;
-		Buffer[] buffers = jEdit.getBuffers(view);
+		Buffer[] buffers = jEdit.getBuffers();
 
 		for(int i = 0; i < buffers.length && !hasDirty; i++)
 			hasDirty = !buffers[i].isUntitled() && buffers[i].isDirty();
@@ -1998,38 +2002,22 @@ public class jEdit
 		return _getBuffer(MiscUtilities.resolveSymlinks(path));
 	} //}}}
 
-	//{{{ getBuffers() methods
+	//{{{ getBuffers() method
 	/**
-	 * @return an array of open buffers.
+	 * Returns an array of open buffers.
 	 */
-	public static Buffer[] getBuffers() {
-		return getBuffers(null);
-	}
-	
-	/**
-	 * 
-	 * @param v the View to filter on
-	 * @return an array of open buffers belonging to this View
-	 * @since 4.3pre15
-	 */
-	public static Buffer[] getBuffers(View v)
+	public static Buffer[] getBuffers()
 	{
 		synchronized(bufferListLock)
 		{
-			ArrayList<Buffer> buffers = new ArrayList<Buffer>();
+			Buffer[] buffers = new Buffer[bufferCount];
 			Buffer buffer = buffersFirst;
 			for(int i = 0; i < bufferCount; i++)
 			{
-				if (v == null) buffers.add(buffer);
-				else {
-					View v2 = buffer.getView();
-					if (v2 == null) buffer.setView(v);
-					if (v2 == v) buffers.add(buffer);
-				}
+				buffers[i] = buffer;
 				buffer = buffer.next;
 			}
-			Buffer[] ba = new Buffer[buffers.size()];
-			return buffers.toArray(ba);
+			return buffers;
 		}
 	} //}}}
 

@@ -879,7 +879,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	public void setBuffer(Buffer buffer, boolean disableFileStatusCheck, boolean focus)
 	{
 		editPane.setBuffer(buffer, focus);
-		buffer.setView(this);
 		int check = jEdit.getIntegerProperty("checkFileStatus");
 		if((! disableFileStatusCheck) && (check == 1 || check == 2 || check == 3))
 			jEdit.checkBufferStatus(this, true);

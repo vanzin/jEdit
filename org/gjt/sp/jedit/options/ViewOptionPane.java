@@ -30,19 +30,6 @@ import org.gjt.sp.jedit.*;
 
 public class ViewOptionPane extends AbstractOptionPane
 {
-	//{{{ Private members
-	private JLabel layout;
-	private Icon layoutIcon1, layoutIcon2, layoutIcon3, layoutIcon4;
-	private JButton alternateDockingLayout, alternateToolBarLayout;
-	private JCheckBox showFullPath;
-	private JCheckBox showSearchbar;
-	private JCheckBox beepOnSearchAutoWrap;
-	private JCheckBox showBufferSwitcher;
-	private JCheckBox showAllBuffers;
-	
-	private JTextField bufferSwitcherMaxRowCount;
-	//}}}
-
 	//{{{ ViewOptionPane constructor
 	public ViewOptionPane()
 	{
@@ -123,11 +110,6 @@ public class ViewOptionPane extends AbstractOptionPane
 		addComponent(showBufferSwitcher);
 		showBufferSwitcher.addActionListener(actionHandler);
 
-		showAllBuffers = new JCheckBox(jEdit.getProperty(
-		"options.view.showAllBuffers"));
-		showAllBuffers.setSelected(jEdit.getBooleanProperty(
-			"view.showAllBuffers", true));
-		addComponent(showAllBuffers);
 
 		/* Buffer switcher max row count */
 		bufferSwitcherMaxRowCount = new JTextField(jEdit.getProperty("bufferSwitcher.maxRowCount"));
@@ -153,12 +135,20 @@ public class ViewOptionPane extends AbstractOptionPane
 			.isSelected());
 		jEdit.setBooleanProperty("view.showBufferSwitcher",
 			showBufferSwitcher.isSelected());
-		jEdit.setBooleanProperty("view.showAllBuffers", 
-			showAllBuffers.isSelected());
 		jEdit.setProperty("bufferSwitcher.maxRowCount",
 			bufferSwitcherMaxRowCount.getText());
 	} //}}}
 
+	//{{{ Private members
+	private JLabel layout;
+	private Icon layoutIcon1, layoutIcon2, layoutIcon3, layoutIcon4;
+	private JButton alternateDockingLayout, alternateToolBarLayout;
+	private JCheckBox showFullPath;
+	private JCheckBox showSearchbar;
+	private JCheckBox beepOnSearchAutoWrap;
+	private JCheckBox showBufferSwitcher;
+	private JTextField bufferSwitcherMaxRowCount;
+	//}}}
 
 	//{{{ ActionHandler class
 	private class ActionHandler implements ActionListener
@@ -190,7 +180,6 @@ public class ViewOptionPane extends AbstractOptionPane
 			else if (evt.getSource() == showBufferSwitcher)
 			{
 				bufferSwitcherMaxRowCount.setEditable(showBufferSwitcher.isSelected());
-				showAllBuffers.setEnabled(showBufferSwitcher.isSelected());
 			}
 		}
 	} //}}}
