@@ -102,8 +102,8 @@ public class ContentManager
 			return new BufferSegment(text,start,len);
 		else
 		{
-			return new BufferSegment(text,start,gapStart - start)
-				.concat(new BufferSegment(text,gapEnd,start + len - gapStart));
+			return new BufferSegment(text,start,gapStart - start,
+				new BufferSegment(text,gapEnd,start + len - gapStart));
 		}
 	} //}}}
 

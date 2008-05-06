@@ -39,7 +39,7 @@ public class BufferSegment implements CharSequence
 		this(data,offset,len,null);
 	}
 
-	private BufferSegment(char[] data,
+	public BufferSegment(char[] data,
 			      int offset,
 			      int len,
 			      BufferSegment next)
@@ -78,16 +78,6 @@ public class BufferSegment implements CharSequence
 		return sb.toString();
 	}
 
-	protected BufferSegment concat(BufferSegment other)
-	{
-		BufferSegment clone = new BufferSegment(data,offset,len,next);
-		BufferSegment last = clone;
-		while (last.next != null)
-			last = last.next;
-		last.next = other;
-		return clone;
-	}
-
 	private void toString(StringBuilder sb)
 	{
 		sb.append(data,offset,len);
@@ -117,9 +107,9 @@ public class BufferSegment implements CharSequence
 			throw new ArrayIndexOutOfBoundsException();
 	}
 
-	private char[] data;
-	private int offset;
-	private int len;
-	private BufferSegment next;
+	private final char[] data;
+	private final int offset;
+	private final int len;
+	private final BufferSegment next;
 }
 
