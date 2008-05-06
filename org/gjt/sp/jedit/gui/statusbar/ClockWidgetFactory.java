@@ -48,15 +48,15 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 	//{{{ getWidget() method
 	public Widget getWidget(View view) 
 	{
-		ClockWidget mode = new ClockWidget(view);
-		return mode;
+		Widget clock = new ClockWidget(view);
+		return clock;
 	} //}}}
 
 	//{{{ ClockWidget class
 	private static class ClockWidget implements Widget
 	{
 		private final Clock clock;
-		public ClockWidget(final View view) 
+		ClockWidget(View view) 
 		{
 			clock = new Clock();
 		}
@@ -75,8 +75,8 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 		}
 	} //}}}
 
-    //{{{ Clock class
-    private static class Clock extends JLabel implements ActionListener
+	//{{{ Clock class
+	private static class Clock extends JLabel implements ActionListener
 	{
 		//{{{ Clock constructor
 		Clock()
@@ -127,7 +127,7 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 		} //}}}
 
 		//{{{ actionPerformed() method
-		public void actionPerformed(ActionEvent evt)
+		public void actionPerformed(ActionEvent e)
 		{
 			update();
 		} //}}}
