@@ -1,0 +1,215 @@
+/*
+ * ClockWidgetFactory.java - The clock widget service
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2008 Matthieu Casanova
+ * Portions Copyright (C) 2001, 2004 Slava Pestov
+ * Portions copyright (C) 2001 Mike Dillon
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.gjt.sp.jedit.gui.statusbar;
+
+//{{{ Imports
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.EnhancedDialog;
+import org.gjt.sp.util.Log;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
+//}}}
+
+/**
+ * @author Matthieu Casanova
+ * @since jEdit 4.3pre15
+ */
+public class ErrorsWidgetFactory implements StatusWidgetFactory
+{
+	//{{{ getWidget() method
+	public Widget getWidget(View view)
+	{
+		Widget errorWidget = new ErrorWidget(view);
+		return errorWidget;
+	} //}}}
+
+	//{{{ ErrorWidget class
+	private static class ErrorWidget implements Widget
+	{
+		private final ErrorHighlight errorHighlight;
+
+		ErrorWidget(View view)
+		{
+			errorHighlight = new ErrorHighlight(view);
+		}
+
+		public JComponent getComponent()
+		{
+			return errorHighlight;
+		}
+
+		public void update()
+		{
+			errorHighlight.update();
+		}
+
+		public void propertiesChanged()
+		{
+		}
+	} //}}}
+
+	//{{{ ErrorHighlight class
+	private static class ErrorHighlight extends JLabel implements ActionListener
+	{
+		private int currentSize;
+
+		//{{{ ErrorHighlight constructor
+		ErrorHighlight(final View view)
+		{
+			setForeground(jEdit.getColorProperty("view.status.foreground"));
+			setBackground(jEdit.getColorProperty("view.status.background"));
+			addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					if (e.getClickCount() == 2 && !Log.throwables.isEmpty())
+						new ErrorDialog(view);
+				}
+			});
+		} //}}}
+
+		//{{{ addNotify() method
+		@Override
+		public void addNotify()
+		{
+			super.addNotify();
+			update();
+			int millisecondsPerMinute = 1000;
+
+			timer = new Timer(millisecondsPerMinute, this);
+			timer.start();
+			ToolTipManager.sharedInstance().registerComponent(this);
+		} //}}}
+
+
+		//{{{ removeNotify() method
+		@Override
+		public void removeNotify()
+		{
+			timer.stop();
+			ToolTipManager.sharedInstance().unregisterComponent(this);
+			super.removeNotify();
+		} //}}}
+
+		//{{{ getToolTipLocation() method
+		@Override
+		public Point getToolTipLocation(MouseEvent event)
+		{
+			return new Point(event.getX(), -20);
+		} //}}}
+
+		//{{{ actionPerformed() method
+		public void actionPerformed(ActionEvent e)
+		{
+			update();
+		} //}}}
+
+		//{{{ Private members
+		private Timer timer;
+
+		//{{{ update() method
+		private void update()
+		{
+			int size = Log.throwables.size();
+			if (size != currentSize)
+			{
+				currentSize = size;
+				if (size == 0)
+				{
+					setForeground(jEdit.getColorProperty("view.status.foreground"));
+					setText(null);
+					setToolTipText(size + " error");
+				}
+				else
+				{
+					setForeground(Color.red);
+					setText(Integer.toString(size) + " error(s)");
+					setToolTipText(size + " error(s)");
+				}
+			}
+		}
+	} //}}}
+
+	private static class ErrorDialog extends EnhancedDialog
+	{
+		private JTextArea textArea;
+		private ByteArrayOutputStream byteArrayOutputStream;
+		private PrintStream printStream;
+
+		private ErrorDialog(Frame view)
+		{
+			super(view, "Errors", true);
+			byteArrayOutputStream = new ByteArrayOutputStream();
+			printStream = new PrintStream(byteArrayOutputStream);
+			Object[] throwables = Log.throwables.toArray();
+			textArea = new JTextArea();
+			textArea.setEditable(false);
+			if (throwables.length != 0)
+			{
+				Throwable throwable = (Throwable) throwables[0];
+				setThrowable(throwable);
+			}
+			final JComboBox combo = new JComboBox(throwables);
+			combo.addItemListener(new ItemListener()
+			{
+				public void itemStateChanged(ItemEvent e)
+				{
+					setThrowable((Throwable) combo.getSelectedItem());
+				}
+			});
+			getContentPane().add(combo, BorderLayout.NORTH);
+			getContentPane().add(new JScrollPane(textArea));
+			pack();
+			setLocationRelativeTo(view);
+			setVisible(true);
+		}
+
+		private void setThrowable(Throwable throwable)
+		{
+			throwable.printStackTrace(printStream);
+			textArea.setText(byteArrayOutputStream.toString());
+			byteArrayOutputStream.reset();
+		}
+
+		@Override
+		public void ok()
+		{
+			dispose();
+		}
+
+		@Override
+		public void cancel()
+		{
+			dispose();
+		}
+	}
+	//}}}
+} //}}}

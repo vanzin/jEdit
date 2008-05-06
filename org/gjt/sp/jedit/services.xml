@@ -90,5 +90,10 @@
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="clock">
 		new org.gjt.sp.jedit.gui.statusbar.ClockWidgetFactory();
-	</SERVICE><!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
+	</SERVICE>
+
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="errors">
+		new org.gjt.sp.jedit.gui.statusbar.ErrorsWidgetFactory();
+	</SERVICE>
+	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 </SERVICES>

@@ -31,10 +31,7 @@ import java.io.Writer;
 
 import java.text.DateFormat;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -335,6 +332,8 @@ public class Log
 	private static final PrintStream realErr;
 	private static final LogListModel listModel;
 	private static final DateFormat timeFormat;
+	private static final int MAX_THROWABLES = 10;
+	public static final List<Throwable> throwables;
 	//}}}
 
 	//{{{ Class initializer
@@ -351,6 +350,7 @@ public class Log
 		listModel = new LogListModel();
 		
 		timeFormat = DateFormat.getTimeInstance(MEDIUM);
+		throwables = Collections.synchronizedList(new ArrayList<Throwable>(MAX_THROWABLES));
 	} //}}}
 
 	//{{{ createPrintStream() method
@@ -366,7 +366,14 @@ public class Log
 		final Throwable message)
 	{
 		PrintStream out = createPrintStream(urgency,source);
-
+		synchronized (throwables)
+		{
+			if (throwables.size() == MAX_THROWABLES)
+			{
+				throwables.remove(0);
+			}
+			throwables.add(message);
+		}
 		synchronized(LOCK)
 		{
 			message.printStackTrace(out);

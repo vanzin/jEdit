@@ -16,6 +16,9 @@ contributing to this release.
   code that can avoid the user of strings (such as the word completion action).
   (Marcelo Vanzin)
 
+- New status bar ErrorWidget added to display the 10 last exceptions that
+  happened in jEdit (Matthieu Casanova)
+
 }}}
 {{{ Editing
 
