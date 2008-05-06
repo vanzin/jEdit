@@ -68,7 +68,7 @@ prev-buffer.shortcut=C+PAGE_UP
 next-buffer.shortcut=C+PAGE_DOWN
 last-action.shortcut=C+SPACE
 
-recent-buffer.shortcut=C+`
+recent-buffer.shortcut=C+BACK_QUOTE
 select-block.shortcut=C+OPEN_BRACKET
 match-bracket.shortcut=C+CLOSE_BRACKET
 expand-abbrev.shortcut=C+SEMICOLON
@@ -115,7 +115,7 @@ prev-marker.shortcut=C+e C+COMMA
 next-marker.shortcut=C+e C+PERIOD
 prev-bracket.shortcut=C+e C+OPEN_BRACKET
 next-bracket.shortcut=C+e C+CLOSE_BRACKET
-close-docking-area.shortcut=C+e C+`
+close-docking-area.shortcut=C+e C+BACK_QUOTE
 #}}}
 
 #{{{ C+e X
@@ -175,7 +175,7 @@ scroll-down-page.shortcut=A+SLASH
 prev-textarea.shortcut=A+PAGE_UP
 next-textarea.shortcut=A+PAGE_DOWN
 
-show-buffer-switcher.shortcut=A+`
+show-buffer-switcher.shortcut=A+BACK_QUOTE
 toggle-rect-select.shortcut=A+BACK_SLASH
 #}}}
 
