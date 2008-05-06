@@ -29,7 +29,7 @@ package org.gjt.sp.jedit.buffer;
  * @version $Id$
  * @since jEdit 4.3pre15
  */
-public class BufferSegment implements CharSequence
+class BufferSegment implements CharSequence
 {
 
 	public BufferSegment(char[] data,
