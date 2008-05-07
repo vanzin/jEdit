@@ -1,11 +1,9 @@
 /*
- * ClockWidgetFactory.java - The clock widget service
+ * ErrorsWidgetFactory.java - The error widget service
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2008 Matthieu Casanova
- * Portions Copyright (C) 2001, 2004 Slava Pestov
- * Portions copyright (C) 2001 Mike Dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +25,7 @@ package org.gjt.sp.jedit.gui.statusbar;
 //{{{ Imports
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.util.Log;
 
@@ -38,6 +37,7 @@ import java.io.ByteArrayOutputStream;
 //}}}
 
 /**
+ * This widget will show you in the status bar the last errors reported in jEdit.
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
  */
@@ -187,8 +187,8 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			});
 			getContentPane().add(combo, BorderLayout.NORTH);
 			getContentPane().add(new JScrollPane(textArea));
-			pack();
-			setLocationRelativeTo(view);
+            pack();
+            GUIUtilities.loadGeometry(this,"status.errorWidget");
 			setVisible(true);
 		}
 
@@ -196,10 +196,18 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		{
 			throwable.printStackTrace(printStream);
 			textArea.setText(byteArrayOutputStream.toString());
-			byteArrayOutputStream.reset();
+            textArea.setCaretPosition(0);
+            byteArrayOutputStream.reset();
 		}
 
-		@Override
+        @Override
+        public void dispose()
+        {
+            GUIUtilities.saveGeometry(this, "status.errorWidget");
+            super.dispose();
+        }
+
+        @Override
 		public void ok()
 		{
 			dispose();
