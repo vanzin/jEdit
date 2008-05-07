@@ -187,8 +187,8 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			});
 			getContentPane().add(combo, BorderLayout.NORTH);
 			getContentPane().add(new JScrollPane(textArea));
-            pack();
-            GUIUtilities.loadGeometry(this,"status.errorWidget");
+			pack();
+			GUIUtilities.loadGeometry(this,"status.errorWidget");
 			setVisible(true);
 		}
 
@@ -196,18 +196,18 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		{
 			throwable.printStackTrace(printStream);
 			textArea.setText(byteArrayOutputStream.toString());
-            textArea.setCaretPosition(0);
-            byteArrayOutputStream.reset();
+			textArea.setCaretPosition(0);
+			byteArrayOutputStream.reset();
 		}
 
-        @Override
-        public void dispose()
-        {
-            GUIUtilities.saveGeometry(this, "status.errorWidget");
-            super.dispose();
-        }
+		@Override
+		public void dispose()
+		{
+			GUIUtilities.saveGeometry(this, "status.errorWidget");
+			super.dispose();
+		}
 
-        @Override
+		@Override
 		public void ok()
 		{
 			dispose();
