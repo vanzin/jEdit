@@ -87,7 +87,7 @@ public class TextArea extends JComponent
 	public TextArea(boolean insideJEdit)
 	{
 		this(null);
-		actionContext = new JEditActionContext<JEditBeanShellAction, JEditActionSet<JEditBeanShellAction>>() 
+		actionContext = new JEditActionContext<JEditBeanShellAction, JEditActionSet<JEditBeanShellAction>>()
 		{
 			@Override
 			public void invokeAction(EventObject evt, JEditBeanShellAction action)
@@ -95,24 +95,24 @@ public class TextArea extends JComponent
 				action.invoke(TextArea.this);
 			}
 		};
-		
+
 		setMouseHandler(new TextAreaMouseHandler(this));
 		TextAreaInputHandler inputHandler = new TextAreaInputHandler(this)
 		{
 			@Override
-			protected JEditBeanShellAction getAction(String action) 
+			protected JEditBeanShellAction getAction(String action)
 			{
 				return TextArea.this.actionContext.getAction(action);
 			}
 		};
-		
+
 		inputHandlerProvider = new DefaultInputHandlerProvider(inputHandler);
 		if (insideJEdit)
 		{
 			return;
 		}
-		
-		
+
+
 		//{{{ init Style property manager
 		if (SyntaxUtilities.propertyManager == null)
 		{
@@ -125,7 +125,7 @@ public class TextArea extends JComponent
 			catch (IOException e)
 			{
 				Log.log(Log.ERROR, TextArea.class, e);
-			}		
+			}
 			finally
 			{
 				IOUtilities.closeQuietly(in);
@@ -150,14 +150,14 @@ public class TextArea extends JComponent
 		{
 			defaultFontSize = 12;
 		}
-		
+
 		/*Font font1 = new Font("Monospaced", Font.PLAIN, 12);
 		painter.setFont(font1);
 		SyntaxStyle[] styles = new SyntaxStyle[1];
 		styles[0] = new SyntaxStyle(Color.black, Color.white, font1);*/
 		//painter.setStyles(styles);
-		
-		
+
+
 		painter.setBlockCaretEnabled(false);
 
 		String name = SyntaxUtilities.propertyManager.getProperty("view.font");
@@ -191,13 +191,13 @@ public class TextArea extends JComponent
 				style = Font.PLAIN;
 			}
 			font = new Font(family,style,size);
-			
+
 		} //}}}
 
-		
+
 		painter.setFont(font);
-		
-		
+
+
 		painter.setStructureHighlightEnabled(true);
 		painter.setStructureHighlightColor(Color.black);
 		painter.setEOLMarkersPainted(false);
@@ -233,9 +233,9 @@ public class TextArea extends JComponent
 
 		setCaretBlinkEnabled(true);
 		setElectricScroll(3);
-		
-		DefaultFoldHandlerProvider foldHandlerProvider = new DefaultFoldHandlerProvider(); 
-		
+
+		DefaultFoldHandlerProvider foldHandlerProvider = new DefaultFoldHandlerProvider();
+
 		FoldHandler.foldHandlerProvider = foldHandlerProvider;
 		foldHandlerProvider.addFoldHandler(new ExplicitFoldHandler());
 		foldHandlerProvider.addFoldHandler(new IndentFoldHandler());
@@ -353,7 +353,7 @@ public class TextArea extends JComponent
 
 	//{{{ toString() method
 	@Override
-	public String toString() 
+	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("caret: ").append(caret).append('\n');
@@ -387,7 +387,7 @@ public class TextArea extends JComponent
 	 */
 	public AbstractInputHandler getInputHandler()
 	{
-		
+
 		return inputHandlerProvider.getInputHandler();
 	} //}}}
 
@@ -401,7 +401,7 @@ public class TextArea extends JComponent
 	} //}}}
 
 	//{{{ getGutter() method
- 	/**
+	/**
 	 * Returns the gutter to the left of the text area or null if the gutter
 	 * is disabled
 	 */
@@ -2283,7 +2283,7 @@ forward_scan:	do
 	{
 		int physicalLine = getCaretLine();
 		int midPhysicalLine = getPhysicalLineOfScreenLine(visibleLines >> 1);
-		int diff = physicalLine -  midPhysicalLine; 
+		int diff = physicalLine -  midPhysicalLine;
 		setFirstLine(getFirstLine() + diff);
 	} //}}}
 
@@ -4013,7 +4013,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ addExplicitFold() method
 	/**
 	 * Surrounds the selection with explicit fold markers.
-	 * @throws TextAreaException an exception thrown if the folding mode is 
+	 * @throws TextAreaException an exception thrown if the folding mode is
 	 * not explicit
 	 * @since jEdit 4.0pre3
 	 */
@@ -4635,16 +4635,19 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	//{{{ addLeftOfScrollBar() method
 	/**
-	 * Adds a component to the box left of the vertical scroll bar. The
-	 * ErrorList plugin uses this to show a global error overview, for
-	 * example.
+	 * Adds a component to the left side of the box left of the vertical
+	 * scroll bar. The ErrorList plugin uses this to show a global error
+	 * overview, for example.  It is possible for more than one component
+	 * to be added, each is added to the left side of the box in turn.
+	 * Adding to the left ensures the scrollbar is always right of all added
+	 * components.
 	 *
 	 * @param comp The component
 	 * @since jEdit 4.2pre1
 	 */
 	public void addLeftOfScrollBar(Component comp)
 	{
-		verticalBox.add(comp,verticalBox.getComponentCount() - 1);
+		verticalBox.add(comp, 0);
 	} //}}}
 
 	//{{{ removeLeftOfScrollBar() method
@@ -4836,12 +4839,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		gutter.repaint();
 		painter.repaint();
 	} //}}}
-	
+
 	//{{{ addActionSet() method
 	/**
 	 * Adds a new action set to the textarea's list of ActionSets.
 	 * Call this only on standalone textarea
-	 * 
+	 *
 	 * @param actionSet the actionSet to add
 	 * @since jEdit 4.3pre13
 	 */
@@ -4868,7 +4871,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 			return caret;
 	} //}}}
-	
+
 	//{{{ getMarkLine() method
 	/**
 	 * @deprecated Do not use.
@@ -4887,7 +4890,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 			return caretLine;
 	} //}}}
-	
+
 	//{{{ Package-private members
 
 	static TextArea focusedComponent;
@@ -4899,8 +4902,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	final FastRepaintManager repaintMgr;
 	DisplayManager displayManager;
 	final SelectionManager selectionManager;
-	/** 
-	 * The action context. 
+	/**
+	 * The action context.
 	 * It is used only when the textarea is standalone
 	 */
 	private JEditActionContext<JEditBeanShellAction,JEditActionSet<JEditBeanShellAction>> actionContext;
@@ -6151,7 +6154,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		structureTimer.setInitialDelay(100);
 		structureTimer.setRepeats(false);
 	} //}}}
-	
+
 	//{{{ _createTextArea() method
 	public static TextArea _createTextArea(boolean insidejEdit, final IPropertyManager iPropertyManager)
 	{
@@ -6160,10 +6163,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		textArea.setTransferHandler(new TextAreaTransferHandler());
 
 		JEditActionSet<JEditBeanShellAction> actionSet = new JEditActionSet<JEditBeanShellAction>(
-				null, TextArea.class.getResource("textarea.actions.xml")) 
+				null, TextArea.class.getResource("textarea.actions.xml"))
 		{
 			@Override
-			protected JEditBeanShellAction[] getArray(int size) 
+			protected JEditBeanShellAction[] getArray(int size)
 			{
 				return new JEditBeanShellAction[size];
 			}
@@ -6178,7 +6181,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				return textArea.getInputHandler();
 			}
-			
+
 			protected JEditBeanShellAction createBeanShellAction(String actionName,
 									     String code,
 									     String selected,
@@ -6194,12 +6197,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		actionSet.initKeyBindings();
 		return textArea;
 	} //}}}
-	
+
 	//{{{ createTextArea() method
 	/**
 	 * Create a standalone TextArea.
 	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
-	 * 
+	 *
 	 * @param iPropertyManager the properties where key bindings are stored
 	 * @return a textarea
 	 * @since 4.3pre13
@@ -6209,12 +6212,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		final TextArea textArea = _createTextArea(false, iPropertyManager);
 		return textArea;
 	} // }}}
-	
+
 	//{{{ createTextArea() method
 	/**
 	 * Create a standalone TextArea.
 	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
-	 * 
+	 *
 	 * @return a textarea
 	 * @since 4.3pre13
 	 */
@@ -6229,14 +6232,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		catch (IOException e)
 		{
 			Log.log(Log.ERROR, TextArea.class, e);
-		}		
+		}
 		finally
 		{
 			IOUtilities.closeQuietly(in);
 		}
-		TextArea textArea = _createTextArea(false, new IPropertyManager() 
+		TextArea textArea = _createTextArea(false, new IPropertyManager()
 		{
-			public String getProperty(String name) 
+			public String getProperty(String name)
 			{
 				return (String) props.get(name);
 			}
