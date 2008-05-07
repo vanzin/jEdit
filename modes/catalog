@@ -472,7 +472,7 @@
 <!-- Great. AElfred doesn't support entities in attribute values,
      but all other XML parsers complain if < appears. -->
 <MODE NAME="xml"		FILE="xml.xml"
-				FILE_NAME_GLOB="*.{xml,xhtml,xsd}"
+				FILE_NAME_GLOB="*.{xml,xhtml,xsd,qrc,ui}"
 				FIRST_LINE_GLOB="&lt;\?xml*" />
 
 <MODE NAME="xq"			FILE="xq.xml"
