@@ -46,6 +46,11 @@ public class EditPaneUpdate extends EBMessage
 	 */
 	public static final Object BUFFER_CHANGED = "BUFFER_CHANGED";
 
+	
+	/**
+	 * Edit pane position is about to change in a major way
+	 */
+	public static final Object POSITION_CHANGING = "POSITION_CHANGING";
 	/**
 	 * Edit pane buffer is about to change. You should see this before BUFFER_CHANGED.
 	 * Navigator uses this message to save the cursor position in its history.

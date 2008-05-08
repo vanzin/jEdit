@@ -33,6 +33,12 @@ contributing to this release.
   String. StandardUtilities / TextUtilities were enhanced to provide functions
   that are not present in the CharSequence class, or were only available for
   Strings before. (Marcelo Vanzin)
+  
+- Removed deprecated CaretChanging message, which was never in jEdit 4.2 anyway.
+
+- Added new EBMessage, PositionChanging, base class for BufferChanging,
+  for navigable position changes within the same buffer.
+  
 
 }}}
 
