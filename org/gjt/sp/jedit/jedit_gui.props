@@ -207,6 +207,7 @@ reload.label=$Reload
 reload.icon.small=16x16/actions/view-refresh.png
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
+close-buffer.icon.small=10x10/actions/close.png
 close-all.label=Clos$e All
 save.label=$Save
 save.icon.small=16x16/actions/document-save.png
@@ -256,10 +257,15 @@ edit=undo \
      %source
 edit.label=$Edit
 undo.label=$Undo
+undo.icon.small=16x16/actions/edit-undo.png
 redo.label=$Redo
+redo.icon.small=16x16/actions/edit-redo.png
 cut.label=$Cut
+cut.icon.small=16x16/actions/edit-cut.png
 copy.label=C$opy
+copy.icon.small=16x16/actions/edit-copy.png
 paste.label=$Paste
+paste.icon.small=16x16/actions/edit-paste.png
 select-all.label=Select $All
 word-count.label=$Word Count...
 complete-word.label=Co$mplete Word
@@ -405,6 +411,7 @@ search=find \
        hypersearch-results
 search.label=$Search
 find.label=$Find...
+find.icon.small=16x16/actions/edit-find.png
 find-next.label=Fi$nd Next
 find-prev.label=Find Pre$vious
 search-in-open-buffers.label=Search in Open $Buffers...
@@ -502,8 +509,10 @@ view=new-view \
      %docking
 view.label=$View
 new-view.label=New $View
+new-view.icon.small=16x16/actions/window-new.png
 new-plain-view.label=Ne$w Plain View
 close-view.label=$Close View
+close-view.icon.small=10x10/actions/close.png
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
@@ -589,10 +598,13 @@ utils=vfs.browser \
       %quick-options
 utils.label=$Utilities
 vfs.browser.label=$File System Browser
+vfs.browser.icon.small=16x16/apps/system-file-manager.png
 action-bar.label=$Action Bar
 last-action.label=Re$peat Last Action
 buffer-options.label=$Buffer Options...
+buffer-options.icon.small=16x16/actions/document-properties.png
 global-options.label=$Global Options...
+global-options.icon.small=16x16/categories/preferences-system.png
 
 #{{{ Recent Directories menu
 recent-directories.label=$Recent Directories
@@ -677,7 +689,9 @@ macros=record-macro \
 macros.code=new MacrosProvider();
 macros.label=Ma$cros
 record-macro.label=$Record Macro...
+record-macro.icon.small=16x16/actions/media-record.png
 stop-recording.label=$Stop Recording
+stop-recording.icon.small=16x16/actions/media-playback-stop.png
 last-macro.label=Repeat Last Macro
 record-temp-macro.label=Record $Temporary Macro
 run-temp-macro.label=Run Tem$porary Macro
