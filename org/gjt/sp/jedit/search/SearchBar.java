@@ -38,20 +38,19 @@ import org.gjt.sp.util.Log;
  * Incremental search tool bar.
  * @version $Id$
  */
-public class SearchBar extends JPanel
+public class SearchBar extends JToolBar
 {
 	//{{{ SearchBar constructor
 	public SearchBar(final View view, boolean temp)
 	{
-		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
-
 		this.view = view;
 
-		add(Box.createHorizontalStrut(2));
+		setFloatable(false);
+		addSeparator(new Dimension(2,2));
 
 		JLabel label = new JLabel(jEdit.getProperty("view.search.find"));
 		add(label);
-		add(Box.createHorizontalStrut(12));
+		addSeparator(new Dimension(12,12));
 		add(find = new HistoryTextField("find"));
 		find.setSelectAllOnFocus(true);
 
@@ -70,23 +69,27 @@ public class SearchBar extends JPanel
 
 		Insets margin = new Insets(1,1,1,1);
 
-		add(Box.createHorizontalStrut(12));
+		addSeparator(new Dimension(12,12));
+		
 		add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
 		ignoreCase.addActionListener(actionHandler);
 		ignoreCase.setMargin(margin);
+		ignoreCase.setOpaque(false);
 		ignoreCase.setRequestFocusEnabled(false);
-		add(Box.createHorizontalStrut(2));
+		addSeparator(new Dimension(2,2));
 		add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
+		regexp.setOpaque(false);
 		regexp.setRequestFocusEnabled(false);
-		add(Box.createHorizontalStrut(2));
+		addSeparator(new Dimension(2,2));
 		add(hyperSearch = new JCheckBox(jEdit.getProperty(
 			"search.hypersearch")));
 		hyperSearch.addActionListener(actionHandler);
 		hyperSearch.setMargin(margin);
+		hyperSearch.setOpaque(false);
 		hyperSearch.setRequestFocusEnabled(false);
 
 		update();

@@ -35,21 +35,20 @@ import org.gjt.sp.jedit.*;
 /**
  * Action invocation bar.
  */
-public class ActionBar extends JPanel
+public class ActionBar extends JToolBar
 {
 	//{{{ ActionBar constructor
 	public ActionBar(View view, boolean temp)
 	{
-		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
-
 		this.view = view;
 		this.temp = temp;
 
-		add(Box.createHorizontalStrut(2));
+		setFloatable(false);
+		addSeparator(new Dimension(2,2));
 
 		JLabel label = new JLabel(jEdit.getProperty("view.action.prompt"));
 		add(label);
-		add(Box.createHorizontalStrut(12));
+		addSeparator(new Dimension(12,12));
 		add(action = new ActionTextField());
 		action.setEnterAddsToHistory(false);
 		Dimension max = action.getPreferredSize();

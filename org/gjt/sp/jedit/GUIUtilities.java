@@ -364,7 +364,7 @@ public class GUIUtilities
 	 * @param name The toolbar name
 	 * @since jEdit 4.2pre2
 	 */
-	public static Box loadToolBar(String name)
+	public static Container loadToolBar(String name)
 	{
 		return loadToolBar(jEdit.getActionContext(),name);
 	} //}}}
@@ -378,10 +378,13 @@ public class GUIUtilities
 	 * @param name The toolbar name
 	 * @since jEdit 4.2pre2
 	 */
-	public static Box loadToolBar(ActionContext context, String name)
+	public static Container loadToolBar(ActionContext context, String name)
 	{
-		Box toolBar = new Box(BoxLayout.X_AXIS);
-
+		JPanel toolBar = new JPanel(new BorderLayout());
+		JToolBar toolB = new JToolBar();
+		toolB.setFloatable(false);
+		toolB.setMargin(new Insets(0,0,0,0));
+		
 		String buttons = jEdit.getProperty(name);
 		if(buttons != null)
 		{
@@ -390,18 +393,19 @@ public class GUIUtilities
 			{
 				String button = st.nextToken();
 				if(button.equals("-"))
-					toolBar.add(Box.createHorizontalStrut(12));
+				{
+					toolB.addSeparator(new Dimension(12,12));
+				}
 				else
 				{
 					JButton b = loadToolButton(context,button);
 					if(b != null)
-						toolBar.add(b);
+						toolB.add(b);
 				}
 			}
 		}
 
-		toolBar.add(Box.createGlue());
-
+		toolBar.add(toolB);
 		return toolBar;
 	} //}}}
 

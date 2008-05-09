@@ -215,7 +215,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * Returns the view's tool bar.
 	 * @since jEdit 4.2pre1
 	 */
-	public Box getToolBar()
+	public Container getToolBar()
 	{
 		return toolBar;
 	} //}}}
@@ -1280,7 +1280,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private JPanel bottomToolBars;
 	private ToolBarManager toolBarManager;
 
-	private Box toolBar;
+	private Container toolBar;
 	private SearchBar searchBar;
 	private ActionBar actionBar;
 

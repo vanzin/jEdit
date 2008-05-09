@@ -1151,7 +1151,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 
 	//{{{ createToolBar() method
-	private Box createToolBar()
+	private Container createToolBar()
 	{
 		if(mode == BROWSER)
 			return GUIUtilities.loadToolBar(actionContext,
@@ -1175,12 +1175,11 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 		if(jEdit.getBooleanProperty("vfs.browser.showToolbar"))
 		{
-			Box toolbar = createToolBar();
+			Container toolbar = createToolBar();
 			if(horizontalLayout)
 				toolbarBox.add(toolbar);
 			else
 			{
-				toolbar.add(Box.createGlue());
 				toolbarBox.add(toolbar);
 			}
 		}
