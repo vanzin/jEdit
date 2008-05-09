@@ -163,13 +163,17 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		private JTextArea textArea;
 		private ByteArrayOutputStream byteArrayOutputStream;
 		private PrintStream printStream;
+		private JButton removeThisError;
+		private JButton removeAllErrors;
+		private Object[] throwables;
+		private JComboBox combo;
 
 		private ErrorDialog(Frame view)
 		{
 			super(view, "Errors", true);
 			byteArrayOutputStream = new ByteArrayOutputStream();
 			printStream = new PrintStream(byteArrayOutputStream);
-			Object[] throwables = Log.throwables.toArray();
+			throwables = Log.throwables.toArray();
 			textArea = new JTextArea();
 			textArea.setEditable(false);
 			if (throwables.length != 0)
@@ -177,7 +181,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 				Throwable throwable = (Throwable) throwables[0];
 				setThrowable(throwable);
 			}
-			final JComboBox combo = new JComboBox(throwables);
+			combo = new JComboBox(throwables);
 			combo.addItemListener(new ItemListener()
 			{
 				public void itemStateChanged(ItemEvent e)
@@ -187,6 +191,22 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			});
 			getContentPane().add(combo, BorderLayout.NORTH);
 			getContentPane().add(new JScrollPane(textArea));
+
+
+
+			Box buttons = new Box(BoxLayout.X_AXIS);
+			buttons.add(Box.createGlue());
+
+			buttons.add(removeThisError = new JButton("Remove this error from list"));
+			buttons.add(Box.createHorizontalStrut(6));
+			buttons.add(removeAllErrors = new JButton("Remove all errors error from list"));
+			ErrorDialog.MyActionListener actionListener = new MyActionListener();
+			removeThisError.addActionListener(actionListener);
+			removeAllErrors.addActionListener(actionListener);
+			buttons.add(Box.createGlue());
+
+
+			getContentPane().add(buttons, BorderLayout.SOUTH);
 			pack();
 			GUIUtilities.loadGeometry(this,"status.errorWidget");
 			setVisible(true);
@@ -194,10 +214,17 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 
 		private void setThrowable(Throwable throwable)
 		{
-			throwable.printStackTrace(printStream);
-			textArea.setText(byteArrayOutputStream.toString());
-			textArea.setCaretPosition(0);
-			byteArrayOutputStream.reset();
+			if (throwable == null)
+			{
+				textArea.setText(null);
+			}
+			else
+			{
+				throwable.printStackTrace(printStream);
+				textArea.setText(byteArrayOutputStream.toString());
+				textArea.setCaretPosition(0);
+				byteArrayOutputStream.reset();
+			}
 		}
 
 		@Override
@@ -217,6 +244,35 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		public void cancel()
 		{
 			dispose();
+		}
+
+		private class MyActionListener implements ActionListener
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				Object source = e.getSource();
+				if (source == removeThisError)
+				{
+					Throwable throwable = (Throwable) combo.getSelectedItem();
+					if (throwable != null)
+					{
+						Log.throwables.remove(throwable);
+						combo.removeItem(throwable);
+						if (combo.getItemCount() == 0)
+						{
+							dispose();
+						}
+					}
+				}
+				else if (source == removeAllErrors)
+				{
+					for (Object throwable : throwables)
+					{
+						Log.throwables.remove(throwable);
+					}
+					dispose();
+				}
+			}
 		}
 	}
 	//}}}
