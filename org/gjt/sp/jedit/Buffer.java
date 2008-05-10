@@ -96,7 +96,7 @@ public class Buffer extends JEditBuffer
 	public static final String CARET_POSITIONED = "Buffer__caretPositioned";
 
 	/**
-	 * Stores a List of {@link Selection} instances.
+	 * Stores a List of {@link org.gjt.sp.jedit.textarea.Selection} instances.
 	 */
 	public static final String SELECTION = "Buffer__selection";
 
@@ -590,8 +590,8 @@ public class Buffer extends JEditBuffer
 					updateMarkersFile(view);
 				}
 			});
-		
-		int check = jEdit.getIntegerProperty("checkFileStatus"); 
+
+		int check = jEdit.getIntegerProperty("checkFileStatus");
 		if((! disableFileStatusCheck) && (check == 1 || check == 2))
 			jEdit.checkBufferStatus(view,false);
 
@@ -2009,7 +2009,7 @@ public class Buffer extends JEditBuffer
 	//{{{ editSyntaxStyle() method
 	/**
 	 * Edit the syntax style of the token under the caret.
-	 * 
+	 *
 	 * @param textArea the textarea where your caret is
 	 * @since jEdit 4.3pre11
 	 */
@@ -2017,11 +2017,11 @@ public class Buffer extends JEditBuffer
 		int lineNum = textArea.getCaretLine();
 		int start = getLineStartOffset(lineNum);
 		int position = textArea.getCaretPosition();
-		
+
 		DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
 		markTokens(lineNum,tokenHandler);
 		Token token = tokenHandler.getTokens();
-	
+
 		while(token.id != Token.END)
 		{
 			int next = start + token.length;

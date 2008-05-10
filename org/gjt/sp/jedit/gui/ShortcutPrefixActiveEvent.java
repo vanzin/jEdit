@@ -35,8 +35,8 @@ import org.gjt.sp.util.Log;
 /**
  *  Description of the Class
  *
- *@author     jchoyt
- *@created    December 17, 2005
+ * @author     jchoyt
+ * created    December 17, 2005
  */
 public class ShortcutPrefixActiveEvent extends ChangeEvent
 {

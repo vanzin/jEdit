@@ -384,7 +384,7 @@ public class GUIUtilities
 		JToolBar toolB = new JToolBar();
 		toolB.setFloatable(false);
 		toolB.setMargin(new Insets(0,0,0,0));
-		
+
 		String buttons = jEdit.getProperty(name);
 		if(buttons != null)
 		{
@@ -1377,7 +1377,7 @@ public class GUIUtilities
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
 	 * @since jEdit 4.0pre1
-	 * @see {@link javax.swing.JComponent#setComponentPopupMenu(javax.swing.JPopupMenu)},
+	 * @see javax.swing.JComponent#setComponentPopupMenu(javax.swing.JPopupMenu) setComponentPopupMenu
 	 * which works better and is simpler to use: you don't have to write the code to
 	 * show/hide popups in response to mouse events anymore.
 	 */

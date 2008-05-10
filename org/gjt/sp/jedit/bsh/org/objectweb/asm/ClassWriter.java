@@ -25,11 +25,11 @@
 package org.gjt.sp.jedit.bsh.org.objectweb.asm;
 
 /**
- * A {@link ClassVisitor ClassVisitor} that generates Java class files. More
+ * A {@link org.gjt.sp.jedit.bsh.org.objectweb.asm.ClassVisitor ClassVisitor} that generates Java class files. More
  * precisely this visitor generates a byte array conforming to the Java class
  * file format. It can be used alone, to generate a Java class "from scratch",
- * or with one or more {@link ClassReader ClassReader} and adapter class
- * visitor to generate a modified class from one or more existing Java classes.
+ * or with one or more adapter class
+ * visitors to generate a modified class from one or more existing Java classes.
  */
 
 public class ClassWriter implements ClassVisitor {

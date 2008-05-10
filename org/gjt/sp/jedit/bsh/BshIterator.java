@@ -7,7 +7,7 @@
  *                                                                           *
  *  The contents of this file are subject to the Sun Public License Version  *
  *  1.0 (the "License"); you may not use this file except in compliance with *
- *  the License. A copy of the License is available at http://www.sun.com    * 
+ *  the License. A copy of the License is available at http://www.sun.com    *
  *                                                                           *
  *  The Original Code is BeanShell. The Initial Developer of the Original    *
  *  Code is Pat Niemeyer. Portions created by Pat Niemeyer are Copyright     *
@@ -34,24 +34,24 @@
 package org.gjt.sp.jedit.bsh;
 
 /**
-	An interface implemented by classes wrapping instances of iterators,
-	enumerations, collections, etc.
-	@see CollectionManager.getBshIterator(Object)
+    An interface implemented by classes wrapping instances of iterators,
+    enumerations, collections, etc.
+    @see CollectionManager#getBshIterator(Object) getBshIterator
 */
-public interface BshIterator 
+public interface BshIterator
 {
-	/**
-	 * Fetch the next object in the iteration
-	 *
-	 * @return The next object
-	 */
-	public Object next();
-	
-	/**
-	 * Returns true if and only if there are more objects available
-	 * via the <code>next()</code> method
-	 *
-	 * @return The next object
-	 */
-	public boolean hasNext();
+    /**
+     * Fetch the next object in the iteration
+     *
+     * @return The next object
+     */
+    public Object next();
+
+    /**
+     * Returns true if and only if there are more objects available
+     * via the <code>next()</code> method
+     *
+     * @return The next object
+     */
+    public boolean hasNext();
 }

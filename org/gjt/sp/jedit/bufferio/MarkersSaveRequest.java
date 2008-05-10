@@ -3,7 +3,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * based on jEdit.buffer.BufferSaveRequest (Copyright (C) 2000, 2005 Slava Pestov)
- * Copyright (C) 2005 Martin Raspe 
+ * Copyright (C) 2005 Martin Raspe
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -32,10 +32,10 @@ import org.gjt.sp.util.*;
 
 /**
  * A save request for markers. Factored out from BufferSaveRequest.java
- * 
+ *
  * @author     Martin Raspe
- * @created    May 20, 2005
- * @modified   $Date: 2006/03/10 12:49:17 $ by $Author: hertzhaft $
+ * created    May 20, 2005
+ * modified   $Date: 2006/03/10 12:49:17 $ by $Author: hertzhaft $
  */
 
 public class MarkersSaveRequest extends WorkRequest
@@ -64,7 +64,7 @@ public class MarkersSaveRequest extends WorkRequest
 		this.markersPath = Buffer.getMarkersPath(vfs, path);
 
 	} //}}}
-	
+
 	//{{{ run() method
 	public void run()
 	{

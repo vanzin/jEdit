@@ -72,7 +72,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	 * It is used to restore the selection after the filter has been applied
 	 * If it is null,
 	 *
-	 * @param table the table that uses the model
+	 * @param list the list that uses the model
 	 */
 	public void setList(JList list)
 	{

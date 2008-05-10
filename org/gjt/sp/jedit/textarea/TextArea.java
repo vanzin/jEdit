@@ -583,9 +583,10 @@ public class TextArea extends JComponent
 	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
 	 * however since jEdit must run with Java 1.3, this class only has the
 	 * necessary support to call a hook method via reflection. This method
-	 * is called by the {@link org.gjt.sp.jedit.Java14} class to signal that
+	 * is called by the org.gjt.sp.jedit.Java14 class to signal that
 	 * a drag is in progress.
 	 * @since jEdit 4.2pre5
+	 * @deprecated the org.gjt.jedit.Java14 class no longer exists.
 	 */
 	public boolean isDragInProgress()
 	{
@@ -597,9 +598,10 @@ public class TextArea extends JComponent
 	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
 	 * however since jEdit must run with Java 1.3, this class only has the
 	 * necessary support to call a hook method via reflection. This method
-	 * is called by the {@link org.gjt.sp.jedit.Java14} class to signal that
+	 * is called by the org.gjt.sp.jedit.Java14 class to signal that
 	 * a drag is in progress.
 	 * @since jEdit 4.2pre5
+	 * @deprecated the org.gjt.jedit.Java14 class no longer exists.
 	 */
 	public void setDragInProgress(boolean dndInProgress)
 	{

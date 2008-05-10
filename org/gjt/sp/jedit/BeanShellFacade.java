@@ -46,7 +46,7 @@ import org.gjt.sp.util.Log;
 public abstract class BeanShellFacade<T>
 {
 	//{{{ BeanShellFacade constructor
-	public BeanShellFacade() 
+	public BeanShellFacade()
 	{
 		classManager = new ClassManagerImpl();
 		classManager.setClassLoader(new JARClassLoader());
@@ -70,7 +70,7 @@ public abstract class BeanShellFacade<T>
 		global.importPackage("org.gjt.sp.jedit.textarea");
 		global.importPackage("org.gjt.sp.util");
 	} //}}}
-	
+
 	//{{{ evalSelection() method
 	/**
 	 * Evaluates the text selected in the specified text area.
@@ -87,7 +87,7 @@ public abstract class BeanShellFacade<T>
 		if(returnValue != null)
 			textArea.setSelectedText(returnValue.toString());
 	} //}}}
-	
+
 	//{{{ eval() method
 	/**
 	 * Evaluates the specified BeanShell expression with the global namespace
@@ -98,7 +98,7 @@ public abstract class BeanShellFacade<T>
 	{
 		return eval(param, global, command);
 	} //}}}
-	
+
 	//{{{ eval() method
 	/**
 	 * Evaluates the specified BeanShell expression. Errors are reported in
@@ -122,7 +122,7 @@ public abstract class BeanShellFacade<T>
 
 		return null;
 	} //}}}
-	
+
 	//{{{ _eval() method
 	/**
 	 * Evaluates the specified BeanShell expression. Unlike
@@ -166,7 +166,7 @@ public abstract class BeanShellFacade<T>
 			}
 		}
 	} //}}}
-	
+
 	//{{{ cacheBlock() method
 	/**
 	 * Caches a block of code, returning a handle that can be passed to
@@ -194,13 +194,12 @@ public abstract class BeanShellFacade<T>
 			return global.getMethod(name,new Class[0]);
 		}
 	} //}}}
-	
+
 	//{{{ runCachedBlock() method
 	/**
 	 * Runs a cached block of code in the specified namespace. Faster than
 	 * evaluating the block each time.
 	 * @param method The method instance returned by cacheBlock()
-	 * @param view The view
 	 * @param namespace The namespace to run the code in
 	 * @exception Exception instances are thrown when various BeanShell
 	 * errors occur
@@ -246,7 +245,7 @@ public abstract class BeanShellFacade<T>
 			resetDefaultVariables(namespace);
 		}
 	} //}}}
-	
+
 	//{{{ getNameSpace() method
 	/**
 	 * Returns the global namespace.
@@ -255,7 +254,7 @@ public abstract class BeanShellFacade<T>
 	{
 		return global;
 	} //}}}
-	
+
 	//{{{ resetClassManager() method
 	/**
 	 * Causes BeanShell internal structures to drop references to cached
@@ -265,27 +264,27 @@ public abstract class BeanShellFacade<T>
 	{
 		classManager.reset();
 	} //}}}
-	
+
 	//{{{ setupDefaultVariables() method
 	protected abstract void setupDefaultVariables(NameSpace namespace, T param)
 		throws UtilEvalError;
 	//}}}
 
 	//{{{ resetDefaultVariables() method
-	protected abstract void resetDefaultVariables(NameSpace namespace) 
+	protected abstract void resetDefaultVariables(NameSpace namespace)
 		throws UtilEvalError;
 	//}}}
-	
+
 	//{{{ handleException() method
 	protected abstract void handleException(T param, String path, Throwable t);
 	//}}}
-	
+
 	//{{{ createInterpreter() method
 	protected static Interpreter createInterpreter(NameSpace nameSpace)
 	{
 		return new Interpreter(null,System.out,System.err,false,nameSpace);
 	} //}}}
-	
+
 	//{{{ unwrapException() method
 	/**
 	 * This extracts an exception from a 'wrapping' exception, as BeanShell
@@ -313,7 +312,7 @@ public abstract class BeanShellFacade<T>
 
 		throw e;
 	} //}}}
-	
+
 	//{{{ Static variables
 	protected NameSpace global;
 	private BshClassManager classManager;

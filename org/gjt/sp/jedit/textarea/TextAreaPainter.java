@@ -190,7 +190,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	/**
 	 * Returns the syntax styles used to paint colorized text. Entry <i>n</i>
 	 * will be used to paint tokens with id = <i>n</i>.
-	 * @return 
+	 * @return an array of SyntaxStyles
 	 * @see org.gjt.sp.jedit.syntax.Token
 	 */
 	public final SyntaxStyle[] getStyles()
@@ -506,12 +506,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	@Deprecated
 	public void setAntiAliasEnabled(boolean isEnabled) {
-		
+
 		setAntiAlias(new AntiAlias(isEnabled));
 	}
 	/**
 	 * As of jEdit 4.3pre4, a new JDK 1.6 subpixel antialias mode is supported.
-	 * 
+	 *
 	 * @since jEdit 4.2pre4
 	 */
 	public void setAntiAlias(AntiAlias newValue)
@@ -527,7 +527,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public AntiAlias getAntiAlias() {
 		return antiAlias;
 	}
-	
+
 	//{{{ isAntiAliasEnabled() method
 	/**
 	 * Returns if anti-aliasing is enabled.
@@ -695,7 +695,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		paint(_gfx);
 	} //}}}
-	
+
 	//{{{ paint() method
 	/**
 	 * Repaints the text.
@@ -870,8 +870,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	private static Object sm_hrgbRender = null;
 	private static Constructor sm_frcConstructor = null;
-	
-	static 
+
+	static
 	{
 		try
 		{
@@ -902,32 +902,32 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 		/** LCD HRGB mode - works with JRE 1.6 only, which is why we use reflection */
 		else if (antiAlias.val() == 2 && sm_hrgbRender != null )
-		{ 
+		{
 			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, sm_hrgbRender);
-			Object fontRenderHint = fracFontMetrics ? 
+			Object fontRenderHint = fracFontMetrics ?
 				RenderingHints.VALUE_FRACTIONALMETRICS_ON :
 				RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
 			Object[] paramList = new Object[] {null, sm_hrgbRender, fontRenderHint};
-			try 
+			try
 			{
 				fontRenderContext = (FontRenderContext) sm_frcConstructor.newInstance(paramList);
 			}
-			catch (Exception e) 
+			catch (Exception e)
 			{
 				fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 			}
 		}
-		else /** Standard Antialias Version */  
+		else /** Standard Antialias Version */
 		{
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			hints.put(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
 			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
-		} 
+		}
 
 		renderingHints = new RenderingHints(hints);
-	       
-		
+
+
 	} //}}}
 
 	//}}}
@@ -955,7 +955,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			else
 				return (count == 0);
 		} //}}}
-		
+
 		//{{{ paintValidLine() method
 		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
@@ -1210,7 +1210,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				return;
 
 			int offset = caret - textArea.getLineStartOffset(physicalLine);
-			textArea.offsetToXY(physicalLine, 
+			textArea.offsetToXY(physicalLine,
 					    offset, textArea.offsetXY);
 			int caretX = textArea.offsetXY.x;
 			int lineHeight = fm.getHeight();
