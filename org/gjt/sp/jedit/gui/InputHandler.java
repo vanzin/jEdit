@@ -63,7 +63,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 
 	//{{{ handleKey() method
 	/**
- 	 * Handles a keystroke.
+	 * Handles a keystroke.
 	 * @param keyStroke The key stroke.
 	 * @return true if the input could be handled.
 	 * @since jEdit 4.2pre5
@@ -122,8 +122,6 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 			if(keyEventInterceptor != null)
 				keyEventInterceptor.keyTyped(evt);
 			else if(from == View.ACTION_BAR
-				|| (Debug.GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES &&
-				    Options.SIMPLIFIED_KEY_HANDLING)
 				|| isPrefixActive()
 				|| view.getTextArea().hasFocus())
 			{
@@ -161,64 +159,30 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 			break;
 		}
 	} //}}}
-	
+
 	//{{{ _preprocessKeyEvent() method
 	private KeyEvent _preprocessKeyEvent(KeyEvent evt)
 	{
 		if(view.isClosed())
 			return null;
 		Component focusOwner = view.getFocusOwner();
-		if (Options.SIMPLIFIED_KEY_HANDLING)
+		if(focusOwner instanceof JComponent)
 		{
-			/*
-				It seems that the "else" path below does
-				not work. Apparently, is is there to prevent
-				some keyboard events to be "swallowed" by
-				jEdit when the keyboard event in fact should
-				be scheduled to swing for further handling.
+			JComponent comp = (JComponent)focusOwner;
+			InputMap map = comp.getInputMap();
+			ActionMap am = comp.getActionMap();
 
-				On some "key typed" events, the "return null;"
-				is triggered. However, these key events
-				actually do not seem to be handled elseewhere,
-				so they are not handled at all.
-
-				This behaviour exists with old keyboard handling
-				as well as with new keyboard handling. However,
-				the new keyboard handling is more sensitive
-				about what kinds of key events it receives. It
-				expects to see all "key typed" events,
-				which is incompatible with the "return null;"
-				below.
-
-				This bug triggers jEdit bug 1493185 ( https://sourceforge.net/tracker/?func=detail&aid=1493185&group_id=588&atid=100588 ).
-
-				Thus, we disable the possibility of
-				key event swallowing for the new key event
-				handling.
-
-			*/
-		}
-		else
-		{
-			if(focusOwner instanceof JComponent)
+			if(map != null && am != null && comp.isEnabled())
 			{
-				JComponent comp = (JComponent)focusOwner;
-				InputMap map = comp.getInputMap();
-				ActionMap am = comp.getActionMap();
-
-				if(map != null && am != null && comp.isEnabled())
+				KeyStroke	keyStroke	= KeyStroke.getKeyStrokeForEvent(evt);
+				Object binding = map.get(keyStroke);
+				if(binding != null && am.get(binding) != null)
 				{
-					KeyStroke	keyStroke	= KeyStroke.getKeyStrokeForEvent(evt);
-					Object binding = map.get(keyStroke);
-					if(binding != null && am.get(binding) != null)
-					{
-						return null;
-					}
+					return null;
 				}
 			}
 		}
-
-		if(focusOwner instanceof JTextComponent)
+		else if(focusOwner instanceof JTextComponent)
 		{
 			// fix for the bug where key events in JTextComponents
 			// inside views are also handled by the input handler

@@ -118,7 +118,7 @@ public class jEdit
 		// MacOS users expect the app to keep running after all windows
 		// are closed
 		background = OperatingSystem.isMacOS();
-		
+
 		//{{{ Parse command line
 		boolean endOpts = false;
 		int level = Log.WARNING;
@@ -385,11 +385,11 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress("loading user properties");
 		initUserProperties();
-		
+
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
-		
-		Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
+
+		///Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
 
 		//{{{ Initialize server
@@ -1224,11 +1224,11 @@ public class jEdit
 	// {{{ getActionSets() method
 	/**
 	 * Returns all registered action sets.
-	 * 
+	 *
 	 * @return the ActionSet(s)
 	 * @since jEdit 4.0pre1
 	 */
-	public static ActionSet[] getActionSets() 
+	public static ActionSet[] getActionSets()
 	{
 		return actionContext.getActionSets();
 	} // }}}
@@ -1476,7 +1476,7 @@ public class jEdit
 			if (u.getProtocol().equals("file"))
 				path = URLDecoder.decode(u.getPath());
 		}
-		catch (MalformedURLException mue) 
+		catch (MalformedURLException mue)
 		{
 			path = MiscUtilities.constructPath(parent,path);
 		}
@@ -1947,7 +1947,7 @@ public class jEdit
 
 		// save caret info. Buffer.load() will load it.
 		visit(new SaveCaretInfoVisitor());
-		
+
 
 		for(int i = 0; i < buffers.length; i++)
 		{
@@ -2514,11 +2514,11 @@ public class jEdit
 			propsModTime = file2.lastModified();
 		}
 	} //}}}
-	
+
 	// {{{ createTextArea() method
 	/**
 	 * Create a standalone TextArea.
-	 * 
+	 *
 	 * @return a textarea
 	 * @since 4.3pre13
 	 */
@@ -2724,7 +2724,7 @@ public class jEdit
 						new String[] { subst.toString() });
 					if(subst instanceof Throwable)
 						Log.log(Log.ERROR,this,subst);
-					if (subst instanceof SAXParseException) 
+					if (subst instanceof SAXParseException)
 					{
 						line = ((SAXParseException)subst).getLineNumber();
 					}
@@ -3543,7 +3543,7 @@ public class jEdit
 	private static void finishStartup(final boolean gui, final boolean restore,
 		final String userDir, final String[] args)
 	{
-		SwingUtilities.invokeLater(new Runnable() 
+		SwingUtilities.invokeLater(new Runnable()
 		{
 			public void run()
 			{
@@ -3702,7 +3702,7 @@ loop:		for(int i = 0; i < list.length; i++)
 				else
 					throw new InternalError();
 
-				if(view != null && view.getBuffer() == buffer) 
+				if(view != null && view.getBuffer() == buffer)
 				{
 					view.getTextArea().setCaretPosition(pos);
 					buffer.setIntegerProperty(Buffer.CARET,pos);
@@ -3962,7 +3962,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	//{{{ initKeyBindings() method
 	/**
 	 * Loads all key bindings from the properties.
-	 * 
+	 *
 	 * @since 3.1pre1
 	 */
 	private static void initKeyBindings()
@@ -3970,7 +3970,7 @@ loop:		for(int i = 0; i < list.length; i++)
 		inputHandler.removeAllKeyBindings();
 
 		ActionSet[] actionSets = getActionSets();
-		for (int i = 0; i < actionSets.length; i++) 
+		for (int i = 0; i < actionSets.length; i++)
 		{
 			actionSets[i].initKeyBindings();
 		}
@@ -4022,107 +4022,47 @@ loop:		for(int i = 0; i < list.length; i++)
 
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
-			if (Options.SIMPLIFIED_KEY_HANDLING)
+			if(!evt.isConsumed())
 			{
-				boolean result;
+				Component comp = (Component)evt.getSource();
+				if(!comp.isShowing())
+					return true;
 
-				/*
-					Commenting this out is experimental.
-
-					This code (if not commented out) seems to be the cause for
-					https://sourceforge.net/tracker/index.php?func=detail&aid=1542026&group_id=588&atid=100588
-
-					Because the simplified key handling is still experimental, breaking things here is still allowed. ;-)
-
-					My intuition says that we should separate
-					(1) key sequences which invoke some special actions against
-					(2) key sequences which are ordinary input.
-
-					While the former should be available in most or all jEdit windows,
-					the latter should be available only within jEdit buffers.
-
-					Currently, it seems, both former and latter are handled globally, leading to the errorneous behaviour
-					of emitting keys to the buffer which are intendet to popup menus.
-
-					Commenting this out leads to an inavailability of keyboard shortcuts if other windows than a View have the focus. (This is a regression.)
-					In the long term, we should really separate global key-sequence triggered actions from local input.
-				*/
-				if(!evt.isConsumed())
+				for(;;)
 				{
-					Component comp = (Component)evt.getSource();
-					if(!comp.isShowing())
-						return true;
-
-					for(;;)
+					if(comp instanceof View)
 					{
-						if(comp instanceof View)
-						{
-							((View)comp).processKeyEvent(evt,View.VIEW,true);
-							return true;
-						}
-						else if(comp == null || comp instanceof Window
-							|| comp instanceof JEditTextArea)
-						{
-							if (comp instanceof PluginManager)
-							{
-								evt.setSource(comp);
-								((PluginManager)comp).processKeyEvents(evt);
-							}
-							break;
-						}
-						else
-							comp = comp.getParent();
-					}
-				}
-
-				result = super.postProcessKeyEvent(evt);
-
-				return result;
-			}
-			else
-			{
-				if(!evt.isConsumed())
-				{
-					Component comp = (Component)evt.getSource();
-					if(!comp.isShowing())
+						((View)comp).getInputHandler().processKeyEvent(evt,
+							View.VIEW, false);
 						return true;
-
-					for(;;)
-					{
-						if(comp instanceof View)
-						{
-							((View)comp).getInputHandler().processKeyEvent(evt,
-								View.VIEW, false);
-							return true;
-						}
-						else if(comp == null || comp instanceof Window
-							|| comp instanceof JEditTextArea)
-						{
-							if (comp instanceof PluginManager)
-							{
-								evt.setSource(comp);
-								((PluginManager)comp).processKeyEvents(evt);
-							}
-							break;
-						}
-						else
-							comp = comp.getParent();
 					}
+					else if(comp == null || comp instanceof Window
+						|| comp instanceof JEditTextArea)
+					{
+						if (comp instanceof PluginManager)
+						{
+							evt.setSource(comp);
+							((PluginManager)comp).processKeyEvents(evt);
+						}
+						break;
+					}
+					else
+						comp = comp.getParent();
 				}
-
-				return super.postProcessKeyEvent(evt);
 			}
+
+			return super.postProcessKeyEvent(evt);
 		}
 	} //}}}
 
 	//{{{ JEditPropertyManager class
 	public static class JEditPropertyManager implements IPropertyManager
 	{
-		public String getProperty(String name) 
+		public String getProperty(String name)
 		{
 			return jEdit.getProperty(name);
 		}
 	} //}}}
-	
-	private static final JEditPropertyManager propertyManager = new JEditPropertyManager(); 
+
+	private static final JEditPropertyManager propertyManager = new JEditPropertyManager();
 }

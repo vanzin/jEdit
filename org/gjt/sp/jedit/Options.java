@@ -26,8 +26,13 @@ package org.gjt.sp.jedit;
  *
  * @author Matthieu Casanova
  * @version $Id: MCSTrapProcessor.java,v 1.1 2006/02/07 13:01:17 matthieu Exp $
+ * @deprecated
  */
 public class Options
 {
+	/*
+	This class is no longer used and is only retained for the unlikely
+	chance that some plugin might be using it.
+	*/
 	public static boolean SIMPLIFIED_KEY_HANDLING;
 }

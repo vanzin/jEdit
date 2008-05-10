@@ -26,7 +26,6 @@ package org.gjt.sp.jedit.options;
 
 import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.Options;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
@@ -55,9 +54,8 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restoreCLI;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
-	private JCheckBox newKeyboardHandling;
 	//}}}
-	
+
 	//{{{ GeneralOptionPane constructor
 	public GeneralOptionPane()
 	{
@@ -67,7 +65,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ _init() method
 	protected void _init()
 	{
-		
+
 		/* Line separator */
 		String[] lineSeps = { jEdit.getProperty("lineSep.unix"),
 			jEdit.getProperty("lineSep.windows"),
@@ -154,7 +152,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		/* Session management */
 		restore = new JCheckBox(jEdit.getProperty(
 			"options.general.restore"));
-		
+
 		restore.setSelected(jEdit.getBooleanProperty("restore"));
 		restore.addActionListener(new ActionListener()
 		{
@@ -166,13 +164,13 @@ public class GeneralOptionPane extends AbstractOptionPane
 		});
 
 		addComponent(restore);
-		
+
 		restoreRemote = new JCheckBox(jEdit.getProperty(
 			"options.general.restore.remote"));
 		restoreRemote.setSelected(jEdit.getBooleanProperty("restore.remote", false));
 		restoreRemote.setEnabled(restore.isSelected());
 		addComponent(restoreRemote);
-		
+
 		restoreCLI = new JCheckBox(jEdit.getProperty(
 			"options.general.restore.cli"));
 		restoreCLI.setSelected(jEdit.getBooleanProperty("restore.cli"));
@@ -199,11 +197,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
 		sortByName.setEnabled(sortBuffers.isSelected());
 		addComponent(sortByName);
-		
-		newKeyboardHandling = new JCheckBox(jEdit.getProperty("options.general.newkeyhandling"));
-		newKeyboardHandling.setToolTipText(jEdit.getProperty("options.general.newkeyhandling.tooltip"));
-		newKeyboardHandling.setSelected(jEdit.getBooleanProperty("newkeyhandling"));
-		addComponent(newKeyboardHandling);
 
 		hypersearchResultsWarning = new JTextField(jEdit.getProperty("hypersearch.maxWarningResults"));
 		addComponent(jEdit.getProperty("options.general.hypersearch.maxWarningResults"),
@@ -216,7 +209,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	//{{{ _save() method
 	protected void _save()
 	{
-		
+
 		String lineSep = null;
 		switch(lineSeparator.getSelectedIndex())
 		{
@@ -253,9 +246,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setIntegerProperty("checkFileStatus",checkModStatusUpon.getSelectedIndex());
 		jEdit.setProperty("recentFiles",recentFiles.getText());
 		jEdit.setBooleanProperty("sortRecent",sortRecent.isSelected());
-		boolean nkh = newKeyboardHandling.isSelected();
-		jEdit.setBooleanProperty("newkeyhandling", nkh);
-		Options.SIMPLIFIED_KEY_HANDLING = nkh;
 		jEdit.setBooleanProperty("saveCaret",saveCaret.isSelected());
 		jEdit.setBooleanProperty("persistentMarkers",
 			persistentMarkers.isSelected());

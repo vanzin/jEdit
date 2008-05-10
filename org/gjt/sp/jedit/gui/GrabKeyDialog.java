@@ -57,7 +57,7 @@ public class GrabKeyDialog extends JDialog
 			id = "unknown type";
 			break;
 		}
-		
+
 		StringBuilder b = new StringBuilder(50);
 
 		b.append(id + ",keyCode=0x"
@@ -66,10 +66,10 @@ public class GrabKeyDialog extends JDialog
 			+ Integer.toString(evt.getKeyChar(),16)
 			+ ",modifiers=0x"
 			+ Integer.toString(evt.getModifiers(),16));
-		
+
 		b.append(",consumed=");
 		b.append(evt.isConsumed()?'1':'0');
-			
+
 		return b.toString();
 	} //}}}
 
@@ -190,15 +190,6 @@ public class GrabKeyDialog extends JDialog
 		JPanel content = new JPanel(new GridLayout(0,1,0,6))
 		{
 			/**
-			 * Returns if this component can be traversed by pressing the
-			 * Tab key. This returns false.
-			 */
-			public boolean isManagingFocus()
-			{
-				return false;
-			}
-
-			/**
 			 * Makes the tab key work in Java 1.4.
 			 * @since jEdit 3.2pre4
 			 */
@@ -276,7 +267,7 @@ public class GrabKeyDialog extends JDialog
 		if (Debug.DUMP_KEY_EVENTS) {
 			Log.log(Log.DEBUG,GrabKeyDialog.class,"getSymbolicName("+keyCode+").");
 		}
-		
+
 		if(keyCode == KeyEvent.VK_UNDEFINED)
 			return null;
 		/* else if(keyCode == KeyEvent.VK_OPEN_BRACKET)
@@ -430,7 +421,7 @@ public class GrabKeyDialog extends JDialog
 
 			KeyEventTranslator.Key key = KeyEventTranslator
 				.translateKeyEvent(evt);
-				
+
 			if (Debug.DUMP_KEY_EVENTS) {
 				Log.log(Log.DEBUG,GrabKeyDialog.class,"processKeyEvent() key="+key+", _evt="+_evt+".");
 			}
@@ -449,44 +440,24 @@ public class GrabKeyDialog extends JDialog
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
 
-			if (!Options.SIMPLIFIED_KEY_HANDLING) {
-				if(key.modifiers != null)
-					keyString.append(key.modifiers).append('+');
-	
-				if(key.input == ' ')
-					keyString.append("SPACE");
-				else if(key.input != '\0')
-					keyString.append(key.input);
-				else
-				{
-					String symbolicName = getSymbolicName(key.key);
-	
-					if(symbolicName == null)
-						return;
-	
-					keyString.append(symbolicName);
-				}
+			if(key.modifiers != null) {
+				keyString.append(key.modifiers).append('+');
+			}
+
+			String symbolicName = getSymbolicName(key.key);
+
+			if(symbolicName != null) {
+				keyString.append(symbolicName);
 			} else {
-				if(key.modifiers != null) {
-					keyString.append(key.modifiers).append('+');
-				}
-				
-				String symbolicName = getSymbolicName(key.key);
-
-				if(symbolicName != null) { 
-					keyString.append(symbolicName);
-				} else {
-					if (key.input != '\0') {
-						if (key.input == ' ') {
-							keyString.append("SPACE");
-						} else {
-							keyString.append(key.input);
-						}
+				if (key.input != '\0') {
+					if (key.input == ' ') {
+						keyString.append("SPACE");
 					} else {
-						return;
+						keyString.append(key.input);
 					}
+				} else {
+					return;
 				}
-
 			}
 
 			setText(keyString.toString());

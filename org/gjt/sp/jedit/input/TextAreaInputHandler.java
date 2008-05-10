@@ -134,54 +134,6 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 	 */
 	private KeyEvent _preprocessKeyEvent(KeyEvent evt)
 	{
-		Component focusOwner = textArea;
-		if (true /*Options.SIMPLIFIED_KEY_HANDLING*/)
-		{
-			/*
-				It seems that the "else" path below does
-				not work. Apparently, is is there to prevent
-				some keyboard events to be "swallowed" by
-				jEdit when the keyboard event in fact should
-				be scheduled to swing for further handling.
-
-				On some "key typed" events, the "return null;"
-				is triggered. However, these key events
-				actually do not seem to be handled elseewhere,
-				so they are not handled at all.
-
-				This behaviour exists with old keyboard handling
-				as well as with new keyboard handling. However,
-				the new keyboard handling is more sensitive
-				about what kinds of key events it receives. It
-				expects to see all "key typed" events,
-				which is incompatible with the "return null;"
-				below.
-
-				This bug triggers jEdit bug 1493185 ( https://sourceforge.net/tracker/?func=detail&aid=1493185&group_id=588&atid=100588 ).
-
-				Thus, we disable the possibility of
-				key event swallowing for the new key event
-				handling.
-
-			*/
-		}
-		else
-		{
-			JComponent comp = (JComponent)focusOwner;
-			InputMap map = comp.getInputMap();
-			ActionMap am = comp.getActionMap();
-
-			if(map != null && am != null && comp.isEnabled())
-			{
-				KeyStroke keyStroke = KeyStroke.getKeyStrokeForEvent(evt);
-				Object binding = map.get(keyStroke);
-				if(binding != null && am.get(binding) != null)
-				{
-					return null;
-				}
-			}
-		}
-
 		if(evt.isConsumed())
 			return null;
 
@@ -205,7 +157,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 			textArea.requestFocus();
 		}
 	} //}}}
-	
+
 	//{{{ getAction() method
 	protected abstract JEditBeanShellAction getAction(String action);
 	//}}}
@@ -255,28 +207,6 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 			action.invoke(textArea);
 		else
 		{
-			// stop people doing dumb stuff like C+ENTER 100 C+n
-			if(_repeatCount > REPEAT_COUNT_THRESHOLD)
-			{
-				/*String label = action.getLabel();
-				if(label == null)
-					label = action.getName();
-				else
-					label = GUIUtilities.prettifyMenuLabel(label);
-
-				Object[] pp = { label, _repeatCount };
-
-				if(GUIUtilities.confirm(view,"large-repeat-count",pp,
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION)
-					!= JOptionPane.YES_OPTION)
-				{
-					repeatCount = 1;
-					view.getStatus().setMessage(null);
-					return;
-				}*/
-			}
-
 			try
 			{
 				buffer.beginCompoundEdit();
@@ -302,7 +232,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 			repeatCount = 1;
 		}
 	} //}}}
-	
+
 	//{{{ handleKey() method
 	/**
 	 * Handles the given keystroke.
@@ -332,7 +262,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 		{
 			if(input != '\0')
 			{
-				if (!dryRun) 
+				if (!dryRun)
 				{
 					setCurrentBindings(bindings);
 					invokeReadNextChar(input);
@@ -342,7 +272,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 			}
 			else
 			{
-				if (!dryRun) 
+				if (!dryRun)
 				{
 					readNextChar = null;
 				}
@@ -372,7 +302,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 					{ // let user input be only local
 						userInput(input);
 					}
-				} 
+				}
 				else
 				{
 					// this is retarded. excuse me while I drool
@@ -428,40 +358,6 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 
 		if(repeatCount == 1)
 			textArea.userInput(ch);
-		else
-		{
-			// stop people doing dumb stuff like C+ENTER 100 C+n
-			/*if(repeatCount > REPEAT_COUNT_THRESHOLD)
-			{
-				Object[] pp = { String.valueOf(ch),
-					repeatCount };
-
-				if(GUIUtilities.confirm(view,
-					"large-repeat-count.user-input",pp,
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION)
-					!= JOptionPane.YES_OPTION)
-				{
-					repeatCount = 1;
-					view.getStatus().setMessage(null);
-					return;
-				}
-			}
-
-			JEditBuffer buffer = textArea.getBuffer();
-			try
-			{
-				if(repeatCount != 1)
-					buffer.beginCompoundEdit();
-				for(int i = 0; i < repeatCount; i++)
-					textArea.userInput(ch);
-			}
-			finally
-			{
-				if(repeatCount != 1)
-					buffer.endCompoundEdit();
-			}   */
-		}
 
 		repeatCount = 1;
 	} //}}}

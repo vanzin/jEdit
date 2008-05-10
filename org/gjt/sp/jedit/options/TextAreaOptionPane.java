@@ -139,7 +139,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		addComponent(electricBorders);
 
 		/* Anti-aliasing */
-		
+
 		antiAlias = new JComboBox(AntiAlias.comboChoices);
 		antiAlias.setToolTipText(jEdit.getProperty("options.textarea.antiAlias.tooltip"));
 		AntiAlias antiAliasValue = new AntiAlias(jEdit.getProperty("view.antiAlias"));
@@ -152,10 +152,10 @@ public class TextAreaOptionPane extends AbstractOptionPane
 					font.setAntiAliasEnabled(idx > 0);
 					font.repaint();
 				}
-			});		
+			});
 		antiAlias.setSelectedIndex(antiAliasValue.val());
 		addComponent(jEdit.getProperty("options.textarea"+ ".antiAlias"), antiAlias);
-		
+
 		/* Fractional font metrics */
 		fracFontMetrics = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".fracFontMetrics"));

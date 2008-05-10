@@ -119,21 +119,6 @@ public class Debug
 	public static boolean ALT_KEY_PRESSED_DISABLED = OperatingSystem.isMacOS();
 
 	/**
-	 * Old key handling (SIMPLIFIED_KEY_HANDLING==false) and
-	 * new key handling (SIMPLIFIED_KEY_HANDLING==true) react on different
-	 * key events. Old key handling primarily reacts on "key pressed" events,
-	 * while new key handling primarily reacts on "key typed" events.
-	 * The feature of enabled shortcuts when dockables are docked and have
-	 * focus was only implemented for the case of reaction on "key pressed"
-	 * evets. This switch enables such handling for "key typed" events, too.
-	 * With this switch on, global shortcuts for docked dockables also work
-	 * with the new key handling.
-	 *
-	 * See also: jEdit bug 1493185 ( https://sourceforge.net/tracker/?func=detail&aid=1493185&group_id=588&atid=100588 ).
-	 */
-	public static boolean GLOBAL_SHORTCUTS_FOR_DOCKED_DOCKABLES = true;
-	
-	/**
 	 * Geometry workaround for X11.
 	 */
 	public static boolean GEOMETRY_WORKAROUND = false;
@@ -157,7 +142,7 @@ public class Debug
 	 * Create new search dialogs instead of reusing instances.
 	 */
 	public static boolean DISABLE_SEARCH_DIALOG_POOL = false;
-	
+
 	/**
 	 * Disable multihead support, since it can cause window positioning
 	 * problems with some Java versions.
