@@ -215,20 +215,6 @@
             files to remember, if the buffer list should be sorted, and so
             on.</para>
 
-            <para><emphasis role="bold">simplified keyboard handling</emphasis>.
-            This is an experimental keyboard handling mode which is not
-            compatible with JDK 1.4, and behaves better for some international
-            users under Linux than the standard keyboard handling. If you find
-            that some of your keys are not being registered properly, it is
-            worthwhile to try this option. If you are using Windows, probably
-            not. When all of the classic keyboard handling bugs are fixed under
-            all platforms, we will remove this option.</para>
-
-            <indexterm>
-                <primary>keyboard handling</primary>
-
-                <secondary>simplified</secondary>
-            </indexterm>
         </sect2>
 
         <sect2 id="abbrevs-pane">

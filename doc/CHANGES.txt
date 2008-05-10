@@ -1710,15 +1710,6 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   existing jEdit installation does not suffice. You would get weird
   errors in this case. Thus, a full reinstall is required.
 }}}
-{{{ Keyboard handling changes
-- There is a new option, "simplified keyboard handling"
-  under "general options" to switch between two keyboard handling modes.
-  Keyboard event workaround handling has been substantially changed (as
-  a fix to bug 1488047). This may greatly affect the way your keys work.
-  Please report any bugs regarding this (and please drop a note about
-  this bug in bug 1488047).
-  (Xuön Baldauf).
-}}}
 {{{ API Changes
 
 - DockableWindowManager has a new method, setDockableTitle()
