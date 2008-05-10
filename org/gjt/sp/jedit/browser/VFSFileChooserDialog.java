@@ -261,7 +261,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		int mode, boolean multipleSelection, boolean autoshow)
 	{
 		JPanel content = new JPanel(new BorderLayout());
-		content.setBorder(new EmptyBorder(12,12,12,12));
 		setContentPane(content);
 
 		String name;
@@ -289,8 +288,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
-		panel.setBorder(new EmptyBorder(12,0,0,0));
-
+		panel.setBorder(new EmptyBorder(12,12,12,12));
+		
 		filenameField = new VFSFileNameField(browser,null);
 		filenameField.setText(name);
 		filenameField.selectAll();

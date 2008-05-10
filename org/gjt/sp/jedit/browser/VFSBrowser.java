@@ -191,6 +191,8 @@ public class VFSBrowser extends JPanel implements EBComponent,
 
 		GridBagLayout layout = new GridBagLayout();
 		pathAndFilterPanel = new JPanel(layout);
+		if(isHorizontalLayout())
+			pathAndFilterPanel.setBorder(new EmptyBorder(12,12,12,12));
 
 		GridBagConstraints cons = new GridBagConstraints();
 		cons.gridwidth = cons.gridheight = 1;
@@ -307,6 +309,8 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		add(BorderLayout.NORTH,topBox);
 
 		add(BorderLayout.CENTER,browserView = new BrowserView(this));
+		if(isHorizontalLayout())
+			browserView.setBorder(new EmptyBorder(0,12,0,12));
 
 		propertiesChanged();
 
@@ -1135,11 +1139,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//}}}
 
 	//{{{ createMenuBar() method
-	private JPanel createMenuBar()
+	private Container createMenuBar()
 	{
-		JPanel menuBar = new JPanel();
-		menuBar.setLayout(new BoxLayout(menuBar,BoxLayout.X_AXIS));
-		menuBar.setBorder(new EmptyBorder(0,1,0,3));
+		JToolBar menuBar = new JToolBar();
+		menuBar.setFloatable(false);
 
 		menuBar.add(new CommandsMenuButton());
 		menuBar.add(Box.createHorizontalStrut(3));
@@ -1186,10 +1189,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 		if(jEdit.getBooleanProperty("vfs.browser.showMenubar"))
 		{
-			JPanel menubar = createMenuBar();
+			Container menubar = createMenuBar();
 			if(horizontalLayout)
 			{
-				toolbarBox.add(Box.createHorizontalStrut(6));
 				toolbarBox.add(menubar,0);
 			}
 			else
@@ -1203,8 +1205,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			plugins = null;
 			favorites = null;
 		}
-
-		toolbarBox.add(Box.createGlue());
 
 		revalidate();
 
@@ -1395,7 +1395,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 
 	//{{{ CommandsMenuButton class
-	class CommandsMenuButton extends JButton
+	class CommandsMenuButton extends RolloverButton
 	{
 		//{{{ CommandsMenuButton constructor
 		CommandsMenuButton()
@@ -1439,7 +1439,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 
 	//{{{ PluginsMenuButton class
-	class PluginsMenuButton extends JButton
+	class PluginsMenuButton extends RolloverButton
 	{
 		//{{{ PluginsMenuButton constructor
 		PluginsMenuButton()
@@ -1496,7 +1496,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 
 	//{{{ FavoritesMenuButton class
-	class FavoritesMenuButton extends JButton
+	class FavoritesMenuButton extends RolloverButton
 	{
 		//{{{ FavoritesMenuButton constructor
 		FavoritesMenuButton()
