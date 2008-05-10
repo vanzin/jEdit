@@ -79,8 +79,8 @@
         stop two buffers from being able to share the same path name.</para>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Save a Copy
-        As</guimenuitem> saves the buffer to different location but does not
-        rename it., but doesn't rename the buffer, and doesn't clear the
+        As</guimenuitem> saves the buffer to a different location but does not
+        rename the buffer, and does not clear the
         <quote>modified</quote> flag. Note that using this command to save over
         another open buffer will automatically reload the other buffer.</para>
 
