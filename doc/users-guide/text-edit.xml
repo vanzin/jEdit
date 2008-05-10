@@ -292,7 +292,7 @@
         overwrite mode, which can be toggled by pressing
         <keycap>INSERT</keycap>, one character is deleted from in front of the
         caret position for every character that is inserted. The caret is drawn
-        as horizontal line while overwrite mode is active. The status bar also
+        as a horizontal line while overwrite mode is active. The status bar also
         indicates if overwrite mode is active; see <xref linkend="status-bar" />
         for details.</para>
 
@@ -473,7 +473,7 @@
         joins lines in the current selection to make it fit within the wrap
         column position. If nothing is selected, the paragraph containing the
         caret is formatted instead. See <xref linkend="word-wrap" /> for
-        information and word wrap and changing the wrap column.</para>
+        information about word wrap and changing the wrap column.</para>
 
         <para><guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
         Paragraph</guimenuitem> (shortcut: <keycap>C+e d</keycap>) deletes the
