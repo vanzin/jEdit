@@ -71,7 +71,7 @@ dropdown-arrow.icon=ToolbarMenu.gif
 #{{{ Tool bar
 view.toolbar=new-file open-file save close-buffer - print - \
 	undo redo - cut copy paste - find find-next - \
-	unsplit split-horizontal split-vertical - \
+	new-view unsplit split-horizontal split-vertical - \
 	buffer-options global-options - \
 	plugin-manager - help
 
