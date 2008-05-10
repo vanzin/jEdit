@@ -34,7 +34,7 @@
         <title>Preface</title>
         <para>jEdit is a very mature text editor, and has gone through a very
         interesting phase of development. Left in a "prerelease" stage for about
-        two years, it's had a long time to solifidy. Many of the original
+        four years, it's had a long time to solifidy. Many of the original
         developers, including Slava Pestov, have stopped working directly on
         jEdit. Fortunately, because of the wonderful nature of open source,
         there are more and more eyeballs on this code than ever! We have
@@ -60,9 +60,9 @@
         join in on the development of future versions of jEdit or its
         plugins.</para>
         <para>I watch the tracker traffic (<literal>jedit-devel</literal>) and
-        commit logs (in the <literal>jedit-cvs</literal> mailing list) with
+        commit logs (in the <literal>jedit-commits</literal> mailing list) with
         fascination, learning new Java tricks, or new jEdit tricks. It's quite
-        satisfying to be this imtimate with code that I find I am using every
+        satisfying to be this intimate with code that I find I am using every
         day. I feel I am on a first-name basis with all of the active
         committers, and I've given and/or received help from every one of them.
         While it is true, there are parts of it that could be designed a little
