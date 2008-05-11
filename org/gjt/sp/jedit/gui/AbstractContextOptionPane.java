@@ -65,24 +65,9 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 
         add(BorderLayout.NORTH,caption);
 
-        StringTokenizer st = new StringTokenizer(getContextMenu());
-        listModel = new DefaultListModel();
-        while(st.hasMoreTokens())
-        {
-            String actionName = st.nextToken();
-            if(actionName.equals("-"))
-                listModel.addElement(new AbstractContextOptionPane.MenuItem("-","-"));
-            else
-            {
-                EditAction action = jEdit.getAction(actionName);
-                if(action == null)
-                    continue;
-                String label = action.getLabel();
-                if(label == null)
-                    continue;
-                listModel.addElement(new AbstractContextOptionPane.MenuItem(actionName,label));
-            }
-        }
+		listModel = new DefaultListModel();
+		reloadContextList(getContextMenu());
+		
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addListSelectionListener(new ListHandler());
@@ -98,22 +83,28 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
         add.addActionListener(actionHandler);
         buttons.add(add);
         buttons.add(Box.createHorizontalStrut(6));
-        remove = new RolloverButton(GUIUtilities.loadIcon("Minus.png"));
+        remove = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.remove.icon")));
         remove.setToolTipText(jEdit.getProperty("common.remove"));
         remove.addActionListener(actionHandler);
         buttons.add(remove);
         buttons.add(Box.createHorizontalStrut(6));
-        moveUp = new RolloverButton(GUIUtilities.loadIcon("ArrowU.png"));
+        moveUp = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.moveUp.icon")));
         moveUp.setToolTipText(jEdit.getProperty("common.moveUp"));
         moveUp.addActionListener(actionHandler);
         buttons.add(moveUp);
         buttons.add(Box.createHorizontalStrut(6));
-        moveDown = new RolloverButton(GUIUtilities.loadIcon("ArrowD.png"));
+        moveDown = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.moveDown.icon")));
         moveDown.setToolTipText(jEdit.getProperty("common.moveDown"));
         moveDown.addActionListener(actionHandler);
         buttons.add(moveDown);
         buttons.add(Box.createGlue());
 
+		// add "reset to defaults" button
+		reset = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.reset.icon")));
+		reset.setToolTipText(jEdit.getProperty("options.context.reset"));
+		reset.addActionListener(actionHandler);
+		buttons.add(reset);
+		
         updateButtons();
         add(BorderLayout.SOUTH,buttons);
     }
@@ -175,6 +166,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
     private JButton add;
     private JButton remove;
     private JButton moveUp, moveDown;
+    private JButton reset;
     private JLabel caption;
     private JPanel buttons;
 
@@ -185,6 +177,28 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
         moveUp.setEnabled(index > 0);
         moveDown.setEnabled(index != -1 && index != listModel.getSize() - 1);
     }
+	
+	private void reloadContextList(String contextMenu)
+	{
+		listModel.clear();
+		StringTokenizer st = new StringTokenizer(contextMenu);
+		while(st.hasMoreTokens())
+		{
+			String actionName = st.nextToken();
+			if(actionName.equals("-"))
+				listModel.addElement(new AbstractContextOptionPane.MenuItem("-","-"));
+			else
+			{
+				EditAction action = jEdit.getAction(actionName);
+				if(action == null)
+					continue;
+				String label = action.getLabel();
+				if(label == null)
+					continue;
+				listModel.addElement(new AbstractContextOptionPane.MenuItem(actionName,label));
+			}
+		}
+	}
 
     static class MenuItem
     {
@@ -267,6 +281,31 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
                 list.setSelectedIndex(index+1);
                 list.ensureIndexIsVisible(index+1);
             }
+			else if(source == reset)
+			{
+				String dialogType = "options.context.reset.dialog";
+				int result = GUIUtilities.confirm(list,dialogType,null,
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+				
+				if(result == JOptionPane.YES_OPTION)
+				{
+					// the user should be able to cancel the options dialog 
+					// so we need to modify the list, not the actual property
+					// since the default value is not available, 
+					// we reset, fetch default value and re-set to original
+					String orgContext = jEdit.getProperty("view.context");
+					jEdit.resetProperty("view.context");
+					String defaultContext = jEdit.getProperty("view.context");
+					jEdit.setProperty("view.context", orgContext);
+					reloadContextList(defaultContext);
+					
+					// reset selection if user had more buttons than default
+					list.setSelectedIndex(0);
+					list.ensureIndexIsVisible(0);
+					updateButtons();
+				}
+			}
         }
     }
 

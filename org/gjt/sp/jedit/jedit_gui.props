@@ -1760,13 +1760,22 @@ options.context.label=Context Menu
 options.context.code=new ContextOptionPane();
 options.context.caption=Items in text area right click menu:
 options.context.add=Add...
+options.context.add.icon=22x22/actions/list-add.png
 options.context.remove=Remove
+options.context.remove.icon=22x22/actions/list-remove.png
 options.context.moveUp=Move Up
+options.context.moveUp.icon=22x22/actions/go-up.png
 options.context.moveDown=Move Down
+options.context.moveDown.icon=22x22/actions/go-down.png
+options.context.reset=Reset to Default
+options.context.reset.icon=22x22/actions/edit-clear.png
 options.context.add.title=Add to Context Menu
 options.context.add.caption=Add to context menu:
 options.context.add.separator=Separator
 options.context.add.action=Command or macro:
+
+options.context.reset.dialog.title=Reset to Default
+options.context.reset.dialog.message=Are you sure you want to reset the context menu to the installation default?
 #}}}
 
 #{{{ Docking pane
