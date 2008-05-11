@@ -46,7 +46,7 @@ public abstract class EBMessage
 	 * @param source The message source
 	 * @since jEdit 4.2pre1
 	 */
-	public EBMessage(Object source)
+	protected EBMessage(Object source)
 	{
 		this.source = source;
 	} //}}}
@@ -56,7 +56,7 @@ public abstract class EBMessage
 	 * Creates a new message.
 	 * @param source The message source
 	 */
-	public EBMessage(EBComponent source)
+	protected EBMessage(EBComponent source)
 	{
 		this.source = source;
 	} //}}}
@@ -75,12 +75,13 @@ public abstract class EBMessage
 	/**
 	 * Returns a string representation of this message.
 	 */
+	@Override
 	public String toString()
 	{
 		String className = getClass().getName();
 		int index = className.lastIndexOf('.');
 		return className.substring(index + 1)
-			+ "[" + paramString() + "]";
+			+ '[' + paramString() + ']';
 	} //}}}
 
 	//{{{ paramString() method
