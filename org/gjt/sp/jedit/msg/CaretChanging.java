@@ -29,9 +29,8 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
    including CodeBrowser, Tags, CscopeFinder, and SideKick,
    whenever the plugin takes an action to change the caret to another location.
 
-   @deprecated use @ref BufferChanging instead. It serves the same purpose, alerting plugins
-   that the navigation position for the EditPane is about to change. The name of this class is misleading
-   since a TextArea does not emit a caretChanging message each time the caret changes.
+   @deprecated use @ref PositionChanging instead. This class will be removed
+   before jEdit 4.3final.
 
    @author Alan Ezust
    @since jEdit 4.3pre3
