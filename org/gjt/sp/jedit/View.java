@@ -836,6 +836,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getBuffer() method
 	/**
 	 * Returns the current edit pane's buffer.
+	 * @return the current edit pane's buffer, it can be null
 	 */
 	public Buffer getBuffer()
 	{
@@ -1138,7 +1139,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		/* On MacOS X, the close box is shown in a different color if
 		an app has unsaved changes. For details, see
 		http://developer.apple.com/qa/qa2001/qa1146.html */
-		final String WINDOW_MODIFIED = "windowModified";
+		String WINDOW_MODIFIED = "windowModified";
 		getRootPane().putClientProperty(WINDOW_MODIFIED,
 			unsavedChanges);
 	} //}}}
