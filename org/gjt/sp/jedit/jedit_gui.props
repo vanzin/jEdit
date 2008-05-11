@@ -2023,6 +2023,8 @@ options.toolbar.moveUp=Move Up
 options.toolbar.moveUp.icon=22x22/actions/go-up.png
 options.toolbar.moveDown=Move Down
 options.toolbar.moveDown.icon=22x22/actions/go-down.png
+options.toolbar.reset=Reset to Default
+options.toolbar.reset.icon=22x22/actions/edit-clear.png
 options.toolbar.edit.title=Edit Tool Bar Entry
 options.toolbar.edit.caption=Type:
 options.toolbar.edit.separator=Separator
@@ -2032,6 +2034,9 @@ options.toolbar.edit.builtin=Use built-in icon:
 options.toolbar.edit.file=Load icon from file:
 options.toolbar.edit.choose=Choose
 options.toolbar.edit.no-icon=No icon selected
+
+options.toolbar.reset.dialog.title=Reset to Default
+options.toolbar.reset.dialog.message=Are you sure you want to reset the toolbar to the installation default?
 #}}}
 
 #{{{ View pane

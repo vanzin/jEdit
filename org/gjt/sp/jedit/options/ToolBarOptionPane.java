@@ -69,46 +69,9 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 		add(BorderLayout.NORTH,panel);
 
-		String toolbar = jEdit.getProperty("view.toolbar");
-		StringTokenizer st = new StringTokenizer(toolbar);
 		listModel = new DefaultListModel();
-		while(st.hasMoreTokens())
-		{
-			String actionName = st.nextToken();
-			if(actionName.equals("-"))
-				listModel.addElement(new ToolBarOptionPane.Button("-",null,null,"-"));
-			else
-			{
-				EditAction action = jEdit.getAction(actionName);
-				if(action == null)
-					continue;
-				String label = action.getLabel();
-				if(label == null)
-					continue;
-
-				Icon icon;
-				String iconName;
-				if(actionName.equals("-"))
-				{
-					iconName = null;
-					icon = null;
-				}
-				else
-				{
-					iconName = jEdit.getProperty(actionName + ".icon");
-					if(iconName == null)
-						icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
-					else
-					{
-						icon = GUIUtilities.loadIcon(iconName);
-						if(icon == null)
-							icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
-					}
-				}
-				listModel.addElement(new Button(actionName,iconName,icon,label));
-			}
-		}
-
+		reloadButtonList(jEdit.getProperty("view.toolbar"));
+		
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(new ListHandler());
@@ -146,6 +109,12 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		edit.addActionListener(actionHandler);
 		buttons.add(edit);
 		buttons.add(Box.createGlue());
+		
+		// add "reset to defaults" button
+		reset = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.toolbar.reset.icon")));
+		reset.setToolTipText(jEdit.getProperty("options.toolbar.reset"));
+		reset.addActionListener(actionHandler);
+		buttons.add(reset);
 		//}}}
 
 		updateButtons();
@@ -153,7 +122,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 
 		//{{{ Ceate icons list
 		iconList = new DefaultComboBoxModel();
-		st = new StringTokenizer(jEdit.getProperty("icons"));
+		StringTokenizer st = new StringTokenizer(jEdit.getProperty("icons"));
 		while(st.hasMoreElements())
 		{
 			String icon = st.nextToken();
@@ -190,6 +159,7 @@ public class ToolBarOptionPane extends AbstractOptionPane
 	private RolloverButton remove;
 	private RolloverButton moveUp, moveDown;
 	private RolloverButton edit;
+	private RolloverButton reset;
 
 	private DefaultComboBoxModel iconList;
 	//}}}
@@ -203,7 +173,52 @@ public class ToolBarOptionPane extends AbstractOptionPane
 		moveDown.setEnabled(index != -1 && index != listModel.getSize() - 1);
 		edit.setEnabled(index != -1);
 	} //}}}
+	
+	//{{{ reloadButtonList() method
+	private void reloadButtonList(String toolbar)
+	{
+		StringTokenizer st = new StringTokenizer(toolbar);
+		listModel.clear();
+		
+		while(st.hasMoreTokens())
+		{
+			String actionName = st.nextToken();
+			if(actionName.equals("-"))
+				listModel.addElement(new ToolBarOptionPane.Button("-",null,null,"-"));
+			else
+			{
+				EditAction action = jEdit.getAction(actionName);
+				if(action == null)
+					continue;
+				String label = action.getLabel();
+				if(label == null)
+					continue;
 
+				Icon icon;
+				String iconName;
+				if(actionName.equals("-"))
+				{
+					iconName = null;
+					icon = null;
+				}
+				else
+				{
+					iconName = jEdit.getProperty(actionName + ".icon");
+					if(iconName == null)
+						icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
+					else
+					{
+						icon = GUIUtilities.loadIcon(iconName);
+						if(icon == null)
+							icon = GUIUtilities.loadIcon(jEdit.getProperty("broken-image.icon"));
+					}
+				}
+				listModel.addElement(new Button(actionName,iconName,icon,label));
+			}
+		}
+	}
+	//}}}
+	
 	//}}}
 
 	//{{{ Inner classes
@@ -372,6 +387,31 @@ public class ToolBarOptionPane extends AbstractOptionPane
 				listModel.setElementAt(selection,index);
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
+			}
+			else if(source == reset)
+			{
+				String dialogType = "options.toolbar.reset.dialog";
+				int result = GUIUtilities.confirm(list,dialogType,null,
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE);
+				
+				if(result == JOptionPane.YES_OPTION)
+				{
+					// the user should be able to cancel the options dialog 
+					// so we need to modify the list, not the actual property
+					// since the default value is not available, 
+					// we reset, fetch default value and re-set to original
+					String orgToolbar = jEdit.getProperty("view.toolbar");
+					jEdit.resetProperty("view.toolbar");
+					String defaultToolbar = jEdit.getProperty("view.toolbar");
+					jEdit.setProperty("view.toolbar", orgToolbar);
+					reloadButtonList(defaultToolbar);
+					
+					// reset selection if user had more buttons than default
+					list.setSelectedIndex(0);
+					list.ensureIndexIsVisible(0);
+					updateButtons();
+				}
 			}
 		}
 	} //}}}
