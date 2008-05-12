@@ -6,7 +6,15 @@ Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova and
 Seph M. Soliman for contributing to this release.
 
 {{{ Bug Fixes
+
 - The autosave feature was broken (#1957237) (Matthieu Casanova)
+
+- Toolbar overhaul: Toolbar buttons were inconsistently sizes across different
+  L&Fs. (#1954020)
+  In addition, toolbar buttons and toolbars now use JToolBar instead of just
+  JPanel. The Open File dialog was also modified to remove the margin around
+  the toolbar. (Seph M. Soliman)
+
 }}}
 {{{ Miscellaneous
 
