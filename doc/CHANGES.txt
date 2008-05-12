@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre15
 
-Thanks to Björn "Vampire" Kautler, Marcelo Vanzin and Matthieu Casanova for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova and
+Seph M. Soliman for contributing to this release.
 
 {{{ Bug Fixes
 - The autosave feature was broken (#1957237) (Matthieu Casanova)
@@ -18,6 +18,9 @@ contributing to this release.
 
 - New status bar ErrorWidget added to display the 10 last exceptions that
   happened in jEdit (Matthieu Casanova)
+
+- Toolbar and context menu can now be restored to default setting
+  (Seph M. Soliman - #1961989)
 
 }}}
 {{{ Editing
