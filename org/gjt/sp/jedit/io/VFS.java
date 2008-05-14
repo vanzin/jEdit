@@ -199,7 +199,8 @@ public abstract class VFS
 	 * @deprecated Use the form where the constructor takes a capability
 	 * list.
 	 */
-	public VFS(String name)
+	@Deprecated
+	protected VFS(String name)
 	{
 		this(name,0);
 	}
@@ -209,7 +210,7 @@ public abstract class VFS
 	 * @param name The name
 	 * @param caps The capabilities
 	 */
-	public VFS(String name, int caps)
+	protected VFS(String name, int caps)
 	{
 		this.name = name;
 		this.caps = caps;
@@ -224,7 +225,7 @@ public abstract class VFS
 	 * @param extAttrs The extended attributes
 	 * @since jEdit 4.2pre1
 	 */
-	public VFS(String name, int caps, String[] extAttrs)
+	protected VFS(String name, int caps, String[] extAttrs)
 	{
 		this.name = name;
 		this.caps = caps;
@@ -748,6 +749,7 @@ public abstract class VFS
 	/**
 	 * @deprecated Use <code>_listFiles()</code> instead.
 	 */
+	@Deprecated
 	public DirectoryEntry[] _listDirectory(Object session, String directory,
 		Component comp)
 		throws IOException
@@ -784,6 +786,7 @@ public abstract class VFS
 	 * @since jEdit 2.7pre1
 	 * @deprecated Use <code>_getFile()</code> instead.
 	 */
+	@Deprecated
 	public DirectoryEntry _getDirectoryEntry(Object session, String path,
 		Component comp)
 		throws IOException
@@ -795,6 +798,7 @@ public abstract class VFS
 	/**
 	 * @deprecated Use <code>VFSFile</code> instead.
 	 */
+	@Deprecated
 	public static class DirectoryEntry extends VFSFile
 	{
 		//{{{ DirectoryEntry constructor
@@ -1007,7 +1011,7 @@ public abstract class VFS
 	 * interface that compares {@link VFS.DirectoryEntry} instances.
 	 * @since jEdit 4.2pre1
 	 */
-	public static class DirectoryEntryCompare implements Comparator
+	public static class DirectoryEntryCompare implements Comparator<VFSFile>
 	{
 		private boolean sortIgnoreCase, sortMixFilesAndDirs;
 
@@ -1025,11 +1029,8 @@ public abstract class VFS
 			this.sortIgnoreCase = sortIgnoreCase;
 		}
 
-		public int compare(Object obj1, Object obj2)
+		public int compare(VFSFile file1, VFSFile file2)
 		{
-			VFSFile file1 = (VFSFile)obj1;
-			VFSFile file2 = (VFSFile)obj2;
-
 			if(!sortMixFilesAndDirs)
 			{
 				if(file1.getType() != file2.getType())
