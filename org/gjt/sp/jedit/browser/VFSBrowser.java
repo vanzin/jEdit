@@ -370,6 +370,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	} //}}}
 
 	//{{{ addNotify() method
+	@Override
 	public void addNotify()
 	{
 		super.addNotify();
@@ -377,6 +378,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	} //}}}
 
 	//{{{ removeNotify() method
+	@Override
 	public void removeNotify()
 	{
 		super.removeNotify();
@@ -465,6 +467,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	 * @deprecated Use {@link #getVFSFileFilter()} instead. This method
 	 *             might return wrong information since jEdit 4.3pre6.
 	 */
+	@Deprecated
 	public String getFilenameFilter()
 	{
 		if(filterCheckbox.isSelected())
@@ -498,7 +501,8 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	 *
 	 * @since jEdit 4.3pre7
 	 */
-	public void addVFSFileFilter(VFSFileFilter filter) {
+	public void addVFSFileFilter(VFSFileFilter filter)
+	{
 		filterField.addItem(filter);
 		if (filterField.getItemCount() == 2)
 		{
@@ -815,7 +819,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	} //}}}
 
 	//{{{ getBrowserView() method
-	public BrowserView getBrowserView()
+	BrowserView getBrowserView()
 	{
 		return browserView;
 	} //}}}
@@ -1419,6 +1423,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		//{{{ MouseHandler class
 		class MouseHandler extends MouseAdapter
 		{
+			@Override
 			public void mousePressed(MouseEvent evt)
 			{
 				if(!popup.isVisible())
@@ -1476,6 +1481,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		//{{{ MouseHandler class
 		class MouseHandler extends MouseAdapter
 		{
+			@Override
 			public void mousePressed(MouseEvent evt)
 			{
 				createPopupMenu();
@@ -1630,6 +1636,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		//{{{ MouseHandler class
 		class MouseHandler extends MouseAdapter
 		{
+			@Override
 			public void mousePressed(MouseEvent evt)
 			{
 				if(popup != null && popup.isVisible())
@@ -1700,7 +1707,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 			boolean filterEnabled = filterCheckbox.isSelected();
 
-			ArrayList<VFSFile> directoryVector = new ArrayList<VFSFile>();
+			List<VFSFile> directoryList = new ArrayList<VFSFile>();
 
 			int directories = 0;
 			int files = 0;
@@ -1731,17 +1738,17 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					else
 						directories++;
 
-					directoryVector.add(file);
+					directoryList.add(file);
 				}
 
-				Collections.sort(directoryVector,
+				Collections.sort(directoryList,
 					new VFS.DirectoryEntryCompare(
 					sortMixFilesAndDirs,
 					sortIgnoreCase));
 			}
 
 			browserView.directoryLoaded(node,path,
-				directoryVector);
+				directoryList);
 
 			// to notify listeners that any existing
 			// selection has been deactivated
@@ -1757,6 +1764,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				filesSelected();
 		}
 
+		@Override
 		public String toString()
 		{
 			return (String)loadInfo[0];
@@ -1794,6 +1802,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 		}
 
+		@Override
 		public void invokeAction(EventObject evt, EditAction action)
 		{
 			VFSBrowser browser = (VFSBrowser)
@@ -1913,6 +1922,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 		}
 
+		@Override
 		protected void processFocusEvent(FocusEvent e)
 		{
 			// AWT will call setItem() when the editor loses
@@ -1940,6 +1950,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private static class VFSFileFilterRenderer extends DefaultListCellRenderer
 	{
 
+		@Override
 		public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean isSelected,
 			boolean cellHasFocus)
