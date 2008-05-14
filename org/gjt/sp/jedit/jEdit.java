@@ -536,7 +536,7 @@ public class jEdit
 	 * new collection, not the existing properties instance.
 	 * @since jEdit 3.1pre4
 	 */
-	public static final Properties getProperties()
+	public static Properties getProperties()
 	{
 		return propMgr.getProperties();
 	} //}}}
@@ -546,7 +546,7 @@ public class jEdit
 	 * Fetches a property, returning null if it's not defined.
 	 * @param name The property
 	 */
-	public static final String getProperty(String name)
+	public static String getProperty(String name)
 	{
 		return propMgr.getProperty(name);
 	} //}}}
@@ -558,7 +558,7 @@ public class jEdit
 	 * @param name The property
 	 * @param def The default value
 	 */
-	public static final String getProperty(String name, String def)
+	public static String getProperty(String name, String def)
 	{
 		String value = propMgr.getProperty(name);
 		if(value == null)
@@ -583,7 +583,7 @@ public class jEdit
 	 * @param name The property
 	 * @param args The positional parameters
 	 */
-	public static final String getProperty(String name, Object[] args)
+	public static String getProperty(String name, Object[] args)
 	{
 		if(name == null)
 			return null;
@@ -604,7 +604,7 @@ public class jEdit
 	 * Returns the value of a boolean property.
 	 * @param name The property
 	 */
-	public static final boolean getBooleanProperty(String name)
+	public static boolean getBooleanProperty(String name)
 	{
 		return getBooleanProperty(name,false);
 	} //}}}
@@ -615,7 +615,7 @@ public class jEdit
 	 * @param name The property
 	 * @param def The default value
 	 */
-	public static final boolean getBooleanProperty(String name, boolean def)
+	public static boolean getBooleanProperty(String name, boolean def)
 	{
 		String value = getProperty(name);
 		if(value == null)
@@ -635,7 +635,7 @@ public class jEdit
 	 * Returns the value of an integer property.
 	 * @param name The property
 	 */
-	public static final int getIntegerProperty(String name)
+	public static int getIntegerProperty(String name)
 	{
 		return getIntegerProperty(name,0);
 	} //}}}
@@ -647,7 +647,7 @@ public class jEdit
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final int getIntegerProperty(String name, int def)
+	public static int getIntegerProperty(String name, int def)
 	{
 		String value = getProperty(name);
 		if(value == null)
@@ -699,7 +699,7 @@ public class jEdit
 	 * @param name The property
 	 * @since jEdit 4.0pre1
 	 */
-	public static final Font getFontProperty(String name)
+	public static Font getFontProperty(String name)
 	{
 		return getFontProperty(name,null);
 	} //}}}
@@ -719,7 +719,7 @@ public class jEdit
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final Font getFontProperty(String name, Font def)
+	public static Font getFontProperty(String name, Font def)
 	{
 		String family = getProperty(name);
 		String sizeString = getProperty(name + "size");
@@ -798,7 +798,7 @@ public class jEdit
 	 * @param name The property
 	 * @param value The new value
 	 */
-	public static final void setProperty(String name, String value)
+	public static void setProperty(String name, String value)
 	{
 		propMgr.setProperty(name,value);
 	} //}}}
@@ -811,7 +811,7 @@ public class jEdit
 	 * @param value The new value
 	 * @since jEdit 2.3final
 	 */
-	public static final void setTemporaryProperty(String name, String value)
+	public static void setTemporaryProperty(String name, String value)
 	{
 		propMgr.setTemporaryProperty(name,value);
 	} //}}}
@@ -822,7 +822,7 @@ public class jEdit
 	 * @param name The property
 	 * @param value The value
 	 */
-	public static final void setBooleanProperty(String name, boolean value)
+	public static void setBooleanProperty(String name, boolean value)
 	{
 		setProperty(name,value ? "true" : "false");
 	} //}}}
@@ -834,13 +834,13 @@ public class jEdit
 	 * @param value The value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final void setIntegerProperty(String name, int value)
+	public static void setIntegerProperty(String name, int value)
 	{
 		setProperty(name,String.valueOf(value));
 	} //}}}
 
 	//{{{ setDoubleProperty() method
-	public static final void setDoubleProperty(String name, double value)
+	public static void setDoubleProperty(String name, double value)
 	{
 		setProperty(name,String.valueOf(value));
 	}
@@ -861,7 +861,7 @@ public class jEdit
 	 * @param value The value
 	 * @since jEdit 4.0pre1
 	 */
-	public static final void setFontProperty(String name, Font value)
+	public static void setFontProperty(String name, Font value)
 	{
 		setProperty(name,value.getFamily());
 		setIntegerProperty(name + "size",value.getSize());
@@ -873,7 +873,7 @@ public class jEdit
 	 * Unsets (clears) a property.
 	 * @param name The property
 	 */
-	public static final void unsetProperty(String name)
+	public static void unsetProperty(String name)
 	{
 		propMgr.unsetProperty(name);
 	} //}}}
@@ -885,7 +885,7 @@ public class jEdit
 	 *
 	 * @since jEdit 2.5pre3
 	 */
-	public static final void resetProperty(String name)
+	public static void resetProperty(String name)
 	{
 		propMgr.resetProperty(name);
 	} //}}}
@@ -1023,16 +1023,16 @@ public class jEdit
 	 */
 	public static EditPlugin[] getPlugins()
 	{
-		List<EditPlugin> vector = new ArrayList<EditPlugin>();
+		List<EditPlugin> pluginList = new ArrayList<EditPlugin>();
 		for(int i = 0; i < jars.size(); i++)
 		{
 			EditPlugin plugin = jars.elementAt(i).getPlugin();
 			if(plugin != null)
-				vector.add(plugin);
+				pluginList.add(plugin);
 		}
 
-		EditPlugin[] array = new EditPlugin[vector.size()];
-		vector.toArray(array);
+		EditPlugin[] array = new EditPlugin[pluginList.size()];
+		pluginList.toArray(array);
 		return array;
 	} //}}}
 
@@ -1259,6 +1259,7 @@ public class jEdit
 	/**
 	 * @deprecated Use the form that takes a String instead
 	 */
+	@Deprecated
 	public static ActionSet getActionSetForAction(EditAction action)
 	{
 		return actionContext.getActionSetForAction(action.getName());
@@ -1268,6 +1269,7 @@ public class jEdit
 	/**
 	 * @deprecated Call getActionNames() instead
 	 */
+	@Deprecated
 	public static EditAction[] getActions()
 	{
 		String[] names = actionContext.getActionNames();
@@ -1435,6 +1437,7 @@ public class jEdit
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
 	 */
+	@Deprecated
 	public static Buffer openFile(View view, String parent,
 		String path, boolean readOnly, boolean newFile)
 	{
@@ -1444,6 +1447,7 @@ public class jEdit
 	 * @deprecated The openFile() forms with the readOnly parameter
 	 * should not be used. The readOnly prameter is no longer supported.
 	 */
+	@Deprecated
 	public static Buffer openFile(View view, String parent,
 		String path, boolean readOnly, boolean newFile,
 		Hashtable props)
@@ -2711,6 +2715,7 @@ public class jEdit
 		final String fileName = (String)mode.getProperty("file");
 		XModeHandler xmh = new XModeHandler(mode.getName())
 		{
+			@Override
 			public void error(String what, Object subst)
 			{
 				String msg;
@@ -2734,6 +2739,7 @@ public class jEdit
 				GUIUtilities.error(null,"xmode-error",args);
 			}
 
+			@Override
 			public TokenMarker getTokenMarker(String modeName)
 			{
 				Mode mode = getMode(modeName);
@@ -2983,6 +2989,7 @@ public class jEdit
 		FoldHandler.foldHandlerProvider = new ServiceManager.ServiceFoldHandlerProvider();
 		actionContext = new ActionContext()
 		{
+			@Override
 			public void invokeAction(EventObject evt,
 				EditAction action)
 			{
@@ -3533,6 +3540,7 @@ public class jEdit
 			this.pw = pw;
 		}
 
+		@Override
 		protected PasswordAuthentication getPasswordAuthentication()
 		{
 			return pw;
@@ -3939,6 +3947,7 @@ loop:		for(int i = 0; i < list.length; i++)
 		ModeCatalogHandler handler = new ModeCatalogHandler(
 			MiscUtilities.getParentOfPath(path),resource)
 		{
+			@Override
 			protected Mode instantiateMode(String modeName)
 			{
 				return new JEditMode(modeName);
@@ -4020,6 +4029,7 @@ loop:		for(int i = 0; i < list.length; i++)
 			setDefaultFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 		}
 
+		@Override
 		public boolean postProcessKeyEvent(KeyEvent evt)
 		{
 			if(!evt.isConsumed())
