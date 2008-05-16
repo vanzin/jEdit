@@ -15,6 +15,8 @@ Seph M. Soliman for contributing to this release.
   JPanel. The Open File dialog was also modified to remove the margin around
   the toolbar. (Seph M. Soliman)
 
+- The shortcut to create a new file in the VFSBrowser is now ctrl+n instead of
+  just 'n' (#1965114) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
@@ -44,12 +46,12 @@ Seph M. Soliman for contributing to this release.
   String. StandardUtilities / TextUtilities were enhanced to provide functions
   that are not present in the CharSequence class, or were only available for
   Strings before. (Marcelo Vanzin)
-  
+
 - Removed deprecated CaretChanging message, which was never in jEdit 4.2 anyway.
 
 - Added new EBMessage, PositionChanging, base class for BufferChanging,
   for navigable position changes within the same buffer.
-  
+
 
 }}}
 

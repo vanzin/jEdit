@@ -125,7 +125,7 @@ public class VFSDirectoryEntryTable extends JTable
 		VFSDirectoryEntryTableModel model
 			= (VFSDirectoryEntryTableModel)getModel();
 
-		LinkedList<VFSFile> returnValue = new LinkedList<VFSFile>();
+		java.util.List<VFSFile> returnValue = new LinkedList<VFSFile>();
 		int[] selectedRows = getSelectedRows();
 		for(int i = 0; i < selectedRows.length; i++)
 		{
@@ -189,7 +189,7 @@ public class VFSDirectoryEntryTable extends JTable
 		timer.stop();
 		typeSelectBuffer.setLength(0);
 
-		VFSDirectoryEntryTableModel model = ((VFSDirectoryEntryTableModel)getModel());
+		VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)getModel();
 		int startIndex;
 		if(node == null)
 		{
@@ -299,7 +299,8 @@ public class VFSDirectoryEntryTable extends JTable
 
 					for(int i = row - 1; i >= 0; i--)
 					{
-						if((model.files[i].expanded) && (model.files[i].level < model.files[row].level))
+						if(model.files[i].expanded &&
+						   model.files[i].level < model.files[row].level)
 						{
 							setSelectedRow(i);
 							return;
@@ -322,10 +323,13 @@ public class VFSDirectoryEntryTable extends JTable
 				ea = ac.getAction("vfs.browser.delete");
 				ac.invokeAction(evt, ea);
 				break;
-			case KeyEvent.CTRL_MASK | KeyEvent.VK_N:
-				evt.consume();
-				ea = ac.getAction("vfs.browser.new-file");
-				ac.invokeAction(evt, ea);
+			case KeyEvent.VK_N:
+				if ((evt.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)
+				{
+					evt.consume();
+					ea = ac.getAction("vfs.browser.new-file");
+					ac.invokeAction(evt, ea);
+				}
 				break;
 			case KeyEvent.VK_INSERT:
 				evt.consume();
@@ -364,9 +368,9 @@ public class VFSDirectoryEntryTable extends JTable
 			case KeyEvent.VK_ENTER:
 				evt.consume();
 				browserView.getBrowser().filesActivated(
-					(evt.isShiftDown()
+					evt.isShiftDown()
 					? VFSBrowser.M_OPEN_NEW_VIEW
-					: VFSBrowser.M_OPEN),false);
+					: VFSBrowser.M_OPEN,false);
 
 				break;
 			}
@@ -492,9 +496,9 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			VFSDirectoryEntryTableModel.Entry entry
 				= model.files[i];
-			Font font = (entry.dirEntry.getType()
+			Font font = entry.dirEntry.getType()
 				== VFSFile.FILE
-				? renderer.plainFont : renderer.boldFont);
+				? renderer.plainFont : renderer.boldFont;
 
 			widths[0] = Math.max(widths[0],renderer.getEntryWidth(
 				entry,font,fontRenderContext));
@@ -568,8 +572,8 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			super.mouseClicked(e);
 			int ind = getSelectionModel().getMinSelectionIndex();
-			Entry node = (Entry) (getModel().getValueAt(ind, 0));
-			boolean isDir = (node.dirEntry.getType() == VFSFile.DIRECTORY); 
+			Entry node = (Entry) getModel().getValueAt(ind, 0);
+			boolean isDir = node.dirEntry.getType() == VFSFile.DIRECTORY;
 			EditBus.send(new VFSPathSelected(jEdit.getActiveView(),
 							 node.dirEntry.getPath(), isDir));
 		}
@@ -617,7 +621,7 @@ public class VFSDirectoryEntryTable extends JTable
 		{
 			JLabel l = (JLabel)tcr.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 			VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel)table.getModel();
-			Icon icon = (column == model.getSortColumn())
+			Icon icon = column == model.getSortColumn()
 				? model.getAscending() ? ASC_ICON : DESC_ICON
 				: null;
 			l.setIcon(icon);
