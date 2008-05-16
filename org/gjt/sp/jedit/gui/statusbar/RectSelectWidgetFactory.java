@@ -35,6 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 //}}}
 
 /**
@@ -46,8 +47,8 @@ public class RectSelectWidgetFactory implements StatusWidgetFactory
     //{{{ getWidget() class
     public Widget getWidget(View view) 
     {
-	    RectSelectWidget mode = new RectSelectWidget(view);
-	    return mode;
+	    Widget rect = new RectSelectWidget(view);
+	    return rect;
     } //}}}
 
     //{{{ RectSelectWidget class
@@ -55,20 +56,22 @@ public class RectSelectWidgetFactory implements StatusWidgetFactory
     {
 	    private final JLabel rectSelect;
 	    private final View view;
-	    public RectSelectWidget(final View view) 
+	    RectSelectWidget(final View view)
 	    {
 		    rectSelect = new ToolTipLabel();
 		    rectSelect.setHorizontalAlignment(SwingConstants.CENTER);
 		    rectSelect.setToolTipText(jEdit.getProperty("view.status.rect-tooltip"));
 		    this.view = view;
-		    rectSelect.addMouseListener(new MouseAdapter() 
-						{
-							@Override
-							public void mouseClicked(MouseEvent evt)
-							{
-								view.getTextArea().toggleRectangularSelectionEnabled();
-							}
-						});
+		    rectSelect.addMouseListener(new MouseAdapter()
+		    {
+			    @Override
+			    public void mouseClicked(MouseEvent evt)
+			    {
+				    JEditTextArea textArea = view.getTextArea();
+				    if (textArea != null)
+				    	textArea.toggleRectangularSelectionEnabled();
+			    }
+		    });
 	    }
 	    
 	    public JComponent getComponent() 
@@ -78,8 +81,12 @@ public class RectSelectWidgetFactory implements StatusWidgetFactory
 	    
 	    public void update() 
 	    {
-		    rectSelect.setText(view.getTextArea().isRectangularSelectionEnabled()
-				       ? "R" : "-");
+		    JEditTextArea textArea = view.getTextArea();
+		    if (textArea != null)
+		    {
+			    rectSelect.setText(textArea.isRectangularSelectionEnabled()
+					       ? "R" : "-");
+		    }
 	    }
 	    
             public void propertiesChanged()

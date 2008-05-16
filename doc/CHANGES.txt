@@ -17,6 +17,9 @@ Seph M. Soliman for contributing to this release.
 
 - The shortcut to create a new file in the VFSBrowser is now ctrl+n instead of
   just 'n' (#1965114) (Matthieu Casanova)
+
+- Some NPE fixed in status bar widgets when the view do not have a textArea yet
+  (#1965532) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

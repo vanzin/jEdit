@@ -35,58 +35,63 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 //}}}
 
 /**
  * @author Matthieu Casanova
- * @since jEdit 4.3pre14 
+ * @since jEdit 4.3pre14
  */
 public class OverwriteWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
-	public Widget getWidget(View view) 
+	public Widget getWidget(View view)
 	{
-		OverwriteWidget mode = new OverwriteWidget(view);
-		return mode;
+		Widget overwrite = new OverwriteWidget(view);
+		return overwrite;
 	} //}}}
-	
+
 	//{{{ OverwriteWidget constructor
 	private static class OverwriteWidget implements Widget
 	{
 		private final JLabel overwrite;
 		private final View view;
-		
-		public OverwriteWidget(final View view) 
+
+		OverwriteWidget(final View view)
 		{
 			overwrite = new ToolTipLabel();
 			overwrite.setHorizontalAlignment(SwingConstants.CENTER);
 			overwrite.setToolTipText(jEdit.getProperty("view.status.overwrite-tooltip"));
 			this.view = view;
-			overwrite.addMouseListener(new MouseAdapter() 
-						   {
-							   @Override
-							   public void mouseClicked(MouseEvent evt)
-							   {
-								   view.getTextArea().toggleOverwriteEnabled();
-							   }
-						   });
+			overwrite.addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseClicked(MouseEvent evt)
+				{
+					JEditTextArea textArea = view.getTextArea();
+					if (textArea != null)
+						textArea.toggleOverwriteEnabled();
+				}
+			});
 		}
-		
+
 		//{{{ getComponent() method
-		public JComponent getComponent() 
+		public JComponent getComponent()
 		{
 			return overwrite;
 		} //}}}
 
-		
+
 		//{{{ update() method
-		public void update() 
+		public void update()
 		{
-			overwrite.setText(view.getTextArea().isOverwriteEnabled()
-					  ? "O" : "-");
+			JEditTextArea textArea = view.getTextArea();
+			if (textArea != null)
+				overwrite.setText(textArea.isOverwriteEnabled()
+						  ? "O" : "-");
 		} //}}}
 
-		
+
 		//{{{ propertiesChanged() method
 		public void propertiesChanged()
 		{
