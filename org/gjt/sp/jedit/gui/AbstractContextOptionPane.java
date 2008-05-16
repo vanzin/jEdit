@@ -78,7 +78,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
         buttons.setBorder(new EmptyBorder(3,0,0,0));
         buttons.setLayout(new BoxLayout(buttons,BoxLayout.X_AXIS));
         ActionHandler actionHandler = new ActionHandler();
-        add = new RolloverButton(GUIUtilities.loadIcon("Plus.png"));
+        add = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.add.icon")));
         add.setToolTipText(jEdit.getProperty("common.add"));
         add.addActionListener(actionHandler);
         buttons.add(add);
