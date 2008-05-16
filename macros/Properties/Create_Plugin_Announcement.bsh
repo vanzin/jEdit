@@ -264,7 +264,7 @@ void pluginTextDialog( View view, Buffer buffer )
         longDescription = longDescriptionArea.getText();
         source = sourceArea.getText();
         StringBuffer ret = new StringBuffer();
-        ret.append( "Paste the text below into the Plugin Central Submission Tracker at http://sourceforge.net/tracker/?group_id=588&atid=625093\n" );
+        ret.append( "Paste the text below into the Plugin Central Submission Tracker at https://sourceforge.net/tracker/?group_id=588&atid=625093\n" );
         ret.append( "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" );
         ret.append( "\n{{{ " );
         ret.append( pluginName );
