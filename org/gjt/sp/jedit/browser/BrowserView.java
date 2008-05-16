@@ -116,6 +116,7 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ removeNotify() method
+	@Override
 	public void removeNotify()
 	{
 		String prop = browser.isHorizontalLayout() ? "vfs.browser.horizontalSplitter" : "vfs.browser.splitter";
@@ -337,12 +338,12 @@ class BrowserView extends JPanel
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private VFSBrowser browser;
+	private final VFSBrowser browser;
 
-	private JSplitPane splitPane;
-	private JList parentDirectories;
-	private VFSDirectoryEntryTable table;
-	private Set<String> tmpExpanded;
+	private final JSplitPane splitPane;
+	private final JList parentDirectories;
+	private final VFSDirectoryEntryTable table;
+	private final Set<String> tmpExpanded;
 	private BrowserCommandsMenu popup;
 	private boolean showIcons;
 	//}}}
@@ -388,7 +389,8 @@ class BrowserView extends JPanel
 	//{{{ ParentDirectoryRenderer class
 	class ParentDirectoryRenderer extends DefaultListCellRenderer
 	{
-		Font plainFont, boldFont;
+		private Font plainFont;
+		private final Font boldFont;
 
 		ParentDirectoryRenderer()
 		{
@@ -398,6 +400,7 @@ class BrowserView extends JPanel
 			boldFont = new Font(plainFont.getName(),Font.BOLD,plainFont.getSize());
 		}
 
+		@Override
 		public Component getListCellRendererComponent(
 			JList list,
 			Object value,
@@ -435,8 +438,9 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ ParentMouseHandler class
-	class ParentMouseHandler extends MouseAdapter
+	private class ParentMouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mousePressed(MouseEvent evt)
 		{
 			int row = parentDirectories.locationToIndex(evt.getPoint());
@@ -446,7 +450,7 @@ class BrowserView extends JPanel
 					.getElementAt(row);
 				if(obj instanceof VFSFile)
 				{
-					VFSFile dirEntry = ((VFSFile)obj);
+					VFSFile dirEntry = (VFSFile)obj;
 					if(GUIUtilities.isPopupTrigger(evt))
 					{
 						if(popup != null && popup.isVisible())
@@ -466,6 +470,7 @@ class BrowserView extends JPanel
 			}
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent evt)
 		{
 			if(evt.getClickCount() % 2 != 0 &&
@@ -479,7 +484,7 @@ class BrowserView extends JPanel
 					.getElementAt(row);
 				if(obj instanceof VFSFile)
 				{
-					VFSFile dirEntry = ((VFSFile)obj);
+					VFSFile dirEntry = (VFSFile)obj;
 					if(!GUIUtilities.isPopupTrigger(evt))
 					{
 						browser.setDirectory(dirEntry.getPath());
@@ -492,9 +497,10 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ TableMouseHandler class
-	class TableMouseHandler extends MouseAdapter
+	private class TableMouseHandler extends MouseAdapter
 	{
 		//{{{ mouseClicked() method
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			Point p = evt.getPoint();
@@ -517,9 +523,9 @@ class BrowserView extends JPanel
 			if((evt.getModifiers() & InputEvent.BUTTON1_MASK) != 0
 				&& evt.getClickCount() % 2 == 0)
 			{
-				browser.filesActivated((evt.isShiftDown()
+				browser.filesActivated(evt.isShiftDown()
 					? VFSBrowser.M_OPEN_NEW_VIEW
-					: VFSBrowser.M_OPEN),true);
+					: VFSBrowser.M_OPEN,true);
 			}
 			else if(GUIUtilities.isMiddleButton(evt.getModifiers()))
 			{
@@ -527,13 +533,14 @@ class BrowserView extends JPanel
 					table.getSelectionModel().addSelectionInterval(row,row);
 				else
 					table.getSelectionModel().setSelectionInterval(row,row);
-				browser.filesActivated((evt.isShiftDown()
+				browser.filesActivated(evt.isShiftDown()
 					? VFSBrowser.M_OPEN_NEW_VIEW
-					: VFSBrowser.M_OPEN),true);
+					: VFSBrowser.M_OPEN,true);
 			}
 		} //}}}
 
 		//{{{ mousePressed() method
+		@Override
 		public void mousePressed(MouseEvent evt)
 		{
 			Point p = evt.getPoint();
@@ -588,6 +595,7 @@ class BrowserView extends JPanel
 		} //}}}
 
 		//{{{ mouseReleased() method
+		@Override
 		public void mouseReleased(MouseEvent evt)
 		{
 			if(!GUIUtilities.isPopupTrigger(evt)
@@ -598,20 +606,25 @@ class BrowserView extends JPanel
 		} //}}}
 	} //}}}
 
-	static class LoadingPlaceholder {}
+	private static class LoadingPlaceholder {}
 	//}}}
 	
 	class ParentDirectoryList extends JList
 	{
 
-		public String getPath(int row) {
-			LinkedList<String> components = new LinkedList<String>();
-			for (int i=1; i<=row; ++i) components.add(getModel().getElementAt(i).toString());
+		public String getPath(int row)
+		{
+			Collection<String> components = new LinkedList<String>();
+			for (int i=1; i<=row; ++i)
+				components.add(getModel().getElementAt(i).toString());
 			return getModel().getElementAt(0) + TextUtilities.join(components, File.separator);
 		}
+
+		@Override
 		protected void processKeyEvent(KeyEvent evt)
 		{
-			if (evt.getID() == KeyEvent.KEY_PRESSED)  {
+			if (evt.getID() == KeyEvent.KEY_PRESSED)
+			{
 				ActionContext ac = VFSBrowser.getActionContext();
 				int row = parentDirectories.getSelectedIndex();
 				switch(evt.getKeyCode()) {
@@ -697,7 +710,8 @@ class BrowserView extends JPanel
 					break;
 				}
 			}
-			if (!evt.isConsumed()) super.processKeyEvent(evt);
+			if (!evt.isConsumed())
+				super.processKeyEvent(evt);
 		}	
 	}
 	
