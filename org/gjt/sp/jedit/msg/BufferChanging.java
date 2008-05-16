@@ -28,15 +28,10 @@ import org.gjt.sp.util.Log;
 
 /** An EBMessage sent by the EditPane just before the buffer changes.
  * 
- * Plugins may emit this message just before they perform a 
- * Navigation-Like operation, such as jumping the cursor to 
- * another location (which should be in a different buffer).
+ * Plugins normally do not need to emit this message, since jEdit core
+ * does whenever the buffer changes.
  * 
- * Navigable jumps from one position in the buffer to another should send
- * PositionChanging instead.
- * 
- * This message is mostly for the benefit of the Navigator plugin, 
- * but may be used by other plugins too, such as BufferLocal.
+ * Known plugins to be using this: BufferLocal, Navigator.
  * 
  * @since jEdit 4.3pre4
  * @version $Id$

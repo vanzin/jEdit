@@ -50,7 +50,7 @@ Seph M. Soliman for contributing to this release.
 - Removed deprecated CaretChanging message, which was never in jEdit 4.2 anyway.
 
 - Added new EBMessage, PositionChanging, base class for BufferChanging,
-  for navigable position changes within the same buffer.
+  for navigable position changes within the same buffer. Replaces CaretChanging.
 
 
 }}}
@@ -1737,11 +1737,6 @@ Nicholas O'Leary and Marcelo Vanzin for contributing to this release.
   JEditTextArea.setBuffer() has been rewritten to end a compoundEdit on the old buffer and start
   a new compoundEdit on the new buffer if there were a compoundEdit in progress.
   (bug #1469996).   (Björn "Vampire" Kautler )
-
-- New class: org.gjt.sp.jedit.msg.CaretChanging, for alerting
-  other plugins that the caret position is about to change.
-  This allows Navigator to be alerted of sidekick selections. (Alan
-  Ezust)
 
 - MiscUtilities.isBinaryFile() method that will check if a file is binary or not (Matthieu Casanova)
 

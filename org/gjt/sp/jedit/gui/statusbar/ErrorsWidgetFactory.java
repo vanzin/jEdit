@@ -197,9 +197,10 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			Box buttons = new Box(BoxLayout.X_AXIS);
 			buttons.add(Box.createGlue());
 
-			buttons.add(removeThisError = new JButton("Remove this error from list"));
+			buttons.add(removeThisError = new JButton(jEdit.getProperty("grab-key.remove")));
 			buttons.add(Box.createHorizontalStrut(6));
-			buttons.add(removeAllErrors = new JButton("Remove all errors error from list"));
+			buttons.add(removeAllErrors = new JButton(jEdit.getProperty("common.clearAll")));
+			
 			ErrorDialog.MyActionListener actionListener = new MyActionListener();
 			removeThisError.addActionListener(actionListener);
 			removeAllErrors.addActionListener(actionListener);

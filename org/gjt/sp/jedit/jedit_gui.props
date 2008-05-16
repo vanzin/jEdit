@@ -36,6 +36,8 @@ common.moveUp=Move Up
 common.moveUp.icon=22x22/actions/go-up.png
 common.moveDown=Move Down
 common.moveDown.icon=22x22/actions/go-down.png
+common.clearAll=Clear All
+common.clearAll.icon=22x22/actions/edit-clear.png
 
 lineSep.unix=Unix (\\n)
 lineSep.windows=DOS/Windows (\\r\\n)
