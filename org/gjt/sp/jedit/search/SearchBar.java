@@ -45,12 +45,16 @@ public class SearchBar extends JToolBar
 	{
 		this.view = view;
 
+		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
+
 		setFloatable(false);
-		addSeparator(new Dimension(2,2));
+		add(Box.createHorizontalStrut(2));
 
 		JLabel label = new JLabel(jEdit.getProperty("view.search.find"));
 		add(label);
-		addSeparator(new Dimension(12,12));
+		
+		add(Box.createHorizontalStrut(12));
+		
 		add(find = new HistoryTextField("find"));
 		find.setSelectAllOnFocus(true);
 
@@ -69,7 +73,7 @@ public class SearchBar extends JToolBar
 
 		Insets margin = new Insets(1,1,1,1);
 
-		addSeparator(new Dimension(12,12));
+		addSeparator(new Dimension(12, 12));
 		
 		add(ignoreCase = new JCheckBox(jEdit.getProperty(
 			"search.case")));
@@ -77,14 +81,16 @@ public class SearchBar extends JToolBar
 		ignoreCase.setMargin(margin);
 		ignoreCase.setOpaque(false);
 		ignoreCase.setRequestFocusEnabled(false);
-		addSeparator(new Dimension(2,2));
+		add(Box.createHorizontalStrut(2));
+		
 		add(regexp = new JCheckBox(jEdit.getProperty(
 			"search.regexp")));
 		regexp.addActionListener(actionHandler);
 		regexp.setMargin(margin);
 		regexp.setOpaque(false);
 		regexp.setRequestFocusEnabled(false);
-		addSeparator(new Dimension(2,2));
+		add(Box.createHorizontalStrut(2));
+		
 		add(hyperSearch = new JCheckBox(jEdit.getProperty(
 			"search.hypersearch")));
 		hyperSearch.addActionListener(actionHandler);

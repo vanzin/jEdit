@@ -42,13 +42,14 @@ public class ActionBar extends JToolBar
 	{
 		this.view = view;
 		this.temp = temp;
-
+		
+		setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 		setFloatable(false);
-		addSeparator(new Dimension(2,2));
+		add(Box.createHorizontalStrut(2));
 
 		JLabel label = new JLabel(jEdit.getProperty("view.action.prompt"));
 		add(label);
-		addSeparator(new Dimension(12,12));
+		add(Box.createHorizontalStrut(12));
 		add(action = new ActionTextField());
 		action.setEnterAddsToHistory(false);
 		Dimension max = action.getPreferredSize();
