@@ -28,8 +28,7 @@ import org.gjt.sp.util.Log;
 
 /** An EBMessage sent by the EditPane just before the buffer changes.
  * 
- * Plugins normally do not need to emit this message, since jEdit core
- * does whenever the buffer changes.
+ * jEdit core emits this whenever the EditPane's buffer changes.
  * 
  * Known plugins to be using this: BufferLocal, Navigator.
  * 

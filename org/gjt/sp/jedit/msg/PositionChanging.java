@@ -13,8 +13,10 @@ import org.gjt.sp.jedit.EditPane;
  * emit this message whenever the user wants to jump from one position
  * to another in the same buffer.
  * 
- * For jumps to a different buffer entirely, it is not necessary to send an
- * EBMessage, since a BufferChanging message will be sent by jEdit core.
+ * For jumps to a different buffer entirely, it is not necessary for plugins
+ * to send BufferChanging, since it is sent by Core whenever EditPane.setBuffer()
+ * is called.
+ * 
  *
  * @see org.gjt.sp.jedit.msg.BufferChanging
  * @author ezust
