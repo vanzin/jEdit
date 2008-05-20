@@ -170,7 +170,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 
 		private ErrorDialog(Frame view)
 		{
-			super(view, "Errors", true);
+			super(view, "Errors", false);
 			byteArrayOutputStream = new ByteArrayOutputStream();
 			printStream = new PrintStream(byteArrayOutputStream);
 			throwables = Log.throwables.toArray();
