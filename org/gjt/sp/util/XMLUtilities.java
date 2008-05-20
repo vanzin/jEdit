@@ -24,10 +24,10 @@
 
 package org.gjt.sp.util;
 
+//{{{ Imports
 import java.io.InputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.Reader;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -35,6 +35,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+//}}}
 
 /**
  * XML utility methods that only depend on the JDK.
@@ -60,7 +61,7 @@ public class XMLUtilities
 	 */
 	public static String charsToEntities(String str, boolean xml11)
 	{
-		StringBuffer buf = new StringBuffer(str.length());
+		StringBuilder buf = new StringBuilder(str.length());
 		for(int i = 0; i < str.length(); i++)
 		{
 			char ch = str.charAt(i);
@@ -68,7 +69,7 @@ public class XMLUtilities
 			// control characters, excluding \t, \r and \n
 			if (xml11 && ch < 32 && ch != '\r' && ch != '\n' && ch != '\t')
 			{
-				buf.append("&#").append((int)ch).append(";");
+				buf.append("&#").append((int)ch).append(';');
 				continue;
 			}
 
@@ -126,7 +127,6 @@ public class XMLUtilities
 		catch(SAXParseException se)
 		{
 			int line = se.getLineNumber();
-			String message = se.getMessage();
 			Log.log(Log.ERROR,XMLUtilities.class,
 				"while parsing from " + in + ": SAXParseException: line " + line + ": " , se);
 			return true;
@@ -175,7 +175,7 @@ public class XMLUtilities
 			catch (Exception e)
 			{
 				Log.log(Log.ERROR,XMLUtilities.class,
-					"Error while opening " + test + ":");
+					"Error while opening " + test + ':');
 				Log.log(Log.ERROR,XMLUtilities.class,e);
 			}
 		}
