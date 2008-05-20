@@ -32,7 +32,7 @@ import org.gjt.sp.util.Log;
 class JEditMode extends Mode
 {
 	//{{{ JEditMode constructor
-	public JEditMode(String name)
+	JEditMode(String name)
 	{
 		super(name);
 	} //}}}
@@ -44,6 +44,7 @@ class JEditMode extends Mode
 	 * @param key The property name
 	 * @since jEdit 4.3pre10
 	 */
+	@Override
 	public Object getProperty(String key)
 	{
 		String prefix = "mode." + name + '.';
@@ -91,6 +92,7 @@ class JEditMode extends Mode
 	 * Loads the mode from disk if it hasn't been loaded already.
 	 * @since jEdit 4.3pre10
 	 */
+	@Override
 	public void loadIfNecessary()
 	{
 		if(marker == null)
