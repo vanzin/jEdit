@@ -263,7 +263,7 @@ loop:			for(int counter = 0; ; counter++)
 
 				buffer.getText(offset,end - offset,text);
 				SearchMatcher.Match match = matcher.nextMatch(
-					new SegmentCharSequence(text,false),
+					new SegmentCharSequence(text),
 					startOfLine,endOfLine,counter == 0,
 					false);
 				if(match == null)

@@ -1,8 +1,7 @@
 /*
- * SegmentCharSequence.java
  * :noTabs=false:
  *
- * Copyright (C) 2006 Marcelo Vanzin
+ * Copyright (C) 2008 Kazutoshi Satoda
  *
  * This library is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published
@@ -18,54 +17,51 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 package org.gjt.sp.util;
 
-import java.io.Serializable;
-import javax.swing.text.Segment;
-
 /**
- * Class that lets java.util.regex search within a javax.swing.text.Segment.
- *
- * @author Marcelo Vanzin
+ * Reversed view of a given CharSequence.
  */
-public class SegmentCharSequence implements CharSequence, Serializable
+public class ReverseCharSequence implements CharSequence
 {
-
-	public SegmentCharSequence(Segment seg)
+	public ReverseCharSequence(CharSequence base)
 	{
-		this(seg, 0, seg.count);
+		this.base = base;
 	}
 
-	public SegmentCharSequence(Segment seg, int off, int len)
+	public CharSequence baseSequence()
 	{
-		this.offset = off;
-		this.length = len;
-		this.seg = seg;
+		return base;
 	}
 
 	public char charAt(int index)
 	{
-		return seg.array[seg.offset + offset + index];
+		return base.charAt(base.length() - index - 1);
 	}
 
 	public int length()
 	{
-		return length;
+		return base.length();
 	}
 
 	public CharSequence subSequence(int start, int end)
 	{
-		return new SegmentCharSequence(seg, offset + start, end - start);
+		int baseLength = base.length();
+		return new ReverseCharSequence(
+			base.subSequence(baseLength - end, baseLength - start));
 	}
 
 	public String toString()
 	{
-		return new String(seg.array, offset+seg.offset, length);
+		int baseLength = base.length();
+		StringBuilder builder = new StringBuilder(baseLength);
+		for (int i = baseLength - 1; i >= 0; --i)
+		{
+			builder.append(base.charAt(i));
+		}
+		return builder.toString();
 	}
 
-	private int 	offset;
-	private int 	length;
-	private Segment seg;
-
+	private final CharSequence base;
 }
-

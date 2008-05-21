@@ -35,6 +35,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.SegmentCharSequence;
+import org.gjt.sp.util.ReverseCharSequence;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -623,17 +624,25 @@ loop:			for(;;)
 		}
 
 		Segment text = new Segment();
+		CharSequence sequence;
 		if(reverse)
+		{
 			buffer.getText(0,start,text);
+			sequence = new ReverseCharSequence(
+				new SegmentCharSequence(text));
+		}
 		else
+		{
 			buffer.getText(start,buffer.getLength() - start,text);
+			sequence = new SegmentCharSequence(text);
+		}
 
 		// the start and end flags will be wrong with reverse search enabled,
 		// but they are only used by the regexp matcher, which doesn't
 		// support reverse search yet.
 		//
 		// REMIND: fix flags when adding reverse regexp search.
-		SearchMatcher.Match match = matcher.nextMatch(new SegmentCharSequence(text,reverse),
+		SearchMatcher.Match match = matcher.nextMatch(sequence,
 			start == 0,true,firstTime,reverse);
 
 		if(match != null)
@@ -1188,7 +1197,7 @@ loop:		for(int counter = 0; ; counter++)
 				buffer.getLineOfOffset(offset)) == offset);
 
 			SearchMatcher.Match occur = matcher.nextMatch(
-				new SegmentCharSequence(text,false),
+				new SegmentCharSequence(text),
 				startOfLine,endOfLine,counter == 0,
 				false);
 			if(occur == null)
