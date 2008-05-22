@@ -109,7 +109,11 @@ public class JEditBuffer
 	} //}}}
 
 	//{{{ JEditBuffer constructor
-	public JEditBuffer()
+    /**
+     * Create a new JEditBuffer.
+     * It is used by independent textarea only
+     */
+    public JEditBuffer()
 	{
 		bufferListeners = new Vector<Listener>();
 		lock = new ReentrantReadWriteLock();
@@ -951,7 +955,8 @@ public class JEditBuffer
 	/**
 	 * @deprecated Use {@link #indentLine(int,boolean)} instead.
 	 */
-	public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
+    @Deprecated
+    public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
 		boolean canDecreaseIndent)
 	{
 		return indentLine(lineIndex,canDecreaseIndent);
@@ -1241,7 +1246,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		Mode mode = ModeProvider.instance.getMode(ctx.rules.getModeName());
 
 		// mode can be null, though that's probably an error "further up":
-		if( mode == null )
+		if (mode == null)
 			return false;
 		return mode.isElectricKey(ch);
 	} //}}}
@@ -1563,12 +1568,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public boolean getBooleanProperty(String name)
 	{
 		Object obj = getProperty(name);
-		if(obj instanceof Boolean)
+		if (obj instanceof Boolean)
 			return (Boolean)obj;
-		else if("true".equals(obj) || "on".equals(obj) || "yes".equals(obj))
+		if ("true".equals(obj) || "on".equals(obj) || "yes".equals(obj))
 			return true;
-		else
-			return false;
+
+        return false;
 	} //}}}
 
 	//{{{ setBooleanProperty() method
