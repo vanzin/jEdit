@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-import javax.swing.text.Segment;
 import javax.swing.tree.*;
 import javax.swing.*;
 

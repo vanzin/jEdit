@@ -28,7 +28,6 @@ import org.gjt.sp.jedit.bsh.*;
 import java.awt.*;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import javax.swing.text.Segment;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.TextAreaDialog;
 import org.gjt.sp.jedit.io.VFSManager;
