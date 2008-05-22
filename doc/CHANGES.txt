@@ -55,6 +55,8 @@ Seph M. Soliman for contributing to this release.
 - Added new EBMessage, PositionChanging, base class for BufferChanging,
   for navigable position changes within the same buffer. Replaces CaretChanging.
 
+- Deprecated a constructor of SegmentCharSequence which has reverse flag,
+  in favor of a new class ReverseCharSequence. (Kazutoshi Satoda)
 
 }}}
 
