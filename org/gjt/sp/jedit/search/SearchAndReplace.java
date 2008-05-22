@@ -34,7 +34,6 @@ import org.gjt.sp.jedit.gui.TextAreaDialog;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.util.SegmentCharSequence;
 import org.gjt.sp.util.ReverseCharSequence;
 import org.gjt.sp.util.Log;
 //}}}
@@ -623,26 +622,18 @@ loop:			for(;;)
 			return false;
 		}
 
-		Segment text = new Segment();
-		CharSequence sequence;
-		if(reverse)
-		{
-			buffer.getText(0,start,text);
-			sequence = new ReverseCharSequence(
-				new SegmentCharSequence(text));
-		}
-		else
-		{
-			buffer.getText(start,buffer.getLength() - start,text);
-			sequence = new SegmentCharSequence(text);
-		}
+		CharSequence text =
+			reverse ? new ReverseCharSequence(
+					buffer.getSegment(0,start))
+				: buffer.getSegment(
+					start,buffer.getLength() - start);
 
 		// the start and end flags will be wrong with reverse search enabled,
 		// but they are only used by the regexp matcher, which doesn't
 		// support reverse search yet.
 		//
 		// REMIND: fix flags when adding reverse regexp search.
-		SearchMatcher.Match match = matcher.nextMatch(sequence,
+		SearchMatcher.Match match = matcher.nextMatch(text,
 			start == 0,true,firstTime,reverse);
 
 		if(match != null)
@@ -1187,25 +1178,21 @@ loop:			while(path != null)
 		boolean endOfLine = (buffer.getLineEndOffset(
 			buffer.getLineOfOffset(end)) - 1 == end);
 
-		Segment text = new Segment();
 		int offset = start;
 loop:		for(int counter = 0; ; counter++)
 		{
-			buffer.getText(offset,end - offset,text);
-
 			boolean startOfLine = (buffer.getLineStartOffset(
 				buffer.getLineOfOffset(offset)) == offset);
 
+			CharSequence text = buffer.getSegment(
+				offset,end - offset);
 			SearchMatcher.Match occur = matcher.nextMatch(
-				new SegmentCharSequence(text),
-				startOfLine,endOfLine,counter == 0,
-				false);
+				text,startOfLine,endOfLine,counter == 0,false);
 			if(occur == null)
 				break loop;
 
-			String found = new String(text.array,
-				text.offset + occur.start,
-				occur.end - occur.start);
+			String found = text.subSequence(
+				occur.start, occur.end).toString();
 
 			int length = replaceOne(view,buffer,occur,offset,
 				found,smartCaseReplace);
