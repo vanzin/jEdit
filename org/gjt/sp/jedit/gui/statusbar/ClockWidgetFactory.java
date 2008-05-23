@@ -48,7 +48,7 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 	//{{{ getWidget() method
 	public Widget getWidget(View view) 
 	{
-		Widget clock = new ClockWidget(view);
+		Widget clock = new ClockWidget();
 		return clock;
 	} //}}}
 
@@ -56,7 +56,7 @@ public class ClockWidgetFactory implements StatusWidgetFactory
 	private static class ClockWidget implements Widget
 	{
 		private final Clock clock;
-		ClockWidget(View view) 
+		ClockWidget()
 		{
 			clock = new Clock();
 		}

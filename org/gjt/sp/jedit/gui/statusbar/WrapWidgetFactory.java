@@ -47,8 +47,8 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 	//{{{ getWidget() method
 	public Widget getWidget(View view) 
 	{
-		WrapWidget mode = new WrapWidget(view);
-		return mode;
+		Widget wrap = new WrapWidget(view);
+		return wrap;
 	} //}}}
 	
 	//{{{ WrapWidget class

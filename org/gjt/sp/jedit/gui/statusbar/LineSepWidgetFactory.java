@@ -45,8 +45,8 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 	//{{{ getWidget() method
 	public Widget getWidget(View view) 
 	{
-		LineSepWidget mode = new LineSepWidget(view);
-		return mode;
+		Widget lineSep = new LineSepWidget(view);
+		return lineSep;
 	} //}}}
 	
 	//{{{ LineSepWidget class

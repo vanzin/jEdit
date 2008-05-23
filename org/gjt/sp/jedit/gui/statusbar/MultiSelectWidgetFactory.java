@@ -47,8 +47,8 @@ public class MultiSelectWidgetFactory implements StatusWidgetFactory
 	//{{{ getWidget() method
 	public Widget getWidget(View view)
 	{
-		Widget mode = new MultiSelectWidget(view);
-		return mode;
+		Widget multiSelect = new MultiSelectWidget(view);
+		return multiSelect;
 	} //}}}
 
 	//{{{ MultiSelectWidget class

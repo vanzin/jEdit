@@ -45,8 +45,8 @@ public class FoldWidgetFactory implements StatusWidgetFactory
 	//{{{ getWidget() method
 	public Widget getWidget(View view) 
 	{
-		FoldWidget mode = new FoldWidget(view);
-		return mode;
+		Widget fold = new FoldWidget(view);
+		return fold;
 	} //}}}
 
 	//{{{ FoldWidget class
