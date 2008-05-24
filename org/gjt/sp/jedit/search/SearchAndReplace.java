@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.TextAreaDialog;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.msg.PositionChanging;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.ReverseCharSequence;
@@ -614,6 +615,9 @@ loop:			for(;;)
 	public static boolean find(View view, Buffer buffer, int start,
 		boolean firstTime, boolean reverse) throws Exception
 	{
+		
+		EditBus.send(new PositionChanging(view.getEditPane()));
+		
 		SearchMatcher matcher = getSearchMatcher();
 		if(matcher == null)
 		{
