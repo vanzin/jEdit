@@ -73,7 +73,7 @@
 <MODE NAME="bibtex"		FILE="bibtex.xml"
 				FILE_NAME_GLOB="*.bib" />
 
-<!--  We let Objective C mode highlight .h files -->
+<!-- We let c++ color the .h files -->
 <MODE NAME="c"			FILE="c.xml"
 				FILE_NAME_GLOB="*.c" />
 
@@ -93,7 +93,7 @@
 				FILE_NAME_GLOB="*.{cfm,dbm,cfc}" />
 
 <MODE NAME="c++"		FILE="cplusplus.xml"
-				FILE_NAME_GLOB="*.{cc,cpp,hh,hpp,cxx}" />
+				FILE_NAME_GLOB="*.{cc,cpp,h,hh,hpp,cxx}" />
 
 <MODE NAME="c#"			FILE="csharp.xml"
 				FILE_NAME_GLOB="*.cs" />
@@ -271,7 +271,7 @@
 				FILE_NAME_GLOB="*.{nsi,nsh}" />
 
 <MODE NAME="objective-c"	FILE="objective-c.xml"
-				FILE_NAME_GLOB="*.[mh]" />
+				FILE_NAME_GLOB="*.{objc,m}" />
 
 <MODE NAME="objectrexx"		FILE="objectrexx.xml"
 				FILE_NAME_GLOB="*.{rex,orx}" />
