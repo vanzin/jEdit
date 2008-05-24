@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre15
 
 Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova and
-Seph M. Soliman for contributing to this release.
+Seph M. Soliman, and Alan Ezust for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -54,6 +54,7 @@ Seph M. Soliman for contributing to this release.
 
 - Added new EBMessage, PositionChanging, base class for BufferChanging,
   for navigable position changes within the same buffer. Replaces CaretChanging.
+  Search - FindNext sends it before finding next. (Alan Ezust) 
 
 - Deprecated a constructor of SegmentCharSequence which has reverse flag,
   in favor of a new class ReverseCharSequence. (Kazutoshi Satoda)
