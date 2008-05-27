@@ -20,6 +20,9 @@ Seph M. Soliman, and Alan Ezust for contributing to this release.
 
 - Some NPE fixed in status bar widgets when the view do not have a textArea yet
   (#1965532) (Matthieu Casanova)
+  
+- [ 1694133 ] File Browser: back-arrow in filename textbox (Alan Ezust)  
+  
 }}}
 {{{ Miscellaneous
 
