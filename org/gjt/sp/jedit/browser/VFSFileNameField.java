@@ -79,10 +79,7 @@ class VFSFileNameField extends HistoryTextField
 				doComplete(path);
 				break;
 			case KeyEvent.VK_LEFT:
-				if(getCaretPosition() == 0)
-					browser.getBrowserView().getTable().processKeyEvent(evt);
-				else
-					super.processKeyEvent(evt);
+				super.processKeyEvent(evt);
 				break;
 			case KeyEvent.VK_RIGHT:
 				if(getCaretPosition() == getDocument().getLength())
