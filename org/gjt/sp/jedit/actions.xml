@@ -929,14 +929,7 @@
 
 <ACTION NAME="scroll-to-current-line">
 	<CODE>
-		if(!textArea.getDisplayManager().isLineVisible(
-			textArea.getCaretLine()))
-		{
-			textArea.getDisplayManager().expandFold(
-				textArea.getCaretLine(),true);
-		}
-		textArea.scrollToCaret(true);
-		textArea.requestFocus();
+		textArea.scrollToCurrent();
 	</CODE>
 </ACTION>
 

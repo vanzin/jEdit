@@ -22,6 +22,11 @@ Seph M. Soliman, and Alan Ezust for contributing to this release.
   (#1965532) (Matthieu Casanova)
   
 - [ 1694133 ] File Browser: back-arrow in filename textbox (Alan Ezust)  
+
+- [ 1910061 ] 4.3pre13, r11659 - Center Caret On Screen action
+  Restored previous behavior of centercaret on screen, and modified
+  the "scrollToCurrent" behavior to attempt to center the caret
+  when the text is not folded. (Alan Ezust)
   
 }}}
 {{{ Miscellaneous
