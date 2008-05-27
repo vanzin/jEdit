@@ -401,14 +401,15 @@ public class MiscUtilities
 		int start = getPathStart(path);
 		if(start != 0)
 			path = path.substring(start);
-		int index = Math.max(path.lastIndexOf('/'),
-							 path.lastIndexOf(File.separatorChar));
+		int index = Math.max(
+			path.lastIndexOf('/'), path.lastIndexOf(File.separatorChar));
 		if(index == -1)
 			return index;
 		else
 			return index + start;
 	} //}}}
 
+	
 	//{{{ getFileExtension() method
 	/**
 	 * Returns the extension of the specified filename, or an empty
@@ -1719,7 +1720,7 @@ loop:		for(;;)
 	{
 		int start = 0;
 		if(path.startsWith("/"))
-			return 1;
+			return 0;
 		else if(OperatingSystem.isDOSDerived()
 			&& path.length() >= 3
 			&& path.charAt(1) == ':'
