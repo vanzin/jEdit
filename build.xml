@@ -186,9 +186,9 @@
 				<include name="org/gjt/sp/util/SyntaxUtilities.class"/>
 				<include name="org/gjt/sp/util/XMLUtilities.class"/>
 				<include name="org/gjt/sp/util/Log*.class"/>
-				<include name="org/gjt/sp/jedit/textarea/*.xml" />
 			</fileset>
             <fileset dir=".">
+				<include name="org/gjt/sp/jedit/textarea/*.xml"/>
 				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
 				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
@@ -1324,6 +1324,11 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
+	
+	<target name="install" depends="build" 
+		description="install built files to config.install.dir">
+		<copy todir="${config.install.dir}" file="${build.dir}/jedit.jar" />
+    </target>
 	
 	<target name="dist"
 			depends="init"

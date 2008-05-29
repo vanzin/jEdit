@@ -189,7 +189,6 @@ file=new-file \
      reload-all \
      %reload-encoding \
      - \
-     editpane-close-buffer \
      close-buffer \
      close-all \
      - \
@@ -213,6 +212,7 @@ reload-all.label=Reloa$d All...
 close-buffer.label=$Close
 close-buffer.icon.small=10x10/actions/close.png
 editpane-close-buffer.label=Close from edit pane
+closeall-except-active.label=Clear BufferSet except active
 editpane-close-buffer.icon.small=10x10/actions/close.png
 close-all.label=Clos$e All
 save.label=$Save
@@ -563,7 +563,7 @@ resplit.label=$Restore Split
 prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
 buffersets.label=Buffer Sets
-buffersets=global-bufferset view-bufferset editpane-bufferset - editpane-close-buffer
+buffersets=global-bufferset view-bufferset editpane-bufferset - editpane-close-buffer closeall-except-active
 
 #}}}
 
@@ -1707,7 +1707,7 @@ options.general.checkModStatusUpon.operations=visiting the buffer or saving any 
 options.general.checkModStatusUpon.focusBuffer=visiting or saving the buffer
 options.general.checkModStatusUpon.none=saving the buffer
 options.general.recentFiles=Recent files to remember:
-options.general.hypersearch.maxWarningResults=Ask to stop hypersearch if the result count pass this limit:
+options.general.hypersearch.maxWarningResults=Max Hypersearch Results:
 options.general.sortRecent=Sort recent file list
 options.general.saveCaret=Save caret positions in recent file list
 options.general.persistentMarkers=Save marker positions

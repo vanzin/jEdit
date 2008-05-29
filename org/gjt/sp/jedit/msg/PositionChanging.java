@@ -14,8 +14,9 @@ import org.gjt.sp.jedit.EditPane;
  * to another in the same buffer.
  * 
  * For jumps to a different buffer entirely, it is not necessary for plugins
- * to send BufferChanging, since it is sent by Core whenever EditPane.setBuffer()
- * is called.
+ * to send any message, since BufferChanging is sent by jEdit whenever 
+ * EditPane.setBuffer() is called, and it serves as a PositionChanging message
+ * also.
  * 
  *
  * @see org.gjt.sp.jedit.msg.BufferChanging

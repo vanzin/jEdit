@@ -182,13 +182,20 @@
         <para> Each EditPane can show a BufferList, which is a representation of a BufferSet.
         In jEdit 4.2, all EditPane buffer lists showed a global list of all buffers that were opened from any EditPane in any View. This resulted in very large lists of buffers, and made the next/previous buffer actions useless with many views, editpanes and buffers. </para>
         
-        <para> In jEdit 4.3, it is possible to change the BufferSet scope of any EditPane, from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenu>global|view|editpane</guimenu>.
+        <para> With a View or Editpane-scope buffer set, opening a buffer in one View will not result in the buffer 
+        being added to the buffer lists of other EditPanes. </para>
+        
+        <para> In jEdit 4.3, it is possible to change the BufferSet scope of any EditPane. The statusbar shows you which
+        bufferset scope is active for the current editpane (look for the letter "G", "E" or "V"). Double-clicking on that
+        will allow you to change the buffer set.
+        Also, you can change it from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenu>global|view|editpane</guimenu>.
+        </para>
+        
+        <para> <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenuitem>Close from Edit Pane</guimenuitem> will remove the buffer from the current BufferSet without closing the buffer entirely or removing it from other BufferSets. <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the current EditPane by removing all items except the active buffer from the set.
         </para>
         
         <para>You can set the default Buffer Set scope for newly created EditPanes. 
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>&gt;<guimenuitem>View</guimenuitem>&gt;<guilabel>BufferSet scope for new EditPanes</guilabel>.</para>
-        
-        <para> You can remove a buffer from the current BufferSet without closing it from other Views with <guimenu>File</guimenu>&gt;<guimenuitem>Close</guimenuitem>. </para>
         
         <para> When a buffer is opened from EditPane A, with a "view" bufferset scope, and then it is opened again from EditPane B in another View, then it is removed from A's buffer set. </para>
         
