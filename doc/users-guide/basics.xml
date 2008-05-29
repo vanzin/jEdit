@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="basics">
     <title>jEdit Basics</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :indentSize=1:noTabs=true: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
     <sect1 id="overview">
         <title>Interface Overview</title>
 
-        <para>A <firstterm>view</firstterm> is the jEdit term for an editor
+        <para>A <firstterm>View</firstterm> is the jEdit term for an editor main
         window. It is possible to have multiple views open at once, and each
         view can be split into multiple panes. jEdit remembers the state of open
         views between editing sessions.</para>
-
-        <para>An open file is referred to as a <firstterm>buffer</firstterm>.
+        
+        <para>An open file is referred to as a <firstterm>Buffer</firstterm>.
         Unlike some editors where each buffer gets its own view, jEdit
         completely separates the two concepts. A buffer might be visible in
         several views, or none at all.</para>
 
-        <para>The drop-down list at the top of the view shows all open buffers;
-        selecting one will make it visible in the view's text area. Different
+        <para>A <firstterm>TextArea</firstterm> is an editor for a buffer. 
+        An <firstterm>EditPane</firstterm> contains a textarea plus optional buffer switcher. 
+        A View contains one editpane by default, and additional panes are created whenever
+        the view is split.  </para>
+        
+        <para>The drop-down buffer switcher list at the top of each EditPane shows
+        a buffer set which by default includes all open buffers.
+        Selecting a buffer on this list will make it visible in the text area. Different
         emblems are displayed next to buffer names in the list, depending the
         buffer's state; a red disk is shown for buffers with unsaved changes, a
         lock is shown for read-only buffers, and a spark is shown for new
@@ -123,15 +126,15 @@
     <sect1 id="views">
         <title>Multiple Views</title>
 
-        <para>As documented at the beginning of this chapter, multiple views can
-        be opened at once, and views can be split into multiple panes.</para>
+        <para>As documented at the beginning of this chapter, multiple Views
+        (main windows) can be open at once.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem>
-        creates a new view.</para>
+        creates a new view, or main window.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>New Plain
         View</guimenuitem> creates a new view but without any tool bars or
-        docked windows. This can be used to open a small window for taking notes
+        dockable windows. This can be used to open a small window for taking notes
         and so on.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem>
@@ -166,8 +169,34 @@
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Next Text
         Area</guimenuitem> (shortcut: <keycap>A+PAGE_DOWN</keycap>) shifts
         keyboard focus to the next text area.</para>
+        
+        <para><guimenu>Macros</guimenu>&gt;<guimenu>Interface</guimenu>&gt;
+        <guimenu>Splitpane Grow</guimenu> grows the size of the currently focused
+        text area. </para>
+        
     </sect1>
 
+    <sect1 id="buffersets">
+        <title>Buffer Sets</title>
+        
+        <para> Each EditPane can show a BufferList, which is a representation of a BufferSet.
+        In jEdit 4.2, all EditPane buffer lists showed a global list of all buffers that were opened from any EditPane in any View. This resulted in very large lists of buffers, and made the next/previous buffer actions useless with many views, editpanes and buffers. </para>
+        
+        <para> In jEdit 4.3, it is possible to change the BufferSet scope of any EditPane, from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenu>global|view|editpane</guimenu>.
+        </para>
+        
+        <para>You can set the default Buffer Set scope for newly created EditPanes. 
+        <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>&gt;<guimenuitem>View</guimenuitem>&gt;<guilabel>BufferSet scope for new EditPanes</guilabel>.</para>
+        
+        <para> You can remove a buffer from the current BufferSet without closing it from other Views with <guimenu>File</guimenu>&gt;<guimenuitem>Close</guimenuitem>. </para>
+        
+        <para> When a buffer is opened from EditPane A, with a "view" bufferset scope, and then it is opened again from EditPane B in another View, then it is removed from A's buffer set. </para>
+        
+        <para> When a buffer is opened from EditPane B, and A's bufferset scope is "editpane", it is removed from A's bufferset, regardless of which view B is in. </para>
+        
+        <para> The buffer sets feature helps keep the buffer lists local and managable when using jEdit in a multiple-view and multiple-editpane environment. </para>
+    </sect1>
+    
     <sect1 id="docking">
         <title>Window Docking</title>
 
