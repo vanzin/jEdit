@@ -2,8 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre15
 
-Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova and
-Seph M. Soliman, and Alan Ezust for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova,
+Seph M. Soliman, Alan Ezust, and Daniel Hahler for contributing to this
+release.
 
 {{{ Bug Fixes
 
@@ -54,6 +55,15 @@ Seph M. Soliman, and Alan Ezust for contributing to this release.
 - SF Patch #1947143: remove the hack to support sub names with apostrophes in
   perl mode. Hopefully no one will complain (the hack had its own problems,
   as the SF entry shows). (Marcelo Vanzin)
+
+- PHP mode:
+  - add new ruleset PHP_EXPRESSION to handle separate expressions better,
+    e.g. new support for constructs like "$a->{'bar-'.substr($b,1)}"
+  - handle function definitions (DEF_FUNCTION* rulesets), e.g.
+    "function foo( array $bar = null )"
+  - handle var-vars (e.g. $$foo)
+  - stricter, consistent matching of variable names
+  - other minor fixes/improvements
 
 }}}
 {{{ API Changes
