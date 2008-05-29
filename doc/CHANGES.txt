@@ -20,14 +20,14 @@ Seph M. Soliman, and Alan Ezust for contributing to this release.
 
 - Some NPE fixed in status bar widgets when the view do not have a textArea yet
   (#1965532) (Matthieu Casanova)
-  
-- [ 1694133 ] File Browser: back-arrow in filename textbox (Alan Ezust)  
+
+- [ 1694133 ] File Browser: back-arrow in filename textbox (Alan Ezust)
 
 - [ 1910061 ] 4.3pre13, r11659 - Center Caret On Screen action
   Restored previous behavior of centercaret on screen, and modified
   the "scrollToCurrent" behavior to attempt to center the caret
   when the text is not folded. (Alan Ezust)
-  
+
 }}}
 {{{ Miscellaneous
 
@@ -42,6 +42,11 @@ Seph M. Soliman, and Alan Ezust for contributing to this release.
 
 - Toolbar and context menu can now be restored to default setting
   (Seph M. Soliman - #1961989)
+
+- New BufferSet api. The EditPanes can now manage their own list of buffers,
+  or share this list with the editpanes from the same view, and of course as
+  usual share the same list between all EditPanes (the default behavior)
+  (Matthieu Casanova)
 
 }}}
 {{{ Editing
@@ -62,7 +67,7 @@ Seph M. Soliman, and Alan Ezust for contributing to this release.
 
 - Added new EBMessage, PositionChanging, base class for BufferChanging,
   for navigable position changes within the same buffer. Replaces CaretChanging.
-  Search - FindNext sends it before finding next. (Alan Ezust) 
+  Search - FindNext sends it before finding next. (Alan Ezust)
 
 - Deprecated a constructor of SegmentCharSequence which has reverse flag,
   in favor of a new class ReverseCharSequence. (Kazutoshi Satoda)

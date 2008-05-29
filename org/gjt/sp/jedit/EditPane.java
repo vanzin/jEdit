@@ -36,6 +36,8 @@ import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.bufferset.BufferSetListener;
+import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.util.SyntaxUtilities;
 //}}}
 
@@ -44,18 +46,18 @@ import org.gjt.sp.util.SyntaxUtilities;
  *
  * In a BeanShell script, you can obtain the current edit pane from the
  * <code>editPane</code> variable.<p>
- * 
- * 
+ *
+ *
  * Each View can have multiple editPanes, one is active at a time.
  * Each EditPane has a single JEditTextArea, and is operating on single buffer.
- * The EditPane also can switch buffers. 
- * 
+ * The EditPane also can switch buffers.
+ *
  * This is the "controller" between a JEditTextArea (view) and a buffer (model).
  *
  * This class does not have a public constructor.
  * Edit panes can be created and destroyed using methods in the
  * {@link View} class.<p>
- * 
+ *
  *
  * @see View#splitHorizontally()
  * @see View#splitVertically()
@@ -67,7 +69,7 @@ import org.gjt.sp.util.SyntaxUtilities;
  * @author Slava Pestov
  * @version $Id$
  */
-public class EditPane extends JPanel implements EBComponent
+public class EditPane extends JPanel implements EBComponent, BufferSetListener
 {
 	//{{{ getView() method
 	/**
@@ -115,6 +117,10 @@ public class EditPane extends JPanel implements EBComponent
 		if(this.buffer == buffer)
 			return;
 
+		if (bufferSet.indexOf(buffer) == -1)
+		{
+			jEdit.getBufferSetManager().addBuffer(view, buffer);
+		}
 		//if(buffer.insideCompoundEdit())
 		//	buffer.endCompoundEdit();
 		EditBus.send(new BufferChanging(this, buffer));
@@ -124,7 +130,7 @@ public class EditPane extends JPanel implements EBComponent
 		this.buffer = buffer;
 
 		textArea.setBuffer(buffer);
-		    
+
 		if(!init)
 		{
 			view.updateTitle();
@@ -133,7 +139,7 @@ public class EditPane extends JPanel implements EBComponent
 			{
 				if(bufferSwitcher.getSelectedItem() != buffer)
 					bufferSwitcher.setSelectedItem(buffer);
-				bufferSwitcher.setToolTipText(buffer.getPath());				
+				bufferSwitcher.setToolTipText(buffer.getPath());
 			}
 
 			EditBus.send(new EditPaneUpdate(this,EditPaneUpdate
@@ -182,11 +188,8 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void prevBuffer()
 	{
-		Buffer buffer = this.buffer.getPrev();
-		if(buffer == null)
-			setBuffer(jEdit.getLastBuffer());
-		else
-			setBuffer(buffer);
+		Buffer buffer = bufferSet.getPreviousBuffer(bufferSet.indexOf(this.buffer));
+		setBuffer(buffer);
 	} //}}}
 
 	//{{{ nextBuffer() method
@@ -196,11 +199,8 @@ public class EditPane extends JPanel implements EBComponent
 	 */
 	public void nextBuffer()
 	{
-		Buffer buffer = this.buffer.getNext();
-		if(buffer == null)
-			setBuffer(jEdit.getFirstBuffer());
-		else
-			setBuffer(buffer);
+		Buffer buffer = bufferSet.getNextBuffer(bufferSet.indexOf(this.buffer));
+		setBuffer(buffer);
 	} //}}}
 
 	//{{{ recentBuffer() method
@@ -280,14 +280,14 @@ public class EditPane extends JPanel implements EBComponent
 
 		buffer.setIntegerProperty(Buffer.CARET,
 			textArea.getCaretPosition());
-		
+
 		// save a map of buffer.getPath() -> CaretInfo, this is necessary for
 		// when the same buffer is open in more than one EditPane and the user
-		// is switching between buffers.  We want to keep the caret in the 
-		// right position in each EditPane, which won't be the case if we 
+		// is switching between buffers.  We want to keep the caret in the
+		// right position in each EditPane, which won't be the case if we
 		// just use the buffer caret property.
 		Map<String, CaretInfo> carets = (Map<String, CaretInfo>)getClientProperty(CARETS);
-		if (carets == null) 
+		if (carets == null)
 		{
 			carets = new HashMap<String, CaretInfo>();
 			putClientProperty(CARETS, carets);
@@ -295,11 +295,11 @@ public class EditPane extends JPanel implements EBComponent
 		CaretInfo caretInfo = carets.get(buffer.getPath());
 		if (caretInfo == null)
 		{
-			caretInfo = new CaretInfo();	
+			caretInfo = new CaretInfo();
 			carets.put(buffer.getPath(), caretInfo);
 		}
 		caretInfo.caret = textArea.getCaretPosition();
-		
+
 
 		Selection[] selection = textArea.getSelection();
 		for(int i = 0; i < selection.length; i++)
@@ -327,7 +327,7 @@ public class EditPane extends JPanel implements EBComponent
 
 	//{{{ loadCaretInfo() method
 	/**
-	 * Loads the caret and selection information from this EditPane, fall 
+	 * Loads the caret and selection information from this EditPane, fall
 	 * back to the information from the current buffer if none is already
 	 * in this EditPane.
 	 * @since jEdit 2.5pre2
@@ -345,13 +345,13 @@ public class EditPane extends JPanel implements EBComponent
 		CaretInfo caretInfo = carets.get(buffer.getPath());
 		if (caretInfo == null)
 		{
-			caretInfo = new CaretInfo();	
+			caretInfo = new CaretInfo();
 		}
-		
+
 		// set the position of the caret itself.
 		// Caret position could be stored in the internal map already,
-		// if so, use that one first.  Otherwise, fall back to any 
-		// previously saved caret position that was stored in the 
+		// if so, use that one first.  Otherwise, fall back to any
+		// previously saved caret position that was stored in the
 		// buffer properties.
 		int caret = caretInfo.caret;
 		if (caret == -1 || buffer.getBooleanProperty(Buffer.CARET_POSITIONED))
@@ -469,7 +469,7 @@ public class EditPane extends JPanel implements EBComponent
 		}
 
 		Marker marker = null;
-		
+
 		int caret = textArea.getCaretPosition();
 
 		for(int i = 0; i < markers.size(); i++)
@@ -505,7 +505,7 @@ public class EditPane extends JPanel implements EBComponent
 			getToolkit().beep();
 			return;
 		}
-		
+
 		int caret = textArea.getCaretPosition();
 
 		Marker marker = null;
@@ -563,7 +563,7 @@ public class EditPane extends JPanel implements EBComponent
 	public void addMarker()
 	{
 		int caretLine = textArea.getCaretLine();
-		
+
 		// always add markers on selected lines
 		Selection[] selection = textArea.getSelection();
 		for(int i = 0; i < selection.length; i++)
@@ -627,6 +627,106 @@ public class EditPane extends JPanel implements EBComponent
 		return new Dimension(0,0);
 	} //}}}
 
+	public BufferSet getBufferSet()
+	{
+		return bufferSet;
+	}
+
+	public void setBufferSet()
+	{
+		String mode = jEdit.getProperty("editpane.bufferset.default", BufferSet.SCOPE[0]);
+
+		if (mode.equals(BufferSet.SCOPE[1]))
+		{
+			setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view));
+		}
+		else if (mode.equals(BufferSet.SCOPE[2]))
+		{
+			setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(this, bufferSet));
+		}
+		else
+		{
+			setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
+		}
+	}
+
+	public void setBufferSet(BufferSet bufferSet)
+	{
+		if (this.bufferSet != bufferSet)
+		{
+			if (this.bufferSet != null)
+			{
+				this.bufferSet.removeBufferSetListener(this);
+			}
+			firePropertyChange("bufferSet", this.bufferSet, bufferSet);
+			this.bufferSet = bufferSet;
+			bufferSet.addBufferSetListener(this);
+			if (bufferSwitcher != null)
+			{
+				bufferSwitcher.updateBufferList();
+			}
+		}
+	}
+
+	public void bufferAdded(Buffer buffer, int index)
+	{
+		if (bufferSwitcher != null)
+			bufferSwitcher.updateBufferList();
+		if (bufferSet.indexOf(this.buffer) == -1)
+		{
+			// it happens when having 1 untitled buffer if I open a file. The untitled buffer
+			// is closed but the new buffer is not yet opened
+			setBuffer(buffer);
+		}
+	}
+
+	public void bufferRemoved(Buffer buffer, int index)
+	{
+		if (buffer.isUntitled())
+		{
+			// the buffer was a new file so I do not need to keep it's informations
+			Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
+			if (carets != null)
+				carets.remove(buffer.getPath());
+		}
+		if (buffer == this.buffer)
+		{
+			// The closed buffer is the current buffer
+			Buffer newBuffer = recentBuffer != null ?
+				recentBuffer : bufferSet.getPreviousBuffer(index);
+
+			if(newBuffer != null && !newBuffer.isClosed())
+			{
+				setBuffer(newBuffer);
+				if (bufferSet.size() > 1)
+				{
+					recentBuffer = bufferSet.getPreviousBuffer(index -1);
+				}
+			}
+			else if(bufferSet.size() != 0)
+			{
+				setBuffer(bufferSet.getBuffer(0));
+				recentBuffer = null;
+			}
+		}
+		if(buffer == recentBuffer)
+			recentBuffer = null;
+		if (bufferSwitcher != null)
+			bufferSwitcher.updateBufferList();
+	}
+
+	public void bufferMoved(Buffer buffer, int oldIndex, int newIndex)
+	{
+		if (bufferSwitcher != null)
+			bufferSwitcher.updateBufferList();
+	}
+
+	public void bufferCleared()
+	{
+		if (bufferSwitcher != null)
+			bufferSwitcher.updateBufferList();
+	}
+
 	//{{{ toString() method
 	@Override
 	public String toString()
@@ -662,6 +762,7 @@ public class EditPane extends JPanel implements EBComponent
 
 		propertiesChanged();
 
+		setBufferSet();
 		if(buffer == null)
 			setBuffer(jEdit.getFirstBuffer());
 		else
@@ -689,6 +790,7 @@ public class EditPane extends JPanel implements EBComponent
 	private boolean init;
 	/** The View where the edit pane is. */
 	private final View view;
+	private BufferSet bufferSet;
 	/** The current buffer. */
 	private Buffer buffer;
 	private Buffer recentBuffer;
@@ -698,7 +800,7 @@ public class EditPane extends JPanel implements EBComponent
 	private final MarkerHighlight markerHighlight;
 
 	private static final String CARETS = "Buffer->caret";
-	
+
 	//}}}
 
 	//{{{ propertiesChanged() method
@@ -792,13 +894,13 @@ public class EditPane extends JPanel implements EBComponent
 			"view.ctrlForRectangularSelection"));
 
 		textArea.propertiesChanged();
-		
+
 		if (bufferSwitcher != null) {
 			bufferSwitcher.setMaximumRowCount(jEdit.getIntegerProperty(
 				"bufferSwitcher.maxRowCount",10));
 		}
 	} //}}}
-	
+
 	//{{{ initPainter() method
 	/**
 	 * Init the painter of a textarea.
@@ -1003,7 +1105,7 @@ public class EditPane extends JPanel implements EBComponent
 			StatusBar status = view.getStatus();
 			if(status == null)
 				return;
-			
+
 			switch(flag)
 			{
 			case OVERWRITE_CHANGED:
@@ -1022,27 +1124,27 @@ public class EditPane extends JPanel implements EBComponent
 					new Integer[] { value ? 1 : 0 }));
 				break;
 			}
-			
+
 			status.updateMiscStatus();
 		}
-	
+
 		public void bracketSelected(org.gjt.sp.jedit.textarea.TextArea textArea, int line, String text)
 		{
 			StatusBar status = view.getStatus();
 			if(status == null)
 				return;
-			
+
 			status.setMessageAndClear(jEdit.getProperty(
 				"view.status.bracket",new Object[] {
 				line, text }));
 		}
-	
+
 		public void narrowActive(org.gjt.sp.jedit.textarea.TextArea textArea)
 		{
 			StatusBar status = view.getStatus();
 			if(status == null)
 				return;
-			
+
 			status.setMessageAndClear(
 				jEdit.getProperty("view.status.narrow"));
 		}
@@ -1059,25 +1161,25 @@ public class EditPane extends JPanel implements EBComponent
 		{
 			return markerHighlightColor;
 		} //}}}
-	
+
 		//{{{ setMarkerHighlightColor() method
 		public void setMarkerHighlightColor(Color markerHighlightColor)
 		{
 			this.markerHighlightColor = markerHighlightColor;
 		} //}}}
-	
+
 		//{{{ isMarkerHighlightEnabled() method
 		public boolean isMarkerHighlightEnabled()
 		{
 			return markerHighlight;
 		} //}}}
-	
+
 		//{{{ isMarkerHighlightEnabled()
 		public void setMarkerHighlightEnabled(boolean markerHighlight)
 		{
 			this.markerHighlight = markerHighlight;
 		} //}}}
-	
+
 		//{{{ paintValidLine() method
 		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,

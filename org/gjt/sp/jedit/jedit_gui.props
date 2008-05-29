@@ -71,7 +71,7 @@ dropdown-arrow.icon=ToolbarMenu.gif
 #}}}
 
 #{{{ Tool bar
-view.toolbar=new-file open-file save close-buffer - print - \
+view.toolbar=new-file open-file save editpane-close-buffer - print - \
 	undo redo - cut copy paste - find find-next - \
 	new-view unsplit split-horizontal split-vertical - \
 	buffer-options global-options - \
@@ -81,6 +81,7 @@ new-file.icon=22x22/actions/document-new.png
 open-file.icon=22x22/actions/document-open.png
 save.icon=22x22/actions/document-save.png
 close-buffer.icon=22x22/actions/document-close.png
+editpane-close-buffer.icon=22x22/actions/document-close.png
 print.icon=22x22/actions/document-print.png
 page-setup.icon=22x22/actions/printer-setup.png
 undo.icon=22x22/actions/edit-undo.png
@@ -188,6 +189,7 @@ file=new-file \
      reload-all \
      %reload-encoding \
      - \
+     editpane-close-buffer \
      close-buffer \
      close-all \
      - \
@@ -210,6 +212,8 @@ reload.icon.small=16x16/actions/view-refresh.png
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
 close-buffer.icon.small=10x10/actions/close.png
+editpane-close-buffer.label=Close from edit pane
+editpane-close-buffer.icon.small=10x10/actions/close.png
 close-all.label=Clos$e All
 save.label=$Save
 save.icon.small=16x16/actions/document-save.png
@@ -508,7 +512,8 @@ view=new-view \
      - \
      %scrolling \
      %splitting \
-     %docking
+     %docking \
+     %buffersets
 view.label=$View
 new-view.label=New $View
 new-view.icon.small=16x16/actions/window-new.png
@@ -557,6 +562,9 @@ unsplit.label=Unsplit $All
 resplit.label=$Restore Split
 prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
+buffersets.label=Buffer Sets
+buffersets=global-bufferset view-bufferset editpane-bufferset - editpane-close-buffer
+
 #}}}
 
 #{{{ Docking menu
@@ -928,7 +936,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjï¿½rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -2061,7 +2069,10 @@ options.view.showSearchbar=Always show search bar
 options.view.beepOnSearchAutoWrap=Beep when searching automatically wraps
 options.view.showBufferSwitcher=Show buffer switcher
 options.view.bufferSwitcherMaxRowsCount=Visible rows in buffer switcher:
+options.editpane.bufferset.default=BufferSet scope for new EditPanes:
 #}}}
+
+
 
 #{{{ File System Browser panes
 options.browser.label=File System Browser

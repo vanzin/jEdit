@@ -100,9 +100,27 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="closeall-except-active">
+        <CODE>
+		org.gjt.sp.jedit.bufferset.BufferSet bufferSet = editPane.getBufferSet();
+		Buffer[] buffers = bufferSet.getAllBuffers();
+		for (Buffer buff:buffers)
+		{
+			if (buff != buffer)
+				jEdit.removeFromBufferSet(editPane,buff);
+		}
+	</CODE>
+</ACTION>
+
 <ACTION NAME="close-buffer">
 	<CODE>
 		jEdit.closeBuffer(view,buffer);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="editpane-close-buffer">
+	<CODE>
+		jEdit.removeFromBufferSet(editPane,buffer);
 	</CODE>
 </ACTION>
 
@@ -353,7 +371,25 @@
 		new GlobalOptions(view);
 	</CODE>
 </ACTION>
-
+<ACTION NAME="global-bufferset">
+	<CODE>
+		editPane.setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
+		editPane.getTextArea().getGutter().setBackground(
+			jEdit.getColorProperty("view.gutter.bgColor"));
+	</CODE>
+</ACTION>
+<ACTION NAME="view-bufferset">
+	<CODE>
+		editPane.setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view, editPane.getBufferSet()));
+		editPane.getTextArea().getGutter().setBackground(Color.red);
+	</CODE>
+</ACTION>
+<ACTION NAME="editpane-bufferset">
+	<CODE>
+		editPane.setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(editPane, editPane.getBufferSet()));
+		editPane.getTextArea().getGutter().setBackground(Color.blue);
+	</CODE>
+</ACTION>
 
 <ACTION NAME="goto-line">
 	<CODE>

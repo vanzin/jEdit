@@ -57,6 +57,7 @@ import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.XModeHandler;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -1502,14 +1503,15 @@ public class jEdit
 					if(view != null)
 						view.setBuffer(buffer,true);
 
+					bufferSetManager.addBuffer(view, buffer);
 					return buffer;
-				}
+	}
 
 				newBuffer = new Buffer(path,newFile,false,props);
 
 				if(!newBuffer.load(view,false))
 					return null;
-
+				bufferSetManager.addBuffer(view, newBuffer);
 				addBufferToList(newBuffer);
 			}
 
@@ -1642,40 +1644,10 @@ public class jEdit
 	 */
 	public static Buffer newFile(View view, String dir)
 	{
-		// If only one new file is open which is clean, just close
-		// it, which will create an 'Untitled-1'
-		if(dir != null
-			&& buffersFirst != null
-			&& buffersFirst == buffersLast
-			&& buffersFirst.isUntitled()
-			&& !buffersFirst.isDirty())
-		{
-			closeBuffer(view,buffersFirst);
-			// return the newly created 'untitled-1'
-			return buffersFirst;
-		}
-
 		// Find the highest Untitled-n file
-		int untitledCount = 0;
-		Buffer buffer = buffersFirst;
-		while(buffer != null)
-		{
-			if(buffer.getName().startsWith("Untitled-"))
-			{
-				try
-				{
-					untitledCount = Math.max(untitledCount,
-						Integer.parseInt(buffer.getName()
-						.substring(9)));
-				}
-				catch(NumberFormatException nf)
-				{
-				}
-			}
-			buffer = buffer.next;
-		}
+		int untitledCount = getNextUntitledBufferId();
 
-		return openFile(view,dir,"Untitled-" + (untitledCount+1),true,null);
+		return openFile(view,dir,"Untitled-" + untitledCount,true,null);
 	} //}}}
 
 	//}}}
@@ -1778,14 +1750,16 @@ public class jEdit
 		removeBufferFromList(buffer);
 		buffer.close();
 		DisplayManager.bufferClosed(buffer);
-
+		bufferSetManager.removeBuffer(buffer);
 		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSED));
 		if(jEdit.getBooleanProperty("persistentMarkers"))
 			buffer.updateMarkersFile(view);
 
-		// Create a new file when the last is closed
-		if(buffersFirst == null && buffersLast == null)
-			newFile(view);
+		if (bufferSetManager.hasEmptyBufferSets())
+		{
+			Buffer newEmptyBuffer = newFile(null);
+			bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
+		}
 	} //}}}
 
 	//{{{ closeAllBuffers() methods
@@ -1843,6 +1817,7 @@ public class jEdit
 		// zero it here so that BufferTabs doesn't have any problems
 		buffersFirst = buffersLast = null;
 		bufferHash.clear();
+		bufferSetManager.clear();
 		bufferCount = 0;
 
 		while(buffer != null)
@@ -1870,12 +1845,45 @@ public class jEdit
 		}
 
 		if(!isExiting)
-			newFile(view);
+		{
+			if (bufferSetManager.hasEmptyBufferSets())
+			{
+				Buffer newEmptyBuffer = newFile(view);
+				bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
+			}
+		}
 
 		PerspectiveManager.setPerspectiveDirty(true);
 
 		return true;
 	} //}}}
+
+	/**
+	 * Remove a buffer from the EditPane's bufferSet.
+	 * If the buffer is not in any bufferSet after that, it is closed
+	 * @param editPane the edit pane (it cannot be null)
+	 * @param buffer the buffer (it cannot be null)
+	 * @since jEdit 4.3pre15
+	 */
+	public static void removeFromBufferSet(EditPane editPane, Buffer buffer)
+	{
+		int bufferSetsCount = bufferSetManager.countBufferSets(buffer);
+		if (bufferSetsCount < 2)
+		{
+			closeBuffer(editPane.getView(), buffer);
+		}
+		else
+		{
+			bufferSetManager.removeBuffer(editPane, buffer);
+		}
+		if (bufferSetManager.hasEmptyBufferSets())
+		{
+			int untitledCount = getNextUntitledBufferId();
+			Buffer newEmptyBuffer = openTemporary(editPane.getView(), null,"Untitled-" + untitledCount,true, null);
+			commitTemporary(newEmptyBuffer);
+			bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
+		}
+	}
 
 	//{{{ saveAllBuffers() method
 	/**
@@ -2051,6 +2059,11 @@ public class jEdit
 	{
 		return buffersLast;
 	} //}}}
+
+	public static BufferSetManager getBufferSetManager()
+	{
+		return bufferSetManager;
+	}
 
 	//{{{ checkBufferStatus() methods
 	/**
@@ -2839,6 +2852,7 @@ public class jEdit
 
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
+	private static BufferSetManager bufferSetManager;
 
 	// buffer link list
 	private static boolean sortBuffers;
@@ -2849,7 +2863,7 @@ public class jEdit
 	private static Map<String, Buffer> bufferHash;
 
 	// makes openTemporary() thread-safe
-	private static final Object bufferListLock 		= new Object();
+	private static final Object bufferListLock = new Object();
 
 	private static final Object editBusOrderingLock	= new Object();
 
@@ -3022,7 +3036,7 @@ public class jEdit
 		bufferHash = new HashMap<String, Buffer>();
 
 		inputHandler = new DefaultInputHandler(null);
-
+		bufferSetManager = new BufferSetManager();
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
 			"org.gjt.sp.jedit.proto|" +
@@ -3398,6 +3412,29 @@ public class jEdit
 			new MyFocusManager());
 	} //}}}
 
+	private static int getNextUntitledBufferId()
+	{
+		int untitledCount = 0;
+		Buffer buffer = buffersFirst;
+		while(buffer != null)
+		{
+			if(buffer.getName().startsWith("Untitled-"))
+			{
+				try
+				{
+					untitledCount = Math.max(untitledCount,
+						Integer.parseInt(buffer.getName()
+						.substring(9)));
+				}
+				catch(NumberFormatException nf)
+				{
+				}
+			}
+			buffer = buffer.next;
+		}
+		return untitledCount + 1;
+	}
+
 	//{{{ runStartupScripts() method
 	/**
 	 * Runs scripts in a directory.
@@ -3740,22 +3777,20 @@ loop:		for(int i = 0; i < list.length; i++)
 
 			// if only one, clean, 'untitled' buffer is open, we
 			// replace it
-			if(buffersFirst != null
-				&& buffersFirst == buffersLast
-				&& buffersFirst.isUntitled()
-				&& !buffersFirst.isDirty())
-			{
-				Buffer oldBuffersFirst = buffersFirst;
-				buffersFirst = buffersLast = buffer;
-				DisplayManager.bufferClosed(oldBuffersFirst);
-				EditBus.send(new BufferUpdate(oldBuffersFirst,
-					null,BufferUpdate.CLOSED));
-
-				bufferHash.clear();
-
-				bufferHash.put(symlinkPath,buffer);
-				return;
-			}
+//			if(hasUntitledCleanBuffer())
+//			{
+//				Buffer oldBuffersFirst = buffersFirst;
+//				buffersFirst = buffersLast = buffer;
+//				DisplayManager.bufferClosed(oldBuffersFirst);
+//				EditBus.send(new BufferUpdate(oldBuffersFirst,
+//					null,BufferUpdate.CLOSED));
+//
+//				bufferHash.clear();
+//
+//				bufferHash.put(symlinkPath,buffer);
+//				bufferSetManager.removeBuffer(oldBuffersFirst);
+//				return;
+//			}
 
 			bufferCount++;
 

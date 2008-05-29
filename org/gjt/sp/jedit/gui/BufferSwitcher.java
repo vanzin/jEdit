@@ -24,6 +24,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.bufferset.BufferSet;
 
 
 /** BufferSwitcher class
@@ -65,12 +66,13 @@ public class BufferSwitcher extends JComboBox
 	{
 		// if the buffer count becomes 0, then it is guaranteed to
 		// become 1 very soon, so don't do anything in that case.
-		if(jEdit.getBufferCount() == 0)
+		BufferSet bufferSet = editPane.getBufferSet();
+		if(bufferSet.size() == 0)
 			return;
 
 		updating = true;
 		setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
-		setModel(new DefaultComboBoxModel(jEdit.getBuffers()));
+		setModel(new DefaultComboBoxModel(bufferSet.getAllBuffers()));
 		setSelectedItem(editPane.getBuffer());
 		setToolTipText(editPane.getBuffer().getPath());
 		updating = false;
