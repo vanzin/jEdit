@@ -96,8 +96,7 @@ class BufferSegment implements CharSequence
 				if (start < len)
 					return new BufferSegment(data,
 						offset+start,len-start,
-						next.subSegment(0,
-							end-(len-start)));
+						next.subSegment(0,end-len));
 				else
 					return next.subSegment(start-len,
 						end-len);
