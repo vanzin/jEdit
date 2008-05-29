@@ -374,20 +374,16 @@
 <ACTION NAME="global-bufferset">
 	<CODE>
 		editPane.setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
-		editPane.getTextArea().getGutter().setBackground(
-			jEdit.getColorProperty("view.gutter.bgColor"));
 	</CODE>
 </ACTION>
 <ACTION NAME="view-bufferset">
 	<CODE>
 		editPane.setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view, editPane.getBufferSet()));
-		editPane.getTextArea().getGutter().setBackground(Color.red);
 	</CODE>
 </ACTION>
 <ACTION NAME="editpane-bufferset">
 	<CODE>
 		editPane.setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(editPane, editPane.getBufferSet()));
-		editPane.getTextArea().getGutter().setBackground(Color.blue);
 	</CODE>
 </ACTION>
 
