@@ -2300,12 +2300,13 @@ forward_scan:	do
 	 */
 	public void scrollToCurrent() 
 	{
-		if (getDisplayManager().isLineVisible(getCaretLine()))
+		if (!getDisplayManager().isLineVisible(getCaretLine()))
 			getDisplayManager().expandFold(getCaretLine(),true);
 		int physicalLine = getCaretLine();
 		int midPhysicalLine = getPhysicalLineOfScreenLine(visibleLines >> 1);
 		int diff = physicalLine -  midPhysicalLine;
 		setFirstLine(getFirstLine() + diff);
+		requestFocus();
 	} // }}}
 	
 	//{{{ setCaretPosition() method
