@@ -59,12 +59,64 @@
         Options</guimenuitem> dialog box.</para>
     </sect1>
 
+        <sect1 id="views">
+        <title>Multiple Views</title>
+
+        <para>As documented at the beginning of this chapter, multiple Views
+        (main windows) can be open at once.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem>
+        creates a new view, or main window.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>New Plain
+        View</guimenuitem> creates a new view but without any tool bars or
+        dockable windows. This can be used to open a small window for taking notes
+        and so on.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem>
+        closes the current view. If only one view is open, closing it will exit
+        jEdit, unless background mode is on; see <xref linkend="starting" /> for
+        information about starting jEdit in background mode.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>Split
+        Horizontally</guimenuitem> (shortcut: <keycap>C+2</keycap>) splits the
+        view into two TextAreas, placed above each other.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>Split
+        Vertically</guimenuitem> (shortcut: <keycap>C+3</keycap>) splits the
+        view into two TextAreas, placed next to each other.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>Unsplit
+        Current</guimenuitem> (shortcut: <keycap>C+0</keycap>) removes the split
+        containing the current TextArea only.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>Unsplit All</guimenuitem>
+        (shortcut: <keycap>C+1</keycap>) removes all splits from the View.</para>
+
+        <para>When a view is split, editing commands operate on the TextArea
+        that has keyboard focus. To give a TextArea keyboard focus, click in it
+        with the mouse, or use the following commands.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous Text
+        Area</guimenuitem> (shortcut: <keycap>A+PAGE_UP</keycap>) shifts
+        keyboard focus to the previous text area.</para>
+
+        <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Next Text
+        Area</guimenuitem> (shortcut: <keycap>A+PAGE_DOWN</keycap>) shifts
+        keyboard focus to the next text area.</para>
+        
+        <para><guimenu>Macros</guimenu>&gt;<guimenu>Interface</guimenu>&gt;
+        <guimenu>Splitpane Grow</guimenu> grows the size of the currently focused
+        text area. </para>
+        
+    </sect1>
+
     <sect1 id="buffers">
         <title>Switching Buffers</title>
 
-        <para>In addition to using the drop-down list at the top of the view, as
-        documented in the previous section, the current buffer can also be
-        switched using menu item commands and their keyboard shortcuts.</para>
+        <para>Each EditPane has an optional drop-down
+        BufferList, at the top. The Buffer Switcher shows the current buffer and can also be used to 
+        switch the current buffer, using menu item commands and their keyboard shortcuts.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous
         Buffer</guimenuitem> (keyboard shortcut: <keycap>C+PAGE_UP</keycap>)
@@ -123,63 +175,10 @@
         </itemizedlist>
     </sect1>
 
-    <sect1 id="views">
-        <title>Multiple Views</title>
-
-        <para>As documented at the beginning of this chapter, multiple Views
-        (main windows) can be open at once.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem>
-        creates a new view, or main window.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>New Plain
-        View</guimenuitem> creates a new view but without any tool bars or
-        dockable windows. This can be used to open a small window for taking notes
-        and so on.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem>
-        closes the current view. If only one view is open, closing it will exit
-        jEdit, unless background mode is on; see <xref linkend="starting" /> for
-        information about starting jEdit in background mode.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>Split
-        Horizontally</guimenuitem> (shortcut: <keycap>C+2</keycap>) splits the
-        view into two text areas, placed above each other.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>Split
-        Vertically</guimenuitem> (shortcut: <keycap>C+3</keycap>) splits the
-        view into two text areas, placed next to each other.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>Unsplit
-        Current</guimenuitem> (shortcut: <keycap>C+0</keycap>) removes the split
-        containing the current text area only.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>Unsplit All</guimenuitem>
-        (shortcut: <keycap>C+1</keycap>) removes all splits from the
-        view.</para>
-
-        <para>When a view is split, editing commands operate on the text area
-        that has keyboard focus. To give a text area keyboard focus, click in it
-        with the mouse, or use the following commands.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous Text
-        Area</guimenuitem> (shortcut: <keycap>A+PAGE_UP</keycap>) shifts
-        keyboard focus to the previous text area.</para>
-
-        <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Next Text
-        Area</guimenuitem> (shortcut: <keycap>A+PAGE_DOWN</keycap>) shifts
-        keyboard focus to the next text area.</para>
-        
-        <para><guimenu>Macros</guimenu>&gt;<guimenu>Interface</guimenu>&gt;
-        <guimenu>Splitpane Grow</guimenu> grows the size of the currently focused
-        text area. </para>
-        
-    </sect1>
-
     <sect1 id="buffersets">
         <title>Buffer Sets</title>
         
-        <para> Each EditPane can show a BufferList, which is a representation of a BufferSet.
+        <para> As mentioned in the previous section, each EditPane can show a BufferList, which is a representation of a BufferSet.
         In jEdit 4.2, all EditPane buffer lists showed a global list of all buffers that were opened from any EditPane in any View. This resulted in very large lists of buffers, and made the next/previous buffer actions useless with many views, editpanes and buffers. </para>
         
         <para> With a View or Editpane-scope buffer set, opening a buffer in one View will not result in the buffer 
@@ -191,8 +190,7 @@
         Also, you can change it from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenu>global|view|editpane</guimenu>.
         </para>
         
-        <para> <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenuitem>Close from Edit Pane</guimenuitem> will remove the buffer from the current BufferSet without closing the buffer entirely or removing it from other BufferSets. <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the current EditPane by removing all items except the active buffer from the set.
-        </para>
+        <para> <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenuitem>Close from Edit Pane</guimenuitem> will remove the buffer from the current BufferSet without closing the buffer entirely or removing it from other BufferSets. <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the current EditPane by removing all items except the active buffer from the set. Buffers that do not exist in any buffer set should be automatically closed by jEdit. </para>
         
         <para>You can set the default Buffer Set scope for newly created EditPanes. 
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>&gt;<guimenuitem>View</guimenuitem>&gt;<guilabel>BufferSet scope for new EditPanes</guilabel>.</para>
