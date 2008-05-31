@@ -1013,7 +1013,7 @@ public class jEdit
 			}
 		}
 		if (!loadIfNecessary) return plugin;
-		String jarPath  = PluginJAR.findPlugin(name);
+		String jarPath = PluginJAR.findPlugin(name);
 		PluginJAR pjar = PluginJAR.load(jarPath, true);
 		return pjar.getPlugin();
 	} //}}}
@@ -3774,23 +3774,6 @@ loop:		for(int i = 0; i < list.length; i++)
 			{
 				symlinkPath = symlinkPath.toLowerCase();
 			}
-
-			// if only one, clean, 'untitled' buffer is open, we
-			// replace it
-//			if(hasUntitledCleanBuffer())
-//			{
-//				Buffer oldBuffersFirst = buffersFirst;
-//				buffersFirst = buffersLast = buffer;
-//				DisplayManager.bufferClosed(oldBuffersFirst);
-//				EditBus.send(new BufferUpdate(oldBuffersFirst,
-//					null,BufferUpdate.CLOSED));
-//
-//				bufferHash.clear();
-//
-//				bufferHash.put(symlinkPath,buffer);
-//				bufferSetManager.removeBuffer(oldBuffersFirst);
-//				return;
-//			}
 
 			bufferCount++;
 
