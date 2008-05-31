@@ -38,7 +38,7 @@ public class BufferSetManager implements EBComponent
 {
 	public BufferSetManager()
 	{
-		global = new BufferSet();
+		global = new BufferSet(BufferSet.SCOPE[0]);
 		viewBufferSetMap = Collections.synchronizedMap(new HashMap<View, BufferSet>());
 		editPaneBufferSetMap = Collections.synchronizedMap(new HashMap<EditPane, BufferSet>());
 		bufferBufferSetMap = Collections.synchronizedMap(new HashMap<Buffer, Set<BufferSet>>());
@@ -93,7 +93,7 @@ public class BufferSetManager implements EBComponent
 		BufferSet bufferSet = viewBufferSetMap.get(view);
 		if (bufferSet == null)
 		{
-			bufferSet = createBufferSet(source);
+			bufferSet = createBufferSet(BufferSet.SCOPE[1],source);
 			viewBufferSetMap.put(view, bufferSet);
 		}
 		return bufferSet;
@@ -109,7 +109,7 @@ public class BufferSetManager implements EBComponent
 		BufferSet bufferSet = editPaneBufferSetMap.get(editPane);
 		if (bufferSet == null)
 		{
-			bufferSet = createBufferSet(source);
+			bufferSet = createBufferSet(BufferSet.SCOPE[2],source);
 			editPaneBufferSetMap.put(editPane, bufferSet);
 		}
 		return bufferSet;
@@ -311,17 +311,17 @@ public class BufferSetManager implements EBComponent
 	 * are added
 	 * @return the new bufferSet
 	 */
-	private BufferSet createBufferSet(BufferSet source)
+	private BufferSet createBufferSet(String scope, BufferSet source)
 	{
 		BufferSet bufferSet;
 		if (source == null)
 		{
-			bufferSet = new BufferSet();
+			bufferSet = new BufferSet(scope);
 			addAllBuffers(bufferSet);
 		}
 		else
 		{
-			bufferSet = new BufferSet(source);
+			bufferSet = new BufferSet(scope, source);
 		}
 		Buffer[] allBuffers = bufferSet.getAllBuffers();
 		for (Buffer buffer : allBuffers)
