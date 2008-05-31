@@ -452,7 +452,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{
-	@Override
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			Object source = evt.getSource();
@@ -468,7 +468,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	static class ToolTipLabel extends JLabel
 	{
 		//{{{ getToolTipLocation() method
-	@Override
+		@Override
 		public Point getToolTipLocation(MouseEvent event)
 		{
 			return new Point(event.getX(),-20);
