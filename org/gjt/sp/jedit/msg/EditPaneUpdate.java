@@ -59,6 +59,12 @@ public class EditPaneUpdate extends EBMessage
 	 * @since 4.3pre3
 	 */
 	public static final Object BUFFER_CHANGING = "BUFFER_CHANGING";
+
+	/**
+	 * The bufferSet of the EditPane was changed.
+	 * @since 4.3pre15
+	 */
+	public static final Object BUFFERSET_CHANGED = "BUFFERSET_CHANGED";
 	
 	/**
 	 * Creates a new edit pane update message.

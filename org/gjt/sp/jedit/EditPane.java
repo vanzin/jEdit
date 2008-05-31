@@ -627,11 +627,19 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		return new Dimension(0,0);
 	} //}}}
 
+	//{{{ getBufferSet() method
 	public BufferSet getBufferSet()
 	{
 		return bufferSet;
-	}
+	} //}}}
 
+	//{{{ setBufferSet() methods
+	/**
+	 * Set the default bufferSet.
+	 * from the editpane.bufferset.default property
+	 *
+	 * @since jEdit 4.3pre15
+	 */
 	public void setBufferSet()
 	{
 		String mode = jEdit.getProperty("editpane.bufferset.default", BufferSet.SCOPE[0]);
@@ -650,6 +658,11 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		}
 	}
 
+	/**
+	 * Set the new bufferSet of the EditPane.
+	 * @param bufferSet the new bufferSet
+	 * @since jEdit 4.3pre15
+	 */
 	public void setBufferSet(BufferSet bufferSet)
 	{
 		if (this.bufferSet != bufferSet)
@@ -658,16 +671,23 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			{
 				this.bufferSet.removeBufferSetListener(this);
 			}
-			firePropertyChange("bufferSet", this.bufferSet, bufferSet);
 			this.bufferSet = bufferSet;
 			bufferSet.addBufferSetListener(this);
 			if (bufferSwitcher != null)
 			{
 				bufferSwitcher.updateBufferList();
 			}
+			EditBus.send(new EditPaneUpdate(this, EditPaneUpdate.BUFFERSET_CHANGED));
 		}
-	}
+	} //}}}
 
+	//{{{ bufferAdded() method
+	/**
+	 * A buffer was added in the bufferSet.
+	 * @param buffer the added buffer
+	 * @param index the position where it was added
+	 * @since jEdit 4.3pre15
+	 */
 	public void bufferAdded(Buffer buffer, int index)
 	{
 		if (bufferSwitcher != null)
@@ -678,8 +698,15 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			// is closed but the new buffer is not yet opened
 			setBuffer(buffer);
 		}
-	}
+	} //}}}
 
+	//{{{ bufferRemoved() method
+	/**
+	 * A buffer was removed from the bufferSet.
+	 * @param buffer the removed buffer
+	 * @param index the position where it was before being removed
+	 * @since jEdit 4.3pre15
+	 */
 	public void bufferRemoved(Buffer buffer, int index)
 	{
 		if (buffer.isUntitled())
@@ -713,28 +740,41 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			recentBuffer = null;
 		if (bufferSwitcher != null)
 			bufferSwitcher.updateBufferList();
-	}
+	} //}}}
 
+	//{{{ bufferMoved() method
+	/**
+	 * A buffer was moved in the BufferSet.
+	 * @param buffer the moved buffer
+	 * @param oldIndex the position it was before
+	 * @param newIndex the new position
+	 * @since jEdit 4.3pre15
+	 */
 	public void bufferMoved(Buffer buffer, int oldIndex, int newIndex)
 	{
 		if (bufferSwitcher != null)
 			bufferSwitcher.updateBufferList();
-	}
+	} //}}}
 
+	//{{{ bufferCleared() method
+	/**
+	 * The bufferSet was cleared
+	 * @since jEdit 4.3pre15
+	 */
 	public void bufferCleared()
 	{
 		if (bufferSwitcher != null)
 			bufferSwitcher.updateBufferList();
-	}
+	} //}}}
 
 	//{{{ toString() method
 	@Override
 	public String toString()
 	{
 		return getClass().getName() + '['
-		       + (view.getEditPane() == this
+			+ (view.getEditPane() == this
 			? "active" : "inactive")
-			+ ']';
+			+ ',' + bufferSet.getScope() + ']';
 	} //}}}
 
 	//{{{ Package-private members
