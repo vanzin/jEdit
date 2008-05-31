@@ -2290,7 +2290,7 @@ forward_scan:	do
 			setCaretPosition(offset);		
 	} //}}}
 
-	// {{{ scrollToCurrent() method
+	// {{{ scrollAndCenterCaret() method
 	/**
 	 * Tries to scroll the textArea so that the caret is centered on the screen. 
 	 * Sometimes gets confused by folds but at least makes the caret visible and 
@@ -2298,7 +2298,7 @@ forward_scan:	do
 	 * 
 	 * @since jEdit 4.3pre15
 	 */
-	public void scrollToCurrent() 
+	public void scrollAndCenterCaret() 
 	{
 		if (!getDisplayManager().isLineVisible(getCaretLine()))
 			getDisplayManager().expandFold(getCaretLine(),true);
