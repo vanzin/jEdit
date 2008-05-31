@@ -29,10 +29,7 @@ import javax.swing.border.*;
 import javax.swing.text.Segment;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.font.*;
-import java.awt.geom.*;
 import java.awt.*;
-import java.text.*;
 import java.util.StringTokenizer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.textarea.*;
@@ -102,16 +99,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		Color bg = jEdit.getColorProperty("view.status.background");
 
 		showCaretStatus = jEdit.getBooleanProperty("view.status.show-caret-status");
-		showEditMode = jEdit.getBooleanProperty("view.status.show-edit-mode");
-		showFoldMode = jEdit.getBooleanProperty("view.status.show-fold-mode");
-		showEncoding = jEdit.getBooleanProperty("view.status.show-encoding");
-		showWrap = jEdit.getBooleanProperty("view.status.show-wrap");
-		showMultiSelect = jEdit.getBooleanProperty("view.status.show-multi-select");
-		showRectSelect = jEdit.getBooleanProperty("view.status.show-rect-select");
-		showOverwrite = jEdit.getBooleanProperty("view.status.show-overwrite");
-		showLineSeperator = jEdit.getBooleanProperty("view.status.show-line-seperator");
-		boolean showMemory = jEdit.getBooleanProperty("view.status.show-memory");
-		boolean showClock = jEdit.getBooleanProperty("view.status.show-clock");
 
 		panel.setBackground(bg);
 		panel.setForeground(fg);
@@ -119,7 +106,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		caretStatus.setForeground(fg);
 		message.setBackground(bg);
 		message.setForeground(fg);
-		
+
 		// retarded GTK look and feel!
 		Font font = new JLabel().getFont();
 		//UIManager.getFont("Label.font");
@@ -152,8 +139,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 					Widget widget = getWidget(token);
 					if (widget == null)
 					{
-					    Log.log(Log.WARNING, this, "Widget " + token + " doesn't exists");
-					    continue;
+						Log.log(Log.WARNING, this, "Widget " + token + " doesn't exists");
+						continue;
 					}
 					Component c = widget.getComponent();
 					c.setBackground(bg);
@@ -168,7 +155,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				}
 			}
 			currentBar = statusBar;
-		}		
+		}
 		updateBufferStatus();
 		updateMiscStatus();
 	} //}}}
@@ -262,6 +249,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ setMessage() method
 	/**
 	 * Displays a status message.
+	 * @param message the message to display, it can be null
 	 */
 	public void setMessage(String message)
 	{
@@ -397,7 +385,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		rectSelectWidget.update();
 		overwriteWidget.update();
 	} //}}}
-	
+
 	//{{{ Private members
 	private String currentBar;
 	private View view;
@@ -421,14 +409,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private Segment seg = new Segment();
 
 	private boolean showCaretStatus;
-	private boolean showEditMode;
-	private boolean showFoldMode;
-	private boolean showEncoding;
-	private boolean showWrap;
-	private boolean showMultiSelect;
-	private boolean showRectSelect;
-	private boolean showOverwrite;
-	private boolean showLineSeperator;
 	//}}}
 
 	static final String caretTestStr = "9999,999-999 99%";
@@ -452,14 +432,14 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			return overwriteWidget;
 		if ("lineSep".equals(name))
 			return lineSepWidget;
-		
+
 		return _getWidget(name);
 	} //}}}
 
 	//{{{ _getWidget() method
 	private Widget _getWidget(String name)
 	{
-		StatusWidgetFactory widgetFactory = 
+		StatusWidgetFactory widgetFactory =
 		(StatusWidgetFactory) ServiceManager.getService("org.gjt.sp.jedit.gui.statusbar.StatusWidget", name);
 		if (widgetFactory == null)
 		{
@@ -468,7 +448,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		}
 		return widgetFactory.getWidget(view);
 	} //}}}
-	
+
 	//{{{ MouseHandler class
 	class MouseHandler extends MouseAdapter
 	{

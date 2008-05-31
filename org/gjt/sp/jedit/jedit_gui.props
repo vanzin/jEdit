@@ -878,20 +878,13 @@ view.status.vertical-paste-string-register=Register to vertical paste \
 	from? [{0}]
 view.status.wrap-changed=Word wrap mode is now "{0}"
 view.status.wrap-tooltip=Word wrap mode (click to change)
+view.status.bufferset-tooltip=BufferSet scope is {0}
 #}}}
 
 #{{{ Status bar component visibility
 view.status=( mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock
 
 view.status.show-caret-status=true
-view.status.show-edit-mode=true
-view.status.show-fold-mode=true
-view.status.show-encoding=true
-view.status.show-wrap=true
-view.status.show-multi-select=true
-view.status.show-overwrite=true
-view.status.show-line-seperator=true
-view.status.show-memory=true
 #}}}
 
 #}}}
@@ -938,7 +931,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Bjï¿½rn "Vampire" Kautler\n\
+	Björn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1987,11 +1980,6 @@ options.status.edit.labelRadioButton=label
 options.status.edit.widgetRadioButton=widget
 options.status.edit.labelLabel=Type a label:
 options.status.edit.widgetLabel=Choose a widget:
-#}}}
-
-#{{{ Status bar pane
-
-
 #}}}
 
 #{{{ Syntax Highlighting pane
