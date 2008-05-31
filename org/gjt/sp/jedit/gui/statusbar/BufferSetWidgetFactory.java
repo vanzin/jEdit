@@ -4,8 +4,6 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2008 Matthieu Casanova
- * Portions Copyright (C) 2001, 2004 Slava Pestov
- * Portions copyright (C) 2001 Mike Dillon
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
