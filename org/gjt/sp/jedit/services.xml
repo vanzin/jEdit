@@ -95,5 +95,9 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="errors">
 		new org.gjt.sp.jedit.gui.statusbar.ErrorsWidgetFactory();
 	</SERVICE>
+
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="buffersets">
+		new org.gjt.sp.jedit.gui.statusbar.BufferSetWidgetFactory();
+	</SERVICE>
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 </SERVICES>

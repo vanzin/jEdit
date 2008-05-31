@@ -26,7 +26,7 @@ release.
   but was also used for going back a space in the text field.
   Use "Alt+Left" to go up a directory. (#1694133 - Alan Ezust)
 
-- New Action: Scroll-And-Center-Caret Action. 
+- New Action: Scroll-And-Center-Caret Action.
   Restored previous behavior of center-caret-on-screen.
   (# 1910061 - Alan Ezust)
 
@@ -48,6 +48,7 @@ release.
 - New BufferSet api. The EditPanes can now manage their own list of buffers,
   or share this list with the editpanes from the same view, and of course as
   usual share the same list between all EditPanes (the default behavior)
+  A bufferSet widget is available for the status bar
   (Matthieu Casanova)
 
 }}}
