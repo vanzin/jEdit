@@ -36,6 +36,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.statusbar.StatusWidgetFactory;
 import org.gjt.sp.jedit.gui.statusbar.Widget;
+import org.gjt.sp.jedit.gui.statusbar.ToolTipLabel;
 import org.gjt.sp.util.*;
 //}}}
 
@@ -462,16 +463,5 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 					view.getTextArea().showGoToLineDialog();
 			}
 		}
-	} //}}}
-
-	//{{{ ToolTipLabel class
-	static class ToolTipLabel extends JLabel
-	{
-		//{{{ getToolTipLocation() method
-		@Override
-		public Point getToolTipLocation(MouseEvent event)
-		{
-			return new Point(event.getX(),-20);
-		} //}}}
 	} //}}}
 }
