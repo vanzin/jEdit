@@ -44,17 +44,19 @@ public class BufferSet
 
 	private Buffer untitledCleanBuffer;
 	private boolean checkForCleanBuffer;
+
+	private final String scope;
 	
-	
-	public BufferSet()
+	public BufferSet(String scope)
 	{
 		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		listeners = new EventListenerList();
+		this.scope = scope;
 	}
 
-	public BufferSet(BufferSet copy)
+	public BufferSet(String scope, BufferSet copy)
 	{
-		this();
+		this(scope);
 		buffers.addAll(copy.buffers);
 		untitledCleanBuffer = copy.untitledCleanBuffer;
 		checkForCleanBuffer = copy.checkForCleanBuffer;
@@ -198,6 +200,11 @@ public class BufferSet
 		return buffers.get(index);
 	}
 
+	public String getScope()
+	{
+		return scope;
+	}
+
 	public Buffer getPreviousBuffer(int index)
 	{
 		if (buffers.isEmpty())
@@ -258,5 +265,11 @@ public class BufferSet
 	public void removeBufferSetListener(BufferSetListener listener)
 	{
 		listeners.remove(BufferSetListener.class, listener);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "BufferSet["+scope+",nbBuffers="+size()+']';
 	}
 }
