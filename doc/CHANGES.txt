@@ -22,12 +22,13 @@ release.
 - Some NPE fixed in status bar widgets when the view do not have a textArea yet
   (#1965532) (Matthieu Casanova)
 
-- [ 1694133 ] File Browser: back-arrow in filename textbox (Alan Ezust)
+- File Browser: back-arrow in filename textbox used to go up a directory,
+  but was also used for going back a space in the text field.
+  Use "Alt+Left" to go up a directory. (#1694133 - Alan Ezust)
 
-- [ 1910061 ] 4.3pre13, r11659 - Center Caret On Screen action
-  Restored previous behavior of centercaret on screen, and modified
-  the "scrollToCurrent" behavior to attempt to center the caret
-  when the text is not folded. (Alan Ezust)
+- New Action: Scroll-And-Center-Caret Action. 
+  Restored previous behavior of center-caret-on-screen.
+  (# 1910061 - Alan Ezust)
 
 }}}
 {{{ Miscellaneous

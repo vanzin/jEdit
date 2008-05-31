@@ -31,7 +31,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;

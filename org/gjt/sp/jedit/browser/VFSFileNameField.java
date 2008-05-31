@@ -23,16 +23,13 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
-import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.io.File;
 import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
-import org.gjt.sp.jedit.OperatingSystem;
-import org.gjt.sp.util.Log;
 //}}}
+import org.gjt.sp.util.Log;
 
 /**
  * @author Slava Pestov
@@ -79,6 +76,10 @@ class VFSFileNameField extends HistoryTextField
 				doComplete(path);
 				break;
 			case KeyEvent.VK_LEFT:
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK) > 0) {
+//					evt.setModifiers(0);
+					browser.getBrowserView().getTable().processKeyEvent(evt);
+				}
 				super.processKeyEvent(evt);
 				break;
 			case KeyEvent.VK_RIGHT:

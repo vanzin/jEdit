@@ -449,36 +449,34 @@
             <itemizedlist>
                 <listitem>
                     <para><guimenuitem>Parent Directory</guimenuitem> - moves up
-                    in the directory hierarchy.</para>
+                    in the directory hierarchy. The Alt+Left arrow keyboard shortcut achieves the same thing. </para>
                 </listitem>
 
                 <listitem>
                     <para><guimenuitem>Reload Directory</guimenuitem> - reloads
-                    the file list from disk.</para>
+                    the file list from disk. F5 does this also. </para>
                 </listitem>
 
                 <listitem>
                     <para><guimenuitem>Root Directory</guimenuitem> - on Unix,
                     goes to the root directory (<filename>/</filename>). On
                     Windows and MacOS X, lists all mounted drives and network
-                    shares.</para>
+                    shares. The forward slash (/) achieves this too. </para>
                 </listitem>
 
                 <listitem>
                     <para><guimenuitem>Home Directory</guimenuitem> - displays
-                    your home directory.</para>
+                    your home directory. Keyboard shortcut: ~ </para>
                 </listitem>
 
                 <listitem>
                     <para><guimenuitem>Directory of Current Buffer</guimenuitem>
                     - displays the directory containing the currently active
-                    buffer.</para>
+                    buffer. Shortcut: - </para>
                 </listitem>
 
                 <listitem>
-                    <para><guimenuitem>New File</guimenuitem> - opens new,
-                    empty, buffer in the current directory. The file will not
-                    actually be created on disk until the buffer is
+                    <para><guimenuitem>New File</guimenuitem> (Ctrl+N) - opens new, empty, buffer in the current directory. The file will not actually be created on disk until the buffer is
                     saved.</para>
                 </listitem>
 
