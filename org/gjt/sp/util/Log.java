@@ -383,7 +383,7 @@ public class Log
 	//{{{ _log() method
 	private static void _log(int urgency, String source, String message)
 	{
-		String fullMessage = timeFormat.format(new Date()) + " [" + urgencyToString(urgency) + "] " + source
+		String fullMessage = timeFormat.format(new Date()) + " ["+Thread.currentThread().getName()+"] [" + urgencyToString(urgency) + "] " + source
 			+ ": " + message;
 
 		try
