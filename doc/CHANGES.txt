@@ -30,6 +30,10 @@ release.
   Restored previous behavior of center-caret-on-screen.
   (# 1910061 - Alan Ezust)
 
+- A NPE was happened when loading several buffers at the same time and if the
+  collapseFold bufferlocal property is set to something else than 0
+  (#1982663) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 

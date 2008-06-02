@@ -461,7 +461,10 @@ public class DisplayManager
 			hideLineRange(firstInvisible,buffer.getLineCount() - 1);
 
 		notifyScreenLineChanges();
-		textArea.foldStructureChanged();
+		if(textArea.getDisplayManager() == this)
+		{
+			textArea.foldStructureChanged();
+		}
 	} //}}}
 
 	//{{{ narrow() method
