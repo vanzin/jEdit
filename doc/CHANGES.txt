@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre15
 
 Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova,
-Seph M. Soliman, Alan Ezust, and Daniel Hahler for contributing to this
-release.
+Seph M. Soliman, Alan Ezust, Robert Schwenn, and Daniel Hahler for contributing
+to this release.
 
 {{{ Bug Fixes
 
@@ -54,6 +54,10 @@ release.
   usual share the same list between all EditPanes (the default behavior)
   A bufferSet widget is available for the status bar
   (Matthieu Casanova)
+
+- New text macro "Line_Filter.bsh" added. It can filter the lines of a buffer
+  to remove the lines that match or do not match a char sequence (patch #1981501)
+  (Robert Schwenn)
 
 }}}
 {{{ Editing
