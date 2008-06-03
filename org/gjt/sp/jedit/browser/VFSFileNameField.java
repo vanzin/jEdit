@@ -27,7 +27,10 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.ActionContext;
+import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.MiscUtilities;
+
 //}}}
 import org.gjt.sp.util.Log;
 
@@ -78,17 +81,33 @@ class VFSFileNameField extends HistoryTextField
 			case KeyEvent.VK_LEFT:
 				if ((evt.getModifiers() & KeyEvent.ALT_MASK) > 0) {
 //					evt.setModifiers(0);
+					// browser.getBrowserView().getTable().processKeyEvent(evt);
+					browser.previousDirectory();
+					evt.consume();
+				}
+				else {
 					browser.getBrowserView().getTable().processKeyEvent(evt);
 				}
-				super.processKeyEvent(evt);
+				break;
+			case KeyEvent.VK_UP:
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+					String p = browser.getDirectory();
+					browser.setDirectory(MiscUtilities.getParentOfPath(p));
+					evt.consume();
+				}
+				else {
+					browser.getBrowserView().getTable()
+					.processKeyEvent(evt);
+				}
 				break;
 			case KeyEvent.VK_RIGHT:
-				if(getCaretPosition() == getDocument().getLength())
-					browser.getBrowserView().getTable().processKeyEvent(evt);
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+					evt.consume();
+					browser.nextDirectory();
+				}
 				else
 					super.processKeyEvent(evt);
 				break;
-			case KeyEvent.VK_UP:
 			case KeyEvent.VK_DOWN:
 			case KeyEvent.VK_PAGE_UP:
 			case KeyEvent.VK_PAGE_DOWN:

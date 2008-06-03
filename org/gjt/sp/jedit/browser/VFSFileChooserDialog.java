@@ -42,6 +42,7 @@ import org.gjt.sp.util.*;
 
 /**
  * Wraps the VFS browser in a modal dialog.
+ * Shows up when "File-Open" is used. 
  * @author Slava Pestov
  * @version $Id$
  */

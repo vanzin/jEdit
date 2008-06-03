@@ -633,14 +633,29 @@ class BrowserView extends JPanel
 					if (row < parentDirectories.getSize().height-1) 
 						parentDirectories.setSelectedIndex(++row);
 					break;
+				case KeyEvent.VK_LEFT:
+					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+						evt.consume();
+						browser.previousDirectory();
+					}
+					else super.processEvent(evt);
+					break;
+				case KeyEvent.VK_RIGHT:
+					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+						evt.consume();
+						browser.nextDirectory();
+					}
+					else super.processEvent(evt);
+					break;
 				case KeyEvent.VK_TAB:
-			        	  table.requestFocus();
-			        	  evt.consume();
-			        	  break;
+		        	  table.requestFocus();
+		        	  evt.consume();
+		        	  break;
 				case KeyEvent.VK_UP :
 					evt.consume();
-					if (row > 0) 
+					if (row > 0) { 
 						parentDirectories.setSelectedIndex(--row);
+					}
 					break;
 				case KeyEvent.VK_BACK_SPACE:
 					evt.consume();

@@ -284,72 +284,85 @@ public class VFSDirectoryEntryTable extends JTable
 			int row = getSelectedRow();
 			ActionContext ac = VFSBrowser.getActionContext();
 			ActionContext jac = jEdit.getActionContext();
+			EditAction browserUp = ac.getAction("vfs.browser.up");			
 			VFSBrowser browser = browserView.getBrowser();
 			switch(evt.getKeyCode())
 			{
 			case KeyEvent.VK_LEFT:
 				evt.consume();
-				if(row != -1)
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) 
 				{
-					if(model.files[row].expanded)
+					browser.previousDirectory();
+				}
+				else 
+				{
+					if(row != -1)
 					{
-						toggleExpanded(row);
-						return;
-					}
-
-					for(int i = row - 1; i >= 0; i--)
-					{
-						if(model.files[i].expanded &&
-						   model.files[i].level < model.files[row].level)
+						if(model.files[row].expanded)
 						{
-							setSelectedRow(i);
+							toggleExpanded(row);
 							return;
 						}
-					}
-				}
 
-				String dir = browserView.getBrowser()
-					.getDirectory();
-				dir = MiscUtilities.getParentOfPath(dir);
-				browserView.getBrowser().setDirectory(dir);
+						for(int i = row - 1; i >= 0; i--)
+						{
+							if(model.files[i].expanded &&
+							   model.files[i].level < model.files[row].level)
+							{
+								setSelectedRow(i);
+								return;
+							}
+						}
+					}
+
+					String dir = browserView.getBrowser()
+						.getDirectory();
+					dir = MiscUtilities.getParentOfPath(dir);
+					browserView.getBrowser().setDirectory(dir);
+				}
 				break;
 			case KeyEvent.VK_BACK_SPACE:
 				evt.consume();
-				EditAction ea = ac.getAction("vfs.browser.up");
-				ac.invokeAction(evt, ea);
+				ac.invokeAction(evt, browserUp);
+				break;
+			case KeyEvent.VK_UP:
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK) >0) {
+					evt.consume();
+					ac.invokeAction(evt, browserUp);
+				}
 				break;
 			case KeyEvent.VK_DELETE:
 				evt.consume();
-				ea = ac.getAction("vfs.browser.delete");
-				ac.invokeAction(evt, ea);
+				EditAction deleteAct = ac.getAction("vfs.browser.delete");
+				ac.invokeAction(evt, deleteAct);
 				break;
 			case KeyEvent.VK_N:
 				if ((evt.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK)
 				{
 					evt.consume();
-					ea = ac.getAction("vfs.browser.new-file");
+					EditAction ea = ac.getAction("vfs.browser.new-file");
 					ac.invokeAction(evt, ea);
 				}
 				break;
 			case KeyEvent.VK_INSERT:
 				evt.consume();
-				ea = ac.getAction("vfs.browser.new-directory");
-				ac.invokeAction(evt, ea);
+				EditAction newDir = ac.getAction("vfs.browser.new-directory");
+				ac.invokeAction(evt, newDir);
 				break;
 			case KeyEvent.VK_ESCAPE:
-				ea = jac.getAction("close-docking-area");
-				ea.invoke(jEdit.getActiveView());
+				EditAction cda = jac.getAction("close-docking-area");
+				cda.invoke(jEdit.getActiveView());
 				evt.consume();
 				break;
 			case KeyEvent.VK_F2:
-				ea = ac.getAction("vfs.browser.rename");
+				EditAction ren = ac.getAction("vfs.browser.rename");
 				evt.consume();
-				ac.invokeAction(evt, ea);
+				ac.invokeAction(evt, ren);
 				break;
 			case KeyEvent.VK_F5:
 				evt.consume();
-				ea = ac.getAction("vfs.browser.reload");
-				ac.invokeAction(evt, ea);
+				EditAction reload= ac.getAction("vfs.browser.reload");
+				ac.invokeAction(evt, reload);
 				break;
 			case KeyEvent.VK_F6:
 			case KeyEvent.VK_TAB:
@@ -358,12 +371,14 @@ public class VFSDirectoryEntryTable extends JTable
 				break;
 			case KeyEvent.VK_RIGHT:
 				evt.consume();
-				if(row != -1)
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+					browser.nextDirectory();
+				}
+				else if(row != -1)
 				{
 					if(!model.files[row].expanded)
 						toggleExpanded(row);
 				}
-
 				break;
 			case KeyEvent.VK_ENTER:
 				evt.consume();

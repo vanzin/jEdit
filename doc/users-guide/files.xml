@@ -403,6 +403,12 @@
             here, allowing for both <literal>$VARNAME</literal> or
             <literal>%VARNAME%</literal> syntax. </para>
             
+            <para> <literal>A+Up</literal> is a keyboard shortcut that brings
+            you to the parent directory. </para>
+            
+            <para> <literal>A+Left</literal> and <literal>A+Right</literal> navigate back and forward through the visited directory stacks, in a
+            Netscape/Konqueror/IE like fashion. </para>
+            
             <para>To see a specific set of files only (for example, those whose
             names end with <filename>.java</filename>), enter a glob pattern in
             the <guibutton>Filter</guibutton> text field. This text fields
@@ -428,6 +434,8 @@
                 conventional letter-by-letter sort would have placed these two
                 files in the wrong order.</para>
             </tip>
+            
+
         </sect2>
 
         <sect2>

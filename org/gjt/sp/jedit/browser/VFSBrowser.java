@@ -548,9 +548,38 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		return path;
 	} //}}}
 
+	// {{{ Directory Stack operations
+	/**
+	 * @since jedit 4.3pre15
+	 */
+	public void previousDirectory() 
+	{
+		if (historyStack.size() > 0) 
+		{
+			String prev = historyStack.pop();
+			nextDirectoryStack.push(prev);
+			setDirectory(prev);
+			historyStack.pop();
+		}
+	}
+	
+	
+	/**
+	 * @since jEdit 4.3pre15
+	 */
+	public void nextDirectory() 
+	{
+		if (nextDirectoryStack.size()>0) 
+		{
+			setDirectory(nextDirectoryStack.pop());
+		}
+	}
+	// }}}	
+	
 	//{{{ setDirectory() method
 	public void setDirectory(String path)
 	{
+		historyStack.push(path);
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 		path = MiscUtilities.expandVariables(path);
@@ -1140,6 +1169,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	private boolean requestRunning;
 	private boolean maybeReloadRequestRunning;
+	
+	private Stack<String> historyStack = new Stack<String>();
+	private Stack<String> nextDirectoryStack = new Stack<String>();
 	//}}}
 
 	//{{{ createMenuBar() method
