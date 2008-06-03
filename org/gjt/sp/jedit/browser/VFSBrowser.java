@@ -554,11 +554,11 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	 */
 	public void previousDirectory() 
 	{
-		if (historyStack.size() > 0) 
+		if (historyStack.size() > 1)
 		{
-			historyStack.pop();
+			String current = historyStack.pop();
 			String prev = historyStack.peek();
-			nextDirectoryStack.push(prev);
+			nextDirectoryStack.push(current);
 			setDirectory(prev);
 			historyStack.pop();
 		}
