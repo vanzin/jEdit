@@ -59,6 +59,8 @@ to this release.
   to remove the lines that match or do not match a char sequence (patch #1981501)
   (Robert Schwenn)
 
+- New Mac OS X application icon (Seph M. Soliman)
+
 }}}
 {{{ Editing
 
