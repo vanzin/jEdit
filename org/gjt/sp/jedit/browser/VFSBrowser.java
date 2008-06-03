@@ -556,7 +556,8 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	{
 		if (historyStack.size() > 0) 
 		{
-			String prev = historyStack.pop();
+			historyStack.pop();
+			String prev = historyStack.peek();
 			nextDirectoryStack.push(prev);
 			setDirectory(prev);
 			historyStack.pop();
@@ -579,7 +580,6 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	//{{{ setDirectory() method
 	public void setDirectory(String path)
 	{
-		historyStack.push(path);
 		if(path.startsWith("file:"))
 			path = path.substring(5);
 		path = MiscUtilities.expandVariables(path);
@@ -588,6 +588,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
+		historyStack.push(path);
 		browserView.saveExpansionState();
 		browserView.loadDirectory(null,path,true);
 		this.path = path;
