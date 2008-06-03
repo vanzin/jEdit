@@ -27,8 +27,6 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.ActionContext;
-import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.MiscUtilities;
 
 //}}}
@@ -52,18 +50,6 @@ class VFSFileNameField extends HistoryTextField
 		Dimension dim = getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		setMaximumSize(dim);
-	} //}}}
-
-	//{{{ isManagingFocus() method
-	public boolean isManagingFocus()
-	{
-		return false;
-	} //}}}
-
-	//{{{ getFocusTraversalKeysEnabled() method
-	public boolean getFocusTraversalKeysEnabled()
-	{
-		return false;
 	} //}}}
 
 	//{{{ processKeyEvent() method

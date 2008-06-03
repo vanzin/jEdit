@@ -321,6 +321,10 @@ public class VFSDirectoryEntryTable extends JTable
 					browserView.getBrowser().setDirectory(dir);
 				}
 				break;
+			case KeyEvent.VK_TAB:
+//				browser.getBrowserView().focusOnDefaultComponent();
+				browser.focusOnDefaultComponent();
+				break;
 			case KeyEvent.VK_BACK_SPACE:
 				evt.consume();
 				ac.invokeAction(evt, browserUp);
@@ -365,10 +369,6 @@ public class VFSDirectoryEntryTable extends JTable
 				ac.invokeAction(evt, reload);
 				break;
 			case KeyEvent.VK_F6:
-			case KeyEvent.VK_TAB:
-				browser.focusOnDefaultComponent();
-				evt.consume();
-				break;
 			case KeyEvent.VK_RIGHT:
 				evt.consume();
 				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {

@@ -68,6 +68,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		int mode, boolean multipleSelection, boolean autoshow)
 	{
 		super(view,getDefaultTitle(),true);
+		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
 
@@ -82,6 +83,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		int mode, boolean multipleSelection, boolean autoshow)
 	{
 		super(parent,getDefaultTitle(),true);
+		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());		
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
 
@@ -95,6 +97,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		int mode, boolean multipleSelection, boolean autoshow)
 	{
 		super(parent, getDefaultTitle(),true);
+		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());		
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
 
@@ -278,7 +281,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			path = vfs.getParentOfPath(path);
 		}
 
-		browser = new VFSBrowser(view,path,mode,multipleSelection,null);
+		browser = new VFSBrowser(view, path, mode, multipleSelection, null);
+		
 		browser.addBrowserListener(new BrowserHandler());
 		content.add(BorderLayout.CENTER,browser);
 
@@ -289,6 +293,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		filenameField = new VFSFileNameField(browser,null);
 		filenameField.setText(name);
 		filenameField.selectAll();
+		browser.setDefaultFocusComponent(filenameField);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
 		box.add(filenameField);
@@ -344,6 +349,8 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			setVisible(true);
 	} //}}}
 
+	
+	
 	//{{{ doFileExistsWarning() method
 	private boolean doFileExistsWarning(String filename)
 	{

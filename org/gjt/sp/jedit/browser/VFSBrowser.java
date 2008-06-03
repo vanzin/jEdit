@@ -44,6 +44,9 @@ import org.gjt.sp.util.Log;
 
 /**
  * The main class of the VFS browser.
+ * Used as dockable, and also embedded inside the
+ * VFSFileSelectorDialog.
+ * 
  * @author Slava Pestov
  * @version $Id$
  */
@@ -206,6 +209,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		pathAndFilterPanel.add(label);
 
 		pathField = new HistoryTextField("vfs.browser.path");
+		defaultFocusComponent = pathField;
 		pathField.addKeyListener(keyListener);
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
@@ -365,10 +369,14 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	//{{{ focusOnDefaultComponent() method
 	public void focusOnDefaultComponent()
 	{
-		pathField.requestFocus();
-	//	browserView.focusOnFileView();
+		// pathField.requestFocus();		
+		defaultFocusComponent.requestFocus();
 	} //}}}
 
+	public void setDefaultFocusComponent(JComponent c) {
+		defaultFocusComponent = c;
+	}
+	
 	//{{{ addNotify() method
 	@Override
 	public void addNotify()
@@ -1152,6 +1160,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private String path;
 	private JPanel pathAndFilterPanel;
 	private HistoryTextField pathField;
+	private JComponent defaultFocusComponent;
 	private JCheckBox filterCheckbox;
 	private HistoryComboBoxEditor filterEditor;
 	private JComboBox filterField;
