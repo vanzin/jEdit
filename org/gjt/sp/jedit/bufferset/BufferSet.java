@@ -267,6 +267,11 @@ public class BufferSet
 		listeners.remove(BufferSetListener.class, listener);
 	}
 
+	public boolean hasListeners()
+	{
+		return listeners.getListenerCount() != 0;
+	}
+
 	@Override
 	public String toString()
 	{

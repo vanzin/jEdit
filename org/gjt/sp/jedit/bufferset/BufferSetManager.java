@@ -174,6 +174,7 @@ public class BufferSetManager implements EBComponent
 	 */
 	void removeBuffer(BufferSet bufferSet, Buffer buffer)
 	{
+		Log.log(Log.DEBUG, this, "removeBuffer("+bufferSet+','+buffer+')');
 		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
 		bufferSets.remove(bufferSet);
 		bufferSet.removeBuffer(buffer);
@@ -183,7 +184,25 @@ public class BufferSetManager implements EBComponent
 		}
 		if (bufferSets.isEmpty())
 		{
+			Log.log(Log.DEBUG, this, "Buffer:"+buffer+" is in no bufferSet anymore, closing it");
 			jEdit._closeBuffer(null, buffer);
+		}
+		else
+		{
+			boolean shouldClose = true;
+			for (BufferSet bs: bufferSets)
+			{
+				if (bs.hasListeners())
+				{
+					shouldClose = false;
+					break;
+				}
+			}
+			if (shouldClose)
+			{
+				Log.log(Log.DEBUG, this, "Buffer:"+buffer+" is only in bufferSets that have no listeners, closing it");
+				jEdit._closeBuffer(null, buffer);
+			}
 		}
 	}
 
