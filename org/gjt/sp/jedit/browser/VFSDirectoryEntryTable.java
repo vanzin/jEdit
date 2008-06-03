@@ -322,8 +322,13 @@ public class VFSDirectoryEntryTable extends JTable
 				}
 				break;
 			case KeyEvent.VK_TAB:
-//				browser.getBrowserView().focusOnDefaultComponent();
-				browser.focusOnDefaultComponent();
+				evt.consume();
+				if ((evt.getModifiers() & KeyEvent.SHIFT_MASK ) > 0) {
+					browserView.getParentDirectoryList().requestFocus();
+				}
+				else {
+					browser.focusOnDefaultComponent();	
+				}
 				break;
 			case KeyEvent.VK_BACK_SPACE:
 				evt.consume();

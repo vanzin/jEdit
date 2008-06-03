@@ -647,6 +647,13 @@ class BrowserView extends JPanel
 					}
 					else super.processEvent(evt);
 					break;
+				case KeyEvent.VK_TAB:
+					evt.consume();
+					if ((evt.getModifiers() & KeyEvent.SHIFT_MASK) > 0)
+						browser.focusOnDefaultComponent();
+					else
+						table.requestFocus();
+					break;
 				case KeyEvent.VK_UP :
 					evt.consume();
 					if (row > 0) { 
