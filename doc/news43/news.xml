@@ -83,7 +83,7 @@
     </preface>
     <chapter id="compatibility">
         <title>Java Compatibility</title>
-        <para>jEdit 4.2 runs on Java 1.3 or later, but jEdit 4.3 requires Sun
+        <para>jEdit 4.3 requires Sun
         Java 1.5.0 or later. Older versions of Java are not supported.</para>
         <para>If you want to use the new LCD Antialiasing feature of Java 1.6,
         it is supported. From <guimenuitem>Global Options - Text Area -
@@ -93,6 +93,15 @@
     </chapter>
     <chapter id="user-changes">
         <title>User-Visible Changes</title>
+		
+		<para> There There is an enhanced Status Bar (and accompanying service API
+		to allow plugins to add new status bar diaplay/controls).
+		It is now possible to choose different, independent Buffer Sets 
+		for each EditPane buffer switcher. See <ulink
+		url="../users-guide/buffersets.html">Buffer Sets</ulink> for more
+		information.
+		</para>
+		
         <section id="readded">
             <title>Re-added Features</title>
             <para>Soft wrapping to the text area, one of my personal favorite
@@ -142,7 +151,8 @@
             <literal>java.util.regex</literal> instead of
             <literal>gnu.regexp</literal>, so be sure to keep that in mind as
             you are composing your own regular expressions, whether they are in
-            mode files, search expressions, or in your own plugins.</para>
+            mode files, search expressions, or in your own plugins. XSearch plugin
+			still uses <literal>gnu.regexp</literal> in case the old behavior is still desired. </para>
         </section>
         <section id="search">
             <title>Search and Replace</title>
@@ -169,7 +179,7 @@
             <title>File System Browser</title>
             <para>The file system browser is much more keyboard friendly, and
             supports some common shortcuts set by default in KDE and Windows
-            (del, f2, f5, backspace).</para>
+            (del, f2, f5, A+Left and A+Right for history, A+up for parent dir).</para>
         </section>
         <section id="bundled-macros">
             <title>Bundled Macros</title>
@@ -244,8 +254,8 @@
         <para>Navigator, providing a navigable history, is new and improved - it
         provides the user with Eclipse-like Navigation to previous locations,
         for each TextArea of each View. It uses new 4.3 EditBus messages which
-        are now available in the public API, CaretChanging and
-        BufferClosing.</para>
+        are now available in the public API, PositionChanging and
+        BufferChanging.</para>
         <bridgehead>ProjectViewer</bridgehead>
         <para>For managing groups of files and organizing them into trees,
         ProjectViewer is very useful. It's been under active development, and
@@ -272,7 +282,9 @@
         JavaSideKick, XML, and PerlSideKick. Be sure to try them out.</para>
         <para>In case you're looking for JavaCore, JBrowse, CodeAid,
         DotComplete, or PropertySideKick, they have all been merged (in terms of
-        functionality) into the new JavaSideKick plugin.</para>
+        functionality) into the new JavaSideKick plugin. Some other plugins that 
+		depend on these above plugins still need to be converted to use
+		JavaSideKick instead of the old java plugins listed above. </para>
         <para>As for HtmlSideKick, JavaScriptSideKick, and XmlIndenter, they
         have all been merged into the new XML 2 plugin, which now includes two
         parsers for CSS, one for Ecmascript, and completion popups for elements
@@ -280,36 +292,8 @@
         <para>If you use many different languages, you should also try out the
         very clever ContextMenu plugin, which I am seriously thinking of adding
         to the core one of these days.</para>
-        <formalpara>
-            <title>Ant and Xerces</title>
-            <para>Previously, Apache Ant was included in AntFarm, and Apache
-            Xerces was included in the XML plugin. Both of these libraries were
-            broken out of their respective plugins and given their own plugin
-            status. This should help avoid some of the kinds of plugin conflicts
-            that arose with previous versions of XML and AntFarm.</para>
-        </formalpara>
-        <formalpara>
-            <title>Console</title>
-            <para>Console has many new features, improved error parsing, and
-            more keyboard shortcuts. The command execution part was rewritten.
-            You should read the changelog in the Console users guide for more
-            details.</para>
-        </formalpara>
-        <formalpara>
-            <title>Optional</title>
-            <para>This is my first plugin, I hope you like it! It combines the
-            three option panes (global, plugin and buffer) under a single tab
-            pane. It saves me a lot of mouse clicks when I want to switch from
-            plugin options ot shortcuts.</para>
-        </formalpara>
-        <formalpara>
-            <title>FTP</title>
-            <para>The FTP plugin strongly influences the development of the
-            virtual file systems of JEdit, and on occasion, bugs in one place
-            require fixes in the other. FTP is being developed in lock-step with
-            the core, and the most recent FTP plugin is more bug-free than
-            latest version that runs on jEdit 4.2final.</para>
-        </formalpara>
+		<para>The SVNPlugin is new, and the JDiff plugin is improved. Many
+		other plugins have latest versions that require jEdit 4.3. </para>
         <formalpara>
             <title>InfoViewer</title>
             <para>This plugin uses jEdit 4.3's action overriding API to serve as

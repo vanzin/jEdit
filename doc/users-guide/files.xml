@@ -390,14 +390,14 @@
             directory to list its contents in place. To browse higher up in the
             directory hierarchy, double-click one of the parent directories in
             the parent directory list.</para>
-
+            
             <para>Files and directories in the file list are shown in different
             colors depending on what glob patterns their names match. The
             patterns and colors can be customized in the <guibutton>File System
             Browser</guibutton>&gt;<guibutton>Colors</guibutton> pane of the
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box.</para>
-
+            
             <para>The <guibutton>Path:</guibutton> Text Box can be used to 
             navigate to a specific directory. Environment variables are expanded
             here, allowing for both <literal>$VARNAME</literal> or
