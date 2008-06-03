@@ -219,7 +219,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		pathField.setPreferredSize(prefSize);
 		pathField.addActionListener(actionHandler);
 		cons.gridx = 1;
-		cons.weightx = 1;
+		cons.weightx = 1.0;
 		cons.gridwidth = GridBagConstraints.REMAINDER;
 
 		layout.setConstraints(pathField,cons);
@@ -238,7 +238,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		{
 			cons.gridwidth = 1;
 			cons.gridx = 0;
-			cons.weightx = 0;
+			cons.weightx = 0.0;
 			cons.gridy = 1;
 			layout.setConstraints(filterCheckbox,cons);
 			pathAndFilterPanel.add(filterCheckbox);
@@ -290,7 +290,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 			cons.gridwidth = GridBagConstraints.REMAINDER;
 			cons.fill = GridBagConstraints.HORIZONTAL;
 			cons.gridx = 1;
-			cons.weightx = 1;
+			cons.weightx = 1.0;
 			if (filterField.getItemCount() > 1)
 			{
 				filterField.setEditor(filterEditor);
@@ -325,16 +325,16 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		{
 			String userHome = System.getProperty("user.home");
 			String defaultPath = jEdit.getProperty("vfs.browser.defaultPath");
-			if(defaultPath.equals("home"))
+			if("home".equals(defaultPath))
 				path = userHome;
-			else if(defaultPath.equals("working"))
+			else if("working".equals(defaultPath))
 				path = System.getProperty("user.dir");
-			else if(defaultPath.equals("buffer"))
+			else if("buffer".equals(defaultPath))
 			{
 				Buffer buffer = view.getBuffer();
 				path = buffer.getDirectory();
 			}
-			else if(defaultPath.equals("last"))
+			else if("last".equals(defaultPath))
 			{
 				HistoryModel pathModel = HistoryModel.getModel("vfs.browser.path");
 				if(pathModel.getSize() == 0)
@@ -342,7 +342,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 				else
 					path = pathModel.getItem(0);
 			}
-			else if(defaultPath.equals("favorites"))
+			else if("favorites".equals(defaultPath))
 				path = "favorites:";
 			else
 			{
@@ -527,7 +527,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	//{{{ setFilenameFilter() method
 	public void setFilenameFilter(String filter)
 	{
-		if(filter == null || filter.length() == 0 || filter.equals("*"))
+		if(filter == null || filter.length() == 0 || "*".equals(filter))
 			filterCheckbox.setSelected(false);
 		else
 		{
@@ -879,7 +879,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 
 		while(e.hasMoreElements())
 		{
-			VFS vfs = (VFS)e.nextElement();
+			VFS vfs = e.nextElement();
 			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
 				continue;
 
@@ -1102,7 +1102,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 	//{{{ Private members
 
-	private static ActionContext actionContext;
+	private static final ActionContext actionContext;
 
 	static
 	{
@@ -1585,7 +1585,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			public void actionPerformed(ActionEvent evt)
 			{
 				String actionCommand = evt.getActionCommand();
-				if(actionCommand.equals("add-to-favorites"))
+				if("add-to-favorites".equals(actionCommand))
 				{
 					// if any directories are selected, add
 					// them, otherwise add current directory
