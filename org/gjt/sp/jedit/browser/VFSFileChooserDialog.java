@@ -102,7 +102,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ getBrowser() method
 	/**
 	 * Returns the VFSBrowser instance used internally.
-	 *
+	 * @return the VFS browser used in the dialog
 	 * @since jEdit 4.3pre7
 	 */
 	public VFSBrowser getBrowser()
@@ -279,10 +279,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		}
 
 		browser = new VFSBrowser(view,path,mode,multipleSelection,null);
-		browser.getBrowserView().getTable().setRequestFocusEnabled(false);
-		browser.getBrowserView().getParentDirectoryList()
-			.setRequestFocusEnabled(false);
-		/* browser.getBrowserView().getTable().addKeyListener(new KeyHandler()); */
 		browser.addBrowserListener(new BrowserHandler());
 		content.add(BorderLayout.CENTER,browser);
 
@@ -369,7 +365,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ getSelectedFiles() method
 	private String[] getSelectedFiles(int type1, int type2)
 	{
-		List l = new ArrayList();
+		List<String> l = new ArrayList<String>();
 		VFSFile[] selectedFiles = browser.getSelectedFiles();
 		for(int i = 0; i < selectedFiles.length; i++)
 		{
@@ -377,7 +373,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			if(file.getType() == type1 || file.getType() == type2)
 				l.add(file.getPath());
 		}
-		return (String[])l.toArray(new String[l.size()]);
+		return l.toArray(new String[l.size()]);
 	} //}}}
 
 	//}}}
@@ -412,7 +408,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					ok.setText(jEdit.getProperty(
 						"vfs.browser.dialog.choose-dir"));
 				}
-				return;
 			}
 			else if(files.length == 1)
 			{
@@ -575,7 +570,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			catch(IOException e)
 			{
 				VFSManager.error(e,path,browser);
-				return;
 			}
 			finally
 			{
@@ -588,7 +582,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				catch(IOException e)
 				{
 					VFSManager.error(e,path,browser);
-					return;
 				}
 			}
 		}

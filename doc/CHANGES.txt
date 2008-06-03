@@ -24,8 +24,8 @@ to this release.
 
 - VFSFileChooserDialog: back-arrow in filename textbox used to go up a
   directory, but was also used for going back a space in the text field.
-  Disabled that behavior, and added shortcuts "A+Up" to go up a dir, 
-  A+Left and A+Right to go back and forward in the directory stack. 
+  Disabled that behavior, and added shortcuts "A+Up" to go up a dir,
+  A+Left and A+Right to go back and forward in the directory stack.
   These also work the dockable VFSBrowser. (#1694133 - Alan Ezust)
 
 - New Action: Scroll-And-Center-Caret Action.
@@ -35,6 +35,9 @@ to this release.
 - A NPE was happened when loading several buffers at the same time and if the
   collapseFold bufferlocal property is set to something else than 0
   (#1982663) (Matthieu Casanova)
+
+- The shortcuts were not working in the file chooser dialog because the filename
+  field was always requesting the focus. (Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous
