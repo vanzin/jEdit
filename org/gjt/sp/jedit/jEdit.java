@@ -58,6 +58,7 @@ import org.gjt.sp.jedit.syntax.XModeHandler;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
+import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -1691,12 +1692,6 @@ public class jEdit
 				}
 			}
 			else if(result != JOptionPane.NO_OPTION)
-				return false;
-		}
-		else
-		{
-			// if the buffer is untitled, not dirty and alone, no need to close it
-			if (buffer.isUntitled() && bufferCount == 1)
 				return false;
 		}
 
