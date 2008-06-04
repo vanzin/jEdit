@@ -366,13 +366,16 @@ public class Log
 		final Throwable message)
 	{
 		PrintStream out = createPrintStream(urgency,source);
-		synchronized (throwables)
+		if (urgency >= level)
 		{
-			if (throwables.size() == MAX_THROWABLES)
+			synchronized (throwables)
 			{
-				throwables.remove(0);
+				if (throwables.size() == MAX_THROWABLES)
+				{
+					throwables.remove(0);
+				}
+				throwables.add(message);
 			}
-			throwables.add(message);
 		}
 		synchronized(LOCK)
 		{
