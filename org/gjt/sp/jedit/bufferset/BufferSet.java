@@ -76,7 +76,7 @@ public class BufferSet
 			if (buffers.size() == 1)
 			{
 				Buffer buf = buffers.get(0);
-				if (buf.isUntitled() && !buffer.isDirty())
+				if (buf.isUntitled() && !buf.isDirty())
 				{
 					untitledBuffer = buf;
 				}
