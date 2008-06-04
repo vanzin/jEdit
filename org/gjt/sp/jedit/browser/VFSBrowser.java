@@ -231,7 +231,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 
 		filterCheckbox = new JCheckBox(jEdit.getProperty("vfs.browser.filter"));
 		filterCheckbox.setMargin(new Insets(0,0,0,0));
-		filterCheckbox.setRequestFocusEnabled(false);
+//		filterCheckbox.setRequestFocusEnabled(false);
 		filterCheckbox.setBorder(new EmptyBorder(0,0,0,12));
 		filterCheckbox.setSelected(jEdit.getBooleanProperty(
 			"vfs.browser.filter-enabled"));

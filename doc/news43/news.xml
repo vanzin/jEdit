@@ -94,13 +94,16 @@
     <chapter id="user-changes">
         <title>User-Visible Changes</title>
 		
-		<para> There There is an enhanced Status Bar (and accompanying service API
-		to allow plugins to add new status bar diaplay/controls).
+		<orderedlist>
+        <listitem><para> There is an enhanced Status Bar (and accompanying service API
+		to allow plugins to add new status bar diaplay/controls). </para></listitem>
+        <listitem><para>
 		It is now possible to choose different, independent Buffer Sets 
 		for each EditPane buffer switcher. See <ulink
 		url="../users-guide/buffersets.html">Buffer Sets</ulink> for more
 		information.
-		</para>
+        </para></listitem>
+        </orderedlist>
 		
         <section id="readded">
             <title>Re-added Features</title>

@@ -124,6 +124,8 @@ public class BrowserCommandsMenu extends JPopupMenu
 		}
 
 		add(createMenuItem("up"));
+		add(createMenuItem("previous"));
+		add(createMenuItem("next"));
 		add(createMenuItem("reload"));
 		add(createMenuItem("roots"));
 		add(createMenuItem("home"));

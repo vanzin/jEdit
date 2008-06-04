@@ -2262,9 +2262,14 @@ vfs.browser.synchronize.label=Directory of Current Buffer
 vfs.browser.synchronize.shortcut=-
 vfs.browser.up.icon=22x22/actions/go-parent.png
 vfs.browser.up.label=Parent Directory
-vfs.browser.up.shortcut=BACK_SPACE
+vfs.browser.up.shortcut=A+Up
 vfs.browser.paste.label=Paste File Here
-
+vfs.browser.previous.label=Previous Directory
+vfs.browser.previous.shortcut=A+Left
+vfs.browser.next.label=Next Directory
+vfs.browser.next.shortcut=A+Right
+vfs.browser.next.icon=22x22/actions/go-next.png
+vfs.browser.previous.icon=22x22/actions/go-previous.png
 #}}}
 
 #{{{ Tool bar
@@ -2275,9 +2280,13 @@ vfs.browser.toolbar-browser=vfs.browser.up \
 			    vfs.browser.synchronize \
 			    vfs.browser.new-file \
 			    vfs.browser.new-directory \
-			    vfs.browser.search-directory
+			    vfs.browser.search-directory \
+			    vfs.browser.previous \
+			    vfs.browser.next 
 vfs.browser.toolbar-dialog=vfs.browser.up \
 			   vfs.browser.reload \
+			   vfs.browser.previous \
+			   vfs.browser.next \
 			   vfs.browser.roots \
 			   vfs.browser.home \
 			   vfs.browser.synchronize \

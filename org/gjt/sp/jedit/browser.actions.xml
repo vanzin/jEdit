@@ -21,6 +21,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="vfs.browser.previous">
+	<CODE>
+		browser.previousDirectory();
+	</CODE>
+</ACTION>
+
+<ACTION NAME="vfs.browser.next">
+	<CODE>
+		browser.nextDirectory();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="vfs.browser.browse-window">
 	<CODE>
 		for(int i = 0; i &lt; files.length; i++)
