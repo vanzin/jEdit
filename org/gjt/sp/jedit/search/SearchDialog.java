@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
-//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 
@@ -72,25 +71,6 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			}
 			return searchDialog;
 		}
-	} //}}}
-
-	//{{{ preloadSearchDialog() method
-	/**
-	 * Preloads the search dialog for the given for so that it can be
-	 * quickly displayed later.
-	 *
-	 * @param view the view from which you want to preload the SearchDialog
-	 * @since jEdit 4.2pre3
-	 * @deprecated no reason to use this method anymore now we have JIT compiler
-	 */
-	@Deprecated
-	public static void preloadSearchDialog(View view)
-	{
-		if(Debug.DISABLE_SEARCH_DIALOG_POOL)
-			return;
-
-		SearchDialog dialog = new SearchDialog(view);
-		viewHash.put(view,dialog);
 	} //}}}
 
 	//{{{ showSearchDialog() method
