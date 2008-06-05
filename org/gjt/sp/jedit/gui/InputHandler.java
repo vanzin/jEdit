@@ -57,7 +57,6 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 	 */
 	public InputHandler(View view)
 	{
-		super();
 		this.view = view;
 	} //}}}
 
@@ -174,7 +173,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 
 			if(map != null && am != null && comp.isEnabled())
 			{
-				KeyStroke	keyStroke	= KeyStroke.getKeyStrokeForEvent(evt);
+				KeyStroke keyStroke = KeyStroke.getKeyStrokeForEvent(evt);
 				Object binding = map.get(keyStroke);
 				if(binding != null && am.get(binding) != null)
 				{
@@ -182,7 +181,8 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 				}
 			}
 		}
-		else if(focusOwner instanceof JTextComponent)
+		
+		if(focusOwner instanceof JTextComponent)
 		{
 			// fix for the bug where key events in JTextComponents
 			// inside views are also handled by the input handler
@@ -296,6 +296,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 	/**
 	 * @deprecated Use the other form of this method instead
 	 */
+	@Deprecated
 	public void readNextChar(String code)
 	{
 		readNextChar = code;
