@@ -66,13 +66,12 @@ class VFSFileNameField extends HistoryTextField
 				break;
 			case KeyEvent.VK_LEFT:
 				if ((evt.getModifiers() & KeyEvent.ALT_MASK) > 0) {
-//					evt.setModifiers(0);
-					// browser.getBrowserView().getTable().processKeyEvent(evt);
 					browser.previousDirectory();
 					evt.consume();
 				}
 				else {
-					browser.getBrowserView().getTable().processKeyEvent(evt);
+					// 				browser.getBrowserView().getTable().processKeyEvent(evt);
+					super.processKeyEvent(evt);
 				}
 				break;
 			case KeyEvent.VK_UP:
