@@ -2250,7 +2250,7 @@ public class jEdit
 			if(config.width != 0 && config.height != 0)
 			{
 				Rectangle desired = new Rectangle(
-					config.x,config.y,config.width,
+					config.x-10, config.y+10,config.width,
 					config.height);
 				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
 				{
