@@ -42,6 +42,12 @@ to this release.
 - The shortcuts were not working in the file chooser dialog because the filename
   field was always requesting the focus. (Matthieu Casanova)
 
+- When assigning escape shortcut to close-docking-area, it didn't work in the
+  hypersearch result panel because the JTree has the focus, and "escape"
+  keypress is assigned to "hideTip" action by the Swing framework.  I removed
+  this default assignment because nobody care hiding tooltips (#1955140)
+  (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 

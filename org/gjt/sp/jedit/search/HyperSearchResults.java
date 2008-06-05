@@ -84,7 +84,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		resultTree.setVisibleRowCount(16);
 		resultTree.setRootVisible(false);
 		resultTree.setShowsRootHandles(true);
-
+		KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+		resultTree.getInputMap().remove(keyStroke);
 		// looks bad with the OS X L&F, apparently...
 		if(!OperatingSystem.isMacOSLF())
 			resultTree.putClientProperty("JTree.lineStyle", "Angled");
