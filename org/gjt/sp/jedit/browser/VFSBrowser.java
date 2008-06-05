@@ -372,9 +372,13 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		defaultFocusComponent.requestFocus();
 	} //}}}
 
-	public void setDefaultFocusComponent(JComponent c) {
+	// {{{ setDefaultFocusComponent()
+	/** Only used by VFSFileChooserDialog, since it embeds this in a dialog
+	 */
+	void setDefaultFocusComponent(JComponent c) 
+	{
 		defaultFocusComponent = c;
-	}
+	}// }}}
 	
 	//{{{ addNotify() method
 	@Override

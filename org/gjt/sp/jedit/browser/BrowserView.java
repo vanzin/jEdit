@@ -662,14 +662,13 @@ class BrowserView extends JPanel
 					break;
 				case KeyEvent.VK_BACK_SPACE:
 					evt.consume();
-					EditAction ea = ac.getAction("vfs.browser.up");
-					ac.invokeAction(evt, ea);
+					EditAction up = ac.getAction("vfs.browser.up");
+					ac.invokeAction(evt, up);
 					break;
 				case KeyEvent.VK_F5: 
 					evt.consume();
-					ac = VFSBrowser.getActionContext();
-					ea = ac.getAction("vfs.browser.reload");
-					ac.invokeAction(evt, ea);
+					EditAction reload = ac.getAction("vfs.browser.reload");
+					ac.invokeAction(evt, reload);
 					break;
 				case KeyEvent.VK_ENTER: 
 					evt.consume();
