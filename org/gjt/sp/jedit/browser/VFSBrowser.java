@@ -209,7 +209,6 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		pathAndFilterPanel.add(label);
 
 		pathField = new HistoryTextField("vfs.browser.path");
-		defaultFocusComponent = pathField;
 		pathField.addKeyListener(keyListener);
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
@@ -315,7 +314,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		add(BorderLayout.CENTER,browserView = new BrowserView(this));
 		if(isHorizontalLayout())
 			browserView.setBorder(new EmptyBorder(0,12,0,12));
-
+		defaultFocusComponent = browserView.getTable();
 		propertiesChanged();
 
 		updateFilterEnabled();
