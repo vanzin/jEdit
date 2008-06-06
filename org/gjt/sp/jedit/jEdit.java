@@ -1512,8 +1512,8 @@ public class jEdit
 
 				if(!newBuffer.load(view,false))
 					return null;
-				bufferSetManager.addBuffer(view, newBuffer);
 				addBufferToList(newBuffer);
+				bufferSetManager.addBuffer(view, newBuffer);
 			}
 
 			EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
@@ -1752,7 +1752,9 @@ public class jEdit
 
 		if (bufferSetManager.hasEmptyBufferSets())
 		{
-			Buffer newEmptyBuffer = newFile(null);
+			int untitledCount = getNextUntitledBufferId();
+			Buffer newEmptyBuffer = openTemporary(view, null,"Untitled-" + untitledCount,true, null);
+			commitTemporary(newEmptyBuffer);
 			bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
 		}
 	} //}}}
@@ -1843,7 +1845,9 @@ public class jEdit
 		{
 			if (bufferSetManager.hasEmptyBufferSets())
 			{
-				Buffer newEmptyBuffer = newFile(view);
+				int untitledCount = getNextUntitledBufferId();
+				Buffer newEmptyBuffer = openTemporary(view, null,"Untitled-" + untitledCount,true, null);
+				commitTemporary(newEmptyBuffer);
 				bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
 			}
 		}

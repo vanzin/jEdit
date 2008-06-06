@@ -124,7 +124,13 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		//if(buffer.insideCompoundEdit())
 		//	buffer.endCompoundEdit();
 		EditBus.send(new BufferChanging(this, buffer));
-		recentBuffer = this.buffer;
+		if (bufferSet.indexOf(this.buffer) != -1)
+		{
+			// when closing the last buffer of a bufferSet, the current buffer will still be the closed
+			// buffer until a new empty buffer is created.
+			// So if the current buffer is not anymore in the bufferSet, do not set the recentBuffer
+			recentBuffer = this.buffer;
+		}
 		if(recentBuffer != null)
 			saveCaretInfo();
 		this.buffer = buffer;
@@ -1033,7 +1039,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			 * 'Untitled' file creation. */
 			if(buffer.isClosed())
 			{
-				setBuffer(jEdit.getFirstBuffer(), msg.getView() == view);
 				// since recentBuffer will be set to the one that
 				// was closed
 				recentBuffer = null;
@@ -1054,11 +1059,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 				{
 					setBuffer(newBuffer);
 					recentBuffer = newBuffer.getPrev();
-				}
-				else if(jEdit.getBufferCount() != 0)
-				{
-					setBuffer(jEdit.getFirstBuffer());
-					recentBuffer = null;
 				}
 			}
 			else if(_buffer == recentBuffer)
