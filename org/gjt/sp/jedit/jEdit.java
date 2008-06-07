@@ -2224,6 +2224,8 @@ public class jEdit
 			{
 				view.showWaitCursor();
 				view.getEditPane().saveCaretInfo();
+				config.x -= 20;
+				config.y += 20;
 			}
 
 			View newView = new View(buffer,config);
@@ -2254,7 +2256,7 @@ public class jEdit
 			if(config.width != 0 && config.height != 0)
 			{
 				Rectangle desired = new Rectangle(
-					config.x-20, config.y+20, config.width,
+					config.x, config.y, config.width,
 					config.height);
 				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
 				{
