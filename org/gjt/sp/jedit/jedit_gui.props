@@ -882,7 +882,7 @@ view.status.bufferset-tooltip=BufferSet scope is {0}
 #}}}
 
 #{{{ Status bar component visibility
-view.status=( mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock
+view.status=( mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep buffersets memory-status errors clock 
 
 view.status.show-caret-status=true
 #}}}
