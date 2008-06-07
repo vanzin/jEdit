@@ -23,14 +23,15 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import java.util.HashSet;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.gui.HistoryTextField;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.MiscUtilities;
 
-//}}}
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * @author Slava Pestov
@@ -50,6 +51,14 @@ class VFSFileNameField extends HistoryTextField
 		Dimension dim = getPreferredSize();
 		dim.width = Integer.MAX_VALUE;
 		setMaximumSize(dim);
+
+		// Enable TAB pressed for completion instead of
+		// focas traversal.
+		final int FORWARD = KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS;
+		HashSet<AWTKeyStroke> keys = new HashSet<AWTKeyStroke>(
+				getFocusTraversalKeys(FORWARD));
+		keys.remove(AWTKeyStroke.getAWTKeyStroke("pressed TAB"));
+		setFocusTraversalKeys(FORWARD, keys);
 	} //}}}
 
 	//{{{ processKeyEvent() method
