@@ -24,13 +24,18 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import java.awt.*;
+import java.awt.AWTEvent;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import org.gjt.sp.jedit.*;
+import javax.swing.JPopupMenu;
 
-import javax.swing.*;
-//}}}
+import org.gjt.sp.jedit.Abbrevs;
+import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.Macros;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.msg.PositionChanging;
 
 /**
  * jEdit's text component.<p>
@@ -46,6 +51,7 @@ import javax.swing.*;
  */
 public class JEditTextArea extends TextArea
 {
+	
 	//{{{ JEditTextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
@@ -127,6 +133,19 @@ public class JEditTextArea extends TextArea
 		}
 	} //}}}
 
+	// {{{ overrides from the base class that are EditBus  aware 
+	public void goToBufferEnd(boolean select)
+	{
+		EditBus.send(new PositionChanging(this));
+		super.goToBufferEnd(select);
+	}
+
+	public void goToBufferStart(boolean select)
+	{
+		EditBus.send(new PositionChanging(this));
+		super.goToBufferStart(select);
+	} // }}}
+	
 	//{{{ showGoToLineDialog() method
 	/**
 	 * Displays the 'go to line' dialog box, and moves the caret to the

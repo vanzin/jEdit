@@ -23,22 +23,45 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.gjt.sp.jedit.gui.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+
+import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.jedit.bufferset.BufferSetListener;
+import org.gjt.sp.jedit.gui.BufferSwitcher;
+import org.gjt.sp.jedit.gui.StatusBar;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.msg.BufferChanging;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.EditPaneUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.bufferset.BufferSetListener;
-import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.jedit.textarea.AntiAlias;
+import org.gjt.sp.jedit.textarea.Gutter;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.MouseHandler;
+import org.gjt.sp.jedit.textarea.Selection;
+import org.gjt.sp.jedit.textarea.StatusListener;
+import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.textarea.TextAreaExtension;
+import org.gjt.sp.jedit.textarea.TextAreaPainter;
+import org.gjt.sp.jedit.textarea.TextAreaTransferHandler;
 import org.gjt.sp.util.SyntaxUtilities;
+
 //}}}
 
 /**
@@ -797,6 +820,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea(view);
+		paneMap.put(textArea, this);
 		textArea.getPainter().setAntiAlias(new AntiAlias(jEdit.getProperty("view.antiAlias")));
 		textArea.setMouseHandler(new MouseHandler(textArea));
 		textArea.setTransferHandler(new TextAreaTransferHandler());
@@ -822,12 +846,17 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ close() method
 	void close()
 	{
+		paneMap.remove(textArea);
 		saveCaretInfo();
 		EditBus.send(new EditPaneUpdate(this,EditPaneUpdate.DESTROYED));
 		EditBus.removeFromBus(this);
 		textArea.dispose();
 	} //}}}
 
+	public static EditPane get(TextArea ta) {
+		return paneMap.get(ta);
+	}
+	
 	//}}}
 
 	//{{{ Private members
@@ -836,6 +865,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	private boolean init;
 	/** The View where the edit pane is. */
 	private final View view;
+	private static final HashMap<TextArea, EditPane> paneMap = new HashMap<TextArea, EditPane>();
 	private BufferSet bufferSet;
 	/** The current buffer. */
 	private Buffer buffer;
