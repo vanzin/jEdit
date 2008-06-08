@@ -342,6 +342,12 @@
                         <para>Line separator - see <xref
                         linkend="line-separators" />.</para>
                     </listitem>
+                    
+                    <listitem>
+                        <para>Buffer Set Scope - see <xref
+                        linkend="buffersets" />.</para>
+                    </listitem>
+                    
                 </itemizedlist>
             </listitem>
 
