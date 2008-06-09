@@ -58,7 +58,6 @@ import org.gjt.sp.jedit.syntax.XModeHandler;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
-import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -1506,7 +1505,7 @@ public class jEdit
 
 					bufferSetManager.addBuffer(view, buffer);
 					return buffer;
-	}
+				}
 
 				newBuffer = new Buffer(path,newFile,false,props);
 
@@ -1750,13 +1749,7 @@ public class jEdit
 		if(jEdit.getBooleanProperty("persistentMarkers"))
 			buffer.updateMarkersFile(view);
 
-		if (bufferSetManager.hasEmptyBufferSets())
-		{
-			int untitledCount = getNextUntitledBufferId();
-			Buffer newEmptyBuffer = openTemporary(view, null,"Untitled-" + untitledCount,true, null);
-			commitTemporary(newEmptyBuffer);
-			bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
-		}
+		bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
 	} //}}}
 
 	//{{{ closeAllBuffers() methods
@@ -1843,13 +1836,7 @@ public class jEdit
 
 		if(!isExiting)
 		{
-			if (bufferSetManager.hasEmptyBufferSets())
-			{
-				int untitledCount = getNextUntitledBufferId();
-				Buffer newEmptyBuffer = openTemporary(view, null,"Untitled-" + untitledCount,true, null);
-				commitTemporary(newEmptyBuffer);
-				bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
-			}
+			bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
 		}
 
 		PerspectiveManager.setPerspectiveDirty(true);
@@ -1875,13 +1862,7 @@ public class jEdit
 		{
 			bufferSetManager.removeBuffer(editPane, buffer);
 		}
-		if (bufferSetManager.hasEmptyBufferSets())
-		{
-			int untitledCount = getNextUntitledBufferId();
-			Buffer newEmptyBuffer = openTemporary(editPane.getView(), null,"Untitled-" + untitledCount,true, null);
-			commitTemporary(newEmptyBuffer);
-			bufferSetManager.addBufferToEmptyBufferSets(newEmptyBuffer);
-		}
+		bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
 	}
 
 	//{{{ saveAllBuffers() method
@@ -3413,7 +3394,7 @@ public class jEdit
 			new MyFocusManager());
 	} //}}}
 
-	private static int getNextUntitledBufferId()
+	public static int getNextUntitledBufferId()
 	{
 		int untitledCount = 0;
 		Buffer buffer = buffersFirst;
@@ -4009,7 +3990,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	 * Compose buffer-local properties which can be got from history.
 	 * @since 4.3pre10
 	 */
-	private static void composeBufferPropsFromHistory(Hashtable props,
+	private static void composeBufferPropsFromHistory(Map props,
 		String path)
 	{
 		BufferHistory.Entry entry = BufferHistory.getEntry(path);

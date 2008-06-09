@@ -97,6 +97,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ getView() method
 	/**
 	 * Returns the view containing this edit pane.
+	 * @return the view that contains this EditPane
 	 * @since jEdit 2.5pre2
 	 */
 	public View getView()
@@ -107,6 +108,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ getBuffer() method
 	/**
 	 * Returns the current buffer.
+	 * @return the current buffer
 	 * @since jEdit 2.5pre2
 	 */
 	public Buffer getBuffer()
@@ -142,7 +144,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		if (bufferSet.indexOf(buffer) == -1)
 		{
-			jEdit.getBufferSetManager().addBuffer(view, buffer);
+			jEdit.getBufferSetManager().addBuffer(this, buffer);
 		}
 		//if(buffer.insideCompoundEdit())
 		//	buffer.endCompoundEdit();
@@ -264,6 +266,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ getTextArea() method
 	/**
 	 * Returns the view's text area.
+	 * @return the text area of the edit pane
 	 * @since jEdit 2.5pre2
 	 */
 	public JEditTextArea getTextArea()
@@ -274,6 +277,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ getBufferSwitcher() method
 	/**
 	 * Returns the buffer switcher combo box instance.
+	 * @return the buffer switcher (it can be null)
 	 * @since jEdit 4.1pre8
 	 */
 	public BufferSwitcher getBufferSwitcher()

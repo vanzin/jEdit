@@ -133,20 +133,25 @@ public class BufferSetManager implements EBComponent
 
 	public void addBuffer(View view, Buffer buffer)
 	{
+		EditPane editPane = view == null ? null : view.getEditPane();
+		addBuffer(editPane, buffer);
+	}
+
+	public void addBuffer(EditPane editPane, Buffer buffer)
+	{
 		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
 		if (bufferSets == null)
 		{
 			bufferSets = new HashSet<BufferSet>();
 			bufferBufferSetMap.put(buffer, bufferSets);
 		}
-		if (view == null)
+		if (editPane == null)
 		{
 			global.addBuffer(buffer);
 			bufferSets.add(global);
 		}
 		else
 		{
-			EditPane editPane = view.getEditPane();
 			BufferSet bufferSet = editPane.getBufferSet();
 			bufferSet.addBuffer(buffer);
 			bufferSets.add(bufferSet);
@@ -170,7 +175,6 @@ public class BufferSetManager implements EBComponent
 	 *
 	 * @param bufferSet the bufferSet
 	 * @param buffer the buffer that will be removed
-	 * @return true if the buffer is not in a BufferSet anymore
 	 */
 	void removeBuffer(BufferSet bufferSet, Buffer buffer)
 	{
@@ -240,9 +244,15 @@ public class BufferSetManager implements EBComponent
 		});
 	}
 
-	public boolean hasEmptyBufferSets()
+	public void addNewUntitledBufferTopEmptyBufferSets()
 	{
-		return !emptyBufferSets.isEmpty();
+		if (emptyBufferSets.isEmpty())
+			return;
+		int untitledCount = jEdit.getNextUntitledBufferId();
+		Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView().getEditPane().getView(), null,
+							    "Untitled-" + untitledCount,true, null);
+		jEdit.commitTemporary(newEmptyBuffer);
+		addBufferToEmptyBufferSets(newEmptyBuffer);
 	}
 
 	/**
@@ -251,7 +261,7 @@ public class BufferSetManager implements EBComponent
 	 *
 	 * @param buffer the buffer to add
 	 */
-	public void addBufferToEmptyBufferSets(Buffer buffer)
+	private void addBufferToEmptyBufferSets(Buffer buffer)
 	{
 		Set<BufferSet> sets = bufferBufferSetMap.get(buffer);
 		if (sets == null)
@@ -326,12 +336,21 @@ public class BufferSetManager implements EBComponent
 
 	/**
 	 * Create a bufferSet
+	 * @param scope the scope of the bufferSet
 	 * @param source the source bufferSet. If it exists the buffers will be copied otherwise all open buffers
 	 * are added
 	 * @return the new bufferSet
 	 */
 	private BufferSet createBufferSet(String scope, BufferSet source)
 	{
+		boolean copy = jEdit.getBooleanProperty("editpane.bufferset.copy", true);
+		if (!copy)
+		{
+			BufferSet bufferSet = new BufferSet(scope);
+			emptyBufferSets.add(bufferSet);
+			return bufferSet;
+		}
+
 		BufferSet bufferSet;
 		if (source == null)
 		{

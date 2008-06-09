@@ -122,7 +122,11 @@ public class ViewOptionPane extends AbstractOptionPane
 		defaultBufferSet = new JComboBox(BufferSet.SCOPE);
 		defaultBufferSet.setSelectedItem(jEdit.getProperty("editpane.bufferset.default", BufferSet.SCOPE[0]));
 		addComponent(jEdit.getProperty("options.editpane.bufferset.default"), defaultBufferSet);
-		
+
+		copyParentBufferSet = new JCheckBox(jEdit.getProperty("options.editpane.bufferset.copy"));
+		copyParentBufferSet.setSelected(jEdit.getBooleanProperty("editpane.bufferset.copy", true));
+		addComponent(copyParentBufferSet);
+
 	} //}}}
 
 	//{{{ _save() method
@@ -145,6 +149,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		jEdit.setProperty("bufferSwitcher.maxRowCount",
 			bufferSwitcherMaxRowCount.getText());
 		jEdit.setProperty("editpane.bufferset.default", defaultBufferSet.getSelectedItem().toString());
+		jEdit.setBooleanProperty("editpane.bufferset.copy", copyParentBufferSet.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -157,6 +162,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	private JCheckBox showBufferSwitcher;
 	private JTextField bufferSwitcherMaxRowCount;
 	private JComboBox defaultBufferSet;
+	private JCheckBox copyParentBufferSet;
 	//}}}
 
 	//{{{ ActionHandler class

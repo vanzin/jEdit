@@ -243,6 +243,13 @@ view.middleMousePaste=false
 # as if selection mode were rectangular mode
 view.ctrlForRectangularSelection=true
 
+# The default bufferSet scope
+editpane.bufferset.default=global
+
+# Copy the current bufferSet content when creating a new bufferSet for an
+# EditPane
+editpane.bufferset.copy=true
+
 #{{{ Gutter
 
 # Gutter background color

@@ -882,7 +882,7 @@ view.status.bufferset-tooltip=BufferSet scope is {0}
 #}}}
 
 #{{{ Status bar component visibility
-view.status=( mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep buffersets memory-status errors clock 
+view.status=( mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep buffersets memory-status errors clock
 
 view.status.show-caret-status=true
 #}}}
@@ -2061,6 +2061,8 @@ options.view.beepOnSearchAutoWrap=Beep when searching automatically wraps
 options.view.showBufferSwitcher=Show buffer switcher
 options.view.bufferSwitcherMaxRowsCount=Visible rows in buffer switcher:
 options.editpane.bufferset.default=BufferSet scope for new EditPanes:
+options.editpane.bufferset.copy=Copy the current bufferSet of the edit pane \
+	when choosing bufferSet
 #}}}
 
 
@@ -2283,7 +2285,7 @@ vfs.browser.toolbar-browser=vfs.browser.up \
 			    vfs.browser.new-directory \
 			    vfs.browser.search-directory \
 			    vfs.browser.previous \
-			    vfs.browser.next 
+			    vfs.browser.next
 vfs.browser.toolbar-dialog=vfs.browser.up \
 			   vfs.browser.reload \
 			   vfs.browser.previous \
