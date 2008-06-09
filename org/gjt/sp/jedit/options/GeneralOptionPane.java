@@ -25,8 +25,8 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 
 import org.gjt.sp.jedit.AbstractOptionPane;
-import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
@@ -77,6 +77,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 
@@ -85,7 +86,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			jEdit.getProperty("lineSep.windows"),
 			jEdit.getProperty("lineSep.mac") };
 		lineSeparator = new JComboBox(lineSeps);
-		String lineSep = jEdit.getProperty("buffer."+Buffer.LINESEP,
+		String lineSep = jEdit.getProperty("buffer."+ JEditBuffer.LINESEP,
 			System.getProperty("line.separator"));
 		if("\n".equals(lineSep))
 			lineSeparator.setSelectedIndex(0);
@@ -221,6 +222,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 
@@ -237,7 +239,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 			lineSep = "\r";
 			break;
 		}
-		jEdit.setProperty("buffer."+Buffer.LINESEP,lineSep);
+		jEdit.setProperty("buffer."+ JEditBuffer.LINESEP,lineSep);
 		switch(checkModStatus.getSelectedIndex())
 		{
 		case 0:
