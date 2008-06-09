@@ -41,6 +41,7 @@ import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
+import org.gjt.sp.jedit.options.GeneralOptionPane;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -592,7 +593,8 @@ public class Buffer extends JEditBuffer
 			});
 
 		int check = jEdit.getIntegerProperty("checkFileStatus");
-		if((! disableFileStatusCheck) && (check == 1 || check == 2))
+		if(!disableFileStatusCheck && (check == GeneralOptionPane.checkFileStatus_all ||
+					       check == GeneralOptionPane.checkFileStatus_operations))
 			jEdit.checkBufferStatus(view,false);
 
 		return true;

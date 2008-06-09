@@ -40,6 +40,20 @@ import java.awt.event.ActionListener;
 
 public class GeneralOptionPane extends AbstractOptionPane
 {
+	//{{{ checkFileStatus options
+	// Check the buffer status when the view got the focus
+	public static final int checkFileStatus_focus = 0;
+	// Check the file status when the view got the status
+	// or when saving or visiting the buffer
+	public static final int checkFileStatus_all = 1;
+	// Check the file status when visiting or saving <b>any</b> buffer
+	public static final int checkFileStatus_operations = 2;
+	// Check the file status when visiting or saving the buffer
+	public static final int checkFileStatus_focusBuffer = 3;
+	// Check the file status when saving the buffer
+	public static final int checkFileStatus_none = 4;
+	//}}}
+
 	//{{{ Private members
 	private JComboBox lineSeparator;
 	private JComboBox checkModStatus;

@@ -42,6 +42,7 @@ import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
+import org.gjt.sp.jedit.options.GeneralOptionPane;
 //}}}
 
 /**
@@ -881,7 +882,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	{
 		editPane.setBuffer(buffer, focus);
 		int check = jEdit.getIntegerProperty("checkFileStatus");
-		if((! disableFileStatusCheck) && (check == 1 || check == 2 || check == 3))
+		if(!disableFileStatusCheck && (check == GeneralOptionPane.checkFileStatus_all ||
+						  check == GeneralOptionPane.checkFileStatus_operations ||
+						  check == GeneralOptionPane.checkFileStatus_focusBuffer))
 			jEdit.checkBufferStatus(this, true);
 	} //}}}
 
@@ -1730,9 +1733,10 @@ loop:		while (true)
 				public void run()
 				{
 					int check = jEdit.getIntegerProperty("checkFileStatus");
-					if(check == 0 || check == 1)
+					if(check == GeneralOptionPane.checkFileStatus_focus ||
+					   check == GeneralOptionPane.checkFileStatus_all)
 						jEdit.checkBufferStatus(View.this,false);
-					else if(check == 3)
+					else if(check == GeneralOptionPane.checkFileStatus_focusBuffer)
 						jEdit.checkBufferStatus(View.this,true);
 				}
 			});
