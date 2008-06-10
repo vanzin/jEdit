@@ -124,7 +124,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.editpane.bufferset.default"), defaultBufferSet);
 
 		copyParentBufferSet = new JCheckBox(jEdit.getProperty("options.editpane.bufferset.copy"));
-		copyParentBufferSet.setSelected(jEdit.getBooleanProperty("editpane.bufferset.copy", true));
+		copyParentBufferSet.setSelected(jEdit.getBooleanProperty("editpane.bufferset.copy"));
 		addComponent(copyParentBufferSet);
 
 	} //}}}

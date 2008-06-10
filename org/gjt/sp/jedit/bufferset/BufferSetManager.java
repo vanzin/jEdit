@@ -343,7 +343,7 @@ public class BufferSetManager implements EBComponent
 	 */
 	private BufferSet createBufferSet(String scope, BufferSet source)
 	{
-		boolean copy = jEdit.getBooleanProperty("editpane.bufferset.copy", true);
+		boolean copy = jEdit.getBooleanProperty("editpane.bufferset.copy");
 		if (!copy)
 		{
 			BufferSet bufferSet = new BufferSet(scope);
