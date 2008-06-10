@@ -115,7 +115,7 @@
         <title>Switching Buffers</title>
 
         <para>Each EditPane has an optional drop-down BufferSwitcher at the top.
-        The Buffer Switcher shows the current buffer and can also be used to 
+        The BufferSwitcher shows the current buffer and can also be used to 
         switch the current buffer, using menu item commands and their keyboard shortcuts.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous
@@ -178,22 +178,42 @@
     <sect1 id="buffersets">
         <title>Buffer Sets</title>
         
-        <para> As mentioned in the previous section, each EditPane can show a Buffer Switcher, which is actually a representation of a BufferSet.
-        In jEdit 4.2, all EditPane buffer lists showed a global list of all buffers that were opened from any EditPane in any View. This resulted in very large lists of buffers, and made the next/previous buffer actions useless with many views, editpanes and buffers. </para>
+        <para> As mentioned in the previous section, each EditPane can show a Buffer Switcher, which
+        is actually a representation of a BufferSet. In jEdit 4.2, all EditPane buffer switchers
+        showed a global list of all buffers that were opened from any EditPane in any View. This
+        resulted in very large lists of buffers, and made the next/previous buffer actions useless
+        with many views, editpanes and buffers. </para>
         
-        <para> In Jedit 4.3, with a View or Editpane-scope buffer set, opening a buffer in one View/EditPane will not result in the buffer 
-        being added to the buffer sets of other Views/EditPanes. </para>
-
-        <para>The default Buffer Set scope for newly created EditPanes is set from <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>&gt;<guimenuitem>View</guimenuitem>&gt;<guilabel>BufferSet scope for new EditPanes</guilabel>.</para>
-        
-        <para> It is possible to change the BufferSet scope of any EditPane. The statusbar shows you which
-        bufferset scope is active for the current editpane (look for the letter "G", "E" or "V"). Double-clicking on that
-        will allow you to change the buffer set. Also, the scope for the current EditPane can be changed from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenu>global|view|editpane</guimenu>.
+        <para> In Jedit 4.3, with View-scope BufferSets,  EditPanes in the same View share the same
+        BufferSet, and opening a buffer in one View will not affect the non-global BufferSets in other
+        views. With EditPane-scope BufferSets, each EditPane can have its own independent BufferSet.
         </para>
+
+        <para>The default Buffer Set scope for newly created EditPanes is global by default, and
+        changed from <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+        &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope for new
+        EditPanes</guilabel>. </para>
         
-        <para> <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenuitem>Remove From BufferSet</guimenuitem> will remove the buffer from the current BufferSet. If it was the last Buffer Set to contain that Buffer, the buffer is also closed.  <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the current EditPane by performing a "Remove from BufferSet" on all items except the active buffer in the Pane. </para>
+        <para> New buffersets are initially empty, or populated with a copy of the 
+        existing bufferset. This behavior can be changed from 
+        <guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt; 
+        <guilabel>New BufferSets contain copies of current bufferset</guilabel>. </para>
         
-        <para> The buffer sets feature helps keep the buffer lists local and managable when using jEdit in a multiple-view and multiple-editpane environment. </para>
+        <para> The statusbar shows you which bufferset scope is active for the current editpane 
+        (look for the letter "G", "E" or "V"). Double-clicking on that
+        will allow you to change the buffer set. Also, the scope for the current EditPane can be
+        changed from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu> &gt;
+        <guimenu>global|view|editpane</guimenu>. </para>
+        
+        <para> <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu>&gt;<guimenuitem>Remove From
+        BufferSet</guimenuitem> will remove the current buffer from the editpane's BufferSet. If it
+        was the last BufferSet to contain that buffer, the buffer is also closed.  
+        <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
+        current EditPane by performing a "Remove from BufferSet" on all items except the active buffer
+        in the Pane. </para>
+        
+        <para> The buffer sets feature helps keep the buffer lists local and managable when using
+        jEdit in a multiple-view and multiple-editpane environment. </para>
     </sect1>
     
     <sect1 id="docking">

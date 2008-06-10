@@ -24,23 +24,22 @@ to this release.
 
 - VFSFileChooserDialog: back-arrow in filename textbox used to go up a
   directory, but was also used for going back a space in the text field.
-  Disabled that behavior. (#1694133 - Alan Ezust)
+  Disabled first behavior. (#1694133 - Alan Ezust)
 
-- VFSBrowser: Added shortcuts "A+Up" to go up a dir,
-  A+Left and A+Right to go back and forward in the directory stack. (Alan Ezust)
+- VFSBrowser: Added shortcut "A+Up" to go up a dir.
+  New browser directory stack actions: next/previous (A+Left and A+Right).
+  Reworked tab-keyboard focus traversal policy. (Alan Ezust)
 
-- Added a Focus Traversal Policy to both VFSBrowser and VFSFileChooserDialog.
-
-- New Action: Scroll-And-Center-Caret Action.
-  Restored previous behavior of center-caret-on-screen.
-  (# 1910061 - Alan Ezust)
+- New Action: Scroll-And-Center-Caret Action. Restored previous 
+  behavior of center-caret-on-screen. (#1910061 - Alan Ezust)
 
 - A NPE was happened when loading several buffers at the same time and if the
   collapseFold bufferlocal property is set to something else than 0
   (#1982663) (Matthieu Casanova)
 
-- The shortcuts were not working in the file chooser dialog because the filename
-  field was always requesting the focus. (Matthieu Casanova)
+- The shortcuts were not working in the file chooser dialog table 
+  because the filename field was always requesting the focus.
+  (Matthieu Casanova)
 
 - When assigning escape shortcut to close-docking-area, it didn't work in the
   hypersearch result panel because the JTree has the focus, and "escape"
