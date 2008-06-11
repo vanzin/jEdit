@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="customizing">
     <title>Customizing jEdit</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=0: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
     <sect1 id="buffer-opts">
@@ -417,9 +414,9 @@
             
             <bridgehead> 2-key shortcut prefixes </bridgehead>
             
-            <para> Some shortcuts, such as C+e, C+m, and C+r, are prefixes for two-keystroke shortcuts. Another other keystroke may be used as a prefix in a 2-key shortcut, so for example, C+x can be redefined as a prefix to make it more emacs-like, by mapping any other action to a C+x prefixed shortcut.</para>
+            <para> Some shortcuts, such as C+e, C+m, and C+r, are prefixes for two-keystroke shortcuts. Another  keystroke may be used as a prefix in a 2-key shortcut, so for example, C+x can be redefined as a prefix to make it more emacs-like, by mapping any other action to a C+x prefixed shortcut.</para>
             
-            <para> Conversely, emacs users will notice at first that C+e can not be mapped as a single key shortcut to go to the end of the line, unless all of the other actions that contain C+e prefixed shortcuts are redefined to other shortcuts first. After that, C+e can be bound to end-of-line. </para>
+            <para> Conversely, emacs users will notice at first that C+e can not be mapped as a single key shortcut to go to the end of the line, unless all of the other actions that contain C+e prefixed shortcuts are remapped to other shortcuts first. After that, C+e can be bound to end-of-line. </para>
             
             <para> The default shortcuts can be found in  <literal>jedit_keys.props</literal>. </para>
             

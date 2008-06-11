@@ -189,6 +189,7 @@ file=new-file \
      reload-all \
      %reload-encoding \
      - \
+     editpane-close-buffer \
      close-buffer \
      close-all \
      - \
@@ -211,7 +212,7 @@ reload.icon.small=16x16/actions/view-refresh.png
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
 close-buffer.icon.small=10x10/actions/close.png
-editpane-close-buffer.label=Remove From BufferSet
+editpane-close-buffer.label=Close (local)
 closeall-except-active.label=Clear BufferSet except active
 editpane-close-buffer.icon.small=10x10/actions/close.png
 close-all.label=Clos$e All

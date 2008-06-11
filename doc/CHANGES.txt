@@ -93,6 +93,8 @@ to this release.
 }}}
 {{{ API Changes
 
+- Removed com.microstar XML parser. 
+
 - New methods were added to jEditBuffer to return CharSequence instead of
   String. StandardUtilities / TextUtilities were enhanced to provide functions
   that are not present in the CharSequence class, or were only available for
