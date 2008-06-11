@@ -15,7 +15,7 @@
     <PROPERTY NAME="lineComment" VALUE="%" />
     <PROPERTY NAME="deepIndent" VALUE="FALSE" />
     <PROPERTY NAME="wordBreakChars" VALUE="" />
-    <PROPERTY NAME="noWordSep" VALUE="@_-:*{}[]&lt;&gt;" />
+    <PROPERTY NAME="noWordSep" VALUE="\@_-:*&lt;&gt;" />
   </PROPS>
   
   <!-- default rules -->

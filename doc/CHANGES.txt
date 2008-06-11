@@ -90,6 +90,8 @@ to this release.
   - stricter, consistent matching of variable names
   - other minor fixes/improvements
 
+- Fix word separators in LaTeX mode (SF #1982712)
+
 }}}
 {{{ API Changes
 
