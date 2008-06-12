@@ -201,7 +201,7 @@
 				FILE_NAME_GLOB="*.java" />
 
 <MODE NAME="javascript"		FILE="javascript.xml"
-				FILE_NAME_GLOB="*.js" />
+				FILE_NAME_GLOB="{*.js,Buildsub}" />
 
 <MODE NAME="jcl"		FILE="jcl.xml"
 				FILE_NAME_GLOB="*.jcl" />
