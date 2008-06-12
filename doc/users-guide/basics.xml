@@ -209,7 +209,7 @@
         was the last BufferSet to contain that buffer, the buffer is also closed. The regular <guimenuitem>Close</guimenuitem> action closes the buffer in all EditPanes, as before. </para>
         
         <para> <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
-        current EditPane by performing a "Remove from BufferSet" on all items except those which are displayed in an editpane. </para>
+        current EditPane by performing a <guimenuitem>Close (local)</guimenuitem> on all items except those buffers which are displayed in an editpane. </para>
         
         <para> The buffer sets feature helps keep the buffer lists local and managable when using
         jEdit in a multiple-view and multiple-editpane environment. </para>
