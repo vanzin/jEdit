@@ -52,9 +52,9 @@
         locations, as well as folding arrows; it will also display line numbers
         if the <guimenu>View</guimenu>&gt;<guimenuitem>Line
         Numbers</guimenuitem> (shortcut: <keycap>C+e C+t</keycap>) command is
-        invoked. Note this command only takes effect until the view is closed.
-        To have line numbers visible all the time, enable the appropriate
-        setting in the <guilabel>Gutter</guilabel> pane of the
+        invoked. Note this menu toggle action has the side-effect of changing the
+        persistent jEdit properties for the Gutter, which can also
+        be set from the <guilabel>Gutter</guilabel> pane of the
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
         Options</guimenuitem> dialog box.</para>
     </sect1>
