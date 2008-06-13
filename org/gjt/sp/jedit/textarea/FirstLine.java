@@ -44,6 +44,7 @@ class FirstLine extends Anchor
 	} //}}}
 
 	//{{{ changed() method
+	@Override
 	public void changed()
 	{
 		//{{{ Debug code
@@ -96,6 +97,7 @@ class FirstLine extends Anchor
 	} //}}}
 
 	//{{{ reset() method
+	@Override
 	public void reset()
 	{
 		if(Debug.SCROLL_DEBUG)
@@ -359,6 +361,7 @@ class FirstLine extends Anchor
 	} //}}}
 
 	//{{{ toString() method
+	@Override
 	public String toString()
 	{
 		return "FirstLine["+physicalLine+','+scrollLine+','+skew+']';
