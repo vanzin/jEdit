@@ -427,6 +427,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		} //}}}
 
 		//{{{ invoke() method
+		@Override
 		public void invoke(View view)
 		{
 			setLastMacro(this);
@@ -448,6 +449,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		} //}}}
 
 		//{{{ getCode() method
+		@Override
 		public String getCode()
 		{
 			return "Macros.getMacro(\"" + getName() + "\").invoke(view);";
@@ -635,7 +637,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	} //}}}
 
 	//{{{ loadMacros() method
-	private static void loadMacros(Vector vector, String path, File directory)
+	private static void loadMacros(List vector, String path, File directory)
 	{
 		lastMacro = null;
 
@@ -650,19 +652,18 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			if(file.isHidden())
 			{
 				/* do nothing! */
-				continue;
 			}
 			else if(file.isDirectory())
 			{
 				String submenuName = fileName.replace('_',' ');
-				Vector submenu = null;
+				List submenu = null;
 				//{{{ try to merge with an existing menu first
 				for(int j = 0; j < vector.size(); j++)
 				{
 					Object obj = vector.get(j);
-					if(obj instanceof Vector)
+					if(obj instanceof List)
 					{
-						Vector vec = (Vector)obj;
+						List vec = (List)obj;
 						if(submenuName.equals(vec.get(0)))
 						{
 							submenu = vec;
@@ -687,7 +688,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	} //}}}
 
 	//{{{ addMacro() method
-	private static void addMacro(File file, String path, Vector vector)
+	private static void addMacro(File file, String path, List vector)
 	{
 		String fileName = file.getName();
 		Handler handler = getHandlerForPathName(file.getPath());
@@ -1005,6 +1006,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		} //}}}
 
 		//{{{ createMacro() method
+		@Override
 		public Macro createMacro(String macroName, String path)
 		{
 			// Remove '.bsh'
@@ -1015,12 +1017,14 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		} //}}}
 
 		//{{{ runMacro() method
+		@Override
 		public void runMacro(View view, Macro macro)
 		{
 			BeanShell.runScript(view,macro.getPath(),null,true);
 		} //}}}
 
 		//{{{ runMacro() method
+		@Override
 		public void runMacro(View view, Macro macro, boolean ownNamespace)
 		{
 			BeanShell.runScript(view,macro.getPath(),null,ownNamespace);
