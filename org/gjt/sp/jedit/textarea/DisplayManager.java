@@ -76,10 +76,10 @@ public class DisplayManager
 		return dmgr;
 	} //}}}
 
-	//{{{ releaseDisplayManager() method
-	static void releaseDisplayManager(DisplayManager dmgr)
+	//{{{ release() method
+	void release()
 	{
-		dmgr.inUse = false;
+		inUse = false;
 	} //}}}
 
 	//{{{ bufferClosed() method
@@ -216,7 +216,6 @@ public class DisplayManager
 	public void collapseFold(int line)
 	{
 		int lineCount = buffer.getLineCount();
-		int start = 0;
 		int end = lineCount - 1;
 
 		// if the caret is on a collapsed fold, collapse the
@@ -232,6 +231,7 @@ public class DisplayManager
 		int initialFoldLevel = buffer.getFoldLevel(line);
 
 		//{{{ Find fold start and end...
+		int start = 0;
 		if(line != lineCount - 1
 			&& buffer.getFoldLevel(line + 1) > initialFoldLevel)
 		{
@@ -298,7 +298,6 @@ public class DisplayManager
 		int returnValue = -1;
 
 		int lineCount = buffer.getLineCount();
-		int start = 0;
 		int end = lineCount - 1;
 
 		int initialFoldLevel = buffer.getFoldLevel(line);
@@ -325,6 +324,7 @@ public class DisplayManager
 		}
 
 		//{{{ Find fold start and fold end...
+		int start;
 		if (buffer.getFoldLevel(line + 1) > initialFoldLevel)
 		{
 			// this line is the start of a fold

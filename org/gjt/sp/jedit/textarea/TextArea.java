@@ -546,8 +546,7 @@ public class TextArea extends JComponent
 
 			if(displayManager != null)
 			{
-				DisplayManager.releaseDisplayManager(
-					displayManager);
+				displayManager.release();
 			}
 
 			displayManager = DisplayManager.getDisplayManager(
