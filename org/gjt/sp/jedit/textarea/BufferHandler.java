@@ -46,10 +46,10 @@ class BufferHandler implements BufferListener
 	private final DisplayManager displayManager;
 	private final TextArea textArea;
 	private final JEditBuffer buffer;
-	boolean delayedUpdate;
-	boolean delayedMultilineUpdate;
-	int delayedUpdateStart;
-	int delayedUpdateEnd;
+	private boolean delayedUpdate;
+	private boolean delayedMultilineUpdate;
+	private int delayedUpdateStart;
+	private int delayedUpdateEnd;
 
 	//{{{ BufferChangeHandler constructor
 	BufferHandler(DisplayManager displayManager,
