@@ -32,8 +32,8 @@ import org.gjt.sp.util.Log;
  */
 abstract class Anchor
 {
-	final DisplayManager displayManager;
-	final TextArea textArea;
+	protected final DisplayManager displayManager;
+	protected final TextArea textArea;
 	/** The physical line. */
 	int physicalLine;
 	/**
