@@ -68,7 +68,6 @@ import org.gjt.sp.jedit.menu.EnhancedMenuItem;
  * sorting features of the Java collections API:
  *
  * <ul>
- * <li>{@link MiscUtilities.StringCompare}</li>
  * <li>{@link MiscUtilities.StringICaseCompare}</li>
  * <li>{@link MiscUtilities.MenuItemCompare}</li>
  * </ul>
@@ -147,7 +146,7 @@ public class MiscUtilities
 			else
 				return home + File.separator + path;
 		}
-		else if(path.equals("~"))
+		else if("~".equals(path))
 			return System.getProperty("user.home");
 		else
 			return path;
@@ -215,21 +214,21 @@ public class MiscUtilities
 		// 18 nov 2003: calling this on a drive letter on Windows causes
 		// drive access
 		if(OperatingSystem.isDOSDerived())
+		{
+			if(path.length() == 2 || path.length() == 3)
 			{
-				if(path.length() == 2 || path.length() == 3)
-					{
-						if(path.charAt(1) == ':')
-							return path;
-					}
+				if(path.charAt(1) == ':')
+					return path;
 			}
+		}
 		try
-			{
-				return new File(path).getCanonicalPath();
-			}
+		{
+			return new File(path).getCanonicalPath();
+		}
 		catch(IOException io)
-			{
-				return path;
-			}
+		{
+			return path;
+		}
 	} //}}}
 
 	//{{{ isAbsolutePath() method
@@ -241,28 +240,28 @@ public class MiscUtilities
 	{
 		if(isURL(path))
 			return true;
-		else if(path.startsWith("~/") || path.startsWith("~" + File.separator) || path.equals("~"))
+		else if(path.startsWith("~/") || path.startsWith("~" + File.separator) || "~".equals(path))
 			return true;
 		else if(OperatingSystem.isDOSDerived())
-			{
-				if(path.length() == 2 && path.charAt(1) == ':')
-					return true;
-				if(path.length() > 2 && path.charAt(1) == ':'
-					&& (path.charAt(2) == '\\'
-						|| path.charAt(2) == '/'))
-					return true;
-				if(path.startsWith("\\\\")
-					|| path.startsWith("//"))
-					return true;
-			}
+		{
+			if(path.length() == 2 && path.charAt(1) == ':')
+				return true;
+			if(path.length() > 2 && path.charAt(1) == ':'
+				&& (path.charAt(2) == '\\'
+					|| path.charAt(2) == '/'))
+				return true;
+			if(path.startsWith("\\\\")
+				|| path.startsWith("//"))
+				return true;
+		}
 		// not sure if this is correct for OpenVMS.
 		else if(OperatingSystem.isUnix()
 				|| OperatingSystem.isVMS())
-			{
-				// nice and simple
-				if(path.length() > 0 && path.charAt(0) == '/')
-					return true;
-			}
+		{
+			// nice and simple
+			if(path.length() > 0 && path.charAt(0) == '/')
+				return true;
+		}
 
 		return false;
 	} //}}}
@@ -305,9 +304,9 @@ public class MiscUtilities
 
 		for(;;)
 		{
-			if(path.equals("."))
+			if(".".equals(path))
 				return parent;
-			else if(path.equals(".."))
+			else if("..".equals(path))
 				return getParentOfPath(parent);
 			else if(path.startsWith(dd) || path.startsWith("../"))
 			{
@@ -521,14 +520,14 @@ public class MiscUtilities
 			return true;
 
 		try
-			{
-				new URL(str);
-				return true;
-			}
+		{
+			new URL(str);
+			return true;
+		}
 		catch(MalformedURLException mf)
-			{
-				return false;
-			}
+		{
+			return false;
+		}
 	} //}}}
 
 	//{{{ saveBackup() method
@@ -578,68 +577,68 @@ public class MiscUtilities
 
 		// If backups is 1, create ~ file
 		if(backups == 1)
-			{
-				File backupFile = new File(backupDirectory,
-										   backupPrefix + name + backupSuffix);
-				long modTime = backupFile.lastModified();
-				/* if backup file was created less than
-				 * 'backupTimeDistance' ago, we do not
-				 * create the backup */
-				if(System.currentTimeMillis() - modTime
-				   >= backupTimeDistance)
-					{
-						Log.log(Log.DEBUG,MiscUtilities.class,
-							"Saving backup of file \"" +
-							file.getAbsolutePath() + "\" to \"" +
-							backupFile.getAbsolutePath() + '"');
-						backupFile.delete();
-						if (!file.renameTo(backupFile))
-							IOUtilities.moveFile(file, backupFile);
-					}
-			}
+		{
+			File backupFile = new File(backupDirectory,
+									   backupPrefix + name + backupSuffix);
+			long modTime = backupFile.lastModified();
+			/* if backup file was created less than
+			 * 'backupTimeDistance' ago, we do not
+			 * create the backup */
+			if(System.currentTimeMillis() - modTime
+			   >= backupTimeDistance)
+				{
+					Log.log(Log.DEBUG,MiscUtilities.class,
+						"Saving backup of file \"" +
+						file.getAbsolutePath() + "\" to \"" +
+						backupFile.getAbsolutePath() + '"');
+					backupFile.delete();
+					if (!file.renameTo(backupFile))
+						IOUtilities.moveFile(file, backupFile);
+				}
+		}
 		// If backups > 1, move old ~n~ files, create ~1~ file
 		else
+		{
+			/* delete a backup created using above method */
+			new File(backupDirectory,
+					 backupPrefix + name + backupSuffix
+					 + backups + backupSuffix).delete();
+
+			File firstBackup = new File(backupDirectory,
+										backupPrefix + name + backupSuffix
+										+ "1" + backupSuffix);
+			long modTime = firstBackup.lastModified();
+			/* if backup file was created less than
+			 * 'backupTimeDistance' ago, we do not
+			 * create the backup */
+			if(System.currentTimeMillis() - modTime
+			   >= backupTimeDistance)
 			{
-				/* delete a backup created using above method */
-				new File(backupDirectory,
-						 backupPrefix + name + backupSuffix
-						 + backups + backupSuffix).delete();
+				for(int i = backups - 1; i > 0; i--)
+				{
+					File backup = new File(backupDirectory,
+										   backupPrefix + name
+										   + backupSuffix + i
+										   + backupSuffix);
 
-				File firstBackup = new File(backupDirectory,
-											backupPrefix + name + backupSuffix
-											+ "1" + backupSuffix);
-				long modTime = firstBackup.lastModified();
-				/* if backup file was created less than
-				 * 'backupTimeDistance' ago, we do not
-				 * create the backup */
-				if(System.currentTimeMillis() - modTime
-				   >= backupTimeDistance)
-					{
-						for(int i = backups - 1; i > 0; i--)
-							{
-								File backup = new File(backupDirectory,
-													   backupPrefix + name
-													   + backupSuffix + i
-													   + backupSuffix);
+					backup.renameTo(
+									new File(backupDirectory,
+											 backupPrefix + name
+											 + backupSuffix + (i+1)
+											 + backupSuffix));
+				}
 
-								backup.renameTo(
-												new File(backupDirectory,
-														 backupPrefix + name
-														 + backupSuffix + (i+1)
-														 + backupSuffix));
-							}
-
-						File backupFile = new File(backupDirectory,
-												   backupPrefix + name + backupSuffix
-												   + "1" + backupSuffix);
-						Log.log(Log.DEBUG,MiscUtilities.class,
-							"Saving backup of file \"" +
-							file.getAbsolutePath() + "\" to \"" +
-							backupFile.getAbsolutePath() + '"');
-						if (!file.renameTo(backupFile))
-							IOUtilities.moveFile(file, backupFile);
-					}
+				File backupFile = new File(backupDirectory,
+										   backupPrefix + name + backupSuffix
+										   + "1" + backupSuffix);
+				Log.log(Log.DEBUG,MiscUtilities.class,
+					"Saving backup of file \"" +
+					file.getAbsolutePath() + "\" to \"" +
+					backupFile.getAbsolutePath() + '"');
+				if (!file.renameTo(backupFile))
+					IOUtilities.moveFile(file, backupFile);
 			}
+		}
 	} //}}}
 
 	//{{{ moveFile() method
@@ -1057,7 +1056,7 @@ public class MiscUtilities
 	 */
 	public static String escapesToChars(String str)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
@@ -1111,7 +1110,7 @@ public class MiscUtilities
 	 */
 	public static String charsToEscapes(String str, String toEscape)
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
@@ -1237,7 +1236,7 @@ public class MiscUtilities
 	 */
 	public static String getLongestPrefix(List str, boolean ignoreCase)
 	{
-		if(str.size() == 0)
+		if(str.isEmpty())
 			return "";
 
 		int prefixLength = 0;
@@ -1423,6 +1422,7 @@ loop:		for(;;)
 	/**
 	 * Compares menu item labels.
 	 */
+	@Deprecated
 	public static class MenuItemCompare implements Compare
 	{
 		public int compare(Object obj1, Object obj2)
@@ -1449,7 +1449,7 @@ loop:		for(;;)
 	public static String buildToVersion(String build)
 	{
 		if(build.length() != 11)
-			return "<unknown version: " + build + ">";
+			return "<unknown version: " + build + '>';
 		// First 2 chars are the major version number
 		int major = Integer.parseInt(build.substring(0,2));
 		// Second 2 are the minor number
@@ -1492,10 +1492,10 @@ loop:		for(;;)
 	{
 		Log.log(Log.DEBUG, MiscUtilities.class,"Searching for tools.jar...");
 
-		Vector paths = new Vector();
+		Collection<String> paths = new LinkedList<String>();
 
 		//{{{ 1. Check whether tools.jar is in the system classpath:
-		paths.addElement("System classpath: "
+		paths.add("System classpath: "
 			+ System.getProperty("java.class.path"));
 
 		try
@@ -1526,7 +1526,7 @@ loop:		for(;;)
 		{
 			String toolsPath = constructPath(settingsDir, "jars",
 				"tools.jar");
-			paths.addElement(toolsPath);
+			paths.add(toolsPath);
 			if(new File(toolsPath).exists())
 			{
 				Log.log(Log.DEBUG, MiscUtilities.class,
@@ -1541,7 +1541,7 @@ loop:		for(;;)
 		if(jEditDir != null)
 		{
 			String toolsPath = constructPath(jEditDir, "jars", "tools.jar");
-			paths.addElement(toolsPath);
+			paths.add(toolsPath);
 			if(new File(toolsPath).exists())
 			{
 				Log.log(Log.DEBUG, MiscUtilities.class,
@@ -1556,9 +1556,9 @@ loop:		for(;;)
 		if(toolsPath.toLowerCase().endsWith(File.separator + "jre"))
 			toolsPath = toolsPath.substring(0, toolsPath.length() - 4);
 		toolsPath = constructPath(toolsPath, "lib", "tools.jar");
-		paths.addElement(toolsPath);
+		paths.add(toolsPath);
 
-		if(!(new File(toolsPath).exists()))
+		if(!new File(toolsPath).exists())
 		{
 			Log.log(Log.WARNING, MiscUtilities.class,
 				"Could not find tools.jar.\n"
@@ -1659,7 +1659,7 @@ loop:		for(;;)
 		{
 			set = EncodingServer.getAvailableNames();
 		}
-		return set.toArray(new String[0]);
+		return set.toArray(new String[set.size()]);
 	} //}}}
 
 	//{{{ throwableToString() method
@@ -1718,7 +1718,6 @@ loop:		for(;;)
 	//{{{ getPathStart()
 	private static int getPathStart(String path)
 	{
-		int start = 0;
 		if(path.startsWith("/"))
 			return 0;
 		else if(OperatingSystem.isDOSDerived()
