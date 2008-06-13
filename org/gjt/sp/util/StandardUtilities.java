@@ -52,7 +52,7 @@ public class StandardUtilities
 	public static String getIndentString(String str)
 	{
 
-		StringBuffer indentString = new StringBuffer();
+		StringBuilder indentString = new StringBuilder();
 		int idx = 0;
 		char ch = str.charAt(idx);
 		while (idx < str.length() && Character.isWhitespace(ch)) {
@@ -392,7 +392,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 * Compares objects as strings.
 	 */
 	public static class StringCompare implements Comparator
-		{
+	{
 		public int compare(Object obj1, Object obj2)
 		{
 			return compareStrings(obj1.toString(),
@@ -440,7 +440,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		final Object GROUP = new Object();
 		Stack state = new Stack();
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		boolean backslash = false;
 
 		for(int i = 0; i < glob.length(); i++)
@@ -532,11 +532,11 @@ loop:		for(int i = 0; i < str.length(); i++)
 					    int ooff,
 					    int len)
 	{
-		boolean ret = true;
 
 		if (toff < 0 || ooff < 0 || len < 0)
 			return false;
 
+		boolean ret = true;
 		for (int i = 0; i < len; i++)
 		{
 			char c1, c2;
