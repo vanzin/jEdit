@@ -22,6 +22,7 @@ package com.microstar.xml;
   * @see org.xml.sax.EntityHandler
   * @see org.xml.sax.DocumentHandler
   * @see org.xml.sax.ErrorHandler
+  * @deprecated
   */
 public interface XmlHandler {
 

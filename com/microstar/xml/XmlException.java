@@ -18,6 +18,7 @@ package com.microstar.xml;
   * @version 1.1
   * @see XmlHandler#error
   * @see HandlerBase
+  * @deprecated use import org.xml.sax.SAXParseException
   */
 public class XmlException extends Exception
 {

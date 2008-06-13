@@ -37,6 +37,7 @@ import java.io.Reader;
   * @see XmlHandler
   * @see XmlException
   * @see org.xml.sax.HandlerBase
+  * @deprecated use org.xml.sax.helpers.DefaultHandler
   */
 public class HandlerBase implements XmlHandler {
 

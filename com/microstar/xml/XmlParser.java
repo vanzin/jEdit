@@ -42,6 +42,7 @@ import java.util.Stack;
   * @see XmlHandler
   * @see HandlerBase
   * @see SAXDriver
+  * @deprecated use org.xml.sax.XMLReader
   */
 public class XmlParser {
 
