@@ -23,6 +23,9 @@
 package org.gjt.sp.jedit;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Collection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -31,6 +34,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
 
 /**
  * Manages persistence of open buffers and views across jEdit sessions.
@@ -120,6 +124,19 @@ public class PerspectiveManager
 		if(jEdit.getBufferCount() == 0)
 			return;
 
+		Buffer[] buffers = jEdit.getBuffers();
+		BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
+		Collection<Buffer> savedBuffers = new LinkedList<Buffer>();
+		for (Buffer buffer: buffers)
+		{
+			if (!buffer.isNewFile() && bufferSetManager.hasListeners(buffer))
+			{
+				savedBuffers.add(buffer);
+			}
+		}
+		if (savedBuffers.isEmpty())
+			return;
+
 		if(!autosave)
 			Log.log(Log.MESSAGE,PerspectiveManager.class,"Saving " + perspectiveXML);
 
@@ -137,12 +154,8 @@ public class PerspectiveManager
 			out.write("<PERSPECTIVE>");
 			out.write(lineSep);
 
-			Buffer[] buffers = jEdit.getBuffers();
-			for(int i = 0; i < buffers.length; i++)
+			for (Buffer buffer: savedBuffers)
 			{
-				Buffer buffer = buffers[i];
-				if(buffer.isNewFile())
-					continue;
 				out.write("<BUFFER AUTORELOAD=\"");
 				out.write(buffer.getAutoReload() ? "TRUE" : "FALSE");
 				out.write("\" AUTORELOAD_DIALOG=\"");
