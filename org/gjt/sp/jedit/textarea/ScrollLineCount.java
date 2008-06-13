@@ -37,9 +37,11 @@ class ScrollLineCount extends Anchor
 		super(displayManager,textArea);
 	} //}}}
 
+	@Override
 	public void changed() {}
 
 	//{{{ reset() method
+	@Override
 	public void reset()
 	{
 		if(Debug.SCROLL_DEBUG)
