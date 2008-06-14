@@ -211,10 +211,10 @@ reload.label=$Reload
 reload.icon.small=16x16/actions/view-refresh.png
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
-close-buffer.icon.small=10x10/actions/close.png
+close-buffer.icon.small=16x16/actions/document-close.png
 editpane-close-buffer.label=Close (local)
 closeall-except-active.label=Clear BufferSet except active
-editpane-close-buffer.icon.small=10x10/actions/close.png
+editpane-close-buffer.icon.small=16x16/actions/document-close.png
 close-all.label=Clos$e All
 save.label=$Save
 save.icon.small=16x16/actions/document-save.png
@@ -520,7 +520,7 @@ new-view.label=New $View
 new-view.icon.small=16x16/actions/window-new.png
 new-plain-view.label=Ne$w Plain View
 close-view.label=$Close View
-close-view.icon.small=10x10/actions/close.png
+close-view.icon.small=16x16/actions/document-close.png
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
@@ -2276,22 +2276,23 @@ vfs.browser.previous.icon=22x22/actions/go-previous.png
 #}}}
 
 #{{{ Tool bar
-vfs.browser.toolbar-browser=vfs.browser.up \
+vfs.browser.toolbar-browser=vfs.browser.previous \
+			    vfs.browser.next \
+			    vfs.browser.up \
 			    vfs.browser.reload \
-			    vfs.browser.roots \
 			    vfs.browser.home \
+			    vfs.browser.roots \
 			    vfs.browser.synchronize \
 			    vfs.browser.new-file \
 			    vfs.browser.new-directory \
-			    vfs.browser.search-directory \
-			    vfs.browser.previous \
-			    vfs.browser.next
-vfs.browser.toolbar-dialog=vfs.browser.up \
-			   vfs.browser.reload \
-			   vfs.browser.previous \
+			    vfs.browser.search-directory
+			    
+vfs.browser.toolbar-dialog=vfs.browser.previous \
 			   vfs.browser.next \
-			   vfs.browser.roots \
+			   vfs.browser.up \
+			   vfs.browser.reload \
 			   vfs.browser.home \
+			   vfs.browser.roots \
 			   vfs.browser.synchronize \
 			   vfs.browser.new-directory
 #}}}
