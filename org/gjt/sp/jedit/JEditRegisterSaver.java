@@ -37,7 +37,7 @@ import java.io.IOException;
 class JEditRegisterSaver implements RegisterSaver
 {
 	//{{{ Constructor
-	public JEditRegisterSaver()
+	JEditRegisterSaver()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory != null)
@@ -148,12 +148,14 @@ class JEditRegisterSaver implements RegisterSaver
 	private static class RegistersHandler extends DefaultHandler
 	{
 		//{{{ resolveEntity() method
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
 			return XMLUtilities.findEntity(systemId, "registers.dtd", getClass());
 		} //}}}
 
 		//{{{ startElement() method
+		@Override
 		public void startElement(String uri, String localName,
 					 String qName, Attributes attrs)
 		{
@@ -162,9 +164,10 @@ class JEditRegisterSaver implements RegisterSaver
 		} //}}}
 
 		//{{{ endElement() method
+		@Override
 		public void endElement(String uri, String localName, String name)
 		{
-			if(name.equals("REGISTER"))
+			if("REGISTER".equals(name))
 			{
 				if(registerName == null || registerName.length() != 1)
 					Log.log(Log.ERROR,this,"Malformed NAME: " + registerName);
@@ -176,6 +179,7 @@ class JEditRegisterSaver implements RegisterSaver
 		} //}}}
 
 		//{{{ characters() method
+		@Override
 		public void characters(char[] ch, int start, int length)
 		{
 			if (inRegister)
@@ -184,7 +188,7 @@ class JEditRegisterSaver implements RegisterSaver
 
 		//{{{ Private members
 		private String registerName;
-		private StringBuffer charData = new StringBuffer();
+		private final StringBuilder charData = new StringBuilder();
 		private boolean inRegister;
 		//}}}
 	} //}}}
