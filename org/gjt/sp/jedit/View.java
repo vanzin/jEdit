@@ -1537,11 +1537,13 @@ loop:		while (true)
 		removeToolBar(status);
 		getContentPane().remove(status);
 
-		if(jEdit.getBooleanProperty("view.toolbar.alternateLayout"))
+		boolean showStatus = plainView ? jEdit.getBooleanProperty("view.status.plainview.visible") :
+				    jEdit.getBooleanProperty("view.status.visible");
+		if (jEdit.getBooleanProperty("view.toolbar.alternateLayout"))
 		{
 			getContentPane().add(BorderLayout.NORTH,topToolBars);
 			getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
-			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
+			if (showStatus)
 				addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
 		}
 		else
@@ -1550,7 +1552,7 @@ loop:		while (true)
 				DockableLayout.TOP_TOOLBARS,0);
 			dockableWindowManager.add(bottomToolBars,
 				DockableLayout.BOTTOM_TOOLBARS,0);
-			if(!plainView && jEdit.getBooleanProperty("view.status.visible"))
+			if (showStatus)
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}
 

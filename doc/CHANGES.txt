@@ -30,14 +30,14 @@ to this release.
   New browser directory stack actions: next/previous (A+Left and A+Right).
   Reworked tab-keyboard focus traversal policy. (Alan Ezust)
 
-- New Action: Scroll-And-Center-Caret Action. Restored previous 
+- New Action: Scroll-And-Center-Caret Action. Restored previous
   behavior of center-caret-on-screen. (#1910061 - Alan Ezust)
 
 - A NPE was happened when loading several buffers at the same time and if the
   collapseFold bufferlocal property is set to something else than 0
   (#1982663) (Matthieu Casanova)
 
-- The shortcuts were not working in the file chooser dialog table 
+- The shortcuts were not working in the file chooser dialog table
   because the filename field was always requesting the focus.
   (Matthieu Casanova)
 
@@ -74,6 +74,9 @@ to this release.
 
 - New Mac OS X application icon (Seph M. Soliman)
 
+- The plain view can now have a status bar, a new option is added to choose it
+  in the status bar option pane, and a new toggle menu is added to show/hide
+  status bar in view menu (#1984974) (Matthieu Casanova)
 }}}
 {{{ Editing
 
@@ -95,7 +98,7 @@ to this release.
 }}}
 {{{ API Changes
 
-- Removed com.microstar XML parser. 
+- Removed com.microstar XML parser.
 
 - New methods were added to jEditBuffer to return CharSequence instead of
   String. StandardUtilities / TextUtilities were enhanced to provide functions

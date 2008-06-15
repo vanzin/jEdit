@@ -510,6 +510,7 @@ view=new-view \
      show-buffer-switcher \
      - \
      toggle-line-numbers \
+     toggle-statusbar \
      - \
      %scrolling \
      %splitting \
@@ -526,6 +527,7 @@ next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
 show-buffer-switcher.label=Show $Buffer Switcher
 toggle-line-numbers.label=$Line Numbers
+toggle-statusbar.label=$Toggle Status Bar
 show-context-menu.label=Show Context Menu
 
 #{{{ Scrolling menu
@@ -1973,6 +1975,7 @@ grab-key.prefix-shortcut.message=\
 options.status.label=Status Bar
 options.status.code=new StatusBarOptionPane();
 options.status.visible=Show status bar
+options.status.plainview.visible=Show status bar in plain views
 options.status.foreground=Status bar text:
 options.status.background=Status bar background:
 options.status.memory.foreground=Memory indicator foreground:
@@ -2286,7 +2289,7 @@ vfs.browser.toolbar-browser=vfs.browser.previous \
 			    vfs.browser.new-file \
 			    vfs.browser.new-directory \
 			    vfs.browser.search-directory
-			    
+
 vfs.browser.toolbar-dialog=vfs.browser.previous \
 			   vfs.browser.next \
 			   vfs.browser.up \

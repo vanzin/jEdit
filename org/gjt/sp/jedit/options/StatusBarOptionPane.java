@@ -29,7 +29,6 @@ import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.net.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
@@ -60,6 +59,10 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			"options.status.visible"));
 		showStatusbar.setSelected(jEdit.getBooleanProperty("view.status.visible"));
 		panel.add(showStatusbar);
+		showStatusbarPlain = new JCheckBox(jEdit.getProperty(
+			"options.status.plainview.visible"));
+		showStatusbarPlain.setSelected(jEdit.getBooleanProperty("view.status.plainview.visible"));
+		panel.add(showStatusbarPlain);
 		panel.add(new JLabel(jEdit.getProperty(
 			"options.status.caption")));
 		add(panel, BorderLayout.NORTH);
@@ -171,6 +174,9 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.status.visible",showStatusbar
 			.isSelected());
 
+		jEdit.setBooleanProperty("view.status.plainview.visible",showStatusbarPlain
+			.isSelected());
+
 		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < listModel.getSize(); i++)
 		{
@@ -191,6 +197,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private ColorWellButton memForegroundColor;
 	private ColorWellButton memBackgroundColor;
 	private JCheckBox showStatusbar;
+	private JCheckBox showStatusbarPlain;
 	private DefaultListModel listModel;
 	private JList list;
 	private RolloverButton add;
@@ -214,7 +221,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	//{{{ Inner classes
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -293,7 +300,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ ListHandler class
-	class ListHandler implements ListSelectionListener
+	private class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
@@ -317,7 +324,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		private String value;
 		
 		//{{{ WidgetSelectionDialog constructor
-		public WidgetSelectionDialog(Component comp) 
+		WidgetSelectionDialog(Component comp)
 		{
 			super(GUIUtilities.getParentDialog(comp),
 			      jEdit.getProperty("options.status.edit.title"),

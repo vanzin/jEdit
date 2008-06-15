@@ -975,7 +975,7 @@
 		}
 		textArea.scrollToCaret(true);
 		textArea.requestFocus();
-	
+
 	</CODE>
 </ACTION>
 
@@ -1314,6 +1314,24 @@
 	</CODE>
 	<IS_SELECTED>
 		return textArea.getGutter().isExpanded();
+	</IS_SELECTED>
+</ACTION>
+
+<ACTION NAME="toggle-statusbar">
+	<CODE>
+		boolean showing = view.getStatus().isShowing();
+		if (view.isPlainView())
+		{
+			jEdit.setBooleanProperty("view.status.plainview.visible", !showing);
+		}
+		else
+		{
+			jEdit.setBooleanProperty("view.status.visible", !showing);
+		}
+		jEdit.propertiesChanged();
+	</CODE>
+	<IS_SELECTED>
+		return view.getStatus().isShowing();
 	</IS_SELECTED>
 </ACTION>
 
