@@ -69,19 +69,28 @@ public class DeepIndentRule implements IndentRule
 				oldLineIndex = lineIndex;
 			}
 			Parens parens = new Parens(buffer, lineIndex, searchPos);
-			if (parens.openOffset > parens.closeOffset)
-			{
-				// recalculate column (when using tabs instead of spaces)
-				int indent = parens.openOffset + getIndent(lineText, buffer.getTabSize()) - lineText.length();
-				indentActions.add(new IndentAction.AlignParameter(indent));
-				return;
-			}
 
 			// No parens on prev line
 			if (parens.openOffset == -1 && parens.closeOffset == -1)
 			{
+				// Try prev-prev line if present.
+				if (prevPrevLineIndex != -1) {
+					lineIndex = prevPrevLineIndex;
+					prevPrevLineIndex = -1;
+					continue;
+				}
 				return;
 			}
+
+			if (parens.openOffset > parens.closeOffset)
+			{
+				// recalculate column (when using tabs instead of spaces)
+				int indent = parens.openOffset + getIndent(lineText, buffer.getTabSize()) - lineText.length();
+				indentActions.clear();
+				indentActions.add(new IndentAction.AlignParameter(indent));
+				return;
+			}
+
 			int openParenOffset = TextUtilities.findMatchingBracket(buffer, lineIndex, parens.closeOffset);
 			if (openParenOffset >= 0)
 			{
