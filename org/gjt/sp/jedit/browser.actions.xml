@@ -78,7 +78,7 @@
 		}
 		String source = Registers.getRegister('$').toString();
 		String target = buf.toString();
-		if (source == null || target == null || source.length() == 0 || target.length() == 0)
+		if (source == null || target.length() == 0 || source.length() == 0)
 			return;
 		VFSManager.runInWorkThread(new CopyFileWorker(view, source, target));
 	</CODE>
