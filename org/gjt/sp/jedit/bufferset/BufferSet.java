@@ -24,11 +24,13 @@ package org.gjt.sp.jedit.bufferset;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
 import javax.swing.event.EventListenerList;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * A BufferSet is a sorted list of buffers.
@@ -38,7 +40,7 @@ import java.util.Collections;
  */
 public class BufferSet
 {
-	public static final String SCOPE[] = {"global", "view", "editpane" };
+	public static final String[] SCOPE = {"global", "view", "editpane" };
 	private final List<Buffer> buffers;
 	private EventListenerList listeners;
 
@@ -46,12 +48,28 @@ public class BufferSet
 	private boolean checkForCleanBuffer;
 
 	private final String scope;
-	
+	private static final Comparator<Buffer> nameSorter = new NameSorter();
+	private static final Comparator<Buffer> pathSorter = new PathSorter();
+
+	private boolean sorted;
+
+	private Comparator<Buffer> comparator;
+
 	public BufferSet(String scope)
 	{
 		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		listeners = new EventListenerList();
 		this.scope = scope;
+
+
+		sorted = jEdit.getBooleanProperty("sortBuffers");
+		if (sorted)
+		{
+			if (jEdit.getBooleanProperty("sortByName"))
+				comparator = nameSorter;
+			else
+				comparator = pathSorter;
+		}
 	}
 
 	public BufferSet(String scope, BufferSet copy)
@@ -82,24 +100,31 @@ public class BufferSet
 				}
 			}
 
-			int oldPos = buffers.indexOf(buffer);
-			if (oldPos != -1)
+			if (sorted)
 			{
-				if (position == -1)
+				buffers.add(buffer);
+				Collections.sort(buffers, comparator);
+				position = buffers.indexOf(buffer);
+			}
+			else
+			{
+				int oldPos = buffers.indexOf(buffer);
+				if (oldPos != -1)
 				{
+					if (position == -1)
+					{
+						return;
+					}
+					moveBuffer(oldPos, position);
 					return;
 				}
-				moveBuffer(oldPos, position);
-				return;
+				int size = buffers.size();
+				if (position == -1 || position > size)
+				{
+					position = size;
+				}
+				buffers.add(position, buffer);
 			}
-			int size = buffers.size();
-			if (position == -1 || position > size)
-			{
-				position = size;
-			}
-			buffers.add(position, buffer);
-
-
 		}
 		BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
 		Log.log(Log.DEBUG, this, hashCode() + ": Buffer added " + buffer + " at " + position);
@@ -117,6 +142,11 @@ public class BufferSet
 
 	void moveBuffer(int oldPosition, int newPosition)
 	{
+		if (sorted)
+		{
+			// Buffers are sorted, do nothing
+			return;
+		}
 		Buffer buffer;
 		synchronized (buffers)
 		{
@@ -276,5 +306,27 @@ public class BufferSet
 	public String toString()
 	{
 		return "BufferSet["+scope+",nbBuffers="+size()+']';
+	}
+
+	private static class NameSorter implements Comparator<Buffer>
+	{
+		public int compare(Buffer o1, Buffer o2)
+		{
+
+			int ret = StandardUtilities.compareStrings(o1.getName(), o2.getName(), true);
+			if (ret == 0)
+			{
+				ret = StandardUtilities.compareStrings(o1.getPath(), o2.getPath(), true);
+			}
+			return ret;
+		}
+	}
+
+	private static class PathSorter implements Comparator<Buffer>
+	{
+		public int compare(Buffer o1, Buffer o2)
+		{
+			return StandardUtilities.compareStrings(o1.getPath(), o2.getPath(), true);
+		}
 	}
 }

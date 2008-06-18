@@ -389,7 +389,8 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
-
+		bufferSetManager = new BufferSetManager();
+		
 		///Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
 
@@ -3018,7 +3019,6 @@ public class jEdit
 		bufferHash = new HashMap<String, Buffer>();
 
 		inputHandler = new DefaultInputHandler(null);
-		bufferSetManager = new BufferSetManager();
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
 			"org.gjt.sp.jedit.proto|" +
