@@ -1964,11 +1964,10 @@ public class Buffer extends JEditBuffer
 					setFlag(NEW_FILE,false);
 					setFlag(UNTITLED,false);
 					super.setDirty(false);
-
-					// this ensures that undo can clear
-					// the dirty flag properly when all
-					// edits up to a save are undone
-					undoMgr.bufferSaved();
+					if(jEdit.getBooleanProperty("resetUndoOnSave"))
+					{
+						undoMgr.clear();
+					}
 				}
 				finally
 				{

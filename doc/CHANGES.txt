@@ -117,6 +117,9 @@ to this release.
 - SearchDialog.preloadSearchDialog(View) is now completely removed after being
   deprecated for 2 years (Matthieu Casanova)
 
+- Removed an undesired dependency to jEdit from buffer.UndoManager which
+  breaks independant textarea. (Kazutoshi Satoda)
+
 }}}
 
 }}}
