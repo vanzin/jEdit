@@ -158,14 +158,12 @@ class BufferHandler implements BufferListener
 
 	//{{{ preContentInserted() method
 	/**
-	 * Called when text is about to be removed from the buffer, but is
-	 * still present.
-	 *
-	 * @param buffer    The buffer in question
+	 * Called when text is about to be inserted in the buffer.
+	 * @param buffer The buffer in question
 	 * @param startLine The first line
-	 * @param offset    The start offset, from the beginning of the buffer
-	 * @param numLines  The number of lines to be removed
-	 * @param length    The number of characters to be removed
+	 * @param offset The start offset, from the beginning of the buffer
+	 * @param numLines The number of lines inserted
+	 * @param length The number of characters inserted
 	 * @since jEdit 4.3pre11
 	 */
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
@@ -185,13 +183,14 @@ class BufferHandler implements BufferListener
 
 	//{{{ preContentRemoved() method
 	/**
-	 * Method called before some content is removed.
-	 *
-	 * @param buffer the buffer
-	 * @param startLine the first removed line
-	 * @param offset the offset where starts the removed content
-	 * @param numLines the number of removed lines
-	 * @param length the removed length
+	 * Called when text is about to be removed from the buffer, but is
+	 * still present.
+	 * @param buffer The buffer in question
+	 * @param startLine The first line
+	 * @param offset The start offset, from the beginning of the buffer
+	 * @param numLines The number of lines to be removed
+	 * @param length The number of characters to be removed
+	 * @since jEdit 4.3pre3
 	 */
 	public void preContentRemoved(JEditBuffer buffer, int startLine,
 		int offset, int numLines, int length)
