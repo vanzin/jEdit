@@ -32,7 +32,6 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
@@ -123,7 +122,7 @@ public abstract class XModeHandler extends DefaultHandler
 					&& ! tag.tagName.equals("IMPORT")
 					&& ! tag.lastDelegateSet.getModeName().equals(modeName))
 			{
-				Mode mode = jEdit.getMode(tag.lastDelegateSet.getModeName());
+				Mode mode = ModeProvider.instance.getMode(tag.lastDelegateSet.getModeName());
 				if( ! reloadModes.contains(mode) )
 				{
 					reloadModes.add(mode);
