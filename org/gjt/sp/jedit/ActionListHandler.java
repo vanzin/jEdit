@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import java.io.*;
 import java.util.Stack;
 
 import org.xml.sax.Attributes;
