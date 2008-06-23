@@ -30,6 +30,7 @@ import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -39,38 +40,13 @@ import org.gjt.sp.util.Log;
 public class GrabKeyDialog extends JDialog
 {
 	//{{{ toString() method
+	/**
+	 * @deprecated use {@link org.gjt.sp.jedit.input.AbstractInputHandler#toString(java.awt.event.KeyEvent)}
+	 */
+	@Deprecated
 	public static String toString(KeyEvent evt)
 	{
-		String id;
-		switch(evt.getID())
-		{
-		case KeyEvent.KEY_PRESSED:
-			id = "KEY_PRESSED";
-			break;
-		case KeyEvent.KEY_RELEASED:
-			id = "KEY_RELEASED";
-			break;
-		case KeyEvent.KEY_TYPED:
-			id = "KEY_TYPED";
-			break;
-		default:
-			id = "unknown type";
-			break;
-		}
-
-		StringBuilder b = new StringBuilder(50);
-
-		b.append(id + ",keyCode=0x"
-			+ Integer.toString(evt.getKeyCode(),16)
-			+ ",keyChar=0x"
-			+ Integer.toString(evt.getKeyChar(),16)
-			+ ",modifiers=0x"
-			+ Integer.toString(evt.getModifiers(),16));
-
-		b.append(",consumed=");
-		b.append(evt.isConsumed()?'1':'0');
-
-		return b.toString();
+		return AbstractInputHandler.toString(evt);
 	} //}}}
 
 	//{{{ GrabKeyDialog constructor

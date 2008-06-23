@@ -23,7 +23,6 @@ package org.gjt.sp.jedit.input;
 
 //{{{ Imports
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.gui.KeyEventTranslator;
 import org.gjt.sp.jedit.gui.KeyEventWorkaround;
 import org.gjt.sp.jedit.textarea.TextArea;
@@ -72,7 +71,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event                 : "
-				+ GrabKeyDialog.toString(evt) + " from " + from);
+				+ toString(evt) + " from " + from);
 		//	Log.log(Log.DEBUG,this,view+".isFocused()="+view.isFocused()+'.',new Exception());
 		}
 
@@ -83,7 +82,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event after workaround: "
-				+ GrabKeyDialog.toString(evt) + " from " + from);
+				+ toString(evt) + " from " + from);
 		}
 
 		boolean focusOnTextArea = false;
@@ -140,7 +139,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event (preprocessing) : "
-					+ GrabKeyDialog.toString(evt));
+					+ toString(evt));
 		}
 
 		return KeyEventWorkaround.processKeyEvent(evt);
