@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.gui;
 import java.awt.event.*;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -307,7 +308,7 @@ public class KeyEventWorkaround
 			if(Debug.DUMP_KEY_EVENTS)
 			{
 				Log.log(Log.DEBUG,"KEWa","Key event (working around): "
-					+ GrabKeyDialog.toString(evt)+": evt.getWhen()-lastKeyTime="+(evt.getWhen() - lastKeyTime)+",modifiers="+modifiers+",last="+last+".");
+					+ AbstractInputHandler.toString(evt)+": evt.getWhen()-lastKeyTime="+(evt.getWhen() - lastKeyTime)+",modifiers="+modifiers+",last="+last+".");
 			}
 
 			if(evt.getWhen() - lastKeyTime < 750)
