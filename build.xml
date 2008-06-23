@@ -35,7 +35,8 @@
 			  location="${build.dir}/classes" />
 	<property name="jar.location"
 			  location="${build.dir}" />
-	
+
+	<property name="textAreaPackage" location="../textarea" />
 	<!-- Various Filenames -->
 	<property name="jar.filename"
 			  value="${ant.project.name}.jar" />
@@ -90,6 +91,7 @@
 				failonerror="false">
 			<fileset dir="${build.dir}" />
 			<fileset dir="${dist.dir}" />
+			<fileset dir="${textAreaPackage}/build" />
 			<fileset dir="doc"
 					 includes="docbook-wrapper-*.xsl" />
 		</delete>
@@ -114,6 +116,121 @@
 			<include name="com/**" />
 		</javac>
 	</target>
+
+	<target name="prepare-textArea"
+			depends="init">
+		<mkdir dir="${textAreaPackage}/src" />
+		<copy todir="${textAreaPackage}/src">
+			<fileset dir=".">
+				<include name="org/gjt/sp/jedit/bsh/*"/>
+				<include name="org/gjt/sp/jedit/bsh/**/*"/>
+
+				<include name="org/gjt/sp/jedit/buffer/BufferListener.java"/>
+				<include name="org/gjt/sp/jedit/buffer/BufferSegment.java"/>
+				<include name="org/gjt/sp/jedit/buffer/ContentManager.java"/>
+				<include name="org/gjt/sp/jedit/buffer/DefaultFoldHandlerProvider.java"/>
+				<include name="org/gjt/sp/jedit/buffer/DummyFoldHandler.java"/>
+				<include name="org/gjt/sp/jedit/buffer/ExplicitFoldHandler.java"/>
+				<include name="org/gjt/sp/jedit/buffer/FoldHandler.java"/>
+				<include name="org/gjt/sp/jedit/buffer/FoldHandlerProvider.java"/>
+				<include name="org/gjt/sp/jedit/buffer/IndentFoldHandler.java"/>
+				<include name="org/gjt/sp/jedit/buffer/JEditBuffer.java"/>
+				<include name="org/gjt/sp/jedit/buffer/KillRing.java"/>
+				<include name="org/gjt/sp/jedit/buffer/LineManager.java"/>
+				<include name="org/gjt/sp/jedit/buffer/PositionManager.java"/>
+				<include name="org/gjt/sp/jedit/buffer/UndoManager.java"/>
+
+				<include name="org/gjt/sp/jedit/gui/KeyEventTranslator.java"/>
+				<include name="org/gjt/sp/jedit/gui/KeyEventWorkaround.java"/>
+				<include name="org/gjt/sp/jedit/gui/MutableListModel.java"/>
+				<include name="org/gjt/sp/jedit/gui/ShortcutPrefixActiveEvent.java"/>
+
+				<include name="org/gjt/sp/jedit/indent/*.java"/>
+
+				<include name="org/gjt/sp/jedit/input/AbstractInputHandler.java"/>
+				<include name="org/gjt/sp/jedit/input/DefaultInputHandlerProvider.java"/>
+				<include name="org/gjt/sp/jedit/input/InputHandlerProvider.java"/>
+				<include name="org/gjt/sp/jedit/input/TextAreaInputHandler.java"/>
+
+				<include name="org/gjt/sp/jedit/syntax/*.java"/>
+				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
+
+				<include name="org/gjt/sp/jedit/textarea/Anchor.java"/>
+				<include name="org/gjt/sp/jedit/textarea/AntiAlias.java"/>
+				<include name="org/gjt/sp/jedit/textarea/BufferHandler.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ChunkCache.java"/>
+				<include name="org/gjt/sp/jedit/textarea/DisplayManager.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ExtensionManager.java"/>
+				<include name="org/gjt/sp/jedit/textarea/FastRepaintManager.java"/>
+				<include name="org/gjt/sp/jedit/textarea/FirstLine.java"/>
+				<include name="org/gjt/sp/jedit/textarea/Gutter.java"/>
+				<include name="org/gjt/sp/jedit/textarea/InputMethodSupport.java"/>
+				<include name="org/gjt/sp/jedit/textarea/MouseActions.java"/>
+				<include name="org/gjt/sp/jedit/textarea/MouseActionsProvider.java"/>
+				<include name="org/gjt/sp/jedit/textarea/RangeMap.java"/>
+				<include name="org/gjt/sp/jedit/textarea/Selection.java"/>
+				<include name="org/gjt/sp/jedit/textarea/SelectionManager.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ScreenLineManager.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ScrollLayout.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ScrollLineCount.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ScrollListener.java"/>
+				<include name="org/gjt/sp/jedit/textarea/StatusListener.java"/>
+				<include name="org/gjt/sp/jedit/textarea/StructureMatcher.java"/>
+				<include name="org/gjt/sp/jedit/textarea/TextArea.java"/>
+				<include name="org/gjt/sp/jedit/textarea/TextAreaBorder.java"/>
+				<include name="org/gjt/sp/jedit/textarea/TextAreaDropHandler.java"/>
+				<include name="org/gjt/sp/jedit/textarea/TextAreaException.java"/>
+				<include name="org/gjt/sp/jedit/textarea/TextAreaExtension.java"/>
+				<include name="org/gjt/sp/jedit/textarea/TextAreaMouseHandler.java"/>
+				<include name="org/gjt/sp/jedit/textarea/TextAreaPainter.java"/>
+				<include name="org/gjt/sp/jedit/textarea/textarea.actions.xml"/>
+
+				<include name="org/gjt/sp/jedit/ActionListHandler.java"/>
+				<include name="org/gjt/sp/jedit/BeanShellFacade.java"/>
+				<include name="org/gjt/sp/jedit/Debug.java"/>
+				<include name="org/gjt/sp/jedit/IPropertyManager.java"/>
+				<include name="org/gjt/sp/jedit/JEditAbstractEditAction.java"/>
+				<include name="org/gjt/sp/jedit/JEditActionSet.java"/>
+				<include name="org/gjt/sp/jedit/JEditActionContext.java"/>
+				<include name="org/gjt/sp/jedit/JEditBeanShellAction.java"/>
+				<include name="org/gjt/sp/jedit/Mode.java"/>
+				<include name="org/gjt/sp/jedit/OperatingSystem.java"/>
+				<include name="org/gjt/sp/jedit/RegistersListener.java"/>
+				<include name="org/gjt/sp/jedit/RegisterSaver.java"/>
+				<include name="org/gjt/sp/jedit/SelectionManager.java"/>
+				<include name="org/gjt/sp/jedit/TextUtilities.java"/>
+				<include name="org/gjt/sp/jedit/TextUtilities.java"/>
+				<include name="org/gjt/sp/jedit/jedit.props"/>
+				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
+
+
+				<include name="org/gjt/sp/util/Log*.java"/>
+				<include name="org/gjt/sp/util/IntegerArray.java"/>
+				<include name="org/gjt/sp/util/IOUtilities.java"/>
+				<include name="org/gjt/sp/util/ProgressObserver.java"/>
+				<include name="org/gjt/sp/util/SegmentCharSequence.java"/>
+				<include name="org/gjt/sp/util/StandardUtilities.java"/>
+				<include name="org/gjt/sp/util/SyntaxUtilities.java"/>
+				<include name="org/gjt/sp/util/XMLUtilities.java"/>
+			</fileset>
+		</copy>
+		
+	</target>
+
+	<target name="compile-textArea"
+			depends="init,prepare-textArea">
+		<mkdir dir="${textAreaPackage}/build" />
+		<javac srcdir="${textAreaPackage}/src"
+			   destdir="${textAreaPackage}/build"
+			   debug="true"
+			   debuglevel="${config.build.debuglevel}"
+			   deprecation="${config.build.deprecation}"
+			   source="${target.java.version}"
+			   target="${target.java.version}"
+			   compiler="modern"
+			   encoding="UTF-8">
+		</javac>
+	</target>
 	
 	<target name="build"
 			depends="init,compile"
@@ -135,7 +252,7 @@
 				<include name="org/gjt/sp/jedit/icons/**/*.gif" />
 				<include name="org/gjt/sp/jedit/icons/**/*.jpg" />
 				<include name="org/gjt/sp/jedit/icons/**/*.png" />
-            </fileset>
+          		  </fileset>
 		</jar>
 		<copy todir="${jar.location}">
 			<fileset dir=".">
@@ -148,46 +265,15 @@
 	</target>
 	
 	<target name="build-textArea"
-			depends="init,compile"
+			depends="init,compile-textArea"
 			description="build the textArea JAR-file with full debug-information">
 		<mkdir dir="${jar.location}" />
 		<jar destfile="${jar.location}/${ant.project.name}-textArea.jar"
 			 compress="false"
 			 duplicate="fail"
 			 index="true">
-			<fileset dir="${classes.dir}/core/">
-				<include name="org/gjt/sp/jedit/buffer/*.class"/>
-				<include name="org/gjt/sp/jedit/indent/*.class"/>
-				<include name="org/gjt/sp/jedit/syntax/*.class"/>
-				<include name="org/gjt/sp/jedit/textarea/*.class"/>
-				<include name="org/gjt/sp/jedit/input/AbstractInputHandler.class"/>
-				<include name="org/gjt/sp/jedit/input/TextAreaInputHandler.class"/>
-				<include name="org/gjt/sp/jedit/input/InputHandlerProvider.class"/>
-				<include name="org/gjt/sp/jedit/input/DefaultInputHandlerProvider.class"/>
-				<include name="org/gjt/sp/jedit/gui/HistoryModel.class"/>
-				<include name="org/gjt/sp/jedit/gui/KeyEventWorkaround.class"/>
-				<include name="org/gjt/sp/jedit/gui/KeyEventTranslator*.class"/>
-				<include name="org/gjt/sp/jedit/gui/MutableListModel.class"/>
-				<include name="org/gjt/sp/jedit/Mode.class"/>
-				<include name="org/gjt/sp/jedit/Debug.class"/>
-				<include name="org/gjt/sp/jedit/OperatingSystem.class"/>
-				<include name="org/gjt/sp/jedit/Registers.class"/>
-				<include name="org/gjt/sp/jedit/TextUtilities.class"/>
-				<include name="org/gjt/sp/jedit/Options.class"/>
-				<include name="org/gjt/sp/jedit/IPropertyManager.class"/>
-				<include name="org/gjt/sp/jedit/JEditActionContext.class"/>
-				<include name="org/gjt/sp/jedit/JEditActionSet.class"/>
-				<include name="org/gjt/sp/jedit/JEditAbstractEditAction.class"/>
-				<include name="org/gjt/sp/jedit/JEditBeanShellAction.class"/>
-				<include name="org/gjt/sp/jedit/ActionListHandler.class"/>
-				<include name="org/gjt/sp/util/IntegerArray.class"/>
-				<include name="org/gjt/sp/util/IOUtilities.class"/>
-				<include name="org/gjt/sp/util/StandardUtilities.class"/>
-				<include name="org/gjt/sp/util/SyntaxUtilities.class"/>
-				<include name="org/gjt/sp/util/XMLUtilities.class"/>
-				<include name="org/gjt/sp/util/Log*.class"/>
-			</fileset>
-            <fileset dir=".">
+			<fileset dir="${textAreaPackage}/build/" />
+           		 <fileset dir="${textAreaPackage}/src">
 				<include name="org/gjt/sp/jedit/textarea/*.xml"/>
 				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
