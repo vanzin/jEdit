@@ -2982,6 +2982,23 @@ public class jEdit
 	 */
 	private static void initMisc()
 	{
+		ModeProvider.instance = new ModeProvider()
+		{
+			@Override
+			protected void error(String fileName, Throwable e)
+			{
+				Log.log(Log.ERROR, this, e);
+				if (e instanceof SAXParseException)
+				{
+					String message = e.getMessage();
+					int line = ((SAXParseException)e).getLineNumber();
+					int col = ((SAXParseException)e).getColumnNumber();
+
+					Object[] args = { fileName, line, col, message };
+					GUIUtilities.error(null,"xmode-error",args);
+				}
+			}
+		};
 		jars = new Vector<PluginJAR>();
 		FoldHandler.foldHandlerProvider = new ServiceManager.ServiceFoldHandlerProvider();
 		actionContext = new ActionContext()
