@@ -25,7 +25,6 @@ package org.gjt.sp.jedit;
 
 import org.gjt.sp.jedit.bsh.*;
 import java.awt.Component;
-import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.Log;
 
@@ -199,7 +198,8 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 		@Override
 		protected void handleException(TextArea textArea, String path, Throwable t)
 		{
-			new BeanShellErrorDialog(null,t);
+			Log.log(Log.ERROR,this, t, t);
+//			new BeanShellErrorDialog(null,t);
 		}
 	} //}}}
 

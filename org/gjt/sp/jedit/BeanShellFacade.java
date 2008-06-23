@@ -46,10 +46,9 @@ import org.gjt.sp.util.Log;
 public abstract class BeanShellFacade<T>
 {
 	//{{{ BeanShellFacade constructor
-	public BeanShellFacade()
+	protected BeanShellFacade()
 	{
 		classManager = new ClassManagerImpl();
-		classManager.setClassLoader(new JARClassLoader());
 		global = new NameSpace(classManager,
 			"jEdit embedded BeanShell interpreter");
 
@@ -115,7 +114,7 @@ public abstract class BeanShellFacade<T>
 		}
 		catch(Throwable e)
 		{
-			Log.log(Log.ERROR,BeanShell.class,e);
+			Log.log(Log.ERROR,BeanShellFacade.class,e);
 
 			handleException(param,null,e);
 		}
@@ -145,7 +144,7 @@ public abstract class BeanShellFacade<T>
 		{
 			setupDefaultVariables(namespace,view);
 			if(Debug.BEANSHELL_DEBUG)
-				Log.log(Log.DEBUG,BeanShell.class,command);
+				Log.log(Log.DEBUG,BeanShellFacade.class,command);
 			return interp.eval(command);
 		}
 		catch(Exception e)
@@ -315,7 +314,7 @@ public abstract class BeanShellFacade<T>
 
 	//{{{ Static variables
 	protected NameSpace global;
-	private BshClassManager classManager;
+	protected BshClassManager classManager;
 	private static Interpreter interpForMethods;
 	private static final Object[] NO_ARGS = new Object[0];
 	//}}}

@@ -26,8 +26,6 @@ package org.gjt.sp.jedit;
 import org.gjt.sp.jedit.bsh.*;
 
 import java.io.*;
-import java.lang.ref.*;
-import java.util.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.jedit.textarea.*;
@@ -534,9 +532,17 @@ public class BeanShell
 	//}}}
 
 	//}}}
-	
+
+	/**
+	 * The BeanshellFacade that is used by jEdit.
+	 */
 	private static class MyBeanShellFacade extends BeanShellFacade<View>
 	{
+		private MyBeanShellFacade()
+		{
+			classManager.setClassLoader(new JARClassLoader());
+		}
+
 		@Override
 		protected void init()
 		{
