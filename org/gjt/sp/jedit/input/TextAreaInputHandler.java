@@ -23,14 +23,13 @@ package org.gjt.sp.jedit.input;
 
 //{{{ Imports
 import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.gui.GrabKeyDialog;
 import org.gjt.sp.jedit.gui.KeyEventTranslator;
 import org.gjt.sp.jedit.gui.KeyEventWorkaround;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
@@ -51,7 +50,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 	private final TextArea textArea;
 
 	//{{{ TextAreaInputHandler constructor
-	public TextAreaInputHandler(TextArea textArea)
+	protected TextAreaInputHandler(TextArea textArea)
 	{
 		this.textArea = textArea;
 		bindings = currentBindings = new Hashtable();
@@ -67,6 +66,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 	 * @param global it is only true if the event comes from the DefaultKeyboardFocusManager
 	 * @since 4.3pre7
 	 */
+	@Override
 	public void processKeyEvent(KeyEvent evt, int from, boolean global)
 	{
 		if(Debug.DUMP_KEY_EVENTS)
@@ -169,6 +169,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 	 * @param action The action
 	 * @since jEdit 4.2pre1
 	 */
+	@Override
 	public void invokeAction(String action)
 	{
 		invokeAction(getAction(action));
@@ -180,6 +181,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 	 * necessary.
 	 * @param action The action
 	 */
+	@Override
 	public void invokeAction(JEditBeanShellAction action)
 	{
 		JEditBuffer buffer = textArea.getBuffer();
@@ -240,6 +242,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 	 * @param dryRun only calculate the return value, do not have any other effect
 	 * @since jEdit 4.2pre5
 	 */
+	@Override
 	public boolean handleKey(KeyEventTranslator.Key keyStroke,boolean dryRun)
 	{
 		char input = '\0';
@@ -365,7 +368,7 @@ public abstract class TextAreaInputHandler extends AbstractInputHandler<JEditBea
 	//{{{ invokeReadNextChar() method
 	protected void invokeReadNextChar(char ch)
 	{
-		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
+		String charStr = StandardUtilities.charsToEscapes(String.valueOf(ch));
 
 		// this might be a bit slow if __char__ occurs a lot
 		int index;
