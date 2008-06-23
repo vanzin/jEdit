@@ -30,11 +30,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPopupMenu;
 
-import org.gjt.sp.jedit.Abbrevs;
-import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.Macros;
-import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.PositionChanging;
 
 /**
@@ -58,7 +54,7 @@ public class JEditTextArea extends TextArea
 	 */
 	public JEditTextArea(View view)
 	{
-		super(view);
+		super(jEdit.getPropertyManager(), view);
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 		popupEnabled = true;
 		this.view = view;

@@ -83,9 +83,9 @@ public class TextArea extends JComponent
 	 * Instantiate a TextArea.
 	 * @param insideJEdit must be set to true if the textarea is embedded in jEdit
 	 */
-	public TextArea(boolean insideJEdit)
+	public TextArea(IPropertyManager propertyManager, boolean insideJEdit)
 	{
-		this(null);
+		this(propertyManager, null);
 		actionContext = new JEditActionContext<JEditBeanShellAction, JEditActionSet<JEditBeanShellAction>>()
 		{
 			@Override
@@ -256,7 +256,7 @@ public class TextArea extends JComponent
 	 * Creates a new JEditTextArea.
 	 * @param inputHandlerProvider the inputHandlerProvider
 	 */
-	public TextArea(InputHandlerProvider inputHandlerProvider)
+	public TextArea(IPropertyManager propertyManager, InputHandlerProvider inputHandlerProvider)
 	{
 		this.inputHandlerProvider = inputHandlerProvider;
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
@@ -267,7 +267,7 @@ public class TextArea extends JComponent
 		painter = new TextAreaPainter(this);
 		repaintMgr = new FastRepaintManager(this,painter);
 		gutter = new Gutter(this);
-		gutter.setMouseActionsProvider(new MouseActions("gutter"));
+		gutter.setMouseActionsProvider(new MouseActions(propertyManager, "gutter"));
 		listenerList = new EventListenerList();
 		caretEvent = new MutableCaretEvent();
 		blink = true;
@@ -6178,9 +6178,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ _createTextArea() method
 	public static TextArea _createTextArea(boolean insidejEdit, final IPropertyManager iPropertyManager)
 	{
-		final TextArea textArea = new TextArea(insidejEdit);
+		final TextArea textArea = new TextArea(iPropertyManager, insidejEdit);
 		textArea.setMouseHandler(new TextAreaMouseHandler(textArea));
-		textArea.setTransferHandler(new TextAreaTransferHandler());
+		// todo : make TextareaTransferHandler standalone
+//		textArea.setTransferHandler(new TextAreaTransferHandler());
 
 		JEditActionSet<JEditBeanShellAction> actionSet = new JEditActionSet<JEditBeanShellAction>(
 				null, TextArea.class.getResource("textarea.actions.xml"))

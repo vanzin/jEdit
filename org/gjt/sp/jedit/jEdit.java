@@ -2046,6 +2046,14 @@ public class jEdit
 		return bufferSetManager;
 	}
 
+	/**
+	 * @since jEdit 4.3pre15
+	 */
+	public static JEditPropertyManager getPropertyManager()
+	{
+		return propertyManager;
+	}
+
 	//{{{ checkBufferStatus() methods
 	/**
 	 * Checks each buffer's status on disk and shows the dialog box

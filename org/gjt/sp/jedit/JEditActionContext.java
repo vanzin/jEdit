@@ -23,6 +23,8 @@
 
 package org.gjt.sp.jedit;
 
+import org.gjt.sp.util.StandardUtilities;
+
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -155,7 +157,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 
 			actionNames = vec.toArray(new String[vec.size()]);
 			Arrays.sort(actionNames,
-				new MiscUtilities.StringICaseCompare());
+				new StandardUtilities.StringCompare(true));
 		}
 
 		return actionNames;

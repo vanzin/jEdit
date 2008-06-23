@@ -23,30 +23,33 @@
 package org.gjt.sp.jedit.textarea;
 
 import java.awt.event.MouseEvent;
-import org.gjt.sp.jedit.gui.DefaultInputHandler;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.KeyEventTranslator;
+import org.gjt.sp.jedit.IPropertyManager;
 
 public class MouseActions implements MouseActionsProvider
 {
+	private IPropertyManager propertyManager;
+
 	//{{{ MouseActions constructor
-	MouseActions(String name)
+	MouseActions(IPropertyManager propertyManager, String name)
 	{
+		this.propertyManager = propertyManager;
 		this.name = name;
 	} //}}}
 
 	//{{{ getActionForEvent() method
 	public String getActionForEvent(MouseEvent evt, String variant)
 	{
-		String modStr = DefaultInputHandler.getModifierString(evt);
+		String modStr = KeyEventTranslator.getModifierString(evt);
 		if(modStr == null)
 		{
-			return jEdit.getProperty("view." + name + '.'
+			return propertyManager.getProperty("view." + name + '.'
 				+ variant + "Click");
 		}
 		else
 		{
-			return jEdit.getProperty("view." + name + '.'
-				+ DefaultInputHandler.getModifierString(evt)
+			return propertyManager.getProperty("view." + name + '.'
+				+ KeyEventTranslator.getModifierString(evt)
 				+ variant + "Click");
 		}
 	} //}}}
