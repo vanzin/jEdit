@@ -1095,10 +1095,12 @@ public class MiscUtilities
 	 * string.
 	 * @param str The string
 	 * @since jEdit 2.3pre1
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#charsToEscapes(String)}
 	 */
+	@Deprecated
 	public static String charsToEscapes(String str)
 	{
-		return charsToEscapes(str,"\n\t\\\"'");
+		return StandardUtilities.charsToEscapes(str);
 	} //}}}
 
 	//{{{ charsToEscapes() method
@@ -1107,7 +1109,9 @@ public class MiscUtilities
 	 * @param str The string
 	 * @param toEscape Any characters that require escaping
 	 * @since jEdit 4.1pre3
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#charsToEscapes(String)}
 	 */
+	@Deprecated
 	public static String charsToEscapes(String str, String toEscape)
 	{
 		StringBuilder buf = new StringBuilder();
@@ -1409,7 +1413,9 @@ loop:		for(;;)
 	//{{{ StringICaseCompare class
 	/**
 	 * Compares strings ignoring case.
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities.StringCompare}
 	 */
+	@Deprecated
 	public static class StringICaseCompare implements Comparator<Object>
 	{
 		public int compare(Object obj1, Object obj2)

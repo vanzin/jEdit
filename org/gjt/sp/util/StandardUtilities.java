@@ -43,6 +43,49 @@ public class StandardUtilities
 
 	//{{{ Text methods
 
+	//{{{ charsToEscapes() method
+	/**
+	 * Escapes newlines, tabs, backslashes, and quotes in the specified
+	 * string.
+	 * @param str The string
+	 * @since jEdit 4.3pre15
+	 */
+	public static String charsToEscapes(String str)
+	{
+		return charsToEscapes(str,"\n\t\\\"'");
+	} //}}}
+
+	//{{{ charsToEscapes() method
+	/**
+	 * Escapes the specified characters in the specified string.
+	 * @param str The string
+	 * @param toEscape Any characters that require escaping
+	 * @since jEdit 4.3pre15
+	 */
+	public static String charsToEscapes(String str, String toEscape)
+	{
+		StringBuilder buf = new StringBuilder();
+		for(int i = 0; i < str.length(); i++)
+		{
+			char c = str.charAt(i);
+			if(toEscape.indexOf(c) != -1)
+			{
+				if(c == '\n')
+					buf.append("\\n");
+				else if(c == '\t')
+					buf.append("\\t");
+				else
+				{
+					buf.append('\\');
+					buf.append(c);
+				}
+			}
+			else
+				buf.append(c);
+		}
+		return buf.toString();
+	} //}}}
+
 	//{{{ getPrevIndentStyle() method
 	/**
 	 * @param str A java string
@@ -393,10 +436,21 @@ loop:		for(int i = 0; i < str.length(); i++)
 	 */
 	public static class StringCompare implements Comparator
 	{
+		private boolean icase;
+
+		public StringCompare(boolean icase)
+		{
+			this.icase = icase;
+		}
+
+		public StringCompare()
+		{
+		}
+
 		public int compare(Object obj1, Object obj2)
 		{
 			return compareStrings(obj1.toString(),
-				obj2.toString(),false);
+				obj2.toString(),icase);
 		}
 	} //}}}
 
