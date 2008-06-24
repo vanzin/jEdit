@@ -3184,7 +3184,7 @@ public class jEdit
 			return;
 
 		Arrays.sort(snippets,
-			new MiscUtilities.StringICaseCompare());
+			new StandardUtilities.StringCompare(true));
 
 		for (int i = 0; i < snippets.length; ++i)
 		{
@@ -3456,7 +3456,7 @@ public class jEdit
 			return;
 
 		Arrays.sort(snippets,
-			new MiscUtilities.StringICaseCompare());
+			new StandardUtilities.StringCompare(true));
 
 		/*
 		 * Force the default encoding to UTF-8 temporarily.
