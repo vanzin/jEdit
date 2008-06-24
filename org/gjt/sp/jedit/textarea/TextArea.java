@@ -81,6 +81,7 @@ public class TextArea extends JComponent
 	//{{{ TextArea constructor
 	/**
 	 * Instantiate a TextArea.
+	 * @param propertyManager the property manager that contains informations like shortcut bindings
 	 * @param insideJEdit must be set to true if the textarea is embedded in jEdit
 	 */
 	public TextArea(IPropertyManager propertyManager, boolean insideJEdit)
@@ -101,7 +102,7 @@ public class TextArea extends JComponent
 			@Override
 			protected JEditBeanShellAction getAction(String action)
 			{
-				return TextArea.this.actionContext.getAction(action);
+				return actionContext.getAction(action);
 			}
 		};
 
@@ -133,7 +134,7 @@ public class TextArea extends JComponent
 			{
 				public String getProperty(String name)
 				{
-					return (String) props.get(name);
+					return props.getProperty(name);
 				}
 			};
 		}
@@ -165,7 +166,7 @@ public class TextArea extends JComponent
 		String styleString = SyntaxUtilities.propertyManager.getProperty(name + "style");
 
 		//{{{ get font, copy of jEdit.getFontPropert()
-		Font font = null;
+		Font font;
 		if(family == null || sizeString == null || styleString == null)
 			font = new Font("Monospaced", Font.PLAIN, 12);
 		else
@@ -254,6 +255,7 @@ public class TextArea extends JComponent
 	//{{{ TextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
+	 * @param propertyManager the property manager that contains informations like shortcut bindings
 	 * @param inputHandlerProvider the inputHandlerProvider
 	 */
 	public TextArea(IPropertyManager propertyManager, InputHandlerProvider inputHandlerProvider)
@@ -5016,7 +5018,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 		{
 			visibleLines = height / lineHeight;
-			lastLinePartial = (height % lineHeight != 0);
+			lastLinePartial = height % lineHeight != 0;
 			if(lastLinePartial)
 				visibleLines++;
 		}
@@ -6038,12 +6040,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		} //}}}
 
 		//{{{ getDot() method
+		@Override
 		public int getDot()
 		{
 			return getCaretPosition();
 		} //}}}
 
 		//{{{ getMark() method
+		@Override
 		public int getMark()
 		{
 			return getMarkPosition();
@@ -6203,6 +6207,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				return textArea.getInputHandler();
 			}
 
+			@Override
 			protected JEditBeanShellAction createBeanShellAction(String actionName,
 									     String code,
 									     String selected,
@@ -6230,7 +6235,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public static TextArea createTextArea(IPropertyManager iPropertyManager)
 	{
-		final TextArea textArea = _createTextArea(false, iPropertyManager);
+		TextArea textArea = _createTextArea(false, iPropertyManager);
 		return textArea;
 	} // }}}
 
@@ -6262,7 +6267,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			public String getProperty(String name)
 			{
-				return (String) props.get(name);
+				return props.getProperty(name);
 			}
 		});
 		textArea.getBuffer().setProperty("folding", "explicit");
