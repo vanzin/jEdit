@@ -647,8 +647,7 @@ public abstract class VFS
 		String glob, boolean recursive, Component comp )
 		throws IOException
 	{
-		String[] retval = null;
-		retval = _listDirectory(session, directory, glob, recursive, comp, true, false);
+		String[] retval = _listDirectory(session, directory, glob, recursive, comp, true, false);
 		return retval;
 	} //}}}
 
@@ -721,7 +720,7 @@ public abstract class VFS
 
 		String[] retVal = files.toArray(new String[files.size()]);
 
-		Arrays.sort(retVal,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(retVal,new StandardUtilities.StringCompare(true));
 
 		return retVal;
 	} //}}}
@@ -1067,7 +1066,6 @@ public abstract class VFS
 		});
 	} //}}}
 
-	private long val;
 	//{{{ recursive listFiles() method
 	private void listFiles(Object session, Collection<String> stack,
 		List<String> files, String directory, VFSFileFilter filter, boolean recursive,
@@ -1181,7 +1179,7 @@ public abstract class VFS
 	} //}}}
 
 	//{{{ ColorEntry class
-	static class ColorEntry
+	private static class ColorEntry
 	{
 		Pattern re;
 		Color color;
