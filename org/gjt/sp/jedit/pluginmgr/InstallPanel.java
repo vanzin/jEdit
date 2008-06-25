@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.pluginmgr;
 
 //{{{ Imports
-
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.RolloverButton;
@@ -70,10 +69,10 @@ class InstallPanel extends JPanel implements EBComponent
 	private PluginTableModel pluginModel;
 	private PluginManager window;
 	private PluginInfoBox infoBox;
-	ChoosePluginSet chooseButton;
+	private ChoosePluginSet chooseButton;
 	private boolean updates;
 
-	final HashSet<String> pluginSet = new HashSet<String>();
+	private final Set<String> pluginSet = new HashSet<String>();
 	//}}}
 
 	//{{{ InstallPanel constructor
@@ -88,7 +87,7 @@ class InstallPanel extends JPanel implements EBComponent
 
 		final JSplitPane split = new JSplitPane(
 			JSplitPane.VERTICAL_SPLIT, jEdit.getBooleanProperty("appearance.continuousLayout"));
-		split.setResizeWeight(.75);
+		split.setResizeWeight(0.75);
 		/* Setup the table */
 		table = new JTable(pluginModel = new PluginTableModel());
 		table.setShowGrid(false);
@@ -261,7 +260,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ PluginTableModel class
-	class PluginTableModel extends AbstractTableModel
+	private class PluginTableModel extends AbstractTableModel
 	{
 		/** This List can contain String or Entry. */
 		private List entries = new ArrayList();
@@ -269,6 +268,7 @@ class InstallPanel extends JPanel implements EBComponent
 		int sortDirection = 1;
 
 		//{{{ getColumnClass() method
+		@Override
 		public Class getColumnClass(int columnIndex)
 		{
 			switch (columnIndex)
@@ -290,6 +290,7 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ getColumnName() method
+		@Override
 		public String getColumnName(int column)
 		{
 			switch (column)
@@ -311,6 +312,7 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ getValueAt() method
+		@Override
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
 			Object obj = entries.get(rowIndex);
@@ -348,6 +350,7 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ isCellEditable() method
+		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex)
 		{
 			return columnIndex == 0;
@@ -407,6 +410,7 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ setValueAt() method
+		@Override
 		public void setValueAt(Object aValue, int row, int column)
 		{
 			if (column != 0) return;
@@ -599,7 +603,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ Entry class
-	class Entry
+	private class Entry
 	{
 		String name, installedVersion, version, author, date, description, set;
 
@@ -653,10 +657,11 @@ class InstallPanel extends JPanel implements EBComponent
 			List<Entry> list = new ArrayList<Entry>();
 			getParents(list);
 			Entry[] array = list.toArray(new Entry[list.size()]);
-			Arrays.sort(array,new MiscUtilities.StringICaseCompare());
+			Arrays.sort(array,new StandardUtilities.StringCompare(true));
 			return array;
 		}
 
+		@Override
 		public String toString()
 		{
 			return name;
@@ -667,7 +672,7 @@ class InstallPanel extends JPanel implements EBComponent
 	/**
 	 * @TODO refactor to use the PluginDetailPanel?
 	 */
-	class PluginInfoBox extends JTextPane implements ListSelectionListener
+	private class PluginInfoBox extends JTextPane implements ListSelectionListener
 	{
 		private final String[] params;
 		PluginInfoBox()
@@ -704,7 +709,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ SizeLabel class
-	class SizeLabel extends JLabel implements TableModelListener
+	private class SizeLabel extends JLabel implements TableModelListener
 	{
 		private int size;
 
@@ -737,7 +742,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ SelectallButton class
-	class SelectallButton extends JCheckBox implements ActionListener, TableModelListener
+	private class SelectallButton extends JCheckBox implements ActionListener, TableModelListener
 	{
 		SelectallButton()
 		{
@@ -775,11 +780,14 @@ class InstallPanel extends JPanel implements EBComponent
 
 	//{{{ StringMapHandler class
 	/** For parsing the pluginset xml files into pluginSet */
-	class StringMapHandler extends DefaultHandler {
+	private class StringMapHandler extends DefaultHandler
+	{
 		StringMapHandler()
 		{
 			pluginSet.clear();
 		}
+
+		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attrs) throws SAXException
 		{
 			if (localName.equals("plugin"))
@@ -790,9 +798,9 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ ChoosePluginSet class
-	class ChoosePluginSet extends RolloverButton implements ActionListener
+	private class ChoosePluginSet extends RolloverButton implements ActionListener
 	{
-		String path;
+		private String path;
 		
 		//{{{ ChoosePluginSet constructor
 		ChoosePluginSet()
@@ -803,6 +811,7 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ updateUI method
+		@Override
 		public void updateUI()
 		{
 			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
@@ -830,7 +839,7 @@ class InstallPanel extends JPanel implements EBComponent
 	}//}}}
 
 	//{{{ ClearPluginSet class
-	class ClearPluginSet extends RolloverButton implements ActionListener
+	private class ClearPluginSet extends RolloverButton implements ActionListener
 	{
 		//{{{ ClearPluginSet constructor
 		ClearPluginSet()
@@ -851,7 +860,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ InstallButton class
-	class InstallButton extends JButton implements ActionListener, TableModelListener
+	private class InstallButton extends JButton implements ActionListener, TableModelListener
 	{
 		InstallButton()
 		{
@@ -939,7 +948,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ EntryCompare class
-	static class EntryCompare implements Comparator
+	private static class EntryCompare implements Comparator<Entry>
 	{
 		private static final int COLUMN_INSTALL = 0;
 		private static final int COLUMN_NAME = 1;
@@ -959,10 +968,8 @@ class InstallPanel extends JPanel implements EBComponent
 			this.sortDirection = sortDirection;
 		}
 
-		public int compare(Object o1, Object o2)
+		public int compare(Entry e1, Entry e2)
 		{
-			InstallPanel.Entry e1 = (InstallPanel.Entry)o1;
-			InstallPanel.Entry e2 = (InstallPanel.Entry)o2;
 			int result;
 
 			switch (type)
@@ -1024,8 +1031,9 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ HeaderMouseHandler class
-	class HeaderMouseHandler extends MouseAdapter
+	private class HeaderMouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			int column = table.getTableHeader().columnAtPoint(evt.getPoint());
@@ -1035,7 +1043,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ TextRenderer
-	static class TextRenderer extends DefaultTableCellRenderer
+	private static class TextRenderer extends DefaultTableCellRenderer
 	{
 		private DefaultTableCellRenderer tcr;
 
@@ -1044,19 +1052,20 @@ class InstallPanel extends JPanel implements EBComponent
 			this.tcr = tcr;
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			if (column == 5)
-				tcr.setHorizontalAlignment(SwingConstants.TRAILING);
+				tcr.setHorizontalAlignment(TRAILING);
 			else
-				tcr.setHorizontalAlignment(SwingConstants.LEADING);
+				tcr.setHorizontalAlignment(LEADING);
 			return tcr.getTableCellRendererComponent(table,value,isSelected,false,row,column);
 		}
 	} //}}}
 
 	//{{{ KeyboardAction class
-	class KeyboardAction extends AbstractAction
+	private class KeyboardAction extends AbstractAction
 	{
 		private KeyboardCommand command = KeyboardCommand.NONE;
 
@@ -1097,8 +1106,9 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ TableFocusHandler class
-	class TableFocusHandler extends FocusAdapter
+	private class TableFocusHandler extends FocusAdapter
 	{
+		@Override
 		public void focusGained(FocusEvent fe)
 		{
 			if (-1 == table.getSelectedRow() && table.getRowCount() > 0)
@@ -1115,7 +1125,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ HeaderRenderer
-	static class HeaderRenderer extends DefaultTableCellRenderer
+	private static class HeaderRenderer extends DefaultTableCellRenderer
 	{
 		private DefaultTableCellRenderer tcr;
 
@@ -1124,6 +1134,7 @@ class InstallPanel extends JPanel implements EBComponent
 			this.tcr = tcr;
 		}
 
+		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
 							       boolean isSelected, boolean hasFocus,
 							       int row, int column)
