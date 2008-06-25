@@ -69,6 +69,7 @@ import org.gjt.sp.jedit.help.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.StandardUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -87,8 +88,8 @@ public class ManagePanel extends JPanel
 	private final PluginTableModel pluginModel;
 	private final PluginManager window;
 	private JPopupMenu popup;
-	private Set<String> selectedPlugins = null;
-	private Set<String> jarNames = null;
+	private Set<String> selectedPlugins;
+	private Set<String> jarNames;
 	//}}}
 
 	//{{{ ManagePanel constructor
@@ -179,7 +180,7 @@ public class ManagePanel extends JPanel
 	 * Selects the same plugins that are in that set.
 	 * @since jEdit 4.3pre10
 	 */
-	class ManagePanelRestoreHandler extends DefaultHandler 
+	private class ManagePanelRestoreHandler extends DefaultHandler
 	{
 		ManagePanelRestoreHandler()
 		{
@@ -228,10 +229,12 @@ public class ManagePanel extends JPanel
 				{
 					String jarPath = ent.jar;
 					String jarName = jarPath.substring(1 + jarPath.lastIndexOf(File.separatorChar));
-					try {
+					try
+					{
 						pluginModel.setValueAt(jarNames.contains(jarName), i, 0);
 					}
-					catch (Exception e) {
+					catch (Exception e)
+					{
 						Log.log(Log.WARNING, this, "Exception thrown loading: " + jarName);
 					}
 				}
@@ -257,7 +260,7 @@ public class ManagePanel extends JPanel
 	 * @throws IOException if jEdit cannot generate cache
 	 * @since jEdit 4.3pre12
 	 */
-	private Collection<String> getDeclaredJars(String jarName) throws IOException
+	private static Collection<String> getDeclaredJars(String jarName) throws IOException
 	{
 		Collection<String> jarList = new ArrayList<String>();
 		PluginJAR pluginJAR = new PluginJAR(new File(jarName));
@@ -393,7 +396,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ PluginTableModel class
-	class PluginTableModel extends AbstractTableModel
+	private class PluginTableModel extends AbstractTableModel
 	{
 		private final List<Entry> entries;
 		private int sortType = EntryCompare.NAME;
@@ -553,7 +556,7 @@ public class ManagePanel extends JPanel
 		//{{{ sort() method
 		public void sort(int type)
 		{
-			ArrayList<String> savedSelection = new ArrayList<String>();
+			List<String> savedSelection = new ArrayList<String>();
 			saveSelection(savedSelection);
 			Collections.sort(entries,new EntryCompare(type));
 			fireTableChanged(new TableModelEvent(this));
@@ -564,7 +567,7 @@ public class ManagePanel extends JPanel
 		//{{{ update() method
 		public void update()
 		{
-			ArrayList<String> savedSelection = new ArrayList<String>();
+			List<String> savedSelection = new ArrayList<String>();
 			saveSelection(savedSelection);
 			entries.clear();
 
@@ -621,9 +624,9 @@ public class ManagePanel extends JPanel
 			{
 				List<String> closureSet = new LinkedList<String>();
 				PluginJAR.transitiveClosure(dependents, closureSet);
-				ArrayList<String> listModel = new ArrayList<String>();
+				List<String> listModel = new ArrayList<String>();
 				listModel.addAll(closureSet);
-				Collections.sort(listModel, new MiscUtilities.StringICaseCompare());
+				Collections.sort(listModel, new StandardUtilities.StringCompare(true));
 
 				int button = GUIUtilities.listConfirm(window,"plugin-manager.dependency",
 					new String[] { jar.getFile().getName() }, listModel.toArray());
@@ -713,7 +716,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ TextRenderer class
-	class TextRenderer extends DefaultTableCellRenderer
+	private class TextRenderer extends DefaultTableCellRenderer
 	{
 		private final DefaultTableCellRenderer tcr;
 
@@ -736,7 +739,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ HideLibrariesButton class
-	class HideLibrariesButton extends JCheckBox implements ActionListener
+	private class HideLibrariesButton extends JCheckBox implements ActionListener
 	{
 		HideLibrariesButton()
 		{
@@ -767,7 +770,7 @@ public class ManagePanel extends JPanel
 	 * @since jEdit 4.3pre10
 	 * @author Alan Ezust
 	 */
-	class RestoreButton extends RolloverButton implements ActionListener
+	private class RestoreButton extends RolloverButton implements ActionListener
 	{
 		RestoreButton()
 		{
@@ -801,7 +804,7 @@ public class ManagePanel extends JPanel
 	 * @since jEdit 4.3pre10
 	 * @author Alan Ezust
 	 */
-	class SaveButton extends RolloverButton implements ActionListener
+	private class SaveButton extends RolloverButton implements ActionListener
 	{
 		SaveButton()
 		{
@@ -813,24 +816,28 @@ public class ManagePanel extends JPanel
 
 		void saveState(String vfsURL, List<Entry> pluginList) 
 		{
-			StringBuffer sb = new StringBuffer("<pluginset>\n ");
+			StringBuilder sb = new StringBuilder("<pluginset>\n ");
 			
-			for (Entry entry: pluginList) {
+			for (Entry entry: pluginList)
+			{
 				String jarName = entry.jar.substring(1+entry.jar.lastIndexOf(File.separatorChar));
-				sb.append("   <plugin name=\"" + entry.name + "\" jar=\""+ jarName + "\" />\n ");
+				sb.append("   <plugin name=\"").append(entry.name).append("\" jar=\"");
+				sb.append(jarName).append("\" />\n ");
 			}
 			sb.append("</pluginset>\n");
 			
 			VFS vfs = VFSManager.getVFSForPath(vfsURL);
 			Object session = vfs.createVFSSession(vfsURL, ManagePanel.this);
-			try {
+			try
+			{
 				OutputStream os = vfs._createOutputStream(session, vfsURL, ManagePanel.this);
 				OutputStreamWriter writer = new OutputStreamWriter(os);
 				writer.write(sb.toString());
 				writer.close();
 				os.close();
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Log.log(Log.ERROR, this, "Saving State Error", e);
 			}
 			
@@ -843,7 +850,7 @@ public class ManagePanel extends JPanel
 				ManagePanel.this.window, jEdit.getActiveView(),
 				path, VFSBrowser.SAVE_DIALOG, false , true);
 			String[] fileselections = fileChooser.getSelectedFiles();
-			ArrayList<Entry> pluginSelections = new ArrayList<Entry>();
+			List<Entry> pluginSelections = new ArrayList<Entry>();
 			if (fileselections == null || fileselections.length != 1) return;
 			
 			PluginJAR[] jars = jEdit.getPluginJARs();
@@ -864,7 +871,7 @@ public class ManagePanel extends JPanel
 	 * The Remove button is the button pressed to remove the selected 
 	 * plugin.
 	 */
-	class RemoveButton extends JButton implements ListSelectionListener, ActionListener
+	private class RemoveButton extends JButton implements ListSelectionListener, ActionListener
 	{
 		RemoveButton()
 		{
@@ -934,7 +941,7 @@ public class ManagePanel extends JPanel
 				{
 					button = GUIUtilities.listConfirm(window,"plugin-manager.remove-dependencies",
 						null, closureSet.toArray());
-					Collections.sort(closureSet, new MiscUtilities.StringICaseCompare());
+					Collections.sort(closureSet, new StandardUtilities.StringCompare(true));
 				}
 				if(button == JOptionPane.YES_OPTION)
 				{
@@ -1082,7 +1089,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ HelpButton class
-	class HelpButton extends JButton implements ListSelectionListener, ActionListener
+	private class HelpButton extends JButton implements ListSelectionListener, ActionListener
 	{
 		private URL docURL;
 
@@ -1124,7 +1131,8 @@ public class ManagePanel extends JPanel
 						}
 					}
 				}
-				catch (Exception ex) {
+				catch (Exception ex)
+				{
 					Log.log(Log.ERROR, this, "ManagePanel HelpButton Update", ex);
 				}
 			}
@@ -1133,7 +1141,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ EntryCompare class
-	private static class EntryCompare implements Comparator<ManagePanel.Entry>
+	private static class EntryCompare implements Comparator<Entry>
 	{
 		public static final int NAME = 1;
 		public static final int STATUS = 2;
@@ -1145,7 +1153,7 @@ public class ManagePanel extends JPanel
 			this.type = type;
 		}
 
-		public int compare(ManagePanel.Entry e1, ManagePanel.Entry e2)
+		public int compare(Entry e1, Entry e2)
 		{
 			if (type == NAME)
 				return compareNames(e1,e2);
@@ -1158,7 +1166,7 @@ public class ManagePanel extends JPanel
 			}
 		}
 
-		private static int compareNames(ManagePanel.Entry e1, ManagePanel.Entry e2)
+		private static int compareNames(Entry e1, Entry e2)
 		{
 			String s1;
 			if(e1.name == null)
@@ -1176,7 +1184,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ HeaderMouseHandler class
-	class HeaderMouseHandler extends MouseAdapter
+	private class HeaderMouseHandler extends MouseAdapter
 	{
 		@Override
 		public void mouseClicked(MouseEvent evt)
@@ -1257,7 +1265,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ KeyboardAction class
-	class KeyboardAction extends AbstractAction
+	private class KeyboardAction extends AbstractAction
 	{
 		private KeyboardCommand command = KeyboardCommand.NONE;
 		
@@ -1294,7 +1302,7 @@ public class ManagePanel extends JPanel
 	} //}}}
 
 	//{{{ TableFocusHandler class
-	class TableFocusHandler extends FocusAdapter
+	private class TableFocusHandler extends FocusAdapter
 	{
 		@Override
 		public void focusGained(FocusEvent fe)

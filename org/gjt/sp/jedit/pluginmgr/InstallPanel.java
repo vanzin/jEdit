@@ -312,7 +312,6 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ getValueAt() method
-		@Override
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
 			Object obj = entries.get(rowIndex);
