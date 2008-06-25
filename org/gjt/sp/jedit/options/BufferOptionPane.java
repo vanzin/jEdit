@@ -38,23 +38,24 @@ import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.util.StandardUtilities;
 
 
 public class BufferOptionPane extends AbstractOptionPane
 {
-	JComboBox encoding;
-	JComboBox lineSeparator;
-	JCheckBox gzipped;
-	Mode[] modes;
-	JComboBox mode;
-	JComboBox folding;
-	JComboBox wrap;
-	JComboBox maxLineLen;
-	JComboBox tabSize;
-	JComboBox indentSize;
-	JComboBox checkModStatus;
-	JCheckBox noTabs;
-	Buffer buffer;
+	private JComboBox encoding;
+	private JComboBox lineSeparator;
+	private JCheckBox gzipped;
+	private Mode[] modes;
+	private JComboBox mode;
+	private JComboBox folding;
+	private JComboBox wrap;
+	private JComboBox maxLineLen;
+	private JComboBox tabSize;
+	private JComboBox indentSize;
+	private JComboBox checkModStatus;
+	private JCheckBox noTabs;
+	private Buffer buffer;
 
 
 	public BufferOptionPane()
@@ -64,10 +65,9 @@ public class BufferOptionPane extends AbstractOptionPane
 	}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
-
-
 		buffer = jEdit.getActiveView().getBuffer();
 		String filename = buffer.getName();
 		setName("Buffer: " + filename);
@@ -96,7 +96,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		//{{{ Encoding
 		String[] encodings = MiscUtilities.getEncodings(true);
-		Arrays.sort(encodings,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(encodings,new StandardUtilities.StringCompare(true));
 		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
 		encoding.setSelectedItem(buffer.getStringProperty(JEditBuffer.ENCODING));
@@ -145,7 +145,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		//{{{ Edit mode
 		modes = jEdit.getModes();
-		Arrays.sort(modes,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(modes,new StandardUtilities.StringCompare(true));
 		mode = new JComboBox(modes);
 		mode.setSelectedItem(buffer.getMode());
 		ActionHandler actionListener = new ActionHandler();
@@ -210,6 +210,7 @@ public class BufferOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		int index = lineSeparator.getSelectedIndex();
@@ -309,7 +310,7 @@ public class BufferOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ ActionHandler() class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent evt)
