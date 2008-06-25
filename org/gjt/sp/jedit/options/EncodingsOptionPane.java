@@ -23,53 +23,33 @@
 package org.gjt.sp.jedit.options;
 
 //{{{ Imports
-import java.awt.Component;
 import java.awt.Dimension;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.util.Arrays;
 import java.util.Vector;
-
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-
 import org.gjt.sp.jedit.AbstractOptionPane;
-import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.jEdit;
-
-import org.gjt.sp.jedit.MiscUtilities.StringICaseCompare;
-
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.JCheckBoxList;
-
 import org.gjt.sp.jedit.gui.JCheckBoxList.Entry;
-
+import org.gjt.sp.util.StandardUtilities;
 import static java.awt.GridBagConstraints.BOTH;
-
 import static java.util.Arrays.sort;
-
 import static javax.swing.Box.createHorizontalBox;
 import static javax.swing.Box.createHorizontalStrut;
-
 import static org.gjt.sp.jedit.jEdit.getBooleanProperty;
 import static org.gjt.sp.jedit.jEdit.getProperty;
 import static org.gjt.sp.jedit.jEdit.setBooleanProperty;
 import static org.gjt.sp.jedit.jEdit.unsetProperty;
-
 import static org.gjt.sp.jedit.MiscUtilities.getEncodings;
 //}}}
 
@@ -101,14 +81,15 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		// Default file encoding
 		String[] encodings = getEncodings(true);
-		sort(encodings,new StringICaseCompare());
+		sort(encodings,new StandardUtilities.StringCompare(true));
 		defaultEncoding = new JComboBox(encodings);
 		defaultEncoding.setEditable(true);
-		defaultEncoding.setSelectedItem(jEdit.getProperty("buffer."+Buffer.ENCODING,
+		defaultEncoding.setSelectedItem(jEdit.getProperty("buffer."+JEditBuffer.ENCODING,
 			System.getProperty("file.encoding")));
 		addComponent(jEdit.getProperty("options.general.encoding"),defaultEncoding);
 
@@ -133,7 +114,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 
 		// Encodings to display
 		encodings = getEncodings(false);
-		sort(encodings,new StringICaseCompare());
+		sort(encodings,new StandardUtilities.StringCompare(true));
 		Vector<Entry> encodingEntriesVector = new Vector<Entry>();
 		boolean enableSelectAll = false;
 		boolean enableSelectNone = false;
@@ -174,10 +155,11 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		
-		jEdit.setProperty("buffer."+Buffer.ENCODING,(String)
+		jEdit.setProperty("buffer."+ JEditBuffer.ENCODING,(String)
 			defaultEncoding.getSelectedItem());
 		jEdit.setBooleanProperty("buffer.encodingAutodetect",
 			encodingAutodetect.isSelected());
@@ -200,7 +182,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	//{{{ Inner classes
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
@@ -220,7 +202,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ TableModelHandler class
-	class TableModelHandler implements TableModelListener
+	private class TableModelHandler implements TableModelListener
 	{
 		public void tableChanged(TableModelEvent tme)
 		{
