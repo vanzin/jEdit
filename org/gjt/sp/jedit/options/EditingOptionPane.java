@@ -34,6 +34,7 @@ import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
+ * @author Slava Pestov
  * @version $Id$
  */
 public class EditingOptionPane extends AbstractOptionPane
@@ -45,10 +46,11 @@ public class EditingOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		Mode[] modes = jEdit.getModes();
-		Arrays.sort(modes,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(modes,new StandardUtilities.StringCompare(true));
 
 		global = new ModeProperties();
 		modeProps = new ModeProperties[modes.length];
@@ -146,6 +148,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		jEdit.setProperty("buffer.defaultMode",
@@ -273,7 +276,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -293,7 +296,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ ModeProperties class
-	static class ModeProperties
+	private static class ModeProperties
 	{
 		//{{{ Instance variables
 		Mode mode;
