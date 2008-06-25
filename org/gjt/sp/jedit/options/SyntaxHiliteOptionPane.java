@@ -33,10 +33,9 @@ import java.util.Vector;
 import java.util.Collections;
 
 import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.gui.ColorWellButton;
-import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.gui.StyleEditor;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 //{{{ SyntaxHiliteOptionPane class
@@ -59,6 +58,7 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 	//{{{ Protected members
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		setLayout(new BorderLayout(6,6));
@@ -67,6 +67,7 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		styleModel.save();
@@ -107,8 +108,9 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ MouseHandler class
-	class MouseHandler extends MouseAdapter
+	private class MouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			int row = styleTable.rowAtPoint(evt.getPoint());
@@ -136,12 +138,12 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 //{{{ StyleTableModel class
 class StyleTableModel extends AbstractTableModel
 {
-	private Vector styleChoices;
+	private java.util.List<StyleChoice> styleChoices;
 
 	//{{{ StyleTableModel constructor
 	StyleTableModel()
 	{
-		styleChoices = new Vector(Token.ID_COUNT + 4);
+		styleChoices = new Vector<StyleChoice>(Token.ID_COUNT + 4);
 		// start at 1 not 0 to skip Token.NULL
 		for(int i = 1; i < Token.ID_COUNT; i++)
 		{
@@ -158,7 +160,7 @@ class StyleTableModel extends AbstractTableModel
 		addStyleChoice(jEdit.getProperty("options.syntax.foldLine.0"),
 			"view.style.foldLine.0");
 
-		Collections.sort(styleChoices,new MiscUtilities.StringICaseCompare());
+		Collections.sort(styleChoices,new StandardUtilities.StringCompare(true));
 	} //}}}
 
 	//{{{ getColumnCount() method
@@ -176,7 +178,7 @@ class StyleTableModel extends AbstractTableModel
 	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
-		StyleChoice ch = (StyleChoice)styleChoices.elementAt(row);
+		StyleChoice ch = styleChoices.get(row);
 		switch(col)
 		{
 		case 0:
@@ -189,15 +191,17 @@ class StyleTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ setValueAt() method
+	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		StyleChoice ch = (StyleChoice)styleChoices.elementAt(row);
+		StyleChoice ch = styleChoices.get(row);
 		if(col == 1)
 			ch.style = (SyntaxStyle)value;
 		fireTableRowsUpdated(row,row);
 	} //}}}
 
 	//{{{ getColumnName() method
+	@Override
 	public String getColumnName(int index)
 	{
 		switch(index)
@@ -216,8 +220,8 @@ class StyleTableModel extends AbstractTableModel
 	{
 		for(int i = 0; i < styleChoices.size(); i++)
 		{
-			StyleChoice ch = (StyleChoice)styleChoices
-				.elementAt(i);
+			StyleChoice ch = styleChoices
+				.get(i);
 			jEdit.setProperty(ch.property,
 				GUIUtilities.getStyleString(ch.style));
 		}
@@ -226,18 +230,18 @@ class StyleTableModel extends AbstractTableModel
 	//{{{ addStyleChoice() method
 	private void addStyleChoice(String label, String property)
 	{
-		styleChoices.addElement(new StyleChoice(label,
+		styleChoices.add(new StyleChoice(label,
 			property,
 			GUIUtilities.parseStyle(jEdit.getProperty(property),
 			"Dialog",12)));
 	} //}}}
 
 	//{{{ StyleChoice class
-	static class StyleChoice
+	private static class StyleChoice
 	{
-		String label;
-		String property;
-		SyntaxStyle style;
+		private String label;
+		private String property;
+		private SyntaxStyle style;
 
 		StyleChoice(String label, String property, SyntaxStyle style)
 		{
@@ -247,6 +251,7 @@ class StyleTableModel extends AbstractTableModel
 		}
 
 		// for sorting
+		@Override
 		public String toString()
 		{
 			return label;
@@ -258,7 +263,7 @@ class StyleTableModel extends AbstractTableModel
 		implements TableCellRenderer
 	{
 		//{{{ StyleRenderer constructor
-		public StyleRenderer()
+		StyleRenderer()
 		{
 			setOpaque(true);
 			setBorder(SyntaxHiliteOptionPane.noFocusBorder);
@@ -289,7 +294,7 @@ class StyleTableModel extends AbstractTableModel
 				setFont(style.getFont());
 			}
 
-			setBorder((cellHasFocus) ? UIManager.getBorder(
+			setBorder(cellHasFocus ? UIManager.getBorder(
 				"Table.focusCellHighlightBorder")
 				: SyntaxHiliteOptionPane.noFocusBorder);
 			return this;
