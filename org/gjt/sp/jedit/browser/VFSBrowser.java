@@ -1828,7 +1828,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		{
 			Component source = (Component)evt.getSource();
 
-			if(GUIUtilities.getComponentParent(source,JList.class)
+			if(GUIUtilities.getComponentParent(source, BrowserView.ParentDirectoryList.class)
 				!= null)
 			{
 				Object[] selected = browser.getBrowserView()

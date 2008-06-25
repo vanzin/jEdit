@@ -47,6 +47,9 @@ to this release.
   this default assignment because nobody care hiding tooltips (#1955140)
   (Matthieu Casanova)
 
+- When the parent directory list is selected in the VFSBrowser, the selected
+  files were always empty (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
