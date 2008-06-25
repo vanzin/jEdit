@@ -57,6 +57,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	}
 
 	// protected members
+	@Override
 	protected void _init()
 	{
 		allBindings = new Vector<KeyBinding>();
@@ -127,6 +128,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		filteredModel.setFilter(filterTF.getText());
 	}
 
+	@Override
 	protected void _save()
 	{
 		if(keyTable.getCellEditor() != null)
@@ -140,7 +142,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	private void initModels()
 	{
-		Vector<KeyBinding[]> allBindings = new Vector<KeyBinding[]>();
+		List<KeyBinding[]> allBindings = new Vector<KeyBinding[]>();
 		models = new Vector<ShortcutsModel>();
 		ActionSet[] actionSets = jEdit.getActionSets();
 		for(int i = 0; i < actionSets.length; i++)
@@ -162,15 +164,17 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		}
 		if (models.size() > 1)
 			models.addElement(new ShortcutsModel("All", allBindings));
-		Collections.sort(models,new MiscUtilities.StringICaseCompare());
+		Collections.sort(models,new StandardUtilities.StringCompare(true));
 		ShortcutsModel currentModel = models.elementAt(0);
 		filteredModel = new FilteredTableModel<ShortcutsModel>(currentModel)
 		{
+			@Override
 			public String prepareFilter(String filter)
 			{
 				return filter.toLowerCase();
 			}
 
+			@Override
 			public boolean passFilter(int row, String filter)
 			{
 				String name = delegated.getBindingAt(row, 0).label.toLowerCase();
@@ -181,7 +185,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 	private ShortcutsModel createModel(String modelLabel, String[] actions)
 	{
-		Vector<GrabKeyDialog.KeyBinding[]> bindings = new Vector<GrabKeyDialog.KeyBinding[]>(actions.length);
+		List<GrabKeyDialog.KeyBinding[]> bindings = new Vector<GrabKeyDialog.KeyBinding[]>(actions.length);
 
 		for(int i = 0; i < actions.length; i++)
 		{
@@ -220,23 +224,24 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		GrabKeyDialog.KeyBinding binding
 			= new GrabKeyDialog.KeyBinding(name,label,shortcut,false);
 
-		allBindings.addElement(binding);
+		allBindings.add(binding);
 		return binding;
 	}
 
 	// private members
 	private JTable keyTable;
 	private Vector<ShortcutsModel> models;
-	private FilteredTableModel filteredModel;
+	private FilteredTableModel<ShortcutsModel> filteredModel;
 	private JComboBox selectModel;
 	private Vector<GrabKeyDialog.KeyBinding> allBindings;
 	private JTextField filterTF;
 
-	class HeaderMouseHandler extends MouseAdapter
+	private class HeaderMouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
-			ShortcutsModel shortcutsModel = (ShortcutsModel) filteredModel.getDelegated();
+			ShortcutsModel shortcutsModel = filteredModel.getDelegated();
 			switch(keyTable.getTableHeader().columnAtPoint(evt.getPoint()))
 			{
 			case 0:
@@ -253,8 +258,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		}
 	}
 
-	class TableMouseHandler extends MouseAdapter
+	private class TableMouseHandler extends MouseAdapter
 	{
+		@Override
 		public void mouseClicked(MouseEvent evt)
 		{
 			int row = keyTable.getSelectedRow();
@@ -264,7 +270,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				 GrabKeyDialog gkd = new GrabKeyDialog(
 					GUIUtilities.getParentDialog(
 					ShortcutsOptionPane.this),
-					((ShortcutsModel)filteredModel.getDelegated()).getBindingAt(filteredModel.getTrueRow(row), col - 1),
+					filteredModel.getDelegated().getBindingAt(filteredModel.getTrueRow(row), col - 1),
 					allBindings,null);
 				if(gkd.isOK())
 					filteredModel.setValueAt(
@@ -273,7 +279,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		}
 	}
 
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -288,19 +294,19 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		}
 	}
 
-	class ShortcutsModel extends AbstractTableModel
+	private class ShortcutsModel extends AbstractTableModel
 	{
-		private Vector<GrabKeyDialog.KeyBinding[]> bindings;
+		private List<GrabKeyDialog.KeyBinding[]> bindings;
 		private String name;
 
-		ShortcutsModel(String name, Vector<GrabKeyDialog.KeyBinding[]> bindings)
+		ShortcutsModel(String name, List<GrabKeyDialog.KeyBinding[]> bindings)
 		{
 			this.name = name;
 			this.bindings = bindings;
 			sort(0);
 		}
 
-		public Vector<GrabKeyDialog.KeyBinding[]> getBindings()
+		public List<GrabKeyDialog.KeyBinding[]> getBindings()
 		{
 			return bindings;
 		}
@@ -335,6 +341,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 		}
 
+		@Override
 		public void setValueAt(Object value, int row, int col)
 		{
 			if(col == 0)
@@ -347,6 +354,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			fireTableDataChanged();
 		}
 
+		@Override
 		public String getColumnName(int index)
 		{
 			switch(index)
@@ -377,18 +385,19 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		public GrabKeyDialog.KeyBinding getBindingAt(int row, int nr)
 		{
-			GrabKeyDialog.KeyBinding[] binding = bindings.elementAt(row);
+			GrabKeyDialog.KeyBinding[] binding = bindings.get(row);
 			return binding[nr];
 		}
 
+		@Override
 		public String toString()
 		{
 			return name;
 		}
 
-		class KeyCompare implements Comparator<GrabKeyDialog.KeyBinding[]>
+		private class KeyCompare implements Comparator<GrabKeyDialog.KeyBinding[]>
 		{
-			int col;
+			private int col;
 
 			KeyCompare(int col)
 			{
