@@ -30,6 +30,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.StandardUtilities;
@@ -73,7 +75,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 		Map<String,Hashtable<String,String>> _modeAbbrevs = Abbrevs.getModeAbbrevs();
 		modeAbbrevs = new HashMap<String,AbbrevsModel>();
 		Mode[] modes = jEdit.getModes();
-		Arrays.sort(modes,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(modes,new StandardUtilities.StringCompare(true));
 		String[] sets = new String[modes.length + 1];
 		sets[0] = "global";
 		for(int i = 0; i < modes.length; i++)
@@ -225,7 +227,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ HeaderMouseHandler class
-	class HeaderMouseHandler extends MouseAdapter
+	private class HeaderMouseHandler extends MouseAdapter
 	{
 		@Override
 		public void mouseClicked(MouseEvent evt)
@@ -243,7 +245,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ TableMouseHandler class
-	class TableMouseHandler extends MouseAdapter
+	private class TableMouseHandler extends MouseAdapter
 	{
 		@Override
 		public void mouseClicked(MouseEvent evt)
@@ -254,7 +256,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ SelectionHandler class
-	class SelectionHandler implements ListSelectionListener
+	private class SelectionHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
@@ -263,7 +265,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -312,7 +314,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ Renderer class
-	static class Renderer extends DefaultTableCellRenderer
+	private static class Renderer extends DefaultTableCellRenderer
 	{
 		@Override
 		public Component getTableCellRendererComponent(
@@ -338,7 +340,7 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 //{{{ AbbrevsModel class
 class AbbrevsModel extends AbstractTableModel
 {
-	Vector<Abbrev> abbrevs;
+	List<Abbrev> abbrevs;
 	int lastSort;
 
 	//{{{ AbbrevsModel constructor
@@ -376,7 +378,7 @@ class AbbrevsModel extends AbstractTableModel
 	//{{{ remove() method
 	void remove(int index)
 	{
-		abbrevs.removeElementAt(index);
+		abbrevs.remove(index);
 		fireTableStructureChanged();
 	} //}}}
 
@@ -456,9 +458,9 @@ class AbbrevsModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ AbbrevCompare class
-	static class AbbrevCompare implements Comparator<Abbrev>
+	private static class AbbrevCompare implements Comparator<Abbrev>
 	{
-		int col;
+		private int col;
 
 		AbbrevCompare(int col)
 		{
