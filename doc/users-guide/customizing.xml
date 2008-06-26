@@ -302,6 +302,8 @@
             <para> The <literal>Extra Word Characters</literal> allows you to set the <literal>noLineSep</literal> buffer property on a mode-wide basis, allowing you to define what is considered part of a word when double-clicking on it in the text area.
             </para>
             
+            <para> The <literal>Deep Indent</literal> option instructs jEdit to indent subsequent lines so that they line up with the open bracket on the previous line. </para>
+            
             
         </sect2>
 
