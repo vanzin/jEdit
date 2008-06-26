@@ -75,6 +75,7 @@ public class DeepIndentRule implements IndentRule
 			{
 				// Try prev-prev line if present.
 				if (prevPrevLineIndex != -1) {
+					searchPos = -1;
 					lineIndex = prevPrevLineIndex;
 					prevPrevLineIndex = -1;
 					continue;
