@@ -83,6 +83,7 @@ public class AboutDialog extends JDialog implements ActionListener
 		private BufferedImage bufImage = null;
 		private Graphics2D g = null;
 		private static final Font defaultFont = UIManager.getFont("Label.font");
+		private Font bottomLineFont = defaultFont.deriveFont(9.8f);
 		private String sBottomLine;
 		private ImageIcon image;
 		private Vector<String> vLines;
@@ -94,8 +95,8 @@ public class AboutDialog extends JDialog implements ActionListener
 			iPipeLineCount = 0, w = 0, h = 0, y = 0;
 		private static final int
 			SLEEP_TIME = 30,
-			iBottomPadding = 30,
-			iTopPadding = 120;
+			iBottomPadding = 56,
+			iTopPadding = 100;
 		private static Rectangle2D.Float rectangle;
 		private static GradientPaint gradientPaint = null;
 
@@ -105,6 +106,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			sBottomLine = jEdit.getProperty("about.version",args);
 			setFont( defaultFont );
 			fm = getFontMetrics( defaultFont );
+			FontMetrics fmBottom = getFontMetrics( bottomLineFont );
 			iLineHeight = fm.getHeight();
 			vLines = new Vector<String>(50);
 			image = (ImageIcon)GUIUtilities.loadIcon("about.png");
@@ -125,7 +127,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			setPreferredSize( d );
 			w = d.width;
 			h = d.height;
-			iBottomLineXOffset = (w - fm.stringWidth( sBottomLine ) )/2;
+			iBottomLineXOffset = (w / 2) - (fmBottom.stringWidth( sBottomLine ) / 2);
 			iBottomLineYOffset = h-iLineHeight/2;
 			StringTokenizer st = new StringTokenizer(
 				jEdit.getProperty("about.text"),"\n");
@@ -164,8 +166,19 @@ public class AboutDialog extends JDialog implements ActionListener
 			}
 
 			g.drawImage( image.getImage(), 0, 0, w, h, this );
-			g.setPaint( Color.black );
+			
+			g.setFont( bottomLineFont );
+			
+			g.setPaint( new Color(55, 55, 55) );
 			g.drawString( sBottomLine, iBottomLineXOffset, iBottomLineYOffset );
+			// Draw a highlight effect
+			g.setPaint( new Color(255, 255, 255, 50) );
+			g.drawString( sBottomLine, iBottomLineXOffset + 1, iBottomLineYOffset + 1 );
+			
+			g.setFont( defaultFont );
+			g.setPaint( Color.black );
+			
+			
 			g.drawRect( 0, 0, w-1, h-1 );
 			g.clip( rectangle );
 			g.setPaint( gradientPaint );
