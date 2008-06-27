@@ -23,6 +23,7 @@ package org.gjt.sp.jedit.gui;
 
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.jEdit;
 
@@ -133,14 +134,14 @@ public class JEditHistoryModelSaver implements HistoryModelSaver
 						continue;
 
 					out.write('[');
-					out.write(MiscUtilities.charsToEscapes(
+					out.write(StandardUtilities.charsToEscapes(
 						model.getName(),TO_ESCAPE));
 					out.write(']');
 					out.write(lineSep);
 
 					for(int i = 0; i < model.getSize(); i++)
 					{
-						out.write(MiscUtilities.charsToEscapes(
+						out.write(StandardUtilities.charsToEscapes(
 							model.getItem(i),
 							TO_ESCAPE));
 						out.write(lineSep);
