@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
 import java.awt.event.KeyEvent;
 import java.awt.*;
@@ -55,7 +56,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 	 * Creates a new input handler.
 	 * @param view The view
 	 */
-	public InputHandler(View view)
+	protected InputHandler(View view)
 	{
 		this.view = view;
 	} //}}}
@@ -79,12 +80,13 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 	 * because some Swing overhead is avoided.
 	 * @since 4.3pre7
 	 */
+	@Override
 	public void processKeyEvent(KeyEvent evt, int from, boolean global)
 	{
 		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event                 : "
-				+ GrabKeyDialog.toString(evt) + " from " + from);
+				+ AbstractInputHandler.toString(evt) + " from " + from);
 			Log.log(Log.DEBUG,this,view+".isFocused()="+view.isFocused()+'.',new Exception());
 		}
 
@@ -98,7 +100,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event after workaround: "
-				+ GrabKeyDialog.toString(evt) + " from " + from);
+				+ AbstractInputHandler.toString(evt) + " from " + from);
 		}
 
 		Component prefixFocusOwner = view.getPrefixFocusOwner();
@@ -205,7 +207,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 		if(Debug.DUMP_KEY_EVENTS)
 		{
 			Log.log(Log.DEBUG,this,"Key event (preprocessing) : "
-					+ GrabKeyDialog.toString(evt));
+					+ AbstractInputHandler.toString(evt));
 		}
 
 		return KeyEventWorkaround.processKeyEvent(evt);
@@ -309,6 +311,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 	 * @param action The action
 	 * @since jEdit 4.2pre1
 	 */
+	@Override
 	public void invokeAction(String action)
 	{
 		invokeAction(jEdit.getAction(action));
@@ -320,6 +323,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 	 * necessary.
 	 * @param action The action
 	 */
+	@Override
 	public void invokeAction(EditAction action)
 	{
 		JEditBuffer buffer = view.getBuffer();
@@ -483,7 +487,7 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 		/* if(buffer.insideCompoundEdit())
 			buffer.endCompoundEdit(); */
 
-		String charStr = MiscUtilities.charsToEscapes(String.valueOf(ch));
+		String charStr = StandardUtilities.charsToEscapes(String.valueOf(ch));
 
 		// this might be a bit slow if __char__ occurs a lot
 		int index;
