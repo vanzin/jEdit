@@ -820,7 +820,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 		 */
 		public void recordInput(String str, boolean overwrite)
 		{
-			String charStr = MiscUtilities.charsToEscapes(str);
+			String charStr = StandardUtilities.charsToEscapes(str);
 
 			if(overwrite)
 			{
@@ -997,7 +997,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	} //}}}
 
 	//{{{ BeanShellHandler class
-	static class BeanShellHandler extends Handler
+	private static class BeanShellHandler extends Handler
 	{
 		//{{{ BeanShellHandler constructor
 		BeanShellHandler()
