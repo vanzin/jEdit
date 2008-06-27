@@ -77,7 +77,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		filterTF = new JTextField(40);
 		filterTF.setToolTipText(jEdit.getProperty("options.shortcuts.filter.tooltip"));
-		filterTF.getDocument().addDocumentListener(new DocumentListener() {
+		filterTF.getDocument().addDocumentListener(new DocumentListener()
+		{
 			public void changedUpdate(DocumentEvent e) {
 				setFilter();
 			}
@@ -233,7 +234,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private Vector<ShortcutsModel> models;
 	private FilteredTableModel<ShortcutsModel> filteredModel;
 	private JComboBox selectModel;
-	private Vector<GrabKeyDialog.KeyBinding> allBindings;
+	private List<KeyBinding> allBindings;
 	private JTextField filterTF;
 
 	private class HeaderMouseHandler extends MouseAdapter
