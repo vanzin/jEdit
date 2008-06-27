@@ -949,16 +949,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		// Set up the right-click popup menu
 		JPopupMenu popup = GUIUtilities.loadPopupMenu("view.context");
 		
-		/* Add dynamic context menus if any services are offered */
-		final String serviceName =  DynamicContextMenuService.class.getName();
-		String[] dclist = ServiceManager.getServiceNames(serviceName);
-		for (String dc: dclist) {
-			DynamicContextMenuService dcms = (DynamicContextMenuService) (
-					ServiceManager.getService(serviceName, dc));
-			JMenuItem item = dcms.createMenu(this);
-			// Q: Can we make it insert at the top instead? 
-			if (item != null) popup.add(item);
-		}
 		JMenuItem customize = new JMenuItem(jEdit.getProperty(
 			"view.context.customize"));
 		customize.addActionListener(new ActionListener()

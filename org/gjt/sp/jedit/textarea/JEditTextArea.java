@@ -25,12 +25,16 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.awt.AWTEvent;
+import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.Vector;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.DynamicContextMenuService;
 import org.gjt.sp.jedit.msg.PositionChanging;
 
 /**
@@ -451,6 +455,7 @@ public class JEditTextArea extends TextArea
 	//{{{ Instance variables
 	private View view;
 	private JPopupMenu popup;
+	private JPopupMenu dynamicPopup;
 	private boolean popupEnabled;
 	//}}}
 	//}}}
@@ -504,8 +509,29 @@ public class JEditTextArea extends TextArea
 	 */
 	public void handlePopupTrigger(MouseEvent evt)
 	{
-		if(popup.isVisible())
-			popup.setVisible(false);
+		dynamicPopup = new JPopupMenu();
+		
+		/* Add dynamic context menus if any services are offered */
+		final String serviceName =  DynamicContextMenuService.class.getName();
+		String[] dclist = ServiceManager.getServiceNames(serviceName);
+		for (String dc: dclist) {
+			DynamicContextMenuService dcms = (DynamicContextMenuService) (
+					ServiceManager.getService(serviceName, dc));
+			JMenuItem item = dcms.createMenu(this);
+			// Q: Can we make it insert at the top instead? 
+			if (item != null) dynamicPopup.add(item);
+		}
+		
+		for (Component c: popup.getComponents()) {
+			if (c instanceof JMenuItem) {
+				JMenuItem mi = (JMenuItem)c;
+				dynamicPopup.add(mi);
+			}
+		}
+		
+		
+		if(dynamicPopup.isVisible())
+			dynamicPopup.setVisible(false);
 		else
 		{
 			int x = evt.getX();
@@ -517,7 +543,7 @@ public class JEditTextArea extends TextArea
 
 			if(getSelectionCount() == 0 || multi)
 				moveCaretPosition(dragStart,false);
-			GUIUtilities.showPopupMenu(popup,painter,x,y);
+			GUIUtilities.showPopupMenu(dynamicPopup,painter,x,y);
 		}
 	} //}}}
 
