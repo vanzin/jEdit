@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import javax.swing.event.*;
 import javax.swing.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -123,16 +124,16 @@ public class ActionBar extends JToolBar
 					if(propName.equals("buffer.mode"))
 					{
 						code = "buffer.setMode(\""
-							+ MiscUtilities.charsToEscapes(
+							+ StandardUtilities.charsToEscapes(
 							propValue) + "\");";
 					}
 					else
 					{
 						code = "buffer.setStringProperty(\""
-							+ MiscUtilities.charsToEscapes(
+							+ StandardUtilities.charsToEscapes(
 							propName.substring("buffer.".length())
 							) + "\",\""
-							+ MiscUtilities.charsToEscapes(
+							+ StandardUtilities.charsToEscapes(
 							propValue) + "\");";
 					}
 
@@ -141,18 +142,18 @@ public class ActionBar extends JToolBar
 				else if(propName.startsWith("!buffer."))
 				{
 					code = "jEdit.setProperty(\""
-						+ MiscUtilities.charsToEscapes(
+						+ StandardUtilities.charsToEscapes(
 						propName.substring(1)) + "\",\""
-						+ MiscUtilities.charsToEscapes(
+						+ StandardUtilities.charsToEscapes(
 						propValue) + "\");\n"
 						+ "jEdit.propertiesChanged();";
 				}
 				else
 				{
 					code = "jEdit.setProperty(\""
-						+ MiscUtilities.charsToEscapes(
+						+ StandardUtilities.charsToEscapes(
 						propName) + "\",\""
-						+ MiscUtilities.charsToEscapes(
+						+ StandardUtilities.charsToEscapes(
 						propValue) + "\");\n"
 						+ "jEdit.propertiesChanged();";
 				}
@@ -210,7 +211,7 @@ public class ActionBar extends JToolBar
 	} //}}}
 
 	//{{{ getCompletions() method
-	private String[] getCompletions(String str)
+	private static String[] getCompletions(String str)
 	{
 		str = str.toLowerCase();
 		String[] actions = jEdit.getActionNames();
@@ -263,7 +264,7 @@ public class ActionBar extends JToolBar
 	//{{{ Inner classes
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -275,7 +276,7 @@ public class ActionBar extends JToolBar
 	} //}}}
 
 	//{{{ DocumentHandler class
-	class DocumentHandler implements DocumentListener
+	private class DocumentHandler implements DocumentListener
 	{
 		//{{{ insertUpdate() method
 		public void insertUpdate(DocumentEvent evt)
@@ -297,7 +298,7 @@ public class ActionBar extends JToolBar
 	} //}}}
 
 	//{{{ ActionTextField class
-	class ActionTextField extends HistoryTextField
+	private class ActionTextField extends HistoryTextField
 	{
 		boolean repeat;
 		boolean nonDigit;
@@ -308,16 +309,19 @@ public class ActionBar extends JToolBar
 			setSelectAllOnFocus(true);
 		}
 
+		@Override
 		public boolean isManagingFocus()
 		{
 			return false;
 		}
 
+		@Override
 		public boolean getFocusTraversalKeysEnabled()
 		{
 			return false;
 		}
 
+		@Override
 		public void processKeyEvent(KeyEvent evt)
 		{
 			evt = KeyEventWorkaround.processKeyEvent(evt);
@@ -415,6 +419,7 @@ public class ActionBar extends JToolBar
 			});
 		}
 
+		@Override
 		public void addNotify()
 		{
 			super.addNotify();
@@ -423,7 +428,7 @@ public class ActionBar extends JToolBar
 	} //}}}
 
 	//{{{ CompletionPopup class
-	class CompletionPopup extends JWindow
+	private class CompletionPopup extends JWindow
 	{
 		CompletionList list;
 
@@ -438,6 +443,7 @@ public class ActionBar extends JToolBar
 				 * Returns if this component can be traversed by pressing the
 				 * Tab key. This returns false.
 				 */
+				@Override
 				public boolean isManagingFocus()
 				{
 					return false;
@@ -446,6 +452,7 @@ public class ActionBar extends JToolBar
 				/**
 				 * Makes the tab key work in Java 1.4.
 				 */
+				@Override
 				public boolean getFocusTraversalKeysEnabled()
 				{
 					return false;
@@ -487,8 +494,9 @@ public class ActionBar extends JToolBar
 		} //}}}
 
 		//{{{ MouseHandler class
-		class MouseHandler extends MouseAdapter
+		private class MouseHandler extends MouseAdapter
 		{
+			@Override
 			public void mouseClicked(MouseEvent evt)
 			{
 				invoke();
@@ -504,6 +512,7 @@ public class ActionBar extends JToolBar
 			}
 
 			// we need this public not protected
+			@Override
 			public void processKeyEvent(KeyEvent evt)
 			{
 				super.processKeyEvent(evt);
@@ -511,13 +520,15 @@ public class ActionBar extends JToolBar
 		} //}}}
 
 		//{{{ KeyHandler class
-		class KeyHandler extends KeyAdapter
+		private class KeyHandler extends KeyAdapter
 		{
+			@Override
 			public void keyTyped(KeyEvent evt)
 			{
 				action.processKeyEvent(evt);
 			}
 
+			@Override
 			public void keyPressed(KeyEvent evt)
 			{
 				int keyCode = evt.getKeyCode();
