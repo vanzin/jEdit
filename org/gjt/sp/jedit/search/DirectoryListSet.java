@@ -29,6 +29,7 @@ import java.io.*;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -99,18 +100,20 @@ public class DirectoryListSet extends BufferListSet
 	} //}}}
 
 	//{{{ getCode() method
+	@Override
 	public String getCode()
 	{
-		return "new DirectoryListSet(\"" + MiscUtilities.charsToEscapes(directory)
-			+ "\",\"" + MiscUtilities.charsToEscapes(glob) + "\","
-			+ recurse + ")";
+		return "new DirectoryListSet(\"" + StandardUtilities.charsToEscapes(directory)
+			+ "\",\"" + StandardUtilities.charsToEscapes(glob) + "\","
+			+ recurse + ')';
 	} //}}}
 
 	//{{{ _getFiles() method
+	@Override
 	protected String[] _getFiles(final Component comp)
 	{
-		this.skipBinary = jEdit.getBooleanProperty("search.skipBinary.toggle");
-		this.skipHidden = jEdit.getBooleanProperty("search.skipHidden.toggle");
+		skipBinary = jEdit.getBooleanProperty("search.skipBinary.toggle");
+		skipHidden = jEdit.getBooleanProperty("search.skipHidden.toggle");
 		final VFS vfs = VFSManager.getVFSForPath(directory);
 		Object session;
 		if(SwingUtilities.isEventDispatchThread())
