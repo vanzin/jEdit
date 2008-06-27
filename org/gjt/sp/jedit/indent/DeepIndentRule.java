@@ -95,6 +95,8 @@ public class DeepIndentRule implements IndentRule
 			int openParenOffset = TextUtilities.findMatchingBracket(buffer, lineIndex, parens.closeOffset);
 			if (openParenOffset >= 0)
 			{
+				// Avoid falling back to the prev-prev line in this case.
+				prevPrevLineIndex = -1;
 				lineIndex = buffer.getLineOfOffset(openParenOffset);
 				searchPos = openParenOffset - buffer.getLineStartOffset(lineIndex) - 1;
 				if (searchPos < 0)
