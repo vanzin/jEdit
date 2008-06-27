@@ -29,13 +29,16 @@ import java.awt.*;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.TextAreaDialog;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.PositionChanging;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.ReverseCharSequence;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -384,7 +387,7 @@ public class SearchAndReplace
 
 		view.getDockableWindowManager().addDockableWindow(
 			HyperSearchResults.NAME);
-		final HyperSearchResults results = (HyperSearchResults)
+		HyperSearchResults results = (HyperSearchResults)
 			view.getDockableWindowManager()
 			.getDockable(HyperSearchResults.NAME);
 		results.searchStarted();
@@ -842,6 +845,7 @@ loop:			for(;;)
 	 * Replaces all occurrences of the search string with the replacement
 	 * string.
 	 * @param view The view
+	 * @return the number of modified files
 	 */
 	public static boolean replaceAll(View view)
 	{
@@ -854,6 +858,7 @@ loop:			for(;;)
 	 * string.
 	 * @param view The view
 	 * @param dontOpenChangedFiles Whether to open changed files or to autosave them quietly
+	 * @return the number of modified files
 	 */
 	public static boolean replaceAll(View view, boolean dontOpenChangedFiles)
 	{
@@ -971,12 +976,14 @@ loop:			while(path != null)
 	//{{{ escapeRegexp() method
 	/**
 	 * Escapes characters with special meaning in a regexp.
+	 * @param str the string to escape
 	 * @param multiline Should \n be escaped?
+	 * @return the string with escaped characters
 	 * @since jEdit 4.3pre1
 	 */
 	public static String escapeRegexp(String str, boolean multiline)
 	{
-		return MiscUtilities.charsToEscapes(str,
+		return StandardUtilities.charsToEscapes(str,
 			"\r\t\\()[]{}$^*+?|."
 			+ (multiline ? "" : "\n"));
 	} //}}}
@@ -1112,7 +1119,7 @@ loop:			while(path != null)
 	} //}}}
 
 	//{{{ replaceInSelection() method
-	private static int replaceInSelection(View view, JEditTextArea textArea,
+	private static int replaceInSelection(View view, TextArea textArea,
 		Buffer buffer, SearchMatcher matcher, boolean smartCaseReplace,
 		Selection s) throws Exception
 	{
@@ -1171,7 +1178,7 @@ loop:			while(path != null)
 	 * @param smartCaseReplace See user's guide
 	 * @return The number of occurrences replaced
 	 */
-	private static int _replace(View view, Buffer buffer,
+	private static int _replace(View view, JEditBuffer buffer,
 		SearchMatcher matcher, int start, int end,
 		boolean smartCaseReplace)
 		throws Exception
@@ -1228,7 +1235,7 @@ loop:		for(int counter = 0; ; counter++)
 	 * Replace one occurrence of the search string with the
 	 * replacement string.
 	 */
-	private static int replaceOne(View view, Buffer buffer,
+	private static int replaceOne(View view, JEditBuffer buffer,
 		SearchMatcher.Match occur, int offset, String found,
 		boolean smartCaseReplace)
 		throws Exception
