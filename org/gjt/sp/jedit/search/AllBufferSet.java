@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.search;
 //{{{ Imports
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -64,9 +65,10 @@ public class AllBufferSet extends BufferListSet
 	 * Returns the BeanShell code that will recreate this file set.
 	 * @since jEdit 2.7pre3
 	 */
+	@Override
 	public String getCode()
 	{
-		return "new AllBufferSet(\"" + MiscUtilities.charsToEscapes(glob)
+		return "new AllBufferSet(\"" + StandardUtilities.charsToEscapes(glob)
 			+ "\")";
 	} //}}}
 
@@ -75,10 +77,11 @@ public class AllBufferSet extends BufferListSet
 	//}}}
 
 	//{{{ _getFiles() method
+	@Override
 	protected String[] _getFiles(Component comp)
 	{
 		Buffer[] buffers = jEdit.getBuffers();
-		ArrayList returnValue = new ArrayList(buffers.length);
+		List<String> returnValue = new ArrayList<String>(buffers.length);
 
 		Pattern filter;
 		try
@@ -98,6 +101,6 @@ public class AllBufferSet extends BufferListSet
 				returnValue.add(buffer.getPath());
 		}
 
-		return (String[])returnValue.toArray(new String[returnValue.size()]);
+		return returnValue.toArray(new String[returnValue.size()]);
 	} //}}}
 }
