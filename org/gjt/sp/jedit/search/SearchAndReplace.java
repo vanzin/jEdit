@@ -1085,12 +1085,12 @@ loop:			while(path != null)
 		if(recorder != null)
 		{
 			recorder.record("SearchAndReplace.setSearchString(\""
-				+ MiscUtilities.charsToEscapes(search) + "\");");
+				+ StandardUtilities.charsToEscapes(search) + "\");");
 
 			if(replaceAction)
 			{
 				recorder.record("SearchAndReplace.setReplaceString(\""
-					+ MiscUtilities.charsToEscapes(replace) + "\");");
+					+ StandardUtilities.charsToEscapes(replace) + "\");");
 				recorder.record("SearchAndReplace.setBeanShellReplace("
 					+ beanshell + ");");
 			}
