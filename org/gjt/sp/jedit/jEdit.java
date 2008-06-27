@@ -2933,7 +2933,7 @@ public class jEdit
 		String userDir = System.getProperty("user.dir");
 
 		script.append("parent = \"");
-		script.append(MiscUtilities.charsToEscapes(userDir));
+		script.append(StandardUtilities.charsToEscapes(userDir));
 		script.append("\";\n");
 
 		script.append("args = new String[");
@@ -2951,7 +2951,7 @@ public class jEdit
 			else
 			{
 				script.append('"');
-				script.append(MiscUtilities.charsToEscapes(args[i]));
+				script.append(StandardUtilities.charsToEscapes(args[i]));
 				script.append('"');
 			}
 
@@ -2977,7 +2977,7 @@ public class jEdit
 		{
 			scriptFile = MiscUtilities.constructPath(userDir,scriptFile);
 			script.append("BeanShell.runScript(view,\"")
-				.append(MiscUtilities.charsToEscapes(scriptFile))
+				.append(StandardUtilities.charsToEscapes(scriptFile))
 				.append("\",null,this.namespace);\n");
 		}
 
