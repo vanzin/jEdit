@@ -101,7 +101,10 @@ to this release.
 }}}
 {{{ API Changes
 
-- Removed com.microstar XML parser.
+- Deprecated com.microstar XML parser. (Alan Ezust)
+
+- New DynamicContextMenuService allowing plugins to offer actions in the
+  TextArea contextmenu that depend on the state of the textarea. (Alan Ezust)
 
 - New methods were added to jEditBuffer to return CharSequence instead of
   String. StandardUtilities / TextUtilities were enhanced to provide functions
