@@ -43,6 +43,7 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.options.GeneralOptionPane;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -1360,7 +1361,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		else
 		{
 			splitConfig.append('"');
-			splitConfig.append(MiscUtilities.charsToEscapes(
+			splitConfig.append(StandardUtilities.charsToEscapes(
 				getBuffer().getPath()));
 			splitConfig.append("\" buffer");
 		}
@@ -1381,7 +1382,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		else
 		{
 			splitConfig.append('"');
-			splitConfig.append(MiscUtilities.charsToEscapes(
+			splitConfig.append(StandardUtilities.charsToEscapes(
 				((EditPane)right).getBuffer().getPath()));
 			splitConfig.append("\" buffer");
 		}
@@ -1394,7 +1395,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		else
 		{
 			splitConfig.append('"');
-			splitConfig.append(MiscUtilities.charsToEscapes(
+			splitConfig.append(StandardUtilities.charsToEscapes(
 				((EditPane)left).getBuffer().getPath()));
 			splitConfig.append("\" buffer");
 		}
