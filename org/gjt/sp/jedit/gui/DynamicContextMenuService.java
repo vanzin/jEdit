@@ -2,7 +2,7 @@ package org.gjt.sp.jedit.gui;
 
 import javax.swing.JMenuItem;
 
-import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 
 /**
  * A service that can be offered by plugins when a context menu item needs to be offered
@@ -18,6 +18,6 @@ abstract public class DynamicContextMenuService {
 	 * @return a dynamic menu item (or JMenu) dependent on state of pane
 	 *         or null if there is no appropriate action to be added at this time
 	 */
-	public abstract JMenuItem createMenu(TextArea ta); 
+	public abstract JMenuItem createMenu(JEditTextArea ta); 
 
 }

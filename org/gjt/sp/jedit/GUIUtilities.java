@@ -34,7 +34,7 @@ import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
-import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
@@ -292,7 +292,7 @@ public class GUIUtilities
 	 * @param name The menu name
 	 * @since jEdit 2.6pre2
 	 */
-	public static JPopupMenu loadPopupMenu(String name, TextArea textArea)
+	public static JPopupMenu loadPopupMenu(String name, JEditTextArea textArea)
 	{
 		return loadPopupMenu(jEdit.getActionContext(), name, textArea);
 	} //}}}
@@ -336,7 +336,7 @@ public class GUIUtilities
 	 * popup. If not null, include context menu items defined by services.
 	 * @since jEdit 4.3pre15
 	 */
-	public static JPopupMenu loadPopupMenu(ActionContext context, String name, TextArea textArea)
+	public static JPopupMenu loadPopupMenu(ActionContext context, String name, JEditTextArea textArea)
 	{
 		JPopupMenu menu = new JPopupMenu();
 
@@ -376,7 +376,7 @@ public class GUIUtilities
 	 * @param editPane the EditPane desiring to display these menu items
 	 * @since jEdit 4.3pre15
 	 */
-	public static List<JMenuItem> getServiceContextMenuItems(TextArea textArea) {
+	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea) {
 		List<JMenuItem> list = new ArrayList<JMenuItem>();
 		final String serviceClassName =  DynamicContextMenuService.class.getName();
 		String[] menuServiceList = ServiceManager.getServiceNames(serviceClassName);
