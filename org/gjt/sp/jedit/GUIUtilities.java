@@ -23,7 +23,9 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
+import org.gjt.sp.jedit.gui.DynamicContextMenuService;
 import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
 import org.gjt.sp.jedit.gui.SplashScreen;
@@ -32,17 +34,42 @@ import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.TextAreaMouseHandler;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 
-import javax.swing.*;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+
+
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URL;
-import java.util.*;
-import java.util.List;
-//}}}
 
 /**
  * Various GUI functions.<p>
@@ -262,6 +289,17 @@ public class GUIUtilities
 	//{{{ loadPopupMenu() method
 	/**
 	 * Creates a popup menu.
+	 * @param name The menu name
+	 * @since jEdit 2.6pre2
+	 */
+	public static JPopupMenu loadPopupMenu(String name, TextArea textArea)
+	{
+		return loadPopupMenu(jEdit.getActionContext(), name, textArea);
+	} //}}}
+
+	//{{{ loadPopupMenu() method
+	/**
+	 * Creates a popup menu.
 
 	 * @param name The menu name
 	 * @since jEdit 2.6pre2
@@ -283,6 +321,23 @@ public class GUIUtilities
 	 */
 	public static JPopupMenu loadPopupMenu(ActionContext context, String name)
 	{
+		return loadPopupMenu(context, name, null);
+	}
+
+	//{{{ loadPopupMenu() method
+	/**
+	 * Creates a popup menu.
+
+	 * @param context An action context; either
+	 * <code>jEdit.getActionContext()</code> or
+	 * <code>VFSBrowser.getActionContext()</code>.
+	 * @param name The menu name
+	 * @param editPane the EditPane holding the TextArea wanting to show the
+	 * popup. If not null, include context menu items defined by services.
+	 * @since jEdit 4.3pre15
+	 */
+	public static JPopupMenu loadPopupMenu(ActionContext context, String name, TextArea textArea)
+	{
 		JPopupMenu menu = new JPopupMenu();
 
 		String menuItems = jEdit.getProperty(name);
@@ -298,8 +353,50 @@ public class GUIUtilities
 					menu.add(loadMenuItem(context,menuItemName,false));
 			}
 		}
+		// load menu items defined by services
+		if (textArea != null)
+		{
+			List<JMenuItem> list = GUIUtilities.getServiceContextMenuItems(textArea);
+			if (list.size() > 0)
+			{
+				menu.addSeparator();
+			}
+			for (JMenuItem mi : list)
+			{
+				menu.add(mi);
+			}
+		}
 
 		return menu;
+	} //}}}
+	//{{{ addServiceContextMenuItems() method
+	/**
+	 * @return a list of menu items defined by services.
+	 *
+	 * @param editPane the EditPane desiring to display these menu items
+	 * @since jEdit 4.3pre15
+	 */
+	public static List<JMenuItem> getServiceContextMenuItems(TextArea textArea) {
+		List<JMenuItem> list = new ArrayList<JMenuItem>();
+		final String serviceClassName =  DynamicContextMenuService.class.getName();
+		String[] menuServiceList = ServiceManager.getServiceNames(serviceClassName);
+		for (String menuServiceName : menuServiceList)
+		{
+			if (menuServiceName != null && menuServiceName.trim().length() > 0)
+			{
+				DynamicContextMenuService dcms = (DynamicContextMenuService) (
+						ServiceManager.getService(serviceClassName, menuServiceName));
+				if (dcms != null)
+				{
+					JMenuItem mi = dcms.createMenu(textArea);
+					if (mi != null)
+					{
+						list.add(mi);
+					}
+				}
+			}
+		}
+		return list;
 	} //}}}
 
 	//{{{ loadMenuItem() method

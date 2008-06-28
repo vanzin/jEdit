@@ -19,7 +19,7 @@
         <keycap>UP</keycap> and <keycap>DOWN</keycap> keys move the caret in the
         respective direction, and the <keycap>PAGE_UP</keycap> and
         <keycap>PAGE_DOWN</keycap> keys move the caret up and down one
-        screenful, respectively.</para>
+        screen-full, respectively.</para>
 
         <para>When pressed once, the <keycap>HOME</keycap> key moves the caret
         to the first non-whitespace character of the current screen line.

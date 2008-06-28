@@ -42,7 +42,6 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetListener;
 import org.gjt.sp.jedit.gui.BufferSwitcher;
-import org.gjt.sp.jedit.gui.DynamicContextMenuService;
 import org.gjt.sp.jedit.gui.StatusBar;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferChanging;
@@ -947,7 +946,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			"view.electricBorders",0));
 
 		// Set up the right-click popup menu
-		JPopupMenu popup = GUIUtilities.loadPopupMenu("view.context");
+		JPopupMenu popup = GUIUtilities.loadPopupMenu("view.context", getTextArea());
 		
 		JMenuItem customize = new JMenuItem(jEdit.getProperty(
 			"view.context.customize"));
