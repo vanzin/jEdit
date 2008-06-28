@@ -80,6 +80,9 @@ to this release.
 - The plain view can now have a status bar, a new option is added to choose it
   in the status bar option pane, and a new toggle menu is added to show/hide
   status bar in view menu (#1984974) (Matthieu Casanova)
+  
+- New images for splash screen and about dialog to match the new visual feel
+  (Seph M. Soliman)
 }}}
 {{{ Editing
 
