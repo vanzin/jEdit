@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre15
 
 Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova,
-Seph M. Soliman, Alan Ezust, Robert Schwenn, and Daniel Hahler for contributing
-to this release.
+Seph M. Soliman, Alan Ezust, Robert Schwenn, Bernhard Walle, 
+Dale Anson, and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -83,6 +83,9 @@ to this release.
   
 - New images for splash screen and about dialog to match the new visual feel
   (Seph M. Soliman)
+  
+- Thicker caret (#2005829 - Bernhard Walle (bwalle)
+
 }}}
 {{{ Editing
 
@@ -107,7 +110,7 @@ to this release.
 - Deprecated com.microstar XML parser. (Alan Ezust)
 
 - New DynamicContextMenuService allowing plugins to offer actions in the
-  TextArea contextmenu that depend on the state of the textarea. (Alan Ezust)
+  TextArea contextmenu that depend on the state of the textarea. (Alan Ezust, Dale Anson)
 
 - New methods were added to jEditBuffer to return CharSequence instead of
   String. StandardUtilities / TextUtilities were enhanced to provide functions
