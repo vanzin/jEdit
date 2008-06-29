@@ -1071,7 +1071,14 @@ public abstract class VFS
 		List<String> files, String directory, VFSFileFilter filter, boolean recursive,
 		Component comp, boolean skipBinary, boolean skipHidden) throws IOException
 	{
-		if(stack.contains(directory))
+		String resolvedPath = directory;
+		if (recursive && !MiscUtilities.isURL(directory))
+		{
+			// resolve symlinks to avoid loops
+			resolvedPath = MiscUtilities.resolveSymlinks(directory);
+		}
+
+		if(stack.contains(resolvedPath))
 		{
 			Log.log(Log.ERROR,this,
 				"Recursion in _listDirectory(): "
@@ -1079,7 +1086,7 @@ public abstract class VFS
 			return;
 		}
 
-		stack.add(directory);
+		stack.add(resolvedPath);
 
 		Thread ct = Thread.currentThread();
 		WorkThread wt = null;
@@ -1106,21 +1113,12 @@ public abstract class VFS
 			{
 				if(recursive)
 				{
-					// resolve symlinks to avoid loops
 					String canonPath = _canonPath(session,
 						file.getPath(),comp);
-					if(!MiscUtilities.isURL(canonPath))
-					{
-						String resolvedPath =
-							MiscUtilities.resolveSymlinks(canonPath);
-						stack.add(resolvedPath);
-					}
-
 					listFiles(session,stack,files,
 						canonPath,filter,recursive,
 						comp, skipBinary, skipHidden);
 				}
-
 			}
 			else // It's a regular file
 			{
