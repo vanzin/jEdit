@@ -147,6 +147,14 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public static final int HIGHEST_LAYER = Integer.MAX_VALUE;
 	//}}}
 
+	//{{{ Others
+	/**
+	 * Cursor stroke.
+	 * @since jEdit 4.3pre15
+	 */
+	static final Stroke CURSOR_STROKE = new BasicStroke(2);
+	//}}}
+
 	//{{{ setBounds() method
 	/**
 	 * It is a bad idea to override this, but we need to get the component
@@ -1227,7 +1235,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				gfx.drawRect(caretX,y,textArea.charWidth - 1,
 					     lineHeight - 1);
 			else
-				gfx.drawLine(caretX,y,caretX,y + lineHeight - 1);
+			{
+				Stroke old = gfx.getStroke();
+				gfx.setStroke(CURSOR_STROKE);
+				gfx.drawLine(caretX+1,y+1,caretX+1,y + lineHeight - 1);
+				gfx.setStroke(old);
+			}
 		}
 	} //}}}
 
