@@ -216,7 +216,7 @@ public abstract class VFS
 		this.caps = caps;
 		// reasonable defaults (?)
 		this.extAttrs = new String[] { EA_SIZE, EA_TYPE };
-	} 
+	}
 
 	/**
 	 * Creates a new virtual filesystem.
@@ -257,7 +257,7 @@ public abstract class VFS
 	/**
 	 * Returns if an additional markers file can be saved by this VFS.
 	 * Default is {@code true}.
-	 * 
+	 *
 	 * @since jEdit 4.3pre10
 	 */
 	public boolean isMarkersFileSupported()
@@ -496,7 +496,7 @@ public abstract class VFS
 		return true;
 	} //}}}
 
-	//{{{ copy() methods	
+	//{{{ copy() methods
 	/**
 	 * Copy a file to another using VFS.
 	 *
@@ -1086,8 +1086,8 @@ public abstract class VFS
 		if (ct instanceof WorkThread) {
 			wt = (WorkThread) ct;
 		}
-		
-		
+
+
 		VFSFile[] _files = _listFiles(session,directory,
 			comp);
 		if(_files == null || _files.length == 0)
@@ -1110,7 +1110,11 @@ public abstract class VFS
 					String canonPath = _canonPath(session,
 						file.getPath(),comp);
 					if(!MiscUtilities.isURL(canonPath))
-						canonPath = MiscUtilities.resolveSymlinks(canonPath);
+					{
+						String resolvedPath =
+							MiscUtilities.resolveSymlinks(canonPath);
+						stack.add(resolvedPath);
+					}
 
 					listFiles(session,stack,files,
 						canonPath,filter,recursive,
