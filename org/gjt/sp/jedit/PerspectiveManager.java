@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.LinkedList;
 import java.util.Collection;
 
@@ -278,11 +277,13 @@ public class PerspectiveManager
 			charData = new StringBuffer();
 		}
 
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
 			return XMLUtilities.findEntity(systemId, "perspective.dtd", getClass());
 		}
 
+		@Override
 		public void startElement(String uri, String localName,
 					 String qName, Attributes attrs)
 		{
@@ -345,7 +346,8 @@ public class PerspectiveManager
 			}
 			return false;
 		}
-		
+
+		@Override
 		public void endElement(String uri, String localName, String name)
 		{
 			if(name.equals("BUFFER"))
@@ -373,6 +375,7 @@ public class PerspectiveManager
 			}
 		}
 
+		@Override
 		public void characters(char[] ch, int start, int length)
 		{
 			charData.append(ch,start,length);
