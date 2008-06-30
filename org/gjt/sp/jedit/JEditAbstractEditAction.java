@@ -47,12 +47,12 @@ public abstract class JEditAbstractEditAction<E>
 	 * Creates a new edit action with the specified name.
 	 * @param name The action name
 	 */
-	public JEditAbstractEditAction(String name)
+	protected JEditAbstractEditAction(String name)
 	{
 		this.name = name;
 	}
 	
-	public JEditAbstractEditAction(String name, Object[] newArgs) 
+	protected JEditAbstractEditAction(String name, Object[] newArgs)
 	{
 		this.name = name;
 		this.args = newArgs;
@@ -61,6 +61,7 @@ public abstract class JEditAbstractEditAction<E>
 	//{{{ getName() method
 	/**
 	 * Returns the internal name of this action.
+	 * @return the action name
 	 */
 	public String getName()
 	{
@@ -70,7 +71,7 @@ public abstract class JEditAbstractEditAction<E>
 	// {{{ setName() method
 	/**
 	 * Changes the name of an action
-	 * @param newName
+	 * @param newName the new name of the action
 	 * @since jEdit 4.3pre4
 	 */
 	public void setName(String newName) 
@@ -85,11 +86,10 @@ public abstract class JEditAbstractEditAction<E>
 	 * 
 	 * @param arg the argument
 	 */
-	abstract public void invoke(E arg);
+	public abstract void invoke(E arg);
 
 	/**
-	 * 
-	 * @param arg
+	 * @param arg the arguments of the action
 	 * @param newArgs new argument list
 	 */
 	public final void invoke(E arg, Object[] newArgs) 
