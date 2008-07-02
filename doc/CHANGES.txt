@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre15
 
 Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova,
-Seph M. Soliman, Alan Ezust, Robert Schwenn, Bernhard Walle, 
+Seph M. Soliman, Alan Ezust, Robert Schwenn, Bernhard Walle,
 Dale Anson, and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
@@ -50,6 +50,8 @@ Dale Anson, and Daniel Hahler for contributing to this release.
 - When the parent directory list is selected in the VFSBrowser, the selected
   files were always empty (Matthieu Casanova)
 
+- when opening the save dialog, if the choosen path's VFS is not browseable,
+  the default directory is opened instead (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
@@ -80,10 +82,10 @@ Dale Anson, and Daniel Hahler for contributing to this release.
 - The plain view can now have a status bar, a new option is added to choose it
   in the status bar option pane, and a new toggle menu is added to show/hide
   status bar in view menu (#1984974) (Matthieu Casanova)
-  
+
 - New images for splash screen and about dialog to match the new visual feel
   (Seph M. Soliman)
-  
+
 - Thicker caret (#2005829 - Bernhard Walle (bwalle)
 
 }}}

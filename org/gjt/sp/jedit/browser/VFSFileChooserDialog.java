@@ -37,6 +37,7 @@ import java.util.*;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.*;
 //}}}
 
@@ -114,6 +115,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ dispose() method
+	@Override
 	public void dispose()
 	{
 		GUIUtilities.saveGeometry(this,"vfs.browser.dialog");
@@ -122,6 +124,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		VFSFile[] files = browser.getSelectedFiles();
@@ -157,7 +160,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(filename.equals("-"))
 			filename = bufferDir;
 		else if(filename.startsWith("-/")
-			|| filename.startsWith("-" + File.separator))
+			|| filename.startsWith('-' + File.separator))
 		{
 			filename = MiscUtilities.constructPath(
 				bufferDir,filename.substring(2));
@@ -193,7 +196,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
 					{
 						Hashtable props = new Hashtable();
-						props.put(Buffer.ENCODING,browser.currentEncoding);
+						props.put(JEditBuffer.ENCODING,browser.currentEncoding);
 						jEdit.openFile(browser.getView(),
 							browser.getDirectory(),
 							path,false,props);
@@ -210,6 +213,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
@@ -279,6 +283,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			VFS vfs = VFSManager.getVFSForPath(path);
 			name = vfs.getFileName(path);
 			path = vfs.getParentOfPath(path);
+			if ((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
+			{
+				path = null;
+			}
 		}
 
 		browser = new VFSBrowser(view, path, mode, multipleSelection, null);
@@ -388,7 +396,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	//{{{ Inner classes
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -400,7 +408,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ BrowserHandler class
-	class BrowserHandler implements BrowserListener
+	private class BrowserHandler implements BrowserListener
 	{
 		//{{{ filesSelected() method
 		public void filesSelected(VFSBrowser browser, VFSFile[] files)
@@ -491,29 +499,12 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		} //}}}
 	} //}}}
 
-	//{{{ KeyHandler class
-	class KeyHandler extends KeyAdapter
-	{
-		public void keyTyped(KeyEvent evt)
-		{
-			switch(evt.getKeyChar())
-			{
-			case '/':
-			case '-':
-			case '~':
-				filenameField.processKeyEvent(evt);
-				filenameField.requestFocus();
-				break;
-			}
-		}
-	} //}}}
-
 	//{{{ WorkThreadListener class
-	class WorkThreadHandler implements WorkThreadProgressListener
+	private class WorkThreadHandler implements WorkThreadProgressListener
 	{
 		//{{{ statusUpdate() method
 		public void statusUpdate(final WorkThreadPool threadPool,
-			final int threadIndex)
+			int threadIndex)
 		{
 			SwingUtilities.invokeLater(new Runnable()
 			{
@@ -542,7 +533,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ GetFileTypeRequest class
-	class GetFileTypeRequest implements Runnable
+	private class GetFileTypeRequest implements Runnable
 	{
 		VFS    vfs;
 		Object session;
