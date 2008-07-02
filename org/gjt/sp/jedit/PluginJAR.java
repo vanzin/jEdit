@@ -155,17 +155,19 @@ public class PluginJAR
 	 * Loads a plugin, and its dependent plugins if necessary.
 	 *
 	 * @since jEdit 4.3pre7
-	 *
 	 */
-	public static PluginJAR load(String path, boolean loadDependents) {
+	public static PluginJAR load(String path, boolean loadDependents)
+	{
 		PluginJAR jar = jEdit.getPluginJAR(path);
-		if (jar != null && jar.getPlugin() != null) {
+		if (jar != null && jar.getPlugin() != null)
+		{
 			return jar;
 		}
 		jEdit.addPluginJAR(path);
 		jar = jEdit.getPluginJAR(path);
 		String className = jar.getPlugin().getClassName();
-		if (loadDependents) {
+		if (loadDependents)
+		{
 			Set<String> pluginLoadList = getDependencySet(className);
 			for (String jarName: pluginLoadList)
 			{
@@ -245,7 +247,7 @@ public class PluginJAR
 		{
 			throw new RuntimeException(ioe);
 		}
-		Enumeration itr = zipFile.entries();
+		Enumeration<? extends ZipEntry> itr = zipFile.entries();
 		while (itr.hasMoreElements())
 		{
 			String entry = itr.nextElement().toString();
@@ -845,7 +847,7 @@ public class PluginJAR
 		if(plugin != null && !(plugin instanceof EditPlugin.Broken))
 		{
 			if(plugin instanceof EBPlugin)
-				EditBus.removeFromBus((EBPlugin)plugin);
+				EditBus.removeFromBus((EBComponent)plugin);
 
 			try
 			{
@@ -904,6 +906,7 @@ public class PluginJAR
 	} //}}}
 
 	//{{{ toString() method
+	@Override
 	public String toString()
 	{
 		if(plugin == null)
@@ -990,7 +993,7 @@ public class PluginJAR
 	 */
 	public PluginJAR(File file)
 	{
-		this.path = file.getPath();
+		path = file.getPath();
 		String jarCacheDir = jEdit.getJARCacheDirectory();
 		if(jarCacheDir != null)
 		{
@@ -1381,7 +1384,7 @@ public class PluginJAR
 				((EBComponent)plugin).handleMessage(
 					new org.gjt.sp.jedit.msg.PropertiesChanged(null));
 			}
-			EditBus.addToBus((EBPlugin)plugin);
+			EditBus.addToBus((EBComponent)plugin);
 		}
 
 		// buffers retain a reference to the fold handler in
