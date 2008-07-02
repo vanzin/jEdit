@@ -108,7 +108,14 @@ public abstract class PropertiesBean
 					Object _val = p.getProperty(_pname);
 					if (_val != null)
 						_val = parse((String)_val, _props[i].getPropertyType());
-					_set.invoke(this, _val);
+					try
+					{
+						_set.invoke(this, _val);
+					}
+					catch (IllegalArgumentException iae)
+					{
+						/* Ignore these. */
+					}
 				}
 			}
 		}
