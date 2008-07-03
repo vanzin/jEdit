@@ -711,6 +711,21 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 				bufferSwitcher.updateBufferList();
 			}
 			EditBus.send(new EditPaneUpdate(this, EditPaneUpdate.BUFFERSET_CHANGED));
+			if (bufferSet.indexOf(recentBuffer) == -1)
+			{
+				// the recent buffer is not in the bufferSet
+				recentBuffer =  null;
+			}
+			if (bufferSet.size() != 0 && bufferSet.indexOf(buffer) == -1)
+			{
+				// the current buffer is not contained in the bufferSet, we must change the current buffer
+				if (recentBuffer != null)
+					setBuffer(recentBuffer);
+				else
+				{
+					setBuffer(bufferSet.getBuffer(0));
+				}
+			}
 		}
 	} //}}}
 
