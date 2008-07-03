@@ -281,22 +281,53 @@ public class BufferSet
 		}
 	}
 
+	/**
+	 * Returns an array of all buffers in this bufferSet.
+	 *
+	 * @return an array of all Buffers
+	 */
 	public Buffer[] getAllBuffers()
 	{
 		Buffer[] buffers = new Buffer[this.buffers.size()];
 		return this.buffers.toArray(buffers);
 	}
 
+	/**
+	 * Add a BufferSetListener.
+	 * @param listener the new BufferSetListener
+	 */
 	public void addBufferSetListener(BufferSetListener listener)
 	{
+		Log.log(Log.DEBUG, this, hashCode() + ": addBufferSetListener " + listener);
 		listeners.add(BufferSetListener.class, listener);
 	}
 
+	/**
+	 * Remove a BufferSetListener.
+	 * If there are no listeners anymore, remove all buffers from the bufferSet.
+	 * @param listener the removed BufferSetListener
+	 */
 	public void removeBufferSetListener(BufferSetListener listener)
 	{
+		Log.log(Log.DEBUG, this, hashCode() + ": removeBufferSetListener " + listener);
 		listeners.remove(BufferSetListener.class, listener);
+		if (!hasListeners())
+		{
+			// must empty the bufferSet
+			Buffer[] buffers = getAllBuffers();
+			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
+			for (Buffer buffer : buffers)
+			{
+				bufferSetManager.removeBuffer(this, buffer);
+			}
+		}
 	}
 
+	/**
+	 * Check if the BufferSet has listeners.
+	 *
+	 * @return true if the bufferSet has listeners
+	 */
 	public boolean hasListeners()
 	{
 		return listeners.getListenerCount() != 0;
