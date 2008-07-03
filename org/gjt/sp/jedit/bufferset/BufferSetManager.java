@@ -128,6 +128,8 @@ public class BufferSetManager implements EBComponent
 	public int countBufferSets(Buffer buffer)
 	{
 		Set<BufferSet> sets = bufferBufferSetMap.get(buffer);
+		if (sets == null)
+			return 0;
 		return sets.size();
 	}
 
@@ -296,7 +298,7 @@ public class BufferSetManager implements EBComponent
 	 *
 	 * @param visitor the bufferset visitor
 	 */
-	private void visit(BufferSetVisitor visitor)
+	public void visit(BufferSetVisitor visitor)
 	{
 		visitor.visit(global);
 		Collection<BufferSet> bufferSetCollection = viewBufferSetMap.values();
@@ -377,7 +379,7 @@ public class BufferSetManager implements EBComponent
 		return bufferSet;
 	}
 
-	private static interface BufferSetVisitor
+	public static interface BufferSetVisitor
 	{
 		void visit(BufferSet bufferSet);
 	}
