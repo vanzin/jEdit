@@ -1,5 +1,7 @@
 package org.gjt.sp.jedit.gui;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.JMenuItem;
 
 import org.gjt.sp.jedit.textarea.JEditTextArea;
@@ -15,9 +17,10 @@ abstract public class DynamicContextMenuService {
 	 * 
 	 * @param ta the TextArea where the context menu was requested.
 	 * 	   Use this to determine the location of the caret, or the edit mode of the buffer, etc.
+	 * @param evt a mouseEvent that triggered this menu request, or null
 	 * @return a dynamic menu item (or JMenu) dependent on state of ta
 	 *         or null if there is no appropriate action to be added at this time
 	 */
-	public abstract JMenuItem createMenu(JEditTextArea ta); 
+	public abstract JMenuItem createMenu(JEditTextArea ta, MouseEvent evt); 
 
 }

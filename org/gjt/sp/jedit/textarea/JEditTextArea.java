@@ -512,7 +512,7 @@ public class JEditTextArea extends TextArea
 		else
 		{
 			// Rebuild popup menu every time the menu is requested.
-			popup = GUIUtilities.loadPopupMenu("view.context", this);
+			popup = GUIUtilities.loadPopupMenu("view.context", this, evt);
 			int x = evt.getX();
 			int y = evt.getY();
 

@@ -292,9 +292,9 @@ public class GUIUtilities
 	 * @param name The menu name
 	 * @since jEdit 2.6pre2
 	 */
-	public static JPopupMenu loadPopupMenu(String name, JEditTextArea textArea)
+	public static JPopupMenu loadPopupMenu(String name, JEditTextArea textArea, MouseEvent evt)
 	{
-		return loadPopupMenu(jEdit.getActionContext(), name, textArea);
+		return loadPopupMenu(jEdit.getActionContext(), name, textArea, evt);
 	} //}}}
 
 	//{{{ loadPopupMenu() method
@@ -321,7 +321,7 @@ public class GUIUtilities
 	 */
 	public static JPopupMenu loadPopupMenu(ActionContext context, String name)
 	{
-		return loadPopupMenu(context, name, null);
+		return loadPopupMenu(context, name, null, null);
 	}
 
 	//{{{ loadPopupMenu() method
@@ -334,9 +334,10 @@ public class GUIUtilities
 	 * @param name The menu name
 	 * @param editPane the EditPane holding the TextArea wanting to show the
 	 * popup. If not null, include context menu items defined by services.
+	 * @param evt additional context info about where the mouse was when menu was requested
 	 * @since jEdit 4.3pre15
 	 */
-	public static JPopupMenu loadPopupMenu(ActionContext context, String name, JEditTextArea textArea)
+	public static JPopupMenu loadPopupMenu(ActionContext context, String name, JEditTextArea textArea, MouseEvent evt)
 	{
 		JPopupMenu menu = new JPopupMenu();
 
@@ -356,7 +357,7 @@ public class GUIUtilities
 		// load menu items defined by services
 		if (textArea != null)
 		{
-			List<JMenuItem> list = GUIUtilities.getServiceContextMenuItems(textArea);
+			List<JMenuItem> list = GUIUtilities.getServiceContextMenuItems(textArea, evt);
 			if (list.size() > 0)
 			{
 				menu.addSeparator();
@@ -376,7 +377,7 @@ public class GUIUtilities
 	 * @param editPane the EditPane desiring to display these menu items
 	 * @since jEdit 4.3pre15
 	 */
-	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea) {
+	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea, MouseEvent evt) {
 		List<JMenuItem> list = new ArrayList<JMenuItem>();
 		final String serviceClassName =  DynamicContextMenuService.class.getName();
 		String[] menuServiceList = ServiceManager.getServiceNames(serviceClassName);
@@ -388,7 +389,7 @@ public class GUIUtilities
 						ServiceManager.getService(serviceClassName, menuServiceName));
 				if (dcms != null)
 				{
-					JMenuItem mi = dcms.createMenu(textArea);
+					JMenuItem mi = dcms.createMenu(textArea, evt);
 					if (mi != null)
 					{
 						list.add(mi);

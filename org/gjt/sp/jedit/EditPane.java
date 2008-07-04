@@ -961,7 +961,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			"view.electricBorders",0));
 
 		// Set up the right-click popup menu
-		JPopupMenu popup = GUIUtilities.loadPopupMenu("view.context", getTextArea());
+		JPopupMenu popup = GUIUtilities.loadPopupMenu("view.context", getTextArea(), null);
 		
 		JMenuItem customize = new JMenuItem(jEdit.getProperty(
 			"view.context.customize"));
