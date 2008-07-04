@@ -389,10 +389,11 @@ public class GUIUtilities
 						ServiceManager.getService(serviceClassName, menuServiceName));
 				if (dcms != null)
 				{
-					JMenuItem mi = dcms.createMenu(textArea, evt);
-					if (mi != null)
+					JMenuItem items[] = dcms.createMenu(textArea, evt);
+					if (items != null)
 					{
-						list.add(mi);
+						for (JMenuItem mi: items) 
+							list.add(mi);
 					}
 				}
 			}
