@@ -83,5 +83,6 @@ class TextAreaDropHandler extends DropTargetAdapter
 		Log.log(Log.DEBUG,this,"Drop");
 		textArea.setDragInProgress(false);
 		//textArea.getBuffer().endCompoundEdit();
+		savedBuffer = null;
 	}
 }
