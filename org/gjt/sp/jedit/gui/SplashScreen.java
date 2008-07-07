@@ -36,10 +36,10 @@ public class SplashScreen extends JComponent
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		setBackground(Color.white);
 
-		Font font = new Font("Dialog",Font.PLAIN,10);
-		setFont(font);
-		fm = getFontMetrics(font);
-
+		setFont(defaultFont);
+		fm = getFontMetrics(defaultFont);
+		fmVersion = getFontMetrics(labelFont);
+		
 		image = getToolkit().getImage(
 			getClass().getResource("/org/gjt/sp/jedit/icons/splash.png"));
 		MediaTracker tracker = new MediaTracker(this);
@@ -153,22 +153,33 @@ public class SplashScreen extends JComponent
 
 		if (label != null)
 		{
-			g.drawString(label,
-				     (getWidth() - fm.stringWidth(label)) / 2,
-				     image.getHeight(this) + (PROGRESS_HEIGHT
-							      + fm.getAscent() + fm.getDescent()) / 2);
+			int drawOffsetX = (getWidth() - fm.stringWidth(label)) / 2;
+			int drawOffsetY = image.getHeight(this) + (PROGRESS_HEIGHT
+							      + fm.getAscent() + fm.getDescent()) / 2;
+			
+			g.setFont(defaultFont);
+			g.setColor( Color.black );
+			g.drawString( label, drawOffsetX, drawOffsetY );
 		}
 
-
-		String version = jEdit.getVersion();
-		g.drawString(version,
-			getWidth() - fm.stringWidth(version) - 2,
-			image.getHeight(this) - fm.getDescent());
+		String version = "version " + jEdit.getVersion();
+		
+		int drawOffsetX = (getWidth() / 2) - (fm.stringWidth(version) / 2);
+		int drawOffsetY = image.getHeight(this) - fm.getDescent() - 2;
+		
+		g.setFont( labelFont );
+		
+		g.setColor( versionColor1 );
+		g.drawString( version, drawOffsetX, drawOffsetY );
+		// Draw a highlight effect
+		g.setColor( versionColor2 );
+		g.drawString( version, drawOffsetX + 1, drawOffsetY + 1 );
+		
 		notify();
 	}
 
 	// private members
-	private final FontMetrics fm;
+	private final FontMetrics fm, fmVersion;
 	private final JWindow win;
 	private final Image image;
 	private int progress;
@@ -177,4 +188,8 @@ public class SplashScreen extends JComponent
 	private String label;
 	private String lastLabel;
 	private long lastAdvanceTime = System.currentTimeMillis();
+	private Font defaultFont = new Font("Dialog",Font.PLAIN,10);
+	private Font labelFont = UIManager.getFont("Label.font").deriveFont(9.8f);
+	private Color versionColor1 = new Color(55, 55, 55), versionColor2 = new Color(255, 255, 255, 50);
+	
 }

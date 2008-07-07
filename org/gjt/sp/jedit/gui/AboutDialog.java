@@ -95,8 +95,8 @@ public class AboutDialog extends JDialog implements ActionListener
 			iPipeLineCount = 0, w = 0, h = 0, y = 0;
 		private static final int
 			SLEEP_TIME = 30,
-			iBottomPadding = 56,
-			iTopPadding = 100;
+			iBottomPadding = 36,
+			iTopPadding = 120;
 		private static Rectangle2D.Float rectangle;
 		private static GradientPaint gradientPaint = null;
 
