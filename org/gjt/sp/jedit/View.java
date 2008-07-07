@@ -43,6 +43,8 @@ import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.options.GeneralOptionPane;
+import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
@@ -1360,10 +1362,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			getSplitConfig(splitPane,splitConfig);
 		else
 		{
-			splitConfig.append('"');
-			splitConfig.append(StandardUtilities.charsToEscapes(
-				getBuffer().getPath()));
-			splitConfig.append("\" buffer");
+			appendToSplitConfig(splitConfig, editPane);
 		}
 
 		return splitConfig.toString();
@@ -1377,34 +1376,55 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		StringBuilder splitConfig)
 	{
 		Component right = splitPane.getRightComponent();
-		if(right instanceof JSplitPane)
-			getSplitConfig((JSplitPane)right,splitConfig);
-		else
-		{
-			splitConfig.append('"');
-			splitConfig.append(StandardUtilities.charsToEscapes(
-				((EditPane)right).getBuffer().getPath()));
-			splitConfig.append("\" buffer");
-		}
+		appendToSplitConfig(splitConfig, right);
 
 		splitConfig.append(' ');
 
 		Component left = splitPane.getLeftComponent();
-		if(left instanceof JSplitPane)
-			getSplitConfig((JSplitPane)left,splitConfig);
-		else
-		{
-			splitConfig.append('"');
-			splitConfig.append(StandardUtilities.charsToEscapes(
-				((EditPane)left).getBuffer().getPath()));
-			splitConfig.append("\" buffer");
-		}
+		appendToSplitConfig(splitConfig, left);
 
 		splitConfig.append(' ');
 		splitConfig.append(splitPane.getDividerLocation());
 		splitConfig.append(' ');
 		splitConfig.append(splitPane.getOrientation()
 			== JSplitPane.VERTICAL_SPLIT ? "vertical" : "horizontal");
+	} //}}}
+
+	/**
+	 * Append the Component to the split config.
+	 * The component must be a JSplitPane or an EditPane
+	 *
+	 * @param splitConfig the split config
+	 * @param component the component
+	 */
+	private static void appendToSplitConfig(StringBuilder splitConfig, Component component)
+	{
+		if(component instanceof JSplitPane)
+		{
+			// the component is a JSplitPane
+			getSplitConfig((JSplitPane)component,splitConfig);
+		}
+		else
+		{
+			// the component is an editPane
+			EditPane editPane = (EditPane) component;
+			splitConfig.append('"');
+			splitConfig.append(StandardUtilities.charsToEscapes(
+				editPane.getBuffer().getPath()));
+			splitConfig.append("\" buffer");
+			BufferSet bufferSet = editPane.getBufferSet();
+			Buffer[] buffers = bufferSet.getAllBuffers();                                                                                                         
+			for (Buffer buffer : buffers)
+			{
+				splitConfig.append(" \"");
+				splitConfig.append(StandardUtilities.charsToEscapes(
+					buffer.getPath()));
+				splitConfig.append("\" buff");
+			}
+			splitConfig.append(" \"");
+			splitConfig.append(bufferSet.getScope());
+			splitConfig.append("\" bufferset");
+		}
 	} //}}}
 
 	//{{{ setSplitConfig() method
@@ -1457,6 +1477,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		st.quoteChar('"');
 		st.eolIsSignificant(false);
 		boolean continuousLayout = jEdit.getBooleanProperty("appearance.continuousLayout");
+		List<Buffer> editPaneBuffers = new ArrayList<Buffer>();
 loop:		while (true)
 		{
 			switch(st.nextToken())
@@ -1504,6 +1525,36 @@ loop:		while (true)
 
 					stack.push(editPane = createEditPane(
 						buffer));
+				}
+				else if (st.sval.equals("buff"))
+				{
+
+					String path = (String)stack.pop();
+					buffer = jEdit.getBuffer(path);
+					editPaneBuffers.add(buffer);
+				}
+				else if (st.sval.equals("bufferset"))
+				{
+					String scope = (String) stack.pop();
+					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
+					if (BufferSet.SCOPE[0].equals(scope))
+					{
+						editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());
+					}
+					else if (BufferSet.SCOPE[1].equals(scope))
+					{
+						editPane.setBufferSet(bufferSetManager.getViewBufferSet(this));
+					}
+					else if (BufferSet.SCOPE[2].equals(scope))
+					{
+						editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane));
+					}
+					BufferSet bufferSet = editPane.getBufferSet();
+					for (Buffer buff : editPaneBuffers)
+					{
+						bufferSetManager.addBuffer(bufferSet, buff);
+					}
+					editPaneBuffers.clear();
 				}
 				break;
 			case StreamTokenizer.TT_NUMBER:

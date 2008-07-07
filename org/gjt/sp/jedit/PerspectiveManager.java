@@ -354,7 +354,7 @@ public class PerspectiveManager
 			{
 				if (restoreFiles && !skipRemote(charData.toString()))
 				{
-					currentBuffer = jEdit.openFile(null,charData.toString());
+					currentBuffer = jEdit.openTemporary(null,null, charData.toString(), false);
 					// if the autoReload attributes are not present, don't set anything
 					// it's sufficient to check whether they are present on the first BUFFER element
 					if (currentBuffer != null)
@@ -363,6 +363,7 @@ public class PerspectiveManager
 							currentBuffer.setAutoReload("TRUE".equals(autoReload));
 						if(autoReloadDialog != null)
 							currentBuffer.setAutoReloadDialog("TRUE".equals(autoReloadDialog));
+						jEdit.commitTemporary(currentBuffer);
 					}
 				}
 			}
