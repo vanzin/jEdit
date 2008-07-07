@@ -102,6 +102,8 @@ public class BufferSet
 
 			if (sorted)
 			{
+				if (buffers.contains(buffer))
+					return;
 				buffers.add(buffer);
 				Collections.sort(buffers, comparator);
 				position = buffers.indexOf(buffer);
