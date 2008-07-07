@@ -141,23 +141,27 @@ public class BufferSetManager implements EBComponent
 
 	public void addBuffer(EditPane editPane, Buffer buffer)
 	{
+		if (editPane == null)
+		{
+			addBuffer(global, buffer);
+		}
+		else
+		{
+			BufferSet bufferSet = editPane.getBufferSet();
+			addBuffer(bufferSet, buffer);
+		}
+	}
+
+	public void addBuffer(BufferSet bufferSet, Buffer buffer)
+	{
 		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
 		if (bufferSets == null)
 		{
 			bufferSets = new HashSet<BufferSet>();
 			bufferBufferSetMap.put(buffer, bufferSets);
 		}
-		if (editPane == null)
-		{
-			global.addBuffer(buffer);
-			bufferSets.add(global);
-		}
-		else
-		{
-			BufferSet bufferSet = editPane.getBufferSet();
-			bufferSet.addBuffer(buffer);
-			bufferSets.add(bufferSet);
-		}
+		bufferSets.add(bufferSet);
+		bufferSet.addBuffer(buffer);
 	}
 
 	/**
@@ -210,6 +214,8 @@ public class BufferSetManager implements EBComponent
 	public boolean hasListeners(Buffer buffer)
 	{
 		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
+		if (bufferSets == null)
+			return false;
 		for (BufferSet bs: bufferSets)
 		{
 			if (bs.hasListeners())
