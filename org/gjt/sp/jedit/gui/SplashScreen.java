@@ -19,11 +19,13 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.*;
 import java.awt.*;
 
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * The splash screen displayed on startup.
@@ -31,6 +33,7 @@ import org.gjt.sp.util.Log;
  */
 public class SplashScreen extends JComponent
 {
+	//{{{ SplashScreen constructor
 	public SplashScreen()
 	{
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -38,8 +41,6 @@ public class SplashScreen extends JComponent
 
 		setFont(defaultFont);
 		fm = getFontMetrics(defaultFont);
-		fmVersion = getFontMetrics(labelFont);
-		
 		image = getToolkit().getImage(
 			getClass().getResource("/org/gjt/sp/jedit/icons/splash.png"));
 		MediaTracker tracker = new MediaTracker(this);
@@ -58,10 +59,12 @@ public class SplashScreen extends JComponent
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
 		GraphicsDevice gd = gs[0];
-		if (gd != null) {
-            GraphicsConfiguration gconf = gd.getDefaultConfiguration();
-			if (gconf != null) {
-                Rectangle bounds = gconf.getBounds();
+		if (gd != null)
+		{
+			GraphicsConfiguration gconf = gd.getDefaultConfiguration();
+			if (gconf != null)
+			{
+				Rectangle bounds = gconf.getBounds();
 				screen = new Dimension(bounds.width, bounds.height);
 			}
 		}
@@ -75,13 +78,15 @@ public class SplashScreen extends JComponent
 			(screen.height - size.height) / 2);
 		win.validate();
 		win.setVisible(true);
-	}
+	} //}}}
 
+	//{{{ dispose() method
 	public void dispose()
 	{
 		win.dispose();
-	}
+	} //}}}
 
+	//{{{ advance() methods
 	public synchronized void advance()
 	{
 		logAdvanceTime(null);
@@ -117,14 +122,16 @@ public class SplashScreen extends JComponent
 		{
 			Log.log(Log.ERROR,this,ie);
 		}
-	}
+	} //}}}
 
+	//{{{ logAdvanceTime() method
 	private void logAdvanceTime(String label)
 	{
 		long currentTime = System.currentTimeMillis();
 		if (lastLabel != null)
 		{
-			Log.log(Log.DEBUG, SplashScreen.class, lastLabel +':'+(currentTime - lastAdvanceTime) + "ms");
+			Log.log(Log.DEBUG, SplashScreen.class,
+				lastLabel +':'+(currentTime - lastAdvanceTime) + "ms");
 		}
 		if (label != null)
 		{
@@ -132,9 +139,10 @@ public class SplashScreen extends JComponent
 			lastAdvanceTime = currentTime;
 
 		}
+	} //}}}
 
-	}
-
+	//{{{ paintComponent() method
+	@Override
 	public synchronized void paintComponent(Graphics g)
 	{
 		Dimension size = getSize();
@@ -156,30 +164,35 @@ public class SplashScreen extends JComponent
 			int drawOffsetX = (getWidth() - fm.stringWidth(label)) / 2;
 			int drawOffsetY = image.getHeight(this) + (PROGRESS_HEIGHT
 							      + fm.getAscent() + fm.getDescent()) / 2;
-			
-			g.setFont(defaultFont);
-			g.setColor( Color.black );
-			g.drawString( label, drawOffsetX, drawOffsetY );
+
+			paintString(g, label, drawOffsetX, drawOffsetY);
 		}
 
 		String version = "version " + jEdit.getVersion();
-		
+
 		int drawOffsetX = (getWidth() / 2) - (fm.stringWidth(version) / 2);
 		int drawOffsetY = image.getHeight(this) - fm.getDescent() - 2;
-		
+
+		paintString(g, version, drawOffsetX, drawOffsetY);
+
+		notify();
+	} //}}}
+
+	//{{{ paintString() method
+	private void paintString(Graphics g, String version, int drawOffsetX,
+				 int drawOffsetY)
+	{
 		g.setFont( labelFont );
-		
+
 		g.setColor( versionColor1 );
 		g.drawString( version, drawOffsetX, drawOffsetY );
 		// Draw a highlight effect
 		g.setColor( versionColor2 );
 		g.drawString( version, drawOffsetX + 1, drawOffsetY + 1 );
-		
-		notify();
-	}
+	} //}}}
 
-	// private members
-	private final FontMetrics fm, fmVersion;
+	//{{{ private members
+	private final FontMetrics fm;
 	private final JWindow win;
 	private final Image image;
 	private int progress;
@@ -190,6 +203,7 @@ public class SplashScreen extends JComponent
 	private long lastAdvanceTime = System.currentTimeMillis();
 	private Font defaultFont = new Font("Dialog",Font.PLAIN,10);
 	private Font labelFont = UIManager.getFont("Label.font").deriveFont(9.8f);
-	private Color versionColor1 = new Color(55, 55, 55), versionColor2 = new Color(255, 255, 255, 50);
-	
+	private Color versionColor1 = new Color(55, 55, 55);
+	private Color versionColor2 = new Color(255, 255, 255, 50);
+	//}}}
 }
