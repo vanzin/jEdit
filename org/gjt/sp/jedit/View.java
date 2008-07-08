@@ -46,6 +46,7 @@ import org.gjt.sp.jedit.options.GeneralOptionPane;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -1531,7 +1532,14 @@ loop:		while (true)
 
 					String path = (String)stack.pop();
 					buffer = jEdit.getBuffer(path);
-					editPaneBuffers.add(buffer);
+					if (buffer == null)
+					{
+						Log.log(Log.WARNING, this, "Error buffer " + path + " doesn't exists");
+					}
+					else
+					{
+						editPaneBuffers.add(buffer);
+					}
 				}
 				else if (st.sval.equals("bufferset"))
 				{
