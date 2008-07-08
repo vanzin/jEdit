@@ -542,7 +542,7 @@ scrolling=scroll-to-current-line \
 	  scroll-down-page
 scrolling.label=Scrollin$g
 scroll-to-current-line.label=Scroll $to Current Line
-scroll-and-center.label=Scroll and Center Caret
+scroll-and-center.label=$Scroll and Center Caret
 center-caret.label=$Center Caret on Screen
 scroll-up-line.label=Line Scroll $Up
 scroll-down-line.label=Line Scroll $Down
