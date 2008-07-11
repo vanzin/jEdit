@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.syntax.TokenHandler;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 
 import java.util.List;
+import java.util.Stack;
 import javax.swing.text.Segment;
 
 /**
@@ -70,7 +71,7 @@ public class DeepIndentRule implements IndentRule
 			}
 			Parens parens = new Parens(buffer, lineIndex, searchPos);
 
-			// No parens on prev line
+			// No unmatched parens on prev line.
 			if (parens.openOffset == -1 && parens.closeOffset == -1)
 			{
 				// Try prev-prev line if present.
@@ -83,7 +84,9 @@ public class DeepIndentRule implements IndentRule
 				return;
 			}
 
-			if (parens.openOffset > parens.closeOffset)
+			// There's an unmatched open parenthesis - we want to
+			// align according to its position.
+			if (parens.closeOffset == -1)
 			{
 				// recalculate column (when using tabs instead of spaces)
 				int indent = parens.openOffset + getIndent(lineText, buffer.getTabSize()) - lineText.length();
@@ -92,6 +95,8 @@ public class DeepIndentRule implements IndentRule
 				return;
 			}
 
+			// There's an unmatched closed parenthesis - find the
+			// matching parenthesis and start looking from there again.
 			int openParenOffset = TextUtilities.findMatchingBracket(buffer, lineIndex, parens.closeOffset);
 			if (openParenOffset >= 0)
 			{
@@ -100,7 +105,7 @@ public class DeepIndentRule implements IndentRule
 				lineIndex = buffer.getLineOfOffset(openParenOffset);
 				searchPos = openParenOffset - buffer.getLineStartOffset(lineIndex) - 1;
 				if (searchPos < 0)
-				 	break;
+					break;
 			}
 			else
 				break;
@@ -144,14 +149,19 @@ public class DeepIndentRule implements IndentRule
 	{
 		int openOffset;
 		int closeOffset;
-		int searchPos;
+
+		private int searchPos;
+		private Stack<Integer> open;
+		private Stack<Integer> close;
 
 		Parens(JEditBuffer b, int line, int pos)
 		{
-			this.openOffset = -1;
-			this.closeOffset = -1;
 			this.searchPos = pos;
+			this.open = new Stack<Integer>();
+			this.close = new Stack<Integer>();
 			b.markTokens(line, this);
+			openOffset = (open.isEmpty()) ? -1 : open.pop();
+			closeOffset = (close.isEmpty()) ? -1 : close.pop();
 		}
 
 		public void handleToken(Segment seg,
@@ -184,17 +194,21 @@ public class DeepIndentRule implements IndentRule
 				/* Ignore comments and literals. */
 				break;
 			default:
-				for (int i = offset + length - 1;
-				     i >= offset;
-				     i--)
+				for (int i = offset; i < offset + length; i++)
 				{
 					if (seg.array[seg.offset + i] == openChar)
 					{
-						openOffset = i;
+						if (open.isEmpty() && !close.isEmpty())
+							close.pop();
+						else
+							open.push(i);
 					}
 					else if (seg.array[seg.offset + i] == closeChar)
 					{
-						closeOffset = i;
+						if (close.isEmpty() && !open.isEmpty())
+							open.pop();
+						else
+							close.push(i);
 					}
 				}
 				break;
