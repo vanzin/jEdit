@@ -1031,6 +1031,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			jEdit.getColorProperty("view.fgColor"));
 		painter.setBlockCaretEnabled(jEdit.getBooleanProperty(
 			"view.blockCaret"));
+		painter.setThickCaretEnabled(jEdit.getBooleanProperty(
+			"view.thickCaret"));
 		painter.setLineHighlightEnabled(jEdit.getBooleanProperty(
 			"view.lineHighlight"));
 		painter.setLineHighlightColor(

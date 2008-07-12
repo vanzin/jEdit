@@ -147,14 +147,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public static final int HIGHEST_LAYER = Integer.MAX_VALUE;
 	//}}}
 
-	//{{{ Others
-	/**
-	 * Cursor stroke.
-	 * @since jEdit 4.3pre15
-	 */
-	static final Stroke CURSOR_STROKE = new BasicStroke(2);
-	//}}}
-
 	//{{{ setBounds() method
 	/**
 	 * It is a bad idea to override this, but we need to get the component
@@ -399,6 +391,30 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			addExtension(BLOCK_CARET_LAYER,caretExtension);
 		else
 			addExtension(CARET_LAYER,caretExtension);
+		if(textArea.getBuffer() != null)
+			textArea.invalidateLine(textArea.getCaretLine());
+	} //}}}
+
+	//{{{ isThickCaretEnabled() method
+	/**
+	 * Returns true if the caret should be drawn with a thick line, false otherwise.
+	 * @since jEdit 4.3pre15
+	 */
+	public final boolean isThickCaretEnabled()
+	{
+		return thickCaret;
+	} //}}}
+
+	//{{{ setThickCaretEnabled() method
+	/**
+	 * Sets if the caret should be drawn with a thick line.
+	 * @param thickCaret
+	 *     True if the caret should be drawn as a block, false otherwise.
+	 * @since jEdit 4.3pre15
+	 */
+	public final void setThickCaretEnabled(boolean thickCaret)
+	{
+		this.thickCaret = thickCaret;
 		if(textArea.getBuffer() != null)
 			textArea.invalidateLine(textArea.getCaretLine());
 	} //}}}
@@ -819,6 +835,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	SyntaxStyle[] foldLineStyle;
 
 	boolean blockCaret;
+	boolean thickCaret;
 	boolean lineHighlight;
 	boolean structureHighlight;
 	boolean eolMarkers;
@@ -1236,10 +1253,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					     lineHeight - 1);
 			else
 			{
-				Stroke old = gfx.getStroke();
-				gfx.setStroke(CURSOR_STROKE);
-				gfx.drawLine(caretX+1,y+1,caretX+1,y + lineHeight - 1);
-				gfx.setStroke(old);
+				if (thickCaret)
+					gfx.drawRect(caretX, y,
+						1, lineHeight - 1);
+				else
+					gfx.drawLine(caretX,y,
+						caretX,y + lineHeight - 1);
 			}
 		}
 	} //}}}

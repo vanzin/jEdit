@@ -75,12 +75,17 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			+ ".blockCaret"));
 		blockCaret.setSelected(jEdit.getBooleanProperty("view.blockCaret"));
 
+		thickCaret = new JCheckBox(jEdit.getProperty("options.textarea"
+			+ ".thickCaret"));
+		thickCaret.setSelected(jEdit.getBooleanProperty("view.thickCaret"));
+
 		Box caretSettings = new Box(BoxLayout.X_AXIS);
 		caretSettings.add(new JLabel(jEdit.getProperty(
 			"options.textarea.caret")));
 		caretSettings.add(Box.createHorizontalStrut(6));
 		caretSettings.add(blinkCaret);
 		caretSettings.add(blockCaret);
+		caretSettings.add(thickCaret);
 
 		addComponent(caretSettings,caretColor = new ColorWellButton(
 			jEdit.getColorProperty("view.caretColor")),
@@ -181,6 +186,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 			.getSelectedColor());
 		jEdit.setBooleanProperty("view.caretBlink",blinkCaret.isSelected());
 		jEdit.setBooleanProperty("view.blockCaret",blockCaret.isSelected());
+		jEdit.setBooleanProperty("view.thickCaret",thickCaret.isSelected());
 		jEdit.setColorProperty("view.caretColor",caretColor
 			.getSelectedColor());
 		jEdit.setColorProperty("view.selectionColor",selectionColor
@@ -218,6 +224,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private ColorWellButton backgroundColor;
 	private JCheckBox blinkCaret;
 	private JCheckBox blockCaret;
+	private JCheckBox thickCaret;
 	private ColorWellButton caretColor;
 	private ColorWellButton selectionColor;
 	private ColorWellButton multipleSelectionColor;

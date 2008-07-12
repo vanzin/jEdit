@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre15
 
 Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova,
-Seph M. Soliman, Alan Ezust, Robert Schwenn, Bernhard Walle,
+Seph M. Soliman, Alan Ezust, Robert Schwenn, Nils Nordman,
 Dale Anson, and Daniel Hahler for contributing to this release.
 
 {{{ Bug Fixes
@@ -86,7 +86,7 @@ Dale Anson, and Daniel Hahler for contributing to this release.
 - New images for splash screen and about dialog to match the new visual feel
   (Seph M. Soliman)
 
-- Thicker caret (#2005829 - Bernhard Walle (bwalle)
+- New option to make the caret thicker. (SF.net Patch #1608486 - Nils Nordman)
 
 }}}
 {{{ Editing

@@ -2007,6 +2007,7 @@ options.textarea.background=Background color:
 options.textarea.caret=Caret:
 options.textarea.blinkCaret=blinking
 options.textarea.blockCaret=block
+options.textarea.thickCaret=thick
 options.textarea.selection=Single selection:
 options.textarea.multipleSelection=Multiple selection:
 options.textarea.lineHighlight=Highlight current line:
