@@ -1700,6 +1700,29 @@ public class jEdit
 		return true;
 	} //}}}
 
+	//{{{ closeBuffer() method
+	/**
+	 * Close a buffer.
+	 * The buffer is first removed from the EditPane's bufferSet.
+	 * If the buffer is not in any bufferSet after that, it is closed
+	 * @param editPane the edit pane (it cannot be null)
+	 * @param buffer the buffer (it cannot be null)
+	 * @since jEdit 4.3pre15
+	 */
+	public static void closeBuffer(EditPane editPane, Buffer buffer)
+	{
+		int bufferSetsCount = bufferSetManager.countBufferSets(buffer);
+		if (bufferSetsCount < 2)
+		{
+			closeBuffer(editPane.getView(), buffer);
+		}
+		else
+		{
+			bufferSetManager.removeBuffer(editPane, buffer);
+		}
+		bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
+	} //}}}
+
 	//{{{ _closeBuffer() method
 	/**
 	 * Closes the buffer, even if it has unsaved changes.
@@ -1844,27 +1867,6 @@ public class jEdit
 
 		return true;
 	} //}}}
-
-	/**
-	 * Remove a buffer from the EditPane's bufferSet.
-	 * If the buffer is not in any bufferSet after that, it is closed
-	 * @param editPane the edit pane (it cannot be null)
-	 * @param buffer the buffer (it cannot be null)
-	 * @since jEdit 4.3pre15
-	 */
-	public static void removeFromBufferSet(EditPane editPane, Buffer buffer)
-	{
-		int bufferSetsCount = bufferSetManager.countBufferSets(buffer);
-		if (bufferSetsCount < 2)
-		{
-			closeBuffer(editPane.getView(), buffer);
-		}
-		else
-		{
-			bufferSetManager.removeBuffer(editPane, buffer);
-		}
-		bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
-	}
 
 	//{{{ saveAllBuffers() method
 	/**

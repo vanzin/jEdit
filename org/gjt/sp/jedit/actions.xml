@@ -114,13 +114,13 @@
 
 <ACTION NAME="close-buffer">
 	<CODE>
-		jEdit.closeBuffer(view,buffer);
+		jEdit.closeBuffer(editPane,buffer);
 	</CODE>
 </ACTION>
 
-<ACTION NAME="editpane-close-buffer">
+<ACTION NAME="global-close-buffer">
 	<CODE>
-		jEdit.removeFromBufferSet(editPane,buffer);
+		jEdit.closeBuffer(view,buffer);
 	</CODE>
 </ACTION>
 

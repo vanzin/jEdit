@@ -71,7 +71,7 @@ dropdown-arrow.icon=ToolbarMenu.gif
 #}}}
 
 #{{{ Tool bar
-view.toolbar=new-file open-file save editpane-close-buffer - print - \
+view.toolbar=new-file open-file save close-buffer - print - \
 	undo redo - cut copy paste - find find-next - \
 	new-view unsplit split-horizontal split-vertical - \
 	buffer-options global-options - \
@@ -81,7 +81,7 @@ new-file.icon=22x22/actions/document-new.png
 open-file.icon=22x22/actions/document-open.png
 save.icon=22x22/actions/document-save.png
 close-buffer.icon=22x22/actions/document-close.png
-editpane-close-buffer.icon=22x22/actions/document-close.png
+global-close-buffer.icon=22x22/actions/document-close.png
 print.icon=22x22/actions/document-print.png
 page-setup.icon=22x22/actions/printer-setup.png
 undo.icon=22x22/actions/edit-undo.png
@@ -189,8 +189,8 @@ file=new-file \
      reload-all \
      %reload-encoding \
      - \
-     editpane-close-buffer \
      close-buffer \
+     global-close-buffer \
      close-all \
      - \
      save \
@@ -212,9 +212,9 @@ reload.icon.small=16x16/actions/view-refresh.png
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
 close-buffer.icon.small=16x16/actions/document-close.png
-editpane-close-buffer.label=Close (local)
+global-close-buffer.label=Close (global)
 closeall-except-active.label=Clear BufferSet except active
-editpane-close-buffer.icon.small=16x16/actions/document-close.png
+global-close-buffer.icon.small=16x16/actions/document-close.png
 close-all.label=Clos$e All
 save.label=$Save
 save.icon.small=16x16/actions/document-save.png
@@ -568,7 +568,7 @@ resplit.label=$Restore Split
 prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
 buffersets.label=Buffer Sets
-buffersets=global-bufferset view-bufferset editpane-bufferset - editpane-close-buffer closeall-except-active
+buffersets=global-bufferset view-bufferset editpane-bufferset - closeall-except-active
 
 #}}}
 
