@@ -1414,13 +1414,17 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				editPane.getBuffer().getPath()));
 			splitConfig.append("\" buffer");
 			BufferSet bufferSet = editPane.getBufferSet();
-			Buffer[] buffers = bufferSet.getAllBuffers();                                                                                                         
+			Buffer[] buffers = bufferSet.getAllBuffers();
+			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 			for (Buffer buffer : buffers)
 			{
-				splitConfig.append(" \"");
-				splitConfig.append(StandardUtilities.charsToEscapes(
-					buffer.getPath()));
-				splitConfig.append("\" buff");
+				if (!buffer.isNewFile() && bufferSetManager.hasListeners(buffer))
+				{
+					splitConfig.append(" \"");
+					splitConfig.append(StandardUtilities.charsToEscapes(
+						buffer.getPath()));
+					splitConfig.append("\" buff");
+				}
 			}
 			splitConfig.append(" \"");
 			splitConfig.append(bufferSet.getScope());
