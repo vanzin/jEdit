@@ -112,6 +112,11 @@ public class BufferSetManager implements EBComponent
 			bufferSet = createBufferSet(BufferSet.SCOPE[2],source);
 			editPaneBufferSetMap.put(editPane, bufferSet);
 		}
+		if (bufferSet.size() == 0)
+		{
+			emptyBufferSets.add(bufferSet);
+			addNewUntitledBufferTopEmptyBufferSets();
+		}
 		return bufferSet;
 	}
 
