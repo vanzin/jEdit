@@ -134,6 +134,8 @@ Dale Anson, and Daniel Hahler for contributing to this release.
 - Removed an undesired dependency to jEdit from buffer.UndoManager which
   breaks independant textarea. (Kazutoshi Satoda)
 
+- New NumericTextField class. It is a TextField that accept only numeric values
+  (Matthieu Casanova)
 }}}
 
 }}}
