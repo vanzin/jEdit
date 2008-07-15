@@ -345,7 +345,13 @@ public class BufferSetManager implements EBComponent
 		for (int i = 0; i < buffers.length; i++)
 		{
 			Buffer buffer = buffers[i];
-			bufferBufferSetMap.get(buffer).add(bufferSet);
+			Set<BufferSet> bufferBufferSet = bufferBufferSetMap.get(buffer);
+			if (bufferBufferSet == null)
+			{
+				bufferBufferSet = new HashSet<BufferSet>();
+				bufferBufferSetMap.put(buffer, bufferBufferSet);
+			}
+			bufferBufferSet.add(bufferSet);
 			bufferSet.addBuffer(buffer);
 		}
 	}
