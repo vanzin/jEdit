@@ -52,6 +52,9 @@ Dale Anson, and Daniel Hahler for contributing to this release.
 
 - when opening the save dialog, if the choosen path's VFS is not browseable,
   the default directory is opened instead (Matthieu Casanova)
+
+- Better field control on Appearance and Saving & backups option panes
+  (#2015210) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

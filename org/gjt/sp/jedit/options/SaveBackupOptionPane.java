@@ -27,6 +27,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.NumericTextField;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 //}}}
 
@@ -45,6 +46,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		/* Two-stage save */
@@ -62,7 +64,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		addComponent(confirmSaveAll);
 
 		/* Autosave interval */
-		autosave = new JTextField(jEdit.getProperty("autosave"));
+		autosave = new NumericTextField(jEdit.getProperty("autosave"), true);
 		addComponent(jEdit.getProperty("options.save-back.autosave"),autosave);
 
 		/* Autosave untitled buffers */
@@ -73,7 +75,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 
 
 		/* Backup count */
-		backups = new JTextField(jEdit.getProperty("backups"));
+		backups = new NumericTextField(jEdit.getProperty("backups"), true);
 		addComponent(jEdit.getProperty("options.save-back.backups"),backups);
 
 		/* Backup directory */
@@ -106,6 +108,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		jEdit.setBooleanProperty("twoStageSave",twoStageSave.isSelected());

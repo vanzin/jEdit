@@ -27,6 +27,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
+import org.gjt.sp.jedit.gui.NumericTextField;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
@@ -38,7 +39,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	 * List of icon themes that are supported in jEdit core.
 	 * Possible values of the jedit property 'icon-theme'
 	 */
-	public static final String[] builtInIconThemes = new String[] {"tango", "old" };
+	public static final String[] builtInIconThemes = {"tango", "old"};
 	
 	//{{{ AppearanceOptionPane constructor
 	public AppearanceOptionPane()
@@ -47,6 +48,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		/* Look and feel */
@@ -110,11 +112,11 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		updateEnabled();
 
 		/* History count */
-		history = new JTextField(jEdit.getProperty("history"));
+		history = new NumericTextField(jEdit.getProperty("history"), true);
 		addComponent(jEdit.getProperty("options.appearance.history"),history);
 
 		/* Menu spillover count */
-		menuSpillover = new JTextField(jEdit.getProperty("menu.spillover"));
+		menuSpillover = new NumericTextField(jEdit.getProperty("menu.spillover"), true);
 		addComponent(jEdit.getProperty("options.appearance.menuSpillover"),menuSpillover);
 
 		continuousLayout = new JCheckBox(jEdit.getProperty(
@@ -164,6 +166,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		String lf = lfs[lookAndFeel.getSelectedIndex()].getClassName();
