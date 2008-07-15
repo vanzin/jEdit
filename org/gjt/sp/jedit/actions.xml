@@ -107,7 +107,7 @@
 		for (Buffer buff:buffers)
 		{
 			if (buff != buffer)
-				jEdit.removeFromBufferSet(editPane,buff);
+				jEdit.closeBuffer(editPane,buff);
 		}
 	</CODE>
 </ACTION>
