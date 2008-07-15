@@ -270,7 +270,7 @@ public class BufferSetManager implements EBComponent
 		if (emptyBufferSets.isEmpty())
 			return;
 		int untitledCount = jEdit.getNextUntitledBufferId();
-		Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView().getEditPane().getView(), null,
+		Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
 							    "Untitled-" + untitledCount,true, null);
 		jEdit.commitTemporary(newEmptyBuffer);
 		addBufferToEmptyBufferSets(newEmptyBuffer);

@@ -836,7 +836,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		this.view = view;
 
-		EditBus.addToBus(this);
 
 		textArea = new JEditTextArea(view);
 		paneMap.put(textArea, this);
@@ -860,6 +859,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		loadBufferSwitcher();
 
 		init = false;
+		EditBus.addToBus(this);
 	} //}}}
 
 	//{{{ close() method
