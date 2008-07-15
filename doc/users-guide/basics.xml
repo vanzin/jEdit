@@ -205,11 +205,11 @@
         changed from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu> &gt;
         <guimenu>global|view|editpane</guimenu>. </para>
         
-        <para> <guimenu>File</guimenu> &gt; <guimenuitem>Close (local)</guimenuitem> will remove the current buffer from the editpane's BufferSet. If it
-        was the last BufferSet to contain that buffer, the buffer is also closed. The regular <guimenuitem>Close</guimenuitem> action closes the buffer in all EditPanes, as before. </para>
+        <para> <guimenu>File</guimenu> &gt; <guimenuitem>Close</guimenuitem> behavior has changed in 4.3pre15: now it will remove the current buffer from the editpane's BufferSet. If it
+        was the last BufferSet to contain that buffer, the buffer is also closed. The  <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the regular Close action did before. </para>
         
         <para> <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
-        current EditPane by performing a <guimenuitem>Close (local)</guimenuitem> on all items except those buffers which are displayed in an editpane. </para>
+        current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in an editpane. </para>
         
         <para> The buffer sets feature helps keep the buffer lists local and managable when using
         jEdit in a multiple-view and multiple-editpane environment. </para>
