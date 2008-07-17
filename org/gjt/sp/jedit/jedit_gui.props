@@ -2066,10 +2066,10 @@ options.view.beepOnSearchAutoWrap=Beep when searching automatically wraps
 options.view.showBufferSwitcher=Show buffer switcher
 options.view.bufferSwitcherMaxRowsCount=Visible rows in buffer switcher:
 options.editpane.bufferset.default=BufferSet scope for new EditPanes:
-options.editpane.bufferset.copy=New BufferSets contain copy of current BufferSet
-options.editpane.bufferset.newbufferset.copy=New BufferSets contain copy of current BufferSet
-options.editpane.bufferset.newbufferset.empty=New BufferSets contain an empty buffer
-options.editpane.bufferset.newbufferset.currentbuffer=New BufferSets contain the current buffer
+options.editpane.bufferset.contain=New BufferSets contain:
+options.editpane.bufferset.newbufferset.copy=copy of current BufferSet
+options.editpane.bufferset.newbufferset.empty=an empty buffer
+options.editpane.bufferset.newbufferset.currentbuffer=current buffer only
 #}}}
 
 

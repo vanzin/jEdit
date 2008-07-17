@@ -25,7 +25,7 @@ package org.gjt.sp.jedit.menu;
 import javax.swing.JMenu;
 
 /**
- * Interface for a menu whose contents are determined at runtime.<p>
+ * Interface for a pull-down menu whose contents are determined at runtime.<p>
  *
  * See {@link org.gjt.sp.jedit.EditPlugin} for properties you need to define to
  * have your plugin provide a dynamic menu.
