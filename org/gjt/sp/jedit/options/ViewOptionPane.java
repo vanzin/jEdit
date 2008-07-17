@@ -28,6 +28,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
 
 public class ViewOptionPane extends AbstractOptionPane
 {
@@ -38,6 +39,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		/* View dock layout */
@@ -106,7 +108,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		/* Show buffer switcher */
 		showBufferSwitcher = new JCheckBox(jEdit.getProperty(
 			"options.view.showBufferSwitcher"));
-		
+
 		showBufferSwitcher.setSelected(jEdit.getBooleanProperty(
 			"view.showBufferSwitcher"));
 		addComponent(showBufferSwitcher);
@@ -118,7 +120,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.view.bufferSwitcherMaxRowsCount"),
 			bufferSwitcherMaxRowCount);
 		bufferSwitcherMaxRowCount.setEditable(showBufferSwitcher.isSelected());
-		
+
 		defaultBufferSet = new JComboBox(BufferSet.SCOPE);
 		defaultBufferSet.setSelectedItem(jEdit.getProperty("editpane.bufferset.default", BufferSet.SCOPE[0]));
 		addComponent(jEdit.getProperty("options.editpane.bufferset.default"), defaultBufferSet);
@@ -127,9 +129,17 @@ public class ViewOptionPane extends AbstractOptionPane
 		copyParentBufferSet.setSelected(jEdit.getBooleanProperty("editpane.bufferset.copy"));
 		addComponent(copyParentBufferSet);
 
+		newBufferSetBehavior = new JComboBox();
+		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.copy);
+		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.empty);
+		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.currentbuffer);
+		newBufferSetBehavior.setSelectedItem(BufferSetManager.NewBufferSetAction.fromString(jEdit.getProperty("editpane.bufferset.new")));
+		addComponent(newBufferSetBehavior);
+
 	} //}}}
 
 	//{{{ _save() method
+	@Override
 	protected void _save()
 	{
 		jEdit.setBooleanProperty("view.docking.alternateLayout",
@@ -149,7 +159,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		jEdit.setProperty("bufferSwitcher.maxRowCount",
 			bufferSwitcherMaxRowCount.getText());
 		jEdit.setProperty("editpane.bufferset.default", defaultBufferSet.getSelectedItem().toString());
-		jEdit.setBooleanProperty("editpane.bufferset.copy", copyParentBufferSet.isSelected());
+		jEdit.setProperty("editpane.bufferset.new", newBufferSetBehavior.getSelectedItem().toString());
 	} //}}}
 
 	//{{{ Private members
@@ -163,6 +173,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	private JTextField bufferSwitcherMaxRowCount;
 	private JComboBox defaultBufferSet;
 	private JCheckBox copyParentBufferSet;
+	private JComboBox newBufferSetBehavior;
 	//}}}
 
 	//{{{ ActionHandler class

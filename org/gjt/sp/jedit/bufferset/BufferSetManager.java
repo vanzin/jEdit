@@ -36,6 +36,28 @@ import java.util.*;
  */
 public class BufferSetManager implements EBComponent
 {
+	public enum NewBufferSetAction
+	{
+		empty, copy, currentbuffer;
+
+		public static NewBufferSetAction fromString(String s)
+		{
+			NewBufferSetAction[] newBufferSetActions = values();
+			for (NewBufferSetAction newBufferSetAction : newBufferSetActions)
+			{
+				if (newBufferSetAction.toString().equals(s))
+					return newBufferSetAction;
+			}
+
+			return currentbuffer;
+		}
+
+		@Override
+		public String toString()
+		{
+			return jEdit.getProperty("options.editpane.bufferset.newbufferset." + super.toString());
+		}
+	}
 	public BufferSetManager()
 	{
 		global = new BufferSet(BufferSet.SCOPE[0]);
@@ -370,24 +392,30 @@ public class BufferSetManager implements EBComponent
 	 */
 	private BufferSet createBufferSet(String scope, BufferSet source)
 	{
-		boolean copy = jEdit.getBooleanProperty("editpane.bufferset.copy");
-		if (!copy)
+		String action = jEdit.getProperty("editpane.bufferset.new");
+		NewBufferSetAction bufferSetAction = NewBufferSetAction.fromString(action);
+		BufferSet bufferSet = new BufferSet(scope);
+		switch (bufferSetAction)
 		{
-			BufferSet bufferSet = new BufferSet(scope);
-			emptyBufferSets.add(bufferSet);
-			return bufferSet;
+			case copy:
+				if (source == null)
+					addAllBuffers(bufferSet);
+				else
+					bufferSet.copy(source);
+				break;
+			case empty:
+				break;
+			case currentbuffer:
+				View activeView = jEdit.getActiveView();
+				if (activeView == null)
+					break;
+				EditPane editPane = activeView.getEditPane();
+				Buffer buffer = editPane.getBuffer();
+				bufferSet.addBuffer(buffer);
+				break;
 		}
+		
 
-		BufferSet bufferSet;
-		if (source == null)
-		{
-			bufferSet = new BufferSet(scope);
-			addAllBuffers(bufferSet);
-		}
-		else
-		{
-			bufferSet = new BufferSet(scope, source);
-		}
 		Buffer[] allBuffers = bufferSet.getAllBuffers();
 		for (Buffer buffer : allBuffers)
 		{

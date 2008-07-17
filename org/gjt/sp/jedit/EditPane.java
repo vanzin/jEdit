@@ -852,7 +852,13 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		setBufferSet();
 		if(buffer == null)
-			setBuffer(jEdit.getFirstBuffer());
+		{
+			Buffer b = bufferSet.getBuffer(0);
+			if (b == null)
+				setBuffer(jEdit.getFirstBuffer());
+			else
+				setBuffer(b);
+		}
 		else
 			setBuffer(buffer);
 
@@ -872,7 +878,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		textArea.dispose();
 	} //}}}
 
-	public static EditPane get(TextArea ta) {
+	public static EditPane get(TextArea ta)
+	{
 		return paneMap.get(ta);
 	}
 	
@@ -884,7 +891,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	private boolean init;
 	/** The View where the edit pane is. */
 	private final View view;
-	private static final HashMap<TextArea, EditPane> paneMap = new HashMap<TextArea, EditPane>();
+	private static final Map<TextArea, EditPane> paneMap = new HashMap<TextArea, EditPane>();
 	private BufferSet bufferSet;
 	/** The current buffer. */
 	private Buffer buffer;

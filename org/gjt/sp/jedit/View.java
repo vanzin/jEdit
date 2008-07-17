@@ -617,7 +617,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
-		setEditPane(createEditPane(oldEditPane.getBuffer()));
+		setEditPane(createEditPane(null));
 		editPane.loadCaretInfo();
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();

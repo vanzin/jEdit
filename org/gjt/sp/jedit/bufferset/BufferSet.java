@@ -72,9 +72,8 @@ public class BufferSet
 		}
 	}
 
-	public BufferSet(String scope, BufferSet copy)
+	void copy(BufferSet copy)
 	{
-		this(scope);
 		buffers.addAll(copy.buffers);
 		untitledCleanBuffer = copy.untitledCleanBuffer;
 		checkForCleanBuffer = copy.checkForCleanBuffer;
