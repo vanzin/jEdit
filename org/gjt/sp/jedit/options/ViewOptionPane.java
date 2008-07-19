@@ -121,8 +121,11 @@ public class ViewOptionPane extends AbstractOptionPane
 			bufferSwitcherMaxRowCount);
 		bufferSwitcherMaxRowCount.setEditable(showBufferSwitcher.isSelected());
 
-		defaultBufferSet = new JComboBox(BufferSet.SCOPE);
-		defaultBufferSet.setSelectedItem(jEdit.getProperty("editpane.bufferset.default", BufferSet.SCOPE[0]));
+		defaultBufferSet = new JComboBox();
+		defaultBufferSet.addItem(BufferSet.Scope.global);
+		defaultBufferSet.addItem(BufferSet.Scope.view);
+		defaultBufferSet.addItem(BufferSet.Scope.editpane);
+		defaultBufferSet.setSelectedItem(BufferSet.Scope.fromString(jEdit.getProperty("editpane.bufferset.default")));
 		addComponent(jEdit.getProperty("options.editpane.bufferset.default"), defaultBufferSet);
 
 

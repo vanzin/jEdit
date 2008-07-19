@@ -2,7 +2,7 @@
  * BufferSetManager.java - Manages the buffersets.
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
- * 
+ *
  * Copyright (C) 2008 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
@@ -21,21 +21,24 @@
  */
 package org.gjt.sp.jedit.bufferset;
 
+//{{{ Imports
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.util.Log;
 
 import java.util.*;
+//}}}
 
 /**
  * The buffersets manager.
- * 
+ *
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
  */
 public class BufferSetManager implements EBComponent
 {
+	//{{{ NewBufferSetAction enum
 	public enum NewBufferSetAction
 	{
 		empty, copy, currentbuffer;
@@ -57,17 +60,20 @@ public class BufferSetManager implements EBComponent
 		{
 			return jEdit.getProperty("options.editpane.bufferset.newbufferset." + super.toString());
 		}
-	}
+	} //}}}
+
+	//{{{ BufferSetManager constructor
 	public BufferSetManager()
 	{
-		global = new BufferSet(BufferSet.SCOPE[0]);
+		global = new BufferSet(BufferSet.Scope.global);
 		viewBufferSetMap = Collections.synchronizedMap(new HashMap<View, BufferSet>());
 		editPaneBufferSetMap = Collections.synchronizedMap(new HashMap<EditPane, BufferSet>());
 		bufferBufferSetMap = Collections.synchronizedMap(new HashMap<Buffer, Set<BufferSet>>());
 		emptyBufferSets = Collections.synchronizedSet(new HashSet<BufferSet>());
 		EditBus.addToBus(this);
-	}
+	} //}}}
 
+	//{{{ handleMessage() method
 	public void handleMessage(EBMessage message)
 	{
 		if (message instanceof ViewUpdate)
@@ -98,8 +104,9 @@ public class BufferSetManager implements EBComponent
 				}
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ getGlobalBufferSet() method
 	/**
 	 * Retourne le bufferSet global.
 	 *
@@ -108,14 +115,15 @@ public class BufferSetManager implements EBComponent
 	public BufferSet getGlobalBufferSet()
 	{
 		return global;
-	}
+	} //}}}
 
+	//{{{ getViewBufferSet() methods
 	public BufferSet getViewBufferSet(View view, BufferSet source)
 	{
 		BufferSet bufferSet = viewBufferSetMap.get(view);
 		if (bufferSet == null)
 		{
-			bufferSet = createBufferSet(BufferSet.SCOPE[1],source);
+			bufferSet = createBufferSet(BufferSet.Scope.view,source);
 			viewBufferSetMap.put(view, bufferSet);
 		}
 		return bufferSet;
@@ -124,14 +132,15 @@ public class BufferSetManager implements EBComponent
 	public BufferSet getViewBufferSet(View view)
 	{
 		return getViewBufferSet(view, null);
-	}
+	} //}}}
 
+	//{{{ getEditPaneBufferSet() methods
 	public BufferSet getEditPaneBufferSet(EditPane editPane, BufferSet source)
 	{
 		BufferSet bufferSet = editPaneBufferSetMap.get(editPane);
 		if (bufferSet == null)
 		{
-			bufferSet = createBufferSet(BufferSet.SCOPE[2],source);
+			bufferSet = createBufferSet(BufferSet.Scope.editpane,source);
 			editPaneBufferSetMap.put(editPane, bufferSet);
 		}
 		if (bufferSet.size() == 0)
@@ -142,11 +151,13 @@ public class BufferSetManager implements EBComponent
 		return bufferSet;
 	}
 
+
 	public BufferSet getEditPaneBufferSet(EditPane editPane)
 	{
 		return getEditPaneBufferSet(editPane, null);
-	}
+	} //}}}
 
+	//{{{ countBufferSets() method
 	/**
 	 * Count the bufferSets in which the buffer is.
 	 * @param buffer the buffer
@@ -158,8 +169,9 @@ public class BufferSetManager implements EBComponent
 		if (sets == null)
 			return 0;
 		return sets.size();
-	}
+	} //}}}
 
+	//{{{ addBuffer() methods
 	public void addBuffer(View view, Buffer buffer)
 	{
 		EditPane editPane = view == null ? null : view.getEditPane();
@@ -189,11 +201,12 @@ public class BufferSetManager implements EBComponent
 		}
 		bufferSets.add(bufferSet);
 		bufferSet.addBuffer(buffer);
-	}
+	} //}}}
 
+	//{{{ removeBuffer() methods
 	/**
 	 * Remove a buffer from the EditPane's bufferSet.
-	 * 
+	 *
 	 * @param editPane the editPane It cannot be null
 	 * @param buffer the buffer
 	 */
@@ -229,8 +242,9 @@ public class BufferSetManager implements EBComponent
 			Log.log(Log.DEBUG, this, "Buffer:" + buffer + " is only in bufferSets that have no listeners, closing it");
 			jEdit._closeBuffer(null, buffer);
 		}
-	}
+	} //}}}
 
+	//{{{ hasListeners() method
 	/**
 	 * Check if a buffer is in at least one bufferSet that as some listeners.
 	 * Otherwise nobody can see it.
@@ -251,8 +265,9 @@ public class BufferSetManager implements EBComponent
 			}
 		}
 		return false;
-	}
+	} //}}}
 
+	//{{{ removeBuffer() method
 	/**
 	 * remove a buffer from all bufferSets.
 	 *
@@ -269,8 +284,9 @@ public class BufferSetManager implements EBComponent
 				emptyBufferSets.add(bufferSet);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ clear() method
 	/**
 	 * Close all buffers.
 	 */
@@ -285,8 +301,9 @@ public class BufferSetManager implements EBComponent
 				emptyBufferSets.add(bufferSet);
 			}
 		});
-	}
+	} //}}}
 
+	//{{{ addNewUntitledBufferTopEmptyBufferSets() method
 	public void addNewUntitledBufferTopEmptyBufferSets()
 	{
 		if (emptyBufferSets.isEmpty())
@@ -296,8 +313,9 @@ public class BufferSetManager implements EBComponent
 							    "Untitled-" + untitledCount,true, null);
 		jEdit.commitTemporary(newEmptyBuffer);
 		addBufferToEmptyBufferSets(newEmptyBuffer);
-	}
+	} //}}}
 
+	//{{{ addBufferToEmptyBufferSets() method
 	/**
 	 * Add this buffer to all empty buffersets.
 	 * Usually it will be a new untitled bufferSet
@@ -324,8 +342,9 @@ public class BufferSetManager implements EBComponent
 			}
 			emptyBufferSets.clear();
 		}
-	}
+	} //}}}
 
+	//{{{ visit() method
 	/**
 	 * This method will visit all buffersets.
 	 *
@@ -344,8 +363,11 @@ public class BufferSetManager implements EBComponent
 		{
 			visitor.visit(bufferSet);
 		}
-	}
+	} //}}}
 
+	//{{{ Private members
+
+	//{{{ Fields
 	/** The global bufferSet. */
 	private final BufferSet global;
 	/** The BufferSets that will be associated to a View. */
@@ -357,10 +379,13 @@ public class BufferSetManager implements EBComponent
 
 	/**
 	 * This set contains the buffersets that are currently empty.
-	 * They will need to get a new buffer quickly 
+	 * They will need to get a new buffer quickly
 	 */
 	private final Set<BufferSet> emptyBufferSets;
+	//}}}
 
+
+	//{{{ addAllBuffers() method
 	/**
 	 * Add all buffers to the bufferSet.
 	 *
@@ -381,8 +406,9 @@ public class BufferSetManager implements EBComponent
 			bufferBufferSet.add(bufferSet);
 			bufferSet.addBuffer(buffer);
 		}
-	}
+	} //}}}
 
+	//{{{ createBufferSet() method
 	/**
 	 * Create a bufferSet
 	 * @param scope the scope of the bufferSet
@@ -390,7 +416,7 @@ public class BufferSetManager implements EBComponent
 	 * are added
 	 * @return the new bufferSet
 	 */
-	private BufferSet createBufferSet(String scope, BufferSet source)
+	private BufferSet createBufferSet(BufferSet.Scope scope, BufferSet source)
 	{
 		String action = jEdit.getProperty("editpane.bufferset.new");
 		NewBufferSetAction bufferSetAction = NewBufferSetAction.fromString(action);
@@ -414,7 +440,7 @@ public class BufferSetManager implements EBComponent
 				bufferSet.addBuffer(buffer);
 				break;
 		}
-		
+
 
 		Buffer[] allBuffers = bufferSet.getAllBuffers();
 		for (Buffer buffer : allBuffers)
@@ -422,13 +448,15 @@ public class BufferSetManager implements EBComponent
 			bufferBufferSetMap.get(buffer).add(bufferSet);
 		}
 		return bufferSet;
-	}
+	} //}}}
 
+	//{{{ BufferSetVisitor interface
 	public static interface BufferSetVisitor
 	{
 		void visit(BufferSet bufferSet);
-	}
+	} //}}}
 
+	//{{{ BufferSetClosed class
 	private class BufferSetClosed extends BufferSetAdapter
 	{
 		private BufferSet closedBufferSet;
@@ -461,5 +489,7 @@ public class BufferSetManager implements EBComponent
 				}
 			}
 		}
-	}
+	} //}}}
+
+	//}}}
 }

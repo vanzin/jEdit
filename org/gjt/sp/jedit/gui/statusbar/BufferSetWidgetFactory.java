@@ -56,9 +56,9 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 	{
 		private final JLabel bufferSetLabel;
 		private final View view;
-		private String currentScope;
+		private BufferSet.Scope currentScope;
 
-		public BufferSetWidget(final View view)
+		BufferSetWidget(final View view)
 		{
 			bufferSetLabel = new ToolTipLabel()
 			{
@@ -87,19 +87,19 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 					{
 						EditPane editPane = view.getEditPane();
 						BufferSet bufferSet = editPane.getBufferSet();
-						String scope = bufferSet.getScope();
+						BufferSet.Scope scope = bufferSet.getScope();
 						BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
-						if ("view".equals(scope))
+						switch (scope)
 						{
-							editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane, bufferSet));
-						}
-						else if ("editpane".equals(scope))
-						{
-							editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());
-						}
-						else
-						{
-							editPane.setBufferSet(bufferSetManager.getViewBufferSet(editPane.getView()));
+							case global:
+								editPane.setBufferSet(bufferSetManager.getViewBufferSet(editPane.getView()));
+								break;
+							case view:
+								editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane, bufferSet));
+								break;
+							case editpane:
+								editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());
+								break;
 						}
 					}
 				}
@@ -115,10 +115,10 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 		//{{{ update() method
 		public void update()
 		{
-			String scope = view.getEditPane().getBufferSet().getScope();
+			BufferSet.Scope scope = view.getEditPane().getBufferSet().getScope();
 			if (currentScope == null || !currentScope.equals(scope))
 			{
-				bufferSetLabel.setText(scope.substring(0,1).toUpperCase());
+				bufferSetLabel.setText(scope.toString().substring(0,1).toUpperCase());
 				bufferSetLabel.setToolTipText(jEdit.getProperty("view.status.bufferset-tooltip", new Object[] {scope}));
 				currentScope = scope;
 			}

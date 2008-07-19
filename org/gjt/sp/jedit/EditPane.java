@@ -675,19 +675,19 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	 */
 	public void setBufferSet()
 	{
-		String mode = jEdit.getProperty("editpane.bufferset.default", BufferSet.SCOPE[0]);
+		BufferSet.Scope mode = BufferSet.Scope.fromString(jEdit.getProperty("editpane.bufferset.default"));
 
-		if (mode.equals(BufferSet.SCOPE[1]))
+		switch (mode)
 		{
-			setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view));
-		}
-		else if (mode.equals(BufferSet.SCOPE[2]))
-		{
-			setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(this, bufferSet));
-		}
-		else
-		{
-			setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
+			case view:
+				setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view));
+				break;
+			case editpane:
+				setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(this, bufferSet));
+				break;
+			case global:
+				setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
+				break;
 		}
 	}
 

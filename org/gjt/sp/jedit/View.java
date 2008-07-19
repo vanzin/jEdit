@@ -1547,19 +1547,19 @@ loop:		while (true)
 				}
 				else if (st.sval.equals("bufferset"))
 				{
-					String scope = (String) stack.pop();
+					BufferSet.Scope scope = BufferSet.Scope.fromString((String) stack.pop());
 					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
-					if (BufferSet.SCOPE[0].equals(scope))
+					switch (scope)
 					{
-						editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());
-					}
-					else if (BufferSet.SCOPE[1].equals(scope))
-					{
-						editPane.setBufferSet(bufferSetManager.getViewBufferSet(this));
-					}
-					else if (BufferSet.SCOPE[2].equals(scope))
-					{
-						editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane));
+						case view:
+							editPane.setBufferSet(bufferSetManager.getViewBufferSet(this));
+							break;
+						case editpane:
+							editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane));
+							break;
+						case global:
+							editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());
+							break;
 					}
 					BufferSet bufferSet = editPane.getBufferSet();
 					for (Buffer buff : editPaneBuffers)
