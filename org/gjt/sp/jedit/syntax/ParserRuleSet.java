@@ -178,6 +178,7 @@ public class ParserRuleSet
 	/**
 	* @deprecated As the linking between rules is not anymore done within the rule, use {@link #getRules(Character)} instead
 	*/
+	@Deprecated
 	public ParserRule getRules(char ch)
 	{
 		List<ParserRule> rules = getRules(Character.valueOf(ch));
@@ -341,6 +342,7 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ toString() method
+	@Override
 	public String toString()
 	{
 		return getClass().getName() + '[' + modeName + "::" + setName + ']';
