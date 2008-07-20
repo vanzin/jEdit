@@ -69,7 +69,6 @@ public class BufferSetManager implements EBComponent
 		viewBufferSetMap = Collections.synchronizedMap(new HashMap<View, BufferSet>());
 		editPaneBufferSetMap = Collections.synchronizedMap(new HashMap<EditPane, BufferSet>());
 		bufferBufferSetMap = Collections.synchronizedMap(new HashMap<Buffer, Set<BufferSet>>());
-		emptyBufferSets = Collections.synchronizedSet(new HashSet<BufferSet>());
 		EditBus.addToBus(this);
 	} //}}}
 
@@ -143,11 +142,7 @@ public class BufferSetManager implements EBComponent
 			bufferSet = createBufferSet(BufferSet.Scope.editpane,source);
 			editPaneBufferSetMap.put(editPane, bufferSet);
 		}
-		if (bufferSet.size() == 0)
-		{
-			emptyBufferSets.add(bufferSet);
-			addNewUntitledBufferTopEmptyBufferSets();
-		}
+
 		return bufferSet;
 	}
 
@@ -228,10 +223,7 @@ public class BufferSetManager implements EBComponent
 		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
 		bufferSets.remove(bufferSet);
 		bufferSet.removeBuffer(buffer);
-		if (bufferSet.size() == 0)
-		{
-			emptyBufferSets.add(bufferSet);
-		}
+
 		if (bufferSets.isEmpty())
 		{
 			Log.log(Log.DEBUG, this, "Buffer:"+buffer+" is in no bufferSet anymore, closing it");
@@ -279,10 +271,6 @@ public class BufferSetManager implements EBComponent
 		for (BufferSet bufferSet : sets)
 		{
 			bufferSet.removeBuffer(buffer);
-			if (bufferSet.size() == 0)
-			{
-				emptyBufferSets.add(bufferSet);
-			}
 		}
 	} //}}}
 
@@ -298,50 +286,8 @@ public class BufferSetManager implements EBComponent
 			public void visit(BufferSet bufferSet)
 			{
 				bufferSet.clear();
-				emptyBufferSets.add(bufferSet);
 			}
 		});
-	} //}}}
-
-	//{{{ addNewUntitledBufferTopEmptyBufferSets() method
-	public void addNewUntitledBufferTopEmptyBufferSets()
-	{
-		if (emptyBufferSets.isEmpty())
-			return;
-		int untitledCount = jEdit.getNextUntitledBufferId();
-		Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
-							    "Untitled-" + untitledCount,true, null);
-		jEdit.commitTemporary(newEmptyBuffer);
-		addBufferToEmptyBufferSets(newEmptyBuffer);
-	} //}}}
-
-	//{{{ addBufferToEmptyBufferSets() method
-	/**
-	 * Add this buffer to all empty buffersets.
-	 * Usually it will be a new untitled bufferSet
-	 *
-	 * @param buffer the buffer to add
-	 */
-	private void addBufferToEmptyBufferSets(Buffer buffer)
-	{
-		Set<BufferSet> sets = bufferBufferSetMap.get(buffer);
-		if (sets == null)
-		{
-			sets = new HashSet<BufferSet>();
-			bufferBufferSetMap.put(buffer, sets);
-		}
-		synchronized (emptyBufferSets)
-		{
-			for (BufferSet bufferSet : emptyBufferSets)
-			{
-				if (bufferSet.size() == 0)
-				{
-					sets.add(bufferSet);
-					bufferSet.addBuffer(buffer);
-				}
-			}
-			emptyBufferSets.clear();
-		}
 	} //}}}
 
 	//{{{ visit() method
@@ -376,12 +322,6 @@ public class BufferSetManager implements EBComponent
 
 	/** The BufferSets that contains the Buffer. */
 	private final Map<Buffer, Set<BufferSet>> bufferBufferSetMap;
-
-	/**
-	 * This set contains the buffersets that are currently empty.
-	 * They will need to get a new buffer quickly
-	 */
-	private final Set<BufferSet> emptyBufferSets;
 	//}}}
 
 

@@ -1720,7 +1720,6 @@ public class jEdit
 		{
 			bufferSetManager.removeBuffer(editPane, buffer);
 		}
-		bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
 	} //}}}
 
 	//{{{ _closeBuffer() method
@@ -1772,8 +1771,6 @@ public class jEdit
 		EditBus.send(new BufferUpdate(buffer,view,BufferUpdate.CLOSED));
 		if(jEdit.getBooleanProperty("persistentMarkers"))
 			buffer.updateMarkersFile(view);
-
-		bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
 	} //}}}
 
 	//{{{ closeAllBuffers() methods
@@ -1831,7 +1828,6 @@ public class jEdit
 		// zero it here so that BufferTabs doesn't have any problems
 		buffersFirst = buffersLast = null;
 		bufferHash.clear();
-		bufferSetManager.clear();
 		bufferCount = 0;
 
 		while(buffer != null)
@@ -1858,11 +1854,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		if(!isExiting)
-		{
-			bufferSetManager.addNewUntitledBufferTopEmptyBufferSets();
-		}
-
+		bufferSetManager.clear();
 		PerspectiveManager.setPerspectiveDirty(true);
 
 		return true;
@@ -2037,24 +2029,33 @@ public class jEdit
 	//{{{ getLastBuffer() method
 	/**
 	 * Returns the last buffer.
+	 * @return the last buffer
 	 */
 	public static Buffer getLastBuffer()
 	{
 		return buffersLast;
 	} //}}}
 
+	//{{{ getBufferSetManager() method
+	/**
+	 * Returns the bufferSet manager.
+	 * @return the bufferSetManager
+	 * @since jEdit 4.3pre15
+	 */
 	public static BufferSetManager getBufferSetManager()
 	{
 		return bufferSetManager;
-	}
+	} //}}}
 
+	//{{{ getPropertyManager() method
 	/**
+	 * @returns the propertyManager
 	 * @since jEdit 4.3pre15
 	 */
 	public static JEditPropertyManager getPropertyManager()
 	{
 		return propertyManager;
-	}
+	} //}}}
 
 	//{{{ checkBufferStatus() methods
 	/**

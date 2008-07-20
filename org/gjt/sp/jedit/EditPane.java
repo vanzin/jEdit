@@ -704,6 +704,15 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			{
 				this.bufferSet.removeBufferSetListener(this);
 			}
+			if (bufferSet.size() == 0)
+			{
+				int untitledCount = jEdit.getNextUntitledBufferId();
+				Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
+									    "Untitled-" + untitledCount,true, null);
+				jEdit.commitTemporary(newEmptyBuffer);
+				jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+			}
+
 			this.bufferSet = bufferSet;
 			bufferSet.addBufferSetListener(this);
 			if (bufferSwitcher != null)
@@ -783,6 +792,15 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 				setBuffer(bufferSet.getBuffer(0));
 				recentBuffer = null;
 			}
+			else
+			{
+				int untitledCount = jEdit.getNextUntitledBufferId();
+				Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
+									    "Untitled-" + untitledCount,true, null);
+				jEdit.commitTemporary(newEmptyBuffer);
+				jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+				setBuffer(newEmptyBuffer);
+			}
 		}
 		if(buffer == recentBuffer)
 			recentBuffer = null;
@@ -811,8 +829,14 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	 */
 	public void bufferCleared()
 	{
-		if (bufferSwitcher != null)
-			bufferSwitcher.updateBufferList();
+		int untitledCount = jEdit.getNextUntitledBufferId();
+		Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
+									    "Untitled-" + untitledCount,true, null);
+		jEdit.commitTemporary(newEmptyBuffer);
+		jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+		setBuffer(newEmptyBuffer);
+//		if (bufferSwitcher != null)
+//			bufferSwitcher.updateBufferList();
 	} //}}}
 
 	//{{{ toString() method
