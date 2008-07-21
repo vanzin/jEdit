@@ -589,6 +589,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ splitHorizontally() method
 	/**
 	 * Splits the view horizontally.
+	 * @return the new editPane
 	 * @since jEdit 4.1pre2
 	 */
 	public EditPane splitHorizontally()
@@ -599,6 +600,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ splitVertically() method
 	/**
 	 * Splits the view vertically.
+	 * @return the new editPane
 	 * @since jEdit 4.1pre2
 	 */
 	public EditPane splitVertically()
@@ -609,6 +611,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ split() method
 	/**
 	 * Splits the view.
+	 * @param orientation the orientation {@link javax.swing.JSplitPane#HORIZONTAL_SPLIT} or
+	 * {@link javax.swing.JSplitPane#VERTICAL_SPLIT}
+	 * @return the new editPane
 	 * @since jEdit 4.1pre2
 	 */
 	public EditPane split(int orientation)
@@ -617,8 +622,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
-		setEditPane(createEditPane(null));
-		editPane.loadCaretInfo();
+		EditPane newEditPane = createEditPane(null);
+//		setEditPane(newEditPane);
+		newEditPane.loadCaretInfo();
 
 		JComponent oldParent = (JComponent)oldEditPane.getParent();
 
@@ -648,7 +654,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				oldSplitPane.setRightComponent(newSplitPane);
 
 			newSplitPane.setLeftComponent(oldEditPane);
-			newSplitPane.setRightComponent(editPane);
+			newSplitPane.setRightComponent(newEditPane);
 
 			oldSplitPane.setDividerLocation(dividerPos);
 		}
@@ -657,7 +663,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			splitPane = newSplitPane;
 
 			newSplitPane.setLeftComponent(oldEditPane);
-			newSplitPane.setRightComponent(editPane);
+			newSplitPane.setRightComponent(newEditPane);
 
 			oldParent.add(newSplitPane,0);
 			oldParent.revalidate();
@@ -673,7 +679,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		editPane.focusOnTextArea();
 
-		return editPane;
+		return newEditPane;
 	} //}}}
 
 	//{{{ unsplit() method
@@ -831,6 +837,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getSplitPane() method
 	/**
 	 * Returns the top-level split pane, if any.
+	 * @return the top JSplitPane if any.
 	 * @since jEdit 2.3pre2
 	 */
 	public JSplitPane getSplitPane()
@@ -898,6 +905,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * to that edit pane. Otherwise, opens the buffer in the currently
 	 * active edit pane.
 	 * @param buffer The buffer
+	 * @return the current edit pane
 	 * @since jEdit 4.2pre1
 	 */
 	public EditPane goToBuffer(Buffer buffer)
@@ -910,7 +918,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * If this buffer is open in one of the view's edit panes, activates
 	 * that edit pane. Otherwise, opens the buffer in the currently
 	 * active edit pane. But the focus is not moved.
-	 * @param buffer The buffer
+	 * @param buffer The buffer to show
+	 * @return the current edit pane
 	 * @since jEdit 4.3pre13
 	 */
 	public EditPane showBuffer(Buffer buffer)
@@ -934,6 +943,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getEditPane() method
 	/**
 	 * Returns the current edit pane.
+	 * @return the current edit pane
 	 * @since jEdit 2.5pre2
 	 */
 	public EditPane getEditPane()
@@ -944,6 +954,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getEditPanes() method
 	/**
 	 * Returns all edit panes.
+	 * @return an array of all edit panes in the view
 	 * @since jEdit 2.5pre2
 	 */
 	public EditPane[] getEditPanes()
@@ -965,6 +976,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	//{{{ getViewConfig() method
 	/**
+	 * @return a ViewConfig instance for the current view
 	 * @since jEdit 4.2pre1
 	 */
 	public ViewConfig getViewConfig()
@@ -1026,6 +1038,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	/**
 	 * Returns true if this view has been closed with
 	 * {@link jEdit#closeView(View)}.
+	 * @return true if the view is closed
 	 */
 	public boolean isClosed()
 	{
@@ -1035,6 +1048,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ isPlainView() method
 	/**
 	 * Returns true if this is an auxilliary view with no dockable windows.
+	 * @return true if the view is plain
 	 * @since jEdit 4.1pre2
 	 */
 	public boolean isPlainView()
@@ -1045,6 +1059,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getNext() method
 	/**
 	 * Returns the next view in the list.
+	 * @return the next view
 	 */
 	public View getNext()
 	{
@@ -1054,6 +1069,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ getPrev() method
 	/**
 	 * Returns the previous view in the list.
+	 * @return the preview view
 	 */
 	public View getPrev()
 	{
@@ -1494,9 +1510,9 @@ loop:		while (true)
 					st.sval.equals("horizontal"))
 				{
 					int orientation
-						= (st.sval.equals("vertical")
+						= st.sval.equals("vertical")
 						? JSplitPane.VERTICAL_SPLIT
-						: JSplitPane.HORIZONTAL_SPLIT);
+						: JSplitPane.HORIZONTAL_SPLIT;
 					int divider = ((Integer)stack.pop())
 						.intValue();
 					stack.push(splitPane = new JSplitPane(
@@ -1737,7 +1753,7 @@ loop:		while (true)
 	//{{{ Inner classes
 
 	//{{{ CaretHandler class
-	class CaretHandler implements CaretListener
+	private class CaretHandler implements CaretListener
 	{
 		public void caretUpdate(CaretEvent evt)
 		{
@@ -1747,7 +1763,7 @@ loop:		while (true)
 	} //}}}
 
 	//{{{ FocusHandler class
-	class FocusHandler extends FocusAdapter
+	private class FocusHandler extends FocusAdapter
 	{
 		@Override
 		public void focusGained(FocusEvent evt)
@@ -1770,7 +1786,7 @@ loop:		while (true)
 	} //}}}
 
 	//{{{ ScrollHandler class
-	class ScrollHandler implements ScrollListener
+	private class ScrollHandler implements ScrollListener
 	{
 		public void scrolledVertically(TextArea textArea)
 		{
@@ -1782,7 +1798,7 @@ loop:		while (true)
 	} //}}}
 
 	//{{{ WindowHandler class
-	class WindowHandler extends WindowAdapter
+	private class WindowHandler extends WindowAdapter
 	{
 		@Override
 		public void windowActivated(WindowEvent evt)
@@ -1861,7 +1877,7 @@ loop:		while (true)
 	} //}}}
 
 	//{{{ MyFocusTraversalPolicy class
-	static class MyFocusTraversalPolicy extends LayoutFocusTraversalPolicy
+	private static class MyFocusTraversalPolicy extends LayoutFocusTraversalPolicy
 	{
 		@Override
 		public Component getDefaultComponent(Container focusCycleRoot)
