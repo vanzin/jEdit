@@ -677,7 +677,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			}
 		});
 
-		editPane.focusOnTextArea();
+		newEditPane.focusOnTextArea();
 
 		return newEditPane;
 	} //}}}
