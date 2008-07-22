@@ -10,30 +10,30 @@
 
         <para>A <firstterm>View</firstterm> is the jEdit term for an editor main
         window. It is possible to have multiple views open at once, and each
-        view can be split into multiple panes. jEdit remembers the state of open
+        View can be split into multiple panes. jEdit remembers the state of open
         views between editing sessions.</para>
         
         <para>An open file is referred to as a <firstterm>Buffer</firstterm>.
-        Unlike some editors where each buffer gets its own view, jEdit
+        Unlike some editors where each buffer gets its own View, jEdit
         completely separates the two concepts. A buffer might be visible in
         several views, or none at all.</para>
 
         <para>A <firstterm>TextArea</firstterm> is an editor for a buffer. 
-        An <firstterm>EditPane</firstterm> contains a textarea plus optional buffer switcher. 
-        A View contains one editpane by default, and additional panes are created whenever
-        the view is split.  </para>
+        An <firstterm>EditPane</firstterm> contains a TextArea plus optional buffer switcher. 
+        A View contains one EditPane by default, and additional panes are created whenever
+        the View is split.  </para>
         
         <para>The drop-down buffer switcher list at the top of each EditPane shows
         a buffer set which by default includes all open buffers.
-        Selecting a buffer on this list will make it visible in the text area. Different
+        Selecting a buffer on this list will make it visible in the TextArea. Different
         emblems are displayed next to buffer names in the list, depending the
         buffer's state; a red disk is shown for buffers with unsaved changes, a
         lock is shown for read-only buffers, and a spark is shown for new
         buffers which don't yet exist on disk.</para>
 
         <para>As with most other graphical applications, there is a tool bar at
-        the top of the view which provides quick access to frequently-used
-        commands. Also, clicking the text area with the right mouse button
+        the top of the View which provides quick access to frequently-used
+        commands. Also, clicking the TextArea with the right mouse button
         displays a popup menu which also facilitates quick access to various
         commands. Both the tool bar and the right-click menu can be completely
         customized to suit your tastes in the
@@ -41,13 +41,13 @@
         Options</guimenuitem> dialog box; see <xref linkend="context-pane" />
         and <xref linkend="toolbar-pane" />.</para>
 
-        <para>Most of the view is taken up by the text area. If you've ever used
-        a graphical user interface before, the text area will be instantly
+        <para>Most of the View is taken up by the TextArea. If you've ever used
+        a graphical user interface before, the TextArea will be instantly
         familiar. Text can be inserted simply by typing. More details on text
         insertion and deletion can be found in <xref
         linkend="entering-text" />.</para>
 
-        <para>The strip on the left of the text area is called a
+        <para>The strip on the left of the TextArea is called a
         <firstterm>gutter</firstterm>. The gutter displays marker and register
         locations, as well as folding arrows; it will also display line numbers
         if the <guimenu>View</guimenu>&gt;<guimenuitem>Line
@@ -66,25 +66,25 @@
         (main windows) can be open at once.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>New View</guimenuitem>
-        creates a new view, or main window.</para>
+        creates a new View, or main window.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>New Plain
-        View</guimenuitem> creates a new view but without any tool bars or
+        View</guimenuitem> creates a new View but without any tool bars or
         dockable windows. This can be used to open a small window for taking notes
         and so on.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Close View</guimenuitem>
-        closes the current view. If only one view is open, closing it will exit
+        closes the current View. If only one View is open, closing it will exit
         jEdit, unless background mode is on; see <xref linkend="starting" /> for
         information about starting jEdit in background mode.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Split
         Horizontally</guimenuitem> (shortcut: <keycap>C+2</keycap>) splits the
-        view into two TextAreas, placed above each other.</para>
+        View into two TextAreas, placed above each other.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Split
         Vertically</guimenuitem> (shortcut: <keycap>C+3</keycap>) splits the
-        view into two TextAreas, placed next to each other.</para>
+        View into two TextAreas, placed next to each other.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Unsplit
         Current</guimenuitem> (shortcut: <keycap>C+0</keycap>) removes the split
@@ -93,21 +93,21 @@
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Unsplit All</guimenuitem>
         (shortcut: <keycap>C+1</keycap>) removes all splits from the View.</para>
 
-        <para>When a view is split, editing commands operate on the TextArea
+        <para>When a View is split, editing commands operate on the TextArea
         that has keyboard focus. To give a TextArea keyboard focus, click in it
         with the mouse, or use the following commands.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Previous Text
         Area</guimenuitem> (shortcut: <keycap>A+PAGE_UP</keycap>) shifts
-        keyboard focus to the previous text area.</para>
+        keyboard focus to the previous TextArea.</para>
 
         <para><guimenu>View</guimenu>&gt;<guimenuitem>Go to Next Text
         Area</guimenuitem> (shortcut: <keycap>A+PAGE_DOWN</keycap>) shifts
-        keyboard focus to the next text area.</para>
+        keyboard focus to the next TextArea.</para>
         
         <para><guimenu>Macros</guimenu>&gt;<guimenu>Interface</guimenu>&gt;
         <guimenu>Splitpane Grow</guimenu> grows the size of the currently focused
-        text area. </para>
+        TextArea. </para>
         
     </sect1>
 
@@ -182,7 +182,7 @@
         displays the contents of a BufferSet. In jEdit 4.2, all EditPane buffer switchers
         showed the same BufferSet: a global list of all buffers that were opened from any EditPane in any View. 
         When using many Views and EditPanes, this resulted in large lists of buffers, and made
-        the next/previous buffer actions useless with many views, editpanes and buffers. 
+        the next/previous buffer actions useless with many views, EditPanes and buffers. 
         </para>
         
         <para> In jEdit 4.3, it is possible to have different scopes for the BufferSets of each EditPane. The three scopes are: </para>
@@ -191,7 +191,7 @@
         <listitem><para> <emphasis role="bold">View</emphasis>: EditPanes in the same View share the same
         BufferSet. Opening a buffer in one View will not affect the non-global scope BufferSets in EditPanes of other
         Views. </para></listitem> 
-        <listitem><para><emphasis role="bold">EditPane</emphasis>: Each EditPane can have its own independent BufferSet, although any buffers that are opened from it should also show up in the Global bufferset..
+        <listitem><para><emphasis role="bold">EditPane</emphasis>: Each EditPane can have its own independent BufferSet, although any buffers that are opened from it should also show up in the Global BufferSet..
         </para></listitem>
         </orderedlist>
         
@@ -200,43 +200,42 @@
         &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope for new
         EditPanes</guilabel>. </para>
         
+                
+        <para> New BufferSets are initially empty, or populated with a copy of the 
+        existing BufferSet. This behavior can be changed from 
+        <guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt; 
+        <guilabel>New BufferSets contain: copies of current BufferSet</guilabel>. </para>
+        
+        <para> The statusbar shows you which BufferSet scope is active for the current EditPane 
+        (look for the letter "G", "E" or "V"). Double-clicking on that
+        will allow you to change the buffer set. Also, the scope for the current EditPane BufferSet can be changed from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu> &gt;
+        <guimenu>(Global|View|EditPane) Buffer Set</guimenu>. </para>
+
         <para> A new BufferSet can be created in a number of ways, such as when a new
         View is created (and the default BufferSet scope is not global) or when the
         View is split (and the default BufferSet scope is EditPane), or when the
-        BufferSet scope is changed to EditPane by invoking an action.
-        </para>
-                
-        <para> New buffersets are initially empty, or populated with a copy of the 
-        existing bufferset. This behavior can be changed from 
-        <guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt; 
-        <guilabel>New BufferSets contain: copies of current bufferset</guilabel>. </para>
-        
-        <para> The statusbar shows you which bufferset scope is active for the current editpane 
-        (look for the letter "G", "E" or "V"). Double-clicking on that
-        will allow you to change the buffer set. Also, the scope for the current EditPane can be
-        changed from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu> &gt;
-        <guimenu>global|view|editpane</guimenu>. </para>
+        BufferSet scope is changed to EditPane via the statusbar or menu action. </para>
         
         <para> <guimenu>File</guimenu> &gt; <guimenuitem>Close</guimenuitem> behavior has changed in 4.3pre15: now it will remove the current buffer from the EditPane's BufferSet. If it
         was the last BufferSet to contain that buffer, the buffer is also closed. </para>
-        <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the regular Close action did before. </para>
+        <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the regular <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before. </para>
         
         <para> <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
-        current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active editpane. </para>
+        current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active EditPane. </para>
         
-        <para> The buffer sets feature helps keep the buffer lists local and managable when using
-        jEdit in a multiple-view and multiple-editpane environment. </para>
+        <para> The buffer sets feature helps keep the buffer lists local and manageable when using
+        jEdit in a multiple-View and multiple-EditPane environment. </para>
     </sect1>
     
     <sect1 id="docking">
         <title>Window Docking</title>
 
-        <para>Various jEdit and plugin windows can be docked into the view for
+        <para>Various jEdit and plugin windows can be docked into the View for
         convenience. Dockable windows have a popup button in their top-left
         corner. Clicking this button displays a menu with commands for docking
-        the window in one of four sides of the view.</para>
+        the window in one of four sides of the View.</para>
 
-        <para>On each side of the text area where there are docked windows, a
+        <para>On each side of the TextArea where there are docked windows, a
         strip of buttons is shown. There is a button for activating each docked
         window, as well as a close box and a popup menu button, which when
         clicked shows a menu for moving or undocking the currently selected
@@ -288,7 +287,7 @@
     <sect1 id="status-bar">
         <title>The Status Bar</title>
 
-        <para>The <firstterm>status bar</firstterm> at the bottom of the view
+        <para>The <firstterm>status bar</firstterm> at the bottom of the View
         consists of the following components, from left to right:</para>
 
         <itemizedlist>
@@ -407,7 +406,7 @@
 
         <para><guimenu>Utilities</guimenu>&gt;<guimenuitem>Action
         Bar</guimenuitem> (shortcut: <keycap>C+ENTER</keycap>) displays the
-        action bar at the bottom of the view and gives it keyboard focus. The
+        action bar at the bottom of the View and gives it keyboard focus. The
         action bar remembers previously entered strings; see <xref
         linkend="history" /> for details.</para>
 
