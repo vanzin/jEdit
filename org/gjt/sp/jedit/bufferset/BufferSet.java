@@ -61,7 +61,12 @@ public class BufferSet
 	} //}}}
 
 	//{{{ BufferSet constructor
-	public BufferSet(Scope scope)
+	/**
+	 * Create a new BufferSet with the given scope. Only the BufferSetManager can call this
+	 * constructor
+	 * @param scope the scope
+	 */
+	BufferSet(Scope scope)
 	{
 		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		listeners = new EventListenerList();
@@ -137,12 +142,21 @@ public class BufferSet
 	} //}}}
 
 	//{{{ getBuffer() method
+	/**
+	 * Returns the Buffer at the given index.
+	 * @param index the index. The index must exists
+	 * @return the buffer at the index.
+	 */
 	public Buffer getBuffer(int index)
 	{
 		return buffers.get(index);
 	} //}}}
 
 	//{{{ getScope() method
+	/**
+	 * Returns the scope of the bufferSet.
+	 * @return the scope of the bufferSet
+	 */
 	public Scope getScope()
 	{
 		return scope;
