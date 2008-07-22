@@ -735,6 +735,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 					setBuffer(bufferSet.getBuffer(0));
 				}
 			}
+			PerspectiveManager.setPerspectiveDirty(true);
 		}
 	} //}}}
 
