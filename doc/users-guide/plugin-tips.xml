@@ -52,4 +52,109 @@
         url="../api/org/gjt/sp/jedit/EditPlugin.html"><classname>EditPlugin</classname></ulink>
         class for details.</para>
     </sect1>
+    
+    <sect1 id="plugin-tips-colors">
+     <title>Plugin colors</title>
+     <para>There are a number of colors used by the View that should also be
+        used by plugins where possible.  This helps promote a consistent color
+        scheme throughout jEdit.
+        </para><para>
+        The main color properties are:
+         </para>
+         <itemizedlist>
+          <listitem>view.bgColor - the background color of the main text area</listitem>
+          <listitem>view.fgColor - the base foreground color for text in the main text area</listitem>
+          <listitem>view.lineHighlightColor - color of the current line highlight</listitem>
+          <listitem>view.selectionColor - the color of selected text in the main text area</listitem>
+          <listitem>view.caretColor - the color of the caret in the main text area</listitem>
+          <listitem>view.eolMarkerColor - the color of the end-of-line marker</listitem>
+         </itemizedlist>
+         <para>
+        To use these colors in your plugin, use 
+        <programlisting>jEdit.getColorProperty("view.whatever", default_color)</programlisting>
+        </para>
+        <para>
+        For example, the QuickNotepad example should have lines like this:
+        </para>
+        <programlisting>
+        textarea.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE);
+        textarea.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK);
+        </programlisting><para>
+        This sets the foreground and background colors of QuickNotepad to be the same
+        as those in the View.  
+        </para>
+        <para>
+        There are other color properties that may be useful, depending on what your
+        plugin displays.
+        </para>
+        <para>
+        Gutter colors:
+        </para><itemizedlist>
+         <listitem>view.gutter.bgColor</listitem>
+         <listitem>view.gutter.currentLineColor</listitem>
+         <listitem>view.gutter.fgColor</listitem>
+         <listitem>view.gutter.focusBorderColor</listitem>
+         <listitem>view.gutter.foldColor</listitem>
+         <listitem>view.gutter.highlightColor</listitem>
+         <listitem>view.gutter.markerColor</listitem>
+         <listitem>view.gutter.noFocusBorderColor</listitem>
+         <listitem>view.gutter.registerColor</listitem>
+         <listitem>view.gutter.structureHighlightColor</listitem>
+         </itemizedlist>
+         <para>
+        Status bar colors:
+        </para>
+        <itemizedlist>
+          <listitem>view.status.background</listitem>
+          <listitem>view.status.foreground</listitem>
+          <listitem>view.status.memory.background</listitem>
+          <listitem>view.status.memory.foreground</listitem>
+         </itemizedlist>
+         <para>
+        </para><para>
+        Structure highlight colors:
+        </para><itemizedlist>
+         <listitem>view.structureHighlightColor</listitem>
+         <listitem>view.structureHighlightColor</listitem>
+         </itemizedlist>
+        <para>
+        Style colors.  Use <classname>GUIUtilities.parseStyle</classname> for these.
+        </para>
+        <itemizedlist>
+          <listitem>view.style.comment1</listitem>
+          <listitem>view.style.comment2</listitem>
+          <listitem>view.style.comment3</listitem>
+          <listitem>view.style.comment4</listitem>
+          <listitem>view.style.digit</listitem>
+          <listitem>view.style.foldLine.0</listitem>
+          <listitem>view.style.foldLine.1</listitem>
+          <listitem>view.style.foldLine.2</listitem>
+          <listitem>view.style.foldLine.3</listitem>
+          <listitem>view.style.function</listitem>
+          <listitem>view.style.invalid</listitem>
+          <listitem>view.style.keyword1</listitem>
+          <listitem>view.style.keyword2</listitem>
+          <listitem>view.style.keyword3</listitem>
+          <listitem>view.style.keyword4</listitem>
+          <listitem>view.style.label</listitem>
+          <listitem>view.style.literal1</listitem>
+          <listitem>view.style.literal2</listitem>
+          <listitem>view.style.literal3</listitem>
+          <listitem>view.style.literal4</listitem>
+          <listitem>view.style.markup</listitem>
+          <listitem>view.style.operator</listitem>
+          <listitem>view.wrapGuideColor</listitem>
+          </itemizedlist>
+          <para>
+        For example, here is a setting for a fold line color:
+        </para>
+        <programlisting>
+         view.style.foldLine.0=color\:\#000000 bgColor\:\#f5deb8 style\:b
+         </programlisting>
+         <para>
+        Passing the value to <classname>GUIUtilities.parseStyle</classname> will
+        return a SyntaxStyle object, which you can query for background color,
+        foreground color, and font.
+        </para>
+     </sect1>
 </chapter>
