@@ -57,6 +57,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.TooManyListenersException;
+import java.net.URL;
+
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.JEditActionContext;
 import org.gjt.sp.jedit.JEditActionSet;
@@ -588,6 +590,7 @@ public class TextArea extends JComponent
 	 * @since jEdit 4.2pre5
 	 * @deprecated the org.gjt.jedit.Java14 class no longer exists.
 	 */
+	@Deprecated
 	public boolean isDragInProgress()
 	{
 		return dndInProgress;
@@ -603,6 +606,7 @@ public class TextArea extends JComponent
 	 * @since jEdit 4.2pre5
 	 * @deprecated the org.gjt.jedit.Java14 class no longer exists.
 	 */
+	@Deprecated
 	public void setDragInProgress(boolean dndInProgress)
 	{
 		this.dndInProgress = dndInProgress;
@@ -5697,7 +5701,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ getRectParams() method
-	static class RectParams
+	private static class RectParams
 	{
 		final int extraStartVirt;
 		final int extraEndVirt;
@@ -6020,7 +6024,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ Inner classes
 
 	//{{{ CaretBlinker class
-	static class CaretBlinker implements ActionListener
+	private static class CaretBlinker implements ActionListener
 	{
 		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent evt)
@@ -6031,7 +6035,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ MutableCaretEvent class
-	class MutableCaretEvent extends CaretEvent
+	private class MutableCaretEvent extends CaretEvent
 	{
 		//{{{ MutableCaretEvent constructor
 		MutableCaretEvent()
@@ -6055,7 +6059,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ AdjustHandler class
-	class AdjustHandler implements AdjustmentListener
+	private class AdjustHandler implements AdjustmentListener
 	{
 		//{{{ adjustmentValueChanged() method
 		public void adjustmentValueChanged(AdjustmentEvent evt)
@@ -6071,7 +6075,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ FocusHandler class
-	class FocusHandler implements FocusListener
+	private class FocusHandler implements FocusListener
 	{
 		//{{{ focusGained() method
 		public void focusGained(FocusEvent evt)
@@ -6111,7 +6115,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ MouseWheelHandler class
-	class MouseWheelHandler implements MouseWheelListener
+	private class MouseWheelHandler implements MouseWheelListener
 	{
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
@@ -6158,6 +6162,51 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 	} //}}}
 
+	//{{{ StandaloneActionSet class
+	/**
+	 * The actionSet for standalone textArea.
+	 * @author Matthieu Casanova
+	 */
+	private static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
+	{
+		private final IPropertyManager iPropertyManager;
+		private final TextArea textArea;
+
+		private StandaloneActionSet(IPropertyManager iPropertyManager, TextArea textArea)
+		{
+			super(null, TextArea.class.getResource("textarea.actions.xml"));
+			this.iPropertyManager = iPropertyManager;
+			this.textArea = textArea;
+		}
+
+		@Override
+		protected JEditBeanShellAction[] getArray(int size)
+		{
+			return new JEditBeanShellAction[size];
+		}
+
+		@Override
+		protected String getProperty(String name)
+		{
+			return iPropertyManager.getProperty(name);
+		}
+
+		public AbstractInputHandler getInputHandler()
+		{
+			return textArea.getInputHandler();
+		}
+
+		@Override
+		protected JEditBeanShellAction createBeanShellAction(String actionName,
+								     String code,
+								     String selected,
+								     boolean noRepeat,
+								     boolean noRecord,
+								     boolean noRememberLast)
+		{
+			return new JEditBeanShellAction(actionName,code,selected,noRepeat,noRecord,noRememberLast);
+		}
+	} //}}}
 	//}}}
 
 	//{{{ Class initializer
@@ -6180,6 +6229,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ _createTextArea() method
+	/**
+	 * Create a standalone textArea.
+	 * @param insidejEdit true if we are in jEdit, false otherwise
+	 * @param iPropertyManager the property manager that will provide properties
+	 * @return the new textarea
+	 */
 	public static TextArea _createTextArea(boolean insidejEdit, final IPropertyManager iPropertyManager)
 	{
 		final TextArea textArea = new TextArea(iPropertyManager, insidejEdit);
@@ -6187,37 +6242,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		// todo : make TextareaTransferHandler standalone
 //		textArea.setTransferHandler(new TextAreaTransferHandler());
 
-		JEditActionSet<JEditBeanShellAction> actionSet = new JEditActionSet<JEditBeanShellAction>(
-				null, TextArea.class.getResource("textarea.actions.xml"))
-		{
-			@Override
-			protected JEditBeanShellAction[] getArray(int size)
-			{
-				return new JEditBeanShellAction[size];
-			}
+		StandaloneActionSet actionSet = new StandaloneActionSet(iPropertyManager, textArea);
 
-			@Override
-			protected String getProperty(String name)
-			{
-				return iPropertyManager.getProperty(name);
-			}
-
-			public AbstractInputHandler getInputHandler()
-			{
-				return textArea.getInputHandler();
-			}
-
-			@Override
-			protected JEditBeanShellAction createBeanShellAction(String actionName,
-									     String code,
-									     String selected,
-									     boolean noRepeat,
-									     boolean noRecord,
-									     boolean noRememberLast)
-			{
-				return new JEditBeanShellAction(actionName,code,selected,noRepeat,noRecord,noRememberLast);
-			}
-		};
 		textArea.addActionSet(actionSet);
 		actionSet.load();
 		actionSet.initKeyBindings();
