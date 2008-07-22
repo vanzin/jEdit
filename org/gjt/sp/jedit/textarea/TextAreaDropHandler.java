@@ -30,17 +30,24 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * @author Slava Pestov
+ * @version $Id$
+ */
 class TextAreaDropHandler extends DropTargetAdapter
 {
-	private TextArea textArea;
+	private final TextArea textArea;
 	private JEditBuffer savedBuffer;
 	private int savedCaret;
 
+	//{{{ TextAreaDropHandler constructor
 	TextAreaDropHandler(TextArea textArea)
 	{
 		this.textArea = textArea;
-	}
+	} //}}}
 
+	//{{{ dragEnter() method
+	@Override
 	public void dragEnter(DropTargetDragEvent dtde)
 	{
 		Log.log(Log.DEBUG,this,"Drag enter");
@@ -48,8 +55,10 @@ class TextAreaDropHandler extends DropTargetAdapter
 		textArea.setDragInProgress(true);
 		//textArea.getBuffer().beginCompoundEdit();
 		savedCaret = textArea.getCaretPosition();
-	}
+	} //}}}
 
+	//{{{ dragOver() method
+	@Override
 	public void dragOver(DropTargetDragEvent dtde)
 	{
 		Point p = dtde.getLocation();
@@ -63,8 +72,10 @@ class TextAreaDropHandler extends DropTargetAdapter
 			textArea.moveCaretPosition(pos,
 				TextArea.ELECTRIC_SCROLL);
 		}
-	}
+	} //}}}
 
+	//{{{ dragExit() method
+	@Override
 	public void dragExit(DropTargetEvent dtde)
 	{
 		Log.log(Log.DEBUG,this,"Drag exit");
@@ -76,13 +87,14 @@ class TextAreaDropHandler extends DropTargetAdapter
 				TextArea.ELECTRIC_SCROLL);
 		}
 		savedBuffer = null;
-	}
+	} //}}}
 
+	//{{{ drop() method
 	public void drop(DropTargetDropEvent dtde)
 	{
 		Log.log(Log.DEBUG,this,"Drop");
 		textArea.setDragInProgress(false);
 		//textArea.getBuffer().endCompoundEdit();
 		savedBuffer = null;
-	}
+	} //}}}
 }
