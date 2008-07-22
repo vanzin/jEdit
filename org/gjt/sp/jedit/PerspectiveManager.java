@@ -133,8 +133,6 @@ public class PerspectiveManager
 				savedBuffers.add(buffer);
 			}
 		}
-		if (savedBuffers.isEmpty())
-			return;
 
 		if(!autosave)
 			Log.log(Log.MESSAGE,PerspectiveManager.class,"Saving " + perspectiveXML);
