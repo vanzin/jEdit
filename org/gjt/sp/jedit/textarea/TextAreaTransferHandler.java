@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
@@ -68,6 +69,7 @@ public class TextAreaTransferHandler extends TransferHandler
 	*/
 
 	//{{{ createTransferable
+	@Override
 	protected Transferable createTransferable(JComponent c)
 	{
 		Log.log(Log.DEBUG,this,"createTransferable()");
@@ -82,12 +84,14 @@ public class TextAreaTransferHandler extends TransferHandler
 	} //}}}
 
 	//{{{ getSourceActions
+	@Override
 	public int getSourceActions(JComponent c)
 	{
 		return COPY_OR_MOVE;
 	} //}}}
 
 	//{{{ importData
+	@Override
 	public boolean importData(JComponent c, Transferable t)
 	{
 		Log.log(Log.DEBUG,this,"Import data");
@@ -104,14 +108,16 @@ public class TextAreaTransferHandler extends TransferHandler
 				returnValue = importFile(c,t);
 			}
 			else {
-				DataFlavor	uriListStringDataFlavor = null;
-				DataFlavor[]	dataFlavors		= t.getTransferDataFlavors();
+				DataFlavor uriListStringDataFlavor = null;
+				DataFlavor[] dataFlavors = t.getTransferDataFlavors();
 				
-				for (int i = 0;i<dataFlavors.length;i++) {
+				for (int i = 0;i<dataFlavors.length;i++)
+				{
 					DataFlavor dataFlavor = dataFlavors[i];
 					if ("text".equals(dataFlavor.getPrimaryType()) &&
 					    "uri-list".equals(dataFlavor.getSubType()) &&
-					    dataFlavor.getRepresentationClass() == String.class) {
+					    dataFlavor.getRepresentationClass() == String.class)
+					{
 						uriListStringDataFlavor = dataFlavor;
 						break;
 					}
@@ -154,7 +160,7 @@ public class TextAreaTransferHandler extends TransferHandler
 		List<File> data = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
 
 		boolean browsedDirectory = false;
-
+		BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 		for (File file : data)
 		{
 			if (file.isDirectory())
@@ -169,7 +175,10 @@ public class TextAreaTransferHandler extends TransferHandler
 			Buffer _buffer = jEdit.openFile(null,
 							file.getPath());
 			if (_buffer != null)
+			{
 				buffer = _buffer;
+				bufferSetManager.addBuffer(editPane, buffer);
+			}
 		}
 
 		if(buffer != null)
@@ -193,17 +202,17 @@ public class TextAreaTransferHandler extends TransferHandler
 		JEditTextArea textArea = (JEditTextArea) c;
 		if (dragSource == null)
 		{
-			boolean		found			= false;
-			String[]	components		= str.split("\r\n");
+			boolean found = false;
+			String[] components = str.split("\r\n");
 
 			boolean browsedDirectory = false;
 			for (int i = 0;i<components.length;i++)
 			{
-				String	str0	= components[i];
+				String str0 = components[i];
 				
 				if (str0.length() > 0)
 				{
-					URI	uri	= new URI(str0); // this handles the URI-decoding
+					URI uri = new URI(str0); // this handles the URI-decoding
 					
 					if ("file".equals(uri.getScheme()))
 					{
@@ -258,8 +267,8 @@ public class TextAreaTransferHandler extends TransferHandler
 		JEditTextArea textArea = (JEditTextArea)c;
 		if (dragSource == null)
 		{
-			boolean		found			= false;			
-			String[]	components		= str.split("\n");
+			boolean found = false;
+			String[] components = str.split("\n");
 
 			for (int i = 0;i<components.length;i++)
 			{
@@ -269,7 +278,6 @@ public class TextAreaTransferHandler extends TransferHandler
 				VFS vfs = VFSManager.getVFSForPath(str0);
 				if (!(vfs instanceof FileVFS) || str.startsWith("file://"))
 				{
-				
 //					str = str.replace('\n',' ').replace('\r',' ').trim();
 					if (str0.startsWith("file://"))
 					{
@@ -339,7 +347,8 @@ public class TextAreaTransferHandler extends TransferHandler
 		return true;
 	} //}}}
 
-	//{{{ exportDone
+	//{{{ exportDone() method
+	@Override
 	protected void exportDone(JComponent c, Transferable t,
 		int action)
 	{
@@ -405,7 +414,8 @@ public class TextAreaTransferHandler extends TransferHandler
 		dragSource = null;
 	} //}}}
 
-	//{{{ canImport
+	//{{{ canImport() method
+	@Override
 	public boolean canImport(JComponent c, DataFlavor[] flavors)
 	{
 		JEditTextArea textArea = (JEditTextArea)c;
@@ -442,9 +452,9 @@ public class TextAreaTransferHandler extends TransferHandler
 	} //}}}
 
 	//{{{ TextAreaSelection class
-	static class TextAreaSelection extends StringSelection
+	private static class TextAreaSelection extends StringSelection
 	{
-		JEditTextArea textArea;
+		final JEditTextArea textArea;
 
 		TextAreaSelection(JEditTextArea textArea)
 		{
@@ -453,11 +463,11 @@ public class TextAreaTransferHandler extends TransferHandler
 		}
 	} //}}}
 
-	//{{{ DraggedURLLoader
-	static class DraggedURLLoader extends WorkRequest
+	//{{{ DraggedURLLoader class
+	private static class DraggedURLLoader extends WorkRequest
 	{
-		private JEditTextArea textArea;
-		private String url;
+		private final JEditTextArea textArea;
+		private final String url;
 		
 		DraggedURLLoader(JEditTextArea textArea, String url)
 		{
