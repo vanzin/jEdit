@@ -327,13 +327,12 @@ public class GUIUtilities
 	//{{{ loadPopupMenu() method
 	/**
 	 * Creates a popup menu.
-
 	 * @param context An action context; either
 	 * <code>jEdit.getActionContext()</code> or
 	 * <code>VFSBrowser.getActionContext()</code>.
 	 * @param name The menu name
-	 * @param editPane the EditPane holding the TextArea wanting to show the
-	 * popup. If not null, include context menu items defined by services.
+	 * @param textArea the textArea wanting to show the popup.
+	 * 	If not null, include context menu items defined by services.
 	 * @param evt additional context info about where the mouse was when menu was requested
 	 * @since jEdit 4.3pre15
 	 */
@@ -374,7 +373,7 @@ public class GUIUtilities
 	/**
 	 * @return a list of menu items defined by services.
 	 *
-	 * @param editPane the EditPane desiring to display these menu items
+	 * @param textArea the TextArea desiring to display these menu items
 	 * @since jEdit 4.3pre15
 	 */
 	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea, MouseEvent evt) {
