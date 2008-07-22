@@ -179,28 +179,31 @@
         <title>Buffer Sets</title>
         
         <para> As mentioned in the previous section, each EditPane can show a Buffer Switcher, which
-        is displays the contents of a BufferSet. In jEdit 4.2, all EditPane buffer switchers
+        displays the contents of a BufferSet. In jEdit 4.2, all EditPane buffer switchers
         showed the same BufferSet: a global list of all buffers that were opened from any EditPane in any View. 
         When using many Views and EditPanes, this resulted in large lists of buffers, and made
         the next/previous buffer actions useless with many views, editpanes and buffers. 
         </para>
         
-        <para> In jEdit 4.3, it is possible to have different scopes for the BufferSets of each EditPane. 
-        It is also possible to choose a different default scope for new Buffer Sets. The three scopes are: </para>
+        <para> In jEdit 4.3, it is possible to have different scopes for the BufferSets of each EditPane. The three scopes are: </para>
         <orderedlist>
-          <listitem><para> <emphasis role="bold">View</emphasis>: EditPanes in the same View share the same
+        <listitem><para> <emphasis role="bold">Global</emphasis>: Includes all buffers open from any EditPane. </para></listitem>
+        <listitem><para> <emphasis role="bold">View</emphasis>: EditPanes in the same View share the same
         BufferSet. Opening a buffer in one View will not affect the non-global scope BufferSets in EditPanes of other
         Views. </para></listitem> 
-        <listitem><para><emphasis role="bold">EditPane</emphasis>: Each EditPane can have its own independent BufferSet.
+        <listitem><para><emphasis role="bold">EditPane</emphasis>: Each EditPane can have its own independent BufferSet, although any buffers that are opened from it should also show up in the Global bufferset..
         </para></listitem>
-        <listitem><para> <emphasis role="bold">Global</emphasis>: Includes all buffers open from any EditPane. </para></listitem>
         </orderedlist>
         
         <para> The default Buffer Set scope for newly created EditPanes is global by default, and can be
         changed from <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
         &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope for new
-        EditPanes</guilabel>. A new BufferSet can be created in a number of ways, such as when a new View is        
-        created (and the default BufferSet scope is not global) or when the View is split (and the default BufferSet scope is EditPane), or when the BufferSet scope is changed directly by invoking an action.
+        EditPanes</guilabel>. </para>
+        
+        <para> A new BufferSet can be created in a number of ways, such as when a new
+        View is created (and the default BufferSet scope is not global) or when the
+        View is split (and the default BufferSet scope is EditPane), or when the
+        BufferSet scope is changed to EditPane by invoking an action.
         </para>
                 
         <para> New buffersets are initially empty, or populated with a copy of the 
