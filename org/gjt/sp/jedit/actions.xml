@@ -378,12 +378,12 @@
 </ACTION>
 <ACTION NAME="view-bufferset">
 	<CODE>
-		editPane.setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view, editPane.getBufferSet()));
+		editPane.setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view));
 	</CODE>
 </ACTION>
 <ACTION NAME="editpane-bufferset">
 	<CODE>
-		editPane.setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(editPane, editPane.getBufferSet()));
+		editPane.setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(editPane));
 	</CODE>
 </ACTION>
 

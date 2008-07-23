@@ -41,6 +41,7 @@ import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetListener;
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.gui.BufferSwitcher;
 import org.gjt.sp.jedit.gui.StatusBar;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -683,7 +684,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 				setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view));
 				break;
 			case editpane:
-				setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(this, bufferSet));
+				setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(this));
 				break;
 			case global:
 				setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
@@ -700,17 +701,41 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		if (this.bufferSet != bufferSet)
 		{
+			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
+
+			String action = jEdit.getProperty("editpane.bufferset.new");
+			BufferSetManager.NewBufferSetAction bufferSetAction = BufferSetManager.NewBufferSetAction.fromString(action);
+			switch (bufferSetAction)
+			{
+				case copy:
+					if (this.bufferSet == null)
+						bufferSetManager.addAllBuffers(bufferSet);
+					else
+						bufferSetManager.mergeBufferSet(bufferSet, this.bufferSet);
+					break;
+				case empty:
+					break;
+				case currentbuffer:
+					View activeView = jEdit.getActiveView();
+					if (activeView == null)
+						break;
+					EditPane editPane = activeView.getEditPane();
+					Buffer buffer = editPane.getBuffer();
+					bufferSetManager.addBuffer(bufferSet,buffer);
+					break;
+			}
 			if (this.bufferSet != null)
 			{
 				this.bufferSet.removeBufferSetListener(this);
 			}
+
 			if (bufferSet.size() == 0)
 			{
 				int untitledCount = jEdit.getNextUntitledBufferId();
 				Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
 									    "Untitled-" + untitledCount,true, null);
 				jEdit.commitTemporary(newEmptyBuffer);
-				jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+				bufferSetManager.addBuffer(bufferSet, newEmptyBuffer);
 			}
 
 			this.bufferSet = bufferSet;

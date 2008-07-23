@@ -95,7 +95,7 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 								editPane.setBufferSet(bufferSetManager.getViewBufferSet(editPane.getView()));
 								break;
 							case view:
-								editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane, bufferSet));
+								editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane));
 								break;
 							case editpane:
 								editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());

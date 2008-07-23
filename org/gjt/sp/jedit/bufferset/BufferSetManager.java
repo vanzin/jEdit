@@ -117,39 +117,38 @@ public class BufferSetManager implements EBComponent
 	} //}}}
 
 	//{{{ getViewBufferSet() methods
-	public BufferSet getViewBufferSet(View view, BufferSet source)
+	public BufferSet getViewBufferSet(View view)
 	{
 		BufferSet bufferSet = viewBufferSetMap.get(view);
 		if (bufferSet == null)
 		{
-			bufferSet = createBufferSet(BufferSet.Scope.view,source);
+			bufferSet = new BufferSet(BufferSet.Scope.view);
 			viewBufferSetMap.put(view, bufferSet);
 		}
 		return bufferSet;
-	}
-
-	public BufferSet getViewBufferSet(View view)
-	{
-		return getViewBufferSet(view, null);
 	} //}}}
 
 	//{{{ getEditPaneBufferSet() methods
-	public BufferSet getEditPaneBufferSet(EditPane editPane, BufferSet source)
+	public BufferSet getEditPaneBufferSet(EditPane editPane)
 	{
 		BufferSet bufferSet = editPaneBufferSetMap.get(editPane);
 		if (bufferSet == null)
 		{
-			bufferSet = createBufferSet(BufferSet.Scope.editpane,source);
+			bufferSet = new BufferSet(BufferSet.Scope.editpane);
 			editPaneBufferSetMap.put(editPane, bufferSet);
 		}
 
 		return bufferSet;
-	}
+	} //}}}
 
-
-	public BufferSet getEditPaneBufferSet(EditPane editPane)
+	//{{{ mergeBufferSet() method
+	public void mergeBufferSet(BufferSet bufferSet, BufferSet source)
 	{
-		return getEditPaneBufferSet(editPane, null);
+		Buffer[] buffers = source.getAllBuffers();
+		for (Buffer buffer : buffers)
+		{
+			addBuffer(bufferSet, buffer);
+		}
 	} //}}}
 
 	//{{{ countBufferSets() method
@@ -331,7 +330,7 @@ public class BufferSetManager implements EBComponent
 	 *
 	 * @param bufferSet the bufferSet
 	 */
-	private void addAllBuffers(BufferSet bufferSet)
+	public void addAllBuffers(BufferSet bufferSet)
 	{
 		Buffer[] buffers = jEdit.getBuffers();
 		for (int i = 0; i < buffers.length; i++)

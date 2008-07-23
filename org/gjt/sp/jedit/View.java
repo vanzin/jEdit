@@ -622,7 +622,13 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
-		EditPane newEditPane = createEditPane(oldEditPane.getBuffer());
+		String action = jEdit.getProperty("editpane.bufferset.new");
+		BufferSetManager.NewBufferSetAction bufferSetAction = BufferSetManager.NewBufferSetAction.fromString(action);
+		EditPane newEditPane;
+		if (bufferSetAction == BufferSetManager.NewBufferSetAction.empty)
+			newEditPane = createEditPane(null);
+		else
+			newEditPane = createEditPane(oldEditPane.getBuffer());
 //		setEditPane(newEditPane);
 		newEditPane.loadCaretInfo();
 
