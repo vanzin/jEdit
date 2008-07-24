@@ -197,6 +197,22 @@ public class BufferSetManager implements EBComponent
 		bufferSet.addBuffer(buffer);
 	} //}}}
 
+	//{{{ addAllBuffers() method
+	/**
+	 * Add all buffers to the bufferSet.
+	 *
+	 * @param bufferSet the bufferSet
+	 */
+	public void addAllBuffers(BufferSet bufferSet)
+	{
+		Buffer[] buffers = jEdit.getBuffers();
+		for (Buffer buffer : buffers)
+		{
+			if (!buffer.isClosed())
+				addBuffer(bufferSet, buffer);
+		}
+	} //}}}
+
 	//{{{ removeBuffer() methods
 	/**
 	 * Remove a buffer from the EditPane's bufferSet.
@@ -322,72 +338,6 @@ public class BufferSetManager implements EBComponent
 	/** The BufferSets that contains the Buffer. */
 	private final Map<Buffer, Set<BufferSet>> bufferBufferSetMap;
 	//}}}
-
-
-	//{{{ addAllBuffers() method
-	/**
-	 * Add all buffers to the bufferSet.
-	 *
-	 * @param bufferSet the bufferSet
-	 */
-	public void addAllBuffers(BufferSet bufferSet)
-	{
-		Buffer[] buffers = jEdit.getBuffers();
-		for (int i = 0; i < buffers.length; i++)
-		{
-			Buffer buffer = buffers[i];
-			Set<BufferSet> bufferBufferSet = bufferBufferSetMap.get(buffer);
-			if (bufferBufferSet == null)
-			{
-				bufferBufferSet = new HashSet<BufferSet>();
-				bufferBufferSetMap.put(buffer, bufferBufferSet);
-			}
-			bufferBufferSet.add(bufferSet);
-			bufferSet.addBuffer(buffer);
-		}
-	} //}}}
-
-	//{{{ createBufferSet() method
-	/**
-	 * Create a bufferSet
-	 * @param scope the scope of the bufferSet
-	 * @param source the source bufferSet. If it exists the buffers will be copied otherwise all open buffers
-	 * are added
-	 * @return the new bufferSet
-	 */
-	private BufferSet createBufferSet(BufferSet.Scope scope, BufferSet source)
-	{
-		String action = jEdit.getProperty("editpane.bufferset.new");
-		NewBufferSetAction bufferSetAction = NewBufferSetAction.fromString(action);
-		BufferSet bufferSet = new BufferSet(scope);
-		switch (bufferSetAction)
-		{
-			case copy:
-				if (source == null)
-					addAllBuffers(bufferSet);
-				else
-					bufferSet.copy(source);
-				break;
-			case empty:
-				break;
-			case currentbuffer:
-				View activeView = jEdit.getActiveView();
-				if (activeView == null)
-					break;
-				EditPane editPane = activeView.getEditPane();
-				Buffer buffer = editPane.getBuffer();
-				bufferSet.addBuffer(buffer);
-				break;
-		}
-
-
-		Buffer[] allBuffers = bufferSet.getAllBuffers();
-		for (Buffer buffer : allBuffers)
-		{
-			bufferBufferSetMap.get(buffer).add(bufferSet);
-		}
-		return bufferSet;
-	} //}}}
 
 	//{{{ BufferSetVisitor interface
 	public static interface BufferSetVisitor
