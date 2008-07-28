@@ -944,6 +944,7 @@ loop:			while(path != null)
 					else
 					{
 						jEdit.commitTemporary(buffer);
+						jEdit.getBufferSetManager().addBuffer(view, buffer);
 					}
 				}
 			}
