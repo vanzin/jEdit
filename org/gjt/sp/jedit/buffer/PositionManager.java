@@ -65,14 +65,14 @@ public class PositionManager
 			return;
 
 		/* get all positions from offset to the end, inclusive */
-		Iterator iter = positions.tailMap(new PosBottomHalf(offset))
-			.keySet().iterator();
+		Set<PosBottomHalf> bottomHalfs = positions.tailMap(new PosBottomHalf(offset))
+			.keySet();
+		Iterator<PosBottomHalf> iter = bottomHalfs.iterator();
 
 		iteration = true;
-		while(iter.hasNext())
+		for (PosBottomHalf bottomHalf : bottomHalfs)
 		{
-			((PosBottomHalf)iter.next())
-				.contentInserted(offset,length);
+			bottomHalf.contentInserted(offset, length);
 		}
 		iteration = false;
 	} //}}}
@@ -84,14 +84,13 @@ public class PositionManager
 			return;
 
 		/* get all positions from offset to the end, inclusive */
-		Iterator iter = positions.tailMap(new PosBottomHalf(offset))
-			.keySet().iterator();
+		Set<PosBottomHalf> bottomHalfs = positions.tailMap(new PosBottomHalf(offset))
+			.keySet();
 
 		iteration = true;
-		while(iter.hasNext())
+		for (PosBottomHalf bottomHalf : bottomHalfs)
 		{
-			((PosBottomHalf)iter.next())
-				.contentRemoved(offset,length);
+			bottomHalf.contentRemoved(offset,length);
 		}
 		iteration = false;
 
@@ -109,7 +108,7 @@ public class PositionManager
 	//{{{ PosTopHalf class
 	class PosTopHalf implements Position
 	{
-		PosBottomHalf bh;
+		private final PosBottomHalf bh;
 
 		//{{{ PosTopHalf constructor
 		PosTopHalf(PosBottomHalf bh)
@@ -125,6 +124,7 @@ public class PositionManager
 		} //}}}
 
 		//{{{ finalize() method
+		@Override
 		protected void finalize()
 		{
 			synchronized(PositionManager.this)
@@ -181,6 +181,7 @@ public class PositionManager
 		} //}}}
 
 		//{{{ equals() method
+		@Override
 		public boolean equals(Object o)
 		{
 			if(!(o instanceof PosBottomHalf))
