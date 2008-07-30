@@ -27,6 +27,7 @@ import org.gjt.sp.util.StandardUtilities;
 
 import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.InputEvent;
 import java.awt.*;
 
 /**
@@ -42,6 +43,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	} //}}}
 
 	//{{{ mousePressed() method
+	@Override
 	public void mousePressed(MouseEvent evt)
 	{
 		showCursor();
@@ -93,8 +95,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			textArea.moveCaretPosition(dragStart,false);
 			return;
 		}
-		else
-			maybeDragAndDrop = false;
+		maybeDragAndDrop = false;
 
 		if(quickCopyDrag)
 		{
@@ -266,12 +267,14 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	} //}}}
 
 	//{{{ mouseMoved() method
+	@Override
 	public void mouseMoved(MouseEvent evt)
 	{
 		showCursor();
 	} //}}}
 
 	//{{{ mouseDragged() method
+	@Override
 	public void mouseDragged(MouseEvent evt)
 	{
 		if(maybeDragAndDrop)
@@ -494,6 +497,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	} //}}}
 
 	//{{{ mouseReleased() method
+	@Override
 	public void mouseReleased(MouseEvent evt)
 	{
 		if(!dragged && textArea.isQuickCopyEnabled() &&
@@ -529,41 +533,43 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	//{{{ isMiddleButton() method
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
+	 * @return true if the modifier match the middle button
 	 * @since jEdit 4.3pre7
 	 */
 	public static boolean isMiddleButton(int modifiers)
 	{
 		if (OperatingSystem.isMacOS())
 		{
-			if((modifiers & MouseEvent.BUTTON1_MASK) != 0)
-				return (modifiers & MouseEvent.ALT_MASK) != 0;
+			if((modifiers & InputEvent.BUTTON1_MASK) != 0)
+				return (modifiers & InputEvent.ALT_MASK) != 0;
 			else
-				return (modifiers & MouseEvent.BUTTON2_MASK) != 0;
+				return (modifiers & InputEvent.BUTTON2_MASK) != 0;
 		}
 		else
-			return (modifiers & MouseEvent.BUTTON2_MASK) != 0;
+			return (modifiers & InputEvent.BUTTON2_MASK) != 0;
 	} //}}}
 
 	//{{{ isRightButton() method
 	/**
 	 * @param modifiers The modifiers flag from a mouse event
+	 * @return true if the modifier match the right button
 	 * @since jEdit 4.3pre7
 	 */
 	public static boolean isRightButton(int modifiers)
 	{
 		if (OperatingSystem.isMacOS())
 		{
-			if((modifiers & MouseEvent.BUTTON1_MASK) != 0)
-				return (modifiers & MouseEvent.CTRL_MASK) != 0;
+			if((modifiers & InputEvent.BUTTON1_MASK) != 0)
+				return (modifiers & InputEvent.CTRL_MASK) != 0;
 			else
-				return (modifiers & MouseEvent.BUTTON3_MASK) != 0;
+				return (modifiers & InputEvent.BUTTON3_MASK) != 0;
 		}
 		else
-			return (modifiers & MouseEvent.BUTTON3_MASK) != 0;
+			return (modifiers & InputEvent.BUTTON3_MASK) != 0;
 	} //}}}
 
 	//{{{ Private members
-	protected TextArea textArea;
+	protected final TextArea textArea;
 	protected int dragStartLine;
 	protected int dragStartOffset;
 	protected int dragStart;
