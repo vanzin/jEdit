@@ -1854,7 +1854,8 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		bufferSetManager.clear();
+		if (!isExiting)
+			bufferSetManager.clear();
 		PerspectiveManager.setPerspectiveDirty(true);
 
 		return true;
@@ -4050,7 +4051,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	//}}}
 
 	//{{{ MyFocusManager class
-	static class MyFocusManager extends DefaultKeyboardFocusManager
+	private static class MyFocusManager extends DefaultKeyboardFocusManager
 	{
 		MyFocusManager()
 		{
