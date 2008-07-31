@@ -65,14 +65,13 @@ public class PositionManager
 			return;
 
 		/* get all positions from offset to the end, inclusive */
-		Set<PosBottomHalf> bottomHalfs = positions.tailMap(new PosBottomHalf(offset))
-			.keySet();
-		Iterator<PosBottomHalf> iter = bottomHalfs.iterator();
+		Iterator<PosBottomHalf> iter = positions.tailMap(new PosBottomHalf(offset))
+			.keySet().iterator();
 
 		iteration = true;
-		for (PosBottomHalf bottomHalf : bottomHalfs)
+		while(iter.hasNext())
 		{
-			bottomHalf.contentInserted(offset, length);
+			iter.next().contentInserted(offset,length);
 		}
 		iteration = false;
 	} //}}}
@@ -84,13 +83,13 @@ public class PositionManager
 			return;
 
 		/* get all positions from offset to the end, inclusive */
-		Set<PosBottomHalf> bottomHalfs = positions.tailMap(new PosBottomHalf(offset))
-			.keySet();
+		Iterator<PosBottomHalf> iter = positions.tailMap(new PosBottomHalf(offset))
+			.keySet().iterator();
 
 		iteration = true;
-		for (PosBottomHalf bottomHalf : bottomHalfs)
+		while(iter.hasNext())
 		{
-			bottomHalf.contentRemoved(offset,length);
+			iter.next().contentRemoved(offset,length);
 		}
 		iteration = false;
 
@@ -108,7 +107,7 @@ public class PositionManager
 	//{{{ PosTopHalf class
 	class PosTopHalf implements Position
 	{
-		private final PosBottomHalf bh;
+		final PosBottomHalf bh;
 
 		//{{{ PosTopHalf constructor
 		PosTopHalf(PosBottomHalf bh)
