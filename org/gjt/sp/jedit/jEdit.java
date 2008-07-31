@@ -48,6 +48,7 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
 import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
@@ -2218,8 +2219,7 @@ public class jEdit
 			{
 				view.showWaitCursor();
 				view.getEditPane().saveCaretInfo();
-				config.x -= 20;
-				config.y += 20;
+				config.docking.move(-20, 20);
 			}
 
 			View newView = new View(buffer,config);
@@ -2227,31 +2227,19 @@ public class jEdit
 
 			if(!config.plainView)
 			{
-				DockableWindowManager wm = newView.getDockableWindowManager();
-				if(config.top != null
-					&& config.top.length() != 0)
-					wm.showDockableWindow(config.top);
-
-				if(config.left != null
-					&& config.left.length() != 0)
-					wm.showDockableWindow(config.left);
-
-				if(config.bottom != null
-					&& config.bottom.length() != 0)
-					wm.showDockableWindow(config.bottom);
-
-				if(config.right != null
-					&& config.right.length() != 0)
-					wm.showDockableWindow(config.right);
+				DockableWindowManagerBase wm = newView.getDockableWindowManager();
+				wm.setDockingLayout(config.docking);
 			}
 
 			newView.pack();
 
-			if(config.width != 0 && config.height != 0)
+			DockingLayout layout = config.docking;
+			int width = layout.getWidth();
+			int height = layout.getHeight();
+			if(width != 0 && height != 0)
 			{
 				Rectangle desired = new Rectangle(
-					config.x, config.y, config.width,
-					config.height);
+						layout.getX(), layout.getY(), width, height);
 				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
 				{
 					new GUIUtilities.UnixWorkaround(newView,

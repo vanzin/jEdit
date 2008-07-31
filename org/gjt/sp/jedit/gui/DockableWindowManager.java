@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -32,27 +33,32 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.TreeMap;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
-//}}}
 
 /**
  * <p>Keeps track of all dockable windows for a single View, and provides
@@ -141,8 +147,58 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  * @since jEdit 2.6pre3
  */
-public class DockableWindowManager extends JPanel implements EBComponent
+public class DockableWindowManager extends DockableWindowManagerBase
 {
+	
+	//{{{ ViewConfig class
+	public static class DockableWindowConfig extends DockingLayout
+	{
+		public int x, y, width, height;
+
+		// dockables
+		public String top, left, bottom, right;
+		public int topPos, leftPos, bottomPos, rightPos;
+
+		public DockableWindowConfig(boolean plainView)
+		{
+			String prefix = plainView ? "plain-view" : "view";
+			x = jEdit.getIntegerProperty(prefix + ".x",0);
+			y = jEdit.getIntegerProperty(prefix + ".y",0);
+			width = jEdit.getIntegerProperty(prefix + ".width",0);
+			height = jEdit.getIntegerProperty(prefix + ".height",0);
+		}
+
+		public DockableWindowConfig(int x, int y, int width, int height, int extState)
+		{
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+		}
+		
+		public void move(int x, int y)
+		{
+			this.x += x;
+			this.y += y;
+		}
+
+		public int getY() {
+			return y;
+		}
+		
+		public int getX() {
+			return x;
+		}
+		
+		public int getHeight() {
+			return height;
+		}
+
+		public int getWidth() {
+			return width;
+		}
+	} //}}}
+
 	//{{{ Constants
 	/**
 	 * Floating position.
@@ -176,16 +232,16 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	//}}}
 	
 	//{{{ Data members
-	private final View view;
-	private final DockableWindowFactory factory;
+	private View view;
+	private DockableWindowFactory factory;
 
 	/** A mapping from Strings to Entry objects. */
-	private final Map<String, Entry> windows;
-	private final PanelWindowContainer left;
-	private final PanelWindowContainer right;
-	private final PanelWindowContainer top;
-	private final PanelWindowContainer bottom;
-	private final List<Entry> clones;
+	private Map<String, Entry> windows;
+	private PanelWindowContainer left;
+	private PanelWindowContainer right;
+	private PanelWindowContainer top;
+	private PanelWindowContainer bottom;
+	private List<Entry> clones;
 	
 	private Entry lastEntry;
 	public Stack showStack = new Stack();
@@ -201,6 +257,70 @@ public class DockableWindowManager extends JPanel implements EBComponent
 			.getRegisteredDockableWindows();
 	} //}}}
 
+	public void setDockingLayout(DockingLayout docking) {
+		DockableWindowConfig config = (DockableWindowConfig) docking;
+		if(config.top != null && config.top.length() != 0)
+				showDockableWindow(config.top);
+
+		if(config.left != null && config.left.length() != 0)
+				showDockableWindow(config.left);
+
+		if(config.bottom != null && config.bottom.length() != 0)
+				showDockableWindow(config.bottom);
+
+		if(config.right != null && config.right.length() != 0)
+				showDockableWindow(config.right);
+		
+	}
+	@Override
+	public DockingLayout getDockingLayout(ViewConfig config) {
+		DockableWindowConfig docking = new DockableWindowConfig(config.plainView);
+		String prefix = config.plainView ? "plain-view" : "view";
+		switch (config.extState)
+		{
+			case Frame.MAXIMIZED_BOTH:
+			case Frame.ICONIFIED:
+				docking.x = jEdit.getIntegerProperty(prefix + ".x",getX());
+				docking.y = jEdit.getIntegerProperty(prefix + ".y",getY());
+				docking.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
+				docking.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
+				break;
+
+			case Frame.MAXIMIZED_VERT:
+				docking.x = getX();
+				docking.y = jEdit.getIntegerProperty(prefix + ".y",getY());
+				docking.width = getWidth();
+				docking.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
+				break;
+
+			case Frame.MAXIMIZED_HORIZ:
+				docking.x = jEdit.getIntegerProperty(prefix + ".x",getX());
+				docking.y = getY();
+				docking.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
+				docking.height = getHeight();
+				break;
+
+			case Frame.NORMAL:
+			default:
+				docking.x = getX();
+				docking.y = getY();
+				docking.width = getWidth();
+				docking.height = getHeight();
+				break;
+		}
+
+		docking.top = getTopDockingArea().getCurrent();
+		docking.left = getLeftDockingArea().getCurrent();
+		docking.bottom = getBottomDockingArea().getCurrent();
+		docking.right = getRightDockingArea().getCurrent();
+
+		docking.topPos = getTopDockingArea().getDimension();
+		docking.leftPos = getLeftDockingArea().getDimension();
+		docking.bottomPos = getBottomDockingArea().getDimension();
+		docking.rightPos = getRightDockingArea().getDimension();
+		return docking;
+	}
+
 	//{{{ DockableWindowManager constructor
 	/**
 	 * Creates a new dockable window manager.
@@ -210,7 +330,7 @@ public class DockableWindowManager extends JPanel implements EBComponent
 	 * @param config A docking configuration
 	 * @since jEdit 2.6pre3
 	 */
-	public DockableWindowManager(View view, DockableWindowFactory factory,
+	public void configure(View view, DockableWindowFactory factory,
 		View.ViewConfig config)
 	{
 		setLayout(new DockableLayout());
@@ -220,10 +340,11 @@ public class DockableWindowManager extends JPanel implements EBComponent
 		windows = new HashMap<String, Entry>();
 		clones = new ArrayList<Entry>();
 
-		top = new PanelWindowContainer(this,TOP,config.topPos);
-		left = new PanelWindowContainer(this,LEFT,config.leftPos);
-		bottom = new PanelWindowContainer(this,BOTTOM,config.bottomPos);
-		right = new PanelWindowContainer(this,RIGHT,config.rightPos);
+		DockableWindowConfig docking = (DockableWindowConfig) config.docking;
+		top = new PanelWindowContainer(this,TOP,docking.topPos);
+		left = new PanelWindowContainer(this,LEFT,docking.leftPos);
+		bottom = new PanelWindowContainer(this,BOTTOM,docking.bottomPos);
+		right = new PanelWindowContainer(this,RIGHT,docking.rightPos);
 
 		add(DockableLayout.TOP_BUTTONS,top.buttonPanel);
 		add(DockableLayout.LEFT_BUTTONS,left.buttonPanel);

@@ -23,31 +23,65 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
-import org.gjt.sp.jedit.visitors.JEditVisitor;
-import javax.swing.event.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.AWTEvent;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.search.*;
-import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.textarea.TextArea;
-import org.gjt.sp.jedit.input.InputHandlerProvider;
-import org.gjt.sp.jedit.options.GeneralOptionPane;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.LayoutFocusTraversalPolicy;
+import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
-import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.jedit.gui.ActionBar;
+import org.gjt.sp.jedit.gui.DefaultInputHandler;
+import org.gjt.sp.jedit.gui.DockableLayout;
+import org.gjt.sp.jedit.gui.DockableWindowFactory;
+import org.gjt.sp.jedit.gui.DockableWindowManagerBase;
+import org.gjt.sp.jedit.gui.HistoryModel;
+import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.gui.StatusBar;
+import org.gjt.sp.jedit.gui.ToolBarManager;
+import org.gjt.sp.jedit.gui.VariableGridLayout;
+import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
+import org.gjt.sp.jedit.input.InputHandlerProvider;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.EditPaneUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.msg.SearchSettingsChanged;
+import org.gjt.sp.jedit.msg.ViewUpdate;
+import org.gjt.sp.jedit.options.GeneralOptionPane;
+import org.gjt.sp.jedit.search.CurrentBufferSet;
+import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.search.SearchBar;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.ScrollListener;
+import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.visitors.JEditVisitor;
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.util.Log;
-//}}}
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * A <code>View</code> is jEdit's top-level frame window.<p>
@@ -95,6 +129,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ User interface
 
 	//{{{ ToolBar-related constants
+
+	private static final String DOCKABLE_WINDOW_MANAGER_SERVICE = "org.gjt.sp.jedit.gui.DockableWindowManagerBase";
 
 	//{{{ Groups
 	/**
@@ -210,7 +246,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * Returns the dockable window manager associated with this view.
 	 * @since jEdit 2.6pre3
 	 */
-	public DockableWindowManager getDockableWindowManager()
+	public DockableWindowManagerBase getDockableWindowManager()
 	{
 		return dockableWindowManager;
 	} //}}}
@@ -990,51 +1026,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		ViewConfig config = new ViewConfig();
 		config.plainView = isPlainView();
 		config.splitConfig = getSplitConfig();
-		config.extState = getExtendedState();
-		String prefix = config.plainView ? "plain-view" : "view";
-		switch (config.extState)
-		{
-			case Frame.MAXIMIZED_BOTH:
-			case Frame.ICONIFIED:
-				config.x = jEdit.getIntegerProperty(prefix + ".x",getX());
-				config.y = jEdit.getIntegerProperty(prefix + ".y",getY());
-				config.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
-				config.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
-				break;
-
-			case Frame.MAXIMIZED_VERT:
-				config.x = getX();
-				config.y = jEdit.getIntegerProperty(prefix + ".y",getY());
-				config.width = getWidth();
-				config.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
-				break;
-
-			case Frame.MAXIMIZED_HORIZ:
-				config.x = jEdit.getIntegerProperty(prefix + ".x",getX());
-				config.y = getY();
-				config.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
-				config.height = getHeight();
-				break;
-
-			case Frame.NORMAL:
-			default:
-				config.x = getX();
-				config.y = getY();
-				config.width = getWidth();
-				config.height = getHeight();
-				break;
-		}
-
-		config.top = dockableWindowManager.getTopDockingArea().getCurrent();
-		config.left = dockableWindowManager.getLeftDockingArea().getCurrent();
-		config.bottom = dockableWindowManager.getBottomDockingArea().getCurrent();
-		config.right = dockableWindowManager.getRightDockingArea().getCurrent();
-
-		config.topPos = dockableWindowManager.getTopDockingArea().getDimension();
-		config.leftPos = dockableWindowManager.getLeftDockingArea().getDimension();
-		config.bottomPos = dockableWindowManager.getBottomDockingArea().getDimension();
-		config.rightPos = dockableWindowManager.getRightDockingArea().getDimension();
-
+		config.docking = dockableWindowManager.getDockingLayout(config);
 		return config;
 	} //}}}
 
@@ -1215,8 +1207,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		setIconImage(GUIUtilities.getEditorIcon());
 
-		dockableWindowManager = new DockableWindowManager(this,
-			DockableWindowFactory.getInstance(),config);
+		dockableWindowManager = (DockableWindowManagerBase) ServiceManager.getService(
+			DOCKABLE_WINDOW_MANAGER_SERVICE, "Original");
+		dockableWindowManager.configure(this, DockableWindowFactory.getInstance(),config);
 
 		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
@@ -1304,7 +1297,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ Instance variables
 	private boolean closed;
 
-	private DockableWindowManager dockableWindowManager;
+	private DockableWindowManagerBase dockableWindowManager;
 
 	private JPanel topToolBars;
 	private JPanel bottomToolBars;
@@ -1848,12 +1841,9 @@ loop:		while (true)
 	{
 		public boolean plainView;
 		public String splitConfig;
-		public int x, y, width, height, extState;
-
-		// dockables
-		public String top, left, bottom, right;
-		public int topPos, leftPos, bottomPos, rightPos;
-
+		public int extState;
+		public DockingLayout docking;
+		
 		public ViewConfig()
 		{
 		}
@@ -1862,23 +1852,13 @@ loop:		while (true)
 		{
 			this.plainView = plainView;
 			String prefix = plainView ? "plain-view" : "view";
-			x = jEdit.getIntegerProperty(prefix + ".x",0);
-			y = jEdit.getIntegerProperty(prefix + ".y",0);
-			width = jEdit.getIntegerProperty(prefix + ".width",0);
-			height = jEdit.getIntegerProperty(prefix + ".height",0);
-			extState = jEdit.getIntegerProperty(prefix + ".extendedState",NORMAL);
+			extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
 		}
 
-		public ViewConfig(boolean plainView, String splitConfig,
-			int x, int y, int width, int height, int extState)
+		public ViewConfig(boolean plainView, String splitConfig)
 		{
-			this.plainView = plainView;
+			this(plainView);
 			this.splitConfig = splitConfig;
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
-			this.extState = extState;
 		}
 	} //}}}
 
