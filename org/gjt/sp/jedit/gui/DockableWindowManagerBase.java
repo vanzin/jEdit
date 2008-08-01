@@ -11,9 +11,9 @@ import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.View.ViewConfig;
-import org.gjt.sp.jedit.gui.DockableWindowManager.KeyHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
+@SuppressWarnings("serial")
 public abstract class DockableWindowManagerBase extends JPanel implements EBComponent {
 
 	public static abstract class DockingLayout {
@@ -29,45 +29,19 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	 * Docking framework interface methods
 	 */
 	abstract public void adjust(View view, ViewConfig config);
-	public void setDockingLayout(DockingLayout docking) {
-		
-	}
-	public void showDockableWindow(String name) {
-		
-	}
-	public void hideDockableWindow(String name) {
-		
-	}
-	public JComponent floatDockableWindow(String name) {
-		return null;
-	}
-	public JComponent getDockable(String name) {
-		return null;
-	}
-	public String getDockableTitle(String name) {
-		return null;
-	}
-	public void setDockableTitle(String dockable, String title) {
-		
-	}
-	public boolean isDockableWindowDocked(String name) {
-		return false;
-	}
-	public boolean isDockableWindowVisible(String name) {
-		return false;
-	}
-	public void closeCurrentArea() {
-		
-	}
-	public void close() {
-		
-	}
-	public DockingLayout getDockingLayout(ViewConfig config) {
-		return null;
-	}
-	public KeyListener closeListener(String dockableName) {
-		return null;
-	}
+	abstract public void setDockingLayout(DockingLayout docking);
+	abstract public void showDockableWindow(String name);
+	abstract public void hideDockableWindow(String name);
+	abstract public JComponent floatDockableWindow(String name);
+	abstract public JComponent getDockable(String name);
+	abstract public String getDockableTitle(String name);
+	abstract public void setDockableTitle(String dockable, String title);
+	abstract public boolean isDockableWindowDocked(String name);
+	abstract public boolean isDockableWindowVisible(String name);
+	abstract public void closeCurrentArea();
+	abstract public void close();
+	abstract public DockingLayout getDockingLayout(ViewConfig config);
+	abstract public KeyListener closeListener(String dockableName);
 
 	/*
 	 * Base class methods
