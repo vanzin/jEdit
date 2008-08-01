@@ -17,6 +17,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public abstract class DockableWindowManagerBase extends JPanel implements EBComponent {
 
 	public static abstract class DockingLayout {
+		public DockingLayout() {
+		}
+		abstract public void setPlainView(boolean plain);
 		abstract public DefaultHandler getPerspectiveHandler();
 		abstract public void savePerspective(SettingsXML.Saver out, String lineSep) throws IOException;
 		abstract public void move(int dx, int dy);

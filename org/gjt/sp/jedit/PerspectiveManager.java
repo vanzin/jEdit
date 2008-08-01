@@ -99,8 +99,7 @@ public class PerspectiveManager
 
 		Log.log(Log.MESSAGE,PerspectiveManager.class,"Loading " + perspectiveXML);
 
-		PerspectiveHandler handler = new PerspectiveHandler(restoreFiles,
-			View.getDockingFrameworkProvider().getPerpsectiveHandler());
+		PerspectiveHandler handler = new PerspectiveHandler(restoreFiles);
 		try
 		{
 			perspectiveXML.load(handler);
@@ -241,12 +240,13 @@ public class PerspectiveManager
 		String autoReload, autoReloadDialog;
 		DefaultHandler dockingLayoutHandler;
 		
-		PerspectiveHandler(boolean restoreFiles, DefaultHandler dockingHandler)
+		PerspectiveHandler(boolean restoreFiles)
 		{
 			this.restoreFiles = restoreFiles;
 			config = new View.ViewConfig();
 			charData = new StringBuffer();
-			dockingLayoutHandler = dockingHandler;
+			config.docking = View.getDockingFrameworkProvider().createDockingLayout();
+			dockingLayoutHandler = config.docking.getPerspectiveHandler();
 		}
 
 		@Override

@@ -162,7 +162,8 @@ public class DockableWindowManager extends DockableWindowManagerBase
 	//{{{ DockableWindowConfig class
 	public static class DockableWindowConfig extends DockingLayout
 	{
-		class PerspectiveHandler extends DefaultHandler {
+		public class PerspectiveHandler extends DefaultHandler
+		{
 			public void startElement(String uri, String localName,
 					 String qName, Attributes attrs)
 			{
@@ -206,7 +207,10 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		public String top, left, bottom, right;
 		public int topPos, leftPos, bottomPos, rightPos;
 
-		public DockableWindowConfig(boolean plainView)
+		public DockableWindowConfig()
+		{
+		}
+		public void setPlainView(boolean plainView)
 		{
 			String prefix = plainView ? "plain-view" : "view";
 			x = jEdit.getIntegerProperty(prefix + ".x",0);
@@ -232,7 +236,7 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		}
 
 		public DefaultHandler getPerspectiveHandler() {
-			return null;
+			return new PerspectiveHandler();
 		}
 
 		public void savePerspective(SettingsXML.Saver out, String lineSep) throws IOException {
@@ -345,7 +349,8 @@ public class DockableWindowManager extends DockableWindowManagerBase
 	}
 	@Override
 	public DockingLayout getDockingLayout(ViewConfig config) {
-		DockableWindowConfig docking = new DockableWindowConfig(config.plainView);
+		DockableWindowConfig docking = new DockableWindowConfig();
+		docking.setPlainView(config.plainView);
 		String prefix = config.plainView ? "plain-view" : "view";
 		docking.extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
 
