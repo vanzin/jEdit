@@ -8,7 +8,7 @@
 ### it with all its content. (So don't use your
 ### home-directory or your project-directory
 ### if you don't want to loose all your files!)
-#build.dir=build
+build.dir=build
 
 ### The directory where to put the distribution-files
 ### Use a directory exclusive used for that,
@@ -16,7 +16,7 @@
 ### it with all its content. (So don't use your
 ### home-directory or your project-directory
 ### if you don't want to loose all your files!)
-#dist.dir=dist
+dist.dir=dist
 
 ### The name of the Inno Setup compiler executable
 ### for building of the Windows installer

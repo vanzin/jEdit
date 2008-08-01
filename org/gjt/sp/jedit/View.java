@@ -60,6 +60,7 @@ import org.gjt.sp.jedit.gui.DockableLayout;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.gui.DockableWindowManagerBase;
 import org.gjt.sp.jedit.gui.HistoryModel;
+import org.gjt.sp.jedit.gui.IDockingFrameworkProvider;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.StatusBar;
 import org.gjt.sp.jedit.gui.ToolBarManager;
@@ -130,8 +131,10 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	//{{{ ToolBar-related constants
 
-	private static final String DOCKABLE_WINDOW_MANAGER_SERVICE = "org.gjt.sp.jedit.gui.DockableWindowManagerBase";
-
+	private static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
+		"org.gjt.sp.jedit.gui.DockingFrameworkProvider";
+	private static IDockingFrameworkProvider dockingFrameworkProvider = null;
+	
 	//{{{ Groups
 	/**
 	 * The group of tool bars above the DockableWindowManager
@@ -251,6 +254,12 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return dockableWindowManager;
 	} //}}}
 
+	static public IDockingFrameworkProvider getDockingFrameworkProvider() {
+		if (dockingFrameworkProvider == null)
+			dockingFrameworkProvider = (IDockingFrameworkProvider) ServiceManager.getService(
+					DOCKING_FRAMEWORK_PROVIDER_SERVICE, "Original");
+		return dockingFrameworkProvider;
+	}
 	//{{{ getToolBar() method
 	/**
 	 * Returns the view's tool bar.
@@ -1207,9 +1216,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		setIconImage(GUIUtilities.getEditorIcon());
 
-		dockableWindowManager = (DockableWindowManagerBase) ServiceManager.getService(
-			DOCKABLE_WINDOW_MANAGER_SERVICE, "Original");
-		dockableWindowManager.configure(this, DockableWindowFactory.getInstance(),config);
+		dockableWindowManager = getDockingFrameworkProvider().create(this,
+			DockableWindowFactory.getInstance(), config);
 
 		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
@@ -1841,7 +1849,6 @@ loop:		while (true)
 	{
 		public boolean plainView;
 		public String splitConfig;
-		public int extState;
 		public DockingLayout docking;
 		
 		public ViewConfig()
@@ -1851,8 +1858,6 @@ loop:		while (true)
 		public ViewConfig(boolean plainView)
 		{
 			this.plainView = plainView;
-			String prefix = plainView ? "plain-view" : "view";
-			extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
 		}
 
 		public ViewConfig(boolean plainView, String splitConfig)

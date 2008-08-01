@@ -102,8 +102,8 @@
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 	
 	<!-- Docking framework -->
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.DockableWindowManagerBase" NAME="Original">
-		new org.gjt.sp.jedit.gui.DockableWindowManager();
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.DockingFrameworkProvider" NAME="Original">
+		new org.gjt.sp.jedit.gui.DockableWindowManagerProvider();
 	</SERVICE>
 	
 </SERVICES>

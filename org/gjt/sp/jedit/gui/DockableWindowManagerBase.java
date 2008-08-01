@@ -1,16 +1,22 @@
 package org.gjt.sp.jedit.gui;
 
+import java.io.IOException;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.View.ViewConfig;
+import org.xml.sax.helpers.DefaultHandler;
 
 public abstract class DockableWindowManagerBase extends JPanel implements EBComponent {
 
 	public static abstract class DockingLayout {
+		abstract public DefaultHandler getPerspectiveHandler();
+		abstract public void savePerspective(SettingsXML.Saver out, String lineSep) throws IOException;
 		abstract public void move(int x, int y);
 		abstract public int getX();
 		abstract public int getY();
@@ -63,7 +69,8 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	private void propertiesChanged() {
 		
 	}
-	public void configure(View view, DockableWindowFactory instance, ViewConfig config) {
+	public DockableWindowManagerBase(View view, DockableWindowFactory instance,
+			ViewConfig config) {
 	}	
 	public void init() {
 		

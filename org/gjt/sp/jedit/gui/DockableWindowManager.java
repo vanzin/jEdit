@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,6 +45,7 @@ import java.util.TreeMap;
 
 import javax.swing.AbstractButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
@@ -51,6 +53,7 @@ import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.PluginJAR;
+import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
@@ -59,6 +62,8 @@ import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>Keeps track of all dockable windows for a single View, and provides
@@ -150,10 +155,48 @@ import org.gjt.sp.util.Log;
 public class DockableWindowManager extends DockableWindowManagerBase
 {
 	
-	//{{{ ViewConfig class
+	//{{{ DockableWindowConfig class
 	public static class DockableWindowConfig extends DockingLayout
 	{
-		public int x, y, width, height;
+		class PerspectiveHandler extends DefaultHandler {
+			public void startElement(String uri, String localName,
+					 String qName, Attributes attrs)
+			{
+				for (int i = 0; i < attrs.getLength(); i++)
+					attribute(attrs.getQName(i), attrs.getValue(i));
+			}
+			private void attribute(String aname, String value)
+			{
+				if(aname.equals("X"))
+					x = Integer.parseInt(value);
+				else if(aname.equals("Y"))
+					y = Integer.parseInt(value);
+				else if(aname.equals("WIDTH"))
+					width = Integer.parseInt(value);
+				else if(aname.equals("HEIGHT"))
+					height = Integer.parseInt(value);
+				else if(aname.equals("EXT_STATE"))
+					extState = Integer.parseInt(value);
+				else if(aname.equals("TOP"))
+					top = value;
+				else if(aname.equals("LEFT"))
+					left = value;
+				else if(aname.equals("BOTTOM"))
+					bottom = value;
+				else if(aname.equals("RIGHT"))
+					right = value;
+				else if(aname.equals("TOP_POS"))
+					topPos = Integer.parseInt(value);
+				else if(aname.equals("LEFT_POS"))
+					leftPos = Integer.parseInt(value);
+				else if(aname.equals("BOTTOM_POS"))
+					bottomPos = Integer.parseInt(value);
+				else if(aname.equals("RIGHT_POS"))
+					rightPos = Integer.parseInt(value);
+			}
+		}
+		
+		public int x, y, width, height, extState;
 
 		// dockables
 		public String top, left, bottom, right;
@@ -166,6 +209,7 @@ public class DockableWindowManager extends DockableWindowManagerBase
 			y = jEdit.getIntegerProperty(prefix + ".y",0);
 			width = jEdit.getIntegerProperty(prefix + ".width",0);
 			height = jEdit.getIntegerProperty(prefix + ".height",0);
+			extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
 		}
 
 		public DockableWindowConfig(int x, int y, int width, int height, int extState)
@@ -174,6 +218,7 @@ public class DockableWindowManager extends DockableWindowManagerBase
 			this.y = y;
 			this.width = width;
 			this.height = height;
+			this.extState = extState;
 		}
 		
 		public void move(int x, int y)
@@ -196,6 +241,44 @@ public class DockableWindowManager extends DockableWindowManagerBase
 
 		public int getWidth() {
 			return width;
+		}
+
+		public DefaultHandler getPerspectiveHandler() {
+			return null;
+		}
+
+		public void savePerspective(SettingsXML.Saver out, String lineSep) throws IOException {
+			out.write("<GEOMETRY X=\"");
+			out.write(String.valueOf(x));
+			out.write("\" Y=\"");
+			out.write(String.valueOf(y));
+			out.write("\" WIDTH=\"");
+			out.write(String.valueOf(width));
+			out.write("\" HEIGHT=\"");
+			out.write(String.valueOf(height));
+			out.write("\" EXT_STATE=\"");
+			out.write(String.valueOf(extState));
+			out.write("\" />");
+			out.write(lineSep);
+
+			out.write("<DOCKING LEFT=\"");
+			out.write(left == null ? "" : left);
+			out.write("\" TOP=\"");
+			out.write(top == null ? "" : top);
+			out.write("\" RIGHT=\"");
+			out.write(right == null ? "" : right);
+			out.write("\" BOTTOM=\"");
+			out.write(bottom == null ? "" : bottom);
+			out.write("\" LEFT_POS=\"");
+			out.write(String.valueOf(leftPos));
+			out.write("\" TOP_POS=\"");
+			out.write(String.valueOf(topPos));
+			out.write("\" RIGHT_POS=\"");
+			out.write(String.valueOf(rightPos));
+			out.write("\" BOTTOM_POS=\"");
+			out.write(String.valueOf(bottomPos));
+			out.write("\" />");
+			out.write(lineSep);
 		}
 	} //}}}
 
@@ -276,7 +359,9 @@ public class DockableWindowManager extends DockableWindowManagerBase
 	public DockingLayout getDockingLayout(ViewConfig config) {
 		DockableWindowConfig docking = new DockableWindowConfig(config.plainView);
 		String prefix = config.plainView ? "plain-view" : "view";
-		switch (config.extState)
+		docking.extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
+
+		switch (docking.extState)
 		{
 			case Frame.MAXIMIZED_BOTH:
 			case Frame.ICONIFIED:
@@ -330,9 +415,10 @@ public class DockableWindowManager extends DockableWindowManagerBase
 	 * @param config A docking configuration
 	 * @since jEdit 2.6pre3
 	 */
-	public void configure(View view, DockableWindowFactory factory,
+	public DockableWindowManager(View view, DockableWindowFactory factory,
 		View.ViewConfig config)
 	{
+		super(view, factory, config);
 		setLayout(new DockableLayout());
 		this.view = view;
 		this.factory = factory;

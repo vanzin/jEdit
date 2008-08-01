@@ -2225,14 +2225,13 @@ public class jEdit
 			View newView = new View(buffer,config);
 			addViewToList(newView);
 
+			DockableWindowManagerBase wm = newView.getDockableWindowManager();
 			if(!config.plainView)
-			{
-				DockableWindowManagerBase wm = newView.getDockableWindowManager();
 				wm.setDockingLayout(config.docking);
-			}
 
 			newView.pack();
-
+			//wm.adjust(view);
+			
 			DockingLayout layout = config.docking;
 			int width = layout.getWidth();
 			int height = layout.getHeight();
