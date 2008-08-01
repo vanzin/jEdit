@@ -50,13 +50,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
+import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
@@ -225,22 +229,6 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		{
 			this.x += x;
 			this.y += y;
-		}
-
-		public int getY() {
-			return y;
-		}
-		
-		public int getX() {
-			return x;
-		}
-		
-		public int getHeight() {
-			return height;
-		}
-
-		public int getWidth() {
-			return width;
 		}
 
 		public DefaultHandler getPerspectiveHandler() {
@@ -1346,6 +1334,27 @@ public class DockableWindowManager extends DockableWindowManagerBase
 				hideDockableWindow(name);
 		}
 	} //}}}
+
+	@Override
+	public void adjust(View parent, ViewConfig config) {
+		DockableWindowConfig layout = (DockableWindowConfig) config.docking;
+		if(layout.width != 0 && layout.height != 0)
+		{
+			Rectangle desired = new Rectangle(
+					layout.x, layout.y, layout.width, layout.height);
+			if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
+			{
+				new GUIUtilities.UnixWorkaround(view,"view",desired,layout.extState);
+			}
+			else
+			{
+				view.setBounds(desired);
+				view.setExtendedState(layout.extState);
+			}
+		}
+		else
+			view.setLocationRelativeTo(parent);
+	}
 
 	
 }

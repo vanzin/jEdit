@@ -1171,7 +1171,7 @@ public class GUIUtilities
 	} //}}}
 
 	//{{{ UnixWorkaround class
-	static class UnixWorkaround
+	public static class UnixWorkaround
 	{
 		Window win;
 		String name;
@@ -1181,7 +1181,7 @@ public class GUIUtilities
 		boolean windowOpened;
 
 		//{{{ UnixWorkaround constructor
-		UnixWorkaround(Window win, String name, Rectangle desired,
+		public UnixWorkaround(Window win, String name, Rectangle desired,
 			int extState)
 		{
 			this.win = win;

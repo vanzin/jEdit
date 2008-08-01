@@ -91,7 +91,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	 */
 	public static void browseDirectoryInNewWindow(View view, String path)
 	{
-		DockableWindowManager wm = view.getDockableWindowManager();
+		DockableWindowManagerBase wm = view.getDockableWindowManager();
 		if(path != null)
 		{
 			// this is such a bad way of doing it, but oh well...
@@ -110,7 +110,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	 */
 	public static void browseDirectory(View view, String path)
 	{
-		DockableWindowManager wm = view.getDockableWindowManager();
+		DockableWindowManagerBase wm = view.getDockableWindowManager();
 		VFSBrowser browser = (VFSBrowser)wm.getDockable(NAME);
 		if(browser != null)
 		{
@@ -170,7 +170,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		this.multipleSelection = multipleSelection;
 		this.view = view;
 
-		DockableWindowManager dwm = view.getDockableWindowManager();
+		DockableWindowManagerBase dwm = view.getDockableWindowManager();
 		KeyListener keyListener = dwm.closeListener(NAME);
 		addKeyListener(keyListener);
 		

@@ -2230,29 +2230,8 @@ public class jEdit
 				wm.setDockingLayout(config.docking);
 
 			newView.pack();
-			//wm.adjust(view);
+			wm.adjust(view, config);
 			
-			DockingLayout layout = config.docking;
-			int width = layout.getWidth();
-			int height = layout.getHeight();
-			if(width != 0 && height != 0)
-			{
-				Rectangle desired = new Rectangle(
-						layout.getX(), layout.getY(), width, height);
-				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
-				{
-					new GUIUtilities.UnixWorkaround(newView,
-						"view",desired,config.extState);
-				}
-				else
-				{
-					newView.setBounds(desired);
-					newView.setExtendedState(config.extState);
-				}
-			}
-			else
-				newView.setLocationRelativeTo(view);
-
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 			newView.setVisible(true);
