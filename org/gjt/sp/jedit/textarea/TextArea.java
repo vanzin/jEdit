@@ -4554,6 +4554,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if (getSelectionCount() == 0)
 		{
 			int end = getLineEndOffset(caretLine);
+
+			// Nothing to do if the caret is on the last line.
+			if(end > buffer.getLength())
+			{
+				getToolkit().beep();
+				return;
+			}
+
 			try
 			{
 				buffer.beginCompoundEdit();
