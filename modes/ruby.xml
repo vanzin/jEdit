@@ -379,6 +379,7 @@
 
             <KEYWORD2>load</KEYWORD2>
             <KEYWORD2>require</KEYWORD2>
+            <KEYWORD2>initialize</KEYWORD2>
 
             <OPERATOR>and</OPERATOR>
             <OPERATOR>not</OPERATOR>
