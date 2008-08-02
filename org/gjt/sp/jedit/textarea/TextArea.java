@@ -4130,50 +4130,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		selectNone();
 	} //}}}
 
-	//{{{ rangeLineComment() method
-	/**
-	 * This method will surround each selected line with a range comment.
-	 * This is used when calling line comment if the edit mode doesn't have
-	 * a line comment property
-	 * @since jEdit 4.3pre10
-	 */
-	private void rangeLineComment()
-	{
-		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
-		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
-		if(!buffer.isEditable() || commentStart == null || commentEnd == null
-			|| commentStart.length() == 0 || commentEnd.length() == 0)
-		{
-			getToolkit().beep();
-			return;
-		}
-
-		commentStart += ' ';
-		commentEnd = ' ' + commentEnd;
-
-
-		try
-		{
-			buffer.beginCompoundEdit();
-			int[] lines = getSelectedLines();
-			for(int i = 0; i < lines.length; i++)
-			{
-				String text = getLineText(lines[i]);
-				if (text.trim().length() == 0)
-					continue;
-				buffer.insert(getLineEndOffset(lines[i]) - 1,
-					commentEnd);
-				buffer.insert(getLineStartOffset(lines[i])
-					+ StandardUtilities.getLeadingWhiteSpace(text),
-					commentStart);
-			}
-		}
-		finally
-		{
-			buffer.endCompoundEdit();
-		}
-	} //}}}
-
 	//{{{ rangeComment() method
 	/**
 	 * Adds comment start and end strings to the beginning and end of the
@@ -4631,30 +4587,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			}
 		}
 	} //}}}
-
-	//{{{ joinLines() method
-	/**
-	 * Join the lines in the selection.
-	 * If you use this method you have to lock the buffer in compound edit mode
-	 *
-	 * @param selection the selection
-	 * @since jEdit 4.3pre8
-	 */
-	private void joinLines(Selection selection)
-	{
-		do
-		{
-			if (selection.startLine == buffer.getLineCount() - 1)
-				return;
-			int end = getLineEndOffset(selection.startLine);
-			String nextLineText = buffer.getLineText(selection.startLine + 1);
-			buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
-				nextLineText) + 1);
-			if (nextLineText.length() != 0)
-				buffer.insert(end - 1, " ");
-		}
-		while (selection.startLine < selection.endLine);
-	} //}}}
 	//}}}
 
 	//{{{ AWT stuff
@@ -4786,7 +4718,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 
 	//{{{ Input method support
-	private InputMethodSupport inputMethodSupport;
 	@Override
 	public InputMethodRequests getInputMethodRequests()
 	{
@@ -5205,6 +5136,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	private boolean caretBlinks;
 	private InputHandlerProvider inputHandlerProvider;
+
+	private InputMethodSupport inputMethodSupport;
 
 	/** The last visible physical line index. */
 	private int physLastLine;
@@ -6018,6 +5951,74 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		buffer.insert(caretStart,start + whitespace);
 
 		return caretBack;
+	} //}}}
+
+	//{{{ rangeLineComment() method
+	/**
+	 * This method will surround each selected line with a range comment.
+	 * This is used when calling line comment if the edit mode doesn't have
+	 * a line comment property
+	 * @since jEdit 4.3pre10
+	 */
+	private void rangeLineComment()
+	{
+		String commentStart = buffer.getContextSensitiveProperty(caret,"commentStart");
+		String commentEnd = buffer.getContextSensitiveProperty(caret,"commentEnd");
+		if(!buffer.isEditable() || commentStart == null || commentEnd == null
+			|| commentStart.length() == 0 || commentEnd.length() == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
+		commentStart += ' ';
+		commentEnd = ' ' + commentEnd;
+
+
+		try
+		{
+			buffer.beginCompoundEdit();
+			int[] lines = getSelectedLines();
+			for(int i = 0; i < lines.length; i++)
+			{
+				String text = getLineText(lines[i]);
+				if (text.trim().length() == 0)
+					continue;
+				buffer.insert(getLineEndOffset(lines[i]) - 1,
+					commentEnd);
+				buffer.insert(getLineStartOffset(lines[i])
+					+ StandardUtilities.getLeadingWhiteSpace(text),
+					commentStart);
+			}
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
+	} //}}}
+
+	//{{{ joinLines() method
+	/**
+	 * Join the lines in the selection.
+	 * If you use this method you have to lock the buffer in compound edit mode
+	 *
+	 * @param selection the selection
+	 * @since jEdit 4.3pre8
+	 */
+	private void joinLines(Selection selection)
+	{
+		do
+		{
+			if (selection.startLine == buffer.getLineCount() - 1)
+				return;
+			int end = getLineEndOffset(selection.startLine);
+			String nextLineText = buffer.getLineText(selection.startLine + 1);
+			buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
+				nextLineText) + 1);
+			if (nextLineText.length() != 0)
+				buffer.insert(end - 1, " ");
+		}
+		while (selection.startLine < selection.endLine);
 	} //}}}
 	//}}}
 
