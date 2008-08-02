@@ -4540,7 +4540,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	//{{{ joinLines() method
 	/**
-	 * Joins the current and the next line.
+	 * Joins the current and the next line, or joins all lines in
+	 * selections.
 	 * @since jEdit 2.7pre2
 	 */
 	public void joinLines()
@@ -4551,44 +4552,40 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-		if (getSelectionCount() == 0)
+		try
 		{
-			int end = getLineEndOffset(caretLine);
-
-			// Nothing to do if the caret is on the last line.
-			if(end > buffer.getLength())
+			buffer.beginCompoundEdit();
+			boolean doneForSelection = false;
+			for (Selection selection: selectionManager.getSelection())
 			{
-				getToolkit().beep();
-				return;
-			}
-
-			try
-			{
-				buffer.beginCompoundEdit();
-				joinLine(caretLine);
-			}
-			finally
-			{
-				buffer.endCompoundEdit();
-			}
-			setCaretPosition(end - 1);
-		}
-		else
-		{
-			try
-			{
-				buffer.beginCompoundEdit();
-				Selection[] selections = selectionManager.getSelection();
-				for (int i = 0; i < selections.length; i++)
+				while (selection.startLine < selection.endLine)
 				{
-					Selection selection = selections[i];
-					joinLines(selection);
+					joinLineAt(selection.startLine);
+					doneForSelection = true;
 				}
 			}
-			finally
+			// If nothing selected or all selections span only
+			// one line, join the line at the caret.
+			if (!doneForSelection)
 			{
-				buffer.endCompoundEdit();
+				int end = getLineEndOffset(caretLine);
+
+				// Nothing to do if the caret is on the last line.
+				if (end > buffer.getLength())
+				{
+					getToolkit().beep();
+					return;
+				}
+
+				joinLineAt(caretLine);
+				if(!multi)
+					selectNone();
+				moveCaretPosition(end - 1);
 			}
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
 		}
 	} //}}}
 	//}}}
@@ -6001,28 +5998,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 	} //}}}
 
-	//{{{ joinLines() method
-	/**
-	 * Join the lines in the selection.
-	 * If you use this method you have to lock the buffer in compound edit mode
-	 *
-	 * @param selection the selection
-	 * @since jEdit 4.3pre8
-	 */
-	private void joinLines(Selection selection)
-	{
-		do
-		{
-			joinLine(selection.startLine);
-		}
-		while (selection.startLine < selection.endLine);
-	} //}}}
-
 	//{{{ joinLine() method
 	/**
 	 * Join a line with the next line.
+	 * If you use this method you have to lock the buffer in compound edit mode.
 	 */
-	private void joinLine(int line)
+	private void joinLineAt(int line)
 	{
 		if (line >= buffer.getLineCount() - 1)
 			return;
