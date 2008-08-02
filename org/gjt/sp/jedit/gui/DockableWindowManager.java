@@ -47,6 +47,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
@@ -60,7 +61,6 @@ import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
-import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
@@ -1322,6 +1322,16 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		}
 		else
 			view.setLocationRelativeTo(parent);
+	}
+
+	@Override
+	public void setBottomToolbars(JPanel toolbars) {
+		add(toolbars, DockableLayout.BOTTOM_TOOLBARS, 0);		
+	}
+
+	@Override
+	public void setTopToolbars(JPanel toolbars) {
+		add(toolbars, DockableLayout.TOP_TOOLBARS, 0);		
 	}
 
 	
