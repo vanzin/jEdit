@@ -318,6 +318,8 @@ public class MiscUtilities
 			else
 				break;
 		}
+		if(path.length() == 0)
+			return parent;
 
 		if(OperatingSystem.isDOSDerived()
 			&& !isURL(parent)
