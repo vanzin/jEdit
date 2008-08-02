@@ -2287,7 +2287,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-		//{{{ fireContentInserted() method
+	//{{{ firePreContentInserted() method
 	protected void firePreContentInserted(int startLine, int offset,
 		int numLines, int length)
 	{
