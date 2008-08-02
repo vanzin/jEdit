@@ -67,6 +67,7 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	/*
 	 * Docking framework interface methods
 	 */
+	abstract public void setMainPanel(JPanel panel);
 	abstract public void adjust(View view, ViewConfig config);
 	abstract public void setDockingLayout(DockingLayout docking);
 	abstract public void showDockableWindow(String name);
@@ -74,7 +75,6 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	abstract public JComponent floatDockableWindow(String name);
 	abstract public void setTopToolbars(JPanel toolbars);
 	abstract public void setBottomToolbars(JPanel toolbars);
-	abstract public void setContent(Component c);
 	public JComponent getDockable(String name)
 	{
 		return windows.get(name);

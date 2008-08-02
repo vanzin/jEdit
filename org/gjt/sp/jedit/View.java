@@ -660,6 +660,11 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return split(JSplitPane.HORIZONTAL_SPLIT);
 	} //}}}
 
+	private void setMainContent(Component c) {
+		mainPanel.add(c, BorderLayout.CENTER);
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	}
 	//{{{ split() method
 	/**
 	 * Splits the view.
@@ -723,7 +728,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			newSplitPane.setLeftComponent(oldEditPane);
 			newSplitPane.setRightComponent(newEditPane);
 
-			dockableWindowManager.setContent(newSplitPane);
+			setMainContent(newSplitPane);
+			
 		}
 
 		SwingUtilities.invokeLater(new Runnable()
@@ -760,7 +766,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 					_editPane.close();
 			}
 
-			dockableWindowManager.setContent(editPane);
+			setMainContent(editPane);
 
 			splitPane = null;
 			updateTitle();
@@ -817,7 +823,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			}
 			else
 			{
-				dockableWindowManager.setContent(editPane);
+				setMainContent(editPane);
 				splitPane = null;
 			}
 
@@ -1216,9 +1222,12 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		setIconImage(GUIUtilities.getEditorIcon());
 
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
 		dockableWindowManager = getDockingFrameworkProvider().create(this,
 			DockableWindowFactory.getInstance(), config);
-
+		dockableWindowManager.setMainPanel(mainPanel);
+		
 		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
@@ -1306,7 +1315,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private boolean closed;
 
 	private DockableWindowManagerBase dockableWindowManager;
-
+	private JPanel mainPanel;
+	
 	private JPanel topToolBars;
 	private JPanel bottomToolBars;
 	private ToolBarManager toolBarManager;
@@ -1461,16 +1471,13 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		try
 		{
 			Component comp = restoreSplitConfig(buffer,splitConfig);
-			dockableWindowManager.setContent(comp);
+			setMainContent(comp);
 		}
 		catch(IOException e)
 		{
 			// this should never throw an exception.
 			throw new InternalError();
 		}
-
-		dockableWindowManager.revalidate();
-		dockableWindowManager.repaint();
 	} //}}}
 
 	//{{{ restoreSplitConfig() method

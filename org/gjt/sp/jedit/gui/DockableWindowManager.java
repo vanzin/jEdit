@@ -400,6 +400,10 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		add(RIGHT,right.dockablePanel);
 	} //}}}
 
+	public void setMainPanel(JPanel panel) {
+		add(panel, 0);
+	}
+	
 	//{{{ init() method
 	/**
 	 * Initialises dockable window manager. Do not call this method directly.
@@ -1334,15 +1338,4 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		add(toolbars, DockableLayout.TOP_TOOLBARS, 0);		
 	}
 
-	Component contents = null;
-	
-	@Override
-	public void setContent(Component c) {
-		if (contents != null)
-			remove(contents);
-		contents = c;
-		add(contents, 0);
-	}
-
-	
 }
