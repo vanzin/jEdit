@@ -2195,9 +2195,15 @@ public class jEdit
 	{
 		View.ViewConfig config;
 		if(view != null && (plainView == view.isPlainView()))
+		{
 			config = view.getViewConfig();
+			config.x -= 20;
+			config.y += 20;
+		}
 		else
+		{
 			config = new View.ViewConfig(plainView);
+		}
 		return newView(view,buffer,config);
 	}
 	/**
@@ -2218,8 +2224,6 @@ public class jEdit
 			{
 				view.showWaitCursor();
 				view.getEditPane().saveCaretInfo();
-				config.x -= 20;
-				config.y += 20;
 			}
 
 			View newView = new View(buffer,config);
