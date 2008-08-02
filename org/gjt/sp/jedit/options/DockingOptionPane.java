@@ -55,6 +55,8 @@ public class DockingOptionPane extends AbstractOptionPane
 	//{{{ _save() method
 	public void _save()
 	{
+		jEdit.setProperty(View.VIEW_DOCKING_FRAMEWORK_PROPERTY,
+			(String) dockingFramework.getSelectedItem());
 		windowModel.save();
 	} //}}}
 

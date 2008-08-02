@@ -166,6 +166,11 @@ public class DockableWindowFactory
 		return retVal;
 	} //}}}
 
+	public Window getDockableWindowFactory(String name)
+	{
+		return dockableWindowFactories.get(name);
+	}
+	
 	//{{{ getDockableWindowIterator() method
 	Iterator<Window> getDockableWindowIterator()
 	{

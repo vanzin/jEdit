@@ -2,19 +2,58 @@ package org.gjt.sp.jedit.gui;
 
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
+import org.gjt.sp.util.Log;
 import org.xml.sax.helpers.DefaultHandler;
 
 @SuppressWarnings("serial")
-public abstract class DockableWindowManagerBase extends JPanel implements EBComponent {
+public abstract class DockableWindowManagerBase extends JPanel implements EBComponent
+{
+
+	//{{{ Constants
+	/**
+	 * Floating position.
+	 * @since jEdit 2.6pre3
+	 */
+	public static final String FLOATING = "floating";
+	
+	/**
+	 * Top position.
+	 * @since jEdit 2.6pre3
+	 */
+	public static final String TOP = "top";
+
+	/**
+	 * Left position.
+	 * @since jEdit 2.6pre3
+	 */
+	public static final String LEFT = "left";
+
+	/**
+	 * Bottom position.
+	 * @since jEdit 2.6pre3
+	 */
+	public static final String BOTTOM = "bottom";
+
+	/**
+	 * Right position.
+	 * @since jEdit 2.6pre3
+	 */
+	public static final String RIGHT = "right";
+	//}}}
 
 	public static abstract class DockingLayout {
 		public DockingLayout() {
@@ -33,7 +72,10 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	abstract public void showDockableWindow(String name);
 	abstract public void hideDockableWindow(String name);
 	abstract public JComponent floatDockableWindow(String name);
-	abstract public JComponent getDockable(String name);
+	public JComponent getDockable(String name)
+	{
+		return windows.get(name);
+	}
 	abstract public String getDockableTitle(String name);
 	abstract public void setDockableTitle(String dockable, String title);
 	abstract public boolean isDockableWindowDocked(String name);
@@ -44,6 +86,13 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	abstract public KeyListener closeListener(String dockableName);
 
 	/*
+	 * Data members
+	 */
+	protected View view;
+	protected DockableWindowFactory factory;
+	protected Map<String, JComponent> windows = new HashMap<String, JComponent>();
+	
+	/*
 	 * Base class methods
 	 */
 	public void handleMessage(EBMessage msg) {
@@ -53,10 +102,32 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 		
 	}
 	public DockableWindowManagerBase(View view, DockableWindowFactory instance,
-			ViewConfig config) {
+			ViewConfig config)
+	{
+		this.view = view;
+		this.factory = instance;
 	}	
-	public void init() {
-		
+	public void init()
+	{
+		EditBus.addToBus(this);
+	}
+	protected JComponent createDockable(String name)
+	{
+		DockableWindowFactory.Window wf = factory.getDockableWindowFactory(name);
+		if (wf == null)
+		{
+			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
+			return null;
+		}
+		String position = getDockablePosition(name);
+		JComponent window = wf.createDockableWindow(view, position);
+		if (window != null)
+			windows.put(name, window);
+		return window;
+	}
+	protected String getDockablePosition(String name)
+	{
+		return jEdit.getProperty(name + ".dock-position", FLOATING);
 	}
 	/*
 	 * Derived methods

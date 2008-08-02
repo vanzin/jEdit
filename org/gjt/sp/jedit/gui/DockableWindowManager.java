@@ -274,41 +274,7 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		}
 	} //}}}
 
-	//{{{ Constants
-	/**
-	 * Floating position.
-	 * @since jEdit 2.6pre3
-	 */
-	public static final String FLOATING = "floating";
-	
-	/**
-	 * Top position.
-	 * @since jEdit 2.6pre3
-	 */
-	public static final String TOP = "top";
-
-	/**
-	 * Left position.
-	 * @since jEdit 2.6pre3
-	 */
-	public static final String LEFT = "left";
-
-	/**
-	 * Bottom position.
-	 * @since jEdit 2.6pre3
-	 */
-	public static final String BOTTOM = "bottom";
-
-	/**
-	 * Right position.
-	 * @since jEdit 2.6pre3
-	 */
-	public static final String RIGHT = "right";
-	//}}}
-	
 	//{{{ Data members
-	private View view;
-	private DockableWindowFactory factory;
 
 	/** A mapping from Strings to Entry objects. */
 	private Map<String, Entry> windows;
@@ -413,8 +379,6 @@ public class DockableWindowManager extends DockableWindowManagerBase
 	{
 		super(view, factory, config);
 		setLayout(new DockableLayout());
-		this.view = view;
-		this.factory = factory;
 
 		windows = new HashMap<String, Entry>();
 		clones = new ArrayList<Entry>();
@@ -442,8 +406,7 @@ public class DockableWindowManager extends DockableWindowManagerBase
 	 */
 	public void init()
 	{
-		EditBus.addToBus(this);
-
+		super.init();
 		Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
 
 		while(entries.hasNext())

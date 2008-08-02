@@ -29,7 +29,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -132,7 +131,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	//{{{ ToolBar-related constants
 
-	private static final String VIEW_DOCKING_FRAMEWORK_PROPERTY = "view.docking.framework";
+	public static final String VIEW_DOCKING_FRAMEWORK_PROPERTY = "view.docking.framework";
 	private static final String ORIGINAL_DOCKING_FRAMEWORK = "Original";
 	public static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
 		"org.gjt.sp.jedit.gui.DockingFrameworkProvider";
