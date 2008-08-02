@@ -132,7 +132,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	//{{{ ToolBar-related constants
 
-	private static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
+	private static final String VIEW_DOCKING_FRAMEWORK_PROPERTY = "view.docking.framework";
+	private static final String ORIGINAL_DOCKING_FRAMEWORK = "Original";
+	public static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
 		"org.gjt.sp.jedit.gui.DockingFrameworkProvider";
 	private static IDockingFrameworkProvider dockingFrameworkProvider = null;
 	
@@ -257,8 +259,13 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	static public IDockingFrameworkProvider getDockingFrameworkProvider() {
 		if (dockingFrameworkProvider == null)
-			dockingFrameworkProvider = (IDockingFrameworkProvider) ServiceManager.getService(
-					DOCKING_FRAMEWORK_PROVIDER_SERVICE, "Original");
+		{
+			String framework = jEdit.getProperty(
+				VIEW_DOCKING_FRAMEWORK_PROPERTY, ORIGINAL_DOCKING_FRAMEWORK);
+			dockingFrameworkProvider = (IDockingFrameworkProvider)
+				ServiceManager.getService(
+					DOCKING_FRAMEWORK_PROVIDER_SERVICE, framework);
+		}
 		return dockingFrameworkProvider;
 	}
 	//{{{ getToolBar() method

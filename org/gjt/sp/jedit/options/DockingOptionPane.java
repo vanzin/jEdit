@@ -48,6 +48,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	public void _init()
 	{
 		setLayout(new BorderLayout());
+		add(BorderLayout.NORTH,createDockingFrameworkChooser());
 		add(BorderLayout.CENTER,createWindowTableScroller());
 	} //}}}
 
@@ -62,8 +63,19 @@ public class DockingOptionPane extends AbstractOptionPane
 	//{{{ Instance variables
 	private JTable windowTable;
 	private WindowTableModel windowModel;
+	private JComboBox dockingFramework;
 	//}}}
 
+	private JPanel createDockingFrameworkChooser()
+	{
+		JPanel p = new JPanel();
+		p.add(new JLabel("Docking framework:"));
+		String [] frameworks =
+			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
+		dockingFramework = new JComboBox(frameworks);
+		p.add(dockingFramework);
+		return p;
+	}
 	//{{{ createWindowTableScroller() method
 	private JScrollPane createWindowTableScroller()
 	{
