@@ -173,7 +173,7 @@ public class CompletionPopup extends JWindow
 	/**
 	 * Start completion.
 	 * @param candidates The candidates of this completion
-	 * @param active Ser focus to the popup
+	 * @param active Set focus to the popup
 	 */
 	public void reset(Candidates candidates, boolean active)
 	{
