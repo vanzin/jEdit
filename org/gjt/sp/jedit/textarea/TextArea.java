@@ -4589,15 +4589,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void joinLines()
 	{
+		if(!buffer.isEditable())
+		{
+			getToolkit().beep();
+			return;
+		}
+
 		if (getSelectionCount() == 0)
 		{
 			int end = getLineEndOffset(caretLine);
-			if(!buffer.isEditable() || end > buffer.getLength())
-			{
-				getToolkit().beep();
-				return;
-			}
-
 			try
 			{
 				buffer.beginCompoundEdit();
