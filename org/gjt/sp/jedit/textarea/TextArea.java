@@ -4560,7 +4560,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				while (selection.startLine < selection.endLine)
 				{
-					joinLineAt(selection.startLine);
+					// Edit from end of selection to
+					// minimize invalidations and
+					// recaluculations of cached line info
+					// such as indent level or fold level.
+					joinLineAt(selection.endLine - 1);
 					doneForSelection = true;
 				}
 			}
