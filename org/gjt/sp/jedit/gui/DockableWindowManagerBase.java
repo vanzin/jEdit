@@ -74,8 +74,7 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	abstract public JComponent floatDockableWindow(String name);
 	abstract public void setTopToolbars(JPanel toolbars);
 	abstract public void setBottomToolbars(JPanel toolbars);
-	abstract public void removeContent(JComponent c);
-	abstract public void addContent(Component c);
+	abstract public void setContent(Component c);
 	public JComponent getDockable(String name)
 	{
 		return windows.get(name);

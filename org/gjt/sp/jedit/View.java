@@ -723,8 +723,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			newSplitPane.setLeftComponent(oldEditPane);
 			newSplitPane.setRightComponent(newEditPane);
 
-			oldParent.add(newSplitPane,0);
-			oldParent.revalidate();
+			dockableWindowManager.setContent(newSplitPane);
 		}
 
 		SwingUtilities.invokeLater(new Runnable()
@@ -761,11 +760,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 					_editPane.close();
 			}
 
-			JComponent parent = (JComponent)splitPane.getParent();
-
-			parent.remove(splitPane);
-			parent.add(editPane,0);
-			parent.revalidate();
+			dockableWindowManager.setContent(editPane);
 
 			splitPane = null;
 			updateTitle();
@@ -818,15 +813,13 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				else
 					parentSplit.setRightComponent(editPane);
 				parentSplit.setDividerLocation(pos);
+				parent.revalidate();
 			}
 			else
 			{
-				parent.remove(comp);
-				parent.add(editPane,0);
+				dockableWindowManager.setContent(editPane);
 				splitPane = null;
 			}
-
-			parent.revalidate();
 
 			updateTitle();
 
@@ -1465,16 +1458,10 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ setSplitConfig() method
 	private void setSplitConfig(Buffer buffer, String splitConfig)
 	{
-		if(editPane != null)
-			dockableWindowManager.removeContent(editPane);
-
-		if(splitPane != null)
-			dockableWindowManager.removeContent(splitPane);
-
 		try
 		{
 			Component comp = restoreSplitConfig(buffer,splitConfig);
-			dockableWindowManager.addContent(comp);
+			dockableWindowManager.setContent(comp);
 		}
 		catch(IOException e)
 		{
