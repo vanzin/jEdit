@@ -660,8 +660,12 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return split(JSplitPane.HORIZONTAL_SPLIT);
 	} //}}}
 
+	private Component mainContent = null;
 	private void setMainContent(Component c) {
-		mainPanel.add(c, BorderLayout.CENTER);
+		if (mainContent != null)
+			mainPanel.remove(mainContent);
+		mainContent = c;
+		mainPanel.add(mainContent, BorderLayout.CENTER);
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	}
