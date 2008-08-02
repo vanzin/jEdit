@@ -1413,6 +1413,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			== JSplitPane.VERTICAL_SPLIT ? "vertical" : "horizontal");
 	} //}}}
 
+	//{{{ appendToSplitConfig() method
 	/**
 	 * Append the Component to the split config.
 	 * The component must be a JSplitPane or an EditPane
