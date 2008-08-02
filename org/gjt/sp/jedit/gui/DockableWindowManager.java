@@ -1334,5 +1334,15 @@ public class DockableWindowManager extends DockableWindowManagerBase
 		add(toolbars, DockableLayout.TOP_TOOLBARS, 0);		
 	}
 
+	@Override
+	public void removeContent(JComponent c) {
+		remove(c);
+	}
+
+	@Override
+	public void addContent(Component c) {
+		add(c, 0);
+	}
+
 	
 }

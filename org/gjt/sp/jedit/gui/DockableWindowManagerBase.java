@@ -1,9 +1,9 @@
 package org.gjt.sp.jedit.gui;
 
+import java.awt.Component;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JComponent;
@@ -74,11 +74,16 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	abstract public JComponent floatDockableWindow(String name);
 	abstract public void setTopToolbars(JPanel toolbars);
 	abstract public void setBottomToolbars(JPanel toolbars);
+	abstract public void removeContent(JComponent c);
+	abstract public void addContent(Component c);
 	public JComponent getDockable(String name)
 	{
 		return windows.get(name);
 	}
-	abstract public String getDockableTitle(String name);
+	public String getDockableTitle(String name)
+	{
+		return longTitle(name);
+	}
 	abstract public void setDockableTitle(String dockable, String title);
 	abstract public boolean isDockableWindowDocked(String name);
 	abstract public boolean isDockableWindowVisible(String name);
@@ -131,6 +136,21 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	{
 		return jEdit.getProperty(name + ".dock-position", FLOATING);
 	}
+	public String longTitle(String name) 
+	{
+		String title = jEdit.getProperty(name + ".longtitle");
+		if (title == null)
+			return shortTitle(name);
+		return title;
+	}
+	public String shortTitle(String name)
+	{		
+		String title = jEdit.getProperty(name + ".title");
+		if(title == null)
+			return "NO TITLE PROPERTY: " + name;
+		return title;
+	}
+
 	/*
 	 * Derived methods
 	 */

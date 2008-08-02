@@ -1466,15 +1466,15 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private void setSplitConfig(Buffer buffer, String splitConfig)
 	{
 		if(editPane != null)
-			dockableWindowManager.remove(editPane);
+			dockableWindowManager.removeContent(editPane);
 
 		if(splitPane != null)
-			dockableWindowManager.remove(splitPane);
+			dockableWindowManager.removeContent(splitPane);
 
 		try
 		{
 			Component comp = restoreSplitConfig(buffer,splitConfig);
-			dockableWindowManager.add(comp,0);
+			dockableWindowManager.addContent(comp);
 		}
 		catch(IOException e)
 		{
