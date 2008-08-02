@@ -4557,11 +4557,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			try
 			{
 				buffer.beginCompoundEdit();
-				String nextLineText = buffer.getLineText(caretLine + 1);
-				buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
-					nextLineText) + 1);
-				if (nextLineText.length() != 0)
-					buffer.insert(end - 1, " ");
+				joinLine(caretLine);
 			}
 			finally
 			{
@@ -6009,16 +6005,25 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		do
 		{
-			if (selection.startLine == buffer.getLineCount() - 1)
-				return;
-			int end = getLineEndOffset(selection.startLine);
-			String nextLineText = buffer.getLineText(selection.startLine + 1);
-			buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
-				nextLineText) + 1);
-			if (nextLineText.length() != 0)
-				buffer.insert(end - 1, " ");
+			joinLine(selection.startLine);
 		}
 		while (selection.startLine < selection.endLine);
+	} //}}}
+
+	//{{{ joinLine() method
+	/**
+	 * Join a line with the next line.
+	 */
+	private void joinLine(int line)
+	{
+		if (line >= buffer.getLineCount() - 1)
+			return;
+		int end = getLineEndOffset(line);
+		String nextLineText = buffer.getLineText(line + 1);
+		buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
+			nextLineText) + 1);
+		if (nextLineText.length() != 0)
+			buffer.insert(end - 1, " ");
 	} //}}}
 	//}}}
 
