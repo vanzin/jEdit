@@ -57,7 +57,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.TooManyListenersException;
-import java.net.URL;
 
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.JEditActionContext;
@@ -6006,13 +6005,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	/**
 	 * Join a line with the next line.
 	 * If you use this method you have to lock the buffer in compound edit mode.
+	 * @param line the line number that will be joined with the next line
 	 */
 	private void joinLineAt(int line)
 	{
 		if (line >= buffer.getLineCount() - 1)
 			return;
 		int end = getLineEndOffset(line);
-		String nextLineText = buffer.getLineText(line + 1);
+		CharSequence nextLineText = buffer.getLineSegment(line + 1);
 		buffer.remove(end - 1,StandardUtilities.getLeadingWhiteSpace(
 			nextLineText) + 1);
 		if (nextLineText.length() != 0)
