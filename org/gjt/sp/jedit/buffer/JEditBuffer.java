@@ -2463,7 +2463,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			int length = getLineEndOffset(getLineCount() - 1)
 				- (getLineStartOffset(firstLine) + 1);
-			parseBufferLocalProperties(getText(getLineStartOffset(firstLine),length));
+			parseBufferLocalProperties(getSegment(getLineStartOffset(firstLine),length));
 		}
 	} //}}}
 
