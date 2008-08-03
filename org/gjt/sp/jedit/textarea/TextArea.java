@@ -4481,7 +4481,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(getSelectionCount() == 0)
 		{
 			// if caret is inside leading whitespace, indent.
-			String text = buffer.getLineText(caretLine);
+			CharSequence text = buffer.getLineSegment(caretLine);
 			int start = buffer.getLineStartOffset(caretLine);
 			int whiteSpace = StandardUtilities.getLeadingWhiteSpace(text);
 
@@ -5945,7 +5945,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			buffer.insert(caretEnd,end);
 		else
 		{
-			String lineText = buffer.getText(caretEnd - 1, 1);
+			CharSequence lineText = buffer.getSegment(caretEnd - 1, 1);
 			if (Character.isWhitespace(lineText.charAt(0)))
 				buffer.insert(caretEnd, end);
 			else
