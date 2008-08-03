@@ -123,6 +123,7 @@ public abstract class Selection implements Cloneable
 	} //}}}
 
 	//{{{ toString() method
+	@Override
 	public String toString()
 	{
 		return getClass().getName() + "[start=" + start
@@ -131,6 +132,7 @@ public abstract class Selection implements Cloneable
 	} //}}}
 
 	//{{{ clone() method
+	@Override
 	public Object clone()
 	{
 		try
@@ -169,7 +171,7 @@ public abstract class Selection implements Cloneable
 	} //}}}
 
 	// should the next two be public, maybe?
-	abstract void getText(JEditBuffer buffer, StringBuffer buf);
+	abstract void getText(JEditBuffer buffer, StringBuilder buf);
 
 	/**
 	 * Replace the selection with the given text
@@ -229,6 +231,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ getStart() method
+		@Override
 		public int getStart(JEditBuffer buffer, int line)
 		{
 			if(line == startLine)
@@ -238,6 +241,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ getEnd() method
+		@Override
 		public int getEnd(JEditBuffer buffer, int line)
 		{
 			if(line == endLine)
@@ -249,7 +253,8 @@ public abstract class Selection implements Cloneable
 		//{{{ Package-private members
 
 		//{{{ getText() method
-		void getText(JEditBuffer buffer, StringBuffer buf)
+		@Override
+		void getText(JEditBuffer buffer, StringBuilder buf)
 		{
 			buf.append(buffer.getText(start,end - start));
 		} //}}}
@@ -261,6 +266,7 @@ public abstract class Selection implements Cloneable
 		 * @param text the text
 		 * @return the offset at the end of the inserted text
 		 */
+		@Override
 		int setText(JEditBuffer buffer, String text)
 		{
 			buffer.remove(start,end - start);
@@ -274,6 +280,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ contentInserted() method
+		@Override
 		boolean contentInserted(JEditBuffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
@@ -299,6 +306,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ contentRemoved() method
+		@Override
 		boolean contentRemoved(JEditBuffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
@@ -424,6 +432,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ getStart() method
+		@Override
 		public int getStart(JEditBuffer buffer, int line)
 		{
 			return getColumnOnOtherLine(buffer,line,
@@ -431,6 +440,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ getEnd() method
+		@Override
 		public int getEnd(JEditBuffer buffer, int line)
 		{
 			return getColumnOnOtherLine(buffer,line,
@@ -442,7 +452,8 @@ public abstract class Selection implements Cloneable
 		int extraEndVirt;
 
 		//{{{ getText() method
-		void getText(JEditBuffer buffer, StringBuffer buf)
+		@Override
+		void getText(JEditBuffer buffer, StringBuilder buf)
 		{
 			int start = getStartColumn(buffer);
 			int end = getEndColumn(buffer);
@@ -480,6 +491,7 @@ public abstract class Selection implements Cloneable
 		 * @param text the text
 		 * @return the offset at the end of the inserted text
 		 */
+		@Override
 		int setText(JEditBuffer buffer, String text)
 		{
 			int startColumn = getStartColumn(buffer);
@@ -605,6 +617,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ contentInserted() method
+		@Override
 		boolean contentInserted(JEditBuffer buffer, int startLine, int start,
 			int numLines, int length)
 		{
@@ -694,6 +707,7 @@ public abstract class Selection implements Cloneable
 		} //}}}
 
 		//{{{ contentRemoved() method
+		@Override
 		boolean contentRemoved(JEditBuffer buffer, int startLine, int start,
 			int numLines, int length)
 		{

@@ -2053,7 +2053,7 @@ forward_scan:	do
 	 */
 	public String getSelectedText(Selection s)
 	{
-		StringBuffer buf = new StringBuffer(s.end - s.start);
+		StringBuilder buf = new StringBuilder(s.end - s.start);
 		s.getText(buffer,buf);
 		return buf.toString();
 	} //}}}
@@ -2071,7 +2071,7 @@ forward_scan:	do
 		if(sel.length == 0)
 			return null;
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < sel.length; i++)
 		{
 			if(i != 0)
