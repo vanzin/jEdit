@@ -256,11 +256,15 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return dockableWindowManager;
 	} //}}}
 
+	static public String getDockingFrameworkName() {
+		String framework = jEdit.getProperty(
+				VIEW_DOCKING_FRAMEWORK_PROPERTY, ORIGINAL_DOCKING_FRAMEWORK);
+		return framework;
+	}
 	static public IDockingFrameworkProvider getDockingFrameworkProvider() {
 		if (dockingFrameworkProvider == null)
 		{
-			String framework = jEdit.getProperty(
-				VIEW_DOCKING_FRAMEWORK_PROPERTY, ORIGINAL_DOCKING_FRAMEWORK);
+			String framework = getDockingFrameworkName();
 			dockingFrameworkProvider = (IDockingFrameworkProvider)
 				ServiceManager.getService(
 					DOCKING_FRAMEWORK_PROVIDER_SERVICE, framework);

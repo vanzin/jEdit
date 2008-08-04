@@ -1,10 +1,11 @@
 package org.gjt.sp.jedit.gui;
 
-import java.awt.Component;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -16,6 +17,8 @@ import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
+import org.gjt.sp.jedit.msg.DockableWindowUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -69,7 +72,19 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	 */
 	abstract public void setMainPanel(JPanel panel);
 	abstract public void adjust(View view, ViewConfig config);
-	abstract public void setDockingLayout(DockingLayout docking);
+	public void setDockingLayout(DockingLayout docking)
+	{
+		// By default, use the docking positions specified by the jEdit properties
+		Iterator<Entry<String, String>> iterator = positions.entrySet().iterator();
+		while (iterator.hasNext())
+		{
+			Entry<String, String> entry = iterator.next();
+			String dockable = entry.getKey();
+			String position = entry.getValue();
+			if (! position.equals(FLOATING))
+				showDockableWindow(dockable);
+		}
+	}
 	abstract public void showDockableWindow(String name);
 	abstract public void hideDockableWindow(String name);
 	abstract public JComponent floatDockableWindow(String name);
@@ -90,7 +105,10 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	abstract public void close();
 	abstract public DockingLayout getDockingLayout(ViewConfig config);
 	abstract public KeyListener closeListener(String dockableName);
-
+	protected void dockableMoved(String name, String from, String to)
+	{
+	}
+	
 	/*
 	 * Data members
 	 */
@@ -102,9 +120,34 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	 * Base class methods
 	 */
 	public void handleMessage(EBMessage msg) {
-		
+		if (msg instanceof DockableWindowUpdate)
+		{
+			if(((DockableWindowUpdate)msg).getWhat() ==	DockableWindowUpdate.PROPERTIES_CHANGED)
+				propertiesChanged();
+		}
+		else if (msg instanceof PropertiesChanged)
+			propertiesChanged();
 	}
-	private void propertiesChanged() {
+	
+	private Map<String, String> positions = new HashMap<String, String>();
+	
+	private void propertiesChanged()
+	{
+		if(view.isPlainView())
+			return;
+
+		String[] dockables = factory.getRegisteredDockableWindows();
+		for(int i = 0; i < dockables.length; i++)
+		{
+			String dockable = dockables[i];
+			String oldPosition = positions.get(dockable);
+			String newPosition = getDockablePosition(dockable);
+			if ((oldPosition == null) || (! newPosition.equals(oldPosition)))
+			{
+				positions.put(dockable, newPosition);
+				dockableMoved(dockable, oldPosition, newPosition);
+			}
+		}
 		
 	}
 	public DockableWindowManagerBase(View view, DockableWindowFactory instance,
@@ -116,6 +159,14 @@ public abstract class DockableWindowManagerBase extends JPanel implements EBComp
 	public void init()
 	{
 		EditBus.addToBus(this);
+
+		Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
+		while(entries.hasNext())
+		{
+			DockableWindowFactory.Window window = entries.next();
+			String dockable = window.name;
+			positions.put(dockable, getDockablePosition(dockable));
+		}
 	}
 	protected JComponent createDockable(String name)
 	{

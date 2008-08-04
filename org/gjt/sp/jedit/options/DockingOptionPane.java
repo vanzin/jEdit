@@ -75,6 +75,15 @@ public class DockingOptionPane extends AbstractOptionPane
 		String [] frameworks =
 			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
 		dockingFramework = new JComboBox(frameworks);
+		String framework = View.getDockingFrameworkName();
+		for (int i = 0; i < frameworks.length; i++)
+		{
+			if (frameworks[i].equals(framework))
+			{
+				dockingFramework.setSelectedIndex(i);
+				break;
+			}
+		}
 		p.add(dockingFramework);
 		return p;
 	}
