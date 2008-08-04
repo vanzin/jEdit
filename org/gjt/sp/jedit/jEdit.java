@@ -1429,6 +1429,8 @@ public class jEdit
 	 * @param view The view to open the file in
 	 * @param path The file path
 	 *
+	 * @return the buffer, or null if jEdit was unable to load it
+	 *
 	 * @since jEdit 2.4pre1
 	 */
 	public static Buffer openFile(View view, String path)
@@ -1459,12 +1461,16 @@ public class jEdit
 	/**
 	 * Opens a file. This may return null if the buffer could not be
 	 * opened for some reason.
-	 * @param view The view to open the file in
+	 * @param view The view to open the file in. If it is null, the file
+	 * will be opened and added to the bufferSet of the current edit pane,
+	 * but not selected
 	 * @param parent The parent directory of the file
 	 * @param path The path name of the file
 	 * @param newFile True if the file should not be loaded from disk
 	 * be prompted if it should be reloaded
 	 * @param props Buffer-local properties to set in the buffer
+	 *
+	 * @return the buffer, or null if jEdit was unable to load it
 	 *
 	 * @since jEdit 3.2pre10
 	 */
@@ -1504,7 +1510,6 @@ public class jEdit
 					if(view != null)
 						view.setBuffer(buffer,true);
 
-					bufferSetManager.addBuffer(view, buffer);
 					return buffer;
 				}
 
@@ -1513,7 +1518,10 @@ public class jEdit
 				if(!newBuffer.load(view,false))
 					return null;
 				addBufferToList(newBuffer);
-				bufferSetManager.addBuffer(view, newBuffer);
+				if (view != null)
+					bufferSetManager.addBuffer(view, newBuffer);
+				else
+					bufferSetManager.addBuffer(jEdit.getActiveView(), newBuffer);
 			}
 
 			EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
@@ -1536,6 +1544,8 @@ public class jEdit
 	 * @param path The path name of the file
 	 * @param newFile True if the file should not be loaded from disk
 	 *
+	 * @return the buffer, or null if jEdit was unable to load it
+	 *
 	 * @since jEdit 3.2pre10
 	 */
 	public static Buffer openTemporary(View view, String parent,
@@ -1553,6 +1563,8 @@ public class jEdit
 	 * @param path The path name of the file
 	 * @param newFile True if the file should not be loaded from disk
 	 * @param props Buffer-local properties to set in the buffer
+	 *
+	 * @return the buffer, or null if jEdit was unable to load it
 	 *
 	 * @since jEdit 4.3pre10
 	 */
@@ -1615,7 +1627,10 @@ public class jEdit
 	//{{{ newFile() method
 	/**
 	 * Creates a new `untitled' file.
+	 *
 	 * @param view The view to create the file in
+	 *
+	 * @return the new buffer
 	 */
 	public static Buffer newFile(View view)
 	{
@@ -1641,6 +1656,9 @@ public class jEdit
 	 * Creates a new `untitled' file.
 	 * @param view The view to create the file in
 	 * @param dir The directory to create the file in
+	 *
+	 * @return the new buffer
+	 *
 	 * @since jEdit 3.1pre2
 	 */
 	public static Buffer newFile(View view, String dir)
@@ -1777,6 +1795,8 @@ public class jEdit
 	/**
 	 * Closes all open buffers.
 	 * @param view The view
+	 *
+	 * @return true if all buffers were closed, false otherwise 
 	 */
 	public static boolean closeAllBuffers(View view)
 	{
@@ -1787,6 +1807,8 @@ public class jEdit
 	 * @param view The view
 	 * @param isExiting This must be false unless this method is
 	 * being called by the exit() method
+	 *
+	 * @return true if all buffers were closed, false otherwise
 	 */
 	public static boolean closeAllBuffers(View view, boolean isExiting)
 	{
@@ -1952,6 +1974,9 @@ public class jEdit
 	 * must be an absolute, canonical, path.
 	 *
 	 * @param path The path name
+	 *
+	 * @return the searched buffer, or null if it is not already open
+	 *
 	 * @see MiscUtilities#constructPath(String,String)
 	 * @see MiscUtilities#resolveSymlinks(String)
 	 * @see #getBuffer(String)
@@ -1982,6 +2007,9 @@ public class jEdit
 	 * path and call {@link #_getBuffer(String)} instead.
 	 *
 	 * @param path The path name
+	 *
+	 * @return the searched buffer, or null if it is not already open
+	 *
 	 * @see MiscUtilities#constructPath(String,String)
 	 * @see MiscUtilities#resolveSymlinks(String)
 	 */
@@ -1993,6 +2021,7 @@ public class jEdit
 	//{{{ getBuffers() method
 	/**
 	 * Returns an array of open buffers.
+	 * @return  an array of all open buffers
 	 */
 	public static Buffer[] getBuffers()
 	{
