@@ -3639,10 +3639,6 @@ public class jEdit
 				Buffer buffer = openFiles(null,userDir,args);
 
 				int count = getBufferCount();
-				if(count == 0)
-					newFile(null);
-
-				View view;
 
 				boolean restoreFiles = restore
 					&& jEdit.getBooleanProperty("restore")
@@ -3651,9 +3647,9 @@ public class jEdit
 
 				if(gui || count != 0)
 				{
-					view = PerspectiveManager
+					View view = PerspectiveManager
 						.loadPerspective(
-						restoreFiles);
+							restoreFiles);
 
 					if(view == null)
 						view = newView(null,buffer);
