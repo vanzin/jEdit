@@ -107,9 +107,9 @@ public class BufferSetManager implements EBComponent
 
 	//{{{ getGlobalBufferSet() method
 	/**
-	 * Retourne le bufferSet global.
+	 * Returns the global bufferSet.
 	 *
-	 * @return le bufferSet global
+	 * @return the global bufferSet
 	 */
 	public BufferSet getGlobalBufferSet()
 	{
@@ -117,6 +117,13 @@ public class BufferSetManager implements EBComponent
 	} //}}}
 
 	//{{{ getViewBufferSet() methods
+	/**
+	 * Returns a view bufferSet for the given view.
+	 * If it doesn't exists it is created
+	 *
+	 * @param view a view
+	 * @return the view's bufferSet
+	 */
 	public BufferSet getViewBufferSet(View view)
 	{
 		BufferSet bufferSet = viewBufferSetMap.get(view);
@@ -128,7 +135,14 @@ public class BufferSetManager implements EBComponent
 		return bufferSet;
 	} //}}}
 
-	//{{{ getEditPaneBufferSet() methods
+	//{{{ getEditPaneBufferSet() method
+	/**
+	 * Returns a EditPane bufferSet for the given EditPane.
+	 * If it doesn't exists it is created
+	 *
+	 * @param editPane the editPAne
+	 * @return the EditPane's bufferSet
+	 */
 	public BufferSet getEditPaneBufferSet(EditPane editPane)
 	{
 		BufferSet bufferSet = editPaneBufferSetMap.get(editPane);
@@ -142,12 +156,18 @@ public class BufferSetManager implements EBComponent
 	} //}}}
 
 	//{{{ mergeBufferSet() method
-	public void mergeBufferSet(BufferSet bufferSet, BufferSet source)
+	/**
+	 * Merge the content of the source bufferSet into the target bufferSet
+	 * @param target the target bufferSet
+	 * @param source the source bufferSet
+	 * @see org.gjt.sp.jedit.EditPane#setBuffer(org.gjt.sp.jedit.Buffer) 
+	 */
+	public void mergeBufferSet(BufferSet target, BufferSet source)
 	{
 		Buffer[] buffers = source.getAllBuffers();
 		for (Buffer buffer : buffers)
 		{
-			addBuffer(bufferSet, buffer);
+			addBuffer(target, buffer);
 		}
 	} //}}}
 
@@ -156,6 +176,7 @@ public class BufferSetManager implements EBComponent
 	 * Count the bufferSets in which the buffer is.
 	 * @param buffer the buffer
 	 * @return the number of buffersets in which buffer is
+	 * @see org.gjt.sp.jedit.jEdit#closeBuffer(org.gjt.sp.jedit.EditPane, org.gjt.sp.jedit.Buffer) 
 	 */
 	public int countBufferSets(Buffer buffer)
 	{
@@ -166,12 +187,24 @@ public class BufferSetManager implements EBComponent
 	} //}}}
 
 	//{{{ addBuffer() methods
+	/**
+	 * Add a buffer into the current editPane of the given view.
+	 * If the view is null, it will be added to the global bufferSet
+	 * @param view a view (or null)
+	 * @param buffer the buffer to add
+	 */
 	public void addBuffer(View view, Buffer buffer)
 	{
 		EditPane editPane = view == null ? null : view.getEditPane();
 		addBuffer(editPane, buffer);
 	}
 
+	/**
+	 * Add a buffer into the current editPane of the given editPane.
+	 * If the editPane is null, it will be added to the global bufferSet
+	 * @param editPane an EditPane (or null)
+	 * @param buffer the buffer to add
+	 */
 	public void addBuffer(EditPane editPane, Buffer buffer)
 	{
 		if (editPane == null)
@@ -185,6 +218,12 @@ public class BufferSetManager implements EBComponent
 		}
 	}
 
+	/**
+	 * Add a buffer in the given bufferSet.
+	 *
+	 * @param bufferSet the bufferSet
+	 * @param buffer the buffer to add
+	 */
 	public void addBuffer(BufferSet bufferSet, Buffer buffer)
 	{
 		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
