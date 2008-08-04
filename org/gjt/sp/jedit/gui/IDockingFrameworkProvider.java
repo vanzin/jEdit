@@ -4,10 +4,10 @@ import javax.swing.JPanel;
 
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.View.ViewConfig;
-import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
+import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 
 public interface IDockingFrameworkProvider {
-	DockableWindowManagerBase create(View view, DockableWindowFactory instance,
+	DockableWindowManager create(View view, DockableWindowFactory instance,
 			ViewConfig config);
 	DockingLayout createDockingLayout();
 }

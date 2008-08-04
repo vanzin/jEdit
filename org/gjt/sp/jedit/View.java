@@ -58,14 +58,14 @@ import org.gjt.sp.jedit.gui.ActionBar;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.gui.DockableLayout;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
-import org.gjt.sp.jedit.gui.DockableWindowManagerBase;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.gui.IDockingFrameworkProvider;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.StatusBar;
 import org.gjt.sp.jedit.gui.ToolBarManager;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
-import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
+import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
@@ -251,7 +251,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	 * Returns the dockable window manager associated with this view.
 	 * @since jEdit 2.6pre3
 	 */
-	public DockableWindowManagerBase getDockableWindowManager()
+	public DockableWindowManager getDockableWindowManager()
 	{
 		return dockableWindowManager;
 	} //}}}
@@ -1322,7 +1322,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ Instance variables
 	private boolean closed;
 
-	private DockableWindowManagerBase dockableWindowManager;
+	private DockableWindowManager dockableWindowManager;
 	private JPanel mainPanel;
 	
 	private JPanel topToolBars;

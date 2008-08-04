@@ -48,7 +48,7 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
+import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
@@ -2225,7 +2225,7 @@ public class jEdit
 			View newView = new View(buffer,config);
 			addViewToList(newView);
 
-			DockableWindowManagerBase wm = newView.getDockableWindowManager();
+			DockableWindowManager wm = newView.getDockableWindowManager();
 			if(!config.plainView)
 				wm.setDockingLayout(config.docking);
 

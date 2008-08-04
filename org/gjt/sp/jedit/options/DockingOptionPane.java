@@ -154,8 +154,7 @@ class WindowTableModel extends AbstractTableModel
 	{
 		windows = new Vector();
 
-		String[] dockables = DockableWindowManager
-			.getRegisteredDockableWindows();
+		String[] dockables = DockableWindowManager.getRegisteredDockableWindows();
 		for(int i = 0; i < dockables.length; i++)
 		{
 			windows.addElement(new Entry(dockables[i]));

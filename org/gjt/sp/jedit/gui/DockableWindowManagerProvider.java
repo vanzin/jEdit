@@ -4,18 +4,18 @@ import javax.swing.JPanel;
 
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.View.ViewConfig;
-import org.gjt.sp.jedit.gui.DockableWindowManagerBase.DockingLayout;
+import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class DockableWindowManagerProvider implements IDockingFrameworkProvider {
 
-	public DockableWindowManagerBase create(View view,
+	public DockableWindowManager create(View view,
 			DockableWindowFactory instance, ViewConfig config) {
-		return new DockableWindowManager(view, instance, config);
+		return new DockableWindowManagerImpl(view, instance, config);
 	}
 
 	public DockingLayout createDockingLayout() {
-		return new DockableWindowManager.DockableWindowConfig();
+		return new DockableWindowManagerImpl.DockableWindowConfig();
 	}
 
 }

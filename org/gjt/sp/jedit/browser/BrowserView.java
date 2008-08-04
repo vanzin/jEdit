@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.util.*;
 
 import org.gjt.sp.jedit.gui.DockableWindowManager;
-import org.gjt.sp.jedit.gui.DockableWindowManagerBase;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
@@ -53,7 +52,7 @@ class BrowserView extends JPanel
 		this.browser = browser;
 
 		tmpExpanded = new HashSet<String>();
-		DockableWindowManagerBase dwm = jEdit.getActiveView().getDockableWindowManager();
+		DockableWindowManager dwm = jEdit.getActiveView().getDockableWindowManager();
 		KeyListener keyListener = dwm.closeListener(VFSBrowser.NAME);
 
 		parentDirectories = new ParentDirectoryList();

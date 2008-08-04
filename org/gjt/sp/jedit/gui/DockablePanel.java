@@ -44,7 +44,7 @@ import javax.swing.border.Border;
 class DockablePanel extends JPanel
 {
 	private PanelWindowContainer panel;
-	private DockableWindowManager wm;
+	private DockableWindowManagerImpl wm;
 
 	//{{{ DockablePanel constructor
 	DockablePanel(PanelWindowContainer panel)
