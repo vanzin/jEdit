@@ -1352,14 +1352,4 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			view.setLocationRelativeTo(parent);
 	}
 
-	@Override
-	public void setBottomToolbars(JPanel toolbars) {
-		add(toolbars, DockableLayout.BOTTOM_TOOLBARS, 0);		
-	}
-
-	@Override
-	public void setTopToolbars(JPanel toolbars) {
-		add(toolbars, DockableLayout.TOP_TOOLBARS, 0);		
-	}
-
 }

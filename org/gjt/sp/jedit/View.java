@@ -1644,8 +1644,8 @@ loop:		while (true)
 		}
 		else
 		{
-			dockableWindowManager.setTopToolbars(topToolBars);
-			dockableWindowManager.setBottomToolbars(bottomToolBars);
+			mainPanel.add(topToolBars, BorderLayout.NORTH);
+			mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
 			if (showStatus)
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}

@@ -32,16 +32,12 @@ public class DockableLayout implements LayoutManager2
 	// jEdit's UI layout
 	static final String CENTER = BorderLayout.CENTER;
 
-	public static final String TOP_TOOLBARS = "top-toolbars";
-	public static final String BOTTOM_TOOLBARS = "bottom-toolbars";
-
 	static final String TOP_BUTTONS = "top-buttons";
 	static final String LEFT_BUTTONS = "left-buttons";
 	static final String BOTTOM_BUTTONS = "bottom-buttons";
 	static final String RIGHT_BUTTONS = "right-buttons";
 
 	private boolean alternateLayout;
-	private Component topToolbars, bottomToolbars;
 	private Component center;
 
 	/* No good */
@@ -85,10 +81,6 @@ public class DockableLayout implements LayoutManager2
 	{
 		if(cons == null || CENTER.equals(cons))
 			center = comp;
-		else if(TOP_TOOLBARS.equals(cons))
-			topToolbars = comp;
-		else if(BOTTOM_TOOLBARS.equals(cons))
-			bottomToolbars = comp;
 		else if(DockableWindowManager.TOP.equals(cons))
 			top = (DockablePanel)comp;
 		else if(DockableWindowManager.LEFT.equals(cons))
@@ -112,10 +104,6 @@ public class DockableLayout implements LayoutManager2
 	{
 		if(center == comp)
 			center = null;
-		else if(comp == topToolbars)
-			topToolbars = null;
-		else if(comp == bottomToolbars)
-			bottomToolbars = null;
 		else if(comp == top)
 			top = null;
 		else if(comp == left)
@@ -141,12 +129,8 @@ public class DockableLayout implements LayoutManager2
 		Dimension _center = (center == null
 			? new Dimension(0,0)
 			: center.getPreferredSize());
-		Dimension _topToolbars = (topToolbars == null
-			? new Dimension(0,0)
-			: topToolbars.getPreferredSize());
-		Dimension _bottomToolbars = (bottomToolbars == null
-			? new Dimension(0,0)
-			: bottomToolbars.getPreferredSize());
+		Dimension _topToolbars = new Dimension(0,0);
+		Dimension _bottomToolbars = new Dimension(0,0);
 
 		prefSize.height = _top.height + _bottom.height + _center.height
 			+ _topButtons.height + _bottomButtons.height
@@ -177,12 +161,8 @@ public class DockableLayout implements LayoutManager2
 	{
 		Dimension size = parent.getSize();
 
-		Dimension _topToolbars = (topToolbars == null
-			? new Dimension(0,0)
-			: topToolbars.getPreferredSize());
-		Dimension _bottomToolbars = (bottomToolbars == null
-			? new Dimension(0,0)
-			: bottomToolbars.getPreferredSize());
+		Dimension _topToolbars = new Dimension(0,0);
+		Dimension _bottomToolbars = new Dimension(0,0);
 
 		int topButtonHeight = -1;
 		int bottomButtonHeight = -1;
@@ -403,29 +383,6 @@ public class DockableLayout implements LayoutManager2
 				rightWidth,
 				_height); //}}}
 		}
-
-		//{{{ Position tool bars if they are managed by us
-		if(topToolbars != null)
-		{
-			topToolbars.setBounds(
-				leftButtonWidth + leftWidth,
-				topButtonHeight + topHeight,
-				size.width - leftWidth - rightWidth
-				- leftButtonWidth - rightButtonWidth,
-				_topToolbars.height);
-		}
-
-		if(bottomToolbars != null)
-		{
-			bottomToolbars.setBounds(
-				leftButtonWidth + leftWidth,
-				size.height - bottomHeight
-				- bottomButtonHeight
-				- _bottomToolbars.height,
-				size.width - leftWidth - rightWidth
-				- leftButtonWidth - rightButtonWidth,
-				_bottomToolbars.height);
-		} //}}}
 
 		//{{{ Position center (edit pane, or split pane)
 		if(center != null)
