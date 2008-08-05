@@ -728,7 +728,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			{
 				this.bufferSet.removeBufferSetListener(this);
 			}
-
+			if (buffer != null)
+				bufferSetManager.addBuffer(bufferSet, buffer);
 			if (bufferSet.size() == 0)
 			{
 				int untitledCount = jEdit.getNextUntitledBufferId();
@@ -899,8 +900,9 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		add(BorderLayout.CENTER,textArea);
 
 		propertiesChanged();
-
+		this.buffer = buffer;
 		setBufferSet();
+		this.buffer = null;
 		if(buffer == null)
 		{
 			Buffer b = bufferSet.getBuffer(0);
