@@ -329,12 +329,20 @@ public class BufferSetManager implements EBComponent
 	 */
 	public void removeBuffer(Buffer buffer)
 	{
-		Set<BufferSet> sets = bufferBufferSetMap.get(buffer);
+		Set<BufferSet> sets = bufferBufferSetMap.remove(buffer);
 		for (BufferSet bufferSet : sets)
 		{
-			removeBuffer(bufferSet, buffer);
+			bufferSet.removeBuffer(buffer);
+			if (bufferSet.size() == 0 && bufferSet.hasListeners())
+			{
+				int untitledCount = jEdit.getNextUntitledBufferId();
+				Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
+									    "Untitled-" + untitledCount,true, null);
+				jEdit.commitTemporary(newEmptyBuffer);
+				jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+			}
 		}
-		bufferBufferSetMap.remove(buffer);
+
 	} //}}}
 
 	//{{{ clear() method
