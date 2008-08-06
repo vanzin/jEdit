@@ -288,6 +288,14 @@ public class BufferSetManager implements EBComponent
 			Log.log(Log.DEBUG, this, "Buffer:" + buffer + " is only in bufferSets that have no listeners, closing it");
 			jEdit._closeBuffer(null, buffer);
 		}
+		if (bufferSet.size() == 0 && bufferSet.hasListeners())
+		{
+			int untitledCount = jEdit.getNextUntitledBufferId();
+			Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
+								    "Untitled-" + untitledCount,true, null);
+			jEdit.commitTemporary(newEmptyBuffer);
+			jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+		}
 	} //}}}
 
 	//{{{ hasListeners() method
@@ -321,11 +329,12 @@ public class BufferSetManager implements EBComponent
 	 */
 	public void removeBuffer(Buffer buffer)
 	{
-		Set<BufferSet> sets = bufferBufferSetMap.remove(buffer);
+		Set<BufferSet> sets = bufferBufferSetMap.get(buffer);
 		for (BufferSet bufferSet : sets)
 		{
-			bufferSet.removeBuffer(buffer);
+			removeBuffer(bufferSet, buffer);
 		}
+		bufferBufferSetMap.remove(buffer);
 	} //}}}
 
 	//{{{ clear() method
