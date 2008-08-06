@@ -2226,16 +2226,16 @@ public class jEdit
 			View newView = new View(buffer,config);
 			addViewToList(newView);
 
-			DockableWindowManager wm = newView.getDockableWindowManager();
-			if(!config.plainView)
-				wm.setDockingLayout(config.docking);
-
 			newView.pack();
 			newView.adjust(view, config);
 			
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 			newView.setVisible(true);
+
+			DockableWindowManager wm = newView.getDockableWindowManager();
+			if(!config.plainView)
+				wm.setDockingLayout(config.docking);
 
 			// show tip of the day
 			if(newView == viewsFirst)
