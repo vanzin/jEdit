@@ -29,9 +29,6 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +53,6 @@ import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
-import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
@@ -315,26 +311,6 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		propertiesChanged();
 	} //}}}
 
-	// {{{ closeListener() method
-	/**
-	 * 
-	 * The actionEvent "close-docking-area" by default only works on 
-	 * windows that are docked. If you want your floatable plugins to also
-	 * respond to this event, you need to add key listeners to each component
-	 * in your plugin that usually has keyboard focus. 
-	 * This function returns a key listener which does exactly that.
-	 * You should not need to call this method - it is used by FloatingWindowContainer.
-	 * 
-	 * @param dockableName the name of your dockable
-	 * @return a KeyListener you can add to that plugin's component.
-	 * @since jEdit 4.3pre6
-	 * 
-	 */
-	public KeyListener closeListener(String dockableName) {
-		return new KeyHandler(dockableName);
-	}
-	// }}}
-	
 	//{{{ floatDockableWindow() method
 	/**
 	 * Opens a new instance of the specified dockable window in a floating
@@ -1068,72 +1044,6 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			// props are loaded
 			
 		} //}}}
-	} //}}}
-
-	//{{{ KeyHandler class
-	/**
-	 * This keyhandler responds to only two key events - those corresponding to
-	 * the close-docking-area action event. 
-	 * 
-	 * @author ezust
-	 */
-	class KeyHandler extends KeyAdapter {
-		static final String action = "close-docking-area";  
-		Key b1, b2;
-		String name;
-		
-		public KeyHandler(String dockableName) 
-		{
-/*
-			String prefixStr = null;
-
-			StringTokenizer st = new StringTokenizer(keyBinding);
-			while(st.hasMoreTokens())
-			{
-				String keyCodeStr = st.nextToken();
-				if(prefixStr == null)
-					prefixStr = keyCodeStr;
-				else
-					prefixStr = prefixStr + " " + keyCodeStr;
-
-				KeyEventTranslator.Key keyStroke = KeyEventTranslator.parseKey(keyCodeStr);
-				if(keyStroke == null)
-					return;
-
-				if(st.hasMoreTokens())
-				{
-					Object o = current.get(keyStroke);
-					if(o instanceof Hashtable)
-						current = (Hashtable)o;
-					else
-					{
-						Hashtable hash = new Hashtable();
-						hash.put(PREFIX_STR,prefixStr);
-						o = hash;
-						current.put(keyStroke,o);
-						current = (Hashtable)o;
-					}
-				}
-				else
-					current.put(keyStroke,action);
-			}
-*/
-			String shortcut1=jEdit.getProperty(action + ".shortcut");
-			String shortcut2=jEdit.getProperty(action + ".shortcut2");
-			if (shortcut1 != null)
-				b1 = KeyEventTranslator.parseKey(shortcut1);
-			if (shortcut2 != null)
-				b2 = KeyEventTranslator.parseKey(shortcut2);
-			name = dockableName;
-		}
-		
-		public void keyTyped(KeyEvent e)
-		{
-			char cc = e.getKeyChar();
-			if ((b1 != null && cc == b1.key) ||
-			     (b2 != null && cc == b2.key)) 
-				hideDockableWindow(name);
-		}
 	} //}}}
 
 }
