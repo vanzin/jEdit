@@ -1868,6 +1868,7 @@ public class jEdit
 			DisplayManager.bufferClosed(buffer);
 			if(!isExiting)
 			{
+				bufferSetManager.removeBuffer(buffer);
 				EditBus.send(new BufferUpdate(buffer,view,
 					BufferUpdate.CLOSED));
 			}
@@ -1876,8 +1877,6 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		if (!isExiting)
-			bufferSetManager.clear();
 		PerspectiveManager.setPerspectiveDirty(true);
 
 		return true;
