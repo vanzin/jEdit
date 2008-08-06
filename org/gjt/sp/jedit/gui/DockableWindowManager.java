@@ -103,13 +103,15 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	abstract public void close();
 	abstract public DockingLayout getDockingLayout(ViewConfig config);
 	abstract public KeyListener closeListener(String dockableName);
-	protected void dockableMoved(String name, String from, String to)
+	protected void dockingPositionChanged(String dockableName,
+		String oldPosition, String newPosition)
 	{
 	}
 	
 	/*
 	 * Data members
 	 */
+
 	protected View view;
 	protected DockableWindowFactory factory;
 	protected Map<String, JComponent> windows = new HashMap<String, JComponent>();
@@ -153,7 +155,7 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 			if ((oldPosition == null) || (! newPosition.equals(oldPosition)))
 			{
 				positions.put(dockable, newPosition);
-				dockableMoved(dockable, oldPosition, newPosition);
+				dockingPositionChanged(dockable, oldPosition, newPosition);
 			}
 		}
 		
