@@ -90,7 +90,6 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	abstract public boolean isDockableWindowDocked(String name);
 	abstract public boolean isDockableWindowVisible(String name);
 	abstract public void closeCurrentArea();
-	abstract public void close();
 	abstract public DockingLayout getDockingLayout(ViewConfig config);
 	abstract public KeyListener closeListener(String dockableName);
 	protected void dockingPositionChanged(String dockableName,
@@ -216,6 +215,11 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 			positions.put(dockable, getDockablePosition(dockable));
 		}
 	}
+	public void close()
+	{
+		EditBus.removeFromBus(this);
+	}
+
 	protected JComponent createDockable(String name)
 	{
 		DockableWindowFactory.Window wf = factory.getDockableWindowFactory(name);

@@ -532,7 +532,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	 */
 	public void close()
 	{
-		EditBus.removeFromBus(this);
+		super.close();
 
 		for (Entry entry : windows.values())
 		{
