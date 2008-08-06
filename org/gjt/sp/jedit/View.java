@@ -29,6 +29,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -56,7 +58,6 @@ import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.gui.ActionBar;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
-import org.gjt.sp.jedit.gui.DockableLayout;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.gui.HistoryModel;
@@ -1049,7 +1050,41 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		ViewConfig config = new ViewConfig();
 		config.plainView = isPlainView();
 		config.splitConfig = getSplitConfig();
+		config.extState = getExtendedState();
 		config.docking = dockableWindowManager.getDockingLayout(config);
+		String prefix = config.plainView ? "plain-view" : "view";
+		switch (config.extState)
+		{
+			case Frame.MAXIMIZED_BOTH:
+			case Frame.ICONIFIED:
+				config.x = jEdit.getIntegerProperty(prefix + ".x",getX());
+				config.y = jEdit.getIntegerProperty(prefix + ".y",getY());
+				config.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
+				config.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
+				break;
+
+			case Frame.MAXIMIZED_VERT:
+				config.x = getX();
+				config.y = jEdit.getIntegerProperty(prefix + ".y",getY());
+				config.width = getWidth();
+				config.height = jEdit.getIntegerProperty(prefix + ".height",getHeight());
+				break;
+
+			case Frame.MAXIMIZED_HORIZ:
+				config.x = jEdit.getIntegerProperty(prefix + ".x",getX());
+				config.y = getY();
+				config.width = jEdit.getIntegerProperty(prefix + ".width",getWidth());
+				config.height = getHeight();
+				break;
+
+			case Frame.NORMAL:
+			default:
+				config.x = getX();
+				config.y = getY();
+				config.width = getWidth();
+				config.height = getHeight();
+				break;
+		}
 		return config;
 	} //}}}
 
@@ -1854,6 +1889,7 @@ loop:		while (true)
 	//{{{ ViewConfig class
 	public static class ViewConfig
 	{
+		public int x, y, width, height, extState;
 		public boolean plainView;
 		public String splitConfig;
 		public DockingLayout docking;
@@ -1865,14 +1901,45 @@ loop:		while (true)
 		public ViewConfig(boolean plainView)
 		{
 			this.plainView = plainView;
+			String prefix = plainView ? "plain-view" : "view";
+			x = jEdit.getIntegerProperty(prefix + ".x",0);
+			y = jEdit.getIntegerProperty(prefix + ".y",0);
+			width = jEdit.getIntegerProperty(prefix + ".width",0);
+			height = jEdit.getIntegerProperty(prefix + ".height",0);
+			extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
 		}
 
-		public ViewConfig(boolean plainView, String splitConfig)
+		public ViewConfig(boolean plainView, String splitConfig,
+			int x, int y, int width, int height, int extState)
 		{
-			this(plainView);
+			this.plainView = plainView;
 			this.splitConfig = splitConfig;
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.extState = extState;
 		}
 	} //}}}
+
+	public void adjust(View parent, ViewConfig config) {
+		if(config.width != 0 && config.height != 0)
+		{
+			Rectangle desired = new Rectangle(
+					config.x, config.y, config.width, config.height);
+			if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
+			{
+				new GUIUtilities.UnixWorkaround(this,"view",desired,config.extState);
+			}
+			else
+			{
+				setBounds(desired);
+				setExtendedState(config.extState);
+			}
+		}
+		else
+			setLocationRelativeTo(parent);
+	}
 
 	//{{{ MyFocusTraversalPolicy class
 	private static class MyFocusTraversalPolicy extends LayoutFocusTraversalPolicy

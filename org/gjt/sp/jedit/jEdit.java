@@ -29,9 +29,9 @@ import java.awt.DefaultKeyboardFocusManager;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
+
 import org.gjt.sp.jedit.bsh.UtilEvalError;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -48,7 +48,6 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
@@ -2201,6 +2200,7 @@ public class jEdit
 			config = new View.ViewConfig(plainView);
 		return newView(view,buffer,config);
 	}
+
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -2219,7 +2219,8 @@ public class jEdit
 			{
 				view.showWaitCursor();
 				view.getEditPane().saveCaretInfo();
-				config.docking.move(-20, 20);
+				config.x -= 20;
+				config.y += 20;
 			}
 
 			View newView = new View(buffer,config);
@@ -2230,7 +2231,7 @@ public class jEdit
 				wm.setDockingLayout(config.docking);
 
 			newView.pack();
-			wm.adjust(view, config);
+			newView.adjust(view, config);
 			
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 

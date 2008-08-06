@@ -61,17 +61,16 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	public static abstract class DockingLayout {
 		public DockingLayout() {
 		}
-		abstract public void setPlainView(boolean plain);
+		public void setPlainView(boolean plain) {
+		}
 		abstract public DefaultHandler getPerspectiveHandler();
 		abstract public void savePerspective(SettingsXML.Saver out, String lineSep) throws IOException;
-		abstract public void move(int dx, int dy);
 	}
 
 	/*
 	 * Docking framework interface methods
 	 */
 	abstract public void setMainPanel(JPanel panel);
-	abstract public void adjust(View view, ViewConfig config);
 	public void setDockingLayout(DockingLayout docking)
 	{
 		// By default, use the docking positions specified by the jEdit properties
