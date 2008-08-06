@@ -429,16 +429,6 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	}
 	// }}}
 	
-	//{{{ getView() method
-	/**
-	 * Returns this dockable window manager's view.
-	 * @since jEdit 4.0pre2
-	 */
-	public View getView()
-	{
-		return view;
-	} //}}}
-
 	//{{{ floatDockableWindow() method
 	/**
 	 * Opens a new instance of the specified dockable window in a floating
@@ -513,18 +503,6 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			/* an error occurred */;
 	} //}}}
 
-	//{{{ addDockableWindow() method
-	/**
-	 * Opens the specified dockable window. As of jEdit 4.0pre1, has the
-	 * same effect as calling showDockableWindow().
-	 * @param name The dockable window name
-	 * @since jEdit 2.6pre3
-	 */
-	public void addDockableWindow(String name)
-	{
-		showDockableWindow(name);
-	} //}}}
-
 	//{{{ hideDockableWindow() method
 	/**
 	 * Hides the specified dockable window.
@@ -533,61 +511,15 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	 */
 	public void hideDockableWindow(String name)
 	{
-
 		Entry entry = windows.get(name);
 		if(entry == null)
 		{
 			Log.log(Log.ERROR,this,"Unknown dockable window: " + name);
 			return;
 		}
-
-
-
 		if(entry.win == null)
 			return;
-
 		entry.container.show(null);
-	} //}}}
-
-	//{{{ removeDockableWindow() method
-	/**
-	 * Hides the specified dockable window. As of jEdit 4.2pre1, has the
-	 * same effect as calling hideDockableWindow().
-	 * @param name The dockable window name
-	 * @since jEdit 4.2pre1
-	 */
-	public void removeDockableWindow(String name)
-	{
-		hideDockableWindow(name);
-	} //}}}
-
-	//{{{ toggleDockableWindow() method
-	/**
-	 * Toggles the visibility of the specified dockable window.
-	 * @param name The dockable window name
-	 */
-	public void toggleDockableWindow(String name)
-	{
-		if(isDockableWindowVisible(name))
-			removeDockableWindow(name);
-		else
-			addDockableWindow(name);
-	} //}}}
-
-	//{{{ getDockableWindow() method
-	/**
-	 * Returns the specified dockable window.
-	 *
-	 * Note that this method
-	 * will return null if the dockable has not been added yet.
-	 * Make sure you call {@link #addDockableWindow(String)} first.
-	 *
-	 * @param name The name of the dockable window
-	 * @since jEdit 4.1pre2
-	 */
-	public JComponent getDockableWindow(String name)
-	{
-		return getDockable(name);
 	} //}}}
 
 	//{{{ getDockable() method
@@ -606,7 +538,6 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	 */
 	public JComponent getDockable(String name)
 	{
-		
 		Entry entry = windows.get(name);
 		if(entry == null || entry.win == null)
 			return null;
@@ -614,38 +545,6 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			return entry.win;
 	} //}}}
 
-	//{{{ getDockableTitle() method
-	/**
-	 * Returns the title of the specified dockable window.
-	 * @param name The name of the dockable window.
-	 * @since jEdit 4.1pre5
-	 */
-	public String getDockableTitle(String name)
-	{
-		Entry e = windows.get(name);
-		return e.longTitle();
-	} //}}}
-
-	//{{{ setDockableTitle() method
-	/**
-	 * Changes the .longtitle property of a dockable window, which corresponds to the 
-	 * title shown when it is floating (not docked). Fires a change event that makes sure
-	 * all floating dockables change their title.
-	 * 
-	 * @param dockableName the name of the dockable, as specified in the dockables.xml
-	 * @param newTitle the new .longtitle you want to see above it.
-	 * @since 4.3pre5
-	 * 
-	 */
-	public void  setDockableTitle(String dockableName, String newTitle) {
-		Entry entry = windows.get(dockableName);
-		String propName = entry.factory.name + ".longtitle";
-		String oldTitle = jEdit.getProperty(propName);
-		jEdit.setProperty(propName, newTitle);
-		firePropertyChange(propName, oldTitle, newTitle);
-	}
-	// }}}
-	
 	//{{{ isDockableWindowVisible() method
 	/**
 	 * Returns if the specified dockable window is visible.

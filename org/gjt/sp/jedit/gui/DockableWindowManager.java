@@ -88,15 +88,6 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	abstract public void showDockableWindow(String name);
 	abstract public void hideDockableWindow(String name);
 	abstract public JComponent floatDockableWindow(String name);
-	public JComponent getDockable(String name)
-	{
-		return windows.get(name);
-	}
-	public String getDockableTitle(String name)
-	{
-		return longTitle(name);
-	}
-	abstract public void setDockableTitle(String dockable, String title);
 	abstract public boolean isDockableWindowDocked(String name);
 	abstract public boolean isDockableWindowVisible(String name);
 	abstract public void closeCurrentArea();
@@ -119,10 +110,58 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	/*
 	 * Base class methods
 	 */
+
+	//{{{ getView() method
+	/**
+	 * Returns this dockable window manager's view.
+	 * @since jEdit 4.0pre2
+	 */
+	public View getView()
+	{
+		return view;
+	} //}}}
+
 	//{{{ getRegisteredDockableWindows() method
 	/**
 	 * @since jEdit 4.3pre2
 	 */
+	public JComponent getDockable(String name)
+	{
+		return windows.get(name);
+	}
+	
+	//{{{ getDockableTitle() method
+	/**
+	 * Returns the title of the specified dockable window.
+	 * @param name The name of the dockable window.
+	 * @since jEdit 4.1pre5
+	 */
+	public String getDockableTitle(String name)
+	{
+		return longTitle(name);
+	}//}}}
+	
+	//{{{ setDockableTitle() method
+	/**
+	 * Changes the .longtitle property of a dockable window, which corresponds to the 
+	 * title shown when it is floating (not docked). Fires a change event that makes sure
+	 * all floating dockables change their title.
+	 * 
+	 * @param dockableName the name of the dockable, as specified in the dockables.xml
+	 * @param newTitle the new .longtitle you want to see above it.
+	 * @since 4.3pre5
+	 * 
+	 */
+	public void setDockableTitle(String dockable, String title)
+	{
+		String propName = getLongTitlePropertyName(dockable);
+		String oldTitle = jEdit.getProperty(propName);
+		jEdit.setProperty(propName, title);
+		firePropertyChange(propName, oldTitle, title);		
+	}
+	// }}}
+	
+	//{{{ getDockableTitle() method
 	public static String[] getRegisteredDockableWindows()
 	{
 		return DockableWindowFactory.getInstance()
@@ -196,9 +235,13 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	{
 		return jEdit.getProperty(name + ".dock-position", FLOATING);
 	}
+	private String getLongTitlePropertyName(String dockableName)
+	{
+		return dockableName + ".longtitle";
+	}
 	public String longTitle(String name) 
 	{
-		String title = jEdit.getProperty(name + ".longtitle");
+		String title = jEdit.getProperty(getLongTitlePropertyName(name));
 		if (title == null)
 			return shortTitle(name);
 		return title;
@@ -214,19 +257,60 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	/*
 	 * Derived methods
 	 */
-	public void addDockableWindow(String name) {
+	
+	//{{{ addDockableWindow() method
+	/**
+	 * Opens the specified dockable window. As of jEdit 4.0pre1, has the
+	 * same effect as calling showDockableWindow().
+	 * @param name The dockable window name
+	 * @since jEdit 2.6pre3
+	 */
+	public void addDockableWindow(String name)
+	{
 		showDockableWindow(name);
-	}
-	public void removeDockableWindow(String name) {
+	} //}}}
+
+	
+	//{{{ removeDockableWindow() method
+	/**
+	 * Hides the specified dockable window. As of jEdit 4.2pre1, has the
+	 * same effect as calling hideDockableWindow().
+	 * @param name The dockable window name
+	 * @since jEdit 4.2pre1
+	 */
+	public void removeDockableWindow(String name)
+	{
 		hideDockableWindow(name);
-	}
-	public void toggleDockableWindow(String name) {
-		if (isDockableWindowVisible(name))
-			hideDockableWindow(name);
+	} //}}}
+
+	
+	//{{{ toggleDockableWindow() method
+	/**
+	 * Toggles the visibility of the specified dockable window.
+	 * @param name The dockable window name
+	 */
+	public void toggleDockableWindow(String name)
+	{
+		if(isDockableWindowVisible(name))
+			removeDockableWindow(name);
 		else
-			showDockableWindow(name);
-	}
-	public JComponent getDockableWindow(String name) {
+			addDockableWindow(name);
+	} //}}}
+
+	//{{{ getDockableWindow() method
+	/**
+	 * Returns the specified dockable window.
+	 *
+	 * Note that this method
+	 * will return null if the dockable has not been added yet.
+	 * Make sure you call {@link #addDockableWindow(String)} first.
+	 *
+	 * @param name The name of the dockable window
+	 * @since jEdit 4.1pre2
+	 */
+	public JComponent getDockableWindow(String name)
+	{
 		return getDockable(name);
-	}
+	} //}}}
+
 }
