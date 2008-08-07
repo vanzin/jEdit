@@ -32,6 +32,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.Window;
 
+import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -2201,6 +2202,18 @@ public class jEdit
 		return newView(view,buffer,config);
 	}
 
+	private static class DockingLayoutSetter implements Runnable {
+		private View view;
+		private ViewConfig config;
+		public DockingLayoutSetter(View view, ViewConfig config) {
+			this.view = view;
+			this.config = config;
+		}
+		public void run() {
+			DockableWindowManager wm = view.getDockableWindowManager();
+			wm.setDockingLayout(config.docking);
+		}
+	}
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -2233,9 +2246,8 @@ public class jEdit
 
 			newView.setVisible(true);
 
-			DockableWindowManager wm = newView.getDockableWindowManager();
 			if(!config.plainView)
-				wm.setDockingLayout(config.docking);
+				SwingUtilities.invokeLater(new DockingLayoutSetter(newView, config));
 
 			// show tip of the day
 			if(newView == viewsFirst)
