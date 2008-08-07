@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Collection;
@@ -119,7 +120,8 @@ public class PerspectiveManager
 
 		if(perspectiveXML == null)
 			return;
-
+		File perspectiveFile = new File(perspectiveXML.toString());
+		
 		// backgrounded
 		if(jEdit.getBufferCount() == 0)
 			return;
@@ -206,7 +208,7 @@ public class PerspectiveManager
 				out.write("\" />");
 				out.write(lineSep);
 
-				config.docking.savePerspective(out, lineSep);
+				config.docking.savePerspective(perspectiveFile, out, lineSep);
 				
 				out.write("</VIEW>");
 				out.write(lineSep);

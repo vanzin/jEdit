@@ -692,6 +692,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="perspective-save" NO_REPEAT="TRUE">
+	<CODE>
+		org.gjt.sp.jedit.gui.PerspectiveManager.get().saveAs(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="perspective-load" NO_REPEAT="TRUE">
+	<CODE>
+		org.gjt.sp.jedit.gui.PerspectiveManager.get().load(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="plugin-manager">
 	<CODE>
 		PluginManager.showPluginManager(view);

@@ -29,6 +29,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,7 +191,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			return new PerspectiveHandler();
 		}
 
-		public void savePerspective(SettingsXML.Saver out, String lineSep) throws IOException {
+		public void savePerspective(File f, SettingsXML.Saver out, String lineSep) throws IOException {
 			out.write("<DOCKING LEFT=\"");
 			out.write(left == null ? "" : left);
 			out.write("\" TOP=\"");

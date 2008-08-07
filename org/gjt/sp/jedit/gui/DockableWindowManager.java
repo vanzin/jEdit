@@ -3,6 +3,7 @@ package org.gjt.sp.jedit.gui;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -67,7 +68,7 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 		public void setPlainView(boolean plain) {
 		}
 		abstract public DefaultHandler getPerspectiveHandler();
-		abstract public void savePerspective(SettingsXML.Saver out, String lineSep) throws IOException;
+		abstract public void savePerspective(File file, SettingsXML.Saver out, String lineSep) throws IOException;
 	}
 
 	/*
