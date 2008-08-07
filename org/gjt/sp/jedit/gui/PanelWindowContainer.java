@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.List;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.DockableWindowManager.DockingArea;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -45,7 +46,7 @@ import org.gjt.sp.util.StandardUtilities;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class PanelWindowContainer implements DockableWindowContainer
+public class PanelWindowContainer implements DockableWindowContainer, DockingArea
 {
 	//{{{ PanelWindowContainer constructor
 	public PanelWindowContainer(DockableWindowManagerImpl wm, String position,
