@@ -489,7 +489,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 						
 						PanelWindowContainer container = panel.getWindowContainer();
 						
-						container.show(null);
+						container.show((DockableWindowManagerImpl.Entry) null);
 						return;
 					}
 

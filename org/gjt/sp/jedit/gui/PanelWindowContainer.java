@@ -156,7 +156,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		if(current == entry)
 		{
 			current = null;
-			show(null);
+			show(current);
 		}
 		else
 		{
@@ -181,7 +181,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		if(current == entry)
 		{
 			current = null;
-			show(null);
+			show(current);
 		}
 		else
 		{
@@ -420,11 +420,11 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 				popup.setVisible(false);
 
 			if(evt.getSource() == closeBox)
-				show(null);
+				show((DockableWindowManagerImpl.Entry)null);
 			else
 			{
 				if(wm.isDockableWindowVisible(evt.getActionCommand()))
-					show(null);
+					show((DockableWindowManagerImpl.Entry)null);
 				else
 					wm.showDockableWindow(evt.getActionCommand());
 			}
@@ -910,6 +910,16 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			return returnValue;
 		} //}}}
 	} //}}}
+
+	@Override
+	public void show(String name) {
+		DockableWindowManagerImpl.Entry entry = null;
+		if (name != null) {
+			wm.showDockableWindow(name);
+			wm.hideDockableWindow(name);
+		}
+		show(entry);
+	}
 
 	//}}}
 }
