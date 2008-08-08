@@ -99,7 +99,9 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 		String oldPosition, String newPosition)
 	{
 	}
-	abstract public void dockableTitleChanged(String dockable, String newTitle);
+	public void dockableTitleChanged(String dockable, String newTitle)
+	{
+	}
 	protected interface DockingArea {
 		void showMostRecent();
 		String getCurrent();
