@@ -111,7 +111,7 @@ public class DockingLayoutManager
 	
 	public static void createActions()
 	{
-		actions = new ActionSet("Perspectives");
+		actions = new ActionSet("Docking Layouts");
 		String[] perspectives = getSavedPerspectiveFiles();
 		for (String perspective: perspectives)
 			addAction(perspective);
