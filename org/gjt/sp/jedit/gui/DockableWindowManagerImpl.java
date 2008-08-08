@@ -837,7 +837,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	//}}}
 
 	//{{{ propertiesChanged() method
-	private void propertiesChanged()
+	protected void propertiesChanged()
 	{
 		if(view.isPlainView())
 			return;

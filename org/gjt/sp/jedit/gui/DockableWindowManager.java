@@ -211,7 +211,7 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	
 	private Map<String, String> positions = new HashMap<String, String>();
 	
-	private void propertiesChanged()
+	protected void propertiesChanged()
 	{
 		if(view.isPlainView())
 			return;
