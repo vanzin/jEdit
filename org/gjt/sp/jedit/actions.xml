@@ -694,13 +694,13 @@
 
 <ACTION NAME="perspective-save" NO_REPEAT="TRUE">
 	<CODE>
-		org.gjt.sp.jedit.gui.PerspectiveManager.get().saveAs(view);
+		DockingLayoutManager.saveAs(view);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="perspective-load" NO_REPEAT="TRUE">
 	<CODE>
-		org.gjt.sp.jedit.gui.PerspectiveManager.get().load(view);
+		DockingLayoutManager.load(view);
 	</CODE>
 </ACTION>
 

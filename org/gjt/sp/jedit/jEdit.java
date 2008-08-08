@@ -3205,6 +3205,8 @@ public class jEdit
 		builtInActionSet.setLabel(getProperty("action-set.jEdit"));
 		builtInActionSet.load();
 
+		DockingLayoutManager.createActions();
+		
 		actionContext.addActionSet(builtInActionSet);
 
 		DockableWindowFactory.getInstance()
