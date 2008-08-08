@@ -22,10 +22,11 @@
 
 package org.gjt.sp.jedit.options;
 
-//{{{ Imports
 import javax.swing.table.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,7 +49,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	public void _init()
 	{
 		setLayout(new BorderLayout());
-		add(BorderLayout.NORTH,createDockingFrameworkChooser());
+		add(BorderLayout.NORTH,createDockingOptionsPanel());
 		add(BorderLayout.CENTER,createWindowTableScroller());
 	} //}}}
 
@@ -57,6 +58,8 @@ public class DockingOptionPane extends AbstractOptionPane
 	{
 		jEdit.setProperty(View.VIEW_DOCKING_FRAMEWORK_PROPERTY,
 			(String) dockingFramework.getSelectedItem());
+		jEdit.setBooleanProperty(AUTO_LOAD_MODE_LAYOUT_PROP, autoLoadModeLayout.isSelected());
+		jEdit.setBooleanProperty(AUTO_SAVE_MODE_LAYOUT_PROP, autoSaveModeLayout.isSelected());
 		windowModel.save();
 	} //}}}
 
@@ -66,12 +69,43 @@ public class DockingOptionPane extends AbstractOptionPane
 	private JTable windowTable;
 	private WindowTableModel windowModel;
 	private JComboBox dockingFramework;
+	private JCheckBox autoLoadModeLayout;
+	private JCheckBox autoSaveModeLayout;
 	//}}}
 
+	private static final String DOCKING_OPTIONS_PREFIX = "options.docking.";
+	public static final String AUTO_LOAD_MODE_LAYOUT_PROP = DOCKING_OPTIONS_PREFIX + "autoLoadModeLayout";
+	private static final String AUTO_LOAD_MODE_LAYOUT_LABEL = AUTO_LOAD_MODE_LAYOUT_PROP + ".label";
+	public static final String AUTO_SAVE_MODE_LAYOUT_PROP = DOCKING_OPTIONS_PREFIX + "autoSaveModeLayout";
+	private static final String AUTO_SAVE_MODE_LAYOUT_LABEL = AUTO_SAVE_MODE_LAYOUT_PROP + ".label";
+	
+	private JPanel createDockingOptionsPanel()
+	{
+		JPanel p = new JPanel();
+		p.setLayout(new GridLayout(0, 1));
+		p.add(createDockingFrameworkChooser());
+		boolean autoLoadModeLayoutProp = jEdit.getBooleanProperty(
+			AUTO_LOAD_MODE_LAYOUT_PROP, false);
+		autoLoadModeLayout = new JCheckBox(
+			jEdit.getProperty(AUTO_LOAD_MODE_LAYOUT_LABEL),
+			autoLoadModeLayoutProp);
+		p.add(autoLoadModeLayout);
+		autoSaveModeLayout = new JCheckBox(
+			jEdit.getProperty(AUTO_SAVE_MODE_LAYOUT_LABEL),
+			jEdit.getBooleanProperty(AUTO_SAVE_MODE_LAYOUT_PROP, false));
+		p.add(autoSaveModeLayout);
+		autoSaveModeLayout.setEnabled(autoLoadModeLayoutProp);
+		autoLoadModeLayout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				autoSaveModeLayout.setEnabled(autoLoadModeLayout.isSelected());
+			}
+		});
+		return p;
+	}
 	private JPanel createDockingFrameworkChooser()
 	{
 		JPanel p = new JPanel();
-		p.add(new JLabel("Docking framework:"));
+		p.add(new JLabel(jEdit.getProperty("options.docking.selectFramework.label")));
 		String [] frameworks =
 			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
 		dockingFramework = new JComboBox(frameworks);

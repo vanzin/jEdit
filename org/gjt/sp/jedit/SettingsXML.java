@@ -129,6 +129,11 @@ public class SettingsXML
 		file = new File(MiscUtilities.constructPath(
 			settingsDirectory, filename));
 	} //}}}
+	
+	public SettingsXML(File f)
+	{
+		file = f;
+	}
 
 	//{{{ fileExits() method
 	/**
