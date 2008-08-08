@@ -911,7 +911,6 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		} //}}}
 	} //}}}
 
-	@Override
 	public void show(String name) {
 		DockableWindowManagerImpl.Entry entry = null;
 		if (name != null) {
