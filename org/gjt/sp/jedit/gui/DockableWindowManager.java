@@ -99,7 +99,7 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 		String oldPosition, String newPosition)
 	{
 	}
-
+	abstract public void dockableTitleChanged(String dockable, String newTitle);
 	protected interface DockingArea {
 		void showMostRecent();
 		String getCurrent();
@@ -188,7 +188,8 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 		String propName = getLongTitlePropertyName(dockable);
 		String oldTitle = jEdit.getProperty(propName);
 		jEdit.setProperty(propName, title);
-		firePropertyChange(propName, oldTitle, title);		
+		firePropertyChange(propName, oldTitle, title);
+		dockableTitleChanged(dockable, title);
 	}
 	// }}}
 	

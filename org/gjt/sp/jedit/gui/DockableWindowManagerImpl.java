@@ -1047,4 +1047,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		} //}}}
 	} //}}}
 
+	@Override
+	public void dockableTitleChanged(String dockable, String newTitle) {
+		invalidate();
+	}
 }
