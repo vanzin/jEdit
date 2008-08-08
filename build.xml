@@ -56,6 +56,8 @@
 			  value="lines,vars,source" />
 	<property name="config.build.deprecation"
 			  value="true" />
+	<property name="config.build.compilerarg"
+			  value="-Xlint:unchecked" />
 	
 	<target name="init"
 			unless="init.done">
@@ -114,6 +116,7 @@
 			   encoding="UTF-8">
 			<include name="org/**" />
 			<include name="com/**" />
+			<compilerarg line="${config.build.compilerarg}" />
 		</javac>
 	</target>
 
@@ -490,7 +493,9 @@
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
-			   compiler="modern" />
+			   compiler="modern">
+			<compilerarg line="${config.build.compilerarg}" />
+		</javac>
 		<javadoc sourcepath="."
 				 destdir="${classes.dir}/javadoc/api"
 				 packagenames="org.*,com.*"
@@ -501,7 +506,7 @@
 				 use="true"
 				 author="true"
 				 splitindex="true"
-                 locale="en"
+				 locale="en"
 				 windowtitle="jEdit API"
 				 doctitle="jEdit API"
 				 failonerror="true"
@@ -665,7 +670,9 @@
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
-			   compiler="modern" />
+			   compiler="modern">
+			<compilerarg line="${config.build.compilerarg}" />
+		</javac>
 	</target>
 	
 	<target name="compile-default-plugins-for-dist"
@@ -894,7 +901,9 @@
 			   deprecation="${config.build.deprecation}"
 			   source="1.4"
 			   target="1.4"
-			   compiler="modern" />
+			   compiler="modern">
+			<compilerarg line="${config.build.compilerarg}" />
+		</javac>
 	</target>
 	
 	<target name="dist-mac-finish"
@@ -1161,7 +1170,9 @@
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
-			   compiler="modern" />
+			   compiler="modern">
+			<compilerarg line="${config.build.compilerarg}" />
+		</javac>
 	</target>
 	
 	<target name="compile-deb"
@@ -1178,7 +1189,9 @@
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
-			   compiler="modern" />
+			   compiler="modern">
+			<compilerarg line="${config.build.compilerarg}" />
+		</javac>
 	</target>
 	
 	<target name="compile-calculatesize"
@@ -1195,7 +1208,9 @@
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
-			   compiler="modern" />
+			   compiler="modern">
+			<compilerarg line="${config.build.compilerarg}" />
+		</javac>
 	</target>
 	
 	<target name="dist-deb"
