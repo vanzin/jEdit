@@ -704,6 +704,18 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="perspective-save-current-mode" NO_REPEAT="TRUE">
+	<CODE>
+		DockingLayoutManager.saveCurrentModeLayout(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="perspective-load-current-mode" NO_REPEAT="TRUE">
+	<CODE>
+		DockingLayoutManager.loadCurrentModeLayout(view);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="plugin-manager">
 	<CODE>
 		PluginManager.showPluginManager(view);
