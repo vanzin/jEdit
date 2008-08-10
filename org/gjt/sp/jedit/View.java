@@ -84,6 +84,7 @@ import org.gjt.sp.jedit.visitors.JEditVisitor;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+//}}}
 
 /**
  * A <code>View</code> is jEdit's top-level frame window.<p>
