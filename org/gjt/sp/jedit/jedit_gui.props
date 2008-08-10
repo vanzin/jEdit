@@ -578,7 +578,12 @@ docking=left-docking-area \
 	right-docking-area \
 	bottom-docking-area \
 	- \
-	close-docking-area
+	close-docking-area \
+	- \
+	perspective-load \
+	perspective-save \
+	perspective-load-current-mode \
+	perspective-save-current-mode
 docking.label=$Docking
 docking.menu.label=Dockable Menu
 left-docking-area.label=Go to $Left Docking Area
@@ -586,7 +591,10 @@ top-docking-area.label=Go to $Top Docking Area
 right-docking-area.label=Go to $Right Docking Area
 bottom-docking-area.label=Go to $Bottom Docking Area
 close-docking-area.label=$Close Current Docking Area
-
+perspective-load.label=Load docking layout ...
+perspective-save.label=Save docking layout ...
+perspective-load-current-mode.label=Load docking layout of current mode
+perspective-save-current-mode.label=Save docking layout of current mode
 
 #}}}
 
@@ -1792,6 +1800,9 @@ options.docking.label=Docking
 options.docking.code=new DockingOptionPane();
 options.docking.title=Window
 options.docking.dockPosition=Docking position
+options.docking.selectFramework.label=Docking framework:
+options.docking.autoSaveModeLayout.label=Automatically save mode-specific docking layout
+options.docking.autoLoadModeLayout.label=Automatically load mode-specific docking layout
 #}}}
 
 #{{{ Editing pane

@@ -100,4 +100,10 @@
 		new org.gjt.sp.jedit.gui.statusbar.BufferSetWidgetFactory();
 	</SERVICE>
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
+	
+	<!-- Docking framework -->
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.DockingFrameworkProvider" NAME="Original">
+		new org.gjt.sp.jedit.gui.DockableWindowManagerProvider();
+	</SERVICE>
+	
 </SERVICES>

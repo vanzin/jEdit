@@ -22,12 +22,14 @@
 
 package org.gjt.sp.jedit;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Collection;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.util.Log;
@@ -118,7 +120,8 @@ public class PerspectiveManager
 
 		if(perspectiveXML == null)
 			return;
-
+		File perspectiveFile = new File(perspectiveXML.toString());
+		
 		// backgrounded
 		if(jEdit.getBufferCount() == 0)
 			return;
@@ -205,25 +208,8 @@ public class PerspectiveManager
 				out.write("\" />");
 				out.write(lineSep);
 
-				out.write("<DOCKING LEFT=\"");
-				out.write(config.left == null ? "" : config.left);
-				out.write("\" TOP=\"");
-				out.write(config.top == null ? "" : config.top);
-				out.write("\" RIGHT=\"");
-				out.write(config.right == null ? "" : config.right);
-				out.write("\" BOTTOM=\"");
-				out.write(config.bottom == null ? "" : config.bottom);
-				out.write("\" LEFT_POS=\"");
-				out.write(String.valueOf(config.leftPos));
-				out.write("\" TOP_POS=\"");
-				out.write(String.valueOf(config.topPos));
-				out.write("\" RIGHT_POS=\"");
-				out.write(String.valueOf(config.rightPos));
-				out.write("\" BOTTOM_POS=\"");
-				out.write(String.valueOf(config.bottomPos));
-				out.write("\" />");
-				out.write(lineSep);
-
+				config.docking.savePerspective(perspectiveFile, out, lineSep);
+				
 				out.write("</VIEW>");
 				out.write(lineSep);
 			}
@@ -267,12 +253,15 @@ public class PerspectiveManager
 		View.ViewConfig config;
 		boolean restoreFiles;
 		String autoReload, autoReloadDialog;
-
+		DefaultHandler dockingLayoutHandler;
+		
 		PerspectiveHandler(boolean restoreFiles)
 		{
 			this.restoreFiles = restoreFiles;
 			config = new View.ViewConfig();
 			charData = new StringBuffer();
+			config.docking = View.getDockingFrameworkProvider().createDockingLayout();
+			dockingLayoutHandler = config.docking.getPerspectiveHandler();
 		}
 
 		@Override
@@ -292,6 +281,11 @@ public class PerspectiveManager
 				String value = attrs.getValue(i);
 				attribute(name, value);
 			}
+			try {
+				dockingLayoutHandler.startElement(uri, localName, qName, attrs);
+			} catch (SAXException e) {
+				e.printStackTrace();
+			}
 		}
 
 		private void attribute(String aname, String value)
@@ -308,22 +302,6 @@ public class PerspectiveManager
 				config.extState = Integer.parseInt(value);
 			else if(aname.equals("PLAIN"))
 				config.plainView = ("TRUE".equals(value));
-			else if(aname.equals("TOP"))
-				config.top = value;
-			else if(aname.equals("LEFT"))
-				config.left = value;
-			else if(aname.equals("BOTTOM"))
-				config.bottom = value;
-			else if(aname.equals("RIGHT"))
-				config.right = value;
-			else if(aname.equals("TOP_POS"))
-				config.topPos = Integer.parseInt(value);
-			else if(aname.equals("LEFT_POS"))
-				config.leftPos = Integer.parseInt(value);
-			else if(aname.equals("BOTTOM_POS"))
-				config.bottomPos = Integer.parseInt(value);
-			else if(aname.equals("RIGHT_POS"))
-				config.rightPos = Integer.parseInt(value);
 			else if(aname.equals("AUTORELOAD"))
 				autoReload = value;
 			else if(aname.equals("AUTORELOAD_DIALOG"))
@@ -371,7 +349,12 @@ public class PerspectiveManager
 			{
 				view = jEdit.newView(view,null,config);
 				config = new View.ViewConfig();
-			}
+			} else
+				try {
+					dockingLayoutHandler.endElement(uri, localName, name);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				}
 		}
 
 		@Override

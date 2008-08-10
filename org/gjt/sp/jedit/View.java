@@ -23,30 +23,67 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
-import org.gjt.sp.jedit.visitors.JEditVisitor;
-import javax.swing.event.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.AWTEvent;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Rectangle;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
-import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.search.*;
-import org.gjt.sp.jedit.textarea.*;
-import org.gjt.sp.jedit.textarea.TextArea;
-import org.gjt.sp.jedit.input.InputHandlerProvider;
-import org.gjt.sp.jedit.options.GeneralOptionPane;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.LayoutFocusTraversalPolicy;
+import javax.swing.SwingUtilities;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
-import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.jedit.gui.ActionBar;
+import org.gjt.sp.jedit.gui.DefaultInputHandler;
+import org.gjt.sp.jedit.gui.DockableWindowFactory;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
+import org.gjt.sp.jedit.gui.HistoryModel;
+import org.gjt.sp.jedit.gui.IDockingFrameworkProvider;
+import org.gjt.sp.jedit.gui.InputHandler;
+import org.gjt.sp.jedit.gui.StatusBar;
+import org.gjt.sp.jedit.gui.ToolBarManager;
+import org.gjt.sp.jedit.gui.VariableGridLayout;
+import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
+import org.gjt.sp.jedit.input.InputHandlerProvider;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.EditPaneUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.msg.SearchSettingsChanged;
+import org.gjt.sp.jedit.msg.ViewUpdate;
+import org.gjt.sp.jedit.options.GeneralOptionPane;
+import org.gjt.sp.jedit.search.CurrentBufferSet;
+import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.search.SearchBar;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.textarea.ScrollListener;
+import org.gjt.sp.jedit.textarea.TextArea;
+import org.gjt.sp.jedit.visitors.JEditVisitor;
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -96,6 +133,12 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	//{{{ ToolBar-related constants
 
+	public static final String VIEW_DOCKING_FRAMEWORK_PROPERTY = "view.docking.framework";
+	private static final String ORIGINAL_DOCKING_FRAMEWORK = "Original";
+	public static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
+		"org.gjt.sp.jedit.gui.DockingFrameworkProvider";
+	private static IDockingFrameworkProvider dockingFrameworkProvider = null;
+	
 	//{{{ Groups
 	/**
 	 * The group of tool bars above the DockableWindowManager
@@ -215,6 +258,21 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return dockableWindowManager;
 	} //}}}
 
+	static public String getDockingFrameworkName() {
+		String framework = jEdit.getProperty(
+				VIEW_DOCKING_FRAMEWORK_PROPERTY, ORIGINAL_DOCKING_FRAMEWORK);
+		return framework;
+	}
+	static public IDockingFrameworkProvider getDockingFrameworkProvider() {
+		if (dockingFrameworkProvider == null)
+		{
+			String framework = getDockingFrameworkName();
+			dockingFrameworkProvider = (IDockingFrameworkProvider)
+				ServiceManager.getService(
+					DOCKING_FRAMEWORK_PROVIDER_SERVICE, framework);
+		}
+		return dockingFrameworkProvider;
+	}
 	//{{{ getToolBar() method
 	/**
 	 * Returns the view's tool bar.
@@ -608,6 +666,15 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return split(JSplitPane.HORIZONTAL_SPLIT);
 	} //}}}
 
+	private Component mainContent = null;
+	private void setMainContent(Component c) {
+		if (mainContent != null)
+			mainPanel.remove(mainContent);
+		mainContent = c;
+		mainPanel.add(mainContent, BorderLayout.CENTER);
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	}
 	//{{{ split() method
 	/**
 	 * Splits the view.
@@ -671,8 +738,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			newSplitPane.setLeftComponent(oldEditPane);
 			newSplitPane.setRightComponent(newEditPane);
 
-			oldParent.add(newSplitPane,0);
-			oldParent.revalidate();
+			setMainContent(newSplitPane);
+			
 		}
 
 		SwingUtilities.invokeLater(new Runnable()
@@ -709,11 +776,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 					_editPane.close();
 			}
 
-			JComponent parent = (JComponent)splitPane.getParent();
-
-			parent.remove(splitPane);
-			parent.add(editPane,0);
-			parent.revalidate();
+			setMainContent(editPane);
 
 			splitPane = null;
 			updateTitle();
@@ -766,15 +829,13 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				else
 					parentSplit.setRightComponent(editPane);
 				parentSplit.setDividerLocation(pos);
+				parent.revalidate();
 			}
 			else
 			{
-				parent.remove(comp);
-				parent.add(editPane,0);
+				setMainContent(editPane);
 				splitPane = null;
 			}
-
-			parent.revalidate();
 
 			updateTitle();
 
@@ -991,6 +1052,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		config.plainView = isPlainView();
 		config.splitConfig = getSplitConfig();
 		config.extState = getExtendedState();
+		config.docking = dockableWindowManager.getDockingLayout(config);
 		String prefix = config.plainView ? "plain-view" : "view";
 		switch (config.extState)
 		{
@@ -1024,17 +1086,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				config.height = getHeight();
 				break;
 		}
-
-		config.top = dockableWindowManager.getTopDockingArea().getCurrent();
-		config.left = dockableWindowManager.getLeftDockingArea().getCurrent();
-		config.bottom = dockableWindowManager.getBottomDockingArea().getCurrent();
-		config.right = dockableWindowManager.getRightDockingArea().getCurrent();
-
-		config.topPos = dockableWindowManager.getTopDockingArea().getDimension();
-		config.leftPos = dockableWindowManager.getLeftDockingArea().getDimension();
-		config.bottomPos = dockableWindowManager.getBottomDockingArea().getDimension();
-		config.rightPos = dockableWindowManager.getRightDockingArea().getDimension();
-
 		return config;
 	} //}}}
 
@@ -1215,9 +1266,12 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 		setIconImage(GUIUtilities.getEditorIcon());
 
-		dockableWindowManager = new DockableWindowManager(this,
-			DockableWindowFactory.getInstance(),config);
-
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout());
+		dockableWindowManager = getDockingFrameworkProvider().create(this,
+			DockableWindowFactory.getInstance(), config);
+		dockableWindowManager.setMainPanel(mainPanel);
+		
 		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
@@ -1305,7 +1359,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private boolean closed;
 
 	private DockableWindowManager dockableWindowManager;
-
+	private JPanel mainPanel;
+	
 	private JPanel topToolBars;
 	private JPanel bottomToolBars;
 	private ToolBarManager toolBarManager;
@@ -1458,25 +1513,16 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ setSplitConfig() method
 	private void setSplitConfig(Buffer buffer, String splitConfig)
 	{
-		if(editPane != null)
-			dockableWindowManager.remove(editPane);
-
-		if(splitPane != null)
-			dockableWindowManager.remove(splitPane);
-
 		try
 		{
 			Component comp = restoreSplitConfig(buffer,splitConfig);
-			dockableWindowManager.add(comp,0);
+			setMainContent(comp);
 		}
 		catch(IOException e)
 		{
 			// this should never throw an exception.
 			throw new InternalError();
 		}
-
-		dockableWindowManager.revalidate();
-		dockableWindowManager.repaint();
 	} //}}}
 
 	//{{{ restoreSplitConfig() method
@@ -1635,10 +1681,8 @@ loop:		while (true)
 		}
 		else
 		{
-			dockableWindowManager.add(topToolBars,
-				DockableLayout.TOP_TOOLBARS,0);
-			dockableWindowManager.add(bottomToolBars,
-				DockableLayout.BOTTOM_TOOLBARS,0);
+			mainPanel.add(topToolBars, BorderLayout.NORTH);
+			mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
 			if (showStatus)
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}
@@ -1847,14 +1891,11 @@ loop:		while (true)
 	//{{{ ViewConfig class
 	public static class ViewConfig
 	{
+		public int x, y, width, height, extState;
 		public boolean plainView;
 		public String splitConfig;
-		public int x, y, width, height, extState;
-
-		// dockables
-		public String top, left, bottom, right;
-		public int topPos, leftPos, bottomPos, rightPos;
-
+		public DockingLayout docking;
+		
 		public ViewConfig()
 		{
 		}
@@ -1867,7 +1908,7 @@ loop:		while (true)
 			y = jEdit.getIntegerProperty(prefix + ".y",0);
 			width = jEdit.getIntegerProperty(prefix + ".width",0);
 			height = jEdit.getIntegerProperty(prefix + ".height",0);
-			extState = jEdit.getIntegerProperty(prefix + ".extendedState",NORMAL);
+			extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
 		}
 
 		public ViewConfig(boolean plainView, String splitConfig,
@@ -1882,6 +1923,25 @@ loop:		while (true)
 			this.extState = extState;
 		}
 	} //}}}
+
+	public void adjust(View parent, ViewConfig config) {
+		if(config.width != 0 && config.height != 0)
+		{
+			Rectangle desired = new Rectangle(
+					config.x, config.y, config.width, config.height);
+			if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
+			{
+				new GUIUtilities.UnixWorkaround(this,"view",desired,config.extState);
+			}
+			else
+			{
+				setBounds(desired);
+				setExtendedState(config.extState);
+			}
+		}
+		else
+			setLocationRelativeTo(parent);
+	}
 
 	//{{{ MyFocusTraversalPolicy class
 	private static class MyFocusTraversalPolicy extends LayoutFocusTraversalPolicy
@@ -1910,4 +1970,5 @@ loop:		while (true)
 		}
 	}//}}}
 	//}}}
+
 }

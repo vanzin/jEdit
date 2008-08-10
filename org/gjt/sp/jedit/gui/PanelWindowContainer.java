@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.List;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.DockableWindowManager.DockingArea;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -45,10 +46,10 @@ import org.gjt.sp.util.StandardUtilities;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class PanelWindowContainer implements DockableWindowContainer
+public class PanelWindowContainer implements DockableWindowContainer, DockingArea
 {
 	//{{{ PanelWindowContainer constructor
-	public PanelWindowContainer(DockableWindowManager wm, String position,
+	public PanelWindowContainer(DockableWindowManagerImpl wm, String position,
 		int dimension)
 	{
 		this.wm = wm;
@@ -83,7 +84,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		buttonGroup.add(nullButton = new JToggleButton());
 		//}}}
 
-		dockables = new ArrayList<DockableWindowManager.Entry>();
+		dockables = new ArrayList<DockableWindowManagerImpl.Entry>();
 		buttons = new ArrayList<AbstractButton>();
 		dockablePanel = new DockablePanel(this);
 
@@ -94,24 +95,24 @@ public class PanelWindowContainer implements DockableWindowContainer
 	/**
 	 * @since jEdit 4.3pre2
 	 */
-	public DockableWindowManager getDockableWindowManager()
+	public DockableWindowManagerImpl getDockableWindowManager()
 	{
 		return wm;
 	} //}}}
 	
 	//{{{ register() method
-	public void register(DockableWindowManager.Entry entry)
+	public void register(DockableWindowManagerImpl.Entry entry)
 	{
 		dockables.add(entry);
 
 		//{{{ Create button
 		int rotation;
-		if(position.equals(DockableWindowManager.TOP)
-			|| position.equals(DockableWindowManager.BOTTOM))
+		if(position.equals(DockableWindowManagerImpl.TOP)
+			|| position.equals(DockableWindowManagerImpl.BOTTOM))
 			rotation = RotatedTextIcon.NONE;
-		else if(position.equals(DockableWindowManager.LEFT))
+		else if(position.equals(DockableWindowManagerImpl.LEFT))
 			rotation = RotatedTextIcon.CCW;
-		else if(position.equals(DockableWindowManager.RIGHT))
+		else if(position.equals(DockableWindowManagerImpl.RIGHT))
 			rotation = RotatedTextIcon.CW;
 		else
 			throw new InternalError("Invalid position: " + position);
@@ -136,7 +137,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ unregister() method
-	public void unregister(DockableWindowManager.Entry entry)
+	public void unregister(DockableWindowManagerImpl.Entry entry)
 	{
 		if(entry.factory.name.equals(mostRecent))
 			mostRecent = null;
@@ -155,7 +156,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		if(current == entry)
 		{
 			current = null;
-			show(null);
+			show(current);
 		}
 		else
 		{
@@ -166,7 +167,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ remove() method
-	public void remove(DockableWindowManager.Entry entry)
+	public void remove(DockableWindowManagerImpl.Entry entry)
 	{
 		if(entry.factory.name.equals(mostRecent))
 			mostRecent = null;
@@ -180,7 +181,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		if(current == entry)
 		{
 			current = null;
-			show(null);
+			show(current);
 		}
 		else
 		{
@@ -207,7 +208,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ show() method
-	public void show(DockableWindowManager.Entry entry)
+	public void show(DockableWindowManagerImpl.Entry entry)
 	{
 		if(current == entry)
 		{
@@ -276,7 +277,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 	} //}}}
 
 	//{{{ isVisible() method
-	public boolean isVisible(DockableWindowManager.Entry entry)
+	public boolean isVisible(DockableWindowManagerImpl.Entry entry)
 	{
 		return current == entry;
 	} //}}}
@@ -320,7 +321,7 @@ public class PanelWindowContainer implements DockableWindowContainer
 		String[] retVal = new String[dockables.size()];
 		for(int i = 0; i < dockables.size(); i++)
 		{
-			DockableWindowManager.Entry entry = dockables.get(i);
+			DockableWindowManagerImpl.Entry entry = dockables.get(i);
 			retVal[i] = entry.factory.name;
 		}
 		return retVal;
@@ -378,16 +379,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 	//}}}
 
 	//{{{ Private members
-	private final DockableWindowManager wm;
+	private final DockableWindowManagerImpl wm;
 	private final String position;
 	private final JButton closeBox;
 	private final JButton menuBtn;
 	private final ButtonGroup buttonGroup;
 	private final JToggleButton nullButton;
 	private int dimension;
-	private final List<DockableWindowManager.Entry> dockables;
+	private final List<DockableWindowManagerImpl.Entry> dockables;
 	private final List<AbstractButton> buttons;
-	private DockableWindowManager.Entry current;
+	private DockableWindowManagerImpl.Entry current;
 	private JPopupMenu popup;
 
 	// remember the most recent dockable
@@ -419,11 +420,11 @@ public class PanelWindowContainer implements DockableWindowContainer
 				popup.setVisible(false);
 
 			if(evt.getSource() == closeBox)
-				show(null);
+				show((DockableWindowManagerImpl.Entry)null);
 			else
 			{
 				if(wm.isDockableWindowVisible(evt.getActionCommand()))
-					show(null);
+					show((DockableWindowManagerImpl.Entry)null);
 				else
 					wm.showDockableWindow(evt.getActionCommand());
 			}
@@ -493,13 +494,13 @@ public class PanelWindowContainer implements DockableWindowContainer
 		{
 			this.position = position;
 			insets = new Insets(
-				position.equals(DockableWindowManager.BOTTOM)
+				position.equals(DockableWindowManagerImpl.BOTTOM)
 					? SPLITTER_WIDTH : 0,
-				position.equals(DockableWindowManager.RIGHT)
+				position.equals(DockableWindowManagerImpl.RIGHT)
 					? SPLITTER_WIDTH : 0,
-				position.equals(DockableWindowManager.TOP)
+				position.equals(DockableWindowManagerImpl.TOP)
 					? SPLITTER_WIDTH : 0,
-				position.equals(DockableWindowManager.LEFT)
+				position.equals(DockableWindowManagerImpl.LEFT)
 					? SPLITTER_WIDTH : 0);
 		} //}}}
 
@@ -512,16 +513,16 @@ public class PanelWindowContainer implements DockableWindowContainer
 			if(color1 == null || color2 == null || color3 == null)
 				return;
 
-			if(position.equals(DockableWindowManager.BOTTOM))
+			if(position.equals(DockableWindowManagerImpl.BOTTOM))
 				paintHorizBorder(g,x,y,width);
-			else if(position.equals(DockableWindowManager.RIGHT))
+			else if(position.equals(DockableWindowManagerImpl.RIGHT))
 				paintVertBorder(g,x,y,height);
-			else if(position.equals(DockableWindowManager.TOP))
+			else if(position.equals(DockableWindowManagerImpl.TOP))
 			{
 				paintHorizBorder(g,x,y + height
 					- SPLITTER_WIDTH,width);
 			}
-			else if(position.equals(DockableWindowManager.LEFT))
+			else if(position.equals(DockableWindowManagerImpl.LEFT))
 			{
 				paintVertBorder(g,x + width
 					- SPLITTER_WIDTH,y,height);
@@ -734,8 +735,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 			Dimension dim = comp[2].getPreferredSize();
 
-			if(position.equals(DockableWindowManager.TOP)
-				|| position.equals(DockableWindowManager.BOTTOM))
+			if(position.equals(DockableWindowManagerImpl.TOP)
+				|| position.equals(DockableWindowManagerImpl.BOTTOM))
 			{
 				int width = dimension - insets.right;
 				Dimension returnValue = preferredLayoutSizeLR(insets, comp, dim, width);
@@ -763,8 +764,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 			Dimension dim = comp[2].getPreferredSize();
 
-			if(position.equals(DockableWindowManager.TOP)
-				|| position.equals(DockableWindowManager.BOTTOM))
+			if(position.equals(DockableWindowManagerImpl.TOP)
+				|| position.equals(DockableWindowManagerImpl.BOTTOM))
 			{
 				int width = parent.getWidth() - insets.right;
 				Dimension returnValue = preferredLayoutSizeLR(insets, comp, dim, width);
@@ -804,8 +805,8 @@ public class PanelWindowContainer implements DockableWindowContainer
 
 			Dimension dim = comp[2].getPreferredSize();
 
-			if(position.equals(DockableWindowManager.TOP)
-				|| position.equals(DockableWindowManager.BOTTOM))
+			if(position.equals(DockableWindowManagerImpl.TOP)
+				|| position.equals(DockableWindowManagerImpl.BOTTOM))
 			{
 				int width = parent.getWidth() - insets.right;
 				int rowHeight = Math.max(dim.height,closeBox.getPreferredSize().width);
@@ -909,6 +910,15 @@ public class PanelWindowContainer implements DockableWindowContainer
 			return returnValue;
 		} //}}}
 	} //}}}
+
+	public void show(String name) {
+		DockableWindowManagerImpl.Entry entry = null;
+		if (name != null) {
+			wm.showDockableWindow(name);
+			wm.hideDockableWindow(name);
+		}
+		show(entry);
+	}
 
 	//}}}
 }

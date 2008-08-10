@@ -43,7 +43,7 @@ import org.gjt.sp.util.XMLUtilities;
  *   - Making backup on each save.
  *   - Detection of change on disk.
  */
-class SettingsXML
+public class SettingsXML
 {
 	//{{{ Saver class
 	/**
@@ -129,6 +129,11 @@ class SettingsXML
 		file = new File(MiscUtilities.constructPath(
 			settingsDirectory, filename));
 	} //}}}
+	
+	public SettingsXML(File f)
+	{
+		file = f;
+	}
 
 	//{{{ fileExits() method
 	/**

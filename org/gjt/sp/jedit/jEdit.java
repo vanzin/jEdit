@@ -29,9 +29,10 @@ import java.awt.DefaultKeyboardFocusManager;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.KeyboardFocusManager;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
+
+import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
@@ -2234,6 +2235,19 @@ public class jEdit
 		}
 		return newView(view,buffer,config);
 	}
+
+	private static class DockingLayoutSetter implements Runnable {
+		private View view;
+		private ViewConfig config;
+		public DockingLayoutSetter(View view, ViewConfig config) {
+			this.view = view;
+			this.config = config;
+		}
+		public void run() {
+			DockableWindowManager wm = view.getDockableWindowManager();
+			wm.setDockingLayout(config.docking);
+		}
+	}
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -2257,50 +2271,15 @@ public class jEdit
 			View newView = new View(buffer,config);
 			addViewToList(newView);
 
-			if(!config.plainView)
-			{
-				DockableWindowManager wm = newView.getDockableWindowManager();
-				if(config.top != null
-					&& config.top.length() != 0)
-					wm.showDockableWindow(config.top);
-
-				if(config.left != null
-					&& config.left.length() != 0)
-					wm.showDockableWindow(config.left);
-
-				if(config.bottom != null
-					&& config.bottom.length() != 0)
-					wm.showDockableWindow(config.bottom);
-
-				if(config.right != null
-					&& config.right.length() != 0)
-					wm.showDockableWindow(config.right);
-			}
-
 			newView.pack();
-
-			if(config.width != 0 && config.height != 0)
-			{
-				Rectangle desired = new Rectangle(
-					config.x, config.y, config.width,
-					config.height);
-				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
-				{
-					new GUIUtilities.UnixWorkaround(newView,
-						"view",desired,config.extState);
-				}
-				else
-				{
-					newView.setBounds(desired);
-					newView.setExtendedState(config.extState);
-				}
-			}
-			else
-				newView.setLocationRelativeTo(view);
-
+			newView.adjust(view, config);
+			
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 			newView.setVisible(true);
+
+			if(!config.plainView)
+				SwingUtilities.invokeLater(new DockingLayoutSetter(newView, config));
 
 			// show tip of the day
 			if(newView == viewsFirst)
@@ -3258,6 +3237,8 @@ public class jEdit
 		builtInActionSet.setLabel(getProperty("action-set.jEdit"));
 		builtInActionSet.load();
 
+		DockingLayoutManager.init();
+		
 		actionContext.addActionSet(builtInActionSet);
 
 		DockableWindowFactory.getInstance()

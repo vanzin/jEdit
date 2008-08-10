@@ -55,7 +55,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 {
 	String dockableName = null;
 	//{{{ FloatingWindowContainer constructor
-	public FloatingWindowContainer(DockableWindowManager dockableWindowManager,
+	public FloatingWindowContainer(DockableWindowManagerImpl dockableWindowManager,
 		boolean clone)
 	{
 		this.dockableWindowManager = dockableWindowManager;
@@ -81,7 +81,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ register() method
-	public void register(DockableWindowManager.Entry entry)
+	public void register(DockableWindowManagerImpl.Entry entry)
 	{
 		this.entry = entry;
 		dockableName = entry.factory.name;
@@ -105,13 +105,13 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ remove() method
-	public void remove(DockableWindowManager.Entry entry)
+	public void remove(DockableWindowManagerImpl.Entry entry)
 	{
 		dispose();
 	} //}}}
 
 	//{{{ unregister() method
-	public void unregister(DockableWindowManager.Entry entry)
+	public void unregister(DockableWindowManagerImpl.Entry entry)
 	{
 		this.entry = null;
 		entry.btn = null;
@@ -123,7 +123,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ show() method
-	public void show(final DockableWindowManager.Entry entry)
+	public void show(final DockableWindowManagerImpl.Entry entry)
 	{
 		if(entry == null)
 			dispose();
@@ -151,7 +151,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ isVisible() method
-	public boolean isVisible(DockableWindowManager.Entry entry)
+	public boolean isVisible(DockableWindowManagerImpl.Entry entry)
 	{
 		return true;
 	} //}}}
@@ -166,7 +166,7 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ getDockableWindowManager() method
-	public DockableWindowManager getDockableWindowManager()
+	public DockableWindowManagerImpl getDockableWindowManager()
 	{
 		return dockableWindowManager;
 	} //}}}
@@ -179,9 +179,9 @@ public class FloatingWindowContainer extends JFrame implements DockableWindowCon
 	} //}}}
 
 	//{{{ Private members
-	private final DockableWindowManager dockableWindowManager;
+	private final DockableWindowManagerImpl dockableWindowManager;
 	private final boolean clone;
-	private DockableWindowManager.Entry entry;
+	private DockableWindowManagerImpl.Entry entry;
 	private final JButton menu;
 	//}}}
 
