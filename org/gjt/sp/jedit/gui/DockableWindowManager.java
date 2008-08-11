@@ -95,6 +95,9 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	abstract public boolean isDockableWindowVisible(String name);
 	abstract public void closeCurrentArea();
 	abstract public DockingLayout getDockingLayout(ViewConfig config);
+	protected void alternateLayoutChanged(boolean alternateLayout)
+	{
+	}
 	protected void dockingPositionChanged(String dockableName,
 		String oldPosition, String newPosition)
 	{
@@ -219,6 +222,13 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 		if(view.isPlainView())
 			return;
 
+		boolean newAlternateLayout = jEdit.getBooleanProperty(ALTERNATE_LAYOUT_PROP);
+		if (newAlternateLayout != alternateLayout)
+		{
+			alternateLayout = newAlternateLayout;
+			alternateLayoutChanged(newAlternateLayout);
+		}
+		
 		String[] dockables = factory.getRegisteredDockableWindows();
 		for(int i = 0; i < dockables.length; i++)
 		{
@@ -233,11 +243,16 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 		}
 		
 	}
+	
+	private static final String ALTERNATE_LAYOUT_PROP = "view.docking.alternateLayout";
+	private boolean alternateLayout;
+	
 	public DockableWindowManager(View view, DockableWindowFactory instance,
 			ViewConfig config)
 	{
 		this.view = view;
 		this.factory = instance;
+		alternateLayout = jEdit.getBooleanProperty(ALTERNATE_LAYOUT_PROP);
 	}	
 	public void init()
 	{
