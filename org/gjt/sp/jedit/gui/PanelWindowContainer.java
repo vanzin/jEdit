@@ -647,7 +647,6 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 
 			FontRenderContext fontRenderContext
 				= new FontRenderContext(null,true,true);
-			this.text = text;
 			glyphs = font.createGlyphVector(fontRenderContext,text);
 			width = (int)glyphs.getLogicalBounds().getWidth() + 4;
 			//height = (int)glyphs.getLogicalBounds().getHeight();
@@ -731,7 +730,6 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		//{{{ Private members
 		private final int rotate;
 		private final Font font;
-		private final String text;
 		private final GlyphVector glyphs;
 		private final float width;
 		private final float height;
@@ -947,19 +945,6 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			wm.hideDockableWindow(name);
 		}
 		show(entry);
-	}
-
-	public boolean isVisible() {
-		return false;
-	}
-
-	public void setVisible(boolean visible) {
-		if (isVisible() == visible)
-			return;
-		if (visible)
-			showMostRecent();
-		else
-			show((DockableWindowManagerImpl.Entry) null);
 	}
 
 	//}}}
