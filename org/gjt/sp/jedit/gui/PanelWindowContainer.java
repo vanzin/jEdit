@@ -23,21 +23,50 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
-import javax.swing.border.*;
-import javax.swing.plaf.metal.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.font.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.LayoutManager;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
-import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import org.gjt.sp.jedit.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JToggleButton;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
+import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DockableWindowManager.DockingArea;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.util.StandardUtilities;
-//}}}
 
 /**
  * A container for dockable windows. This class should never be used
@@ -918,6 +947,19 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			wm.hideDockableWindow(name);
 		}
 		show(entry);
+	}
+
+	public boolean isVisible() {
+		return false;
+	}
+
+	public void setVisible(boolean visible) {
+		if (isVisible() == visible)
+			return;
+		if (visible)
+			showMostRecent();
+		else
+			show((DockableWindowManagerImpl.Entry) null);
 	}
 
 	//}}}

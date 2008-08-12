@@ -109,6 +109,8 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 		void showMostRecent();
 		String getCurrent();
 		void show(String name);
+		boolean isVisible();
+		void setVisible(boolean visible);
 	}
 	abstract public DockingArea getLeftDockingArea();
 	abstract public DockingArea getRightDockingArea();
