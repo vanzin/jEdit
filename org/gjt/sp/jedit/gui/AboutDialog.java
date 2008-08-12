@@ -155,7 +155,7 @@ public class AboutDialog extends JDialog implements ActionListener
 					d.width, d.height-iBottomPadding-iTopPadding );
 				//"+1" makes sure every new line from below comes up smoothly
 				//cause it gets pre-painted and clipped as needed
-				iPipeLineCount = 1 + (int)(rectangle.height/iLineHeight);
+				iPipeLineCount = 1 + (int)Math.ceil(rectangle.height/iLineHeight);
 				y = (int) d.height+iBottomPadding;
 				g.setFont( defaultFont );
 				gradientPaint = new GradientPaint(
@@ -188,7 +188,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			{
 				//check whether the text line is above the canvas, if so, the code skips it
 				yCoor = y+(i*iLineHeight);
-				if( yCoor < iTopPadding )
+				if( yCoor + iLineHeight <= iTopPadding )
 				{
 					continue;
 				}
