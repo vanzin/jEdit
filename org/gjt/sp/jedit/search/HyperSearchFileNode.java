@@ -36,7 +36,6 @@ import org.gjt.sp.jedit.jEdit;
 public class HyperSearchFileNode implements HyperSearchNode
 {
 	public String path;
-	public Buffer buffer;
 	public boolean showFullPath = true;
 
 	private static String fileSep = System.getProperty("file.separator");
@@ -55,9 +54,7 @@ public class HyperSearchFileNode implements HyperSearchNode
 	//{{{ getBuffer() method
 	public Buffer getBuffer(View view)
 	{
-		if(buffer == null)
-			buffer = jEdit.openFile(view,path);
-		return buffer;
+		return jEdit.openFile(view,path);
 	} //}}}
 
 	//{{{ goTo() method
@@ -86,8 +83,7 @@ public class HyperSearchFileNode implements HyperSearchNode
 			return false;
 		HyperSearchFileNode otherResult = (HyperSearchFileNode)compareObj;
 		
-		return path.equals(MiscUtilities.resolveSymlinks(otherResult.path))
-			&& buffer.equals(otherResult.buffer);		
+		return path.equals(MiscUtilities.resolveSymlinks(otherResult.path));
 	}//}}}
 
 	/**

@@ -13,6 +13,12 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 
 }}}
+{{{ API Changes
+
+- A public field buffer in HyperSearchFileNode was removed. Use
+  getBuffer() instead. (Kazutoshi Satoda)
+
+}}}
 
 }}}
 
