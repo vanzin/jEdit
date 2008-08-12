@@ -46,7 +46,9 @@ public class DockingLayoutManager implements EBComponent
 			out = xml.openSaver();
 			out.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + lineSep);
 			out.write("<perspective>" + lineSep);
-			view.getViewConfig().docking.savePerspective(f, out, lineSep);
+			DockingLayout docking = view.getViewConfig().docking; 
+			if (docking != null)
+				docking.savePerspective(f, out, lineSep);
 			out.write("</perspective>" + lineSep);
 			out.finish();
 			addAction(f.getAbsolutePath());
@@ -70,6 +72,8 @@ public class DockingLayoutManager implements EBComponent
 	{
 		DockingLayout docking = View.getDockingFrameworkProvider().createDockingLayout();
 		DefaultHandler handler = docking.getPerspectiveHandler();
+		if (handler == null)
+			return;
 		try {
 			XMLUtilities.parseXML(new FileInputStream(f), handler);
 		} catch (FileNotFoundException e) {

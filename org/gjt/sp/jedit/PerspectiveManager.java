@@ -208,7 +208,8 @@ public class PerspectiveManager
 				out.write("\" />");
 				out.write(lineSep);
 
-				config.docking.savePerspective(perspectiveFile, out, lineSep);
+				if (config.docking != null)
+					config.docking.savePerspective(perspectiveFile, out, lineSep);
 				
 				out.write("</VIEW>");
 				out.write(lineSep);
@@ -261,7 +262,10 @@ public class PerspectiveManager
 			config = new View.ViewConfig();
 			charData = new StringBuffer();
 			config.docking = View.getDockingFrameworkProvider().createDockingLayout();
-			dockingLayoutHandler = config.docking.getPerspectiveHandler();
+			if (config.docking != null)
+				dockingLayoutHandler = config.docking.getPerspectiveHandler();
+			else
+				dockingLayoutHandler = null;
 		}
 
 		@Override
@@ -282,7 +286,8 @@ public class PerspectiveManager
 				attribute(name, value);
 			}
 			try {
-				dockingLayoutHandler.startElement(uri, localName, qName, attrs);
+				if (dockingLayoutHandler != null)
+					dockingLayoutHandler.startElement(uri, localName, qName, attrs);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			}
@@ -351,7 +356,8 @@ public class PerspectiveManager
 				config = new View.ViewConfig();
 			} else
 				try {
-					dockingLayoutHandler.endElement(uri, localName, name);
+					if (dockingLayoutHandler != null)
+						dockingLayoutHandler.endElement(uri, localName, name);
 				} catch (SAXException e) {
 					e.printStackTrace();
 				}
