@@ -188,19 +188,19 @@ public class UndoManager
 			Remove rem = (Remove)toMerge;
 			if(rem.offset == offset)
 			{
-				rem.str = rem.str.concat(text);
-				rem.hashcode = rem.str.hashCode();
+				rem.content.str = rem.content.str.concat(text);
+				rem.content.hashcode = rem.content.str.hashCode();
 				rem.length += length;
-				KillRing.getInstance().changed(rem);
+				KillRing.getInstance().changed(rem.content);
 				return;
 			}
 			else if(offset + length == rem.offset)
 			{
-				rem.str = text.concat(rem.str);
-				rem.hashcode = rem.str.hashCode();
+				rem.content.str = text.concat(rem.content.str);
+				rem.content.hashcode = rem.content.str.hashCode();
 				rem.length += length;
 				rem.offset = offset;
-				KillRing.getInstance().changed(rem);
+				KillRing.getInstance().changed(rem.content);
 				return;
 			}
 		}
@@ -217,7 +217,7 @@ public class UndoManager
 		else
 			addEdit(rem);
 
-		KillRing.getInstance().add(rem);
+		KillRing.getInstance().add(rem.content);
 	} //}}}
 
 	//{{{ resetClearDirty method
@@ -350,8 +350,28 @@ public class UndoManager
 		String str;
 	} //}}}
 
+	//{{{ RemovedContent clas
+	// This class is held in KillRing.
+	public static class RemovedContent
+	{
+		String str;
+		int hashcode;
+		boolean inKillRing;
+
+		public RemovedContent(String str)
+		{
+			this.str = str;
+			this.hashcode = str.hashCode();
+		}
+
+		public String toString()
+		{
+			return str;
+		}
+	}// }}}
+
 	//{{{ Remove class
-	public static class Remove extends Edit
+	static class Remove extends Edit
 	{
 		//{{{ Remove constructor
 		Remove(UndoManager mgr, int offset, int length, String str)
@@ -359,14 +379,13 @@ public class UndoManager
 			this.mgr = mgr;
 			this.offset = offset;
 			this.length = length;
-			this.str = str;
-			hashcode = str.hashCode();
+			this.content = new RemovedContent(str);
 		} //}}}
 
 		//{{{ undo() method
 		int undo()
 		{
-			mgr.buffer.insert(offset,str);
+			mgr.buffer.insert(offset,content.str);
 			if(mgr.undoClearDirty == this)
 				mgr.buffer.setDirty(false);
 			return offset + length;
@@ -381,18 +400,10 @@ public class UndoManager
 			return offset;
 		} //}}}
 
-		//{{{ toString() method
-		public String toString()
-		{
-			return str;
-		} //}}}
-
 		UndoManager mgr;
 		int offset;
 		int length;
-		String str;
-		int hashcode;
-		boolean inKillRing;
+		final RemovedContent content;
 	} //}}}
 
 	//{{{ CompoundEdit class

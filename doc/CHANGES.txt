@@ -6,6 +6,7 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- Closed buffers were often kept in memory. (Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous

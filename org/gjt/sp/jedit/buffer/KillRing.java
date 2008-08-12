@@ -51,15 +51,15 @@ public class KillRing implements MutableListModel
 	{
 		int newSize = Math.max(1, historySize);
 		if(ring == null)
-			ring = new UndoManager.Remove[newSize];
+			ring = new UndoManager.RemovedContent[newSize];
 		else if(newSize != ring.length)
 		{
-			UndoManager.Remove[] newRing = new UndoManager.Remove[
+			UndoManager.RemovedContent[] newRing = new UndoManager.RemovedContent[
 				newSize];
 			int newCount = Math.min(getSize(),newSize);
 			for(int i = 0; i < newCount; i++)
 			{
-				newRing[i] = (UndoManager.Remove)getElementAt(i);
+				newRing[i] = (UndoManager.RemovedContent)getElementAt(i);
 			}
 			ring = newRing;
 			count = newCount;
@@ -94,20 +94,20 @@ public class KillRing implements MutableListModel
 	 */
 	protected void reset(List source)
 	{
-		UndoManager.Remove[] newRing
-			= new UndoManager.Remove[source.size()];
+		UndoManager.RemovedContent[] newRing
+			= new UndoManager.RemovedContent[source.size()];
 		int i = 0;
 		for(Object x: source)
 		{
-			UndoManager.Remove element;
+			UndoManager.RemovedContent element;
 			if(x instanceof String)
 			{
-				element = new UndoManager.Remove(
-					null,0,0,(String)x);
+				element = new UndoManager.RemovedContent(
+					(String)x);
 			}
 			else
 			{
-				element = (UndoManager.Remove)x;
+				element = (UndoManager.RemovedContent)x;
 			}
 			newRing[i++] = element;
 		}
@@ -157,7 +157,7 @@ public class KillRing implements MutableListModel
 		called by the 'Paste Deleted' dialog where the performance
 		is not exactly vital */
 		remove(index);
-		add((UndoManager.Remove)value);
+		add((UndoManager.RemovedContent)value);
 	} //}}}
 
 	//}}}
@@ -165,7 +165,7 @@ public class KillRing implements MutableListModel
 	//{{{ Package-private members
 
 	//{{{ changed() method
-	void changed(UndoManager.Remove rem)
+	void changed(UndoManager.RemovedContent rem)
 	{
 		if(rem.inKillRing)
 		{
@@ -194,7 +194,7 @@ public class KillRing implements MutableListModel
 	} //}}}
 
 	//{{{ add() method
-	void add(UndoManager.Remove rem)
+	void add(UndoManager.RemovedContent rem)
 	{
 		// compare existing entries' hashcode with this
 		int length = (wrap ? ring.length : count);
@@ -244,7 +244,7 @@ public class KillRing implements MutableListModel
 	{
 		if(wrap)
 		{
-			UndoManager.Remove[] newRing = new UndoManager.Remove[
+			UndoManager.RemovedContent[] newRing = new UndoManager.RemovedContent[
 				ring.length];
 			int newCount = 0;
 			for(int j = 0; j < ring.length; j++)
@@ -273,7 +273,7 @@ public class KillRing implements MutableListModel
 	//}}}
 
 	//{{{ Private members
-	private UndoManager.Remove[] ring;
+	private UndoManager.RemovedContent[] ring;
 	private int count;
 	private boolean wrap;
 	private static KillRing killRing = new KillRing();
