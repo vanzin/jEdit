@@ -277,6 +277,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		clones = new ArrayList<Entry>();
 
 		DockableWindowConfig docking = (DockableWindowConfig) config.docking;
+		if (docking == null)
+			docking = new DockableWindowConfig();
 		top = new PanelWindowContainer(this,TOP,docking.topPos);
 		left = new PanelWindowContainer(this,LEFT,docking.leftPos);
 		bottom = new PanelWindowContainer(this,BOTTOM,docking.bottomPos);
