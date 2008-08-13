@@ -188,7 +188,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			{
 				//check whether the text line is above the canvas, if so, the code skips it
 				yCoor = y+(i*iLineHeight);
-				if( yCoor + iLineHeight <= iTopPadding )
+				if( yCoor < iTopPadding )
 				{
 					continue;
 				}
