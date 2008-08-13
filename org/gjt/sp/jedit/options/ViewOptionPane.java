@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.options;
 
 import javax.swing.border.*;
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
@@ -128,7 +129,6 @@ public class ViewOptionPane extends AbstractOptionPane
 		defaultBufferSet.setSelectedItem(BufferSet.Scope.fromString(jEdit.getProperty("editpane.bufferset.default")));
 		addComponent(jEdit.getProperty("options.editpane.bufferset.default"), defaultBufferSet);
 
-
 		newBufferSetBehavior = new JComboBox();
 		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.copy);
 		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.empty);
@@ -136,6 +136,31 @@ public class ViewOptionPane extends AbstractOptionPane
 		newBufferSetBehavior.setSelectedItem(BufferSetManager.NewBufferSetAction.fromString(jEdit.getProperty("editpane.bufferset.new")));
 		addComponent(new JLabel(jEdit.getProperty("options.editpane.bufferset.contain")),
 					newBufferSetBehavior);
+
+		
+		/* Sort buffers */
+		sortBuffers = new JCheckBox(jEdit.getProperty(
+			"options.view.sortBuffers"));
+		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
+		sortBuffers.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				sortByName.setEnabled(sortBuffers.isSelected());
+			}
+		});
+
+		addComponent(sortBuffers);
+
+		/* Sort buffers by names */
+		sortByName = new JCheckBox(jEdit.getProperty(
+			"options.view.sortByName"));
+		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
+		sortByName.setEnabled(sortBuffers.isSelected());
+		addComponent(sortByName);
+		
+		
+
 
 	} //}}}
 
@@ -161,6 +186,9 @@ public class ViewOptionPane extends AbstractOptionPane
 			bufferSwitcherMaxRowCount.getText());
 		jEdit.setProperty("editpane.bufferset.default", defaultBufferSet.getSelectedItem().toString());
 		jEdit.setProperty("editpane.bufferset.new", newBufferSetBehavior.getSelectedItem().toString());
+		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
+		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
+		
 	} //}}}
 
 	//{{{ Private members
@@ -174,6 +202,9 @@ public class ViewOptionPane extends AbstractOptionPane
 	private JTextField bufferSwitcherMaxRowCount;
 	private JComboBox defaultBufferSet;
 	private JComboBox newBufferSetBehavior;
+	private JCheckBox sortBuffers;
+	private JCheckBox sortByName;
+	
 	//}}}
 
 	//{{{ ActionHandler class

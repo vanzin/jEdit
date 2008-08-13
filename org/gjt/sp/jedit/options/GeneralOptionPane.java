@@ -66,8 +66,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restore;
 	private JCheckBox restoreRemote;
 	private JCheckBox restoreCLI;
-	private JCheckBox sortBuffers;
-	private JCheckBox sortByName;
 	//}}}
 
 	//{{{ GeneralOptionPane constructor
@@ -192,27 +190,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		restoreCLI.setEnabled(restore.isSelected());
 		addComponent(restoreCLI);
 
-		/* Sort buffers */
-		sortBuffers = new JCheckBox(jEdit.getProperty(
-			"options.general.sortBuffers"));
-		sortBuffers.setSelected(jEdit.getBooleanProperty("sortBuffers"));
-		sortBuffers.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				sortByName.setEnabled(sortBuffers.isSelected());
-			}
-		});
-
-		addComponent(sortBuffers);
-
-		/* Sort buffers by names */
-		sortByName = new JCheckBox(jEdit.getProperty(
-			"options.general.sortByName"));
-		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
-		sortByName.setEnabled(sortBuffers.isSelected());
-		addComponent(sortByName);
-
+		
 		hypersearchResultsWarning = new JTextField(jEdit.getProperty("hypersearch.maxWarningResults"));
 		addComponent(jEdit.getProperty("options.general.hypersearch.maxWarningResults"),
 			hypersearchResultsWarning);
@@ -268,8 +246,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore",restore.isSelected());
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("restore.remote", restoreRemote.isSelected());
-		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
-		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		try
 		{
 			jEdit.setIntegerProperty("hypersearch.maxWarningResults", Integer.parseInt(hypersearchResultsWarning.getText()));

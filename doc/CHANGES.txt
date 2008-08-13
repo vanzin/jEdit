@@ -10,7 +10,8 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 }}}
 {{{ Miscellaneous
-
+- Moved buffer list sorting options from General to View Option Pane
+  with other bufferset options.
 
 }}}
 {{{ API Changes
