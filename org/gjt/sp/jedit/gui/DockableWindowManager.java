@@ -126,6 +126,7 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 			if (tTop) getTopDockingArea().showMostRecent();
 		}
 		closeToggle = !closeToggle;
+		view.getTextArea().requestFocus();
 	}
 	
 	protected void applyAlternateLayout(boolean alternateLayout)
