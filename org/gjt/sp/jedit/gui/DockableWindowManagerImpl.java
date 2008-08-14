@@ -229,6 +229,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	
 	public void setDockingLayout(DockingLayout docking) {
 		DockableWindowConfig config = (DockableWindowConfig) docking;
+		if (config == null)
+			return;
 		if(config.top != null && config.top.length() != 0)
 				showDockableWindow(config.top);
 

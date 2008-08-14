@@ -29,6 +29,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class DockingLayoutManager implements EBComponent
 {
 
+	private static final String NO_SETTINGS_MESSAGE = "no-settings.message";
 	private static ActionSet actions;
 	private static DockingLayoutManager instance;
 	private Map<View, String> currentMode;
@@ -59,7 +60,13 @@ public class DockingLayoutManager implements EBComponent
 	
 	public static void saveAs(View view)
 	{
-		JFileChooser fc = new JFileChooser(getPerspectiveDirectory());
+		String perspectiveDirectory = getPerspectiveDirectory();
+		if (perspectiveDirectory == null)
+		{
+			JOptionPane.showMessageDialog(view, jEdit.getProperty(NO_SETTINGS_MESSAGE));
+			return;
+		}
+		JFileChooser fc = new JFileChooser(perspectiveDirectory);
 		if (fc.showSaveDialog(view) != JFileChooser.APPROVE_OPTION)
 			return;
 		File f = fc.getSelectedFile();
@@ -86,7 +93,13 @@ public class DockingLayoutManager implements EBComponent
 	
 	public static void load(View view)
 	{
-		JFileChooser fc = new JFileChooser(getPerspectiveDirectory());
+		String perspectiveDirectory = getPerspectiveDirectory();
+		if (perspectiveDirectory == null)
+		{
+			JOptionPane.showMessageDialog(view, jEdit.getProperty(NO_SETTINGS_MESSAGE));
+			return;
+		}
+		JFileChooser fc = new JFileChooser(perspectiveDirectory);
 		if (fc.showOpenDialog(view) != JFileChooser.APPROVE_OPTION)
 			return;
 		File f = fc.getSelectedFile();
@@ -97,7 +110,10 @@ public class DockingLayoutManager implements EBComponent
 
 	private static String getPerspectiveDirectory()
 	{
-		String dir = jEdit.getSettingsDirectory() + File.separator + "perspectives";
+		String settingsDir = jEdit.getSettingsDirectory();
+		if (settingsDir == null)
+			return null;
+		String dir = settingsDir + File.separator + "perspectives";
 		File f = new File(dir);
 		if (! f.exists())
 			f.mkdir();
@@ -106,9 +122,12 @@ public class DockingLayoutManager implements EBComponent
 
 	private static String[] getSavedPerspectiveFiles()
 	{
-		File dir = new File(getPerspectiveDirectory());
+		String perspectiveDirectory = getPerspectiveDirectory();
+		if (perspectiveDirectory == null)
+			return new String[0];
+		File dir = new File(perspectiveDirectory);
 		if (! dir.canRead())
-			return null;
+			return new String[0];
 		File[] files = dir.listFiles();
 		String[] perspectives = new String[files.length];
 		for (int i = 0; i < files.length; i++) {
@@ -232,13 +251,19 @@ public class DockingLayoutManager implements EBComponent
 	
 	private void saveModeLayout(View view, String mode)
 	{
-		File f = new File(getModePerspective(mode));
+		String modePerspective = getModePerspective(mode);
+		if (modePerspective == null)
+			return;
+		File f = new File(modePerspective);
 		save(view, f);
 	}
 	
 	private void loadModeLayout(View view, String mode)
 	{
-		File f = new File(getModePerspective(mode));
+		String modePerspective = getModePerspective(mode);
+		if (modePerspective == null)
+			return;
+		File f = new File(modePerspective);
 		if (! f.canRead())	// Try global default
 			f = new File(getModePerspective(null));
 		if (! f.canRead())
@@ -264,8 +289,11 @@ public class DockingLayoutManager implements EBComponent
 	
 	private String getModePerspective(String mode)
 	{
+		String dir = getPerspectiveDirectory();
+		if (dir == null)
+			return null;
 		if (mode == null)
 			mode = GLOBAL_MODE;
-		return getPerspectiveDirectory() + File.separator + "mode-" + mode + ".xml";
+		return dir + File.separator + "mode-" + mode + ".xml";
 	}
 }
