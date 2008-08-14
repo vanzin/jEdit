@@ -78,8 +78,6 @@ developers, come join the #jedit channel on irc.freenode.net. You
 can use the IRC plugin, available from <http://plugins.jedit.org>, for
 this purpose.
 
-You may also e-mail me directly by e-mailing <slava@jedit.org>.
-
 * Libraries
 
 jEdit bundles the following libraries:
