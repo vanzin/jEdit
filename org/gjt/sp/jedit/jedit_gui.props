@@ -578,6 +578,7 @@ docking=left-docking-area \
 	right-docking-area \
 	bottom-docking-area \
 	- \
+	toggle-dock-areas \
 	close-docking-area \
 	- \
 	perspective-load \
@@ -586,13 +587,14 @@ docking=left-docking-area \
 	perspective-save-current-mode
 docking.label=$Docking
 docking.menu.label=Dockable Menu
+toggle-dock-areas.label=Toggle Docked $Areas
 left-docking-area.label=Go to $Left Docking Area
 top-docking-area.label=Go to $Top Docking Area
 right-docking-area.label=Go to $Right Docking Area
 bottom-docking-area.label=Go to $Bottom Docking Area
 close-docking-area.label=$Close Current Docking Area
-perspective-load.label=Load docking layout ...
-perspective-save.label=Save docking layout ...
+perspective-load.label=$Load docking layout ...
+perspective-save.label=$Save docking layout ...
 perspective-load-current-mode.label=Load docking layout of current mode
 perspective-save-current-mode.label=Save docking layout of current mode
 

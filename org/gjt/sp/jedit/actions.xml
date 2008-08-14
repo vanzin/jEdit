@@ -1331,6 +1331,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="toggle-dock-areas">
+	<CODE>
+		wm.toggleDockAreas();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="toggle-line-numbers">
 	<CODE>
 		textArea.getGutter().toggleExpanded();

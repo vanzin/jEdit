@@ -95,6 +95,39 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	abstract public boolean isDockableWindowVisible(String name);
 	abstract public void closeCurrentArea();
 	abstract public DockingLayout getDockingLayout(ViewConfig config);
+	
+	
+	private boolean tBottom, tTop, tLeft, tRight;
+	private boolean closeToggle = true;
+	/**
+	 * Hides all visible dock areas, or shows them again,
+	 * if the last time it was a hide. 
+	 * @since jEdit 4.3pre16
+	 * 
+	 */
+	public void toggleDockAreas() 
+	{
+		if (closeToggle) 
+		{
+			tTop = getTopDockingArea().getCurrent() != null;
+			tLeft = getLeftDockingArea().getCurrent() != null;
+			tRight = getRightDockingArea().getCurrent() != null;
+			tBottom = getBottomDockingArea().getCurrent() != null;
+			getBottomDockingArea().show(null);
+			getTopDockingArea().show(null);
+			getRightDockingArea().show(null);
+			getLeftDockingArea().show(null);
+		}
+		else 
+		{
+			if (tBottom) getBottomDockingArea().showMostRecent();
+			if (tLeft) getLeftDockingArea().showMostRecent();
+			if (tRight) getRightDockingArea().showMostRecent();
+			if (tTop) getTopDockingArea().showMostRecent();
+		}
+		closeToggle = !closeToggle;
+	}
+	
 	protected void applyAlternateLayout(boolean alternateLayout)
 	{
 	}
