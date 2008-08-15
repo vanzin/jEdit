@@ -25,12 +25,16 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.awt.AWTEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import javax.swing.JPopupMenu;
+import javax.swing.JMenuItem;
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.options.GlobalOptions;
 
 import org.gjt.sp.jedit.msg.PositionChanging;
 
@@ -48,7 +52,7 @@ import org.gjt.sp.jedit.msg.PositionChanging;
  */
 public class JEditTextArea extends TextArea
 {
-	
+
 	//{{{ JEditTextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
@@ -130,7 +134,7 @@ public class JEditTextArea extends TextArea
 		}
 	} //}}}
 
-	// {{{ overrides from the base class that are EditBus  aware 
+	// {{{ overrides from the base class that are EditBus  aware
 	public void goToBufferEnd(boolean select)
 	{
 		EditBus.send(new PositionChanging(this));
@@ -142,7 +146,7 @@ public class JEditTextArea extends TextArea
 		EditBus.send(new PositionChanging(this));
 		super.goToBufferStart(select);
 	} // }}}
-	
+
 	//{{{ showGoToLineDialog() method
 	/**
 	 * Displays the 'go to line' dialog box, and moves the caret to the
@@ -506,13 +510,24 @@ public class JEditTextArea extends TextArea
 	 */
 	public void handlePopupTrigger(MouseEvent evt)
 	{
-			
+
 		if(popup.isVisible())
 			popup.setVisible(false);
 		else
 		{
 			// Rebuild popup menu every time the menu is requested.
 			popup = GUIUtilities.loadPopupMenu("view.context", this, evt);
+			JMenuItem customize = new JMenuItem(jEdit.getProperty(
+				"view.context.customize"));
+			customize.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					new GlobalOptions(view,"context");
+				}
+			});
+			popup.addSeparator();
+			popup.add(customize);
 			int x = evt.getX();
 			int y = evt.getY();
 
