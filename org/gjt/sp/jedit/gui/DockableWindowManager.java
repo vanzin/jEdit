@@ -534,7 +534,7 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 			return layouts;
 		}
 		private String fileToLayout(String filename) {
-			return filename.replaceFirst("(-view\\d+)?.xml", "");
+			return filename.replaceFirst(".xml", "");
 		}
 		private String layoutToFile(String baseName, int viewIndex) {
 			StringBuffer name = new StringBuffer(baseName);

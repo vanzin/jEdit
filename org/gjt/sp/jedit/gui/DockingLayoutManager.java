@@ -78,10 +78,13 @@ public class DockingLayoutManager implements EBComponent
 			JOptionPane.showMessageDialog(view, jEdit.getProperty(NO_SETTINGS_MESSAGE));
 			return;
 		}
-		String layoutName = JOptionPane.showInputDialog(view,
+		String layoutName = (String) JOptionPane.showInputDialog(view,
 			jEdit.getProperty(LOAD_LAYOUT_MESSAGE),
 			jEdit.getProperty(LOAD_LAYOUT_TITLE),
-			JOptionPane.QUESTION_MESSAGE);
+			JOptionPane.QUESTION_MESSAGE,
+			null,
+			getSavedLayouts(),
+			null);
 		if (layoutName == null)
 			return;
 		load(view, layoutName);
