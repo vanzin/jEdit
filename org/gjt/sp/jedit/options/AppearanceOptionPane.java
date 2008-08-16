@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
@@ -78,6 +79,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		
 		addComponent(jEdit.getProperty("options.appearance.lf"),
 			lookAndFeel);
+		addDockingFrameworkChooser();
 
 		/* Icon Theme */
 		String[] themes = IconTheme.builtInNames();
@@ -178,7 +180,10 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
 		jEdit.setBooleanProperty("appearance.continuousLayout",continuousLayout.isSelected());
 		IconTheme.set(iconThemes.getSelectedItem().toString());
-		
+
+		jEdit.setProperty(View.VIEW_DOCKING_FRAMEWORK_PROPERTY,
+			(String) dockingFramework.getSelectedItem());
+
 		/* AntiAlias nv = AntiAlias.appearance();
 		 int idx = antiAliasExtras.getSelectedIndex();
 		nv.set(idx);
@@ -228,6 +233,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JComboBox lookAndFeel;
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
+	private JComboBox dockingFramework;
 	private JTextField history;
 	private JTextField menuSpillover;
 	private JCheckBox showTips;
@@ -258,6 +264,22 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			secondaryFont.setEnabled(false);
 		}
 	} //}}}
+	private void addDockingFrameworkChooser()
+	{	
+		String [] frameworks =
+			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
+		dockingFramework = new JComboBox(frameworks);
+		String framework = View.getDockingFrameworkName();
+		for (int i = 0; i < frameworks.length; i++)
+		{
+			if (frameworks[i].equals(framework))
+			{
+				dockingFramework.setSelectedIndex(i);
+				break;
+			}
+		}
+		addComponent(new JLabel(jEdit.getProperty("options.appearance.selectFramework.label")), dockingFramework);
+	}
 
 	//}}}
 }

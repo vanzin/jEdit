@@ -51,13 +51,12 @@ public class DockingOptionPane extends AbstractOptionPane
 		setLayout(new BorderLayout());
 		add(BorderLayout.NORTH,createDockingOptionsPanel());
 		add(BorderLayout.CENTER,createWindowTableScroller());
+		// add(BorderLayout.SOUTH, new )
 	} //}}}
 
 	//{{{ _save() method
 	public void _save()
 	{
-		jEdit.setProperty(View.VIEW_DOCKING_FRAMEWORK_PROPERTY,
-			(String) dockingFramework.getSelectedItem());
 		jEdit.setBooleanProperty(AUTO_LOAD_MODE_LAYOUT_PROP, autoLoadModeLayout.isSelected());
 		jEdit.setBooleanProperty(AUTO_SAVE_MODE_LAYOUT_PROP, autoSaveModeLayout.isSelected());
 		windowModel.save();
@@ -68,7 +67,6 @@ public class DockingOptionPane extends AbstractOptionPane
 	//{{{ Instance variables
 	private JTable windowTable;
 	private WindowTableModel windowModel;
-	private JComboBox dockingFramework;
 	private JCheckBox autoLoadModeLayout;
 	private JCheckBox autoSaveModeLayout;
 	//}}}
@@ -83,7 +81,6 @@ public class DockingOptionPane extends AbstractOptionPane
 	{
 		JPanel p = new JPanel();
 		p.setLayout(new GridLayout(0, 1));
-		p.add(createDockingFrameworkChooser());
 		boolean autoLoadModeLayoutProp = jEdit.getBooleanProperty(
 			AUTO_LOAD_MODE_LAYOUT_PROP, false);
 		autoLoadModeLayout = new JCheckBox(
@@ -100,25 +97,6 @@ public class DockingOptionPane extends AbstractOptionPane
 				autoSaveModeLayout.setEnabled(autoLoadModeLayout.isSelected());
 			}
 		});
-		return p;
-	}
-	private JPanel createDockingFrameworkChooser()
-	{
-		JPanel p = new JPanel();
-		p.add(new JLabel(jEdit.getProperty("options.docking.selectFramework.label")));
-		String [] frameworks =
-			ServiceManager.getServiceNames(View.DOCKING_FRAMEWORK_PROVIDER_SERVICE);
-		dockingFramework = new JComboBox(frameworks);
-		String framework = View.getDockingFrameworkName();
-		for (int i = 0; i < frameworks.length; i++)
-		{
-			if (frameworks[i].equals(framework))
-			{
-				dockingFramework.setSelectedIndex(i);
-				break;
-			}
-		}
-		p.add(dockingFramework);
 		return p;
 	}
 	//{{{ createWindowTableScroller() method
