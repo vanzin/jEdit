@@ -1,13 +1,8 @@
 package org.gjt.sp.jedit.gui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.gjt.sp.jedit.ActionSet;
@@ -17,19 +12,21 @@ import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.Mode;
-import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.options.DockingOptionPane;
-import org.gjt.sp.util.XMLUtilities;
-import org.xml.sax.helpers.DefaultHandler;
 
 public class DockingLayoutManager implements EBComponent
 {
 
 	private static final String NO_SETTINGS_MESSAGE = "no-settings.message";
+	private static final String SAVE_LAYOUT_FAILED = "save-layout-failed.message";
+	private static final String LOAD_LAYOUT_TITLE = "load-layout.title";
+	private static final String LOAD_LAYOUT_MESSAGE = "load-layout.message";
+	private static final String SAVE_LAYOUT_TITLE = "save-layout.title";
+	private static final String SAVE_LAYOUT_MESSAGE = "save-layout.message";
 	private static ActionSet actions;
 	private static DockingLayoutManager instance;
 	private Map<View, String> currentMode;
@@ -38,118 +35,73 @@ public class DockingLayoutManager implements EBComponent
 	{
 		currentMode = new HashMap<View, String>();
 	}
-	private static void save(View view, File f)
+	private static boolean save(View view, String layoutName)
 	{
-		String lineSep = System.getProperty("line.separator");
-		SettingsXML xml = new SettingsXML(f);
-		SettingsXML.Saver out = null;
-		try {
-			out = xml.openSaver();
-			out.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + lineSep);
-			out.write("<perspective>" + lineSep);
-			DockingLayout docking = view.getViewConfig().docking; 
-			if (docking != null)
-				docking.savePerspective(f, out, lineSep);
-			out.write("</perspective>" + lineSep);
-			out.finish();
-			addAction(f.getAbsolutePath());
-		} catch (IOException e) {
-			e.printStackTrace();
+		DockingLayout docking = view.getViewConfig().docking; 
+		if (docking != null) {
+			boolean ret = docking.saveLayout(layoutName, DockingLayout.NO_VIEW_INDEX);
+			if (! ret)
+				return false;
+			addAction(layoutName);
 		}
+		return true;
 	}
 	
 	public static void saveAs(View view)
 	{
-		String perspectiveDirectory = getPerspectiveDirectory();
-		if (perspectiveDirectory == null)
+		if (jEdit.getSettingsDirectory() == null)
 		{
 			JOptionPane.showMessageDialog(view, jEdit.getProperty(NO_SETTINGS_MESSAGE));
 			return;
 		}
-		JFileChooser fc = new JFileChooser(perspectiveDirectory);
-		if (fc.showSaveDialog(view) != JFileChooser.APPROVE_OPTION)
+		String layoutName = JOptionPane.showInputDialog(view,
+			jEdit.getProperty(SAVE_LAYOUT_MESSAGE),
+			jEdit.getProperty(SAVE_LAYOUT_TITLE),
+			JOptionPane.QUESTION_MESSAGE);
+		if (layoutName == null)
 			return;
-		File f = fc.getSelectedFile();
-		if (f == null)
-			return;
-		save(view, f);
+		if (! save(view, layoutName))
+			JOptionPane.showMessageDialog(view, jEdit.getProperty(SAVE_LAYOUT_FAILED));
 	}
 	
-	private static void load(View view, File f)
+	private static void load(View view, String layoutName)
 	{
 		DockingLayout docking = View.getDockingFrameworkProvider().createDockingLayout();
-		DefaultHandler handler = docking.getPerspectiveHandler();
-		if (handler == null)
-			return;
-		try {
-			XMLUtilities.parseXML(new FileInputStream(f), handler);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		view.getDockableWindowManager().setDockingLayout(docking);
+		if (docking.loadLayout(layoutName, DockingLayout.NO_VIEW_INDEX))
+			view.getDockableWindowManager().setDockingLayout(docking);
 	}
 	
 	public static void load(View view)
 	{
-		String perspectiveDirectory = getPerspectiveDirectory();
-		if (perspectiveDirectory == null)
+		if (jEdit.getSettingsDirectory() == null)
 		{
 			JOptionPane.showMessageDialog(view, jEdit.getProperty(NO_SETTINGS_MESSAGE));
 			return;
 		}
-		JFileChooser fc = new JFileChooser(perspectiveDirectory);
-		if (fc.showOpenDialog(view) != JFileChooser.APPROVE_OPTION)
+		String layoutName = JOptionPane.showInputDialog(view,
+			jEdit.getProperty(LOAD_LAYOUT_MESSAGE),
+			jEdit.getProperty(LOAD_LAYOUT_TITLE),
+			JOptionPane.QUESTION_MESSAGE);
+		if (layoutName == null)
 			return;
-		File f = fc.getSelectedFile();
-		if ((f == null) || (! f.canRead()))
-			return;
-		load(view, f);
+		load(view, layoutName);
 	}
 
-	private static String getPerspectiveDirectory()
+	private static String[] getSavedLayouts()
 	{
-		String settingsDir = jEdit.getSettingsDirectory();
-		if (settingsDir == null)
-			return null;
-		String dir = settingsDir + File.separator + "perspectives";
-		File f = new File(dir);
-		if (! f.exists())
-			f.mkdir();
-		return dir;
-	}
-
-	private static String[] getSavedPerspectiveFiles()
-	{
-		String perspectiveDirectory = getPerspectiveDirectory();
-		if (perspectiveDirectory == null)
+		DockingLayout docking = View.getDockingFrameworkProvider().createDockingLayout();
+		String[] layouts = null;
+		if (docking != null)
+			layouts = docking.getSavedLayouts();
+		if (layouts == null)
 			return new String[0];
-		File dir = new File(perspectiveDirectory);
-		if (! dir.canRead())
-			return new String[0];
-		File[] files = dir.listFiles();
-		String[] perspectives = new String[files.length];
-		for (int i = 0; i < files.length; i++) {
-			perspectives[i] = files[i].getAbsolutePath();
-		}
-		return perspectives;
+		return layouts;
 	}
 	
-	private static String getPerspectiveName(String perspectiveFile)
+	private static void addAction(String layoutName)
 	{
-		File f = new File(perspectiveFile);
-		String name = f.getName();
-		if (name.toLowerCase().endsWith(".xml"))
-			name = name.substring(0, name.length() - 4);
-		return name;
-	}
-	
-	private static void addAction(String perspectiveFile)
-	{
-		String name = getPerspectiveName(perspectiveFile);
-		if ((actions != null) && (! actions.contains(name)))
-			actions.addAction(new LoadPerspectiveAction(name, perspectiveFile));
+		if ((actions != null) && (! actions.contains(layoutName)))
+			actions.addAction(new LoadPerspectiveAction(layoutName));
 	}
 	
 	public static void init()
@@ -162,9 +114,9 @@ public class DockingLayoutManager implements EBComponent
 	private static void createActions()
 	{
 		actions = new ActionSet("Docking Layouts");
-		String[] perspectives = getSavedPerspectiveFiles();
-		for (String perspective: perspectives)
-			addAction(perspective);
+		String[] layouts = getSavedLayouts();
+		for (String layout: layouts)
+			addAction(layout);
 		jEdit.addActionSet(actions);
 		actions.initKeyBindings();
 	}
@@ -178,25 +130,16 @@ public class DockingLayoutManager implements EBComponent
 	{
 		private static final String LOAD_PREFIX = "load-";
 
-		public LoadPerspectiveAction(String name, String file)
+		public LoadPerspectiveAction(String layoutName)
 		{
-			super(LOAD_PREFIX + name, new String[] { file });
-			jEdit.setTemporaryProperty(LOAD_PREFIX + name + ".label", LOAD_PREFIX + name);
+			super(LOAD_PREFIX + layoutName, new String[] { layoutName });
+			jEdit.setTemporaryProperty(LOAD_PREFIX + layoutName + ".label", LOAD_PREFIX + layoutName);
 		}
 		
 		@Override
 		public void invoke(View view)
 		{
-			File f = new File((String) args[0]);
-			if (! f.canRead())
-			{
-				JOptionPane.showMessageDialog(view,
-					"The selected perspective file cannot be read.",
-					"Load Perspective Error",
-					JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-			DockingLayoutManager.load(view, f);
+			DockingLayoutManager.load(view, (String) args[0]);
 		}
 	}
 
@@ -251,24 +194,18 @@ public class DockingLayoutManager implements EBComponent
 	
 	private void saveModeLayout(View view, String mode)
 	{
-		String modePerspective = getModePerspective(mode);
-		if (modePerspective == null)
+		String modeLayout = getModePerspective(mode);
+		if (modeLayout == null)
 			return;
-		File f = new File(modePerspective);
-		save(view, f);
+		save(view, modeLayout);
 	}
 	
 	private void loadModeLayout(View view, String mode)
 	{
-		String modePerspective = getModePerspective(mode);
-		if (modePerspective == null)
+		String modeLayout = getModePerspective(mode);
+		if (modeLayout == null)
 			return;
-		File f = new File(modePerspective);
-		if (! f.canRead())	// Try global default
-			f = new File(getModePerspective(null));
-		if (! f.canRead())
-			return;
-		load(view, f);
+		load(view, modeLayout);
 	}
 
 	public static void loadCurrentModeLayout(View view)
@@ -289,11 +226,8 @@ public class DockingLayoutManager implements EBComponent
 	
 	private String getModePerspective(String mode)
 	{
-		String dir = getPerspectiveDirectory();
-		if (dir == null)
-			return null;
 		if (mode == null)
 			mode = GLOBAL_MODE;
-		return dir + File.separator + "mode-" + mode + ".xml";
+		return "mode-" + mode;
 	}
 }

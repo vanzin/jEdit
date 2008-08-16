@@ -5,7 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.IOException;
+import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,18 +17,17 @@ import javax.swing.JPanel;
 import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
+import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
-import org.xml.sax.helpers.DefaultHandler;
 // }}}
-@SuppressWarnings("serial")
 
+@SuppressWarnings("serial")
 // {{{ abstract class DockableWindowManager
 /**
  * Base class for Dockable Window Managers.
@@ -36,7 +35,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * associated with that View.
  * 
  */
- public abstract class DockableWindowManager extends JPanel implements EBComponent
+public abstract class DockableWindowManager extends JPanel implements EBComponent
 {
 
 	//{{{ Constants
@@ -95,7 +94,6 @@ import org.xml.sax.helpers.DefaultHandler;
 		alternateLayout = jEdit.getBooleanProperty(ALTERNATE_LAYOUT_PROP);
 	} // }}}
 
-    
     // {{{ Abstract methods
 	abstract public void setMainPanel(JPanel panel);
 	abstract public void showDockableWindow(String name);
@@ -110,7 +108,7 @@ import org.xml.sax.helpers.DefaultHandler;
 	abstract public DockingArea getTopDockingArea();
 	abstract public DockingArea getBottomDockingArea();
     // }}}
-	
+
     // {{{ public methods
     // {{{ init()
 	public void init()
@@ -125,13 +123,13 @@ import org.xml.sax.helpers.DefaultHandler;
 			positions.put(dockable, getDockablePosition(dockable));
 		}
 	} // }}} 
-    
+
     // {{{ close()
 	public void close()
 	{
 		EditBus.removeFromBus(this);
 	} // }}}
-    
+
 	// {{{ applyDockingLayout
 	public void applyDockingLayout(DockingLayout docking)
 	{
@@ -169,7 +167,6 @@ import org.xml.sax.helpers.DefaultHandler;
 	{
 		hideDockableWindow(name);
 	} //}}}
-
 	
 	//{{{ toggleDockableWindow() method
 	/**
@@ -200,9 +197,8 @@ import org.xml.sax.helpers.DefaultHandler;
 		return getDockable(name);
 	} //}}}
 
-
 	// {{{ toggleDockAreas()
-    /**
+	/**
 	 * Hides all visible dock areas, or shows them again,
 	 * if the last time it was a hide. 
 	 * @since jEdit 4.3pre16
@@ -231,12 +227,12 @@ import org.xml.sax.helpers.DefaultHandler;
 		closeToggle = !closeToggle;
 		view.getTextArea().requestFocus();
 	} // }}}
-	
-    
+
     // {{{ dockableTitleChanged
 	public void dockableTitleChanged(String dockable, String newTitle)
 	{
 	} // }}}
+	
 	// {{{ closeListener() method
 	/**
 	 * 
@@ -256,9 +252,7 @@ import org.xml.sax.helpers.DefaultHandler;
 		return new KeyHandler(dockableName);
 	}
 	// }}}
-    
 
-	
 	//{{{ getView() method
 	/**
 	 * Returns this dockable window manager's view.
@@ -288,7 +282,7 @@ import org.xml.sax.helpers.DefaultHandler;
 	{
 		return longTitle(name);
 	}//}}}
-	
+
 	//{{{ setDockableTitle() method
 	/**
 	 * Changes the .longtitle property of a dockable window, which corresponds to the 
@@ -323,7 +317,7 @@ import org.xml.sax.helpers.DefaultHandler;
 		applyDockingLayout(docking);
 		applyAlternateLayout(alternateLayout);
 	} // }}}
-	
+
     // {{{ handleMessage()
 	public void handleMessage(EBMessage msg) {
 		if (msg instanceof DockableWindowUpdate)
@@ -333,18 +327,59 @@ import org.xml.sax.helpers.DefaultHandler;
 		}
 		else if (msg instanceof PropertiesChanged)
 			propertiesChanged();
+		else if(msg instanceof PluginUpdate)
+		{
+			PluginUpdate pmsg = (PluginUpdate)msg;
+			if (pmsg.getWhat() == PluginUpdate.LOADED)
+			{
+				Iterator<DockableWindowFactory.Window> iter = factory.getDockableWindowIterator();
+				while (iter.hasNext())
+				{
+					DockableWindowFactory.Window w = iter.next();
+					if (w.plugin == pmsg.getPluginJAR())
+						positions.put(w.name, getDockablePosition(w.name));
+				}
+				propertiesChanged();
+			}
+			else if(pmsg.isExiting())
+			{
+				// we don't care
+			}
+			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
+			{
+				Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
+				while (entries.hasNext())
+				{
+					DockableWindowFactory.Window window = entries.next();
+					if (window.plugin == pmsg.getPluginJAR())
+						hideDockableWindow(window.name);
+				}
+			}
+			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
+			{
+				Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
+				while (entries.hasNext())
+				{
+					DockableWindowFactory.Window window = entries.next();
+					if (window.plugin == pmsg.getPluginJAR())
+					{
+						hideDockableWindow(window.name);
+						windows.remove(window.name);
+					}
+				}
+			}
+		}
 	} // }}}
 
     // {{{ longTitle()    
-    public String longTitle(String name) 
+	public String longTitle(String name) 
 	{
 		String title = jEdit.getProperty(getLongTitlePropertyName(name));
 		if (title == null)
 			return shortTitle(name);
 		return title;
 	} // }}}
-    
-    
+
     // {{{ shortTitle ()
 	public String shortTitle(String name)
 	{		
@@ -366,7 +401,7 @@ import org.xml.sax.helpers.DefaultHandler;
 		String oldPosition, String newPosition)
 	{
 	} //}}}
-	
+
     // {{{ getAlternateLayoutProp()
 	protected boolean getAlternateLayoutProp()
 	{
@@ -400,8 +435,7 @@ import org.xml.sax.helpers.DefaultHandler;
 		}
 		
 	} // }}}
-	
-	
+
     // {{{ createDockable()
 	protected JComponent createDockable(String name)
 	{
@@ -422,7 +456,7 @@ import org.xml.sax.helpers.DefaultHandler;
 	{
 		return jEdit.getProperty(name + ".dock-position", FLOATING);
 	} // }}}
-    
+
     // {{{ getLongTitlePropertyName()
 	protected String getLongTitlePropertyName(String dockableName)
 	{
@@ -439,7 +473,7 @@ import org.xml.sax.helpers.DefaultHandler;
 		void show(String name);
 	}
     // }}}
-    
+
 	//{{{ KeyHandler class
 	/**
 	 * This keyhandler responds to only two key events - those corresponding to
@@ -471,19 +505,63 @@ import org.xml.sax.helpers.DefaultHandler;
 				hideDockableWindow(name);
 		}
 	} //}}}
-	
+
     // {{{ DockingLayout class
     /**
 	 * Objects of DockingLayout class describe which dockables are docked where,
 	 * which ones are floating, and their sizes/positions for saving/loading perspectives. 
 	 */
 	public static abstract class DockingLayout {
-		public DockingLayout() {
-		}
+		public static final int NO_VIEW_INDEX = -1;
 		public void setPlainView(boolean plain) {
 		}
-		abstract public DefaultHandler getPerspectiveHandler();
-		abstract public void savePerspective(File file, SettingsXML.Saver out, String lineSep) throws IOException;
+		abstract public boolean loadLayout(String baseName, int viewIndex);
+		abstract public boolean saveLayout(String baseName, int viewIndex);
+		abstract public String getName();
+		public String [] getSavedLayouts() {
+			String layoutDir = getLayoutDirectory();
+			if (layoutDir == null)
+				return null;
+			File dir = new File(layoutDir);
+			File[] files = dir.listFiles(new FilenameFilter() {
+				public boolean accept(File dir, String name) {
+					return name.endsWith(".xml");
+				}
+			});
+			String[] layouts = new String[files.length];
+			for (int i = 0; i < files.length; i++)
+				layouts[i] = fileToLayout(files[i].getName());
+			return layouts;
+		}
+		private String fileToLayout(String filename) {
+			return filename.replaceFirst("(-view\\d+)?.xml", "");
+		}
+		private String layoutToFile(String baseName, int viewIndex) {
+			StringBuffer name = new StringBuffer(baseName);
+			if (viewIndex != NO_VIEW_INDEX)
+				name.append("-view" + String.valueOf(viewIndex));
+			name.append(".xml");
+			return name.toString();
+		}
+		public String getLayoutFilename(String baseName, int viewIndex) {
+			String dir = getLayoutDirectory();
+			if (dir == null)
+				return null;
+			return dir + File.separator + layoutToFile(baseName, viewIndex);
+		}
+		private String getLayoutDirectory() {
+			String name = getName();
+			if (name == null)
+				return null;
+			String dir = jEdit.getSettingsDirectory();
+			if (dir == null)
+				return null;
+			dir = dir + File.separator + name;
+			File d = new File(dir);
+			if (! d.exists())
+				d.mkdir();
+			return dir;
+		}
 	} // }}}
 
 } // }}}

@@ -692,25 +692,25 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="perspective-save" NO_REPEAT="TRUE">
+<ACTION NAME="layout-save" NO_REPEAT="TRUE">
 	<CODE>
 		DockingLayoutManager.saveAs(view);
 	</CODE>
 </ACTION>
 
-<ACTION NAME="perspective-load" NO_REPEAT="TRUE">
+<ACTION NAME="layout-load" NO_REPEAT="TRUE">
 	<CODE>
 		DockingLayoutManager.load(view);
 	</CODE>
 </ACTION>
 
-<ACTION NAME="perspective-save-current-mode" NO_REPEAT="TRUE">
+<ACTION NAME="layout-save-current-mode" NO_REPEAT="TRUE">
 	<CODE>
 		DockingLayoutManager.saveCurrentModeLayout(view);
 	</CODE>
 </ACTION>
 
-<ACTION NAME="perspective-load-current-mode" NO_REPEAT="TRUE">
+<ACTION NAME="layout-load-current-mode" NO_REPEAT="TRUE">
 	<CODE>
 		DockingLayoutManager.loadCurrentModeLayout(view);
 	</CODE>

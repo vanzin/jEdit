@@ -62,6 +62,12 @@ action-set.plugin=Plugin: {0}
 macro-handler.beanshell.label=BeanShell script
 macro-handler.beanshell.glob=*.bsh
 
+save-layout-failed.message=Failed to save the docking layout.
+load-layout.title=Load Docking Layout
+load-layout.message=Docking layout to load:
+save-layout.title=Save Docking Layout
+save-layout.message=Docking layout to save:
+
 # Plugin activation hooks
 defer=false
 startup=true
@@ -581,10 +587,10 @@ docking=left-docking-area \
 	toggle-dock-areas \
 	close-docking-area \
 	- \
-	perspective-load \
-	perspective-save \
-	perspective-load-current-mode \
-	perspective-save-current-mode
+	layout-load \
+	layout-save \
+	layout-load-current-mode \
+	layout-save-current-mode
 docking.label=$Docking
 docking.menu.label=Dockable Menu
 toggle-dock-areas.label=Toggle Docked $Areas
@@ -593,10 +599,10 @@ top-docking-area.label=Go to $Top Docking Area
 right-docking-area.label=Go to $Right Docking Area
 bottom-docking-area.label=Go to $Bottom Docking Area
 close-docking-area.label=$Close Current Docking Area
-perspective-load.label=$Load docking layout ...
-perspective-save.label=$Save docking layout ...
-perspective-load-current-mode.label=Load docking layout of current mode
-perspective-save-current-mode.label=Save docking layout of current mode
+layout-load.label=$Load docking layout ...
+layout-save.label=$Save docking layout ...
+layout-load-current-mode.label=Load docking layout of current mode
+layout-save-current-mode.label=Save docking layout of current mode
 
 #}}}
 

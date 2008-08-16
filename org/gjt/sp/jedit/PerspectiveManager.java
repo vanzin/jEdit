@@ -22,20 +22,17 @@
 
 package org.gjt.sp.jedit;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Collection;
+import java.util.LinkedList;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
+import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
-import org.gjt.sp.util.IOUtilities;
-import org.gjt.sp.jedit.bufferset.BufferSetManager;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Manages persistence of open buffers and views across jEdit sessions.
@@ -45,6 +42,8 @@ import org.gjt.sp.jedit.bufferset.BufferSetManager;
  */
 public class PerspectiveManager
 {
+	private static final String PERSPECTIVE_FILENAME = "perspective";
+
 	//{{{ isPerspectiveDirty() method
 	/**
 	 * We only autosave the perspective if it has changed, to avoid spinning
@@ -120,7 +119,6 @@ public class PerspectiveManager
 
 		if(perspectiveXML == null)
 			return;
-		File perspectiveFile = new File(perspectiveXML.toString());
 		
 		// backgrounded
 		if(jEdit.getBufferCount() == 0)
@@ -209,7 +207,7 @@ public class PerspectiveManager
 				out.write(lineSep);
 
 				if (config.docking != null)
-					config.docking.savePerspective(perspectiveFile, out, lineSep);
+					config.docking.saveLayout(PERSPECTIVE_FILENAME, i);
 				
 				out.write("</VIEW>");
 				out.write(lineSep);
@@ -241,7 +239,7 @@ public class PerspectiveManager
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory != null)
 		{
-			perspectiveXML = new SettingsXML(settingsDirectory, "perspective");
+			perspectiveXML = new SettingsXML(settingsDirectory, PERSPECTIVE_FILENAME);
 		}
 	} //}}}
 
@@ -254,7 +252,6 @@ public class PerspectiveManager
 		View.ViewConfig config;
 		boolean restoreFiles;
 		String autoReload, autoReloadDialog;
-		DefaultHandler dockingLayoutHandler;
 		
 		PerspectiveHandler(boolean restoreFiles)
 		{
@@ -262,10 +259,6 @@ public class PerspectiveManager
 			config = new View.ViewConfig();
 			charData = new StringBuffer();
 			config.docking = View.getDockingFrameworkProvider().createDockingLayout();
-			if (config.docking != null)
-				dockingLayoutHandler = config.docking.getPerspectiveHandler();
-			else
-				dockingLayoutHandler = null;
 		}
 
 		@Override
@@ -284,12 +277,6 @@ public class PerspectiveManager
 				String name = attrs.getQName(i);
 				String value = attrs.getValue(i);
 				attribute(name, value);
-			}
-			try {
-				if (dockingLayoutHandler != null)
-					dockingLayoutHandler.startElement(uri, localName, qName, attrs);
-			} catch (SAXException e) {
-				e.printStackTrace();
 			}
 		}
 
@@ -352,15 +339,12 @@ public class PerspectiveManager
 				config.splitConfig = charData.toString();
 			else if(name.equals("VIEW"))
 			{
+				if (config.docking != null)
+					config.docking.loadLayout(PERSPECTIVE_FILENAME, jEdit.getViewCount());
 				view = jEdit.newView(view,null,config);
 				config = new View.ViewConfig();
-			} else
-				try {
-					if (dockingLayoutHandler != null)
-						dockingLayoutHandler.endElement(uri, localName, name);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				}
+				config.docking = View.getDockingFrameworkProvider().createDockingLayout();
+			}
 		}
 
 		@Override

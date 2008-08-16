@@ -525,6 +525,12 @@ public class jEdit
 
 		GUIUtilities.advanceSplashProgress();
 
+		// Create dynamic actions for switching to saved layouts.
+		// The list of saved layouts is retrieved from the docking framework,
+		// which can be provided by a plugin, so this must be called only after
+		// the plugins are loaded.
+		DockingLayoutManager.init();
+		
 		// Open files, create the view and hide the splash screen.
 		SyntaxUtilities.propertyManager = jEdit.propertyManager;
 		finishStartup(gui,restore,userDir,args);
@@ -3237,8 +3243,6 @@ public class jEdit
 		builtInActionSet.setLabel(getProperty("action-set.jEdit"));
 		builtInActionSet.load();
 
-		DockingLayoutManager.init();
-		
 		actionContext.addActionSet(builtInActionSet);
 
 		DockableWindowFactory.getInstance()

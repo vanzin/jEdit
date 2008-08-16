@@ -29,7 +29,10 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +53,6 @@ import javax.swing.SwingUtilities;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.PluginJAR;
-import org.gjt.sp.jedit.SettingsXML;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
@@ -58,6 +60,7 @@ import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -191,26 +194,57 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			return new PerspectiveHandler();
 		}
 
-		public void savePerspective(File f, SettingsXML.Saver out, String lineSep) throws IOException {
-			out.write("<DOCKING LEFT=\"");
-			out.write(left == null ? "" : left);
-			out.write("\" TOP=\"");
-			out.write(top == null ? "" : top);
-			out.write("\" RIGHT=\"");
-			out.write(right == null ? "" : right);
-			out.write("\" BOTTOM=\"");
-			out.write(bottom == null ? "" : bottom);
-			out.write("\" LEFT_POS=\"");
-			out.write(String.valueOf(leftPos));
-			out.write("\" TOP_POS=\"");
-			out.write(String.valueOf(topPos));
-			out.write("\" RIGHT_POS=\"");
-			out.write(String.valueOf(rightPos));
-			out.write("\" BOTTOM_POS=\"");
-			out.write(String.valueOf(bottomPos));
-			out.write("\" />");
-			out.write(lineSep);
+		public boolean saveLayout(String baseName, int viewIndex) {
+			String lineSep = System.getProperty("line.separator");
+			String filename = getLayoutFilename(baseName, viewIndex);
+			BufferedWriter out;
+			try {
+				out = new BufferedWriter(new FileWriter(filename));
+				out.write("<DOCKING LEFT=\"");
+				out.write(left == null ? "" : left);
+				out.write("\" TOP=\"");
+				out.write(top == null ? "" : top);
+				out.write("\" RIGHT=\"");
+				out.write(right == null ? "" : right);
+				out.write("\" BOTTOM=\"");
+				out.write(bottom == null ? "" : bottom);
+				out.write("\" LEFT_POS=\"");
+				out.write(String.valueOf(leftPos));
+				out.write("\" TOP_POS=\"");
+				out.write(String.valueOf(topPos));
+				out.write("\" RIGHT_POS=\"");
+				out.write(String.valueOf(rightPos));
+				out.write("\" BOTTOM_POS=\"");
+				out.write(String.valueOf(bottomPos));
+				out.write("\" />");
+				out.write(lineSep);
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+			return true;
 		}
+
+		@Override
+		public boolean loadLayout(String baseName, int viewIndex) {
+			String filename = getLayoutFilename(baseName, viewIndex);
+			DefaultHandler handler = getPerspectiveHandler();
+			try {
+				XMLUtilities.parseXML(new FileInputStream(filename), handler);
+			} catch (FileNotFoundException e) {
+				return false;
+			} catch (IOException e) {
+				return false;
+			}
+			return true;
+		}
+		
+		@Override
+		public String getName() {
+			return "DockableWindowManager";
+		}
+
 	} //}}}
 
 	//{{{ Data members
