@@ -516,18 +516,8 @@ public class JEditTextArea extends TextArea
 		else
 		{
 			// Rebuild popup menu every time the menu is requested.
-			popup = GUIUtilities.loadPopupMenu("view.context", this, evt);
-			JMenuItem customize = new JMenuItem(jEdit.getProperty(
-				"view.context.customize"));
-			customize.addActionListener(new ActionListener()
-			{
-				public void actionPerformed(ActionEvent evt)
-				{
-					new GlobalOptions(view,"context");
-				}
-			});
-			popup.addSeparator();
-			popup.add(customize);
+			createPopupMenu(evt);
+
 			int x = evt.getX();
 			int y = evt.getY();
 
@@ -539,6 +529,27 @@ public class JEditTextArea extends TextArea
 				moveCaretPosition(dragStart,false);
 			GUIUtilities.showPopupMenu(popup,painter,x,y);
 		}
+	} //}}}
+
+	//{{{ createPopupMenu() method
+	/**
+	 * Creates the popup menu.
+	 * @since 4.3pre15
+	 */
+	public void createPopupMenu(MouseEvent evt)
+	{
+		popup = GUIUtilities.loadPopupMenu("view.context", this, evt);
+		JMenuItem customize = new JMenuItem(jEdit.getProperty(
+			"view.context.customize"));
+		customize.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent evt)
+			{
+				new GlobalOptions(view,"context");
+			}
+		});
+		popup.addSeparator();
+		popup.add(customize);
 	} //}}}
 
 	//{{{ showPopupMenu() method

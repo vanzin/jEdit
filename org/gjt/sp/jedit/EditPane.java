@@ -28,14 +28,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -49,7 +45,6 @@ import org.gjt.sp.jedit.msg.BufferChanging;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
-import org.gjt.sp.jedit.options.GlobalOptions;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
@@ -603,10 +598,10 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		for(int i = 0; i < selection.length; i++)
 		{
 			Selection s = selection[i];
-			if(s.getStartLine() != s.getEndLine())
+			int startLine = s.getStartLine();
+			if(startLine != s.getEndLine() && startLine != caretLine)
 			{
-				if(s.getStartLine() != caretLine)
-					buffer.addMarker('\0',s.getStart());
+				buffer.addMarker('\0',s.getStart());
 			}
 
 			if(s.getEndLine() != caretLine)
@@ -925,7 +920,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		return paneMap.get(ta);
 	}
-	
+
 	//}}}
 
 	//{{{ Private members
@@ -1011,20 +1006,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			"view.electricBorders",0));
 
 		// Set up the right-click popup menu
-		JPopupMenu popup = GUIUtilities.loadPopupMenu("view.context", getTextArea(), null);
-		
-		JMenuItem customize = new JMenuItem(jEdit.getProperty(
-			"view.context.customize"));
-		customize.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent evt)
-			{
-				new GlobalOptions(view,"context");
-			}
-		});
-		popup.addSeparator();
-		popup.add(customize);
-		textArea.setRightClickPopup(popup);
+		textArea.createPopupMenu(null);
 
 		// use old property name for backwards compatibility
 		textArea.setQuickCopyEnabled(jEdit.getBooleanProperty(
@@ -1205,15 +1187,12 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		}
 		else if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED)
 		{
-			if(_buffer == buffer)
+			if(_buffer == buffer && bufferSwitcher != null)
 			{
-				if(bufferSwitcher != null)
-				{
-					if(buffer.isDirty())
-						bufferSwitcher.repaint();
-					else
-						bufferSwitcher.updateBufferList();
-				}
+				if(buffer.isDirty())
+					bufferSwitcher.repaint();
+				else
+					bufferSwitcher.updateBufferList();
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.MARKERS_CHANGED)
@@ -1230,10 +1209,9 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 					view.getStatus().updateBufferStatus();
 			}
 		}
-		else if(msg.getWhat() == BufferUpdate.SAVED)
+		else if(msg.getWhat() == BufferUpdate.SAVED && _buffer == buffer)
 		{
-			if(_buffer == buffer)
-				textArea.propertiesChanged();
+			textArea.propertiesChanged();
 		}
 	} //}}}
 
