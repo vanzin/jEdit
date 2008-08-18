@@ -859,6 +859,48 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			setSplitConfig(null,lastSplitConfig);
 	} //}}}
 
+	//{{{ getSplitConfig() method
+	/**
+	*   Split configurations are recorded in a simple RPN "language".
+	*   @return The split configuration, describing where splitpanes
+	*           are, which buffers are open in each EditPane, etc.
+	*	
+	*/
+	public String getSplitConfig()
+	{
+		StringBuilder splitConfig = new StringBuilder();
+
+		if(splitPane != null)
+			getSplitConfig(splitPane,splitConfig);
+		else
+		{
+			appendToSplitConfig(splitConfig, editPane);
+		}
+
+		return splitConfig.toString();
+	} //}}}
+
+	//{{{ setSplitConfig() method
+	/**
+	 * sets the split configuration as per the splitConfig.
+	 * 
+	 * @param buffer if null, checks all buffers to restore View's split config.
+	 * @param splitConfig the split config, as returned by getSplitConfig() 
+	 */
+	public void setSplitConfig(Buffer buffer, String splitConfig)
+	{
+		try
+		{
+			Component comp = restoreSplitConfig(buffer,splitConfig);
+			setMainContent(comp);
+		}
+		catch(IOException e)
+		{
+			// this should never throw an exception.
+			throw new InternalError();
+		}
+	} //}}}
+	
 	//{{{ nextTextArea() method
 	/**
 	 * Moves keyboard focus to the next text area.
@@ -1432,21 +1474,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	} //}}}
 
 	//{{{ getSplitConfig() method
-	private String getSplitConfig()
-	{
-		StringBuilder splitConfig = new StringBuilder();
-
-		if(splitPane != null)
-			getSplitConfig(splitPane,splitConfig);
-		else
-		{
-			appendToSplitConfig(splitConfig, editPane);
-		}
-
-		return splitConfig.toString();
-	} //}}}
-
-	//{{{ getSplitConfig() method
 	/*
 	 * The split config is recorded in a simple RPN "language".
 	 */
@@ -1507,21 +1534,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			splitConfig.append(" \"");
 			splitConfig.append(bufferSet.getScope());
 			splitConfig.append("\" bufferset");
-		}
-	} //}}}
-
-	//{{{ setSplitConfig() method
-	private void setSplitConfig(Buffer buffer, String splitConfig)
-	{
-		try
-		{
-			Component comp = restoreSplitConfig(buffer,splitConfig);
-			setMainContent(comp);
-		}
-		catch(IOException e)
-		{
-			// this should never throw an exception.
-			throw new InternalError();
 		}
 	} //}}}
 
