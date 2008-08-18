@@ -138,7 +138,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	public static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
 		"org.gjt.sp.jedit.gui.DockingFrameworkProvider";
 	private static IDockingFrameworkProvider dockingFrameworkProvider = null;
-	
+
 	//{{{ Groups
 	/**
 	 * The group of tool bars above the DockableWindowManager
@@ -739,7 +739,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			newSplitPane.setRightComponent(newEditPane);
 
 			setMainContent(newSplitPane);
-			
+
 		}
 
 		SwingUtilities.invokeLater(new Runnable()
@@ -802,7 +802,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 			// find first split pane parenting current edit pane
 			Component comp = editPane;
-			while(!(comp instanceof JSplitPane))
+			while(!(comp instanceof JSplitPane) && comp != null)
 			{
 				comp = comp.getParent();
 			}
@@ -818,7 +818,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 					_editPane.close();
 			}
 
-			JComponent parent = (JComponent)comp.getParent();
+			JComponent parent = comp == null ? null : (JComponent)comp.getParent();
 
 			if(parent instanceof JSplitPane)
 			{
@@ -864,7 +864,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	*   Split configurations are recorded in a simple RPN "language".
 	*   @return The split configuration, describing where splitpanes
 	*           are, which buffers are open in each EditPane, etc.
-	*	
+	*
 	*/
 	public String getSplitConfig()
 	{
@@ -883,9 +883,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ setSplitConfig() method
 	/**
 	 * sets the split configuration as per the splitConfig.
-	 * 
+	 *
 	 * @param buffer if null, checks all buffers to restore View's split config.
-	 * @param splitConfig the split config, as returned by getSplitConfig() 
+	 * @param splitConfig the split config, as returned by getSplitConfig()
 	 */
 	public void setSplitConfig(Buffer buffer, String splitConfig)
 	{
@@ -900,7 +900,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			throw new InternalError();
 		}
 	} //}}}
-	
+
 	//{{{ nextTextArea() method
 	/**
 	 * Moves keyboard focus to the next text area.
@@ -1313,7 +1313,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		dockableWindowManager = getDockingFrameworkProvider().create(this,
 			DockableWindowFactory.getInstance(), config);
 		dockableWindowManager.setMainPanel(mainPanel);
-		
+
 		topToolBars = new JPanel(new VariableGridLayout(
 			VariableGridLayout.FIXED_NUM_COLUMNS,
 			1));
@@ -1402,7 +1402,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	private DockableWindowManager dockableWindowManager;
 	private JPanel mainPanel;
-	
+
 	private JPanel topToolBars;
 	private JPanel bottomToolBars;
 	private ToolBarManager toolBarManager;
@@ -1543,11 +1543,12 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	// this is where checked exceptions piss me off. this method only uses
 	// a StringReader which can never throw an exception...
 	{
-		if(buffer != null)
+		if(buffer != null) {
 			return editPane = createEditPane(buffer);
-		else if(splitConfig == null)
+		}
+		else if(splitConfig == null) {
 			return editPane = createEditPane(jEdit.getFirstBuffer());
-
+		}
 		Buffer[] buffers = jEdit.getBuffers();
 
 		Stack stack = new Stack();
@@ -1907,7 +1908,7 @@ loop:		while (true)
 		public boolean plainView;
 		public String splitConfig;
 		public DockingLayout docking;
-		
+
 		public ViewConfig()
 		{
 		}
