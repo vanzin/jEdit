@@ -16,7 +16,7 @@
 	
 	New to 1.3: If another EditPane is already open with the
 	requested buffer, it is selected and focused.  
-
+	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
@@ -43,16 +43,16 @@ String[] sourceExtensions = new String[]{"cpp", "c", "cxx" };
    @return the absolute path if found, NULL if not.
    */
 String findBuffer(String fileName) {
-	File f = new File(fileName);
-	if (f.canRead()) return f.getPath();
-	String fn2 = f.getName();
-	Buffer[] bufs = jEdit.getBuffers();
-	bn = bufs.length;
-	for (int i=0; i<bn; ++i) {
-		Buffer b = bufs[i];
-		if (b.getName().equals(fn2)) return b.getPath();
-	}
-	return null;
+    File f = new File(fileName);
+    if (f.canRead()) return f.getPath();
+    String fn2 = f.getName();
+    Buffer[] bufs = jEdit.getBuffers();
+    bn = bufs.length;
+    for (int i=0; i<bn; ++i) {
+        Buffer b = bufs[i];
+        if (b.getName().equals(fn2)) return b.getPath();
+    }
+    return null;
 }
    
 /** Given a header file, iterates through all sourcefile extensions checking if the sourcefile exists.
@@ -61,50 +61,53 @@ String findBuffer(String fileName) {
 
 String getSourceFile(String baseName)
 {
-	int numExt = sourceExtensions.length;
-	for (int i=numExt-1; i>=0; --i) 
-	{
-		String ext = sourceExtensions[i];
-		String tryFile = baseName + "." + ext;
-		String path = findBuffer(tryFile);
-		if (path != null) return path;
-	}        
-	return baseName + "." + defaultSourceExtension;
+    int numExt = sourceExtensions.length;
+    for (int i=numExt-1; i>=0; --i) 
+    {
+        String ext = sourceExtensions[i];
+        String tryFile = baseName + "." + ext;
+        String path = findBuffer(tryFile);
+        if (path != null) return path;
+    }        
+    return baseName + "." + defaultSourceExtension;
 }
 
 boolean isSourceFile(String extension) 
 {
-	for (int i=0; i<sourceExtensions.length; ++i) {
-		if (extension.equals(sourceExtensions[i])) return true;
-	}
-	return false;
+    for (int i=0; i<sourceExtensions.length; ++i) {
+        if (extension.equals(sourceExtensions[i])) return true;
+    }
+    return false;
 }
 
 void toggleHeaderSource()
 {
-	String currentFile = buffer.getPath();
-	int pos = currentFile.lastIndexOf('.');
-	String extension = currentFile.substring(pos+1);
-	String baseName = currentFile.substring(0, pos);
+
+    String currentFile = buffer.getPath();
+    int pos = currentFile.lastIndexOf('.');
+    String extension = currentFile.substring(pos+1);
+    String baseName = currentFile.substring(0, pos);
 	String path = null;
-	if (isSourceFile(extension)) 
-	{
-		path = findBuffer(baseName + ".h");
-		if (path == null) path = baseName + ".h";
-	}
-	else if (extension.equals("h")) {
-		path = getSourceFile(baseName);
-	}
+    if (isSourceFile(extension)) 
+    {
+        path = findBuffer(baseName + ".h");
+        if (path == null) path = baseName + ".h";
+    }
+    else if (extension.equals("h")) {
+        path = getSourceFile(baseName);
+    }
 	if (path == null) return;
 	// see if it is already open in another editpane
 	panes = view.getEditPanes();
-	for (int i=panes.length - 1; i >= 0; --i) {
-		buf = panes[i].getBuffer();
-		if (buf.getName().equals(path) 
-		|| buf.getPath().equals(path)) {
-			panes[i].focusOnTextArea();
-			return;
-		}
+	if (panes.length > 1) 
+		for (int i=panes.length - 1; i >= 0; --i) {
+			buf = panes[i].getBuffer();
+			if (buf.getName().equals(path) 
+			|| buf.getPath().equals(path)) {
+				panes[i].focusOnTextArea();
+				return;
+			}
+		
 	}
 	jEdit.openFile(view, path);
 }
