@@ -471,54 +471,6 @@
                     willingness to be involved in translation work.</para>
                 </answer>
             </qandaentry>
-
-            <qandaentry>
-                <question id="text-wrap">
-                    <para>When using soft wrap, why does it scroll per physical
-                    line and not screen line?</para>
-                </question>
-
-                <answer>
-                    <para>This will change in jEdit 4.2.</para>
-                </answer>
-            </qandaentry>
-        </qandadiv>
-
-        <!--******************************************************* Printing -->
-
-        <qandadiv id="text-print">
-            <title>Printing text</title>
-
-            <qandaentry>
-                <question id="text-print-improve">
-                    <para>What can I do to improve printing performance?</para>
-                </question>
-
-                <answer>
-                    <para>Prior to release of version 1.4 of the Java
-                    Development Kit (JDK), printing has been one of the weak
-                    areas of the Java platform. If you are using JDK version
-                    1.3, here are a few suggestions on improving printing
-                    performance.</para>
-
-                    <para>One simple way to improve printing is to use the
-                    InfoViewer plugin to display and print a text file in your
-                    favorite Web browser. You can also write a macro that saves
-                    a buffer and then passes the buffer's file name (using the
-                    method <filename>buffer.getPath()</filename>) to an external
-                    print utility. The file <filename>prettyprint.bat</filename>
-                    in the Downloads section of <ulink
-                    url="http://community.jedit.org">jEdit Community</ulink> is
-                    an example of this approach using a Windows batch file and
-                    Ghostscript. You can then change the <keycombo
-                            action="simul">
-                            <keycap>CTRL</keycap>
-
-                            <keycap>P</keycap>
-                        </keycombo> keyboard shortcut to point to your printing
-                    macro.</para>
-                </answer>
-            </qandaentry>
         </qandadiv>
 
         <!--********************************************************* Source -->
@@ -636,8 +588,7 @@
                     jEdit's fold features. I recommend using Ctrl-Q as the
                     prefix, and if you want to use Ctrl-Q to quit, you have to
                     hit Ctrl-Q twice. Cut and paste the below shortcuts into
-                    your own properties file (while jEdit is not running, of
-                    course).</para>
+                    your own properties file.</para>
 
                     <programlisting>
 # emacs end of line

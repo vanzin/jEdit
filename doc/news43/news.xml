@@ -13,8 +13,8 @@
             <surname>Pestov</surname>
         </author>
         <copyright>
-            <year>2007</year>
-            <year>2007</year>
+            <year>2008</year>
+            <year>2008</year>
             <holder>Alan Ezust</holder>
         </copyright>
         <legalnotice>
@@ -75,9 +75,10 @@
     <preface id="acknowledgements">
         <title>Acknowledgements</title>
         <para>This release would not have been possible if it were not for the
-        *constant* help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin,
-        Matthieu Casanova, and Björn "Vampire" Kautler. I would also like to
-        give sincere thanks to all of the other core and plugin developers who
+        frequent help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin,
+        Matthieu Casanova, Shlomy Reinstein, Seph Soliman, Eric Berry, Robert Schwenn.  
+        and Björn "Vampire" Kautler. I would also like to give sincere thanks to all 
+        of the other core and plugin developers who
         have made <ulink url="../CHANGES.txt">significant contributions</ulink>
         to help keep this editor alive and on the cutting edge.</para>
     </preface>
@@ -95,14 +96,23 @@
         <title>User-Visible Changes</title>
 		
 		<orderedlist>
+        <listitem><para> Most likely, you'll notice first the new Tango icon set,
+        used for the toolbar icons.  If for some reason you are nostalgic
+        for the old icon set, you can always switch back to it from the
+        Appearance option pane. </para></listitem>
         <listitem><para> There is an enhanced Status Bar (and accompanying service API
 		to allow plugins to add new status bar diaplay/controls). </para></listitem>
         <listitem><para>
 		It is now possible to choose different, independent Buffer Sets 
 		for each EditPane buffer switcher. See <ulink
 		url="../users-guide/buffersets.html">Buffer Sets</ulink> for more
-		information.
-        </para></listitem>
+		information.  </para></listitem>
+        <listitem><para> The Dockable Interface has been enhanced and made
+        into a jEdit service, so it is possible for plugins to offer alternate
+        dockable window managers. Some of them give jEdit a very
+        Eclipse-like feel. In addition, it is now possible to save and load
+        dockable layouts, which are analogous to Eclipse perspectives.
+        </para></listitem>         
         </orderedlist>
 		
         <section id="readded">
@@ -154,8 +164,10 @@
             <literal>java.util.regex</literal> instead of
             <literal>gnu.regexp</literal>, so be sure to keep that in mind as
             you are composing your own regular expressions, whether they are in
-            mode files, search expressions, or in your own plugins. XSearch plugin
-			still uses <literal>gnu.regexp</literal> in case the old behavior is still desired. </para>
+            mode files, search expressions, or in your own plugins. XSearch
+            plugin and others still use <literal>gnu.regexp</literal> plugin,
+            which offers the legacy regex engine, in case the old behavior is
+            still desired. </para>
         </section>
         <section id="search">
             <title>Search and Replace</title>
@@ -245,6 +257,11 @@
             layout depending on whether they are docked at the top/bottom or the
             left/right. This interface is meaningless (for now) for non-MOVABLE
             dockable windows.</para>
+            <para>A new Service, <ulink
+            url="../api/org/gjt/sp/jedit/gui/DockableWindowManagerProvider.html">DockableWindowManagerProvier</ulink>
+            is introduced to permit plugins to offer alternate dockable
+            frameworks, replacing the legacy dockables that are starting to
+            look rather old. </para>
         </section>
     </chapter>
     <chapter id="new-plugins">
@@ -298,20 +315,20 @@
 		<para>The SVNPlugin is new, and the JDiff plugin is improved. Many
 		other plugins have latest versions that require jEdit 4.3. </para>
         <formalpara>
-            <title>InfoViewer</title>
-            <para>This plugin uses jEdit 4.3's action overriding API to serve as
-            a replacement to the HelpViewer. Since I use/work with this instead
-            of the built-in HelpViewer, I do not notice or fix bugs in
-            HelpViewer. Try it out - you might like it! At some point, I might
-            merge this into the jEdit core, but for now, it's a separate
-            plugin.</para>
+        <title>InfoViewer</title>
+        <para>This plugin uses jEdit 4.3's action overriding API to serve as
+        a replacement to the HelpViewer. Since I use/work with this instead
+        of the built-in HelpViewer, I do not notice or fix bugs in
+        HelpViewer. Try it out - you might like it! At some point, I might
+        merge this into the jEdit core, but for now, it's a separate
+        plugin.</para>
         </formalpara>
         <formalpara>
-            <title>XSearch</title>
-            <para>XSearch is a replacement for the built-in search dialogs.
-            Similarly, there are new features in XSearch which have not been put
-            into the core yet. XSearch has good ProjectViewer integration too -
-            you can search only the files that were added to the project.</para>
+        <title>XSearch</title>
+        <para>XSearch is a replacement for the built-in search dialogs.
+        Similarly, there are new features in XSearch which have not been put
+        into the core yet. XSearch has good ProjectViewer integration too -
+        you can search only the files that were added to the project.</para>
         </formalpara>
     </chapter>
     <chapter id="futureplans">

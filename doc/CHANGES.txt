@@ -2,26 +2,37 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre16
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
+and Shlomy Reinstein for contributing to this release.
 
 {{{ Bug Fixes
 
 - Closed buffers were often kept in memory. (Kazutoshi Satoda)
 
 - Error "Invalid screen line count" was shown when scrolling in a
-  compound edit. (SF.net patch #1990960 - Kazutoshi Satoda)
+  compound edit. (SF.net patch #1990960 - Kazutoshi Satoda) 
 
 }}}
 {{{ Miscellaneous
 - Moved buffer list sorting options from General to View Option Pane
-  with other bufferset options.
+  with other bufferset options. (Alan Ezust)
+}}}
 
+{{{ Docker Plugin features merged into jEdit Core
+- New actions: View - Docking - Load|Save docking layout (of current mode)
+  You can save named dockable layouts, analogous to Eclipse perspectives,
+  on a global or per-mode basis. (Shlomy Reinstein)
+  
+- New action: View - Docking - Toggle Docked Areas. (Alan Ezust)
 }}}
 {{{ API Changes
 
 - A public field buffer in HyperSearchFileNode was removed. Use
   getBuffer() instead. (Kazutoshi Satoda)
 
+- A new service, DockableWindowManagerProvier, makes it possible
+  for plugins to offer alternate docking managers. (Shlomy Reinstein)
+  
 }}}
 
 }}}
