@@ -1,32 +1,35 @@
 /**
-    ToggleHeaderSource.bsh V1.2
-    by Alan Ezust  alan at jedit dot org
-    $Id$
-   
-    A jedit beanshell macro that toggles your current buffer
-    between the header file (.h) and the source file (.c(pp|xx)?).
+	ToggleHeaderSource.bsh V1.3
+	by Alan Ezust  
+	$Id$
+	
+	A jedit beanshell macro that toggles your current buffer
+	between the header file (.h) and the source file (.c(pp|xx)?).
+	
+	Enables you to switch the current text
+	buffer between C/C++ header and sourcecode
+	file. If the file does not already exist, it opens a new buffer
+	of that name for you. 
+	
+	New to 1.2: If another buffer is already open with the requested
+	filename, it is selected, even if located in another directory.
+	
+	New to 1.3: If another EditPane is already open with the
+	requested buffer, it is selected and focused.  
 
-    Enables you to switch the current text
-    buffer between C/C++ header and sourcecode
-    file. If the file does not already exist, it opens a new buffer
-    of that name for you. 
-
-    New to 1.2: If another buffer is already open with the requested
-    filename, it is selected, even if located in another directory.
-
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with the jEdit program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with the jEdit program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  */
 
@@ -40,16 +43,16 @@ String[] sourceExtensions = new String[]{"cpp", "c", "cxx" };
    @return the absolute path if found, NULL if not.
    */
 String findBuffer(String fileName) {
-    File f = new File(fileName);
-    if (f.canRead()) return f.getPath();
-    String fn2 = f.getName();
-    Buffer[] bufs = jEdit.getBuffers();
-    bn = bufs.length;
-    for (int i=0; i<bn; ++i) {
-        Buffer b = bufs[i];
-        if (b.getName().equals(fn2)) return b.getPath();
-    }
-    return null;
+	File f = new File(fileName);
+	if (f.canRead()) return f.getPath();
+	String fn2 = f.getName();
+	Buffer[] bufs = jEdit.getBuffers();
+	bn = bufs.length;
+	for (int i=0; i<bn; ++i) {
+		Buffer b = bufs[i];
+		if (b.getName().equals(fn2)) return b.getPath();
+	}
+	return null;
 }
    
 /** Given a header file, iterates through all sourcefile extensions checking if the sourcefile exists.
@@ -58,42 +61,52 @@ String findBuffer(String fileName) {
 
 String getSourceFile(String baseName)
 {
-    int numExt = sourceExtensions.length;
-    for (int i=numExt-1; i>=0; --i) 
-    {
-        String ext = sourceExtensions[i];
-        String tryFile = baseName + "." + ext;
-        String path = findBuffer(tryFile);
-        if (path != null) return path;
-    }        
-    return baseName + "." + defaultSourceExtension;
+	int numExt = sourceExtensions.length;
+	for (int i=numExt-1; i>=0; --i) 
+	{
+		String ext = sourceExtensions[i];
+		String tryFile = baseName + "." + ext;
+		String path = findBuffer(tryFile);
+		if (path != null) return path;
+	}        
+	return baseName + "." + defaultSourceExtension;
 }
 
 boolean isSourceFile(String extension) 
 {
-    for (int i=0; i<sourceExtensions.length; ++i) {
-        if (extension.equals(sourceExtensions[i])) return true;
-    }
-    return false;
+	for (int i=0; i<sourceExtensions.length; ++i) {
+		if (extension.equals(sourceExtensions[i])) return true;
+	}
+	return false;
 }
 
 void toggleHeaderSource()
 {
-
-    String currentFile = buffer.getPath();
-    int pos = currentFile.lastIndexOf('.');
-    String extension = currentFile.substring(pos+1);
-    String baseName = currentFile.substring(0, pos);
-    if (isSourceFile(extension)) 
-    {
-        String path = findBuffer(baseName + ".h");
-        if (path != null) jEdit.openFile(view, path);
-        else jEdit.openFile(view, baseName + ".h");
-    }
-    else if (extension.equals("h")) {
-        String sourceFile = getSourceFile(baseName);
-        jEdit.openFile(view, sourceFile);         
-    }
+	String currentFile = buffer.getPath();
+	int pos = currentFile.lastIndexOf('.');
+	String extension = currentFile.substring(pos+1);
+	String baseName = currentFile.substring(0, pos);
+	String path = null;
+	if (isSourceFile(extension)) 
+	{
+		path = findBuffer(baseName + ".h");
+		if (path == null) path = baseName + ".h";
+	}
+	else if (extension.equals("h")) {
+		path = getSourceFile(baseName);
+	}
+	if (path == null) return;
+	// see if it is already open in another editpane
+	panes = view.getEditPanes();
+	for (int i=panes.length - 1; i >= 0; --i) {
+		buf = panes[i].getBuffer();
+		if (buf.getName().equals(path) 
+		|| buf.getPath().equals(path)) {
+			panes[i].focusOnTextArea();
+			return;
+		}
+	}
+	jEdit.openFile(view, path);
 }
 
 toggleHeaderSource();
