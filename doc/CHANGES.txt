@@ -8,6 +8,9 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 - Closed buffers were often kept in memory. (Kazutoshi Satoda)
 
+- Error "Invalid screen line count" was shown when scrolling in a
+  compound edit. (SF.net patch #1990960 - Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 - Moved buffer list sorting options from General to View Option Pane

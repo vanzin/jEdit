@@ -51,10 +51,6 @@ class ScrollLineCount extends Anchor
 		int scrollLine = 0;
 		while(physicalLine != -1)
 		{
-			int before = scrollLine;
-			displayManager.updateScreenLineCount(physicalLine);
-			if(before != scrollLine)
-				throw new RuntimeException(this + " nudged");
 			scrollLine += displayManager
 				.getScreenLineCount(physicalLine);
 			physicalLine = displayManager

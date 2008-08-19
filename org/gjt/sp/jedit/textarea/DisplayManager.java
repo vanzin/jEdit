@@ -188,9 +188,7 @@ public class DisplayManager
 	 */
 	public final int getScreenLineCount(int line)
 	{
-		if(!screenLineMgr.isScreenLineCountValid(line))
-			throw new RuntimeException("Invalid screen line count: " + line);
-
+		updateScreenLineCount(line);
 		return screenLineMgr.getScreenLineCount(line);
 	} //}}}
 
@@ -756,7 +754,6 @@ public class DisplayManager
 			if(!isLineVisible(i))
 			{
 				// important: not screenLineMgr.getScreenLineCount()
-				updateScreenLineCount(i);
 				int screenLines = getScreenLineCount(i);
 				if(firstLine.physicalLine >= i)
 				{
@@ -786,7 +783,7 @@ public class DisplayManager
 			i = getNextVisibleLine(i);
 		while(i != -1 && i <= end)
 		{
-			int screenLines = screenLineMgr.getScreenLineCount(i);
+			int screenLines = getScreenLineCount(i);
 			if(i < firstLine.physicalLine)
 			{
 				firstLine.scrollLine -= screenLines;
@@ -815,8 +812,7 @@ public class DisplayManager
 			{
 				firstLine.physicalLine = getPrevVisibleLine(
 					firstLine.physicalLine);
-				firstLine.scrollLine -=
-					screenLineMgr.getScreenLineCount(
+				firstLine.scrollLine -= getScreenLineCount(
 					firstLine.physicalLine);
 			}
 			firstLine.callChanged = true;

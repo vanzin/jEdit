@@ -114,10 +114,6 @@ class FirstLine extends Anchor
 			if(i >= oldPhysicalLine)
 				break;
 
-			int before = scrollLine;
-			displayManager.updateScreenLineCount(i);
-			if(before != scrollLine)
-				throw new RuntimeException(this + " nudged");
 			scrollLine += displayManager.getScreenLineCount(i);
 
 			int nextLine = displayManager.getNextVisibleLine(i);
@@ -129,7 +125,6 @@ class FirstLine extends Anchor
 
 		physicalLine = i;
 
-		displayManager.updateScreenLineCount(i);
 		int screenLines = displayManager.getScreenLineCount(physicalLine);
 		if(skew >= screenLines)
 			skew = screenLines - 1;
