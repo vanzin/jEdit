@@ -51,54 +51,68 @@
 		new BufferLocalEncodingDetector();
 	</SERVICE>
 	
+	<!-- {{{ Status Bar widgets -->
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="mode">
-		new org.gjt.sp.jedit.gui.statusbar.ModeWidgetFactory();
+       import org.gjt.sp.jedit.gui.statusbar.*;
+       new ModeWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="fold">
-		new org.gjt.sp.jedit.gui.statusbar.FoldWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new FoldWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="encoding">
-		new org.gjt.sp.jedit.gui.statusbar.EncodingWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new EncodingWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="wrap">
-		new org.gjt.sp.jedit.gui.statusbar.WrapWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new WrapWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="multiSelect">
-		new org.gjt.sp.jedit.gui.statusbar.MultiSelectWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new MultiSelectWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="rectSelect">
-		new org.gjt.sp.jedit.gui.statusbar.RectSelectWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new RectSelectWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="overwrite">
-		new org.gjt.sp.jedit.gui.statusbar.OverwriteWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new OverwriteWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="lineSep">
-		new org.gjt.sp.jedit.gui.statusbar.LineSepWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new LineSepWidgetFactory();
 	</SERVICE>
 	
 		
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="memory-status">
-		new org.gjt.sp.jedit.gui.statusbar.MemoryStatusWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new MemoryStatusWidgetFactory();
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="clock">
-		new org.gjt.sp.jedit.gui.statusbar.ClockWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new ClockWidgetFactory();
 	</SERVICE>
 
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="errors">
-		new org.gjt.sp.jedit.gui.statusbar.ErrorsWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new ErrorsWidgetFactory();
 	</SERVICE>
 
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="buffersets">
-		new org.gjt.sp.jedit.gui.statusbar.BufferSetWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new BufferSetWidgetFactory();
 	</SERVICE>
+	<!-- }}} -->
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 	
 	<!-- Docking framework -->
