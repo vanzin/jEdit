@@ -98,6 +98,9 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	abstract public void setMainPanel(JPanel panel);
 	abstract public void showDockableWindow(String name);
 	abstract public void hideDockableWindow(String name);
+	// Completely dispose of a dockable - called when a plugin is
+	// unloaded, to remove all references to the its dockables.
+	abstract public void disposeDockableWindow(String name);
 	abstract public JComponent floatDockableWindow(String name);
 	abstract public boolean isDockableWindowDocked(String name);
 	abstract public boolean isDockableWindowVisible(String name);
@@ -363,7 +366,7 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 					DockableWindowFactory.Window window = entries.next();
 					if (window.plugin == pmsg.getPluginJAR())
 					{
-						hideDockableWindow(window.name);
+						disposeDockableWindow(window.name);
 						windows.remove(window.name);
 					}
 				}
