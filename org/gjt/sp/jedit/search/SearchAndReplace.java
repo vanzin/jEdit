@@ -623,20 +623,23 @@ loop:			for(;;)
 			return false;
 		}
 
-		CharSequence text =
-			reverse ? new ReverseCharSequence(
-					buffer.getSegment(0,start))
-				: buffer.getSegment(
-					start,buffer.getLength() - start);
-
-		// the start and end flags will be wrong with reverse search enabled,
-		// but they are only used by the regexp matcher, which doesn't
-		// support reverse search yet.
-		//
-		// REMIND: fix flags when adding reverse regexp search.
+		CharSequence text;
+		boolean startOfBuffer;
+		boolean endOfBuffer;
+		if(reverse)
+		{
+			text = new ReverseCharSequence(buffer.getSegment(0,start));
+			startOfBuffer = true;
+			endOfBuffer = (start == buffer.getLength());
+		}
+		else
+		{
+			text = buffer.getSegment(start,buffer.getLength() - start);
+			startOfBuffer = (start == 0);
+			endOfBuffer = true;
+		}
 		SearchMatcher.Match match = matcher.nextMatch(text,
-			start == 0,true,firstTime,reverse);
-
+			startOfBuffer,endOfBuffer,firstTime,reverse);
 		if(match != null)
 		{
 			jEdit.commitTemporary(buffer);
