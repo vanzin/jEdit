@@ -691,8 +691,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 			&& !searchSelection.isSelected());
 
 		boolean reverseEnabled = !hyperSearch.isSelected()
-			&& searchCurrentBuffer.isSelected()
-			&& !regexp.isSelected();
+			&& searchCurrentBuffer.isSelected();
 		searchBack.setEnabled(reverseEnabled);
 		searchForward.setEnabled(reverseEnabled);
 		if(!reverseEnabled)

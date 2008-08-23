@@ -1438,12 +1438,6 @@ empty-fileset.message=The specified search file set contains no files.\n\
 	(if applicable) are set correctly.
 #}}}
 
-#{{{ Reverse regular expression search not supported dialog
-regexp-reverse.title=Not Supported
-regexp-reverse.message=Cannot search backwards for a regular expression.\n\
-	Either search forwards or disable regular expressions.
-#}}}
-
 #{{{ Can only search local directories dialog
 remote-dir-search.title=Non-Local Directory Chosen
 remote-dir-search.message=You have elected to search a non-local directory.\n\

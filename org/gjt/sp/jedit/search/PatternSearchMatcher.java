@@ -24,6 +24,8 @@ package org.gjt.sp.jedit.search;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.gjt.sp.util.ReverseCharSequence;
+
 /**
  * A regular expression string matcher using java.util.regex.
  * @see java.util.regex.Pattern
@@ -74,8 +76,10 @@ public class PatternSearchMatcher extends SearchMatcher
 	 * @param firstTime 	If false and the search string matched at the
 	 *			start offset with length zero, automatically
 	 *			find next match
-	 * @param reverse 	Unsupported for PatternSearchMatcher. Should
-	 *			always be "false".
+	 * @param reverse 	If true find match prior to current match
+	 * 			(this is done by searching from the beginning to
+	 * 			just prior to the current match, so will be inefficient
+	 * 			for large buffers)
 	 *
 	 * @return A {@link SearchMatcher.Match} object.
 	 * @since jEdit 4.3pre5
@@ -83,6 +87,19 @@ public class PatternSearchMatcher extends SearchMatcher
 	public SearchMatcher.Match nextMatch(CharSequence text, boolean start,
 		boolean end, boolean firstTime, boolean reverse)
 	{
+		// "For the mean time, there is no way to automatically generate a sexeger"
+		//
+		// http://japhy.perlmonk.org/sexeger/sexeger.html
+		//
+		// So ... for reverse regex searches we will search 
+		// the string in the forward direction and 
+		// return the last match.
+		
+		// Since we search the String in the forward direction,
+		// (even for reverse searches) un-reverse the ReverseCharSequence.
+		if (text instanceof ReverseCharSequence)
+			text = ((ReverseCharSequence)text).baseSequence();
+
 		if (re == null)
 			re = Pattern.compile(pattern, flags);
 
@@ -90,31 +107,50 @@ public class PatternSearchMatcher extends SearchMatcher
 		if (!match.find())
 			return null;
 
-		// if we're not at the start of the buffer, and the pattern
-		// begins with "^" and matched the beginning of the region
-		// being matched, ignore the match and try the next one.
-		if (!start && match.start() == 0
-			&& re.pattern().charAt(0) == '^' && !match.find())
-			return null;
-
-		// similarly, if we're not at the end of the buffer and we
-		// match the end of the text, and the pattern ends with a "$",
-		// return null.
-		if (!end && match.end() == (text.length() - 1)
-			&& pattern.charAt(pattern.length() - 1) == '$')
-			return null;
-
-		returnValue.substitutions = new String[match.groupCount() + 1];
-		for(int i = 0; i < returnValue.substitutions.length; i++)
-		{
-			returnValue.substitutions[i] = match.group(i);
+		while (true) {
+			// if we're not at the start of the buffer, and the pattern
+			// begins with "^" and matched the beginning of the region
+			// being matched, ignore the match and try the next one.
+			if (!start && match.start() == 0
+				&& re.pattern().charAt(0) == '^' && !match.find())
+				return null;
+	
+			// similarly, if we're not at the end of the buffer and we
+			// match the end of the text, and the pattern ends with a "$",
+			// return null.
+			if (!end && match.end() == (text.length() - 1)
+				&& pattern.charAt(pattern.length() - 1) == '$')
+				return null;
+	
+			returnValue.substitutions = new String[match.groupCount() + 1];
+			for(int i = 0; i < returnValue.substitutions.length; i++)
+			{
+				returnValue.substitutions[i] = match.group(i);
+			}
+	
+			int _start = match.start();
+			int _end = match.end();
+	
+			returnValue.start = _start;
+			returnValue.end = _end;
+			
+			// For non-reversed searches, we break immediately
+			// to return the first match.  For reversed searches,
+			// we continue until no more matches are found
+			if (!reverse || !match.find()) {
+				break;
+			}
 		}
 
-		int _start = match.start();
-		int _end = match.end();
+		if (reverse) {
+			// The caller assumes we are searching a reversed
+			// CharSegment, so we need to reverse the indices
+			// before returning
+			int len = returnValue.end - returnValue.start;
+			returnValue.start = text.length() - returnValue.end;
+			returnValue.end = returnValue.start + len;
+		}
 
-		returnValue.start = _start;
-		returnValue.end = _end;
 		return returnValue;
 	} //}}}
 

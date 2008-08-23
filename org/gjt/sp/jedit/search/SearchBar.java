@@ -211,12 +211,6 @@ public class SearchBar extends JToolBar
 		//{{{ Incremental search
 		else
 		{
-			if(reverse && SearchAndReplace.getRegexp())
-			{
-				GUIUtilities.error(view,"regexp-reverse",null);
-				return;
-			}
-
 			// on enter, start search from end
 			// of current match to find next one
 			int start;

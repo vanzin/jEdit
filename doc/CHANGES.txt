@@ -3,7 +3,7 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre16
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
-and Shlomy Reinstein for contributing to this release.
+Shlomy Reinstein, and Greg Merrill for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -16,6 +16,10 @@ and Shlomy Reinstein for contributing to this release.
 {{{ Miscellaneous
 - Moved buffer list sorting options from General to View Option Pane
   with other bufferset options. (Alan Ezust)
+
+- Enabled reverse regex search. (SF.net patch #1923613 - Greg Merrill)
+  NOTE: There is a known problem with "$".
+
 }}}
 
 {{{ Docker Plugin features merged into jEdit Core

@@ -447,11 +447,6 @@ public class SearchAndReplace
 		}
 
 		boolean _reverse = reverse && fileset instanceof CurrentBufferSet;
-		if(_reverse && regexp)
-		{
-			GUIUtilities.error(comp,"regexp-reverse",null);
-			return false;
-		}
 
 		try
 		{
