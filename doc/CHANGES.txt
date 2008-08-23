@@ -18,7 +18,7 @@ Shlomy Reinstein, and Greg Merrill for contributing to this release.
   with other bufferset options. (Alan Ezust)
 
 - Enabled reverse regex search. (SF.net patch #1923613 - Greg Merrill)
-  NOTE: There is a known problem with "$".
+  NOTE: There is a known problem with "$". (SF.net bug #2069249)
 
 }}}
 
