@@ -12,6 +12,9 @@ Shlomy Reinstein, and Greg Merrill for contributing to this release.
 - Error "Invalid screen line count" was shown when scrolling in a
   compound edit. (SF.net patch #1990960 - Kazutoshi Satoda) 
 
+- Folded lines sometimes became invisible.
+  (SF.net patch #1999448 - Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 - Moved buffer list sorting options from General to View Option Pane

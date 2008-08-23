@@ -168,16 +168,9 @@ class BufferHandler implements BufferListener
 	 */
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
-		if (textArea.getDisplayManager() == displayManager && numLines != 0)
+		if(textArea.getDisplayManager() == displayManager)
 		{
-			//{{{ fix for black hole bug
-			// if you remove the {{{ at a fold start, the fold is removed so it must be expanded otherwise }}}
-			// the text remains invisible
-			if (buffer.isFoldStart(startLine))
-			{
-				displayManager.expandFold(startLine, false);
-			}
-			// }}}
+			getReadyToBreakFold(startLine);
 		}
 	} //}}}
 
@@ -203,31 +196,25 @@ class BufferHandler implements BufferListener
 
 		if(textArea.getDisplayManager() == displayManager)
 		{
-			//{{{ fix for black hole bug
-			// if you remove the {{{ at a fold start, the fold is removed so it must be expanded otherwise }}}
-			// the text remains invisible
-			int endLine = startLine + numLines;
-			if (buffer.isFoldStart(endLine))
+			if(numLines == 0)
 			{
-				if (numLines == 0)
+				getReadyToBreakFold(startLine);
+			}
+			else
+			{
+				int lastLine = startLine + numLines;
+				if(offset != buffer.getLineStartOffset(startLine)
+				 || offset + length != buffer.getLineStartOffset(lastLine))
 				{
-					String endLineText = buffer.getLineText(endLine);
-					int i = endLineText.indexOf("{{{"); // }}}
-					if (i != -1)
-					{
-						int lineStartOffset = buffer.getLineStartOffset(endLine);
-						if (offset < lineStartOffset + i + 3 && offset + length > lineStartOffset + i)
-						{
-							displayManager.expandFold(endLine, false);
-						}
-					}
+					getReadyToBreakFold(startLine);
+					getReadyToBreakFold(lastLine);
 				}
 				else
 				{
-					displayManager.expandFold(endLine, false);
+					// The removal wll not modify
+					// any remaining lines.
 				}
 			}
-			// }}}
 
 			if(numLines != 0)
 			{
@@ -454,5 +441,15 @@ class BufferHandler implements BufferListener
 				delayedUpdateEnd,
 				endLine);
 		}
+	} //}}}
+
+	//{{{ getReadyToBreakFold() method
+	// This is a fix for black hole bug.
+	// If you modify a part of folded lines, like {{{ (followed by }}}),
+	// the fold is removed so it must be expanded otherwise the text
+	// remains invisible.
+	private void getReadyToBreakFold(int line)
+	{
+		displayManager.expandFold(line, false);
 	} //}}}
 }
