@@ -298,7 +298,6 @@ public class DisplayManager
 		int lineCount = buffer.getLineCount();
 		int end = lineCount - 1;
 
-		int initialFoldLevel = buffer.getFoldLevel(line);
 		if (line == lineCount - 1)
 		{
 			return -1;
@@ -323,6 +322,7 @@ public class DisplayManager
 
 		//{{{ Find fold start and fold end...
 		int start;
+		int initialFoldLevel = buffer.getFoldLevel(line);
 		if (buffer.getFoldLevel(line + 1) > initialFoldLevel)
 		{
 			// this line is the start of a fold
