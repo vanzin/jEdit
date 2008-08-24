@@ -72,14 +72,12 @@ public class BufferSet
 		listeners = new EventListenerList();
 		this.scope = scope;
 
-
-		sorted = jEdit.getBooleanProperty("sortBuffers");
-		if (sorted)
+		if (jEdit.getBooleanProperty("sortBuffers"))
 		{
 			if (jEdit.getBooleanProperty("sortByName"))
-				comparator = nameSorter;
+				sorter = nameSorter;
 			else
-				comparator = pathSorter;
+				sorter = pathSorter;
 		}
 	} //}}}
 
@@ -99,12 +97,12 @@ public class BufferSet
 				}
 			}
 
-			if (sorted)
+			if (sorter != null)
 			{
 				if (buffers.contains(buffer))
 					return;
 				buffers.add(buffer);
-				Collections.sort(buffers, comparator);
+				Collections.sort(buffers, sorter);
 				position = buffers.indexOf(buffer);
 			}
 			else
@@ -292,7 +290,7 @@ public class BufferSet
 	//{{{ moveBuffer() method
 	void moveBuffer(int oldPosition, int newPosition)
 	{
-		if (sorted)
+		if (sorter != null)
 		{
 			// Buffers are sorted, do nothing
 			return;
@@ -357,10 +355,7 @@ public class BufferSet
 	private final Scope scope;
 	private static final Comparator<Buffer> nameSorter = new NameSorter();
 	private static final Comparator<Buffer> pathSorter = new PathSorter();
-
-	private boolean sorted;
-
-	private Comparator<Buffer> comparator;
+	private Comparator<Buffer> sorter;
 	//}}}
 
 
