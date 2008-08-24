@@ -310,22 +310,11 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		buffer.setIntegerProperty(Buffer.CARET,
 			textArea.getCaretPosition());
 
-		// save a map of buffer.getPath() -> CaretInfo, this is necessary for
-		// when the same buffer is open in more than one EditPane and the user
-		// is switching between buffers.  We want to keep the caret in the
-		// right position in each EditPane, which won't be the case if we
-		// just use the buffer caret property.
-		Map<String, CaretInfo> carets = (Map<String, CaretInfo>)getClientProperty(CARETS);
-		if (carets == null)
-		{
-			carets = new HashMap<String, CaretInfo>();
-			putClientProperty(CARETS, carets);
-		}
-		CaretInfo caretInfo = carets.get(buffer.getPath());
+		CaretInfo caretInfo = caretsForPath.get(buffer.getPath());
 		if (caretInfo == null)
 		{
 			caretInfo = new CaretInfo();
-			carets.put(buffer.getPath(), caretInfo);
+			caretsForPath.put(buffer.getPath(), caretInfo);
 		}
 		caretInfo.caret = textArea.getCaretPosition();
 
@@ -365,13 +354,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		// get our internal map of buffer -> CaretInfo since there might
 		// be current info already
-		Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
-		if (carets == null)
-		{
-			carets = new HashMap<String, CaretInfo>();
-			putClientProperty(CARETS, carets);
-		}
-		CaretInfo caretInfo = carets.get(buffer.getPath());
+		CaretInfo caretInfo = caretsForPath.get(buffer.getPath());
 		if (caretInfo == null)
 		{
 			caretInfo = new CaretInfo();
@@ -457,12 +440,9 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	 */
 	void bufferRenamed(String oldPath, String newPath)
 	{
-		Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
-		if (carets == null)
-			return;
-		CaretInfo caretInfo = carets.remove(oldPath);
+		CaretInfo caretInfo = caretsForPath.remove(oldPath);
 		if (caretInfo != null)
-			carets.put(newPath, caretInfo);
+			caretsForPath.put(newPath, caretInfo);
 
 	} //}}}
 
@@ -791,9 +771,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		if (buffer.isUntitled())
 		{
 			// the buffer was a new file so I do not need to keep it's informations
-			Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
-			if (carets != null)
-				carets.remove(buffer.getPath());
+			caretsForPath.remove(buffer.getPath());
 		}
 		if (buffer == this.buffer)
 		{
@@ -939,7 +917,12 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	private final JEditTextArea textArea;
 	private final MarkerHighlight markerHighlight;
 
-	private static final String CARETS = "Buffer->caret";
+	// A map of buffer.getPath() -> CaretInfo. This is necessary for
+	// when the same buffer is open in more than one EditPane and the user
+	// is switching between buffers.  We want to keep the caret in the
+	// right position in each EditPane, which won't be the case if we
+	// just use the buffer caret property.
+	private final Map<String, CaretInfo> caretsForPath = new HashMap<String, CaretInfo>();
 
 	//}}}
 
@@ -1152,9 +1135,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			if (closedBuffer.isUntitled())
 			{
 				// the buffer was a new file so I do not need to keep it's informations
-				Map<String, CaretInfo> carets = (Map<String, CaretInfo>) getClientProperty(CARETS);
-				if (carets != null)
-					carets.remove(closedBuffer.getPath());
+				caretsForPath.remove(closedBuffer.getPath());
 			}
 		}
 		else if(msg.getWhat() == BufferUpdate.LOAD_STARTED)
