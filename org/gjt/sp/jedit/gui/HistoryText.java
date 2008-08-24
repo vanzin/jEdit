@@ -281,10 +281,21 @@ public class HistoryText
 		if(popup != null && popup.isVisible())
 		{
 			popup.setVisible(false);
+			popup = null;
 			return;
 		}
 
-		popup = new JPopupMenu();
+		popup = new JPopupMenu() {
+			@Override
+			public void setVisible(boolean b)
+			{
+				if (!b)
+				{
+					popup = null;
+				}
+				super.setVisible(b);
+			}
+		};
 		JMenuItem caption = new JMenuItem(jEdit.getProperty(
 			"history.caption"));
 		caption.addActionListener(new ActionListener()
