@@ -30,8 +30,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Collections;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -47,19 +46,15 @@ public class HistoryTextArea extends JTextArea
 	{
 		super(3,15);
 		controller = new HistoryText(this,name);
-		Set focusForwardTraversalKeys = new TreeSet();
-		focusForwardTraversalKeys.add(
-			KeyStroke.getKeyStroke(KeyEvent.VK_TAB,0));
-		Set focusBackwardTraversalKeys = new TreeSet();
-		focusBackwardTraversalKeys.add(
-			KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
-			InputEvent.SHIFT_MASK));
 		setFocusTraversalKeys(
 			KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS,
-			focusForwardTraversalKeys);
+			Collections.singleton(
+				KeyStroke.getKeyStroke(KeyEvent.VK_TAB,0)));
 		setFocusTraversalKeys(
 			KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS,
-			focusBackwardTraversalKeys);
+			Collections.singleton(
+				KeyStroke.getKeyStroke(KeyEvent.VK_TAB,
+					InputEvent.SHIFT_MASK)));
 	} //}}}
 
 	//{{{ getModel() method
