@@ -38,7 +38,7 @@ Shlomy Reinstein, and Greg Merrill for contributing to this release.
 - A public field buffer in HyperSearchFileNode was removed. Use
   getBuffer() instead. (Kazutoshi Satoda)
 
-- A new service, DockableWindowManagerProvier, makes it possible
+- A new service, DockableWindowManagerProvider, makes it possible
   for plugins to offer alternate docking managers. (Shlomy Reinstein)
   
 }}}

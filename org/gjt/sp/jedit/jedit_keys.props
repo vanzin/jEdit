@@ -19,12 +19,12 @@ copy.shortcut=C+c
 delete-line.shortcut=C+d
 # C+e is a prefix
 find.shortcut=C+f
-find-next.shortcut=C+g
+find-next.shortcut=F3
 # C+h is not usable on MacOS X
 indent-lines.shortcut=C+i
 join-lines.shortcut=C+j
 swap-marker.shortcut=C+k
-goto-line.shortcut=C+l
+goto-line.shortcut=C+g
 # C+m is a prefix
 new-file.shortcut=C+n
 open-file.shortcut=C+o
@@ -92,6 +92,7 @@ line-comment.shortcut=C+e C+k
 select-line-range.shortcut=C+e C+l
 add-marker.shortcut=C+e C+m
 center-caret.shortcut=C+e C+n
+scroll-and-center=C+l
 open-path.shortcut=C+e C+o
 vertical-paste.shortcut=C+e C+p
 replace-in-selection.shortcut=C+e C+r

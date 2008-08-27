@@ -119,7 +119,7 @@ public class BufferSetManager implements EBComponent
 	//{{{ getViewBufferSet() methods
 	/**
 	 * Returns a view bufferSet for the given view.
-	 * If it doesn't exists it is created
+	 * If it doesn't exist it is created
 	 *
 	 * @param view a view
 	 * @return the view's bufferSet
@@ -138,7 +138,7 @@ public class BufferSetManager implements EBComponent
 	//{{{ getEditPaneBufferSet() method
 	/**
 	 * Returns a EditPane bufferSet for the given EditPane.
-	 * If it doesn't exists it is created
+	 * If it doesn't exist it is created
 	 *
 	 * @param editPane the editPAne
 	 * @return the EditPane's bufferSet

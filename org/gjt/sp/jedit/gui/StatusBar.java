@@ -140,7 +140,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 					Widget widget = getWidget(token);
 					if (widget == null)
 					{
-						Log.log(Log.WARNING, this, "Widget " + token + " doesn't exists");
+						Log.log(Log.WARNING, this, "Widget " + token + " doesn't exist");
 						continue;
 					}
 					Component c = widget.getComponent();
@@ -444,7 +444,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		(StatusWidgetFactory) ServiceManager.getService("org.gjt.sp.jedit.gui.statusbar.StatusWidget", name);
 		if (widgetFactory == null)
 		{
-			Log.log(Log.ERROR, this, "Widget " + name + " doesn't exists");
+			Log.log(Log.ERROR, this, "Widget " + name + " doesn't exist");
 			return null;
 		}
 		return widgetFactory.getWidget(view);

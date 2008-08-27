@@ -37,7 +37,7 @@ public class DefaultFoldHandlerProvider implements FoldHandlerProvider
 	 * there is no registered handler with that name.
 	 *
 	 * @param name The name of the desired fold handler
-	 * @return the FoldHandler or null if it doesn't exists
+	 * @return the FoldHandler or null if it doesn't exist
 	 * @since jEdit 4.3pre10
 	 */
 	public FoldHandler getFoldHandler(String name)

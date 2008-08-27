@@ -292,8 +292,8 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	 * title shown when it is floating (not docked). Fires a change event that makes sure
 	 * all floating dockables change their title.
 	 * 
-	 * @param dockableName the name of the dockable, as specified in the dockables.xml
-	 * @param newTitle the new .longtitle you want to see above it.
+	 * @param dockable the name of the dockable, as specified in the dockables.xml
+	 * @param title the new .longtitle you want to see above it.
 	 * @since 4.3pre5
 	 * 
 	 */

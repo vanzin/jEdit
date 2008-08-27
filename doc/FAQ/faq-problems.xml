@@ -296,29 +296,6 @@ view.unsplitCurrent();
                 </answer>
             </qandaentry>
         </qandadiv>
-        <!--********************************************************* Mac OS -->
-        <qandadiv id="macos-problems">
-            <title>Mac OS Problems</title>
-            <qandaentry>
-                <question id="blurry-tabs">
-                    <para>Why are the tabs for docked windows blurry under OS X
-                    10.2?</para>
-                </question>
-                <answer>
-                    <para>In Mac OS X 10.2 Apple enabled Hardware Acceleration
-                    for Java by default. Unfortunately it had some bugs. This is
-                    the result of one of these bugs. The only way to avoid this
-                    problem is to disable hardware acceleration for jEdit or
-                    your whole system. To disable it in jEdit you will need to
-                    edit the following file:
-                    jEdit/jEdit.app/Contents/Resources/MRJApp.properties You
-                    will need to add the line
-                    <userinput>com.apple.hwaccel=false</userinput>. This is done
-                    for you in the Mac OS X plugin.</para>
-                </answer>
-            </qandaentry>
-        </qandadiv>
-        <!--***************************************************** Unix/Linux -->
         <qandadiv id="unix-problems">
             <title>Unix/Linux Problems</title>
             <qandaentry>
@@ -332,8 +309,8 @@ Exception in thread "main" java.awt.AWTError: Cannot load AWT toolkit: gnu.java.
 </programlisting>
 				</question>
 				<answer>
-				 <para> Make sure the version of Java you are running is 1.5 or higher. Default installations of Linux still  include a gij compiler which is only 1.4 compliant. 
-				 the do not normally include a java5 jre or even jdk, so you often must install it manually. In debian/ubuntu, 
+				 <para> Make sure the version of Java you are running is Sun Java 1.5 or higher. Default installations of Linux still  include a gij compiler which is only 1.4 compliant or not fully Sun compliant. 
+				 Some do not include a java5 jre or even jdk, so you may need to install it manually. In debian/ubuntu, 
 				 <literal> apt-get install sun-java5-jdk </literal>
 				 </para>
 		        </answer>

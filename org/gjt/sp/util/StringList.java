@@ -28,7 +28,7 @@ import java.util.Collection;
 
 // {{{ StringList class
 /**
- * A List<String> with some perl-like convenience functions (split/join primarily),
+ * A List&lt;String&gt; with some perl-like convenience functions (split/join primarily),
  * and easy conversion to/from arrays.
  * @since jEdit 4.3pre7
  */

@@ -118,7 +118,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 	/**
 	 * Returns the specified action.
 	 * @param name The action name
-	 * @return a JEditAbstractEditAction or null if it doesn't exists
+	 * @return a JEditAbstractEditAction or null if it doesn't exist
 	 * @since jEdit 4.3pre13
 	 */
 	public F getAction(String name)

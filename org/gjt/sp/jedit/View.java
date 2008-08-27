@@ -1620,7 +1620,7 @@ loop:		while (true)
 					buffer = jEdit.getBuffer(path);
 					if (buffer == null)
 					{
-						Log.log(Log.WARNING, this, "Error buffer " + path + " doesn't exists");
+						Log.log(Log.WARNING, this, "Buffer " + path + " doesn't exist");
 					}
 					else
 					{
