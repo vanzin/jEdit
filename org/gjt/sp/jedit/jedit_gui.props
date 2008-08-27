@@ -1935,7 +1935,7 @@ options.save-back.backupEverySave=Backup on every save
 options.save-back.twoStageSave=Two-stage save (safer but resets file owner on Unix)
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
-options.save-back.suppressNotSavedConfirmUntitled=Suppress "not saved" confirm dialog for Untitled buffers
+options.save-back.suppressNotSavedConfirmUntitled=Don't show "file not saved" dialog when closing Untitled buffers
 #}}}
 
 #{{{ Shortcuts pane
