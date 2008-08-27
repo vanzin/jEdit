@@ -64,11 +64,14 @@ public class CloseDialog extends EnhancedDialog
 		Buffer[] buffers = jEdit.getBuffers();
 		for(int i = 0; i < buffers.length; i++)
 		{
+			
 			Buffer buffer = buffers[i];
-			if(buffer.isDirty())
-			{
-				bufferModel.addElement(buffer.getPath());
-			}
+			boolean addBuffer = buffer.isDirty();
+			if (buffer.getLength() == 0) addBuffer = false;
+			if (buffer.isNewFile() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) 
+				addBuffer=false;
+			if(addBuffer) 
+				bufferModel.addElement(buffer.getPath()); 
 		}
 
 		centerPanel.add(BorderLayout.CENTER,new JScrollPane(bufferList));

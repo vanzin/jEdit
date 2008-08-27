@@ -24,6 +24,12 @@ Shlomy Reinstein, and Greg Merrill for contributing to this release.
 - Enabled reverse regex search. (SF.net patch #1923613 - Greg Merrill)
   NOTE: There is a known problem with "$". (SF.net bug #2069249)
 
+- New option in saving/backup: Suppress "file not saved" warning
+  on Untitled buffers. Related to that, "file not saved" warning
+  is no longer shown for buffers (untitled or not) with length=0. 
+  -- (request # 2068307 - Alan Ezust )
+
+
 }}}
 
 {{{ Docker Plugin features merged into jEdit Core

@@ -70,9 +70,14 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		/* Autosave untitled buffers */
 		autosaveUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.autosaveUntitled"));
+		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
+			"options.save-back.suppressNotSavedConfirmUntitled"));
+		suppressNotSavedConfirmUntitled.setSelected(
+			jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
+
 		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
 		addComponent(autosaveUntitled);
-
+		addComponent(suppressNotSavedConfirmUntitled);
 
 		/* Backup count */
 		backups = new NumericTextField(jEdit.getProperty("backups"), true);
@@ -122,7 +127,8 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		boolean newAutosave = autosaveUntitled.isSelected();
 		boolean oldAutosave = jEdit.getBooleanProperty("autosaveUntitled");
 		jEdit.setBooleanProperty("autosaveUntitled", newAutosave);
-
+		jEdit.setBooleanProperty("suppressNotSavedConfirmUntitled",
+				suppressNotSavedConfirmUntitled.isSelected() );
 		if ((!newAutosave || jEdit.getIntegerProperty("autosave",0) == 0) && oldAutosave)
 		{
 			Buffer[] buffers = jEdit.getBuffers();
@@ -141,6 +147,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private JCheckBox confirmSaveAll;
 	private JTextField autosave;
 	private JCheckBox autosaveUntitled;
+	private JCheckBox suppressNotSavedConfirmUntitled;
 	private JTextField backups;
 	private JTextField backupDirectory;
 	private JTextField backupPrefix;
