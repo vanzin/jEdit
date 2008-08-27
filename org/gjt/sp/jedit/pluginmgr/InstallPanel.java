@@ -187,7 +187,7 @@ class InstallPanel extends JPanel implements EBComponent
 		}
 		catch (Exception e)
 		{
-			Log.log(Log.ERROR, this, "Loading Pluginset Error", e);
+			Log.log(Log.WARNING, this, "Loading Pluginset failed:" + e.getMessage());
 			return false;
 		}
 		pluginModel.update();
