@@ -66,11 +66,7 @@ public class CloseDialog extends EnhancedDialog
 		{
 			
 			Buffer buffer = buffers[i];
-			boolean addBuffer = buffer.isDirty();
-			if (buffer.getLength() == 0) addBuffer = false;
-			if (buffer.isNewFile() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) 
-				addBuffer=false;
-			if(addBuffer) 
+			if(buffer.isDirty()) 
 				bufferModel.addElement(buffer.getPath()); 
 		}
 

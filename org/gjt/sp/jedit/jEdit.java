@@ -1698,13 +1698,7 @@ public class jEdit
 				return false;
 		}
 
-		boolean showNotSaved = buffer.isDirty();
-		if (buffer.getLength() == 0) showNotSaved = false;
-		if (buffer.isNewFile() &&
-				jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) 
-			showNotSaved = false;
-
-		if(showNotSaved)
+		if(buffer.isDirty())
 		{
 			Object[] args = { buffer.getName() };
 			int result = GUIUtilities.confirm(view,"notsaved",args,

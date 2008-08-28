@@ -801,6 +801,15 @@ public class Buffer extends JEditBuffer
 		return getFlag(CLOSED);
 	} //}}}
 
+	public boolean isDirty()
+	{
+		if (isNewFile()) {
+			if (getLength() == 0) return false;
+			if (jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) return false;
+		}
+		return super.isDirty();
+	}
+	
 	//{{{ isLoaded() method
 	/**
 	 * Returns true if the buffer is loaded. This method is thread-safe.
