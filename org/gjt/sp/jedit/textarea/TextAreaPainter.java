@@ -744,13 +744,13 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 		else
 		{
-			long prepareTime = System.currentTimeMillis();
+			long prepareTime = System.nanoTime();
 			FastRepaintManager.RepaintLines lines
 				= textArea.repaintMgr.prepareGraphics(clipRect,
 				textArea.getFirstLine(),gfx);
-			prepareTime = (System.currentTimeMillis() - prepareTime);
+			prepareTime = (System.nanoTime() - prepareTime);
 
-			long linesTime = System.currentTimeMillis();
+			long linesTime = System.nanoTime();
 			int numLines = (lines.last - lines.first + 1);
 
 			int y = lines.first * lineHeight;
@@ -758,18 +758,18 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			extensionMgr.paintScreenLineRange(textArea,gfx,
 				lines.first,lines.last,y,lineHeight);
-			linesTime = (System.currentTimeMillis() - linesTime);
+			linesTime = (System.nanoTime() - linesTime);
 
 			textArea.repaintMgr.setFastScroll(
 				clipRect.equals(new Rectangle(0,0,
 				getWidth(),getHeight())));
 
-			long blitTime = System.currentTimeMillis();
+			long blitTime = System.nanoTime();
 			textArea.repaintMgr.paint(_gfx);
-			blitTime = (System.currentTimeMillis() - blitTime);
+			blitTime = (System.nanoTime() - blitTime);
 
 			if(Debug.PAINT_TIMER && numLines >= 1)
-				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + "/" + blitTime + " ms");
+				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + "/" + blitTime + " ns");
 		}
 
 		textArea.updateMaxHorizontalScrollWidth();
