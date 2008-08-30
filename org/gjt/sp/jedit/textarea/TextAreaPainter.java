@@ -728,35 +728,56 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	@Override
 	public void paint(Graphics _gfx)
 	{
-		Graphics2D gfx = textArea.repaintMgr.getGraphics();
-
+		assert(_gfx instanceof Graphics2D);
+		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
 
-		Rectangle clipRect = _gfx.getClipBounds();
-
-		JEditBuffer buffer = textArea.getBuffer();
+		Rectangle clipRect = gfx.getClipBounds();
 		int lineHeight = fm.getHeight();
-		if(lineHeight == 0 || buffer.isLoading())
+		if(lineHeight == 0 || textArea.getBuffer().isLoading())
 		{
-			_gfx.setColor(getBackground());
-			_gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
+			gfx.setColor(getBackground());
+			gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
+		}
+		else if(Debug.DISABLE_FASTREPAINTMANAGER)
+		{
+			long prepareTime = System.nanoTime();
+			// Because the clipRect's height is usually an even multiple
+			// of the font height, we subtract 1 from it, otherwise one
+			// too many lines will always be painted.
+			int firstLine = clipRect.y / lineHeight;
+			int lastLine = (clipRect.y + clipRect.height - 1) / lineHeight;
+			gfx.setColor(getBackground());
+			gfx.setFont(getFont());
+			prepareTime = (System.nanoTime() - prepareTime);
+
+			long linesTime = System.nanoTime();
+			int numLines = (lastLine - firstLine + 1);
+			int y = firstLine * lineHeight;
+			gfx.fillRect(0,y,getWidth(),numLines * lineHeight);
+			extensionMgr.paintScreenLineRange(textArea,gfx,
+				firstLine,lastLine,y,lineHeight);
+			linesTime = (System.nanoTime() - linesTime);
+
+			if(Debug.PAINT_TIMER && numLines >= 1)
+				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + " ns");
 		}
 		else
 		{
+			Graphics2D backBuffer = textArea.repaintMgr.getGraphics();
+
 			long prepareTime = System.nanoTime();
 			FastRepaintManager.RepaintLines lines
 				= textArea.repaintMgr.prepareGraphics(clipRect,
-				textArea.getFirstLine(),gfx);
+				textArea.getFirstLine(),backBuffer);
 			prepareTime = (System.nanoTime() - prepareTime);
 
 			long linesTime = System.nanoTime();
 			int numLines = (lines.last - lines.first + 1);
-
 			int y = lines.first * lineHeight;
-			gfx.fillRect(0,y,getWidth(),numLines * lineHeight);
-
-			extensionMgr.paintScreenLineRange(textArea,gfx,
+			backBuffer.fillRect(0,y,getWidth(),numLines * lineHeight);
+			extensionMgr.paintScreenLineRange(textArea,backBuffer,
 				lines.first,lines.last,y,lineHeight);
 			linesTime = (System.nanoTime() - linesTime);
 
@@ -765,7 +786,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				getWidth(),getHeight())));
 
 			long blitTime = System.nanoTime();
-			textArea.repaintMgr.paint(_gfx);
+			textArea.repaintMgr.paint(gfx);
 			blitTime = (System.nanoTime() - blitTime);
 
 			if(Debug.PAINT_TIMER && numLines >= 1)
