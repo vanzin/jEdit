@@ -1074,19 +1074,23 @@ public abstract class VFS
 		String resolvedPath = directory;
 		if (recursive && !MiscUtilities.isURL(directory))
 		{
-			// resolve symlinks to avoid loops
 			resolvedPath = MiscUtilities.resolveSymlinks(directory);
+			/*
+			 * If looking at a symlink, do not traverse the
+			 * resolved path more than once.
+			 */
+			if (!directory.equals(resolvedPath))
+			{
+				if (stack.contains(resolvedPath))
+				{
+					Log.log(Log.ERROR,this,
+						"Recursion in listFiles(): "
+						+ directory);
+					return;
+				}
+				stack.add(resolvedPath);
+			}
 		}
-
-		if(stack.contains(resolvedPath))
-		{
-			Log.log(Log.ERROR,this,
-				"Recursion in _listDirectory(): "
-				+ directory);
-			return;
-		}
-
-		stack.add(resolvedPath);
 
 		Thread ct = Thread.currentThread();
 		WorkThread wt = null;
