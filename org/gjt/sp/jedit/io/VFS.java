@@ -712,7 +712,6 @@ public abstract class VFS
 		boolean skipBinary, boolean skipHidden)
 		throws IOException
 	{
-		Log.log(Log.DEBUG,this,"Listing " + directory);
 		List<String> files = new ArrayList<String>(100);
 
 		listFiles(session,new HashSet<String>(), files,directory,filter,
