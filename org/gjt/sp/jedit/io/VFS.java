@@ -1143,8 +1143,6 @@ public abstract class VFS
 						// may be not binary...
 					}
 				}
-
-				Log.log(Log.DEBUG,this,file.getPath());
 				files.add(file.getPath());
 			}
 		}
