@@ -30,6 +30,7 @@ import javax.swing.JMenuItem;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.MalformedInputException;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -410,7 +411,7 @@ public class MiscUtilities
 			return index + start;
 	} //}}}
 
-	
+
 	//{{{ getFileExtension() method
 	/**
 	 * Returns the extension of the specified filename, or an empty
@@ -748,8 +749,16 @@ public class MiscUtilities
 		}
 		// Read the stream in system default encoding. The encoding
 		// might be wrong. But enough for binary detection.
-		return containsNullCharacter(
-			new InputStreamReader(detection.getRewindedStream()));
+		try
+		{
+			return containsNullCharacter(
+				new InputStreamReader(detection.getRewindedStream()));
+		}
+		catch (MalformedInputException mie)
+		{
+			// This error probably means the input is binary.
+			return true;
+		}
 	} //}}}
 
 	//{{{ isBackup() method
