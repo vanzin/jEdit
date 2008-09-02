@@ -46,6 +46,8 @@ public class Chunk extends Token
 	 * @param gfx The graphics context
 	 * @param x The x co-ordinate
 	 * @param y The y co-ordinate
+	 * @param glyphVector true if we want to use glyphVector, false if we
+	 * want to use drawString
 	 * @return The width of the painted text
 	 * @since jEdit 4.2pre1
 	 */
@@ -255,30 +257,28 @@ public class Chunk extends Token
 	//{{{ xToOffset() method
 	public final int xToOffset(float x, boolean round)
 	{
-		if(!visible)
+		if (!visible)
 		{
-			if(round && width - x < x)
+			if (round && width - x < x)
 				return offset + length;
 			else
 				return offset;
 		}
-		else
+		
+		float[] pos = getPositions();
+
+		for(int i = 0; i < length; i++)
 		{
-			float[] pos = getPositions();
+			float glyphX = pos[i*2];
+			float nextX = (i == length - 1
+				? width : pos[i*2+2]);
 
-			for(int i = 0; i < length; i++)
+			if(nextX > x)
 			{
-				float glyphX = pos[i*2];
-				float nextX = (i == length - 1
-					? width : pos[i*2+2]);
-
-				if(nextX > x)
-				{
-					if(!round || nextX - x > x - glyphX)
-						return offset + i;
-					else
-						return offset + i + 1;
-				}
+				if(!round || nextX - x > x - glyphX)
+					return offset + i;
+				else
+					return offset + i + 1;
 			}
 		}
 
@@ -307,11 +307,10 @@ public class Chunk extends Token
 			visible = true;
 
 			str = new String(seg.array,seg.offset + offset,length);
-			
-			Rectangle2D logicalBounds;
+
 			gv = style.getFont().createGlyphVector(
 				fontRenderContext, str);
-			logicalBounds = gv.getLogicalBounds();
+			Rectangle2D logicalBounds = gv.getLogicalBounds();
 
 			width = (float)logicalBounds.getWidth();
 		}
