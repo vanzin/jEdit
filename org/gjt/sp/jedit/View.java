@@ -258,21 +258,34 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return dockableWindowManager;
 	} //}}}
 
-	static public String getDockingFrameworkName() {
+	//{{{ getDockingFrameworkName() method
+	public static String getDockingFrameworkName()
+	{
 		String framework = jEdit.getProperty(
 				VIEW_DOCKING_FRAMEWORK_PROPERTY, ORIGINAL_DOCKING_FRAMEWORK);
 		return framework;
-	}
-	static public DockingFrameworkProvider getDockingFrameworkProvider() {
+	} //}}}
+
+	//{{{ getDockingFrameworkProvider() method
+	public static DockingFrameworkProvider getDockingFrameworkProvider()
+	{
 		if (dockingFrameworkProvider == null)
 		{
 			String framework = getDockingFrameworkName();
 			dockingFrameworkProvider = (DockingFrameworkProvider)
 				ServiceManager.getService(
 					DOCKING_FRAMEWORK_PROVIDER_SERVICE, framework);
+
+			if (dockingFrameworkProvider == null)
+			{
+				dockingFrameworkProvider = (DockingFrameworkProvider)
+				ServiceManager.getService(
+					DOCKING_FRAMEWORK_PROVIDER_SERVICE, ORIGINAL_DOCKING_FRAMEWORK);
+			}
 		}
 		return dockingFrameworkProvider;
-	}
+	} //}}}
+
 	//{{{ getToolBar() method
 	/**
 	 * Returns the view's tool bar.
