@@ -70,14 +70,23 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		/* Autosave untitled buffers */
 		autosaveUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.autosaveUntitled"));
+		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
+		addComponent(autosaveUntitled);
+
 		suppressNotSavedConfirmUntitled = new JCheckBox(jEdit.getProperty(
 			"options.save-back.suppressNotSavedConfirmUntitled"));
 		suppressNotSavedConfirmUntitled.setSelected(
 			jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
-
-		autosaveUntitled.setSelected(jEdit.getBooleanProperty("autosaveUntitled"));
-		addComponent(autosaveUntitled);
 		addComponent(suppressNotSavedConfirmUntitled);
+		
+		useMD5forDirtyCalculation = new JCheckBox(jEdit.getProperty(
+			"options.save-back.useMD5forDirtyCalculation"));
+		useMD5forDirtyCalculation.setSelected(
+			jEdit.getBooleanProperty("useMD5forDirtyCalculation"));
+		addComponent(useMD5forDirtyCalculation);
+		
+		
+		
 
 		/* Backup count */
 		backups = new NumericTextField(jEdit.getProperty("backups"), true);
@@ -128,7 +137,9 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		boolean oldAutosave = jEdit.getBooleanProperty("autosaveUntitled");
 		jEdit.setBooleanProperty("autosaveUntitled", newAutosave);
 		jEdit.setBooleanProperty("suppressNotSavedConfirmUntitled",
-				suppressNotSavedConfirmUntitled.isSelected() );
+				suppressNotSavedConfirmUntitled.isSelected()); 
+		jEdit.setBooleanProperty("useMD5forDirtyCalculation", 
+				useMD5forDirtyCalculation.isSelected());
 		if ((!newAutosave || jEdit.getIntegerProperty("autosave",0) == 0) && oldAutosave)
 		{
 			Buffer[] buffers = jEdit.getBuffers();
@@ -148,6 +159,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	private JTextField autosave;
 	private JCheckBox autosaveUntitled;
 	private JCheckBox suppressNotSavedConfirmUntitled;
+	private JCheckBox useMD5forDirtyCalculation;
 	private JTextField backups;
 	private JTextField backupDirectory;
 	private JTextField backupPrefix;

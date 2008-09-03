@@ -49,6 +49,9 @@ import javax.swing.text.Segment;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -853,6 +856,9 @@ public class Buffer extends JEditBuffer
 			if (getLength() == 0 || 
 				jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) 
 				d = false;
+		}
+		else if (d && jEdit.getBooleanProperty("useMD5forDirtyCalculation")) {
+			d = !Arrays.equals(calculateHash(), md5hash);
 		}
 		super.setDirty(d);
 		boolean editable = isEditable();
@@ -1686,6 +1692,7 @@ public class Buffer extends JEditBuffer
 	private File file;
 	private File autosaveFile;
 	private long modTime;
+	private byte[] md5hash;
 
 	private final Vector<Marker> markers;
 
@@ -1870,9 +1877,23 @@ public class Buffer extends JEditBuffer
 		return true;
 	} //}}}
 
+	/** @returns an MD5 hash of the contents of the buffer */
+	private byte[] calculateHash() {
+		try {
+			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+			digest.update(getText(0, getLength()).getBytes());
+			return digest.digest();
+		}
+		catch (NoSuchAlgorithmException nsae) {
+			Log.log(Log.ERROR, this, "Can't Calculate MD5 hash!", nsae);
+		}
+	}
+	
+	
 	//{{{ finishLoading() method
 	private void finishLoading()
 	{
+		md5hash = calculateHash();
 		parseBufferLocalProperties();
 		// AHA!
 		// this is probably the only way to fix this

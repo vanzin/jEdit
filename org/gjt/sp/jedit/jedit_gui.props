@@ -1938,6 +1938,7 @@ options.save-back.twoStageSave=Two-stage save (safer but resets file owner on Un
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
 options.save-back.suppressNotSavedConfirmUntitled=Don't show "file not saved" dialog when closing Untitled buffers
+options.save-back.useMD5forDirtyCalculation=Use MD5 hash calculations to check if isDirty()
 #}}}
 
 #{{{ Shortcuts pane
