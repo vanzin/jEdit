@@ -852,14 +852,13 @@ public class Buffer extends JEditBuffer
 	public void setDirty(boolean d)
 	{
 		boolean old_d = isDirty();
-		if (isNewFile()) {
-			if (getLength() == 0 || 
-				jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled")) 
-				d = false;
+		if (d && getLength() == initialLength) {
+			if (isNewFile()) d = false;
+			else if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
+				d = !Arrays.equals(calculateHash(), md5hash);
 		}
-		else if (d && jEdit.getBooleanProperty("useMD5forDirtyCalculation")) {
-			d = !Arrays.equals(calculateHash(), md5hash);
-		}
+		if (isNewFile() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"))
+			d = false;
 		super.setDirty(d);
 		boolean editable = isEditable();
 
@@ -1693,6 +1692,7 @@ public class Buffer extends JEditBuffer
 	private File autosaveFile;
 	private long modTime;
 	private byte[] md5hash;
+	private int initialLength;
 
 	private final Vector<Marker> markers;
 
@@ -1879,6 +1879,7 @@ public class Buffer extends JEditBuffer
 
 	/** @returns an MD5 hash of the contents of the buffer */
 	private byte[] calculateHash() {
+//		Log.log(Log.DEBUG, this, "calculateHash()");
 		try {
 			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
 			digest.update(getText(0, getLength()).getBytes());
@@ -1895,6 +1896,8 @@ public class Buffer extends JEditBuffer
 	private void finishLoading()
 	{
 		md5hash = calculateHash();
+		initialLength = getLength();
+		
 		parseBufferLocalProperties();
 		// AHA!
 		// this is probably the only way to fix this
