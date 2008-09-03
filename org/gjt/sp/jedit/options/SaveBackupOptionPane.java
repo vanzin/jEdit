@@ -81,6 +81,8 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		
 		useMD5forDirtyCalculation = new JCheckBox(jEdit.getProperty(
 			"options.save-back.useMD5forDirtyCalculation"));
+		useMD5forDirtyCalculation.setToolTipText(jEdit.getProperty(
+			"options.save-back.useMD5forDirtyCalculation.tooltip"));
 		useMD5forDirtyCalculation.setSelected(
 			jEdit.getBooleanProperty("useMD5forDirtyCalculation"));
 		addComponent(useMD5forDirtyCalculation);

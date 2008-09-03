@@ -1943,7 +1943,9 @@ options.save-back.twoStageSave=Two-stage save (safer but resets file owner on Un
 options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
 options.save-back.suppressNotSavedConfirmUntitled=Don't show "file not saved" dialog when closing Untitled buffers
-options.save-back.useMD5forDirtyCalculation=Use MD5 hash calculations to check if isDirty()
+options.save-back.useMD5forDirtyCalculation=Don't show "file not saved" if buffer is the same as original 
+options.save-back.useMD5forDirtyCalculation.tooltip=Use MD5 hash to calculate if changed buffers are really the same as they were at loading time.
+
 #}}}
 
 #{{{ Shortcuts pane
