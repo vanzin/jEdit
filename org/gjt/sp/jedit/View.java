@@ -61,7 +61,7 @@ import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.gui.HistoryModel;
-import org.gjt.sp.jedit.gui.IDockingFrameworkProvider;
+import org.gjt.sp.jedit.gui.DockingFrameworkProvider;
 import org.gjt.sp.jedit.gui.InputHandler;
 import org.gjt.sp.jedit.gui.StatusBar;
 import org.gjt.sp.jedit.gui.ToolBarManager;
@@ -137,7 +137,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private static final String ORIGINAL_DOCKING_FRAMEWORK = "Original";
 	public static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
 		"org.gjt.sp.jedit.gui.DockingFrameworkProvider";
-	private static IDockingFrameworkProvider dockingFrameworkProvider = null;
+	private static DockingFrameworkProvider dockingFrameworkProvider = null;
 
 	//{{{ Groups
 	/**
@@ -263,11 +263,11 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				VIEW_DOCKING_FRAMEWORK_PROPERTY, ORIGINAL_DOCKING_FRAMEWORK);
 		return framework;
 	}
-	static public IDockingFrameworkProvider getDockingFrameworkProvider() {
+	static public DockingFrameworkProvider getDockingFrameworkProvider() {
 		if (dockingFrameworkProvider == null)
 		{
 			String framework = getDockingFrameworkName();
-			dockingFrameworkProvider = (IDockingFrameworkProvider)
+			dockingFrameworkProvider = (DockingFrameworkProvider)
 				ServiceManager.getService(
 					DOCKING_FRAMEWORK_PROVIDER_SERVICE, framework);
 		}

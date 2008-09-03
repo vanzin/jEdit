@@ -18,6 +18,10 @@ import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.options.DockingOptionPane;
 
+/** Saves and loads dockable layouts to disk
+    @author Shlomy Reinstein
+    @since jEdit 4.3pre16
+*/
 public class DockingLayoutManager implements EBComponent
 {
 

@@ -30,12 +30,94 @@ import org.gjt.sp.util.Log;
 @SuppressWarnings("serial")
 // {{{ abstract class DockableWindowManager
 /**
- * Base class for Dockable Window Managers.
- * Each View has a single DockableWindowManager, for managing the specific dockable instances
- * associated with that View.
+ * <p>Keeps track of all dockable windows for a single View, and provides
+ * an API for getting/showing/hiding them. </p>
+ * 
+ * <p>Each {@link org.gjt.sp.jedit.View} has an instance of this class.</p>
+ *
+ * <p><b>dockables.xml:</b></p>
+ *
+ * <p>Dockable window definitions are read from <code>dockables.xml</code> files
+ * contained inside plugin JARs. A dockable definition file has the following
+ * form: </p>
+ *
+ * <pre>&lt;?xml version="1.0"?&gt;
+ *&lt;!DOCTYPE DOCKABLES SYSTEM "dockables.dtd"&gt;
+ *&lt;DOCKABLES&gt;
+ *    &lt;DOCKABLE NAME="<i>dockableName</i>" MOVABLE="TRUE|FALSE"&gt;
+ *        // Code to create the dockable
+ *    &lt;/DOCKABLE&gt;
+ *&lt;/DOCKABLES&gt;</pre>
+ *
+ * <p>The MOVABLE attribute specifies the behavior when the docking position of
+ * the dockable window is changed. If MOVABLE is TRUE, the existing instance of
+ * the dockable window is moved to the new docking position, and if the dockable
+ * window implements the DockableWindow interface (see {@link DockableWindow}),
+ * it is also notified about the change in docking position before it is moved.
+ * If MOVABLE is FALSE, the BeanShell code is invoked to get the instance of
+ * the dockable window to put in the new docking position. Typically, the
+ * BeanShell code returns a new instance of the dockable window, and the state
+ * of the existing instance is not preserved after the change. It is therefore
+ * recommended to set MOVABLE to TRUE for all dockables in order to make them
+ * preserve their state when they are moved. For backward compatibility reasons,
+ * this attribute is set to FALSE by default.</p>
+ * <p>More than one <code>&lt;DOCKABLE&gt;</code> tag may be present. The code that
+ * creates the dockable can reference any BeanShell built-in variable
+ * (see {@link org.gjt.sp.jedit.BeanShell}), along with a variable
+ * <code>position</code> whose value is one of
+ * {@link #FLOATING}, {@link #TOP}, {@link #LEFT}, {@link #BOTTOM},
+ * and {@link #RIGHT}. </p>
+ *
+ * <p>The following properties must be defined for each dockable window: </p>
+ *
+ * <ul>
+ * <li><code><i>dockableName</i>.title</code> - the string to show on the dockable
+ * button. </li>
+ * <li><code><i>dockableName</i>.label</code> - The string to use for generating
+ *    menu items and action names. </li> 
+ * <li><code><i>dockableName</i>.longtitle</code> - (optional) the string to use
+ *      in the dockable's floating window title (when it is floating).
+ *       If not specified, the <code><i>dockableName</i>.title</code> property is used. </li>
+ * </ul>
+ *
+ * A number of actions are automatically created for each dockable window:
+ *
+ * <ul>
+ * <li><code><i>dockableName</i></code> - opens the dockable window.</li>
+ * <li><code><i>dockableName</i>-toggle</code> - toggles the dockable window's visibility.</li>
+ * <li><code><i>dockableName</i>-float</code> - opens the dockable window in a new
+ * floating window.</li>
+ * </ul>
+ *
+ * Note that only the first action needs a <code>label</code> property, the
+ * rest have automatically-generated labels.
+ *
+ * <p> <b>Implementation details:</b></p>
+ *
+ * <p> When an instance of this class is initialized by the {@link org.gjt.sp.jedit.View}
+ * class, it
+ * iterates through the list of registered dockable windows (from jEdit itself,
+ * and any loaded plugins) and
+ * examines options supplied by the user in the <b>Global
+ * Options</b> dialog box. Any plugins designated for one of the
+ * four docking positions are displayed.</p>
+ *
+ * <p> To create an instance of a dockable window, the <code>DockableWindowManager</code>
+ * finds and executes the BeanShell code extracted from the appropriate
+ * <code>dockables.xml</code> file. This code will typically consist of a call
+ * to the constructor of the dockable window component. The result of the
+ * BeanShell expression, typically a newly constructed component, is placed
+ * in a window managed by this class. </p>
+ *
+ * @see org.gjt.sp.jedit.View#getDockableWindowManager()
+ *
+ * @author Slava Pestov
+ * @author John Gellene (API documentation)
+ * @version $Id$
+ * @since jEdit 2.6pre3
  * 
  */
-public abstract class DockableWindowManager extends JPanel implements EBComponent
+ public abstract class DockableWindowManager extends JPanel implements EBComponent
 {
 
 	//{{{ Constants
@@ -98,8 +180,9 @@ public abstract class DockableWindowManager extends JPanel implements EBComponen
 	abstract public void setMainPanel(JPanel panel);
 	abstract public void showDockableWindow(String name);
 	abstract public void hideDockableWindow(String name);
-	// Completely dispose of a dockable - called when a plugin is
-	// unloaded, to remove all references to the its dockables.
+
+	/** Completely dispose of a dockable - called when a plugin is
+	    unloaded, to remove all references to the its dockables. */
 	abstract public void disposeDockableWindow(String name);
 	abstract public JComponent floatDockableWindow(String name);
 	abstract public boolean isDockableWindowDocked(String name);
