@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit;
 
 import org.gjt.sp.jedit.bsh.*;
+import java.lang.ref.SoftReference;
 import java.awt.Component;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.util.Log;
@@ -48,15 +49,17 @@ public class BeanShellAction extends EditAction
 	{
 		super(name);
 
-		this.code = code;
-		this.isSelected = isSelected;
+		/* Some characters that we like to use in action names
+		 * ('.', '-') are not allowed in BeanShell identifiers. */
+		String sanitizedName = name.replace('.','_').replace('-','_');
+		this.code = new CachedBshMethod("action_" + sanitizedName, code);
+		if (isSelected != null)
+		{
+			this.isSelected = new CachedBshMethod("selected_" + sanitizedName, isSelected);
+		}
 		this.noRepeat = noRepeat;
 		this.noRecord = noRecord;
 		this.noRememberLast = noRememberLast;
-
-		/* Some characters that we like to use in action names
-		 * ('.', '-') are not allowed in BeanShell identifiers. */
-		sanitizedName = name.replace('.','_').replace('-','_');
 
 		jEdit.setTemporaryProperty(name + ".toggle",
 			isSelected != null ? "true" : "false");
@@ -67,13 +70,7 @@ public class BeanShellAction extends EditAction
 	{
 		try
 		{
-			if(cachedCode == null)
-			{
-				String cachedCodeName = "action_" + sanitizedName;
-				cachedCode = BeanShell.cacheBlock(cachedCodeName,code,true);
-			}
-
-			BeanShell.runCachedBlock(cachedCode,view,
+			BeanShell.runCachedBlock(code.get(),view,
 				new NameSpace(BeanShell.getNameSpace(),
 				"BeanShellAction.invoke()"));
 		}
@@ -95,13 +92,6 @@ public class BeanShellAction extends EditAction
 
 		try
 		{
-			if(cachedIsSelected == null)
-			{
-				String cachedIsSelectedName = "selected_" + sanitizedName;
-				cachedIsSelected = BeanShell.cacheBlock(cachedIsSelectedName,
-					isSelected,true);
-			}
-
 			View view = GUIUtilities.getView(comp);
 
 			// undocumented hack to allow browser actions to work.
@@ -109,7 +99,7 @@ public class BeanShellAction extends EditAction
 			global.setVariable("_comp",comp);
 
 			return Boolean.TRUE.equals(BeanShell.runCachedBlock(
-				cachedIsSelected,view,
+				isSelected.get(),view,
 				new NameSpace(BeanShell.getNameSpace(),
 				"BeanShellAction.isSelected()")));
 		}
@@ -165,17 +155,50 @@ public class BeanShellAction extends EditAction
 	//{{{ getCode() method
 	public String getCode()
 	{
-		return code.trim();
+		return code.getSource().trim();
 	} //}}}
 
 	//{{{ Private members
 	private boolean noRepeat;
 	private boolean noRecord;
 	private boolean noRememberLast;
-	private String code;
-	private String isSelected;
-	private BshMethod cachedCode;
-	private BshMethod cachedIsSelected;
-	private String sanitizedName;
+	private CachedBshMethod code;
+	private CachedBshMethod isSelected;
+
+	//{{{ CachedBshMethod class
+	private static class CachedBshMethod
+	{
+		private final String name;
+		private final String source;
+		private SoftReference<BshMethod> cache;
+
+		public CachedBshMethod(String name, String source)
+		{
+			this.name = name;
+			this.source = source;
+			this.cache = null;
+		}
+
+		public BshMethod get() throws java.lang.Exception
+		{
+			if (cache != null)
+			{
+				BshMethod cached = cache.get();
+				if (cached != null)
+				{
+					return cached;
+				}
+			}
+			BshMethod newOne = BeanShell.cacheBlock(name, source, true);
+			cache = new SoftReference<BshMethod>(newOne);
+			return newOne;
+		}
+
+		public String getSource()
+		{
+			return source;
+		}
+	}//}}}
+
 	//}}}
 }

@@ -170,7 +170,7 @@ public abstract class BeanShellFacade<T>
 	/**
 	 * Caches a block of code, returning a handle that can be passed to
 	 * runCachedBlock().
-	 * @param id An identifier. If null, a unique identifier is generated
+	 * @param id An identifier.
 	 * @param code The code
 	 * @param namespace If true, the namespace will be set
 	 * @exception Exception instances are thrown when various BeanShell errors
@@ -179,18 +179,21 @@ public abstract class BeanShellFacade<T>
 	public BshMethod cacheBlock(String id, String code, boolean namespace)
 		throws Exception
 	{
-		String name = "__internal_" + id;
-
-		// evaluate a method declaration
+		// Make local namespace so that the method could be GCed
+		// if it becomes unnecessary.
+		NameSpace local = new NameSpace(global, "__internal_" + id);
+		// This name should be unique enough not to shadow any outer
+		// identifier.
+		String name = "__runCachedMethod";
 		if(namespace)
 		{
-			_eval(null,global,name + "(ns) {\nthis.callstack.set(0,ns);\n" + code + "\n}");
-			return global.getMethod(name,new Class[] { NameSpace.class });
+			_eval(null,local,name + "(ns) {\nthis.callstack.set(0,ns);\n" + code + "\n}");
+			return local.getMethod(name,new Class[] { NameSpace.class });
 		}
 		else
 		{
-			_eval(null,global,name + "() {\n" + code + "\n}");
-			return global.getMethod(name,new Class[0]);
+			_eval(null,local,name + "() {\n" + code + "\n}");
+			return local.getMethod(name,new Class[0]);
 		}
 	} //}}}
 
