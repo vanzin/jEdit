@@ -1877,15 +1877,18 @@ public class Buffer extends JEditBuffer
 		return true;
 	} //}}}
 
-	/** @returns an MD5 hash of the contents of the buffer */
-	private byte[] calculateHash() {
+	/** @return an MD5 hash of the contents of the buffer */
+	private byte[] calculateHash()
+	{
 //		Log.log(Log.DEBUG, this, "calculateHash()");
-		try {
+		try
+		{
 			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
 			digest.update(getText(0, getLength()).getBytes());
 			return digest.digest();
 		}
-		catch (NoSuchAlgorithmException nsae) {
+		catch (NoSuchAlgorithmException nsae)
+		{
 			Log.log(Log.ERROR, this, "Can't Calculate MD5 hash!", nsae);
 			return null;
 		}
