@@ -1886,6 +1886,7 @@ public class Buffer extends JEditBuffer
 		}
 		catch (NoSuchAlgorithmException nsae) {
 			Log.log(Log.ERROR, this, "Can't Calculate MD5 hash!", nsae);
+			return null;
 		}
 	}
 	
