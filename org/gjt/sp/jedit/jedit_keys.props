@@ -27,6 +27,7 @@ swap-marker.shortcut=C+k
 goto-line.shortcut=C+g
 # C+m is a prefix
 new-file.shortcut=C+n
+new-file-in-mode.shortcut=CS+n
 open-file.shortcut=C+o
 print.shortcut=C+p
 exit.shortcut=C+q

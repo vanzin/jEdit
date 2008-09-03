@@ -565,6 +565,28 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="new-file-in-mode">
+	<CODE>
+		Mode[] modes = jEdit.getModes();
+		Mode currentMode = buffer.getMode();
+		String dialogTitle = jEdit.getProperty("new-file-in-mode.dialog.title");
+		String dialogMessage = jEdit.getProperty("new-file-in-mode.dialog.message");
+		Mode choice = (Mode)JOptionPane.showInputDialog(
+			view,
+			dialogMessage,
+			dialogTitle,
+			JOptionPane.QUESTION_MESSAGE,
+			null,
+			modes,
+			currentMode);
+		if(choice != null) {
+			Buffer newBuffer = jEdit.newFile(view);
+			view.goToBuffer(newBuffer);
+			newBuffer.setMode(choice);
+		}
+	</CODE>
+</ACTION>
+
 <ACTION NAME="new-view">
 	<CODE>
 		jEdit.newView(view);

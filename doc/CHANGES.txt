@@ -3,7 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre16
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
-Shlomy Reinstein, and Greg Merrill for contributing to this release.
+Shlomy Reinstein, Greg Merrill, and Eric Berry for contributing to this
+release.
 
 {{{ Bug Fixes
 
@@ -18,6 +19,7 @@ Shlomy Reinstein, and Greg Merrill for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
 - Moved buffer list sorting options from General to View Option Pane
   with other bufferset options. (Alan Ezust)
 
@@ -33,8 +35,11 @@ Shlomy Reinstein, and Greg Merrill for contributing to this release.
   file as loaded from disk is the same as what is in the buffer.
   -- (Request # 2077326 - Alan Ezust)
 
-}}}
+- New action new-file-in-mode, which opens a dialog listing the
+  available modes, the user can select one and a new file is created
+  under that mode. (SF.net patch #1829669 - Eric Berry)
 
+}}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)
   You can save named dockable layouts, analogous to Eclipse perspectives,

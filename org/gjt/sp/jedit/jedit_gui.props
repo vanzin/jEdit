@@ -188,6 +188,7 @@ view.mbar=file edit search markers folds view utils macros plugins help-menu
 
 #{{{ File menu
 file=new-file \
+     new-file-in-mode \
      open-file \
      %recent-files \
      - \
@@ -211,6 +212,10 @@ file=new-file \
 file.label=$File
 new-file.label=$New
 new-file.icon.small=16x16/actions/document-new.png
+new-file-in-mode.label=New In $Mode
+new-file-in-mode.icon.small=16x16/actions/document-new.png
+new-file-in-mode.dialog.title=New File
+new-file-in-mode.dialog.message=With Edit Mode:
 open-file.label=$Open...
 open-file.icon.small=16x16/actions/document-open.png
 reload.label=$Reload
@@ -952,7 +957,7 @@ about.text=jEdit is brought to you by\n\
 	Ben Williams\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Björn "Vampire" Kautler\n\
+	Bjrn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
