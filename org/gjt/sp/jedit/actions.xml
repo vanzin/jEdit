@@ -559,12 +559,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="new-plain-view">
-	<CODE>
-		jEdit.newView(view,buffer,true);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="new-file-in-mode">
 	<CODE>
 		Mode[] modes = jEdit.getModes();
@@ -584,6 +578,12 @@
 			view.goToBuffer(newBuffer);
 			newBuffer.setMode(choice);
 		}
+	</CODE>
+</ACTION>
+
+<ACTION NAME="new-plain-view">
+	<CODE>
+		jEdit.newView(view,buffer,true);
 	</CODE>
 </ACTION>
 
