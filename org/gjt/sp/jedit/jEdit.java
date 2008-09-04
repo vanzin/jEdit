@@ -2242,18 +2242,6 @@ public class jEdit
 		return newView(view,buffer,config);
 	}
 
-	private static class DockingLayoutSetter implements Runnable {
-		private View view;
-		private ViewConfig config;
-		public DockingLayoutSetter(View view, ViewConfig config) {
-			this.view = view;
-			this.config = config;
-		}
-		public void run() {
-			DockableWindowManager wm = view.getDockableWindowManager();
-			wm.setDockingLayout(config.docking);
-		}
-	}
 	/**
 	 * Creates a new view.
 	 * @param view An existing view
@@ -4113,6 +4101,25 @@ loop:		for(int i = 0; i < list.length; i++)
 		public String getProperty(String name)
 		{
 			return jEdit.getProperty(name);
+		}
+	} //}}}
+
+	//{{{ DockingLayoutSetter class
+	private static class DockingLayoutSetter implements Runnable
+	{
+		private View view;
+		private ViewConfig config;
+
+		DockingLayoutSetter(View view, ViewConfig config)
+		{
+			this.view = view;
+			this.config = config;
+		}
+
+		public void run()
+		{
+			DockableWindowManager wm = view.getDockableWindowManager();
+			wm.setDockingLayout(config.docking);
 		}
 	} //}}}
 
