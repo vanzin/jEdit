@@ -1650,23 +1650,24 @@ loop:		while (true)
 				{
 					BufferSet.Scope scope = BufferSet.Scope.fromString((String) stack.pop());
 					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
+					BufferSet bufferSet = null;
 					switch (scope)
 					{
 						case view:
-							editPane.setBufferSet(bufferSetManager.getViewBufferSet(this));
+							bufferSet = bufferSetManager.getViewBufferSet(this);
 							break;
 						case editpane:
-							editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane));
+							bufferSet = bufferSetManager.getEditPaneBufferSet(editPane);
 							break;
 						case global:
-							editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());
+							bufferSet = bufferSetManager.getGlobalBufferSet();
 							break;
 					}
-					BufferSet bufferSet = editPane.getBufferSet();
 					for (Buffer buff : editPaneBuffers)
 					{
 						bufferSetManager.addBuffer(bufferSet, buff);
 					}
+					editPane.setBufferSet(bufferSet);
 					editPaneBuffers.clear();
 				}
 				break;
