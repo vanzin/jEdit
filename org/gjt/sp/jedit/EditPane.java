@@ -726,7 +726,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 				// the recent buffer is not in the bufferSet
 				recentBuffer =  null;
 			}
-			if (bufferSet.size() != 0 && bufferSet.indexOf(buffer) == -1)
+			if (bufferSet.indexOf(buffer) == -1)
 			{
 				// the current buffer is not contained in the bufferSet, we must change the current buffer
 				if (recentBuffer != null)
@@ -869,11 +869,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		this.buffer = null;
 		if(buffer == null)
 		{
-			Buffer b = bufferSet.getBuffer(0);
-			if (b == null)
+			if (this.buffer == null)
 				setBuffer(jEdit.getFirstBuffer());
-			else
-				setBuffer(b);
 		}
 		else
 			setBuffer(buffer);

@@ -311,14 +311,15 @@ public class BufferSetManager implements EBComponent
 		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
 		if (bufferSets == null)
 			return false;
-		for (BufferSet bs: bufferSets)
+		return !bufferSets.isEmpty();
+		/*for (BufferSet bs: bufferSets)
 		{
 			if (bs.hasListeners())
 			{
 				return true;
 			}
 		}
-		return false;
+		return false;*/
 	} //}}}
 
 	//{{{ removeBuffer() method
