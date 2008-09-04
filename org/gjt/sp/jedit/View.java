@@ -278,6 +278,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 			if (dockingFrameworkProvider == null)
 			{
+				Log.log(Log.ERROR, View.class, "No docking framework " + framework +
+							       " available, using the original one");
 				dockingFrameworkProvider = (DockingFrameworkProvider)
 				ServiceManager.getService(
 					DOCKING_FRAMEWORK_PROVIDER_SERVICE, ORIGINAL_DOCKING_FRAMEWORK);
@@ -679,15 +681,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return split(JSplitPane.HORIZONTAL_SPLIT);
 	} //}}}
 
-	private Component mainContent = null;
-	private void setMainContent(Component c) {
-		if (mainContent != null)
-			mainPanel.remove(mainContent);
-		mainContent = c;
-		mainPanel.add(mainContent, BorderLayout.CENTER);
-		mainPanel.revalidate();
-		mainPanel.repaint();
-	}
 	//{{{ split() method
 	/**
 	 * Splits the view.
@@ -1441,7 +1434,20 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private boolean plainView;
 
 	private Socket waitSocket;
+	private Component mainContent;
+
 	//}}}
+
+	//{{{ setMainContent() method
+	private void setMainContent(Component c)
+	{
+		if (mainContent != null)
+			mainPanel.remove(mainContent);
+		mainContent = c;
+		mainPanel.add(mainContent, BorderLayout.CENTER);
+		mainPanel.revalidate();
+		mainPanel.repaint();
+	} //}}}
 
 	//{{{ getEditPanes() method
 	private static void getEditPanes(List<EditPane> vec, Component comp)
@@ -1934,7 +1940,7 @@ loop:		while (true)
 			y = jEdit.getIntegerProperty(prefix + ".y",0);
 			width = jEdit.getIntegerProperty(prefix + ".width",0);
 			height = jEdit.getIntegerProperty(prefix + ".height",0);
-			extState = jEdit.getIntegerProperty(prefix + ".extendedState",JFrame.NORMAL);
+			extState = jEdit.getIntegerProperty(prefix + ".extendedState", Frame.NORMAL);
 		}
 
 		public ViewConfig(boolean plainView, String splitConfig,
