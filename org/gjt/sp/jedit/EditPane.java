@@ -869,8 +869,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		this.buffer = null;
 		if(buffer == null)
 		{
-			if (this.buffer == null)
-				setBuffer(jEdit.getFirstBuffer());
+			setBuffer(jEdit.getFirstBuffer());
 		}
 		else
 			setBuffer(buffer);
