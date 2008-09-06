@@ -45,6 +45,9 @@ release.
   (SF.net Plugin Bugs #1620694) and consumed much memory.
   (Kazutoshi Satoda)
 
+- Improved rendering of complex text layout (like Indic text) in text
+  area. (SF.net bug #981012 - Kazutoshi Satoda)
+
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)

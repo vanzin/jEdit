@@ -308,8 +308,15 @@ public class Chunk extends Token
 
 			str = new String(seg.array,seg.offset + offset,length);
 
-			gv = style.getFont().createGlyphVector(
-				fontRenderContext, str);
+			int textStart = seg.offset + offset;
+			int textLimit = textStart + length;
+			// FIXME: Need BiDi support.
+			int layoutFlags = Font.LAYOUT_LEFT_TO_RIGHT
+				| Font.LAYOUT_NO_START_CONTEXT
+				| Font.LAYOUT_NO_LIMIT_CONTEXT;
+			gv = style.getFont().layoutGlyphVector(
+				fontRenderContext,
+				seg.array, textStart, textLimit, layoutFlags);
 			Rectangle2D logicalBounds = gv.getLogicalBounds();
 
 			width = (float)logicalBounds.getWidth();
