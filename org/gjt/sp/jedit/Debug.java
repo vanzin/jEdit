@@ -90,13 +90,6 @@ public class Debug
 	public static boolean PAINT_TIMER = false;
 
 	/**
-	 * Disable FastRepaintManager in painting TextAreaPainter.
-	 * The performance gain is questionable while it requires
-	 * much additional memory.
-	 */
-	public static boolean DISABLE_FASTREPAINTMANAGER = false;
-
-	/**
 	 * Show time taken for each EBComponent.
 	 */
 	public static boolean EB_TIMER = false;
