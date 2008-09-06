@@ -3,20 +3,21 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre16
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
-Shlomy Reinstein, Greg Merrill, and Eric Berry for contributing to this
-release.
+Shlomy Reinstein, Greg Merrill, Kevin Hunter, and Eric Berry for contributing to
+this release.
 
 {{{ Bug Fixes
 
 - Closed buffers were often kept in memory. (Kazutoshi Satoda)
 
 - Error "Invalid screen line count" was shown when scrolling in a
-  compound edit. (SF.net patch #1990960 - Kazutoshi Satoda) 
+  compound edit. (SF.net patch #1990960 - Kazutoshi Satoda)
 
 - Folded lines sometimes became invisible after breaking the fold
   structure; like explicit fold markers, or indents.
   (SF.net patch #1999448 - Kazutoshi Satoda)
 
+- Fixed char escape in shellscript (#2080891) (Kevin Hunter)
 }}}
 {{{ Miscellaneous
 
@@ -28,10 +29,10 @@ release.
 
 - New option in saving/backup: Suppress "file not saved" warning
   on Untitled buffers. Related to that, "file not saved" warning
-  is no longer shown for buffers (untitled or not) with length=0. 
+  is no longer shown for buffers (untitled or not) with length=0.
   -- (request # 2068307 - Alan Ezust)
-  
-- New option in saving/backup: Calculate MD5 hash to see if the 
+
+- New option in saving/backup: Calculate MD5 hash to see if the
   file as loaded from disk is the same as what is in the buffer.
   -- (Request # 2077326 - Alan Ezust)
 
@@ -53,7 +54,7 @@ release.
 - New actions: View - Docking - Load|Save docking layout (of current mode)
   You can save named dockable layouts, analogous to Eclipse perspectives,
   on a global or per-mode basis. (Shlomy Reinstein)
-  
+
 - New action: View - Docking - Toggle Docked Areas. (Alan Ezust)
 }}}
 {{{ API Changes
@@ -63,7 +64,7 @@ release.
 
 - A new service, DockableWindowManagerProvider, makes it possible
   for plugins to offer alternate docking managers. (Shlomy Reinstein)
-  
+
 }}}
 
 }}}
