@@ -169,8 +169,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		textArea.propertiesChanged();
 		textArea.updateMaxHorizontalScrollWidth();
 		textArea.scrollBarsInitialized = true;
-
-		textArea.repaintMgr.updateGraphics();
 	} //}}}
 
 	//{{{ getFocusTraversalKeysEnabled() method
@@ -740,7 +738,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			gfx.setColor(getBackground());
 			gfx.fillRect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
 		}
-		else if(Debug.DISABLE_FASTREPAINTMANAGER)
+		else
 		{
 			long prepareTime = System.nanoTime();
 			// Because the clipRect's height is usually an even multiple
@@ -762,35 +760,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(Debug.PAINT_TIMER && numLines >= 1)
 				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + " ns");
-		}
-		else
-		{
-			Graphics2D backBuffer = textArea.repaintMgr.getGraphics();
-
-			long prepareTime = System.nanoTime();
-			FastRepaintManager.RepaintLines lines
-				= textArea.repaintMgr.prepareGraphics(clipRect,
-				textArea.getFirstLine(),backBuffer);
-			prepareTime = (System.nanoTime() - prepareTime);
-
-			long linesTime = System.nanoTime();
-			int numLines = (lines.last - lines.first + 1);
-			int y = lines.first * lineHeight;
-			backBuffer.fillRect(0,y,getWidth(),numLines * lineHeight);
-			extensionMgr.paintScreenLineRange(textArea,backBuffer,
-				lines.first,lines.last,y,lineHeight);
-			linesTime = (System.nanoTime() - linesTime);
-
-			textArea.repaintMgr.setFastScroll(
-				clipRect.equals(new Rectangle(0,0,
-				getWidth(),getHeight())));
-
-			long blitTime = System.nanoTime();
-			textArea.repaintMgr.paint(gfx);
-			blitTime = (System.nanoTime() - blitTime);
-
-			if(Debug.PAINT_TIMER && numLines >= 1)
-				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + "/" + blitTime + " ns");
 		}
 
 		textArea.updateMaxHorizontalScrollWidth();

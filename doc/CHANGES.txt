@@ -39,6 +39,12 @@ release.
   available modes, the user can select one and a new file is created
   under that mode. (SF.net patch #1829669 - Eric Berry)
 
+- Removed own back buffers for textarea, which were meant to speed up
+  painting textare, because the effect seemed to be not noticeable and
+  not stable over runtime environments, while it broke Background plugin
+  (SF.net Plugin Bugs #1620694) and consumed much memory.
+  (Kazutoshi Satoda)
+
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)

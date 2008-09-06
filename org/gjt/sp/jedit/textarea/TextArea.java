@@ -268,7 +268,6 @@ public class TextArea extends JComponent
 		selectionManager = new SelectionManager(this);
 		chunkCache = new ChunkCache(this);
 		painter = new TextAreaPainter(this);
-		repaintMgr = new FastRepaintManager(this,painter);
 		gutter = new Gutter(this);
 		gutter.setMouseActionsProvider(new MouseActions(propertyManager, "gutter"));
 		listenerList = new EventListenerList();
@@ -544,7 +543,6 @@ public class TextArea extends JComponent
 				this.buffer.beginCompoundEdit();
 
 			chunkCache.setBuffer(buffer);
-			repaintMgr.setFastScroll(false);
 			propertiesChanged();
 
 			if(displayManager != null)
@@ -4795,7 +4793,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			displayManager.notifyScreenLineChanges();
 		}
 
-		repaintMgr.setFastScroll(false);
 		chunkCache.invalidateAll();
 		gutter.repaint();
 		painter.repaint();
@@ -4860,7 +4857,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	final Segment lineSegment = new Segment();
 	MouseInputAdapter mouseHandler;
 	final ChunkCache chunkCache;
-	final FastRepaintManager repaintMgr;
 	DisplayManager displayManager;
 	final SelectionManager selectionManager;
 	/**
@@ -4974,7 +4970,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ foldStructureChanged() method
 	void foldStructureChanged()
 	{
-		repaintMgr.setFastScroll(false);
 		chunkCache.invalidateAll();
 		recalculateLastPhysicalLine();
 		repaint();
@@ -5225,8 +5220,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(!buffer.isTransactionInProgress())
 			_finishCaretUpdate();
 		/* otherwise DisplayManager.BufferChangeHandler calls */
-
-		repaintMgr.setFastScroll(false);
 	} //}}}
 
 	//{{{ fireCaretEvent() method

@@ -424,7 +424,6 @@ class BufferHandler implements BufferListener
 	private void delayUpdate(int startLine, int endLine)
 	{
 		textArea.chunkCache.invalidateChunksFromPhys(startLine);
-		textArea.repaintMgr.setFastScroll(false);
 
 		if(!delayedUpdate)
 		{
