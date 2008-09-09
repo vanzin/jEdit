@@ -85,7 +85,7 @@ public class BufferSetManager implements EBComponent
 				BufferSet viewBufferSet = viewBufferSetMap.remove(view);
 				if (viewBufferSet != null)
 				{
-					viewBufferSet.getAllBuffers(new BufferSetClosed(viewBufferSet));
+					viewBufferSet.getAllBuffers(new BufferSetClosed(view, viewBufferSet));
 				}
 			}
 		}
@@ -99,7 +99,7 @@ public class BufferSetManager implements EBComponent
 				BufferSet editPaneBufferSet = editPaneBufferSetMap.remove(editPane);
 				if (editPaneBufferSet != null)
 				{
-					editPaneBufferSet.getAllBuffers(new BufferSetClosed(editPaneBufferSet));
+					editPaneBufferSet.getAllBuffers(new BufferSetClosed(editPane, editPaneBufferSet));
 				}
 			}
 		}
@@ -160,7 +160,7 @@ public class BufferSetManager implements EBComponent
 	 * Merge the content of the source bufferSet into the target bufferSet
 	 * @param target the target bufferSet
 	 * @param source the source bufferSet
-	 * @see org.gjt.sp.jedit.EditPane#setBuffer(org.gjt.sp.jedit.Buffer) 
+	 * @see org.gjt.sp.jedit.EditPane#setBuffer(org.gjt.sp.jedit.Buffer)
 	 */
 	public void mergeBufferSet(BufferSet target, BufferSet source)
 	{
@@ -176,7 +176,7 @@ public class BufferSetManager implements EBComponent
 	 * Count the bufferSets in which the buffer is.
 	 * @param buffer the buffer
 	 * @return the number of buffersets in which buffer is
-	 * @see org.gjt.sp.jedit.jEdit#closeBuffer(org.gjt.sp.jedit.EditPane, org.gjt.sp.jedit.Buffer) 
+	 * @see org.gjt.sp.jedit.jEdit#closeBuffer(org.gjt.sp.jedit.EditPane, org.gjt.sp.jedit.Buffer)
 	 */
 	public int countBufferSets(Buffer buffer)
 	{
@@ -405,13 +405,77 @@ public class BufferSetManager implements EBComponent
 	//{{{ BufferSetClosed class
 	private class BufferSetClosed extends BufferSetAdapter
 	{
+		/** The closed bufferSet. */
 		private BufferSet closedBufferSet;
 
-		private BufferSetClosed(BufferSet closedBufferSet)
+		/**
+		 * The closed view.
+		 * If there is a closed view, there is no closed edit pane
+		 */
+		private View closedView;
+
+		/**
+		 * The closed EditPane.
+ 		 * If there is a closed edit pane, there is no closed view
+		 */
+		private EditPane closedEditPane;
+
+		/** The previous editPane where to put dirty buffers if necessary. */
+		private EditPane prevEditPane;
+
+		//{{{ BufferSetClosed constructors
+		private BufferSetClosed(View closedView,
+					BufferSet closedBufferSet)
 		{
+			this.closedView = closedView;
 			this.closedBufferSet = closedBufferSet;
+			init();
 		}
 
+		private BufferSetClosed(EditPane closedEditPane,
+					BufferSet closedBufferSet)
+		{
+			this.closedEditPane = closedEditPane;
+			this.closedBufferSet = closedBufferSet;
+			init();
+		} //}}}
+
+
+		//{{{ init() method
+		private void init()
+		{
+			if (closedView != null)
+			{
+					View prev = closedView.getPrev();
+					if (prev != null)
+					{
+						prevEditPane = prev.getEditPane();
+					}
+				}
+			else
+			{
+				View view = closedEditPane.getView();
+				EditPane[] editPanes = view.getEditPanes();
+				for (EditPane editPane : editPanes)
+				{
+					if (editPane != closedEditPane)
+					{
+						prevEditPane = editPane;
+						break;
+					}
+				}
+				if (prevEditPane == null)
+				{
+					View prev = view.getPrev();
+					if (prev != null)
+					{
+						prevEditPane = prev.getEditPane();
+					}
+				}
+			}
+		} //}}}
+
+		//{{{ bufferAdded() method
 		@Override
 		public void bufferAdded(Buffer buffer, int index)
 		{
@@ -422,19 +486,31 @@ public class BufferSetManager implements EBComponent
 				// the buffer do not belong to any other BufferSet
 				if (buffer.isDirty())
 				{
-					EditPane editPane = jEdit.getActiveView().getEditPane();
-					Log.log(Log.MESSAGE, this, "The buffer " + buffer + " was removed from a BufferSet, it is dirty, adding it to " + editPane);
-					// the buffer is dirty, I open it in the first edit pane (is it a good choice ?)
-					editPane.setBuffer(buffer);
+					if (prevEditPane != null)
+					{
+						Log.log(Log.MESSAGE, this,
+							"The buffer " +  buffer +
+							" was removed from a BufferSet, it is dirty, adding it to " +
+							prevEditPane);
+						prevEditPane.setBuffer(buffer);
+					}
+					else
+					{
+						Log.log(Log.ERROR, this,
+							"The buffer " + buffer +
+							" was removed from a BufferSet, it is dirty, but there is no other edit pane");
+					}
 				}
 				else
 				{
 					// the buffer is not dirty I close it
-					Log.log(Log.MESSAGE, this, "The buffer " + buffer + " was removed from a BufferSet, it is clean, closing it");
+					Log.log(Log.MESSAGE, this, "The buffer " +
+						buffer + " was removed from a BufferSet, it is clean, closing it");
 					jEdit._closeBuffer(null, buffer);
 				}
 			}
-		}
+		} //}}}
+
 	} //}}}
 
 	//}}}

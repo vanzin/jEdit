@@ -2,9 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre16
 
-Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
-Shlomy Reinstein, Greg Merrill, Kevin Hunter, and Eric Berry for contributing to
-this release.
+Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Matthieu Casanova,
+Alan Ezust, Shlomy Reinstein, Greg Merrill, Kevin Hunter, and Eric Berry for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -18,6 +18,9 @@ this release.
   (SF.net patch #1999448 - Kazutoshi Satoda)
 
 - Fixed char escape in shellscript (#2080891) (Kevin Hunter)
+
+- When closing a view or an EditPane, the dirty buffers of it's bufferSet are
+  now added to the previous EditPane (#2091052) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
