@@ -185,7 +185,8 @@ public class ViewOptionPane extends AbstractOptionPane
 		jEdit.setProperty("bufferSwitcher.maxRowCount",
 			bufferSwitcherMaxRowCount.getText());
 		jEdit.setProperty("editpane.bufferset.default", defaultBufferSet.getSelectedItem().toString());
-		jEdit.setProperty("editpane.bufferset.new", newBufferSetBehavior.getSelectedItem().toString());
+		jEdit.setProperty("editpane.bufferset.new",
+						  ((BufferSetManager.NewBufferSetAction)newBufferSetBehavior.getSelectedItem()).getName());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		

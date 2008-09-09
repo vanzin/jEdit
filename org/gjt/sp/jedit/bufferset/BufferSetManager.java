@@ -48,17 +48,22 @@ public class BufferSetManager implements EBComponent
 			NewBufferSetAction[] newBufferSetActions = values();
 			for (NewBufferSetAction newBufferSetAction : newBufferSetActions)
 			{
-				if (newBufferSetAction.toString().equals(s))
+				if (newBufferSetAction.getName().equals(s))
 					return newBufferSetAction;
 			}
 
 			return currentbuffer;
 		}
 
+		public String getName()
+		{
+			return super.toString();
+		}
+
 		@Override
 		public String toString()
 		{
-			return jEdit.getProperty("options.editpane.bufferset.newbufferset." + super.toString());
+			return jEdit.getProperty("options.editpane.bufferset.newbufferset." + getName());
 		}
 	} //}}}
 
