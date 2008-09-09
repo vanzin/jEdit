@@ -346,7 +346,10 @@ public class Chunk extends Token
 	{
 		boolean sun_java_5 = false;
 		String vendor = System.getProperty("java.vendor");
-		if (vendor != null && vendor.startsWith("Sun"))
+		// Enable the workaround on Apple JVM, too, because the
+		// same problem was reported on Mac OS X.
+		if (vendor != null && (vendor.startsWith("Sun") ||
+					vendor.startsWith("Apple")))
 		{
 			String version = System.getProperty("java.version");
 			if (version != null && version.startsWith("1.5"))
