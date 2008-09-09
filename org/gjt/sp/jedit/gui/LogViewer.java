@@ -368,15 +368,16 @@ EBComponent
 		}
 
 		@Override
-			public String prepareFilter(String filter)
+		public String prepareFilter(String filter)
 		{
 			return filter.toLowerCase();
 		}
 
 		@Override
-			public boolean passFilter(int row, String filter)
+		public boolean passFilter(int row, String filter)
 		{
 			return delegated.getElementAt(row).toString().toLowerCase().contains(filter);
 		}
 	}
 }
+
