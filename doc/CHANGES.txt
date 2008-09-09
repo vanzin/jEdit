@@ -24,6 +24,9 @@ contributing to this release.
 
 - A memory leak fixed in the Activity Log panel (#2100926) (Matthieu Casanova,
   Kazutoshi Satoda)
+
+- When starting jEdit without a settings directory an error happened when saving
+  backup of setting files (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 

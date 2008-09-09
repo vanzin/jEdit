@@ -2471,7 +2471,7 @@ public class jEdit
 	 */
 	public static void backupSettingsFile(File file)
 	{
-		if(settingsDirectory == null)
+		if(settingsDirectory == null || !file.exists())
 			return;
 
 		String backupDir = MiscUtilities.constructPath(
