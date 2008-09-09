@@ -21,6 +21,9 @@ contributing to this release.
 
 - When closing a view or an EditPane, the dirty buffers of it's bufferSet are
   now added to the previous EditPane (#2091052) (Matthieu Casanova)
+
+- A memory leak fixed in the Activity Log panel (#2100926) (Matthieu Casanova,
+  Kazutoshi Satoda)
 }}}
 {{{ Miscellaneous
 
@@ -44,7 +47,7 @@ contributing to this release.
   under that mode. (SF.net patch #1829669 - Eric Berry)
 
 - Removed own back buffers for textarea, which were meant to speed up
-  painting textare, because the effect seemed to be not noticeable and
+  painting textarea, because the effect seemed to be not noticeable and
   not stable over runtime environments, while it broke Background plugin
   (SF.net Plugin Bugs #1620694) and consumed much memory.
   (Kazutoshi Satoda)

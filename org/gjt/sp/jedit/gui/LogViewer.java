@@ -94,21 +94,8 @@ EBComponent
 		caption.add(copy);
 
 		ListModel model = Log.getLogListModel();
-		listModel = new FilteredListModel(model)
-		{
-			@Override
-			public String prepareFilter(String filter)
-			{
-				return filter.toLowerCase();
-			}
-
-			@Override
-			public boolean passFilter(int row, String filter)
-			{
-				return delegated.getElementAt(row).toString().toLowerCase().contains(filter);
-			}
-		};
-		model.addListDataListener(new ListHandler());
+		listModel = new MyFilteredListModel(model);
+		model.removeListDataListener(listModel);
 		list = new LogList(listModel);
 		listModel.setList(list);
 		add(BorderLayout.NORTH,caption);
@@ -142,6 +129,9 @@ EBComponent
 	public void addNotify()
 	{
 		super.addNotify();
+		ListModel model = Log.getLogListModel();
+		model.addListDataListener(listModel);
+		model.addListDataListener(listHandler = new ListHandler());
 		if(tailIsOn)
 			scrollToTail();
 
@@ -153,7 +143,10 @@ EBComponent
 	public void removeNotify()
 	{
 		super.removeNotify();
-
+		ListModel model = Log.getLogListModel();
+		model.removeListDataListener(listModel);
+		model.removeListDataListener(listHandler);
+		listHandler = null;
 		EditBus.removeFromBus(this);
 	} //}}}
 
@@ -164,6 +157,7 @@ EBComponent
 	} //}}}
 
 	//{{{ Private members
+	private ListHandler listHandler;
 	private final FilteredListModel listModel;
 	private final JList list;
 	private final JButton copy;
@@ -199,13 +193,13 @@ EBComponent
 	private void scrollLaterIfRequired()
 	{
 		if (tailIsOn)
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				scrollToTail();
-			}
-		});
+				public void run()
+				{
+					scrollToTail();
+				}
+			});
 	} //}}}
 
 	//}}}
@@ -363,6 +357,26 @@ EBComponent
 			setFont( list.getFont() );
 			setOpaque( true );
 			return this;
+		}
+	}
+
+	private static class MyFilteredListModel extends FilteredListModel
+	{
+		MyFilteredListModel(ListModel model)
+		{
+			super(model);
+		}
+
+		@Override
+			public String prepareFilter(String filter)
+		{
+			return filter.toLowerCase();
+		}
+
+		@Override
+			public boolean passFilter(int row, String filter)
+		{
+			return delegated.getElementAt(row).toString().toLowerCase().contains(filter);
 		}
 	}
 }
