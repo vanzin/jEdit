@@ -58,6 +58,12 @@ contributing to this release.
 - Improved rendering of complex text layout (like Indic text) in text
   area. (SF.net bug #981012 - Kazutoshi Satoda)
 
+- Added some new encoding detectors which reads some lines at the top of
+  file and search for encoding declaration pattern in regex.
+    - html: finds "\bcharset=(ENCODING)"
+    - python: finds "coding[=:]\s*(ENCODING)"
+  (Kazutoshi Satoda)
+
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)

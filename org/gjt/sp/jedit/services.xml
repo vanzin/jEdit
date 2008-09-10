@@ -48,9 +48,20 @@
 		new XMLEncodingDetector();
 	</SERVICE>
 	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="buffer-local-property">
-		new BufferLocalEncodingDetector();
+		new RegexEncodingDetector(":encoding=([^:]+):", "$1");
 	</SERVICE>
-	
+	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="html">
+		new RegexEncodingDetector(
+			"\\bcharset=(" + RegexEncodingDetector.VALID_ENCODING_PATTERN + ")",
+			"$1");
+	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="python">
+		new RegexEncodingDetector(
+			"coding[=:]\s*(" + RegexEncodingDetector.VALID_ENCODING_PATTERN + ")",
+			"$1");
+	</SERVICE>
+
+
 	<!-- {{{ Status Bar widgets -->
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="mode">
        import org.gjt.sp.jedit.gui.statusbar.*;
