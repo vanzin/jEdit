@@ -27,6 +27,9 @@ contributing to this release.
 
 - When starting jEdit without a settings directory an error happened when saving
   backup of setting files (Matthieu Casanova)
+
+- The action on new bufferSet creation was not stored correctly in properties
+  causing sometimes NPE (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
