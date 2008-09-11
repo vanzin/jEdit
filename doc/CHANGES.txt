@@ -2,9 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre16
 
-Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Matthieu Casanova,
-Alan Ezust, Shlomy Reinstein, Greg Merrill, Kevin Hunter, and Eric Berry for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Dakshinamurthy Karra,
+Matthieu Casanova, Alan Ezust, Shlomy Reinstein, Greg Merrill, Kevin Hunter, and
+Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -30,6 +30,9 @@ contributing to this release.
 
 - The action on new bufferSet creation was not stored correctly in properties
   causing sometimes NPE (Matthieu Casanova)
+
+- When a bufferSet is sorted, dragging a buffer in BufferTabs plugin was not
+ possible (#2100690) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
@@ -83,6 +86,10 @@ contributing to this release.
 - A new service, DockableWindowManagerProvider, makes it possible
   for plugins to offer alternate docking managers. (Shlomy Reinstein)
 
+- Embedded textarea refactoring for better usability.
+  Now a software that wants to use the jEdit's textarea must instantiate the
+  class StandaloneTextArea, and for use in a jEdit's plugin
+  JEditEmbeddedTextArea (patch #2096752) (Dakshinamurthy Karra)
 }}}
 
 }}}
