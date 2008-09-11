@@ -86,6 +86,9 @@
 <MODE NAME="clips"		FILE="clips.xml"
 				FILE_NAME_GLOB="*.clp" />
 
+<MODE NAME="cmake"		FILE="cmake.xml"
+				FILE_NAME_GLOB="CMakeLists.txt"/>
+
 <MODE NAME="cobol"		FILE="cobol.xml"
 				FILE_NAME_GLOB="*.cbl" />
 

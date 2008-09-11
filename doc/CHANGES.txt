@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre16
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Dakshinamurthy Karra,
-Matthieu Casanova, Alan Ezust, Shlomy Reinstein, Greg Merrill, Kevin Hunter, and
-Eric Berry for contributing to this release.
+Matthieu Casanova, Alan Ezust, Bernhard Walle, Shlomy Reinstein, Greg Merrill,
+Kevin Hunter, and Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -90,6 +90,9 @@ Eric Berry for contributing to this release.
   Now a software that wants to use the jEdit's textarea must instantiate the
   class StandaloneTextArea, and for use in a jEdit's plugin
   JEditEmbeddedTextArea (patch #2096752) (Dakshinamurthy Karra)
+}}}
+{{{ Editing
+- New cmake mode (patch #2011419) (Bernhard Walle)
 }}}
 
 }}}
