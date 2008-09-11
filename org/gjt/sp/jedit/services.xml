@@ -57,7 +57,7 @@
 	</SERVICE>
 	<SERVICE CLASS="org.gjt.sp.jedit.io.EncodingDetector" NAME="python">
 		new RegexEncodingDetector(
-			"coding[=:]\s*(" + RegexEncodingDetector.VALID_ENCODING_PATTERN + ")",
+			"coding[=:]\\s*(" + RegexEncodingDetector.VALID_ENCODING_PATTERN + ")",
 			"$1");
 	</SERVICE>
 
