@@ -79,6 +79,11 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		dragStartOffset = dragStart - textArea.getLineStartOffset(
 			dragStartLine);
 
+		if(isPopupTrigger(evt) && textArea.isRightClickPopupEnabled())
+		{
+				textArea.handlePopupTrigger(evt);
+				return;
+		}
 
 		dragged = false;
 

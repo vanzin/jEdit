@@ -363,21 +363,6 @@ public class Registers
 		return registers;
 	} //}}}
 
-	//{{{ getRegisterStatusPrompt() method
-	/**
-	 * Returns the status prompt for the given register action. Only
-	 * intended to be called from <code>actions.xml</code>.
-	 * @since jEdit 4.2pre2
-	 */
-	public static String getRegisterStatusPrompt(String action)
-	{
-		String registerNameString = getRegisterNameString();
-		return jEdit.getProperty("view.status." + action,
-			new String[] {registerNameString == null ?
-				      jEdit.getProperty("view.status.no-registers") :
-				      registerNameString});
-	} //}}}
-
 	//{{{ getRegisterNameString() method
 	/**
 	 * Returns a string of all defined registers, used by the status bar

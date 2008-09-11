@@ -24,23 +24,17 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import java.io.IOException;
 import java.util.EventObject;
-import org.gjt.sp.jedit.Debug;
-import org.gjt.sp.jedit.Mode;
-import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.buffer.*;
+
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.input.TextAreaInputHandler;
 import org.gjt.sp.jedit.syntax.Chunk;
-import org.gjt.sp.jedit.syntax.TokenMarker;
-import org.gjt.sp.jedit.syntax.ParserRuleSet;
-import org.gjt.sp.jedit.syntax.ModeProvider;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.SyntaxUtilities;
 
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
@@ -52,17 +46,9 @@ import javax.swing.text.Segment;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.im.InputMethodRequests;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Properties;
 import java.util.TooManyListenersException;
-
-import org.gjt.sp.jedit.IPropertyManager;
-import org.gjt.sp.jedit.JEditActionContext;
-import org.gjt.sp.jedit.JEditActionSet;
-import org.gjt.sp.jedit.JEditBeanShellAction;
-import org.gjt.sp.util.IOUtilities;
 //}}}
 
 /**
@@ -77,189 +63,15 @@ import org.gjt.sp.util.IOUtilities;
  * @author John Gellene (API documentation)
  * @version $Id: JEditTextArea.java 7148 2006-09-29 23:09:06 +0200 (ven., 29 sept. 2006) kpouer $
  */
-public class TextArea extends JComponent
+public abstract class TextArea extends JComponent
 {
-	//{{{ TextArea constructor
-	/**
-	 * Instantiate a TextArea.
-	 * @param propertyManager the property manager that contains informations like shortcut bindings
-	 * @param insideJEdit must be set to true if the textarea is embedded in jEdit
-	 */
-	public TextArea(IPropertyManager propertyManager, boolean insideJEdit)
-	{
-		this(propertyManager, null);
-		actionContext = new JEditActionContext<JEditBeanShellAction, JEditActionSet<JEditBeanShellAction>>()
-		{
-			@Override
-			public void invokeAction(EventObject evt, JEditBeanShellAction action)
-			{
-				action.invoke(TextArea.this);
-			}
-		};
-
-		setMouseHandler(new TextAreaMouseHandler(this));
-		TextAreaInputHandler inputHandler = new TextAreaInputHandler(this)
-		{
-			@Override
-			protected JEditBeanShellAction getAction(String action)
-			{
-				return actionContext.getAction(action);
-			}
-		};
-
-		inputHandlerProvider = new DefaultInputHandlerProvider(inputHandler);
-		if (insideJEdit)
-		{
-			return;
-		}
-
-
-		//{{{ init Style property manager
-		if (SyntaxUtilities.propertyManager == null)
-		{
-			final Properties props = new Properties();
-			InputStream in = TextArea.class.getResourceAsStream("/org/gjt/sp/jedit/jedit.props");
-			try
-			{
-				props.load(in);
-			}
-			catch (IOException e)
-			{
-				Log.log(Log.ERROR, TextArea.class, e);
-			}
-			finally
-			{
-				IOUtilities.closeQuietly(in);
-			}
-			SyntaxUtilities.propertyManager = new IPropertyManager()
-			{
-				public String getProperty(String name)
-				{
-					return props.getProperty(name);
-				}
-			};
-		}
-		//}}}
-
-		String defaultFont = SyntaxUtilities.propertyManager.getProperty("view.font");
-		int defaultFontSize;
-		try
-		{
-			defaultFontSize = Integer.parseInt(SyntaxUtilities.propertyManager.getProperty("view.fontsize"));
-		}
-		catch (NumberFormatException e)
-		{
-			defaultFontSize = 12;
-		}
-
-		/*Font font1 = new Font("Monospaced", Font.PLAIN, 12);
-		painter.setFont(font1);
-		SyntaxStyle[] styles = new SyntaxStyle[1];
-		styles[0] = new SyntaxStyle(Color.black, Color.white, font1);*/
-		//painter.setStyles(styles);
-
-
-		painter.setBlockCaretEnabled(false);
-
-		String name = SyntaxUtilities.propertyManager.getProperty("view.font");
-		String family = SyntaxUtilities.propertyManager.getProperty(name);
-		String sizeString = SyntaxUtilities.propertyManager.getProperty(name + "size");
-		String styleString = SyntaxUtilities.propertyManager.getProperty(name + "style");
-
-		//{{{ get font, copy of jEdit.getFontPropert()
-		Font font;
-		if(family == null || sizeString == null || styleString == null)
-			font = new Font("Monospaced", Font.PLAIN, 12);
-		else
-		{
-			int size, style;
-
-			try
-			{
-				size = Integer.parseInt(sizeString);
-			}
-			catch(NumberFormatException nf)
-			{
-				size = 12;
-			}
-
-			try
-			{
-				style = Integer.parseInt(styleString);
-			}
-			catch(NumberFormatException nf)
-			{
-				style = Font.PLAIN;
-			}
-			font = new Font(family,style,size);
-
-		} //}}}
-
-
-		painter.setFont(font);
-
-
-		painter.setStructureHighlightEnabled(true);
-		painter.setStructureHighlightColor(Color.black);
-		painter.setEOLMarkersPainted(false);
-		painter.setEOLMarkerColor(new Color(255,102,51));
-		painter.setWrapGuidePainted(true);
-		painter.setWrapGuideColor(new Color(125,125,255));
-		painter.setCaretColor(Color.red);
-		painter.setSelectionColor(new Color(204,204,255));
-		painter.setMultipleSelectionColor(new Color(204,255,204));
-		painter.setBackground(Color.white);
-		painter.setForeground(Color.black);
-		painter.setBlockCaretEnabled(false);
-		painter.setLineHighlightEnabled(true);
-		painter.setLineHighlightColor(new Color(255,204,255));
-		painter.setAntiAlias(new AntiAlias(0));
-		painter.setFractionalFontMetricsEnabled(false);
-
-		painter.setStyles(SyntaxUtilities.loadStyles(defaultFont,defaultFontSize));
-
-		gutter.setExpanded(false);
-		gutter.setHighlightInterval(5);
-		gutter.setCurrentLineHighlightEnabled(true);
-		gutter.setStructureHighlightEnabled(true);
-		gutter.setStructureHighlightColor(new Color(102,102,153));
-		gutter.setBackground(new Color(219,219,219));
-		gutter.setForeground(Color.black);
-		gutter.setHighlightedForeground(new Color(153,0,102));
-		gutter.setFoldColor(new Color(131,131,131));
-		gutter.setCurrentLineForeground(new Color(255,0,51));
-		gutter.setLineNumberAlignment(Gutter.RIGHT);
-		gutter.setFont(new Font("Monospaced", Font.PLAIN, 10));
-		gutter.setBorder(3, new Color(153,0,153), Color.white, painter.getBackground());
-
-		setCaretBlinkEnabled(true);
-		setElectricScroll(3);
-
-		DefaultFoldHandlerProvider foldHandlerProvider = new DefaultFoldHandlerProvider();
-
-		FoldHandler.foldHandlerProvider = foldHandlerProvider;
-		foldHandlerProvider.addFoldHandler(new ExplicitFoldHandler());
-		foldHandlerProvider.addFoldHandler(new IndentFoldHandler());
-		foldHandlerProvider.addFoldHandler(new DummyFoldHandler());
-		JEditBuffer buffer = new JEditBuffer();
-		TokenMarker tokenMarker = new TokenMarker();
-		tokenMarker.addRuleSet(new ParserRuleSet("text","MAIN"));
-		buffer.setTokenMarker(tokenMarker);
-		setBuffer(buffer);
-		Mode mode = new Mode("text");
-		mode.setTokenMarker(tokenMarker);
-		ModeProvider.instance.addMode(mode);
-		KillRing.setInstance(new KillRing());
-		KillRing.getInstance().propertiesChanged(100);
-	} //}}}
-
 	//{{{ TextArea constructor
 	/**
 	 * Creates a new JEditTextArea.
 	 * @param propertyManager the property manager that contains informations like shortcut bindings
 	 * @param inputHandlerProvider the inputHandlerProvider
 	 */
-	public TextArea(IPropertyManager propertyManager, InputHandlerProvider inputHandlerProvider)
+	protected TextArea(IPropertyManager propertyManager, InputHandlerProvider inputHandlerProvider)
 	{
 		this.inputHandlerProvider = inputHandlerProvider;
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
@@ -326,8 +138,42 @@ public class TextArea extends JComponent
 		// (eg, from the recent file list)
 		focusedComponent = this;
 
+		popupEnabled = true;
 	} //}}}
 
+	//{{{ initInputHandler() method
+	/**
+	 * Creates an actionContext and initializes the input handler for this textarea. Called when creating
+	 * a standalone textarea from within jEdit. See {@link jEdit#createTextArea()}
+	 */
+	public void initInputHandler()
+	{
+		actionContext = new JEditActionContext<JEditBeanShellAction, JEditActionSet<JEditBeanShellAction>>()
+		{
+			@Override
+			public void invokeAction(EventObject evt, JEditBeanShellAction action)
+			{
+				action.invoke(TextArea.this);
+			}
+		};
+
+		setMouseHandler(new TextAreaMouseHandler(this));
+		inputHandlerProvider = new DefaultInputHandlerProvider(new TextAreaInputHandler(this)
+		{
+			@Override
+			protected JEditBeanShellAction getAction(String action)
+			{
+				return actionContext.getAction(action);
+			}
+		});
+	} //}}}
+
+	//{{{ getActionContext() method
+	public JEditActionContext<JEditBeanShellAction,JEditActionSet<JEditBeanShellAction>> getActionContext()
+	{
+		return actionContext;
+	} //}}}
+	
 	//{{{ setMouseHandler() method
 	public void setMouseHandler(MouseInputAdapter mouseInputAdapter)
 	{
@@ -4340,7 +4186,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			for(int i = 0; i < selection.length; i++)
 			{
 				Selection s = selection[i];
-				setSelectedText(s,TextUtilities.tabsToSpaces(
+				setSelectedText(s, TextUtilities.tabsToSpaces(
 					getSelectedText(s),buffer.getTabSize()));
 			}
 		}
@@ -5125,6 +4971,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//}}}
 
 	//{{{ Instance variables
+	protected JPopupMenu popup;
+
+	private boolean popupEnabled;
 	protected Cursor hiddenCursor;
 
 	private final Gutter gutter;
@@ -5134,8 +4983,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private final MutableCaretEvent caretEvent;
 
 	private boolean caretBlinks;
-	private InputHandlerProvider inputHandlerProvider;
-
+	protected InputHandlerProvider inputHandlerProvider;
+	
 	private InputMethodSupport inputMethodSupport;
 
 	/** The last visible physical line index. */
@@ -6013,6 +5862,192 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	} //}}}
 	//}}}
 
+	//{{{ isRightClickPopupEnabled() method
+	/**
+	 * Returns if the right click popup menu is enabled. The Gestures
+	 * plugin uses this API.
+	 * @since jEdit 4.2pre13
+	 */
+	public boolean isRightClickPopupEnabled()
+	{
+		return popupEnabled;
+	} //}}}
+
+	//{{{ setRightClickPopupEnabled() method
+	/**
+	 * Sets if the right click popup menu is enabled. The Gestures
+	 * plugin uses this API.
+	 * @since jEdit 4.2pre13
+	 */
+	public void setRightClickPopupEnabled(boolean popupEnabled)
+	{
+		this.popupEnabled = popupEnabled;
+	} //}}}
+
+	//{{{ getRightClickPopup() method
+	/**
+	 * Returns the right click popup menu.
+	 */
+	public final JPopupMenu getRightClickPopup()
+	{
+		return popup;
+	} //}}}
+
+	//{{{ setRightClickPopup() method
+	/**
+	 * Sets the right click popup menu.
+	 * @param popup The popup
+	 */
+	public final void setRightClickPopup(JPopupMenu popup)
+	{
+		this.popup = popup;
+	} //}}}
+
+	//{{{ handlePopupTrigger() method
+	/**
+	 * Do the same thing as right-clicking on the text area. The Gestures
+	 * plugin uses this API.
+	 * @since jEdit 4.2pre13
+	 */
+	public void handlePopupTrigger(MouseEvent evt)
+	{
+		// Rebuild popup menu every time the menu is requested.
+		createPopupMenu(evt);
+
+		int x = evt.getX();
+		int y = evt.getY();
+
+		int dragStart = xyToOffset(x,y,
+			!(painter.isBlockCaretEnabled()
+			|| isOverwriteEnabled()));
+
+		if(getSelectionCount() == 0 || multi)
+			moveCaretPosition(dragStart,false);
+		showPopupMenu(popup,this,x,y,false);
+	} //}}}
+
+	//{{{ createPopupMenu() method
+	/**
+	 * Creates the popup menu.
+	 * @since 4.3pre15
+	 */
+	public void createPopupMenu(MouseEvent evt)
+	{
+		popup = new JPopupMenu();
+	} //}}}
+
+	//{{{ showPopupMenu() method
+	/**
+	 * Shows the popup menu below the current caret position.
+	 * @since 4.3pre10
+	 */
+	public void showPopupMenu()
+	{
+		if (!popup.isVisible() && hasFocus())
+		{
+			Point caretPos = offsetToXY(getCaretPosition());
+			if (caretPos != null) {
+				// Open the context menu below the caret
+				int charHeight = getPainter().getFontMetrics().getHeight();
+				showPopupMenu(popup,
+					painter,caretPos.x,caretPos.y + charHeight,true);
+			}
+		}
+	} //}}}
+
+	//{{{ showPopupMenu() method - copied from GUIUtilities
+	/**
+	 * Shows the specified popup menu, ensuring it is displayed within
+	 * the bounds of the screen.
+	 * @param popup The popup menu
+	 * @param comp The component to show it for
+	 * @param x The x co-ordinate
+	 * @param y The y co-ordinate
+	 * @param point If true, then the popup originates from a single point;
+	 * otherwise it will originate from the component itself. This affects
+	 * positioning in the case where the popup does not fit onscreen.
+	 *
+	 * @since jEdit 4.1pre1
+	 */
+	private void showPopupMenu(JPopupMenu popup, Component comp,
+		int x, int y, boolean point)
+	{
+		int offsetX = 0;
+		int offsetY = 0;
+
+		int extraOffset = (point ? 1 : 0);
+
+		Component win = comp;
+		while(!(win instanceof Window || win == null))
+		{
+			offsetX += win.getX();
+			offsetY += win.getY();
+			win = win.getParent();
+		}
+
+		if(win != null)
+		{
+			Dimension size = popup.getPreferredSize();
+
+			Rectangle screenSize = new Rectangle();
+
+			GraphicsEnvironment ge = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
+
+			GraphicsDevice[] devices = ge.getScreenDevices();
+
+			for (int j = 0; j < devices.length; j++)
+			{
+				GraphicsDevice device = devices[j];
+
+				GraphicsConfiguration[] gc =
+					device.getConfigurations();
+
+				for (int i=0; i < gc.length; i++)
+				{
+					screenSize =
+						screenSize.union(
+							gc[i].getBounds());
+				}
+			}
+
+			if(x + offsetX + size.width + win.getX() > screenSize.width
+				&& x + offsetX + win.getX() >= size.width)
+			{
+				//System.err.println("x overflow");
+				if(point)
+					x -= (size.width + extraOffset);
+				else
+					x = (win.getWidth() - size.width - offsetX + extraOffset);
+			}
+			else
+			{
+				x += extraOffset;
+			}
+
+			//System.err.println("y=" + y + ",offsetY=" + offsetY
+			//	+ ",size.height=" + size.height
+			//	+ ",win.height=" + win.getHeight());
+			if(y + offsetY + size.height + win.getY() > screenSize.height
+				&& y + offsetY + win.getY() >= size.height)
+			{
+				if(point)
+					y = (win.getHeight() - size.height - offsetY + extraOffset);
+				else
+					y = -size.height - 1;
+			}
+			else
+			{
+				y += extraOffset;
+			}
+
+			popup.show(comp,x,y);
+		}
+		else
+			popup.show(comp,x + extraOffset,y + extraOffset);
+
+	} //}}}
+
 	//{{{ Inner classes
 
 	//{{{ CaretBlinker class
@@ -6159,12 +6194,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * The actionSet for standalone textArea.
 	 * @author Matthieu Casanova
 	 */
-	private static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
+	protected static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
 	{
 		private final IPropertyManager iPropertyManager;
 		private final TextArea textArea;
 
-		private StandaloneActionSet(IPropertyManager iPropertyManager, TextArea textArea)
+		StandaloneActionSet(IPropertyManager iPropertyManager, TextArea textArea)
 		{
 			super(null, TextArea.class.getResource("textarea.actions.xml"));
 			this.iPropertyManager = iPropertyManager;
@@ -6218,92 +6253,5 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		});
 		structureTimer.setInitialDelay(100);
 		structureTimer.setRepeats(false);
-	} //}}}
-
-	//{{{ _createTextArea() method
-	/**
-	 * Create a standalone textArea.
-	 * @param insidejEdit true if we are in jEdit, false otherwise
-	 * @param iPropertyManager the property manager that will provide properties
-	 * @return the new textarea
-	 */
-	public static TextArea _createTextArea(boolean insidejEdit, final IPropertyManager iPropertyManager)
-	{
-		final TextArea textArea = new TextArea(iPropertyManager, insidejEdit);
-		textArea.setMouseHandler(new TextAreaMouseHandler(textArea));
-		// todo : make TextareaTransferHandler standalone
-//		textArea.setTransferHandler(new TextAreaTransferHandler());
-
-		StandaloneActionSet actionSet = new StandaloneActionSet(iPropertyManager, textArea);
-
-		textArea.addActionSet(actionSet);
-		actionSet.load();
-		actionSet.initKeyBindings();
-		return textArea;
-	} //}}}
-
-	//{{{ createTextArea() method
-	/**
-	 * Create a standalone TextArea.
-	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
-	 *
-	 * @param iPropertyManager the properties where key bindings are stored
-	 * @return a textarea
-	 * @since 4.3pre13
-	 */
-	public static TextArea createTextArea(IPropertyManager iPropertyManager)
-	{
-		TextArea textArea = _createTextArea(false, iPropertyManager);
-		return textArea;
-	} // }}}
-
-	//{{{ createTextArea() method
-	/**
-	 * Create a standalone TextArea.
-	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
-	 *
-	 * @return a textarea
-	 * @since 4.3pre13
-	 */
-	public static TextArea createTextArea()
-	{
-		final Properties props = new Properties();
-		InputStream in = TextArea.class.getResourceAsStream("/org/gjt/sp/jedit/jedit_keys.props");
-		try
-		{
-			props.load(in);
-		}
-		catch (IOException e)
-		{
-			Log.log(Log.ERROR, TextArea.class, e);
-		}
-		finally
-		{
-			IOUtilities.closeQuietly(in);
-		}
-		TextArea textArea = _createTextArea(false, new IPropertyManager()
-		{
-			public String getProperty(String name)
-			{
-				return props.getProperty(name);
-			}
-		});
-		textArea.getBuffer().setProperty("folding", "explicit");
-		return textArea;
-	} // }}}
-
-	//{{{ main() method
-	public static void main(String[] args)
-	{
-		JFrame frame = new JFrame();
-		TextArea text = createTextArea();
-		Mode mode = new Mode("xml");
-		mode.setProperty("file","modes/xml.xml");
-		ModeProvider.instance.addMode(mode);
-		text.getBuffer().setMode(mode);
-		frame.getContentPane().add(text);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
 	} //}}}
 }

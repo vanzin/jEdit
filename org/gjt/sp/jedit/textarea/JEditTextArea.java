@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import javax.swing.JPopupMenu;
 import javax.swing.JMenuItem;
 
 import org.gjt.sp.jedit.*;
@@ -61,7 +60,6 @@ public class JEditTextArea extends TextArea
 	{
 		super(jEdit.getPropertyManager(), view);
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
-		popupEnabled = true;
 		this.view = view;
 	} //}}}
 
@@ -455,52 +453,8 @@ public class JEditTextArea extends TextArea
 
 	//{{{ Instance variables
 	private View view;
-	private JPopupMenu popup;
-
-	private boolean popupEnabled;
 	//}}}
 	//}}}
-
-	//{{{ isRightClickPopupEnabled() method
-	/**
-	 * Returns if the right click popup menu is enabled. The Gestures
-	 * plugin uses this API.
-	 * @since jEdit 4.2pre13
-	 */
-	public boolean isRightClickPopupEnabled()
-	{
-		return popupEnabled;
-	} //}}}
-
-	//{{{ setRightClickPopupEnabled() method
-	/**
-	 * Sets if the right click popup menu is enabled. The Gestures
-	 * plugin uses this API.
-	 * @since jEdit 4.2pre13
-	 */
-	public void setRightClickPopupEnabled(boolean popupEnabled)
-	{
-		this.popupEnabled = popupEnabled;
-	} //}}}
-
-	//{{{ getRightClickPopup() method
-	/**
-	 * Returns the right click popup menu.
-	 */
-	public final JPopupMenu getRightClickPopup()
-	{
-		return popup;
-	} //}}}
-
-	//{{{ setRightClickPopup() method
-	/**
-	 * Sets the right click popup menu.
-	 * @param popup The popup
-	 */
-	public final void setRightClickPopup(JPopupMenu popup)
-	{
-		this.popup = popup;
-	} //}}}
 
 	//{{{ handlePopupTrigger() method
 	/**

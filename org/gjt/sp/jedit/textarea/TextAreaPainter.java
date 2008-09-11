@@ -686,7 +686,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		if(textArea.getBuffer() != null
 			&& !textArea.getBuffer().isLoading())
 			textArea.recalculateLastPhysicalLine();
-		textArea.propertiesChanged();
+		//textArea.propertiesChanged();
 	} //}}}
 
 	//{{{ getStringWidth() method

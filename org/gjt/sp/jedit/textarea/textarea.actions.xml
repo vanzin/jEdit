@@ -164,12 +164,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="goto-line">
-	<CODE>
-		textArea.showGoToLineDialog();
-	</CODE>
-</ACTION>
-
 <ACTION NAME="home" NO_RECORD="TRUE">
 	<CODE>
 		textArea.smartHome(false);
@@ -347,12 +341,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="prev-marker">
-	<CODE>
-		editPane.goToPrevMarker(false);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="prev-page">
 	<CODE>
 		textArea.goToPrevPage(false);
@@ -386,18 +374,6 @@
 <ACTION NAME="redo">
 	<CODE>
 		buffer.redo(textArea);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="remove-all-markers">
-	<CODE>
-		buffer.removeAllMarkers();
-	</CODE>
-</ACTION>
-
-<ACTION NAME="remove-marker" NO_REPEAT="TRUE" NO_RECORD="TRUE">
-	<CODE>
-		buffer.removeMarker(textArea.getCaretLine());
 	</CODE>
 </ACTION>
 
@@ -534,12 +510,6 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="select-next-marker">
-	<CODE>
-		textArea.goToNextMarker(true);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="select-next-page">
 	<CODE>
 		textArea.goToNextPage(true);
@@ -589,12 +559,6 @@
 <ACTION NAME="select-prev-line">
 	<CODE>
 		textArea.goToPrevLine(true);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="select-prev-marker">
-	<CODE>
-		textArea.goToPrevMarker(true);
 	</CODE>
 </ACTION>
 
@@ -748,12 +712,6 @@
 <ACTION NAME="whitespace-home">
 	<CODE>
 		textArea.goToStartOfWhiteSpace(false);
-	</CODE>
-</ACTION>
-
-<ACTION NAME="word-count">
-	<CODE>
-		textArea.showWordCountDialog();
 	</CODE>
 </ACTION>
 

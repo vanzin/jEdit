@@ -32,6 +32,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -145,8 +146,18 @@ public class ModeProvider
 		try
 		{
 			grammar = new BufferedInputStream(
-				new FileInputStream(fileName));
+					new FileInputStream(fileName));
+		}
+		catch (FileNotFoundException e1)
+		{
+			InputStream resource = ModeProvider.class.getResourceAsStream(fileName);
+			if (resource == null)
+				error(fileName, e1);
+			grammar = new BufferedInputStream(resource);
+		}
 
+		try
+		{
 			InputSource isrc = new InputSource(grammar);
 			isrc.setSystemId("jedit.jar");
 			parser.setContentHandler(xmh);

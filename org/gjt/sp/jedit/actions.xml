@@ -169,7 +169,7 @@
 <ACTION NAME="copy-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			Registers.getRegisterStatusPrompt("copy-append-string-register"),
+			jEdit.getRegisterStatusPrompt("copy-append-string-register"),
 			"Registers.append(textArea,__char__,\"\\n\",false);");
 	</CODE>
 </ACTION>
@@ -177,7 +177,7 @@
 <ACTION NAME="copy-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			Registers.getRegisterStatusPrompt("copy-string-register"),
+			jEdit.getRegisterStatusPrompt("copy-string-register"),
 			"Registers.copy(textArea,__char__);");
 	</CODE>
 </ACTION>
@@ -197,7 +197,7 @@
 <ACTION NAME="cut-append-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			Registers.getRegisterStatusPrompt("cut-append-string-register"),
+			jEdit.getRegisterStatusPrompt("cut-append-string-register"),
 			"Registers.append(textArea,__char__,\"\\n\",true);");
 	</CODE>
 </ACTION>
@@ -205,7 +205,7 @@
 <ACTION NAME="cut-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			Registers.getRegisterStatusPrompt("cut-string-register"),
+			jEdit.getRegisterStatusPrompt("cut-string-register"),
 			"Registers.cut(textArea,__char__);");
 	</CODE>
 </ACTION>
@@ -709,7 +709,7 @@
 <ACTION NAME="paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			Registers.getRegisterStatusPrompt("paste-string-register"),
+			jEdit.getRegisterStatusPrompt("paste-string-register"),
 			"Registers.paste(textArea,__char__,false);");
 	</CODE>
 </ACTION>
@@ -1450,7 +1450,7 @@
 <ACTION NAME="vertical-paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(
-			Registers.getRegisterStatusPrompt("vertical-paste-string-register"),
+			jEdit.getRegisterStatusPrompt("vertical-paste-string-register"),
 			"Registers.paste(textArea,__char__,true);");
 	</CODE>
 </ACTION>

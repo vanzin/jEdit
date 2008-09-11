@@ -4,16 +4,16 @@
 	<description>
 		This is an ant build.xml file for building jEdit - Programmer's Text Editor.
 	</description>
-	
+
 	<property file="build.properties"
 			  prefix="config" />
-	
+
 	<!-- jEdit Version -->
 	<property name="jedit.version"
 			  value="4.3pre16" />
 	<property name="jedit.build.number"
 			  value="04.03.16.00" />
-	
+
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
 			  value="1.5" />
@@ -21,7 +21,7 @@
 			  value="1.5+" />
 	<property name="slackware.target.java.version"
 			  value="1_5_0_07-i586-1" />
-	
+
 	<!-- Various Paths -->
 	<property name="config.build.dir"
 			  value="build" />
@@ -50,7 +50,7 @@
 			  value="jedit${jedit.version}install" />
 	<property name="mac.disk.image.filename"
 			  value="jedit${jedit.version}install.dmg" />
-	
+
 	<!-- Miscellaneous -->
 	<property name="config.build.debuglevel"
 			  value="lines,vars,source" />
@@ -58,7 +58,7 @@
 			  value="true" />
 	<property name="config.build.compilerarg"
 			  value="-Xlint:unchecked" />
-	
+
 	<target name="init"
 			unless="init.done">
 		<echo message="Buildfile for ${ant.project.name} (${ant.file})"
@@ -73,7 +73,7 @@
 		<property name="init.done"
 				  value="true" />
 	</target>
-	
+
 	<target name="clean"
 			depends="init"
 			description="clean up intermediate files">
@@ -85,7 +85,7 @@
 					 includes="docbook-wrapper-*.xsl" />
 		</delete>
 	</target>
-	
+
 	<target name="clean-all"
 			depends="init"
 			description="clean up build.dir and dist.dir completely">
@@ -98,7 +98,7 @@
 					 includes="docbook-wrapper-*.xsl" />
 		</delete>
 	</target>
-	
+
 	<target name="compile"
 			depends="init">
 		<mkdir dir="${classes.dir}/core" />
@@ -122,9 +122,15 @@
 
 	<target name="prepare-textArea"
 			depends="init">
+			<delete includeemptydirs="true"
+				failonerror="false">
+				<fileset dir="${textAreaPackage}/src"/>
+			</delete>
+
 		<mkdir dir="${textAreaPackage}/src" />
 		<copy todir="${textAreaPackage}/src">
 			<fileset dir=".">
+				<include name="modes/*.xml"/>
 				<include name="org/gjt/sp/jedit/bsh/*"/>
 				<include name="org/gjt/sp/jedit/bsh/**/*"/>
 
@@ -147,7 +153,8 @@
 				<include name="org/gjt/sp/jedit/gui/KeyEventWorkaround.java"/>
 				<include name="org/gjt/sp/jedit/gui/MutableListModel.java"/>
 				<include name="org/gjt/sp/jedit/gui/ShortcutPrefixActiveEvent.java"/>
-
+				<include name="org/gjt/sp/jedit/gui/HistoryModel.java"/>
+				<include name="org/gjt/sp/jedit/gui/HistoryModelSaver.java"/>
 				<include name="org/gjt/sp/jedit/indent/*.java"/>
 
 				<include name="org/gjt/sp/jedit/input/AbstractInputHandler.java"/>
@@ -177,6 +184,7 @@
 				<include name="org/gjt/sp/jedit/textarea/ScrollLayout.java"/>
 				<include name="org/gjt/sp/jedit/textarea/ScrollLineCount.java"/>
 				<include name="org/gjt/sp/jedit/textarea/ScrollListener.java"/>
+				<include name="org/gjt/sp/jedit/textarea/StandaloneTextArea.java"/>
 				<include name="org/gjt/sp/jedit/textarea/StatusListener.java"/>
 				<include name="org/gjt/sp/jedit/textarea/StructureMatcher.java"/>
 				<include name="org/gjt/sp/jedit/textarea/TextArea.java"/>
@@ -199,6 +207,8 @@
 				<include name="org/gjt/sp/jedit/Mode.java"/>
 				<include name="org/gjt/sp/jedit/OperatingSystem.java"/>
 				<include name="org/gjt/sp/jedit/RegistersListener.java"/>
+				<include name="org/gjt/sp/jedit/RegistersListener.java"/>
+				<include name="org/gjt/sp/jedit/Registers.java"/>
 				<include name="org/gjt/sp/jedit/RegisterSaver.java"/>
 				<include name="org/gjt/sp/jedit/SelectionManager.java"/>
 				<include name="org/gjt/sp/jedit/TextUtilities.java"/>
@@ -206,6 +216,7 @@
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
 				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
+				<include name="modes/*"/>
 
 
 				<include name="org/gjt/sp/util/Log*.java"/>
@@ -218,7 +229,7 @@
 				<include name="org/gjt/sp/util/XMLUtilities.java"/>
 			</fileset>
 		</copy>
-		
+
 	</target>
 
 	<target name="compile-textArea"
@@ -235,7 +246,7 @@
 			   encoding="UTF-8">
 		</javac>
 	</target>
-	
+
 	<target name="build"
 			depends="init,compile"
 			description="build the jEdit JAR-file with full debug-information">
@@ -256,7 +267,7 @@
 				<include name="org/gjt/sp/jedit/icons/**/*.gif" />
 				<include name="org/gjt/sp/jedit/icons/**/*.jpg" />
 				<include name="org/gjt/sp/jedit/icons/**/*.png" />
-          		  </fileset>
+			</fileset>
 		</jar>
 		<copy todir="${jar.location}">
 			<fileset dir=".">
@@ -267,17 +278,17 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="build-textArea"
 			depends="init,compile-textArea"
 			description="build the textArea JAR-file with full debug-information">
 		<mkdir dir="${jar.location}" />
 		<jar destfile="${jar.location}/${ant.project.name}-textArea.jar"
-			 compress="false"
-			 duplicate="fail"
-			 index="true">
+			compress="false"
+			duplicate="fail"
+			index="true">
 			<fileset dir="${textAreaPackage}/build/" />
-           		 <fileset dir="${textAreaPackage}/src">
+				<fileset dir="${textAreaPackage}/src">
 				<include name="org/gjt/sp/jedit/textarea/*.xml"/>
 				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
@@ -285,11 +296,11 @@
 				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
 			</fileset>
 			<manifest>
-				<attribute name="Main-Class" value="org.gjt.sp.jedit.textarea.TextArea"/>
+				<attribute name="Main-Class" value="org.gjt.sp.jedit.textarea.StandaloneTextArea"/>
 			</manifest>
 		</jar>
 	</target>
-	
+
 	<target name="run"
 			depends="init,build"
 			description="run jEdit">
@@ -300,7 +311,7 @@
 			<arg value="-noserver" />
 		</java>
 	</target>
-	
+
 	<target name="run-debug"
 			depends="init,build"
 			description="run jEdit with debug listening enabled">
@@ -312,7 +323,7 @@
 			<arg value="-noserver" />
 		</java>
 	</target>
-	
+
 	<target name="generate-docbook-wrapper"
 			if="format"
 			depends="init">
@@ -342,7 +353,7 @@
 			  append="true"
 			  level="error" />
 	</target>
-	
+
 	<target name="generate-doc-faq"
 			depends="init"
 			if="doc.output.location"
@@ -364,7 +375,7 @@
 				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
-	
+
 	<target name="generate-doc-news"
 			depends="init"
 			if="doc.output.location"
@@ -386,7 +397,7 @@
 				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
-	
+
 	<target name="generate-doc-users-guide"
 			depends="init"
 			if="doc.output.location"
@@ -408,11 +419,11 @@
 				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
-	
+
 	<target name="userdocs"
 			depends="init,docs-html,docs-javadoc"
 			description="generate HTML and JavaDoc API docs (needs xsltproc)" />
-	
+
 	<target name="docs-upload"
 			depends="userdocs"
 			description="upload generated documentation to public website (needs xsltproc and rsync)" >
@@ -428,7 +439,7 @@
 			<arg value="plugins.jedit.org:/home/groups/j/je/jedit/htdocs/" />
 		</exec>
 	</target>
-	
+
 	<target name="docs-html"
 			depends="init"
 			description="generate HTML docs (needs xsltproc)">
@@ -480,7 +491,7 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 	<target name="generate-javadoc"
 			depends="init"
 			unless="javadoc.is.up.to.date">
@@ -517,7 +528,7 @@
 				   packages="com.microstar.xml*" />
 		</javadoc>
 	</target>
-	
+
 	<target name="docs-javadoc"
 			depends="init"
 			description="generate JavaDoc API docs">
@@ -556,7 +567,7 @@
 			</filterchain>
 		</copy>
 	</target>
-	
+
 	<target name="generate-pdf-users-guide"
 			depends="init"
 			if="paper.type"
@@ -610,7 +621,7 @@
 			 format="application/pdf"
 			 messagelevel="info" />
 	</target>
-	
+
 	<target name="docs-pdf"
 			depends="init"
 			if="paper.type">
@@ -637,7 +648,7 @@
 				   type="file" />
 		<antcall target="generate-pdf-users-guide" />
 	</target>
-	
+
 	<target name="docs-pdf-a4"
 			depends="init"
 			description="generate PDF users-guide with A4 paper size (needs xsltproc and fop)">
@@ -646,7 +657,7 @@
 				   value="A4" />
 		</antcall>
 	</target>
-	
+
 	<target name="docs-pdf-USletter"
 			depends="init"
 			description="generate PDF users-guide with US letter paper size (needs xsltproc and fop)">
@@ -655,7 +666,7 @@
 				   value="USletter" />
 		</antcall>
 	</target>
-	
+
 	<target name="compile-installer"
 			depends="init">
 		<mkdir dir="${classes.dir}/installer" />
@@ -674,7 +685,7 @@
 			<compilerarg line="${config.build.compilerarg}" />
 		</javac>
 	</target>
-	
+
 	<target name="compile-default-plugins-for-dist"
 			depends="init">
 		<ant dir="jars/LatestVersion"
@@ -714,7 +725,7 @@
 					  value="${dist.dir}" />
 		</ant>
 	</target>
-	
+
 	<target name="dist-java"
 			depends="init"
 			description="build the Java-installer">
@@ -846,7 +857,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="dist-manuals"
 			depends="init"
 			description="build the PDF-manuals">
@@ -869,7 +880,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="dist-src"
 			depends="init"
 			description="build the src-archive">
@@ -886,7 +897,7 @@
 						prefix="build-support/" />
 		</tar>
 	</target>
-	
+
 	<target name="compile-jarbundler"
 			depends="init">
 		<mkdir dir="${classes.dir}/jarbundler" />
@@ -905,7 +916,7 @@
 			<compilerarg line="${config.build.compilerarg}" />
 		</javac>
 	</target>
-	
+
 	<target name="dist-mac-finish"
 			depends="init"
 			unless="build.on.non.mac"
@@ -1001,7 +1012,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="prepare-dist-mac-finish"
 			depends="init"
 			if="build.on.non.mac">
@@ -1020,7 +1031,7 @@
 			 		   ${config.dist.dir}/startup/**"
 			 compression="bzip2" />
 	</target>
-	
+
 	<target name="dist-mac"
 			depends="init"
 			description="build the Mac OS X disk image (DMG-file)">
@@ -1048,7 +1059,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="prepare-dist-files"
 			depends="init">
 		<antcall target="build">
@@ -1093,7 +1104,7 @@
 		<gzip src="${dist.dir}/classes/package-files/linux/jedit.1"
 			  destfile="${dist.dir}/classes/package-files/linux/jedit.1.gz" />
 	</target>
-	
+
 	<target name="dist-slackware"
 			depends="init"
 			description="build the Slackware Package">
@@ -1155,7 +1166,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="compile-ar"
 			depends="init">
 		<mkdir dir="${classes.dir}/ar" />
@@ -1174,7 +1185,7 @@
 			<compilerarg line="${config.build.compilerarg}" />
 		</javac>
 	</target>
-	
+
 	<target name="compile-deb"
 			depends="init">
 		<mkdir dir="${classes.dir}/deb" />
@@ -1193,7 +1204,7 @@
 			<compilerarg line="${config.build.compilerarg}" />
 		</javac>
 	</target>
-	
+
 	<target name="compile-calculatesize"
 			depends="init">
 		<mkdir dir="${classes.dir}/calculatesize" />
@@ -1212,7 +1223,7 @@
 			<compilerarg line="${config.build.compilerarg}" />
 		</javac>
 	</target>
-	
+
 	<target name="dist-deb"
 			depends="init"
 			description="build the DEB Package">
@@ -1333,7 +1344,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="dist-win-finish"
 			depends="init"
 			unless="build.on.non.win"
@@ -1383,7 +1394,7 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="prepare-dist-win-finish"
 			depends="init"
 			if="build.on.non.win">
@@ -1405,7 +1416,7 @@
 			 		   ${config.dist.dir}/startup/**"
 			 compression="bzip2" />
 	</target>
-	
+
 	<target name="dist-win"
 			depends="init"
 			description="build the Windows installer (EXE-file)">
@@ -1427,12 +1438,12 @@
 		</condition>
 		<antcall target="dist-cleanup" />
 	</target>
-	
-	<target name="install" depends="build" 
+
+	<target name="install" depends="build"
 		description="install built files to config.install.dir">
 		<copy todir="${config.install.dir}" file="${build.dir}/jedit.jar" />
     </target>
-	
+
 	<target name="dist"
 			depends="init"
 			description="build all distribution files">
@@ -1449,7 +1460,7 @@
 				  value="true" />
 		<antcall target="dist-cleanup" />
 	</target>
-	
+
 	<target name="dist-cleanup"
 			depends="init">
 		<delete includeemptydirs="true">
