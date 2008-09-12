@@ -91,6 +91,8 @@ public class TextUtilities
 		case ']': if (direction != null) direction[0] = false; return '[';
 		case '{': if (direction != null) direction[0] = true;  return '}';
 		case '}': if (direction != null) direction[0] = false; return '{';
+		case '<': if (direction != null) direction[0] = true;  return '>';
+		case '>': if (direction != null) direction[0] = false; return '<';
 		default:  return '\0';
 		}
 	} //}}}
