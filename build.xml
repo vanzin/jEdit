@@ -130,7 +130,7 @@
 		<mkdir dir="${textAreaPackage}/src" />
 		<copy todir="${textAreaPackage}/src">
 			<fileset dir=".">
-				<include name="modes/*.xml"/>
+				<include name="modes/*"/>
 				<include name="org/gjt/sp/jedit/bsh/*"/>
 				<include name="org/gjt/sp/jedit/bsh/**/*"/>
 
@@ -294,6 +294,7 @@
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
 				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
+				<include name="modes/*"/>
 			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="org.gjt.sp.jedit.textarea.StandaloneTextArea"/>
