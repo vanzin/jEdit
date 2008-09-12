@@ -1263,13 +1263,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 
 		setTitle(title.toString());
-
-		/* On MacOS X, the close box is shown in a different color if
-		an app has unsaved changes. For details, see
-		http://developer.apple.com/qa/qa2001/qa1146.html */
-		String WINDOW_MODIFIED = "windowModified";
-		getRootPane().putClientProperty(WINDOW_MODIFIED,
-			unsavedChanges);
 	} //}}}
 
 	//{{{ getPrefixFocusOwner() method
