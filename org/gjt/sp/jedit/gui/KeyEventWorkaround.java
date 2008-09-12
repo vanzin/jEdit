@@ -232,46 +232,31 @@ public class KeyEventWorkaround
 	{
 		int keyCode = evt.getKeyCode();
 		char ch = evt.getKeyChar();
+		int modifiers = evt.getModifiers();
 
 		switch(evt.getID())
 		{
 		//{{{ KEY_PRESSED...
 		case KeyEvent.KEY_PRESSED:
-			lastKeyTime = evt.getWhen();
 			// get rid of keys we never need to handle
 			switch(keyCode)
 			{
 			case '\0':
 				return null;
 			case KeyEvent.VK_ALT:
-				modifiers |= InputEvent.ALT_MASK;
-				break;
 			case KeyEvent.VK_ALT_GRAPH:
-				modifiers |= InputEvent.ALT_GRAPH_MASK;
-				break;
 			case KeyEvent.VK_CONTROL:
-				modifiers |= InputEvent.CTRL_MASK;
-				break;
 			case KeyEvent.VK_SHIFT:
-				modifiers |= InputEvent.SHIFT_MASK;
-				break;
 			case KeyEvent.VK_META:
-				modifiers |= InputEvent.META_MASK;
 				break;
 			default:
 				if(!evt.isMetaDown())
 				{
-					if(evt.isControlDown()
-						&& evt.isAltDown())
-					{
-						lastKeyTime = 0L;
-					}
-					else if(!evt.isControlDown()
+					if(!evt.isControlDown()
 						&& !evt.isAltDown())
 					{
 						if(isPrintable(keyCode))
 						{
-							lastKeyTime = 0L;
 							return null;
 						}
 					}
@@ -308,62 +293,46 @@ public class KeyEventWorkaround
 			if(Debug.DUMP_KEY_EVENTS)
 			{
 				Log.log(Log.DEBUG,"KEWa","Key event (working around): "
-					+ AbstractInputHandler.toString(evt)+": evt.getWhen()-lastKeyTime="+(evt.getWhen() - lastKeyTime)+",modifiers="+modifiers+",last="+last+".");
+					+ AbstractInputHandler.toString(evt)+": last="+last+".");
 			}
 
-			if(evt.getWhen() - lastKeyTime < 750)
+			if(!Debug.ALTERNATIVE_DISPATCHER)
 			{
-				if(!Debug.ALTERNATIVE_DISPATCHER)
+				if(((modifiers & InputEvent.CTRL_MASK) != 0
+					^ (modifiers & InputEvent.ALT_MASK) != 0)
+					|| (modifiers & InputEvent.META_MASK) != 0)
 				{
-					if(((modifiers & InputEvent.CTRL_MASK) != 0
-						^ (modifiers & InputEvent.ALT_MASK) != 0)
-						|| (modifiers & InputEvent.META_MASK) != 0)
-					{
-						return null;
-					}
-				}
-
-				// if the last key was a numeric keypad key
-				// and NumLock is off, filter it out
-				if(last == LAST_NUMKEYPAD)
-				{
-					last = LAST_NOTHING;
-					if((ch >= '0' && ch <= '9') || ch == '.'
-						|| ch == '/' || ch == '*'
-						|| ch == '-' || ch == '+')
-					{
-						return null;
-					}
-				}
-				// Windows JDK workaround
-				else if(last == LAST_ALT)
-				{
-					last = LAST_NOTHING;
-					switch(ch)
-					{
-					case 'B':
-					case 'M':
-					case 'X':
-					case 'c':
-					case '!':
-					case ',':
-					case '?':
-						return null;
-					}
+					return null;
 				}
 			}
-			else
+
+			// if the last key was a numeric keypad key
+			// and NumLock is off, filter it out
+			if(last == LAST_NUMKEYPAD)
 			{
-				if((modifiers & InputEvent.SHIFT_MASK) != 0)
+				last = LAST_NOTHING;
+				if((ch >= '0' && ch <= '9') || ch == '.'
+					|| ch == '/' || ch == '*'
+					|| ch == '-' || ch == '+')
 				{
-					switch(ch)
-					{
-					case '\n':
-					case '\t':
-						return null;
-					}
+					return null;
 				}
-				modifiers = 0;
+			}
+			// Windows JDK workaround
+			else if(last == LAST_ALT)
+			{
+				last = LAST_NOTHING;
+				switch(ch)
+				{
+				case 'B':
+				case 'M':
+				case 'X':
+				case 'c':
+				case '!':
+				case ',':
+				case '?':
+					return null;
+				}
 			}
 			break;
 		//}}}
@@ -372,24 +341,15 @@ public class KeyEventWorkaround
 			switch(keyCode)
 			{
 			case KeyEvent.VK_ALT:
-				modifiers &= ~InputEvent.ALT_MASK;
-				lastKeyTime = evt.getWhen();
 				// we consume this to work around the bug
 				// where A+TAB window switching activates
 				// the menu bar on Windows.
 				evt.consume();
 				break;
 			case KeyEvent.VK_ALT_GRAPH:
-				modifiers &= ~InputEvent.ALT_GRAPH_MASK;
-				break;
 			case KeyEvent.VK_CONTROL:
-				modifiers &= ~InputEvent.CTRL_MASK;
-				break;
 			case KeyEvent.VK_SHIFT:
-				modifiers &= ~InputEvent.SHIFT_MASK;
-				break;
 			case KeyEvent.VK_META:
-				modifiers &= ~InputEvent.META_MASK;
 				break;
 			case KeyEvent.VK_LEFT:
 			case KeyEvent.VK_RIGHT:
@@ -420,11 +380,6 @@ public class KeyEventWorkaround
 	{
 		last = LAST_NOTHING;
 	} //}}}
-
-	//{{{ Package-private members
-	static long lastKeyTime;
-	static int modifiers;
-	//}}}
 
 	//{{{ Private members
 	private static int last;

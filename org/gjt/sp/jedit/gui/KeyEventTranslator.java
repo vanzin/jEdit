@@ -175,10 +175,7 @@ public class KeyEventTranslator
 			}
 
 			if((modifiers & InputEvent.ALT_GRAPH_MASK) == 0
-				&& evt.getWhen()
-				- KeyEventWorkaround.lastKeyTime < 750L
-				&& (KeyEventWorkaround.modifiers & ~ignoreMods)
-				!= 0)
+				&& (modifiers & ~ignoreMods) != 0)
 			{
 				if(Debug.ALTERNATIVE_DISPATCHER)
 				{
