@@ -398,7 +398,7 @@
 <MODE NAME="rcp" FILE="rcp.xml" FILE_NAME_GLOB="*.rcp" />
 
 <MODE NAME="shellscript"	FILE="shellscript.xml"
-				FILE_NAME_GLOB="*.{csh,sh,bash}"
+				FILE_NAME_GLOB="*.{csh,sh,bash,login,profile,bashrc,bash_profile}"
 				FIRST_LINE_GLOB="#!/*sh*" />
 
 <MODE NAME="shtml"		FILE="shtml.xml"
