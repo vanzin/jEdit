@@ -130,7 +130,7 @@ public class KeyEventWorkaround
 		case KeyEvent.VK_OPEN_BRACKET :
 		case KeyEvent.VK_BACK_SLASH   :
 		case KeyEvent.VK_CLOSE_BRACKET:
-		case KeyEvent.VK_NUMPAD0 :
+	/*	case KeyEvent.VK_NUMPAD0 :
 		case KeyEvent.VK_NUMPAD1 :
 		case KeyEvent.VK_NUMPAD2 :
 		case KeyEvent.VK_NUMPAD3 :
@@ -145,7 +145,7 @@ public class KeyEventWorkaround
 		case KeyEvent.VK_SEPARATOR:
 		case KeyEvent.VK_SUBTRACT   :
 		case KeyEvent.VK_DECIMAL    :
-		case KeyEvent.VK_DIVIDE     :
+		case KeyEvent.VK_DIVIDE     :*/
 		case KeyEvent.VK_BACK_QUOTE:
 		case KeyEvent.VK_QUOTE:
 		case KeyEvent.VK_DEAD_GRAVE:
