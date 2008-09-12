@@ -74,7 +74,7 @@ public class BufferSwitcher extends JComboBox
 		setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
 		setModel(new DefaultComboBoxModel(bufferSet.getAllBuffers()));
 		setSelectedItem(editPane.getBuffer());
-		setToolTipText(editPane.getBuffer().getPath());
+		setToolTipText(editPane.getBuffer().getPath(true));
 		updating = false;
 	}
 

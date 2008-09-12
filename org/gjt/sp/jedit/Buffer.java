@@ -772,6 +772,16 @@ public class Buffer extends JEditBuffer
 		return path;
 	} //}}}
 
+	//{{{ getPath() method
+	/**
+	  * @param shortVersion if true, replaces home path with ~/ on unix
+	  */
+	public String getPath(Boolean shortVersion)
+	{
+		return shortVersion ? abbreviate(path) : getPath();
+	} //}}}
+
+
 	//{{{ getSymlinkPath() method
 	/**
 	 * If this file is a symbolic link, returns the link destination.
@@ -1568,7 +1578,7 @@ public class Buffer extends JEditBuffer
 	@Override
 	public String toString()
 	{
-		return name + " (" + directory + ')';
+		return name + " (" + abbreviate(directory) + ')';
 	} //}}}
 
 	//}}}
@@ -1738,6 +1748,18 @@ public class Buffer extends JEditBuffer
 			symlinkPath = path;
 		}
 	} //}}}
+
+	//{{{ abbreviate() method
+	/**
+	 * Replaces user.home with tilde character (under UNIX only)
+	 */
+	private String abbreviate(String absolutePath)
+	{
+		return OperatingSystem.isUnix()
+			? absolutePath.replaceFirst("^" + System.getProperty("user.home"), "~")
+			: absolutePath;
+	} //}}}
+
 
 	//{{{ recoverAutosave() method
 	private boolean recoverAutosave(final View view)

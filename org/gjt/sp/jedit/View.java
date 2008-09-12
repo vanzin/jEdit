@@ -1254,7 +1254,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 			Buffer buffer = buffers.get(i);
 			title.append((showFullPath && !buffer.isNewFile())
-				? buffer.getPath() : buffer.getName());
+				? buffer.getPath(true) : buffer.getName());
 			if(buffer.isDirty())
 			{
 				unsavedChanges = true;
