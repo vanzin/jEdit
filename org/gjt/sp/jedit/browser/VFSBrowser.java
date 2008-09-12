@@ -213,6 +213,16 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
 		pathField.setSelectAllOnFocus(true);
+		
+		if (mode == BROWSER) {
+			pathField.addKeyListener(new KeyAdapter() {
+				public void keyReleased(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+						pathField.setText(VFSBrowser.this.path);
+					}
+				}
+			});
+		}
 
 		// because its preferred size can be quite wide, we
 		// don't want it to make the browser way too big,

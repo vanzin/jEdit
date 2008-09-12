@@ -852,13 +852,13 @@ public class Buffer extends JEditBuffer
 	public void setDirty(boolean d)
 	{
 		boolean old_d = isDirty();
+		if (isNewFile() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"))
+			d = false;
 		if (d && getLength() == initialLength) {
 			if (isNewFile()) d = false;
 			else if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
 				d = !Arrays.equals(calculateHash(), md5hash);
 		}
-		if (isNewFile() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"))
-			d = false;
 		super.setDirty(d);
 		boolean editable = isEditable();
 

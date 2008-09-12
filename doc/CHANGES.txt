@@ -4,9 +4,10 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Dakshinamurthy Karra,
 Matthieu Casanova, Alan Ezust, Bernhard Walle, Shlomy Reinstein, Greg Merrill,
-Kevin Hunter, and Eric Berry for contributing to this release.
+Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
+
 
 - Closed buffers were often kept in memory. (Kazutoshi Satoda)
 
@@ -33,6 +34,11 @@ Kevin Hunter, and Eric Berry for contributing to this release.
 
 - When a bufferSet is sorted, dragging a buffer in BufferTabs plugin was not
  possible (#2100690) (Matthieu Casanova)
+
+- # 1519924 - Pressing escape in Path: field gets rid of dock window.
+   (#1854542 - Jeff Robertson - jefftbob)
+ 
+ 
 }}}
 {{{ Miscellaneous
 
@@ -93,6 +99,9 @@ Kevin Hunter, and Eric Berry for contributing to this release.
 }}}
 {{{ Editing
 - New cmake mode (patch #2011419) (Bernhard Walle)
+
+- More patterns for shellscript filenames (# 2056778 - Kevin Hunter (hunteke))
+
 }}}
 
 }}}
