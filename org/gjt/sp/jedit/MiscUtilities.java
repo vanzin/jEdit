@@ -1791,16 +1791,19 @@ loop:		for(;;)
 		}
 		
 		String compress(String path) {
-			if (OperatingSystem.isWindows()) 
-				path = path.toLowerCase();
 			String original = path;			
 			if (previous.containsKey(path)) {
 				return previous.get(path);
 			}
 			String bestPrefix = "/";
 			for (String tryPrefix : prefixMap.keySet()) {
-				if (path.startsWith(tryPrefix) && tryPrefix.length() > bestPrefix.length()) 
+				if (tryPrefix.length() < bestPrefix.length()) continue;
+				if (OperatingSystem.isWindows() && 
+				    path.toLowerCase().startsWith(tryPrefix.toLowerCase()))
 					bestPrefix = tryPrefix;
+				else if (path.startsWith(tryPrefix))
+					bestPrefix = tryPrefix;
+				
 			}
 			if (bestPrefix.length() > 1) {
 				String remainder = original.substring(bestPrefix.length());
