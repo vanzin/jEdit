@@ -1768,6 +1768,8 @@ loop:		for(;;)
 			Map<String, String> env = pb.environment();
 			for (String k: env.keySet()) {
 				if (k.length() < env.get(k).length()) {
+					if (OperatingSystem.isUnix() &&
+						env.get(k).equals(System.getProperty("user.home"))) continue;
 					vars.put(env.get(k), k);
 				}
 			}
