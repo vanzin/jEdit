@@ -1804,10 +1804,13 @@ loop:		for(;;)
 			}
 			if (bestPrefix.length() > 1) {
 				String remainder = original.substring(bestPrefix.length());
-				if (OperatingSystem.isUnix()) 
-					path = "$" + prefixMap.get(bestPrefix) + remainder;
+				String envvar = prefixMap.get(bestPrefix);
+				if (envvar.equals("~")) 
+					path = envvar + remainder;
+				else if (OperatingSystem.isWindows())
+					path = "%" + envvar.toUpperCase() + "%" + remainder;
 				else
-					path = "%" + prefixMap.get(bestPrefix).toUpperCase() + "%" + remainder;
+					path = "$" + envvar + remainder;
 			}
 			previous.put(original, path);
 			return path;
