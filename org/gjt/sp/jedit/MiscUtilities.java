@@ -1765,7 +1765,7 @@ loop:		for(;;)
 	static final VarCompressor svc = new VarCompressor();
 	static class VarCompressor {
 		/** a reverse mapping of values to environment variable names */
-		final Map<String, String> vars = new HashMap<String, String>();
+		final Map<String, String> prefixMap = new HashMap<String, String>();
 		final Map<String, String> previous = new HashMap<String, String>();
 		VarCompressor() {
 			ProcessBuilder pb = new ProcessBuilder();
@@ -1782,31 +1782,32 @@ loop:		for(;;)
 					v = v.toLowerCase();
 					k = k.toLowerCase();
 				}
-				if (vars.containsKey(v)) {
-					String otherKey = vars.get(v);
+				if (prefixMap.containsKey(v)) {
+					String otherKey = prefixMap.get(v);
 					if (otherKey.length() < k.length()) continue;
 				}					
-				vars.put(v, k);
+				prefixMap.put(v, k);
 			}
 		}
 		
 		String compress(String path) {
-			String original = path;			
 			if (OperatingSystem.isWindows()) 
 				path = path.toLowerCase();
+			String original = path;			
 			if (previous.containsKey(path)) {
 				return previous.get(path);
 			}
-			String var = "/";
-			for (String k : vars.keySet()) {
-				if (path.startsWith(k) && k.length() > var.length()) 
-					var = k;
+			String bestPrefix = "/";
+			for (String tryPrefix : prefixMap.keySet()) {
+				if (path.startsWith(tryPrefix) && tryPrefix.length() > bestPrefix.length()) 
+					bestPrefix = tryPrefix;
 			}
-			if (var.length() > 1) {
+			if (bestPrefix.length() > 1) {
+				String remainder = original.substring(bestPrefix.length());
 				if (OperatingSystem.isUnix()) 
-					path = "$" + vars.get(var) + path.substring(var.length());
+					path = "$" + prefixMap.get(bestPrefix) + remainder;
 				else
-					path = "%" + vars.get(var).toUpperCase() + "%" + original.substring(var.length());
+					path = "%" + prefixMap.get(bestPrefix).toUpperCase() + "%" + remainder;
 			}
 			previous.put(original, path);
 			return path;
