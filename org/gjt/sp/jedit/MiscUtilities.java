@@ -44,6 +44,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.StringList;
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 //}}}
@@ -1750,4 +1751,49 @@ loop:		for(;;)
 	} //}}}
 
 	//}}}
+	/** returns an abbreviated path, replacing 
+	 *  values with variables, if a prefix exists.
+	 */
+	public static String abbreviate(String path) {
+		// return path;
+		return svc.compress(path);
+	}
+	static final VarCompressor svc = new VarCompressor();
+	static class VarCompressor {
+		/** a reverse mapping of values to environment variable names */
+		final Map<String, String> vars = new HashMap<String, String>();
+		final Map<String, String> previous = new HashMap<String, String>();
+		VarCompressor() {
+			ProcessBuilder pb = new ProcessBuilder();
+			Map<String, String> env = pb.environment();
+			for (String k: env.keySet()) {
+				if (k.length() < env.get(k).length()) {
+					vars.put(env.get(k), k);
+				}
+			}
+		}
+		
+		String compress(String path) {
+			if (previous.containsKey(path)) {
+				return previous.get(path);
+			}
+			String original = path;
+			String var = "/";
+			for (String k : vars.keySet()) {
+				if (path.startsWith(k) && k.length() > var.length()) 
+					var = k;
+			}
+			if (var.length() > 1) {
+				if (OperatingSystem.isUnix()) 
+					path = "$" + vars.get(var) + path.substring(var.length());
+				else
+					path = "%" + vars.get(var) + "%" + path.substring(var.length());
+			}
+			if (OperatingSystem.isUnix()) {
+				path = path.replaceFirst("^" + System.getProperty("user.home"), "~");
+			}
+			previous.put(original, path);
+			return path;
+		}
+	}
 }

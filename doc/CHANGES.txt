@@ -52,9 +52,8 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Enabled reverse regex search. (SF.net patch #1923613 - Greg Merrill)
   NOTE: There is a known problem with "$". (SF.net bug #2069249)
 
-- New option in saving/backup: Suppress "file not saved" warning
-  on Untitled buffers. Related to that, "file not saved" warning
-  is no longer shown for buffers (untitled or not) with length=0.
+- New option in saving/backup: Never mark untitled buffers dirty.
+  Related to that, buffers with length=0 never never marked dirty.
   -- (request # 2068307 - Alan Ezust)
 
 - New option in saving/backup: Calculate MD5 hash to see if the

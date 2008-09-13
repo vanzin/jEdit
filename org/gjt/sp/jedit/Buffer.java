@@ -39,6 +39,7 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StringList;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.options.GeneralOptionPane;
@@ -54,6 +55,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 //}}}
 
@@ -778,7 +780,7 @@ public class Buffer extends JEditBuffer
 	  */
 	public String getPath(Boolean shortVersion)
 	{
-		return shortVersion ? abbreviate(path) : getPath();
+		return shortVersion ? MiscUtilities.abbreviate(path) : getPath();
 	} //}}}
 
 
@@ -1578,7 +1580,7 @@ public class Buffer extends JEditBuffer
 	@Override
 	public String toString()
 	{
-		return name + " (" + abbreviate(directory) + ')';
+		return name + " (" + MiscUtilities.abbreviate(directory) + ')';
 	} //}}}
 
 	//}}}
@@ -1747,17 +1749,6 @@ public class Buffer extends JEditBuffer
 			autosaveFile = null;
 			symlinkPath = path;
 		}
-	} //}}}
-
-	//{{{ abbreviate() method
-	/**
-	 * Replaces user.home with tilde character (under UNIX only)
-	 */
-	private String abbreviate(String absolutePath)
-	{
-		return OperatingSystem.isUnix()
-			? absolutePath.replaceFirst("^" + System.getProperty("user.home"), "~")
-			: absolutePath;
 	} //}}}
 
 
