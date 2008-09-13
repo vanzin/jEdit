@@ -44,7 +44,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
-import org.gjt.sp.util.StringList;
+
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
 //}}}
@@ -1766,12 +1766,15 @@ loop:		for(;;)
 		VarCompressor() {
 			ProcessBuilder pb = new ProcessBuilder();
 			Map<String, String> env = pb.environment();
+			if (OperatingSystem.isUnix()) 
+					env.put("~", System.getProperty("user.home"));
 			for (String k: env.keySet()) {
-				if (k.length() < env.get(k).length()) {
-					if (OperatingSystem.isUnix() &&
-						env.get(k).equals(System.getProperty("user.home"))) continue;
-					vars.put(env.get(k), k);
-				}
+				String v = env.get(k);
+				if (vars.containsKey(v)) {
+					String otherKey = vars.get(v);
+					if (otherKey.length() < k.length()) continue;
+				}					
+				vars.put(v, k);
 			}
 		}
 		
@@ -1790,9 +1793,6 @@ loop:		for(;;)
 					path = "$" + vars.get(var) + path.substring(var.length());
 				else
 					path = "%" + vars.get(var) + "%" + path.substring(var.length());
-			}
-			if (OperatingSystem.isUnix()) {
-				path = path.replaceFirst("^" + System.getProperty("user.home"), "~");
 			}
 			previous.put(original, path);
 			return path;
