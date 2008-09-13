@@ -1771,9 +1771,17 @@ loop:		for(;;)
 			ProcessBuilder pb = new ProcessBuilder();
 			Map<String, String> env = pb.environment();
 			if (OperatingSystem.isUnix()) 
-					env.put("~", System.getProperty("user.home"));
+				env.put("~", System.getProperty("user.home"));
+				
 			for (String k: env.keySet()) {
+				if (k.equalsIgnoreCase("pwd")) continue;
 				String v = env.get(k);
+				
+				if (OperatingSystem.isWindows()) {
+					// no case sensitivity, might as well convert to lower case
+					v = v.toLowerCase();
+					k = k.toLowerCase();
+				}
 				if (vars.containsKey(v)) {
 					String otherKey = vars.get(v);
 					if (otherKey.length() < k.length()) continue;
@@ -1783,10 +1791,12 @@ loop:		for(;;)
 		}
 		
 		String compress(String path) {
+			String original = path;			
+			if (OperatingSystem.isWindows()) 
+				path = path.toLowerCase();
 			if (previous.containsKey(path)) {
 				return previous.get(path);
 			}
-			String original = path;
 			String var = "/";
 			for (String k : vars.keySet()) {
 				if (path.startsWith(k) && k.length() > var.length()) 
@@ -1796,7 +1806,7 @@ loop:		for(;;)
 				if (OperatingSystem.isUnix()) 
 					path = "$" + vars.get(var) + path.substring(var.length());
 				else
-					path = "%" + vars.get(var) + "%" + path.substring(var.length());
+					path = "%" + vars.get(var).toUpperCase() + "%" + original.substring(var.length());
 			}
 			previous.put(original, path);
 			return path;
