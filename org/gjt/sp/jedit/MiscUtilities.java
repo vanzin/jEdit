@@ -198,6 +198,17 @@ public class MiscUtilities
 		return arg;
 	} //}}}
 
+	//{{{ abbreviate() method
+	/** returns an abbreviated path, replacing 
+	 *  values with variables, if a prefix exists.
+	 *  @since jEdit 4.3pre16
+	 */
+	public static String abbreviate(String path) {
+		// return path;
+		return svc.compress(path);
+	} //}}}
+	
+	
 	//{{{ resolveSymlinks() method
 	/**
 	 * Resolves any symbolic links in the path name specified
@@ -1751,13 +1762,6 @@ loop:		for(;;)
 	} //}}}
 
 	//}}}
-	/** returns an abbreviated path, replacing 
-	 *  values with variables, if a prefix exists.
-	 */
-	public static String abbreviate(String path) {
-		// return path;
-		return svc.compress(path);
-	}
 	static final VarCompressor svc = new VarCompressor();
 	static class VarCompressor {
 		/** a reverse mapping of values to environment variable names */
