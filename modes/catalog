@@ -342,7 +342,7 @@
 				FILE_NAME_GLOB="*.{pyx}" />
 
 <MODE NAME="python"		FILE="python.xml"
-				FILE_NAME_GLOB="*.{py,pyw,sc}"
+				FILE_NAME_GLOB="*.{py,pyw,sc,jy}"
 				FIRST_LINE_GLOB="#!*/*python*" />
 
 <MODE NAME="rebol"		FILE="rebol.xml"
