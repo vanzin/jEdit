@@ -142,7 +142,7 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class ActionSet extends JEditActionSet<EditAction>
+public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 {
 	//{{{ ActionSet constructor
 	/**
@@ -299,6 +299,11 @@ public class ActionSet extends JEditActionSet<EditAction>
 		return jEdit.getInputHandler();
 	} //}}}
 
+	//{{{ compareTo() method
+	public int compareTo(Object o) {
+		return label.compareTo(((ActionSet)o).label);
+	}//}}}
+
 	//{{{ toString() method
 	@Override
 	public String toString()
@@ -326,4 +331,5 @@ public class ActionSet extends JEditActionSet<EditAction>
 	private String label;
 	private PluginJAR plugin;
 	//}}}
+
 }

@@ -355,15 +355,16 @@ class ContextAddDialog extends EnhancedDialog
 
         JPanel actionPanel = new JPanel(new BorderLayout(6,6));
 
-        JEditActionSet[] actionsList = jEdit.getActionSets();
-        Vector vec = new Vector(actionsList.length);
+        ActionSet[] actionsList = jEdit.getActionSets();
+        TreeSet<ActionSet> actionSets = new TreeSet<ActionSet>();
         for(int i = 0; i < actionsList.length; i++)
         {
-            ActionSet actionSet = (ActionSet) actionsList[i];
+            ActionSet actionSet = actionsList[i];
             if(actionSet.getActionCount() != 0)
-                vec.addElement(actionSet);
+            	actionSets.add(actionSet);
         }
-        combo = new JComboBox(vec);
+        combo = new JComboBox(actionSets.toArray());
+        combo.setSelectedIndex(jEdit.getIntegerProperty("contextAddDialog.lastSelection",1));
         combo.addActionListener(actionHandler);
         actionPanel.add(BorderLayout.NORTH,combo);
 
@@ -434,6 +435,8 @@ class ContextAddDialog extends EnhancedDialog
     private void updateList()
     {
         ActionSet actionSet = (ActionSet)combo.getSelectedItem();
+        jEdit.setIntegerProperty("contextAddDialog.lastSelection", combo.getSelectedIndex());
+                
         EditAction[] actions = actionSet.getActions();
         Vector listModel = new Vector(actions.length);
 
