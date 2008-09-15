@@ -136,12 +136,12 @@ public class EditBus
 				EBComponent comp = comps[i];
 				if(Debug.EB_TIMER)
 				{
-					long start = System.currentTimeMillis();
+					long start = System.nanoTime();
 					comp.handleMessage(message);
-					long time = (System.currentTimeMillis() - start);
-					if(time != 0)
+					long time = (System.nanoTime() - start);
+					if(time >= 1000000)
 					{
-						Log.log(Log.DEBUG,EditBus.class,comp + ": " + time + " ms");
+						Log.log(Log.DEBUG,EditBus.class,comp + ": " + time + " ns");
 					}
 				}
 				else
