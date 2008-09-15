@@ -606,6 +606,9 @@ TODO:
 			<END>`</END>
 		</SPAN>
 
+		<!--
+		TODO: these should not highlight e.g. "(int)$bar"
+		-->
 		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
 		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR"> (</MARK_PREVIOUS>
 
@@ -4895,13 +4898,13 @@ TODO:
 
 
 	<!-- Handle PHP tags in LITERAL1, e.g. in the "type" attribute of a <SCRIPT> tag -->
-	<RULES SET="LITERAL1+PHP" DEFAULT="LITERAL1">
+	<RULES SET="LITERAL1+PHP" DEFAULT="LITERAL1" ESCAPE="\">
 		<IMPORT DELEGATE="TO_PHP"/>
 	</RULES>
 
 
 	<!-- Handle PHP tags in LITERAL2, e.g. in the "type" attribute of a <SCRIPT> tag -->
-	<RULES SET="LITERAL2+PHP" DEFAULT="LITERAL2">
+	<RULES SET="LITERAL2+PHP" DEFAULT="LITERAL2" ESCAPE="\">
 		<IMPORT DELEGATE="TO_PHP"/>
 	</RULES>
 
