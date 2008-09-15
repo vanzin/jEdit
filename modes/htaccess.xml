@@ -49,6 +49,8 @@
 			<KEYWORD1>Anonymous_NoUserID</KEYWORD1>
 			<KEYWORD1>Anonymous_VerifyEmail</KEYWORD1>
 			<KEYWORD1>AuthAuthoritative</KEYWORD1>
+			<KEYWORD1>AuthBasicAuthoritative</KEYWORD1>
+			<KEYWORD1>AuthBasicProvider</KEYWORD1>
 			<KEYWORD1>AuthDBMAuthoritative</KEYWORD1>
 			<KEYWORD1>AuthDBMGroupFile</KEYWORD1>
 			<KEYWORD1>AuthDBMType</KEYWORD1>
@@ -232,6 +234,8 @@
 			<KEYWORD2>Anonymous_NoUserID</KEYWORD2>
 			<KEYWORD2>Anonymous_VerifyEmail</KEYWORD2>
 			<KEYWORD2>AuthAuthoritative</KEYWORD2>
+			<KEYWORD2>AuthBasicAuthoritative</KEYWORD2>
+			<KEYWORD2>AuthBasicProvider</KEYWORD2>
 			<KEYWORD2>AuthDBMAuthoritative</KEYWORD2>
 			<KEYWORD2>AuthDBMGroupFile</KEYWORD2>
 			<KEYWORD2>AuthDBMType</KEYWORD2>

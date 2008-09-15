@@ -83,14 +83,14 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Abbreviated buffer path in MiscUtilities.abbreviate()
   Replaces homedir with tilde, and reverse-expands environment variables.
   (# 1910097 - Jakub Roztocil, Alan Ezust)
-  
+
 - Angle Brackets are now also matched from find matching bracket.
     (encorejane - # 1849215)
 
 - ActionSet combobox in "add to context menu" is sorted and remembers previous
   selection. (Alan Ezust)
 
-    
+
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)
@@ -117,6 +117,8 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - More patterns for shellscript filenames (# 2056778 - Kevin Hunter (hunteke))
 
+- added htaccess keywords AuthBasicAuthoritative and AuthBasicProvider
+  (#2108778) (Matthieu Casanova)
 }}}
 
 }}}
