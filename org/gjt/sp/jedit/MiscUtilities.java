@@ -1775,8 +1775,9 @@ loop:		for(;;)
 				
 			for (String k: env.keySet()) {
 				if (k.equalsIgnoreCase("pwd")) continue;
-				String v = env.get(k);
 				
+				String v = env.get(k);
+				if (k.length() > v.length()) continue;
 				if (OperatingSystem.isWindows()) {
 					// no case sensitivity, might as well convert to lower case
 					v = v.toLowerCase();
