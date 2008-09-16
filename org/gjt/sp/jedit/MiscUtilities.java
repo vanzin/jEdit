@@ -1775,7 +1775,7 @@ loop:		for(;;)
 				
 			for (String k: env.keySet()) {
 				if (k.equalsIgnoreCase("pwd")) continue;
-				
+				if (!Character.isLetter(k.charAt(0))) continue;
 				String v = env.get(k);
 				if (k.length() > v.length()) continue;
 				if (OperatingSystem.isWindows()) {
