@@ -411,7 +411,7 @@ public class BufferSetManager implements EBComponent
 	private class BufferSetClosed extends BufferSetAdapter
 	{
 		/** The closed bufferSet. */
-		private BufferSet closedBufferSet;
+		private final BufferSet closedBufferSet;
 
 		/**
 		 * The closed view.

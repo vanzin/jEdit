@@ -3619,8 +3619,6 @@ public class jEdit
 		{
 			public void run()
 			{
-				Buffer buffer = openFiles(null,userDir,args);
-
 				int count = getBufferCount();
 
 				boolean restoreFiles = restore
@@ -3635,9 +3633,15 @@ public class jEdit
 							restoreFiles);
 
 					if(view == null)
-						view = newView(null,buffer);
-					else if(buffer != null)
+						view = newView(null,null);
+
+					Buffer buffer = openFiles(null,userDir,args);
+					if(buffer != null)
 						view.setBuffer(buffer,true);
+				}
+				else
+				{
+					openFiles(null,userDir,args);
 				}
 
 				// Start I/O threads

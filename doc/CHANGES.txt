@@ -43,6 +43,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Numpad keys (ADD, SUBTRACT, etc) had been not bindable since 4.3pre13.
   (SF.net bug #1936714 - Kazutoshi Satoda)
 
+- When launching jEdit with some files in the command line if the bufferSet was
+  not global, the files were opened but not visible in the editPane
+  (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
