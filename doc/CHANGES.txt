@@ -7,6 +7,8 @@ Matthieu Casanova, Alan Ezust, Bernhard Walle, Shlomy Reinstein, Greg Merrill,
 Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
+- It is not possible anymore to open more than one clean untitled buffer in
+  a bufferSet (Matthieu Casanova)
 
 - Closed buffers were often kept in memory. (Kazutoshi Satoda)
 

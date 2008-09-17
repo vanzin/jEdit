@@ -555,7 +555,20 @@
 
 <ACTION NAME="new-file">
 	<CODE>
-		jEdit.newFile(view);
+        EditPane editPane = view.getEditPane();
+        BufferSet bufferSet = editPane.getBufferSet();
+        Buffer[] buffers = bufferSet.getAllBuffers();
+        boolean hasUntitled = false;
+        for (Buffer buf:buffers)
+        {
+            if (buf.isUntitled() &amp;&amp; !buf.isDirty())
+            {
+                hasUntitled = true;
+                break;
+            }
+        }
+        if (!hasUntitled)
+		    jEdit.newFile(view);
 	</CODE>
 </ACTION>
 
