@@ -1771,10 +1771,10 @@ loop:		for(;;)
 			ProcessBuilder pb = new ProcessBuilder();
 			Map<String, String> env = pb.environment();
 			if (OperatingSystem.isUnix()) 
-				env.put("~", System.getProperty("user.home"));
-				
+				prefixMap.put(System.getProperty("user.home"), "~");
 			for (String k: env.keySet()) {
 				if (k.equalsIgnoreCase("pwd")) continue;
+				if (k.equalsIgnoreCase("home")) continue;
 				if (!Character.isLetter(k.charAt(0))) continue;
 				String v = env.get(k);
 				if (k.length() > v.length()) continue;
@@ -1803,8 +1803,7 @@ loop:		for(;;)
 				    path.toLowerCase().startsWith(tryPrefix.toLowerCase()))
 					bestPrefix = tryPrefix;
 				else if (path.startsWith(tryPrefix))
-					bestPrefix = tryPrefix;
-				
+					bestPrefix = tryPrefix;	
 			}
 			if (bestPrefix.length() > 1) {
 				String remainder = original.substring(bestPrefix.length());
