@@ -469,7 +469,8 @@ public class BeanShell
 	 * obsolete; call <code>_runScript()</code> or <code>runScript()</code>
 	 * instead.
 	 */
-	public static void runScript(View view, String path,
+	@Deprecated
+    public static void runScript(View view, String path,
 		boolean ownNamespace, boolean rethrowBshErrors)
 	{
 		runScript(view,path,null,ownNamespace);
@@ -481,7 +482,8 @@ public class BeanShell
 	 * obsolete; call <code>_runScript()</code> or <code>runScript()</code>
 	 * instead.
 	 */
-	public static void runScript(View view, String path, Reader in,
+	@Deprecated
+    public static void runScript(View view, String path, Reader in,
 		boolean ownNamespace, boolean rethrowBshErrors)
 	{
 		runScript(view,path,in,ownNamespace);
@@ -492,7 +494,8 @@ public class BeanShell
 	 * @deprecated The <code>rethrowBshErrors</code> parameter is now
 	 * obsolete; call <code>_eval()</code> or <code>eval()</code> instead.
 	 */
-	public static Object eval(View view, String command,
+	@Deprecated
+    public static Object eval(View view, String command,
 		boolean rethrowBshErrors)
 	{
 		return bsh.eval(view,command);
@@ -503,7 +506,8 @@ public class BeanShell
 	 * @deprecated The <code>rethrowBshErrors</code> parameter is now
 	 * obsolete; call <code>_eval()</code> or <code>eval()</code> instead.
 	 */
-	public static Object eval(View view, NameSpace namespace,
+	@Deprecated
+    public static Object eval(View view, NameSpace namespace,
 		String command, boolean rethrowBshErrors)
 	{
 		return eval(view,namespace,command);
@@ -548,6 +552,7 @@ public class BeanShell
 		{
 			super.init();
 			global.importPackage("org.gjt.sp.jedit.browser");
+			global.importPackage("org.gjt.sp.jedit.bufferset");
 			global.importPackage("org.gjt.sp.jedit.gui");
 			global.importPackage("org.gjt.sp.jedit.help");
 			global.importPackage("org.gjt.sp.jedit.io");
