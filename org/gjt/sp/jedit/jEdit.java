@@ -59,6 +59,7 @@ import org.gjt.sp.jedit.syntax.XModeHandler;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
+import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -1670,10 +1671,33 @@ public class jEdit
 	 */
 	public static Buffer newFile(View view, String dir)
 	{
-		// Find the highest Untitled-n file
-		int untitledCount = getNextUntitledBufferId();
+		EditPane editPane = view == null ? getActiveView().getEditPane(): view.getEditPane();
+        BufferSet bufferSet = editPane.getBufferSet();
+        Buffer[] buffers = bufferSet.getAllBuffers();
+        boolean hasUntitled = false;
+		Buffer untitledBuffer = null;
+        for (Buffer buf:buffers)
+        {
+            if (buf.isUntitled() && !buf.isDirty())
+            {
+				untitledBuffer = buf;
+                hasUntitled = true;
+                break;
+            }
+        }
 
-		return openFile(view,dir,"Untitled-" + untitledCount,true,null);
+		if (hasUntitled)
+		{
+			editPane.setBuffer(untitledBuffer);
+			return null;
+		}
+		else
+		{
+			// Find the highest Untitled-n file
+			int untitledCount = getNextUntitledBufferId();
+
+			return openFile(view,dir,"Untitled-" + untitledCount,true,null);
+		}
 	} //}}}
 
 	//}}}
