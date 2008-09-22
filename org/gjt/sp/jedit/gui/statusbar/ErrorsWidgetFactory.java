@@ -81,19 +81,11 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		private int currentSize;
 
 		//{{{ ErrorHighlight constructor
-		ErrorHighlight(final View view)
+		ErrorHighlight(View view)
 		{
 			setForeground(jEdit.getColorProperty("view.status.foreground"));
 			setBackground(jEdit.getColorProperty("view.status.background"));
-			addMouseListener(new MouseAdapter()
-			{
-				@Override
-				public void mouseClicked(MouseEvent e)
-				{
-					if (e.getClickCount() == 2 && !Log.throwables.isEmpty())
-						new ErrorDialog(view);
-				}
-			});
+			addMouseListener(new MyMouseAdapter(view));
 		} //}}}
 
 		//{{{ addNotify() method
@@ -132,7 +124,6 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			update();
 		} //}}}
 
-		//{{{ Private members
 		private Timer timer;
 
 		//{{{ update() method
@@ -155,19 +146,49 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 					setToolTipText(size + " error(s)");
 				}
 			}
-		}
+		} //}}}
+
+		//{{{ MyMouseAdapter class
+		private class MyMouseAdapter extends MouseAdapter
+		{
+			private final View view;
+
+			MyMouseAdapter(View view)
+			{
+				this.view = view;
+			}
+
+			@Override
+				public void mouseClicked(MouseEvent e)
+			{
+				if (Log.throwables.isEmpty())
+					return;
+				if (GUIUtilities.isRightButton(e.getModifiers()))
+				{
+					JPopupMenu menu = GUIUtilities.loadPopupMenu("errorwidget.popupmenu");
+					GUIUtilities.showPopupMenu(menu, ErrorHighlight.this, e.getX(), e.getY());
+
+				}
+				else if (e.getClickCount() == 2)
+					new ErrorDialog(view);
+
+			}
+		} //}}}
+
 	} //}}}
 
+	//{{{ ErrorDialog class
 	private static class ErrorDialog extends EnhancedDialog
 	{
-		private JTextArea textArea;
-		private ByteArrayOutputStream byteArrayOutputStream;
-		private PrintStream printStream;
-		private JButton removeThisError;
-		private JButton removeAllErrors;
-		private Object[] throwables;
-		private JComboBox combo;
+		private final JTextArea textArea;
+		private final ByteArrayOutputStream byteArrayOutputStream;
+		private final PrintStream printStream;
+		private final JButton removeThisError;
+		private final JButton removeAllErrors;
+		private final Object[] throwables;
+		private final JComboBox combo;
 
+		//{{{ ErrorDialog constructor
 		private ErrorDialog(Frame view)
 		{
 			super(view, "Errors", false);
@@ -200,7 +221,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			buttons.add(removeThisError = new JButton(jEdit.getProperty("grab-key.remove")));
 			buttons.add(Box.createHorizontalStrut(6));
 			buttons.add(removeAllErrors = new JButton(jEdit.getProperty("common.clearAll")));
-			
+
 			ErrorDialog.MyActionListener actionListener = new MyActionListener();
 			removeThisError.addActionListener(actionListener);
 			removeAllErrors.addActionListener(actionListener);
@@ -211,8 +232,9 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			pack();
 			GUIUtilities.loadGeometry(this,"status.errorWidget");
 			setVisible(true);
-		}
+		} //}}}
 
+		//{{{ setThrowable() method
 		private void setThrowable(Throwable throwable)
 		{
 			if (throwable == null)
@@ -226,27 +248,31 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 				textArea.setCaretPosition(0);
 				byteArrayOutputStream.reset();
 			}
-		}
+		} //}}}
 
+		//{{{ dispose() method
 		@Override
 		public void dispose()
 		{
 			GUIUtilities.saveGeometry(this, "status.errorWidget");
 			super.dispose();
-		}
+		} //}}}
 
+		//{{{ ok() method
 		@Override
 		public void ok()
 		{
 			dispose();
-		}
+		} //}}}
 
+		//{{{ cancel() method
 		@Override
 		public void cancel()
 		{
 			dispose();
-		}
+		} //}}}
 
+		//{{{ MyActionListener class
 		private class MyActionListener implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e)
@@ -274,7 +300,6 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 					dispose();
 				}
 			}
-		}
-	}
-	//}}}
-} //}}}
+		} //}}}
+	} //}}}
+}

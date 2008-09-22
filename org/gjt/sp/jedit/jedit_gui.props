@@ -1944,7 +1944,7 @@ options.save-back.confirmSaveAll="Save All Buffers" asks for confirmation
 options.save-back.autosaveUntitled=Autosave untitled buffers
 options.save-back.suppressNotSavedConfirmUntitled=Never mark Untitled buffers dirty.
 options.save-back.useMD5forDirtyCalculation=Never mark buffers dirty if contents are unchanged.
-options.save-back.useMD5forDirtyCalculation.tooltip=Compare with length and MD5 hash of  buffer at load time, to decide if an edited buffer is still dirty.  
+options.save-back.useMD5forDirtyCalculation.tooltip=Compare with length and MD5 hash of  buffer at load time, to decide if an edited buffer is still dirty.
 #}}}
 
 #{{{ Shortcuts pane
@@ -2513,5 +2513,5 @@ plugin-manager.remove-failed.message=The plugin {0}\n\
 
 #}}}
 
-
+errorwidget.popupmenu=logs-remove-all-errors
 

@@ -529,6 +529,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="logs-remove-all-errors">
+	<CODE>
+		Log.throwables.clear();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="match-bracket">
 	<CODE>
 		textArea.goToMatchingBracket();
