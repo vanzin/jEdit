@@ -488,6 +488,7 @@ public class Registers
 		/**
 		 * Converts to a string.
 		 */
+		@Override
 		String toString();
 
 		/**
@@ -522,12 +523,14 @@ public class Registers
 		/**
 		 * Returns the clipboard contents.
 		 */
+		@Override
 		public String toString()
 		{
 			try
 			{
 
-				if (false) {
+				if (false)
+				{
 					/*
 						This is to debug clipboard problems.
 
@@ -582,20 +585,26 @@ public class Registers
 		}
 	} //}}}
 
-	protected static void debugListDataFlavors(Transferable transferable) {
-		DataFlavor[]	dataFlavors		= transferable.getTransferDataFlavors();
+	//{{{ debugListDataFlavors() method
+	protected static void debugListDataFlavors(Transferable transferable)
+	{
+		DataFlavor[] dataFlavors = transferable.getTransferDataFlavors();
 
-		for (int i = 0;i<dataFlavors.length;i++) {
+		for (int i = 0;i<dataFlavors.length;i++)
+		{
 			DataFlavor dataFlavor = dataFlavors[i];
-
-			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): dataFlavor="+dataFlavor+'.');
-
+			Log.log(Log.DEBUG,Registers.class,
+				"debugListDataFlavors(): dataFlavor="+
+				dataFlavor+'.');
 		}
 
-		if (dataFlavors.length==0) {
-			Log.log(Log.DEBUG,Registers.class,"debugListDataFlavors(): no dataFlavor supported.");
+		if (dataFlavors.length == 0)
+		{
+			Log.log(Log.DEBUG,Registers.class,
+				"debugListDataFlavors(): no dataFlavor supported.");
 		}
-	}
+	} //}}}
+
 
 	//{{{ StringRegister class
 	/**
@@ -625,6 +634,7 @@ public class Registers
 		/**
 		 * Converts to a string.
 		 */
+		@Override
 		public String toString()
 		{
 			return value;
