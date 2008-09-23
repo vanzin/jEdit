@@ -25,6 +25,8 @@ package org.gjt.sp.jedit.gui.statusbar;
 import org.gjt.sp.jedit.View;
 
 /**
+ * A widget factory for the status bar.
+ * 
  * @author Matthieu Casanova
  * @since jEdit 4.3pre14 
  */
@@ -32,6 +34,7 @@ public interface StatusWidgetFactory
 {
 	/**
 	 * returns an instance of Widget for the given view
+	 * @param view the view to which the created widget will belong
 	 * @return a widget instance
 	 */
 	Widget getWidget(View view);
