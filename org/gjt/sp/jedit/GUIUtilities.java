@@ -41,12 +41,8 @@ import org.gjt.sp.util.SyntaxUtilities;
 
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -98,30 +94,35 @@ public class GUIUtilities
 	 * @deprecated Use <code>GUIUtilities.loadIcon("new.gif");</code>
 	 * instead.
 	 */
+	@Deprecated
 	public static Icon NEW_BUFFER_ICON;
 
 	/**
 	 * @deprecated Use <code>GUIUtilities.loadIcon("dirty.gif");</code>
 	 * instead.
 	 */
+	@Deprecated
 	public static Icon DIRTY_BUFFER_ICON;
 
 	/**
 	 * @deprecated Use <code>GUIUtilities.loadIcon("readonly.gif");</code>
 	 * instead.
 	 */
+	@Deprecated
 	public static Icon READ_ONLY_BUFFER_ICON;
 
 	/**
 	 * @deprecated Use <code>GUIUtilities.loadIcon("normal.gif");</code>
 	 * instead.
 	 */
+	@Deprecated
 	public static Icon NORMAL_BUFFER_ICON;
 
 	/**
 	 * @deprecated Use <code>GUIUtilities.loadIcon("jedit-icon.gif");</code>
 	 * instead.
 	 */
+	@Deprecated
 	public static Icon WINDOW_ICON;
 	//}}}
 
@@ -357,7 +358,7 @@ public class GUIUtilities
 		if (textArea != null)
 		{
 			List<JMenuItem> list = GUIUtilities.getServiceContextMenuItems(textArea, evt);
-			if (list.size() > 0)
+			if (!list.isEmpty())
 			{
 				menu.addSeparator();
 			}
@@ -378,21 +379,20 @@ public class GUIUtilities
 	 */
 	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea, MouseEvent evt) {
 		List<JMenuItem> list = new ArrayList<JMenuItem>();
-		final String serviceClassName =  DynamicContextMenuService.class.getName();
+		String serviceClassName =  DynamicContextMenuService.class.getName();
 		String[] menuServiceList = ServiceManager.getServiceNames(serviceClassName);
 		for (String menuServiceName : menuServiceList)
 		{
 			if (menuServiceName != null && menuServiceName.trim().length() > 0)
 			{
-				DynamicContextMenuService dcms = (DynamicContextMenuService) (
-						ServiceManager.getService(serviceClassName, menuServiceName));
+				DynamicContextMenuService dcms = (DynamicContextMenuService)
+						ServiceManager.getService(serviceClassName, menuServiceName);
 				if (dcms != null)
 				{
-					JMenuItem items[] = dcms.createMenu(textArea, evt);
+					JMenuItem[] items = dcms.createMenu(textArea, evt);
 					if (items != null)
 					{
-						for (JMenuItem mi: items) 
-							list.add(mi);
+						list.addAll(Arrays.asList(items));
 					}
 				}
 			}
@@ -841,10 +841,7 @@ public class GUIUtilities
 							JOptionPane.YES_NO_OPTION,
 							JOptionPane.QUESTION_MESSAGE);
 		Object[] selectedValues = list.getSelectedValues();
-		for (Object selectedValue : selectedValues)
-		{
-			selectedItems.add(selectedValue);
-		}
+		selectedItems.addAll(Arrays.asList(selectedValues));
 		return ret;
 	} //}}}
 
@@ -1078,14 +1075,13 @@ public class GUIUtilities
 	 * @param parent The parent frame to be relative to.
 	 * @param name The name of the window
 	 */
-	public static void loadGeometry(Window win, Container parent, String name ) {
-		int x, y, width, height;
-
+	public static void loadGeometry(Window win, Container parent, String name )
+	{
 		Dimension size = win.getSize();
-		width = jEdit.getIntegerProperty(name + ".width", size.width);
-		height = jEdit.getIntegerProperty(name + ".height", size.height);
-		x = jEdit.getIntegerProperty(name + ".x",50);
-		y = jEdit.getIntegerProperty(name + ".y",50);
+		int width = jEdit.getIntegerProperty(name + ".width", size.width);
+		int height = jEdit.getIntegerProperty(name + ".height", size.height);
+		int x = jEdit.getIntegerProperty(name + ".x",50);
+		int y = jEdit.getIntegerProperty(name + ".y",50);
 		if(parent != null)
 		{
 			Point location = parent.getLocation();
@@ -1188,11 +1184,10 @@ public class GUIUtilities
 			this.name = name;
 			this.desired = desired;
 
-			int adjust_x, adjust_y, adjust_width, adjust_height;
-			adjust_x = jEdit.getIntegerProperty(name + ".dx",0);
-			adjust_y = jEdit.getIntegerProperty(name + ".dy",0);
-			adjust_width = jEdit.getIntegerProperty(name + ".d-width",0);
-			adjust_height = jEdit.getIntegerProperty(name + ".d-height",0);
+			int adjust_x = jEdit.getIntegerProperty(name + ".dx",0);
+			int adjust_y = jEdit.getIntegerProperty(name + ".dy",0);
+			int adjust_width = jEdit.getIntegerProperty(name + ".d-width",0);
+			int adjust_height = jEdit.getIntegerProperty(name + ".d-height",0);
 
 			required = new Rectangle(
 				desired.x - adjust_x,
@@ -1216,7 +1211,7 @@ public class GUIUtilities
 		} //}}}
 
 		//{{{ ComponentHandler class
-		class ComponentHandler extends ComponentAdapter
+		private class ComponentHandler extends ComponentAdapter
 		{
 			//{{{ componentMoved() method
 			@Override
@@ -1262,7 +1257,7 @@ public class GUIUtilities
 		} //}}}
 
 		//{{{ WindowHandler class
-		class WindowHandler extends WindowAdapter
+		private class WindowHandler extends WindowAdapter
 		{
 			//{{{ windowOpened() method
 			@Override
@@ -1300,7 +1295,8 @@ public class GUIUtilities
 	 * @param name The name of the window
 	 * @see #addSizeSaver(Frame,String)
 	 */
-	public static void saveGeometry(Window win, String name) {
+	public static void saveGeometry(Window win, String name)
+	{
 		saveGeometry (win, win.getParent(), name);
 	} //}}}
 
@@ -1331,8 +1327,8 @@ public class GUIUtilities
 		if (parent != null)
 		{
 			Rectangle parentBounds = parent.getBounds();
-			x = x - parentBounds.x;
-			y = y - parentBounds.y;
+			x -= parentBounds.x;
+			y -= parentBounds.y;
 		}
 		jEdit.setIntegerProperty(name + ".x",x);
 		jEdit.setIntegerProperty(name + ".y",y);
@@ -1505,7 +1501,7 @@ public class GUIUtilities
 		int offsetX = 0;
 		int offsetY = 0;
 
-		int extraOffset = (point ? 1 : 0);
+		int extraOffset = point ? 1 : 0;
 
 		Component win = comp;
 		while(!(win instanceof Window || win == null))
@@ -1546,9 +1542,9 @@ public class GUIUtilities
 			{
 				//System.err.println("x overflow");
 				if(point)
-					x -= (size.width + extraOffset);
+					x -= size.width + extraOffset;
 				else
-					x = (win.getWidth() - size.width - offsetX + extraOffset);
+					x = win.getWidth() - size.width - offsetX + extraOffset;
 			}
 			else
 			{
@@ -1562,7 +1558,7 @@ public class GUIUtilities
 				&& y + offsetY + win.getY() >= size.height)
 			{
 				if(point)
-					y = (win.getHeight() - size.height - offsetY + extraOffset);
+					y = win.getHeight() - size.height - offsetY + extraOffset;
 				else
 					y = -size.height - 1;
 			}
@@ -1803,7 +1799,7 @@ public class GUIUtilities
 		// Load the icon theme but fallback on the old icons
 		String theme = jEdit.getProperty("icon-theme", "tango");
 		Log.log(Log.DEBUG, GUIUtilities.class, "Icon theme set to: "+theme);
-		setIconPath("jeditresource:/org/gjt/sp/jedit/icons/themes/" + theme + "/");
+		setIconPath("jeditresource:/org/gjt/sp/jedit/icons/themes/" + theme + '/');
 		Log.log(Log.DEBUG, GUIUtilities.class, "Loading icon theme from: "+iconPath);
 
 		// don't do this in static{} since we need jEdit.initMisc()
@@ -1841,35 +1837,44 @@ public class GUIUtilities
 	private static SplashScreen splash;
 	private static Map<String, Icon> icons;
 	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
-	private static String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
-	private static HashMap<String, String> deprecatedIcons = new HashMap<String, String>();
+	private static final String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
+	private static final HashMap<String, String> deprecatedIcons = new HashMap<String, String>();
 
 	//{{{ _loadMenuItem() method
-	private static JMenuItem _loadMenuItem(String name, ActionContext context, boolean setMnemonic) {
+	private static JMenuItem _loadMenuItem(String name, ActionContext context, boolean setMnemonic)
+	{
 
 		String label = jEdit.getProperty(name + ".label");
-		if (label == null) {
+		if (label == null)
+		{
 			label = name;
 		}
 		char mnemonic;
 		int index = label.indexOf('$');
-		if (index != -1 && label.length() - index > 1) {
+		if (index != -1 && label.length() - index > 1)
+		{
 			mnemonic = Character.toLowerCase(label.charAt(index + 1));
 			label = label.substring(0, index).concat(label.substring(++index));
-		} else {
+		}
+		else
+		{
 			mnemonic = '\0';
 		}
 		JMenuItem mi;
-		if (jEdit.getBooleanProperty(name + ".toggle")) {
+		if (jEdit.getBooleanProperty(name + ".toggle"))
+		{
 			mi = new EnhancedCheckBoxMenuItem(label, name, context);
-		} else {
+		} else
+		{
 			mi = new EnhancedMenuItem(label, name, context);
 		}
-		if (!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0') {
+		if (!OperatingSystem.isMacOS() && setMnemonic && mnemonic != '\0')
+		{
 			mi.setMnemonic(mnemonic);
 		}
 		Icon itemIcon = loadIcon(jEdit.getProperty(name + ".icon.small"));
-		if(itemIcon != null) {
+		if(itemIcon != null)
+		{
 			mi.setIcon(itemIcon);
 		}
 
@@ -1891,26 +1896,13 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre6
 	 * @see GUIUtilities#saveGeometry(Window,Container,String)
 	 */
-	static class SizeSaver extends ComponentAdapter implements WindowStateListener
+	private static class SizeSaver extends ComponentAdapter implements WindowStateListener
 	{
 		private Frame frame;
 		private Container parent;
 		private String name;
 
-		//{{{ SizeSaver constructor
-		/**
-		 * Constructs a new SizeSaver.
-		 *
-		 * @param frame The Frame for which to save the size
-		 * @param name The prefix for the settings
-		 */
-		SizeSaver(Frame frame, String name)
-		{
-			this.frame = frame;
-			this.parent = frame.getParent();
-		} //}}}
-
-		//{{{ SizeSaver constructor
+		//{{{ SizeSaver constructors
 		/**
 		 * Constructs a new SizeSaver.
 		 *
@@ -1918,9 +1910,9 @@ public class GUIUtilities
 		 * @param parent The parent to be relative to.
 		 * @param name The prefix for the settings
 		 */
-		public SizeSaver(Frame frame, Container parent, String name)
+		SizeSaver(Frame frame, Container parent, String name)
 		{
-			if ((null == frame) || (null == name))
+			if (frame == null || name == null)
 			{
 				throw new NullPointerException();
 			}
