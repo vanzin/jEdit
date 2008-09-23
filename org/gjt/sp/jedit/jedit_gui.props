@@ -2514,4 +2514,5 @@ plugin-manager.remove-failed.message=The plugin {0}\n\
 #}}}
 
 errorwidget.popupmenu=logs-remove-all-errors
+logs-remove-all-errors.label=Remove all errors
 
