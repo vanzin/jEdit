@@ -50,8 +50,6 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
-
-
 - Moved buffer list sorting options from General to View Option Pane
   with other bufferset options. (Alan Ezust)
 
@@ -95,7 +93,8 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - ActionSet combobox in "add to context menu" is sorted and remembers previous
   selection. (Alan Ezust)
 
-
+- Added right click popup menu to the Error widget in the status bar to clear
+  all errors (feature #2122926) (Matthieu Casanova)
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)

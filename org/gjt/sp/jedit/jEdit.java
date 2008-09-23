@@ -1671,33 +1671,38 @@ public class jEdit
 	 */
 	public static Buffer newFile(View view, String dir)
 	{
-		EditPane editPane = view == null ? getActiveView().getEditPane(): view.getEditPane();
-        BufferSet bufferSet = editPane.getBufferSet();
-        Buffer[] buffers = bufferSet.getAllBuffers();
-        boolean hasUntitled = false;
-		Buffer untitledBuffer = null;
-        for (Buffer buf:buffers)
-        {
-            if (buf.isUntitled() && !buf.isDirty())
-            {
-				untitledBuffer = buf;
-                hasUntitled = true;
-                break;
-            }
-        }
-
-		if (hasUntitled)
+		EditPane editPane = null;
+		if (view != null)
 		{
-			editPane.setBuffer(untitledBuffer);
-			return null;
+			editPane = view.getEditPane();
 		}
 		else
 		{
-			// Find the highest Untitled-n file
-			int untitledCount = getNextUntitledBufferId();
-
-			return openFile(view,dir,"Untitled-" + untitledCount,true,null);
+			View v = getActiveView();
+			if (v != null)
+			{
+				editPane = v.getEditPane();
+			}
 		}
+
+		if (editPane != null)
+		{
+			BufferSet bufferSet = editPane.getBufferSet();
+			Buffer[] buffers = bufferSet.getAllBuffers();
+			for (Buffer buf:buffers)
+			{
+				if (buf.isUntitled() && !buf.isDirty())
+				{
+					editPane.setBuffer(buf);
+					return buf;
+				}
+			}
+		}
+
+		// Find the highest Untitled-n file
+		int untitledCount = getNextUntitledBufferId();
+
+		return openFile(view,dir,"Untitled-" + untitledCount,true,null);
 	} //}}}
 
 	//}}}
