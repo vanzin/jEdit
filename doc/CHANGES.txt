@@ -50,6 +50,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
+- Added a widget for the statusbar that displays the length of the current
+  selection (feature #1912735) (Matthieu Casanova)
+
 - Moved buffer list sorting options from General to View Option Pane
   with other bufferset options. (Alan Ezust)
 
