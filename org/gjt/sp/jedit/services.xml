@@ -123,6 +123,10 @@
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new BufferSetWidgetFactory();
 	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="selection-length">
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new SelectionLengthWidgetFactory();
+	</SERVICE>
 	<!-- }}} -->
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 	

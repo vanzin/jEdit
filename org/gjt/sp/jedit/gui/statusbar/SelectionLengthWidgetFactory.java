@@ -35,7 +35,7 @@ import javax.swing.event.CaretEvent;
 //}}}
 
 /**
- * @author Matthieu Casanova
+ * @author Matthieu Casanova      I 
  * @since jEdit 4.3pre15
  */
 public class SelectionLengthWidgetFactory implements StatusWidgetFactory
