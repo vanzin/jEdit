@@ -112,7 +112,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		Font font = new JLabel().getFont();
 		//UIManager.getFont("Label.font");
 		FontMetrics fm = getFontMetrics(font);
-		Dimension dim;
 
 		if (showCaretStatus)
 		{
@@ -120,8 +119,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			caretStatus.setFont(font);
 
-			dim = new Dimension(fm.stringWidth(caretTestStr),
-				fm.getHeight());
+			Dimension dim = new Dimension(fm.stringWidth(caretTestStr),
+					fm.getHeight());
 			caretStatus.setPreferredSize(dim);
 		}
 		else
@@ -389,25 +388,25 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 	//{{{ Private members
 	private String currentBar;
-	private View view;
-	private JPanel panel;
-	private Box box;
-	private ToolTipLabel caretStatus;
+	private final View view;
+	private final JPanel panel;
+	private final Box box;
+	private final ToolTipLabel caretStatus;
 	private Component messageComp;
-	private JLabel message;
-	private Widget modeWidget;
-	private Widget foldWidget;
-	private Widget encodingWidget;
-	private Widget wrapWidget;
-	private Widget multiSelectWidget;
-	private Widget rectSelectWidget;
-	private Widget overwriteWidget;
-	private Widget lineSepWidget;
+	private final JLabel message;
+	private final Widget modeWidget;
+	private final Widget foldWidget;
+	private final Widget encodingWidget;
+	private final Widget wrapWidget;
+	private final Widget multiSelectWidget;
+	private final Widget rectSelectWidget;
+	private final Widget overwriteWidget;
+	private final Widget lineSepWidget;
 	/* package-private for speed */ StringBuilder buf = new StringBuilder();
 	private Timer tempTimer;
 	private boolean currentMessageIsIO;
 
-	private Segment seg = new Segment();
+	private final Segment seg = new Segment();
 
 	private boolean showCaretStatus;
 	//}}}
@@ -451,7 +450,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	} //}}}
 
 	//{{{ MouseHandler class
-	class MouseHandler extends MouseAdapter
+	private class MouseHandler extends MouseAdapter
 	{
 		@Override
 		public void mouseClicked(MouseEvent evt)
