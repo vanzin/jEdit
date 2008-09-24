@@ -50,6 +50,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
+- Added the absolute caret position in the caret status of the status bar
+  (Matthieu Casanova)
+
 - Added a widget for the statusbar that displays the length of the current
   selection (feature #1912735) (Matthieu Casanova)
 
@@ -126,7 +129,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - added htaccess keywords AuthBasicAuthoritative and AuthBasicProvider
   (#2108778) (Matthieu Casanova)
-  
+
 - Added some indent rules in shellscript.xml (Matthieu Casanova)
 }}}
 

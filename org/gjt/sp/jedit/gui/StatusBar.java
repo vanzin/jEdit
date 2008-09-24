@@ -289,9 +289,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	//{{{ updateCaretStatus() method
 	public void updateCaretStatus()
 	{
-		//if(!isShowing())
-		//	return;
-
 		if (showCaretStatus)
 		{
 			Buffer buffer = view.getBuffer();
@@ -306,6 +303,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			JEditTextArea textArea = view.getTextArea();
 
+			int caretPosition = textArea.getCaretPosition();
 			int currLine = textArea.getCaretLine();
 
 			// there must be a better way of fixing this...
@@ -317,7 +315,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				return; // hopefully another caret update will come?
 
 			int start = textArea.getLineStartOffset(currLine);
-			int dot = textArea.getCaretPosition() - start;
+			int dot = caretPosition - start;
 
 			// see above
 			if(dot < 0)
@@ -327,7 +325,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
 				buffer.getTabSize());
 
-			buf.setLength(0);
+			buf.append(caretPosition).append(',');
 			buf.append(Integer.toString(currLine + 1));
 			buf.append(',');
 			buf.append(Integer.toString(dot + 1));
@@ -365,6 +363,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			}
 
 			caretStatus.setText(buf.toString());
+			buf.setLength(0);
 		}
 	} //}}}
 
@@ -411,7 +410,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private boolean showCaretStatus;
 	//}}}
 
-	static final String caretTestStr = "9999,999-999 99%";
+	static final String caretTestStr = "99999999,9999,999-999 99%";
 
 	//{{{ getWidget() method
 	private Widget getWidget(String name)
