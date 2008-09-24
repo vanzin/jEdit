@@ -7,6 +7,12 @@
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+		<PROPERTY NAME="indentNextLines"
+			VALUE="^.*(then|else|case.*in)$" />
+		<PROPERTY NAME="unindentThisLine"
+			VALUE="^\s*(fi|else|esac|.*\))$" />
+		<PROPERTY NAME="unindentNextLines"
+			VALUE="^\s*(fi|else|esac)$" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" ESCAPE="\">
 		<!-- Comments -->
