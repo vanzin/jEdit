@@ -1868,6 +1868,7 @@ options.gutter.markerHighlight=Show marker positions:
 options.gutter.foldColor=Fold markers:
 options.gutter.focusBorderColor=Focused gutter border:
 options.gutter.noFocusBorderColor=Unfocused gutter border:
+options.gutter.foldStyle.label=Fold style:
 #}}}
 
 #{{{ Mouse pane

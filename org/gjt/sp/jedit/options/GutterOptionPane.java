@@ -25,8 +25,10 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
+
 import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.textarea.Gutter;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -154,6 +156,9 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterNoFocusBorder = new ColorWellButton(
 			jEdit.getColorProperty("view.gutter.noFocusBorderColor")),
 			GridBagConstraints.VERTICAL);
+		
+		addFoldStyleChooser();
+
 	} //}}}
 
 	//{{{ _save() method
@@ -204,10 +209,30 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterMarkerHighlight.getSelectedColor());
 		jEdit.setColorProperty("view.gutter.foldColor",
 			gutterFoldMarkers.getSelectedColor());
+		jEdit.setProperty(Gutter.FOLD_PAINTER_PROPERTY,
+				(String) foldPainter.getSelectedItem());
 		jEdit.setColorProperty("view.gutter.focusBorderColor",
 			gutterFocusBorder.getSelectedColor());
 		jEdit.setColorProperty("view.gutter.noFocusBorderColor",
 			gutterNoFocusBorder.getSelectedColor());
+	} //}}}
+
+	//{{{ addFoldStyleChooser() method
+	private void addFoldStyleChooser()
+	{
+		String [] painters =
+			ServiceManager.getServiceNames(Gutter.FOLD_PAINTER_SERVICE);
+		foldPainter = new JComboBox(painters);
+		String painter = Gutter.getFoldPainterName();
+		for (int i = 0; i < painters.length; i++)
+		{
+			if (painters[i].equals(painter))
+			{
+				foldPainter.setSelectedIndex(i);
+				break;
+			}
+		}
+		addComponent(new JLabel(jEdit.getProperty("options.gutter.foldStyle.label")), foldPainter);
 	} //}}}
 
 	//{{{ Private members
@@ -224,6 +249,7 @@ public class GutterOptionPane extends AbstractOptionPane
 	private JCheckBox gutterMarkerHighlightEnabled;
 	private ColorWellButton gutterMarkerHighlight;
 	private ColorWellButton gutterFoldMarkers;
+	private JComboBox foldPainter;
 	private ColorWellButton gutterFocusBorder;
 	private ColorWellButton gutterNoFocusBorder;
 	//}}}

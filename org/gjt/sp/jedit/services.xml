@@ -22,6 +22,17 @@
 		new DummyFoldHandler();
 	</SERVICE>
 
+	<!-- Fold painters -->
+	<SERVICE CLASS="org.gjt.sp.jedit.textarea.FoldPainter" NAME="Triangle">
+		new TriangleFoldPainter();
+	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.textarea.FoldPainter" NAME="Square">
+		new SquareFoldPainter();
+	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.textarea.FoldPainter" NAME="Circle">
+		new CircleFoldPainter();
+	</SERVICE>
+
 	<!-- Extended encodings -->
 	<!-- Not supported by Java -->
 	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="UTF-8Y">

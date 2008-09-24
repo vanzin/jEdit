@@ -101,6 +101,12 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Added right click popup menu to the Error widget in the status bar to clear
   all errors (feature #2122926) (Matthieu Casanova)
+  
+- Added two new fold styles: Square folds (Explorer style) and round folds
+  (Scintilla style). Created a service to provide the fold painter, and a
+  property to select the fold painter service to use. The fold style can be
+  changed using a new option in Global Options -> Gutter. (feature #1747300)
+  (Shlomy Reinstein)
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)

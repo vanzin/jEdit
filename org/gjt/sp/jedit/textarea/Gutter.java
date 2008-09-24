@@ -29,6 +29,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
+
+import org.gjt.sp.jedit.ServiceManager;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
@@ -72,6 +75,35 @@ public class Gutter extends JComponent implements SwingConstants
 	public static final int HIGHEST_LAYER = Integer.MAX_VALUE;
 	//}}}
 
+	//{{{ Fold painters
+	/**
+	 * Fold painter service.
+	 * @since jEdit 4.3pre16
+	 */
+	public static final String FOLD_PAINTER_PROPERTY = "foldPainter";
+	public static final String FOLD_PAINTER_SERVICE = "org.gjt.sp.jedit.textarea.FoldPainter";
+	public static final String DEFAULT_FOLD_PAINTER_SERVICE = "Triangle";
+
+	//{{{ getFoldPainterService() method
+	public static String getFoldPainterName()
+	{
+		return jEdit.getProperty(FOLD_PAINTER_PROPERTY, DEFAULT_FOLD_PAINTER_SERVICE);
+	} //}}}
+
+	//{{{ setFolderPainter() method
+	public void setFoldPainter(String painterName)
+	{
+		foldPainter = (FoldPainter) ServiceManager.getService(
+				FOLD_PAINTER_SERVICE, painterName);
+		if (foldPainter == null)
+			foldPainter = (FoldPainter) ServiceManager.getService(
+				FOLD_PAINTER_SERVICE,
+				DEFAULT_FOLD_PAINTER_SERVICE);
+	}
+	//}}}
+	
+	//}}} Fold painters
+	
 	//{{{ Gutter constructor
 	public Gutter(TextArea textArea)
 	{
@@ -88,6 +120,7 @@ public class Gutter extends JComponent implements SwingConstants
 		addMouseMotionListener(mouseHandler);
 
 		updateBorder();
+		setFoldPainter(getFoldPainterName());
 	} //}}}
 
 	//{{{ paintComponent() method
@@ -528,6 +561,8 @@ public class Gutter extends JComponent implements SwingConstants
 
 	private int borderWidth;
 	private Border focusBorder, noFocusBorder;
+	
+	private FoldPainter foldPainter;
 	//}}}
 
 	//{{{ paintLine() method
@@ -550,32 +585,19 @@ public class Gutter extends JComponent implements SwingConstants
 		//{{{ Paint fold triangles
 		if(info.firstSubregion && buffer.isFoldStart(physicalLine))
 		{
-			int _y = y + lineHeight / 2;
-			gfx.setColor(foldColor);
-			if(textArea.displayManager
-				.isLineVisible(physicalLine + 1))
-			{
-				gfx.drawLine(1,_y - 3,10,_y - 3);
-				gfx.drawLine(2,_y - 2,9,_y - 2);
-				gfx.drawLine(3,_y - 1,8,_y - 1);
-				gfx.drawLine(4,_y,7,_y);
-				gfx.drawLine(5,_y + 1,6,_y + 1);
-			}
-			else
-			{
-				gfx.drawLine(4,_y - 5,4,_y + 4);
-				gfx.drawLine(5,_y - 4,5,_y + 3);
-				gfx.drawLine(6,_y - 3,6,_y + 2);
-				gfx.drawLine(7,_y - 2,7,_y + 1);
-				gfx.drawLine(8,_y - 1,8,_y);
-			}
+			foldPainter.paintFoldStart(this, gfx, line, physicalLine,
+					textArea.displayManager.isLineVisible(physicalLine+1),
+					y, lineHeight, buffer);
 		}
 		else if(info.lastSubregion && buffer.isFoldEnd(physicalLine))
 		{
-			gfx.setColor(foldColor);
-			int _y = y + lineHeight / 2;
-			gfx.drawLine(4,_y,4,_y + 3);
-			gfx.drawLine(4,_y + 3,7,_y + 3);
+			foldPainter.paintFoldEnd(this, gfx, line, physicalLine, y,
+					lineHeight, buffer);
+		}
+		else if(buffer.getFoldLevel(physicalLine) > 0)
+		{
+			foldPainter.paintFoldMiddle(this, gfx, line, physicalLine,
+					y, lineHeight, buffer);
 		} //}}}
 		//{{{ Paint bracket scope
 		else if(structureHighlight)

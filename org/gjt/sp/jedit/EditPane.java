@@ -977,7 +977,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			jEdit.getColorProperty("view.gutter.focusBorderColor"),
 			jEdit.getColorProperty("view.gutter.noFocusBorderColor"),
 			textArea.getPainter().getBackground());
-
+		gutter.setFoldPainter(Gutter.getFoldPainterName());
+		
 		textArea.setCaretBlinkEnabled(jEdit.getBooleanProperty(
 			"view.caretBlink"));
 
