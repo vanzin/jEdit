@@ -27,7 +27,7 @@ public class SquareFoldPainter implements FoldPainter {
 		gfx.drawRect(_x-4,_y-4,8,8);
 		gfx.drawLine(_x-2,_y,_x+2,_y);
 		if (nextLineVisible)
-			gfx.drawLine(_x,_y+5,_x,_y+lineHeight-1);
+			gfx.drawLine(_x,_y+5,_x,y+lineHeight-1);
 		else
 			gfx.drawLine(_x,_y-2,_x,_y+2);
 	}
