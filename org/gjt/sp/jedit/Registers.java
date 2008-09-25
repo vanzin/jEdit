@@ -488,7 +488,6 @@ public class Registers
 		/**
 		 * Converts to a string.
 		 */
-		@Override
 		String toString();
 
 		/**
