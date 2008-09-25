@@ -22,13 +22,14 @@ public class SquareFoldPainter implements FoldPainter {
 			JEditBuffer buffer)
 	{
 		int _y = y + lineHeight / 2;
+		int _x = 5;
 		gfx.setColor(gutter.getFoldColor());
-		gfx.drawRect(1,_y-5,9,10);
-		gfx.drawLine(3,_y,8,_y);
+		gfx.drawRect(_x-4,_y-4,8,8);
+		gfx.drawLine(_x-2,_y,_x+2,_y);
 		if (nextLineVisible)
-			gfx.drawLine(5,_y+5,5,_y+lineHeight-1);
+			gfx.drawLine(_x,_y+5,_x,_y+lineHeight-1);
 		else
-			gfx.drawLine(5,_y-3,5,_y+3);
+			gfx.drawLine(_x,_y-2,_x,_y+2);
 	}
 
 	@Override
