@@ -1,3 +1,27 @@
+/*
+ * TriangleFoldPainter.java
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 1999, 2000 mike dillon
+ * Portions copyright (C) 2001, 2002 Slava Pestov
+ * Refactoring copyright (C) 2008 Shlomy Reinstein
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 package org.gjt.sp.jedit.textarea;
 
 import java.awt.Graphics2D;
@@ -7,8 +31,9 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 public class TriangleFoldPainter implements FoldPainter {
 
 	@Override
-	public void paintFoldStart(Gutter gutter, Graphics2D gfx, int screenLine, int bufferLine,
-			boolean nextLineVisible, int y, int lineHeight, JEditBuffer buffer)
+	public void paintFoldStart(Gutter gutter, Graphics2D gfx, int screenLine,
+			int physicalLine, boolean nextLineVisible, int y, int lineHeight,
+			JEditBuffer buffer)
 	{
 		int _y = y + lineHeight / 2;
 		gfx.setColor(gutter.getFoldColor());
@@ -32,7 +57,7 @@ public class TriangleFoldPainter implements FoldPainter {
 
 	@Override
 	public void paintFoldEnd(Gutter gutter, Graphics2D gfx, int screenLine,
-			int bufferLine, int y, int lineHeight, JEditBuffer buffer)
+			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
 		gfx.setColor(gutter.getFoldColor());
 		int _y = y + lineHeight / 2;
@@ -42,7 +67,7 @@ public class TriangleFoldPainter implements FoldPainter {
 
 	@Override
 	public void paintFoldMiddle(Gutter gutter, Graphics2D gfx, int screenLine,
-			int bufferLine, int y, int lineHeight, JEditBuffer buffer)
+			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
 	}
 
