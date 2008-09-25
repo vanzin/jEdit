@@ -35,7 +35,7 @@ import org.gjt.sp.util.Log;
 //}}}
 
 /**
- * The gutter is the component that displays folding triangles and line
+ * The gutter is the component that displays folding indicators and line
  * numbers to the left of the text area. The only methods in this class
  * that should be called by plugins are those for adding and removing
  * text area extensions.
