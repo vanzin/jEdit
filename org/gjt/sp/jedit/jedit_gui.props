@@ -1869,6 +1869,9 @@ options.gutter.foldColor=Fold markers:
 options.gutter.focusBorderColor=Focused gutter border:
 options.gutter.noFocusBorderColor=Unfocused gutter border:
 options.gutter.foldStyle.label=Fold style:
+options.gutter.foldStyleNames.Triangle=Triangle
+options.gutter.foldStyleNames.Square=Square
+options.gutter.foldStyleNames.Circle=Circle
 #}}}
 
 #{{{ Mouse pane
