@@ -28,7 +28,7 @@ import javax.swing.*;
 
 import java.awt.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.textarea.Gutter;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -209,7 +209,7 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterMarkerHighlight.getSelectedColor());
 		jEdit.setColorProperty("view.gutter.foldColor",
 			gutterFoldMarkers.getSelectedColor());
-		jEdit.setProperty(Gutter.FOLD_PAINTER_PROPERTY,
+		jEdit.setProperty(JEditTextArea.FOLD_PAINTER_PROPERTY,
 				(String) foldPainter.getSelectedItem());
 		jEdit.setColorProperty("view.gutter.focusBorderColor",
 			gutterFocusBorder.getSelectedColor());
@@ -221,9 +221,9 @@ public class GutterOptionPane extends AbstractOptionPane
 	private void addFoldStyleChooser()
 	{
 		String [] painters =
-			ServiceManager.getServiceNames(Gutter.FOLD_PAINTER_SERVICE);
+			ServiceManager.getServiceNames(JEditTextArea.FOLD_PAINTER_SERVICE);
 		foldPainter = new JComboBox(painters);
-		String painter = Gutter.getFoldPainterName();
+		String painter = JEditTextArea.getFoldPainterName();
 		for (int i = 0; i < painters.length; i++)
 		{
 			if (painters[i].equals(painter))

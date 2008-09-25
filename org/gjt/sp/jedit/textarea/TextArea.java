@@ -141,6 +141,12 @@ public abstract class TextArea extends JComponent
 		popupEnabled = true;
 	} //}}}
 
+	//{{{ getFoldPainter() method
+	public FoldPainter getFoldPainter()
+	{
+		return new TriangleFoldPainter();
+	} //}}}
+	
 	//{{{ initInputHandler() method
 	/**
 	 * Creates an actionContext and initializes the input handler for this textarea. Called when creating

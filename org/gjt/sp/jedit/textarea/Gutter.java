@@ -30,8 +30,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
-import org.gjt.sp.jedit.ServiceManager;
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
@@ -84,21 +82,13 @@ public class Gutter extends JComponent implements SwingConstants
 	public static final String FOLD_PAINTER_SERVICE = "org.gjt.sp.jedit.textarea.FoldPainter";
 	public static final String DEFAULT_FOLD_PAINTER_SERVICE = "Triangle";
 
-	//{{{ getFoldPainterService() method
-	public static String getFoldPainterName()
-	{
-		return jEdit.getProperty(FOLD_PAINTER_PROPERTY, DEFAULT_FOLD_PAINTER_SERVICE);
-	} //}}}
-
 	//{{{ setFolderPainter() method
-	public void setFoldPainter(String painterName)
+	public void setFoldPainter(FoldPainter painter)
 	{
-		foldPainter = (FoldPainter) ServiceManager.getService(
-				FOLD_PAINTER_SERVICE, painterName);
-		if (foldPainter == null)
-			foldPainter = (FoldPainter) ServiceManager.getService(
-				FOLD_PAINTER_SERVICE,
-				DEFAULT_FOLD_PAINTER_SERVICE);
+		if (painter == null)
+			foldPainter = new TriangleFoldPainter();
+		else
+			foldPainter = painter;
 	}
 	//}}}
 	
@@ -120,7 +110,7 @@ public class Gutter extends JComponent implements SwingConstants
 		addMouseMotionListener(mouseHandler);
 
 		updateBorder();
-		setFoldPainter(getFoldPainterName());
+		setFoldPainter(textArea.getFoldPainter());
 	} //}}}
 
 	//{{{ paintComponent() method

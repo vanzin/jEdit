@@ -173,6 +173,7 @@
 				<include name="org/gjt/sp/jedit/textarea/ExtensionManager.java"/>
 				<include name="org/gjt/sp/jedit/textarea/FastRepaintManager.java"/>
 				<include name="org/gjt/sp/jedit/textarea/FirstLine.java"/>
+				<include name="org/gjt/sp/jedit/textarea/FoldPainter.java"/>
 				<include name="org/gjt/sp/jedit/textarea/Gutter.java"/>
 				<include name="org/gjt/sp/jedit/textarea/InputMethodSupport.java"/>
 				<include name="org/gjt/sp/jedit/textarea/MouseActions.java"/>
@@ -195,6 +196,7 @@
 				<include name="org/gjt/sp/jedit/textarea/TextAreaMouseHandler.java"/>
 				<include name="org/gjt/sp/jedit/textarea/TextAreaPainter.java"/>
 				<include name="org/gjt/sp/jedit/textarea/textarea.actions.xml"/>
+				<include name="org/gjt/sp/jedit/textarea/TriangleFoldPainter.java"/>
 
 				<include name="org/gjt/sp/jedit/ActionListHandler.java"/>
 				<include name="org/gjt/sp/jedit/BeanShellFacade.java"/>

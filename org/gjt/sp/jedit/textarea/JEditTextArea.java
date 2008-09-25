@@ -63,6 +63,18 @@ public class JEditTextArea extends TextArea
 		this.view = view;
 	} //}}}
 
+	//{{{ getFoldPainter() method
+	@Override
+	public FoldPainter getFoldPainter() {
+		FoldPainter foldPainter = (FoldPainter) ServiceManager.getService(
+				FOLD_PAINTER_SERVICE, getFoldPainterName());
+		if (foldPainter == null)
+			foldPainter = (FoldPainter) ServiceManager.getService(
+				FOLD_PAINTER_SERVICE,
+				DEFAULT_FOLD_PAINTER_SERVICE);
+		return foldPainter;
+	} //}}}
+
 	//{{{ smartHome() method
 	/**
 	 * On subsequent invocations, first moves the caret to the first
@@ -456,6 +468,23 @@ public class JEditTextArea extends TextArea
 	//}}}
 	//}}}
 
+	//{{{ Fold painters
+	/**
+	 * Fold painter service.
+	 * @since jEdit 4.3pre16
+	 */
+	public static final String FOLD_PAINTER_PROPERTY = "foldPainter";
+	public static final String FOLD_PAINTER_SERVICE = "org.gjt.sp.jedit.textarea.FoldPainter";
+	public static final String DEFAULT_FOLD_PAINTER_SERVICE = "Triangle";
+
+	//{{{ getFoldPainterService() method
+	public static String getFoldPainterName()
+	{
+		return jEdit.getProperty(FOLD_PAINTER_PROPERTY, DEFAULT_FOLD_PAINTER_SERVICE);
+	} //}}}
+
+	//}}} Fold painters
+	
 	//{{{ handlePopupTrigger() method
 	/**
 	 * Do the same thing as right-clicking on the text area. The Gestures
