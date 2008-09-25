@@ -38,6 +38,12 @@ public class SquareFoldPainter implements FoldPainter {
 		gfx.drawLine(5,_y + 3,9,_y + 3);
 	}
 
+	private boolean isNested(int physicalLine, JEditBuffer buffer)
+	{
+		return (physicalLine > 0 &&
+			buffer.getFoldLevel(physicalLine - 1) < buffer.getFoldLevel(physicalLine));
+	}
+
 	@Override
 	public void paintFoldStart(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, boolean nextLineVisible, int y, int lineHeight,
@@ -48,10 +54,17 @@ public class SquareFoldPainter implements FoldPainter {
 		gfx.setColor(gutter.getFoldColor());
 		gfx.drawRect(_x-4,_y-4,8,8);
 		gfx.drawLine(_x-2,_y,_x+2,_y);
+		boolean nested = isNested(physicalLine, buffer);
+		if (nested)
+			gfx.drawLine(_x,y,_x,_y-5);
 		if (nextLineVisible)
 			gfx.drawLine(_x,_y+5,_x,y+lineHeight-1);
 		else
+		{
 			gfx.drawLine(_x,_y-2,_x,_y+2);
+			if (nested)
+				gfx.drawLine(_x,_y+4,_x,y+lineHeight-1);
+		}
 	}
 
 	@Override
