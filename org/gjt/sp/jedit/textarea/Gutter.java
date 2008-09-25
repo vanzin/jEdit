@@ -572,22 +572,20 @@ public class Gutter extends JComponent implements SwingConstants
 		if(physicalLine == -1)
 			return;
 
-		//{{{ Paint fold triangles
+		boolean drawFoldMiddle = true;
+		//{{{ Paint fold start and end indicators
 		if(info.firstSubregion && buffer.isFoldStart(physicalLine))
 		{
+			drawFoldMiddle = false;
 			foldPainter.paintFoldStart(this, gfx, line, physicalLine,
 					textArea.displayManager.isLineVisible(physicalLine+1),
 					y, lineHeight, buffer);
 		}
 		else if(info.lastSubregion && buffer.isFoldEnd(physicalLine))
 		{
+			drawFoldMiddle = false;
 			foldPainter.paintFoldEnd(this, gfx, line, physicalLine, y,
 					lineHeight, buffer);
-		}
-		else if(buffer.getFoldLevel(physicalLine) > 0)
-		{
-			foldPainter.paintFoldMiddle(this, gfx, line, physicalLine,
-					y, lineHeight, buffer);
 		} //}}}
 		//{{{ Paint bracket scope
 		else if(structureHighlight)
@@ -637,9 +635,11 @@ public class Gutter extends JComponent implements SwingConstants
 				}
 
 				gfx.setColor(structureHighlightColor);
+				drawFoldMiddle = false;
 				if(structScreenLine == caretScreenLine)
 				{
 					// do nothing
+					drawFoldMiddle = true;
 				}
 				// draw |^
 				else if(line == caretScreenLine)
@@ -678,6 +678,11 @@ public class Gutter extends JComponent implements SwingConstants
 				}
 			}
 		} //}}}
+		if(drawFoldMiddle && buffer.getFoldLevel(physicalLine) > 0)
+		{
+			foldPainter.paintFoldMiddle(this, gfx, line, physicalLine,
+					y, lineHeight, buffer);
+		}
 
 		//{{{ Paint line numbers
 		if(info.firstSubregion && expanded)
