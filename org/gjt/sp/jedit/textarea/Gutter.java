@@ -287,17 +287,15 @@ public class Gutter extends JComponent implements SwingConstants
 
 	//{{{ setFont() method
 	/*
-	 * JComponent.setFont(Font) is overridden here to cache the baseline for
-	 * the font. This avoids having to get the font metrics during every
-	 * repaint.
+	 * JComponent.setFont(Font) is overridden here to cache the font
+	 * metrics for the font. This avoids having to get the font metrics
+	 * during every repaint.
 	 */
 	public void setFont(Font font)
 	{
 		super.setFont(font);
 
 		fm = getFontMetrics(font);
-
-		baseline = fm.getAscent();
 
 		Border border = getBorder();
 		if(border != null)
@@ -529,8 +527,6 @@ public class Gutter extends JComponent implements SwingConstants
 	private MouseHandler mouseHandler;
 	private ExtensionManager extensionMgr;
 
-	private int baseline;
-
 	private Dimension gutterSize = new Dimension(0,0);
 	private Dimension collapsedSize = new Dimension(0,0);
 
@@ -562,8 +558,9 @@ public class Gutter extends JComponent implements SwingConstants
 		if(buffer.isLoading())
 			return;
 
-		int lineHeight = textArea.getPainter().getFontMetrics()
-			.getHeight();
+		FontMetrics textAreaFm = textArea.getPainter().getFontMetrics();
+		int lineHeight = textAreaFm.getHeight();
+		int baseline = textAreaFm.getAscent();
 
 		ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(line);
 		int physicalLine = info.physicalLine;
