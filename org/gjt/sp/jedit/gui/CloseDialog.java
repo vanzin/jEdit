@@ -31,8 +31,12 @@ import java.awt.*;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
+/**
+ * @author Slava Pestov
+ */
 public class CloseDialog extends EnhancedDialog
 {
 	//{{{ CloseDialog constructor
@@ -109,25 +113,27 @@ public class CloseDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ok() method
+	@Override
 	public void ok()
 	{
 		// do nothing
 	} //}}}
 
 	//{{{ cancel() method
+	@Override
 	public void cancel()
 	{
 		dispose();
 	} //}}}
 
 	//{{{ Private members
-	private View view;
-	private JList bufferList;
-	private DefaultListModel bufferModel;
-	private JButton selectAll;
-	private JButton save;
-	private JButton discard;
-	private JButton cancel;
+	private final View view;
+	private final JList bufferList;
+	private final DefaultListModel bufferModel;
+	private final JButton selectAll;
+	private final JButton save;
+	private final JButton discard;
+	private final JButton cancel;
 
 	private boolean ok; // only set if all buffers saved/closed
 
@@ -141,7 +147,7 @@ public class CloseDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ActionHandler class
-	class ActionHandler implements ActionListener
+	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
 		{
@@ -221,7 +227,7 @@ public class CloseDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ ListHandler class
-	class ListHandler implements ListSelectionListener
+	private class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent evt)
 		{
@@ -230,8 +236,20 @@ public class CloseDialog extends EnhancedDialog
 
 			int index = bufferList.getSelectedIndex();
 			if(index != -1)
-				view.showBuffer(jEdit.getBuffer((String)
-					bufferModel.getElementAt(index)));
+			{
+				String path = (String) bufferModel.getElementAt(index);
+				Buffer buffer = jEdit.getBuffer(path);
+				if (buffer == null)
+				{
+					// it seems this buffer was already closed
+					Log.log(Log.DEBUG, this, "Buffer " + path + " is already closed");
+					bufferModel.removeElementAt(index);
+				}
+				else
+				{
+					view.showBuffer(buffer);
+				}
+			}
 
 			updateButtons();
 		}

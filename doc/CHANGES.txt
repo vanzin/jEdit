@@ -7,6 +7,10 @@ Matthieu Casanova, Alan Ezust, Bernhard Walle, Shlomy Reinstein, Greg Merrill,
 Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
+- When the close dialog is open with a list of dirty files, if one of those files
+  is closed in jEdit by another thread, selecting will remove the file from the
+  dialog (#2129419) (Matthieu Casanova)
+
 - It is not possible anymore to open more than one clean untitled buffer in
   a bufferSet (Matthieu Casanova)
 
@@ -37,7 +41,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
  possible (#2100690) (Matthieu Casanova)
 
 - # 1519924 - Pressing escape in Path: field gets rid of dock window.
-   (#1854542 - Jeff Robertson - jefftbob)
+  (#1854542 - Jeff Robertson - jefftbob)
 
 - Fixed occasional input problems after switching application focus.
   (SF.net bug #2093501, #1650718 - Kazutoshi Satoda)
@@ -101,7 +105,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Added right click popup menu to the Error widget in the status bar to clear
   all errors (feature #2122926) (Matthieu Casanova)
-  
+
 - Added two new fold styles: Square folds (Explorer style) and round folds
   (Scintilla style). Created a service to provide the fold painter, and a
   property to select the fold painter service to use. The fold style can be
