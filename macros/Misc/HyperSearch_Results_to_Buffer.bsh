@@ -3,9 +3,11 @@
  * for jEdit text that writes HyperSearch results
  * matches to a new buffer in the format:
  *
+ * * <search string>
  * <filename> :<linenum>: <line text>
  *
  * Copyright (C) 2002, 2003 Ollie Rutherfurd <oliver@rutherfurd.net>
+ * 2008: Shlomy Reinstein - added search string and include all searches
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,14 +61,14 @@ writeHypersearchResultsToBuffer(View view){
 		return;
 	}
 
+	results = new StringBuffer();
 	node = root.getFirstChild();
-	while(node.getNextSibling() != null)
+	while(node != null)
 	{
+	    	results.append("* " + node.toString() + "\n");
+		traverseTree(node, results);
 		node = node.getNextSibling();
 	}
-
-	results = new StringBuffer();
-	traverseTree(node, results);
 
 	text = results.toString();
 	if(text.length() > 0)
