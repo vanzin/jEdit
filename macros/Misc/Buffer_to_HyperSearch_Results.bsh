@@ -95,8 +95,16 @@ writeHypersearchResultsToBuffer(View view){
 		if (searchStringPos < 0)
 		    continue;
 		hyperSearchNode = new HyperSearchResult(buffer, lineNum);
-		searchStringPos += buffer.getLineStartOffset(lineNum);
-		hyperSearchNode.addOccur(searchStringPos, searchStringPos + searchStringLength);
+		while (searchStringPos >= 0)
+		{
+		    int pos = searchStringPos + buffer.getLineStartOffset(lineNum);
+		    hyperSearchNode.addOccur(pos, pos + searchStringLength);
+		    pos = text.substring(searchStringPos + 1).indexOf(searchString);
+		    if (pos < 0)
+			searchStringPos = pos;
+		    else
+			searchStringPos += pos + 1;
+		}
 		bufferNode.add(new DefaultMutableTreeNode(hyperSearchNode, false));
 		count++;
 	    }
