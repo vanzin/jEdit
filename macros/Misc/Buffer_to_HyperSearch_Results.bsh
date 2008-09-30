@@ -47,6 +47,7 @@ writeHypersearchResultsToBuffer(View view){
 	i = count = 0;
 	String prevPath = null;
 	String searchString = null;
+	DefaultMutableTreeNode rootSearchNode = null;
 	for (i=0; i < lines.length; i++)
 	{
 	    String line = lines[i];
@@ -63,19 +64,18 @@ writeHypersearchResultsToBuffer(View view){
 	    else
 	    {
 		if (rootSearchNode == null)
-		{
-		    Macros.error(view,
-			"Error with line: '" + line + "' - search text not specified.");
-		    break;
-		}
+		    continue;
 		sep = line.indexOf(" :");
+		if (sep < 1)
+		    continue;
 	    	path = line.substring(0, sep);
 		if (prevPath == null || !path.equals(prevPath))
 		{
 		    if (hyperSearchFileNode != null)
 		    {
 			hyperSearchFileNode.setCount(count);
-			rootSearchNode.add(bufferNode);
+			if (bufferNode != null)
+			    rootSearchNode.add(bufferNode);
 		    }
 		    hyperSearchFileNode = new HyperSearchFileNode(path);
 		    bufferNode = new DefaultMutableTreeNode(hyperSearchFileNode);
@@ -87,6 +87,8 @@ writeHypersearchResultsToBuffer(View view){
 		}
 		s = line.substring(sep + 2);
 		sep = s.indexOf(":");
+		if (sep < 1)
+		    continue;
 		int lineNum = Integer.valueOf(s.substring(0, sep)) - 1;
 		String text = buffer.getLineText(lineNum);
 		int searchStringPos = text.indexOf(searchString);
@@ -99,8 +101,11 @@ writeHypersearchResultsToBuffer(View view){
 		count++;
 	    }
 	}
-	hyperSearchFileNode.setCount(count);
-	rootSearchNode.add(bufferNode);
+	// Add the last result, if exists
+	if (hyperSearchFileNode != null)
+	    hyperSearchFileNode.setCount(count);
+	if (rootSearchNode != null && bufferNode != null)
+	    rootSearchNode.add(bufferNode);
 
 	model.reload();
 }
