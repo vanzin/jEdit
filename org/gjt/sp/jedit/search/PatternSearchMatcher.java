@@ -165,7 +165,8 @@ public class PatternSearchMatcher extends SearchMatcher
 	@Override
 	public String toString()
 	{
-		return "PatternSearchMatcher[" + pattern + ']';
+		boolean ignoreCase = (flags & Pattern.CASE_INSENSITIVE) != 0;
+		return "PatternSearchMatcher[" + pattern + ',' + ignoreCase + ']';
 	} //}}}
 	
 	static int getFlag(boolean ignoreCase)

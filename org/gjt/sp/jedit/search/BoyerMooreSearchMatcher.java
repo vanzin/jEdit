@@ -195,7 +195,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	//{{{ toString() method
 	public String toString()
 	{
-		return "BoyerMooreSearchMatcher[" + new String(pattern) + ']';
+		return "BoyerMooreSearchMatcher[" + new String(pattern) + ',' + ignoreCase + ']';
 	} //}}}
 
 	//{{{ Private members

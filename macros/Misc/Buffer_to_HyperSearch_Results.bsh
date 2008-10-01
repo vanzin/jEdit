@@ -25,6 +25,19 @@
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.util.regex.*;
+
+String escape(String s){
+    sb = new StringBuffer();
+    for (int i = 0; i < s.length(); i++)
+    {
+	char ch = s.charAt(i);
+	sb.append(ch);
+	if (ch == '\\')
+	    sb.append(ch);
+    }
+    return sb.toString();
+}
 
 writeHypersearchResultsToBuffer(View view){
 	hs = view.getDockableWindowManager().getDockableWindow("hypersearch-results");
@@ -48,15 +61,31 @@ writeHypersearchResultsToBuffer(View view){
 	String prevPath = null;
 	String searchString = null;
 	DefaultMutableTreeNode rootSearchNode = null;
+	Pattern searchNodePattern = Pattern.compile(
+	    "^\\*\\s+(\\w+)\\[(.+),(true|false)\\]\\s*$");
+	SearchMatcher searchMatcher = null;
 	for (i=0; i < lines.length; i++)
 	{
 	    String line = lines[i];
-	    if (line.startsWith("* "))
+	    Matcher m = searchNodePattern.matcher(line);
+	    if (m.matches())
 	    {
-		searchString = line.substring(2);
-		searchStringLength = searchString.length();
+		// Add the last result if exists
+		if (hyperSearchFileNode != null)
+		    hyperSearchFileNode.setCount(count);
+		if (rootSearchNode != null && bufferNode != null)
+		    rootSearchNode.add(bufferNode);
+		
+		String searchMatcherName = m.group(1);
+		String searchPattern = m.group(2);
+		if (searchMatcherName.indexOf("Pattern") >= 0)
+		    searchPattern = escape(searchPattern);
+		String ignoreCase = m.group(3);
+		String statement = "new " + searchMatcherName + "(\"" +
+			searchPattern + "\", " + ignoreCase + ");";
+		searchMatcher = BeanShell.bsh.eval(view, statement);
 		rootSearchNode = new DefaultMutableTreeNode(
-		    new HyperSearchOperationNode(searchString, null));
+		    new HyperSearchOperationNode(searchPattern, null));
 		root.add(rootSearchNode);
 		hyperSearchFileNode = null;
 		prevPath = null;
@@ -91,19 +120,22 @@ writeHypersearchResultsToBuffer(View view){
 		    continue;
 		int lineNum = Integer.valueOf(s.substring(0, sep)) - 1;
 		String text = buffer.getLineText(lineNum);
-		int searchStringPos = text.indexOf(searchString);
-		if (searchStringPos < 0)
+		int lineStart = buffer.getLineStartOffset(lineNum);
+		int lineEnd = buffer.getLineEndOffset(lineNum);
+		SearchMatcher.Match match = searchMatcher.nextMatch(
+		    buffer.getSegment(lineStart,lineEnd-lineStart),
+		    true,true,true,false);
+		if (match == null)
 		    continue;
 		hyperSearchNode = new HyperSearchResult(buffer, lineNum);
-		while (searchStringPos >= 0)
+		int offset = lineStart;
+		while (match != null)
 		{
-		    int pos = searchStringPos + buffer.getLineStartOffset(lineNum);
-		    hyperSearchNode.addOccur(pos, pos + searchStringLength);
-		    pos = text.substring(searchStringPos + 1).indexOf(searchString);
-		    if (pos < 0)
-			searchStringPos = pos;
-		    else
-			searchStringPos += pos + 1;
+		    hyperSearchNode.addOccur(offset+match.start,offset+match.end);
+		    offset += match.end;
+		    match = searchMatcher.nextMatch(
+			buffer.getSegment(offset,lineEnd-offset),
+			false,true,false,false);
 		}
 		bufferNode.add(new DefaultMutableTreeNode(hyperSearchNode, false));
 		count++;
@@ -114,7 +146,6 @@ writeHypersearchResultsToBuffer(View view){
 	    hyperSearchFileNode.setCount(count);
 	if (rootSearchNode != null && bufferNode != null)
 	    rootSearchNode.add(bufferNode);
-
 	model.reload();
 }
 

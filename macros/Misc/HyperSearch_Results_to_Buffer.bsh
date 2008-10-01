@@ -26,7 +26,6 @@
  * $Id$
  */
 
-
 traverseTree(javax.swing.tree.DefaultMutableTreeNode node, StringBuffer results){
 	if (node.getUserObject() instanceof org.gjt.sp.jedit.search.HyperSearchFileNode)
 	{
@@ -65,7 +64,10 @@ writeHypersearchResultsToBuffer(View view){
 	node = root.getFirstChild();
 	while(node != null)
 	{
-	    	results.append("* " + node.toString() + "\n");
+	    	Object object = node.getUserObject();
+	    	if (! (object instanceof org.gjt.sp.jedit.search.HyperSearchOperationNode))
+		    continue;
+	    	results.append("* " + object.getSearchMatcher() + "\n");
 		traverseTree(node, results);
 		node = node.getNextSibling();
 	}
