@@ -113,15 +113,14 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (Shlomy Reinstein)
 
 - Changed the "HyperSearch_Results_to_Buffer" macro to include the results of
-  all searches, not just the last one, and also the search string of each
+  all searches, not just the last one, and also the search matcher of each
   search, in order to be able to be able to "import" the search results from
   the buffer later.
   Added a new "Buffer_to_HyperSearch_Results" macro that reads a buffer that
   was previously created by the "HyperSearch_Results_to_Buffer" macro, and
   possibly manipulated manually later, and imports the results from the buffer
-  into the HyperSearch Results dockable.
-  Currently, this macro only works fine for substring searches, it does not
-  work for regular expression searches.
+  into the HyperSearch Results dockable. This macro handles the
+  "regular expression" and "ignore case" options correctly.
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)
