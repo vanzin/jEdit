@@ -63,14 +63,14 @@ import org.gjt.sp.util.SyntaxUtilities;
  * jEdit's standalone text component.<p>
  *
  * Use this class to embed a jEdit text area into other applications.
- * 
+ *
  * Example:
  * <code>
  * class MyTextArea extends StandaloneTextArea
  * {
  *     static final Properties props = new Properties();
  *     static IPropertyManager propertyManager;
- *     
+ *
  *     static
  *     {
  *        props = new Properties();
@@ -81,16 +81,16 @@ import org.gjt.sp.util.SyntaxUtilities;
  *        	}
  *        }
  *     }
- *     
+ *
  *     public MyTextArea()
  *     {
  *         super(propertyManager);
  *     }
  * }
  * </code>
- * 
+ *
  * See jedit.props for properties that can be set.
- *  
+ *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
  * @version $Id: JEditTextArea.java 7148 2006-09-29 23:09:06 +0200 (ven., 29 sept. 2006) kpouer $
@@ -99,23 +99,23 @@ public class StandaloneTextArea extends TextArea
 {
 
 	//{{{ Instance variables
-	private IPropertyManager propertyManager;
+	private final IPropertyManager propertyManager;
 	//}}}
 
 	//{{{ StandaloneTextArea constructor
 	/**
 	 * Creates a new StandaloneTextArea. A reference to the propertyManager is saved and used to read the properties
 	 * when {@link StandaloneTextArea#propertiesChanged()} is called.
-	 * 
+	 *
 	 * @param propertyManager the property manager that contains both shortcut bindings and UI information
 	 */
 	public StandaloneTextArea(IPropertyManager propertyManager)
 	{
 		super(propertyManager, null);
 		this.propertyManager = propertyManager;
-		
+
 		initInputHandler();
-		
+
 		setMouseHandler(new TextAreaMouseHandler(this));
 		// todo : make TextareaTransferHandler standalone
 //		textArea.setTransferHandler(new TextAreaTransferHandler());
@@ -178,17 +178,22 @@ public class StandaloneTextArea extends TextArea
 		setElectricScroll(getIntegerProperty(
 			"view.electricBorders",0));
 
-		if (this.buffer == null)
+		if (buffer == null)
 			return ;
-		
+
 		String property = propertyManager.getProperty("buffer.undoCount");
 		int undoCount = 100;
 		if (property != null)
-			try {
+		{
+			try
+			{
 				undoCount = Integer.parseInt(property);
-			} catch (NumberFormatException e) {
+			}
+			catch (NumberFormatException e)
+			{
+			}
 		}
-		this.buffer.setUndoLimit(undoCount);
+		buffer.setUndoLimit(undoCount);
 	} //}}}
 
 	//{{{ initGutter() method
@@ -304,7 +309,7 @@ public class StandaloneTextArea extends TextArea
 	// The following methods are copied from jEdit.java and refer to the propertyManager passed
 	// to the constructor.
 	//}}}
-	
+
 	//{{{ getProperty() method
 	public String getProperty(String name)
 	{
@@ -421,7 +426,7 @@ public class StandaloneTextArea extends TextArea
 			return def;
 		else
 		{
-			int size, style;
+			int size;
 
 			try
 			{
@@ -432,6 +437,7 @@ public class StandaloneTextArea extends TextArea
 				return def;
 			}
 
+			int style;
 			try
 			{
 				style = Integer.parseInt(styleString);
@@ -480,15 +486,50 @@ public class StandaloneTextArea extends TextArea
 	@Override
 	public void propertiesChanged()
 	{
+		initBuffer();
 		initTextArea();
 		super.propertiesChanged();
 	} //}}}
+
+	//{{{ initBuffer() method
+	/**
+	 * Reinitializes the buffer by reading the properties from the property manager
+	 */
+	private void initBuffer()
+	{
+		String[] bufferProperties = {
+			"lineSeparator",
+			"encodingAutodetect",
+			"tabSize",
+			"indentSize",
+			"noTabs",
+			"defaultMode",
+			"undoCount",
+			"wrap",
+			"maxLineLen",
+			"wordBreakChars",
+			"noWordSep",
+			"camelCasedWords",
+			"folding",
+			"collapseFolds"
+		};
+		for (int i = 0; i < bufferProperties.length; i++)
+		{
+			String value = getProperty("buffer." + bufferProperties[i]);
+			if (value == null)
+				buffer.unsetProperty(bufferProperties[i]);
+			else
+				buffer.setProperty(bufferProperties[i], value);
+		}
+		buffer.propertiesChanged();
+	}
 
 	//{{{ createPopupMenu() method
 	/**
 	 * Creates the popup menu.
 	 * @since 4.3pre15
 	 */
+	@Override
 	public void createPopupMenu(MouseEvent evt)
 	{
 		popup = new JPopupMenu();

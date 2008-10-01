@@ -7,6 +7,12 @@ Matthieu Casanova, Alan Ezust, Bernhard Walle, Shlomy Reinstein, Greg Merrill,
 Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
+- When changing the antialiasing mode to none, jEdit do not need to be restarted
+  anymore (patch #2115400) (Dakshinamurthy Karra)
+
+- The standalone textarea reloads the properties of the buffer when properties
+  are changed (patch #2115400) (Dakshinamurthy Karra)
+
 - When the close dialog is open with a list of dirty files, if one of those files
   is closed in jEdit by another thread, selecting will remove the file from the
   dialog (#2129419) (Matthieu Casanova)

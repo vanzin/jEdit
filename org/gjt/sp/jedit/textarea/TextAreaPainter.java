@@ -527,8 +527,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @deprecated use setAntiAlias(AntiAlias newMode)
 	 */
 	@Deprecated
-	public void setAntiAliasEnabled(boolean isEnabled) {
-
+	public void setAntiAliasEnabled(boolean isEnabled)
+	{
 		setAntiAlias(new AntiAlias(isEnabled));
 	}
 	/**
@@ -538,7 +538,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public void setAntiAlias(AntiAlias newValue)
 	{
-		this.antiAlias = newValue;
+		antiAlias = newValue;
 		updateRenderingHints();
 	} //}}}
 
@@ -546,7 +546,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 * @return the AntiAlias value that is currently used for TextAreas.
 	 * @since jedit 4.3pre4
 	 */
-	public AntiAlias getAntiAlias() {
+	public AntiAlias getAntiAlias()
+	{
 		return antiAlias;
 	}
 
@@ -726,7 +727,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	@Override
 	public void paint(Graphics _gfx)
 	{
-		assert(_gfx instanceof Graphics2D);
+		assert _gfx instanceof Graphics2D;
 		Graphics2D gfx = (Graphics2D)_gfx;
 		gfx.setRenderingHints(renderingHints);
 		fontRenderContext = gfx.getFontRenderContext();
@@ -748,15 +749,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int lastLine = (clipRect.y + clipRect.height - 1) / lineHeight;
 			gfx.setColor(getBackground());
 			gfx.setFont(getFont());
-			prepareTime = (System.nanoTime() - prepareTime);
+			prepareTime = System.nanoTime() - prepareTime;
 
 			long linesTime = System.nanoTime();
-			int numLines = (lastLine - firstLine + 1);
+			int numLines = lastLine - firstLine + 1;
 			int y = firstLine * lineHeight;
 			gfx.fillRect(0,y,getWidth(),numLines * lineHeight);
 			extensionMgr.paintScreenLineRange(textArea,gfx,
 				firstLine,lastLine,y,lineHeight);
-			linesTime = (System.nanoTime() - linesTime);
+			linesTime = System.nanoTime() - linesTime;
 
 			if(Debug.PAINT_TIMER && numLines >= 1)
 				Log.log(Log.DEBUG,this,"repainting " + numLines + " lines took " + prepareTime + "/" + linesTime + " ns");
@@ -883,8 +884,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private final Map fonts;
 	//}}}
 
-	private static Object sm_hrgbRender = null;
-	private static Constructor sm_frcConstructor = null;
+	private static Object sm_hrgbRender;
+	private static Constructor<FontRenderContext> sm_frcConstructor;
 
 	static
 	{
@@ -892,7 +893,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			Field f = RenderingHints.class.getField("VALUE_TEXT_ANTIALIAS_LCD_HRGB");
 			sm_hrgbRender = f.get(null);
-			Class[] fracFontMetricsTypeList = new Class[] {AffineTransform.class, Object.class, Object.class};
+			Class[] fracFontMetricsTypeList = {AffineTransform.class, Object.class, Object.class};
 			sm_frcConstructor = FontRenderContext.class.getConstructor(fracFontMetricsTypeList);
 		}
 		catch (NullPointerException npe) {}
@@ -911,9 +912,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON
 				: RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 
-		if (antiAlias.val() == 0) {
+		if (antiAlias.val() == 0)
+		{
 			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 		}
 		/** LCD HRGB mode - works with JRE 1.6 only, which is why we use reflection */
 		else if (antiAlias.val() == 2 && sm_hrgbRender != null )
@@ -922,10 +925,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			Object fontRenderHint = fracFontMetrics ?
 				RenderingHints.VALUE_FRACTIONALMETRICS_ON :
 				RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
-			Object[] paramList = new Object[] {null, sm_hrgbRender, fontRenderHint};
+			Object[] paramList = {null, sm_hrgbRender, fontRenderHint};
 			try
 			{
-				fontRenderContext = (FontRenderContext) sm_frcConstructor.newInstance(paramList);
+				fontRenderContext = sm_frcConstructor.newInstance(paramList);
 			}
 			catch (Exception e)
 			{
@@ -935,7 +938,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		else /** Standard Antialias Version */
 		{
 			hints.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-			hints.put(RenderingHints.KEY_ANTIALIASING,  RenderingHints.VALUE_ANTIALIAS_ON);
+			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 		}
@@ -950,7 +953,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Inner classes
 
 	//{{{ PaintLineBackground class
-	class PaintLineBackground extends TextAreaExtension
+	private class PaintLineBackground extends TextAreaExtension
 	{
 		//{{{ shouldPaintLineHighlight() method
 		private boolean shouldPaintLineHighlight(int caret, int start, int end)
@@ -968,7 +971,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				return s.getStartLine() == s.getEndLine();
 			}
 			else
-				return (count == 0);
+				return count == 0;
 		} //}}}
 
 		//{{{ paintValidLine() method
@@ -982,10 +985,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			//{{{ Paint line highlight and collapsed fold highlight
 			boolean collapsedFold =
-				(physicalLine < buffer.getLineCount() - 1
+				physicalLine < buffer.getLineCount() - 1
 				&& buffer.isFoldStart(physicalLine)
 				&& !textArea.displayManager
-				.isLineVisible(physicalLine + 1));
+				.isLineVisible(physicalLine + 1);
 
 			SyntaxStyle foldLineStyle = null;
 			if(collapsedFold)
@@ -1037,7 +1040,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ PaintSelection class
-	class PaintSelection extends TextAreaExtension
+	private class PaintSelection extends TextAreaExtension
 	{
 		//{{{ paintValidLine() method
 		@Override
@@ -1078,7 +1081,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ PaintWrapGuide class
-	class PaintWrapGuide extends TextAreaExtension
+	private class PaintWrapGuide extends TextAreaExtension
 	{
 		@Override
 		public void paintScreenLineRange(Graphics2D gfx, int firstLine,
@@ -1118,7 +1121,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	} //}}}
 
 	//{{{ PaintText class
-	class PaintText extends TextAreaExtension
+	private class PaintText extends TextAreaExtension
 	{
 		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
@@ -1206,12 +1209,12 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				x += textArea.charWidth;
 			}
 
-			lineInfo.width = (x - originalX);
+			lineInfo.width = x - originalX;
 		}
 	} //}}}
 
 	//{{{ PaintCaret class
-	class PaintCaret extends TextAreaExtension
+	private class PaintCaret extends TextAreaExtension
 	{
 		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
