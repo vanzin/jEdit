@@ -39,6 +39,16 @@ String escape(String s){
     return sb.toString();
 }
 
+HyperSearchFileNode hyperSearchFileNode;
+DefaultMutableTreeNode bufferNode, rootSearchNode;
+
+addLastResultIfExists(){
+    if (hyperSearchFileNode != null)
+	hyperSearchFileNode.setCount(count);
+    if (rootSearchNode != null && bufferNode != null)
+	rootSearchNode.add(bufferNode);
+}
+
 writeHypersearchResultsToBuffer(View view){
 	hs = view.getDockableWindowManager().getDockableWindow("hypersearch-results");
 	if (hs == null)
@@ -56,11 +66,11 @@ writeHypersearchResultsToBuffer(View view){
 	if (lines.length == 0)
 	    return;
 
-	HyperSearchFileNode hyperSearchFileNode = null;
-	i = count = 0;
+	hyperSearchFileNode = null;
+	i = 0;
+	count = 0;
 	String prevPath = null;
 	String searchString = null;
-	DefaultMutableTreeNode rootSearchNode = null;
 	Pattern searchNodePattern = Pattern.compile(
 	    "^\\*\\s+(\\w+)\\[(.+),(true|false)\\]\\s*$");
 	SearchMatcher searchMatcher = null;
@@ -70,22 +80,19 @@ writeHypersearchResultsToBuffer(View view){
 	    Matcher m = searchNodePattern.matcher(line);
 	    if (m.matches())
 	    {
-		// Add the last result if exists
-		if (hyperSearchFileNode != null)
-		    hyperSearchFileNode.setCount(count);
-		if (rootSearchNode != null && bufferNode != null)
-		    rootSearchNode.add(bufferNode);
+		addLastResultIfExists();
 		
 		String searchMatcherName = m.group(1);
 		String searchPattern = m.group(2);
+		String searchString = searchPattern;
+		String ignoreCase = m.group(3);
 		if (searchMatcherName.indexOf("Pattern") >= 0)
 		    searchPattern = escape(searchPattern);
-		String ignoreCase = m.group(3);
 		String statement = "new " + searchMatcherName + "(\"" +
 			searchPattern + "\", " + ignoreCase + ");";
 		searchMatcher = BeanShell.bsh.eval(view, statement);
 		rootSearchNode = new DefaultMutableTreeNode(
-		    new HyperSearchOperationNode(searchPattern, null));
+		    new HyperSearchOperationNode(searchString, searchMatcher));
 		root.add(rootSearchNode);
 		hyperSearchFileNode = null;
 		prevPath = null;
@@ -100,12 +107,7 @@ writeHypersearchResultsToBuffer(View view){
 	    	path = line.substring(0, sep);
 		if (prevPath == null || !path.equals(prevPath))
 		{
-		    if (hyperSearchFileNode != null)
-		    {
-			hyperSearchFileNode.setCount(count);
-			if (bufferNode != null)
-			    rootSearchNode.add(bufferNode);
-		    }
+		    addLastResultIfExists();
 		    hyperSearchFileNode = new HyperSearchFileNode(path);
 		    bufferNode = new DefaultMutableTreeNode(hyperSearchFileNode);
 		    prevPath = path;
@@ -141,11 +143,7 @@ writeHypersearchResultsToBuffer(View view){
 		count++;
 	    }
 	}
-	// Add the last result, if exists
-	if (hyperSearchFileNode != null)
-	    hyperSearchFileNode.setCount(count);
-	if (rootSearchNode != null && bufferNode != null)
-	    rootSearchNode.add(bufferNode);
+	addLastResultIfExists();
 	model.reload();
 }
 
