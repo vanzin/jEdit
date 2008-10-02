@@ -122,9 +122,13 @@ writeHypersearchResultsToBuffer(View view){
 			if (sep < 1)
 				continue;
 			int lineNum = Integer.valueOf(s.substring(0, sep)) - 1;
-			String text = buffer.getLineText(lineNum);
-			int lineStart = buffer.getLineStartOffset(lineNum);
-			int lineEnd = buffer.getLineEndOffset(lineNum);
+			int lineStart, lineEnd;
+			try {
+				lineStart = buffer.getLineStartOffset(lineNum);
+				lineEnd = buffer.getLineEndOffset(lineNum);
+			} catch (Exception e) {
+				continue;
+			}
 			SearchMatcher.Match match = searchMatcher.nextMatch(
 				buffer.getSegment(lineStart,lineEnd-lineStart),
 				true,true,true,false);
