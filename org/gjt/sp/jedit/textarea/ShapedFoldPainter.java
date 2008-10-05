@@ -6,7 +6,6 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 public abstract class ShapedFoldPainter implements FoldPainter {
 
-	@Override
 	public void paintFoldEnd(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
@@ -21,7 +20,6 @@ public abstract class ShapedFoldPainter implements FoldPainter {
 			gfx.drawLine(_x,y+4,_x,y+lineHeight-1);
 	}
 
-	@Override
 	public void paintFoldMiddle(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
@@ -29,7 +27,6 @@ public abstract class ShapedFoldPainter implements FoldPainter {
 		gfx.drawLine(5,y,5,y+lineHeight-1);
 	}
 
-	@Override
 	public void paintFoldStart(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, boolean nextLineVisible, int y, int lineHeight,
 			JEditBuffer buffer)
