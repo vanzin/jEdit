@@ -58,6 +58,10 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - When launching jEdit with some files in the command line if the bufferSet was
   not global, the files were opened but not visible in the editPane
   (Matthieu Casanova)
+
+- #1766853: View is not plain with -newplainview on first launch.
+  '-newplainview' now works also when jEdit is not running.
+  (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar
