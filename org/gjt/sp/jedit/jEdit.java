@@ -534,7 +534,7 @@ public class jEdit
 		
 		// Open files, create the view and hide the splash screen.
 		SyntaxUtilities.propertyManager = jEdit.propertyManager;
-		finishStartup(gui,restore,userDir,args);
+		finishStartup(gui,restore,newPlainView,userDir,args);
 	} //}}}
 
 	//{{{ Property methods
@@ -3642,7 +3642,7 @@ public class jEdit
 
 	//{{{ finishStartup() method
 	private static void finishStartup(final boolean gui, final boolean restore,
-		final String userDir, final String[] args)
+		final boolean newPlainView, final String userDir, final String[] args)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -3657,9 +3657,11 @@ public class jEdit
 
 				if(gui || count != 0)
 				{
-					View view = PerspectiveManager
-						.loadPerspective(
-							restoreFiles);
+					View view;
+					if (newPlainView)
+						view = newView(null,null,true);
+					else
+						view = PerspectiveManager.loadPerspective(restoreFiles);
 
 					if(view == null)
 						view = newView(null,null);
