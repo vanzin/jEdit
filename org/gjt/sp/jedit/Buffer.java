@@ -1911,7 +1911,10 @@ public class Buffer extends JEditBuffer
 	//{{{ finishLoading() method
 	private void finishLoading()
 	{
-		md5hash = calculateHash();
+		if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
+				md5hash = calculateHash();
+		else md5hash = new byte[1];
+	
 		initialLength = getLength();
 		
 		parseBufferLocalProperties();
