@@ -188,30 +188,33 @@ public class ParserRuleSet
 	//{{{ getRules() method
 	public List<ParserRule> getRules(Character key)
 	{
+		List<ParserRule> rulesForNull = ruleMap.get(null);
+		boolean emptyForNull = (rulesForNull == null) || (rulesForNull.size() == 0);
 		Character upperKey = null == key ? null : Character.valueOf(Character.toUpperCase(key.charValue()));
-		List<ParserRule> rules = ruleMap.get(upperKey);
-		if (null == rules)
+		List<ParserRule> rulesForKey = null == upperKey ? null : ruleMap.get(upperKey);
+		boolean emptyForKey = (rulesForKey == null) || (rulesForKey.size() == 0);
+		if (emptyForNull && emptyForKey)
 		{
-			rules = new ArrayList<ParserRule>();
+			return Collections.emptyList();
+		}
+		else if (emptyForKey)
+		{
+			return rulesForNull;
+		}
+		else if (emptyForNull)
+		{
+			return rulesForKey;
 		}
 		else
 		{
-			rules = new ArrayList<ParserRule>(rules);
+			int size = rulesForNull.size() + rulesForKey.size();
+			ArrayList<ParserRule> mixed = new ArrayList<ParserRule>(size);
+			mixed.addAll(rulesForKey);
+			mixed.addAll(rulesForNull);
+			// fill the deprecated ParserRule.next pointer
+			rulesForKey.get(rulesForKey.size() - 1).next = rulesForNull.get(0);
+			return mixed;
 		}
-		if (null != upperKey)
-		{
-			List<ParserRule> nullRules = ruleMap.get(null);
-			if (null != nullRules)
-			{
-				int rulesSize = rules.size();
-				if ((0 < rulesSize) && (0 < nullRules.size()))
-				{
-					rules.get(rulesSize-1).next = nullRules.get(0);
-				}
-				rules.addAll(nullRules);
-			}
-		}
-		return rules;
 	} //}}}
 
 	//{{{ getRuleCount() method
