@@ -62,6 +62,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - #1766853: View is not plain with -newplainview on first launch.
   '-newplainview' now works also when jEdit is not running.
   (Shlomy Reinstein)
+
+- Fixed the released size shown by jEdit.showMemoryDialog() which was
+  wrong when GC compacted the total heap size. (Kazutoshi Satoda)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar

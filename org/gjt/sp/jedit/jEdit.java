@@ -2425,7 +2425,7 @@ public class jEdit
 		return background;
 	} //}}}
 
-	//{{{ showMemoryStatusDialog() method
+	//{{{ showMemoryDialog() method
 	/**
 	 * Performs garbage collection and displays a dialog box showing
 	 * memory status.
@@ -2435,20 +2435,23 @@ public class jEdit
 	public static void showMemoryDialog(View view)
 	{
 		Runtime rt = Runtime.getRuntime();
-		int before = (int) (rt.freeMemory() / 1024);
+		long usedBefore = rt.totalMemory() - rt.freeMemory();
 		System.gc();
-		int after = (int) (rt.freeMemory() / 1024);
-		int total = (int) (rt.totalMemory() / 1024);
+		long free = rt.freeMemory();
+		long total = rt.totalMemory();
+		long used = total - free;
 
-		JProgressBar progress = new JProgressBar(0,total);
-		progress.setValue(total - after);
+		int totalKb = (int) (total / 1024);
+		int usedKb = (int) (used / 1024);
+		JProgressBar progress = new JProgressBar(0,totalKb);
+		progress.setValue(usedKb);
 		progress.setStringPainted(true);
 		progress.setString(jEdit.getProperty("memory-status.use",
-			new Object[] { total - after, total }));
+			new Object[] { usedKb, totalKb }));
 
 		Object[] message = new Object[4];
 		message[0] = getProperty("memory-status.gc",
-			new Object[] { after - before });
+			new Object[] { (usedBefore - used) / 1024 });
 		message[1] = Box.createVerticalStrut(12);
 		message[2] = progress;
 		message[3] = Box.createVerticalStrut(6);
