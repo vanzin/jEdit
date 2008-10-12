@@ -922,7 +922,7 @@ unwind:		while(context.parent != null)
 			inRule = rule;
 			if (rule != null && rule.escapeRule != null)
 				escapeRule = rule.escapeRule;
-			else if (rules != null && rules.getName() != null)
+			else if (rules != null && rules.getModeName() != null)
 				escapeRule = rules.getEscapeRule();
 			else if (parent != null)
 				escapeRule = parent.escapeRule;
