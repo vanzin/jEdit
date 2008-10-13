@@ -65,6 +65,11 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Fixed the released size shown by jEdit.showMemoryDialog() which was
   wrong when GC compacted the total heap size. (Kazutoshi Satoda)
+
+- Fixed a long delay (typically 7-10 seconds) when showing the context menu
+  of the text area or the drop down of a history text field the first time.
+  This long delay was experienced mostly on Windows, and was caused by the
+  call to GraphicsDevice.getConfigurations().
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar

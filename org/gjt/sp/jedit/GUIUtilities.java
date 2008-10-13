@@ -1515,11 +1515,8 @@ public class GUIUtilities
 		{
 			Dimension size = popup.getPreferredSize();
 
-			Rectangle screenSize = new Rectangle();
-
-			GraphicsEnvironment ge = GraphicsEnvironment
-				.getLocalGraphicsEnvironment();
-			screenSize = ge.getMaximumWindowBounds();
+			Rectangle screenSize = GraphicsEnvironment
+				.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
 			if(x + offsetX + size.width + win.getX() > screenSize.width
 				&& x + offsetX + win.getX() >= size.width)
