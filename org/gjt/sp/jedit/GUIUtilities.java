@@ -1519,23 +1519,7 @@ public class GUIUtilities
 
 			GraphicsEnvironment ge = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
-
-			GraphicsDevice[] devices = ge.getScreenDevices();
-
-			for (int j = 0; j < devices.length; j++)
-			{
-				GraphicsDevice device = devices[j];
-
-				GraphicsConfiguration[] gc =
-					device.getConfigurations();
-
-				for (int i=0; i < gc.length; i++)
-				{
-					screenSize =
-						screenSize.union(
-							gc[i].getBounds());
-				}
-			}
+			screenSize = ge.getMaximumWindowBounds();
 
 			if(x + offsetX + size.width + win.getX() > screenSize.width
 				&& x + offsetX + win.getX() >= size.width)
