@@ -50,6 +50,8 @@ import javax.swing.text.Segment;
 import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -1896,8 +1898,12 @@ public class Buffer extends JEditBuffer
 //		Log.log(Log.DEBUG, this, "calculateHash()");
 		try
 		{
+			int length = getLength();
+			ByteBuffer bb = ByteBuffer.allocate( length * 2 );	// Chars are 2 bytes
+			CharBuffer cb = bb.asCharBuffer();
+			cb.append( getSegment(0, length) );
 			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-			digest.update(getText(0, getLength()).getBytes());
+			digest.update( bb );
 			return digest.digest();
 		}
 		catch (NoSuchAlgorithmException nsae)
