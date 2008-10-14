@@ -90,7 +90,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - New option in saving/backup: Calculate MD5 hash to see if the
   file as loaded from disk is the same as what is in the buffer.
-  -- (Request # 2077326 - Alan Ezust)
+  -- (Request # 2077326 - Alan Ezust, Kevin Hunter, K. Satoda)
 
 - New action new-file-in-mode, which opens a dialog listing the
   available modes, the user can select one and a new file is created
