@@ -33,6 +33,16 @@ if ( buffer.isReadOnly() ) {
    return ;
 }
 
+Mode mode = buffer.getMode();
+boolean shouldIndent = true;
+String[] indentProps = new String[]{"indentOpenBrackets", "indentOpenBrackets", "unalignedOpenBrackets", "unalignedCloseBrackets", "indentNextLine", "unindentThisLine", "electricKeys", "doubleBracketIndent", "lineUpClosingBracket"};
+for (String name : indentProps) {
+    if (mode.getProperty(name) == null) {
+        shouldIndent = false;
+        break;
+    }
+}
+
 // get the current selection or the current line if no selection
 Selection[] selections = textArea.getSelection();
 
@@ -76,8 +86,10 @@ Registers.paste( textArea, '_', false );
 textArea.goToPrevLine( false );
 
 // indent lines
-for (int i = 0; i < startLines.length; i++) {
-    buffer.indentLines( startLines[i] - 1, endLines[i] );
+if (shouldIndent) {
+    for (int i = 0; i < startLines.length; i++) {
+        buffer.indentLines( startLines[i] - 1, endLines[i] );
+    }
 }
 
 // reselect the moved text
