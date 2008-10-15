@@ -84,6 +84,7 @@ public class PatternSearchMatcher extends SearchMatcher
 	 * @return A {@link SearchMatcher.Match} object.
 	 * @since jEdit 4.3pre5
 	 */
+	@Override
 	public SearchMatcher.Match nextMatch(CharSequence text, boolean start,
 		boolean end, boolean firstTime, boolean reverse)
 	{
@@ -107,7 +108,8 @@ public class PatternSearchMatcher extends SearchMatcher
 		if (!match.find())
 			return null;
 
-		while (true) {
+		while (true)
+		{
 			// if we're not at the start of the buffer, and the pattern
 			// begins with "^" and matched the beginning of the region
 			// being matched, ignore the match and try the next one.
@@ -118,7 +120,7 @@ public class PatternSearchMatcher extends SearchMatcher
 			// similarly, if we're not at the end of the buffer and we
 			// match the end of the text, and the pattern ends with a "$",
 			// return null.
-			if (!end && match.end() == (text.length() - 1)
+			if (!end && match.end() == text.length() - 1
 				&& pattern.charAt(pattern.length() - 1) == '$')
 				return null;
 	
@@ -137,12 +139,14 @@ public class PatternSearchMatcher extends SearchMatcher
 			// For non-reversed searches, we break immediately
 			// to return the first match.  For reversed searches,
 			// we continue until no more matches are found
-			if (!reverse || !match.find()) {
+			if (!reverse || !match.find())
+			{
 				break;
 			}
 		}
 
-		if (reverse) {
+		if (reverse)
+		{
 			// The caller assumes we are searching a reversed
 			// CharSegment, so we need to reverse the indices
 			// before returning
