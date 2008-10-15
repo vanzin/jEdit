@@ -69,7 +69,10 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Fixed a long delay (typically 7-10 seconds) when showing the context menu
   of the text area or the drop down of a history text field the first time.
   This long delay was experienced mostly on Windows, and was caused by the
-  call to GraphicsDevice.getConfigurations().
+  call to GraphicsDevice.getConfigurations()
+
+- The search and replace regex can now match an empty string under certain
+  conditions to avoid infinite loop (#1671312) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar

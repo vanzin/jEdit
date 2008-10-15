@@ -303,14 +303,6 @@ public class SearchAndReplace
 		else
 			matcher = new BoyerMooreSearchMatcher(search, ignoreCase);
 
-		if (matcher.nextMatch("", true, true, true, false) != null) 
-		{
-			Log.log(Log.WARNING, SearchAndReplace.class, 
-				"The matcher " + matcher + 
-				" can match empty string !");
-			matcher = null;
-		}
-
 		return matcher;
 	} //}}}
 
@@ -1188,13 +1180,13 @@ loop:			while(path != null)
 			buffer.getLineOfOffset(end)) - 1 == end);
 
 		int offset = start;
+		int oldOffset = -1;
 loop:		for(int counter = 0; ; counter++)
 		{
 			boolean startOfLine = (buffer.getLineStartOffset(
 				buffer.getLineOfOffset(offset)) == offset);
 
-			CharSequence text = buffer.getSegment(
-				offset,end - offset);
+			CharSequence text = buffer.getSegment(offset,end - offset);
 			SearchMatcher.Match occur = matcher.nextMatch(
 				text,startOfLine,endOfLine,counter == 0,false);
 			if(occur == null)
@@ -1224,6 +1216,9 @@ loop:		for(int counter = 0; ; counter++)
 				if (offset >= end)
 					break loop;
 			}
+			if (offset == oldOffset)
+				break loop;
+			oldOffset = offset;
 		}
 
 		return occurCount;
