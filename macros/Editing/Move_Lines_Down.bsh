@@ -34,11 +34,11 @@ if ( buffer.isReadOnly() ) {
 }
 
 Mode mode = buffer.getMode();
-boolean shouldIndent = true;
+boolean shouldIndent = false;
 String[] indentProps = new String[]{"indentOpenBrackets", "indentOpenBrackets", "unalignedOpenBrackets", "unalignedCloseBrackets", "indentNextLine", "unindentThisLine", "electricKeys", "doubleBracketIndent", "lineUpClosingBracket"};
 for (String name : indentProps) {
-    if (mode.getProperty(name) == null) {
-        shouldIndent = false;
+    if (mode.getProperty(name) != null) {
+        shouldIndent = true;
         break;
     }
 }
