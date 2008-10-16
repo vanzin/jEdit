@@ -1354,11 +1354,9 @@ loop:		for(int counter = 0; ; counter++)
 						.substitutions
 						.length)
 					{
-						buf.append(
-							occur
-							.substitutions
-							[n]
-						);
+						String subs = occur.substitutions[n];
+						if (subs != null)
+							buf.append(subs);
 					}
 				}
 				break;
