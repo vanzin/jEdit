@@ -73,6 +73,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - The search and replace regex can now match an empty string under certain
   conditions to avoid infinite loop (#1671312) (Matthieu Casanova)
+
+- Fixed an exception when searching within a selection for the regexp '$', if
+  the last selection line is empty. (#2173112) (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar
