@@ -286,7 +286,7 @@ loop:			for(int counter = 0; ; counter++)
 					offset + match.end);
 
 				offset += match.end;
-				if (matcher.isMatchingEOL())
+				if (matcher.isMatchingEOL() || (match.end == 0))
 				{
 					if (offset < buffer.getLength())
 						offset += 1;
