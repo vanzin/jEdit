@@ -77,9 +77,6 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Fixed an exception when searching within a selection for the regexp '$', if
   the last selection line is empty. (#2173112) (Shlomy Reinstein)
 
-- Fixed: regex hypersearch '^' only matches the first line.
-  (#2173091) (Shlomy Reinstein)
-
 - Fixed: regex '$' does not replace an empty last line.
   (#2173087) (Shlomy Reinstein)
 }}}
