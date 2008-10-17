@@ -79,6 +79,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Fixed: regex hypersearch '^' only matches the first line.
   (#2173091) (Shlomy Reinstein)
+
+- Fixed: regex '$' does not replace an empty last line.
+  (#2173087) (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar

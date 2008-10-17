@@ -259,11 +259,11 @@ loop:			for(int counter = 0; ; counter++)
 				boolean startOfLine = buffer.getLineStartOffset(
 					buffer.getLineOfOffset(offset)) == offset;
 
-				int length = end - offset;
-				if (length < 0)
+				// Stop searching when we've reached the end offset
+				if ((offset > end) || ((offset == end) && (end > start)))
 					break loop;
 				SearchMatcher.Match match = matcher.nextMatch(
-					buffer.getSegment(offset, length),
+					buffer.getSegment(offset, end - offset),
 					startOfLine,endOfLine,counter == 0,
 					false);
 				if(match == null)
