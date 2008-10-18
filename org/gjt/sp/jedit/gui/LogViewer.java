@@ -95,7 +95,11 @@ EBComponent
 
 		ListModel model = Log.getLogListModel();
 		listModel = new MyFilteredListModel(model);
+		// without this, listModel is held permanently in model.
+		// See addNotify() and removeNotify(), and constructor of
+		// FilteredListModel.
 		model.removeListDataListener(listModel);
+
 		list = new LogList(listModel);
 		listModel.setList(list);
 		add(BorderLayout.NORTH,caption);
