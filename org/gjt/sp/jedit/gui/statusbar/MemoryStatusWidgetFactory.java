@@ -140,11 +140,11 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 		public String getToolTipText()
 		{
 			Runtime runtime = Runtime.getRuntime();
-			int freeMemory = (int)(runtime.freeMemory() >> 10);
-			int totalMemory = (int)(runtime.totalMemory() >> 10);
-			int usedMemory = totalMemory - freeMemory;
-			args[0] = new Integer(usedMemory);
-			args[1] = new Integer(totalMemory);
+			long free = runtime.freeMemory();
+			long total = runtime.totalMemory();
+			long used = total - free;
+			args[0] = (int) (used / 1024);
+			args[1] = (int) (total / 1024);
 			return jEdit.getProperty("view.status.memory-tooltip",args);
 		} //}}}
 
@@ -168,16 +168,16 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 			Insets insets = new Insets(0,0,0,0);//MemoryStatus.this.getBorder().getBorderInsets(this);
 
 			Runtime runtime = Runtime.getRuntime();
-			int freeMemory = (int)(runtime.freeMemory() >> 10);
-			int totalMemory = (int)(runtime.totalMemory() >> 10);
-			int usedMemory = totalMemory - freeMemory;
+			long free = runtime.freeMemory();
+			long total = runtime.totalMemory();
+			long used = total - free;
 
 			int width = MemoryStatus.this.getWidth()
 				- insets.left - insets.right;
 			int height = MemoryStatus.this.getHeight()
 				- insets.top - insets.bottom - 1;
 
-			float fraction = ((float)usedMemory) / totalMemory;
+			float fraction = ((float)used) / total;
 
 			g.setColor(progressBackground);
 
@@ -185,8 +185,8 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 				(int)(width * fraction),
 				height);
 
-			String str = (usedMemory >> 10) + "/"
-				+ (totalMemory >> 10) + "Mb";
+			String str = (used / 1024 / 1024) + "/"
+				+ (total / 1024 / 1024) + "Mb";
 
 			FontRenderContext frc = new FontRenderContext(null,false,false);
 
@@ -200,7 +200,7 @@ public class MemoryStatusWidgetFactory implements StatusWidgetFactory
 			g2.setColor(progressForeground);
 
 			g2.drawString(str,
-				insets.left + ((int) (width - bounds.getWidth()) >> 1),
+				insets.left + ((int) (width - bounds.getWidth()) / 2),
 				(int)(insets.top + lm.getAscent()));
 
 			g2.dispose();
