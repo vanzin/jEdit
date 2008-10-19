@@ -120,7 +120,7 @@ public class PatternSearchMatcher extends SearchMatcher
 			// similarly, if we're not at the end of the buffer and we
 			// match the end of the text, and the pattern ends with a "$",
 			// return null.
-			if (!end && match.end() == text.length() - 1
+			if (!end && match.end() == text.length()
 				&& pattern.charAt(pattern.length() - 1) == '$')
 				return null;
 	

@@ -77,6 +77,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Fixed an exception when searching within a selection for the regexp '$', if
   the last selection line is empty. (#2173112) (Shlomy Reinstein)
 
+- Replace in selection which ends at middle of line for regex which ends
+  with "$" could wrongly match the end of selection. (Kazutoshi Satoda)
+
 - Fixed: regex '$' does not replace an empty last line.
   (#2173087) (Shlomy Reinstein)
 }}}
