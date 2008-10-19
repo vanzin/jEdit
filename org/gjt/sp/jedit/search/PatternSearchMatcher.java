@@ -130,7 +130,11 @@ public class PatternSearchMatcher extends SearchMatcher
 			// if we're not at the end of the buffer and we
 			// match the end of the text, and the pattern ends with a "$",
 			// ignore the match.
-			if (!end && match.end() == text.length()
+			// The match at the end the buffer which immediately follows
+			// the final newline is also ignored because it is generally
+			// not expected as an EOL.
+			if ((!end || (text.charAt(text.length() - 1) == '\n'))
+				&& match.end() == text.length()
 				&& pattern.charAt(pattern.length() - 1) == '$')
 			{
 				if (previous != null)
