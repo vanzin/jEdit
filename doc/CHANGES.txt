@@ -71,17 +71,18 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   This long delay was experienced mostly on Windows, and was caused by the
   call to GraphicsDevice.getConfigurations()
 
-- The search and replace regex can now match an empty string under certain
-  conditions to avoid infinite loop (#1671312) (Matthieu Casanova)
+- The search and replace regex can now match an empty string.
+  (SF.net bug #1671312 - Matthieu Casanova, Shlomy Reinstein,
+  Kazutoshi Satoda)
+
+- Some regex replace, like "\b" -> "|", falled into infinite loop.
+  (Kazutoshi Satoda)
 
 - Fixed an exception when searching within a selection for the regexp '$', if
   the last selection line is empty. (#2173112) (Shlomy Reinstein)
 
 - Replace in selection which ends at middle of line for regex which ends
   with "$" could wrongly match the end of selection. (Kazutoshi Satoda)
-
-- Fixed: regex '$' does not replace an empty last line.
-  (#2173087) (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar
@@ -93,8 +94,8 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Moved buffer list sorting options from General to View Option Pane
   with other bufferset options. (Alan Ezust)
 
-- Enabled reverse regex search. (SF.net patch #1923613 - Greg Merrill)
-  NOTE: There is a known problem with "$". (SF.net bug #2069249)
+- Enabled reverse regex search.
+  (SF.net patch #1923613 - Greg Merrill, Kazutoshi Satoda)
 
 - New option in saving/backup: Never mark untitled buffers dirty.
   Related to that, buffers with length=0 never never marked dirty.
@@ -160,7 +161,6 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - New action: View - Docking - Toggle Docked Areas. (Alan Ezust)
 }}}
 {{{ API Changes
-
 - A public field buffer in HyperSearchFileNode was removed. Use
   getBuffer() instead. (Kazutoshi Satoda)
 
@@ -171,6 +171,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   Now a software that wants to use the jEdit's textarea must instantiate the
   class StandaloneTextArea, and for use in a jEdit's plugin
   JEditEmbeddedTextArea (patch #2096752) (Dakshinamurthy Karra)
+
+- SearchMatcher#isMatchingEOL(), which was introduced at 4.3pre7, has been
+  removed in favor of better fix for the problem. (Kazutoshi Satoda)
 }}}
 {{{ Editing
 - New cmake mode (patch #2011419) (Bernhard Walle)

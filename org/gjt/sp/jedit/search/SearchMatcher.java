@@ -53,22 +53,6 @@ public abstract class SearchMatcher
 	public abstract Match nextMatch(CharSequence text, boolean start,
 		boolean end, boolean firstTime, boolean reverse);
 
-	/**
-	 * Returns whether the matcher is matching the end of the line
-	 * character. This should be used to adjust the matched region
-	 * size when matching the end-of-line character, since it's not
-	 * included in the matched region returned by the
-	 * java.util.regex.Pattern matcher.
-	 *
-	 * @return Whether the end of the match region will be the EOL
-	 *         character.
-	 * @since  jEdit 4.3pre7
-	 */
-	public boolean isMatchingEOL()
-	{
-		return false;
-	}
-
 	protected Match returnValue;
 
 	//{{{ Match class

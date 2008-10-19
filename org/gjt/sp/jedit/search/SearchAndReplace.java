@@ -497,16 +497,7 @@ loop:			for(;;)
 					else
 						start = 0;
 
-					boolean _search = true;
-					if (!_reverse && matcher.isMatchingEOL())
-					{
-						if (start < buffer.getLength())
-							start += 1;
-						else
-							_search = false;
-					}
-
-					if(_search && find(view,buffer,start,repeat,_reverse))
+					if(find(view,buffer,start,repeat,_reverse))
 						return true;
 				}
 
@@ -687,25 +678,8 @@ loop:			for(;;)
 		Selection[] selection = textArea.getSelection();
 		if (selection.length == 0)
 		{
-			try
-			{
-				SearchMatcher matcher = getSearchMatcher();
-				if ((matcher != null) && (matcher.isMatchingEOL()))
-				{
-					int caretPosition = textArea.getCaretPosition();
-					selection = new Selection[] { new Selection.Range(caretPosition,caretPosition) };
-				}
-				else
-				{
-					view.getToolkit().beep();
-					return false;
-				}
-			}
-			catch (Exception e)
-			{
-				handleError(comp,e);
-				return false;
-			}
+			view.getToolkit().beep();
+			return false;
 		}
 
 		record(view,"replace(view)",true,false);
@@ -1180,7 +1154,6 @@ loop:			while(path != null)
 			buffer.getLineOfOffset(end)) - 1 == end);
 
 		int offset = start;
-		int oldOffset = -1;
 loop:		for(int counter = 0; ; counter++)
 		{
 			boolean startOfLine = (buffer.getLineStartOffset(
@@ -1205,20 +1178,6 @@ loop:		for(int counter = 0; ; counter++)
 				end += (length - found.length());
 				occurCount++;
 			}
-
-			if (matcher.isMatchingEOL())
-			{
-				if (offset < buffer.getLength())
-					offset += 1;
-				else
-					break loop;
-
-				if (offset >= end)
-					break loop;
-			}
-			if (offset == oldOffset)
-				break loop;
-			oldOffset = offset;
 		}
 
 		return occurCount;

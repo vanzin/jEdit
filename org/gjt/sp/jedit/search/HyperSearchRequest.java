@@ -253,15 +253,11 @@ loop:				for(int i = 0; i < files.length; i++)
 			int offset = start;
 
 			HyperSearchResult lastResult = null;
-			int oldOffset = -1;
 loop:			for(int counter = 0; ; counter++)
 			{
 				boolean startOfLine = buffer.getLineStartOffset(
 					buffer.getLineOfOffset(offset)) == offset;
 
-				// Stop searching when we've reached the end offset
-				if ((offset > end) || ((offset == end) && (end > start)))
-					break loop;
 				SearchMatcher.Match match = matcher.nextMatch(
 					buffer.getSegment(offset, end - offset),
 					startOfLine,endOfLine,counter == 0,
@@ -286,16 +282,6 @@ loop:			for(int counter = 0; ; counter++)
 					offset + match.end);
 
 				offset += match.end;
-				if (matcher.isMatchingEOL())
-				{
-					if (offset < buffer.getLength())
-						offset += 1;
-					else
-						break loop;
-				}
-				if (oldOffset == offset)
-					break loop;
-				oldOffset = offset;
 				resultCount++;
 			}
 		}

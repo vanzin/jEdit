@@ -108,22 +108,44 @@ public class PatternSearchMatcher extends SearchMatcher
 		if (!match.find())
 			return null;
 
+		// if we're not at the start of the buffer, and the pattern
+		// begins with "^" and matched the beginning of the region
+		// being matched, ignore the match and try the next one.
+		if (!start && match.start() == 0
+			&& re.pattern().charAt(0) == '^' && !match.find())
+			return null;
+
+		// Special care for zero width matches. Without this care,
+		// the caller will fall into an infinite loop, for non-reverse
+		// search.
+		if (!reverse && !firstTime && match.start() == 0 && match.end() == 0)
+		{
+			if (!match.find())
+				return null;
+		}
+
+		Match previous = null;
 		while (true)
 		{
-			// if we're not at the start of the buffer, and the pattern
-			// begins with "^" and matched the beginning of the region
-			// being matched, ignore the match and try the next one.
-			if (!start && match.start() == 0
-				&& re.pattern().charAt(0) == '^' && !match.find())
-				return null;
-	
-			// similarly, if we're not at the end of the buffer and we
+			// if we're not at the end of the buffer and we
 			// match the end of the text, and the pattern ends with a "$",
-			// return null.
+			// ignore the match.
 			if (!end && match.end() == text.length()
 				&& pattern.charAt(pattern.length() - 1) == '$')
-				return null;
-	
+			{
+				if (previous != null)
+				{
+					returnValue.start = previous.start;
+					returnValue.end = previous.end;
+					returnValue.substitutions = previous.substitutions;
+					break;
+				}
+				else
+				{
+					return null;
+				}
+			}
+
 			returnValue.substitutions = new String[match.groupCount() + 1];
 			for(int i = 0; i < returnValue.substitutions.length; i++)
 			{
@@ -141,8 +163,32 @@ public class PatternSearchMatcher extends SearchMatcher
 			// we continue until no more matches are found
 			if (!reverse || !match.find())
 			{
+				// For reverse search, check for zero width match at
+				// the end of text.
+				if (reverse && !firstTime && returnValue.start == text.length()
+					&& returnValue.end == text.length())
+				{
+					if (previous != null)
+					{
+						returnValue.start = previous.start;
+						returnValue.end = previous.end;
+						returnValue.substitutions = previous.substitutions;
+					}
+					else
+					{
+						return null;
+					}
+				}
 				break;
 			}
+			// Save the result for reverse zero width match.
+			if (previous == null)
+			{
+				previous = new Match();
+			}
+			previous.start = returnValue.start;
+			previous.end = returnValue.end;
+			previous.substitutions = returnValue.substitutions;
 		}
 
 		if (reverse)
@@ -156,13 +202,6 @@ public class PatternSearchMatcher extends SearchMatcher
 		}
 
 		return returnValue;
-	} //}}}
-
-	//{{{ isMatchingEOL() method
-	@Override
-	public boolean isMatchingEOL()
-	{
-		return pattern.charAt(pattern.length() - 1) == '$';
 	} //}}}
 
 	//{{{ toString() method
