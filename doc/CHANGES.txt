@@ -83,6 +83,10 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Replace in selection which ends at middle of line for regex which ends
   with "$" could wrongly match the end of selection. (Kazutoshi Satoda)
+
+- When splitting the view, using editpane scope for bufferSet the new editPane
+  contained all buffers instead of having only buffers from the active EditPane
+  (#2152509) (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar

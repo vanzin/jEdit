@@ -680,18 +680,34 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 			String action = jEdit.getProperty("editpane.bufferset.new");
 			BufferSetManager.NewBufferSetAction bufferSetAction = BufferSetManager.NewBufferSetAction.fromString(action);
+			View activeView = jEdit.getActiveView();
 			switch (bufferSetAction)
 			{
 				case copy:
 					if (this.bufferSet == null)
-						bufferSetManager.addAllBuffers(bufferSet);
+					{
+						EditPane editPane = view.getEditPane();
+						if (editPane == null)
+						{
+							if (activeView != null)
+								editPane = activeView.getEditPane();
+
+						}
+						if (editPane == null)
+						{
+							bufferSetManager.addAllBuffers(bufferSet);
+						}
+						else
+						{
+							bufferSetManager.mergeBufferSet(bufferSet, editPane.bufferSet);
+						}
+					}
 					else
 						bufferSetManager.mergeBufferSet(bufferSet, this.bufferSet);
 					break;
 				case empty:
 					break;
 				case currentbuffer:
-					View activeView = jEdit.getActiveView();
 					if (activeView == null)
 						break;
 					EditPane editPane = activeView.getEditPane();
