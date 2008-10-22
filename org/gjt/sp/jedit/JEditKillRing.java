@@ -42,7 +42,7 @@ import org.gjt.sp.util.IOUtilities;
 class JEditKillRing extends KillRing
 {
 	//{{{ Constructor
-	public JEditKillRing()
+	JEditKillRing()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		if(settingsDirectory != null)
@@ -52,6 +52,7 @@ class JEditKillRing extends KillRing
 	} //}}}
 
 	//{{{ load() method
+	@Override
 	public void load()
 	{
 		if(killringXML == null)
@@ -75,6 +76,7 @@ class JEditKillRing extends KillRing
 	} //}}}
 
 	//{{{ save() method
+	@Override
 	public void save()
 	{
 		if(killringXML == null)
@@ -137,17 +139,20 @@ class JEditKillRing extends KillRing
 	{
 		public List<String> list = new LinkedList<String>();
 
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
 			return XMLUtilities.findEntity(systemId, "killring.dtd", getClass());
 		}
 
+		@Override
 		public void startElement(String uri, String localName,
 					 String qName, Attributes attrs)
 		{
 			inEntry = qName.equals("ENTRY");
 		}
 
+		@Override
 		public void endElement(String uri, String localName, String name)
 		{
 			if(name.equals("ENTRY"))
@@ -158,13 +163,14 @@ class JEditKillRing extends KillRing
 			}
 		}
 
+		@Override
 		public void characters(char[] ch, int start, int length)
 		{
 			if (inEntry)
 				charData.append(ch, start, length);
 		}
 
-		private StringBuffer charData = new StringBuffer();
+		private final StringBuilder charData = new StringBuilder();
 		private boolean inEntry;
 	} //}}}
 	//}}}
