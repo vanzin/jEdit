@@ -87,6 +87,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - When splitting the view, using editpane scope for bufferSet the new editPane
   contained all buffers instead of having only buffers from the active EditPane
   (#2152509) (Matthieu Casanova)
+
+- killring.xml or other XML files could be corrupted with control characters.
+  (Kazutoshi Satoda)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar

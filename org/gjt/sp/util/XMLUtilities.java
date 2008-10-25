@@ -67,9 +67,23 @@ public class XMLUtilities
 			char ch = str.charAt(i);
 
 			// control characters, excluding \t, \r and \n
-			if (xml11 && ch < 32 && ch != '\r' && ch != '\n' && ch != '\t')
+			// See: http://www.w3.org/International/questions/qa-controls
+			if (((0x00 <= ch && ch <= 0x1F) || (0x7F <= ch && ch <= 0x9F))
+				&& ch != '\r' && ch != '\n' && ch != '\t')
 			{
-				buf.append("&#").append((int)ch).append(';');
+				if (xml11 && ch != 0x00)
+				{
+					buf.append("&#").append((int)ch).append(';');
+				}
+				else
+				{
+					// The character is illegal.
+					// But put a PI instead, to make it
+					// recoverable in certain apps.
+					buf.append("<?illegal-xml-character ")
+						.append((int)ch)
+						.append("?>");
+				}
 				continue;
 			}
 
