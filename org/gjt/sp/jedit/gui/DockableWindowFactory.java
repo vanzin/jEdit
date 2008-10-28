@@ -171,6 +171,14 @@ public class DockableWindowFactory
 		return dockableWindowFactories.get(name);
 	}
 	
+	public String getDockableWindowPluginClass(String name)
+	{
+		Window w = getDockableWindowFactory(name);
+		if (w == null || w.plugin == null || w.plugin.getPlugin() == null)
+			return null;
+		return w.plugin.getPlugin().getClassName();
+	}
+	
 	//{{{ getDockableWindowIterator() method
 	Iterator<Window> getDockableWindowIterator()
 	{

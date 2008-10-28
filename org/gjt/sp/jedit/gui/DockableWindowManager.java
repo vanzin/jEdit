@@ -390,11 +390,21 @@ import org.gjt.sp.util.Log;
 	}
 	// }}}
 	
-	//{{{ getDockableTitle() method
+	//{{{ getRegisteredDockableWindows() method
 	public static String[] getRegisteredDockableWindows()
 	{
 		return DockableWindowFactory.getInstance()
 			.getRegisteredDockableWindows();
+	} //}}}
+	
+	//{{{ getDockableWindowPluginClassName() method
+	public static String getDockableWindowPluginName(String name)
+	{
+		String pluginClass =
+			DockableWindowFactory.getInstance().getDockableWindowPluginClass(name);
+		if (pluginClass == null)
+			return null;
+		return jEdit.getProperty("plugin." + pluginClass + ".name");
 	} //}}}
 	
     // {{{ setDockingLayout method

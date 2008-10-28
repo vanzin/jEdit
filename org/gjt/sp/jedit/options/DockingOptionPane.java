@@ -22,21 +22,40 @@
 
 package org.gjt.sp.jedit.options;
 
-import javax.swing.table.*;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Vector;
 
-import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.*;
+import javax.swing.Box;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
+import org.gjt.sp.jedit.AbstractOptionPane;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 //{{{ DockingOptionPane class
+@SuppressWarnings("serial")
 public class DockingOptionPane extends AbstractOptionPane
 {
 	//{{{ DockingOptionPane constructor
@@ -51,7 +70,8 @@ public class DockingOptionPane extends AbstractOptionPane
 		setLayout(new BorderLayout());
 		add(BorderLayout.NORTH,createDockingOptionsPanel());
 		add(BorderLayout.CENTER,createWindowTableScroller());
-		// add(BorderLayout.SOUTH, new )
+		dockableSetSelection.setModel(
+			new DefaultComboBoxModel(windowModel.getDockableSets()));
 	} //}}}
 
 	//{{{ _save() method
@@ -69,6 +89,7 @@ public class DockingOptionPane extends AbstractOptionPane
 	private WindowTableModel windowModel;
 	private JCheckBox autoLoadModeLayout;
 	private JCheckBox autoSaveModeLayout;
+	private JComboBox dockableSetSelection;
 	//}}}
 
 	private static final String DOCKING_OPTIONS_PREFIX = "options.docking.";
@@ -97,6 +118,23 @@ public class DockingOptionPane extends AbstractOptionPane
 				autoSaveModeLayout.setEnabled(autoLoadModeLayout.isSelected());
 			}
 		});
+		Box vSetSelection = Box.createVerticalBox();
+		p.add(vSetSelection);
+		Box setSelection = Box.createHorizontalBox();
+		vSetSelection.add(setSelection);
+		setSelection.add(Box.createHorizontalStrut(6));
+		setSelection.add(new JLabel(jEdit.getProperty(
+			"options.docking.selectSet.label")));
+		setSelection.add(Box.createHorizontalStrut(6));
+		dockableSetSelection = new JComboBox();
+		setSelection.add(dockableSetSelection);
+		dockableSetSelection.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				windowModel.showSet((String) dockableSetSelection.getSelectedItem());
+			}
+		});
+		setSelection.add(Box.createHorizontalStrut(6));
+		vSetSelection.add(Box.createVerticalStrut(6));
 		return p;
 	}
 	//{{{ createWindowTableScroller() method
@@ -157,27 +195,61 @@ public class DockingOptionPane extends AbstractOptionPane
 } //}}}
 
 //{{{ WindowTableModel class
+@SuppressWarnings("serial")
 class WindowTableModel extends AbstractTableModel
 {
-	private Vector windows;
+	private static final String PLUGIN_SET_PREFIX = "Plugin: ";
+	private static final String CORE_DOCKABLE_SET = "Core";
+	private static final String ALL_DOCKABLE_SET = "All";
+	private HashMap<String, Vector<Entry>> dockableSets;
+	private Vector<Entry> windows;
 
 	//{{{ WindowTableModel constructor
 	WindowTableModel()
 	{
-		windows = new Vector();
-
+		dockableSets = new HashMap<String, Vector<Entry>>();
+		Vector<Entry> all = new Vector<Entry>();
+		dockableSets.put(ALL_DOCKABLE_SET, all);
+		windows = new Vector<Entry>();
 		String[] dockables = DockableWindowManager.getRegisteredDockableWindows();
-		for(int i = 0; i < dockables.length; i++)
+		for (String dockable: dockables)
 		{
-			windows.addElement(new Entry(dockables[i]));
+			String plugin = DockableWindowManager.
+				getDockableWindowPluginName(dockable);
+			String set;
+			if (plugin != null)
+				set = PLUGIN_SET_PREFIX + plugin;
+			else
+				set = CORE_DOCKABLE_SET; 
+			Vector<Entry> currentSetDockables = dockableSets.get(set);
+			if (currentSetDockables == null)
+			{
+				currentSetDockables = new Vector<Entry>();
+				dockableSets.put(set, currentSetDockables);
+			}
+			Entry entry = new Entry(dockable);
+			currentSetDockables.add(entry);
+			all.add(entry);
 		}
-
-		sort();
+		showSet(ALL_DOCKABLE_SET);
 	} //}}}
 
-	//{{{ sort() method
-	public void sort()
+	public Vector<String> getDockableSets() {
+		Vector<String> sets = new Vector<String>();
+		for (String set: dockableSets.keySet())
+			sets.add(set);
+		sets.remove(ALL_DOCKABLE_SET);
+		sets.remove(CORE_DOCKABLE_SET);
+		Collections.sort(sets);
+		sets.insertElementAt(CORE_DOCKABLE_SET, 0);
+		sets.insertElementAt(ALL_DOCKABLE_SET, 0);
+		return sets;
+	}
+
+	//{{{ showSet() method
+	public void showSet(String set)
 	{
+		windows = dockableSets.get(set);
 		Collections.sort(windows,new WindowCompare());
 		fireTableDataChanged();
 	} //}}}
@@ -296,7 +368,7 @@ class WindowTableModel extends AbstractTableModel
 	} //}}}
 
 	//{{{ WindowCompare class
-	static class WindowCompare implements Comparator
+	static class WindowCompare implements Comparator<Object>
 	{
 		public int compare(Object obj1, Object obj2)
 		{
