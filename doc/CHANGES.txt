@@ -162,6 +162,10 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Added macro Editing/Toggle_Fold.bsh for toggling the current fold.
   (feature #2190064) (Shlomy Reinstein)
+
+- Added a combo box to the Docking option pane (in the Global Options dialog)
+  for selecting the set of dockables to configure (plugin / core / all).
+  (feature #2199003) (Shlomy Reinstein)
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)
