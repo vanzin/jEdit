@@ -42,6 +42,8 @@ import javax.swing.WindowConstants;
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.JEditBeanShellAction;
 import org.gjt.sp.jedit.Mode;
+import org.gjt.sp.jedit.JEditActionSet;
+import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.buffer.DefaultFoldHandlerProvider;
 import org.gjt.sp.jedit.buffer.DummyFoldHandler;
 import org.gjt.sp.jedit.buffer.ExplicitFoldHandler;
@@ -120,7 +122,7 @@ public class StandaloneTextArea extends TextArea
 		// todo : make TextareaTransferHandler standalone
 //		textArea.setTransferHandler(new TextAreaTransferHandler());
 
-		StandaloneActionSet actionSet = new StandaloneActionSet(propertyManager, this);
+		JEditActionSet<JEditBeanShellAction> actionSet = new StandaloneActionSet(propertyManager, this);
 
 		addActionSet(actionSet);
 		actionSet.load();
@@ -605,6 +607,52 @@ public class StandaloneTextArea extends TextArea
 			IOUtilities.closeQuietly(in);
 		}
 		return props;
+	} //}}}
+
+	//{{{ StandaloneActionSet class
+	/**
+	 * The actionSet for standalone textArea.
+	 * @author Matthieu Casanova
+	 */
+	private static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
+	{
+		private final IPropertyManager iPropertyManager;
+		private final TextArea textArea;
+
+		StandaloneActionSet(IPropertyManager iPropertyManager, TextArea textArea)
+		{
+			super(null, TextArea.class.getResource("textarea.actions.xml"));
+			this.iPropertyManager = iPropertyManager;
+			this.textArea = textArea;
+		}
+
+		@Override
+		protected JEditBeanShellAction[] getArray(int size)
+		{
+			return new JEditBeanShellAction[size];
+		}
+
+		@Override
+		protected String getProperty(String name)
+		{
+			return iPropertyManager.getProperty(name);
+		}
+
+		public AbstractInputHandler getInputHandler()
+		{
+			return textArea.getInputHandler();
+		}
+
+		@Override
+		protected JEditBeanShellAction createBeanShellAction(String actionName,
+								     String code,
+								     String selected,
+								     boolean noRepeat,
+								     boolean noRecord,
+								     boolean noRememberLast)
+		{
+			return new JEditBeanShellAction(actionName,code,selected,noRepeat,noRecord,noRememberLast);
+		}
 	} //}}}
 
 	//{{{ main() method

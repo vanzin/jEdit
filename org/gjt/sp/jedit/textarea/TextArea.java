@@ -3352,8 +3352,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				noWordSep,true,camelCasedWords,eatWhitespace);
 		}
 
-		buffer.remove(_caret + lineStart,
-			caret - (_caret + lineStart));
+		buffer.remove(_caret + lineStart, caret - _caret + lineStart);
 	} //}}}
 
 	//{{{ delete() method
@@ -5975,13 +5974,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 *
 	 * @since jEdit 4.1pre1
 	 */
-	private void showPopupMenu(JPopupMenu popup, Component comp,
+	private static void showPopupMenu(JPopupMenu popup, Component comp,
 		int x, int y, boolean point)
 	{
 		int offsetX = 0;
 		int offsetY = 0;
 
-		int extraOffset = (point ? 1 : 0);
+		int extraOffset = point ? 1 : 0;
 
 		Component win = comp;
 		while(!(win instanceof Window || win == null))
@@ -6003,9 +6002,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				//System.err.println("x overflow");
 				if(point)
-					x -= (size.width + extraOffset);
+					x -= size.width + extraOffset;
 				else
-					x = (win.getWidth() - size.width - offsetX + extraOffset);
+					x = win.getWidth() - size.width - offsetX + extraOffset;
 			}
 			else
 			{
@@ -6019,7 +6018,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				&& y + offsetY + win.getY() >= size.height)
 			{
 				if(point)
-					y = (win.getHeight() - size.height - offsetY + extraOffset);
+					y = win.getHeight() - size.height - offsetY + extraOffset;
 				else
 					y = -size.height - 1;
 			}
@@ -6176,51 +6175,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 	} //}}}
 
-	//{{{ StandaloneActionSet class
-	/**
-	 * The actionSet for standalone textArea.
-	 * @author Matthieu Casanova
-	 */
-	protected static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
-	{
-		private final IPropertyManager iPropertyManager;
-		private final TextArea textArea;
-
-		StandaloneActionSet(IPropertyManager iPropertyManager, TextArea textArea)
-		{
-			super(null, TextArea.class.getResource("textarea.actions.xml"));
-			this.iPropertyManager = iPropertyManager;
-			this.textArea = textArea;
-		}
-
-		@Override
-		protected JEditBeanShellAction[] getArray(int size)
-		{
-			return new JEditBeanShellAction[size];
-		}
-
-		@Override
-		protected String getProperty(String name)
-		{
-			return iPropertyManager.getProperty(name);
-		}
-
-		public AbstractInputHandler getInputHandler()
-		{
-			return textArea.getInputHandler();
-		}
-
-		@Override
-		protected JEditBeanShellAction createBeanShellAction(String actionName,
-								     String code,
-								     String selected,
-								     boolean noRepeat,
-								     boolean noRecord,
-								     boolean noRememberLast)
-		{
-			return new JEditBeanShellAction(actionName,code,selected,noRepeat,noRecord,noRememberLast);
-		}
-	} //}}}
 	//}}}
 
 	//{{{ Class initializer
