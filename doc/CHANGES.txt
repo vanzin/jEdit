@@ -7,6 +7,9 @@ Matthieu Casanova, Alan Ezust, Bernhard Walle, Shlomy Reinstein, Greg Merrill,
 Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
+- When the bufferSet were not sorted it was possible to have two time the same
+  buffer in a bufferSet (Matthieu Casanova)
+
 - When changing the antialiasing mode to none, jEdit do not need to be restarted
   anymore (patch #2115400) (Dakshinamurthy Karra)
 
