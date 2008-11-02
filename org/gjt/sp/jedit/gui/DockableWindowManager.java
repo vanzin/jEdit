@@ -433,7 +433,7 @@ import org.gjt.sp.util.Log;
 				{
 					DockableWindowFactory.Window w = iter.next();
 					if (w.plugin == pmsg.getPluginJAR())
-						positions.put(w.name, getDockablePosition(w.name));
+						positions.put(w.name, DockableWindowManager.FLOATING);
 				}
 				propertiesChanged();
 			}
@@ -441,17 +441,8 @@ import org.gjt.sp.util.Log;
 			{
 				// we don't care
 			}
-			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
-			{
-				Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
-				while (entries.hasNext())
-				{
-					DockableWindowFactory.Window window = entries.next();
-					if (window.plugin == pmsg.getPluginJAR())
-						hideDockableWindow(window.name);
-				}
-			}
-			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
+			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED ||
+					pmsg.getWhat() == PluginUpdate.UNLOADED)
 			{
 				Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
 				while (entries.hasNext())
