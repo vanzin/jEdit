@@ -223,7 +223,7 @@ end;
 // Returns JVM options to be used for launch jEdit.
 function jvmOptions(Param: String): String;
 begin
-	Result := '-Xms64M -Xmx192M';
+	Result := '-Xmx192M';
 end;
 
 // updates the batch file for commandline usage

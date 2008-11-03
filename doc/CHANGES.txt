@@ -169,6 +169,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 - Added a combo box to the Docking option pane (in the Global Options dialog)
   for selecting the set of dockables to configure (plugin / core / all).
   (feature #2199003) (Shlomy Reinstein)
+
+- Removed a JVM option "-Xms64M" from Windows installation, which
+  consumed too much memory. (Kazutoshi Satoda)
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)
