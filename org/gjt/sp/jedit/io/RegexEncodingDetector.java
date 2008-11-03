@@ -22,15 +22,15 @@ package org.gjt.sp.jedit.io;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.nio.CharBuffer;
 
 /**
  * An encoding detector which finds regex pattern.
  *
- * This reads the sample in the system default encoding for first 10
+ * This reads the sample in the system default encoding for first some
  * lines and look for a regex pattern. This can fail if the
  * stream cannot be read in the system default encoding or the
  * pattern is not found at near the top of the stream.
@@ -59,22 +59,18 @@ public class RegexEncodingDetector implements EncodingDetector
 
 	public String detectEncoding(InputStream sample) throws IOException
 	{
-		BufferedReader reader
-			= new BufferedReader(new InputStreamReader(sample));
-		for (int i = 0; i < 10; ++i)
+		InputStreamReader reader = new InputStreamReader(sample);
+		final int bufferSize = 1024;
+		char[] buffer = new char[bufferSize];
+		reader.read(buffer, 0, bufferSize);
+		Matcher matcher = pattern.matcher(CharBuffer.wrap(buffer));
+		while (matcher.find())
 		{
-			String line = reader.readLine();
-			if (line == null)
-				return null;
-			Matcher matcher = pattern.matcher(line);
-			if (matcher.find())
+			String extracted = extractReplacement(
+				matcher, replacement);
+			if (EncodingServer.hasEncoding(extracted))
 			{
-				String extracted = extractReplacement(
-					matcher, replacement);
-				if (EncodingServer.hasEncoding(extracted))
-				{
-					return extracted;
-				}
+				return extracted;
 			}
 		}
 		return null;
