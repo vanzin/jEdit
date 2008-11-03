@@ -1,2 +1,2 @@
 @echo off
-start "jEdit startup" "{javaw.exe}" -Xms64M -Xmx192M -jar "{jedit.jar}" -reuseview %*
+start "jEdit startup" "{javaw.exe}" {jvmOptions} -jar "{jedit.jar}" -reuseview %*

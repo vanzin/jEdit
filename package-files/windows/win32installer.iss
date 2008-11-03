@@ -87,18 +87,18 @@ Source: classes\package-files\windows\jedit.bat; DestDir: {app}; Flags: ignoreve
 Filename: {app}\jEdit.url; Section: InternetShortcut; Key: URL; String: http://www.jEdit.org
 
 [Icons]
-Name: {group}\jEdit; Filename: {code:javaPath}; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit - Programmer's Text Editor; HotKey: ctrl+alt+j; IconIndex: 0; Parameters: "-Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -reuseview"
+Name: {group}\jEdit; Filename: {code:javaPath}; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit - Programmer's Text Editor; HotKey: ctrl+alt+j; IconIndex: 0; Parameters: "{code:jvmOptions} -jar ""{app}\@jar.filename@"" -reuseview"
 Name: {group}\{cm:ProgramOnTheWeb,jEdit}; Filename: {app}\jEdit.url; Comment: jEdit Website
-Name: {group}\Start jEdit Server; Filename: {code:javaPath}; Parameters: "-Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -background -nogui"; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: Start jEdit Server; IconIndex: 0; Languages: slovenian slovak russian portuguese polish norwegian italian hungarian french finnish dutch danish czech catalan brazilianportuguese english
+Name: {group}\Start jEdit Server; Filename: {code:javaPath}; Parameters: "{code:jvmOptions} -jar ""{app}\@jar.filename@"" -background -nogui"; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: Start jEdit Server; IconIndex: 0; Languages: slovenian slovak russian portuguese polish norwegian italian hungarian french finnish dutch danish czech catalan brazilianportuguese english
 Name: {group}\Quit jEdit Server; Filename: {code:javaPath}; Parameters: "-jar ""{app}\@jar.filename@"" -quit"; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: Quit jEdit Server; IconIndex: 0; Languages: slovenian slovak russian portuguese polish norwegian italian hungarian french finnish dutch danish czech catalan brazilianportuguese english
-Name: {group}\jEdit Server Starten; Filename: {code:javaPath}; Parameters: "-Xms64M -Xmx192M  -jar ""{app}\@jar.filename@"" -background -nogui"; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit Server Starten; IconIndex: 0; Languages: german
+Name: {group}\jEdit Server Starten; Filename: {code:javaPath}; Parameters: "{code:jvmOptions}  -jar ""{app}\@jar.filename@"" -background -nogui"; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit Server Starten; IconIndex: 0; Languages: german
 Name: {group}\jEdit Server Beenden; Filename: {code:javaPath}; Parameters: "-jar ""{app}\@jar.filename@"" -quit"; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit Server Beenden; IconIndex: 0; Languages: german
 Name: {group}\{cm:UninstallProgram,jEdit}; Filename: {uninstallexe}; Comment: {cm:UninstallProgram,jEdit}
-Name: {userdesktop}\jEdit; Filename: {code:javaPath}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit - Programmer's Text Editor; IconIndex: 0; Parameters: "-Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -reuseview"
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\jEdit; Filename: {code:javaPath}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit - Programmer's Text Editor; IconIndex: 0; Parameters: "-Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -reuseview"
+Name: {userdesktop}\jEdit; Filename: {code:javaPath}; Tasks: desktopicon; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit - Programmer's Text Editor; IconIndex: 0; Parameters: "{code:jvmOptions} -jar ""{app}\@jar.filename@"" -reuseview"
+Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\jEdit; Filename: {code:javaPath}; Tasks: quicklaunchicon; WorkingDir: {app}; IconFilename: {app}\jedit.ico; Comment: jEdit - Programmer's Text Editor; IconIndex: 0; Parameters: "{code:jvmOptions} -jar ""{app}\@jar.filename@"" -reuseview"
 
 [Run]
-Filename: {code:javaPath}; Description: {cm:LaunchProgram,jEdit}; Flags: postinstall skipifsilent nowait; WorkingDir: {app}; Parameters: "-Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -reuseview"
+Filename: {code:javaPath}; Description: {cm:LaunchProgram,jEdit}; Flags: postinstall skipifsilent nowait; WorkingDir: {app}; Parameters: "{code:jvmOptions} -jar ""{app}\@jar.filename@"" -reuseview"
 
 [Components]
 Name: main; Description: jEdit - Programmer's Text Editor; Flags: fixed; Types: custom compact full
@@ -109,10 +109,10 @@ Name: batchfile; Description: Batch file (for command-line usage); Types: custom
 [Registry]
 Root: HKCR; Subkey: *\Shell; Flags: uninsdeletekeyifempty
 Root: HKCR; Subkey: *\Shell\Open with jEdit; Flags: uninsdeletekey; Languages: slovenian slovak russian portuguese polish norwegian italian hungarian french finnish dutch danish czech catalan brazilianportuguese english
-Root: HKCR; Subkey: *\Shell\Open with jEdit\Command; ValueType: string; ValueData: """{code:javaPath}"" -Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -reuseview ""%1"""; Flags: uninsdeletekey; Languages: slovenian slovak russian portuguese polish norwegian italian hungarian french finnish dutch danish czech catalan brazilianportuguese english
+Root: HKCR; Subkey: *\Shell\Open with jEdit\Command; ValueType: string; ValueData: """{code:javaPath}"" {code:jvmOptions} -jar ""{app}\@jar.filename@"" -reuseview ""%1"""; Flags: uninsdeletekey; Languages: slovenian slovak russian portuguese polish norwegian italian hungarian french finnish dutch danish czech catalan brazilianportuguese english
 Root: HKCR; Subkey: *\Shell\Mit jEdit Öffnen; Flags: uninsdeletekey; Languages: german
-Root: HKCR; Subkey: *\Shell\Mit jEdit Öffnen\Command; ValueType: string; ValueData: """{code:javaPath}"" -Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -reuseview ""%1"""; Flags: uninsdeletekey; Languages: german
-Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueData: """{code:javaPath}"" -Xms64M -Xmx192M -jar ""{app}\@jar.filename@"" -background -nogui"; Tasks: autostartserver; ValueName: jEdit Server; Flags: uninsdeletevalue
+Root: HKCR; Subkey: *\Shell\Mit jEdit Öffnen\Command; ValueType: string; ValueData: """{code:javaPath}"" {code:jvmOptions} -jar ""{app}\@jar.filename@"" -reuseview ""%1"""; Flags: uninsdeletekey; Languages: german
+Root: HKLM; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueData: """{code:javaPath}"" {code:jvmOptions} -jar ""{app}\@jar.filename@"" -background -nogui"; Tasks: autostartserver; ValueName: jEdit Server; Flags: uninsdeletevalue
 
 [UninstallDelete]
 Type: files; Name: {app}\jEdit.url
@@ -220,6 +220,12 @@ begin
 	Result := '';
 end;
 
+// Returns JVM options to be used for launch jEdit.
+function jvmOptions(Param: String): String;
+begin
+	Result := '-Xms64M -Xmx192M';
+end;
+
 // updates the batch file for commandline usage
 // and includes its path in %PATH
 procedure UpdateBatchFile;
@@ -229,6 +235,7 @@ var
 	i, pathLine : Integer;
 begin
 	LoadStringFromFile(ExpandConstant('{app}\jedit.bat'),tmpS);
+	StringChange(tmpS,'{jvmOptions}',jvmOptions(''));
 	StringChange(tmpS,'{jedit.jar}','{app}\@jar.filename@');
 	SaveStringToFile(ExpandConstant('{app}\jedit.bat'),ExpandConstantEx(tmpS,'javaw.exe',javaPath('')),false);
 	if UsingWinNT then begin
