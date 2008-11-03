@@ -1555,10 +1555,12 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	// this is where checked exceptions piss me off. this method only uses
 	// a StringReader which can never throw an exception...
 	{
-		if(buffer != null) {
+		if(buffer != null)
+		{
 			return editPane = createEditPane(buffer);
 		}
-		else if(splitConfig == null) {
+		else if(splitConfig == null)
+		{
 			return editPane = createEditPane(jEdit.getFirstBuffer());
 		}
 		Buffer[] buffers = jEdit.getBuffers();
@@ -1950,7 +1952,8 @@ loop:		while (true)
 		}
 	} //}}}
 
-	public void adjust(View parent, ViewConfig config) {
+	public void adjust(View parent, ViewConfig config)
+	{
 		if(config.width != 0 && config.height != 0)
 		{
 			Rectangle desired = new Rectangle(
