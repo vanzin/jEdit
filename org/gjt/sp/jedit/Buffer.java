@@ -39,7 +39,6 @@ import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StringList;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.jedit.options.GeneralOptionPane;
@@ -55,10 +54,9 @@ import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Map;
 import java.util.Vector;
+import java.util.Map;
 //}}}
 
 /**
@@ -395,7 +393,7 @@ public class Buffer extends JEditBuffer
 	 * if only a copy should be saved to the specified filename
 	 * @since jEdit 2.6pre5
 	 */
-	public boolean save(final View view, String path, final boolean rename)
+	public boolean save(View view, String path, boolean rename)
 	{
 		return save(view,path,rename,false);
 	} //}}}
@@ -626,7 +624,7 @@ public class Buffer extends JEditBuffer
 		// - only supported on local file system
 		if(!isPerformingIO() && file != null && !getFlag(NEW_FILE))
 		{
-			boolean newReadOnly = (file.exists() && !file.canWrite());
+			boolean newReadOnly = file.exists() && !file.canWrite();
 			if(newReadOnly != isFileReadOnly())
 			{
 				setFileReadOnly(newReadOnly);
@@ -1203,6 +1201,10 @@ public class Buffer extends JEditBuffer
 
 	//{{{ insertString() method
 	/**
+	 * Insert a string into the buffer
+	 * @param offset The offset
+	 * @param str The string
+	 * @param attr ignored
 	 * @deprecated Call <code>insert()</code> instead.
 	 */
 	@Deprecated
@@ -1437,10 +1439,8 @@ public class Buffer extends JEditBuffer
 	 */
 	public Marker getMarker(char shortcut)
 	{
-		Enumeration<Marker> e = markers.elements();
-		while(e.hasMoreElements())
+		for (Marker marker : markers)
 		{
-			Marker marker = e.nextElement();
 			if(marker.getShortcut() == shortcut)
 				return marker;
 		}
@@ -1490,11 +1490,12 @@ public class Buffer extends JEditBuffer
 		// adapted from VFS.save
 		VFS vfs = VFSManager.getVFSForPath(getPath());
 		if (((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) ||
-		    (!vfs.isMarkersFileSupported())) {
+		    !vfs.isMarkersFileSupported())
+		{
 			VFSManager.error(view, path, "vfs.not-supported.save",
 				new String[] { "markers file" });
 			return false;
-			}
+		}
 		Object session = vfs.createVFSSession(path, view);
 		if(session == null)
 			return false;
@@ -1594,7 +1595,7 @@ public class Buffer extends JEditBuffer
 	Buffer next;
 
 	//{{{ Buffer constructor
-	Buffer(String path, boolean newFile, boolean temp, Hashtable props)
+	Buffer(String path, boolean newFile, boolean temp, Map props)
 	{
 		super(props);
 
@@ -1670,7 +1671,7 @@ public class Buffer extends JEditBuffer
 	private void setFlag(int flag, boolean value)
 	{
 		if(value)
-			flags |= (1 << flag);
+			flags |= 1 << flag;
 		else
 			flags &= ~(1 << flag);
 	} //}}}
@@ -1678,7 +1679,7 @@ public class Buffer extends JEditBuffer
 	//{{{ getFlag() method
 	private boolean getFlag(int flag)
 	{
-		int mask = (1 << flag);
+		int mask = 1 << flag;
 		return (flags & mask) == mask;
 	} //}}}
 
@@ -1899,7 +1900,7 @@ public class Buffer extends JEditBuffer
 		try
 		{
 			int length = getLength();
-			ByteBuffer bb = ByteBuffer.allocate( length * 2 );	// Chars are 2 bytes
+			ByteBuffer bb = ByteBuffer.allocate(length * 2);	// Chars are 2 bytes
 			CharBuffer cb = bb.asCharBuffer();
 			cb.append( getSegment(0, length) );
 			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
@@ -1918,8 +1919,9 @@ public class Buffer extends JEditBuffer
 	private void finishLoading()
 	{
 		if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
-				md5hash = calculateHash();
-		else md5hash = new byte[1];
+			md5hash = calculateHash();
+		else
+			md5hash = new byte[1];
 	
 		initialLength = getLength();
 		
@@ -2069,7 +2071,8 @@ public class Buffer extends JEditBuffer
 	 * @param textArea the textarea where your caret is
 	 * @since jEdit 4.3pre11
 	 */
-	void editSyntaxStyle(JEditTextArea textArea) {
+	void editSyntaxStyle(JEditTextArea textArea)
+	{
 		int lineNum = textArea.getCaretLine();
 		int start = getLineStartOffset(lineNum);
 		int position = textArea.getCaretPosition();
