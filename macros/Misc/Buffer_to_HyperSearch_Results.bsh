@@ -152,6 +152,8 @@ writeHypersearchResultsToBuffer(View view){
 	model.reload();
 }
 
+setAccessibility(true);
 writeHypersearchResultsToBuffer(view);
+setAccessibility(false);
 
 // :wrap=none:collapseFolds=0:noTabs=false:lineSeparator=\n:maxLineLen=80:indentSize=4:deepIndent=false:folding=none:

@@ -80,8 +80,9 @@ writeHypersearchResultsToBuffer(View view){
 	}
 }
 
+setAccessibility(true);
 writeHypersearchResultsToBuffer(view);
-
+setAccessibility(false);
 /*
 	Macro index data (in DocBook format)
 
