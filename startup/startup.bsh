@@ -22,12 +22,6 @@ ac()
 e = Math.E;
 pi = Math.PI;
 
-/* Allow accessibility to non-public Java elements
- * Previously, this was done indirectly during startup by the
- * getGraphicsEnvironment.bsh macro.
- */
-ac();
-
 /* I use this for scripting various search and replace operations. */
 s(search,replace,flags)
 {

@@ -93,6 +93,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - killring.xml or other XML files could be corrupted with control characters.
   (Kazutoshi Satoda)
+
+- BeanShell codes could access non-public members by default.
+  (Kazutoshi Satoda)
 }}}
 {{{ Miscellaneous
 - Added the absolute caret position in the caret status of the status bar
