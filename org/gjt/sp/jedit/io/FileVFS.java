@@ -49,13 +49,14 @@ public class FileVFS extends VFS
 	{
 		super("file",READ_CAP | WRITE_CAP | BROWSE_CAP | DELETE_CAP
 			| RENAME_CAP | MKDIR_CAP | LOW_LATENCY_CAP
-			| ((OperatingSystem.isCaseInsensitiveFS())
+			| (OperatingSystem.isCaseInsensitiveFS()
 			? CASE_INSENSITIVE_CAP : 0),
 			new String[] { EA_TYPE, EA_SIZE, EA_STATUS,
 			EA_MODIFIED });
 	} //}}}
 
 	//{{{ getParentOfPath() method
+	@Override
 	public String getParentOfPath(String path)
 	{
 		if(OperatingSystem.isDOSDerived())
@@ -72,6 +73,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ constructPath() method
+	@Override
 	public String constructPath(String parent, String path)
 	{
 		if(parent.endsWith(File.separator)
@@ -82,6 +84,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ getFileSeparator() method
+	@Override
 	public char getFileSeparator()
 	{
 		return File.separatorChar;
@@ -97,6 +100,7 @@ public class FileVFS extends VFS
 	 *
 	 * @param path The path name
 	 */
+	@Override
 	public String getTwoStageSaveName(String path)
 	{
 		File parent = new File(getParentOfPath(path));
@@ -114,6 +118,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ save() method
+	@Override
 	public boolean save(View view, Buffer buffer, String path)
 	{
 		if(OperatingSystem.isUnix())
@@ -128,6 +133,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ insert() method
+	@Override
 	public boolean insert(View view, Buffer buffer, String path)
 	{
 		File file = new File(path);
@@ -185,6 +191,7 @@ public class FileVFS extends VFS
 	 * @exception IOException if an I/O error occurred
 	 * @since jEdit 4.0pre2
 	 */
+	@Override
 	public String _canonPath(Object session, String path, Component comp)
 		throws IOException
 	{
@@ -203,6 +210,7 @@ public class FileVFS extends VFS
 		/**
 		 * @deprecated Call getModified() instead.
 		 */
+		@Deprecated
 		public long modified;
 
 		//{{{ LocalFile() class
@@ -223,6 +231,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		//{{{ getExtendedAttribute() method
+		@Override
 		public String getExtendedAttribute(String name)
 		{
 			fetchAttrs();
@@ -238,6 +247,7 @@ public class FileVFS extends VFS
 
 		//{{{ fetchAttrs() method
 		/** Fetch the attributes of the local file. */
+		@Override
 		protected void fetchAttrs()
 		{
 			if(fetchedAttrs())
@@ -262,6 +272,7 @@ public class FileVFS extends VFS
 		 * @return the file system icon
 		 * @since 4.3pre9
 		 */
+		@Override
 		public Icon getIcon(boolean expanded, boolean openBuffer)
 		{
 			if (icon == null)
@@ -275,6 +286,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		//{{{ getSymlinkPath() method
+		@Override
 		public String getSymlinkPath()
 		{
 			fetchAttrs();
@@ -282,6 +294,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		//{{{ getLength() method
+		@Override
 		public long getLength()
 		{
 			fetchAttrs();
@@ -289,6 +302,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		//{{{ isReadable() method
+		@Override
 		public boolean isReadable()
 		{
 			fetchAttrs();
@@ -296,6 +310,7 @@ public class FileVFS extends VFS
 		} //}}}
 
 		//{{{ isWriteable() method
+		@Override
 		public boolean isWriteable()
 		{
 			fetchAttrs();
@@ -320,6 +335,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _listFiles() method
+	@Override
 	public VFSFile[] _listFiles(Object session, String path,
 		Component comp)
 	{
@@ -357,6 +373,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _getFile() method
+	@Override
 	public VFSFile _getFile(Object session, String path,
 		Component comp)
 	{
@@ -374,6 +391,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _delete() method
+	@Override
 	public boolean _delete(Object session, String path, Component comp)
 	{
 		File file = new File(path);
@@ -403,6 +421,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _rename() method
+	@Override
 	public boolean _rename(Object session, String from, String to,
 		Component comp)
 	{
@@ -456,6 +475,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _mkdir() method
+	@Override
 	public boolean _mkdir(Object session, String directory, Component comp)
 	{
 		String parent = getParentOfPath(directory);
@@ -482,6 +502,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _backup() method
+	@Override
 	public void _backup(Object session, String path, Component comp)
 		throws IOException
 	{
@@ -527,6 +548,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _createInputStream() method
+	@Override
 	public InputStream _createInputStream(Object session, String path,
 		boolean ignoreErrors, Component comp) throws IOException
 	{
@@ -544,6 +566,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _createOutputStream() method
+	@Override
 	public OutputStream _createOutputStream(Object session, String path,
 		Component comp) throws IOException
 	{
@@ -551,6 +574,7 @@ public class FileVFS extends VFS
 	} //}}}
 
 	//{{{ _saveComplete() method
+	@Override
 	public void _saveComplete(Object session, Buffer buffer, String path,
 		Component comp)
 	{
@@ -652,6 +676,6 @@ public class FileVFS extends VFS
 	//}}}
 
 	//{{{ Private members
-	private static FileSystemView fsView = FileSystemView.getFileSystemView();
+	private static final FileSystemView fsView = FileSystemView.getFileSystemView();
 	//}}}
 }
