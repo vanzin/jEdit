@@ -3352,7 +3352,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				noWordSep,true,camelCasedWords,eatWhitespace);
 		}
 
-		buffer.remove(_caret + lineStart, caret - _caret + lineStart);
+		buffer.remove(_caret + lineStart, caret - (_caret + lineStart));
 	} //}}}
 
 	//{{{ delete() method
