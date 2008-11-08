@@ -36,6 +36,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.options.GlobalOptions;
 
 import org.gjt.sp.jedit.msg.PositionChanging;
+//}}}
 
 /**
  * jEdit's text component.<p>
