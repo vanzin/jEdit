@@ -954,7 +954,7 @@
 					signature="JESP"
 					stubfile="jedit"
 					version="${jedit.version}"
-					vmoptions="-Xms64M -Xmx192M">
+					vmoptions="-Xmx192M">
 			<javaproperty name="apple.awt.antialiasing"
 						  value="true" />
 			<javaproperty name="apple.awt.textantialiasing"

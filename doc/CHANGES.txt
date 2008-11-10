@@ -173,8 +173,8 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   for selecting the set of dockables to configure (plugin / core / all).
   (feature #2199003) (Shlomy Reinstein)
 
-- Removed a JVM option "-Xms64M" from Windows installation, which
-  consumed too much memory. (Kazutoshi Satoda)
+- Removed a JVM option "-Xms64M" from installed startup commands/scripts,
+  which consumed too much memory. (Kazutoshi Satoda)
 }}}
 {{{ Docker Plugin features merged into jEdit Core
 - New actions: View - Docking - Load|Save docking layout (of current mode)

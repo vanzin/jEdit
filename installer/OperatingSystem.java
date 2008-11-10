@@ -182,7 +182,6 @@ public abstract class OperatingSystem
 				out.write("#\n");
 				out.write("\n");
 				out.write("# Set jvm heap initial and maximum sizes (in megabytes).\n");
-				out.write("JAVA_HEAP_INIT_SIZE=64\n");
 				out.write("JAVA_HEAP_MAX_SIZE=192\n");
 				out.write("\n");
 				out.write("DEFAULT_JAVA_HOME=\""
@@ -198,7 +197,6 @@ public abstract class OperatingSystem
 				String jar = installDir + File.separator
 					+ name.toLowerCase() + ".jar";
 				out.write("\texec \"$JAVA_HOME/bin/java\"" +
-					  " -Xms${JAVA_HEAP_INIT_SIZE}M" +
 					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
 					  jar + " -reuseview \"$1\" \"$2\"" +
 					  " \"$3\" \"$4\" \"$5\" \"$6\"" +
@@ -206,7 +204,6 @@ public abstract class OperatingSystem
 				out.write("\tshift 9\n");
 				out.write("done\n");
 				out.write("exec \"$JAVA_HOME/bin/java\"" +
-					  " -Xms${JAVA_HEAP_INIT_SIZE}M" +
 					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
 					  jar + " -reuseview \"$1\" \"$2\"" +
 					  " \"$3\" \"$4\" \"$5\" \"$6\"" +
