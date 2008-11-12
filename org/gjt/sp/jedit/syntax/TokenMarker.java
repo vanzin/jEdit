@@ -254,6 +254,7 @@ unwind:		while(context.parent != null)
 		tokenHandler.setLineContext(context);
 
 		/* for GC. */
+		this.tokenHandler = null;
 		this.line = null;
 
 		return context;
