@@ -2071,7 +2071,7 @@ public class Buffer extends JEditBuffer
 	 * @param textArea the textarea where your caret is
 	 * @since jEdit 4.3pre11
 	 */
-	void editSyntaxStyle(JEditTextArea textArea)
+	public void editSyntaxStyle(JEditTextArea textArea)
 	{
 		int lineNum = textArea.getCaretLine();
 		int start = getLineStartOffset(lineNum);
