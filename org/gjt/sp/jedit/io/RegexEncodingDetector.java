@@ -62,15 +62,19 @@ public class RegexEncodingDetector implements EncodingDetector
 		InputStreamReader reader = new InputStreamReader(sample);
 		final int bufferSize = 1024;
 		char[] buffer = new char[bufferSize];
-		reader.read(buffer, 0, bufferSize);
-		Matcher matcher = pattern.matcher(CharBuffer.wrap(buffer));
-		while (matcher.find())
+		int readSize = reader.read(buffer, 0, bufferSize);
+		if (readSize > 0)
 		{
-			String extracted = extractReplacement(
-				matcher, replacement);
-			if (EncodingServer.hasEncoding(extracted))
+			Matcher matcher = pattern.matcher(
+				CharBuffer.wrap(buffer, 0, readSize));
+			while (matcher.find())
 			{
-				return extracted;
+				String extracted = extractReplacement(
+					matcher, replacement);
+				if (EncodingServer.hasEncoding(extracted))
+				{
+					return extracted;
+				}
 			}
 		}
 		return null;
