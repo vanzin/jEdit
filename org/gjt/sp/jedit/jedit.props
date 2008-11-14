@@ -438,6 +438,7 @@ plugin-manager.showAll=true
 plugin-manager.mirror.id=switch
 plugin-manager.deleteDownloads=true
 plugin-manager.hide-libraries.toggle=true
+plugin-blacklist.MacOS.jar=true
 #}}}
 
 #{{{ Hidden settings

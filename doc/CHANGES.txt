@@ -101,6 +101,8 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Disabled the MacOS plugin by default for now. (Björn "Vampire" Kautler)
+
 - Added the absolute caret position in the caret status of the status bar
   (Matthieu Casanova)
 
