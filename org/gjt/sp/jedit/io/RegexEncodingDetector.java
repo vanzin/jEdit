@@ -43,7 +43,7 @@ public class RegexEncodingDetector implements EncodingDetector
 	/**
 	 * A regex pattern matches to "Charset names" specified for
 	 * java.nio.charset.Charset.
-	 * @see http://java.sun.com/j2se/1.5.0/docs/api/java/nio/charset/Charset.html#names
+	 * @see <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/nio/charset/Charset.html#names">Charset names</a>
 	 */
 	public static final String VALID_ENCODING_PATTERN
 		= "\\p{Alnum}[\\p{Alnum}\\-.:_]*";
