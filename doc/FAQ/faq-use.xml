@@ -271,15 +271,17 @@
                 </question>
 
                 <answer>
-                    <para>If you are using jEditLauncher, you associate the file
-                    extension with <replaceable>[full
-                    path]</replaceable><userinput>\jedit.exe
-                    "%1"</userinput>.</para>
+                    <para>You associate the file extension with
+                    <userinput><replaceable>&lt;jEdit installation
+                    directory&gt;</replaceable>\jedit.bat</userinput>.
+                    This can be done from the <guimenuitem>File Types</guimenuitem>
+                    tab in the Windows Explorer's <guimenuitem>Tools</guimenuitem>
+                    -&gt; <guimenuitem>Folder options...</guimenuitem> menu.</para>
 
-                    <para>The jEditLauncher package for Windows includes a
+                    <para>The EXE-installer for Windows includes a
                     custom context menu handler. It will provide menu items for
                     using jEdit any time you right-click on a file icon in
-                    Windows Explorer or a Windows file menu. This feature does
+                    Windows Explorer. This feature does
                     not interfere with any existing file associations.</para>
                 </answer>
             </qandaentry>
@@ -316,20 +318,6 @@
                     example, the easiest workaround is to rename the file in two
                     steps: first to <filename>_myfile.txt</filename>, then to
                     <filename>MyFile.txt</filename>.</para>
-                </answer>
-            </qandaentry>
-
-            <qandaentry>
-                <question id="file-delete-recurse">
-                    <para>Can I recursively delete a directory's files in
-                    jEdit's File Browser?</para>
-                </question>
-
-                <answer>
-                    <para>No. The feature is being planned for inclusion in a
-                    future jEdit version. The fastest way to do this in the
-                    current jEdit version is to use the Console plugin and a
-                    native command.</para>
                 </answer>
             </qandaentry>
         </qandadiv>
