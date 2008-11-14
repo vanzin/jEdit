@@ -7,6 +7,7 @@ Matthieu Casanova, Alan Ezust, Bernhard Walle, Shlomy Reinstein, Greg Merrill,
 Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 {{{ Bug Fixes
+
 - When the bufferSet were not sorted it was possible to have two time the same
   buffer in a bufferSet (Matthieu Casanova)
 
@@ -47,7 +48,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   causing sometimes NPE (Matthieu Casanova)
 
 - When a bufferSet is sorted, dragging a buffer in BufferTabs plugin was not
- possible (#2100690) (Matthieu Casanova)
+  possible (#2100690) (Matthieu Casanova)
 
 - # 1519924 - Pressing escape in Path: field gets rid of dock window.
   (#1854542 - Jeff Robertson - jefftbob)
@@ -96,8 +97,10 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - BeanShell codes could access non-public members by default.
   (Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
+
 - Added the absolute caret position in the caret status of the status bar
   (Matthieu Casanova)
 
@@ -111,12 +114,12 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (SF.net patch #1923613 - Greg Merrill, Kazutoshi Satoda)
 
 - New option in saving/backup: Never mark untitled buffers dirty.
-  Related to that, buffers with length=0 never never marked dirty.
-  -- (request # 2068307 - Alan Ezust)
+  Related to that, buffers with length=0 never marked dirty.
+  (request # 2068307 - Alan Ezust)
 
 - New option in saving/backup: Calculate MD5 hash to see if the
   file as loaded from disk is the same as what is in the buffer.
-  -- (Request # 2077326 - Alan Ezust, Kevin Hunter, K. Satoda)
+  (Request # 2077326 - Alan Ezust, Kevin Hunter, K. Satoda)
 
 - New action new-file-in-mode, which opens a dialog listing the
   available modes, the user can select one and a new file is created
@@ -142,7 +145,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (# 1910097 - Jakub Roztocil, Alan Ezust)
 
 - Angle Brackets are now also matched from find matching bracket.
-    (encorejane - # 1849215)
+  (encorejane - # 1849215)
 
 - ActionSet combobox in "add to context menu" is sorted and remembers previous
   selection. (Alan Ezust)
@@ -158,7 +161,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Changed the "HyperSearch_Results_to_Buffer" macro to include the results of
   all searches, not just the last one, and also the search matcher of each
-  search, in order to be able to be able to "import" the search results from
+  search, in order to be able to "import" the search results from
   the buffer later.
   Added a new "Buffer_to_HyperSearch_Results" macro that reads a buffer that
   was previously created by the "HyperSearch_Results_to_Buffer" macro, and
@@ -175,15 +178,19 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - Removed a JVM option "-Xms64M" from installed startup commands/scripts,
   which consumed too much memory. (Kazutoshi Satoda)
+
 }}}
 {{{ Docker Plugin features merged into jEdit Core
+
 - New actions: View - Docking - Load|Save docking layout (of current mode)
   You can save named dockable layouts, analogous to Eclipse perspectives,
   on a global or per-mode basis. (Shlomy Reinstein)
 
 - New action: View - Docking - Toggle Docked Areas. (Alan Ezust)
+
 }}}
 {{{ API Changes
+
 - A public field buffer in HyperSearchFileNode was removed. Use
   getBuffer() instead. (Kazutoshi Satoda)
 
@@ -197,8 +204,10 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
 
 - SearchMatcher#isMatchingEOL(), which was introduced at 4.3pre7, has been
   removed in favor of better fix for the problem. (Kazutoshi Satoda)
+
 }}}
 {{{ Editing
+
 - New cmake mode (patch #2011419) (Bernhard Walle)
 
 - More patterns for shellscript filenames (# 2056778 - Kevin Hunter (hunteke))
@@ -207,6 +216,7 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (#2108778) (Matthieu Casanova)
 
 - Added some indent rules in shellscript.xml (Matthieu Casanova)
+
 }}}
 
 }}}
