@@ -23,7 +23,11 @@ package org.gjt.sp.jedit.bufferset;
 
 //{{{ Imports
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
@@ -40,7 +44,7 @@ import java.util.Comparator;
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
  */
-public class BufferSet
+public class BufferSet implements EBComponent
 {
 	//{{{ Scope enum
 	public enum Scope
@@ -71,6 +75,7 @@ public class BufferSet
 		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		listeners = new EventListenerList();
 		this.scope = scope;
+		EditBus.addToBus(this);
 
 		if (jEdit.getBooleanProperty("sortBuffers"))
 		{
@@ -81,10 +86,43 @@ public class BufferSet
 		}
 	} //}}}
 
+	//{{{ finalize
+	protected void finalize()
+	{
+		EditBus.removeFromBus(this);
+	} //}}}
+
+	//{{{ handleMessage
+	public void handleMessage(EBMessage msg) {
+		if (msg != null && msg instanceof PropertiesChanged) {
+			if (jEdit.getBooleanProperty("sortBuffers"))
+			{
+				if (jEdit.getBooleanProperty("sortByName"))
+					sorter = nameSorter;
+				else
+					sorter = pathSorter;
+				Collections.sort(buffers, sorter);
+				BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
+				for (BufferSetListener listener : listeners)
+				{
+					listener.bufferAdded(null, -1);
+				}
+			}
+			else
+			{
+				sorter = null;
+			}
+		}
+	} //}}}
+
 	//{{{ addBufferAt() method
 	public void addBufferAt(Buffer buffer, int position)
 	{
 		Log.log(Log.DEBUG, this, hashCode() + " addBufferAt("+buffer+','+position+')');
+
+		if (buffers.contains(buffer))
+			return;
+
 		Buffer untitledBuffer = null;
 		synchronized (buffers)
 		{
@@ -97,12 +135,8 @@ public class BufferSet
 				}
 			}
 
-			if (sorter != null && buffers.contains(buffer))
-				sorter = null;
 			if (sorter != null)
 			{
-				if (buffers.contains(buffer))
-					return;
 				buffers.add(buffer);
 				Collections.sort(buffers, sorter);
 				position = buffers.indexOf(buffer);

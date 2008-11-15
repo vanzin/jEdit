@@ -767,6 +767,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		if (bufferSwitcher != null)
 			bufferSwitcher.updateBufferList();
+		if (buffer == null)
+			return;
 		if (bufferSet.indexOf(this.buffer) == -1)
 		{
 			// it happens when having 1 untitled buffer if I open a file. The untitled buffer
@@ -994,7 +996,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			jEdit.getColorProperty("view.gutter.noFocusBorderColor"),
 			textArea.getPainter().getBackground());
 		gutter.setFoldPainter(textArea.getFoldPainter());
-		
+
 		textArea.setCaretBlinkEnabled(jEdit.getBooleanProperty(
 			"view.caretBlink"));
 
