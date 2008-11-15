@@ -95,7 +95,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			GridBagConstraints.VERTICAL);
 
 		optionsPanel.addSeparator();
-		optionsPanel.addSeparator("Caret position display options:");
+		optionsPanel.addComponent(new JLabel("Caret position display options:"));
 
 		/*
 		view.status.show-caret-offset -- true shows caret offset from start of buffer
@@ -104,10 +104,10 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		view.status.show-caret-virtual -- true shows virtual offset in line for caret
 		view.status.show-caret-percent -- true shows relative position of the caret within the buffer
 		*/
-		show_caret_offset = new JCheckBox("Show caret offset", jEdit.getBooleanProperty("view.status.show-caret-offset", true));
+		show_caret_offset = new JCheckBox("Show caret offset from start of file", jEdit.getBooleanProperty("view.status.show-caret-offset", true));
 		show_caret_linenumber = new JCheckBox("Show caret line number", jEdit.getBooleanProperty("view.status.show-caret-linenumber", true));
-		show_caret_dot = new JCheckBox("Show caret offset in line", jEdit.getBooleanProperty("view.status.show-caret-dot", true));
-		show_caret_virtual = new JCheckBox("Show caret virtual offset in line", jEdit.getBooleanProperty("view.status.show-caret-virtual", true));
+		show_caret_dot = new JCheckBox("Show caret offset from start of line", jEdit.getBooleanProperty("view.status.show-caret-dot", true));
+		show_caret_virtual = new JCheckBox("Show caret virtual offset from start of line", jEdit.getBooleanProperty("view.status.show-caret-virtual", true));
 		show_caret_percent = new JCheckBox("Show relative position (%) of caret within buffer", jEdit.getBooleanProperty("view.status.show-caret-percent", true));
 		optionsPanel.addComponent(show_caret_offset);
 		optionsPanel.addComponent(show_caret_linenumber);
