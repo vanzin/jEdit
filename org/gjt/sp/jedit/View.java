@@ -47,6 +47,9 @@ import java.util.Stack;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.LayoutFocusTraversalPolicy;
@@ -1714,6 +1717,7 @@ loop:		while (true)
 			if (showStatus)
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}
+		showBufferSwitcherMenuItem();
 
 		getRootPane().revalidate();
 
@@ -1721,6 +1725,50 @@ loop:		while (true)
 			GUIUtilities.initContinuousLayout(splitPane);
 		//SwingUtilities.updateComponentTreeUI(getRootPane());
 	} //}}}
+
+	//{{{ showBufferSwitcherMenuItem() method
+	/**
+	 * Shows or hides the "Show Buffer Switcher" menu item in the View menu
+	 * depending on the visible state of the buffer switcher.  The menu item
+	 * is intended to have the same effect as clicking on the buffer switcher
+	 * combo box, and it doesn't make sense to have this action available if
+	 * the buffer switcher isn't visible.
+	 */
+	private void showBufferSwitcherMenuItem() {
+		boolean show = (jEdit.getBooleanProperty("view.showBufferSwitcher"));
+		JMenuBar menubar = getJMenuBar();
+		if (menubar == null)
+		{
+			return;
+		}
+		JMenu viewmenu = null;
+		String viewmenu_label = jEdit.getProperty("view.label");
+		viewmenu_label = viewmenu_label.replace("$", "");
+		String sbs_label = jEdit.getProperty("show-buffer-switcher.label");
+		sbs_label = sbs_label.replace("$", "");
+		for (int i = 0; i < menubar.getMenuCount(); i++)
+		{
+			JMenu menu = menubar.getMenu(i);
+			if (menu.getText().equals(viewmenu_label))
+			{
+				viewmenu = menu;
+				break;
+			}
+		}
+		if (viewmenu != null)
+		{
+			for (int i = 0; i < viewmenu.getMenuComponentCount(); i++)
+			{
+				Component item = viewmenu.getMenuComponent(i);
+				if (item instanceof JMenuItem && ((JMenuItem)item).getText().equals(sbs_label))
+				{
+					((JMenuItem)item).setVisible(show);
+					viewmenu.invalidate();
+				}
+			}
+		}
+	} //}}}
+
 
 	//{{{ loadToolBars() method
 	private void loadToolBars()
