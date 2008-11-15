@@ -52,8 +52,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
-		
-		//{{{ North 
+
+		//{{{ North
 		JPanel panel = new JPanel(new GridLayout(2,1));
 		showStatusbar = new JCheckBox(jEdit.getProperty(
 			"options.status.visible"));
@@ -67,7 +67,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			"options.status.caption")));
 		add(panel, BorderLayout.NORTH);
 		//}}}
-		
+
 		//{{{ Options panel
 		AbstractOptionPane optionsPanel = new AbstractOptionPane("Status Options");
 		/* Foreground color */
@@ -81,7 +81,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			backgroundColor = new ColorWellButton(
 			jEdit.getColorProperty("view.status.background")),
 			GridBagConstraints.VERTICAL);
-		
+
 		/* Memory foreground color */
 		optionsPanel.addComponent(jEdit.getProperty("options.status.memory.foreground"),
 			memForegroundColor = new ColorWellButton(
@@ -93,9 +93,32 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			memBackgroundColor = new ColorWellButton(
 			jEdit.getColorProperty("view.status.memory.background")),
 			GridBagConstraints.VERTICAL);
+
+		optionsPanel.addSeparator();
+		optionsPanel.addSeparator("Caret position display options:");
+
+		/*
+		view.status.show-caret-offset -- true shows caret offset from start of buffer
+		view.status.show-caret-linenumber -- true shows line number for caret
+		view.status.show-caret-dot -- true shows offset in line for caret
+		view.status.show-caret-virtual -- true shows virtual offset in line for caret
+		view.status.show-caret-percent -- true shows relative position of the caret within the buffer
+		*/
+		show_caret_offset = new JCheckBox("Show caret offset", jEdit.getBooleanProperty("view.status.show-caret-offset", true));
+		show_caret_linenumber = new JCheckBox("Show caret line number", jEdit.getBooleanProperty("view.status.show-caret-linenumber", true));
+		show_caret_dot = new JCheckBox("Show caret offset in line", jEdit.getBooleanProperty("view.status.show-caret-dot", true));
+		show_caret_virtual = new JCheckBox("Show caret virtual offset in line", jEdit.getBooleanProperty("view.status.show-caret-virtual", true));
+		show_caret_percent = new JCheckBox("Show relative position (%) of caret within buffer", jEdit.getBooleanProperty("view.status.show-caret-percent", true));
+		optionsPanel.addComponent(show_caret_offset);
+		optionsPanel.addComponent(show_caret_linenumber);
+		optionsPanel.addComponent(show_caret_dot);
+		optionsPanel.addComponent(show_caret_virtual);
+		optionsPanel.addComponent(show_caret_percent);
+
+
 		//}}}
 
-		
+
 		//{{{ widgets panel
 		String statusbar = jEdit.getProperty("view.status");
 		StringTokenizer st = new StringTokenizer(statusbar);
@@ -105,7 +128,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			String token = st.nextToken();
 			listModel.addElement(token);
 		}
-	
+
 
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -149,8 +172,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 
 		updateButtons();
 		widgetsPanel.add(buttons, BorderLayout.SOUTH);
-		
-		
+
+
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.addTab("Options",optionsPanel);
 		tabs.add("Widgets", widgetsPanel);
@@ -182,11 +205,18 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		{
 			if(i != 0)
 				buf.append(' ');
-			
+
 			String widgetName = (String) listModel.elementAt(i);
 			buf.append(widgetName);
 		}
 		jEdit.setProperty("view.status",buf.toString());
+
+		jEdit.setBooleanProperty("view.status.show-caret-offset", show_caret_offset.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-linenumber", show_caret_linenumber.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-dot", show_caret_dot.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-virtual", show_caret_virtual.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-percent", show_caret_percent.isSelected());
+
 	} //}}}
 
 	//{{{ Private members
@@ -204,6 +234,12 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private RolloverButton remove;
 	private RolloverButton moveUp, moveDown;
 	private RolloverButton edit;
+
+	private JCheckBox show_caret_offset;
+	private JCheckBox show_caret_linenumber;
+	private JCheckBox show_caret_dot;
+	private JCheckBox show_caret_virtual;
+	private JCheckBox show_caret_percent;
 	//}}}
 
 	//{{{ updateButtons() method
@@ -232,8 +268,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				String value = selectWidget();
 				if (value == null)
 					return;
-				
-	
+
+
 				int index = list.getSelectedIndex();
 				if(index == -1)
 					index = listModel.getSize();
@@ -288,7 +324,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				list.ensureIndexIsVisible(index);
 			}
 		}
-		
+
 		private String selectWidget()
 		{
 			WidgetSelectionDialog dialog = new WidgetSelectionDialog(StatusBarOptionPane.this);
@@ -309,7 +345,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//}}}
-	
+
 	//{{{ WidgetSelectionDialog class
 	private class WidgetSelectionDialog extends EnhancedDialog
 	{
@@ -322,7 +358,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		private JLabel widgetLabel;
 		private JRadioButton widgetRadio;
 		private String value;
-		
+
 		//{{{ WidgetSelectionDialog constructor
 		WidgetSelectionDialog(Component comp)
 		{
@@ -337,10 +373,10 @@ public class StatusBarOptionPane extends AbstractOptionPane
 
 			labelLabel = new JLabel(jEdit.getProperty("options.status.edit.labelLabel"));
 			labelField = new JTextField();
-			
+
 			widgetLabel = new JLabel(jEdit.getProperty("options.status.edit.widgetLabel"));
 			widgetCombo = new JComboBox(ServiceManager.getServiceNames("org.gjt.sp.jedit.gui.statusbar.StatusWidget"));
-			
+
 			ActionHandler actionHandler = new ActionHandler();
 			labelRadio.addActionListener(actionHandler);
 			widgetRadio.addActionListener(actionHandler);
@@ -363,7 +399,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			labelField.setEnabled(false);
 			widgetRadio.setSelected(true);
 
-			
+
 			JPanel content = new JPanel(new BorderLayout());
 			content.setBorder(new EmptyBorder(12,12,12,12));
 			setContentPane(content);
@@ -392,7 +428,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 
 		//{{{ ok() method
 		@Override
-		public void ok() 
+		public void ok()
 		{
 			if (widgetRadio.isSelected())
 			{
@@ -404,21 +440,21 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			}
 			dispose();
 		} //}}}
-		
+
 		//{{{ cancel() method
 		@Override
-		public void cancel() 
+		public void cancel()
 		{
 			value = null;
 			dispose();
 		} //}}}
-		
+
 		//{{{ getValue() method
 		public String getValue()
 		{
 			return value;
 		} //}}}
-	
+
 		//{{{ ActionHandler class
 		private class ActionHandler implements ActionListener
 		{

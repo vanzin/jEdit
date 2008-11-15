@@ -325,25 +325,43 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
 				buffer.getTabSize());
 
-			if (jEdit.getBooleanProperty("view.status.show-caret-offset", true)) {
-				buf.append(caretPosition).append(',');
+			if (jEdit.getBooleanProperty("view.status.show-caret-offset", true))
+			{
+				buf.append(caretPosition);
 			}
-			if (jEdit.getBooleanProperty("view.status.show-caret-linenumber", true)) {
+			if (jEdit.getBooleanProperty("view.status.show-caret-linenumber", true))
+			{
+				if (buf.length() > 0)
+				{
+					buf.append(',');
+				}
 				buf.append(Integer.toString(currLine + 1));
-				buf.append(',');
 			}
-			if (jEdit.getBooleanProperty("view.status.show-caret-dot", true)) {
+			if (jEdit.getBooleanProperty("view.status.show-caret-dot", true))
+			{
+				if (buf.length() > 0)
+				{
+					buf.append(',');
+				}
 				buf.append(Integer.toString(dot + 1));
 			}
-			if (jEdit.getBooleanProperty("view.status.show-caret-virtual", true) && virtualPosition != dot)
+			if (jEdit.getBooleanProperty("view.status.show-caret-virtual", true))
 			{
-				buf.append('-');
+				if (buf.length() > 0 && jEdit.getBooleanProperty("view.status.show-caret-dot", true))
+				{
+					buf.append('-');
+				}
+				else if (buf.length() > 0) {
+					buf.append(',');
+				}
 				buf.append(Integer.toString(virtualPosition + 1));
 			}
 
-			buf.append(' ');
-
 			if (jEdit.getBooleanProperty("view.status.show-caret-percent", true)) {
+				if (buf.length() > 0)
+				{
+					buf.append(' ');
+				}
 				int firstLine = textArea.getFirstLine();
 				int visible = textArea.getVisibleLines();
 				int lineCount = textArea.getLineCount();
