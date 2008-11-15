@@ -325,12 +325,17 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
 				buffer.getTabSize());
 
-			buf.append(caretPosition).append(',');
-			buf.append(Integer.toString(currLine + 1));
-			buf.append(',');
-			buf.append(Integer.toString(dot + 1));
-
-			if (virtualPosition != dot)
+			if (jEdit.getBooleanProperty("view.status.show-caret-offset", true)) {
+				buf.append(caretPosition).append(',');
+			}
+			if (jEdit.getBooleanProperty("view.status.show-caret-linenumber", true)) {
+				buf.append(Integer.toString(currLine + 1));
+				buf.append(',');
+			}
+			if (jEdit.getBooleanProperty("view.status.show-caret-dot", true)) {
+				buf.append(Integer.toString(dot + 1));
+			}
+			if (jEdit.getBooleanProperty("view.status.show-caret-virtual", true) && virtualPosition != dot)
 			{
 				buf.append('-');
 				buf.append(Integer.toString(virtualPosition + 1));
@@ -338,30 +343,29 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 
 			buf.append(' ');
 
-			int firstLine = textArea.getFirstLine();
-			int visible = textArea.getVisibleLines();
-			int lineCount = textArea.getDisplayManager().getScrollLineCount();
+			if (jEdit.getBooleanProperty("view.status.show-caret-percent", true)) {
+				int firstLine = textArea.getFirstLine();
+				int visible = textArea.getVisibleLines();
+				int lineCount = textArea.getLineCount();
 
-			if (visible >= lineCount)
-			{
-				buf.append("All");
+				if (visible >= lineCount)
+				{
+					buf.append("All");
+				}
+				else if (firstLine == 0)
+				{
+					buf.append("Top");
+				}
+				else if (currLine == textArea.getLastPhysicalLine())
+				{
+					buf.append("Bot");
+				}
+				else
+				{
+					float percent = ((float)currLine / (float)lineCount) * 100.0f;
+					buf.append((int)percent).append('%');
+				}
 			}
-			else if (firstLine == 0)
-			{
-				buf.append("Top");
-			}
-			else if (firstLine + visible >= lineCount)
-			{
-				buf.append("Bot");
-			}
-			else
-			{
-				float percent = (float)firstLine / (float)lineCount
-					* 100.0f;
-				buf.append(Integer.toString((int)percent));
-				buf.append('%');
-			}
-
 			caretStatus.setText(buf.toString());
 			buf.setLength(0);
 		}
@@ -455,10 +459,9 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		public void mouseClicked(MouseEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == caretStatus)
+			if(source == caretStatus && evt.getClickCount() == 2)
 			{
-				if(evt.getClickCount() == 2)
-					view.getTextArea().showGoToLineDialog();
+				view.getTextArea().showGoToLineDialog();
 			}
 		}
 	} //}}}
