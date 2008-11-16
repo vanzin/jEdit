@@ -392,7 +392,7 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
 		bufferSetManager = new BufferSetManager();
-		
+
 		///Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
 
@@ -531,7 +531,7 @@ public class jEdit
 		// which can be provided by a plugin, so this must be called only after
 		// the plugins are loaded.
 		DockingLayoutManager.init();
-		
+
 		// Open files, create the view and hide the splash screen.
 		SyntaxUtilities.propertyManager = jEdit.propertyManager;
 		finishStartup(gui,restore,newPlainView,userDir,args);
@@ -1832,7 +1832,7 @@ public class jEdit
 	 * Closes all open buffers.
 	 * @param view The view
 	 *
-	 * @return true if all buffers were closed, false otherwise 
+	 * @return true if all buffers were closed, false otherwise
 	 */
 	public static boolean closeAllBuffers(View view)
 	{
@@ -2296,7 +2296,7 @@ public class jEdit
 
 			newView.pack();
 			newView.adjust(view, config);
-			
+
 			EditBus.send(new ViewUpdate(newView,ViewUpdate.CREATED));
 
 			newView.setVisible(true);
@@ -3927,7 +3927,8 @@ loop:		for(int i = 0; i < list.length; i++)
 			}
 			else
 			{
-				buffer.prev.next = buffer.next;
+				if (buffer.prev != null)
+					buffer.prev.next = buffer.next;
 			}
 
 			if(buffer == buffersLast)
@@ -3937,7 +3938,8 @@ loop:		for(int i = 0; i < list.length; i++)
 			}
 			else
 			{
-				buffer.next.prev = buffer.prev;
+				if (buffer.next != null)
+					buffer.next.prev = buffer.prev;
 			}
 
 			// fixes the hang that can occur if we 'save as' to a new
