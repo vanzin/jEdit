@@ -14,6 +14,15 @@
 			<END>--%&gt;</END>
 		</SPAN>
 
+        <!-- Java comment within a jsp scriplet block.  There might be a better
+        way to do this.  The situation this is attempting to fix is a scriptlet
+        block like this:
+        &lt; } // end of if %&gt;
+        This should make the java line comment end at the %, and not include
+        the percent, so the %&gt; are colored correctly as the end of the
+        scriptlet block. -->
+        <SEQ_REGEXP TYPE="COMMENT1" HASH_CHAR="/" AT_WORD_START="FALSE">/[/](.*?)(?=[%][>])</SEQ_REGEXP>
+
 		<!-- JSP directive -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="DIRECTIVES">
 			<BEGIN>&lt;%@</BEGIN>
@@ -33,7 +42,6 @@
 			<BEGIN>&lt;jsp:expression&gt;</BEGIN>
 			<END>&lt;/jsp:expression&gt;</END>
 		</SPAN>
-
 
 		<!-- JSP scriptlet code block -->
 		<SPAN TYPE="KEYWORD1" DELEGATE="java::MAIN">
