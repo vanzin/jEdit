@@ -62,4 +62,10 @@ public interface BufferSetListener extends EventListener
 	 * The bufferSet was cleared, it is now empty.
 	 */
 	void bufferCleared();
+
+	/**
+	 * The bufferSet was sorted.
+	 */
+	void bufferSetSorted();
+
 }

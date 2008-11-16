@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.bufferset;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 
 import java.util.*;
@@ -108,6 +109,19 @@ public class BufferSetManager implements EBComponent
 				}
 			}
 		}
+		else if (message instanceof PropertiesChanged) {
+			// pass on PropertiesChanged message to BufferSets so
+			// they can resort themselves as needed.
+			for (BufferSet bufferSet : editPaneBufferSetMap.values())
+			{
+				bufferSet.handleMessage((PropertiesChanged)message);
+			}
+			for (BufferSet bufferSet : viewBufferSetMap.values())
+			{
+				bufferSet.handleMessage((PropertiesChanged)message);
+			}
+		}
+
 	} //}}}
 
 	//{{{ getGlobalBufferSet() method

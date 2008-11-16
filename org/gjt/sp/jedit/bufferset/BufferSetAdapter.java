@@ -23,8 +23,6 @@ package org.gjt.sp.jedit.bufferset;
 
 import org.gjt.sp.jedit.Buffer;
 
-import java.util.EventListener;
-
 /**
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
@@ -46,4 +44,9 @@ public class BufferSetAdapter implements BufferSetListener
 	public void bufferCleared()
 	{
 	}
+
+	public void bufferSetSorted()
+	{
+	}
+
 }

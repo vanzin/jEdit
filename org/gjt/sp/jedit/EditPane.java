@@ -765,10 +765,10 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	 */
 	public void bufferAdded(Buffer buffer, int index)
 	{
-		if (bufferSwitcher != null)
-			bufferSwitcher.updateBufferList();
 		if (buffer == null)
 			return;
+		if (bufferSwitcher != null)
+			bufferSwitcher.updateBufferList();
 		if (bufferSet.indexOf(this.buffer) == -1)
 		{
 			// it happens when having 1 untitled buffer if I open a file. The untitled buffer
@@ -848,6 +848,17 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 //			bufferSwitcher.updateBufferList();
 	} //}}}
 
+	//{{{ bufferSetSorted() method
+	/**
+	 * The bufferSet was sorted
+	 * @since jEdit 4.3pre16
+	 */
+	public void bufferSetSorted()
+	{
+		if (bufferSwitcher != null)
+			bufferSwitcher.updateBufferList();
+	} //}}}
+
 	//{{{ toString() method
 	@Override
 	public String toString()
@@ -878,7 +889,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().addExtension(markerHighlight);
 		textArea.addStatusListener(new StatusHandler());
-
 		add(BorderLayout.CENTER,textArea);
 
 		propertiesChanged();

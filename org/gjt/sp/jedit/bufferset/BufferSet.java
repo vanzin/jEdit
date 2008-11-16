@@ -23,9 +23,6 @@ package org.gjt.sp.jedit.bufferset;
 
 //{{{ Imports
 import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.EBComponent;
-import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
@@ -44,7 +41,7 @@ import java.util.Comparator;
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
  */
-public class BufferSet implements EBComponent
+public class BufferSet
 {
 	//{{{ Scope enum
 	public enum Scope
@@ -75,7 +72,6 @@ public class BufferSet implements EBComponent
 		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		listeners = new EventListenerList();
 		this.scope = scope;
-		EditBus.addToBus(this);
 
 		if (jEdit.getBooleanProperty("sortBuffers"))
 		{
@@ -86,32 +82,34 @@ public class BufferSet implements EBComponent
 		}
 	} //}}}
 
-	//{{{ finalize
-	protected void finalize()
-	{
-		EditBus.removeFromBus(this);
-	} //}}}
-
 	//{{{ handleMessage
-	public void handleMessage(EBMessage msg) {
-		if (msg != null && msg instanceof PropertiesChanged) {
-			if (jEdit.getBooleanProperty("sortBuffers"))
-			{
-				if (jEdit.getBooleanProperty("sortByName"))
-					sorter = nameSorter;
-				else
-					sorter = pathSorter;
-				Collections.sort(buffers, sorter);
-				BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
-				for (BufferSetListener listener : listeners)
-				{
-					listener.bufferAdded(null, -1);
-				}
-			}
+	/**
+	 * This method is called by BufferSetManager to signal that this
+	 * BufferSet needs to react to a change in the sorting properties.
+	 */
+	protected void handleMessage(PropertiesChanged msg) {
+		if (jEdit.getBooleanProperty("sortBuffers"))
+		{
+			// set the appropriate sorter
+			if (jEdit.getBooleanProperty("sortByName"))
+				sorter = nameSorter;
 			else
+				sorter = pathSorter;
+
+			// do the sort
+			Collections.sort(buffers, sorter);
+
+			// notify the listeners so they can repaint themselves
+			BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
+			for (BufferSetListener listener : listeners)
 			{
-				sorter = null;
+				listener.bufferSetSorted();
 			}
+		}
+		else
+		{
+			// user has elected not to sort BufferSets
+			sorter = null;
 		}
 	} //}}}
 
