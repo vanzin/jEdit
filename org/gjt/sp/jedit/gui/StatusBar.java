@@ -122,6 +122,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			Dimension dim = new Dimension(fm.stringWidth(caretTestStr),
 					fm.getHeight());
 			caretStatus.setPreferredSize(dim);
+			updateCaretStatus();
 		}
 		else
 			panel.remove(caretStatus);

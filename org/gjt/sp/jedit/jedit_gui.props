@@ -2011,6 +2011,11 @@ options.status.edit.labelRadioButton=label
 options.status.edit.widgetRadioButton=widget
 options.status.edit.labelLabel=Type a label:
 options.status.edit.widgetLabel=Choose a widget:
+options.status.caret.offset=Show caret offset from start of file
+options.status.caret.linenumber=Show caret line number
+options.status.caret.dot=Show caret offset from start of line
+options.status.caret.virtual=Show caret virtual offset from start of line
+options.status.caret.percent=Show relative position (%) of caret within buffer
 #}}}
 
 #{{{ Syntax Highlighting pane
