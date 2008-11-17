@@ -1,5 +1,38 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3pre17
+
+{{{ Bug Fixes
+
+- Fix for caret position display in status bar (tracker 2220033), relative
+position was not always correct. In conjunction with this, added checkboxes
+in the Status Bar option pane to make the various items in the caret position
+display configurable (tracker 737187) (Dale Anson).
+
+- Fix for files in buffer switcher not ordered (tracker 2183929).  Sorting is
+now immediate on changing the preferences in the option dialog (Dale Anson)
+
+- Fix for View->Show Buffer Switcher does not show the buffer switcher (tracker
+2179149) (Dale Anson) This menu item is intended to show the buffer switcher
+drop down, which isn't necessary if the buffer switcher is not visible.  Now the
+visibility of this menu item is the same as the visibility of the buffer
+switcher.
+
+}}}
+
+{{{ Syntax Highlighting
+
+- Fix for java mode (tracker 737187), method name not always highlighted if
+there were one or more spaces or tabs following the method name (Dale Anson)
+
+- Fix for jsp mode (tracker 846913), syntax highlighting doesn't ignore comments
+and strings, where a single line java comment on the same line as a scriptlet
+terminator improperly highlighted the terminator as a comment (Dale Anson)
+
+}}}
+
+}}}
+
 {{{ Version 4.3pre16
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Dakshinamurthy Karra,
