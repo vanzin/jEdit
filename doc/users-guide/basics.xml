@@ -31,6 +31,11 @@
         lock is shown for read-only buffers, and a spark is shown for new
         buffers which don't yet exist on disk.</para>
 
+        <para>With the new Tango icon theme, these symbols are slightly different,
+        a red square is shown for buffers with unsaved changes, a lock is shown for
+        read-only buffers, and a yellow square is shown for new buffers which don't
+        yet exist on disk.</para>
+
         <para>As with most other graphical applications, there is a tool bar at
         the top of the View which provides quick access to frequently-used
         commands. Also, clicking the TextArea with the right mouse button
