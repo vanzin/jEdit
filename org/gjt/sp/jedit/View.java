@@ -398,7 +398,16 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			// has a wait cursor
 			Cursor cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 			setCursor(cursor);
-			cursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
+
+			// removed next line for bug 1968223, "wrong mouse pointer in view 1".
+			// Calling visit(SetCursorVisitor) sets the cursor on the editPane,
+			// and setting the text cursor on the editPane is incorrect since this
+			// will cause the text cursor to be set on the bufferswitcher, and the
+			// gutter and scrollbars of the text area.  Using the default cursor
+			// is the right thing to do, this will set the proper cursor on the
+			// subcomponents.
+			///cursor = Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR);
+
 			visit(new SetCursorVisitor(cursor));
 		}
 	} //}}}
