@@ -10,9 +10,9 @@
 
 	<!-- jEdit Version -->
 	<property name="jedit.version"
-			  value="4.3pre16" />
+			  value="4.3pre17" />
 	<property name="jedit.build.number"
-			  value="04.03.16.00" />
+			  value="04.03.17.00" />
 
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
