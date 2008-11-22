@@ -380,8 +380,9 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		// set any selections
 		Selection[] selection = caretInfo.selection;
-		if ( selection == null ) {
-			selection = (Selection[])buffer.getProperty(Buffer.SELECTION);
+		if ( selection == null )
+		{
+			selection = (Selection[]) buffer.getProperty(Buffer.SELECTION);
 		}
 		if(selection != null)
 		{
@@ -1031,7 +1032,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		textArea.propertiesChanged();
 
-		if (bufferSwitcher != null) {
+		if (bufferSwitcher != null)
+		{
 			bufferSwitcher.setMaximumRowCount(jEdit.getIntegerProperty(
 				"bufferSwitcher.maxRowCount",10));
 		}

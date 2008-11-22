@@ -66,7 +66,8 @@ public class JEditTextArea extends TextArea
 
 	//{{{ getFoldPainter() method
 	@Override
-	public FoldPainter getFoldPainter() {
+	public FoldPainter getFoldPainter()
+	{
 		FoldPainter foldPainter = (FoldPainter) ServiceManager.getService(
 				FOLD_PAINTER_SERVICE, getFoldPainterName());
 		if (foldPainter == null)
@@ -492,6 +493,7 @@ public class JEditTextArea extends TextArea
 	 * plugin uses this API.
 	 * @since jEdit 4.2pre13
 	 */
+	@Override
 	public void handlePopupTrigger(MouseEvent evt)
 	{
 
@@ -520,6 +522,7 @@ public class JEditTextArea extends TextArea
 	 * Creates the popup menu.
 	 * @since 4.3pre15
 	 */
+	@Override
 	public void createPopupMenu(MouseEvent evt)
 	{
 		popup = GUIUtilities.loadPopupMenu("view.context", this, evt);
@@ -541,12 +544,14 @@ public class JEditTextArea extends TextArea
 	 * Shows the popup menu below the current caret position.
 	 * @since 4.3pre10
 	 */
+	@Override
 	public void showPopupMenu()
 	{
 		if (!popup.isVisible() && hasFocus())
 		{
 			Point caretPos = offsetToXY(getCaretPosition());
-			if (caretPos != null) {
+			if (caretPos != null)
+			{
 				// Open the context menu below the caret
 				int charHeight = getPainter().getFontMetrics().getHeight();
 				GUIUtilities.showPopupMenu(popup,

@@ -290,9 +290,8 @@ public class TextAreaTransferHandler extends TransferHandler
 				
 			}
 			
-			if (found) {
+			if (found)
 				return true;
-			}
 		}
 
 		if(dragSource != null

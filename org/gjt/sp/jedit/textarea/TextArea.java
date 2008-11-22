@@ -5746,7 +5746,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else
 			start = "{{{ ";
 
-		if (startLineComment != null) {
+		if (startLineComment != null)
+		{
 			// add a new line if there's text after the comment
 			// we're inserting
 			if (buffer.getLineLength(lineStart) != caretStart)
@@ -5951,7 +5952,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if (!popup.isVisible() && hasFocus())
 		{
 			Point caretPos = offsetToXY(getCaretPosition());
-			if (caretPos != null) {
+			if (caretPos != null)
+			{
 				// Open the context menu below the caret
 				int charHeight = getPainter().getFontMetrics().getHeight();
 				showPopupMenu(popup,
