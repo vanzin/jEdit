@@ -21,6 +21,9 @@ contributing to this release.
   the visibility of this menu item is the same as the visibility of the buffer
   switcher.
 
+- When having split view, dropping a file on the inactive textArea was opening
+  it to the active textArea (#2321838) (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
@@ -36,6 +39,9 @@ contributing to this release.
 - The keybindings are reloaded when the properties are changed in the standalone
   textarea, and the StandaloneActionSet now takes an url to the actions.xml
   as constructor parameter (patch #2304608) (Dakshinamurthy Karra)
+
+- Added jEdit.openFile(EditPane, ....) methods to explicitely choose an editPane
+  to open a file (Matthieu Casanova)
 }}}
 
 

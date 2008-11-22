@@ -1418,7 +1418,7 @@ public class jEdit
 				continue;
 			}
 
-			lastBuffer = openFile(null,parent,arg,false,null);
+			lastBuffer = openFile((View)null,parent,arg,false,null);
 
 			if(retVal == null && lastBuffer != null)
 				retVal = lastBuffer;
@@ -1466,6 +1466,7 @@ public class jEdit
 	{
 		return openFile(view,parent,path,newFile,props);
 	}
+
 	/**
 	 * Opens a file. This may return null if the buffer could not be
 	 * opened for some reason.
@@ -1485,10 +1486,45 @@ public class jEdit
 	public static Buffer openFile(View view, String parent,
 		String path, boolean newFile, Hashtable props)
 	{
+		return openFile(view.getEditPane(), parent, path, newFile, props);
+	} 
+
+	/**
+	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
+	 * null if the buffer could not be opened.
+	 * @param editPane the EditPane to open the file in.
+	 * @param path The file path
+	 *
+	 * @return the buffer, or null if jEdit was unable to load it
+	 *
+	 * @since jEdit 4.3pre17
+	 */
+	public static Buffer openFile(EditPane editPane, String path)
+	{
+		return openFile(editPane,null,path,false,new Hashtable());
+	}
+
+	/**
+	 * Opens a file. This may return null if the buffer could not be
+	 * opened for some reason.
+	 * @param editPane the EditPane to open the file in.
+	 * @param parent The parent directory of the file
+	 * @param path The path name of the file
+	 * @param newFile True if the file should not be loaded from disk
+	 * be prompted if it should be reloaded
+	 * @param props Buffer-local properties to set in the buffer
+	 *
+	 * @return the buffer, or null if jEdit was unable to load it
+	 *
+	 * @since jEdit 4.3pre17
+	 */
+	public static Buffer openFile(EditPane editPane, String parent,
+		String path, boolean newFile, Hashtable props)
+	{
 		PerspectiveManager.setPerspectiveDirty(true);
 
-		if(view != null && parent == null)
-			parent = view.getBuffer().getDirectory();
+		if(editPane != null && parent == null)
+			parent = editPane.getBuffer().getDirectory();
 
 		try
 		{
@@ -1510,13 +1546,14 @@ public class jEdit
 
 		synchronized (editBusOrderingLock)
 		{
+			View view = editPane == null ? null : editPane.getView();
 			synchronized(bufferListLock)
 			{
 				Buffer buffer = getBuffer(path);
 				if(buffer != null)
 				{
-					if(view != null)
-						view.setBuffer(buffer,true);
+					if(editPane != null)
+						editPane.setBuffer(buffer,true);
 
 					return buffer;
 				}
@@ -1526,8 +1563,8 @@ public class jEdit
 				if(!newBuffer.load(view,false))
 					return null;
 				addBufferToList(newBuffer);
-				if (view != null)
-					bufferSetManager.addBuffer(view, newBuffer);
+				if (editPane != null)
+					bufferSetManager.addBuffer(editPane.getBufferSet(), newBuffer);
 				else
 					bufferSetManager.addBuffer(jEdit.getActiveView(), newBuffer);
 			}
@@ -1535,8 +1572,8 @@ public class jEdit
 			EditBus.send(new BufferUpdate(newBuffer,view,BufferUpdate.CREATED));
 		}
 
-		if(view != null)
-			view.setBuffer(newBuffer,true);
+		if(editPane != null)
+			editPane.setBuffer(newBuffer,true);
 
 		return newBuffer;
 	} //}}}

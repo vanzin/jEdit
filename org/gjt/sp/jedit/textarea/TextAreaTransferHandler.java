@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.io.FileVFS;
@@ -475,7 +476,19 @@ public class TextAreaTransferHandler extends TransferHandler
 		}
 		public void run()
 		{
-			jEdit.openFile(textArea.getView(),url);
+			EditPane editPane = null;
+			// this search is necessary because we want to open the file to the textarea where the
+			// file was dropped, not to the first textArea of the view
+			EditPane[] editPanes = textArea.getView().getEditPanes();
+			for (EditPane pane : editPanes)
+			{
+				if (pane.getTextArea() == textArea)
+				{
+					editPane = pane;
+					break;
+				}
+			}
+			jEdit.openFile(editPane,url);
 		}
 	} //}}}
 

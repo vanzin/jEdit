@@ -491,7 +491,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			return;
 		}
 
-		Buffer buffer = jEdit.openFile(null,settings + File.separator
+		Buffer buffer = jEdit.openFile((View)null,settings + File.separator
 			+ "macros","Temporary_Macro.bsh",true,null);
 
 		if(buffer == null)
@@ -531,7 +531,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 
 		name = name.replace(' ','_');
 
-		Buffer buffer = jEdit.openFile(null,null,
+		Buffer buffer = jEdit.openFile((View) null,null,
 			MiscUtilities.constructPath(settings,"macros",
 			name + ".bsh"),true,null);
 
