@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import javax.swing.AbstractAction;
@@ -122,7 +123,7 @@ public class StandaloneTextArea extends TextArea
 		// todo : make TextareaTransferHandler standalone
 //		textArea.setTransferHandler(new TextAreaTransferHandler());
 
-		JEditActionSet<JEditBeanShellAction> actionSet = new StandaloneActionSet(propertyManager, this);
+		JEditActionSet<JEditBeanShellAction> actionSet = new StandaloneActionSet(propertyManager, this, TextArea.class.getResource("textarea.actions.xml"));
 
 		addActionSet(actionSet);
 		actionSet.load();
@@ -488,6 +489,12 @@ public class StandaloneTextArea extends TextArea
 	@Override
 	public void propertiesChanged()
 	{
+		getInputHandler().removeAllKeyBindings();
+		JEditActionSet<JEditBeanShellAction>[] actionSets = getActionContext().getActionSets();
+		for (JEditActionSet<JEditBeanShellAction> actionSet : actionSets)
+		{
+			actionSet.initKeyBindings();
+		}
 		initBuffer();
 		initTextArea();
 		super.propertiesChanged();
@@ -614,14 +621,14 @@ public class StandaloneTextArea extends TextArea
 	 * The actionSet for standalone textArea.
 	 * @author Matthieu Casanova
 	 */
-	private static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
+	protected static class StandaloneActionSet extends JEditActionSet<JEditBeanShellAction>
 	{
 		private final IPropertyManager iPropertyManager;
 		private final TextArea textArea;
 
-		StandaloneActionSet(IPropertyManager iPropertyManager, TextArea textArea)
+		public StandaloneActionSet(IPropertyManager iPropertyManager, TextArea textArea, URL url)
 		{
-			super(null, TextArea.class.getResource("textarea.actions.xml"));
+			super(null, url);
 			this.iPropertyManager = iPropertyManager;
 			this.textArea = textArea;
 		}

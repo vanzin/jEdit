@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre17
 
-Thanks to Björn "Vampire" Kautler and Dale Anson for contributing to this
-release.
+Thanks to Björn "Vampire" Kautler, Dakshinamurthy Karra and Dale Anson for
+contributing to this release.
 
 {{{ Bug Fixes
 
@@ -32,9 +32,15 @@ release.
   terminator improperly highlighted the terminator as a comment (Dale Anson)
 
 }}}
+{{{ API Changes
+- The keybindings are reloaded when the properties are changed in the standalone
+  textarea, and the StandaloneActionSet now takes an url to the actions.xml
+  as constructor parameter (patch #2304608) (Dakshinamurthy Karra)
+}}}
+
 
 }}}
- 
+
 {{{ Version 4.3pre16
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Dakshinamurthy Karra,
