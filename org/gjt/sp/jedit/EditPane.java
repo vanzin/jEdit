@@ -722,16 +722,13 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			}
 			if (buffer != null)
 				bufferSetManager.addBuffer(bufferSet, buffer);
-			if (bufferSet.size() == 0)
-			{
-				int untitledCount = jEdit.getNextUntitledBufferId();
-				Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
-									    "Untitled-" + untitledCount,true, null);
-				jEdit.commitTemporary(newEmptyBuffer);
-				bufferSetManager.addBuffer(bufferSet, newEmptyBuffer);
-			}
 
 			this.bufferSet = bufferSet;
+			if (bufferSet.size() == 0)
+			{
+				jEdit.newFile(this);
+			}
+
 			bufferSet.addBufferSetListener(this);
 			if (bufferSwitcher != null)
 			{

@@ -42,6 +42,9 @@ contributing to this release.
 
 - Added jEdit.openFile(EditPane, ....) methods to explicitely choose an editPane
   to open a file (Matthieu Casanova)
+
+- Added jEdit.newFile(EditPane, ...) methods to explicitely choose an EditPane
+  to create a new file (Matthieu Casanova)
 }}}
 
 

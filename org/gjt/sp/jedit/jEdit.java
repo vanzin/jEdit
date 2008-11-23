@@ -1523,7 +1523,7 @@ public class jEdit
 	{
 		PerspectiveManager.setPerspectiveDirty(true);
 
-		if(editPane != null && parent == null)
+		if(editPane != null && parent == null && editPane.getBuffer() != null)
 			parent = editPane.getBuffer().getDirectory();
 
 		try
@@ -1669,7 +1669,7 @@ public class jEdit
 		EditBus.send(new BufferUpdate(buffer,null,BufferUpdate.LOADED));
 	} //}}}
 
-	//{{{ newFile() method
+	//{{{ newFile() methods
 	/**
 	 * Creates a new `untitled' file.
 	 *
@@ -1679,24 +1679,9 @@ public class jEdit
 	 */
 	public static Buffer newFile(View view)
 	{
-		String path;
+		return newFile(view == null ? null : view.getEditPane());
+	}
 
-		if(view != null && view.getBuffer() != null)
-		{
-			path = view.getBuffer().getDirectory();
-			VFS vfs = VFSManager.getVFSForPath(path);
-			// don't want 'New File' to create a read only buffer
-			// if current file is on SQL VFS or something
-			if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
-				path = System.getProperty("user.home");
-		}
-		else
-			path = null;
-
-		return newFile(view,path);
-	} //}}}
-
-	//{{{ newFile() method
 	/**
 	 * Creates a new `untitled' file.
 	 * @param view The view to create the file in
@@ -1721,7 +1706,48 @@ public class jEdit
 				editPane = v.getEditPane();
 			}
 		}
+		return newFile(editPane, dir);
+	}
 
+	/**
+	 * Creates a new `untitled' file.
+	 *
+	 * @param editPane The editPane to create the file in
+	 *
+	 * @return the new buffer
+	 * @since jEdit 4.3pre17
+	 */
+	public static Buffer newFile(EditPane editPane)
+	{
+		String path;
+
+		if(editPane != null && editPane.getBuffer() != null)
+		{
+			path = editPane.getBuffer().getDirectory();
+			VFS vfs = VFSManager.getVFSForPath(path);
+			// don't want 'New File' to create a read only buffer
+			// if current file is on SQL VFS or something
+			if((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
+				path = System.getProperty("user.home");
+		}
+		else
+			path = null;
+
+		return newFile(editPane,path);
+	}
+
+	/**
+	 * Creates a new `untitled' file.
+	 * 
+	 * @param editPane The editPane to create the file in
+	 * @param dir The directory to create the file in
+	 *
+	 * @return the new buffer
+	 *
+	 * @since jEdit 4.3pre17
+	 */
+	public static Buffer newFile(EditPane editPane, String dir)
+	{
 		if (editPane != null)
 		{
 			BufferSet bufferSet = editPane.getBufferSet();
@@ -1739,7 +1765,7 @@ public class jEdit
 		// Find the highest Untitled-n file
 		int untitledCount = getNextUntitledBufferId();
 
-		return openFile(view,dir,"Untitled-" + untitledCount,true,null);
+		return openFile(editPane,dir,"Untitled-" + untitledCount,true,null);
 	} //}}}
 
 	//}}}

@@ -205,7 +205,7 @@ public class EditServer extends Thread
 			Buffer buffer = jEdit.openFiles(null,parent,args);
 
 			if(jEdit.getBufferCount() == 0)
-				jEdit.newFile(null);
+				jEdit.newFile((EditPane) null);
 
 			boolean restoreFiles = restore
 				&& jEdit.getBooleanProperty("restore")
