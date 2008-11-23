@@ -1486,7 +1486,7 @@ public class jEdit
 	public static Buffer openFile(View view, String parent,
 		String path, boolean newFile, Hashtable props)
 	{
-		return openFile(view.getEditPane(), parent, path, newFile, props);
+		return openFile(view == null ? null : view.getEditPane(), parent, path, newFile, props);
 	} 
 
 	/**
