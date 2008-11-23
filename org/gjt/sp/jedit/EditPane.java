@@ -836,14 +836,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	 */
 	public void bufferCleared()
 	{
-		int untitledCount = jEdit.getNextUntitledBufferId();
-		Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
-									    "Untitled-" + untitledCount,true, null);
-		jEdit.commitTemporary(newEmptyBuffer);
-		jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
-		setBuffer(newEmptyBuffer);
-//		if (bufferSwitcher != null)
-//			bufferSwitcher.updateBufferList();
+		jEdit.newFile(this);
 	} //}}}
 
 	//{{{ bufferSetSorted() method
