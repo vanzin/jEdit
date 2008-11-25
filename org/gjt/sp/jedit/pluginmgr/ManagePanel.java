@@ -149,7 +149,7 @@ public class ManagePanel extends JPanel
 		scrollpane.getViewport().setBackground(table.getBackground());
 		pluginDetailPanel = new PluginDetailPanel();
 		scrollpane.setPreferredSize(new Dimension(400,400));
-		final JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
+		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 			true, scrollpane, pluginDetailPanel);
 		add(BorderLayout.CENTER, split);
 		split.setResizeWeight(0.75);
@@ -210,10 +210,10 @@ public class ManagePanel extends JPanel
 	boolean loadPluginSet(String path) 
 	{
 		VFS vfs = VFSManager.getVFSForPath(path);
-		Object session = vfs.createVFSSession(path, ManagePanel.this);
+		Object session = vfs.createVFSSession(path, this);
 		try
 		{
-			InputStream is = vfs._createInputStream(session, path, false, ManagePanel.this);
+			InputStream is = vfs._createInputStream(session, path, false, this);
 			XMLUtilities.parseXML(is, new ManagePanelRestoreHandler());
 			is.close();
 			int rowCount = pluginModel.getRowCount();
@@ -291,7 +291,7 @@ public class ManagePanel extends JPanel
 	//{{{ Inner classes
 
 	//{{{ KeyboardCommand enum
-	public enum KeyboardCommand
+	private enum KeyboardCommand
 	{
 		NONE,
 		TAB_OUT_FORWARD,
@@ -828,17 +828,20 @@ public class ManagePanel extends JPanel
 			
 			VFS vfs = VFSManager.getVFSForPath(vfsURL);
 			Object session = vfs.createVFSSession(vfsURL, ManagePanel.this);
+			OutputStream os = null;
 			try
 			{
-				OutputStream os = vfs._createOutputStream(session, vfsURL, ManagePanel.this);
+				os = vfs._createOutputStream(session, vfsURL, ManagePanel.this);
 				OutputStreamWriter writer = new OutputStreamWriter(os);
 				writer.write(sb.toString());
-				writer.close();
-				os.close();
 			}
 			catch (Exception e)
 			{
 				Log.log(Log.ERROR, this, "Saving State Error", e);
+			}
+			finally
+			{
+				IOUtilities.closeQuietly(os);
 			}
 			
 		}
@@ -1208,8 +1211,9 @@ public class ManagePanel extends JPanel
 				if (GUIUtilities.isPopupTrigger(evt))
 				{
 					int row = table.rowAtPoint(evt.getPoint());
-					if ((-1 != row) &&
-					    (!table.isRowSelected(row))) {
+					if (row != -1 &&
+					    !table.isRowSelected(row))
+					{
 						table.setRowSelectionInterval(row,row);
 					}
 					if (popup == null)
@@ -1307,13 +1311,13 @@ public class ManagePanel extends JPanel
 		@Override
 		public void focusGained(FocusEvent fe)
 		{
-			if (-1 == table.getSelectedRow())
+			if (table.getSelectedRow() == -1)
 			{
 				table.setRowSelectionInterval(0,0);
 				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
 				scrollbar.setValue(scrollbar.getMinimum());
 			}
-			if (-1 == table.getSelectedColumn())
+			if (table.getSelectedColumn() == -1)
 			{
 				table.setColumnSelectionInterval(0,0);
 			}
