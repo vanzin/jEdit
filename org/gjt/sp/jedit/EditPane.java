@@ -25,6 +25,7 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -56,6 +57,7 @@ import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.TextAreaExtension;
 import org.gjt.sp.jedit.textarea.TextAreaPainter;
 import org.gjt.sp.jedit.textarea.TextAreaTransferHandler;
+import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 
 //}}}
@@ -100,6 +102,23 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		return view;
 	} //}}}
+
+	// {{{ get(TextArea) method 
+	/** @return the EditPane containing the TextArea.
+	 */
+	public static EditPane get(TextArea ta)
+	{
+		if (ta == null) return null;
+		Container c = ta.getParent();
+		while (c != null) 
+		{
+			if (c instanceof EditPane) 
+				return ((EditPane)c);
+			c = c.getParent();
+		}
+		Log.log(Log.ERROR, ta, "EditPane.get(): no EditPane in TextArea parent list?");
+		return null;
+	} // }}}
 
 	//{{{ getBuffer() method
 	/**
@@ -873,7 +892,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 
 		textArea = new JEditTextArea(view);
-		paneMap.put(textArea, this);
 		textArea.getPainter().setAntiAlias(new AntiAlias(jEdit.getProperty("view.antiAlias")));
 		textArea.setMouseHandler(new MouseHandler(textArea));
 		textArea.setTransferHandler(new TextAreaTransferHandler());
@@ -902,17 +920,12 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ close() method
 	void close()
 	{
-		paneMap.remove(textArea);
 		saveCaretInfo();
 		EditBus.send(new EditPaneUpdate(this,EditPaneUpdate.DESTROYED));
 		EditBus.removeFromBus(this);
 		textArea.dispose();
 	} //}}}
 
-	public static EditPane get(TextArea ta)
-	{
-		return paneMap.get(ta);
-	}
 
 	//}}}
 
@@ -922,7 +935,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	private boolean init;
 	/** The View where the edit pane is. */
 	private final View view;
-	private static final Map<TextArea, EditPane> paneMap = new HashMap<TextArea, EditPane>();
 	private BufferSet bufferSet;
 	/** The current buffer. */
 	private Buffer buffer;

@@ -33,6 +33,8 @@ contributing to this release.
 - Fix for jsp mode (tracker 846913), syntax highlighting doesn't ignore comments
   and strings, where a single line java comment on the same line as a scriptlet
   terminator improperly highlighted the terminator as a comment (Dale Anson)
+  
+- Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear search through parent container linked list. (Alan Ezust)
 
 }}}
 {{{ API Changes

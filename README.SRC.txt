@@ -169,14 +169,17 @@ General jEdit documentation can be found in the 'doc' directory.
 
 
 
-* Tips for Eclipse users:
+* Tips for Eclipse/NetBeans/IDE users:
 
 Some of the source directories are only needed for building packages on
 certain platforms. If you add jEdit source to an IDE like Eclipse that tries
 to build everything, you'll get some errors from these directories unless
 you have the right libraries. However, if you tell Eclipse to exclude these
-directories, you can still build jEdit from source. Follow these steps:
+directories, you can still build and run/debug jEdit from source.
+Follow these steps:
 
  - Project properties - Java build path 
  - Source - Excluded dirs - Edit - Add multiple
  - Add these subdirs: jars, net, de, build
+ 
+
