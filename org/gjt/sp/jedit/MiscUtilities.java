@@ -46,7 +46,7 @@ import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
 
 import org.gjt.sp.util.XMLUtilities;
-import org.gjt.sp.jedit.menu.EnhancedMenuItem;
+import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 //}}}
 
 /**
@@ -1431,22 +1431,16 @@ loop:		for(;;)
 	//{{{ MenuItemCompare class
 	/**
 	 * Compares menu item labels.
+	 * @deprecated Replaced with {@link org.gjt.sp.menu.compare.MenuItemTextComparator}
 	 */
 	@Deprecated
 	public static class MenuItemCompare implements Compare
 	{
+		private MenuItemTextComparator comparator = new MenuItemTextComparator();
+		
 		public int compare(Object obj1, Object obj2)
 		{
-			boolean obj1E, obj2E;
-			obj1E = obj1 instanceof EnhancedMenuItem;
-			obj2E = obj2 instanceof EnhancedMenuItem;
-			if(obj1E && !obj2E)
-				return 1;
-			else if(obj2E && !obj1E)
-				return -1;
-			else
-				return StandardUtilities.compareStrings(((JMenuItem)obj1).getText(),
-					((JMenuItem)obj2).getText(),true);
+			return comparator.compare((JMenuItem)obj1, (JMenuItem)obj2);
 		}
 	} //}}}
 

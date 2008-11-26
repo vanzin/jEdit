@@ -30,6 +30,7 @@ import javax.swing.*;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 //}}}
 
 /**
@@ -242,7 +243,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 		}
 
 		Collections.sort(encodingMenuItemList,
-			new MiscUtilities.MenuItemCompare());
+			new MenuItemTextComparator());
 
 		Iterator iter = encodingMenuItemList.iterator();
 		while(iter.hasNext())

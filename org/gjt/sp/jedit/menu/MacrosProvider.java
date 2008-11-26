@@ -80,7 +80,7 @@ public class MacrosProvider implements DynamicMenuProvider
 			}
 		}
 
-		Collections.sort(menuItems,new MiscUtilities.MenuItemCompare());
+		Collections.sort(menuItems, new MenuItemTextComparator());
 		for(int i = 0; i < menuItems.size(); i++)
 		{
 			menu.add((JMenuItem)menuItems.get(i));

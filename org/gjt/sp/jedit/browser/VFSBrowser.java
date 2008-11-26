@@ -40,6 +40,7 @@ import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 //}}}
 
 /**
@@ -951,7 +952,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 
 		if (!vec.isEmpty())
 		{
-			Collections.sort(vec,new MiscUtilities.MenuItemCompare());
+			Collections.sort(vec,new MenuItemTextComparator());
 			for(int i = 0; i < vec.size(); i++)
 				pluginMenu.add(vec.get(i));
 		}

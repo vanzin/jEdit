@@ -164,7 +164,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 
 		if(sort)
 		{
-			Collections.sort(menuItems, new MiscUtilities.MenuItemCompare());
+			Collections.sort(menuItems, new MenuItemTextComparator());
 			for(int i = 0; i < menuItems.size(); i++)
 			{
 				if(menu.getMenuComponentCount() >= maxItems

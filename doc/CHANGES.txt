@@ -38,6 +38,7 @@ contributing to this release.
 
 }}}
 {{{ API Changes
+
 - The keybindings are reloaded when the properties are changed in the standalone
   textarea, and the StandaloneActionSet now takes an url to the actions.xml
   as constructor parameter (patch #2304608) (Dakshinamurthy Karra)
@@ -47,6 +48,11 @@ contributing to this release.
 
 - Added jEdit.newFile(EditPane, ...) methods to explicitely choose an EditPane
   to create a new file (Matthieu Casanova)
+
+- Added org.gjt.sp.jedit.menu.MenuItemTextComparator as the preferred
+  alternative for deprecated MiscUtilities.MenuItemCompare.
+  (Eric Berry - SF.net patch #2308329)
+
 }}}
 
 

@@ -105,8 +105,7 @@ public class PluginsProvider implements DynamicMenuProvider
 		for(int i = 0; i < letters.length; i++)
 		{
 			List list = letters[i];
-			Collections.sort(list,new MiscUtilities
-				.MenuItemCompare());
+			Collections.sort(list,new MenuItemTextComparator());
 		}
 
 		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
