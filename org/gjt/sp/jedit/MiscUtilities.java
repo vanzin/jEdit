@@ -1431,7 +1431,7 @@ loop:		for(;;)
 	//{{{ MenuItemCompare class
 	/**
 	 * Compares menu item labels.
-	 * @deprecated Replaced with {@link org.gjt.sp.menu.compare.MenuItemTextComparator}
+	 * @deprecated Replaced with {@link org.gjt.sp.jedit.menu.MenuItemTextComparator}
 	 */
 	@Deprecated
 	public static class MenuItemCompare implements Compare
