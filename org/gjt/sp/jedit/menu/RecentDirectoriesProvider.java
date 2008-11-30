@@ -87,7 +87,7 @@ public class RecentDirectoriesProvider implements DynamicMenuProvider
 
 		int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
 
-		Vector menuItems = new Vector();
+		Vector<JMenuItem> menuItems = new Vector<JMenuItem>();
 
 		for(int i = 0; i < model.getSize(); i++)
 		{
@@ -130,7 +130,7 @@ public class RecentDirectoriesProvider implements DynamicMenuProvider
 					menu = newMenu;
 				}
 
-				menu.add((JMenuItem)menuItems.elementAt(i));
+				menu.add(menuItems.elementAt(i));
 			}
 		}
 	} //}}}

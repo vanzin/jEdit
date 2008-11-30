@@ -58,7 +58,7 @@ public class MacrosProvider implements DynamicMenuProvider
 	//{{{ createMacrosMenu() method
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
-		Vector menuItems = new Vector();
+		Vector<JMenuItem> menuItems = new Vector<JMenuItem>();
 
 		for(int i = start; i < vector.size(); i++)
 		{
@@ -83,7 +83,7 @@ public class MacrosProvider implements DynamicMenuProvider
 		Collections.sort(menuItems, new MenuItemTextComparator());
 		for(int i = 0; i < menuItems.size(); i++)
 		{
-			menu.add((JMenuItem)menuItems.get(i));
+			menu.add(menuItems.get(i));
 		}
 	} //}}}
 }

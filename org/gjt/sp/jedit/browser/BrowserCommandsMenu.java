@@ -164,8 +164,8 @@ public class BrowserCommandsMenu extends JPopupMenu
 	{
 		if(encodingMenuItems != null)
 		{
-			JRadioButtonMenuItem mi = (JRadioButtonMenuItem)
-				encodingMenuItems.get(browser.currentEncoding);
+			JRadioButtonMenuItem mi = encodingMenuItems.get(
+				browser.currentEncoding);
 			if(mi != null)
 			{
 				mi.setSelected(true);
@@ -184,7 +184,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 	//{{{ Private members
 	private VFSBrowser browser;
-	private HashMap encodingMenuItems;
+	private HashMap<String, JRadioButtonMenuItem> encodingMenuItems;
 	private JCheckBoxMenuItem autoDetect;
 	private JRadioButtonMenuItem otherEncoding;
 
@@ -200,7 +200,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 	{
 		ActionHandler actionHandler = new ActionHandler();
 
-		encodingMenuItems = new HashMap();
+		encodingMenuItems = new HashMap<String, JRadioButtonMenuItem>();
 		JMenu encodingMenu = new JMenu(jEdit.getProperty(
 			"vfs.browser.commands.encoding.label"));
 
@@ -217,7 +217,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 		ButtonGroup grp = new ButtonGroup();
 
-		List encodingMenuItemList = new ArrayList();
+		List<JMenuItem> encodingMenuItemList = new ArrayList<JMenuItem>();
 		String[] encodings = MiscUtilities.getEncodings(true);
 		for(int i = 0; i < encodings.length; i++)
 		{
