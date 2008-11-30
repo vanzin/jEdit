@@ -375,7 +375,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				{
 					buf.append("Top");
 				}
-				else if (currLine == textArea.getLastPhysicalLine())
+				else if (firstLine + visible >= lineCount)
 				{
 					buf.append("Bot");
 				}
