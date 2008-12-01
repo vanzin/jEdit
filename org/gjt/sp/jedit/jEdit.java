@@ -3299,7 +3299,7 @@ public class jEdit
 			return;
 
 		Arrays.sort(snippets,
-			new StandardUtilities.StringCompare(true));
+			new StandardUtilities.StringCompare<String>(true));
 
 		for (int i = 0; i < snippets.length; ++i)
 		{
@@ -3571,7 +3571,7 @@ public class jEdit
 			return;
 
 		Arrays.sort(snippets,
-			new StandardUtilities.StringCompare(true));
+			new StandardUtilities.StringCompare<File>(true));
 
 		/*
 		 * Force the default encoding to UTF-8 temporarily.

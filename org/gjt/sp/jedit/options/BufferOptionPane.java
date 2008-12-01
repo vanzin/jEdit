@@ -96,7 +96,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		//{{{ Encoding
 		String[] encodings = MiscUtilities.getEncodings(true);
-		Arrays.sort(encodings,new StandardUtilities.StringCompare(true));
+		Arrays.sort(encodings,new StandardUtilities.StringCompare<String>(true));
 		encoding = new JComboBox(encodings);
 		encoding.setEditable(true);
 		encoding.setSelectedItem(buffer.getStringProperty(JEditBuffer.ENCODING));
@@ -145,7 +145,7 @@ public class BufferOptionPane extends AbstractOptionPane
 
 		//{{{ Edit mode
 		modes = jEdit.getModes();
-		Arrays.sort(modes,new StandardUtilities.StringCompare(true));
+		Arrays.sort(modes,new StandardUtilities.StringCompare<Mode>(true));
 		mode = new JComboBox(modes);
 		mode.setSelectedItem(buffer.getMode());
 		ActionHandler actionListener = new ActionHandler();

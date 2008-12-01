@@ -626,7 +626,7 @@ public class ManagePanel extends JPanel
 				PluginJAR.transitiveClosure(dependents, closureSet);
 				List<String> listModel = new ArrayList<String>();
 				listModel.addAll(closureSet);
-				Collections.sort(listModel, new StandardUtilities.StringCompare(true));
+				Collections.sort(listModel, new StandardUtilities.StringCompare<String>(true));
 
 				int button = GUIUtilities.listConfirm(window,"plugin-manager.dependency",
 					new String[] { jar.getFile().getName() }, listModel.toArray());
@@ -944,7 +944,7 @@ public class ManagePanel extends JPanel
 				{
 					button = GUIUtilities.listConfirm(window,"plugin-manager.remove-dependencies",
 						null, closureSet.toArray());
-					Collections.sort(closureSet, new StandardUtilities.StringCompare(true));
+					Collections.sort(closureSet, new StandardUtilities.StringCompare<String>(true));
 				}
 				if(button == JOptionPane.YES_OPTION)
 				{

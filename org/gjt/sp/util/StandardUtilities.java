@@ -434,7 +434,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	/**
 	 * Compares objects as strings.
 	 */
-	public static class StringCompare implements Comparator
+	public static class StringCompare<E> implements Comparator<E>
 	{
 		private boolean icase;
 
@@ -447,7 +447,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		{
 		}
 
-		public int compare(Object obj1, Object obj2)
+		public int compare(E obj1, E obj2)
 		{
 			return compareStrings(obj1.toString(),
 				obj2.toString(),icase);

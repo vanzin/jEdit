@@ -358,7 +358,7 @@ public class ServiceManager
 		public String[] getFoldModes()
 		{
 			String[] handlers = getServiceNames(SERVICE);
-			Arrays.sort(handlers,new StandardUtilities.StringCompare());
+			Arrays.sort(handlers,new StandardUtilities.StringCompare<String>());
 			return handlers;
 		}
 	}

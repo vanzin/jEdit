@@ -719,7 +719,7 @@ public abstract class VFS
 
 		String[] retVal = files.toArray(new String[files.size()]);
 
-		Arrays.sort(retVal,new StandardUtilities.StringCompare(true));
+		Arrays.sort(retVal,new StandardUtilities.StringCompare<String>(true));
 
 		return retVal;
 	} //}}}

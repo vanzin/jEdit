@@ -157,7 +157,7 @@ public abstract class JEditActionContext<F extends JEditAbstractEditAction, E ex
 
 			actionNames = vec.toArray(new String[vec.size()]);
 			Arrays.sort(actionNames,
-				new StandardUtilities.StringCompare(true));
+				new StandardUtilities.StringCompare<String>(true));
 		}
 
 		return actionNames;

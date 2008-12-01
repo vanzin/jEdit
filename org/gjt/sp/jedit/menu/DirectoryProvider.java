@@ -122,7 +122,7 @@ public class DirectoryProvider implements DynamicMenuProvider
 			int maxItems = jEdit.getIntegerProperty("menu.spillover",20);
 
 			Arrays.sort(list,
-				new StandardUtilities.StringCompare(true));
+				new StandardUtilities.StringCompare<File>(true));
 			for(int i = 0; i < list.length; i++)
 			{
 				File file = list[i];
@@ -172,6 +172,6 @@ public class DirectoryProvider implements DynamicMenuProvider
 	} //}}}
 
 	//{{{ Private members
-	private String dir;
+	private final String dir;
 	//}}}
 }

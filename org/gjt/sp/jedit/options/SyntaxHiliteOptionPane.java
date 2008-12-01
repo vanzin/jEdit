@@ -138,7 +138,7 @@ public class SyntaxHiliteOptionPane extends AbstractOptionPane
 //{{{ StyleTableModel class
 class StyleTableModel extends AbstractTableModel
 {
-	private java.util.List<StyleChoice> styleChoices;
+	private final java.util.List<StyleChoice> styleChoices;
 
 	//{{{ StyleTableModel constructor
 	StyleTableModel()
@@ -160,7 +160,7 @@ class StyleTableModel extends AbstractTableModel
 		addStyleChoice(jEdit.getProperty("options.syntax.foldLine.0"),
 			"view.style.foldLine.0");
 
-		Collections.sort(styleChoices,new StandardUtilities.StringCompare(true));
+		Collections.sort(styleChoices,new StandardUtilities.StringCompare<StyleChoice>(true));
 	} //}}}
 
 	//{{{ getColumnCount() method
@@ -283,7 +283,7 @@ class StyleTableModel extends AbstractTableModel
 			{
 				SyntaxStyle style = (SyntaxStyle)value;
 				setForeground(style.getForegroundColor());
-				if (style.getBackgroundColor() != null) 
+				if (style.getBackgroundColor() != null)
 					setBackground(style.getBackgroundColor());
 				else
 				{

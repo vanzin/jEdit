@@ -198,7 +198,7 @@ public class CompleteWord extends CompletionPopup
 	{
 		// build a list of unique words in all visible buffers
 		final Set<Completion> completions = new TreeSet<Completion>(new StandardUtilities
-			.StringCompare());
+			.StringCompare<Completion>());
 		final Set<Buffer> buffers = new HashSet<Buffer>();
 
 		// only complete current buffer's keyword map

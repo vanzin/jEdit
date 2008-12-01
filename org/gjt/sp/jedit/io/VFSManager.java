@@ -427,7 +427,7 @@ public class VFSManager
 				// before any updates for the children. sorting
 				// the list alphanumerically guarantees this.
 				Collections.sort(vfsUpdates,
-					new StandardUtilities.StringCompare()
+					new StandardUtilities.StringCompare<VFSUpdate>()
 				);
 				for(int i = 0; i < vfsUpdates.size(); i++)
 				{

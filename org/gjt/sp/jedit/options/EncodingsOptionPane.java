@@ -86,7 +86,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 	{
 		// Default file encoding
 		String[] encodings = getEncodings(true);
-		sort(encodings,new StandardUtilities.StringCompare(true));
+		sort(encodings,new StandardUtilities.StringCompare<String>(true));
 		defaultEncoding = new JComboBox(encodings);
 		defaultEncoding.setEditable(true);
 		defaultEncoding.setSelectedItem(jEdit.getProperty("buffer."+JEditBuffer.ENCODING,
@@ -114,7 +114,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 
 		// Encodings to display
 		encodings = getEncodings(false);
-		sort(encodings,new StandardUtilities.StringCompare(true));
+		sort(encodings,new StandardUtilities.StringCompare<String>(true));
 		Vector<Entry> encodingEntriesVector = new Vector<Entry>();
 		boolean enableSelectAll = false;
 		boolean enableSelectNone = false;
@@ -207,7 +207,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		public void tableChanged(TableModelEvent tme)
 		{
 			int checkedAmount = encodingsList.getCheckedValues().length;
-			if (0 == checkedAmount)
+			if (checkedAmount == 0)
 			{
 				selectNoneButton.setEnabled(false);
 			}

@@ -23,6 +23,7 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.gui.FilteredTableModel;
 import org.gjt.sp.jedit.gui.GrabKeyDialog;
@@ -43,6 +44,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
+//}}}
 
 /**
  * Key binding editor.
@@ -51,12 +53,13 @@ import java.util.Vector;
  */
 public class ShortcutsOptionPane extends AbstractOptionPane
 {
+	//{{{ ShortcutsOptionPane constructor
 	public ShortcutsOptionPane()
 	{
 		super("shortcuts");
-	}
+	} //}}}
 
-	// protected members
+	//{{{ _init() method
 	@Override
 	protected void _init()
 	{
@@ -115,20 +118,16 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		JPanel tableFilterPanel = new JPanel(new BorderLayout());
 		tableFilterPanel.add(BorderLayout.NORTH,filterPanel);
 		tableFilterPanel.add(BorderLayout.CENTER,scroller);
-		
+
 		add(BorderLayout.NORTH,north);
 		add(BorderLayout.CENTER,tableFilterPanel);
 		try {
 			selectModel.setSelectedIndex(jEdit.getIntegerProperty("options.shortcuts.select.index", 0));
 		}
 		catch (IllegalArgumentException eae) {}
-	}
+	} //}}}
 
-	private void setFilter()
-	{
-		filteredModel.setFilter(filterTF.getText());
-	}
-
+	//{{{ _save() method
 	@Override
 	protected void _save()
 	{
@@ -139,8 +138,23 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			model.save();
 
 		Macros.loadMacros();
-	}
+	} //}}}
 
+	//{{{ Private members
+	private JTable keyTable;
+	private Vector<ShortcutsModel> models;
+	private FilteredTableModel<ShortcutsModel> filteredModel;
+	private JComboBox selectModel;
+	private List<KeyBinding> allBindings;
+	private JTextField filterTF;
+
+	//{{{ setFilter() method
+	private void setFilter()
+	{
+		filteredModel.setFilter(filterTF.getText());
+	} //}}}
+
+	//{{{ initModels() method
 	private void initModels()
 	{
 		List<KeyBinding[]> allBindings = new Vector<KeyBinding[]>();
@@ -158,14 +172,14 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 						+ actionSet.getPluginJAR());
 				}
 				ShortcutsModel model = createModel(modelLabel,
-						actionSet.getActionNames()); 
+						actionSet.getActionNames());
 				models.addElement(model);
 				allBindings.addAll(model.getBindings());
 			}
 		}
 		if (models.size() > 1)
 			models.addElement(new ShortcutsModel("All", allBindings));
-		Collections.sort(models,new StandardUtilities.StringCompare(true));
+		Collections.sort(models,new StandardUtilities.StringCompare<ShortcutsModel>(true));
 		ShortcutsModel currentModel = models.elementAt(0);
 		filteredModel = new FilteredTableModel<ShortcutsModel>(currentModel)
 		{
@@ -182,8 +196,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				return name.contains(filter);
 			}
 		};
-	}
+	} //}}}
 
+	//{{{ createModel() method
 	private ShortcutsModel createModel(String modelLabel, String[] actions)
 	{
 		List<GrabKeyDialog.KeyBinding[]> bindings = new Vector<GrabKeyDialog.KeyBinding[]>(actions.length);
@@ -202,8 +217,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		}
 
 		return new ShortcutsModel(modelLabel,bindings);
-	}
+	} //}}}
 
+	//{{{ addBindings() method
 	private void addBindings(String name, String label, List<GrabKeyDialog.KeyBinding[]> bindings)
 	{
 		GrabKeyDialog.KeyBinding[] b = new GrabKeyDialog.KeyBinding[2];
@@ -214,8 +230,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			jEdit.getProperty(name + ".shortcut2"));
 
 		bindings.add(b);
-	}
+	} //}}}
 
+	//{{{ createBinding() method
 	private GrabKeyDialog.KeyBinding createBinding(String name,
 		String label, String shortcut)
 	{
@@ -227,16 +244,11 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		allBindings.add(binding);
 		return binding;
-	}
+	} //}}}
 
-	// private members
-	private JTable keyTable;
-	private Vector<ShortcutsModel> models;
-	private FilteredTableModel<ShortcutsModel> filteredModel;
-	private JComboBox selectModel;
-	private List<KeyBinding> allBindings;
-	private JTextField filterTF;
+	//{{{ Inner classes
 
+	//{{{ HeaderMouseHandler class
 	private class HeaderMouseHandler extends MouseAdapter
 	{
 		@Override
@@ -257,8 +269,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 			setFilter();
 		}
-	}
+	} //}}}
 
+	//{{{ TableMouseHandler class
 	private class TableMouseHandler extends MouseAdapter
 	{
 		@Override
@@ -278,8 +291,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 						gkd.getShortcut(),row,col);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ ActionHandler class
 	private class ActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent evt)
@@ -293,8 +307,9 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				setFilter();
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ ShortcutsModel class
 	private class ShortcutsModel extends AbstractTableModel
 	{
 		private List<GrabKeyDialog.KeyBinding[]> bindings;
@@ -311,7 +326,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		{
 			return bindings;
 		}
-		
+
 		public void sort(int col)
 		{
 			Collections.sort(bindings,new KeyCompare(col));
@@ -438,5 +453,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				}
 			}
 		}
-	}
+	} //}}}
+	//}}}
+	//}}}
 }

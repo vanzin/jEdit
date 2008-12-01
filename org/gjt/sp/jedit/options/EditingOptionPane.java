@@ -50,7 +50,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		Mode[] modes = jEdit.getModes();
-		Arrays.sort(modes,new StandardUtilities.StringCompare(true));
+		Arrays.sort(modes,new StandardUtilities.StringCompare<Mode>(true));
 
 		global = new ModeProperties();
 		modeProps = new ModeProperties[modes.length];
