@@ -335,171 +335,173 @@ public class AbbrevsOptionPane extends AbstractOptionPane
 				isSelected,cellHasFocus,row,col);
 		}
 	} //}}}
-} //}}}
 
-//{{{ AbbrevsModel class
-class AbbrevsModel extends AbstractTableModel
-{
-	List<Abbrev> abbrevs;
-	int lastSort;
-
-	//{{{ AbbrevsModel constructor
-	AbbrevsModel(Map<String,String> abbrevHash)
+	//{{{ AbbrevsModel class
+	private static class AbbrevsModel extends AbstractTableModel
 	{
-		abbrevs = new Vector<Abbrev>();
+		List<Abbrev> abbrevs;
+		int lastSort;
 
-		if(abbrevHash != null)
+		//{{{ AbbrevsModel constructor
+		AbbrevsModel(Map<String,String> abbrevHash)
 		{
-			Set<Map.Entry<String,String>> entrySet = abbrevHash.entrySet();
-			for (Map.Entry<String,String> entry : entrySet)
+			abbrevs = new Vector<Abbrev>();
+
+			if(abbrevHash != null)
 			{
-				abbrevs.add(new Abbrev(entry.getKey(),
-					entry.getValue()));
+				Set<Map.Entry<String,String>> entrySet = abbrevHash.entrySet();
+				for (Map.Entry<String,String> entry : entrySet)
+				{
+					abbrevs.add(new Abbrev(entry.getKey(),
+					                       entry.getValue()));
+				}
+				sort(0);
 			}
-			sort(0);
-		}
-	} //}}}
+		} //}}}
 
-	//{{{ sort() method
-	void sort(int col)
-	{
-		lastSort = col;
-		Collections.sort(abbrevs,new AbbrevCompare(col));
-		fireTableDataChanged();
-	} //}}}
-
-	//{{{ add() method
-	void add(String abbrev, String expansion)
-	{
-		abbrevs.add(new Abbrev(abbrev,expansion));
-		sort(lastSort);
-	} //}}}
-
-	//{{{ remove() method
-	void remove(int index)
-	{
-		abbrevs.remove(index);
-		fireTableStructureChanged();
-	} //}}}
-
-	//{{{ toHashtable() method
-	public Hashtable<String,String> toHashtable()
-	{
-		Hashtable<String,String> hash = new Hashtable<String,String>();
-		for(int i = 0; i < abbrevs.size(); i++)
+		//{{{ sort() method
+		void sort(int col)
 		{
-			Abbrev abbrev = abbrevs.get(i);
-			if(abbrev.abbrev.length() > 0
-				&& abbrev.expand.length() > 0)
+			lastSort = col;
+			Collections.sort(abbrevs,new AbbrevCompare(col));
+			fireTableDataChanged();
+		} //}}}
+
+		//{{{ add() method
+		void add(String abbrev, String expansion)
+		{
+			abbrevs.add(new Abbrev(abbrev,expansion));
+			sort(lastSort);
+		} //}}}
+
+		//{{{ remove() method
+		void remove(int index)
+		{
+			abbrevs.remove(index);
+			fireTableStructureChanged();
+		} //}}}
+
+		//{{{ toHashtable() method
+		public Hashtable<String,String> toHashtable()
+		{
+			Hashtable<String,String> hash = new Hashtable<String,String>();
+			for(int i = 0; i < abbrevs.size(); i++)
 			{
-				hash.put(abbrev.abbrev,abbrev.expand);
+				Abbrev abbrev = abbrevs.get(i);
+				if(abbrev.abbrev.length() > 0
+				   && abbrev.expand.length() > 0)
+				{
+					hash.put(abbrev.abbrev,abbrev.expand);
+				}
 			}
-		}
-		return hash;
-	} //}}}
+			return hash;
+		} //}}}
 
-	//{{{ getColumnCount() method
-	public int getColumnCount()
-	{
-		return 2;
-	} //}}}
-
-	//{{{ getRowCount() method
-	public int getRowCount()
-	{
-		return abbrevs.size();
-	} //}}}
-
-	//{{{ getValueAt() method
-	public Object getValueAt(int row, int col)
-	{
-		Abbrev abbrev = abbrevs.get(row);
-		switch(col)
+		//{{{ getColumnCount() method
+		public int getColumnCount()
 		{
-		case 0:
-			return abbrev.abbrev;
-		case 1:
-			return abbrev.expand;
-		default:
-			return null;
-		}
-	} //}}}
+			return 2;
+		} //}}}
 
-	//{{{ setValueAt() method
-	@Override
-	public void setValueAt(Object value, int row, int col)
-	{
-		if(value == null)
-			value = "";
-
-		Abbrev abbrev = abbrevs.get(row);
-
-		if(col == 0)
-			abbrev.abbrev = (String)value;
-		else
-			abbrev.expand = (String)value;
-
-		fireTableRowsUpdated(row,row);
-	} //}}}
-
-	//{{{ getColumnName() method
-	@Override
-	public String getColumnName(int index)
-	{
-		switch(index)
+		//{{{ getRowCount() method
+		public int getRowCount()
 		{
-		case 0:
-			return jEdit.getProperty("options.abbrevs.abbrev");
-		case 1:
-			return jEdit.getProperty("options.abbrevs.expand");
-		default:
-			return null;
-		}
-	} //}}}
+			return abbrevs.size();
+		} //}}}
 
-	//{{{ AbbrevCompare class
-	private static class AbbrevCompare implements Comparator<Abbrev>
-	{
-		private int col;
-
-		AbbrevCompare(int col)
+		//{{{ getValueAt() method
+		public Object getValueAt(int row, int col)
 		{
-			this.col = col;
-		}
+			Abbrev abbrev = abbrevs.get(row);
+			switch(col)
+			{
+				case 0:
+					return abbrev.abbrev;
+				case 1:
+					return abbrev.expand;
+				default:
+					return null;
+			}
+		} //}}}
 
-		public int compare(Abbrev a1, Abbrev a2)
+		//{{{ setValueAt() method
+		@Override
+		public void setValueAt(Object value, int row, int col)
 		{
+			if(value == null)
+				value = "";
+
+			Abbrev abbrev = abbrevs.get(row);
+
 			if(col == 0)
-			{
-				String abbrev1 = a1.abbrev.toLowerCase();
-				String abbrev2 = a2.abbrev.toLowerCase();
-
-				return StandardUtilities.compareStrings(
-					abbrev1,abbrev2,true);
-			}
+				abbrev.abbrev = (String)value;
 			else
+				abbrev.expand = (String)value;
+
+			fireTableRowsUpdated(row,row);
+		} //}}}
+
+		//{{{ getColumnName() method
+		@Override
+		public String getColumnName(int index)
+		{
+			switch(index)
 			{
-				String expand1 = a1.expand.toLowerCase();
-				String expand2 = a2.expand.toLowerCase();
-
-				return StandardUtilities.compareStrings(
-					expand1,expand2,true);
+				case 0:
+					return jEdit.getProperty("options.abbrevs.abbrev");
+				case 1:
+					return jEdit.getProperty("options.abbrevs.expand");
+				default:
+					return null;
 			}
-		}
+		} //}}}
+
+		//{{{ AbbrevCompare class
+		private static class AbbrevCompare implements Comparator<Abbrev>
+		{
+			private int col;
+
+			AbbrevCompare(int col)
+			{
+				this.col = col;
+			}
+
+			public int compare(Abbrev a1, Abbrev a2)
+			{
+				if(col == 0)
+				{
+					String abbrev1 = a1.abbrev.toLowerCase();
+					String abbrev2 = a2.abbrev.toLowerCase();
+
+					return StandardUtilities.compareStrings(
+						abbrev1,abbrev2,true);
+				}
+				else
+				{
+					String expand1 = a1.expand.toLowerCase();
+					String expand2 = a2.expand.toLowerCase();
+
+					return StandardUtilities.compareStrings(
+						expand1,expand2,true);
+				}
+			}
+		} //}}}
+
+		//{{{ Abbrev class
+		private static class Abbrev
+		{
+			Abbrev() {}
+
+			Abbrev(String abbrev, String expand)
+			{
+				this.abbrev = abbrev;
+				this.expand = expand;
+			}
+
+			String abbrev;
+			String expand;
+		} //}}}
+
 	} //}}}
-} //}}}
 
-//{{{ Abbrev class
-class Abbrev
-{
-	Abbrev() {}
-
-	Abbrev(String abbrev, String expand)
-	{
-		this.abbrev = abbrev;
-		this.expand = expand;
-	}
-
-	String abbrev;
-	String expand;
 } //}}}
