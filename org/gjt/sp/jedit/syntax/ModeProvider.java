@@ -133,15 +133,17 @@ public class ModeProvider
 		Log.log(Log.NOTICE,this,"Loading edit mode " + fileName);
 
 		XMLReader parser;
-		try {
+		try
+		{
 			parser = XMLReaderFactory.createXMLReader();
-		} catch (SAXException saxe) {
+		} catch (SAXException saxe)
+		{
 			Log.log(Log.ERROR, this, saxe);
 			return;
 		}
 		mode.setTokenMarker(xmh.getTokenMarker());
 
-		InputStream grammar = null;
+		InputStream grammar;
 
 		try
 		{
