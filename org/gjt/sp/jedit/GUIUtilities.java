@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-
 import org.gjt.sp.jedit.browser.VFSFileChooserDialog;
 import org.gjt.sp.jedit.gui.DynamicContextMenuService;
 import org.gjt.sp.jedit.gui.EnhancedButton;
@@ -66,6 +65,7 @@ import javax.swing.SwingUtilities;
 
 import java.awt.*;
 import java.awt.event.*;
+//}}}
 
 /**
  * Various GUI functions.<p>
@@ -612,6 +612,8 @@ public class GUIUtilities
 			}
 		}
 	} //}}}
+
+	//}}}
 
 	//}}}
 
