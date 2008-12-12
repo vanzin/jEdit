@@ -2344,7 +2344,10 @@ public class jEdit
 	 */
 	public static View newView(View view, Buffer buffer, View.ViewConfig config)
 	{
-		PerspectiveManager.setPerspectiveDirty(true);
+		// Mark the perspective as dirty, unless the new view is created
+		// during jEdit startup, by the loading of the perspective.
+		if (isStartupDone())
+			PerspectiveManager.setPerspectiveDirty(true);
 
 		try
 		{
@@ -2466,6 +2469,16 @@ public class jEdit
 	//}}}
 
 	//{{{ Miscellaneous methods
+
+	//{{{ isStartupDone() method
+	/**
+	 * Whether jEdit startup is over.
+	 * @since jEdit 4.3pre17
+	 */
+	public static boolean isStartupDone()
+	{
+		return startupDone;
+	} //}}}
 
 	//{{{ isMainThread() method
 	/**
