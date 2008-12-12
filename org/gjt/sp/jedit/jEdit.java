@@ -112,6 +112,8 @@ public class jEdit
 			System.exit(1);
 		} //}}}
 
+		startupDone.add(false);
+		
 		// later on we need to know if certain code is called from
 		// the main thread
 		mainThread = Thread.currentThread();
@@ -2367,9 +2369,11 @@ public class jEdit
 
 			newView.setVisible(true);
 
-			if(!config.plainView)
-				SwingUtilities.invokeLater(new DockingLayoutSetter(newView, config));
-
+			if(!config.plainView) {
+				startupDone.add(false);
+				SwingUtilities.invokeLater(new DockingLayoutSetter(newView, config, jEdit.getViewCount()));
+			}
+			
 			// show tip of the day
 			if(newView == viewsFirst)
 			{
@@ -2477,7 +2481,7 @@ public class jEdit
 	 */
 	public static boolean isStartupDone()
 	{
-		return startupDone;
+		return (! startupDone.contains(false));
 	} //}}}
 
 	//{{{ isMainThread() method
@@ -2921,7 +2925,7 @@ public class jEdit
 			}
 			pluginErrors.addElement(newEntry);
 
-			if(startupDone)
+			if(isStartupDone())
 			{
 				SwingUtilities.invokeLater(new Runnable()
 				{
@@ -2992,7 +2996,7 @@ public class jEdit
 	private static View viewsLast;
 	private static View activeView;
 
-	private static boolean startupDone;
+	private static Vector<Boolean> startupDone = new Vector<Boolean>();
 
 	private static Thread mainThread;
 	//}}}
@@ -3774,7 +3778,7 @@ public class jEdit
 					showPluginErrorDialog();
 				} //}}}
 
-				startupDone = true;
+				startupDone.set(0, true);
 
 				// in one case not a single AWT class will
 				// have been touched (splash screen off +
@@ -4236,17 +4240,20 @@ loop:		for(int i = 0; i < list.length; i++)
 	{
 		private View view;
 		private ViewConfig config;
-
-		DockingLayoutSetter(View view, ViewConfig config)
+		private int startupDoneIndex;
+		
+		DockingLayoutSetter(View view, ViewConfig config, int startupDoneIndex)
 		{
 			this.view = view;
 			this.config = config;
+			this.startupDoneIndex = startupDoneIndex;
 		}
 
 		public void run()
 		{
 			DockableWindowManager wm = view.getDockableWindowManager();
 			wm.setDockingLayout(config.docking);
+			startupDone.set(startupDoneIndex, true);
 		}
 	} //}}}
 

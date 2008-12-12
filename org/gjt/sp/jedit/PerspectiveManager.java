@@ -114,7 +114,7 @@ public class PerspectiveManager
 	//{{{ savePerspective() method
 	public static void savePerspective(boolean autosave)
 	{
-		if(!isPerspectiveEnabled())
+		if(!isPerspectiveEnabled() || !jEdit.isStartupDone())
 			return;
 
 		if(perspectiveXML == null)
