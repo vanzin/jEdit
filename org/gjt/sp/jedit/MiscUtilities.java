@@ -1767,7 +1767,7 @@ loop:		for(;;)
 			if (OperatingSystem.isUnix()) 
 				prefixMap.put(System.getProperty("user.home"), "~");
 			for (String k: env.keySet()) {
-				if (k.equalsIgnoreCase("pwd")) continue;
+				if (k.equalsIgnoreCase("pwd") || k.equalsIgnoreCase("oldpwd")) continue;
 				if (!Character.isLetter(k.charAt(0))) continue;
 				String v = env.get(k);
 				if (k.length() > v.length()) continue;
