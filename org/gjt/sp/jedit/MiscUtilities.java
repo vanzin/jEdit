@@ -203,7 +203,8 @@ public class MiscUtilities
 	 *  values with variables, if a prefix exists.
 	 *  @since jEdit 4.3pre16
 	 */
-	public static String abbreviate(String path) {
+	public static String abbreviate(String path)
+	{
 		// return path;
 		return svc.compress(path);
 	} //}}}
@@ -780,7 +781,8 @@ public class MiscUtilities
 	 * @return true if this is a backup file.
 	 * @since jEdit 4.3pre5
 	 */
-	public static boolean isBackup( String filename ) {
+	public static boolean isBackup( String filename )
+	{
 		if (filename.startsWith("#")) return true;
 		if (filename.endsWith("~")) return true;
 		if (filename.endsWith(".bak")) return true;
@@ -1757,26 +1759,31 @@ loop:		for(;;)
 
 	//}}}
 	static final VarCompressor svc = new VarCompressor();
-	static class VarCompressor {
+	static class VarCompressor
+	{
 		/** a reverse mapping of values to environment variable names */
 		final Map<String, String> prefixMap = new HashMap<String, String>();
 		final Map<String, String> previous = new HashMap<String, String>();
-		VarCompressor() {
+		VarCompressor()
+		{
 			ProcessBuilder pb = new ProcessBuilder();
 			Map<String, String> env = pb.environment();
 			if (OperatingSystem.isUnix()) 
 				prefixMap.put(System.getProperty("user.home"), "~");
-			for (String k: env.keySet()) {
+			for (String k: env.keySet())
+			{
 				if (k.equalsIgnoreCase("pwd") || k.equalsIgnoreCase("oldpwd")) continue;
 				if (!Character.isLetter(k.charAt(0))) continue;
 				String v = env.get(k);
 				if (k.length() > v.length()) continue;
-				if (OperatingSystem.isWindows()) {
+				if (OperatingSystem.isWindows())
+				{
 					// no case sensitivity, might as well convert to lower case
 					v = v.toLowerCase();
 					k = k.toLowerCase();
 				}
-				if (prefixMap.containsKey(v)) {
+				if (prefixMap.containsKey(v))
+				{
 					String otherKey = prefixMap.get(v);
 					if (otherKey.length() < k.length()) continue;
 				}					
@@ -1784,13 +1791,16 @@ loop:		for(;;)
 			}
 		}
 		
-		String compress(String path) {
+		String compress(String path)
+		{
 			String original = path;			
-			if (previous.containsKey(path)) {
+			if (previous.containsKey(path))
+			{
 				return previous.get(path);
 			}
 			String bestPrefix = "/";
-			for (String tryPrefix : prefixMap.keySet()) {
+			for (String tryPrefix : prefixMap.keySet())
+			{
 				if (tryPrefix.length() < bestPrefix.length()) continue;
 				if (OperatingSystem.isWindows() && 
 				    path.toLowerCase().startsWith(tryPrefix.toLowerCase()))
@@ -1798,7 +1808,8 @@ loop:		for(;;)
 				else if (path.startsWith(tryPrefix))
 					bestPrefix = tryPrefix;	
 			}
-			if (bestPrefix.length() > 1) {
+			if (bestPrefix.length() > 1)
+			{
 				String remainder = original.substring(bestPrefix.length());
 				String envvar = prefixMap.get(bestPrefix);
 				if (envvar.equals("~")) 
