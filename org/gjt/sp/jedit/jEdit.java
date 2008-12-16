@@ -2369,7 +2369,8 @@ public class jEdit
 
 			newView.setVisible(true);
 
-			if(!config.plainView) {
+			if(!config.plainView)
+			{
 				startupDone.add(false);
 				SwingUtilities.invokeLater(new DockingLayoutSetter(newView, config, jEdit.getViewCount()));
 			}
