@@ -41,7 +41,7 @@ public class OptionGroup
 	// {{{ data members
 	protected final String name;
 	protected final String label;
-	protected final Vector members;
+	protected final List<Object> members;
 	private boolean sort;
 	// }}}
 	
@@ -57,12 +57,15 @@ public class OptionGroup
 	{
 		this.name = name;
 		label = jEdit.getProperty("options." + name + ".label");
-		members = new Vector();
+		members = new ArrayList<Object>();
 	} //}}}
 
 	//{{{ OptionGroup constructor
 	/**
 	 * Creates an option group.
+	 * @param name The internal name of the option group, used to key a
+	 * property <code>options.<i>name</i>.label</code> which is the
+	 * label displayed in the options dialog.
 	 * @param label The label
 	 * @param options A whitespace-separated list of option pane names
 	 * @since jEdit 4.2pre2
@@ -71,7 +74,7 @@ public class OptionGroup
 	{
 		this.name = name;
 		this.label = label;
-		members = new Vector();
+		members = new ArrayList<Object>();
 
 		StringTokenizer st = new StringTokenizer(options);
 		while(st.hasMoreTokens())
@@ -90,6 +93,7 @@ public class OptionGroup
 	//{{{ getLabel() method
 	/**
 	 * Returns the option group's human-readable label.
+	 * @return the option group's human-readable label.
 	 * @since jEdit 4.2pre1
 	 */
 	public String getLabel()
@@ -124,16 +128,16 @@ public class OptionGroup
 	} //}}}
 
 	//{{{ getMembers() method
-	public Enumeration getMembers()
+	public Iterator<Object> getMembers()
 	{
-		return members.elements();
+		return members.iterator();
 	} //}}}
 
 	//{{{ getMember() method
 	public Object getMember(int index)
 	{
-		return (index >= 0 && index < members.size())
-			? members.elementAt(index) : null;
+		return index >= 0 && index < members.size()
+			? members.get(index) : null;
 	} //}}}
 
 	//{{{ getMemberIndex() method
@@ -151,6 +155,7 @@ public class OptionGroup
 	//{{{ setSort() method
 	/**
 	 * Sets if the members of this group should be sorted.
+	 * @param sort the new sort flag, true to sort the group false otherwise
 	 * @since jEdit 4.2pre3
 	 */
 	public void setSort(boolean sort)
@@ -168,7 +173,7 @@ public class OptionGroup
 		{
 			for(int i = 0; i < members.size(); i++)
 			{
-				Object obj = members.elementAt(i);
+				Object obj = members.get(i);
 				String label;
 				if(obj instanceof OptionPane)
 				{
@@ -190,13 +195,13 @@ public class OptionGroup
 
 				if(newLabel.compareToIgnoreCase(label) < 0)
 				{
-					members.insertElementAt(newObj,i);
+					members.add(i, newObj);
 					return;
 				}
 			}
 		}
 
-		members.addElement(newObj);
+		members.add(newObj);
 	} //}}}
 
 	//}}}
