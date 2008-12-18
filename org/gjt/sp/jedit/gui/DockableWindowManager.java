@@ -113,6 +113,7 @@ import org.gjt.sp.util.Log;
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
+ * @author Shlomy Reinstein (refactoring into a base and an impl)
  * @version $Id$
  * @since jEdit 2.6pre3
  * 
