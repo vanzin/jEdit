@@ -23,6 +23,9 @@ contributing to this release.
 
 - When having split view, dropping a file on the inactive textArea was opening
   it to the active textArea (#2321838) (Matthieu Casanova)
+  
+- MD5 hash calculated inside read-lock, and also after buffer saves.
+   (Alan Ezust)
 
 }}}
 {{{ Miscellaneous

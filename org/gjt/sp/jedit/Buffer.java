@@ -1896,13 +1896,18 @@ public class Buffer extends JEditBuffer
 	/** @return an MD5 hash of the contents of the buffer */
 	private byte[] calculateHash()
 	{
-//		Log.log(Log.DEBUG, this, "calculateHash()");
+		final byte[] dummy = new byte[1]; 
+		if (!jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
+			return dummy;
 		try
 		{
+			readLock();
+			Log.log(Log.NOTICE, this, "calculateHash()");
 			int length = getLength();
 			ByteBuffer bb = ByteBuffer.allocate(length * 2);	// Chars are 2 bytes
 			CharBuffer cb = bb.asCharBuffer();
 			cb.append( getSegment(0, length) );
+			readUnlock();
 			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
 			digest.update( bb );
 			return digest.digest();
@@ -1910,21 +1915,28 @@ public class Buffer extends JEditBuffer
 		catch (NoSuchAlgorithmException nsae)
 		{
 			Log.log(Log.ERROR, this, "Can't Calculate MD5 hash!", nsae);
-			return null;
+			return dummy;
 		}
+	}
+	
+	/** Update the buffer's members with the current hash and length,
+	 *  for later comparison.
+	 */
+	private void updateHash() 
+	{
+		md5hash = calculateHash();
+		initialLength = getLength();
 	}
 	
 	
 	//{{{ finishLoading() method
 	private void finishLoading()
 	{
-		if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
-			md5hash = calculateHash();
-		else
-			md5hash = new byte[1];
-	
-		initialLength = getLength();
 		
+		updateHash();
+		
+		
+			
 		parseBufferLocalProperties();
 		// AHA!
 		// this is probably the only way to fix this
@@ -1960,6 +1972,9 @@ public class Buffer extends JEditBuffer
 		String oldSymlinkPath, String path,
 		boolean rename, boolean error)
 	{
+		
+		
+		
 		//{{{ Set the buffer's path
 		// Caveat: won't work if save() called with a relative path.
 		// But I don't think anyone calls it like that anyway.
@@ -2051,6 +2066,8 @@ public class Buffer extends JEditBuffer
 						propertiesChanged();
 				}
 
+				updateHash();
+				
 				if (!isTemporary())
 				{
 					EditBus.send(new BufferUpdate(this,
