@@ -935,7 +935,7 @@ about.version=jEdit {0} using Java {1}
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
 # insert a space by itself in the text to create blank lines.
 about.text=jEdit is brought to you by\n\
-	\ \n\
+	\n\
 	Slava Pestov\n\
 	Aaron Bell\n\
 	Adam Sawicki\n\
@@ -960,7 +960,7 @@ about.text=jEdit is brought to you by\n\
 	Bernhard Walle\n\
 	Bertalan Fodor\n\
 	Bill McMilleon\n\
-	Bjrn "Vampire" Kautler\n\
+	Bj\u00f6rn "Vampire" Kautler\n\
 	Brad Mace\n\
 	Brant Langer Gurganus\n\
 	Brett Smith\n\
@@ -1005,7 +1005,7 @@ about.text=jEdit is brought to you by\n\
 	Ian Maclean\n\
 	Igor Lesik\n\
 	Israel Olalla\n\
-	Jakub Rozto\u010Dil\n\
+	Jakub Rozto\u010dil\n\
 	Jamie LaScolea\n\
 	Jason Ginchereau\n\
 	Jean-Francois Larvoire\n\
@@ -1125,8 +1125,8 @@ about.text=jEdit is brought to you by\n\
 	Will Varfar\n\
 	Wiktor Adamski\n\
 	Wojciech Stryjewski\n\
-	Wolfgang Chico-T\u00F6pfer\n\
-	\ \n\
+	Wolfgang Chico-T\u00f6pfer\n\
+	\n\
 	I'd also like to thank the users for their\n\
 	comments, feedback and bug reports.
 #}}}
@@ -1244,7 +1244,7 @@ no-write.message=Cannot save to {0}.\n\
 badurl.title=Invalid URL
 # {0} - the URL
 # {1} - the error
-badurl.message=The following URL is invalid: {0}\n
+badurl.message=The following URL is invalid: {0}\n\
 	({1})
 #}}}
 

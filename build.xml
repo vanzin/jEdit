@@ -311,7 +311,7 @@
 			  fork="true"
 			  spawn="true"
 			  maxmemory="192M">
-			<arg value="-noserver" />
+			<arg value="-settings=${build.dir}/settings" />
 		</java>
 	</target>
 
@@ -322,8 +322,8 @@
 			  fork="true"
 			  spawn="true"
 			  maxmemory="192M">
-			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5000" />
-			<arg value="-noserver" />
+			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=localhost:5005,timeout=60000" />
+			<arg value="-settings=${build.dir}/settings" />
 		</java>
 	</target>
 
