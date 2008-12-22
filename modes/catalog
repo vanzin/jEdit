@@ -203,6 +203,9 @@
 <MODE NAME="java"		FILE="java.xml"
 				FILE_NAME_GLOB="*.java" />
 
+<MODE NAME="javafx"		FILE="javafx.xml"
+				FILE_NAME_GLOB="*.fx" />
+
 <MODE NAME="javascript"		FILE="javascript.xml"
 				FILE_NAME_GLOB="{*.js,Buildsub}" />
 

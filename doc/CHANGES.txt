@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre17
 
-Thanks to Björn "Vampire" Kautler, Dakshinamurthy Karra and Dale Anson for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra and 
+Dale Anson for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -57,7 +57,9 @@ contributing to this release.
   (Eric Berry - SF.net patch #2308329)
 
 }}}
-
+{{{ Editing
+- New JavaFX edit mode (Matthieu Casanova)
+}}}
 
 }}}
 
