@@ -386,10 +386,10 @@ public abstract class OptionsDialog extends EnhancedDialog
 	{
 		path.add(node);
 
-		Iterator<Object> iterator = node.getMembers();
-		while (iterator.hasNext())
+		Enumeration e = node.getMembers();
+		while(e.hasMoreElements())
 		{
-			Object obj = iterator.next();
+			Object obj = e.nextElement();
 			if(obj instanceof OptionGroup)
 			{
 				OptionGroup grp = (OptionGroup)obj;
@@ -447,10 +447,10 @@ public abstract class OptionsDialog extends EnhancedDialog
 		if(obj instanceof OptionGroup)
 		{
 			OptionGroup grp = (OptionGroup)obj;
-			Iterator<Object> members = grp.getMembers();
-			while (members.hasNext())
+			Enumeration members = grp.getMembers();
+			while(members.hasMoreElements())
 			{
-				save(members.next());
+				save(members.nextElement());
 			}
 		}
 		else if(obj instanceof OptionPane)
