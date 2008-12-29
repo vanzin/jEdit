@@ -118,9 +118,6 @@ public class BufferSet
 	{
 		Log.log(Log.DEBUG, this, hashCode() + " addBufferAt("+buffer+','+position+')');
 
-		if (buffers.contains(buffer))
-			return;
-
 		Buffer untitledBuffer = null;
 		synchronized (buffers)
 		{
@@ -135,6 +132,8 @@ public class BufferSet
 
 			if (sorter != null)
 			{
+				if (buffers.contains(buffer))
+					return;
 				buffers.add(buffer);
 				Collections.sort(buffers, sorter);
 				position = buffers.indexOf(buffer);
