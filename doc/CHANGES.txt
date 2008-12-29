@@ -27,6 +27,9 @@ Dale Anson for contributing to this release.
 - MD5 hash calculated inside read-lock, and also after buffer saves.
    (Alan Ezust)
 
+- Fix drag & drop in BufferTabs, which broke as a result of BufferSet ignoring
+  changes in buffer index (#2100690) (Shlomy Reinstein).
+  
 }}}
 {{{ Miscellaneous
 
