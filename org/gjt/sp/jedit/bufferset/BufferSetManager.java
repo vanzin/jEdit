@@ -112,6 +112,7 @@ public class BufferSetManager implements EBComponent
 		else if (message instanceof PropertiesChanged) {
 			// pass on PropertiesChanged message to BufferSets so
 			// they can resort themselves as needed.
+			global.handleMessage((PropertiesChanged)message);
 			for (BufferSet bufferSet : editPaneBufferSetMap.values())
 			{
 				bufferSet.handleMessage((PropertiesChanged)message);
