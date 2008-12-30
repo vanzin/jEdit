@@ -247,6 +247,15 @@
       <BEGIN>use[\p{Space}]*=[\p{Space}]*'</BEGIN>
       <END>'</END>
     </SPAN_REGEXP>
+    <!-- value -->
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="value" DELEGATE="XPATH">
+      <BEGIN>value[\p{Space}]*=[\p{Space}]*"</BEGIN>
+      <END>"</END>
+    </SPAN_REGEXP>
+    <SPAN_REGEXP TYPE="KEYWORD2" HASH_CHAR="select" DELEGATE="XPATH">
+      <BEGIN>select[\p{Space}]*=[\p{Space}]*'</BEGIN>
+      <END>'</END>
+    </SPAN_REGEXP>
 
     <!-- Namespace declarations -->
     <SEQ TYPE="OPERATOR">xmlns:</SEQ>
@@ -434,3 +443,5 @@
   </RULES>
 
 </MODE>
+
+ 	  	 

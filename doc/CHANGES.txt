@@ -62,6 +62,9 @@ Dale Anson for contributing to this release.
 }}}
 {{{ Editing
 - New JavaFX edit mode (Matthieu Casanova)
+
+- Fixes to XSLT mode (Pascal Sancho - # 1954810)
+
 }}}
 
 }}}
