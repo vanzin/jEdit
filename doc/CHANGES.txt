@@ -30,13 +30,19 @@ this release.
 
 - Fix drag & drop in BufferTabs, which broke as a result of BufferSet ignoring
   changes in buffer index (#2100690) (Shlomy Reinstein).
+
+- Fix #2321838: Dropped file is unexpectedly opened in both of split panes.
+  (Shlomy Reinstein)
   
 }}}
 {{{ Miscellaneous
-
   
 - Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear search through parent container linked list. (Alan Ezust)
 
+- Applied patch #2296738: File/Directory properties dialog for VFS browser.
+  The context menu of the VFS browser now has a "Properties" menu item that
+  shows the properties of the selected node(s) in a dialog.
+  
 }}}
 {{{ API Changes
 
