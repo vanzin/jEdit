@@ -176,6 +176,9 @@
 <MODE NAME="i4gl"		FILE="i4gl.xml"
 				FILE_NAME_GLOB="*.4gl" />
 
+<MODE NAME="icalendar"          FILE="ical.xml"
+				FILE_NAME_GLOB="*.ics" />
+
 <MODE NAME="icon"		FILE="icon.xml"
 				FILE_NAME_GLOB="*.icn" />
 

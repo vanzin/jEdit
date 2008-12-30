@@ -2,8 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre17
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra and 
-Dale Anson for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra,
+Pascal Sancho, Victor Engmark, Alan Ezust, and Dale Anson for contributing to
+this release.
 
 {{{ Bug Fixes
 
@@ -33,12 +34,6 @@ Dale Anson for contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- Fix for java mode (tracker 737187), method name not always highlighted if
-  there were one or more spaces or tabs following the method name (Dale Anson)
-
-- Fix for jsp mode (tracker 846913), syntax highlighting doesn't ignore comments
-  and strings, where a single line java comment on the same line as a scriptlet
-  terminator improperly highlighted the terminator as a comment (Dale Anson)
   
 - Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear search through parent container linked list. (Alan Ezust)
 
@@ -64,6 +59,16 @@ Dale Anson for contributing to this release.
 - New JavaFX edit mode (Matthieu Casanova)
 
 - Fixes to XSLT mode (Pascal Sancho - # 1954810)
+
+- New icalendar mode (Victor Engmark - #1934498
+
+- Fix for java mode (tracker 737187), method name not always highlighted if
+  there were one or more spaces or tabs following the method name (Dale Anson)
+
+- Fix for jsp mode (tracker 846913), syntax highlighting doesn't ignore comments
+  and strings, where a single line java comment on the same line as a scriptlet
+  terminator improperly highlighted the terminator as a comment (Dale Anson)
+
 
 }}}
 
