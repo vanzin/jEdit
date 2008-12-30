@@ -171,7 +171,7 @@ public class TextAreaTransferHandler extends TransferHandler
 				}
 				continue;
 			}
-			Buffer _buffer = jEdit.openFile(view, file.getPath());
+			Buffer _buffer = jEdit.openFile(editPane, file.getPath());
 			if (_buffer != null)
 			{
 				buffer = _buffer;
