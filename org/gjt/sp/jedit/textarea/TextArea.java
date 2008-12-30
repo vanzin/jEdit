@@ -5939,7 +5939,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void createPopupMenu(MouseEvent evt)
 	{
-		popup = new JPopupMenu();
+		if (popup == null)
+			popup = new JPopupMenu();
 	} //}}}
 
 	//{{{ showPopupMenu() method
