@@ -141,7 +141,7 @@
 
 <ACTION NAME="vfs.browser.properties">
 	<CODE>
-	   	browser.fileProperties();
+	   	browser.fileProperties(files);
 	</CODE>
 </ACTION>
 

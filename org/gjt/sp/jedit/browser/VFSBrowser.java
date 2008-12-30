@@ -860,9 +860,9 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	/**
 	 * Show selected file's properties.
 	 */
-	public void fileProperties()
+	public void fileProperties(VFSFile[] files)
 	{
-		new FilePropertiesDialog(view, this);
+		new FilePropertiesDialog(view, this, files);
 	} //}}} 		
 		
 	//{{{ searchInDirectory() method

@@ -40,7 +40,7 @@ public class FilePropertiesDialog extends EnhancedDialog
 	 * @param view The view
 	 * @param browser The VFSBrowser
 	 */	
-	public FilePropertiesDialog(View view, VFSBrowser browser)
+	public FilePropertiesDialog(View view, VFSBrowser browser, VFSFile[] files)
 	{
 		super(view,jEdit.getProperty("vfs.browser.properties.title"),true);
 		GUIUtilities.loadGeometry(this,"propdialog");
@@ -48,7 +48,10 @@ public class FilePropertiesDialog extends EnhancedDialog
 		this.browser = browser;
 		this.view = view;
 			
-		this.selectedFiles = browser.getSelectedFiles();
+		if (files.length > 0)
+			this.selectedFiles = files;
+		else
+			this.selectedFiles = browser.getSelectedFiles();
 		this.local = (LocalFile)selectedFiles[0];
 		createAndShowGUI();		
 	} //}}}	

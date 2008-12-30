@@ -122,7 +122,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 			add(createMenuItem("copy-path"));
 			add(createMenuItem("paste"));
 			
-			if( browser.getSelectedFiles().length != 0)
+			if((files.length == 1) || (browser.getSelectedFiles().length != 0)) 
 		   		add(createMenuItem("properties"));
 			
 			addSeparator();
