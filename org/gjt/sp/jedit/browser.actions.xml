@@ -139,6 +139,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="vfs.browser.properties">
+	<CODE>
+	   	browser.fileProperties();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="vfs.browser.reload">
 	<CODE>
 		browser.reloadDirectory();

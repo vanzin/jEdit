@@ -2298,6 +2298,8 @@ vfs.browser.delete.shortcut=DELETE
 vfs.browser.home.icon=22x22/actions/go-home.png
 vfs.browser.home.label=Home Directory
 vfs.browser.home.shortcut=~
+vfs.browser.properties.label=Properties
+vfs.browser.properties.title=File/Directory Properties
 vfs.browser.insert.label=Insert
 vfs.browser.new-directory.icon=22x22/actions/folder-new.png
 vfs.browser.new-directory.label=New Directory...
@@ -2540,6 +2542,21 @@ plugin-manager.remove-failed.message=The plugin {0}\n\
 	could not be removed.
 #}}}
 
+#}}}
+
+#{{{ File Properties Dialog
+fileprop.name=Name
+fileprop.path=Path
+fileprop.lastmod=Last Modified
+fileprop.size=Size
+fileprop.properties=Properties
+fileprop.readable=Readable
+fileprop.writeable=Writeable
+fileprop.attribute=Attribute
+fileprop.okBtn=OK
+fileprop.cancelBtn=Cancel
+fileprop.selectedFiles=Selected files
+fileprop.selectedDirectories=Selected directories
 #}}}
 
 errorwidget.popupmenu=logs-remove-all-errors
