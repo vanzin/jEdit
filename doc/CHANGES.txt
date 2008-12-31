@@ -33,7 +33,10 @@ this release.
 
 - Fix #2321838: Dropped file is unexpectedly opened in both of split panes.
   (Shlomy Reinstein)
-  
+
+- Fix #1974620: Cannot use C+e C+BACK_QUOTE for close-docking-area.
+  (Shlomy Reinstein)
+
 }}}
 {{{ Miscellaneous
   
