@@ -9,6 +9,7 @@ import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Vector;
 import java.util.Map.Entry;
 
 import javax.swing.JComponent;
@@ -583,26 +584,53 @@ import org.gjt.sp.util.Log;
 	 */
 	class KeyHandler extends KeyAdapter {
 		static final String action = "close-docking-area";  
-		Key b1, b2;
+		Vector<Key> b1, b2;
 		String name;
+		int match1, match2;
 		
 		public KeyHandler(String dockableName) 
 		{
 			String shortcut1=jEdit.getProperty(action + ".shortcut");
 			String shortcut2=jEdit.getProperty(action + ".shortcut2");
 			if (shortcut1 != null)
-				b1 = KeyEventTranslator.parseKey(shortcut1);
+				b1 = parseShortcut(shortcut1);
 			if (shortcut2 != null)
-				b2 = KeyEventTranslator.parseKey(shortcut2);
+				b2 = parseShortcut(shortcut2);
 			name = dockableName;
+			match1 = match2 = 0;
 		}
 		
 		public void keyTyped(KeyEvent e)
 		{
-			char cc = e.getKeyChar();
-			if ((b1 != null && cc == b1.key) ||
-			     (b2 != null && cc == b2.key)) 
+			if (b1 != null)
+				match1 = match(e, b1, match1);
+			if (b2 != null)
+				match2 = match(e, b2, match2);
+			if ((match1 > 0 && match1 == b1.size()) ||
+				(match2 > 0 && match2 == b2.size()))
+			{
 				hideDockableWindow(name);
+				match1 = match2 = 0;
+			}
+		}
+		
+		private int match(KeyEvent e, Vector<Key> shortcut, int index)
+		{
+			char c = e.getKeyChar();
+			if (shortcut != null && c == shortcut.get(index).key)
+				return index + 1;
+			return 0;
+		}
+		
+		private Vector<Key> parseShortcut(String shortcut)
+		{
+			Vector<Key> keys = new Vector<Key>();
+			String [] parts = shortcut.split("\\s+");
+			for (String part: parts) {
+				if (part.length() > 0)
+					keys.add(KeyEventTranslator.parseKey(part));
+			}
+			return keys;
 		}
 	} //}}}
 
