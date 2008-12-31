@@ -251,11 +251,14 @@
 
             <para>The <guibutton>Appearance</guibutton> pane can be used to
             change the appearance of user interface controls such as buttons,
-            labels and menus. The number of items retained in history text
-            fields can also be set here; see <xref linkend="history" />.</para>
+            labels and menus. It can also be used to change the docking
+            framework (the dockable window manager). The number of items
+            retained in history text fields can also be set here; see
+            <xref linkend="history" />.</para>
 
             <para>Note that changes to certain settings such as the Swing look
-            and feel require a restart of jEdit to take effect.</para>
+            and feel and the docking framework require a restart of jEdit to
+            take effect.</para>
         </sect2>
 
         <sect2 id="autosave-backups-pane">
