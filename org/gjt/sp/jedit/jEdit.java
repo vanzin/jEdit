@@ -1758,6 +1758,14 @@ public class jEdit
 			{
 				if (buf.isUntitled() && !buf.isDirty())
 				{
+					/*  if  "never mark untitled buffers dirty"
+					 *  is selected, we might have contents in non-dirty
+					 *  untitled buffers. We must clear those contents
+					 *  if user requested new file.
+					 */
+					int l = buf.getLength();
+					if (l > 0) 
+						buf.remove(0, l);
 					editPane.setBuffer(buf);
 					return buf;
 				}

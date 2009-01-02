@@ -48,7 +48,7 @@ import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 /**
  * The main class of the VFS browser.
  * Used as dockable, and also embedded inside the
- * VFSFileSelectorDialog.
+ * VFSFileChooserDialog.
  * 
  * @author Slava Pestov
  * @version $Id$
