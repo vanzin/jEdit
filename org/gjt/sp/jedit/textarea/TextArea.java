@@ -380,7 +380,7 @@ public abstract class TextArea extends JComponent
 				// dubious?
 				//setFirstLine(0);
 
-				if(!buffer.isLoading())
+				if(!this.buffer.isLoading())
 					selectNone();
 				caretLine = caret = caretScreenLine = 0;
 				match = null;
