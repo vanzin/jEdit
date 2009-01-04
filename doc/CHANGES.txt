@@ -23,16 +23,13 @@ this release.
   switcher.
 
 - When having split view, dropping a file on the inactive textArea was opening
-  it to the active textArea (#2321838) (Matthieu Casanova)
+  it to the active textArea (#2321838) (Matthieu Casanova, Shlomy Reinstein)
   
 - MD5 hash calculated inside read-lock, and also after buffer saves.
    (Alan Ezust)
 
 - Fix drag & drop in BufferTabs, which broke as a result of BufferSet ignoring
   changes in buffer index (#2100690) (Shlomy Reinstein).
-
-- Fix #2321838: Dropped file is unexpectedly opened in both of split panes.
-  (Shlomy Reinstein)
 
 - Fix #1974620: Cannot use C+e C+BACK_QUOTE for close-docking-area.
   (Shlomy Reinstein)
