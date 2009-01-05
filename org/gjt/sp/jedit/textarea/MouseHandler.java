@@ -162,6 +162,7 @@ public class MouseHandler extends TextAreaMouseHandler
 			textArea.selectNone();
 		}
 
+		maybeDragAndDrop = false;
 		dragged = false;
 	} //}}}
 

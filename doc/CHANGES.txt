@@ -37,6 +37,8 @@ this release.
 - Fixed a NPE which had prevented to switch from a loading buffer to
   another. (Kazutoshi Satoda)
 
+- Fix #2017514: Selection occasionally lost after right-click.
+
 }}}
 {{{ Miscellaneous
   
