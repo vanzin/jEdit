@@ -165,10 +165,7 @@ public class Mode
 	public boolean getBooleanProperty(String key)
 	{
 		Object value = getProperty(key);
-		if("true".equals(value) || "on".equals(value) || "yes".equals(value))
-			return true;
-		else
-			return false;
+		return StandardUtilities.getBoolean(value, false);
 	} //}}}
 
 	//{{{ setProperty() method
