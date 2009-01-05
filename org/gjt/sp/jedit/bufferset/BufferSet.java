@@ -24,7 +24,6 @@ package org.gjt.sp.jedit.bufferset;
 //{{{ Imports
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 
@@ -79,37 +78,6 @@ public class BufferSet
 				sorter = nameSorter;
 			else
 				sorter = pathSorter;
-		}
-	} //}}}
-
-	//{{{ handleMessage
-	/**
-	 * This method is called by BufferSetManager to signal that this
-	 * BufferSet needs to react to a change in the sorting properties.
-	 */
-	protected void handleMessage(PropertiesChanged msg) {
-		if (jEdit.getBooleanProperty("sortBuffers"))
-		{
-			// set the appropriate sorter
-			if (jEdit.getBooleanProperty("sortByName"))
-				sorter = nameSorter;
-			else
-				sorter = pathSorter;
-
-			// do the sort
-			Collections.sort(buffers, sorter);
-
-			// notify the listeners so they can repaint themselves
-			BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
-			for (BufferSetListener listener : listeners)
-			{
-				listener.bufferSetSorted();
-			}
-		}
-		else
-		{
-			// user has elected not to sort BufferSets
-			sorter = null;
 		}
 	} //}}}
 
@@ -320,6 +288,38 @@ public class BufferSet
 		addBufferAt(buffer,  -1);
 	} //}}}
 
+	//{{{ handleMessage
+	/**
+	 * This method is called by BufferSetManager to signal that this
+	 * BufferSet needs to react to a change in the sorting properties.
+	 */
+	void handleMessage()
+	{
+		if (jEdit.getBooleanProperty("sortBuffers"))
+		{
+			// set the appropriate sorter
+			if (jEdit.getBooleanProperty("sortByName"))
+				sorter = nameSorter;
+			else
+				sorter = pathSorter;
+
+			// do the sort
+			Collections.sort(buffers, sorter);
+
+			// notify the listeners so they can repaint themselves
+			BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
+			for (BufferSetListener listener : listeners)
+			{
+				listener.bufferSetSorted();
+			}
+		}
+		else
+		{
+			// user has elected not to sort BufferSets
+			sorter = null;
+		}
+	} //}}}
+
 	//{{{ moveBuffer() method
 	void moveBuffer(int oldPosition, int newPosition)
 	{
@@ -378,6 +378,7 @@ public class BufferSet
 			listener.bufferCleared();
 		}
 	} //}}}
+
 
 	//}}}
 
