@@ -43,6 +43,7 @@ public class MouseHandler extends TextAreaMouseHandler
 	} //}}}
 
 	//{{{ mousePressed() method
+	@Override
 	public void mousePressed(MouseEvent evt)
 	{
 		showCursor();
@@ -127,6 +128,7 @@ public class MouseHandler extends TextAreaMouseHandler
 	} //}}}
 
 	//{{{ mouseReleased() method
+	@Override
 	public void mouseReleased(MouseEvent evt)
 	{
 		// middle mouse button drag inserts selection
