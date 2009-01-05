@@ -33,7 +33,7 @@ import org.gjt.sp.util.Log;
 /**
  * <p>Keeps track of all dockable windows for a single View, and provides
  * an API for getting/showing/hiding them. </p>
- * 
+ *
  * <p>Each {@link org.gjt.sp.jedit.View} has an instance of this class.</p>
  *
  * <p><b>dockables.xml:</b></p>
@@ -75,7 +75,7 @@ import org.gjt.sp.util.Log;
  * <li><code><i>dockableName</i>.title</code> - the string to show on the dockable
  * button. </li>
  * <li><code><i>dockableName</i>.label</code> - The string to use for generating
- *    menu items and action names. </li> 
+ *    menu items and action names. </li>
  * <li><code><i>dockableName</i>.longtitle</code> - (optional) the string to use
  *      in the dockable's floating window title (when it is floating).
  *       If not specified, the <code><i>dockableName</i>.title</code> property is used. </li>
@@ -117,7 +117,7 @@ import org.gjt.sp.util.Log;
  * @author Shlomy Reinstein (refactoring into a base and an impl)
  * @version $Id$
  * @since jEdit 2.6pre3
- * 
+ *
  */
  public abstract class DockableWindowManager extends JPanel implements EBComponent
 {
@@ -128,7 +128,7 @@ import org.gjt.sp.util.Log;
 	 * @since jEdit 2.6pre3
 	 */
 	public static final String FLOATING = "floating";
-	
+
 	/**
 	 * Top position.
 	 * @since jEdit 2.6pre3
@@ -155,7 +155,7 @@ import org.gjt.sp.util.Log;
 	//}}}
 
 	// {{{ data members
-	private Map<String, String> positions = new HashMap<String, String>();
+	private final Map<String, String> positions = new HashMap<String, String>();
 	protected View view;
 	protected DockableWindowFactory factory;
 	protected Map<String, JComponent> windows = new HashMap<String, JComponent>();
@@ -166,11 +166,10 @@ import org.gjt.sp.util.Log;
 
 	private static final String ALTERNATE_LAYOUT_PROP = "view.docking.alternateLayout";
 	private boolean alternateLayout;
+	// }}}
 
-    // }}}
-
-    // {{{ DockableWindowManager constructor    
-    public DockableWindowManager(View view, DockableWindowFactory instance,
+	// {{{ DockableWindowManager constructor
+	public DockableWindowManager(View view, DockableWindowFactory instance,
 			ViewConfig config)
 	{
 		this.view = view;
@@ -178,27 +177,27 @@ import org.gjt.sp.util.Log;
 		alternateLayout = jEdit.getBooleanProperty(ALTERNATE_LAYOUT_PROP);
 	} // }}}
 
-    // {{{ Abstract methods
-	abstract public void setMainPanel(JPanel panel);
-	abstract public void showDockableWindow(String name);
-	abstract public void hideDockableWindow(String name);
+	// {{{ Abstract methods
+	public abstract void setMainPanel(JPanel panel);
+	public abstract void showDockableWindow(String name);
+	public abstract void hideDockableWindow(String name);
 
 	/** Completely dispose of a dockable - called when a plugin is
 	    unloaded, to remove all references to the its dockables. */
-	abstract public void disposeDockableWindow(String name);
-	abstract public JComponent floatDockableWindow(String name);
-	abstract public boolean isDockableWindowDocked(String name);
-	abstract public boolean isDockableWindowVisible(String name);
-	abstract public void closeCurrentArea();
-	abstract public DockingLayout getDockingLayout(ViewConfig config);
-	abstract public DockingArea getLeftDockingArea();
-	abstract public DockingArea getRightDockingArea();
-	abstract public DockingArea getTopDockingArea();
-	abstract public DockingArea getBottomDockingArea();
-    // }}}
+	public abstract void disposeDockableWindow(String name);
+	public abstract JComponent floatDockableWindow(String name);
+	public abstract boolean isDockableWindowDocked(String name);
+	public abstract boolean isDockableWindowVisible(String name);
+	public abstract void closeCurrentArea();
+	public abstract DockingLayout getDockingLayout(ViewConfig config);
+	public abstract DockingArea getLeftDockingArea();
+	public abstract DockingArea getRightDockingArea();
+	public abstract DockingArea getTopDockingArea();
+	public abstract DockingArea getBottomDockingArea();
+	// }}}
 
-    // {{{ public methods
-    // {{{ init()
+	// {{{ public methods
+	// {{{ init()
 	public void init()
 	{
 		EditBus.addToBus(this);
@@ -210,9 +209,9 @@ import org.gjt.sp.util.Log;
 			String dockable = window.name;
 			positions.put(dockable, getDockablePosition(dockable));
 		}
-	} // }}} 
+	} // }}}
 
-    // {{{ close()
+	// {{{ close()
 	public void close()
 	{
 		EditBus.removeFromBus(this);
@@ -232,7 +231,7 @@ import org.gjt.sp.util.Log;
 				showDockableWindow(dockable);
 		}
 	} //}}}
-	
+
 	//{{{ addDockableWindow() method
 	/**
 	 * Opens the specified dockable window. As of jEdit 4.0pre1, has the
@@ -244,6 +243,7 @@ import org.gjt.sp.util.Log;
 	{
 		showDockableWindow(name);
 	} //}}}
+
 	//{{{ removeDockableWindow() method
 	/**
 	 * Hides the specified dockable window. As of jEdit 4.2pre1, has the
@@ -255,7 +255,7 @@ import org.gjt.sp.util.Log;
 	{
 		hideDockableWindow(name);
 	} //}}}
-	
+
 	//{{{ toggleDockableWindow() method
 	/**
 	 * Toggles the visibility of the specified dockable window.
@@ -288,13 +288,13 @@ import org.gjt.sp.util.Log;
 	// {{{ toggleDockAreas()
 	/**
 	 * Hides all visible dock areas, or shows them again,
-	 * if the last time it was a hide. 
+	 * if the last time it was a hide.
 	 * @since jEdit 4.3pre16
-	 * 
+	 *
 	 */
-	public void toggleDockAreas() 
+	public void toggleDockAreas()
 	{
-		if (closeToggle) 
+		if (closeToggle)
 		{
 			tTop = getTopDockingArea().getCurrent() != null;
 			tLeft = getLeftDockingArea().getCurrent() != null;
@@ -305,7 +305,7 @@ import org.gjt.sp.util.Log;
 			getRightDockingArea().show(null);
 			getLeftDockingArea().show(null);
 		}
-		else 
+		else
 		{
 			if (tBottom) getBottomDockingArea().showMostRecent();
 			if (tLeft) getLeftDockingArea().showMostRecent();
@@ -316,27 +316,28 @@ import org.gjt.sp.util.Log;
 		view.getTextArea().requestFocus();
 	} // }}}
 
-    // {{{ dockableTitleChanged
+	// {{{ dockableTitleChanged
 	public void dockableTitleChanged(String dockable, String newTitle)
 	{
 	} // }}}
-	
+
 	// {{{ closeListener() method
 	/**
-	 * 
-	 * The actionEvent "close-docking-area" by default only works on 
+	 *
+	 * The actionEvent "close-docking-area" by default only works on
 	 * windows that are docked. If you want your floatable plugins to also
 	 * respond to this event, you need to add key listeners to each component
-	 * in your plugin that usually has keyboard focus. 
+	 * in your plugin that usually has keyboard focus.
 	 * This function returns a key listener which does exactly that.
 	 * You should not need to call this method - it is used by FloatingWindowContainer.
-	 * 
+	 *
 	 * @param dockableName the name of your dockable
 	 * @return a KeyListener you can add to that plugin's component.
 	 * @since jEdit 4.3pre6
-	 * 
+	 *
 	 */
-	public KeyListener closeListener(String dockableName) {
+	public KeyListener closeListener(String dockableName)
+	{
 		return new KeyHandler(dockableName);
 	}
 	// }}}
@@ -359,7 +360,7 @@ import org.gjt.sp.util.Log;
 	{
 		return windows.get(name);
 	} // }}}
-	
+
 	//{{{ getDockableTitle() method
 	/**
 	 * Returns the title of the specified dockable window.
@@ -373,14 +374,14 @@ import org.gjt.sp.util.Log;
 
 	//{{{ setDockableTitle() method
 	/**
-	 * Changes the .longtitle property of a dockable window, which corresponds to the 
+	 * Changes the .longtitle property of a dockable window, which corresponds to the
 	 * title shown when it is floating (not docked). Fires a change event that makes sure
 	 * all floating dockables change their title.
-	 * 
+	 *
 	 * @param dockable the name of the dockable, as specified in the dockables.xml
 	 * @param title the new .longtitle you want to see above it.
 	 * @since 4.3pre5
-	 * 
+	 *
 	 */
 	public void setDockableTitle(String dockable, String title)
 	{
@@ -391,14 +392,14 @@ import org.gjt.sp.util.Log;
 		dockableTitleChanged(dockable, title);
 	}
 	// }}}
-	
+
 	//{{{ getRegisteredDockableWindows() method
 	public static String[] getRegisteredDockableWindows()
 	{
 		return DockableWindowFactory.getInstance()
 			.getRegisteredDockableWindows();
 	} //}}}
-	
+
 	//{{{ getDockableWindowPluginClassName() method
 	public static String getDockableWindowPluginName(String name)
 	{
@@ -408,19 +409,20 @@ import org.gjt.sp.util.Log;
 			return null;
 		return jEdit.getProperty("plugin." + pluginClass + ".name");
 	} //}}}
-	
-    // {{{ setDockingLayout method
+
+	// {{{ setDockingLayout method
 	public void setDockingLayout(DockingLayout docking)
 	{
 		applyDockingLayout(docking);
 		applyAlternateLayout(alternateLayout);
 	} // }}}
 
-    // {{{ handleMessage()
-	public void handleMessage(EBMessage msg) {
+	// {{{ handleMessage() method
+	public void handleMessage(EBMessage msg)
+	{
 		if (msg instanceof DockableWindowUpdate)
 		{
-			if(((DockableWindowUpdate)msg).getWhat() ==	DockableWindowUpdate.PROPERTIES_CHANGED)
+			if(((DockableWindowUpdate)msg).getWhat() == DockableWindowUpdate.PROPERTIES_CHANGED)
 				propertiesChanged();
 		}
 		else if (msg instanceof PropertiesChanged)
@@ -460,8 +462,8 @@ import org.gjt.sp.util.Log;
 		}
 	} // }}}
 
-    // {{{ longTitle()    
-	public String longTitle(String name) 
+	// {{{ longTitle() method
+	public String longTitle(String name)
 	{
 		String title = jEdit.getProperty(getLongTitlePropertyName(name));
 		if (title == null)
@@ -469,35 +471,36 @@ import org.gjt.sp.util.Log;
 		return title;
 	} // }}}
 
-    // {{{ shortTitle ()
+	// {{{ shortTitle() method
 	public String shortTitle(String name)
-	{		
+	{
 		String title = jEdit.getProperty(name + ".title");
 		if(title == null)
 			return "NO TITLE PROPERTY: " + name;
 		return title;
 	} // }}}
 
-    // }}}
-    // {{{ protected methods
-    // {{{ applyAlternateLayout
+	// }}}
+
+	// {{{ protected methods
+	// {{{ applyAlternateLayout
 	protected void applyAlternateLayout(boolean alternateLayout)
 	{
 	} //}}}
 
-    // {{{
+	// {{{
 	protected void dockingPositionChanged(String dockableName,
 		String oldPosition, String newPosition)
 	{
 	} //}}}
 
-    // {{{ getAlternateLayoutProp()
+	// {{{ getAlternateLayoutProp()
 	protected boolean getAlternateLayoutProp()
 	{
 		return alternateLayout;
 	} // }}}
-	
-    // {{{ propertiesChanged
+
+	// {{{ propertiesChanged
 	protected void propertiesChanged()
 	{
 		if(view.isPlainView())
@@ -509,23 +512,23 @@ import org.gjt.sp.util.Log;
 			alternateLayout = newAlternateLayout;
 			applyAlternateLayout(newAlternateLayout);
 		}
-		
+
 		String[] dockables = factory.getRegisteredDockableWindows();
 		for(int i = 0; i < dockables.length; i++)
 		{
 			String dockable = dockables[i];
 			String oldPosition = positions.get(dockable);
 			String newPosition = getDockablePosition(dockable);
-			if ((oldPosition == null) || (! newPosition.equals(oldPosition)))
+			if (oldPosition == null || !newPosition.equals(oldPosition))
 			{
 				positions.put(dockable, newPosition);
 				dockingPositionChanged(dockable, oldPosition, newPosition);
 			}
 		}
-		
+
 	} // }}}
 
-    // {{{ createDockable()
+	// {{{ createDockable()
 	protected JComponent createDockable(String name)
 	{
 		DockableWindowFactory.Window wf = factory.getDockableWindowFactory(name);
@@ -540,7 +543,8 @@ import org.gjt.sp.util.Log;
 			windows.put(name, window);
 		return window;
 	} // }}}
-    // {{{ getDockablePosition()
+
+	// {{{ getDockablePosition()
 	protected String getDockablePosition(String name)
 	{
 		return jEdit.getProperty(name + ".dock-position", FLOATING);
@@ -557,38 +561,40 @@ import org.gjt.sp.util.Log;
 		else
 			c.requestFocus();
 	} // }}}
-	
-    // {{{ getLongTitlePropertyName()
+
+	// {{{ getLongTitlePropertyName()
 	protected String getLongTitlePropertyName(String dockableName)
 	{
 		return dockableName + ".longtitle";
 	} //}}}
-    // }}}
-	
+	// }}}
 
-    // {{{ Inner classes
-    // {{{ DockingArea interface    
-	protected interface DockingArea {
+
+	// {{{ Inner classes
+	// {{{ DockingArea interface
+	protected interface DockingArea
+	{
 		void showMostRecent();
 		String getCurrent();
 		void show(String name);
 	}
-    // }}}
+	// }}}
 
 	//{{{ KeyHandler class
 	/**
 	 * This keyhandler responds to only two key events - those corresponding to
-	 * the close-docking-area action event. 
-	 * 
+	 * the close-docking-area action event.
+	 *
 	 * @author ezust
 	 */
-	class KeyHandler extends KeyAdapter {
-		static final String action = "close-docking-area";  
+	class KeyHandler extends KeyAdapter
+	{
+		static final String action = "close-docking-area";
 		Vector<Key> b1, b2;
 		String name;
 		int match1, match2;
-		
-		public KeyHandler(String dockableName) 
+
+		public KeyHandler(String dockableName)
 		{
 			String shortcut1=jEdit.getProperty(action + ".shortcut");
 			String shortcut2=jEdit.getProperty(action + ".shortcut2");
@@ -599,7 +605,8 @@ import org.gjt.sp.util.Log;
 			name = dockableName;
 			match1 = match2 = 0;
 		}
-		
+
+		@Override
 		public void keyTyped(KeyEvent e)
 		{
 			if (b1 != null)
@@ -613,7 +620,7 @@ import org.gjt.sp.util.Log;
 				match1 = match2 = 0;
 			}
 		}
-		
+
 		private int match(KeyEvent e, Vector<Key> shortcut, int index)
 		{
 			char c = e.getKeyChar();
@@ -621,7 +628,7 @@ import org.gjt.sp.util.Log;
 				return index + 1;
 			return 0;
 		}
-		
+
 		private Vector<Key> parseShortcut(String shortcut)
 		{
 			Vector<Key> keys = new Vector<Key>();
@@ -634,25 +641,32 @@ import org.gjt.sp.util.Log;
 		}
 	} //}}}
 
-    // {{{ DockingLayout class
-    /**
+	// {{{ DockingLayout class
+	/**
 	 * Objects of DockingLayout class describe which dockables are docked where,
-	 * which ones are floating, and their sizes/positions for saving/loading perspectives. 
+	 * which ones are floating, and their sizes/positions for saving/loading perspectives.
 	 */
-	public static abstract class DockingLayout {
+	public abstract static class DockingLayout
+	{
 		public static final int NO_VIEW_INDEX = -1;
-		public void setPlainView(boolean plain) {
+		public abstract boolean loadLayout(String baseName, int viewIndex);
+		public abstract boolean saveLayout(String baseName, int viewIndex);
+		public abstract String getName();
+
+		public void setPlainView(boolean plain)
+		{
 		}
-		abstract public boolean loadLayout(String baseName, int viewIndex);
-		abstract public boolean saveLayout(String baseName, int viewIndex);
-		abstract public String getName();
-		public String [] getSavedLayouts() {
+
+		public String [] getSavedLayouts()
+		{
 			String layoutDir = getLayoutDirectory();
 			if (layoutDir == null)
 				return null;
 			File dir = new File(layoutDir);
-			File[] files = dir.listFiles(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
+			File[] files = dir.listFiles(new FilenameFilter()
+			{
+				public boolean accept(File dir, String name)
+				{
 					return name.endsWith(".xml");
 				}
 			});
@@ -661,23 +675,31 @@ import org.gjt.sp.util.Log;
 				layouts[i] = fileToLayout(files[i].getName());
 			return layouts;
 		}
-		private String fileToLayout(String filename) {
+
+		private static String fileToLayout(String filename)
+		{
 			return filename.replaceFirst(".xml", "");
 		}
-		private String layoutToFile(String baseName, int viewIndex) {
-			StringBuffer name = new StringBuffer(baseName);
+
+		private static String layoutToFile(String baseName, int viewIndex)
+		{
+			StringBuilder name = new StringBuilder(baseName);
 			if (viewIndex != NO_VIEW_INDEX)
-				name.append("-view" + String.valueOf(viewIndex));
+				name.append("-view").append(viewIndex);
 			name.append(".xml");
 			return name.toString();
 		}
-		public String getLayoutFilename(String baseName, int viewIndex) {
+
+		public String getLayoutFilename(String baseName, int viewIndex)
+		{
 			String dir = getLayoutDirectory();
 			if (dir == null)
 				return null;
 			return dir + File.separator + layoutToFile(baseName, viewIndex);
 		}
-		private String getLayoutDirectory() {
+
+		private String getLayoutDirectory()
+		{
 			String name = getName();
 			if (name == null)
 				return null;
@@ -686,7 +708,7 @@ import org.gjt.sp.util.Log;
 				return null;
 			dir = dir + File.separator + name;
 			File d = new File(dir);
-			if (! d.exists())
+			if (!d.exists())
 				d.mkdir();
 			return dir;
 		}
