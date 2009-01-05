@@ -646,6 +646,31 @@ loop:		for(int i = 0; i < str.length(); i++)
 		return ret;
 	} //}}}
 
+	//{{{ getBoolean() method
+	/**
+	 * Returns a boolean from a given object.
+	 * @param obj the object
+	 * @param def The default value
+	 * @return the boolean value if obj is a Boolean,
+	 * true if the value is "true", "yes", "on",
+	 * false if the value is "false", "no", "off"
+	 * def if the value is null or anything else
+	 * @since jEdit 4.3pre17
+	 */
+	public static boolean getBoolean(Object obj, boolean def)
+	{
+		if(obj == null)
+			return def;
+		else if("true".equals(obj) || "yes".equals(obj)
+			|| "on".equals(obj))
+			return true;
+		else if("false".equals(obj) || "no".equals(obj)
+			|| "off".equals(obj))
+			return false;
+
+		return def;
+	} //}}}
+
 	//}}}
 	private StandardUtilities(){}
 }

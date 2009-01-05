@@ -630,16 +630,7 @@ public class jEdit
 	public static boolean getBooleanProperty(String name, boolean def)
 	{
 		String value = getProperty(name);
-		if(value == null)
-			return def;
-		else if(value.equals("true") || value.equals("yes")
-			|| value.equals("on"))
-			return true;
-		else if(value.equals("false") || value.equals("no")
-			|| value.equals("off"))
-			return false;
-		else
-			return def;
+		return StandardUtilities.getBoolean(value, def);
 	} //}}}
 
 	//{{{ getIntegerProperty() method

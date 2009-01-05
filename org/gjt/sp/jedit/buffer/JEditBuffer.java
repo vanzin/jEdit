@@ -1567,13 +1567,20 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public boolean getBooleanProperty(String name)
 	{
-		Object obj = getProperty(name);
-		if (obj instanceof Boolean)
-			return (Boolean)obj;
-		if ("true".equals(obj) || "on".equals(obj) || "yes".equals(obj))
-			return true;
+		return getBooleanProperty(name, false);
+	} //}}}
 
-		return false;
+	//{{{ getBooleanProperty() method
+	/**
+	 * Returns the value of a boolean property. This method is thread-safe.
+	 * @param name The property name
+	 * @param def The default value
+	 * @since jEdit 4.3pre17
+	 */
+	public boolean getBooleanProperty(String name, boolean def)
+	{
+		Object obj = getProperty(name);
+		return StandardUtilities.getBoolean(obj, def);
 	} //}}}
 
 	//{{{ setBooleanProperty() method
