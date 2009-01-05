@@ -1573,7 +1573,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if ("true".equals(obj) || "on".equals(obj) || "yes".equals(obj))
 			return true;
 
-        return false;
+		return false;
 	} //}}}
 
 	//{{{ setBooleanProperty() method
@@ -1653,7 +1653,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * @param flags Regular expression compilation flags
 	 * @since jEdit 4.3pre5
 	 */
-	public Pattern getPatternProperty(String name, int flags) {
+	public Pattern getPatternProperty(String name, int flags)
+	{
 		synchronized(propertyLock)
 		{
 			boolean defaultValueFlag;
