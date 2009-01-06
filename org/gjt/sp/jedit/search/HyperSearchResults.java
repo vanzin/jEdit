@@ -79,7 +79,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		resultTreeRoot = new DefaultMutableTreeNode();
 		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
 		resultTree = new JTree(resultTreeModel);
-		resultTree.setToolTipText("");
+		resultTree.setToolTipText(null);
 		resultTree.setCellRenderer(new ResultCellRenderer());
 		resultTree.setVisibleRowCount(16);
 		resultTree.setRootVisible(false);
