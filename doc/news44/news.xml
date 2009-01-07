@@ -8,15 +8,6 @@
             <firstname>Alan</firstname>
             <surname>Ezust</surname>
         </author>
-        <author>
-            <firstname>Slava</firstname>
-            <surname>Pestov</surname>
-        </author>
-        <copyright>
-            <year>2008</year>
-            <year>2008</year>
-            <holder>Alan Ezust</holder>
-        </copyright>
         <legalnotice>
             <title>Legal Notice</title>
             <para>Permission is granted to copy, distribute and/or modify this
@@ -28,10 +19,16 @@
             the file <filename>COPYING.DOC.txt</filename> included with the
             jEdit distribution.</para>
         </legalnotice>
-        <title>What's New in jEdit 4.3</title>
+        <title>What's New in jEdit 4.4</title>
     </bookinfo>
     <preface id="preface">
         <title>Preface</title>
+		<para> First of all, jEdit 4.4 is the new name for jEdit 4.3.
+		We had to "skip" a point release in order to avoid version numbering
+		confusion. No longer will jEdit be called "pre" or "final":
+		instead, we are moving over to straight-decimal x.y.z.w version
+		numbering scheme. 
+		</para>
         <para>jEdit is a very mature text editor, and has gone through a very
         interesting phase of development. Left in a "prerelease" stage for about
         four years, it's had a long time to solifidy. Many of the original
@@ -43,7 +40,7 @@
         url="http://sourceforge.net/project/stats/detail.php?group_id=588&amp;ugn=jedit&amp;type=prdownload&amp;mode=year&amp;package_id=0">reports</ulink>
         that there are on average at least a half-million downloads per year,
         and this has been true for the entire millenium.</para>
-        <para>In terms of actual releases, there may have been a slight lull
+        <para>In terms of actual releases, there was a bit of a lull
         while Slava's absense was sinking in among the other members of the
         community, but in 2006, thanks to their generous donations of time,
         effort, and coding skills, we started releasing regular prereleases
@@ -55,7 +52,7 @@
         source of things to do. I anticipate that the trackers will always have
         many open issues, but I see many of the old ones finally being closed,
         and that is very much satisfying. I can say with complete confidence
-        that 4.3 is an improvement over 4.2 in many different ways. I hope that
+        that 4.4 is an improvement over 4.2 in every possible way. I hope that
         after you read this document, you will think so too, and perhaps want to
         join in on the development of future versions of jEdit or its
         plugins.</para>
@@ -76,15 +73,16 @@
         <title>Acknowledgements</title>
         <para>This release would not have been possible if it were not for the
         frequent help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin,
-        Matthieu Casanova, Shlomy Reinstein, Seph Soliman, Eric Berry, Robert Schwenn.  
-        and Björn "Vampire" Kautler. I would also like to give sincere thanks to all 
+        Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein, Seph Soliman,
+		Eric Berry, Robert Schwenn, and Björn "Vampire" Kautler. 
+		I would also like to give sincere thanks to all 
         of the other core and plugin developers who
         have made <ulink url="../CHANGES.txt">significant contributions</ulink>
         to help keep this editor alive and on the cutting edge.</para>
     </preface>
     <chapter id="compatibility">
         <title>Java Compatibility</title>
-        <para>jEdit 4.3 requires Sun
+        <para>jEdit 4.4 requires Sun
         Java 1.5.0 or later. Older versions of Java are not supported.</para>
         <para>If you want to use the new LCD Antialiasing feature of Java 1.6,
         it is supported. From <guimenuitem>Global Options - Text Area -
@@ -200,7 +198,7 @@
             <title>Bundled Macros</title>
             <para>There are a number of new bundled macros, and most of the
             existing ones have undergone enhancements and bug fixes. jEdit 4.2
-            bundled 58 macros in 7 categories; jEdit 4.3 bundles 75 macros in 9
+            bundled 58 macros in 7 categories; jEdit 4.4 bundles 75 macros in 9
             categories.</para>
             <para>Of course you can create new macros of your own, either by
             recording actions or writing them from scratch.</para>
@@ -228,7 +226,7 @@
             <title>Plugin API changes</title>
             <para>jEdit 4.2 used to run plugins that were designed only for the
             4.1 plugin API, but plugins that are missing the "activate" property
-            will no longer load properly in 4.3final.</para>
+            will no longer load properly in 4.3.</para>
             <para>There are two new properties that all plugins can have:
             <literal>description</literal> and
             <literal>longdescription</literal>. The former is just a string
@@ -265,15 +263,17 @@
         </section>
     </chapter>
     <chapter id="new-plugins">
-        <title>The core 4.3 plugins</title>
+        <title>The core plugins</title>
         <para>This chapter showcases the new(er) plugins that were under the
         most active development during jEdit 4.3. Some of them influenced the
         development of the jEdit core, and others are good enough to be
         incorporated into the core, but are left as separate plugins simply
         because it makes it easier for us to maintain and debug them.</para>
+		<para>The latest version of <emphasis role="bold">Console</emphasis>
+		has many improvements, and takes advantage of new features of jEdit. </para> 
         <para>Navigator, providing a navigable history, is new and improved - it
         provides the user with Eclipse-like Navigation to previous locations,
-        for each TextArea of each View. It uses new 4.3 EditBus messages which
+        for each TextArea of each View. It uses new EditBus messages which
         are now available in the public API, PositionChanging and
         BufferChanging.</para>
         <bridgehead>ProjectViewer</bridgehead>
@@ -310,26 +310,10 @@
         parsers for CSS, one for Ecmascript, and completion popups for elements
         and attributes in XML, CSS, and HTML.</para>
         <para>If you use many different languages, you should also try out the
-        very clever ContextMenu plugin, which I am seriously thinking of adding
-        to the core one of these days.</para>
+        very clever ContextMenu plugin. </para>
 		<para>The SVNPlugin is new, and the JDiff plugin is improved. Many
 		other plugins have latest versions that require jEdit 4.3. </para>
-        <formalpara>
-        <title>InfoViewer</title>
-        <para>This plugin uses jEdit 4.3's action overriding API to serve as
-        a replacement to the HelpViewer. Since I use/work with this instead
-        of the built-in HelpViewer, I do not notice or fix bugs in
-        HelpViewer. Try it out - you might like it! At some point, I might
-        merge this into the jEdit core, but for now, it's a separate
-        plugin.</para>
-        </formalpara>
-        <formalpara>
-        <title>XSearch</title>
-        <para>XSearch is a replacement for the built-in search dialogs.
-        Similarly, there are new features in XSearch which have not been put
-        into the core yet. XSearch has good ProjectViewer integration too -
-        you can search only the files that were added to the project.</para>
-        </formalpara>
+		
     </chapter>
     <chapter id="futureplans">
         <title>Future Plans</title>

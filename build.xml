@@ -387,15 +387,15 @@
 			  unless="config.xsltproc.executable" />
 		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
 			  unless="config.docbook.catalog" />
-		<mkdir dir="${doc.output.location}/news43" />
+		<mkdir dir="${doc.output.location}/news44" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
 			<arg value="--output" />
-			<arg value="../${doc.output.location}/news43/" />
+			<arg value="../${doc.output.location}/news44/" />
 			<arg value="--catalogs" />
 			<arg value="jedithtml.xsl" />
-			<arg value="news43/news.xml" />
+			<arg value="news44/news.xml" />
 			<env key="SGML_CATALOG_FILES"
 				 file="${config.docbook.catalog}" />
 		</exec>
@@ -468,11 +468,11 @@
 				   type="file" />
 		<antcall target="generate-doc-faq" />
 		<dependset>
-			<srcfileset dir="doc/news43" />
-			<targetfileset dir="${doc.output.location}/news43" />
+			<srcfileset dir="doc/news44" />
+			<targetfileset dir="${doc.output.location}/news44" />
 		</dependset>
 		<available property="news.is.up.to.date"
-				   file="${doc.output.location}/news43/toc.xml"
+				   file="${doc.output.location}/news44/toc.xml"
 				   type="file" />
 		<antcall target="generate-doc-news" />
 		<dependset>
