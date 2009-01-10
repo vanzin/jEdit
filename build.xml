@@ -363,19 +363,14 @@
 			unless="faq.is.up.to.date">
 		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
 			  unless="config.xsltproc.executable" />
-		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
-			  unless="config.docbook.catalog" />
 		<mkdir dir="${doc.output.location}/FAQ" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
 			<arg value="--output" />
 			<arg value="../${doc.output.location}/FAQ/" />
-			<arg value="--catalogs" />
 			<arg value="jedithtml.xsl" />
 			<arg value="FAQ/faq.xml" />
-			<env key="SGML_CATALOG_FILES"
-				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
 
@@ -385,19 +380,14 @@
 			unless="news.is.up.to.date">
 		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
 			  unless="config.xsltproc.executable" />
-		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
-			  unless="config.docbook.catalog" />
 		<mkdir dir="${doc.output.location}/news44" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
 			<arg value="--output" />
 			<arg value="../${doc.output.location}/news44/" />
-			<arg value="--catalogs" />
 			<arg value="jedithtml.xsl" />
 			<arg value="news44/news.xml" />
-			<env key="SGML_CATALOG_FILES"
-				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
 
@@ -407,19 +397,14 @@
 			unless="users-guide.is.up.to.date">
 		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
 			  unless="config.xsltproc.executable" />
-		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
-			  unless="config.docbook.catalog" />
 		<mkdir dir="${doc.output.location}/users-guide" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
 			<arg value="--output" />
 			<arg value="../${doc.output.location}/users-guide/" />
-			<arg value="--catalogs" />
 			<arg value="jedithtml.xsl" />
 			<arg value="users-guide/users-guide.xml" />
-			<env key="SGML_CATALOG_FILES"
-				 file="${config.docbook.catalog}" />
 		</exec>
 	</target>
 
@@ -577,8 +562,6 @@
 			unless="pdf-users-guide.is.up.to.date">
 		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
 			  unless="config.xsltproc.executable" />
-		<fail message="Please set the &quot;docbook.catalog&quot; in build.properties"
-			  unless="config.docbook.catalog" />
 		<fail message="Please set the &quot;fop.dir&quot; in build.properties"
 			  unless="config.fop.dir" />
 		<antcall target="generate-docbook-wrapper">
@@ -603,11 +586,8 @@
 			<arg value="&quot;${paper.type}&quot;" />
 			<arg value="--output" />
 			<arg value="../${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot" />
-			<arg value="--catalogs" />
 			<arg value="jeditfo.xsl" />
 			<arg value="users-guide/users-guide.xml" />
-			<env key="SGML_CATALOG_FILES"
-				 file="${config.docbook.catalog}" />
 		</exec>
 		<delete file="doc/docbook-wrapper-fo.xsl"
 				failonerror="false" />
