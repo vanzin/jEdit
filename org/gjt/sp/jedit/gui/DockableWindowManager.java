@@ -572,11 +572,12 @@ import org.gjt.sp.util.Log;
 
 	// {{{ Inner classes
 	// {{{ DockingArea interface
-	protected interface DockingArea
+	public interface DockingArea
 	{
 		void showMostRecent();
 		String getCurrent();
 		void show(String name);
+		String [] getDockables();
 	}
 	// }}}
 
