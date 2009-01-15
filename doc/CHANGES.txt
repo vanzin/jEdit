@@ -39,6 +39,7 @@ this release.
 
 - Fix #2017514: Selection occasionally lost after right-click.
 
+- The status bar label did not follow the editor colors (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
   

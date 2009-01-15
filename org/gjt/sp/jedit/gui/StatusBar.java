@@ -152,7 +152,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				}
 				else
 				{
-					box.add(new JLabel(token));
+					JLabel label = new JLabel(token);
+					label.setBackground(bg);
+					label.setForeground(fg);
+					box.add(label);
 				}
 			}
 			currentBar = statusBar;
