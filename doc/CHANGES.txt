@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre17
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra,
-Pascal Sancho, Victor Engmark, Alan Ezust, and Dale Anson for contributing to
-this release.
+Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, and Daniel Hahler
+for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -24,7 +24,7 @@ this release.
 
 - When having split view, dropping a file on the inactive textArea was opening
   it to the active textArea (#2321838) (Matthieu Casanova, Shlomy Reinstein)
-  
+
 - MD5 hash calculated inside read-lock, and also after buffer saves.
    (Alan Ezust)
 
@@ -42,13 +42,13 @@ this release.
 - The status bar label did not follow the editor colors (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
-  
+
 - Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear search through parent container linked list. (Alan Ezust)
 
 - Applied patch #2296738: File/Directory properties dialog for VFS browser.
   The context menu of the VFS browser now has a "Properties" menu item that
   shows the properties of the selected node(s) in a dialog.
-  
+
 }}}
 {{{ API Changes
 
@@ -304,6 +304,9 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (#2108778) (Matthieu Casanova)
 
 - Added some indent rules in shellscript.xml (Matthieu Casanova)
+
+- HTML mode: Fix delegation of "style" attribute to CSS mode and delegate
+  on* attributes to JavaScript mode (Daniel Hahler)
 
 }}}
 

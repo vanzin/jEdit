@@ -56,6 +56,12 @@
 			<END>$1</END>
 		</SPAN_REGEXP>
 
+		<!-- Javascript: delegate on* attributes to Javascript mode -->
+ 		<SPAN_REGEXP AT_WORD_START="TRUE" DELEGATE="javascript::MAIN" HASH_CHAR="on" TYPE="MARKUP">
+			<BEGIN>on[a-z]+\s*=\s*(["'])</BEGIN>
+			<END>$1</END>
+		</SPAN_REGEXP>
+
 		<!-- NOTE: no ESCAPE for quotes, at least for attributes; e.g onclick="alert(\"foo\");" is invalid! -->
 		<SPAN TYPE="LITERAL1">
 			<BEGIN>"</BEGIN>
