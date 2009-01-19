@@ -81,6 +81,8 @@ for contributing to this release.
   and strings, where a single line java comment on the same line as a scriptlet
   terminator improperly highlighted the terminator as a comment (Dale Anson)
 
+- HTML mode: Fix delegation of "style" attribute to CSS mode and delegate
+  on* attributes to JavaScript mode (Daniel Hahler)
 
 }}}
 
@@ -304,9 +306,6 @@ Jeff Robertson, Kevin Hunter, and Eric Berry for contributing to this release.
   (#2108778) (Matthieu Casanova)
 
 - Added some indent rules in shellscript.xml (Matthieu Casanova)
-
-- HTML mode: Fix delegation of "style" attribute to CSS mode and delegate
-  on* attributes to JavaScript mode (Daniel Hahler)
 
 }}}
 
