@@ -40,6 +40,11 @@ for contributing to this release.
 - Fix #2017514: Selection occasionally lost after right-click.
 
 - The status bar label did not follow the editor colors (Matthieu Casanova)
+
+- Fix #2519873: MyDoggyPlugin : the dockables are immediately loaded.
+  Each plugin dockable that was configured by the properties file to be docked
+  was immediately loaded and made visible when the plugin was loaded. Now, it
+  uses lazy instantiation and only its anchor button is shown.
 }}}
 {{{ Miscellaneous
 

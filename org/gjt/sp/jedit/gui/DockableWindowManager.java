@@ -7,8 +7,10 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.Map.Entry;
 
@@ -18,6 +20,7 @@ import javax.swing.JPanel;
 import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View.ViewConfig;
@@ -155,6 +158,7 @@ import org.gjt.sp.util.Log;
 	//}}}
 
 	// {{{ data members
+	private final Map<PluginJAR, Set<String>> plugins = new HashMap<PluginJAR, Set<String>>(); 
 	private final Map<String, String> positions = new HashMap<String, String>();
 	protected View view;
 	protected DockableWindowFactory factory;
@@ -208,6 +212,7 @@ import org.gjt.sp.util.Log;
 			DockableWindowFactory.Window window = entries.next();
 			String dockable = window.name;
 			positions.put(dockable, getDockablePosition(dockable));
+			addPluginDockable(window.plugin, dockable);
 		}
 	} // }}}
 
@@ -417,6 +422,19 @@ import org.gjt.sp.util.Log;
 		applyAlternateLayout(alternateLayout);
 	} // }}}
 
+	// {{{ addPluginDockable
+	private void addPluginDockable(PluginJAR plugin, String name)
+	{
+		Set<String> dockables = plugins.get(plugin);
+		if (dockables == null)
+		{
+			dockables = new HashSet<String>();
+			plugins.put(plugin, dockables);
+		}
+		dockables.add(name);
+	}
+	// }}}
+	
 	// {{{ handleMessage() method
 	public void handleMessage(EBMessage msg)
 	{
@@ -437,7 +455,12 @@ import org.gjt.sp.util.Log;
 				{
 					DockableWindowFactory.Window w = iter.next();
 					if (w.plugin == pmsg.getPluginJAR())
-						positions.put(w.name, DockableWindowManager.FLOATING);
+					{
+						String position = getDockablePosition(w.name);
+						positions.put(w.name, position);
+						addPluginDockable(w.plugin, w.name);
+						dockableLoaded(w.name, position);
+					}
 				}
 				propertiesChanged();
 			}
@@ -448,14 +471,13 @@ import org.gjt.sp.util.Log;
 			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED ||
 					pmsg.getWhat() == PluginUpdate.UNLOADED)
 			{
-				Iterator<DockableWindowFactory.Window> entries = factory.getDockableWindowIterator();
-				while (entries.hasNext())
+				Set<String> dockables = plugins.remove(pmsg.getPluginJAR());
+				if (dockables != null)
 				{
-					DockableWindowFactory.Window window = entries.next();
-					if (window.plugin == pmsg.getPluginJAR())
+					for (String dockable: dockables)
 					{
-						disposeDockableWindow(window.name);
-						windows.remove(window.name);
+						disposeDockableWindow(dockable);
+						windows.remove(dockable);
 					}
 				}
 			}
@@ -488,6 +510,12 @@ import org.gjt.sp.util.Log;
 	{
 	} //}}}
 
+	// {{{
+	protected void dockableLoaded(String dockableName, String position)
+	{
+	}
+	// }}}
+	
 	// {{{
 	protected void dockingPositionChanged(String dockableName,
 		String oldPosition, String newPosition)
