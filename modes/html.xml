@@ -51,7 +51,7 @@
              NOTE: ESCAPE moved from RULE to SPANs! -->
 	<RULES SET="TAGS" DEFAULT="MARKUP">
 		<!-- Inline CSS -->
- 		<SPAN_REGEXP TYPE="MARKUP" DELEGATE="css::PROPERTIES" HASH_CHAR="style">
+ 		<SPAN_REGEXP AT_WORD_START="TRUE" TYPE="MARKUP" DELEGATE="css::PROPERTIES" HASH_CHAR="style">
 			<BEGIN>style\s*=\s*(["'])</BEGIN>
 			<END>$1</END>
 		</SPAN_REGEXP>
