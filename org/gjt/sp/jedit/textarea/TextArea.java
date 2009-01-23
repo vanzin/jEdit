@@ -146,7 +146,7 @@ public abstract class TextArea extends JComponent
 	{
 		return new TriangleFoldPainter();
 	} //}}}
-	
+
 	//{{{ initInputHandler() method
 	/**
 	 * Creates an actionContext and initializes the input handler for this textarea. Called when creating
@@ -179,7 +179,7 @@ public abstract class TextArea extends JComponent
 	{
 		return actionContext;
 	} //}}}
-	
+
 	//{{{ setMouseHandler() method
 	public void setMouseHandler(MouseInputAdapter mouseInputAdapter)
 	{
@@ -578,7 +578,7 @@ public abstract class TextArea extends JComponent
 		return displayManager.firstLine.physicalLine;
 	} //}}}
 
-	//{{{ setFirstPhysicalLine() method
+	//{{{ setFirstPhysicalLine() methods
 	/**
 	 * Sets the vertical scroll bar position.
 	 * @param physFirstLine The first physical line to display
@@ -587,9 +587,8 @@ public abstract class TextArea extends JComponent
 	public void setFirstPhysicalLine(int physFirstLine)
 	{
 		setFirstPhysicalLine(physFirstLine,0);
-	} //}}}
+	}
 
-	//{{{ setFirstPhysicalLine() method
 	/**
 	 * Sets the vertical scroll bar position.
 	 * @param physFirstLine The first physical line to display
@@ -729,7 +728,7 @@ public abstract class TextArea extends JComponent
 			doElectricScroll);
 	} //}}}
 
-	//{{{ scrollTo() method
+	//{{{ scrollTo() methods
 	/**
 	 * Ensures that the specified location in the buffer is visible.
 	 * @param offset The offset from the start of the buffer
@@ -741,9 +740,8 @@ public abstract class TextArea extends JComponent
 		int line = buffer.getLineOfOffset(offset);
 		scrollTo(line,offset - buffer.getLineStartOffset(line),
 			doElectricScroll);
-	} //}}}
+	}
 
-	//{{{ scrollTo() method
 	/**
 	 * Ensures that the specified location in the buffer is visible.
 	 * @param line The line number
@@ -964,7 +962,7 @@ public abstract class TextArea extends JComponent
 
 	//{{{ Offset conversion
 
-	//{{{ xyToOffset() method
+	//{{{ xyToOffset() methods
 	/**
 	 * Converts a point to an offset.
 	 * Note that unlike in previous jEdit versions, this method now returns
@@ -976,9 +974,8 @@ public abstract class TextArea extends JComponent
 	public int xyToOffset(int x, int y)
 	{
 		return xyToOffset(x,y,true);
-	} //}}}
+	}
 
-	//{{{ xyToOffset() method
 	/**
 	 * Converts a point to an offset.
 	 * Note that unlike in previous jEdit versions, this method now returns
@@ -1031,7 +1028,7 @@ public abstract class TextArea extends JComponent
 		}
 	} //}}}
 
-	//{{{ offsetToXY() method
+	//{{{ offsetToXY() methods
 	/**
 	 * Converts an offset into a point in the text area painter's
 	 * co-ordinate space.
@@ -1045,9 +1042,8 @@ public abstract class TextArea extends JComponent
 		offset -= buffer.getLineStartOffset(line);
 		Point retVal = new Point();
 		return offsetToXY(line,offset,retVal);
-	} //}}}
+	}
 
-	//{{{ offsetToXY() method
 	/**
 	 * Converts an offset into a point in the text area painter's
 	 * co-ordinate space.
@@ -1059,9 +1055,8 @@ public abstract class TextArea extends JComponent
 	public Point offsetToXY(int line, int offset)
 	{
 		return offsetToXY(line,offset,new Point());
-	} //}}}
+	}
 
-	//{{{ offsetToXY() method
 	/**
 	 * Converts a line,offset pair into an x,y (pixel) point relative to the
 	 * upper left corner (0,0) of the text area.
@@ -1284,7 +1279,7 @@ public abstract class TextArea extends JComponent
 		return buffer.getLineLength(line);
 	} //}}}
 
-	//{{{ getText() method
+	//{{{ getText() methods
 	/**
 	 * Returns the specified substring of the buffer.
 	 * @param start The start offset
@@ -1294,9 +1289,8 @@ public abstract class TextArea extends JComponent
 	public final String getText(int start, int len)
 	{
 		return buffer.getText(start,len);
-	} //}}}
+	}
 
-	//{{{ getText() method
 	/**
 	 * Copies the specified substring of the buffer into a segment.
 	 * @param start The start offset
@@ -1306,9 +1300,17 @@ public abstract class TextArea extends JComponent
 	public final void getText(int start, int len, Segment segment)
 	{
 		buffer.getText(start,len,segment);
+	}
+
+	/**
+	 * Returns the entire text of this text area.
+	 */
+	public String getText()
+	{
+		return buffer.getText(0,buffer.getLength());
 	} //}}}
 
-	//{{{ getLineText() method
+	//{{{ getLineText() methods
 	/**
 	 * Returns the text on the specified line.
 	 * @param lineIndex the line number
@@ -1317,9 +1319,8 @@ public abstract class TextArea extends JComponent
 	public final String getLineText(int lineIndex)
 	{
 		return buffer.getLineText(lineIndex);
-	} //}}}
+	}
 
-	//{{{ getLineText() method
 	/**
 	 * Copies the text on the specified line into a Segment. If lineIndex
 	 * is invalid, the segment will contain a null string.
@@ -1329,15 +1330,6 @@ public abstract class TextArea extends JComponent
 	public final void getLineText(int lineIndex, Segment segment)
 	{
 		buffer.getLineText(lineIndex,segment);
-	} //}}}
-
-	//{{{ getText() method
-	/**
-	 * Returns the entire text of this text area.
-	 */
-	public String getText()
-	{
-		return buffer.getText(0,buffer.getLength());
 	} //}}}
 
 	//{{{ setText() method
@@ -1517,9 +1509,8 @@ public abstract class TextArea extends JComponent
 		}
 
 		return null;
-	} //}}}
+	}
 
-	//{{{ selectToMatchingBracket() method
 	/**
 	 * Selects from the bracket at the caret position to the corresponding
 	 * bracket.
@@ -1652,7 +1643,7 @@ forward_scan:	do
 		return selectionManager.getSelectionCount();
 	} //}}}
 
-	//{{{ getSelection() method
+	//{{{ getSelection() methods
 	/**
 	 * Returns the current selection.
 	 * @since jEdit 3.2pre1
@@ -1660,6 +1651,17 @@ forward_scan:	do
 	public Selection[] getSelection()
 	{
 		return selectionManager.getSelection();
+	}
+
+	/**
+	 * Returns the selection with the specified index. This must be
+	 * between 0 and the return value of <code>getSelectionCount()</code>.
+	 * @since jEdit 4.3pre1
+	 * @param index the index of the selection you want
+	 */
+	public Selection getSelection(int index)
+	{
+		return selectionManager.selection.get(index);
 	} //}}}
 
 	//{{{ getSelectionIterator() method
@@ -1672,18 +1674,6 @@ forward_scan:	do
 		return selectionManager.selection.iterator();
 	} //}}}
 
-	//{{{ getSelection() method
-	/**
-	 * Returns the selection with the specified index. This must be
-	 * between 0 and the return value of <code>getSelectionCount()</code>.
-	 * @since jEdit 4.3pre1
-	 * @param index the index of the selection you want
-	 */
-	public Selection getSelection(int index)
-	{
-		return selectionManager.selection.get(index);
-	} //}}}
-
 	//{{{ selectNone() method
 	/**
 	 * Deselects everything.
@@ -1694,7 +1684,7 @@ forward_scan:	do
 		setSelection((Selection)null);
 	} //}}}
 
-	//{{{ setSelection() method
+	//{{{ setSelection() methods
 	/**
 	 * Sets the selection. Nested and overlapping selections are merged
 	 * where possible. Null elements of the array are ignored.
@@ -1707,9 +1697,8 @@ forward_scan:	do
 		invalidateSelectedLines();
 		selectionManager.setSelection(selection);
 		finishCaretUpdate(caretLine,NO_SCROLL,true);
-	} //}}}
+	}
 
-	//{{{ setSelection() method
 	/**
 	 * Sets the selection. Nested and overlapping selections are merged
 	 * where possible.
@@ -1723,7 +1712,7 @@ forward_scan:	do
 		finishCaretUpdate(caretLine,NO_SCROLL,true);
 	} //}}}
 
-	//{{{ addToSelection() method
+	//{{{ addToSelection() methods
 	/**
 	 * Adds to the selection. Nested and overlapping selections are merged
 	 * where possible.
@@ -1735,9 +1724,8 @@ forward_scan:	do
 		invalidateSelectedLines();
 		selectionManager.addToSelection(selection);
 		finishCaretUpdate(caretLine,NO_SCROLL,true);
-	} //}}}
+	}
 
-	//{{{ addToSelection() method
 	/**
 	 * Adds to the selection. Nested and overlapping selections are merged
 	 * where possible.
@@ -1763,7 +1751,7 @@ forward_scan:	do
 		return selectionManager.getSelectionAtOffset(offset);
 	} //}}}
 
-	//{{{ removeFromSelection() method
+	//{{{ removeFromSelection() methods
 	/**
 	 * Deactivates the specified selection.
 	 * @param sel The selection
@@ -1774,9 +1762,8 @@ forward_scan:	do
 		invalidateSelectedLines();
 		selectionManager.removeFromSelection(sel);
 		finishCaretUpdate(caretLine,NO_SCROLL,true);
-	} //}}}
+	}
 
-	//{{{ removeFromSelection() method
 	/**
 	 * Deactivates the selection at the specified offset. If there is
 	 * no selection at that offset, does nothing.
@@ -1822,7 +1809,7 @@ forward_scan:	do
 		fireCaretEvent();
 	} //}}}
 
-	//{{{ extendSelection() method
+	//{{{ extendSelection() methods
 	/**
 	 * Extends the selection at the specified offset, or creates a new
 	 * one if there is no selection at the specified offset. This is
@@ -1835,9 +1822,8 @@ forward_scan:	do
 	public void extendSelection(int offset, int end)
 	{
 		extendSelection(offset,end,0,0);
-	} //}}}
+	}
 
-	//{{{ extendSelection() method
 	/**
 	 * Extends the selection at the specified offset, or creates a new
 	 * one if there is no selection at the specified offset. This is
@@ -1895,7 +1881,7 @@ forward_scan:	do
 		}
 	} //}}}
 
-	//{{{ getSelectedText() method
+	//{{{ getSelectedText() methods
 	/**
 	 * Returns the text in the specified selection.
 	 * @param s The selection
@@ -1906,9 +1892,8 @@ forward_scan:	do
 		StringBuilder buf = new StringBuilder(s.end - s.start);
 		s.getText(buffer,buf);
 		return buf.toString();
-	} //}}}
+	}
 
-	//{{{ getSelectedText() method
 	/**
 	 * Returns the text in all active selections.
 	 * @param separator The string to insert between each text chunk
@@ -1931,9 +1916,8 @@ forward_scan:	do
 		}
 
 		return buf.toString();
-	} //}}}
+	}
 
-	//{{{ getSelectedText() method
 	/**
 	 * Returns the text in all active selections, with a newline
 	 * between each text chunk.
@@ -1943,7 +1927,7 @@ forward_scan:	do
 		return getSelectedText("\n");
 	} //}}}
 
-	//{{{ setSelectedText() method
+	//{{{ setSelectedText() methods
 	/**
 	 * Replaces the selection with the specified text.
 	 * @param s The selection
@@ -1973,9 +1957,8 @@ forward_scan:	do
 
 		// no no no!!!!
 		//selectNone();
-	} //}}}
+	}
 
-	//{{{ setSelectedText() method
 	/**
 	 * Replaces the selection at the caret with the specified text.
 	 * If there is no selection at the caret, the text is inserted at
@@ -1987,9 +1970,8 @@ forward_scan:	do
 		if(newCaret != -1)
 			moveCaretPosition(newCaret);
 		selectNone();
-	} //}}}
+	}
 
-	//{{{ setSelectedText() method
 	/**
 	 * Replaces the selection at the caret with the specified text.
 	 * If there is no selection at the caret, the text is inserted at
@@ -2140,18 +2122,18 @@ forward_scan:	do
 		if(offset == -1)
 			getToolkit().beep();
 		else
-			setCaretPosition(offset);		
+			setCaretPosition(offset);
 	} //}}}
 
 	// {{{ scrollAndCenterCaret() method
 	/**
-	 * Tries to scroll the textArea so that the caret is centered on the screen. 
-	 * Sometimes gets confused by folds but at least makes the caret visible and 
+	 * Tries to scroll the textArea so that the caret is centered on the screen.
+	 * Sometimes gets confused by folds but at least makes the caret visible and
 	 * guesses better on subsequent attempts.
-	 * 
+	 *
 	 * @since jEdit 4.3pre15
 	 */
-	public void scrollAndCenterCaret() 
+	public void scrollAndCenterCaret()
 	{
 		if (!getDisplayManager().isLineVisible(getCaretLine()))
 			getDisplayManager().expandFold(getCaretLine(),true);
@@ -2161,8 +2143,8 @@ forward_scan:	do
 		setFirstLine(getFirstLine() + diff);
 		requestFocus();
 	} // }}}
-	
-	//{{{ setCaretPosition() method
+
+	//{{{ setCaretPosition() methods
 	/**
 	 * Sets the caret position and deactivates the selection.
 	 * @param newCaret The caret position
@@ -2171,9 +2153,8 @@ forward_scan:	do
 	{
 		selectNone();
 		moveCaretPosition(newCaret,true);
-	} //}}}
+	}
 
-	//{{{ setCaretPosition() method
 	/**
 	 * Sets the caret position and deactivates the selection.
 	 * @param newCaret The caret position
@@ -2185,7 +2166,7 @@ forward_scan:	do
 		moveCaretPosition(newCaret,doElectricScroll);
 	} //}}}
 
-	//{{{ moveCaretPosition() method
+	//{{{ moveCaretPosition() methods
 	/**
 	 * Sets the caret position without deactivating the selection.
 	 * @param newCaret The caret position
@@ -2193,9 +2174,8 @@ forward_scan:	do
 	public void moveCaretPosition(int newCaret)
 	{
 		moveCaretPosition(newCaret,true);
-	} //}}}
+	}
 
-	//{{{ moveCaretPosition() method
 	/**
 	 * Sets the caret position without deactivating the selection.
 	 * @param newCaret The caret position
@@ -2205,12 +2185,12 @@ forward_scan:	do
 	{
 		moveCaretPosition(newCaret,doElectricScroll ? ELECTRIC_SCROLL
 			: NORMAL_SCROLL);
-	} //}}}
+	}
 
-	//{{{ moveCaretPosition() method
 	public static final int NO_SCROLL = 0;
 	public static final int NORMAL_SCROLL = 1;
 	public static final int ELECTRIC_SCROLL = 2;
+
 	/**
 	 * Sets the caret position without deactivating the selection.
 	 * @param newCaret The caret position
@@ -2560,7 +2540,7 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		moveCaretPosition(newCaret);
 	} //}}}
 
-	//{{{ goToNextWord() method
+	//{{{ goToNextWord() methods
 	/**
 	 * Moves the caret to the start of the next word.
 	 * Note that if the "view.eatWhitespace" boolean propery is false,
@@ -2571,9 +2551,8 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	public void goToNextWord(boolean select)
 	{
 		goToNextWord(select,false);
-	} //}}}
+	}
 
-	//{{{ goToNextWord() method
 	/**
 	 * Moves the caret to the start of the next word.
 	 * @since jEdit 4.1pre5
@@ -3300,7 +3279,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		delete(false);
 	} //}}}
 
-	//{{{ backspaceWord() method
+	//{{{ backspaceWord() methods
 	/**
 	 * Deletes the word before the caret.
 	 * @since jEdit 2.7pre2
@@ -3308,9 +3287,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void backspaceWord()
 	{
 		backspaceWord(false);
-	} //}}}
+	}
 
-	//{{{ backspaceWord() method
 	/**
 	 * Deletes the word before the caret.
 	 * @param eatWhitespace If true, will eat whitespace
@@ -3493,7 +3471,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			caret - getLineStartOffset(caretLine));
 	} //}}}
 
-	//{{{ deleteWord() method
+	//{{{ deleteWord() methods
 	/**
 	 * Deletes the word in front of the caret.
 	 * @since jEdit 2.7pre2
@@ -3501,9 +3479,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void deleteWord()
 	{
 		deleteWord(false);
-	} //}}}
+	}
 
-	//{{{ deleteWord() method
 	/**
 	 * Deletes the word in front of the caret.
 	 *
@@ -3760,7 +3737,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		setMagicCaretPosition(magic);
 	} //}}}
 
-	//{{{ collapseFold() method
+	//{{{ collapseFold() methods
 	/**
 	 * Like {@link DisplayManager#collapseFold(int)}, but
 	 * also moves the caret to the first line of the fold.
@@ -3769,9 +3746,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void collapseFold()
 	{
 		collapseFold(caretLine);
-	} //}}}
+	}
 
-	//{{{ collapseFold() method
 	/**
 	 * Like {@link DisplayManager#collapseFold(int)}, but
 	 * also moves the caret to the first line of the fold.
@@ -3822,7 +3798,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		}
 	} //}}}
 
-	//{{{ selectFold() method
+	//{{{ selectFold() methods
 	/**
 	 * Selects the fold that contains the caret line number.
 	 * @since jEdit 3.1pre3
@@ -3830,9 +3806,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	public void selectFold()
 	{
 		selectFold(caretLine);
-	} //}}}
+	}
 
-	//{{{ selectFold() method
 	/**
 	 * Selects the fold that contains the specified line number.
 	 * @param line The line number
@@ -4570,7 +4545,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		remove(comp);
 	} //}}}
 
-	//{{{ Input method support
+	//{{{ getInputMethodRequests() method
 	@Override
 	public InputMethodRequests getInputMethodRequests()
 	{
@@ -4989,7 +4964,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	private boolean caretBlinks;
 	protected InputHandlerProvider inputHandlerProvider;
-	
+
 	private InputMethodSupport inputMethodSupport;
 
 	/** The last visible physical line index. */
