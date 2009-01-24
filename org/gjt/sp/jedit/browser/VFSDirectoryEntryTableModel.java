@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit.browser;
 
+//{{{ Imports
 import javax.swing.table.*;
 import java.util.*;
 import org.gjt.sp.jedit.io.FileVFS;
@@ -31,6 +32,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+//}}}
 
 /**
  * @author Slava Pestov
@@ -215,14 +217,14 @@ public class VFSDirectoryEntryTableModel extends AbstractTableModel
 	//{{{ getSortAttribute() method
 	public String getSortAttribute(int column)
 	{
-		return (column == 0) ? "name" : getExtendedAttribute(column);
+		return column == 0 ? "name" : getExtendedAttribute(column);
 	} //}}}
 
 	//{{{ sortByColumn() method
 	public boolean sortByColumn(int column)
 	{
 		// toggle ascending/descending if column was clicked again
-		ascending = (sortColumn == column) ? !ascending : true;
+		ascending = sortColumn != column || !ascending;
 
 		// we don't sort by some attributes
 		String sortBy = getSortAttribute(column);
@@ -395,7 +397,7 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 	 * For sorting columns in the VFS Browser.
 	 * @since jEdit 4.3pre7
 	 */
-	static class EntryCompare implements Comparator
+	static class EntryCompare implements Comparator<Entry>
 	{
 		private boolean sortIgnoreCase, sortMixFilesAndDirs, sortAscending;
 		private String sortAttribute;
@@ -415,11 +417,8 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 			this.sortAttribute = sortBy;
 		}
 
-		public int compare(Object obj1, Object obj2)
+		public int compare(Entry entry1, Entry entry2)
 		{
-			Entry entry1 = (Entry)obj1;
-			Entry entry2 = (Entry)obj2;
-
 			// we want to compare sibling ancestors of the entries
 			if(entry1.level < entry2.level) 
 				return compare(entry1, entry2.parent);
@@ -468,8 +467,7 @@ vfs_attr_loop:	for(int i = 0; i < attrs.length; i++)
 					file1.getName(),
 					file2.getName(),
 					sortIgnoreCase);
-			return (sortAscending) ? result : -result;
+			return sortAscending ? result : -result;
 		}
 	} //}}}
-
 }
