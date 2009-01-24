@@ -86,21 +86,20 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 					if (evt.getClickCount() == 2)
 					{
 						EditPane editPane = view.getEditPane();
-						BufferSet bufferSet = editPane.getBufferSet();
-						BufferSet.Scope scope = bufferSet.getScope();
-						BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
+						BufferSet.Scope scope = editPane.getBufferSetScope();
 						switch (scope)
 						{
 							case global:
-								editPane.setBufferSet(bufferSetManager.getViewBufferSet(editPane.getView()));
+								scope = BufferSet.Scope.view;
 								break;
 							case view:
-								editPane.setBufferSet(bufferSetManager.getEditPaneBufferSet(editPane));
+								scope = BufferSet.Scope.editpane;
 								break;
 							case editpane:
-								editPane.setBufferSet(bufferSetManager.getGlobalBufferSet());
+								scope = BufferSet.Scope.global;
 								break;
 						}
+						editPane.setBufferSetScope(scope);
 					}
 				}
 			});
@@ -115,7 +114,7 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 		//{{{ update() method
 		public void update()
 		{
-			BufferSet.Scope scope = view.getEditPane().getBufferSet().getScope();
+			BufferSet.Scope scope = view.getEditPane().getBufferSetScope();
 			if (currentScope == null || !currentScope.equals(scope))
 			{
 				bufferSetLabel.setText(scope.toString().substring(0,1).toUpperCase());

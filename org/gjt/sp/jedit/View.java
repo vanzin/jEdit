@@ -1547,7 +1547,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				}
 			}
 			splitConfig.append(" \"");
-			splitConfig.append(bufferSet.getScope());
+			splitConfig.append(editPane.getBufferSetScope());
 			splitConfig.append("\" bufferset");
 		}
 	} //}}}
@@ -1647,25 +1647,13 @@ loop:		while (true)
 				else if (st.sval.equals("bufferset"))
 				{
 					BufferSet.Scope scope = BufferSet.Scope.fromString((String) stack.pop());
+					editPane.setBufferSetScope(scope);
 					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
-					BufferSet bufferSet = null;
-					switch (scope)
-					{
-						case view:
-							bufferSet = bufferSetManager.getViewBufferSet(this);
-							break;
-						case editpane:
-							bufferSet = bufferSetManager.getEditPaneBufferSet(editPane);
-							break;
-						case global:
-							bufferSet = bufferSetManager.getGlobalBufferSet();
-							break;
-					}
+					BufferSet bufferSet = editPane.getBufferSet();
 					for (Buffer buff : editPaneBuffers)
 					{
 						bufferSetManager.addBuffer(bufferSet, buff);
 					}
-					editPane.setBufferSet(bufferSet);
 					editPaneBuffers.clear();
 				}
 				break;

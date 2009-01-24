@@ -66,11 +66,10 @@ public class BufferSet
 	 * constructor
 	 * @param scope the scope
 	 */
-	BufferSet(Scope scope)
+	BufferSet()
 	{
 		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		listeners = new EventListenerList();
-		this.scope = scope;
 
 		if (jEdit.getBooleanProperty("sortBuffers"))
 		{
@@ -149,16 +148,6 @@ public class BufferSet
 	public Buffer getBuffer(int index)
 	{
 		return buffers.get(index);
-	} //}}}
-
-	//{{{ getScope() method
-	/**
-	 * Returns the scope of the bufferSet.
-	 * @return the scope of the bufferSet
-	 */
-	public Scope getScope()
-	{
-		return scope;
 	} //}}}
 
 	//{{{ getPreviousBuffer() method
@@ -271,7 +260,7 @@ public class BufferSet
 	@Override
 	public String toString()
 	{
-		return "BufferSet["+scope+",nbBuffers="+size()+']';
+		return "BufferSet[nbBuffers="+size()+']';
 	} //}}}
 
 	//{{{ Package-private members
@@ -386,7 +375,6 @@ public class BufferSet
 	private final List<Buffer> buffers;
 	private EventListenerList listeners;
 
-	private final Scope scope;
 	private static final Comparator<Buffer> nameSorter = new NameSorter();
 	private static final Comparator<Buffer> pathSorter = new PathSorter();
 	private Comparator<Buffer> sorter;

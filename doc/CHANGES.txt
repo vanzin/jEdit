@@ -71,6 +71,11 @@ for contributing to this release.
   alternative for deprecated MiscUtilities.MenuItemCompare.
   (Eric Berry - SF.net patch #2308329)
 
+- Removed BufferSet#getScope(). The scope of bufferset is a property of
+  EditPane. Added EditPane#getBufferSetScope() and setBufferSetScope().
+  Also removed EditPane#setBufferSet(), which was the way to set the
+  scope of buffer set. (Kazutoshi Satoda)
+
 }}}
 {{{ Editing
 - New JavaFX edit mode (Matthieu Casanova)

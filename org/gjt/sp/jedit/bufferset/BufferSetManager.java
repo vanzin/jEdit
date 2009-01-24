@@ -71,7 +71,7 @@ public class BufferSetManager implements EBComponent
 	//{{{ BufferSetManager constructor
 	public BufferSetManager()
 	{
-		global = new BufferSet(BufferSet.Scope.global);
+		global = new BufferSet();
 		viewBufferSetMap = Collections.synchronizedMap(new HashMap<View, BufferSet>());
 		editPaneBufferSetMap = Collections.synchronizedMap(new HashMap<EditPane, BufferSet>());
 		bufferBufferSetMap = Collections.synchronizedMap(new HashMap<Buffer, Set<BufferSet>>());
@@ -150,7 +150,7 @@ public class BufferSetManager implements EBComponent
 		BufferSet bufferSet = viewBufferSetMap.get(view);
 		if (bufferSet == null)
 		{
-			bufferSet = new BufferSet(BufferSet.Scope.view);
+			bufferSet = new BufferSet();
 			viewBufferSetMap.put(view, bufferSet);
 		}
 		return bufferSet;
@@ -169,7 +169,7 @@ public class BufferSetManager implements EBComponent
 		BufferSet bufferSet = editPaneBufferSetMap.get(editPane);
 		if (bufferSet == null)
 		{
-			bufferSet = new BufferSet(BufferSet.Scope.editpane);
+			bufferSet = new BufferSet();
 			editPaneBufferSetMap.put(editPane, bufferSet);
 		}
 

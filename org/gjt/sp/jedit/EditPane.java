@@ -662,38 +662,40 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		return bufferSet;
 	} //}}}
 
-	//{{{ setBufferSet() methods
+	//{{{ getBufferSetScope() method
 	/**
-	 * Set the default bufferSet.
-	 * from the editpane.bufferset.default property
-	 *
-	 * @since jEdit 4.3pre15
+	 * Get the current scope of bufferSet.
+	 * @since jEdit 4.3pre17
 	 */
-	public void setBufferSet()
+	public BufferSet.Scope getBufferSetScope()
 	{
-		BufferSet.Scope mode = BufferSet.Scope.fromString(jEdit.getProperty("editpane.bufferset.default"));
+		return bufferSetScope;
+	} //}}}
 
-		switch (mode)
+	//{{{ setBufferSetScope() methods
+	/**
+	 * Set the scope of bufferSet for the EditPane.
+	 * @param scope the new scope
+	 * @since jEdit 4.3pre17
+	 */
+	public void setBufferSetScope(BufferSet.Scope scope)
+	{
+		BufferSet bufferSet;
+		switch (scope)
 		{
 			case view:
-				setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view));
+				bufferSet = jEdit.getBufferSetManager().getViewBufferSet(view);
 				break;
 			case editpane:
-				setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(this));
+				bufferSet = jEdit.getBufferSetManager().getEditPaneBufferSet(this);
 				break;
+			default:
+				scope = BufferSet.Scope.global;
 			case global:
-				setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
+				bufferSet = jEdit.getBufferSetManager().getGlobalBufferSet();
 				break;
 		}
-	}
 
-	/**
-	 * Set the new bufferSet of the EditPane.
-	 * @param bufferSet the new bufferSet
-	 * @since jEdit 4.3pre15
-	 */
-	public void setBufferSet(BufferSet bufferSet)
-	{
 		if (this.bufferSet != bufferSet)
 		{
 			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
@@ -743,6 +745,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 				bufferSetManager.addBuffer(bufferSet, buffer);
 
 			this.bufferSet = bufferSet;
+			this.bufferSetScope = scope;
 			if (bufferSet.size() == 0)
 			{
 				jEdit.newFile(this);
@@ -876,7 +879,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		return getClass().getName() + '['
 			+ (view.getEditPane() == this
 			? "active" : "inactive")
-			+ ',' + bufferSet.getScope() + ']';
+			+ ',' + bufferSetScope + ']';
 	} //}}}
 
 	//{{{ Package-private members
@@ -902,7 +905,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		propertiesChanged();
 		this.buffer = buffer;
-		setBufferSet();
+		setBufferSetScope(BufferSet.Scope.fromString(
+			jEdit.getProperty("editpane.bufferset.default")));
 		this.buffer = null;
 		if(buffer == null)
 		{
@@ -935,11 +939,15 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	private boolean init;
 	/** The View where the edit pane is. */
 	private final View view;
+
 	private BufferSet bufferSet;
+	private BufferSet.Scope bufferSetScope;
+
 	/** The current buffer. */
 	private Buffer buffer;
 	private Buffer recentBuffer;
 	private BufferSwitcher bufferSwitcher;
+
 	/** The textArea inside the edit pane. */
 	private final JEditTextArea textArea;
 	private final MarkerHighlight markerHighlight;
