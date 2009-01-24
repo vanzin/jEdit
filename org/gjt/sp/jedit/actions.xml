@@ -373,17 +373,17 @@
 </ACTION>
 <ACTION NAME="global-bufferset">
 	<CODE>
-		editPane.setBufferSet(jEdit.getBufferSetManager().getGlobalBufferSet());
+		editPane.setBufferSetScope(BufferSet.Scope.global);
 	</CODE>
 </ACTION>
 <ACTION NAME="view-bufferset">
 	<CODE>
-		editPane.setBufferSet(jEdit.getBufferSetManager().getViewBufferSet(view));
+		editPane.setBufferSetScope(BufferSet.Scope.view);
 	</CODE>
 </ACTION>
 <ACTION NAME="editpane-bufferset">
 	<CODE>
-		editPane.setBufferSet(jEdit.getBufferSetManager().getEditPaneBufferSet(editPane));
+		editPane.setBufferSetScope(BufferSet.Scope.editpane);
 	</CODE>
 </ACTION>
 
