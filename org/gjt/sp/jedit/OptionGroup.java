@@ -41,7 +41,7 @@ public class OptionGroup
 	// {{{ data members
 	protected final String name;
 	protected final String label;
-	protected final Vector members;
+	protected final Vector<Object> members;
 	private boolean sort;
 	// }}}
 	
@@ -57,7 +57,7 @@ public class OptionGroup
 	{
 		this.name = name;
 		label = jEdit.getProperty("options." + name + ".label");
-		members = new Vector();
+		members = new Vector<Object>();
 	} //}}}
 
 	//{{{ OptionGroup constructor
@@ -71,7 +71,7 @@ public class OptionGroup
 	{
 		this.name = name;
 		this.label = label;
-		members = new Vector();
+		members = new Vector<Object>();
 
 		StringTokenizer st = new StringTokenizer(options);
 		while(st.hasMoreTokens())
@@ -124,7 +124,7 @@ public class OptionGroup
 	} //}}}
 
 	//{{{ getMembers() method
-	public Enumeration getMembers()
+	public Enumeration<Object> getMembers()
 	{
 		return members.elements();
 	} //}}}
