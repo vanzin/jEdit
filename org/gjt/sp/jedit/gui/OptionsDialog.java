@@ -378,15 +378,15 @@ public abstract class OptionsDialog extends EnhancedDialog
 	//{{{ selectPane() method
 	private boolean selectPane(OptionGroup node, String name)
 	{
-		return selectPane(node,name,new ArrayList());
+		return selectPane(node,name,new ArrayList<Object>());
 	} //}}}
 
 	//{{{ selectPane() method
-	private boolean selectPane(OptionGroup node, String name, List path)
+	private boolean selectPane(OptionGroup node, String name, List<Object> path)
 	{
 		path.add(node);
 
-		Enumeration e = node.getMembers();
+		Enumeration<Object> e = node.getMembers();
 		while(e.hasMoreElements())
 		{
 			Object obj = e.nextElement();
@@ -447,7 +447,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 		if(obj instanceof OptionGroup)
 		{
 			OptionGroup grp = (OptionGroup)obj;
-			Enumeration members = grp.getMembers();
+			Enumeration<Object> members = grp.getMembers();
 			while(members.hasMoreElements())
 			{
 				save(members.nextElement());
