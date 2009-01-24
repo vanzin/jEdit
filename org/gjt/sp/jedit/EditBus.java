@@ -109,7 +109,7 @@ public class EditBus
 		{
 			if (copyComponents == null)
 			{
-				copyComponents = (EBComponent[])components.toArray(
+				copyComponents = components.toArray(
 					new EBComponent[components.size()]);
 			}
 			return copyComponents;
@@ -138,7 +138,7 @@ public class EditBus
 				{
 					long start = System.nanoTime();
 					comp.handleMessage(message);
-					long time = (System.nanoTime() - start);
+					long time = System.nanoTime() - start;
 					if(time >= 1000000)
 					{
 						Log.log(Log.DEBUG,EditBus.class,comp + ": " + time + " ns");
@@ -157,7 +157,7 @@ public class EditBus
 	} //}}}
 
 	//{{{ Private members
-	private static ArrayList components = new ArrayList();
+	private static final List<EBComponent> components = new ArrayList<EBComponent>();
 	private static EBComponent[] copyComponents;
 
 	// can't create new instances
