@@ -29,6 +29,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.io.*;
 import java.util.Random;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
@@ -136,7 +137,7 @@ public class TipOfTheDay extends EnhancedDialog
 			tipToShow = Math.abs(new Random().nextInt()) % count;
 		try
 		{
-			tipText.setPage(tips[tipToShow].toURL());
+			tipText.setPage(tips[tipToShow].toURI().toURL());
 		}
 		catch(Exception e)
 		{
