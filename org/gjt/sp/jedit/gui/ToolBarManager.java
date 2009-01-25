@@ -25,6 +25,8 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.*;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -63,18 +65,18 @@ public class ToolBarManager
 	private Container top;
 	private Container bottom;
 
-	private ArrayList topToolBars = new ArrayList();
-	private ArrayList bottomToolBars = new ArrayList();
+	private List<Entry> topToolBars = new ArrayList<Entry>();
+	private List<Entry> bottomToolBars = new ArrayList<Entry>();
 	//}}}
 
 	//{{{ addToolBar() method
-	private void addToolBar(Container group, ArrayList toolbars,
+	private static void addToolBar(Container group, List<Entry> toolbars,
 		Entry entry)
 	{
 		// See if we should place this toolbar before any others
 		for(int i = 0; i < toolbars.size(); i++)
 		{
-			if(entry.layer > ((Entry)toolbars.get(i)).layer)
+			if(entry.layer > toolbars.get(i).layer)
 			{
 				toolbars.add(i,entry);
 				group.add(entry.toolbar,i);
@@ -88,12 +90,12 @@ public class ToolBarManager
 	} //}}}
 
 	//{{{ removeToolBar() method
-	private void removeToolBar(Container group, ArrayList toolbars,
+	private static void removeToolBar(Container group, List<Entry> toolbars,
 		Component toolbar)
 	{
 		for(int i = 0; i < toolbars.size(); i++)
 		{
-			if(toolbar == ((Entry)toolbars.get(i)).toolbar)
+			if(toolbar == toolbars.get(i).toolbar)
 			{
 				group.remove(toolbar);
 				toolbars.remove(i);
@@ -106,7 +108,7 @@ public class ToolBarManager
 	//}}}
 
 	//{{{ Entry class
-	static class Entry
+	private static class Entry
 	{
 		int layer;
 		Component toolbar;
