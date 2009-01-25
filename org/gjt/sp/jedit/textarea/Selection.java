@@ -358,7 +358,6 @@ public abstract class Selection implements Cloneable
 		//{{{ Rect constructor
 		public Rect()
 		{
-			super();
 		} //}}}
 
 		//{{{ Rect constructor
@@ -502,7 +501,7 @@ public abstract class Selection implements Cloneable
 			int maxWidth = 0;
 			int totalLines = 0;
 			/** This list will contains Strings and Integer. */
-			List lines = new ArrayList();
+			List<Object> lines = new ArrayList<Object>();
 
 			//{{{ Split the text into lines
 			if(text != null)
