@@ -47,6 +47,7 @@ import org.gjt.sp.util.IOUtilities;
 
 import org.gjt.sp.util.XMLUtilities;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}
 
 /**
@@ -254,7 +255,7 @@ public class MiscUtilities
 	{
 		if(isURL(path))
 			return true;
-		else if(path.startsWith("~/") || path.startsWith("~" + File.separator) || "~".equals(path))
+		else if(path.startsWith("~/") || path.startsWith('~' + File.separator) || "~".equals(path))
 			return true;
 		else if(OperatingSystem.isDOSDerived())
 		{
@@ -280,7 +281,7 @@ public class MiscUtilities
 		return false;
 	} //}}}
 
-	//{{{ constructPath() method
+	//{{{ constructPath() methods
 	/**
 	 * Constructs an absolute path name from a directory and another
 	 * path name. This method is VFS-aware.
@@ -343,9 +344,8 @@ public class MiscUtilities
 		VFS vfs = VFSManager.getVFSForPath(parent);
 
 		return canonPath(vfs.constructPath(parent,path));
-	} //}}}
+	}
 
-	//{{{ constructPath() method
 	/**
 	 * Constructs an absolute path name from three path components.
 	 * This method is VFS-aware.
@@ -365,8 +365,8 @@ public class MiscUtilities
 	 * appended to <code>parent</code> even if it is absolute.
 	 * <b>For local path names only.</b>.
 	 *
-	 * @param path
-	 * @param parent
+	 * @param parent the parent path
+	 * @param path the path to append to the parent
 	 */
 	public static String concatPath(String parent, String path)
 	{
@@ -376,7 +376,7 @@ public class MiscUtilities
 		// Make all child paths relative.
 		if (path.startsWith(File.separator))
 			path = path.substring(1);
-		else if ((path.length() >= 3) && (path.charAt(1) == ':'))
+		else if (path.length() >= 3 && path.charAt(1) == ':')
 			path = path.replace(':', File.separatorChar);
 
 		if (parent == null)
@@ -546,10 +546,10 @@ public class MiscUtilities
 		}
 	} //}}}
 
-	//{{{ saveBackup() method
+	//{{{ saveBackup() methods
 	/**
 	 * Saves a backup (optionally numbered) of a file.
-	 * @param file A local file
+	 * @param file A local file                                                        
 	 * @param backups The number of backups. Must be >= 1. If > 1, backup
 	 * files will be numbered.
 	 * @param backupPrefix The backup file name prefix
@@ -558,14 +558,13 @@ public class MiscUtilities
 	 * they will be saved in the same directory as the file itself.
 	 * @since jEdit 4.0pre1
 	 */
-	public static void saveBackup(File file, int backups,
-								  String backupPrefix, String backupSuffix,
-								  String backupDirectory)
+	 public static void saveBackup(File file, int backups,
+		 String backupPrefix, String backupSuffix,
+		 String backupDirectory)
 	{
 		saveBackup(file,backups,backupPrefix,backupSuffix,backupDirectory,0);
-	} //}}}
+	}
 
-	//{{{ saveBackup() method
 	/**
 	 * Saves a backup (optionally numbered) of a file.
 	 * @param file A local file
@@ -595,34 +594,34 @@ public class MiscUtilities
 		if(backups == 1)
 		{
 			File backupFile = new File(backupDirectory,
-									   backupPrefix + name + backupSuffix);
+				backupPrefix + name + backupSuffix);
 			long modTime = backupFile.lastModified();
 			/* if backup file was created less than
 			 * 'backupTimeDistance' ago, we do not
 			 * create the backup */
 			if(System.currentTimeMillis() - modTime
 			   >= backupTimeDistance)
-				{
-					Log.log(Log.DEBUG,MiscUtilities.class,
-						"Saving backup of file \"" +
-						file.getAbsolutePath() + "\" to \"" +
-						backupFile.getAbsolutePath() + '"');
-					backupFile.delete();
-					if (!file.renameTo(backupFile))
-						IOUtilities.moveFile(file, backupFile);
-				}
+			{
+				Log.log(Log.DEBUG,MiscUtilities.class,
+					"Saving backup of file \"" +
+					file.getAbsolutePath() + "\" to \"" +
+					backupFile.getAbsolutePath() + '"');
+				backupFile.delete();
+				if (!file.renameTo(backupFile))
+					IOUtilities.moveFile(file, backupFile);
+			}
 		}
 		// If backups > 1, move old ~n~ files, create ~1~ file
 		else
 		{
 			/* delete a backup created using above method */
 			new File(backupDirectory,
-					 backupPrefix + name + backupSuffix
-					 + backups + backupSuffix).delete();
-
+				backupPrefix + name + backupSuffix
+				+ backups + backupSuffix).delete();
+				
 			File firstBackup = new File(backupDirectory,
-										backupPrefix + name + backupSuffix
-										+ "1" + backupSuffix);
+				backupPrefix + name + backupSuffix
+				+ '1' + backupSuffix);
 			long modTime = firstBackup.lastModified();
 			/* if backup file was created less than
 			 * 'backupTimeDistance' ago, we do not
@@ -633,20 +632,19 @@ public class MiscUtilities
 				for(int i = backups - 1; i > 0; i--)
 				{
 					File backup = new File(backupDirectory,
-										   backupPrefix + name
-										   + backupSuffix + i
-										   + backupSuffix);
+						backupPrefix + name
+						+ backupSuffix + i
+						+ backupSuffix);
 
-					backup.renameTo(
-									new File(backupDirectory,
-											 backupPrefix + name
-											 + backupSuffix + (i+1)
-											 + backupSuffix));
+					backup.renameTo(new File(backupDirectory,
+						backupPrefix + name
+						+ backupSuffix + (i + 1)
+						+ backupSuffix));
 				}
 
 				File backupFile = new File(backupDirectory,
-										   backupPrefix + name + backupSuffix
-										   + "1" + backupSuffix);
+					backupPrefix + name + backupSuffix
+					+ '1' + backupSuffix);
 				Log.log(Log.DEBUG,MiscUtilities.class,
 					"Saving backup of file \"" +
 					file.getAbsolutePath() + "\" to \"" +
@@ -679,7 +677,7 @@ public class MiscUtilities
 		return IOUtilities.moveFile(source, dest);
 	} //}}}
 
-	//{{{ copyStream() method
+	//{{{ copyStream() methods
 	/**
 	 * Copy an input stream to an output stream.
 	 *
@@ -695,13 +693,12 @@ public class MiscUtilities
 	 */
 	@Deprecated
 	public static boolean copyStream(int bufferSize, ProgressObserver progress,
-									 InputStream in, OutputStream out, boolean canStop)
+		InputStream in, OutputStream out, boolean canStop)
 		throws IOException
 	{
 		return IOUtilities.copyStream(bufferSize, progress, in, out, canStop);
-	} //}}}
+	}
 
-	//{{{ copyStream() method
 	/**
 	 * Copy an input stream to an output stream with a buffer of 4096 bytes.
 	 *
@@ -721,7 +718,7 @@ public class MiscUtilities
 		return IOUtilities.copyStream(4096,progress, in, out, canStop);
 	} //}}}
 
-	//{{{ isBinary() method
+	//{{{ isBinary() methods
 	/**
 	 * Check if a Reader is binary.
 	 * @deprecated
@@ -731,9 +728,8 @@ public class MiscUtilities
 	public static boolean isBinary(Reader reader) throws IOException
 	{
 		return containsNullCharacter(reader);
-	} //}}}
+	}
 
-	//{{{ isBinary() method
 	/**
 	 * Check if an InputStream is binary.
 	 * First this tries encoding auto detection. If an encoding is
@@ -781,7 +777,7 @@ public class MiscUtilities
 	 * @return true if this is a backup file.
 	 * @since jEdit 4.3pre5
 	 */
-	public static boolean isBackup( String filename )
+	public static boolean isBackup(String filename)
 	{
 		if (filename.startsWith("#")) return true;
 		if (filename.endsWith("~")) return true;
@@ -807,7 +803,7 @@ public class MiscUtilities
 		if (buffer == null)
 			encoding = System.getProperty("file.encoding");
 		else
-			encoding = buffer.getStringProperty(Buffer.ENCODING);
+			encoding = buffer.getStringProperty(JEditBuffer.ENCODING);
 		boolean gzipped = false;
 
 		if (buffer == null || buffer.getBooleanProperty(Buffer.ENCODING_AUTODETECT))
@@ -842,7 +838,7 @@ public class MiscUtilities
 			{
 				buffer.setBooleanProperty(Buffer.GZIPPED,true);
 			}
-			buffer.setProperty(Buffer.ENCODING, encoding);
+			buffer.setProperty(JEditBuffer.ENCODING, encoding);
 		}
 		return result;
 	} //}}}
@@ -1014,7 +1010,7 @@ public class MiscUtilities
 		return StandardUtilities.getOffsetOfVirtualColumn(seg, tabSize, column, totalVirtualWidth);
 	} //}}}
 
-	//{{{ createWhiteSpace() method
+	//{{{ createWhiteSpace() methods
 	/**
 	 * Creates a string of white space with the specified length.<p>
 	 *
@@ -1033,9 +1029,8 @@ public class MiscUtilities
 	public static String createWhiteSpace(int len, int tabSize)
 	{
 		return StandardUtilities.createWhiteSpace(len,tabSize,0);
-	} //}}}
+	}
 
-	//{{{ createWhiteSpace() method
 	/**
 	 * Creates a string of white space with the specified length.<p>
 	 *
@@ -1114,7 +1109,7 @@ public class MiscUtilities
 		return buf.toString();
 	} //}}}
 
-	//{{{ charsToEscapes() method
+	//{{{ charsToEscapes() methods
 	/**
 	 * Escapes newlines, tabs, backslashes, and quotes in the specified
 	 * string.
@@ -1126,9 +1121,8 @@ public class MiscUtilities
 	public static String charsToEscapes(String str)
 	{
 		return StandardUtilities.charsToEscapes(str);
-	} //}}}
+	}
 
-	//{{{ charsToEscapes() method
 	/**
 	 * Escapes the specified characters in the specified string.
 	 * @param str The string
@@ -1144,7 +1138,7 @@ public class MiscUtilities
 
 	//{{{ compareVersions() method
 	/**
-	 * @deprecated Call <code>compareStrings()</code> instead
+	 * @deprecated Call {@link StandardUtilities#compareStrings(String, String, boolean)} instead
 	 */
 	@Deprecated
 	public static int compareVersions(String v1, String v2)
@@ -1176,12 +1170,12 @@ public class MiscUtilities
 
 	//{{{ stringsEqual() method
 	/**
-	 * @deprecated Call <code>objectsEqual()</code> instead.
+	 * @deprecated Call {@link StandardUtilities#objectsEqual(Object, Object)} instead.
 	 */
 	@Deprecated
 	public static boolean stringsEqual(String s1, String s2)
 	{
-		return org.gjt.sp.util.StandardUtilities.objectsEqual(s1,s2);
+		return StandardUtilities.objectsEqual(s1,s2);
 	} //}}}
 
 	//{{{ objectsEqual() method
@@ -1237,7 +1231,7 @@ public class MiscUtilities
 		}
 	} //}}}
 
-	//{{{ getLongestPrefix() method
+	//{{{ getLongestPrefix() methods
 	/**
 	 * Returns the longest common prefix in the given set of strings.
 	 * @param str The strings
@@ -1269,9 +1263,8 @@ loop:		for(;;)
 		}
 
 		return str.get(0).toString().substring(0,prefixLength);
-	} //}}}
+	}
 
-	//{{{ getLongestPrefix() method
 	/**
 	 * Returns the longest common prefix in the given set of strings.
 	 * @param str The strings
@@ -1281,9 +1274,8 @@ loop:		for(;;)
 	public static String getLongestPrefix(String[] str, boolean ignoreCase)
 	{
 		return getLongestPrefix((Object[])str,ignoreCase);
-	} //}}}
+	}
 
-	//{{{ getLongestPrefix() method
 	/**
 	 * Returns the longest common prefix in the given set of strings.
 	 * @param str The strings (calls <code>toString()</code> on each object)
@@ -1401,7 +1393,7 @@ loop:		for(;;)
 		int compare(Object obj1, Object obj2);
 	} //}}}
 
-	//{{{ StringCompare class
+	//{{{ StringCompare deprecated class
 	/**
 	 * Compares strings.
 	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities.StringCompare}
@@ -1416,7 +1408,7 @@ loop:		for(;;)
 		}
 	} //}}}
 
-	//{{{ StringICaseCompare class
+	//{{{ StringICaseCompare deprecated class
 	/**
 	 * Compares strings ignoring case.
 	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities.StringCompare}
@@ -1430,7 +1422,7 @@ loop:		for(;;)
 		}
 	} //}}}
 
-	//{{{ MenuItemCompare class
+	//{{{ MenuItemCompare deprecated class
 	/**
 	 * Compares menu item labels.
 	 * @deprecated Replaced with {@link org.gjt.sp.jedit.menu.MenuItemTextComparator}
@@ -1636,19 +1628,18 @@ loop:		for(;;)
 		return permissions;
 	} //}}}
 
-	//{{{ getEncodings() method
+	//{{{ getEncodings() methods
 	/**
 	 * Returns a list of supported character encodings.
 	 * @since jEdit 4.2pre5
-	 * @deprecated See #getEncodings( boolean )
+	 * @deprecated See #getEncodings(boolean)
 	 */
 	@Deprecated
 	public static String[] getEncodings()
 	{
 		return getEncodings(false);
-	} //}}}
+	}
 
-	//{{{ getEncodings() method
 	/**
 	 * Returns a list of supported character encodings.
 	 * @since jEdit 4.3pre5
@@ -1711,8 +1702,14 @@ loop:		for(;;)
 	//{{{ Private members
 	private MiscUtilities() {}
 
-	//{{{ compareChars()
-	/** should this be public? */
+	//{{{ compareChars() method
+	/**
+	 * Compares two chars.
+	 * should this be public?
+	 * @param ch1 the first char
+	 * @param ch2 the second char
+	 * @param ignoreCase true if you want to ignore case
+	 */
 	private static boolean compareChars(char ch1, char ch2, boolean ignoreCase)
 	{
 		if(ignoreCase)
@@ -1721,7 +1718,7 @@ loop:		for(;;)
 			return ch1 == ch2;
 	} //}}}
 
-	//{{{ getPathStart()
+	//{{{ getPathStart() method
 	private static int getPathStart(String path)
 	{
 		if(path.startsWith("/"))
@@ -1736,7 +1733,7 @@ loop:		for(;;)
 			return 0;
 	} //}}}
 
-	//{{{ containsNullCharacter()
+	//{{{ containsNullCharacter() method
 	private static boolean containsNullCharacter(Reader reader)
 		throws IOException
 	{
@@ -1758,12 +1755,17 @@ loop:		for(;;)
 	} //}}}
 
 	//}}}
+	
 	static final VarCompressor svc = new VarCompressor();
+	
+	//{{{ VarCompressor class
 	static class VarCompressor
 	{
 		/** a reverse mapping of values to environment variable names */
 		final Map<String, String> prefixMap = new HashMap<String, String>();
 		final Map<String, String> previous = new HashMap<String, String>();
+		
+		//{{{ VarCompressor constructor
 		VarCompressor()
 		{
 			ProcessBuilder pb = new ProcessBuilder();
@@ -1789,8 +1791,9 @@ loop:		for(;;)
 				}					
 				prefixMap.put(v, k);
 			}
-		}
+		} //}}}
 		
+		//{{{ compress() method
 		String compress(String path)
 		{
 			String original = path;			
@@ -1815,12 +1818,13 @@ loop:		for(;;)
 				if (envvar.equals("~")) 
 					path = envvar + remainder;
 				else if (OperatingSystem.isWindows())
-					path = "%" + envvar.toUpperCase() + "%" + remainder;
+					path = '%' + envvar.toUpperCase() + '%' + remainder;
 				else
-					path = "$" + envvar + remainder;
+					path = '$' + envvar + remainder;
 			}
 			previous.put(original, path);
 			return path;
-		}
-	}
+		} //}}}
+	} //}}}
+
 }
