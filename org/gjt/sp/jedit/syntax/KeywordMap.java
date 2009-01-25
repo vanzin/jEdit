@@ -23,7 +23,8 @@
 package org.gjt.sp.jedit.syntax;
 
 import javax.swing.text.Segment;
-import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A <code>KeywordMap</code> is similar to a hashtable in that it maps keys
@@ -44,7 +45,7 @@ public class KeywordMap
 	{
 		this(ignoreCase, 52);
 		this.ignoreCase = ignoreCase;
-		noWordSep = new StringBuffer();
+		noWordSep = new StringBuilder();
 	} //}}}
 
 	//{{{ KeywordMap constructor
@@ -148,18 +149,18 @@ loop:		for(int i = 0; i < keyword.length; i++)
 	 */
 	public String[] getKeywords()
 	{
-		Vector vector = new Vector(100);
+		List<String> vector = new ArrayList<String>(100);
 		for(int i = 0; i < map.length; i++)
 		{
 			Keyword keyword = map[i];
 			while(keyword != null)
 			{
-				vector.addElement(new String(keyword.keyword));
+				vector.add(new String(keyword.keyword));
 				keyword = keyword.next;
 			}
 		}
 		String[] retVal = new String[vector.size()];
-		vector.copyInto(retVal);
+		vector.toArray(retVal);
 		return retVal;
 	} //}}}
 
@@ -208,7 +209,7 @@ loop:		for(int i = 0; i < keyword.length; i++)
 	private int mapLength;
 	private Keyword[] map;
 	private boolean ignoreCase;
-	private StringBuffer noWordSep;
+	private StringBuilder noWordSep;
 	//}}}
 
 	//{{{ getStringMapKey() method
@@ -230,9 +231,9 @@ loop:		for(int i = 0; i < keyword.length; i++)
 	//}}}
 
 	//{{{ Keyword class
-	class Keyword
+	private static class Keyword
 	{
-		public Keyword(char[] keyword, byte id, Keyword next)
+		Keyword(char[] keyword, byte id, Keyword next)
 		{
 			this.keyword = keyword;
 			this.id = id;
