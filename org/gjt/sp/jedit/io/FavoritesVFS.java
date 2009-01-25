@@ -83,15 +83,14 @@ public class FavoritesVFS extends VFS
 		{
 			path = path.substring(PROTOCOL.length() + 1);
 
-			Iterator iter = favorites.iterator();
+			Iterator<Favorite> iter = favorites.iterator();
 			while(iter.hasNext())
 			{
-				if(((Favorite)iter.next()).getPath()
-					.equals(path))
+				if(iter.next().getPath().equals(path))
 				{
 					iter.remove();
 					VFSManager.sendVFSUpdate(this,PROTOCOL
-						+ ":",false);
+						+ ':',false);
 					EditBus.send(new DynamicMenuChanged(
 						"favorites"));
 					return true;
@@ -107,7 +106,7 @@ public class FavoritesVFS extends VFS
 	{
 		synchronized(lock)
 		{
-			favorites = new LinkedList();
+			favorites = new LinkedList<Favorite>();
 
 			String favorite;
 			int i = 0;
@@ -130,16 +129,15 @@ public class FavoritesVFS extends VFS
 			if(favorites == null)
 				loadFavorites();
 
-			Iterator iter = favorites.iterator();
-			while(iter.hasNext())
+			for (Favorite favorite : favorites)
 			{
-				if(((Favorite)iter.next()).getPath().equals(path))
+				if (favorite.getPath().equals(path))
 					return;
 			}
 
 			favorites.add(new Favorite(path,type));
 
-			VFSManager.sendVFSUpdate(instance,PROTOCOL + ":",false);
+			VFSManager.sendVFSUpdate(instance,PROTOCOL + ':',false);
 			EditBus.send(new DynamicMenuChanged("favorites"));
 		}
 	} //}}}
@@ -153,14 +151,12 @@ public class FavoritesVFS extends VFS
 				return;
 
 			int i = 0;
-			Iterator iter = favorites.iterator();
-			while(iter.hasNext())
+			for (Favorite favorite : favorites)
 			{
-				Favorite e = ((Favorite)iter.next());
 				jEdit.setProperty("vfs.favorite." + i,
-					e.getPath());
+					favorite.getPath());
 				jEdit.setIntegerProperty("vfs.favorite." + i
-					+ ".type",e.getType());
+					+ ".type", favorite.getType());
 
 				i++;
 			}
@@ -178,15 +174,15 @@ public class FavoritesVFS extends VFS
 			if(favorites == null)
 				loadFavorites();
 
-			return (VFSFile[])favorites.toArray(
+			return favorites.toArray(
 				new VFSFile[favorites.size()]);
 		}
 	} //}}}
 
 	//{{{ Private members
 	private static FavoritesVFS instance;
-	private static Object lock = new Object();
-	private static List favorites;
+	private static final Object lock = new Object();
+	private static List<Favorite> favorites;
 	//}}}
 
 	//{{{ Favorite class
@@ -194,7 +190,7 @@ public class FavoritesVFS extends VFS
 	{
 		Favorite(String path, int type)
 		{
-			super(path,path,PROTOCOL + ":" + path,type,0,false);
+			super(path,path,PROTOCOL + ':' + path,type,0,false);
 		}
 
 		public String getExtendedAttribute(String name)
