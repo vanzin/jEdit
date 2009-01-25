@@ -140,7 +140,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private static final String ORIGINAL_DOCKING_FRAMEWORK = "Original";
 	public static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
 		"org.gjt.sp.jedit.gui.DockingFrameworkProvider";
-	private static DockingFrameworkProvider dockingFrameworkProvider = null;
+	private static DockingFrameworkProvider dockingFrameworkProvider;
 
 	//{{{ Groups
 	/**
@@ -1256,7 +1256,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				title.append(", ");
 
 			Buffer buffer = buffers.get(i);
-			title.append((showFullPath && !buffer.isNewFile())
+			title.append(showFullPath && !buffer.isNewFile()
 				? buffer.getPath(true) : buffer.getName());
 			if(buffer.isDirty())
 			{
@@ -1568,7 +1568,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		Buffer[] buffers = jEdit.getBuffers();
 
-		Stack stack = new Stack();
+		Stack<Object> stack = new Stack<Object>();
 
 		// we create a stream tokenizer for parsing a simple
 		// stack-based language
@@ -1722,18 +1722,19 @@ loop:		while (true)
 	 * combo box, and it doesn't make sense to have this action available if
 	 * the buffer switcher isn't visible.
 	 */
-	private void showBufferSwitcherMenuItem() {
-		boolean show = (jEdit.getBooleanProperty("view.showBufferSwitcher"));
+	private void showBufferSwitcherMenuItem()
+	{
+		boolean show = jEdit.getBooleanProperty("view.showBufferSwitcher");
 		JMenuBar menubar = getJMenuBar();
 		if (menubar == null)
 		{
 			return;
 		}
-		JMenu viewmenu = null;
 		String viewmenu_label = jEdit.getProperty("view.label");
 		viewmenu_label = viewmenu_label.replace("$", "");
 		String sbs_label = jEdit.getProperty("show-buffer-switcher.label");
 		sbs_label = sbs_label.replace("$", "");
+		JMenu viewmenu = null;
 		for (int i = 0; i < menubar.getMenuCount(); i++)
 		{
 			JMenu menu = menubar.getMenu(i);
