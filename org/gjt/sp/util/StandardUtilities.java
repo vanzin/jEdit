@@ -492,7 +492,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 
 		final Object NEG = new Object();
 		final Object GROUP = new Object();
-		Stack state = new Stack();
+		Stack<Object> state = new Stack<Object>();
 
 		StringBuilder buf = new StringBuilder();
 		boolean backslash = false;
@@ -551,7 +551,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 			case '}':
 				if(!state.isEmpty())
 				{
-					buf.append(")");
+					buf.append(')');
 					if(state.pop() == NEG)
 						buf.append(".*");
 				}
@@ -593,7 +593,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		boolean ret = true;
 		for (int i = 0; i < len; i++)
 		{
-			char c1, c2;
+			char c1;
 
 			if (i + toff < seq.length())
 				c1 = seq.charAt(i + toff);
@@ -603,6 +603,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 				break;
 			}
 
+			char c2;
 			if (i + ooff < other.length())
 				c2 = other.charAt(i + ooff);
 			else
