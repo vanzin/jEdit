@@ -662,6 +662,8 @@ loop:		for(int i = 0; i < str.length(); i++)
 	{
 		if(obj == null)
 			return def;
+		else if(obj instanceof Boolean)
+			return ((Boolean)obj).booleanValue();
 		else if("true".equals(obj) || "yes".equals(obj)
 			|| "on".equals(obj))
 			return true;
