@@ -61,16 +61,16 @@ import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.IOUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 // }}}
-// {{{ DockableWindowManagerImpl class
+
 /**
  * Concrete class for Dockable Window Managers.
  * Each View has a single DockableWindowManager, for managing the
  * specific dockable instances associated with that View.
  * @since jEdit 4.3pre16
- *
  */
 public class DockableWindowManagerImpl extends DockableWindowManager
 {
@@ -87,6 +87,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 				for (int i = 0; i < attrs.getLength(); i++)
 					attribute(attrs.getQName(i), attrs.getValue(i));
 			}
+
 			private void attribute(String aname, String value)
 			{
 				if(aname.equals("TOP"))
@@ -112,14 +113,16 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		public String top, left, bottom, right;
 		public int topPos, leftPos, bottomPos, rightPos;
 
-		public DefaultHandler getPerspectiveHandler() {
+		public DefaultHandler getPerspectiveHandler()
+		{
 			return new PerspectiveHandler();
 		}
 
-		public boolean saveLayout(String baseName, int viewIndex) {
+		public boolean saveLayout(String baseName, int viewIndex)
+		{
 			String lineSep = System.getProperty("line.separator");
 			String filename = getLayoutFilename(baseName, viewIndex);
-			BufferedWriter out;
+			BufferedWriter out = null;
 			try {
 				out = new BufferedWriter(new FileWriter(filename));
 				out.write("<DOCKING LEFT=\"");
@@ -140,30 +143,43 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 				out.write(String.valueOf(bottomPos));
 				out.write("\" />");
 				out.write(lineSep);
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				Log.log(Log.ERROR, this, e, e);
 				return false;
+			}
+			finally
+			{
+				IOUtilities.closeQuietly(out);
 			}
 			return true;
 		}
 
 		@Override
-		public boolean loadLayout(String baseName, int viewIndex) {
+		public boolean loadLayout(String baseName, int viewIndex)
+		{
 			String filename = getLayoutFilename(baseName, viewIndex);
 			DefaultHandler handler = getPerspectiveHandler();
-			try {
+			try
+			{
+				// no need to close the stream it is closed by XMLUtilities.parseXML() method
 				XMLUtilities.parseXML(new FileInputStream(filename), handler);
-			} catch (FileNotFoundException e) {
+			}
+			catch (FileNotFoundException e)
+			{
 				return false;
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				return false;
 			}
 			return true;
 		}
 		
 		@Override
-		public String getName() {
+		public String getName()
+		{
 			return "DockableWindowManager";
 		}
 
@@ -178,11 +194,12 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	private PanelWindowContainer bottom;
 	private List<Entry> clones;
 	private Entry lastEntry;
-	public Stack showStack = new Stack();
+	public Stack<String> showStack = new Stack<String>();
 	// }}}
 
 	// {{{ setDockingLayout() 	
-	public void setDockingLayout(DockingLayout docking) {
+	public void setDockingLayout(DockingLayout docking)
+	{
 		DockableWindowConfig config = (DockableWindowConfig) docking;
 		if (config == null)
 			return;
@@ -202,7 +219,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	
 	// {{{ getDockingLayout()
 	@Override
-	public DockingLayout getDockingLayout(ViewConfig config) {
+	public DockingLayout getDockingLayout(ViewConfig config)
+	{
 		DockableWindowConfig docking = new DockableWindowConfig();
 		
 		docking.top = getTopDockingArea().getCurrent();
@@ -254,9 +272,12 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		add(RIGHT,right.dockablePanel);
 	} //}}}
 
-	public void setMainPanel(JPanel panel) {
+	//{{{ setMainPanel() method
+	public void setMainPanel(JPanel panel) 
+	{
 		add(panel, 0);
-	}
+	} //}}}
+
 	
 	//{{{ init() method
 	/**
@@ -435,7 +456,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			{
 				/* Try to hide the last entry that was shown */
 				try {
-					String dockableName = showStack.pop().toString(); 
+					String dockableName = showStack.pop();
 					hideDockableWindow(dockableName);
 					return;
 				}
@@ -987,14 +1008,17 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			else
 				return title;
 		}
+
 		/**
 		 * @return A label appropriate for the title on the dock buttons.
 		 */
-		public String label() {
+		public String label()
+		{
 			String retval = jEdit.getProperty(factory.name + ".label");
 			retval = retval.replaceAll("\\$", "");
 			return retval; 
 		}
+
 		//{{{ Entry constructor
 		Entry(DockableWindowFactory.Window factory, String position)
 		{
@@ -1009,10 +1033,9 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	} //}}}
 
 	@Override
-	public void disposeDockableWindow(String name) {
+	public void disposeDockableWindow(String name)
+	{
 		// Nothing to do here; called as a response to plugin unloading,
 		// handled differently by this implementation.
 	}
-
-	// }}}
 }
