@@ -45,6 +45,10 @@ for contributing to this release.
   Each plugin dockable that was configured by the properties file to be docked
   was immediately loaded and made visible when the plugin was loaded. Now, it
   uses lazy instantiation and only its anchor button is shown.
+  
+- Fixed a bug in OperatingSystem.getScreenBounds() (Matthieu Casanova)
+
+- Fixed JVM detection that was broken with java 1.6 (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
@@ -76,6 +80,9 @@ for contributing to this release.
   Also removed EditPane#setBufferSet(), which was the way to set the
   scope of buffer set. (Kazutoshi Satoda)
 
+- Added OperatingSystem.hasJava16() method and made deprecated
+  OperatingSystem.hasJava15() and OperatingSystem.hasJava14() since jEdit
+  requires Java 1.5 at least (Matthieu Casanova)
 }}}
 {{{ Editing
 - New JavaFX edit mode (Matthieu Casanova)
