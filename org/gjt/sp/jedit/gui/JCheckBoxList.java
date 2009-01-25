@@ -26,6 +26,8 @@ package org.gjt.sp.jedit.gui;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.Vector;
+import java.util.List;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.*;
 //}}}
@@ -85,7 +87,7 @@ public class JCheckBoxList extends JTable
 	//{{{ getCheckedValues() method
 	public Object[] getCheckedValues()
 	{
-		Vector values = new Vector();
+		List<Object> values = new ArrayList<Object>();
 		CheckBoxListModel model = (CheckBoxListModel)getModel();
 		for(int i = 0; i < model.items.size(); i++)
 		{
@@ -97,8 +99,7 @@ public class JCheckBoxList extends JTable
 		}
 
 		Object[] retVal = new Object[values.size()];
-		values.copyInto(retVal);
-		return retVal;
+		return values.toArray(retVal);
 	} //}}}
 
 	//{{{ selectAll() method
@@ -212,7 +213,7 @@ public class JCheckBoxList extends JTable
 	} //}}}
 
 	//{{{ DummyRenderer class
-	private class DummyRenderer extends DefaultTableCellRenderer
+	private static class DummyRenderer extends DefaultTableCellRenderer
 	{
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value,
@@ -274,7 +275,7 @@ class CheckBoxListModel extends AbstractTableModel
 		}
 	}
 
-	private JCheckBoxList.Entry createEntry(Object obj)
+	private static JCheckBoxList.Entry createEntry(Object obj)
 	{
 		if(obj instanceof JCheckBoxList.Entry)
 			return (JCheckBoxList.Entry)obj;
@@ -341,7 +342,7 @@ class CheckBoxListModel extends AbstractTableModel
 			JCheckBoxList.Entry entry = items.get(row);
 			if(!entry.caption)
 			{
-				entry.checked = (value.equals(Boolean.TRUE));
+				entry.checked = value.equals(Boolean.TRUE);
 				fireTableRowsUpdated(row,row);
 			}
 		}
