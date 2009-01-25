@@ -32,9 +32,8 @@ class PropertyManager
 	{
 		Properties total = new Properties();
 		total.putAll(system);
-		Iterator iter = plugins.iterator();
-		while(iter.hasNext())
-			total.putAll((Properties)iter.next());
+		for (Properties plugin : plugins)
+			total.putAll(plugin);
 		total.putAll(site);
 		total.putAll(user);
 		return total;
@@ -118,14 +117,14 @@ class PropertyManager
 			if(prop == null || prop.length() == 0)
 				user.remove(name);
 			else
-				user.put(name,"");
+				user.setProperty(name,"");
 		}
 		else
 		{
 			if(value.equals(prop))
 				user.remove(name);
 			else
-				user.put(name,value);
+				user.setProperty(name,value);
 		}
 	} //}}}
 
@@ -133,14 +132,14 @@ class PropertyManager
 	public void setTemporaryProperty(String name, String value)
 	{
 		user.remove(name);
-		system.put(name,value);
+		system.setProperty(name,value);
 	} //}}}
 
 	//{{{ unsetProperty() method
 	void unsetProperty(String name)
 	{
 		if(getDefaultProperty(name) != null)
-			user.put(name,"");
+			user.setProperty(name,"");
 		else
 			user.remove(name);
 	} //}}}
@@ -153,7 +152,7 @@ class PropertyManager
 
 	//{{{ Private members
 	private Properties system = new Properties();
-	private List plugins = new LinkedList();
+	private List<Properties> plugins = new LinkedList<Properties>();
 	private Properties site = new Properties();
 	private Properties user = new Properties();
 
@@ -164,11 +163,10 @@ class PropertyManager
 		if(value != null)
 			return value;
 
-		Iterator iter = plugins.iterator();
-		while(iter.hasNext())
+		for (Properties plugin : plugins)
 		{
-			value = ((Properties)iter.next()).getProperty(name);
-			if(value != null)
+			value = plugin.getProperty(name);
+			if (value != null)
 				return value;
 		}
 
@@ -176,7 +174,7 @@ class PropertyManager
 	} //}}}
 
 	//{{{ loadProps() method
-	private void loadProps(Properties into, InputStream in)
+	private static void loadProps(Properties into, InputStream in)
 		throws IOException
 	{
 		try
