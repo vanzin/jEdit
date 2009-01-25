@@ -30,6 +30,8 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
+
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -210,7 +212,7 @@ class BrowserColorsModel extends AbstractTableModel
 	//{{{ BrowserColorsModel constructor
 	BrowserColorsModel()
 	{
-		entries = new ArrayList();
+		entries = new ArrayList<Entry>();
 
 		int i = 0;
 		String glob;
@@ -241,18 +243,18 @@ class BrowserColorsModel extends AbstractTableModel
 	//{{{ moveUp() method
 	public void moveUp(int index)
 	{
-		Object obj = entries.get(index);
+		Entry entry = entries.get(index);
 		entries.remove(index);
-		entries.add(index - 1,obj);
+		entries.add(index - 1,entry);
 		fireTableRowsUpdated(index - 1,index);
 	} //}}}
 
 	//{{{ moveDown() method
 	public void moveDown(int index)
 	{
-		Object obj = entries.get(index);
+		Entry entry = entries.get(index);
 		entries.remove(index);
-		entries.add(index + 1,obj);
+		entries.add(index + 1,entry);
 		fireTableRowsUpdated(index,index + 1);
 	} //}}}
 
@@ -262,7 +264,7 @@ class BrowserColorsModel extends AbstractTableModel
 		int i;
 		for(i = 0; i < entries.size(); i++)
 		{
-			Entry entry = (Entry)entries.get(i);
+			Entry entry = entries.get(i);
 			jEdit.setProperty("vfs.browser.colors." + i + ".glob",
 				entry.glob);
 			jEdit.setColorProperty("vfs.browser.colors." + i + ".color",
@@ -287,7 +289,7 @@ class BrowserColorsModel extends AbstractTableModel
 	//{{{ getValueAt() method
 	public Object getValueAt(int row, int col)
 	{
-		Entry entry = (Entry)entries.get(row);
+		Entry entry = entries.get(row);
 
 		switch(col)
 		{
@@ -303,13 +305,13 @@ class BrowserColorsModel extends AbstractTableModel
 	//{{{ isCellEditable() method
 	public boolean isCellEditable(int row, int col)
 	{
-		return (col == 0);
+		return col == 0;
 	} //}}}
 
 	//{{{ setValueAt() method
 	public void setValueAt(Object value, int row, int col)
 	{
-		Entry entry = (Entry)entries.get(row);
+		Entry entry = entries.get(row);
 
 		if(col == 0)
 			entry.glob = (String)value;
@@ -347,10 +349,10 @@ class BrowserColorsModel extends AbstractTableModel
 		}
 	} //}}}
 
-	private ArrayList entries;
+	private List<Entry> entries;
 
 	//{{{ Entry class
-	static class Entry
+	private static class Entry
 	{
 		String glob;
 		Color color;
@@ -367,7 +369,7 @@ class BrowserColorsModel extends AbstractTableModel
 		implements TableCellRenderer
 	{
 		//{{{ ColorRenderer constructor
-		public ColorRenderer()
+		ColorRenderer()
 		{
 			setOpaque(true);
 			setBorder(SyntaxHiliteOptionPane.noFocusBorder);
@@ -396,7 +398,7 @@ class BrowserColorsModel extends AbstractTableModel
 			if (value != null)
 				setBackground((Color)value);
 
-			setBorder((cellHasFocus) ? UIManager.getBorder(
+			setBorder(cellHasFocus ? UIManager.getBorder(
 				"Table.focusCellHighlightBorder")
 				: SyntaxHiliteOptionPane.noFocusBorder);
 			return this;
