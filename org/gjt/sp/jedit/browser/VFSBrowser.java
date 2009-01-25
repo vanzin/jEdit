@@ -34,13 +34,11 @@ import java.util.*;
 import java.util.List;
 
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.io.FileVFS.LocalFile;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 //}}}
@@ -593,7 +591,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 	 */
 	public void nextDirectory() 
 	{
-		if (nextDirectoryStack.size()>0) 
+		if (!nextDirectoryStack.isEmpty())
 		{
 			setDirectory(nextDirectoryStack.pop());
 		}
@@ -1067,7 +1065,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				Buffer _buffer = jEdit.getBuffer(file.getPath());
 				if(_buffer == null)
 				{
-					Hashtable props = new Hashtable();
+					Hashtable<String, Object> props = new Hashtable<String, Object>();
 					props.put(JEditBuffer.ENCODING,currentEncoding);
 					props.put(Buffer.ENCODING_AUTODETECT,
 						  Boolean.valueOf(autoDetectEncoding));
