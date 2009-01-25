@@ -64,7 +64,8 @@ public class JARClassLoader extends ClassLoader
 	 *
 	 * @since jEdit 4.3pre6
 	 */
-	public JARClassLoader(boolean delegateFirst) {
+	public JARClassLoader(boolean delegateFirst)
+	{
 		this.delegateFirst = delegateFirst;
 		// for debugging
 		id = INDEX++;
@@ -175,10 +176,10 @@ public class JARClassLoader extends ClassLoader
 			return null;
 
 		if(!name.startsWith("/"))
-			name = "/" + name;
+			name = '/' + name;
 
 		return "jeditresource:/" + MiscUtilities.getFileName(
-			jar.getPath()) + "!" + name;
+			jar.getPath()) + '!' + name;
 	} //}}}
 
 	//{{{ getZipFile() method
@@ -210,15 +211,13 @@ public class JARClassLoader extends ClassLoader
 			"Live instances: " + live);
 		synchronized(classHash)
 		{
-			Iterator entries = classHash.entrySet().iterator();
-			while(entries.hasNext())
+			for (Map.Entry<String, Object> entry : classHash.entrySet())
 			{
-				Map.Entry entry = (Map.Entry)entries.next();
-				if(entry.getValue() != NO_CLASS)
+				if (entry.getValue() != NO_CLASS)
 				{
-					Log.log(Log.DEBUG,JARClassLoader.class,
+					Log.log(Log.DEBUG, JARClassLoader.class,
 						entry.getKey() + " ==> "
-						+ entry.getValue());
+							+ entry.getValue());
 				}
 			}
 		}
@@ -228,9 +227,9 @@ public class JARClassLoader extends ClassLoader
 	public String toString()
 	{
 		if(jar == null)
-			return "<anonymous>(" + id + ")";
+			return "<anonymous>(" + id + ')';
 		else
-			return jar.getPath() + " (" + id + ")";
+			return jar.getPath() + " (" + id + ')';
 	} //}}}
 
 	//{{{ findResources() method
@@ -240,14 +239,14 @@ public class JARClassLoader extends ClassLoader
 		{
 			private Object element;
 
-			public SingleElementEnumeration(Object element)
+			SingleElementEnumeration(Object element)
 			{
 				this.element = element;
 			}
 
 			public boolean hasMoreElements()
 			{
-				return (element != null);
+				return element != null;
 			}
 
 			public Object nextElement()
@@ -292,7 +291,7 @@ public class JARClassLoader extends ClassLoader
 		{
 			String _delegate = jEdit.getProperty(
 				"plugin." + jar.getPlugin().getClassName() + ".class_loader_delegate");
-			delegateFirst = (_delegate == null || "true".equals(_delegate));
+			delegateFirst = _delegate == null || "true".equals(_delegate);
 		}
 
 		String[] classes = jar.getClasses();
@@ -331,7 +330,7 @@ public class JARClassLoader extends ClassLoader
 
 	private static int INDEX;
 	private static int live;
-	private static Hashtable classHash = new Hashtable();
+	private static Map<String, Object> classHash = new Hashtable<String, Object>();
 
 	private int id;
 	private boolean delegateFirst;
@@ -413,7 +412,7 @@ public class JARClassLoader extends ClassLoader
 	} //}}}
 
 	//{{{ getMfValue() method
-	private String getMfValue(Attributes sectionAttrs, Attributes mainAttrs, Attributes.Name name)
+	private static String getMfValue(Attributes sectionAttrs, Attributes mainAttrs, Attributes.Name name)
 	{
 		String value=null;
 		if (sectionAttrs != null)
@@ -435,7 +434,7 @@ public class JARClassLoader extends ClassLoader
 			return;
 		}
 
-		Attributes sa = mf.getAttributes(name.replace('.', '/') + "/");
+		Attributes sa = mf.getAttributes(name.replace('.', '/') + '/');
 		Attributes ma = mf.getMainAttributes();
 
 		URL sealBase = null;
