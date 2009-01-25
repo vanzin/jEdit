@@ -336,7 +336,7 @@ public class BufferHistory
 		if(s == null)
 			return null;
 
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
 		for(int i = 0; i < s.length; i++)
 		{
@@ -362,7 +362,7 @@ public class BufferHistory
 		if(s == null)
 			return null;
 
-		Vector<Selection> selection = new Vector<Selection>();
+		List<Selection> selection = new ArrayList<Selection>();
 		StringTokenizer st = new StringTokenizer(s);
 
 		while(st.hasMoreTokens())
@@ -388,7 +388,7 @@ public class BufferHistory
 		}
 
 		Selection[] returnValue = new Selection[selection.size()];
-		selection.copyInto(returnValue);
+		returnValue = selection.toArray(returnValue);
 		return returnValue;
 	} //}}}
 
@@ -456,7 +456,7 @@ public class BufferHistory
 		private String selection;
 		private String encoding;
 		private String mode;
-		private StringBuffer charData = new StringBuffer();
+		private StringBuilder charData = new StringBuilder();
 	} //}}}
 
 	//}}}
