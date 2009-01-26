@@ -113,15 +113,13 @@ public class BufferSetManager implements EBComponent
 		{
 			// pass on PropertiesChanged message to BufferSets so
 			// they can resort themselves as needed.
-			global.handleMessage();
-			for (BufferSet bufferSet : editPaneBufferSetMap.values())
+			visit(new BufferSetVisitor()
 			{
-				bufferSet.handleMessage();
-			}
-			for (BufferSet bufferSet : viewBufferSetMap.values())
-			{
-				bufferSet.handleMessage();
-			}
+				public void visit(BufferSet bufferSet)
+				{
+					bufferSet.handleMessage();
+				}
+			});
 		}
 
 	} //}}}
