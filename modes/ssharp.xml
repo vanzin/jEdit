@@ -30,8 +30,8 @@
 		</SPAN>
 
         <SPAN TYPE="LITERAL2" ESCAPE="\">
-            <BEGIN>«</BEGIN>
-            <END>»</END>
+            <BEGIN>Â«</BEGIN>
+            <END>Â»</END>
         </SPAN>
 
         <SEQ TYPE="OPERATOR">(</SEQ>
@@ -91,7 +91,7 @@
             <KEYWORD2>senderMethod</KEYWORD2>
             <KEYWORD2>blockSelf</KEYWORD2>
             <KEYWORD2>scheduler</KEYWORD2>
-            <KEYWORD2>¼</KEYWORD2>
+            <KEYWORD2>Â¼</KEYWORD2>
 
 			<!-- not really keywords, but a different color works well-->
 			<KEYWORD4>isNil</KEYWORD4>
