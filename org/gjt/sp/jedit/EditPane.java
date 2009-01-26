@@ -657,6 +657,12 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	} //}}}
 
 	//{{{ getBufferSet() method
+	/**
+	 * Returns the current buffer set.
+	 * This can be changed by setBufferSetScope().
+	 * @return the buffer set which is currently used by this EditPane
+	 * @since jEdit 4.3pre17
+	 */
 	public BufferSet getBufferSet()
 	{
 		return bufferSet;
@@ -680,24 +686,24 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	 */
 	public void setBufferSetScope(BufferSet.Scope scope)
 	{
-		BufferSet bufferSet;
-		switch (scope)
+		if (this.bufferSetScope != scope)
 		{
-			case view:
-				bufferSet = jEdit.getBufferSetManager().getViewBufferSet(view);
-				break;
-			case editpane:
-				bufferSet = jEdit.getBufferSetManager().getEditPaneBufferSet(this);
-				break;
-			default:
-				scope = BufferSet.Scope.global;
-			case global:
-				bufferSet = jEdit.getBufferSetManager().getGlobalBufferSet();
-				break;
-		}
+			BufferSet bufferSet;
+			switch (scope)
+			{
+				case editpane:
+					bufferSet = new BufferSet();
+					break;
+				case view:
+					bufferSet = view.getLocalBufferSet();
+					break;
+				default:
+					scope = BufferSet.Scope.global;
+				case global:
+					bufferSet = jEdit.getGlobalBufferSet();
+					break;
+			}
 
-		if (this.bufferSet != bufferSet)
-		{
 			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 
 			String action = jEdit.getProperty("editpane.bufferset.new");

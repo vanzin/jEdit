@@ -62,11 +62,9 @@ public class BufferSet
 
 	//{{{ BufferSet constructor
 	/**
-	 * Create a new BufferSet with the given scope. Only the BufferSetManager can call this
-	 * constructor
-	 * @param scope the scope
+	 * Create a new BufferSet.
 	 */
-	BufferSet()
+	public BufferSet()
 	{
 		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		listeners = new EventListenerList();

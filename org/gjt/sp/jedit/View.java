@@ -1092,6 +1092,17 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 	} //}}}
 
+	/**
+	 * Returns the view's local buffer set, which can be shared by
+	 * several editpanes.
+	 * @return the view's buffer set
+	 * @since jEdit 4.3pre17
+	 */
+	public BufferSet getLocalBufferSet()
+	{
+		return localBufferSet;
+	}
+
 	//{{{ getViewConfig() method
 	/**
 	 * @return a ViewConfig instance for the current view
@@ -1330,6 +1341,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
 
+		localBufferSet = new BufferSet();
+
 		setSplitConfig(buffer,config.splitConfig);
 
 		getContentPane().add(BorderLayout.CENTER,dockableWindowManager);
@@ -1416,6 +1429,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	private EditPane editPane;
 	private JSplitPane splitPane;
 	private String lastSplitConfig;
+	private final BufferSet localBufferSet;
 
 	private StatusBar status;
 

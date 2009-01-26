@@ -71,9 +71,6 @@ public class BufferSetManager implements EBComponent
 	//{{{ BufferSetManager constructor
 	public BufferSetManager()
 	{
-		global = new BufferSet();
-		viewBufferSetMap = Collections.synchronizedMap(new HashMap<View, BufferSet>());
-		editPaneBufferSetMap = Collections.synchronizedMap(new HashMap<EditPane, BufferSet>());
 		bufferBufferSetMap = Collections.synchronizedMap(new HashMap<Buffer, Set<BufferSet>>());
 		EditBus.addToBus(this);
 	} //}}}
@@ -87,12 +84,9 @@ public class BufferSetManager implements EBComponent
 			if (viewUpdate.getWhat() == ViewUpdate.CLOSED)
 			{
 				View view = viewUpdate.getView();
-				// If the view has a BufferSet, unlink the buffer from this bufferSet.
-				BufferSet viewBufferSet = viewBufferSetMap.remove(view);
-				if (viewBufferSet != null)
-				{
-					viewBufferSet.getAllBuffers(new BufferSetClosed(view, viewBufferSet));
-				}
+				// Unlink the buffer from this bufferSet.
+				BufferSet viewBufferSet = view.getLocalBufferSet();
+				viewBufferSet.getAllBuffers(new BufferSetClosed(view, viewBufferSet));
 			}
 		}
 		else if (message instanceof EditPaneUpdate)
@@ -101,10 +95,10 @@ public class BufferSetManager implements EBComponent
 			if (editPaneUpdate.getWhat() == EditPaneUpdate.DESTROYED)
 			{
 				EditPane editPane = editPaneUpdate.getEditPane();
-				// If the editPane has a BufferSet, unlink the buffer from this bufferSet.
-				BufferSet editPaneBufferSet = editPaneBufferSetMap.remove(editPane);
-				if (editPaneBufferSet != null)
+				// If the editPane has own BufferSet, unlink the buffer from this bufferSet.
+				if (editPane.getBufferSetScope() == BufferSet.Scope.editpane)
 				{
+					BufferSet editPaneBufferSet = editPane.getBufferSet();
 					editPaneBufferSet.getAllBuffers(new BufferSetClosed(editPane, editPaneBufferSet));
 				}
 			}
@@ -122,56 +116,6 @@ public class BufferSetManager implements EBComponent
 			});
 		}
 
-	} //}}}
-
-	//{{{ getGlobalBufferSet() method
-	/**
-	 * Returns the global bufferSet.
-	 *
-	 * @return the global bufferSet
-	 */
-	public BufferSet getGlobalBufferSet()
-	{
-		return global;
-	} //}}}
-
-	//{{{ getViewBufferSet() methods
-	/**
-	 * Returns a view bufferSet for the given view.
-	 * If it doesn't exist it is created
-	 *
-	 * @param view a view
-	 * @return the view's bufferSet
-	 */
-	public BufferSet getViewBufferSet(View view)
-	{
-		BufferSet bufferSet = viewBufferSetMap.get(view);
-		if (bufferSet == null)
-		{
-			bufferSet = new BufferSet();
-			viewBufferSetMap.put(view, bufferSet);
-		}
-		return bufferSet;
-	} //}}}
-
-	//{{{ getEditPaneBufferSet() method
-	/**
-	 * Returns a EditPane bufferSet for the given EditPane.
-	 * If it doesn't exist it is created
-	 *
-	 * @param editPane the editPAne
-	 * @return the EditPane's bufferSet
-	 */
-	public BufferSet getEditPaneBufferSet(EditPane editPane)
-	{
-		BufferSet bufferSet = editPaneBufferSetMap.get(editPane);
-		if (bufferSet == null)
-		{
-			bufferSet = new BufferSet();
-			editPaneBufferSetMap.put(editPane, bufferSet);
-		}
-
-		return bufferSet;
 	} //}}}
 
 	//{{{ mergeBufferSet() method
@@ -228,7 +172,7 @@ public class BufferSetManager implements EBComponent
 	{
 		if (editPane == null)
 		{
-			addBuffer(global, buffer);
+			addBuffer(jEdit.getGlobalBufferSet(), buffer);
 		}
 		else
 		{
@@ -389,28 +333,29 @@ public class BufferSetManager implements EBComponent
 	 */
 	public void visit(BufferSetVisitor visitor)
 	{
-		visitor.visit(global);
-		Collection<BufferSet> bufferSetCollection = viewBufferSetMap.values();
-		for (BufferSet bufferSet : bufferSetCollection)
+		BufferSet global = jEdit.getGlobalBufferSet();
+		visitor.visit(jEdit.getGlobalBufferSet());
+		for (View view: jEdit.getViews())
 		{
-			visitor.visit(bufferSet);
-		}
-		Collection<BufferSet> sets = editPaneBufferSetMap.values();
-		for (BufferSet bufferSet : sets)
-		{
-			visitor.visit(bufferSet);
+			BufferSet viewLocal = view.getLocalBufferSet();
+			if (viewLocal != null)
+			{
+				visitor.visit(viewLocal);
+			}
+			for (EditPane editPane: view.getEditPanes())
+			{
+				BufferSet used = editPane.getBufferSet();
+				if (used != global && used != viewLocal)
+				{
+					visitor.visit(used);
+				}
+			}
 		}
 	} //}}}
 
 	//{{{ Private members
 
 	//{{{ Fields
-	/** The global bufferSet. */
-	private final BufferSet global;
-	/** The BufferSets that will be associated to a View. */
-	private final Map<View, BufferSet> viewBufferSetMap;
-	private final Map<EditPane, BufferSet> editPaneBufferSetMap;
-
 	/** The BufferSets that contains the Buffer. */
 	private final Map<Buffer, Set<BufferSet>> bufferBufferSetMap;
 	//}}}
