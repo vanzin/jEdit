@@ -25,6 +25,8 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+
 import java.awt.Component;
 import java.awt.Frame;
 import java.io.IOException;
@@ -34,6 +36,7 @@ import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.SwingWorkerManager;
 import org.gjt.sp.util.WorkThreadPool;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -67,6 +70,7 @@ public class VFSManager
 	public static void init()
 	{
 		int count = jEdit.getIntegerProperty("ioThreadCount",4);
+		workerManager = new SwingWorkerManager("jEdit I/O", count);
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
 		JARClassLoader classLoader = new JARClassLoader();
 		for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
@@ -218,6 +222,14 @@ public class VFSManager
 		return ioThreadPool;
 	} //}}}
 
+	/**
+	 * Returns the Swing worker manager.
+	 */
+	public static SwingWorkerManager getWorkerManager()
+	{
+		return workerManager;
+	}
+	
 	//{{{ waitForRequests() method
 	/**
 	 * Returns when all pending requests are complete.
@@ -267,6 +279,12 @@ public class VFSManager
 		ioThreadPool.addWorkRequest(run,false);
 	} //}}}
 
+	//{{{ addWorker() method
+	public static void addWorker(SwingWorker worker)
+	{
+		getWorkerManager().addWorker(worker);
+	} //}}}
+	
 	//}}}
 
 	//{{{ error() method
@@ -442,6 +460,7 @@ public class VFSManager
 	//{{{ Private members
 
 	//{{{ Static variables
+	private static SwingWorkerManager workerManager;
 	private static WorkThreadPool ioThreadPool;
 	private static VFS fileVFS;
 	private static VFS urlVFS;

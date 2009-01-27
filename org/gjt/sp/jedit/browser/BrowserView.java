@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import org.gjt.sp.jedit.browser.VFSBrowser.DirectoryLoadedAWTRequest;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
@@ -169,10 +170,13 @@ class BrowserView extends JPanel
 
 		Object[] loadInfo = new Object[2];
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.LIST_DIRECTORY,browser,
-			session,vfs,path,null,loadInfo));
-		browser.directoryLoaded(node,loadInfo,addToHistory);
+		BrowserIORequest request = new BrowserIORequest(
+			BrowserIORequest.LIST_DIRECTORY,browser, session, vfs, path, null,
+			loadInfo); 
+		VFSManager.addWorker(request);
+		Runnable loaded = browser.new DirectoryLoadedAWTRequest(node, loadInfo,
+			addToHistory);
+		request.setAwtTask(loaded);
 	} //}}}
 
 	//{{{ directoryLoaded() method

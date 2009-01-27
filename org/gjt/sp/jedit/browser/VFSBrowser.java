@@ -40,6 +40,7 @@ import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.SwingWorkerManager;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 //}}}
 
@@ -695,25 +696,26 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
+		BrowserIORequest request = null;
 		for(int i = 0; i < files.length; i++)
 		{
 			Object session = vfs.createVFSSession(files[i].getDeletePath(),this);
 			if(session == null)
 				continue;
 
-			VFSManager.runInWorkThread(new BrowserIORequest(
-				BrowserIORequest.DELETE,this,
-				session,vfs,files[i].getDeletePath(),
-				null,null));
+			request = new BrowserIORequest(BrowserIORequest.DELETE, this,
+				session, vfs, files[i].getDeletePath(), null, null);
+			VFSManager.addWorker(request);
 		}
-
-		VFSManager.runInAWTThread(new Runnable()
+		if (request != null)
 		{
-			public void run()
-			{
-				endRequest();
-			}
-		});
+			request.setAwtTask(new Runnable() {
+				public void run()
+				{
+					endRequest();
+				}
+			});
+		}
 	} //}}}
 
 	//{{{ rename() method
@@ -737,17 +739,17 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null));
+		BrowserIORequest request = new BrowserIORequest(BrowserIORequest.RENAME,
+			this, session, vfs, from, to, null);
+		VFSManager.runInWorkThread(request);
 
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
+		request.setAwtTask(new Runnable()
 			{
-				endRequest();
-			}
-		});
+				public void run()
+				{
+					endRequest();
+				}
+			});
 	} //}}}
 
 	//{{{ rename() method
@@ -771,17 +773,17 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null));
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
+		BrowserIORequest request = new BrowserIORequest(BrowserIORequest.RENAME,
+			this, session, vfs, from, to, null);
+		VFSManager.addWorker(request);
+		
+		request.setAwtTask(new Runnable()
 			{
-				endRequest();
-			}
-		});
+				public void run()
+				{
+					endRequest();
+				}
+			});
 	} //}}}		
 
 	//{{{ mkdir() method
@@ -818,17 +820,17 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.MKDIR,this,
-			session,vfs,newDirectory,null,null));
+		BrowserIORequest request = new BrowserIORequest(BrowserIORequest.MKDIR,
+			this, session, vfs, newDirectory, null, null);
+		VFSManager.addWorker(request);
 
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
+		request.setAwtTask(new Runnable()
 			{
-				endRequest();
-			}
-		});
+				public void run()
+				{
+					endRequest();
+				}
+			});
 	} //}}}
 
 	//{{{ newFile() method
@@ -1150,14 +1152,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ Package-private members
 	String currentEncoding;
 	boolean autoDetectEncoding;
-
-	//{{{ directoryLoaded() method
-	void directoryLoaded(Object node, Object[] loadInfo,
-		boolean addToHistory)
-	{
-		VFSManager.runInAWTThread(new DirectoryLoadedAWTRequest(
-			node,loadInfo,addToHistory));
-	} //}}}
 
 	//{{{ filesSelected() method
 	void filesSelected()

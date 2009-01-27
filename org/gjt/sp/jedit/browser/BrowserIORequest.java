@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
 import java.io.*;
+
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -34,7 +35,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-class BrowserIORequest extends WorkRequest
+class BrowserIORequest extends SwingWorkerBase<Void, Void>
 {
 	//{{{ Request types
 	/**
@@ -82,7 +83,7 @@ class BrowserIORequest extends WorkRequest
 	} //}}}
 
 	//{{{ run() method
-	public void run()
+	public Void doInBackground()
 	{
 		switch(type)
 		{
@@ -99,8 +100,9 @@ class BrowserIORequest extends WorkRequest
 			mkdir();
 			break;
 		}
+		return null;
 	} //}}}
-
+	
 	//{{{ toString() method
 	public String toString()
 	{
