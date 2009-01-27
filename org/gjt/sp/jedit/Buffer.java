@@ -54,7 +54,6 @@ import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Map;
 //}}}
@@ -945,7 +944,7 @@ public class Buffer extends JEditBuffer
 	@Deprecated
 	public void addBufferChangeListener(BufferChangeListener listener)
 	{
-		addBufferChangeListener(listener,NORMAL_PRIORITY);
+		addBufferListener(new BufferChangeListener.Adapter(listener), NORMAL_PRIORITY);
 	} //}}}
 
 	//{{{ removeBufferChangeListener() method
@@ -1144,7 +1143,9 @@ public class Buffer extends JEditBuffer
 		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
 		if(defaultMode == null)
 			defaultMode = jEdit.getMode("text");
-		setMode(defaultMode);
+
+		if (defaultMode != null)
+			setMode(defaultMode);
 	} //}}}
 
 	//}}}

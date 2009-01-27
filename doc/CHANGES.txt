@@ -45,10 +45,12 @@ for contributing to this release.
   Each plugin dockable that was configured by the properties file to be docked
   was immediately loaded and made visible when the plugin was loaded. Now, it
   uses lazy instantiation and only its anchor button is shown.
-  
+
 - Fixed a bug in OperatingSystem.getScreenBounds() (Matthieu Casanova)
 
 - Fixed JVM detection that was broken with java 1.6 (Matthieu Casanova)
+
+- Fixed a NPE in Buffer.setMode() if the defaultMode is null (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
