@@ -690,6 +690,7 @@ eval-selection.label=Evaluate $Selection
 troubleshooting=log-viewer \
 		update-log \
 		- \
+		worker-progress-monitor \
 		io-progress-monitor \
 		keyboard-tester \
 		memory-status \
@@ -697,6 +698,7 @@ troubleshooting=log-viewer \
 troubleshooting.label=$Troubleshooting
 log-viewer.label=$Activity Log
 update-log.label=$Update Activity Log on Disk
+worker-progress-monitor.label=Worker progress
 io-progress-monitor.label=$I/O Progress
 keyboard-tester.label=$Keyboard Tester...
 memory-status.label=$Memory Status...

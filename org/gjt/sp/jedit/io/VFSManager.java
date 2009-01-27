@@ -25,7 +25,6 @@ package org.gjt.sp.jedit.io;
 //{{{ Imports
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import java.awt.Component;
 import java.awt.Frame;
@@ -36,6 +35,7 @@ import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.SwingWorkerBase;
 import org.gjt.sp.util.SwingWorkerManager;
 import org.gjt.sp.util.WorkThreadPool;
 import org.gjt.sp.util.StandardUtilities;
@@ -280,7 +280,7 @@ public class VFSManager
 	} //}}}
 
 	//{{{ addWorker() method
-	public static void addWorker(SwingWorker worker)
+	public static void addWorker(SwingWorkerBase worker)
 	{
 		getWorkerManager().addWorker(worker);
 	} //}}}
