@@ -246,11 +246,6 @@ public class BufferSetManager implements EBComponent
 			Log.log(Log.DEBUG, this, "Buffer:"+buffer+" is in no bufferSet anymore, closing it");
 			jEdit._closeBuffer(null, buffer);
 		}
-		else if (!hasListeners(buffer))
-		{
-			Log.log(Log.DEBUG, this, "Buffer:" + buffer + " is only in bufferSets that have no listeners, closing it");
-			jEdit._closeBuffer(null, buffer);
-		}
 		if (bufferSet.size() == 0 && bufferSet.hasListeners())
 		{
 			int untitledCount = jEdit.getNextUntitledBufferId();
@@ -259,30 +254,6 @@ public class BufferSetManager implements EBComponent
 			jEdit.commitTemporary(newEmptyBuffer);
 			jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
 		}
-	} //}}}
-
-	//{{{ hasListeners() method
-	/**
-	 * Check if a buffer is in at least one bufferSet that as some listeners.
-	 * Otherwise nobody can see it.
-	 *
-	 * @param buffer the buffer
-	 * @return true if the buffer is in a bufferSet that has listeners
-	 */
-	public boolean hasListeners(Buffer buffer)
-	{
-		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
-		if (bufferSets == null)
-			return false;
-		return !bufferSets.isEmpty();
-		/*for (BufferSet bs: bufferSets)
-		{
-			if (bs.hasListeners())
-			{
-				return true;
-			}
-		}
-		return false;*/
 	} //}}}
 
 	//{{{ removeBuffer() method

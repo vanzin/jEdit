@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
@@ -125,11 +124,10 @@ public class PerspectiveManager
 			return;
 
 		Buffer[] buffers = jEdit.getBuffers();
-		BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 		Collection<Buffer> savedBuffers = new LinkedList<Buffer>();
 		for (Buffer buffer: buffers)
 		{
-			if (!buffer.isNewFile() && bufferSetManager.hasListeners(buffer))
+			if (!buffer.isNewFile())
 			{
 				savedBuffers.add(buffer);
 			}

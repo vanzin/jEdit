@@ -1549,10 +1549,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			splitConfig.append("\" buffer");
 			BufferSet bufferSet = editPane.getBufferSet();
 			Buffer[] buffers = bufferSet.getAllBuffers();
-			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 			for (Buffer buffer : buffers)
 			{
-				if (!buffer.isNewFile() && bufferSetManager.hasListeners(buffer))
+				if (!buffer.isNewFile())
 				{
 					splitConfig.append(" \"");
 					splitConfig.append(StandardUtilities.charsToEscapes(

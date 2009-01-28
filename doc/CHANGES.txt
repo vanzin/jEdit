@@ -90,6 +90,8 @@ for contributing to this release.
     - jEdit.getEditPaneBufferSet(editPane) /* this might be unused one */
       -> editPane.getBufferSet() /* this is currently used one */
 
+- Removed BufferSetManager#hasListeners() which had always returned true.
+
 - Added OperatingSystem.hasJava16() method and made deprecated
   OperatingSystem.hasJava15() and OperatingSystem.hasJava14() since jEdit
   requires Java 1.5 at least (Matthieu Casanova)
