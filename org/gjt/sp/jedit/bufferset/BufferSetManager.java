@@ -280,22 +280,6 @@ public class BufferSetManager implements EBComponent
 
 	} //}}}
 
-	//{{{ clear() method
-	/**
-	 * Close all buffers.
-	 */
-	public void clear()
-	{
-		bufferBufferSetMap.clear();
-		visit(new BufferSetVisitor()
-		{
-			public void visit(BufferSet bufferSet)
-			{
-				bufferSet.clear();
-			}
-		});
-	} //}}}
-
 	//{{{ visit() method
 	/**
 	 * This method will visit all buffersets.

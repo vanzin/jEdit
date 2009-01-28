@@ -92,6 +92,8 @@ for contributing to this release.
 
 - Removed BufferSetManager#hasListeners() which had always returned true.
 
+- Removed BufferSetManager#clear() which just made inconsistent state.
+
 - Added OperatingSystem.hasJava16() method and made deprecated
   OperatingSystem.hasJava15() and OperatingSystem.hasJava14() since jEdit
   requires Java 1.5 at least (Matthieu Casanova)
