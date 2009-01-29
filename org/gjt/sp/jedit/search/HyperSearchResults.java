@@ -33,6 +33,7 @@ import java.util.*;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.search.SearchMatcher.Match;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -45,6 +46,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	DefaultFocusComponent
 {
 	public static final String NAME = "hypersearch-results";
+	public static final String HIGHLIGHT_PROP = "hypersearch.results.highlight";
 
 	//{{{ HyperSearchResults constructor
 	public HyperSearchResults(View view)
@@ -61,6 +63,12 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		ActionHandler ah = new ActionHandler();
 
+		highlight = new RolloverButton();
+		highlight.setToolTipText(jEdit.getProperty(
+			"hypersearch-results.highlight.label"));
+		highlight.addActionListener(ah);
+		toolBar.add(highlight);
+		
 		clear = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty("hypersearch-results.clear.icon")));
 		clear.setToolTipText(jEdit.getProperty(
@@ -78,7 +86,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		resultTreeRoot = new DefaultMutableTreeNode();
 		resultTreeModel = new DefaultTreeModel(resultTreeRoot);
-		resultTree = new JTree(resultTreeModel);
+		resultTree = new HighlightingTree(resultTreeModel);
 		resultTree.setToolTipText(null);
 		resultTree.setCellRenderer(new ResultCellRenderer());
 		resultTree.setVisibleRowCount(16);
@@ -118,6 +126,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		EditBus.addToBus(this);
 		multiStatus = jEdit.getBooleanProperty(
 			"hypersearch-results.multi");
+		updateHighlightStatus();
 		updateMultiStatus();
 	} //}}}
 
@@ -298,10 +307,20 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	private DefaultMutableTreeNode resultTreeRoot;
 	private DefaultTreeModel resultTreeModel;
 
+	private RolloverButton highlight;
 	private RolloverButton clear;
 	private RolloverButton multi;
 	private boolean multiStatus;
 
+	//{{{ updateHighlightStatus() method
+	private void updateHighlightStatus()
+	{
+		if (jEdit.getBooleanProperty(HIGHLIGHT_PROP))
+			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.highlight.icon")));
+		else
+			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.normal.icon")));
+	} //}}}
+	
 	//{{{ updateMultiStatus() method
 	private void updateMultiStatus()
 	{
@@ -422,7 +441,13 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
-			if(source == clear)
+			if(source == highlight)
+			{
+				jEdit.setBooleanProperty(HIGHLIGHT_PROP,
+					! jEdit.getBooleanProperty(HIGHLIGHT_PROP));
+				updateHighlightStatus();
+			}
+			else if(source == clear)
 			{
 				removeAllNodes();
 			}
@@ -444,6 +469,67 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		}
 	} //}}}
 
+	//{{{ HighlightingTree class
+	class HighlightingTree extends JTree
+	{
+		public HighlightingTree(DefaultTreeModel model)
+		{
+			super(model);
+		}
+
+		@Override
+		public String convertValueToText(Object value, boolean selected,
+				boolean expanded, boolean leaf, int row, boolean hasFocus)
+		{
+			String s = super.convertValueToText(value, selected, expanded, leaf,
+				row, hasFocus);
+			if (! jEdit.getBooleanProperty(HIGHLIGHT_PROP))
+				return s;
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+			while ((node != null) &&
+				   (! (node.getUserObject() instanceof HyperSearchOperationNode)))
+			{
+				node = (DefaultMutableTreeNode) node.getParent();
+			}
+			if (node == null)
+				return s;
+			SearchMatcher matcher =
+				((HyperSearchOperationNode) node.getUserObject()).getSearchMatcher();
+			StringBuffer sb = new StringBuffer("<html><body>");
+			int i = 0;
+			Match m = null;
+			while ((m = matcher.nextMatch(s.substring(i), true, true, true, false)) != null)
+			{
+				appendString2html(sb, s.substring(i, i + m.start));
+				sb.append("<b>");
+				appendString2html(sb, s.substring(i + m.start, i + m.end));
+				sb.append("</b>");
+				i += m.end;
+			}
+			appendString2html(sb, s.substring(i));
+			sb.append("</body></html>");
+			return sb.toString();
+		}
+
+		private void appendString2html(StringBuffer sb, String s)
+		{
+			for (int i = 0; i < s.length(); i++)
+			{
+				char c = s.charAt(i);
+				String r;
+				switch (c) {
+				case '"': r = "&quot;"; break;
+				case '\'': r = "&apos;"; break;
+				case '&': r = "&amp;"; break;
+				case '<': r = "&lt;"; break;
+				case '>': r = "&gt;"; break;
+				default: r = String.valueOf(c); break;
+				}
+				sb.append(r);
+			}
+		}
+	} //}}}
+	
 	//{{{ KeyHandler class
 	class KeyHandler extends KeyAdapter
 	{
@@ -750,7 +836,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	class ResultCellRenderer extends DefaultTreeCellRenderer
 	{
 		Font plainFont, boldFont;
-
+		
 		//{{{ ResultCellRenderer constructor
 		ResultCellRenderer()
 		{
