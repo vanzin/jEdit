@@ -71,7 +71,6 @@ public class BufferSetManager implements EBComponent
 	//{{{ BufferSetManager constructor
 	public BufferSetManager()
 	{
-		bufferBufferSetMap = Collections.synchronizedMap(new HashMap<Buffer, Set<BufferSet>>());
 		EditBus.addToBus(this);
 	} //}}}
 
@@ -143,10 +142,7 @@ public class BufferSetManager implements EBComponent
 	 */
 	public int countBufferSets(Buffer buffer)
 	{
-		Set<BufferSet> sets = bufferBufferSetMap.get(buffer);
-		if (sets == null)
-			return 0;
-		return sets.size();
+		return getOwners(buffer).size();
 	} //}}}
 
 	//{{{ addBuffer() methods
@@ -189,13 +185,6 @@ public class BufferSetManager implements EBComponent
 	 */
 	public void addBuffer(BufferSet bufferSet, Buffer buffer)
 	{
-		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
-		if (bufferSets == null)
-		{
-			bufferSets = new HashSet<BufferSet>();
-			bufferBufferSetMap.put(buffer, bufferSets);
-		}
-		bufferSets.add(bufferSet);
 		bufferSet.addBuffer(buffer);
 	} //}}}
 
@@ -237,11 +226,11 @@ public class BufferSetManager implements EBComponent
 	void removeBuffer(BufferSet bufferSet, Buffer buffer)
 	{
 		Log.log(Log.DEBUG, this, "removeBuffer("+bufferSet+','+buffer+')');
-		Set<BufferSet> bufferSets = bufferBufferSetMap.get(buffer);
-		bufferSets.remove(bufferSet);
+		Set<BufferSet> owners = getOwners(buffer);
+		owners.remove(bufferSet);
 		bufferSet.removeBuffer(buffer);
 
-		if (bufferSets.isEmpty())
+		if (owners.isEmpty())
 		{
 			Log.log(Log.DEBUG, this, "Buffer:"+buffer+" is in no bufferSet anymore, closing it");
 			jEdit._closeBuffer(null, buffer);
@@ -264,8 +253,7 @@ public class BufferSetManager implements EBComponent
 	 */
 	public void removeBuffer(Buffer buffer)
 	{
-		Set<BufferSet> sets = bufferBufferSetMap.remove(buffer);
-		for (BufferSet bufferSet : sets)
+		for (BufferSet bufferSet : getOwners(buffer))
 		{
 			bufferSet.removeBuffer(buffer);
 			if (bufferSet.size() == 0 && bufferSet.hasListeners())
@@ -310,10 +298,31 @@ public class BufferSetManager implements EBComponent
 
 	//{{{ Private members
 
-	//{{{ Fields
-	/** The BufferSets that contains the Buffer. */
-	private final Map<Buffer, Set<BufferSet>> bufferBufferSetMap;
-	//}}}
+	//{{{ getOwners() method
+	/** Get all BufferSets that contains the Buffer. */
+	private Set<BufferSet> getOwners(Buffer buffer)
+	{
+		final Set<BufferSet> candidates = new HashSet<BufferSet>();
+		// Collect all BufferSets.
+		visit(new BufferSetVisitor()
+		{
+			public void visit(BufferSet bufferSet)
+			{
+				candidates.add(bufferSet);
+			}
+		});
+		// Remove all that doesn't contain the buffer.
+		Iterator<BufferSet> i = candidates.iterator();
+		while (i.hasNext())
+		{
+			if (i.next().indexOf(buffer) == -1)
+			{
+				i.remove();
+			}
+		}
+		// Remaining are the result.
+		return candidates;
+	} //}}}
 
 	//{{{ BufferSetVisitor interface
 	public static interface BufferSetVisitor
@@ -374,9 +383,9 @@ public class BufferSetManager implements EBComponent
 		@Override
 		public void bufferAdded(Buffer buffer, int index)
 		{
-			Set<BufferSet> sets = bufferBufferSetMap.get(buffer);
-			sets.remove(closedBufferSet);
-			if (sets.isEmpty())
+			Set<BufferSet> owners = getOwners(buffer);
+			owners.remove(closedBufferSet);
+			if (owners.isEmpty())
 			{
 				// the buffer do not belong to any other BufferSet
 				if (buffer.isDirty())
