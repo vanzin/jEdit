@@ -326,72 +326,48 @@ public class BufferSetManager implements EBComponent
 	{
 		/** The closed bufferSet. */
 		private final BufferSet closedBufferSet;
-
-		/**
-		 * The closed view.
-		 * If there is a closed view, there is no closed edit pane
-		 */
-		private View closedView;
-
-		/**
-		 * The closed EditPane.
- 		 * If there is a closed edit pane, there is no closed view
-		 */
-		private EditPane closedEditPane;
-
 		/** The previous editPane where to put dirty buffers if necessary. */
-		private EditPane prevEditPane;
+		private final EditPane prevEditPane;
 
 		//{{{ BufferSetClosed constructors
 		private BufferSetClosed(View closedView,
 					BufferSet closedBufferSet)
 		{
-			this.closedView = closedView;
+			this.prevEditPane = getPrevEditPane(closedView);
 			this.closedBufferSet = closedBufferSet;
-			init();
 		}
 
 		private BufferSetClosed(EditPane closedEditPane,
 					BufferSet closedBufferSet)
 		{
-			this.closedEditPane = closedEditPane;
+			this.prevEditPane = getPrevEditPane(closedEditPane);
 			this.closedBufferSet = closedBufferSet;
-			init();
 		} //}}}
 
 
-		//{{{ init() method
-		private void init()
+		//{{{ getPrevEditPane() method
+		private EditPane getPrevEditPane(View closedView)
 		{
-			if (closedView != null)
+			View prev = closedView.getPrev();
+			if (prev != null)
 			{
-					View prev = closedView.getPrev();
-					if (prev != null)
-					{
-						prevEditPane = prev.getEditPane();
-					}
-				}
-			else
+				return prev.getEditPane();
+			}
+			return null;
+		}
+
+		private EditPane getPrevEditPane(EditPane closedEditPane)
+		{
+			View view = closedEditPane.getView();
+			EditPane[] editPanes = view.getEditPanes();
+			for (EditPane editPane : editPanes)
 			{
-				View view = closedEditPane.getView();
-				EditPane[] editPanes = view.getEditPanes();
-				for (EditPane editPane : editPanes)
+				if (editPane != closedEditPane)
 				{
-					if (editPane != closedEditPane)
-					{
-						prevEditPane = editPane;
-						break;
-					}
-				}
-				if (prevEditPane == null)
-				{
-					View prev = view.getPrev();
-					if (prev != null)
-					{
-						prevEditPane = prev.getEditPane();
-					}
+					return editPane;
 				}
 			}
+			return getPrevEditPane(view);
 		} //}}}
 
 		//{{{ bufferAdded() method
