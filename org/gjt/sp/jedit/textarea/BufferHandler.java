@@ -203,7 +203,9 @@ class BufferHandler implements BufferListener
 			else
 			{
 				int lastLine = startLine + numLines;
-				if(offset != buffer.getLineStartOffset(startLine)
+				if(!displayManager.isLineVisible(startLine)
+				 || !displayManager.isLineVisible(lastLine)
+			 	 || offset != buffer.getLineStartOffset(startLine)
 				 || offset + length != buffer.getLineStartOffset(lastLine))
 				{
 					getReadyToBreakFold(startLine);
@@ -211,8 +213,9 @@ class BufferHandler implements BufferListener
 				}
 				else
 				{
-					// The removal wll not modify
-					// any remaining lines.
+					// The removal will not touch
+					// inside of folds and wll not
+					// modify any remaining lines.
 				}
 			}
 

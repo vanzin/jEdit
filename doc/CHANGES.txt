@@ -51,6 +51,10 @@ for contributing to this release.
 - Fixed JVM detection that was broken with java 1.6 (Matthieu Casanova)
 
 - Fixed a NPE in Buffer.setMode() if the defaultMode is null (Matthieu Casanova)
+
+- Folded lines could become invisible if "delete-line" action was used
+  at a collapsed fold. (SF.net bug #2548764 - Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 
