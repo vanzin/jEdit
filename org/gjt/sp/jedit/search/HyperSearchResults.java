@@ -319,6 +319,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.highlight.icon")));
 		else
 			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.normal.icon")));
+		resultTree.repaint();
 	} //}}}
 	
 	//{{{ updateMultiStatus() method
@@ -497,7 +498,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				((HyperSearchOperationNode) node.getUserObject()).getSearchMatcher();
 			StringBuffer sb = new StringBuffer("<html><body>");
 			int i = 0;
-			Match m = null;
+			Match m;
 			while ((m = matcher.nextMatch(s.substring(i), true, true, true, false)) != null)
 			{
 				appendString2html(sb, s.substring(i, i + m.start));
