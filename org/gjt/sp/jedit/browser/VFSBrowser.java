@@ -40,7 +40,6 @@ import org.gjt.sp.jedit.search.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.SwingWorkerManager;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
 //}}}
 
@@ -697,6 +696,22 @@ public class VFSBrowser extends JPanel implements EBComponent,
 			return;
 
 		BrowserIORequest request = null;
+		class AwtTask implements Runnable
+		{
+			int bgTasks;
+			public void setNumBackgroundTasks(int bgTasks)
+			{
+				this.bgTasks = bgTasks;
+			}
+			public void run()
+			{
+				bgTasks--;
+				if (bgTasks == 0)
+					endRequest();
+			}
+		};
+		AwtTask awtTask = new AwtTask();
+		Vector<BrowserIORequest> requests = new Vector<BrowserIORequest>();
 		for(int i = 0; i < files.length; i++)
 		{
 			Object session = vfs.createVFSSession(files[i].getDeletePath(),this);
@@ -704,18 +719,12 @@ public class VFSBrowser extends JPanel implements EBComponent,
 				continue;
 
 			request = new BrowserIORequest(BrowserIORequest.DELETE, this,
-				session, vfs, files[i].getDeletePath(), null, null);
-			VFSManager.addWorker(request);
+				session, vfs, files[i].getDeletePath(), null, null, awtTask);
+			requests.add(request);
 		}
-		if (request != null)
-		{
-			request.setAwtTask(new Runnable() {
-				public void run()
-				{
-					endRequest();
-				}
-			});
-		}
+		awtTask.setNumBackgroundTasks(requests.size());
+		for (BrowserIORequest req: requests)
+			VFSManager.addWorker(req);
 	} //}}}
 
 	//{{{ rename() method
@@ -740,16 +749,14 @@ public class VFSBrowser extends JPanel implements EBComponent,
 			return;
 
 		BrowserIORequest request = new BrowserIORequest(BrowserIORequest.RENAME,
-			this, session, vfs, from, to, null);
-		VFSManager.runInWorkThread(request);
-
-		request.setAwtTask(new Runnable()
+			this, session, vfs, from, to, null, new Runnable()
 			{
 				public void run()
 				{
 					endRequest();
 				}
 			});
+		VFSManager.runInWorkThread(request);
 	} //}}}
 
 	//{{{ rename() method
@@ -758,7 +765,6 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		VFS vfs = VFSManager.getVFSForPath(from);
 
 		String filename = vfs.getFileName(from);
-		String[] args = { filename };
 		String to = newname;
 		
 		if(to == null || filename.equals(newname))
@@ -773,17 +779,16 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
-		BrowserIORequest request = new BrowserIORequest(BrowserIORequest.RENAME,
-			this, session, vfs, from, to, null);
-		VFSManager.addWorker(request);
-		
-		request.setAwtTask(new Runnable()
+		Runnable awtTask = new Runnable()
+		{
+			public void run()
 			{
-				public void run()
-				{
-					endRequest();
-				}
-			});
+				endRequest();
+			}
+		};
+		BrowserIORequest request = new BrowserIORequest(BrowserIORequest.RENAME,
+			this, session, vfs, from, to, null, awtTask);
+		VFSManager.addWorker(request);
 	} //}}}		
 
 	//{{{ mkdir() method
@@ -820,17 +825,17 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
+		Runnable awtTask = new Runnable()
+		{
+			public void run()
+			{
+				endRequest();
+			}
+		};
 		BrowserIORequest request = new BrowserIORequest(BrowserIORequest.MKDIR,
-			this, session, vfs, newDirectory, null, null);
+			this, session, vfs, newDirectory, null, null, awtTask);
 		VFSManager.addWorker(request);
 
-		request.setAwtTask(new Runnable()
-			{
-				public void run()
-				{
-					endRequest();
-				}
-			});
 	} //}}}
 
 	//{{{ newFile() method

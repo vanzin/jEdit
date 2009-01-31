@@ -51,8 +51,8 @@ public class BufferAutosaveRequest extends BufferIORequest
 		super(view,buffer,session,vfs,path);
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ doInBackground() method
+	protected SegmentBuffer doInBackground()
 	{
 		OutputStream out = null;
 
@@ -72,12 +72,12 @@ public class BufferAutosaveRequest extends BufferIORequest
 				{
 					// buffer has been saved while we
 					// were waiting.
-					return;
+					return null;
 				}
 
 				out = vfs._createOutputStream(session,path,view);
 				if(out == null)
-					return;
+					return null;
 
 				write(buffer,out);
 			}
@@ -114,5 +114,6 @@ public class BufferAutosaveRequest extends BufferIORequest
 		{
 			IOUtilities.closeQuietly(out);
 		}
+		return null;
 	} //}}}
 }

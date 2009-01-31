@@ -24,6 +24,8 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
+import java.util.concurrent.ExecutionException;
+
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
@@ -51,8 +53,8 @@ public class BufferInsertRequest extends BufferIORequest
 		super(view,buffer,session,vfs,path);
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ doInBackground() method
+	protected SegmentBuffer doInBackground()
 	{
 		InputStream in = null;
 		try
@@ -73,21 +75,11 @@ public class BufferInsertRequest extends BufferIORequest
 
 			in = vfs._createInputStream(session,path,false,view);
 			if(in == null)
-				return;
+				return null;
 
 			final SegmentBuffer seg = read(
 				autodetect(in),length,true);
-
-			/* we don't do this in Buffer.insert() so that
-			   we can insert multiple files at once */
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					view.getTextArea().setSelectedText(
-						seg.toString());
-				}
-			});
+			return seg;
 		}
 		catch(Exception e)
 		{
@@ -121,5 +113,20 @@ public class BufferInsertRequest extends BufferIORequest
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
+		return null;
 	} //}}}
+	
+	public void done()
+	{
+		SegmentBuffer seg = null;
+		try {
+			seg = get();
+		} catch (InterruptedException e) {
+		} catch (ExecutionException e) {
+		}
+		/* we don't do this in Buffer.insert() so that
+		   we can insert multiple files at once */
+		if (seg != null)
+			view.getTextArea().setSelectedText(seg.toString());
+	}
 }

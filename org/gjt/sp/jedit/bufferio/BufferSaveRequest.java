@@ -54,8 +54,8 @@ public class BufferSaveRequest extends BufferIORequest
 		super(view,buffer,session,vfs,path);
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ doInBackground() method
+	protected SegmentBuffer doInBackground()
 	{
 		/* if the VFS supports renaming files, we first
 		 * save to #<filename>#save#, then rename that
@@ -106,7 +106,7 @@ public class BufferSaveRequest extends BufferIORequest
 			if(out == null)
 			{
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-				return;
+				return null;
 			}
 			try
 			{
@@ -201,6 +201,7 @@ public class BufferSaveRequest extends BufferIORequest
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
+		return null;
 	} //}}}
 
 	//{{{ Private members

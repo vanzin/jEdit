@@ -342,7 +342,7 @@ public class Buffer extends JEditBuffer
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		VFSManager.runInWorkThread(new BufferAutosaveRequest(
+		VFSManager.addWorker(new BufferAutosaveRequest(
 			null,this,null,VFSManager.getFileVFS(),
 			autosaveFile.getPath()));
 	} //}}}

@@ -172,11 +172,8 @@ class BrowserView extends JPanel
 
 		BrowserIORequest request = new BrowserIORequest(
 			BrowserIORequest.LIST_DIRECTORY,browser, session, vfs, path, null,
-			loadInfo); 
+			loadInfo, browser.new DirectoryLoadedAWTRequest(node, loadInfo, addToHistory)); 
 		VFSManager.addWorker(request);
-		Runnable loaded = browser.new DirectoryLoadedAWTRequest(node, loadInfo,
-			addToHistory);
-		request.setAwtTask(loaded);
 	} //}}}
 
 	//{{{ directoryLoaded() method

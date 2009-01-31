@@ -32,7 +32,6 @@ import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.*;
 //}}}
 
@@ -58,8 +57,8 @@ public class BufferLoadRequest extends BufferIORequest
 		super(view,buffer,session,vfs,path);
 	} //}}}
 	
-	//{{{ run() method
-	public void run()
+	//{{{ doInBackground() method
+	protected SegmentBuffer doInBackground()
 	{
 		try
 		{
@@ -139,6 +138,7 @@ public class BufferLoadRequest extends BufferIORequest
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
 		}
+		return null;
 	} //}}}
 
 	//{{{ getNakedStream() method

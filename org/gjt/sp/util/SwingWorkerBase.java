@@ -1,12 +1,31 @@
 package org.gjt.sp.util;
 
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-public abstract class SwingWorkerBase<T, V> extends SwingWorker<T, V> {
+public abstract class SwingWorkerBase<T, V> extends SwingWorker<T, V> implements ProgressObserver {
 
 	private String status;
-	private Runnable awtTask;
+	private Runnable awtTask = null;
+	private long maxProgress = 100;
+	
+	public SwingWorkerBase()
+	{
+	}
+	
+	public SwingWorkerBase(Runnable awtTask)
+	{
+		this.awtTask = awtTask;
+	}
+	
+	public void setMaximum(long maxProgress)
+	{
+		this.maxProgress = maxProgress;
+	}
+	
+	public void setValue(long value)
+	{
+		setProgress((int) (((float)value / maxProgress) * 100));
+	}
 	
 	public void setStatus(String status)
 	{
@@ -22,28 +41,9 @@ public abstract class SwingWorkerBase<T, V> extends SwingWorker<T, V> {
 	{
 	}
 	
-	public void setAwtTask(Runnable awtTask)
-	{
-		synchronized (this)
-		{
-			if (isDone())
-			{
-				if (SwingUtilities.isEventDispatchThread())
-					awtTask.run();
-				else
-					SwingUtilities.invokeLater(awtTask);
-			}
-			else
-				this.awtTask = awtTask;
-		}
-	}
-	
 	public void done()
 	{
-		synchronized (this)
-		{
-			if (awtTask != null)
-				awtTask.run();
-		}
+		if (awtTask != null)
+			awtTask.run();
 	}
 }

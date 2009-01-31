@@ -23,12 +23,13 @@
 package org.gjt.sp.jedit.search;
 
 //{{{ Imports
+import java.util.concurrent.ExecutionException;
+
 import javax.swing.tree.*;
 import javax.swing.*;
 
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
@@ -41,7 +42,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-class HyperSearchRequest extends WorkRequest
+class HyperSearchRequest extends SwingWorkerBase<String, Void>
 {
 	//{{{ HyperSearchRequest constructor
 	HyperSearchRequest(View view, SearchMatcher matcher,
@@ -57,29 +58,19 @@ class HyperSearchRequest extends WorkRequest
 		this.selection = selection;
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ doInBackground() method
+	protected String doInBackground()
 	{
 		setStatus(jEdit.getProperty("hypersearch-status"));
 
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 		String[] files = fileset.getFiles(view);
 		if(files == null || files.length == 0)
-		{
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					GUIUtilities.error(view,"empty-fileset",null);
-					results.searchDone(rootSearchNode);
-				}
-			});
-			return;
-		}
+			return "empty-fileset";
 
 		setMaximum(fileset.getFileCount(view));
 
-		// to minimise synchronization and stuff like that, we only
+		// to minimize synchronization and stuff like that, we only
 		// show a status message at most twice a second
 
 		// initially zero, so that we always show the first message
@@ -152,15 +143,25 @@ loop:				for(int i = 0; i < files.length; i++)
 		catch(WorkThread.Abort a)
 		{
 		}
-		finally
+		return null;
+	}
+	
+	public void done()
+	{
+		String error = null;
+		try {
+			 error = get();
+		} catch (InterruptedException e) {
+		} catch (ExecutionException e) {
+		}
+		if (error != null)
 		{
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					results.searchDone(rootSearchNode, selectNode);
-				}
-			});
+			GUIUtilities.error(view,error,null);
+			results.searchDone(rootSearchNode);
+		}
+		else
+		{
+			results.searchDone(rootSearchNode, selectNode);
 		}
 	} //}}}
 

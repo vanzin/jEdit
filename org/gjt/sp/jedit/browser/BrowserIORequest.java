@@ -71,8 +71,9 @@ class BrowserIORequest extends SwingWorkerBase<Void, Void>
 	 */
 	BrowserIORequest(int type, VFSBrowser browser,
 		Object session, VFS vfs, String path1, String path2,
-		Object[] loadInfo)
+		Object[] loadInfo, Runnable awtTask)
 	{
+		super(awtTask);
 		this.type = type;
 		this.browser = browser;
 		this.session = session;
