@@ -1,0 +1,42 @@
+plugin.LatestVersionPlugin.activate=defer
+
+plugin.LatestVersionPlugin.name=Latest Version Check
+plugin.LatestVersionPlugin.author=Slava Pestov
+plugin.LatestVersionPlugin.version=1.5
+plugin.LatestVersionPlugin.docs=LatestVersion.html
+
+plugin.LatestVersionPlugin.depend.0=jedit 04.02.01.00
+plugin.LatestVersionPlugin.depend.1=jdk 1.4
+
+plugin.LatestVersionPlugin.description=This plugin can be used to find out what \
+    the latest available jEdit version is.
+plugin.LatestVersionPlugin.longdescription=LatestVersion.txt
+
+plugin.LatestVersionPlugin.menu-item=version-check
+
+version-check.label=Check jEdit Version
+
+version-check.stable.title=Version Status
+version-check.stable.message=You are using the stable branch of jEdit, version {0}.\n\n\
+	The latest stable release is {1}.\n\
+	The latest development release is {2}.\n\n\
+	Do you want to see more information?
+
+version-check.stable-nodevel.title=Version Status
+version-check.stable-nodevel.message=You are using the stable branch of jEdit, version {0}.\n\n\
+	The latest stable release is {1}.\n\n\
+	Do you want to see more information?
+
+version-check.devel.title=Version Status
+version-check.devel.message=You are using the development branch of jEdit, version {0}.\n\n\
+	The latest development release is {2}.\n\
+	The latest stable release is {1}.\n\n\
+	Do you want to see more information?
+
+version-check.devel-nodevel.title=Version Status
+version-check.devel-nodevel.message=You are using the development branch of jEdit, version {0}.\n\n\
+	Currently, no development release is available.\n\
+	The latest stable release is {1}.\n\n\
+	Do you want to see more information?
+
+version-check.url=http://www.jedit.org/jEdit-version.txt

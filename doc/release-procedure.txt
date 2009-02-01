@@ -1,0 +1,60 @@
+Release procedure of jEdit
+
+1. Define a set of requirements for the next stable release.
+
+  Discuss and make a list of requirements. The results are put in a
+  publicly visible file.
+  (It maybe, TODO.txt in the repository, or a page in Wiki.)
+
+  To keep often releases, as a good practice, the requirements must be
+  readily achievable in some months. If it seems to take more than 3
+  months, some requirements should be postponed. One major improvement
+  is enough.
+
+2. Work on the trunk, to achieve the listed but missing requirements.
+
+  Minor improvements or features are also welcome even if they are not
+  listed as requirements in step 1, unless it slows to achieve the
+  requirements.
+
+3. Make a release branch. (ex. "/branches/M.N.x")
+
+  Anytime after this, the step 1 of the next release can be started.
+
+4. Make a RC (release-candidate) from the branch. (ex. M.N-rc1)
+
+  The release of RCs is announced on jedit-devel, jedit-users,
+  jedit-announce, with a clear notice saying it is for testing.
+
+5. Receive bugs for the RC, and fix them.
+
+  The fixes first applied on the trunk, and proposed as candidates of
+  merge into the release branch. A candidate can be a revision, a group
+  of revisions, or another branch to refine the fix. The proposed fixes
+  are listed in a publicly visible file, with some comments,
+  justifications, and status of review.
+  (It maybe, PROPOSED_FIXES.txt in the branch, or a page in Wiki.)
+
+  The merge is done by another committer (reviewer) other than the
+  original committer of the fix. The fix is accepted only if
+    - the fix also works for the reviewer, and
+    - the reviewer is sure that the fix doesn't include unwanted changes
+  . If a fix was rejected, it can be proposed again with some
+  refinements made on the trunk.
+
+  This means each fix is reviewed at least two persons. This reduces
+  possibility of unexpected breakages, and achieves the stability of the
+  release branch.
+
+  While this process, some RCs may be made for each two weeks or so.
+
+6. If no major bugs are reported against the RC for the last period,
+   release from the branch as a stable release. (ex. M.N.0)
+
+7. After a stable release, bug fix continue as same as the step 5.
+   If some fixes are merged from the trunk, make a patch release.
+   (ex. M.N.1, M.N.2, ...)
+
+
+Please send to jedit-devel@lists.sourceforge.net, if you find any issue
+about this procedure.
