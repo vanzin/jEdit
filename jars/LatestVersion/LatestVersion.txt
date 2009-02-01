@@ -1,1 +1,0 @@
-This plugin can be used to find out what the latest available jEdit version is. To invoke it, select Plugins->Check jEdit Version. When invoked, it will connect to a special URL (http://www.jedit.org/jEdit-version.txt), which contains version info.
