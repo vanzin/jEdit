@@ -32,9 +32,12 @@ import java.awt.event.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
 import org.gjt.sp.jedit.gui.RolloverButton;
+import org.gjt.sp.jedit.gui.StyleEditor;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.SearchMatcher.Match;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.SyntaxUtilities;
 //}}}
 
 /**
@@ -315,7 +318,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ updateHighlightStatus() method
 	private void updateHighlightStatus()
 	{
-		if (jEdit.getBooleanProperty(HIGHLIGHT_PROP))
+		String prop = jEdit.getProperty(HIGHLIGHT_PROP);
+		if (prop != null && prop.length() > 0)
 			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.highlight.icon")));
 		else
 			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.normal.icon")));
@@ -434,6 +438,25 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		view.getDockableWindowManager().hideDockableWindow(NAME);
 	} //}}}
 
+	//{{{ parseHighlightStyle()
+	SyntaxStyle parseHighlightStyle(String style)
+	{
+		Font f = (resultTree != null) ? resultTree.getFont() :
+			UIManager.getFont("Tree.font");
+		SyntaxStyle s = null;
+		try
+		{
+			s = SyntaxUtilities.parseStyle(style, f.getFamily(), f.getSize(), true);
+		}
+		catch (Exception e)
+		{
+			style = "color:#000000";
+			s = SyntaxUtilities.parseStyle(style, f.getFamily(), f.getSize(), true);
+		}
+		return s;
+	}
+	//}}}
+	
 	//}}}
 
 	//{{{ ActionHandler class
@@ -444,8 +467,11 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			Object source = evt.getSource();
 			if(source == highlight)
 			{
-				jEdit.setBooleanProperty(HIGHLIGHT_PROP,
-					! jEdit.getBooleanProperty(HIGHLIGHT_PROP));
+				String prop = jEdit.getProperty(HIGHLIGHT_PROP);
+				SyntaxStyle style = new StyleEditor(jEdit.getActiveView(), parseHighlightStyle(prop),
+					"hypersearch").getStyle();
+				if (style != null)
+					jEdit.setProperty(HIGHLIGHT_PROP, GUIUtilities.getStyleString(style));
 				updateHighlightStatus();
 			}
 			else if(source == clear)
@@ -473,9 +499,15 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ HighlightingTree class
 	class HighlightingTree extends JTree
 	{
+		private String prop;
+		private String[] tags;
+		
 		public HighlightingTree(DefaultTreeModel model)
 		{
 			super(model);
+			prop = jEdit.getProperty(HIGHLIGHT_PROP);
+			if (prop != null && prop.length() > 0)
+				tags = style2html(prop);
 		}
 
 		@Override
@@ -484,7 +516,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		{
 			String s = super.convertValueToText(value, selected, expanded, leaf,
 				row, hasFocus);
-			if (! jEdit.getBooleanProperty(HIGHLIGHT_PROP))
+			String newProp = jEdit.getProperty(HIGHLIGHT_PROP);
+			if (newProp == null || newProp.length() == 0)
 				return s;
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
 			while ((node != null) &&
@@ -494,6 +527,11 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			}
 			if (node == null)
 				return s;
+			if (! newProp.equals(prop))
+			{
+				prop = newProp;
+				tags = style2html(prop);
+			}
 			SearchMatcher matcher =
 				((HyperSearchOperationNode) node.getUserObject()).getSearchMatcher();
 			StringBuffer sb = new StringBuffer("<html><body>");
@@ -502,16 +540,52 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			while ((m = matcher.nextMatch(s.substring(i), true, true, true, false)) != null)
 			{
 				appendString2html(sb, s.substring(i, i + m.start));
-				sb.append("<b>");
+				sb.append(tags[0]);
 				appendString2html(sb, s.substring(i + m.start, i + m.end));
-				sb.append("</b>");
+				sb.append(tags[1]);
 				i += m.end;
 			}
 			appendString2html(sb, s.substring(i));
 			sb.append("</body></html>");
+			System.err.println(sb.toString());
 			return sb.toString();
 		}
 
+		private String[] style2html(String prop)
+		{
+			StringBuffer open = new StringBuffer();
+			StringBuffer close = new StringBuffer();
+			SyntaxStyle style = parseHighlightStyle(prop);
+			Font f = style.getFont();
+			Color c = style.getForegroundColor();
+			if (c != null)
+			{
+				open.append("<font color=#");
+				open.append(Integer.toHexString(c.getRGB() & 0xffffff));
+				open.append(">");
+				close.insert(0, "</font>");
+			}
+			c = style.getBackgroundColor();
+			if (c != null)
+			{
+				open.append("<span bgcolor=#");
+				open.append(Integer.toHexString(c.getRGB() & 0xffffff));
+				open.append(">");
+				close.insert(0, "</span>");
+			}
+			if (f.isBold())
+			{
+				open.append("<b>");
+				close.insert(0, "</b>");
+			}
+			if (f.isItalic())
+			{
+				open.append("<i>");
+				close.insert(0, "</i>");
+			}
+			return new String[] { open.toString(), close.toString() };
+		}
+		
 		private void appendString2html(StringBuffer sb, String s)
 		{
 			for (int i = 0; i < s.length(); i++)
