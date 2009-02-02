@@ -36,6 +36,8 @@ import org.gjt.sp.util.*;
  */
 public class BufferInsertRequest extends BufferIORequest
 {
+	private SegmentBuffer seg;
+
 	//{{{ BufferInsertRequest constructor
 	/**
 	 * Creates a new buffer I/O request.
@@ -51,8 +53,8 @@ public class BufferInsertRequest extends BufferIORequest
 		super(view,buffer,session,vfs,path);
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ background() method
+	public void background()
 	{
 		InputStream in = null;
 		try
@@ -75,19 +77,8 @@ public class BufferInsertRequest extends BufferIORequest
 			if(in == null)
 				return;
 
-			final SegmentBuffer seg = read(
+			seg = read(
 				autodetect(in),length,true);
-
-			/* we don't do this in Buffer.insert() so that
-			   we can insert multiple files at once */
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					view.getTextArea().setSelectedText(
-						seg.toString());
-				}
-			});
 		}
 		catch(Exception e)
 		{
@@ -122,4 +113,11 @@ public class BufferInsertRequest extends BufferIORequest
 			}
 		}
 	} //}}}
+
+	public void foreground() {
+		/* we don't do this in Buffer.insert() so that
+		   we can insert multiple files at once */
+		view.getTextArea().setSelectedText(seg.toString());
+
+	}
 }

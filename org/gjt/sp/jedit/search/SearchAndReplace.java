@@ -406,8 +406,7 @@ public class SearchAndReplace
 			}
 			else
 				s = null;
-			VFSManager.runInWorkThread(new HyperSearchRequest(view,
-				matcher,results,s));
+			VFSManager.run(new HyperSearchRequest(view,matcher,results,s));
 			return true;
 		}
 		catch(Exception e)

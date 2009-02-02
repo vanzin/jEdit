@@ -175,9 +175,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		if(session == null)
 			return;
 
-		VFSManager.runInWorkThread(new GetFileTypeRequest(
-			vfs,session,path,type));
-		VFSManager.runInAWTThread(new Runnable()
+		VFSManager.run(new GetFileTypeRequest(vfs,session,path,type), new Runnable()
 		{
 			public void run()
 			{

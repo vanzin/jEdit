@@ -54,8 +54,8 @@ public class BufferSaveRequest extends BufferIORequest
 		super(view,buffer,session,vfs,path);
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ background() method
+	public void background()
 	{
 		/* if the VFS supports renaming files, we first
 		 * save to #<filename>#save#, then rename that

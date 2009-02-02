@@ -38,7 +38,7 @@ import org.gjt.sp.util.*;
  * modified   $Date: 2006/03/10 12:49:17 $ by $Author: hertzhaft $
  */
 
-public class MarkersSaveRequest extends WorkRequest
+public class MarkersSaveRequest extends SwingWorkerBase
 {
 	//{{{ Constants
 	public static final String ERROR_OCCURRED = "MarkersSaveRequest__error";
@@ -65,8 +65,8 @@ public class MarkersSaveRequest extends WorkRequest
 
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ background() method
+	public void background()
 	{
 		OutputStream out = null;
 

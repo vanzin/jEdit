@@ -342,7 +342,7 @@ public class Buffer extends JEditBuffer
 
 		setFlag(AUTOSAVE_DIRTY,false);
 
-		VFSManager.runInWorkThread(new BufferAutosaveRequest(
+		VFSManager.run(new BufferAutosaveRequest(
 			null,this,null,VFSManager.getFileVFS(),
 			autosaveFile.getPath()));
 	} //}}}
@@ -1500,9 +1500,7 @@ public class Buffer extends JEditBuffer
 		Object session = vfs.createVFSSession(path, view);
 		if(session == null)
 			return false;
-		VFSManager.runInWorkThread(
-			new MarkersSaveRequest(
-				view, this, session, vfs, path));
+		VFSManager.run(new MarkersSaveRequest(view, this, session, vfs, path));
 		return true;
 	} //}}}
 

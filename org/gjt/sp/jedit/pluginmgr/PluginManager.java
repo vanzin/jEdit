@@ -34,7 +34,7 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.WorkRequest;
+import org.gjt.sp.util.SwingWorkerBase;
 //}}}
 
 /**
@@ -236,9 +236,9 @@ public class PluginManager extends JFrame implements EBComponent
 
 		final Exception[] exception = new Exception[1];
 
-		VFSManager.runInWorkThread(new WorkRequest()
+		VFSManager.run(new SwingWorkerBase()
 		{
-			public void run()
+			public void background()
 			{
 				try
 				{
@@ -256,11 +256,7 @@ public class PluginManager extends JFrame implements EBComponent
 					downloadingPluginList = false;
 				}
 			}
-		});
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
+			public void foreground()
 			{
 				if(exception[0] instanceof SAXParseException)
 				{

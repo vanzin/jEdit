@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.WorkRequest;
+import org.gjt.sp.util.SwingWorkerBase;
 
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
@@ -225,7 +225,7 @@ public class TextAreaTransferHandler extends TransferHandler
 						}
 						else
 						{
-							VFSManager.runInWorkThread(new DraggedURLLoader(textArea,uri.getPath()));
+							VFSManager.run(new DraggedURLLoader(textArea,uri.getPath()));
 						}
 						found = true;
 					}
@@ -282,7 +282,7 @@ public class TextAreaTransferHandler extends TransferHandler
 						str0 = str0.substring(7);
 					}
 
-					VFSManager.runInWorkThread(new DraggedURLLoader(textArea,str0));
+					VFSManager.run(new DraggedURLLoader(textArea,str0));
 				}
 				found = true;
 				
@@ -461,7 +461,7 @@ public class TextAreaTransferHandler extends TransferHandler
 	} //}}}
 
 	//{{{ DraggedURLLoader class
-	private static class DraggedURLLoader extends WorkRequest
+	private static class DraggedURLLoader extends SwingWorkerBase
 	{
 		private final JEditTextArea textArea;
 		private final String url;
@@ -471,7 +471,7 @@ public class TextAreaTransferHandler extends TransferHandler
 			this.textArea = textArea;
 			this.url = url;
 		}
-		public void run()
+		public void background()
 		{
 			EditPane editPane = EditPane.get(textArea);
 			jEdit.openFile(editPane,url);

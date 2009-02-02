@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 //}}}
+import org.gjt.sp.util.SwingWorkerBase;
 
 public class HelpSearchPanel extends JPanel
 {
@@ -203,9 +204,9 @@ public class HelpSearchPanel extends JPanel
 			final String text = searchField.getText();
 			final Vector<Result> resultModel = new Vector<Result>();
 
-			VFSManager.runInWorkThread(new Runnable()
+			VFSManager.run(new SwingWorkerBase()
 			{
-				public void run()
+				public void background()
 				{
 					StringTokenizer st = new StringTokenizer(text,",.;:-? ");
 
@@ -259,25 +260,21 @@ public class HelpSearchPanel extends JPanel
 						Collections.sort(resultModel,new ResultCompare());
 					}
 				}
-			});
-
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
+			
+				public void foreground()
 				{
 					if(resultModel.isEmpty())
 					{
 						results.setListData(new String[] {
 							jEdit.getProperty(
 							"helpviewer.no-results") });
-
+	
 						getToolkit().beep();
 					}
 					else
 						results.setListData(resultModel);
 				}
 			});
-
 		}
 	} //}}}
 

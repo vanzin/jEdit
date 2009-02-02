@@ -34,7 +34,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-class BrowserIORequest extends WorkRequest
+class BrowserIORequest extends SwingWorkerBase
 {
 	//{{{ Request types
 	/**
@@ -81,8 +81,8 @@ class BrowserIORequest extends WorkRequest
 		this.loadInfo = loadInfo;
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ background() method
+	public void background()
 	{
 		switch(type)
 		{

@@ -40,6 +40,7 @@ import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.SwingWorkerBase;
 import org.gjt.sp.util.XMLUtilities;
 
 import static javax.swing.tree.TreeSelectionModel.SINGLE_TREE_SELECTION;
@@ -96,9 +97,9 @@ public class HelpTOCPanel extends JPanel
 		toc.setModel(empty);
 		toc.setRootVisible(true);
 
-		VFSManager.runInWorkThread(new Runnable()
+		VFSManager.run(new SwingWorkerBase()
 		{
-			public void run()
+			public void background()
 			{
 				createTOC();
 				tocModel.reload(tocRoot);

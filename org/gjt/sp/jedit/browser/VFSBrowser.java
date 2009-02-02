@@ -695,19 +695,20 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
+		Vector<Runnable> background = new Vector<Runnable>();
 		for(int i = 0; i < files.length; i++)
 		{
 			Object session = vfs.createVFSSession(files[i].getDeletePath(),this);
 			if(session == null)
 				continue;
 
-			VFSManager.runInWorkThread(new BrowserIORequest(
+			background.add(new BrowserIORequest(
 				BrowserIORequest.DELETE,this,
 				session,vfs,files[i].getDeletePath(),
 				null,null));
+			
 		}
-
-		VFSManager.runInAWTThread(new Runnable()
+		VFSManager.run(background, new Runnable()
 		{
 			public void run()
 			{
@@ -737,17 +738,15 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null));
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
+		VFSManager.run(
+			new BrowserIORequest(BrowserIORequest.RENAME,this,session,vfs,from,to,null),
+			new Runnable()
 			{
-				endRequest();
-			}
-		});
+				public void run()
+				{
+					endRequest();
+				}
+			});
 	} //}}}
 
 	//{{{ rename() method
@@ -771,17 +770,15 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.RENAME,this,
-			session,vfs,from,to,null));
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
+		VFSManager.run(
+			new BrowserIORequest(BrowserIORequest.RENAME,this,session,vfs,from,to,null),
+			new Runnable()
 			{
-				endRequest();
-			}
-		});
+				public void run()
+				{
+					endRequest();
+				}
+			});
 	} //}}}		
 
 	//{{{ mkdir() method
@@ -818,7 +815,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		if(!startRequest())
 			return;
 
-		VFSManager.runInWorkThread(new BrowserIORequest(
+		VFSManager.run(new BrowserIORequest(
 			BrowserIORequest.MKDIR,this,
 			session,vfs,newDirectory,null,null));
 
@@ -1150,14 +1147,6 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ Package-private members
 	String currentEncoding;
 	boolean autoDetectEncoding;
-
-	//{{{ directoryLoaded() method
-	void directoryLoaded(Object node, Object[] loadInfo,
-		boolean addToHistory)
-	{
-		VFSManager.runInAWTThread(new DirectoryLoadedAWTRequest(
-			node,loadInfo,addToHistory));
-	} //}}}
 
 	//{{{ filesSelected() method
 	void filesSelected()

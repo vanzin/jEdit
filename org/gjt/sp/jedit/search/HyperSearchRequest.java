@@ -28,7 +28,6 @@ import javax.swing.*;
 
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
@@ -41,7 +40,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-class HyperSearchRequest extends WorkRequest
+class HyperSearchRequest extends SwingWorkerBase
 {
 	//{{{ HyperSearchRequest constructor
 	HyperSearchRequest(View view, SearchMatcher matcher,
@@ -57,23 +56,17 @@ class HyperSearchRequest extends WorkRequest
 		this.selection = selection;
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ background() method
+	public void background()
 	{
+		error = null;
 		setStatus(jEdit.getProperty("hypersearch-status"));
 
 		SearchFileSet fileset = SearchAndReplace.getSearchFileSet();
 		String[] files = fileset.getFiles(view);
 		if(files == null || files.length == 0)
 		{
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				public void run()
-				{
-					GUIUtilities.error(view,"empty-fileset",null);
-					results.searchDone(rootSearchNode);
-				}
-			});
+			error = "empty-fileset";
 			return;
 		}
 
@@ -152,22 +145,26 @@ loop:				for(int i = 0; i < files.length; i++)
 		catch(WorkThread.Abort a)
 		{
 		}
-		finally
-		{
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					results.searchDone(rootSearchNode, selectNode);
-				}
-			});
-		}
 	} //}}}
 
+	public void foreground()
+	{
+		if (error != null)
+		{
+			GUIUtilities.error(view,error,null);
+			results.searchDone(rootSearchNode);
+		}
+		else
+		{
+			results.searchDone(rootSearchNode, selectNode);
+		}
+	}
+	
 	//{{{ Private members
 
 	//{{{ Instance variables
 	private View view;
+	private String error;
 	private SearchMatcher matcher;
 	private HyperSearchResults results;
 	private DefaultMutableTreeNode rootSearchNode;

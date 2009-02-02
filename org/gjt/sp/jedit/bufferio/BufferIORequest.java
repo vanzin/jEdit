@@ -44,7 +44,7 @@ import org.gjt.sp.jedit.io.Encoding;
 import org.gjt.sp.jedit.io.EncodingServer;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.SegmentBuffer;
-import org.gjt.sp.util.WorkRequest;
+import org.gjt.sp.util.SwingWorkerBase;
 //}}}
 
 /**
@@ -52,7 +52,7 @@ import org.gjt.sp.util.WorkRequest;
  * @author Slava Pestov
  * @version $Id$
  */
-public abstract class BufferIORequest extends WorkRequest
+public abstract class BufferIORequest extends SwingWorkerBase
 {
 	//{{{ Constants
 

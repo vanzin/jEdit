@@ -29,11 +29,14 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.SwingWorkerBase;
 import org.gjt.sp.util.WorkThreadPool;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -68,6 +71,7 @@ public class VFSManager
 	{
 		int count = jEdit.getIntegerProperty("ioThreadCount",4);
 		ioThreadPool = new WorkThreadPool("jEdit I/O",count);
+		executor = Executors.newFixedThreadPool(count);
 		JARClassLoader classLoader = new JARClassLoader();
 		for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
 		{
@@ -267,6 +271,51 @@ public class VFSManager
 		ioThreadPool.addWorkRequest(run,false);
 	} //}}}
 
+	public static void run(SwingWorkerBase worker)
+	{
+		executor.execute(worker);
+	}
+	
+	public static void run(final Runnable background, final Runnable foreground)
+	{
+		executor.execute(new SwingWorkerBase() {
+			public void background() {
+				background.run();
+			}
+			public void foreground() {
+				foreground.run();
+			}
+		});
+	}
+	
+	public static void run(Vector<Runnable> background, final Runnable foreground)
+	{
+		class Countdown {
+			int count;
+			Runnable awt;
+			public Countdown(int count, Runnable awt) {
+				this.count = count;
+				this.awt = awt;
+			}
+			public void done() {
+				count--;
+				if (count == 0)
+					awt.run();
+			}
+		}
+		final Countdown cnt = new Countdown(background.size(), foreground);
+		for (final Runnable r: background) {
+			executor.execute(new SwingWorkerBase() {
+				public void background() {
+					r.run();
+				}
+				public void foreground() {
+					cnt.done();
+				}
+			});
+		}
+	}
+	
 	//}}}
 
 	//{{{ error() method
@@ -443,6 +492,7 @@ public class VFSManager
 
 	//{{{ Static variables
 	private static WorkThreadPool ioThreadPool;
+	private static ExecutorService executor;
 	private static VFS fileVFS;
 	private static VFS urlVFS;
 	private static final Hashtable<String, VFS> vfsHash;

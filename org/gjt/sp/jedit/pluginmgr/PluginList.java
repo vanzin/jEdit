@@ -32,7 +32,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.helpers.XMLReaderFactory;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.WorkRequest;
+import org.gjt.sp.util.SwingWorkerBase;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -61,10 +61,10 @@ class PluginList
 	 */
 	private final String id;
 	private String cachedURL;
-	private WorkRequest workRequest;
+	private SwingWorkerBase workRequest;
 	String gzipURL;
 	//{{{ PluginList constructor
-	PluginList(WorkRequest workRequest) 
+	PluginList(SwingWorkerBase workRequest) 
 	{
 		id = jEdit.getProperty("plugin-manager.mirror.id");
 		this.workRequest = workRequest;

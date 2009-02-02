@@ -51,8 +51,8 @@ public class BufferAutosaveRequest extends BufferIORequest
 		super(view,buffer,session,vfs,path);
 	} //}}}
 
-	//{{{ run() method
-	public void run()
+	//{{{ background() method
+	public void background()
 	{
 		OutputStream out = null;
 

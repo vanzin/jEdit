@@ -458,7 +458,7 @@ public abstract class VFS
 			// this makes HyperSearch much faster
 			request.run();
 		else
-			VFSManager.runInWorkThread(request);
+			VFSManager.run(request);
 
 		return true;
 	} //}}}
@@ -491,8 +491,7 @@ public abstract class VFS
 		if(!path.equals(buffer.getPath()))
 			buffer.unsetProperty(Buffer.BACKED_UP);
 
-		VFSManager.runInWorkThread(new BufferSaveRequest(
-			view,buffer,session,this,path));
+		VFSManager.run(new BufferSaveRequest(view,buffer,session,this,path));
 		return true;
 	} //}}}
 
@@ -605,8 +604,7 @@ public abstract class VFS
 		if(session == null)
 			return false;
 
-		VFSManager.runInWorkThread(new BufferInsertRequest(
-			view,buffer,session,this,path));
+		VFSManager.run(new BufferInsertRequest(view,buffer,session,this,path));
 		return true;
 	} //}}}
 
