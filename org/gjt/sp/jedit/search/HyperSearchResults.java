@@ -500,14 +500,14 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	class HighlightingTree extends JTree
 	{
 		private String prop;
-		private String[] tags;
+		private String styleTag;
 		
 		public HighlightingTree(DefaultTreeModel model)
 		{
 			super(model);
 			prop = jEdit.getProperty(HIGHLIGHT_PROP);
 			if (prop != null && prop.length() > 0)
-				tags = style2html(prop);
+				styleTag = style2html(prop);
 		}
 
 		@Override
@@ -530,19 +530,21 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			if (! newProp.equals(prop))
 			{
 				prop = newProp;
-				tags = style2html(prop);
+				styleTag = style2html(prop);
 			}
 			SearchMatcher matcher =
 				((HyperSearchOperationNode) node.getUserObject()).getSearchMatcher();
-			StringBuffer sb = new StringBuffer("<html><body>");
+			StringBuffer sb = new StringBuffer("<html><style>.highlight {");
+			sb.append(styleTag);
+			sb.append("}</style><body>");
 			int i = 0;
 			Match m;
 			while ((m = matcher.nextMatch(s.substring(i), true, true, true, false)) != null)
 			{
 				appendString2html(sb, s.substring(i, i + m.start));
-				sb.append(tags[0]);
+				sb.append("<span class=\"highlight\">");
 				appendString2html(sb, s.substring(i + m.start, i + m.end));
-				sb.append(tags[1]);
+				sb.append("</span>");
 				i += m.end;
 			}
 			appendString2html(sb, s.substring(i));
@@ -551,39 +553,34 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			return sb.toString();
 		}
 
-		private String[] style2html(String prop)
+		private String color2html(Color c)
 		{
-			StringBuffer open = new StringBuffer();
-			StringBuffer close = new StringBuffer();
+			StringBuffer cs = new StringBuffer("rgb(");
+			cs.append(c.getRed());
+			cs.append(",");
+			cs.append(c.getGreen());
+			cs.append(",");
+			cs.append(c.getBlue());
+			cs.append(");");
+			return cs.toString();
+		}
+		
+		private String style2html(String prop)
+		{
+			StringBuffer tag = new StringBuffer();
 			SyntaxStyle style = parseHighlightStyle(prop);
 			Font f = style.getFont();
 			Color c = style.getForegroundColor();
 			if (c != null)
-			{
-				open.append("<font color=#");
-				open.append(Integer.toHexString(c.getRGB() & 0xffffff));
-				open.append(">");
-				close.insert(0, "</font>");
-			}
+				tag.append("color:" + color2html(c));
 			c = style.getBackgroundColor();
 			if (c != null)
-			{
-				open.append("<span bgcolor=#");
-				open.append(Integer.toHexString(c.getRGB() & 0xffffff));
-				open.append(">");
-				close.insert(0, "</span>");
-			}
+				tag.append("background:" + color2html(c));
 			if (f.isBold())
-			{
-				open.append("<b>");
-				close.insert(0, "</b>");
-			}
+				tag.append("font-weight:bold;");
 			if (f.isItalic())
-			{
-				open.append("<i>");
-				close.insert(0, "</i>");
-			}
-			return new String[] { open.toString(), close.toString() };
+				tag.append("font-style: italic;");
+			return tag.toString();
 		}
 		
 		private void appendString2html(StringBuffer sb, String s)
