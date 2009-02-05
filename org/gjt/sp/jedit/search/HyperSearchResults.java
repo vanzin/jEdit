@@ -591,7 +591,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 				String r;
 				switch (c) {
 				case '"': r = "&quot;"; break;
-				case '\'': r = "&apos;"; break;
+				//case '\'': r = "&apos;"; break;
 				case '&': r = "&amp;"; break;
 				case '<': r = "&lt;"; break;
 				case '>': r = "&gt;"; break;
