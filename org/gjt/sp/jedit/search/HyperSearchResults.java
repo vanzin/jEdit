@@ -549,7 +549,6 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			}
 			appendString2html(sb, s.substring(i));
 			sb.append("</body></html>");
-			System.err.println(sb.toString());
 			return sb.toString();
 		}
 
