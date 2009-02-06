@@ -15,9 +15,11 @@ package installer;
 
 import javax.swing.border.*;
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.event.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /*
@@ -136,7 +138,7 @@ public class SwingInstall extends JFrame
 		{
 			OperatingSystem.OSTask osTask = (OperatingSystem.OSTask)keys.next();
 			String dir = ((JTextField)osTaskDirs.get(osTask)).getText();
-			if(dir != null && dir.length() != 0)
+			if(dir != null && dir.trim().length() != 0)
 			{
 				osTask.setEnabled(true);
 				osTask.setDirectory(dir);
@@ -162,12 +164,14 @@ public class SwingInstall extends JFrame
 
 			nextButton.setText("Next");
 			prevButton.setEnabled(false);
+			nextButton.setEnabled(true);
 			break;
 		case 1:
 			caption.setText(installer.getProperty("app.license.title"));
 
 			nextButton.setText("Next");
 			prevButton.setEnabled(true);
+			nextButton.setEnabled(true);
 			break;
 		case 2:
 			caption.setText("Specify where " + appName
@@ -175,12 +179,14 @@ public class SwingInstall extends JFrame
 
 			nextButton.setText("Next");
 			prevButton.setEnabled(true);
+			if(!chooseDirectory.isOK())nextButton.setEnabled(false);
 			break;
 		case 3:
 			caption.setText("Choose components to install");
 
 			nextButton.setText("Install");
 			prevButton.setEnabled(true);
+			nextButton.setEnabled(true);
 			break;
 		case 4:
 			caption.setText("Installing " + appName);
@@ -196,6 +202,7 @@ public class SwingInstall extends JFrame
 			nextButton.setText("Finish");
 			prevButton.setEnabled(false);
 			nextButton.setEnabled(true);
+			cancelButton.setEnabled(false);
 			break;
 		}
 
@@ -352,6 +359,135 @@ public class SwingInstall extends JFrame
 		}
 	}
 
+	class DirVerifier extends InputVerifier
+	{
+		private JTextComponent message;
+		private Object pos;
+		private JComponent parent;
+		
+		public DirVerifier(JComponent parent, Object pos)
+		{
+			super();
+			message = new JTextArea(" ");
+			message.setEditable(false);
+			message.setBackground(parent.getBackground());
+			this.parent = parent;
+			this.pos = pos;
+		}
+		
+		public boolean shouldYieldFocus(JComponent input)
+		{
+			return verify(input);
+		}
+		
+		public boolean verify(JComponent input)
+		{
+			if(input instanceof JTextComponent)
+			{
+				String dir = ((JTextComponent)input).getText();
+				if(checkNull(dir) &&
+					checkExistNotDirectory(dir) &&
+					checkExistNotEmpty(dir) &&
+					checkRelative(dir))
+				{
+					//everything is perfect, clean label
+					if(message.getParent()!=null)
+					{
+						SwingUtilities.invokeLater(new Runnable()
+							{
+								public void run()
+								{
+									parent.remove(message);
+									parent.revalidate();
+									parent.repaint();
+								}
+							});
+					}
+				}
+				else
+				{
+					if(message.getParent()==null)
+					{
+						SwingUtilities.invokeLater(new Runnable()
+							{
+								public void run()
+								{
+									parent.add(message,pos);
+									parent.revalidate();
+									parent.repaint();
+								}
+							});
+					}
+					else message.repaint();
+				}
+			}
+			return true;
+		}
+		
+		private boolean checkNull(String file)
+		{
+			if(file.trim().length()==0)
+			{
+				message.setForeground(Color.red);
+				message.setText(installer.getProperty("dir.null"));
+				return false;
+			}
+			else return true;
+		}
+		
+		private boolean checkRelative(String dir)
+		{
+			File f = new File(dir);
+			if(!f.isAbsolute())
+			{
+				String msg = installer.getProperty("dir.relative");
+				try
+				{
+					String full = f.getCanonicalPath();
+					message.setForeground(Color.orange);
+					message.setText(msg+'\n'+full);
+				}
+				catch(IOException ioe)
+				{
+					message.setForeground(Color.red);
+					msg = installer.getProperty("dir.cant-resolve");
+					message.setText(msg);
+				}
+				return false;
+			}
+			else return true;
+		}
+		
+		private boolean checkExistNotDirectory(String dir)
+		{
+			File f = new File(dir);
+			if(f.exists() && !f.isDirectory())
+			{
+				message.setForeground(Color.red);
+				message.setText(installer.getProperty("dir.not-directory"));
+				return false;
+			}
+			else return true;
+		}
+		
+		private boolean checkExistNotEmpty(String dir)
+		{
+			File f = new File(dir);
+			String[]cnt = f.list();
+			if(cnt!=null && cnt.length>0)
+			{
+				message.setForeground(Color.orange);
+				message.setText(installer.getProperty("dir.not-empty"));
+				return false;
+			}
+			else return true;
+		}
+	}
+	/**
+	 * only install directory is required, as it's necessary to scripts, etc.
+	 * If one uses the installer only for OS tasks, then one deselects all components
+	 * and that's all.
+	 */
 	class ChooseDirectory extends JPanel
 	{
 		JTextField installDir;
@@ -360,16 +496,22 @@ public class SwingInstall extends JFrame
 		ChooseDirectory()
 		{
 			super(new BorderLayout());
-
 			osTaskDirs = new HashMap();
 
-			JPanel directoryPanel = new JPanel(new VariableGridLayout(
-				VariableGridLayout.FIXED_NUM_COLUMNS,3,12,12));
+			
+			JPanel directoryPanel = new JPanel(new GridBagLayout());
 
 			installDir = addField(directoryPanel,"Install program in:",
 				OperatingSystem.getOperatingSystem()
 				.getInstallDirectory(appName,appVersion));
 
+			installDir.addFocusListener(new FocusAdapter()
+				{
+					public void focusLost(FocusEvent fe)
+					{
+						nextButton.setEnabled(isOK());
+					}
+				});
 			for(int i = 0; i < osTasks.length; i++)
 			{
 				OperatingSystem.OSTask osTask = osTasks[i];
@@ -384,25 +526,59 @@ public class SwingInstall extends JFrame
 			ChooseDirectory.this.add(BorderLayout.NORTH,directoryPanel);
 		}
 
+		boolean isOK()
+		{
+			if(installDir.getText().length()==0)return false;
+			File f = new File(installDir.getText());
+			return !(f.exists()&&!f.isDirectory());
+		}
+
+		private GridBagConstraints c = new GridBagConstraints();
 		private JTextField addField(JPanel directoryPanel, String label,
 			String defaultText)
 		{
+			
+			//new line
+			c.gridy++;
+			
+			//message
 			JTextField field = new JTextField(defaultText);
+			c.insets.bottom=3;
+			c.gridx=0;
+			c.gridwidth=3;
+			c.insets.left=0;
+			c.insets.right=0;
+			c.anchor=GridBagConstraints.LINE_START;
+			DirVerifier verif = new DirVerifier(directoryPanel,c.clone());
+			
+			
+			field.setInputVerifier(verif);
+			
+			c.insets.bottom=12;
+			c.gridx=0;
+			c.gridy++;
+			c.gridwidth=1;
+			c.anchor=GridBagConstraints.LINE_END;
+			directoryPanel.add(new JLabel(label,SwingConstants.RIGHT),c);
 
-			directoryPanel.add(new JLabel(label,SwingConstants.RIGHT));
-
-			Box fieldBox = new Box(BoxLayout.Y_AXIS);
-			fieldBox.add(Box.createGlue());
-			Dimension dim = field.getPreferredSize();
-			dim.width = Integer.MAX_VALUE;
-			field.setMaximumSize(dim);
-			fieldBox.add(field);
-			fieldBox.add(Box.createGlue());
-			directoryPanel.add(fieldBox);
+			c.gridx=1;
+			c.fill=GridBagConstraints.HORIZONTAL;
+			c.anchor=GridBagConstraints.CENTER;
+			c.insets.left=12;
+			c.insets.right=12;
+			c.weightx=1.0;
+			directoryPanel.add(field,c);
+			
+			
 			JButton choose = new JButton("Choose...");
 			choose.setRequestFocusEnabled(false);
 			choose.addActionListener(new ActionHandler(field));
-			directoryPanel.add(choose);
+			c.gridx=2;
+			c.insets.left=0;
+			c.insets.right=0;
+			c.fill=GridBagConstraints.NONE;
+			c.weightx=0;
+			directoryPanel.add(choose,c);
 
 			return field;
 		}
@@ -425,7 +601,10 @@ public class SwingInstall extends JFrame
 
 				if(chooser.showOpenDialog(SwingInstall.this)
 					== JFileChooser.APPROVE_OPTION)
-					field.setText(chooser.getSelectedFile().getPath());
+				{
+						field.setText(chooser.getSelectedFile().getPath());
+						field.getInputVerifier().verify(field);
+				}
 			}
 		}
 	}
@@ -582,6 +761,17 @@ public class SwingInstall extends JFrame
 						"Installation aborted",
 						JOptionPane.ERROR_MESSAGE);
 					System.exit(1);
+				}
+			});
+		}
+
+		public void message(final String message)
+		{
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				public void run()
+				{
+					progress.setString(message);
 				}
 			});
 		}

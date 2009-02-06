@@ -43,7 +43,9 @@ public class ConsoleInstall
 		String _installDir = readLine(in);
 		if(_installDir.length() != 0)
 			installDir = _installDir;
-
+		else 
+			System.out.println("Will use default");
+		
 		OperatingSystem.OSTask[] osTasks = os.getOSTasks(installer);
 
 		for(int i = 0; i < osTasks.length; i++)
@@ -66,6 +68,8 @@ public class ConsoleInstall
 					else
 						osTask.setDirectory(dir);
 				}
+				else
+					System.out.println("will use default");
 			}
 		}
 

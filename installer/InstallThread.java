@@ -14,6 +14,7 @@ package installer;
 
 import java.io.*;
 import java.util.Vector;
+import java.net.*;
 
 /*
  * The thread that performs installation.
@@ -44,7 +45,7 @@ public class InstallThread extends Thread
 			for(int i = 0; i < components.size(); i++)
 			{
 				String comp = (String)components.elementAt(i);
-				System.err.println("Installing " + comp);
+				progress.message("Installing " + comp);
 				installComponent(comp);
 			}
 
@@ -52,7 +53,7 @@ public class InstallThread extends Thread
 			// scripts, installing man pages, etc.)
 			for(int i = 0; i < osTasks.length; i++)
 			{
-				System.err.println("Performing task " +
+				progress.message("Performing task " +
 					osTasks[i].getName());
 				osTasks[i].perform(installDir,components);
 			}

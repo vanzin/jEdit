@@ -57,3 +57,10 @@ comp.4.disk-size=@jedit-os2.disksize@
 comp.4.real-size=@jedit-os2.realsize@
 comp.4.fileset=jedit-os2
 comp.4.os=HalfAnOS
+
+dir.null=Empty directory: will NOT be installed
+dir.not-empty=Target directory exists and is not empty
+dir.not-directory=Target is NOT a directory, can't install
+dir.relative=Relative directory, translated to :
+dir.relative-cant-resolve=Can't resolve relative directory !
+dir.not-exist=Target directory doesn't exist (we will create it for you)

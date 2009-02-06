@@ -25,5 +25,6 @@ public interface Progress
 
 	public void done();
 
+	public void message(String message);
 	public void error(String message);
 }

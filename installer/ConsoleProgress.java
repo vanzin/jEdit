@@ -32,6 +32,11 @@ public class ConsoleProgress implements Progress
 		System.out.println("*** Installation complete");
 	}
 
+	public void message(String message)
+	{
+		System.out.println(message);
+	}
+
 	public void error(String message)
 	{
 		System.err.println("*** An error occurred: " + message);

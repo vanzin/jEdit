@@ -22,12 +22,23 @@ public class Install
 {
 	public static void main(String[] args)
 	{
+		
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.3") < 0)
+		if(javaVersion.compareTo("1.5") < 0)
 		{
-			System.err.println("You are running Java version "
-				+ javaVersion + ".");
-			System.err.println("This installer requires Java 1.3 or later.");
+			String message = "You are running Java version "
+					+ javaVersion + " from "+System.getProperty("java.vendor")+".\n"
+					+"This installer requires Java 1.5 or later.";
+			if(args.length == 0)
+			{
+				JOptionPane.showMessageDialog(null,
+					message,
+					"jEdit installer...", JOptionPane.ERROR_MESSAGE); 
+			}
+			else
+			{
+				System.err.println(message);
+			}
 			System.exit(1);
 		}
 
