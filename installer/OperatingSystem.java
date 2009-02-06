@@ -193,21 +193,15 @@ public abstract class OperatingSystem
 				out.write("\n");
 				out.write("# Launch application.\n");
 				out.write("\n");
-				out.write("while [ $# -gt 9 ]; do\n");
+				
 				String jar = installDir + File.separator
 					+ name.toLowerCase() + ".jar";
-				out.write("\texec \"$JAVA_HOME/bin/java\"" +
-					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
-					  jar + " -reuseview \"$1\" \"$2\"" +
-					  " \"$3\" \"$4\" \"$5\" \"$6\"" +
-					  " \"$7\" \"$8\" \"$9\"\n");
-				out.write("\tshift 9\n");
-				out.write("done\n");
-				out.write("exec \"$JAVA_HOME/bin/java\"" +
-					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
-					  jar + " -reuseview \"$1\" \"$2\"" +
-					  " \"$3\" \"$4\" \"$5\" \"$6\"" +
-					  " \"$7\" \"$8\" \"$9\"\n");
+
+                
+ 				out.write("exec \"$JAVA_HOME/bin/java\"" +
+ 					  " -Xms${JAVA_HEAP_INIT_SIZE}M" +
+ 					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
+					  jar + " \"$@\"\n");
 				out.close();
 
 				// Make it executable
