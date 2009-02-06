@@ -64,6 +64,12 @@ Bernard Walle, and Markus Laker for contributing to this release.
   The context menu of the VFS browser now has a "Properties" menu item that
   shows the properties of the selected node(s) in a dialog.
 
+- Implemented feature request #2555956: Show presence of jedit server. The About
+  dialog now shows the mode in which jEdit is running: server,
+  server-background, or standalone. (Shlomy Reinstein)
+
+- Added configurable highlighting of the matching text in hypersearch results,
+  which is part of feature request #2446121. (Shlomy Reinstein)
 }}}
 {{{ API Changes
 
@@ -101,6 +107,12 @@ Bernard Walle, and Markus Laker for contributing to this release.
 - Added OperatingSystem.hasJava16() method and made deprecated
   OperatingSystem.hasJava15() and OperatingSystem.hasJava14() since jEdit
   requires Java 1.5 at least (Matthieu Casanova)
+
+- Added a new interface for docking framework plugins to react to newly loaded
+  dockables (fixed bug #2519873). (Shlomy Reinstein)
+
+- Added the API DockingArea.getDockables() to support the Docker plugin.
+
 }}}
 {{{ Editing
 - New JavaFX edit mode (Matthieu Casanova)
