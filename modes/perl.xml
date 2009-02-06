@@ -290,6 +290,7 @@
 
 		<!-- complex operators -->
 		<SEQ TYPE="OPERATOR">||</SEQ>
+		<SEQ TYPE="OPERATOR">//</SEQ>
 		<SEQ TYPE="OPERATOR">&amp;&amp;</SEQ>
 		<SEQ TYPE="OPERATOR">!=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;=&gt;</SEQ>
@@ -298,6 +299,7 @@
 		<SEQ TYPE="OPERATOR">==</SEQ>
 		<SEQ TYPE="OPERATOR">=~</SEQ>
 		<SEQ TYPE="OPERATOR">!~</SEQ>
+		<SEQ TYPE="OPERATOR">~~</SEQ>
 
 		<SEQ TYPE="OPERATOR">+=</SEQ>
 		<SEQ TYPE="OPERATOR">-=</SEQ>
@@ -454,6 +456,7 @@
 			<KEYWORD3>read</KEYWORD3>
 			<KEYWORD3>readdir</KEYWORD3>
 			<KEYWORD3>rewinddir</KEYWORD3>
+			<KEYWORD3>say</KEYWORD3>
 			<KEYWORD3>seek</KEYWORD3>
 			<KEYWORD3>seekdir</KEYWORD3>
 			<KEYWORD3>select</KEYWORD3>
@@ -513,6 +516,12 @@
 			<KEYWORD1>return</KEYWORD1>
 			<KEYWORD1>wantarray</KEYWORD1>
 
+			<!-- Keywords related to switch -->
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+			<KEYWORD1>given</KEYWORD1>
+			<KEYWORD1>when</KEYWORD1>
+
 			<!-- Keywords related to scoping -->
 			<!--<KEYWORD1>caller</KEYWORD1>-->
 			<!--<KEYWORD1>import</KEYWORD1>-->
@@ -520,6 +529,7 @@
 			<KEYWORD1>my</KEYWORD1>
 			<KEYWORD1>our</KEYWORD1>
 			<KEYWORD1>package</KEYWORD1>
+			<KEYWORD1>state</KEYWORD1>
 			<KEYWORD1>use</KEYWORD1>
 
 			<!-- Miscellaneous functions -->

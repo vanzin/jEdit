@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre17
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra,
-Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, and Daniel Hahler
-for contributing to this release.
+Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, Daniel Hahler and
+Markus Laker for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -119,6 +119,8 @@ for contributing to this release.
 - HTML mode: Fix delegation of "style" attribute to CSS mode and delegate
   on* attributes to JavaScript mode (Daniel Hahler)
 
+- SF Bug #1947324: Bring Perl mode up to date with Perl 5.10
+  Add some new keywords and operators to the perl mode. (Markus Laker)
 }}}
 
 }}}
