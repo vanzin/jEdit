@@ -34,14 +34,9 @@ import java.util.Stack;
   *   [do something interesting]
   * }
   * </pre>
-  * <p>Alternatively, you can use the standard SAX interfaces
-  * with the <code>SAXDriver</code> class as your entry point.
   * @author Copyright (c) 1997, 1998 by Microstar Software Ltd.
   * @author Written by David Megginson &lt;dmeggins@microstar.com&gt;
   * @version 1.1
-  * @see XmlHandler
-  * @see HandlerBase
-  * @see SAXDriver
   * @deprecated use org.xml.sax.XMLReader
   */
 public class XmlParser {
@@ -2797,7 +2792,7 @@ public class XmlParser {
 
   /**
     * Find the type of an entity.
-    * @returns An integer constant representing the entity type.
+    * @return An integer constant representing the entity type.
     * @see #ENTITY_UNDECLARED
     * @see #ENTITY_INTERNAL
     * @see #ENTITY_NDATA
@@ -2873,7 +2868,7 @@ public class XmlParser {
 
   /**
     * Get the notation name associated with an NDATA entity.
-    * @param ename The NDATA entity name.
+    * @param eName The NDATA entity name.
     * @return The associated notation name, or null if the
     *         entity was not declared, or if it is not an
     *         NDATA entity.
