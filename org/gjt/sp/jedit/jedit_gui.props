@@ -929,7 +929,10 @@ print-error.message=An error occurred while trying to print:\n\
 
 #{{{ About dialog
 about.title=About jEdit
-about.version=jEdit {0} using Java {1}
+about.version=jEdit {0} {1} mode, using Java {2}
+about.mode.standalone=standalone
+about.mode.server=server
+about.mode.server-background=server-background
 
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we

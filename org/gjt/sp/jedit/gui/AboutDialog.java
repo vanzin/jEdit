@@ -110,7 +110,17 @@ public class AboutDialog extends JDialog implements ActionListener
 
 		AboutPanel()
 		{
-			String[] args = { jEdit.getVersion(), System.getProperty("java.version") };
+			String mode;
+			if (jEdit.getEditServer() != null)
+			{
+				if (jEdit.isBackgroundModeEnabled())
+					mode = jEdit.getProperty("about.mode.server-background");
+				else
+					mode = jEdit.getProperty("about.mode.server");
+			}
+			else
+				mode = jEdit.getProperty("about.mode.standalone");
+			String[] args = { jEdit.getVersion(), mode, System.getProperty("java.version") };
 			sBottomLine = jEdit.getProperty("about.version",args);
 			setFont(defaultFont);
 			fm = getFontMetrics(defaultFont);
