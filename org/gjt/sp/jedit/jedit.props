@@ -98,6 +98,9 @@ search.keepDialog.toggle=true
 # When this limit is reached a dialog appears to cancel the search
 hypersearch.maxWarningResults=1000
 
+# Style for highlighting matches in hypersearch results
+hypersearch.results.highlight=bgColor:#ccccff
+
 # Confirm dialogs
 confirmSaveAll=true
 
