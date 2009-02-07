@@ -35,6 +35,7 @@ import javax.swing.SwingConstants;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 /**
  * @author Matthieu Casanova
@@ -56,7 +57,7 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 		private final View view;
 		
 		//{{{ LineSepWidget constructor
-		public LineSepWidget(final View view) 
+		LineSepWidget(final View view) 
 		{
 			lineSep = new ToolTipLabel();
 			lineSep.setHorizontalAlignment(SwingConstants.CENTER);
@@ -84,7 +85,7 @@ public class LineSepWidgetFactory implements StatusWidgetFactory
 		public void update() 
 		{
 			Buffer buffer = view.getBuffer();
-			String lineSep = buffer.getStringProperty("lineSeparator");
+			String lineSep = buffer.getStringProperty(JEditBuffer.LINESEP);
 			if("\n".equals(lineSep))
 				this.lineSep.setText("U");
 			else if("\r\n".equals(lineSep))

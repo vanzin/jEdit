@@ -229,7 +229,7 @@ public class BufferOptionPane extends AbstractOptionPane
 			oldLineSep = System.getProperty("line.separator");
 		if(!oldLineSep.equals(lineSep))
 		{
-			buffer.setStringProperty("lineSeparator",lineSep);
+			buffer.setStringProperty(JEditBuffer.LINESEP, lineSep);
 			buffer.setDirty(true);
 		}
 
