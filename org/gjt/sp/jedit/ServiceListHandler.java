@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -31,8 +30,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 
-import org.gjt.sp.util.Log;
 import org.gjt.sp.util.XMLUtilities;
+import org.gjt.sp.util.Log;
 //}}}
 
 /**
@@ -47,9 +46,9 @@ class ServiceListHandler extends DefaultHandler
 	{
 		this.plugin = plugin;
 		this.uri = uri;
-		code = new StringBuffer();
-		stateStack = new Stack();
-		cachedServices = new LinkedList();
+		code = new StringBuilder();
+		stateStack = new Stack<String>();
+		cachedServices = new LinkedList<ServiceManager.Descriptor>();
 	} //}}}
 
 	//{{{ resolveEntity() method
@@ -110,14 +109,14 @@ class ServiceListHandler extends DefaultHandler
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			Log.log(Log.ERROR, e, e);
 		}
 	} //}}}
 
 	//{{{ getCachedServices() method
 	public ServiceManager.Descriptor[] getCachedServices()
 	{
-		return (ServiceManager.Descriptor[])cachedServices.toArray(
+		return cachedServices.toArray(
 			new ServiceManager.Descriptor[cachedServices.size()]);
 	} //}}}
 
@@ -129,11 +128,11 @@ class ServiceListHandler extends DefaultHandler
 
 	private String serviceName;
 	private String serviceClass;
-	private StringBuffer code;
+	private StringBuilder code;
 
-	private Stack stateStack;
+	private Stack<String> stateStack;
 
-	private List cachedServices;
+	private List<ServiceManager.Descriptor> cachedServices;
 	//}}}
 
 	//{{{ pushElement() method
@@ -149,13 +148,13 @@ class ServiceListHandler extends DefaultHandler
 	//{{{ peekElement() method
 	private String peekElement()
 	{
-		return (String) stateStack.peek();
+		return stateStack.peek();
 	} //}}}
 
 	//{{{ popElement() method
 	private String popElement()
 	{
-		return (String) stateStack.pop();
+		return stateStack.pop();
 	} //}}}
 
 	//}}}
