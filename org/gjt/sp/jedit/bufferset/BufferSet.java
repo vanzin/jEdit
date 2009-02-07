@@ -354,19 +354,6 @@ public class BufferSet
 		}
 	} //}}}
 
-	//{{{ clear() method
-	void clear()
-	{
-		buffers.clear();
-		BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
-		Log.log(Log.DEBUG, this, hashCode() + ": Buffer clear");
-		for (BufferSetListener listener : listeners)
-		{
-			listener.bufferCleared();
-		}
-	} //}}}
-
-
 	//}}}
 
 	//{{{ Private members

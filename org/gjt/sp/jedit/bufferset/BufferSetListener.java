@@ -59,11 +59,6 @@ public interface BufferSetListener extends EventListener
 	void bufferMoved(Buffer buffer, int oldIndex, int newIndex);
 
 	/**
-	 * The bufferSet was cleared, it is now empty.
-	 */
-	void bufferCleared();
-
-	/**
 	 * The bufferSet was sorted.
 	 */
 	void bufferSetSorted();

@@ -41,10 +41,6 @@ public class BufferSetAdapter implements BufferSetListener
 	{
 	}
 
-	public void bufferCleared()
-	{
-	}
-
 	public void bufferSetSorted()
 	{
 	}
