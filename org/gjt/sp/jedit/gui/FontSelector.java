@@ -27,7 +27,8 @@ package org.gjt.sp.jedit.gui;
 //{{{ Imports
 import java.awt.event.*;
 import java.awt.*;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -115,7 +116,7 @@ public class FontSelector extends JButton
 			break;
 		}
 
-		setText(font.getName() + " " + font.getSize() + " " + styleString);
+		setText(font.getName() + ' ' + font.getSize() + ' ' + styleString);
 	} //}}}
 
 	//{{{ setAntiAliasEnabled() method
@@ -167,21 +168,21 @@ public class FontSelector extends JButton
 class FontSelectorDialog extends EnhancedDialog
 {
 	//{{{ FontSelectorDialog constructor
-	public FontSelectorDialog(Frame parent, Font font)
+	FontSelectorDialog(Frame parent, Font font)
 	{
 		super(parent,jEdit.getProperty("font-selector.title"),true);
 		init(font);
 	} //}}}
 
 	//{{{ FontSelectorDialog constructor
-	public FontSelectorDialog(Dialog parent, Font font)
+	FontSelectorDialog(Dialog parent, Font font)
 	{
 		super(parent,jEdit.getProperty("font-selector.title"),true);
 		init(font);
 	} //}}}
 
 	//{{{ FontSelectorDialog constructor
-	public FontSelectorDialog(Frame parent, Font font,
+	FontSelectorDialog(Frame parent, Font font,
 		FontSelector fontSelector)
 	{
 		super(parent,jEdit.getProperty("font-selector.title"),true);
@@ -190,7 +191,7 @@ class FontSelectorDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ FontSelectorDialog constructor
-	public FontSelectorDialog(Dialog parent, Font font,
+	FontSelectorDialog(Dialog parent, Font font,
 		FontSelector fontSelector)
 	{
 		super(parent,jEdit.getProperty("font-selector.title"),true);
@@ -366,32 +367,31 @@ class FontSelectorDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ getFontList() method
-	private String[] getFontList()
+	private static String[] getFontList()
 	{
 		String[] nameArray = GraphicsEnvironment
 			.getLocalGraphicsEnvironment()
 			.getAvailableFontFamilyNames();
-		Vector nameVector = new Vector(nameArray.length);
+		List<String> nameVector = new ArrayList<String>(nameArray.length);
 
 		for(int i = 0, j; i < nameArray.length; i++)
 		{
 			for(j = 0; j < HIDEFONTS.length; j++)
 			{
-				if(nameArray[i].indexOf(HIDEFONTS[j]) >= 0)
+				if(nameArray[i].contains(HIDEFONTS[j]))
 					break;
 			}
 
 			if(j == HIDEFONTS.length)
-				nameVector.addElement(nameArray[i]);
+				nameVector.add(nameArray[i]);
 		}
 
 		String[] _array = new String[nameVector.size()];
-		nameVector.copyInto(_array);
-		return _array;
+		return nameVector.toArray(_array);
 	} //}}}
 
 	//{{{ createTextFieldAndListPanel() method
-	private JPanel createTextFieldAndListPanel(String label,
+	private static JPanel createTextFieldAndListPanel(String label,
 		JTextField textField, JList list)
 	{
 		GridBagLayout layout = new GridBagLayout();
