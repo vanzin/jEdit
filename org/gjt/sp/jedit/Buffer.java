@@ -1053,7 +1053,7 @@ public class Buffer extends JEditBuffer
 	public void toggleLineSeparator(View view)
 	{
 		String status = null;
-		String lineSep = getStringProperty("lineSeparator");
+		String lineSep = getStringProperty(LINESEP);
 		if("\n".equals(lineSep))
 		{
 			status = "windows";
@@ -1072,7 +1072,7 @@ public class Buffer extends JEditBuffer
 		view.getStatus().setMessageAndClear(jEdit.getProperty(
 			"view.status.linesep-changed",new String[] {
 			jEdit.getProperty("lineSep." + status) }));
-		setProperty("lineSeparator",lineSep);
+		setProperty(LINESEP, lineSep);
 		setDirty(true);
 		propertiesChanged();
 	} //}}}
