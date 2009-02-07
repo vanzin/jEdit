@@ -263,12 +263,6 @@ public class BufferSet
 
 	//{{{ Package-private members
 
-	//{{{ copy() method
-	void copy(BufferSet copy)
-	{
-		buffers.addAll(copy.buffers);
-	} //}}}
-
 	//{{{ addBuffer() method
 	void addBuffer(Buffer buffer)
 	{
