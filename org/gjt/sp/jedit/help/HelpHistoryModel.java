@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.help;
 
 import java.net.URL;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * History model used by the help browser 
@@ -34,13 +36,12 @@ public class HelpHistoryModel
 	//{{{ HelpHistoryModel constructor
 	public HelpHistoryModel(int size)
 	{
-		int historyPos = 0;
 		history = new HistoryEntry[size];
-		listeners = new java.util.Vector();
+		listeners = new ArrayList<HelpHistoryModelListener>();
 	} //}}}
 
 	//{{{ forward() method
-	public HistoryEntry forward(HelpViewer helpViewer)
+	HistoryEntry forward(HelpViewer helpViewer)
 	{
 		if(history.length - historyPos <= 1)
 		{
@@ -65,7 +66,7 @@ public class HelpHistoryModel
 	} //}}}
 
 	//{{{ back() method
-	public HistoryEntry back(HelpViewer helpViewer)
+	HistoryEntry back(HelpViewer helpViewer)
 	{
 		if (historyPos <= 1)
 		{
@@ -143,7 +144,7 @@ public class HelpHistoryModel
 	}//}}}
 
 	//{{{ getPreviousURLs() method
-	public HistoryEntry[] getPreviousURLs()
+	HistoryEntry[] getPreviousURLs()
 	{
 		if (historyPos<=1)
 		{
@@ -155,7 +156,7 @@ public class HelpHistoryModel
 	} //}}}
 
 	//{{{ getNextURLs() method
-	public HistoryEntry[] getNextURLs()
+	HistoryEntry[] getNextURLs()
 	{
 		if (history.length - historyPos <= 1)
 		{
@@ -187,14 +188,14 @@ public class HelpHistoryModel
 	{
 		for (int i=0 ; i<listeners.size() ; i++)
 		{
-			((HelpHistoryModelListener)listeners.elementAt(i)).historyUpdated();
+			listeners.get(i).historyUpdated();
 		}
 	} //}}}
 
 	//{{{ Private members
 	private int historyPos;
 	private HistoryEntry[] history;
-	private java.util.Vector listeners;
+	private List<HelpHistoryModelListener> listeners;
 	//}}}
 
 	//{{{ Inner Classes
@@ -238,7 +239,7 @@ public class HelpHistoryModel
 		public String toString()
 		{
 			return getClass().getName() + "[url=" + url + ",title=" + title
-			+ ",scrollPosition=" + scrollPosition + "]";
+			+ ",scrollPosition=" + scrollPosition + ']';
 		} //}}}
 	} //}}}
 
