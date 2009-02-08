@@ -75,6 +75,9 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - Added configurable highlighting of the matching text in hypersearch results,
   which is part of feature request #2446121. (Shlomy Reinstein)
+  
+- The JarClassLoader now allows to open resources from another jar
+  (Matthieu Casanova)
 }}}
 {{{ API Changes
 

@@ -134,7 +134,14 @@ public class PluginJAR
 	private final JARClassLoader classLoader;
 	private ZipFile zipFile;
 	private Properties properties;
+	/**
+	 * The class list contained in this jar.
+	 */
 	private String[] classes;
+	/**
+	 * The resource list in this jar.
+	 */
+	private String[] resources;
 	private ActionSet actions;
 	private ActionSet browserActions;
 	private EditPlugin plugin;
@@ -1009,7 +1016,7 @@ public class PluginJAR
 	void init()
 	{
 		PluginCacheEntry cache = getPluginCache(this);
-		if(cache != null)
+		if(cache != null && cache.resources != null)
 		{
 			loadCache(cache);
 			classLoader.activate();
@@ -1093,6 +1100,12 @@ public class PluginJAR
 	String[] getClasses()
 	{
 		return classes;
+	} //}}}
+
+	//{{{ getResources() method
+	public String[] getResources()
+	{
+		return resources;
 	} //}}}
 
 	//}}}
@@ -1201,6 +1214,7 @@ public class PluginJAR
 		properties = new Properties();
 
 		List<String> classes = new LinkedList<String>();
+		List<String> resources = new LinkedList<String>();
 
 		ZipFile zipFile = getZipFile();
 
@@ -1250,6 +1264,10 @@ public class PluginJAR
 				}
 				classes.add(className);
 			}
+			else
+			{
+				resources.add(name);
+			}
 		}
 
 		cache.cachedProperties = properties;
@@ -1257,6 +1275,9 @@ public class PluginJAR
 
 		this.classes = cache.classes =
 			classes.toArray(
+			new String[classes.size()]);
+		this.resources = cache.resources =
+			resources.toArray(
 			new String[classes.size()]);
 
 		String label = null;
@@ -1451,6 +1472,7 @@ public class PluginJAR
 		public long modTime;
 
 		public String[] classes;
+		public String[] resources;
 		public URL actionsURI;
 		public String[] cachedActionNames;
 		public boolean[] cachedActionToggleFlags;

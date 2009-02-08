@@ -135,7 +135,15 @@ public class JARClassLoader extends ClassLoader
 			ZipFile zipFile = jar.getZipFile();
 			ZipEntry entry = zipFile.getEntry(name);
 			if(entry == null)
+			{
+				Object obj = resourcesHash.get(name);
+				if(obj instanceof JARClassLoader)
+				{
+					JARClassLoader classLoader = (JARClassLoader)obj;
+					return classLoader.getResourceAsStream(name);
+				}
 				return getSystemResourceAsStream(name);
+			}
 			else
 				return zipFile.getInputStream(entry);
 		}
@@ -158,7 +166,15 @@ public class JARClassLoader extends ClassLoader
 			ZipFile zipFile = jar.getZipFile();
 			ZipEntry entry = zipFile.getEntry(name);
 			if(entry == null)
-				return getSystemResource(name);
+			{
+				Object obj = resourcesHash.get(name);
+				if(obj instanceof JARClassLoader)
+				{
+					JARClassLoader classLoader = (JARClassLoader)obj;
+					return classLoader.getResource(name);
+				}
+				return findResource(name);
+			}
 			else
 				return new URL(getResourceAsPath(name));
 		}
@@ -302,22 +318,44 @@ public class JARClassLoader extends ClassLoader
 				classHash.put(classes[i],this);
 			}
 		}
+
+		String[] resources = jar.getResources();
+		if(resources != null)
+		{
+			for(int i = 0; i < resources.length; i++)
+			{
+				resourcesHash.put(resources[i],this);
+			}
+		}
 	} //}}}
 
 	//{{{ deactivate() method
 	void deactivate()
 	{
 		String[] classes = jar.getClasses();
-		if(classes == null)
+		if(classes != null)
+		{
+			for(int i = 0; i < classes.length; i++)
+			{
+				Object loader = classHash.get(classes[i]);
+				if(loader == this)
+					classHash.remove(classes[i]);
+				else
+					/* two plugins provide same class! */;
+			}
+		}
+
+		String[] resources = jar.getResources();
+		if(resources == null)
 			return;
 
-		for(int i = 0; i < classes.length; i++)
+		for(int i = 0; i < resources.length; i++)
 		{
-			Object loader = classHash.get(classes[i]);
+			Object loader = resourcesHash.get(resources[i]);
 			if(loader == this)
-				classHash.remove(classes[i]);
+				resourcesHash.remove(resources[i]);
 			else
-				/* two plugins provide same class! */;
+				/* two plugins provide same resource! */;
 		}
 	} //}}}
 
@@ -331,6 +369,7 @@ public class JARClassLoader extends ClassLoader
 	private static int INDEX;
 	private static int live;
 	private static Map<String, Object> classHash = new Hashtable<String, Object>();
+	private static Map<String, Object> resourcesHash = new HashMap<String, Object>();
 
 	private int id;
 	private boolean delegateFirst;
