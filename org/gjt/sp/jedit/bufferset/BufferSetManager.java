@@ -85,7 +85,7 @@ public class BufferSetManager implements EBComponent
 				View view = viewUpdate.getView();
 				// Unlink the buffer from this bufferSet.
 				BufferSet viewBufferSet = view.getLocalBufferSet();
-				viewBufferSet.getAllBuffers(new BufferSetClosed(view, viewBufferSet));
+				viewBufferSet.getAllBuffers(new BufferSetClosed(viewBufferSet));
 			}
 		}
 		else if (message instanceof EditPaneUpdate)
@@ -98,7 +98,7 @@ public class BufferSetManager implements EBComponent
 				if (editPane.getBufferSetScope() == BufferSet.Scope.editpane)
 				{
 					BufferSet editPaneBufferSet = editPane.getBufferSet();
-					editPaneBufferSet.getAllBuffers(new BufferSetClosed(editPane, editPaneBufferSet));
+					editPaneBufferSet.getAllBuffers(new BufferSetClosed(editPaneBufferSet));
 				}
 			}
 		}
@@ -335,48 +335,11 @@ public class BufferSetManager implements EBComponent
 	{
 		/** The closed bufferSet. */
 		private final BufferSet closedBufferSet;
-		/** The previous editPane where to put dirty buffers if necessary. */
-		private final EditPane prevEditPane;
 
 		//{{{ BufferSetClosed constructors
-		private BufferSetClosed(View closedView,
-					BufferSet closedBufferSet)
+		private BufferSetClosed(BufferSet closedBufferSet)
 		{
-			this.prevEditPane = getPrevEditPane(closedView);
 			this.closedBufferSet = closedBufferSet;
-		}
-
-		private BufferSetClosed(EditPane closedEditPane,
-					BufferSet closedBufferSet)
-		{
-			this.prevEditPane = getPrevEditPane(closedEditPane);
-			this.closedBufferSet = closedBufferSet;
-		} //}}}
-
-
-		//{{{ getPrevEditPane() method
-		private EditPane getPrevEditPane(View closedView)
-		{
-			View prev = closedView.getPrev();
-			if (prev != null)
-			{
-				return prev.getEditPane();
-			}
-			return null;
-		}
-
-		private EditPane getPrevEditPane(EditPane closedEditPane)
-		{
-			View view = closedEditPane.getView();
-			EditPane[] editPanes = view.getEditPanes();
-			for (EditPane editPane : editPanes)
-			{
-				if (editPane != closedEditPane)
-				{
-					return editPane;
-				}
-			}
-			return getPrevEditPane(view);
 		} //}}}
 
 		//{{{ bufferAdded() method
@@ -387,31 +350,9 @@ public class BufferSetManager implements EBComponent
 			owners.remove(closedBufferSet);
 			if (owners.isEmpty())
 			{
-				// the buffer do not belong to any other BufferSet
-				if (buffer.isDirty())
-				{
-					if (prevEditPane != null)
-					{
-						Log.log(Log.MESSAGE, this,
-							"The buffer " +  buffer +
-							" was removed from a BufferSet, it is dirty, adding it to " +
-							prevEditPane);
-						prevEditPane.setBuffer(buffer);
-					}
-					else
-					{
-						Log.log(Log.ERROR, this,
-							"The buffer " + buffer +
-							" was removed from a BufferSet, it is dirty, but there is no other edit pane");
-					}
-				}
-				else
-				{
-					// the buffer is not dirty I close it
-					Log.log(Log.MESSAGE, this, "The buffer " +
-						buffer + " was removed from a BufferSet, it is clean, closing it");
-					jEdit._closeBuffer(null, buffer);
-				}
+				Log.log(Log.MESSAGE, this, "The buffer " +
+					buffer + " was removed from a BufferSet, closing it");
+				jEdit._closeBuffer(null, buffer);
 			}
 		} //}}}
 
