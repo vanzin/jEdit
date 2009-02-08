@@ -744,10 +744,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 					bufferSetManager.addBuffer(newBufferSet,buffer);
 					break;
 			}
-			if (oldBufferSet != null)
-			{
-				oldBufferSet.removeBufferSetListener(this);
-			}
 			if (buffer != null)
 				bufferSetManager.addBuffer(newBufferSet, buffer);
 
@@ -757,6 +753,14 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			if (newBufferSet.size() == 0)
 			{
 				jEdit.newFile(this);
+			}
+
+			// This must be after updating this.bufferSet since
+			// removeBufferSetListener() uses
+			// EditPane#getBufferSet() on this EditPane.
+			if (oldBufferSet != null)
+			{
+				oldBufferSet.removeBufferSetListener(this);
 			}
 
 			newBufferSet.addBufferSetListener(this);
