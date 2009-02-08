@@ -62,7 +62,7 @@ public class VFSDirectoryEntryTable extends JTable
 
 		setIntercellSpacing(new Dimension(0,0));
 
-		setDefaultRenderer(VFSDirectoryEntryTableModel.Entry.class,
+		setDefaultRenderer(Entry.class,
 			renderer = new FileCellRenderer());
 
 		header = getTableHeader();
@@ -84,9 +84,7 @@ public class VFSDirectoryEntryTable extends JTable
 	{
 		for(int i = 0; i < getRowCount(); i++)
 		{
-			VFSDirectoryEntryTableModel.Entry entry =
-				(VFSDirectoryEntryTableModel.Entry)
-				getValueAt(i,1);
+			Entry entry = (Entry) getValueAt(i,1);
 			if(entry.dirEntry.getPath().equals(path))
 			{
 				setSelectedRow(i);
@@ -156,7 +154,7 @@ public class VFSDirectoryEntryTable extends JTable
 		VFSDirectoryEntryTableModel model
 		= (VFSDirectoryEntryTableModel)getModel();
 
-		VFSDirectoryEntryTableModel.Entry entry = model.files[row];
+		Entry entry = model.files[row];
 		if(entry.dirEntry.getType() == VFSFile.FILE)
 			return;
 
@@ -201,15 +199,14 @@ public class VFSDirectoryEntryTable extends JTable
 			startIndex =
 				model.expand(
 				vfs,
-				(VFSDirectoryEntryTableModel.Entry)node,
+				(Entry)node,
 				list);
 			startIndex++;
 		}
 
 		for(int i = 0; i < list.size(); i++)
 		{
-			VFSDirectoryEntryTableModel.Entry e
-				= model.files[startIndex + i];
+			Entry e = model.files[startIndex + i];
 			String path = e.dirEntry.getPath();
 			if(tmpExpanded.contains(path))
 			{
@@ -229,7 +226,7 @@ public class VFSDirectoryEntryTable extends JTable
 
 		for(int i = 0; i < model.files.length; i++)
 		{
-			VFSDirectoryEntryTableModel.Entry e = model.files[i];
+			Entry e = model.files[i];
 			if(!e.expanded || e.dirEntry.getType() == VFSFile.FILE)
 				continue;
 
@@ -257,7 +254,7 @@ public class VFSDirectoryEntryTable extends JTable
 		VFSFile template = new VFSFile(
 			"foo","foo","foo",VFSFile.FILE,0L,false);
 		setRowHeight(renderer.getTableCellRendererComponent(
-			this,new VFSDirectoryEntryTableModel.Entry(template,0),
+			this,new Entry(template,0),
 			false,false,0,0).getPreferredSize().height);
 		Dimension prefSize = getPreferredSize();
 		setPreferredScrollableViewportSize(new Dimension(prefSize.width,
@@ -290,7 +287,7 @@ public class VFSDirectoryEntryTable extends JTable
 			{
 			case KeyEvent.VK_LEFT:
 				evt.consume();
-				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) 
+				if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
 				{
 					browser.previousDirectory();
 				}
@@ -323,7 +320,8 @@ public class VFSDirectoryEntryTable extends JTable
 				break;
 			case KeyEvent.VK_TAB:
 				evt.consume();
-				if ((evt.getModifiers() & KeyEvent.SHIFT_MASK ) > 0) {
+				if ((evt.getModifiers() & InputEvent.SHIFT_MASK) > 0)
+				{
 					browserView.getParentDirectoryList().requestFocus();
 				}
 				else {
@@ -335,7 +333,8 @@ public class VFSDirectoryEntryTable extends JTable
 				ac.invokeAction(evt, browserUp);
 				break;
 			case KeyEvent.VK_UP:
-				if ((evt.getModifiers() & KeyEvent.ALT_MASK) >0) {
+				if ((evt.getModifiers() & InputEvent.ALT_MASK) >0)
+				{
 					evt.consume();
 					ac.invokeAction(evt, browserUp);
 				}
@@ -376,7 +375,8 @@ public class VFSDirectoryEntryTable extends JTable
 			case KeyEvent.VK_F6:
 			case KeyEvent.VK_RIGHT:
 				evt.consume();
-				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+				if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
+				{
 					browser.nextDirectory();
 				}
 				else if(row != -1)
@@ -406,7 +406,8 @@ public class VFSDirectoryEntryTable extends JTable
 			}
 
 			// hack...
-			if(evt.isShiftDown() && evt.getKeyChar() == '\n') {
+			if(evt.isShiftDown() && evt.getKeyChar() == '\n')
+			{
 				evt.consume();
 				return;
 			}
@@ -514,8 +515,7 @@ public class VFSDirectoryEntryTable extends JTable
 
 		for(int i = 0; i < model.files.length; i++)
 		{
-			VFSDirectoryEntryTableModel.Entry entry
-				= model.files[i];
+			Entry entry = model.files[i];
 			Font font = entry.dirEntry.getType()
 				== VFSFile.FILE
 				? renderer.plainFont : renderer.boldFont;
