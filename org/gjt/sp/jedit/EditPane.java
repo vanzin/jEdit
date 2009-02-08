@@ -688,19 +688,20 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		if (this.bufferSetScope != scope)
 		{
-			BufferSet bufferSet;
+			BufferSet oldBufferSet = this.bufferSet;
+			BufferSet newBufferSet;
 			switch (scope)
 			{
 				case editpane:
-					bufferSet = new BufferSet();
+					newBufferSet = new BufferSet();
 					break;
 				case view:
-					bufferSet = view.getLocalBufferSet();
+					newBufferSet = view.getLocalBufferSet();
 					break;
 				default:
 					scope = BufferSet.Scope.global;
 				case global:
-					bufferSet = jEdit.getGlobalBufferSet();
+					newBufferSet = jEdit.getGlobalBufferSet();
 					break;
 			}
 
@@ -712,7 +713,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			switch (bufferSetAction)
 			{
 				case copy:
-					if (this.bufferSet == null)
+					if (oldBufferSet == null)
 					{
 						EditPane editPane = view.getEditPane();
 						if (editPane == null)
@@ -723,15 +724,15 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 						}
 						if (editPane == null)
 						{
-							bufferSetManager.addAllBuffers(bufferSet);
+							bufferSetManager.addAllBuffers(newBufferSet);
 						}
 						else
 						{
-							bufferSetManager.mergeBufferSet(bufferSet, editPane.bufferSet);
+							bufferSetManager.mergeBufferSet(newBufferSet, editPane.bufferSet);
 						}
 					}
 					else
-						bufferSetManager.mergeBufferSet(bufferSet, this.bufferSet);
+						bufferSetManager.mergeBufferSet(newBufferSet, oldBufferSet);
 					break;
 				case empty:
 					break;
@@ -740,42 +741,43 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 						break;
 					EditPane editPane = activeView.getEditPane();
 					Buffer buffer = editPane.getBuffer();
-					bufferSetManager.addBuffer(bufferSet,buffer);
+					bufferSetManager.addBuffer(newBufferSet,buffer);
 					break;
 			}
-			if (this.bufferSet != null)
+			if (oldBufferSet != null)
 			{
-				this.bufferSet.removeBufferSetListener(this);
+				oldBufferSet.removeBufferSetListener(this);
 			}
 			if (buffer != null)
-				bufferSetManager.addBuffer(bufferSet, buffer);
+				bufferSetManager.addBuffer(newBufferSet, buffer);
 
-			this.bufferSet = bufferSet;
+
+			this.bufferSet = newBufferSet;
 			this.bufferSetScope = scope;
-			if (bufferSet.size() == 0)
+			if (newBufferSet.size() == 0)
 			{
 				jEdit.newFile(this);
 			}
 
-			bufferSet.addBufferSetListener(this);
+			newBufferSet.addBufferSetListener(this);
 			if (bufferSwitcher != null)
 			{
 				bufferSwitcher.updateBufferList();
 			}
 			EditBus.send(new EditPaneUpdate(this, EditPaneUpdate.BUFFERSET_CHANGED));
-			if (bufferSet.indexOf(recentBuffer) == -1)
+			if (newBufferSet.indexOf(recentBuffer) == -1)
 			{
 				// the recent buffer is not in the bufferSet
 				recentBuffer =  null;
 			}
-			if (bufferSet.indexOf(buffer) == -1)
+			if (newBufferSet.indexOf(buffer) == -1)
 			{
 				// the current buffer is not contained in the bufferSet, we must change the current buffer
 				if (recentBuffer != null)
 					setBuffer(recentBuffer);
 				else
 				{
-					setBuffer(bufferSet.getBuffer(0));
+					setBuffer(newBufferSet.getBuffer(0));
 				}
 			}
 			PerspectiveManager.setPerspectiveDirty(true);
