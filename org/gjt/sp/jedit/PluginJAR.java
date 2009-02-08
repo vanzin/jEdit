@@ -1016,7 +1016,7 @@ public class PluginJAR
 	void init()
 	{
 		PluginCacheEntry cache = getPluginCache(this);
-		if(cache != null && cache.resources != null)
+		if(cache != null)
 		{
 			loadCache(cache);
 			classLoader.activate();
@@ -1123,6 +1123,7 @@ public class PluginJAR
 	private void loadCache(PluginCacheEntry cache)
 	{
 		classes = cache.classes;
+		resources = cache.resources;
 
 		/* this should be before dockables are initialized */
 		if(cache.cachedProperties != null)
@@ -1278,7 +1279,7 @@ public class PluginJAR
 			new String[classes.size()]);
 		this.resources = cache.resources =
 			resources.toArray(
-			new String[classes.size()]);
+			new String[resources.size()]);
 
 		String label = null;
 
@@ -1465,7 +1466,7 @@ public class PluginJAR
 	 */
 	public static class PluginCacheEntry
 	{
-		public static final int MAGIC = 0xB7A2E421;
+		public static final int MAGIC = 0xB7A2E422;
 
 		//{{{ Instance variables
 		public PluginJAR plugin;
@@ -1543,6 +1544,7 @@ public class PluginJAR
 			}
 
 			classes = readStringArray(din);
+			resources = readStringArray(din);
 
 			cachedProperties = readMap(din);
 
@@ -1586,6 +1588,7 @@ public class PluginJAR
 			}
 
 			writeStringArray(dout,classes);
+			writeStringArray(dout,resources);
 
 			writeMap(dout,cachedProperties);
 
