@@ -781,12 +781,13 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 			PerspectiveManager.setPerspectiveDirty(true);
 
-			EditPane[] editPanes = getEditPanes();
-			for(int i = 0; i < editPanes.length; i++)
+			for(EditPane _editPane: getEditPanes())
 			{
-				EditPane _editPane = editPanes[i];
 				if(editPane != _editPane)
+				{
+					mergeBufferSets(editPane, _editPane);
 					_editPane.close();
+				}
 			}
 
 			setMainContent(editPane);
@@ -822,13 +823,14 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 			// get rid of any edit pane that is a child
 			// of the current edit pane's parent splitter
-			EditPane[] editPanes = getEditPanes();
-			for(int i = 0; i < editPanes.length; i++)
+			for(EditPane _editPane: getEditPanes())
 			{
-				EditPane _editPane = editPanes[i];
 				if(GUIUtilities.isAncestorOf(comp,_editPane)
 					&& _editPane != editPane)
+				{
+					mergeBufferSets(editPane, _editPane);
 					_editPane.close();
+				}
 			}
 
 			JComponent parent = comp == null ? null : (JComponent)comp.getParent();
@@ -1920,6 +1922,22 @@ loop:		while (true)
 				editPane.getBufferSet().getAllBuffers()));
 		}
 		return openBuffers;
+	} //}}}
+
+	//{{{ mergeBufferSets() method
+	/**
+	 * Merge a EditPane's BufferSet into another one.
+	 * This is used on unsplitting panes not to close buffers.
+	 */
+	static private void mergeBufferSets(EditPane target, EditPane source)
+	{
+		BufferSet sourceBufferSet = source.getBufferSet();
+		BufferSet targetBufferSet = target.getBufferSet();
+		if (sourceBufferSet != targetBufferSet)
+		{
+			jEdit.getBufferSetManager().mergeBufferSet(
+				targetBufferSet, sourceBufferSet);
+		}
 	} //}}}
 
 	//}}}

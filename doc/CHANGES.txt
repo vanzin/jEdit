@@ -60,6 +60,10 @@ Bernard Walle, and Markus Laker for contributing to this release.
   Now a confirmation dialog is shown on closing a view as well as
   exiting jEdit. (SF.net bug #2091052 - Kazutoshi Satoda)
 
+- With editpane BufferSet scope, buffers could be closed on unsplitting
+  EditPanes.
+  Now all buffers are kept on the remaining EditPane. (Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 
