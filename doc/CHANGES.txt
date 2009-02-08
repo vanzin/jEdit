@@ -138,6 +138,8 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - SF Bug #1947324: Bring Perl mode up to date with Perl 5.10
   Add some new keywords and operators to the perl mode. (Markus Laker)
+  
+- Added COMMENT3 in javascript mode (bug #2474585) (Matthieu Casanova) 
 }}}
 
 }}}

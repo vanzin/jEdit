@@ -28,6 +28,11 @@
 
 		<!-- The rest of the javascript info -->
 
+        <SPAN TYPE="COMMENT3">
+			<BEGIN>/**</BEGIN>
+			<END>*/</END>
+		</SPAN>
+
 		<SPAN TYPE="COMMENT1">
 			<BEGIN>/*</BEGIN>
 			<END>*/</END>
