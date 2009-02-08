@@ -23,6 +23,8 @@
 package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
+import java.util.Collection;
+import java.util.Arrays;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.*;
@@ -41,6 +43,11 @@ public class CloseDialog extends EnhancedDialog
 {
 	//{{{ CloseDialog constructor
 	public CloseDialog(View view)
+	{
+		this(view, Arrays.asList(jEdit.getBuffers()));
+	}
+
+	public CloseDialog(View view, Collection<Buffer> buffers)
 	{
 		super(view,jEdit.getProperty("close.title"),true);
 
@@ -65,11 +72,8 @@ public class CloseDialog extends EnhancedDialog
 		bufferList.setVisibleRowCount(10);
 		bufferList.addListSelectionListener(new ListHandler());
 
-		Buffer[] buffers = jEdit.getBuffers();
-		for(int i = 0; i < buffers.length; i++)
+		for(Buffer buffer: buffers)
 		{
-			
-			Buffer buffer = buffers[i];
 			if(buffer.isDirty()) 
 				bufferModel.addElement(buffer.getPath()); 
 		}

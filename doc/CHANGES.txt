@@ -55,6 +55,11 @@ Bernard Walle, and Markus Laker for contributing to this release.
 - Folded lines could become invisible if "delete-line" action was used
   at a collapsed fold. (SF.net bug #2548764 - Kazutoshi Satoda)
 
+- With non-global BufferSet scope, closing the first view of multiple
+  views could loose dirty buffers.
+  Now a confirmation dialog is shown on closing a view as well as
+  exiting jEdit. (SF.net bug #2091052 - Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 

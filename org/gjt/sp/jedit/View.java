@@ -42,7 +42,10 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.swing.JComponent;
@@ -60,6 +63,7 @@ import javax.swing.event.CaretListener;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.gui.ActionBar;
+import org.gjt.sp.jedit.gui.CloseDialog;
 import org.gjt.sp.jedit.gui.DefaultInputHandler;
 import org.gjt.sp.jedit.gui.DockableWindowFactory;
 import org.gjt.sp.jedit.gui.DockableWindowManager;
@@ -1363,6 +1367,35 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		GUIUtilities.addSizeSaver(this, null, plainView ? "plain-view" : "view");
 	} //}}}
 
+	//{{{ confirmToCloseDirty() methods
+	/**
+	 * If the view contains dirty buffers which will be closed on
+	 * closing the view, show the confirmation dialog for user.
+	 * @return
+	 * 	true if there are no such buffers or user select OK
+	 * 	to close the view; false if user select Cancel
+	 */
+	boolean confirmToCloseDirty()
+	{
+		Set<Buffer> checkingBuffers = getOpenBuffers();
+		for (View view: jEdit.getViews())
+		{
+			if (view != this)
+			{
+				checkingBuffers.removeAll(
+					view.getOpenBuffers());
+			}
+		}
+		for (Buffer buffer: checkingBuffers)
+		{
+			if (buffer.isDirty())
+			{
+				return new CloseDialog(this, checkingBuffers).isOK();
+			}
+		}
+		return true;
+	} //}}}
+
 	//{{{ close() method
 	void close()
 	{
@@ -1875,6 +1908,18 @@ loop:		while (true)
 		EditPane[] editPanes = getEditPanes();
 		for(int i = 0; i < editPanes.length; i++)
 			editPanes[i].getTextArea().getGutter().updateBorder();
+	} //}}}
+
+	//{{{ getOpenBuffers() method
+	private Set<Buffer> getOpenBuffers()
+	{
+		Set<Buffer> openBuffers = new HashSet<Buffer>();
+		for (EditPane editPane: getEditPanes())
+		{
+			openBuffers.addAll(Arrays.asList(
+				editPane.getBufferSet().getAllBuffers()));
+		}
+		return openBuffers;
 	} //}}}
 
 	//}}}

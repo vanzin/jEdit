@@ -4095,20 +4095,29 @@ loop:		for(int i = 0; i < list.length; i++)
 	/**
 	 * closeView() used by exit().
 	 */
-	private static void closeView(View view, boolean callExit)
+	private static boolean closeView(View view, boolean callExit)
 	{
 		PerspectiveManager.setPerspectiveDirty(true);
 
 		if(viewsFirst == viewsLast && callExit)
+		{
 			exit(view,false); /* exit does editor event & save */
+			// Coming here means the request has been canceled.
+			return false;
+		}
 		else
 		{
+			if (!view.confirmToCloseDirty())
+				return false;
+
 			view.close();
 			view.dispose();
 			removeViewFromList(view);
 
 			if(view == activeView)
 				activeView = null;
+
+			return true;
 		}
 	} //}}}
 
