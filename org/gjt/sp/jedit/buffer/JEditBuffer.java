@@ -79,7 +79,7 @@ public class JEditBuffer
 	 */
 	public static final String ENCODING = "encoding";
 
-	//{{{ JEditBuffer constructor
+	//{{{ JEditBuffer constructors
 	public JEditBuffer(Map props)
 	{
 		bufferListeners = new Vector<Listener>();
@@ -106,14 +106,13 @@ public class JEditBuffer
 			properties.put(ENCODING,new PropValue(System.getProperty("file.encoding"),false));
 		if(getProperty(LINESEP) == null)
 			properties.put(LINESEP,new PropValue(System.getProperty("line.separator"),false));
-	} //}}}
+	}
 
-	//{{{ JEditBuffer constructor
-    /**
-     * Create a new JEditBuffer.
-     * It is used by independent textarea only
-     */
-    public JEditBuffer()
+	/**
+	 * Create a new JEditBuffer.
+	 * It is used by independent textarea only
+	 */
+	public JEditBuffer()
 	{
 		bufferListeners = new Vector<Listener>();
 		lock = new ReentrantReadWriteLock();
@@ -452,7 +451,7 @@ public class JEditBuffer
 
 	//{{{ Text getters and setters
 
-	//{{{ getLineText() method
+	//{{{ getLineText() methods
 	/**
 	 * Returns the text on the specified line.
 	 * This method is thread-safe.
@@ -478,9 +477,8 @@ public class JEditBuffer
 		{
 			readUnlock();
 		}
-	} //}}}
+	} 
 
-	//{{{ getLineText() method
 	/**
 	 * Returns the specified line in a <code>Segment</code>.<p>
 	 *
@@ -543,7 +541,7 @@ public class JEditBuffer
 		}
 	} //}}}
 
-	//{{{ getText() method
+	//{{{ getText() methods
 	/**
 	 * Returns the specified text range. This method is thread-safe.
 	 * @param start The start offset
@@ -565,9 +563,8 @@ public class JEditBuffer
 		{
 			readUnlock();
 		}
-	} //}}}
+	}
 
-	//{{{ getText() method
 	/**
 	 * Returns the specified text range in a <code>Segment</code>.<p>
 	 *
@@ -626,7 +623,7 @@ public class JEditBuffer
 		}
 	} //}}}
 
-	//{{{ insert() method
+	//{{{ insert() methods
 	/**
 	 * Inserts a string into the buffer.
 	 * @param offset The offset
@@ -674,9 +671,8 @@ public class JEditBuffer
 		{
 			writeUnlock();
 		}
-	} //}}}
+	}
 
-	//{{{ insert() method
 	/**
 	 * Inserts a string into the buffer.
 	 * @param offset The offset
@@ -910,7 +906,7 @@ public class JEditBuffer
 		}
 	} //}}}
 
-	//{{{ indentLines() method
+	//{{{ indentLines() methods
 	/**
 	 * Indents all specified lines.
 	 * @param start The first line to indent
@@ -929,9 +925,8 @@ public class JEditBuffer
 		{
 			endCompoundEdit();
 		}
-	} //}}}
+	}
 
-	//{{{ indentLines() method
 	/**
 	 * Indents all specified lines.
 	 * @param lines The line numbers
@@ -951,18 +946,17 @@ public class JEditBuffer
 		}
 	} //}}}
 
-	//{{{ indentLine() method
+	//{{{ indentLine() methods
 	/**
 	 * @deprecated Use {@link #indentLine(int,boolean)} instead.
 	 */
-    @Deprecated
-    public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
+	 @Deprecated
+	 public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
 		boolean canDecreaseIndent)
 	{
 		return indentLine(lineIndex,canDecreaseIndent);
-	} //}}}
+	}
 
-	//{{{ indentLine() method
 	/**
 	 * Indents the specified line.
 	 * @param lineIndex The line number to indent
@@ -1222,7 +1216,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-	//{{{ isElectricKey() method
+	//{{{ isElectricKey() methods
 	/**
 	 * Should inserting this character trigger a re-indent of
 	 * the current line?
@@ -1232,9 +1226,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public boolean isElectricKey(char ch)
 	{
 		return mode.isElectricKey(ch);
-	} //}}}
+	}
 
-	//{{{ isElectricKey() method
 	/**
 	 * Should inserting this character trigger a re-indent of
 	 * the current line?
@@ -1559,7 +1552,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		setProperty(name,value);
 	} //}}}
 
-	//{{{ getBooleanProperty() method
+	//{{{ getBooleanProperty() methods
 	/**
 	 * Returns the value of a boolean property. This method is thread-safe.
 	 * @param name The property name
@@ -1568,9 +1561,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public boolean getBooleanProperty(String name)
 	{
 		return getBooleanProperty(name, false);
-	} //}}}
+	}
 
-	//{{{ getBooleanProperty() method
 	/**
 	 * Returns the value of a boolean property. This method is thread-safe.
 	 * @param name The property name
@@ -1758,7 +1750,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return mode;
 	} //}}}
 
-	//{{{ setMode() method
+	//{{{ setMode() methods
 	/**
 	 * Sets this buffer's edit mode. Note that calling this before a buffer
 	 * is loaded will have no effect; in that case, set the "mode" property
@@ -1769,9 +1761,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	public void setMode(String mode)
 	{
 		setMode(ModeProvider.instance.getMode(mode));
-	} //}}}
+	}
 
-	//{{{ setMode() method
 	/**
 	 * Sets this buffer's edit mode. Note that calling this before a buffer
 	 * is loaded will have no effect; in that case, set the "mode" property
@@ -2156,7 +2147,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	}
 
-	//{{{ addBufferListener() method
+	//{{{ addBufferListener() methods
 	/**
 	 * Adds a buffer change listener.
 	 * @param listener The listener
@@ -2178,9 +2169,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 			}
 		}
 		bufferListeners.add(l);
-	} //}}}
+	}
 
-	//{{{ addBufferListener() method
 	/**
 	 * Adds a buffer change listener.
 	 * @param listener The listener
@@ -2225,7 +2215,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 		return returnValue;
 	} //}}}
-
 
 	//{{{ setUndoLimit() method
 	/**
