@@ -45,7 +45,7 @@ public class FileRootsVFS extends VFS
 	//{{{ FileRootsVFS constructor
 	public FileRootsVFS()
 	{
-		super("roots",LOW_LATENCY_CAP,new String[] {
+		super("roots",LOW_LATENCY_CAP | BROWSE_CAP, new String[] {
 			EA_TYPE });
 	} //}}}
 
