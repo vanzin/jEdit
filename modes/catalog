@@ -159,7 +159,7 @@
 				FILE_NAME_GLOB="*.{dem,plt}" />
 
 <MODE NAME="groovy"		FILE="groovy.xml"
-				FILE_NAME_GLOB="*.{groovy,grv}"/>
+				FILE_NAME_GLOB="*.{gant,gradle,groovy,grv}"/>
 
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />
