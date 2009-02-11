@@ -10,8 +10,11 @@
 <MODE NAME="actionscript"	FILE="actionscript.xml"
 				FILE_NAME_GLOB="*.as" />
 
-<MODE NAME="ada95"		FILE="ada95.xml"
-				FILE_NAME_GLOB="*.{ada,adb,ads}" />
+<MODE FILE="ada.xml" NAME="ada"
+            FILE_NAME_GLOB="*.{ada,adb,ads}"/>
+
+
+<MODE NAME="ada95"		FILE="ada95.xml" />
 
 <MODE NAME="antlr"		FILE="antlr.xml"
 				FILE_NAME_GLOB="*.g" />
@@ -85,6 +88,8 @@
 
 <MODE NAME="clips"		FILE="clips.xml"
 				FILE_NAME_GLOB="*.clp" />
+
+<MODE NAME="clojure" FILE="clojure.xml" />
 
 <MODE NAME="cmake"		FILE="cmake.xml"
 				FILE_NAME_GLOB="CMakeLists.txt"/>
