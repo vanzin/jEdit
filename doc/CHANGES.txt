@@ -79,7 +79,7 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - Added configurable highlighting of the matching text in hypersearch results,
   which is part of feature request #2446121. (Shlomy Reinstein)
-  
+
 - The JarClassLoader now allows to open resources from another jar
   (Matthieu Casanova)
 }}}
@@ -141,7 +141,7 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - Improved VHDL mode (M. Cesar R. Lacruz - # 2082454)
 
-- Fixes to XSLT mode (Pascal Sancho - # 1954810)
+- Fixes to XSLT mode (Pascal Sancho - # 1954810, Greg Knittl # 2148505)
 
 - New icalendar mode (Victor Engmark - #1934498
 
@@ -157,8 +157,8 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - SF Bug #1947324: Bring Perl mode up to date with Perl 5.10
   Add some new keywords and operators to the perl mode. (Markus Laker)
-  
-- Added COMMENT3 in javascript mode (bug #2474585) (Matthieu Casanova) 
+
+- Added COMMENT3 in javascript mode (bug #2474585) (Matthieu Casanova)
 }}}
 
 }}}
@@ -690,8 +690,8 @@ zoniie, and Daniel Hahler for contributing to this release.
   files (#1556663) Matthieu Casanova
 
 - Bugfixes for Installer related to obsolete JVMs and invalid
-  pathnames. (kerik - # 2327864, 979086, 2327736, 1817421)  
-  
+  pathnames. (kerik - # 2327864, 979086, 2327736, 1817421)
+
 - Installer for *nix platforms - simplified startup script
     (#2098720 - Bernhard Walle)
 
