@@ -114,8 +114,9 @@ public class SyntaxUtilities
 	 * @param family Style strings only specify font style, not font family
 	 * @param size Style strings only specify font style, not font family
 	 * @param color If false, the styles will be monochrome
+	 * @param defaultFgColor Default foreground color (if not specified in style string)
 	 * @exception IllegalArgumentException if the style is invalid
-	 * @since jEdit 4.3pre13
+	 * @since jEdit 4.3pre17
 	 */
 	public static SyntaxStyle parseStyle(String str, String family, int size,
 		boolean color, Color defaultFgColor)
