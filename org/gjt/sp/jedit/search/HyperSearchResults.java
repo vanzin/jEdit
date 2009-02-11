@@ -446,7 +446,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		SyntaxStyle s = null;
 		try
 		{
-			s = SyntaxUtilities.parseStyle(style, f.getFamily(), f.getSize(), true);
+			s = SyntaxUtilities.parseStyle(style, f.getFamily(), f.getSize(), true, null);
 		}
 		catch (Exception e)
 		{
