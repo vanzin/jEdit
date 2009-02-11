@@ -133,6 +133,8 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - New mode for Great Cow Basic (Mark Twomey # 2055913)
 
+- New mode for TSP (goebbe - #2155442
+
 - Improved Ada mode (Peter Chapin - # 2022589)
 
 - New mode for Clojure (David Moss # 2201893)

@@ -382,6 +382,9 @@
 				FILE_NAME_GLOB="*.{rst,rest}"
 				FIRST_LINE_GLOB="{===,~~~}*"/>
 
+<MODE NAME="rfc" FILE="rfc.xml"
+                FILE_NAME_GLOB="rfc*.txt" />
+
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
 
@@ -460,6 +463,9 @@
 <MODE NAME="text"		FILE="text.xml"
 				FILE_NAME_GLOB="*.txt" />
 
+<MODE NAME="tsp" FILE="tsp.xml"
+                FILE_NAME_GLOB="*.tsp" />
+
 <MODE NAME="tpl"		FILE="tpl.xml"
 				FILE_NAME_GLOB="*.tpl" />
 
@@ -505,5 +511,5 @@
 <MODE NAME="zpt"		FILE="zpt.xml"
 				FILE_NAME_GLOB="*.{pt,zpt}"/>
 
-<MODE NAME="rfc" FILE="rfc.xml" FILE_NAME_GLOB="rfc*.txt" />
+
 </MODES>
