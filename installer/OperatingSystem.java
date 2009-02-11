@@ -194,8 +194,8 @@ public abstract class OperatingSystem
 				out.write("# Launch application.\n");
 				out.write("\n");
 				
-				String jar = installDir + File.separator
-					+ name.toLowerCase() + ".jar";
+				String jar = "\""+ installDir + File.separator
+					+ name.toLowerCase() + ".jar"+"\"";
 
                 
  				out.write("exec \"$JAVA_HOME/bin/java\"" +

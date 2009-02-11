@@ -694,7 +694,8 @@ zoniie, and Daniel Hahler for contributing to this release.
   files (#1556663) Matthieu Casanova
 
 - Bugfixes for Installer related to obsolete JVMs and invalid
-  pathnames. (kerik - # 2327864, 979086, 2327736, 1817421)
+  pathnames. (Eric Le Layk - # 2327864, 979086, 2327736,
+  1817421, 2582492, 2328160)
 
 - Installer for *nix platforms - simplified startup script
     (#2098720 - Bernhard Walle)
