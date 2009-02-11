@@ -496,8 +496,9 @@
 <MODE NAME="vhdl"		FILE="vhdl.xml"
 				FILE_NAME_GLOB="*.vh*" />
 
-<!-- Great. AElfred doesn't support entities in attribute values,
-     but all other XML parsers complain if < appears. -->
+<MODE NAME="vrml2" FILE="vrml2.xml"
+                FILE_NAME_GLOB="*.{wrl,wrz}"/>
+
 <MODE NAME="xml"		FILE="xml.xml"
 				FILE_NAME_GLOB="*.{xml,xhtml,xsd,qrc,ui}"
 				FIRST_LINE_GLOB="&lt;\?xml*" />

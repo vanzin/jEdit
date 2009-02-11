@@ -9,26 +9,26 @@
 <!-- Author:  Mark J. Twomey -->
 
 <!--
-Add a MODE entry in the catalog file for the following: 
-   NAME="gcbasic" FILE="gcbasic.xml" 
-   FILE_NAME_GLOB="*.{gc,gcb}" 
-   FIRST_LINE_GLOB="{*GCBASIC*,*Great Cow BASIC*}" 
+Add a MODE entry in the catalog file for the following:
+   NAME="gcbasic" FILE="gcbasic.xml"
+   FILE_NAME_GLOB="*.{gc,gcb}"
+   FIRST_LINE_GLOB="{*GCBASIC*,*Great Cow BASIC*}"
 ===================================================================
 
 Note 1: GCBASIC (Great Cow BASIC) is an open-source BASIC compiler for Microchip PIC microcontrollers.
-        For more information go here   http://gcbasic.sourceforge.net/ 
+        For more information go here   http://gcbasic.sourceforge.net/
 
 Note 2: It will not unindent as you type.
         However, if you do "Select All" (Ctrl-A), and then do "Indent Lines" (Ctrl-i),
-        then it fixes the indentation of the whole program. It works great! 
+        then it fixes the indentation of the whole program. It works great!
 -->
 
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="'" />
       <PROPERTY NAME="ignoreWhitespace" VALUE="TRUE" />
-      
-      <PROPERTY NAME="indentNextLines"   VALUE="^(SUB\s.*|FUNCTION\s.*|MACRO\s.*|\s+DO\s+.*|\s+DO$|DO\s+.*|DO$|\s*FOR\s.*|FOR\s.*|REPEAT\s.*|CASE\s.*|\s+IF\s+.*\s+THEN$|IF\s+.*\s+THEN$|\s+#ifdef\s+.*$|#ifdef\s+.*$)" /> 
+
+      <PROPERTY NAME="indentNextLines"   VALUE="^(SUB\s.*|FUNCTION\s.*|MACRO\s.*|\s+DO\s+.*|\s+DO$|DO\s+.*|DO$|\s*FOR\s.*|FOR\s.*|REPEAT\s.*|CASE\s.*|\s+IF\s+.*\s+THEN$|IF\s+.*\s+THEN$|\s+#ifdef\s+.*$|#ifdef\s+.*$)" />
       <PROPERTY NAME="unindentThisLine"  VALUE="^(\s+END\s+SUB.*|END\s+SUB.*|\s+END\s+FUNCTION.*|END\s+FUNCTION.*|\s+END\s+MACRO.*|END\s+MACRO.*|\s+LOOP.*|LOOP.*|\s+NEXT.*|NEXT.*|\s+END\s+IF.*|END\s+IF.*|\s+#endif.*|#endif.*|\s+#endif|#endif)" />
       <PROPERTY NAME="unindentNextLines" VALUE="^(\s+END\s+SUB|END\s+SUB|\s+END\s+SUB\s+|END\s+SUB\s+|\s+END\s+FUNCTION|END\s+FUNCTION|\s+END\s+FUNCTION\s+|END\s+FUNCTION\s+|\s+END\s+MACRO|END\s+MACRO|\s+END\s+MACRO\s+|END\s+MACRO\s+|\s+LOOP|LOOP|\s+LOOP\s+|LOOP\s+|\s+NEXT|NEXT|\s+NEXT\s+|NEXT\s+|\s+END\s+IF|END\s+IF|\s+END\s+IF\s+|END\s+IF\s+|\s+#endif|#endif|\s+#endif\s+|#endif\s+)" />
 	</PROPS>
@@ -37,8 +37,8 @@ Note 2: It will not unindent as you type.
 		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE">
 			<BEGIN>"</BEGIN>
 			<END>"</END>
-		</SPAN>     
- 
+		</SPAN>
+
       <!-- Comments -->
 		<EOL_SPAN TYPE="COMMENT4">'</EOL_SPAN>
 		<EOL_SPAN TYPE="COMMENT4">rem </EOL_SPAN>
@@ -50,12 +50,12 @@ Note 2: It will not unindent as you type.
 		<SEQ TYPE="OPERATOR">-</SEQ>
       <SEQ TYPE="OPERATOR">+=</SEQ>
       <SEQ TYPE="OPERATOR">-=</SEQ>
-      
+
 		<!-- Logical operators -->
-		<SEQ TYPE="OPERATOR">&amp;</SEQ>      
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
       <SEQ TYPE="OPERATOR">|</SEQ>
       <SEQ TYPE="OPERATOR">!</SEQ>
-      
+
 		<!-- Comparison operators -->
       <SEQ TYPE="OPERATOR">=</SEQ>
 		<SEQ TYPE="OPERATOR">&lt;&gt;</SEQ>
@@ -79,7 +79,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD3>#startup</KEYWORD3>
          <KEYWORD3>#RAM</KEYWORD3>
          <KEYWORD3>#mem</KEYWORD3>
-        
+
          <!--  ====== CHIP DATA : START  ====== -->
          <!-- [Ports] -->
          <KEYWORD2>PORTA</KEYWORD2>
@@ -106,7 +106,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>ConfigWords</KEYWORD2>
          <KEYWORD2>PSP</KEYWORD2>
          <KEYWORD2>MaxAddress</KEYWORD2>
-         
+
          <!-- [Interrupts] -->
          <KEYWORD2>ADCReady</KEYWORD2>
          <KEYWORD2>CCP1</KEYWORD2>
@@ -125,7 +125,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>Timer2Overflow</KEYWORD2>
          <KEYWORD2>UsartRX1Ready</KEYWORD2>
          <KEYWORD2>UsartTX1Ready</KEYWORD2>
-         
+
          <!-- [Registers] -->
          <KEYWORD2>INDF</KEYWORD2>
          <KEYWORD2>TMR0</KEYWORD2>
@@ -197,7 +197,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>ANSELH</KEYWORD2>
          <KEYWORD2>EECON1</KEYWORD2>
          <KEYWORD2>EECON2</KEYWORD2>
-         
+
          <!-- [Bits] -->
          <KEYWORD2>IRP</KEYWORD2>
          <KEYWORD2>RP1</KEYWORD2>
@@ -476,7 +476,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>BRG16</KEYWORD2>
          <KEYWORD2>WUE</KEYWORD2>
          <KEYWORD2>ABDEN</KEYWORD2>
-         
+
          <KEYWORD2>ANS0</KEYWORD2>
          <KEYWORD2>ANS1</KEYWORD2>
          <KEYWORD2>ANS2</KEYWORD2>
@@ -491,13 +491,13 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>ANS11</KEYWORD2>
          <KEYWORD2>ANS12</KEYWORD2>
          <KEYWORD2>ANS13</KEYWORD2>
-         
+
          <KEYWORD2>EEPGD</KEYWORD2>
          <KEYWORD2>WRERR</KEYWORD2>
          <KEYWORD2>WREN</KEYWORD2>
          <KEYWORD2>WR</KEYWORD2>
          <KEYWORD2>RD</KEYWORD2>
-         
+
          <!-- [Pins-DIP] -->
          <KEYWORD2>RA0</KEYWORD2>
          <KEYWORD2>RA1</KEYWORD2>
@@ -507,7 +507,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RA5</KEYWORD2>
          <KEYWORD2>RA6</KEYWORD2>
          <KEYWORD2>RA7</KEYWORD2>
-         
+
          <KEYWORD2>RB0</KEYWORD2>
          <KEYWORD2>RB1</KEYWORD2>
          <KEYWORD2>RB2</KEYWORD2>
@@ -516,7 +516,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RB5</KEYWORD2>
          <KEYWORD2>RB6</KEYWORD2>
          <KEYWORD2>RB7</KEYWORD2>
-         
+
          <KEYWORD2>RC0</KEYWORD2>
          <KEYWORD2>RC1</KEYWORD2>
          <KEYWORD2>RC2</KEYWORD2>
@@ -525,7 +525,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RC5</KEYWORD2>
          <KEYWORD2>RC6</KEYWORD2>
          <KEYWORD2>RC7</KEYWORD2>
-         
+
          <KEYWORD2>RD0</KEYWORD2>
          <KEYWORD2>RD1</KEYWORD2>
          <KEYWORD2>RD2</KEYWORD2>
@@ -534,7 +534,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RD5</KEYWORD2>
          <KEYWORD2>RD6</KEYWORD2>
          <KEYWORD2>RD7</KEYWORD2>
-         
+
          <KEYWORD2>RE0</KEYWORD2>
          <KEYWORD2>RE1</KEYWORD2>
          <KEYWORD2>RE2</KEYWORD2>
@@ -543,7 +543,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RE5</KEYWORD2>
          <KEYWORD2>RE6</KEYWORD2>
          <KEYWORD2>RE7</KEYWORD2>
-         
+
          <KEYWORD2>RF0</KEYWORD2>
          <KEYWORD2>RF1</KEYWORD2>
          <KEYWORD2>RF2</KEYWORD2>
@@ -552,7 +552,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RF5</KEYWORD2>
          <KEYWORD2>RF6</KEYWORD2>
          <KEYWORD2>RF7</KEYWORD2>
-         
+
          <KEYWORD2>RG0</KEYWORD2>
          <KEYWORD2>RG1</KEYWORD2>
          <KEYWORD2>RG2</KEYWORD2>
@@ -561,7 +561,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RG5</KEYWORD2>
          <KEYWORD2>RG6</KEYWORD2>
          <KEYWORD2>RG7</KEYWORD2>
-         
+
          <KEYWORD2>RH0</KEYWORD2>
          <KEYWORD2>RH1</KEYWORD2>
          <KEYWORD2>RH2</KEYWORD2>
@@ -570,7 +570,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RH5</KEYWORD2>
          <KEYWORD2>RH6</KEYWORD2>
          <KEYWORD2>RH7</KEYWORD2>
-         
+
          <KEYWORD2>RI0</KEYWORD2>
          <KEYWORD2>RI1</KEYWORD2>
          <KEYWORD2>RI2</KEYWORD2>
@@ -579,7 +579,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RI5</KEYWORD2>
          <KEYWORD2>RI6</KEYWORD2>
          <KEYWORD2>RI7</KEYWORD2>
-         
+
          <KEYWORD2>RJ0</KEYWORD2>
          <KEYWORD2>RJ1</KEYWORD2>
          <KEYWORD2>RJ2</KEYWORD2>
@@ -588,7 +588,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>RJ5</KEYWORD2>
          <KEYWORD2>RJ6</KEYWORD2>
          <KEYWORD2>RJ7</KEYWORD2>
-         
+
          <KEYWORD2>AN0</KEYWORD2>
          <KEYWORD2>AN1</KEYWORD2>
          <KEYWORD2>AN2</KEYWORD2>
@@ -609,39 +609,39 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>AN17</KEYWORD2>
          <KEYWORD2>AN18</KEYWORD2>
          <KEYWORD2>AN19</KEYWORD2>
-         
+
          <KEYWORD2>MCLR</KEYWORD2>
-         
+
          <KEYWORD2>C1INP</KEYWORD2>
          <KEYWORD2>C2INP</KEYWORD2>
-         
+
          <KEYWORD2>T1G</KEYWORD2>
-         
+
          <KEYWORD2>T1CKI</KEYWORD2>
          <KEYWORD2>T0CKI</KEYWORD2>
-         
+
          <KEYWORD2>C1OUT</KEYWORD2>
          <KEYWORD2>C2OUT</KEYWORD2>
-         
+
          <KEYWORD2>OSC1</KEYWORD2>
          <KEYWORD2>OSC2</KEYWORD2>
-         
+
          <KEYWORD2>U1TX</KEYWORD2>
          <KEYWORD2>U1RX</KEYWORD2>
-         
+
          <KEYWORD2>CCP1</KEYWORD2>
          <KEYWORD2>CCP2</KEYWORD2>
-         
+
          <KEYWORD2>ECCPA</KEYWORD2>
          <KEYWORD2>ECCPB</KEYWORD2>
          <KEYWORD2>ECCPC</KEYWORD2>
          <KEYWORD2>ECCPD</KEYWORD2>
-         
+
          <KEYWORD2>Vss</KEYWORD2>
          <KEYWORD2>Vdd</KEYWORD2>
          <KEYWORD2>Vss</KEYWORD2>
          <KEYWORD2>Vdd</KEYWORD2>
-         
+
          <!-- [ConfigOps] -->
          <KEYWORD2>DEBUG</KEYWORD2>
          <KEYWORD2>LVP</KEYWORD2>
@@ -656,8 +656,8 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>OSC</KEYWORD2>
          <KEYWORD2>WRT</KEYWORD2>
          <KEYWORD2>BORV</KEYWORD2>
-         
-         
+
+
          <!-- [Config] -->
          <KEYWORD2>DEBUG_ON</KEYWORD2>
          <KEYWORD2>DEBUG_OFF</KEYWORD2>
@@ -700,9 +700,9 @@ Note 2: It will not unindent as you type.
          <KEYWORD2>BOR21V</KEYWORD2>
          <KEYWORD2>BOR40V</KEYWORD2>
 
-         
+
          <!--  ====== CHIP DATA : END  ====== -->
-         
+
 
 			<!-- Flow Control -->
 			<KEYWORD1>if</KEYWORD1>
@@ -711,30 +711,30 @@ Note 2: It will not unindent as you type.
 			<KEYWORD1>goto</KEYWORD1>
 			<KEYWORD1>gosub</KEYWORD1>
 			<KEYWORD1>return</KEYWORD1>
-         
+
 			<!-- Loop Statements -->
 			<KEYWORD1>for</KEYWORD1>
 			<KEYWORD1>to</KEYWORD1>
 			<KEYWORD1>step</KEYWORD1>
 			<KEYWORD1>next</KEYWORD1>
-         
+
 			<!-- Do..Loop -->
 			<KEYWORD1>do</KEYWORD1>
 			<KEYWORD1>while</KEYWORD1>
 			<KEYWORD1>until</KEYWORD1>
 			<KEYWORD1>loop</KEYWORD1>
-         
+
          <!-- Repeat..Loop -->
 			<KEYWORD1>repeat</KEYWORD1>
 
          <!-- Select..Case -->
 			<KEYWORD1>select</KEYWORD1>
          <KEYWORD1>case</KEYWORD1>
-         
+
          <!-- Call..Every -->
 			<KEYWORD1>call</KEYWORD1>
          <KEYWORD1>every</KEYWORD1>
-         
+
 			<!-- Closing, Exit Statements -->
 			<KEYWORD1>exit</KEYWORD1>
 			<KEYWORD1>end</KEYWORD1>
@@ -744,11 +744,11 @@ Note 2: It will not unindent as you type.
 			<KEYWORD1>sub</KEYWORD1>
          <KEYWORD1>macro</KEYWORD1>
          <KEYWORD1>let</KEYWORD1>
-         
+
 			<!-- Declaration -->
 			<KEYWORD1>dim</KEYWORD1>
-			<KEYWORD1>as</KEYWORD1>        
-		
+			<KEYWORD1>as</KEYWORD1>
+
 			<!-- Bitwise -->
 			<KEYWORD1>rotate</KEYWORD1>
 			<KEYWORD1>left</KEYWORD1>
@@ -758,7 +758,7 @@ Note 2: It will not unindent as you type.
 
 			<!-- Comments -->
 			<KEYWORD1>rem</KEYWORD1>
-         
+
          <!-- RS 232 Commands -->
          <KEYWORD1>InitSer </KEYWORD1>
          <KEYWORD1>SerSend </KEYWORD1>
@@ -773,7 +773,7 @@ Note 2: It will not unindent as you type.
          <!-- SPI/I2C Commands -->
          <KEYWORD1>SPIMode </KEYWORD1>
          <KEYWORD1>SPITransfer </KEYWORD1>
-        
+
          <!-- EEPROM Commands -->
          <KEYWORD1>EPRead </KEYWORD1>
          <KEYWORD1>EPWrite </KEYWORD1>
@@ -785,41 +785,41 @@ Note 2: It will not unindent as you type.
          <KEYWORD1>PWMOn </KEYWORD1>
          <KEYWORD1>PWMOff </KEYWORD1>
          <KEYWORD1>HPWM </KEYWORD1>
-         
+
          <!-- SRF04 Distance Sensor PWM Commands -->
          <KEYWORD1>USDistance </KEYWORD1>
-         
+
          <!-- Sound PWM Commands -->
          <KEYWORD1>Tone </KEYWORD1>
-         
+
          <!-- LCD Display Commands -->
          <KEYWORD1>PRINT </KEYWORD1>
          <KEYWORD1>LOCATE </KEYWORD1>
          <KEYWORD1>PUT </KEYWORD1>
          <KEYWORD1>CLS </KEYWORD1>
-         <KEYWORD1>LCDInt </KEYWORD1> 
-         <KEYWORD1>LCDHex </KEYWORD1> 
-         <KEYWORD1>LCDWord </KEYWORD1> 
-         
+         <KEYWORD1>LCDInt </KEYWORD1>
+         <KEYWORD1>LCDHex </KEYWORD1>
+         <KEYWORD1>LCDWord </KEYWORD1>
+
          <!-- 7-Segment Display Commands -->
          <KEYWORD1>DisplayValue </KEYWORD1>
          <KEYWORD1>DisplayChar </KEYWORD1>
-          
+
          <!-- Keypad Commands -->
          <KEYWORD1>KeypadRaw</KEYWORD1>
          <KEYWORD1>KeypadData</KEYWORD1>
-         
+
          <!-- String handling Functions -->
          <KEYWORD1>LEN </KEYWORD1>
-         <KEYWORD1>MID$ </KEYWORD1> 
-         
+         <KEYWORD1>MID$ </KEYWORD1>
+
          <!-- Timer Functions -->
          <KEYWORD1>InitTimer0</KEYWORD1>
          <KEYWORD1>InitTimer1</KEYWORD1>
          <KEYWORD1>InitTimer2</KEYWORD1>
          <KEYWORD1>ClearTimer</KEYWORD1>
-         <KEYWORD1>StartTimer</KEYWORD1> 
-         <KEYWORD1>StopTimer</KEYWORD1> 
+         <KEYWORD1>StartTimer</KEYWORD1>
+         <KEYWORD1>StopTimer</KEYWORD1>
 
 			<!-- Miscellaneous Commands/Functions -->
 			<KEYWORD1>WAIT</KEYWORD1>
@@ -838,7 +838,7 @@ Note 2: It will not unindent as you type.
          <KEYWORD1>Swap4</KEYWORD1>
          <KEYWORD1>Table</KEYWORD1>
          <KEYWORD1>ReadTable</KEYWORD1>
- 
+
 			<!-- Logical operators -->
 			<OPERATOR>and</OPERATOR>
 			<OPERATOR>or</OPERATOR>
@@ -880,15 +880,15 @@ Note 2: It will not unindent as you type.
          <LITERAL2>OneOf</LITERAL2>
 
 		</KEYWORDS>
-      
+
       <!-- Binary Numbers instead of single quote comments. For example b'00011011' -->
       <SPAN TYPE="LITERAL1" >
       <BEGIN>b'</BEGIN><END>'</END>
-      </SPAN> 
-      
+      </SPAN>
+
 	</RULES>
 
 </MODE>
 
 
- 	  	 
+

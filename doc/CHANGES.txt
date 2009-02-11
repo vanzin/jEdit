@@ -133,7 +133,9 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - New mode for Great Cow Basic (Mark Twomey # 2055913)
 
-- New mode for TSP (goebbe - #2155442
+- New mode for TSP (goebbe - #2155442)
+
+- New mode for VRML2 (Jimmy Chaw #2297731)
 
 - Improved Ada mode (Peter Chapin - # 2022589)
 
