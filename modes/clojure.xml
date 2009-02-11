@@ -5,7 +5,7 @@
 <!--
     This file is partially based on lisp.xml and mostly in
     the documentation found at: http://clojure.org/
-    
+
     author: dsm
     date:   24/10/08
     version:0.1
@@ -55,7 +55,7 @@
 			<BEGIN>(</BEGIN>
 			<END>)</END>
 		</SPAN>
-        
+
         <!-- Vectors -->
 		<SPAN TYPE="MARKUP" DELEGATE="MAIN">
 			<BEGIN>#^[</BEGIN>
@@ -77,7 +77,7 @@
 			<BEGIN>[</BEGIN>
 			<END>]</END>
 		</SPAN>
-		
+
         <!-- Maps -->
 		<SPAN TYPE="MARKUP" DELEGATE="MAIN">
 			<BEGIN>#^{</BEGIN>
@@ -99,7 +99,7 @@
 			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
-        
+
         <!-- Sets -->
 		<SPAN TYPE="MARKUP" DELEGATE="MAIN">
 			<BEGIN>#^#{</BEGIN>
@@ -121,25 +121,25 @@
 			<BEGIN>#{</BEGIN>
 			<END>}</END>
 		</SPAN>
-        
+
         <!-- Quoted symbols -->
         <SEQ AT_WORD_START="TRUE" TYPE="KEYWORD1">#&apos;</SEQ>
         <MARK_FOLLOWING
-            AT_WORD_START="TRUE" 
+            AT_WORD_START="TRUE"
             TYPE="LITERAL3">&apos;</MARK_FOLLOWING>
         <!-- Meta symbols -->
         <MARK_FOLLOWING
-            AT_WORD_START="TRUE" 
+            AT_WORD_START="TRUE"
             TYPE="LABEL">^</MARK_FOLLOWING>
         <!-- Deref symbols -->
         <MARK_FOLLOWING
-            AT_WORD_START="TRUE" 
+            AT_WORD_START="TRUE"
             TYPE="LABEL">@</MARK_FOLLOWING>
         <!-- Metadata -->
         <MARK_FOLLOWING
-            AT_WORD_START="TRUE" 
+            AT_WORD_START="TRUE"
             TYPE="MARKUP">#^</MARK_FOLLOWING>
-        
+
 		<!-- Based on convention discussed here:
 			 http://www.gigamonkeys.com/book/syntax-and-semantics.html -->
 		<EOL_SPAN TYPE="COMMENT4">;;;;</EOL_SPAN>
@@ -151,21 +151,21 @@
 			<BEGIN>#&quot;</BEGIN>
 			<END>&quot;</END>
 		</SPAN>
-        
+
 		<SPAN TYPE="LITERAL1" DELEGATE="STRINGS" ESCAPE="\">
 			<BEGIN>&quot;</BEGIN>
 			<END>&quot;</END>
 		</SPAN>
-        
+
         <!-- Character literals -->
         <SEQ_REGEXP
                 HASH_CHAR="\"
                 AT_WORD_START="TRUE"
                 TYPE="LITERAL2">\\(.|newline|space|tab)</SEQ_REGEXP>
-            
+
         <!-- The &apos;.&apos; special form -->
         <SEQ AT_WORD_START="TRUE" TYPE="KEYWORD1">.</SEQ>
-            
+
         <!-- Namespace separators -->
         <!-- <MARK_PREVIOUS
                 TYPE="LITERAL4"
@@ -173,12 +173,12 @@
         <MARK_PREVIOUS
                 TYPE="LITERAL4"
                 MATCH_TYPE="CONTEXT">.</MARK_PREVIOUS> -->
-        
+
         <!-- Keywords -->
         <MARK_FOLLOWING
                 AT_WORD_START="TRUE"
                 TYPE="KEYWORD4">:</MARK_FOLLOWING>
-        
+
         <KEYWORDS>
             <!-- Evaluation -->
             <KEYWORD4>read</KEYWORD4>
@@ -188,7 +188,7 @@
             <KEYWORD4>apply</KEYWORD4>
             <KEYWORD4>symbol</KEYWORD4>
             <KEYWORD4>keyword</KEYWORD4>
-            
+
             <!-- Special Forms -->
             <KEYWORD1>quote</KEYWORD1>
             <KEYWORD1>monitor-enter</KEYWORD1>
@@ -202,7 +202,7 @@
             <KEYWORD3>constantly</KEYWORD3>
             <KEYWORD3>identity</KEYWORD3>
             <KEYWORD3>comp</KEYWORD3>
-            
+
             <!-- Other functions -->
             <KEYWORD1>map</KEYWORD1>
             <KEYWORD1>mapcat</KEYWORD1>
@@ -210,7 +210,7 @@
             <KEYWORD1>time</KEYWORD1>
             <KEYWORD1>line-seq</KEYWORD1>
             <KEYWORD1>reduce</KEYWORD1>
-            
+
             <!-- Printing -->
             <KEYWORD1>pr</KEYWORD1>
             <KEYWORD1>prn</KEYWORD1>
@@ -223,14 +223,14 @@
             <KEYWORD2>with-out-str</KEYWORD2>
             <KEYWORD2>with-open</KEYWORD2>
             <LITERAL1>newline</LITERAL1>
-            
+
             <!-- RegExps -->
             <KEYWORD1>re-matcher</KEYWORD1>
             <KEYWORD1>re-find</KEYWORD1>
             <KEYWORD1>re-matches</KEYWORD1>
             <KEYWORD1>re-groups</KEYWORD1>
             <KEYWORD1>re-seq</KEYWORD1>
-            
+
             <!-- Flow control -->
             <KEYWORD2>do</KEYWORD2>
             <KEYWORD2>dotimes</KEYWORD2>
@@ -265,7 +265,7 @@
             <KEYWORD3>await</KEYWORD3>
             <KEYWORD3>await-for</KEYWORD3>
             <KEYWORD3>doto</KEYWORD3>
-            
+
             <!-- Constructors -->
             <FUNCTION>defmulti</FUNCTION>
             <FUNCTION>defmethod</FUNCTION>
@@ -317,7 +317,7 @@
             <FUNCTION>short</FUNCTION>
             <FUNCTION>byte</FUNCTION>
             <FUNCTION>parse</FUNCTION>
-            
+
             <!-- Collections -->
             <KEYWORD1>count</KEYWORD1>
             <KEYWORD1>seq</KEYWORD1>
@@ -396,7 +396,7 @@
             <KEYWORD1>to-array</KEYWORD1>
             <KEYWORD1>into-array</KEYWORD1>
             <KEYWORD1>to-array-2d</KEYWORD1>
-            
+
             <!-- Tests, operators and numerical fns -->
             <KEYWORD4>-&gt;</KEYWORD4>
             <KEYWORD4>instance?</KEYWORD4>
@@ -453,7 +453,7 @@
             <KEYWORD4>join</KEYWORD4>
             <KEYWORD4>distinct</KEYWORD4>
             <KEYWORD4>submit</KEYWORD4>
-            
+
             <!-- Pre-defined vars -->
             <KEYWORD3>*ns*</KEYWORD3>
             <KEYWORD3>*out*</KEYWORD3>
@@ -462,14 +462,14 @@
             <KEYWORD3>*warn-on-reflection*</KEYWORD3>
             <!-- Special symbols -->
             <KEYWORD3>&amp;</KEYWORD3>
-            
+
             <!-- Literals -->
 			<LITERAL4>true</LITERAL4>
 			<LITERAL4>false</LITERAL4>
 			<LITERAL4>nil</LITERAL4>
         </KEYWORDS>
     </RULES>
-    
+
     <RULES  SET="STRINGS"
             HIGHLIGHT_DIGITS="FALSE"
             DEFAULT="LITERAL1"
@@ -482,7 +482,7 @@
             <INVALID>&quot;</INVALID>
         </KEYWORDS>
     </RULES>
-    
+
     <RULES  SET="REGEXPS"
             HIGHLIGHT_DIGITS="FALSE"
             DEFAULT="LITERAL1"
@@ -498,4 +498,4 @@
     </RULES>
 </MODE>
 
- 	  	 
+
