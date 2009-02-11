@@ -131,6 +131,8 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - New mode for GraphViz Dot (Kevin Hunter # 1991303)
 
+- New mode for Great Cow Basic (Mark Twomey # 2055913)
+
 - Improved Ada mode (Peter Chapin - # 2022589)
 
 - New mode for Clojure (David Moss # 2201893)
