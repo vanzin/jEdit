@@ -129,6 +129,8 @@ Bernard Walle, and Markus Laker for contributing to this release.
 {{{ Editing
 - New JavaFX edit mode (Matthieu Casanova)
 
+- New mode for GraphViz Dot (Kevin Hunter # 1991303)
+
 - Fixes to XSLT mode (Pascal Sancho - # 1954810)
 
 - New icalendar mode (Victor Engmark - #1934498

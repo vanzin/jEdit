@@ -115,6 +115,9 @@
 
 <MODE NAME="django"		FILE="django.xml"/>
 
+<MODE NAME='dot' FILE='dot.xml'
+                FILE_NAME_GLOB='*.dot' />
+
 <MODE NAME="doxygen"		FILE="doxygen.xml"
 				FILE_NAME_GLOB="doxyfile*" />
 
