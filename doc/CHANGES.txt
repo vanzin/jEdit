@@ -137,6 +137,8 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - New mode for Clojure (David Moss # 2201893)
 
+- Improved VHDL mode (M. Cesar R. Lacruz - # 2082454)
+
 - Fixes to XSLT mode (Pascal Sancho - # 1954810)
 
 - New icalendar mode (Victor Engmark - #1934498
