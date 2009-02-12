@@ -6,7 +6,7 @@
 <!-- Copyright (C) 2003 Slava Pestov                                         -->
 
 <!-- :tabSize=8:indentSize=8:noTabs=false:                                   -->
-<!-- :folding=indent:collapseFolds=1:                                        -->
+<!-- :folding=indent:collapseFolds=1:mode=jedit-actions:		     -->
 
 <!-- Actions are the 'glue' that binds menu item selections and keystrokes   -->
 <!-- to jEdit's APIs. For simplicity and compactness, they are written in    -->

@@ -10,7 +10,7 @@
 <MODE NAME="actionscript"	FILE="actionscript.xml"
 				FILE_NAME_GLOB="*.as" />
 
-<MODE FILE="ada.xml" NAME="ada"
+<MODE NAME="ada"		FILE="ada.xml"
             FILE_NAME_GLOB="*.{ada,adb,ads}"/>
 
 
@@ -120,8 +120,8 @@
 
 <MODE NAME="django"		FILE="django.xml"/>
 
-<MODE NAME='dot' FILE='dot.xml'
-                FILE_NAME_GLOB='*.dot' />
+<MODE NAME="dot"		FILE="dot.xml"
+				FILE_NAME_GLOB="*.dot" />
 
 <MODE NAME="doxygen"		FILE="doxygen.xml"
 				FILE_NAME_GLOB="doxyfile*" />
@@ -226,6 +226,8 @@
 
 <MODE NAME="jcl"		FILE="jcl.xml"
 				FILE_NAME_GLOB="*.jcl" />
+
+<MODE NAME="jedit-actions"	FILE="jedit-actions.xml" />
 
 <MODE NAME="jhtml"		FILE="jhtml.xml"
 				FILE_NAME_GLOB="*.jhtml" />
@@ -416,7 +418,8 @@
 <MODE NAME="sgml"		FILE="sgml.xml"
 				FILE_NAME_GLOB="*.{sgml,sgm,dtd}" />
 
-<MODE NAME="rcp" FILE="rcp.xml" FILE_NAME_GLOB="*.rcp" />
+<MODE NAME="rcp" 		FILE="rcp.xml"
+				FILE_NAME_GLOB="*.rcp" />
 
 <MODE NAME="shellscript"	FILE="shellscript.xml"
 				FILE_NAME_GLOB="*.{csh,sh,bash,login,profile,bashrc,bash_profile}"

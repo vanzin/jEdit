@@ -127,6 +127,9 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 }}}
 {{{ Editing
+- New jedit-actions edit mode that delegates to beanshell the <CODE> tags
+  (Romain François)
+
 - New JavaFX edit mode (Matthieu Casanova)
 
 - Updated Lilypond mode (Bertalan Fodor # 2538906)
@@ -149,7 +152,7 @@ Bernard Walle, and Markus Laker for contributing to this release.
 
 - Fixes to XSLT mode (Pascal Sancho - # 1954810, Greg Knittl # 2148505)
 
-- New icalendar mode (Victor Engmark - #1934498
+- New icalendar mode (Victor Engmark - #1934498)
 
 - Fix for java mode (tracker 737187), method name not always highlighted if
   there were one or more spaces or tabs following the method name (Dale Anson)
