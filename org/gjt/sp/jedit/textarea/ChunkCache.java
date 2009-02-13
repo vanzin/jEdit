@@ -308,6 +308,7 @@ class ChunkCache
 	 * @param x The x co-ordinate
 	 * @param round Round up to next character if x is past the middle of a
 	 * character?
+	 * @return the offset from the start of the subregion
 	 */
 	int xToSubregionOffset(int physicalLine, int subregion, int x,
 		boolean round)
@@ -326,6 +327,7 @@ class ChunkCache
 	 * @param x The x co-ordinate
 	 * @param round Round up to next character if x is past the middle of a
 	 * character?
+	 * @return the offset from the start of the subregion
 	 */
 	static int xToSubregionOffset(LineInfo info, int x,
 		boolean round)
@@ -342,6 +344,7 @@ class ChunkCache
 	 * Converts an offset within a subregion into an x co-ordinate.
 	 * @param physicalLine The physical line
 	 * @param offset The offset
+	 * @return the x co-ordinate of the offset within a subregion
 	 */
 	int subregionOffsetToX(int physicalLine, int offset)
 	{
@@ -355,6 +358,7 @@ class ChunkCache
 	 * Converts an offset within a subregion into an x co-ordinate.
 	 * @param info The line info object
 	 * @param offset The offset
+	 * @return the x co-ordinate of the offset within a subregion
 	 */
 	static int subregionOffsetToX(LineInfo info, int offset)
 	{
@@ -367,6 +371,7 @@ class ChunkCache
 	 * physical line.
 	 * @param line The physical line number
 	 * @param offset An offset
+	 * @return the start offset of the subregion of the line
 	 */
 	int getSubregionStartOffset(int line, int offset)
 	{
@@ -382,6 +387,7 @@ class ChunkCache
 	 * physical line.
 	 * @param line The physical line number
 	 * @param offset An offset
+	 * @return the end offset of the subregion of the line
 	 */
 	int getSubregionEndOffset(int line, int offset)
 	{
@@ -469,6 +475,7 @@ class ChunkCache
 	/**
 	 * The needFullRepaint variable becomes true when the number of screen
 	 * lines in a physical line changes.
+	 * @return true if the TextArea needs full repaint
 	 */
 	boolean needFullRepaint()
 	{
@@ -623,8 +630,8 @@ class ChunkCache
 
 		out.clear();
 
-		int offset = 0;
-		int length = 0;
+		int offset;
+		int length;
 
 		for(int i = firstScreenLine; i <= lastScreenLine; i++)
 		{
@@ -660,13 +667,9 @@ class ChunkCache
 
 				info.firstSubregion = true;
 
-				int screenLines;
-
 				// if the line has no text, out.size() == 0
 				if(out.isEmpty())
 				{
-					screenLines = 1;
-
 					if(i == 0)
 					{
 						if(textArea.displayManager.firstLine.skew > 0)
@@ -684,8 +687,6 @@ class ChunkCache
 				// otherwise, the number of subregions
 				else
 				{
-					screenLines = out.size();
-
 					if(i == 0)
 					{
 						int skew = textArea.displayManager.firstLine.skew;
@@ -785,17 +786,44 @@ class ChunkCache
 	//}}}
 
 	//{{{ LineInfo class
-	/** The informations on a line. (for fast access) */
+	/**
+	 * The informations on a line. (for fast access)
+	 * When using softwrap, a line is divided in n
+	 * subregions.
+	 */
 	static class LineInfo
 	{
+		/**
+		 * The physical line.
+		 */
 		int physicalLine;
+		/**
+		 * The offset where begins the line.
+		 */
 		int offset;
+		/**
+		 * The line length.
+		 */
 		int length;
+		/**
+		 * true if it is the first subregion of a line.
+		 */
 		boolean firstSubregion;
+		/**
+		 * True if it is the last subregion of a line.
+		 */
 		boolean lastSubregion;
 		Chunk chunks;
 		/** The line width. */
 		int width;
 		TokenMarker.LineContext lineContext;
+
+		@Override
+		public String toString()
+		{
+			return "LineInfo[" + physicalLine + ',' + offset + ','
+			       + length + ',' + firstSubregion + ',' +
+			       lastSubregion + "]";
+		}
 	} //}}}
 }
