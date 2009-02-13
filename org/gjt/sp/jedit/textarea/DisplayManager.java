@@ -594,6 +594,12 @@ public class DisplayManager
 	} //}}}
 
 	//{{{ setFirstPhysicalLine() method
+	/**
+	 * Scroll from a given ammount of lines.
+	 *
+	 * @param amount the ammount of lines that must be scrolled
+	 * @param skew a skew within the given line
+	 */
 	void setFirstPhysicalLine(int amount, int skew)
 	{
 		int oldFirstLine = textArea.getFirstLine();
