@@ -7,6 +7,10 @@ Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, Daniel Hahler,
 Bernard Walle, and Markus Laker for contributing to this release.
 
 {{{ Bug Fixes
+- Fixed scrolling bug : when the TextArea was smaller than one visible line,
+  if a line was wrapped, moving the cursor up or down in this line will not make
+  was not the textarea scrolling to see the cursor (#2596087)
+  (Matthieu Casanova)
 
 - Fix for caret position display in status bar (tracker 2220033), relative
   position was not always correct. In conjunction with this, added checkboxes

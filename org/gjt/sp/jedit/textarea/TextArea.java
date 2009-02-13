@@ -775,7 +775,21 @@ public abstract class TextArea extends JComponent
 		{
 			if(Debug.SCROLL_TO_DEBUG)
 				Log.log(Log.DEBUG,this,"visibleLines <= 0");
-			setFirstPhysicalLine(line,_electricScroll);
+			if (_electricScroll == 0)
+			{
+				// Fix the case when the line is wrapped
+				// it was not possible to see the second (or next)
+				// subregion of a line
+				ChunkCache.LineInfo[] infos = chunkCache
+				.getLineInfosForPhysicalLine(line);
+				int subregion = ChunkCache.getSubregionOfOffset(
+					offset,infos);
+				setFirstPhysicalLine(line,subregion);
+			}
+			else
+			{
+				setFirstPhysicalLine(line,_electricScroll);
+			}
 			return;
 		}
 
@@ -4781,7 +4795,14 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			visibleLines = height / lineHeight;
 			lastLinePartial = height % lineHeight != 0;
 			if(lastLinePartial)
+			{
 				visibleLines++;
+				System.out.println("YES");
+			}
+			else
+			{
+				System.out.println("NO");
+			}
 		}
 
 		chunkCache.recalculateVisibleLines();
