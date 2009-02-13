@@ -4795,14 +4795,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			visibleLines = height / lineHeight;
 			lastLinePartial = height % lineHeight != 0;
 			if(lastLinePartial)
-			{
 				visibleLines++;
-				System.out.println("YES");
-			}
-			else
-			{
-				System.out.println("NO");
-			}
 		}
 
 		chunkCache.recalculateVisibleLines();
