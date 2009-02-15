@@ -200,7 +200,7 @@ public class MiscUtilities
 	} //}}}
 
 	//{{{ abbreviate() method
-	/** returns an abbreviated path, replacing 
+	/** returns an abbreviated path, replacing
 	 *  values with variables, if a prefix exists.
 	 *  @since jEdit 4.3pre16
 	 */
@@ -209,8 +209,7 @@ public class MiscUtilities
 		// return path;
 		return svc.compress(path);
 	} //}}}
-	
-	
+
 	//{{{ resolveSymlinks() method
 	/**
 	 * Resolves any symbolic links in the path name specified
@@ -549,7 +548,7 @@ public class MiscUtilities
 	//{{{ saveBackup() methods
 	/**
 	 * Saves a backup (optionally numbered) of a file.
-	 * @param file A local file                                                        
+	 * @param file A local file
 	 * @param backups The number of backups. Must be >= 1. If > 1, backup
 	 * files will be numbered.
 	 * @param backupPrefix The backup file name prefix
@@ -618,7 +617,7 @@ public class MiscUtilities
 			new File(backupDirectory,
 				backupPrefix + name + backupSuffix
 				+ backups + backupSuffix).delete();
-				
+
 			File firstBackup = new File(backupDirectory,
 				backupPrefix + name + backupSuffix
 				+ '1' + backupSuffix);
@@ -1431,7 +1430,7 @@ loop:		for(;;)
 	public static class MenuItemCompare implements Compare
 	{
 		private MenuItemTextComparator comparator = new MenuItemTextComparator();
-		
+
 		public int compare(Object obj1, Object obj2)
 		{
 			return comparator.compare((JMenuItem)obj1, (JMenuItem)obj2);
@@ -1755,28 +1754,34 @@ loop:		for(;;)
 	} //}}}
 
 	//}}}
-	
+
 	static final VarCompressor svc = new VarCompressor();
-	
+
 	//{{{ VarCompressor class
 	static class VarCompressor
 	{
 		/** a reverse mapping of values to environment variable names */
 		final Map<String, String> prefixMap = new HashMap<String, String>();
 		final Map<String, String> previous = new HashMap<String, String>();
-		
+
 		//{{{ VarCompressor constructor
 		VarCompressor()
 		{
 			ProcessBuilder pb = new ProcessBuilder();
 			Map<String, String> env = pb.environment();
-			if (OperatingSystem.isUnix()) 
+			if (OperatingSystem.isUnix())
 				prefixMap.put(System.getProperty("user.home"), "~");
 			for (String k: env.keySet())
 			{
 				if (k.equalsIgnoreCase("pwd") || k.equalsIgnoreCase("oldpwd")) continue;
 				if (!Character.isLetter(k.charAt(0))) continue;
 				String v = env.get(k);
+				final File f = new File(v);
+				// only add valid directories to the prefix map
+				if (!f.isDirectory()) continue;
+				// no need for trailing file separator
+				if (v.endsWith(File.separator))
+					v = v.substring(0, v.length()-1);
 				if (k.length() > v.length()) continue;
 				if (OperatingSystem.isWindows())
 				{
@@ -1788,34 +1793,43 @@ loop:		for(;;)
 				{
 					String otherKey = prefixMap.get(v);
 					if (otherKey.length() < k.length()) continue;
-				}					
+				}
 				prefixMap.put(v, k);
 			}
 		} //}}}
-		
+
 		//{{{ compress() method
 		String compress(String path)
 		{
-			String original = path;			
+			String original = path;
 			if (previous.containsKey(path))
 			{
 				return previous.get(path);
 			}
 			String bestPrefix = "/";
+			String verifiedPrefix = bestPrefix;
 			for (String tryPrefix : prefixMap.keySet())
 			{
 				if (tryPrefix.length() < bestPrefix.length()) continue;
-				if (OperatingSystem.isWindows() && 
+				if (OperatingSystem.isWindows() &&
 				    path.toLowerCase().startsWith(tryPrefix.toLowerCase()))
 					bestPrefix = tryPrefix;
-				else if (path.startsWith(tryPrefix))
-					bestPrefix = tryPrefix;	
+				else if (path.startsWith(tryPrefix)) {
+					bestPrefix = tryPrefix;
+				}
+				// Only use prefix if it is a directory-prefix of the path
+				if (!bestPrefix.equals(verifiedPrefix)) {
+					String remainder = original.substring(bestPrefix.length());
+					if (remainder.length() < 1 || remainder.startsWith(File.separator))
+						verifiedPrefix = bestPrefix;
+					else bestPrefix = verifiedPrefix;
+				}
 			}
 			if (bestPrefix.length() > 1)
 			{
 				String remainder = original.substring(bestPrefix.length());
 				String envvar = prefixMap.get(bestPrefix);
-				if (envvar.equals("~")) 
+				if (envvar.equals("~"))
 					path = envvar + remainder;
 				else if (OperatingSystem.isWindows())
 					path = '%' + envvar.toUpperCase() + '%' + remainder;
