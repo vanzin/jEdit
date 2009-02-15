@@ -72,8 +72,8 @@ class ChunkCache
 	/**
 	 * @param line physical line number of document 
 	 * @param offset number of characters from the left of the line. 
-	 * @return number of pixels from the left of the textArea where the
-	 * cursor should be
+	 * @return returns the screen line number where the line and offset are.
+	 * It returns -1 if this position is not currently visible
 	 */
 	int getScreenLineOfOffset(int line, int offset)
 	{
@@ -251,6 +251,11 @@ class ChunkCache
 	} //}}}
 
 	//{{{ getLineInfo() method
+	/**
+	 * Returns the line informations for a given screen line
+	 * @param screenLine the screen line
+	 * @return the LineInfo for the screenLine
+	 */
 	LineInfo getLineInfo(int screenLine)
 	{
 		updateChunksUpTo(screenLine);
@@ -258,6 +263,11 @@ class ChunkCache
 	} //}}}
 
 	//{{{ getLineSubregionCount() method
+	/**
+	 * Returns the number of subregions of a physical line
+	 * @param physicalLine a physical line
+	 * @return the number of subregions of this physical line
+	 */
 	int getLineSubregionCount(int physicalLine)
 	{
 		if(!textArea.softWrap)
