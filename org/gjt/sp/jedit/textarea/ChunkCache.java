@@ -702,8 +702,9 @@ class ChunkCache
 						int skew = textArea.displayManager.firstLine.skew;
 						if(skew >= out.size())
 						{
+							// The skew cannot be greater than the chunk count of the line
+							// we need at least one chunk per subregion in a line 
 							Log.log(Log.ERROR,this,"BUG: skew=" + skew + ",out.size()=" + out.size());
-							skew = 0;
 							needFullRepaint = true;
 							lastScreenLine = lineInfo.length - 1;
 						}

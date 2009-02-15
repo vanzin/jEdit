@@ -791,6 +791,7 @@ public abstract class TextArea extends JComponent
 		int visibleLines = getVisibleLines();
 		if(screenLine == -1)
 		{
+			// We are scrolling to a position that is not on the screen.
 			if(Debug.SCROLL_TO_DEBUG)
 				Log.log(Log.DEBUG,this,"screenLine == -1");
 			ChunkCache.LineInfo[] infos = chunkCache
