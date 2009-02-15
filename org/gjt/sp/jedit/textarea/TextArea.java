@@ -755,18 +755,6 @@ public abstract class TextArea extends JComponent
 			Log.log(Log.DEBUG,this,"scrollTo(), lineCount="
 				+ getLineCount());
 
-		//{{{ Get ready
-		int extraEndVirt;
-		int lineLength = buffer.getLineLength(line);
-		if(offset > lineLength)
-		{
-			extraEndVirt = charWidth * (offset - lineLength);
-			offset = lineLength;
-		}
-		else
-			extraEndVirt = 0;
-		//}}}
-
 		if(visibleLines <= 1)
 		{
 			if(Debug.SCROLL_TO_DEBUG)
@@ -782,10 +770,23 @@ public abstract class TextArea extends JComponent
 			return;
 		}
 
-		//{{{ Scroll vertically
+		//{{{ Get ready
+		int extraEndVirt;
+		int lineLength = buffer.getLineLength(line);
+		if(offset > lineLength)
+		{
+			extraEndVirt = charWidth * (offset - lineLength);
+			offset = lineLength;
+		}
+		else
+			extraEndVirt = 0;
+
 		int _electricScroll = doElectricScroll
 			&& visibleLines - 1 > (electricScroll << 1)
 				      ? electricScroll : 0;
+		//}}}
+
+		//{{{ Scroll vertically
 		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		int visibleLines = getVisibleLines();
 		if(screenLine == -1)
