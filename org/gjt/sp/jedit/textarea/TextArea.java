@@ -765,35 +765,27 @@ public abstract class TextArea extends JComponent
 		}
 		else
 			extraEndVirt = 0;
-
-		int _electricScroll = doElectricScroll
-			&& visibleLines - 1 > (electricScroll << 1)
-				      ? electricScroll : 0;
 		//}}}
 
 		if(visibleLines <= 1)
 		{
 			if(Debug.SCROLL_TO_DEBUG)
-				Log.log(Log.DEBUG,this,"visibleLines <= 0");
-			if (_electricScroll == 0)
-			{
-				// Fix the case when the line is wrapped
-				// it was not possible to see the second (or next)
-				// subregion of a line
-				ChunkCache.LineInfo[] infos = chunkCache
-				.getLineInfosForPhysicalLine(line);
-				int subregion = ChunkCache.getSubregionOfOffset(
-					offset,infos);
-				setFirstPhysicalLine(line,subregion);
-			}
-			else
-			{
-				setFirstPhysicalLine(line,_electricScroll);
-			}
+			Log.log(Log.DEBUG,this,"visibleLines <= 0");
+			// Fix the case when the line is wrapped
+			// it was not possible to see the second (or next)
+			// subregion of a line
+			ChunkCache.LineInfo[] infos = chunkCache
+			.getLineInfosForPhysicalLine(line);
+			int subregion = ChunkCache.getSubregionOfOffset(
+				offset,infos);
+			setFirstPhysicalLine(line,subregion);
 			return;
 		}
 
 		//{{{ Scroll vertically
+		int _electricScroll = doElectricScroll
+			&& visibleLines - 1 > (electricScroll << 1)
+				      ? electricScroll : 0;
 		int screenLine = chunkCache.getScreenLineOfOffset(line,offset);
 		int visibleLines = getVisibleLines();
 		if(screenLine == -1)
