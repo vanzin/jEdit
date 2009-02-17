@@ -6122,7 +6122,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			 * move caret depending on pressed control-keys:
 			 * - Alt: move cursor, do not select
 			 * - Alt+(shift or control): move cursor, select
-			 * - shift: scroll page
+			 * - shift: scroll horizontally
 			 * - control: scroll single line
 			 * - <else>: scroll 3 lines
 			 ****************************************************/
@@ -6135,12 +6135,22 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				else
 					goToNextLine(select);
 			}
-			else if(e.isShiftDown())
+			else if(e.getScrollType()
+				== MouseWheelEvent.WHEEL_BLOCK_SCROLL)
 			{
-				if(e.getWheelRotation() > 0)
-					scrollDownPage();
+				if(e.isShiftDown())
+				{
+					// Wheel orientation is reversed so we negate the charwidth
+					setHorizontalOffset(getHorizontalOffset()
+						+ (e.getWheelRotation() > 0 ? 1 : -1) * painter.getWidth());
+				}
 				else
-					scrollUpPage();
+				{
+					if(e.getWheelRotation() > 0)
+						scrollDownPage();
+					else
+						scrollUpPage();
+				}
 			}
 			else if(e.isControlDown())
 			{
@@ -6150,13 +6160,29 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			else if(e.getScrollType()
 				== MouseWheelEvent.WHEEL_UNIT_SCROLL)
 			{
-				setFirstLine(getFirstLine()
-					+ e.getUnitsToScroll());
+				if(e.isShiftDown())
+				{
+					setHorizontalOffset(getHorizontalOffset()
+						+ (-charWidth * e.getUnitsToScroll()));
+				}
+				else
+				{
+					setFirstLine(getFirstLine()
+						+ e.getUnitsToScroll());
+				}
 			}
 			else
 			{
-				setFirstLine(getFirstLine()
-					+ 3 * e.getWheelRotation());
+				if(e.isShiftDown())
+				{
+					setHorizontalOffset(getHorizontalOffset()
+						+ (-charWidth * e.getWheelRotation()));
+				}
+				else
+				{
+					setFirstLine(getFirstLine()
+						+ 3 * e.getWheelRotation());
+				}
 			}
 		}
 	} //}}}
