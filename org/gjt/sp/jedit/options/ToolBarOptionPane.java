@@ -583,7 +583,6 @@ class ToolBarEditDialog extends EnhancedDialog
 				}
 				else
 				{
-					String iconName = MiscUtilities.getFileName(current.iconName);
 					builtin.setSelected(true);
 					ListModel model = builtinCombo.getModel();
 					for(int i = 0; i < model.getSize(); i++)
@@ -591,7 +590,7 @@ class ToolBarEditDialog extends EnhancedDialog
 						ToolBarOptionPane.IconListEntry entry
 							= (ToolBarOptionPane.IconListEntry)
 							model.getElementAt(i);
-						if(entry.name.equals(iconName))
+						if(entry.name.equals(current.iconName))
 						{
 							builtinCombo.setSelectedIndex(i);
 							break;
