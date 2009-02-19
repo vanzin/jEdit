@@ -119,6 +119,9 @@ public class jEdit
 		mainThread = Thread.currentThread();
 
 		settingsDirectory = ".jedit";
+		// On mac, different rules (should) apply
+		if(OperatingSystem.isMacOS())
+			settingsDirectory = "Library/jEdit";
 
 		// MacOS users expect the app to keep running after all windows
 		// are closed
@@ -136,6 +139,7 @@ public class jEdit
 		boolean runStartupScripts = true;
 		boolean quit = false;
 		boolean wait = false;
+		boolean shouldRelocateSettings = true;
 		String userDir = System.getProperty("user.dir");
 
 		// script to run
@@ -178,7 +182,10 @@ public class jEdit
 				else if(arg.equals("-nosettings"))
 					settingsDirectory = null;
 				else if(arg.startsWith("-settings="))
+				{
 					settingsDirectory = arg.substring(10);
+					shouldRelocateSettings = false;
+				}
 				else if(arg.startsWith("-noserver"))
 					portFile = null;
 				else if(arg.equals("-server"))
@@ -322,6 +329,13 @@ public class jEdit
 		if(!new File(settingsDirectory,"nosplash").exists())
 			GUIUtilities.showSplashScreen();
 
+		//{{{ Mac settings migration code. Should eventually be removed
+		if(OperatingSystem.isMacOS() && shouldRelocateSettings && settingsDirectory != null)
+		{
+			relocateSettings();
+		}
+		// }}}
+		
 		//{{{ Initialize settings directory
 		Writer stream;
 		if(settingsDirectory != null)
@@ -2487,7 +2501,30 @@ public class jEdit
 	//}}}
 
 	//{{{ Miscellaneous methods
-
+	
+	//{{{ relocateSettings() method
+	public static void relocateSettings()
+	{
+		String oldSettingsPath = MiscUtilities.constructPath(
+				System.getProperty("user.home"),
+				".jedit");
+		File oldSettingsDir = new File(oldSettingsPath);
+		File newSettingsDir = new File(settingsDirectory);
+		if(oldSettingsDir.exists() && !newSettingsDir.exists())
+		{
+			Log.log(Log.NOTICE,jEdit.class,"Old settings directory found (HOME/.jedit). Moving to new location ("+newSettingsDir+")");
+			try
+			{
+				oldSettingsDir.renameTo(newSettingsDir);
+			}
+			catch(SecurityException se)
+			{
+				Log.log(Log.ERROR,jEdit.class,se);
+			}
+		}
+	}
+	//}}}
+	
 	//{{{ isStartupDone() method
 	/**
 	 * Whether jEdit startup is over.

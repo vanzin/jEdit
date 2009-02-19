@@ -6152,6 +6152,13 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 						scrollUpPage();
 				}
 			}
+			else if(e.isControlDown() && e.isShiftDown())
+			{
+				if(e.getWheelRotation() > 0)
+					scrollDownPage();
+				else
+					scrollUpPage();
+			}
 			else if(e.isControlDown())
 			{
 				setFirstLine(getFirstLine()
