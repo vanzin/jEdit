@@ -832,6 +832,9 @@
                 <para><literal>FUNCTION</literal></para>
             </listitem>
             <listitem>
+               <para><literal>DIGIT</literal></para>
+            </listitem>
+            <listitem>
                 <para><literal>INVALID</literal><!--  - tokens of this type are
   automatically added if a <literal>NO_WORD_BREAK</literal> or
   <literal>NO_LINE_BREAK</literal> <literal>SPAN</literal> spans more than
