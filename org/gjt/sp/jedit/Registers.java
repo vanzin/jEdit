@@ -29,6 +29,7 @@ import java.io.*;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.HistoryModel;
+import org.gjt.sp.jedit.msg.PositionChanging;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
@@ -175,7 +176,7 @@ public class Registers
 			textArea.setSelectedText("");
 	} //}}}
 
-	//{{{ paste() method
+	//{{{ paste() methods
 	/**
 	 * Insets the contents of the specified register into the text area.
 	 * @param textArea The text area
@@ -185,9 +186,8 @@ public class Registers
 	public static void paste(TextArea textArea, char register)
 	{
 		paste(textArea,register,false);
-	} //}}}
+	}
 
-	//{{{ paste() method
 	/**
 	 * Inserts the contents of the specified register into the text area.
 	 * @param textArea The text area
@@ -219,6 +219,7 @@ public class Registers
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
+		EditBus.send(new PositionChanging(textArea));
 		try
 		{
 			buffer.beginCompoundEdit();
@@ -235,6 +236,7 @@ public class Registers
 
 				if(caretLine != textArea.getLineCount() - 1)
 				{
+
 					int startColumn = rect.getStartColumn(
 						buffer);
 					int offset = buffer
