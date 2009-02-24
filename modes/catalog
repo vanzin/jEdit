@@ -512,6 +512,9 @@
 <MODE NAME="xsl"		FILE="xsl.xml"
 				FILE_NAME_GLOB="*.xsl" />
 
+<MODE NAME="yaml" FILE="yaml.xml"
+                FILE_NAME_GLOB="*.{yml,yaml}" />
+
 <MODE NAME="zpt"		FILE="zpt.xml"
 				FILE_NAME_GLOB="*.{pt,zpt}"/>
 
