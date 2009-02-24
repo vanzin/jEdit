@@ -77,7 +77,7 @@ Bernard Walle, Markus Laker and Seph Soliman for contributing to this release.
 - jEdit settings directory is now stored in a sane location on Mac (HOME/Library/jEdit).
   Old settings are moved to new location unless a custom location is set through
   (-settings=foo). (Seph Soliman)
-  
+
 - Page-scrolling changed to CTRL+SHIFT+scroll instead of SHIFT+scroll due to Java on Mac.
 
 - Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear search through parent container linked list. (Alan Ezust)
@@ -144,6 +144,8 @@ Bernard Walle, Markus Laker and Seph Soliman for contributing to this release.
   (Romain François)
 
 - New JavaFX edit mode (Matthieu Casanova)
+
+- Updated Antlr mode (LDiracDelta # 2013652 )
 
 - Updated Lilypond mode (Bertalan Fodor # 2538906)
 
