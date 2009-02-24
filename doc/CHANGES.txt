@@ -4,7 +4,8 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra,
 Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, Daniel Hahler,
-Bernard Walle, Markus Laker and Seph Soliman for contributing to this release.
+Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker and Seph Soliman
+for contributing to this release.
 
 {{{ Bug Fixes
 - Fixed horizontal mac scrolling with trackpad or Mighty Mouse (#2308694)
@@ -140,12 +141,15 @@ Bernard Walle, Markus Laker and Seph Soliman for contributing to this release.
 
 }}}
 {{{ Editing
+
 - New jedit-actions edit mode that delegates to beanshell the <CODE> tags
   (Romain François)
 
 - New JavaFX edit mode (Matthieu Casanova)
 
 - Updated Antlr mode (LDiracDelta # 2013652 )
+
+- Removed ML indenting from ML mode (Lucas Dixon - #2382013)
 
 - Updated Lilypond mode (Bertalan Fodor # 2538906)
 
