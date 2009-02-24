@@ -38,7 +38,11 @@ public class InstallThread extends Thread
 	public void run()
 	{
 		progress.setMaximum(size * 1024);
-
+		
+		//return value ignored : already signalled in ServerKiller
+		progress.message("stopping any jEdit server");
+		ServerKiller.quitjEditServer();
+		
 		try
 		{
 			// install user-selected packages
