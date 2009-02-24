@@ -667,11 +667,15 @@ public abstract class TextArea extends JComponent
 
 		if(horizontalOffset == this.horizontalOffset)
 			return;
-		
-		// Scrolling with trackpad or other device should be kept inside bounds
-		if(horizontalOffset < Math.min(-(maxHorizontalScrollWidth-painter.getWidth()), 0))
-			return;
 
+		// Scrolling with trackpad or other device should be kept inside bounds
+		int min = Math.min(-(maxHorizontalScrollWidth + charWidth - painter.getWidth()), 0);
+		if(horizontalOffset < min)
+			horizontalOffset = min;
+
+		if(horizontalOffset == this.horizontalOffset)
+			return;
+		
 		this.horizontalOffset = horizontalOffset;
 		painter.repaint();
 
