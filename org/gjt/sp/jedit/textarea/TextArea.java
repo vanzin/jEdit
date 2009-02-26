@@ -668,14 +668,6 @@ public abstract class TextArea extends JComponent
 		if(horizontalOffset == this.horizontalOffset)
 			return;
 
-		// Scrolling with trackpad or other device should be kept inside bounds
-		int min = Math.min(-(maxHorizontalScrollWidth + charWidth - painter.getWidth()), 0);
-		if(horizontalOffset < min)
-			horizontalOffset = min;
-
-		if(horizontalOffset == this.horizontalOffset)
-			return;
-		
 		this.horizontalOffset = horizontalOffset;
 		painter.repaint();
 
@@ -5032,6 +5024,28 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private boolean ctrlForRectangularSelection;
 	//}}}
 
+	//{{{ _setHorizontalOffset() method
+	/**
+	 * Sets the horizontal offset of drawn lines. This method will
+	 * check if the offset do not go too far after the last character
+	 * @param horizontalOffset offset The new horizontal offset
+	 */
+	public void _setHorizontalOffset(int horizontalOffset)
+	{
+		if(horizontalOffset > 0)
+			horizontalOffset = 0;
+
+		if(horizontalOffset == this.horizontalOffset)
+			return;
+
+		// Scrolling with trackpad or other device should be kept inside bounds
+		int min = Math.min(-(maxHorizontalScrollWidth + charWidth - painter.getWidth()), 0);
+		if(horizontalOffset < min)
+			horizontalOffset = min;
+
+		setHorizontalOffset(horizontalOffset);
+	} //}}}
+
 	//{{{ invalidateSelectedLines() method
 	/**
 	 * Repaints the lines containing the selection.
@@ -6149,7 +6163,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				if(e.isShiftDown())
 				{
 					// Wheel orientation is reversed so we negate the charwidth
-					setHorizontalOffset(getHorizontalOffset()
+					_setHorizontalOffset(getHorizontalOffset()
 						+ (e.getWheelRotation() > 0 ? 1 : -1) * painter.getWidth());
 				}
 				else
@@ -6177,7 +6191,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				if(e.isShiftDown())
 				{
-					setHorizontalOffset(getHorizontalOffset()
+					_setHorizontalOffset(getHorizontalOffset()
 						+ (-charWidth * e.getUnitsToScroll()));
 				}
 				else
@@ -6190,7 +6204,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				if(e.isShiftDown())
 				{
-					setHorizontalOffset(getHorizontalOffset()
+					_setHorizontalOffset(getHorizontalOffset()
 						+ (-charWidth * e.getWheelRotation()));
 				}
 				else
