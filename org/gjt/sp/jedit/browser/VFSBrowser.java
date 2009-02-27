@@ -215,10 +215,14 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		pathField.setEnterAddsToHistory(false);
 		pathField.setSelectAllOnFocus(true);
 		
-		if (mode == BROWSER) {
-			pathField.addKeyListener(new KeyAdapter() {
-				public void keyReleased(KeyEvent e) {
-					if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+		if (mode == BROWSER)
+		{
+			pathField.addKeyListener(new KeyAdapter()
+			{
+				public void keyReleased(KeyEvent e)
+				{
+					if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+					{
 						pathField.setText(VFSBrowser.this.path);
 					}
 				}
@@ -1132,7 +1136,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 
 
 	//{{{ move() method
-	public void move(String newPosition) {
+	public void move(String newPosition)
+	{
 		boolean horz = (mode != BROWSER
 				|| DockableWindowManager.TOP.equals(newPosition)
 				|| DockableWindowManager.BOTTOM.equals(newPosition));
@@ -1480,7 +1485,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		 * the flag after the AWT thread is done with the
 		 * current events.
 		 */
-		private void resetLater() {
+		private void resetLater()
+		{
 			SwingUtilities.invokeLater(
 				new Runnable()
 				{
