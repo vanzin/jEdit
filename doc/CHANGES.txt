@@ -8,9 +8,12 @@ Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker and Seph Soliman
 for contributing to this release.
 
 {{{ Bug Fixes
+- The autoreload option was not applied for existing buffers (#2587311)
+  (Matthieu Casanova)
+
 - When restoring the perspective the EditPanes are created with the default
   bufferSet scope and it is changed after according to the perspective.xml.
-  Now it is immediately created with the good scope(#2645056)
+  Now it is immediately created with the good scope (#2645056)
   (Matthieu Casanova)
 
 - Fixed horizontal mac scrolling with trackpad or Mighty Mouse (#2308694)

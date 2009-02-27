@@ -984,6 +984,8 @@ public class Buffer extends JEditBuffer
 	public void propertiesChanged()
 	{
 		super.propertiesChanged();
+		setAutoReloadDialog(jEdit.getBooleanProperty("autoReloadDialog"));
+		setAutoReload(jEdit.getBooleanProperty("autoReload"));
 		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
 
