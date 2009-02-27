@@ -21,11 +21,12 @@
  */
 package org.gjt.sp.jedit.textarea;
 
-import org.gjt.sp.jedit.input.InputHandlerProvider;
+//{{{ Imports
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.EditPane;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+//}}}
 
 /**
  * @author Matthieu Casanova
