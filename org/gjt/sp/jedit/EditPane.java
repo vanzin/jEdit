@@ -897,7 +897,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ Package-private members
 
 	//{{{ EditPane constructor
-	EditPane(View view, Buffer buffer)
+	EditPane(View view, Buffer buffer, BufferSet.Scope scope)
 	{
 		super(new BorderLayout());
 
@@ -917,8 +917,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		propertiesChanged();
 		this.buffer = buffer;
-		setBufferSetScope(BufferSet.Scope.fromString(
-			jEdit.getProperty("editpane.bufferset.default")));
+		setBufferSetScope(scope);
 		this.buffer = null;
 		if(buffer == null)
 		{

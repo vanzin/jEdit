@@ -1674,9 +1674,9 @@ loop:		while (true)
 
 					if(buffer == null)
 						buffer = jEdit.getFirstBuffer();
-
-					stack.push(editPane = createEditPane(
-						buffer));
+					stack.push(buffer);
+//					stack.push(editPane = createEditPane(
+//						buffer));
 				}
 				else if (st.sval.equals("buff"))
 				{
@@ -1695,7 +1695,10 @@ loop:		while (true)
 				else if (st.sval.equals("bufferset"))
 				{
 					BufferSet.Scope scope = BufferSet.Scope.fromString((String) stack.pop());
-					editPane.setBufferSetScope(scope);
+					buffer = (Buffer) stack.pop();
+					editPane = createEditPane(buffer, scope);
+					stack.push(editPane);
+//					editPane.setBufferSetScope(scope);
 					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 					BufferSet bufferSet = editPane.getBufferSet();
 					for (Buffer buff : editPaneBuffers)
@@ -1839,10 +1842,16 @@ loop:		while (true)
 		}
 	} //}}}
 
-	//{{{ createEditPane() method
+	//{{{ createEditPane() methods
 	private EditPane createEditPane(Buffer buffer)
 	{
-		EditPane editPane = new EditPane(this,buffer);
+		return createEditPane(buffer, BufferSet.Scope.fromString(
+			jEdit.getProperty("editpane.bufferset.default")));
+	}
+
+	private EditPane createEditPane(Buffer buffer, BufferSet.Scope scope)
+	{
+		EditPane editPane = new EditPane(this,buffer, scope);
 		JEditTextArea textArea = editPane.getTextArea();
 		textArea.addFocusListener(new FocusHandler());
 		textArea.addCaretListener(new CaretHandler());
