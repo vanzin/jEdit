@@ -1675,8 +1675,6 @@ loop:		while (true)
 					if(buffer == null)
 						buffer = jEdit.getFirstBuffer();
 					stack.push(buffer);
-//					stack.push(editPane = createEditPane(
-//						buffer));
 				}
 				else if (st.sval.equals("buff"))
 				{
@@ -1698,7 +1696,6 @@ loop:		while (true)
 					buffer = (Buffer) stack.pop();
 					editPane = createEditPane(buffer, scope);
 					stack.push(editPane);
-//					editPane.setBufferSetScope(scope);
 					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 					BufferSet bufferSet = editPane.getBufferSet();
 					for (Buffer buff : editPaneBuffers)
