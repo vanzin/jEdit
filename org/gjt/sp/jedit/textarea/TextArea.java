@@ -5030,7 +5030,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * check if the offset do not go too far after the last character
 	 * @param horizontalOffset offset The new horizontal offset
 	 */
-	public void _setHorizontalOffset(int horizontalOffset)
+	private void _setHorizontalOffset(int horizontalOffset)
 	{
 		if(horizontalOffset > 0)
 			horizontalOffset = 0;
