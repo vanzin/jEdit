@@ -1782,7 +1782,11 @@ loop:		for(;;)
 				// no need for trailing file separator
 				if (v.endsWith(File.separator))
 					v = v.substring(0, v.length()-1);
-				if (k.length() > v.length()) continue;
+				// check if it is actually shorter
+				if (OperatingSystem.isWindows())
+					if (k.length()+2 > v.length()) continue; // gets replaced by %FOO%
+				else
+					if (k.length()+1 > v.length()) continue; // gets replaced by $FOO
 				if (OperatingSystem.isWindows())
 				{
 					// no case sensitivity, might as well convert to lower case
