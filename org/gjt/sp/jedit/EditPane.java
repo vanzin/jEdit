@@ -103,21 +103,13 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		return view;
 	} //}}}
 
-	// {{{ get(TextArea) method 
+	// {{{ get(TextArea) method
 	/** @return the EditPane containing the TextArea.
 	 */
 	public static EditPane get(TextArea ta)
 	{
 		if (ta == null) return null;
-		Container c = ta.getParent();
-		while (c != null) 
-		{
-			if (c instanceof EditPane) 
-				return ((EditPane)c);
-			c = c.getParent();
-		}
-		Log.log(Log.ERROR, ta, "EditPane.get(): no EditPane in TextArea parent list?");
-		return null;
+		return (EditPane)SwingUtilities.getAncestorOfClass(EditPane.class, ta);
 	} // }}}
 
 	//{{{ getBuffer() method
