@@ -833,7 +833,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	boolean wrapGuide;
 	AntiAlias antiAlias;
 	boolean fracFontMetrics;
-
+	RenderingHints renderingHints;
 	// should try to use this as little as possible.
 	FontMetrics fm;
 	//}}}
@@ -879,7 +879,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ Instance variables
 	private final ExtensionManager extensionMgr;
 	private final PaintCaret caretExtension;
-	private RenderingHints renderingHints;
 	private FontRenderContext fontRenderContext;
 	private final Map fonts;
 	//}}}

@@ -117,7 +117,7 @@ public class Gutter extends JComponent implements SwingConstants
 	public void paintComponent(Graphics _gfx)
 	{
 		Graphics2D gfx = (Graphics2D)_gfx;
-
+		gfx.setRenderingHints(textArea.getPainter().renderingHints);
 		// fill the background
 		Rectangle clip = gfx.getClipBounds();
 		gfx.setColor(getBackground());

@@ -8,6 +8,9 @@ Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker and Seph Soliman
 for contributing to this release.
 
 {{{ Bug Fixes
+- If the textarea is antialiased the gutter will also use the same antialiasing
+  (Matthieu Casanova)
+
 - The autoreload option was not applied for existing buffers (#2587311)
   (Matthieu Casanova)
 
