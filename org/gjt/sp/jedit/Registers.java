@@ -29,7 +29,6 @@ import java.io.*;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.gui.HistoryModel;
-import org.gjt.sp.jedit.msg.PositionChanging;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
@@ -219,7 +218,6 @@ public class Registers
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
-		EditBus.send(new PositionChanging(textArea));
 		try
 		{
 			buffer.beginCompoundEdit();

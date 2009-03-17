@@ -158,6 +158,14 @@ public class JEditTextArea extends TextArea
 		EditBus.send(new PositionChanging(this));
 		super.goToBufferStart(select);
 	} // }}}
+	
+	// {{{ replaceSelection(String) 
+	@Override
+	public int replaceSelection(String selectedText)
+	{
+		EditBus.send(new PositionChanging(this));
+		return super.replaceSelection(selectedText);
+	}//}}}
 
 	//{{{ showGoToLineDialog() method
 	/**
@@ -559,5 +567,6 @@ public class JEditTextArea extends TextArea
 			}
 		}
 	} //}}}
+
 
 }

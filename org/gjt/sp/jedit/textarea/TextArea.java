@@ -1,5 +1,5 @@
 /*
- * TextArea.java - Handles services.xml files in plugins
+ * TextArea.java - Standalone jEdit Text Area component
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -2013,17 +2013,16 @@ forward_scan:	do
 			throw new RuntimeException("Text component read only");
 
 		int newCaret = -1;
-
 		if(getSelectionCount() == 0)
 		{
 			// for compatibility with older jEdit versions
 			buffer.insert(caret,selectedText);
+			newCaret = getCaretPosition() + selectedText.length();
 		}
 		else
 		{
 			try
 			{
-
 				buffer.beginCompoundEdit();
 
 				Selection[] selection = getSelection();
@@ -2213,7 +2212,6 @@ forward_scan:	do
 			throw new IllegalArgumentException("caret out of bounds: "
 				+ newCaret);
 		}
-
 		int oldCaretLine = caretLine;
 
 		if(caret == newCaret)

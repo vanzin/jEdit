@@ -32,7 +32,8 @@ import java.util.*;
 //}}}
 
 /**
- * The buffersets manager.
+ * The buffersets manager. A singleton instance of this
+ * can be obtained from jEdit.getBufferSetManager()
  *
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
