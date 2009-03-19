@@ -222,8 +222,15 @@ public class HyperSearchOperationNode
 	}//}}}
 
 	//{{{ getSearchMatcher() method
-	SearchMatcher getSearchMatcher()
+	public SearchMatcher getSearchMatcher()
 	{
 		return searchMatcher;
 	}//}}}
+
+	//{{{ getSearchString() method
+	public String getSearchString()
+	{
+		return searchString;
+	}//}}}
+
 }

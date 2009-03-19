@@ -79,7 +79,7 @@ class HyperSearchRequest extends WorkRequest
 
 		setMaximum(fileset.getFileCount(view));
 
-		// to minimise synchronization and stuff like that, we only
+		// to minimize synchronization and stuff like that, we only
 		// show a status message at most twice a second
 
 		// initially zero, so that we always show the first message
