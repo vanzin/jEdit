@@ -2017,7 +2017,6 @@ forward_scan:	do
 		{
 			// for compatibility with older jEdit versions
 			buffer.insert(caret,selectedText);
-			newCaret = getCaretPosition() + selectedText.length() - 1;
 		}
 		else
 		{
