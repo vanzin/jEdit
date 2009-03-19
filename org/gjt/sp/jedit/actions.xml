@@ -1364,6 +1364,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="toggle-full-screen">
+	<CODE>
+		view.toggleFullScreen();
+	</CODE>
+</ACTION>
+		
 <ACTION NAME="toggle-line-numbers">
 	<CODE>
 		textArea.getGutter().toggleExpanded();

@@ -112,6 +112,7 @@ left-docking-area.shortcut=C+e C+LEFT
 top-docking-area.shortcut=C+e C+UP
 right-docking-area.shortcut=C+e C+RIGHT
 bottom-docking-area.shortcut=C+e C+DOWN
+toggle-full-screen.shortcut=F11
 
 prev-marker.shortcut=C+e C+COMMA
 next-marker.shortcut=C+e C+PERIOD

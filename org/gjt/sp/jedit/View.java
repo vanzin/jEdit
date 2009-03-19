@@ -30,6 +30,8 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -1321,6 +1323,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	//{{{ View constructor
 	View(Buffer buffer, ViewConfig config)
 	{
+		fullScreenMode = false;
 		plainView = config.plainView;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
@@ -1367,6 +1370,29 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		EditBus.addToBus(this);
 
 		GUIUtilities.addSizeSaver(this, null, plainView ? "plain-view" : "view");
+	} //}}}
+
+	//{{{ toggleFullScreen() method
+	public void toggleFullScreen()
+	{
+		fullScreenMode = (! fullScreenMode);
+		GraphicsDevice sd = GraphicsEnvironment.
+			getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		dispose();
+		if (fullScreenMode)
+		{
+			windowedBounds = getBounds();
+			setUndecorated(true);
+			setBounds(sd.getDefaultConfiguration().getBounds());
+			validate();
+			setVisible(true);
+		}
+		else
+		{
+			setUndecorated(false);
+			setBounds(windowedBounds);
+			setVisible(true);
+		}
 	} //}}}
 
 	//{{{ confirmToCloseDirty() methods
@@ -1480,6 +1506,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	private Socket waitSocket;
 	private Component mainContent;
+
+	private boolean fullScreenMode;
+	private Rectangle windowedBounds;
 
 	//}}}
 
