@@ -31,7 +31,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -1376,8 +1375,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	public void toggleFullScreen()
 	{
 		fullScreenMode = (! fullScreenMode);
-		GraphicsDevice sd = GraphicsEnvironment.
-			getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		GraphicsDevice sd = getGraphicsConfiguration().getDevice();
 		dispose();
 		if (fullScreenMode)
 		{
