@@ -1379,9 +1379,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		dispose();
 		boolean alternateLayout = jEdit.getBooleanProperty(
 			"view.toolbar.alternateLayout");
-		boolean showMenu = jEdit.getBooleanProperty("options.view.fullScreenIncludesMenu"); 
-		boolean showToolbars = jEdit.getBooleanProperty("options.view.fullScreenIncludesToolbars"); 
-		boolean showStatus = jEdit.getBooleanProperty("options.view.fullScreenIncludesStatus"); 
+		boolean showMenu = jEdit.getBooleanProperty("fullScreenIncludesMenu"); 
+		boolean showToolbars = jEdit.getBooleanProperty("fullScreenIncludesToolbar"); 
+		boolean showStatus = jEdit.getBooleanProperty("fullScreenIncludesStatus"); 
 		if (fullScreenMode)
 		{
 			if (! showMenu)
