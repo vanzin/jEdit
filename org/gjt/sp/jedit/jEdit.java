@@ -2398,8 +2398,13 @@ public class jEdit
 
 			if(!config.plainView)
 			{
-				startupDone.add(false);
-				SwingUtilities.invokeLater(new DockingLayoutSetter(newView, config, jEdit.getViewCount()));
+				int index;
+				synchronized (startupDone) {
+					index = startupDone.size();
+					startupDone.add(false);
+				}
+				SwingUtilities.invokeLater(new DockingLayoutSetter(
+					newView, config, index));
 			}
 			
 			// show tip of the day
