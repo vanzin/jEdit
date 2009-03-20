@@ -2123,11 +2123,18 @@ options.view.showBufferSwitcher=Show buffer switcher
 options.view.bufferSwitcherMaxRowsCount=Visible rows in buffer switcher:
 options.view.sortBuffers=Sort buffer sets
 options.view.sortByName=Sort buffer sets by file name, instead of path name
+options.view.fullScreenIncludesMenu=Show the menu bar in full-screen mode
+options.view.fullScreenIncludesToolbar=Show the toolbars in full-screen mode
+options.view.fullScreenIncludesStatus=Show the status bar in full-screen mode
 options.editpane.bufferset.default=BufferSet scope for new EditPanes:
 options.editpane.bufferset.contain=New BufferSets contain:
 options.editpane.bufferset.newbufferset.copy=copy of current BufferSet
 options.editpane.bufferset.newbufferset.empty=an empty buffer
 options.editpane.bufferset.newbufferset.currentbuffer=current buffer only
+
+fullScreenIncludesMenu=true
+fullScreenIncludesToolbars=true
+fullScreenIncludesStatus=true
 #}}}
 
 

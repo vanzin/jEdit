@@ -1377,8 +1377,38 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		fullScreenMode = (! fullScreenMode);
 		GraphicsDevice sd = getGraphicsConfiguration().getDevice();
 		dispose();
+		boolean alternateLayout = jEdit.getBooleanProperty(
+			"view.toolbar.alternateLayout");
+		boolean showMenu = jEdit.getBooleanProperty("options.view.fullScreenIncludesMenu"); 
+		boolean showToolbars = jEdit.getBooleanProperty("options.view.fullScreenIncludesToolbars"); 
+		boolean showStatus = jEdit.getBooleanProperty("options.view.fullScreenIncludesStatus"); 
 		if (fullScreenMode)
 		{
+			if (! showMenu)
+			{
+				menuBar = getJMenuBar();
+				setJMenuBar(null);
+			}
+			if (alternateLayout)
+			{
+				if (! showToolbars)
+				{
+					getContentPane().remove(topToolBars);
+					getContentPane().remove(bottomToolBars);
+				}
+				if (! showStatus)
+					removeToolBar(status);
+			}
+			else
+			{
+				if (! showToolbars)
+				{
+					mainPanel.remove(topToolBars);
+					mainPanel.remove(bottomToolBars);
+				}
+				if (! showStatus)
+					getContentPane().remove(status);
+			}
 			windowedBounds = getBounds();
 			setUndecorated(true);
 			setBounds(sd.getDefaultConfiguration().getBounds());
@@ -1387,6 +1417,28 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		else
 		{
+			if (! showMenu)
+				setJMenuBar(menuBar);
+			if (alternateLayout)
+			{
+				if (! showToolbars)
+				{
+					getContentPane().add(BorderLayout.NORTH,topToolBars);
+					getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
+				}
+				if (! showStatus)
+					addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
+			}
+			else
+			{
+				if (! showToolbars)
+				{
+					mainPanel.add(topToolBars, BorderLayout.NORTH);
+					mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
+				}
+				if (! showStatus)
+					getContentPane().add(BorderLayout.SOUTH,status);
+			}
 			setUndecorated(false);
 			setBounds(windowedBounds);
 			setVisible(true);
@@ -1507,6 +1559,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 
 	private boolean fullScreenMode;
 	private Rectangle windowedBounds;
+	private JMenuBar menuBar;
 
 	//}}}
 
