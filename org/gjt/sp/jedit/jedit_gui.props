@@ -528,7 +528,9 @@ view=new-view \
      %scrolling \
      %splitting \
      %docking \
-     %buffersets
+     %buffersets \
+     - \
+     toggle-full-screen
 view.label=$View
 new-view.label=New $View
 new-view.icon.small=16x16/actions/window-new.png
@@ -542,6 +544,7 @@ show-buffer-switcher.label=Show $Buffer Switcher
 toggle-line-numbers.label=$Line Numbers
 toggle-statusbar.label=$Toggle Status Bar
 show-context-menu.label=Show Context Menu
+toggle-full-screen.label=Toggle full-screen mode
 
 #{{{ Scrolling menu
 scrolling=scroll-to-current-line \
