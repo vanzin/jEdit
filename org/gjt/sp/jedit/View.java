@@ -1371,42 +1371,66 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		GUIUtilities.addSizeSaver(this, null, plainView ? "plain-view" : "view");
 	} //}}}
 
+	//{{{ updateFullScreenProps() method
+	public void updateFullScreenProps()
+	{
+		boolean alternateLayout = jEdit.getBooleanProperty(
+			"view.toolbar.alternateLayout");
+		boolean showMenu = jEdit.getBooleanProperty("fullScreenIncludesMenu"); 
+		boolean showToolbars = jEdit.getBooleanProperty("fullScreenIncludesToolbar"); 
+		boolean showStatus = jEdit.getBooleanProperty("fullScreenIncludesStatus"); 
+		if (! showMenu)
+		{
+			menuBar = getJMenuBar();
+			setJMenuBar(null);
+		}
+		else
+			setJMenuBar(menuBar);
+		if (alternateLayout)
+		{
+			if (! showToolbars)
+			{
+				getContentPane().remove(topToolBars);
+				getContentPane().remove(bottomToolBars);
+			}
+			else
+			{
+				getContentPane().add(BorderLayout.NORTH,topToolBars);
+				getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
+			}
+			if (! showStatus)
+				removeToolBar(status);
+			else
+				addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
+		}
+		else
+		{
+			if (! showToolbars)
+			{
+				mainPanel.remove(topToolBars);
+				mainPanel.remove(bottomToolBars);
+			}
+			else
+			{
+				mainPanel.add(topToolBars, BorderLayout.NORTH);
+				mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
+			}
+			if (! showStatus)
+				getContentPane().remove(status);
+			else
+				getContentPane().add(BorderLayout.SOUTH,status);
+		}
+	}
+	
 	//{{{ toggleFullScreen() method
 	public void toggleFullScreen()
 	{
 		fullScreenMode = (! fullScreenMode);
 		GraphicsDevice sd = getGraphicsConfiguration().getDevice();
 		dispose();
-		boolean alternateLayout = jEdit.getBooleanProperty(
-			"view.toolbar.alternateLayout");
-		boolean showMenu = jEdit.getBooleanProperty("fullScreenIncludesMenu"); 
-		boolean showToolbars = jEdit.getBooleanProperty("fullScreenIncludesToolbar"); 
-		boolean showStatus = jEdit.getBooleanProperty("fullScreenIncludesStatus"); 
 		if (fullScreenMode)
 		{
-			menuBar = getJMenuBar();
-			if (! showMenu)
-				setJMenuBar(null);
-			if (alternateLayout)
-			{
-				if (! showToolbars)
-				{
-					getContentPane().remove(topToolBars);
-					getContentPane().remove(bottomToolBars);
-				}
-				if (! showStatus)
-					removeToolBar(status);
-			}
-			else
-			{
-				if (! showToolbars)
-				{
-					mainPanel.remove(topToolBars);
-					mainPanel.remove(bottomToolBars);
-				}
-				if (! showStatus)
-					getContentPane().remove(status);
-			}
+			updateFullScreenProps();
 			windowedBounds = getBounds();
 			setUndecorated(true);
 			setBounds(sd.getDefaultConfiguration().getBounds());
@@ -1417,25 +1441,19 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		{
 			if (getJMenuBar() != menuBar)
 				setJMenuBar(menuBar);
+			boolean alternateLayout = jEdit.getBooleanProperty(
+				"view.toolbar.alternateLayout");
 			if (alternateLayout)
 			{
-				if (! showToolbars)
-				{
-					getContentPane().add(BorderLayout.NORTH,topToolBars);
-					getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
-				}
-				if (! showStatus)
-					addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
+				getContentPane().add(BorderLayout.NORTH,topToolBars);
+				getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
+				addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
 			}
 			else
 			{
-				if (! showToolbars)
-				{
-					mainPanel.add(topToolBars, BorderLayout.NORTH);
-					mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
-				}
-				if (! showStatus)
-					getContentPane().add(BorderLayout.SOUTH,status);
+				mainPanel.add(topToolBars, BorderLayout.NORTH);
+				mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
+				getContentPane().add(BorderLayout.SOUTH,status);
 			}
 			setUndecorated(false);
 			setBounds(windowedBounds);
@@ -1838,6 +1856,9 @@ loop:		while (true)
 		if (splitPane != null)
 			GUIUtilities.initContinuousLayout(splitPane);
 		//SwingUtilities.updateComponentTreeUI(getRootPane());
+		
+		if (fullScreenMode)
+			updateFullScreenProps();
 	} //}}}
 
 	//{{{ showBufferSwitcherMenuItem() method
