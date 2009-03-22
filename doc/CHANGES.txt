@@ -91,6 +91,7 @@ for contributing to this release.
   (-settings=foo). (Seph Soliman)
 
 - Page-scrolling changed to CTRL+SHIFT+scroll instead of SHIFT+scroll due to Java on Mac.
+  (Seph Soliman)
 
 - Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear search through parent container linked list. (Alan Ezust)
 
