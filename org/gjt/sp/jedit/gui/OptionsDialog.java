@@ -553,6 +553,16 @@ public abstract class OptionsDialog extends EnhancedDialog
 	//{{{ OptionTreeModel class
 	public class OptionTreeModel implements TreeModel
 	{
+		public OptionTreeModel()
+		{
+			this(new OptionGroup(null));
+		}
+
+		public OptionTreeModel(OptionGroup root)
+		{
+			this.root = root;
+		}
+
 		public void addTreeModelListener(TreeModelListener l)
 		{
 			listenerList.add(TreeModelListener.class, l);
@@ -703,7 +713,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 			}
 		}
 
-		private final OptionGroup root = new OptionGroup(null);
+		private final OptionGroup root;
 		private final EventListenerList listenerList = new EventListenerList();
 	} //}}}
 }

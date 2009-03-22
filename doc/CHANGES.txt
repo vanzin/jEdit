@@ -4,8 +4,8 @@ JEDIT 4.3 VERSION HISTORY
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra,
 Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, Daniel Hahler,
-Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker and Seph Soliman
-for contributing to this release.
+Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker, Seph Soliman
+and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
 - If the textarea is antialiased the gutter will also use the same antialiasing
@@ -154,6 +154,9 @@ for contributing to this release.
   dockables (fixed bug #2519873). (Shlomy Reinstein)
 
 - Added the API DockingArea.getDockables() to support the Docker plugin.
+
+- Added new constructor to OptionsDialog.OptionsTreeModel that allows setting
+  the root group of the tree. (Marcelo Vanzin)
 
 }}}
 {{{ Editing
