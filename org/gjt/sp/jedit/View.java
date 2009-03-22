@@ -1384,11 +1384,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		boolean showStatus = jEdit.getBooleanProperty("fullScreenIncludesStatus"); 
 		if (fullScreenMode)
 		{
+			menuBar = getJMenuBar();
 			if (! showMenu)
-			{
-				menuBar = getJMenuBar();
 				setJMenuBar(null);
-			}
 			if (alternateLayout)
 			{
 				if (! showToolbars)
@@ -1417,7 +1415,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		else
 		{
-			if (! showMenu)
+			if (getJMenuBar() != menuBar)
 				setJMenuBar(menuBar);
 			if (alternateLayout)
 			{
