@@ -1323,6 +1323,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	View(Buffer buffer, ViewConfig config)
 	{
 		fullScreenMode = false;
+		menuBar = null;
 		plainView = config.plainView;
 
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
@@ -1384,7 +1385,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			menuBar = getJMenuBar();
 			setJMenuBar(null);
 		}
-		else
+		else if (menuBar != null)
 			setJMenuBar(menuBar);
 		if (alternateLayout)
 		{
@@ -1439,7 +1440,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		else
 		{
-			if (getJMenuBar() != menuBar)
+			if ((menuBar != null) && (getJMenuBar() != menuBar))
 				setJMenuBar(menuBar);
 			boolean alternateLayout = jEdit.getBooleanProperty(
 				"view.toolbar.alternateLayout");
