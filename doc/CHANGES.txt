@@ -85,6 +85,9 @@ and Marcelo Vanzin for contributing to this release.
 
 - Fixed #2688862: "Redo HyperSearch" uses title of last search.
   (Shlomy Reinstein)
+
+- Fixed #2712031: Index out of bounds exception in FilteredListModel.
+  (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 
