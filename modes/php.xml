@@ -5106,12 +5106,6 @@ TODO:
 			<END>&lt;/code&gt;</END>
 		</SPAN>
 
-		<!-- HTML tags -->
-		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS" NO_LINE_BREAK="TRUE">
-			<BEGIN>&lt;</BEGIN>
-			<END>&gt;</END>
-		</SPAN>
-
 		<!-- Imports: -->
 		<IMPORT DELEGATE="PHPDOC_DELEGATE_LABEL_BLOCKS" />
 		<IMPORT DELEGATE="PHPDOC_LABEL_KEYWORDS" />
