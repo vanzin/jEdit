@@ -108,6 +108,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 			public void run()
 			{
 				Set<Integer> selectedIndices = saveSelection();
+				list.clearSelection();
 				FilteredListModel.this.filter = filter;
 				if (filter != null && filter.length() > 0)
 				{
@@ -131,7 +132,7 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 				else
 					resetFilter();
 
-				fireContentsChanged(this, 0, getSize());
+				fireContentsChanged(this, 0, getSize() - 1);
 				restoreSelection(selectedIndices);
 			}
 		};
