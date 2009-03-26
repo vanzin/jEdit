@@ -307,10 +307,7 @@ public class BeanShell
 	{
 		Log.log(Log.MESSAGE,BeanShell.class,"Running script " + path);
 
-		Interpreter interp =bsh.createInterpreter(namespace);
-
-		VFS vfs = null;
-		Object session = null;
+		Interpreter interp = BeanShellFacade.createInterpreter(namespace);
 
 		try
 		{
@@ -340,21 +337,6 @@ public class BeanShell
 		finally
 		{
 			running = false;
-
-			if(session != null)
-			{
-				try
-				{
-					vfs._endVFSSession(session,view);
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,BeanShell.class,io);
-					GUIUtilities.error(view,"read-error",
-						new String[] { path, io.toString() });
-				}
-			}
-
 			try
 			{
 				// no need to do this for macros!
@@ -470,7 +452,7 @@ public class BeanShell
 	 * instead.
 	 */
 	@Deprecated
-    public static void runScript(View view, String path,
+	public static void runScript(View view, String path,
 		boolean ownNamespace, boolean rethrowBshErrors)
 	{
 		runScript(view,path,null,ownNamespace);
@@ -483,7 +465,7 @@ public class BeanShell
 	 * instead.
 	 */
 	@Deprecated
-    public static void runScript(View view, String path, Reader in,
+	public static void runScript(View view, String path, Reader in,
 		boolean ownNamespace, boolean rethrowBshErrors)
 	{
 		runScript(view,path,in,ownNamespace);
@@ -495,7 +477,7 @@ public class BeanShell
 	 * obsolete; call <code>_eval()</code> or <code>eval()</code> instead.
 	 */
 	@Deprecated
-    public static Object eval(View view, String command,
+	public static Object eval(View view, String command,
 		boolean rethrowBshErrors)
 	{
 		return bsh.eval(view,command);
@@ -507,7 +489,7 @@ public class BeanShell
 	 * obsolete; call <code>_eval()</code> or <code>eval()</code> instead.
 	 */
 	@Deprecated
-    public static Object eval(View view, NameSpace namespace,
+	public static Object eval(View view, NameSpace namespace,
 		String command, boolean rethrowBshErrors)
 	{
 		return eval(view,namespace,command);
