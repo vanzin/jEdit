@@ -2218,6 +2218,8 @@ TODO:
 			<KEYWORD2>jewishtojd</KEYWORD2>
 			<KEYWORD2>join</KEYWORD2>
 			<KEYWORD2>jpeg2wbmp</KEYWORD2>
+			<KEYWORD2>json_decode</KEYWORD2>
+			<KEYWORD2>json_encode</KEYWORD2>
 			<KEYWORD2>juliantojd</KEYWORD2>
 			<KEYWORD2>key</KEYWORD2> <!-- arrayiterator, directoryiterator, filteriterator, hw_api_attribute, recursivedirectoryiterator, recursiveiteratoriterator, simplexmliterator -->
 			<KEYWORD2>krsort</KEYWORD2>
