@@ -4694,6 +4694,7 @@ TODO:
 			<!-- Language constructs (69)
 				http://www.php.net/manual/en/reserved.php -->
 			<KEYWORD1>__CLASS__</KEYWORD1>
+			<KEYWORD1>__DIR__</KEYWORD1>
 			<KEYWORD1>__FILE__</KEYWORD1>
 			<KEYWORD1>__FUNCTION__</KEYWORD1>
 			<KEYWORD1>__LINE__</KEYWORD1>
