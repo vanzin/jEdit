@@ -88,7 +88,6 @@ public class JEditBuffer
 		lineMgr = new LineManager();
 		positionMgr = new PositionManager(this);
 		undoMgr = new UndoManager(this);
-		seg = new Segment();
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
 		properties = new HashMap<Object, PropValue>();
@@ -120,7 +119,6 @@ public class JEditBuffer
 		lineMgr = new LineManager();
 		positionMgr = new PositionManager(this);
 		undoMgr = new UndoManager(this);
-		seg = new Segment();
 		integerArray = new IntegerArray();
 		propertyLock = new Object();
 		properties = new HashMap<Object, PropValue>();
@@ -431,6 +429,7 @@ public class JEditBuffer
 
 		for(int i = lineIndex - 1; i >= 0; i--)
 		{
+			Segment seg = new Segment();
 			getLineText(i,seg);
 			if(seg.count != 0)
 				returnValue = i;
@@ -795,7 +794,7 @@ public class JEditBuffer
 			for(int i = 0; i < lines.length; i++)
 			{
 				int pos, lineStart, lineEnd, tail;
-
+				Segment seg = new Segment();
 				getLineText(lines[i],seg);
 
 				// blank line
@@ -1005,6 +1004,7 @@ public class JEditBuffer
 	 */
 	public int getCurrentIndentForLine(int lineIndex, int[] whitespaceChars)
 	{
+		Segment seg = new Segment();
 		getLineText(lineIndex,seg);
 
 		int tabSize = getTabSize();
@@ -1091,6 +1091,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			readLock();
 
 			int start = getLineStartOffset(line);
+			Segment seg = new Segment();
 			getText(start,column,seg);
 
 			return StandardUtilities.getVirtualWidth(seg,getTabSize());
@@ -1123,6 +1124,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{
 			readLock();
 
+			Segment seg = new Segment();
 			getLineText(line,seg);
 
 			return StandardUtilities.getOffsetOfVirtualColumn(seg,
@@ -1258,11 +1260,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public void markTokens(int lineIndex, TokenHandler tokenHandler)
 	{
-		Segment seg;
-		if(SwingUtilities.isEventDispatchThread())
-			seg = this.seg;
-		else
-			seg = new Segment();
+		Segment seg = new Segment();
 
 		if(lineIndex < 0 || lineIndex >= lineMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(lineIndex);
@@ -1852,6 +1850,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			for(int i = firstInvalidFoldLevel; i <= line; i++)
 			{
+				Segment seg = new Segment();
 				newFoldLevel = foldHandler.getFoldLevel(this,i,seg);
 				if(newFoldLevel != lineMgr.getFoldLevel(i))
 				{
@@ -2228,13 +2227,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 		if (undoMgr != null)
 			undoMgr.setLimit(limit);
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ Protected members
 
 	protected Mode mode;
-	protected Segment seg;
 	protected boolean textMode;
 	protected UndoManager undoMgr;
 

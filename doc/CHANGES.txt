@@ -88,6 +88,9 @@ and Marcelo Vanzin for contributing to this release.
 
 - Fixed #2712031: Index out of bounds exception in FilteredListModel.
   (Shlomy Reinstein)
+
+- Fixed #1633393: TextArea painting corruption when saving
+  (Dale Anson)
 }}}
 {{{ Miscellaneous
 
