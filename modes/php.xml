@@ -621,12 +621,19 @@ TODO:
 			<END AT_LINE_START="TRUE">$1</END>
 		</SPAN_REGEXP>
 
+
 		<!-- Keep blocks of curly braces (scopes) together.
-		     This is required e.g. for handling $a->{'php-code'}. -->
+		     This is required e.g. for handling $a->{if(1){ echo 1; }}. -->
+		<!--
+		TODO: this does not work with the following and therefore is commented out (should match brackets in PHP blocks only!):
+		<?php { ?>
+		}
+		<?php } ?>
 		<SPAN TYPE="OPERATOR" DELEGATE="PHP">
 			<BEGIN>{</BEGIN>
 			<END>}</END>
 		</SPAN>
+		-->
 
 		<!-- operators -->
 		<!-- {{{ -->
@@ -667,6 +674,7 @@ TODO:
 		<SEQ TYPE="OPERATOR">~</SEQ>
 		<SEQ TYPE="OPERATOR">(</SEQ>
 		<SEQ TYPE="OPERATOR">)</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
 		<SEQ TYPE="OPERATOR">}</SEQ>
 		<!-- }}} -->
 
@@ -4701,6 +4709,7 @@ TODO:
 			<KEYWORD1>__FUNCTION__</KEYWORD1>
 			<KEYWORD1>__LINE__</KEYWORD1>
 			<KEYWORD1>__METHOD__</KEYWORD1>
+			<KEYWORD1>__NAMESPACE__</KEYWORD1>
 			<KEYWORD1>abstract</KEYWORD1>
 			<OPERATOR>and</OPERATOR>
 			<KEYWORD1>array</KEYWORD1>
@@ -4737,6 +4746,7 @@ TODO:
 			<KEYWORD1>foreach</KEYWORD1>
 			<KEYWORD1>function</KEYWORD1>
 			<KEYWORD1>global</KEYWORD1>
+			<KEYWORD1>goto</KEYWORD1>
 			<KEYWORD1>if</KEYWORD1>
 			<KEYWORD1>implements</KEYWORD1>
 			<KEYWORD1>include</KEYWORD1>
@@ -4745,6 +4755,7 @@ TODO:
 			<KEYWORD1>interface</KEYWORD1>
 			<KEYWORD1>isset</KEYWORD1>
 			<KEYWORD1>list</KEYWORD1>
+			<KEYWORD1>namespace</KEYWORD1>
 			<KEYWORD1>new</KEYWORD1>
 			<KEYWORD1>null</KEYWORD1>
 			<KEYWORD1>old_function</KEYWORD1>
