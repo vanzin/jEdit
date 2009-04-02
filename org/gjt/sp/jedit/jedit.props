@@ -246,6 +246,10 @@ view.middleMousePaste=false
 # as if selection mode were rectangular mode
 view.ctrlForRectangularSelection=true
 
+# Minimal view size that is considered "valid" when loading perspective
+view.minStartupWidth=200
+view.minStartupHeight=200
+
 # The default bufferSet scope
 editpane.bufferset.default=global
 

@@ -31,6 +31,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -2171,20 +2172,40 @@ loop:		while (true)
 		}
 	} //}}}
 
+	// Checks if the specified rectangle is within screen boundaries
+	private boolean isInsideScreen(View parent, Rectangle r)
+	{
+		Rectangle bounds;
+		if (parent == null)
+			bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().
+				getMaximumWindowBounds();
+		else
+			bounds = parent.getGraphicsConfiguration().getBounds();
+		int minWidth = jEdit.getIntegerProperty("view.minStartupWidth");
+		int minHeight = jEdit.getIntegerProperty("view.minStartupHeight");
+		return (r.x < bounds.width - minWidth &&
+				r.x + r.width > minWidth &&
+				r.y < bounds.height - minHeight &&
+				r.y + r.height > minHeight);
+	}
+	
 	public void adjust(View parent, ViewConfig config)
 	{
 		if(config.width != 0 && config.height != 0)
 		{
 			Rectangle desired = new Rectangle(
 					config.x, config.y, config.width, config.height);
-			if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
-			{
-				new GUIUtilities.UnixWorkaround(this,"view",desired,config.extState);
-			}
+			if (! isInsideScreen(parent, desired))
+				setLocationRelativeTo(parent);
 			else
 			{
-				setBounds(desired);
-				setExtendedState(config.extState);
+				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
+					new GUIUtilities.UnixWorkaround(this,"view",desired,config.extState);
+				else
+				{
+					setBounds(desired);
+					setExtendedState(config.extState);
+				}
 			}
 		}
 		else
