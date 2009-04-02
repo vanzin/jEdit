@@ -1,7 +1,7 @@
 Package: jedit
 Version: 4:@jedit.build.number@
 Architecture: all
-Maintainer: Contributors <devel@jEdit.org>
+Maintainer: Contributors <jedit-devel@lists.sourceforge.net>
 Section: contrib/editors
 Homepage: http://www.jedit.org/ 
 Architecture: all
