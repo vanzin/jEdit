@@ -229,6 +229,37 @@ loop:		for(int i = 0; i < str.length(); i++)
 		return createWhiteSpace(len,tabSize,0);
 	} //}}}
 
+	//{{{ truncateWhiteSpace() method
+	public static String truncateWhiteSpace(int len, int tabSize,
+		String indentStr)
+	{
+		StringBuilder buf = new StringBuilder();
+		int indent = 0, i = 0;
+		while (indent < len)
+		{
+			char c = indentStr.charAt(i);
+			if (c == ' ')
+			{
+				indent++;
+				buf.append(c);
+			}
+			else if (c == '\t')
+			{
+				if (indent + tabSize > len)
+				{
+					for (; indent < len; indent++)
+						buf.append(' ');
+				}
+				else
+				{
+					indent += tabSize;
+					buf.append(c);
+				}
+			}
+		}
+		return buf.toString();
+	} //}}}
+	
 	//{{{ createWhiteSpace() method
 	/**
 	 * Creates a string of white space with the specified length.<p>
