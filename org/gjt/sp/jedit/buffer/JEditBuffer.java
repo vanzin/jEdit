@@ -976,7 +976,7 @@ public class JEditBuffer
 		int idealIndent = getIdealIndentForLine(lineIndex, prevLineIndex,
 			prevLineIndent);
 
-		if (idealIndent == -1 ||
+		if (idealIndent == -1 || idealIndent == currentIndent ||
 			(!canDecreaseIndent && idealIndent < currentIndent))
 			return false;
 
@@ -988,10 +988,17 @@ public class JEditBuffer
 			int start = getLineStartOffset(lineIndex);
 
 			remove(start,whitespaceChars[0]);
-			String prevIndentString = StandardUtilities.getIndentString(
-				getLineText(prevLineIndex));
-			String indentString = prevIndentString;
-			if (idealIndent == prevLineIndent)
+			String prevIndentString = (prevLineIndex >= 0) ?
+				StandardUtilities.getIndentString(getLineText(
+					prevLineIndex)) : null;
+			String indentString;
+			if (prevIndentString == null)
+			{
+				indentString = StandardUtilities.createWhiteSpace(
+					idealIndent,
+					getBooleanProperty("noTabs") ? 0 : getTabSize());
+			}
+			else if (idealIndent == prevLineIndent)
 				indentString = prevIndentString;
 			else if (idealIndent < prevLineIndent)
 				indentString = StandardUtilities.truncateWhiteSpace(
