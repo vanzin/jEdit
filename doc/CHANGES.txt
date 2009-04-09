@@ -95,6 +95,9 @@ and Marcelo Vanzin for contributing to this release.
 - Fixed #2609091: Windows appear out of view. Caused by starting jEdit in a
   single monitor environment, where last time it ran in the 2nd monitor of a
   dual monitor environment. (Shlomy Reinstein)
+
+- Fixed #1593576: Autoindenting should copy exact whitespaces.
+  (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 

@@ -1056,10 +1056,27 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * Returns the ideal leading indent for the specified line.
 	 * This will apply the various auto-indent rules.
 	 * @param lineIndex The line number
+	 */
+	public int getIdealIndentForLine(int lineIndex)
+	{
+		int prevLineIndex = getPriorNonEmptyLine(lineIndex);
+		int oldIndent = prevLineIndex == -1 ? 0 :
+			StandardUtilities.getLeadingWhiteSpaceWidth(
+			getLineSegment(prevLineIndex),
+			getTabSize());
+		return getIdealIndentForLine(lineIndex, prevLineIndex,
+			oldIndent);
+	} //}}}
+
+	//{{{ getIdealIndentForLine() method
+	/**
+	 * Returns the ideal leading indent for the specified line.
+	 * This will apply the various auto-indent rules.
+	 * @param lineIndex The line number
 	 * @param prevLineIndex The index of the previous non-empty line
 	 * @param oldIndent The indent width of the previous line (or 0)
 	 */
-	public int getIdealIndentForLine(int lineIndex, int prevLineIndex,
+	private int getIdealIndentForLine(int lineIndex, int prevLineIndex,
 		int oldIndent)
 	{
 		int prevPrevLineIndex = prevLineIndex < 0 ? -1
