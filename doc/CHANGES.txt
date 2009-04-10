@@ -127,6 +127,9 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
   (Matthieu Casanova)
 
 - Implemented feature request #2668434: fullscreen-mode. (Shlomy Reinstein)
+
+- When creating a directory in the VFS Browser the parent directory is expanded
+  if it was closed (Matthieu Casanova)
 }}}
 {{{ API Changes
 

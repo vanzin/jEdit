@@ -797,7 +797,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 
 		// if a directory is selected, create new dir in there.
 		// if a file is selected, create new dir inside its parent.
-		VFSFile[] selected = getSelectedFiles();
+		final VFSFile[] selected = getSelectedFiles();
 		String parent;
 		if(selected.length == 0)
 			parent = path;
@@ -831,6 +831,19 @@ public class VFSBrowser extends JPanel implements EBComponent,
 			public void run()
 			{
 				endRequest();
+				if (selected.length != 0 && selected[0].getType() != VFSFile.FILE)
+				{
+					VFSDirectoryEntryTable directoryEntryTable = browserView.getTable();
+					int selectedRow = directoryEntryTable.getSelectedRow();
+					VFSDirectoryEntryTableModel model = (VFSDirectoryEntryTableModel) directoryEntryTable.getModel();
+					VFSDirectoryEntryTableModel.Entry entry = model.files[selectedRow];
+					if (!entry.expanded)
+					{
+						browserView.clearExpansionState();
+						browserView.loadDirectory(entry,entry.dirEntry.getPath(),
+							false);
+					}
+				}
 			}
 		});
 	} //}}}
