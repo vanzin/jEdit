@@ -1007,7 +1007,8 @@ public class JEditBuffer
 				indentString = prevIndentString +
 					StandardUtilities.createWhiteSpace(
 						idealIndent - prevLineIndent,
-						getBooleanProperty("noTabs") ? 0 : getTabSize());
+						getBooleanProperty("noTabs") ? 0 : getTabSize(),
+						prevLineIndent);
 			insert(start, indentString);
 		}
 		finally
