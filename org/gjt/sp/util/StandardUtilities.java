@@ -234,8 +234,8 @@ loop:		for(int i = 0; i < str.length(); i++)
 		String indentStr)
 	{
 		StringBuilder buf = new StringBuilder();
-		int indent = 0, i = 0;
-		while (indent < len)
+		int indent = 0;
+		for (int i = 0; indent < len && i < indentStr.length(); i++)
 		{
 			char c = indentStr.charAt(i);
 			if (c == ' ')
