@@ -98,6 +98,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Fixed #1593576: Autoindenting should copy exact whitespaces.
   (Shlomy Reinstein)
+
+- Fixed #2744708: Deleted file doesn't show as dirty buffer. (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 
