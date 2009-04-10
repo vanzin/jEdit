@@ -11,8 +11,7 @@
 				FILE_NAME_GLOB="*.as" />
 
 <MODE NAME="ada"		FILE="ada.xml"
-            FILE_NAME_GLOB="*.{ada,adb,ads}"/>
-
+            			FILE_NAME_GLOB="*.{ada,adb,ads}"/>
 
 <MODE NAME="ada95"		FILE="ada95.xml" />
 
@@ -21,7 +20,6 @@
 
 <MODE NAME="apacheconf"		FILE="apacheconf.xml"
 				FILE_NAME_GLOB="*httpd.conf" />
-
 
 <MODE NAME="apdl"		FILE="apdl.xml"
 				FILE_NAME_GLOB="*.{ans,inp,mak,mac}" />
@@ -89,7 +87,7 @@
 <MODE NAME="clips"		FILE="clips.xml"
 				FILE_NAME_GLOB="*.clp" />
 
-<MODE NAME="clojure" FILE="clojure.xml" />
+<MODE NAME="clojure" 		FILE="clojure.xml" />
 
 <MODE NAME="cmake"		FILE="cmake.xml"
 				FILE_NAME_GLOB="CMakeLists.txt"/>
@@ -157,9 +155,9 @@
 				FILE_NAME_GLOB="*.ftl"
 				FIRST_LINE_GLOB="&lt;\#ftl*"/>
 
-<MODE NAME="gcbasic" FILE="gcbasic.xml"
-    FILE_NAME_GLOB="*.{gc,gcb}"
-    FIRST_LINE_GLOB="{*GCBASIC*,*Great Cow BASIC*}" />
+<MODE NAME="gcbasic" 		FILE="gcbasic.xml"
+				FILE_NAME_GLOB="*.{gc,gcb}"
+				FIRST_LINE_GLOB="{*GCBASIC*,*Great Cow BASIC*}" />
 
 <MODE NAME="gettext"		FILE="gettext.xml"
 				FILE_NAME_GLOB="*.{po,pot}" />
@@ -212,8 +210,8 @@
 <MODE NAME="io"			FILE="io.xml"
 				FILE_NAME_GLOB="*.io" />
 
-<MODE NAME="javacc" FILE="javacc.xml"
-        FILE_NAME_GLOB="*.{jj,jjt}"/>
+<MODE NAME="javacc"		FILE="javacc.xml"
+				FILE_NAME_GLOB="*.{jj,jjt}"/>
 
 <MODE NAME="java"		FILE="java.xml"
 				FILE_NAME_GLOB="*.java" />
@@ -279,7 +277,7 @@
 <MODE NAME="mqsc"		FILE="mqsc.xml"
 				FILE_NAME_GLOB="*.mqsc" />
 
-<MODE NAME="myghty"			FILE="myghty.xml"
+<MODE NAME="myghty"		FILE="myghty.xml"
 				FILE_NAME_GLOB="{autohandler,dhandler,*.myt}"/>
 
 <MODE NAME="mysql"		FILE="mysql.xml" />
@@ -334,11 +332,14 @@
 <MODE NAME="postscript"		FILE="postscript.xml"
 				FILE_NAME_GLOB="*.{ps,eps}" />
 
+<MODE NAME="povray"		FILE="povray.xml"
+				FILE_NAME_GLOB="*.{pov,povray}" />
+
 <MODE NAME="powerdynamo"	FILE="powerdynamo.xml"
 				FILE_NAME_GLOB="*.{ssc,stm}" />
 
-<MODE NAME="povray"		FILE="povray.xml"
-				FILE_NAME_GLOB="*.{pov,povray}" />
+<MODE NAME="powershell"		FILE="powershell.xml"
+				FILE_NAME_GLOB="*.ps1" />
 
 <MODE NAME="prolog"             FILE="prolog.xml"
                                 FILE_NAME_GLOB="*.pro" />
@@ -384,8 +385,8 @@
 				FILE_NAME_GLOB="*.{rst,rest}"
 				FIRST_LINE_GLOB="{===,~~~}*"/>
 
-<MODE NAME="rfc" FILE="rfc.xml"
-                FILE_NAME_GLOB="rfc*.txt" />
+<MODE NAME="rfc"		FILE="rfc.xml"
+				FILE_NAME_GLOB="rfc*.txt" />
 
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
@@ -398,7 +399,7 @@
 
 <MODE NAME="ruby"		FILE="ruby.xml"
 				FILE_NAME_GLOB="*.{rb,rbw}"
-	            FIRST_LINE_GLOB="#!*/*ruby*" />
+				FIRST_LINE_GLOB="#!*/*ruby*" />
 
 <MODE NAME="rview"		FILE="rview.xml"
 				FILE_NAME_GLOB="*.rvw" />
@@ -466,8 +467,8 @@
 <MODE NAME="text"		FILE="text.xml"
 				FILE_NAME_GLOB="*.txt" />
 
-<MODE NAME="tsp" FILE="tsp.xml"
-                FILE_NAME_GLOB="*.tsp" />
+<MODE NAME="tsp"		FILE="tsp.xml"
+				FILE_NAME_GLOB="*.tsp" />
 
 <MODE NAME="tpl"		FILE="tpl.xml"
 				FILE_NAME_GLOB="*.tpl" />
@@ -499,8 +500,8 @@
 <MODE NAME="vhdl"		FILE="vhdl.xml"
 				FILE_NAME_GLOB="*.vh*" />
 
-<MODE NAME="vrml2" FILE="vrml2.xml"
-                FILE_NAME_GLOB="*.{wrl,wrz}"/>
+<MODE NAME="vrml2"		FILE="vrml2.xml"
+				FILE_NAME_GLOB="*.{wrl,wrz}"/>
 
 <MODE NAME="xml"		FILE="xml.xml"
 				FILE_NAME_GLOB="*.{xml,xhtml,xsd,qrc,ui}"
@@ -512,11 +513,10 @@
 <MODE NAME="xsl"		FILE="xsl.xml"
 				FILE_NAME_GLOB="*.xsl" />
 
-<MODE NAME="yaml" FILE="yaml.xml"
-                FILE_NAME_GLOB="*.{yml,yaml}" />
+<MODE NAME="yaml"		FILE="yaml.xml"
+				FILE_NAME_GLOB="*.{yml,yaml}" />
 
 <MODE NAME="zpt"		FILE="zpt.xml"
 				FILE_NAME_GLOB="*.{pt,zpt}"/>
-
 
 </MODES>
