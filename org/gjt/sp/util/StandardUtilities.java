@@ -245,14 +245,15 @@ loop:		for(int i = 0; i < str.length(); i++)
 			}
 			else if (c == '\t')
 			{
-				if (indent + tabSize > len)
+				int withTab = indent + tabSize - (indent % tabSize);
+				if (withTab > len)
 				{
 					for (; indent < len; indent++)
 						buf.append(' ');
 				}
 				else
 				{
-					indent += tabSize;
+					indent = withTab;
 					buf.append(c);
 				}
 			}
