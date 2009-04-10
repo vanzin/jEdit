@@ -641,6 +641,8 @@ public class Buffer extends JEditBuffer
 				if(!file.exists())
 				{
 					setFlag(NEW_FILE,true);
+					EditBus.send(new BufferUpdate(this,null,
+							BufferUpdate.CREATED));
 					setDirty(true);
 					return FILE_DELETED;
 				}
