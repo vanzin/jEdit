@@ -39,14 +39,13 @@ public class EditPaneUpdate extends EBMessage
 	 * Edit pane destroyed.
 	 */
 	public static final Object DESTROYED = "DESTROYED";
-
 	/**
 	 * The current buffer in the EditPane has changed to show a different buffer. This
 	 * happens when an action results in a call to EditPane.setBuffer().
 	 */
 	public static final Object BUFFER_CHANGED = "BUFFER_CHANGED";
 	/**
-	 * Edit pane position is about to change in a major way
+	 * Edit pane caret position is about to change in a major way
 	 */
 	public static final Object POSITION_CHANGING = "POSITION_CHANGING";
 	/**
@@ -56,7 +55,7 @@ public class EditPaneUpdate extends EBMessage
 	public static final Object BUFFER_CHANGING = "BUFFER_CHANGING";
 
 	/**
-	 * The bufferSet of the EditPane was changed.
+	 * The bufferSet scope of the EditPane was changed.
 	 * @since 4.3pre15
 	 */
 	public static final Object BUFFERSET_CHANGED = "BUFFERSET_CHANGED";
