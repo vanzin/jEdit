@@ -641,8 +641,6 @@ public class Buffer extends JEditBuffer
 				if(!file.exists())
 				{
 					setFlag(NEW_FILE,true);
-					EditBus.send(new BufferUpdate(this,null,
-							BufferUpdate.CREATED));
 					setDirty(true);
 					return FILE_DELETED;
 				}
@@ -868,8 +866,7 @@ public class Buffer extends JEditBuffer
 		if (isNewFile() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"))
 			d = false;
 		if (d && getLength() == initialLength) {
-			if (isNewFile()) d = false;
-			else if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
+			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
 				d = !Arrays.equals(calculateHash(), md5hash);
 		}
 		super.setDirty(d);
