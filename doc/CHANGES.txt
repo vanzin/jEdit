@@ -133,6 +133,9 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 }}}
 {{{ API Changes
 
+- Removed deprecated org.gjt.sp.jedit.msg.CaretChanging. Use PositionChanging
+  instead - the former is no longer being used. (Alan Ezust)
+
 - The keybindings are reloaded when the properties are changed in the standalone
   textarea, and the StandaloneActionSet now takes an url to the actions.xml
   as constructor parameter (patch #2304608) (Dakshinamurthy Karra)
