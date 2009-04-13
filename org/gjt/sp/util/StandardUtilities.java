@@ -94,14 +94,13 @@ public class StandardUtilities
 	 */
 	public static String getIndentString(String str)
 	{
-
 		StringBuilder indentString = new StringBuilder();
-		int idx = 0;
-		char ch = str.charAt(idx);
-		while (idx < str.length() && Character.isWhitespace(ch)) {
+		for (int i = 0; i < str.length(); i++)
+		{
+			char ch = str.charAt(i);
+			if (! Character.isWhitespace(ch))
+				break;
 			indentString.append(ch);
-			idx++;
-			ch = str.charAt(idx);
 		}
 		return indentString.toString();
 
