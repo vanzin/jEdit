@@ -1,39 +1,43 @@
 /**
-	ToggleHeaderSource.bsh V1.3
-	by Alan Ezust  
+	ToggleHeaderSource.bsh V1.4
+	by Alan Ezust
 	$Id$
-	
+
 	A jedit beanshell macro that toggles your current buffer
 	between the header file (.h) and the source file (.c(pp|xx)?).
-	
+
 	Enables you to switch the current text
 	buffer between C/C++ header and sourcecode
 	file. If the file does not already exist, it opens a new buffer
-	of that name for you. 
-	
+	of that name for you.
+
 	New to 1.2: If another buffer is already open with the requested
 	filename, it is selected, even if located in another directory.
-	
+
 	New to 1.3: If another EditPane is already open with the
-	requested buffer, it is selected and focused.  
-	
+	requested buffer, it is selected and focused.
+
+	New to 1.4: Instead of throwing an exception, treats
+	files with no extension as header files, and tries to
+	open .cpp file with same basename.
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or any later version.
-	
+
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-	
+
 	You should have received a copy of the GNU General Public License
 	along with the jEdit program; if not, write to the Free Software
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
  */
 
-String defaultSourceExtension = "cpp";  
+String defaultSourceExtension = "cpp";
 
 String[] sourceExtensions = new String[]{"cpp", "c", "cxx" };
 
@@ -54,7 +58,7 @@ String findBuffer(String fileName) {
     }
     return null;
 }
-   
+
 /** Given a header file, iterates through all sourcefile extensions checking if the sourcefile exists.
    @return the absolute path of the sourcefile for this header
 */
@@ -62,17 +66,17 @@ String findBuffer(String fileName) {
 String getSourceFile(String baseName)
 {
     int numExt = sourceExtensions.length;
-    for (int i=numExt-1; i>=0; --i) 
+    for (int i=numExt-1; i>=0; --i)
     {
         String ext = sourceExtensions[i];
         String tryFile = baseName + "." + ext;
         String path = findBuffer(tryFile);
         if (path != null) return path;
-    }        
+    }
     return baseName + "." + defaultSourceExtension;
 }
 
-boolean isSourceFile(String extension) 
+boolean isSourceFile(String extension)
 {
     for (int i=0; i<sourceExtensions.length; ++i) {
         if (extension.equals(sourceExtensions[i])) return true;
@@ -82,32 +86,35 @@ boolean isSourceFile(String extension)
 
 void toggleHeaderSource()
 {
-
     String currentFile = buffer.getPath();
     int pos = currentFile.lastIndexOf('.');
-    String extension = currentFile.substring(pos+1);
-    String baseName = currentFile.substring(0, pos);
 	String path = null;
-    if (isSourceFile(extension)) 
-    {
-        path = findBuffer(baseName + ".h");
-        if (path == null) path = baseName + ".h";
+    if (pos < 0) {
+        path = getSourceFile(currentFile);
     }
-    else if (extension.equals("h")) {
-        path = getSourceFile(baseName);
+    else {
+        String baseName = currentFile.substring(0, pos);
+        String extension = currentFile.substring(pos+1);
+        if (isSourceFile(extension))
+            {
+                path = findBuffer(baseName + ".h");
+                if (path == null) path = baseName + ".h";
+            }
+        else if (extension.equals("h")) {
+            path = getSourceFile(baseName);
+        }
     }
 	if (path == null) return;
 	// see if it is already open in another editpane
 	panes = view.getEditPanes();
-	if (panes.length > 1) 
+	if (panes.length > 1)
 		for (int i=panes.length - 1; i >= 0; --i) {
 			buf = panes[i].getBuffer();
-			if (buf.getName().equals(path) 
+			if (buf.getName().equals(path)
 			|| buf.getPath().equals(path)) {
 				panes[i].focusOnTextArea();
 				return;
 			}
-		
 	}
 	jEdit.openFile(view, path);
 }
