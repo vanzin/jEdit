@@ -132,3 +132,24 @@ s(search,replace,flags)
 // );
 
 /*}}}*/
+
+/*{{{ Keep predefined BeanShell variables up to date after changing
+      view / edit pane / buffer.*/
+
+updateViewPredefinedVariables()
+{
+	view = jEdit.getActiveView();
+	editPane = view.getEditPane();
+	buffer = editPane.getBuffer();
+	textArea = editPane.getTextArea();
+	wm = view.getDockableWindowManager();
+}
+
+updateEditPanePredefinedVariables(View view)
+{
+	editPane = view.getEditPane();
+	buffer = editPane.getBuffer();
+	textArea = editPane.getTextArea();
+}
+
+/*}}}*/

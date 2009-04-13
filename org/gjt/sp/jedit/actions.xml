@@ -114,12 +114,14 @@
 <ACTION NAME="close-buffer">
 	<CODE>
 		jEdit.closeBuffer(editPane,buffer);
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
 <ACTION NAME="global-close-buffer">
 	<CODE>
 		jEdit.closeBuffer(view,buffer);
+		buffer = view.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -132,6 +134,7 @@
 <ACTION NAME="close-view">
 	<CODE>
 		jEdit.closeView(view);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
@@ -284,18 +287,21 @@
 <ACTION NAME="eval" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		BeanShell.showEvaluateDialog(view);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
 <ACTION NAME="eval-for-selected-lines">
 	<CODE>
 		BeanShell.showEvaluateLinesDialog(view);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
 <ACTION NAME="eval-selection">
 	<CODE>
 		BeanShell.evalSelection(view,textArea);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
@@ -373,16 +379,19 @@
 <ACTION NAME="global-bufferset">
 	<CODE>
 		editPane.setBufferSetScope(BufferSet.Scope.global);
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 <ACTION NAME="view-bufferset">
 	<CODE>
 		editPane.setBufferSetScope(BufferSet.Scope.view);
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 <ACTION NAME="editpane-bufferset">
 	<CODE>
 		editPane.setBufferSetScope(BufferSet.Scope.editpane);
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -397,6 +406,7 @@
 		view.getInputHandler().readNextChar(
 			buffer.getMarkerStatusPrompt("goto-marker"),
 			"editPane.goToMarker(__char__,false);");
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -492,6 +502,7 @@
 <ACTION NAME="last-action" NO_RECORD="TRUE" NO_REMEMBER_LAST="TRUE">
 	<CODE>
 		view.getInputHandler().invokeLastAction();
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
@@ -500,7 +511,10 @@
 		if(Macros.getLastMacro() == null)
 			view.getToolkit().beep();
 		else
+		{
 			Macros.getLastMacro().invoke(view);
+			updateViewPredefinedVariables();
+		}
 	</CODE>
 </ACTION>
 
@@ -561,6 +575,7 @@
 <ACTION NAME="new-file">
 	<CODE>
 		jEdit.newFile(view);
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -582,6 +597,7 @@
 			Buffer newBuffer = jEdit.newFile(view);
 			view.goToBuffer(newBuffer);
 			newBuffer.setMode(choice);
+			buffer = newBuffer;
 		}
 	</CODE>
 </ACTION>
@@ -589,12 +605,14 @@
 <ACTION NAME="new-plain-view">
 	<CODE>
 		jEdit.newView(view,buffer,true);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
 <ACTION NAME="new-view">
 	<CODE>
 		jEdit.newView(view);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
@@ -607,6 +625,7 @@
 <ACTION NAME="next-buffer">
 	<CODE>
 		editPane.nextBuffer();
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -649,6 +668,7 @@
 <ACTION NAME="next-textarea">
 	<CODE>
 		view.nextTextArea();
+		updateEditPanePredefinedVariables(view);
 	</CODE>
 </ACTION>
 
@@ -667,6 +687,7 @@
 <ACTION NAME="open-file">
 	<CODE>
 		GUIUtilities.showVFSFileDialog(view,null,VFSBrowser.BROWSER_DIALOG,true);
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -764,6 +785,7 @@
 <ACTION NAME="prev-buffer">
 	<CODE>
 		editPane.prevBuffer();
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -806,6 +828,7 @@
 <ACTION NAME="prev-textarea">
 	<CODE>
 		view.prevTextArea();
+		updateEditPanePredefinedVariables(view);
 	</CODE>
 </ACTION>
 
@@ -871,6 +894,7 @@
 <ACTION NAME="recent-buffer">
 	<CODE>
 		view.getEditPane().recentBuffer();
+		buffer = editPane.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -953,6 +977,7 @@
 <ACTION NAME="resplit">
 	<CODE>
 		view.resplit();
+		updateEditPanePredefinedVariables(view);
 	</CODE>
 </ACTION>
 
@@ -965,12 +990,14 @@
 <ACTION NAME="run-other-macro">
 	<CODE>
 		Macros.showRunScriptDialog(view);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
 <ACTION NAME="run-temp-macro" NO_RECORD="TRUE">
 	<CODE>
 		Macros.runTemporaryMacro(view);
+		updateViewPredefinedVariables();
 	</CODE>
 </ACTION>
 
@@ -1305,18 +1332,21 @@
 <ACTION NAME="split-horizontal">
 	<CODE>
 		view.splitHorizontally();
+		updateEditPanePredefinedVariables(view);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="split-vertical">
 	<CODE>
 		view.splitVertically();
+		updateEditPanePredefinedVariables(view);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="stop-recording" NO_RECORD="TRUE">
 	<CODE>
 		Macros.stopRecording(view);
+		buffer = view.getBuffer();
 	</CODE>
 </ACTION>
 
@@ -1443,12 +1473,14 @@
 <ACTION NAME="unsplit">
 	<CODE>
 		view.unsplit();
+		updateEditPanePredefinedVariables(view);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="unsplit-current">
 	<CODE>
 		view.unsplitCurrent();
+		updateEditPanePredefinedVariables(view);
 	</CODE>
 </ACTION>
 
