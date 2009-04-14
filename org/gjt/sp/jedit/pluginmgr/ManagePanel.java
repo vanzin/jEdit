@@ -176,7 +176,7 @@ public class ManagePanel extends JPanel
 
 	// {{{ class ManagePanelRestoreHandler
 	/**
-	 * For handling the XML parse events of a plugin set. 
+	 * For handling the XML parse events of a plugin set.
 	 * Selects the same plugins that are in that set.
 	 * @since jEdit 4.3pre10
 	 */
@@ -191,10 +191,10 @@ public class ManagePanel extends JPanel
 
 
 		@Override
-		public void startElement(String uri, String localName, 
-							String qName, Attributes attrs) throws SAXException 
+		public void startElement(String uri, String localName,
+							String qName, Attributes attrs) throws SAXException
 		{
-			if (localName.equals("plugin")) 
+			if (localName.equals("plugin"))
 			{
 				String jarName = attrs.getValue("jar");
 				String name = attrs.getValue("name");
@@ -205,9 +205,9 @@ public class ManagePanel extends JPanel
 			}
 		}
 	}//}}}
-	
+
 	//{{{ loadPluginSet() method
-	boolean loadPluginSet(String path) 
+	boolean loadPluginSet(String path)
 	{
 		VFS vfs = VFSManager.getVFSForPath(path);
 		Object session = vfs.createVFSSession(path, this);
@@ -217,15 +217,15 @@ public class ManagePanel extends JPanel
 			XMLUtilities.parseXML(is, new ManagePanelRestoreHandler());
 			is.close();
 			int rowCount = pluginModel.getRowCount();
-			for (int i=0 ; i<rowCount ; i++) 
+			for (int i=0 ; i<rowCount ; i++)
 			{
 				Entry ent = pluginModel.getEntry(i);
 				String name = ent.name;
-				if (name != null) 
+				if (name != null)
 				{
 					pluginModel.setValueAt(selectedPlugins.contains(name), i, 0);
 				}
-				else 
+				else
 				{
 					String jarPath = ent.jar;
 					String jarName = jarPath.substring(1 + jarPath.lastIndexOf(File.separatorChar));
@@ -238,9 +238,9 @@ public class ManagePanel extends JPanel
 						Log.log(Log.WARNING, this, "Exception thrown loading: " + jarName);
 					}
 				}
-			}			
+			}
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			Log.log(Log.ERROR, this, "Loading Pluginset Error", e);
 			return false;
@@ -287,7 +287,7 @@ public class ManagePanel extends JPanel
 		jarList.add(jarName);
 		return jarList;
 	}//}}}
-	
+
 	//{{{ Inner classes
 
 	//{{{ KeyboardCommand enum
@@ -639,9 +639,9 @@ public class ManagePanel extends JPanel
 		private void unloadPluginJAR(PluginJAR jar)
 		{
 			String[] dependents = jar.getDependentPlugins();
-			for (String dependent : dependents) 
+			for (String dependent : dependents)
 			{
-				if (!unloaded.containsKey(dependent)) 
+				if (!unloaded.containsKey(dependent))
 				{
 					unloaded.put(dependent, Boolean.TRUE);
 					PluginJAR _jar = jEdit.getPluginJAR(dependent);
@@ -762,7 +762,7 @@ public class ManagePanel extends JPanel
 	/**
 	 * Permits the user to restore the state of the ManagePanel
 	 * based on a PluginSet.
-	 * 
+	 *
 	 * Selects all loaded plugins that appear in an .XML file, and deselects
 	 * all others, and also sets the pluginset to that .XML file. Does not install any plugins
 	 * that were not previously installed.
@@ -781,9 +781,9 @@ public class ManagePanel extends JPanel
 
 		public void actionPerformed(ActionEvent e)
 		{
-			String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, 
-				jEdit.getSettingsDirectory() + File.separator); 
-			String[] selectedFiles = GUIUtilities.showVFSFileDialog(ManagePanel.this.window, 
+			String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET,
+				jEdit.getSettingsDirectory() + File.separator);
+			String[] selectedFiles = GUIUtilities.showVFSFileDialog(ManagePanel.this.window,
 				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
 			if (selectedFiles == null || selectedFiles.length != 1) return;
 			path = selectedFiles[0];
@@ -792,10 +792,10 @@ public class ManagePanel extends JPanel
 				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path);
 				EditBus.send(new PropertiesChanged(PluginManager.getInstance()));
 			}
-			
+
 		}
 	}//}}}
-	
+
 	//{{{ SaveButton class
 	/**
 	 * Permits the user to save the state of the ManagePanel,
@@ -814,10 +814,10 @@ public class ManagePanel extends JPanel
 			setEnabled(true);
 		}
 
-		void saveState(String vfsURL, List<Entry> pluginList) 
+		void saveState(String vfsURL, List<Entry> pluginList)
 		{
 			StringBuilder sb = new StringBuilder("<pluginset>\n ");
-			
+
 			for (Entry entry: pluginList)
 			{
 				String jarName = entry.jar.substring(1+entry.jar.lastIndexOf(File.separatorChar));
@@ -825,14 +825,14 @@ public class ManagePanel extends JPanel
 				sb.append(jarName).append("\" />\n ");
 			}
 			sb.append("</pluginset>\n");
-			
+
 			VFS vfs = VFSManager.getVFSForPath(vfsURL);
 			Object session = vfs.createVFSSession(vfsURL, ManagePanel.this);
-			OutputStream os = null;
+			Writer writer = null;
 			try
 			{
-				os = vfs._createOutputStream(session, vfsURL, ManagePanel.this);
-				OutputStreamWriter writer = new OutputStreamWriter(os);
+				OutputStream os = vfs._createOutputStream(session, vfsURL, ManagePanel.this);
+				writer = new BufferedWriter(new OutputStreamWriter(os));
 				writer.write(sb.toString());
 			}
 			catch (Exception e)
@@ -841,11 +841,11 @@ public class ManagePanel extends JPanel
 			}
 			finally
 			{
-				IOUtilities.closeQuietly(os);
+				IOUtilities.closeQuietly(writer);
 			}
-			
+
 		}
-		
+
 		public void actionPerformed(ActionEvent e)
 		{
 			String path = jEdit.getProperty("plugin-manager.pluginset.path", jEdit.getSettingsDirectory() + File.separator);
@@ -855,7 +855,7 @@ public class ManagePanel extends JPanel
 			String[] fileselections = fileChooser.getSelectedFiles();
 			List<Entry> pluginSelections = new ArrayList<Entry>();
 			if (fileselections == null || fileselections.length != 1) return;
-			
+
 			PluginJAR[] jars = jEdit.getPluginJARs();
 			for (PluginJAR jar : jars) {
 				if (jar.getPlugin() != null) {
@@ -871,7 +871,7 @@ public class ManagePanel extends JPanel
 
 	//{{{ RemoveButton class
 	/**
-	 * The Remove button is the button pressed to remove the selected 
+	 * The Remove button is the button pressed to remove the selected
 	 * plugin.
 	 */
 	private class RemoveButton extends JButton implements ListSelectionListener, ActionListener
@@ -932,7 +932,7 @@ public class ManagePanel extends JPanel
 				null,listModel.toArray());
 			if(button == JOptionPane.YES_OPTION)
 			{
-				
+
 				List<String> closureSet = new ArrayList<String>();
 				PluginJAR.transitiveClosure(loadedJarsToRemove.toArray(new String[loadedJarsToRemove.size()]), closureSet);
 				closureSet.removeAll(listModel);
@@ -1272,12 +1272,12 @@ public class ManagePanel extends JPanel
 	private class KeyboardAction extends AbstractAction
 	{
 		private KeyboardCommand command = KeyboardCommand.NONE;
-		
+
 		KeyboardAction(KeyboardCommand command)
 		{
 			this.command = command;
 		}
-		
+
 		public void actionPerformed(ActionEvent evt)
 		{
 			switch (command)
@@ -1323,7 +1323,7 @@ public class ManagePanel extends JPanel
 			}
 		}
 	} //}}}
-	
+
 	//{{{ TableSelectionListener class
 	private class TableSelectionListener implements ListSelectionListener
 	{
@@ -1333,7 +1333,7 @@ public class ManagePanel extends JPanel
 			if (row != -1)
 			{
 				Entry entry = pluginModel.getEntry(row);
-				pluginDetailPanel.setPlugin(entry);				
+				pluginDetailPanel.setPlugin(entry);
 			}
 		}
 	} //}}}

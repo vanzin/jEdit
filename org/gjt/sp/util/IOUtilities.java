@@ -181,6 +181,16 @@ public class IOUtilities
 	{
 		if(out != null)
 		{
+			try {
+				if (out instanceof Flushable)
+				{
+					((Flushable)out).flush();
+				}
+			}
+			catch (IOException e)
+			{
+				// ignore
+			}
 			try
 			{
 				out.close();
@@ -214,6 +224,36 @@ public class IOUtilities
 	}
 
 	/**
+	 * Method that will close a {@link Writer} ignoring it if it is null and ignoring exceptions.
+	 *
+	 * @param out the Writer to close.
+	 */
+	public static void closeQuietly(Writer out)
+	{
+		if(out != null)
+		{
+			try {
+				if (out instanceof Flushable)
+				{
+					((Flushable)out).flush();
+				}
+			}
+			catch (IOException e)
+			{
+				// ignore
+			}
+			try
+			{
+				out.close();
+			}
+			catch (IOException e)
+			{
+				//ignore
+			}
+		}
+	}
+
+	/**
 	 * Method that will close an {@link java.io.Closeable} ignoring it if it is null and ignoring exceptions.
 	 *
 	 * @param closeable the closeable to close.
@@ -223,6 +263,16 @@ public class IOUtilities
 	{
 		if(closeable != null)
 		{
+			try {
+				if (closeable instanceof Flushable)
+				{
+					((Flushable)closeable).flush();
+				}
+			}
+			catch (IOException e)
+			{
+				// ignore
+			}
 			try
 			{
 				closeable.close();
