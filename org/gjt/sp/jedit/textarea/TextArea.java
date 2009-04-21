@@ -232,6 +232,7 @@ public abstract class TextArea extends JComponent
 	public void dispose()
 	{
 		DisplayManager.textAreaDisposed(this);
+		gutter.dispose();
 	} //}}}
 
 	//{{{ getInputHandler() method

@@ -30,6 +30,8 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+import org.gjt.sp.jedit.buffer.BufferAdapter;
+import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 //}}}
@@ -109,6 +111,23 @@ public class Gutter extends JComponent implements SwingConstants
 		mouseHandler = new MouseHandler();
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
+
+		bufferListener = new BufferAdapter() {
+			private void update() {
+				setFont(getFont());
+			}
+			public void bufferLoaded(JEditBuffer buffer) {
+				update();
+			}
+			public void contentInserted(JEditBuffer buffer, int startLine,
+					int offset, int numLines, int length) {
+				update();
+			}
+			public void contentRemoved(JEditBuffer buffer, int startLine,
+					int offset, int numLines, int length) {
+				update();
+			}
+		};
 
 		updateBorder();
 		setFoldPainter(textArea.getFoldPainter());
@@ -280,12 +299,40 @@ public class Gutter extends JComponent implements SwingConstants
 				+ insets.right;
 			collapsedSize.height = gutterSize.height
 				= insets.top + insets.bottom;
-			lineNumberWidth = fm.stringWidth("12345"); 
+			lineNumberWidth = fm.stringWidth(String.valueOf(getLineCount())); 
 			gutterSize.width = FOLD_MARKER_SIZE + insets.right
 				+ lineNumberWidth;
 		}
 
 		revalidate();
+	} //}}}
+
+	//{{{ getLineCount() method
+	private int getLineCount()
+	{
+		JEditBuffer buf = textArea.getBuffer();
+		if (buf != buffer)
+		{
+			if (buffer != null)
+				buffer.removeBufferListener(bufferListener);
+			buffer = buf;
+			if (buffer != null)
+				buffer.addBufferListener(bufferListener);
+		}
+		if (buffer == null)
+			return 99;
+		int count = buffer.getLineCount();
+		return (count < 99) ? 99 : count;
+	} //}}}
+
+	//{{{ dispose() method
+	void dispose()
+	{
+		if (buffer != null)
+		{
+			buffer.removeBufferListener(bufferListener);
+			buffer = null;
+		}
 	} //}}}
 
 	//{{{ setFont() method
@@ -303,7 +350,7 @@ public class Gutter extends JComponent implements SwingConstants
 		Border border = getBorder();
 		if(border != null)
 		{
-			lineNumberWidth = fm.stringWidth("12345"); 
+			lineNumberWidth = fm.stringWidth(String.valueOf(getLineCount())); 
 			gutterSize.width = FOLD_MARKER_SIZE
 				+ border.getBorderInsets(this).right
 				+ lineNumberWidth;
@@ -573,6 +620,8 @@ public class Gutter extends JComponent implements SwingConstants
 	private Border focusBorder, noFocusBorder;
 	
 	private FoldPainter foldPainter;
+	private JEditBuffer buffer;
+	private BufferListener bufferListener;
 	//}}}
 
 	//{{{ paintLine() method
