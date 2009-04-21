@@ -28,7 +28,7 @@
 
 		<!-- The rest of the javascript info -->
 
-        <SPAN TYPE="COMMENT3">
+		<SPAN TYPE="COMMENT3">
 			<BEGIN>/**</BEGIN>
 			<END>*/</END>
 		</SPAN>
@@ -53,7 +53,7 @@
 
 		<SEQ TYPE="COMMENT2">//--&gt;</SEQ>
 		<EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
-        <SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/" AT_WORD_START="TRUE">/[^\p{Blank}]*?/</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="MARKUP" HASH_CHAR="/" AT_WORD_START="TRUE">/[^\p{Blank}]*?/</SEQ_REGEXP>
 
 		<SEQ TYPE="COMMENT1">&lt;!--</SEQ>
 
