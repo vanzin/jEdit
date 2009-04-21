@@ -25,7 +25,6 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -46,9 +45,11 @@ import org.gjt.sp.jedit.msg.BufferChanging;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.options.GutterOptionPane;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.textarea.Gutter;
+import org.gjt.sp.jedit.textarea.GutterPopupHandler;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.textarea.MouseHandler;
 import org.gjt.sp.jedit.textarea.Selection;
@@ -57,7 +58,6 @@ import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.TextAreaExtension;
 import org.gjt.sp.jedit.textarea.TextAreaPainter;
 import org.gjt.sp.jedit.textarea.TextAreaTransferHandler;
-import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 
 //}}}
@@ -903,7 +903,19 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		textArea.setMouseHandler(new MouseHandler(textArea));
 		textArea.setTransferHandler(new TextAreaTransferHandler());
 		markerHighlight = new MarkerHighlight();
+		textArea.getGutter().setGutterEnabled(
+			GutterOptionPane.isGutterEnabled());
 		textArea.getGutter().addExtension(markerHighlight);
+		textArea.getGutter().setSelectionPopupHandler(
+			new GutterPopupHandler()
+			{
+				public void handlePopup(int x, int y, int line) {
+					Buffer buffer = getBuffer();
+					buffer.addOrRemoveMarker('\0',
+						buffer.getLineStartOffset(line));
+				}
+			});
+		
 		textArea.addStatusListener(new StatusHandler());
 		add(BorderLayout.CENTER,textArea);
 
@@ -1012,6 +1024,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		}
 
 		gutter.setFont(jEdit.getFontProperty("view.gutter.font"));
+		gutter.setGutterEnabled(GutterOptionPane.isGutterEnabled());
 
 		int width = jEdit.getIntegerProperty(
 			"view.gutter.borderWidth",3);

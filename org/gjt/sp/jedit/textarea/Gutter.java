@@ -98,6 +98,7 @@ public class Gutter extends JComponent implements SwingConstants
 	public Gutter(TextArea textArea)
 	{
 		this.textArea = textArea;
+		enabled = true;
 
 		setAutoscrolls(true);
 		setOpaque(true);
@@ -275,11 +276,13 @@ public class Gutter extends JComponent implements SwingConstants
 		else
 		{
 			Insets insets = border.getBorderInsets(this);
-			collapsedSize.width = FOLD_MARKER_SIZE + insets.right;
+			collapsedSize.width = FOLD_MARKER_SIZE + SELECTION_GUTTER_WIDTH
+				+ insets.right;
 			collapsedSize.height = gutterSize.height
 				= insets.top + insets.bottom;
+			lineNumberWidth = fm.stringWidth("12345"); 
 			gutterSize.width = FOLD_MARKER_SIZE + insets.right
-				+ fm.stringWidth("12345");
+				+ lineNumberWidth;
 		}
 
 		revalidate();
@@ -300,13 +303,22 @@ public class Gutter extends JComponent implements SwingConstants
 		Border border = getBorder();
 		if(border != null)
 		{
+			lineNumberWidth = fm.stringWidth("12345"); 
 			gutterSize.width = FOLD_MARKER_SIZE
 				+ border.getBorderInsets(this).right
-				+ fm.stringWidth("12345");
+				+ lineNumberWidth;
 			revalidate();
 		}
 	} //}}}
 
+	//{{{ setGutterEnabled() method
+	/* Enables showing or hiding the gutter. */
+	public void setGutterEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
+		revalidate();
+	} //}}}
+	
 	//{{{ Getters and setters
 
 	//{{{ getHighlightedForeground() method
@@ -356,6 +368,8 @@ public class Gutter extends JComponent implements SwingConstants
 	 */
 	public Dimension getPreferredSize()
 	{
+		if (! enabled)
+			return disabledSize;
 		if (expanded)
 			return gutterSize;
 		else
@@ -512,6 +526,11 @@ public class Gutter extends JComponent implements SwingConstants
 		repaint();
 	} //}}}
 
+	public void setSelectionPopupHandler(GutterPopupHandler handler)
+	{
+		mouseHandler.selectionPopupHandler = handler;
+	}
+
 	public void setMouseActionsProvider(MouseActionsProvider mouseActionsProvider)
 	{
 		mouseHandler.mouseActions = mouseActionsProvider;
@@ -522,13 +541,18 @@ public class Gutter extends JComponent implements SwingConstants
 
 	//{{{ Instance variables
 	private static final int FOLD_MARKER_SIZE = 12;
+	private static final int SELECTION_GUTTER_WIDTH = 12;
+		// The selection gutter exists only if the gutter is not expanded
 
+	private boolean enabled;
 	private final TextArea textArea;
 	private MouseHandler mouseHandler;
 	private ExtensionManager extensionMgr;
 
 	private Dimension gutterSize = new Dimension(0,0);
 	private Dimension collapsedSize = new Dimension(0,0);
+	private int lineNumberWidth;
+	private Dimension disabledSize = new Dimension(0,0);
 
 	private Color intervalHighlight;
 	private Color currentLineHighlight;
@@ -690,12 +714,10 @@ public class Gutter extends JComponent implements SwingConstants
 			switch (alignment)
 			{
 			case RIGHT:
-				offset = gutterSize.width - collapsedSize.width
-					- (fm.stringWidth(number) + 1);
+				offset = lineNumberWidth - (fm.stringWidth(number) + 1);
 				break;
 			case CENTER:
-				offset = ((gutterSize.width - collapsedSize.width)
-					- fm.stringWidth(number)) / 2;
+				offset = (lineNumberWidth - fm.stringWidth(number)) / 2;
 				break;
 			case LEFT: default:
 				offset = 0;
@@ -724,6 +746,8 @@ public class Gutter extends JComponent implements SwingConstants
 		MouseActionsProvider mouseActions;
 		boolean drag;
 		int toolTipInitialDelay, toolTipReshowDelay;
+		boolean selectLines;
+		GutterPopupHandler selectionPopupHandler;
 
 		//{{{ mouseEntered() method
 		public void mouseEntered(MouseEvent e)
@@ -748,9 +772,25 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			textArea.requestFocus();
 
-			if(TextAreaMouseHandler.isPopupTrigger(e)
-				|| e.getX() >= getWidth() - borderWidth * 2)
+			boolean outsideGutter =
+				(e.getX() >= getWidth() - borderWidth * 2);
+			if(TextAreaMouseHandler.isPopupTrigger(e) || outsideGutter)
 			{
+				if ((selectionPopupHandler != null) &&
+					(! outsideGutter) &&
+					(e.getX() > FOLD_MARKER_SIZE))
+				{
+					int screenLine = e.getY() / textArea.getPainter()
+						.getFontMetrics().getHeight();
+					int line = textArea.chunkCache.getLineInfo(screenLine)
+						.physicalLine;
+					if (line >= 0)
+					{
+						selectionPopupHandler.handlePopup(
+							e.getX(), e.getY(), line);
+						return;
+					}
+				}
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mousePressed(e);
 				drag = true;
@@ -767,6 +807,19 @@ public class Gutter extends JComponent implements SwingConstants
 
 				if(line == -1)
 					return;
+
+				if (e.getX() >= FOLD_MARKER_SIZE)
+				{
+					Selection s = new Selection.Range(
+						textArea.getLineStartOffset(line),
+						getFoldEndOffset(line));
+					if(textArea.isMultipleSelectionEnabled())
+						textArea.addToSelection(s);
+					else
+						textArea.setSelection(s);
+					selectLines = true;
+					return;
+				}
 
 				//{{{ Determine action
 				String defaultAction;
@@ -870,6 +923,48 @@ public class Gutter extends JComponent implements SwingConstants
 				e.translatePoint(-getWidth(),0);
 				textArea.mouseHandler.mouseDragged(e);
 			}
+			else if(selectLines)
+			{
+				int screenLine = e.getY() / textArea.getPainter()
+					.getFontMetrics().getHeight();
+				int line = textArea.chunkCache.getLineInfo(screenLine)
+					.physicalLine;
+				if(line == -1)
+					return;
+				int numSelections = textArea.getSelectionCount();
+				Selection sel = textArea.getSelection(numSelections - 1);
+				int selStart = sel.getStart();
+				int selStartLine = textArea.getLineOfOffset(selStart);
+				int selEnd;
+				if (selStartLine < line)
+				{
+					selEnd = getFoldEndOffset(line);
+				}
+				else
+				{
+					selStart = textArea.getLineStartOffset(line);
+					selEnd = sel.getEnd();
+				}
+				textArea.resizeSelection(selStart, selEnd, 0, false);
+			}
+		} //}}}
+
+		//{{{ getFoldEndOffset() method
+		private int getFoldEndOffset(int line)
+		{
+			JEditBuffer buffer = textArea.getBuffer();
+			int endLine;
+			if ((line == buffer.getLineCount() - 1) ||
+				(textArea.displayManager.isLineVisible(line + 1)))
+			{
+				endLine = line;
+			}
+			else
+			{
+				int[] lines = buffer.getFoldAtLine(line);
+				endLine = lines[1];
+			}
+			return buffer.getLineEndOffset(endLine);
 		} //}}}
 
 		//{{{ mouseReleased() method
@@ -882,6 +977,7 @@ public class Gutter extends JComponent implements SwingConstants
 			}
 
 			drag = false;
+			selectLines = false;
 		} //}}}
 	} //}}}
 }

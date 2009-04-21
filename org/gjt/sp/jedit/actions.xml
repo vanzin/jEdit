@@ -1370,6 +1370,17 @@
 	</CODE>
 </ACTION>
 		
+<ACTION NAME="toggle-gutter">
+	<CODE>
+		boolean showing = jEdit.getBooleanProperty("view.gutter.enabled");
+		jEdit.setBooleanProperty("view.gutter.enabled", !showing);
+		jEdit.propertiesChanged();
+	</CODE>
+	<IS_SELECTED>
+		return jEdit.getBooleanProperty("view.gutter.enabled");
+	</IS_SELECTED>
+</ACTION>
+
 <ACTION NAME="toggle-line-numbers">
 	<CODE>
 		textArea.getGutter().toggleExpanded();

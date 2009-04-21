@@ -524,6 +524,7 @@ view=new-view \
      - \
      toggle-line-numbers \
      toggle-statusbar \
+     toggle-gutter \
      - \
      %scrolling \
      %splitting \
@@ -543,6 +544,7 @@ recent-buffer.label=Go to $Recent Buffer
 show-buffer-switcher.label=Show $Buffer Switcher
 toggle-line-numbers.label=$Line Numbers
 toggle-statusbar.label=$Toggle Status Bar
+toggle-gutter.label=$Toggle Gutter
 show-context-menu.label=Show Context Menu
 toggle-full-screen.label=Toggle full-screen mode
 
@@ -1883,6 +1885,7 @@ options.encodings.selectNone=Select None
 #{{{ Gutter pane
 options.gutter.label=Gutter
 options.gutter.code=new GutterOptionPane();
+options.gutter.enabled=Show gutter
 options.gutter.lineNumbers=Line numbering
 options.gutter.font=Gutter font:
 options.gutter.foreground=Line number color:

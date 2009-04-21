@@ -321,6 +321,9 @@ view.gutter.AfoldClick=narrow-fold
 view.gutter.structClick=match-struct
 view.gutter.CstructClick=select-struct
 view.gutter.AstructClick=narrow-struct
+
+# Show gutter?
+view.gutter.enabled=true
 #}}}
 
 # Expand abbrevs when space bar pressed
