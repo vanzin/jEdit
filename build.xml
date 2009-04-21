@@ -175,6 +175,7 @@
 				<include name="org/gjt/sp/jedit/textarea/FirstLine.java"/>
 				<include name="org/gjt/sp/jedit/textarea/FoldPainter.java"/>
 				<include name="org/gjt/sp/jedit/textarea/Gutter.java"/>
+				<include name="org/gjt/sp/jedit/textarea/GutterPopupHandler.java"/>
 				<include name="org/gjt/sp/jedit/textarea/InputMethodSupport.java"/>
 				<include name="org/gjt/sp/jedit/textarea/MouseActions.java"/>
 				<include name="org/gjt/sp/jedit/textarea/MouseActionsProvider.java"/>
