@@ -324,6 +324,9 @@ view.gutter.AstructClick=narrow-struct
 
 # Show gutter?
 view.gutter.enabled=true
+
+# Gutter minimal number of digits to reserve for line numbers
+view.gutter.minDigitCount=2
 #}}}
 
 # Expand abbrevs when space bar pressed

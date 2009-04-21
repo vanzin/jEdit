@@ -1887,6 +1887,7 @@ options.gutter.label=Gutter
 options.gutter.code=new GutterOptionPane();
 options.gutter.enabled=Show gutter
 options.gutter.lineNumbers=Line numbering
+options.gutter.minLineNumberDigits=Minimal number of digits to reserve for line numbers:
 options.gutter.font=Gutter font:
 options.gutter.foreground=Line number color:
 options.gutter.background=Background color:

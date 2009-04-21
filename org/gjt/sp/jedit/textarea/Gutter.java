@@ -113,19 +113,16 @@ public class Gutter extends JComponent implements SwingConstants
 		addMouseMotionListener(mouseHandler);
 
 		bufferListener = new BufferAdapter() {
-			private void update() {
-				setFont(getFont());
-			}
 			public void bufferLoaded(JEditBuffer buffer) {
-				update();
+				updateLineNumberWidth();
 			}
 			public void contentInserted(JEditBuffer buffer, int startLine,
 					int offset, int numLines, int length) {
-				update();
+				updateLineNumberWidth();
 			}
 			public void contentRemoved(JEditBuffer buffer, int startLine,
 					int offset, int numLines, int length) {
-				update();
+				updateLineNumberWidth();
 			}
 		};
 
@@ -299,7 +296,7 @@ public class Gutter extends JComponent implements SwingConstants
 				+ insets.right;
 			collapsedSize.height = gutterSize.height
 				= insets.top + insets.bottom;
-			lineNumberWidth = fm.stringWidth(String.valueOf(getLineCount())); 
+			lineNumberWidth = fm.charWidth('5') * getLineNumberDigitCount(); 
 			gutterSize.width = FOLD_MARKER_SIZE + insets.right
 				+ lineNumberWidth;
 		}
@@ -307,22 +304,51 @@ public class Gutter extends JComponent implements SwingConstants
 		revalidate();
 	} //}}}
 
-	//{{{ getLineCount() method
-	private int getLineCount()
+	//{{{ setMinLineNumberDigitCount() method
+	public void setMinLineNumberDigitCount(int min)
+	{
+		if (min == minLineNumberDigits)
+			return;
+		minLineNumberDigits = min;
+		if (textArea.getBuffer() != null)
+			updateLineNumberWidth();
+	} //}}}
+
+	//{{{ getMinLineNumberDigitCount() method
+	private int getMinLineNumberDigitCount()
+	{
+		return minLineNumberDigits;
+	} //}}}
+
+	//{{{ getLineNumberDigitCount() method
+	private int getLineNumberDigitCount()
 	{
 		JEditBuffer buf = textArea.getBuffer();
-		if (buf != buffer)
-		{
-			if (buffer != null)
-				buffer.removeBufferListener(bufferListener);
-			buffer = buf;
-			if (buffer != null)
-				buffer.addBufferListener(bufferListener);
-		}
-		if (buffer == null)
-			return 99;
-		int count = buffer.getLineCount();
-		return (count < 99) ? 99 : count;
+		int minDigits = getMinLineNumberDigitCount();
+		if (buf == null)
+			return minDigits;
+		int count = buf.getLineCount();
+		int digits;
+		for (digits = 0; count > 0; digits++)
+			count /= 10;
+		return (digits < minDigits) ? minDigits : digits;
+	} //}}}
+
+	//{{{ setBuffer() method
+	void setBuffer(JEditBuffer newBuffer)
+	{
+		if (buffer != null)
+			buffer.removeBufferListener(bufferListener);
+		buffer = newBuffer;
+		if (buffer != null)
+			buffer.addBufferListener(bufferListener);
+		updateLineNumberWidth();
+	}
+
+	//{{{ updateLineNumberWidth() method
+	private void updateLineNumberWidth()
+	{
+		setFont(getFont());
 	} //}}}
 
 	//{{{ dispose() method
@@ -350,7 +376,7 @@ public class Gutter extends JComponent implements SwingConstants
 		Border border = getBorder();
 		if(border != null)
 		{
-			lineNumberWidth = fm.stringWidth(String.valueOf(getLineCount())); 
+			lineNumberWidth = fm.charWidth('5') * getLineNumberDigitCount(); 
 			gutterSize.width = FOLD_MARKER_SIZE
 				+ border.getBorderInsets(this).right
 				+ lineNumberWidth;
@@ -622,6 +648,7 @@ public class Gutter extends JComponent implements SwingConstants
 	private FoldPainter foldPainter;
 	private JEditBuffer buffer;
 	private BufferListener bufferListener;
+	private int minLineNumberDigits;
 	//}}}
 
 	//{{{ paintLine() method

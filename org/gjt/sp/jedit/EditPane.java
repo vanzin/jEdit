@@ -905,6 +905,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		markerHighlight = new MarkerHighlight();
 		textArea.getGutter().setGutterEnabled(
 			GutterOptionPane.isGutterEnabled());
+		textArea.getGutter().setMinLineNumberDigitCount(
+			GutterOptionPane.getMinLineNumberDigits());
 		textArea.getGutter().addExtension(markerHighlight);
 		textArea.getGutter().setSelectionPopupHandler(
 			new GutterPopupHandler()

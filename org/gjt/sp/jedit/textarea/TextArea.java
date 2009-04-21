@@ -396,6 +396,7 @@ public abstract class TextArea extends JComponent
 				this.buffer.beginCompoundEdit();
 
 			chunkCache.setBuffer(buffer);
+			gutter.setBuffer(buffer);
 			propertiesChanged();
 
 			if(displayManager != null)

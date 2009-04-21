@@ -56,6 +56,24 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.lineNumbers"));
 		addComponent(lineNumbersEnabled);
 
+		minLineNumberDigits = new JTextField(String.valueOf(
+				getMinLineNumberDigits()),1);
+		minLineNumberDigits.setInputVerifier(new InputVerifier() {
+			@Override
+			public boolean verify(JComponent input) {
+				String s = minLineNumberDigits.getText();
+				int i;
+				try {
+					i = Integer.valueOf(s).intValue();
+				} catch (Exception e) {
+					return false;
+				}
+				return (i >= 0);
+			}
+		});
+		addComponent(jEdit.getProperty("options.gutter.minLineNumberDigits"),
+			minLineNumberDigits, GridBagConstraints.VERTICAL);
+
 		/* Text font */
 		gutterFont = new FontSelector(
 			jEdit.getFontProperty("view.gutter.font",
@@ -171,6 +189,8 @@ public class GutterOptionPane extends AbstractOptionPane
 	{
 		jEdit.setBooleanProperty("view.gutter.lineNumbers", lineNumbersEnabled
 			.isSelected());
+		jEdit.setIntegerProperty("view.gutter.minDigitCount",
+			Integer.valueOf(minLineNumberDigits.getText()));
 
 		jEdit.setFontProperty("view.gutter.font",gutterFont.getFont());
 		jEdit.setColorProperty("view.gutter.fgColor",gutterForeground
@@ -248,7 +268,16 @@ public class GutterOptionPane extends AbstractOptionPane
 	{
 		return jEdit.getBooleanProperty(GUTTER_ENABLED_PROPERTY);
 	} //}}}
-	
+
+	//{{{ getMinLineNumberDigits() method
+	public static int getMinLineNumberDigits()
+	{
+		int n = jEdit.getIntegerProperty("view.gutter.minDigitCount", 2);
+		if (n < 0)
+			n = 2;
+		return n;
+	}
+
 	//{{{ Private members
 	private static final String GUTTER_ENABLED_PROPERTY =
 		"view.gutter.enabled";
@@ -270,5 +299,6 @@ public class GutterOptionPane extends AbstractOptionPane
 	private ColorWellButton gutterNoFocusBorder;
 	private String [] painters;
 	private JCheckBox gutterEnabled;
+	private JTextField minLineNumberDigits;
 	//}}}
 }
