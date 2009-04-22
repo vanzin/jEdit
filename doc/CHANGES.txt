@@ -100,6 +100,8 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
   (Shlomy Reinstein)
 
 - Fixed #2744708: Deleted file doesn't show as dirty buffer. (Shlomy Reinstein)
+
+- Fixed #2777073: Fix gutter width for line numbers. (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 

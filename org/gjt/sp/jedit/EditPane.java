@@ -1027,6 +1027,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 		gutter.setFont(jEdit.getFontProperty("view.gutter.font"));
 		gutter.setGutterEnabled(GutterOptionPane.isGutterEnabled());
+		gutter.setMinLineNumberDigitCount(
+			GutterOptionPane.getMinLineNumberDigits());
 
 		int width = jEdit.getIntegerProperty(
 			"view.gutter.borderWidth",3);
