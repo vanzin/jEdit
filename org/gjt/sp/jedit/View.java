@@ -2007,9 +2007,11 @@ loop:		while (true)
 		}
 	} //}}}
 
-	
-	private void closeDuplicateBuffers(EditPaneUpdate epu) {
-		if (!jEdit.getBooleanProperty("buffersets.exclusive")) return;
+	//{{{ closeDuplicateBuffers() method
+	private void closeDuplicateBuffers(EditPaneUpdate epu)
+	{
+		if (!jEdit.getBooleanProperty("buffersets.exclusive"))
+			return;
 		EditPane ep = epu.getEditPane();
 		Buffer b = ep.getBuffer();
 		BufferSet bs = ep.getBufferSet();
@@ -2023,7 +2025,7 @@ loop:		while (true)
 			// bufferset!
 			jEdit.getBufferSetManager().removeBuffer(epc, b);
 		}
-	}
+	} //}}}
 	
 	//{{{ updateGutterBorders() method
 	/**
