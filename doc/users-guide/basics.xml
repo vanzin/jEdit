@@ -222,6 +222,8 @@
         was the last BufferSet to contain that buffer, the buffer is also closed. </para>
         <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the regular <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before. </para>
 
+        <para> An <guimenuitem>Exclusive Bufferset</guimenuitem> means that any time a buffer is opened from one EditPane, it is closed in other EditPanes which use a different non-global BufferSet.  </para>
+
         <para> <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
         current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active EditPane. </para>
 
