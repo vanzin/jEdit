@@ -8,6 +8,9 @@ Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker, Seph Soliman,
 Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
+- Loading a library from the PluginManager gives a NPE
+  (#2779500) (Matthieu Casanova)
+
 - If the textarea is antialiased the gutter will also use the same antialiasing
   (Matthieu Casanova)
 

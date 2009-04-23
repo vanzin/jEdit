@@ -172,7 +172,13 @@ public class PluginJAR
 		}
 		jEdit.addPluginJAR(path);
 		jar = jEdit.getPluginJAR(path);
-		String className = jar.getPlugin().getClassName();
+		EditPlugin plugin = jar.getPlugin();
+		if (plugin == null)
+		{
+			// No plugin, maybe it is a library
+			return jar;
+		}
+		String className = plugin.getClassName();
 		if (loadDependents)
 		{
 			Set<String> pluginLoadList = getDependencySet(className);
