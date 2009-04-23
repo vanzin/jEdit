@@ -300,7 +300,9 @@ public class BufferSetManager implements EBComponent
 	//{{{ Private members
 
 	//{{{ getOwners() method
-	/** Get all BufferSets that contains the Buffer. */
+	/**
+	    @return set of BufferSets that contain buffer
+        */
 	private Set<BufferSet> getOwners(Buffer buffer)
 	{
 		final Set<BufferSet> candidates = new HashSet<BufferSet>();

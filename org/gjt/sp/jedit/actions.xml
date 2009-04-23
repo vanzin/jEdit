@@ -380,6 +380,17 @@
 		editPane.setBufferSetScope(BufferSet.Scope.view);
 	</CODE>
 </ACTION>
+
+<ACTION NAME="bufferset-toggle-exclusive">
+<CODE>
+    jEdit.setBooleanProperty("buffersets.exclusive",
+        !jEdit.getBooleanProperty("buffersets.exclusive"));
+</CODE>
+<IS_SELECTED>
+    jEdit.getBooleanProperty("buffersets.exclusive");
+</IS_SELECTED>
+</ACTION>
+
 <ACTION NAME="editpane-bufferset">
 	<CODE>
 		editPane.setBufferSetScope(BufferSet.Scope.editpane);
@@ -1369,7 +1380,7 @@
 		view.toggleFullScreen();
 	</CODE>
 </ACTION>
-		
+
 <ACTION NAME="toggle-gutter">
 	<CODE>
 		boolean showing = jEdit.getBooleanProperty("view.gutter.enabled");

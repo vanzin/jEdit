@@ -2000,12 +2000,31 @@ loop:		while (true)
 			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED
 			&& editPane.getBuffer().isLoaded())
 		{
+			closeDuplicateBuffers(msg);
 			status.updateCaretStatus();
 			status.updateBufferStatus();
 			status.updateMiscStatus();
 		}
 	} //}}}
 
+	
+	private void closeDuplicateBuffers(EditPaneUpdate epu) {
+		if (!jEdit.getBooleanProperty("buffersets.exclusive")) return;
+		EditPane ep = epu.getEditPane();
+		Buffer b = ep.getBuffer();
+		BufferSet bs = ep.getBufferSet();
+		for (EditPane epc : getEditPanes()) 
+		{
+			if (epc == ep) continue;
+			if (epc.getBufferSet() == bs) continue;
+			if (epc.getBufferSet() == jEdit.getGlobalBufferSet()) continue;
+			if (epc.getBufferSet().indexOf(b) < 0) continue;
+			// found it open somewhere else thats not our
+			// bufferset!
+			jEdit.getBufferSetManager().removeBuffer(epc, b);
+		}
+	}
+	
 	//{{{ updateGutterBorders() method
 	/**
 	 * Updates the borders of all gutters in this view to reflect the

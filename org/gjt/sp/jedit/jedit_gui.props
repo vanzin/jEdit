@@ -225,6 +225,7 @@ close-buffer.label=$Close
 close-buffer.icon.small=16x16/actions/document-close.png
 global-close-buffer.label=Close (global)
 closeall-except-active.label=Clear BufferSet except active
+bufferset-toggle-exclusive.label=Toggle Exclusive BufferSets
 closeall-except-active.icon.small=16x16/actions/document-close.png
 global-close-buffer.icon.small=16x16/actions/document-close.png
 close-all.label=Clos$e All
@@ -586,7 +587,7 @@ resplit.label=$Restore Split
 prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
 buffersets.label=Buffer Sets
-buffersets=global-bufferset view-bufferset editpane-bufferset - closeall-except-active
+buffersets=global-bufferset view-bufferset editpane-bufferset bufferset-toggle-exclusive - closeall-except-active
 
 #}}}
 

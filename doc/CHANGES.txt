@@ -19,6 +19,8 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
   Now it is immediately created with the good scope (#2645056)
   (Matthieu Casanova)
 
+- New action: Toggle exclusive BufferSets (Alan Ezust # 2060078).
+
 - Fixed horizontal mac scrolling with trackpad or Mighty Mouse (#2308694)
   (Seph Soliman)
 
