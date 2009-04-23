@@ -104,7 +104,11 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	} //}}}
 
 	// {{{ get(TextArea) method
-	/** @return the EditPane containing the TextArea.
+	/**
+	 * Returns the EditPane of a TextArea.
+	 *  
+	 * @param ta the textArea
+	 * @return the EditPane containing the TextArea.
 	 */
 	public static EditPane get(TextArea ta)
 	{
@@ -911,7 +915,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		textArea.getGutter().setSelectionPopupHandler(
 			new GutterPopupHandler()
 			{
-				public void handlePopup(int x, int y, int line) {
+				public void handlePopup(int x, int y, int line)
+				{
 					Buffer buffer = getBuffer();
 					buffer.addOrRemoveMarker('\0',
 						buffer.getLineStartOffset(line));
