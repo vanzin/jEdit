@@ -43,7 +43,7 @@ public class ContentManager
 		return length;
 	} //}}}
 
-	//{{{ getText() method
+	//{{{ getText() methods
 	public String getText(int start, int len)
 	{
 		if(start >= gapStart)
@@ -55,9 +55,21 @@ public class ContentManager
 			return new String(text,start,gapStart - start)
 				.concat(new String(text,gapEnd,start + len - gapStart));
 		}
-	} //}}}
+	}
 
-	//{{{ getText() method
+	/**
+	 * Returns the specified text range in a <code>Segment</code>.<p>
+	 *
+	 * Using a <classname>Segment</classname> is generally more
+	 * efficient than using a <classname>String</classname> because it
+	 * results in less memory allocation and array copying.<p>
+	 *
+	 *
+	 * @param start The start offset
+	 * @param len The number of characters to get
+	 * @param seg The segment to copy the text to
+	 * @see JEditBuffer#getText(int, int, Segment)
+	 */
 	public void getText(int start, int len, Segment seg)
 	{
 		if(start >= gapStart)
@@ -107,7 +119,7 @@ public class ContentManager
 		}
 	} //}}}
 
-	//{{{ insert() method
+	//{{{ insert() methods
 	public void insert(int start, String str)
 	{
 		int len = str.length();
@@ -121,9 +133,8 @@ public class ContentManager
 		str.getChars(0,len,text,start);
 		gapStart += len;
 		length += len;
-	} //}}}
+	}
 
-	//{{{ insert() method
 	/**
 	 * Inserts the given data into the buffer.
 	 *
@@ -144,9 +155,8 @@ public class ContentManager
 		}
 		gapStart += len;
 		length += len;
-	} //}}}
+	}
 
-	//{{{ insert() method
 	public void insert(int start, Segment seg)
 	{
 		moveGapStart(start);
