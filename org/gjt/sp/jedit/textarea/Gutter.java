@@ -348,7 +348,9 @@ public class Gutter extends JComponent implements SwingConstants
 	//{{{ updateLineNumberWidth() method
 	private void updateLineNumberWidth()
 	{
-		setFont(getFont());
+		Font f = getFont();
+		if (f != null)
+			setFont(getFont());
 	} //}}}
 
 	//{{{ dispose() method
