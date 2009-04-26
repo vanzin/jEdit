@@ -537,6 +537,13 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			StringBuffer sb = new StringBuffer("<html><style>.highlight {");
 			sb.append(styleTag);
 			sb.append("}</style><body>");
+			int lineTextIndex = s.indexOf(": ");
+			if (lineTextIndex > 0)
+			{
+				lineTextIndex += 2;
+				appendString2html(sb, s.substring(0, lineTextIndex));
+				s = s.substring(lineTextIndex);
+			}
 			int i = 0;
 			Match m;
 			while ((m = matcher.nextMatch(s.substring(i), true, true, true, false)) != null)
