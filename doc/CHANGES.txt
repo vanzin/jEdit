@@ -107,9 +107,6 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 - Fixed #2744708: Deleted file doesn't show as dirty buffer. (Shlomy Reinstein)
 
 - Fixed #2777073: Fix gutter width for line numbers. (Shlomy Reinstein)
-
-- Fixed #2781716: Line numbers in Hypersearch Results are wrongly highlighted.
-  (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 
