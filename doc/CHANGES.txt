@@ -22,8 +22,6 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
   Now it is immediately created with the good scope (#2645056)
   (Matthieu Casanova)
 
-- New action: Toggle exclusive BufferSets (Alan Ezust # 2060078).
-
 - Fixed horizontal mac scrolling with trackpad or Mighty Mouse (#2308694)
   (Seph Soliman)
 
@@ -49,7 +47,7 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 - When having split view, dropping a file on the inactive textArea was opening
   it to the active textArea (#2321838) (Matthieu Casanova, Shlomy Reinstein)
 
-- MD5 hash calculated inside read-lock, and also after buffer saves.
+- MD5 hash calculated inside read-lock, and also after buffer saves (#2780652).
    (Alan Ezust)
 
 - Fix drag & drop in BufferTabs, which broke as a result of BufferSet ignoring
@@ -126,6 +124,8 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 - Implemented feature request #2555956: Show presence of jedit server. The About
   dialog now shows the mode in which jEdit is running: server,
   server-background, or standalone. (Shlomy Reinstein)
+
+- New action: Toggle exclusive BufferSets (Alan Ezust # 2060078).
 
 - Added configurable highlighting of the matching text in hypersearch results,
   which is part of feature request #2446121. (Shlomy Reinstein)

@@ -215,14 +215,15 @@
 
         <para> New BufferSets are initially empty, or populated with a copy of the
         existing BufferSet. This behavior can be changed from
-        <guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt;
-        <guilabel>New BufferSets contain: copies of current BufferSet</guilabel>. </para>
+        <guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>
+        New (View/EditPane) BufferSets contain: copies of current BufferSet/Current Buffer/Untitled Buffer
+        </guilabel>. There is a separate setting for new views and split panes. </para>
 
         <para> <guimenu>File</guimenu> &gt; <guimenuitem>Close</guimenuitem> behavior has changed in 4.3pre15: now it will remove the current buffer from the EditPane's BufferSet only. If it
         was the last BufferSet to contain that buffer, the buffer is also closed. </para>
         <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the regular <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before. </para>
 
-        <para> An <guimenuitem>Exclusive Bufferset</guimenuitem> means that any time a buffer is opened from one EditPane, it is closed in other EditPanes which use a different non-global BufferSet.  </para>
+        <para> An <guimenuitem>Exclusive Bufferset</guimenuitem> means that any time a buffer is opened from one EditPane, it should be automatically closed in other EditPanes which use a non-intersecting BufferSet.  </para>
 
         <para> <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
         current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active EditPane. </para>
@@ -238,7 +239,6 @@
         View is created (and the default BufferSet scope is not global) or when the
         View is split (and the default BufferSet scope is EditPane), or when the
         BufferSet scope is changed to EditPane via the statusbar or menu action. </para>
-
 
     </sect1>
 
