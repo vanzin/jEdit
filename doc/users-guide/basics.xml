@@ -202,13 +202,13 @@
             <listitem><para> <emphasis role="bold">Global</emphasis>: Includes all buffers open from any EditPane. </para></listitem>
             <listitem><para> <emphasis role="bold">View</emphasis>: EditPanes in the same View share the same
             BufferSet. Opening a buffer in one View will not affect the non-global scope BufferSets in EditPanes of
-            other Views. </para></listitem>
+            other Views.  </para></listitem>
             <listitem><para><emphasis role="bold">EditPane</emphasis>: Each EditPane can have its own independent
             BufferSet.
             </para></listitem>
         </orderedlist>
 
-        <para> The default Buffer Set scope for newly created EditPanes is global by default, and can be
+        <para> The default Buffer Set scope can be Global, View, or EditPane, and can be
         changed from <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
         &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope for new
         EditPanes</guilabel>. </para>
@@ -228,7 +228,8 @@
         was the last BufferSet to contain that buffer, the buffer is also closed. </para>
         <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the regular <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before. </para>
 
-        <para> An <guimenuitem>Exclusive Bufferset</guimenuitem> means that any time a buffer is opened from one EditPane, it should be automatically closed in other EditPanes which use a non-intersecting BufferSet.  </para>
+        <para> When <guimenuitem>Exclusive Buffersets</guimenuitem> are enabled, any time a buffer is opened from one EditPane, it should be automatically closed in other EditPanes which use a disjoint (non-intersecting)
+        BufferSet.  </para>
 
         <para> <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
         current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active EditPane. </para>
@@ -239,8 +240,6 @@
         (look for the letter "G", "E" or "V"). Double-clicking on that
         will allow you to change the buffer set. Also, the scope for the current EditPane BufferSet can be changed from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu> &gt;
         <guimenu>(Global|View|EditPane) Buffer Set</guimenu>. </para>
-
-
 
     </sect1>
 

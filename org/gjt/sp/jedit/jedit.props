@@ -251,11 +251,11 @@ view.minStartupWidth=200
 view.minStartupHeight=200
 
 # The default bufferSet scope
-editpane.bufferset.default=global
+editpane.bufferset.default=editpane
 
 # Copy the current bufferSet content when creating a new bufferSet for an
 # EditPane
-editpane.bufferset.new=currentbuffer
+editpane.bufferset.new=copy
 
 #{{{ Gutter
 
