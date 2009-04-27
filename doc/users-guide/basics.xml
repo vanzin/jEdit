@@ -213,6 +213,11 @@
         &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope for new
         EditPanes</guilabel>. </para>
 
+        <para> A new BufferSet can be created in a number of ways, such as when a new
+        View is created (and the default BufferSet scope is not global) or when the
+        View is split (and the default BufferSet scope is EditPane), or when the
+        BufferSet scope is changed to EditPane via the statusbar or menu action. </para>
+
         <para> New BufferSets are initially empty, or populated with a copy of the
         existing BufferSet. This behavior can be changed from
         <guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>
@@ -235,10 +240,7 @@
         will allow you to change the buffer set. Also, the scope for the current EditPane BufferSet can be changed from <guimenu>View</guimenu>&gt;<guimenu>Buffer Sets</guimenu> &gt;
         <guimenu>(Global|View|EditPane) Buffer Set</guimenu>. </para>
 
-        <para> A new BufferSet can be created in a number of ways, such as when a new
-        View is created (and the default BufferSet scope is not global) or when the
-        View is split (and the default BufferSet scope is EditPane), or when the
-        BufferSet scope is changed to EditPane via the statusbar or menu action. </para>
+
 
     </sect1>
 
