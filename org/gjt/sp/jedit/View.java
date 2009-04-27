@@ -2013,17 +2013,26 @@ loop:		while (true)
 		if (!jEdit.getBooleanProperty("buffersets.exclusive"))
 			return;
 		EditPane ep = epu.getEditPane();
+		/* Only one view needs to handle this message, since 
+		   we iterate through all the other views */
+		if (ep.getView() != this) return;
 		Buffer b = ep.getBuffer();
-		BufferSet bs = ep.getBufferSet();
-		for (EditPane epc : getEditPanes()) 
-		{
-			if (epc == ep) continue;
-			if (epc.getBufferSet() == bs) continue;
-			if (epc.getBufferSet() == jEdit.getGlobalBufferSet()) continue;
-			if (epc.getBufferSet().indexOf(b) < 0) continue;
-			// found it open somewhere else thats not our
-			// bufferset!
-			jEdit.getBufferSetManager().removeBuffer(epc, b);
+		for (View v: jEdit.getViews()) 
+		{ 
+			for (EditPane epc : v.getEditPanes())
+			{
+				// if it's my editpane, skip it.
+				if (epc == ep) continue;
+				// If it's view scope, it has to be of a different view
+				if ((epc.getBufferSetScope() == BufferSet.Scope.view)
+					&&  (v == this)) continue;
+				// If it's global, forget it.
+				if (epc.getBufferSet() == jEdit.getGlobalBufferSet()) continue;
+				// Is it in the bufferset?
+				if (epc.getBufferSet().indexOf(b) < 0) continue;
+				// found it open in a disjoint bufferset !
+				jEdit.getBufferSetManager().removeBuffer(epc, b);
+			}
 		}
 	} //}}}
 	
