@@ -211,7 +211,8 @@
         <para> The default Buffer Set scope can be Global, View, or EditPane, and can be
         changed from <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
         &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope for new
-        EditPanes</guilabel>. </para>
+        EditPanes</guilabel>. Changing this will not affect the current editpanes you may already have. Furthermore, since the buffersets of each EditPane are saved in the perspective when you exit, and restored when you start jEdit again, exiting and re-running jEdit will restore the current bufferset scopes as well.
+        In order to see this setting have effect, you have to create new views or split panes. </para>
 
         <para> A new BufferSet can be created in a number of ways, such as when a new
         View is created (and the default BufferSet scope is not global) or when the
