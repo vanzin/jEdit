@@ -74,6 +74,12 @@ public class GutterOptionPane extends AbstractOptionPane
 		addComponent(jEdit.getProperty("options.gutter.minLineNumberDigits"),
 			minLineNumberDigits, GridBagConstraints.VERTICAL);
 
+		/* Selection area enable */
+		selectionAreaEnabled = new JCheckBox(jEdit.getProperty(
+			"options.gutter.selectionAreaEnabled"));
+		selectionAreaEnabled.setSelected(isSelectionAreaEnabled());
+		addComponent(selectionAreaEnabled);
+
 		/* Text font */
 		gutterFont = new FontSelector(
 			jEdit.getFontProperty("view.gutter.font",
@@ -242,6 +248,8 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterNoFocusBorder.getSelectedColor());
 		jEdit.setBooleanProperty(GUTTER_ENABLED_PROPERTY,
 			gutterEnabled.isSelected());
+		jEdit.setBooleanProperty(SELECTION_AREA_ENABLED_PROPERTY,
+			selectionAreaEnabled.isSelected());
 	} //}}}
 
 	//{{{ addFoldStyleChooser() method
@@ -278,9 +286,17 @@ public class GutterOptionPane extends AbstractOptionPane
 		return n;
 	}
 
+	//{{{ isSelectionAreaEnabled() method
+	public static boolean isSelectionAreaEnabled()
+	{
+		return jEdit.getBooleanProperty(SELECTION_AREA_ENABLED_PROPERTY);
+	}
+
 	//{{{ Private members
 	private static final String GUTTER_ENABLED_PROPERTY =
 		"view.gutter.enabled";
+	private static final String SELECTION_AREA_ENABLED_PROPERTY =
+		"view.gutter.selectionAreaEnabled";
 	private FontSelector gutterFont;
 	private ColorWellButton gutterForeground;
 	private ColorWellButton gutterBackground;
@@ -300,5 +316,6 @@ public class GutterOptionPane extends AbstractOptionPane
 	private String [] painters;
 	private JCheckBox gutterEnabled;
 	private JTextField minLineNumberDigits;
+	private JCheckBox selectionAreaEnabled;
 	//}}}
 }

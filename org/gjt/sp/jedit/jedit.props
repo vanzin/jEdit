@@ -327,6 +327,9 @@ view.gutter.enabled=true
 
 # Gutter minimal number of digits to reserve for line numbers
 view.gutter.minDigitCount=2
+
+# Show selection area in gutter?
+view.gutter.selectionAreaEnabled=true
 #}}}
 
 # Expand abbrevs when space bar pressed

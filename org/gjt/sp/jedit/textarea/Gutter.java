@@ -101,6 +101,7 @@ public class Gutter extends JComponent implements SwingConstants
 	{
 		this.textArea = textArea;
 		enabled = true;
+		selectionAreaEnabled = true;
 
 		setAutoscrolls(true);
 		setOpaque(true);
@@ -292,8 +293,9 @@ public class Gutter extends JComponent implements SwingConstants
 		else
 		{
 			Insets insets = border.getBorderInsets(this);
-			collapsedSize.width = FOLD_MARKER_SIZE + SELECTION_GUTTER_WIDTH
-				+ insets.right;
+			collapsedSize.width = FOLD_MARKER_SIZE + insets.right;
+			if (selectionAreaEnabled)
+				 collapsedSize.width += SELECTION_GUTTER_WIDTH;
 			collapsedSize.height = gutterSize.height
 				= insets.top + insets.bottom;
 			lineNumberWidth = fm.charWidth('5') * getLineNumberDigitCount(); 
@@ -391,6 +393,19 @@ public class Gutter extends JComponent implements SwingConstants
 	public void setGutterEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
+		revalidate();
+	} //}}}
+
+	//{{{ setSelectionAreaEnabled() method
+	public void setSelectonAreaEnabled(boolean enabled)
+	{
+		if (selectionAreaEnabled == enabled)
+			return;
+		selectionAreaEnabled = enabled;
+		if (enabled)
+			collapsedSize.width += SELECTION_GUTTER_WIDTH;
+		else
+			collapsedSize.width -= SELECTION_GUTTER_WIDTH;
 		revalidate();
 	} //}}}
 	
@@ -640,6 +655,7 @@ public class Gutter extends JComponent implements SwingConstants
 	private int interval;
 	private boolean currentLineHighlightEnabled;
 	private boolean expanded;
+	private boolean selectionAreaEnabled;
 
 	private boolean structureHighlight;
 	private Color structureHighlightColor;

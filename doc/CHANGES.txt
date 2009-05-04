@@ -104,7 +104,9 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 
 - Fixed #2744708: Deleted file doesn't show as dirty buffer. (Shlomy Reinstein)
 
-- Fixed #2777073: Fix gutter width for line numbers. (Shlomy Reinstein)
+- Fixed #2777073: Fix gutter width for line numbers. Minimal number of digits
+  to reserve for line numbers can be controlled using the Gutter option pane.
+  (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 
@@ -137,6 +139,16 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 
 - When creating a directory in the VFS Browser the parent directory is expanded
   if it was closed (Matthieu Casanova)
+
+- Implemented feature request #1730845: Select line from gutter.
+  Added a selection area to the gutter when line numbers are not shown. The
+  selection area can be used for selecting lines from the text area (left-click
+  or left-click and drag) and for toggling markers (right-click).
+  The selection area can be enabled or disabled from the Gutter option pane.
+  (Shlomy Reinstein)
+
+- Added an option in the Gutter option pane to enable or disable the gutter.
+  (Shlomy Reinstein)
 }}}
 {{{ API Changes
 
