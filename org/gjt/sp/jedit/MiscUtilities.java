@@ -151,6 +151,8 @@ public class MiscUtilities
 		}
 		else if("~".equals(path))
 			return System.getProperty("user.home");
+		else if ("-".equals(path))
+			return getParentOfPath(jEdit.getActiveView().getBuffer().getPath());
 		else
 			return path;
 	} //}}}
@@ -255,6 +257,8 @@ public class MiscUtilities
 		if(isURL(path))
 			return true;
 		else if(path.startsWith("~/") || path.startsWith('~' + File.separator) || "~".equals(path))
+			return true;
+		else if ("-".equals(path))
 			return true;
 		else if(OperatingSystem.isDOSDerived())
 		{
