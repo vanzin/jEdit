@@ -295,7 +295,7 @@
 
             <para>Changing options from this optionpane does not change XML mode definition files on disk; it merely writes values to the user properties file which
             override those set in mode files. To find out how to edit mode files directly, see <xref linkend="writing-modes-part" />. Some of these options can be further overridden on an individual file basis through the use of buffer-local properties. </para>
-            
+
             <para>The <literal>File name
             glob</literal> and <literal>First line glob</literal> text
             fields let you specify a glob pattern that names and first lines of
@@ -304,10 +304,10 @@
 
             <para> The <literal>Extra Word Characters</literal> allows you to set the <literal>noLineSep</literal> buffer property on a mode-wide basis, allowing you to define what is considered part of a word when double-clicking on it in the text area.
             </para>
-            
+
             <para> The <literal>Deep Indent</literal> option instructs jEdit to indent subsequent lines so that they line up with the open bracket on the previous line. </para>
-            
-            
+
+
         </sect2>
 
         <sect2 id="encodings-pane">
@@ -317,7 +317,7 @@
             users of jEdit many flexible options for defining how Encodings are
             handled in jEdit. See <xref linkend="encodings" /> for the
             basics.</para>
-            
+
             <para> In previous versions of jEdit, there was very little encoding autodetection, so <guilabel>use autodetection when possible</guilabel> is an option you can switch on or off.
             </para>
 
@@ -356,8 +356,9 @@
             <title>The Gutter Pane</title>
 
             <para>The <guibutton>Gutter</guibutton> option pane contains
-            settings to customize the appearance of the gutter. See <xref
-            linkend="overview" />.</para>
+            settings to customize the appearance of the gutter. Some new options were added
+            to jEdit 4.3, including "show gutter", "minimal number of digits to reserve for line numbers",
+            and "fold style".  See <xref linkend="overview" />.</para>
         </sect2>
 
         <sect2 id="mouse-pane">
@@ -366,13 +367,9 @@
             <para>The <guibutton>Mouse</guibutton> option pane contains settings
             for toggling drag and drop of text, as well as gutter mouse click
             behavior.</para>
-            
-            <para> The only option that may not be self-explanatory is the  <emphasis role="bold">Double-Click drag joins non-alphanumeric characters</emphasis>. This option means that double-click will select a region that includes the non-alphabetical characters, as defined for the current mode. The actual set of characters can be defined for an indiviual file via buffer-local properties (<literal>noWordSep</literal>) or on a mode-wide basis from the Editing option pane (<literal>Extra Word Characters</literal>).
-            </para>
-            
-            
-            
-            
+
+            <para> The only option that may not be self-explanatory is the  <emphasis role="bold">Double-Click drag joins non-alphanumeric characters</emphasis>. This option means that double-click will select a region that includes the non-alphabetical characters, as defined for the current mode. The actual set of characters can be defined for an indiviual file via buffer-local properties (<literal>noWordSep</literal>) or on a mode-wide basis from the Editing option pane (<literal>Extra Word Characters</literal>).  </para>
+
         </sect2>
 
         <sect2 id="printing-pane">
@@ -416,15 +413,15 @@
             press the keys you want associated with that command in the
             resulting dialog box. The dialog box will warn you if the shortcut
             is already assigned.</para>
-            
+
             <bridgehead> 2-key shortcut prefixes </bridgehead>
-            
+
             <para> Some shortcuts, such as C+e, C+m, and C+r, are prefixes for two-keystroke shortcuts. Another  keystroke may be used as a prefix in a 2-key shortcut, so for example, C+x can be redefined as a prefix to make it more emacs-like, by mapping any other action to a C+x prefixed shortcut.</para>
-            
+
             <para> Conversely, emacs users will notice at first that C+e can not be mapped as a single key shortcut to go to the end of the line, unless all of the other actions that contain C+e prefixed shortcuts are remapped to other shortcuts first. After that, C+e can be bound to end-of-line. </para>
-            
+
             <para> The default shortcuts can be found in  <literal>jedit_keys.props</literal>. </para>
-            
+
         </sect2>
 
         <sect2 id="status-bar-pane">
@@ -583,7 +580,7 @@
                 the plugin manager, see <xref linkend="using-plugins" />.</para>
             </listitem>
             <listitem><para>
-              <filename>pluginMgr-Cached.xml.gz</filename> - 
+              <filename>pluginMgr-Cached.xml.gz</filename> -
                 this contains a cached copy of the last XML plugin list downloaded from plugin central. If you delete this file, a new one will be created next time you try to install a plugin via Plugin Manager. </para>
             </listitem>
 

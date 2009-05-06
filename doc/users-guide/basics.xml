@@ -62,6 +62,13 @@
         be set from the <guilabel>Gutter</guilabel> pane of the
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
         Options</guimenuitem> dialog box.</para>
+
+        <para> The gutter is divided into two sections. Right-clicking on the left side
+        gives you a context menu, while right-clicking no the right side toggles a marker at that
+        position. Text can be selected by left-clicking and dragging on right side of the gutter,
+        for the range of lines you wish to select.
+        </para>
+
     </sect1>
 
         <sect1 id="views">
