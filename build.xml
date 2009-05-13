@@ -134,6 +134,7 @@
 				<include name="org/gjt/sp/jedit/bsh/*"/>
 				<include name="org/gjt/sp/jedit/bsh/**/*"/>
 
+				<include name="org/gjt/sp/jedit/buffer/BufferAdapter.java"/>
 				<include name="org/gjt/sp/jedit/buffer/BufferListener.java"/>
 				<include name="org/gjt/sp/jedit/buffer/BufferSegment.java"/>
 				<include name="org/gjt/sp/jedit/buffer/ContentManager.java"/>
