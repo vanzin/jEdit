@@ -8,6 +8,9 @@ Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker, Seph Soliman,
 Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug Fixes
+- The Password fields in Metal Look & Feel now follows the TextArea color scheme
+  (Matthieu Casanova)
+
 - If you set - as path in the VFSBrowser it will be replaced by the path
   of the current buffer (#2218621) (Matthieu Casanova)
 

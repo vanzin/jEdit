@@ -3575,7 +3575,7 @@ public class jEdit
 			Color selectionColor = new javax.swing.plaf.ColorUIResource(
 				jEdit.getColorProperty("view.selectionColor"));
 
-			String[] prefixes = { "TextField", "TextArea", "List", "Table" };
+			String[] prefixes = { "PasswordField", "TextField", "TextArea", "List", "Table" };
 			for(int i = 0; i < prefixes.length; i++)
 			{
 				String prefix = prefixes[i];
