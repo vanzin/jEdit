@@ -113,7 +113,7 @@ public class jEdit
 		} //}}}
 
 		startupDone.add(false);
-		
+
 		// later on we need to know if certain code is called from
 		// the main thread
 		mainThread = Thread.currentThread();
@@ -335,7 +335,7 @@ public class jEdit
 			relocateSettings();
 		}
 		// }}}
-		
+
 		//{{{ Initialize settings directory
 		Writer stream;
 		if(settingsDirectory != null)
@@ -1496,7 +1496,7 @@ public class jEdit
 		String path, boolean newFile, Hashtable props)
 	{
 		return openFile(view == null ? null : view.getEditPane(), parent, path, newFile, props);
-	} 
+	}
 
 	/**
 	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
@@ -1747,7 +1747,7 @@ public class jEdit
 
 	/**
 	 * Creates a new `untitled' file.
-	 * 
+	 *
 	 * @param editPane The editPane to create the file in
 	 * @param dir The directory to create the file in
 	 *
@@ -1771,7 +1771,7 @@ public class jEdit
 					 *  if user requested new file.
 					 */
 					int l = buf.getLength();
-					if (l > 0) 
+					if (l > 0)
 						buf.remove(0, l);
 					editPane.setBuffer(buf);
 					return buf;
@@ -2406,7 +2406,7 @@ public class jEdit
 				SwingUtilities.invokeLater(new DockingLayoutSetter(
 					newView, config, index));
 			}
-			
+
 			// show tip of the day
 			if(newView == viewsFirst)
 			{
@@ -2506,7 +2506,7 @@ public class jEdit
 	//}}}
 
 	//{{{ Miscellaneous methods
-	
+
 	//{{{ relocateSettings() method
 	public static void relocateSettings()
 	{
@@ -2529,7 +2529,7 @@ public class jEdit
 		}
 	}
 	//}}}
-	
+
 	//{{{ isStartupDone() method
 	/**
 	 * Whether jEdit startup is over.
@@ -3609,6 +3609,7 @@ public class jEdit
 			new MyFocusManager());
 	} //}}}
 
+	//{{{ getNextUntitledBufferId() method
 	public static int getNextUntitledBufferId()
 	{
 		int untitledCount = 0;
@@ -3630,7 +3631,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 		return untitledCount + 1;
-	}
+	} //}}}
 
 	//{{{ runStartupScripts() method
 	/**
