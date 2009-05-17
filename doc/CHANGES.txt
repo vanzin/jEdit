@@ -217,6 +217,8 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 - New jedit-actions edit mode that delegates to beanshell the <CODE> tags
   (Romain François)
 
+- Updated SAS edit mode (Ian Helgesen # 1806510).
+
 - New JavaFX edit mode (Matthieu Casanova)
 
 - Updated Antlr mode (LDiracDelta # 2013652 )
