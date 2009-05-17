@@ -192,6 +192,11 @@ Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
 
 - Removed BufferSetManager#clear() which just made inconsistent state.
 
+- Added a new method jEdit.moveBuffer() to explicitly move a buffer in
+  a BufferSet.
+  This can be used to replace a hacky call of BufferSet#addBufferAt()
+  which is used to move the buffer.
+
 - Added OperatingSystem.hasJava16() method and made deprecated
   OperatingSystem.hasJava15() and OperatingSystem.hasJava14() since jEdit
   requires Java 1.5 at least (Matthieu Casanova)
