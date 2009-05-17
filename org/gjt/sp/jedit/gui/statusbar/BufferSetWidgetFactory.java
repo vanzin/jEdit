@@ -33,7 +33,6 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.bufferset.BufferSet;
-import org.gjt.sp.jedit.bufferset.BufferSetManager;
 //}}}
 
 /**
