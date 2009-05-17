@@ -1422,7 +1422,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			else
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}
-	}
+	} //}}}
 	
 	//{{{ toggleFullScreen() method
 	public void toggleFullScreen()
