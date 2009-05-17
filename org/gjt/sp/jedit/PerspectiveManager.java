@@ -245,7 +245,6 @@ public class PerspectiveManager
 	private static class PerspectiveHandler extends DefaultHandler
 	{
 		View view;
-		Buffer currentBuffer;
 		StringBuffer charData;
 		View.ViewConfig config;
 		boolean restoreFiles;
@@ -320,16 +319,16 @@ public class PerspectiveManager
 			{
 				if (restoreFiles && !skipRemote(charData.toString()))
 				{
-					currentBuffer = jEdit.openTemporary(null,null, charData.toString(), false);
+					Buffer restored = jEdit.openTemporary(null,null, charData.toString(), false);
 					// if the autoReload attributes are not present, don't set anything
 					// it's sufficient to check whether they are present on the first BUFFER element
-					if (currentBuffer != null)
+					if (restored != null)
 					{
 						if(autoReload != null)
-							currentBuffer.setAutoReload("TRUE".equals(autoReload));
+							restored.setAutoReload("TRUE".equals(autoReload));
 						if(autoReloadDialog != null)
-							currentBuffer.setAutoReloadDialog("TRUE".equals(autoReloadDialog));
-						jEdit.commitTemporary(currentBuffer);
+							restored.setAutoReloadDialog("TRUE".equals(autoReloadDialog));
+						jEdit.commitTemporary(restored);
 					}
 				}
 			}
