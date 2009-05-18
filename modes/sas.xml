@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
+
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!--
       SAS edit mode by Bill McMilleon (bill@mcmilleon.com)
       March 19, 2003
 
-      updated by Ian Helgesen
-      2007-10-02
+      updated by Ian Helgesen 2007-10-02
+      updated by goebbe 2009-05-18
 
       Suggested catalog file entry:
 
@@ -21,40 +22,56 @@
 .*;|\s*data .*;|\s*%macro\s?.*;|define event \S+\s*;)"/>
 
     <PROPERTY NAME="unindentThisLine" VALUE="^\s*(else.*|end\s*|elsif.*|rescue.*|when.*)$"/>
-<PROPERTY NAME="unindentNextLines" VALUE="^\s*(end\s*|else.*|rescue.*|elsif.*|when.*)$"/>
+    <PROPERTY NAME="unindentNextLines" VALUE="^\s*(end\s*|else.*|rescue.*|elsif.*|when.*)$"/>
 
     <PROPERTY NAME="commentStart" VALUE="/*" />
     <PROPERTY NAME="commentEnd" VALUE="*/" />
     <PROPERTY NAME="lineComment" VALUE="%*" />
 </PROPS>
 
-    <RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="FALSE">
+    <RULES IGNORE_CASE="TRUE" NO_WORD_SEP="_" HIGHLIGHT_DIGITS="TRUE">
 
 <!-- In fixed form, column 72 is the last column parsed, unless the
 \extend_source option is invoked -->
     <!-- TERMINATE AT_CHAR="72" / -->
 
-		<!-- C style comment -->
-		<SPAN TYPE="COMMENT1">
-			<BEGIN>/*</BEGIN>
-			<END>*/</END>
-		</SPAN>
-<SPAN TYPE="COMMENT2" AT_WORD_START="TRUE">
-<BEGIN>*</BEGIN>
-<END>;</END>
+<!-- C style comment -->
+<SPAN TYPE="COMMENT1">
+	<BEGIN>/*</BEGIN>
+	<END>*/</END>
 </SPAN>
 
-<SPAN TYPE="COMMENT2">
-<BEGIN>%*</BEGIN>
-<END>;</END>
+<!--<SPAN TYPE="COMMENT2" AT_WORD_START="TRUE">
+    <BEGIN>*</BEGIN>
+    <END>;</END>
+</SPAN>-->
+
+<SPAN TYPE="COMMENT2" AT_WHITESPACE_END="TRUE">
+	<BEGIN>*</BEGIN>
+	<END>;</END>
 </SPAN>
+
+<!-- COMMENT2 also when there is nothing OR nothing but space between the last ; and the *   -->
+<!-- currently the ending ; of a comment cannot be used in regexp inside Jedit -->
+<!-- therefore two COMMENT2 in row is hard to implement -->
+<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR=";" EXCLUDE_MATCH="FALSE">
+    <BEGIN>[;][\s]*[*]</BEGIN>
+    <END>;</END>
+</SPAN_REGEXP>
+
+<SPAN TYPE="COMMENT2">
+    <BEGIN>%*</BEGIN>
+    <END>;</END>
+</SPAN>
+
+
 <SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE">
-  <BEGIN>'</BEGIN>
-  <END>'</END>
+    <BEGIN>'</BEGIN>
+    <END>'</END>
 </SPAN>
 <SPAN TYPE="LITERAL2" NO_LINE_BREAK="FALSE">
-  <BEGIN>"</BEGIN>
-  <END>"</END>
+    <BEGIN>"</BEGIN>
+    <END>"</END>
 </SPAN>
 
 <!-- PROCS                 -->
@@ -106,7 +123,7 @@
     <SEQ TYPE="OPERATOR">=</SEQ>
     <SEQ TYPE="OPERATOR">&lt;</SEQ>
     <SEQ TYPE="OPERATOR">&gt;</SEQ>
-    <SEQ TYPE="OPERATOR">_</SEQ>
+    <!--<SEQ TYPE="OPERATOR">_</SEQ>  -->
     <SEQ TYPE="OPERATOR">|</SEQ>
     <SEQ TYPE="OPERATOR">~</SEQ>
     <SEQ TYPE="OPERATOR">^</SEQ>
@@ -407,8 +424,3 @@
 
     </RULES>
 </MODE>
-
-
-
-
-

@@ -221,7 +221,7 @@ release.
 - New jedit-actions edit mode that delegates to beanshell the <CODE> tags
   (Romain François)
 
-- Updated SAS edit mode (Ian Helgesen # 1806510).
+- Updated SAS edit mode (Ian Helgesen # 1806510, goebbe #2675761 ).
 
 - New JavaFX edit mode (Matthieu Casanova)
 
