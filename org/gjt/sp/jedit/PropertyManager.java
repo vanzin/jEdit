@@ -65,7 +65,6 @@ class PropertyManager
 		throws IOException
 	{
 		user.store(out,"jEdit properties");
-		out.close();
 	} //}}}
 
 	//{{{ loadPluginProps() method

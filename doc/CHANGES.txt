@@ -5,9 +5,13 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra,
 Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, Daniel Hahler,
 Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker, Seph Soliman,
-Sergey Mezentsev and Marcelo Vanzin for contributing to this release.
+Sergey Mezentsev, Matthew Bakalar and Marcelo Vanzin for contributing to this
+release.
 
 {{{ Bug Fixes
+- Fixed a possible case where an output stream is not closed (#2790435)
+  (Matthew Bakalar)
+
 - The Password fields in Metal Look & Feel now follows the TextArea color scheme
   (Matthieu Casanova)
 

@@ -2697,10 +2697,10 @@ public class jEdit
 		else
 		{
 			backupSettingsFile(file2);
-
+			OutputStream out = null;
 			try
 			{
-				OutputStream out = new FileOutputStream(file1);
+				out = new FileOutputStream(file1);
 				propMgr.saveUserProps(out);
 				file2.delete();
 				file1.renameTo(file2);
@@ -2708,6 +2708,10 @@ public class jEdit
 			catch(IOException io)
 			{
 				Log.log(Log.ERROR,jEdit.class,io);
+			}
+			finally
+			{
+				IOUtilities.closeQuietly(out);
 			}
 
 			propsModTime = file2.lastModified();
