@@ -3566,6 +3566,7 @@ TODO:
 			<KEYWORD2>proc_open</KEYWORD2>
 			<KEYWORD2>proc_terminate</KEYWORD2>
 			<KEYWORD2>process</KEYWORD2> <!-- domxsltstylesheet -->
+			<KEYWORD2>property_exists</KEYWORD2>
 			<KEYWORD2>pspell_add_to_personal</KEYWORD2>
 			<KEYWORD2>pspell_add_to_session</KEYWORD2>
 			<KEYWORD2>pspell_check</KEYWORD2>
@@ -5062,6 +5063,7 @@ TODO:
 			<LABEL>@static</LABEL>
 			<LABEL>@staticvar</LABEL>
 			<LABEL>@subpackage</LABEL>
+			<LABEL>@throws</LABEL>
 			<LABEL>@todo</LABEL>
 			<LABEL>@tutorial</LABEL>
 			<LABEL>@uses</LABEL>

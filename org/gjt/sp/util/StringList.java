@@ -136,7 +136,7 @@ public class StringList extends ArrayList<String>
 			return get(0);
 		else
 		{
-			StringBuffer retval = new StringBuffer();
+			StringBuilder retval = new StringBuilder();
 			retval.append(get(0));
 			for (int i = 1; i < s; ++i)
 				retval.append(delim + get(i));
