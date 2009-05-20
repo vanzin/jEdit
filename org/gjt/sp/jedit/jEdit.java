@@ -2702,8 +2702,6 @@ public class jEdit
 			{
 				out = new FileOutputStream(file1);
 				propMgr.saveUserProps(out);
-				file2.delete();
-				file1.renameTo(file2);
 			}
 			catch(IOException io)
 			{
@@ -2713,7 +2711,12 @@ public class jEdit
 			{
 				IOUtilities.closeQuietly(out);
 			}
-
+			file2.delete();
+			if (! file1.renameTo(file2))
+			{
+				Log.log(Log.ERROR,jEdit.class,"Failed to rename \"" + file1 +
+					"\" to the user properties file \"" + file2 + "\".");
+			}
 			propsModTime = file2.lastModified();
 		}
 	} //}}}
