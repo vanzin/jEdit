@@ -575,7 +575,7 @@ public class StandaloneTextArea extends TextArea
 	//{{{ createTextArea() method
 	/**
 	 * Create a standalone TextArea.
-	 * If you want to use it in jEdit, please use {@link org.gjt.sp.jedit.jEdit#createTextArea()}
+	 * If you want to use it in jEdit, please use {@link JEditEmbeddedTextArea#JEditEmbeddedTextArea()}
 	 *
 	 * @return a textarea
 	 * @since 4.3pre13

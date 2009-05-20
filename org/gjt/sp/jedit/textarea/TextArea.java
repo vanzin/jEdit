@@ -149,8 +149,9 @@ public abstract class TextArea extends JComponent
 
 	//{{{ initInputHandler() method
 	/**
-	 * Creates an actionContext and initializes the input handler for this textarea. Called when creating
-	 * a standalone textarea from within jEdit. See {@link jEdit#createTextArea()}
+	 * Creates an actionContext and initializes the input
+	 * handler for this textarea. Called when creating
+	 * a standalone textarea from within jEdit.
 	 */
 	public void initInputHandler()
 	{
