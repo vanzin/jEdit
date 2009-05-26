@@ -29,6 +29,7 @@ sendBufferToNextSplit() {
             dest = src + 1;
             if (dest >= editPanes.length) dest = 0;
             jEdit.openFile(editPanes[dest], buffer.getPath());
+            break;
          }
 }
 
