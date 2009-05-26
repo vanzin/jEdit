@@ -267,6 +267,9 @@ release.
   Add some new keywords and operators to the perl mode. (Markus Laker)
 
 - Added COMMENT3 in javascript mode (bug #2474585) (Matthieu Casanova)
+
+- Added macro: "Files/Send Buffer to Next Editpane" for use with EditPane
+  bufferset scope (Alan Ezust).
 }}}
 
 }}}
