@@ -3600,15 +3600,21 @@ public class jEdit
 			for(int i = 0; i < prefixes.length; i++)
 			{
 				String prefix = prefixes[i];
-				defaults.put(prefix + ".disabledBackground",background);
+				defaults.put(prefix + ".foreground",foreground);
 				defaults.put(prefix + ".background",background);
 				defaults.put(prefix + ".disabledForeground",foreground);
-				defaults.put(prefix + ".foreground",foreground);
+				defaults.put(prefix + ".disabledBackground",background);
 				defaults.put(prefix + ".caretForeground",caretColor);
 				defaults.put(prefix + ".selectionForeground",foreground);
 				defaults.put(prefix + ".selectionBackground",selectionColor);
-				//defaults.put(prefix + ".inactiveForeground",foreground);
 			}
+
+			defaults.put("ComboBox.foreground",foreground);
+			defaults.put("ComboBox.background",background);
+			defaults.put("ComboBox.disabledForeground",foreground);
+			defaults.put("ComboBox.disabledBackground",background);
+			defaults.put("ComboBox.selectedForeground",foreground);
+			defaults.put("ComboBox.selectedBackground",selectionColor);
 
 			defaults.put("Tree.background",background);
 			defaults.put("Tree.foreground",foreground);
