@@ -173,6 +173,11 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		stripTrailingEOL.setSelected(jEdit.getBooleanProperty("stripTrailingEOL"));
 		addComponent(stripTrailingEOL);
 
+		completeFromAllBuffers = new JCheckBox(jEdit.getProperty(
+			"options.textArea.completeFromAllBuffers"));
+		completeFromAllBuffers.setSelected(jEdit.getBooleanProperty("completeFromAllBuffers"));
+		addComponent(completeFromAllBuffers);
+
 	} //}}}
 
 	//{{{ _save() method
@@ -216,6 +221,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		jEdit.setProperty("view.antiAlias", nv.toString());
 		jEdit.setBooleanProperty("view.fracFontMetrics",fracFontMetrics.isSelected());
 		jEdit.setBooleanProperty("stripTrailingEOL", stripTrailingEOL.isSelected());
+		jEdit.setBooleanProperty("completeFromAllBuffers", completeFromAllBuffers.isSelected());
 	} //}}}
 
 	//{{{ Private members
@@ -241,5 +247,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JComboBox antiAlias;
 	private JCheckBox fracFontMetrics;
 	private JCheckBox stripTrailingEOL;
+	private JCheckBox completeFromAllBuffers;
 	//}}}
 }

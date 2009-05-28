@@ -5,8 +5,8 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Dakshinamurthy Karra,
 Pascal Sancho, Victor Engmark, Alan Ezust, Dale Anson, Daniel Hahler,
 Kazutoshi Satoda, Shlomy Reinstein, Bernard Walle, Markus Laker, Seph Soliman,
-Sergey Mezentsev, Matthew Bakalar and Marcelo Vanzin for contributing to this
-release.
+Sergey Mezentsev, Matthew Bakalar, Marcelo Vanzin and Matthew Gilbert for
+contributing to this release.
 
 {{{ Bug Fixes
 - Fixed a possible case where an output stream is not closed (#2790435)
@@ -159,6 +159,10 @@ release.
 
 - Added an option in the Gutter option pane to enable or disable the gutter.
   (Shlomy Reinstein)
+
+- Added an option to search all open buffers to build the completion list.
+  (Matthew Gilbert - SF.net patch #2569381, #2570229)
+
 }}}
 {{{ API Changes
 

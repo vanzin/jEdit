@@ -60,6 +60,9 @@ twoStageSave=true
 # Strip trailing EOL
 stripTrailingEOL=true
 
+# Complete words from all open buffers
+completeFromAllBuffers=false
+
 # Need this so that new files have a trailing EOL
 buffer.trailingEOL=true
 

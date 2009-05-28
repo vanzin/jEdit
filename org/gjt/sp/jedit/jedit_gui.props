@@ -2087,6 +2087,8 @@ Subpixel supported in JDK 1.6 and later.
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
 options.textArea.stripTrailingEOL=Hide final end of line (if any)
+options.textArea.completeFromAllBuffers=Complete words from all open buffers (default is \
+    to limit search to currently visible buffers)
 #}}}
 
 #{{{ Tool Bar pane

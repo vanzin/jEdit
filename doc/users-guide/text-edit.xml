@@ -378,6 +378,14 @@
         <para>Typing while the popup is visible will automatically update the
         popup and narrow the set of completions as necessary.</para>
 
+        <para>The default word completion uses the visible buffers (buffers
+        being shown in an EditPane) to find completions. The set of possible
+        words can be expanded by enabling the <guimenuitem>Global Options - Text
+        Area - Complete words from all open buffers</guimenuitem> option.
+        Setting this option will use all open buffers to search for possible
+        completions. Note, this can degrade completion performance if many
+        buffers are open.</para>
+
         <para><guimenu>Edit</guimenu>&gt;<guimenuitem>Word Count</guimenuitem>
         displays a dialog box with the number of characters, words and lines in
         the current buffer.</para>
