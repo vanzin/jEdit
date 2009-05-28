@@ -228,7 +228,8 @@ public class CompleteWord extends CompletionPopup
 				Arrays.asList(jEdit.getBuffers()) :
 				getVisibleBuffers();
 
-		for (Buffer b : sourceBuffers) {
+		for (Buffer b : sourceBuffers)
+		{
 			// only complete current buffer's keyword map
 			KeywordMap _keywordMap;
 			if(b == buffer)
