@@ -56,7 +56,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkEvent.EventType;
 import javax.swing.event.HyperlinkListener;
 
 import javax.swing.text.html.HTMLDocument;
