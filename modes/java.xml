@@ -129,7 +129,7 @@
 			<KEYWORD3>short</KEYWORD3>
 			<KEYWORD3>void</KEYWORD3>
 
-			<FUNCTION>assert</FUNCTION>
+			<KEYWORD1>assert</KEYWORD1>
 			<KEYWORD1>strictfp</KEYWORD1>
 
 
