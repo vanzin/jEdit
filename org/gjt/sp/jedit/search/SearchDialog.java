@@ -343,6 +343,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		label.setDisplayedMnemonic(jEdit.getProperty("search.find.mnemonic")
 			.charAt(0));
 		find = new HistoryTextArea("find");
+		find.setName("find");
 		find.setColumns(25);
 		find.setToolTipText(jEdit.getProperty("search.find.tooltip"));
 		label.setToolTipText(jEdit.getProperty("search.find.tooltip"));
@@ -402,6 +403,7 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		cons.insets = new Insets(0,0,0,0);
 
 		replace = new HistoryTextArea("replace");
+		replace.setName("replace");
 		replace.setToolTipText(jEdit.getProperty("search.find.tooltip"));
 		label.setLabelFor(replace);
 
