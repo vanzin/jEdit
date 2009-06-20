@@ -31,8 +31,8 @@ package org.gjt.sp.jedit.io;
  * @version	$Id$
  * @since	jEdit 4.3pre7
  */
-public interface VFSFileFilter {
-
+public interface VFSFileFilter 
+{
 	public static final String SERVICE_NAME = VFSFileFilter.class.getName();
 
 	/**
