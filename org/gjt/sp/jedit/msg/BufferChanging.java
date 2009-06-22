@@ -40,20 +40,21 @@ public class BufferChanging extends PositionChanging
 	/**
 	 * @param editPane the editPane that sent the message
 	 * @param newBuffer the buffer that will soon be displayed.
-	 * 
 	 */
-	public BufferChanging(EditPane editPane, Buffer newBuffer) {
+	public BufferChanging(EditPane editPane, Buffer newBuffer)
+	{
 		super(editPane, EditPaneUpdate.BUFFER_CHANGING);
-		if (newBuffer == null) {
+		if (newBuffer == null)
 			Log.log (Log.ERROR, this, "BufferChanging to null Buffer? Emit PositionChanging instead.");
-		}
+
 		m_buffer = newBuffer;
 	}
 	
 	/**
 	 * @return the new buffer that is about to be displayed
 	 */
-	public Buffer getBuffer() {
+	public Buffer getBuffer()
+	{
 		return m_buffer;
 	}
 
