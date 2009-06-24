@@ -182,6 +182,7 @@ public class JEditTextArea extends TextArea
 		try
 		{
 			int lineNumber = Integer.parseInt(line) - 1;
+			EditBus.send(new PositionChanging(this));
 			setCaretPosition(getLineStartOffset(lineNumber));
 		}
 		catch(Exception e)

@@ -26,12 +26,15 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import java.awt.event.*;
 
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.Registers;
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.msg.PositionChanging;
 //}}}
 
 /**
  * The mouseHandler used for jEdit.
+ * 
  */
 public class MouseHandler extends TextAreaMouseHandler
 {
@@ -68,7 +71,7 @@ public class MouseHandler extends TextAreaMouseHandler
 
 		if(textArea.getBuffer().isLoading())
 			return;
-
+		EditBus.send(new PositionChanging(textArea));
 		int x = evt.getX();
 		int y = evt.getY();
 
@@ -99,6 +102,7 @@ public class MouseHandler extends TextAreaMouseHandler
 			&& clickCount == 1 && !evt.isShiftDown())
 		{
 			maybeDragAndDrop = true;
+
 			textArea.moveCaretPosition(dragStart,false);
 			return;
 		}

@@ -31,8 +31,9 @@ import java.awt.event.InputEvent;
 import java.awt.*;
 
 /**
+ * Standalone TextArea MouseHandler.
  * @author Matthieu Casanova
- * @version $Id: FoldHandler.java 5568 2006-07-10 20:52:23Z kpouer $
+ * @version $Id: TextAreaHandler.java 5568 2006-07-10 20:52:23Z kpouer $
  */
 public class TextAreaMouseHandler extends MouseInputAdapter
 {
