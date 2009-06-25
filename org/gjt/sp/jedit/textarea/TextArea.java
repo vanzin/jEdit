@@ -209,18 +209,22 @@ public abstract class TextArea extends JComponent
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append("caret: ").append(caret).append('\n');
-		builder.append("caretLine: ").append(caretLine).append('\n');
-		builder.append("caretScreenLine: ").append(caretScreenLine).append('\n');
-		builder.append("electricScroll: ").append(electricScroll).append('\n');
-		builder.append("horizontalOffset: ").append(horizontalOffset).append('\n');
-		builder.append("magicCaret: ").append(magicCaret).append('\n');
-		builder.append("offsetXY").append(offsetXY.toString()).append('\n');
-		builder.append("oldCaretLine: ").append(oldCaretLine).append('\n');
-		builder.append("screenLastLine: ").append(screenLastLine).append('\n');
-		builder.append("visibleLines: ").append(visibleLines).append('\n');
-		builder.append("firstPhysicalLine: ").append(getFirstPhysicalLine()).append('\n');
-		builder.append("physLastLine: ").append(physLastLine).append('\n');
+		String baseVersion = super.toString();
+		int len = baseVersion.length() - 1;
+		builder.append(baseVersion);
+		builder.setLength(len); // chop off the last ]
+		builder.append(",caret=").append(caret).append(',');
+		builder.append("caretLine=").append(caretLine).append(',');
+		builder.append("caretScreenLine=").append(caretScreenLine).append(',');
+		builder.append("electricScroll=").append(electricScroll).append(',');
+		builder.append("horizontalOffset=").append(horizontalOffset).append(',');
+		builder.append("magicCaret=").append(magicCaret).append(',');
+		builder.append("offsetXY=").append(offsetXY.toString()).append(',');
+		builder.append("oldCaretLine=").append(oldCaretLine).append(',');
+		builder.append("screenLastLine=").append(screenLastLine).append(',');
+		builder.append("visibleLines=").append(visibleLines).append(',');
+		builder.append("firstPhysicalLine=").append(getFirstPhysicalLine()).append(',');
+		builder.append("physLastLine=").append(physLastLine).append(']');
 		return builder.toString();
 	} //}}}
 
