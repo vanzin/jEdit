@@ -96,7 +96,7 @@ import org.gjt.sp.util.SyntaxUtilities;
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
- * @version $Id: JEditTextArea.java 7148 2006-09-29 23:09:06 +0200 (ven., 29 sept. 2006) kpouer $
+ * @version $Id$
  */
 public class StandaloneTextArea extends TextArea
 {

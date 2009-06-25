@@ -31,7 +31,7 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
  *
  * @since jEdit 4.3pre16
  * @author Shlomy Reinstein
- * @version $Id: FoldPainter.java 13799 2008-09-25 21:22:28Z shlomy $
+ * @version $Id$
  */
 public interface FoldPainter {
 	

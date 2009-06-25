@@ -59,9 +59,8 @@ import java.util.TooManyListenersException;
  * JEditEmbeddedTextArea and StandaloneTextArea, so it needs to be embeddable and separable.
  *
  * @author Slava Pestov
- * @author John Gellene (API documentation)
  * @author kpouer (rafactoring into standalone text area)
- * @version $Id: TextArea.java 7148 2006-09-29 23:09:06 +0200 (ven., 29 sept. 2006) kpouer $
+ * @version $Id$
  */
 public abstract class TextArea extends JComponent
 {

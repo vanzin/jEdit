@@ -33,7 +33,7 @@ import java.awt.*;
 /**
  * Standalone TextArea MouseHandler.
  * @author Matthieu Casanova
- * @version $Id: TextAreaHandler.java 5568 2006-07-10 20:52:23Z kpouer $
+ * @version $Id$
  */
 public class TextAreaMouseHandler extends MouseInputAdapter
 {
