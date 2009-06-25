@@ -51,8 +51,8 @@ import java.util.LinkedList;
 import java.util.TooManyListenersException;
 //}}}
 
-/**
- * TextArea abstract class.
+/** Abstract TextArea component.
+ *
  * The concrete instance used by jEdit itself is called the JEditTextArea.
  *
  * This class uses a minimal set of jEdit APIs because it is the base class of the
@@ -213,18 +213,18 @@ public abstract class TextArea extends JComponent
 		int len = baseVersion.length() - 1;
 		builder.append(baseVersion);
 		builder.setLength(len); // chop off the last ]
-		builder.append(",caret=").append(caret).append(',');
-		builder.append("caretLine=").append(caretLine).append(',');
-		builder.append("caretScreenLine=").append(caretScreenLine).append(',');
-		builder.append("electricScroll=").append(electricScroll).append(',');
-		builder.append("horizontalOffset=").append(horizontalOffset).append(',');
-		builder.append("magicCaret=").append(magicCaret).append(',');
-		builder.append("offsetXY=").append(offsetXY.toString()).append(',');
-		builder.append("oldCaretLine=").append(oldCaretLine).append(',');
-		builder.append("screenLastLine=").append(screenLastLine).append(',');
-		builder.append("visibleLines=").append(visibleLines).append(',');
-		builder.append("firstPhysicalLine=").append(getFirstPhysicalLine()).append(',');
-		builder.append("physLastLine=").append(physLastLine).append(']');
+		builder.append(",caret=").append(caret);
+		builder.append(",caretLine=").append(caretLine);
+		builder.append(",caretScreenLine=").append(caretScreenLine);
+		builder.append(",electricScroll=").append(electricScroll);
+		builder.append(",horizontalOffset=").append(horizontalOffset);
+		builder.append(",magicCaret=").append(magicCaret);
+		builder.append(",offsetXY=").append(offsetXY.toString());
+		builder.append(",oldCaretLine=").append(oldCaretLine);
+		builder.append(",screenLastLine=").append(screenLastLine);
+		builder.append(",visibleLines=").append(visibleLines);
+		builder.append(",firstPhysicalLine=").append(getFirstPhysicalLine());
+		builder.append(",physLastLine=").append(physLastLine).append("]");
 		return builder.toString();
 	} //}}}
 

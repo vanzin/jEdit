@@ -32,9 +32,8 @@ import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.msg.PositionChanging;
 //}}}
 
-/**
- * The mouseHandler used for jEdit.
- * 
+/** The mouseHandler used for jEdit.
+ *
  */
 public class MouseHandler extends TextAreaMouseHandler
 {

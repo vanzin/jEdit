@@ -1,5 +1,5 @@
 /*
- * TextAreaMouseHandler.java - Handles services.xml files in plugins
+ * TextAreaMouseHandler.java - standalone mouse handler for textarea
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -30,8 +30,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.InputEvent;
 import java.awt.*;
 
-/**
- * Standalone TextArea MouseHandler.
+/** Standalone TextArea MouseHandler.
+ *
  * @author Matthieu Casanova
  * @version $Id$
  */
