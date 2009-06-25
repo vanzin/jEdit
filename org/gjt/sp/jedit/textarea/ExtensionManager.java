@@ -1,5 +1,5 @@
 /*
- * ExtensionManager.java - Handles 'layers'
+ * ExtensionManager.java -
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *

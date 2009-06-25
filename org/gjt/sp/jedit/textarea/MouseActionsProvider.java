@@ -1,5 +1,5 @@
 /*
- * ServiceManager.java - Handles services.xml files in plugins
+ * MouseActionsProvider.java
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *

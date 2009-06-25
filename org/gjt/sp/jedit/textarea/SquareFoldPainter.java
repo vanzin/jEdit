@@ -1,7 +1,7 @@
 /*
  * SquareFoldPainter.java
  * :tabSize=8:indentSize=8:noTabs=false:
- * :folding=explicit:collapseFolds=1:
+ * :folding=explicit:collapseFolds=0:
  *
  * Copyright (C) 2008 Shlomy Reinstein
  *
@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.textarea;
 
 import java.awt.Graphics2D;
 
+// {{{ SquareFoldPainter
 public class SquareFoldPainter extends ShapedFoldPainter {
 
 	@Override
@@ -31,4 +32,4 @@ public class SquareFoldPainter extends ShapedFoldPainter {
 		gfx.drawRect(1,top,8,(bottom-top));
 	}
 
-}
+} // }}}

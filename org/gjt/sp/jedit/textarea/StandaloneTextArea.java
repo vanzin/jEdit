@@ -61,7 +61,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.SyntaxUtilities;
 
 //}}}
-
+// {{{ class StandaloneTextArea
 /**
  * jEdit's standalone text component.<p>
  *
@@ -386,7 +386,7 @@ public class StandaloneTextArea extends TextArea
 	} //}}}
 
 
-	//{{{ getFontProperty() method
+	//{{{ getFontProperty() methods
 	/**
 	 * Returns the value of a font property. The family is stored
 	 * in the <code><i>name</i></code> property, the font size is stored
@@ -403,7 +403,7 @@ public class StandaloneTextArea extends TextArea
 	private Font getFontProperty(String name)
 	{
 		return getFontProperty(name,null);
-	} //}}}
+	}
 
 	/**
 	 * Returns the value of a font property. The family is stored
@@ -454,7 +454,7 @@ public class StandaloneTextArea extends TextArea
 		}
 	} //}}}
 
-	//{{{ getColorProperty() method
+	//{{{ getColorProperty() methods
 	/**
 	 * Returns the value of a color property.
 	 * @param name The property name
@@ -463,9 +463,8 @@ public class StandaloneTextArea extends TextArea
 	private Color getColorProperty(String name)
 	{
 		return getColorProperty(name,Color.black);
-	} //}}}
+	}
 
-	//{{{ getColorProperty() method
 	/**
 	 * Returns the value of a color property.
 	 * @param name The property name
@@ -531,7 +530,7 @@ public class StandaloneTextArea extends TextArea
 				buffer.setProperty(bufferProperties[i], value);
 		}
 		buffer.propertiesChanged();
-	}
+	} // }}}
 
 	//{{{ createPopupMenu() method
 	/**
@@ -676,4 +675,4 @@ public class StandaloneTextArea extends TextArea
 		frame.pack();
 		frame.setVisible(true);
 	} //}}}
-}
+}// }}}

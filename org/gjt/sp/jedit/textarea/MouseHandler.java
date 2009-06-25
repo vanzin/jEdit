@@ -1,5 +1,5 @@
 /*
- * MouseHandler.java - jEdit's text component
+ * MouseHandler.java
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *

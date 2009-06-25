@@ -19,6 +19,7 @@
 
 package org.gjt.sp.jedit.textarea;
 
+
 /**
  * Fired when the text area needs to display a status message.
  * @author Slava Pestov
@@ -32,8 +33,8 @@ public interface StatusListener extends java.util.EventListener
 	int RECT_SELECT_CHANGED = 2;
 
 	void statusChanged(TextArea textArea, int flag, boolean value);
-	
+
 	void bracketSelected(TextArea textArea, int line, String text);
-	
+
 	void narrowActive(TextArea textArea);
 }

@@ -1,7 +1,7 @@
 /*
  * TriangleFoldPainter.java
  * :tabSize=8:indentSize=8:noTabs=false:
- * :folding=explicit:collapseFolds=1:
+ * :folding=explicit:collapseFolds=0:
  *
  * Copyright (C) 1999, 2000 mike dillon
  * Portions copyright (C) 2001, 2002 Slava Pestov
@@ -25,11 +25,12 @@
 package org.gjt.sp.jedit.textarea;
 
 import java.awt.Graphics2D;
-
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
+// {{{ class TriangleFoldHandler
 public class TriangleFoldPainter implements FoldPainter {
 
+	// {{{ paintFoldStart()
 	public void paintFoldStart(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, boolean nextLineVisible, int y, int lineHeight,
 			JEditBuffer buffer)
@@ -52,8 +53,9 @@ public class TriangleFoldPainter implements FoldPainter {
 			gfx.drawLine(7,_y - 2,7,_y + 1);
 			gfx.drawLine(8,_y - 1,8,_y);
 		}
-	}
+	} // }}}
 
+	// {{{ paintFoldEnd()
 	public void paintFoldEnd(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
@@ -61,11 +63,12 @@ public class TriangleFoldPainter implements FoldPainter {
 		int _y = y + lineHeight / 2;
 		gfx.drawLine(4,_y,4,_y + 3);
 		gfx.drawLine(4,_y + 3,7,_y + 3);
-	}
+	} // }}}
 
+	// {{{ paintFoldMiddle()
 	public void paintFoldMiddle(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
 	{
-	}
+	} // }}}
 
-}
+}// }}}
