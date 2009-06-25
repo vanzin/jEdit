@@ -56,7 +56,7 @@ import java.util.TooManyListenersException;
  * The concrete instance used by jEdit itself is called the JEditTextArea.
  *
  * This class uses a minimal set of jEdit APIs because it is the base class of the
- * StandaloneTextArea also and needs to be embeddable.
+ * JEditEmbeddedTextArea also and needs to be embeddable.
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
