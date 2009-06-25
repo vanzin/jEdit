@@ -52,16 +52,16 @@ import java.util.TooManyListenersException;
 //}}}
 
 /**
- * jEdit's text component.<p>
+ * TextArea abstract class.
+ * The concrete instance used by jEdit itself is called the JEditTextArea.
  *
- * Unlike most other text editors, the selection API permits selection and
- * concurrent manipulation of multiple, non-contiguous regions of text.
- * Methods in this class that deal with selecting text rely upon classes derived
- * the {@link Selection} class.
+ * This class uses a minimal set of jEdit APIs because it is the base class of the
+ * StandaloneTextArea also and needs to be embeddable.
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
- * @version $Id: JEditTextArea.java 7148 2006-09-29 23:09:06 +0200 (ven., 29 sept. 2006) kpouer $
+ * @author kpouer (rafactoring into standalone text area)
+ * @version $Id: TextArea.java 7148 2006-09-29 23:09:06 +0200 (ven., 29 sept. 2006) kpouer $
  */
 public abstract class TextArea extends JComponent
 {

@@ -1,11 +1,9 @@
 /*
- * EditAction.java - jEdit action listener
+ * AbstractEditAction.java - Base class for EditAction
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 1998, 2003 Slava Pestov
- *
- * This program is free software; you can redistribute it and/or
+  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or any later version.
@@ -29,7 +27,7 @@ package org.gjt.sp.jedit;
  * @see jEdit#getActionNames()
  * @see ActionSet
  *
- * @author Slava Pestov
+ * @author S. Pestov, M. Casanova, K. Satoda
  * @version $Id: EditAction.java 11177 2007-12-01 09:50:50Z k_satoda $
  * @since 4.3pre13
  */
@@ -37,11 +35,11 @@ public abstract class JEditAbstractEditAction<E>
 {
 	//{{{ Private members
 	protected String name;
-	
+
 	protected Object[] args;
 
 	//}}}
-	
+
 	//{{{ EditAction constructors
 	/**
 	 * Creates a new edit action with the specified name.
@@ -51,13 +49,13 @@ public abstract class JEditAbstractEditAction<E>
 	{
 		this.name = name;
 	}
-	
+
 	protected JEditAbstractEditAction(String name, Object[] newArgs)
 	{
 		this.name = name;
 		this.args = newArgs;
 	} //}}}
-		
+
 	//{{{ getName() method
 	/**
 	 * Returns the internal name of this action.
@@ -67,14 +65,14 @@ public abstract class JEditAbstractEditAction<E>
 	{
 		return name;
 	} //}}}
-	
+
 	// {{{ setName() method
 	/**
 	 * Changes the name of an action
 	 * @param newName the new name of the action
 	 * @since jEdit 4.3pre4
 	 */
-	public void setName(String newName) 
+	public void setName(String newName)
 	{
 		name = newName;
 	}// }}}
@@ -83,7 +81,7 @@ public abstract class JEditAbstractEditAction<E>
 	/**
 	 * Invokes the action. This is an implementation of the Command pattern,
 	 * and concrete actions should override this.
-	 * 
+	 *
 	 * @param arg the argument
 	 */
 	public abstract void invoke(E arg);
@@ -92,12 +90,12 @@ public abstract class JEditAbstractEditAction<E>
 	 * @param arg the arguments of the action
 	 * @param newArgs new argument list
 	 */
-	public final void invoke(E arg, Object[] newArgs) 
+	public final void invoke(E arg, Object[] newArgs)
 	{
 		args = newArgs;
 		invoke(arg);
 	} //}}}
-	
+
 	//{{{ toString() method
 	@Override
 	public String toString()
