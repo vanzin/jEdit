@@ -1,5 +1,5 @@
 /*
- * TextArea.java - Standalone jEdit Text Area component
+ * TextArea.java - Abstract jEdit Text Area component
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *

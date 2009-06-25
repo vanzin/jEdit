@@ -1,5 +1,5 @@
 /*
- * StandaloneTextArea.java - A TextArea that can be embedded in applications
+ * JEditEmbeddedTextArea.java - A TextArea that can be embedded in applications
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -28,7 +28,8 @@ import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 //}}}
 
-/**
+/** An embeddable TextArea for jEdit plugins to use.
+ *
  * @author Matthieu Casanova
  */
 public class JEditEmbeddedTextArea extends TextArea
