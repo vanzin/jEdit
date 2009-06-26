@@ -43,7 +43,7 @@ contributing to this release.
 - Fix for caret position display in status bar (tracker 2220033), relative
   position was not always correct. In conjunction with this, added checkboxes
   in the Status Bar option pane to make the various items in the caret position
-  display configurable (tracker 737187) (Dale Anson).
+  display configurable. (Dale Anson, Kazutoshi Satoda).
 
 - Fix for files in buffer switcher not ordered (tracker 2183929).  Sorting is
   now immediate on changing the preferences in the option dialog (Dale Anson)

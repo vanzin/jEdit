@@ -98,28 +98,33 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		optionsPanel.addComponent(new JLabel(jEdit.getProperty("options.status.caret.title", "Caret position display options:")));
 
 		/*
-		view.status.show-caret-offset -- true shows caret offset from start of buffer
-		view.status.show-caret-linenumber -- true shows line number for caret
-		view.status.show-caret-dot -- true shows offset in line for caret
-		view.status.show-caret-virtual -- true shows virtual offset in line for caret
-		view.status.show-caret-percent -- true shows relative position of the caret within the buffer
+		Caret position format: lineno,dot-virtual (caretpos/bufferlength)
+		view.status.show-caret-linenumber -- true shows line number for caret (lineno)
+		view.status.show-caret-dot -- true shows offset in line for caret (dot)
+		view.status.show-caret-virtual -- true shows virtual offset in line for caret (virtual)
+		view.status.show-caret-offset -- true shows caret offset from start of buffer (caretpos)
+		view.status.show-caret-bufferlength -- true shows length of buffer (bufferlength)
 		*/
-		show_caret_offset = new JCheckBox(jEdit.getProperty("options.status.caret.offset", "Show caret offset from start of file"),
-			jEdit.getBooleanProperty("view.status.show-caret-offset", true));
-		show_caret_linenumber = new JCheckBox(jEdit.getProperty("options.status.caret.linenumber", "Show caret line number"),
+		showCaretLineNumber = new JCheckBox(jEdit.getProperty("options.status.caret.linenumber", "Show caret line number"),
 			jEdit.getBooleanProperty("view.status.show-caret-linenumber", true));
-		show_caret_dot = new JCheckBox(jEdit.getProperty("options.status.caret.dot", "Show caret offset from start of line"),
+		showCaretLineNumber.setName("showCaretLineNumber");
+		showCaretDot = new JCheckBox(jEdit.getProperty("options.status.caret.dot", "Show caret offset from start of line"),
 			jEdit.getBooleanProperty("view.status.show-caret-dot", true));
-		show_caret_virtual = new JCheckBox(jEdit.getProperty("options.status.caret.virtual", "Show caret virtual offset from start of line"),
+		showCaretDot.setName("showCaretDot");
+		showCaretVirtual = new JCheckBox(jEdit.getProperty("options.status.caret.virtual", "Show caret virtual offset from start of line"),
 			jEdit.getBooleanProperty("view.status.show-caret-virtual", true));
-		show_caret_percent = new JCheckBox(jEdit.getProperty("options.status.caret.percent", "Show relative position (%) of caret within buffer"),
-			jEdit.getBooleanProperty("view.status.show-caret-percent", true));
-		optionsPanel.addComponent(show_caret_offset);
-		optionsPanel.addComponent(show_caret_linenumber);
-		optionsPanel.addComponent(show_caret_dot);
-		optionsPanel.addComponent(show_caret_virtual);
-		optionsPanel.addComponent(show_caret_percent);
-
+		showCaretVirtual.setName("showCaretVirtual");
+		showCaretOffset = new JCheckBox(jEdit.getProperty("options.status.caret.offset", "Show caret offset from start of file"),
+			jEdit.getBooleanProperty("view.status.show-caret-offset", true));
+		showCaretOffset.setName("showCaretOffset");
+		showCaretBufferLength = new JCheckBox(jEdit.getProperty("options.status.caret.bufferlength", "Show length of file"),
+			jEdit.getBooleanProperty("view.status.show-caret-bufferlength", true));
+		showCaretBufferLength.setName("showCaretBufferLength");
+		optionsPanel.addComponent(showCaretLineNumber);
+		optionsPanel.addComponent(showCaretDot);
+		optionsPanel.addComponent(showCaretVirtual);
+		optionsPanel.addComponent(showCaretOffset);
+		optionsPanel.addComponent(showCaretBufferLength);
 
 		//}}}
 
@@ -216,11 +221,11 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		}
 		jEdit.setProperty("view.status",buf.toString());
 
-		jEdit.setBooleanProperty("view.status.show-caret-offset", show_caret_offset.isSelected());
-		jEdit.setBooleanProperty("view.status.show-caret-linenumber", show_caret_linenumber.isSelected());
-		jEdit.setBooleanProperty("view.status.show-caret-dot", show_caret_dot.isSelected());
-		jEdit.setBooleanProperty("view.status.show-caret-virtual", show_caret_virtual.isSelected());
-		jEdit.setBooleanProperty("view.status.show-caret-percent", show_caret_percent.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-linenumber", showCaretLineNumber.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-dot", showCaretDot.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-virtual", showCaretVirtual.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-offset", showCaretOffset.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-bufferlength", showCaretBufferLength.isSelected());
 
 	} //}}}
 
@@ -240,11 +245,11 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private RolloverButton moveUp, moveDown;
 	private RolloverButton edit;
 
-	private JCheckBox show_caret_offset;
-	private JCheckBox show_caret_linenumber;
-	private JCheckBox show_caret_dot;
-	private JCheckBox show_caret_virtual;
-	private JCheckBox show_caret_percent;
+	private JCheckBox showCaretLineNumber;
+	private JCheckBox showCaretDot;
+	private JCheckBox showCaretVirtual;
+	private JCheckBox showCaretOffset;
+	private JCheckBox showCaretBufferLength;
 	//}}}
 
 	//{{{ updateButtons() method

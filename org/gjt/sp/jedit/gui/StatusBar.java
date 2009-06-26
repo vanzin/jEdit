@@ -63,6 +63,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	public StatusBar(View view)
 	{
 		super(new BorderLayout());
+		setName("StatusBar");
 		setBorder(new CompoundBorder(new EmptyBorder(4,0,0,
 			(OperatingSystem.isMacOS() ? 18 : 0)),
 			UIManager.getBorder("TextField.border")));
@@ -77,6 +78,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		MouseHandler mouseHandler = new MouseHandler();
 
 		caretStatus = new ToolTipLabel();
+		caretStatus.setName("caretStatus");
 		caretStatus.setToolTipText(jEdit.getProperty("view.status.caret-tooltip"));
 		caretStatus.addMouseListener(mouseHandler);
 
@@ -321,76 +323,65 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			int start = textArea.getLineStartOffset(currLine);
 			int dot = caretPosition - start;
 
-			// see above
-			if(dot < 0)
-				return;
+ 			if(dot < 0)
+ 				return;
+ 
+			int bufferLength = buffer.getLength();
 
-			buffer.getText(start,dot,seg);
-			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
-				buffer.getTabSize());
-
-			if (jEdit.getBooleanProperty("view.status.show-caret-offset", true))
-			{
-				buf.append(caretPosition);
-			}
+ 			buffer.getText(start,dot,seg);
+ 			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
+ 				buffer.getTabSize());
+			// for GC
+			seg.array = null;
+			seg.count = 0;
+ 
+			// per lengthy discussion on dev list, format for caret
+			// position is lineno,dot-virtual (caret/total) e.g.
+			// 388,10-31 (8835/13414).  No more "Top" nor "Bottom".
 			if (jEdit.getBooleanProperty("view.status.show-caret-linenumber", true))
 			{
-				if (buf.length() > 0)
-				{
-					buf.append(',');
-				}
-				buf.append(Integer.toString(currLine + 1));
+				buf.append(currLine + 1);
+				buf.append(',');
 			}
 			if (jEdit.getBooleanProperty("view.status.show-caret-dot", true))
 			{
-				if (buf.length() > 0)
-				{
-					buf.append(',');
-				}
-				buf.append(Integer.toString(dot + 1));
+				buf.append(dot + 1);
 			}
-			if (jEdit.getBooleanProperty("view.status.show-caret-virtual", true))
+			if (jEdit.getBooleanProperty("view.status.show-caret-virtual", true) &&
+				virtualPosition != dot)
 			{
-				if (buf.length() > 0 && jEdit.getBooleanProperty("view.status.show-caret-dot", true))
-				{
-					buf.append('-');
-				}
-				else if (buf.length() > 0) {
-					buf.append(',');
-				}
-				buf.append(Integer.toString(virtualPosition + 1));
+				buf.append('-');
+				buf.append(virtualPosition + 1);
 			}
-
-			if (jEdit.getBooleanProperty("view.status.show-caret-percent", true)) {
-				if (buf.length() > 0)
-				{
-					buf.append(' ');
-				}
-				int firstLine = textArea.getFirstLine();
-				int visible = textArea.getVisibleLines();
-				int lineCount = textArea.getLineCount();
-
-				if (visible >= lineCount)
-				{
-					buf.append("All");
-				}
-				else if (firstLine == 0)
-				{
-					buf.append("Top");
-				}
-				else if (firstLine + visible >= lineCount)
-				{
-					buf.append("Bot");
-				}
-				else
-				{
-					float percent = ((float)currLine / (float)lineCount) * 100.0f;
-					buf.append((int)percent).append('%');
-				}
+			if (buf.length() > 0) 
+			{
+				buf.append(' ');
 			}
-			caretStatus.setText(buf.toString());
-			buf.setLength(0);
-		}
+			if (jEdit.getBooleanProperty("view.status.show-caret-offset", true) &&
+				jEdit.getBooleanProperty("view.status.show-caret-bufferlength", true))
+			{
+				buf.append('(');
+				buf.append(caretPosition);
+				buf.append('/');
+				buf.append(bufferLength);
+				buf.append(')');
+			}
+			else if (jEdit.getBooleanProperty("view.status.show-caret-offset", true))
+			{
+				buf.append('(');
+				buf.append(caretPosition);
+				buf.append(')');
+			}
+			else if (jEdit.getBooleanProperty("view.status.show-caret-bufferlength", true))
+			{
+				buf.append('(');
+				buf.append(bufferLength);
+				buf.append(')');
+			}
+				
+ 			caretStatus.setText(buf.toString());
+ 			buf.setLength(0);
+ 		}			
 	} //}}}
 
 	//{{{ updateBufferStatus() method
@@ -436,7 +427,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private boolean showCaretStatus;
 	//}}}
 
-	static final String caretTestStr = "99999999,9999,999-999 99%";
+	//static final String caretTestStr = "99999999,9999,999-999 99%";
+	static final String caretTestStr = "9999,999-999 (99999999/99999999)";
 
 	//{{{ getWidget() method
 	private Widget getWidget(String name)
