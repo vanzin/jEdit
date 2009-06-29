@@ -697,13 +697,13 @@
 			<property name="jedit.install.dir"
 					  value="${dist.dir}" />
 		</ant>
-		<ant dir="jars/MacOS"
+		<ant dir="jars/MacOSX"
 			 target="dist"
 			 inheritAll="false">
 			<property name="jedit.install.dir"
 					  value="${dist.dir}" />
 		</ant>
-		<ant dir="jars/MacOS"
+		<ant dir="jars/MacOSX"
 			 target="clean"
 			 inheritAll="false">
 			<property name="jedit.install.dir"
@@ -738,7 +738,7 @@
 			 compression="bzip2">
 			<tarfileset id="jedit-mac"
 					 dir="${dist.dir}"
-					 includes="jars/MacOS.jar" />
+					 includes="jars/MacOSX.jar" />
 		</tar>
 		<tar destfile="${dist.dir}/jedit-api.tar.bz2"
 			 compression="bzip2">
