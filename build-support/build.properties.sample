@@ -1,0 +1,159 @@
+# Default properties for plugin-build.xml
+# Uncomment properties and set to desired values.
+# Save to a file named build.properties in one of these locations:
+# - The plugin's main directory (e.g., "plugins/XML/build.properties")
+# - The plugin's parent directory (e.g., "plugins/build.properties")
+# - Your home directory (with or without a leading dot)
+
+
+# jEdit & plugins directory settings
+
+# jEdit install directory
+#jedit.install.dir=../../jEdit
+
+# location where your jars are installed
+#install.dir=${jedit.install.dir}/jars
+
+# Location where the plugins are (used by some older build files)
+#jedit.plugins.dir=${install.dir}
+
+# Location to find built jars (for dependencies)
+#jedit.jars.dir=${install.dir}
+
+# User settings directory
+#jedit.user.home=${user.home}/.jedit
+
+
+# Top-level of the plugins source tree
+#plugins.srcdir=..
+
+# Where to place the built jar files
+#install.dir=..
+
+# Generic plugin build options
+
+# Where the plugin source is located
+#src.dir=.
+
+# The name of the JAR file
+#jar.file=${ant.project.name}.jar
+
+# The name of the source ZIP file
+#src.zip.file=${ant.project.name}.zip
+
+# The target run when running dist
+#dist.target=dist.nojavadoc
+
+# Where to put temporary build files
+#build.dir=build
+
+# Where to put compiled classes
+#build.classes=${build.dir}/classes
+
+# Where to put generated documentation
+#build.docs=${build.dir}/docs
+
+# Where to put generated javadoc
+#build.javadoc=${build.docs}/javadoc
+
+# Where to put other files
+#build.extras=${build.dir}/extras
+
+# Default compiler flags
+
+# Generate debugging code
+#compiler.debug=off
+#compiler.debuglevel=lines,vars,source
+
+# Gererate optimized code
+#compiler.optimize=off
+
+# Deprecation warnings.
+#compiler.deprecation=off
+
+# Verbose compiler messages
+#compiler.verbose=off
+
+# Disable compiler warnings
+#compiler.nowarn=off
+
+# Target JVM version
+#compiler.target=1.4
+
+# Java version of the source files
+#compiler.source=1.4
+
+# List files being compiled
+#compiler.listfiles=no
+
+# Fork the javac compiler
+#compiler.fork=no
+
+# Documentation build options
+
+# What target to use for the docs
+#docs-proc.target=xsltproc
+
+# Stylesheet file to use
+#user-doc.xsl=${build.support}/users-guide.xsl
+
+# Documentation docbook source
+#user-doc.xml=${basedir}/docs/users-guide.xml
+
+# Documentation output file
+#user-doc.out=${build.docs}/index.html
+
+# Title for javadoc documentation
+#javadoc.title=${ant.project.name} API
+
+# Where to find the DocBook XML catalog file 
+# REQUIRED: xsltproc is skipped unless this is set.
+#docbook.catalog=C:\\Programme\\DocBook\\XML\\4.2\\docbook.cat
+
+# Where to find the DocBook XML DTD
+#docbookx.dtd=C:\\Programme\\DocBook\\XML\\4.2\\docbookx.dtd
+
+# Where to find the DocBook stylesheet
+#docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.70.1\\
+
+# The name of the xsl stylesheet (without the path info)
+#docbook.xsl.sheet=html/chunk.xsl
+
+# The path to the style sheet to use.
+#docs.style.sheet=${docbook.xsl}/${docbook.xsl.sheet}
+
+# The path to the xsltproc executable
+#xsltproc.executable=C:\\Programme\\xsltproc\\xsltproc.exe
+
+# CVS options
+
+# CVS user name
+#jedit.cvs.user=${user.name}
+
+# CVS_RSH value
+#cvs.rsh=ssh
+
+# CVSROOT
+#cvs.root=:ext:${jedit.cvs.user}@jedit.cvs.sourceforge.net:/cvsroot/jedit
+
+# JUnit options
+
+# Where to find jUnit
+#junit.jar=junit.jar
+
+# The name of the jUnit Testcase
+#junit.testcase=${ant.project.name}TestSuite
+
+# Whether to print a summary
+#junit.printsummary=on
+
+# Whether to halt if an error occurs
+#junit.haltonfailure=off
+
+# Ant Contrib
+
+# Where to find the ant-contrib jar.
+#ant-contrib.jar=ant-contrib-1.0b1.jar
+
+# Where to find the findbugs lib dir.
+#findbugs.lib.dir=<findbugs-install-dir>/lib
