@@ -137,20 +137,17 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
         buttons.add(c);
     }
 
-    static class MenuItemCompare implements Comparator
+    static class MenuItemCompare implements Comparator<MenuItem>
     {
-        public int compare(Object obj1, Object obj2)
+        public int compare(MenuItem obj1, MenuItem obj2)
         {
-            return StandardUtilities.compareStrings(
-                ((MenuItem)obj1).label,
-                ((MenuItem)obj2).label,
-                true);
+            return StandardUtilities.compareStrings(obj1.label, obj2.label, true);
         }
     }
 
     protected void _save()
     {
-        StringBuffer buf = new StringBuffer();
+    	StringBuilder buf = new StringBuilder();
         for(int i = 0; i < listModel.getSize(); i++)
         {
             if(i != 0)

@@ -300,7 +300,7 @@ public class HelpTOCPanel extends JPanel
 
 		//{{{ Private members
 		private String tag;
-		private StringBuffer title = new StringBuffer();
+		private StringBuilder title = new StringBuilder();
 		private String href;
 		private DefaultMutableTreeNode node;
 		private Stack nodes;

@@ -509,7 +509,7 @@ public class VFSDirectoryEntryTable extends JTable
 
 		for(int i = 1; i < widths.length; i++)
 		{
-			String extAttr = model.getExtendedAttribute(i);
+			//String extAttr = model.getExtendedAttribute(i);
 			widths[i] = Math.max(widths[i],model.getColumnWidth(i));
 		}
 

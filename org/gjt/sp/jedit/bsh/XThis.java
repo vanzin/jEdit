@@ -182,7 +182,7 @@ public class XThis extends This
             {
                 Class [] ints = proxy.getClass().getInterfaces();
                 // XThis.this refers to the enclosing class instance
-                StringBuffer sb = new StringBuffer(
+                StringBuilder sb = new StringBuilder(
                     XThis.this.toString() + "\nimplements:" );
                 for(int i=0; i<ints.length; i++)
                     sb.append( " "+ ints[i].getName()

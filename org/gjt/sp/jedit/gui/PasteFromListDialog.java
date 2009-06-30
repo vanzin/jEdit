@@ -145,7 +145,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	private String getSelectedClipText()
 	{
 		Object[] selected = clips.getSelectedValues();
-		StringBuffer clip = new StringBuffer();
+		StringBuilder clip = new StringBuilder();
 		for(int i = 0; i < selected.length; i++)
 		{
 			if(i != 0)
@@ -182,7 +182,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	{
 		String shorten(String item)
 		{
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			// workaround for Swing rendering labels starting
 			// with <html> using the HTML engine
 			if(item.toLowerCase().startsWith("<html>"))

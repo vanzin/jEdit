@@ -58,7 +58,7 @@ public class dir
 
 		for( int i=0; i< files.length; i++ ) {
 			File f = new File( dir + File.separator + files[i] );
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			sb.append( f.canRead() ? "r": "-" );
 			sb.append( f.canWrite() ? "w": "-" );
 			sb.append( "_" );
@@ -76,7 +76,7 @@ public class dir
 
 			// hack to get fixed length 'length' field
 			int fieldlen = 8;
-			StringBuffer len = new StringBuffer();
+			StringBuilder len = new StringBuilder();
 			for(int j=0; j<fieldlen; j++)
 				len.append(" ");
 			len.insert(0, f.length());

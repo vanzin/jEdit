@@ -295,7 +295,7 @@ public class ParserRule
 	//{{{ toString() method
 	public String toString()
 	{
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		result.append(getClass().getName()).append("[action=");
 		switch (action & MAJOR_ACTIONS)
 		{

@@ -846,7 +846,7 @@ class Reflect
         if ( !type.isArray() )
             return type.getName();
 
-        StringBuffer className = new StringBuffer();
+        StringBuilder className = new StringBuilder();
         try {
             className.append( getArrayBaseType(type).getName() +" ");
             for(int i = 0; i < getArrayDimensions(type); i++)

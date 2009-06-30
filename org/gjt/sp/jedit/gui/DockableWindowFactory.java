@@ -201,7 +201,7 @@ public class DockableWindowFactory
 			actions = true;
 			movable = MOVABLE_DEFAULT;
 
-			code = new StringBuffer();
+			code = new StringBuilder();
 			cachedDockableNames = new LinkedList<String>();
 			cachedDockableActionFlags = new LinkedList<Boolean>();
 			cachedDockableMovableFlags = new LinkedList<Boolean>();
@@ -338,7 +338,7 @@ public class DockableWindowFactory
 		private java.util.List<Boolean> cachedDockableMovableFlags;
 		
 		private String dockableName;
-		private StringBuffer code;
+		private StringBuilder code;
 		private boolean actions;
 		private boolean movable;
 		final boolean MOVABLE_DEFAULT = false;

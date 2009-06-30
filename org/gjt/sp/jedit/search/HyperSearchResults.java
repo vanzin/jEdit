@@ -534,7 +534,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			}
 			SearchMatcher matcher =
 				((HyperSearchOperationNode) node.getUserObject()).getSearchMatcher();
-			StringBuffer sb = new StringBuffer("<html><style>.highlight {");
+			StringBuilder sb = new StringBuilder("<html><style>.highlight {");
 			sb.append(styleTag);
 			sb.append("}</style><body>");
 			int lineTextIndex = s.indexOf(": ");
@@ -561,7 +561,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 		private String color2html(Color c)
 		{
-			StringBuffer cs = new StringBuffer("rgb(");
+			StringBuilder cs = new StringBuilder("rgb(");
 			cs.append(c.getRed());
 			cs.append(",");
 			cs.append(c.getGreen());
@@ -573,7 +573,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		
 		private String style2html(String prop)
 		{
-			StringBuffer tag = new StringBuffer();
+			StringBuilder tag = new StringBuilder();
 			SyntaxStyle style = parseHighlightStyle(prop);
 			Font f = style.getFont();
 			Color c = style.getForegroundColor();
@@ -589,19 +589,27 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			return tag.toString();
 		}
 		
-		private void appendString2html(StringBuffer sb, String s)
-		{
-			for (int i = 0; i < s.length(); i++)
-			{
+		private void appendString2html(StringBuilder sb, String s) {
+			for (int i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
 				String r;
 				switch (c) {
-				case '"': r = "&quot;"; break;
-				//case '\'': r = "&apos;"; break;
-				case '&': r = "&amp;"; break;
-				case '<': r = "&lt;"; break;
-				case '>': r = "&gt;"; break;
-				default: r = String.valueOf(c); break;
+				case '"':
+					r = "&quot;";
+					break;
+				// case '\'': r = "&apos;"; break;
+				case '&':
+					r = "&amp;";
+					break;
+				case '<':
+					r = "&lt;";
+					break;
+				case '>':
+					r = "&gt;";
+					break;
+				default:
+					r = String.valueOf(c);
+					break;
 				}
 				sb.append(r);
 			}

@@ -84,8 +84,7 @@ public class RegexEncodingDetector implements EncodingDetector
 	 * Returns a replaced string for a Matcher which has been matched
 	 * by find() method.
 	 */
-	private static String extractReplacement(Matcher found
-		, String replacement)
+	private static String extractReplacement(Matcher found, String replacement)
 	{
 		/*
 		 * It doesn't make sense to read before start, but
@@ -94,8 +93,7 @@ public class RegexEncodingDetector implements EncodingDetector
 		int found_start = found.start();
 		int found_end = found.end();
 		int source_length = found_end - found_start;
-		StringBuffer replaced = new StringBuffer(found_start
-			+ (source_length * 2));
+		StringBuffer replaced = new StringBuffer(found_start + (source_length * 2));
 		found.appendReplacement(replaced, replacement);
 		return replaced.substring(found_start);
 	}

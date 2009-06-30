@@ -285,16 +285,16 @@ public class TextUtilities
 	 *
 	 * @since jedit 4.3pre3
 	 */
-	public static String join(Collection c, String delim) {
+	public static String join(Collection<String> c, String delim) {
 		StringBuilder retval = new StringBuilder();
-		Iterator itr = c.iterator();
-		if (itr.hasNext()) {
-			retval.append( itr.next().toString() );
-		}
-		else return "";
+		Iterator<String> itr = c.iterator();
+		if (itr.hasNext())
+			retval.append( itr.next() );
+		else 
+			return "";
 		while (itr.hasNext()) {
 			retval.append(delim);
-			retval.append(itr.next().toString());
+			retval.append(itr.next());
 		}
 		return retval.toString();
 	}
@@ -385,7 +385,7 @@ public class TextUtilities
 		int type = getCharType(ch, noWordSep);
 		//}}}
 
-loop:		for(int i = pos; i >= 0; i--)
+		for(int i = pos; i >= 0; i--)
 		{
 			char lastCh = ch;
 			ch = line.charAt(i);
@@ -578,7 +578,7 @@ loop:		for(int i = pos; i >= 0; i--)
 		int type = getCharType(ch, noWordSep);
 		//}}}
 
-loop:		for(int i = pos; i < line.length(); i++)
+		for(int i = pos; i < line.length(); i++)
 		{
 			char lastCh = ch;
 			ch = line.charAt(i);

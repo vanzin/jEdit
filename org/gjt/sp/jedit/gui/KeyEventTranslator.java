@@ -379,7 +379,7 @@ public class KeyEventTranslator
 
 	public static String modifiersToString(int mods)
 	{
-		StringBuffer buf = null;
+		StringBuilder buf = null;
 
 		for(int i = 0; i < MODS.length; i++)
 		{
@@ -422,10 +422,10 @@ public class KeyEventTranslator
 	/** This map is a pool of Key. */
 	private static final Map<Key, Key> transMap = new HashMap<Key, Key>();
 
-	private static StringBuffer lazyAppend(StringBuffer buf, char ch)
+	private static StringBuilder lazyAppend(StringBuilder buf, char ch)
 	{
 		if(buf == null)
-			buf = new StringBuffer();
+			buf = new StringBuilder();
 		if(buf.indexOf(String.valueOf(ch)) == -1)
 			buf.append(ch);
 		return buf;

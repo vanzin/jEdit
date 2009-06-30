@@ -102,7 +102,7 @@ public class AbbrevEditor extends JPanel
 	//{{{ getExpansion() method
 	public String getExpansion()
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
 		String beforeCaretText = beforeCaret.getText();
 		String afterCaretText = afterCaret.getText();
@@ -167,7 +167,7 @@ public class AbbrevEditor extends JPanel
 
 		String beforeCaretText = null;
 		String afterCaretText = null;
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 
 		for(int i = 0; i < expansion.length(); i++)
 		{

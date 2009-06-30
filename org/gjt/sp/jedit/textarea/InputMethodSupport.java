@@ -212,7 +212,7 @@ class InputMethodSupport
 			{
 				lastCommittedText = null;
 				lastCommittedAt = owner.getCaretPosition();
-				StringBuffer committed = new StringBuffer(committed_count);
+				StringBuilder committed = new StringBuilder(committed_count);
 				char c;
 				int count;
 				for(c = text.first(), count = committed_count

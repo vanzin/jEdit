@@ -464,7 +464,7 @@ public class Type {
    */
 
   public String getDescriptor () {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     getDescriptor(buf);
     return buf.toString();
   }
@@ -483,7 +483,7 @@ public class Type {
     final Type returnType,
     final Type[] argumentTypes)
   {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     buf.append('(');
     for (int i = 0; i < argumentTypes.length; ++i) {
       argumentTypes[i].getDescriptor(buf);
@@ -500,7 +500,7 @@ public class Type {
    * @param buf the string buffer to which the descriptor must be appended.
    */
 
-  private void getDescriptor (final StringBuffer buf) {
+  private void getDescriptor(final StringBuilder buf) {
     switch (sort) {
       case VOID:    buf.append('V'); return;
       case BOOLEAN: buf.append('Z'); return;
@@ -542,7 +542,7 @@ public class Type {
    */
 
   public static String getDescriptor (final Class c) {
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     getDescriptor(buf, c);
     return buf.toString();
   }
@@ -556,7 +556,7 @@ public class Type {
 
   public static String getMethodDescriptor (final Method m) {
     Class[] parameters = m.getParameterTypes();
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
     buf.append('(');
     for (int i = 0; i < parameters.length; ++i) {
       getDescriptor(buf, parameters[i]);
@@ -573,7 +573,7 @@ public class Type {
    * @param c the class whose descriptor must be computed.
    */
 
-  private static void getDescriptor (final StringBuffer buf, final Class c) {
+  private static void getDescriptor (final StringBuilder buf, final Class c) {
     Class d = c;
     while (true) {
       if (d.isPrimitive()) {

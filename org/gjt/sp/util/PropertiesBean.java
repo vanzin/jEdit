@@ -25,14 +25,10 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-
-import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.WeakHashMap;
 
 /**
  * A "java bean" that can serialize itself into a java.util.Properties

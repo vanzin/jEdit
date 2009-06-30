@@ -245,7 +245,7 @@ public class PerspectiveManager
 	private static class PerspectiveHandler extends DefaultHandler
 	{
 		View view;
-		StringBuffer charData;
+		private StringBuilder charData;
 		View.ViewConfig config;
 		boolean restoreFiles;
 		String autoReload, autoReloadDialog;
@@ -254,7 +254,7 @@ public class PerspectiveManager
 		{
 			this.restoreFiles = restoreFiles;
 			config = new View.ViewConfig();
-			charData = new StringBuffer();
+			charData = new StringBuilder();
 			config.docking = View.getDockingFrameworkProvider().createDockingLayout();
 		}
 

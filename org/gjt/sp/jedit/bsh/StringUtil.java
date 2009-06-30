@@ -81,7 +81,7 @@ public class StringUtil {
 
     public static String methodString(String name, Class[] types)
     {
-        StringBuffer sb = new StringBuffer(name + "(");
+    	StringBuilder sb = new StringBuilder(name + "(");
         if ( types.length > 0 )
 			sb.append(" ");
         for( int i=0; i<types.length; i++ )

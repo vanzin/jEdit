@@ -959,10 +959,10 @@ void VariableDeclaratorId() #VariableDeclaratorId :
     boolean jjtc000 = true;
     jjtree.openNodeScope(jjtn000);
     jjtreeOpenNodeScope(jjtn000);Token t;
-    StringBuffer s;
+    StringBuilder s;
     try {
       t = jj_consume_token(IDENTIFIER);
-        s = new StringBuffer(t.image);
+        s = new StringBuilder(t.image);
       label_5:
       while (true) {
         if (jj_2_7(2)) {

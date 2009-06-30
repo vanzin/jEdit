@@ -61,7 +61,7 @@ import java.util.Vector;
 */
 public class CallStack 
 {
-	private Vector stack = new Vector(2);
+	private Vector<NameSpace> stack = new Vector<NameSpace>(2);
 
 	public CallStack() { }
 
@@ -128,7 +128,7 @@ public class CallStack
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("CallStack:\n");
 		NameSpace [] nsa = toArray();
 		for(int i=0; i<nsa.length; i++)
@@ -141,9 +141,10 @@ public class CallStack
 		Occasionally we need to freeze the callstack for error reporting
 		purposes, etc.
 	*/
+	@SuppressWarnings("unchecked")
 	public CallStack copy() {
 		CallStack cs = new CallStack();
-		cs.stack = (Vector)this.stack.clone();
+		cs.stack = (Vector<NameSpace>) stack.clone();
 		return cs;
 	}
 }

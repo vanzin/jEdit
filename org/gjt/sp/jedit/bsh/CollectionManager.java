@@ -171,6 +171,10 @@ public class CollectionManager
                 return createEnumeration(
                     iterateOverMe.toString().toCharArray());
 
+            if (iterateOverMe instanceof StringBuilder)
+                return createEnumeration(
+                    iterateOverMe.toString().toCharArray());
+
             throw new IllegalArgumentException(
                 "Cannot enumerate object of type "+iterateOverMe.getClass());
         }

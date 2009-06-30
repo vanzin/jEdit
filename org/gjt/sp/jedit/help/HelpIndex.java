@@ -230,7 +230,7 @@ class HelpIndex
 
 		try
 		{
-			StringBuffer word = new StringBuffer();
+			StringBuilder word = new StringBuilder();
 			boolean insideTag = false;
 			boolean insideEntity = false;
 
