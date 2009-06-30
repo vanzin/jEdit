@@ -22,8 +22,6 @@
 
 package org.gjt.sp.jedit;
 
-import java.io.*;
-import java.util.*;
 
 /**
  * Manage properties.

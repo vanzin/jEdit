@@ -149,7 +149,7 @@ public class StringList extends ArrayList<String>
 	public static void main(String args[])
 	{
 		String teststr = "a,b,c,d,e,f";
-		StringList sl = StringList.split(teststr, ",");
+		StringList.split(teststr, ",");
 		//String joinstr = sl.join(",");
 		// assert(teststr.equals(joinstr));
 		System.out.println("Test Passed");

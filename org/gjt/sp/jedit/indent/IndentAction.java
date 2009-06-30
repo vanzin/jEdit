@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.indent;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
-import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.util.StandardUtilities;
 
 /**

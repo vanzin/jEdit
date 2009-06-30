@@ -4246,8 +4246,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	 * Compose buffer-local properties which can be got from history.
 	 * @since 4.3pre10
 	 */
-	private static void composeBufferPropsFromHistory(Map props,
-		String path)
+	private static void composeBufferPropsFromHistory(Map props, String path)
 	{
 		BufferHistory.Entry entry = BufferHistory.getEntry(path);
 

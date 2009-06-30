@@ -22,10 +22,9 @@
 
 package org.gjt.sp.jedit.indent;
 
-import org.gjt.sp.jedit.TextUtilities;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-
 import java.util.List;
+
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 /**
  * Whitespace rule. This rule cancels all indent actions in the
