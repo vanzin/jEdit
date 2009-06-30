@@ -19,7 +19,7 @@
       <maximumStackSize value="32" />
       <properties />
     </buildFile>
-    <buildFile url="file://$PROJECT_DIR$/jars/MacOS/build.xml">
+    <buildFile url="file://$PROJECT_DIR$/jars/MacOSX/build.xml">
       <additionalClassPath />
       <antReference projectDefault="true" />
       <customJdkName value="" />
@@ -90,7 +90,7 @@
     <scope name="Modes" pattern="file[jEdit]:modes//*.xml" />
     <scope name="Macros" pattern="file[jEdit]:macros//*.bsh" />
     <scope name="LatestVersion Sourcefiles" pattern="file[LatestVersion]:*.java" />
-    <scope name="MacOS Sourcefiles" pattern="file[MacOS]:macos//*.java" />
+    <scope name="MacOSX Sourcefiles" pattern="file[MacOSX]:macosx//*.java" />
     <scope name="QuickNotepad Sourcefiles" pattern="file[QuickNotepad]:*.java" />
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
@@ -285,7 +285,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/jars/LatestVersion/LatestVersion.iml" filepath="$PROJECT_DIR$/jars/LatestVersion/LatestVersion.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jars/MacOS/MacOS.iml" filepath="$PROJECT_DIR$/jars/MacOS/MacOS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jars/MacOSX/MacOSX.iml" filepath="$PROJECT_DIR$/jars/MacOSX/MacOSX.iml" />
       <module fileurl="file://$PROJECT_DIR$/jars/QuickNotepad/QuickNotepad.iml" filepath="$PROJECT_DIR$/jars/QuickNotepad/QuickNotepad.iml" />
       <module fileurl="file://$PROJECT_DIR$/jEdit.iml" filepath="$PROJECT_DIR$/jEdit.iml" />
     </modules>

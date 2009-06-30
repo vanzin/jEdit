@@ -5,10 +5,14 @@
 		This is an ant build.xml file for building the QuickNotepad plugin for jEdit.
 	</description>
 
+	<property file="build.properties"/>
+	<property file="../build.properties"/>
+
 	<property name="jedit.install.dir"
 			  location="../../build" />
 	<property name="user-doc.xml"
 			  value="users-guide.xml" />
+
 	<property name="build.support"
 			  value="../../../build-support" />
 	<import file="${build.support}/plugin-build.xml" />

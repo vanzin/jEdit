@@ -23,8 +23,6 @@
 package macosx;
 
 //{{{ Imports
-import macosx.*;
-
 import javax.swing.*;
 import java.util.regex.Pattern;
 import java.io.File;
@@ -34,6 +32,7 @@ import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 public class MacOSXPlugin extends EBPlugin
@@ -252,7 +251,7 @@ public class MacOSXPlugin extends EBPlugin
 			return false;
 		}
 		
-		if (MiscUtilities.compareStrings(System.getProperty("mrj.version"),mrjversion,false) < 0)
+		if (StandardUtilities.compareStrings(System.getProperty("mrj.version"),mrjversion,false) < 0)
 		{
 			SwingUtilities.invokeLater( new Runnable() { public void run() {
 				GUIUtilities.error(null,"MacOSXPlugin.dialog.mrjversion",new Object[] {mrjversion});

@@ -1,78 +1,23 @@
 <?xml version="1.0"?>
+<project name="MacOSX"
+		 default="build">
+	<description>
+		This is an ant build.xml file for building the MacOSX plugin for jEdit.
+	</description>
 
-<!--
-     This is a build.xml file for building the MacOSX plugin.
-     The 'dist' target compiles the plugin and creates the JAR file.
--->
-
-<project name="MacOSX" default="dist" basedir=".">
-  <!-- properties -->
 	<property file="build.properties"/>
 	<property file="../build.properties"/>
-  	<property name="build.support" value="../build-support" />
 
+	<property name="jedit.install.dir"
+			  location="../../build" />
+	<property name="docs-proc.target"
+			  value="none" />
+
+	<property name="build.support"
+			  value="../../../build-support" />
 	<import file="${build.support}/plugin-build.xml" />
-	<property name="src.dir" value="."/>
-	<property name="build.dir" value="build"/>
-    <property name="install.dir" value=".."/>
-    <property name="jar.name" value="${ant.project.name}.jar"/>
-    <property name="docs.dir" value="docs"/>
-	
-	<!-- define the class path -->
-    <path id="project.class.path">
-        <pathelement location="${jedit.install.dir}/jedit.jar"/>
-        <pathelement location="${src.dir}"/>
-	</path>
-	
-    <target name="init">
-        <mkdir dir="${build.dir}"/>
-    </target>
 
-    <target name="compile" depends="init">
-        <javac srcdir="${src.dir}" destdir="${build.dir}" deprecation="on" includeJavaRuntime="yes">
-            <classpath refid="project.class.path"/>
-        </javac>
-    </target>
-
-    <target name="dist" depends="compile">
-    
-    <!-- create installation directory -->
-        <mkdir dir="${install.dir}"/>
-    
-    <!-- create jar file -->
-        <jar jarfile="${install.dir}/${jar.name}">
-      
-      <!-- add compiled classes to jar -->
-            <fileset dir="${build.dir}"/>
-			
-      <!-- add any required files from the source directory (not java files) -->
-            <fileset dir="${src.dir}">
-                <include name="actions.xml"/>
-                <include name="**/*.props"/>
-                <include name="**/*.html"/>
-                <include name="**/*.jpg"/>
-                <include name="**/*.gif"/>
-            </fileset>
-      
-      <!-- add any documentation -->
-            <fileset dir="${docs.dir}">
-                <include name="**/*.xml"/>
-                <include name="**/*.props"/>
-                <include name="**/*.html"/>
-                <include name="**/*.gif"/>
-                <include name="**/*.jpg"/>
-                <include name="**/*.png"/>
-            </fileset>
-
-        </jar>
-    </target>
-	
-  <!-- cleans build directory -->
-    <target name="clean">
-        <delete dir="${build.dir}"/>
-        <delete>
-            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
-        </delete>
-    </target>
-
+	<selector id="packageFiles">
+		<filename name="docs/MacOSX.html" />
+	</selector>
 </project>

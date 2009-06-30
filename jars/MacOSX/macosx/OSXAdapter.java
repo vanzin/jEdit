@@ -23,8 +23,6 @@
 package macosx;
 
 //{{{ Imports
-import com.apple.eawt.*;
-import com.apple.eio.*;
 import java.util.*;
 import java.io.File;
 import java.awt.event.*;
