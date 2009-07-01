@@ -9,6 +9,9 @@ Sergey Mezentsev, Matthew Bakalar, Marcelo Vanzin and Matthew Gilbert for
 contributing to this release.
 
 {{{ Bug Fixes
+
+- Stop caret timer in text area on dispose (Bill Culp - # 2814857)
+
 - Fixed a possible case where an output stream is not closed (#2790435)
   (Matthew Bakalar)
 

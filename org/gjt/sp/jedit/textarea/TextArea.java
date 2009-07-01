@@ -4500,6 +4500,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		if(focusedComponent == this)
 			focusedComponent = null;
+
+		caretTimer.stop();
 	} //}}}
 
 	//{{{ getFocusTraversalKeysEnabled() method
