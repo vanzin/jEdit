@@ -231,6 +231,8 @@ contributing to this release.
 
 - Updated Antlr mode (LDiracDelta # 2013652 )
 
+- New Pure mode (http://code.google.com/p/pure-lang - Ben Dutcher # 2716903)
+
 - New YAML editing mode (Jakub Roztocil - #2604705 )
 
 - Removed ML indenting from ML mode (Lucas Dixon - #2382013)
