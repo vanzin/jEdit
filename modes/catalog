@@ -522,6 +522,9 @@
 <MODE NAME="xsl"		FILE="xsl.xml"
 				FILE_NAME_GLOB="*.xsl" />
 
+<MODE NAME="yab"		FILE="yab.xml"
+				FILE_NAME_GLOB="*.yab" />
+
 <MODE NAME="yaml"		FILE="yaml.xml"
 				FILE_NAME_GLOB="*.{yml,yaml}" />
 

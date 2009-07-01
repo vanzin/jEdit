@@ -230,6 +230,8 @@ contributing to this release.
 
 - New stata/stata-ado modes (Goebbe # 2664474)
 
+- New YABasic edit mode (Ben Dutcher # 2716891)
+
 - Updated SAS edit mode (Ian Helgesen # 1806510, goebbe #2675761, #2793540).
 
 - New JavaFX edit mode (Matthieu Casanova)
