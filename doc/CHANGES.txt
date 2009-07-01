@@ -228,6 +228,8 @@ contributing to this release.
 - New jedit-actions edit mode that delegates to beanshell the <CODE> tags
   (Romain François)
 
+- Javascript brace indentation patch (Eric Berry # 2808701)
+
 - New N3 edit mode (Jakub Roztocil # 2772966)
 
 - New stata/stata-ado modes (Goebbe # 2664474)
