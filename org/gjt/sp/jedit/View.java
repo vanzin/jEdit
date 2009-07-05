@@ -1441,6 +1441,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		else
 		{
+			boolean showStatus = plainView ? jEdit.getBooleanProperty("view.status.plainview.visible") :
+				jEdit.getBooleanProperty("view.status.visible");
 			if ((menuBar != null) && (getJMenuBar() != menuBar))
 				setJMenuBar(menuBar);
 			boolean alternateLayout = jEdit.getBooleanProperty(
@@ -1449,13 +1451,15 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			{
 				getContentPane().add(BorderLayout.NORTH,topToolBars);
 				getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
-				addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
+				if (showStatus)
+					addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
 			}
 			else
 			{
 				mainPanel.add(topToolBars, BorderLayout.NORTH);
 				mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
-				getContentPane().add(BorderLayout.SOUTH,status);
+				if (showStatus)
+					getContentPane().add(BorderLayout.SOUTH,status);
 			}
 			setUndecorated(false);
 			setBounds(windowedBounds);
