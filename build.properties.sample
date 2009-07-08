@@ -27,14 +27,13 @@
 #xsltproc.executable=xsltproc
 
 #Recommended to use win32 binaries of xsltproc instead of cygwin binaries:
-#you can download them from here: http://www.zlatkovic.com/libxml.en.html
 #xsltproc.executable=C:/ppApps/xsltproc/xsltproc.exe
 
 ### For generating the docs, adjust the following to your local paths
 ### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
 
 #Example windows locations:
-# cygwin can be used to install docbook-xml and docbook-dtd: 
+# cygwin can be used to install docbook-xml and docbook-dtd:
 # docbook.catalog=c:/cygwin/usr/share/xml/docbook/4.4/docbook.cat
 # docbook.xsl=c:/cygwin/usr/share/docbook-xsl
 

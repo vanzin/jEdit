@@ -12,7 +12,7 @@ General jEdit documentation can be found in the 'doc' directory.
     version doesn't work, please submit a bug report.
     Get it from <http://ant.apache.org>.
   - The Ant-nodeps package. This is included in the download from ants website,
-    as well as the AntPlugin from the Plugin Manager,  
+    as well as the AntPlugin from the Plugin Manager,
     but not in some default installs on various *nix systems.
     There you should get the ant-nodeps package through your
     package management system.
@@ -35,13 +35,16 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the online help in either HTML- or PDF-format:
 
-  - DocBook XML 4.2. Get it from <http://www.docbook.org/xml/4.2/>
-  - DocBook XSL. Don't use a ".0" version, these are experimental releases.
-    They are normally followed by a ".1" version short time after release
-    of the ".0" version.
-    Get it from <http://www.sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608>
-  - xsltproc. This is originally a *nix program, but there are ports
+  - DocBook XML 4.4. called "docbook-dtd" or "docbook-xml" from package managers.
+    Get it from <http://www.docbook.org/xml/4.4/>.  Contains catalog information.
+  - DocBook XSL. Called "docbook-xsl" in package managers.
+    Contains style sheets for transformation into HTML or FO.
+    Don't use a ".0" version, these are experimental releases.
+    <http://www.sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608>
+  - xsltproc. sometimes packaged as "libxslt" from package managers:
+    This is originally a *nix program, but there are ports
     e. g. for Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html>
+    or <http://www.zlatkovic.com/libxml.en.html>.
 
  For building the online help in PDF-format:
 
@@ -56,7 +59,6 @@ General jEdit documentation can be found in the 'doc' directory.
  For building the Mac OS X disk image (DMG) for easy distribution (for the final step):
 
   - A box running Mac OS X
-
 
 
 * Tasks
@@ -178,8 +180,8 @@ you have the right libraries. However, if you tell Eclipse to exclude these
 directories, you can still build and run/debug jEdit from source.
 Follow these steps:
 
- - Project properties - Java build path 
+ - Project properties - Java build path
  - Source - Excluded dirs - Edit - Add multiple
  - Add these subdirs: jars, net, de, build
- 
+
 
