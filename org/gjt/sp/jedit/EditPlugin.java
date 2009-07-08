@@ -403,6 +403,13 @@ public abstract class EditPlugin
 			return null;
 
 		File file = new File(settingsDirectory, "plugins");
+		if (!file.isDirectory()) 
+		{
+			if (!file.mkdir()) 
+			{
+				Log.log(Log.ERROR, EditPlugin.class, "Can't create directory:" + file.getAbsolutePath());
+			}
+		}
 		return new File(file, pluginClassName);
 	} //}}}
 
