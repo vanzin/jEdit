@@ -22,32 +22,35 @@
 ### for building of the Windows installer
 #innosetup.compiler.executable=C:\\Programme\\Inno Setup 5\\Compil32.exe
 
-### For generating the docs adjust the following to your local paths
-### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
 
 # If xsltproc is in your path, uncomment this:
 #xsltproc.executable=xsltproc
 
-# example windows locations:
-#xsltproc.executable=C:\\Programme\\xsltproc\\xsltproc.exe
-#docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.70.1\\
-#docbook.catalog=C:\\Programme\\DocBook\\XML\\4.2\\docbook.cat
+#Recommended to use win32 binaries of xsltproc instead of cygwin binaries:
+#you can download them from here: http://www.zlatkovic.com/libxml.en.html
+#xsltproc.executable=C:/ppApps/xsltproc/xsltproc.exe
+
+### For generating the docs, adjust the following to your local paths
+### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
+
+#Example windows locations:
+# cygwin can be used to install docbook-xml and docbook-dtd: 
+# docbook.catalog=c:/cygwin/usr/share/xml/docbook/4.4/docbook.cat
+# docbook.xsl=c:/cygwin/usr/share/docbook-xsl
 
 # Debian location
 #docbook.xsl=/usr/share/xml/docbook/stylesheet/nwalsh
-#docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.2/docbook.cat
+#docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.4/docbook.cat
 
 # Fink (Mac OS/X) location
-# xsltproc.executable=xsltproc
-docbook.catalog=/sw/share/xml/dtd/docbookx/4.4.0/docbook.cat
-docbook.xsl=/sw/share/xml/xsl/docbook-xsl
+#docbook.catalog=/sw/share/xml/dtd/docbookx/4.4.0/docbook.cat
+#docbook.xsl=/sw/share/xml/xsl/docbook-xsl
 
 ### For uploading the docs to the public webserver
 ### adjust the following to your local path
 #rsync.executable=C:\\Programme\\cwRsync\\bin\\rsync.exe
-
 # If it's in your path, this is sufficient:
-rsync.executable=rsync
+#rsync.executable=rsync
 
 ### If you want to build the PDF user's guide,
 ### set this to your local FOP install directory.
