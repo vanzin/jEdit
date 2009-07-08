@@ -24,21 +24,30 @@
 
 ### For generating the docs adjust the following to your local paths
 ### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
+
+# If xsltproc is in your path, uncomment this:
+#xsltproc.executable=xsltproc
+
+# example windows locations:
 #xsltproc.executable=C:\\Programme\\xsltproc\\xsltproc.exe
 #docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.70.1\\
 #docbook.catalog=C:\\Programme\\DocBook\\XML\\4.2\\docbook.cat
 
 # Debian location
-#xsltproc.executable=xsltproc
 #docbook.xsl=/usr/share/xml/docbook/stylesheet/nwalsh
 #docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.2/docbook.cat
+
+# Fink (Mac OS/X) location
+# xsltproc.executable=xsltproc
+docbook.catalog=/sw/share/xml/dtd/docbookx/4.4.0/docbook.cat
+docbook.xsl=/sw/share/xml/xsl/docbook-xsl
 
 ### For uploading the docs to the public webserver
 ### adjust the following to your local path
 #rsync.executable=C:\\Programme\\cwRsync\\bin\\rsync.exe
 
-# Debian location
-#rsync.executable=rsync
+# If it's in your path, this is sufficient:
+rsync.executable=rsync
 
 ### If you want to build the PDF user's guide,
 ### set this to your local FOP install directory.
