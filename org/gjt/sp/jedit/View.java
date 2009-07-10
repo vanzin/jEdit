@@ -30,6 +30,7 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
@@ -2211,8 +2212,20 @@ loop:		while (true)
 	{
 		Rectangle bounds;
 		if (parent == null)
+		{
 			bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().
 				getMaximumWindowBounds();
+			GraphicsDevice [] devices = GraphicsEnvironment.
+				getLocalGraphicsEnvironment().getScreenDevices();
+			if (devices.length > 1)
+			{
+				for (GraphicsDevice device: devices)
+				{
+					for (GraphicsConfiguration config: device.getConfigurations())
+						bounds = bounds.union(config.getBounds());
+				}
+			}
+		}
 		else
 			bounds = parent.getGraphicsConfiguration().getBounds();
 		int minWidth = jEdit.getIntegerProperty("view.minStartupWidth");
