@@ -590,7 +590,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 							EditBus.send(new DockableWindowUpdate(
 								DockableWindowManagerImpl.this,
 								DockableWindowUpdate.PROPERTIES_CHANGED,
-								null
+								dockable
 							));
 							showDockableWindow(dockable);
 						}
@@ -640,7 +640,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 						EditBus.send(new DockableWindowUpdate(
 							DockableWindowManagerImpl.this,
 							DockableWindowUpdate.PROPERTIES_CHANGED,
-							null
+							dockable
 						));
 						// Reset the window, propertiesChanged() doesn't
 						// reset it for MOVABLE windows.
