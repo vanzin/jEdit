@@ -1755,11 +1755,13 @@ loop:		while (true)
 					if (obj1 instanceof Buffer)
 					{
 						Buffer b1 = buffer = (Buffer) obj1;
-						Buffer b2 = (Buffer) obj2;
-						BufferSet bufferSet = jEdit.getGlobalBufferSet();
-						bufferSet.addBufferAt(b1, -1);
-						bufferSet.addBufferAt(b2, -1);
+						jEdit.getGlobalBufferSet().addBufferAt(b1, -1);
 						obj1 = editPane = createEditPane(b1, BufferSet.Scope.global);
+					}
+					if (obj2 instanceof Buffer)
+					{
+						Buffer b2 = (Buffer) obj2;
+						jEdit.getGlobalBufferSet().addBufferAt(b2, -1);
 						obj2 = createEditPane(b2, BufferSet.Scope.global);
 					}
 					stack.push(splitPane = new JSplitPane(
