@@ -1749,11 +1749,24 @@ loop:		while (true)
 						: JSplitPane.HORIZONTAL_SPLIT;
 					int divider = ((Integer)stack.pop())
 						.intValue();
+					Object obj1 = stack.pop();
+					Object obj2 = stack.pop();
+					// Backward compatibility with pre-bufferset versions
+					if (obj1 instanceof Buffer)
+					{
+						Buffer b1 = buffer = (Buffer) obj1;
+						Buffer b2 = (Buffer) obj2;
+						BufferSet bufferSet = jEdit.getGlobalBufferSet();
+						bufferSet.addBufferAt(b1, -1);
+						bufferSet.addBufferAt(b2, -1);
+						obj1 = editPane = createEditPane(b1, BufferSet.Scope.global);
+						obj2 = createEditPane(b2, BufferSet.Scope.global);
+					}
 					stack.push(splitPane = new JSplitPane(
 						orientation,
 						continuousLayout,
-						(Component)stack.pop(),
-						(Component)stack.pop()));
+						(Component)obj1,
+						(Component)obj2));
 					splitPane.setOneTouchExpandable(true);
 					splitPane.setBorder(null);
 					splitPane.setMinimumSize(
