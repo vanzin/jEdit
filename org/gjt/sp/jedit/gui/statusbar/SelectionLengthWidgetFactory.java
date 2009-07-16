@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.gui.statusbar;
 //{{{ Imports
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.ViewUpdate;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 
@@ -124,7 +125,26 @@ public class SelectionLengthWidgetFactory implements StatusWidgetFactory
 					setText("");
 				}
 				else
-					setText(Integer.toString(selection.getEnd() - selection.getStart()));
+				{
+					int selectionEnd = selection.getEnd();
+					int selectionStart = selection.getStart();
+					int len;
+					if (selection instanceof Selection.Rect)
+					{
+						int startLine = selection.getStartLine();
+						int endLine = selection.getEndLine();
+						JEditTextArea textArea = view.getTextArea();
+						int startLineOffset = textArea.getLineStartOffset(startLine);
+						int endLineOffset = textArea.getLineStartOffset(endLine);
+						int lines = endLine - startLine + 1;
+						int columns = (selectionEnd - endLineOffset) -
+							(selectionStart - startLineOffset);
+						len = lines * columns;
+					}
+					else
+						len = selectionEnd - selectionStart;
+					setText(Integer.toString(len));
+				}
 			}
 		}
 	} //}}}
