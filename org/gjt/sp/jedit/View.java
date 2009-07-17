@@ -1832,9 +1832,18 @@ loop:		while (true)
 			}
 		}
 
+		// Backward compatibility with pre-bufferset versions
+		Object obj = stack.peek();
+		if (obj instanceof Buffer)
+		{
+			jEdit.getGlobalBufferSet().addBufferAt((Buffer)obj, -1);
+			obj = editPane = createEditPane((Buffer)obj,
+				BufferSet.Scope.global);
+		}
+		
 		updateGutterBorders();
 
-		return (Component)stack.peek();
+		return (Component)obj;
 	} //}}}
 
 	//{{{ propertiesChanged() method
