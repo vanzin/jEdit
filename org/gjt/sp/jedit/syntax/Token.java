@@ -57,7 +57,7 @@ public class Token
 	 */
 	public static String tokenToString(byte token)
 	{
-		return TOKEN_TYPES[token];
+		return (token == Token.END) ? "END" : TOKEN_TYPES[token];
 	} //}}}
 
 	//{{{ Token types
