@@ -2,9 +2,13 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre18
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Shlomy Reinstein for contributing to this
+release.
 
 {{{ Bug Fixes
+
+- Fixed bug #2806043: Token.tokenToString() throws
+  ArrayIndexOutOfBoundsException on the END token. (Shlomy Reinstein)
 
 - When switching back from fullscreen mode to normal, check property to decide
   whether to show status bar in normal or plain view. (Shlomy Reinstein)
@@ -17,14 +21,14 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 - Fixed #2819701: DockableWindowManagerImpl causes NullPointerExceptions.
   (Shlomy Reinstein)
 
-- Fixed #2817321: Exceptions on startup. 
+- Fixed #2817321: Exceptions on startup.
   Caused by a backward-incompatibility that was introduced by the BufferSets
   feature, of the "split configuration" format in the perspective.xml file. This
   incompatibility prevented jEdit from starting up for users who upgrade from
   any non-BufferSet version. A workaround for this is to remove perspective.xml,
   but then the previous layout is not restored. With this fix, jEdit should
-  start normally with an old perspective.xml file. (#2817321) (Shlomy Reinstein) 
-  
+  start normally with an old perspective.xml file. (#2817321) (Shlomy Reinstein)
+
 - Fixed #2818261: Rectangular Selection Count wrong. (Shlomy Reinstein)
 
 }}}
@@ -158,14 +162,16 @@ contributing to this release.
 }}}
 {{{ Miscellaneous
 
-- jEdit settings directory is now stored in a sane location on Mac (HOME/Library/jEdit).
-  Old settings are moved to new location unless a custom location is set through
-  (-settings=foo). (Seph Soliman)
+- jEdit settings directory is now stored in a sane location on Mac
+  (HOME/Library/jEdit).   Old settings are moved to new location unless a custom
+  location is set through (-settings=foo). (Seph Soliman)
 
-- Page-scrolling changed to CTRL+SHIFT+scroll instead of SHIFT+scroll due to Java on Mac.
+- Page-scrolling changed to CTRL+SHIFT+scroll instead of SHIFT+scroll
+  due to Java on Mac.
   (Seph Soliman)
 
-- Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear search through parent container linked list. (Alan Ezust)
+- Removed redundant TextArea:EditPane map in EditPane.java in favor of a linear
+  search through parent container linked list. (Alan Ezust)
 
 - Applied patch #2296738: File/Directory properties dialog for VFS browser.
   The context menu of the VFS browser now has a "Properties" menu item that
@@ -200,6 +206,10 @@ contributing to this release.
 
 - Added an option to search all open buffers to build the completion list.
   (Matthew Gilbert - SF.net patch #2569381, #2570229)
+
+- Added macro: "Files/Send Buffer to Next Editpane" for use with EditPane
+  bufferset scope (Alan Ezust).
+
 
 }}}
 {{{ API Changes
@@ -254,6 +264,7 @@ contributing to this release.
 
 - Added new constructor to OptionsDialog.OptionsTreeModel that allows setting
   the root group of the tree. (Marcelo Vanzin)
+
 
 }}}
 {{{ Editing
@@ -322,8 +333,7 @@ contributing to this release.
 
 - Added COMMENT3 in javascript mode (bug #2474585) (Matthieu Casanova)
 
-- Added macro: "Files/Send Buffer to Next Editpane" for use with EditPane
-  bufferset scope (Alan Ezust).
+
 }}}
 
 }}}
