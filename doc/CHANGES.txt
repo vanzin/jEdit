@@ -6,6 +6,26 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- When switching back from fullscreen mode to normal, check property to decide
+  whether to show status bar in normal or plain view. (Shlomy Reinstein)
+
+- Fixed restoring of view bounds from perspective.xml for dual-monitor
+  environments. This was broken by a fix in the previous version for users who
+  switch from a dual-monitor environment to a single-monitor environment, and
+  now should be fixed indefinitely. (Shlomy Reinstein)
+
+- Fixed #2819701: DockableWindowManagerImpl causes NullPointerExceptions.
+  (Shlomy Reinstein)
+
+- Fixed #2817321: Exceptions on startup. 
+  Caused by a backward-incompatibility that was introduced by the BufferSets
+  feature, of the "split configuration" format in the perspective.xml file. This
+  incompatibility prevented jEdit from starting up for users who upgrade from
+  any non-BufferSet version. A workaround for this is to remove perspective.xml,
+  but then the previous layout is not restored. With this fix, jEdit should
+  start normally with an old perspective.xml file. (#2817321) (Shlomy Reinstein) 
+  
+- Fixed #2818261: Rectangular Selection Count wrong. (Shlomy Reinstein)
 
 }}}
 {{{ Miscellaneous
