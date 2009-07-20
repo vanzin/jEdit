@@ -31,6 +31,8 @@ release.
 
 - Fixed #2818261: Rectangular Selection Count wrong. (Shlomy Reinstein)
 
+- Fixed #2823909: action bar not visible in full screen mode. (Shlomy Reinstein)
+
 }}}
 {{{ Miscellaneous
 
