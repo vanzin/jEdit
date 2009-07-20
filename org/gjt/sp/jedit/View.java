@@ -1391,16 +1391,11 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			setJMenuBar(menuBar);
 		if (alternateLayout)
 		{
+			// Note: Bottom toolbar is the action bar, which is always enabled
 			if (! showToolbars)
-			{
 				getContentPane().remove(topToolBars);
-				getContentPane().remove(bottomToolBars);
-			}
 			else
-			{
 				getContentPane().add(BorderLayout.NORTH,topToolBars);
-				getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
-			}
 			if (! showStatus)
 				removeToolBar(status);
 			else
@@ -1408,16 +1403,11 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		else
 		{
+			// Note: Bottom toolbar is the action bar, which is always enabled
 			if (! showToolbars)
-			{
 				mainPanel.remove(topToolBars);
-				mainPanel.remove(bottomToolBars);
-			}
 			else
-			{
 				mainPanel.add(topToolBars, BorderLayout.NORTH);
-				mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
-			}
 			if (! showStatus)
 				getContentPane().remove(status);
 			else
