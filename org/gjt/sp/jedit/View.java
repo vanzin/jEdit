@@ -1379,9 +1379,9 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 	{
 		boolean alternateLayout = jEdit.getBooleanProperty(
 			"view.toolbar.alternateLayout");
-		boolean showMenu = jEdit.getBooleanProperty("fullScreenIncludesMenu"); 
-		boolean showToolbars = jEdit.getBooleanProperty("fullScreenIncludesToolbar"); 
-		boolean showStatus = jEdit.getBooleanProperty("fullScreenIncludesStatus"); 
+		boolean showMenu = jEdit.getBooleanProperty("fullScreenIncludesMenu");
+		boolean showToolbars = jEdit.getBooleanProperty("fullScreenIncludesToolbar");
+		boolean showStatus = jEdit.getBooleanProperty("fullScreenIncludesStatus");
 		if (! showMenu)
 		{
 			menuBar = getJMenuBar();
@@ -1414,7 +1414,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 				getContentPane().add(BorderLayout.SOUTH,status);
 		}
 	} //}}}
-	
+
 	//{{{ toggleFullScreen() method
 	public void toggleFullScreen()
 	{
@@ -1454,7 +1454,8 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		setVisible(true);
 		toFront();
-		requestFocus();
+		// so you can keep typing in your editpane afterwards...
+		editPane.getTextArea().requestFocus();
 	} //}}}
 
 	//{{{ confirmToCloseDirty() methods
@@ -1829,7 +1830,7 @@ loop:		while (true)
 			obj = editPane = createEditPane((Buffer)obj,
 				BufferSet.Scope.global);
 		}
-		
+
 		updateGutterBorders();
 
 		return (Component)obj;
@@ -1876,7 +1877,7 @@ loop:		while (true)
 		if (splitPane != null)
 			GUIUtilities.initContinuousLayout(splitPane);
 		//SwingUtilities.updateComponentTreeUI(getRootPane());
-		
+
 		if (fullScreenMode)
 			updateFullScreenProps();
 	} //}}}
@@ -2031,12 +2032,12 @@ loop:		while (true)
 		if (!jEdit.getBooleanProperty("buffersets.exclusive"))
 			return;
 		EditPane ep = epu.getEditPane();
-		/* Only one view needs to handle this message, since 
+		/* Only one view needs to handle this message, since
 		   we iterate through all the other views */
 		if (ep.getView() != this) return;
 		Buffer b = ep.getBuffer();
-		for (View v: jEdit.getViews()) 
-		{ 
+		for (View v: jEdit.getViews())
+		{
 			for (EditPane epc : v.getEditPanes())
 			{
 				// if it's my editpane, skip it.
@@ -2053,7 +2054,7 @@ loop:		while (true)
 			}
 		}
 	} //}}}
-	
+
 	//{{{ updateGutterBorders() method
 	/**
 	 * Updates the borders of all gutters in this view to reflect the
@@ -2248,7 +2249,7 @@ loop:		while (true)
 				r.y < bounds.height - minHeight &&
 				r.y + r.height > minHeight);
 	}
-	
+
 	public void adjust(View parent, ViewConfig config)
 	{
 		if(config.width != 0 && config.height != 0)
