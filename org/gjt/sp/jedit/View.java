@@ -1428,7 +1428,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			setUndecorated(true);
 			setBounds(sd.getDefaultConfiguration().getBounds());
 			validate();
-			setVisible(true);
 		}
 		else
 		{
@@ -1441,21 +1440,20 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			if (alternateLayout)
 			{
 				getContentPane().add(BorderLayout.NORTH,topToolBars);
-				getContentPane().add(BorderLayout.SOUTH,bottomToolBars);
 				if (showStatus)
 					addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
 			}
 			else
 			{
 				mainPanel.add(topToolBars, BorderLayout.NORTH);
-				mainPanel.add(bottomToolBars, BorderLayout.SOUTH);
 				if (showStatus)
 					getContentPane().add(BorderLayout.SOUTH,status);
 			}
 			setUndecorated(false);
 			setBounds(windowedBounds);
-			setVisible(true);
 		}
+		setVisible(true);
+		toFront();
 	} //}}}
 
 	//{{{ confirmToCloseDirty() methods
