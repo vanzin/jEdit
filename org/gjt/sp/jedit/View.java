@@ -1454,6 +1454,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		}
 		setVisible(true);
 		toFront();
+		requestFocus();
 	} //}}}
 
 	//{{{ confirmToCloseDirty() methods
