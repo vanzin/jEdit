@@ -703,42 +703,45 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 
 			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 
-			String action = jEdit.getProperty("editpane.bufferset.new");
-			BufferSetManager.NewBufferSetAction bufferSetAction = BufferSetManager.NewBufferSetAction.fromString(action);
-			View activeView = jEdit.getActiveView();
-			switch (bufferSetAction)
+			if (jEdit.isStartupDone())	// Ignore "new buffersets contain:" option when loading perspective
 			{
-				case copy:
-					if (oldBufferSet == null)
-					{
-						EditPane editPane = view.getEditPane();
-						if (editPane == null)
+				String action = jEdit.getProperty("editpane.bufferset.new");
+				BufferSetManager.NewBufferSetAction bufferSetAction = BufferSetManager.NewBufferSetAction.fromString(action);
+				View activeView = jEdit.getActiveView();
+				switch (bufferSetAction)
+				{
+					case copy:
+						if (oldBufferSet == null)
 						{
-							if (activeView != null)
-								editPane = activeView.getEditPane();
-
-						}
-						if (editPane == null)
-						{
-							bufferSetManager.addAllBuffers(newBufferSet);
+							EditPane editPane = view.getEditPane();
+							if (editPane == null)
+							{
+								if (activeView != null)
+									editPane = activeView.getEditPane();
+	
+							}
+							if (editPane == null)
+							{
+								bufferSetManager.addAllBuffers(newBufferSet);
+							}
+							else
+							{
+								bufferSetManager.mergeBufferSet(newBufferSet, editPane.bufferSet);
+							}
 						}
 						else
-						{
-							bufferSetManager.mergeBufferSet(newBufferSet, editPane.bufferSet);
-						}
-					}
-					else
-						bufferSetManager.mergeBufferSet(newBufferSet, oldBufferSet);
-					break;
-				case empty:
-					break;
-				case currentbuffer:
-					if (activeView == null)
+							bufferSetManager.mergeBufferSet(newBufferSet, oldBufferSet);
 						break;
-					EditPane editPane = activeView.getEditPane();
-					Buffer buffer = editPane.getBuffer();
-					bufferSetManager.addBuffer(newBufferSet,buffer);
-					break;
+					case empty:
+						break;
+					case currentbuffer:
+						if (activeView == null)
+							break;
+						EditPane editPane = activeView.getEditPane();
+						Buffer buffer = editPane.getBuffer();
+						bufferSetManager.addBuffer(newBufferSet,buffer);
+						break;
+				}
 			}
 			if (buffer != null)
 				bufferSetManager.addBuffer(newBufferSet, buffer);
@@ -780,7 +783,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 					setBuffer(newBufferSet.getBuffer(0));
 				}
 			}
-			PerspectiveManager.setPerspectiveDirty(true);
+			if (jEdit.isStartupDone())	// Do not mark perspective dirty on startup
+				PerspectiveManager.setPerspectiveDirty(true);
 		}
 	} //}}}
 
