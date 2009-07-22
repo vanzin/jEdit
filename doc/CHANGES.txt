@@ -35,6 +35,9 @@ release.
 
 - Fixed #2825028: Plugins not properly unloaded during exit. (Shlomy Reinstein)
 
+- Fixed #2825203: BufferSets not restored correctly on startup.
+  (Shlomy Reinstein)
+
 }}}
 {{{ Miscellaneous
 
