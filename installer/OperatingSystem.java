@@ -199,7 +199,6 @@ public abstract class OperatingSystem
 
                 
  				out.write("exec \"$JAVA_HOME/bin/java\"" +
- 					  " -Xms${JAVA_HEAP_INIT_SIZE}M" +
  					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
 					  jar + " \"$@\"\n");
 				out.close();
