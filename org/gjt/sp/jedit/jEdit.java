@@ -2818,6 +2818,9 @@ public class jEdit
 		{
 			exiting = true;
 
+			// Send EditorExiting
+			EditBus.send(new EditorExiting(null));
+
 			// Save view properties here
 			if(view != null)
 			{
@@ -2839,8 +2842,6 @@ public class jEdit
 				removePluginJAR(plugins[i],true);
 			}
 
-			// Send EditorExiting
-			EditBus.send(new EditorExiting(null));
 
 			// Save settings
 			saveSettings();
