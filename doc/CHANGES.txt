@@ -33,9 +33,17 @@ release.
 
 - Fixed #2823909: action bar not visible in full screen mode. (Shlomy Reinstein)
 
+- Fixed #2825028: Plugins not properly unloaded during exit. (Shlomy Reinstein)
+
 }}}
 {{{ Miscellaneous
 
+
+}}}
+{{{ API Changes
+
+- Added a new API function to check if jEdit is exiting: jEdit.isExiting()
+  (Shlomy Reinstein)
 
 }}}
 
