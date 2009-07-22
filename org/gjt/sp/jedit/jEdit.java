@@ -2554,6 +2554,16 @@ public class jEdit
 		return (! startupDone.contains(false));
 	} //}}}
 
+	//{{{ isExiting() method
+	/**
+	 * Whether jEdit is currently exiting.
+	 * @since jEdit 4.3pre17
+	 */
+	public static boolean isExiting()
+	{
+		return exiting;
+	} //}}}
+
 	//{{{ isMainThread() method
 	/**
 	 * Returns true if the currently running thread is the main thread.
@@ -2806,6 +2816,8 @@ public class jEdit
 		}
 		else
 		{
+			exiting = true;
+
 			// Save view properties here
 			if(view != null)
 			{
@@ -3076,6 +3088,7 @@ public class jEdit
 	private static View activeView;
 
 	private static Vector<Boolean> startupDone = new Vector<Boolean>();
+	private static boolean exiting = false;
 
 	private static Thread mainThread;
 	//}}}
