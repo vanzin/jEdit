@@ -1806,9 +1806,14 @@ loop:		while (true)
 					stack.push(editPane);
 					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 					BufferSet bufferSet = editPane.getBufferSet();
+					int i = 0;
 					for (Buffer buff : editPaneBuffers)
 					{
-						bufferSetManager.addBuffer(bufferSet, buff);
+						if (buff == buffer)
+							bufferSet.addBufferAt(buffer, i);
+						else
+							bufferSetManager.addBuffer(bufferSet, buff);
+						i++;
 					}
 					editPaneBuffers.clear();
 				}
