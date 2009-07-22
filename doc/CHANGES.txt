@@ -45,8 +45,8 @@ release.
 }}}
 {{{ API Changes
 
-- Added a new API function to check if jEdit is exiting: jEdit.isExiting()
-  (Shlomy Reinstein)
+- Moved EditorExiting ebmessage earlier, before the unloading of plugin jars
+  so plugins can catch it and act appropriately during shutdown. (Alan Ezust)
 
 }}}
 
