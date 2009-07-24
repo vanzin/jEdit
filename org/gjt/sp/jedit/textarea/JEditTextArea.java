@@ -153,13 +153,39 @@ public class JEditTextArea extends TextArea
 		super.goToBufferEnd(select);
 	}
 
+	//{{{ goToMatchingBracket() method
+	/**
+	 * Moves the caret to the bracket matching the one before the caret.
+	 * Also sends PositionChanging if it goes somewhere.
+	 * @since jEdit 4.3pre18
+	 */
+	public void goToMatchingBracket()
+	{
+		if(getLineLength(caretLine) != 0)
+		{
+			int dot = caret - getLineStartOffset(caretLine);
+
+			int bracket = TextUtilities.findMatchingBracket(
+				buffer,caretLine,Math.max(0,dot - 1));
+			if(bracket != -1)
+			{
+				EditBus.send(new PositionChanging(this));
+				selectNone();
+				moveCaretPosition(bracket + 1,false);
+				return;
+			}
+		}
+		getToolkit().beep();
+	} //}}}
+
+
 	public void goToBufferStart(boolean select)
 	{
 		EditBus.send(new PositionChanging(this));
 		super.goToBufferStart(select);
 	} // }}}
-	
-	// {{{ replaceSelection(String) 
+
+	// {{{ replaceSelection(String)
 	@Override
 	public int replaceSelection(String selectedText)
 	{
@@ -495,7 +521,7 @@ public class JEditTextArea extends TextArea
 	} //}}}
 
 	//}}} Fold painters
-	
+
 	//{{{ handlePopupTrigger() method
 	/**
 	 * Do the same thing as right-clicking on the text area. The Gestures
