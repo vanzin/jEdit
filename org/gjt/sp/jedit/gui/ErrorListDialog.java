@@ -28,6 +28,11 @@ import java.awt.event.*;
 import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
 import org.gjt.sp.util.Log;
@@ -116,9 +121,24 @@ public class ErrorListDialog extends EnhancedDialog
 		label.setBorder(new EmptyBorder(0,0,6,0));
 		centerPanel.add(BorderLayout.NORTH,label);
 
-		JList errors = new JList(messages);
-		errors.setCellRenderer(new ErrorListCellRenderer());
-		errors.setVisibleRowCount(Math.min(messages.size(),4));
+		JTextPane errors = new JTextPane();
+		errors.setEditable(false);
+		StyledDocument doc = errors.getStyledDocument();
+		Font plainFont = new JLabel().getFont();
+		SimpleAttributeSet plainFontAttrSet = new SimpleAttributeSet();
+		StyleConstants.setFontFamily(plainFontAttrSet, plainFont.getFamily());
+		SimpleAttributeSet boldFontAttrSet = (SimpleAttributeSet) plainFontAttrSet.clone();
+		StyleConstants.setBold(boldFontAttrSet, true);
+		for (Object message: messages)
+		{
+			ErrorEntry entry = (ErrorEntry) message;
+			try {
+				doc.insertString(doc.getLength(), entry.path + ":\n", boldFontAttrSet);
+				for (String s: entry.messages)
+					doc.insertString(doc.getLength(), s + "\n", plainFontAttrSet);
+			} catch (BadLocationException e) {
+			}
+		}
 
 		// need this bullshit scroll bar policy for the preferred size
 		// hack to work
