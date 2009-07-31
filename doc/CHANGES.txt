@@ -41,6 +41,9 @@ release.
 - Fixed the Java based installer not to use an undefined variable
   JAVA_HEAP_INIT_SIZE in Unix startup script. (Kazutoshi Satoda)
 
+- Fixed #2818327: Plugin Error Dialog issues - allow copying the text from
+  the plugin error dialog. (Shlomy Reinstein).
+
 }}}
 {{{ Miscellaneous
 
