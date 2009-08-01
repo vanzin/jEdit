@@ -654,7 +654,7 @@ public abstract class VFS
 
 	//{{{ _listDirectory() method
 	/**
-	 * A convinience method that matches file names against globs, and can
+	 * A convenience method that matches file names against globs, and can
 	 * optionally list the directory recursively.
 	 * @param session The session
 	 * @param directory The directory. Note that this must be a full
@@ -687,7 +687,7 @@ public abstract class VFS
 
 	//{{{ _listDirectory() method
 	/**
-	 * A convinience method that filters the directory listing
+	 * A convenience method that filters the directory listing
 	 * according to a filter, and can optionally list the directory
 	 * recursively.
 	 * @param session The session

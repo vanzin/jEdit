@@ -86,7 +86,8 @@ public class AllBufferSet extends BufferListSet
 		Pattern filter;
 		try
 		{
-			filter = Pattern.compile(StandardUtilities.globToRE(glob));
+			filter = Pattern.compile(StandardUtilities.globToRE(glob),
+				Pattern.CASE_INSENSITIVE);
 		}
 		catch(Exception e)
 		{
