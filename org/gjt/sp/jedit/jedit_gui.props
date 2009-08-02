@@ -225,7 +225,7 @@ close-buffer.label=$Close
 close-buffer.icon.small=16x16/actions/document-close.png
 global-close-buffer.label=Close (global)
 closeall-except-active.label=Clear BufferSet except active
-bufferset-toggle-exclusive.label=Toggle Exclusive BufferSets
+bufferset-toggle-exclusive.label=Toggle E$xclusive BufferSets
 closeall-except-active.icon.small=16x16/actions/document-close.png
 global-close-buffer.icon.small=16x16/actions/document-close.png
 close-all.label=Clos$e All
@@ -521,11 +521,12 @@ view=new-view \
      prev-buffer \
      next-buffer \
      recent-buffer \
-     show-buffer-switcher \
+     focus-buffer-switcher \
      - \
      toggle-line-numbers \
      toggle-statusbar \
      toggle-gutter \
+     toggle-buffer-switcher \
      - \
      %scrolling \
      %splitting \
@@ -542,12 +543,13 @@ close-view.icon.small=16x16/actions/document-close.png
 prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
-show-buffer-switcher.label=Show $Buffer Switcher
+toggle-buffer-switcher.label=Toggle Buffer Switcher
+focus-buffer-switcher.label=Focus $Buffer Switcher
 toggle-line-numbers.label=$Line Numbers
-toggle-statusbar.label=$Toggle Status Bar
-toggle-gutter.label=$Toggle Gutter
+toggle-statusbar.label=Toggle Status Ba$r
+toggle-gutter.label=Toggle $Gutter
 show-context-menu.label=Show Context Menu
-toggle-full-screen.label=Toggle full-screen mode
+toggle-full-screen.label=Toggle $full-screen mode
 
 #{{{ Scrolling menu
 scrolling=scroll-to-current-line \
@@ -586,8 +588,12 @@ unsplit.label=Unsplit $All
 resplit.label=$Restore Split
 prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
-buffersets.label=Buffer Sets
+buffersets.label=$Buffer Sets
 buffersets=global-bufferset view-bufferset editpane-bufferset bufferset-toggle-exclusive - closeall-except-active
+global-bufferset.label=$Global Scope
+view-bufferset.label=$View Scope
+editpane-bufferset.label=$EditPane Scope
+
 
 #}}}
 

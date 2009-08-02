@@ -106,7 +106,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	// {{{ get(TextArea) method
 	/**
 	 * Returns the EditPane of a TextArea.
-	 *  
+	 *
 	 * @param ta the textArea
 	 * @return the EditPane containing the TextArea.
 	 */
@@ -296,12 +296,12 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		return bufferSwitcher;
 	} //}}}
 
-	//{{{ showBufferSwitcher() method
+	//{{{ focusBufferSwitcher() method
 	/**
-	 * Shows the buffer switcher combo box.
+	 * Pops up and focuses on the buffer switcher combo box.
 	 * @since jEdit 4.1pre8
 	 */
-	public void showBufferSwitcher()
+	public void focusBufferSwitcher()
 	{
 		if(bufferSwitcher == null)
 			getToolkit().beep();
@@ -718,7 +718,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 							{
 								if (activeView != null)
 									editPane = activeView.getEditPane();
-	
+
 							}
 							if (editPane == null)
 							{
@@ -926,7 +926,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 						buffer.getLineStartOffset(line));
 				}
 			});
-		
+
 		textArea.addStatusListener(new StatusHandler());
 		add(BorderLayout.CENTER,textArea);
 
@@ -1139,7 +1139,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	} //}}}
 
 	//{{{ loadBufferSwitcher() method
-	private void loadBufferSwitcher()
+	void loadBufferSwitcher()
 	{
 		if(jEdit.getBooleanProperty("view.showBufferSwitcher"))
 		{

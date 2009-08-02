@@ -1762,10 +1762,15 @@ loop:		for(;;)
 	static final VarCompressor svc = new VarCompressor();
 
 	//{{{ VarCompressor class
+	/**
+	 * Singleton class for quickly "compressing" paths into variable-prefixed values.
+	 * @author alan ezust
+	 */
 	static class VarCompressor
 	{
 		/** a reverse mapping of values to environment variable names */
 		final Map<String, String> prefixMap = new HashMap<String, String>();
+		/** previously compressed strings saved for quick access later */
 		final Map<String, String> previous = new HashMap<String, String>();
 
 		//{{{ VarCompressor constructor
@@ -1820,7 +1825,7 @@ loop:		for(;;)
 			{
 				if (tryPrefix.length() < bestPrefix.length()) continue;
 				if (OperatingSystem.isWindows() &&
-				    path.toLowerCase().startsWith(tryPrefix.toLowerCase()))
+				    path.toLowerCase().startsWith(tryPrefix))
 					bestPrefix = tryPrefix;
 				else if (path.startsWith(tryPrefix)) {
 					bestPrefix = tryPrefix;

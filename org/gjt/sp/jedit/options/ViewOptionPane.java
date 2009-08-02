@@ -137,7 +137,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		addComponent(new JLabel(jEdit.getProperty("options.editpane.bufferset.contain")),
 					newBufferSetBehavior);
 
-		
+
 		/* Sort buffers */
 		sortBuffers = new JCheckBox(jEdit.getProperty(
 			"options.view.sortBuffers"));
@@ -158,13 +158,13 @@ public class ViewOptionPane extends AbstractOptionPane
 		sortByName.setSelected(jEdit.getBooleanProperty("sortByName"));
 		sortByName.setEnabled(sortBuffers.isSelected());
 		addComponent(sortByName);
-		
+
 		fullScreenIncludesMenu = new JCheckBox(jEdit.getProperty(
 			"options.view.fullScreenIncludesMenu"));
 		fullScreenIncludesMenu.setSelected(
 			jEdit.getBooleanProperty("fullScreenIncludesMenu"));
 		addComponent(fullScreenIncludesMenu);
-		
+
 		fullScreenIncludesToolbar = new JCheckBox(jEdit.getProperty(
 			"options.view.fullScreenIncludesToolbar"));
 		fullScreenIncludesToolbar.setSelected(
@@ -175,7 +175,7 @@ public class ViewOptionPane extends AbstractOptionPane
 				"options.view.fullScreenIncludesStatus"));
 		fullScreenIncludesStatus.setSelected(
 				jEdit.getBooleanProperty("fullScreenIncludesStatus"));
-		addComponent(fullScreenIncludesStatus);				
+		addComponent(fullScreenIncludesStatus);
 
 	} //}}}
 
@@ -207,7 +207,7 @@ public class ViewOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("fullScreenIncludesMenu",fullScreenIncludesMenu.isSelected());
 		jEdit.setBooleanProperty("fullScreenIncludesToolbar",fullScreenIncludesToolbar.isSelected());
 		jEdit.setBooleanProperty("fullScreenIncludesStatus",fullScreenIncludesStatus.isSelected());
-		
+
 	} //}}}
 
 	//{{{ Private members

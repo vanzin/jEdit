@@ -1295,9 +1295,21 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="show-buffer-switcher">
+<ACTION NAME="toggle-buffer-switcher">
+<CODE>
+    jEdit.setBooleanProperty("view.showBufferSwitcher",
+        !jEdit.getBooleanProperty("view.showBufferSwitcher"));
+    view.updateBufferSwitcherStates();
+</CODE>
+<IS_SELECTED>
+    jEdit.getBooleanProperty("view.showBufferSwitcher");
+</IS_SELECTED>
+</ACTION>
+
+
+<ACTION NAME="focus-buffer-switcher">
 	<CODE>
-		editPane.showBufferSwitcher();
+		editPane.focusBufferSwitcher();
 	</CODE>
 </ACTION>
 
