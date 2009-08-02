@@ -1894,6 +1894,8 @@ loop:		while (true)
 	 * is intended to have the same effect as clicking on the buffer switcher
 	 * combo box, and it doesn't make sense to have this action available if
 	 * the buffer switcher isn't visible.
+	 * Also shows or hides the Buffer Switcher itself, since this can be invoked after
+	 * the toggle buffer switcher action.
 	 */
 	public void updateBufferSwitcherStates()
 	{
@@ -1930,8 +1932,9 @@ loop:		while (true)
 			}
 		}
 		// Toggle the visibility of the BufferSwitcher itself
-		for (EditPane ep: getEditPanes()) 
-			ep.loadBufferSwitcher();
+		for (View v: jEdit.getViews())
+			for (EditPane ep: v.getEditPanes())
+				ep.loadBufferSwitcher();
 	} //}}}
 
 
