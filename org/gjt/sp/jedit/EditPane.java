@@ -307,8 +307,14 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			getToolkit().beep();
 		else
 		{
-			bufferSwitcher.requestFocus();
-			bufferSwitcher.showPopup();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run()
+				{
+					bufferSwitcher.requestFocus();
+					bufferSwitcher.showPopup();
+				}
+				
+			});
 		}
 	} //}}}
 
