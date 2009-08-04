@@ -1889,7 +1889,7 @@ loop:		while (true)
 
 	//{{{ updateBufferSwitcherStates() method
 	/**
-	 * Shows or hides the "Focus Buffer Switcher" menu item in the View menu
+	 * Enables or Disables the "Focus Buffer Switcher" menu item in the View menu
 	 * depending on the visible state of the buffer switcher.  The menu item
 	 * is intended to have the same effect as clicking on the buffer switcher
 	 * combo box, and it doesn't make sense to have this action available if
@@ -1926,8 +1926,8 @@ loop:		while (true)
 				Component item = viewmenu.getMenuComponent(i);
 				if (item instanceof JMenuItem && ((JMenuItem)item).getText().equals(sbs_label))
 				{
-					((JMenuItem)item).setVisible(show);
-					viewmenu.invalidate();
+					((JMenuItem)item).setEnabled(show);
+					// viewmenu.invalidate();
 				}
 			}
 		}
