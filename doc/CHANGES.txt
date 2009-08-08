@@ -48,7 +48,6 @@ for contributing to this release.
   was not shown before (otherwise, this has no effect).
 }}}
 {{{ Miscellaneous
-- Renamed "show buffer switcher" to "focus buffer switcher" (ezust)
 
 - New action: toggle buffer switcher - toggles visibility of buffer switcher,
     and enabled-ness of focus menu item and focuses if enabled. (ezust)
@@ -57,6 +56,9 @@ for contributing to this release.
   in the gutter (which is visible when line numbers are not shown).
 }}}
 {{{ API Changes
+
+- Renamed "EditPane.showBufferSwitcher()" to "focusBufferSwitcher", and the
+  corresponding action that invokes it. (Alan Ezust)
 
 - Removed deprecated TextAreaUpdate EBMessage. Use EditPaneUpdate instead.
     (Alan Ezust)

@@ -299,7 +299,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	//{{{ focusBufferSwitcher() method
 	/**
 	 * Pops up and focuses on the buffer switcher combo box.
-	 * @since jEdit 4.1pre8
+	 * @since jEdit 4.3pre18
+	 * (previously known as showBufferSwitcher)
 	 */
 	public void focusBufferSwitcher()
 	{
@@ -313,7 +314,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 					bufferSwitcher.requestFocus();
 					bufferSwitcher.showPopup();
 				}
-				
+
 			});
 		}
 	} //}}}
