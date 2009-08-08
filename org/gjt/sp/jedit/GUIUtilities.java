@@ -1628,6 +1628,25 @@ public class GUIUtilities
 		return null;
 	} //}}}
 
+	//{{{ setEnabledRecursively() method
+	/**
+	 * Call setEnabled() recursively on the container and its descendants.
+	 * @param c The container
+	 * @param enabled The enabled state to set
+	 * @since jEdit 4.3pre17
+	 */
+	public static void setEnabledRecursively(Container c, boolean enabled)
+	{
+		for (Component child: c.getComponents())
+		{
+			if (child instanceof Container)
+				setEnabledRecursively((Container)child, enabled);
+			else
+				child.setEnabled(enabled);
+		}
+		c.setEnabled(enabled);
+	} //}}}
+
 	//{{{ getView() method
 	/**
 	 * Finds the view parent of the specified component.

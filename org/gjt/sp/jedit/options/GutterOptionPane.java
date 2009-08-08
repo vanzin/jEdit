@@ -25,12 +25,17 @@ package org.gjt.sp.jedit.options;
 
 //{{{ Imports
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import java.awt.*;
+
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 //}}}
+
+import com.sun.java.swing.SwingUtilities3;
 
 public class GutterOptionPane extends AbstractOptionPane
 {
@@ -49,12 +54,26 @@ public class GutterOptionPane extends AbstractOptionPane
 		gutterEnabled.setSelected(isGutterEnabled());
 		addComponent(gutterEnabled);
 
+		/* Gutter components frame */
+		GridBagConstraints cons = new GridBagConstraints();
+		cons.gridheight = 1;
+		cons.gridwidth = GridBagConstraints.REMAINDER;
+		cons.fill = GridBagConstraints.HORIZONTAL;
+		cons.anchor = GridBagConstraints.WEST;
+		cons.weightx = 1.0f;
+		cons.ipadx = 0;
+		cons.ipady = 0;
+		cons.insets = new Insets(0,0,0,0);
+		gutterComponents = new JPanel(new GridBagLayout());
+		gutterComponents.setBorder(BorderFactory.createTitledBorder(
+			jEdit.getProperty("options.gutter.optionalComponents")));
+
 		/* Line numbering */
 		lineNumbersEnabled = new JCheckBox(jEdit.getProperty(
 			"options.gutter.lineNumbers"));
 		lineNumbersEnabled.setSelected(jEdit.getBooleanProperty(
 			"view.gutter.lineNumbers"));
-		addComponent(lineNumbersEnabled);
+		gutterComponents.add(lineNumbersEnabled, cons);
 
 		minLineNumberDigits = new JTextField(String.valueOf(
 				getMinLineNumberDigits()),1);
@@ -71,14 +90,30 @@ public class GutterOptionPane extends AbstractOptionPane
 				return (i >= 0);
 			}
 		});
-		addComponent(jEdit.getProperty("options.gutter.minLineNumberDigits"),
-			minLineNumberDigits, GridBagConstraints.VERTICAL);
+		JPanel minLineNumberDigitsPanel = new JPanel();
+		minLineNumberDigitsPanel.add(new JLabel(
+			jEdit.getProperty("options.gutter.minLineNumberDigits")));
+		minLineNumberDigitsPanel.add(minLineNumberDigits);
+		cons.gridy = 1;
+		gutterComponents.add(minLineNumberDigitsPanel, cons);
 
 		/* Selection area enable */
 		selectionAreaEnabled = new JCheckBox(jEdit.getProperty(
 			"options.gutter.selectionAreaEnabled"));
 		selectionAreaEnabled.setSelected(isSelectionAreaEnabled());
-		addComponent(selectionAreaEnabled);
+		cons.gridy = 2;
+		gutterComponents.add(selectionAreaEnabled, cons);
+
+		addComponent(gutterComponents);
+		// Disable gutter components when 'show gutter' is unchecked
+		setGutterComponentsEnabledState();
+		gutterEnabled.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent e)
+			{
+				setGutterComponentsEnabledState();
+			}
+		});
 
 		/* Text font */
 		gutterFont = new FontSelector(
@@ -252,6 +287,13 @@ public class GutterOptionPane extends AbstractOptionPane
 			selectionAreaEnabled.isSelected());
 	} //}}}
 
+	//{{{ setGutterComponentsEnabledState
+	private void setGutterComponentsEnabledState()
+	{
+		GUIUtilities.setEnabledRecursively(gutterComponents,
+			gutterEnabled.isSelected());
+	} //}}}
+
 	//{{{ addFoldStyleChooser() method
 	private void addFoldStyleChooser()
 	{
@@ -315,6 +357,7 @@ public class GutterOptionPane extends AbstractOptionPane
 	private ColorWellButton gutterNoFocusBorder;
 	private String [] painters;
 	private JCheckBox gutterEnabled;
+	private JPanel gutterComponents;
 	private JTextField minLineNumberDigits;
 	private JCheckBox selectionAreaEnabled;
 	//}}}
