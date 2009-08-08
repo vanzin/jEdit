@@ -35,8 +35,6 @@ import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 //}}}
 
-import com.sun.java.swing.SwingUtilities3;
-
 public class GutterOptionPane extends AbstractOptionPane
 {
 	//{{{ GutterOptionPane constructor
@@ -75,21 +73,24 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.lineNumbers"));
 		gutterComponents.add(lineNumbersEnabled, cons);
 
-		minLineNumberDigits = new JTextField(String.valueOf(
-				getMinLineNumberDigits()),1);
-		minLineNumberDigits.setInputVerifier(new InputVerifier() {
+		InputVerifier integerInputVerifier = new InputVerifier() {
 			@Override
 			public boolean verify(JComponent input) {
-				String s = minLineNumberDigits.getText();
+				if (! (input instanceof JTextField))
+					return true;
+				JTextField tf = (JTextField) input;
 				int i;
 				try {
-					i = Integer.valueOf(s).intValue();
+					i = Integer.valueOf(tf.getText()).intValue();
 				} catch (Exception e) {
 					return false;
 				}
 				return (i >= 0);
 			}
-		});
+		};
+		minLineNumberDigits = new JTextField(String.valueOf(
+				getMinLineNumberDigits()),1);
+		minLineNumberDigits.setInputVerifier(integerInputVerifier);
 		JPanel minLineNumberDigitsPanel = new JPanel();
 		minLineNumberDigitsPanel.add(new JLabel(
 			jEdit.getProperty("options.gutter.minLineNumberDigits")));
@@ -114,6 +115,19 @@ public class GutterOptionPane extends AbstractOptionPane
 				setGutterComponentsEnabledState();
 			}
 		});
+
+		/* Selection area background color */
+		addComponent(jEdit.getProperty("options.gutter.selectionAreaBgColor"),
+			selectionAreaBgColor = new ColorWellButton(
+					jEdit.getColorProperty("view.gutter.selectionAreaBgColor")),
+					GridBagConstraints.VERTICAL);
+
+		/* Selection area width */
+		selectionAreaWidth = new JTextField(String.valueOf(
+			getSelectionAreaWidth()),DEFAULT_SELECTION_GUTTER_WIDTH);
+		selectionAreaWidth.setInputVerifier(integerInputVerifier);
+		addComponent(jEdit.getProperty("options.gutter.selectionAreaWidth"),
+			selectionAreaWidth);
 
 		/* Text font */
 		gutterFont = new FontSelector(
@@ -285,6 +299,10 @@ public class GutterOptionPane extends AbstractOptionPane
 			gutterEnabled.isSelected());
 		jEdit.setBooleanProperty(SELECTION_AREA_ENABLED_PROPERTY,
 			selectionAreaEnabled.isSelected());
+		jEdit.setColorProperty(SELECTION_AREA_BGCOLOR_PROPERTY,
+			selectionAreaBgColor.getSelectedColor());
+		jEdit.setIntegerProperty("view.gutter.selectionAreaWidth",
+			Integer.valueOf(selectionAreaWidth.getText()));
 	} //}}}
 
 	//{{{ setGutterComponentsEnabledState
@@ -326,19 +344,39 @@ public class GutterOptionPane extends AbstractOptionPane
 		if (n < 0)
 			n = 2;
 		return n;
-	}
+	} //}}}
 
 	//{{{ isSelectionAreaEnabled() method
 	public static boolean isSelectionAreaEnabled()
 	{
 		return jEdit.getBooleanProperty(SELECTION_AREA_ENABLED_PROPERTY);
-	}
+	} //}}}
+
+	//{{{ getSelectionAreaBgColor() method
+	public static Color getSelectionAreaBackground()
+	{
+		return jEdit.getColorProperty(SELECTION_AREA_BGCOLOR_PROPERTY);
+	} //}}}
+
+	//{{{ getSelectionAreaWidth() method
+	public static int getSelectionAreaWidth()
+	{
+		int n = jEdit.getIntegerProperty("view.gutter.selectionAreaWidth",
+			DEFAULT_SELECTION_GUTTER_WIDTH);
+		if (n < 0)
+			n = DEFAULT_SELECTION_GUTTER_WIDTH;
+		return n;
+	} //}}}
 
 	//{{{ Private members
 	private static final String GUTTER_ENABLED_PROPERTY =
 		"view.gutter.enabled";
 	private static final String SELECTION_AREA_ENABLED_PROPERTY =
 		"view.gutter.selectionAreaEnabled";
+	private static final String SELECTION_AREA_BGCOLOR_PROPERTY =
+		"view.gutter.selectionAreaBgColor";
+	private static final int DEFAULT_SELECTION_GUTTER_WIDTH = 12;
+
 	private FontSelector gutterFont;
 	private ColorWellButton gutterForeground;
 	private ColorWellButton gutterBackground;
@@ -360,5 +398,7 @@ public class GutterOptionPane extends AbstractOptionPane
 	private JPanel gutterComponents;
 	private JTextField minLineNumberDigits;
 	private JCheckBox selectionAreaEnabled;
+	private ColorWellButton selectionAreaBgColor;
+	private JTextField selectionAreaWidth;
 	//}}}
 }

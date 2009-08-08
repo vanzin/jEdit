@@ -920,7 +920,7 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		Gutter gutter = textArea.getGutter();
 		gutter.setGutterEnabled(GutterOptionPane.isGutterEnabled());
 		gutter.setMinLineNumberDigitCount(GutterOptionPane.getMinLineNumberDigits());
-		gutter.setSelectonAreaEnabled(GutterOptionPane.isSelectionAreaEnabled());
+		gutter.setSelectionAreaEnabled(GutterOptionPane.isSelectionAreaEnabled());
 		gutter.addExtension(markerHighlight);
 		gutter.setSelectionPopupHandler(
 			new GutterPopupHandler()
@@ -1044,8 +1044,12 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		gutter.setGutterEnabled(GutterOptionPane.isGutterEnabled());
 		gutter.setMinLineNumberDigitCount(
 			GutterOptionPane.getMinLineNumberDigits());
-		gutter.setSelectonAreaEnabled(
+		gutter.setSelectionAreaEnabled(
 			GutterOptionPane.isSelectionAreaEnabled());
+		gutter.setSelectionAreaBackground(
+			GutterOptionPane.getSelectionAreaBackground());
+		gutter.setSelectionAreaWidth(
+				GutterOptionPane.getSelectionAreaWidth());
 
 		int width = jEdit.getIntegerProperty(
 			"view.gutter.borderWidth",3);

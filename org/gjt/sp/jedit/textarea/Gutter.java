@@ -102,6 +102,7 @@ public class Gutter extends JComponent implements SwingConstants
 		this.textArea = textArea;
 		enabled = true;
 		selectionAreaEnabled = true;
+		selectionAreaWidth = SELECTION_GUTTER_WIDTH;
 
 		setAutoscrolls(true);
 		setOpaque(true);
@@ -139,8 +140,17 @@ public class Gutter extends JComponent implements SwingConstants
 		// fill the background
 		Rectangle clip = gfx.getClipBounds();
 		gfx.setColor(getBackground());
-		gfx.fillRect(clip.x, clip.y, clip.width, clip.height);
-
+		int bgColorWidth = isSelectionAreaEnabled() ? FOLD_MARKER_SIZE :
+			clip.width; 
+		gfx.fillRect(clip.x, clip.y, bgColorWidth, clip.height);
+		if (isSelectionAreaEnabled())
+		{
+			if (selectionAreaBgColor == null)
+				selectionAreaBgColor = getBackground();
+			gfx.setColor(selectionAreaBgColor);
+			gfx.fillRect(clip.x + FOLD_MARKER_SIZE, clip.y,
+				clip.width - FOLD_MARKER_SIZE, clip.height);
+		}
 		// if buffer is loading, don't paint anything
 		if (textArea.getBuffer().isLoading())
 			return;
@@ -294,8 +304,8 @@ public class Gutter extends JComponent implements SwingConstants
 		{
 			Insets insets = border.getBorderInsets(this);
 			collapsedSize.width = FOLD_MARKER_SIZE + insets.right;
-			if (selectionAreaEnabled)
-				 collapsedSize.width += SELECTION_GUTTER_WIDTH;
+			if (isSelectionAreaEnabled())
+				 collapsedSize.width += selectionAreaWidth;
 			collapsedSize.height = gutterSize.height
 				= insets.top + insets.bottom;
 			lineNumberWidth = fm.charWidth('5') * getLineNumberDigitCount(); 
@@ -345,7 +355,7 @@ public class Gutter extends JComponent implements SwingConstants
 		if (buffer != null)
 			buffer.addBufferListener(bufferListener);
 		updateLineNumberWidth();
-	}
+	} //}}}
 
 	//{{{ updateLineNumberWidth() method
 	private void updateLineNumberWidth()
@@ -388,6 +398,8 @@ public class Gutter extends JComponent implements SwingConstants
 		}
 	} //}}}
 
+	//{{{ Getters and setters
+
 	//{{{ setGutterEnabled() method
 	/* Enables showing or hiding the gutter. */
 	public void setGutterEnabled(boolean enabled)
@@ -396,20 +408,38 @@ public class Gutter extends JComponent implements SwingConstants
 		revalidate();
 	} //}}}
 
-	//{{{ setSelectionAreaEnabled() method
-	public void setSelectonAreaEnabled(boolean enabled)
+	//{{{ isSelectionAreaEnabled() method
+	public boolean isSelectionAreaEnabled()
 	{
-		if (selectionAreaEnabled == enabled)
+		return selectionAreaEnabled;
+	} //}}}
+
+	//{{{ setSelectionAreaEnabled() method
+	public void setSelectionAreaEnabled(boolean enabled)
+	{
+		if (isSelectionAreaEnabled() == enabled)
 			return;
 		selectionAreaEnabled = enabled;
 		if (enabled)
-			collapsedSize.width += SELECTION_GUTTER_WIDTH;
+			collapsedSize.width += selectionAreaWidth;
 		else
-			collapsedSize.width -= SELECTION_GUTTER_WIDTH;
+			collapsedSize.width -= selectionAreaWidth;
 		revalidate();
 	} //}}}
-	
-	//{{{ Getters and setters
+
+	//{{{ setSelectionAreaBackground() method
+	public void setSelectionAreaBackground(Color bgColor)
+	{
+		selectionAreaBgColor = bgColor;
+		repaint();
+	} //}}}
+
+	//{{{ setSelectionAreaWidth() method
+	public void setSelectionAreaWidth(int width)
+	{
+		selectionAreaWidth = width;
+		revalidate();
+	} //}}}
 
 	//{{{ getHighlightedForeground() method
 	/**
@@ -647,6 +677,7 @@ public class Gutter extends JComponent implements SwingConstants
 	private Color intervalHighlight;
 	private Color currentLineHighlight;
 	private Color foldColor;
+	private Color selectionAreaBgColor;
 
 	private FontMetrics fm;
 
@@ -667,6 +698,7 @@ public class Gutter extends JComponent implements SwingConstants
 	private JEditBuffer buffer;
 	private BufferListener bufferListener;
 	private int minLineNumberDigits;
+	private int selectionAreaWidth;
 	//}}}
 
 	//{{{ paintLine() method

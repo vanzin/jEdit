@@ -1407,8 +1407,11 @@
 
 <ACTION NAME="toggle-line-numbers">
 	<CODE>
-		textArea.getGutter().toggleExpanded();
-		jEdit.setBooleanProperty("view.gutter.lineNumbers", textArea.getGutter().isExpanded());
+		boolean shown = jEdit.getBooleanProperty("view.gutter.lineNumbers");
+		jEdit.setBooleanProperty("view.gutter.lineNumbers", !shown);
+		if (! shown)
+			jEdit.setBooleanProperty("view.gutter.enabled", !shown);
+		jEdit.propertiesChanged();
 	</CODE>
 	<IS_SELECTED>
 		return textArea.getGutter().isExpanded();
