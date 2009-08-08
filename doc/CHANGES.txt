@@ -44,6 +44,8 @@ for contributing to this release.
 - Fixed #2818327: Plugin Error Dialog issues - allow copying the text from
   the plugin error dialog. (Shlomy Reinstein).
 
+- Fixed #2833822: Selecting "View -> Line numbers" now shows the gutter if it
+  was not shown before (otherwise, this has no effect).
 }}}
 {{{ Miscellaneous
 - Renamed "show buffer switcher" to "focus buffer switcher" (ezust)
@@ -51,6 +53,8 @@ for contributing to this release.
 - New action: toggle buffer switcher - toggles visibility of buffer switcher,
     and enabled-ness of focus menu item and focuses if enabled. (ezust)
 
+- New options to select the width and the background color of the selection area
+  in the gutter (which is visible when line numbers are not shown).
 }}}
 {{{ API Changes
 
