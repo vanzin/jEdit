@@ -198,7 +198,7 @@
         displays the contents of a BufferSet. In jEdit 4.2, all EditPane buffer switchers
         showed the same BufferSet: a global list of all buffers that were opened from any EditPane in any View.
         When using many Views and EditPanes, this resulted in large lists of buffers, and made
-        the next/previous buffer actions useless with many views, EditPanes and buffers.
+        the next/previous buffer actions useless with many Views, EditPanes and Buffers.
         </para>
 
         <para> In jEdit 4.3, it is possible to have more narrow scopes for the BufferSets
@@ -219,9 +219,9 @@
         </orderedlist>
 
         <para> The Buffer Set scope can be Global, View, or EditPane, and can be
-        changed from many places, including
+        changed from many places. The default can be set from
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
-        &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope</guilabel>. Changing this will cause all editpanes to change their bufferset scope immediately.
+        &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>BufferSet scope for new EditPanes</guilabel>.
         </para>
 
         <para> A new BufferSet can be created in a number of ways, such as when a new
@@ -229,7 +229,7 @@
         View is split (and the default BufferSet scope is EditPane), or when the
         BufferSet scope is changed to EditPane via the statusbar or menu action. </para>
 
-        <para> New BufferSets are initially empty, or populated with a copy of the
+        <para> New BufferSets are initially empty, or populated with the current buffer only, or a copy of the
         existing BufferSet. This behavior can be changed from
         <guimenuitem>Global Options</guimenuitem> &gt; <guimenuitem>View</guimenuitem> &gt; <guilabel>New (View/EditPane) BufferSets contain: copies of current BufferSet/Current
         Buffer/Untitled Buffer </guilabel>.</para>
@@ -239,8 +239,7 @@
 
         <para> The <guimenu> File </guimenu> &gt; <guimenuitem>Close (global)</guimenuitem> action closes the buffer in all EditPanes, as the regular <guimenu> File </guimenu> &gt; <guimenuitem>Close</guimenuitem> action did before. </para>
 
-        <para> When <guimenuitem>Exclusive Buffersets</guimenuitem> are enabled, any time a buffer is opened from one EditPane, it should be automatically closed in other EditPanes which use a disjoint (non-intersecting)
-        BufferSet.  </para>
+        <para> When <guimenuitem>Exclusive Buffersets</guimenuitem> are enabled, any time a buffer is opened from one EditPane, it should be automatically closed in other EditPanes which use a disjoint (non-intersecting) BufferSet. </para>
 
         <para> <guimenuitem>Clear BufferSet except active</guimenuitem> will clear the BufferSet of the
         current EditPane by performing a <guimenuitem>Close</guimenuitem> on all items except those buffers which are displayed in another active EditPane. </para>
@@ -250,7 +249,7 @@
         <para> The statusbar shows you which BufferSet scope is active
         (look for the letter "G", "E" or "V"). Double-clicking on that
         will allow you to change the scope. Currently, it changes
-        your scope for the current editpane, but this behavior will soon change
+        your scope for the current editpane, but this behavior will someday change
         and cause a global scope-change on all editapnes immediately.
         </para>
 
