@@ -46,6 +46,10 @@ for contributing to this release.
 
 - Fixed #2833822: Selecting "View -> Line numbers" now shows the gutter if it
   was not shown before (otherwise, this has no effect).
+  
+- # 2838679 - Support Cygwin xsltproc in build.xml for docs generation
+   (Sebastian Schuberth).
+   
 }}}
 {{{ Miscellaneous
 

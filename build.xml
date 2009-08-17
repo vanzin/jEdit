@@ -59,6 +59,13 @@
 	<property name="config.build.compilerarg"
 			  value="-Xlint:unchecked" />
 
+	<!-- Cygwin detection (xsltproc needs special arguments) -->
+	<dirname property="xsltproc.dir" file="${config.xsltproc.executable}" />
+	<available file="${xsltproc.dir}/cygcheck.exe" property="xsltproc.cygwin" />
+	<condition property="xsltproc.cygwin.arg" value="--path /usr/share/docbook-xsl/html/" else="">
+		<isset property="xsltproc.cygwin" />
+	</condition>
+
 	<target name="init"
 			unless="init.done">
 		<echo message="Buildfile for ${ant.project.name} (${ant.file})"
@@ -369,6 +376,7 @@
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
+			<arg line="${xsltproc.cygwin.arg}" />
 			<arg value="--output" />
 			<arg value="../${doc.output.location}/FAQ/" />
 			<arg value="jedithtml.xsl" />
@@ -386,6 +394,7 @@
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
+			<arg line="${xsltproc.cygwin.arg}" />
 			<arg value="--output" />
 			<arg value="../${doc.output.location}/news44/" />
 			<arg value="jedithtml.xsl" />
@@ -403,6 +412,7 @@
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
+			<arg line="${xsltproc.cygwin.arg}" />
 			<arg value="--output" />
 			<arg value="../${doc.output.location}/users-guide/" />
 			<arg value="jedithtml.xsl" />
@@ -583,6 +593,7 @@
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
+			<arg line="${xsltproc.cygwin.arg}" />
 			<arg value="--stringparam" />
 			<arg value="paper.type" />
 			<arg value="&quot;${paper.type}&quot;" />
