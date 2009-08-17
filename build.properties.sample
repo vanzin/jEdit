@@ -26,7 +26,7 @@
 # If xsltproc is in your path, uncomment this:
 #xsltproc.executable=xsltproc
 
-#Recommended to use win32 binaries of xsltproc instead of cygwin binaries:
+#You can specify the absolute path of the win32 or cygwin binary of xsltproc here:
 #xsltproc.executable=C:/ppApps/xsltproc/xsltproc.exe
 
 ### For generating the docs, adjust the following to your local paths
