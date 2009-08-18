@@ -53,6 +53,9 @@ for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Smarter "smartEnd" - now advances to end of code (before comment
+  delimiter). (Gordon Hollenbeck #2646484).    
+
 - New action: toggle buffer switcher - toggles visibility of buffer switcher,
     and enabled-ness of focus menu item and focuses if enabled. (ezust)
 
@@ -66,7 +69,7 @@ for contributing to this release.
 
 - Removed deprecated TextAreaUpdate EBMessage. Use EditPaneUpdate instead.
     (Alan Ezust)
-
+    
 - Moved EditorExiting ebmessage earlier, before the unloading of plugin jars
   so plugins can catch it and act appropriately during shutdown. (Alan Ezust)
 

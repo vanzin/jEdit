@@ -128,17 +128,23 @@ public class JEditTextArea extends TextArea
 		{
 		case 1:
 			if(recorder != null)
+				recorder.record("textArea.goToEndOfCode(" + select + ");");
+
+			goToEndOfCode(select);
+			break;
+		case 2:
+			if(recorder != null)
 				recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
 
 			goToEndOfWhiteSpace(select);
 			break;
-		case 2:
+		case 3:
 			if(recorder != null)
 				recorder.record("textArea.goToEndOfLine(" + select + ");");
 
 			goToEndOfLine(select);
 			break;
-		default: //case 3:
+		default: //case 4:
 			if(recorder != null)
 				recorder.record("textArea.goToLastVisibleLine(" + select + ");");
 			goToLastVisibleLine(select);
@@ -513,7 +519,7 @@ public class JEditTextArea extends TextArea
 	public static final String FOLD_PAINTER_PROPERTY = "foldPainter";
 	public static final String FOLD_PAINTER_SERVICE = "org.gjt.sp.jedit.textarea.FoldPainter";
 	public static final String DEFAULT_FOLD_PAINTER_SERVICE = "Triangle";
-
+	
 	//{{{ getFoldPainterService() method
 	public static String getFoldPainterName()
 	{

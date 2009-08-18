@@ -30,7 +30,7 @@ import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.input.TextAreaInputHandler;
-import org.gjt.sp.jedit.syntax.Chunk;
+import org.gjt.sp.jedit.syntax.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
@@ -2938,12 +2938,15 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		switch(getInputHandler().getLastActionCount())
 		{
 		case 1:
-			goToEndOfWhiteSpace(select);
+			goToEndOfCode(select);
 			break;
 		case 2:
+			goToEndOfWhiteSpace(select);
+			break;
+		case 3:
 			goToEndOfLine(select);
 			break;
-		default: //case 3:
+		default: //case 4:
 			goToLastVisibleLine(select);
 			break;
 		}
@@ -2987,6 +2990,52 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		// so that end followed by up arrow will always put caret at
 		// the end of the previous line, for example
 		//setMagicCaretPosition(Integer.MAX_VALUE);
+	} //}}}
+
+	//{{{ goToEndOfCode() method
+	/**
+	 * Moves the caret to the end of the code present on the current line, before the comments and whitespace.
+	 * @param select true if you want to extend selection
+	 * @since jEdit 4.2pre18
+	 */
+	public void goToEndOfCode(boolean select)
+	{
+		int line = getCaretLine();
+
+		// @todo - Should tokenHandler be an TextArea instance variable?
+		DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
+		buffer.markTokens(line,tokenHandler);
+		Token token = tokenHandler.getTokens();
+
+		char[] txt = getLineText(line).toCharArray();
+
+		// replace comments with whitespace to find endOfCode:
+		while(true)
+		{
+			if( token.id == Token.COMMENT1 ||
+				token.id == Token.COMMENT2 ||
+				token.id == Token.COMMENT3 ||
+				token.id == Token.COMMENT4)
+			{
+				for(int i=token.offset; i<token.offset+token.length; i++)
+				{
+					txt[i] = ' ';
+				}
+			}
+
+			if(token.next == null)
+				break;
+			token = token.next;
+		}
+
+		int newCaret = getLineLength(line) - StandardUtilities.getTrailingWhiteSpace( new String(txt) );
+		newCaret += getLineStartOffset(line);
+
+		if(select)
+			extendSelection(caret,newCaret);
+		else if(!multi)
+			selectNone();
+		moveCaretPosition(newCaret);
 	} //}}}
 
 	//{{{ goToStartOfWhiteSpace() method
