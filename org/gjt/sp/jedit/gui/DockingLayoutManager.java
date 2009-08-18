@@ -15,6 +15,8 @@ import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
+import org.gjt.sp.jedit.msg.BufferUpdate;
+import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.options.DockingOptionPane;
 
@@ -150,6 +152,32 @@ public class DockingLayoutManager implements EBComponent
 		}
 	}
 
+	private boolean canChangeEditMode(EBMessage message)
+	{
+		if (message instanceof BufferUpdate)
+		{
+			BufferUpdate bu = (BufferUpdate) message;
+			Object what = bu.getWhat();
+			if ((what == BufferUpdate.CLOSED) ||
+				(what == BufferUpdate.CREATED) ||
+				(what == BufferUpdate.PROPERTIES_CHANGED))
+			{
+				return true;
+			}
+		}
+		else if (message instanceof EditPaneUpdate)
+		{
+			EditPaneUpdate ep = (EditPaneUpdate) message;
+			Object what = ep.getWhat();
+			if ((what == EditPaneUpdate.BUFFER_CHANGED) ||
+				(what == EditPaneUpdate.CREATED))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public void handleMessage(EBMessage message)
 	{
 		boolean autoLoadModeLayout = jEdit.getBooleanProperty(
@@ -171,6 +199,8 @@ public class DockingLayoutManager implements EBComponent
 		View view = jEdit.getActiveView();
 		if (view == null)
 			return;
+		if (! canChangeEditMode(message))
+			return;
 		String newMode = getCurrentEditMode(view);
 		String mode = currentMode.get(view);
 		boolean sameMode =
@@ -186,7 +216,7 @@ public class DockingLayoutManager implements EBComponent
 			loadModeLayout(view, newMode);
 		}
 	}
-	
+
 	private String getCurrentEditMode(View view) {
 		Buffer buffer = view.getBuffer();
 		if (buffer == null)
