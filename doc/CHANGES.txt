@@ -53,6 +53,8 @@ for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- New Macro - "Text/Compose Tag". (Gordon Hollenbeck # 2644277)
+
 - Smarter "smartEnd" - now advances to end of code (before comment
   delimiter). (Gordon Hollenbeck #2646484).    
 
