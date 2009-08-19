@@ -24,32 +24,37 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-import java.util.EventObject;
 
+import java.util.EventObject;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.TooManyListenersException;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.event.*;
+import java.awt.*;
+import java.awt.im.InputMethodRequests;
+
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.text.Segment;
+
+import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.IPropertyManager;
+import org.gjt.sp.jedit.JEditActionContext;
+import org.gjt.sp.jedit.JEditActionSet;
+import org.gjt.sp.jedit.JEditBeanShellAction;
+import org.gjt.sp.jedit.TextUtilities;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.input.DefaultInputHandlerProvider;
 import org.gjt.sp.jedit.input.InputHandlerProvider;
 import org.gjt.sp.jedit.input.TextAreaInputHandler;
-import org.gjt.sp.jedit.syntax.*;
-import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.syntax.Chunk;
+import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
+import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
-
-import javax.swing.*;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.text.Segment;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.im.InputMethodRequests;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.TooManyListenersException;
-//}}}
 
 /** Abstract TextArea component.
  *
@@ -2938,15 +2943,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		switch(getInputHandler().getLastActionCount())
 		{
 		case 1:
-			goToEndOfCode(select);
-			break;
-		case 2:
 			goToEndOfWhiteSpace(select);
 			break;
-		case 3:
+		case 2:
 			goToEndOfLine(select);
 			break;
-		default: //case 4:
+		default: //case 3:
 			goToLastVisibleLine(select);
 			break;
 		}
