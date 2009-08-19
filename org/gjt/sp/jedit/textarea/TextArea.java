@@ -2996,7 +2996,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	/**
 	 * Moves the caret to the end of the code present on the current line, before the comments and whitespace.
 	 * @param select true if you want to extend selection
-	 * @since jEdit 4.2pre18
+	 * @since jEdit 4.3pre18
 	 */
 	public void goToEndOfCode(boolean select)
 	{

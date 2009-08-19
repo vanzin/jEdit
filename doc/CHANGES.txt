@@ -46,17 +46,17 @@ for contributing to this release.
 
 - Fixed #2833822: Selecting "View -> Line numbers" now shows the gutter if it
   was not shown before (otherwise, this has no effect).
-  
+
 - # 2838679 - Support Cygwin xsltproc in build.xml for docs generation
    (Sebastian Schuberth).
-   
+
 }}}
 {{{ Miscellaneous
 
 - New Macro - "Text/Compose Tag". (Gordon Hollenbeck # 2644277)
 
 - Smarter "smartEnd" - now advances to end of code (before comment
-  delimiter). (Gordon Hollenbeck #2646484).    
+  delimiter). (Gordon Hollenbeck #2646484).
 
 - New action: toggle buffer switcher - toggles visibility of buffer switcher,
     and enabled-ness of focus menu item and focuses if enabled. (ezust)
@@ -69,9 +69,11 @@ for contributing to this release.
 - Renamed "EditPane.showBufferSwitcher()" to "focusBufferSwitcher", and the
   corresponding action that invokes it. (Alan Ezust)
 
+- New method: TextArea.goToEndOfCode() (Gordon Hollenbeck #2646484).
+
 - Removed deprecated TextAreaUpdate EBMessage. Use EditPaneUpdate instead.
     (Alan Ezust)
-    
+
 - Moved EditorExiting ebmessage earlier, before the unloading of plugin jars
   so plugins can catch it and act appropriately during shutdown. (Alan Ezust)
 
