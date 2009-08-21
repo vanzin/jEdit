@@ -379,6 +379,7 @@ public class DockableWindowFactory
 		String code;
 		boolean loaded;
 		boolean movable;
+		boolean isBeingCreated = false;
 
 		//{{{ Window constructor
 		Window(PluginJAR plugin, String name, String code,
@@ -388,7 +389,7 @@ public class DockableWindowFactory
 			this.name = name;
 			this.code = code;
 			this.movable = movable;
-			
+
 			if(code != null)
 				loaded = true;
 
@@ -434,6 +435,14 @@ public class DockableWindowFactory
 		//{{{ createDockableWindow() method
 		JComponent createDockableWindow(View view, String position)
 		{
+			// Avoid infinite recursion
+			synchronized(this)
+			{
+				if (isBeingCreated)
+					return null;
+				isBeingCreated = true;
+			}
+
 			load();
 
 			if(!loaded)
@@ -457,6 +466,10 @@ public class DockableWindowFactory
 			}
 			JComponent win = (JComponent)BeanShell.eval(view,
 				nameSpace,code);
+			synchronized(this)
+			{
+				isBeingCreated = false;
+			}
 			return win;
 		} //}}}
 
