@@ -1373,7 +1373,6 @@
 		</copy>
 		<exec executable="${config.innosetup.compiler.executable}"
 			  failonerror="true">
-			<arg value="/cc" />
 			<arg file="${dist.dir}/classes/package-files/windows/win32installer.iss" />
 		</exec>
 		<condition property="wipe.dist.files">

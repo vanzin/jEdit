@@ -18,12 +18,9 @@
 ### if you don't want to loose all your files!)
 #dist.dir=dist
 
-### The name of the Inno Setup compiler executable
-### for building of the Windows installer. This can
-### be either "Compil32.exe" or "ISCC.exe" for the
-### GUI or command line version of the compiler,
-### respectively.
-#innosetup.compiler.executable=C:\\Programme\\Inno Setup 5\\Compil32.exe
+### The name of the Inno Setup command line compiler
+### executable for building the Windows installer.
+#innosetup.compiler.executable=C:\\Programme\\Inno Setup 5\\ISCC.exe
 
 # If xsltproc is in your path, uncomment this:
 #xsltproc.executable=xsltproc
