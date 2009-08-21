@@ -50,6 +50,9 @@ for contributing to this release.
 - # 2838679 - Support Cygwin xsltproc in build.xml for docs generation
    (Sebastian Schuberth).
 
+- Fixed #2834900: DockingLayoutManager recursion when handling EditBus msgs.
+  Prevented such recursions by avoiding creation of a dockable if it is already
+  being created. (Shlomy Reinstein)
 }}}
 {{{ Miscellaneous
 
