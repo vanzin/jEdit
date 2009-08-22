@@ -220,7 +220,7 @@ public class Mode
 
 	//{{{ accept() method
 	/**
-	 * Returns if the edit mode is suitable for editing the specified
+	 * Returns true if the edit mode is suitable for editing the specified
 	 * file. The buffer name and first line is checked against the
 	 * file name and first line globs, respectively.
 	 * @param fileName The buffer's name
@@ -230,13 +230,31 @@ public class Mode
 	 */
 	public boolean accept(String fileName, String firstLine)
 	{
-		if(filenameRE != null && filenameRE.matcher(fileName).matches())
-			return true;
+		return acceptFilename(fileName) || acceptFirstLine(firstLine);
+	} //}}}
 
-		if(firstlineRE != null && firstlineRE.matcher(firstLine).matches())
-			return true;
+	//{{{ acceptFilename() method
+	/**
+	 * Returns true if the buffer name matches the file name glob.
+	 * @param fileName The buffer's name
+	 * @return true if the file name matches the file name glob.
+	 * @since jEdit 4.3pre18
+	 */
+	public boolean acceptFilename(String fileName)
+	{
+		return filenameRE != null && filenameRE.matcher(fileName).matches();
+	} //}}}
 
-		return false;
+	//{{{ acceptFirstLine() method
+	/**
+	 * Returns true if the first line matches the first line glob.
+	 * @param firstLine The first line of the buffer
+	 * @return true if the first line matches the first line glob.
+	 * @since jEdit 4.3pre18
+	 */
+	public boolean acceptFirstLine(String firstLine)
+	{
+		return firstlineRE != null && firstlineRE.matcher(firstLine).matches();
 	} //}}}
 
 	//{{{ getName() method

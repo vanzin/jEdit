@@ -49,6 +49,12 @@ for contributing to this release.
 
 - # 2838679 - Support Cygwin xsltproc in build.xml for docs generation
    (Sebastian Schuberth).
+   
+- Minor refactoring of Mode class to allow plugins to determine the mode of a
+  file without having to necessarily read the first line of the file.  This 
+  allows huge performance gains in plugins like TaskList that need to determine
+  the mode of a large number of files that are not yet opened in jEdit.
+  (Dale Anson)
 
 - Fixed #2834900: DockingLayoutManager recursion when handling EditBus msgs.
   Prevented such recursions by avoiding creation of a dockable if it is already
