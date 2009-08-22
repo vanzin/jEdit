@@ -2906,6 +2906,45 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		moveCaretPosition(newCaret);
 	} //}}}
 
+	//{{{ home() method
+	/**
+	 * A "dumb home" action which only has 2 states:
+	 *     start of the whitespace or start of line
+	 *     @param select true if we also want to select from the cursor
+	 * @since jedit 4.3pre18
+	 */
+	public void home(boolean select)
+	{
+		switch(getInputHandler().getLastActionCount() % 2)
+		{
+		case 1:
+			goToStartOfWhiteSpace(select);
+			break;
+		default:
+			goToStartOfLine(select);
+			break;
+		}
+	}// }}}
+
+	// {{{ end() method
+	/**
+	 * a dumb end action which only has 2 states:
+	 * 	end of whitespace or end of line
+	 * @param select true if we also want to select from the cursor
+	 * @since jedit 4.3pre18
+	 */
+	public void end(boolean select) {
+		switch(getInputHandler().getLastActionCount() % 2)
+		{
+		case 1:
+			goToEndOfWhiteSpace(select);
+			break;
+		default:
+			goToEndOfLine(select);
+			break;
+		}
+	}//}}}
+
 	//{{{ smartHome() method
 	/**
 	 * On subsequent invocations, first moves the caret to the first
@@ -2932,23 +2971,32 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 	//{{{ smartEnd() method
 	/**
-	 * On subsequent invocations, first moves the caret to the last
-	 * non-whitespace character of the line, then the end of the
-	 * line, then to the last visible line.
+	 * Has 4 states based on # of invocations:
+	 *   1. last character of code (before inline comment)
+	 *   2. last non whitespace character of the line
+	 *   3. end of line
+	 *   4. end of last visible line
 	 * @param select true if you want to extend selection
-	 * @since jEdit 4.3pre7
+	 * @since jEdit 4.3pre18
 	 */
 	public void smartEnd(boolean select)
 	{
+		int pos = getCaretPosition();
+		int npos = 0;
 		switch(getInputHandler().getLastActionCount())
 		{
 		case 1:
-			goToEndOfWhiteSpace(select);
+			goToEndOfCode(select);
+			npos = getCaretPosition();
+			if (npos == pos) goToEndOfWhiteSpace(select);
 			break;
 		case 2:
+			goToEndOfWhiteSpace(select);
+			break;
+		case 3:
 			goToEndOfLine(select);
 			break;
-		default: //case 3:
+		default: //case 4:
 			goToLastVisibleLine(select);
 			break;
 		}

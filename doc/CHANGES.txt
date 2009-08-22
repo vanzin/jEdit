@@ -61,6 +61,13 @@ for contributing to this release.
 - New action: toggle buffer switcher - toggles visibility of buffer switcher,
     and enabled-ness of focus menu item and focuses if enabled. (ezust)
 
+- New (restored?) Actions: dumb "home" and "end": not as smart as smart
+  home/end - stays on the same line always. (Alan Ezust)
+
+- Smarter Smart-end - uses syntax info to determine end of code (before
+  start of comment), giving smart-end 4 states instead of the previous 3.
+  (Gordon Hollenbeck #2646484).
+
 - New options to select the width and the background color of the selection area
   in the gutter (which is visible when line numbers are not shown).
 }}}

@@ -277,6 +277,12 @@
 
 <ACTION NAME="end" NO_RECORD="TRUE">
 	<CODE>
+		textArea.end(false);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="smart-end" NO_RECORD="TRUE">
+	<CODE>
 		textArea.smartEnd(false);
 	</CODE>
 </ACTION>
@@ -417,11 +423,18 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="home" NO_RECORD="TRUE">
+<ACTION NAME="smart-home" NO_RECORD="TRUE">
 	<CODE>
 		textArea.smartHome(false);
 	</CODE>
 </ACTION>
+
+<ACTION NAME="home" NO_RECORD="TRUE">
+	<CODE>
+		textArea.home(false);
+	</CODE>
+</ACTION>
+
 
 <ACTION NAME="hypersearch" NO_RECORD="TRUE">
 	<CODE>
