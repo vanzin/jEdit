@@ -104,7 +104,10 @@ public class UndoManager
 	public void beginCompoundEdit()
 	{
 		if(compoundEditCount == 0)
+		{
 			compoundEdit = new CompoundEdit();
+			reviseUndoId();
+		}
 
 		compoundEditCount++;
 	} //}}}
@@ -136,6 +139,12 @@ public class UndoManager
 	public boolean insideCompoundEdit()
 	{
 		return compoundEditCount != 0;
+	} //}}}
+
+	//{{{ getUndoId() method
+	public Object getUndoId()
+	{
+		return undoId;
 	} //}}}
 
 	//{{{ contentInserted() method
@@ -173,7 +182,10 @@ public class UndoManager
 		if(compoundEdit != null)
 			compoundEdit.add(ins);
 		else
+		{
+			reviseUndoId();
 			addEdit(ins);
+		}
 	} //}}}
 
 	//{{{ contentRemoved() method
@@ -215,7 +227,10 @@ public class UndoManager
 		if(compoundEdit != null)
 			compoundEdit.add(rem);
 		else
+		{
+			reviseUndoId();
 			addEdit(rem);
+		}
 
 		KillRing.getInstance().add(rem.content);
 	} //}}}
@@ -248,6 +263,7 @@ public class UndoManager
 	private int compoundEditCount;
 	private CompoundEdit compoundEdit;
 	private Edit undoClearDirty, redoClearDirty;
+	private Object undoId;
 	//}}}
 
 	//{{{ addEdit() method
@@ -294,6 +310,19 @@ public class UndoManager
 			return ((CompoundEdit)undosLast).last;
 		else
 			return undosLast;
+	} //}}}
+
+	//{{{ reviseUndoId()
+	/*
+	 * Revises a unique undoId for a new undo operation that is being
+	 * created as a result of a buffer content change.
+	 * This method should be called whenever a buffer content change
+	 * causes a new undo operation to be created; i.e. whenever a content
+	 * change is not included in the same undo operation as the previous.
+	 */
+	private void reviseUndoId()
+	{
+		undoId = new Object();
 	} //}}}
 
 	//}}}

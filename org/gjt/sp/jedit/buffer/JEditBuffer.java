@@ -82,6 +82,7 @@ public class JEditBuffer
 	public JEditBuffer(Map props)
 	{
 		bufferListeners = new Vector<Listener>();
+		undoListeners = new Vector<BufferUndoListener>();
 		lock = new ReentrantReadWriteLock();
 		contentMgr = new ContentManager();
 		lineMgr = new LineManager();
@@ -113,6 +114,7 @@ public class JEditBuffer
 	public JEditBuffer()
 	{
 		bufferListeners = new Vector<Listener>();
+		undoListeners = new Vector<BufferUndoListener>();
 		lock = new ReentrantReadWriteLock();
 		contentMgr = new ContentManager();
 		lineMgr = new LineManager();
@@ -2036,6 +2038,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			else
 				textArea.setCaretPosition(caret);
 
+			fireUndo();
 			fireTransactionComplete();
 		}
 		finally
@@ -2074,6 +2077,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			else
 				textArea.setCaretPosition(caret);
 
+			fireRedo();
 			fireTransactionComplete();
 		}
 		finally
@@ -2166,6 +2170,23 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return undoInProgress;
 	} //}}}
 
+	//{{{ getUndoId() method
+	/**
+	 * Returns an object that identifies the undo operation to which the
+	 * current content change belongs. This method can be used by buffer
+	 * listeners during content changes (contentInserted/contentRemoved)
+	 * to find out which content changes belong to the same "undo" operation.
+	 * The same undoId object will be returned for all content changes
+	 * belonging to the same undo operation. Only the identity of the
+	 * undoId can be used, by comparing it with a previously-returned undoId
+	 * using "==".
+	 * @since jEdit 4.3pre18
+	 */
+	public Object getUndoId()
+	{
+		return undoMgr.getUndoId();
+	} //}}}
+
 	//}}}
 
 	//{{{ Buffer events
@@ -2251,6 +2272,28 @@ loop:		for(int i = 0; i < seg.count; i++)
 			returnValue[i] = bufferListeners.get(i).listener;
 		}
 		return returnValue;
+	} //}}}
+
+	//{{{ addBufferUndoListener() method
+	/**
+	 * Adds a buffer undo listener.
+	 * @param listener The listener
+	 * @since jEdit 4.3pre18
+	 */
+	public void addBufferUndoListener(BufferUndoListener listener)
+	{
+		undoListeners.add(listener);
+	} //}}}
+
+	//{{{ removeBufferUndoListener() method
+	/**
+	 * Removes a buffer undo listener.
+	 * @param listener The listener
+	 * @since jEdit 4.3pre18
+	 */
+	public void removeBufferUndoListener(BufferUndoListener listener)
+	{
+		undoListeners.remove(listener);
 	} //}}}
 
 	//{{{ setUndoLimit() method
@@ -2374,6 +2417,40 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
+	//{{{ fireUndo() method
+	protected void fireUndo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.undo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer undo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireRedo() method
+	protected void fireRedo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.redo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer redo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+	
 	//{{{ fireTransactionComplete() method
 	protected void fireTransactionComplete()
 	{
@@ -2547,6 +2624,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 	//{{{ Private members
 	private List<Listener> bufferListeners;
+	private List<BufferUndoListener> undoListeners;
 	private final ReentrantReadWriteLock lock;
 	private ContentManager contentMgr;
 	private LineManager lineMgr;

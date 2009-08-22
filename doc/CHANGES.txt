@@ -92,6 +92,18 @@ for contributing to this release.
 
 }}}
 
+- Added support for undo-aware plugins:
+    - A new interface: org.gjt.sp.jedit.buffer.BufferUndoListener
+      This interface defines a listener that gets notified whenever undo/redo
+      are performed on a buffer. The listener can be added to / removed from
+      a buffer using:
+      JEditBuffer.addBufferUndoListener(BufferUndoListener)
+      JEditBuffer.removeBufferUndoListener(BufferUndoListener listener)
+    - A new method: JEditBuffer.getUndoId()
+      This method can be used during buffer content changes to find which
+      changes are included in the same undo operation. The method returns a
+      different undoId for each undo operation, and all changes included in the
+      same undo operation get the same undoId.
 }}}
 
 {{{ Version 4.3pre17
