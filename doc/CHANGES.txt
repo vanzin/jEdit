@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre18
 
-Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, and Alan Ezust
-for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust and 
+Denis Dzenskevich for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -59,6 +59,9 @@ for contributing to this release.
 - Fixed #2834900: DockingLayoutManager recursion when handling EditBus msgs.
   Prevented such recursions by avoiding creation of a dockable if it is already
   being created. (Shlomy Reinstein)
+  
+- Fixed syntax highlight when a " appear in a javadoc comment in java mode
+  (#2818095) (Denis Dzenskevich)
 }}}
 {{{ Miscellaneous
 

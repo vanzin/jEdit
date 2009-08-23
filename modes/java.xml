@@ -170,6 +170,12 @@
 		<SEQ TYPE="COMMENT3">&lt;=</SEQ>
 		<SEQ TYPE="COMMENT3">&lt; </SEQ>
 
+        <!-- strings in quotes -->
+        <SPAN TYPE="LITERAL1" ESCAPE="\" NO_LINE_BREAK="TRUE">
+        <BEGIN>&quot;</BEGIN>
+        <END>&quot;</END>
+        </SPAN>
+
 		<!-- HTML tags -->
 		<SPAN TYPE="MARKUP" DELEGATE="xml::TAGS"
 			NO_LINE_BREAK="TRUE">
