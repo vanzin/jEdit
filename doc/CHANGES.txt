@@ -2,10 +2,12 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre18
 
-Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust and 
-Denis Dzenskevich for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust 
+Matthieu Casanova and Denis Dzenskevich for contributing to this release.
 
 {{{ Bug Fixes
+- When using the quick syntax edition, if the operation is cancelled, do not
+  send a propertiesChanged event (Matthieu Casanova)
 
 - Fixed bug #2806043: Token.tokenToString() throws
   ArrayIndexOutOfBoundsException on the END token. (Shlomy Reinstein)

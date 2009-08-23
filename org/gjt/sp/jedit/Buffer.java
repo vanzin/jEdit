@@ -865,7 +865,8 @@ public class Buffer extends JEditBuffer
 		boolean old_d = isDirty();
 		if (isUntitled() && jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"))
 			d = false;
-		if (d && getLength() == initialLength) {
+		if (d && getLength() == initialLength)
+		{
 			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
 				d = !Arrays.equals(calculateHash(), md5hash);
 		}
@@ -2125,8 +2126,10 @@ public class Buffer extends JEditBuffer
 		SyntaxStyle style = new StyleEditor(jEdit.getActiveView(),
 				currentStyle, typeName).getStyle();
 		if(style != null)
+		{
 			jEdit.setProperty(property, GUIUtilities.getStyleString(style));
-		jEdit.propertiesChanged();
+			jEdit.propertiesChanged();
+		}
 	} //}}}
 	//}}}
 }
