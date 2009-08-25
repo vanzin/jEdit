@@ -32,7 +32,7 @@
 ### For generating the docs, adjust the following to your local paths
 ### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
 
-# cygwin "docbook-xml44" and "docbook-xls" packages
+# cygwin "docbook-xml44" and "docbook-xsl" packages
 # can be used to install docbook-xml and docbook-dtd
 # (example windows locations):
 #docbook.catalog=c:/cygwin/usr/share/xml/docbook/4.4/docbook.cat
