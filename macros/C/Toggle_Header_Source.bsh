@@ -39,7 +39,7 @@
 
 String defaultSourceExtension = "cpp";
 
-String[] sourceExtensions = new String[]{"cpp", "c", "cxx" };
+String[] sourceExtensions = new String[]{"cpp", "cxx", "cc", "c"};
 
 
 /** Looks for an existing file in the same directory, or
