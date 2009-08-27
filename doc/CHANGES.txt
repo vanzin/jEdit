@@ -2,8 +2,9 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre18
 
-Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust 
-Matthieu Casanova and Denis Dzenskevich for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust
+Matthieu Casanova, Denis Dzenskevich and Dennis Sheil for contributing to this
+release.
 
 {{{ Bug Fixes
 - When using the quick syntax edition, if the operation is cancelled, do not
@@ -51,9 +52,9 @@ Matthieu Casanova and Denis Dzenskevich for contributing to this release.
 
 - # 2838679 - Support Cygwin xsltproc in build.xml for docs generation
    (Sebastian Schuberth).
-   
+
 - Minor refactoring of Mode class to allow plugins to determine the mode of a
-  file without having to necessarily read the first line of the file.  This 
+  file without having to necessarily read the first line of the file.  This
   allows huge performance gains in plugins like TaskList that need to determine
   the mode of a large number of files that are not yet opened in jEdit.
   (Dale Anson)
@@ -61,9 +62,12 @@ Matthieu Casanova and Denis Dzenskevich for contributing to this release.
 - Fixed #2834900: DockingLayoutManager recursion when handling EditBus msgs.
   Prevented such recursions by avoiding creation of a dockable if it is already
   being created. (Shlomy Reinstein)
-  
+
 - Fixed syntax highlight when a " appear in a javadoc comment in java mode
   (#2818095) (Denis Dzenskevich)
+
+- Fixed #2808363 (patch #2827234): fix perl highlighting hanging on some
+  operators. (Dennis Sheil)
 }}}
 {{{ Miscellaneous
 
