@@ -2031,14 +2031,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 			writeLock();
 
 			undoInProgress = true;
+			fireBeginUndo();
 			int caret = undoMgr.undo();
-
 			if(caret == -1)
 				textArea.getToolkit().beep();
 			else
 				textArea.setCaretPosition(caret);
 
-			fireUndo();
+			fireEndUndo();
 			fireTransactionComplete();
 		}
 		finally
@@ -2071,13 +2071,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 			writeLock();
 
 			undoInProgress = true;
+			fireBeginRedo();
 			int caret = undoMgr.redo();
 			if(caret == -1)
 				textArea.getToolkit().beep();
 			else
 				textArea.setCaretPosition(caret);
 
-			fireRedo();
+			fireEndRedo();
 			fireTransactionComplete();
 		}
 		finally
@@ -2309,6 +2310,30 @@ loop:		for(int i = 0; i < seg.count; i++)
 			undoMgr.setLimit(limit);
 	} //}}}
 
+	//{{{ canUndo() method
+	/**
+	 * Returns true if an undo operation can be performed.
+	 * @since jEdit 4.3pre18
+	 */
+	public boolean canUndo()
+	{
+		if (undoMgr == null)
+			return false;
+		return undoMgr.canUndo();
+	} //}}}
+
+	//{{{ canRedo() method
+	/**
+	 * Returns true if a redo operation can be performed.
+	 * @since jEdit 4.3pre18
+	 */
+	public boolean canRedo()
+	{
+		if (undoMgr == null)
+			return false;
+		return undoMgr.canRedo();
+	} //}}}
+
 	//}}}
 
 	//{{{ Protected members
@@ -2417,14 +2442,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-	//{{{ fireUndo() method
-	protected void fireUndo()
+	//{{{ fireBeginUndo() method
+	protected void fireBeginUndo()
 	{
 		for (BufferUndoListener listener: undoListeners)
 		{
 			try
 			{
-				listener.undo(this);
+				listener.beginUndo(this);
 			}
 			catch(Throwable t)
 			{
@@ -2434,18 +2459,52 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 	} //}}}
 
-	//{{{ fireRedo() method
-	protected void fireRedo()
+	//{{{ fireEndUndo() method
+	protected void fireEndUndo()
 	{
 		for (BufferUndoListener listener: undoListeners)
 		{
 			try
 			{
-				listener.redo(this);
+				listener.endUndo(this);
 			}
 			catch(Throwable t)
 			{
-				Log.log(Log.ERROR,this,"Exception while sending buffer redo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,"Exception while sending buffer undo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireBeginRedo() method
+	protected void fireBeginRedo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.beginRedo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer begin redo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+	
+	//{{{ fireEndRedo() method
+	protected void fireEndRedo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.endRedo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer end redo event to "+ listener +" :");
 				Log.log(Log.ERROR,this,t);
 			}
 		}

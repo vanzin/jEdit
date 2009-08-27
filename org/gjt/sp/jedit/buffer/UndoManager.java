@@ -58,6 +58,12 @@ public class UndoManager
 		undoCount = 0;
 	} //}}}
 
+	//{{{ canUndo() method
+	public boolean canUndo()
+	{
+		return (undosLast != null);
+	} //}}}
+
 	//{{{ undo() method
 	public int undo()
 	{
@@ -78,6 +84,12 @@ public class UndoManager
 				undosFirst = null;
 			return caret;
 		}
+	} //}}}
+
+	//{{{ canRedo() method
+	public boolean canRedo()
+	{
+		return (redosFirst != null);
 	} //}}}
 
 	//{{{ redo() method

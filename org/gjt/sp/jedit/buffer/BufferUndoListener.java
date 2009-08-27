@@ -38,19 +38,35 @@ package org.gjt.sp.jedit.buffer;
  */
 public interface BufferUndoListener
 {
-	//{{{ undo() method
+	//{{{ beginUndo() method
 	/**
-	 * Called when undo is called on the buffer.
+	 * Called when an undo operation on the buffer begins.
 	 * @param buffer The buffer in question
 	 */
-	void undo(JEditBuffer buffer);
+	void beginUndo(JEditBuffer buffer);
 	//}}}
 
-	//{{{ redo() method
+	//{{{ endUndo() method
 	/**
-	 * Called when redo is called on the buffer.
+	 * Called when an undo operation on the buffer ends.
 	 * @param buffer The buffer in question
 	 */
-	void redo(JEditBuffer buffer);
+	void endUndo(JEditBuffer buffer);
+	//}}}
+
+	//{{{ beginRedo() method
+	/**
+	 * Called when a redo on the buffer begins.
+	 * @param buffer The buffer in question
+	 */
+	void beginRedo(JEditBuffer buffer);
+	//}}}
+
+	//{{{ endRedo() method
+	/**
+	 * Called when a redo on the buffer ends.
+	 * @param buffer The buffer in question
+	 */
+	void endRedo(JEditBuffer buffer);
 	//}}}
 }
