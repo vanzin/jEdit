@@ -595,9 +595,9 @@ public class DisplayManager
 
 	//{{{ setFirstPhysicalLine() method
 	/**
-	 * Scroll from a given ammount of lines.
+	 * Scroll from a given amount of lines.
 	 *
-	 * @param amount the ammount of lines that must be scrolled
+	 * @param amount the amount of lines that must be scrolled
 	 * @param skew a skew within the given line
 	 */
 	void setFirstPhysicalLine(int amount, int skew)
