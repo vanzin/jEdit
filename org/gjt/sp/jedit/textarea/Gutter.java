@@ -873,6 +873,7 @@ public class Gutter extends JComponent implements SwingConstants
 		boolean drag;
 		int toolTipInitialDelay, toolTipReshowDelay;
 		boolean selectLines;
+		int selAnchorLine;
 		GutterPopupHandler selectionPopupHandler;
 
 		//{{{ mouseEntered() method
@@ -944,6 +945,7 @@ public class Gutter extends JComponent implements SwingConstants
 					else
 						textArea.setSelection(s);
 					selectLines = true;
+					selAnchorLine = line;
 					return;
 				}
 
@@ -1053,24 +1055,33 @@ public class Gutter extends JComponent implements SwingConstants
 			{
 				int screenLine = e.getY() / textArea.getPainter()
 					.getFontMetrics().getHeight();
-				int line = textArea.chunkCache.getLineInfo(screenLine)
-					.physicalLine;
-				if(line == -1)
-					return;
-				int numSelections = textArea.getSelectionCount();
-				Selection sel = textArea.getSelection(numSelections - 1);
-				int selStart = sel.getStart();
-				int selStartLine = textArea.getLineOfOffset(selStart);
-				int selEnd;
-				if (selStartLine < line)
+				int line;
+				if(e.getY() < 0)
 				{
-					selEnd = getFoldEndOffset(line);
+					textArea.scrollUpLine();
+					line = textArea.getFirstPhysicalLine();
+				}
+				else if(e.getY() >= getHeight())
+				{
+					textArea.scrollDownLine();
+					line = textArea.getLastPhysicalLine();
+				}
+				else
+					line = textArea.chunkCache.getLineInfo(screenLine)
+						.physicalLine;
+
+				int selStart, selEnd;
+				if(line < selAnchorLine)
+				{
+					selStart = textArea.getLineStartOffset(line);
+					selEnd = getFoldEndOffset(selAnchorLine);
 				}
 				else
 				{
-					selStart = textArea.getLineStartOffset(line);
-					selEnd = sel.getEnd();
+					selStart = textArea.getLineStartOffset(selAnchorLine);
+					selEnd = getFoldEndOffset(line);
 				}
+
 				textArea.resizeSelection(selStart, selEnd, 0, false);
 			}
 		} //}}}
@@ -1090,7 +1101,11 @@ public class Gutter extends JComponent implements SwingConstants
 				int[] lines = buffer.getFoldAtLine(line);
 				endLine = lines[1];
 			}
-			return buffer.getLineEndOffset(endLine);
+
+			if(endLine == buffer.getLineCount() - 1)
+				return buffer.getLineEndOffset(endLine) - 1;
+			else
+				return buffer.getLineEndOffset(endLine);
 		} //}}}
 
 		//{{{ mouseReleased() method
