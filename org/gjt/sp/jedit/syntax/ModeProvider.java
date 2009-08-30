@@ -49,12 +49,12 @@ public class ModeProvider
 {
 	public static ModeProvider instance = new ModeProvider();
 
-	private List<Mode> modes = new ArrayList<Mode>(160);
+	private List<Mode> modes = new ArrayList<Mode>(180);
 
 	//{{{ removeAll() method
 	public void removeAll()
 	{
-		modes = new ArrayList<Mode>(160);
+		modes = new ArrayList<Mode>(180);
 	} //}}}
 
 	//{{{ getMode() method
