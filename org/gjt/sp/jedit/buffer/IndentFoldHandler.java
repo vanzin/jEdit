@@ -39,7 +39,10 @@ public class IndentFoldHandler extends FoldHandler
 
 	//{{{ getFoldLevel() method
 	/**
-	 * Returns the fold level of the specified line.
+	 * Returns the fold level of the specified line. For a whitespace-only
+	 * line, returns the fold level of the next non-whitespace line, or
+	 * the level of the previous line if no non-whitespace line follows or if
+	 * the level of the previous line is higher.
 	 * @param buffer The buffer in question
 	 * @param lineIndex The line index
 	 * @param seg A segment the fold handler can use to obtain any
@@ -50,40 +53,41 @@ public class IndentFoldHandler extends FoldHandler
 	public int getFoldLevel(JEditBuffer buffer, int lineIndex, Segment seg)
 	{
 		int tabSize = buffer.getTabSize();
-
-		buffer.getLineText(lineIndex,seg);
-
-		int offset = seg.offset;
-		int count = seg.count;
-
-		int whitespace = 0;
-
-		boolean seenNonWhiteSpace = false;
+		// Look for first non-whitespace line starting at lineIndex
+		int prevLevel = 0;
+		for (int index = lineIndex; index < buffer.getLineCount(); index++)
+		{
+			buffer.getLineText(index,seg);
+			int offset = seg.offset;
+			int count = seg.count;
+			int whitespace = 0;
+			boolean seenNonWhiteSpace = false;
 
 loop:		for(int i = 0; i < count; i++)
-		{
-			switch(seg.array[offset + i])
 			{
-			case ' ':
-				whitespace++;
-				break;
-			case '\t':
-				whitespace += (tabSize - whitespace % tabSize);
-				break;
-			default:
-				seenNonWhiteSpace = true;
-				break loop;
+				switch(seg.array[offset + i])
+				{
+				case ' ':
+					whitespace++;
+					break;
+				case '\t':
+					whitespace += (tabSize - whitespace % tabSize);
+					break;
+				default:
+					seenNonWhiteSpace = true;
+					break loop;
+				}
 			}
-		}
 
-		if(!seenNonWhiteSpace)
-		{
-			// empty line. inherit previous line's fold level
-			if(lineIndex != 0)
-				return buffer.getFoldLevel(lineIndex - 1);
-			else
+			if(seenNonWhiteSpace)
+				return (whitespace > prevLevel) ? whitespace : prevLevel;
+			if(index == 0)
 				return 0;
+			if(index == lineIndex)
+				prevLevel = buffer.getFoldLevel(lineIndex - 1);
 		}
-			return whitespace;
+		// All lines from lineIndex are whitespace-only - use fold
+		// level of previous line.
+		return prevLevel;
 	} //}}}
 }
