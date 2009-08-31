@@ -1887,6 +1887,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 			int newFoldLevel = 0;
 			boolean changed = false;
+			int firstUpdatedFoldLevel = firstInvalidFoldLevel;
 
 			for(int i = firstInvalidFoldLevel; i <= line; i++)
 			{
@@ -1897,6 +1898,21 @@ loop:		for(int i = 0; i < seg.count; i++)
 					if(Debug.FOLD_DEBUG)
 						Log.log(Log.DEBUG,this,i + " fold level changed");
 					changed = true;
+					// Update preceding fold levels if necessary
+					List<Integer> precedingFoldLevels =
+						foldHandler.getPrecedingFoldLevels(
+							this,i,seg,newFoldLevel);
+					if (precedingFoldLevels != null)
+					{
+						int j = i;
+						for (Integer foldLevel: precedingFoldLevels)
+						{
+							j--;
+							lineMgr.setFoldLevel(j,foldLevel.intValue());
+						}
+						if (j < firstUpdatedFoldLevel)
+							firstUpdatedFoldLevel = j;
+					}
 				}
 				lineMgr.setFoldLevel(i,newFoldLevel);
 			}
@@ -1909,8 +1925,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 			if(changed)
 			{
 				if(Debug.FOLD_DEBUG)
-					Log.log(Log.DEBUG,this,"fold level changed: " + firstInvalidFoldLevel + ',' + line);
-				fireFoldLevelChanged(firstInvalidFoldLevel,line);
+					Log.log(Log.DEBUG,this,"fold level changed: " + firstUpdatedFoldLevel + ',' + line);
+				fireFoldLevelChanged(firstUpdatedFoldLevel,line);
 			}
 
 			return newFoldLevel;
