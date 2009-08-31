@@ -68,6 +68,12 @@ release.
 
 - Fixed #2808363 (patch #2827234): fix perl highlighting hanging on some
   operators. (Dennis Sheil)
+
+- Applied patch #2842678: Gutter selection problems (Shlomy Reinstein, patch
+  provided by encorejane).
+
+- Applied patch #2846169: IndentFoldHandler - allow blank lines after start of
+  fold.	(Shlomy Reinstein, patch provided by Suraj Kurapati)
 }}}
 {{{ Miscellaneous
 
@@ -99,8 +105,6 @@ release.
 - Moved EditorExiting ebmessage earlier, before the unloading of plugin jars
   so plugins can catch it and act appropriately during shutdown. (Alan Ezust)
 
-}}}
-
 - Added support for undo-aware plugins:
     - A new interface: org.gjt.sp.jedit.buffer.BufferUndoListener
       This interface defines a listener that gets notified whenever undo/redo
@@ -108,11 +112,19 @@ release.
       a buffer using:
       JEditBuffer.addBufferUndoListener(BufferUndoListener)
       JEditBuffer.removeBufferUndoListener(BufferUndoListener listener)
-    - A new method: JEditBuffer.getUndoId()
-      This method can be used during buffer content changes to find which
+    - New methods in JEditBuffer: getUndoId(), canUndo(), canRedo()
+      getUndoId() can be used during buffer content changes to find which
       changes are included in the same undo operation. The method returns a
       different undoId for each undo operation, and all changes included in the
-      same undo operation get the same undoId.
+      same undo operation get the same undoId. The other two methods return
+      true if more items exist in the undo/redo list, respectively.
+
+- New method: FoldHandler.getPrecedingFoldLevels - allows a fold handler to
+  specify fold levels of lines preceding a line whose content has changed, to
+  support patch #2846169, which makes the fold levels of blank lines depend on
+  the first non-whitespace-only line following them. (Shlomy Reinstein)
+}}}
+
 }}}
 
 {{{ Version 4.3pre17
