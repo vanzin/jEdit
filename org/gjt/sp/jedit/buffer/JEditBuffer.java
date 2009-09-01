@@ -1899,19 +1899,22 @@ loop:		for(int i = 0; i < seg.count; i++)
 						Log.log(Log.DEBUG,this,i + " fold level changed");
 					changed = true;
 					// Update preceding fold levels if necessary
-					List<Integer> precedingFoldLevels =
-						foldHandler.getPrecedingFoldLevels(
-							this,i,seg,newFoldLevel);
-					if (precedingFoldLevels != null)
+					if (i == firstInvalidFoldLevel)
 					{
-						int j = i;
-						for (Integer foldLevel: precedingFoldLevels)
+						List<Integer> precedingFoldLevels =
+							foldHandler.getPrecedingFoldLevels(
+								this,i,seg,newFoldLevel);
+						if (precedingFoldLevels != null)
 						{
-							j--;
-							lineMgr.setFoldLevel(j,foldLevel.intValue());
+							int j = i;
+							for (Integer foldLevel: precedingFoldLevels)
+							{
+								j--;
+								lineMgr.setFoldLevel(j,foldLevel.intValue());
+							}
+							if (j < firstUpdatedFoldLevel)
+								firstUpdatedFoldLevel = j;
 						}
-						if (j < firstUpdatedFoldLevel)
-							firstUpdatedFoldLevel = j;
 					}
 				}
 				lineMgr.setFoldLevel(i,newFoldLevel);
