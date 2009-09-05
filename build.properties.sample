@@ -8,6 +8,7 @@
 ### it with all its content. (So don't use your
 ### home-directory or your project-directory
 ### if you don't want to loose all your files!)
+### This has to be a relative directory.
 #build.dir=build
 
 ### The directory where to put the distribution-files
@@ -16,6 +17,7 @@
 ### it with all its content. (So don't use your
 ### home-directory or your project-directory
 ### if you don't want to loose all your files!)
+### This has to be a relative directory.
 #dist.dir=dist
 
 ### The name of the Inno Setup command line compiler
