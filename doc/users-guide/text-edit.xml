@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="editing">
     <title>Editing Text</title>
+    <!-- jEdit buffer-local properties:
+         :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80:
+         :xml.root=users-guide.xml: -->
 
-    <!-- jEdit buffer-local properties: -->
-
-    <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
-
-    <!-- :xml.root=users-guide.xml: -->
-
-    <sect1 id="caret">
+    <section id="caret">
         <title>Moving The Caret</title>
 
         <para>The simplest way to move the caret is to click the mouse at the
@@ -114,9 +111,9 @@
                 </listitem>
             </itemizedlist>
         </sidebar>
-    </sect1>
+    </section>
 
-    <sect1 id="selection">
+    <section id="selection">
         <title>Selecting Text</title>
 
         <para>A <firstterm>selection</firstterm> is a block of text marked for
@@ -128,7 +125,7 @@
         selections</quote>). Furthermore, several chunks of text can be selected
         and operated on simultaneously.</para>
 
-        <sect2>
+        <section>
             <title>Range Selection</title>
 
             <para>Dragging the mouse creates a range selection from where the
@@ -150,9 +147,9 @@
             Selection</guisubmenu>&gt;<guimenuitem>Select None</guimenuitem>
             (shortcut: <keycap>ESCAPE</keycap>) deactivates the
             selection.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="rect-select">
+        <section id="rect-select">
             <title>Rectangular Selection</title>
 
             <para>Dragging with the <keycap>Control</keycap> key held down will
@@ -203,9 +200,9 @@
                 Options</guimenuitem> dialog box. For information about soft
                 wrap, see <xref linkend="word-wrap" />.</para>
             </note>
-        </sect2>
+        </section>
 
-        <sect2 id="multi-select">
+        <section id="multi-select">
             <title>Multiple Selection</title>
 
             <para><guimenu>Edit</guimenu>&gt;<guisubmenu>More
@@ -282,10 +279,10 @@
                 will not be able to add new selections until multiple selection
                 mode is reactivated.</para>
             </note>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="entering-text">
+    <section id="entering-text">
         <title>Inserting and Deleting Text</title>
 
         <para>Text entered at the keyboard is inserted into the buffer. In
@@ -312,9 +309,9 @@
         <para>More advanced deletion commands are described in <xref
         linkend="words" />, <xref linkend="lines" /> and <xref
         linkend="paragraphs" />.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="undo-redo">
+    <section id="undo-redo">
         <title>Undo and Redo</title>
 
         <para><guimenu>Edit</guimenu>&gt;<guimenuitem>Undo</guimenuitem>
@@ -336,9 +333,9 @@
         pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
         Options</guimenuitem> dialog box; see <xref
         linkend="editing-pane" />.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="words">
+    <section id="words">
         <title>Working With Words</title>
 
         <para><keycap>C+LEFT</keycap> and <keycap>C+RIGHT</keycap> move the
@@ -390,17 +387,17 @@
         displays a dialog box with the number of characters, words and lines in
         the current buffer.</para>
 
-        <sect2>
+        <section>
             <title>What's a Word?</title>
 
             <para>The default behavior of the <keycap>C+LEFT</keycap>,
             <keycap>C+RIGHT</keycap>, <keycap>C+BACKSPACE</keycap> and
             <keycap>C+DELETE</keycap> commands is to stop both at the beginning
             and the end of each word. Normally, a word is a sequence of
-            alphanumerics, but you can add other characters as part of 
+            alphanumerics, but you can add other characters as part of
             what jEdit considers to be a 'word', set on a global or mode basis
             from <guimenuitem>Global Options -  Editing - Extra Word
-            Characters</guimenuitem>. 
+            Characters</guimenuitem>.
             In addition, this behavior can be changed by remapping
             these keystrokes to alternative actions whose names end with
             <guimenuitem>(Eat Whitespace)</guimenuitem> in the
@@ -408,10 +405,10 @@
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box; see <xref
             linkend="shortcuts-pane" />.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="lines">
+    <section id="lines">
         <title>Working With Lines</title>
 
         <para>An entire line can be selected by triple-clicking with the mouse,
@@ -455,9 +452,9 @@
         <para>It will be changed to:</para>
 
         <screen>new Widget(Foo.createDefaultFoo());</screen>
-    </sect1>
+    </section>
 
-    <sect1 id="paragraphs">
+    <section id="paragraphs">
         <title>Working With Paragraphs</title>
 
         <para>As far as jEdit is concerned, <quote>paragraphs</quote> are
@@ -486,9 +483,9 @@
         <para><guimenu>Edit</guimenu>&gt;<guisubmenu>Text</guisubmenu>&gt;<guimenuitem>Delete
         Paragraph</guimenuitem> (shortcut: <keycap>C+e d</keycap>) deletes the
         paragraph containing the caret.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="word-wrap">
+    <section id="word-wrap">
         <title>Wrapping Long Lines</title>
 
         <para>The <firstterm>word wrap</firstterm> feature splits lines at word
@@ -550,7 +547,7 @@
             </listitem>
         </itemizedlist>
 
-        <sect2>
+        <section>
             <title>Soft Wrap</title>
 
             <para>In soft wrap mode, lines are automatically wrapped when
@@ -567,9 +564,9 @@
             Options</guimenuitem> dialog box, a colon (<quote>:</quote>) is
             painted at the end of wrapped lines. See <xref
             linkend="text-area-pane" />.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Hard Wrap</title>
 
             <para>In hard wrap mode, inserting text at the end of a line will
@@ -586,10 +583,10 @@
             changed in the <guibutton>Text Area</guibutton> pane of the
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="scrolling">
+    <section id="scrolling">
         <title>Scrolling</title>
 
         <para>If you have a mouse with a scroll wheel, you can use the wheel to
@@ -653,9 +650,9 @@
         <para>The above scrolling commands differ from the caret movement
         commands in that they don't actually move the caret; they just change
         the scroll bar position.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="text-transfer">
+    <section id="text-transfer">
         <title>Transferring Text</title>
 
         <para>jEdit provides a rich set of commands for moving and copying text.
@@ -666,7 +663,7 @@
         in jEdit, the system clipboard is just another register, with the
         special name <filename>$</filename>.</para>
 
-        <sect2>
+        <section>
             <title>The Clipboard</title>
 
             <para>jEdit offers the usual text transfer operations, that operate
@@ -704,9 +701,9 @@
             (shortcut: <keycap>C+e C+a</keycap>) is the same as <guimenuitem>Cut
             Append</guimenuitem> except it does not remove the selection from
             the buffer.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="quick-copy">
+        <section id="quick-copy">
             <title>Quick Copy</title>
 
             <para>The quick copy feature is usually found in Unix text editors.
@@ -760,9 +757,9 @@
             using the quick copy feature. On other platforms and Java versions,
             the contents of the quick copy register are only accessible from
             within jEdit.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="registers">
+        <section id="registers">
             <title>General Register Commands</title>
 
             <para>These commands require more keystrokes than the two methods
@@ -827,10 +824,10 @@
             Clipboard</guisubmenu>&gt;<guimenuitem>View Registers</guimenuitem>
             displays a dialog box for viewing register contents, including the
             clipboard and the quick copy.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="markers">
+    <section id="markers">
         <title>Markers</title>
 
         <para>A <firstterm>marker</firstterm> is a pointer to a specific
@@ -901,12 +898,12 @@
         highlight. Moving the mouse over the highlight displays a tool tip
         showing the marker's shortcut, if it has one. See <xref
         linkend="overview" /> for information about the gutter.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="search-replace">
+    <section id="search-replace">
         <title>Search and Replace</title>
 
-        <sect2>
+        <section>
             <title>Searching For Text</title>
 
             <para><guimenu>Search</guimenu>&gt;<guimenuitem>Find</guimenuitem>
@@ -934,13 +931,15 @@
             <quote>Hello</quote> will match <quote>hello</quote>,
             <quote>HELLO</quote> and <quote>HeLlO</quote>.</para>
 
-            <para>To search for special characters (such as newlines or 
+            <para>To search for special characters (such as newlines or
             non-printable characters), inexact sequences of text, or strings
             that span multiple lines, we use
-            <emphasis role="bold">Regular Expressions</emphasis>. 
+            <emphasis role="bold">Regular Expressions</emphasis>.
             Selecting the <guibutton>Regular expressions</guibutton> check
             box allows special characters to be used in the search string.
-            Regular expression syntax is described in <xref linkend="regexps" />.</para>
+            Regular expression syntax is described in <xref linkend="regexps"/>.
+            If you use (groups) in the search field, you back-reference them
+            with $1 through $9 in the replace field. </para>
 
             <para>The <guibutton>Backward</guibutton> and
             <guibutton>Forward</guibutton> buttons specify the search direction.
@@ -969,9 +968,9 @@
             Previous</guimenuitem> (shortcut: <keycap>C+h</keycap>) locates the
             previous occurrence of the most recent search string without
             displaying the search and replace dialog box.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Replacing Text</title>
 
             <para>The replace string text field of the search dialog remembers
@@ -992,7 +991,7 @@
             select between the two replacement modes, which are described in
             detail below.</para>
 
-            <sect3>
+            <section>
                 <title>Text Replace</title>
 
                 <para>If the <guibutton>Text</guibutton> button is selected, the
@@ -1028,9 +1027,9 @@
                         <quote>DEFAULT_TEXT</quote></para>
                     </listitem>
                 </itemizedlist>
-            </sect3>
+            </section>
 
-            <sect3>
+            <section>
                 <title>BeanShell Replace</title>
 
                 <para>In BeanShell replacement mode, the search string is
@@ -1096,10 +1095,10 @@
 
                 <para>These examples only scratch the surface; the possibilities
                 are endless.</para>
-            </sect3>
-        </sect2>
+            </section>
+        </section>
 
-        <sect2 id="hypersearch">
+        <section id="hypersearch">
             <title>HyperSearch</title>
 
             <para>If the <guibutton>HyperSearch</guibutton> check box in the
@@ -1118,9 +1117,9 @@
             <para>Running searches can be stopped in the
             <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>I/O
             Progress Monitor</guimenuitem> dialog box.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Multiple File Search</title>
 
             <para>Search and replace commands can be performed over an arbitrary
@@ -1177,9 +1176,9 @@
             Directory</guimenuitem> (shortcut: <keycap>C+e C+d</keycap>)
             displays the search dialog box and selects the
             <guibutton>Directory</guibutton> button.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="search-bar">
+        <section id="search-bar">
             <title>The Search Bar</title>
 
             <para>The search bar feature provides a convenient way to search in
@@ -1242,6 +1241,6 @@
             Word</guimenuitem> (shortcut: <keycap>A+PERIOD</keycap>) performs a
             HyperSearch for the word at the caret. This command does not show
             the search bar or give it keyboard focus.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 </chapter>
