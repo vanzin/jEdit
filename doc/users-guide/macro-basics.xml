@@ -8,7 +8,7 @@
     <!-- This file cover the introductory section of the macro guide -->
     <!-- $Id$  -->
 
-    <sect1 id="beanshell-intro">
+    <section id="beanshell-intro">
         <title>Introducing BeanShell</title>
 
         <para>Here is how BeanShell's author, Pat Niemeyer, describes his
@@ -37,9 +37,9 @@
         Information on how to run and organize macros, whether included with the
         jEdit installation or written by you, can be found in <xref
         linkend="using-macros" />.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="single-macros">
+    <section id="single-macros">
         <title>Single Execution Macros</title>
 
         <para>As noted in <xref linkend="organizing-macros" />, you can save a
@@ -119,9 +119,9 @@
             <para>You can also do the same thing using the BeanShell interpreter
             option of the <application>Console</application> plugin.</para>
         </sidebar>
-    </sect1>
+    </section>
 
-    <sect1 id="first-example">
+    <section id="first-example">
         <title>The Mandatory First Example</title>
 
         <informalexample>
@@ -294,9 +294,9 @@ org.gjt.sp.jedit.syntax
 org.gjt.sp.jedit.textarea
 org.gjt.sp.util</programlisting>
         </sidebar>
-    </sect1>
+    </section>
 
-    <sect1 id="predefined-variables">
+    <section id="predefined-variables">
         <title>Predefined Variables in BeanShell</title>
 
         <para>The following variables are always available for use in BeanShell
@@ -387,9 +387,9 @@ org.gjt.sp.util</programlisting>
         execution. If the macro switches views, buffers or edit panes, the
         variable values will be out of date. In that case, you can use the
         equivalent method calls.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="helpful-methods">
+    <section id="helpful-methods">
         <title>Helpful Methods in the Macros Class</title>
 
         <para>Including <function>message()</function>, there are five static
@@ -574,9 +574,9 @@ int result = Macros.confirm(view, "Do you really want to learn"
         presenting a user interface. In fact, full-blown user interfaces using
         the Java Swing APIs are also possible, and will be covered later on in
         <xref linkend="dialog-macro" />.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="dynamic-typing">
+    <section id="dynamic-typing">
         <title>BeanShell Dynamic Typing</title>
 
         <para>Without an explicit <glossterm>type declaration</glossterm> like
@@ -621,9 +621,9 @@ result = 14;</programlisting>
 and will be totally ignored by BeanShell regardless of how
 many lines it covers */</programlisting>
         </informalexample>
-    </sect1>
+    </section>
 
-    <sect1 id="something-useful">
+    <section id="something-useful">
         <title>Now For Something Useful</title>
 
         <para>Here is a macro that inserts the path of the current buffer in the
@@ -763,5 +763,5 @@ String result = df.format(d);
                     </itemizedlist></para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 </chapter>

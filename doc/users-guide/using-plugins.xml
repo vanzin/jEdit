@@ -14,7 +14,7 @@
     information about writing plugins can be found in <xref
     linkend="writing-plugins-part" />.</para>
 
-    <sect1 id="plugin-manager">
+    <section id="plugin-manager">
         <title>The Plugin Manager</title>
 
         <para><guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin
@@ -40,14 +40,14 @@
         <guibutton>Save</guibutton> rollover button allows you to save the list
         of installed and loaded plugins to an XML file.  See <xref
         linkend="plugin-sets" /> for more information. </para>
-        
-        
-        <para><guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin
-        Options</guimenuitem> displays a dialog box for changing plugin 
-        settings.</para>
-    </sect1>
 
-    <sect1 id="installing-plugins">
+
+        <para><guimenu>Plugins</guimenu>&gt;<guimenuitem>Plugin
+        Options</guimenuitem> displays a dialog box for changing plugin
+        settings.</para>
+    </section>
+
+    <section id="installing-plugins">
         <title>Installing and Updating Plugins</title>
 
         <para>Plugins can be installed in two ways; manually, and from the
@@ -77,7 +77,7 @@
         will see the filename in the hovertip of the
         <guibutton>choose</guibutton> rolloverbutton, as well as all of the
         plugins in that set already checked for you. </para>
-        
+
         <para> You can clear the active PluginSet with the
         <guibutton>clear</guibutton> button next to it, or choose a different
         PluginSet xml file with the <guibutton>choose</guibutton> button. See
@@ -110,21 +110,21 @@
             Options</guimenuitem> dialog box; see <xref
             linkend="firewall-pane" />.</para>
         </sidebar>
-    </sect1>
-    
-    <sect1 id="plugin-sets">
+    </section>
+
+    <section id="plugin-sets">
     <title>Plugin Sets</title>
-    
+
     <para> A <emphasis role="bold">PluginSet</emphasis> is a collection of
     plugins, represented as an XML file. These XML files can be created from the
     <guibutton>save</guibutton> button of the Manage tab of the Plugin Manager.
     Saving a PluginSet remembers all of the currently loaded plugins. </para>
-    
+
     <para> When a PluginSet has been saved, it becomes the "default pluginset",
     which means that if you unload/uninstall plugins from that set and go back to the
     Install tab, you should see them selected for download again. To clear this
     setting, click on the <guibutton>clear</guibutton> button in the
-    Install tab. 
+    Install tab.
     </para>
 
     <para> It is posisble to Choose/Open a PluginSet from the Manage or the
@@ -133,11 +133,11 @@
     are loaded but not in the list. From the Install tab, it selects plugins
     from that list that are not loaded, marking them for download from Plugin
     Central. </para>
-        
+
     <para> When choosing a PluginSet, the path can be given as a remote URL.
     This helps teachers and sysadmins direct the students/slaves to a standard
     set of plugins that are required for the course/job. </para>
-    
-    </sect1>
-     
+
+    </section>
+
 </chapter>

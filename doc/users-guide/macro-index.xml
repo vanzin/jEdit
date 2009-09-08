@@ -18,7 +18,7 @@
     are detailed descriptions for each macro as well as a search
     facility.</para>
 
-    <sect1 id="macros-c" >
+    <section id="macros-c" >
         <title>C/C++ macros </title>
          <para> These macros are useful for C/C++ programming. </para>
          <itemizedlist>
@@ -33,10 +33,10 @@
          <para> Toggles between the header and the implementation file. Works for .c, .cxx, and .cpp extensions. </para>
          </listitem>
          </itemizedlist>
-    </sect1>
-         
-    
-    <sect1 id="macros-clipboard">
+    </section>
+
+
+    <section id="macros-clipboard">
         <title>Clipboard Macros</title>
 
         <para>These macros copy or cut text to the clipboard.</para>
@@ -88,9 +88,9 @@
                 are not copied.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="macros-editing">
+    <section id="macros-editing">
         <title>Editing Macros</title>
 
         <para>These macros automate various text editing tasks.</para>
@@ -100,7 +100,7 @@
                 <para><filename>Emacs_Ctrl-K.bsh</filename></para>
                 <para>Cuts and appends text, from the cursor to the end of the line, into the copy buffer.   </para>
             </listitem>
-        
+
             <listitem>
                 <para><filename>Emacs_Next_Line.bsh</filename></para>
 
@@ -199,9 +199,9 @@
                 indentation.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="macros-files">
+    <section id="macros-files">
         <title>File Management Macros</title>
 
         <para>These macros automate the opening and closing of files.</para>
@@ -297,9 +297,9 @@
                 and MacOS X.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="macros-interface">
+    <section id="macros-interface">
         <title>User Interface Macros</title>
 
         <para>Description.</para>
@@ -339,8 +339,8 @@
                splitter away from the cursor, effectively increasing the size of
                the currently active split pane. </para>
              </listitem>
-               
-            
+
+
             <listitem>
                 <para><filename>Toggle_Left_Docking_Area.bsh</filename></para>
 
@@ -362,9 +362,9 @@
                 it's current state.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="macros-java">
+    <section id="macros-java">
         <title>Java Code Macros</title>
 
         <para>These macros handle text formatting and generation tasks that are
@@ -449,9 +449,9 @@
                 details.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="macros-misc">
+    <section id="macros-misc">
         <title>Miscellaneous Macros</title>
 
         <para>While these macros do not fit easily into the other categories,
@@ -565,9 +565,9 @@
                 current Java Virtual Machine.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="macros-properties">
+    <section id="macros-properties">
         <title>Property Macros</title>
 
         <para>These macros produce lists or tables containing properties used by
@@ -606,9 +606,9 @@
                 new buffer.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="macros-text">
+    <section id="macros-text">
         <title>Text Macros</title>
 
         <para>These macros generate various forms of formatted text.</para>
@@ -688,5 +688,5 @@
                 <para>Removes every second line, if they are all blank.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 </appendix>

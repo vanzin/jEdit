@@ -15,7 +15,7 @@
     application, the changes will take effect after the
     <guimenu>Utilities</guimenu> &gt; <guisubmenu>Troubleshooting</guisubmenu>
     &gt; <guimenuitem>Reload Edit Modes</guimenuitem> command is invoked.</para>
-    <sect1 id="xml-primer">
+    <section id="xml-primer">
         <title>An XML Primer</title>
         <para>A very simple XML file (which also happens to be an edit mode)
         looks like so:</para>
@@ -70,8 +70,8 @@
         <programlisting>&lt;SEQ TYPE="OPERATOR"&gt;&amp;amp;&lt;/SEQ&gt;</programlisting>
         <para>Now that the basics of XML have been covered, the rest of this
         section will cover each construct in detail.</para>
-    </sect1>
-    <sect1 id="mode-preamble">
+    </section>
+    <section id="mode-preamble">
         <title>The Preamble and MODE tag</title>
         <para>Each mode definition must begin with the following:</para>
         <programlisting>&lt;?xml version="1.0"?&gt;
@@ -84,8 +84,8 @@
         <programlisting>&lt;MODE&gt;
     <replaceable>... mode definition goes here ...</replaceable>
 &lt;/MODE&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-tag-props">
+    </section>
+    <section id="mode-tag-props">
         <title>The PROPS Tag</title>
         <para>The <literal>PROPS</literal> tag and the
         <literal>PROPERTY</literal> tags inside it are used to define
@@ -200,8 +200,8 @@
     &lt;PROPERTY NAME="doubleBracketIndent" VALUE="false" /&gt;
     &lt;PROPERTY NAME="lineUpClosingBracket" VALUE="true" /&gt;
 &lt;/PROPS&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-tag-rules">
+    </section>
+    <section id="mode-tag-rules">
         <title>The RULES Tag</title>
         <para><literal>RULES</literal> tags must be placed inside the
         <literal>MODE</literal> tag. Each <literal>RULES</literal> tag defines a
@@ -257,7 +257,7 @@
         <programlisting>&lt;RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE"&gt;
     <replaceable>... parser rules go here ...</replaceable>
 &lt;/RULES&gt;</programlisting>
-        <sect2>
+        <section>
             <title>Highlighting Numbers</title>
             <para>If the <literal>HIGHLIGHT_DIGITS</literal> attribute is set to
             <literal>TRUE</literal>, jEdit will attempt to highlight numbers in
@@ -277,8 +277,8 @@
             <programlisting>DIGIT_RE="(0[lL]?|[1-9]\d{0,9}(\d{0,9}[lL])?|0[xX]\p{XDigit}{1,8}(\p{XDigit}{0,8}[lL])?|0[0-7]{1,11}([0-7]{0,11}[lL])?|([0-9]+\.[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?[fFdD]?|[0-9]+([eE][+-]?[0-9]+[fFdD]?|([eE][+-]?[0-9]+)?[fFdD]))"</programlisting>
             <para>Regular expression syntax is described in <xref
             linkend="regexps" />.</para>
-        </sect2>
-        <sect2 id="rule-ordering">
+        </section>
+        <section id="rule-ordering">
             <title>Rule Ordering Requirements</title>
             <para>You might encounter this very common pitfall when writing your
             own modes.</para>
@@ -318,8 +318,8 @@
             the first rule will be the first to match. However, if you write
             <quote>[FOO]</quote>, it will be highlighted using the second rule,
             which is exactly what you would expect.</para>
-        </sect2>
-        <sect2>
+        </section>
+        <section>
             <title>Per-Ruleset Properties</title>
             <para>The <literal>PROPS</literal> tag (described in <xref
             linkend="mode-tag-props" />) can also be placed inside the
@@ -343,9 +343,9 @@
             comment strings (in the case of HTML, for example, in HTML text and
             inline JavaScript). For information about the commenting commands,
             see <xref linkend="commenting" />.</para>
-        </sect2>
-    </sect1>
-    <sect1 id="mode-rule-terminate">
+        </section>
+    </section>
+    <section id="mode-rule-terminate">
         <title>The TERMINATE Tag</title>
         <para>The <literal>TERMINATE</literal> rule, which must be placed inside
         a <literal>RULES</literal> tag, specifies that parsing should stop after
@@ -355,8 +355,8 @@
         <programlisting>&lt;TERMINATE AT_CHAR="1" /&gt;</programlisting>
         <para>This rule is used in Patch mode, for example, because only the
         first character of each line affects highlighting.</para>
-    </sect1>
-    <sect1 id="mode-rule-span">
+    </section>
+    <section id="mode-rule-span">
         <title>The SPAN Tag</title>
         <para>The <literal>SPAN</literal> rule, which must be placed inside a
         <literal>RULES</literal> tag, highlights text between a start and end
@@ -443,8 +443,8 @@
   &lt;BEGIN&gt;&amp;lt;style&amp;gt;&lt;/BEGIN&gt;
   &lt;END&gt;&amp;lt;/style&amp;gt;&lt;/END&gt;
 &lt;/SPAN&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-span-regexp">
+    </section>
+    <section id="mode-rule-span-regexp">
         <title>The SPAN_REGEXP Tag</title>
         <para>The <literal>SPAN_REGEXP</literal> rule is similar to the
         <literal>SPAN</literal> rule except the start sequence is taken to be a
@@ -492,8 +492,8 @@
     &lt;BEGIN&gt;&amp;lt;#ftl\b&lt;/BEGIN&gt;
     &lt;END&gt;&amp;gt;&lt;/END&gt;
 &lt;/SPAN_REGEXP&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-eol-span">
+    </section>
+    <section id="mode-rule-eol-span">
         <title>The EOL_SPAN Tag</title>
         <para>An <literal>EOL_SPAN</literal> is similar to a
         <literal>SPAN</literal> except that highlighting stops at the end of the
@@ -540,8 +540,8 @@
         <para>Here is an <literal>EOL_SPAN</literal> that highlights C++
         comments:</para>
         <programlisting>&lt;EOL_SPAN TYPE="COMMENT1"&gt;//&lt;/EOL_SPAN&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-eol-span-regexp">
+    </section>
+    <section id="mode-rule-eol-span-regexp">
         <title>The EOL_SPAN_REGEXP Tag</title>
         <para>The <literal>EOL_SPAN_REGEXP</literal> rule is similar to the
         <literal>EOL_SPAN</literal> rule except the match sequence is taken to
@@ -578,8 +578,8 @@
         followed by any whitespace character, and extend until the end of the
         line:</para>
         <programlisting>&lt;EOL_SPAN_REGEXP AT_WHITESPACE_END="TRUE" HASH_CHAR="REM" TYPE="COMMENT1"&gt;REM\s&lt;/EOL_SPAN_REGEXP&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-mark-prev">
+    </section>
+    <section id="mode-rule-mark-prev">
         <title>The MARK_PREVIOUS Tag</title>
         <para>The <literal>MARK_PREVIOUS</literal> rule, which must be placed
         inside a <literal>RULES</literal> tag, highlights from the end of the
@@ -617,8 +617,8 @@
         <quote>XXX:</quote>):</para>
         <programlisting>&lt;MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
    MATCH_TYPE="DEFAULT"&gt;:&lt;/MARK_PREVIOUS&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-mark-following">
+    </section>
+    <section id="mode-rule-mark-following">
         <title>The MARK_FOLLOWING Tag</title>
         <para>The <literal>MARK_FOLLOWING</literal> rule, which must be placed
         inside a <literal>RULES</literal> tag, highlights from the start of the
@@ -655,8 +655,8 @@
         <para>Here is a rule that highlights variables in Unix shell scripts
         (<quote>$CLASSPATH</quote>, <quote>$IFS</quote>, etc):</para>
         <programlisting>&lt;MARK_FOLLOWING TYPE="KEYWORD2"&gt;$&lt;/MARK_FOLLOWING&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-seq">
+    </section>
+    <section id="mode-rule-seq">
         <title>The SEQ Tag</title>
         <para>The <literal>SEQ</literal> rule, which must be placed inside a
         <literal>RULES</literal> tag, highlights fixed sequences of text. The
@@ -700,8 +700,8 @@
 &lt;SEQ TYPE="OPERATOR"&gt;-&lt;/SEQ&gt;
 &lt;SEQ TYPE="OPERATOR"&gt;*&lt;/SEQ&gt;
 &lt;SEQ TYPE="OPERATOR"&gt;/&lt;/SEQ&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-seq-regexp">
+    </section>
+    <section id="mode-rule-seq-regexp">
         <title>The SEQ_REGEXP Tag</title>
         <para>The <literal>SEQ_REGEXP</literal> rule is similar to the
         <literal>SEQ</literal> rule except the match sequence is taken to be a
@@ -744,8 +744,8 @@
         <programlisting>
  		&lt;SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_WORD_START="TRUE" TYPE="KEYWORD2"&gt;[A-Z][a-z]+[A-Z][a-zA-Z]+&lt;/SEQ_REGEXP&gt;
  </programlisting>
-    </sect1>
-    <sect1 id="mode-rule-import">
+    </section>
+    <section id="mode-rule-import">
         <title>The IMPORT Tag</title>
         <para>The <literal>IMPORT</literal> tag, which must be placed inside a
         <literal>RULES</literal> tag, loads all rules defined in a given ruleset
@@ -784,8 +784,8 @@
 
    &lt;IMPORT DELEGATE="javascript::MAIN"/&gt;
 &lt;/RULES&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-rule-keywords">
+    </section>
+    <section id="mode-rule-keywords">
         <title>The KEYWORDS Tag</title>
         <para>The <literal>KEYWORDS</literal> tag, which must be placed inside a
         <literal>RULES</literal> tag and can only appear once, specifies a list
@@ -806,8 +806,8 @@
   &lt;KEYWORD3&gt;int&lt;/KEYWORD3&gt;
   &lt;KEYWORD3&gt;void&lt;/KEYWORD3&gt;
 &lt;/KEYWORDS&gt;</programlisting>
-    </sect1>
-    <sect1 id="mode-syntax-tokens">
+    </section>
+    <section id="mode-syntax-tokens">
         <title>Token Types</title>
         <para>Parser rules can highlight tokens using any of the following token
         types:</para>
@@ -874,8 +874,8 @@
                 <para><literal>OPERATOR</literal></para>
             </listitem>
         </itemizedlist>
-    </sect1>
-    <sect1 id="mode-match-type">
+    </section>
+    <section id="mode-match-type">
         <title>The MATCH_TYPE Attribute</title>
         <para>The <literal>MATCH_TYPE</literal> attribute is used by some of the
         rules to control how the region matched by the rule will be
@@ -909,5 +909,5 @@
                 <literal>EXCLUDE_MATCH="TRUE"</literal>.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 </chapter>

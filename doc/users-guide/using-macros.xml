@@ -22,7 +22,7 @@
         documentation for the appropriate plugins for more information.</para>
     </sidebar>
 
-    <sect1 id="recording-macros">
+    <section id="recording-macros">
         <title>Recording Macros</title>
 
         <para>The simplest use of macros is to record a series of key strokes
@@ -105,9 +105,9 @@
         <filename>Temporary_Macro.bsh</filename> as an ordinary macro with a
         descriptive name of your choice. The new name will then be displayed in
         the <guimenu>Macros</guimenu> menu.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="running-macros">
+    <section id="running-macros">
         <title>Running Macros</title>
 
         <para>Macros supplied with jEdit, as well as macros that you record or
@@ -126,9 +126,9 @@
         Bar</guimenuitem> or <guimenuitem>Context Menu</guimenuitem> panes of
         the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
         Options</guimenuitem> dialog; see <xref linkend="global-opts" />.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="organizing-macros">
+    <section id="organizing-macros">
         <title>How jEdit Organizes Macros</title>
 
         <para>Every macro, whether or not you originally recorded it, is stored
@@ -180,5 +180,5 @@
         program or add macro files to the macro directories, you should run the
         <guimenu>Macros</guimenu>&gt;<guimenuitem>Rescan Macros</guimenuitem>
         command to update the macro list.</para>
-    </sect1>
+    </section>
 </chapter>

@@ -63,7 +63,7 @@
         line switch.</para>
     </sidebar>
 
-    <sect1 id="cli-usage">
+    <section id="cli-usage">
         <title>Command Line Usage</title>
 
         <para>On operating systems that support a command line, jEdit can be
@@ -81,7 +81,7 @@
 
         <screen><prompt>$ </prompt><userinput>jedit -- -myfile</userinput></screen>
 
-        <sect2>
+        <section>
             <title>Miscellaneous Options</title>
 
             <informaltable>
@@ -131,9 +131,9 @@
                     </tbody>
                 </tgroup>
             </informaltable>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Configuration Options</title>
 
             <informaltable>
@@ -231,9 +231,9 @@
                     </tbody>
                 </tgroup>
             </informaltable>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Edit Server Options</title>
 
             <para>See <xref linkend="starting" /> for a brief description of the
@@ -359,6 +359,6 @@
                     </tbody>
                 </tgroup>
             </informaltable>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 </chapter>

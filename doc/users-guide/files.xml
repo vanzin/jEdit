@@ -6,7 +6,7 @@
     <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=80: -->
     <!-- :xml.root=users-guide.xml: -->
 
-    <sect1 id="creating">
+    <section id="creating">
         <title>Creating New Files</title>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>New</guimenuitem>
@@ -14,9 +14,9 @@
         to create a new file is to specify a non-existent file name when
         starting jEdit on the command line. A new file will be created on disk
         when the buffer is saved for the first time.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="opening">
+    <section id="opening">
         <title>Opening Files</title>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Open</guimenuitem>
@@ -61,9 +61,9 @@
             Options</guimenuitem> dialog box; see <xref linkend="buffer-opts" />
             for details.</para>
         </tip>
-    </sect1>
+    </section>
 
-    <sect1 id="saving">
+    <section id="saving">
         <title>Saving Files</title>
 
         <para>Changed made in a buffer do not affect the file on disk until the
@@ -91,7 +91,7 @@
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
         Options</guimenuitem> dialog box.</para>
 
-        <sect2>
+        <section>
             <title>Two-Stage Save</title>
 
             <para>To prevent data loss in the unlikely case that jEdit should
@@ -110,9 +110,9 @@
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box; see <xref
             linkend="general-pane" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="autosave">
+        <section id="autosave">
             <title>Autosave and Crash Recovery</title>
 
             <para>The autosave feature protects your work from computer crashes
@@ -135,9 +135,9 @@
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box; see <xref
             linkend="autosave-backups-pane" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="backups">
+        <section id="backups">
             <title>Backups</title>
 
             <para>The backup feature can be used to roll back to the previous
@@ -198,10 +198,10 @@
                     buffer is saved.</para>
                 </listitem>
             </itemizedlist>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="line-separators">
+    <section id="line-separators">
         <title>Line Separators</title>
 
         <para>Unix systems use newlines (<literal>\n</literal>) to mark line
@@ -248,9 +248,9 @@
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
         Options</guimenuitem> dialog box; see <xref linkend="general-pane" />.
         Note that changing this setting has no effect on existing files.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="encodings">
+    <section id="encodings">
         <title>Character Encodings</title>
 
         <para>A character encoding is a mapping from a set of characters to
@@ -316,7 +316,7 @@
         when working with that file; otherwise the default encoding will be
         used.</para>
 
-        <sect2>
+        <section>
             <title>Commonly Used Encodings</title>
 
             <para>While the world is slowly converging on UTF-8 and UTF-16
@@ -353,10 +353,10 @@
             also supported; <literal>KOI8_R</literal> for Russian text,
             <literal>Big5</literal> and <literal>GBK</literal> for Chinese, and
             <literal>SJIS</literal> for Japanese.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="vfs-browser">
+    <section id="vfs-browser">
         <title>The File System Browser (FSB)</title>
 
         <para><guimenu>Utilities</guimenu>&gt;<guimenuitem>File System
@@ -370,7 +370,7 @@
         Options</guimenuitem> dialog box; see <xref
         linkend="vfs-browser-pane" />.</para>
 
-        <sect2>
+        <section>
             <title>Navigating the File System</title>
 
             <para>The directory to browse is specified in the
@@ -383,32 +383,32 @@
             <guimenu>Utilities</guimenu>&gt;<guisubmenu>Recent
             Directories</guisubmenu> menu; selecting one opens it in the file
             system browser.</para>
-            
+
             <para>To browse a listed directory, double-click it (or if you have
             a three-button mouse, you can click the middle mouse button as
             well). Alternatively, click the disclosure widget next to a
             directory to list its contents in place. To browse higher up in the
             directory hierarchy, double-click one of the parent directories in
             the parent directory list.</para>
-            
+
             <para>Files and directories in the file list are shown in different
             colors depending on what glob patterns their names match. The
             patterns and colors can be customized in the <guibutton>File System
             Browser</guibutton>&gt;<guibutton>Colors</guibutton> pane of the
             <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box.</para>
-            
-            <para>The <guibutton>Path:</guibutton> Text Box can be used to 
+
+            <para>The <guibutton>Path:</guibutton> Text Box can be used to
             navigate to a specific directory. Environment variables are expanded
             here, allowing for both <literal>$VARNAME</literal> or
             <literal>%VARNAME%</literal> syntax. </para>
-            
+
             <para> <literal>A+Up</literal> is a keyboard shortcut that brings
             you to the parent directory. </para>
-            
+
             <para> <literal>A+Left</literal> and <literal>A+Right</literal> navigate back and forward through the visited directory stacks, in a
             Netscape/Konqueror/IE like fashion. </para>
-            
+
             <para>To see a specific set of files only (for example, those whose
             names end with <filename>.java</filename>), enter a glob pattern in
             the <guibutton>Filter</guibutton> text field. This text fields
@@ -422,7 +422,7 @@
             view.</para>
 
             <para>Clicking a file or directory with the right mouse button
-            displays a popup menu containing various commands. 
+            displays a popup menu containing various commands.
             <!-- Note that attempting to delete a directory containing files will give an error; only empty directories can be deleted. -->
             </para>
 
@@ -434,11 +434,11 @@
                 conventional letter-by-letter sort would have placed these two
                 files in the wrong order.</para>
             </tip>
-            
 
-        </sect2>
 
-        <sect2>
+        </section>
+
+        <section>
             <title>The Tool Bar</title>
 
             <para>The file system browser has a tool bar containing a number of
@@ -446,9 +446,9 @@
             (described below) except <guimenuitem>Show Hidden
             Files</guimenuitem> and <guisubmenu>Encoding</guisubmenu> has a
             corresponding tool bar button.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>The Commands Menu</title>
 
             <para>Clicking the <guibutton>Commands</guibutton> button displays a
@@ -514,17 +514,17 @@
                     See <xref linkend="encodings" />.</para>
                 </listitem>
             </itemizedlist>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>The Plugins Menu</title>
 
             <para>Clicking the <guibutton>Plugins</guibutton> button displays a
             menu containing plugin commands. For information about plugins, see
             <xref linkend="using-plugins" />.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>The Favorites Menu</title>
 
             <para>Clicking the <guibutton>Favorites</guibutton> button displays
@@ -536,9 +536,9 @@
             the favorites list in the file system view, then select
             <guimenuitem>Delete</guimenuitem> from the right-click menu of the
             entry you want to remove.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Keyboard Shortcuts</title>
 
             <para>Completion behaves differently in file dialogs than in the
@@ -565,10 +565,10 @@
             Additionally, pressing <keycap>/</keycap>, <keycap>~</keycap> or
             <keycap>-</keycap> always immediately goes to the root, home and
             current buffer's directory, respectively.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="reloading">
+    <section id="reloading">
         <title>Reloading From Disk</title>
 
         <para>When a view is brought to the foreground, jEdit checks if any open
@@ -589,9 +589,9 @@
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Reload All</guimenuitem>
         discards unsaved changes in all open buffers and reload them from disk,
         asking for confirmation first.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="threaded-io">
+    <section id="threaded-io">
         <title>Multi-Threaded I/O</title>
 
         <para>To improve responsiveness and perceived performance, jEdit
@@ -618,9 +618,9 @@
    dialog box; see <xref linkend="global-opts" />. Setting the number to zero
    disables multi-threaded I/O completely; doing this is not recommended.
   </para> -->
-    </sect1>
+    </section>
 
-    <sect1 id="printing">
+    <section id="printing">
         <title>Printing</title>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Print</guimenuitem>
@@ -669,9 +669,9 @@
                 <para>If folded regions should be printed.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="closing-exiting">
+    <section id="closing-exiting">
         <title>Closing Files and Exiting jEdit</title>
 
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Close</guimenuitem>
@@ -689,5 +689,5 @@
         <para><guimenu>File</guimenu>&gt;<guimenuitem>Exit</guimenuitem>
         (shortcut: <keycap>C+q</keycap>) will completely exit jEdit, prompting
         if unsaved buffers should be saved first.</para>
-    </sect1>
+    </section>
 </chapter>

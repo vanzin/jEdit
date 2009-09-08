@@ -36,7 +36,7 @@
     <para>Within a regular expression, the following characters have special
     meaning:</para>
 
-    <bridgehead renderas="sect3">Positional Operators</bridgehead>
+    <bridgehead renderas="section">Positional Operators</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -56,7 +56,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">One-Character Operators</bridgehead>
+    <bridgehead renderas="section">One-Character Operators</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -105,7 +105,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Character Class Operator</bridgehead>
+    <bridgehead renderas="section">Character Class Operator</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -128,7 +128,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Subexpressions and Backreferences</bridgehead>
+    <bridgehead renderas="section">Subexpressions and Backreferences</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -176,7 +176,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Branching (Alternation) Operator</bridgehead>
+    <bridgehead renderas="section">Branching (Alternation) Operator</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -187,7 +187,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Repeating Operators</bridgehead>
+    <bridgehead renderas="section">Repeating Operators</bridgehead>
 
     <para>These symbols operate on the previous atomic expression.</para>
 
@@ -227,7 +227,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="sect3">Stingy (Minimal) Matching</bridgehead>
+    <bridgehead renderas="section">Stingy (Minimal) Matching</bridgehead>
 
     <para>If a repeating operator (above) is immediately followed by a
     <literal>?</literal>, the repeating operator will stop at the smallest
@@ -248,5 +248,5 @@
                 dialog.</para>
             </note>
 
-    
+
 </appendix>

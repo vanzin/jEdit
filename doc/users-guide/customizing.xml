@@ -5,7 +5,7 @@
     <!-- :tabSize=1:indentSize=1:noTabs=true:wrap=soft:maxLineLen=0: -->
     <!-- :xml.root=users-guide.xml: -->
 
-    <sect1 id="buffer-opts">
+    <section id="buffer-opts">
         <title>The Buffer Options Dialog Box</title>
 
         <para><guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
@@ -57,9 +57,9 @@
                 linkend="indent" />)</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="buffer-local">
+    <section id="buffer-local">
         <title>Buffer-Local Properties</title>
 
         <para>Buffer-local properties provide an alternate way to change editor
@@ -191,9 +191,9 @@
                 </tbody>
             </tgroup>
         </informaltable>
-    </sect1>
+    </section>
 
-    <sect1 id="global-opts">
+    <section id="global-opts">
         <title>The Global Options Dialog Box</title>
 
         <para><guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
@@ -204,7 +204,7 @@
         their own option panes, and information about them can be found in the
         documentation for the plugins in question.</para>
 
-        <sect2 id="general-pane">
+        <section id="general-pane">
             <title>The General Pane</title>
 
             <para>The <guibutton>General</guibutton> pane contains various
@@ -212,9 +212,9 @@
             files to remember, if the buffer list should be sorted, and so
             on.</para>
 
-        </sect2>
+        </section>
 
-        <sect2 id="abbrevs-pane">
+        <section id="abbrevs-pane">
             <title>The Abbreviations Pane</title>
 
             <indexterm>
@@ -244,9 +244,9 @@
 
             <para>See <xref linkend="positional-params" /> for information about
             positional parameters in abbreviations.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="appearance-pane">
+        <section id="appearance-pane">
             <title>The Appearance Pane</title>
 
             <para>The <guibutton>Appearance</guibutton> pane can be used to
@@ -259,34 +259,34 @@
             <para>Note that changes to certain settings such as the Swing look
             and feel and the docking framework require a restart of jEdit to
             take effect.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="autosave-backups-pane">
+        <section id="autosave-backups-pane">
             <title>The Autosave and Backup Pane</title>
 
             <para>The <guibutton>Autosave</guibutton> option pane contains
             settings for the autosave and backup features. See <xref
             linkend="autosave" /> and <xref linkend="backups" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="context-pane">
+        <section id="context-pane">
             <title>The Context Menu Pane</title>
 
             <para>The <guibutton>Context Menu</guibutton> option pane edits the
             text area's right-click context menu. See <xref
             linkend="views" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="docking-pane">
+        <section id="docking-pane">
             <title>The Docking Pane</title>
 
             <para>The <guibutton>Docking</guibutton> option pane specifies
             docking location for various dockable windows. Another way to
             specify docking locations is to use the popup menus associated with
             each dockable window; see <xref linkend="docking" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="editing-pane">
+        <section id="editing-pane">
             <title>The Editing Pane</title>
 
             <para>The <guibutton>Editing</guibutton> option pane contains
@@ -308,9 +308,9 @@
             <para> The <literal>Deep Indent</literal> option instructs jEdit to indent subsequent lines so that they line up with the open bracket on the previous line. </para>
 
 
-        </sect2>
+        </section>
 
-        <sect2 id="encodings-pane">
+        <section id="encodings-pane">
             <title>The Encodings Pane</title>
 
             <para>This option pane is new to jEdit 4.3, and offers international
@@ -350,18 +350,18 @@
             allows the user to select the subset of supported encodings to
             display in other GUI components that list all of the
             encodings.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="gutter-pane">
+        <section id="gutter-pane">
             <title>The Gutter Pane</title>
 
             <para>The <guibutton>Gutter</guibutton> option pane contains
             settings to customize the appearance of the gutter. Some new options were added
             to jEdit 4.3, including "show gutter", "minimal number of digits to reserve for line numbers",
             and "fold style".  See <xref linkend="overview" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="mouse-pane">
+        <section id="mouse-pane">
             <title>The Mouse Pane</title>
 
             <para>The <guibutton>Mouse</guibutton> option pane contains settings
@@ -370,35 +370,35 @@
 
             <para> The only option that may not be self-explanatory is the  <emphasis role="bold">Double-Click drag joins non-alphanumeric characters</emphasis>. This option means that double-click will select a region that includes the non-alphabetical characters, as defined for the current mode. The actual set of characters can be defined for an indiviual file via buffer-local properties (<literal>noWordSep</literal>) or on a mode-wide basis from the Editing option pane (<literal>Extra Word Characters</literal>).  </para>
 
-        </sect2>
+        </section>
 
-        <sect2 id="printing-pane">
+        <section id="printing-pane">
             <title>The Printing Pane</title>
 
             <para>The <guibutton>Printing</guibutton> option pane contains
             settings to control the appearance of printed output. Workarounds
             that might be needed for your Java version to print correctly can
             also be enabled here. See <xref linkend="printing" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="pluginmgr-pane">
+        <section id="pluginmgr-pane">
             <title>The Plugin Manager Pane</title>
 
             <para>The <guibutton>Plugin Manager</guibutton> pane contains a
             chooser for the desired download mirror, as well as various settings
             such as the directory where plugins are to be installed. In addition, you can set the time in minutes that the pluginlist can be cached from jedit.org, helping to reduce the server load. See <xref
             linkend="using-plugins" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="firewall-pane">
+        <section id="firewall-pane">
             <title>The Proxy Servers Pane</title>
 
             <para>The <guibutton>Proxy Servers</guibutton> option pane lets you
             specify HTTP and SOCKS proxy servers to use when jEdit makes network
             connections, for example when downloading plugins.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="shortcuts-pane">
+        <section id="shortcuts-pane">
             <title>The Shortcuts Pane</title>
 
             <para>The <guibutton>Shortcuts</guibutton> option pane associates
@@ -422,41 +422,41 @@
 
             <para> The default shortcuts can be found in  <literal>jedit_keys.props</literal>. </para>
 
-        </sect2>
+        </section>
 
-        <sect2 id="status-bar-pane">
+        <section id="status-bar-pane">
             <title>The Status Bar Pane</title>
 
             <para>The <guibutton>Status Bar</guibutton> option pane contains
             settings to customize the status bar, or disable it completely. See
             <xref linkend="status-bar" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="syntax-hilite-pane">
+        <section id="syntax-hilite-pane">
             <title>The Syntax Highlighting Pane</title>
 
             <para>The <guibutton>Syntax Highlighting</guibutton> pane can be
             used to customize the fonts and colors for syntax highlighting. See
             <xref linkend="syntax-hilite" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="text-area-pane">
+        <section id="text-area-pane">
             <title>The Text Area Pane</title>
 
             <para>The <guibutton>Text Area</guibutton> pane contains settings to
             customize the appearance of the text area. See <xref
             linkend="overview" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="toolbar-pane">
+        <section id="toolbar-pane">
             <title>The Tool Bar Pane</title>
 
             <para>The <guibutton>Tool Bar</guibutton> option pane lets you edit
             the tool bar, or disable it completely. See <xref
             linkend="views" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="view-pane">
+        <section id="view-pane">
             <title>The View Pane</title>
 
             <para>The <guibutton>View</guibutton> option pane lets you change
@@ -464,9 +464,9 @@
             including the arrangement of dockable windows, and if the search bar
             and buffer switcher should be visible. See <xref
             linkend="views" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="vfs-browser-pane">
+        <section id="vfs-browser-pane">
             <title>The File System Browser Panes</title>
 
             <para>The <guibutton>File System Browser</guibutton> group contains
@@ -475,10 +475,10 @@
             system browser settings. The latter configures glob patterns used
             for coloring the file list. See <xref linkend="vfs-browser" /> for
             more information.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="settings-directory">
+    <section id="settings-directory">
         <title>The jEdit Settings Directory</title>
 
         <para>jEdit stores settings, macros, and plugins as files inside the
@@ -623,7 +623,7 @@
             </listitem>
         </itemizedlist>
 
-        <sect2 id="propertiesfile">
+        <section id="propertiesfile">
             <title>The jEdit properties file</title>
 
             <para>The jEdit <literal>properties</literal> file uses the Java
@@ -634,6 +634,6 @@
             <para>Editing and saving this file while jEdit is running means that
             until you restart jEdit again, all other changed settings will be
             lost.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 </chapter>

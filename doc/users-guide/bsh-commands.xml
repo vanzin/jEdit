@@ -2,9 +2,9 @@
 <chapter id="bsh-commands">
 <!-- jEdit buffer local properties:
       :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:
-      :xml.root=users-guide.xml: 
+      :xml.root=users-guide.xml:
       jEdit 3.2 Macro Guide, (C) 2001 John Gellene
-      Thu Jun 21 23:49:14 EDT 2001 @200 /Internet Time/ --> 
+      Thu Jun 21 23:49:14 EDT 2001 @200 /Internet Time/ -->
 
     <title>BeanShell Commands</title>
 
@@ -20,7 +20,7 @@
         the plugin and loaded on startup.</para>
     </note>
 
-    <sect1 id="bsh-commands-output">
+    <section id="bsh-commands-output">
         <title>Output Commands</title>
 
         <itemizedlist>
@@ -85,9 +85,9 @@
                 array's elements.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="bsh-commands-file">
+    <section id="bsh-commands-file">
         <title>File Management Commands</title>
 
         <itemizedlist>
@@ -197,9 +197,9 @@
                 <parameter>pathname</parameter>.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="bsh-commands-serial">
+    <section id="bsh-commands-serial">
         <title>Component Commands</title>
 
         <itemizedlist>
@@ -265,9 +265,9 @@
                 <parameter>ptsize</parameter> and returns the new font.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="bsh-commands-resource">
+    <section id="bsh-commands-resource">
         <title>Resource Management Commands</title>
 
         <itemizedlist>
@@ -375,9 +375,9 @@
       </para>
     </listitem> -->
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="bsh-commands-script">
+    <section id="bsh-commands-script">
         <title>Script Execution Commands</title>
 
         <itemizedlist>
@@ -519,9 +519,9 @@
                 namespace.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="bsh-commands-object">
+    <section id="bsh-commands-object">
         <title>BeanShell Object Management Commands</title>
 
         <itemizedlist>
@@ -666,9 +666,9 @@ crufties.counter = 5;
                 <quote>undefining</quote> the variable.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="bsh-commands-other">
+    <section id="bsh-commands-other">
         <title>Other Commands</title>
 
         <itemizedlist>
@@ -715,5 +715,5 @@ crufties.counter = 5;
                 the BeanShell interpreter is reading.</para>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 </chapter>

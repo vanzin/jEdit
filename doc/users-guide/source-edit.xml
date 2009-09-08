@@ -8,7 +8,7 @@
 
     <!-- :xml.root=users-guide.xml: -->
 
-    <sect1 id="modes">
+    <section id="modes">
         <title>Edit Modes</title>
 
         <para>An <firstterm>edit mode</firstterm> specifies syntax highlighting
@@ -25,7 +25,7 @@
         first line of the file. For example, files whose first line is
         <filename>#!/bin/sh</filename> are opened with shell script mode.</para>
 
-        <sect2 id="mode-selection">
+        <section id="mode-selection">
             <title>Mode Selection</title>
 
             <para>File name and first line matching is done using glob patterns
@@ -52,9 +52,9 @@
             the name of the desired edit mode:</para>
 
             <screen>:mode=<replaceable>edit mode</replaceable>:</screen>
-        </sect2>
+        </section>
 
-        <sect2 id="syntax-hilite">
+        <section id="syntax-hilite">
             <title>Syntax Highlighting</title>
 
             <para>Syntax highlighting is the display of programming language
@@ -68,10 +68,10 @@
             the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
             Options</guimenuitem> dialog box; see <xref
             linkend="syntax-hilite-pane" />.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="indent">
+    <section id="indent">
         <title>Tabbing and Indentation</title>
 
         <para>jEdit makes a distinction between the <firstterm>tab
@@ -124,7 +124,7 @@
         removes all whitespace from the end of each selected line, or the
         current line if there is no selection.</para>
 
-        <sect2 id="soft-tabs">
+        <section id="soft-tabs">
             <title>Soft Tabs</title>
 
             <para>Files containing hard tab characters may look less than ideal
@@ -173,9 +173,9 @@
             to Spaces</guimenuitem> converts hard tabs to soft tabs in the
             current selection, or the entire buffer if nothing is
             selected.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="autoindent">
+        <section id="autoindent">
             <title>Automatic Indent</title>
 
             <para>The auto indent feature inserts the appropriate number of tabs
@@ -244,10 +244,10 @@
             indentation, prefix the tab or newline with <keycap>C+e v</keycap>.
             For example, to create a new line without any indentation, type
             <keycap>C+e v ENTER</keycap>.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="commenting">
+    <section id="commenting">
         <title>Commenting Out Code</title>
 
         <para>Most programming and markup languages support the notion of
@@ -271,9 +271,9 @@
         <keycap>C+e C+k</keycap>) inserts the line comment string, for example
         <literal>//</literal> in Java mode, at the start of each selected
         line.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="bracket-matching">
+    <section id="bracket-matching">
         <title>Bracket Matching</title>
 
         <para>Misplaced and unmatched brackets are one of the most common syntax
@@ -332,9 +332,9 @@
             brackets inside string literals and comments will be skipped when
             matching brackets that are part of program syntax.</para>
         </tip>
-    </sect1>
+    </section>
 
-    <sect1 id="abbrevs">
+    <section id="abbrevs">
         <title>Abbreviations</title>
 
         <para>Abbreviations are invoked by typing a couple of letters and then
@@ -377,7 +377,7 @@
                 <keycap>E</keycap>
             </keycombo> <keycap>V</keycap> <keycap>Space</keycap>.</para>
 
-        <sect2 id="positional-params">
+        <section id="positional-params">
             <title>Positional Parameters</title>
 
             <para>Positional parameters are an advanced feature that make
@@ -403,10 +403,10 @@
             will be blank in the expansion, and extra parameters will be
             ignored. A status bar message will be shown stating the required
             number of parameters.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="folding">
+    <section id="folding">
         <title>Folding</title>
 
         <para>Program source code and other structured text files can be thought
@@ -489,7 +489,7 @@ With text inside it.
             visible again.</para>
         </warning>
 
-        <sect2>
+        <section>
             <title>Collapsing and Expanding Folds</title>
 
             <para>The first line of each fold has a triangle drawn next to it in
@@ -528,9 +528,9 @@ With text inside it.
             <para><guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand All
             Folds</guimenuitem> (shortcut: <keycap>C+e x</keycap>) expands all
             folds in the buffer.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Navigating Around With Folds</title>
 
             <para><guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Parent
@@ -544,9 +544,9 @@ With text inside it.
             <para><guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Go to Next
             Fold</guimenuitem> (shortcut: <keycap>A+DOWN</keycap>) moves the
             caret to the fold immediately after the caret position.</para>
-        </sect2>
+        </section>
 
-        <sect2>
+        <section>
             <title>Miscellaneous Folding Commands</title>
 
             <para><guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Add Explicit
@@ -589,9 +589,9 @@ With text inside it.
                     <screen>:collapseFolds=<replaceable>level</replaceable>:</screen>
                 </listitem>
             </itemizedlist>
-        </sect2>
+        </section>
 
-        <sect2 id="narrowing">
+        <section id="narrowing">
             <title>Narrowing</title>
 
             <para>The narrowing feature temporarily <quote>narrows</quote> the
@@ -617,6 +617,6 @@ With text inside it.
             <para><guisubmenu>Folding</guisubmenu>&gt;<guimenuitem>Expand All
             Folds</guimenuitem> (shortcut: <keycap>C+e x</keycap>) shows lines
             that were hidden as a result of narrowing.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 </chapter>

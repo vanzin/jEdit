@@ -34,7 +34,7 @@
     code for further study or to use as a starting point for your own
     plugin.</para>
 
-    <sect1 id="plugin-load">
+    <section id="plugin-load">
         <title><indexterm>
                 <primary>Plugin API</primary>
 
@@ -143,9 +143,9 @@
             at any time, and <function>stop()</function> needs to fully clean up
             after the plugin.</para>
         </sidebar>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-quicknotepadplugin">
+    <section id="plugin-implement-quicknotepadplugin">
         <title>The QuickNotepadPlugin Class</title>
 
         <para>The major issues encountered when writing a plugin core class
@@ -318,9 +318,9 @@ options.quicknotepad.filepath=
                 </informalexample>
             </listitem>
         </itemizedlist>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-properties">
+    <section id="plugin-implement-properties">
         <title>The Property File</title>
 
         <para>jEdit maintains a list of <quote>properties</quote>, which are
@@ -472,9 +472,9 @@ options.quicknotepad.filepath=</programlisting>
             4.1 plugins which have not been updated to use the 4.2 API will not
             be supported in jEdit 4.3.</para>
         </sidebar>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-editbus">
+    <section id="plugin-implement-editbus">
         <title>The EditBus</title>
 
         <para>jEdit (and some plugins) generate several kinds of messages to
@@ -488,8 +488,8 @@ options.quicknotepad.filepath=</programlisting>
         url="../api/org/gjt/sp/jedit/msg/package-summary.html">org.gjt.sp.jedit.msg</ulink>
         package.</para>
 
-        
-        
+
+
         <para>For example, the ViewUpdate messages are all related to the jEdit
         View, or the top-level window. If the user creates multiple Views, a
         plugin may need to know when they are created or destroyed, so it would
@@ -547,10 +547,10 @@ else if(msg instanceof ViewUpdate) {
         url="../api/org/gjt/sp/jedit/EditPlugin.html">
         <classname>EditPlugin</classname></ulink> will suffice as a plugin base
         class. Note that QuickNotepad uses the latter.</para>
-        
+
         <tip>
         <title>Using the Activity Log to see the EditBus</title>
-        
+
         <para> To determine precisely which EditBus messages are being sent by
         jEdit or the plugins, start up jEdit with an additional argument,
         <literal>-log=5</literal>. You can set an even lower log level to see
@@ -558,10 +558,10 @@ else if(msg instanceof ViewUpdate) {
         Activity Log will include [notice]s, which will show us exactly which
         EditBus message is sent and when. See <xref linkend="activity-log" />
         for more details. </para> </tip>
-        
-    </sect1>
 
-    <sect1 id="plugin-implement-actions">
+    </section>
+
+    <section id="plugin-implement-actions">
         <title>The Actions Catalog</title>
 
         <para>Actions define procedures that can be bound to a menu item, a
@@ -646,9 +646,9 @@ else if(msg instanceof ViewUpdate) {
         <filename>actions.xml</filename> file can be found in the documentation
         of the <ulink url="../api/org/gjt/sp/jedit/ActionSet.html">
         <classname>ActionSet</classname></ulink> class.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-dockables">
+    <section id="plugin-implement-dockables">
         <title>The dockables.xml Window Catalog</title>
 
         <para>A Dockable is a window that can float like a dialog, or dock into
@@ -704,9 +704,9 @@ else if(msg instanceof ViewUpdate) {
         also contains the public interface you should use for getting, showing,
         hiding, and other interactions with the plugin's top-level
         windows.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-services">
+    <section id="plugin-implement-services">
         <title>The services.xml file</title>
 
         <para>A "service" is a mechanism by which one plugin can work with other
@@ -747,9 +747,9 @@ else if(msg instanceof ViewUpdate) {
         url="../api/org/gjt/sp/jedit/ServiceManager.html">ServiceManager</ulink>
         class API documentation. There, you can find out what the tags and
         attributes mean, as well as how to register and use services.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-quicknotepad">
+    <section id="plugin-implement-quicknotepad">
         <title>The QuickNotepad Class</title>
 
         <para>Here is where most of the features of the plugin will be
@@ -925,9 +925,9 @@ else if(msg instanceof ViewUpdate) {
         implemented as a <classname>JTextArea</classname> with word wrap and tab
         sizes hard-coded. Placing the object in a separate class will simply
         future modifications.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-quicknotepadtoolbar">
+    <section id="plugin-implement-quicknotepadtoolbar">
         <title>The QuickNotepadToolBar Class</title>
 
         <para>There is nothing remarkable about the toolbar panel that is placed
@@ -989,9 +989,9 @@ else if(msg instanceof ViewUpdate) {
         <function>propertiesChanged()</function> method for the toolbar that
         sets the text and visibility of the label containing the notepad file
         path.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-options">
+    <section id="plugin-implement-options">
         <title>The QuickNotepadOptionPane Class</title>
 
         <para>Using the default implementation provided by
@@ -1102,9 +1102,9 @@ else if(msg instanceof ViewUpdate) {
         chooser dialog in response to user action, and the other to construct a
         <classname>Font</classname> object from the plugin's font properties.
         They do not require discussion here.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-docs">
+    <section id="plugin-implement-docs">
         <title>Plugin Documentation</title>
 
         <para>While not required by the plugin API, a help file is an essential
@@ -1149,9 +1149,9 @@ else if(msg instanceof ViewUpdate) {
         <para>The location of the plugin's help file is stored in the
         <literal>plugin.QuickNotepad.docs</literal> property; see <xref
         linkend="plugin-implement-properties" />.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="plugin-implement-building">
+    <section id="plugin-implement-building">
         <title>The build.xml Ant build file</title>
 
         <para>We have already outlined the contents of the user action catalog,
@@ -1178,7 +1178,7 @@ else if(msg instanceof ViewUpdate) {
     &lt;property file=&quot;build.properties&quot; /&gt;
     &lt;property file=&quot;../build.properties&quot; /&gt;
 	&lt;property name=&quot;build.support&quot;
-			  value=&quot;../../../build-support&quot; /&gt;    
+			  value=&quot;../../../build-support&quot; /&gt;
     &lt;import file="${build.support}/plugin-build.xml" /&gt;
 &lt;/project&gt;
 </programlisting>
@@ -1190,7 +1190,7 @@ else if(msg instanceof ViewUpdate) {
         url="https://jedit.svn.sourceforge.net/svnroot/jedit/build-support/trunk/">jEdit's
         SVN repository</ulink>. It contains the common build steps used to build the core jEdit plugins, and some example <literal>build.properties.sample</literal> files which you can adapt for use with your development environment.</para>
 
-        
+
         <para>Customizing this build file for a different plugin will likely
         only require three changes to build.xml file:</para>
 
@@ -1215,7 +1215,7 @@ else if(msg instanceof ViewUpdate) {
         uniform way by setting the common properties in a single
         <literal>build.properties</literal> file, placed in the plugin source's
         parent directory. </para>
-        
+
         <tip> <para>For a full discussion of the <filename>Ant</filename> file
         format and command syntax, you should consult the <ulink
         url="http://jakarta.apache.org/ant/manual/index.html">Ant
@@ -1225,9 +1225,9 @@ else if(msg instanceof ViewUpdate) {
         attributes. The Console plugin provides you with an ANT button which you
         can bind to keyboard actions. In addition, there are the AntFarm and
         Antelope plugins which also proivde you with alternate means to execute
-        Ant targets through the Console.</para> </tip> </sect1>
+        Ant targets through the Console.</para> </tip> </section>
 
-    <sect1 id="plugin-implement-reloading">
+    <section id="plugin-implement-reloading">
         <title>Reloading the Plugin</title>
 
         <para>Once you have compiled your plugin, you will need to test its
@@ -1267,9 +1267,9 @@ else if(msg instanceof ViewUpdate) {
         <para>If you have reached this point in the text, you are probably
         serious about writing a plugin for jEdit. Good luck with your efforts,
         and thank you for contributing to the jEdit project.</para>
-    </sect1>
-    
-    <sect1 id="plugin-debugging" >
+    </section>
+
+    <section id="plugin-debugging" >
     <title> Tips for debugging plugins </title>
       <bridgehead> BeanShell </bridgehead>
       <para> jEdit includes a Beanshell interface into its currently running JVM at all times. You can access it a variety of ways, but one way is from <literal>Plugins - Console - Shells - BeanShell</literal>. From here, you can interactively inspect the values of any object in memory, call any of its member functions, or create new instances of any class that is currently loaded by jEdit or any of its plugins. All this, without setting any breakpoints!
@@ -1277,6 +1277,6 @@ else if(msg instanceof ViewUpdate) {
       <para> If you're too lazy to type each Beanshell statement interactively, you can also create debugging code snippets as macros and invoke them from <literal>utilities - beanshell - evaluate selection</literal>, or <literal>Macros - Misc - Evaluate Buffer in Beanshell</literal>, or place the file in your own macros directory and bind it to its own keyboard shortcut. </para>
       <bridgehead> Other useful tips </bridgehead>
       <para> This section is new but will be expanded shortly. Please post suggestions to the <literal>jedit-devel</literal> mailing list. </para>
-      </sect1>
-    
+      </section>
+
 </chapter>

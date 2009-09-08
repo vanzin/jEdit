@@ -19,7 +19,7 @@
     <para>Now we will look at a more complicated macro which will demonstrate
     some useful techniques and BeanShell features.</para>
 
-    <sect1 id="dialog-macro-intro">
+    <section id="dialog-macro-intro">
         <title>Use of the Macro</title>
 
         <para>Our new example adds prefix and suffix text to a series of
@@ -53,9 +53,9 @@ ourStringBuffer.append(addressSupp);
 ourStringBuffer.append(city);
 ourStringBuffer.append(<quote>state/province</quote>);
 ourStringBuffer.append(country);</screen>
-    </sect1>
+    </section>
 
-    <sect1 id="add-prefix-and-suffix">
+    <section id="add-prefix-and-suffix">
         <title>Listing of the Macro</title>
 
         <para>The macro script follows. You can find it in the jEdit
@@ -176,12 +176,12 @@ prefixSuffixDialog();
 
 // end of Add_Prefix_and_Suffix.bsh</programlisting>
         </informalexample>
-    </sect1>
+    </section>
 
-    <sect1 id="macro-analysis">
+    <section id="macro-analysis">
         <title>Analysis of the Macro</title>
 
-        <sect2 id="explain-imports">
+        <section id="explain-imports">
             <title>Import Statements</title>
 
             <informalexample>
@@ -197,9 +197,9 @@ import javax.swing.border.*;</programlisting>
             that are not automatically imported must be identified by a full
             qualified name or be the subject of an <function>import</function>
             statement.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-create-dialog">
+        <section id="explain-create-dialog">
             <title>Create the Dialog</title>
 
             <informalexample>
@@ -264,9 +264,9 @@ dialog.setContentPane(content);</programlisting>
             of nested containers and specifying the location of each of their
             member components. We have taken the first step by creating a
             <classname>JPanel</classname> as the dialog's content pane.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-fields-panel">
+        <section id="explain-fields-panel">
             <title>Create the Text Fields</title>
 
             <informalexample>
@@ -326,9 +326,9 @@ content.add(fieldPanel, <quote>Center</quote>);</programlisting>
             <varname>fieldPanel</varname> is added to the dialog's content pane
             to occupy the <quote>Center</quote> section of the content
             pane.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-button-panel">
+        <section id="explain-button-panel">
             <title>Create the Buttons</title>
 
             <informalexample>
@@ -369,9 +369,9 @@ content.add(buttonPanel, <quote>South</quote>);</programlisting>
             reasons), and place the completed <varname>buttonPanel</varname> in
             the <quote>South</quote> section of the dialog's content
             pane.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-add-listeners">
+        <section id="explain-add-listeners">
             <title>Register the Action Listeners</title>
 
             <informalexample>
@@ -414,9 +414,9 @@ suffixField.addActionListener(this);</programlisting>
             on each of the four components specifying <varname>this</varname> as
             the <classname>ActionListener</classname>. We still need to
             implement the interface. We will do that shortly.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-set-visible">
+        <section id="explain-set-visible">
             <title>Make the Dialog Visible</title>
 
             <informalexample>
@@ -444,9 +444,9 @@ dialog.setVisible(true);</programlisting>
             doesn't do anything. Without more code, it will not respond to user
             input and will not accomplish any text manipulation. The remainder
             of the script deals with these two requirements.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-action-listener">
+        <section id="explain-action-listener">
             <title>The Action Listener</title>
 
             <informalexample>
@@ -478,9 +478,9 @@ void actionPerformed(e)
             one of the more powerful features of the BeanShell package. this
             technique is discussed in the next chapter; see <xref
             linkend="macro-tips-BeanShell-class" />.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-process-text">
+        <section id="explain-process-text">
             <title>Get the User's Input</title>
 
             <informalexample>
@@ -507,9 +507,9 @@ void processText()
             <constant>null</constant> or empty values because
             <function>addCurrentToHistory()</function> does that
             internally.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="explain-jedit-calls">
+        <section id="explain-jedit-calls">
             <title>Call jEdit Methods to Manipulate Text</title>
 
             <informalexample>
@@ -622,9 +622,9 @@ void processText()
     command issued immediately after the macro completes will thus remove
     the prefix and suffix text from all of the previously selected lines.
   </para> -->
-        </sect2>
+        </section>
 
-        <sect2 id="explain-main">
+        <section id="explain-main">
             <title>The Main Routine</title>
 
             <informalexample>
@@ -641,6 +641,6 @@ prefixSuffixDialog();</programlisting>
             is now complete. In the next section, we look at other ways in which
             a macro can obtain user input, as well as other macro writing
             techniques.</para>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 </chapter>

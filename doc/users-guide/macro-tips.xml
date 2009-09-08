@@ -21,7 +21,7 @@
     <!-- $Id$
  -->
 
-    <sect1 id="macro-tips-input">
+    <section id="macro-tips-input">
         <title>Getting Input for a Macro</title>
 
         <para>The dialog-based macro discussed in <xref
@@ -33,7 +33,7 @@
         other techniques for obtaining input that will help you write macros
         quickly.</para>
 
-        <sect2 id="macro-tips-input-single-line">
+        <section id="macro-tips-input-single-line">
             <title>Getting a Single Line of Text</title>
 
             <para>As mentioned earlier in <xref linkend="helpful-methods" />,
@@ -73,9 +73,9 @@ insertTag();
             see if it is null. This would occur if the user presses the
             <guilabel>Cancel</guilabel> button or closes the dialog window
             displayed by <function>Macros.input()</function>.</para>
-        </sect2>
+        </section>
 
-        <sect2 id="macro-tips-input-multiple-data">
+        <section id="macro-tips-input-multiple-data">
             <title>Getting Multiple Data Items</title>
 
             <para>If more than one item of input is needed, a succession of
@@ -270,9 +270,9 @@ if( JOptionPane.OK_OPTION !=
                     <function>JCheckBox.isSelected()</function>).</para>
                 </listitem>
             </itemizedlist>
-        </sect2>
+        </section>
 
-        <sect2 id="tips-macro-input-combo">
+        <section id="tips-macro-input-combo">
             <title>Selecting Input From a List</title>
 
             <para>Another useful way to get user input for a macro is to use a
@@ -381,9 +381,9 @@ combo.setSelectedItem(STARTING_SET); // defined as "global"
 
 // end fragments</programlisting>
             </informalexample>
-        </sect2>
+        </section>
 
-        <sect2 id="macro-tips-single-char">
+        <section id="macro-tips-single-char">
             <title>Using a Single Keypress as Input</title>
 
             <para>Some macros may choose to emulate the style of character-based
@@ -497,10 +497,10 @@ view.getInputHandler().readNextChar("Enter a character",
                     view.</para>
                 </listitem>
             </itemizedlist>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="startup-scripts">
+    <section id="startup-scripts">
         <title>Startup Scripts</title>
 
         <para>On startup, jEdit runs any BeanShell scripts located in the
@@ -577,9 +577,9 @@ view.getInputHandler().readNextChar("Enter a character",
             string, or a method call such as
             <function>buffer.getPath()</function>.</para>
         </sidebar>
-    </sect1>
+    </section>
 
-    <sect1 id="scripts-command-line">
+    <section id="scripts-command-line">
         <title>Running Scripts from the Command Line</title>
 
         <para>The <userinput>-run</userinput> command line switch specifies a
@@ -645,15 +645,15 @@ doSomethingUseful();</programlisting>
         input/output is complete, or immediately if there are no pending I/O
         operations. This will delay operations on a new buffer, for example,
         until after the buffer is loaded and displayed.</para>
-    </sect1>
+    </section>
 
-    <sect1 id="macro-tips-BeanShell">
+    <section id="macro-tips-BeanShell">
         <title>Advanced BeanShell Techniques</title>
 
         <para>BeanShell has a few advanced features that we haven't mentioned
         yet. They will be discussed in this section.</para>
 
-        <sect2 id="macro-tips-BeanShell-convenience">
+        <section id="macro-tips-BeanShell-convenience">
             <title>BeanShell's Convenience Syntax</title>
 
             <para>We noted earlier that BeanShell syntax does not require that
@@ -693,9 +693,9 @@ b{"text"} = "Choose";
 </programlisting></informalexample>
 
 -->
-        </sect2>
+        </section>
 
-        <sect2 id="macro-tips-BeanShell-keywords">
+        <section id="macro-tips-BeanShell-keywords">
             <title>Special BeanShell Keywords</title>
 
             <para>BeanShell uses special keywords to refer to variables or
@@ -744,9 +744,9 @@ foo();</programlisting>
             <screen>top
 middle
 bottom</screen>
-        </sect2>
+        </section>
 
-        <sect2 id="macro-tips-BeanShell-class">
+        <section id="macro-tips-BeanShell-class">
             <title>Implementing Classes and Interfaces</title>
 
             <para>As discussed in the macro example in <xref
@@ -758,7 +758,7 @@ bottom</screen>
     run() {
         System.out.println("Hello world!");
     }
-    
+
     return this;
 }
 
@@ -795,16 +795,16 @@ new Thread(r).start();</programlisting>
         this.cdr = cdr;
     }
 }</programlisting>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 
-    <sect1 id="macro-tips-debugging">
+    <section id="macro-tips-debugging">
         <title>Debugging Macros</title>
 
         <para>Here are a few techniques that can prove helpful in debugging
         macros.</para>
 
-        <sect2 id="macro-tips-debugging-exceptions">
+        <section id="macro-tips-debugging-exceptions">
             <title>Identifying Exceptions</title>
 
             <para>An <glossterm>exception</glossterm> is a condition reflecting
@@ -844,9 +844,9 @@ new Thread(r).start();</programlisting>
                     error.</para>
                 </listitem>
             </itemizedlist>
-        </sect2>
+        </section>
 
-        <sect2 id="macro-tips-debugging-log">
+        <section id="macro-tips-debugging-log">
             <title>Using the Activity Log as a Tracing Tool</title>
 
             <para>Sometimes exception tracebacks will say what kind of error
@@ -916,6 +916,6 @@ new Thread(r).start();</programlisting>
                 <function>Macros.message()</function> in your final source
                 code.</para>
             </sidebar>
-        </sect2>
-    </sect1>
+        </section>
+    </section>
 </chapter>
