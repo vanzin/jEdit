@@ -1304,12 +1304,6 @@
 						 includes="*.txt"
 						 prefix="usr/share/doc/jEdit/" />
 			<datafileset file="."
-						 fullpath="usr/share/java/" />
-			<datafileset dir="${dist.dir}/jars"
-						 includes="LatestVersion.jar
-						 		   QuickNotepad.jar"
-						 prefix="usr/share/java/" />
-			<datafileset file="."
 						 fullpath="usr/share/jEdit/" />
 			<datafileset dir="${dist.dir}"
 						 includes="doc/**
@@ -1319,6 +1313,12 @@
 						 		   startup/**
 						 		   ${jar.filename}"
 						 prefix="usr/share/jEdit/" />
+			<datafileset file="."
+						 fullpath="usr/share/jEdit/jars/" />
+			<datafileset dir="${dist.dir}/jars"
+						 includes="LatestVersion.jar
+						 		   QuickNotepad.jar"
+						 prefix="usr/share/jEdit/jars/" />
 			<datafileset file="."
 						 fullpath="usr/share/man/" />
 			<datafileset file="."
