@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre18
 
-Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust
+Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust, Chepel
 Matthieu Casanova, Denis Dzenskevich and Dennis Sheil for contributing to this
 release.
 
@@ -123,6 +123,9 @@ release.
   specify fold levels of lines preceding a line whose content has changed, to
   support patch #2846169, which makes the fold levels of blank lines depend on
   the first non-whitespace-only line following them. (Shlomy Reinstein)
+}}}
+{{{ Editing
+- "try" keyword added to erlang edit mode (patch #2769870) (Chepel)
 }}}
 
 }}}

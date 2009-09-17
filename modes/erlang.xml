@@ -134,6 +134,7 @@
 			<KEYWORD1>query</KEYWORD1>
 			<KEYWORD1>receive</KEYWORD1>
 			<KEYWORD1>when</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
 
 			<!-- built-in-functions BIFs -->
 			<KEYWORD2>abs</KEYWORD2>
