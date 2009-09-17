@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre18
 
 Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust, Chepel
-Matthieu Casanova, Denis Dzenskevich and Dennis Sheil for contributing to this
-release.
+Matthieu Casanova, Denis Dzenskevich and Dennis Sheil, Jim Lawton for 
+contributing to this release.
 
 {{{ Bug Fixes
 - When using the quick syntax edition, if the operation is cancelled, do not
@@ -126,6 +126,12 @@ release.
 }}}
 {{{ Editing
 - "try" keyword added to erlang edit mode (patch #2769870) (Chepel)
+
+- added assembly-agc (Apollo Guidance Computer) edit mode (patch #2848519) 
+  (Jim Lawton)
+
+- added assembly-ags (Apollo Abort Guidance System) edit mode (patch #2848519) 
+  (Jim Lawton)
 }}}
 
 }}}
