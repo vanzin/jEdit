@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3pre18
 
 Thanks to Björn "Vampire" Kautler, Shlomy Reinstein, Alan Ezust, Chepel
-Matthieu Casanova, Denis Dzenskevich and Dennis Sheil, Jim Lawton for 
-contributing to this release.
+Matthieu Casanova, Denis Dzenskevich, Dennis Sheil, Jim Lawton and
+Suraj Kurapati for contributing to this release.
 
 {{{ Bug Fixes
 - When using the quick syntax edition, if the operation is cancelled, do not
@@ -74,6 +74,9 @@ contributing to this release.
 
 - Applied patch #2846169: IndentFoldHandler - allow blank lines after start of
   fold.	(Shlomy Reinstein, patch provided by Suraj Kurapati)
+
+- Applied patch #2844750: line height correction (disappearing underscores),
+  using OpenJDK (Suraj Kurapati)
 }}}
 {{{ Miscellaneous
 

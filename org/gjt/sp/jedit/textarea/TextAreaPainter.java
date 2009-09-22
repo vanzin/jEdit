@@ -1029,7 +1029,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(lineInfo.chunks != null)
 			{
 				float baseLine = y + fm.getHeight()
-					- fm.getLeading() - fm.getDescent();
+					- (fm.getLeading()+1) - fm.getDescent();
 				Chunk.paintChunkBackgrounds(
 					lineInfo.chunks,gfx,
 					textArea.getHorizontalOffset(),
@@ -1139,7 +1139,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int originalX = x;
 
 			float baseLine = y + fm.getHeight()
-				- fm.getLeading() - fm.getDescent();
+				- (fm.getLeading()+1) - fm.getDescent();
 
 			if(lineInfo.chunks != null)
 			{

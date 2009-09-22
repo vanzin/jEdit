@@ -98,7 +98,7 @@ class InputMethodSupport
 				int width = Math.round(composedTextLayout.getAdvance());
 				int height = fm.getHeight();
 				int offset_to_baseline = height
-					- fm.getLeading() - fm.getDescent();
+					- (fm.getLeading()+1) - fm.getDescent();
 				int caret_x = x + composedCaretX;
 
 				gfx.setColor(painter.getBackground());
@@ -143,7 +143,7 @@ class InputMethodSupport
 			Point caret = owner.offsetToXY(owner.getCaretPosition());
 			float local_x = x - origin.x - caret.x;
 			float local_y = y - origin.y - caret.y
-				- composedTextLayout.getLeading()
+				- (composedTextLayout.getLeading()+1)
 				- composedTextLayout.getAscent();
 			return composedTextLayout.hitTestChar(local_x, local_y);
 		}
