@@ -123,6 +123,9 @@ public class ErrorListDialog extends EnhancedDialog
 
 		JTextPane errors = new JTextPane();
 		errors.setEditable(false);
+		errors.setBackground( jEdit.getColorProperty("view.bgColor") );
+		errors.setCaretColor( jEdit.getActiveView().getEditPane().getTextArea().getPainter().getCaretColor() );
+		errors.setSelectionColor( jEdit.getActiveView().getEditPane().getTextArea().getPainter().getSelectionColor() );
 		StyledDocument doc = errors.getStyledDocument();
 		Font plainFont = new JLabel().getFont();
 		SimpleAttributeSet plainFontAttrSet = new SimpleAttributeSet();
