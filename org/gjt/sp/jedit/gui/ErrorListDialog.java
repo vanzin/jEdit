@@ -57,7 +57,7 @@ public class ErrorListDialog extends EnhancedDialog
 			Log.log(Log.ERROR,this,path + ":");
 			Log.log(Log.ERROR,this,message);
 
-			Vector tokenizedMessage = new Vector();
+			Vector<String> tokenizedMessage = new Vector<String>();
 			int lastIndex = -1;
 			for(int i = 0; i < message.length(); i++)
 			{
@@ -102,7 +102,7 @@ public class ErrorListDialog extends EnhancedDialog
 
 	//{{{ ErrorListDialog constructor
 	public ErrorListDialog(Frame frame, String title, String caption,
-		Vector messages, boolean pluginError)
+		Vector<ErrorEntry> messages, boolean pluginError)
 	{
 		super(frame,title,!pluginError);
 
@@ -129,9 +129,8 @@ public class ErrorListDialog extends EnhancedDialog
 		StyleConstants.setFontFamily(plainFontAttrSet, plainFont.getFamily());
 		SimpleAttributeSet boldFontAttrSet = (SimpleAttributeSet) plainFontAttrSet.clone();
 		StyleConstants.setBold(boldFontAttrSet, true);
-		for (Object message: messages)
+		for (ErrorEntry entry : messages)
 		{
-			ErrorEntry entry = (ErrorEntry) message;
 			try {
 				doc.insertString(doc.getLength(), entry.path + ":\n", boldFontAttrSet);
 				for (String s: entry.messages)
