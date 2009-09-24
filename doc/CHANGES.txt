@@ -137,6 +137,9 @@ Suraj Kurapati for contributing to this release.
   (Jim Lawton)
   
 - Ruby edit mode updated (patch #2846453) (Suraj Kurapati)
+
+- Added *.sv (System Verilog) extension to verilog edit mode (feature #2814425)
+  (Matthieu Casanova)
 }}}
 
 }}}

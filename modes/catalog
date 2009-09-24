@@ -513,7 +513,7 @@
 				FILE_NAME_GLOB="*.vm" />
 
 <MODE NAME="verilog"		FILE="verilog.xml"
-				FILE_NAME_GLOB="*.{ver,v}" />
+				FILE_NAME_GLOB="*.{ver,v,sv}" />
 
 <MODE NAME="vhdl"		FILE="vhdl.xml"
 				FILE_NAME_GLOB="*.vh*" />
