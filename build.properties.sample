@@ -27,10 +27,6 @@
 # If xsltproc is in your path, uncomment this:
 #xsltproc.executable=xsltproc
 
-# You can specify the absolute path of the win32 or cygwin binary
-# (from the "libxslt" package) of xsltproc here:
-#xsltproc.executable=C:/ppApps/xsltproc/xsltproc.exe
-
 ### For generating the docs, adjust the following to your local paths
 ### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
 
@@ -39,12 +35,13 @@
 # (example windows locations):
 #docbook.catalog=c:/cygwin/usr/share/xml/docbook/4.4/docbook.cat
 #docbook.xsl=c:/cygwin/usr/share/docbook-xsl
+#xsltproc.executable=C:/cygwin/usr/bin/xsltproc.exe
 
-# Debian location
+# Example Debian locations
 #docbook.xsl=/usr/share/xml/docbook/stylesheet/nwalsh
 #docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.4/docbook.cat
 
-# Fink (Mac OS/X) location
+# Example Fink (Mac OS/X) locations
 #docbook.catalog=/sw/share/xml/dtd/docbookx/4.4.0/docbook.cat
 #docbook.xsl=/sw/share/xml/xsl/docbook-xsl
 

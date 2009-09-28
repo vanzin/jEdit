@@ -33,7 +33,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 
 /**
  * The Save and Backup option panel.
- * 
+ *
  * @author Slava Pestov
  * @author $Id$
  */
@@ -54,6 +54,8 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 			"options.save-back.twoStageSave"));
 		twoStageSave.setSelected(jEdit.getBooleanProperty(
 			"twoStageSave"));
+		twoStageSave.setToolTipText(jEdit.getProperty(
+			"options.save-back.twoStageSave.tooltip"));
 		addComponent(twoStageSave);
 
 		/* Confirm save all */
@@ -78,7 +80,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		suppressNotSavedConfirmUntitled.setSelected(
 			jEdit.getBooleanProperty("suppressNotSavedConfirmUntitled"));
 		addComponent(suppressNotSavedConfirmUntitled);
-		
+
 		useMD5forDirtyCalculation = new JCheckBox(jEdit.getProperty(
 			"options.save-back.useMD5forDirtyCalculation"));
 		useMD5forDirtyCalculation.setToolTipText(jEdit.getProperty(
@@ -86,9 +88,9 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		useMD5forDirtyCalculation.setSelected(
 			jEdit.getBooleanProperty("useMD5forDirtyCalculation"));
 		addComponent(useMD5forDirtyCalculation);
-		
-		
-		
+
+
+
 
 		/* Backup count */
 		backups = new NumericTextField(jEdit.getProperty("backups"), true);
@@ -139,8 +141,8 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		boolean oldAutosave = jEdit.getBooleanProperty("autosaveUntitled");
 		jEdit.setBooleanProperty("autosaveUntitled", newAutosave);
 		jEdit.setBooleanProperty("suppressNotSavedConfirmUntitled",
-				suppressNotSavedConfirmUntitled.isSelected()); 
-		jEdit.setBooleanProperty("useMD5forDirtyCalculation", 
+				suppressNotSavedConfirmUntitled.isSelected());
+		jEdit.setBooleanProperty("useMD5forDirtyCalculation",
 				useMD5forDirtyCalculation.isSelected());
 		if ((!newAutosave || jEdit.getIntegerProperty("autosave",0) == 0) && oldAutosave)
 		{
@@ -174,7 +176,7 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			String[] choosenFolder = 
+			String[] choosenFolder =
 				GUIUtilities.showVFSFileDialog(null,
 				   			       backupDirectory.getText(),
 				   			       VFSBrowser.CHOOSE_DIRECTORY_DIALOG,

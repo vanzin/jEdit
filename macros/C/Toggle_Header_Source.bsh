@@ -4,7 +4,7 @@
 	$Id$
 
 	A jedit beanshell macro that toggles your current buffer
-	between the header file (.h) and the source file (.c(pp|xx)?).
+	between the header file (.h) and the source file (.c(c|pp|xx)?).
 
 	Enables you to switch the current text
 	buffer between C/C++ header and sourcecode
