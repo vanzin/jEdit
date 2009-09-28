@@ -37,7 +37,12 @@
 
  */
 
-String defaultSourceExtension = "cpp";
+/* Set this property from the console beanshell to something else if cpp is not
+   your favorite extension. e.g.:
+   jEdit.setProperty("default.extension.c", "cc");
+*/
+
+String defaultSourceExtension = jEdit.getProperty("default.extension.c", "cpp");
 
 String[] sourceExtensions = new String[]{"cpp", "cxx", "cc", "c"};
 
