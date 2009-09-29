@@ -37,6 +37,10 @@
 
  */
 
+import projectviewer.*;
+import projectviewer.vpt.*;
+import java.util.*;
+
 /* Set this property from the console beanshell to something else if cpp is not
    your favorite extension. e.g.:
    jEdit.setProperty("default.extension.c", "cc");
@@ -46,6 +50,26 @@ String defaultSourceExtension = jEdit.getProperty("default.extension.c", "cpp");
 
 String[] sourceExtensions = new String[]{"cpp", "cxx", "cc", "c"};
 
+/** Looks for an existing file in the current project, if ProjectViewer is
+   installed and a 'current' project exists.
+   @return the absolute path if found, NULL if not.
+   */
+String findBufferInProject(String fileName) {
+    int sep1 = fileName.lastIndexOf('\\');
+    int sep2 = fileName.lastIndexOf('/');
+    if (sep1 > sep2)
+        fileName = fileName.substring(sep1 + 1);
+    else if (sep2 > sep1)
+        fileName = fileName.substring(sep2 + 1);
+    VPTProject project = ProjectViewer.getActiveProject(view);
+    Collection nodes = project.getOpenableNodes();
+    for (VPTNode node: nodes) {
+        String path = node.getNodePath();
+        if ((path.endsWith("\\" + fileName)) || (path.endsWith("/" + fileName)))
+            return path;
+    }
+    return null;		
+}
 
 /** Looks for an existing file in the same directory, or
    an already open buffer with the given name in another directory.
@@ -64,6 +88,17 @@ String findBuffer(String fileName) {
     return null;
 }
 
+/** Returns true if PV is installed and a project is selected (current)
+*/
+boolean activeProjectExists()
+{
+    EditPlugin p = jEdit.getPlugin("projectviewer.ProjectPlugin",false);
+    if(p == null)
+        return false;
+    VPTProject project = ProjectViewer.getActiveProject(view);
+    return (project != null);
+}
+
 /** Given a header file, iterates through all sourcefile extensions checking if the sourcefile exists.
    @return the absolute path of the sourcefile for this header
 */
@@ -71,12 +106,24 @@ String findBuffer(String fileName) {
 String getSourceFile(String baseName)
 {
     int numExt = sourceExtensions.length;
+    // First try open buffers
     for (int i=numExt-1; i>=0; --i)
     {
         String ext = sourceExtensions[i];
         String tryFile = baseName + "." + ext;
         String path = findBuffer(tryFile);
         if (path != null) return path;
+    }
+    // Then try current project
+    if (activeProjectExists())
+    {
+        for (int i=numExt-1; i>=0; --i)
+        {
+            String ext = sourceExtensions[i];
+            String tryFile = baseName + "." + ext;
+            String path = findBufferInProject(tryFile);
+            if (path != null) return path;
+        }
     }
     return baseName + "." + defaultSourceExtension;
 }
@@ -101,10 +148,15 @@ void toggleHeaderSource()
         String baseName = currentFile.substring(0, pos);
         String extension = currentFile.substring(pos+1);
         if (isSourceFile(extension))
-            {
-                path = findBuffer(baseName + ".h");
-                if (path == null) path = baseName + ".h";
+        {
+            String header = baseName + ".h";
+            path = findBuffer(header);
+            if (path == null) {
+                if (activeProjectExists())
+        	    path = findBufferInProject(header);
             }
+            if (path == null) path = baseName + ".h";
+        }
         else if (extension.equals("h")) {
             path = getSourceFile(baseName);
         }
