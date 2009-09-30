@@ -230,13 +230,16 @@ end;
 // and includes its path in %PATH
 procedure UpdateBatchFile;
 var
+	tmpSAnsi : AnsiString;
 	tmpS : String;
 	tmpSA : Array Of String;
 	i, pathLine : Integer;
 begin
-	LoadStringFromFile(ExpandConstant('{app}\jedit.bat'),tmpS);
-	StringChange(tmpS,'{jvmOptions}',jvmOptions(''));
-	StringChange(tmpS,'{jedit.jar}','{app}\@jar.filename@');
+	LoadStringFromFile(ExpandConstant('{app}\jedit.bat'),tmpSAnsi);
+	tmpS := tmpSAnsi;
+
+	StringChangeEx(tmpS,'{jvmOptions}',jvmOptions(''),False);
+	StringChangeEx(tmpS,'{jedit.jar}','{app}\@jar.filename@',False);
 	SaveStringToFile(ExpandConstant('{app}\jedit.bat'),ExpandConstantEx(tmpS,'javaw.exe',javaPath('')),false);
 	if UsingWinNT then begin
 		tmpS := '';
