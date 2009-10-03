@@ -134,7 +134,7 @@ public class TipOfTheDay extends EnhancedDialog
 		// clicks 'Next Tip'
 		int tipToShow = currentTip;
 		while(tipToShow == currentTip || !tips[tipToShow].getName().endsWith(".html"))
-			tipToShow = Math.abs(new Random().nextInt()) % count;
+			tipToShow = (new Random().nextInt(Integer.MAX_VALUE)) % count;
 		try
 		{
 			tipText.setPage(tips[tipToShow].toURI().toURL());
