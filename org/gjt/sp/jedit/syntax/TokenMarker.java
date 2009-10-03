@@ -88,7 +88,7 @@ public class TokenMarker
 	 * @param tokenHandler the token handler
 	 * @param line a segment containing the content of the line
 	 */
-	public LineContext markTokens(LineContext prevContext,
+	public synchronized LineContext markTokens(LineContext prevContext,
 		TokenHandler tokenHandler, Segment line)
 	{
 		//{{{ Set up some instance variables
