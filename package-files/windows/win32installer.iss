@@ -16,7 +16,6 @@ LicenseFile=@dist.dir@\doc\COPYING.txt
 OutputDir=@dist.dir@
 OutputBaseFilename=@win.filename@
 SetupIconFile=@base.dir@\icons\jedit.ico
-Compression=lzma
 SolidCompression=true
 SourceDir=@dist.dir@
 VersionInfoVersion=@jedit.build.number@
@@ -24,7 +23,6 @@ VersionInfoCompany=Contributors
 VersionInfoDescription=Programmer's Text Editor
 VersionInfoTextVersion=@jedit.version@
 VersionInfoCopyright=Copyright © 1998-@current.year@ Contributors
-ShowLanguageDialog=yes
 AppCopyright=Copyright © 1998-@current.year@ Contributors
 ChangesAssociations=true
 TimeStampsInUTC=true
@@ -345,3 +343,4 @@ begin
 		DelTree(ExpandConstant('{app}\jars'),true,true,true);
 	end;
 end;
+
