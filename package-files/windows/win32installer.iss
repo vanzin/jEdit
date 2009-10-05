@@ -43,6 +43,7 @@ ChangesEnvironment=true
 PrivilegesRequired=admin
 WizardImageFile=@base.dir@\icons\WindowsInstallerImage.bmp
 WizardSmallImageFile=@base.dir@\icons\WindowsInstallerSmallImage.bmp
+ArchitecturesInstallIn64BitMode=x64
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -128,6 +129,9 @@ var
 begin
 	jreVersion := '';
 	RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment','CurrentVersion',jreVersion);
+	if (Length(jreVersion) = 0) and IsWin64 then begin
+		RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Runtime Environment','CurrentVersion',jreVersion);
+	end;
 	Result := jreVersion;
 end;
 
@@ -138,6 +142,9 @@ var
 begin
 	jdkVersion := '';
 	RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Development Kit', 'CurrentVersion', jdkVersion);
+	if (Length(jdkVersion) = 0) and IsWin64 then begin
+		RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Development Kit', 'CurrentVersion', jdkVersion);
+	end;
 	Result := jdkVersion;
 end;
 
@@ -193,6 +200,9 @@ begin
 	javaVersion := getJDKVersion;
 	if (Length(javaVersion) > 0) and (javaVersion >= '1.5') then begin
 		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Development Kit\' + javaVersion,'JavaHome',javaHome);
+		if (Length(javaHome) = 0) and IsWin64 then begin
+			RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Development Kit\' + javaVersion,'JavaHome',javaHome);
+		end;
 		path := javaHome + '\bin\javaw.exe';
 		if FileExists(path) then begin
 			Log('(JDK) found javaw.exe: ' + path);
@@ -207,6 +217,9 @@ begin
 	javaVersion := getJREVersion;
 	if (Length(javaVersion) > 0) and (javaVersion >= '1.5') then begin
 		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion,'JavaHome',javaHome);
+		if (Length(javaHome) = 0) and IsWin64 then begin
+			RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion,'JavaHome',javaHome);
+		end;
 		path := javaHome + '\bin\javaw.exe';
 		if FileExists(path) then begin
 			Log('(JRE) found javaw.exe: ' + path);
