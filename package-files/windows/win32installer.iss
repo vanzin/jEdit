@@ -38,6 +38,7 @@ ChangesEnvironment=true
 PrivilegesRequired=admin
 WizardImageFile=@base.dir@\icons\WindowsInstallerImage.bmp
 WizardSmallImageFile=@base.dir@\icons\WindowsInstallerSmallImage.bmp
+WizardImageStretch=false
 ArchitecturesInstallIn64BitMode=x64
 
 [Languages]
