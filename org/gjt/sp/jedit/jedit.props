@@ -334,7 +334,8 @@ view.gutter.minDigitCount=2
 # Show selection area in gutter?
 view.gutter.selectionAreaEnabled=true
 # Gutter selection area background color
-view.gutter.selectionAreaBgColor=#dbdbdb
+# - leave out so by default it is the same as the gutter's
+#view.gutter.selectionAreaBgColor=#dbdbdb
 #}}}
 
 # Expand abbrevs when space bar pressed

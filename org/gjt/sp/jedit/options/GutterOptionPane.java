@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.*;
 //}}}
+import org.gjt.sp.util.SyntaxUtilities;
 
 public class GutterOptionPane extends AbstractOptionPane
 {
@@ -119,8 +120,7 @@ public class GutterOptionPane extends AbstractOptionPane
 		/* Selection area background color */
 		addComponent(jEdit.getProperty("options.gutter.selectionAreaBgColor"),
 			selectionAreaBgColor = new ColorWellButton(
-					jEdit.getColorProperty("view.gutter.selectionAreaBgColor")),
-					GridBagConstraints.VERTICAL);
+				getSelectionAreaBackground()), GridBagConstraints.VERTICAL);
 
 		/* Selection area width */
 		selectionAreaWidth = new JTextField(String.valueOf(
@@ -355,7 +355,10 @@ public class GutterOptionPane extends AbstractOptionPane
 	//{{{ getSelectionAreaBgColor() method
 	public static Color getSelectionAreaBackground()
 	{
-		return jEdit.getColorProperty(SELECTION_AREA_BGCOLOR_PROPERTY);
+		String color = jEdit.getProperty(SELECTION_AREA_BGCOLOR_PROPERTY);
+		if (color == null)
+			return jEdit.getColorProperty("view.gutter.bgColor");
+		return SyntaxUtilities.parseColor(color, Color.black);
 	} //}}}
 
 	//{{{ getSelectionAreaWidth() method
