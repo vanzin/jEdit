@@ -135,6 +135,8 @@ Suraj Kurapati for contributing to this release.
 
 - added assembly-ags (Apollo Abort Guidance System) edit mode (patch #2848519) 
   (Jim Lawton)
+
+- added binsource-agc (Apollo Guidance Computer Binary) edit mode  (Jim Lawton)
   
 - Ruby edit mode updated (patch #2846453) (Suraj Kurapati)
 

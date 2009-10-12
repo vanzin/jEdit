@@ -80,6 +80,8 @@
 <MODE NAME="bibtex"		FILE="bibtex.xml"
 				FILE_NAME_GLOB="*.bib" />
 
+<MODE NAME="binsource-agc"	FILE="binsource-agc.xml"
+				FILE_NAME_GLOB="*.binsource" />
 <!-- We let c++ color the .h files -->
 <MODE NAME="c"			FILE="c.xml"
 				FILE_NAME_GLOB="*.c" />
