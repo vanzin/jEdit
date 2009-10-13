@@ -103,6 +103,12 @@ class HyperSearchRequest extends WorkRequest
 				int maxResults = jEdit.getIntegerProperty("hypersearch.maxWarningResults");
 loop:				for(int i = 0; i < files.length; i++)
 				{
+					if(jEdit.getBooleanProperty("hyperSearch-stopButton"))
+					{
+						jEdit.setTemporaryProperty("hyperSearch-stopButton", "false");
+						Log.log(Log.MESSAGE, this, "Search stopped by user action (stop button)");
+						break;
+					}
 					if (!asked && resultCount > maxResults && maxResults != 0)
 					{
 						Log.log(Log.DEBUG, this, "Search in progress, " + resultCount +

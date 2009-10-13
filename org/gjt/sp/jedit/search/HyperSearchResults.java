@@ -85,6 +85,14 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		multi.addActionListener(ah);
 		toolBar.add(multi);
 
+		stop = new RolloverButton(GUIUtilities.loadIcon(
+			jEdit.getProperty("hypersearch-results.stop.icon")));
+		stop.setToolTipText(jEdit.getProperty(
+			"hypersearch-results.stop.label"));
+		stop.addActionListener(ah);
+		toolBar.add(stop);
+		stop.setEnabled(false);
+
 		add(BorderLayout.NORTH, toolBar);
 
 		resultTreeRoot = new DefaultMutableTreeNode();
@@ -210,6 +218,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ searchStarted() method
 	public void searchStarted()
 	{
+		stop.setEnabled(true);
 		caption.setText(jEdit.getProperty("hypersearch-results.searching",
 				new String[] { SearchAndReplace.getSearchString() }));
 	} //}}}
@@ -244,6 +253,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	 */
 	public void searchDone(final DefaultMutableTreeNode searchNode, final DefaultMutableTreeNode selectNode)
 	{
+		stop.setEnabled(false);
 		final int nodeCount = searchNode.getChildCount();
 		if (nodeCount < 1)
 		{
@@ -313,6 +323,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	private RolloverButton highlight;
 	private RolloverButton clear;
 	private RolloverButton multi;
+	private RolloverButton stop;
 	private boolean multiStatus;
 
 	//{{{ updateHighlightStatus() method
@@ -492,6 +503,10 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 							.getChildAt(i));
 					}
 				}
+			}
+			else if(source == stop)
+			{
+				jEdit.setTemporaryProperty("hyperSearch-stopButton", "true");
 			}
 		}
 	} //}}}

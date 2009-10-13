@@ -79,7 +79,6 @@ Suraj Kurapati for contributing to this release.
   using OpenJDK (Suraj Kurapati)
 }}}
 {{{ Miscellaneous
-
 - New Macro - "Text/Compose Tag". (Gordon Hollenbeck # 2644277)
 
 - New action: toggle buffer switcher - toggles visibility of buffer switcher,
@@ -94,6 +93,9 @@ Suraj Kurapati for contributing to this release.
 
 - New options to select the width and the background color of the selection area
   in the gutter (which is visible when line numbers are not shown).
+  
+- New button in Hypersearch dockable panel to stop an hypersearch
+  (patch #2842444) (encorejane)
 }}}
 {{{ API Changes
 
