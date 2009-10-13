@@ -33,8 +33,10 @@ import org.gjt.sp.util.Log;
 
 /**
  * Manages low-level text display tasks - the visible lines in the TextArea.
- * 
- * 
+ * The ChunkCache contains an array of LineInfo object.
+ * Each LineInfo object is associated to one screen line of the TextArea and
+ * contains informations about this line.
+ * The array is resized when the TextArea geometry changes  
  *
  * @author Slava Pestov
  * @version $Id$
@@ -221,17 +223,6 @@ class ChunkCache
 	{
 		firstInvalidLine = 0;
 		lastScreenLine = lastScreenLineP = -1;
-	} //}}}
-
-	//{{{ invalidateChunksFrom() method
-	void invalidateChunksFrom(int screenLine)
-	{
-		if(Debug.CHUNK_CACHE_DEBUG)
-			Log.log(Log.DEBUG,this,"Invalidate from " + screenLine);
-		firstInvalidLine = Math.min(screenLine,firstInvalidLine);
-
-		if(screenLine <= lastScreenLine)
-			lastScreenLine = lastScreenLineP = -1;
 	} //}}}
 
 	//{{{ invalidateChunksFromPhys() method
