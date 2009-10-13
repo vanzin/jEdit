@@ -94,7 +94,8 @@ class ChunkCache
 			LineInfo last = getLineInfo(lastScreenLine);
 
 			if(offset >= last.offset
-				&& offset < last.offset + last.length) {
+				&& offset < last.offset + last.length)
+			{
 				return lastScreenLine;
 			}
 		}
