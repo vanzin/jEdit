@@ -74,7 +74,8 @@ class VFSFileNameField extends HistoryTextField
 				doComplete(path);
 				break;
 			case KeyEvent.VK_LEFT:
-				if ((evt.getModifiers() & KeyEvent.ALT_MASK) > 0) {
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK) > 0)
+				{
 					browser.previousDirectory();
 					evt.consume();
 				}
@@ -84,7 +85,8 @@ class VFSFileNameField extends HistoryTextField
 				}
 				break;
 			case KeyEvent.VK_UP:
-				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0)
+				{
 					String p = browser.getDirectory();
 					browser.setDirectory(MiscUtilities.getParentOfPath(p));
 					evt.consume();
@@ -95,7 +97,8 @@ class VFSFileNameField extends HistoryTextField
 				}
 				break;
 			case KeyEvent.VK_RIGHT:
-				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+				if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0)
+				{
 					evt.consume();
 					browser.nextDirectory();
 				}

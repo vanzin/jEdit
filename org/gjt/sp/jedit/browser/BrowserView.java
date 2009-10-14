@@ -627,21 +627,24 @@ class BrowserView extends JPanel
 			{
 				ActionContext ac = VFSBrowser.getActionContext();
 				int row = parentDirectories.getSelectedIndex();
-				switch(evt.getKeyCode()) {
+				switch(evt.getKeyCode())
+				{
 				case KeyEvent.VK_DOWN:
 					evt.consume();			
 					if (row < parentDirectories.getSize().height-1) 
 						parentDirectories.setSelectedIndex(++row);
 					break;
 				case KeyEvent.VK_LEFT:
-					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0)
+					{
 						evt.consume();
 						browser.previousDirectory();
 					}
 					else super.processEvent(evt);
 					break;
 				case KeyEvent.VK_RIGHT:
-					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0) {
+					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0)
+					{
 						evt.consume();
 						browser.nextDirectory();
 					}
@@ -656,7 +659,8 @@ class BrowserView extends JPanel
 					break;
 				case KeyEvent.VK_UP :
 					evt.consume();
-					if (row > 0) { 
+					if (row > 0)
+					{
 						parentDirectories.setSelectedIndex(--row);
 					}
 					break;
@@ -696,7 +700,8 @@ class BrowserView extends JPanel
 					break; */					
 				}
 			}
-			else if(evt.getID() == KeyEvent.KEY_TYPED) {
+			else if(evt.getID() == KeyEvent.KEY_TYPED)
+			{
 				if(evt.isControlDown() || evt.isAltDown()
 					|| evt.isMetaDown())
 				{
