@@ -776,8 +776,10 @@ unwind:		while(context.parent != null)
 	} //}}}
 
 	//{{{ matchToken() method
-	private byte matchToken(ParserRule rule, ParserRule base, LineContext ctx) {
-		switch (rule.matchType) {
+	private byte matchToken(ParserRule rule, ParserRule base, LineContext ctx)
+	{
+		switch (rule.matchType)
+		{
 			case ParserRule.MATCH_TYPE_RULE:
 				return base.token;
 

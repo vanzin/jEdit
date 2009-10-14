@@ -110,7 +110,8 @@ public class ParserRuleSet
 				}
 			}
 
-			if (ruleset.keywords != null) {
+			if (ruleset.keywords != null)
+			{
 				if (keywords == null)
 					keywords = new KeywordMap(ignoreCase);
 				keywords.add(ruleset.keywords);

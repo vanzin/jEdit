@@ -366,8 +366,8 @@ public abstract class XModeHandler extends DefaultHandler
 				!tag.tagName.equals("END")
 				&& !tag.tagName.equals("BEGIN")
 				&& !tag.tagName.equals("KEYWORDS")
-				&& !tag.tagName.equals("MODE")
-			) {
+				&& !tag.tagName.equals("MODE"))
+			{
 				byte token = Token.stringToToken(tag.tagName);
 				if(token != -1)
 					addKeyword(tag.lastKeyword.toString(),token);
@@ -593,7 +593,7 @@ public abstract class XModeHandler extends DefaultHandler
 			lastNoWordBreak = "TRUE".equals(attrs.getValue("NO_WORD_BREAK"));
 			lastIgnoreCase = (attrs.getValue("IGNORE_CASE") == null ||
 					"TRUE".equals(attrs.getValue("IGNORE_CASE")));
-			lastHighlightDigits = "TRUE".equals(attrs.getValue("HIGHLIGHT_DIGITS"));;
+			lastHighlightDigits = "TRUE".equals(attrs.getValue("HIGHLIGHT_DIGITS"));
 			lastDigitRE = attrs.getValue("DIGIT_RE");
 
 			tmp = attrs.getValue("NO_WORD_SEP");
