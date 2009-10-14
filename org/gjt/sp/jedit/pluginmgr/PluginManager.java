@@ -150,7 +150,8 @@ public class PluginManager extends JFrame implements EBComponent
 	} //}}}
 
 	//{{{ init() method
-	private void init() {
+	private void init()
+	{
 		EditBus.addToBus(this);
 		
 

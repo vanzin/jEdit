@@ -788,7 +788,8 @@ public class ManagePanel extends JPanel
 			if (selectedFiles == null || selectedFiles.length != 1) return;
 			path = selectedFiles[0];
 			boolean success = loadPluginSet(path);
-			if (success) {
+			if (success)
+			{
 				jEdit.setProperty(PluginManager.PROPERTY_PLUGINSET, path);
 				EditBus.send(new PropertiesChanged(PluginManager.getInstance()));
 			}
@@ -857,8 +858,10 @@ public class ManagePanel extends JPanel
 			if (fileselections == null || fileselections.length != 1) return;
 
 			PluginJAR[] jars = jEdit.getPluginJARs();
-			for (PluginJAR jar : jars) {
-				if (jar.getPlugin() != null) {
+			for (PluginJAR jar : jars)
+			{
+				if (jar.getPlugin() != null)
+				{
 					Entry entry = new Entry (jar);
 					pluginSelections.add(entry);
 				}
@@ -1118,7 +1121,8 @@ public class ManagePanel extends JPanel
 					Entry entry = pluginModel.getEntry(table.getSelectedRow());
 					String label = entry.clazz;
 					String docs = entry.docs;
-					if (label != null) {
+					if (label != null)
+					{
 						EditPlugin plug = jEdit.getPlugin(label, false);
 						PluginJAR jar = null;
 						if (plug != null) jar = plug.getPluginJAR();
