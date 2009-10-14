@@ -739,14 +739,18 @@ public class ExtendedGridLayout implements LayoutManager2
 				if ((Integer.MAX_VALUE-minimumColWidth) < currentMinimumColWidth)
 				{
 					currentMinimumColWidth = Integer.MAX_VALUE;
-				} else {
+				}
+				else
+				{
 					currentMinimumColWidth += minimumColWidth;
 				}
 				int preferredColWidth = preferredColWidths[col];
 				if ((Integer.MAX_VALUE-preferredColWidth) < currentPreferredColWidth)
 				{
 					currentPreferredColWidth = Integer.MAX_VALUE;
-				} else {
+				}
+				else
+				{
 					currentPreferredColWidth += preferredColWidth;
 				}
 				int maximumColWidth = maximumColWidths[col];
@@ -848,21 +852,27 @@ public class ExtendedGridLayout implements LayoutManager2
 				if ((Integer.MAX_VALUE-minimumRowHeight) < currentMinimumRowHeight)
 				{
 					currentMinimumRowHeight = Integer.MAX_VALUE;
-				} else {
+				}
+				else
+				{
 					currentMinimumRowHeight += minimumRowHeight;
 				}
 				int preferredRowHeight = preferredRowHeights[row];
 				if ((Integer.MAX_VALUE-preferredRowHeight) < currentPreferredRowHeight)
 				{
 					currentPreferredRowHeight = Integer.MAX_VALUE;
-				} else {
+				}
+				else
+				{
 					currentPreferredRowHeight += preferredRowHeight;
 				}
 				int maximumRowHeight = maximumRowHeights[row];
 				if ((Integer.MAX_VALUE-maximumRowHeight) < currentMaximumRowHeight)
 				{
 					currentMaximumRowHeight = Integer.MAX_VALUE;
-				} else {
+				}
+				else
+				{
 					currentMaximumRowHeight += maximumRowHeight;
 				}
 			}

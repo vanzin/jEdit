@@ -128,7 +128,8 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 
 		add(BorderLayout.NORTH,north);
 		add(BorderLayout.CENTER,tableFilterPanel);
-		try {
+		try
+		{
 			selectModel.setSelectedIndex(jEdit.getIntegerProperty("options.shortcuts.select.index", 0));
 		}
 		catch (IllegalArgumentException eae) {}

@@ -79,7 +79,8 @@ class VFSFileNameField extends HistoryTextField
 					browser.previousDirectory();
 					evt.consume();
 				}
-				else {
+				else
+				{
 					// 				browser.getBrowserView().getTable().processKeyEvent(evt);
 					super.processKeyEvent(evt);
 				}
@@ -91,7 +92,8 @@ class VFSFileNameField extends HistoryTextField
 					browser.setDirectory(MiscUtilities.getParentOfPath(p));
 					evt.consume();
 				}
-				else {
+				else
+				{
 					browser.getBrowserView().getTable()
 					.processKeyEvent(evt);
 				}

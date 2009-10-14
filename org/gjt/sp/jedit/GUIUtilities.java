@@ -1869,7 +1869,8 @@ public class GUIUtilities
 		if (jEdit.getBooleanProperty(name + ".toggle"))
 		{
 			mi = new EnhancedCheckBoxMenuItem(label, name, context);
-		} else
+		}
+		else
 		{
 			mi = new EnhancedMenuItem(label, name, context);
 		}

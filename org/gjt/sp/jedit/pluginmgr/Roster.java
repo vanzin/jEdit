@@ -421,7 +421,8 @@ class Roster
 				progress.setStatus(jEdit.getProperty("plugin-manager.progress",new String[] {fileName, host}));
 				InputStream in = null;
 				FileOutputStream out = null;
-				try {
+				try
+				{
 					in = conn.getInputStream();
 					out = new FileOutputStream(path);
 					if(!IOUtilities.copyStream(progress,in,out,true))

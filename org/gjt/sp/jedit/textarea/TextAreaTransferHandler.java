@@ -106,7 +106,8 @@ public class TextAreaTransferHandler extends TransferHandler
 			{
 				returnValue = importFile(c,t);
 			}
-			else {
+			else
+			{
 				DataFlavor uriListStringDataFlavor = null;
 				DataFlavor[] dataFlavors = t.getTransferDataFlavors();
 				

@@ -103,7 +103,8 @@ public class BufferSwitcher extends JComboBox
 			
 			if(buffer == null)
 				setIcon(null);
-			else {
+			else
+			{
 				setIcon(buffer.getIcon());
 				setToolTipText(buffer.getPath());
 			}

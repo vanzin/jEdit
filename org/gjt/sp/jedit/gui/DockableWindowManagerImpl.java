@@ -123,7 +123,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			String lineSep = System.getProperty("line.separator");
 			String filename = getLayoutFilename(baseName, viewIndex);
 			BufferedWriter out = null;
-			try {
+			try
+			{
 				out = new BufferedWriter(new FileWriter(filename));
 				out.write("<DOCKING LEFT=\"");
 				out.write(left == null ? "" : left);
@@ -455,7 +456,8 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			public void run()
 			{
 				/* Try to hide the last entry that was shown */
-				try {
+				try
+				{
 					String dockableName = showStack.pop();
 					hideDockableWindow(dockableName);
 					return;

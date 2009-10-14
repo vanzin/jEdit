@@ -324,7 +324,8 @@ public class VFSDirectoryEntryTable extends JTable
 				{
 					browserView.getParentDirectoryList().requestFocus();
 				}
-				else {
+				else
+				{
 					browser.focusOnDefaultComponent();	
 				}
 				break;
