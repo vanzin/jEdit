@@ -446,7 +446,8 @@ public abstract class BufferIORequest extends WorkRequest
 		}
 
 		Writer tester = encoding.getTextWriter(
-			new OutputStream() {
+			new OutputStream()
+			{
 				public void write(int b) {}
 			});
 		for(int i = 0; i < line.count; ++i)
