@@ -308,7 +308,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 			getToolkit().beep();
 		else
 		{
-			SwingUtilities.invokeLater(new Runnable() {
+			SwingUtilities.invokeLater(new Runnable()
+			{
 				public void run()
 				{
 					bufferSwitcher.requestFocus();
@@ -868,16 +869,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		if (bufferSwitcher != null)
 			bufferSwitcher.updateBufferList();
-	} //}}}
-
-	//{{{ bufferCleared() method
-	/**
-	 * The bufferSet was cleared
-	 * @since jEdit 4.3pre15
-	 */
-	public void bufferCleared()
-	{
-		jEdit.newFile(this);
 	} //}}}
 
 	//{{{ bufferSetSorted() method
