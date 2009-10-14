@@ -2413,7 +2413,8 @@ public class jEdit
 			if(!config.plainView)
 			{
 				int index;
-				synchronized (startupDone) {
+				synchronized (startupDone)
+				{
 					index = startupDone.size();
 					startupDone.add(false);
 				}

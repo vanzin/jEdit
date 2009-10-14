@@ -377,7 +377,8 @@ public class GUIUtilities
 	 * @param textArea the TextArea desiring to display these menu items
 	 * @since jEdit 4.3pre15
 	 */
-	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea, MouseEvent evt) {
+	public static List<JMenuItem> getServiceContextMenuItems(JEditTextArea textArea, MouseEvent evt)
+	{
 		List<JMenuItem> list = new ArrayList<JMenuItem>();
 		String serviceClassName =  DynamicContextMenuService.class.getName();
 		String[] menuServiceList = ServiceManager.getServiceNames(serviceClassName);
@@ -1421,8 +1422,10 @@ public class GUIUtilities
 			@Override
 			public void windowGainedFocus(WindowEvent evt)
 			{
-				SwingUtilities.invokeLater(new Runnable(){
-						public void run() {
+				SwingUtilities.invokeLater(new Runnable()
+				{
+						public void run()
+						{
 							comp.requestFocusInWindow();
 						}
 				});

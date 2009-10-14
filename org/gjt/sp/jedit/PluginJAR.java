@@ -296,7 +296,8 @@ public class PluginJAR
 	 * @return an ordered set of JARpaths that contains the
 	 *      plugins that need to be (re)loaded, in the correct order.
 	 */
-	public static Set<String> getDependencySet(String className) {
+	public static Set<String> getDependencySet(String className)
+	{
 		String dep;
 		Set<String> retval = new LinkedHashSet<String>();
 		int i=0;

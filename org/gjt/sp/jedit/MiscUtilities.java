@@ -1827,11 +1827,13 @@ loop:		for(;;)
 				if (OperatingSystem.isWindows() &&
 				    path.toLowerCase().startsWith(tryPrefix))
 					bestPrefix = tryPrefix;
-				else if (path.startsWith(tryPrefix)) {
+				else if (path.startsWith(tryPrefix))
+				{
 					bestPrefix = tryPrefix;
 				}
 				// Only use prefix if it is a directory-prefix of the path
-				if (!bestPrefix.equals(verifiedPrefix)) {
+				if (!bestPrefix.equals(verifiedPrefix))
+				{
 					String remainder = original.substring(bestPrefix.length());
 					if (remainder.length() < 1 || remainder.startsWith(File.separator))
 						verifiedPrefix = bestPrefix;

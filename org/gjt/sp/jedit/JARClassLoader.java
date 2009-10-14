@@ -444,7 +444,8 @@ public class JARClassLoader extends ClassLoader
 	private void definePackage(String clazz) throws IOException
 	{
 		int idx = clazz.lastIndexOf('.');
-		if (idx != -1) {
+		if (idx != -1)
+		{
 			String name = clazz.substring(0, idx);
 			if (getPackage(name) == null) definePackage(name, new JarFile(jar.getFile()).getManifest());
 		}
@@ -456,7 +457,8 @@ public class JARClassLoader extends ClassLoader
 		String value=null;
 		if (sectionAttrs != null)
 			value = sectionAttrs.getValue(name);
-		else if (mainAttrs != null) {
+		else if (mainAttrs != null)
+		{
 			value = mainAttrs.getValue(name);
 		}
 		return value;
@@ -482,7 +484,8 @@ public class JARClassLoader extends ClassLoader
 			try
 			{
 				sealBase = jar.getFile().toURL();
-			} catch (MalformedURLException e) { }
+			}
+			catch (MalformedURLException e) {}
 		}
 
 		Package pkg=definePackage(

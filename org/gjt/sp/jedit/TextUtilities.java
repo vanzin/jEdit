@@ -285,14 +285,16 @@ public class TextUtilities
 	 *
 	 * @since jedit 4.3pre3
 	 */
-	public static String join(Collection<String> c, String delim) {
+	public static String join(Collection<String> c, String delim)
+	{
 		StringBuilder retval = new StringBuilder();
 		Iterator<String> itr = c.iterator();
 		if (itr.hasNext())
 			retval.append( itr.next() );
 		else 
 			return "";
-		while (itr.hasNext()) {
+		while (itr.hasNext())
+		{
 			retval.append(delim);
 			retval.append(itr.next());
 		}
@@ -658,7 +660,8 @@ public class TextUtilities
 	 * should be treated as word characters anyway
 	 * @return the type of the char : {@link #WHITESPACE}, {@link #WORD_CHAR}, {@link #SYMBOL}
 	 */
-	private static int getCharType(char ch, String noWordSep) {
+	private static int getCharType(char ch, String noWordSep)
+	{
 		int type;
 		if(Character.isWhitespace(ch))
 			type = WHITESPACE;

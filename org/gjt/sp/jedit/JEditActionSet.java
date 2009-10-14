@@ -336,7 +336,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 		{
 			retVal[i++] = (E) e.nextElement();
 		}
-		return (E[]) retVal;
+		return retVal;
 	} //}}}
 
 	//{{{ contains() method
@@ -382,7 +382,8 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 		{
 			Log.log(Log.DEBUG,this,"Loading actions from " + uri);
 			ActionListHandler ah = new ActionListHandler(uri.toString(),this);
-			if ( XMLUtilities.parseXML(uri.openStream(), ah)) {
+			if ( XMLUtilities.parseXML(uri.openStream(), ah))
+			{
 				Log.log(Log.ERROR, this, "Unable to parse: " + uri);
 			}
 		}
