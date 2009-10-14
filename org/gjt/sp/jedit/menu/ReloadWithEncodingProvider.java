@@ -73,7 +73,8 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 		String[] encodings = MiscUtilities.getEncodings(true);
 		String systemEncoding = System.getProperty("file.encoding");
 
-		if (Arrays.binarySearch(encodings, systemEncoding) < 0) {
+		if (Arrays.binarySearch(encodings, systemEncoding) < 0)
+		{
 			String[] tmp_a = new String[encodings.length + 1];
 			System.arraycopy(encodings, 0, tmp_a, 0, encodings.length);
 			tmp_a[encodings.length] = systemEncoding;
