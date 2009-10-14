@@ -736,21 +736,26 @@ public class ExtendedGridLayout implements LayoutManager2
 			for (int col=fromCol ; col<toCol ; col++)
 			{
 				int minimumColWidth = minimumColWidths[col];
-				if ((Integer.MAX_VALUE-minimumColWidth) < currentMinimumColWidth) {
+				if ((Integer.MAX_VALUE-minimumColWidth) < currentMinimumColWidth)
+				{
 					currentMinimumColWidth = Integer.MAX_VALUE;
 				} else {
 					currentMinimumColWidth += minimumColWidth;
 				}
 				int preferredColWidth = preferredColWidths[col];
-				if ((Integer.MAX_VALUE-preferredColWidth) < currentPreferredColWidth) {
+				if ((Integer.MAX_VALUE-preferredColWidth) < currentPreferredColWidth)
+				{
 					currentPreferredColWidth = Integer.MAX_VALUE;
 				} else {
 					currentPreferredColWidth += preferredColWidth;
 				}
 				int maximumColWidth = maximumColWidths[col];
-				if ((Integer.MAX_VALUE-maximumColWidth) < currentMaximumColWidth) {
+				if ((Integer.MAX_VALUE-maximumColWidth) < currentMaximumColWidth)
+				{
 					currentMaximumColWidth = Integer.MAX_VALUE;
-				} else {
+				}
+				else
+				{
 					currentMaximumColWidth += maximumColWidth;
 				}
 			}
@@ -840,19 +845,22 @@ public class ExtendedGridLayout implements LayoutManager2
 			for (int row=fromRow ; row<toRow ; row++)
 			{
 				int minimumRowHeight = minimumRowHeights[row];
-				if ((Integer.MAX_VALUE-minimumRowHeight) < currentMinimumRowHeight) {
+				if ((Integer.MAX_VALUE-minimumRowHeight) < currentMinimumRowHeight)
+				{
 					currentMinimumRowHeight = Integer.MAX_VALUE;
 				} else {
 					currentMinimumRowHeight += minimumRowHeight;
 				}
 				int preferredRowHeight = preferredRowHeights[row];
-				if ((Integer.MAX_VALUE-preferredRowHeight) < currentPreferredRowHeight) {
+				if ((Integer.MAX_VALUE-preferredRowHeight) < currentPreferredRowHeight)
+				{
 					currentPreferredRowHeight = Integer.MAX_VALUE;
 				} else {
 					currentPreferredRowHeight += preferredRowHeight;
 				}
 				int maximumRowHeight = maximumRowHeights[row];
-				if ((Integer.MAX_VALUE-maximumRowHeight) < currentMaximumRowHeight) {
+				if ((Integer.MAX_VALUE-maximumRowHeight) < currentMaximumRowHeight)
+				{
 					currentMaximumRowHeight = Integer.MAX_VALUE;
 				} else {
 					currentMaximumRowHeight += maximumRowHeight;
@@ -966,10 +974,12 @@ public class ExtendedGridLayout implements LayoutManager2
 		}
 		
 		// clip the size to Integer.MAX_VALUE if too big
-		if (totalWidth > Integer.MAX_VALUE) {
+		if (totalWidth > Integer.MAX_VALUE)
+		{
 			totalWidth = Integer.MAX_VALUE;
 		}
-		if (totalHeight > Integer.MAX_VALUE) {
+		if (totalHeight > Integer.MAX_VALUE)
+		{
 			totalHeight = Integer.MAX_VALUE;
 		}
 		
@@ -996,7 +1006,8 @@ public class ExtendedGridLayout implements LayoutManager2
 		Component[] components = parent.getComponents();
 		for (Component component : components)
 		{
-			if (component.isVisible()) {
+			if (component.isVisible())
+			{
 				ExtendedGridLayoutConstraints constraints = lookupConstraints(component).getWorkCopy();
 				int rowNumber = constraints.getRow();
 				for (int i=rowNumber, c=rows.size() ; i>=c ; i--)
@@ -1131,7 +1142,8 @@ public class ExtendedGridLayout implements LayoutManager2
 		// check the last gridRow for rowspans and probably add rows for these
 		haveNext = false;
 		int gridRowsSize = gridRows.size();
-		if (gridRowsSize > 0) {
+		if (gridRowsSize > 0)
+		{
 			ListIterator<ExtendedGridLayoutConstraints> gridRowIterator = gridRows.get(gridRows.size()-1).listIterator();
 			while (gridRowIterator.hasNext())
 			{

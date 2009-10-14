@@ -938,9 +938,11 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 		} //}}}
 	} //}}}
 
-	public void show(String name) {
+	public void show(String name)
+	{
 		DockableWindowManagerImpl.Entry entry = null;
-		if (name != null) {
+		if (name != null)
+		{
 			wm.showDockableWindow(name);
 			wm.hideDockableWindow(name);
 		}

@@ -11,14 +11,16 @@ import org.gjt.sp.jedit.gui.DockableWindowManager.DockingLayout;
    @author Shlomy Reinstein
    @since jEdit 4.3pre16
 */   
-public class DockableWindowManagerProvider implements DockingFrameworkProvider {
-
+public class DockableWindowManagerProvider implements DockingFrameworkProvider
+{
 	public DockableWindowManager create(View view,
-			DockableWindowFactory instance, ViewConfig config) {
+			DockableWindowFactory instance, ViewConfig config)
+	{
 		return new DockableWindowManagerImpl(view, instance, config);
 	}
 
-	public DockingLayout createDockingLayout() {
+	public DockingLayout createDockingLayout()
+	{
 		return new DockableWindowManagerImpl.DockableWindowConfig();
 	}
 

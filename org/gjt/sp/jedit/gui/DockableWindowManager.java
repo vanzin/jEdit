@@ -662,7 +662,8 @@ import org.gjt.sp.util.Log;
 		{
 			Vector<Key> keys = new Vector<Key>();
 			String [] parts = shortcut.split("\\s+");
-			for (String part: parts) {
+			for (String part: parts)
+			{
 				if (part.length() > 0)
 					keys.add(KeyEventTranslator.parseKey(part));
 			}

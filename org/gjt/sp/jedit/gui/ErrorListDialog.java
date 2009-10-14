@@ -134,11 +134,14 @@ public class ErrorListDialog extends EnhancedDialog
 		StyleConstants.setBold(boldFontAttrSet, true);
 		for (ErrorEntry entry : messages)
 		{
-			try {
+			try
+			{
 				doc.insertString(doc.getLength(), entry.path + ":\n", boldFontAttrSet);
 				for (String s: entry.messages)
 					doc.insertString(doc.getLength(), s + "\n", plainFontAttrSet);
-			} catch (BadLocationException e) {
+			}
+			catch (BadLocationException e)
+			{
 			}
 		}
 

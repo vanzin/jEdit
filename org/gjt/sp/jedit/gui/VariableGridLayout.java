@@ -478,10 +478,12 @@ public class VariableGridLayout implements LayoutManager2, java.io.Serializable
 			Insets insets = parent.getInsets();
 			w += insets.left + insets.right + ((ncols - 1) * hgap) + distanceToBorders.left + distanceToBorders.right;
 			h += insets.top + insets.bottom + ((nrows - 1) * vgap) + distanceToBorders.top + distanceToBorders.bottom;
-			if (w > Integer.MAX_VALUE) {
+			if (w > Integer.MAX_VALUE)
+			{
 				w = Integer.MAX_VALUE;
 			}
-			if (h > Integer.MAX_VALUE) {
+			if (h > Integer.MAX_VALUE)
+			{
 				h = Integer.MAX_VALUE;
 			}
 			return new Dimension((int)w,(int)h);

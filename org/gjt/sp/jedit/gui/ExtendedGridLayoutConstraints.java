@@ -237,7 +237,8 @@ public class ExtendedGridLayoutConstraints
 	  *         object or {@code null} if no colspan is applicable
 	  * @see #getRowspanPlaceholder(boolean)
 	  */
-	ExtendedGridLayoutConstraints getColspanPlaceholder(boolean forUsage) {
+	ExtendedGridLayoutConstraints getColspanPlaceholder(boolean forUsage)
+	{
 		if (1 == colspan)
 		{
 			return null;
@@ -260,7 +261,8 @@ public class ExtendedGridLayoutConstraints
 	  *         object or {@code null} if no rowspan is applicable
 	  * @see #getColspanPlaceholder(boolean)
 	  */
-	ExtendedGridLayoutConstraints getRowspanPlaceholder(boolean forUsage) {
+	ExtendedGridLayoutConstraints getRowspanPlaceholder(boolean forUsage)
+	{
 		if (1 == rowspan)
 		{
 			return null;

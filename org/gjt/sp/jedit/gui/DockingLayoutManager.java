@@ -44,7 +44,8 @@ public class DockingLayoutManager implements EBComponent
 	private static boolean save(View view, String layoutName)
 	{
 		DockingLayout docking = view.getViewConfig().docking; 
-		if (docking != null) {
+		if (docking != null)
+		{
 			boolean ret = docking.saveLayout(layoutName, DockingLayout.NO_VIEW_INDEX);
 			if (! ret)
 				return false;
@@ -217,7 +218,8 @@ public class DockingLayoutManager implements EBComponent
 		}
 	}
 
-	private String getCurrentEditMode(View view) {
+	private String getCurrentEditMode(View view)
+	{
 		Buffer buffer = view.getBuffer();
 		if (buffer == null)
 			return null;

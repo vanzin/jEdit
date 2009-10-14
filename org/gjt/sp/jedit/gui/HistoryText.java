@@ -285,7 +285,8 @@ public class HistoryText
 			return;
 		}
 
-		popup = new JPopupMenu() {
+		popup = new JPopupMenu()
+		{
 			@Override
 			public void setVisible(boolean b)
 			{

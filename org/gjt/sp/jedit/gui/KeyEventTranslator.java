@@ -69,8 +69,10 @@ public class KeyEventTranslator
 	{
 		Key key = translateKeyEvent2(evt);
 
-		if (key!=null) {
-			if (key.isPhantom()) {
+		if (key!=null)
+		{
+			if (key.isPhantom())
+			{
 				key = null;
 			}
 		}
@@ -323,19 +325,23 @@ public class KeyEventTranslator
 		int duplicateMapping =
 			(c & a) | (c & m) | (c & s) | (a & m) | (a & s) | (m & s);
 
-		if((duplicateMapping & InputEvent.CTRL_MASK) != 0) {
+		if((duplicateMapping & InputEvent.CTRL_MASK) != 0)
+		{
 			throw new IllegalArgumentException(
 				"CTRL is mapped to more than one modifier");
 		}
-		if((duplicateMapping & InputEvent.ALT_MASK) != 0) {
+		if((duplicateMapping & InputEvent.ALT_MASK) != 0)
+		{
 			throw new IllegalArgumentException(
 				"ALT is mapped to more than one modifier");
 		}
-		if((duplicateMapping & InputEvent.META_MASK) != 0) {
+		if((duplicateMapping & InputEvent.META_MASK) != 0)
+		{
 			throw new IllegalArgumentException(
 				"META is mapped to more than one modifier");
 		}
-		if((duplicateMapping & InputEvent.SHIFT_MASK) != 0) {
+		if((duplicateMapping & InputEvent.SHIFT_MASK) != 0)
+		{
 			throw new IllegalArgumentException(
 				"SHIFT is mapped to more than one modifier");
 		}
@@ -515,19 +521,23 @@ public class KeyEventTranslator
 				+ '>';
 		}
 
-		public void setIsFromGlobalContext(boolean to) {
+		public void setIsFromGlobalContext(boolean to)
+		{
 			isFromGlobalContext = to;
 		}
 
-		public boolean isFromGlobalContext() {
+		public boolean isFromGlobalContext()
+		{
 			return isFromGlobalContext;
 		}
 
-		public void setIsPhantom(boolean to) {
+		public void setIsPhantom(boolean to)
+		{
 			isPhantom = to;
 		}
 
-		public boolean isPhantom() {
+		public boolean isPhantom()
+		{
 			return isPhantom;
 		}
 	} //}}}

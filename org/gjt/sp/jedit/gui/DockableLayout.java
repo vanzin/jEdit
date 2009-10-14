@@ -49,7 +49,9 @@ public class DockableLayout implements LayoutManager2
 	private Component topButtons, leftButtons, bottomButtons, rightButtons;
 
 	/** @deprecated use isAlternateLayout */
-	public boolean setAlternateLayout() {
+	@Deprecated
+	public boolean setAlternateLayout()
+	{
 		return isAlternateLayout();
 	}
 	

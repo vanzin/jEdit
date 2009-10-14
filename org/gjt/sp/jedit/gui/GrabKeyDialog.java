@@ -213,7 +213,8 @@ public class GrabKeyDialog extends JDialog
 			buttons.add(ok);
 			buttons.add(Box.createHorizontalStrut(12));
 
-			if(binding.isAssigned()) {
+			if(binding.isAssigned())
+			{
 				// show "remove" button
 				remove = new JButton(jEdit.getProperty("grab-key.remove"));
 				remove.addActionListener(new ActionHandler());
@@ -244,7 +245,8 @@ public class GrabKeyDialog extends JDialog
 	//{{{ getSymbolicName() method
 	public static String getSymbolicName(int keyCode)
 	{
-		if (Debug.DUMP_KEY_EVENTS) {
+		if (Debug.DUMP_KEY_EVENTS)
+		{
 			Log.log(Log.DEBUG,GrabKeyDialog.class,"getSymbolicName("+keyCode+").");
 		}
 
@@ -401,7 +403,8 @@ public class GrabKeyDialog extends JDialog
 			KeyEventTranslator.Key key = KeyEventTranslator
 				.translateKeyEvent(evt);
 
-			if (Debug.DUMP_KEY_EVENTS) {
+			if (Debug.DUMP_KEY_EVENTS)
+			{
 				Log.log(Log.DEBUG,GrabKeyDialog.class,"processKeyEvent() key="+key+", _evt="+_evt+'.');
 			}
 
@@ -419,22 +422,32 @@ public class GrabKeyDialog extends JDialog
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
 
-			if(key.modifiers != null) {
+			if(key.modifiers != null)
+			{
 				keyString.append(key.modifiers).append('+');
 			}
 
 			String symbolicName = getSymbolicName(key.key);
 
-			if(symbolicName != null) {
+			if(symbolicName != null)
+			{
 				keyString.append(symbolicName);
-			} else {
-				if (key.input != '\0') {
-					if (key.input == ' ') {
+			}
+			else
+			{
+				if (key.input != '\0')
+				{
+					if (key.input == ' ')
+					{
 						keyString.append("SPACE");
-					} else {
+					}
+					else
+					{
 						keyString.append(key.input);
 					}
-				} else {
+				}
+				else
+				{
 					return;
 				}
 			}

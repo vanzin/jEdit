@@ -322,7 +322,8 @@ class FontSelectorDialog extends EnhancedDialog
 
 		content.add(BorderLayout.NORTH,listPanel);
 
-		preview = new JLabel(jEdit.getProperty("font-selector.long-text")) {
+		preview = new JLabel(jEdit.getProperty("font-selector.long-text"))
+		{
 			public void paintComponent(Graphics g)
 			{
 				if(fontSelector != null)

@@ -137,7 +137,8 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 	} //}}}
 
 	//{{{ move() method
-	public void move(String newPosition) {
+	public void move(String newPosition)
+	{
 		int orientation = JSplitPane.HORIZONTAL_SPLIT;
 		if (newPosition.equals(DockableWindowManager.LEFT) ||
 			newPosition.equals(DockableWindowManager.RIGHT))

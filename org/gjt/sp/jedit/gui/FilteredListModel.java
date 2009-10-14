@@ -104,7 +104,8 @@ public abstract class FilteredListModel<E extends ListModel> extends AbstractLis
 	//{{{ setFilter() method
 	public void setFilter(final String filter)
 	{
-		Runnable runner = new Runnable() {
+		Runnable runner = new Runnable()
+		{
 			public void run()
 			{
 				Set<Integer> selectedIndices = saveSelection();
