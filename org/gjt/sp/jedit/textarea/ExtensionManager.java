@@ -47,9 +47,11 @@ class ExtensionManager
 		Entry entry = new Entry(layer,ext);
 
 		int i = 0;
-		for (Entry extension : extensions) {
+		for (Entry extension : extensions)
+		{
 			int _layer = extension.layer;
-			if (layer < _layer) {
+			if (layer < _layer)
+			{
 				extensions.add(i, entry);
 				return;
 			}

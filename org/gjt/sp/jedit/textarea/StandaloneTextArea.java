@@ -152,10 +152,13 @@ public class StandaloneTextArea extends TextArea
 		String property = propertyManager.getProperty("buffer.undoCount");
 		int undoCount = 100;
 		if (property != null)
-			try {
+			try
+			{
 				undoCount = Integer.parseInt(property);
-			} catch (NumberFormatException e) {
-		}
+			}
+			catch (NumberFormatException e)
+			{
+			}
 		this.buffer.setUndoLimit(undoCount);
 		Mode mode = new Mode("text");
 		mode.setTokenMarker(tokenMarker);

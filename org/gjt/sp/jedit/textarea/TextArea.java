@@ -2933,7 +2933,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * @param select true if we also want to select from the cursor
 	 * @since jedit 4.3pre18
 	 */
-	public void end(boolean select) {
+	public void end(boolean select)
+	{
 		switch(getInputHandler().getLastActionCount() % 2)
 		{
 		case 1:

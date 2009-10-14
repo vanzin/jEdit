@@ -114,16 +114,22 @@ public class Gutter extends JComponent implements SwingConstants
 		addMouseListener(mouseHandler);
 		addMouseMotionListener(mouseHandler);
 
-		bufferListener = new BufferAdapter() {
-			public void bufferLoaded(JEditBuffer buffer) {
+		bufferListener = new BufferAdapter()
+		{
+			public void bufferLoaded(JEditBuffer buffer)
+			{
 				updateLineNumberWidth();
 			}
+
 			public void contentInserted(JEditBuffer buffer, int startLine,
-					int offset, int numLines, int length) {
+					int offset, int numLines, int length)
+			{
 				updateLineNumberWidth();
 			}
+
 			public void contentRemoved(JEditBuffer buffer, int startLine,
-					int offset, int numLines, int length) {
+					int offset, int numLines, int length) 
+			{
 				updateLineNumberWidth();
 			}
 		};
