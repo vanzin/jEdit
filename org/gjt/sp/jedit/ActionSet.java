@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit;
 
 //{{{ imports
-import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -300,7 +299,8 @@ public class ActionSet extends JEditActionSet<EditAction> implements Comparable
 	} //}}}
 
 	//{{{ compareTo() method
-	public int compareTo(Object o) {
+	public int compareTo(Object o)
+	{
 		return label.compareTo(((ActionSet)o).label);
 	}//}}}
 
