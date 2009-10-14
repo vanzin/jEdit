@@ -34,16 +34,19 @@ public class HyperSearchFolderNode
 			fileSep = "\\\\";
 	}
 	
-	public File getNodeFile() {
+	public File getNodeFile()
+	{
 		return nodeFile;
 	}
 	
-	public HyperSearchFolderNode(File nodeFile, boolean showFullPath) {
+	public HyperSearchFolderNode(File nodeFile, boolean showFullPath) 
+	{
 		this.nodeFile = nodeFile;
 		this.showFullPath = showFullPath;
 	}
 	
-	public String toString() {
+	public String toString()
+	{
 		if (showFullPath)
 			return nodeFile.getAbsolutePath();
 		String paths[] = nodeFile.getAbsolutePath().split(fileSep);

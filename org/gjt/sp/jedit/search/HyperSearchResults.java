@@ -154,8 +154,10 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	{
 		// impl note: since multi-level hierarchies now allowed,
 		// use traverseNodes to process HyperSearchResult nodes
-		traverseNodes(resultTreeRoot, new TreeNodeCallbackAdapter() {
-			public boolean processNode(DefaultMutableTreeNode node) {
+		traverseNodes(resultTreeRoot, new TreeNodeCallbackAdapter()
+		{
+			public boolean processNode(DefaultMutableTreeNode node)
+			{
 				Object userObject = node.getUserObject();
 				if (!(userObject instanceof HyperSearchResult))
 					return true;
@@ -454,7 +456,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	{
 		Font f = (resultTree != null) ? resultTree.getFont() :
 			UIManager.getFont("Tree.font");
-		SyntaxStyle s = null;
+		SyntaxStyle s;
 		try
 		{
 			s = SyntaxUtilities.parseStyle(style, f.getFamily(), f.getSize(), true, null);
@@ -593,10 +595,10 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			Font f = style.getFont();
 			Color c = style.getForegroundColor();
 			if (c != null)
-				tag.append("color:" + color2html(c));
+				tag.append("color:").append(color2html(c));
 			c = style.getBackgroundColor();
 			if (c != null)
-				tag.append("background:" + color2html(c));
+				tag.append("background:").append(color2html(c));
 			if (f.isBold())
 				tag.append("font-weight:bold;");
 			if (f.isItalic())
@@ -604,11 +606,14 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			return tag.toString();
 		}
 		
-		private void appendString2html(StringBuilder sb, String s) {
-			for (int i = 0; i < s.length(); i++) {
+		private void appendString2html(StringBuilder sb, String s)
+		{
+			for (int i = 0; i < s.length(); i++)
+			{
 				char c = s.charAt(i);
 				String r;
-				switch (c) {
+				switch (c)
+				{
 				case '"':
 					r = "&quot;";
 					break;
@@ -910,7 +915,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		
 		traverseNodes(node, new TreeNodeCallbackAdapter()
 		{
-			public boolean processNode(DefaultMutableTreeNode node) {
+			public boolean processNode(DefaultMutableTreeNode node)
+			{
 				resultTree.expandPath(new TreePath(node.getPath()));
 				return true;
 			}
@@ -1047,7 +1053,8 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	//{{{ TreeNodeCallbackAdapter class
 	static class TreeNodeCallbackAdapter implements HyperSearchTreeNodeCallback
 	{
-		public boolean processNode(DefaultMutableTreeNode node) {
+		public boolean processNode(DefaultMutableTreeNode node)
+		{
 			return false;
 		}
 		
