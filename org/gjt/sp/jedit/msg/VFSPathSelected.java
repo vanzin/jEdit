@@ -38,7 +38,8 @@ public class VFSPathSelected extends EBMessage
 	 * 
 	 * @return true if this is a directory node
 	 */
-	public boolean isDirectory() {
+	public boolean isDirectory()
+	{
 		return isDir;
 	}
 

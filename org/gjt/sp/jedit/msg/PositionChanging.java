@@ -25,17 +25,21 @@ import org.gjt.sp.jedit.textarea.TextArea;
  * @since jEdit 4.3pre15
  *
  */
-public class PositionChanging extends EditPaneUpdate {
+public class PositionChanging extends EditPaneUpdate
+{
 	
-	protected PositionChanging(EditPane editPane, Object whatt) {
+	protected PositionChanging(EditPane editPane, Object whatt)
+	{
 		super(editPane, whatt);
 	}
 
-	public PositionChanging(TextArea textArea) {
+	public PositionChanging(TextArea textArea)
+	{
 		super(EditPane.get(textArea), EditPaneUpdate.POSITION_CHANGING);
 	}
 	
-	public PositionChanging(EditPane editPane) {
+	public PositionChanging(EditPane editPane)
+	{
 		super (editPane, EditPaneUpdate.POSITION_CHANGING);
 	}
 }
