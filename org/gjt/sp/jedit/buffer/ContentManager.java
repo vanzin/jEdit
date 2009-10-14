@@ -150,7 +150,8 @@ public class ContentManager
 			moveGapEnd(start + len + 1024);
 		}
 
-		for (int i = 0; i < len; i++) {
+		for (int i = 0; i < len; i++)
+		{
 			text[start+i] = str.charAt(i);
 		}
 		gapStart += len;
