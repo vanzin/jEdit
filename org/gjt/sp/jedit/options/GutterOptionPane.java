@@ -74,16 +74,21 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.lineNumbers"));
 		gutterComponents.add(lineNumbersEnabled, cons);
 
-		InputVerifier integerInputVerifier = new InputVerifier() {
+		InputVerifier integerInputVerifier = new InputVerifier()
+		{
 			@Override
-			public boolean verify(JComponent input) {
+			public boolean verify(JComponent input)
+			{
 				if (! (input instanceof JTextField))
 					return true;
 				JTextField tf = (JTextField) input;
 				int i;
-				try {
+				try
+				{
 					i = Integer.valueOf(tf.getText()).intValue();
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					return false;
 				}
 				return (i >= 0);

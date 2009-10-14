@@ -82,20 +82,27 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		filterTF.setToolTipText(jEdit.getProperty("options.shortcuts.filter.tooltip"));
 		filterTF.getDocument().addDocumentListener(new DocumentListener()
 		{
-			public void changedUpdate(DocumentEvent e) {
+			public void changedUpdate(DocumentEvent e)
+			{
 				setFilter();
 			}
-			public void insertUpdate(DocumentEvent e) {
+
+			public void insertUpdate(DocumentEvent e)
+			{
 				setFilter();
 			}
-			public void removeUpdate(DocumentEvent e) {
+
+			public void removeUpdate(DocumentEvent e)
+			{
 				setFilter();
 			}
 		});
 		JButton clearButton = new JButton(jEdit.getProperty(
 				"options.shortcuts.clear.label"));
-		clearButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		clearButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				filterTF.setText("");
 				filterTF.requestFocus();
 			}

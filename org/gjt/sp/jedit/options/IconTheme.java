@@ -7,15 +7,18 @@ public class IconTheme extends Object
 {
 	static final String[] builtIn  = new String[] { "tango", "classic" };
 	
-	public static String[] builtInNames() {
+	public static String[] builtInNames()
+	{
 		return builtIn;
 	}
 
-	public static String get() {
+	public static String get() 
+	{
 		return jEdit.getProperty("icon-theme", "tango");
 	}
 	
-	public static void set(String name) {
+	public static void set(String name)
+	{
 		GUIUtilities.setIconPath("jeditresource:/org/gjt/sp/jedit/icons/themes/" + name + "/");
 		jEdit.setProperty("icon-theme", name);
 	}

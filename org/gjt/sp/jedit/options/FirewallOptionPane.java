@@ -88,7 +88,8 @@ public class FirewallOptionPane extends AbstractOptionPane {
 	} //}}}
 
 	//{{{ _save() method
-	public void _save() {
+	public void _save()
+	{
 		jEdit.setBooleanProperty("firewall.enabled", httpEnabled.isSelected());
 		jEdit.setProperty("firewall.host", httpHost.getText());
 		jEdit.setProperty("firewall.port", httpPort.getText());

@@ -118,7 +118,8 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		Vector<Entry> encodingEntriesVector = new Vector<Entry>();
 		boolean enableSelectAll = false;
 		boolean enableSelectNone = false;
-		for (String encoding : encodings) {
+		for (String encoding : encodings)
+		{
 			boolean selected = !getBooleanProperty("encoding.opt-out."+encoding,false);
 			enableSelectAll = enableSelectAll || !selected;
 			enableSelectNone = enableSelectNone || selected;
