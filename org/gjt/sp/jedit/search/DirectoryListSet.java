@@ -147,7 +147,14 @@ public class DirectoryListSet extends BufferListSet
 
 		try
 		{
-			return vfs._listDirectory(session,directory,glob,recurse,comp, skipBinary, skipHidden);
+			try
+			{
+				return vfs._listDirectory(session,directory,glob,recurse,comp, skipBinary, skipHidden);
+			}
+			finally
+			{
+				vfs._endVFSSession(session, comp);
+			}
 		}
 		catch(IOException io)
 		{
