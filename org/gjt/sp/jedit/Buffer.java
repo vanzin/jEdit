@@ -420,7 +420,16 @@ public class Buffer extends JEditBuffer
 		setBooleanProperty(BufferIORequest.ERROR_OCCURRED,false);
 
 		if(path == null && getFlag(NEW_FILE))
-			return saveAs(view,rename);
+		{
+			boolean ret = saveAs(view,rename);
+			if (ret)
+			{
+				jEdit.getBufferSetManager().removeBuffer(view.getEditPane(), this);
+				jEdit.getBufferSetManager().addBuffer(
+					view.getEditPane().getBufferSet(), this);
+			}
+			return ret;
+		}
 
 		if(path == null && file != null)
 		{
@@ -593,6 +602,10 @@ public class Buffer extends JEditBuffer
 						newPath,rename,getBooleanProperty(
 							BufferIORequest.ERROR_OCCURRED));
 					updateMarkersFile(view);
+					jEdit.getBufferSetManager().removeBuffer(
+						view.getEditPane(), Buffer.this);
+					jEdit.getBufferSetManager().addBuffer(
+						view.getEditPane().getBufferSet(), Buffer.this);
 				}
 			});
 
