@@ -2237,20 +2237,7 @@ loop:		while (true)
 	{
 		Rectangle bounds;
 		if (parent == null)
-		{
-			bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().
-				getMaximumWindowBounds();
-			GraphicsDevice [] devices = GraphicsEnvironment.
-				getLocalGraphicsEnvironment().getScreenDevices();
-			if (devices.length > 1)
-			{
-				for (GraphicsDevice device: devices)
-				{
-					for (GraphicsConfiguration config: device.getConfigurations())
-						bounds = bounds.union(config.getBounds());
-				}
-			}
-		}
+			bounds = GUIUtilities.getScreenBounds();
 		else
 			bounds = parent.getGraphicsConfiguration().getBounds();
 		int minWidth = jEdit.getIntegerProperty("view.minStartupWidth");

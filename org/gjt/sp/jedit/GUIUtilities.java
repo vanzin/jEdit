@@ -1467,6 +1467,29 @@ public class GUIUtilities
 		return TextAreaMouseHandler.isRightButton(modifiers);
 	} //}}}
 
+	//{{{ getScreenBounds() method
+	/**
+	 * Returns the screen bounds, taking into account multi-screen
+	 * environments.
+	 * @since jEdit 4.3pre18
+	 */
+	public static Rectangle getScreenBounds()
+	{
+		Rectangle bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().
+			getMaximumWindowBounds();
+		GraphicsDevice [] devices = GraphicsEnvironment.
+			getLocalGraphicsEnvironment().getScreenDevices();
+		if (devices.length > 1)
+		{
+			for (GraphicsDevice device: devices)
+			{
+				for (GraphicsConfiguration config: device.getConfigurations())
+					bounds = bounds.union(config.getBounds());
+			}
+		}
+		return bounds;
+	}
+
 	//{{{ showPopupMenu() method
 	/**
 	 * Shows the specified popup menu, ensuring it is displayed within
@@ -1520,8 +1543,7 @@ public class GUIUtilities
 		{
 			Dimension size = popup.getPreferredSize();
 
-			Rectangle screenSize = GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+			Rectangle screenSize = getScreenBounds();
 
 			if(x + offsetX + size.width + win.getX() > screenSize.width
 				&& x + offsetX + win.getX() >= size.width)
