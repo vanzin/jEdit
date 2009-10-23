@@ -97,11 +97,21 @@ public class BufferSet
 
 			if (sorter != null)
 			{
+				int prevPosition = -1;
 				if (buffers.contains(buffer))
-					return;
-				buffers.add(buffer);
+					prevPosition =  buffers.indexOf(buffer);
+				else
+					buffers.add(buffer);
 				Collections.sort(buffers, sorter);
 				position = buffers.indexOf(buffer);
+				if ((prevPosition != -1) && (position != prevPosition))
+				{
+					BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
+					Log.log(Log.DEBUG, this, hashCode() + ": Buffer moved " + buffer + " from " + prevPosition + " to " + position);
+					for (BufferSetListener listener : listeners)
+						listener.bufferMoved(buffer, prevPosition, position);
+					return;
+				}
 			}
 			else
 			{

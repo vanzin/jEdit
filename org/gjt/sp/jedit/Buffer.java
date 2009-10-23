@@ -29,6 +29,7 @@ import org.gjt.sp.jedit.buffer.*;
 import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
+import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.gui.StyleEditor;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
@@ -54,6 +55,7 @@ import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Vector;
 import java.util.Map;
 //}}}
@@ -2002,6 +2004,19 @@ public class Buffer extends JEditBuffer
 				}
 
 				setPath(path);
+				final HashSet<BufferSet> bufferSets = new HashSet<BufferSet>();
+				jEdit.visit(new JEditVisitorAdapter()
+				{
+					@Override
+					public void visit(EditPane editPane)
+					{
+						BufferSet bufferSet = editPane.getBufferSet(); 
+						if (bufferSet.indexOf(Buffer.this) != -1)
+							bufferSets.add(bufferSet);
+					}
+				});
+				for (BufferSet bufferSet: bufferSets)
+					jEdit.getBufferSetManager().addBuffer(bufferSet, this);
 			}
 			else
 			{

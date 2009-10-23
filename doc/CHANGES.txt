@@ -10,6 +10,9 @@ Suraj Kurapati for contributing to this release.
 - When using the quick syntax edition, if the operation is cancelled, do not
   send a propertiesChanged event (Matthieu Casanova)
 
+- Fixed bug #2881152 - Bufferset Order is incorrect after a "save as".
+  (#2882756 - Shlomy Reinstein)
+
 - Fixed bug #2806043: Token.tokenToString() throws
   ArrayIndexOutOfBoundsException on the END token. (Shlomy Reinstein)
 
@@ -93,7 +96,7 @@ Suraj Kurapati for contributing to this release.
 
 - New options to select the width and the background color of the selection area
   in the gutter (which is visible when line numbers are not shown).
-  
+
 - New button in Hypersearch dockable panel to stop an hypersearch
   (patch #2842444) (encorejane)
 }}}
@@ -132,14 +135,14 @@ Suraj Kurapati for contributing to this release.
 {{{ Editing
 - "try" keyword added to erlang edit mode (patch #2769870) (Chepel)
 
-- added assembly-agc (Apollo Guidance Computer) edit mode (patch #2848519) 
+- added assembly-agc (Apollo Guidance Computer) edit mode (patch #2848519)
   (Jim Lawton)
 
-- added assembly-ags (Apollo Abort Guidance System) edit mode (patch #2848519) 
+- added assembly-ags (Apollo Abort Guidance System) edit mode (patch #2848519)
   (Jim Lawton)
 
 - added binsource-agc (Apollo Guidance Computer Binary) edit mode  (Jim Lawton)
-  
+
 - Ruby edit mode updated (patch #2846453) (Suraj Kurapati)
 
 - Added *.sv (System Verilog) extension to verilog edit mode (feature #2814425)
