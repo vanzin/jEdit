@@ -10,6 +10,9 @@ Suraj Kurapati for contributing to this release.
 - When using the quick syntax edition, if the operation is cancelled, do not
   send a propertiesChanged event (Matthieu Casanova)
 
+- Fixed bug #2882702 - Right Click menu shows up to the left of the mouse
+  pointer in a multiple monitor environment.
+
 - Fixed bug #2881152 - Bufferset Order is incorrect after a "save as".
   (#2882756 - Shlomy Reinstein)
 
