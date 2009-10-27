@@ -2015,6 +2015,7 @@ public class Buffer extends JEditBuffer
 							bufferSets.add(bufferSet);
 					}
 				});
+				jEdit.getBufferSetManager().removeBuffer(this);
 				for (BufferSet bufferSet: bufferSets)
 					jEdit.getBufferSetManager().addBuffer(bufferSet, this);
 			}
