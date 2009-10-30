@@ -4803,6 +4803,7 @@ TODO:
 			<KEYWORD2>xdebug_is_enabled</KEYWORD2>
 			<KEYWORD2>xdebug_memory_usage</KEYWORD2>
 			<KEYWORD2>xdebug_peak_memory_usage</KEYWORD2>
+			<KEYWORD2>xdebug_print_function_stack</KEYWORD2>
 			<KEYWORD2>xdebug_start_code_coverage</KEYWORD2>
 			<KEYWORD2>xdebug_start_profiling</KEYWORD2><!-- version 1 only -->
 			<KEYWORD2>xdebug_start_trace</KEYWORD2><!-- version 1 only -->
