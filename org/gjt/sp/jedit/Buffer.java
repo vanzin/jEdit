@@ -2005,6 +2005,7 @@ public class Buffer extends JEditBuffer
 
 				setPath(path);
 				final HashSet<BufferSet> bufferSets = new HashSet<BufferSet>();
+				final HashSet<EditPane> editPanesCurrent = new HashSet<EditPane>();
 				jEdit.visit(new JEditVisitorAdapter()
 				{
 					@Override
@@ -2012,12 +2013,18 @@ public class Buffer extends JEditBuffer
 					{
 						BufferSet bufferSet = editPane.getBufferSet(); 
 						if (bufferSet.indexOf(Buffer.this) != -1)
+						{
 							bufferSets.add(bufferSet);
+							if (editPane.getBuffer() == Buffer.this)
+								editPanesCurrent.add(editPane);
+						}
 					}
 				});
 				jEdit.getBufferSetManager().removeBuffer(this);
 				for (BufferSet bufferSet: bufferSets)
 					jEdit.getBufferSetManager().addBuffer(bufferSet, this);
+				for (EditPane editPane: editPanesCurrent)
+					editPane.setBuffer(this);
 			}
 			else
 			{
