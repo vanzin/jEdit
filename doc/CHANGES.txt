@@ -2,7 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre19
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Marcelo Vanzin for contributing to this
+release.
 
 {{{ Bug Fixes
 
@@ -12,7 +13,18 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 
 }}}
+{{{ API Changes
 
+. Add support for type-specific EditBus message handlers. EditBus handlers
+  don't need to implement EBComponent anymore; they just need to annotate their
+  EditBus handler methods with the new "EBHandler" annotation. The methods
+  should expect a single argument (an instance of any EBMessage type), and the
+  method will be called whenever a message of a matching type is sent on the
+  EditBus. Classes that still implement EBComponent will continue to work
+  exactly like before, even if they include handlers using the new annotation.
+  (Marcelo Vanzin)
+
+}}}
 }}}
 
 {{{ Version 4.3pre18

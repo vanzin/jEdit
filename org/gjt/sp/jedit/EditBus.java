@@ -22,6 +22,8 @@
 
 package org.gjt.sp.jedit;
 
+import java.lang.annotation.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import org.gjt.sp.util.Log;
 
@@ -35,9 +37,19 @@ import org.gjt.sp.util.Log;
  *
  * The EditBus maintains a list of objects that have requested to receive
  * messages. When a message is sent using this class, all registered
- * components receive it in turn. Classes for objects that subscribe to
+ * components receive it in turn. Classes for objects that sourceibe to
  * the EditBus must implement the {@link EBComponent} interface, which
  * defines the single method {@link EBComponent#handleMessage(EBMessage)}.<p>
+ *
+ * Alternatively, since jEdit4.3pre19, EditBus components can be any
+ * object. Handlers for EditBus messages are created by annotating
+ * methods with the {@link EBHandler} annotation. Such methods should
+ * expect a single parameter - an edit bus message of any desired type.
+ * If a message matching the type (or any of its super-types, unless the
+ * annotation requests exact type matching) is being sent, the annotated
+ * method will be called instead of the default {@link
+ * EBComponent#handleMessage(EBMessage)}. If a handler exists for a
+ * specific message type, the default handler will not be called.<p>
  *
  * A plugin core class that extends the
  * {@link EBPlugin} abstract class (and whose name ends with
@@ -45,7 +57,7 @@ import org.gjt.sp.util.Log;
  * added to the EditBus during jEdit's startup routine.  Any other
  * class - for example, a dockable window that needs to receive
  * notification of buffer changes - must perform its own registration by calling
- * {@link #addToBus(EBComponent)} during its initialization.
+ * {@link #addToBus(Object)} during its initialization.
  * A convenient place to register in a class derived from <code>JComponent</code>
  * would be in an implementation of the <code>JComponent</code> method
  * <code>addNotify()</code>.<p>
@@ -69,6 +81,33 @@ import org.gjt.sp.util.Log;
  */
 public class EditBus
 {
+
+	//{{{ EBHandler annotation
+	/**
+	 * This annotation should be used in methods that are to be
+	 * considered "edit bus message handlers". When registering
+	 * an object using {@link #addToBus(Object)}, all methods
+	 * tagged with this annotation will be considered as handlers
+	 * for specific edit bus messages.<p>
+	 *
+	 * Each method should expect a single argument (an object of
+	 * some type derived from EBMessage, inclusive). When
+	 * delivering an EBMessage, the bus will search for and invoke
+	 * all handlers matching the outgoing message type.<p>
+	 *
+	 * @since jEdit 4.3pre19
+	 */
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.METHOD)
+	public static @interface EBHandler
+	{
+		/**
+		 * Whether the message should match the exact type of
+		 * the parameter, instead of a compatible type.
+		 */
+		boolean exact() default false;
+	} //}}}
+
 	//{{{ addToBus() method
 	/**
 	 * Adds a component to the bus. It will receive all messages sent
@@ -78,11 +117,27 @@ public class EditBus
 	 */
 	public static void addToBus(EBComponent comp)
 	{
-		synchronized(components)
-		{
-			components.add(comp);
-			copyComponents = null;
-		}
+		addToBus((Object)comp);
+	} //}}}
+
+	//{{{ addToBus() method
+	/**
+	 * Adds a component to the bus. Methods annotated with the
+	 * {@link EBHandler} annotation found in the component will
+	 * be used as EditBus message handlers if a message of a
+	 * matching type is sent on the bus.<p>
+	 *
+	 * If the component implements {@link EBComponent}, then the
+	 * {@link EBComponent#handleMessage(EBMessage)} method will be
+	 * called for every message sent on the bus.
+	 *
+	 * @param comp The component to add
+	 *
+	 * @since jEdit 4.3pre19
+	 */
+	public static void addToBus(Object comp)
+	{
+		components.addComponent(comp);
 	} //}}}
 
 	//{{{ removeFromBus() method
@@ -92,28 +147,30 @@ public class EditBus
 	 */
 	public static void removeFromBus(EBComponent comp)
 	{
-		synchronized(components)
-		{
-			components.remove(comp);
-			copyComponents = null;
-		}
+		removeFromBus((Object) comp);
+	} //}}}
+
+	//{{{ removeFromBus() method
+	/**
+	 * Removes a component from the bus.
+	 * @param comp The component to remove
+	 * @since 4.3pre19
+	 */
+	public static void removeFromBus(Object comp)
+	{
+		components.removeComponent(comp);
 	} //}}}
 
 	//{{{ getComponents() method
 	/**
 	 * Returns an array of all components connected to the bus.
+	 *
+	 * @deprecated Don't use this method. It now returns an empty array.
 	 */
+	@Deprecated
 	public static EBComponent[] getComponents()
 	{
-		synchronized(components)
-		{
-			if (copyComponents == null)
-			{
-				copyComponents = components.toArray(
-					new EBComponent[components.size()]);
-			}
-			return copyComponents;
-		}
+		return new EBComponent[0];
 	} //}}}
 
 	//{{{ send() method
@@ -125,42 +182,222 @@ public class EditBus
 	{
 		Log.log(Log.DEBUG,EditBus.class,message.toString());
 
-		// To avoid any problems if components are added or removed
-		// while the message is being sent
-		EBComponent[] comps = getComponents();
-
-		for(int i = 0; i < comps.length; i++)
+		components.lock();
+		try
 		{
-			try
-			{
-				EBComponent comp = comps[i];
-				if(Debug.EB_TIMER)
-				{
-					long start = System.nanoTime();
-					comp.handleMessage(message);
-					long time = System.nanoTime() - start;
-					if(time >= 1000000)
-					{
-						Log.log(Log.DEBUG,EditBus.class,comp + ": " + time + " ns");
-					}
-				}
-				else
-					comps[i].handleMessage(message);
-			}
-			catch(Throwable t)
-			{
-				Log.log(Log.ERROR,EditBus.class,"Exception"
-					+ " while sending message on EditBus:");
-				Log.log(Log.ERROR,EditBus.class,t);
-			}
+			sendImpl(message);
+		}
+		finally
+		{
+			components.unlock();
 		}
 	} //}}}
 
 	//{{{ Private members
-	private static final List<EBComponent> components = new ArrayList<EBComponent>();
-	private static EBComponent[] copyComponents;
+	private static final HandlerList components = new HandlerList();
 
 	// can't create new instances
 	private EditBus() {}
+
+	//{{{ dispatch() method
+	private static void dispatch(EBMessageHandler emh,
+				     EBMessage msg)
+		throws Exception
+	{
+		if (emh.handler != null)
+			emh.handler.invoke(emh.comp, msg);
+		else
+		{
+			assert (emh.comp instanceof EBComponent);
+			((EBComponent)emh.comp).handleMessage(msg);
+		}
+	} //}}}
+
+	//{{{ sendImpl() method
+	private static void sendImpl(EBMessage message)
+	{
+		boolean isExact = true;
+		Class<?> type = message.getClass();
+		while (!type.equals(Object.class))
+		{
+			List<EBMessageHandler> handlers = components.get(type);
+			if (handlers != null)
+			{
+				try
+				{
+					for (EBMessageHandler emh : handlers)
+					{
+						if (!isExact &&
+						    emh.source != null &&
+						    emh.source.exact())
+						{
+							continue;
+						}
+						if(Debug.EB_TIMER)
+						{
+							long start = System.nanoTime();
+							dispatch(emh, message);
+							long time = System.nanoTime() - start;
+							if(time >= 1000000)
+							{
+								Log.log(Log.DEBUG,EditBus.class,emh.comp + ": " + time + " ns");
+							}
+						}
+						else
+							dispatch(emh, message);
+					}
+				}
+				catch(Throwable t)
+				{
+					Log.log(Log.ERROR,EditBus.class,"Exception"
+						+ " while sending message on EditBus:");
+					Log.log(Log.ERROR,EditBus.class,t);
+				}
+			}
+			type = type.getSuperclass();
+			isExact = false;
+		}
+	} //}}}
+
 	//}}}
+
+	//{{{ EBMessageHandler class
+	private static class EBMessageHandler
+	{
+
+		EBMessageHandler(Object comp,
+				 Method handler,
+				 EBHandler source)
+		{
+			this.comp = comp;
+			this.handler = handler;
+			this.source = source;
+		}
+
+		Object comp;
+		Method handler;
+		EBHandler source;
+	} //}}}
+
+	//{{{ HandlerList class
+	/**
+	 * A "special" hash map that has some optimizations for use by
+	 * the EditBus. Notably, it allows setting a "read only" mode
+	 * where modifications to the map are postponed until the map
+	 * is unlocked.
+	 */
+	private static class HandlerList
+		extends HashMap<Class<?>, List<EBMessageHandler>>
+	{
+
+		public List<EBMessageHandler> safeGet(Class<?> type)
+		{
+			List<EBMessageHandler> lst = super.get(type);
+			if (lst == null) {
+				lst = new LinkedList<EBMessageHandler>();
+				super.put(type, lst);
+			}
+			return lst;
+		}
+
+
+		public synchronized void lock()
+		{
+			lock++;
+		}
+
+
+		public synchronized void unlock()
+		{
+			lock--;
+			if (lock == 0)
+			{
+				for (Object comp : add)
+					addComponent(comp);
+				for (Object comp : remove)
+					removeComponent(comp);
+				add.clear();
+				remove.clear();
+			}
+		}
+
+
+		public synchronized void removeComponent(Object comp)
+		{
+			if (lock != 0)
+			{
+				remove.add(comp);
+				return;
+			}
+
+			for (Class<?> msg : keySet())
+			{
+				List<EBMessageHandler> handlers = get(msg);
+				if (handlers == null)
+					continue;
+				for (Iterator<EBMessageHandler> it = handlers.iterator();
+				     it.hasNext(); )
+				{
+					EBMessageHandler emh = it.next();
+					if (emh.comp == comp)
+						it.remove();
+				}
+			}
+		}
+
+
+		public synchronized void addComponent(Object comp)
+		{
+			if (lock != 0)
+			{
+				add.add(comp);
+				return;
+			}
+
+			for (Method m : comp.getClass().getMethods())
+			{
+				EBHandler source = m.getAnnotation(EBHandler.class);
+				if (source == null)
+					continue;
+
+				Class[] params = m.getParameterTypes();
+
+				if (params.length != 1)
+				{
+					Log.log(Log.ERROR, EditBus.class,
+						"Invalid EBHandler method " + m.getName() +
+						" in class " + comp.getClass().getName() +
+						": too many parameters.");
+					continue;
+				}
+
+				if (!EBMessage.class.isAssignableFrom(params[0]))
+				{
+					Log.log(Log.ERROR, EditBus.class,
+						"Invalid parameter " + params[0].getName() +
+						" in method " + m.getName() +
+						" of class " + comp.getClass().getName());
+					continue;
+				}
+
+				synchronized (components)
+				{
+					safeGet(params[0]).add(new EBMessageHandler(comp, m, source));
+				}
+			}
+
+			/*
+			 * If the component implements EBComponent, then add the
+			 * default handler for backwards compatibility.
+			 */
+			if (comp instanceof EBComponent)
+				safeGet(EBMessage.class).add(new EBMessageHandler(comp, null, null));
+		}
+
+
+		private int lock;
+		private List<Object> add = new LinkedList<Object>();
+		private List<Object> remove = new LinkedList<Object>();
+	} //}}}
+
 }
