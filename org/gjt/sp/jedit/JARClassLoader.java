@@ -127,25 +127,27 @@ public class JARClassLoader extends ClassLoader
 	//{{{ getResourceAsStream() method
 	public InputStream getResourceAsStream(String name)
 	{
-		if(jar == null)
-			return null;
-
 		try
 		{
-			ZipFile zipFile = jar.getZipFile();
-			ZipEntry entry = zipFile.getEntry(name);
-			if(entry == null)
+			// try in current jar first
+			if(jar != null)
 			{
-				Object obj = resourcesHash.get(name);
-				if(obj instanceof JARClassLoader)
+				ZipFile zipFile = jar.getZipFile();
+				ZipEntry entry = zipFile.getEntry(name);
+				if(entry != null)
 				{
-					JARClassLoader classLoader = (JARClassLoader)obj;
-					return classLoader.getResourceAsStream(name);
+					return zipFile.getInputStream(entry);
 				}
-				return getSystemResourceAsStream(name);
 			}
-			else
-				return zipFile.getInputStream(entry);
+			// then try from another jar
+			Object obj = resourcesHash.get(name);
+			if(obj instanceof JARClassLoader)
+			{
+				JARClassLoader classLoader = (JARClassLoader)obj;
+				return classLoader.getResourceAsStream(name);
+			}
+			// finally try from the system class loader
+			return getSystemResourceAsStream(name);
 		}
 		catch(IOException io)
 		{
@@ -156,27 +158,30 @@ public class JARClassLoader extends ClassLoader
 	} //}}}
 
 	//{{{ getResource() method
+	/**
+	 * overriding getResource() because we want to search FIRST in this
+	 * ClassLoader, then the parent, the path, etc.
+	 */
 	public URL getResource(String name)
 	{
-		if(jar == null)
-			return null;
-
 		try
 		{
-			ZipFile zipFile = jar.getZipFile();
-			ZipEntry entry = zipFile.getEntry(name);
-			if(entry == null)
+			if(jar != null)
 			{
-				Object obj = resourcesHash.get(name);
-				if(obj instanceof JARClassLoader)
+				ZipFile zipFile = jar.getZipFile();
+				ZipEntry entry = zipFile.getEntry(name);
+				if(entry != null)
 				{
-					JARClassLoader classLoader = (JARClassLoader)obj;
-					return classLoader.getResource(name);
+					return new URL(getResourceAsPath(name));
 				}
-				return findResource(name);
 			}
-			else
-				return new URL(getResourceAsPath(name));
+			
+			Object obj = resourcesHash.get(name);
+			if(obj instanceof JARClassLoader)
+			{
+				JARClassLoader classLoader = (JARClassLoader)obj;
+				return classLoader.getResource(name);
+			} else return findResource(name);
 		}
 		catch(IOException io)
 		{
@@ -186,10 +191,22 @@ public class JARClassLoader extends ClassLoader
 	} //}}}
 
 	//{{{ getResourceAsPath() method
+	/**
+	 * construct a jeditresource:/etc path from the name
+	 * of a resource in the associated jar.
+	 * The existence of the resource is not actually checked.
+	 *
+	 * @param name name of the resource
+	 * @return jeditresource:/path_to_the_jar!name_of_the_resource
+	 * @throws UnsupportedOperationException if this is an anonymous
+	 * JARClassLoader (no associated jar).
+	 */
 	public String getResourceAsPath(String name)
 	{
+		// this must be fixed during plugin development
 		if(jar == null)
-			return null;
+			throw new UnsupportedOperationException(
+				"don't call getResourceAsPath() on anonymous JARClassLoader");
 
 		if(!name.startsWith("/"))
 			name = '/' + name;
@@ -249,7 +266,10 @@ public class JARClassLoader extends ClassLoader
 	} //}}}
 
 	//{{{ findResources() method
-	protected Enumeration findResources(String name) throws IOException
+	/**
+	 * @return zero or one resource, as returned by getResource()
+	 */
+	public Enumeration getResources(String name) throws IOException
 	{
 		class SingleElementEnumeration implements Enumeration
 		{
