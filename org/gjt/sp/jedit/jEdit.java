@@ -3343,6 +3343,10 @@ public class jEdit
 					new JARClassLoader());
 			}
 		});
+		// Also set the ContextClassLoader for the main jEdit thread.
+		// This way, the ContextClassLoader will be a JARClassLoader
+		// even at plugin activation.
+		Thread.currentThread().setContextClassLoader(new JARClassLoader());
 	} //}}}
 
 	//{{{ initSystemProperties() method
