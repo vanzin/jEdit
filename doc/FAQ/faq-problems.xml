@@ -2,7 +2,7 @@
 <sect1 id="problems">
     <title>Problems</title>
     <!-- jEdit buffer-local properties:                      -->
-    <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
+    <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
     <!-- jEdit FAQ                                           -->
     <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
@@ -168,8 +168,9 @@ view.unsplitCurrent();
 					Run this, and jEdit creates
                     a new TextArea for you, and that one won't be confused. This
                     can help avoid the need to restart jEdit. If you can
-                    reproduce the steps you took to cause this, please submit a bug report
-                    that details what plugins/versions you were using, and how to reproduce it. Especially take note of what linewrap mode - and fyi, we have received no reports of this from people who use hard/no line wrap. </para>
+                    reproduce the steps you took to cause this, please submit a
+                    bug report that details what plugins/versions you were
+                    using, and how to reproduce it. It may be specific to a file you are editing, or a particular combination of settings you are using, or sequence of actions you performed. </para>
                 </answer>
             </qandaentry>
             <qandaentry>
@@ -185,6 +186,15 @@ view.unsplitCurrent();
                     <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
                     Options</guimenuitem> dialog box.</para>
                 </answer>
+            </qandaentry>
+            <qandaentry>
+                <question id="antialiased-text-everywhere">
+                    <para>How can I get antialiased text everywhere? </para>
+                </question>
+                <answer>
+                   <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>. Note that "Standard" works over Microsoft remote desktop, while "subpixel" does not. <guimenuitem> Fractional Font Metrics</guimenuitem>, a very old option, combined with Subpixel does not seem to do anything good. </para>
+                   <para>Also, starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else. You can add these options to the batch file or shell script line that starts jEdit. </para>
+			    </answer>
             </qandaentry>
             <qandaentry>
                 <question id="install-no-such-file">
