@@ -2,11 +2,14 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre19
 
-Thanks to Björn "Vampire" Kautler and Marcelo Vanzin for contributing to this
-release.
+Thanks to Björn "Vampire" Kautler, Marcelo Vanzin and Eric Le Lay for
+contributing to this release.
 
 {{{ Bug Fixes
 
+- Applied patch #2876132 - anonymous instances of JARClassLoader will now
+  resolve resources like instances associated with a JAR file (fix for Xerces).
+  The context ClassLoader for jedit server thread is now a JARClassLoader.
 
 }}}
 {{{ Miscellaneous
