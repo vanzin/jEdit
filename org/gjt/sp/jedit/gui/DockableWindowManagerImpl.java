@@ -848,7 +848,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 			{
 				entry.container.unregister(entry);
 				entry.container = null;
-				if (entry.factory.movable)
+				if (entry.factory.movable && (! newPosition.equals(FLOATING)))
 				{
 					if (entry.win instanceof DockableWindow)
 						((DockableWindow)entry.win).move(newPosition);
