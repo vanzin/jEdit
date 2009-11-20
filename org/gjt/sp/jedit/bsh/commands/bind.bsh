@@ -4,7 +4,7 @@
 import org.gjt.sp.jedit.bsh.This;
 import org.gjt.sp.jedit.bsh.NameSpace;
 
-bind( bsh.This ths, bsh.NameSpace namespace ) {
+bind( org.gjt.sp.jedit.bsh.This ths, bsh.NameSpace namespace ) {
 	This.bind( ths, namespace, this.interpreter );
 }
 

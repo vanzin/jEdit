@@ -81,7 +81,7 @@ Object load( String filename )
 	oin.close();
 
 	// bind bsh objects into the caller's namespace
-	if ( obj instanceof bsh.This )
+	if ( obj instanceof org.gjt.sp.jedit.bsh.This )
 		bind( obj, this.caller.namespace );
 
 	return obj;
