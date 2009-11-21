@@ -28,7 +28,9 @@ import javax.swing.*;
 import javax.swing.tree.*;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
 import org.gjt.sp.jedit.gui.RolloverButton;
@@ -122,6 +124,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		dim.width = 400;
 		scrollPane.setPreferredSize(dim);
 		add(BorderLayout.CENTER, scrollPane);
+		resultTree.setTransferHandler(new ResultTreeTransferHandler());
 	} //}}}
 
 	//{{{ focusOnDefaultComponent() method
@@ -743,6 +746,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 
 				popupMenu.add(new RedoSearchAction((HyperSearchOperationNode)userObj));
 			}
+			popupMenu.add(new CopyToClipboardAction());
 
 			GUIUtilities.showPopupMenu(popupMenu,evt.getComponent(),
 				evt.getX(),evt.getY());
@@ -817,6 +821,51 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 			TreePath path = resultTree.getSelectionPath();
 			DefaultMutableTreeNode operNode = (DefaultMutableTreeNode)path.getLastPathComponent();
 			expandAllNodes(operNode);
+		}
+	}//}}}
+
+	//{{{ CopyToClipboardAction class
+	class CopyToClipboardAction extends AbstractAction
+	{
+		CopyToClipboardAction()
+		{
+			super(jEdit.getProperty("hypersearch-results.copy-to-clipboard"));
+		}
+
+		public void actionPerformed(ActionEvent evt)
+		{
+			TreePath path = resultTree.getSelectionPath();
+			DefaultMutableTreeNode operNode = (DefaultMutableTreeNode)
+				path.getLastPathComponent();
+			ToStringNodes toStringNodes = new ToStringNodes();
+			traverseNodes(operNode, toStringNodes);
+			StringSelection selection = new StringSelection(
+				toStringNodes.nodesString.toString());
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(selection, null);
+		}
+	}//}}}
+
+	//{{{ ToStringNodes class
+	class ToStringNodes implements HyperSearchTreeNodeCallback
+	{
+		StringBuilder nodesString = new StringBuilder();
+
+		public boolean processNode(DefaultMutableTreeNode node)
+		{
+			Object userObject = node.getUserObject();
+			if (userObject instanceof HyperSearchFileNode)
+				nodesString.append(((HyperSearchFileNode)userObject).path);
+			else if (userObject instanceof HyperSearchResult)
+			{
+				HyperSearchResult hsr = (HyperSearchResult)userObject;
+				// Copy the ORIGINAL line from the buffer!
+				nodesString.append(hsr.buffer == null ? hsr.toString() : hsr.buffer.getLineText(hsr.line));
+			}
+			else
+				nodesString.append(userObject.toString());
+			nodesString.append(System.getProperty("line.separator"));
+			return true;
 		}
 	}//}}}
 
@@ -1022,6 +1071,28 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		}//}}}
 	} //}}}
 
+	//{{{
+	class ResultTreeTransferHandler extends TransferHandler
+	{
+		@Override
+		public void exportToClipboard(JComponent comp, Clipboard clip,
+				int action) throws IllegalStateException
+		{
+			TreePath [] paths = resultTree.getSelectionPaths();
+			ToStringNodes toStringNodes = new ToStringNodes();
+			for (TreePath path: paths)
+			{
+				DefaultMutableTreeNode operNode = (DefaultMutableTreeNode)
+					path.getLastPathComponent();
+				toStringNodes.processNode(operNode);
+			}
+			StringSelection selection = new StringSelection(
+				toStringNodes.nodesString.toString());
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(selection, null);
+		}
+	} //}}}
+	
 	// these are used to eliminate code duplication. i don't normally use
 	// the visitor or "template method" pattern, but this code was contributed
 	// by Peter Cox and i don't feel like changing it around too much.
