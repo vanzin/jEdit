@@ -213,7 +213,7 @@ view.structureHighlight=true
 view.structureHighlightColor=#000000
 
 # EOL markers
-view.eolMarkers=true
+view.eolMarkers=false
 view.eolMarkerColor=#ff6633
 
 # Wrap guide
