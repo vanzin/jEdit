@@ -1765,6 +1765,16 @@ public class jEdit
 			{
 				if (buf.isUntitled() && !buf.isDirty())
 				{
+
+                    if (!MiscUtilities.getParentOfPath(buf.getPath()).equals(dir))
+                    {
+                        // Find the highest Untitled-n file
+                        int untitledCount = getNextUntitledBufferId();
+
+                        Buffer newBuffer = openFile(editPane,dir,"Untitled-" + untitledCount,true,null);
+                        jEdit.closeBuffer(editPane, buf);
+                        return newBuffer;
+                    }
 					/*  if  "never mark untitled buffers dirty"
 					 *  is selected, we might have contents in non-dirty
 					 *  untitled buffers. We must clear those contents

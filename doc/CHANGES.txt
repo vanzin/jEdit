@@ -2,8 +2,8 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3pre19
 
-Thanks to Björn "Vampire" Kautler, Marcelo Vanzin and Eric Le Lay for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova and 
+Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -13,8 +13,9 @@ contributing to this release.
 
 }}}
 {{{ Miscellaneous
-
-
+- When creating a new file from the VFS Browser, if a clean untitled buffer 
+  already exists but with another path it is now replaced by a new untitled 
+  buffer using the selected path (Matthieu Casanova)
 }}}
 {{{ API Changes
 
