@@ -947,6 +947,7 @@ about.version=jEdit {0} {1} mode, using Java {2}
 about.mode.standalone=standalone
 about.mode.server=server
 about.mode.server-background=server-background
+about.navigate=Press arrow keys to navigate about text
 
 # This text scrolls by in the about dialog box.
 # Hack: Since StringTokenizer treats two consequent \n as one token, we
@@ -1033,7 +1034,7 @@ about.text=jEdit is brought to you by\n\
 	Jim Lawton\n\
 	Jim Morris\n\
 	Jim Wissner\n\
-	Joerg Spieler\n\
+	J\u00f6rg Spieler\n\
 	John Gellene\n\
 	John Perry\n\
 	Jonathan Revusky\n\

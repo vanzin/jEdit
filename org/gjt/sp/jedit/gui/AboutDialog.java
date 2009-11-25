@@ -45,7 +45,7 @@ public class AboutDialog extends JDialog implements ActionListener
 		getRootPane().setDefaultButton(closeBtn);
 
 		JPanel p = new JPanel(new BorderLayout());
-		AboutPanel aboutPanel = new AboutPanel();
+		final AboutPanel aboutPanel = new AboutPanel();
 		JPanel flowP = new JPanel(new FlowLayout());
 		flowP.add(closeBtn);
 		flowP.add(Box.createRigidArea(new Dimension(40, 40)));
@@ -55,6 +55,15 @@ public class AboutDialog extends JDialog implements ActionListener
 		p.add(BorderLayout.NORTH, Box.createRigidArea(new Dimension(10, 10)));
 		p.add(BorderLayout.SOUTH, flowP);
 		p.add(BorderLayout.CENTER, aboutPanel);
+
+		closeBtn.setToolTipText(jEdit.getProperty("about.navigate"));
+		closeBtn.addKeyListener(new KeyAdapter()
+		{
+			public void keyPressed(KeyEvent e)
+			{
+				aboutPanel.handleKeyEvent(e);
+			}
+		});
 
 		setContentPane(p);
 		pack();
@@ -107,6 +116,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			iTopPadding = 120;
 		private static Rectangle2D.Float rectangle;
 		private static GradientPaint gradientPaint;
+		private boolean skipDrain = false;
 
 		AboutPanel()
 		{
@@ -160,8 +170,30 @@ public class AboutDialog extends JDialog implements ActionListener
 			updateUI();
 		}
 
+		private void handleKeyEvent(KeyEvent e)
+		{
+			if (e.getKeyCode() == KeyEvent.VK_DOWN)
+			{
+				skipDrain = false;
+				Collections.rotate(vLines, -1);
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_UP)
+			{
+				skipDrain = false;
+				Collections.rotate(vLines, 1);
+			}
+			else if ((e.getKeyCode() == KeyEvent.VK_LEFT) ||
+					(e.getKeyCode() == KeyEvent.VK_RIGHT) ||
+					(e.getKeyCode() == KeyEvent.VK_ESCAPE))
+			{
+				skipDrain = ! skipDrain;
+			}
+		}
+
 		private void drain()
 		{
+			if (skipDrain)
+				return;
 			if (bufImage == null)
 			{
 				//pre-computing all data that can be known at this time
