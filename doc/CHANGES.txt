@@ -16,6 +16,11 @@ Eric Le Lay for contributing to this release.
 - When creating a new file from the VFS Browser, if a clean untitled buffer 
   already exists but with another path it is now replaced by a new untitled 
   buffer using the selected path (Matthieu Casanova)
+  
+- Applied patch #2887515: Navigate in AboutDialog (contributed by spj).
+  The name list in the about dialog can be scrolled faster using the up and
+  down arrow keys, and the scrolling can be stopped using the right and left
+  arrow keys or the escape key.
 }}}
 {{{ API Changes
 
