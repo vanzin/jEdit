@@ -208,7 +208,8 @@ public class MiscUtilities
 	 */
 	public static String abbreviate(String path)
 	{
-		// return path;
+		if (svc == null)
+			svc = new VarCompressor();
 		return svc.compress(path);
 	} //}}}
 
@@ -1759,7 +1760,7 @@ loop:		for(;;)
 
 	//}}}
 
-	static final VarCompressor svc = new VarCompressor();
+	static VarCompressor svc = null;
 
 	//{{{ VarCompressor class
 	/**
@@ -1785,9 +1786,8 @@ loop:		for(;;)
 				if (k.equalsIgnoreCase("pwd") || k.equalsIgnoreCase("oldpwd")) continue;
 				if (!Character.isLetter(k.charAt(0))) continue;
 				String v = env.get(k);
-				final File f = new File(v);
-				// only add valid directories to the prefix map
-				if (!f.isDirectory()) continue;
+				// only add possible candidates to the prefix map
+				if (!canBePathPrefix(v)) continue;
 				// no need for trailing file separator
 				if (v.endsWith(File.separator))
 					v = v.substring(0, v.length()-1);
@@ -1853,6 +1853,18 @@ loop:		for(;;)
 			}
 			previous.put(original, path);
 			return path;
+		} //}}}
+
+		//{{{ canBePathPrefix() method
+		// Returns true if the argument may absolutely point a directory.
+		// For speed, no access to file system or network should happen.
+		private boolean canBePathPrefix(String s)
+		{
+			// Do not use File#isDirectory() since it causes
+			// access to file system or network to check if
+			// the directory is actually exists.
+			return !s.contains(File.pathSeparator)
+				&& new File(s).isAbsolute();
 		} //}}}
 	} //}}}
 
