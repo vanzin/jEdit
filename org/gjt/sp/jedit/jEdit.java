@@ -90,8 +90,8 @@ public class jEdit
 	 */
 	public static String getBuild()
 	{
-		// (major).(minor).(<99 = preX, 99 = final).(bug fix)
-		return "04.03.19.00";
+		// (major).(minor).(<99 = preX, 99 = "final").(bug fix)
+		return "04.03.99.00";
 	} //}}}
 
 	//{{{ main() method
@@ -1770,7 +1770,7 @@ public class jEdit
 					{
 						// Find the highest Untitled-n file
 						int untitledCount = getNextUntitledBufferId();
-						
+
 						Buffer newBuffer = openFile(editPane,dir,"Untitled-" + untitledCount,true,null);
 						jEdit.closeBuffer(editPane, buf);
 						return newBuffer;
@@ -4352,7 +4352,7 @@ loop:		for(int i = 0; i < list.length; i++)
 		private View view;
 		private ViewConfig config;
 		private int startupDoneIndex;
-		
+
 		DockingLayoutSetter(View view, ViewConfig config, int startupDoneIndex)
 		{
 			this.view = view;
