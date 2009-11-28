@@ -10,7 +10,7 @@
 
 	<!-- jEdit Version -->
 	<property name="jedit.version"
-			  value="4.3.0" />
+			  value="4.3" />
 	<property name="jedit.build.number"
 			  value="04.03.99.00" />
 
@@ -390,15 +390,15 @@
 			unless="news.is.up.to.date">
 		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
 			  unless="config.xsltproc.executable" />
-		<mkdir dir="${doc.output.location}/news44" />
+		<mkdir dir="${doc.output.location}/news43" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
 			<arg line="${xsltproc.cygwin.arg}" />
 			<arg value="--output" />
-			<arg value="../${doc.output.location}/news44/" />
+			<arg value="../${doc.output.location}/news43/" />
 			<arg value="jedithtml.xsl" />
-			<arg value="news44/news.xml" />
+			<arg value="news43/news.xml" />
 		</exec>
 	</target>
 
@@ -465,11 +465,11 @@
 				   type="file" />
 		<antcall target="generate-doc-faq" />
 		<dependset>
-			<srcfileset dir="doc/news44" />
-			<targetfileset dir="${doc.output.location}/news44" />
+			<srcfileset dir="doc/news43" />
+			<targetfileset dir="${doc.output.location}/news43" />
 		</dependset>
 		<available property="news.is.up.to.date"
-				   file="${doc.output.location}/news44/toc.xml"
+				   file="${doc.output.location}/news43/toc.xml"
 				   type="file" />
 		<antcall target="generate-doc-news" />
 		<dependset>

@@ -19,15 +19,14 @@
             the file <filename>COPYING.DOC.txt</filename> included with the
             jEdit distribution.</para>
         </legalnotice>
-        <title>What's New in jEdit 4.4</title>
+        <title>What's New in jEdit 4.3</title>
     </bookinfo>
     <preface id="preface">
         <title>Preface</title>
-		<para> First of all, jEdit 4.4 is the new name for jEdit 4.3.
-		We had to "skip" a point release in order to avoid version numbering
-		confusion. No longer will jEdit be called "pre" or "final":
-		instead, we are moving over to straight-decimal x.y.z.w version
-		numbering scheme. 
+		<para>
+		No longer will jEdit be called "pre" or "final":
+		instead, we are moving over to straight-decimal x.y.z version
+		numbering scheme.
 		</para>
         <para>jEdit is a very mature text editor, and has gone through a very
         interesting phase of development. Left in a "prerelease" stage for about
@@ -74,15 +73,15 @@
         <para>This release would not have been possible if it were not for the
         frequent help and efforts of Dale Anson, Jeffrey Hoyt, Marcelo Vanzin,
         Matthieu Casanova, Kazutoshi Satoda, Shlomy Reinstein, Seph Soliman,
-		Eric Berry, Robert Schwenn, and Björn "Vampire" Kautler. 
-		I would also like to give sincere thanks to all 
+		Eric Berry, Robert Schwenn, and Björn "Vampire" Kautler.
+		I would also like to give sincere thanks to all
         of the other core and plugin developers who
         have made <ulink url="../CHANGES.txt">significant contributions</ulink>
         to help keep this editor alive and on the cutting edge.</para>
     </preface>
     <chapter id="compatibility">
         <title>Java Compatibility</title>
-        <para>jEdit 4.4 requires Sun
+        <para>jEdit 4.3 requires Sun
         Java 1.5.0 or later. Older versions of Java are not supported.</para>
         <para>If you want to use the new LCD Antialiasing feature of Java 1.6,
         it is supported. From <guimenuitem>Global Options - Text Area -
@@ -92,7 +91,7 @@
     </chapter>
     <chapter id="user-changes">
         <title>User-Visible Changes</title>
-		
+
 		<orderedlist>
         <listitem><para> Most likely, you'll notice first the new Tango icon set,
         used for the toolbar icons.  If for some reason you are nostalgic
@@ -101,7 +100,7 @@
         <listitem><para> There is an enhanced Status Bar (and accompanying service API
 		to allow plugins to add new status bar diaplay/controls). </para></listitem>
         <listitem><para>
-		It is now possible to choose different, independent Buffer Sets 
+		It is now possible to choose different, independent Buffer Sets
 		for each EditPane buffer switcher. See <ulink
 		url="../users-guide/buffersets.html">Buffer Sets</ulink> for more
 		information.  </para></listitem>
@@ -110,9 +109,9 @@
         dockable window managers. Some of them give jEdit a very
         Eclipse-like feel. In addition, it is now possible to save and load
         dockable layouts, which are analogous to Eclipse perspectives.
-        </para></listitem>         
+        </para></listitem>
         </orderedlist>
-		
+
         <section id="readded">
             <title>Re-added Features</title>
             <para>Soft wrapping to the text area, one of my personal favorite
@@ -145,8 +144,8 @@
             Methods</ulink> are now supported in jEdit. This should make it much
             easier for people to use alternate keyboard input methods to use
             jEdit and enter Chinese/Korean/Japanese characters, as well as other
-            alternative input devices. Thank you, Kazutoshi Satoda, for 
-            fixing that and many other encoding and internationalization problems that 
+            alternative input devices. Thank you, Kazutoshi Satoda, for
+            fixing that and many other encoding and internationalization problems that
             prevented non-English speaking users from using jEdit properly
             in their native language.</para>
         </section>
@@ -198,7 +197,7 @@
             <title>Bundled Macros</title>
             <para>There are a number of new bundled macros, and most of the
             existing ones have undergone enhancements and bug fixes. jEdit 4.2
-            bundled 58 macros in 7 categories; jEdit 4.4 bundles 75 macros in 9
+            bundled 58 macros in 7 categories; jEdit 4.3 bundles 75 macros in 9
             categories.</para>
             <para>Of course you can create new macros of your own, either by
             recording actions or writing them from scratch.</para>
@@ -270,7 +269,7 @@
         incorporated into the core, but are left as separate plugins simply
         because it makes it easier for us to maintain and debug them.</para>
 		<para>The latest version of <emphasis role="bold">Console</emphasis>
-		has many improvements, and takes advantage of new features of jEdit. </para> 
+		has many improvements, and takes advantage of new features of jEdit. </para>
         <para>Navigator, providing a navigable history, is new and improved - it
         provides the user with Eclipse-like Navigation to previous locations,
         for each TextArea of each View. It uses new EditBus messages which
@@ -302,7 +301,7 @@
         JavaSideKick, XML, and PerlSideKick. Be sure to try them out.</para>
         <para>In case you're looking for JavaCore, JBrowse, CodeAid,
         DotComplete, or PropertySideKick, they have all been merged (in terms of
-        functionality) into the new JavaSideKick plugin. Some other plugins that 
+        functionality) into the new JavaSideKick plugin. Some other plugins that
 		depend on these above plugins still need to be converted to use
 		JavaSideKick instead of the old java plugins listed above. </para>
         <para>As for HtmlSideKick, JavaScriptSideKick, and XmlIndenter, they
@@ -313,7 +312,7 @@
         very clever ContextMenu plugin. </para>
 		<para>The SVNPlugin is new, and the JDiff plugin is improved. Many
 		other plugins have latest versions that require jEdit 4.3. </para>
-		
+
     </chapter>
     <chapter id="futureplans">
         <title>Future Plans</title>

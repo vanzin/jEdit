@@ -1463,7 +1463,7 @@ loop:		for(;;)
 
 		return major + "." + minor
 			+ (beta != 99 ? "rc" + beta :
-			(bugfix != 0 ? "." + bugfix : ".0"));
+			(bugfix != 0 ? "." + bugfix : ""));
 	} //}}}
 
 	//{{{ isToolsJarAvailable() method
