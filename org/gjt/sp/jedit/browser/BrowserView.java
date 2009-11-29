@@ -57,6 +57,7 @@ class BrowserView extends JPanel
 
 		parentDirectories = new ParentDirectoryList();
 		parentDirectories.addKeyListener(keyListener);
+		parentDirectories.setName("parent");
 		
 		parentDirectories.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		parentDirectories.setCellRenderer(new ParentDirectoryRenderer());
@@ -68,6 +69,7 @@ class BrowserView extends JPanel
 
 		table = new VFSDirectoryEntryTable(this);
 		table.addMouseListener(new TableMouseHandler());
+		table.setName("file");
 		JScrollPane tableScroller = new JScrollPane(table);
 		tableScroller.setMinimumSize(new Dimension(0,0));
 		tableScroller.getViewport().setBackground(table.getBackground());

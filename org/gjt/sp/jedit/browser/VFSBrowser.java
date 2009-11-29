@@ -210,6 +210,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		pathAndFilterPanel.add(label);
 
 		pathField = new HistoryTextField("vfs.browser.path");
+		pathField.setName("path");
 		pathField.addKeyListener(keyListener);
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
@@ -252,6 +253,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 
 		filterCheckbox.addActionListener(actionHandler);
 		filterCheckbox.addKeyListener(keyListener);
+		filterCheckbox.setName("filter-checkbox");
 		if(mode != CHOOSE_DIRECTORY_DIALOG)
 		{
 			cons.gridwidth = 1;
@@ -269,6 +271,7 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		filterEditor.setSelectAllOnFocus(true);
 		filterEditor.addActionListener(actionHandler);
 		filterEditor.addKeyListener(keyListener);
+		filterField.setName("filter-field");
 		String filter;
 		if(mode == BROWSER || !jEdit.getBooleanProperty(
 			"vfs.browser.currentBufferFilter"))
@@ -1524,7 +1527,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setText(jEdit.getProperty("vfs.browser.commands.label"));
 			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 			setHorizontalTextPosition(SwingConstants.LEADING);
-
+			setName("commands");
+			
 			popup = new BrowserCommandsMenu(VFSBrowser.this,null);
 
 			CommandsMenuButton.this.setRequestFocusEnabled(false);
@@ -1569,7 +1573,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setText(jEdit.getProperty("vfs.browser.plugins.label"));
 			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 			setHorizontalTextPosition(SwingConstants.LEADING);
-
+			setName("plugins");
+			
 			PluginsMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(1,1,1,1));
 			PluginsMenuButton.this.addMouseListener(new MouseHandler());
@@ -1627,7 +1632,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			setText(jEdit.getProperty("vfs.browser.favorites.label"));
 			setIcon(GUIUtilities.loadIcon(jEdit.getProperty("dropdown-arrow.icon")));
 			setHorizontalTextPosition(SwingConstants.LEADING);
-
+			setName("favorites");
+			
 			FavoritesMenuButton.this.setRequestFocusEnabled(false);
 			setMargin(new Insets(1,1,1,1));
 			FavoritesMenuButton.this.addMouseListener(new MouseHandler());

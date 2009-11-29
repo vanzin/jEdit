@@ -301,6 +301,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		filenameField = new VFSFileNameField(browser,null);
 		filenameField.setText(name);
 		filenameField.selectAll();
+		filenameField.setName("filename");
 		browser.setDefaultFocusComponent(filenameField);
 		Box box = new Box(BoxLayout.Y_AXIS);
 		box.add(Box.createGlue());
@@ -319,6 +320,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		panel.add(Box.createHorizontalStrut(12));
 
 		ok = new JButton();
+		ok.setName("ok");
 		getRootPane().setDefaultButton(ok);
 
 		switch(mode)
@@ -342,6 +344,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		panel.add(ok);
 		panel.add(Box.createHorizontalStrut(6));
 		cancel = new JButton(jEdit.getProperty("common.cancel"));
+		cancel.setName("cancel");
 		cancel.addActionListener(new ActionHandler());
 		panel.add(cancel);
 
