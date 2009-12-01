@@ -283,6 +283,9 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	@Override
 	public void mouseDragged(MouseEvent evt)
 	{
+		if (isPopupTrigger(evt))
+			return;
+
 		if(maybeDragAndDrop)
 		{
 			textArea.startDragAndDrop(evt,control);
