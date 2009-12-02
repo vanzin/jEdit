@@ -1778,6 +1778,8 @@ loop:		while (true)
 					{
 						String path = (String)obj;
 						buffer = jEdit.getBuffer(path);
+						if (buffer == null)
+							buffer = jEdit.openFile(this, path);
 					}
 
 					if(buffer == null)
