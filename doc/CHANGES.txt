@@ -2,4 +2,13 @@ JEDIT 4.4 VERSION HISTORY
 
 {{{ Version 4.4pre1
 
+Thanks to: Alan Ezust, Eric Berry, and Shlomy Reinstein.
+
+{{{ Bug Fixes
+
+- Fixed bug #2907139: Upgrading from 4.2final to 4.3pre18 causes freeze at
+  startup (Shlomy Reinstein)
+
+}}}
+
 }}}
