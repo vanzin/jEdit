@@ -1462,7 +1462,7 @@ loop:		for(;;)
 		int bugfix = Integer.parseInt(build.substring(9,11));
 
 		return major + "." + minor
-			+ (beta != 99 ? "rc" + beta :
+			+ (beta != 99 ? "pre" + beta :
 			(bugfix != 0 ? "." + bugfix : ""));
 	} //}}}
 
