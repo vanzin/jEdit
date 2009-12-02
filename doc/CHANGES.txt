@@ -2,6 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3.0
 
+
 Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova and
 Eric Le Lay for contributing to this release.
 
@@ -10,6 +11,9 @@ Eric Le Lay for contributing to this release.
 - Applied patch #2876132 - anonymous instances of JARClassLoader will now
   resolve resources like instances associated with a JAR file (fix for Xerces).
   The context ClassLoader for jedit server thread is now a JARClassLoader.
+
+- Fixed bug #2907139: Upgrading from 4.2final to 4.3pre18 causes freeze at
+  startup (Shlomy Reinstein)
 
 }}}
 {{{ Miscellaneous
