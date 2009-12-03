@@ -2,11 +2,16 @@ JEDIT 4.4 VERSION HISTORY
 
 {{{ Version 4.4pre1
 
-Thanks to: Alan Ezust, Eric Berry, Shlomy Reinstein and Eric Le Lay.
+Thanks to: Alan Ezust, Eric Berry, Shlomy Reinstein,
+Eric Le Lay and Bernhard Walle.
 
 {{{ Bug fixes
 
 - fix #1439605 - remove installer.VariableGridLayout (r16596).
+
+- Added the missing doxygen commands for doxygen v1.6.1
+  (bug #2895272 - report and patch from Bernhard Walle).
+  doxygen now highlights quoted strings in comments.
 
 }}}
 
