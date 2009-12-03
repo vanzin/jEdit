@@ -82,6 +82,7 @@ see http://jedit.org/users-guide/installing-modes.html
       <!-- conditionals -->
       <KEYWORD4>FOREACH</KEYWORD4>
       <KEYWORD4>ELSE</KEYWORD4>
+      <KEYWORD4>ELSEIF</KEYWORD4> 
       <KEYWORD4>IF</KEYWORD4>
       <KEYWORD4>MACRO</KEYWORD4>
       <KEYWORD4>ENDIF</KEYWORD4>
