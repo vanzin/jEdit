@@ -2,10 +2,11 @@ JEDIT 4.4 VERSION HISTORY
 
 {{{ Version 4.4pre1
 
-Thanks to: Alan Ezust, Eric Berry, and Shlomy Reinstein.
+Thanks to: Alan Ezust, Eric Berry, Shlomy Reinstein and Eric Le Lay.
 
 {{{ Bug fixes
 
+- fix #1439605 - remove installer.VariableGridLayout (r16596).
 
 }}}
 
