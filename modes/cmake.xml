@@ -11,7 +11,7 @@ see http://jedit.org/users-guide/installing-modes.html
 -->
 <MODE>
 	<PROPS>
-		<PROPERTY NAME="lineCommenti" VALUE="#"/>
+		<PROPERTY NAME="lineComment" VALUE="#"/>
 
 		<PROPERTY NAME="indentSize" VALUE="4"/>
 		<PROPERTY NAME="firstlineGlob" VALUE=""/>
