@@ -164,6 +164,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		/* Fractional font metrics */
 		fracFontMetrics = new JCheckBox(jEdit.getProperty("options.textarea"
 			+ ".fracFontMetrics"));
+		fracFontMetrics.setToolTipText(jEdit.getProperty("options.textarea.fracFontMetrics.tooltip"));
 		fracFontMetrics.setSelected(jEdit.getBooleanProperty("view.fracFontMetrics"));
 		addComponent(fracFontMetrics);
 
