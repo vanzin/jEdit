@@ -3,8 +3,8 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3.0
 
 
-Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova and
-Eric Le Lay for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova,
+Alan Ezust, Eric Berry, and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -17,9 +17,6 @@ Eric Le Lay for contributing to this release.
 
 }}}
 {{{ Miscellaneous
-
-- Changed versioning system. Instead of "pre" it is "rc", and instead of
-  "final" it's just ".0". (Alan Ezust)
 
 - When creating a new file from the VFS Browser, if a clean untitled buffer
   already exists but with another path it is now replaced by a new untitled
@@ -46,6 +43,10 @@ Eric Le Lay for contributing to this release.
   exactly like before, even if they include handlers using the new annotation.
   (Marcelo Vanzin)
 
+}}}
+{{{ Editing
+
+- Removed : from electricKeys property in python.xml edit mode. (Alan Ezust)
 }}}
 }}}
 
