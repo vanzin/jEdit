@@ -2,10 +2,12 @@ JEDIT 4.4 VERSION HISTORY
 
 {{{ Version 4.4pre1
 
-Thanks to: Alan Ezust, Eric Berry, Shlomy Reinstein,
-Eric Le Lay and Bernhard Walle.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy Reinstein,
+Eric Le Lay and Bernhard Walle for contributing to this release.
 
 {{{ Bug fixes
+
+- Fixed some quirks in the Python edit mode (Björn "Vampire" Kautler)
 
 - fix #1439605 - remove installer.VariableGridLayout (r16596).
 
@@ -14,14 +16,13 @@ Eric Le Lay and Bernhard Walle.
   doxygen now highlights quoted strings in comments.
 
 }}}
-
 {{{ API changes
+
 
 }}}
 {{{ Miscellaneous
 
 
-
+}}}
 }}}
 
-}}}
