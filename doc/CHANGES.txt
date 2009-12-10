@@ -50,7 +50,8 @@ Alan Ezust, Eric Berry, and Eric Le Lay for contributing to this release.
 }}}
 {{{ Editing
 
-- Removed : from electricKeys property in python.xml edit mode. (Alan Ezust)
+-  Improved Python edit mode (Björn "Vampire" Kautler) w.r.t. electricKeys.
+
 }}}
 }}}
 
