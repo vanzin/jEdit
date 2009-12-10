@@ -8,9 +8,13 @@ Alan Ezust, Eric Berry, and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
 
+- Merged rev# 16624 from trunk, to fix printing which was broken by
+  patch#2876132. (Eric Le Lay)
+
 - Applied patch #2876132 - anonymous instances of JARClassLoader will now
   resolve resources like instances associated with a JAR file (fix for Xerces).
   The context ClassLoader for jedit server thread is now a JARClassLoader.
+  (Eric Le Lay)
 
 - Fixed bug #2907139: Upgrading from 4.2final to 4.3pre18 causes freeze at
   startup (Shlomy Reinstein)

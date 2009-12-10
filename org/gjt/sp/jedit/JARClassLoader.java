@@ -181,7 +181,16 @@ public class JARClassLoader extends ClassLoader
 			{
 				JARClassLoader classLoader = (JARClassLoader)obj;
 				return classLoader.getResource(name);
-			} else return findResource(name);
+			} else
+			{
+				URL ret = getSystemResource(name); 
+				if(ret != null)
+				{
+					Log.log(Log.DEBUG,JARClassLoader.class,"Would have returned null for getResource("+name+")");
+					Log.log(Log.DEBUG,JARClassLoader.class,"returning("+ret+")");
+				}
+				return ret;
+			}
 		}
 		catch(IOException io)
 		{
