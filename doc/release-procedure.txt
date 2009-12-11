@@ -19,7 +19,14 @@ Release procedure of jEdit
 
 3. Make a release branch. (ex. "/branches/M.N.x")
 
-  Anytime after this, the step 1 of the next release can be started.
+  To keep stabilizing the release, only the following changes are
+  allowed on the branch.
+    - Bumping up of the version number.
+    - Changes under "doc" directory.
+    - Merging of reviewed changes from the trunk. (See step 5 below)
+
+  Anytime after making the branch, the step 1 of the next release can be
+  started.
 
 4. Make a RC (release-candidate) from the branch. (ex. M.N-rc1)
 
