@@ -323,21 +323,18 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			int start = textArea.getLineStartOffset(currLine);
 			int dot = caretPosition - start;
 
- 			if(dot < 0)
- 				return;
- 
+			if(dot < 0)
+				return;
+
 			int bufferLength = buffer.getLength();
 
- 			buffer.getText(start,dot,seg);
- 			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
- 				buffer.getTabSize());
+			buffer.getText(start,dot,seg);
+			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
+				buffer.getTabSize());
 			// for GC
 			seg.array = null;
 			seg.count = 0;
- 
-			// per lengthy discussion on dev list, format for caret
-			// position is lineno,dot-virtual (caret/total) e.g.
-			// 388,10-31 (8835/13414).  No more "Top" nor "Bottom".
+
 			if (jEdit.getBooleanProperty("view.status.show-caret-linenumber", true))
 			{
 				buf.append(currLine + 1);
@@ -353,7 +350,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				buf.append('-');
 				buf.append(virtualPosition + 1);
 			}
-			if (buf.length() > 0) 
+			if (buf.length() > 0)
 			{
 				buf.append(' ');
 			}
@@ -378,10 +375,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				buf.append(bufferLength);
 				buf.append(')');
 			}
-				
- 			caretStatus.setText(buf.toString());
- 			buf.setLength(0);
- 		}			
+
+			caretStatus.setText(buf.toString());
+			buf.setLength(0);
+		}
 	} //}}}
 
 	//{{{ updateBufferStatus() method
@@ -427,7 +424,6 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private boolean showCaretStatus;
 	//}}}
 
-	//static final String caretTestStr = "99999999,9999,999-999 99%";
 	static final String caretTestStr = "9999,999-999 (99999999/99999999)";
 
 	//{{{ getWidget() method
