@@ -67,7 +67,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 
 		// SILLY: allow for anti-aliased characters' "fuzz"
 		if(wrapMargin != 0.0f)
-			this.wrapMargin = wrapMargin += 2.0f;
+			this.wrapMargin = wrapMargin + 2.0f;
 		else
 			this.wrapMargin = 0.0f;
 

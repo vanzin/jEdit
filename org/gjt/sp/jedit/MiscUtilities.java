@@ -1781,11 +1781,12 @@ loop:		for(;;)
 			Map<String, String> env = pb.environment();
 			if (OperatingSystem.isUnix())
 				prefixMap.put(System.getProperty("user.home"), "~");
-			for (String k: env.keySet())
+			for (Map.Entry<String, String> entry: env.entrySet())
 			{
+				String k = entry.getKey();
 				if (k.equalsIgnoreCase("pwd") || k.equalsIgnoreCase("oldpwd")) continue;
 				if (!Character.isLetter(k.charAt(0))) continue;
-				String v = env.get(k);
+				String v = entry.getValue();
 				// only add possible candidates to the prefix map
 				if (!canBePathPrefix(v)) continue;
 				// no need for trailing file separator

@@ -219,7 +219,7 @@ public class EditServer extends Thread
 			{
 				if(buffer == null)
 					buffer = jEdit.getFirstBuffer();
-				view = jEdit.newView(null,buffer);
+				jEdit.newView(null,buffer);
 			}
 			else if(buffer != null)
 				view.setBuffer(buffer,false);

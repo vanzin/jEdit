@@ -517,7 +517,7 @@ public class JARClassLoader extends ClassLoader
 			catch (MalformedURLException e) {}
 		}
 
-		Package pkg=definePackage(
+		definePackage(
 			name,
 			getMfValue(sa, ma, Name.SPECIFICATION_TITLE),
 			getMfValue(sa, ma, Name.SPECIFICATION_VERSION),

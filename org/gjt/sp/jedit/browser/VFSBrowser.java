@@ -763,7 +763,6 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		VFS vfs = VFSManager.getVFSForPath(from);
 
 		String filename = vfs.getFileName(from);
-		String[] args = { filename };
 		String to = newname;
 		
 		if(to == null || filename.equals(newname))

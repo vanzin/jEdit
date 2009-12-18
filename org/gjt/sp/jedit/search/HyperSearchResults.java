@@ -1054,7 +1054,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		} //}}}
 
 		//{{{ CountNodes class
-		class CountNodes implements HyperSearchTreeNodeCallback
+		static class CountNodes implements HyperSearchTreeNodeCallback
 		{
 			int bufferCount;
 			int resultCount;

@@ -419,7 +419,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			return name;
 		}
 
-		private class KeyCompare implements Comparator<GrabKeyDialog.KeyBinding[]>
+		static private class KeyCompare implements Comparator<GrabKeyDialog.KeyBinding[]>
 		{
 			private int col;
 

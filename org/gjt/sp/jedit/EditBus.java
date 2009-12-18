@@ -330,9 +330,10 @@ public class EditBus
 				return;
 			}
 
-			for (Class<?> msg : keySet())
+			for (Map.Entry<Class<?>, List<EBMessageHandler>> entry: entrySet())
 			{
-				List<EBMessageHandler> handlers = get(msg);
+				Class<?> msg = entry.getKey();
+				List<EBMessageHandler> handlers = entry.getValue();
 				if (handlers == null)
 					continue;
 				for (Iterator<EBMessageHandler> it = handlers.iterator();
