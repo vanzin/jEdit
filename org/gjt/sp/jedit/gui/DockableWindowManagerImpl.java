@@ -965,7 +965,7 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 	private boolean continuousLayout;
 
 	//{{{ Entry class
-	class Entry
+	static class Entry
 	{
 		DockableWindowFactory.Window factory;
 

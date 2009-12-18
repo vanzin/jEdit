@@ -433,7 +433,7 @@ public class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ TOCCellRenderer class
-	class TOCCellRenderer extends DefaultTreeCellRenderer
+	static class TOCCellRenderer extends DefaultTreeCellRenderer
 	{
 		EmptyBorder border = new EmptyBorder(1,0,1,1);
 

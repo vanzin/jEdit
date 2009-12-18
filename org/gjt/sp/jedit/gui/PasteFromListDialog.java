@@ -178,7 +178,7 @@ public class PasteFromListDialog extends EnhancedDialog
 	//}}}
 
 	//{{{ Renderer class
-	class Renderer extends DefaultListCellRenderer
+	static class Renderer extends DefaultListCellRenderer
 	{
 		String shorten(String item)
 		{

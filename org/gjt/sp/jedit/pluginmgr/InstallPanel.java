@@ -602,7 +602,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ Entry class
-	private class Entry
+	static private class Entry
 	{
 		String name, installedVersion, version, author, date, description, set;
 

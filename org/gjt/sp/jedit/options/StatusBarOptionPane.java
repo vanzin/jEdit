@@ -357,7 +357,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	//}}}
 
 	//{{{ WidgetSelectionDialog class
-	private class WidgetSelectionDialog extends EnhancedDialog
+	static private class WidgetSelectionDialog extends EnhancedDialog
 	{
 		private JButton ok;
 		private JButton cancel;

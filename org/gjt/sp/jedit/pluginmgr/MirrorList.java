@@ -167,7 +167,7 @@ public class MirrorList
 	} //}}}
 
 	//{{{ MirrorCompare class
-	private class MirrorCompare implements Comparator<Mirror>
+	static private class MirrorCompare implements Comparator<Mirror>
 	{
 		public int compare(Mirror m1,Mirror m2)
 		{

@@ -609,11 +609,13 @@ public class FileVFS extends VFS
 		{
 			String[] cmdarray = { "ls", "-ld", path };
 
+			InputStreamReader isr = null;
+			BufferedReader reader = null;
 			try
 			{
 				Process process = Runtime.getRuntime().exec(cmdarray);
-
-				BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				isr = new InputStreamReader(process.getInputStream());
+				reader = new BufferedReader(isr);
 
 				String output = reader.readLine();
 
@@ -631,6 +633,19 @@ public class FileVFS extends VFS
 			// Kaffe's implementation of Runtime.exec throws java.lang.InternalError.
 			catch (Throwable t)
 			{
+			}
+			finally
+			{
+				try
+				{
+					if (reader != null)
+						reader.close();
+					else if (isr != null)
+						isr.close();
+				}
+				catch (IOException e)
+				{
+				}
 			}
 		}
 

@@ -357,16 +357,6 @@ public class StandaloneTextArea extends TextArea
 	/**
 	 * Returns the value of an integer property.
 	 * @param name The property
-	 */
-	private int getIntegerProperty(String name)
-	{
-		return getIntegerProperty(name,0);
-	} //}}}
-
-	//{{{ getIntegerProperty() method
-	/**
-	 * Returns the value of an integer property.
-	 * @param name The property
 	 * @param def The default value
 	 * @since jEdit 4.0pre1
 	 */

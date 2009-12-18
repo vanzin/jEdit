@@ -318,7 +318,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ ShortcutsModel class
-	private class ShortcutsModel extends AbstractTableModel
+	static private class ShortcutsModel extends AbstractTableModel
 	{
 		private List<GrabKeyDialog.KeyBinding[]> bindings;
 		private String name;

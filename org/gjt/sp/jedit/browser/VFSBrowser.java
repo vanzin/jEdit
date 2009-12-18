@@ -1302,12 +1302,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		if(jEdit.getBooleanProperty("vfs.browser.showToolbar"))
 		{
 			Container toolbar = createToolBar();
-			if(horizontalLayout)
-				toolbarBox.add(toolbar);
-			else
-			{
-				toolbarBox.add(toolbar);
-			}
+			toolbarBox.add(toolbar);
 		}
 
 		if(jEdit.getBooleanProperty("vfs.browser.showMenubar"))

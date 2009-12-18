@@ -50,6 +50,7 @@ class PluginList
 	 */
 	public static final int GZIP_MAGIC_1 = 0x1f;
 	public static final int GZIP_MAGIC_2 = 0x8b;
+	public static final long MILLISECONDS_PER_MINUTE = 60L * 1000;
 
 	final List<Plugin> plugins = new ArrayList<Plugin>();
 	final Map<String, Plugin> pluginHash = new HashMap<String, Plugin>();
@@ -97,7 +98,7 @@ class PluginList
 				long currentTime = System.currentTimeMillis();
 				long age = currentTime - f.lastModified();
 				/* By default only download plugin lists every 5 minutes */
-				long interval = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 5) * 60 * 1000;
+				long interval = jEdit.getIntegerProperty("plugin-manager.list-cache.minutes", 5) * MILLISECONDS_PER_MINUTE;
 				if (age > interval)
 				{
 					Log.log(Log.MESSAGE, this, "PluginList cached copy too old. Downloading from mirror. ");

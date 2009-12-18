@@ -91,7 +91,7 @@ public class BufferSwitcher extends JComboBox
 		}
 	}
 
-	class BufferCellRenderer extends DefaultListCellRenderer
+	static class BufferCellRenderer extends DefaultListCellRenderer
 	{
 		public Component getListCellRendererComponent(
 			JList list, Object value, int index,

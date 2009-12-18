@@ -847,7 +847,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	}//}}}
 
 	//{{{ ToStringNodes class
-	class ToStringNodes implements HyperSearchTreeNodeCallback
+	static class ToStringNodes implements HyperSearchTreeNodeCallback
 	{
 		StringBuilder nodesString = new StringBuilder();
 
@@ -990,7 +990,7 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 	}//}}}
 
 	//{{{ ResultCellRenderer class
-	class ResultCellRenderer extends DefaultTreeCellRenderer
+	static class ResultCellRenderer extends DefaultTreeCellRenderer
 	{
 		Font plainFont, boldFont;
 		
