@@ -42,6 +42,7 @@ import org.gjt.sp.util.SyntaxUtilities;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
+import java.lang.ref.SoftReference;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -136,8 +137,7 @@ public class GUIUtilities
 	public static void setIconPath(String iconPath)
 	{
 		GUIUtilities.iconPath = iconPath;
-		if(icons != null)
-			icons.clear();
+		iconCache = null;
 	} //}}}
 
 	//{{{ loadIcon() method
@@ -155,11 +155,18 @@ public class GUIUtilities
 		if(deprecatedIcons != null && deprecatedIcons.containsKey(iconName))
 			iconName = deprecatedIcons.get(iconName);
 
-		if(icons == null)
-			icons = new Hashtable<String, Icon>();
-
 		// check if there is a cached version first
-		Icon icon = icons.get(iconName);
+		Map<String, Icon> cache = null;
+		if(iconCache != null)
+		{
+			cache = iconCache.get();
+		}
+		if(cache == null)
+		{
+			cache = new Hashtable<String, Icon>();
+			iconCache = new SoftReference<Map<String, Icon>>(cache);
+		}
+		Icon icon = cache.get(iconName);
 		if(icon != null)
 			return icon;
 
@@ -190,7 +197,7 @@ public class GUIUtilities
 
 		icon = new ImageIcon(url);
 
-		icons.put(iconName,icon);
+		cache.put(iconName,icon);
 		return icon;
 	} //}}}
 
@@ -1862,7 +1869,7 @@ public class GUIUtilities
 
 	//{{{ Private members
 	private static SplashScreen splash;
-	private static Map<String, Icon> icons;
+	private static SoftReference<Map<String, Icon>> iconCache;
 	private static String iconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
 	private static final String defaultIconPath = "jeditresource:/org/gjt/sp/jedit/icons/themes/";
 	private static final HashMap<String, String> deprecatedIcons = new HashMap<String, String>();
