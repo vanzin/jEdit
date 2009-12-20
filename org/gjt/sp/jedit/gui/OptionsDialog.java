@@ -551,7 +551,7 @@ public abstract class OptionsDialog extends EnhancedDialog
 	} //}}}
 
 	//{{{ OptionTreeModel class
-	static public class OptionTreeModel implements TreeModel
+	public class OptionTreeModel implements TreeModel
 	{
 		public OptionTreeModel()
 		{
