@@ -1,6 +1,6 @@
 JEDIT 4.3 VERSION HISTORY
 
-{{{ Version 4.3.0
+{{{ Version 4.3
 
 
 Thanks to Björn "Vampire" Kautler, Marcelo Vanzin, Matthieu Casanova,
@@ -50,12 +50,13 @@ Alan Ezust, Eric Berry, and Eric Le Lay for contributing to this release.
 }}}
 {{{ Editing
 
--  Improved Python edit mode (Björn "Vampire" Kautler) w.r.t. electricKeys.
+- Improved indenting rules of Python edit mode. (Björn "Vampire" Kautler)
 
 - Reverted a change for jsp mode, which was made on 4.3pre17 to fix a
   bug, since it doesn't work any more. (see SF.net bug #846913)
 
 }}}
+
 }}}
 
 {{{ Version 4.3pre18
