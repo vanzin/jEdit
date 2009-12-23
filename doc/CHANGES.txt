@@ -7,6 +7,8 @@ Eric Le Lay and Bernhard Walle for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
+
 - Fixed some quirks in the Python edit mode (Björn "Vampire" Kautler)
 
 - fix #1439605 - remove installer.VariableGridLayout (r16596).

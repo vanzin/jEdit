@@ -77,6 +77,59 @@ public class JEditTextArea extends TextArea
 		return foldPainter;
 	} //}}}
 
+	
+	//{{{ home() method
+	/**
+	 * A "dumb home" action which only has 2 states:
+	 *     start of the whitespace or start of line
+	 *     @param select true if we also want to select from the cursor
+	 * @since jedit 4.4pre1
+	 */
+	public void home(boolean select)
+	{
+		Macros.Recorder recorder = view.getMacroRecorder();
+		switch(getInputHandler().getLastActionCount() % 2)
+		{
+		case 1:
+			if(recorder != null)
+				recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");			
+			goToStartOfWhiteSpace(select);
+			break;
+		default:
+			if(recorder != null)
+				recorder.record("textArea.goToStartOfLine(" + select + ");");			
+			goToStartOfLine(select);
+			break;
+		}
+	}// }}}
+	
+
+	// {{{ end() method
+	/**
+	 * a dumb end action which only has 2 states:
+	 * 	end of whitespace or end of line
+	 * @param select true if we also want to select from the cursor
+	 * @since jedit 4.4pre1
+	 */
+	public void end(boolean select)
+	{
+		Macros.Recorder recorder = view.getMacroRecorder();
+
+		switch(getInputHandler().getLastActionCount() % 2)
+		{
+		case 1:
+			if(recorder != null)
+				recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
+			goToEndOfWhiteSpace(select);
+			break;
+		default:
+			if(recorder != null)
+				recorder.record("textArea.goToEndOfLine(" + select + ");");
+			goToEndOfLine(select);
+			break;
+		}
+	}//}}}
+	
 	//{{{ smartHome() method
 	/**
 	 * On subsequent invocations, first moves the caret to the first
