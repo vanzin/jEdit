@@ -26,18 +26,16 @@ package org.gjt.sp.jedit.gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.ViewUpdate;
-import org.gjt.sp.util.Log;
 //}}}
 
-public class MarkerViewer extends JPanel implements EBComponent, ActionListener
+public class MarkerViewer extends JPanel implements ActionListener
 {
 	//{{{ MarkerViewer constructor
 	public MarkerViewer(View view)
@@ -120,30 +118,36 @@ public class MarkerViewer extends JPanel implements EBComponent, ActionListener
 		}
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handleEditPaneUpdate() method
+	@EBHandler
+	public void handleEditPaneUpdate(EditPaneUpdate epu)
 	{
-		if (msg instanceof EditPaneUpdate)
+		if (epu.getEditPane().getView().equals(view) &&
+			epu.getWhat().equals(EditPaneUpdate.BUFFER_CHANGED))
 		{
-			EditPaneUpdate epu = (EditPaneUpdate)msg;
-			if (epu.getEditPane().getView().equals(view) &&
-				epu.getWhat().equals(EditPaneUpdate.BUFFER_CHANGED))
-				refreshList();
+			refreshList();
 		}
-		if (msg instanceof ViewUpdate)
+	} //}}}
+
+	//{{{ handleViewUpdate() method
+	@EBHandler
+	public void handleViewUpdate(ViewUpdate vu)
+	{
+		if (vu.getView().equals(view) &&
+			vu.getWhat().equals(ViewUpdate.EDIT_PANE_CHANGED))
 		{
-			ViewUpdate vu = (ViewUpdate)msg;
-			if (vu.getView().equals(view) &&
-				vu.getWhat().equals(ViewUpdate.EDIT_PANE_CHANGED))
-				refreshList();
+			refreshList();
 		}
-		if (msg instanceof BufferUpdate)
+	} //}}}
+
+	//{{{ handleBufferUpdate() method
+	@EBHandler
+	public void handleBufferUpdate(BufferUpdate bu)
+	{
+		if (view.getBuffer().equals(bu.getBuffer()) &&
+			(bu.getWhat().equals(BufferUpdate.MARKERS_CHANGED) || bu.getWhat().equals(BufferUpdate.LOADED)))
 		{
-			BufferUpdate bu = (BufferUpdate)msg;
-			if (view.getBuffer().equals(bu.getBuffer())
-				&&
-				(bu.getWhat().equals(BufferUpdate.MARKERS_CHANGED) || bu.getWhat().equals(BufferUpdate.LOADED)))
-				refreshList();
+			refreshList();
 		}
 	}//}}}
 

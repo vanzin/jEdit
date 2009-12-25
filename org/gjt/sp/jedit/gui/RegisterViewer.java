@@ -29,12 +29,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.Registers.Register;
 import org.gjt.sp.jedit.msg.RegisterChanged;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
 
-public class RegisterViewer extends JPanel implements EBComponent, ActionListener,
+public class RegisterViewer extends JPanel implements ActionListener,
 	DockableWindow
 {
 	//{{{ RegisterViewer constructor
@@ -105,20 +106,20 @@ public class RegisterViewer extends JPanel implements EBComponent, ActionListene
 			clearSelectedIndex();
 	} //}}}
 
-	//{{{ handleMessage
-	public void handleMessage(EBMessage msg)
+	//{{{ handleRegisterChanged() method
+	@EBHandler
+	public void handleRegisterChanged(RegisterChanged msg)
 	{
-		if (msg instanceof RegisterChanged)
-		{
-			if (((RegisterChanged)msg).getRegisterName() != '%')
-				refreshList();
-		}
-		else if (msg instanceof PropertiesChanged)
-		{
-			GUIUtilities.initContinuousLayout(splitPane);
-		}
+		if (msg.getRegisterName() != '%')
+			refreshList();
+	} //}}}
 
-	}//}}}
+	//{{{ handlePropertiesChanged
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		GUIUtilities.initContinuousLayout(splitPane);
+	} //}}}
 
 	//{{{ addNotify() method
 	@Override

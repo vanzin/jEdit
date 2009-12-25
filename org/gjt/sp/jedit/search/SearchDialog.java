@@ -31,6 +31,7 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.io.*;
@@ -43,7 +44,7 @@ import org.gjt.sp.jedit.*;
  * @author Slava Pestov
  * @version $Id$
  */
-public class SearchDialog extends EnhancedDialog implements EBComponent
+public class SearchDialog extends EnhancedDialog
 {
 	//{{{ Constants
 	/**
@@ -245,14 +246,12 @@ public class SearchDialog extends EnhancedDialog implements EBComponent
 		setVisible(false);
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handleSearchSettingsChanged() method
+	@EBHandler
+	public void handleSearchSettingsChanged(EBMessage msg)
 	{
-		if(msg instanceof SearchSettingsChanged)
-		{
-			if(!saving)
-				load();
-		}
+		if(!saving)
+			load();
 	} //}}}
 
 	//{{{ dispose() method

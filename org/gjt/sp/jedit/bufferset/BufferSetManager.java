@@ -23,6 +23,7 @@ package org.gjt.sp.jedit.bufferset;
 
 //{{{ Imports
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
@@ -38,7 +39,7 @@ import java.util.*;
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
  */
-public class BufferSetManager implements EBComponent
+public class BufferSetManager
 {
 	//{{{ NewBufferSetAction enum
 	public enum NewBufferSetAction
@@ -75,47 +76,48 @@ public class BufferSetManager implements EBComponent
 		EditBus.addToBus(this);
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage message)
+	//{{{ handleViewUpdate() method
+	@EBHandler
+	public void handleViewUpdate(ViewUpdate viewUpdate)
 	{
-		if (message instanceof ViewUpdate)
+		if (viewUpdate.getWhat() == ViewUpdate.CLOSED)
 		{
-			ViewUpdate viewUpdate = (ViewUpdate) message;
-			if (viewUpdate.getWhat() == ViewUpdate.CLOSED)
-			{
-				View view = viewUpdate.getView();
-				// Unlink the buffer from this bufferSet.
-				BufferSet viewBufferSet = view.getLocalBufferSet();
-				viewBufferSet.getAllBuffers(new BufferSetClosed(viewBufferSet));
-			}
+			View view = viewUpdate.getView();
+			// Unlink the buffer from this bufferSet.
+			BufferSet viewBufferSet = view.getLocalBufferSet();
+			viewBufferSet.getAllBuffers(new BufferSetClosed(viewBufferSet));
 		}
-		else if (message instanceof EditPaneUpdate)
-		{
-			EditPaneUpdate editPaneUpdate = (EditPaneUpdate) message;
-			if (editPaneUpdate.getWhat() == EditPaneUpdate.DESTROYED)
-			{
-				EditPane editPane = editPaneUpdate.getEditPane();
-				// If the editPane has own BufferSet, unlink the buffer from this bufferSet.
-				if (editPane.getBufferSetScope() == BufferSet.Scope.editpane)
-				{
-					BufferSet editPaneBufferSet = editPane.getBufferSet();
-					editPaneBufferSet.getAllBuffers(new BufferSetClosed(editPaneBufferSet));
-				}
-			}
-		}
-		else if (message instanceof PropertiesChanged)
-		{
-			// pass on PropertiesChanged message to BufferSets so
-			// they can resort themselves as needed.
-			visit(new BufferSetVisitor()
-			{
-				public void visit(BufferSet bufferSet)
-				{
-					bufferSet.handleMessage();
-				}
-			});
-		}
+	} //}}}
 
+	//{{{ handleEditPaneUpdate() method
+	@EBHandler
+	public void handleEditPaneUpdate(EditPaneUpdate editPaneUpdate)
+	{
+		if (editPaneUpdate.getWhat() == EditPaneUpdate.DESTROYED)
+		{
+			EditPane editPane = editPaneUpdate.getEditPane();
+			// If the editPane has own BufferSet, unlink the buffer from this bufferSet.
+			if (editPane.getBufferSetScope() == BufferSet.Scope.editpane)
+			{
+				BufferSet editPaneBufferSet = editPane.getBufferSet();
+				editPaneBufferSet.getAllBuffers(new BufferSetClosed(editPaneBufferSet));
+			}
+		}
+	} //}}}
+
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		// pass on PropertiesChanged message to BufferSets so
+		// they can resort themselves as needed.
+		visit(new BufferSetVisitor()
+		{
+			public void visit(BufferSet bufferSet)
+			{
+				bufferSet.handleMessage();
+			}
+		});
 	} //}}}
 
 	//{{{ mergeBufferSet() method

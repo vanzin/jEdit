@@ -257,7 +257,6 @@ class PluginList
 	static class PluginSet
 	{
 		String name;
-		String description;
 		final List<String> plugins = new ArrayList<String>();
 
 		public String toString()

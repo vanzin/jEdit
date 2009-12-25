@@ -29,6 +29,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.xml.sax.SAXParseException;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.*;
@@ -40,7 +41,7 @@ import org.gjt.sp.util.WorkRequest;
 /**
  * @version $Id$
  */
-public class PluginManager extends JFrame implements EBComponent
+public class PluginManager extends JFrame
 {
 	
 	//{{{ getInstance() method
@@ -62,36 +63,37 @@ public class PluginManager extends JFrame implements EBComponent
 		super.dispose();
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage message)
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged message)
 	{
-		if (message instanceof PropertiesChanged)
+		if (shouldUpdatePluginList())
 		{
-			if (shouldUpdatePluginList())
+			pluginList = null;
+			updatePluginList();
+			if(tabPane.getSelectedIndex() != 0)
 			{
-				pluginList = null;
-				updatePluginList();
-				if(tabPane.getSelectedIndex() != 0)
-				{
-					installer.updateModel();
-					updater.updateModel();
-				}
+				installer.updateModel();
+				updater.updateModel();
 			}
 		}
-		else if (message instanceof PluginUpdate)
+	} //}}}
+
+	//{{{ handlePluginUpdate() method
+	@EBHandler
+	public void handlePluginUpdate(PluginUpdate msg)
+	{
+		if(!queuedUpdate)
 		{
-			if(!queuedUpdate)
+			SwingUtilities.invokeLater(new Runnable()
 			{
-				SwingUtilities.invokeLater(new Runnable()
+				public void run()
 				{
-					public void run()
-					{
-						queuedUpdate = false;
-						manager.update();
-					}
-				});
-				queuedUpdate = true;
-			}
+					queuedUpdate = false;
+					manager.update();
+				}
+			});
+			queuedUpdate = true;
 		}
 	} //}}}
 

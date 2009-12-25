@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 //}}}
 
@@ -51,7 +52,7 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ BufferSetWidget class
-	private static class BufferSetWidget implements Widget, EBComponent
+	public static class BufferSetWidget implements Widget
 	{
 		private final JLabel bufferSetLabel;
 		private final View view;
@@ -136,25 +137,22 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 			bufferSetLabel.setMaximumSize(dim);
 		} //}}}
 
-		//{{{ handleMessage() method
-		public void handleMessage(EBMessage message)
+		//{{{ handleViewUpdate() method
+		@EBHandler
+		public void handleViewUpdate(ViewUpdate viewUpdate)
 		{
-			if (message instanceof ViewUpdate)
+			if (viewUpdate.getWhat() == ViewUpdate.EDIT_PANE_CHANGED)
+				update();
+		} //}}}
+
+		//{{{ handleEditPaneUpdate() method
+		@EBHandler
+		public void handleEditPaneUpdate(EditPaneUpdate editPaneUpdate)
+		{
+			if (editPaneUpdate.getEditPane() == view.getEditPane() &&
+				editPaneUpdate.getWhat() == EditPaneUpdate.BUFFERSET_CHANGED)
 			{
-				ViewUpdate viewUpdate = (ViewUpdate) message;
-				if (viewUpdate.getWhat() == ViewUpdate.EDIT_PANE_CHANGED)
-				{
-					update();
-				}
-			}
-			else if (message instanceof EditPaneUpdate)
-			{
-				EditPaneUpdate editPaneUpdate = (EditPaneUpdate) message;
-				if (editPaneUpdate.getEditPane() == view.getEditPane() &&
-					editPaneUpdate.getWhat() == EditPaneUpdate.BUFFERSET_CHANGED)
-				{
-					update();
-				}
+				update();
 			}
 		} //}}}
 

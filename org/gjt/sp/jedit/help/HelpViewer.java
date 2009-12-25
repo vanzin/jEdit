@@ -61,13 +61,12 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
-import org.gjt.sp.jedit.EBComponent;
-import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.MiscUtilities;
 
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 
@@ -82,7 +81,7 @@ import static org.gjt.sp.jedit.help.HelpHistoryModel.HistoryEntry;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HelpViewer extends JFrame implements HelpViewerInterface, EBComponent, HelpHistoryModelListener
+public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHistoryModelListener
 {
 	//{{{ HelpViewer constructor
 	/**
@@ -322,13 +321,11 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 		super.dispose();
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handlePluginUpdate() method
+	@EBHandler
+	public void handlePluginUpdate(PluginUpdate pmsg)
 	{
-		if(msg instanceof PluginUpdate)
-		{
-			PluginUpdate pmsg = (PluginUpdate)msg;
-			if(pmsg.getWhat() == PluginUpdate.LOADED
+		if(pmsg.getWhat() == PluginUpdate.LOADED
 				|| pmsg.getWhat() == PluginUpdate.UNLOADED)
 			{
 				if(!pmsg.isExiting())
@@ -338,11 +335,13 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, EBCompone
 					queuedTOCReload = true;
 				}
 			}
-		}
-		else if (msg instanceof PropertiesChanged)
-		{
-			GUIUtilities.initContinuousLayout(splitter);
-		}
+	} //}}}
+
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		GUIUtilities.initContinuousLayout(splitter);
 	} //}}}
 
 	//{{{ getBaseURL() method

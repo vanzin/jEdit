@@ -50,11 +50,11 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
@@ -673,61 +673,65 @@ public class DockableWindowManagerImpl extends DockableWindowManager
 		}
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handleDockableWindowUpdate() method
+	@EBHandler
+	public void handleDockableWindowUpdate(DockableWindowUpdate msg)
 	{
-		if(msg instanceof DockableWindowUpdate)
-		{
-			if(((DockableWindowUpdate)msg).getWhat()
-				== DockableWindowUpdate.PROPERTIES_CHANGED)
-				propertiesChanged();
-		}
-		else if(msg instanceof PropertiesChanged)
+		if (msg.getWhat() == DockableWindowUpdate.PROPERTIES_CHANGED)
 			propertiesChanged();
-		else if(msg instanceof PluginUpdate)
+	} //}}}
+
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		propertiesChanged();
+	} //}}}
+
+	//{{{ handlePluginUpdate() method
+	@EBHandler
+	public void handlePluginUpdate(PluginUpdate pmsg)
+	{
+		if(pmsg.getWhat() == PluginUpdate.LOADED)
 		{
-			PluginUpdate pmsg = (PluginUpdate)msg;
-			if(pmsg.getWhat() == PluginUpdate.LOADED)
-			{
-				Iterator<DockableWindowFactory.Window> iter = factory.getDockableWindowIterator();
+			Iterator<DockableWindowFactory.Window> iter = factory.getDockableWindowIterator();
 
-				while(iter.hasNext())
-				{
-					DockableWindowFactory.Window w = iter.next();
-					if(w.plugin == pmsg.getPluginJAR())
-						addEntry(w);
-				}
+			while(iter.hasNext())
+			{
+				DockableWindowFactory.Window w = iter.next();
+				if(w.plugin == pmsg.getPluginJAR())
+					addEntry(w);
+			}
 
-				propertiesChanged();
-			}
-			else if(pmsg.isExiting())
+			propertiesChanged();
+		}
+		else if(pmsg.isExiting())
+		{
+			// we don't care
+		}
+		else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
+		{
+			Iterator<Entry> iter = getAllPluginEntries(
+				pmsg.getPluginJAR(),false);
+			while(iter.hasNext())
 			{
-				// we don't care
+				Entry entry = iter.next();
+				if(entry.container != null)
+					entry.container.remove(entry);
 			}
-			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED)
+		}
+		else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
+		{
+			Iterator<Entry> iter = getAllPluginEntries(
+				pmsg.getPluginJAR(),true);
+			while(iter.hasNext())
 			{
-				Iterator<Entry> iter = getAllPluginEntries(
-					pmsg.getPluginJAR(),false);
-				while(iter.hasNext())
+				Entry entry = iter.next();
+				if(entry.container != null)
 				{
-					Entry entry = iter.next();
-					if(entry.container != null)
-						entry.container.remove(entry);
-				}
-			}
-			else if(pmsg.getWhat() == PluginUpdate.UNLOADED)
-			{
-				Iterator<Entry> iter = getAllPluginEntries(
-					pmsg.getPluginJAR(),true);
-				while(iter.hasNext())
-				{
-					Entry entry = iter.next();
-					if(entry.container != null)
-					{
-						entry.container.unregister(entry);
-						entry.win = null;
-						entry.container = null;
-					}
+					entry.container.unregister(entry);
+					entry.win = null;
+					entry.container = null;
 				}
 			}
 		}

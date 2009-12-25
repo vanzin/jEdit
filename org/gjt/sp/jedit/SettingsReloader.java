@@ -24,22 +24,21 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import java.io.File;
+
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.search.*;
 //}}}
 
-class SettingsReloader implements EBComponent
+class SettingsReloader
 {
 	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	@EBHandler
+	public void handleVFSUpdate(VFSUpdate vmsg)
 	{
-		if(msg instanceof VFSUpdate)
-		{
-			VFSUpdate vmsg = (VFSUpdate)msg;
-			maybeReload(vmsg.getPath());
-		}
+		maybeReload(vmsg.getPath());
 	} //}}}
 
 	//{{{ maybeReload() method

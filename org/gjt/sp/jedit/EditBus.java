@@ -37,7 +37,7 @@ import org.gjt.sp.util.Log;
  *
  * The EditBus maintains a list of objects that have requested to receive
  * messages. When a message is sent using this class, all registered
- * components receive it in turn. Classes for objects that sourceibe to
+ * components receive it in turn. Classes for objects that subscribe to
  * the EditBus must implement the {@link EBComponent} interface, which
  * defines the single method {@link EBComponent#handleMessage(EBMessage)}.<p>
  *

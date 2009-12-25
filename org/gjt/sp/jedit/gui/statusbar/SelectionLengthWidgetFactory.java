@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.ViewUpdate;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.textarea.TextArea;
@@ -49,7 +50,7 @@ public class SelectionLengthWidgetFactory implements StatusWidgetFactory
 	} //}}}
 
 	//{{{ SelectionLengthWidget class
-	private static class SelectionLengthWidget implements Widget, EBComponent
+	public static class SelectionLengthWidget implements Widget
 	{
 		private final SelectionLength selectionLength;
 		private final View view;
@@ -77,21 +78,18 @@ public class SelectionLengthWidgetFactory implements StatusWidgetFactory
 		{
 		}
 
-		public void handleMessage(EBMessage message)
+		@EBHandler
+		public void handleViewUpdate(ViewUpdate viewUpdate)
 		{
-			if (message instanceof ViewUpdate)
+			if (viewUpdate.getView() == view && viewUpdate.getWhat() == ViewUpdate.EDIT_PANE_CHANGED)
 			{
-				ViewUpdate viewUpdate = (ViewUpdate) message;
-				if (viewUpdate.getView() == view && viewUpdate.getWhat() == ViewUpdate.EDIT_PANE_CHANGED)
+				if (textArea != null)
 				{
-					if (textArea != null)
-					{
-						textArea.removeCaretListener(selectionLength);
-					}
-					textArea = view.getTextArea();
-					if (selectionLength.visible)
-						textArea.addCaretListener(selectionLength);
+					textArea.removeCaretListener(selectionLength);
 				}
+				textArea = view.getTextArea();
+				if (selectionLength.visible)
+					textArea.addCaretListener(selectionLength);
 			}
 		}
 

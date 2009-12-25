@@ -23,6 +23,7 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.bsh.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
@@ -51,8 +52,8 @@ import org.gjt.sp.jedit.menu.MenuItemTextComparator;
  * @author Slava Pestov
  * @version $Id$
  */
-public class VFSBrowser extends JPanel implements EBComponent,
-	DefaultFocusComponent, DockableWindow
+public class VFSBrowser extends JPanel implements DefaultFocusComponent,
+	DockableWindow
 {
 	public static final String NAME = "vfs.browser";
 
@@ -425,32 +426,41 @@ public class VFSBrowser extends JPanel implements EBComponent,
 		EditBus.removeFromBus(this);
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
 	{
-		if(msg instanceof PropertiesChanged)
-			propertiesChanged();
-		else if(msg instanceof BufferUpdate)
+		propertiesChanged();
+	} //}}}
+
+	//{{{ handleBufferUpdate() method
+	@EBHandler
+	public void handleBufferUpdate(BufferUpdate bmsg)
+	{
+		if (bmsg.getWhat() == BufferUpdate.CREATED ||
+			bmsg.getWhat() == BufferUpdate.CLOSED)
 		{
-			BufferUpdate bmsg = (BufferUpdate)msg;
-			if(bmsg.getWhat() == BufferUpdate.CREATED
-				|| bmsg.getWhat() == BufferUpdate.CLOSED)
-				browserView.updateFileView();
+			browserView.updateFileView();
 		}
-		else if(msg instanceof PluginUpdate)
+	} //}}}
+
+	//{{{ handlePluginUpdate() method
+	@EBHandler
+	public void handlePluginUpdate(PluginUpdate pmsg)
+	{
+		if((pmsg.getWhat() == PluginUpdate.LOADED ||
+		   pmsg.getWhat() == PluginUpdate.UNLOADED) &&
+		   plugins != null /* plugins can be null if the VFSBrowser menu bar is hidden */)
 		{
-			PluginUpdate pmsg = (PluginUpdate)msg;
-			if((pmsg.getWhat() == PluginUpdate.LOADED ||
-			   pmsg.getWhat() == PluginUpdate.UNLOADED) &&
-				plugins != null /* plugins can be null if the VFSBrowser menu bar is hidden */)
-			{
-				plugins.updatePopupMenu();
-			}
+			plugins.updatePopupMenu();
 		}
-		else if(msg instanceof VFSUpdate)
-		{
-			maybeReloadDirectory(((VFSUpdate)msg).getPath());
-		}
+	} //}}}
+
+	//{{{ handleVFSUpdate() method
+	@EBHandler
+	public void handleVFSUpdate(VFSUpdate msg)
+	{
+		maybeReloadDirectory(msg.getPath());
 	} //}}}
 
 	//{{{ getView() method
@@ -2017,15 +2027,15 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				return;
 			}
 
-			// this happens when changing the selected item
-			// in the combo; the combo has not yet fired an
-			// itemStateChanged() event, so it's not put into
-			// non-editable mode by the handler above.
-			if (!(item instanceof GlobVFSFileFilter))
-				return;
-
 			if (item != null)
 			{
+				// this happens when changing the selected item
+				// in the combo; the combo has not yet fired an
+				// itemStateChanged() event, so it's not put into
+				// non-editable mode by the handler above.
+				if (!(item instanceof GlobVFSFileFilter))
+					return;
+
 				GlobVFSFileFilter filter = (GlobVFSFileFilter) item;
 				filter = new GlobVFSFileFilter(filter.getGlob());
 				setText(filter.getGlob());

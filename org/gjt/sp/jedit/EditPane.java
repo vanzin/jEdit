@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetListener;
@@ -90,7 +91,7 @@ import org.gjt.sp.util.SyntaxUtilities;
  * @author Slava Pestov
  * @version $Id$
  */
-public class EditPane extends JPanel implements EBComponent, BufferSetListener
+public class EditPane extends JPanel implements BufferSetListener
 {
 	//{{{ getView() method
 	/**
@@ -638,16 +639,12 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 		buffer.addMarker(shortcut,caret);
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
 	{
-		if(msg instanceof PropertiesChanged)
-		{
-			propertiesChanged();
-			loadBufferSwitcher();
-		}
-		else if(msg instanceof BufferUpdate)
-			handleBufferUpdate((BufferUpdate)msg);
+		propertiesChanged();
+		loadBufferSwitcher();
 	} //}}}
 
 	//{{{ getMinimumSize() method
@@ -1162,7 +1159,8 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	} //}}}
 
 	//{{{ handleBufferUpdate() method
-	private void handleBufferUpdate(BufferUpdate msg)
+	@EBHandler
+	public void handleBufferUpdate(BufferUpdate msg)
 	{
 		Buffer _buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.CREATED)

@@ -30,8 +30,9 @@ import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.*;
+
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
 import org.gjt.sp.jedit.gui.RolloverButton;
 import org.gjt.sp.jedit.gui.StyleEditor;
@@ -47,8 +48,7 @@ import org.gjt.sp.util.SyntaxUtilities;
  * @author Slava Pestov
  * @version $Id$
  */
-public class HyperSearchResults extends JPanel implements EBComponent,
-	DefaultFocusComponent
+public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 {
 	public static final String NAME = "hypersearch-results";
 	public static final String HIGHLIGHT_PROP = "hypersearch.results.highlight";
@@ -172,19 +172,16 @@ public class HyperSearchResults extends JPanel implements EBComponent,
 		});
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handleBufferUpdate() method
+	@EBHandler
+	public void handleBufferUpdate(BufferUpdate bmsg)
 	{
-		if(msg instanceof BufferUpdate)
-		{
-			BufferUpdate bmsg = (BufferUpdate)msg;
-			Buffer buffer = bmsg.getBuffer();
-			Object what = bmsg.getWhat();
-			if(what == BufferUpdate.LOADED)
-				visitBuffers(new BufferLoadedVisitor(),buffer);
-			else if(what == BufferUpdate.CLOSED)
-				visitBuffers(new BufferClosedVisitor(),buffer);
-		}
+		Buffer buffer = bmsg.getBuffer();
+		Object what = bmsg.getWhat();
+		if(what == BufferUpdate.LOADED)
+			visitBuffers(new BufferLoadedVisitor(),buffer);
+		else if(what == BufferUpdate.CLOSED)
+			visitBuffers(new BufferClosedVisitor(),buffer);
 	} //}}}
 
 	//{{{ traverseNodes() method

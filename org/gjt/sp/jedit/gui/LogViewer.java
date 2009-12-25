@@ -29,6 +29,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
 //}}}
@@ -36,8 +37,7 @@ import org.gjt.sp.util.Log;
 /**
  * @version $Id$
  */
-public class LogViewer extends JPanel implements DefaultFocusComponent,
-EBComponent
+public class LogViewer extends JPanel implements DefaultFocusComponent
 {
 	//{{{ LogViewer constructor
 	public LogViewer()
@@ -121,11 +121,11 @@ EBComponent
 		scrollLaterIfRequired();
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
 	{
-		if(msg instanceof PropertiesChanged)
-			propertiesChanged();
+		propertiesChanged();
 	} //}}}
 
 	//{{{ addNotify() method

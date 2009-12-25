@@ -19,7 +19,6 @@
 
 package org.gjt.sp.jedit.msg;
 
-import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
 
 /**
@@ -36,7 +35,7 @@ public class PropertiesChanged extends EBMessage
 	 * Creates a new properties changed message.
 	 * @param source The message source
 	 */
-	public PropertiesChanged(EBComponent source)
+	public PropertiesChanged(Object source)
 	{
 		super(source);
 	}

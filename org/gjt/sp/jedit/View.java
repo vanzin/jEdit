@@ -30,9 +30,7 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -63,6 +61,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.gui.ActionBar;
@@ -137,7 +136,7 @@ import org.gjt.sp.util.StandardUtilities;
  * @author John Gellene (API documentation)
  * @version $Id$
  */
-public class View extends JFrame implements EBComponent, InputHandlerProvider
+public class View extends JFrame implements InputHandlerProvider
 {
 	//{{{ User interface
 
@@ -1204,20 +1203,19 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		return prev;
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+	//{{{ handlePropertiesChanged()
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
 	{
-		if(msg instanceof PropertiesChanged)
-			propertiesChanged();
-		else if(msg instanceof SearchSettingsChanged)
-		{
-			if(searchBar != null)
-				searchBar.update();
-		}
-		else if(msg instanceof BufferUpdate)
-			handleBufferUpdate((BufferUpdate)msg);
-		else if(msg instanceof EditPaneUpdate)
-			handleEditPaneUpdate((EditPaneUpdate)msg);
+		propertiesChanged();
+	} //}}}
+
+	//{{{ handleSearchSettingsChanged() method
+	@EBHandler
+	public void handleSearchSettingsChanged(SearchSettingsChanged msg)
+	{
+		if(searchBar != null)
+			searchBar.update();
 	} //}}}
 
 	//{{{ getMinimumSize() method
@@ -2006,7 +2004,8 @@ loop:		while (true)
 	} //}}}
 
 	//{{{ handleBufferUpdate() method
-	private void handleBufferUpdate(BufferUpdate msg)
+	@EBHandler
+	public void handleBufferUpdate(BufferUpdate msg)
 	{
 		Buffer buffer = msg.getBuffer();
 		if(msg.getWhat() == BufferUpdate.DIRTY_CHANGED
@@ -2025,7 +2024,8 @@ loop:		while (true)
 	} //}}}
 
 	//{{{ handleEditPaneUpdate() method
-	private void handleEditPaneUpdate(EditPaneUpdate msg)
+	@EBHandler
+	public void handleEditPaneUpdate(EditPaneUpdate msg)
 	{
 		EditPane editPane = msg.getEditPane();
 		if(editPane.getView() == this

@@ -17,12 +17,11 @@ import java.util.Map.Entry;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.gjt.sp.jedit.EBComponent;
-import org.gjt.sp.jedit.EBMessage;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.PluginJAR;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
@@ -122,7 +121,7 @@ import org.gjt.sp.util.Log;
  * @since jEdit 2.6pre3
  *
  */
- public abstract class DockableWindowManager extends JPanel implements EBComponent
+ public abstract class DockableWindowManager extends JPanel
 {
 
 	//{{{ Constants
@@ -434,51 +433,56 @@ import org.gjt.sp.util.Log;
 		dockables.add(name);
 	}
 	// }}}
-	
-	// {{{ handleMessage() method
-	public void handleMessage(EBMessage msg)
+
+	// {{{ handleDockableWindowUpdate() method
+	@EBHandler
+	public void handleDockableWindowUpdate(DockableWindowUpdate msg)
 	{
-		if (msg instanceof DockableWindowUpdate)
-		{
-			if(((DockableWindowUpdate)msg).getWhat() == DockableWindowUpdate.PROPERTIES_CHANGED)
-				propertiesChanged();
-		}
-		else if (msg instanceof PropertiesChanged)
+		if(msg.getWhat() == DockableWindowUpdate.PROPERTIES_CHANGED)
 			propertiesChanged();
-		else if(msg instanceof PluginUpdate)
+	} // }}}
+
+	// {{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		propertiesChanged();
+	} // }}}
+
+	// {{{ handlePluginUpdate() method
+	@EBHandler
+	public void handlePluginUpdate(PluginUpdate pmsg)
+	{
+		if (pmsg.getWhat() == PluginUpdate.LOADED)
 		{
-			PluginUpdate pmsg = (PluginUpdate)msg;
-			if (pmsg.getWhat() == PluginUpdate.LOADED)
+			Iterator<DockableWindowFactory.Window> iter = factory.getDockableWindowIterator();
+			while (iter.hasNext())
 			{
-				Iterator<DockableWindowFactory.Window> iter = factory.getDockableWindowIterator();
-				while (iter.hasNext())
+				DockableWindowFactory.Window w = iter.next();
+				if (w.plugin == pmsg.getPluginJAR())
 				{
-					DockableWindowFactory.Window w = iter.next();
-					if (w.plugin == pmsg.getPluginJAR())
-					{
-						String position = getDockablePosition(w.name);
-						positions.put(w.name, position);
-						addPluginDockable(w.plugin, w.name);
-						dockableLoaded(w.name, position);
-					}
+					String position = getDockablePosition(w.name);
+					positions.put(w.name, position);
+					addPluginDockable(w.plugin, w.name);
+					dockableLoaded(w.name, position);
 				}
-				propertiesChanged();
 			}
-			else if(pmsg.isExiting())
+			propertiesChanged();
+		}
+		else if(pmsg.isExiting())
+		{
+			// we don't care
+		}
+		else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED ||
+				pmsg.getWhat() == PluginUpdate.UNLOADED)
+		{
+			Set<String> dockables = plugins.remove(pmsg.getPluginJAR());
+			if (dockables != null)
 			{
-				// we don't care
-			}
-			else if(pmsg.getWhat() == PluginUpdate.DEACTIVATED ||
-					pmsg.getWhat() == PluginUpdate.UNLOADED)
-			{
-				Set<String> dockables = plugins.remove(pmsg.getPluginJAR());
-				if (dockables != null)
+				for (String dockable: dockables)
 				{
-					for (String dockable: dockables)
-					{
-						disposeDockableWindow(dockable);
-						windows.remove(dockable);
-					}
+					disposeDockableWindow(dockable);
+					windows.remove(dockable);
 				}
 			}
 		}

@@ -341,7 +341,7 @@ public class DockableWindowFactory
 		private StringBuilder code;
 		private boolean actions;
 		private boolean movable;
-		final boolean MOVABLE_DEFAULT = false;
+		static final boolean MOVABLE_DEFAULT = false;
 		
 		private Stack<String> stateStack;
 		//}}}
