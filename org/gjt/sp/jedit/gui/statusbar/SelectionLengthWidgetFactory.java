@@ -63,6 +63,7 @@ public class SelectionLengthWidgetFactory implements StatusWidgetFactory
 			selectionLength = new SelectionLength();
 			selectionLength.setForeground(jEdit.getColorProperty("view.status.foreground"));
 			selectionLength.setBackground(jEdit.getColorProperty("view.status.background"));
+			EditBus.addToBus(this);
 		}
 
 		public JComponent getComponent()
