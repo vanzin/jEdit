@@ -77,7 +77,7 @@ public class JEditTextArea extends TextArea
 		return foldPainter;
 	} //}}}
 
-	
+
 	//{{{ home() method
 	/**
 	 * A "dumb home" action which only has 2 states:
@@ -101,10 +101,9 @@ public class JEditTextArea extends TextArea
 			goToStartOfLine(select);
 			break;
 		}
-	}// }}}
-	
+	} //}}}
 
-	// {{{ end() method
+	//{{{ end() method
 	/**
 	 * a dumb end action which only has 2 states:
 	 * 	end of whitespace or end of line
@@ -128,8 +127,8 @@ public class JEditTextArea extends TextArea
 			goToEndOfLine(select);
 			break;
 		}
-	}//}}}
-	
+	} //}}}
+
 	//{{{ smartHome() method
 	/**
 	 * On subsequent invocations, first moves the caret to the first

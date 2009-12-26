@@ -2924,9 +2924,9 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			goToStartOfLine(select);
 			break;
 		}
-	}// }}}
+	} //}}}
 
-	// {{{ end() method
+	//{{{ end() method
 	/**
 	 * a dumb end action which only has 2 states:
 	 * 	end of whitespace or end of line
@@ -2944,7 +2944,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			goToEndOfLine(select);
 			break;
 		}
-	}//}}}
+	} //}}}
 
 	//{{{ smartHome() method
 	/**
