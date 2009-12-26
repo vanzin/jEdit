@@ -25,6 +25,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.msg.DynamicMenuChanged;
 import org.gjt.sp.util.Log;
@@ -768,7 +769,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	/**
 	 * Handles macro recording.
 	 */
-	public static class Recorder implements EBComponent
+	public static class Recorder
 	{
 		View view;
 		Buffer buffer;
@@ -869,17 +870,14 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 			}
 		} //}}}
 
-		//{{{ handleMessage() method
-		public void handleMessage(EBMessage msg)
+		//{{{ handleBufferUpdate() method
+		@EBHandler
+		public void handleBufferUpdate(BufferUpdate bmsg)
 		{
-			if(msg instanceof BufferUpdate)
+			if(bmsg.getWhat() == BufferUpdate.CLOSED)
 			{
-				BufferUpdate bmsg = (BufferUpdate)msg;
-				if(bmsg.getWhat() == BufferUpdate.CLOSED)
-				{
-					if(bmsg.getBuffer() == buffer)
-						stopRecording(view);
-				}
+				if(bmsg.getBuffer() == buffer)
+					stopRecording(view);
 			}
 		} //}}}
 
