@@ -28,12 +28,16 @@ Release procedure of jEdit
   Anytime after making the branch, the step 1 of the next release can be
   started.
 
-4. Make a RC (release-candidate) from the branch. (ex. M.N-rc1)
+4. Make a public preview build from the branch.
 
-  The release of RCs is announced on jedit-devel, jedit-users,
+  The preview build is announced on jedit-devel, jedit-users,
   jedit-announce, with a clear notice saying it is for testing.
 
-5. Receive bugs for the RC, and fix them.
+  For this purpose, daily build can be used. Daily builds are provided
+  by Eric Berry (elberry), here.
+  http://www.tellurianring.com/projects/jedit-daily/
+
+5. Receive bugs for preview builds, and fix them.
 
   The fixes first applied on the trunk. If it seems also good for a
   release branch, it can be submitted into the Merge Requests tracker.
@@ -60,10 +64,10 @@ Release procedure of jEdit
   possibility of unexpected breakages, and achieves the stability of the
   release branch.
 
-  While this process, some RCs may be made for each two weeks or so.
+  While this process, some more preview builds may be made periodically.
 
-6. If no major bugs are reported against the RC for the last period,
-   release from the branch as a stable release. (ex. M.N.0)
+6. If no major bugs are reported against the preview build for the last
+   period, release from the branch as a stable release. (ex. M.N.0)
 
 7. After a stable release, bug fix continue as same as the step 5.
    If some fixes are merged from the trunk, make a patch release.
