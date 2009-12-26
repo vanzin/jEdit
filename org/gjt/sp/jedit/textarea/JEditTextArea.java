@@ -77,14 +77,12 @@ public class JEditTextArea extends TextArea
 		return foldPainter;
 	} //}}}
 
-
+	// {{{ Overrides for macro recording.
 	//{{{ home() method
 	/**
-	 * A "dumb home" action which only has 2 states:
-	 *     start of the whitespace or start of line
-	 *     @param select true if we also want to select from the cursor
-	 * @since jedit 4.4pre1
+	 * An override to record the acutual action taken for home().
 	 */
+	@Override
 	public void home(boolean select)
 	{
 		Macros.Recorder recorder = view.getMacroRecorder();
@@ -105,11 +103,9 @@ public class JEditTextArea extends TextArea
 
 	//{{{ end() method
 	/**
-	 * a dumb end action which only has 2 states:
-	 * 	end of whitespace or end of line
-	 * @param select true if we also want to select from the cursor
-	 * @since jedit 4.4pre1
+	 * An override to record the acutual action taken for end().
 	 */
+	@Override
 	public void end(boolean select)
 	{
 		Macros.Recorder recorder = view.getMacroRecorder();
@@ -131,10 +127,7 @@ public class JEditTextArea extends TextArea
 
 	//{{{ smartHome() method
 	/**
-	 * On subsequent invocations, first moves the caret to the first
-	 * non-whitespace character of the line, then the beginning of the
-	 * line, then to the first visible line.
-	 * @since jEdit 2.7pre2
+	 * An override to record the acutual action taken for smartHome().
 	 */
 	@Override
 	public void smartHome(boolean select)
@@ -166,10 +159,7 @@ public class JEditTextArea extends TextArea
 
 	//{{{ smartEnd() method
 	/**
-	 * On subsequent invocations, first moves the caret to the last
-	 * non-whitespace character of the line, then the end of the
-	 * line, then to the last visible line.
-	 * @since jEdit 2.7pre2
+	 * An override to record the acutual action taken for smartHome().
 	 */
 	@Override
 	public void smartEnd(boolean select)
@@ -197,6 +187,7 @@ public class JEditTextArea extends TextArea
 			break;
 		}
 	} //}}}
+	// }}}
 
 	// {{{ overrides from the base class that are EditBus  aware
 	public void goToBufferEnd(boolean select)
