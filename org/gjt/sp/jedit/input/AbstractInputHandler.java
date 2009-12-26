@@ -58,7 +58,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 		repeatCount = 1;
 	} //}}}
 	
-		//{{{ addKeyBinding() method
+	//{{{ addKeyBinding() method
 	/**
 	 * Adds a key binding to this input handler. The key binding is
 	 * a list of white space separated key strokes of the form
@@ -322,12 +322,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 	public abstract void processKeyEvent(KeyEvent evt, int from, boolean global); 
 	//}}}
 
-	//{{{ processKeyEventKeyStrokeHandling() method
-
-	//{{{ handleKey() methodprotected void sendShortcutPrefixOff()
-	/**
-	 *  If 
-	 */
+	//{{{ sendShortcutPrefixOff() method
 	protected void sendShortcutPrefixOff()
 	{
 		if(shortcutOn)
@@ -382,6 +377,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 		return b.toString();
 	} //}}}
 
+	//{{{ processKeyEventKeyStrokeHandling() method
 	/**
 	 *
 	 * @param evt the keyboard event
