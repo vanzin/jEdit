@@ -17,9 +17,17 @@ Eric Le Lay and Bernhard Walle for contributing to this release.
   (bug #2895272 - report and patch from Bernhard Walle).
   doxygen now highlights quoted strings in comments.
 
+- Fixed bug in "selection-length" status bar widget: The widget was not added
+  to the edit bus, so it wasn't updated when the edit pane changed.
+  (Shlomy Reinstein)
+
+- Fixed #2920352: Can't disable "Restore previously open files on startup".
+  (Shlomy Reinstein)
+
 }}}
 {{{ API changes
 
+- Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
 }}}
 {{{ Miscellaneous
