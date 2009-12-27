@@ -2091,6 +2091,7 @@ options.textarea.blockCaret=block
 options.textarea.thickCaret=thick
 options.textarea.selection=Single selection:
 options.textarea.multipleSelection=Multiple selection:
+options.textarea.selectionFg=Selection foreground:
 options.textarea.lineHighlight=Highlight current line:
 options.textarea.structureHighlight=Highlight matching elements:
 options.textarea.eolMarkers=End of line markers:

@@ -296,7 +296,10 @@ public class StandaloneTextArea extends TextArea
 		painter.setAntiAlias(new AntiAlias(getProperty("view.antiAlias")));
 		painter.setFractionalFontMetricsEnabled(getBooleanProperty(
 			"view.fracFontMetrics"));
-
+		painter.setSelectionFgColor(getColorProperty(
+			"view.selectionFgColor"));
+		painter.setSelectionFgColorEnabled(getBooleanProperty(
+			"view.selectionFg"));
 		String defaultFont = getProperty("view.font");
 		int defaultFontSize = getIntegerProperty("view.fontsize",12);
 		painter.setStyles(SyntaxUtilities.loadStyles(defaultFont,defaultFontSize));

@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.textarea;
 //{{{ Imports
 import javax.swing.text.*;
 import javax.swing.JComponent;
+
 import java.awt.event.MouseEvent;
 import java.awt.font.*;
 import java.awt.geom.AffineTransform;
@@ -35,6 +36,7 @@ import java.util.*;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.syntax.Chunk;
+import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.Debug;
@@ -317,6 +319,54 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public final void setLineHighlightEnabled(boolean lineHighlight)
 	{
 		this.lineHighlight = lineHighlight;
+		textArea.repaint();
+	} //}}}
+
+	//{{{ getSelectionFgColor() method
+	/**
+	 * Returns the selection foreground color, if one is set.
+	 * @since jEdit 4.4.1
+	 */
+	public final Color getSelectionFgColor()
+	{
+		return selectionFgColor;
+	} //}}}
+
+	//{{{ setSelectionFgColor() method
+	/**
+	 * Sets the selection foreground color.
+	 * @param selectionFgColor The selection foreground color
+	 * @since jEdit 4.4.1
+	 */
+	public final void setSelectionFgColor(Color selectionFgColor)
+	{
+		this.selectionFgColor = selectionFgColor;
+		if (isSelectionFgColorEnabled())
+			textArea.repaint();
+	} //}}}
+
+	//{{{ isSelectionFgColorEnabled() method
+	/**
+	 * Returns true if selection foreground color is enabled - i.e. a specific
+	 * color is used for the selection foreground instead of the syntax highlight
+	 * color.
+	 * @since jEdit 4.4.1
+	 */
+	public final boolean isSelectionFgColorEnabled()
+	{
+		return selectionFg;
+	} //}}}
+
+	//{{{ setSelectionFgEnabled() method
+	/**
+	 * Enables or disables selection foreground color.
+	 * @param selectionFg True if selection foreground should be enabled,
+	 * false otherwise
+	 * @since jEdit 4.4.1
+	 */
+	public final void setSelectionFgColorEnabled(boolean selectionFg)
+	{
+		this.selectionFg = selectionFg;
 		textArea.repaint();
 	} //}}}
 
@@ -834,6 +884,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	AntiAlias antiAlias;
 	boolean fracFontMetrics;
 	RenderingHints renderingHints;
+	boolean selectionFg;
+	Color selectionFgColor;
 	// should try to use this as little as possible.
 	FontMetrics fm;
 	//}}}
@@ -869,6 +921,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		addExtension(BRACKET_HIGHLIGHT_LAYER,new StructureMatcher
 			.Highlight(textArea));
 		addExtension(TEXT_LAYER,new PaintText());
+		addExtension(TEXT_LAYER,new PaintSelectionText());
 		caretExtension = new PaintCaret();
 	} //}}}
 
@@ -1076,6 +1129,89 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int x2 = selectionStartAndEnd[1];
 
 			gfx.fillRect(x1,y,x2 - x1,fm.getHeight());
+		} //}}}
+	} //}}}
+
+	//{{{ PaintSelectionText class
+	private class PaintSelectionText extends TextAreaExtension
+	{
+		//{{{ paintValidLine() method
+		@Override
+		public void paintValidLine(Graphics2D gfx, int screenLine,
+			int physicalLine, int start, int end, int y)
+		{
+			if(textArea.getSelectionCount() == 0)
+				return;
+			if ((! isSelectionFgColorEnabled()) || (getSelectionFgColor() == null)) 
+				return;
+
+			Iterator<Selection> iter = textArea.getSelectionIterator();
+			while(iter.hasNext())
+			{
+				Selection s = iter.next();
+				paintSelection(gfx,screenLine,physicalLine,y,s);
+			}
+		} //}}}
+
+		//{{{ paintSelection() method
+		private void paintSelection(Graphics2D gfx, int screenLine,
+			int physicalLine, int y, Selection s)
+		{
+			if ((physicalLine < s.getStartLine()) || (physicalLine > s.getEndLine()))
+				return;
+			int[] selectionStartAndEnd = textArea.selectionManager.getSelectionStartAndEnd(
+				screenLine, physicalLine, s);
+			if(selectionStartAndEnd == null)
+				return;
+			float x = selectionStartAndEnd[0];
+			y += fm.getHeight() - (fm.getLeading()+1) - fm.getDescent();
+
+			DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
+			textArea.getBuffer().markTokens(physicalLine, tokenHandler);
+			Token token = tokenHandler.getTokens();
+
+			int lineStart = textArea.getLineStartOffset(physicalLine);
+			int startOffset, endOffset;
+			if (s instanceof Selection.Rect)
+			{
+				Selection.Rect r = (Selection.Rect)s;
+				startOffset = r.getStart(textArea.getBuffer(), physicalLine);
+				endOffset = r.getEnd(textArea.getBuffer(), physicalLine);
+			}
+			else
+			{
+				startOffset = (s.getStart() > lineStart) ? s.getStart() : lineStart;
+				endOffset = s.getEnd();
+			}
+			int tokenStart = lineStart;
+			while(token.id != Token.END)
+			{
+				int next = tokenStart + token.length;
+				if (next > startOffset)	// Reached selection start
+				{
+					if (tokenStart >= endOffset)	// Got past selection
+						break;
+					SyntaxStyle style = styles[token.id];
+					if(style != null)
+					{
+						gfx.setFont(style.getFont());
+						gfx.setColor(getSelectionFgColor());
+						int strStart = (startOffset > tokenStart) ? startOffset : tokenStart; 
+						int strEnd = (endOffset > next) ? next : endOffset;
+						String sub = textArea.getText(strStart, strEnd - strStart);
+						if (sub.length() == 1 && sub.equals("\t"))
+							x = nextTabStop(x, next);
+						else
+						{
+							gfx.drawString(sub, x, y);
+							x += style.getFont().getStringBounds(sub,
+								getFontRenderContext()).getWidth();
+						}
+					}
+				}
+				tokenStart = next;
+				token = token.next;
+			}
 		} //}}}
 	} //}}}
 

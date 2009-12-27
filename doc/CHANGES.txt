@@ -32,6 +32,10 @@ Eric Le Lay and Bernhard Walle for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Added a configurable selection foreground color. If set, this color will be
+  used for the selection foreground instead of the syntax highlighting color.
+  The new option can be set from Global Options -> Text Area.
+  (Shlomy Reinstein)
 
 }}}
 }}}

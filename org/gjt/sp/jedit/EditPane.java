@@ -1123,6 +1123,11 @@ public class EditPane extends JPanel implements BufferSetListener
 		painter.setFractionalFontMetricsEnabled(jEdit.getBooleanProperty(
 			"view.fracFontMetrics"));
 
+		painter.setSelectionFgColor(jEdit.getColorProperty(
+			"view.selectionFgColor"));
+		painter.setSelectionFgColorEnabled(jEdit.getBooleanProperty(
+			"view.selectionFg"));
+
 		String defaultFont = jEdit.getProperty("view.font");
 		int defaultFontSize = jEdit.getIntegerProperty("view.fontsize",12);
 		painter.setStyles(SyntaxUtilities.loadStyles(defaultFont,defaultFontSize));
