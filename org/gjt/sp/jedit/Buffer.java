@@ -56,6 +56,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Vector;
 import java.util.Map;
 //}}}
@@ -1591,6 +1592,28 @@ public class Buffer extends JEditBuffer
 		return name + " (" + MiscUtilities.abbreviate(directory) + ')';
 	} //}}}
 
+	//{{{ addBufferUndoListener() method
+	/**
+	 * Adds a buffer undo listener.
+	 * @param listener The listener
+	 * @since jEdit 4.3pre18
+	 */
+	public void addBufferUndoListener(BufferUndoListener listener)
+	{
+		undoListeners.add(listener);
+	} //}}}
+
+	//{{{ removeBufferUndoListener() method
+	/**
+	 * Removes a buffer undo listener.
+	 * @param listener The listener
+	 * @since jEdit 4.3pre18
+	 */
+	public void removeBufferUndoListener(BufferUndoListener listener)
+	{
+		undoListeners.remove(listener);
+	} //}}}
+
 	//}}}
 
 	//{{{ Package-private members
@@ -1630,6 +1653,8 @@ public class Buffer extends JEditBuffer
 		setFlag(NEW_FILE,newFile);
 		setFlag(AUTORELOAD,jEdit.getBooleanProperty("autoReload"));
 		setFlag(AUTORELOAD_DIALOG,jEdit.getBooleanProperty("autoReloadDialog"));
+
+		undoListeners = new Vector<BufferUndoListener>();
 	} //}}}
 
 	//{{{ commitTemporary() method
@@ -1666,6 +1691,77 @@ public class Buffer extends JEditBuffer
 		}
 	} //}}}
 
+	//}}}
+
+	//{{{ Protected members
+
+	//{{{ fireBeginUndo() method
+	protected void fireBeginUndo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.beginUndo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer undo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireEndUndo() method
+	protected void fireEndUndo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.endUndo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer undo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+
+	//{{{ fireBeginRedo() method
+	protected void fireBeginRedo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.beginRedo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer begin redo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
+	
+	//{{{ fireEndRedo() method
+	protected void fireEndRedo()
+	{
+		for (BufferUndoListener listener: undoListeners)
+		{
+			try
+			{
+				listener.endRedo(this);
+			}
+			catch(Throwable t)
+			{
+				Log.log(Log.ERROR,this,"Exception while sending buffer end redo event to "+ listener +" :");
+				Log.log(Log.ERROR,this,t);
+			}
+		}
+	} //}}}
 	//}}}
 
 	//{{{ Private members
@@ -1717,6 +1813,7 @@ public class Buffer extends JEditBuffer
 	private final Vector<Marker> markers;
 
 	private Socket waitSocket;
+	private List<BufferUndoListener> undoListeners;
 	//}}}
 
 	//{{{ setPath() method
