@@ -185,7 +185,7 @@ public class PluginJAR
 			for (String jarName: pluginLoadList)
 			{
 				String jarPath = findPlugin(jarName);
-				load(jarPath, false);
+				load(jarPath, true);
 			}
 		}
 		// Load extra jars that are part of this plugin
