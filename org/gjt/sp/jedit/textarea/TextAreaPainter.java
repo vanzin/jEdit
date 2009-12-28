@@ -1159,12 +1159,9 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			if ((physicalLine < s.getStartLine()) || (physicalLine > s.getEndLine()))
 				return;
-			int[] selectionStartAndEnd = textArea.selectionManager.getSelectionStartAndEnd(
-				screenLine, physicalLine, s);
-			if(selectionStartAndEnd == null)
-				return;
-			float x = selectionStartAndEnd[0];
-			y += fm.getHeight() - (fm.getLeading()+1) - fm.getDescent();
+			float x = 0f;
+			float baseLine = y + fm.getHeight() -
+				(fm.getLeading()+1) - fm.getDescent();
 
 			DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
 			textArea.getBuffer().markTokens(physicalLine, tokenHandler);
@@ -1187,6 +1184,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			while(token.id != Token.END)
 			{
 				int next = tokenStart + token.length;
+				String sub = null;
 				if (next > startOffset)	// Reached selection start
 				{
 					if (tokenStart >= endOffset)	// Got past selection
@@ -1196,18 +1194,38 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					{
 						gfx.setFont(style.getFont());
 						gfx.setColor(getSelectionFgColor());
-						int strStart = (startOffset > tokenStart) ? startOffset : tokenStart; 
+						int strStart;
+						if (startOffset > tokenStart)
+						{
+							strStart = startOffset;
+							sub = textArea.getText(tokenStart,
+								startOffset - tokenStart);
+							x += style.getFont().getStringBounds(sub,
+								getFontRenderContext()).getWidth();
+						}
+						else
+							strStart = tokenStart; 
 						int strEnd = (endOffset > next) ? next : endOffset;
-						String sub = textArea.getText(strStart, strEnd - strStart);
+						sub = textArea.getText(strStart, strEnd - strStart);
 						if (sub.length() == 1 && sub.equals("\t"))
 							x = nextTabStop(x, next);
 						else
 						{
-							gfx.drawString(sub, x, y);
+							gfx.drawString(sub, x, baseLine);
 							x += style.getFont().getStringBounds(sub,
 								getFontRenderContext()).getWidth();
 						}
 					}
+				}
+				if (sub == null)
+				{
+					SyntaxStyle style = styles[token.id];
+					sub = textArea.getText(tokenStart, next - tokenStart);
+					if (sub.length() == 1 && sub.equals("\t"))
+						x = nextTabStop(x, next);
+					else
+						x += style.getFont().getStringBounds(sub,
+							getFontRenderContext()).getWidth();
 				}
 				tokenStart = next;
 				token = token.next;
