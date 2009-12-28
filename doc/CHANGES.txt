@@ -3,11 +3,11 @@ JEDIT 4.4 VERSION HISTORY
 {{{ Version 4.4pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy Reinstein,
-Eric Le Lay and Bernhard Walle for contributing to this release.
+Damien Radtke, Eric Le Lay and Bernhard Walle for contributing to this release.
 
 {{{ Bug fixes
 
-- Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Kog13)
+- Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Radtke)
 
 - Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
 
