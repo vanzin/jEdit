@@ -8,8 +8,6 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 - Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Kog13)
 
-- Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
-
 }}}
 {{{ Miscellaneous
 
