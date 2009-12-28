@@ -77,12 +77,57 @@ public class JEditTextArea extends TextArea
 		return foldPainter;
 	} //}}}
 
+	// {{{ Overrides for macro recording.
+	//{{{ home() method
+	/**
+	 * An override to record the acutual action taken for home().
+	 */
+	@Override
+	public void home(boolean select)
+	{
+		Macros.Recorder recorder = view.getMacroRecorder();
+		switch(getInputHandler().getLastActionCount() % 2)
+		{
+		case 1:
+			if(recorder != null)
+				recorder.record("textArea.goToStartOfWhiteSpace(" + select + ");");			
+			goToStartOfWhiteSpace(select);
+			break;
+		default:
+			if(recorder != null)
+				recorder.record("textArea.goToStartOfLine(" + select + ");");			
+			goToStartOfLine(select);
+			break;
+		}
+	} //}}}
+
+	//{{{ end() method
+	/**
+	 * An override to record the acutual action taken for end().
+	 */
+	@Override
+	public void end(boolean select)
+	{
+		Macros.Recorder recorder = view.getMacroRecorder();
+
+		switch(getInputHandler().getLastActionCount() % 2)
+		{
+		case 1:
+			if(recorder != null)
+				recorder.record("textArea.goToEndOfWhiteSpace(" + select + ");");
+			goToEndOfWhiteSpace(select);
+			break;
+		default:
+			if(recorder != null)
+				recorder.record("textArea.goToEndOfLine(" + select + ");");
+			goToEndOfLine(select);
+			break;
+		}
+	} //}}}
+
 	//{{{ smartHome() method
 	/**
-	 * On subsequent invocations, first moves the caret to the first
-	 * non-whitespace character of the line, then the beginning of the
-	 * line, then to the first visible line.
-	 * @since jEdit 2.7pre2
+	 * An override to record the acutual action taken for smartHome().
 	 */
 	@Override
 	public void smartHome(boolean select)
@@ -114,10 +159,7 @@ public class JEditTextArea extends TextArea
 
 	//{{{ smartEnd() method
 	/**
-	 * On subsequent invocations, first moves the caret to the last
-	 * non-whitespace character of the line, then the end of the
-	 * line, then to the last visible line.
-	 * @since jEdit 2.7pre2
+	 * An override to record the acutual action taken for smartHome().
 	 */
 	@Override
 	public void smartEnd(boolean select)
@@ -145,6 +187,7 @@ public class JEditTextArea extends TextArea
 			break;
 		}
 	} //}}}
+	// }}}
 
 	// {{{ overrides from the base class that are EditBus  aware
 	public void goToBufferEnd(boolean select)
