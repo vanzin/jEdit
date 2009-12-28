@@ -1185,11 +1185,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			{
 				int next = tokenStart + token.length;
 				String sub = null;
+				SyntaxStyle style = styles[token.id];
 				if (next > startOffset)	// Reached selection start
 				{
 					if (tokenStart >= endOffset)	// Got past selection
 						break;
-					SyntaxStyle style = styles[token.id];
 					if(style != null)
 					{
 						gfx.setFont(style.getFont());
@@ -1198,39 +1198,38 @@ public class TextAreaPainter extends JComponent implements TabExpander
 						if (startOffset > tokenStart)
 						{
 							strStart = startOffset;
-							sub = textArea.getText(tokenStart,
-								startOffset - tokenStart);
-							x += style.getFont().getStringBounds(sub,
-								getFontRenderContext()).getWidth();
+							x = nextX(x, style, sub, tokenStart, startOffset);
 						}
 						else
 							strStart = tokenStart; 
 						int strEnd = (endOffset > next) ? next : endOffset;
 						sub = textArea.getText(strStart, strEnd - strStart);
-						if (sub.length() == 1 && sub.equals("\t"))
-							x = nextTabStop(x, next);
-						else
-						{
-							gfx.drawString(sub, x, baseLine);
-							x += style.getFont().getStringBounds(sub,
-								getFontRenderContext()).getWidth();
-						}
+						gfx.drawString(sub, x, baseLine);
+						x = nextX(x, style, sub, strStart, strEnd);
 					}
 				}
 				if (sub == null)
-				{
-					SyntaxStyle style = styles[token.id];
-					sub = textArea.getText(tokenStart, next - tokenStart);
-					if (sub.length() == 1 && sub.equals("\t"))
-						x = nextTabStop(x, next);
-					else
-						x += style.getFont().getStringBounds(sub,
-							getFontRenderContext()).getWidth();
-				}
+					x = nextX(x, style, sub, tokenStart, next);
 				tokenStart = next;
 				token = token.next;
 			}
 		} //}}}
+
+		//{{{
+		float nextX(float x, SyntaxStyle style, String s, int startOffset,
+			int endOffset)
+		{
+			if (s == null)
+				s = textArea.getText(startOffset, endOffset - startOffset);
+			if (s.length() == 1 && s.equals("\t"))
+				x = nextTabStop(x, endOffset);
+			else
+			{
+				Font font = (style != null) ? style.getFont() : getFont();
+				x += font.getStringBounds(s, getFontRenderContext()).getWidth();
+			}
+			return x;
+		}
 	} //}}}
 
 	//{{{ PaintWrapGuide class
