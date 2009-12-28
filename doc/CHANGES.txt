@@ -7,6 +7,8 @@ Eric Le Lay and Bernhard Walle for contributing to this release.
 
 {{{ Bug fixes
 
+- Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Kog13)
+
 - Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
 
 - Fixed some quirks in the Python edit mode (Björn "Vampire" Kautler)
