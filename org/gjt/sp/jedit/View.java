@@ -1268,8 +1268,6 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 		if(!OperatingSystem.isMacOS())
 			title.append(jEdit.getProperty("view.title"));
 
-		boolean unsavedChanges = false;
-
 		for(int i = 0; i < buffers.size(); i++)
 		{
 			if(i != 0)
@@ -1279,10 +1277,7 @@ public class View extends JFrame implements EBComponent, InputHandlerProvider
 			title.append(showFullPath && !buffer.isNewFile()
 				? buffer.getPath(true) : buffer.getName());
 			if(buffer.isDirty())
-			{
-				unsavedChanges = true;
 				title.append(jEdit.getProperty("view.title.dirty"));
-			}
 		}
 
 		setTitle(title.toString());
@@ -1779,7 +1774,10 @@ loop:		while (true)
 						String path = (String)obj;
 						buffer = jEdit.getBuffer(path);
 						if (buffer == null)
-							buffer = jEdit.openFile(this, path);
+						{
+							int untitledCount = jEdit.getNextUntitledBufferId();
+							buffer = jEdit.openFile(this,null,"Untitled-" + untitledCount,true,null);
+						}
 					}
 
 					if(buffer == null)

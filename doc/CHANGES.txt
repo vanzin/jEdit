@@ -2,14 +2,17 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3.1
 
-Thanks to Björn "Vampire" Kautler, and Alan Ezust for contributing to
-this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, and Shlomy Reinstein for
+contributing to this release.
 
 {{{ Bug Fixes
 
 - Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Kog13)
 
 - Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
+
+- Fixed #2920352: Can't disable "Restore previously open files on startup".
+  (Shlomy Reinstein)
 
 }}}
 {{{ Miscellaneous
