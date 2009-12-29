@@ -392,7 +392,6 @@ class InstallPanel extends JPanel implements EBComponent
 				return;
 
 			String[] args = { entry.name };
-
 			int result = GUIUtilities.listConfirm(
 				window,"plugin-manager.dependency",
 				args,parents);
@@ -419,8 +418,9 @@ class InstallPanel extends JPanel implements EBComponent
 				return;
 
 			Entry entry = (Entry)obj;
+			boolean before = entry.install;
 			entry.install = Boolean.TRUE.equals(aValue);
-
+			if (before == entry.install) return;
 			if (!entry.install)
 				deselectParents(entry);
 
@@ -791,7 +791,13 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			if (localName.equals("plugin"))
 			{
+				String jarName = attrs.getValue("jar");
+				if (jarName.endsWith(".jar")) 
+					jarName=jarName.substring(0, jarName.length()-4);
 				pluginSet.add(attrs.getValue("name"));
+				if (jarName != attrs.getValue("name")) {
+					pluginSet.add(jarName);
+				}
 			}
 		}
 	} //}}}
