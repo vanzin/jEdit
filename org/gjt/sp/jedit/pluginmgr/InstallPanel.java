@@ -792,12 +792,9 @@ class InstallPanel extends JPanel implements EBComponent
 			if (localName.equals("plugin"))
 			{
 				String jarName = attrs.getValue("jar");
-				if (jarName.endsWith(".jar")) 
+				if (jarName.endsWith(".jar"))
 					jarName=jarName.substring(0, jarName.length()-4);
-				pluginSet.add(attrs.getValue("name"));
-				if (jarName != attrs.getValue("name")) {
-					pluginSet.add(jarName);
-				}
+				pluginSet.add(jarName);
 			}
 		}
 	} //}}}
@@ -806,7 +803,7 @@ class InstallPanel extends JPanel implements EBComponent
 	private class ChoosePluginSet extends RolloverButton implements ActionListener
 	{
 		private String path;
-		
+
 		//{{{ ChoosePluginSet constructor
 		ChoosePluginSet()
 		{
@@ -853,7 +850,7 @@ class InstallPanel extends JPanel implements EBComponent
 			setToolTipText("clear plugin set");
 			addActionListener(this);
 		} //}}}
-		
+
 		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent e)
 		{
@@ -1158,5 +1155,5 @@ class InstallPanel extends JPanel implements EBComponent
 	//}}}
 
 	static final Icon ASC_ICON  = GUIUtilities.loadIcon("arrow-asc.png");
-	static final Icon DESC_ICON = GUIUtilities.loadIcon("arrow-desc.png");	
+	static final Icon DESC_ICON = GUIUtilities.loadIcon("arrow-desc.png");
 }
