@@ -23,10 +23,9 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-
-import javax.swing.text.*;
-import java.awt.font.*;
+import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
+import java.awt.font.FontRenderContext;
 import java.util.List;
 //}}}
 
@@ -59,7 +58,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	{
 		super.init();
 
-		x = 0.0f;
+		endX = 0.0f;
 
 		this.styles = styles;
 		this.fontRenderContext = fontRenderContext;
@@ -74,8 +73,8 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		this.out = out;
 
 		seenNonWhitespace = false;
-		endX = endOfWhitespace = 0.0f;
-		end = null;
+		endOfWhitespace = 0.0f;
+		afterTrailingWhitespace = false;
 	} //}}}
 
 	//{{{ getChunkList() method
@@ -104,8 +103,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	{
 		if(id == Token.END)
 		{
-			if(firstToken != null)
-				out.add(merge((Chunk)firstToken,seg));
+			terminateScreenLine(seg);
 			return;
 		}
 
@@ -113,52 +111,35 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		{
 			int splitLength = Math.min(length - splitOffset,MAX_CHUNK_LEN);
 			Chunk chunk = createChunk(id,offset + splitOffset,splitLength,context);
-			addToken(chunk,context);
-
 			if(wrapMargin != 0.0f)
 			{
 				initChunk(chunk,seg);
-				x += chunk.width;
-
 				if(Character.isWhitespace(seg.array[
 					seg.offset + chunk.offset]))
 				{
-					if(seenNonWhitespace)
+					if (seenNonWhitespace)
 					{
-						end = lastToken;
-						endX = x;
+						afterTrailingWhitespace = true;
 					}
-					else
-						endOfWhitespace = x;
 				}
 				else
 				{
-					if(x > wrapMargin
-						&& end != null
-						&& seenNonWhitespace)
+					if (!seenNonWhitespace)
 					{
-						Chunk nextLine = new Chunk(endOfWhitespace,
-							end.offset + end.length,
-							getParserRuleSet(context));
-						initChunk(nextLine,seg);
-
-						nextLine.next = end.next;
-						end.next = null;
-
-						if(firstToken != null)
-							out.add(merge((Chunk)firstToken,seg));
-
-						firstToken = nextLine;
-
-						x = x - endX + endOfWhitespace;
-
-						end = null;
-						endX = x;
+						endOfWhitespace = endX;
+						seenNonWhitespace = true;
 					}
-
-					seenNonWhitespace = true;
+					if(endX + chunk.width > wrapMargin
+						&& afterTrailingWhitespace
+						&& endX > endOfWhitespace)
+					{
+						wrapLine(seg, context);
+					}
+					afterTrailingWhitespace = false;
 				}
+				endX += chunk.width;
 			}
+			addToken(chunk,context);
 		}
 	} //}}}
 
@@ -168,15 +149,14 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	private SyntaxStyle[] styles;
 	private FontRenderContext fontRenderContext;
 	private TabExpander expander;
-	private float x;
+	private float endX;
 
 	private List<Chunk> out;
 	private float wrapMargin;
-	private float endX;
-	private Token end;
 
 	private boolean seenNonWhitespace;
 	private float endOfWhitespace;
+	private boolean afterTrailingWhitespace;
 	//}}}
 
 	//{{{ createChunk() method
@@ -189,12 +169,16 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	} //}}}
 
 	//{{{ initChunk() method
-	protected void initChunk(Chunk chunk, Segment seg)
+	private void initChunk(Chunk chunk, Segment seg)
 	{
-		chunk.init(seg,expander,x,fontRenderContext);
+		chunk.init(seg,expander,endX,fontRenderContext);
 	} //}}}
 
 	//{{{ merge() method
+	/**
+	 * Merges each adjucent chunks if possible, to reduce the number
+	 * of chunks for rendering performance.
+	 */
 	private Chunk merge(Chunk first, Segment seg)
 	{
 		if(first == null)
@@ -218,7 +202,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 				{
 					initChunk(chunk,seg);
 					if(wrapMargin == 0.0f)
-						x += chunk.width;
+						endX += chunk.width;
 				}
 				chunk = next;
 			}
@@ -242,6 +226,40 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		return ((c1.style == c2.style)
 			&& ch1 != '\t' && ch2 != '\t'
 			&& (c1.length + c2.length <= MAX_CHUNK_LEN));
+	} //}}}
+
+	//{{{ wrapLine() method
+	/**
+	 * Starts a new screen line.
+	 */
+	private void wrapLine(Segment seg, TokenMarker.LineContext context)
+	{
+		// Wrap can't happen at the start of a screen line.
+		assert lastToken != null;
+
+		int eolOffset = lastToken.offset + lastToken.length;
+		terminateScreenLine(seg);
+
+		Chunk indent = new Chunk(endOfWhitespace, eolOffset,
+			getParserRuleSet(context));
+		initChunk(indent, seg);
+		addToken(indent, context);
+
+		endX = endOfWhitespace;
+	} //}}}
+
+	//{{{ terminateScreenLine() method
+	/**
+	 * Makes the list of tokens into a screen line.
+	 * The list becomes empty.
+	 */
+	private void terminateScreenLine(Segment seg)
+	{
+		if (firstToken != null)
+		{
+			out.add(merge((Chunk)firstToken, seg));
+			firstToken = lastToken = null;
+		}
 	} //}}}
 
 	//}}}
