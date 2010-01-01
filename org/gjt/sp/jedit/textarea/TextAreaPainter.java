@@ -357,7 +357,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		return selectionFg;
 	} //}}}
 
-	//{{{ setSelectionFgEnabled() method
+	//{{{ setSelectionFgColorEnabled() method
 	/**
 	 * Enables or disables selection foreground color.
 	 * @param selectionFg True if selection foreground should be enabled,
