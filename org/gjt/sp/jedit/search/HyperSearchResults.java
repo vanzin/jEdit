@@ -40,6 +40,7 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.SearchMatcher.Match;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.HtmlUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
 //}}}
 
@@ -481,7 +482,10 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			if(source == highlight)
 			{
 				String prop = jEdit.getProperty(HIGHLIGHT_PROP);
-				SyntaxStyle style = new StyleEditor(jEdit.getActiveView(), parseHighlightStyle(prop),
+				Font f = (resultTree != null) ? resultTree.getFont() :
+					UIManager.getFont("Tree.font");
+				SyntaxStyle style = new StyleEditor(jEdit.getActiveView(),
+					HtmlUtilities.parseHighlightStyle(prop, f),
 					"hypersearch").getStyle();
 				if (style != null)
 					jEdit.setProperty(HIGHLIGHT_PROP, GUIUtilities.getStyleString(style));
@@ -524,7 +528,11 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			super(model);
 			prop = jEdit.getProperty(HIGHLIGHT_PROP);
 			if (prop != null && prop.length() > 0)
-				styleTag = style2html(prop);
+			{
+				Font f = (resultTree != null) ? resultTree.getFont() :
+					UIManager.getFont("Tree.font");
+				styleTag = HtmlUtilities.style2html(prop, f);
+			}
 		}
 
 		@Override
@@ -547,92 +555,26 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			if (! newProp.equals(prop))
 			{
 				prop = newProp;
-				styleTag = style2html(prop);
+				Font f = (resultTree != null) ? resultTree.getFont() :
+					UIManager.getFont("Tree.font");
+				styleTag = HtmlUtilities.style2html(prop, f);
 			}
 			SearchMatcher matcher =
 				((HyperSearchOperationNode) node.getUserObject()).getSearchMatcher();
-			StringBuilder sb = new StringBuilder("<html><style>.highlight {");
-			sb.append(styleTag);
-			sb.append("}</style><body>");
-			int lineTextIndex = s.indexOf(": ");
-			if (lineTextIndex > 0)
-			{
-				lineTextIndex += 2;
-				appendString2html(sb, s.substring(0, lineTextIndex));
-				s = s.substring(lineTextIndex);
-			}
-			int i = 0;
+			int i = s.indexOf(": ");
+			if (i > 0)
+				i += 2;
+			else
+				i = 0;
 			Match m;
+			Vector<Integer> matches = new Vector<Integer>();
 			while ((m = matcher.nextMatch(s.substring(i), true, true, true, false)) != null)
 			{
-				appendString2html(sb, s.substring(i, i + m.start));
-				sb.append("<span class=\"highlight\">");
-				appendString2html(sb, s.substring(i + m.start, i + m.end));
-				sb.append("</span>");
+				matches.add(i + m.start);
+				matches.add(i + m.end);
 				i += m.end;
 			}
-			appendString2html(sb, s.substring(i));
-			sb.append("</body></html>");
-			return sb.toString();
-		}
-
-		private String color2html(Color c)
-		{
-			StringBuilder cs = new StringBuilder("rgb(");
-			cs.append(c.getRed());
-			cs.append(",");
-			cs.append(c.getGreen());
-			cs.append(",");
-			cs.append(c.getBlue());
-			cs.append(");");
-			return cs.toString();
-		}
-		
-		private String style2html(String prop)
-		{
-			StringBuilder tag = new StringBuilder();
-			SyntaxStyle style = parseHighlightStyle(prop);
-			Font f = style.getFont();
-			Color c = style.getForegroundColor();
-			if (c != null)
-				tag.append("color:").append(color2html(c));
-			c = style.getBackgroundColor();
-			if (c != null)
-				tag.append("background:").append(color2html(c));
-			if (f.isBold())
-				tag.append("font-weight:bold;");
-			if (f.isItalic())
-				tag.append("font-style: italic;");
-			return tag.toString();
-		}
-		
-		private void appendString2html(StringBuilder sb, String s)
-		{
-			for (int i = 0; i < s.length(); i++)
-			{
-				char c = s.charAt(i);
-				String r;
-				switch (c)
-				{
-				case '"':
-					r = "&quot;";
-					break;
-				// case '\'': r = "&apos;"; break;
-				case '&':
-					r = "&amp;";
-					break;
-				case '<':
-					r = "&lt;";
-					break;
-				case '>':
-					r = "&gt;";
-					break;
-				default:
-					r = String.valueOf(c);
-					break;
-				}
-				sb.append(r);
-			}
+			return HtmlUtilities.highlightString(s, styleTag, matches);
 		}
 	} //}}}
 	
