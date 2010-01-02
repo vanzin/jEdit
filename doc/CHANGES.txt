@@ -2,15 +2,16 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3.1
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, and Shlomy Reinstein for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Damien Radtke,
+Kazutoshi Satoda, Dale Anson, and Shlomy Reinstein for contributing
+to this release.
 
 {{{ Bug Fixes
 
 - Fix for 2924261, BufferLocal ignores request to change encoding.  (Dale
 Anson)
 
-- Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Kog13)
+- Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Radtke)
 
 - Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
 
