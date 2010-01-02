@@ -1,19 +1,22 @@
-JEDIT 4.4 VERSION HISTORY
+jEdit 4.4 version history
+       (changes since jEdit 4.3)
 
 {{{ Version 4.4pre1
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy Reinstein,
-Damien Radtke, Eric Le Lay and Bernhard Walle for contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
+Reinstein, Damien Radtke, Dale Anson, Eric Le Lay and Bernhard Walle for
+contributing to this release.
 
 {{{ Bug fixes
 
+- Fix # 2924261, BufferLocal ignores request to change encoding.
+  (Dale Anson)
+
 - Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Radtke)
-  Removed unnecessary popup warnings from InstallPanel about deselecting plugins
-  when loading a pluginset. (Alan Ezust)
+  Removed unnecessary popup warnings from InstallPanel when loading a
+  pluginset. (Alan Ezust)
 
 - Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
-
-- Fixed some quirks in the Python edit mode (Björn "Vampire" Kautler)
 
 - fix #1439605 - remove installer.VariableGridLayout (r16596).
 
