@@ -7,6 +7,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Fix for 2924261, BufferLocal ignores request to change encoding.  (Dale
+Anson)
+
 - Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Kog13)
 
 - Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)

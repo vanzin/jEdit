@@ -148,6 +148,7 @@ public class ReloadWithEncodingProvider implements ActionListener, DynamicMenuPr
 			// Disable auto-detect because user explicitly
 			// specify an encoding.
 			props.put(Buffer.ENCODING_AUTODETECT, false);
+			view.getBuffer().setStringProperty(Buffer.ENCODING, encoding);
 		}
 
 		String path = view.getBuffer().getPath();
