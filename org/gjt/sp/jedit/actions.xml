@@ -1308,6 +1308,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="set-view-title">
+	<CODE>
+		view.showUserTitleDialog();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="toggle-buffer-switcher">
 <CODE>
     b = !jEdit.getBooleanProperty("view.showBufferSwitcher");

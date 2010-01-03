@@ -533,6 +533,7 @@ view=new-view \
      %docking \
      %buffersets \
      - \
+     set-view-title \
      toggle-full-screen
 view.label=$View
 new-view.label=New $View
@@ -549,6 +550,7 @@ toggle-line-numbers.label=$Line Numbers
 toggle-statusbar.label=Toggle S$tatus Bar
 toggle-gutter.label=Toggle $Gutter
 show-context-menu.label=Show Context Menu
+set-view-title.label=Set view title...
 toggle-full-screen.label=Toggle $full-screen mode
 
 #{{{ Scrolling menu
@@ -1725,6 +1727,9 @@ syntax-style-no-token.message=The text under the caret has no associated \
 	syntax style to configure.
 #}}}
 
+#{{{ View title dialog
+view.title.select=Please enter a title for this view:
+#}}}
 #}}}
 
 #{{{ Buffer options dialog

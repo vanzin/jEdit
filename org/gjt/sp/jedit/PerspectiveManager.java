@@ -183,6 +183,15 @@ public class PerspectiveManager
 				out.write(config.plainView ? "TRUE" : "FALSE");
 				out.write("\">");
 
+				if (config.title != null)
+				{
+					out.write(lineSep);
+					out.write("<TITLE>");
+					out.write(XMLUtilities.charsToEntities(config.title,false));
+					out.write("</TITLE>");
+					out.write(lineSep);
+				}
+
 				out.write("<PANES>");
 				out.write(lineSep);
 				out.write(XMLUtilities.charsToEntities(
@@ -342,6 +351,8 @@ public class PerspectiveManager
 				config = new View.ViewConfig();
 				config.docking = View.getDockingFrameworkProvider().createDockingLayout();
 			}
+			else if(name.equals("TITLE"))
+				config.title = charData.toString();
 		}
 
 		@Override

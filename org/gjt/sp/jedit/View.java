@@ -54,6 +54,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.LayoutFocusTraversalPolicy;
@@ -1123,6 +1124,7 @@ public class View extends JFrame implements InputHandlerProvider
 		config.splitConfig = getSplitConfig();
 		config.extState = getExtendedState();
 		config.docking = dockableWindowManager.getDockingLayout(config);
+		config.title = userTitle;
 		String prefix = config.plainView ? "plain-view" : "view";
 		switch (config.extState)
 		{
@@ -1264,7 +1266,12 @@ public class View extends JFrame implements InputHandlerProvider
 		/* On Mac OS X, apps are not supposed to show their name in the
 		title bar. */
 		if(!OperatingSystem.isMacOS())
-			title.append(jEdit.getProperty("view.title"));
+		{
+			if (userTitle != null)
+				title.append(userTitle);
+			else
+				title.append(jEdit.getProperty("view.title"));
+		}
 
 		for(int i = 0; i < buffers.size(); i++)
 		{
@@ -1281,6 +1288,29 @@ public class View extends JFrame implements InputHandlerProvider
 		setTitle(title.toString());
 	} //}}}
 
+	//{{{ setUserTitle() method
+	/**
+	 * Sets a user-defined title for this view instead of the "view.title" property.
+	 */
+	public void setUserTitle(String title)
+	{
+		userTitle = title + " - ";
+		updateTitle();
+	} //}}}
+
+	//{{{ showUserTitleDialog() method
+	/**
+	 * Shows a dialog for selecting a user-defined title for this view.
+	 */
+	public void showUserTitleDialog()
+	{
+		String title = JOptionPane.showInputDialog(this, jEdit.getProperty(
+			"view.title.select"));
+		if (title == null)
+			return;
+		setUserTitle(title);
+	} //}}}
+	
 	//{{{ getPrefixFocusOwner() method
 	public Component getPrefixFocusOwner()
 	{
@@ -1329,6 +1359,7 @@ public class View extends JFrame implements InputHandlerProvider
 		mainPanel.setLayout(new BorderLayout());
 		dockableWindowManager = getDockingFrameworkProvider().create(this,
 			DockableWindowFactory.getInstance(), config);
+		userTitle = config.title;
 		dockableWindowManager.setMainPanel(mainPanel);
 
 		topToolBars = new JPanel(new VariableGridLayout(
@@ -1566,7 +1597,7 @@ public class View extends JFrame implements InputHandlerProvider
 	private boolean fullScreenMode;
 	private Rectangle windowedBounds;
 	private JMenuBar menuBar;
-
+	private String userTitle;
 	//}}}
 
 	//{{{ setMainContent() method
@@ -2203,6 +2234,7 @@ loop:		while (true)
 		public boolean plainView;
 		public String splitConfig;
 		public DockingLayout docking;
+		public String title;
 
 		public ViewConfig()
 		{

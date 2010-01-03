@@ -44,6 +44,10 @@ contributing to this release.
   The new option can be set from Global Options -> Text Area.
   (Shlomy Reinstein)
 
+- Implemented feature request #2919875: Namable views. You can now specify a
+  name for each view using View -> Set view title. The name is persistent in the
+  perspective.xml file.
+
 }}}
 }}}
 
