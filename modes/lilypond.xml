@@ -17,10 +17,15 @@ Recommended jEdit/modes/catalog entry:
 	<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 	<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 	<PROPERTY NAME="doubleBracketIndent" VALUE="false" />
+    <PROPERTY NAME="indentNextLines" VALUE=".*&lt;&lt;.*" />
+    <PROPERTY NAME="unindentThisLine" VALUE=".*&gt;&gt;.*" />
+    <PROPERTY NAME="unindentNextLines" VALUE=".*&gt;&gt;.*" />
+    <PROPERTY NAME="unindentThisLine" VALUE="(?!(.*&lt;&lt;)).*&gt;&gt;.*" />
+    <PROPERTY NAME="electricKeys" VALUE="&gt;" /> 
 	<PROPERTY NAME="wordBreakChars" VALUE="=" />
 </PROPS>
 
-<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="FALSE">
+<RULES IGNORE_CASE="FALSE" HIGHLIGHT_DIGITS="TRUE">
 
 	<SPAN TYPE="COMMENT2" NO_LINE_BREAK="FALSE">
 		<BEGIN>%{</BEGIN><END>%}</END>
@@ -58,8 +63,6 @@ Recommended jEdit/modes/catalog entry:
 	<!-- rests and skip -->
 
 	<SEQ_REGEXP TYPE="LITERAL4" AT_WORD_START="TRUE" HASH_CHARS="rRs">[rRs]\d*\b</SEQ_REGEXP>
-
-	<SEQ_REGEXP TYPE="DIGIT" AT_WORD_START="FALSE" HASH_CHARS="1234567890">\d+\b</SEQ_REGEXP>
 
   <MARK_FOLLOWING TYPE="FUNCTION">ly:</MARK_FOLLOWING>
   
@@ -1282,7 +1285,7 @@ Recommended jEdit/modes/catalog entry:
 <KEYWORD2>display-application</KEYWORD2>
 <KEYWORD2>display-backtrace</KEYWORD2>
 <KEYWORD2>display-error</KEYWORD2>
-<KEYWORD2>do</KEYWORD2>
+<!--  KEYWORD2>do</KEYWORD2 -->
 <KEYWORD2>dotted-list?</KEYWORD2>
 <KEYWORD2>doubly-weak-hash-table?</KEYWORD2>
 <KEYWORD2>down</KEYWORD2>
