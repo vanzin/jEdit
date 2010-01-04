@@ -223,7 +223,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	{
 		stop.setEnabled(true);
 		caption.setText(jEdit.getProperty("hypersearch-results.searching",
-				new String[] { SearchAndReplace.getSearchString() }));
+				new String[] { trimSearchString() }));
 	} //}}}
 
 	//{{{ setSearchStatus() method
@@ -236,7 +236,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	public void searchFailed()
 	{
 		caption.setText(jEdit.getProperty("hypersearch-results.no-results",
-				new String[] { SearchAndReplace.getSearchString() }));
+				new String[] { trimSearchString() }));
 
 		// collapse all nodes, as suggested on user mailing list...
 		for(int i = 0; i < resultTreeRoot.getChildCount(); i++)
@@ -265,7 +265,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		}
 
 		caption.setText(jEdit.getProperty("hypersearch-results.done",
-				new String [] { SearchAndReplace.getSearchString() }));
+				new String [] { trimSearchString() }));
 
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -452,6 +452,18 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		view.getDockableWindowManager().hideDockableWindow(NAME);
 	} //}}}
 
+	//{{{ trimSearchString() method
+	private String trimSearchString()
+	{
+		String s = SearchAndReplace.getSearchString();
+		int length = jEdit.getIntegerProperty("hypersearch.displayQueryLength", 100);
+		if (s.length() > length)
+		{
+			return s.substring(0,length) + "...";
+		}
+		return s;
+	} //}}}
+
 	//{{{ parseHighlightStyle()
 	SyntaxStyle parseHighlightStyle(String style)
 	{
@@ -468,8 +480,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			s = SyntaxUtilities.parseStyle(style, f.getFamily(), f.getSize(), true);
 		}
 		return s;
-	}
-	//}}}
+	} //}}}
 	
 	//}}}
 
