@@ -1,3 +1,25 @@
+/*
+ * HtmlUtilities.java - HTML utility functions
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2010 Shlomy Reinstein
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
 package org.gjt.sp.util;
 
 import java.awt.Color;
@@ -6,11 +28,32 @@ import java.util.Vector;
 
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 
+/**
+ * HTML utility methods for conversion of strings to HTML and highlighting matches
+ * in search results.
+ * Some of these methods were moved here from HyperSearchResults.HighlightingTree
+ * to make them available for plugins.
+ *
+ * @author Shlomy Reinstein
+ * @version $Id: $
+ * @since 4.4pre1
+ */
+
 public class HtmlUtilities
 {
 	//{{{ public section
 
 	//{{{ parseHighlightStyle()
+	/**
+	 * Parses a string specifying a syntax highlight style.
+	 *
+	 * The syntax highlight string should be in the same format used to
+	 * store syntax highlight styles in the properties.
+	 *
+	 * @param style The syntax highlight style string.
+	 * @param f The font to which the syntax style will apply.
+	 * @return The SyntaxStyle object represented by the style string.
+	 */
 	public static SyntaxStyle parseHighlightStyle(String style, Font f)
 	{
 		SyntaxStyle s;
@@ -27,6 +70,17 @@ public class HtmlUtilities
 	} //}}}
 
 	//{{{ style2html()
+	/**
+	 * Parses a string specifying a syntax highlight style, and creates an
+	 * HTML representation for it.
+	 *
+	 * The syntax highlight string should be in the same format used to
+	 * store syntax highlight styles in the properties.
+	 *
+	 * @param prop The syntax highlight style string.
+	 * @param f The font to which the syntax style will apply.
+	 * @return The HTML representation of the given syntax style. 
+	 */
 	public static String style2html(String prop, Font f)
 	{
 		StringBuilder tag = new StringBuilder();
@@ -44,9 +98,18 @@ public class HtmlUtilities
 			tag.append("font-style: italic;");
 		return tag.toString();
 	} //}}}
-	//}}}
 
 	//{{{ highlightString()
+	/**
+	 * Creates an HTML presentation of a given string, where selected substrings
+	 * are highlighted with a given syntax style tag.
+	 *
+	 * @param s The (non-HTML) string to highlight. 
+	 * @param styleTag The HTML string representing the highlight style.
+	 * @param ranges The indices of the substrings to highlight, in pairs: The start
+	 *               index of a substring followed by the end index of the substring.
+	 * @return The HTML representation of the string with highlighted substrings. 
+	 */
 	public static String highlightString(String s, String styleTag, Vector<Integer> ranges)
 	{
 		StringBuilder sb = new StringBuilder("<html><style>.highlight {");
@@ -69,6 +132,13 @@ public class HtmlUtilities
 	} //}}}
 
 	//{{{ appendString2html
+	/**
+	 * Appends a given non-HTML string to an HTML string, translating character
+	 * entities to the appropriate HTML form.
+	 * 
+	 * @param: sb The HTML string to which the non-HTML string is appended.
+	 * @param: s The non-HTML string to append. 
+	 */
 	public static void appendString2html(StringBuilder sb, String s)
 	{
 		for (int i = 0; i < s.length(); i++)
@@ -97,6 +167,8 @@ public class HtmlUtilities
 			sb.append(r);
 		}
 	} //}}}
+	
+	//}}}
 
 	//{{{ private section
 
