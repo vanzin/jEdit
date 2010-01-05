@@ -31,6 +31,9 @@ Bernhard Walle for contributing to this release.
 - Fixed #2920352: Can't disable "Restore previously open files on startup".
   (Shlomy Reinstein)
 
+- Searching for regex "^\s*.*$" missed every second line of adjacent
+  matching lines. (SF.net bug #2915720 - Kazutoshi Satoda)
+
 }}}
 {{{ API changes
 
