@@ -46,6 +46,9 @@ Bernhard Walle for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Added actions for eating whitespace at word ends in both directions
+  for findWordStart. (#1953341 - strank)
+
 - Added a configurable selection foreground color. If set, this color will be
   used for the selection foreground instead of the syntax highlighting color.
   The new option can be set from Global Options -> Text Area.

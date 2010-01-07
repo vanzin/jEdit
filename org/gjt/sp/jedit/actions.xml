@@ -75,6 +75,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="backspace-word-std-after">
+	<CODE>
+		textArea.backspaceWord(true, true);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="bottom-docking-area">
 	<CODE>
 		wm.getBottomDockingArea().showMostRecent();
@@ -845,6 +851,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="prev-word-std-after">
+	<CODE>
+		textArea.goToPrevWord(false,true,true);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="print">
 	<CODE>
 	if(jEdit.getBooleanProperty("print.force13"))
@@ -1269,6 +1281,12 @@
 <ACTION NAME="select-prev-word-std">
 	<CODE>
 		textArea.goToPrevWord(true,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-word-std-after">
+	<CODE>
+		textArea.goToPrevWord(true,true,true);
 	</CODE>
 </ACTION>
 

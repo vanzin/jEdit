@@ -378,6 +378,28 @@ public class TextUtilities
 					boolean camelCasedWords,
 					boolean eatWhitespace)
 	{
+		return findWordStart(line, pos, noWordSep, joinNonWordChars, camelCasedWords, eatWhitespace, false);
+	} //}}}
+
+	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @param joinNonWordChars Treat consecutive non-alphanumeric
+	 * characters as one word
+	 * @param camelCasedWords Treat "camelCased" parts as words
+	 * @param eatWhitespace Include whitespace at start of word
+	 * @param eatOnlyAfterWord Eat only whitespace after a word,
+	 * in effect this finds actual word starts even if eating
+	 * @since jEdit 4.3pre16
+	 */
+	public static int findWordStart(CharSequence line, int pos, String noWordSep,
+		boolean joinNonWordChars, boolean camelCasedWords,
+		boolean eatWhitespace, boolean eatOnlyAfterWord)
+	{
 		char ch = line.charAt(pos);
 
 		if(noWordSep == null)
@@ -395,12 +417,22 @@ public class TextUtilities
 			{
 			//{{{ Whitespace...
 			case WHITESPACE:
-				// only select other whitespace in this case
+				// only select other whitespace in this case, unless eating only after words
 				if(Character.isWhitespace(ch))
 					break;
-				// word char or symbol; stop
+				// word char or symbol; stop, unless eating only after words
+				else if (!eatOnlyAfterWord)
+				{
+					return i + 1;
+				}
+				// we have eaten after-word-whitespace and now continue until word start
+				else if (Character.isLetterOrDigit(ch) || noWordSep.indexOf(ch) != -1)
+				{
+					type = WORD_CHAR;
+				}
 				else
-					return i + 1; //}}}
+					type = SYMBOL;
+				break; //}}}
 			//{{{ Word character...
 			case WORD_CHAR:
 				// stop at next last (in writing direction) upper case char if camel cased
@@ -422,9 +454,9 @@ public class TextUtilities
 				{
 					break;
 				}
-				// whitespace; include in word if eating
+				// whitespace; include in word if eating, but not if only eating after word
 				else if(Character.isWhitespace(ch)
-					&& eatWhitespace)
+					&& eatWhitespace && !eatOnlyAfterWord)
 				{
 					type = WHITESPACE;
 					break;
@@ -436,10 +468,10 @@ public class TextUtilities
 				if(!joinNonWordChars && pos != i)
 					return i + 1;
 
-				// whitespace; include in word if eating
+				// whitespace; include in word if eating, but not if only eating after word
 				if(Character.isWhitespace(ch))
 				{
-					if(eatWhitespace)
+					if(eatWhitespace && !eatOnlyAfterWord)
 					{
 						type = WHITESPACE;
 						break;

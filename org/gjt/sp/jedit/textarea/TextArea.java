@@ -2862,9 +2862,23 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ goToPrevWord() method
 	/**
 	 * Moves the caret to the start of the previous word.
+	 * @param eatWhitespace If true, will eat whitespace
 	 * @since jEdit 4.1pre5
 	 */
 	public void goToPrevWord(boolean select, boolean eatWhitespace)
+	{
+		goToPrevWord(select,eatWhitespace,false);
+	} //}}}
+
+	//{{{ goToPrevWord() method
+	/**
+	 * Moves the caret to the start of the previous word.
+	 * @param eatWhitespace If true, will eat whitespace
+	 * @param eatOnlyAfterWord Eat only whitespace after a word,
+	 * in effect this goes to actual word starts even if eating
+	 * @since jEdit 4.1pre16
+	 */
+	public void goToPrevWord(boolean select, boolean eatWhitespace, boolean eatOnlyAfterWord)
 	{
 		int lineStart = getLineStartOffset(caretLine);
 		int newCaret = caret - lineStart;
@@ -2894,7 +2908,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
 			newCaret = TextUtilities.findWordStart(lineText,
-				newCaret - 1,noWordSep,true,camelCasedWords,eatWhitespace);
+				newCaret - 1,noWordSep,true,camelCasedWords,eatWhitespace,
+				eatOnlyAfterWord);
 
 			newCaret += lineStart;
 		}
@@ -3407,6 +3422,19 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void backspaceWord(boolean eatWhitespace)
 	{
+		backspaceWord(eatWhitespace,false);
+	} //}}}
+
+	//{{{ backspaceWord() method
+	/**
+	 * Deletes the word before the caret.
+	 * @param eatWhitespace If true, will eat whitespace
+	 * @param eatOnlyAfterWord Eat only whitespace after a word,
+	 * in effect this goes to actual word starts even if eating
+	 * @since jEdit 4.2pre16
+	 */
+	public void backspaceWord(boolean eatWhitespace, boolean eatOnlyAfterWord)
+	{
 		if(!buffer.isEditable())
 		{
 			getToolkit().beep();
@@ -3438,7 +3466,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			String noWordSep = buffer.getStringProperty("noWordSep");
 			boolean camelCasedWords = buffer.getBooleanProperty("camelCasedWords");
 			_caret = TextUtilities.findWordStart(lineText,_caret-1,
-				noWordSep,true,camelCasedWords,eatWhitespace);
+				noWordSep,true,camelCasedWords,eatWhitespace,
+				eatOnlyAfterWord);
 		}
 
 		buffer.remove(_caret + lineStart, caret - (_caret + lineStart));

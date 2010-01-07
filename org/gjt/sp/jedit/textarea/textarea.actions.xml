@@ -37,6 +37,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="backspace-word-std-after">
+	<CODE>
+		textArea.backspaceWord(true, true);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="center-caret">
 	<CODE>
 		textArea.centerCaret();
@@ -365,6 +371,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="prev-word-std-after">
+	<CODE>
+		textArea.goToPrevWord(false,true,true);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="range-comment">
 	<CODE>
 		textArea.rangeComment();
@@ -583,6 +595,12 @@
 <ACTION NAME="select-prev-word-std">
 	<CODE>
 		textArea.goToPrevWord(true,true);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="select-prev-word-std-after">
+	<CODE>
+		textArea.goToPrevWord(true,true,true);
 	</CODE>
 </ACTION>
 
