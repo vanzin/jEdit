@@ -4,7 +4,7 @@ jEdit 4.4 version history
 {{{ Version 4.4pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
-Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay and 
+Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay and
 Bernhard Walle for contributing to this release.
 
 {{{ Bug fixes
@@ -19,10 +19,6 @@ Bernhard Walle for contributing to this release.
 - Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
 
 - fix #1439605 - remove installer.VariableGridLayout (r16596).
-
-- Added the missing doxygen commands for doxygen v1.6.1
-  (bug #2895272 - report and patch from Bernhard Walle).
-  doxygen now highlights quoted strings in comments.
 
 - Fixed bug in "selection-length" status bar widget: The widget was not added
   to the edit bus, so it wasn't updated when the edit pane changed.
@@ -40,6 +36,14 @@ Bernhard Walle for contributing to this release.
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
 }}}
+{{{ Editing
+- Added the missing doxygen commands for doxygen v1.6.1
+  (bug #2895272 - report and patch from Bernhard Walle).
+  doxygen now highlights quoted strings in comments.
+
+- Added regex.xml mode file (#2782258 - Kevin Hunter)
+
+}}}
 {{{ Miscellaneous
 
 - Added a configurable selection foreground color. If set, this color will be
@@ -50,7 +54,7 @@ Bernhard Walle for contributing to this release.
 - Implemented feature request #2919875: Namable views. You can now specify a
   name for each view using View -> Set view title. The name is persistent in the
   perspective.xml file.
-  
+
 - In Hypersearchs result panel, the query string length is now limited to 100
   chars by default for display (Matthieu Casanova)
 
