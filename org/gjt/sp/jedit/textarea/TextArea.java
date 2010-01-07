@@ -2876,7 +2876,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * @param eatWhitespace If true, will eat whitespace
 	 * @param eatOnlyAfterWord Eat only whitespace after a word,
 	 * in effect this goes to actual word starts even if eating
-	 * @since jEdit 4.1pre16
+	 * @since jEdit 4.4pre1
 	 */
 	public void goToPrevWord(boolean select, boolean eatWhitespace, boolean eatOnlyAfterWord)
 	{
@@ -3431,7 +3431,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 * @param eatWhitespace If true, will eat whitespace
 	 * @param eatOnlyAfterWord Eat only whitespace after a word,
 	 * in effect this goes to actual word starts even if eating
-	 * @since jEdit 4.2pre16
+	 * @since jEdit 4.4pre1
 	 */
 	public void backspaceWord(boolean eatWhitespace, boolean eatOnlyAfterWord)
 	{

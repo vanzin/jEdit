@@ -291,7 +291,7 @@ public class TextUtilities
 		Iterator<String> itr = c.iterator();
 		if (itr.hasNext())
 			retval.append( itr.next() );
-		else 
+		else
 			return "";
 		while (itr.hasNext())
 		{
@@ -394,7 +394,7 @@ public class TextUtilities
 	 * @param eatWhitespace Include whitespace at start of word
 	 * @param eatOnlyAfterWord Eat only whitespace after a word,
 	 * in effect this finds actual word starts even if eating
-	 * @since jEdit 4.3pre16
+	 * @since jEdit 4.4pre1
 	 */
 	public static int findWordStart(CharSequence line, int pos, String noWordSep,
 		boolean joinNonWordChars, boolean camelCasedWords,
