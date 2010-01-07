@@ -44,7 +44,7 @@ void runScript()
 	else
 		buffer.save(view, buffer.getPath());
 	mode = buffer.getMode().getName();
-	path = buffer.getPath() + " ";
+	path = buffer.getPath() ;
 	os = System.getProperty("os.name");
 	if(os.indexOf("Windows") != -1)
 		path = "\"" + path + "\"";
