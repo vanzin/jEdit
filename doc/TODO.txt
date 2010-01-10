@@ -1,3 +1,11 @@
+close view ne ferme pas les buffers
+
+delete property
+editpane.bufferset.default
+editpane.bufferset.new
+options.editpane.bufferset.contain
+
+
 [error] ExtensionManager: java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 379
 [error] ExtensionManager:  at org.gjt.sp.jedit.Buffer.getLineOfOffset(Buffer.java:892)
 [error] ExtensionManager:  at errorlist.DefaultErrorSource$DefaultError.getLineNumber(DefaultErrorSource.java:510)

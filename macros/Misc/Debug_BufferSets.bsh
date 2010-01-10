@@ -33,20 +33,7 @@ for (Buffer buffer:buffers)
 }
 
 Log.log(Log.DEBUG, this, "------END BUFFER LIST------");
-Log.log(Log.DEBUG, this, "------BUFFERSET LIST------");
-bufferSetManager.visit(new org.gjt.sp.jedit.bufferset.BufferSetManager.BufferSetVisitor()
-					   {
-					   public void visit(org.gjt.sp.jedit.bufferset.BufferSet bufferSet)
-					   {
-						   Buffer[] buffers = bufferSet.getAllBuffers();
-						   for (Buffer buffer : buffers)
-						   {
-							   Log.log(Log.DEBUG, this, bufferSet.hashCode() + "@" + bufferSet + " " + buffer);
-						   }
-					   }
-					   });
 
-Log.log(Log.DEBUG, this, "------END BUFFERSET LIST------");
 Log.log(Log.DEBUG, this, "------EDITPANE LIST------");
 jEdit.visit(new org.gjt.sp.jedit.visitors.JEditVisitorAdapter()
 			{

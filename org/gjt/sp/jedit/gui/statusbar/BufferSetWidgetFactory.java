@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008 Matthieu Casanova
+ * Copyright (C) 2008, 2009 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,9 +30,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.msg.ViewUpdate;
+import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
-import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 //}}}
 
@@ -47,18 +46,17 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 	//{{{ getWidget() method
 	public Widget getWidget(View view)
 	{
-		Widget bufferSetWidget = new BufferSetWidget(view);
+		Widget bufferSetWidget = new BufferSetWidget();
 		return bufferSetWidget;
 	} //}}}
 
 	//{{{ BufferSetWidget class
-	public static class BufferSetWidget implements Widget
+	private static class BufferSetWidget implements Widget, EBComponent
 	{
 		private final JLabel bufferSetLabel;
-		private final View view;
 		private BufferSet.Scope currentScope;
 
-		BufferSetWidget(final View view)
+		BufferSetWidget()
 		{
 			bufferSetLabel = new ToolTipLabel()
 			{
@@ -76,7 +74,6 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 					EditBus.removeFromBus(BufferSetWidget.this);
 				}
 			};
-			this.view = view;
 			update();
 			bufferSetLabel.addMouseListener(new MouseAdapter()
 			{
@@ -85,8 +82,8 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 				{
 					if (evt.getClickCount() == 2)
 					{
-						EditPane editPane = view.getEditPane();
-						BufferSet.Scope scope = editPane.getBufferSetScope();
+						BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
+						BufferSet.Scope scope = bufferSetManager.getScope();
 						switch (scope)
 						{
 							case global:
@@ -99,7 +96,7 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 								scope = BufferSet.Scope.global;
 								break;
 						}
-						editPane.setBufferSetScope(scope);
+						bufferSetManager.setScope(scope);
 					}
 				}
 			});
@@ -114,7 +111,7 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 		//{{{ update() method
 		public void update()
 		{
-			BufferSet.Scope scope = view.getEditPane().getBufferSetScope();
+			BufferSet.Scope scope = jEdit.getBufferSetManager().getScope();
 			if (currentScope == null || !currentScope.equals(scope))
 			{
 				bufferSetLabel.setText(scope.toString().substring(0,1).toUpperCase());
@@ -137,22 +134,16 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 			bufferSetLabel.setMaximumSize(dim);
 		} //}}}
 
-		//{{{ handleViewUpdate() method
-		@EBHandler
-		public void handleViewUpdate(ViewUpdate viewUpdate)
+		//{{{ handleMessage() method
+		public void handleMessage(EBMessage message)
 		{
-			if (viewUpdate.getWhat() == ViewUpdate.EDIT_PANE_CHANGED)
-				update();
-		} //}}}
-
-		//{{{ handleEditPaneUpdate() method
-		@EBHandler
-		public void handleEditPaneUpdate(EditPaneUpdate editPaneUpdate)
-		{
-			if (editPaneUpdate.getEditPane() == view.getEditPane() &&
-				editPaneUpdate.getWhat() == EditPaneUpdate.BUFFERSET_CHANGED)
+			if (message instanceof EditPaneUpdate)
 			{
-				update();
+				EditPaneUpdate editPaneUpdate = (EditPaneUpdate) message;
+				if (editPaneUpdate.getWhat() == EditPaneUpdate.BUFFERSET_CHANGED)
+				{
+					update();
+				}
 			}
 		} //}}}
 

@@ -23,6 +23,7 @@ package org.gjt.sp.jedit.bufferset;
 
 //{{{ Imports
 import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.EditPane;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -45,7 +46,7 @@ public class BufferSet
 	//{{{ Scope enum
 	public enum Scope
 	{
-		global, view, editpane;
+		editpane, view, global;
 
 		public static Scope fromString(String s)
 		{
@@ -61,12 +62,13 @@ public class BufferSet
 	} //}}}
 
 	//{{{ BufferSet constructor
-	/**
-	 * Create a new BufferSet.
-	 */
-	public BufferSet()
+	public BufferSet(EditPane owner, BufferSet source)
 	{
-		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
+		this.owner = owner;
+		if (source == null)
+			buffers = Collections.synchronizedList(new ArrayList<Buffer>());
+		else
+			buffers = Collections.synchronizedList(new ArrayList<Buffer>(source.buffers));
 		listeners = new EventListenerList();
 
 		if (jEdit.getBooleanProperty("sortBuffers"))
@@ -76,7 +78,17 @@ public class BufferSet
 			else
 				sorter = pathSorter;
 		}
-	} //}}}
+	}//}}}
+
+	//{{{ getOwner() method
+	/**
+	 * @return the editpane that owns this BufferSet
+	 * @since 4.4pre1
+	 */
+	public EditPane getOwner()
+	{
+		return owner;
+	}//}}}
 
 	//{{{ addBufferAt() method
 	public void addBufferAt(Buffer buffer, int position)
@@ -274,7 +286,7 @@ public class BufferSet
 	 * This method is called by BufferSetManager to signal that this
 	 * BufferSet needs to react to a change in the sorting properties.
 	 */
-	void handleMessage()
+	void propertiesChanged()
 	{
 		if (jEdit.getBooleanProperty("sortBuffers"))
 		{
@@ -353,7 +365,7 @@ public class BufferSet
 	//{{{ Private members
 	private final List<Buffer> buffers;
 	private EventListenerList listeners;
-
+	private final EditPane owner;
 	private static final Comparator<Buffer> nameSorter = new NameSorter();
 	private static final Comparator<Buffer> pathSorter = new PathSorter();
 	private Comparator<Buffer> sorter;
