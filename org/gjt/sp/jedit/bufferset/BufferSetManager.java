@@ -374,7 +374,7 @@ public class BufferSetManager
 			}
 		}
 		this.scope = scope;
-		EditBus.send(new EditPaneUpdate(null, EditPaneUpdate.BUFFERSET_CHANGED));
+		EditBus.send(new PropertiesChanged(null));
 	}
 
 	public BufferSet.Scope getScope()
