@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008 Matthieu Casanova
+ * Copyright (C) 2008, 2010 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.util.Log;
-
+import org.gjt.sp.jedit.EditBus.EBHandler;
 import java.util.*;
 //}}}
 
@@ -38,7 +38,7 @@ import java.util.*;
  * @author Matthieu Casanova
  * @since jEdit 4.3pre15
  */
-public class BufferSetManager implements EBComponent
+public class BufferSetManager
 {
 	//{{{ BufferSetManager constructor
 	public BufferSetManager()
@@ -47,36 +47,37 @@ public class BufferSetManager implements EBComponent
 		scope = BufferSet.Scope.fromString(jEdit.getProperty("bufferset.scope", "global"));
 	} //}}}
 
-	//{{{ handleMessage() method
-	public void handleMessage(EBMessage message)
+	//{{{ handleEditPaneUpdate() method
+	@EBHandler
+	public void handleEditPaneUpdate(EditPaneUpdate message)
 	{
-		if (message instanceof EditPaneUpdate)
+		EditPaneUpdate editPaneUpdate = (EditPaneUpdate) message;
+		if (editPaneUpdate.getWhat() == EditPaneUpdate.DESTROYED)
 		{
-			EditPaneUpdate editPaneUpdate = (EditPaneUpdate) message;
-			if (editPaneUpdate.getWhat() == EditPaneUpdate.DESTROYED)
+			EditPane editPane = editPaneUpdate.getEditPane();
+			BufferSet bufferSet = editPane.getBufferSet();
+			Buffer[] allBuffers = bufferSet.getAllBuffers();
+			for (Buffer buffer : allBuffers)
 			{
-				EditPane editPane = editPaneUpdate.getEditPane();
-				BufferSet bufferSet = editPane.getBufferSet();
-				Buffer[] allBuffers = bufferSet.getAllBuffers();
-				for (Buffer buffer : allBuffers)
-				{
-					removeBuffer(bufferSet, buffer);
-				}
+				removeBuffer(bufferSet, buffer);
 			}
 		}
-		else if (message instanceof PropertiesChanged)
+	} //}}}
+
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		// pass on PropertiesChanged message to BufferSets so
+		// they can resort themselves as needed.
+		jEdit.visit(new JEditVisitorAdapter()
 		{
-			// pass on PropertiesChanged message to BufferSets so
-			// they can resort themselves as needed.
-			jEdit.visit(new JEditVisitorAdapter()
+			@Override
+			public void visit(EditPane editPane)
 			{
-				@Override
-				public void visit(EditPane editPane)
-				{
-					editPane.getBufferSet().propertiesChanged();
-				}
-			});
-		}
+				editPane.getBufferSet().propertiesChanged();
+			}
+		});
 	} //}}}
 
 	//{{{ mergeBufferSet() method
