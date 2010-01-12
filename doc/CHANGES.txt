@@ -4,8 +4,8 @@ jEdit 4.4 version history
 {{{ Version 4.4pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
-Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay and
-Bernhard Walle for contributing to this release.
+Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
+Bernhard Walle and Joerg Spieler for contributing to this release.
 
 {{{ Bug fixes
 
@@ -61,6 +61,8 @@ Bernhard Walle for contributing to this release.
 - In Hypersearchs result panel, the query string length is now limited to 100
   chars by default for display (Matthieu Casanova)
 
+- Applied patch #2887520: Allow filtering the recent file list using file globs,
+  e.g. "*.java" or "{*.c,*.h}". (Patch provided by Joerg Spieler)
 }}}
 }}}
 

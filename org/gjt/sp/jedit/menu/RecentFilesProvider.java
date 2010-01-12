@@ -26,6 +26,8 @@ package org.gjt.sp.jedit.menu;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
+import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -38,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 //}}}
 
 public class RecentFilesProvider implements DynamicMenuProvider
@@ -106,25 +110,37 @@ public class RecentFilesProvider implements DynamicMenuProvider
 
 		final List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
 		final JTextField text = new JTextField();
-		text.setToolTipText(jEdit.getProperty("recent-files.textfield.tooltip"));
+		text.setToolTipText(jEdit.getProperty("recent-files.textfield.tooltip") + ": " + jEdit.getProperty("glob.tooltip"));
 		menu.add(text);
 		text.addKeyListener(new KeyAdapter()
 		{
 			public void keyReleased(KeyEvent e)
 			{
 				String typedText = text.getText();
-				for (JMenuItem tempMenuItem : menuItems)
+				boolean filter = (typedText.length() > 0);
+				Pattern pattern = null;
+				if (filter)
 				{
-					if (typedText.length() == 0)
+					String regex = typedText;
+					if ((! typedText.contains("*")) && (! typedText.contains("?")))
 					{
-						tempMenuItem.setEnabled(true);
+						// Old style (before jEdit 4.3pre18): Match start of file name
+						regex = regex + "*";
 					}
-					else
+					pattern = Pattern.compile(StandardUtilities.globToRE(regex),
+						Pattern.CASE_INSENSITIVE);
+				}
+				try
+				{
+					for (JMenuItem recent : menuItems)
 					{
-						String fileName = tempMenuItem.getText();
-						boolean matchesStart = fileName.toLowerCase().startsWith(typedText.toLowerCase());
-						tempMenuItem.setEnabled(matchesStart);
+						recent.setEnabled(filter ?
+							pattern.matcher(recent.getText()).matches() : true);
 					}
+				}
+				catch(PatternSyntaxException re)
+				{
+				  Log.log(Log.ERROR,this,re.getMessage());
 				}
 			}
 		});
