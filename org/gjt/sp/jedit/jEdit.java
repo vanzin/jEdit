@@ -1572,7 +1572,7 @@ public class jEdit
 					return null;
 				addBufferToList(newBuffer);
 				if (editPane != null)
-					bufferSetManager.addBuffer(editPane.getBufferSet(), newBuffer);
+					bufferSetManager.addBuffer(editPane, newBuffer);
 				else
 					bufferSetManager.addBuffer(jEdit.getActiveView(), newBuffer);
 			}

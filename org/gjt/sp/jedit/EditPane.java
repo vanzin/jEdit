@@ -768,7 +768,7 @@ public class EditPane extends JPanel implements BufferSetListener
 	EditPane(View view, BufferSet bufferSetSource, Buffer buffer)
 	{
 		super(new BorderLayout());
-		bufferSet = new BufferSet(this, bufferSetSource);
+		bufferSet = new BufferSet(bufferSetSource);
 		init = true;
 
 		this.view = view;

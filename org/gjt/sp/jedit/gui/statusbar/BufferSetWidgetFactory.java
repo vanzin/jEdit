@@ -33,6 +33,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferset.BufferSetManager;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 //}}}
 
 /**
@@ -64,6 +65,7 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 				public void addNotify()
 				{
 					super.addNotify();
+					BufferSetWidget.this.update();
 					EditBus.addToBus(BufferSetWidget.this);
 				}
 
@@ -137,10 +139,10 @@ public class BufferSetWidgetFactory implements StatusWidgetFactory
 		//{{{ handleMessage() method
 		public void handleMessage(EBMessage message)
 		{
-			if (message instanceof EditPaneUpdate)
+			if (message instanceof PropertiesChanged)
 			{
-				EditPaneUpdate editPaneUpdate = (EditPaneUpdate) message;
-				if (editPaneUpdate.getWhat() == EditPaneUpdate.BUFFERSET_CHANGED)
+				PropertiesChanged propertiesChanged = (PropertiesChanged) message;
+				if (propertiesChanged.getSource() instanceof BufferSetManager)
 				{
 					update();
 				}

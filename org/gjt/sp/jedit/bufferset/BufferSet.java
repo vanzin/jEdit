@@ -23,7 +23,6 @@ package org.gjt.sp.jedit.bufferset;
 
 //{{{ Imports
 import org.gjt.sp.jedit.Buffer;
-import org.gjt.sp.jedit.EditPane;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -62,9 +61,8 @@ public class BufferSet
 	} //}}}
 
 	//{{{ BufferSet constructor
-	public BufferSet(EditPane owner, BufferSet source)
+	public BufferSet(BufferSet source)
 	{
-		this.owner = owner;
 		if (source == null)
 			buffers = Collections.synchronizedList(new ArrayList<Buffer>());
 		else
@@ -78,16 +76,6 @@ public class BufferSet
 			else
 				sorter = pathSorter;
 		}
-	}//}}}
-
-	//{{{ getOwner() method
-	/**
-	 * @return the editpane that owns this BufferSet
-	 * @since 4.4pre1
-	 */
-	public EditPane getOwner()
-	{
-		return owner;
 	}//}}}
 
 	//{{{ addBufferAt() method
@@ -243,16 +231,6 @@ public class BufferSet
 	{
 		Log.log(Log.DEBUG, this, hashCode() + ": removeBufferSetListener " + listener);
 		listeners.remove(BufferSetListener.class, listener);
-		if (!hasListeners())
-		{
-			// must empty the bufferSet
-			Buffer[] buffers = getAllBuffers();
-			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
-			for (Buffer buffer : buffers)
-			{
-				bufferSetManager.removeBuffer(this, buffer);
-			}
-		}
 	} //}}}
 
 	//{{{ hasListeners() method
@@ -365,7 +343,6 @@ public class BufferSet
 	//{{{ Private members
 	private final List<Buffer> buffers;
 	private EventListenerList listeners;
-	private final EditPane owner;
 	private static final Comparator<Buffer> nameSorter = new NameSorter();
 	private static final Comparator<Buffer> pathSorter = new PathSorter();
 	private Comparator<Buffer> sorter;

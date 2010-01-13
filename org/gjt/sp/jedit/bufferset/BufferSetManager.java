@@ -51,10 +51,9 @@ public class BufferSetManager
 	@EBHandler
 	public void handleEditPaneUpdate(EditPaneUpdate message)
 	{
-		EditPaneUpdate editPaneUpdate = (EditPaneUpdate) message;
-		if (editPaneUpdate.getWhat() == EditPaneUpdate.DESTROYED)
+		if (message.getWhat() == EditPaneUpdate.DESTROYED)
 		{
-			EditPane editPane = editPaneUpdate.getEditPane();
+			EditPane editPane = message.getEditPane();
 			BufferSet bufferSet = editPane.getBufferSet();
 			Buffer[] allBuffers = bufferSet.getAllBuffers();
 			for (Buffer buffer : allBuffers)
@@ -78,22 +77,6 @@ public class BufferSetManager
 				editPane.getBufferSet().propertiesChanged();
 			}
 		});
-	} //}}}
-
-	//{{{ mergeBufferSet() method
-	/**
-	 * Merge the content of the source bufferSet into the target bufferSet
-	 * @param target the target bufferSet
-	 * @param source the source bufferSet
-	 * @see org.gjt.sp.jedit.EditPane#setBuffer(org.gjt.sp.jedit.Buffer)
-	 */
-	public void mergeBufferSet(BufferSet target, BufferSet source)
-	{
-		Buffer[] buffers = source.getAllBuffers();
-		for (Buffer buffer : buffers)
-		{
-			addBuffer(target, buffer);
-		}
 	} //}}}
 
 	//{{{ countBufferSets() method
@@ -127,37 +110,25 @@ public class BufferSetManager
 	 * @param editPane an EditPane (or null)
 	 * @param buffer the buffer to add
 	 */
-	public void addBuffer(EditPane editPane, Buffer buffer)
+	public void addBuffer(EditPane editPane, final Buffer buffer)
 	{
 		if (editPane == null)
 		{
 			editPane = jEdit.getActiveView().getEditPane();
 		}
 		BufferSet bufferSet = editPane.getBufferSet();
-		addBuffer(bufferSet, buffer);
-	}
-
-	/**
-	 * Add a buffer in the given bufferSet.
-	 *
-	 * @param bufferSet the bufferSet
-	 * @param buffer the buffer to add
-	 */
-	public void addBuffer(BufferSet bufferSet, final Buffer buffer)
-	{
 		switch (scope)
 		{
 			case editpane:
 				bufferSet.addBuffer(buffer);
 				break;
 			case view:
-				EditPane owner = bufferSet.getOwner();
-				EditPane[] editPanes = owner.getView().getEditPanes();
-				for (EditPane editPane:editPanes)
+				EditPane[] editPanes = editPane.getView().getEditPanes();
+				for (EditPane pane:editPanes)
 				{
-					if (editPane == null)
+					if (pane == null)
 						continue;
-					BufferSet bfs = editPane.getBufferSet();
+					BufferSet bfs = pane.getBufferSet();
 					bfs.addBuffer(buffer);
 				}
 				break;
@@ -172,23 +143,7 @@ public class BufferSetManager
 					}
 				});
 		}
-	} //}}}
-
-	//{{{ addAllBuffers() method
-	/**
-	 * Add all buffers to the bufferSet.
-	 *
-	 * @param bufferSet the bufferSet
-	 */
-	public void addAllBuffers(BufferSet bufferSet)
-	{
-		Buffer[] buffers = jEdit.getBuffers();
-		for (Buffer buffer : buffers)
-		{
-			if (!buffer.isClosed())
-				addBuffer(bufferSet, buffer);
-		}
-	} //}}}
+	}
 
 	//{{{ moveBuffer() method
 	/**
@@ -250,7 +205,7 @@ public class BufferSetManager
 		if (bufferSet.size() == 0 && bufferSet.hasListeners())
 		{
 			Buffer newEmptyBuffer = createUntitledBuffer();
-			jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+			jEdit.getBufferSetManager().addBuffer(getOwner(bufferSet), newEmptyBuffer);
 		}
 	} //}}}
 
@@ -268,11 +223,28 @@ public class BufferSetManager
 			if (bufferSet.size() == 0 && bufferSet.hasListeners())
 			{
 				Buffer newEmptyBuffer = createUntitledBuffer();
-				jEdit.getBufferSetManager().addBuffer(bufferSet, newEmptyBuffer);
+				EditPane owner = getOwner(bufferSet);
+				jEdit.getBufferSetManager().addBuffer(owner, newEmptyBuffer);
 			}
 		}
-
 	} //}}}
+
+	private static EditPane getOwner(BufferSet bufferSet)
+	{
+		View[] views = jEdit.getViews();
+		for (View view : views)
+		{
+			EditPane[] editPanes = view.getEditPanes();
+			for (EditPane editPane : editPanes)
+			{
+				if (editPane.getBufferSet() == bufferSet)
+				{
+					return editPane;
+				}
+			}
+		}
+		return null;
+	}
 
 	public static Buffer createUntitledBuffer()
 	{
@@ -374,7 +346,7 @@ public class BufferSetManager
 			}
 		}
 		this.scope = scope;
-		EditBus.send(new PropertiesChanged(null));
+		EditBus.send(new PropertiesChanged(this));
 	}
 
 	public BufferSet.Scope getScope()
