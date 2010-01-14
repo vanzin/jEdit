@@ -104,15 +104,25 @@ public class PatternSearchMatcher extends SearchMatcher
 		if (re == null)
 			re = Pattern.compile(pattern, flags);
 
-		Matcher match = re.matcher(text);
-		if (!match.find())
-			return null;
+		// if the pattern begins with "^", avoid spurious match at the
+		// start of input sequence which is not a start of line.
+		int matchStart = 0;
+		if (!start && re.pattern().charAt(0) == '^')
+		{
+			Matcher sol = Pattern.compile("^", flags).matcher(text);
+			// Ignore the first match since it is not a start of line.
+			sol.find();
+			// If the second match is not found, the real pattern also
+			// can't match.
+			if (!sol.find())
+				return null;
+			// Skip the text to the second match, which can be the first
+			// match for the real pattern.
+			matchStart = sol.start();
+		}
 
-		// if we're not at the start of the buffer, and the pattern
-		// begins with "^" and matched the beginning of the region
-		// being matched, ignore the match and try the next one.
-		if (!start && match.start() == 0
-			&& re.pattern().charAt(0) == '^' && !match.find())
+		Matcher match = re.matcher(text);
+		if (!match.find(matchStart))
 			return null;
 
 		// Special care for zero width matches. Without this care,

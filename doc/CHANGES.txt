@@ -8,6 +8,9 @@ to this release.
 
 {{{ Bug Fixes
 
+- Searching for regex "^\s*.*$" missed every second line of adjacent
+  matching lines. (SF.net bug #2915720 - Kazutoshi Satoda)
+
 - Fix for 2924261, BufferLocal ignores request to change encoding.  (Dale
 Anson)
 
@@ -175,6 +178,7 @@ Suraj Kurapati for contributing to this release.
 
 - Applied patch #2844750: line height correction (disappearing underscores),
   using OpenJDK (Suraj Kurapati)
+
 }}}
 {{{ Miscellaneous
 - New Macro - "Text/Compose Tag". (Gordon Hollenbeck # 2644277)
