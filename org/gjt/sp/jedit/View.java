@@ -782,6 +782,7 @@ public class View extends JFrame implements InputHandlerProvider
 			{
 				if(editPane != _editPane)
 				{
+					mergeBufferSets(editPane, _editPane);
 					_editPane.close();
 				}
 			}
@@ -824,6 +825,7 @@ public class View extends JFrame implements InputHandlerProvider
 				if(GUIUtilities.isAncestorOf(comp,_editPane)
 					&& _editPane != editPane)
 				{
+					mergeBufferSets(editPane, _editPane);
 					_editPane.close();
 				}
 			}
@@ -2115,6 +2117,20 @@ loop:		while (true)
 				editPane.getBufferSet().getAllBuffers()));
 		}
 		return openBuffers;
+	} //}}}
+
+	//{{{ mergeBufferSets() method
+	/**
+	 * Merge a EditPane's BufferSet into another one.
+	 * This is used on unsplitting panes not to close buffers.
+	 */
+	static private void mergeBufferSets(EditPane target, EditPane source)
+	{
+		BufferSetManager manager = jEdit.getBufferSetManager();
+		for (Buffer buffer: source.getBufferSet().getAllBuffers())
+		{
+			manager.addBuffer(target, buffer);
+		}
 	} //}}}
 
 	//}}}
