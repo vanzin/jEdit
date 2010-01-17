@@ -41,6 +41,8 @@ Bernhard Walle and Joerg Spieler for contributing to this release.
   (bug #2895272 - report and patch from Bernhard Walle).
   doxygen now highlights quoted strings in comments.
 
+- Added logtalk.xml mode file (#1945284 - Paulo Moura)
+
 - Added regex.xml mode file (#2782258 - Kevin Hunter)
 
 }}}
