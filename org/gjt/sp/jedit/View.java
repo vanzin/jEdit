@@ -1801,6 +1801,7 @@ loop:		while (true)
 					if(buffer == null)
 						buffer = jEdit.getFirstBuffer();
 					stack.push(buffer);
+					editPaneBuffers.add(buffer);
 				}
 				else if (st.sval.equals("buff"))
 				{
@@ -1819,7 +1820,6 @@ loop:		while (true)
 				{
 					// pop the bufferset scope. Not used anymore but still here for compatibility
 					// with old perspectives
-//					BufferSet.Scope scope = BufferSet.Scope.fromString((String) stack.pop());
 					stack.pop();
 					buffer = (Buffer) stack.pop();
 					editPane = createEditPane(buffer);
@@ -1829,10 +1829,6 @@ loop:		while (true)
 					for (Buffer buff : editPaneBuffers)
 					{
 						bufferSet.addBufferAt(buff,i);
-//						if (buff == buffer)
-//							bufferSet.addBufferAt(buffer, i);
-//						else
-//							bufferSetManager.addBuffer(bufferSet, buff);
 						i++;
 					}
 					editPaneBuffers.clear();
