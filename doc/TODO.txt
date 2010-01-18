@@ -1,11 +1,3 @@
-close view ne ferme pas les buffers
-
-delete property
-editpane.bufferset.default
-editpane.bufferset.new
-options.editpane.bufferset.contain
-
-
 [error] ExtensionManager: java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 379
 [error] ExtensionManager:  at org.gjt.sp.jedit.Buffer.getLineOfOffset(Buffer.java:892)
 [error] ExtensionManager:  at errorlist.DefaultErrorSource$DefaultError.getLineNumber(DefaultErrorSource.java:510)
@@ -94,9 +86,9 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 Ideas: a lot of the code in the jedit text area can be simplified
    for example, i'm not sure we really need the ChunkCache anymore
    just keep the chunks for the currently
-   painting line around, to speed up the multiple offsetToX() 
+   painting line around, to speed up the multiple offsetToX()
    calls that happen during painting
-   also, you might want to rip out the text area's 
+   also, you might want to rip out the text area's
    scrolling code, and put in a JScrollPane
 
 
@@ -125,12 +117,12 @@ Ideas: a lot of the code in the jedit text area can be simplified
   - fsb default size
   - don't show 'new directory' in favorites:
   - file system browser column widths are not saved
-  
+
 + misc:
 
   - kill ring still being reversed
   - jEdit.checkBufferStatus() fucks with split panes
-  
+
   - there is a comment in browser.actions.xml:
   /* NOTE: I do NOT want plugins creating check box menu items
    * in jEdit 4.2! The API is not stable, note the _comp hack...
@@ -186,7 +178,7 @@ Ideas: a lot of the code in the jedit text area can be simplified
   - listening for buffer changes
   - canned controls:
     animated icon, color well button, enhanced dialog,
-    font selector, history text field, 
+    font selector, history text field,
     jcheckboxlist, rolloverbutton,
     variablegridlayout
   - displaying a help viewer
