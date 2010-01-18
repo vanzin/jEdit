@@ -202,11 +202,7 @@ public class BufferSetManager
 			Log.log(Log.DEBUG, this, "Buffer:"+buffer+" is in no bufferSet anymore, closing it");
 			jEdit._closeBuffer(null, buffer);
 		}
-		if (bufferSet.size() == 0 && bufferSet.hasListeners())
-		{
-			Buffer newEmptyBuffer = createUntitledBuffer();
-			jEdit.getBufferSetManager().addBuffer(getOwner(bufferSet), newEmptyBuffer);
-		}
+		bufferRemoved(bufferSet);
 	} //}}}
 
 	//{{{ removeBuffer() method
@@ -220,15 +216,32 @@ public class BufferSetManager
 		for (BufferSet bufferSet : getOwners(buffer))
 		{
 			bufferSet.removeBuffer(buffer);
-			if (bufferSet.size() == 0 && bufferSet.hasListeners())
-			{
-				Buffer newEmptyBuffer = createUntitledBuffer();
-				EditPane owner = getOwner(bufferSet);
-				jEdit.getBufferSetManager().addBuffer(owner, newEmptyBuffer);
-			}
+			bufferRemoved(bufferSet);
 		}
 	} //}}}
 
+	//{{{ removeBuffer() method
+	/**
+	 * This method is called when a buffer has been removed from a bufferSet.
+	 * If it is empty, an untitled buffer is created and added to the bufferSet
+	 * @param bufferSet the bufferSet from which the buffer was removed
+	 */
+	private void bufferRemoved(BufferSet bufferSet)
+	{
+		if (bufferSet.size() == 0)
+		{
+			Buffer newEmptyBuffer = createUntitledBuffer();
+			EditPane editPaneOwner = getOwner(bufferSet);
+			addBuffer(editPaneOwner, newEmptyBuffer);
+		}
+	} //}}}
+
+	//{{{ getOwner() method
+	/**
+	 * Return the editpane that owns the BufferSet
+	 * @param bufferSet the bufferSet
+	 * @return the owner of the given bufferSet
+	 */
 	private static EditPane getOwner(BufferSet bufferSet)
 	{
 		View[] views = jEdit.getViews();
@@ -244,8 +257,13 @@ public class BufferSetManager
 			}
 		}
 		return null;
-	}
+	} //}}}
 
+	//{{{ createUntitledBuffer() method
+	/**
+	 * Create an untitled buffer
+	 * @return the new untitled buffer
+	 */
 	public static Buffer createUntitledBuffer()
 	{
 		int untitledCount = jEdit.getNextUntitledBufferId();
@@ -253,7 +271,7 @@ public class BufferSetManager
 							    "Untitled-" + untitledCount,true, null);
 		jEdit.commitTemporary(newEmptyBuffer);
 		return newEmptyBuffer;
-	}
+	} //}}}
 
 	//{{{ Private members
 
