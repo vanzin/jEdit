@@ -112,16 +112,6 @@ public class GrabKeyDialog extends JDialog
 		return isOK;
 	} //}}}
 
-	//{{{ isManagingFocus() method
-	/**
-	 * Returns if this component can be traversed by pressing the
-	 * Tab key. This returns false.
-	 */
-	public boolean isManagingFocus()
-	{
-		return false;
-	} //}}}
-
 	//{{{ getFocusTraversalKeysEnabled() method
 	/**
 	 * Makes the tab key work in Java 1.4.

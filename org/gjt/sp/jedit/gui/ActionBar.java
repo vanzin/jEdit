@@ -310,12 +310,6 @@ public class ActionBar extends JToolBar
 		}
 
 		@Override
-		public boolean isManagingFocus()
-		{
-			return false;
-		}
-
-		@Override
 		public boolean getFocusTraversalKeysEnabled()
 		{
 			return false;
@@ -439,16 +433,6 @@ public class ActionBar extends JToolBar
 
 			setContentPane(new JPanel(new BorderLayout())
 			{
-				/**
-				 * Returns if this component can be traversed by pressing the
-				 * Tab key. This returns false.
-				 */
-				@Override
-				public boolean isManagingFocus()
-				{
-					return false;
-				}
-
 				/**
 				 * Makes the tab key work in Java 1.4.
 				 */
