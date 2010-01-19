@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008 Matthieu Casanova
+ * Copyright (C) 2008, 2010 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public class BufferSet
 	//{{{ Scope enum
 	public enum Scope
 	{
-		global, view, editpane;
+		editpane, view, global;
 
 		public static Scope fromString(String s)
 		{
@@ -61,12 +61,12 @@ public class BufferSet
 	} //}}}
 
 	//{{{ BufferSet constructor
-	/**
-	 * Create a new BufferSet.
-	 */
-	public BufferSet()
+	public BufferSet(BufferSet source)
 	{
-		buffers = Collections.synchronizedList(new ArrayList<Buffer>());
+		if (source == null)
+			buffers = Collections.synchronizedList(new ArrayList<Buffer>());
+		else
+			buffers = Collections.synchronizedList(new ArrayList<Buffer>(source.buffers));
 		listeners = new EventListenerList();
 
 		if (jEdit.getBooleanProperty("sortBuffers"))
@@ -76,7 +76,7 @@ public class BufferSet
 			else
 				sorter = pathSorter;
 		}
-	} //}}}
+	}//}}}
 
 	//{{{ addBufferAt() method
 	public void addBufferAt(Buffer buffer, int position)
@@ -198,7 +198,6 @@ public class BufferSet
 		}
 	}
 
-
 	/**
 	 * Returns an array of all buffers in this bufferSet.
 	 *
@@ -231,27 +230,6 @@ public class BufferSet
 	{
 		Log.log(Log.DEBUG, this, hashCode() + ": removeBufferSetListener " + listener);
 		listeners.remove(BufferSetListener.class, listener);
-		if (!hasListeners())
-		{
-			// must empty the bufferSet
-			Buffer[] buffers = getAllBuffers();
-			BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
-			for (Buffer buffer : buffers)
-			{
-				bufferSetManager.removeBuffer(this, buffer);
-			}
-		}
-	} //}}}
-
-	//{{{ hasListeners() method
-	/**
-	 * Check if the BufferSet has listeners.
-	 *
-	 * @return true if the bufferSet has listeners
-	 */
-	public boolean hasListeners()
-	{
-		return listeners.getListenerCount() != 0;
 	} //}}}
 
 	//{{{ toString() method
@@ -259,6 +237,26 @@ public class BufferSet
 	public String toString()
 	{
 		return "BufferSet[nbBuffers="+size()+']';
+	} //}}}
+
+	//{{{ sort() method
+	/**
+	 * Sort the bufferSet (useful if a buffer has been renamed for example
+	 * @since jEdit 4.4pre1
+	 */
+	public void sort()
+	{
+		if (sorter == null)
+			return;
+		// do the sort
+		Collections.sort(buffers, sorter);
+
+		// notify the listeners so they can repaint themselves
+		BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
+		for (BufferSetListener listener : listeners)
+		{
+			listener.bufferSetSorted();
+		}
 	} //}}}
 
 	//{{{ Package-private members
@@ -274,7 +272,7 @@ public class BufferSet
 	 * This method is called by BufferSetManager to signal that this
 	 * BufferSet needs to react to a change in the sorting properties.
 	 */
-	void handleMessage()
+	void propertiesChanged()
 	{
 		if (jEdit.getBooleanProperty("sortBuffers"))
 		{
@@ -284,15 +282,7 @@ public class BufferSet
 			else
 				sorter = pathSorter;
 
-			// do the sort
-			Collections.sort(buffers, sorter);
-
-			// notify the listeners so they can repaint themselves
-			BufferSetListener[] listeners = this.listeners.getListeners(BufferSetListener.class);
-			for (BufferSetListener listener : listeners)
-			{
-				listener.bufferSetSorted();
-			}
+			sort();
 		}
 		else
 		{
@@ -353,7 +343,6 @@ public class BufferSet
 	//{{{ Private members
 	private final List<Buffer> buffers;
 	private EventListenerList listeners;
-
 	private static final Comparator<Buffer> nameSorter = new NameSorter();
 	private static final Comparator<Buffer> pathSorter = new PathSorter();
 	private Comparator<Buffer> sorter;

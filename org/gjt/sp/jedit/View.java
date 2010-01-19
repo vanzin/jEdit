@@ -705,13 +705,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		editPane.saveCaretInfo();
 		EditPane oldEditPane = editPane;
-		String action = jEdit.getProperty("editpane.bufferset.new");
-		BufferSetManager.NewBufferSetAction bufferSetAction = BufferSetManager.NewBufferSetAction.fromString(action);
-		EditPane newEditPane;
-		if (bufferSetAction == BufferSetManager.NewBufferSetAction.empty)
-			newEditPane = createEditPane(null);
-		else
-			newEditPane = createEditPane(oldEditPane.getBuffer());
+		EditPane newEditPane = createEditPane(oldEditPane);
 //		setEditPane(newEditPane);
 		newEditPane.loadCaretInfo();
 
@@ -1101,17 +1095,6 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 	} //}}}
 
-	/**
-	 * Returns the view's local buffer set, which can be shared by
-	 * several editpanes.
-	 * @return the view's buffer set
-	 * @since jEdit 4.3pre17
-	 */
-	public BufferSet getLocalBufferSet()
-	{
-		return localBufferSet;
-	}
-
 	//{{{ getViewConfig() method
 	/**
 	 * @return a ViewConfig instance for the current view
@@ -1310,7 +1293,7 @@ public class View extends JFrame implements InputHandlerProvider
 			return;
 		setUserTitle(title);
 	} //}}}
-	
+
 	//{{{ getPrefixFocusOwner() method
 	public Component getPrefixFocusOwner()
 	{
@@ -1375,8 +1358,6 @@ public class View extends JFrame implements InputHandlerProvider
 
 		inputHandler = new DefaultInputHandler(this,(DefaultInputHandler)
 			jEdit.getInputHandler());
-
-		localBufferSet = new BufferSet();
 
 		setSplitConfig(buffer,config.splitConfig);
 
@@ -1577,7 +1558,6 @@ public class View extends JFrame implements InputHandlerProvider
 	private EditPane editPane;
 	private JSplitPane splitPane;
 	private String lastSplitConfig;
-	private final BufferSet localBufferSet;
 
 	private StatusBar status;
 
@@ -1712,7 +1692,7 @@ public class View extends JFrame implements InputHandlerProvider
 				}
 			}
 			splitConfig.append(" \"");
-			splitConfig.append(editPane.getBufferSetScope());
+			splitConfig.append(jEdit.getBufferSetManager().getScope());
 			splitConfig.append("\" bufferset");
 		}
 	} //}}}
@@ -1729,7 +1709,13 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		else if(splitConfig == null)
 		{
-			return editPane = createEditPane(jEdit.getFirstBuffer());
+
+			Buffer buf = jEdit.getFirstBuffer();
+			if (buf == null)
+			{
+				buf = BufferSetManager.createUntitledBuffer();
+			}
+			return editPane = createEditPane(buf);
 		}
 		Buffer[] buffers = jEdit.getBuffers();
 
@@ -1769,14 +1755,12 @@ loop:		while (true)
 					if (obj1 instanceof Buffer)
 					{
 						Buffer b1 = buffer = (Buffer) obj1;
-						jEdit.getGlobalBufferSet().addBufferAt(b1, -1);
-						obj1 = editPane = createEditPane(b1, BufferSet.Scope.global);
+						obj1 = editPane = createEditPane(b1);
 					}
 					if (obj2 instanceof Buffer)
 					{
 						Buffer b2 = (Buffer) obj2;
-						jEdit.getGlobalBufferSet().addBufferAt(b2, -1);
-						obj2 = createEditPane(b2, BufferSet.Scope.global);
+						obj2 = createEditPane(b2);
 					}
 					stack.push(splitPane = new JSplitPane(
 						orientation,
@@ -1804,18 +1788,23 @@ loop:		while (true)
 						buffer = jEdit.getBuffer(path);
 						if (buffer == null)
 						{
-							int untitledCount = jEdit.getNextUntitledBufferId();
-							buffer = jEdit.openFile(this,null,"Untitled-" + untitledCount,true,null);
+							buffer = jEdit.openTemporary(jEdit.getActiveView(), null,
+											    path, true, null);
+							jEdit.commitTemporary(buffer);
+						}
+						else
+						{
+							Log.log(Log.ERROR, this, "Buffer already loaded ???");
 						}
 					}
 
 					if(buffer == null)
 						buffer = jEdit.getFirstBuffer();
 					stack.push(buffer);
+					editPaneBuffers.add(buffer);
 				}
 				else if (st.sval.equals("buff"))
 				{
-
 					String path = (String)stack.pop();
 					buffer = jEdit.getBuffer(path);
 					if (buffer == null)
@@ -1829,19 +1818,17 @@ loop:		while (true)
 				}
 				else if (st.sval.equals("bufferset"))
 				{
-					BufferSet.Scope scope = BufferSet.Scope.fromString((String) stack.pop());
+					// pop the bufferset scope. Not used anymore but still here for compatibility
+					// with old perspectives
+					stack.pop();
 					buffer = (Buffer) stack.pop();
-					editPane = createEditPane(buffer, scope);
+					editPane = createEditPane(buffer);
 					stack.push(editPane);
-					BufferSetManager bufferSetManager = jEdit.getBufferSetManager();
 					BufferSet bufferSet = editPane.getBufferSet();
 					int i = 0;
 					for (Buffer buff : editPaneBuffers)
 					{
-						if (buff == buffer)
-							bufferSet.addBufferAt(buffer, i);
-						else
-							bufferSetManager.addBuffer(bufferSet, buff);
+						bufferSet.addBufferAt(buff,i);
 						i++;
 					}
 					editPaneBuffers.clear();
@@ -1860,9 +1847,7 @@ loop:		while (true)
 		Object obj = stack.peek();
 		if (obj instanceof Buffer)
 		{
-			jEdit.getGlobalBufferSet().addBufferAt((Buffer)obj, -1);
-			obj = editPane = createEditPane((Buffer)obj,
-				BufferSet.Scope.global);
+			obj = editPane = createEditPane((Buffer)obj);
 		}
 
 		updateGutterBorders();
@@ -2002,13 +1987,18 @@ loop:		while (true)
 	//{{{ createEditPane() methods
 	private EditPane createEditPane(Buffer buffer)
 	{
-		return createEditPane(buffer, BufferSet.Scope.fromString(
-			jEdit.getProperty("editpane.bufferset.default")));
+		EditPane editPane = new EditPane(this, null, buffer);
+		JEditTextArea textArea = editPane.getTextArea();
+		textArea.addFocusListener(new FocusHandler());
+		textArea.addCaretListener(new CaretHandler());
+		textArea.addScrollListener(new ScrollHandler());
+		EditBus.send(new EditPaneUpdate(editPane,EditPaneUpdate.CREATED));
+		return editPane;
 	}
 
-	private EditPane createEditPane(Buffer buffer, BufferSet.Scope scope)
+	private EditPane createEditPane(EditPane oldEditPane)
 	{
-		EditPane editPane = new EditPane(this,buffer, scope);
+		EditPane editPane = new EditPane(this, oldEditPane.getBufferSet(), oldEditPane.getBuffer());
 		JEditTextArea textArea = editPane.getTextArea();
 		textArea.addFocusListener(new FocusHandler());
 		textArea.addCaretListener(new CaretHandler());
@@ -2057,7 +2047,8 @@ loop:		while (true)
 	public void handleEditPaneUpdate(EditPaneUpdate msg)
 	{
 		EditPane editPane = msg.getEditPane();
-		if(editPane.getView() == this
+		if(editPane !=  null &&
+			editPane.getView() == this
 			&& msg.getWhat() == EditPaneUpdate.BUFFER_CHANGED
 			&& editPane.getBuffer().isLoaded())
 		{
@@ -2073,28 +2064,30 @@ loop:		while (true)
 	{
 		if (!jEdit.getBooleanProperty("buffersets.exclusive"))
 			return;
-		EditPane ep = epu.getEditPane();
+		final BufferSet.Scope scope = jEdit.getBufferSetManager().getScope();
+		if (scope == BufferSet.Scope.global)
+			return;
+		final EditPane ep = epu.getEditPane();
 		/* Only one view needs to handle this message, since
 		   we iterate through all the other views */
-		if (ep.getView() != this) return;
-		Buffer b = ep.getBuffer();
-		for (View v: jEdit.getViews())
+		final View view = ep.getView();
+		if (view != this)
+			return;
+		final Buffer b = ep.getBuffer();
+
+		jEdit.visit(new JEditVisitorAdapter()
 		{
-			for (EditPane epc : v.getEditPanes())
+			@Override
+			public void visit(EditPane editPane)
 			{
-				// if it's my editpane, skip it.
-				if (epc == ep) continue;
-				// If it's view scope, it has to be of a different view
-				if ((epc.getBufferSetScope() == BufferSet.Scope.view)
-					&&  (v == this)) continue;
-				// If it's global, forget it.
-				if (epc.getBufferSet() == jEdit.getGlobalBufferSet()) continue;
-				// Is it in the bufferset?
-				if (epc.getBufferSet().indexOf(b) < 0) continue;
-				// found it open in a disjoint bufferset !
-				jEdit.getBufferSetManager().removeBuffer(epc, b);
+				if (editPane == ep ||
+					(scope == BufferSet.Scope.view && editPane.getView() == view))
+					return;
+				if (editPane.getBufferSet().indexOf(b) < 0)
+					return;
+				jEdit.getBufferSetManager().removeBuffer(editPane, b);
 			}
-		}
+		});
 	} //}}}
 
 	//{{{ updateGutterBorders() method
@@ -2129,12 +2122,10 @@ loop:		while (true)
 	 */
 	static private void mergeBufferSets(EditPane target, EditPane source)
 	{
-		BufferSet sourceBufferSet = source.getBufferSet();
-		BufferSet targetBufferSet = target.getBufferSet();
-		if (sourceBufferSet != targetBufferSet)
+		BufferSetManager manager = jEdit.getBufferSetManager();
+		for (Buffer buffer: source.getBufferSet().getAllBuffers())
 		{
-			jEdit.getBufferSetManager().mergeBufferSet(
-				targetBufferSet, sourceBufferSet);
+			manager.addBuffer(target, buffer);
 		}
 	} //}}}
 

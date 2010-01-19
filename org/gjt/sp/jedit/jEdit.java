@@ -408,7 +408,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress("init GUI");
 		GUIUtilities.init();
 
-		globalBufferSet = new BufferSet();
 		bufferSetManager = new BufferSetManager();
 
 		///Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
@@ -1573,7 +1572,7 @@ public class jEdit
 					return null;
 				addBufferToList(newBuffer);
 				if (editPane != null)
-					bufferSetManager.addBuffer(editPane.getBufferSet(), newBuffer);
+					bufferSetManager.addBuffer(editPane, newBuffer);
 				else
 					bufferSetManager.addBuffer(jEdit.getActiveView(), newBuffer);
 			}
@@ -2203,18 +2202,6 @@ public class jEdit
 		int oldPosition, int newPosition)
 	{
 		bufferSetManager.moveBuffer(editPane, oldPosition, newPosition);
-	} //}}}
-
-	//{{{ getGlobalBufferSet() method
-	/**
-	 * Returns the global buffer set, which can be shared by several
-	 * views/editpanes.
-	 * @return the global buffer set
-	 * @since jEdit 4.3pre17
-	 */
-	public static BufferSet getGlobalBufferSet()
-	{
-		return globalBufferSet;
 	} //}}}
 
 	//{{{ getBufferSetManager() method
@@ -3066,7 +3053,6 @@ public class jEdit
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
 
-	private static BufferSet globalBufferSet;
 	private static BufferSetManager bufferSetManager;
 
 	// buffer link list

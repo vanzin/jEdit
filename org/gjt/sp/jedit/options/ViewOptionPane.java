@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 2003 Slava Pestov
+ * Portions Copyright (C) 2009 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +23,7 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import javax.swing.border.*;
 import javax.swing.*;
 
@@ -29,11 +31,11 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferset.BufferSet;
-import org.gjt.sp.jedit.bufferset.BufferSetManager;
+//}}}
 
 public class ViewOptionPane extends AbstractOptionPane
 {
-	//{{{ ViewOptionPane constructor
+    //{{{ ViewOptionPane constructor
 	public ViewOptionPane()
 	{
 		super("view");
@@ -122,21 +124,12 @@ public class ViewOptionPane extends AbstractOptionPane
 			bufferSwitcherMaxRowCount);
 		bufferSwitcherMaxRowCount.setEditable(showBufferSwitcher.isSelected());
 
-		defaultBufferSet = new JComboBox();
-		defaultBufferSet.addItem(BufferSet.Scope.global);
-		defaultBufferSet.addItem(BufferSet.Scope.view);
-		defaultBufferSet.addItem(BufferSet.Scope.editpane);
-		defaultBufferSet.setSelectedItem(BufferSet.Scope.fromString(jEdit.getProperty("editpane.bufferset.default")));
-		addComponent(jEdit.getProperty("options.editpane.bufferset.default"), defaultBufferSet);
-
-		newBufferSetBehavior = new JComboBox();
-		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.copy);
-		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.empty);
-		newBufferSetBehavior.addItem(BufferSetManager.NewBufferSetAction.currentbuffer);
-		newBufferSetBehavior.setSelectedItem(BufferSetManager.NewBufferSetAction.fromString(jEdit.getProperty("editpane.bufferset.new")));
-		addComponent(new JLabel(jEdit.getProperty("options.editpane.bufferset.contain")),
-					newBufferSetBehavior);
-
+		buffersetScope = new JComboBox();
+		buffersetScope.addItem(BufferSet.Scope.global);
+		buffersetScope.addItem(BufferSet.Scope.view);
+		buffersetScope.addItem(BufferSet.Scope.editpane);
+		buffersetScope.setSelectedItem(BufferSet.Scope.fromString(jEdit.getProperty("bufferset.scope")));
+		addComponent(jEdit.getProperty("options.bufferset.scope"), buffersetScope);
 
 		/* Sort buffers */
 		sortBuffers = new JCheckBox(jEdit.getProperty(
@@ -199,9 +192,7 @@ public class ViewOptionPane extends AbstractOptionPane
 			showBufferSwitcher.isSelected());
 		jEdit.setProperty("bufferSwitcher.maxRowCount",
 			bufferSwitcherMaxRowCount.getText());
-		jEdit.setProperty("editpane.bufferset.default", defaultBufferSet.getSelectedItem().toString());
-		jEdit.setProperty("editpane.bufferset.new",
-						  ((BufferSetManager.NewBufferSetAction)newBufferSetBehavior.getSelectedItem()).getName());
+		jEdit.setProperty("bufferset.scope", buffersetScope.getSelectedItem().toString());
 		jEdit.setBooleanProperty("sortBuffers",sortBuffers.isSelected());
 		jEdit.setBooleanProperty("sortByName",sortByName.isSelected());
 		jEdit.setBooleanProperty("fullScreenIncludesMenu",fullScreenIncludesMenu.isSelected());
@@ -219,8 +210,7 @@ public class ViewOptionPane extends AbstractOptionPane
 	private JCheckBox beepOnSearchAutoWrap;
 	private JCheckBox showBufferSwitcher;
 	private JTextField bufferSwitcherMaxRowCount;
-	private JComboBox defaultBufferSet;
-	private JComboBox newBufferSetBehavior;
+	private JComboBox buffersetScope;
 	private JCheckBox sortBuffers;
 	private JCheckBox sortByName;
 	private JCheckBox fullScreenIncludesMenu;

@@ -54,11 +54,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Vector;
-import java.util.Map;
+import java.util.*;
 //}}}
 
 /**
@@ -1745,7 +1741,7 @@ public class Buffer extends JEditBuffer
 			}
 		}
 	} //}}}
-	
+
 	//{{{ fireEndRedo() method
 	protected void fireEndRedo()
 	{
@@ -2101,27 +2097,18 @@ public class Buffer extends JEditBuffer
 				}
 
 				setPath(path);
-				final HashSet<BufferSet> bufferSets = new HashSet<BufferSet>();
-				final HashSet<EditPane> editPanesCurrent = new HashSet<EditPane>();
 				jEdit.visit(new JEditVisitorAdapter()
 				{
 					@Override
 					public void visit(EditPane editPane)
 					{
-						BufferSet bufferSet = editPane.getBufferSet(); 
+						BufferSet bufferSet = editPane.getBufferSet();
 						if (bufferSet.indexOf(Buffer.this) != -1)
 						{
-							bufferSets.add(bufferSet);
-							if (editPane.getBuffer() == Buffer.this)
-								editPanesCurrent.add(editPane);
+							bufferSet.sort();
 						}
 					}
 				});
-				jEdit.getBufferSetManager().removeBuffer(this);
-				for (BufferSet bufferSet: bufferSets)
-					jEdit.getBufferSetManager().addBuffer(bufferSet, this);
-				for (EditPane editPane: editPanesCurrent)
-					editPane.setBuffer(this);
 			}
 			else
 			{

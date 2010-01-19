@@ -35,6 +35,10 @@ Bernhard Walle and Joerg Spieler for contributing to this release.
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
+- bufferSet api rewritten. Now all editPane own their bufferSet, do not share
+  it with another editPane and it can never be changed.
+  The scope is the same for all EditPanes (Matthieu Casanova)
+
 }}}
 {{{ Editing
 - Added the missing doxygen commands for doxygen v1.6.1
