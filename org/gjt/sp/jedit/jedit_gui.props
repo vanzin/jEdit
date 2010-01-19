@@ -198,6 +198,7 @@ file=new-file \
      - \
      close-buffer \
      global-close-buffer \
+     closeall-except-active \
      close-all \
      - \
      save \
@@ -222,10 +223,14 @@ reload.label=$Reload
 reload.icon.small=16x16/actions/view-refresh.png
 reload-all.label=Reloa$d All...
 close-buffer.label=$Close
+close-buffer.tooltip=Close buffer in EditPane's BufferSet only.
 close-buffer.icon.small=16x16/actions/document-close.png
 global-close-buffer.label=Close (global)
-closeall-except-active.label=Clear BufferSet except active
+global-close-buffer.tooltip=Close current buffer in all editpanes and views
+closeall-except-active.tooltip=Clear current editpane's BufferSet except for buffer(s) currently showing
+closeall-except-active.label=Close Others
 bufferset-toggle-exclusive.label=Toggle E$xclusive BufferSets
+bufferset-toggle-exclusive.tooltip=When a buffer is opened, close it in other non-intersecting buffersets.
 closeall-except-active.icon.small=16x16/actions/document-close.png
 global-close-buffer.icon.small=16x16/actions/document-close.png
 close-all.label=Clos$e All
@@ -234,6 +239,7 @@ save.label=$Save
 save.icon.small=16x16/actions/document-save.png
 save-as.label=S$ave As...
 save-a-copy-as.label=Save a Cop$y As...
+save-a-copy-as.tooltip=Does not change the current buffer's path
 save-all.label=Save A$ll...
 print.label=$Print...
 print.icon.small=16x16/actions/document-print.png
@@ -545,12 +551,13 @@ prev-buffer.label=Go to $Previous Buffer
 next-buffer.label=Go to $Next Buffer
 recent-buffer.label=Go to $Recent Buffer
 toggle-buffer-switcher.label=Toggle $Buffer Switcher
-focus-buffer-switcher.label=Focus Buffer S$witcher
-toggle-line-numbers.label=$Line Numbers
+focus-buffer-switcher.label=Focus on Buffer S$witcher
+toggle-line-numbers.label=Toggle $Line Numbers
 toggle-statusbar.label=Toggle S$tatus Bar
 toggle-gutter.label=Toggle $Gutter
 show-context-menu.label=Show Context Menu
 set-view-title.label=Set view title...
+set-view-title.tooltip=Set the title of the main window for easy identification from your desktop.
 toggle-full-screen.label=Toggle $full-screen mode
 
 #{{{ Scrolling menu
@@ -591,10 +598,13 @@ resplit.label=$Restore Split
 prev-textarea.label=Go to $Previous Text Area
 next-textarea.label=Go to $Next Text Area
 buffersets.label=$Buffer Sets
-buffersets=global-bufferset view-bufferset editpane-bufferset bufferset-toggle-exclusive - closeall-except-active
+buffersets=global-bufferset view-bufferset editpane-bufferset bufferset-toggle-exclusive
 global-bufferset.label=$Global Scope
+global-bufferset.tooltip=All main windows share the same set of open buffers
 view-bufferset.label=$View Scope
+view-bufferset.tooltip=All editpanes in the same main window share the same set of open buffers
 editpane-bufferset.label=$EditPane Scope
+editpane-bufferset.tooltip=Each Editpane has its own set of open buffers.
 
 
 #}}}
@@ -1782,8 +1792,6 @@ options.general.resetUndo=Reset undo history on save
 options.general.restore=Restore previously open files on startup
 options.general.restore.remote=... including remote files over VFS
 options.general.restore.cli=... including file names specified on the command line
-options.general.newkeyhandling=Use simplified keyboard handling
-options.general.newkeyhandling.tooltip=(Experimental) some international Linux users prefer this mode, but it may go away soon since regular keyboard handling works better.
 options.general.encodingDetectors=List of encoding autodetectors:
 options.general.fallbackEncodings=List of fallback encodings:
 options.general.fallbackEncodings.tooltip=(Experimental) A whitespace-separated list of encodings to try against encoding errors on loading
@@ -2107,11 +2115,11 @@ options.textarea.wrapGuide=Wrap guide:
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
 options.textarea.antiAlias=Anti Aliased smooth text
-options.textarea.antiAlias.tooltip=Anti-aliased fonts slow down display on some systems. \
-Subpixel (supported in JDK 1.6 and later) does not work w/ MS Remote Desktop.
+options.textarea.antiAlias.tooltip=Slow down display on some systems. \
+Subpixel (JDK 1.6 and later) does not work w/ MS Remote Desktop.
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
-options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialiasing	
+options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialiasing
 options.textArea.stripTrailingEOL=Hide final end of line (if any)
 options.textArea.completeFromAllBuffers=Complete words from all open buffers (default is \
     to limit search to currently visible buffers)

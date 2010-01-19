@@ -1879,6 +1879,7 @@ public class GUIUtilities
 	{
 
 		String label = jEdit.getProperty(name + ".label");
+		
 		if (label == null)
 		{
 			label = name;
@@ -1911,6 +1912,10 @@ public class GUIUtilities
 		if(itemIcon != null)
 		{
 			mi.setIcon(itemIcon);
+		}
+		String toolTip = jEdit.getProperty(name + ".tooltip");
+		if (toolTip != null) {
+			mi.setToolTipText(toolTip);
 		}
 
 		return mi;
