@@ -300,7 +300,7 @@ class InstallPanel extends JPanel implements EBComponent
 				case 2: return ' '+jEdit.getProperty("install-plugins.info.category");
 				case 3: return ' '+jEdit.getProperty("install-plugins.info.version");
 				case 4: return ' '+jEdit.getProperty("install-plugins.info.size");
-				case 5: return ' '+"Release date";
+				case 5: return ' '+jEdit.getProperty("install-plugins.info.releaseDate");
 				default: throw new Error("Column out of range");
 			}
 		} //}}}
@@ -602,7 +602,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ Entry class
-	static private class Entry
+	private static class Entry
 	{
 		String name, installedVersion, version, author, date, description, set;
 
