@@ -95,7 +95,8 @@
 <MODE NAME="clips"		FILE="clips.xml"
 				FILE_NAME_GLOB="*.clp" />
 
-<MODE NAME="clojure" 		FILE="clojure.xml" />
+<MODE NAME="clojure" 		FILE="clojure.xml"
+				FILE_NAME_GLOB="*.clj" />
 
 <MODE NAME="cmake"		FILE="cmake.xml"
 				FILE_NAME_GLOB="CMakeLists.txt"/>
