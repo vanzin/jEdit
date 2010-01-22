@@ -142,7 +142,10 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 					Widget widget = getWidget(token);
 					if (widget == null)
 					{
-						Log.log(Log.WARNING, this, "Widget " + token + " doesn't exist");
+						JLabel label = new JLabel(token);
+						label.setBackground(bg);
+						label.setForeground(fg);
+						box.add(label);
 						continue;
 					}
 					Component c = widget.getComponent();
@@ -211,7 +214,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 				}
 				else
 				{
-					Object[] args = {Integer.valueOf(requestCount)};
+					Object[] args = {requestCount};
 					setMessage(jEdit.getProperty(
 						"view.status.io",args));
 					currentMessageIsIO = true;
