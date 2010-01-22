@@ -264,7 +264,7 @@ public class Chunk extends Token
 			else
 				return offset;
 		}
-		
+
 		float[] pos = getPositions();
 
 		for(int i = 0; i < length; i++)
@@ -340,7 +340,7 @@ public class Chunk extends Token
 	//{{{ Private members
 	private float[] positions;
 
-	// Flag to enable a workaround for a bug in Sun Java 5.
+	// Flag to enable a workaround for a bug in most known implementations of Java 5.
 	private static final boolean SUN_JAVA_5;
 	static
 	{
