@@ -178,6 +178,9 @@ class InstallPanel extends JPanel implements EBComponent
 	*/
 	boolean loadPluginSet(String path)
 	{
+		pluginSet.clear();
+		pluginModel.restoreSelection(new HashSet<String>(), new HashSet<String>());
+
 		VFS vfs = VFSManager.getVFSForPath(path);
 		Object session = vfs.createVFSSession(path, InstallPanel.this);
 		try
@@ -558,45 +561,47 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			for (int i=0, c=getRowCount() ; i<c ; i++)
 			{
-				String name = entries.get(i).toString();
+				Object obj = entries.get(i);
+				String name = obj.toString();
+				if (obj instanceof Entry) {
+					name = ((Entry)obj).plugin.jar;
+				}
 				if (pluginSet.contains(name))
 					setValueAt(true, i, 0);
 				else setValueAt(savedChecked.contains(name), i, 0);
 			}
-
-			if (null != table)
+			if (table == null) return;
+			
+			table.setColumnSelectionInterval(0,0);
+			if (!savedSelection.isEmpty())
 			{
-				table.setColumnSelectionInterval(0,0);
-				if (!savedSelection.isEmpty())
+				int i = 0;
+				int rowCount = getRowCount();
+				for ( ; i<rowCount ; i++)
 				{
-					int i = 0;
-					int rowCount = getRowCount();
-					for ( ; i<rowCount ; i++)
+					String name = entries.get(i).toString();
+					if (savedSelection.contains(name))
 					{
-						String name = entries.get(i).toString();
-						if (savedSelection.contains(name))
-						{
-							table.setRowSelectionInterval(i,i);
-							break;
-						}
-					}
-					ListSelectionModel lsm = table.getSelectionModel();
-					for ( ; i<rowCount ; i++)
-					{
-						String name = entries.get(i).toString();
-						if (savedSelection.contains(name))
-						{
-							lsm.addSelectionInterval(i,i);
-						}
+						table.setRowSelectionInterval(i,i);
+						break;
 					}
 				}
-				else
+				ListSelectionModel lsm = table.getSelectionModel();
+				for ( ; i<rowCount ; i++)
 				{
-					if (table.getRowCount() != 0)
-						table.setRowSelectionInterval(0,0);
-					JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
-					scrollbar.setValue(scrollbar.getMinimum());
+					String name = entries.get(i).toString();
+					if (savedSelection.contains(name))
+					{
+						lsm.addSelectionInterval(i,i);
+					}
 				}
+			}
+			else
+			{
+				if (table.getRowCount() != 0)
+					table.setRowSelectionInterval(0,0);
+				JScrollBar scrollbar = scrollpane.getVerticalScrollBar();
+				scrollbar.setValue(scrollbar.getMinimum());
 			}
 		} //}}}
 	} //}}}
@@ -791,10 +796,7 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			if (localName.equals("plugin"))
 			{
-				String jarName = attrs.getValue("jar");
-				if (jarName.endsWith(".jar"))
-					jarName=jarName.substring(0, jarName.length()-4);
-				pluginSet.add(jarName);
+				pluginSet.add(attrs.getValue("jar"));
 			}
 		}
 	} //}}}
@@ -825,11 +827,13 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ actionPerformed() method
 		public void actionPerformed(ActionEvent ae)
 		{
+			
 			path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET,
 				jEdit.getSettingsDirectory() + File.separator);
 			String[] selectedFiles = GUIUtilities.showVFSFileDialog(InstallPanel.this.window,
 				jEdit.getActiveView(), path, VFSBrowser.OPEN_DIALOG, false);
 			if (selectedFiles == null || selectedFiles.length != 1) return;
+
 			path = selectedFiles[0];
 			boolean success = loadPluginSet(path);
 			if (success)

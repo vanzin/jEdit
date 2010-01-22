@@ -198,8 +198,6 @@ public class ManagePanel extends JPanel
 			{
 				String jarName = attrs.getValue("jar");
 				String name = attrs.getValue("name");
-				Entry e = new Entry(jarName);
-				e.name=name;
 				selectedPlugins.add(name);
 				jarNames.add(jarName);
 			}
@@ -235,7 +233,7 @@ public class ManagePanel extends JPanel
 					}
 					catch (Exception e)
 					{
-						Log.log(Log.WARNING, this, "Exception thrown loading: " + jarName);
+						Log.log(Log.WARNING, this, "Exception thrown loading: " + jarName, e);
 					}
 				}
 			}
