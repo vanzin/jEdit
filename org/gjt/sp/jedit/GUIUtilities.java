@@ -1913,10 +1913,6 @@ public class GUIUtilities
 		{
 			mi.setIcon(itemIcon);
 		}
-		String toolTip = jEdit.getProperty(name + ".tooltip");
-		if (toolTip != null) {
-			mi.setToolTipText(toolTip);
-		}
 
 		return mi;
 	} //}}}
