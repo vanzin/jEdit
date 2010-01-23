@@ -5,7 +5,8 @@ jEdit 4.4 version history
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle and Joerg Spieler for contributing to this release.
+Bernhard Walle, Joerg Spieler and Kevin Hunter for contributing to this
+release.
 
 {{{ Bug fixes
 
@@ -43,7 +44,7 @@ Bernhard Walle and Joerg Spieler for contributing to this release.
   in status bar (Matthieu Casanova)
 
 - Removed long deprecated TextArea#isDragInProgress() and
-  TextArea#setDragInProgress().
+  TextArea#setDragInProgress(). (SF.net patch #2809776,2936146 - Kevin Hunter)
 
 }}}
 {{{ Editing
