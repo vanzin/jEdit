@@ -32,8 +32,6 @@ Anson)
 }}}
 {{{ Editing
 
-- Added logtalk.xml mode file (#1945284 - Paulo Moura)
-
 }}}
 
 }}}
