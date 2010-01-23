@@ -42,6 +42,9 @@ Bernhard Walle and Joerg Spieler for contributing to this release.
 - Status bar widget : it is now possible to use labels starting with letters
   in status bar (Matthieu Casanova)
 
+- Removed long deprecated TextArea#isDragInProgress() and
+  TextArea#setDragInProgress().
+
 }}}
 {{{ Editing
 - Added the missing doxygen commands for doxygen v1.6.1

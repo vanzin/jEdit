@@ -52,7 +52,6 @@ class TextAreaDropHandler extends DropTargetAdapter
 	{
 		Log.log(Log.DEBUG,this,"Drag enter");
 		savedBuffer = textArea.getBuffer();
-		textArea.setDragInProgress(true);
 		//textArea.getBuffer().beginCompoundEdit();
 		savedCaret = textArea.getCaretPosition();
 	} //}}}
@@ -79,7 +78,6 @@ class TextAreaDropHandler extends DropTargetAdapter
 	public void dragExit(DropTargetEvent dtde)
 	{
 		Log.log(Log.DEBUG,this,"Drag exit");
-		textArea.setDragInProgress(false);
 		//textArea.getBuffer().endCompoundEdit();
 		if(textArea.getBuffer() == savedBuffer)
 		{
@@ -93,7 +91,6 @@ class TextAreaDropHandler extends DropTargetAdapter
 	public void drop(DropTargetDropEvent dtde)
 	{
 		Log.log(Log.DEBUG,this,"Drop");
-		textArea.setDragInProgress(false);
 		//textArea.getBuffer().endCompoundEdit();
 		savedBuffer = null;
 	} //}}}

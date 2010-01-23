@@ -440,38 +440,6 @@ public abstract class TextArea extends JComponent
 		return buffer.isEditable();
 	} //}}}
 
-	//{{{ isDragInProgress() method
-	/**
-	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
-	 * however since jEdit must run with Java 1.3, this class only has the
-	 * necessary support to call a hook method via reflection. This method
-	 * is called by the org.gjt.sp.jedit.Java14 class to signal that
-	 * a drag is in progress.
-	 * @since jEdit 4.2pre5
-	 * @deprecated the org.gjt.jedit.Java14 class no longer exists.
-	 */
-	@Deprecated
-	public boolean isDragInProgress()
-	{
-		return dndInProgress;
-	} //}}}
-
-	//{{{ setDragInProgress() method
-	/**
-	 * Drag and drop of text in jEdit is implementing using jEdit 1.4 APIs,
-	 * however since jEdit must run with Java 1.3, this class only has the
-	 * necessary support to call a hook method via reflection. This method
-	 * is called by the org.gjt.sp.jedit.Java14 class to signal that
-	 * a drag is in progress.
-	 * @since jEdit 4.2pre5
-	 * @deprecated the org.gjt.jedit.Java14 class no longer exists.
-	 */
-	@Deprecated
-	public void setDragInProgress(boolean dndInProgress)
-	{
-		this.dndInProgress = dndInProgress;
-	} //}}}
-
 	//{{{ isDragEnabled() method
 	/**
 	 * Returns if drag and drop of text is enabled.
@@ -5146,7 +5114,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private boolean rectangularSelectionMode;
 
 	private boolean dndEnabled;
-	private boolean dndInProgress;
 
 	// see finishCaretUpdate() & _finishCaretUpdate()
 	private boolean queuedCaretUpdate;

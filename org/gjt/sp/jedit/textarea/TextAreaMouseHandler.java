@@ -292,9 +292,6 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 			return;
 		}
 
-		if(textArea.isDragInProgress())
-			return;
-
 		if(textArea.getBuffer().isLoading())
 			return;
 
