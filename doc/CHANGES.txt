@@ -31,15 +31,19 @@ release.
 - Searching for regex "^\s*.*$" missed every second line of adjacent
   matching lines. (SF.net bug #2915720 - Kazutoshi Satoda)
 
+- Removed write capability to the UrlVFS. Now http:// files are marked
+  read-only. (Eric Le Lay # 2805986)
+
+
 }}}
 {{{ API changes
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
-- bufferSet api rewritten. Now all editPane own their bufferSet, do not share
-  it with another editPane and it can never be changed.
-  The scope is the same for all EditPanes (Matthieu Casanova)
-  
+- bufferSet api rewritten. Now each editPane have its own bufferSet,
+  does not share it with other editPane. The bufferset scope scope is the
+  same for all EditPanes (Matthieu Casanova)
+
 - Status bar widget : it is now possible to use labels starting with letters
   in status bar (Matthieu Casanova)
 

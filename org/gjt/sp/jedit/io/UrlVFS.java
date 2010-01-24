@@ -39,7 +39,7 @@ public class UrlVFS extends VFS
 	//{{{ UrlVFS constructor
 	public UrlVFS()
 	{
-		super("url",READ_CAP | WRITE_CAP);
+		super("url", READ_CAP);
 	} //}}}
 
 	//{{{ constructPath() method
