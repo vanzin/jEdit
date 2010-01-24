@@ -23,7 +23,8 @@ Release procedure of jEdit
   allowed on the branch.
     - Bumping up of the version number.
     - Changes under "doc" directory.
-    - Merging of reviewed changes from the trunk. (See step 5 below)
+    - Merging of reviewed changes from the trunk or a separate branch.
+      See step 5 below for merging.
 
   Anytime after making the branch, the step 1 of the next release can be
   started.
@@ -39,9 +40,14 @@ Release procedure of jEdit
 
 5. Receive bugs for preview builds, and fix them.
 
-  The fixes first applied on the trunk. If it seems also good for a
-  release branch, it can be submitted into the Merge Requests tracker.
+  Basically, the fixes first applied on the trunk. If it seems also good
+  for a release branch, it can be submitted into the Merge Requests
+  tracker.
   https://sourceforge.net/tracker/?group_id=588&atid=1235750
+
+  If a fix can't be applied on trunk (for example, the target code
+  doesn't exist in the trunk), it can be applied to a separate branch
+  which is created from the target release branch.
 
   When submitting a merge request, please make sure
     - to put the complete set of revision numbers which should be
