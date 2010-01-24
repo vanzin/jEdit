@@ -36,7 +36,7 @@
     <para>Within a regular expression, the following characters have special
     meaning:</para>
 
-    <bridgehead renderas="section">Positional Operators</bridgehead>
+    <bridgehead>Positional Operators</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -56,7 +56,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="section">One-Character Operators</bridgehead>
+    <bridgehead>One-Character Operators</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -78,6 +78,11 @@
         <listitem>
             <para><literal>\s</literal> matches any whitespace character</para>
         </listitem>
+
+        <listitem>
+            <para><literal>\xNN</literal> matches hexadecimal character code <literal>NN</literal></para>
+        </listitem>
+
 
         <listitem>
             <para><literal>\S</literal> matches any non-whitespace
@@ -105,7 +110,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="section">Character Class Operator</bridgehead>
+    <bridgehead>Character Class Operator</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -128,7 +133,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="section">Subexpressions and Backreferences</bridgehead>
+    <bridgehead>Subexpressions and Backreferences</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -176,7 +181,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="section">Branching (Alternation) Operator</bridgehead>
+    <bridgehead>Branching (Alternation) Operator</bridgehead>
 
     <itemizedlist>
         <listitem>
@@ -187,7 +192,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="section">Repeating Operators</bridgehead>
+    <bridgehead>Repeating Operators</bridgehead>
 
     <para>These symbols operate on the previous atomic expression.</para>
 
@@ -227,7 +232,7 @@
         </listitem>
     </itemizedlist>
 
-    <bridgehead renderas="section">Stingy (Minimal) Matching</bridgehead>
+    <bridgehead>Stingy (Minimal) Matching</bridgehead>
 
     <para>If a repeating operator (above) is immediately followed by a
     <literal>?</literal>, the repeating operator will stop at the smallest

@@ -452,7 +452,7 @@
         <para>To use the action bar, input a command and press
         <keycap>Enter</keycap>. The following commands are supported:</para>
 
-        <bridgehead renderas="section">Action invocations</bridgehead>
+        <bridgehead>Action invocations</bridgehead>
 
         <para>Each menu item and tool bar button is bound to an
         <firstterm>action</firstterm>. To find out the name of an action, invoke
@@ -473,7 +473,7 @@
         invoking <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
         Options</guimenuitem>.</para>
 
-        <bridgehead renderas="section">Buffer-local properties</bridgehead>
+        <bridgehead>Buffer-local properties</bridgehead>
 
         <para>Entering <userinput>buffer.property=value</userinput> sets the
         value of the buffer-local property named <userinput>property</userinput>
@@ -486,7 +486,7 @@
         <para>See <xref linkend="buffer-local" /> for information about
         buffer-local properties.</para>
 
-        <bridgehead renderas="section">Global properties</bridgehead>
+        <bridgehead>Global properties</bridgehead>
 
         <para>Entering <userinput>property=value</userinput> sets the value of
         the global property named <userinput>property</userinput> to
@@ -494,7 +494,7 @@
         plugin developers, since the properties jEdit uses to store its settings
         are not currently documented.</para>
 
-        <bridgehead renderas="section">Command repetition</bridgehead>
+        <bridgehead>Command repetition</bridgehead>
 
         <para>To repeat a command multiple times, enter a number in the action
         bar, then press the key-combination that invokes the command.

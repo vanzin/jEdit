@@ -13,7 +13,7 @@
     pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
     Options</guimenuitem> dialog box; see <xref linkend="global-opts" />.</para>
 
-    <bridgehead renderas="section">Files</bridgehead>
+    <bridgehead>Files</bridgehead>
 
     <para>For details, see <xref linkend="buffers" />, <xref linkend="views" />
     and <xref linkend="files" />.</para>
@@ -98,7 +98,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Views</bridgehead>
+    <bridgehead>Views</bridgehead>
 
     <para>For details, see <xref linkend="views" />.</para>
 
@@ -167,7 +167,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Action Bar</bridgehead>
+    <bridgehead>Action Bar</bridgehead>
 
     <para>For details, see <xref linkend="action-bar" />.</para>
 
@@ -192,7 +192,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Moving the Caret</bridgehead>
+    <bridgehead>Moving the Caret</bridgehead>
 
     <para>For details, see <xref linkend="caret" />, <xref linkend="words" />,
     <xref linkend="lines" />, <xref linkend="paragraphs" /> and <xref
@@ -269,7 +269,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Selecting Text</bridgehead>
+    <bridgehead>Selecting Text</bridgehead>
 
     <para>For details, see <xref linkend="selection" />, <xref
     linkend="words" />, <xref linkend="lines" />, <xref linkend="paragraphs" />
@@ -381,7 +381,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Scrolling</bridgehead>
+    <bridgehead>Scrolling</bridgehead>
 
     <para>For details, see <xref linkend="views" />.</para>
 
@@ -418,7 +418,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Text Editing</bridgehead>
+    <bridgehead>Text Editing</bridgehead>
 
     <para>For details, see <xref linkend="undo-redo" />, <xref
     linkend="entering-text" />, <xref linkend="words" />, <xref
@@ -496,7 +496,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Clipboard and Registers</bridgehead>
+    <bridgehead>Clipboard and Registers</bridgehead>
 
     <para>For details, see <xref linkend="text-transfer" />.</para>
 
@@ -611,7 +611,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Markers</bridgehead>
+    <bridgehead>Markers</bridgehead>
 
     <para>For details, see <xref linkend="markers" />.</para>
 
@@ -672,7 +672,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Search and Replace</bridgehead>
+    <bridgehead>Search and Replace</bridgehead>
 
     <para>For details, see <xref linkend="search-replace" />.</para>
 
@@ -762,7 +762,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Source Code Editing</bridgehead>
+    <bridgehead>Source Code Editing</bridgehead>
 
     <para>For details, see <xref linkend="abbrevs" />, <xref linkend="indent" />
     and <xref linkend="commenting" />.</para>
@@ -815,7 +815,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Folding and Narrowing</bridgehead>
+    <bridgehead>Folding and Narrowing</bridgehead>
 
     <para>For details, see <xref linkend="folding" /> and <xref
     linkend="narrowing" />.</para>
@@ -898,7 +898,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Macros</bridgehead>
+    <bridgehead>Macros</bridgehead>
 
     <para>For details, see <xref linkend="using-macros" />.</para>
 
@@ -934,7 +934,7 @@
         </tgroup>
     </informaltable>
 
-    <bridgehead renderas="section">Alternative Shortcuts</bridgehead>
+    <bridgehead>Alternative Shortcuts</bridgehead>
 
     <para>A few frequently-used commands have alternative shortcuts intended to
     help you keep your hands from moving all over the keyboard.</para>
