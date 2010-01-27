@@ -1159,7 +1159,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			if ((physicalLine < s.getStartLine()) || (physicalLine > s.getEndLine()))
 				return;
-			float x = 0f;
+			float x = textArea.getHorizontalOffset();
 			float baseLine = y + fm.getHeight() -
 				(fm.getLeading()+1) - fm.getDescent();
 
@@ -1222,7 +1222,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if (s == null)
 				s = textArea.getText(startOffset, endOffset - startOffset);
 			if (s.length() == 1 && s.equals("\t"))
-				x = nextTabStop(x, endOffset);
+			{
+				int horzOffset = textArea.getHorizontalOffset();
+				x = nextTabStop(x - horzOffset, endOffset) + horzOffset;
+			}
 			else
 			{
 				Font font = (style != null) ? style.getFont() : getFont();
