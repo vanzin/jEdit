@@ -1,5 +1,28 @@
 JEDIT 4.3 VERSION HISTORY
 
+{{{ Version 4.3.2
+
+Thanks to Björn "Vampire" Kautler for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+{{{ API Changes
+
+
+}}}
+{{{ Editing
+
+
+}}}
+
+}}}
+
 {{{ Version 4.3.1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Damien Radtke,
@@ -20,17 +43,6 @@ Anson)
 
 - Fixed #2920352: Can't disable "Restore previously open files on startup".
   (Shlomy Reinstein)
-
-}}}
-{{{ Miscellaneous
-
-
-}}}
-{{{ API Changes
-
-
-}}}
-{{{ Editing
 
 }}}
 
