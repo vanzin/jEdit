@@ -5,8 +5,8 @@ jEdit 4.4 version history
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler and Kevin Hunter for contributing to this
-release.
+Bernhard Walle, Joerg Spieler, Kevin Hunter and Marcelo Vanzin for
+contributing to this release.
 
 {{{ Bug fixes
 
@@ -49,6 +49,18 @@ release.
 
 - Removed long deprecated TextArea#isDragInProgress() and
   TextArea#setDragInProgress(). (SF.net patch #2809776,2936146 - Kevin Hunter)
+
+- EditBus.send() will now always deliver messages on the AWT thread, although
+  it can be called from any thread. (Marcelo Vanzin)
+
+- Added EditBus.sendAsync(): this just enqueues messages to be send over
+  the EditBus as soon as the AWT thread is not busy, and returns immediately.
+   (Marcelo Vanzin)
+
+- Added ability to tag classes with EditBus.EBHandler. This is only useful
+  when tagging an EditPlugin class, and makes the plugin instance behave
+  as if it implemented EBComponent (it's added to the bus when the plugin
+  is activated). (Marcelo Vanzin)
 
 }}}
 {{{ Editing

@@ -56,6 +56,8 @@ import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
+
+import static org.gjt.sp.jedit.EditBus.EBHandler;
 //}}}
 
 /**
@@ -758,7 +760,7 @@ public class PluginJAR
 			startPluginLater();
 		}
 
-		EditBus.send(new PluginUpdate(this,PluginUpdate.ACTIVATED,false));
+		EditBus.sendAsync(new PluginUpdate(this,PluginUpdate.ACTIVATED,false));
 	} //}}}
 
 	//{{{ activateIfNecessary() method
@@ -860,8 +862,11 @@ public class PluginJAR
 
 		if(plugin != null && !(plugin instanceof EditPlugin.Broken))
 		{
-			if(plugin instanceof EBPlugin)
-				EditBus.removeFromBus((EBComponent)plugin);
+			if(plugin instanceof EBPlugin ||
+			   plugin.getClass().getAnnotation(EBHandler.class) != null)
+			{
+				EditBus.removeFromBus(plugin);
+			}
 
 			try
 			{
@@ -1402,7 +1407,8 @@ public class PluginJAR
 			jEdit.pluginError(path, "plugin-error.start-error",args);
 		}
 
-		if(plugin instanceof EBPlugin)
+		if(plugin instanceof EBPlugin ||
+		   plugin.getClass().getAnnotation(EBHandler.class) != null)
 		{
 			if(jEdit.getProperty("plugin." + plugin.getClassName()
 				+ ".activate") == null)
@@ -1413,7 +1419,7 @@ public class PluginJAR
 				((EBComponent)plugin).handleMessage(
 					new org.gjt.sp.jedit.msg.PropertiesChanged(null));
 			}
-			EditBus.addToBus((EBComponent)plugin);
+			EditBus.addToBus(plugin);
 		}
 
 		// buffers retain a reference to the fold handler in

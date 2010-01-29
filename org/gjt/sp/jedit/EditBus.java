@@ -24,7 +24,9 @@ package org.gjt.sp.jedit;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import javax.swing.SwingUtilities;
 import org.gjt.sp.util.Log;
 
 /**
@@ -95,10 +97,16 @@ public class EditBus
 	 * delivering an EBMessage, the bus will search for and invoke
 	 * all handlers matching the outgoing message type.<p>
 	 *
+	 * Since jEdit 4.4pre1, this annotation can also be added to
+	 * classes extending EditPlugin. This will make the plugin
+	 * be added to the bus automatically, similarly to how
+	 * EBPlugin works, but without having to implement the
+	 * EBComponent interface.
+	 *
 	 * @since jEdit 4.3pre19
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
-	@Target(ElementType.METHOD)
+	@Target({ElementType.TYPE, ElementType.METHOD})
 	public static @interface EBHandler
 	{
 		/**
@@ -176,21 +184,56 @@ public class EditBus
 	//{{{ send() method
 	/**
 	 * Sends a message to all components on the bus in turn.
+	 * The message is delivered to components in the AWT thread,
+	 * and this method will wait until all handlers receive the
+	 * message before returning.
+	 *
 	 * @param message The message
 	 */
 	public static void send(EBMessage message)
 	{
-		Log.log(Log.DEBUG,EditBus.class,message.toString());
+		Runnable sender = new SendMessage(message);
 
-		components.lock();
+		if (SwingUtilities.isEventDispatchThread())
+		{
+			sender.run();
+			return;
+		}
+
+		/*
+		 * We can't throw any checked exceptions from this
+		 * method. It will break all source that currently
+		 * expects this method to not throw them. So we catch
+		 * them and log them instead.
+		 */
 		try
 		{
-			sendImpl(message);
+			SwingUtilities.invokeAndWait(sender);
 		}
-		finally
+		catch (InterruptedException ie)
 		{
-			components.unlock();
+			Log.log(Log.ERROR, EditBus.class, ie);
 		}
+		catch (InvocationTargetException ite)
+		{
+			Log.log(Log.ERROR, EditBus.class, ite);
+		}
+	} //}}}
+
+	//{{{ sendAsync() method
+	/**
+	 * Schedules a message to be sent on the edit bus as soon as
+	 * the AWT thread is done processing current events. The
+	 * method returns immediately (i.e., before the message is
+	 * sent).
+	 *
+	 * @param message The message
+	 *
+	 * @since jEdit 4.4pre1
+	 */
+	public static void sendAsync(EBMessage message)
+	{
+		SwingUtilities.invokeLater(new SendMessage(message));
 	} //}}}
 
 	//{{{ Private members
@@ -399,6 +442,34 @@ public class EditBus
 		private int lock;
 		private List<Object> add = new LinkedList<Object>();
 		private List<Object> remove = new LinkedList<Object>();
+	} //}}}
+
+	//{{{ SendMessage class
+	private static class SendMessage implements Runnable
+	{
+
+		public SendMessage(EBMessage message)
+		{
+			this.message = message;
+		}
+
+
+		public void run()
+		{
+			Log.log(Log.DEBUG,EditBus.class,message.toString());
+
+			components.lock();
+			try
+			{
+				sendImpl(message);
+			}
+			finally
+			{
+				components.unlock();
+			}
+		}
+
+		private EBMessage message;
 	} //}}}
 
 }
