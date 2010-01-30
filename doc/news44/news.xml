@@ -4,10 +4,9 @@
 <article>
     <!-- :maxLineLen=80:wrap=hard: -->
     <articleinfo>
-        <author>
-            <firstname>Alan</firstname>
-            <surname>Ezust</surname>
-        </author>
+    <authorblurb>
+       <para> The jEdit all-volunteer development team. </para>
+    </authorblurb>
         <legalnotice>
             <title>Legal Notice</title>
             <para>Permission is granted to copy, distribute and/or modify this
