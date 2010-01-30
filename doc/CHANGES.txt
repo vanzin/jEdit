@@ -1,11 +1,12 @@
 jEdit 4.4 version history
        (changes since jEdit 4.3)
+:encoding=UTF-8:
 
 {{{ Version 4.4pre1
 
 Thanks to Bj√∂rn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler, Kevin Hunter, FranÁois Rey,
+Bernhard Walle, Joerg Spieler, Kevin Hunter, Fran√ßois Rey,
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
@@ -38,7 +39,7 @@ and Marcelo Vanzin for contributing to this release.
 }}}
 {{{ API changes
 
-- File System Browser dynamic menu support (#2938170 - FranÁois Rey)
+- File System Browser dynamic menu support (#2938170 - Fran√ßois Rey)
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
