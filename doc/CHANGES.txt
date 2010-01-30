@@ -61,6 +61,9 @@ contributing to this release.
   when tagging an EditPlugin class, and makes the plugin instance behave
   as if it implemented EBComponent (it's added to the bus when the plugin
   is activated). (Marcelo Vanzin)
+  
+- Temporary buffers do not send BufferUpdate.PROPERTIES_CHANGED messages anymore
+  (patch #2932330) (Dale Anson)
 
 }}}
 {{{ Editing
