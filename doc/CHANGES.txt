@@ -101,3 +101,5 @@ and Marcelo Vanzin for contributing to this release.
 }}}
 }}}
 
+jEdit buffer local properties:
+:folding=explicit:collapseFolds=2:
