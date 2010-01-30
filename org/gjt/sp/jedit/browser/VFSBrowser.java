@@ -956,6 +956,38 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		return browserView.getSelectedFiles();
 	} //}}}
 
+	/**
+	 * Return the selected files from the point of view of the
+	 * given component. This method is to be used by code
+	 * running inside VFSBrowser such as a DynamicMenuProvider.
+	 * Use the other method otherwise.
+	 * The main difference is this function searches the component
+	 * hierarchy for a BrowserView.ParentDirectoryList to get
+	 * the list of currently selected files from there. Otherwise, it
+	 * returns what {@link #getSelectedFiles()} would return.
+	 * @param source the source component to start from when
+	 * 		navigating the component hierarchy
+	 */
+	public VFSFile[] getSelectedFiles(Component source)
+	{
+		if(GUIUtilities.getComponentParent(source, BrowserView.ParentDirectoryList.class)
+			!= null)
+		{
+			Object[] selected = getBrowserView()
+				.getParentDirectoryList()
+				.getSelectedValues();
+			VFSFile[] returnValue = new VFSFile[
+				selected.length];
+			System.arraycopy(selected,0,returnValue,0,
+				selected.length);
+			return returnValue;
+		}
+		else
+		{
+			return getSelectedFiles();
+		}
+	}
+
 	//{{{ locateFile() method
 	/**
 	 * Goes to the given file's directory and selects the file in the list.
@@ -1901,43 +1933,16 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ BrowserActionContext class
 	static class BrowserActionContext extends ActionContext
 	{
-		/**
-		 * If event source hierarchy contains a VFSDirectoryEntryTable,
-		 * this is the currently selected files there. Otherwise, this
-		 * is the currently selected item in the parent directory list.
-		 */
-		private static VFSFile[] getSelectedFiles(EventObject evt,
-			VFSBrowser browser)
-		{
-			Component source = (Component)evt.getSource();
-
-			if(GUIUtilities.getComponentParent(source, BrowserView.ParentDirectoryList.class)
-				!= null)
-			{
-				Object[] selected = browser.getBrowserView()
-					.getParentDirectoryList()
-					.getSelectedValues();
-				VFSFile[] returnValue = new VFSFile[
-					selected.length];
-				System.arraycopy(selected,0,returnValue,0,
-					selected.length);
-				return returnValue;
-			}
-			else
-			{
-				return browser.getSelectedFiles();
-			}
-		}
-
 		@Override
 		public void invokeAction(EventObject evt, EditAction action)
 		{
+			Component source = (Component)evt.getSource();
 			VFSBrowser browser = (VFSBrowser)
 				GUIUtilities.getComponentParent(
-				(Component)evt.getSource(),
+				source,
 				VFSBrowser.class);
 
-			VFSFile[] files = getSelectedFiles(evt,browser);
+			VFSFile[] files = browser.getSelectedFiles(source);
 
 			// in the future we will want something better,
 			// eg. having an 'evt' object passed to

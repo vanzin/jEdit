@@ -749,7 +749,9 @@ public abstract class EditPlugin
 		}
 
 		String menuProperty = "plugin." + getClassName() + ".browser-menu";
-		if(jEdit.getProperty(menuProperty) != null)
+		String codeProperty = "plugin." + getClassName() + ".browser-menu.code";
+		if(jEdit.getProperty(menuProperty) != null
+			|| jEdit.getProperty(codeProperty) != null)
 		{
 			String pluginName = jEdit.getProperty("plugin." +
 				getClassName() + ".name");
