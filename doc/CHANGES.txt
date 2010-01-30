@@ -11,14 +11,8 @@ and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
 
-- Fix # 2924261, BufferLocal ignores request to change encoding.
-  (Dale Anson)
-
-- Fix # 2921611 - PluginSets fail to load grand-dependencies. (Damien Radtke)
-  Removed unnecessary popup warnings from InstallPanel when loading a
+- Removed unnecessary popup warnings from InstallPanel when loading a
   pluginset. (Alan Ezust)
-
-- Fix # 2920287 - Macro recording for home/end actions fixed. (Alan Ezust)
 
 - fix #1439605 - remove installer.VariableGridLayout (r16596).
 
@@ -26,15 +20,8 @@ and Marcelo Vanzin for contributing to this release.
   to the edit bus, so it wasn't updated when the edit pane changed.
   (Shlomy Reinstein)
 
-- Fixed #2920352: Can't disable "Restore previously open files on startup".
-  (Shlomy Reinstein)
-
-- Searching for regex "^\s*.*$" missed every second line of adjacent
-  matching lines. (SF.net bug #2915720 - Kazutoshi Satoda)
-
 - Removed write capability to the UrlVFS. Now http:// files are marked
   read-only. (Eric Le Lay # 2805986)
-
 
 }}}
 {{{ API changes
@@ -70,6 +57,7 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Editing
+
 - Added the missing doxygen commands for doxygen v1.6.1
   (bug #2895272 - report and patch from Bernhard Walle).
   doxygen now highlights quoted strings in comments.
@@ -98,7 +86,9 @@ and Marcelo Vanzin for contributing to this release.
 
 - Applied patch #2887520: Allow filtering the recent file list using file globs,
   e.g. "*.java" or "{*.c,*.h}". (Patch provided by Joerg Spieler)
+
 }}}
+
 }}}
 
 jEdit buffer local properties:
