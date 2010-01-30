@@ -58,6 +58,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * is available since J2SE 5.0 (1.5). This class was written for J2SE 1.4,
  * and is still here only for compatibility.
  */
+@Deprecated
 public class ReadWriteLock
 {
 	//{{{ readLock() method

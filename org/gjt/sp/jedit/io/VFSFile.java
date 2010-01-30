@@ -191,38 +191,47 @@ public class VFSFile implements Serializable
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public String name;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public String path;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public String symlinkPath;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public String deletePath;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public int type;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public long length;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public boolean hidden;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public boolean canRead;
 	/**
 	 * @deprecated Use the accessor/mutator methods instead.
 	 */
+	@Deprecated
 	public boolean canWrite;
 	//}}}
 

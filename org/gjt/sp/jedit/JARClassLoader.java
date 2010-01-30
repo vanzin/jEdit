@@ -228,6 +228,7 @@ public class JARClassLoader extends ClassLoader
 	/**
 	 * @deprecated Call <code>PluginJAR.getZipFile()</code> instead.
 	 */
+	@Deprecated
 	public ZipFile getZipFile()
 	{
 		try

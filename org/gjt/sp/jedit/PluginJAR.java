@@ -377,6 +377,7 @@ public class PluginJAR
 	/**
 	 * @deprecated Call getActionSet() instead
 	 */
+	@Deprecated
 	public ActionSet getActions()
 	{
 		return getActionSet();

@@ -98,6 +98,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 	/**
 	 * @deprecated Call <code>GUIUtilities.getView()</code> instead.
 	 */
+	 @Deprecated
 	public static View getView(Component comp)
 	{
 		// moved to GUIUtilities as it makes no sense being here.

@@ -62,6 +62,7 @@ public abstract class WorkRequest implements Runnable, ProgressObserver
 	 * @param value The progress value.
 	 * @deprecated use {@link #setValue(long)}
 	 */
+	@Deprecated
 	public void setProgressValue(int value)
 	{
 		Thread thread = Thread.currentThread();
@@ -74,6 +75,7 @@ public abstract class WorkRequest implements Runnable, ProgressObserver
 	 * @param value The progress value.
 	 * @deprecated use {@link #setMaximum(long)}
 	 */
+	@Deprecated
 	public void setProgressMaximum(int value)
 	{
 		Thread thread = Thread.currentThread();

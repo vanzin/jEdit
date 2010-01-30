@@ -111,6 +111,7 @@ public class VFSManager
 	/**
 	 * @deprecated Use <code>getVFSForProtocol()</code> instead.
 	 */
+	@Deprecated
 	public static VFS getVFSByName(String name)
 	{
 		// in new api, protocol always equals name
@@ -163,6 +164,7 @@ public class VFSManager
 	 * @deprecated Write a <code>services.xml</code> file instead;
 	 * see {@link org.gjt.sp.jedit.ServiceManager}.
 	 */
+	@Deprecated
 	public static void registerVFS(String protocol, VFS vfs)
 	{
 		Log.log(Log.DEBUG,VFSManager.class,"Registered "
@@ -176,6 +178,7 @@ public class VFSManager
 	/**
 	 * @deprecated Use <code>getVFSs()</code> instead.
 	 */
+	@Deprecated
 	public static Enumeration<VFS> getFilesystems()
 	{
 		return vfsHash.elements();
@@ -284,6 +287,7 @@ public class VFSManager
 	/**
 	 * @deprecated Call the other <code>error()</code> method instead.
 	 */
+	@Deprecated
 	public static void error(final Component comp, final String error, final Object[] args)
 	{
 		// if we are already in the AWT thread, take a shortcut
