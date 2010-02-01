@@ -22,6 +22,10 @@ and Marcelo Vanzin for contributing to this release.
 
 - Removed write capability to the UrlVFS. Now http:// files are marked
   read-only. (Eric Le Lay # 2805986)
+  
+- When having two monitors the About dialog was appearing between them, one half
+  on each monitor. Now it's position is relative to the active View
+  (Matthieu Casanova)
 
 }}}
 {{{ API changes
