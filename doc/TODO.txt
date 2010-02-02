@@ -1,57 +1,11 @@
-[error] ExtensionManager: java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 379
-[error] ExtensionManager:  at org.gjt.sp.jedit.Buffer.getLineOfOffset(Buffer.java:892)
-[error] ExtensionManager:  at errorlist.DefaultErrorSource$DefaultError.getLineNumber(DefaultErrorSource.java:510)
-[error] ExtensionManager:  at errorlist.DefaultErrorSource.findError(DefaultErrorSource.java:330)
-[error] ExtensionManager:  at errorlist.DefaultErrorSource.getLineErrors(DefaultErrorSource.java:134)
-[error] ExtensionManager:  at errorlist.ErrorHighlight.paintValidLine(ErrorHighlight.java:53)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaExtension.paintScreenLineRange(TextAreaExtension.java:70)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:146)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:106)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter.paint(TextAreaPainter.java:699)
-
-[error] ExtensionManager: java.lang.NullPointerException
-[error] ExtensionManager:  at org.gjt.sp.jedit.Buffer.markTokens(Buffer.java:2161)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ChunkCache.lineToChunkList(ChunkCache.java:760)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ChunkCache.updateChunksUpTo(ChunkCache.java:635)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ChunkCache.getLineInfo(ChunkCache.java:244)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter$PaintText.paintValidLine(TextAreaPainter.java:1039)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaExtension.paintScreenLineRange(TextAreaExtension.java:70)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:146)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:106)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter.paint(TextAreaPainter.java:699)
-
-
 TO DO
 
-absolute path completion
-
-does not indent properly:
-
-1000 [
-    [
-        [
-            [
-                50000 cons-a-lot
-            ] 4 10 make-trash
-        ] 4 10 make-trash
-    ] 4 10 make-trash 0 swap [ [ + ] when* ] tree-each drop
-] times
-
-Note that this is not a complete to do list. It mostly only lists bugs
-and quirks that I need to fix eventually.
+Note that this is not a current to do list. It mostly only lists bugs
+and quirks that Slava wanted to fix before he stopped development. All
+of these items should eventually be removed or converted into tracker
+items if they are not out of date.
 
 splitting messes up last physical line in the newly created text area
-
-console: cd / repeatedly on windows
-
-ok [error] ExtensionManager: java.lang.NullPointerException
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.getOffsets(StructureMatcher.java:181)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.paintHighlight(StructureMatcher.java:207)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.StructureMatcher$Highlight.paintValidLine(StructureMatcher.java:147)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaExtension.paintScreenLineRange(TextAreaExtension.java:70)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:146)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.ExtensionManager.paintScreenLineRange(ExtensionManager.java:106)
-[error] ExtensionManager:  at org.gjt.sp.jedit.textarea.TextAreaPainter.paint(TextAreaPainter.java:699)
 
 + text area:
 
@@ -86,9 +40,9 @@ ok [error] ExtensionManager: java.lang.NullPointerException
 Ideas: a lot of the code in the jedit text area can be simplified
    for example, i'm not sure we really need the ChunkCache anymore
    just keep the chunks for the currently
-   painting line around, to speed up the multiple offsetToX() 
+   painting line around, to speed up the multiple offsetToX()
    calls that happen during painting
-   also, you might want to rip out the text area's 
+   also, you might want to rip out the text area's
    scrolling code, and put in a JScrollPane
 
 
@@ -115,14 +69,13 @@ Ideas: a lot of the code in the jedit text area can be simplified
   - test keyboard completion with expanded/collapsed tree
   - test keyboard completion with high latency VFS
   - fsb default size
-  - don't show 'new directory' in favorites:
   - file system browser column widths are not saved
-  
+
 + misc:
 
   - kill ring still being reversed
   - jEdit.checkBufferStatus() fucks with split panes
-  
+
   - there is a comment in browser.actions.xml:
   /* NOTE: I do NOT want plugins creating check box menu items
    * in jEdit 4.2! The API is not stable, note the _comp hack...
@@ -134,7 +87,6 @@ Ideas: a lot of the code in the jedit text area can be simplified
 
   - option to disable buffer local properties
   - CA+PLUS +: bad
-  - jedit -encoding
   - goToBuffer() -- if any parent has zero height or zero width...
   - deferred loading API for macro handlers
   - S+INS, etc in swing controls
@@ -159,8 +111,6 @@ Ideas: a lot of the code in the jedit text area can be simplified
 - document deep indent
 - note about dependencies
 - plugin tutorial:
-  - plugin build environment docs
-  - auto-created actions
   - link to jEdit devel page
   - quicknotepad class -- links to API docs
   - functions - links to API docs
@@ -178,7 +128,7 @@ Ideas: a lot of the code in the jedit text area can be simplified
   - listening for buffer changes
   - canned controls:
     animated icon, color well button, enhanced dialog,
-    font selector, history text field, 
+    font selector, history text field,
     jcheckboxlist, rolloverbutton,
     variablegridlayout
   - displaying a help viewer
@@ -197,19 +147,6 @@ check tips of the day
 - help:
   - titles in search are fucked
 - sidebars: need a border or some sort
-
-[error] WorkThread: java.lang.ClassCastException
-[error] WorkThread:  at archive.ArchiveVFS.getDirectories(Unknown Source)
-[error] WorkThread:  at archive.ArchiveVFS.cacheDirectories(Unknown Source)
-[error] WorkThread:  at archive.ArchiveVFS._listDirectory(Unknown Source)
-[error] WorkThread:  at org.gjt.sp.jedit.browser.BrowserIORequest.listDirectory(BrowserIORequest.java:159)
-[error] WorkThread:  at org.gjt.sp.jedit.browser.BrowserIORequest.run(BrowserIORequest.java:90)
-[error] WorkThread:  at org.gjt.sp.util.WorkThread.doRequest(WorkThread.java:194)
-[error] WorkThread:  at org.gjt.sp.util.WorkThread.doRequests(WorkThread.java:161)
-[error] WorkThread:  at org.gjt.sp.util.WorkThread.run(WorkThread.java:135)
-
-[error] ChunkCache: BUG: skew=1,out.size()=0
-[error] ChunkCache: BUG: skew=1,out.size()=1
 
 - C+d & killring
 - plugin mgr inspection of not-loaded plugins

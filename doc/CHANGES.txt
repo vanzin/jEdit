@@ -35,11 +35,11 @@ and Marcelo Vanzin for contributing to this release.
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
 - bufferSet api rewritten. Now each editPane have its own bufferSet,
-  does not share it with other editPane. The bufferset scope scope is the
-  same for all EditPanes (Matthieu Casanova)
+  does not share it with other editPanes. The bufferset scope is the
+  same for all EditPanes. (Matthieu Casanova)
 
 - Status bar widget : it is now possible to use labels starting with letters
-  in status bar (Matthieu Casanova)
+  in status bar. (Matthieu Casanova)
 
 - Removed long deprecated TextArea#isDragInProgress() and
   TextArea#setDragInProgress(). (SF.net patch #2809776,2936146 - Kevin Hunter)
@@ -55,7 +55,7 @@ and Marcelo Vanzin for contributing to this release.
   when tagging an EditPlugin class, and makes the plugin instance behave
   as if it implemented EBComponent (it's added to the bus when the plugin
   is activated). (Marcelo Vanzin)
-  
+
 - Temporary buffers do not send BufferUpdate.PROPERTIES_CHANGED messages anymore
   (patch #2932330) (Dale Anson)
 
