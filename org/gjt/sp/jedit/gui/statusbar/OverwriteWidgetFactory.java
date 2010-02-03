@@ -87,8 +87,18 @@ public class OverwriteWidgetFactory implements StatusWidgetFactory
 		{
 			JEditTextArea textArea = view.getTextArea();
 			if (textArea != null)
-				overwrite.setText(textArea.isOverwriteEnabled()
-						  ? "O" : "-");
+			{
+				if (textArea.isOverwriteEnabled())
+				{
+					overwrite.setText("O");
+					overwrite.setEnabled(true);
+				}
+				else
+				{
+					overwrite.setText("o");
+					overwrite.setEnabled(false);
+				}
+			}
 		} //}}}
 
 
@@ -100,7 +110,7 @@ public class OverwriteWidgetFactory implements StatusWidgetFactory
 			//UIManager.getFont("Label.font");
 			FontMetrics fm = overwrite.getFontMetrics(font);
 			Dimension dim = new Dimension(
-						      Math.max(fm.charWidth('-'),fm.charWidth('O')) + 1,
+						      Math.max(fm.charWidth('o'),fm.charWidth('O')) + 1,
 						      fm.getHeight());
 			overwrite.setPreferredSize(dim);
 			overwrite.setMaximumSize(dim);

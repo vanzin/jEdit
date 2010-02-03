@@ -84,8 +84,16 @@ public class RectSelectWidgetFactory implements StatusWidgetFactory
 		    JEditTextArea textArea = view.getTextArea();
 		    if (textArea != null)
 		    {
-			    rectSelect.setText(textArea.isRectangularSelectionEnabled()
-					       ? "R" : "-");
+			    if (textArea.isRectangularSelectionEnabled())
+			    {
+				    rectSelect.setText("R");
+				    rectSelect.setEnabled(true);
+			    }
+			    else
+			    {
+				    rectSelect.setText("r");
+				    rectSelect.setEnabled(false);
+			    }
 		    }
 	    }
 	    
@@ -96,7 +104,7 @@ public class RectSelectWidgetFactory implements StatusWidgetFactory
 		    //UIManager.getFont("Label.font");
 		    FontMetrics fm = rectSelect.getFontMetrics(font);
 		    Dimension dim = new Dimension(
-						  Math.max(fm.charWidth('-'),fm.charWidth('R')) + 1,
+						  Math.max(fm.charWidth('r'),fm.charWidth('R')) + 1,
 						  fm.getHeight());
 		    rectSelect.setPreferredSize(dim);
 		    rectSelect.setMaximumSize(dim);

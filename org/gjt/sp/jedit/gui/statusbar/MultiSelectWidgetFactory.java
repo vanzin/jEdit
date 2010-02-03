@@ -25,15 +25,14 @@
 package org.gjt.sp.jedit.gui.statusbar;
 
 //{{{ Imports
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.*;
+
+import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.gui.CompletionPopup;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 //}}}
@@ -63,15 +62,15 @@ public class MultiSelectWidgetFactory implements StatusWidgetFactory
 			multiSelect.setToolTipText(jEdit.getProperty("view.status.multi-tooltip"));
 			this.view = view;
 			multiSelect.addMouseListener(new MouseAdapter()
-						     {
-							     @Override
-							     public void mouseClicked(MouseEvent e)
-							     {
-								     JEditTextArea textArea = view.getTextArea();
-								     if (textArea != null)
-									     textArea.toggleMultipleSelectionEnabled();
-							     }
-						     });
+			{
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					JEditTextArea textArea = view.getTextArea();
+					if (textArea != null)
+						textArea.toggleMultipleSelectionEnabled();
+				}
+			});
 		}
 
 		public JComponent getComponent()
@@ -84,8 +83,16 @@ public class MultiSelectWidgetFactory implements StatusWidgetFactory
 			JEditTextArea textArea = view.getTextArea();
 			if (textArea != null)
 			{
-				multiSelect.setText(textArea.isMultipleSelectionEnabled()
-						    ? "M" : "-");
+				if (textArea.isMultipleSelectionEnabled())
+				{
+					multiSelect.setText("M");
+					multiSelect.setEnabled(true);
+				}
+				else
+				{
+					multiSelect.setText("m");
+					multiSelect.setEnabled(false);
+				}
 			}
 		}
 
@@ -96,7 +103,7 @@ public class MultiSelectWidgetFactory implements StatusWidgetFactory
 			//UIManager.getFont("Label.font");
 			FontMetrics fm = multiSelect.getFontMetrics(font);
 			Dimension dim = new Dimension(
-						      Math.max(fm.charWidth('-'),fm.charWidth('M')) + 1,
+						      Math.max(fm.charWidth('m'),fm.charWidth('M')) + 1,
 						      fm.getHeight());
 			multiSelect.setPreferredSize(dim);
 			multiSelect.setMaximumSize(dim);

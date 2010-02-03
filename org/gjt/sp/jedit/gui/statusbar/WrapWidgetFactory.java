@@ -40,62 +40,69 @@ import org.gjt.sp.jedit.jEdit;
 
 /**
  * @author Matthieu Casanova
- * @since jEdit 4.3pre14 
+ * @since jEdit 4.3pre14
  */
 public class WrapWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
-	public Widget getWidget(View view) 
+	public Widget getWidget(View view)
 	{
 		Widget wrap = new WrapWidget(view);
 		return wrap;
 	} //}}}
-	
+
 	//{{{ WrapWidget class
 	private static class WrapWidget implements Widget
 	{
 		private final JLabel wrap;
 		private final View view;
-		public WrapWidget(final View view) 
+		public WrapWidget(final View view)
 		{
 			wrap = new ToolTipLabel();
 			wrap.setHorizontalAlignment(SwingConstants.CENTER);
 			wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip"));
 			this.view = view;
-			wrap.addMouseListener(new MouseAdapter() 
-					      {
-						      @Override
-						      public void mouseClicked(MouseEvent evt)
-						      {
-							      view.getBuffer().toggleWordWrap(view);
-						      }
-					      });
+			wrap.addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseClicked(MouseEvent evt)
+				{
+					view.getBuffer().toggleWordWrap(view);
+				}
+			});
 		}
-		
-		public JComponent getComponent() 
+
+		public JComponent getComponent()
 		{
 			return wrap;
 		}
-		
-		public void update() 
+
+		public void update()
 		{
 			Buffer buffer = view.getBuffer();
 			String wrap = buffer.getStringProperty("wrap");
 			if(wrap.equals("none"))
-				this.wrap.setText("-");
-			else if(wrap.equals("hard"))
-				this.wrap.setText("H");
-			else if(wrap.equals("soft"))
-				this.wrap.setText("S");
+			{
+				this.wrap.setEnabled(false);
+				this.wrap.setText("N");
+			}
+			else
+			{
+				this.wrap.setEnabled(true);
+				if (wrap.equals("hard"))
+					this.wrap.setText("H");
+				else if (wrap.equals("soft"))
+					this.wrap.setText("S");
+			}
 		}
-		
+
 		public void propertiesChanged()
 		{
 			// retarded GTK look and feel!
 			Font font = new JLabel().getFont();
 			//UIManager.getFont("Label.font");
 			FontMetrics fm = wrap.getFontMetrics(font);
-			Dimension dim = new Dimension(Math.max(Math.max(fm.charWidth('-'),
+			Dimension dim = new Dimension(Math.max(Math.max(fm.charWidth('N'),
 									fm.charWidth('H')),
 					fm.charWidth('S')) + 1,
 				fm.getHeight());

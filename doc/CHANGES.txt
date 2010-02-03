@@ -91,6 +91,7 @@ and Marcelo Vanzin for contributing to this release.
 - Applied patch #2887520: Allow filtering the recent file list using file globs,
   e.g. "*.java" or "{*.c,*.h}". (Patch provided by Joerg Spieler)
 
+- New status bar widget design (Matthieu Casanova #1540560)
 }}}
 
 }}}
