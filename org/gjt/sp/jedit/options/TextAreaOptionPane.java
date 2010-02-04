@@ -105,6 +105,7 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 		/* Selection foreground color */
 		selectionFg = new JCheckBox(jEdit.getProperty("options.textarea.selectionFg"));
+		selectionFg.setName("selectionFg");
 		selectionFg.setSelected(jEdit.getBooleanProperty("view.selectionFg"));
 		addComponent(selectionFg, selectionFgColor = new ColorWellButton(
 			jEdit.getColorProperty("view.selectionFgColor")),
