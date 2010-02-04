@@ -802,6 +802,12 @@ public class EditPane extends JPanel implements BufferSetListener
 		propertiesChanged();
 		setBuffer(buffer);
 
+		// need to add the buffer to the bufferSet.
+		// It may not have been done by the setBuffer() because the EditPane is not yet known by jEdit, and for
+		// view and global scope it is added through this list
+		if (bufferSet.indexOf(buffer) == -1)
+			bufferSet.addBuffer(buffer);
+
 		loadBufferSwitcher();
 
 		init = false;

@@ -78,7 +78,28 @@ public class BufferSet
 		}
 	}//}}}
 
+	//{{{ addBuffer() method
+	/**
+	 * Internal use only, use
+	 * {@link org.gjt.sp.jedit.bufferset.BufferSetManager#addBuffer(org.gjt.sp.jedit.View, org.gjt.sp.jedit.Buffer)}
+	 * or
+	 * {@link org.gjt.sp.jedit.bufferset.BufferSetManager#addBuffer(org.gjt.sp.jedit.EditPane, org.gjt.sp.jedit.Buffer)}
+	 * @param buffer the buffer to be added
+	 */
+	public void addBuffer(Buffer buffer)
+	{
+		addBufferAt(buffer,  -1);
+	} //}}}
+
 	//{{{ addBufferAt() method
+	/**
+	 * Internal use only, use
+	 * {@link org.gjt.sp.jedit.bufferset.BufferSetManager#addBuffer(org.gjt.sp.jedit.View, org.gjt.sp.jedit.Buffer)}
+	 * or
+	 * {@link org.gjt.sp.jedit.bufferset.BufferSetManager#addBuffer(org.gjt.sp.jedit.EditPane, org.gjt.sp.jedit.Buffer)}
+	 * @param buffer the buffer to be added
+	 * @param position the position where it must be added or -1 if we don't care
+	 */
 	public void addBufferAt(Buffer buffer, int position)
 	{
 		Log.log(Log.DEBUG, this, hashCode() + " addBufferAt("+buffer+','+position+')');
@@ -260,12 +281,6 @@ public class BufferSet
 	} //}}}
 
 	//{{{ Package-private members
-
-	//{{{ addBuffer() method
-	void addBuffer(Buffer buffer)
-	{
-		addBufferAt(buffer,  -1);
-	} //}}}
 
 	//{{{ handleMessage
 	/**
