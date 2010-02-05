@@ -357,7 +357,7 @@ public class BufferSet
 
 	//{{{ Private members
 	private final List<Buffer> buffers;
-	private EventListenerList listeners;
+	private final EventListenerList listeners;
 	private static final Comparator<Buffer> nameSorter = new NameSorter();
 	private static final Comparator<Buffer> pathSorter = new PathSorter();
 	private Comparator<Buffer> sorter;
