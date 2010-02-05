@@ -28,7 +28,7 @@ package org.gjt.sp.jedit.textarea;
  * @author ezust
  * @since jedit 4.3pre4
  */
-public class AntiAlias extends Object
+public class AntiAlias
 {
 	public static final Object NONE = "none";
 
@@ -36,7 +36,7 @@ public class AntiAlias extends Object
 
 	public static final Object SUBPIXEL = "subpixel";
 
-	public static final Object comboChoices[] = new Object[] { NONE, STANDARD, SUBPIXEL };
+	public static final Object[] comboChoices = { NONE, STANDARD, SUBPIXEL };
 
 	public void set(int newValue)
 	{
@@ -85,5 +85,5 @@ public class AntiAlias extends Object
 		return m_val;
 	}
 
-	private int m_val = 0;
+	private int m_val;
 }
