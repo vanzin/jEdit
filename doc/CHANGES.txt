@@ -27,6 +27,9 @@ and Marcelo Vanzin for contributing to this release.
   on each monitor. Now it's position is relative to the active View
   (Matthieu Casanova)
 
+- When removing text from the buffer, the event contentRemoved was sent before
+  making the buffer dirty (oman002 #2944145)
+
 }}}
 {{{ API changes
 
