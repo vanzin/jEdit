@@ -184,9 +184,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		ActionHandler actionHandler = new ActionHandler();
 
 		topBox = new Box(BoxLayout.Y_AXIS);
-		horizontalLayout = (mode != BROWSER
+		horizontalLayout = mode != BROWSER
 			|| DockableWindowManager.TOP.equals(position)
-			|| DockableWindowManager.BOTTOM.equals(position));
+			|| DockableWindowManager.BOTTOM.equals(position);
 
 		toolbarBox = new Box(horizontalLayout
 			? BoxLayout.X_AXIS
@@ -221,6 +221,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		{
 			pathField.addKeyListener(new KeyAdapter()
 			{
+				@Override
 				public void keyReleased(KeyEvent e)
 				{
 					if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
@@ -931,8 +932,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		{
 			String name = MiscUtilities.getFileName(path);
 			String ext = MiscUtilities.getFileExtension(name);
-			filter = (ext == null || ext.length() == 0
-				? filter : '*' + ext);
+			filter = ext == null || ext.length() == 0
+				? filter : '*' + ext;
 			path = MiscUtilities.getParentOfPath(path);
 		}
 
@@ -1038,11 +1039,11 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
 				continue;
 
-				JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
-						"vfs." + vfs.getName() + ".label"));
-				menuItem.setActionCommand(vfs.getName());
-				menuItem.addActionListener(actionHandler);
-				vec.add(menuItem);
+			JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
+					"vfs." + vfs.getName() + ".label"));
+			menuItem.setActionCommand(vfs.getName());
+			menuItem.addActionListener(actionHandler);
+			vec.add(menuItem);
 		} //}}}
 
 		//{{{ new API
@@ -1129,7 +1130,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					Hashtable<String, Object> props = new Hashtable<String, Object>();
 					props.put(JEditBuffer.ENCODING,currentEncoding);
 					props.put(Buffer.ENCODING_AUTODETECT,
-						  Boolean.valueOf(autoDetectEncoding));
+						autoDetectEncoding);
 					_buffer = jEdit.openFile(view, null,
 						file.getPath(),false,props);
 				}
@@ -1195,9 +1196,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ move() method
 	public void move(String newPosition)
 	{
-		boolean horz = (mode != BROWSER
+		boolean horz = mode != BROWSER
 				|| DockableWindowManager.TOP.equals(newPosition)
-				|| DockableWindowManager.BOTTOM.equals(newPosition));
+				|| DockableWindowManager.BOTTOM.equals(newPosition);
 		if (horz == horizontalLayout)
 			return;
 		horizontalLayout = horz;
@@ -1298,8 +1299,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	private boolean requestRunning;
 	private boolean maybeReloadRequestRunning;
 	
-	private Stack<String> historyStack = new Stack<String>();
-	private Stack<String> nextDirectoryStack = new Stack<String>();
+	private final Stack<String> historyStack = new Stack<String>();
+	private final Stack<String> nextDirectoryStack = new Stack<String>();
 	//}}}
 
 	//{{{ createMenuBar() method
@@ -1818,9 +1819,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ DirectoryLoadedAWTRequest class
 	class DirectoryLoadedAWTRequest implements Runnable
 	{
-		private Object node;
-		private Object[] loadInfo;
-		private boolean addToHistory;
+		private final Object node;
+		private final Object[] loadInfo;
+		private final boolean addToHistory;
 
 		DirectoryLoadedAWTRequest(Object node, Object[] loadInfo,
 			boolean addToHistory)
