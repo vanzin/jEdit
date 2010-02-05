@@ -354,9 +354,8 @@ public class BufferSetManager
 					{
 						BufferSet bufferSet = editPane.getBufferSet();
 						Set<Buffer> set = buffersMap.get(editPane.getView());
-						while (set.iterator().hasNext())
+						for (Buffer buffer : set)
 						{
-							Buffer buffer = set.iterator().next();
 							bufferSet.addBuffer(buffer);
 						}
 					}
