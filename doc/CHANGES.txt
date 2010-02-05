@@ -26,9 +26,6 @@ and Marcelo Vanzin for contributing to this release.
 - When having two monitors the About dialog was appearing between them, one half
   on each monitor. Now it's position is relative to the active View
   (Matthieu Casanova)
-    
-- Starting jEdit with no settings make the bufferSwitcher appear empty. The reason was that the current buffer of the
-  edit pane was not added to the bufferSet of the edit pane (Matthieu Casanova #2946041)
 
 }}}
 {{{ API changes
