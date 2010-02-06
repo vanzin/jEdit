@@ -524,8 +524,6 @@
 				 source="${target.java.version}">
 			<group title="jEdit"
 				   packages="org.gjt.sp*" />
-			<group title="Microstar XML Parser"
-				   packages="com.microstar.xml*" />
 		</javadoc>
 	</target>
 

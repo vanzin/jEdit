@@ -4,9 +4,9 @@ jEdit 4.4 version history
 
 {{{ Version 4.4pre1
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
+Thanks to BjÃ¶rn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
+Bernhard Walle, Joerg Spieler, Kevin Hunter, FranÃ§ois Rey,
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
@@ -22,7 +22,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Removed write capability to the UrlVFS. Now http:// files are marked
   read-only. (Eric Le Lay # 2805986)
-  
+
 - When having two monitors the About dialog was appearing between them, one half
   on each monitor. Now it's position is relative to the active View
   (Matthieu Casanova)
@@ -33,7 +33,9 @@ and Marcelo Vanzin for contributing to this release.
 }}}
 {{{ API changes
 
-- File System Browser dynamic menu support (#2938170 - François Rey)
+- Removed deprecated objectfactory xml parser.
+
+- File System Browser dynamic menu support (#2938170 - FranÃ§ois Rey)
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
