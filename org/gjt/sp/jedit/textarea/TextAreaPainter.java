@@ -1135,6 +1135,10 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	//{{{ PaintSelectionText class
 	private class PaintSelectionText extends TextAreaExtension
 	{
+		// All screen lines of the same physical line use the same indentation
+		private float indent;
+		private boolean indentFound = false;
+
 		//{{{ paintValidLine() method
 		@Override
 		public void paintValidLine(Graphics2D gfx, int screenLine,
@@ -1159,7 +1163,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			if ((physicalLine < s.getStartLine()) || (physicalLine > s.getEndLine()))
 				return;
-			float x = textArea.getHorizontalOffset();
+
+			float x = indent = textArea.getHorizontalOffset();
 			float baseLine = y + fm.getHeight() -
 				(fm.getLeading()+1) - fm.getDescent();
 
@@ -1180,6 +1185,15 @@ public class TextAreaPainter extends JComponent implements TabExpander
 				startOffset = (s.getStart() > lineStart) ? s.getStart() : lineStart;
 				endOffset = s.getEnd();
 			}
+			// Soft-wrap
+			int screenLineStart = textArea.getScreenLineStartOffset(screenLine);
+			int screenLineEnd = textArea.getScreenLineEndOffset(screenLine);
+			if (screenLineStart > startOffset)
+				startOffset = screenLineStart;
+			if (screenLineEnd < endOffset)
+				endOffset = screenLineEnd;
+			indentFound = false;
+
 			int tokenStart = lineStart;
 			while(token.id != Token.END)
 			{
@@ -1212,6 +1226,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					x = nextX(x, style, sub, tokenStart, next);
 				tokenStart = next;
 				token = token.next;
+				if (tokenStart == screenLineStart)
+					x = indent;
 			}
 		} //}}}
 
@@ -1221,13 +1237,18 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			if (s == null)
 				s = textArea.getText(startOffset, endOffset - startOffset);
-			if (s.length() == 1 && s.equals("\t"))
+			if (s.equals("\t"))
 			{
 				int horzOffset = textArea.getHorizontalOffset();
 				x = nextTabStop(x - horzOffset, endOffset) + horzOffset;
 			}
 			else
 			{
+				if ((! indentFound) && (! s.equals(" ")))
+				{
+					indentFound = true;
+					indent = x;
+				}
 				Font font = (style != null) ? style.getFont() : getFont();
 				x += font.getStringBounds(s, getFontRenderContext()).getWidth();
 			}
