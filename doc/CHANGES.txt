@@ -30,6 +30,8 @@ and Marcelo Vanzin for contributing to this release.
 - When removing text from the buffer, the event contentRemoved was sent before
   making the buffer dirty (oman002 #2944145)
 
+- Selection foreground color broken when soft wrap. (Shlomy Reinstein #2946203)
+
 }}}
 {{{ API changes
 
