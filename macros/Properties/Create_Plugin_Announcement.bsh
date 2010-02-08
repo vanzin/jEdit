@@ -4,6 +4,7 @@
  * text for a plugin submission
  * Copyright ( C ) 2006 Jeffrey Hoyt
  * jchoyt@jedit.org
+ * Eric Berry <elberry@users.sourceforge.net> (version checking 2010)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,14 +225,14 @@ void pluginTextDialog( View view, Buffer buffer )
     longDescriptionArea.setPreferredSize( new Dimension( 250, 120 ) );
     descriptionPanel.add( new JScrollPane( longDescriptionArea ) );
 
-        //add buttons to description panel
-        buttonPanel = new JPanel();
-        buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.X_AXIS ) );
-        ok = new JButton( "Create Announcement" );
-        buttonPanel.add( ok );
-        cancel = new JButton( "Cancel" );
-        buttonPanel.add( cancel );
-        descriptionPanel.add( buttonPanel );
+    //add buttons to description panel
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout( new BoxLayout( buttonPanel, BoxLayout.X_AXIS ) );
+    ok = new JButton( "Create Announcement" );
+    buttonPanel.add( ok );
+    cancel = new JButton( "Cancel" );
+    buttonPanel.add( cancel );
+    descriptionPanel.add( buttonPanel );
     content.add( descriptionPanel, "South" );
 
     // register this method as an ActionListener for
@@ -252,9 +253,81 @@ void pluginTextDialog( View view, Buffer buffer )
     {
         if( e.getSource() != cancel )
         {
-           createAnnouncement();
+        	  if(validateVersions()) {
+        	  	  createAnnouncement();
+        	  }
         }
         dialog.dispose();
+    }
+    
+    boolean validateVersions()
+    {
+    	 boolean valid = true;
+    	 StringBuilder builder = new StringBuilder();
+    	 builder.append(
+    	 	 "There are some inconsistencies in your plugin's requirements. The\n" +
+    	 	 "version numbers below don't match what you are working with in\n" +
+    	 	 "your installation of jEdit.\n\n");
+    	 
+    	 // check jEdit dependency against running build.
+    	 String build = jEdit.getBuild();
+    	 if(!build.equals(jEditDependency))
+    	 {
+    	 	 valid = false;
+    	 	 builder.append("      jEdit - Required: " + jEditDependency + " - Running: " + build + "\n");
+    	 }
+    	 
+    	 // check required plugin dependencies.
+    	 for( int i = 0; i < pluginDependencies.size(); i++ )
+		 {
+		     String plugin = pluginDependencies.get(i);
+		     String[] pluginParts = plugin.split("\\s+");
+		     String pluginClass = pluginParts[0];
+		     String pluginVersion = pluginParts[1];
+		     String installed = jEdit.getProperty("plugin." + pluginClass + ".version").trim();
+		     if(!installed.equals(pluginVersion))
+		     {
+		         valid = false;
+		         builder.append("      " + pluginClass + " - Required: " + pluginVersion + " - Running: " + installed + "\n");
+		     }
+		 }
+		 
+		 // check optional plugin dependencies.
+    	 for( int i = 0; i < optionalPluginDependencies.size(); i++ )
+		 {
+		     String plugin = optionalPluginDependencies.get(i);
+			 String[] pluginParts = plugin.split("\\s+");
+		     String pluginClass = pluginParts[0];
+		     String pluginVersion = pluginParts[1];
+		     String installed = jEdit.getProperty("plugin." + pluginClass + ".version").trim();
+		     if(!installed.equals(pluginVersion))
+		     {
+		         valid = false;
+		         builder.append("      " + pluginClass + " - Optional: " + pluginVersion + " - Running: " + installed + "\n");
+		     }
+		 }
+    	 
+    	 if(!valid)
+    	 {
+    	 	 builder.append("\n\n" +
+    	 	 	 "Note that your plugin will be tested against the latest released\n" +
+    	 	 	 "versions of jEdit and your plugin's dependencies before it is\n" +
+    	 	 	 "released.\n\n" +
+    	 	 	 "Do you want to continue creating this announcement, or would you\n" +
+    	 	 	 "like to cancel it, and update the version numbers?\n\n" +
+    	 	 	 "       \"Yes\" to create announcement as is.\n" +
+    	 	 	 "       \"No\" to cancel and update props.");
+    	 	 int choice = JOptionPane.showConfirmDialog(
+    	 	 	 					view,
+    	 	 	 					builder.toString(),
+    	 	 	 					"Versions don't match",
+    	 	 	 					JOptionPane.YES_NO_OPTION,
+    	 	 	 					JOptionPane.WARNING_MESSAGE);
+    	 	 
+    	 	 // if user's chosen yes, then announcement is created.
+    	 	 valid = (choice == JOptionPane.YES_OPTION);
+    	 }
+    	 return valid;
     }
 
     void createAnnouncement()
@@ -316,20 +389,4 @@ if( buffer.getMode().toString().equals( "properties" ) )
 else
 	Macros.error( view, "This must be run on a jEdit plugin's properties file.  \nOpen your Plugin's props file and rerun this macro." );
 
-/*
-	Macro index data ( in DocBook format )
-
-<listitem>
-    <para><filename>Create_Plugin_Announcement.bsh</filename></para>
-    <abstract><para>
-        Creates a machine-parsable version of the release announcement from the source files and minimal user input.
-        The wiz can then read this file and do the release automatically.
-    </para></abstract>
-    <para>
-        Creates a machine-parsable version of the release announcement from the source files and minimal user input.
-        The wiz can then read this file and do the release automatically.
-    </para>
-</listitem>
-
-*/
-
+// ::mode=beanshell:noTabs=true:tabSize=4:indentSize=4::
