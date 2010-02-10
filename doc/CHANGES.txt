@@ -80,6 +80,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Added regex.xml mode file (#2782258 - Kevin Hunter)
 
+- Added sip.xml mode file to read sip messages (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 

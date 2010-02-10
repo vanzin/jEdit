@@ -434,6 +434,8 @@
 <MODE NAME="sgml"		FILE="sgml.xml"
 				FILE_NAME_GLOB="*.{sgml,sgm,dtd}" />
 
+<MODE NAME="sip"		FILE="sip.xml" />
+
 <MODE NAME="rcp" 		FILE="rcp.xml"
 				FILE_NAME_GLOB="*.rcp" />
 
