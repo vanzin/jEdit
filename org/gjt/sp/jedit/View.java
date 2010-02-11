@@ -905,6 +905,7 @@ public class View extends JFrame implements InputHandlerProvider
 		{
 			Component comp = restoreSplitConfig(buffer,splitConfig);
 			setMainContent(comp);
+			updateTitle();
 		}
 		catch(IOException e)
 		{
@@ -1587,6 +1588,14 @@ public class View extends JFrame implements InputHandlerProvider
 			mainPanel.remove(mainContent);
 		mainContent = c;
 		mainPanel.add(mainContent, BorderLayout.CENTER);
+		if (c instanceof JSplitPane) {
+			splitPane = (JSplitPane)c;	
+			editPane = null;
+		}
+		else {
+			splitPane = null;
+			editPane = (EditPane)c;
+		}
 		mainPanel.revalidate();
 		mainPanel.repaint();
 	} //}}}
