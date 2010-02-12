@@ -23,15 +23,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
-import java.awt.AWTEvent;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -58,7 +50,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.LayoutFocusTraversalPolicy;
-import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
@@ -752,7 +743,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		}
 
-		SwingUtilities.invokeLater(new Runnable()
+		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
 			{
@@ -1588,10 +1579,12 @@ public class View extends JFrame implements InputHandlerProvider
 			mainPanel.remove(mainContent);
 		mainContent = c;
 		mainPanel.add(mainContent, BorderLayout.CENTER);
-		if (c instanceof JSplitPane) {
+		if (c instanceof JSplitPane)
+		{
 			splitPane = (JSplitPane)c;	
 		}
-		else {
+		else
+		{
 			splitPane = null;
 			editPane = (EditPane)c;
 		}
@@ -1800,10 +1793,6 @@ loop:		while (true)
 											    path, true, null);
 							jEdit.commitTemporary(buffer);
 						}
-						else
-						{
-							Log.log(Log.ERROR, this, "Buffer already loaded ???");
-						}
 					}
 
 					if(buffer == null)
@@ -1948,7 +1937,7 @@ loop:		while (true)
 				Component item = viewmenu.getMenuComponent(i);
 				if (item instanceof JMenuItem && ((JMenuItem)item).getText().equals(sbs_label))
 				{
-					((JMenuItem)item).setEnabled(show);
+					item.setEnabled(show);
 					// viewmenu.invalidate();
 				}
 			}
@@ -2127,8 +2116,10 @@ loop:		while (true)
 	/**
 	 * Merge a EditPane's BufferSet into another one.
 	 * This is used on unsplitting panes not to close buffers.
+	 * @param target the target bufferSet where we will merge buffers from source
+	 * @param source the source bufferSet
 	 */
-	static private void mergeBufferSets(EditPane target, EditPane source)
+	private static void mergeBufferSets(EditPane target, EditPane source)
 	{
 		BufferSetManager manager = jEdit.getBufferSetManager();
 		for (Buffer buffer: source.getBufferSet().getAllBuffers())
@@ -2199,7 +2190,7 @@ loop:		while (true)
 			// People have reported hangs with JDK 1.4; might be
 			// caused by modal dialogs being displayed from
 			// windowActivated()
-			SwingUtilities.invokeLater(new Runnable()
+			EventQueue.invokeLater(new Runnable()
 			{
 				public void run()
 				{
@@ -2271,12 +2262,9 @@ loop:		while (true)
 			bounds = GUIUtilities.getScreenBounds();
 		else
 			bounds = parent.getGraphicsConfiguration().getBounds();
-		int minWidth = jEdit.getIntegerProperty("view.minStartupWidth");
-		int minHeight = jEdit.getIntegerProperty("view.minStartupHeight");
-		return (r.x < bounds.width - minWidth &&
-				r.x + r.width > minWidth &&
-				r.y < bounds.height - minHeight &&
-				r.y + r.height > minHeight);
+		return r.x > bounds.x && r.y > bounds.y &&
+			r.x + r.width < bounds.x + bounds.width &&
+			r.y + r.height < bounds.y + bounds.height;
 	}
 
 	public void adjust(View parent, ViewConfig config)
