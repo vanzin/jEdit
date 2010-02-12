@@ -1590,7 +1590,6 @@ public class View extends JFrame implements InputHandlerProvider
 		mainPanel.add(mainContent, BorderLayout.CENTER);
 		if (c instanceof JSplitPane) {
 			splitPane = (JSplitPane)c;	
-			editPane = null;
 		}
 		else {
 			splitPane = null;
