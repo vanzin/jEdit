@@ -124,7 +124,10 @@ public class EncodingsOptionPane extends AbstractOptionPane
 				availableEncodings.add(encoding);
 		}
 		pingPongList = new PingPongList<String>(availableEncodings, selectedEncodings);
-
+		pingPongList.setLeftTitle(getProperty("options.encodings.available"));
+		pingPongList.setRightTitle(getProperty("options.encodings.selected"));
+		pingPongList.setLeftTooltip(getProperty("options.encodings.available.tooltip"));
+		pingPongList.setRightTooltip(getProperty("options.encodings.selected.tooltip"));
 		addComponent(pingPongList,BOTH);
 
 		// Select All/None Buttons

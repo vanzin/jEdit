@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.gui;
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -42,6 +43,10 @@ public class PingPongList<E> extends JSplitPane
 	private final MyListModel<E> rightModel;
 	private JList left;
 	private JList right;
+	private JLabel leftLabel;
+	private JLabel rightLabel;
+	private JPanel leftPanel;
+	private JPanel rightPanel;
 
 	public PingPongList(List<E> leftData, List<E> rightData)
 	{
@@ -55,11 +60,14 @@ public class PingPongList<E> extends JSplitPane
 		left = new JList(leftModel);
 		rightModel = new MyListModel<E>(rightData);
 		right = new JList(rightModel);
+		leftPanel = new JPanel(new BorderLayout());
+		rightPanel = new JPanel(new BorderLayout());
 		JScrollPane leftScroll = new JScrollPane(left);
 		JScrollPane rightScroll = new JScrollPane(right);
-		setLeftComponent(leftScroll);
-		setRightComponent(rightScroll);
-
+		leftPanel.add(leftScroll);
+		rightPanel.add(rightScroll);
+		setLeftComponent(leftPanel);
+		setRightComponent(rightPanel);
 		left.setDragEnabled(true);
 		right.setDragEnabled(true);
 		left.setDropMode(DropMode.INSERT);
@@ -69,6 +77,64 @@ public class PingPongList<E> extends JSplitPane
 		left.setTransferHandler(myTransferHandler);
 		right.setTransferHandler(myTransferHandler);
 		setDividerLocation(0.5);
+	}
+
+	public void setLeftTooltip(String leftTooltip)
+	{
+		left.setToolTipText(leftTooltip);
+	}
+
+	public void setRightTooltip(String rightTooltip)
+	{
+		right.setToolTipText(rightTooltip);
+	}
+
+	public void setLeftTitle(String leftTitle)
+	{
+		if (leftTitle == null)
+		{
+			removeLeftTitle();
+			return;
+		}
+		if (leftLabel == null)
+		{
+			leftLabel = new JLabel();
+		}
+		leftLabel.setText(leftTitle);
+		leftPanel.add(leftLabel, BorderLayout.NORTH);
+	}
+
+	public void setRightTitle(String rightTitle)
+	{
+		if (rightTitle == null)
+		{
+			removeRightTitle();
+			return;
+		}
+		if (rightLabel == null)
+		{
+			rightLabel = new JLabel();
+		}
+		rightLabel.setText(rightTitle);
+		rightPanel.add(rightLabel, BorderLayout.NORTH);
+	}
+
+	public void removeLeftTitle()
+	{
+		if (leftLabel != null)
+		{
+			leftPanel.remove(leftLabel);
+			leftLabel = null;
+		}
+	}
+
+	public void removeRightTitle()
+	{
+		if (rightLabel != null)
+		{
+			rightPanel.remove(rightLabel);
+			rightLabel = null;
+		}
 	}
 
 	public int getLeftSize()
@@ -188,7 +254,7 @@ public class PingPongList<E> extends JSplitPane
 				if (targetList == sourceList)
 				{
 					// we are moving inside the same list
-					for (int i = indices.length - 1; i >=0; i--)
+					for (int i = indices.length - 1; i >= 0; i--)
 					{
 						int index = indices[i];
 						if (indices[i] >= dropLocation)
@@ -201,7 +267,7 @@ public class PingPongList<E> extends JSplitPane
 						}
 						sourceModel.remove(index);
 					}
-					for (int i = indices.length - 1; i >=0; i--)
+					for (int i = indices.length - 1; i >= 0; i--)
 					{
 						indices[i] = dropStart + i;
 					}
@@ -210,7 +276,7 @@ public class PingPongList<E> extends JSplitPane
 				{
 					// we are moving to another list
 					sourceList.clearSelection();
-					for (int i = indices.length - 1; i >=0; i--)
+					for (int i = indices.length - 1; i >= 0; i--)
 					{
 						sourceModel.remove(indices[i]);
 						indices[i] = dropLocation + i;
