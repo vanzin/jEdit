@@ -682,18 +682,6 @@
 
 	<target name="compile-default-plugins-for-dist"
 			depends="init">
-		<ant dir="jars/LatestVersion"
-			 target="dist"
-			 inheritAll="false">
-			<property name="jedit.install.dir"
-					  value="${dist.dir}" />
-		</ant>
-		<ant dir="jars/LatestVersion"
-			 target="clean"
-			 inheritAll="false">
-			<property name="jedit.install.dir"
-					  value="${dist.dir}" />
-		</ant>
 		<ant dir="jars/QuickNotepad"
 			 target="dist"
 			 inheritAll="false">
@@ -735,7 +723,6 @@
 			<tarfileset id="jedit-program"
 					 dir="${dist.dir}"
 					 includes="doc/**
-							   jars/LatestVersion.jar
 							   jars/QuickNotepad.jar
 							   modes/**
 							   properties/**
@@ -1129,7 +1116,6 @@
 						fullpath="usr/share/applications/jEdit.desktop" />
 			<tarfileset dir="${dist.dir}"
 						includes="doc/**
-								  jars/LatestVersion.jar
 								  jars/QuickNotepad.jar
 								  macros/**
 								  modes/**
@@ -1248,7 +1234,6 @@
 					 	 	   classes/package-files/linux/deb/jedit.desktop
 					 	 	   classes/package-files/linux/jedit.1.gz
 					 	 	   doc/**
-						 	   jars/LatestVersion.jar
 						 	   jars/QuickNotepad.jar
 						 	   macros/**
 						 	   modes/**
@@ -1314,8 +1299,7 @@
 			<datafileset file="."
 						 fullpath="usr/share/jEdit/jars/" />
 			<datafileset dir="${dist.dir}/jars"
-						 includes="LatestVersion.jar
-						 		   QuickNotepad.jar"
+						 includes="QuickNotepad.jar"
 						 prefix="usr/share/jEdit/jars/" />
 			<datafileset file="."
 						 fullpath="usr/share/man/" />
@@ -1394,7 +1378,6 @@
 			 		   ${config.dist.dir}/${jar.filename}
 			 		   ${config.dist.dir}/classes/package-files/windows/**
 			 		   ${config.dist.dir}/doc/**
-			 		   ${config.dist.dir}/jars/LatestVersion.jar
 			 		   ${config.dist.dir}/jars/QuickNotepad.jar
 			 		   ${config.dist.dir}/macros/**
 			 		   ${config.dist.dir}/modes/**

@@ -45,9 +45,6 @@ export CLASSPATH="."
 
 ant docs-html-xsltproc javadoc dist
 
-# Build LatestVersion.jar
-(cd jars/LatestVersion && ant)
-
 # Build QuickNotepad.jar
 (cd jars/QuickNotepad && ant)
 

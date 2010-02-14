@@ -70,7 +70,6 @@ Name: autostartserver; Description: jEdit Server automatisch beim Hochfahren sta
 Source: @jar.filename@; DestDir: {app}; Flags: ignoreversion sortfilesbyextension; Components: main
 Source: doc\*; DestDir: {app}\doc; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension; Excludes: api\*,README.txt; Components: main
 Source: doc\api\*; DestDir: {app}\doc\api; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension; Components: apidoc
-Source: jars\LatestVersion.jar; DestDir: {app}\jars; Flags: ignoreversion sortfilesbyextension; Components: main
 Source: jars\QuickNotepad.jar; DestDir: {app}\jars; Flags: ignoreversion sortfilesbyextension; Components: main
 Source: macros\*; DestDir: {app}\macros; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension; Components: macros
 Source: modes\*; DestDir: {app}\modes; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension; Components: main

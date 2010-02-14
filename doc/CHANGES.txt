@@ -87,6 +87,8 @@ and Marcelo Vanzin for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Removed LatestVersion plugin.
+
 - Added actions for eating whitespace at word ends in both directions
   for findWordStart. (#1953341 - strank)
 
