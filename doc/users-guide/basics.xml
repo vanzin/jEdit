@@ -246,7 +246,9 @@
     </section>
 
     <section id="docking">
-        <title>Window Docking</title>
+        <title>Window Docking Layouts</title>
+
+        <para> A docking layout is similar to an Eclipse "Perspective" in that it describes a set of dockable windows that are visible to the user at any given time, hiding the rest. </para>
 
         <para>Various jEdit and plugin windows can be docked into the View for
         convenience. Dockable windows have a popup button in their top-left
@@ -261,20 +263,29 @@
         floating instance of the current window.</para>
 
         <para>The commands in the
-        <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu> menu move
-        keyboard focus between docking areas.</para>
+        <guimenu>View</guimenu>&gt;<guisubmenu>Docking</guisubmenu> menu move keyboard focus between docking areas.</para>
 
-        <para>Dockable windows can also be configured in the
+
+        <para>
+        After you have customized the layout of your dockables and wish to save it for export/import, use the actions <guimenu>View</guimenu> - <guimenu>Docking</guimenu> - <guimenuitem>Save/Load Docking Layout</guimenuitem>. </para>
+        <para> It is possible to configure a Dockable layout for just one or a handful of edit modes. This makes it possible to save or load your dockable layout with the same keyboard shortcut (or automatically) based on the edit mode of your current buffer.
+        </para>
+
+        <para>
+        It is also possible to save/load a layout for a particular edit mode. The loading and saving can be done automatically, as configured in the global options docking pane when the mode of the buffer changes, or manually in response to invoking <guimenu>View</guimenu> - <guimenu>Docking</guimenu> - <guimenuitem>Save/Load Docking Layout for current mode.</guimenuitem>
+        </para>
+
+        <para>Dockable windows can be further configured in the
         <guilabel>Docking</guilabel> pane of the
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box.</para>
+        Options</guimenuitem> dialog box. See <xref linkend="docking-pane"/> for details.
+        </para>
+
 
         <sidebar>
-            <title>For power users</title>
+            <title>For keyboard/power users</title>
 
-            <para>Each dockable has three commands associated with it; one is
-            part of the menu bar and opens the dockable. The other two commands
-            are:</para>
+            <para>Each dockable has three commands associated with it; one is part of the menu bar and opens the dockable. The other two commands are:</para>
 
             <itemizedlist>
                 <listitem>

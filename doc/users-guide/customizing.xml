@@ -282,8 +282,12 @@
 
             <para>The <guibutton>Docking</guibutton> option pane specifies
             docking location for various dockable windows. Another way to
-            specify docking locations is to use the popup menus associated with
-            each dockable window; see <xref linkend="docking" />.</para>
+            specify docking locations is to use the popup menus associated with each dockable window. </para>
+
+            <para> It is possible to configure jEdit to automatically load and/or save <emphasis role="bold">Docking Layouts</emphasis> (similar to eclipse perspectives) based on the edit mode of your current buffer through the checkboxes in this pane. See <xref linkend="docking" />.
+            </para>
+
+
         </section>
 
         <section id="editing-pane">
