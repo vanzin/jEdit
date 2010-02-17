@@ -768,12 +768,13 @@ public class View extends JFrame implements InputHandlerProvider
 			lastSplitConfig = getSplitConfig();
 
 			PerspectiveManager.setPerspectiveDirty(true);
-
+			BufferSet.Scope scope = jEdit.getBufferSetManager().getScope();
 			for(EditPane _editPane: getEditPanes())
 			{
 				if(editPane != _editPane)
 				{
-					mergeBufferSets(editPane, _editPane);
+					if (scope == BufferSet.Scope.editpane)
+						mergeBufferSets(editPane, _editPane);
 					_editPane.close();
 				}
 			}
@@ -809,6 +810,7 @@ public class View extends JFrame implements InputHandlerProvider
 				comp = comp.getParent();
 			}
 
+			BufferSet.Scope scope = jEdit.getBufferSetManager().getScope();
 			// get rid of any edit pane that is a child
 			// of the current edit pane's parent splitter
 			for(EditPane _editPane: getEditPanes())
@@ -816,7 +818,8 @@ public class View extends JFrame implements InputHandlerProvider
 				if(GUIUtilities.isAncestorOf(comp,_editPane)
 					&& _editPane != editPane)
 				{
-					mergeBufferSets(editPane, _editPane);
+					if (scope == BufferSet.Scope.editpane)
+						mergeBufferSets(editPane, _editPane);
 					_editPane.close();
 				}
 			}
