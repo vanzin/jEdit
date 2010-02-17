@@ -2,11 +2,13 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <article>
-    <!-- :maxLineLen=80:wrap=hard: -->
+
+    <title> What's new in jEdit 4.4 </title>
     <articleinfo>
-    <authorblurb>
-       <para> The jEdit all-volunteer development team. </para>
-    </authorblurb>
+        <author>
+            <othername>The jEdit all-volunteer development team</othername>
+        </author>
+
         <legalnotice>
             <title>Legal Notice</title>
             <para>Permission is granted to copy, distribute and/or modify this
@@ -18,13 +20,13 @@
             the file <filename>COPYING.DOC.txt</filename> included with the
             jEdit distribution.</para>
         </legalnotice>
-        <title>What's New in jEdit 4.4</title>
+
     </articleinfo>
     <section>
-    <title> Preface </title>
+        <title> Preface </title>
 
-    <para> This is a paragraph </para>
+        <para> This is a paragraph </para>
     </section>
 
-
+<!-- :maxLineLen=80:wrap=hard: -->
 </article>
