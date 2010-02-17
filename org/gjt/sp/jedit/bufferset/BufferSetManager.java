@@ -58,7 +58,7 @@ public class BufferSetManager
 			Buffer[] allBuffers = bufferSet.getAllBuffers();
 			for (Buffer buffer : allBuffers)
 			{
-				removeBuffer(bufferSet, buffer);
+				_removeBuffer(bufferSet, buffer);
 			}
 		}
 	} //}}}
@@ -185,7 +185,8 @@ public class BufferSetManager
 	}
 
 	/**
-	 * Remove a buffer from a View's BufferSet.
+	 * Remove a buffer from a bufferSet.
+	 * And make sure that the bufferSet is not empty after that
 	 *
 	 * @param bufferSet the bufferSet
 	 * @param buffer the buffer that will be removed
@@ -193,6 +194,19 @@ public class BufferSetManager
 	void removeBuffer(BufferSet bufferSet, Buffer buffer)
 	{
 		Log.log(Log.DEBUG, this, "removeBuffer("+bufferSet+','+buffer+')');
+		_removeBuffer(bufferSet, buffer);
+		bufferRemoved(bufferSet);
+	}
+
+	/**
+	 * Remove a buffer from a bufferSet.
+	 * Used when closing an EditPane
+	 *
+	 * @param bufferSet the bufferSet
+	 * @param buffer the buffer that will be removed
+	 */
+	private void _removeBuffer(BufferSet bufferSet, Buffer buffer)
+	{
 		Set<BufferSet> owners = getOwners(buffer);
 		owners.remove(bufferSet);
 		bufferSet.removeBuffer(buffer);
@@ -202,7 +216,6 @@ public class BufferSetManager
 			Log.log(Log.DEBUG, this, "Buffer:"+buffer+" is in no bufferSet anymore, closing it");
 			jEdit._closeBuffer(null, buffer);
 		}
-		bufferRemoved(bufferSet);
 	} //}}}
 
 	//{{{ removeBuffer() method
