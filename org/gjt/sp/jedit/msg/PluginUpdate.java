@@ -77,6 +77,12 @@ public class PluginUpdate extends EBMessage
 		if(what == null)
 			throw new NullPointerException("What must be non-null");
 
+		EditPlugin plugin = jar.getPlugin();
+		if (plugin != null)
+		{
+			String clazz = plugin.getClassName();
+			version = jEdit.getProperty("plugin."+clazz+".version");
+		}
 		this.what = what;
 		this.exit = exit;
 	} //}}}
@@ -111,15 +117,28 @@ public class PluginUpdate extends EBMessage
 		return (PluginJAR)getSource();
 	} //}}}
 
+	//{{{ getPluginVersion() method
+	/**
+	 * Returns the plugin version.
+	 *
+	 * @return the plugin version. It may be null in some case like for the libraries
+	 * @since 4.4pre1
+	 */
+	public String getPluginVersion()
+	{
+		return version;
+	} //}}}
+
 	//{{{ paramString() method
 	public String paramString()
 	{
-		return "what=" + what + ",exit=" + exit + ","
+		return "what=" + what + ",exit=" + exit + ",version=" + version + ","
 			+ super.paramString();
 	} //}}}
 
 	//{{{ Private members
 	private Object what;
 	private boolean exit;
+	private String version;
 	//}}}
 }

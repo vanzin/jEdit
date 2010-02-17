@@ -71,6 +71,9 @@ and Marcelo Vanzin for contributing to this release.
 
 - New ping-pong list component org.gjt.sp.jedit.gui.PingPongList
   (Matthieu Casanova)
+
+- PluginUpdate bus message now have a method getPluginVersion() that returns
+  the plugin version if there is one (Matthieu Casanova #2953163)
 }}}
 {{{ Editing
 
