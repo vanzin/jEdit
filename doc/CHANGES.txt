@@ -32,6 +32,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Selection foreground color broken when soft wrap. (Shlomy Reinstein #2946203)
 
+- beanshell load() fails w/ exception. (Shlomy Reinstein #2927555)
 }}}
 {{{ API changes
 
