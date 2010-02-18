@@ -5,7 +5,7 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
-
+Fixed bug #2927555: beanshell load() fails w/ exception (Shlomy Reinstein)
 
 }}}
 {{{ Miscellaneous
