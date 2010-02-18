@@ -12,7 +12,7 @@ import java.lang.reflect.Proxy;
 
 import org.gjt.sp.jedit.bsh.Capabilities;
 
-if ( Capabilities.classExists("bsh.ClassGeneratorImpl") )
+if ( Capabilities.classExists("org.gjt.sp.jedit.bsh.ClassGeneratorImpl") )
 {
 public class BshObjectInputStream extends ObjectInputStream
 {
