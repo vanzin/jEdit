@@ -169,6 +169,12 @@ plugin.console.ConsolePlugin.depend.3=optional plugin projectviewer.ProjectPlugi
  * be added to the sub-menu by listing <code>-</code> in the property.</li>
  * </ul>
  *
+ * <p>Again, if the browser menu items need to be determined at runtime, define a
+ * property <code>plugin.<i>className</i>.browser-menu.code</code> to be BeanShell
+ * code that evaluates to an implementation of
+ * {@link org.gjt.sp.jedit.menu.DynamicMenuProvider}.</p>
+ *<p>
+ *
  *<p> In all cases, each action's
  * menu item label is taken from the <code><i>actionName</i>.label</code>
  * property. View actions are defined in an <code>actions.xml</code>

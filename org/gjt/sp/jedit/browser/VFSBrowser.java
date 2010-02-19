@@ -950,6 +950,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 	//{{{ getSelectedFiles() method
 	/**
+	 * Return the selected files in the lower browser tree.
 	 * @since jEdit 4.3pre2
 	 */
 	public VFSFile[] getSelectedFiles()
@@ -957,17 +958,21 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		return browserView.getSelectedFiles();
 	} //}}}
 
+	//{{{ getSelectedFiles() method
 	/**
 	 * Return the selected files from the point of view of the
-	 * given component. This method is to be used by code
-	 * running inside VFSBrowser such as a DynamicMenuProvider.
-	 * Use the other method otherwise.
+	 * given component. This may be the selected directory from the
+	 * upper tree component of the browser (directory tree) or
+	 * the selected files in the bottom tree component.
+	 * This method is to be used by code running inside VFSBrowser
+	 * such as a DynamicMenuProvider. Use the other method otherwise.
 	 * The main difference is this function searches the component
-	 * hierarchy for a BrowserView.ParentDirectoryList to get
+	 * hierarchy for a {@link ParentDirectoryList} to get
 	 * the list of currently selected files from there. Otherwise, it
 	 * returns what {@link #getSelectedFiles()} would return.
 	 * @param source the source component to start from when
 	 * 		navigating the component hierarchy
+	 * @since jEdit 4.4pre1
 	 */
 	public VFSFile[] getSelectedFiles(Component source)
 	{
@@ -987,7 +992,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		{
 			return getSelectedFiles();
 		}
-	}
+	} //}}}
 
 	//{{{ locateFile() method
 	/**
