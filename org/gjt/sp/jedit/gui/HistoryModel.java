@@ -70,6 +70,7 @@ public class HistoryModel extends DefaultListModel
 	} //}}}
 
 	//{{{ insertElementAt() method
+	@Override
 	public void insertElementAt(Object obj, int index)
 	{
 		modified = true;
@@ -87,6 +88,7 @@ public class HistoryModel extends DefaultListModel
 	} //}}}
 
 	//{{{ removeElement() method
+	@Override
 	public boolean removeElement(Object obj)
 	{
 		modified = true;
@@ -97,12 +99,15 @@ public class HistoryModel extends DefaultListModel
 	/**
 	 * @deprecated Call <code>removeAllElements()</code> instead.
 	 */
+	@Override
+	@Deprecated
 	public void clear()
 	{
 		removeAllElements();
 	} //}}}
 
 	//{{{ removeAllElements() method
+	@Override
 	public void removeAllElements()
 	{
 		modified = true;
@@ -169,7 +174,7 @@ public class HistoryModel extends DefaultListModel
 	//{{{ Private members
 	private static int max;
 
-	private String name;
+	private final String name;
 	private static Map<String, HistoryModel> models;
 
 	private static boolean modified;

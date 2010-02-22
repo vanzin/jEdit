@@ -34,7 +34,7 @@ import org.gjt.sp.util.ProgressObserver;
 class PluginManagerProgress extends JDialog implements ProgressObserver
 {
 	//{{{ PluginManagerProgress constructor
-	public PluginManagerProgress(PluginManager dialog, Roster roster)
+	PluginManagerProgress(PluginManager dialog, Roster roster)
 	{
 		super(dialog,jEdit.getProperty("plugin-manager.progress"),true);
 
@@ -48,8 +48,8 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 		progress.setStringPainted(true);
 		progress.setString(jEdit.getProperty("plugin-manager.progress"));
 
-		int maximum = 0;
 		count = roster.getOperationCount();
+		int maximum = 0;
 		for(int i = 0; i < count; i++)
 		{
 			maximum += roster.getOperation(i).getMaximum();
@@ -78,6 +78,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	 * @param value the new value
 	 * @deprecated Use {@link #setValue(long)}
 	 */
+	@Deprecated
 	public void setValue(final int value)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -170,15 +171,15 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	//{{{ Instance variables
 	private Thread thread;
 
-	private JProgressBar progress;
-	private JButton stop;
-	private int count;
+	private final JProgressBar progress;
+	private final JButton stop;
+	private final int count;
 	private int done = 1;
 
 	// progress value as of start of current task
 	private int valueSoFar;
 
-	private Roster roster;
+	private final Roster roster;
 	//}}}
 
 	//{{{ ActionHandler class
@@ -199,6 +200,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	{
 		boolean done;
 
+		@Override
 		public void windowOpened(WindowEvent evt)
 		{
 			if(done)
@@ -209,6 +211,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 			thread.start();
 		}
 
+		@Override
 		public void windowClosing(WindowEvent evt)
 		{
 			thread.stop();
@@ -224,6 +227,7 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 			super("Plugin manager thread");
 		}
 
+		@Override
 		public void run()
 		{
 			roster.performOperationsInWorkThread(PluginManagerProgress.this);

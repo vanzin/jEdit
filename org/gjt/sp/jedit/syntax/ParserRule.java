@@ -110,11 +110,12 @@ public class ParserRule
 	/**
 	* @deprecated As the linking between rules is not anymore done within the rule but external. See {@link ParserRuleSet#getRules(Character)}
 	*/
+	@Deprecated
 	public ParserRule next;
 	//}}}
 
 	//{{{ createSequenceRule() method
-	public static final ParserRule createSequenceRule(
+	public static ParserRule createSequenceRule(
 		int posMatch, String seq, ParserRuleSet delegate, byte id)
 	{
 		return new ParserRule(SEQ, seq.substring(0,1),
@@ -126,7 +127,8 @@ public class ParserRule
 	/**
 	 * @deprecated Use {@link #createRegexpSequenceRule(String,int,String,ParserRuleSet,byte,boolean)} instead
 	 */
-	public static final ParserRule createRegexpSequenceRule(
+	@Deprecated
+	public static ParserRule createRegexpSequenceRule(
 		char hashChar, int posMatch, String seq,
 		ParserRuleSet delegate, byte id, boolean ignoreCase)
 		throws PatternSyntaxException
@@ -136,7 +138,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
-	public static final ParserRule createRegexpSequenceRule(
+	public static ParserRule createRegexpSequenceRule(
 		String hashChar, int posMatch, String seq,
 		ParserRuleSet delegate, byte id, boolean ignoreCase)
 		throws PatternSyntaxException
@@ -147,7 +149,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
-	public static final ParserRule createRegexpSequenceRule(
+	public static ParserRule createRegexpSequenceRule(
 		int posMatch, char[] hashChars, String seq,
 		ParserRuleSet delegate, byte id, boolean ignoreCase)
 		throws PatternSyntaxException
@@ -158,7 +160,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createSpanRule() method
-	public static final ParserRule createSpanRule(
+	public static ParserRule createSpanRule(
 		int startPosMatch, String start, int endPosMatch, String end,
 		ParserRuleSet delegate, byte id, byte matchType,
 		boolean noLineBreak, boolean noWordBreak, String escape)
@@ -174,7 +176,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createRegexpSpanRule() method
-	public static final ParserRule createRegexpSpanRule(
+	public static ParserRule createRegexpSpanRule(
 		String hashChar, int startPosMatch, String start,
 		int endPosMatch, String end, ParserRuleSet delegate, byte id,
 		byte matchType, boolean noLineBreak, boolean noWordBreak,
@@ -192,7 +194,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createRegexpSpanRule() method
-	public static final ParserRule createRegexpSpanRule(
+	public static ParserRule createRegexpSpanRule(
 		int startPosMatch, char[] hashChars, String start,
 		int endPosMatch, String end, ParserRuleSet delegate, byte id,
 		byte matchType, boolean noLineBreak, boolean noWordBreak,
@@ -210,7 +212,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createEOLSpanRule() method
-	public static final ParserRule createEOLSpanRule(
+	public static ParserRule createEOLSpanRule(
 		int posMatch, String seq, ParserRuleSet delegate, byte id,
 		byte matchType)
 	{
@@ -225,7 +227,8 @@ public class ParserRule
 	/**
 	 * @deprecated Use {@link #createRegexpEOLSpanRule(String,int,String,ParserRuleSet,byte,byte,boolean)} instead
 	 */
-	public static final ParserRule createRegexpEOLSpanRule(
+	@Deprecated
+	public static ParserRule createRegexpEOLSpanRule(
 		char hashChar, int posMatch, String seq, ParserRuleSet delegate,
 		byte id, byte matchType, boolean ignoreCase)
 		throws PatternSyntaxException
@@ -235,7 +238,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createRegexpEOLSpanRule() method
-	public static final ParserRule createRegexpEOLSpanRule(
+	public static ParserRule createRegexpEOLSpanRule(
 		String hashChar, int posMatch, String seq, ParserRuleSet delegate,
 		byte id, byte matchType, boolean ignoreCase)
 		throws PatternSyntaxException
@@ -248,7 +251,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createRegexpEOLSpanRule() method
-	public static final ParserRule createRegexpEOLSpanRule(
+	public static ParserRule createRegexpEOLSpanRule(
 		int posMatch, char[] hashChars, String seq, ParserRuleSet delegate,
 		byte id, byte matchType, boolean ignoreCase)
 		throws PatternSyntaxException
@@ -261,7 +264,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createMarkFollowingRule() method
-	public static final ParserRule createMarkFollowingRule(
+	public static ParserRule createMarkFollowingRule(
 		int posMatch, String seq, byte id, byte matchType)
 	{
 		int ruleAction = MARK_FOLLOWING;
@@ -272,7 +275,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createMarkPreviousRule() method
-	public static final ParserRule createMarkPreviousRule(
+	public static ParserRule createMarkPreviousRule(
 		int posMatch, String seq, byte id, byte matchType)
 	{
 		int ruleAction = MARK_PREVIOUS;
@@ -283,7 +286,7 @@ public class ParserRule
 	} //}}}
 
 	//{{{ createEscapeRule() method
-	public static final ParserRule createEscapeRule(String seq)
+	public static ParserRule createEscapeRule(String seq)
 	{
 		int ruleAction = IS_ESCAPE;
 
