@@ -775,6 +775,7 @@ public abstract class EditPlugin
 	 * @deprecated Instead of overriding this method, define properties
 	 * as specified in the description of this class.
 	 */
+	@Deprecated
 	public void createMenuItems(Vector menuItems) {} //}}}
 
 	//{{{ createOptionPanes() method
@@ -782,6 +783,7 @@ public abstract class EditPlugin
 	 * @deprecated Instead of overriding this method, define properties
 	 * as specified in the description of this class.
 	 */
+	@Deprecated
 	public void createOptionPanes(OptionsDialog optionsDialog) {} //}}}
 
 	//}}}
@@ -799,6 +801,7 @@ public abstract class EditPlugin
 	 */
 	public static class Broken extends EditPlugin
 	{
+		@Override
 		public String getClassName()
 		{
 			return clazz;
@@ -812,7 +815,7 @@ public abstract class EditPlugin
 		}
 
 		// private members
-		private String clazz;
+		private final String clazz;
 	} //}}}
 
 	//{{{ Deferred class
@@ -824,6 +827,7 @@ public abstract class EditPlugin
 	 */
 	public static class Deferred extends EditPlugin
 	{
+		@Override
 		public String getClassName()
 		{
 			return clazz;
@@ -847,6 +851,6 @@ public abstract class EditPlugin
 		}
 
 		// private members
-		private String clazz;
+		private final String clazz;
 	} //}}}
 }
