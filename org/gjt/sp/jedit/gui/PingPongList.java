@@ -70,8 +70,6 @@ public class PingPongList<E> extends JSplitPane
 		setRightComponent(rightPanel);
 		left.setDragEnabled(true);
 		right.setDragEnabled(true);
-		left.setDropMode(DropMode.INSERT);
-		right.setDropMode(DropMode.INSERT);
 
 		MyTransferHandler myTransferHandler = new MyTransferHandler();
 		left.setTransferHandler(myTransferHandler);
@@ -228,6 +226,7 @@ public class PingPongList<E> extends JSplitPane
 	private class MyTransferHandler extends TransferHandler
 	{
 		private JList sourceList;
+		private int[]indices;
 
 		@Override
 		public int getSourceActions(JComponent c)
@@ -247,9 +246,9 @@ public class PingPongList<E> extends JSplitPane
 				MyListModel<E> targetModel = (MyListModel<E>) targetList.getModel();
 				@SuppressWarnings({"unchecked"})
 				MyListModel<E> sourceModel = (MyListModel<E>) sourceList.getModel();
-				int dropLocation = targetList.getDropLocation().getIndex();
+				int dropLocation = targetList.getSelectedIndex();
+				if(dropLocation == -1)dropLocation=0;
 				targetModel.add(dropLocation, transferData);
-				int[] indices = sourceList.getSelectedIndices();
 				int dropStart = dropLocation;
 				if (targetList == sourceList)
 				{
@@ -300,6 +299,7 @@ public class PingPongList<E> extends JSplitPane
 		protected Transferable createTransferable(JComponent c)
 		{
 			sourceList = (JList) c;
+			indices = sourceList.getSelectedIndices();
 
 			@SuppressWarnings({"unchecked"})
 			E[] objects = (E[]) sourceList.getSelectedValues();
