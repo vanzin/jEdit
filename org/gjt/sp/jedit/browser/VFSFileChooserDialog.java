@@ -196,7 +196,10 @@ public class VFSFileChooserDialog extends EnhancedDialog
 					if(browser.getMode() == VFSBrowser.BROWSER_DIALOG)
 					{
 						Hashtable props = new Hashtable();
-						props.put(JEditBuffer.ENCODING,browser.currentEncoding);
+						if(browser.currentEncoding != null)
+						{
+							props.put(JEditBuffer.ENCODING,browser.currentEncoding);
+						}
 						jEdit.openFile(browser.getView(),
 							browser.getDirectory(),
 							path,false,props);

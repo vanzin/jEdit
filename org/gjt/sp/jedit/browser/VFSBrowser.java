@@ -176,8 +176,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		KeyListener keyListener = dwm.closeListener(NAME);
 		addKeyListener(keyListener);
 		
-		currentEncoding = jEdit.getProperty("buffer.encoding",
-			System.getProperty("file.encoding"));
+		currentEncoding = null;
 		autoDetectEncoding = jEdit.getBooleanProperty(
 			"buffer.encodingAutodetect");
 
@@ -1133,7 +1132,10 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 				if(_buffer == null)
 				{
 					Hashtable<String, Object> props = new Hashtable<String, Object>();
-					props.put(JEditBuffer.ENCODING,currentEncoding);
+					if(currentEncoding != null)
+					{
+						props.put(JEditBuffer.ENCODING,currentEncoding);
+					}
 					props.put(Buffer.ENCODING_AUTODETECT,
 						autoDetectEncoding);
 					_buffer = jEdit.openFile(view, null,
@@ -1216,7 +1218,12 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	} //}}}
 	
 	//{{{ Package-private members
+
+	// This can be null untill an user explicitly selects an encoding
+	// so that this don't overwrite more accurate encoding information
+	// like buffer histories.
 	String currentEncoding;
+
 	boolean autoDetectEncoding;
 
 	//{{{ directoryLoaded() method

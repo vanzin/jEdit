@@ -37,6 +37,9 @@ and Marcelo Vanzin for contributing to this release.
 - Using regex style encoding auto detectors, StringIndexOutOfBoundsException
   could happen when loading a file. (Kazutoshi Satoda)
 
+- The encoding could be less accurate when opening a file from
+  File System Browser. (Kazutoshi Satoda)
+
 }}}
 {{{ API changes
 

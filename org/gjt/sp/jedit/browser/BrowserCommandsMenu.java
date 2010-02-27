@@ -166,7 +166,7 @@ public class BrowserCommandsMenu extends JPopupMenu
 	//{{{ update() method
 	public void update()
 	{
-		if(encodingMenuItems != null)
+		if(encodingMenuItems != null && browser.currentEncoding != null)
 		{
 			JRadioButtonMenuItem mi = encodingMenuItems.get(
 				browser.currentEncoding);
