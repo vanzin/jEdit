@@ -38,7 +38,7 @@ and Marcelo Vanzin for contributing to this release.
   could happen when loading a file. (Kazutoshi Satoda)
 
 - The encoding could be less accurate when opening a file from
-  File System Browser. (Kazutoshi Satoda)
+  File System Browser. (SF.net bug #1524181,1721796 - Kazutoshi Satoda)
 
 }}}
 {{{ API changes
