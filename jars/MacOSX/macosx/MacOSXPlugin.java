@@ -65,7 +65,7 @@ public class MacOSXPlugin extends EBPlugin
 				{
 					// Fix key bindings for OS X for anything other than Aqua LNF
 					// See: http://lists.apple.com/archives/java-dev/2008/Apr/msg00209.html
-					if (lf.equalsIgnoreCase("apple.laf.aqualookandfeel") == false)
+					if (!UIManager.getLookAndFeel().isNativeLookAndFeel())
 					{
 						Log.log(Log.DEBUG, this, "Fixing keybindingds on current LNF");
 						UIDefaults uid = UIManager.getLookAndFeelDefaults();
