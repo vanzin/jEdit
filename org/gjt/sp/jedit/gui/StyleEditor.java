@@ -39,13 +39,66 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JOptionPane;
 
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
+import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
+import org.gjt.sp.jedit.syntax.Token;
+import org.gjt.sp.jedit.textarea.JEditTextArea;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 //{{{ StyleEditor class
 public class StyleEditor extends EnhancedDialog implements ActionListener
 {
+	//{{{ invokeForCaret() method
+	/**
+	 * Edit the syntax style of the token under the caret.
+	 *
+	 * @param textArea the textarea where your caret is
+	 * @since jEdit 4.4pre1
+	 */
+	public static void invokeForCaret(JEditTextArea textArea)
+	{
+		JEditBuffer buffer = textArea.getBuffer();
+		int lineNum = textArea.getCaretLine();
+		int start = buffer.getLineStartOffset(lineNum);
+		int position = textArea.getCaretPosition();
+
+		DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
+		buffer.markTokens(lineNum,tokenHandler);
+		Token token = tokenHandler.getTokens();
+
+		while(token.id != Token.END)
+		{
+			int next = start + token.length;
+			if (start <= position && next > position)
+				break;
+			start = next;
+			token = token.next;
+		}
+		if (token.id == Token.END || token.id == Token.NULL)
+		{
+			JOptionPane.showMessageDialog(textArea.getView(),
+				jEdit.getProperty("syntax-style-no-token.message"),
+				jEdit.getProperty("syntax-style-no-token.title"),
+				JOptionPane.PLAIN_MESSAGE);
+			return;
+		}
+		String typeName = Token.tokenToString(token.id);
+		String property = "view.style." + typeName.toLowerCase();
+		SyntaxStyle currentStyle = GUIUtilities.parseStyle(
+				jEdit.getProperty(property), "Dialog",12);
+		SyntaxStyle style = new StyleEditor(textArea.getView(),
+				currentStyle, typeName).getStyle();
+		if(style != null)
+		{
+			jEdit.setProperty(property, GUIUtilities.getStyleString(style));
+			jEdit.propertiesChanged();
+		}
+	} //}}}
+
 	//{{{ StyleEditor constructor
 	public StyleEditor(JDialog parent, SyntaxStyle style, String styleName)
 	{

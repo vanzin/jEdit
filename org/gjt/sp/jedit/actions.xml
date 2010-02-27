@@ -277,7 +277,7 @@
 
 <ACTION NAME="edit-syntax-style">
 	<CODE>
-		buffer.editSyntaxStyle(textArea);
+		StyleEditor.invokeForCaret(textArea);
 	</CODE>
 </ACTION>
 

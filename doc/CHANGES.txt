@@ -79,6 +79,11 @@ and Marcelo Vanzin for contributing to this release.
 
 - PluginUpdate bus message now have a method getPluginVersion() that returns
   the plugin version if there is one (Matthieu Casanova #2953163)
+
+- Added StyleEditor.invokeForCaret(textArea) which does same as
+  buffer.editSyntaxStyle(textArea) did, but can be invoked without
+  specifying the buffer object carefully. (Kazutoshi Satoda)
+
 }}}
 {{{ Editing
 
