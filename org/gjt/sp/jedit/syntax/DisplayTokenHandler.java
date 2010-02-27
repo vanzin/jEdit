@@ -42,7 +42,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	//{{{ init() method
 	/**
 	 * Init some variables that will be used when marking tokens.
-	 * This is called before {@link JEditBuffer#markTokens(int, TokenHandler)}
+	 * This is called before {@link org.gjt.sp.jedit.buffer.JEditBuffer#markTokens(int, TokenHandler)}
 	 * to store some data that will be required and that we don't want
 	 * to put in the parameters
 	 *

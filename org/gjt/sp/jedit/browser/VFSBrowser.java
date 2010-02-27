@@ -967,7 +967,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	 * This method is to be used by code running inside VFSBrowser
 	 * such as a DynamicMenuProvider. Use the other method otherwise.
 	 * The main difference is this function searches the component
-	 * hierarchy for a {@link ParentDirectoryList} to get
+	 * hierarchy for a {@link BrowserView.ParentDirectoryList} to get
 	 * the list of currently selected files from there. Otherwise, it
 	 * returns what {@link #getSelectedFiles()} would return.
 	 * @param source the source component to start from when

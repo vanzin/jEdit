@@ -136,8 +136,8 @@ public class HtmlUtilities
 	 * Appends a given non-HTML string to an HTML string, translating character
 	 * entities to the appropriate HTML form.
 	 * 
-	 * @param: sb The HTML string to which the non-HTML string is appended.
-	 * @param: s The non-HTML string to append. 
+	 * @param sb The HTML string to which the non-HTML string is appended.
+	 * @param s The non-HTML string to append.
 	 */
 	public static void appendString2html(StringBuilder sb, String s)
 	{
