@@ -130,7 +130,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			}
 			else
 				mode = jEdit.getProperty("about.mode.standalone");
-			String[] args = { jEdit.getVersion(), mode, System.getProperty("java.version") };
+			String[] args = { jEdit.getVersion(), mode, System.getProperty("java.vendor"), System.getProperty("java.version") };
 			sBottomLine = jEdit.getProperty("about.version",args);
 			setFont(defaultFont);
 			fm = getFontMetrics(defaultFont);

@@ -943,7 +943,7 @@ print-error.message=An error occurred while trying to print:\n\
 
 #{{{ About dialog
 about.title=About jEdit
-about.version=jEdit {0} {1} mode, using Java {2}
+about.version=jEdit {0} {1} mode, using {2} Java {3}
 about.mode.standalone=standalone
 about.mode.server=server
 about.mode.server-background=server-background
