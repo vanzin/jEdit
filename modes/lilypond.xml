@@ -5,7 +5,7 @@
 	Requires jEdit 4.3pre6 or compatible
 Recommended jEdit/modes/catalog entry:
 	<MODE NAME="lilypond" FILE="lilypond.xml"
-	FILE_NAME_GLOB="*.ly" />
+	FILE_NAME_GLOB="*.{ly,ily}" />
 
 -->
 

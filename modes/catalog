@@ -252,7 +252,7 @@
 				FILE_NAME_GLOB="*.{tex,sty,ltx}" />
 
 <MODE NAME="lilypond"		FILE="lilypond.xml"
-				FILE_NAME_GLOB="*.ly" />
+				FILE_NAME_GLOB="*.{ly,ily}" />
 
 <MODE NAME="lisp"		FILE="lisp.xml"
 				FILE_NAME_GLOB="*.{lisp,lsp,el}" />
