@@ -2585,17 +2585,26 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//{{{ parseBufferLocalProperties() method
 	protected void parseBufferLocalProperties()
 	{
-		int lastLine = Math.min(9,getLineCount() - 1);
-		parseBufferLocalProperties(getSegment(0,getLineEndOffset(lastLine) - 1));
+		int maxRead = 10000;
+		int lineCount = getLineCount();
+		int lastLine = Math.min(9, lineCount - 1);
+		int max = Math.min(maxRead, getLineEndOffset(lastLine) - 1);
+		parseBufferLocalProperties(getSegment(0, max));
 
 		// first line for last 10 lines, make sure not to overlap
 		// with the first 10
-		int firstLine = Math.max(lastLine + 1, getLineCount() - 10);
-		if(firstLine < getLineCount())
+		int firstLine = Math.max(lastLine + 1, lineCount - 10);
+		if(firstLine < lineCount)
 		{
-			int length = getLineEndOffset(getLineCount() - 1)
-				- (getLineStartOffset(firstLine) + 1);
-			parseBufferLocalProperties(getSegment(getLineStartOffset(firstLine),length));
+			int firstLineStartOffset = getLineStartOffset(firstLine);
+			int length = getLineEndOffset(lineCount - 1)
+				- (firstLineStartOffset + 1);
+			if (length > maxRead)
+			{
+				firstLineStartOffset += length - maxRead;
+				length = maxRead;
+			}
+			parseBufferLocalProperties(getSegment(firstLineStartOffset,length));
 		}
 	} //}}}
 
@@ -2698,8 +2707,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		StringBuilder buf = new StringBuilder();
 		String name = null;
 		boolean escape = false;
-		int max = Math.min(10000, prop.length());
-		for(int i = 0; i < max; i++)
+		int length = prop.length();
+		for(int i = 0; i < length; i++)
 		{
 			char c = prop.charAt(i);
 			switch(c)
