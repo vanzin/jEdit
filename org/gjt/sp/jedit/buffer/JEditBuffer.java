@@ -2698,7 +2698,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 		StringBuilder buf = new StringBuilder();
 		String name = null;
 		boolean escape = false;
-		for(int i = 0; i < prop.length(); i++)
+		int max = Math.min(10000, prop.length());
+		for(int i = 0; i < max; i++)
 		{
 			char c = prop.charAt(i);
 			switch(c)

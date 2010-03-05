@@ -126,6 +126,11 @@ and Marcelo Vanzin for contributing to this release.
 - New status bar widget design (Matthieu Casanova #1540560)
 
 - New Encodings option pane using drag & drop (Matthieu Casanova)
+
+- Parsing buffer local properties is limited to the first 10000 characters of
+  the first and last 10 lines. This is a performance enhancement when loading
+  buffers containing very long lines (Matthieu Casanova)
+
 }}}
 
 }}}
