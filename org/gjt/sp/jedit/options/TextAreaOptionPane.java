@@ -287,7 +287,6 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox completeFromAllBuffers;
 	//}}}
 
-
 	//{{{ FontList class
 	/**
 	 * The substitution font list widget. Shows a JList with the
@@ -401,9 +400,16 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 		public void save()
 		{
-			for (int i = 0; i < fontsModel.size(); i++)
+			Font f;
+			int i = 0;
+			while ((f = jEdit.getFontProperty("view.fontSubstList." + i)) != null)
 			{
-				Font f = (Font) fontsModel.getElementAt(i);
+				jEdit.unsetProperty("view.fontSubstList." + i);
+				i++;
+			}
+			for (i = 0; i < fontsModel.size(); i++)
+			{
+				f = (Font) fontsModel.getElementAt(i);
 				jEdit.setFontProperty("view.fontSubstList." + i, f);
 			}
 		}
