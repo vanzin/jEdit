@@ -2105,6 +2105,10 @@ options.syntax.foldLine.0=Collapsed fold line, level > 3
 options.textarea.label=Text Area
 options.textarea.code=new TextAreaOptionPane();
 options.textarea.font=Text font:
+options.textarea.fontsubst=Automatic font substitution
+options.textarea.fontsubst.tooltip=Automatically select the appropriate font \
+if the chosen one can't display characters.
+options.textarea.fontsubstlist=Preferred fonts:
 options.textarea.foreground=Text color:
 options.textarea.background=Background color:
 options.textarea.caret=Caret:

@@ -45,7 +45,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Removed deprecated objectfactory xml parser.
 
-- File System Browser dynamic menu support (#2938170 - François Rey)
+- File System Browser dynamic menu support (#2938170 - FranÃ§ois Rey)
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
@@ -130,6 +130,12 @@ and Marcelo Vanzin for contributing to this release.
 - Parsing buffer local properties is limited to the first 10000 characters of
   the first and last 10 lines. This is a performance enhancement when loading
   buffers containing very long lines (Matthieu Casanova)
+
+. Added a new option to perform font substitution in the text area when the
+  current configured font can't display characters in the buffer. It's disabled
+  by default, and can be enabled in the text area option pane, along with the
+  option to choose preferred fonts for substitution. This makes reading files
+  which contain text in multiple scripts more bearable. (Marcelo Vanzin)
 
 }}}
 

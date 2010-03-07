@@ -29,9 +29,12 @@ import java.awt.event.ActionListener;
 import java.awt.*;
 import org.gjt.sp.jedit.textarea.AntiAlias;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.AbstractOptionPane;
 import org.gjt.sp.jedit.gui.FontSelector;
+import org.gjt.sp.jedit.gui.FontSelectorDialog;
 import org.gjt.sp.jedit.gui.ColorWellButton;
+import org.gjt.sp.jedit.gui.RolloverButton;
 //}}}
 
 /**
@@ -53,6 +56,22 @@ public class TextAreaOptionPane extends AbstractOptionPane
 		font = new FontSelector(jEdit.getFontProperty("view.font"));
 
 		addComponent(jEdit.getProperty("options.textarea.font"),font);
+
+		fontSubst = new JCheckBox(jEdit.getProperty("options.textarea.fontsubst"));
+		fontSubst.setToolTipText(jEdit.getProperty("options.textarea.fontsubst.tooltip"));
+		fontSubst.setSelected(jEdit.getBooleanProperty("view.enableFontSubst"));
+		fontSubst.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent evt)
+				{
+					fontSubstList.setVisible(fontSubst.isSelected());
+				}
+			});
+		addComponent(fontSubst);
+
+		fontSubstList = new FontList();
+		fontSubstList.setVisible(fontSubst.isSelected());
+		addComponent(fontSubstList, GridBagConstraints.HORIZONTAL);
 
 		/* Text color */
 		addComponent(jEdit.getProperty("options.textarea.foreground"),
@@ -193,6 +212,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	public void _save()
 	{
 		jEdit.setFontProperty("view.font",font.getFont());
+		jEdit.setBooleanProperty("view.enableFontSubst",fontSubst.isSelected());
+		fontSubstList.save();
 
 		jEdit.setColorProperty("view.fgColor",foregroundColor
 			.getSelectedColor());
@@ -238,6 +259,8 @@ public class TextAreaOptionPane extends AbstractOptionPane
 
 	//{{{ Private members
 	private FontSelector font;
+	private JCheckBox fontSubst;
+	private FontList fontSubstList;
 	private ColorWellButton foregroundColor;
 	private ColorWellButton backgroundColor;
 	private JCheckBox blinkCaret;
@@ -263,4 +286,158 @@ public class TextAreaOptionPane extends AbstractOptionPane
 	private JCheckBox stripTrailingEOL;
 	private JCheckBox completeFromAllBuffers;
 	//}}}
+
+
+	//{{{ FontList class
+	/**
+	 * The substitution font list widget. Shows a JList with the
+	 * list of fonts and buttons that allow the user to manipulate
+	 * the list.
+	 */
+	private static class FontList
+		extends JPanel
+		implements ActionListener
+	{
+
+		public FontList()
+		{
+			int i = 0;
+
+			setLayout(new BorderLayout());
+
+			/* Label. */
+			JLabel l = new JLabel(jEdit.getProperty("options.textarea.fontsubstlist"));
+
+			/* Substitution font list. */
+			Font f;
+			fontsModel = new DefaultListModel();
+			fonts = new JList(fontsModel);
+			fonts.setCellRenderer(new FontItemRenderer());
+			while ((f = jEdit.getFontProperty("view.fontSubstList." + i)) != null)
+			{
+				fontsModel.addElement(f);
+				i++;
+			}
+
+			/* Right-side button box. */
+			Box buttons = new Box(BoxLayout.Y_AXIS);
+
+			add = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.add.icon")));
+			add.setToolTipText(jEdit.getProperty("common.add"));
+			add.addActionListener(this);
+			buttons.add(add);
+			buttons.add(Box.createVerticalStrut(2));
+
+			remove = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.remove.icon")));
+			remove.setToolTipText(jEdit.getProperty("common.remove"));
+			remove.addActionListener(this);
+			buttons.add(remove);
+			buttons.add(Box.createVerticalStrut(2));
+
+			up = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.moveUp.icon")));
+			up.setToolTipText(jEdit.getProperty("common.moveUp"));
+			up.addActionListener(this);
+			buttons.add(up);
+			buttons.add(Box.createVerticalStrut(2));
+
+			down = new RolloverButton(GUIUtilities.loadIcon(jEdit.getProperty("options.context.moveDown.icon")));
+			down.setToolTipText(jEdit.getProperty("common.moveDown"));
+			down.addActionListener(this);
+			buttons.add(down);
+			buttons.add(Box.createGlue());
+
+
+			add(BorderLayout.NORTH, l);
+			add(BorderLayout.CENTER, new JScrollPane(fonts));
+			add(BorderLayout.EAST, buttons);
+		}
+
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			if (ae.getSource() == add)
+			{
+				JDialog parent = GUIUtilities.getParentDialog(this);
+				Font selected =
+					new FontSelectorDialog(parent, null).getSelectedFont();
+
+				if (selected != null)
+				{
+					selected = selected.deriveFont(Font.PLAIN, 12);
+					fontsModel.addElement(selected);
+					fonts.setSelectedIndex(fontsModel.size() - 1);
+				}
+			}
+			else if (ae.getSource() ==  remove)
+			{
+				int idx = fonts.getSelectedIndex();
+				if (idx != -1)
+					fontsModel.removeElementAt(idx);
+			}
+			else if (ae.getSource() == up)
+			{
+				int idx = fonts.getSelectedIndex();
+				if (idx > 0)
+				{
+					Object o = fontsModel.getElementAt(idx);
+					fontsModel.removeElementAt(idx);
+					fontsModel.add(idx - 1, o);
+					fonts.setSelectedIndex(idx - 1);
+				}
+			}
+			else if (ae.getSource() == down)
+			{
+				int idx = fonts.getSelectedIndex();
+				if (idx != -1 && idx < fontsModel.size() - 1)
+				{
+					Object o = fontsModel.getElementAt(idx);
+					fontsModel.removeElementAt(idx);
+					fontsModel.add(idx + 1, o);
+					fonts.setSelectedIndex(idx + 1);
+				}
+			}
+		}
+
+
+		public void save()
+		{
+			for (int i = 0; i < fontsModel.size(); i++)
+			{
+				Font f = (Font) fontsModel.getElementAt(i);
+				jEdit.setFontProperty("view.fontSubstList." + i, f);
+			}
+		}
+
+
+		private DefaultListModel fontsModel;
+		private JList fonts;
+		private JButton add;
+		private JButton remove;
+		private JButton up;
+		private JButton down;
+
+
+		private static class FontItemRenderer extends DefaultListCellRenderer
+		{
+
+			public Component getListCellRendererComponent(JList list,
+								      Object value,
+								      int index,
+								      boolean isSelected,
+								      boolean cellHasFocus)
+			{
+				Font f = (Font) value;
+				super.getListCellRendererComponent(list,
+								   value,
+								   index,
+								   isSelected,
+								   cellHasFocus);
+				setText(f.getFamily());
+				return this;
+			}
+
+		}
+
+	} //}}}
+
 }
