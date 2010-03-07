@@ -283,14 +283,10 @@ public class Chunk extends Token
 			if (x < gwidth)
 			{
 				float[] pos = gv.getGlyphPositions(0, gv.getNumGlyphs(), null);
-				float nextX = 0;
-				int i = 0;
-				while (x < nextX)
-				{
-					nextX += pos[i * 2];
-					off++;
-				}
-				return off;
+				int i;
+				for (i = 0; i < pos.length && x > pos[i];  i += 2);
+				return off + (i / 2) +
+					(round && i < pos.length && x > pos[i] ? 1 : 0);
 			}
 			x -= gwidth;
 			off += gv.getNumGlyphs();
