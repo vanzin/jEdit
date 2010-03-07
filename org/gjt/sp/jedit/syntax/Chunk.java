@@ -276,19 +276,31 @@ public class Chunk extends Token
 				return offset;
 		}
 
-		int off = 0;
+		int off = offset;
+		float myx = 0.0f;
 		for (GlyphVector gv : glyphs)
 		{
 			float gwidth = (float) gv.getLogicalBounds().getWidth();
-			if (x < gwidth)
+			if (myx + gwidth >= x)
 			{
 				float[] pos = gv.getGlyphPositions(0, gv.getNumGlyphs(), null);
-				int i;
-				for (i = 0; i < pos.length && x > pos[i];  i += 2);
-				return off + (i / 2) +
-					(round && i < pos.length && x > pos[i] ? 1 : 0);
+				for (int i = 0; i < gv.getNumGlyphs(); i++)
+				{
+					float glyphX = myx + pos[i * 2];
+					float nextX = (i == gv.getNumGlyphs() - 1)
+					            ? width
+					            : myx + pos[i * 2 + 2];
+
+					if (nextX > x)
+					{
+						if (!round || nextX - x > x - glyphX)
+							return off + i;
+						else
+							return off + i + 1;
+					}
+				}
 			}
-			x -= gwidth;
+			myx += gwidth;
 			off += gv.getNumGlyphs();
 		}
 
