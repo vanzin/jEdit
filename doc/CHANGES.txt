@@ -40,6 +40,8 @@ and Marcelo Vanzin for contributing to this release.
 - The encoding could be less accurate when opening a file from
   File System Browser. (SF.net bug #1524181,1721796 - Kazutoshi Satoda)
 
+- When setting a new message in the status bar in a macro called from the
+  Macro menu the message was cleared immediately (Matthieu Casanova #2964522)
 }}}
 {{{ API changes
 
