@@ -215,8 +215,9 @@ public class BufferSaveRequest extends BufferIORequest
 		if(buffer.getProperty(Buffer.BACKED_UP) == null
 			|| jEdit.getBooleanProperty("backupEverySave"))
 		{
-			vfs._backup(session,path,view);
-			buffer.setBooleanProperty(Buffer.BACKED_UP,true);
+			if (jEdit.getIntegerProperty("backups",1) > 0)
+				vfs._backup(session,path,view);
+			buffer.setBooleanProperty(Buffer.BACKED_UP, true);
 		}
 	} //}}}
 

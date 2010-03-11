@@ -512,10 +512,6 @@ public class FileVFS extends VFS
 		throws IOException
 	{
 		// Fetch properties
-		int backups = jEdit.getIntegerProperty("backups",1);
-
-		if(backups == 0)
-			return;
 
 		String backupPrefix = jEdit.getProperty("backup.prefix");
 		String backupSuffix = jEdit.getProperty("backup.suffix");
@@ -535,7 +531,7 @@ public class FileVFS extends VFS
 		else
 		{
 			backupDirectory = MiscUtilities.constructPath(
-				System.getProperty("user.home"),backupDirectory);
+				System.getProperty("user.home"), backupDirectory);
 
 			// Perhaps here we would want to guard with
 			// a property for parallel backups or not.
@@ -548,7 +544,7 @@ public class FileVFS extends VFS
 				dir.mkdirs();
 		}
 
-		MiscUtilities.saveBackup(file,backups,backupPrefix,
+		MiscUtilities.saveBackup(file, jEdit.getIntegerProperty("backups",1), backupPrefix,
 			backupSuffix,backupDirectory,backupTimeDistance);
 	} //}}}
 
