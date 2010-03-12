@@ -34,8 +34,8 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.*;
 
-import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.Debug;
+import org.gjt.sp.jedit.IPropertyManager;
 //}}}
 
 /**
@@ -205,13 +205,45 @@ public class Chunk extends Token
 		return -1;
 	} //}}}
 
-	//{{{ clearFontCache() method
+	//{{{ propertiesChanged() method
 	/**
-	 * Clears the internal font cache.
+	 * Reload internal configuration based on the given properties.
+	 *
+	 * @param	props	Configuration properties.
+	 *
+	 * @since jEdit 4.4pre1
 	 */
-	public static void clearFontCache()
+	public static void propertiesChanged(IPropertyManager props)
 	{
 		fontSubstList = null;
+		if (props == null)
+		{
+			fontSubstEnabled = false;
+			preferredFonts = null;
+		}
+
+
+		int i = 0;
+		String family;
+		List<Font> userFonts = new ArrayList<Font>();
+
+		fontSubstEnabled = Boolean.parseBoolean(props.getProperty("view.enableFontSubst"));
+
+		while ((family = props.getProperty("view.fontSubstList." + i)) != null)
+		{
+			/*
+			 * The default font is Font.DIALOG if the family
+			 * doesn't match any installed fonts. The following
+			 * check skips fonts that don't exist.
+			 */
+			Font f = new Font(family, Font.PLAIN, 12);
+			if (!f.getFamily().equals(Font.DIALOG) ||
+			    family.equals(Font.DIALOG))
+				userFonts.add(f);
+			i++;
+		}
+
+		preferredFonts = userFonts.toArray(new Font[userFonts.size()]);
 	} //}}}
 
 	//{{{ Instance variables
@@ -362,6 +394,8 @@ public class Chunk extends Token
 	private List<GlyphVector> glyphs;
 	private boolean visible;
 
+	private static boolean fontSubstEnabled;
+	private static Font[] preferredFonts;
 	private static Font[] fontSubstList;
 
 	// Flag to enable a workaround for a bug in most known implementations of Java 5.
@@ -395,23 +429,16 @@ public class Chunk extends Token
 	{
 		if (fontSubstList == null)
 		{
-			int i = 0;
-			List<Font> userFonts = new ArrayList<Font>();
-			Font f;
 			Font[] systemFonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
 
-			while ((f = jEdit.getFontProperty("view.fontSubstList." + i)) != null)
-			{
-				userFonts.add(f);
-				i++;
-			}
+			fontSubstList = new Font[preferredFonts.length +
+						 systemFonts.length];
 
-			fontSubstList = new Font[userFonts.size() + systemFonts.length];
+			System.arraycopy(preferredFonts, 0, fontSubstList, 0,
+					 preferredFonts.length);
 
-			for (i = 0; i < userFonts.size(); i++)
-				fontSubstList[i] = userFonts.get(i);
-
-			System.arraycopy(systemFonts, 0, fontSubstList, i,
+			System.arraycopy(systemFonts, 0, fontSubstList,
+					 preferredFonts.length,
 					 systemFonts.length);
 		}
 		return fontSubstList;
@@ -501,14 +528,13 @@ public class Chunk extends Token
 		float width = 0.0f;
 		int max = 0;
 		Font dflt = style.getFont();
-		boolean fontSubst = jEdit.getBooleanProperty("view.enableFontSubst");
 
 		glyphs = new LinkedList<GlyphVector>();
 
 		while (max != -1 && start < limit)
 		{
-			max = fontSubst ? dflt.canDisplayUpTo(text, start, limit)
-			                : -1;
+			max = fontSubstEnabled ? dflt.canDisplayUpTo(text, start, limit)
+			                       : -1;
 			if (max == -1)
 			{
 				width += addGlyphVector(dflt,

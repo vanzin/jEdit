@@ -52,6 +52,7 @@ import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.buffer.KillRing;
+import org.gjt.sp.jedit.syntax.Chunk;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
@@ -490,6 +491,7 @@ public class StandaloneTextArea extends TextArea
 		{
 			actionSet.initKeyBindings();
 		}
+		Chunk.propertiesChanged(propertyManager);
 		initBuffer();
 		initTextArea();
 		super.propertiesChanged();

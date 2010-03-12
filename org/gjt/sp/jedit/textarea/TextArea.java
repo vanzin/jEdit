@@ -4729,7 +4729,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			displayManager.notifyScreenLineChanges();
 		}
 
-		Chunk.clearFontCache();
 		chunkCache.invalidateAll();
 		gutter.repaint();
 		painter.repaint();

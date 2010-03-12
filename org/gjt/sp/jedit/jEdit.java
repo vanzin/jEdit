@@ -53,6 +53,7 @@ import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
 import org.gjt.sp.jedit.search.SearchAndReplace;
+import org.gjt.sp.jedit.syntax.Chunk;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.XModeHandler;
@@ -946,6 +947,7 @@ public class jEdit
 
 		HistoryModel.setMax(getIntegerProperty("history",25));
 		KillRing.getInstance().propertiesChanged(getIntegerProperty("history",25));
+		Chunk.propertiesChanged(propertyManager);
 
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
