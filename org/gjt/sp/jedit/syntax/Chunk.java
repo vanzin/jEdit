@@ -237,8 +237,8 @@ public class Chunk extends Token
 			 * check skips fonts that don't exist.
 			 */
 			Font f = new Font(family, Font.PLAIN, 12);
-			if (!f.getFamily().equals(Font.DIALOG) ||
-			    family.equals(Font.DIALOG))
+			if (!f.getFamily().equalsIgnoreCase("dialog") ||
+			    family.equalsIgnoreCase("dialog"))
 				userFonts.add(f);
 			i++;
 		}
