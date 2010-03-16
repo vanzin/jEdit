@@ -177,6 +177,9 @@
 <MODE NAME="groovy"		FILE="groovy.xml"
 				FILE_NAME_GLOB="*.{gant,gradle,groovy,grv}"/>
 
+<MODE NAME="gsp"			FILE="jsp.xml"
+				FILE_NAME_GLOB="*.{gsp}" />
+
 <MODE NAME="haskell"		FILE="haskell.xml"
 				FILE_NAME_GLOB="*.hs" />
 
