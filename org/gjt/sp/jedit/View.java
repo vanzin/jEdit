@@ -2257,18 +2257,21 @@ loop:		while (true)
 		}
 	} //}}}
 
-	// Checks if the specified rectangle is within screen boundaries
-	private boolean isInsideScreen(View parent, Rectangle r)
+	//{{{ isInsideScreen() method
+	private static boolean isInsideScreen(View parent, Rectangle r)
 	{
 		Rectangle bounds;
 		if (parent == null)
 			bounds = GUIUtilities.getScreenBounds();
 		else
 			bounds = parent.getGraphicsConfiguration().getBounds();
-		return r.x > bounds.x && r.y > bounds.y &&
-			r.x + r.width < bounds.x + bounds.width &&
-			r.y + r.height < bounds.y + bounds.height;
-	}
+		int minWidth = jEdit.getIntegerProperty("view.minStartupWidth");
+		int minHeight = jEdit.getIntegerProperty("view.minStartupHeight");
+		return  r.x + r.width	> bounds.x + minWidth &&		// right edge at minWidth pixels on the right of the left bound
+			r.x		< bounds.x + bounds.width - minWidth &&	// left edge at minWidth pixels on the left of the right bound
+			r.y + r.height	> bounds.y + minHeight &&		// bottom edge at minHeight pixels under the top bound
+			r.y		< bounds.y + bounds.height - minHeight;	// top edge at minHeight pixels on the top of the bottom bound
+	} //}}}
 
 	public void adjust(View parent, ViewConfig config)
 	{
