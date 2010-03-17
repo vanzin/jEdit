@@ -43,7 +43,7 @@ Release procedure of jEdit
   Basically, the fixes first applied on the trunk. If it seems also good
   for a release branch, it can be submitted into the Merge Requests
   tracker.
-  https://sourceforge.net/tracker/?group_id=588&atid=1235750
+  http://sourceforge.net/tracker/?group_id=588&atid=1235750&status=1
 
   If a fix can't be applied on trunk (for example, the target code
   doesn't exist in the trunk), it can be applied to a separate branch
