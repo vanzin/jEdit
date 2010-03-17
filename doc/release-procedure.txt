@@ -17,7 +17,7 @@ Release procedure of jEdit
   listed as requirements in step 1, unless it slows to achieve the
   requirements.
 
-3. Make a release branch. (ex. "/branches/M.N.x")
+3. Make a release branch from the trunk. (ex. "/branches/M.N.x")
 
   To keep stabilizing the release, only the following changes are
   allowed on the branch.
