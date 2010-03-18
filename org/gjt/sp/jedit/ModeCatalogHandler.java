@@ -67,11 +67,8 @@ class ModeCatalogHandler extends DefaultHandler
 
 
 			Mode mode = ModeProvider.instance.getMode(modeName);
-			if(mode == null)
-			{
-				mode = instantiateMode(modeName);
-				ModeProvider.instance.addMode(mode);
-			}
+            mode = instantiateMode(modeName);
+            ModeProvider.instance.addMode(mode);
 
 			Object path;
 			if(resource)
