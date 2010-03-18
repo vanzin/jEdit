@@ -44,6 +44,9 @@ Anson)
 - Fixed #2920352: Can't disable "Restore previously open files on startup".
   (Shlomy Reinstein)
 
+- Fixed a memory leak which held closed View and EditPane when using
+  global bufferset scope. (Kazutoshi Satoda)
+
 }}}
 
 }}}
