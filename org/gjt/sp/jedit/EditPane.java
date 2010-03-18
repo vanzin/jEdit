@@ -950,7 +950,6 @@ public class EditPane extends JPanel implements EBComponent, BufferSetListener
 	{
 		saveCaretInfo();
 		EditBus.send(new EditPaneUpdate(this,EditPaneUpdate.DESTROYED));
-		bufferSet.removeBufferSetListener(this);
 		EditBus.removeFromBus(this);
 		textArea.dispose();
 	} //}}}
