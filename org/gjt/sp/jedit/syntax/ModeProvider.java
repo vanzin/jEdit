@@ -90,13 +90,41 @@ public class ModeProvider
 
 		// this must be in reverse order so that modes from the user
 		// catalog get checked first!
+		List<Mode> acceptable = new ArrayList<Mode>();
 		for(int i = modes.length - 1; i >= 0; i--)
 		{
 			if(modes[i].accept(nogzName,firstLine))
 			{
-				return modes[i];
+				acceptable.add(modes[i]);
 			}
 		}
+		if (acceptable.size() == 1) 
+		{
+			return acceptable.get(0);	
+		}
+		if (acceptable.size() > 1) {
+			// most acceptable is a mode that matches both the 
+			// and the first line glob
+			for (Mode mode : acceptable) 
+			{
+				if (mode.acceptFilename(filename) && 
+					mode.acceptFirstLine(firstLine)) 
+				{
+					return mode;	
+				}
+			}
+			// next best is filename match
+			for (Mode mode : acceptable) 
+			{
+				if (mode.acceptFilename(filename)) {
+					return mode;	
+				}
+			}
+			// all acceptable choices are by first line glob, and
+			// they all match, so just return the first one.
+			return acceptable.get(0);	
+		}
+		// no matching mode found for this file
 		return null;
 	} //}}}
 
@@ -122,6 +150,18 @@ public class ModeProvider
 	 */
 	public void addMode(Mode mode)
 	{
+		// Modes are loaded from the global catalog first, then from any
+		// user catalogs.  If a user mode is added with the same name as
+		// one from the global catalog, remove the one that was added
+		// from the global catalog.  This prevents the mode from the
+		// global catalog being selected as the mode for a file based
+		// on it having a better match in either filename glob or first
+		// line glob -- the rule is that user modes always take precedence 
+		// over global modes.
+		if (modes.contains(mode)) 
+		{
+			modes.remove(mode);	
+		}
 		modes.add(mode);
 	} //}}}
 

@@ -140,6 +140,23 @@ and Marcelo Vanzin for contributing to this release.
   by default, and can be enabled in the text area option pane, along with the
   option to choose preferred fonts for substitution. This makes reading files
   which contain text in multiple scripts more bearable. (Marcelo Vanzin)
+  
+- Fixed ModeCatalogHandler so if an edit mode in the user-specific catalog has
+  the same name as an edit mode in the system catalog, the version in the
+  user-specific catalog will override the system default.  This is what the 
+  documentation for writing an edit mode has stated is true for some time, now
+  it is. (Dale Anson)
+  
+- Adjusted the ModeProvider so it is a little smarter in picking the mode for a
+  file.  It is possible for a file to match more than one mode.  Previously, the
+  first mode that would accept the file was selected as the mode for the file. 
+  This change checks a little more, so a mode that matches both the filename
+  glob and the first line glob will be selected before a mode that matches only
+  the filename glob.  If no mode matches both filename glob and first line glob,
+  then a mode that matches the filename glob will be selected before a mode that
+  only matches the first line glob.  This is particularly useful for xml files,
+  so that Ant build files can be differentiated from jEdit actions.xml files and
+  from regular xml files.  (Dale Anson)
 
 }}}
 

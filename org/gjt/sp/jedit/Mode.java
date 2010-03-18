@@ -274,7 +274,33 @@ public class Mode
 	{
 		return name;
 	} //}}}
-
+	
+	//{{{ equals() method
+	/**
+	 * @return <code>true</code> if this mode has the same name as another mode.
+	 * Only the name of the mode matters, this allows user created modes to
+	 * be treated the same as global modes regardless of the file name glob 
+	 * or the first line glob.
+	 */
+	public boolean equals(Object other)
+	{
+		if (!(other instanceof Mode))
+		{
+			return false;	
+		}
+		String otherName = ((Mode)other).getName();
+		return name.equals(otherName);
+	} //}}}
+	
+	//{{{ hashCode() method
+	/**
+	 * @return The hash code for this mode.
+	 */
+	public int hashCode()
+	{
+		return name.hashCode();
+	} //}}}
+	
 	//{{{ getIgnoreWhitespace() method
 	public boolean getIgnoreWhitespace()
 	{
