@@ -5,7 +5,11 @@ JEDIT 4.3 VERSION HISTORY
 Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
-Fixed bug #2927555: beanshell load() fails w/ exception (Shlomy Reinstein)
+
+- Fixed bug #2927555: beanshell load() fails w/ exception (Shlomy Reinstein)
+
+- Fixed a memory leak which held closed View and EditPane when using
+  global bufferset scope. (Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous
@@ -43,9 +47,6 @@ Anson)
 
 - Fixed #2920352: Can't disable "Restore previously open files on startup".
   (Shlomy Reinstein)
-
-- Fixed a memory leak which held closed View and EditPane when using
-  global bufferset scope. (Kazutoshi Satoda)
 
 }}}
 
