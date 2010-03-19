@@ -163,6 +163,8 @@ and Marcelo Vanzin for contributing to this release.
   so that Ant build files can be differentiated from jEdit actions.xml files and
   from regular xml files.  (Dale Anson)
 
+- In status bar option pane, when adding a widget only widgets that are not
+  already in the bar will be proposed (Matthieu Casanova feature #2937286)
 }}}
 
 }}}
