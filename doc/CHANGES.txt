@@ -10,6 +10,7 @@ Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
+
 - Fixed a NPE that happens when an error occurs before the view is loaded
   (Matthieu Casanova #2905487)
   
@@ -44,6 +45,10 @@ and Marcelo Vanzin for contributing to this release.
 
 - When setting a new message in the status bar in a macro called from the
   Macro menu the message was cleared immediately (Matthieu Casanova #2964522)
+
+- Fixed leaky memory usage after some specific text operations.
+  (Kazutoshi Satoda)
+
 }}}
 {{{ API changes
 
