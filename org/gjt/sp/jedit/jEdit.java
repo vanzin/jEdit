@@ -3566,6 +3566,16 @@ public class jEdit
 				secondaryFontString);
 		}
 
+		// Though the cause is not known, this must precede
+		// UIManager.setLookAndFeel(), so that menu bar
+		// interaction by ALT key interacts with swing.JMenuBar
+		// (which uses L&F) instead of awt.MenuBar which we
+		// don't use (and doesn't use L&F).
+		// The difference of the behavior was seen on Sun JRE
+		// 6u16 on Windows XP and Windows L&F.
+		KeyboardFocusManager.setCurrentKeyboardFocusManager(
+			new MyFocusManager());
+
 		try
 		{
 			String lf = getProperty("lookAndFeel");
@@ -3636,9 +3646,6 @@ public class jEdit
 			getBooleanProperty("decorate.frames"));
 		JDialog.setDefaultLookAndFeelDecorated(
 			getBooleanProperty("decorate.dialogs"));
-
-		KeyboardFocusManager.setCurrentKeyboardFocusManager(
-			new MyFocusManager());
 	} //}}}
 
 	//{{{ getNextUntitledBufferId() method

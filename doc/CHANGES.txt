@@ -49,6 +49,15 @@ and Marcelo Vanzin for contributing to this release.
 - Fixed leaky memory usage after some specific text operations.
   (Kazutoshi Satoda)
 
+- ALT key typing with Windows Look&Feel (for menu bar interaction) now
+  behaves a bit closer to native Windows applications.
+  NOTE: It's still incomplete due to some problems in JVM.
+    http://bugs.sun.com/view_bug.do?bug_id=6923687
+    http://bugs.sun.com/view_bug.do?bug_id=6458497
+    ALT key typing is disabled on TextArea for now to prevent the latter
+    problem.
+  (SF.net bug #2795635 - Kazutoshi Satoda)
+
 }}}
 {{{ API changes
 
