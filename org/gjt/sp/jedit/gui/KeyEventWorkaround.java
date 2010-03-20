@@ -344,6 +344,11 @@ public class KeyEventWorkaround
 				// we consume this to work around the bug
 				// where A+TAB window switching activates
 				// the menu bar on Windows.
+				// http://bugs.sun.com/view_bug.do?bug_id=6458497
+				//
+				// This should be removed if the fix for the
+				// above problem became widely available, to
+				// allow the menu bar activation.
 				evt.consume();
 				break;
 			case KeyEvent.VK_ALT_GRAPH:
