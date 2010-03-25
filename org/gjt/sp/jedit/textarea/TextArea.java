@@ -55,6 +55,7 @@ import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
 import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.ThreadUtilities;
 
 /** Abstract TextArea component.
  *
@@ -4944,15 +4945,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 					vertical.setBlockIncrement(visible);
 				}
 			};
-			// Wanted, I don't use VFSManager because of independant text area 
-			if (EventQueue.isDispatchThread())
-			{
-				runnable.run();
-			}
-			else
-			{
-				EventQueue.invokeLater(runnable);
-			}
+			ThreadUtilities.runInDispatchThread(runnable);
 		}
 	} //}}}
 

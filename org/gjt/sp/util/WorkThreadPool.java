@@ -106,11 +106,7 @@ public class WorkThreadPool
 			{
 //				Log.log(Log.DEBUG,this,"AWT immediate: " + run);
 
-				if(EventQueue.isDispatchThread())
-					run.run();
-				else
-					EventQueue.invokeLater(run);
-
+				ThreadUtilities.runInDispatchThread(run);
 				return;
 			} //}}}
 

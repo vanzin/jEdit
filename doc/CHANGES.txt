@@ -62,6 +62,7 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ API changes
+- Added ThreadUtilities utility class (Matthieu Casanova)
 
 - Removed deprecated objectfactory xml parser.
 
