@@ -4931,13 +4931,28 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			if(Debug.SCROLL_DEBUG)
 				Log.log(Log.DEBUG,this,"Vertical ok");
-			int lineCount = displayManager.getScrollLineCount();
-			int firstLine = getFirstLine();
-			int visible = visibleLines - (lastLinePartial ? 1 : 0);
+			final int lineCount = displayManager.getScrollLineCount();
+			final int firstLine = getFirstLine();
+			final int visible = visibleLines - (lastLinePartial ? 1 : 0);
 
-			vertical.setValues(firstLine,visible,0,lineCount);
-			vertical.setUnitIncrement(2);
-			vertical.setBlockIncrement(visible);
+			Runnable runnable = new Runnable()
+			{
+				public void run()
+				{
+					vertical.setValues(firstLine,visible,0,lineCount);
+					vertical.setUnitIncrement(2);
+					vertical.setBlockIncrement(visible);
+				}
+			};
+			// Wanted, I don't use VFSManager because of independant text area 
+			if (EventQueue.isDispatchThread())
+			{
+				runnable.run();
+			}
+			else
+			{
+				EventQueue.invokeLater(runnable);
+			}
 		}
 	} //}}}
 

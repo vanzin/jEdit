@@ -10,6 +10,8 @@ Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
+- Update of textarea scrollbars and bufferSwitcher are now done in
+  EventQueue thread (Matthieu Casanova #2946031)
 
 - Fixed a NPE that happens when an error occurs before the view is loaded
   (Matthieu Casanova #2905487)

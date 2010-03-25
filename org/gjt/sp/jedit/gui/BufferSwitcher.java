@@ -19,21 +19,23 @@
 
 package org.gjt.sp.jedit.gui;
 
+//{{{ Imports
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferset.BufferSet;
-
+import org.gjt.sp.jedit.io.VFSManager;
+//}}}
 
 /** BufferSwitcher class
    @version $Id$
 */
 public class BufferSwitcher extends JComboBox
 {
-    // private members
-	private EditPane editPane;
+	// private members
+	private final EditPane editPane;
 	private boolean updating;
 
 	public BufferSwitcher(final EditPane editPane)
@@ -66,16 +68,23 @@ public class BufferSwitcher extends JComboBox
 	{
 		// if the buffer count becomes 0, then it is guaranteed to
 		// become 1 very soon, so don't do anything in that case.
-		BufferSet bufferSet = editPane.getBufferSet();
+		final BufferSet bufferSet = editPane.getBufferSet();
 		if(bufferSet.size() == 0)
 			return;
 
-		updating = true;
-		setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
-		setModel(new DefaultComboBoxModel(bufferSet.getAllBuffers()));
-		setSelectedItem(editPane.getBuffer());
-		setToolTipText(editPane.getBuffer().getPath(true));
-		updating = false;
+		Runnable runnable = new Runnable()
+		{
+			public void run()
+			{
+				updating = true;
+				setMaximumRowCount(jEdit.getIntegerProperty("bufferSwitcher.maxRowCount",10));
+				setModel(new DefaultComboBoxModel(bufferSet.getAllBuffers()));
+				setSelectedItem(editPane.getBuffer());
+				setToolTipText(editPane.getBuffer().getPath(true));
+				updating = false;
+			}
+		};
+		VFSManager.runInAWTThread(runnable);
 	}
 
 	class ActionHandler implements ActionListener
@@ -93,6 +102,7 @@ public class BufferSwitcher extends JComboBox
 
 	static class BufferCellRenderer extends DefaultListCellRenderer
 	{
+		@Override
 		public Component getListCellRendererComponent(
 			JList list, Object value, int index,
 			boolean isSelected, boolean cellHasFocus)
