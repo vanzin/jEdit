@@ -27,6 +27,7 @@ import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferset.BufferSet;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /** BufferSwitcher class
@@ -84,7 +85,7 @@ public class BufferSwitcher extends JComboBox
 				updating = false;
 			}
 		};
-		VFSManager.runInAWTThread(runnable);
+		ThreadUtilities.runInDispatchThread(runnable);
 	}
 
 	class ActionHandler implements ActionListener
