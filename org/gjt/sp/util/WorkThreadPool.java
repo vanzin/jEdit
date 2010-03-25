@@ -24,7 +24,7 @@ package org.gjt.sp.util;
 
 //{{{ Imports
 import javax.swing.event.EventListenerList;
-import javax.swing.SwingUtilities;
+import java.awt.EventQueue;
 //}}}
 
 /**
@@ -106,10 +106,10 @@ public class WorkThreadPool
 			{
 //				Log.log(Log.DEBUG,this,"AWT immediate: " + run);
 
-				if(SwingUtilities.isEventDispatchThread())
+				if(EventQueue.isDispatchThread())
 					run.run();
 				else
-					SwingUtilities.invokeLater(run);
+					EventQueue.invokeLater(run);
 
 				return;
 			} //}}}
@@ -177,7 +177,7 @@ public class WorkThreadPool
 			}
 		}
 
-		if(SwingUtilities.isEventDispatchThread())
+		if(EventQueue.isDispatchThread())
 		{
 			// do any queued AWT runnables
 			doAWTRequests();
@@ -186,7 +186,7 @@ public class WorkThreadPool
 		{
 			try
 			{
-				SwingUtilities.invokeAndWait(new RunRequestsInAWTThread());
+				EventQueue.invokeAndWait(new RunRequestsInAWTThread());
 			}
 			catch(Exception e)
 			{
@@ -371,7 +371,7 @@ public class WorkThreadPool
 	private Request lastAWTRequest;
 	private int awtRequestCount;
 
-	private EventListenerList listenerList;
+	private final EventListenerList listenerList;
 	//}}}
 
 	//{{{ doAWTRequests() method
@@ -414,7 +414,7 @@ public class WorkThreadPool
 		if(!awtRunnerQueued)
 		{
 			awtRunnerQueued = true;
-			SwingUtilities.invokeLater(new RunRequestsInAWTThread());
+			EventQueue.invokeLater(new RunRequestsInAWTThread());
 //			Log.log(Log.DEBUG,this,"AWT runner queued");
 		}
 	} //}}}
@@ -467,7 +467,7 @@ public class WorkThreadPool
 
 		public String toString()
 		{
-			return "[id=" + id + ",run=" + run + "]";
+			return "[id=" + id + ",run=" + run + ']';
 		}
 	} //}}}
 
