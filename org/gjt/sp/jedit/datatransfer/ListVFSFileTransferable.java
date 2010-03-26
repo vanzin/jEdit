@@ -21,12 +21,15 @@
  */
 package org.gjt.sp.jedit.datatransfer;
 
+import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFSFile;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +41,7 @@ import java.util.List;
 public class ListVFSFileTransferable implements Transferable
 {
 	public static final DataFlavor jEditFileList = new DataFlavor(List.class, "application/x-java-jEdit-list-vfsfile");
-	public static final DataFlavor[] supported = {jEditFileList, DataFlavor.stringFlavor};
+	public static final DataFlavor[] supported = {jEditFileList, DataFlavor.stringFlavor, DataFlavor.javaFileListFlavor};
 	
 	private final List<VFSFile> files;
 
@@ -74,6 +77,16 @@ public class ListVFSFileTransferable implements Transferable
 				builder.append(vfsFile);
 			}
 			return builder.toString();
+		}
+		else if (DataFlavor.javaFileListFlavor.equals(flavor))
+		{
+			List<File> files = new ArrayList<File>(this.files.size());
+			for (VFSFile file : this.files)
+			{
+				if (file.getVFS() instanceof FileVFS)
+					files.add(new File(file.getPath()));
+			}
+			return files;
 		}
 		throw new UnsupportedFlavorException(flavor);
 	}
