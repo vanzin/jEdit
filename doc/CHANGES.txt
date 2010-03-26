@@ -127,8 +127,8 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Miscellaneous
-- IT is now possible to copy several files in the VFS Browser at the same time
-  (Matthieu Casanova)
+- It is now possible to copy several files in the VFS Browser at the same time,
+  and copy from/to the OS explorer (Matthieu Casanova)
 
 - Removed LatestVersion plugin.
 

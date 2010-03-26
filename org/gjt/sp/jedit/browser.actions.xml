@@ -81,16 +81,30 @@
         }
 
         java.awt.datatransfer.Transferable transferable = Registers.getRegister('$').getTransferable();
-        if (!transferable.isDataFlavorSupported(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList))
-            return;
-        List copiedFiles = (List) transferable.getTransferData(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList);
-        Iterator iterator = copiedFiles.iterator();
-        while (iterator.hasNext())
+        if (transferable.isDataFlavorSupported(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList))
         {
-            org.gjt.sp.jedit.io.VFSFile f = (org.gjt.sp.jedit.io.VFSFile) iterator.next();
-            if (f.getType() == org.gjt.sp.jedit.io.VFSFile.FILE)
+            List copiedFiles = (List) transferable.getTransferData(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList);
+            Iterator iterator = copiedFiles.iterator();
+            while (iterator.hasNext())
             {
-                VFSManager.runInWorkThread(new CopyFileWorker(view, f.getPath(), targetPath));
+                org.gjt.sp.jedit.io.VFSFile f = (org.gjt.sp.jedit.io.VFSFile) iterator.next();
+                if (f.getType() == org.gjt.sp.jedit.io.VFSFile.FILE)
+                {
+                    VFSManager.runInWorkThread(new CopyFileWorker(view, f.getPath(), targetPath));
+                }
+            }
+        }
+        else if (transferable.isDataFlavorSupported(java.awt.datatransfer.DataFlavor.javaFileListFlavor))
+        {
+            List copiedFiles = (List) transferable.getTransferData(java.awt.datatransfer.DataFlavor.javaFileListFlavor);
+            Iterator iterator = copiedFiles.iterator();
+            while (iterator.hasNext())
+            {
+                File f = (File) iterator.next();
+                if (f.isFile())
+                {
+                    VFSManager.runInWorkThread(new CopyFileWorker(view, f.getAbsolutePath(), targetPath));
+                }
             }
         }
 	</CODE>
