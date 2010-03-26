@@ -205,6 +205,13 @@ public class ServiceManager
 			new String[returnValue.size()]);
 	} //}}}
 
+
+	//{{{ getServiceNames() method
+	public static String[] getServiceNames(Class clazz)
+	{
+		return getServiceNames(clazz.getName());
+	} //}}}
+
 	//{{{ getService() method
 	/**
 	 * Returns an instance of the given service. The first time this is
@@ -239,12 +246,18 @@ public class ServiceManager
 		}
 	} //}}}
 
+	public static <E> E getService(Class<E> clazz, String name)
+	{
+		return (E) getService(clazz.getName(), name);
+	}
+
 	//{{{ Package-private members
 
 	//{{{ registerService() method
 	/**
 	 * Registers a service.
 	 *
+	 * @param d the service descriptor
 	 * @since jEdit 4.2pre1
 	 */
 	static void registerService(Descriptor d)

@@ -145,5 +145,12 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.DockingFrameworkProvider" NAME="Original">
 		new org.gjt.sp.jedit.gui.DockableWindowManagerProvider();
 	</SERVICE>
-	
+
+	<SERVICE CLASS="org.gjt.sp.jedit.datatransfer.JEditTransferableService" NAME="string">
+		new org.gjt.sp.jedit.datatransfer.StringTransferableService();
+	</SERVICE>
+
+	<SERVICE CLASS="org.gjt.sp.jedit.datatransfer.JEditTransferableService" NAME="application/x-java-jEdit-rich-text">
+		new org.gjt.sp.jedit.datatransfer.RichJEditTextTransferableService();
+	</SERVICE>
 </SERVICES>

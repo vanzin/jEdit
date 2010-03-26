@@ -56,31 +56,43 @@
 
 <ACTION NAME="vfs.browser.copy-path">
 	<CODE>
-		buf = new StringBuilder();
-		for(int i = 0; i &lt; files.length; i++)
-		{
-			if(i != 0)
-				buf.append('\n');
-			buf.append(files[i].path);
-		}
-		Registers.setRegister('$',buf.toString());
+        org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable transferable =
+            new org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable(files);
+		Registers.setRegister('$',transferable);
 	</CODE>
 </ACTION>
 
 <ACTION NAME="vfs.browser.paste">
 	<CODE>
-		buf = new StringBuilder();
-		for(int i = 0; i &lt; files.length; i++)
-		{
-			if(i != 0)
-				buf.append('\n');
-			buf.append(files[i].path);
-		}
-		String source = Registers.getRegister('$').toString();
-		String target = buf.toString();
-		if (source == null || target.length() == 0 || source.length() == 0)
-			return;
-		VFSManager.runInWorkThread(new CopyFileWorker(view, source, target));
+        if (files.length != 1)
+            return;
+        org.gjt.sp.jedit.io.VFSFile file = files[0];
+        String targetPath;
+        switch (file.getType())
+        {
+            case org.gjt.sp.jedit.io.VFSFile.FILESYSTEM:
+                return;
+            case org.gjt.sp.jedit.io.VFSFile.FILE:
+                targetPath = MiscUtilities.getParentOfPath(file.getPath());
+                break;
+            case org.gjt.sp.jedit.io.VFSFile.DIRECTORY:
+                targetPath = file.getPath();
+                break;
+        }
+
+        java.awt.datatransfer.Transferable transferable = Registers.getRegister('$').getTransferable();
+        if (!transferable.isDataFlavorSupported(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList))
+            return;
+        List copiedFiles = (List) transferable.getTransferData(org.gjt.sp.jedit.datatransfer.ListVFSFileTransferable.jEditFileList);
+        Iterator iterator = copiedFiles.iterator();
+        while (iterator.hasNext())
+        {
+            org.gjt.sp.jedit.io.VFSFile f = (org.gjt.sp.jedit.io.VFSFile) iterator.next();
+            if (f.getType() == org.gjt.sp.jedit.io.VFSFile.FILE)
+            {
+                VFSManager.runInWorkThread(new CopyFileWorker(view, f.getPath(), targetPath));
+            }
+        }
 	</CODE>
 </ACTION>
 

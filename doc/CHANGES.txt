@@ -62,6 +62,8 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ API changes
+- Register api changed, it now contains Transferable (Matthieu Casanova)
+
 - Added ThreadUtilities utility class (Matthieu Casanova)
 
 - Removed deprecated objectfactory xml parser.
@@ -110,6 +112,8 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Editing
+- When pasting text copied from the textarea, if the target textarea has
+  no edit mode, the edit mode from the source is copied (Matthieu Casanova)
 
 - Added the missing doxygen commands for doxygen v1.6.1
   (bug #2895272 - report and patch from Bernhard Walle).
@@ -123,6 +127,8 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+- IT is now possible to copy several files in the VFS Browser at the same time
+  (Matthieu Casanova)
 
 - Removed LatestVersion plugin.
 

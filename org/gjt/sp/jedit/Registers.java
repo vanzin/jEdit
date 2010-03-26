@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2003 Slava Pestov
+ * Portions Copyright (C) 2010 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,9 +26,13 @@ package org.gjt.sp.jedit;
 //{{{ Imports
 import java.awt.datatransfer.*;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
 import java.io.*;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.datatransfer.JEditRichText;
+import org.gjt.sp.jedit.datatransfer.RichTextTransferable;
+import org.gjt.sp.jedit.datatransfer.TransferHandler;
 import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
@@ -76,7 +81,8 @@ public class Registers
 		if(selection == null)
 			return;
 
-		setRegister(register,selection);
+		Transferable transferable = TransferHandler.getInstance().getTransferable(textArea, selection);
+		setRegister(register, transferable);
 		HistoryModel.getModel("clipboard").addItem(selection);
 
 	} //}}}
@@ -98,7 +104,8 @@ public class Registers
 			if(selection == null)
 				return;
 
-			setRegister(register,selection);
+			Transferable transferable = TransferHandler.getInstance().getTransferable(textArea, selection);
+			setRegister(register,transferable);
 			HistoryModel.getModel("clipboard").addItem(selection);
 
 			textArea.setSelectedText("");
@@ -158,17 +165,31 @@ public class Registers
 
 		if(reg != null)
 		{
-			String registerContents = reg.toString();
-			if(registerContents != null)
+			Transferable transferable = reg.getTransferable();
+			if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
 			{
-				if(registerContents.endsWith(separator))
-					selection = registerContents + selection;
-				else
-					selection = registerContents + separator + selection;
+				try
+				{
+					String registerContents = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+					if(registerContents != null)
+					{
+						if(registerContents.endsWith(separator))
+							selection = registerContents + selection;
+						else
+							selection = registerContents + separator + selection;
+					}
+				}
+				catch (UnsupportedFlavorException e)
+				{
+				}
+				catch (IOException e)
+				{
+					Log.log(Log.ERROR, Registers.class, e);
+				}
 			}
 		}
-
-		setRegister(register,selection);
+		Transferable transferable = TransferHandler.getInstance().getTransferable(textArea, selection);
+		setRegister(register,transferable);
 		HistoryModel.getModel("clipboard").addItem(selection);
 
 		if(cut)
@@ -210,8 +231,41 @@ public class Registers
 			textArea.getToolkit().beep();
 			return;
 		}
-
-		String selection = reg.toString();
+		Transferable transferable = reg.getTransferable();
+		Mode mode = null;
+		String selection = null;
+		if (transferable.isDataFlavorSupported(RichTextTransferable.jEditRichTextDataFlavor))
+		{
+			try
+			{
+				JEditRichText data = (JEditRichText) transferable.getTransferData(RichTextTransferable.jEditRichTextDataFlavor);
+				mode = data.getMode();
+				selection = data.getText();
+			}
+			catch (UnsupportedFlavorException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
+		{
+			try
+			{
+				selection = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+			}
+			catch (UnsupportedFlavorException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 		if(selection == null)
 		{
 			textArea.getToolkit().beep();
@@ -260,8 +314,15 @@ public class Registers
 				textArea.replaceSelection(selection);
 			}
 		}
-		finally {
+		finally
+		{
 			buffer.endCompoundEdit();
+		}
+		if (mode != null &&
+			"text".equals(buffer.getMode().getName()) &&
+			!mode.equals(buffer.getMode()))
+		{
+			buffer.setMode(mode);
 		}
 		HistoryModel.getModel("clipboard").addItem(selection);
 	} //}}}
@@ -317,16 +378,31 @@ public class Registers
 	 */
 	public static void setRegister(char name, String value)
 	{
+		setRegister(name, new StringSelection(value));
+	} //}}}
+
+	//{{{ setRegister() method
+	/**
+	 * Sets the specified register.
+	 * @param name The name
+	 * @param transferable the transferable
+	 */
+	public static void setRegister(char name, Transferable transferable)
+	{
 		touchRegister(name);
 		Register register = getRegister(name);
 		if(register != null)
 		{
-			register.setValue(value);
+			register.setTransferable(transferable);
 			if (listener != null)
 				listener.registerChanged(name);
 		}
 		else
-			setRegister(name,new StringRegister(value));
+		{
+			DefaultRegister defaultRegister = new DefaultRegister();
+			defaultRegister.setTransferable(transferable);
+			setRegister(name, defaultRegister);
+		}
 	} //}}}
 
 	//{{{ clearRegister() method
@@ -488,12 +564,18 @@ public class Registers
 		/**
 		 * Converts to a string.
 		 */
+		@Deprecated
 		String toString();
 
 		/**
 		 * Sets the register contents.
 		 */
+		@Deprecated
 		void setValue(String value);
+
+		Transferable getTransferable();
+
+		void setTransferable(Transferable transferable);
 	} //}}}
 
 	//{{{ ClipboardRegister class
@@ -582,6 +664,16 @@ public class Registers
 				return null;
 			}
 		}
+
+		public Transferable getTransferable()
+		{
+			return clipboard.getContents(this);
+		}
+
+		public void setTransferable(Transferable transferable)
+		{
+			clipboard.setContents(transferable, null);
+		}
 	} //}}}
 
 	//{{{ debugListDataFlavors() method
@@ -604,14 +696,40 @@ public class Registers
 		}
 	} //}}}
 
+	private static class DefaultRegister implements Register
+	{
+		private Transferable transferable;
+
+		public void setValue(String value)
+		{
+			this.transferable = new StringSelection(value);
+		}
+
+		@Override
+		public String toString()
+		{
+			return transferable.toString();
+		}
+
+		public Transferable getTransferable()
+		{
+			return transferable;
+		}
+
+		public void setTransferable(Transferable transferable)
+		{
+			this.transferable = transferable;
+		}
+	}
 
 	//{{{ StringRegister class
 	/**
 	 * Register that stores a string.
 	 */
+	@Deprecated
 	public static class StringRegister implements Register
 	{
-		private String value;
+		private Transferable transferable;
 
 		/**
 		 * Creates a new string register.
@@ -619,7 +737,7 @@ public class Registers
 		 */
 		public StringRegister(String value)
 		{
-			this.value = value;
+			setValue(value);
 		}
 
 		/**
@@ -627,7 +745,7 @@ public class Registers
 		 */
 		public void setValue(String value)
 		{
-			this.value = value;
+			transferable = new StringSelection(value);
 		}
 
 		/**
@@ -636,14 +754,29 @@ public class Registers
 		@Override
 		public String toString()
 		{
-			return value;
+			if (transferable == null)
+				return null;
+			return transferable.toString();
+		}
+
+		public Transferable getTransferable()
+		{
+			return transferable;
+		}
+
+		public void setTransferable(Transferable transferable)
+		{
+			this.transferable = transferable;
 		}
 
 		/**
 		 * Called when this register is no longer available. This
 		 * implementation does nothing.
 		 */
-		public void dispose() {}
+		public void dispose()
+		{
+			transferable = null;
+		}
 	} //}}}
 
 	//}}}
