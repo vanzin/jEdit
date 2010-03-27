@@ -173,6 +173,14 @@
 				<include name="org/gjt/sp/jedit/syntax/*.java"/>
 				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
 
+                <include name="org/gjt/sp/jedit/datatransfer/JEditRichText.java"/>
+                <include name="org/gjt/sp/jedit/datatransfer/JEditTransferable.java"/>
+                <include name="org/gjt/sp/jedit/datatransfer/JEditTransferableService.java"/>
+                <include name="org/gjt/sp/jedit/datatransfer/RichJEditTextTransferableService.java"/>
+                <include name="org/gjt/sp/jedit/datatransfer/RichTextTransferable.java"/>
+                <include name="org/gjt/sp/jedit/datatransfer/StringTransferableService.java"/>
+                <include name="org/gjt/sp/jedit/datatransfer/TransferHandler.java"/>
+
 				<include name="org/gjt/sp/jedit/textarea/Anchor.java"/>
 				<include name="org/gjt/sp/jedit/textarea/AntiAlias.java"/>
 				<include name="org/gjt/sp/jedit/textarea/BufferHandler.java"/>
@@ -236,6 +244,7 @@
 				<include name="org/gjt/sp/util/ProgressObserver.java"/>
 				<include name="org/gjt/sp/util/SegmentCharSequence.java"/>
 				<include name="org/gjt/sp/util/StandardUtilities.java"/>
+				<include name="org/gjt/sp/util/ThreadUtilities.java"/>
 				<include name="org/gjt/sp/util/SyntaxUtilities.java"/>
 				<include name="org/gjt/sp/util/XMLUtilities.java"/>
 			</fileset>

@@ -21,7 +21,6 @@
  */
 package org.gjt.sp.jedit.datatransfer;
 
-import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.textarea.TextArea;
 
 import java.awt.datatransfer.DataFlavor;
@@ -44,17 +43,16 @@ public class TransferHandler
 	private TransferHandler()
 	{
 		services = new ArrayList<JEditTransferableService>();
-		String[] serviceNames = ServiceManager.getServiceNames(JEditTransferableService.class);
-		for (String serviceName : serviceNames)
-		{
-			JEditTransferableService service = ServiceManager.getService(JEditTransferableService.class, serviceName);
-			services.add(service);
-		}
 	}
 
 	public static TransferHandler getInstance()
 	{
 		return instance;
+	}
+
+	public void registerTransferableService(JEditTransferableService transferableService)
+	{
+		services.add(transferableService);
 	}
 
 	public Transferable getTransferable(TextArea textArea, String text)

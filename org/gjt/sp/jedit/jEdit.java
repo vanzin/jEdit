@@ -22,6 +22,7 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
 import java.awt.Color;
 import java.awt.Component;
@@ -481,6 +482,13 @@ public class jEdit
 		{
 			jars.elementAt(i).activatePluginIfNecessary();
 		} //}}}
+
+		String[] serviceNames = ServiceManager.getServiceNames(JEditTransferableService.class);
+		for (String serviceName : serviceNames)
+		{
+			JEditTransferableService service = ServiceManager.getService(JEditTransferableService.class, serviceName);
+			org.gjt.sp.jedit.datatransfer.TransferHandler.getInstance().registerTransferableService(service);
+		}
 
 		//{{{ Load macros and run startup scripts, after plugins and settings are loaded
 		GUIUtilities.advanceSplashProgress("init macros");

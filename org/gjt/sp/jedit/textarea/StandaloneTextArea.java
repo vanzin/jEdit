@@ -44,6 +44,9 @@ import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.JEditBeanShellAction;
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.jedit.JEditActionSet;
+import org.gjt.sp.jedit.datatransfer.RichJEditTextTransferableService;
+import org.gjt.sp.jedit.datatransfer.StringTransferableService;
+import org.gjt.sp.jedit.datatransfer.TransferHandler;
 import org.gjt.sp.jedit.input.AbstractInputHandler;
 import org.gjt.sp.jedit.buffer.DefaultFoldHandlerProvider;
 import org.gjt.sp.jedit.buffer.DummyFoldHandler;
@@ -662,6 +665,8 @@ public class StandaloneTextArea extends TextArea
 	//{{{ main() method
 	public static void main(String[] args)
 	{
+		TransferHandler.getInstance().registerTransferableService(new RichJEditTextTransferableService());
+		TransferHandler.getInstance().registerTransferableService(new StringTransferableService());
 		JFrame frame = new JFrame();
 		TextArea text = createTextArea();
 		Mode mode = new Mode("xml");
