@@ -32,6 +32,7 @@ import java.io.*;
 import java.text.*;
 import java.util.Date;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -632,16 +633,7 @@ public class FileVFS extends VFS
 			}
 			finally
 			{
-				try
-				{
-					if (reader != null)
-						reader.close();
-					else if (isr != null)
-						isr.close();
-				}
-				catch (IOException e)
-				{
-				}
+				IOUtilities.closeQuietly(reader);
 			}
 		}
 
