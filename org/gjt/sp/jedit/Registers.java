@@ -54,10 +54,10 @@ import org.gjt.sp.util.Log;
  * system clipboard. jEdit assigns a
  * {@link Registers.ClipboardRegister} to the register indexed under
  * the character <code>$</code>. A
- * {@link Registers.StringRegister} is created for registers assigned
+ * {@link Registers.DefaultRegister} is created for registers assigned
  * by the user. In addition, jEdit assigns <code>%</code> to
  * the last text segment selected in the text area. On Windows this is a
- * {@link Registers.StringRegister}, on Unix under Java 2 version 1.4, a
+ * {@link Registers.DefaultRegister}, on Unix under Java 2 version 1.4, a
  * {@link Registers.ClipboardRegister}.
  *
  * @author Slava Pestov
@@ -696,6 +696,7 @@ public class Registers
 		}
 	} //}}}
 
+	//{{{ DefaultRegister class
 	private static class DefaultRegister implements Register
 	{
 		private Transferable transferable;
@@ -708,6 +709,23 @@ public class Registers
 		@Override
 		public String toString()
 		{
+			if (transferable == null)
+				return null;
+			if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
+			{
+				try
+				{
+					return transferable.getTransferData(DataFlavor.stringFlavor).toString();
+				}
+				catch (UnsupportedFlavorException e)
+				{
+					Log.log(Log.ERROR, this, e);
+				}
+				catch (IOException e)
+				{
+					Log.log(Log.ERROR, this, e);
+				}
+			}
 			return transferable.toString();
 		}
 
@@ -720,17 +738,15 @@ public class Registers
 		{
 			this.transferable = transferable;
 		}
-	}
+	} //}}}
 
 	//{{{ StringRegister class
 	/**
 	 * Register that stores a string.
 	 */
 	@Deprecated
-	public static class StringRegister implements Register
+	public static class StringRegister extends DefaultRegister
 	{
-		private Transferable transferable;
-
 		/**
 		 * Creates a new string register.
 		 * @param value The contents
@@ -738,44 +754,6 @@ public class Registers
 		public StringRegister(String value)
 		{
 			setValue(value);
-		}
-
-		/**
-		 * Sets the register contents.
-		 */
-		public void setValue(String value)
-		{
-			transferable = new StringSelection(value);
-		}
-
-		/**
-		 * Converts to a string.
-		 */
-		@Override
-		public String toString()
-		{
-			if (transferable == null)
-				return null;
-			return transferable.toString();
-		}
-
-		public Transferable getTransferable()
-		{
-			return transferable;
-		}
-
-		public void setTransferable(Transferable transferable)
-		{
-			this.transferable = transferable;
-		}
-
-		/**
-		 * Called when this register is no longer available. This
-		 * implementation does nothing.
-		 */
-		public void dispose()
-		{
-			transferable = null;
 		}
 	} //}}}
 
