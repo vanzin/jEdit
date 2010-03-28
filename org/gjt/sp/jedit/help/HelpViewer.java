@@ -58,8 +58,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.Document;
 
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.GUIUtilities;
@@ -153,6 +156,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 
 		viewer = new JEditorPane();
 		viewer.setEditable(false);
+		viewer.setEditorKitForContentType("text/html",new AsyncHTMLEditorKit());
 		viewer.addHyperlinkListener(new LinkHandler());
 		viewer.setFont(new Font("Monospaced",Font.PLAIN,12));
 		viewer.addPropertyChangeListener(new PropertyChangeHandler());
@@ -543,5 +547,16 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 		}
 	} //}}}
 
+	//{{{ AsyncHTMLEditorKit class
+	private static class AsyncHTMLEditorKit extends HTMLEditorKit{
+		public Document createDefaultDocument(){
+			// HTMLEditorKit always returns an AbstractDocument
+			AbstractDocument res = (AbstractDocument)super.createDefaultDocument();
+			//non-zero means asynchronous loading (see javadoc for JEditorPane.setPage(URL) )
+			res.setAsynchronousLoadPriority(1);
+			return res;
+		}
+	}
+	//}}}
 	//}}}
 }
