@@ -548,8 +548,10 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 	} //}}}
 
 	//{{{ AsyncHTMLEditorKit class
-	private static class AsyncHTMLEditorKit extends HTMLEditorKit{
-		public Document createDefaultDocument(){
+	private static class AsyncHTMLEditorKit extends HTMLEditorKit
+	{
+		public Document createDefaultDocument()
+		{
 			// HTMLEditorKit always returns an AbstractDocument
 			AbstractDocument res = (AbstractDocument)super.createDefaultDocument();
 			//non-zero means asynchronous loading (see javadoc for JEditorPane.setPage(URL) )
