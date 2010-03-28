@@ -17,9 +17,28 @@ import javax.swing.plaf.metal.*;
 import javax.swing.*;
 import java.io.*;
 import java.util.Properties;
+import java.security.*;
+import java.net.URL;
 
 public class Install
 {
+	/**
+	 * detects wether the installer is running from a path
+	 * containing exclamation marks.
+	 * This has been reported as a cause of failure on Linux and MS Windows :
+	 * see bug #2065330 - Installer doesn't run on dir having ! as last char in name.
+	 */
+	public static boolean isRunningFromExclam()
+	{
+		Class me = Install.class;
+		ProtectionDomain domaine = me.getProtectionDomain();
+		CodeSource source = domaine.getCodeSource();
+		URL mySource = source.getLocation();
+		// In fact the check is more restrictive than required :
+		// a problem occurs only when the ! is at the end of directory
+		return mySource.toString().contains("!");		
+	}
+	
 	public static void main(String[] args)
 	{
 		
@@ -29,6 +48,25 @@ public class Install
 			String message = "You are running Java version "
 					+ javaVersion + " from "+System.getProperty("java.vendor")+".\n"
 					+"This installer requires Java 1.5 or later.";
+			if(args.length == 0)
+			{
+				JOptionPane.showMessageDialog(null,
+					message,
+					"jEdit installer...", JOptionPane.ERROR_MESSAGE); 
+			}
+			else
+			{
+				System.err.println(message);
+			}
+			System.exit(1);
+		}
+
+		if(isRunningFromExclam())
+		{
+			String message = "You are running the installer"
+					+"\nfrom a directory with exclamation mark in it."
+					+ "\nIt is a known cause of failure of the installer,"
+					+ "\nplease move the installer somewhere else and run it again.";
 			if(args.length == 0)
 			{
 				JOptionPane.showMessageDialog(null,

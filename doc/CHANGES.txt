@@ -61,6 +61,9 @@ and Marcelo Vanzin for contributing to this release.
   (SF.net bug #2795635 - Kazutoshi Satoda)
 
 - HelpViewer loads pages asynchronously (SF.net bug #1231914 - Eric Le Lay)
+
+- java installer refuses to install from a directory containing exclamation
+  marks (SF.net bug #2065330 - Eric Le Lay)
 }}}
 {{{ API changes
 - Register api changed, it now contains Transferable (Matthieu Casanova)
