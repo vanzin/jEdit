@@ -212,7 +212,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 	 * 			 history?
 	 * @param scrollPosition The vertical scrollPosition
 	 */
-	public void gotoURL(String url, boolean addToHistory, final int scrollPosition)
+	public void gotoURL(String url, final boolean addToHistory, final int scrollPosition)
 	{
 		// the TOC pane looks up user's guide URLs relative to the
 		// doc directory...
@@ -251,8 +251,8 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 
 		try
 		{
-			URL _url = new URL(url);
-
+			final URL _url = new URL(url);
+			final String _shortURL = shortURL;
 			if(!_url.equals(viewer.getPage()))
 			{
 				title.setText(jEdit.getProperty("helpviewer.loading"));
@@ -264,21 +264,51 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 			}
 
 			historyModel.setCurrentScrollPosition(viewer.getPage(),getCurrentScrollPosition());
-			viewer.setPage(_url);
-			if (0 != scrollPosition)
+			
+			/* call setPage asynchronously, because it can block when
+			   one can't connect to host */
+			Thread t = new Thread()
 			{
-				SwingUtilities.invokeLater(new Runnable()
+				public void run()
 				{
-					public void run()
+					try
 					{
-						viewerScrollPane.getVerticalScrollBar().setValue(scrollPosition);
+						viewer.setPage(_url);
+						if (0 != scrollPosition)
+						{
+							SwingUtilities.invokeLater(new Runnable()
+							{
+								public void run()
+								{
+									viewerScrollPane.getVerticalScrollBar().setValue(scrollPosition);
+								}
+							});
+						}
+						if(addToHistory)
+						{
+							historyModel.addToHistory(_url.toString());
+						}
+
+						HelpViewer.this.shortURL = _shortURL;
+				
+						// select the appropriate tree node.
+						if(_shortURL != null)
+						{
+							toc.selectNode(_shortURL);
+						}
+						
+						viewer.requestFocus();
 					}
-				});
-			}
-			if(addToHistory)
-			{
-				historyModel.addToHistory(url);
-			}
+					catch(IOException io)
+					{
+						Log.log(Log.ERROR,this,io);
+						String[] args = { _url.toString(), io.toString() };
+						GUIUtilities.error(HelpViewer.this,"read-error",args);
+						return;
+					}
+				}
+			};
+			t.start();
 		}
 		catch(MalformedURLException mf)
 		{
@@ -287,23 +317,6 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 			GUIUtilities.error(this,"badurl",args);
 			return;
 		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-			String[] args = { url, io.toString() };
-			GUIUtilities.error(this,"read-error",args);
-			return;
-		}
-
-		this.shortURL = shortURL;
-
-		// select the appropriate tree node.
-		if(shortURL != null)
-		{
-			toc.selectNode(shortURL);
-		}
-		
-		viewer.requestFocus();
 	} //}}}
 
 	//{{{ getCurrentScrollPosition() method
