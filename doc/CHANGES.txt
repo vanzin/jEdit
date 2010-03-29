@@ -11,6 +11,9 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 - Fixed a memory leak which held closed View and EditPane when using
   global bufferset scope. (Kazutoshi Satoda)
 
+- When removing text from the buffer, the event contentRemoved was sent before
+  making the buffer dirty (oman002 #2944145)
+
 }}}
 {{{ Miscellaneous
 

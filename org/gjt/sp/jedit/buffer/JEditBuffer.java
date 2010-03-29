@@ -760,13 +760,14 @@ public class JEditBuffer
 			lineMgr.contentRemoved(startLine,offset,numLines,length);
 			positionMgr.contentRemoved(offset,length);
 
+			setDirty(true);
+
 			fireContentRemoved(startLine,offset,numLines,length);
 
 			/* otherwise it will be delivered later */
 			if(!undoInProgress && !insideCompoundEdit())
 				fireTransactionComplete();
 
-			setDirty(true);
 		}
 		finally
 		{
