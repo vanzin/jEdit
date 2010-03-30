@@ -28,11 +28,9 @@ import javax.swing.text.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.*;
-import java.awt.font.TextAttribute;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.*;
 
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
@@ -523,7 +521,7 @@ public class Chunk extends Token
 	private float layoutGlyphs(FontRenderContext frc,
 				   char text[],
 				   int start,
-				   int limit)
+				   int end)
 	{
 		float width = 0.0f;
 		int max = 0;
@@ -531,9 +529,9 @@ public class Chunk extends Token
 
 		glyphs = new LinkedList<GlyphVector>();
 
-		while (max != -1 && start < limit)
+		while (max != -1 && start < end)
 		{
-			max = fontSubstEnabled ? dflt.canDisplayUpTo(text, start, limit)
+			max = fontSubstEnabled ? dflt.canDisplayUpTo(text, start, end)
 			                       : -1;
 			if (max == -1)
 			{
@@ -541,7 +539,7 @@ public class Chunk extends Token
 							frc,
 							text,
 							start,
-							limit);
+							end);
 			}
 			else
 			{
@@ -584,7 +582,7 @@ public class Chunk extends Token
 					 * can.
 					 */
 					int last = start;
-					while (last < limit &&
+					while (last < end &&
 					       f.canDisplay(text[last]) &&
 					       !dflt.canDisplay(text[last]))
 						last++;
