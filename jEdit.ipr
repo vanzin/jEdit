@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project relativePaths="true" version="4">
+<project version="4">
   <component name="AntConfiguration">
     <defaultAnt bundledAnt="true" />
     <buildFile url="file://$PROJECT_DIR$/build.xml">
@@ -9,7 +9,6 @@
       <maximumHeapSize value="128" />
       <maximumStackSize value="32" />
       <properties />
-      <executeOn event="beforeRun" target="build" runConfigurationType="Application" runConfigurationName="jEdit" />
     </buildFile>
     <buildFile url="file://$PROJECT_DIR$/jars/MacOSX/build.xml">
       <additionalClassPath />
@@ -43,6 +42,15 @@
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="xml">
           <option name="INDENT_SIZE" value="4" />
           <option name="CONTINUATION_INDENT_SIZE" value="8" />
@@ -54,11 +62,9 @@
         </ADDITIONAL_INDENT_OPTIONS>
       </value>
     </option>
-    <option name="USE_PER_PROJECT_SETTINGS" value="false" />
   </component>
   <component name="CompilerConfiguration">
     <option name="DEFAULT_COMPILER" value="Javac" />
-    <option name="DEPLOY_AFTER_MAKE" value="1" />
     <resourceExtensions>
       <entry name=".+\.(properties|xml|html|dtd|tld)" />
       <entry name=".+\.(gif|png|jpeg|jpg)" />
@@ -76,6 +82,73 @@
       <entry name="?*.tld" />
       <entry name="?*.ftl" />
     </wildcardResourcePatterns>
+    <annotationProcessing enabled="false" useClasspath="true" />
+  </component>
+  <component name="CopyrightManager" default="GPL v2">
+    <copyright>
+      <option name="notice" value="jEdit - Programmer's Text Editor&#10;:tabSize=8:indentSize=8:noTabs=false:&#10;:folding=explicit:collapseFolds=1:&#10;&#10;Copyright © &amp;#36;today.year jEdit contributors&#10;&#10;This program is free software; you can redistribute it and/or&#10;modify it under the terms of the GNU General Public License&#10;as published by the Free Software Foundation; either version 2&#10;of the License, or any later version.&#10;This program is distributed in the hope that it will be useful,&#10;but WITHOUT ANY WARRANTY; without even the implied warranty of&#10;MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#10;GNU General Public License for more details.&#10;&#10;You should have received a copy of the GNU General Public License&#10;along with this program; if not, write to the Free Software&#10;Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA." />
+      <option name="keyword" value="Copyright" />
+      <option name="allowReplaceKeyword" value="" />
+      <option name="myName" value="GPL v2" />
+      <option name="myLocal" value="true" />
+    </copyright>
+    <module2copyright />
+    <LanguageOptions name="HTML">
+      <option name="fileTypeOverride" value="2" />
+      <option name="relativeBefore" value="true" />
+      <option name="addBlankAfter" value="true" />
+      <option name="fileLocation" value="2" />
+      <option name="block" value="true" />
+      <option name="separateBefore" value="false" />
+      <option name="separateAfter" value="false" />
+      <option name="prefixLines" value="true" />
+      <option name="lenBefore" value="80" />
+      <option name="lenAfter" value="80" />
+      <option name="box" value="false" />
+      <option name="filler" value=" " />
+    </LanguageOptions>
+    <LanguageOptions name="JSP">
+      <option name="fileTypeOverride" value="2" />
+      <option name="relativeBefore" value="true" />
+      <option name="addBlankAfter" value="true" />
+      <option name="fileLocation" value="2" />
+      <option name="block" value="true" />
+      <option name="separateBefore" value="false" />
+      <option name="separateAfter" value="false" />
+      <option name="prefixLines" value="true" />
+      <option name="lenBefore" value="80" />
+      <option name="lenAfter" value="80" />
+      <option name="box" value="false" />
+      <option name="filler" value=" " />
+    </LanguageOptions>
+    <LanguageOptions name="JSPX">
+      <option name="fileTypeOverride" value="2" />
+      <option name="relativeBefore" value="true" />
+      <option name="addBlankAfter" value="true" />
+      <option name="fileLocation" value="2" />
+      <option name="block" value="true" />
+      <option name="separateBefore" value="false" />
+      <option name="separateAfter" value="false" />
+      <option name="prefixLines" value="true" />
+      <option name="lenBefore" value="80" />
+      <option name="lenAfter" value="80" />
+      <option name="box" value="false" />
+      <option name="filler" value=" " />
+    </LanguageOptions>
+    <LanguageOptions name="XML">
+      <option name="fileTypeOverride" value="2" />
+      <option name="relativeBefore" value="true" />
+      <option name="addBlankAfter" value="true" />
+      <option name="fileLocation" value="2" />
+      <option name="block" value="true" />
+      <option name="separateBefore" value="false" />
+      <option name="separateAfter" value="false" />
+      <option name="prefixLines" value="true" />
+      <option name="lenBefore" value="80" />
+      <option name="lenAfter" value="80" />
+      <option name="box" value="false" />
+      <option name="filler" value=" " />
+    </LanguageOptions>
   </component>
   <component name="DependencyValidationManager">
     <scope name="jEdit Sourcefiles" pattern="file[jEdit]:org//*.java" />
@@ -86,26 +159,11 @@
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="EclipseCompilerSettings">
-    <option name="DEBUGGING_INFO" value="true" />
     <option name="GENERATE_NO_WARNINGS" value="true" />
     <option name="DEPRECATION" value="false" />
-    <option name="ADDITIONAL_OPTIONS_STRING" value="" />
-    <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="ISO-8859-1" />
   <component name="IdProvider" IDEtalkID="F2207F966C6969E072D5CD57D729D7EA" />
-  <component name="InspectionProjectProfileManager">
-    <option name="PROJECT_PROFILE" value="Project Default" />
-    <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
-    <scopes />
-    <profiles>
-      <profile version="1.0" is_locked="false">
-        <option name="myName" value="Project Default" />
-        <option name="myLocal" value="false" />
-      </profile>
-    </profiles>
-    <list size="0" />
-  </component>
   <component name="IssueNavigationConfiguration">
     <option name="links">
       <list>
@@ -115,13 +173,6 @@
         </IssueNavigationLink>
       </list>
     </option>
-  </component>
-  <component name="JavacSettings">
-    <option name="DEBUGGING_INFO" value="true" />
-    <option name="GENERATE_NO_WARNINGS" value="false" />
-    <option name="DEPRECATION" value="true" />
-    <option name="ADDITIONAL_OPTIONS_STRING" value="" />
-    <option name="MAXIMUM_HEAP_SIZE" value="128" />
   </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" />
@@ -139,14 +190,6 @@
     <option name="HEAP_SIZE" />
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
-  </component>
-  <component name="JikesSettings">
-    <option name="JIKES_PATH" value="" />
-    <option name="DEBUGGING_INFO" value="true" />
-    <option name="DEPRECATION" value="true" />
-    <option name="GENERATE_NO_WARNINGS" value="false" />
-    <option name="IS_EMACS_ERRORS_MODE" value="true" />
-    <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
   <component name="Palette2">
     <group name="Swing">
@@ -272,9 +315,12 @@
   <component name="ProjectDetails">
     <option name="projectName" value="jEdit" />
   </component>
-  <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectDictionaryState">
+    <dictionary name="vampire" />
+  </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/jars/MacOSX/MacOSX.iml" filepath="$PROJECT_DIR$/jars/MacOSX/MacOSX.iml" />
       <module fileurl="file://$PROJECT_DIR$/jars/QuickNotepad/QuickNotepad.iml" filepath="$PROJECT_DIR$/jars/QuickNotepad/QuickNotepad.iml" />
       <module fileurl="file://$PROJECT_DIR$/jEdit.iml" filepath="$PROJECT_DIR$/jEdit.iml" />
     </modules>
@@ -283,8 +329,10 @@
     <output url="file://$PROJECT_DIR$/build/idea" />
   </component>
   <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="jEdit" type="Application" factoryName="Application" enabled="false" merge="false" sample_coverage="true" runner="emma">
-      <log_file path="$PROJECT_DIR$/build/settings/activity.log" checked="true" skipped="false" show_all="false" alias="Activity Log" />
+    <configuration default="false" name="jEdit" type="Application" factoryName="Application">
+      <log_file path="$PROJECT_DIR$/build/settings/activity.log" checked="true" skipped="true" show_all="false" alias="Activity Log" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
       <option name="MAIN_CLASS_NAME" value="org.gjt.sp.jedit.jEdit" />
       <option name="VM_PARAMETERS" value="-Xmx192M" />
       <option name="PROGRAM_PARAMETERS" value="-settings=&quot;$PROJECT_DIR$/build/settings&quot;" />
@@ -311,17 +359,98 @@
       <ConfigurationWrapper RunnerId="JProfiler" />
       <ConfigurationWrapper RunnerId="Run" />
       <method>
+        <option name="AntTarget" enabled="true" antfile="file://$PROJECT_DIR$/build.xml" target="build" />
+        <option name="Make" enabled="false" />
         <option name="Run Ant target" value="true" />
-        <option name="Make" value="false" />
       </method>
     </configuration>
-  </component>
-  <component name="RmicSettings">
-    <option name="IS_EANABLED" value="false" />
-    <option name="DEBUGGING_INFO" value="true" />
-    <option name="GENERATE_NO_WARNINGS" value="false" />
-    <option name="GENERATE_IIOP_STUBS" value="false" />
-    <option name="ADDITIONAL_OPTIONS_STRING" value="" />
+    <configuration default="false" name="jEdit (background mode)" type="Application" factoryName="Application">
+      <log_file path="$PROJECT_DIR$/build/settings/activity.log" checked="true" skipped="true" show_all="false" alias="Activity Log" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
+      <option name="MAIN_CLASS_NAME" value="org.gjt.sp.jedit.jEdit" />
+      <option name="VM_PARAMETERS" value="-Xmx192M" />
+      <option name="PROGRAM_PARAMETERS" value="-settings=&quot;$PROJECT_DIR$/build/settings&quot; -background" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jEdit" />
+      <envs />
+      <RunnerSettings RunnerId="JProfiler">
+        <option name="WINDOW" value="false" />
+        <option name="JVMPI" value="false" />
+        <option name="INTERPRETED" value="false" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method>
+        <option name="AntTarget" enabled="true" antfile="file://$PROJECT_DIR$/build.xml" target="build" />
+        <option name="Make" enabled="false" />
+        <option name="Run Ant target" value="true" />
+      </method>
+    </configuration>
+    <configuration default="false" name="jEdit (Java 6)" type="Application" factoryName="Application">
+      <log_file path="$PROJECT_DIR$/build/settings/activity.log" checked="true" skipped="true" show_all="false" alias="Activity Log" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
+      <option name="MAIN_CLASS_NAME" value="org.gjt.sp.jedit.jEdit" />
+      <option name="VM_PARAMETERS" value="-Xmx192M" />
+      <option name="PROGRAM_PARAMETERS" value="-settings=&quot;$PROJECT_DIR$/build/settings&quot;" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="/usr/lib/jvm/java-6-sun" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jEdit" />
+      <envs />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="44197" />
+        <option name="TRANSPORT" value="0" />
+        <option name="LOCAL" value="true" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="JProfiler">
+        <option name="WINDOW" value="false" />
+        <option name="JVMPI" value="false" />
+        <option name="INTERPRETED" value="false" />
+      </RunnerSettings>
+      <ConfigurationWrapper RunnerId="Debug" />
+      <ConfigurationWrapper RunnerId="JProfiler" />
+      <method>
+        <option name="AntTarget" enabled="true" antfile="file://$PROJECT_DIR$/build.xml" target="build" />
+        <option name="Make" enabled="false" />
+        <option name="Run Ant target" value="true" />
+      </method>
+    </configuration>
+    <configuration default="false" name="jEdit (Java 6; background mode)" type="Application" factoryName="Application">
+      <log_file path="$PROJECT_DIR$/build/settings/activity.log" checked="true" skipped="true" show_all="false" alias="Activity Log" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+      <extension name="snapshooter" />
+      <option name="MAIN_CLASS_NAME" value="org.gjt.sp.jedit.jEdit" />
+      <option name="VM_PARAMETERS" value="-Xmx192M" />
+      <option name="PROGRAM_PARAMETERS" value="-settings=&quot;$PROJECT_DIR$/build/settings&quot; -background" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="/usr/lib/jvm/java-6-sun" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jEdit" />
+      <envs />
+      <RunnerSettings RunnerId="JProfiler">
+        <option name="WINDOW" value="false" />
+        <option name="JVMPI" value="false" />
+        <option name="INTERPRETED" value="false" />
+      </RunnerSettings>
+      <method>
+        <option name="AntTarget" enabled="true" antfile="file://$PROJECT_DIR$/build.xml" target="build" />
+        <option name="Make" enabled="false" />
+        <option name="Run Ant target" value="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SvnBranchConfigurationManager">
     <option name="myConfigurationMap">
@@ -703,9 +832,29 @@
       </map>
     </option>
     <option name="myVersion" value="124" />
+    <option name="mySupportsUserInfoFilter" value="true" />
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
   </component>
+  <component name="VcsRevisionGraphProjectComponent">
+    <option name="_useTwoTagConvention" value="true" />
+    <option name="_showTags" value="true" />
+    <option name="_tagNaming" value="TAG_$T_MERGE_$S_TO_$D" />
+    <option name="_tagFilter" value="" />
+    <option name="_branchFilter" />
+    <option name="_showRevisionFilter" value="false" />
+    <option name="_afterDateTimeFilter" value="false" />
+    <option name="_beforeDateTimeFilter" value="false" />
+    <option name="_afterDateTime" value="" />
+    <option name="_beforeDateTime" value="" />
+    <option name="_projectRoot" value="&lt;Use repository root&gt;" />
+    <option name="_trunk" value="trunk" />
+    <option name="_branches" value="branches" />
+    <option name="_tags" value="tags" />
+    <option name="_showTagFilter" value="false" />
+    <option name="_showBranchFilter" value="false" />
+  </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>
 
