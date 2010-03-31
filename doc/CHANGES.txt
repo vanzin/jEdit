@@ -66,7 +66,7 @@ and Marcelo Vanzin for contributing to this release.
   marks (SF.net bug #2065330 - Eric Le Lay)
 
 - don't log an error when the API docs are not available. Provide a link
-  to the online docs instead (SF.net bug #2934360 - Eric Le Lay)
+  to the online docs instead (SF.net bug #1777806 - Eric Le Lay)
 }}}
 {{{ API changes
 - Register api changed, it now contains Transferable (Matthieu Casanova)
