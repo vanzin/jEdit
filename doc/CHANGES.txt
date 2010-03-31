@@ -6,6 +6,9 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed a NPE that happens when an error occurs before the view is loaded
+  (Matthieu Casanova #2905487)
+  
 - Fixed bug #2927555: beanshell load() fails w/ exception (Shlomy Reinstein)
 
 - Fixed a memory leak which held closed View and EditPane when using
