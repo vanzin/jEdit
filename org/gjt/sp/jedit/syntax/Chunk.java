@@ -43,6 +43,10 @@ import org.gjt.sp.jedit.IPropertyManager;
  */
 public class Chunk extends Token
 {
+    //{{{ Static variables
+	private static final char[] EMPTY_TEXT = new char[0];
+    //}}}
+
 	//{{{ paintChunkList() method
 	/**
 	 * Paints a chunk list.
@@ -491,6 +495,10 @@ public class Chunk extends Token
 						     start,
 						     end,
 						     layoutFlags);
+		// This is necessary to work around a memory leak in Sun Java 6 where
+		// the sun.font.GlyphLayout is cached and reused while holding an
+		// instance to the char array.
+		f.layoutGlyphVector(frc, EMPTY_TEXT, 0, 0, layoutFlags);
 		glyphs.add(gv);
 		return (float) gv.getLogicalBounds().getWidth();
 	} // }}}
