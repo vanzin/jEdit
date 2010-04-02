@@ -10,12 +10,13 @@ Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
+
 - Update of textarea scrollbars and bufferSwitcher are now done in
   EventQueue thread (Matthieu Casanova #2946031)
 
 - Fixed a NPE that happens when an error occurs before the view is loaded
   (Matthieu Casanova #2905487)
-  
+
 - Removed unnecessary popup warnings from InstallPanel when loading a
   pluginset. (Alan Ezust)
 
@@ -67,8 +68,14 @@ and Marcelo Vanzin for contributing to this release.
 
 - don't log an error when the API docs are not available. Provide a link
   to the online docs instead (SF.net bug #1777806 - Eric Le Lay)
+
+- Worked around a memory leak in Sun Java 6 where the sun.font.GlyphLayout is
+  cached and reused while holding an instance to the char array
+  (Björn "Vampire" Kautler)
+
 }}}
 {{{ API changes
+
 - Register api changed, it now contains Transferable (Matthieu Casanova)
 
 - Added ThreadUtilities utility class (Matthieu Casanova)
@@ -119,6 +126,7 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Editing
+
 - When pasting text copied from the textarea, if the target textarea has
   no edit mode, the edit mode from the source is copied (Matthieu Casanova)
 
@@ -134,6 +142,7 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
 - It is now possible to copy several files in the VFS Browser at the same time,
   and copy from/to the OS explorer (Matthieu Casanova)
 
@@ -170,16 +179,16 @@ and Marcelo Vanzin for contributing to this release.
   by default, and can be enabled in the text area option pane, along with the
   option to choose preferred fonts for substitution. This makes reading files
   which contain text in multiple scripts more bearable. (Marcelo Vanzin)
-  
+
 - Fixed ModeCatalogHandler so if an edit mode in the user-specific catalog has
   the same name as an edit mode in the system catalog, the version in the
-  user-specific catalog will override the system default.  This is what the 
+  user-specific catalog will override the system default.  This is what the
   documentation for writing an edit mode has stated is true for some time, now
   it is. (Dale Anson)
-  
+
 - Adjusted the ModeProvider so it is a little smarter in picking the mode for a
   file.  It is possible for a file to match more than one mode.  Previously, the
-  first mode that would accept the file was selected as the mode for the file. 
+  first mode that would accept the file was selected as the mode for the file.
   This change checks a little more, so a mode that matches both the filename
   glob and the first line glob will be selected before a mode that matches only
   the filename glob.  If no mode matches both filename glob and first line glob,
@@ -190,6 +199,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - In status bar option pane, when adding a widget only widgets that are not
   already in the bar will be proposed (Matthieu Casanova feature #2937286)
+
 }}}
 
 }}}

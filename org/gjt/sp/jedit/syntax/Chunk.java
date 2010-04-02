@@ -43,9 +43,9 @@ import org.gjt.sp.jedit.IPropertyManager;
  */
 public class Chunk extends Token
 {
-    //{{{ Static variables
+	//{{{ Static variables
 	private static final char[] EMPTY_TEXT = new char[0];
-    //}}}
+	//}}}
 
 	//{{{ paintChunkList() method
 	/**
