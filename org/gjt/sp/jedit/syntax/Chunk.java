@@ -264,7 +264,7 @@ public class Chunk extends Token
 			else
 				return offset;
 		}
-		
+
 		float[] pos = getPositions();
 
 		for(int i = 0; i < length; i++)
