@@ -18,6 +18,9 @@ Kazutoshi Satoda and oman002 for contributing to this release.
 - When removing text from the buffer, the event contentRemoved was sent before
   making the buffer dirty (oman002 #2944145)
 
+- Fixed leaky memory usage after some specific text operations.
+  (Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 
@@ -96,7 +99,7 @@ Alan Ezust, Eric Berry, and Eric Le Lay for contributing to this release.
 }}}
 {{{ API Changes
 
-. Add support for type-specific EditBus message handlers. EditBus handlers
+- Add support for type-specific EditBus message handlers. EditBus handlers
   don't need to implement EBComponent anymore; they just need to annotate their
   EditBus handler methods with the new "EBHandler" annotation. The methods
   should expect a single argument (an instance of any EBMessage type), and the

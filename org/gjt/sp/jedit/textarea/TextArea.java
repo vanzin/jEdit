@@ -2521,6 +2521,7 @@ loop:			for(int i = 0; i < text.length(); i++)
 
 		boolean foundBlank = false;
 
+		final Segment lineSegment = new Segment();
 loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 		{
 			if(!displayManager.isLineVisible(i))
@@ -2813,6 +2814,7 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 
 		boolean foundBlank = false;
 
+		final Segment lineSegment = new Segment();
 loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			if(!displayManager.isLineVisible(i))
@@ -4793,7 +4795,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	static TextArea focusedComponent;
 
 	//{{{ Instance variables
-	final Segment lineSegment = new Segment();
 	MouseInputAdapter mouseHandler;
 	final ChunkCache chunkCache;
 	DisplayManager displayManager;
@@ -5307,6 +5308,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	private boolean lineContainsSpaceAndTabs(int lineIndex)
 	{
+		final Segment lineSegment = new Segment();
 		getLineText(lineIndex,lineSegment);
 
 		for(int j = 0; j < lineSegment.count; j++)
@@ -5416,6 +5418,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(!hardWrap || maxLineLen <= 0)
 			return false;
 
+		final Segment lineSegment = new Segment();
 		buffer.getLineText(caretLine,lineSegment);
 
 		int start = getLineStartOffset(caretLine);
