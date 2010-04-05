@@ -226,11 +226,9 @@
 				<include name="org/gjt/sp/jedit/Mode.java"/>
 				<include name="org/gjt/sp/jedit/OperatingSystem.java"/>
 				<include name="org/gjt/sp/jedit/RegistersListener.java"/>
-				<include name="org/gjt/sp/jedit/RegistersListener.java"/>
 				<include name="org/gjt/sp/jedit/Registers.java"/>
 				<include name="org/gjt/sp/jedit/RegisterSaver.java"/>
 				<include name="org/gjt/sp/jedit/SelectionManager.java"/>
-				<include name="org/gjt/sp/jedit/TextUtilities.java"/>
 				<include name="org/gjt/sp/jedit/TextUtilities.java"/>
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
