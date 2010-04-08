@@ -71,6 +71,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	 * the match
 	 * @since jEdit 4.2pre4
 	 */
+	@Override
 	public SearchMatcher.Match nextMatch(CharSequence text,
 		boolean start, boolean end, boolean firstTime,
 		boolean reverse)
@@ -254,7 +255,7 @@ public class BoyerMooreSearchMatcher extends SearchMatcher
 	 *  building a table that is over 2 orders of magnitude larger and very
 	 *  sparse).
 	 */
-	private static final int getSkipIndex(char ch)
+	private static int getSkipIndex(char ch)
 	{
 		return ch & 0x000000FF;
 	} //}}}
