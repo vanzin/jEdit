@@ -49,4 +49,10 @@ public class JEditRichText
 	{
 		return ModeProvider.instance.getMode(mode);
 	}
+
+    @Override
+    public String toString()
+    {
+        return text;
+    }
 }
