@@ -272,6 +272,13 @@ public class Registers
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
+		if (mode != null &&
+			"text".equals(buffer.getMode().getName()) &&
+			!mode.equals(buffer.getMode()) &&
+			buffer.getLength() == 0)
+		{
+			buffer.setMode(mode);
+		}
 		try
 		{
 			buffer.beginCompoundEdit();
@@ -318,12 +325,7 @@ public class Registers
 		{
 			buffer.endCompoundEdit();
 		}
-		if (mode != null &&
-			"text".equals(buffer.getMode().getName()) &&
-			!mode.equals(buffer.getMode()))
-		{
-			buffer.setMode(mode);
-		}
+
 		HistoryModel.getModel("clipboard").addItem(selection);
 	} //}}}
 
