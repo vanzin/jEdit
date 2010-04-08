@@ -1,5 +1,5 @@
 /*
- * RichTextTransferable.java
+ * JEditDataFlavor.java
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -19,44 +19,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+
 package org.gjt.sp.jedit.datatransfer;
 
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 
 /**
  * @author Matthieu Casanova
  * @since jEdit 4.4.x
  */
-public class RichTextTransferable implements Transferable
+public class JEditDataFlavor
 {
-	private static final DataFlavor[] supportedDataFlavor = {JEditDataFlavor.jEditRichTextDataFlavor};
+   public static final DataFlavor jEditRichTextDataFlavor = new DataFlavor(JEditRichText.class, DataFlavor.javaJVMLocalObjectMimeType);
+   public static final DataFlavor html = new DataFlavor("text/html; class=java.lang.String", "text/html");
 
-	private final String text;
-	private final String mode;
-
-	public RichTextTransferable(String text, String mode)
-	{
-		this.text = text;
-		this.mode = mode;
-	}
-
-	public DataFlavor[] getTransferDataFlavors()
-	{
-		return supportedDataFlavor;
-	}
-
-	public boolean isDataFlavorSupported(DataFlavor flavor)
-	{
-		return JEditDataFlavor.jEditRichTextDataFlavor.equals(flavor);
-	}
-
-	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
-	{
-		if (!isDataFlavorSupported(flavor))
-			throw new UnsupportedFlavorException(flavor);
-		return new JEditRichText(text, mode);
-	}
 }

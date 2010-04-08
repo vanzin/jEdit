@@ -30,6 +30,7 @@ import java.awt.datatransfer.DataFlavor;
 import java.io.*;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
+import org.gjt.sp.jedit.datatransfer.JEditDataFlavor;
 import org.gjt.sp.jedit.datatransfer.JEditRichText;
 import org.gjt.sp.jedit.datatransfer.RichTextTransferable;
 import org.gjt.sp.jedit.datatransfer.TransferHandler;
@@ -208,6 +209,17 @@ public class Registers
 		paste(textArea,register,false);
 	}
 
+    /**
+	 * Insets the contents of the specified register into the text area.
+	 * @param textArea The text area
+	 * @param register The register
+	 * @since jEdit 2.7pre2
+	 */
+	public static void paste(TextArea textArea, char register, DataFlavor preferredDataFlavor)
+	{
+		paste(textArea,register,false, preferredDataFlavor);
+	}
+
 	/**
 	 * Inserts the contents of the specified register into the text area.
 	 * @param textArea The text area
@@ -234,37 +246,26 @@ public class Registers
 		Transferable transferable = reg.getTransferable();
 		Mode mode = null;
 		String selection = null;
-		if (transferable.isDataFlavorSupported(RichTextTransferable.jEditRichTextDataFlavor))
+		if (transferable.isDataFlavorSupported(JEditDataFlavor.jEditRichTextDataFlavor))
 		{
 			try
 			{
-				JEditRichText data = (JEditRichText) transferable.getTransferData(RichTextTransferable.jEditRichTextDataFlavor);
+				JEditRichText data = (JEditRichText) transferable.getTransferData(JEditDataFlavor.jEditRichTextDataFlavor);
 				mode = data.getMode();
 				selection = data.getText();
 			}
 			catch (UnsupportedFlavorException e)
 			{
-				e.printStackTrace();
+				Log.log(Log.ERROR, Registers.class, e);
 			}
 			catch (IOException e)
 			{
-				e.printStackTrace();
+				Log.log(Log.ERROR, Registers.class, e);
 			}
 		}
 		else if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
 		{
-			try
-			{
-				selection = (String) transferable.getTransferData(DataFlavor.stringFlavor);
-			}
-			catch (UnsupportedFlavorException e)
-			{
-				e.printStackTrace();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+            selection = getTextFromTransferable(transferable, DataFlavor.stringFlavor);
 		}
 		if(selection == null)
 		{
@@ -328,6 +329,122 @@ public class Registers
 
 		HistoryModel.getModel("clipboard").addItem(selection);
 	} //}}}
+
+    /**
+	 * Inserts the contents of the specified register into the text area.
+	 * @param textArea The text area
+	 * @param register The register
+	 * @param vertical Vertical (columnar) paste
+     * @param preferredDataFlavor the preferred dataflavor. If not available
+     * <tt>DataFlavor.stringFlavor</tt> will be used
+	 * @since jEdit 4.4pre1
+	 */
+	public static void paste(TextArea textArea, char register,
+		boolean vertical, DataFlavor preferredDataFlavor)
+	{
+        if (JEditDataFlavor.jEditRichTextDataFlavor.equals(preferredDataFlavor))
+        {
+            paste(textArea,register,vertical);
+            return;
+        }
+		if(!textArea.isEditable())
+		{
+			textArea.getToolkit().beep();
+			return;
+		}
+
+		Register reg = getRegister(register);
+
+		if(reg == null)
+		{
+			textArea.getToolkit().beep();
+			return;
+		}
+		Transferable transferable = reg.getTransferable();
+		String selection = null;
+		if (transferable.isDataFlavorSupported(preferredDataFlavor))
+		{
+            selection = getTextFromTransferable(transferable, preferredDataFlavor);
+		}
+		else if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
+		{
+			selection = getTextFromTransferable(transferable, DataFlavor.stringFlavor);
+		}
+		if(selection == null)
+		{
+			textArea.getToolkit().beep();
+			return;
+		}
+		JEditBuffer buffer = textArea.getBuffer();
+		try
+		{
+			buffer.beginCompoundEdit();
+
+			/* vertical paste */
+			if(vertical && textArea.getSelectionCount() == 0)
+			{
+				int caret = textArea.getCaretPosition();
+				int caretLine = textArea.getCaretLine();
+				Selection.Rect rect = new Selection.Rect(
+					caretLine,caret,caretLine,caret);
+				textArea.setSelectedText(rect,selection);
+				caretLine = textArea.getCaretLine();
+
+				if(caretLine != textArea.getLineCount() - 1)
+				{
+
+					int startColumn = rect.getStartColumn(
+						buffer);
+					int offset = buffer
+						.getOffsetOfVirtualColumn(
+						caretLine + 1,startColumn,null);
+					if(offset == -1)
+					{
+						buffer.insertAtColumn(caretLine + 1,startColumn,"");
+						textArea.setCaretPosition(
+							buffer.getLineEndOffset(
+							caretLine + 1) - 1);
+					}
+					else
+					{
+						textArea.setCaretPosition(
+							buffer.getLineStartOffset(
+							caretLine + 1) + offset);
+					}
+				}
+			}
+			else /* Regular paste */
+			{
+				textArea.replaceSelection(selection);
+			}
+		}
+		finally
+		{
+			buffer.endCompoundEdit();
+		}
+
+		HistoryModel.getModel("clipboard").addItem(selection);
+	} //}}}
+
+    private static String getTextFromTransferable(Transferable transferable, DataFlavor dataFlavor)
+    {
+        try
+        {
+            Object data = transferable.getTransferData(dataFlavor);
+            if (dataFlavor.getRepresentationClass().equals(String.class))
+                return (String) data;
+            return data.toString();
+        }
+        catch (UnsupportedFlavorException e)
+        {
+            Log.log(Log.ERROR, Registers.class, e);
+        }
+        catch (IOException e)
+        {
+            Log.log(Log.ERROR, Registers.class, e);
+        }
+        return null;
+    }
 
 	//{{{ getRegister() method
 	/**
