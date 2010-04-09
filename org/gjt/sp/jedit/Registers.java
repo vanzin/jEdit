@@ -34,6 +34,7 @@ import org.gjt.sp.jedit.datatransfer.JEditDataFlavor;
 import org.gjt.sp.jedit.datatransfer.JEditRichText;
 import org.gjt.sp.jedit.datatransfer.TransferHandler;
 import org.gjt.sp.jedit.gui.HistoryModel;
+import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
@@ -272,14 +273,8 @@ public class Registers
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
-		if (mode != null &&
-			"text".equals(buffer.getMode().getName()) &&
-			!mode.equals(buffer.getMode()) &&
-			buffer.getLength() == 0)
-		{
-			buffer.setMode(mode);
-		}
-		try
+        applyMode(mode, buffer);
+        try
 		{
 			buffer.beginCompoundEdit();
 
@@ -329,23 +324,34 @@ public class Registers
 		HistoryModel.getModel("clipboard").addItem(selection);
 	} //}}}
 
-    /**
+	private static void applyMode(Mode mode, JEditBuffer buffer)
+	{
+		if (mode != null &&
+			"text".equals(buffer.getMode().getName()) &&
+		!mode.equals(buffer.getMode()) &&
+		buffer.getLength() == 0)
+		{
+			buffer.setMode(mode);
+		}
+	}
+
+	/**
 	 * Inserts the contents of the specified register into the text area.
 	 * @param textArea The text area
 	 * @param register The register
 	 * @param vertical Vertical (columnar) paste
-     * @param preferredDataFlavor the preferred dataflavor. If not available
-     * <tt>DataFlavor.stringFlavor</tt> will be used
+	 * @param preferredDataFlavor the preferred dataflavor. If not available
+	 * <tt>DataFlavor.stringFlavor</tt> will be used
 	 * @since jEdit 4.4pre1
 	 */
 	public static void paste(TextArea textArea, char register,
 		boolean vertical, DataFlavor preferredDataFlavor)
 	{
-        if (JEditDataFlavor.jEditRichTextDataFlavor.equals(preferredDataFlavor))
-        {
-            paste(textArea,register,vertical);
-            return;
-        }
+		if (JEditDataFlavor.jEditRichTextDataFlavor.equals(preferredDataFlavor))
+		{
+			paste(textArea,register,vertical);
+			return;
+		}
 		if(!textArea.isEditable())
 		{
 			textArea.getToolkit().beep();
@@ -375,6 +381,22 @@ public class Registers
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
+
+		String mime = preferredDataFlavor.getMimeType();
+		int i = mime.indexOf(';');
+		if (i != -1)
+		{
+			mime = mime.substring(0,i); 
+		}
+		String mode = jEdit.getProperty("mime2mode."+mime);
+		if (mode != null)
+		{
+			Mode _mode = ModeProvider.instance.getMode(mode);
+			if (_mode != null)
+			{
+				applyMode(_mode, buffer);
+			}
+		}
 		try
 		{
 			buffer.beginCompoundEdit();
@@ -425,25 +447,25 @@ public class Registers
 		HistoryModel.getModel("clipboard").addItem(selection);
 	} //}}}
 
-    private static String getTextFromTransferable(Transferable transferable, DataFlavor dataFlavor)
-    {
-        try
-        {
-            Object data = transferable.getTransferData(dataFlavor);
-            if (dataFlavor.getRepresentationClass().equals(String.class))
-                return (String) data;
-            return data.toString();
-        }
-        catch (UnsupportedFlavorException e)
-        {
-            Log.log(Log.ERROR, Registers.class, e);
-        }
-        catch (IOException e)
-        {
-            Log.log(Log.ERROR, Registers.class, e);
-        }
-        return null;
-    }
+	private static String getTextFromTransferable(Transferable transferable, DataFlavor dataFlavor)
+	{
+		try
+		{
+			Object data = transferable.getTransferData(dataFlavor);
+			if (dataFlavor.getRepresentationClass().equals(String.class))
+				return (String) data;
+			return data.toString();
+		}
+		catch (UnsupportedFlavorException e)
+		{
+			Log.log(Log.ERROR, Registers.class, e);
+		}
+		catch (IOException e)
+		{
+			Log.log(Log.ERROR, Registers.class, e);
+		}
+		return null;
+	}
 
 	//{{{ getRegister() method
 	/**

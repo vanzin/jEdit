@@ -741,6 +741,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="paste-special">
+	<CODE>
+		new PasteSpecialDialog(view, textArea);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="paste-string-register" NO_REPEAT="TRUE" NO_RECORD="TRUE">
 	<CODE>
 		view.getInputHandler().readNextChar(

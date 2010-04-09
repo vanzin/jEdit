@@ -303,6 +303,7 @@ goto-line.label=$Go to Line...
 clipboard=cut-append \
 	  copy-append \
 	  vertical-paste \
+	  paste-special \
 	  - \
 	  paste-previous \
 	  paste-deleted \
@@ -323,6 +324,7 @@ copy-append.label=C$opy Append
 vertical-paste.label=$Vertical Paste
 paste-previous.label=Paste Previo$us...
 paste-deleted.label=Paste $Deleted...
+paste-special.label=Paste Special...
 cut-string-register.label=Cu$t to Register
 copy-string-register.label=Co$py to Register
 paste-string-register.label=Paste $Register
