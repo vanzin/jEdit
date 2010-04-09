@@ -39,6 +39,10 @@ import org.gjt.sp.jedit.Debug;
  */
 public class Chunk extends Token
 {
+	//{{{ Static variables
+	private static final char[] EMPTY_TEXT = new char[0];
+	//}}}
+
 	//{{{ paintChunkList() method
 	/**
 	 * Paints a chunk list.
@@ -328,9 +332,15 @@ public class Chunk extends Token
 			int layoutFlags = Font.LAYOUT_LEFT_TO_RIGHT
 				| Font.LAYOUT_NO_START_CONTEXT
 				| Font.LAYOUT_NO_LIMIT_CONTEXT;
-			gv = style.getFont().layoutGlyphVector(
+			Font font = style.getFont();
+			gv = font.layoutGlyphVector(
 				fontRenderContext,
 				textArray, textStart, textLimit, layoutFlags);
+			// This is necessary to work around a memory leak in Sun Java 6
+			// where the sun.font.GlyphLayout is cached and reused while holding
+			// an instance to the char array.
+			font.layoutGlyphVector(fontRenderContext, EMPTY_TEXT, 0, 0,
+			                       layoutFlags);
 			Rectangle2D logicalBounds = gv.getLogicalBounds();
 
 			width = (float)logicalBounds.getWidth();

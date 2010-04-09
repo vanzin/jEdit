@@ -21,6 +21,10 @@ Kazutoshi Satoda and oman002 for contributing to this release.
 - Fixed leaky memory usage after some specific text operations.
   (Kazutoshi Satoda)
 
+- Worked around a memory leak in Sun Java 6 where the sun.font.GlyphLayout is
+  cached and reused while holding an instance to the char array
+  (Björn "Vampire" Kautler)
+
 }}}
 {{{ Miscellaneous
 
