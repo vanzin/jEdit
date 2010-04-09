@@ -32,7 +32,6 @@ import java.io.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.datatransfer.JEditDataFlavor;
 import org.gjt.sp.jedit.datatransfer.JEditRichText;
-import org.gjt.sp.jedit.datatransfer.RichTextTransferable;
 import org.gjt.sp.jedit.datatransfer.TransferHandler;
 import org.gjt.sp.jedit.gui.HistoryModel;
 import org.gjt.sp.jedit.textarea.TextArea;
