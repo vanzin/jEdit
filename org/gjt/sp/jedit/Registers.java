@@ -209,7 +209,7 @@ public class Registers
 		paste(textArea,register,false);
 	}
 
-    /**
+	/**
 	 * Insets the contents of the specified register into the text area.
 	 * @param textArea The text area
 	 * @param register The register
@@ -265,7 +265,7 @@ public class Registers
 		}
 		else if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
 		{
-            selection = getTextFromTransferable(transferable, DataFlavor.stringFlavor);
+			selection = getTextFromTransferable(transferable, DataFlavor.stringFlavor);
 		}
 		if(selection == null)
 		{
@@ -273,8 +273,8 @@ public class Registers
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
-        applyMode(mode, buffer);
-        try
+		applyMode(mode, buffer);
+		try
 		{
 			buffer.beginCompoundEdit();
 
@@ -369,7 +369,7 @@ public class Registers
 		String selection = null;
 		if (transferable.isDataFlavorSupported(preferredDataFlavor))
 		{
-            selection = getTextFromTransferable(transferable, preferredDataFlavor);
+			selection = getTextFromTransferable(transferable, preferredDataFlavor);
 		}
 		else if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor))
 		{

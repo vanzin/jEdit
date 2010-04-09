@@ -30,7 +30,6 @@ import java.awt.datatransfer.DataFlavor;
  */
 public class JEditDataFlavor
 {
-   public static final DataFlavor jEditRichTextDataFlavor = new DataFlavor(JEditRichText.class, DataFlavor.javaJVMLocalObjectMimeType);
-   public static final DataFlavor html = new DataFlavor("text/html; class=java.lang.String", "text/html");
-
+	public static final DataFlavor jEditRichTextDataFlavor = new DataFlavor(JEditRichText.class, DataFlavor.javaJVMLocalObjectMimeType);
+	public static final DataFlavor html = new DataFlavor("text/html; class=java.lang.String", "text/html");
 }
