@@ -91,7 +91,7 @@ public class HistoryTextField extends JTextField
 		boolean enterAddsToHistory)
 	{
 		// set sane minumum number of columns
-		super(8);
+		super(4);
 		controller = new HistoryText(this,null)
 		{
 			public void fireActionPerformed()
