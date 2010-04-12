@@ -90,6 +90,8 @@ public class HistoryTextField extends JTextField
 	public HistoryTextField(String name, boolean instantPopups,
 		boolean enterAddsToHistory)
 	{
+		// set sane minumum number of columns
+		super(8);
 		controller = new HistoryText(this,null)
 		{
 			public void fireActionPerformed()
