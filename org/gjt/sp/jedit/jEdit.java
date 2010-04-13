@@ -1326,16 +1326,15 @@ public class jEdit
 
 	//{{{ reloadModes() method
 	/**
-	 * Reloads all edit modes.
+	 * Reloads all edit modes.  User defined edit modes are loaded after
+	 * global modes so that user modes supercede global modes.
 	 * @since jEdit 3.2pre2
 	 */
 	public static void reloadModes()
 	{
-		/* Try to guess the eventual size to avoid unnecessary
-		 * copying */
 		ModeProvider.instance.removeAll();
 
-		//{{{ Load the global catalog
+		//{{{ Load the global catalog first
 		if(jEditHome == null)
 			loadModeCatalog("/modes/catalog",true);
 		else
@@ -1344,7 +1343,7 @@ public class jEdit
 				"modes","catalog"),false);
 		} //}}}
 
-		//{{{ Load user catalog
+		//{{{ Load user catalog second so user modes override global modes.
 		if(settingsDirectory != null)
 		{
 			File userModeDir = new File(MiscUtilities.constructPath(

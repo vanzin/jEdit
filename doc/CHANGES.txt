@@ -4,9 +4,9 @@ jEdit 4.4 version history
 
 {{{ Version 4.4pre1
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
+Thanks to BjÃÂ¶rn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
+Bernhard Walle, Joerg Spieler, Kevin Hunter, FranÃÂ§ois Rey,
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
@@ -71,7 +71,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Worked around a memory leak in Sun Java 6 where the sun.font.GlyphLayout is
   cached and reused while holding an instance to the char array
-  (Björn "Vampire" Kautler)
+  (BjÃÂ¶rn "Vampire" Kautler)
 
 }}}
 {{{ API changes
@@ -85,7 +85,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Removed deprecated objectfactory xml parser.
 
-- File System Browser dynamic menu support (#2938170 - François Rey)
+- File System Browser dynamic menu support (#2938170 - FranÃÂ§ois Rey)
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
@@ -193,17 +193,13 @@ and Marcelo Vanzin for contributing to this release.
   user-specific catalog will override the system default.  This is what the
   documentation for writing an edit mode has stated is true for some time, now
   it is. (Dale Anson)
+  
+- Gave better priorities within modes which matches with a file at the
+  same time, as the following order.
 
-- Adjusted the ModeProvider so it is a little smarter in picking the mode for a
-  file.  It is possible for a file to match more than one mode.  Previously, the
-  first mode that would accept the file was selected as the mode for the file.
-  This change checks a little more, so a mode that matches both the filename
-  glob and the first line glob will be selected before a mode that matches only
-  the filename glob.  If no mode matches both filename glob and first line glob,
-  then a mode that matches the filename glob will be selected before a mode that
-  only matches the first line glob.  This is particularly useful for xml files,
-  so that Ant build files can be differentiated from jEdit actions.xml files and
-  from regular xml files.  (Dale Anson)
+   - both the filename glob and the first line glob
+   - only the filename glob
+   - the first line glob  (Dale Anson)
 
 - In status bar option pane, when adding a widget only widgets that are not
   already in the bar will be proposed (Matthieu Casanova feature #2937286)

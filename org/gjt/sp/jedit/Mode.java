@@ -75,6 +75,7 @@ public class Mode
 	{
 		try
 		{
+			filenameRE = null;
 			String filenameGlob = (String)getProperty("filenameGlob");
 			if(filenameGlob != null && filenameGlob.length() != 0)
 			{
@@ -82,6 +83,7 @@ public class Mode
 							     Pattern.CASE_INSENSITIVE);
 			}
 
+			firstlineRE = null;
 			String firstlineGlob = (String)getProperty("firstlineGlob");
 			if(firstlineGlob != null && firstlineGlob.length() != 0)
 			{
@@ -176,6 +178,8 @@ public class Mode
 	 */
 	public void setProperty(String key, Object value)
 	{
+		String prefix = "mode." + name + '.';
+		jEdit.setProperty(prefix + key, value.toString());
 		props.put(key,value);
 	} //}}}
 
@@ -187,6 +191,8 @@ public class Mode
 	 */
 	public void unsetProperty(String key)
 	{
+		String prefix = "mode." + name + '.';
+		jEdit.unsetProperty(prefix + key);
 		props.remove(key);
 	} //}}}
 
@@ -274,33 +280,7 @@ public class Mode
 	{
 		return name;
 	} //}}}
-	
-	//{{{ equals() method
-	/**
-	 * @return <code>true</code> if this mode has the same name as another mode.
-	 * Only the name of the mode matters, this allows user created modes to
-	 * be treated the same as global modes regardless of the file name glob 
-	 * or the first line glob.
-	 */
-	public boolean equals(Object other)
-	{
-		if (!(other instanceof Mode))
-		{
-			return false;	
-		}
-		String otherName = ((Mode)other).getName();
-		return name.equals(otherName);
-	} //}}}
-	
-	//{{{ hashCode() method
-	/**
-	 * @return The hash code for this mode.
-	 */
-	public int hashCode()
-	{
-		return name.hashCode();
-	} //}}}
-	
+
 	//{{{ getIgnoreWhitespace() method
 	public boolean getIgnoreWhitespace()
 	{

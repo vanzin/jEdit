@@ -36,6 +36,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashMap;
 //}}}
 
 /**
@@ -49,12 +50,12 @@ public class ModeProvider
 {
 	public static ModeProvider instance = new ModeProvider();
 
-	private List<Mode> modes = new ArrayList<Mode>(180);
+	private LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(180);
 
 	//{{{ removeAll() method
 	public void removeAll()
 	{
-		modes = new ArrayList<Mode>(180);
+		modes.clear();
 	} //}}}
 
 	//{{{ getMode() method
@@ -65,13 +66,7 @@ public class ModeProvider
 	 */
 	public Mode getMode(String name)
 	{
-		for(int i = 0; i < modes.size(); i++)
-		{
-			Mode mode = modes.get(i);
-			if(mode.getName().equals(name))
-				return mode;
-		}
-		return null;
+		return modes.get(name);
 	} //}}}
 
 	//{{{ getModeForFile() method
@@ -86,16 +81,13 @@ public class ModeProvider
 	{
 		String nogzName = filename.substring(0,filename.length() -
 			(filename.endsWith(".gz") ? 3 : 0));
-		Mode[] modes = getModes();
 
-		// this must be in reverse order so that modes from the user
-		// catalog get checked first!
 		List<Mode> acceptable = new ArrayList<Mode>();
-		for(int i = modes.length - 1; i >= 0; i--)
+		for(Mode mode : modes.values())
 		{
-			if(modes[i].accept(nogzName,firstLine))
+			if(mode.accept(nogzName,firstLine))
 			{
-				acceptable.add(modes[i]);
+				acceptable.add(mode);
 			}
 		}
 		if (acceptable.size() == 1) 
@@ -137,7 +129,7 @@ public class ModeProvider
 	public Mode[] getModes()
 	{
 		Mode[] array = new Mode[modes.size()];
-		modes.toArray(array);
+		modes.values().toArray(array);
 		return array;
 	} //}}}
 
@@ -146,23 +138,12 @@ public class ModeProvider
 	 * Do not call this method. It is only public so that classes
 	 * in the org.gjt.sp.jedit.syntax package can access it.
 	 * @since jEdit 4.3pre10
+	 * @see org.gjt.sp.jedit.jEdit#reloadModes reloadModes
 	 * @param mode The edit mode
 	 */
 	public void addMode(Mode mode)
 	{
-		// Modes are loaded from the global catalog first, then from any
-		// user catalogs.  If a user mode is added with the same name as
-		// one from the global catalog, remove the one that was added
-		// from the global catalog.  This prevents the mode from the
-		// global catalog being selected as the mode for a file based
-		// on it having a better match in either filename glob or first
-		// line glob -- the rule is that user modes always take precedence 
-		// over global modes.
-		if (modes.contains(mode)) 
-		{
-			modes.remove(mode);	
-		}
-		modes.add(mode);
+		modes.put(mode.getName(), mode);
 	} //}}}
 
 	//{{{ loadMode() method
