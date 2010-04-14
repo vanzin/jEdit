@@ -173,6 +173,7 @@
 				<include name="org/gjt/sp/jedit/syntax/*.java"/>
 				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
 
+				<include name="org/gjt/sp/jedit/datatransfer/JEditDataFlavor.java"/>
 				<include name="org/gjt/sp/jedit/datatransfer/JEditRichText.java"/>
 				<include name="org/gjt/sp/jedit/datatransfer/JEditTransferable.java"/>
 				<include name="org/gjt/sp/jedit/datatransfer/JEditTransferableService.java"/>
