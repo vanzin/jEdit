@@ -34,7 +34,6 @@ import org.gjt.sp.jedit.datatransfer.JEditDataFlavor;
 import org.gjt.sp.jedit.datatransfer.JEditRichText;
 import org.gjt.sp.jedit.datatransfer.TransferHandler;
 import org.gjt.sp.jedit.gui.HistoryModel;
-import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.util.Log;
@@ -383,7 +382,9 @@ public class Registers
 			return;
 		}
 		JEditBuffer buffer = textArea.getBuffer();
-
+		 /*
+		 Commented because it must not use jEdit class.
+		 Need to rewrite a property manager that is independant
 		String mime = preferredDataFlavor.getMimeType();
 		int i = mime.indexOf(';');
 		if (i != -1)
@@ -398,7 +399,7 @@ public class Registers
 			{
 				applyMode(_mode, buffer);
 			}
-		}
+		}     */
 		try
 		{
 			buffer.beginCompoundEdit();
