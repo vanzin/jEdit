@@ -52,7 +52,8 @@ public class TransferHandler
 
 	public void registerTransferableService(JEditTransferableService transferableService)
 	{
-		services.add(transferableService);
+        if (!services.contains(transferableService))
+		    services.add(transferableService);
 	}
 
 	public Transferable getTransferable(TextArea textArea, String text)
