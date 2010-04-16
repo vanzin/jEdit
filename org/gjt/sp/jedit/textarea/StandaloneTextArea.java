@@ -662,13 +662,14 @@ public class StandaloneTextArea extends TextArea
 		}
 	} //}}}
 
-    static
-    {
-        TransferHandler.getInstance().registerTransferableService(new RichJEditTextTransferableService());
+	static
+	{
+		TransferHandler.getInstance().registerTransferableService(new RichJEditTextTransferableService());
 		TransferHandler.getInstance().registerTransferableService(new StringTransferableService());
-    }
+	}
 
 	//{{{ main() method
+
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame();
