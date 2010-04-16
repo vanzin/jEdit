@@ -662,11 +662,15 @@ public class StandaloneTextArea extends TextArea
 		}
 	} //}}}
 
+    static
+    {
+        TransferHandler.getInstance().registerTransferableService(new RichJEditTextTransferableService());
+		TransferHandler.getInstance().registerTransferableService(new StringTransferableService());
+    }
+
 	//{{{ main() method
 	public static void main(String[] args)
 	{
-		TransferHandler.getInstance().registerTransferableService(new RichJEditTextTransferableService());
-		TransferHandler.getInstance().registerTransferableService(new StringTransferableService());
 		JFrame frame = new JFrame();
 		TextArea text = createTextArea();
 		Mode mode = new Mode("xml");
