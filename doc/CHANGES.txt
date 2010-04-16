@@ -4,7 +4,7 @@ jEdit 4.4 version history
 
 {{{ Version 4.4pre1
 
-Thanks to BjÃÂ¶rn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
 Bernhard Walle, Joerg Spieler, Kevin Hunter, FranÃÂ§ois Rey,
 and Marcelo Vanzin for contributing to this release.
@@ -71,7 +71,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Worked around a memory leak in Sun Java 6 where the sun.font.GlyphLayout is
   cached and reused while holding an instance to the char array
-  (BjÃÂ¶rn "Vampire" Kautler)
+  (Björn "Vampire" Kautler)
 
 }}}
 {{{ API changes
