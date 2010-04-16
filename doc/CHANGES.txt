@@ -6,6 +6,7 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Shlomy Reinstein,
 Kazutoshi Satoda and oman002 for contributing to this release.
 
 {{{ Bug Fixes
+- Fixed Standalone TextArea build target (Shlomy Reinstein)
 
 - Fixed a NPE that happens when an error occurs before the view is loaded
   (Matthieu Casanova #2905487)
