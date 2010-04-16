@@ -350,11 +350,11 @@ public class StandaloneTextArea extends TextArea
 		String value = getProperty(name);
 		if(value == null)
 			return def;
-		else if(value.equals("true") || value.equals("yes")
-			|| value.equals("on"))
+		else if("true".equals(value) || "yes".equals(value)
+			|| "on".equals(value))
 			return true;
-		else if(value.equals("false") || value.equals("no")
-			|| value.equals("off"))
+		else if("false".equals(value) || "no".equals(value)
+			|| "off".equals(value))
 			return false;
 		else
 			return def;
