@@ -56,6 +56,10 @@
 ### (the above three properties are needed also)
 #fop.dir=C:\\Programme\\FOP
 
+## For generating Windows executable file, make sure to install Launch4j
+## and set the path to launch4j installed directory.
+#launch4j.dir=C:\\Programme\\launch4j
+
 # debug settings
 build.debug=true
 build.debuglevel=lines,vars,source

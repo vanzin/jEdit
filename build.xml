@@ -1324,6 +1324,52 @@
 		<antcall target="dist-cleanup" />
 	</target>
 
+	<target name="dist-win-exe"
+			unless="build.on.non.win"
+			description="creates a native windows application launcher">
+		<fail message="Please set the launch4j.dir in build.properties"
+			  unless="config.launch4j.dir" />
+		<taskdef
+			name="launch4j"
+			classname="net.sf.launch4j.ant.Launch4jTask"
+			classpath="${config.launch4j.dir}/launch4j.jar:${config.launch4j.dir}/lib/xstream.jar"
+		/>
+		<copy todir="${dist.dir}/classes/package-files/windows"
+			  file="package-files/windows/jedit.exe.manifest"
+			  overwrite="true" />
+		<tstamp>
+			<format property="current.year"
+					pattern="yyyy" />
+		</tstamp>
+		<filterset id="dist-win-exe-config-params">
+			<filter token="jar.filename"
+					value="${jar.filename}" />
+			<filter token="jedit.version"
+					value="${jedit.version}" />
+			<filter token="jedit.build.number"
+					value="${jedit.build.number}" />
+			<filter token="dist.dir"
+					value="${dist.dir}" />
+			<filter token="base.dir"
+					value="${basedir}" />
+			<filter token="current.year"
+					value="${current.year}" />
+			<filter token="target.java.version"
+					value="${target.java.version}" />
+		</filterset>
+		<copy file="package-files/windows/jEdit.launch4j.xml"
+			  tofile="${config.dist.dir}/classes/package-files/windows/jedit.launch4j.xml"
+			  overwrite="true">
+			<filterset refid="dist-win-exe-config-params" />
+			<filterset>
+				<filter token="cmd.line"
+						value="-reuseview" />
+			</filterset>
+		</copy>
+		<launch4j configFile="${config.dist.dir}/classes/package-files/windows/jEdit.launch4j.xml"
+				  outfile="${config.dist.dir}/classes/package-files/windows/jedit.exe" />
+	</target>
+
 	<target name="dist-win-finish"
 			depends="init"
 			unless="build.on.non.win"
@@ -1342,6 +1388,9 @@
 					pattern="yyyy" />
 		</tstamp>
 		<copy todir="${dist.dir}/classes/package-files/windows"
+			  file="package-files/windows/jedit.l4j.ini"
+			  overwrite="true" />
+		<copy todir="${dist.dir}/classes/package-files/windows"
 			  overwrite="true">
 			<fileset file="package-files/windows/win32installer.iss" />
 			<filterset>
@@ -1359,6 +1408,10 @@
 						value="${basedir}" />
 				<filter token="current.year"
 						value="${current.year}" />
+				<filter token="jedit.exefile"
+						value="jedit.exe" />
+				<filter token="jedit.inifile"
+						value="jedit.l4j.ini" />
 			</filterset>
 		</copy>
 		<exec executable="${config.innosetup.compiler.executable}"
@@ -1403,6 +1456,7 @@
 				<os family="windows" />
 			</not>
 		</condition>
+		<antcall target="dist-win-exe" />
 		<antcall target="dist-win-finish">
 			<param name="config.dont.wipe.dist.files"
 				   value="true" />

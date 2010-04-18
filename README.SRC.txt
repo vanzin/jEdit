@@ -53,6 +53,7 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the windows installer (for the final step):
 
+  - Launch4j. Get it from <http://launch4j.sourceforge.net/>
   - Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
   - A box running windows.
 
@@ -128,9 +129,10 @@ General jEdit documentation can be found in the 'doc' directory.
   a file called jedit<version_here>-dist-win-finish.tar.bz2 in the dist-folder,
   configured in build.properties. Give that to someone running Windows and ask him
   to extract the archive and to execute "ant dist-win-finish".
-  The only things that need to be installed for this final step is Apache Ant, and
-  Inno Setup. Prior to running "ant dist-win-finish", the helper has to set up the
-  build.properties file with the path to his Inno Setup installation.
+  The only things that need to be installed for this final step is Apache Ant,
+  Lanch4j, and Inno Setup. Prior to running "ant dist-win-finish", the helper
+  has to set up the build.properties file with the path to his Launch4j and
+  Inno Setup installation.
 
  - dist-win-finish    finish building the Windows installer (EXE-file) on Windows
   build the windows installer in the dist-folder, configured in build.properties if
