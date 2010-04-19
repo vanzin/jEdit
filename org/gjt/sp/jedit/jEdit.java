@@ -1149,17 +1149,7 @@ public class jEdit
 			String path = MiscUtilities.constructPath(directory,plugin);
 			if (jEdit.getBooleanProperty("plugin-blacklist."+plugin))
 				continue;
-			// remove this when 4.1 plugin API is deprecated
-			if(plugin.equals("EditBuddy.jar")
-				|| plugin.equals("PluginManager.jar")
-				|| plugin.equals("Firewall.jar")
-				|| plugin.equals("Tidy.jar")
-				|| plugin.equals("DragAndDrop.jar"))
-			{
-				pluginError(path,"plugin-error.obsolete",null);
-				continue;
-			}
-
+			
 			addPluginJAR(path);
 		}
 	} //}}}
