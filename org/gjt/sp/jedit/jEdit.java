@@ -23,15 +23,10 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
+import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.DefaultKeyboardFocusManager;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.KeyboardFocusManager;
-import java.awt.Toolkit;
-import java.awt.Window;
+
+import java.awt.*;
 
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
@@ -41,6 +36,7 @@ import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.List;
 
 import org.xml.sax.SAXParseException;
 
@@ -2424,7 +2420,7 @@ public class jEdit
 					index = startupDone.size();
 					startupDone.add(false);
 				}
-				SwingUtilities.invokeLater(new DockingLayoutSetter(
+				EventQueue.invokeLater(new DockingLayoutSetter(
 					newView, config, index));
 			}
 
@@ -2988,9 +2984,9 @@ public class jEdit
 
 	//{{{ pluginError() method
 	/**
-	 *
+	 * @param path
 	 * @param messageProp - a property of a message to print
-	 * @param args a list of arguments whch correspond to {0} and {1} in the string to print.
+	 * @param args a list of arguments which correspond to {0} and {1} in the string to print.
 	 */
 	static void pluginError(String path, String messageProp,
 		Object[] args)
@@ -3004,16 +3000,16 @@ public class jEdit
 				new ErrorListDialog.ErrorEntry(
 				path,messageProp,args);
 
-			for(int i = 0; i < pluginErrors.size(); i++)
+			for (ErrorListDialog.ErrorEntry pluginError : pluginErrors)
 			{
-				if(pluginErrors.get(i).equals(newEntry))
+				if (pluginError.equals(newEntry))
 					return;
 			}
 			pluginErrors.addElement(newEntry);
 
 			if(isStartupDone())
 			{
-				SwingUtilities.invokeLater(new Runnable()
+				EventQueue.invokeLater(new Runnable()
 				{
 					public void run()
 					{
@@ -3340,7 +3336,7 @@ public class jEdit
 
 		// Perhaps if Xerces wasn't slightly brain-damaged, we would
 		// not need this
-		SwingUtilities.invokeLater(new Runnable()
+		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
 			{
@@ -3832,7 +3828,7 @@ public class jEdit
 	private static void finishStartup(final boolean gui, final boolean restore,
 		final boolean newPlainView, final String userDir, final String[] args)
 	{
-		SwingUtilities.invokeLater(new Runnable()
+		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
 			{
