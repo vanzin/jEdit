@@ -426,5 +426,5 @@ class SelectionManager
 			&& x <= selectionStartAndEnd[1];
 	} //}}}
 
-	private TextArea textArea;
+	private final TextArea textArea;
 }
