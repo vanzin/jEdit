@@ -31,6 +31,7 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
 
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.gui.DefaultFocusComponent;
@@ -135,6 +136,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ addNotify() method
+	@Override
 	public void addNotify()
 	{
 		super.addNotify();
@@ -146,6 +148,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ removeNotify() method
+	@Override
 	public void removeNotify()
 	{
 		super.removeNotify();
@@ -160,6 +163,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		// use traverseNodes to process HyperSearchResult nodes
 		traverseNodes(resultTreeRoot, new TreeNodeCallbackAdapter()
 		{
+			@Override
 			public boolean processNode(DefaultMutableTreeNode node)
 			{
 				Object userObject = node.getUserObject();
@@ -310,23 +314,23 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ searchDone() method
-	public void searchDone(final DefaultMutableTreeNode searchNode)
+	public void searchDone(DefaultMutableTreeNode searchNode)
 	{
 		searchDone(searchNode, null);
 	} //}}}
 
 	//{{{ Private members
-	private View view;
+	private final View view;
 
-	private JLabel caption;
+	private final JLabel caption;
 	private final JTree resultTree;
-	private DefaultMutableTreeNode resultTreeRoot;
-	private DefaultTreeModel resultTreeModel;
+	private final DefaultMutableTreeNode resultTreeRoot;
+	private final DefaultTreeModel resultTreeModel;
 
-	private RolloverButton highlight;
-	private RolloverButton clear;
-	private RolloverButton multi;
-	private RolloverButton stop;
+	private final RolloverButton highlight;
+	private final RolloverButton clear;
+	private final RolloverButton multi;
+	private final RolloverButton stop;
 	private boolean multiStatus;
 
 	//{{{ updateHighlightStatus() method
@@ -578,7 +582,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			else
 				i = 0;
 			Match m;
-			Vector<Integer> matches = new Vector<Integer>();
+			List<Integer> matches = new ArrayList<Integer>();
 			while ((m = matcher.nextMatch(s.substring(i), true, true, true, false)) != null)
 			{
 				matches.add(i + m.start);
@@ -592,6 +596,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ KeyHandler class
 	class KeyHandler extends KeyAdapter
 	{
+		@Override
 		public void keyPressed(KeyEvent evt)
 		{
 			switch(evt.getKeyCode())
@@ -628,6 +633,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	class MouseHandler extends MouseAdapter
 	{
 		//{{{ mousePressed() method
+		@Override
 		public void mousePressed(MouseEvent evt)
 		{
 			if(evt.isConsumed())
@@ -878,9 +884,9 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			if (curState)
 				operNodeObj.cacheResultNodes(operNode);
 			operNode.removeAllChildren();
-			Exception excp = null;
 			if (curState)
 			{
+				Exception excp = null;
 				try
 				{
 					operNodeObj.insertTreeNodes(resultTree, operNode);
@@ -914,6 +920,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		
 		traverseNodes(node, new TreeNodeCallbackAdapter()
 		{
+			@Override
 			public boolean processNode(DefaultMutableTreeNode node)
 			{
 				resultTree.expandPath(new TreePath(node.getPath()));
@@ -925,7 +932,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	//{{{ GoToNodeAction class
 	class GoToNodeAction extends AbstractAction
 	{
-		private int mode;
+		private final int mode;
 
 		GoToNodeAction(String labelProp, int mode)
 		{
@@ -955,6 +962,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		} //}}}
 
 		//{{{ getTreeCellRendererComponent() method
+		@Override
 		public Component getTreeCellRendererComponent(JTree tree,
 			Object value, boolean sel, boolean expanded,
 			boolean leaf, int row, boolean hasFocus)
