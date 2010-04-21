@@ -24,7 +24,7 @@ package org.gjt.sp.util;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Vector;
+import java.util.List;
 
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 
@@ -110,7 +110,7 @@ public class HtmlUtilities
 	 *               index of a substring followed by the end index of the substring.
 	 * @return The HTML representation of the string with highlighted substrings. 
 	 */
-	public static String highlightString(String s, String styleTag, Vector<Integer> ranges)
+	public static String highlightString(String s, String styleTag, List<Integer> ranges)
 	{
 		StringBuilder sb = new StringBuilder("<html><style>.highlight {");
 		sb.append(styleTag);
