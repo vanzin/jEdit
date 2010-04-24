@@ -26,6 +26,9 @@ Kazutoshi Satoda and oman002 for contributing to this release.
   cached and reused while holding an instance to the char array
   (Björn "Vampire" Kautler)
 
+- When setting a new message in the status bar in a macro called from the
+  Macro menu the message was cleared immediately (Matthieu Casanova #2964522)
+
 }}}
 {{{ Miscellaneous
 

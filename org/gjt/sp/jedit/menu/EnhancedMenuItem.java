@@ -27,6 +27,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.gui.StatusBar;
 //}}}
 
 /**
@@ -151,20 +152,16 @@ public class EnhancedMenuItem extends JMenuItem
 	class MouseHandler extends MouseAdapter
 	{
 		boolean msgSet = false;
+		private String msg;
 
 		public void mouseReleased(MouseEvent evt)
 		{
-			if(msgSet)
-			{
-				GUIUtilities.getView((Component)evt.getSource())
-					.getStatus().setMessage(null);
-				msgSet = false;
-			}
+			cleanupStatusBar(evt);
 		}
 
 		public void mouseEntered(MouseEvent evt)
 		{
-			String msg = jEdit.getProperty(action + ".mouse-over");
+			msg = jEdit.getProperty(action + ".mouse-over");
 			if(msg != null)
 			{
 				GUIUtilities.getView((Component)evt.getSource())
@@ -175,11 +172,21 @@ public class EnhancedMenuItem extends JMenuItem
 
 		public void mouseExited(MouseEvent evt)
 		{
+			cleanupStatusBar(evt);
+		}
+
+		private void cleanupStatusBar(MouseEvent evt)
+		{
 			if(msgSet)
 			{
-				GUIUtilities.getView((Component)evt.getSource())
-					.getStatus().setMessage(null);
+				StatusBar statusBar = GUIUtilities.getView((Component) evt.getSource())
+					.getStatus();
+				if (msg == statusBar.getMessage())
+				{
+					statusBar.setMessage(null);
+				}
 				msgSet = false;
+				msg = null;
 			}
 		}
 	} //}}}
