@@ -2249,6 +2249,7 @@ helpviewer.toc.copying-doc=GNU Free Documentation License
 helpviewer.toc.copying-apache=Apache License
 helpviewer.toc.copying-plugins=Plugin Licensing Amendment
 helpviewer.toc.plugins=Plugins
+helpviewer.toc.online-apidocs=jEdit API Reference (Online)
 
 helpviewer.search.label=Search
 helpviewer.search.caption=Search for:

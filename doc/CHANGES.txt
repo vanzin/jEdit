@@ -3,9 +3,10 @@ JEDIT 4.3 VERSION HISTORY
 {{{ Version 4.3.2
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Shlomy Reinstein,
-Kazutoshi Satoda and oman002 for contributing to this release.
+Kazutoshi Satoda, oman002, and Eric Le Lay for contributing to this release.
 
 {{{ Bug Fixes
+
 - Fixed Standalone TextArea build target (Shlomy Reinstein)
 
 - Fixed a NPE that happens when an error occurs before the view is loaded
@@ -28,6 +29,9 @@ Kazutoshi Satoda and oman002 for contributing to this release.
 
 - When setting a new message in the status bar in a macro called from the
   Macro menu the message was cleared immediately (Matthieu Casanova #2964522)
+
+- don't log an error when the API docs are not available. Provide a link
+  to the online docs instead (SF.net bug #1777806 - Eric Le Lay)
 
 }}}
 {{{ Miscellaneous
