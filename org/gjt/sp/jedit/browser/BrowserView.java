@@ -81,7 +81,7 @@ class BrowserView extends JPanel
 			parentScroller, tableScroller);
 		splitPane.setOneTouchExpandable(true);
 
-		SwingUtilities.invokeLater(new Runnable()
+		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
 			{
@@ -299,8 +299,7 @@ class BrowserView extends JPanel
 
 		if(browserDir.startsWith(FileRootsVFS.PROTOCOL)
 			&& MiscUtilities.isURL(path)
-			&& !MiscUtilities.getProtocolOfURL(path)
-			.equals("file"))
+			&& !"file".equals(MiscUtilities.getProtocolOfURL(path)))
 			return;
 
 		table.maybeReloadDirectory(path);
@@ -369,7 +368,7 @@ class BrowserView extends JPanel
 				// we use SwingUtilities.invokeLater()
 				// so that the action is executed before
 				// the popup is hidden.
-				SwingUtilities.invokeLater(new Runnable()
+				EventQueue.invokeLater(new Runnable()
 				{
 					public void run()
 					{
@@ -637,7 +636,7 @@ class BrowserView extends JPanel
 						parentDirectories.setSelectedIndex(++row);
 					break;
 				case KeyEvent.VK_LEFT:
-					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0)
+					if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
 					{
 						evt.consume();
 						browser.previousDirectory();
@@ -645,7 +644,7 @@ class BrowserView extends JPanel
 					else super.processEvent(evt);
 					break;
 				case KeyEvent.VK_RIGHT:
-					if ((evt.getModifiers() & KeyEvent.ALT_MASK)>0)
+					if ((evt.getModifiers() & InputEvent.ALT_MASK)>0)
 					{
 						evt.consume();
 						browser.nextDirectory();
@@ -654,7 +653,7 @@ class BrowserView extends JPanel
 					break;
 				case KeyEvent.VK_TAB:
 					evt.consume();
-					if ((evt.getModifiers() & KeyEvent.SHIFT_MASK) > 0)
+					if ((evt.getModifiers() & InputEvent.SHIFT_MASK) > 0)
 						browser.focusOnDefaultComponent();
 					else
 						table.requestFocus();
