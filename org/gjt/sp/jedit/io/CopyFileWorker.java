@@ -23,8 +23,10 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
+
 import java.awt.Component;
 import java.io.IOException;
+
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.WorkRequest;
 //}}}
@@ -32,6 +34,7 @@ import org.gjt.sp.util.WorkRequest;
 /**
  * This worker will copy a file. Be careful it override files if the target
  * already exists
+ *
  * @author Matthieu Casanova
  * @since jEdit 4.3pre13
  */
@@ -39,17 +42,16 @@ public class CopyFileWorker extends WorkRequest
 {
 	private final Component comp;
 	private final String source;
-	
+
 	private final String target;
 
-	
 	//{{{ CopyFileWorker constructor
 	/**
-	 * @param comp the component that will be used as parent in case of error
+	 * @param comp   the component that will be used as parent in case of error
 	 * @param source the source VFS
 	 * @param target the target VFS
 	 */
-	public CopyFileWorker(Component comp, String source, String target) 
+	public CopyFileWorker(Component comp, String source, String target)
 	{
 		if (source == null || target == null)
 			throw new NullPointerException("The source and target cannot be null");
@@ -59,15 +61,22 @@ public class CopyFileWorker extends WorkRequest
 	} //}}}
 
 	//{{{ run() method
-	public void run() 
+	public void run()
 	{
+		Log.log(Log.DEBUG, this, this + ".run()");
 		try
 		{
 			VFS.copy(this, source, target, comp, false);
 		}
 		catch (IOException e)
 		{
-			Log.log(Log.ERROR,this, e, e);
+			Log.log(Log.ERROR, this, e, e);
 		}
 	} //}}}
+
+	@Override
+	public String toString()
+	{
+		return "CopyFileWorker[" + source + ',' + target + ']';
+	}
 }
