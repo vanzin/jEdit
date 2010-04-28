@@ -1210,7 +1210,9 @@ public class MiscUtilities
 	} //}}}
 
 	//{{{ formatFileSize() method
+	@Deprecated
 	public static final DecimalFormat KB_FORMAT = new DecimalFormat("#.# kB");
+	@Deprecated
 	public static final DecimalFormat MB_FORMAT = new DecimalFormat("#.# MB");
 
 	/**
@@ -1218,21 +1220,12 @@ public class MiscUtilities
 	 * 1.2 MB).
 	 * @param length The size
 	 * @since jEdit 4.2pre1
+	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#formatFileSize(long)} 
 	 */
+	@Deprecated
 	public static String formatFileSize(long length)
 	{
-		if(length < 1024)
-		{
-			return length + " Bytes";
-		}
-		else if(length < 1024 << 10)
-		{
-			return KB_FORMAT.format((double)length / 1024);
-		}
-		else
-		{
-			return MB_FORMAT.format((double)length / 1024 / 1024);
-		}
+		return StandardUtilities.formatFileSize(length);
 	} //}}}
 
 	//{{{ getLongestPrefix() methods

@@ -27,6 +27,7 @@ package org.gjt.sp.util;
 
 //{{{ Imports
 import javax.swing.text.Segment;
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.Stack;
 //}}}
@@ -40,10 +41,7 @@ import java.util.Stack;
  */
 public class StandardUtilities
 {
-
-	//{{{ Text methods
-
-	//{{{ charsToEscapes() method
+	//{{{ charsToEscapes() methods
 	/**
 	 * Escapes newlines, tabs, backslashes, and quotes in the specified
 	 * string.
@@ -53,9 +51,8 @@ public class StandardUtilities
 	public static String charsToEscapes(String str)
 	{
 		return charsToEscapes(str,"\n\t\\\"'");
-	} //}}}
+	}
 
-	//{{{ charsToEscapes() method
 	/**
 	 * Escapes the specified characters in the specified string.
 	 * @param str The string
@@ -106,7 +103,7 @@ public class StandardUtilities
 
 	} //}}}
 
-	//{{{ getLeadingWhiteSpace() method
+	//{{{ getLeadingWhiteSpace() methods
 	/**
 	 * Returns the number of leading white space characters in the
 	 * specified string.
@@ -116,9 +113,8 @@ public class StandardUtilities
 	public static int getLeadingWhiteSpace(String str)
 	{
 		return getLeadingWhiteSpace((CharSequence)str);
-	} //}}}
+	}
 
-	//{{{ getLeadingWhiteSpace() method
 	/**
 	 * Returns the number of leading white space characters in the
 	 * specified string.
@@ -168,7 +164,7 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 		return whitespace;
 	} //}}}
 
-	//{{{ getLeadingWhiteSpaceWidth() method
+	//{{{ getLeadingWhiteSpaceWidth() methods
 	/**
 	 * Returns the width of the leading white space in the specified
 	 * string.
@@ -178,9 +174,8 @@ loop:		for(int i = str.length() - 1; i >= 0; i--)
 	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
 	{
 		return getLeadingWhiteSpaceWidth((CharSequence)str, tabSize);
-	} //}}}
+	}
 
-	//{{{ getLeadingWhiteSpaceWidth() method
 	/**
 	 * Returns the width of the leading white space in the specified
 	 * string.
@@ -703,6 +698,32 @@ loop:		for(int i = 0; i < str.length(); i++)
 			return false;
 
 		return def;
+	} //}}}
+
+	//{{{ formatFileSize() method
+	public static final DecimalFormat KB_FORMAT = new DecimalFormat("#.# kB");
+	public static final DecimalFormat MB_FORMAT = new DecimalFormat("#.# MB");
+
+	/**
+	 * Formats the given file size into a nice string (123 Bytes, 10.6 kB,
+	 * 1.2 MB).
+	 * @param length The size
+	 * @since jEdit 4.4pre1
+	 */
+	public static String formatFileSize(long length)
+	{
+		if(length < 1024)
+		{
+			return length + " Bytes";
+		}
+		else if(length < 1024 << 10)
+		{
+			return KB_FORMAT.format((double)length / 1024);
+		}
+		else
+		{
+			return MB_FORMAT.format((double)length / 1024 / 1024);
+		}
 	} //}}}
 
 	//}}}

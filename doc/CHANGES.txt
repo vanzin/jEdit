@@ -77,6 +77,9 @@ and Marcelo Vanzin for contributing to this release.
 }}}
 {{{ API changes
 
+- Method MiscUtilities.formatFileSize() moved to StandardUtilities
+  (Matthieu Casanova)
+
 - New method E ServiceManager.getService(Class<E> clazz, String name) to get
   service instance (Matthieu Casanova)
 
