@@ -6,7 +6,7 @@ jEdit 4.4 version history
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler, Kevin Hunter, FranÃÂ§ois Rey,
+Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
@@ -89,7 +89,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Removed deprecated objectfactory xml parser.
 
-- File System Browser dynamic menu support (#2938170 - FranÃÂ§ois Rey)
+- File System Browser dynamic menu support (#2938170 - François Rey)
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
