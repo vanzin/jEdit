@@ -22,6 +22,8 @@
 
 package org.gjt.sp.util;
 
+import org.gjt.sp.jedit.MiscUtilities;
+
 import java.io.*;
 
 /**
@@ -104,7 +106,10 @@ public class IOUtilities
 			out.write(buffer, 0, n);
 			copied += n;
 			if(progress != null)
+			{
+				progress.setStatus(MiscUtilities.formatFileSize(copied));
 				progress.setValue(copied);
+			}
 			if(canStop && Thread.interrupted()) return false;
 		}
 		return true;
