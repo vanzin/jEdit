@@ -33,6 +33,9 @@ Kazutoshi Satoda, oman002, and Eric Le Lay for contributing to this release.
 - don't log an error when the API docs are not available. Provide a link
   to the online docs instead (SF.net bug #1777806 - Eric Le Lay)
 
+- RFC edit mode was misplaced in catalog and was never matching anything because
+  text edit mode glob was more global and checked first (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 

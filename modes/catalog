@@ -399,9 +399,6 @@
 				FILE_NAME_GLOB="*.{rst,rest}"
 				FIRST_LINE_GLOB="{===,~~~}*"/>
 
-<MODE NAME="rfc"		FILE="rfc.xml"
-				FILE_NAME_GLOB="rfc*.txt" />
-
 <MODE NAME="rhtml"		FILE="rhtml.xml"
 				FILE_NAME_GLOB="*.rhtml" />
 
@@ -486,6 +483,11 @@
 
 <MODE NAME="text"		FILE="text.xml"
 				FILE_NAME_GLOB="*.txt" />
+
+<!-- This mode MUST be placed after text mode
+     because filename globs are checked in reverse order -->
+<MODE NAME="rfc"		FILE="rfc.xml"
+				FILE_NAME_GLOB="rfc*.txt" />
 
 <MODE NAME="tsp"		FILE="tsp.xml"
 				FILE_NAME_GLOB="*.tsp" />
