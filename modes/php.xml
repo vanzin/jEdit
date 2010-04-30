@@ -2525,6 +2525,7 @@ TODO:
 			<KEYWORD2>mdecrypt_generic</KEYWORD2>
 			<KEYWORD2>memcache_debug</KEYWORD2>
 			<KEYWORD2>memory_get_usage</KEYWORD2>
+			<KEYWORD2>memory_get_peak_usage</KEYWORD2>
 			<KEYWORD2>metaphone</KEYWORD2>
 			<KEYWORD2>method_exists</KEYWORD2>
 			<KEYWORD2>mhash</KEYWORD2>
