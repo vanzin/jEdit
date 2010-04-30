@@ -6,7 +6,7 @@ jEdit 4.4 version history
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
+Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
@@ -133,6 +133,8 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Editing
+
+- Added haxe.xml mode file to support haXe language (Dion Whitehead)
 
 - When pasting text copied from the textarea, if the target textarea has
   no edit mode, the edit mode from the source is copied (Matthieu Casanova)
