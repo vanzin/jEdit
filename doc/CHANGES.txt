@@ -35,6 +35,9 @@ Kazutoshi Satoda, oman002, and Eric Le Lay for contributing to this release.
 
 - RFC edit mode was misplaced in catalog and was never matching anything because
   text edit mode glob was more global and checked first (Matthieu Casanova)
+  
+- Applied patch #2932330 to suppress BufferUpdate messages from temporary
+  buffers to improve performance. (Dale Anson)
 
 }}}
 {{{ Miscellaneous
