@@ -129,6 +129,8 @@ public class KeyEventTranslator
 					// do a "<space> to insert ".
 					if((modifiers & ~InputEvent.SHIFT_MASK) == 0)
 						returnValue = null;
+                    else if (Debug.ALTERNATIVE_DISPATCHER && (modifiers & ~InputEvent.META_MASK) == 0)
+                        returnValue = null;
 					else
 					{
 						returnValue = new Key(
@@ -157,7 +159,11 @@ public class KeyEventTranslator
 			case '\b':
 				return null;
 			case ' ':
-				if((modifiers & ~InputEvent.SHIFT_MASK) != 0)
+                if (Debug.ALTERNATIVE_DISPATCHER && (modifiers & ~InputEvent.META_MASK) == 0)
+                    returnValue = new Key(
+                        modifiersToString(modifiers),
+                        0,' ');
+				else if((modifiers & ~InputEvent.SHIFT_MASK) != 0)
 					return null;
 			}
 
