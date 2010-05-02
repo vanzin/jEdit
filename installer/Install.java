@@ -28,7 +28,7 @@ public class Install
 	 * This has been reported as a cause of failure on Linux and MS Windows :
 	 * see bug #2065330 - Installer doesn't run on dir having ! as last char in name.
 	 */
-	public static boolean isRunningFromExclam()
+	private static boolean isRunningFromExclam()
 	{
 		Class me = Install.class;
 		ProtectionDomain domaine = me.getProtectionDomain();
@@ -39,48 +39,45 @@ public class Install
 		return mySource.toString().contains("!");		
 	}
 	
+	private static void errorAndExit(boolean isGUI, String message)
+	{
+		if(isGUI)
+		{
+			JTextArea messageCnt = new JTextArea(message);
+			JOptionPane.showMessageDialog(null,
+				messageCnt,
+				"jEdit installer error...", JOptionPane.ERROR_MESSAGE); 
+		}
+		else
+		{
+			System.err.println(message);
+		}
+		System.exit(1);
+	}
+	
 	public static void main(String[] args)
 	{
+		boolean isGUI = args.length == 0;
 		
 		String javaVersion = System.getProperty("java.version");
 		if(javaVersion.compareTo("1.5") < 0)
 		{
-			String message = "You are running Java version "
+			errorAndExit(isGUI,
+					  "You are running Java version "
 					+ javaVersion + " from "+System.getProperty("java.vendor")+".\n"
-					+"This installer requires Java 1.5 or later.";
-			if(args.length == 0)
-			{
-				JOptionPane.showMessageDialog(null,
-					message,
-					"jEdit installer...", JOptionPane.ERROR_MESSAGE); 
-			}
-			else
-			{
-				System.err.println(message);
-			}
-			System.exit(1);
+					+"This installer requires Java 1.5 or later.");
 		}
 
 		if(isRunningFromExclam())
 		{
-			String message = "You are running the installer"
-					+"\nfrom a directory with exclamation mark in it."
-					+ "\nIt is a known cause of failure of the installer,"
-					+ "\nplease move the installer somewhere else and run it again.";
-			if(args.length == 0)
-			{
-				JOptionPane.showMessageDialog(null,
-					message,
-					"jEdit installer...", JOptionPane.ERROR_MESSAGE); 
-			}
-			else
-			{
-				System.err.println(message);
-			}
-			System.exit(1);
+			errorAndExit(isGUI,
+					  "You are running the installer from a directory containing exclamation marks."
+					+ "\nIt is a known cause of failure of the installer"
+					+ "\n(http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4523159 for the curious ones)."
+					+ "\nPlease move the installer somewhere else and run it again.");
 		}
 
-		if(args.length == 0)
+		if(isGUI)
 			new SwingInstall();
 		else if(args.length == 1 && args[0].equals("text"))
 			new ConsoleInstall();
