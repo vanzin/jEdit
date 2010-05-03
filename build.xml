@@ -35,6 +35,8 @@
 			  location="${build.dir}/classes" />
 	<property name="jar.location"
 			  location="${build.dir}" />
+	<property name="docbook.catalog"
+			  value="${config.docbook.catalog}"/>
 
 	<property name="textAreaPackage" location="../textarea" />
 	<!-- Various Filenames -->
@@ -58,6 +60,8 @@
 			  value="true" />
 	<property name="config.build.compilerarg"
 			  value="-Xlint:unchecked" />
+	<property name="docbook.catalog.debug"
+			  value="1"/>
 
 	<!-- Cygwin detection (xsltproc needs special arguments) -->
 	<dirname property="xsltproc.dir" file="${config.xsltproc.executable}" />
@@ -328,6 +332,7 @@
 			  fork="true"
 			  spawn="true"
 			  maxmemory="192M">
+			 <sysproperty key="xml.catalog.verbosity" value="9"/>
 			<arg value="-settings=${build.dir}/settings" />
 		</java>
 	</target>
@@ -389,6 +394,8 @@
 			<arg value="../${doc.output.location}/FAQ/" />
 			<arg value="jedithtml.xsl" />
 			<arg value="FAQ/faq.xml" />
+			<env key="XML_CATALOG_FILES" value="${docbook.catalog}" />
+			<env key="XML_DEBUG_CATALOG" value="${docbook.catalog.debug}" />
 		</exec>
 	</target>
 
@@ -407,6 +414,8 @@
 			<arg value="../${doc.output.location}/news44/" />
 			<arg value="jedithtml.xsl" />
 			<arg value="news44/news.xml" />
+			<env key="XML_CATALOG_FILES" value="${docbook.catalog}" />
+			<env key="XML_DEBUG_CATALOG" value="${docbook.catalog.debug}" />
 		</exec>
 	</target>
 
@@ -425,6 +434,8 @@
 			<arg value="../${doc.output.location}/users-guide/" />
 			<arg value="jedithtml.xsl" />
 			<arg value="users-guide/users-guide.xml" />
+			<env key="XML_CATALOG_FILES" value="${docbook.catalog}" />
+			<env key="XML_DEBUG_CATALOG" value="${docbook.catalog.debug}" />
 		</exec>
 	</target>
 
