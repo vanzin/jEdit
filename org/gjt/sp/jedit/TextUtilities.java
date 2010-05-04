@@ -48,6 +48,10 @@ public class TextUtilities
 {
 	// to avoid slowdown with large files; only scan 10000 lines either way
 	public static final int BRACKET_MATCH_LIMIT = 10000;
+	public static final int WHITESPACE = 0;
+	public static final int WORD_CHAR = 1;
+	public static final int SYMBOL = 2;
+
 
 	//{{{ getTokenAtOffset() method
 	/**
@@ -246,36 +250,7 @@ public class TextUtilities
 		return -1;
 	} //}}}
 
-	//{{{ findWordStart() method
-	/**
-	 * Locates the start of the word at the specified position.
-	 * @param line The text
-	 * @param pos The position
-	 * @param noWordSep Characters that are non-alphanumeric, but
-	 * should be treated as word characters anyway
-	 */
-	public static int findWordStart(String line, int pos, String noWordSep)
-	{
-		return findWordStart(line, pos, noWordSep, true, false);
-	} //}}}
-
-	//{{{ findWordStart() method
-	/**
-	 * Locates the start of the word at the specified position.
-	 * @param line The text
-	 * @param pos The position
-	 * @param noWordSep Characters that are non-alphanumeric, but
-	 * should be treated as word characters anyway
-	 * @since jEdit 4.3pre15
-	 */
-	public static int findWordStart(CharSequence line,
-					int pos,
-					String noWordSep)
-	{
-		return findWordStart(line, pos, noWordSep, true, false, false);
-	} //}}}
-
-
+	//{{{ join() method
 	/** Similar to perl's join() method on lists,
 	 *    but works with all collections.
 	 *
@@ -299,9 +274,36 @@ public class TextUtilities
 			retval.append(itr.next());
 		}
 		return retval.toString();
+	} //}}}
+
+	//{{{ findWordStart() methods
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 */
+	public static int findWordStart(String line, int pos, String noWordSep)
+	{
+		return findWordStart(line, pos, noWordSep, true, false);
 	}
 
-	//{{{ findWordStart() method
+	/**
+	 * Locates the start of the word at the specified position.
+	 * @param line The text
+	 * @param pos The position
+	 * @param noWordSep Characters that are non-alphanumeric, but
+	 * should be treated as word characters anyway
+	 * @since jEdit 4.3pre15
+	 */
+	public static int findWordStart(CharSequence line,
+					int pos,
+					String noWordSep)
+	{
+		return findWordStart(line, pos, noWordSep, true, false, false);
+	}
+
 	/**
 	 * Locates the start of the word at the specified position.
 	 * @param line The text
@@ -316,9 +318,8 @@ public class TextUtilities
 		boolean joinNonWordChars)
 	{
 		return findWordStart(line,pos,noWordSep,joinNonWordChars,false);
-	} //}}}
+	}
 
-	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.
 	 * @param line The text
@@ -333,10 +334,10 @@ public class TextUtilities
 	public static int findWordStart(String line, int pos, String noWordSep,
 		boolean joinNonWordChars, boolean eatWhitespace)
 	{
-		return findWordStart(line, pos, noWordSep, joinNonWordChars, false, eatWhitespace);
-	} //}}}
+		return findWordStart(line, pos, noWordSep, joinNonWordChars,
+			false, eatWhitespace);
+	}
 
-	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.
 	 * @param line The text
@@ -356,9 +357,8 @@ public class TextUtilities
 		return findWordStart((CharSequence) line, pos, noWordSep,
 				     joinNonWordChars, camelCasedWords,
 				     eatWhitespace);
-	} //}}}
+	}
 
-	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.
 	 * @param line The text
@@ -379,9 +379,8 @@ public class TextUtilities
 					boolean eatWhitespace)
 	{
 		return findWordStart(line, pos, noWordSep, joinNonWordChars, camelCasedWords, eatWhitespace, false);
-	} //}}}
+	}
 
-	//{{{ findWordStart() method
 	/**
 	 * Locates the start of the word at the specified position.
 	 * @param line The text
@@ -494,7 +493,7 @@ public class TextUtilities
 		return 0;
 	} //}}}
 
-	//{{{ findWordEnd() method
+	//{{{ findWordEnd() methods
 	/**
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
@@ -505,9 +504,8 @@ public class TextUtilities
 	public static int findWordEnd(String line, int pos, String noWordSep)
 	{
 		return findWordEnd(line, pos, noWordSep, true);
-	} //}}}
+	}
 
-	//{{{ findWordEnd() method
 	/**
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
@@ -521,9 +519,8 @@ public class TextUtilities
 				      String noWordSep)
 	{
 		return findWordEnd(line, pos, noWordSep, true, false, false);
-	} //}}}
+	}
 
-	//{{{ findWordEnd() method
 	/**
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
@@ -538,9 +535,8 @@ public class TextUtilities
 		boolean joinNonWordChars)
 	{
 		return findWordEnd(line,pos,noWordSep,joinNonWordChars,false);
-	} //}}}
+	}
 
-	//{{{ findWordEnd() method
 	/**
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
@@ -555,10 +551,10 @@ public class TextUtilities
 	public static int findWordEnd(String line, int pos, String noWordSep,
 		boolean joinNonWordChars, boolean eatWhitespace)
 	{
-		return findWordEnd(line, pos, noWordSep, joinNonWordChars, false, eatWhitespace);
-	} //}}}
+		return findWordEnd(line, pos, noWordSep, joinNonWordChars,
+			false, eatWhitespace);
+	}
 
-	//{{{ findWordEnd() method
 	/**
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
@@ -578,9 +574,8 @@ public class TextUtilities
 		return findWordEnd((CharSequence)line, pos, noWordSep,
 				   joinNonWordChars, camelCasedWords,
 				   eatWhitespace);
-	} //}}}
+	}
 
-	//{{{ findWordEnd() method
 	/**
 	 * Locates the end of the word at the specified position.
 	 * @param line The text
@@ -684,15 +679,18 @@ public class TextUtilities
 		return line.length();
 	} //}}}
 
+	//{{{ getCharType() method
 	/**
 	 * Returns the type of the char.
 	 *
 	 * @param ch the character
 	 * @param noWordSep Characters that are non-alphanumeric, but
-	 * should be treated as word characters anyway
-	 * @return the type of the char : {@link #WHITESPACE}, {@link #WORD_CHAR}, {@link #SYMBOL}
+	 * should be treated as word characters anyway, it must not be null
+	 * @return the type of the char : {@link #WHITESPACE},
+	 * {@link #WORD_CHAR}, {@link #SYMBOL}
+	 * @since jEdit 4.4pre1
 	 */
-	private static int getCharType(char ch, String noWordSep)
+	public static int getCharType(char ch, String noWordSep)
 	{
 		int type;
 		if(Character.isWhitespace(ch))
@@ -703,7 +701,8 @@ public class TextUtilities
 		else
 			type = SYMBOL;
 		return type;
-	}
+	} //}}}
+
 
 	//{{{ spacesToTabs() method
 	/**
@@ -945,10 +944,6 @@ public class TextUtilities
 	} //}}}
 
 	//{{{ Private members
-	private static final int WHITESPACE = 0;
-	private static final int WORD_CHAR = 1;
-	private static final int SYMBOL = 2;
-
 	//{{{ formatParagraph() method
 	private static void formatParagraph(String text, int maxLineLength,
 		int tabSize, StringBuilder buf)

@@ -76,6 +76,7 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ API changes
+- Made method TextUtilities.getCharType() public (Matthieu Casanova)
 
 - Method MiscUtilities.formatFileSize() moved to StandardUtilities
   (Matthieu Casanova)
@@ -199,7 +200,7 @@ and Marcelo Vanzin for contributing to this release.
   user-specific catalog will override the system default.  This is what the
   documentation for writing an edit mode has stated is true for some time, now
   it is. (Dale Anson)
-  
+
 - Gave better priorities within modes which matches with a file at the
   same time, as the following order.
 
