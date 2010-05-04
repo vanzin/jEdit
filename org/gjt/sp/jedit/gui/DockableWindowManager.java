@@ -6,12 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 import java.util.Map.Entry;
 
 import javax.swing.JComponent;
@@ -623,11 +618,13 @@ import org.gjt.sp.util.Log;
 	class KeyHandler extends KeyAdapter
 	{
 		static final String action = "close-docking-area";
-		Vector<Key> b1, b2;
-		String name;
-		int match1, match2;
+		private List<Key> b1;
+		private List<Key> b2;
+		private final String name;
+		private int match1;
+		private int match2;
 
-		public KeyHandler(String dockableName)
+		KeyHandler(String dockableName)
 		{
 			String shortcut1=jEdit.getProperty(action + ".shortcut");
 			String shortcut2=jEdit.getProperty(action + ".shortcut2");
@@ -654,7 +651,7 @@ import org.gjt.sp.util.Log;
 			}
 		}
 
-		private int match(KeyEvent e, Vector<Key> shortcut, int index)
+		private int match(KeyEvent e, List<Key> shortcut, int index)
 		{
 			char c = e.getKeyChar();
 			if (shortcut != null && c == shortcut.get(index).key)
@@ -662,10 +659,10 @@ import org.gjt.sp.util.Log;
 			return 0;
 		}
 
-		private Vector<Key> parseShortcut(String shortcut)
+		private List<Key> parseShortcut(String shortcut)
 		{
-			Vector<Key> keys = new Vector<Key>();
 			String [] parts = shortcut.split("\\s+");
+			List<Key> keys = new ArrayList<Key>(parts.length);
 			for (String part: parts)
 			{
 				if (part.length() > 0)
