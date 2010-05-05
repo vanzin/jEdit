@@ -1368,7 +1368,7 @@
 			<filter token="target.java.version"
 					value="${target.java.version}" />
 		</filterset>
-		<copy file="package-files/windows/jEdit.launch4j.xml"
+		<copy file="package-files/windows/jedit.launch4j.xml"
 			  tofile="${config.dist.dir}/classes/package-files/windows/jedit.launch4j.xml"
 			  overwrite="true">
 			<filterset refid="dist-win-exe-config-params" />
@@ -1377,7 +1377,7 @@
 						value="-reuseview" />
 			</filterset>
 		</copy>
-		<launch4j configFile="${config.dist.dir}/classes/package-files/windows/jEdit.launch4j.xml"
+		<launch4j configFile="${config.dist.dir}/classes/package-files/windows/jedit.launch4j.xml"
 				  outfile="${config.dist.dir}/classes/package-files/windows/jedit.exe" />
 	</target>
 
