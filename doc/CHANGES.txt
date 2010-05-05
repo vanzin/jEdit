@@ -39,6 +39,9 @@ Kazutoshi Satoda, oman002, and Eric Le Lay for contributing to this release.
 - Applied patch #2932330 to suppress BufferUpdate messages from temporary
   buffers to improve performance. (Dale Anson)
 
+- java installer refuses to install from a directory containing exclamation
+  marks (SF.net bug #2065330 - Eric Le Lay)
+
 }}}
 {{{ Miscellaneous
 

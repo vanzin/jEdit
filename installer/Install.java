@@ -17,32 +17,67 @@ import javax.swing.plaf.metal.*;
 import javax.swing.*;
 import java.io.*;
 import java.util.Properties;
+import java.security.*;
+import java.net.URL;
 
 public class Install
 {
+	/**
+	 * detects wether the installer is running from a path
+	 * containing exclamation marks.
+	 * This has been reported as a cause of failure on Linux and MS Windows :
+	 * see bug #2065330 - Installer doesn't run on dir having ! as last char in name.
+	 */
+	private static boolean isRunningFromExclam()
+	{
+		Class me = Install.class;
+		ProtectionDomain domaine = me.getProtectionDomain();
+		CodeSource source = domaine.getCodeSource();
+		URL mySource = source.getLocation();
+		// In fact the check is more restrictive than required :
+		// a problem occurs only when the ! is at the end of directory
+		return mySource.toString().contains("!");		
+	}
+	
+	private static void errorAndExit(boolean isGUI, String message)
+	{
+		if(isGUI)
+		{
+			JTextArea messageCnt = new JTextArea(message);
+			JOptionPane.showMessageDialog(null,
+				messageCnt,
+				"jEdit installer error...", JOptionPane.ERROR_MESSAGE); 
+		}
+		else
+		{
+			System.err.println(message);
+		}
+		System.exit(1);
+	}
+	
 	public static void main(String[] args)
 	{
+		boolean isGUI = args.length == 0;
 		
 		String javaVersion = System.getProperty("java.version");
 		if(javaVersion.compareTo("1.5") < 0)
 		{
-			String message = "You are running Java version "
+			errorAndExit(isGUI,
+					  "You are running Java version "
 					+ javaVersion + " from "+System.getProperty("java.vendor")+".\n"
-					+"This installer requires Java 1.5 or later.";
-			if(args.length == 0)
-			{
-				JOptionPane.showMessageDialog(null,
-					message,
-					"jEdit installer...", JOptionPane.ERROR_MESSAGE); 
-			}
-			else
-			{
-				System.err.println(message);
-			}
-			System.exit(1);
+					+"This installer requires Java 1.5 or later.");
 		}
 
-		if(args.length == 0)
+		if(isRunningFromExclam())
+		{
+			errorAndExit(isGUI,
+					  "You are running the installer from a directory containing exclamation marks."
+					+ "\nIt is a known cause of failure of the installer"
+					+ "\n(http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4523159 for the curious ones)."
+					+ "\nPlease move the installer somewhere else and run it again.");
+		}
+
+		if(isGUI)
 			new SwingInstall();
 		else if(args.length == 1 && args[0].equals("text"))
 			new ConsoleInstall();
