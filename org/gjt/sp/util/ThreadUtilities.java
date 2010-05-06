@@ -137,7 +137,7 @@ public class ThreadUtilities
 		{
 			runnable.run();
 			done = true;
-			synchronized (runnable)
+			synchronized (this)
 			{
 				notifyAll();
 			}
