@@ -76,13 +76,16 @@ public class TaskMonitor  extends JPanel implements TaskListener
 
 	public void statusUpdated(Task task)
 	{
+		repaint();
 	}
 
 	public void maximumUpdated(Task task)
 	{
+		repaint();
 	}
 
 	public void valueUpdated(Task task)
 	{
+		repaint();
 	}
 }
