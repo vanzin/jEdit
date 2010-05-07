@@ -133,11 +133,6 @@ public class MiscUtilities
 					}
 				path = path.substring(0,trim);
 		}
-		else if(OperatingSystem.isMacOS())
-		{
-			// do the same on OS X
-			path = path.replace(':','/');
-		}
 
 		if(path.startsWith('~' + File.separator))
 		{
