@@ -949,7 +949,7 @@ public class jEdit
 			buffer = buffer.next;
 		}
 
-		HistoryModel.setMax(getIntegerProperty("history",25));
+		HistoryModel.setDefaultMax(getIntegerProperty("history",25));
 		KillRing.getInstance().propertiesChanged(getIntegerProperty("history",25));
 		Chunk.propertiesChanged(propertyManager);
 

@@ -133,6 +133,10 @@ and Marcelo Vanzin for contributing to this release.
 - Added StyleEditor.invokeForCaret(textArea) which does same as
   buffer.editSyntaxStyle(textArea) did, but can be invoked without
   specifying the buffer object carefully. (Kazutoshi Satoda)
+  
+- HistoryModel's max size is no more defined globally : replaced the static
+  max variable by a per-instance max variable and a static defaultMax variable
+  (Eric Le Lay)
 
 }}}
 {{{ Editing
