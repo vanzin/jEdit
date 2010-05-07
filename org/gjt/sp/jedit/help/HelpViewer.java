@@ -262,7 +262,12 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 			historyModel.setCurrentScrollPosition(viewer.getPage(),getCurrentScrollPosition());
 			
 			/* call setPage asynchronously, because it can block when
-			   one can't connect to host */
+			   one can't connect to host.
+			   Calling setPage outside from the EDT may lead to NPE :
+			   see http://bugs.sun.com/view_bug.do?bug_id=4714674
+			   Once jEdit sets JDK 7 as dependency, all this should be
+			   reverted to synchronous code.
+			 */
 			Thread t = new Thread()
 			{
 				public void run()
