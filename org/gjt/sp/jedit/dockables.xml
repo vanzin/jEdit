@@ -21,4 +21,8 @@
 	<DOCKABLE NAME="io-progress-monitor" MOVABLE="TRUE">
 		new IOProgressMonitor();
 	</DOCKABLE>
+
+	<DOCKABLE NAME="task-monitor" MOVABLE="TRUE">
+		new TaskMonitor();
+	</DOCKABLE>
 </DOCKABLES>

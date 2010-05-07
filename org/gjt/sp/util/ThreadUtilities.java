@@ -82,7 +82,17 @@ public class ThreadUtilities
 	 */
 	public static void runInBackground(Runnable runnable)
 	{
-		threadPool.execute(runnable);
+		Task task;
+		if (runnable instanceof Task)
+		{
+			task = (Task) runnable;
+		}
+		else
+		{
+			task = TaskManager.decorate(runnable);
+		}
+		TaskManager.instance.fireWaiting(task);
+		threadPool.execute(task);
 	} //}}}
 
 	private ThreadUtilities()

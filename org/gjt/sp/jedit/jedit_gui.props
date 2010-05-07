@@ -717,6 +717,7 @@ troubleshooting=log-viewer \
 		update-log \
 		- \
 		io-progress-monitor \
+		task-monitor \
 		keyboard-tester \
 		memory-status \
 		reload-modes
@@ -724,6 +725,7 @@ troubleshooting.label=$Troubleshooting
 log-viewer.label=$Activity Log
 update-log.label=$Update Activity Log on Disk
 io-progress-monitor.label=$I/O Progress
+task-monitor.label=$Task Monitor
 keyboard-tester.label=$Keyboard Tester...
 memory-status.label=$Memory Status...
 reload-modes.label=$Reload Edit Modes
@@ -2322,6 +2324,10 @@ abort.message=Are you sure you want to abort the currently executing\n\
 	result in data loss.
 #}}}
 
+#}}}
+
+#{{{ Task  monitor
+tasks-monitor.title=Task Monitor
 #}}}
 
 #{{{ VFS browser
