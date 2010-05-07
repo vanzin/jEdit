@@ -71,6 +71,7 @@ public class IOProgressMonitor extends JPanel
 	} //}}}
 
 	//{{{ addNotify() method
+	@Override
 	public void addNotify()
 	{
 		VFSManager.getIOThreadPool().addProgressListener(workThreadHandler);
@@ -78,6 +79,7 @@ public class IOProgressMonitor extends JPanel
 	} //}}}
 
 	//{{{ removeNotify() method
+	@Override
 	public void removeNotify()
 	{
 		VFSManager.getIOThreadPool().removeProgressListener(workThreadHandler);
@@ -87,9 +89,9 @@ public class IOProgressMonitor extends JPanel
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private JLabel caption;
-	private ThreadProgress[] threads;
-	private WorkThreadHandler workThreadHandler;
+	private final JLabel caption;
+	private final ThreadProgress[] threads;
+	private final WorkThreadHandler workThreadHandler;
 	//}}}
 
 	//{{{ updateCaption() method
@@ -105,9 +107,9 @@ public class IOProgressMonitor extends JPanel
 	//{{{ WorkThreadHandler class
 	class WorkThreadHandler implements WorkThreadProgressListener
 	{
-		public void statusUpdate(final WorkThreadPool threadPool, final int threadIndex)
+		public void statusUpdate(WorkThreadPool threadPool, final int threadIndex)
 		{
-			SwingUtilities.invokeLater(new Runnable()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 			{
 				public void run()
 				{
@@ -117,9 +119,9 @@ public class IOProgressMonitor extends JPanel
 			});
 		}
 
-		public void progressUpdate(final WorkThreadPool threadPool, final int threadIndex)
+		public void progressUpdate(WorkThreadPool threadPool, final int threadIndex)
 		{
-			SwingUtilities.invokeLater(new Runnable()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 			{
 				public void run()
 				{
@@ -134,7 +136,7 @@ public class IOProgressMonitor extends JPanel
 	class ThreadProgress extends JPanel
 	{
 		//{{{ ThreadProgress constructor
-		public ThreadProgress(int index)
+		ThreadProgress(int index)
 		{
 			super(new BorderLayout(12,12));
 
@@ -145,11 +147,11 @@ public class IOProgressMonitor extends JPanel
 			box.add(progress = new JProgressBar());
 			progress.setStringPainted(true);
 			box.add(Box.createGlue());
-			ThreadProgress.this.add(BorderLayout.CENTER,box);
+			add(BorderLayout.CENTER,box);
 
 			abort = new JButton(jEdit.getProperty("io-progress-monitor.abort"));
 			abort.addActionListener(new ActionHandler());
-			ThreadProgress.this.add(BorderLayout.EAST,abort);
+			add(BorderLayout.EAST,abort);
 
 			update();
 		} //}}}
@@ -188,9 +190,9 @@ public class IOProgressMonitor extends JPanel
 		} //}}}
 
 		//{{{ Private members
-		private int index;
-		private JProgressBar progress;
-		private JButton abort;
+		private final int index;
+		private final JProgressBar progress;
+		private final JButton abort;
 		//}}}
 
 		//{{{ ActionHandler class
