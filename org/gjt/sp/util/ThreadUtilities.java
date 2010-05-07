@@ -36,7 +36,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ThreadUtilities
 {
 	//{{{ runInDispatchThread() method
-
 	/**
 	 * Run the runnable in EventDispatch Thread.
 	 * If the current thread is EventDispatch, it will run
@@ -45,7 +44,6 @@ public class ThreadUtilities
 	 * this one will not wait for IO Request before being executed
 	 *
 	 * @param runnable the runnable to run
-	 * @since jEdit 4.4pre1
 	 */
 	public static void runInDispatchThread(Runnable runnable)
 	{
@@ -55,10 +53,11 @@ public class ThreadUtilities
 			EventQueue.invokeLater(runnable);
 	} //}}}
 
-	public static void executeAndWait(Runnable runnable)
+	//{{{ runInDispatchThreadAndWait() method
+	public static void runInDispatchThreadAndWait(Runnable runnable)
 	{
 		MyRunnable run = new MyRunnable(runnable);
-		execute(run);
+		runInBackground(run);
 		while (!run.done)
 		{
 			synchronized (run)
@@ -73,17 +72,15 @@ public class ThreadUtilities
 				}
 			}
 		}
-	}
+	} //}}}
 
 	//{{{ execute() method
-
 	/**
 	 * Run the runnable in the threadpool.
 	 *
 	 * @param runnable the runnable to run
-	 * @since jEdit 4.4pre1
 	 */
-	public static void execute(Runnable runnable)
+	public static void runInBackground(Runnable runnable)
 	{
 		threadPool.execute(runnable);
 	} //}}}
@@ -94,7 +91,6 @@ public class ThreadUtilities
 
 	private static class JEditThreadFactory implements ThreadFactory
 	{
-
 		private JEditThreadFactory()
 		{
 			threadIDs = new AtomicInteger(0);
