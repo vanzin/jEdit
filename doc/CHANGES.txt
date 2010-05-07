@@ -74,6 +74,8 @@ and Marcelo Vanzin for contributing to this release.
   cached and reused while holding an instance to the char array
   (Björn "Vampire" Kautler)
 
+- Don't replace colons by slashes in canonPath() on Mac OS X
+  (SF.net bug #1488911 - Eric Le Lay - r17754)
 }}}
 {{{ API changes
 - Made method TextUtilities.getCharType() public (Matthieu Casanova)
