@@ -1797,7 +1797,7 @@ options.general.restore.remote=... including remote files over VFS
 options.general.restore.cli=... including file names specified on the command line
 options.general.encodingDetectors=List of encoding autodetectors:
 options.general.fallbackEncodings=List of fallback encodings:
-options.general.fallbackEncodings.tooltip=(Experimental) A whitespace-separated list of encodings to try against encoding errors on loading
+options.general.fallbackEncodings.tooltip=A whitespace-separated list of encodings to try against encoding errors on loading
 #}}}
 
 #{{{ Abbreviations pane

@@ -326,7 +326,7 @@
             </para>
 
             <para>The <literal>List of Encoding Autodetector Names</literal> is
-            an experimental feature that allows for jEdit and plugins to offer
+            a feature that allows for jEdit and plugins to offer
             additional encoding autodetector routines. At the moment, there are
             two techniques known by jEdit: the <literal>BOM</literal> (Byte
             Order Mark), and the <literal>XML-PI</literal> (XML processing
