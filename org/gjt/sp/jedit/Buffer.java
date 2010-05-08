@@ -870,7 +870,7 @@ public class Buffer extends JEditBuffer
 			d = false;
 		if (d && getLength() == initialLength)
 		{
-			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
+			if (jEdit.getBooleanProperty("useMD5forDirtyCalculation")) 
 				d = !Arrays.equals(calculateHash(), md5hash);
 		}
 		super.setDirty(d);
@@ -989,8 +989,7 @@ public class Buffer extends JEditBuffer
 		super.propertiesChanged();
 		setAutoReloadDialog(jEdit.getBooleanProperty("autoReloadDialog"));
 		setAutoReload(jEdit.getBooleanProperty("autoReload"));
-		if (!isTemporary())
-			EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
+		EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
 
 	//{{{ getDefaultProperty() method
@@ -1746,7 +1745,7 @@ public class Buffer extends JEditBuffer
 			}
 		}
 	} //}}}
-
+	
 	//{{{ fireEndRedo() method
 	protected void fireEndRedo()
 	{
@@ -1999,12 +1998,12 @@ public class Buffer extends JEditBuffer
 	/** @return an MD5 hash of the contents of the buffer */
 	private byte[] calculateHash()
 	{
-		final byte[] dummy = new byte[1];
+		final byte[] dummy = new byte[1]; 
 		if (!jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
 			return dummy;
 		ByteBuffer bb = null;
 		readLock();
-		try
+		try 
 		{
 			// Log.log(Log.NOTICE, this, "calculateHash()");
 			int length = getLength();
@@ -2012,38 +2011,38 @@ public class Buffer extends JEditBuffer
 			CharBuffer cb = bb.asCharBuffer();
 			cb.append( getSegment(0, length) );
 		}
-		finally
+		finally 
 		{
 			readUnlock();
-		}
-		try
+		} 
+		try 
 		{
 			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
 			digest.update( bb );
 			return digest.digest();
 		}
-		catch (NoSuchAlgorithmException nsae)
+		catch (NoSuchAlgorithmException nsae) 
 		{
 			Log.log(Log.ERROR, this, "Can't Calculate MD5 hash!", nsae);
 			return dummy;
 		}
-
+		
 	}
-
+	
 	/** Update the buffer's members with the current hash and length,
 	 *  for later comparison.
 	 */
-	private void updateHash()
+	private void updateHash() 
 	{
 		initialLength = getLength();
 		md5hash = calculateHash();
 	}
-
+	
 	//{{{ finishLoading() method
 	private void finishLoading()
 	{
 		updateHash();
-
+			
 		parseBufferLocalProperties();
 		// AHA!
 		// this is probably the only way to fix this
@@ -2079,7 +2078,7 @@ public class Buffer extends JEditBuffer
 		String oldSymlinkPath, String path,
 		boolean rename, boolean error)
 	{
-
+		
 		//{{{ Set the buffer's path
 		// Caveat: won't work if save() called with a relative path.
 		// But I don't think anyone calls it like that anyway.
@@ -2109,7 +2108,7 @@ public class Buffer extends JEditBuffer
 					@Override
 					public void visit(EditPane editPane)
 					{
-						BufferSet bufferSet = editPane.getBufferSet();
+						BufferSet bufferSet = editPane.getBufferSet(); 
 						if (bufferSet.indexOf(Buffer.this) != -1)
 						{
 							bufferSets.add(bufferSet);
@@ -2193,7 +2192,7 @@ public class Buffer extends JEditBuffer
 				}
 
 				updateHash();
-
+				
 				if (!isTemporary())
 				{
 					EditBus.send(new BufferUpdate(this,
