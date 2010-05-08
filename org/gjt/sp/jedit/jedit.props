@@ -126,7 +126,7 @@ autoReload=true
 checkFileStatus=0
 
 # Encoding detectors
-encodingDetectors=BOM XML-PI
+encodingDetectors=BOM XML-PI html python
 
 #}}}
 

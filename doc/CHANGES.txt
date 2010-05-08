@@ -221,6 +221,8 @@ and Marcelo Vanzin for contributing to this release.
   jEdit more like a native application.
   (Feature Request #2661227, Patch #2984552 - Hisateru Tanaka)
 
+- Added some more encoding detectors as default. (Kazutoshi Satoda)
+
 }}}
 
 }}}
