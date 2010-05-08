@@ -83,7 +83,7 @@ public class AutoDetection
 			= new ArrayList<EncodingDetector>();
 		String propName = "encodingDetectors";
 		String selectedDetectors
-			= jEdit.getProperty(propName, "BOM XML-PI");
+			= jEdit.getProperty(propName);
 		if (selectedDetectors != null
 			&& selectedDetectors.length() > 0)
 		{

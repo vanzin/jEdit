@@ -100,7 +100,7 @@ public class EncodingsOptionPane extends AbstractOptionPane
 		
 		// Encoding detectors
 		encodingDetectors = new JTextField(jEdit.getProperty(
-			"encodingDetectors","BOM XML-PI"));
+			"encodingDetectors",""));
 		addComponent(jEdit.getProperty("options.general.encodingDetectors"),encodingDetectors);
 
 		// Fallback Encodings
