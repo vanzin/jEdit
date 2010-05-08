@@ -46,6 +46,8 @@ Kazutoshi Satoda, oman002, and Eric Le Lay for contributing to this release.
 }}}
 {{{ API Changes
 
+- Applied patch #2932330 to suppress BufferUpdate messages from temporary
+  buffers to improve performance. (Dale Anson)
 
 }}}
 {{{ Editing
