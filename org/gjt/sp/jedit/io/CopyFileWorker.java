@@ -28,6 +28,7 @@ import java.awt.Component;
 import java.io.IOException;
 
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.Task;
 import org.gjt.sp.util.WorkRequest;
 //}}}
 
@@ -38,7 +39,7 @@ import org.gjt.sp.util.WorkRequest;
  * @author Matthieu Casanova
  * @since jEdit 4.3pre13
  */
-public class CopyFileWorker extends WorkRequest
+public class CopyFileWorker extends Task
 {
 	private final Component comp;
 	private final String source;
@@ -58,10 +59,12 @@ public class CopyFileWorker extends WorkRequest
 		this.comp = comp;
 		this.source = source;
 		this.target = target;
+		setLabel("Copy " + source + " to " + target);
 	} //}}}
 
 	//{{{ run() method
-	public void run()
+	@Override
+	public void _run()
 	{
 		Log.log(Log.DEBUG, this, this + ".run()");
 		try

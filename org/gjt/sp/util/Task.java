@@ -1,15 +1,14 @@
 /*
- * Task.java
+ * jEdit - Programmer's Text Editor
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2010 Matthieu Casanova
+ * Copyright © 2010 jEdit contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or any later version.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,6 +33,10 @@ public abstract class Task implements Runnable, ProgressObserver
 	private String status;
 	private long maximum;
 
+	private String label;
+
+	private Thread thread;
+
 	public enum State
 	{
 		Waiting, Running, Done
@@ -52,7 +55,9 @@ public abstract class Task implements Runnable, ProgressObserver
 		TaskManager.instance.fireRunning(this);
 		try
 		{
+			thread = Thread.currentThread();
 			_run();
+			thread = null;
 		}
 		catch (Throwable t)
 		{
@@ -64,19 +69,22 @@ public abstract class Task implements Runnable, ProgressObserver
 
 	public abstract void _run();
 
-	public void setValue(long value)
+	public final void setValue(long value)
 	{
 		this.value = value;
+		TaskManager.instance.fireValueUpdated(this);
 	}
 
-	public void setMaximum(long maximum)
+	public final void setMaximum(long maximum)
 	{
 		this.maximum = maximum;
+		TaskManager.instance.fireMaximumUpdated(this);
 	}
 
 	public void setStatus(String status)
 	{
 		this.status = status;
+		TaskManager.instance.fireStatusUpdated(this);
 	}
 
 	public long getValue()
@@ -97,6 +105,25 @@ public abstract class Task implements Runnable, ProgressObserver
 	public State getState()
 	{
 		return state;
+	}
+
+	public String getLabel()
+	{
+		return label;
+	}
+
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
+
+	/**
+	 * Cancel the task
+	 */
+	public void cancel()
+	{
+		if (thread != null)
+			thread.interrupt();
 	}
 
 	@Override

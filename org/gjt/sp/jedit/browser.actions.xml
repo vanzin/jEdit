@@ -90,7 +90,7 @@
                 org.gjt.sp.jedit.io.VFSFile f = (org.gjt.sp.jedit.io.VFSFile) iterator.next();
                 if (f.getType() == org.gjt.sp.jedit.io.VFSFile.FILE)
                 {
-                    VFSManager.runInWorkThread(new CopyFileWorker(view, f.getPath(), targetPath));
+                    ThreadUtilities.runInBackground(new CopyFileWorker(view, f.getPath(), targetPath));
                 }
             }
         }
@@ -103,7 +103,7 @@
                 File f = (File) iterator.next();
                 if (f.isFile())
                 {
-                    VFSManager.runInWorkThread(new CopyFileWorker(view, f.getAbsolutePath(), targetPath));
+                    ThreadUtilities.runInBackground(new CopyFileWorker(view, f.getAbsolutePath(), targetPath));
                 }
             }
         }
