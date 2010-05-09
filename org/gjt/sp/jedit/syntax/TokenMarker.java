@@ -139,7 +139,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 
 			//{{{ Check for the escape rule before anything else.
 			if (context.escapeRule != null &&
-				handleRule(context.escapeRule,false))
+				handleRuleStart(context.escapeRule))
 			{
 				continue main_loop;
 			} //}}}
@@ -159,7 +159,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 			for (ParserRule rule : rules)
 			{
 				// stop checking rules if there was a match
-				if (handleRule(rule,false))
+				if (handleRuleStart(rule))
 				{
 					seenWhitespaceEnd = true;
 					continue main_loop;
@@ -173,7 +173,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 					whitespaceEnd = pos + 1;
 
 				if(context.inRule != null)
-					handleRule(context.inRule,true);
+					handleRuleEnd(context.inRule);
 
 				handleNoWordBreak();
 
@@ -203,7 +203,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 						&& noWordSep.indexOf(ch) == -1)
 					{
 						if(context.inRule != null)
-							handleRule(context.inRule,true);
+							handleRuleEnd(context.inRule);
 
 						handleNoWordBreak();
 
@@ -225,7 +225,7 @@ main_loop:	for(pos = line.offset; pos < lineLength; pos++)
 		pos = lineLength;
 
 		if(context.inRule != null)
-			handleRule(context.inRule,true);
+			handleRuleEnd(context.inRule);
 
 		handleNoWordBreak();
 		markKeyword(true);
@@ -292,14 +292,14 @@ unwind:		while(context.parent != null)
 		LineContext tempContext = context;
 		context = context.parent;
 		keywords = context.rules.getKeywords();
-		boolean handled = handleRule(rule,true);
+		boolean handled = handleRuleEnd(rule);
 		context = tempContext;
 		keywords = context.rules.getKeywords();
 
 		if (handled)
 		{
 			if(context.inRule != null)
-				handleRule(context.inRule,true);
+				handleRuleEnd(context.inRule);
 
 			markKeyword(true);
 
@@ -322,39 +322,13 @@ unwind:		while(context.parent != null)
 		return false;
 	} //}}}
 
-	//{{{ handleRule() method
+	//{{{ offsetMatches
 	/**
-	 * Checks if the rule matches the line at the current position
-	 * and handles the rule if it does match
+	 * Checks if the offset matches given position-match-hint of
+	 * ParserRule.
 	 */
-	private boolean handleRule(ParserRule checkRule, boolean end)
+	private boolean offsetMatches(int offset, int posMatch)
 	{
-		//{{{ Some rules can only match in certain locations
-		if(!end)
-		{
-			if (null == checkRule.upHashChars)
-			{
-				if (checkRule.upHashChar != null &&
-				    (pos + checkRule.upHashChar.length() < line.array.length) &&
-				    !checkHashString(checkRule))
-				{
-					return false;
-				}
-			}
-			else
-			{
-				if (-1 == Arrays.binarySearch(
-						checkRule.upHashChars,
-						Character.toUpperCase(line.array[pos])))
-				{
-					return false;
-				}
-			}
-		}
-
-		int offset = (checkRule.action & ParserRule.MARK_PREVIOUS) != 0 ? lastOffset : pos;
-		int posMatch = end ? checkRule.endPosMatch : checkRule.startPosMatch;
-
 		if((posMatch & ParserRule.AT_LINE_START)
 			== ParserRule.AT_LINE_START)
 		{
@@ -378,74 +352,97 @@ unwind:		while(context.parent != null)
 			{
 				return false;
 			}
-		} //}}}
+		}
+
+		return true;
+	} //}}}
+
+	//{{{ handleRuleStart() method
+	/**
+	 * Checks if the rule matches the line at the current position
+	 * as its start and handles the rule if it does match
+	 */
+	private boolean handleRuleStart(ParserRule checkRule)
+	{
+		// Some rules can only match in certain locations
+		if (null == checkRule.upHashChars)
+		{
+			if (checkRule.upHashChar != null &&
+			    (pos + checkRule.upHashChar.length() < line.array.length) &&
+			    !checkHashString(checkRule))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if (-1 == Arrays.binarySearch(
+					checkRule.upHashChars,
+					Character.toUpperCase(line.array[pos])))
+			{
+				return false;
+			}
+		}
+
+		int offset = (checkRule.action & ParserRule.MARK_PREVIOUS) != 0 ? lastOffset : pos;
+		if(!offsetMatches(offset, checkRule.startPosMatch))
+		{
+			return false;
+		}
 
 		int matchedChars = 1;
 		CharSequence charSeq = null;
 		Matcher match = null;
 
-		//{{{ See if the rule's start or end sequence matches here
-		if(!end || (checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
+		// See if the rule's start sequence matches here
+		if((checkRule.action & ParserRule.REGEXP) == 0)
 		{
-			// the end cannot be a regular expression
-			if((checkRule.action & ParserRule.REGEXP) == 0 || end)
-			{
-				if(end)
-				{
-					if(context.spanEndSubst != null)
-						pattern.array = context.spanEndSubst;
-					else
-						pattern.array = checkRule.end;
-				}
-				else
-					pattern.array = checkRule.start;
-				pattern.offset = 0;
-				pattern.count = pattern.array.length;
-				matchedChars = pattern.count;
+			pattern.array = checkRule.start;
+			pattern.offset = 0;
+			pattern.count = pattern.array.length;
+			matchedChars = pattern.count;
 
-				if(!SyntaxUtilities.regionMatches(context.rules
-					.getIgnoreCase(),line,pos,pattern.array))
-				{
-					return false;
-				}
+			if(!SyntaxUtilities.regionMatches(context.rules
+				.getIgnoreCase(),line,pos,pattern.array))
+			{
+				return false;
+			}
+		}
+		else
+		{
+			// note that all regexps start with \A so they only
+			// match the start of the string
+			//int matchStart = pos - line.offset;
+			charSeq = new SegmentCharSequence(line, pos - line.offset,
+							  line.count - (pos - line.offset));
+			match = checkRule.startRegexp.matcher(charSeq);
+			if(!match.lookingAt())
+			{
+				return false;
+			}
+			else if(match.start() != 0)
+			{
+				throw new InternalError("Can't happen");
 			}
 			else
 			{
-				// note that all regexps start with \A so they only
-				// match the start of the string
-				//int matchStart = pos - line.offset;
-				charSeq = new SegmentCharSequence(line, pos - line.offset,
-								  line.count - (pos - line.offset));
-				match = checkRule.startRegexp.matcher(charSeq);
-				if(!match.lookingAt())
-				{
-					return false;
-				}
-				else if(match.start() != 0)
-				{
-					throw new InternalError("Can't happen");
-				}
-				else
-				{
-					matchedChars = match.end();
-					/* workaround for hang if match was
-					 * zero-width. not sure if there is
-					 * a better way to handle this */
-					if(matchedChars == 0)
-						matchedChars = 1;
-				}
+				matchedChars = match.end();
+				/* workaround for hang if match was
+				 * zero-width. not sure if there is
+				 * a better way to handle this */
+				if(matchedChars == 0)
+					matchedChars = 1;
 			}
-		} //}}}
-		//{{{ Check for an escape sequence
+		}
+
 		if((checkRule.action & ParserRule.IS_ESCAPE) == ParserRule.IS_ESCAPE)
 		{
 			pos += pattern.count;
-		} //}}}
-		//{{{ Handle start of rule
-		else if(!end)
+		}
+		else
 		{
 			if(context.inRule != null)
-				handleRule(context.inRule,true);
+				handleRuleEnd(context.inRule);
 
 			markKeyword((checkRule.action & ParserRule.MARK_PREVIOUS)
 				!= ParserRule.MARK_PREVIOUS);
@@ -570,9 +567,47 @@ unwind:		while(context.parent != null)
 			lastOffset = pos + 1;
 
 			// break out of inner for loop to check next char
-		} //}}}
-		//{{{ Handle end of MARK_FOLLOWING
-		else if((context.inRule.action & ParserRule.MARK_FOLLOWING) != 0)
+		}
+
+		return true;
+	} //}}}
+
+	//{{{ handleRuleEnd() method
+	/**
+	 * Checks if the rule matches the line at the current position
+	 * as its end and handles the rule if it does match
+	 */
+	private boolean handleRuleEnd(ParserRule checkRule)
+	{
+		// Some rules can only match in certain locations
+		int offset = (checkRule.action & ParserRule.MARK_PREVIOUS) != 0 ? lastOffset : pos;
+		if (!offsetMatches(offset, checkRule.endPosMatch))
+		{
+			return false;
+		}
+
+		// See if the rule's end sequence matches here
+		if((checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
+		{
+			if(context.spanEndSubst != null)
+				pattern.array = context.spanEndSubst;
+			else
+				pattern.array = checkRule.end;
+			pattern.offset = 0;
+			pattern.count = pattern.array.length;
+
+			if(!SyntaxUtilities.regionMatches(context.rules
+				.getIgnoreCase(),line,pos,pattern.array))
+			{
+				return false;
+			}
+		}
+
+		// Escape rules are handled in handleRuleStart()
+		assert (checkRule.action & ParserRule.IS_ESCAPE) == 0;
+
+		// Handle end of MARK_FOLLOWING
+		if((context.inRule.action & ParserRule.MARK_FOLLOWING) != 0)
 		{
 			if(pos != lastOffset)
 			{
@@ -584,7 +619,7 @@ unwind:		while(context.parent != null)
 
 			lastOffset = pos;
 			context.setInRule(null);
-		} //}}}
+		}
 
 		return true;
 	} //}}}
