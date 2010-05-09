@@ -57,7 +57,7 @@ public class ThreadUtilities
 	public static void runInDispatchThreadAndWait(Runnable runnable)
 	{
 		MyRunnable run = new MyRunnable(runnable);
-		runInBackground(run);
+		runInDispatchThread(run);
 		while (!run.done)
 		{
 			synchronized (run)
