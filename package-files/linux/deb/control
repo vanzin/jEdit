@@ -3,8 +3,7 @@ Version: 4:@jedit.build.number@
 Architecture: all
 Maintainer: Contributors <jedit-devel@lists.sourceforge.net>
 Section: contrib/editors
-Homepage: http://www.jedit.org/ 
-Architecture: all
+Homepage: http://www.jedit.org/
 Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Recommends: sun-java5-jre | sun-java6-jre
@@ -12,7 +11,7 @@ Build-depends: sun-java5-jdk | sun-java6-jdk, ant
 Suggests: exuberant-ctags, cscope, global, ant, sun-java5-jdk, sun-java6-jdk
 Priority: optional
 Installed-Size: @deb.installed.size@
-Description: A plugin-based editor for programmers. 
+Description: A plugin-based editor for programmers.
  As one of the most feature rich editors available, jEdit boasts support for
  syntax highlighting in more than 140 languages. jEdit combines the power of
  Emacs, the user-friendliness of Kate, and the advanced editing features
@@ -27,8 +26,8 @@ Description: A plugin-based editor for programmers.
  Its functionality is easily extended by the use of 'plugins' which can be
  downloaded, updated, and installed, all without exiting the editor. These
  include a built-in Console shell integration, which lets you execute
- interactive external commands inside your editor, as well as bind them to 
+ interactive external commands inside your editor, as well as bind them to
  keyboard shortcuts. The FTP plugin lets you browse and edit files on remote systems
- over FTP or SFTP. Other plugins provide shells, object oriented structure/code 
- browsers, or completion popups for Java, XML, HTML, Ant, LaTeX, Python, Ruby, 
- Perl, C, C++, bash, Scheme, Prolog, and many other languages. 
+ over FTP or SFTP. Other plugins provide shells, object oriented structure/code
+ browsers, or completion popups for Java, XML, HTML, Ant, LaTeX, Python, Ruby,
+ Perl, C, C++, bash, Scheme, Prolog, and many other languages.
