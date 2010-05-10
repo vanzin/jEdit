@@ -10,13 +10,9 @@ Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead
 and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
-- Fixed Standalone TextArea build target (Shlomy Reinstein)
 
 - Update of textarea scrollbars and bufferSwitcher are now done in
   EventQueue thread (Matthieu Casanova #2946031)
-
-- Fixed a NPE that happens when an error occurs before the view is loaded
-  (Matthieu Casanova #2905487)
 
 - Removed unnecessary popup warnings from InstallPanel when loading a
   pluginset. (Alan Ezust)
@@ -34,24 +30,13 @@ and Marcelo Vanzin for contributing to this release.
   on each monitor. Now it's position is relative to the active View
   (Matthieu Casanova)
 
-- When removing text from the buffer, the event contentRemoved was sent before
-  making the buffer dirty (oman002 #2944145)
-
 - Selection foreground color broken when soft wrap. (Shlomy Reinstein #2946203)
-
-- beanshell load() fails w/ exception. (Shlomy Reinstein #2927555)
 
 - Using regex style encoding auto detectors, StringIndexOutOfBoundsException
   could happen when loading a file. (Kazutoshi Satoda)
 
 - The encoding could be less accurate when opening a file from
   File System Browser. (SF.net bug #1524181,1721796 - Kazutoshi Satoda)
-
-- When setting a new message in the status bar in a macro called from the
-  Macro menu the message was cleared immediately (Matthieu Casanova #2964522)
-
-- Fixed leaky memory usage after some specific text operations.
-  (Kazutoshi Satoda)
 
 - ALT key typing with Windows Look&Feel (for menu bar interaction) now
   behaves a bit closer to native Windows applications.
@@ -64,20 +49,12 @@ and Marcelo Vanzin for contributing to this release.
 
 - HelpViewer loads pages asynchronously (SF.net bug #1231914 - Eric Le Lay)
 
-- java installer refuses to install from a directory containing exclamation
-  marks (SF.net bug #2065330 - Eric Le Lay)
-
-- don't log an error when the API docs are not available. Provide a link
-  to the online docs instead (SF.net bug #1777806 - Eric Le Lay)
-
-- Worked around a memory leak in Sun Java 6 where the sun.font.GlyphLayout is
-  cached and reused while holding an instance to the char array
-  (Björn "Vampire" Kautler)
-
 - Don't replace colons by slashes in canonPath() on Mac OS X
   (SF.net bug #1488911 - Eric Le Lay - r17754)
+
 }}}
 {{{ API changes
+
 - Made method TextUtilities.getCharType() public (Matthieu Casanova)
 
 - Method MiscUtilities.formatFileSize() moved to StandardUtilities
@@ -117,9 +94,6 @@ and Marcelo Vanzin for contributing to this release.
   when tagging an EditPlugin class, and makes the plugin instance behave
   as if it implemented EBComponent (it's added to the bus when the plugin
   is activated). (Marcelo Vanzin)
-
-- Applied patch #2932330 to suppress BufferUpdate messages from temporary
-  buffers to improve performance. (Dale Anson)
 
 - RFC edit mode was misplaced in catalog and was never matching anything because
   text edit mode glob was more global and checked first (Matthieu Casanova)
