@@ -124,7 +124,8 @@
 			   source="${target.java.version}"
 			   target="${target.java.version}"
 			   compiler="modern"
-			   encoding="UTF-8">
+			   encoding="UTF-8"
+			   includeAntRuntime="false">
 			<include name="org/**" />
 			<include name="com/**" />
 			<compilerarg line="${config.build.compilerarg}" />
