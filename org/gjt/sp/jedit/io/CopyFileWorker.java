@@ -29,7 +29,6 @@ import java.io.IOException;
 
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.Task;
-import org.gjt.sp.util.WorkRequest;
 //}}}
 
 /**
@@ -69,7 +68,7 @@ public class CopyFileWorker extends Task
 		Log.log(Log.DEBUG, this, this + ".run()");
 		try
 		{
-			VFS.copy(this, source, target, comp, false);
+			VFS.copy(this, source, target, comp, true);
 		}
 		catch (IOException e)
 		{
