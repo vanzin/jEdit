@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 2010 jEdit contributors
+ * Copyright Â© 2010 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,27 +21,42 @@
 
 package org.gjt.sp.jedit.gui;
 
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Task;
 import org.gjt.sp.util.TaskListener;
 import org.gjt.sp.util.TaskManager;
+import org.gjt.sp.util.ThreadUtilities;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * @author Matthieu Casanova
  */
-public class TaskMonitor  extends JPanel implements TaskListener
+public class TaskMonitor extends JPanel implements TaskListener
 {
-	private DefaultListModel model;
+
+	private final TaskTableModel model;
+	private final JTable table;
 
 	public TaskMonitor()
 	{
 		super(new BorderLayout());
-		model = new DefaultListModel();
-		JList taskList = new JList(model);
-		taskList.setCellRenderer(new TaskCellRenderer());
-		JScrollPane scroll = new JScrollPane(taskList);
+		model = new TaskTableModel();
+		table = new JTable(model);
+		table.setDefaultRenderer(Object.class, new TaskCellRenderer());
+		table.getTableHeader().setVisible(false);
+		table.setDefaultEditor(Object.class, new TaskTableEditor());
+		table.getColumnModel().getColumn(1).setMaxWidth(16);
+		table.getColumnModel().getColumn(1).setMinWidth(16);
+		JScrollPane scroll = new JScrollPane(table);
 		add(scroll);
 	}
 
@@ -61,7 +76,7 @@ public class TaskMonitor  extends JPanel implements TaskListener
 
 	public void waiting(Task task)
 	{
-		model.addElement(task);
+		model.addTask(task);
 	}
 
 	public void running(Task task)
@@ -71,7 +86,7 @@ public class TaskMonitor  extends JPanel implements TaskListener
 
 	public void done(Task task)
 	{
-		model.removeElement(task);
+		model.removeTask(task);
 	}
 
 	public void statusUpdated(Task task)
@@ -89,39 +104,138 @@ public class TaskMonitor  extends JPanel implements TaskListener
 		repaint();
 	}
 
-	private static class TaskCellRenderer extends JProgressBar implements ListCellRenderer
+	private static class TaskCellRenderer implements TableCellRenderer
 	{
+		private final JProgressBar progress;
+		private final JButton button;
 		private TaskCellRenderer()
 		{
-			setStringPainted(true);
+			progress = new JProgressBar();
+			button = new JButton(GUIUtilities.loadIcon(jEdit.getProperty("close-buffer.icon")));
+			progress.setStringPainted(true);
 		}
 
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-							      boolean cellHasFocus)
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+							       boolean hasFocus, int row, int column)
 		{
 			Task task = (Task) value;
-			task.getMaximum();
-			if (task.getMaximum() == 0L)
+			if (column == 0)
 			{
-				setIndeterminate(true);
-			}
-			else
-			{
-				setIndeterminate(false);
-				long max = task.getMaximum();
-				long val = task.getValue();
-				if (max > Integer.MAX_VALUE)
+				if (task.getMaximum() == 0L)
 				{
-					max >>= 10L;
-					val >>= 10L;
-
+					progress.setIndeterminate(true);
 				}
-				setMaximum((int) max);
-				setValue((int) val);
+				else
+				{
+					progress.setIndeterminate(false);
+					long max = task.getMaximum();
+					long val = task.getValue();
+					if (max > Integer.MAX_VALUE)
+					{
+						max >>= 10L;
+						val >>= 10L;
+
+					}
+					progress.setMaximum((int) max);
+					progress.setValue((int) val);
+				}
+				progress.setToolTipText(task.getLabel());
+				progress.setString(task.getStatus());
+				return progress;
 			}
-			setToolTipText(task.getLabel());
-			setString(task.getStatus());
-			return this; 
+
+			return button;
+		}
+	}
+
+	private class TaskTableEditor extends AbstractCellEditor implements TableCellEditor
+	{
+		private final JButton button;
+
+		private Task task;
+
+		private TaskTableEditor()
+		{
+			button = new JButton(GUIUtilities.loadIcon(jEdit.getProperty("close-buffer.icon")));
+			button.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					task.cancel();
+					stopCellEditing();
+				}
+			});
+		}
+
+		public Object getCellEditorValue()
+		{
+			return null;
+		}
+
+		//{{{ getTableCellEditorComponent() method
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
+		{
+			task = (Task) value;
+			return button;
+		} //}}}
+	}
+
+	private static class TaskTableModel extends AbstractTableModel
+	{
+		private final java.util.List<Task> tasks;
+
+		private TaskTableModel()
+		{
+			tasks = new ArrayList<Task>();
+		}
+
+		public int getRowCount()
+		{
+			return tasks.size();
+		}
+
+		public int getColumnCount()
+		{
+			return 2;
+		}
+
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex)
+		{
+			return columnIndex == 1;
+		}
+
+		public Object getValueAt(int rowIndex, int columnIndex)
+		{
+			return tasks.get(rowIndex);
+		}
+
+		void addTask(final Task task)
+		{
+			ThreadUtilities.runInDispatchThread(new Runnable()
+			{
+				public void run()
+				{
+					tasks.add(task);
+					fireTableRowsInserted(tasks.size()-1, tasks.size()-1);
+				}
+			});
+		}
+
+		void removeTask(final Task task)
+		{
+			ThreadUtilities.runInDispatchThread(new Runnable()
+			{
+				public void run()
+				{
+					int index = tasks.indexOf(task);
+					if (index != -1)
+					{
+						tasks.remove(index);
+						fireTableRowsDeleted(index,index);
+					}
+				}
+			});
 		}
 	}
 }
