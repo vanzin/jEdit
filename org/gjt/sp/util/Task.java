@@ -22,6 +22,7 @@
 package org.gjt.sp.util;
 
 /**
+ * A Task is basically a Runnable but with some information about it's progression.
  * @since jEdit 4.4pre1
  * @author Matthieu Casanova
  */
@@ -33,6 +34,10 @@ public abstract class Task implements Runnable, ProgressObserver
 
 	private String label;
 
+	/**
+	 * The thread in which the task is running.
+	 * It is set automatically when the task starts.
+	 */
 	private Thread thread;
 
 	public enum State
@@ -42,11 +47,13 @@ public abstract class Task implements Runnable, ProgressObserver
 
 	private State state;
 
+	//{{{ Task Csontructor
 	protected Task()
 	{
 		state = State.Waiting;
-	}
+	} //}}}
 
+	//{{{ run() method
 	public final void run()
 	{
 		state = State.Running;
@@ -63,8 +70,12 @@ public abstract class Task implements Runnable, ProgressObserver
 		}
 		state = State.Done;
 		TaskManager.instance.fireDone(this);
-	}
+	} //}}}
 
+	/**
+	 * This is the method you have to implement and that will be executed
+	 * in the thread.
+	 */
 	public abstract void _run();
 
 	public final void setValue(long value)
@@ -115,6 +126,7 @@ public abstract class Task implements Runnable, ProgressObserver
 		this.label = label;
 	}
 
+	//{{{ cancel() method
 	/**
 	 * Cancel the task
 	 */
@@ -122,11 +134,13 @@ public abstract class Task implements Runnable, ProgressObserver
 	{
 		if (thread != null)
 			thread.interrupt();
-	}
+	} //}}}
+
 
 	@Override
 	public String toString()
 	{
-		return "Task[" + state + ',' + status + ',' + value + '/' + maximum + ']';
+		return "Task[" + state + ',' + status + ',' + value + '/' +
+			maximum + ']';
 	}
 }
