@@ -31,6 +31,7 @@ import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.StandardUtilities;
 
 import javax.swing.*;
 //}}}
@@ -457,7 +458,7 @@ public class VFSFile implements Serializable
 			if(getType() != FILE)
 				return null;
 			else
-				return MiscUtilities.formatFileSize(getLength());
+				return StandardUtilities.formatFileSize(getLength());
 		}
 		else
 			return null;

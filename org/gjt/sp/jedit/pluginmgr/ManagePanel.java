@@ -488,13 +488,13 @@ public class ManagePanel extends JPanel
 						}
 						if (pluginDirectory.exists())
 						{
-							entry.dataSize = MiscUtilities.formatFileSize(IOUtilities.fileLength(pluginDirectory));
+							entry.dataSize = StandardUtilities.formatFileSize(IOUtilities.fileLength(pluginDirectory));
 						}
 						else
 						{
 							if (jEdit.getBooleanProperty("plugin." + entry.clazz + ".usePluginHome"))
 							{
-								entry.dataSize = MiscUtilities.formatFileSize(0);
+								entry.dataSize = StandardUtilities.formatFileSize(0);
 							}
 							else
 							{
