@@ -42,8 +42,8 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.FileVFS.LocalFile;
-import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.StandardUtilities;
 //}}}
 
 /**
@@ -160,7 +160,8 @@ public class FilePropertiesDialog extends EnhancedDialog
 			path = path.substring(0, path.lastIndexOf('/'));
 		}
 		propField.add(new JLabel(jEdit.getProperty("fileprop.path")+": "+path));
-		propField.add(new JLabel(jEdit.getProperty("fileprop.size")+": "+MiscUtilities.formatFileSize(filesSize)));
+		propField.add(new JLabel(jEdit.getProperty("fileprop.size")+": "+
+			StandardUtilities.formatFileSize(filesSize)));
 		Border etch = BorderFactory.createEtchedBorder();
 		propField.setBorder(BorderFactory.createTitledBorder(etch, jEdit.getProperty("fileprop.properties")));
 		centerPanel.add(BorderLayout.CENTER, propField);
@@ -221,11 +222,13 @@ public class FilePropertiesDialog extends EnhancedDialog
 		if(local.getType() == VFSFile.DIRECTORY)
 		{
 			File ioFile = new File(local.getPath());
-			propField.add(new JLabel(jEdit.getProperty("fileprop.size")+": "+MiscUtilities.formatFileSize(IOUtilities.fileLength(ioFile))));
+			propField.add(new JLabel(jEdit.getProperty("fileprop.size")+": "+
+				StandardUtilities.formatFileSize(IOUtilities.fileLength(ioFile))));
 		}
 		else
 		{
-			propField.add(new JLabel(jEdit.getProperty("fileprop.size")+": "+MiscUtilities.formatFileSize(local.getLength())));
+			propField.add(new JLabel(jEdit.getProperty("fileprop.size")+": "+
+				StandardUtilities.formatFileSize(local.getLength())));
 		}
 		Border etch = BorderFactory.createEtchedBorder();
 		propField.setBorder(BorderFactory.createTitledBorder(etch, jEdit.getProperty("fileprop.properties")));
