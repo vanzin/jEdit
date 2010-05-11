@@ -108,7 +108,8 @@ public class IOUtilities
 				progress.setStatus(StandardUtilities.formatFileSize(copied));
 				progress.setValue(copied);
 			}
-			if(canStop && Thread.interrupted()) return false;
+			if(canStop && Thread.interrupted()) 
+				return false;
 		}
 		return true;
 	}
@@ -184,11 +185,9 @@ public class IOUtilities
 	{
 		if(out != null)
 		{
-			try {
-				if (out instanceof Flushable)
-				{
-					((Flushable)out).flush();
-				}
+			try
+			{
+				out.flush();
 			}
 			catch (IOException e)
 			{
@@ -235,11 +234,9 @@ public class IOUtilities
 	{
 		if(out != null)
 		{
-			try {
-				if (out instanceof Flushable)
-				{
-					((Flushable)out).flush();
-				}
+			try
+			{
+				out.flush();
 			}
 			catch (IOException e)
 			{
@@ -266,7 +263,8 @@ public class IOUtilities
 	{
 		if(closeable != null)
 		{
-			try {
+			try
+			{
 				if (closeable instanceof Flushable)
 				{
 					((Flushable)closeable).flush();
