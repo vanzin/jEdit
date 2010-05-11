@@ -29,6 +29,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 //}}}
 
 /**
+ * The threadpool of jEdit.
+ * It uses a ExecutorService from the java.util.concurrent package.
+ * You can run {@link Task} or {@link Runnable} in it, Runnables will be
+ * encapsulated in Task.
+ *
  * @author Matthieu Casanova
  * @author Marcelo Vanzin
  * @since jEdit 4.4pre1
@@ -74,9 +79,11 @@ public class ThreadUtilities
 		}
 	} //}}}
 
-	//{{{ execute() method
+	//{{{ runInBackground() method
 	/**
 	 * Run the runnable in the threadpool.
+	 * The runnable will be encapsulated in a {@link Task}
+	 * @see #runInBackground(Task)
 	 *
 	 * @param runnable the runnable to run
 	 */
@@ -93,12 +100,25 @@ public class ThreadUtilities
 		}
 		TaskManager.instance.fireWaiting(task);
 		threadPool.execute(task);
+	}
+
+	/**
+	 * Run the task in the threadpool.
+	 * The runnable will be encapsulated in a {@link Task}
+	 *
+	 * @param task the task to run
+	 */
+	public static void runInBackground(Task task)
+	{
+		TaskManager.instance.fireWaiting(task);
+		threadPool.execute(task);
 	} //}}}
 
 	private ThreadUtilities()
 	{
 	}
 
+	//{{{ JEditThreadFactory class
 	private static class JEditThreadFactory implements ThreadFactory
 	{
 		private JEditThreadFactory()
@@ -117,7 +137,8 @@ public class ThreadUtilities
 
 		private final AtomicInteger threadIDs;
 		private final ThreadGroup threadGroup;
-	}
+	} //}}}
+
 
 	private static final ExecutorService threadPool;
 
@@ -128,6 +149,7 @@ public class ThreadUtilities
 		((ThreadPoolExecutor) threadPool).setMaximumPoolSize(10);
 	}
 
+	//{{{ MyRunnable class
 	private static class MyRunnable implements Runnable
 	{
 		private final Runnable runnable;
@@ -148,5 +170,6 @@ public class ThreadUtilities
 				notifyAll();
 			}
 		}
-	}
+	} //}}}
+
 }

@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 2010 jEdit contributors
+ * Copyright ï¿½ 2010 jEdit contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,8 @@
 
 package org.gjt.sp.util;
 
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.ProgressObserver;
-
 /**
+ * @since jEdit 4.4pre1
  * @author Matthieu Casanova
  */
 public abstract class Task implements Runnable, ProgressObserver
