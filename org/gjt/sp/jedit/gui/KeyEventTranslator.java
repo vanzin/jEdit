@@ -67,27 +67,6 @@ public class KeyEventTranslator
 	 */
 	public static Key translateKeyEvent(KeyEvent evt)
 	{
-		Key key = translateKeyEvent2(evt);
-
-		if (key!=null)
-		{
-			if (key.isPhantom())
-			{
-				key = null;
-			}
-		}
-
-		return key;
-	}
-
-	/**
-	 * Pass this an event from {@link
-	 * KeyEventWorkaround#processKeyEvent(java.awt.event.KeyEvent)}.
-	 * @param evt the KeyEvent to translate
-	 * @since jEdit 4.2pre3
-	 */
-	public static Key translateKeyEvent2(KeyEvent evt)
-	{
 		int modifiers = evt.getModifiers();
 		Key returnValue;
 
@@ -218,6 +197,21 @@ public class KeyEventTranslator
 			return returnValue;
 		else
 			return trans;
+	}
+
+	/**
+	 * Pass this an event from {@link
+	 * KeyEventWorkaround#processKeyEvent(java.awt.event.KeyEvent)}.
+	 * @param evt the KeyEvent to translate
+	 * @since jEdit 4.2pre3
+	 * @deprecated
+	 *   This gives completely same result with translateKeyEvent()
+	 *   since jEdit 4.4pre1.
+	 */
+	@Deprecated
+	public static Key translateKeyEvent2(KeyEvent evt)
+	{
+		return translateKeyEvent(evt);
 	} //}}}
 
 	//{{{ parseKey() method
@@ -477,14 +471,6 @@ public class KeyEventTranslator
 		*/
 		protected boolean isFromGlobalContext;
 
-		/**
-			Wether this Key event is a phantom key event. A phantom key event is a kind of duplicate key event which
-			should not - due to its nature of being a duplicate - generate any action on data.
-			However, phantom key events may be necessary to notify the rest of the GUI that the key event, if it was not a phantom key event but a real key event,
-			would generate any action and thus would be consumed.
-		*/
-		protected boolean isPhantom;
-
 		public Key(String modifiers, int key, char input)
 		{
 			this.modifiers = modifiers;
@@ -537,14 +523,10 @@ public class KeyEventTranslator
 			return isFromGlobalContext;
 		}
 
-		public void setIsPhantom(boolean to)
-		{
-			isPhantom = to;
-		}
-
+		@Deprecated
 		public boolean isPhantom()
 		{
-			return isPhantom;
+			return false;
 		}
 	} //}}}
 }

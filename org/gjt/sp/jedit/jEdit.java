@@ -407,8 +407,6 @@ public class jEdit
 		GUIUtilities.init();
 
 		bufferSetManager = new BufferSetManager();
-
-		///Options.SIMPLIFIED_KEY_HANDLING = jEdit.getBooleanProperty("newkeyhandling");
 		//}}}
 
 		//{{{ Initialize server
@@ -438,8 +436,6 @@ public class jEdit
 		GUIUtilities.advanceSplashProgress("init resources");
 		initResources();
 		SearchAndReplace.load();
-
-
 
 		if(loadPlugins)
 		{
