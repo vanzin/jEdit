@@ -47,7 +47,7 @@ public abstract class Task implements Runnable, ProgressObserver
 
 	private State state;
 
-	//{{{ Task Csontructor
+	//{{{ Task Constructor
 	protected Task()
 	{
 		state = State.Waiting;
