@@ -36,7 +36,7 @@ import org.gjt.sp.util.Log;
  * @version $Id$
  * @since jEdit 4.2pre3
  */
-public class PositionManager
+class PositionManager
 {
 	//{{{ PositionManager constructor
 	public PositionManager(JEditBuffer buffer)

@@ -35,7 +35,7 @@ import javax.swing.text.Segment;
  * @version $Id$
  * @since jEdit 4.0pre1
  */
-public class ContentManager
+class ContentManager
 {
 	//{{{ getLength() method
 	public final int getLength()
