@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 2010 jEdit contributors
+ * Copyright ï¿½ 2010 jEdit contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,17 +26,23 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
+ * The TaskManager manage Tasks in the Threadpool, it knows all of them, and
+ * sends events to TaskListeners.
+ *
  * @author Matthieu Casanova
  */
 public class TaskManager
 {
 	public static final TaskManager instance = new TaskManager();
 
-	private List<TaskListener> listeners;
+	private final List<TaskListener> listeners;
+
+	private final List<Task> tasks;
 
 	private TaskManager()
 	{
 		listeners = new CopyOnWriteArrayList<TaskListener>();
+		tasks = Collections.synchronizedList(new ArrayList<Task>());
 	}
 
 	public void addTaskListener(TaskListener listener)
@@ -55,6 +61,7 @@ public class TaskManager
 
 	void fireWaiting(Task task)
 	{
+		tasks.add(task);
 		List<TaskListener> listeners = this.listeners;
 		for (TaskListener listener : listeners)
 		{
@@ -73,6 +80,7 @@ public class TaskManager
 
 	void fireDone(Task task)
 	{
+		tasks.remove(task);
 		List<TaskListener> listeners = this.listeners;
 		for (TaskListener listener : listeners)
 		{
@@ -107,14 +115,43 @@ public class TaskManager
 		}
 	}
 
-	public static Task decorate(Runnable runnable)
+	/**
+	 * Visit all tasks.
+	 * While doing this the task list is locked
+	 *
+	 * @param visitor the visitor
+	 */
+	public void visit(TaskVisitor visitor)
+	{
+		synchronized (tasks)
+		{
+			for (Task task : tasks)
+			{
+				visitor.visit(task);
+			}
+		}
+	}
+
+	/**
+	 * Encapsulate a runnable into a task.
+	 * It is done by the Threadpool when receiving a simple Runnable
+	 *
+	 * @param runnable the runnable to encapsulate
+	 * @return a Task
+	 */
+	static Task decorate(Runnable runnable)
 	{
 		return new MyTask(runnable);
 	}
 
+	public interface TaskVisitor
+	{
+		void visit(Task task);
+	}
+
 	private static class MyTask extends Task
 	{
-		private Runnable runnable;
+		private final Runnable runnable;
 
 		private MyTask(Runnable runnable)
 		{
