@@ -1,5 +1,5 @@
 /*
- * jEdit - Programmer's Text Editor
+ * TaskMonitor
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
@@ -29,6 +29,8 @@ import org.gjt.sp.util.TaskManager;
 import org.gjt.sp.util.ThreadUtilities;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -42,14 +44,28 @@ import java.util.ArrayList;
  */
 public class TaskMonitor extends JPanel implements TaskListener
 {
-
 	private final TaskTableModel model;
 	private final JTable table;
+	private final JLabel remainingCount;
 
 	public TaskMonitor()
 	{
 		super(new BorderLayout());
+		remainingCount = new JLabel();
+		add(remainingCount, BorderLayout.NORTH);
+
 		model = new TaskTableModel();
+		model.addTableModelListener(new TableModelListener()
+		{
+			public void tableChanged(TableModelEvent e)
+			{
+				if (e.getType() == TableModelEvent.INSERT ||
+					e.getType() == TableModelEvent.DELETE)
+				{
+					updateTasksCount();
+				}
+			}
+		});
 		table = new JTable(model);
 		table.setDefaultRenderer(Object.class, new TaskCellRenderer());
 		table.getTableHeader().setVisible(false);
@@ -58,11 +74,19 @@ public class TaskMonitor extends JPanel implements TaskListener
 		table.getColumnModel().getColumn(1).setMinWidth(16);
 		JScrollPane scroll = new JScrollPane(table);
 		add(scroll);
+		updateTasksCount();
 	}
 
 	@Override
 	public void addNotify()
 	{
+		TaskManager.instance.visit(new TaskManager.TaskVisitor() 
+		{
+			public void visit(Task task)
+			{
+				model.addTask(task);
+			}
+		});
 		TaskManager.instance.addTaskListener(this);
 		super.addNotify();
 	}
@@ -71,7 +95,8 @@ public class TaskMonitor extends JPanel implements TaskListener
 	public void removeNotify()
 	{
 		TaskManager.instance.removeTaskListener(this);
-		super.removeNotify();    
+		super.removeNotify();
+		model.removeAll();
 	}
 
 	public void waiting(Task task)
@@ -102,6 +127,12 @@ public class TaskMonitor extends JPanel implements TaskListener
 	public void valueUpdated(Task task)
 	{
 		repaint();
+	}
+
+	private void updateTasksCount()
+	{
+		remainingCount.setText(jEdit.getProperty("taskmanager.remainingtasks.label",
+						new Object[]{model.getRowCount()}));
 	}
 
 	private static class TaskCellRenderer implements TableCellRenderer
@@ -236,6 +267,12 @@ public class TaskMonitor extends JPanel implements TaskListener
 					}
 				}
 			});
+		}
+
+		public void removeAll()
+		{
+			tasks.clear();
+			fireTableDataChanged();
 		}
 	}
 }
