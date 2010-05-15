@@ -100,13 +100,13 @@ public class jEdit
 	 */
 	public static void main(String[] args)
 	{
-		//{{{ Check for Java 1.5 or later
+		//{{{ Check for Java 1.6 or later
 		String javaVersion = System.getProperty("java.version");
-		if(javaVersion.compareTo("1.5") < 0)
+		if(javaVersion.compareTo("1.6") < 0)
 		{
 			System.err.println("You are running Java version "
 				+ javaVersion + '.');
-			System.err.println("jEdit requires Java 1.5 or later.");
+			System.err.println("jEdit requires Java 1.6 or later.");
 			System.exit(1);
 		} //}}}
 
