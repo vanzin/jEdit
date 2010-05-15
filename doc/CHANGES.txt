@@ -54,6 +54,9 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ API changes
+- Introduction of a new Threadpool using JDK's ExecutorService.
+  It's api are added to ThreadUtilities, it is preferable to use it instead
+  of the current VFSManager's threadpool. (Matthieu Casanova)
 
 - Made method TextUtilities.getCharType() public (Matthieu Casanova)
 
