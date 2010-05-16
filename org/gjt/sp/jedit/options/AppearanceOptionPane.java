@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.options;
 //{{{ Imports
 import javax.swing.*;
 
+import java.awt.Font;
 import java.awt.event.*;
 import java.io.*;
 import org.gjt.sp.jedit.gui.FontSelector;
@@ -96,8 +97,8 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		}
 		
 		/* Primary Metal L&F font */
-		primaryFont = new FontSelector(jEdit.getFontProperty(
-			"metal.primary.font"));
+		Font pf = jEdit.getFontProperty("metal.primary.font");
+		primaryFont = new FontSelector(pf);
 		addComponent(jEdit.getProperty("options.appearance.primaryFont"),
 			primaryFont);
 
@@ -106,7 +107,13 @@ public class AppearanceOptionPane extends AbstractOptionPane
 			"metal.secondary.font"));
 		addComponent(jEdit.getProperty("options.appearance.secondaryFont"),
 			secondaryFont);
-
+		
+		/* HelpViewer font */
+		helpViewerFont = new FontSelector(jEdit.getFontProperty(
+			"helpviewer.font", pf));
+		addComponent(jEdit.getProperty("options.appearance.helpViewerFont"),
+			helpViewerFont);
+		
 		/*
 		antiAliasExtras = new JComboBox(AntiAlias.comboChoices);
 		antiAliasExtras.setSelectedIndex(AntiAlias.appearance().val());
@@ -177,6 +184,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("lookAndFeel",lf);
 		jEdit.setFontProperty("metal.primary.font",primaryFont.getFont());
 		jEdit.setFontProperty("metal.secondary.font",secondaryFont.getFont());
+		jEdit.setFontProperty("helpviewer.font", helpViewerFont.getFont());
 		jEdit.setProperty("history",history.getText());
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
@@ -235,6 +243,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JComboBox lookAndFeel;
 	private FontSelector primaryFont;
 	private FontSelector secondaryFont;
+	private FontSelector helpViewerFont;
 	private JComboBox dockingFramework;
 	private JTextField history;
 	private JTextField menuSpillover;

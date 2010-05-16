@@ -158,7 +158,7 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 		viewer.setEditable(false);
 		viewer.addHyperlinkListener(new LinkHandler());
 			 
-		viewer.setFont(jEdit.getFontProperty("view.font"));
+		viewer.setFont(jEdit.getFontProperty("helpviewer.font"));
 		viewer.addPropertyChangeListener(new PropertyChangeHandler());
 		viewer.addKeyListener(new KeyHandler());
 

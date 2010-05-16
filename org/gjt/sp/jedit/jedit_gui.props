@@ -1824,6 +1824,7 @@ options.appearance.lf.note=Restart jEdit for look & feel changes to take effect
 options.appearance.lf=Swing look & feel:
 options.appearance.primaryFont=Button, menu and label font:
 options.appearance.secondaryFont=List and text field font:
+options.appearance.helpViewerFont=HelpViewer/Browser Text font:
 options.appearance.history=History text field entries to remember:
 options.appearance.menuSpillover=Number of items before menus spill over:
 options.appearance.startup.label=Startup options

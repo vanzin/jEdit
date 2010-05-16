@@ -146,7 +146,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Removed LatestVersion plugin.
 
-- HelpViewer now uses same font as text area. (#3002186 - Alan Ezust)
+- HelpViewer font can be configured via Appearance Option Pane. (#3002186 - Alan Ezust)
 
 - Added actions for eating whitespace at word ends in both directions
   for findWordStart. (#1953341 - strank)
