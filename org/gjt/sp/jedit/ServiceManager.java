@@ -225,7 +225,7 @@ public class ServiceManager
 	 */
 	public static Object getService(String clazz, String name)
 	{
-		// they never taught you this in undergrad computer science
+
 		Descriptor key = new Descriptor(clazz,name);
 		Descriptor value = serviceMap.get(key);
 		if(value == null)

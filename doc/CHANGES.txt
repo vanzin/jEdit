@@ -110,7 +110,7 @@ and Marcelo Vanzin for contributing to this release.
 - Added StyleEditor.invokeForCaret(textArea) which does same as
   buffer.editSyntaxStyle(textArea) did, but can be invoked without
   specifying the buffer object carefully. (Kazutoshi Satoda)
-  
+
 - HistoryModel's max size is no more defined globally : replaced the static
   max variable by a per-instance max variable and a static defaultMax variable
   (Eric Le Lay)
@@ -145,6 +145,8 @@ and Marcelo Vanzin for contributing to this release.
   and copy from/to the OS explorer (Matthieu Casanova)
 
 - Removed LatestVersion plugin.
+
+- HelpViewer now uses same font as text area. (#3002186 - Alan Ezust)
 
 - Added actions for eating whitespace at word ends in both directions
   for findWordStart. (#1953341 - strank)
