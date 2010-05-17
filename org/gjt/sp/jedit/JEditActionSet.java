@@ -150,7 +150,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 * Creates a new action set.
 	 * @since jEdit 4.3pre13
 	 */
-	public JEditActionSet()
+	protected JEditActionSet()
 	{
 		actions = new Hashtable<String, Object>();
 		loaded = true;
@@ -163,7 +163,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	 * @param uri The actions.xml URI
 	 * @since jEdit 4.3pre13
 	 */
-	public JEditActionSet(String[] cachedActionNames, URL uri)
+	protected JEditActionSet(String[] cachedActionNames, URL uri)
 	{
 		this();
 		this.uri = uri;
@@ -225,7 +225,7 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 				context.actionHash.remove(actions[i]);
 			}
 		}
-		this.actions.clear();
+		actions.clear();
 	} //}}}
 
 	//{{{ getAction() method
@@ -272,11 +272,11 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	public String[] getActionNames()
 	{
 		String[] retVal = new String[actions.size()];
-		Enumeration e = actions.keys();
+		Set<String> keys = actions.keySet();
 		int i = 0;
-		while(e.hasMoreElements())
+		for (String key : keys)
 		{
-			retVal[i++] = (String)e.nextElement();
+			retVal[i++] = key;
 		}
 		return retVal;
 	} //}}}
@@ -290,19 +290,17 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	public String[] getCacheableActionNames()
 	{
 		LinkedList<String> retVal = new LinkedList<String>();
-		Enumeration e = actions.elements();
-		while(e.hasMoreElements())
+		for (Object obj : actions.values())
 		{
-			Object obj = e.nextElement();
-			if(obj == placeholder)
+			if (obj == placeholder)
 			{
 				// ??? this should only be called with
 				// fully loaded action set
-				Log.log(Log.WARNING,this,"Action set not up "
+				Log.log(Log.WARNING, this, "Action set not up "
 					+ "to date");
 			}
-			else if(obj instanceof JEditBeanShellAction)
-				retVal.add(((JEditBeanShellAction)obj).getName());
+			else if (obj instanceof JEditBeanShellAction)
+				retVal.add(((JEditBeanShellAction) obj).getName());
 		}
 		return retVal.toArray(new String[retVal.size()]);
 	} //}}}
@@ -330,11 +328,11 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	{
 		load();
 		E[] retVal = getArray(actions.size());
-		Enumeration e = actions.elements();
+		Collection<Object> values = actions.values();
 		int i = 0;
-		while(e.hasMoreElements())
+		for (Object value : values)
 		{
-			retVal[i++] = (E) e.nextElement();
+			retVal[i++] = (E) value;
 		}
 		return retVal;
 	} //}}}
@@ -422,10 +420,9 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	{
 		AbstractInputHandler inputHandler = getInputHandler();
 
-		Iterator<Map.Entry<String,Object>> iter = actions.entrySet().iterator();
-		while(iter.hasNext())
+		Set<Map.Entry<String, Object>> entries = actions.entrySet();
+		for (Map.Entry<String, Object> entry : entries)
 		{
-			Map.Entry<String,Object> entry = iter.next();
 			String name = entry.getKey();
 
 			String shortcut1 = getProperty(name + ".shortcut");
@@ -454,11 +451,9 @@ public abstract class JEditActionSet<E extends JEditAbstractEditAction> implemen
 	JEditActionContext context;
 
 	//{{{ getActionNames() method
-	void getActionNames(List<String> vec)
+	void getActionNames(List<String> list)
 	{
-		Enumeration<String> e = actions.keys();
-		while(e.hasMoreElements())
-			vec.add(e.nextElement());
+		list.addAll(actions.keySet());
 	} //}}}
 
 	//}}}
