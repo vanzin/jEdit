@@ -70,11 +70,17 @@ class PluginDetailPanel extends JPanel
 		{
 			if (entry.status.equals(Entry.LOADED))
 			{
-				title.setText("<html><b>"+entry.name+"</b></html>");
-				StringBuilder builder = new StringBuilder();
+				if (entry.name == null)
+					title.setText("<html><b>"+entry.jar+"</b></html>");
+				else
+					title.setText("<html><b>"+entry.name+"</b></html>");
 				
-				builder.append("<b>Version</b>: ").append(entry.version).append("<br/>");
-				builder.append("<b>Author</b>: ").append(entry.author).append("<br/>");
+				StringBuilder builder = new StringBuilder();
+
+				if (entry.version != null)
+					builder.append("<b>Version</b>: ").append(entry.version).append("<br/>");
+				if (entry.author != null)
+					builder.append("<b>Author</b>: ").append(entry.author).append("<br/>");
 				if (entry.description != null)
 				{
 					builder.append("<br/>").append(entry.description);
