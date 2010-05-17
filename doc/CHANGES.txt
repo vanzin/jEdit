@@ -62,6 +62,8 @@ Kazutoshi Satoda, oman002, and Eric Le Lay for contributing to this release.
 - java installer refuses to install from a directory containing exclamation
   marks (SF.net bug #2065330 - Eric Le Lay)
 
+- Fix Angle brackets showing up in plugin descriptions in plugin manager
+  (SF.net bug #1963667 - Eric Le Lay)
 }}}
 {{{ Miscellaneous
 
