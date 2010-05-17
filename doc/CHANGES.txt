@@ -56,6 +56,8 @@ and Marcelo Vanzin for contributing to this release.
 - Don't replace colons by slashes in canonPath() on Mac OS X
   (SF.net bug #1488911 - Eric Le Lay - r17754)
 
+- Fix Angle brackets showing up in plugin descriptions in plugin manager
+  (SF.net bug #1963667 - Eric Le Lay)
 }}}
 {{{ API changes
 - Introduction of a new Threadpool using JDK's ExecutorService.

@@ -77,13 +77,15 @@ class PluginDetailPanel extends JPanel
 				
 				StringBuilder builder = new StringBuilder();
 
+				// <br> instead of <br/> because Sun's Java 5 HTML parser can't digest them.
+				// No problem on Sun's Java 6 JVM.
 				if (entry.version != null)
-					builder.append("<b>Version</b>: ").append(entry.version).append("<br/>");
+					builder.append("<b>Version</b>: ").append(entry.version).append("<br>");
 				if (entry.author != null)
-					builder.append("<b>Author</b>: ").append(entry.author).append("<br/>");
+					builder.append("<b>Author</b>: ").append(entry.author).append("<br>");
 				if (entry.description != null)
 				{
-					builder.append("<br/>").append(entry.description);
+					builder.append("<br>").append(entry.description);
 				}
 				pluginDetail.setText(builder.toString());
 			}
