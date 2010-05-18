@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3.3
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Eric Le Lay and Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -10,6 +10,8 @@ Thanks to Björn "Vampire" Kautler for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Fix Angle brackets showing up in plugin descriptions in plugin manager
+  (SF.net bug #1963667 - Eric Le Lay)
 
 }}}
 {{{ API Changes
@@ -62,8 +64,6 @@ Kazutoshi Satoda, oman002, and Eric Le Lay for contributing to this release.
 - java installer refuses to install from a directory containing exclamation
   marks (SF.net bug #2065330 - Eric Le Lay)
 
-- Fix Angle brackets showing up in plugin descriptions in plugin manager
-  (SF.net bug #1963667 - Eric Le Lay)
 }}}
 {{{ Miscellaneous
 
