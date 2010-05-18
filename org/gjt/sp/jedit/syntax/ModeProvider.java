@@ -51,6 +51,10 @@ public class ModeProvider
 	public static ModeProvider instance = new ModeProvider();
 
 	private LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(180);
+	
+	// any mode that is added that is already in the 'modes' map is added here. These
+	// 'override' modes are modes loaded from outside of the standard issue catalog files.
+	private LinkedHashMap<String, Mode> overrideModes = new LinkedHashMap<String, Mode>(20);
 
 	//{{{ removeAll() method
 	public void removeAll()
@@ -83,11 +87,25 @@ public class ModeProvider
 			(filename.endsWith(".gz") ? 3 : 0));
 
 		List<Mode> acceptable = new ArrayList<Mode>();
-		for(Mode mode : modes.values())
+		
+		// First check overrideModes as these are user supplied modes.
+		// User modes have priority.
+		for(Mode mode : overrideModes.values())
 		{
 			if(mode.accept(nogzName,firstLine))
 			{
 				acceptable.add(mode);
+			}
+		}
+		if (acceptable.size() == 0)
+		{
+			// no user modes were acceptable, so check standard modes.
+			for(Mode mode : modes.values())
+			{
+				if(mode.accept(nogzName,firstLine))
+				{
+					acceptable.add(mode);
+				}
 			}
 		}
 		if (acceptable.size() == 1) 
@@ -95,8 +113,8 @@ public class ModeProvider
 			return acceptable.get(0);	
 		}
 		if (acceptable.size() > 1) {
-			// most acceptable is a mode that matches both the 
-			// and the first line glob
+			// most acceptable is a mode that matches both the
+			// filename and the first line glob
 			for (Mode mode : acceptable) 
 			{
 				if (mode.acceptFilename(filename) && 
@@ -143,6 +161,9 @@ public class ModeProvider
 	 */
 	public void addMode(Mode mode)
 	{
+		if (modes.get(mode.getName()) != null) {
+			overrideModes.put(mode.getName(), mode);	
+		}
 		modes.put(mode.getName(), mode);
 	} //}}}
 

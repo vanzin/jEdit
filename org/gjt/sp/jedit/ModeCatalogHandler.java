@@ -70,9 +70,9 @@ class ModeCatalogHandler extends DefaultHandler
 			if (mode == null)
 			{
 			    mode = instantiateMode(modeName);
-			    ModeProvider.instance.addMode(mode);
 			}
-
+			ModeProvider.instance.addMode(mode);
+			
 			Object path;
 			if(resource)
 				path = jEdit.class.getResource(directory + file);

@@ -178,10 +178,6 @@ public class Mode
 	 */
 	public void setProperty(String key, Object value)
 	{
-		String prefix = "mode." + name + '.';
-		// out temporarily -- need a way to set this prop that doesn't 
-		// depend on jEdit.
-		//jEdit.setProperty(prefix + key, value.toString());
 		props.put(key,value);
 	} //}}}
 
@@ -193,10 +189,6 @@ public class Mode
 	 */
 	public void unsetProperty(String key)
 	{
-		String prefix = "mode." + name + '.';
-		// out temporarily -- need a way to unset this prop that doesn't 
-		// depend on jEdit.
-		//jEdit.unsetProperty(prefix + key);
 		props.remove(key);
 	} //}}}
 

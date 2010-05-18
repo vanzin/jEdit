@@ -37,6 +37,33 @@ class JEditMode extends Mode
 		super(name);
 	} //}}}
 
+	//{{{ setProperty() method
+	/**
+	 * Sets a mode property.
+	 * @param key The property name
+	 * @param value The property value
+	 */
+	@Override
+	public void setProperty(String key, Object value)
+	{
+		String prefix = "mode." + name + '.';
+		jEdit.setProperty(prefix + key, value.toString());
+		props.put(key,value);
+	} //}}}
+	
+	//{{{ unsetProperty() method
+	/**
+	 * Unsets a mode property.
+	 * @param key The property name
+	 */
+	@Override
+	public void unsetProperty(String key)
+	{
+		String prefix = "mode." + name + '.';
+		jEdit.unsetProperty(prefix + key);
+		props.remove(key);
+	} //}}}
+	
 	//{{{ getProperty() method
 	/**
 	 * Returns a mode property.
