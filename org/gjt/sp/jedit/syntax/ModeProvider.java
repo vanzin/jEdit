@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.LinkedHashMap;
 //}}}
@@ -60,6 +61,7 @@ public class ModeProvider
 	public void removeAll()
 	{
 		modes.clear();
+		overrideModes.clear();
 	} //}}}
 
 	//{{{ getMode() method
@@ -70,7 +72,12 @@ public class ModeProvider
 	 */
 	public Mode getMode(String name)
 	{
-		return modes.get(name);
+		Mode mode = overrideModes.get(name);
+		if (mode == null) 
+		{
+			mode = modes.get(name);
+		}
+		return mode;
 	} //}}}
 
 	//{{{ getModeForFile() method
@@ -112,7 +119,10 @@ public class ModeProvider
 		{
 			return acceptable.get(0);	
 		}
-		if (acceptable.size() > 1) {
+		if (acceptable.size() > 1) 
+		{
+			Collections.reverse(acceptable);
+			
 			// most acceptable is a mode that matches both the
 			// filename and the first line glob
 			for (Mode mode : acceptable) 
@@ -146,8 +156,11 @@ public class ModeProvider
 	 */
 	public Mode[] getModes()
 	{
-		Mode[] array = new Mode[modes.size()];
-		modes.values().toArray(array);
+		Mode[] array = new Mode[modes.size() + overrideModes.size()];
+		Mode[] standard = modes.values().toArray(new Mode[0]);
+		Mode[] override = overrideModes.values().toArray(new Mode[0]);
+		System.arraycopy(standard, 0, array, 0, standard.length);
+		System.arraycopy(override, 0, array, standard.length, override.length);
 		return array;
 	} //}}}
 
