@@ -519,6 +519,8 @@
 <MODE NAME="typoscript"         FILE="typoscript.xml"
                                 FILE_NAME_GLOB="*.ts"/>
 
+<MODE NAME='url' FILE='url.xml' FILE_NAME_GLOB='*.url' />
+                                
 <MODE NAME="uscript"		FILE="uscript.xml"
 				FILE_NAME_GLOB="*.uc" />
 

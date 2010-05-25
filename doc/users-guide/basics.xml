@@ -7,7 +7,7 @@
 
     <section id="overview">
         <title>Interface Overview</title>
-
+        
         <para>A <firstterm>View</firstterm> is the jEdit term for an editor main
         window. It is possible to have multiple views open at once, and each
         View can be split into multiple panes. jEdit remembers the state of open
