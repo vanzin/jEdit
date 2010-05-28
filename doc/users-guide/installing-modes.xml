@@ -7,7 +7,6 @@
     <!-- :indentSize=1:noTabs=true: -->
 
     <!-- :xml.root=users-guide.xml: -->
-
     <para>jEdit looks for edit modes in two locations; the
     <filename>modes</filename> subdirectory of the jEdit settings directory, and
     the <filename>modes</filename> subdirectory of the jEdit install directory.

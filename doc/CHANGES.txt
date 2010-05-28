@@ -134,7 +134,10 @@ and Marcelo Vanzin for contributing to this release.
   doxygen now highlights quoted strings in comments.
 
 - Added url.xml mode (# 1991306 - Kevin Hunter)  
-  
+
+- 'dot.xml' mode file indent{Open,Close}Brackets wrong 
+  (#3008614 - Robin Neatherway) 
+
 - Added logtalk.xml mode file (#1945284 - Paulo Moura)
 
 - Added regex.xml mode file (#2782258 - Kevin Hunter)
