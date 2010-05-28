@@ -2,12 +2,16 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3.3
 
-Thanks to Eric Le Lay and Björn "Vampire" Kautler for contributing to this release.
+Thanks to Eric Le Lay, Björn "Vampire" Kautler and Seph Soliman
+for contributing to this release.
 
 {{{ Bug Fixes
 
 - Fix Angle brackets showing up in plugin descriptions in plugin manager
   (SF.net bug #1963667 - Eric Le Lay)
+
+- Fix paste into Find dialog does nothing on Mac with non Aqua L&F
+  (SF.net bug #2959723 - Seph Soliman)
 
 }}}
 {{{ Miscellaneous
