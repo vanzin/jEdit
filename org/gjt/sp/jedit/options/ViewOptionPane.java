@@ -31,6 +31,7 @@ import java.awt.event.*;
 import java.awt.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class ViewOptionPane extends AbstractOptionPane
@@ -128,7 +129,17 @@ public class ViewOptionPane extends AbstractOptionPane
 		buffersetScope.addItem(BufferSet.Scope.global);
 		buffersetScope.addItem(BufferSet.Scope.view);
 		buffersetScope.addItem(BufferSet.Scope.editpane);
-		buffersetScope.setSelectedItem(BufferSet.Scope.fromString(jEdit.getProperty("bufferset.scope")));
+		BufferSet.Scope scope = null;
+		try
+		{
+			scope = BufferSet.Scope.valueOf(jEdit.getProperty("bufferset.scope"));
+		}
+		catch (IllegalArgumentException e)
+		{
+			Log.log(Log.ERROR, this, e);
+			scope = BufferSet.Scope.global;
+		}
+		buffersetScope.setSelectedItem(scope);
 		addComponent(jEdit.getProperty("options.bufferset.scope"), buffersetScope);
 
 		/* Sort buffers */
