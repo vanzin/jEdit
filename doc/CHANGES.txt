@@ -6,12 +6,12 @@ Thanks to Eric Le Lay and Björn "Vampire" Kautler for contributing to this relea
 
 {{{ Bug Fixes
 
+- Fix Angle brackets showing up in plugin descriptions in plugin manager
+  (SF.net bug #1963667 - Eric Le Lay)
 
 }}}
 {{{ Miscellaneous
 
-- Fix Angle brackets showing up in plugin descriptions in plugin manager
-  (SF.net bug #1963667 - Eric Le Lay)
 
 }}}
 {{{ API Changes
