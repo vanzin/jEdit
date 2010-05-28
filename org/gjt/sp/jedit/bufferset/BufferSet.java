@@ -42,23 +42,7 @@ import java.util.Comparator;
  */
 public class BufferSet
 {
-	//{{{ Scope enum
-	public enum Scope
-	{
-		editpane, view, global;
-
-		public static Scope fromString(String s)
-		{
-			Scope[] scopes = values();
-			for (Scope scope: scopes)
-			{
-				if (scope.toString().equals(s))
-					return scope;
-			}
-
-			return global;
-		}
-	} //}}}
+	public enum Scope { editpane, view, global }
 
 	//{{{ BufferSet constructor
 	public BufferSet(BufferSet source)

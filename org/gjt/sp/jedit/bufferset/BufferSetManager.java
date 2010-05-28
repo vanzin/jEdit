@@ -44,7 +44,15 @@ public class BufferSetManager
 	public BufferSetManager()
 	{
 		EditBus.addToBus(this);
-		scope = BufferSet.Scope.fromString(jEdit.getProperty("bufferset.scope", "global"));
+		try
+		{
+			scope = BufferSet.Scope.valueOf(jEdit.getProperty("bufferset.scope", "global"));
+		}
+		catch (IllegalArgumentException e)
+		{
+			Log.log(Log.ERROR, this, e);
+			scope = BufferSet.Scope.global;
+		}
 	} //}}}
 
 	//{{{ handleEditPaneUpdate() method
