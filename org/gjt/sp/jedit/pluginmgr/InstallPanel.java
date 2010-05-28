@@ -252,16 +252,6 @@ class InstallPanel extends JPanel implements EBComponent
 
 	//{{{ Inner classes
 
-	//{{{ KeyboardCommand enum
-	public enum KeyboardCommand
-	{
-		NONE,
-		TAB_OUT_FORWARD,
-		TAB_OUT_BACK,
-		EDIT_PLUGIN,
-		CLOSE_PLUGIN_MANAGER
-	} //}}}
-
 	//{{{ PluginTableModel class
 	private class PluginTableModel extends AbstractTableModel
 	{

@@ -288,16 +288,6 @@ public class ManagePanel extends JPanel
 
 	//{{{ Inner classes
 
-	//{{{ KeyboardCommand enum
-	private enum KeyboardCommand
-	{
-		NONE,
-		TAB_OUT_FORWARD,
-		TAB_OUT_BACK,
-		EDIT_PLUGIN,
-		CLOSE_PLUGIN_MANAGER
-	} //}}}
-
 	//{{{ Entry class
 	static class Entry
 	{
