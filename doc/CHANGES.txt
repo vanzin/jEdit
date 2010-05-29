@@ -45,10 +45,10 @@ and Marcelo Vanzin for contributing to this release.
 - ALT key typing with Windows Look&Feel (for menu bar interaction) now
   behaves a bit closer to native Windows applications.
   NOTE: It's still incomplete due to some problems in JVM.
-    http://bugs.sun.com/view_bug.do?bug_id=6923687
-    http://bugs.sun.com/view_bug.do?bug_id=6458497
-    ALT key typing is disabled on TextArea for now to prevent the latter
-    problem.
+        http://bugs.sun.com/view_bug.do?bug_id=6923687
+        http://bugs.sun.com/view_bug.do?bug_id=6458497
+        ALT key typing is disabled on TextArea for now to prevent the latter
+        problem.
   (SF.net bug #2795635 - Kazutoshi Satoda)
 
 - HelpViewer loads pages asynchronously (SF.net bug #1231914 - Eric Le Lay)
@@ -58,8 +58,10 @@ and Marcelo Vanzin for contributing to this release.
 
 - Fix Angle brackets showing up in plugin descriptions in plugin manager
   (SF.net bug #1963667 - Eric Le Lay)
+
 }}}
 {{{ API changes
+
 - Introduction of a new Threadpool using JDK's ExecutorService.
   It's api are added to ThreadUtilities, it is preferable to use it instead
   of the current VFSManager's threadpool. (Matthieu Casanova)
@@ -97,7 +99,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Added EditBus.sendAsync(): this just enqueues messages to be send over
   the EditBus as soon as the AWT thread is not busy, and returns immediately.
-   (Marcelo Vanzin)
+  (Marcelo Vanzin)
 
 - Added ability to tag classes with EditBus.EBHandler. This is only useful
   when tagging an EditPlugin class, and makes the plugin instance behave
@@ -133,10 +135,10 @@ and Marcelo Vanzin for contributing to this release.
   (bug #2895272 - report and patch from Bernhard Walle).
   doxygen now highlights quoted strings in comments.
 
-- Added url.xml mode (# 1991306 - Kevin Hunter)  
+- Added url.xml mode (# 1991306 - Kevin Hunter)
 
-- 'dot.xml' mode file indent{Open,Close}Brackets wrong 
-  (#3008614 - Robin Neatherway) 
+- 'dot.xml' mode file indent{Open,Close}Brackets wrong
+  (#3008614 - Robin Neatherway)
 
 - Added logtalk.xml mode file (#1945284 - Paulo Moura)
 
@@ -198,11 +200,10 @@ and Marcelo Vanzin for contributing to this release.
   it is. (Dale Anson)
 
 - Gave better priorities within modes which matches with a file at the
-  same time, as the following order.
-
-   - both the filename glob and the first line glob
-   - only the filename glob
-   - the first line glob  (Dale Anson)
+  same time, as the following order:
+  - both the filename glob and the first line glob
+  - only the filename glob
+  - the first line glob  (Dale Anson)
 
 - In status bar option pane, when adding a widget only widgets that are not
   already in the bar will be proposed (Matthieu Casanova feature #2937286)
