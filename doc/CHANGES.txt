@@ -11,6 +11,10 @@ and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
 
+- Improve indentation settings of the shellscript edit mode and re-indent
+  the current line before inserting a newline in insert-newline-indent
+  action. (bug #3005463 - Björn "Vampire" Kautler)
+
 - Removed the duplicated "Architecture" line from the Debian control file.
   (bug #2999456 - Björn "Vampire" Kautler)
 
