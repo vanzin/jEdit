@@ -142,11 +142,12 @@ public class ThreadUtilities
 
 	private static final ExecutorService threadPool;
 
+	private static final int CORE_POOL_SIZE = 4;
+
 	static
 	{
 		threadPool = Executors.newCachedThreadPool(new JEditThreadFactory());
-		((ThreadPoolExecutor) threadPool).setCorePoolSize(2);
-		((ThreadPoolExecutor) threadPool).setMaximumPoolSize(10);
+		((ThreadPoolExecutor) threadPool).setCorePoolSize(CORE_POOL_SIZE);
 	}
 
 	//{{{ MyRunnable class
