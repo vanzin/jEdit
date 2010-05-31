@@ -2328,7 +2328,7 @@ abort.message=Are you sure you want to abort the currently executing\n\
 #}}}
 
 #{{{ Task  monitor
-tasks-monitor.title=Task Monitor
+task-monitor.title=Task Monitor
 #}}}
 
 #{{{ VFS browser
