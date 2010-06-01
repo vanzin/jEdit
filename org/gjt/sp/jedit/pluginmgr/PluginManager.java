@@ -28,14 +28,12 @@ import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import org.xml.sax.SAXParseException;
 import org.gjt.sp.jedit.EditBus.EBHandler;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.options.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.WorkRequest;
+import org.gjt.sp.util.Task;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /**
@@ -55,6 +53,7 @@ public class PluginManager extends JFrame
 	} //}}}
 
 	//{{{ dispose() method
+	@Override
 	public void dispose()
 	{
 		instance = null;
@@ -141,7 +140,7 @@ public class PluginManager extends JFrame
 	private final Frame parent;
 	//}}}
 
-	static public final String PROPERTY_PLUGINSET = "plugin-manager.pluginset.path";
+	public static final String PROPERTY_PLUGINSET = "plugin-manager.pluginset.path";
 
 	//{{{ PluginManager constructor
 	private PluginManager(Frame parent)
@@ -237,11 +236,10 @@ public class PluginManager extends JFrame
 			return;
 		}
 
-		final Exception[] exception = new Exception[1];
-
-		VFSManager.runInWorkThread(new WorkRequest()
+		ThreadUtilities.runInBackground(new Task()
 		{
-			public void run()
+			@Override
+			public void _run()
 			{
 				try
 				{
@@ -250,69 +248,9 @@ public class PluginManager extends JFrame
 						"plugin-manager.list-download-connect"));
 					pluginList = new PluginList(this);
 				}
-				catch(Exception e)
-				{
-					exception[0] = e;
-				}
 				finally
 				{
 					downloadingPluginList = false;
-				}
-			}
-		});
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				if(exception[0] instanceof SAXParseException)
-				{
-					SAXParseException se = (SAXParseException)
-						exception[0];
-
-					int line = se.getLineNumber();
-					String path = jEdit.getProperty(
-						"plugin-manager.export-url");
-					String message = se.getMessage();
-					Log.log(Log.ERROR,this,path + ':' + line
-						+ ": " + message);
-					String[] pp = { path,
-						String.valueOf(line),
-						message };
-					GUIUtilities.error(PluginManager.this,
-						"plugin-list.xmlerror",pp);
-				}
-				else if(exception[0] != null)
-				{
-					Exception e = exception[0];
-
-					Log.log(Log.ERROR,this,e);
-					String[] pp = { e.toString() };
-
-					String ok = jEdit.getProperty(
-						"common.ok");
-					String proxyButton = jEdit.getProperty(
-						"plugin-list.ioerror.proxy-servers");
-					int retVal =
-						JOptionPane.showOptionDialog(
-						PluginManager.this,
-						jEdit.getProperty("plugin-list.ioerror.message",pp),
-						jEdit.getProperty("plugin-list.ioerror.title"),
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.ERROR_MESSAGE,
-						null,
-						new Object[] {
-							proxyButton,
-							ok
-						},
-						ok);
-
-					if(retVal == 0)
-					{
-						new GlobalOptions(
-							PluginManager.this,
-							"firewall");
-					}
 				}
 			}
 		});

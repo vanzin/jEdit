@@ -27,13 +27,11 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
+
+import org.gjt.sp.util.*;
 import org.xml.sax.XMLReader;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.XMLReaderFactory;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.WorkRequest;
-import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.jedit.*;
 //}}}
 
@@ -62,13 +60,13 @@ class PluginList
 	 */
 	private final String id;
 	private String cachedURL;
-	private WorkRequest workRequest;
+	private final Task task;
 	String gzipURL;
 	//{{{ PluginList constructor
-	PluginList(WorkRequest workRequest) 
+	PluginList(Task task)
 	{
 		id = jEdit.getProperty("plugin-manager.mirror.id");
-		this.workRequest = workRequest;
+		this.task = task;
 		readPluginList(true);
 	}
 	
@@ -175,7 +173,7 @@ class PluginList
 		try
 		{
 			
-			workRequest.setStatus(jEdit.getProperty("plugin-manager.list-download"));
+			task.setStatus(jEdit.getProperty("plugin-manager.list-download"));
 			InputStream inputStream = new URL(gzipURL).openStream();
 			String fileName = cachedURL.replaceFirst("file:///", "");
 			out = new BufferedOutputStream(new FileOutputStream(fileName));
