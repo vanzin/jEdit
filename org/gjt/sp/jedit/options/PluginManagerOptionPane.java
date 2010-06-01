@@ -305,9 +305,9 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 				{
 					MirrorList mirrorList = new MirrorList(download, this);
 					if (download)
-						saveMirrorList(mirrorList.xml);
+						saveMirrorList(mirrorList.getXml());
 
-					mirrors.addAll(mirrorList.mirrors);
+					mirrors.addAll(mirrorList.getMirrors());
 				}
 				catch (Exception ex)
 				{

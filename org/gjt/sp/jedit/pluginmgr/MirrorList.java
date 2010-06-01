@@ -40,10 +40,6 @@ import org.gjt.sp.util.Log;
  */
 public class MirrorList
 {
-	public List<Mirror> mirrors;
-	/** The xml mirror list. */
-	public String xml;
-
 	//{{{ MirrorList constructor
 	public MirrorList(boolean download, ProgressObserver observer) throws Exception
 	{
@@ -80,7 +76,24 @@ public class MirrorList
 		observer.setValue(2);
 	} //}}}
 
+	//{{{ getXml() method
+	public String getXml()
+	{
+		return xml;
+	} //}}}
+
+	//{{{ getMirrors() method
+	public List<Mirror> getMirrors()
+	{
+		return mirrors;
+	} //}}}
+
 	//{{{ Private members
+
+	/** The xml mirror list. */
+	private String xml;
+	private final List<Mirror> mirrors;
+
 
 	//{{{ readXml() method
 	/**
@@ -167,7 +180,7 @@ public class MirrorList
 	} //}}}
 
 	//{{{ MirrorCompare class
-	static private class MirrorCompare implements Comparator<Mirror>
+	private static class MirrorCompare implements Comparator<Mirror>
 	{
 		public int compare(Mirror m1,Mirror m2)
 		{
