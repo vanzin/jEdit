@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit.pluginmgr;
 
+//{{{ Imports
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -34,6 +35,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
  * @version $Id$
@@ -62,7 +64,9 @@ public class MirrorList
 			Log.log(Log.NOTICE, this, "Loading mirror list from cache");
 			readXml();
 		}
-		observer.setValue(1);
+		if (xml == null)
+			return;
+		observer.setValue(1L);
 		Reader in = new BufferedReader(new StringReader(xml));
 
 		InputSource isrc = new InputSource(in);
@@ -73,7 +77,7 @@ public class MirrorList
 		parser.setEntityResolver(handler);
 		parser.setErrorHandler(handler);
 		parser.parse(isrc);
-		observer.setValue(2);
+		observer.setValue(2L);
 	} //}}}
 
 	//{{{ getXml() method
