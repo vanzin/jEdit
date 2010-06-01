@@ -31,7 +31,6 @@ import java.util.List;
 import java.io.*;
 
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.pluginmgr.*;
 import org.gjt.sp.util.*;
 
@@ -49,6 +48,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	} //}}}
 
 	//{{{ _init() method
+	@Override
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -95,7 +95,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			"options.plugin-manager.updateMirrors"));
 		updateMirrors.addActionListener(new ActionHandler());
 		updateMirrors.setEnabled(false);
-		VFSManager.runInWorkThread(new UpdateMirrorsThread(false));
+		ThreadUtilities.runInBackground(new UpdateMirrorsThread(false));
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		panel.add(updateMirrors);
 		if (spinnerPanel != null) panel.add(spinnerPanel);
@@ -258,6 +258,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 			setSelectionMode(SINGLE_SELECTION);
 		}
 
+		@Override
 		public void removeSelectionInterval(int index0, int index1) {}
 	} //}}}
 
@@ -268,7 +269,7 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		{
 			updateMirrors.setEnabled(false);
 			updateStatus.setText(jEdit.getProperty("options.plugin-manager.workthread"));
-			VFSManager.runInWorkThread(new UpdateMirrorsThread(true));
+			ThreadUtilities.runInBackground(new UpdateMirrorsThread(true));
 		}
 	} //}}}
 
@@ -282,9 +283,9 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 	 * 2 : xml parsed
 	 * 3 : list updated
 	 */
-	class UpdateMirrorsThread extends WorkRequest
+	class UpdateMirrorsThread extends Task
 	{
-		private boolean download;
+		private final boolean download;
 
 		UpdateMirrorsThread(boolean download)
 		{
@@ -292,13 +293,14 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 		}
 
 		//{{{ run() method
-		public void run()
+		@Override
+		public void _run()
 		{
 			try
 			{
 				setStatus(jEdit.getProperty("options.plugin-manager.workthread"));
-				setMaximum(3);
-				setValue(0);
+				setMaximum(3L);
+				setValue(0L);
 
 				final List<MirrorList.Mirror> mirrors = new ArrayList<MirrorList.Mirror>();
 				try
@@ -309,17 +311,24 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 
 					mirrors.addAll(mirrorList.getMirrors());
 				}
-				catch (Exception ex)
+				catch (final Exception ex)
 				{
 					if (download)
 					{
 						Log.log(Log.ERROR,this,ex);
-						GUIUtilities.error(PluginManagerOptionPane.this,
+						ThreadUtilities.runInDispatchThread(new Runnable()
+						{
+							public void run()
+							{
+								GUIUtilities.error(PluginManagerOptionPane.this,
 								"ioerror",new String[] { ex.toString() });
+							}
+						});
+
 					}
 				}
 
-				SwingUtilities.invokeLater(new Runnable()
+				ThreadUtilities.runInDispatchThread(new Runnable()
 				{
 					public void run()
 					{
@@ -335,15 +344,25 @@ public class PluginManagerOptionPane extends AbstractOptionPane
 								break;
 							}
 						}
+						if (size == 0)
+						{
+							miraList.clearSelection();
+						}
 					}
 				});
 
-				setValue(3);
+				setValue(3L);
 			}
 			finally
 			{
-				updateMirrors.setEnabled(true);
-				updateStatus.setText(null);
+				ThreadUtilities.runInDispatchThread(new Runnable()
+				{
+					public void run()
+					{
+						updateMirrors.setEnabled(true);
+						updateStatus.setText(null);
+					}
+				});
 			}
 		} //}}}
 
