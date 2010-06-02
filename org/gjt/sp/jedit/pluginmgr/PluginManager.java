@@ -70,11 +70,6 @@ public class PluginManager extends JFrame
 		{
 			pluginList = null;
 			updatePluginList();
-			if(tabPane.getSelectedIndex() != 0)
-			{
-				installer.updateModel();
-				updater.updateModel();
-			}
 		}
 	} //}}}
 
@@ -252,8 +247,26 @@ public class PluginManager extends JFrame
 				{
 					downloadingPluginList = false;
 				}
+				ThreadUtilities.runInDispatchThread(new Runnable()
+				{
+					public void run()
+					{
+						pluginListUpdated();
+					}
+				});
 			}
 		});
+	} //}}}
+
+	//{{{ processKeyEvent() method
+	private void pluginListUpdated()
+	{
+		Component selected = tabPane.getSelectedComponent();
+		if(selected == installer || selected == updater)
+		{
+			installer.updateModel();
+			updater.updateModel();
+		}
 	} //}}}
 
 	//{{{ processKeyEvent() method
@@ -295,8 +308,6 @@ public class PluginManager extends JFrame
 			if(selected == installer || selected == updater)
 			{
 				updatePluginList();
-				installer.updateModel();
-				updater.updateModel();
 			}
 			else if(selected == manager)
 				manager.update();
