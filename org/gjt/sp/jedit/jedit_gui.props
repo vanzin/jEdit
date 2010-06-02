@@ -2557,21 +2557,6 @@ plugin-manager.list-download-connect=Connecting to plugins.jedit.org
 plugin-manager.list-download=Downloading plugin list from plugins.jedit.org
 plugin-manager.filterField=Show only plugins whose name contains this text
 
-#{{{ Error while loading plugin list
-plugin-list.ioerror.title=I/O Error
-plugin-list.ioerror.message=Could not download the plugin list.\n\
-	({0})\n\
-	\n\
-	If you are behind an HTTP or SOCKS proxy, click\n\
-	"Proxy Servers" to configure proxy server settings\n\
-	and try again.
-plugin-list.ioerror.proxy-servers=Proxy Servers...
-
-plugin-list.xmlerror.title=XML Parser Error
-plugin-list.xmlerror.message=An error occurred while parsing {0}, line {1}:\n\
-	{2}
-#}}}
-
 #{{{ Plugin management
 manage-plugins.title=Manage
 
