@@ -21,6 +21,8 @@
 
 package org.gjt.sp.util;
 
+import javax.swing.*;
+
 /**
  * A Task is basically a Runnable but with some information about it's progression.
  * @since jEdit 4.4pre1
@@ -40,23 +42,18 @@ public abstract class Task implements Runnable, ProgressObserver
 	 */
 	private Thread thread;
 
-	public enum State
-	{
-		Waiting, Running, Done
-	}
-
-	private State state;
+	private SwingWorker.StateValue state;
 
 	//{{{ Task Constructor
 	protected Task()
 	{
-		state = State.Waiting;
+		state = SwingWorker.StateValue.PENDING;
 	} //}}}
 
 	//{{{ run() method
 	public final void run()
 	{
-		state = State.Running;
+		state = SwingWorker.StateValue.STARTED;
 		TaskManager.instance.fireRunning(this);
 		try
 		{
@@ -68,7 +65,7 @@ public abstract class Task implements Runnable, ProgressObserver
 		{
 			Log.log(Log.ERROR, this, t);
 		}
-		state = State.Done;
+		state = SwingWorker.StateValue.DONE;
 		TaskManager.instance.fireDone(this);
 	} //}}}
 
@@ -111,7 +108,7 @@ public abstract class Task implements Runnable, ProgressObserver
 		return maximum;
 	}
 
-	public State getState()
+	public SwingWorker.StateValue getState()
 	{
 		return state;
 	}
