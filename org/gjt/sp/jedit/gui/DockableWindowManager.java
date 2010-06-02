@@ -152,7 +152,7 @@ import org.gjt.sp.util.Log;
 	//}}}
 
 	// {{{ data members
-	private final Map<PluginJAR, Set<String>> plugins = new HashMap<PluginJAR, Set<String>>(); 
+	private final Map<PluginJAR, Set<String>> plugins = new HashMap<PluginJAR, Set<String>>();
 	private final Map<String, String> positions = new HashMap<String, String>();
 	protected View view;
 	protected DockableWindowFactory factory;
@@ -322,13 +322,17 @@ import org.gjt.sp.util.Log;
 
 	// {{{ closeListener() method
 	/**
-	 *
 	 * The actionEvent "close-docking-area" by default only works on
-	 * windows that are docked. If you want your floatable plugins to also
-	 * respond to this event, you need to add key listeners to each component
-	 * in your plugin that usually has keyboard focus.
-	 * This function returns a key listener which does exactly that.
-	 * You should not need to call this method - it is used by FloatingWindowContainer.
+	 * dockable windows that have no special keyboard handling.
+
+	 * If you have dockable widgets with input widgets and/or other fancy
+	 * keyboard handling, those components may not respond to close docking area.
+
+	 * You can add key listeners to each keyboard-handling component
+	 * in your dockable that usually has keyboard focus.
+	 *
+	 * This function creates and returns a key listener which does exactly that.
+	 * It is also used by FloatingWindowContainer when creating new floating windows.
 	 *
 	 * @param dockableName the name of your dockable
 	 * @return a KeyListener you can add to that plugin's component.
@@ -514,7 +518,7 @@ import org.gjt.sp.util.Log;
 	{
 	}
 	// }}}
-	
+
 	// {{{
 	protected void dockingPositionChanged(String dockableName,
 		String oldPosition, String newPosition)

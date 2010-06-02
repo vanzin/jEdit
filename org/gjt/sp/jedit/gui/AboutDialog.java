@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.gui;
 
 //{{{ Imports
 import javax.swing.*;
+
 import java.awt.event.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -171,7 +172,15 @@ public class AboutDialog extends JDialog implements ActionListener
 
 		private void handleKeyEvent(KeyEvent e)
 		{
-			if (e.getKeyCode() == KeyEvent.VK_DOWN)
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				try {
+					AboutDialog ad = (AboutDialog) SwingUtilities.getAncestorOfClass(AboutDialog.class, this);
+					ad.closeDialog();
+				}
+				catch (NullPointerException npe) {}
+				
+			}
+			else if (e.getKeyCode() == KeyEvent.VK_DOWN)
 			{
 				skipDrain = false;
 				Collections.rotate(vLines, -1);
