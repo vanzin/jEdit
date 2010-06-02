@@ -1,0 +1,10 @@
+/**
+	Bind a bsh object into a particular namespace and interpreter
+*/
+import org.gjt.sp.jedit.bsh.This;
+import org.gjt.sp.jedit.bsh.NameSpace;
+
+bind( org.gjt.sp.jedit.bsh.This ths, bsh.NameSpace namespace ) {
+	This.bind( ths, namespace, this.interpreter );
+}
+
