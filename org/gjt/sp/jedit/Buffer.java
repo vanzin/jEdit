@@ -63,6 +63,7 @@ import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StandardUtilities;
 
 /**
  * A <code>Buffer</code> represents the contents of an open text
@@ -2005,7 +2006,7 @@ public class Buffer extends JEditBuffer
 		final byte[] dummy = new byte[1];
 		if (!jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
 			return dummy;
-		return MiscUtilities.md5(getText()); 
+		return StandardUtilities.md5(getText()); 
 	}
 
 	/** Update the buffer's members with the current hash and length,

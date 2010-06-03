@@ -31,8 +31,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.MalformedInputException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -1693,26 +1691,6 @@ loop:		for(;;)
 		return XMLUtilities.findEntity(systemId, test, where);
 	} //}}}
 	
-	// {{{ MD5 sum method
-	/**
-	 * Returns the md5sum for given string. Or dummy byte array on error
-	 * Supress NoSuchAlgorithmException because MD5 algorithm always present in JRE
-	 * @param Given string
-	 * @return md5 sum of given string 
-	 */
-	public static byte[] md5(String s) {
-		final byte[] dummy = new byte[1];
-		try {
-			MessageDigest digest = MessageDigest.getInstance("MD5");
-			digest.update(s.getBytes());
-			return digest.digest();
-		} catch (NoSuchAlgorithmException e) {
-			Log.log(Log.ERROR, MiscUtilities.class, "Can't Calculate MD5 hash!", e);
-			return dummy;
-		}
-	}
-	// }}}
-
 	//{{{ Private members
 	private MiscUtilities() {}
 
