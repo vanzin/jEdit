@@ -57,6 +57,7 @@ public abstract class BufferAdapter implements BufferListener
 		int numLines, int length) {}
 	//}}}
 
+	//{{{ preContentInserted() method
 	/**
 	 * Called when text is about to be inserted in the buffer.
 	 *
@@ -69,7 +70,7 @@ public abstract class BufferAdapter implements BufferListener
 	 */
 	public void preContentInserted(JEditBuffer buffer, int startLine, int offset, int numLines, int length)
 	{
-	}
+	} //}}}
 
 	//{{{ preContentRemoved() method
 	/**
