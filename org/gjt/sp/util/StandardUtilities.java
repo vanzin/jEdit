@@ -28,8 +28,6 @@ package org.gjt.sp.util;
 //{{{ Imports
 import javax.swing.text.Segment;
 
-import org.gjt.sp.jedit.MiscUtilities;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
@@ -748,7 +746,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 			digest.update(s.getBytes());
 			return digest.digest();
 		} catch (NoSuchAlgorithmException e) {
-			Log.log(Log.ERROR, MiscUtilities.class, "Can't Calculate MD5 hash!", e);
+			Log.log(Log.ERROR, StandardUtilities.class, "Can't Calculate MD5 hash!", e);
 			return dummy;
 		}
 	}
