@@ -562,6 +562,21 @@ public class JEditBuffer
 			readUnlock();
 		}
 	}
+	
+	/**
+	 * Returns the full buffer content. This method is thread-safe
+	 */
+	public String getText() {
+		try 
+		{
+			readLock();
+			return contentMgr.getText(0, getLength());
+		} 
+		finally 
+		{
+			readUnlock();
+		}
+	}
 
 	/**
 	 * Returns the specified text range in a <code>Segment</code>.<p>
