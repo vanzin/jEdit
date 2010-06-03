@@ -738,14 +738,20 @@ import org.gjt.sp.util.Log;
 			String name = getName();
 			if (name == null)
 				return null;
-			String dir = jEdit.getSettingsDirectory();
-			if (dir == null)
+			String settings = jEdit.getSettingsDirectory();
+			if (settings == null)
 				return null;
-			dir = dir + File.separator + "wm" + File.separator + name;
-			File d = new File(dir);
-			if (!d.exists())
-				d.mkdirs();
-			return dir;
+			// Specify layout dirs inside a subfolder called "wm" (dir2)
+			// dir1 is implemented for backwards-compatability
+			String dir1 = settings + File.separator + name;
+			String dir2 = settings + File.separator + "wm" + File.separator + name;
+			File d1 = new File(dir1);
+			File d2 = new File(dir2);
+			if (d1.exists() && !d2.exists())
+				return dir1;
+			if (!d2.exists())
+				d2.mkdirs();
+			return dir2;
 		}
 	} // }}}
 
