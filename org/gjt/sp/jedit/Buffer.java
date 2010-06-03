@@ -24,8 +24,25 @@
 package org.gjt.sp.jedit;
 
 //{{{ Imports
+import java.io.File;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Segment;
+
 import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.buffer.*;
+import org.gjt.sp.jedit.buffer.BufferChangeListener;
+import org.gjt.sp.jedit.buffer.BufferListener;
+import org.gjt.sp.jedit.buffer.BufferUndoListener;
+import org.gjt.sp.jedit.buffer.FoldHandler;
+import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
@@ -36,26 +53,16 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
-import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.options.GeneralOptionPane;
+import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
+import org.gjt.sp.jedit.syntax.ModeProvider;
+import org.gjt.sp.jedit.syntax.ParserRuleSet;
+import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.util.IntegerArray;
-import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
-import org.gjt.sp.jedit.options.GeneralOptionPane;
-
-import javax.swing.*;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.Segment;
-import java.io.File;
-import java.io.IOException;
-import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
-//}}}
+import org.gjt.sp.util.IntegerArray;
+import org.gjt.sp.util.Log;
 
 /**
  * A <code>Buffer</code> represents the contents of an open text
@@ -1998,32 +2005,7 @@ public class Buffer extends JEditBuffer
 		final byte[] dummy = new byte[1];
 		if (!jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
 			return dummy;
-		ByteBuffer bb = null;
-		readLock();
-		try
-		{
-			// Log.log(Log.NOTICE, this, "calculateHash()");
-			int length = getLength();
-			bb = ByteBuffer.allocate(length * 2);	// Chars are 2 bytes
-			CharBuffer cb = bb.asCharBuffer();
-			cb.append( getSegment(0, length) );
-		}
-		finally
-		{
-			readUnlock();
-		}
-		try
-		{
-			MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-			digest.update( bb );
-			return digest.digest();
-		}
-		catch (NoSuchAlgorithmException nsae)
-		{
-			Log.log(Log.ERROR, this, "Can't Calculate MD5 hash!", nsae);
-			return dummy;
-		}
-
+		return MiscUtilities.md5(getText()); 
 	}
 
 	/** Update the buffer's members with the current hash and length,
