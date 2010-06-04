@@ -4394,11 +4394,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			try
 			{
 				buffer.beginCompoundEdit();
-				// re-indent the current line before
-				// inserting the newline character
-				buffer.indentLine(caretLine,true);
 				setSelectedText("\n");
-				// calculate indentation of the new line
 				buffer.indentLine(caretLine,true);
 			}
 			finally
