@@ -129,6 +129,9 @@ and Marcelo Vanzin for contributing to this release.
 - HistoryModel's max size is no more defined globally : replaced the static
   max variable by a per-instance max variable and a static defaultMax variable
   (Eric Le Lay)
+  
+- The JeditBuffer class now have thread-safe getText() params-less convenience 
+  method (Vadim Voituk)
 
 }}}
 {{{ Editing

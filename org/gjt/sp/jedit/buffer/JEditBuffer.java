@@ -565,8 +565,10 @@ public class JEditBuffer
 	
 	/**
 	 * Returns the full buffer content. This method is thread-safe
+	 * @since 4.4.1
 	 */
-	public String getText() {
+	public String getText() 
+	{
 		try 
 		{
 			readLock();
