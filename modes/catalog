@@ -455,6 +455,9 @@
 <MODE NAME="slate"		FILE="slate.xml"
 				FILE_NAME_GLOB="*.slate" />
 
+<MODE NAME="slax" FILE="slax.xml"
+                FILE_NAME_GLOB="*.slax" />
+
 <MODE NAME="smalltalk"		FILE="smalltalk.xml"
 				FILE_NAME_GLOB="*.{st,sources,changes}" />
 
@@ -520,7 +523,7 @@
                                 FILE_NAME_GLOB="*.ts"/>
 
 <MODE NAME='url' FILE='url.xml' FILE_NAME_GLOB='*.url' />
-                                
+
 <MODE NAME="uscript"		FILE="uscript.xml"
 				FILE_NAME_GLOB="*.uc" />
 

@@ -146,6 +146,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Ruby mode - keyword highlighting bug fix ( # 2868654 - Suraj Kurapati)
 
+- Slax Edit Mode ( # 2883030 - curtis_call )
+
 - Added url.xml mode (# 1991306 - Kevin Hunter)
 
 - LaTeX mode - code indentation (2872638 - Michael Schlotter)
