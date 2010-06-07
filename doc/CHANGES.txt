@@ -152,6 +152,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Haskell edit mode rewrite ( # 2993269 - Stephen Blackheath)
 
+- Pure edit mode updates ( # 2988741 - asitdepends)
+
 - url.xml mode (# 1991306 - Kevin Hunter)
 
 - LaTeX mode - code indentation (2872638 - Michael Schlotter)

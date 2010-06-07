@@ -247,7 +247,7 @@
 
 <MODE NAME="jmk"		FILE="jmk.xml"
 				FILE_NAME_GLOB="*.jmk" />
-				
+
 <MODE NAME="json"       FILE="json.xml"
                 FILE_NAME_GLOB="*.json" />
 
@@ -380,8 +380,9 @@
 <MODE NAME="ptl"		FILE="ptl.xml"
 				FILE_NAME_GLOB="*.ptl"/>
 
-<MODE NAME="pure"		FILE="pure.xml"
-				FILE_NAME_GLOB="*.pure" />
+<MODE NAME="pure" FILE="pure.xml"
+                FILE_NAME_GLOB="*.pure"
+                FIRST_LINE_GLOB="#!*/*pure"/>
 
 <MODE NAME="pvwave"		FILE="pvwave.xml"
 				FILE_NAME_GLOB="*.jou" />
