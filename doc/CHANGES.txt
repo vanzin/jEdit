@@ -148,7 +148,9 @@ and Marcelo Vanzin for contributing to this release.
 
 - Slax Edit Mode ( # 2883030 - curtis_call )
 
-- Added url.xml mode (# 1991306 - Kevin Hunter)
+- Json edit mode ( # 2979745 - Dale Anson )
+
+- url.xml mode (# 1991306 - Kevin Hunter)
 
 - LaTeX mode - code indentation (2872638 - Michael Schlotter)
 

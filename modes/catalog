@@ -247,6 +247,9 @@
 
 <MODE NAME="jmk"		FILE="jmk.xml"
 				FILE_NAME_GLOB="*.jmk" />
+				
+<MODE NAME="json"       FILE="json.xml"
+                FILE_NAME_GLOB="*.json" />
 
 <MODE NAME="jsp"		FILE="jsp.xml"
 				FILE_NAME_GLOB="*.{jsp,jsf,jspf,tag}" />
