@@ -150,6 +150,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Json edit mode ( # 2979745 - Dale Anson )
 
+- PHP Smarty Templates Mode ( # 2969956 - Rowan Collins)
+
 - Haskell edit mode rewrite ( # 2993269 - Stephen Blackheath)
 
 - Pure edit mode updates ( # 2988741 - asitdepends)

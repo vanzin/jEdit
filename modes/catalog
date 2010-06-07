@@ -465,6 +465,9 @@
 <MODE NAME="smalltalk"		FILE="smalltalk.xml"
 				FILE_NAME_GLOB="*.{st,sources,changes}" />
 
+<MODE NAME="smarty" FILE="smarty.xml"
+                FILE_NAME_GLOB="*.tpl"/>
+
 <MODE NAME="sdl/pr"		FILE="sdl_pr.xml"
 				FILE_NAME_GLOB="*.pr"/>
 
@@ -510,9 +513,6 @@
 
 <MODE NAME="tsp"		FILE="tsp.xml"
 				FILE_NAME_GLOB="*.tsp" />
-
-<MODE NAME="tpl"		FILE="tpl.xml"
-				FILE_NAME_GLOB="*.tpl" />
 
 <MODE NAME="transact-sql"	FILE="tsql.xml"
 				FILE_NAME_GLOB="*.sql" />
