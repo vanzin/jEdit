@@ -150,6 +150,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Json edit mode ( # 2979745 - Dale Anson )
 
+- Haskell edit mode rewrite ( # 2993269 - Stephen Blackheath)
+
 - url.xml mode (# 1991306 - Kevin Hunter)
 
 - LaTeX mode - code indentation (2872638 - Michael Schlotter)
