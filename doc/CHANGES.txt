@@ -144,6 +144,8 @@ and Marcelo Vanzin for contributing to this release.
   (bug #2895272 - report and patch from Bernhard Walle).
   doxygen now highlights quoted strings in comments.
 
+- Ruby mode - keyword highlighting bug fix ( # 2868654 - Suraj Kurapati)
+
 - Added url.xml mode (# 1991306 - Kevin Hunter)
 
 - LaTeX mode - code indentation (2872638 - Michael Schlotter)
