@@ -1,9 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
 <!-- jEdit LaTeX mode
   written by: Michael Schlotter, m.schlotter@bath.ac.uk
-  latex.xml, v.1.2, 29 Mar 2008
+  latex.xml, v1.4.2, 26 November 2009
   
   Suggested catalog entry:
   <MODE NAME="latex" FILE="latex.xml"
@@ -12,10 +12,24 @@
 
 <MODE>
   <PROPS>
+    <!-- comments, word separators -->
     <PROPERTY NAME="lineComment" VALUE="%" />
-    <PROPERTY NAME="deepIndent" VALUE="FALSE" />
     <PROPERTY NAME="wordBreakChars" VALUE="" />
     <PROPERTY NAME="noWordSep" VALUE="\@_-:*&lt;&gt;" />
+    
+    <!-- indenting -->
+    <PROPERTY NAME="deepIndent" VALUE="FALSE" />
+    <PROPERTY NAME="doubleBracketIndent" VALUE="FALSE" />
+    <PROPERTY NAME="lineUpClosingBrackets" VALUE="FALSE" />
+    <PROPERTY NAME="indentOpenBrackets" VALUE="{[" />
+    <PROPERTY NAME="indentCloseBrackets" VALUE="]}" />
+    <PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+    <PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+    <PROPERTY NAME="indentNextLines" VALUE="^.*(\\begin\s*\{.*)$" />
+    <PROPERTY NAME="unindentThisLine" VALUE="^[ \t]*(\\item.*|\\end\s*\{.*)$" />
+    <PROPERTY NAME="unindentNextLines" VALUE="^.*(\\end\s*\{.*)$" />
+    <PROPERTY NAME="electricKeys"
+      VALUE="{abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" />
   </PROPS>
   
   <!-- default rules -->
@@ -25,9 +39,8 @@
     HIGHLIGHT_DIGITS="FALSE">
     
     <!-- \verb|sometext|; any delimeter except * can be used -->
-    <SPAN_REGEXP
-      TYPE="KEYWORD2" DELEGATE="VerbatimRules"
-      HASH_CHAR="\" NO_LINE_BREAK="TRUE">
+    <SPAN_REGEXP TYPE="KEYWORD2" DELEGATE="VerbatimRules"
+        HASH_CHAR="\" NO_LINE_BREAK="TRUE">
       <BEGIN>.verb[\*]?([\p{Punct}&amp;&amp;[^*]])</BEGIN>
       <END>$1</END>
     </SPAN_REGEXP>
@@ -78,6 +91,12 @@
       <BEGIN>\begin{align}</BEGIN><END>\end{align}</END>
     </SPAN>
     <SPAN TYPE="KEYWORD1" DELEGATE="MathRules">
+      <BEGIN>\begin{alignat*}</BEGIN><END>\end{alignat*}</END>
+    </SPAN>
+    <SPAN TYPE="KEYWORD1" DELEGATE="MathRules">
+      <BEGIN>\begin{alignat}</BEGIN><END>\end{alignat}</END>
+    </SPAN>
+    <SPAN TYPE="KEYWORD1" DELEGATE="MathRules">
       <BEGIN>\begin{flalign*}</BEGIN><END>\end{flalign*}</END>
     </SPAN>
     <SPAN TYPE="KEYWORD1" DELEGATE="MathRules">
@@ -96,7 +115,7 @@
       <BEGIN>\begin{multline}</BEGIN><END>\end{multline}</END>
     </SPAN>
     
-    <!-- labels - includes all commands ending with `ref' and `ref*' -->
+    <!-- labels - includes all commands ending with `ref' and `*ref' -->
     <SPAN TYPE="KEYWORD4" DELEGATE="LabelRules" NO_LINE_BREAK="TRUE">
       <BEGIN>\label{</BEGIN><END>}</END>
     </SPAN>
@@ -112,9 +131,8 @@
     <SPAN TYPE="KEYWORD4" DELEGATE="LabelRules" NO_LINE_BREAK="TRUE">
       <BEGIN>\url{</BEGIN><END>}</END>
     </SPAN>
-    <SPAN_REGEXP
-      TYPE="KEYWORD4" DELEGATE="LabelRules"
-      HASH_CHAR="\"  NO_LINE_BREAK="TRUE">
+    <SPAN_REGEXP TYPE="KEYWORD4" DELEGATE="LabelRules"
+        HASH_CHAR="\" NO_LINE_BREAK="TRUE">
       <BEGIN>.[\p{Alnum}]*ref[\*]?\{</BEGIN>
       <END>}</END>
     </SPAN_REGEXP>
@@ -206,8 +224,7 @@
     <SEQ TYPE="KEYWORD3">&amp;</SEQ>
     
     <!-- labels -->
-    <MARK_FOLLOWING TYPE="LABEL" MATCH_TYPE="KEYWORD4"
-      >\label{</MARK_FOLLOWING>
+    <MARK_FOLLOWING TYPE="LABEL" MATCH_TYPE="KEYWORD4">\label{</MARK_FOLLOWING>
     
     <!-- comments -->
     <EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>

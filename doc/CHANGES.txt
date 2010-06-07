@@ -128,8 +128,8 @@ and Marcelo Vanzin for contributing to this release.
 - HistoryModel's max size is no more defined globally : replaced the static
   max variable by a per-instance max variable and a static defaultMax variable
   (Eric Le Lay)
-  
-- The JeditBuffer class now have thread-safe getText() params-less convenience 
+
+- The JeditBuffer class now have thread-safe getText() params-less convenience
   method (Vadim Voituk)
 
 }}}
@@ -145,6 +145,8 @@ and Marcelo Vanzin for contributing to this release.
   doxygen now highlights quoted strings in comments.
 
 - Added url.xml mode (# 1991306 - Kevin Hunter)
+
+- LaTeX mode - code indentation (2872638 - Michael Schlotter)
 
 - 'dot.xml' mode file indent{Open,Close}Brackets wrong
   (#3008614 - Robin Neatherway)
