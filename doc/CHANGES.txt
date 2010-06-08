@@ -140,6 +140,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Added plaintex.xml mode file, for plain tex files. (# 2787012 - James Nicholl)
 
+- Added Go edit mode (#2898646 - Jim Lawton)
+
 - When pasting text copied from the textarea, if the target textarea has
   no edit mode, the edit mode from the source is copied (Matthieu Casanova)
 
