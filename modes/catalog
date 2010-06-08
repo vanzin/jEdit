@@ -422,7 +422,7 @@
 				FIRST_LINE_GLOB="{===,~~~}*"/>
 
 <MODE NAME="rhtml"		FILE="rhtml.xml"
-				FILE_NAME_GLOB="*.rhtml" />
+				FILE_NAME_GLOB="*.{rhtml,html.erb}" />
 
 <MODE NAME="rpm-spec"		FILE="rpmspec.xml"
 				FILE_NAME_GLOB="*.spec" />
