@@ -158,5 +158,5 @@ public abstract class FoldHandler
 		return name;
 	} //}}}
 
-	private String name;
+	private final String name;
 }
