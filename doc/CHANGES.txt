@@ -135,7 +135,8 @@ and Marcelo Vanzin for contributing to this release.
 }}}
 {{{ Editing
 
-- Added haxe.xml mode file to support haXe language (Dion Whitehead)
+- Added haxe.xml and hxml mode files to support haXe language
+  (Dion Whitehead, François Rey, # 2922986)
 
 - When pasting text copied from the textarea, if the target textarea has
   no edit mode, the edit mode from the source is copied (Matthieu Casanova)
