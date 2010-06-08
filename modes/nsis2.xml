@@ -460,6 +460,7 @@ This file should be accurate as of the version of NSIS 2.30. If I've left someth
 			<KEYWORD1>quit</KEYWORD1>
 			<KEYWORD1>seterrors</KEYWORD1>
 			<KEYWORD1>strcmp</KEYWORD1>
+			<KEYWORD1>strcmps</KEYWORD1>
 
 			<!-- Callback functions -->
 			<KEYWORD3>.onguiinit</KEYWORD3>
