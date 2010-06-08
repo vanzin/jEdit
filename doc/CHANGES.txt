@@ -149,6 +149,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - Ruby mode - keyword highlighting bug fix ( # 2868654 - Suraj Kurapati)
 
+- Updated logtalk.xml file (# 2937909 - Paulo Moura)
+
 - Slax Edit Mode ( # 2883030 - curtis_call )
 
 - Json edit mode ( # 2979745 - Dale Anson )
