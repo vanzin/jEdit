@@ -11,6 +11,10 @@ and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
 
+- Fixed caret going to the wrong position when adding explicit folds
+  in a buffer that uses an edit mode that has no line comment
+  (Matthieu Casanova #2138160)
+  
 - When saving a buffer the autoreload option of the buffer was overridden
   by global settings (Matthieu Casanova #2999966)
 
