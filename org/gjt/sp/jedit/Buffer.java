@@ -703,6 +703,7 @@ public class Buffer extends JEditBuffer
 	public void setAutoReload(boolean value)
 	{
 		setFlag(AUTORELOAD, value);
+		autoreloadOverridden = isAutoreloadPropertyOverriden();
 	} //}}}
 
 	//{{{ getAutoReloadDialog() method
@@ -726,6 +727,7 @@ public class Buffer extends JEditBuffer
 	public void setAutoReloadDialog(boolean value)
 	{
 		setFlag(AUTORELOAD_DIALOG, value);
+		autoreloadOverridden = isAutoreloadPropertyOverriden();
 	} //}}}
 
 	//{{{ getVFS() method
@@ -991,8 +993,11 @@ public class Buffer extends JEditBuffer
 	public void propertiesChanged()
 	{
 		super.propertiesChanged();
-		setAutoReloadDialog(jEdit.getBooleanProperty("autoReloadDialog"));
-		setAutoReload(jEdit.getBooleanProperty("autoReload"));
+		if (!autoreloadOverridden)
+		{
+			setAutoReloadDialog(jEdit.getBooleanProperty("autoReloadDialog"));
+			setAutoReload(jEdit.getBooleanProperty("autoReload"));
+		}
 		if (!isTemporary())
 			EditBus.send(new BufferUpdate(this,null,BufferUpdate.PROPERTIES_CHANGED));
 	} //}}}
@@ -1789,6 +1794,13 @@ public class Buffer extends JEditBuffer
 		return (flags & mask) == mask;
 	} //}}}
 
+	//{{{ getFlag() method
+	private boolean isAutoreloadPropertyOverriden()
+	{
+		return getFlag(AUTORELOAD) != jEdit.getBooleanProperty("autoReload") ||
+			getFlag(AUTORELOAD_DIALOG) != jEdit.getBooleanProperty("autoReloadDialog");
+	} //}}}
+
 	//{{{ Flag values
 	private static final int CLOSED = 0;
 	private static final int NEW_FILE = 3;
@@ -1805,6 +1817,8 @@ public class Buffer extends JEditBuffer
 	//}}}
 
 	//{{{ Instance variables
+	/** Indicate if the autoreload property was overridden */
+	private boolean autoreloadOverridden;
 	private String path;
 	private String symlinkPath;
 	private String name;

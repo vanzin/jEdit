@@ -11,11 +11,14 @@ and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
 
+- When saving a buffer the autoreload option of the buffer was overridden
+  by global settings (Matthieu Casanova #2999966)
+
 - Improve indentation settings of the shellscript edit mode.
-  (bug #3005463 - Björn "Vampire" Kautler)
+  (Björn "Vampire" Kautler #3005463)
 
 - Removed the duplicated "Architecture" line from the Debian control file.
-  (bug #2999456 - Björn "Vampire" Kautler)
+  (Björn "Vampire" Kautler #2999456)
 
 - In the manage panel, when selecting a library, the description panel do
   not contains "null" for every fields and the title is set to the jar name
@@ -34,7 +37,7 @@ and Marcelo Vanzin for contributing to this release.
   (Shlomy Reinstein)
 
 - Removed write capability to the UrlVFS. Now http:// files are marked
-  read-only. (Eric Le Lay # 2805986)
+  read-only. (Eric Le Lay #2805986)
 
 - When having two monitors the About dialog was appearing between them, one half
   on each monitor. Now it's position is relative to the active View
