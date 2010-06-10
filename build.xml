@@ -710,24 +710,32 @@
 			 inheritAll="false">
 			<property name="jedit.install.dir"
 					  value="${dist.dir}" />
+			<property name="install.dir"
+					  value="${dist.dir}/jars" />
 		</ant>
 		<ant dir="jars/QuickNotepad"
 			 target="clean"
 			 inheritAll="false">
 			<property name="jedit.install.dir"
 					  value="${dist.dir}" />
+			<property name="install.dir"
+					  value="${dist.dir}/jars" />
 		</ant>
 		<ant dir="jars/MacOSX"
 			 target="dist"
 			 inheritAll="false">
 			<property name="jedit.install.dir"
 					  value="${dist.dir}" />
+			<property name="install.dir"
+					  value="${dist.dir}/jars" />
 		</ant>
 		<ant dir="jars/MacOSX"
 			 target="clean"
 			 inheritAll="false">
 			<property name="jedit.install.dir"
 					  value="${dist.dir}" />
+			<property name="install.dir"
+					  value="${dist.dir}/jars" />
 		</ant>
 	</target>
 
