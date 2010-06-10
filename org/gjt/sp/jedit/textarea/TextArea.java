@@ -3995,7 +3995,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 			if (getSelectionCount() == 0)
 			{
-				addExplicitFold(caret, caret, caretLine, caretLine);
+				int caretBack = addExplicitFold(caret, caret, caretLine, caretLine);
+				setCaretPosition(caret - caretBack);
 			}
 			else
 			{
@@ -5889,7 +5890,17 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		String line = buffer.getLineText(lineStart);
 		String whitespace = line.substring(0,
 			StandardUtilities.getLeadingWhiteSpace(line));
-		caretBack += whitespace.length(); 
+		caretBack += whitespace.length();
+		if (caretStart == caretEnd)
+		{
+			caretBack += end.length() + 1;
+			int lineStartOffset = buffer.getLineStartOffset(lineStart);
+			if (lineStartOffset  + whitespace.length() != caretStart)
+			{
+				caretBack++;
+			}
+		}
+
 		if (endLineComment != null)
 		{
 			// if we're inserting a line comment into a non-empty
