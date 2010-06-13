@@ -76,6 +76,10 @@ and Marcelo Vanzin for contributing to this release.
 - Fix Angle brackets showing up in plugin descriptions in plugin manager
   (SF.net bug #1963667 - Eric Le Lay)
 
+- Fix SOCKS proxy accessing wrong property.
+  Therefore, SOCKS proxy was never getting enabled.
+  (SF.net patch #2820969 - Milutin Jovanović)
+
 }}}
 {{{ API changes
 

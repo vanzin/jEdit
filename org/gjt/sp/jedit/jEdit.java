@@ -3716,7 +3716,7 @@ public class jEdit
 	//{{{ initProxy() method
 	private static void initProxy()
 	{
-		boolean socksEnabled = jEdit.getBooleanProperty("socks.enabled");
+		boolean socksEnabled = jEdit.getBooleanProperty("firewall.socks.enabled");
 		if(!socksEnabled)
 		{
 			Log.log(Log.DEBUG,jEdit.class,"SOCKS proxy disabled");
