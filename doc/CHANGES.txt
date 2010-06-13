@@ -157,6 +157,8 @@ and Marcelo Vanzin for contributing to this release.
 
 - nsis2.xml update (#2653404 Uwe donovaly)
 
+- sas.xml update (#2926121 - goebbe)
+
 - html.erb added to rhtml mode catalog entry. (# 2734062 Sergey Mezentsev)
 
 - Added Go edit mode (#2898646 - Jim Lawton)
