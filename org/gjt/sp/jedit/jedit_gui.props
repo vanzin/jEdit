@@ -602,11 +602,11 @@ next-textarea.label=Go to $Next Text Area
 buffersets.label=$Buffer Sets
 buffersets=global-bufferset view-bufferset editpane-bufferset bufferset-toggle-exclusive
 global-bufferset.label=$Global Scope
-global-bufferset.tooltip=All main windows share the same set of open buffers
+global-bufferset.tooltip=All EditPanes share the same BufferSet.
 view-bufferset.label=$View Scope
-view-bufferset.tooltip=All editpanes in the same main window share the same set of open buffers
+view-bufferset.tooltip=EditPanes in the same View share the same BufferSet.
 editpane-bufferset.label=$EditPane Scope
-editpane-bufferset.tooltip=Each Editpane has its own set of open buffers.
+editpane-bufferset.tooltip=Each Editpane has its own BufferSet.
 
 
 #}}}
