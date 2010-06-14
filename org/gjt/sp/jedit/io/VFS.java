@@ -507,7 +507,9 @@ public abstract class VFS
 	 * @param sourcePath the source path. It must be a file and must exists
 	 * @param targetVFS the target VFS
 	 * @param targetSession the target session
-	 * @param targetPath the target path. It must exists, cn be a file or a directory.
+	 * @param targetPath the target path.
+	 * If it is a path, it must exists, if it is a file, the parent must
+	 * exists
 	 * @param comp comp The component that will parent error dialog boxes
 	 * @param canStop could this copy be stopped ?
 	 * @return true if the copy was successful
@@ -534,8 +536,23 @@ public abstract class VFS
 			}
 			VFSFile targetVFSFile = targetVFS._getFile(targetSession, targetPath, comp);
 			if (targetVFSFile == null)
-				throw new FileNotFoundException("target path " + targetPath + " doesn't exists");
-			if (targetVFSFile.getType() == VFSFile.DIRECTORY)
+			{
+				String parentTargetPath = MiscUtilities.getParentOfPath(targetPath);
+				VFSFile parentTargetVFSFile = targetVFS._getFile(targetSession, parentTargetPath, comp);
+				if (parentTargetVFSFile == null)
+					throw new FileNotFoundException("target path " + parentTargetPath +
+						" doesn't exists");
+				if (parentTargetVFSFile.getType() == VFSFile.DIRECTORY)
+				{
+					String targetFilename = MiscUtilities.getFileName(targetPath);
+					targetPath = MiscUtilities.constructPath(parentTargetPath, targetFilename);
+				}
+				else
+				{
+					throw new IOException("The parent of target path is a file");
+				}
+			}
+			else if (targetVFSFile.getType() == VFSFile.DIRECTORY)
 			{
 				if (targetVFSFile.getPath().equals(sourceVFSFile.getPath()))
 					return false;

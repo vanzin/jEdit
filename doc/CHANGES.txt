@@ -81,7 +81,8 @@ and Marcelo Vanzin for contributing to this release.
   (SF.net patch #2820969 - Milutin Jovanović)
 
 - CopyFileWorker now throws a FileNotFoundException instead of a NPE if
-  the target doesn't exists (Matthieu Casanova)
+  the target path is not a directory and it's parent doesn't exists.
+   (Matthieu Casanova)
 
 - CopyFileWorker do not accept that the source and target are the same
   (Matthieu Casanova)
