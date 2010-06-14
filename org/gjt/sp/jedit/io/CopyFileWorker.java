@@ -55,6 +55,10 @@ public class CopyFileWorker extends Task
 	{
 		if (source == null || target == null)
 			throw new NullPointerException("The source and target cannot be null");
+		if (source.equals(target))
+		{
+			throw new IllegalArgumentException("The source and target must not be the same");
+		}
 		this.comp = comp;
 		this.source = source;
 		this.target = target;

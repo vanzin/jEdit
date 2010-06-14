@@ -82,6 +82,9 @@ and Marcelo Vanzin for contributing to this release.
 
 - CopyFileWorker now throws a FileNotFoundException instead of a NPE if
   the target doesn't exists (Matthieu Casanova)
+
+- CopyFileWorker do not accept that the source and target are the same
+  (Matthieu Casanova)
 }}}
 {{{ API changes
 
