@@ -504,10 +504,10 @@ public abstract class VFS
 	 *                  you should probably launch this command in a WorkThread
 	 * @param sourceVFS the source VFS
 	 * @param sourceSession the VFS session
-	 * @param sourcePath the source path
+	 * @param sourcePath the source path. It must be a file and must exists
 	 * @param targetVFS the target VFS
 	 * @param targetSession the target session
-	 * @param targetPath the target path
+	 * @param targetPath the target path. It must exists, cn be a file or a directory.
 	 * @param comp comp The component that will parent error dialog boxes
 	 * @param canStop could this copy be stopped ?
 	 * @return true if the copy was successful
@@ -527,12 +527,14 @@ public abstract class VFS
 		{
 			VFSFile sourceVFSFile = sourceVFS._getFile(sourceSession, sourcePath, comp);
 			if (sourceVFSFile == null)
-				throw new FileNotFoundException(sourcePath);
+				throw new FileNotFoundException("source path " + sourcePath + " doesn't exists");
 			if (progress != null)
 			{
 				progress.setMaximum(sourceVFSFile.getLength());
 			}
 			VFSFile targetVFSFile = targetVFS._getFile(targetSession, targetPath, comp);
+			if (targetVFSFile == null)
+				throw new FileNotFoundException("target path " + targetPath + " doesn't exists");
 			if (targetVFSFile.getType() == VFSFile.DIRECTORY)
 			{
 				if (targetVFSFile.getPath().equals(sourceVFSFile.getPath()))

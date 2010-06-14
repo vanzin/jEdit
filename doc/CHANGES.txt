@@ -80,6 +80,8 @@ and Marcelo Vanzin for contributing to this release.
   Therefore, SOCKS proxy was never getting enabled.
   (SF.net patch #2820969 - Milutin Jovanović)
 
+- CopyFileWorker now throws a FileNotFoundException instead of a NPE if
+  the target doesn't exists (Matthieu Casanova)
 }}}
 {{{ API changes
 
