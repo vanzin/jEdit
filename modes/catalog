@@ -246,7 +246,8 @@
 <MODE NAME="jcl"		FILE="jcl.xml"
 				FILE_NAME_GLOB="*.jcl" />
 
-<MODE NAME="jedit-actions"	FILE="jedit-actions.xml" />
+<MODE NAME="jedit-actions"	FILE="jedit-actions.xml" 
+                FILE_NAME_GLOB="actions.xml"/>
 
 <MODE NAME="jhtml"		FILE="jhtml.xml"
 				FILE_NAME_GLOB="*.jhtml" />
