@@ -247,6 +247,21 @@ public class Mode
 		return filenameRE != null && filenameRE.matcher(fileName).matches();
 	} //}}}
 
+	//{{{ acceptFilenameIdentical() method
+	/**
+	 * Returns true if the buffer name is identical to the file name glob.
+	 * This works only for regular expressions that only represent themselves,
+	 * i.e. without any meta-characters.
+	 * @param fileName The buffer's name
+	 * @return true if the file name matches the file name glob.
+	 * @since jEdit 4.4pre1
+	 */
+	public boolean acceptFilenameIdentical(String fileName)
+	{
+		return ((String)getProperty("filenameGlob")).equals(fileName) &&
+		       (filenameRE == null || filenameRE.matcher(fileName).matches());
+	} //}}}	
+	
 	//{{{ acceptFirstLine() method
 	/**
 	 * Returns true if the first line matches the first line glob.

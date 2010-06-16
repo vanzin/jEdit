@@ -123,6 +123,17 @@ public class ModeProvider
 		{
 			Collections.reverse(acceptable);
 			
+			// the very most acceptable mode is one whose file
+			// name doesn't only match the file name as regular
+			// expression but which is identical
+			for (Mode mode : acceptable)
+			{
+				if (mode.acceptFilenameIdentical(filename)) 
+				{
+					return mode;	
+				}
+			}
+
 			// most acceptable is a mode that matches both the
 			// filename and the first line glob
 			for (Mode mode : acceptable) 

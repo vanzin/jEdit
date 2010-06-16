@@ -6,8 +6,8 @@ jEdit 4.4 version history
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead
-and Marcelo Vanzin for contributing to this release.
+Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead,
+Marcelo Vanzin and Bernhard Walle for contributing to this release.
 
 {{{ Bug fixes
 - Removed workaround in drag & drop code of TextArea that doesn't seem
@@ -156,6 +156,9 @@ and Marcelo Vanzin for contributing to this release.
 
 - The JeditBuffer class now have thread-safe getText() params-less convenience
   method (Vadim Voituk)
+  
+- Patch 3008954 to Mode and ModeProvider to allow an exact filename
+  match when selecting the mode for a file. (Patch provided by Bernhard Walle)
 
 }}}
 {{{ Editing
@@ -262,6 +265,7 @@ and Marcelo Vanzin for contributing to this release.
 
 - Gave better priorities within modes which matches with a file at the
   same time, as the following order:
+  - exact filename match
   - both the filename glob and the first line glob
   - only the filename glob
   - the first line glob  (Dale Anson)
