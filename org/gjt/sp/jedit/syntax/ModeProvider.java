@@ -185,10 +185,15 @@ public class ModeProvider
 	 */
 	public void addMode(Mode mode)
 	{
-		if (modes.get(mode.getName()) != null) {
+		if (modes.get(mode.getName()) != null) 
+		{
 			overrideModes.put(mode.getName(), mode);	
+			modes.remove(mode.getName());
 		}
-		modes.put(mode.getName(), mode);
+		else 
+		{
+			modes.put(mode.getName(), mode);	
+		}
 	} //}}}
 
 	//{{{ loadMode() method
