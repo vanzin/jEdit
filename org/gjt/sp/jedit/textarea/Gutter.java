@@ -657,6 +657,11 @@ public class Gutter extends JComponent implements SwingConstants
 		mouseHandler.selectionPopupHandler = handler;
 	}
 
+	public GutterPopupHandler getSelectionPopupHandler()
+	{
+		return mouseHandler.selectionPopupHandler;
+	}
+
 	public void setMouseActionsProvider(MouseActionsProvider mouseActionsProvider)
 	{
 		mouseHandler.mouseActions = mouseActionsProvider;
