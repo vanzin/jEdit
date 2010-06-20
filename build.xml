@@ -356,7 +356,7 @@
 	<target name="generate-docbook-wrapper"
 			if="format"
 			depends="init">
-		<fail message="Please set the &quot;docbook.xsl&quot; in build.properties"
+		<fail message="Please set the property &quot;docbook.xsl&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.docbook.xsl" />
 		<pathconvert property="absolute-stylesheet"
 					 dirsep="/">
@@ -387,8 +387,10 @@
 			depends="init"
 			if="doc.output.location"
 			unless="faq.is.up.to.date">
-		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.xsltproc.executable" />
+                <fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
+                          unless="docbook.catalog" />
 		<mkdir dir="${doc.output.location}/FAQ" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -407,8 +409,10 @@
 			depends="init"
 			if="doc.output.location"
 			unless="news.is.up.to.date">
-		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.xsltproc.executable" />
+                <fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
+                          unless="docbook.catalog" />
 		<mkdir dir="${doc.output.location}/news44" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -427,8 +431,10 @@
 			depends="init"
 			if="doc.output.location"
 			unless="users-guide.is.up.to.date">
-		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.xsltproc.executable" />
+                <fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
+                          unless="docbook.catalog" />
 		<mkdir dir="${doc.output.location}/users-guide" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -450,7 +456,7 @@
 	<target name="docs-upload"
 			depends="userdocs"
 			description="upload generated documentation to public website (needs xsltproc and rsync)" >
-		<fail message="Please set the &quot;rsync.executable&quot; in build.properties"
+		<fail message="Please set the property &#quot;rsync.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.rsync.executable" />
 		<exec executable="${config.rsync.executable}"
 			  dir="${jar.location}/doc/"
@@ -593,9 +599,9 @@
 			depends="init"
 			if="paper.type"
 			unless="pdf-users-guide.is.up.to.date">
-		<fail message="Please set the &quot;xsltproc.executable&quot; in build.properties"
+		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.xsltproc.executable" />
-		<fail message="Please set the &quot;fop.dir&quot; in build.properties"
+		<fail message="Please set the property &quot;fop.dir&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.fop.dir" />
 		<antcall target="generate-docbook-wrapper">
 			<param name="format"
@@ -1350,7 +1356,7 @@
 	<target name="dist-win-exe"
 			unless="build.on.non.win"
 			description="creates a native windows application launcher">
-		<fail message="Please set the launch4j.dir in build.properties"
+		<fail message="Please set the property &quot;launch4j.dir&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.launch4j.dir" />
 		<taskdef
 			name="launch4j"
@@ -1404,7 +1410,7 @@
 				</not>
 			</condition>
 		</fail>
-		<fail message="Please set the innosetup.compiler.executable in build.properties"
+		<fail message="Please set the property &quot;innosetup.compiler.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.innosetup.compiler.executable" />
 		<tstamp>
 			<format property="current.year"
