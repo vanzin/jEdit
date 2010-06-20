@@ -456,7 +456,7 @@
 	<target name="docs-upload"
 			depends="userdocs"
 			description="upload generated documentation to public website (needs xsltproc and rsync)" >
-		<fail message="Please set the property &#quot;rsync.executable&quot; in build.properties, you may find example values in build.properties.sample"
+		<fail message="Please set the property 'rsync.executable' in build.properties, you may find example values in build.properties.sample"
 			  unless="config.rsync.executable" />
 		<exec executable="${config.rsync.executable}"
 			  dir="${jar.location}/doc/"
