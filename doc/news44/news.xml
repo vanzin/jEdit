@@ -9,24 +9,17 @@
             <othername>The jEdit all-volunteer development team</othername>
         </author>
 
-        <legalnotice>
-            <title>Legal Notice</title>
-            <para>Permission is granted to copy, distribute and/or modify this
-            document under the terms of the GNU Free Documentation License,
-            Version 1.1 or any later version published by the Free Software
-            Foundation; with no <quote>Invariant Sections</quote>,
-            <quote>Front-Cover Texts</quote> or <quote>Back-Cover Texts</quote>,
-            each as defined in the license. A copy of the license is included in
-            the file <filename>COPYING.DOC.txt</filename> included with the
-            jEdit distribution.</para>
-        </legalnotice>
-
     </articleinfo>
-    <section>
-        <title> Preface </title>
 
-        <para> This is a paragraph </para>
-    </section>
+    <para> Detailed changes can always be found in CHANGES.txt, but
+    here are some of the major features of this version. </para>
+    <itemizedlist>
+    <listitem><para> jEdit 4.4 now requires Java 1.6. </para></listitem>
+    <listitem><para> Buffersets have been re-engineered, and simplified. </para></listitem>
+    <listitem><para> New Task API to replace WorkRequests. </para></listitem>
+    <listitem><para> New DataTransfer API to allow for rich text copy/paste.
+    </para></listitem>
+    </itemizedlist>
 
 <!-- :maxLineLen=80:wrap=hard: -->
 </article>
