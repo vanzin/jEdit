@@ -37,8 +37,7 @@ import org.gjt.sp.util.*;
  * created    May 20, 2005
  * modified   $Date: 2006/03/10 12:49:17 $ by $Author: hertzhaft $
  */
-
-public class MarkersSaveRequest extends WorkRequest
+public class MarkersSaveRequest extends Task
 {
 	//{{{ Constants
 	public static final String ERROR_OCCURRED = "MarkersSaveRequest__error";
@@ -66,43 +65,39 @@ public class MarkersSaveRequest extends WorkRequest
 	} //}}}
 
 	//{{{ run() method
-	public void run()
+	@Override
+	public void _run()
 	{
 		OutputStream out = null;
 
 		try
 		{
 			// the entire save operation can be aborted...
-			setAbortable(true);
-			try
+//			setAbortable(true);
+			// We only save markers to VFS's that support deletion.
+			// Otherwise, we will accumilate stale marks files.
+			if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
 			{
-				// We only save markers to VFS's that support deletion.
-				// Otherwise, we will accumilate stale marks files.
-				if((vfs.getCapabilities() & VFS.DELETE_CAP) != 0)
+				if(buffer.getMarkers().isEmpty())
+					vfs._delete(session,markersPath,view);
+				else
 				{
-					if(buffer.getMarkers().isEmpty())
-						vfs._delete(session,markersPath,view);
-					else
-					{
-						String[] args = { vfs.getFileName(path) };
-						setStatus(jEdit.getProperty("vfs.status.save-markers",args));
-						setValue(0);
-						out = vfs._createOutputStream(session,markersPath,view);
-						if(out != null)
-							writeMarkers(out);
-						}
+					String[] args = { vfs.getFileName(path) };
+					setStatus(jEdit.getProperty("vfs.status.save-markers",args));
+					out = vfs._createOutputStream(session,markersPath,view);
+					if(out != null)
+						writeMarkers(out);
 				}
 			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,this,io);
-				buffer.setBooleanProperty(ERROR_OCCURRED,true);
-			}
 		}
-		catch(WorkThread.Abort a)
+		catch(IOException io)
+		{
+			Log.log(Log.ERROR,this,io);
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
+		}
+		finally
 		{
 			IOUtilities.closeQuietly(out);
-			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 	} //}}}
 
@@ -114,18 +109,23 @@ public class MarkersSaveRequest extends WorkRequest
 		try
 		{
 			List<Marker> markers = buffer.getMarkers();
-			for(int i = 0; i < markers.size(); i++)
+			synchronized (markers)
 			{
-				Marker marker = markers.get(i);
-				o.write('!');
-				o.write(marker.getShortcut());
-				o.write(';');
+				setMaximum(markers.size());
+				for(int i = 0; i < markers.size(); i++)
+				{
+					setValue(i+1);
+					Marker marker = markers.get(i);
+					o.write('!');
+					o.write(marker.getShortcut());
+					o.write(';');
 
-				String pos = String.valueOf(marker.getPosition());
-				o.write(pos);
-				o.write(';');
-				o.write(pos);
-				o.write('\n');
+					String pos = String.valueOf(marker.getPosition());
+					o.write(pos);
+					o.write(';');
+					o.write(pos);
+					o.write('\n');
+				}
 			}
 		}
 		finally

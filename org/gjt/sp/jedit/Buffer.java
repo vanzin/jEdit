@@ -64,6 +64,7 @@ import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.ThreadUtilities;
 
 /**
  * A <code>Buffer</code> represents the contents of an open text
@@ -1515,7 +1516,7 @@ public class Buffer extends JEditBuffer
 		Object session = vfs.createVFSSession(path, view);
 		if(session == null)
 			return false;
-		VFSManager.runInWorkThread(
+		ThreadUtilities.runInBackground(
 			new MarkersSaveRequest(
 				view, this, session, vfs, path));
 		return true;
