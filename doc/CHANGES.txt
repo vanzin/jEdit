@@ -93,9 +93,13 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 }}}
 {{{ API changes
 
-- Introduction of a new Threadpool using JDK's ExecutorService.
-  It's api are added to ThreadUtilities, it is preferable to use it instead
-  of the current VFSManager's threadpool. (Matthieu Casanova)
+- Introduction of a new ThreadUtilities class implementing a
+    threadpool using Java 1.6 Concurrent API. Use this instead of
+    VFSManager's WorkThreadPool, which is now deprecated.
+    Related: A new Task Monitor dockable which will eventually replace
+    the I/O progress monitor, for showing progress of tasks.
+    Still TODO: rewrite VFSManager + all plugins to use ThreadUtilities
+    instead of WorkThreadPool. (Matthieu Casanova)
 
 - Made method TextUtilities.getCharType() public (Matthieu Casanova)
 
@@ -156,7 +160,7 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 
 - The JeditBuffer class now have thread-safe getText() params-less convenience
   method (Vadim Voituk)
-  
+
 - Patch 3008954 to Mode and ModeProvider to allow an exact filename
   match when selecting the mode for a file. (Patch provided by Bernhard Walle)
 
