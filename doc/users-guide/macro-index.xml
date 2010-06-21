@@ -2,6 +2,7 @@
 <appendix id="macro-index">
     <title>Macros Included With jEdit</title>
     <!-- jEdit 4.0 Macro Guide, (C) 2001 John Gellene      -->
+    <!-- jEdit 4.4 Macro Guide, (C) 2010 jedit-devs        -->
     <!-- jEdit buffer-local properties:                    -->
     <!-- :indentSize=2:noTabs=yes:maxLineLen=80:tabSize=2: -->
     <!-- :xml.root=users-guide.xml:                        -->
@@ -87,6 +88,12 @@
                 Clipboard. Lines that are not visible becuase they are folded
                 are not copied.</para>
             </listitem>
+
+            <listitem>
+                <para><filename>Paste_Indent.bsh</filename></para>
+
+                <para>Pastes the content of the clipboard and indents it.</para>
+            </listitem>
         </itemizedlist>
     </section>
 
@@ -97,8 +104,22 @@
 
         <itemizedlist>
             <listitem>
+                <para><filename>Duplicate_Lines_Above.bsh</filename></para>
+
+                <para>Duplicates current/selected line(s) upward.</para>
+            </listitem>
+
+            <listitem>
+                <para><filename>Duplicate_Lines_Below.bsh</filename></para>
+
+                <para>Duplicates current/selected line(s) downward.</para>
+            </listitem>
+
+            <listitem>
                 <para><filename>Emacs_Ctrl-K.bsh</filename></para>
-                <para>Cuts and appends text, from the cursor to the end of the line, into the copy buffer.   </para>
+
+                <para>Cuts and appends text, from the cursor to the end of the
+                line, into the copy buffer.</para>
             </listitem>
 
             <listitem>
@@ -198,6 +219,26 @@
                 <para>Moves the current line up one, with automatic
                 indentation.</para>
             </listitem>
+
+            <listitem>
+                <para><filename>Open_Line_Above.bsh</filename></para>
+
+                <para>Adds a new blank line before the current/selected line(s).</para>
+            </listitem>
+
+            <listitem>
+                <para><filename>Open_Line_Below.bsh</filename></para>
+
+                <para>Adds a new blank line after the current/selected line(s).</para>
+            </listitem>
+
+            <listitem>
+                <para><filename>Toggle_Fold.bsh</filename></para>
+
+                <para>Toggles visibility of current fold.</para>
+
+                <para>This is especially useful for fold toggling via keyboard.</para>
+            </listitem>
         </itemizedlist>
     </section>
 
@@ -207,6 +248,13 @@
         <para>These macros automate the opening and closing of files.</para>
 
         <itemizedlist>
+            <listitem>
+                <para><filename>Browse_Buffer_Directory.bsh</filename></para>
+
+                <para>Opens a the current buffer's directory in the file system
+                browser.</para>
+            </listitem>
+
             <listitem>
                 <para><filename>Browse_Directory.bsh</filename></para>
 
@@ -244,6 +292,12 @@
 
                 <para>Copies the current buffer's filename to the
                 clipboard.</para>
+            </listitem>
+
+            <listitem>
+                <para><filename>Duplicate_Buffer.bsh</filename></para>
+
+                <para>Duplicates the current buffer into a new one.</para>
             </listitem>
 
             <listitem>
@@ -290,6 +344,13 @@
             </listitem>
 
             <listitem>
+                <para><filename>Send_Buffer_To_Next_Split.bsh</filename></para>
+
+                <para>If bufferset scope is set to EditPane, the current buffer
+                is added to the next Editpane's bufferset.</para>
+            </listitem>
+
+            <listitem>
                 <para><filename>Toggle_ReadOnly.bsh</filename></para>
 
                 <para>Toggles a local file's read-only flag. Uses
@@ -327,19 +388,26 @@
             </listitem>
 
             <listitem>
+               <para><filename>Reset_TextArea.bsh</filename> </para>
+               <para>Performs a split and an unsplit of the current TextArea.
+	             Useful for those occasions when your textarea is corrupt
+	             (painting the incorrect characters on the screen).</para>
+             </listitem>
+
+            <listitem>
+               <para><filename>Splitpane_Grow.bsh</filename> </para>
+               <para>When inside a split EditPane, this macro moves the
+               splitter away from the cursor, effectively increasing the size of
+               the currently active split pane.</para>
+             </listitem>
+
+
+            <listitem>
                 <para><filename>Toggle_Bottom_Docking_Area.bsh</filename></para>
 
                 <para>Expands or collapses the bottom docking area, depending on
                 it's current state.</para>
             </listitem>
-
-            <listitem>
-               <para><filename>Splitpane_Grow</filename> </para>
-               <para> When inside a split EditPane, this macro moves the
-               splitter away from the cursor, effectively increasing the size of
-               the currently active split pane. </para>
-             </listitem>
-
 
             <listitem>
                 <para><filename>Toggle_Left_Docking_Area.bsh</filename></para>
@@ -459,6 +527,21 @@
 
         <itemizedlist>
             <listitem>
+                <para><filename>Buffer_to_HyperSearch_Results.bsh</filename></para>
+
+                <para>Reads HyperSearch results from a buffer that was
+                previously created by the HyperSearch_Results_to_Buffer macro and possibly
+                filtered manually, and imports them into the HyperSearch Results dockable.</para>
+            </listitem>
+
+            <listitem>
+                <para><filename>Debug_BufferSets.bsh</filename></para>
+
+                <para>Display int and hex values for the character at the caret,
+                in the status bar.</para>
+            </listitem>
+
+            <listitem>
                 <para><filename>Display_Abbreviations.bsh</filename></para>
 
                 <para>Displays the abbreviations registered for each of jEdit's
@@ -532,6 +615,9 @@
                 <para><filename>HyperSearch_Results_to_Buffer.bsh</filename></para>
 
                 <para>Writes HyperSeach results to a new buffer.</para>
+
+                <para>This buffer can be re-imported to the HyperSearch Results dockable
+                by the Buffer_to_HyperSearch_Results macro.</para>
             </listitem>
 
 
@@ -574,6 +660,13 @@
         the Java platform or jEdit itself.</para>
 
         <itemizedlist>
+            <listitem>
+                <para><filename>Create_Plugin_Announcement.bsh</filename></para>
+
+                <para>Creates an announcement for the Plugin Central Submission Tracker
+                based on the plugins *.props and description.html files.</para>
+            </listitem>
+
             <listitem>
                 <para><filename>Insert_Buffer_Properties.bsh</filename></para>
 
@@ -634,6 +727,12 @@
             </listitem>
 
             <listitem>
+                <para><filename>Compose_Tag.bsh</filename></para>
+
+                <para>The selection is taken as tag name and replaced with a full xml tag.</para>
+            </listitem>
+
+            <listitem>
                 <para><filename>Duplicate_Line.bsh</filename></para>
 
                 <para>Duplicates the line on which the caret lies immediately
@@ -656,6 +755,17 @@
                 <para>Inserts a balanced pair of HTML/SGML/XML markup tags as
                 supplied in an input dialog. The tags will surround any selected
                 text.</para>
+            </listitem>
+
+            <listitem>
+                <para><filename>Line_Filter.bsh</filename></para>
+
+                <para>Filters lines of the current buffer due to a provided regular expression.
+                The resulting set of lines can be either removed from the buffer or written to a new buffer.</para>
+
+                <para>The filter works on a multiline selection (if there is one) otherwise on the whole buffer.
+                The resulting set of lines includes those lines that either match or not match the regular expression.
+                </para>
             </listitem>
 
             <listitem>
