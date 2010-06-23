@@ -388,7 +388,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 	 */
 	protected void processKeyEventKeyStrokeHandling(KeyEvent evt, int from, String mode, boolean global)
 	{
-		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent2(evt);
+		KeyEventTranslator.Key keyStroke = KeyEventTranslator.translateKeyEvent(evt);
 
 		if(keyStroke != null)
 		{
@@ -398,7 +398,7 @@ public abstract class AbstractInputHandler<E extends JEditAbstractEditAction>
 				Log.log(Log.DEBUG,this,"Translated (key "+mode+"): "+keyStroke+" from "+from);
 			}
 			boolean consumed = false;
-			if(handleKey(keyStroke,keyStroke.isPhantom()))
+			if(handleKey(keyStroke, false))
 			{
 				evt.consume();
 
