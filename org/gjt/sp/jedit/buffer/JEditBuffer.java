@@ -52,12 +52,13 @@ import java.util.regex.Pattern;
  * This class is partially thread-safe, however you must pay attention to two
  * very important guidelines:
  * <ul>
- * <li>Changes to a buffer can only be made from the AWT thread, 
- * and only in a writeLock()
+ * <li>Operations such as insert() and remove(),
+ * undo(), change Buffer data in a writeLock(), and must
+ * be called from the AWT thread.
  * <li>When accessing the buffer from another thread, you must
- * call readLock() before and readUnLock() after,  if you plan on performing 
- * more than one read, to ensure that  the buffer contents are not changed by 
- * the AWT thread for the duration of the lock. Only methods whose descriptions 
+ * call readLock() before and readUnLock() after,  if you plan on performing
+ * more than one read, to ensure that  the buffer contents are not changed by
+ * the AWT thread for the duration of the lock. Only methods whose descriptions
  * specify thread safety can be invoked from other threads.
  * </ul>
  *
@@ -476,7 +477,7 @@ public class JEditBuffer
 		{
 			readUnlock();
 		}
-	} 
+	}
 
 	/**
 	 * Returns the specified line in a <code>Segment</code>.<p>
@@ -563,19 +564,19 @@ public class JEditBuffer
 			readUnlock();
 		}
 	}
-	
+
 	/**
 	 * Returns the full buffer content. This method is thread-safe
 	 * @since 4.4.1
 	 */
-	public String getText() 
+	public String getText()
 	{
-		try 
+		try
 		{
 			readLock();
 			return contentMgr.getText(0, getLength());
-		} 
-		finally 
+		}
+		finally
 		{
 			readUnlock();
 		}
@@ -2473,12 +2474,12 @@ loop:		for(int i = 0; i < seg.count; i++)
 	protected void fireBeginRedo()
 	{
 	} //}}}
-	
+
 	//{{{ fireEndRedo() method
 	protected void fireEndRedo()
 	{
 	} //}}}
-	
+
 	//{{{ fireTransactionComplete() method
 	protected void fireTransactionComplete()
 	{

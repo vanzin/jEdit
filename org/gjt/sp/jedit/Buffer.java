@@ -81,12 +81,13 @@ import org.gjt.sp.util.ThreadUtilities;
  * This class is partially thread-safe, however you must pay attention to two
  * very important guidelines:
  * <ul>
- * <li>Changes to a buffer can only be made from the AWT thread, 
- * and only inside a writeLock() .. writeUnLock().
+ * <li>Operations such as insert() and remove(),
+ * undo(), change Buffer data in a writeLock(), and must
+ * be called from the AWT thread.
  * <li>When accessing the buffer from another thread, you must
- * call readLock() before and readUnLock() after,  if you plan on performing 
- * more than one read, to ensure that  the buffer contents are not changed by 
- * the AWT thread for the duration of the lock. Only methods whose descriptions 
+ * call readLock() before and readUnLock() after, if you plan on performing
+ * more than one read, to ensure that  the buffer contents are not changed by
+ * the AWT thread for the duration of the lock. Only methods whose descriptions
  * specify thread safety can be invoked from other threads.
  * </ul>
 
@@ -2023,7 +2024,7 @@ public class Buffer extends JEditBuffer
 		final byte[] dummy = new byte[1];
 		if (!jEdit.getBooleanProperty("useMD5forDirtyCalculation"))
 			return dummy;
-		return StandardUtilities.md5(getText()); 
+		return StandardUtilities.md5(getText());
 	}
 
 	/** Update the buffer's members with the current hash and length,
