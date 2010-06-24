@@ -52,12 +52,13 @@ import java.util.regex.Pattern;
  * This class is partially thread-safe, however you must pay attention to two
  * very important guidelines:
  * <ul>
- * <li>Changes to a buffer can only be made from the AWT thread.
+ * <li>Changes to a buffer can only be made from the AWT thread, 
+ * and only in a writeLock()
  * <li>When accessing the buffer from another thread, you must
- * grab a read lock if you plan on performing more than one call, to ensure that
- * the buffer contents are not changed by the AWT thread for the duration of the
- * lock. Only methods whose descriptions specify thread safety can be invoked
- * from other threads.
+ * call readLock() before and readUnLock() after,  if you plan on performing 
+ * more than one read, to ensure that  the buffer contents are not changed by 
+ * the AWT thread for the duration of the lock. Only methods whose descriptions 
+ * specify thread safety can be invoked from other threads.
  * </ul>
  *
  * @author Slava Pestov
