@@ -56,6 +56,8 @@
 	<!-- Miscellaneous -->
 	<property name="config.build.debuglevel"
 			  value="lines,vars,source" />
+	<property name="config.build.nowarn"
+			  value="false" />
 	<property name="config.build.deprecation"
 			  value="true" />
 	<property name="config.build.compilerarg"
@@ -120,6 +122,7 @@
 			   destdir="${classes.dir}/core"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
@@ -266,6 +269,7 @@
 			   destdir="${textAreaPackage}/build"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
@@ -389,8 +393,8 @@
 			unless="faq.is.up.to.date">
 		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.xsltproc.executable" />
-                <fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-                          unless="docbook.catalog" />
+		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
+			  unless="docbook.catalog" />
 		<mkdir dir="${doc.output.location}/FAQ" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -411,8 +415,8 @@
 			unless="news.is.up.to.date">
 		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.xsltproc.executable" />
-                <fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-                          unless="docbook.catalog" />
+		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
+			  unless="docbook.catalog" />
 		<mkdir dir="${doc.output.location}/news44" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -433,8 +437,8 @@
 			unless="users-guide.is.up.to.date">
 		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="config.xsltproc.executable" />
-                <fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-                          unless="docbook.catalog" />
+		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
+			  unless="docbook.catalog" />
 		<mkdir dir="${doc.output.location}/users-guide" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
@@ -530,6 +534,7 @@
 			   includes="doclet/**"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
@@ -701,6 +706,7 @@
 			   includes="installer/**"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
@@ -927,6 +933,7 @@
 			   includes="net/**"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="1.4"
 			   target="1.4"
@@ -1188,6 +1195,7 @@
 			   includes="de/masters_of_disaster/ant/tasks/ar/**"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
@@ -1207,6 +1215,7 @@
 			   includes="de/masters_of_disaster/ant/tasks/deb/**"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"
@@ -1226,6 +1235,7 @@
 			   includes="de/masters_of_disaster/ant/tasks/calculatesize/**"
 			   debug="true"
 			   debuglevel="${config.build.debuglevel}"
+			   nowarn="${config.build.nowarn}"
 			   deprecation="${config.build.deprecation}"
 			   source="${target.java.version}"
 			   target="${target.java.version}"

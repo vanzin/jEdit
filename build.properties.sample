@@ -62,6 +62,11 @@
 #launch4j.dir=C:\\Programme\\launch4j
 
 # debug settings
-build.debug=true
-build.debuglevel=lines,vars,source
+#build.debug=true
+#build.debuglevel=lines,vars,source
+
+# warning settings
+#build.nowarn=false
+#build.deprecation=true
+#build.compilerarg=-Xlint:unchecked
 
