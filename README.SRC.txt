@@ -36,15 +36,26 @@ General jEdit documentation can be found in the 'doc' directory.
  For building the online help in either HTML- or PDF-format:
 
   - DocBook XML 4.4. called "docbook-dtd" or "docbook-xml" from package managers.
-    Get it from <http://www.docbook.org/xml/4.4/>.  Contains catalog information.
+    Get it from <http://www.docbook.org/xml/4.4/>. This contains catalog
+    information.
+  - Set the "docbook.catalog" property in build.properties to the path of the
+    docbook.cat catalog file. Examples for various OS can be found in
+    build.properties.sample.
   - DocBook XSL. Called "docbook-xsl" in package managers.
-    Contains style sheets for transformation into HTML or FO.
+    Contains style sheets for transformation into HTML or FO (for PDF).
     Don't use a ".0" version, these are experimental releases.
     <http://www.sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608>
+  - Set the "docbook.xsl" property in build.properties to the installation path
+    of the DocBook XSL files. Examples for various OS can be found in
+    build.properties.sample.
   - xsltproc. sometimes packaged as "libxslt" from package managers:
     This is originally a *nix program, but there are ports
     e. g. for Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html>
     or <http://www.zlatkovic.com/libxml.en.html>.
+  - Set the "xsltproc.executable" property in build.properties to the path of
+    your xsltproc executable. If it is in your PATH environment variable,
+    "xsltproc" is sufficient as value. Examples for various OS can be found in
+    build.properties.sample.
 
  For building the online help in PDF-format:
 
