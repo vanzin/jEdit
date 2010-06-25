@@ -121,6 +121,8 @@ public class SaveBackupOptionPane extends AbstractOptionPane
 		/* Backup on every save */
 		backupEverySave = new JCheckBox(jEdit.getProperty(
 			"options.save-back.backupEverySave"));
+		backupEverySave.setToolTipText(jEdit.getProperty(
+			"options.save-back.backupEverySave.tooltip"));
 		backupEverySave.setSelected(jEdit.getBooleanProperty("backupEverySave"));
 		addComponent(backupEverySave);
 	} //}}}
