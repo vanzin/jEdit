@@ -595,7 +595,7 @@
 
         <itemizedlist>
             <listitem>
-                <para><keycap>Shift</keycap> - scrolls an entire page at a
+                <para><keycap>Shift</keycap> - moves the horizontal scrollbar.
                 time.</para>
             </listitem>
 
@@ -608,6 +608,11 @@
                 <para><keycap>Alt</keycap> - moves the caret up and down instead
                 of scrolling.</para>
             </listitem>
+
+             <listitem>
+                <para><keycap>CTRL+SHIFT</keycap> - scroll a page at a time. </para>
+            </listitem>
+
 
             <listitem>
                 <para><keycombo>
