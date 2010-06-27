@@ -2,23 +2,21 @@
 
 <!DOCTYPE MODE SYSTEM "xmode.dtd">
 
-<!--  
+<!--
       SAS edit mode by Bill McMilleon (bill@mcmilleon.com) March 19, 2003
       updated by Ian Helgesen 2007-10-02
       updated by goebbe 2009-05-19
-      updated by goebbe 2010-01-19
-      
+      updated by goebbe 2010-06-15
+
       Suggested catalog file entry:
-
       <MODE NAME="SAS"		FILE="sas.xml" FILE_NAME_GLOB="*.{sas}" />
-
 -->
 
 <MODE>
 <PROPS>
     <PROPERTY NAME="indentNextLines" VALUE="(.*%?do.*;|\s*proc
 .*;|\s*data .*;|\s*%macro\s?.*;|define event \S+\s*;)"/>
-  
+
     <PROPERTY NAME="unindentThisLine" VALUE="^\s*(else.*|end\s*|elsif.*|rescue.*|when.*)$"/>
     <PROPERTY NAME="unindentNextLines" VALUE="^\s*(end\s*|else.*|rescue.*|elsif.*|when.*)$"/>
 
@@ -26,7 +24,7 @@
     <PROPERTY NAME="commentEnd" VALUE="*/" />
     <PROPERTY NAME="lineComment" VALUE="*" />
 </PROPS>
-    
+
     <RULES IGNORE_CASE="TRUE" NO_WORD_SEP="_" HIGHLIGHT_DIGITS="TRUE">
 
 <!-- In fixed form, column 72 is the last column parsed, unless the
@@ -42,37 +40,37 @@
 <!-- AND the start of the second typ2-comment block" as the start of the type2-range comment  -->
 
 <!-- case0: two COMMENT2 range comments in a row at the start of a line: -->
-<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR="*" AT_WHITESPACE_END="TRUE" EXCLUDE_MATCH="FALSE">
+<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR="*" AT_WHITESPACE_END="TRUE">
     <BEGIN>[*][^;]*[;][\s]*[*]</BEGIN>
     <END>;</END>
 </SPAN_REGEXP>
 
 <!-- case1: two comments in a row /*comment*/ *comment; - at the start of a line, : -->
-<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR="/*" AT_WHITESPACE_END="TRUE" EXCLUDE_MATCH="FALSE">
+<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR="/*" AT_WHITESPACE_END="TRUE">
     <BEGIN>([/][*][*][/][\s]*[*])|([/][*](.)*[*][/][\s]*[*])</BEGIN>
     <END>;</END>
 </SPAN_REGEXP>
 
 <!-- case2: one COMMENT2 at the start of a line: -->
-<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR="*" AT_WHITESPACE_END="TRUE" EXCLUDE_MATCH="FALSE">
+<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR="*" AT_WHITESPACE_END="TRUE">
     <BEGIN>[*]</BEGIN>
     <END>;</END>
 </SPAN_REGEXP>
 
-<!-- case3: two COMMENT2 range comments in a row -  after SAS-code:--> 
-<SPAN_REGEXP TYPE="COMMENT2"  HASH_CHAR=";" EXCLUDE_MATCH="FALSE">
+<!-- case3: two COMMENT2 range comments in a row -  after SAS-code:-->
+<SPAN_REGEXP TYPE="COMMENT2"  HASH_CHAR=";">
     <BEGIN>[;][\s]*[*][^;]*[;][\s]*[*]</BEGIN>
     <END>;</END>
 </SPAN_REGEXP>
 
 <!-- case4: two comments in a row /*comment*/ *comment; - after SAS-code:-->
-<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR=";" EXCLUDE_MATCH="FALSE">
+<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR=";">
     <BEGIN>[;][\s]*[/][*](.)*[*][/][\s]*[*]</BEGIN>
     <END>;</END>
 </SPAN_REGEXP>
 
 <!-- case5: one COMMENT2 range comment after SAS-code: -->
-<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR=";" EXCLUDE_MATCH="FALSE">
+<SPAN_REGEXP TYPE="COMMENT2" HASH_CHAR=";">
     <BEGIN>[;][\s]*[*]</BEGIN>
     <END>;</END>
 </SPAN_REGEXP>
@@ -165,7 +163,7 @@
     <SEQ TYPE="OPERATOR">+</SEQ>
     <SEQ TYPE="OPERATOR">*</SEQ>
     <SEQ TYPE="OPERATOR">!</SEQ>
-    
+
     <KEYWORDS>
       <KEYWORD2>$ASCII</KEYWORD2>
       <KEYWORD2>$BINARY</KEYWORD2>
@@ -341,7 +339,7 @@
       <KEYWORD2>MONYY</KEYWORD2>
       <KEYWORD2>MPRINT</KEYWORD2>
       <KEYWORD2>MRECALL</KEYWORD2>
-      <KEYWORD2 AT_WORD_START="TRUE">NE</KEYWORD2>
+      <KEYWORD2>NE</KEYWORD2>
       <KEYWORD2>NEW</KEYWORD2>
       <KEYWORD2>NO</KEYWORD2>
       <KEYWORD2>NOBS</KEYWORD2>
@@ -421,7 +419,7 @@
       <KEYWORD2>TABLE</KEYWORD2>
       <KEYWORD2>TABLES</KEYWORD2>
       <KEYWORD2>THEN</KEYWORD2>
-      <KEYWORD2 AT_WORD_START="TRUE">TITLE</KEYWORD2>
+      <KEYWORD2>TITLE</KEYWORD2>
       <KEYWORD2>TITLE1</KEYWORD2>
       <KEYWORD2>TITLE2</KEYWORD2>
       <KEYWORD2>TITLE3</KEYWORD2>
@@ -437,7 +435,7 @@
       <KEYWORD2>VALUE</KEYWORD2>
       <KEYWORD2>VAR</KEYWORD2>
       <KEYWORD2>WHEN</KEYWORD2>
-      <KEYWORD2 AT_WORD_START="TRUE">WHERE</KEYWORD2>
+      <KEYWORD2>WHERE</KEYWORD2>
       <KEYWORD2>WHILE</KEYWORD2>
       <KEYWORD2>WINDOW</KEYWORD2>
       <KEYWORD2>WORK</KEYWORD2>
@@ -457,4 +455,4 @@
 </MODE>
 
 
- 	  	 
+

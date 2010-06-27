@@ -174,7 +174,7 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 
 - nsis2.xml update (#2653404 Uwe donovaly)
 
-- sas.xml update (#2926121 - goebbe)
+- sas.xml update (#2926121, 3015899 - goebbe)
 
 - html.erb added to rhtml mode catalog entry. (# 2734062 Sergey Mezentsev)
 
