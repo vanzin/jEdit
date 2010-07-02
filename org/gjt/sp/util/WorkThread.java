@@ -22,6 +22,8 @@ package org.gjt.sp.util;
 /**
  * Services work requests in the background.
  * @author Slava Pestov
+ * @deprecated
+ * @see org.gjt.sp.util.ThreadUtilities
  * @version $Id$
  */
 public class WorkThread extends Thread implements ThreadAbortMonitor

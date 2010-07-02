@@ -31,7 +31,8 @@ import java.awt.EventQueue;
  * A pool of work threads.
  * @author Slava Pestov
  * @version $Id$
- * @see org.gjt.sp.util.WorkThread
+ * @deprecated
+ * @see org.gjt.sp.util.ThreadUtilities
  * @since jEdit 2.6pre1
  */
 public class WorkThreadPool
