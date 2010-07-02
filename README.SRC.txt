@@ -35,19 +35,21 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the online help in either HTML- or PDF-format:
 
-  - DocBook XML 4.4. called "docbook-dtd" or "docbook-xml" from package managers.
-    Get it from <http://www.docbook.org/xml/4.4/>. This contains catalog
-    information.
+  - docbook-xsl 1.7.x stylesheets for docbook 4.4 DTD-based documentation.
+    https://sourceforge.net/projects/docbook/files/docbook-xsl/
+  - docbook-xsl-ns -
+    https://sourceforge.net/projects/docbook/files/docbook-xsl-ns/
+    This package that combines schama/catalog data for all Docbook versions
+    with docbook 5 xsl stylesheets.
+    NOTE: Our documentation does not yet build on Docbook 5,
+    which is why we still need Docbook 4 stylesheets from the previous
+    package. Hopefully this will change soon.
   - Set the "docbook.catalog" property in build.properties to the path of the
-    docbook.cat catalog file. Examples for various OS can be found in
+    catalog.xml catalog file. Examples for various OS can be found in
     build.properties.sample.
-  - DocBook XSL. Called "docbook-xsl" in package managers.
-    Contains style sheets for transformation into HTML or FO (for PDF).
-    Don't use a ".0" version, these are experimental releases.
-    <http://www.sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608>
   - Set the "docbook.xsl" property in build.properties to the installation path
-    of the DocBook XSL files. Examples for various OS can be found in
-    build.properties.sample.
+    of the DocBook XSL files (from the first package).
+    Examples for various OS can be found in build.properties.sample.
   - xsltproc. sometimes packaged as "libxslt" from package managers:
     This is originally a *nix program, but there are ports
     e. g. for Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html>
@@ -59,7 +61,7 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the online help in PDF-format:
 
-  - Apache FOP 0.20.5. The 0.92 beta version will NOT work!
+  - Apache FOP 0.20.5. Maybe a later FOP works too, but someone needs to test it.
     Get it from <http://xmlgraphics.apache.org/fop/download.html>
 
  For building the windows installer (for the final step):
@@ -197,4 +199,5 @@ Follow these steps:
  - Source - Excluded dirs - Edit - Add multiple
  - Add these subdirs: jars, net, de, build
 
-
+The "eclipse-formatting.xml" file can be used to set the
+code format style to be the same as what is currently used here.
