@@ -46,11 +46,14 @@ class JEditMode extends Mode
 	@Override
 	public void setProperty(String key, Object value)
 	{
-		String prefix = "mode." + name + '.';
-		jEdit.setProperty(prefix + key, value.toString());
+		if (initialized)
+		{
+			String prefix = "mode." + name + '.';
+			jEdit.setProperty(prefix + key, value.toString());
+		}
 		props.put(key,value);
 	} //}}}
-	
+
 	//{{{ unsetProperty() method
 	/**
 	 * Unsets a mode property.
@@ -59,11 +62,14 @@ class JEditMode extends Mode
 	@Override
 	public void unsetProperty(String key)
 	{
-		String prefix = "mode." + name + '.';
-		jEdit.unsetProperty(prefix + key);
+		if (initialized)
+		{
+			String prefix = "mode." + name + '.';
+			jEdit.unsetProperty(prefix + key);
+		}
 		props.remove(key);
 	} //}}}
-	
+
 	//{{{ getProperty() method
 	/**
 	 * Returns a mode property.
@@ -114,6 +120,18 @@ class JEditMode extends Mode
 			return null;
 	} //}}}
 
+	//{{{ init() method
+	/**
+	 * Keeps track of mode initialization, to avoid overwriting
+	 * custom mode properties in the user's settings.
+	 */
+	@Override
+	public void init()
+	{
+		initialized = true;
+		super.init();
+	} //}}}
+
 	//{{{ loadIfNecessary() method
 	/**
 	 * Loads the mode from disk if it hasn't been loaded already.
@@ -129,4 +147,7 @@ class JEditMode extends Mode
 				Log.log(Log.ERROR, this, "Mode not correctly loaded, token marker is still null");
 		}
 	} //}}}
+
+
+	private boolean initialized = false;
 }
