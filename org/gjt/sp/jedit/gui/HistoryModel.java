@@ -188,10 +188,9 @@ public class HistoryModel extends DefaultListModel
 
 	//{{{ setDefaultMax() method
 	/**
-	 * sets the default size of all HistoryModels.
+	 * Sets the default size of all HistoryModels.
 	 * Affects the VFS path history, the hypersearch history, etc..
 	 * To change the max size of one history, call setMax() instead.
-	 * @return default size limit for HistoryModels
 	 */
 	public static void setDefaultMax(int max)
 	{
@@ -199,6 +198,10 @@ public class HistoryModel extends DefaultListModel
 	} //}}}
 
 	//{{{ getDefaultMax() method
+	/**
+	 * Gets the default size of all HistoryModels.
+	 * @return default size limit for HistoryModels
+	 */
 	public static int getDefaultMax()
 	{
 		return HistoryModel.defaultMax;

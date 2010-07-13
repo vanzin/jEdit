@@ -736,7 +736,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 	/**
 	 * Returns the md5sum for given string. Or dummy byte array on error
 	 * Supress NoSuchAlgorithmException because MD5 algorithm always present in JRE
-	 * @param Given string
+	 * @param s Given string
 	 * @return md5 sum of given string 
 	 */
 	public static byte[] md5(String s) {
