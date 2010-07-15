@@ -76,15 +76,22 @@ public class HelpTOCPanel extends JPanel
 		if(tocModel == null)
 			return;
 
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)nodes.get(shortURL);
+		final DefaultMutableTreeNode node =
+			(DefaultMutableTreeNode)nodes.get(shortURL);
 
 		if(node == null)
 			return;
 
-		TreePath path = new TreePath(tocModel.getPathToRoot(node));
-		toc.expandPath(path);
-		toc.setSelectionPath(path);
-		toc.scrollPathToVisible(path);
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				TreePath path = new TreePath(tocModel.getPathToRoot(node));
+				toc.expandPath(path);
+				toc.setSelectionPath(path);
+				toc.scrollPathToVisible(path);
+			}
+		});
 	} //}}}
 
 	//{{{ load() method
