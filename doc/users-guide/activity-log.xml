@@ -50,4 +50,12 @@
     <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>Update
     Activity Log on Disk</guimenuitem> command. The log file is also
     automatically updated on disk when jEdit exits.</para>
+
+    <para>
+    The "Settings" button in the Activity Log window shows a dialog that lets
+    you adjust the output colors, filter the messages by type, and lets you set
+    the maximum number of lines to display.  Note that larger numbers will 
+    decrease the overall performance of jEdit since these lines are kept in
+    memory.
+    </para>
 </appendix>

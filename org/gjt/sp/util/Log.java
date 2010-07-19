@@ -65,7 +65,7 @@ public class Log
 	 * The maximum number of log messages that will be kept in memory.
 	 * @since jEdit 2.6pre5
 	 */
-	public static final int MAXLINES = 500;
+	public static int MAXLINES = 500;
 
 	/**
 	 * Debugging message urgency. Should be used for messages only

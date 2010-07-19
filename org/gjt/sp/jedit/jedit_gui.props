@@ -2623,6 +2623,17 @@ fileprop.selectedFiles=Selected files
 fileprop.selectedDirectories=Selected directories
 #}}}
 
+#{{{ Activity log viewer
+log-viewer.dialog.title=Activity Log Settings
+log-viewer.settings.label=Settings
+log-viewer.message.label=Message Display:
+log-viewer.message.debug.label=Debug
+log-viewer.message.message.label=Message
+log-viewer.message.notice.label=Notice
+log-viewer.message.warning.label=Warning
+log-viewer.message.error.label=Error
+#}}}
+
 errorwidget.popupmenu=logs-remove-all-errors
 logs-remove-all-errors.label=Remove all errors
 

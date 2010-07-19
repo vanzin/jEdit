@@ -286,6 +286,9 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 - Extended the scope of the workaround for a bug in Sun (and Apple) JVM 5
   to cover IBM JVM because the same problem was reported on it.
   (SF.net bug #3006686 - Kazutoshi Satoda)
+  
+- Added settings to Activity Log to adjust colors and filter by message type.
+  (Dale Anson)
 
 }}}
 
