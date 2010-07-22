@@ -371,6 +371,12 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="focus-on-textarea">
+	<CODE>
+		editPane.focusOnTextArea();
+	</CODE>
+</ACTION>
+
 <ACTION NAME="format-paragraph">
 	<CODE>
 		textArea.formatParagraph();
