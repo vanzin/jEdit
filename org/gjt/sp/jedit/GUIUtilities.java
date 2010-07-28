@@ -773,14 +773,33 @@ public class GUIUtilities
 	 * JOptionPane.WARNING_MESSAGE
 	 * @since jEdit 3.1pre3
 	 */
-	public static int confirm(Component comp, String name,
-		Object[] args, int buttons, int type)
+	public static int confirm(final Component comp, final String name,
+		final Object[] args, final int buttons, final int type)
 	{
-		hideSplashScreen();
-
-		return JOptionPane.showConfirmDialog(comp,
-			jEdit.getProperty(name + ".message",args),
-			jEdit.getProperty(name + ".title"),buttons,type);
+		if (SwingUtilities.isEventDispatchThread())
+		{
+			hideSplashScreen();
+	
+			return JOptionPane.showConfirmDialog(comp,
+				jEdit.getProperty(name + ".message",args),
+				jEdit.getProperty(name + ".title"),buttons,type);
+		}
+		final int [] retValue = new int[1];
+		try
+		{
+			SwingUtilities.invokeAndWait(new Runnable()
+			{
+				public void run()
+				{
+					retValue[0] = confirm(comp, name, args, buttons, type);
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			return JOptionPane.CANCEL_OPTION;
+		}
+		return retValue[0];
 	} //}}}
 
 	//{{{ listConfirm() method
