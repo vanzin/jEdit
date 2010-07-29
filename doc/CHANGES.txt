@@ -90,6 +90,11 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 
 - CopyFileWorker do not accept that the source and target are the same
   (Matthieu Casanova)
+
+- Changed GUIUtilities.confirm() to work also from worker threads, by
+  deferring the confirmation dialog to the EDT. This fixes threading
+  issues with HyperSearchRequest, if the number of results exceeds the
+  "max results" option. (Shlomy Reinstein)
 }}}
 {{{ API changes
 
