@@ -223,6 +223,12 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
   Edit->More clipboard->Paste Special that will suggest different mode to paste
   data from clipboard, currently plain text, rich jEdit text
   (plain text + edit mode) and mime type html are supported (Matthieu Casanova)
+  
+- Added Ant mode file for Ant build files. (#3016053 - Dale Anson)
+
+- Added TLD mode file for JSP Tag Definition Library files. (#3016054 - Dale Anson)
+
+- Added Maven mode file for Maven pom.xml files. (#3016057 - Dale Anson)
 
 }}}
 {{{ Miscellaneous

@@ -15,6 +15,10 @@
 
 <MODE NAME="ada95"		FILE="ada95.xml" />
 
+<MODE NAME="ant"        FILE="ant.xml" 
+                FILE_NAME_GLOB="*.xml" 
+                FIRST_LINE_GLOB="&lt;project*&gt;" />
+                    
 <MODE NAME="antlr"		FILE="antlr.xml"
 				FILE_NAME_GLOB="*.g" />
 
@@ -293,6 +297,9 @@
 <MODE NAME="maple"		FILE="maple.xml"
 				FILE_NAME_GLOB="*.{mpl,mws}" />
 
+<MODE NAME="maven" 
+                FILE="maven.xml" FILE_NAME_GLOB="pom.xml"/>			
+            
 <MODE NAME="ml"			FILE="ml.xml"
 				FILE_NAME_GLOB="*.{sml,ml}" />
 
@@ -520,7 +527,10 @@
      because filename globs are checked in reverse order -->
 <MODE NAME="rfc"		FILE="rfc.xml"
 				FILE_NAME_GLOB="rfc*.txt" />
-
+			
+<MODE NAME="tld"        FILE="tld.xml" 
+                FILE_NAME_GLOB="*.tld"/>
+            
 <MODE NAME="tsp"		FILE="tsp.xml"
 				FILE_NAME_GLOB="*.tsp" />
 
