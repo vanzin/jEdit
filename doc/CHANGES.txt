@@ -230,6 +230,8 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 
 - Added Maven mode file for Maven pom.xml files. (#3016057 - Dale Anson)
 
+- Updated javacc mode to better highlight keywords and regular expressions. (Dale Anson)
+
 }}}
 {{{ Miscellaneous
 
