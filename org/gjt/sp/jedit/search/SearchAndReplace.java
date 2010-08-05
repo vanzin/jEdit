@@ -36,9 +36,7 @@ import org.gjt.sp.jedit.msg.PositionChanging;
 import org.gjt.sp.jedit.msg.SearchSettingsChanged;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.textarea.TextArea;
-import org.gjt.sp.util.ReverseCharSequence;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.*;
 //}}}
 
 /**
@@ -406,8 +404,9 @@ public class SearchAndReplace
 			}
 			else
 				s = null;
-			VFSManager.runInWorkThread(new HyperSearchRequest(view,
-				matcher,results,s));
+			ThreadUtilities.runInBackground(
+				new HyperSearchRequest(view,
+					matcher,results,s));
 			return true;
 		}
 		catch(Exception e)

@@ -26,6 +26,7 @@ package org.gjt.sp.jedit.search;
 import javax.swing.tree.*;
 import javax.swing.*;
 
+import org.gjt.sp.jedit.gui.AbbrevEditor;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -34,6 +35,8 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.*;
+
+import java.awt.*;
 //}}}
 
 /**
@@ -41,7 +44,7 @@ import org.gjt.sp.util.*;
  * @author Slava Pestov
  * @version $Id$
  */
-class HyperSearchRequest extends WorkRequest
+class HyperSearchRequest extends Task
 {
 	//{{{ HyperSearchRequest constructor
 	HyperSearchRequest(View view, SearchMatcher matcher,
@@ -58,7 +61,7 @@ class HyperSearchRequest extends WorkRequest
 	} //}}}
 
 	//{{{ run() method
-	public void run()
+	public void _run()
 	{
 		setStatus(jEdit.getProperty("hypersearch-status"));
 
@@ -66,7 +69,7 @@ class HyperSearchRequest extends WorkRequest
 		String[] files = fileset.getFiles(view);
 		if(files == null || files.length == 0)
 		{
-			SwingUtilities.invokeLater(new Runnable()
+			EventQueue.invokeLater(new Runnable()
 			{
 				public void run()
 				{
@@ -103,7 +106,8 @@ class HyperSearchRequest extends WorkRequest
 				int maxResults = jEdit.getIntegerProperty("hypersearch.maxWarningResults");
 loop:				for(int i = 0; i < files.length; i++)
 				{
-					if(jEdit.getBooleanProperty("hyperSearch-stopButton"))
+					if(jEdit.getBooleanProperty("hyperSearch-stopButton") ||
+						Thread.currentThread().isInterrupted())
 					{
 						jEdit.setTemporaryProperty("hyperSearch-stopButton", "false");
 						Log.log(Log.MESSAGE, this, "Search stopped by user action (stop button)");
@@ -155,9 +159,6 @@ loop:				for(int i = 0; i < files.length; i++)
 				}
 			});
 		}
-		catch(WorkThread.Abort a)
-		{
-		}
 		finally
 		{
 			VFSManager.runInAWTThread(new Runnable()
@@ -170,9 +171,17 @@ loop:				for(int i = 0; i < files.length; i++)
 		}
 	} //}}}
 
+	@Override
+	public void cancel()
+	{
+		if (abortable)
+			super.cancel();
+	}
+
 	//{{{ Private members
 
 	//{{{ Instance variables
+	private volatile boolean abortable = true;
 	private View view;
 	private SearchMatcher matcher;
 	private HyperSearchResults results;
@@ -185,7 +194,7 @@ loop:				for(int i = 0; i < files.length; i++)
 	//{{{ searchInSelection() method
 	private int searchInSelection(Buffer buffer) throws Exception
 	{
-		setAbortable(false);
+		abortable = false;
 
 		int resultCount = 0;
 
@@ -218,7 +227,7 @@ loop:				for(int i = 0; i < files.length; i++)
 			buffer.readUnlock();
 		}
 
-		setAbortable(true);
+		abortable = true;
 
 		return resultCount;
 	} //}}}
@@ -227,7 +236,7 @@ loop:				for(int i = 0; i < files.length; i++)
 	private int doHyperSearch(Buffer buffer, int start, int end)
 		throws Exception
 	{
-		setAbortable(false);
+		abortable = false;
 
 		HyperSearchFileNode hyperSearchFileNode = new HyperSearchFileNode(buffer.getPath());
 		DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(hyperSearchFileNode);
@@ -237,7 +246,7 @@ loop:				for(int i = 0; i < files.length; i++)
 		if(resultCount != 0)
 			rootSearchNode.insert(bufferNode,rootSearchNode.getChildCount());
 
-		setAbortable(true);
+		abortable = true;
 
 		return resultCount;
 	} //}}}
