@@ -1112,7 +1112,8 @@ public abstract class VFS
 
 		Thread ct = Thread.currentThread();
 		WorkThread wt = null;
-		if (ct instanceof WorkThread) {
+		if (ct instanceof WorkThread)
+		{
 			wt = (WorkThread) ct;
 		}
 
@@ -1124,7 +1125,8 @@ public abstract class VFS
 
 		for(int i = 0; i < _files.length; i++)
 		{
-			if (wt != null && wt.isAborted()) break;
+			if (wt != null && wt.isAborted() || ct.isInterrupted())
+				break;
 			VFSFile file = _files[i];
 			if (skipHidden && (file.isHidden() || MiscUtilities.isBackup(file.getName())))
 				continue;
