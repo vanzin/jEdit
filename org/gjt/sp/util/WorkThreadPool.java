@@ -35,6 +35,7 @@ import java.awt.EventQueue;
  * @see org.gjt.sp.util.ThreadUtilities
  * @since jEdit 2.6pre1
  */
+@Deprecated
 public class WorkThreadPool
 {
 	//{{{ WorkThreadPool constructor

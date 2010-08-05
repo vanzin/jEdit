@@ -26,6 +26,7 @@ package org.gjt.sp.util;
  * @see org.gjt.sp.util.ThreadUtilities
  * @version $Id$
  */
+@Deprecated
 public class WorkThread extends Thread implements ThreadAbortMonitor
 {
 	public WorkThread(WorkThreadPool pool, ThreadGroup group, String name)

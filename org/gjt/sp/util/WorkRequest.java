@@ -27,6 +27,7 @@ package org.gjt.sp.util;
  * @since jEdit 2.6pre1
  * @version $Id$
  */
+@Deprecated
 public abstract class WorkRequest implements Runnable, ProgressObserver
 {
 	/**
