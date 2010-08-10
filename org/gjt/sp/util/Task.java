@@ -44,6 +44,8 @@ public abstract class Task implements Runnable, ProgressObserver
 
 	private SwingWorker.StateValue state;
 
+	private volatile boolean cancellable = true;
+
 	//{{{ Task Constructor
 	protected Task()
 	{
@@ -123,13 +125,23 @@ public abstract class Task implements Runnable, ProgressObserver
 		this.label = label;
 	}
 
+	public boolean isCancellable()
+	{
+		return cancellable;
+	}
+
+	public void setCancellable(boolean cancellable)
+	{
+		this.cancellable = cancellable;
+	}
+
 	//{{{ cancel() method
 	/**
 	 * Cancel the task
 	 */
 	public void cancel()
 	{
-		if (thread != null)
+		if (cancellable && thread != null)
 			thread.interrupt();
 	} //}}}
 

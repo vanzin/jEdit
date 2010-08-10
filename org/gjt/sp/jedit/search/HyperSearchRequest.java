@@ -61,6 +61,7 @@ class HyperSearchRequest extends Task
 	} //}}}
 
 	//{{{ run() method
+	@Override
 	public void _run()
 	{
 		setStatus(jEdit.getProperty("hypersearch-status"));
@@ -171,17 +172,9 @@ loop:				for(int i = 0; i < files.length; i++)
 		}
 	} //}}}
 
-	@Override
-	public void cancel()
-	{
-		if (abortable)
-			super.cancel();
-	}
-
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private volatile boolean abortable = true;
 	private View view;
 	private SearchMatcher matcher;
 	private HyperSearchResults results;
@@ -194,7 +187,7 @@ loop:				for(int i = 0; i < files.length; i++)
 	//{{{ searchInSelection() method
 	private int searchInSelection(Buffer buffer) throws Exception
 	{
-		abortable = false;
+		setCancellable(false);
 
 		int resultCount = 0;
 
@@ -226,8 +219,7 @@ loop:				for(int i = 0; i < files.length; i++)
 		{
 			buffer.readUnlock();
 		}
-
-		abortable = true;
+		setCancellable(true);
 
 		return resultCount;
 	} //}}}
@@ -236,7 +228,7 @@ loop:				for(int i = 0; i < files.length; i++)
 	private int doHyperSearch(Buffer buffer, int start, int end)
 		throws Exception
 	{
-		abortable = false;
+		setCancellable(false);
 
 		HyperSearchFileNode hyperSearchFileNode = new HyperSearchFileNode(buffer.getPath());
 		DefaultMutableTreeNode bufferNode = new DefaultMutableTreeNode(hyperSearchFileNode);
@@ -246,7 +238,7 @@ loop:				for(int i = 0; i < files.length; i++)
 		if(resultCount != 0)
 			rootSearchNode.insert(bufferNode,rootSearchNode.getChildCount());
 
-		abortable = true;
+		setCancellable(true);
 
 		return resultCount;
 	} //}}}
