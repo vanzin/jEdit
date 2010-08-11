@@ -10,9 +10,12 @@ Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead,
 Marcelo Vanzin and Bernhard Walle for contributing to this release.
 
 {{{ Bug fixes
+- Fixed a memory leak in the beanshell snippet replacement
+  (Matthieu Casanova #3043132)
+
 - The "buffer" variable is always the current buffer and not the buffer
   where the replacement occurs when using beanshell snippet replacement
-  (#3043118) (Matthieu Casanova)
+  (Matthieu Casanova #3043118)
 
 - Removed workaround in drag & drop code of TextArea that doesn't seem
   useful anymore on Ubuntu and cause exceptions when dropping a Transferable

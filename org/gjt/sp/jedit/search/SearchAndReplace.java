@@ -1252,6 +1252,16 @@ loop:		for(int counter = 0; ; counter++)
 
 		Object obj = BeanShell.runCachedBlock(
 			replaceMethod,view,replaceNS);
+
+		for(int i = 0; i < occur.substitutions.length; i++)
+		{
+			replaceNS.setVariable("_" + i,
+				null, false);
+		}
+		// Not really necessary because it is already cleared in the end of
+		// BeanShell.runCachedBlock()
+		replaceNS.setVariable("buffer", null, false);
+
 		if(obj == null)
 			return "";
 		else
@@ -1358,6 +1368,12 @@ loop:		for(int counter = 0; ; counter++)
 		Object obj = BeanShell.runCachedBlock(
 			replaceMethod,
 			view,replaceNS);
+
+		replaceNS.setVariable("_0", null, false);
+		// Not really necessary because it is already cleared in the end of
+		// BeanShell.runCachedBlock()
+		replaceNS.setVariable("buffer", null, false);
+
 		if(obj == null)
 			return "";
 		else
