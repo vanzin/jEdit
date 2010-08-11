@@ -183,8 +183,8 @@ public class JEditBeanShellAction extends JEditAbstractEditAction<TextArea>
 		{
 			if(textArea != null)
 			{
-				namespace.setVariable("buffer",textArea.getBuffer(), false);
-				namespace.setVariable("textArea",textArea, false);
+				setVariable(namespace, "buffer",textArea.getBuffer());
+				setVariable(namespace, "textArea",textArea);
 			}
 		}
 

@@ -1192,7 +1192,7 @@ loop:		for(int counter = 0; ; counter++)
 		boolean smartCaseReplace)
 		throws Exception
 	{
-		String subst = replaceOne(view,occur,found);
+		String subst = replaceOne(view,buffer,occur,found);
 		if(smartCaseReplace && ignoreCase)
 		{
 			int strCase = TextUtilities.getStringCase(found);
@@ -1219,21 +1219,21 @@ loop:		for(int counter = 0; ; counter++)
 	} //}}}
 
 	//{{{ replaceOne() method
-	private static String replaceOne(View view,
+	private static String replaceOne(View view, JEditBuffer buffer,
 		SearchMatcher.Match occur, String found)
 		throws Exception
 	{
 		if(regexp)
 		{
 			if(replaceMethod != null)
-				return regexpBeanShellReplace(view,occur);
+				return regexpBeanShellReplace(view,buffer,occur);
 			else
 				return regexpReplace(occur,found);
 		}
 		else
 		{
 			if(replaceMethod != null)
-				return literalBeanShellReplace(view,found);
+				return literalBeanShellReplace(view,buffer,found);
 			else
 				return replace;
 		}
@@ -1241,8 +1241,9 @@ loop:		for(int counter = 0; ; counter++)
 
 	//{{{ regexpBeanShellReplace() method
 	private static String regexpBeanShellReplace(View view,
-		SearchMatcher.Match occur) throws Exception
+		JEditBuffer buffer, SearchMatcher.Match occur) throws Exception
 	{
+		replaceNS.setVariable("buffer", buffer, false);
 		for(int i = 0; i < occur.substitutions.length; i++)
 		{
 			replaceNS.setVariable("_" + i,
@@ -1348,9 +1349,11 @@ loop:		for(int counter = 0; ; counter++)
 	} //}}}
 
 	//{{{ literalBeanShellReplace() method
-	private static String literalBeanShellReplace(View view, String found)
+	private static String literalBeanShellReplace(View view,
+		JEditBuffer buffer, String found)
 		throws Exception
 	{
+		replaceNS.setVariable("buffer",buffer);
 		replaceNS.setVariable("_0",found);
 		Object obj = BeanShell.runCachedBlock(
 			replaceMethod,

@@ -267,6 +267,20 @@ public abstract class BeanShellFacade<T>
 		classManager.reset();
 	} //}}}
 
+	//{{{ setVariable() method
+	/**
+	 * Set a beanshell variable in the namespace without overriding it
+	 * @param nameSpace the namespace
+	 * @param name the name of the variable
+	 * @param object the value of the variable
+	 * @throws UtilEvalError
+	 */
+	protected void setVariable(NameSpace nameSpace, String name, Object object) throws UtilEvalError
+	{
+		if (nameSpace.getVariable(name) == Primitive.VOID)
+			nameSpace.setVariable(name,object, false);
+	} //}}}
+
 	//{{{ setupDefaultVariables() method
 	protected abstract void setupDefaultVariables(NameSpace namespace, T param)
 		throws UtilEvalError;
