@@ -28,9 +28,9 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 import org.gjt.sp.jedit.gui.*;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 public class HelpSearchPanel extends JPanel
@@ -203,7 +203,7 @@ public class HelpSearchPanel extends JPanel
 			final String text = searchField.getText();
 			final Vector<Result> resultModel = new Vector<Result>();
 
-			VFSManager.runInWorkThread(new Runnable()
+			ThreadUtilities.runInBackground(new Runnable()
 			{
 				public void run()
 				{
@@ -258,25 +258,27 @@ public class HelpSearchPanel extends JPanel
 
 						Collections.sort(resultModel,new ResultCompare());
 					}
-				}
-			});
 
-			VFSManager.runInAWTThread(new Runnable()
-			{
-				public void run()
-				{
-					if(resultModel.isEmpty())
+					EventQueue.invokeLater(new Runnable()
 					{
-						results.setListData(new String[] {
-							jEdit.getProperty(
-							"helpviewer.no-results") });
+						public void run()
+						{
+							if(resultModel.isEmpty())
+							{
+								results.setListData(new String[] {
+									jEdit.getProperty(
+									"helpviewer.no-results") });
 
-						getToolkit().beep();
-					}
-					else
-						results.setListData(resultModel);
+								getToolkit().beep();
+							}
+							else
+								results.setListData(resultModel);
+						}
+					});
 				}
 			});
+
+
 
 		}
 	} //}}}
