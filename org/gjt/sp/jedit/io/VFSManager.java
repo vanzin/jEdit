@@ -255,6 +255,7 @@ public class VFSManager
 	 * pending I/O requests are complete.
 	 * @since jEdit 2.5pre1
 	 */
+	@Deprecated
 	public static void runInAWTThread(Runnable run)
 	{
 		ioThreadPool.addWorkRequest(run,true);
@@ -265,6 +266,7 @@ public class VFSManager
 	 * Executes the specified runnable in one of the I/O threads.
 	 * @since jEdit 2.6pre2
 	 */
+	@Deprecated
 	public static void runInWorkThread(Runnable run)
 	{
 		ioThreadPool.addWorkRequest(run,false);
