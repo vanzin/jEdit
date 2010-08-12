@@ -30,6 +30,7 @@ import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.XMLUtilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -206,7 +207,7 @@ class InstallPanel extends JPanel implements EBComponent
 		pluginModel.clear();
 		infoBox.setText(jEdit.getProperty("plugin-manager.list-download"));
 
-		VFSManager.runInAWTThread(new Runnable()
+		ThreadUtilities.runInDispatchThread(new Runnable()
 		{
 			public void run()
 			{
