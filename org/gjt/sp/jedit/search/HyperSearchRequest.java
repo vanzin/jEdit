@@ -26,10 +26,8 @@ package org.gjt.sp.jedit.search;
 import javax.swing.tree.*;
 import javax.swing.*;
 
-import org.gjt.sp.jedit.gui.AbbrevEditor;
 import org.gjt.sp.jedit.textarea.Selection;
 import org.gjt.sp.jedit.textarea.JEditTextArea;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.Buffer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
@@ -70,7 +68,7 @@ class HyperSearchRequest extends Task
 		String[] files = fileset.getFiles(view);
 		if(files == null || files.length == 0)
 		{
-			EventQueue.invokeLater(new Runnable()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 			{
 				public void run()
 				{
@@ -152,7 +150,7 @@ loop:				for(int i = 0; i < files.length; i++)
 		catch(final Exception e)
 		{
 			Log.log(Log.ERROR,this,e);
-			SwingUtilities.invokeLater(new Runnable()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 			{
 				public void run()
 				{
@@ -162,7 +160,7 @@ loop:				for(int i = 0; i < files.length; i++)
 		}
 		finally
 		{
-			VFSManager.runInAWTThread(new Runnable()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 			{
 				public void run()
 				{
