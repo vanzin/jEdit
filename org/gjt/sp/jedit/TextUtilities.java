@@ -869,7 +869,7 @@ public class TextUtilities
 		}
 	} //}}}
 
-	//{{{ getStringCase() method
+	//{{{ getStringCase() methods
 	public static final int MIXED = 0;
 	public static final int LOWER_CASE = 1;
 	public static final int UPPER_CASE = 2;
@@ -879,9 +879,9 @@ public class TextUtilities
 	 * Returns if the specified string is all upper case, all lower case,
 	 * or title case (first letter upper case, rest lower case).
 	 * @param str The string
-	 * @since jEdit 4.0pre1
+	 * @since jEdit 4.4pre1
 	 */
-	public static int getStringCase(String str)
+	public static int getStringCase(CharSequence str)
 	{
 		if(str.length() == 0)
 			return MIXED;
@@ -923,6 +923,17 @@ public class TextUtilities
 		}
 
 		return state;
+	}
+
+	/**
+	 * Returns if the specified string is all upper case, all lower case,
+	 * or title case (first letter upper case, rest lower case).
+	 * @param str The string
+	 * @since jEdit 4.0pre1
+	 */
+	public static int getStringCase(String str)
+	{
+		return getStringCase((CharSequence) str);
 	} //}}}
 
 	//{{{ toTitleCase() method

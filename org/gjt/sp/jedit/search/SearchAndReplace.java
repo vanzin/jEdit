@@ -1164,8 +1164,8 @@ loop:		for(int counter = 0; ; counter++)
 			if(occur == null)
 				break loop;
 
-			String found = text.subSequence(
-				occur.start, occur.end).toString();
+			CharSequence found = text.subSequence(
+				occur.start, occur.end);
 
 			int length = replaceOne(view,buffer,occur,offset,
 				found,smartCaseReplace);
@@ -1188,7 +1188,7 @@ loop:		for(int counter = 0; ; counter++)
 	 * replacement string.
 	 */
 	private static int replaceOne(View view, JEditBuffer buffer,
-		SearchMatcher.Match occur, int offset, String found,
+		SearchMatcher.Match occur, int offset, CharSequence found,
 		boolean smartCaseReplace)
 		throws Exception
 	{
@@ -1220,7 +1220,7 @@ loop:		for(int counter = 0; ; counter++)
 
 	//{{{ replaceOne() method
 	private static String replaceOne(View view, JEditBuffer buffer,
-		SearchMatcher.Match occur, String found)
+		SearchMatcher.Match occur, CharSequence found)
 		throws Exception
 	{
 		if(regexp)
@@ -1270,7 +1270,7 @@ loop:		for(int counter = 0; ; counter++)
 
 	//{{{ regexpReplace() method
 	private static String regexpReplace(SearchMatcher.Match occur,
-		String found) throws Exception
+		CharSequence found) throws Exception
 	{
 		StringBuilder buf = new StringBuilder();
 
@@ -1360,7 +1360,7 @@ loop:		for(int counter = 0; ; counter++)
 
 	//{{{ literalBeanShellReplace() method
 	private static String literalBeanShellReplace(View view,
-		JEditBuffer buffer, String found)
+		JEditBuffer buffer, CharSequence found)
 		throws Exception
 	{
 		replaceNS.setVariable("buffer",buffer);
