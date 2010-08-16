@@ -24,9 +24,12 @@ package org.gjt.sp.jedit.search;
 
 //{{{ Imports
 import javax.swing.text.Position;
-import org.gjt.sp.jedit.io.VFSManager;
+
+import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.EditBus.EBHandler;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /**
@@ -67,9 +70,11 @@ public class HyperSearchResult implements HyperSearchNode
 		int i = 0;
 		while(o != null)
 		{
+			int start = o.startPos.getOffset();
+			int end = o.endPos.getOffset();
 			Selection.Range s = new Selection.Range(
-				o.startPos.getOffset(),
-				o.endPos.getOffset()
+				start,
+				end
 			);
 			returnValue[i++] = s;
 			o = o.next;
@@ -80,28 +85,7 @@ public class HyperSearchResult implements HyperSearchNode
 	//{{{ goTo() method
 	public void goTo(final EditPane editPane)
 	{
-		final Buffer buffer = getBuffer(editPane.getView());
-		if(buffer == null)
-			return;
-		editPane.setBuffer(buffer);
-
-		VFSManager.runInAWTThread(new Runnable()
-		{
-			public void run()
-			{
-				Selection[] s = getSelection();
-				if(s == null)
-					return;
-
-				JEditTextArea textArea = editPane.getTextArea();
-				if(textArea.isMultipleSelectionEnabled())
-					textArea.addToSelection(s);
-				else
-					textArea.setSelection(s);
-
-				textArea.moveCaretPosition(occur.endPos.getOffset());
-			}
-		});
+		new GotoDelayed(editPane);
 	} //}}}
 
 	//{{{ toString() method
@@ -214,4 +198,69 @@ public class HyperSearchResult implements HyperSearchNode
 			startPos = endPos = null;
 		} //}}}
 	} //}}}
+
+	public class GotoDelayed implements Runnable
+	{
+		private final EditPane editPane;
+		private volatile boolean loadedEventReceived;
+
+		private GotoDelayed(EditPane editPane)
+		{
+			this.editPane = editPane;
+			EditBus.addToBus(this);
+			buffer = getBuffer(editPane.getView());
+			if(buffer == null)
+			{
+				EditBus.removeFromBus(this);
+				return;
+			}
+			editPane.setBuffer(buffer);
+			synchronized (this)
+			{
+				if (!loadedEventReceived && buffer.isLoaded())
+				{
+					bufferLoaded();
+				}
+			}
+
+		}
+
+		public void run()
+		{
+			Selection[] s = getSelection();
+			if(s == null)
+				return;
+
+			JEditTextArea textArea = editPane.getTextArea();
+			if(textArea.isMultipleSelectionEnabled())
+				textArea.addToSelection(s);
+			else
+				textArea.setSelection(s);
+
+			textArea.moveCaretPosition(occur.endPos.getOffset());
+		}
+
+		private void bufferLoaded()
+		{
+			synchronized (this)
+			{
+				if (!loadedEventReceived)
+				{
+					EditBus.removeFromBus(this);
+					loadedEventReceived = true;
+					ThreadUtilities.runInDispatchThread(this);
+				}
+			}
+		}
+
+		@EBHandler
+		public void handleBufferUpdate(BufferUpdate msg)
+		{
+			if (msg.getWhat() == BufferUpdate.LOADED &&
+				msg.getBuffer() == buffer)
+			{
+				bufferLoaded();
+			}
+		}
+	}
 }
