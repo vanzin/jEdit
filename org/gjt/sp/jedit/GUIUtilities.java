@@ -776,7 +776,7 @@ public class GUIUtilities
 	public static int confirm(final Component comp, final String name,
 		final Object[] args, final int buttons, final int type)
 	{
-		if (SwingUtilities.isEventDispatchThread())
+		if (EventQueue.isDispatchThread())
 		{
 			hideSplashScreen();
 	
@@ -787,7 +787,7 @@ public class GUIUtilities
 		final int [] retValue = new int[1];
 		try
 		{
-			SwingUtilities.invokeAndWait(new Runnable()
+			EventQueue.invokeAndWait(new Runnable()
 			{
 				public void run()
 				{
@@ -1448,7 +1448,7 @@ public class GUIUtilities
 			@Override
 			public void windowGainedFocus(WindowEvent evt)
 			{
-				SwingUtilities.invokeLater(new Runnable()
+				EventQueue.invokeLater(new Runnable()
 				{
 						public void run()
 						{
@@ -2038,7 +2038,7 @@ public class GUIUtilities
 					catch (InterruptedException ie)
 					{
 					}
-					SwingUtilities.invokeLater(sizeSaver);
+					EventQueue.invokeLater(sizeSaver);
 				}
 			}.start();
 		} //}}}
