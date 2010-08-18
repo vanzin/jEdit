@@ -37,6 +37,7 @@ import org.gjt.sp.jedit.gui.DockableWindowManager;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /**
@@ -153,8 +154,8 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ loadDirectory() method
-	public void loadDirectory(Object node, String path,
-		boolean addToHistory)
+	public void loadDirectory(final Object node, String path,
+		final boolean addToHistory)
 	{
 		path = MiscUtilities.constructPath(browser.getDirectory(),path);
 		VFS vfs = VFSManager.getVFSForPath(path);
@@ -169,12 +170,16 @@ class BrowserView extends JPanel
 				new LoadingPlaceholder() });
 		}
 
-		Object[] loadInfo = new Object[2];
-
-		VFSManager.runInWorkThread(new BrowserIORequest(
-			BrowserIORequest.LIST_DIRECTORY,browser,
-			session,vfs,path,null,loadInfo));
-		browser.directoryLoaded(node,loadInfo,addToHistory);
+		final Object[] loadInfo = new Object[2];
+		Runnable awtRunnable = new Runnable()
+		{
+			public void run()
+			{
+				browser.directoryLoaded(node,loadInfo,addToHistory);
+			}
+		};
+		ThreadUtilities.runInBackground(new ListDirectoryBrowserTask(browser,
+			session, vfs, path, null, loadInfo, awtRunnable));
 	} //}}}
 
 	//{{{ directoryLoaded() method
