@@ -267,8 +267,11 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 			
 			/* call setPage asynchronously, because it can block when
 			   one can't connect to host.
-			   Calling setPage outside from the EDT may lead to NPE :
-			   see http://bugs.sun.com/view_bug.do?bug_id=4714674
+			   Calling setPage outside from the EDT violates
+			   the single-tread rule of Swing, but it's an experienced workaround
+			   (see merge request #2984022 - fix blocking HelpViewer
+			   https://sourceforge.net/tracker/?func=detail&aid=2984022&group_id=588&atid=1235750
+			   for discussion).
 			   Once jEdit sets JDK 7 as dependency, all this should be
 			   reverted to synchronous code.
 			 */
@@ -279,30 +282,30 @@ public class HelpViewer extends JFrame implements HelpViewerInterface, HelpHisto
 					try
 					{
 						viewer.setPage(_url);
-						if (0 != scrollPosition)
+						SwingUtilities.invokeLater(new Runnable()
 						{
-							SwingUtilities.invokeLater(new Runnable()
+							public void run()
 							{
-								public void run()
+								if (0 != scrollPosition)
 								{
 									viewerScrollPane.getVerticalScrollBar().setValue(scrollPosition);
 								}
-							});
-						}
-						if(addToHistory)
-						{
-							historyModel.addToHistory(_url.toString());
-						}
-
-						HelpViewer.this.shortURL = _shortURL;
-				
-						// select the appropriate tree node.
-						if(_shortURL != null)
-						{
-							toc.selectNode(_shortURL);
-						}
+								if(addToHistory)
+								{
+									historyModel.addToHistory(_url.toString());
+								}
+		
+								HelpViewer.this.shortURL = _shortURL;
 						
-						viewer.requestFocus();
+								// select the appropriate tree node.
+								if(_shortURL != null)
+								{
+									toc.selectNode(_shortURL);
+								}
+								
+								viewer.requestFocus();
+							}
+						});
 					}
 					catch(IOException io)
 					{
