@@ -160,6 +160,9 @@ public class HtmlUtilities
 			case '>':
 				r = "&gt;";
 				break;
+			case ' ':
+				r = "&nbsp;";	// Maintain amount of whitespace in line
+				break;
 			default:
 				r = String.valueOf(c);
 				break;
