@@ -179,6 +179,8 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 }}}
 {{{ Editing
 
+- Added visualbasic.xml edit mode (Anonymous submitter, #3031412)
+
 - Added haxe.xml and hxml mode files to support haXe language
   (Dion Whitehead, François Rey, # 2922986)
 

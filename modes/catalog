@@ -11,14 +11,14 @@
 				FILE_NAME_GLOB="*.as" />
 
 <MODE NAME="ada"		FILE="ada.xml"
-            			FILE_NAME_GLOB="*.{ada,adb,ads}"/>
+				FILE_NAME_GLOB="*.{ada,adb,ads}"/>
 
 <MODE NAME="ada95"		FILE="ada95.xml" />
 
-<MODE NAME="ant"        FILE="ant.xml" 
-                FILE_NAME_GLOB="*.xml" 
-                FIRST_LINE_GLOB="&lt;project*&gt;" />
-                    
+<MODE NAME="ant"		FILE="ant.xml" 
+				FILE_NAME_GLOB="*.xml" 
+				FIRST_LINE_GLOB="&lt;project*&gt;" />
+
 <MODE NAME="antlr"		FILE="antlr.xml"
 				FILE_NAME_GLOB="*.g" />
 
@@ -178,8 +178,8 @@
 <MODE NAME="gnuplot"		FILE="gnuplot.xml"
 				FILE_NAME_GLOB="*.{dem,plt}" />
 
-<MODE NAME="go" FILE="go.xml"
-                FILE_NAME_GLOB="*.go" />
+<MODE NAME="go"			FILE="go.xml"
+				FILE_NAME_GLOB="*.go" />
 
 <MODE NAME="groovy"		FILE="groovy.xml"
 				FILE_NAME_GLOB="*.{gant,gradle,groovy,grv}"/>
@@ -211,7 +211,7 @@
 <MODE NAME="i4gl"		FILE="i4gl.xml"
 				FILE_NAME_GLOB="*.4gl" />
 
-<MODE NAME="icalendar"          FILE="ical.xml"
+<MODE NAME="icalendar"		FILE="ical.xml"
 				FILE_NAME_GLOB="*.ics" />
 
 <MODE NAME="icon"		FILE="icon.xml"
@@ -251,7 +251,7 @@
 				FILE_NAME_GLOB="*.jcl" />
 
 <MODE NAME="jedit-actions"	FILE="jedit-actions.xml" 
-                FILE_NAME_GLOB="actions.xml"/>
+				FILE_NAME_GLOB="actions.xml"/>
 
 <MODE NAME="jhtml"		FILE="jhtml.xml"
 				FILE_NAME_GLOB="*.jhtml" />
@@ -259,8 +259,8 @@
 <MODE NAME="jmk"		FILE="jmk.xml"
 				FILE_NAME_GLOB="*.jmk" />
 
-<MODE NAME="json"       FILE="json.xml"
-                FILE_NAME_GLOB="*.json" />
+<MODE NAME="json"		FILE="json.xml"
+				FILE_NAME_GLOB="*.json" />
 
 <MODE NAME="jsp"		FILE="jsp.xml"
 				FILE_NAME_GLOB="*.{jsp,jsf,jspf,tag}" />
@@ -280,8 +280,8 @@
 <MODE NAME="literate-haskell"	FILE="literate-haskell.xml"
 				FILE_NAME_GLOB="*.lhs" />
 
-<MODE NAME="logtalk" FILE="logtalk.xml"
-            FILE_NAME_GLOB="*.lgt" />
+<MODE NAME="logtalk"		FILE="logtalk.xml"
+				FILE_NAME_GLOB="*.lgt" />
 
 <MODE NAME="lotos"		FILE="lotos.xml"
 				FILE_NAME_GLOB="*.{lot,lotos}"/>
@@ -297,9 +297,9 @@
 <MODE NAME="maple"		FILE="maple.xml"
 				FILE_NAME_GLOB="*.{mpl,mws}" />
 
-<MODE NAME="maven" 
-                FILE="maven.xml" FILE_NAME_GLOB="pom.xml"/>			
-            
+<MODE NAME="maven"		FILE="maven.xml"
+				FILE_NAME_GLOB="pom.xml"/>			
+
 <MODE NAME="ml"			FILE="ml.xml"
 				FILE_NAME_GLOB="*.{sml,ml}" />
 
@@ -358,7 +358,7 @@
 <MODE NAME="pike"		FILE="pike.xml"
 				FILE_NAME_GLOB="*.{pike,pmod}" />
 
-<MODE NAME="plaintex"   FILE="plaintex.xml" />
+<MODE NAME="plaintex"		FILE="plaintex.xml" />
 
 <MODE NAME="pl-sql"		FILE="pl-sql.xml"
 				FILE_NAME_GLOB="*.pls" />
@@ -381,11 +381,11 @@
 <MODE NAME="powershell"		FILE="powershell.xml"
 				FILE_NAME_GLOB="*.ps1" />
 
-<MODE NAME="prolog"             FILE="prolog.xml"
-                                FILE_NAME_GLOB="*.pro" />
+<MODE NAME="prolog"		FILE="prolog.xml"
+				FILE_NAME_GLOB="*.pro" />
 
-<MODE NAME="progress"           FILE="progress.xml"
-                                FILE_NAME_GLOB="*.[piw]" />
+<MODE NAME="progress"		FILE="progress.xml"
+				FILE_NAME_GLOB="*.[piw]" />
 
 <MODE NAME="properties"		FILE="props.xml"
 				FILE_NAME_GLOB="*{properties,props}" />
@@ -396,9 +396,9 @@
 <MODE NAME="ptl"		FILE="ptl.xml"
 				FILE_NAME_GLOB="*.ptl"/>
 
-<MODE NAME="pure" FILE="pure.xml"
-                FILE_NAME_GLOB="*.pure"
-                FIRST_LINE_GLOB="#!*/*pure"/>
+<MODE NAME="pure"		FILE="pure.xml"
+				FILE_NAME_GLOB="*.pure"
+				FIRST_LINE_GLOB="#!*/*pure"/>
 
 <MODE NAME="pvwave"		FILE="pvwave.xml"
 				FILE_NAME_GLOB="*.jou" />
@@ -475,14 +475,14 @@
 <MODE NAME="slate"		FILE="slate.xml"
 				FILE_NAME_GLOB="*.slate" />
 
-<MODE NAME="slax" FILE="slax.xml"
-                FILE_NAME_GLOB="*.slax" />
+<MODE NAME="slax"		FILE="slax.xml"
+				FILE_NAME_GLOB="*.slax" />
 
 <MODE NAME="smalltalk"		FILE="smalltalk.xml"
 				FILE_NAME_GLOB="*.{st,sources,changes}" />
 
-<MODE NAME="smarty" FILE="smarty.xml"
-                FILE_NAME_GLOB="*.tpl"/>
+<MODE NAME="smarty"		FILE="smarty.xml"
+				FILE_NAME_GLOB="*.tpl"/>
 
 <MODE NAME="sdl/pr"		FILE="sdl_pr.xml"
 				FILE_NAME_GLOB="*.pr"/>
@@ -493,8 +493,8 @@
 <MODE NAME="smi-mib"		FILE="smi-mib.xml"
 				FILE_NAME_GLOB="*{.mib,-MIB.txt}" />
 
-<MODE NAME="sqr"                FILE="sqr.xml"
-                                FILE_NAME_GLOB="*.{sqr,sqc}" />
+<MODE NAME="sqr"		FILE="sqr.xml"
+				FILE_NAME_GLOB="*.{sqr,sqc}" />
 
 <MODE NAME="squidconf"		FILE="squidconf.xml"
 				FILE_NAME_GLOB="squid.conf" />
@@ -505,7 +505,7 @@
 <MODE NAME="stata_ado"		FILE="stataado.xml"
 				FILE_NAME_GLOB="*.{ado}" />
 
-<MODE NAME="svn-commit"         FILE="svn-commit.xml"
+<MODE NAME="svn-commit"		FILE="svn-commit.xml"
 				FILE_NAME_GLOB="svn-commit*.tmp" />
 
 <MODE NAME="swig"		FILE="swig.xml"
@@ -517,7 +517,7 @@
 <MODE NAME="texinfo"		FILE="texinfo.xml"
 				FILE_NAME_GLOB="*.texi" />
 
-<MODE NAME="tex"        FILE ="tex.xml" />
+<MODE NAME="tex"		FILE ="tex.xml" />
 
 
 <MODE NAME="text"		FILE="text.xml"
@@ -528,9 +528,9 @@
 <MODE NAME="rfc"		FILE="rfc.xml"
 				FILE_NAME_GLOB="rfc*.txt" />
 			
-<MODE NAME="tld"        FILE="tld.xml" 
-                FILE_NAME_GLOB="*.tld"/>
-            
+<MODE NAME="tld"		FILE="tld.xml" 
+				FILE_NAME_GLOB="*.tld"/>
+
 <MODE NAME="tsp"		FILE="tsp.xml"
 				FILE_NAME_GLOB="*.tsp" />
 
@@ -543,10 +543,11 @@
 <MODE NAME="twiki"		FILE="twiki.xml"
 				FILE_NAME_GLOB="*.twiki"/>
 
-<MODE NAME="typoscript"         FILE="typoscript.xml"
-                                FILE_NAME_GLOB="*.ts"/>
+<MODE NAME="typoscript"		FILE="typoscript.xml"
+				FILE_NAME_GLOB="*.ts"/>
 
-<MODE NAME='url' FILE='url.xml' FILE_NAME_GLOB='*.url' />
+<MODE NAME='url'		FILE='url.xml'
+				FILE_NAME_GLOB='*.url' />
 
 <MODE NAME="uscript"		FILE="uscript.xml"
 				FILE_NAME_GLOB="*.uc" />
@@ -562,6 +563,9 @@
 
 <MODE NAME="vhdl"		FILE="vhdl.xml"
 				FILE_NAME_GLOB="*.vh*" />
+
+<MODE NAME="visualbasic"	FILE="visualbasic.xml"
+				FILE_NAME_GLOB="*.{vb}" />
 
 <MODE NAME="vrml2"		FILE="vrml2.xml"
 				FILE_NAME_GLOB="*.{wrl,wrz}"/>
