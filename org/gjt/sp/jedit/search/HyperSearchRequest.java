@@ -33,8 +33,6 @@ import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View;
 import org.gjt.sp.util.*;
-
-import java.awt.*;
 //}}}
 
 /**
@@ -99,11 +97,11 @@ class HyperSearchRequest extends Task
 			{
 				int current = 0;
 
-				long lastStatusTime = 0;
+				long lastStatusTime = 0L;
 				int resultCount = 0;
 				boolean asked = false;
 				int maxResults = jEdit.getIntegerProperty("hypersearch.maxWarningResults");
-loop:				for(int i = 0; i < files.length; i++)
+				for(int i = 0; i < files.length; i++)
 				{
 					if(jEdit.getBooleanProperty("hyperSearch-stopButton") ||
 						Thread.currentThread().isInterrupted())
@@ -131,7 +129,7 @@ loop:				for(int i = 0; i < files.length; i++)
 					current++;
 
 					long currentTime = System.currentTimeMillis();
-					if(currentTime - lastStatusTime > 250)
+					if(currentTime - lastStatusTime > 250L)
 					{
 						setValue(current);
 						lastStatusTime = currentTime;
@@ -139,10 +137,8 @@ loop:				for(int i = 0; i < files.length; i++)
 					}
 
 					Buffer buffer = jEdit.openTemporary(null,null,file,false);
-					if(buffer == null)
-						continue loop;
-
-					resultCount += doHyperSearch(buffer, 0, buffer.getLength());
+					if(buffer != null)
+						resultCount += doHyperSearch(buffer, 0, buffer.getLength());
 				}
 				Log.log(Log.MESSAGE, this, resultCount +" OCCURENCES");
 			}
@@ -173,12 +169,12 @@ loop:				for(int i = 0; i < files.length; i++)
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private View view;
-	private SearchMatcher matcher;
-	private HyperSearchResults results;
-	private DefaultMutableTreeNode rootSearchNode;
-	private Selection[] selection;
-	private String searchString;
+	private final View view;
+	private final SearchMatcher matcher;
+	private final HyperSearchResults results;
+	private final DefaultMutableTreeNode rootSearchNode;
+	private final Selection[] selection;
+	private final String searchString;
 	private DefaultMutableTreeNode selectNode;
 	//}}}
 
@@ -258,7 +254,7 @@ loop:				for(int i = 0; i < files.length; i++)
 			int offset = start;
 
 			HyperSearchResult lastResult = null;
-loop:			for(int counter = 0; ; counter++)
+			for(int counter = 0; ; counter++)
 			{
 				boolean startOfLine = buffer.getLineStartOffset(
 					buffer.getLineOfOffset(offset)) == offset;
@@ -268,7 +264,7 @@ loop:			for(int counter = 0; ; counter++)
 					startOfLine,endOfLine,counter == 0,
 					false);
 				if(match == null)
-					break loop;
+					break;
 
 				int newLine = buffer.getLineOfOffset(
 					offset + match.start);
