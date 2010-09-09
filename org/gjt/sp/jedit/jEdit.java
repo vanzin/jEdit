@@ -1845,14 +1845,46 @@ public class jEdit
 	 */
 	public static void closeBuffer(EditPane editPane, Buffer buffer)
 	{
-		int bufferSetsCount = bufferSetManager.countBufferSets(buffer);
-		if (bufferSetsCount < 2)
+		switch (bufferSetManager.getScope())
 		{
-			closeBuffer(editPane.getView(), buffer);
-		}
-		else
-		{
-			bufferSetManager.removeBuffer(editPane, buffer);
+			case global:
+				closeBuffer(editPane.getView(), buffer);
+				break;
+			case view:
+				View[] views = jEdit.getViews();
+				int viewOwner = 0;
+				for (View view : views)
+				{
+					BufferSet bufferSet = view.getEditPane().getBufferSet();
+					// no need to check every bufferSet since it's view scope
+					if (bufferSet.indexOf(buffer) != -1)
+					{
+						viewOwner++;
+						if (viewOwner > 1)
+							break;
+					}
+				}
+				if (viewOwner > 1)
+				{
+					// the buffer is in several view, we can remove it from bufferSet
+					bufferSetManager.removeBuffer(editPane, buffer);
+				}
+				else
+				{
+					closeBuffer(editPane.getView(), buffer);
+				}
+				break;
+			case editpane:
+				int bufferSetsCount = bufferSetManager.countBufferSets(buffer);
+				if (bufferSetsCount < 2)
+				{
+					closeBuffer(editPane.getView(), buffer);
+				}
+				else
+				{
+					bufferSetManager.removeBuffer(editPane, buffer);
+				}
+				break;
 		}
 	} //}}}
 
