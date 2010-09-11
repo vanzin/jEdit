@@ -259,7 +259,12 @@ public class EditServer extends Thread
 			view.setState(java.awt.Frame.NORMAL);
 			view.requestFocus();
 			view.toFront();
-
+			// In some platforms (e.g. Windows), only setAlwaysOnTop works
+			if (! view.isAlwaysOnTop())
+			{
+				view.setAlwaysOnTop(true);
+				view.setAlwaysOnTop(false);
+			}
 			return buffer;
 		}
 	} //}}}

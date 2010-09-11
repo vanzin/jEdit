@@ -102,6 +102,9 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
   deferring the confirmation dialog to the EDT. This fixes threading
   issues with HyperSearchRequest, if the number of results exceeds the
   "max results" option. (Shlomy Reinstein)
+
+- Fix "-reuseview" not bringing the view to the front.
+  (Sf.net bug #1510651 - Shlomy Reinstein)
 }}}
 {{{ API changes
 
