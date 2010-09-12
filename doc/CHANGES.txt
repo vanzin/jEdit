@@ -7,7 +7,8 @@ jEdit 4.4 version history
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
 Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead,
-Marcelo Vanzin and Bernhard Walle for contributing to this release.
+Marcelo Vanzin, Bernhard Walle and Jakub Roztočil for contributing
+to this release.
 
 {{{ Bug fixes
 - Fixed a memory leak in the beanshell snippet replacement
@@ -235,7 +236,7 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
   Edit->More clipboard->Paste Special that will suggest different mode to paste
   data from clipboard, currently plain text, rich jEdit text
   (plain text + edit mode) and mime type html are supported (Matthieu Casanova)
-  
+
 - Added Ant mode file for Ant build files. (#3016053 - Dale Anson)
 
 - Added TLD mode file for JSP Tag Definition Library files. (#3016054 - Dale Anson)
@@ -243,6 +244,9 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 - Added Maven mode file for Maven pom.xml files. (#3016057 - Dale Anson)
 
 - Updated javacc mode to better highlight keywords and regular expressions. (Dale Anson)
+
+- Updated Django temlate mode to Django 1.2, added missing keywords
+  and better integration with HTML, CSS and JS (Jakub Roztočil)
 
 }}}
 {{{ Miscellaneous
@@ -311,7 +315,7 @@ Marcelo Vanzin and Bernhard Walle for contributing to this release.
 - Extended the scope of the workaround for a bug in Sun (and Apple) JVM 5
   to cover IBM JVM because the same problem was reported on it.
   (SF.net bug #3006686 - Kazutoshi Satoda)
-  
+
 - Added settings to Activity Log to adjust colors and filter by message type.
   (Dale Anson)
 
