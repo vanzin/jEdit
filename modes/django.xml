@@ -166,6 +166,9 @@ CSS & JS integration and tag highlighting inspired by the PHP mode.
 			<KEYWORD1>widthratio</KEYWORD1>
 			<KEYWORD1>with</KEYWORD1>
 			<KEYWORD1>endwith</KEYWORD1>
+			<KEYWORD1>trans</KEYWORD1>
+			<KEYWORD1>blocktrans</KEYWORD1>
+			<KEYWORD1>endblocktrans</KEYWORD1>
 
 		</KEYWORDS>
 	</RULES>
