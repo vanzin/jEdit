@@ -1516,7 +1516,6 @@ public abstract class TextArea extends JComponent
 	 */
 	public void selectBlock()
 	{
-
 		Selection s = getSelectionAtOffset(caret);
 		int start, end;
 		if(s == null)
@@ -1543,7 +1542,7 @@ public abstract class TextArea extends JComponent
 		char openBracket = '\0';
 		char closeBracket = '\0';
 
-backward_scan:	while(--start > 0)
+backward_scan:	while(--start >= 0)
 		{
 			char c = text.charAt(start);
 			int index = openBrackets.indexOf(c);
