@@ -173,6 +173,67 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		textArea.scrollBarsInitialized = true;
 	} //}}}
 
+	//{{{ addNotify() method
+	@Override
+	public void addNotify()
+	{
+		super.addNotify();
+		hiddenCursor = getToolkit().createCustomCursor(
+			getGraphicsConfiguration()
+			.createCompatibleImage(16,16,
+			Transparency.BITMASK),
+			new Point(0,0),"Hidden");
+	} //}}}
+
+	//{{{ setCursor() method
+	/**
+	 * Change the mouse cursor.
+	 * If the cursor is hiddenCursor or TEXT_CURSOR, it is the default cursor and the cursor will not disappear
+	 * anymore while typing until {@link #resetCursor()} is called.
+	 * @param cursor the new cursor
+	 * @since jEdit 4.4pre1
+	 */
+	public void setCursor(Cursor cursor)
+	{
+		defaultCursor = cursor == hiddenCursor || cursor.getType() == Cursor.TEXT_CURSOR;
+		super.setCursor(cursor);
+	} //}}}
+
+	//{{{ setCursor() method
+	/**
+	 * Reset the cursor to it's default value.
+	 * @since jEdit 4.4pre1
+	 */
+	public void resetCursor()
+	{
+		defaultCursor = true;
+	} //}}}
+
+	//{{{ showCursor() method
+	/**
+	 * Show the cursor if it is the default cursor
+	 */
+	void showCursor()
+	{
+		if (defaultCursor)
+		{
+		       setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		}
+	} //}}}
+
+	//{{{ hideCursor() method
+	/**
+	 * Hide the cursor if it is the default cursor
+	 */
+	void hideCursor()
+	{
+		if (defaultCursor)
+		{
+			setCursor(hiddenCursor);
+		}
+	} //}}}
+
+
 	//{{{ getFocusTraversalKeysEnabled() method
 	/**
 	 * Makes the tab key work in Java 1.4.
@@ -934,6 +995,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private final PaintCaret caretExtension;
 	private FontRenderContext fontRenderContext;
 	private final Map fonts;
+	private Cursor hiddenCursor;
+	private boolean defaultCursor = true;
 	//}}}
 
 	private static Object sm_hrgbRender;

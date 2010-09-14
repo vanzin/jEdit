@@ -108,6 +108,16 @@ to this release.
   (Sf.net bug #1510651 - Shlomy Reinstein)
 }}}
 {{{ API changes
+- Added methods to manage the cursor if the TextArea :
+  In the TextAreaPainter class, added
+  resetCursor()
+  setCursor(Cursor)
+  The cursor behavior is the following :
+  when the cursor is the default one : TEXT_CURSOR,
+  when typing text it is hidden, after moving the mouse it reappears.
+  If a plugin calls setCursor() to replace it for whatever reason,
+  the cursor will not disappear anymore when typing or be changed to
+  TEXT_CURSOR until resetCursor() is called (Matthieu Casanova)
 
 - Introduction of a new ThreadUtilities class implementing a
     threadpool using Java 1.6 Concurrent API. Use this instead of

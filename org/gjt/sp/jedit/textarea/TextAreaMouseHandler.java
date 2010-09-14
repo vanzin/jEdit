@@ -591,8 +591,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 	//{{{ showCursor() method
 	protected void showCursor()
 	{
-		textArea.getPainter().setCursor(
-			Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+		textArea.getPainter().showCursor();
 	} //}}}
 
 	//}}}

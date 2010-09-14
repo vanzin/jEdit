@@ -3303,9 +3303,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 		}
 
-		/* Null before addNotify() */
-		if(hiddenCursor != null)
-			getPainter().setCursor(hiddenCursor);
+		getPainter().hideCursor();
 
 		switch(ch)
 		{
@@ -4577,12 +4575,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(!buffer.isLoading())
 			recalculateLastPhysicalLine();
 		propertiesChanged();
-
-		hiddenCursor = getToolkit().createCustomCursor(
-			getGraphicsConfiguration()
-			.createCompatibleImage(16,16,
-			Transparency.BITMASK),
-			new Point(0,0),"Hidden");
 	} //}}}
 
 	//{{{ removeNotify() method
@@ -5074,7 +5066,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	protected JPopupMenu popup;
 
 	private boolean popupEnabled;
-	protected Cursor hiddenCursor;
 
 	private final Gutter gutter;
 	protected final TextAreaPainter painter;
