@@ -23,8 +23,6 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
-import org.gjt.sp.jedit.buffer.JEditBuffer;
-
 import javax.swing.text.*;
 import java.awt.font.*;
 import java.util.List;
