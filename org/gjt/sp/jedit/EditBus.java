@@ -22,11 +22,13 @@
 
 package org.gjt.sp.jedit;
 
+import java.awt.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import javax.swing.SwingUtilities;
+import java.util.List;
+
 import org.gjt.sp.util.Log;
 
 /**
@@ -194,7 +196,7 @@ public class EditBus
 	{
 		Runnable sender = new SendMessage(message);
 
-		if (SwingUtilities.isEventDispatchThread())
+		if (EventQueue.isDispatchThread())
 		{
 			sender.run();
 			return;
@@ -208,7 +210,7 @@ public class EditBus
 		 */
 		try
 		{
-			SwingUtilities.invokeAndWait(sender);
+			EventQueue.invokeAndWait(sender);
 		}
 		catch (InterruptedException ie)
 		{
@@ -233,7 +235,7 @@ public class EditBus
 	 */
 	public static void sendAsync(EBMessage message)
 	{
-		SwingUtilities.invokeLater(new SendMessage(message));
+		EventQueue.invokeLater(new SendMessage(message));
 	} //}}}
 
 	//{{{ Private members
