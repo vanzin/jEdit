@@ -45,20 +45,20 @@ public interface Encoding
 	* Decode-error while reading from this Reader should be reported
 	* by throwing an IOException.
 	*/
-	public Reader getTextReader(InputStream in) throws IOException;
+	Reader getTextReader(InputStream in) throws IOException;
 	
 	/**
 	* Map an OutputStream to a Writer.
 	* Encode-error while writing to this Writer should be reported
 	* by throwing an IOException.
 	*/
-	public Writer getTextWriter(OutputStream out) throws IOException;
+	Writer getTextWriter(OutputStream out) throws IOException;
 
 	/**
 	* Map an InputStream to a Reader.
 	* Decode-error while reading from this Reader should be ignored
 	* or replaced.
 	*/
-	public Reader getPermissiveTextReader(InputStream in)
+	Reader getPermissiveTextReader(InputStream in)
 		throws IOException;
 }
