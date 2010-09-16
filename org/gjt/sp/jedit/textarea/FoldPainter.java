@@ -33,8 +33,8 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
  * @author Shlomy Reinstein
  * @version $Id$
  */
-public interface FoldPainter {
-	
+public interface FoldPainter
+{
 	/**
 	 * Paints the beginning of a fold in the gutter.
 	 * @param gutter The gutter in which the fold is drawn.

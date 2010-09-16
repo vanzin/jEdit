@@ -30,8 +30,8 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
 /**
  * Fold Painter
  */
-public abstract class ShapedFoldPainter implements FoldPainter {
-
+public abstract class ShapedFoldPainter implements FoldPainter 
+{
 	// {{{ paintFoldEnd()
 	public void paintFoldEnd(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, int y, int lineHeight, JEditBuffer buffer)
@@ -78,6 +78,6 @@ public abstract class ShapedFoldPainter implements FoldPainter {
 		}
 	}// }}}
 
-	abstract protected void paintFoldShape(Graphics2D gfx, int top, int bottom);
+	protected abstract void paintFoldShape(Graphics2D gfx, int top, int bottom);
 
 } // }}}

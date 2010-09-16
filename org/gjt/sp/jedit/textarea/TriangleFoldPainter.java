@@ -28,8 +28,8 @@ import java.awt.Graphics2D;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 
 // {{{ class TriangleFoldHandler
-public class TriangleFoldPainter implements FoldPainter {
-
+public class TriangleFoldPainter implements FoldPainter
+{
 	// {{{ paintFoldStart()
 	public void paintFoldStart(Gutter gutter, Graphics2D gfx, int screenLine,
 			int physicalLine, boolean nextLineVisible, int y, int lineHeight,
