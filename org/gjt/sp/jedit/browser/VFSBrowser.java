@@ -628,16 +628,15 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 		historyStack.push(path);
 		browserView.saveExpansionState();
-		browserView.loadDirectory(null,path,true);
-		this.path = path;
-
-		VFSManager.runInAWTThread(new Runnable()
+		Runnable delayedAWTRequest = new Runnable()
 		{
 			public void run()
 			{
 				endRequest();
 			}
-		});
+		};
+		browserView.loadDirectory(null,path,true, delayedAWTRequest);
+		this.path = path;
 	} //}}}
 
 	//{{{ getRootDirectory() method
