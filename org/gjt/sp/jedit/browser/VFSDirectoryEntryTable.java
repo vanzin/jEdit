@@ -44,6 +44,7 @@ import org.gjt.sp.jedit.MiscUtilities;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /**
@@ -158,26 +159,29 @@ public class VFSDirectoryEntryTable extends JTable
 		if(entry.dirEntry.getType() == VFSFile.FILE)
 			return;
 
-		if(entry.expanded)
-		{
-			model.collapse(VFSManager.getVFSForPath(
-				entry.dirEntry.getPath()),row);
-			resizeColumns();
-		}
-		else
-		{
-			browserView.clearExpansionState();
-			browserView.loadDirectory(entry,entry.dirEntry.getPath(),
-				false);
-		}
-
-		VFSManager.runInAWTThread(new Runnable()
+		Runnable delayedAwtTask = new Runnable()
 		{
 			public void run()
 			{
 				setSelectedRow(row);
 			}
-		});
+		};
+		if(entry.expanded)
+		{
+			model.collapse(VFSManager.getVFSForPath(
+				entry.dirEntry.getPath()),row);
+			resizeColumns();
+			ThreadUtilities.runInDispatchThread(delayedAwtTask);
+		}
+		else
+		{
+			browserView.clearExpansionState();
+			browserView.loadDirectory(entry,entry.dirEntry.getPath(),
+				false, delayedAwtTask);
+		}
+
+
+
 	} //}}}
 
 	//{{{ setDirectory() method

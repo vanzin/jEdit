@@ -154,8 +154,16 @@ class BrowserView extends JPanel
 	} //}}}
 
 	//{{{ loadDirectory() method
+	public void loadDirectory(Object node, String path,
+		boolean addToHistory)
+	{
+		loadDirectory(node, path, addToHistory, null);
+	} //}}}
+
+
+	//{{{ loadDirectory() method
 	public void loadDirectory(final Object node, String path,
-		final boolean addToHistory)
+		final boolean addToHistory, final Runnable delayedAWTTask)
 	{
 		path = MiscUtilities.constructPath(browser.getDirectory(),path);
 		VFS vfs = VFSManager.getVFSForPath(path);
@@ -176,6 +184,8 @@ class BrowserView extends JPanel
 			public void run()
 			{
 				browser.directoryLoaded(node,loadInfo,addToHistory);
+				if (delayedAWTTask != null)
+					delayedAWTTask.run();
 			}
 		};
 		ThreadUtilities.runInBackground(new ListDirectoryBrowserTask(browser,
