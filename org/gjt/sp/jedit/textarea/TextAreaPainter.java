@@ -1286,7 +1286,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 					}
 				}
 				if (sub == null)
-					x = nextX(x, style, sub, tokenStart, next);
+					x = nextX(x, style, null, tokenStart, next);
 				tokenStart = next;
 				token = token.next;
 				if (tokenStart == screenLineStart)

@@ -202,7 +202,7 @@ public class HyperSearchResult implements HyperSearchNode
 	public class GotoDelayed implements Runnable
 	{
 		private final EditPane editPane;
-		private volatile boolean loadedEventReceived;
+		private volatile boolean loadedEventReceived = false;
 
 		private GotoDelayed(EditPane editPane)
 		{

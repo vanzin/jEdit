@@ -4,9 +4,9 @@ jEdit 4.4 version history
 
 {{{ Version 4.4pre1
 
-Thanks to BjÃ¶rn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
-Bernhard Walle, Joerg Spieler, Kevin Hunter, FranÃ§ois Rey, Dion Whitehead,
+Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead,
 Marcelo Vanzin, Jesse Pavel, Bernhard Walle and Jakub Roztočil for
 contributing to this release.
 
@@ -38,10 +38,10 @@ contributing to this release.
   by global settings (Matthieu Casanova #2999966)
 
 - Improve indentation settings of the shellscript edit mode.
-  (BjÃ¶rn "Vampire" Kautler #3005463)
+  (Björn "Vampire" Kautler #3005463)
 
 - Removed the duplicated "Architecture" line from the Debian control file.
-  (BjÃ¶rn "Vampire" Kautler #2999456)
+  (Björn "Vampire" Kautler #2999456)
 
 - In the manage panel, when selecting a library, the description panel do
   not contains "null" for every fields and the title is set to the jar name
@@ -93,7 +93,7 @@ contributing to this release.
 
 - Fix SOCKS proxy accessing wrong property.
   Therefore, SOCKS proxy was never getting enabled.
-  (SF.net patch #2820969 - Milutin JovanoviÄ)
+  (SF.net patch #2820969 - Milutin Jovanović)
 
 - CopyFileWorker now throws a FileNotFoundException instead of a NPE if
   the target path is not a directory and it's parent doesn't exists.
@@ -144,7 +144,7 @@ contributing to this release.
 
 - Removed deprecated objectfactory xml parser.
 
-- File System Browser dynamic menu support (#2938170 - FranÃ§ois Rey)
+- File System Browser dynamic menu support (#2938170 - François Rey)
 
 - Added a method for unregistering macro handlers: Macros.unregisterHandler().
 
@@ -199,7 +199,7 @@ contributing to this release.
 - Added visualbasic.xml edit mode (Anonymous submitter, #3031412)
 
 - Added haxe.xml and hxml mode files to support haXe language
-  (Dion Whitehead, FranÃ§ois Rey, # 2922986)
+  (Dion Whitehead, François Rey, # 2922986)
 
 - Added plaintex.xml mode file, for plain tex files. (# 2787012 - James Nicholl)
 
@@ -331,7 +331,7 @@ contributing to this release.
 
 - Added settings to Activity Log to adjust colors and filter by message type.
   (Dale Anson)
-  
+
 - Updated 'Make Get and Set' macro. (Dale Anson)  
 
 }}}
