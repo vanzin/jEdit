@@ -1463,6 +1463,7 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		setVisible(true);
 		toFront();
+		closeAllMenus();
 		// so you can keep typing in your editpane afterwards...
 		editPane.getTextArea().requestFocus();
 	} //}}}

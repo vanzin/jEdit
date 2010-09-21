@@ -1060,12 +1060,14 @@
 
 <ACTION NAME="scroll-and-center">
    <CODE>
+   	view.closeAllMenus();
    	textArea.scrollAndCenterCaret();
    </CODE>
 </ACTION>
 
 <ACTION NAME="scroll-to-current-line">
 	<CODE>
+		view.closeAllMenus();
 		if(!textArea.getDisplayManager().isLineVisible(
 			textArea.getCaretLine()))
 		{
