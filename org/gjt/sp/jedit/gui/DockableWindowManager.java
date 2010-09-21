@@ -311,6 +311,7 @@ import org.gjt.sp.util.Log;
 			if (tRight) getRightDockingArea().showMostRecent();
 			if (tTop) getTopDockingArea().showMostRecent();
 		}
+        view.closeAllMenus();
 		closeToggle = !closeToggle;
 		view.getTextArea().requestFocus();
 	} // }}}

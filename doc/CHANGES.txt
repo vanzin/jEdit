@@ -15,6 +15,8 @@ contributing to this release.
   if some ActionSets have been unloaded (plugin deactivation)
   (Matthieu Casanova #3071355)
 
+- Closes menus when toggling dockables. (#3022084 - Anshal Shukla)  
+  
 - Fixed an exception when clicking ok while adding new action to the context
   menu if no action has been selected (Matthieu Casanova #3072546)
 
@@ -200,6 +202,8 @@ contributing to this release.
 - Patch 3008954 to Mode and ModeProvider to allow an exact filename
   match when selecting the mode for a file. (Patch provided by Bernhard Walle)
 
+- Patch 3022084 added View.closeAllMenus(). (Anshal Shukla)  
+  
 }}}
 {{{ Editing
 

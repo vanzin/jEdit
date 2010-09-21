@@ -50,6 +50,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.LayoutFocusTraversalPolicy;
+import javax.swing.MenuSelectionManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
@@ -299,7 +300,7 @@ public class View extends JFrame implements InputHandlerProvider
 		return toolBar;
 	} //}}}
 
-	//{{{ addToolBar() method
+	//{{{ addToolBar() methods
 	/**
 	 * Adds a tool bar to this view.
 	 * @param toolBar The tool bar
@@ -307,9 +308,8 @@ public class View extends JFrame implements InputHandlerProvider
 	public void addToolBar(Component toolBar)
 	{
 		addToolBar(DEFAULT_GROUP, DEFAULT_LAYER, toolBar);
-	} //}}}
+	}
 
-	//{{{ addToolBar() method
 	/**
 	 * Adds a tool bar to this view.
 	 * @param group The tool bar group to add to
@@ -320,9 +320,8 @@ public class View extends JFrame implements InputHandlerProvider
 	public void addToolBar(int group, Component toolBar)
 	{
 		addToolBar(group, DEFAULT_LAYER, toolBar);
-	} //}}}
-
-	//{{{ addToolBar() method
+	}
+	
 	/**
 	 * Adds a tool bar to this view.
 	 * @param group The tool bar group to add to
@@ -1318,6 +1317,16 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 	} //}}}
 
+	// {{{ closeAllMenus()
+	/** closes any popup menus that may have been opened 
+	    @since jEdit 4.4pre1
+	*/
+	public void closeAllMenus()
+	{
+		MenuSelectionManager.defaultManager().clearSelectedPath();
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
+	} // }}}
+	
 	//{{{ Package-private members
 	View prev;
 	View next;
