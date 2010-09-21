@@ -196,6 +196,8 @@ contributing to this release.
 }}}
 {{{ Editing
 
+- Update for Stata-edit mode (goebbe, # 3019042)
+
 - Added visualbasic.xml edit mode (Anonymous submitter, #3031412)
 
 - Added haxe.xml and hxml mode files to support haXe language
