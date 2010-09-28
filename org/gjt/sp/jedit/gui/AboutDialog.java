@@ -67,8 +67,7 @@ public class AboutDialog extends JDialog implements ActionListener
 
 		setContentPane(p);
 		pack();
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation((d.width-getWidth())/2, (d.height-getHeight())/2);
+		setLocationRelativeTo(jEdit.getActiveView());
 		addWindowListener(new WindowAdapter()
 		{
 			@Override

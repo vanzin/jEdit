@@ -112,6 +112,10 @@ Anson)
   (Shlomy Reinstein)
 
 }}}
+  
+- When having two monitors the About dialog was appearing between them, one half
+  on each monitor. Now it's position is relative to the active View
+  (Matthieu Casanova)
 
 }}}
 
