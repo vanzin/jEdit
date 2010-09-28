@@ -1398,13 +1398,10 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		else if (menuBar != null)
 			setJMenuBar(menuBar);
+		// Note: Bottom toolbar is the action bar, which is always enabled
+		loadToolBars();
 		if (alternateLayout)
 		{
-			// Note: Bottom toolbar is the action bar, which is always enabled
-			if (! showToolbars)
-				getContentPane().remove(topToolBars);
-			else
-				getContentPane().add(BorderLayout.NORTH,topToolBars);
 			if (! showStatus)
 				removeToolBar(status);
 			else
@@ -1412,11 +1409,6 @@ public class View extends JFrame implements InputHandlerProvider
 		}
 		else
 		{
-			// Note: Bottom toolbar is the action bar, which is always enabled
-			if (! showToolbars)
-				mainPanel.remove(topToolBars);
-			else
-				mainPanel.add(topToolBars, BorderLayout.NORTH);
 			if (! showStatus)
 				getContentPane().remove(status);
 			else
@@ -1446,16 +1438,12 @@ public class View extends JFrame implements InputHandlerProvider
 				setJMenuBar(menuBar);
 			boolean alternateLayout = jEdit.getBooleanProperty(
 				"view.toolbar.alternateLayout");
-			if (alternateLayout)
+			loadToolBars();
+			if (showStatus)
 			{
-				getContentPane().add(BorderLayout.NORTH,topToolBars);
-				if (showStatus)
+				if (alternateLayout)
 					addToolBar(BOTTOM_GROUP,STATUS_BAR_LAYER,status);
-			}
-			else
-			{
-				mainPanel.add(topToolBars, BorderLayout.NORTH);
-				if (showStatus)
+				else
 					getContentPane().add(BorderLayout.SOUTH,status);
 			}
 			setUndecorated(false);
@@ -1965,7 +1953,9 @@ loop:		while (true)
 	//{{{ loadToolBars() method
 	private void loadToolBars()
 	{
-		if(jEdit.getBooleanProperty("view.showToolbar") && !plainView)
+		if((! plainView) && (fullScreenMode ?
+			jEdit.getBooleanProperty("fullScreenIncludesToolbar") :
+			jEdit.getBooleanProperty("view.showToolbar")))
 		{
 			if(toolBar != null)
 				toolBarManager.removeToolBar(toolBar);
