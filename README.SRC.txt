@@ -201,3 +201,6 @@ Follow these steps:
 
 The "eclipse-formatting.xml" file can be used to set the
 code format style to be the same as what is currently used here.
+
+# Test: This text was added in a branch of the Bazaar Launchpad.net mirror, and
+#       committed directly to a SVN branch on SF.net
