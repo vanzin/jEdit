@@ -137,6 +137,10 @@ Alan Ezust, Eric Berry, and Eric Le Lay for contributing to this release.
 - Fixed bug #2907139: Upgrading from 4.2final to 4.3pre18 causes freeze at
   startup (Shlomy Reinstein)
 
+
+- Using regex style encoding auto detectors, StringIndexOutOfBoundsException
+  could happen when loading a file. (Kazutoshi Satoda)
+
 }}}
 {{{ Miscellaneous
 
