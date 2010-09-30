@@ -5854,7 +5854,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		else if(startCommentStart != null && startCommentEnd != null)
 		{
 			start = startCommentStart + "{{{  " + startCommentEnd;
-			caretBack = 1 + startCommentStart.length();
+			caretBack = 2 + startCommentEnd.length();
 		}
 		else
 			start = "{{{ ";
@@ -5885,7 +5885,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		String line = buffer.getLineText(lineStart);
 		String whitespace = line.substring(0,
 			StandardUtilities.getLeadingWhiteSpace(line));
-
+		caretBack += whitespace.length(); 
 		if (endLineComment != null)
 		{
 			// if we're inserting a line comment into a non-empty
