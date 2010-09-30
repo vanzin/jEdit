@@ -118,6 +118,8 @@ contributing to this release.
 
 - Fix "-reuseview" not bringing the view to the front.
   (Sf.net bug #1510651 - Shlomy Reinstein)
+
+- Show search bar in full screen mode. (Sf.net bug #2944752 - Shlomy Reinstein)
 }}}
 {{{ API changes
 - Added methods to manage the cursor if the TextArea :
