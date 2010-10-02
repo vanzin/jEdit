@@ -2,7 +2,15 @@
     A macro that performs a split and an unsplit of the current TextArea.
 	Useful for those occasions when your textarea is corrupt (painting the
 	incorrect characters on the screen).
-*/	
-
+*/
+import javax.swing.Timer;
 view.splitVertically();
-view.unsplitCurrent();
+int delay = 100; //milliseconds
+ActionListener taskPerformer = new ActionListener() {
+  public void actionPerformed(ActionEvent evt) {
+          view.unsplitCurrent();
+  }
+};
+t = new Timer(delay, taskPerformer);
+t.setRepeats(false);
+t.start();
