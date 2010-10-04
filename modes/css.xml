@@ -127,6 +127,7 @@
 			<KEYWORD2>text-shadow</KEYWORD2>
 			<KEYWORD2>text-decoration</KEYWORD2>
 			<KEYWORD2>text-indent</KEYWORD2>
+			<KEYWORD2>text-overflow</KEYWORD2>
 			<KEYWORD2>text-transform</KEYWORD2>
 			<KEYWORD2>word-spacing</KEYWORD2>
 			<KEYWORD2>letter-spacing</KEYWORD2>
@@ -141,6 +142,8 @@
 			<KEYWORD2>border-bottom-style</KEYWORD2>
 			<KEYWORD2>border-bottom-width</KEYWORD2>
 			<KEYWORD2>border-bottom-color</KEYWORD2>
+			<KEYWORD2>border-bottom-left-radius</KEYWORD2>
+			<KEYWORD2>border-bottom-right-radius</KEYWORD2>
 			<KEYWORD2>border-left</KEYWORD2>
 			<KEYWORD2>border-left-style</KEYWORD2>
 			<KEYWORD2>border-left-width</KEYWORD2>

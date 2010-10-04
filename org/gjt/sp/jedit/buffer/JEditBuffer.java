@@ -1436,8 +1436,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 		}
 		else
 		{
-			if (folding != null)
-				Log.log(Log.WARNING, this, "invalid 'folding' property: " + folding);
 			setFoldHandler(new DummyFoldHandler());
 		}
 	} //}}}

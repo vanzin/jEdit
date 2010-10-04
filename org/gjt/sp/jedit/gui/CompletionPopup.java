@@ -148,6 +148,7 @@ public class CompletionPopup extends JWindow
 			{
 				view.setKeyEventInterceptor(null);
 			}
+
 			super.dispose();
 
 			// This is a workaround to ensure setting the
@@ -414,6 +415,18 @@ public class CompletionPopup extends JWindow
 					moveRelative(1);
 					e.consume();
 					break;
+				case KeyEvent.VK_P:
+					if (e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
+						moveRelative(-1);
+						e.consume();
+					}
+					break;
+				case KeyEvent.VK_N:
+					if (e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK) {
+						moveRelative(1);
+						e.consume();
+					}
+					break;
 				case KeyEvent.VK_PAGE_UP:
 					moveRelativePages(-1);
 					e.consume();
@@ -424,11 +437,13 @@ public class CompletionPopup extends JWindow
 					break;
 				default:
 					if(e.isActionKey()
-						|| e.isControlDown()
 						|| e.isAltDown()
 						|| e.isMetaDown())
 					{
 						dispose();
+					}
+					else if (e.isControlDown()) {
+						e.consume();
 					}
 					break;
 				}
@@ -443,7 +458,14 @@ public class CompletionPopup extends JWindow
 		//{{{ keyTyped() method
 		public void keyTyped(KeyEvent e)
 		{
-			CompletionPopup.this.keyTyped(e);
+			if (e.isControlDown())
+			{
+				e.consume();
+			}
+			else
+			{
+				CompletionPopup.this.keyTyped(e);
+			}
 
 			if (candidates == null || !candidates.isValid())
 			{
