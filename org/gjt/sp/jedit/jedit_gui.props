@@ -936,8 +936,11 @@ view.status.swap-marker=Shortcut of marker to swap caret position with? \
 view.status.vertical-paste-string-register=Register to vertical paste \
 	from? [{0}]
 view.status.wrap-changed=Word wrap mode is now "{0}"
-view.status.wrap-tooltip=Word wrap mode (click to change)
+view.status.wrap-tooltip=<html>Word wrap mode is {0} (click to change)</html>
 view.status.bufferset-tooltip=BufferSet scope is {0}
+wrap.none=disabled
+wrap.hard=hard
+wrap.soft=soft
 #}}}
 
 #{{{ Status bar component visibility

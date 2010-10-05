@@ -278,6 +278,7 @@ contributing to this release.
 
 }}}
 {{{ Miscellaneous
+- Wrap mode tooltip in status bar now indicates the current wrap mode (Matthieu Casanova)
 
 - It is now possible to copy several files in the VFS Browser at the same time,
   and copy from/to the OS explorer (Matthieu Casanova)

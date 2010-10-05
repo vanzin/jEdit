@@ -60,7 +60,7 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		{
 			wrap = new ToolTipLabel();
 			wrap.setHorizontalAlignment(SwingConstants.CENTER);
-			wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip"));
+
 			this.view = view;
 			wrap.addMouseListener(new MouseAdapter()
 			{
@@ -81,7 +81,9 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 		{
 			Buffer buffer = view.getBuffer();
 			String wrap = buffer.getStringProperty("wrap");
-			if(wrap.equals("none"))
+			this.wrap.setToolTipText(jEdit.getProperty("view.status.wrap-tooltip",
+				new String[]{jEdit.getProperty("wrap." + wrap)}));
+			if("none".equals(wrap))
 			{
 				this.wrap.setEnabled(false);
 				this.wrap.setText("N");
@@ -89,9 +91,9 @@ public class WrapWidgetFactory implements StatusWidgetFactory
 			else
 			{
 				this.wrap.setEnabled(true);
-				if (wrap.equals("hard"))
+				if ("hard".equals(wrap))
 					this.wrap.setText("H");
-				else if (wrap.equals("soft"))
+				else if ("soft".equals(wrap))
 					this.wrap.setText("S");
 			}
 		}
