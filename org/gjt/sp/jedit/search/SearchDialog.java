@@ -292,7 +292,7 @@ public class SearchDialog extends EnhancedDialog
 	private JButton synchronize;
 
 	// buttons
-	private JButton findBtn, /* replaceBtn, */ replaceAndFindBtn, replaceAllBtn,
+	private JButton findBtn, replaceBtn, replaceAndFindBtn, replaceAllBtn,
 		closeBtn;
 
 	private boolean saving;
@@ -655,11 +655,11 @@ public class SearchDialog extends EnhancedDialog
 		grid.add(findBtn);
 		findBtn.addActionListener(actionHandler);
 
-		/* replaceBtn = new JButton(jEdit.getProperty("search.replaceBtn"));
-		replaceBtn.setMnemonic(jEdit.getProperty("search.replaceBtn.mnemonic")
-			.charAt(0));
+		replaceBtn = new JButton(jEdit.getProperty("search.replaceBtn", "Replace"));
+		/* replaceBtn.setMnemonic(jEdit.getProperty("search.replaceBtn.mnemonic")
+			.charAt(0)); */
 		grid.add(replaceBtn);
-		replaceBtn.addActionListener(actionHandler); */
+		replaceBtn.addActionListener(actionHandler);
 
 		replaceAndFindBtn = new JButton(jEdit.getProperty("search.replaceAndFindBtn"));
 		replaceAndFindBtn.setMnemonic(jEdit.getProperty("search.replaceAndFindBtn.mnemonic")
@@ -713,6 +713,8 @@ public class SearchDialog extends EnhancedDialog
 
 		findBtn.setEnabled(!searchSelection.isSelected()
 			|| hyperSearch.isSelected());
+		replaceBtn.setEnabled(!hyperSearch.isSelected()
+			&& !searchSelection.isSelected());
 		replaceAndFindBtn.setEnabled(!hyperSearch.isSelected()
 			&& !searchSelection.isSelected());
 	} //}}}
@@ -1027,6 +1029,11 @@ public class SearchDialog extends EnhancedDialog
 				|| source == replace)
 			{
 				ok();
+			}
+			else if (source == replaceBtn)
+			{
+				save(false);
+				SearchAndReplace.replace(view);
 			}
 			else if(source == replaceAndFindBtn)
 			{

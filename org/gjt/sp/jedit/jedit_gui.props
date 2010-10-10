@@ -1433,6 +1433,7 @@ search.synchronize.mnemonic=z
 search.synchronize.tooltip=Sets filter and directory to current buffer's extension/location.
 search.findBtn=Find
 search.findBtn.mnemonic=f
+search.replaceBtn=Replace
 search.replaceAndFindBtn=Replace & Find
 search.replaceAndFindBtn.mnemonic=r
 search.replaceAllBtn=Replace All

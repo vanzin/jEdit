@@ -352,7 +352,7 @@ contributing to this release.
 
 - Ctrl-P and Ctrl-N work from completion popups now (#3080463 - Damien Radtke)
 
-
+- Added "Replace" button to Search and Replace dialog. This allows a 'replace once' as opposed to 'replace and find'. (#3084224 - Dale Anson)
 }}}
 
 }}}
