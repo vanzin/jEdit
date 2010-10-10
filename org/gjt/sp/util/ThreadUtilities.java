@@ -23,10 +23,12 @@
 package org.gjt.sp.util;
 
 //{{{ Imports
-import java.awt.*;
-import java.util.concurrent.*;
+import java.awt.EventQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
-//}}}
 
 /**
  * The threadpool of jEdit.
