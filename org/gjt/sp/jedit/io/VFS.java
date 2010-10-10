@@ -41,6 +41,7 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
+import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.WorkThread;
 //}}}
 
@@ -452,12 +453,14 @@ public abstract class VFS
 		if((getCapabilities() & WRITE_CAP) == 0)
 			buffer.setReadOnly(true);
 
-		BufferIORequest request = new BufferLoadRequest(
-			view,buffer,session,this,path);
+		BufferIORequest request = new BufferLoadRequest(view, buffer, session, this, path);
 		if(buffer.isTemporary())
 			// this makes HyperSearch much faster
 			request.run();
 		else
+			// BufferLoadRequest can cause UI interations (for example FTP connection dialog),
+			// so it should be runned in Dispatch thread
+			//ThreadUtilities.runInDispatchThread(request); 
 			VFSManager.runInWorkThread(request);
 
 		return true;
@@ -1192,8 +1195,7 @@ public abstract class VFS
 				}
 				catch(PatternSyntaxException e)
 				{
-					Log.log(Log.ERROR,VFS.class,"Invalid regular expression: "
-						+ glob);
+					Log.log(Log.ERROR,VFS.class,"Invalid regular expression: " + glob);
 					Log.log(Log.ERROR,VFS.class,e);
 				}
 

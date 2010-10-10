@@ -149,7 +149,6 @@ public abstract class Task implements Runnable, ProgressObserver
 	@Override
 	public String toString()
 	{
-		return "Task[" + state + ',' + status + ',' + value + '/' +
-			maximum + ']';
+		return "Task[" + state + ',' + status + ',' + value + '/' + maximum + ']';
 	}
 }
