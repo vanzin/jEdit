@@ -194,7 +194,11 @@
 				<include name="org/gjt/sp/jedit/textarea/AntiAlias.java"/>
 				<include name="org/gjt/sp/jedit/textarea/BufferHandler.java"/>
 				<include name="org/gjt/sp/jedit/textarea/ChunkCache.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ColumnBlock.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ColumnBlockLine.java"/>
 				<include name="org/gjt/sp/jedit/textarea/DisplayManager.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ElasticTabStopBufferListener.java"/>
+				<include name="org/gjt/sp/jedit/textarea/ElasticTabstopsTabExpander.java"/>
 				<include name="org/gjt/sp/jedit/textarea/ExtensionManager.java"/>
 				<include name="org/gjt/sp/jedit/textarea/FastRepaintManager.java"/>
 				<include name="org/gjt/sp/jedit/textarea/FirstLine.java"/>
@@ -204,6 +208,7 @@
 				<include name="org/gjt/sp/jedit/textarea/InputMethodSupport.java"/>
 				<include name="org/gjt/sp/jedit/textarea/MouseActions.java"/>
 				<include name="org/gjt/sp/jedit/textarea/MouseActionsProvider.java"/>
+				<include name="org/gjt/sp/jedit/textarea/Node.java"/>
 				<include name="org/gjt/sp/jedit/textarea/RangeMap.java"/>
 				<include name="org/gjt/sp/jedit/textarea/Selection.java"/>
 				<include name="org/gjt/sp/jedit/textarea/SelectionManager.java"/>
