@@ -34,7 +34,7 @@ public class ColumnBlock extends Rect implements Node
 
 	private Vector<ColumnBlockLine> lines = new Vector<ColumnBlockLine>();
 
-	private float columnBlockWidth;
+	float columnBlockWidth;
 
 	private boolean tabSizesDirty = true;
 

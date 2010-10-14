@@ -25,7 +25,7 @@ public class ColumnBlockLine
 	private int line;
 	int colStartIndex;
 	int colEndIndex;
-	private float lineLength;
+	float lineLength;
 	
 	//{{{ ColumnBlockLine() method
 	public ColumnBlockLine(int line,int lineStartIndex,int lineEndIndex)
