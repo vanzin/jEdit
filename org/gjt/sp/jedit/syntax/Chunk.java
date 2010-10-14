@@ -344,8 +344,18 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ init() method
+	/**
+	 * @deprecated Use {@link #init(Segment,TabExpander,float,FontRenderContext,int)} instead
+	 */
 	public void init(Segment seg, TabExpander expander, float x,
 		FontRenderContext fontRenderContext)
+	{
+		init(seg, expander, x, fontRenderContext, -1);
+	} //}}}
+
+	//{{{ init() method
+	public void init(Segment seg, TabExpander expander, float x,
+		FontRenderContext fontRenderContext, int physicalLineOffset)
 	{
 		initialized = true;
 
@@ -356,7 +366,7 @@ public class Chunk extends Token
 		else if(length == 1 && seg.array[seg.offset + offset] == '\t')
 		{
 			visible = false;
-			float newX = expander.nextTabStop(x,offset + length);
+			float newX = expander.nextTabStop(x,physicalLineOffset+offset);
 			width = newX - x;
 		}
 		else

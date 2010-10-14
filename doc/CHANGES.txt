@@ -7,7 +7,7 @@ jEdit 4.4 version history
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
 Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead,
-Marcelo Vanzin, Jesse Pavel, Bernhard Walle and Jakub Roztočil for
+Marcelo Vanzin, Jesse Pavel, Bernhard Walle,Anshal Shukla and Jakub Roztočil for
 contributing to this release.
 
 {{{ Bug fixes

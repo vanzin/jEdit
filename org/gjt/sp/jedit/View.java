@@ -2322,6 +2322,6 @@ loop:		while (true)
 			editPane.setCursor(cursor);
 		}
 	}//}}}
-	//}}}
-
+	 //}}}
+	
 }

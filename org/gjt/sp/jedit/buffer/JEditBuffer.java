@@ -30,6 +30,9 @@ import org.gjt.sp.jedit.TextUtilities;
 import org.gjt.sp.jedit.indent.IndentAction;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.textarea.ColumnBlock;
+import org.gjt.sp.jedit.textarea.ColumnBlockLine;
+import org.gjt.sp.jedit.textarea.Node;
 import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
@@ -493,6 +496,23 @@ public class JEditBuffer
 	 */
 	public void getLineText(int line, Segment segment)
 	{
+		getLineText(line, 0, segment);
+	}
+
+	/**
+	 * Returns the specified line from the starting point passed in relativeStartOffset  in a <code>Segment</code>.<p>
+	 *
+	 * Using a <classname>Segment</classname> is generally more
+	 * efficient than using a <classname>String</classname> because it
+	 * results in less memory allocation and array copying.<p>
+	 *
+	 * This method is thread-safe.
+	 *
+	 * @param line The line
+	 * @since jEdit 4.0pre1
+	 */
+	public void getLineText(int line,int relativeStartOffset, Segment segment)
+	{
 		if(line < 0 || line >= lineMgr.getLineCount())
 			throw new ArrayIndexOutOfBoundsException(line);
 
@@ -500,17 +520,24 @@ public class JEditBuffer
 		{
 			readLock();
 
-			int start = line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1);
+			int start = (line == 0 ? 0 : lineMgr.getLineEndOffset(line - 1)); 
 			int end = lineMgr.getLineEndOffset(line);
-
-			getText(start,end - start - 1,segment);
+			if((start+relativeStartOffset)>end)
+			{
+				throw new IllegalArgumentException("This index is outside the line length (start+relativeOffset):"+start+" + "+relativeStartOffset+" > "+"endffset:"+end);
+			}
+			else
+			{	
+				getText(start+relativeStartOffset,end - start -relativeStartOffset- 1,segment);
+			}	
 		}
 		finally
 		{
 			readUnlock();
 		}
 	} //}}}
-
+	
+	//}}}
 	//{{{ getLineSegment() method
 	/**
 	 * Returns the text on the specified line.
@@ -2676,6 +2703,8 @@ loop:		for(int i = 0; i < seg.count; i++)
 	private boolean io;
 	private final Map<Object, PropValue> properties;
 	private final Object propertyLock;
+	public boolean elasticTabstopsOn = false; 
+	private ColumnBlock columnBlock;
 
 	//{{{ getListener() method
 	private BufferListener getListener(int index)
@@ -2804,5 +2833,93 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return ModeProvider.instance.getMode(modeName).getIndentRules();
 	} //}}}
 
+	//{{{ updateColumnBlocks() method
+	public void updateColumnBlocks(int startLine,int endLine,int startColumn,Node parent)
+	{
+		if((parent!=null)&&(startLine>=0)&&(endLine>=0)&&(startLine<=endLine))
+		{	
+			int currentLine = startLine;
+			int colBlockWidth=0;
+			Vector columnBlockLines = new Vector();
+			//while(currentLine<=endLine)
+			for(int ik=startLine-((ColumnBlock)parent).getStartLine();currentLine<=endLine;ik++)
+			{
+				Segment seg = new Segment();
+				int actualStart =  startColumn ;
+				if(((ColumnBlock)parent).getLines().size()>0)
+				{
+					ColumnBlockLine line = ((ColumnBlockLine)(((ColumnBlock)parent).getLines().elementAt(ik)));
+					if(currentLine!=line.getLine())
+					{
+						throw new IllegalArgumentException();
+					}
+					actualStart = line.getColumnEndIndex()+1;
+				}
+				getLineText(currentLine, actualStart, seg);
+				int tabPos = getTabStopPosition(seg);
+				if(tabPos>=0)
+				{
+					columnBlockLines.add(new ColumnBlockLine(currentLine, actualStart, actualStart+tabPos));
+					if( tabPos>colBlockWidth)
+					{
+						colBlockWidth =  tabPos;
+					}
+				}
+				if((( tabPos<0)&&(columnBlockLines.size()>0))||((columnBlockLines.size()>0)&&(currentLine==endLine)))
+				{
+					ColumnBlock  block = new ColumnBlock(this,((ColumnBlockLine)columnBlockLines.elementAt(0)).getLine(),startColumn+colBlockWidth,((ColumnBlockLine)columnBlockLines.elementAt(columnBlockLines.size()-1)).getLine(),startColumn+colBlockWidth);
+					block.setLines(columnBlockLines);
+					block.setParent(parent);
+					block.setWidth(colBlockWidth);
+					block.setTabSizeDirtyStatus(true,false);
+					//block.populateTabSizes();
+					parent.addChild(block);
+					colBlockWidth=0;
+					columnBlockLines = new Vector();
+					updateColumnBlocks(block.getStartLine(), block.getEndLine(), startColumn+block.getColumnWidth()+1, block);
+				}
+				currentLine++;
+			}
+		}
+		else
+		{
+			throw new IllegalArgumentException();
+		}
+	}
 	//}}}
+	
+	//{{{ getTabStopPosition() method
+	public int getTabStopPosition(Segment seg )
+	{
+		for (int i = 0; i < seg.count; i++)
+		{
+			if(seg.array[i+seg.offset]=='\t')
+			{
+				return i;
+			}
+		}
+		return -5;
+	}
+	 //}}}
+	
+	public String columnBlockLock = "columnBlockLock";
+	
+	//{{{ indentUsingElasticTabstops() method
+	public void indentUsingElasticTabstops()
+	{
+		synchronized(columnBlockLock)
+		{
+			columnBlock = new ColumnBlock(this,0,getLineCount()-1);
+			updateColumnBlocks(0, lineMgr.getLineCount()-1, 0, columnBlock);
+		}	
+	}
+	 //}}}
+	
+	//{{{ getColumnBlock() method
+	public ColumnBlock getColumnBlock()
+	{
+		return columnBlock;
+	}
+	 //}}}
+//}}}	
 }

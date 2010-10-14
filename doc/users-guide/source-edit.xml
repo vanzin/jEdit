@@ -173,7 +173,55 @@
             to Spaces</guimenuitem> converts hard tabs to soft tabs in the
             current selection, or the entire buffer if nothing is
             selected.</para>
-        </section>
+	 </section>
+	
+	 <section id="elastic-tabstops">
+            <title>Elastic Tabstops</title>
+
+            <para>Elastic tabstops are an alternative way to handle tabstops.
+            Elastic tabstops differ from traditional fixed tabstops because 
+	     columns in lines above and below the "cell" that is being 
+            changed are always kept aligned. As the width of text before a tab 
+            character changes, the tabstops on adjacent lines are also 
+            changed to fit the widest piece of text in that column. It provides
+            certain explicit benefits like it saves time
+	     spent on arranging the code and works seemlessly with variable width 
+            fonts.But at the same time it can make the code look unorganized 
+            on editors that do not support elastic tabstops.</para>
+
+            <para>This feature is known as <firstterm>elastic tabstops</firstterm>.
+            Elastic tabstops can be enabled or disabled in one of several ways:</para>
+
+            <itemizedlist>
+                <listitem>
+                    <para>On a global or mode-specific basis in the
+                    <guibutton>Editing</guibutton> pane of the
+                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
+                    Options</guimenuitem> dialog box. See <xref
+                    linkend="editing-pane" />.</para>
+                </listitem>
+
+                <listitem>
+                    <para>In the current buffer for the duration of the editing
+                    session in the
+                    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Buffer
+                    Options</guimenuitem> dialog box. See <xref
+                    linkend="buffer-opts" />.</para>
+                </listitem>
+
+                <listitem>
+                    <para>In the current buffer for future editing sessions by
+                    placing the following in one of the first or last 10 lines
+                    of the buffer, where <replaceable>flag</replaceable> is
+                    either <quote>true</quote> or <quote>false</quote>:</para>
+
+                    <screen>:elasticTabstops=<replaceable>flag</replaceable>:</screen>
+                </listitem>
+            </itemizedlist>
+
+            <para>Note that this feature does not work with <firstterm>soft tabs</firstterm>.
+            where tabs are emulated as spaces</para>
+	 </section>
 
         <section id="autoindent">
             <title>Automatic Indent</title>

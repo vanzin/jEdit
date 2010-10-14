@@ -25,6 +25,9 @@ package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
 import java.util.*;
+
+import javax.swing.text.TabExpander;
+
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.syntax.*;
@@ -777,12 +780,12 @@ class ChunkCache
 	private void lineToChunkList(int physicalLine, List<Chunk> out)
 	{
 		TextAreaPainter painter = textArea.getPainter();
-
+		TabExpander expander= textArea.getTabExpander();
 		tokenHandler.init(painter.getStyles(),
 			painter.getFontRenderContext(),
-			painter,out,
+			expander,out,
 			textArea.softWrap
-			? textArea.wrapMargin : 0.0f);
+			? textArea.wrapMargin : 0.0f, buffer.getLineStartOffset(physicalLine));
 		buffer.markTokens(physicalLine,tokenHandler);
 	} //}}}
 

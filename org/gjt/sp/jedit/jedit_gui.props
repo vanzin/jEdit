@@ -989,6 +989,7 @@ about.text=jEdit is brought to you by\n\
 	Amedeo Farello\n\
 	Andre Kaplan\n\
 	Andrey Khalyavin\n\
+	Anshal Shukla\n\
 	Anthony Roy\n\
 	Artur Biesiadowski\n\
 	Aziz Sharif\n\
@@ -1908,6 +1909,7 @@ options.editing.indentSize=Indent width:
 options.editing.noWordSep=Extra word characters:
 options.editing.camelCasedWords=Separate "CamelCased" words
 options.editing.noTabs=Soft (emulated with spaces) tabs
+options.editing.elasticTabstops=Indent using elastic tabstops
 options.editing.deepIndent=Deep indent
 #}}}
 

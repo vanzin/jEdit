@@ -720,8 +720,10 @@ public class DisplayManager
 
 		scrollLineCount = new ScrollLineCount(this,textArea);
 		firstLine = new FirstLine(this,textArea);
-
 		bufferHandler = new BufferHandler(this,textArea,buffer);
+		//TODO:invoke ElasticTabStopBufferListener methods from inside BufferHandler to avoid chunking same line twice
+		ElasticTabStopBufferListener listener = new ElasticTabStopBufferListener(textArea);
+		buffer.addBufferListener(listener, JEditBuffer.HIGH_PRIORITY);
 		// this listener priority thing is a bad hack...
 		buffer.addBufferListener(bufferHandler, JEditBuffer.HIGH_PRIORITY);
 

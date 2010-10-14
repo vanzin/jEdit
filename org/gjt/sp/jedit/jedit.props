@@ -156,6 +156,9 @@ buffer.indentSize=8
 # Soft tabs
 buffer.noTabs=false
 
+#elastic tabstops
+buffer.elasticTabstops=false 
+
 # Default edit mode
 buffer.defaultMode=text
 

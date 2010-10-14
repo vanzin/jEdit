@@ -638,5 +638,5 @@ public class JEditTextArea extends TextArea
 		}
 	} //}}}
 
-
+	
 }

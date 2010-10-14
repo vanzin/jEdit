@@ -876,7 +876,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		textArea.updateMaxHorizontalScrollWidth();
 	} //}}}
-
+	
 	//{{{ nextTabStop() method
 	/**
 	 * Implementation of TabExpander interface. Returns next tab stop after
@@ -1368,7 +1368,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		{
 			ChunkCache.LineInfo lineInfo = textArea.chunkCache
 				.getLineInfo(screenLine);
-
 			Font defaultFont = getFont();
 			Color defaultColor = getForeground();
 

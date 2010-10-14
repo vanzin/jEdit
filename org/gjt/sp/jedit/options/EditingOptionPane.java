@@ -114,6 +114,9 @@ public class EditingOptionPane extends AbstractOptionPane
 
 		addComponent(noTabs = new JCheckBox(jEdit.getProperty(
 			"options.editing.noTabs")));
+		
+		addComponent(elasticTabstops = new JCheckBox(jEdit.getProperty(
+		"options.editing.elasticTabstops")));
 
 		addComponent(deepIndent = new JCheckBox(jEdit.getProperty(
 			"options.editing.deepIndent")));
@@ -189,6 +192,7 @@ public class EditingOptionPane extends AbstractOptionPane
 	private JComboBox tabSize;
 	private JComboBox indentSize;
 	private JCheckBox noTabs;
+	private JCheckBox elasticTabstops;
 	private JCheckBox deepIndent;
 	//}}}
 
@@ -207,6 +211,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		current.tabSize = (String)tabSize.getSelectedItem();
 		current.indentSize = (String)indentSize.getSelectedItem();
 		current.noTabs = noTabs.isSelected();
+		current.elasticTabstops = elasticTabstops.isSelected();
 		current.deepIndent = deepIndent.isSelected();
 	} //}}}
 
@@ -235,6 +240,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		tabSize.setSelectedItem(current.tabSize);
 		indentSize.setSelectedItem(current.indentSize);
 		noTabs.setSelected(current.noTabs);
+		elasticTabstops.setSelected(current.elasticTabstops);
 		deepIndent.setSelected(current.deepIndent);
 
 		updateEnabled();
@@ -270,6 +276,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		tabSize.setEnabled(enabled);
 		indentSize.setEnabled(enabled);
 		noTabs.setEnabled(enabled);
+		elasticTabstops.setEnabled(enabled);
 		deepIndent.setEnabled(enabled);
 	} //}}}
 
@@ -315,6 +322,7 @@ public class EditingOptionPane extends AbstractOptionPane
 		String tabSize;
 		String indentSize;
 		boolean noTabs;
+		boolean elasticTabstops;
 		boolean deepIndent;
 		//}}}
 
@@ -354,6 +362,7 @@ public class EditingOptionPane extends AbstractOptionPane
 				tabSize = mode.getProperty("tabSize").toString();
 				indentSize = mode.getProperty("indentSize").toString();
 				noTabs = mode.getBooleanProperty("noTabs");
+				elasticTabstops = mode.getBooleanProperty("elasticTabstops");
 				deepIndent = mode.getBooleanProperty("deepIndent");
 			}
 			else
@@ -367,6 +376,7 @@ public class EditingOptionPane extends AbstractOptionPane
 				tabSize = jEdit.getProperty("buffer.tabSize");
 				indentSize = jEdit.getProperty("buffer.indentSize");
 				noTabs = jEdit.getBooleanProperty("buffer.noTabs");
+				elasticTabstops= jEdit.getBooleanProperty("buffer.elasticTabstops");
 				deepIndent = jEdit.getBooleanProperty("buffer.deepIndent");
 			}
 		} //}}}
@@ -402,6 +412,7 @@ public class EditingOptionPane extends AbstractOptionPane
 					jEdit.resetProperty(prefix + "tabSize");
 					jEdit.resetProperty(prefix + "indentSize");
 					jEdit.resetProperty(prefix + "noTabs");
+					jEdit.resetProperty(prefix + "elasticTabstops");
 					jEdit.resetProperty(prefix + "deepIndent");
 
 					if(!(StandardUtilities.objectsEqual(oldFilenameGlob,
@@ -442,6 +453,7 @@ public class EditingOptionPane extends AbstractOptionPane
 			jEdit.setProperty(prefix + "tabSize",tabSize);
 			jEdit.setProperty(prefix + "indentSize",indentSize);
 			jEdit.setBooleanProperty(prefix + "noTabs",noTabs);
+			jEdit.setBooleanProperty(prefix + "elasticTabstops",elasticTabstops);
 			jEdit.setBooleanProperty(prefix + "deepIndent",deepIndent);
 		} //}}}
 	} //}}}

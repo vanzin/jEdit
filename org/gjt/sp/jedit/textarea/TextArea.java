@@ -38,6 +38,7 @@ import java.awt.im.InputMethodRequests;
 
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.Segment;
+import javax.swing.text.TabExpander;
 
 import org.gjt.sp.jedit.Debug;
 import org.gjt.sp.jedit.IPropertyManager;
@@ -4429,16 +4430,31 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ indentSelectedLines() method
 	/**
 	 * Indents all selected lines.
-	 * @since jEdit 3.1pre3
+ 	 * @since jEdit 3.1pre3
+ 	 */
+ 	public void indentSelectedLines()
+ 	{
+ 		if(!buffer.isEditable())
+ 			getToolkit().beep();
+ 		else
+ 		{
+			buffer.indentLines(getSelectedLines());
+			selectNone();
+ 		}
+ 	} //}}}
+ 	
+	//{{{ turnOnElasticTabstops() method
+	/**
+	 * Turn ON elastic tab stops.
 	 */
-	public void indentSelectedLines()
+	public void turnOnElasticTabstops()
 	{
 		if(!buffer.isEditable())
 			getToolkit().beep();
 		else
-		{
-			buffer.indentLines(getSelectedLines());
-			selectNone();
+		{	
+			buffer.indentUsingElasticTabstops();
+			buffer.elasticTabstopsOn = true;
 		}
 	} //}}}
 
@@ -4624,7 +4640,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		getInputHandler().processKeyEvent(evt, 1 /* source=TEXTAREA (1) */, false);
 		if(!evt.isConsumed())
-			super.processKeyEvent(evt);
+			super.processKeyEvent(evt);	
 
 	} //}}}
 
@@ -4693,7 +4709,20 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		if(buffer == null)
 			return;
-
+		
+		if(buffer.getBooleanProperty("elasticTabstops"))
+		{
+			//call this only if it was previously off
+			if(!buffer.elasticTabstopsOn)
+			{	
+				turnOnElasticTabstops();
+			}	
+			if(buffer.getColumnBlock()!=null)
+			{	
+				buffer.getColumnBlock().setTabSizeDirtyStatus(true, true);
+			}	
+		}
+		
 		int _tabSize = buffer.getTabSize();
 		char[] foo = new char[_tabSize];
 		for(int i = 0; i < foo.length; i++)
@@ -4723,7 +4752,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			displayManager.invalidateScreenLineCounts();
 			displayManager.notifyScreenLineChanges();
 		}
-
 		chunkCache.invalidateAll();
 		gutter.repaint();
 		painter.repaint();
@@ -5073,6 +5101,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private final MutableCaretEvent caretEvent;
 
 	private boolean caretBlinks;
+	private ElasticTabstopsTabExpander elasticTabstopsExpander = new ElasticTabstopsTabExpander(this);
 	protected InputHandlerProvider inputHandlerProvider;
 
 	private InputMethodSupport inputMethodSupport;
@@ -6349,4 +6378,16 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		structureTimer.setInitialDelay(100);
 		structureTimer.setRepeats(false);
 	} //}}}
+
+	public TabExpander getTabExpander() 
+	{
+		if(buffer.getBooleanProperty("elasticTabstops"))
+		{
+			return elasticTabstopsExpander;
+		}
+		else
+		{
+			return painter;
+		}
+	}
 }

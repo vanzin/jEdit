@@ -56,7 +56,7 @@ public class BufferOptionPane extends AbstractOptionPane
 	private JComboBox checkModStatus;
 	private JCheckBox noTabs;
 	private Buffer buffer;
-
+	private JCheckBox elasticTabstops;
 
 	public BufferOptionPane()
 	{
@@ -207,6 +207,13 @@ public class BufferOptionPane extends AbstractOptionPane
 		noTabs.setSelected(buffer.getBooleanProperty("noTabs"));
 		addComponent(noTabs);
 		//}}}
+		
+		//{{{ Elastic tabstops
+		elasticTabstops = new JCheckBox(jEdit.getProperty(
+			"options.editing.elasticTabstops"));
+		elasticTabstops.setSelected(buffer.getBooleanProperty("elasticTabstops"));
+		addComponent(elasticTabstops);
+		//}}}
 	} //}}}
 
 	//{{{ _save() method
@@ -285,6 +292,7 @@ public class BufferOptionPane extends AbstractOptionPane
 		}
 
 		buffer.setBooleanProperty("noTabs",noTabs.isSelected());
+		buffer.setBooleanProperty("elasticTabstops",elasticTabstops.isSelected());
 
 		index = mode.getSelectedIndex();
 		buffer.setMode(modes[index]);
@@ -331,6 +339,8 @@ public class BufferOptionPane extends AbstractOptionPane
 					"indentSize"));
 				noTabs.setSelected(_mode.getBooleanProperty(
 					"noTabs"));
+				elasticTabstops.setSelected(_mode.getBooleanProperty(
+				"elasticTabstops"));
 			}
 		} //}}}
 	} //}}}
