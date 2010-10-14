@@ -23,8 +23,8 @@ package org.gjt.sp.jedit.textarea;
 public class ColumnBlockLine
 {
 	private int line;
-	private int colStartIndex;
-	private int colEndIndex;
+	int colStartIndex;
+	int colEndIndex;
 	private float lineLength;
 	
 	//{{{ ColumnBlockLine() method
