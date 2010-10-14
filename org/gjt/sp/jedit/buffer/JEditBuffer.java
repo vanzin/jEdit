@@ -2840,7 +2840,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 		{	
 			int currentLine = startLine;
 			int colBlockWidth=0;
-			Vector columnBlockLines = new Vector();
+			Vector<ColumnBlockLine> columnBlockLines = new Vector<ColumnBlockLine>();
 			//while(currentLine<=endLine)
 			for(int ik=startLine-((ColumnBlock)parent).getStartLine();currentLine<=endLine;ik++)
 			{
@@ -2875,7 +2875,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 					//block.populateTabSizes();
 					parent.addChild(block);
 					colBlockWidth=0;
-					columnBlockLines = new Vector();
+					columnBlockLines = new Vector<ColumnBlockLine>();
 					updateColumnBlocks(block.getStartLine(), block.getEndLine(), startColumn+block.getColumnWidth()+1, block);
 				}
 				currentLine++;

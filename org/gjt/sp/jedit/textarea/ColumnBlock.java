@@ -25,17 +25,16 @@ import java.util.Vector;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.textarea.Selection.Rect;
-import org.gjt.sp.util.StandardUtilities;
 
 public class ColumnBlock extends Rect implements Node
 {
-	Node parent;
+	private Node parent;
 
-	Vector<Node> children = new Vector();
+	private Vector<Node> children = new Vector<Node>();
 
-	Vector<ColumnBlockLine> lines = new Vector();
+	private Vector<ColumnBlockLine> lines = new Vector<ColumnBlockLine>();
 
-	float columnBlockWidth;
+	private float columnBlockWidth;
 
 	private boolean tabSizesDirty = true;
 
@@ -94,7 +93,7 @@ public class ColumnBlock extends Rect implements Node
 	}//}}}
 
 	//{{{ setLines() method
-	public void setLines(Vector lines)
+	public void setLines(Vector<ColumnBlockLine> lines)
 	{
 		this.lines = lines;
 	}//}}}
@@ -313,7 +312,7 @@ public class ColumnBlock extends Rect implements Node
 	//{{{ toString() method
 	public String toString()
 	{
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		buf.append("ColumnBlock[startLine : " + startLine + " ,endLine : " + endLine
 			+ " ,columnBlockWidth : " + columnBlockWidth + "] LINES:");
 		for (int i = 0; i < lines.size(); i++)
