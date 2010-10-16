@@ -10,17 +10,19 @@
 
 	<!-- jEdit Version -->
 	<property name="jedit.version"
-			  value="4.4pre1" />
+			  value="4.5pre1" />
 	<property name="jedit.build.number"
-			  value="04.04.01.00" />
+			  value="04.05.01.00" />
 
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
 			  value="1.6" />
 	<property name="mac.target.java.version"
-			  value="1.5+" />
+			  value="1.6+" />
+
+    <!-- based on http://packages.slackverse.org/?v=1&p=92 -->
 	<property name="slackware.target.java.version"
-			  value="1_5_0_07-i586-1" />
+			  value="1_6_0_20-i586-1" />
 
 	<!-- Various Paths -->
 	<property name="config.build.dir"
