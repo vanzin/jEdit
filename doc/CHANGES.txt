@@ -4,8 +4,13 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to ... for contributing to this release
+Thanks to Matthieu Casanova for contributing to this release
 
+{{{ API Changes
+-New method TextArea.getVisibleLineText(lineIndex) that returns
+ the visible part of the given line (Matthieu Casanova)
+
+}}}
 }}}
 
 jEdit buffer local properties:

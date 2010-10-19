@@ -1321,6 +1321,40 @@ public abstract class TextArea extends JComponent
 		buffer.getLineText(lineIndex,segment);
 	} //}}}
 
+	//{{{ getVisibleLineText() methods
+	/**
+	 * Returns the visible part of the given line
+	 * @param lineIndex The line number (physical line)
+	 * @return the visible text
+	 * @since 4.5pre1
+	 */
+	public String getVisibleLineText(int lineIndex)
+	{
+		int offset = -getHorizontalOffset();
+		int lineStartOffset = getLineStartOffset(lineIndex);
+		Point point = offsetToXY(lineStartOffset);
+		int begin = xyToOffset(offset + point.x, point.y);
+		int end = xyToOffset(getPainter().getWidth(), point.y);
+		return buffer.getText(begin, end - begin);
+	}
+
+	/**
+	 * Returns the visible part of the given line
+	 * @param lineIndex The line number (physical line)
+	 * @param segment the segment into which the data will be stored.
+	 * @since 4.5pre1
+	 */
+	public void getVisibleLineText(int lineIndex, Segment segment)
+	{
+		int offset = -getHorizontalOffset();
+		int lineStartOffset = getLineStartOffset(lineIndex);
+		Point point = offsetToXY(lineStartOffset);
+		int begin = xyToOffset(offset + point.x, point.y);
+		int end = xyToOffset(getPainter().getWidth(), point.y);
+		buffer.getText(begin, end - begin, segment);
+	}
+	//}}}
+
 	//{{{ setText() method
 	/**
 	 * Sets the entire text of this text area.
