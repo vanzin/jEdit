@@ -325,9 +325,10 @@ print_loop:	for(;;)
 				Chunk chunks = lineList.get(i);
 				if(chunks != null && actuallyPaint)
 				{
+					FontMetrics metrics = gfx.getFontMetrics();
 					Chunk.paintChunkBackgrounds(chunks,gfx,
 						(float)(pageX + lineNumberWidth),
-						(float)(pageY + y));
+						(float)(pageY + y), metrics.getHeight());
 					Chunk.paintChunkList(chunks,gfx,
 						(float)(pageX + lineNumberWidth),
 						(float)(pageY + y),glyphVector);

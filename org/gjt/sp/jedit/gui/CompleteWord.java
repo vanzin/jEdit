@@ -123,8 +123,7 @@ public class CompleteWord extends CompletionPopup
 			textArea.scrollToCaret(false);
 			Point location = textArea.offsetToXY(
 				caret - word.length());
-			location.y += textArea.getPainter().getFontMetrics()
-				.getHeight();
+			location.y += textArea.getPainter().getLineHeight();
 
 			SwingUtilities.convertPointToScreen(location,
 				textArea.getPainter());

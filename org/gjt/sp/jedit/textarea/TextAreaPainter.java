@@ -782,7 +782,45 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		return fm;
 	} //}}}
+	
+	//{{{ getLineHeight() method
+	/**
+	 * Returns the line height as given by the font metrics plus the 
+	 * added line spacing.
+	 */
+	public int getLineHeight()
+	{
+		return fm.getHeight() + extraLineSpacing;
+	}
+	
+	//{{{ getFontHeight() method
+	/**
+	 * Returns the font height as given by the font metrics.
+	 */
+	public int getFontHeight()
+	{
+		return fm.getHeight();
+	} //}}}
+	
+	//{{{ getLineExtraSpacing() method
+	/**
+	 * Returns the number of pixels from the start of the line to the start
+	 * of text (the extra line spacing).
+	 */
+	public int getLineExtraSpacing()
+	{
+		return extraLineSpacing;
+	} //}}}
 
+	//{{{ setLineExtraSpacing() method
+	/**
+	 * Sets extra spacing between lines in pixels.
+	 */
+	public void setLineExtraSpacing(int spacing)
+	{
+		extraLineSpacing = spacing;
+	} //}}}
+	
 	//{{{ setFont() method
 	/**
 	 * Sets the font for this component. This is overridden to update the
@@ -844,7 +882,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		fontRenderContext = gfx.getFontRenderContext();
 
 		Rectangle clipRect = gfx.getClipBounds();
-		int lineHeight = fm.getHeight();
+		int lineHeight = getLineHeight();
+		int charHeight = getFontHeight();
 		if(lineHeight == 0 || textArea.getBuffer().isLoading())
 		{
 			gfx.setColor(getBackground());
@@ -867,7 +906,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int y = firstLine * lineHeight;
 			gfx.fillRect(0,y,getWidth(),numLines * lineHeight);
 			extensionMgr.paintScreenLineRange(textArea,gfx,
-				firstLine,lastLine,y,lineHeight);
+							  firstLine,lastLine,
+							  y, lineHeight);
 			linesTime = System.nanoTime() - linesTime;
 
 			if(Debug.PAINT_TIMER && numLines >= 1)
@@ -904,7 +944,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		for(int i = 0; i < foo.length; i++)
 			foo[i] = ' ';
 		dim.width = (int)getStringWidth(new String(foo));
-		dim.height = fm.getHeight() * 25;
+		dim.height = getLineHeight() * 25;
 		return dim;
 	} //}}}
 
@@ -949,6 +989,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	Color selectionFgColor;
 	// should try to use this as little as possible.
 	FontMetrics fm;
+	int extraLineSpacing;
 	//}}}
 
 	//{{{ TextAreaPainter constructor
@@ -984,6 +1025,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		addExtension(TEXT_LAYER,new PaintText());
 		addExtension(TEXT_LAYER,new PaintSelectionText());
 		caretExtension = new PaintCaret();
+		
+		extraLineSpacing = 0;
 	} //}}}
 
 	//}}}
@@ -1135,7 +1178,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			if(paintLineHighlight || collapsedFold)
 			{
 				gfx.setColor(bgColor);
-				gfx.fillRect(0,y,getWidth(),fm.getHeight());
+				gfx.fillRect(0,y,getWidth(),getLineHeight());
 			} //}}}
 
 			//{{{ Paint token backgrounds
@@ -1144,12 +1187,11 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 			if(lineInfo.chunks != null)
 			{
-				float baseLine = y + fm.getHeight()
-					- (fm.getLeading()+1) - fm.getDescent();
+				float baseLine = y + getLineHeight() - (fm.getLeading()+1) - fm.getDescent();
 				Chunk.paintChunkBackgrounds(
 					lineInfo.chunks,gfx,
 					textArea.getHorizontalOffset(),
-					baseLine);
+					baseLine, getLineHeight());
 			} //}}}
 		} //}}}
 	} //}}}
@@ -1191,7 +1233,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int x1 = selectionStartAndEnd[0];
 			int x2 = selectionStartAndEnd[1];
 
-			gfx.fillRect(x1,y,x2 - x1,fm.getHeight());
+			gfx.fillRect(x1, y, x2 - x1, getLineHeight());
 		} //}}}
 	} //}}}
 
@@ -1377,8 +1419,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			int x = textArea.getHorizontalOffset();
 			int originalX = x;
 
-			float baseLine = y + fm.getHeight()
-				- (fm.getLeading()+1) - fm.getDescent();
+			float baseLine = y + getLineHeight() - (fm.getLeading()+1) - fm.getDescent();
 
 			if(lineInfo.chunks != null)
 			{
@@ -1469,27 +1510,27 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			textArea.offsetToXY(physicalLine,
 					    offset, textArea.offsetXY);
 			int caretX = textArea.offsetXY.x;
-			int lineHeight = fm.getHeight();
+			int lineHeight = getLineHeight();
+			int charHeight = getFontHeight();
+			int charOffset = lineHeight - charHeight;
 
 			gfx.setColor(caretColor);
 
 			if(textArea.isOverwriteEnabled())
 			{
-				gfx.drawLine(caretX,y + lineHeight - 1,
+				gfx.drawLine(caretX, y + lineHeight - 1,
 					     caretX + textArea.charWidth,
 					     y + lineHeight - 1);
 			}
 			else if(blockCaret)
-				gfx.drawRect(caretX,y,textArea.charWidth - 1,
-					     lineHeight - 1);
+				gfx.drawRect(caretX, y + charOffset, textArea.charWidth - 1, charHeight - 1);
 			else
 			{
 				if (thickCaret)
-					gfx.drawRect(caretX, y,
-						1, lineHeight - 1);
+					gfx.drawRect(caretX, y + charOffset, 1, charHeight - 1);
 				else
-					gfx.drawLine(caretX,y,
-						caretX,y + lineHeight - 1);
+					gfx.drawLine(caretX, y + charOffset, caretX, 
+						     y + charOffset + charHeight - 1);
 			}
 		}
 	} //}}}

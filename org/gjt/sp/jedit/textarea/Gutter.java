@@ -161,8 +161,7 @@ public class Gutter extends JComponent implements SwingConstants
 		if (textArea.getBuffer().isLoading())
 			return;
 
-		int lineHeight = textArea.getPainter().getFontMetrics()
-			.getHeight();
+		int lineHeight = textArea.getPainter().getLineHeight();
 
 		if(lineHeight == 0)
 			return;
@@ -176,7 +175,7 @@ public class Gutter extends JComponent implements SwingConstants
 			Log.log(Log.ERROR,this,"     lastLine=" + lastLine);
 			Log.log(Log.ERROR,this,"     visibleLines=" + textArea.getVisibleLines());
 			Log.log(Log.ERROR,this,"     height=" + getHeight());
-			Log.log(Log.ERROR,this,"     painter.height=" + textArea.getPainter().getHeight());
+			Log.log(Log.ERROR,this,"     painter.height=" + lineHeight);
 			Log.log(Log.ERROR,this,"     clip.y=" + clip.y);
 			Log.log(Log.ERROR,this,"     clip.height=" + clip.height);
 			Log.log(Log.ERROR,this,"     lineHeight=" + lineHeight);
@@ -720,7 +719,7 @@ public class Gutter extends JComponent implements SwingConstants
 			return;
 
 		FontMetrics textAreaFm = textArea.getPainter().getFontMetrics();
-		int lineHeight = textAreaFm.getHeight();
+		int lineHeight = textArea.getPainter().getLineHeight();
 		int baseline = textAreaFm.getAscent();
 
 		ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(line);
@@ -918,8 +917,7 @@ public class Gutter extends JComponent implements SwingConstants
 					(! outsideGutter) &&
 					(e.getX() > FOLD_MARKER_SIZE))
 				{
-					int screenLine = e.getY() / textArea.getPainter()
-						.getFontMetrics().getHeight();
+					int screenLine = e.getY() / textArea.getPainter().getLineHeight();
 					int line = textArea.chunkCache.getLineInfo(screenLine)
 						.physicalLine;
 					if (line >= 0)
@@ -937,8 +935,7 @@ public class Gutter extends JComponent implements SwingConstants
 			{
 				JEditBuffer buffer = textArea.getBuffer();
 
-				int screenLine = e.getY() / textArea.getPainter()
-					.getFontMetrics().getHeight();
+				int screenLine = e.getY() / textArea.getPainter().getLineHeight();
 
 				int line = textArea.chunkCache.getLineInfo(screenLine)
 					.physicalLine;
@@ -1064,8 +1061,7 @@ public class Gutter extends JComponent implements SwingConstants
 			}
 			else if(selectLines)
 			{
-				int screenLine = e.getY() / textArea.getPainter()
-					.getFontMetrics().getHeight();
+				int screenLine = e.getY() / textArea.getPainter().getLineHeight();
 				int line;
 				if(e.getY() < 0)
 				{

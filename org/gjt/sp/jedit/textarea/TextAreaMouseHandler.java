@@ -164,8 +164,7 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		    textArea.isRectangularSelectionEnabled())
 			&& textArea.isEditable())
 		{
-			int screenLine = (evt.getY() / textArea.getPainter()
-				.getFontMetrics().getHeight());
+			int screenLine = (evt.getY() / textArea.getPainter().getLineHeight());
 			if(screenLine > textArea.getLastScreenLine())
 				screenLine = textArea.getLastScreenLine();
 			ChunkCache.LineInfo info = textArea.chunkCache.getLineInfo(screenLine);
@@ -298,17 +297,12 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		TextAreaPainter painter = textArea.getPainter();
 		if(evt.getY() < 0)
 		{
-			int delta = Math.min(-1,evt.getY()
-				/ painter.getFontMetrics()
-				.getHeight());
+			int delta = Math.min(-1,evt.getY() / painter.getLineHeight());
 			textArea.setFirstLine(textArea.getFirstLine() + delta);
 		}
 		else if(evt.getY() >= painter.getHeight())
 		{
-			int delta = Math.max(1,(evt.getY()
-				- painter.getHeight()) /
-				painter.getFontMetrics()
-				.getHeight());
+			int delta = Math.max(1,(evt.getY() - painter.getHeight()) / painter.getLineHeight());
 			if(textArea.lastLinePartial)
 				delta--;
 			textArea.setFirstLine(textArea.getFirstLine() + delta);

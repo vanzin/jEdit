@@ -978,7 +978,7 @@ public abstract class TextArea extends JComponent
 	public int xyToOffset(int x, int y, boolean round)
 	{
 		FontMetrics fm = painter.getFontMetrics();
-		int height = fm.getHeight();
+		int height = painter.getLineHeight();
 		int line = y / height;
 
 		if(line < 0 || line >= visibleLines)
@@ -1067,7 +1067,7 @@ public abstract class TextArea extends JComponent
 
 		FontMetrics fm = painter.getFontMetrics();
 
-		retVal.y = screenLine * fm.getHeight();
+		retVal.y = screenLine * painter.getLineHeight();
 
 		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
 
@@ -1104,8 +1104,8 @@ public abstract class TextArea extends JComponent
 			end = visibleLines;
 
 		FontMetrics fm = painter.getFontMetrics();
-		int y = start * fm.getHeight();
-		int height = (end - start + 1) * fm.getHeight();
+		int y = start * painter.getLineHeight();
+		int height = (end - start + 1) * painter.getLineHeight();
 		painter.repaint(0,y,painter.getWidth(),height);
 		gutter.repaint(0,y,gutter.getWidth(),height);
 	} //}}}
@@ -4938,7 +4938,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(painter == null)
 			return;
 		int height = painter.getHeight();
-		int lineHeight = painter.getFontMetrics().getHeight();
+		int lineHeight = painter.getLineHeight();
 		if(lineHeight == 0)
 			visibleLines = 0;
 		else if(height <= 0)
@@ -6141,7 +6141,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			if (caretPos != null)
 			{
 				// Open the context menu below the caret
-				int charHeight = getPainter().getFontMetrics().getHeight();
+				int charHeight = getPainter().getLineHeight();
 				showPopupMenu(popup,
 					painter,caretPos.x,caretPos.y + charHeight,true);
 			}

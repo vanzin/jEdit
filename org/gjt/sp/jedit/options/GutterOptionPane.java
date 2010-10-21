@@ -66,6 +66,8 @@ public class GutterOptionPane extends AbstractOptionPane
 		gutterComponents = new JPanel(new GridBagLayout());
 		gutterComponents.setBorder(BorderFactory.createTitledBorder(
 			jEdit.getProperty("options.gutter.optionalComponents")));
+		
+		IntegerInputVerifier integerInputVerifier = new IntegerInputVerifier();
 
 		/* Line numbering */
 		lineNumbersEnabled = new JCheckBox(jEdit.getProperty(
@@ -74,26 +76,6 @@ public class GutterOptionPane extends AbstractOptionPane
 			"view.gutter.lineNumbers"));
 		gutterComponents.add(lineNumbersEnabled, cons);
 
-		InputVerifier integerInputVerifier = new InputVerifier()
-		{
-			@Override
-			public boolean verify(JComponent input)
-			{
-				if (! (input instanceof JTextField))
-					return true;
-				JTextField tf = (JTextField) input;
-				int i;
-				try
-				{
-					i = Integer.valueOf(tf.getText()).intValue();
-				}
-				catch (Exception e)
-				{
-					return false;
-				}
-				return (i >= 0);
-			}
-		};
 		minLineNumberDigits = new JTextField(String.valueOf(
 				getMinLineNumberDigits()),1);
 		minLineNumberDigits.setInputVerifier(integerInputVerifier);

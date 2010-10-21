@@ -11,6 +11,11 @@ Thanks to Matthieu Casanova for contributing to this release
  the visible part of the given line (Matthieu Casanova)
 
 }}}
+{{{ Editing
+
+- Applied patch from Matthew Gilbert to add ability to increase/decrease line spacing in the text area. ( # 3023134, Dale Anson)
+
+}}}
 }}}
 
 jEdit buffer local properties:

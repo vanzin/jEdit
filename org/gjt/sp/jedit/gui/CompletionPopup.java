@@ -190,7 +190,7 @@ public class CompletionPopup extends JWindow
 		list.setVisibleRowCount(Math.min(candidates.getSize(),8));
 		pack();
 		setLocation(fitInScreen(getLocation(null),this,
-			view.getTextArea().getPainter().getFontMetrics().getHeight()));
+					view.getTextArea().getPainter().getLineHeight()));
 		if (active)
 		{
 			setSelectedIndex(0);

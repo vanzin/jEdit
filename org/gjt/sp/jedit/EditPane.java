@@ -1236,9 +1236,8 @@ public class EditPane extends JPanel implements BufferSetListener
 				if(buffer.getMarkerInRange(start,end) != null)
 				{
 					gfx.setColor(getMarkerHighlightColor());
-					FontMetrics fm = textArea.getPainter().getFontMetrics();
-					gfx.fillRect(0,y,textArea.getGutter()
-						.getWidth(),fm.getHeight());
+					int height = textArea.getPainter().getLineHeight();
+					gfx.fillRect(0, y, textArea.getGutter().getWidth(), height);
 				}
 			}
 		} //}}}
@@ -1249,7 +1248,7 @@ public class EditPane extends JPanel implements BufferSetListener
 		{
 			if(isMarkerHighlightEnabled())
 			{
-				int lineHeight = textArea.getPainter().getFontMetrics().getHeight();
+				int lineHeight = textArea.getPainter().getLineHeight();
 				if(lineHeight == 0)
 					return null;
 

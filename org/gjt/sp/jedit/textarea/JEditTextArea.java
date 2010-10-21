@@ -34,6 +34,8 @@ import javax.swing.JMenuItem;
 
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.options.GlobalOptions;
+import org.gjt.sp.jedit.EditBus.EBHandler;
+import org.gjt.sp.jedit.msg.PropertiesChanged;
 
 import org.gjt.sp.jedit.msg.PositionChanging;
 //}}}
@@ -62,6 +64,8 @@ public class JEditTextArea extends TextArea
 		super(jEdit.getPropertyManager(), view);
 		enableEvents(AWTEvent.FOCUS_EVENT_MASK | AWTEvent.KEY_EVENT_MASK);
 		this.view = view;
+		painter.setLineExtraSpacing(jEdit.getIntegerProperty("options.textarea.lineSpacing", 0));
+		EditBus.addToBus(this);
 	} //}}}
 
 	//{{{ getFoldPainter() method
@@ -631,12 +635,17 @@ public class JEditTextArea extends TextArea
 			if (caretPos != null)
 			{
 				// Open the context menu below the caret
-				int charHeight = getPainter().getFontMetrics().getHeight();
+				int lineHeight = getPainter().getLineHeight();
 				GUIUtilities.showPopupMenu(popup,
-					painter,caretPos.x,caretPos.y + charHeight,true);
+					painter,caretPos.x,caretPos.y + lineHeight,true);
 			}
 		}
 	} //}}}
 
-	
+	//{{{ handlePropertiesChanged() method
+	@EBHandler
+	public void handlePropertiesChanged(PropertiesChanged msg)
+	{
+		painter.setLineExtraSpacing(jEdit.getIntegerProperty("options.textarea.lineSpacing", 0));
+	} //}}}
 }

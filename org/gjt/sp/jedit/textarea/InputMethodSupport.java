@@ -73,7 +73,7 @@ class InputMethodSupport
 	{
 		TextAreaPainter painter = owner.getPainter();
 		Point origin = painter.getLocationOnScreen();
-		int height = painter.getFontMetrics().getHeight();
+		int height = painter.getLineHeight();
 		return new Rectangle(origin.x + x, origin.y + y, 0, height);
 	}
 	// }}}
@@ -96,7 +96,7 @@ class InputMethodSupport
 				FontMetrics fm = painter.getFontMetrics();
 				int x = owner.offsetToXY(caret).x;
 				int width = Math.round(composedTextLayout.getAdvance());
-				int height = fm.getHeight();
+				int height = painter.getLineHeight();
 				int offset_to_baseline = height
 					- (fm.getLeading()+1) - fm.getDescent();
 				int caret_x = x + composedCaretX;

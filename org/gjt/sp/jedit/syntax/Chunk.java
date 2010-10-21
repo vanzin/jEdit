@@ -112,7 +112,7 @@ public class Chunk extends Token
 	 * @since jEdit 4.2pre1
 	 */
 	public static float paintChunkBackgrounds(Chunk chunks,
-		Graphics2D gfx, float x, float y)
+		Graphics2D gfx, float x, float y, int lineHeight)
 	{
 		Rectangle clipRect = gfx.getClipBounds();
 
@@ -121,7 +121,7 @@ public class Chunk extends Token
 		FontMetrics forBackground = gfx.getFontMetrics();
 
 		int ascent = forBackground.getAscent();
-		int height = forBackground.getHeight();
+		int height = lineHeight;
 
 		while(chunks != null)
 		{

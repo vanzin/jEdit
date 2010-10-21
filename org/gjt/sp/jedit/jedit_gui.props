@@ -2141,9 +2141,10 @@ Subpixel does not work w/ MS Remote Desktop.
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
 options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialiasing
-options.textArea.stripTrailingEOL=Hide final end of line (if any)
-options.textArea.completeFromAllBuffers=Complete words from all open buffers (default is \
+options.textarea.stripTrailingEOL=Hide final end of line (if any)
+options.textarea.completeFromAllBuffers=Complete words from all open buffers (default is \
     to limit search to currently visible buffers)
+options.textarea.lineSpacing.label=Extra vertical line spacing (in pixels):
 #}}}
 
 #{{{ Tool Bar pane
