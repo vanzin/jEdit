@@ -4756,6 +4756,10 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 				buffer.getColumnBlock().setTabSizeDirtyStatus(true, true);
 			}	
 		}
+		else
+		{
+			buffer.elasticTabstopsOn = false;
+		}
 		
 		int _tabSize = buffer.getTabSize();
 		char[] foo = new char[_tabSize];
