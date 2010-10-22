@@ -71,8 +71,7 @@ public class VFSManager
 		JARClassLoader classLoader = new JARClassLoader();
 		for(int i = 0; i < ioThreadPool.getThreadCount(); i++)
 		{
-			ioThreadPool.getThread(i).setContextClassLoader(
-				classLoader);
+			ioThreadPool.getThread(i).setContextClassLoader(classLoader);
 		}
 	} //}}}
 
