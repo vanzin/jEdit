@@ -4,7 +4,7 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to Matthieu Casanova, Bad Sector, Bad Sector, Dale Anson, kog13 and Matthew Gilbert for contributing to this
+Thanks to Matthieu Casanova, Bad Sector, jclopes, Dale Anson, kog13 and Matthew Gilbert for contributing to this
 release
 
 {{{ API Changes
@@ -20,6 +20,8 @@ release
 -Added jflex edit mode (Matthieu Casanova)
 
 -Added "using" keyword to haXe edit mode (patch #3081482 from Bad Sector, Matthieu Casanova)
+
+-Updated erlang mode and associated *.hrl to erlang language (patch #3042398 from jclopes , Matthieu Casanova)
 }}}
 
 {{{ Miscellaneous

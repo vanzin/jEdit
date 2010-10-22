@@ -28,9 +28,16 @@
 		<SEQ_REGEXP HASH_CHAR="$"
 			TYPE="LITERAL3"
 			AT_WORD_START="TRUE"
-		>\$.\w*</SEQ_REGEXP>
+		>\$(\\.|.)</SEQ_REGEXP>
+
+		<SEQ_REGEXP HASH_CHAR="?"
+			TYPE="LABEL"
+			AT_WORD_START="TRUE"
+		>\?\w*</SEQ_REGEXP>
 
 		<SEQ TYPE="LITERAL3">badarg</SEQ>
+		<SEQ TYPE="LITERAL3">infinity</SEQ>
+		<SEQ TYPE="LITERAL3">undefined</SEQ>
 		<SEQ TYPE="LITERAL3">nocookie</SEQ>
 		<SEQ TYPE="LITERAL3">false</SEQ>
 		<SEQ TYPE="LITERAL3">true</SEQ>
@@ -118,6 +125,16 @@
 			TYPE="OPERATOR"
 			AT_WORD_START="TRUE"
 		>\bbnot\b</SEQ_REGEXP>
+		<!-- andalso -->
+		<SEQ_REGEXP HASH_CHAR="andalso"
+			TYPE="OPERATOR"
+			AT_WORD_START="TRUE"
+		>\bandalso\b</SEQ_REGEXP>
+		<!-- orelse -->
+		<SEQ_REGEXP HASH_CHAR="orelse"
+			TYPE="OPERATOR"
+			AT_WORD_START="TRUE"
+		>\borelse\b</SEQ_REGEXP>
 
 		<KEYWORDS>
 			<!-- keywords -->

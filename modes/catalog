@@ -144,7 +144,7 @@
 				FILE_NAME_GLOB="*.epl"/>
 
 <MODE NAME="erlang"		FILE="erlang.xml"
-				FILE_NAME_GLOB="*.erl"/>
+				FILE_NAME_GLOB="*.{erl,hrl}"/>
 
 <MODE NAME="eiffel"		FILE="eiffel.xml"
 				FILE_NAME_GLOB="*.e" />
