@@ -4,7 +4,7 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to Matthieu Casanova, Dale Anson and  Matthew Gilbert for contributing to this release
+Thanks to Matthieu Casanova, Dale Anson, kog13 and Matthew Gilbert for contributing to this release
 
 {{{ API Changes
 -New method TextArea.getVisibleLineText(screenLine) and
@@ -17,6 +17,11 @@ Thanks to Matthieu Casanova, Dale Anson and  Matthew Gilbert for contributing to
 -Applied patch from Matthew Gilbert to add ability to increase/decrease line spacing in the text area. (#3023134, Dale Anson)
 
 -Added jflex edit mode (Matthieu Casanova)
+}}}
+
+{{{ Miscellaneous
+-Added a new menu item "New Macro" in Macros menu (patch #2983607 from kog13, Matthieu Casanova)
+
 }}}
 }}}
 

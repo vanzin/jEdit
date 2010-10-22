@@ -741,7 +741,9 @@ edit-syntax-style.label=Edit syntax style of token under caret
 #}}}
 
 #{{{ Macros menu
-macros=record-macro \
+macros=new-macro \
+       - \
+       record-macro \
        stop-recording \
        - \
        last-macro \
@@ -754,6 +756,8 @@ macros=record-macro \
        -
 macros.code=new MacrosProvider();
 macros.label=Ma$cros
+new-macro.label=New Macro
+new-macro.icon.small=16x16/actions/document-new.png
 record-macro.label=$Record Macro...
 record-macro.icon.small=16x16/actions/media-record.png
 stop-recording.label=$Stop Recording

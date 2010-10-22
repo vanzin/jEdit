@@ -622,6 +622,19 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="new-macro">
+	<CODE>
+		dialog = new VFSFileChooserDialog(view,
+			jEdit.getSettingsDirectory()+File.separator+"macros"+
+			File.separator+"New_Macro.bsh", VFSBrowser.SAVE_DIALOG,
+			false);
+		files = dialog.getSelectedFiles();
+		if (files == null || files.length != 1) return;
+		b = jEdit.newFile(view);
+		b.save(view, files[0]);
+	</CODE>
+</ACTION>
+
 <ACTION NAME="new-plain-view">
 	<CODE>
 		jEdit.newView(view,buffer,true);
