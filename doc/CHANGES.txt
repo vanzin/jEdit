@@ -4,7 +4,7 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to Matthieu Casanova, cy6erGn0m, Bad Sector, jclopes, Dale Anson, kog13 and Matthew Gilbert for contributing to
+Thanks to Matthieu Casanova, cy6erGn0m, Bad Sector, jclopes, Dale Anson, Damien Radtke and Matthew Gilbert for contributing to
 this release
 
 {{{ API Changes
@@ -25,7 +25,7 @@ this release
 }}}
 
 {{{ Miscellaneous
--Added a new menu item "New Macro" in Macros menu (patch #2983607 from kog13, Matthieu Casanova)
+-Added a new menu item "New Macro" in Macros menu (patch #2983607 from Damien Radtke, Matthieu Casanova)
 
 -In search and replace when replacing by a beanshell snippet, it is now possible to use multiple statements instead of
  only one statement. To do that, enclose your code in braces (patch #3002207 from cy6erGn0m, Matthieu Casanova)
