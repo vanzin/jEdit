@@ -1324,15 +1324,16 @@ public abstract class TextArea extends JComponent
 	//{{{ getVisibleLineText() methods
 	/**
 	 * Returns the visible part of the given line
-	 * @param lineIndex The line number (physical line)
+	 * @param screenLine the screenLine
 	 * @return the visible text
 	 * @since 4.5pre1
 	 */
-	public String getVisibleLineText(int lineIndex)
+	public String getVisibleLineText(int screenLine)
 	{
 		int offset = -getHorizontalOffset();
-		int lineStartOffset = getLineStartOffset(lineIndex);
-		Point point = offsetToXY(lineStartOffset);
+		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
+		int lineStartOffset = getLineStartOffset(lineInfo.physicalLine);
+		Point point = offsetToXY(lineStartOffset + lineInfo.offset);
 		int begin = xyToOffset(offset + point.x, point.y);
 		int end = xyToOffset(getPainter().getWidth(), point.y);
 		return buffer.getText(begin, end - begin);
@@ -1340,20 +1341,39 @@ public abstract class TextArea extends JComponent
 
 	/**
 	 * Returns the visible part of the given line
-	 * @param lineIndex The line number (physical line)
+	 * @param screenLine the screenLine
 	 * @param segment the segment into which the data will be stored.
 	 * @since 4.5pre1
 	 */
-	public void getVisibleLineText(int lineIndex, Segment segment)
+	public void getVisibleLineText(int screenLine, Segment segment)
 	{
 		int offset = -getHorizontalOffset();
-		int lineStartOffset = getLineStartOffset(lineIndex);
-		Point point = offsetToXY(lineStartOffset);
+		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
+		int lineStartOffset = getLineStartOffset(lineInfo.physicalLine);
+		Point point = offsetToXY(lineStartOffset + lineInfo.offset);
 		int begin = xyToOffset(offset + point.x, point.y);
 		int end = xyToOffset(getPainter().getWidth(), point.y);
 		buffer.getText(begin, end - begin, segment);
+	}//}}}
+
+	/**
+	 * Returns the visible part of the given line in a CharSequence.
+	 * The buffer data are not copied. so this should be used in EDT
+	 * thread
+	 * @param screenLine the screenLine
+	 * @return the visible text
+	 * @since 4.5pre1
+	 */
+	public CharSequence getVisibleLineSegment(int screenLine)
+	{
+		int offset = -getHorizontalOffset();
+		ChunkCache.LineInfo lineInfo = chunkCache.getLineInfo(screenLine);
+		int lineStartOffset = getLineStartOffset(lineInfo.physicalLine);
+		Point point = offsetToXY(lineStartOffset + lineInfo.offset);
+		int begin = xyToOffset(offset + point.x, point.y);
+		int end = xyToOffset(getPainter().getWidth(), point.y);
+		return buffer.getSegment(begin, end - begin);
 	}
-	//}}}
 
 	//{{{ setText() method
 	/**
