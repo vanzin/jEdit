@@ -1038,9 +1038,10 @@
                 <title>BeanShell Replace</title>
 
                 <para>In BeanShell replacement mode, the search string is
-                replaced with the return value of a BeanShell snippet. The
-                following predefined variables can be referenced in the
-                snippet:</para>
+                replaced with the return value of a BeanShell snippet. If
+                you want to use multiple line snippet, enclose your BeanShell
+                in braces. The following predefined variables can be referenced
+                in the snippet:</para>
 
                 <itemizedlist>
                     <listitem>

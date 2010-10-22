@@ -1033,8 +1033,13 @@ loop:			while(path != null)
 	{
 		if(beanshell && replace.length() != 0)
 		{
+			String text;
+			if( replace.trim().startsWith( "{" ) )
+				text = replace;
+			else
+				text = "return (" + replace + ");";	
 			replaceMethod = BeanShell.cacheBlock("replace",
-				"return (" + replace + ");",true);
+				text,true);
 		}
 		else
 			replaceMethod = null;
