@@ -155,6 +155,9 @@
 <MODE NAME="factor"		FILE="factor.xml"
 				FILE_NAME_GLOB="*.factor"/>
 
+<MODE NAME="jflex"		FILE="jflex.xml" 
+				FILE_NAME_GLOB="*.flex"/>
+
 <MODE NAME="forth"		FILE="forth.xml"
 				FILE_NAME_GLOB="*.f" />
 
