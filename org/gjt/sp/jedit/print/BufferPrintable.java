@@ -299,7 +299,7 @@ print_loop:	for(;;)
 			lineList.clear();
 
 			tokenHandler.init(styles,frc,e,lineList,
-				(float)(pageWidth - lineNumberWidth));
+				(float)(pageWidth - lineNumberWidth), -1);
 
 			buffer.markTokens(currentPhysicalLine,tokenHandler);
 			if(lineList.isEmpty())
