@@ -258,8 +258,12 @@ public class Mode
 	 */
 	public boolean acceptFilenameIdentical(String fileName)
 	{
-		return ((String)getProperty("filenameGlob")).equals(fileName) &&
-		       (filenameRE == null || filenameRE.matcher(fileName).matches());
+		if (fileName == null) 
+		{
+			return false;	
+		}
+		return (fileName.equals((String)getProperty("filenameGlob")) &&
+		       (filenameRE == null || filenameRE.matcher(fileName).matches()));
 	} //}}}	
 	
 	//{{{ acceptFirstLine() method
