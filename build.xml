@@ -18,9 +18,10 @@
 	<property name="target.java.version"
 			  value="1.6" />
 	<property name="mac.target.java.version"
-			  value="1.5+" />
+			  value="1.6+" />
+    <!-- based on http://packages.slackverse.org/?v=1&p=92 -->
 	<property name="slackware.target.java.version"
-			  value="1_5_0_07-i586-1" />
+			  value="1_6_0_20-i586-1" />
 
 	<!-- Various Paths -->
 	<property name="config.build.dir"
