@@ -365,9 +365,8 @@
                     are planning to use jEdit to program in Java, you will need
                     a full Java Development Kit (JDK) package. We recommend
                     obtaining a JDK package.</para>
-                    <para>The current version of jEdit, version 4.3, requires a
-                    Java runtime environment having a release version of 1.5 or
-                    greater. It will not run on versions 1.4 or 1.3. The <ulink
+                    <para>The current version of jEdit requires a
+                    Java runtime environment having a release version of 1.6 or greater. The <ulink
                     url="http://www.jedit.org/index.php?page=compatibility">jEdit
                     web site</ulink> contains a detailed discussion on the
                     compatibility of various publicly available JDK's for the
@@ -571,7 +570,7 @@
                     new features or new elements of program design that require
                     testing and possible further refinement. A development
                     version contains the token <quote>pre</quote> in its version
-                    number, as in <literal>4.3pre5</literal>.</para>
+                    number, as in <literal>4.5pre1</literal>.</para>
                     <para>The latest stable and development versions of jEdit
                     are always available from the <ulink
                     url="http://www.jedit.org">jEdit web site</ulink> and from
