@@ -28,7 +28,7 @@
                 <answer>
                     <para>First, make sure you have a working installation of
                     the Java platform. To run jEdit, you will a platform package
-                    having a version number of at least 1.5.0_06. If you do not
+                    having a version number of at least 1.6. If you do not
                     have the Java platform, we recommend downloading the larger
                     <quote>Software Development Kit</quote> (SDK), instead of
                     the smaller <quote>Java Runtime Environment</quote> (JRE),
@@ -38,12 +38,10 @@
                     <filename>java.exe</filename> on Windows systems and simply
                     <filename>java</filename> on others.</para>
 
-                    <para>Next, decide whether you want the current stable
+                    <para>Next, decide whether you want the current "stable"
                     version or the latest development version. As a general
                     rule, the stable version is a good choice for first-time
-                    users. However, jEdit 4.3pre7 has been in development for a
-                    couple of years now, and it is definitely "stable" enough
-                    for beginners. Download the Java installer for the version
+                    users. Download the Java installer for the version
                     you have chosen from the jEdit web site; it consists of a
                     single file with a name in the style
                     <filename>jeditXXXinstall.jar</filename>. This file is a
@@ -138,9 +136,9 @@
                 </question>
 
                 <answer>
-                    <para>The latest version of jEdit, version 4.3, requires
-                    MacOS X (preferably 10.4 or later), because the Java
-                    platforms of earlier MacOS version out outdated.</para>
+                    <para>The latest version of jEdit requires
+                    MacOS X (preferably 10.5 or later), because the Java
+                    platforms of earlier MacOS versions are outdated.</para>
 
                     <para>Once you have completed installing jEdit locate the
                     jedit.jar file and do the following:</para>
@@ -271,8 +269,8 @@
                 </question>
 
                 <answer>
-                    <para>The latest version of jEdit, version 4.3, requires at
-                    least version 1.5 of the Java 2 platform, and therefore may
+                    <para>The latest version of jEdit requires at
+                    least version 1.6 of the Java 2 platform, and therefore may
                     not be compatible with 3rd party virtual machines.</para>
                 </answer>
             </qandaentry>

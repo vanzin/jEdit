@@ -319,9 +319,9 @@ Exception in thread "main" java.awt.AWTError: Cannot load AWT toolkit: gnu.java.
 </programlisting>
 				</question>
 				<answer>
-				 <para> Make sure the version of Java you are running is Sun Java 1.5 or higher. Default installations of Linux still  include a gij compiler which is only 1.4 compliant or not fully Sun compliant. 
-				 Some do not include a java5 jre or even jdk, so you may need to install it manually. In debian/ubuntu, 
-				 <literal> apt-get install sun-java5-jdk </literal>
+				 <para> Make sure the version of Java you are running is Sun Java 1.6 or higher.  
+				 In debian/ubuntu, 
+				 <literal> apt-get install sun-java6-jdk </literal>
 				 </para>
 		        </answer>
 				</qandaentry>
