@@ -38,9 +38,9 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="UTF-8Y">
 		new EncodingWithBOM("UTF-8");
 	</SERVICE>
-	<!-- Supported by Java SE 6.
-		The followings are workarounds (and used only) for older
-		environments. -->
+	<!-- Supported by Oracle Java SE 6.
+		The followings are workarounds (and used only) for other
+		environments with fewer set of encodings. -->
 	<SERVICE CLASS="org.gjt.sp.jedit.io.Encoding" NAME="x-UTF-16LE-BOM">
 		new EncodingWithBOM("UTF-16LE");
 	</SERVICE>
