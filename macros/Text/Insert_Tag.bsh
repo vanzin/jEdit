@@ -26,7 +26,7 @@
 void insertTag()
 {
 	caret = textArea.getCaretPosition();
-	tag = Macros.input(view, "Enter name of tag:").trim();
+	tag = Macros.input(view, "Enter name of tag:");
 	if( tag == null || tag.length() == 0) return;
 	text = textArea.getSelectedText();
 	if(text == null) text = "";
@@ -48,7 +48,7 @@ void insertTag()
 	
 	//if no selected text, put the caret between the tags
 	if(text.length() == 0)
-		textArea.setCaretPosition(caret + tag.length() + 2);
+		textArea.setCaretPosition(caret + tag.length() + 1 + tags.length);
 } 
 
 if(buffer.isReadOnly())
