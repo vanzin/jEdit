@@ -32,20 +32,19 @@
 ### If you need multiple catalogs, then use a space as separator
 
 # cygwin "docbook-xml44" and "docbook-xsl" packages
-# can be used to install docbook-xml and docbook-dtd
-# Prefer xml over sgml packages if available.
+# can be used to install docbook-xml and docbook-schemas
 # (example windows locations)
 #docbook.catalog=c:/cygwin/usr/share/xml/docbook/4.4/docbook.cat
 #docbook.xsl=c:/cygwin/usr/share/docbook-xsl
 #xsltproc.executable=C:/cygwin/usr/bin/xsltproc.exe
 
-# Example Debian squeeze locations
-#docbook.xsl=/usr/share/xml/docbook/stylesheet/docbook-xsl
+# Example Debian squeeze locations (install docbook-xsl package)
+#docbook.xsl=/usr/share/xml/docbook/stylesheet/docbook-xsl/
 #docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.4/catalog.xml
 
 # Example Fedora Core locations
 #docbook.xsl=/usr/share/sgml/docbook/xsl-stylesheets
-#docbook.catalog=/usr/share/sgml/docbook/xml-dtd-4.4-1.0-48.fc12/catalog
+#docbook.catalog=/usr/share/sgml/docbook/xsl-ns-stylesheets-1.75.2/catalog.xml
 
 # Example Fink (Mac OS/X) locations
 #docbook.catalog=/sw/share/xml/dtd/docbookx/4.4.0/docbook.cat

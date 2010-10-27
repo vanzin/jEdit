@@ -377,19 +377,17 @@ public class Chunk extends Token
 
 			char[] textArray = seg.array;
 			int textStart = seg.offset + offset;
+
 			// {{{ Workaround for a bug in Sun Java 5
 			// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6266084
-			if (SUN_JAVA_5)
-			{
-				// textLimit is used as a text count in
-				// layoutGlyphVector(). So it works only the
-				// case textStart is 0.
-				char[] copy = new char[length];
-				System.arraycopy(textArray, textStart,
-					copy, 0, length);
-				textArray = copy;
-				textStart = 0;
-			} //}}}
+			// textLimit is used as a text count in
+			// layoutGlyphVector(). So it works only the
+			// case textStart is 0.
+			char[] copy = new char[length];
+			System.arraycopy(textArray, textStart,
+				copy, 0, length);
+			textArray = copy;
+			textStart = 0;
 			width = layoutGlyphs(fontRenderContext,
 					     textArray,
 					     textStart,
@@ -409,28 +407,6 @@ public class Chunk extends Token
 	private static boolean fontSubstEnabled;
 	private static Font[] preferredFonts;
 	private static Font[] fontSubstList;
-
-	// Flag to enable a workaround for a bug in most known implementations of Java 5.
-	private static final boolean SUN_JAVA_5;
-	static
-	{
-		boolean sun_java_5 = false;
-		String vendor = System.getProperty("java.vendor");
-		// Enable the workaround on Apple and IBM JVM, too,
-		// because the same problem was reported on them.
-		if (vendor != null &&
-			(vendor.startsWith("Sun") ||
-			vendor.startsWith("Apple") ||
-			vendor.startsWith("IBM")))
-		{
-			String version = System.getProperty("java.version");
-			if (version != null && version.startsWith("1.5"))
-			{
-				sun_java_5 = true;
-			}
-		}
-		SUN_JAVA_5 = sun_java_5;
-	}
 
 	//{{{ getFonts() method
 	/**

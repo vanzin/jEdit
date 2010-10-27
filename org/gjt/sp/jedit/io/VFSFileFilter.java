@@ -37,7 +37,7 @@ public interface VFSFileFilter
 
 	/**
 	 * Should return whether the entry represented by the given URL
-	 * should be listed in the browser view.
+	 * should be listed in the browser view. Can be a file or a directory. 
 	 */
 	public boolean accept(VFSFile file);
 
