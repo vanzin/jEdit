@@ -424,15 +424,15 @@
 			  unless="config.xsltproc.executable" />
 		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
 			  unless="docbook.catalog" />
-		<mkdir dir="${doc.output.location}/news44" />
+		<mkdir dir="${doc.output.location}/news45" />
 		<exec executable="${config.xsltproc.executable}"
 			  dir="doc"
 			  failonerror="true">
 			<arg line="${xsltproc.cygwin.arg}" />
 			<arg value="--output" />
-			<arg value="../${doc.output.location}/news44/" />
+			<arg value="../${doc.output.location}/news45/" />
 			<arg value="jedithtml.xsl" />
-			<arg value="news44/news.xml" />
+			<arg value="news45/news.xml" />
 			<env key="XML_CATALOG_FILES" value="${docbook.catalog}" />
 			<env key="XML_DEBUG_CATALOG" value="${docbook.catalog.debug}" />
 		</exec>
@@ -505,11 +505,11 @@
 				   type="file" />
 		<antcall target="generate-doc-faq" />
 		<dependset>
-			<srcfileset dir="doc/news44" />
-			<targetfileset dir="${doc.output.location}/news44" />
+			<srcfileset dir="doc/news45" />
+			<targetfileset dir="${doc.output.location}/news45" />
 		</dependset>
 		<available property="news.is.up.to.date"
-				   file="${doc.output.location}/news44/toc.xml"
+				   file="${doc.output.location}/news45/toc.xml"
 				   type="file" />
 		<antcall target="generate-doc-news" />
 		<dependset>

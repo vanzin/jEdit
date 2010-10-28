@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article>
+
+    <title> What's new in jEdit 4.5 </title>
+    <articleinfo>
+        <author>
+            <othername>The jEdit all-volunteer development team</othername>
+        </author>
+
+    </articleinfo>
+
+    <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
+    but here are some of the major features of this version. </para>
+    <itemizedlist>
+    <listitem><para> This is an item </para></listitem>
+    </itemizedlist>
+
+<!-- :maxLineLen=80:wrap=hard: -->
+</article>

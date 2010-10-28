@@ -166,7 +166,7 @@ public class HelpTOCPanel extends JPanel
 		tocRoot.add(createNode("COPYING.PLUGINS.txt",
 			jEdit.getProperty("helpviewer.toc.copying-plugins")));
 
-		loadTOC(tocRoot,"news44/toc.xml");
+		loadTOC(tocRoot,"news45/toc.xml");
 		loadTOC(tocRoot,"users-guide/toc.xml");
 		loadTOC(tocRoot,"FAQ/toc.xml");
 
