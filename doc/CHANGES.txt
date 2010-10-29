@@ -23,7 +23,9 @@ this release
 
 -Updated erlang mode and associated *.hrl to erlang language (patch #3042398 from jclopes , Matthieu Casanova)
 }}}
-
+{{{ UI
+- Updated ColorWellButton to use the dialog provided by JColorChooser rather than creating its own dialog since the JColorChooser dialog is much richer. (Dale Anson)
+}}}
 {{{ Miscellaneous
 -Added a new menu item "New Macro" in Macros menu (patch #2983607 from Damien Radtke, Matthieu Casanova)
 

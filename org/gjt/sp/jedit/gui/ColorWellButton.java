@@ -104,102 +104,23 @@ public class ColorWellButton extends JButton
 		public void actionPerformed(ActionEvent evt)
 		{
 			JDialog parent = GUIUtilities.getParentDialog(ColorWellButton.this);
-			JDialog dialog;
+			Color c = null;
 			if (parent != null)
 			{
-				dialog = new ColorPickerDialog(parent,
+				c = JColorChooser.showDialog(parent,
 					jEdit.getProperty("colorChooser.title"),
-					true);
+					ColorWellButton.this.getSelectedColor());
 			}
 			else
 			{
-				dialog = new ColorPickerDialog(
-					JOptionPane.getFrameForComponent(
-					ColorWellButton.this),
+				c = JColorChooser.showDialog(
+					SwingUtilities.getRoot(ColorWellButton.this),
 					jEdit.getProperty("colorChooser.title"),
-					true);
+					ColorWellButton.this.getSelectedColor());
 			}
-			dialog.pack();
-			dialog.setVisible(true);
+			if (c != null) {
+				setSelectedColor(c);	
+			}
 		}
-	} //}}}
-
-	//{{{ ColorPickerDialog class
-	/**
-	 * Replacement for the color picker dialog provided with Swing. This version
-	 * supports dialog as well as frame parents.
-	 * @since jEdit 4.1pre7
-	 */
-	private class ColorPickerDialog extends EnhancedDialog implements ActionListener
-	{
-		public ColorPickerDialog(Frame parent, String title, boolean modal)
-		{
-			super(parent,title,modal);
-
-			init();
-		}
-
-		public ColorPickerDialog(Dialog parent, String title, boolean modal)
-		{
-			super(parent,title,modal);
-
-			getContentPane().setLayout(new BorderLayout());
-
-			init();
-		}
-
-		public void ok()
-		{
-			Color c = chooser.getColor();
-			if (c != null)
-				setSelectedColor(c);
-			setVisible(false);
-		}
-
-		public void cancel()
-		{
-			setVisible(false);
-		}
-
-		public void actionPerformed(ActionEvent evt)
-		{
-			if (evt.getSource() == ok)
-				ok();
-			else
-				cancel();
-		}
-
-		//{{{ Private members
-		private JColorChooser chooser;
-		private JButton ok;
-		private JButton cancel;
-
-		private void init()
-		{
-			Color c = getSelectedColor();
-			if(c == null)
-				chooser = new JColorChooser();
-			else
-				chooser = new JColorChooser(c);
-
-			getContentPane().add(BorderLayout.CENTER, chooser);
-
-			Box buttons = new Box(BoxLayout.X_AXIS);
-			buttons.add(Box.createGlue());
-
-			ok = new JButton(jEdit.getProperty("common.ok"));
-			ok.addActionListener(this);
-			buttons.add(ok);
-			buttons.add(Box.createHorizontalStrut(6));
-			getRootPane().setDefaultButton(ok);
-			cancel = new JButton(jEdit.getProperty("common.cancel"));
-			cancel.addActionListener(this);
-			buttons.add(cancel);
-			buttons.add(Box.createGlue());
-
-			getContentPane().add(BorderLayout.SOUTH, buttons);
-			pack();
-			setLocationRelativeTo(getParent());
-		} //}}}
 	} //}}}
 }
