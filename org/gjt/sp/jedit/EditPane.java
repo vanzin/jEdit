@@ -26,7 +26,6 @@ package org.gjt.sp.jedit;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +58,6 @@ import org.gjt.sp.jedit.textarea.TextAreaExtension;
 import org.gjt.sp.jedit.textarea.TextAreaPainter;
 import org.gjt.sp.jedit.textarea.TextAreaTransferHandler;
 import org.gjt.sp.util.SyntaxUtilities;
-
 //}}}
 
 /**
