@@ -64,6 +64,7 @@ public class ColorWellButton extends JButton
 	{
 		((ColorWell)getIcon()).color = color;
 		repaint();
+		fireStateChanged();
 	} //}}}
 
 	//{{{ ColorWell class
