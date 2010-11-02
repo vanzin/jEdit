@@ -377,17 +377,6 @@ public class Chunk extends Token
 
 			char[] textArray = seg.array;
 			int textStart = seg.offset + offset;
-
-			// {{{ Workaround for a bug in Sun Java 5
-			// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6266084
-			// textLimit is used as a text count in
-			// layoutGlyphVector(). So it works only the
-			// case textStart is 0.
-			char[] copy = new char[length];
-			System.arraycopy(textArray, textStart,
-				copy, 0, length);
-			textArray = copy;
-			textStart = 0;
 			width = layoutGlyphs(fontRenderContext,
 					     textArray,
 					     textStart,
