@@ -635,14 +635,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 	//{{{ setAntiAliasEnabled() method
 	/**
-	 * @deprecated use setAntiAlias(AntiAlias newMode)
-	 */
-	@Deprecated
-	public void setAntiAliasEnabled(boolean isEnabled)
-	{
-		setAntiAlias(new AntiAlias(isEnabled));
-	}
-	/**
 	 * As of jEdit 4.3pre4, a new JDK 1.6 subpixel antialias mode is supported.
 	 *
 	 * @since jEdit 4.2pre4
@@ -653,6 +645,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		updateRenderingHints();
 	} //}}}
 
+	//{{{ getAntiAlias() method
 	/**
 	 * @return the AntiAlias value that is currently used for TextAreas.
 	 * @since jedit 4.3pre4
@@ -660,18 +653,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public AntiAlias getAntiAlias()
 	{
 		return antiAlias;
-	}
-
-	//{{{ isAntiAliasEnabled() method
-	/**
-	 * Returns if anti-aliasing is enabled.
-	 * @since jEdit 3.2pre6
-	 * @deprecated - use @ref getAntiAlias()
-	 */
-	@Deprecated
-	public boolean isAntiAliasEnabled()
-	{
-		return antiAlias.val() > 0;
 	} //}}}
 
 	//{{{ setFractionalFontMetricsEnabled() method

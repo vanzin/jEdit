@@ -499,28 +499,6 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		this.showHiddenFiles = showHiddenFiles;
 	} //}}}
 
-	//{{{ getFilenameFilter() method
-	/**
-	 * Returns the file name filter glob.
-	 * @since jEdit 3.2pre2
-	 * @deprecated Use {@link #getVFSFileFilter()} instead. This method
-	 *             might return wrong information since jEdit 4.3pre6.
-	 */
-	@Deprecated
-	public String getFilenameFilter()
-	{
-		if(filterCheckbox.isSelected())
-		{
-			String filter = filterField.getSelectedItem().toString();
-			if(filter.length() == 0)
-				return "*";
-			else
-				return filter;
-		}
-		else
-			return "*";
-	} //}}}
-
 	//{{{ getVFSFileFilter() method
 	/**
 	 * Returns the currently active VFSFileFilter.
@@ -1032,22 +1010,6 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			/* we're in a modal dialog */;
 
 		List<JMenuItem> vec = new ArrayList<JMenuItem>();
-
-		//{{{ old API
-		Enumeration<VFS> e = VFSManager.getFilesystems();
-
-		while(e.hasMoreElements())
-		{
-			VFS vfs = e.nextElement();
-			if((vfs.getCapabilities() & VFS.BROWSE_CAP) == 0)
-				continue;
-
-			JMenuItem menuItem = new JMenuItem(jEdit.getProperty(
-					"vfs." + vfs.getName() + ".label"));
-			menuItem.setActionCommand(vfs.getName());
-			menuItem.addActionListener(actionHandler);
-			vec.add(menuItem);
-		} //}}}
 
 		//{{{ new API
 		EditPlugin[] plugins = jEdit.getPlugins();

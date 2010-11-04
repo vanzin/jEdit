@@ -49,47 +49,6 @@ public abstract class BracketIndentRule implements IndentRule
 	} //}}}
 
 	//{{{ getBrackets() method
-	/**
-	 * @deprecated
-	 *   Use {@link #getBrackets(JEditBuffer,int,int,int)} instead.
-	 *   Brackets in comments or literals should be ignored for indent.
-	 *   But it can't be done without syntax parsing of a buffer.
-	 */
-	@Deprecated
-	public Brackets getBrackets(String line)
-	{
-		Brackets brackets = new Brackets();
-
-		for(int i = 0; i < line.length(); i++)
-		{
-			char ch = line.charAt(i);
-			if(ch == openBracket)
-			{
-				/* Don't increase indent when we see
-				an explicit fold. */
-				if(line.length() - i >= 3)
-				{
-					if(line.substring(i,i+3).equals("{{{")) /* }}} */
-					{
-						i += 2;
-						continue;
-					}
-				}
-				brackets.openCount++;
-			}
-			else if(ch == closeBracket)
-			{
-				if(brackets.openCount != 0)
-					brackets.openCount--;
-				else
-					brackets.closeCount++;
-			}
-		}
-
-		return brackets;
-	} //}}}
-
-	//{{{ getBrackets() method
 	public Brackets getBrackets(JEditBuffer buffer, int lineIndex)
 	{
 		return getBrackets(buffer, lineIndex,

@@ -167,23 +167,7 @@ public class ParserRuleSet
 			}
 			int ruleAmount = rules.size();
 			rules.add(r);
-			// fill the deprecated ParserRule.next pointer
-			if (ruleAmount > 0)
-			{
-				rules.get(ruleAmount).next = r;
-			}
 		}
-	} //}}}
-
-	//{{{ getRules() method
-	/**
-	* @deprecated As the linking between rules is not anymore done within the rule, use {@link #getRules(Character)} instead
-	*/
-	@Deprecated
-	public ParserRule getRules(char ch)
-	{
-		List<ParserRule> rules = getRules(Character.valueOf(ch));
-		return rules.get(0);
 	} //}}}
 
 	//{{{ getRules() method
@@ -212,8 +196,6 @@ public class ParserRuleSet
 			List<ParserRule> mixed = new ArrayList<ParserRule>(size);
 			mixed.addAll(rulesForKey);
 			mixed.addAll(rulesForNull);
-			// fill the deprecated ParserRule.next pointer
-			rulesForKey.get(rulesForKey.size() - 1).next = rulesForNull.get(0);
 			return mixed;
 		}
 	} //}}}

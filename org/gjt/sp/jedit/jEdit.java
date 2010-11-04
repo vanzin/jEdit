@@ -1265,34 +1265,6 @@ public class jEdit
 		return actionContext.getActionSetForAction(action);
 	} //}}}
 
-	//{{{ getActionSetForAction() method
-	/**
-	 * @deprecated Use the form that takes a String instead
-	 */
-	@Deprecated
-	public static ActionSet getActionSetForAction(EditAction action)
-	{
-		return actionContext.getActionSetForAction(action.getName());
-	} //}}}
-
-	//{{{ getActions() method
-	/**
-	 * @deprecated Call getActionNames() instead
-	 */
-	@Deprecated
-	public static EditAction[] getActions()
-	{
-		String[] names = actionContext.getActionNames();
-		EditAction[] actions = new EditAction[names.length];
-		for(int i = 0; i < actions.length; i++)
-		{
-			actions[i] = actionContext.getAction(names[i]);
-			if(actions[i] == null)
-				Log.log(Log.ERROR,jEdit.class,"wtf: " + names[i]);
-		}
-		return actions;
-	} //}}}
-
 	//{{{ getActionNames() method
 	/**
 	 * Returns all registered action names.
@@ -1443,27 +1415,6 @@ public class jEdit
 	public static Buffer openFile(View view, String path)
 	{
 		return openFile(view,null,path,false,new Hashtable());
-	}
-	/**
-	 * @deprecated The openFile() forms with the readOnly parameter
-	 * should not be used. The readOnly prameter is no longer supported.
-	 */
-	@Deprecated
-	public static Buffer openFile(View view, String parent,
-		String path, boolean readOnly, boolean newFile)
-	{
-		return openFile(view,parent,path,newFile,new Hashtable());
-	}
-	/**
-	 * @deprecated The openFile() forms with the readOnly parameter
-	 * should not be used. The readOnly prameter is no longer supported.
-	 */
-	@Deprecated
-	public static Buffer openFile(View view, String parent,
-		String path, boolean readOnly, boolean newFile,
-		Hashtable props)
-	{
-		return openFile(view,parent,path,newFile,props);
 	}
 
 	/**
@@ -2741,20 +2692,6 @@ public class jEdit
 			propsModTime = file2.lastModified();
 		}
 	} //}}}
-
-	// {{{ createTextArea() method
-	/**
-	 * Create a standalone TextArea.
-	 *
-	 * @return a textarea
-	 * @since 4.3pre13
-	 * @deprecated use new JEditEmbeddedTextArea() instead
-	 */
-	@Deprecated
-	public static TextArea createTextArea()
-	{
-		return new JEditEmbeddedTextArea();
-	} // }}}
 
 	//{{{ exit() method
 	/**

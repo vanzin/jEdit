@@ -84,19 +84,6 @@ public class RegexpIndentRule implements IndentRule
 		}
 	} //}}}
 
-	//{{{ isMatch() method
-	/**
-	 * @deprecated
-	 *   Do not use this. This is here only for compatibility.
-	 */
-	@Deprecated
-	public boolean isMatch(String line)
-	{
-		Matcher m = regexp.matcher(line);
-//		return regexp.isMatch(line);
-		return m.matches();
-	} //}}}
-
 	//{{{ toString() method
 	public String toString()
 	{

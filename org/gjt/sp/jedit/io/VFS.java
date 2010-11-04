@@ -197,16 +197,6 @@ public abstract class VFS
 
 	//{{{ VFS constructors
 	/**
-	 * @deprecated Use the form where the constructor takes a capability
-	 * list.
-	 */
-	@Deprecated
-	protected VFS(String name)
-	{
-		this(name,0);
-	}
-
-	/**
 	 * Creates a new virtual filesystem.
 	 * @param name The name
 	 * @param caps The capabilities

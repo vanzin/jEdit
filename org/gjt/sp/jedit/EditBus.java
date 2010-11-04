@@ -171,18 +171,6 @@ public class EditBus
 		components.removeComponent(comp);
 	} //}}}
 
-	//{{{ getComponents() method
-	/**
-	 * Returns an array of all components connected to the bus.
-	 *
-	 * @deprecated Don't use this method. It now returns an empty array.
-	 */
-	@Deprecated
-	public static EBComponent[] getComponents()
-	{
-		return new EBComponent[0];
-	} //}}}
-
 	//{{{ send() method
 	/**
 	 * Sends a message to all components on the bus in turn.

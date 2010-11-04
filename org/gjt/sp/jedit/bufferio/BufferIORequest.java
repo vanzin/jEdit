@@ -76,12 +76,6 @@ public abstract class BufferIORequest extends WorkRequest
 	public static final String ERROR_OCCURRED = "BufferIORequest__error";
 
 	// These are no longer used but still here only for compatibility.
-	@Deprecated public static final int UTF8_MAGIC_1 = 0xef;
-	@Deprecated public static final int UTF8_MAGIC_2 = 0xbb;
-	@Deprecated public static final int UTF8_MAGIC_3 = 0xbf;
-	@Deprecated public static final int UNICODE_MAGIC_1 = 0xfe;
-	@Deprecated public static final int UNICODE_MAGIC_2 = 0xff;
-	@Deprecated public static final int XML_PI_LENGTH = 50;
 	@Deprecated public static final int GZIP_MAGIC_1 = 0x1f;
 	@Deprecated public static final int GZIP_MAGIC_2 = 0x8b;
 

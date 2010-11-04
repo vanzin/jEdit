@@ -224,24 +224,6 @@ public class JARClassLoader extends ClassLoader
 			jar.getPath()) + '!' + name;
 	} //}}}
 
-	//{{{ getZipFile() method
-	/**
-	 * @deprecated Call <code>PluginJAR.getZipFile()</code> instead.
-	 */
-	@Deprecated
-	public ZipFile getZipFile()
-	{
-		try
-		{
-			return jar.getZipFile();
-		}
-		catch(IOException io)
-		{
-			Log.log(Log.ERROR,this,io);
-			return null;
-		}
-	} //}}}
-
 	//{{{ dump() method
 	/**
 	 * For debugging.

@@ -48,15 +48,7 @@ public class DockableLayout implements LayoutManager2
 
 	private Component topButtons, leftButtons, bottomButtons, rightButtons;
 
-	/** @deprecated use isAlternateLayout */
-	@Deprecated
-	public boolean setAlternateLayout()
-	{
-		return isAlternateLayout();
-	}
-	
 	//{{{ isAlternateLayout() method
-	
 	/**
 	 * jEdit View option: wide horizontal docking areas versus tall vertical docking areas 
 	 * @return true if using the "alternate layout"

@@ -941,17 +941,6 @@ public class Buffer extends JEditBuffer
 
 	//{{{ addBufferChangeListener() method
 	/**
-	 * @deprecated Call {@link JEditBuffer#addBufferListener(BufferListener,int)}.
-	 */
-	@Deprecated
-	public void addBufferChangeListener(BufferChangeListener listener,
-		int priority)
-	{
-		addBufferListener(new BufferChangeListener.Adapter(listener),priority);
-	} //}}}
-
-	//{{{ addBufferChangeListener() method
-	/**
 	 * @deprecated Call {@link JEditBuffer#addBufferListener(BufferListener)}.
 	 */
 	@Deprecated
@@ -1170,68 +1159,6 @@ public class Buffer extends JEditBuffer
 	//}}}
 
 	//{{{ Deprecated methods
-
-	//{{{ putProperty() method
-	/**
-	 * @deprecated Call <code>setProperty()</code> instead.
-	 */
-	@Deprecated
-	public void putProperty(Object name, Object value)
-	{
-		// for backwards compatibility
-		if(!(name instanceof String))
-			return;
-
-		setProperty((String)name,value);
-	} //}}}
-
-	//{{{ putBooleanProperty() method
-	/**
-	 * @deprecated Call <code>setBooleanProperty()</code> instead
-	 */
-	@Deprecated
-	public void putBooleanProperty(String name, boolean value)
-	{
-		setBooleanProperty(name,value);
-	} //}}}
-
-	//{{{ markTokens() method
-	/**
-	 * @deprecated Use org.gjt.sp.jedit.syntax.DefaultTokenHandler instead
-	 */
-	@Deprecated
-	public static class TokenList extends DefaultTokenHandler
-	{
-		public Token getFirstToken()
-		{
-			return getTokens();
-		}
-	}
-
-	/**
-	 * @deprecated Use the other form of <code>markTokens()</code> instead
-	 */
-	@Deprecated
-	public TokenList markTokens(int lineIndex)
-	{
-		TokenList list = new TokenList();
-		markTokens(lineIndex,list);
-		return list;
-	} //}}}
-
-	//{{{ insertString() method
-	/**
-	 * Insert a string into the buffer
-	 * @param offset The offset
-	 * @param str The string
-	 * @param attr ignored
-	 * @deprecated Call <code>insert()</code> instead.
-	 */
-	@Deprecated
-	public void insertString(int offset, String str, AttributeSet attr)
-	{
-		insert(offset,str);
-	} //}}}
 
 	//{{{ getFile() method
 	/**
@@ -1465,19 +1392,6 @@ public class Buffer extends JEditBuffer
 				return marker;
 		}
 		return null;
-	} //}}}
-
-	//{{{ getMarkersPath() method
-	/**
-	 * Returns the path for this buffer's markers file
-	 * @param vfs The appropriate VFS
-	 * @since jEdit 4.3pre7
-	 * @deprecated it will fail if you save to another VFS. use {@link #getMarkersPath(VFS, String)}
-	 */
-	@Deprecated
-	public String getMarkersPath(VFS vfs)
-	{
-		return getMarkersPath(vfs, path);
 	} //}}}
 
 	//{{{ getMarkersPath() method
@@ -2195,20 +2109,5 @@ public class Buffer extends JEditBuffer
 		} //}}}
 	} //}}}
 
-	//{{{ editSyntaxStyle() method
-	/**
-	 * Edit the syntax style of the token under the caret.
-	 *
-	 * @param textArea the textarea where your caret is
-	 * @since jEdit 4.3pre11
-	 * @deprecated
-	 *   This method implicitly assumes (textArea.getBuffer() == this).
-	 *   Use gui.StyleEditor#invokeForCaret(JEditTextArea) instead.
-	 */
-	@Deprecated
-	public void editSyntaxStyle(JEditTextArea textArea)
-	{
-		StyleEditor.invokeForCaret(textArea);
-	} //}}}
 	//}}}
 }

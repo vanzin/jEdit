@@ -49,28 +49,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	 * @param expander
 	 * @param out
 	 * @param wrapMargin
-	 * @deprecated Use {@link #init(SyntaxStyle[],FontRenderContext,TabExpander,List<Chunk>,float,int)} instead
-	 */
-	public void init(SyntaxStyle[] styles,
-		FontRenderContext fontRenderContext,
-		TabExpander expander, List<Chunk> out,
-		float wrapMargin)
-	{
-		init(styles, fontRenderContext, expander, out, wrapMargin, -1);
-	} //}}}
-
-	//{{{ init() method
-	/**
-	 * Init some variables that will be used when marking tokens.
-	 * This is called before {@link org.gjt.sp.jedit.buffer.JEditBuffer#markTokens(int, TokenHandler)}
-	 * to store some data that will be required and that we don't want
-	 * to put in the parameters
-	 *
-	 * @param styles
-	 * @param fontRenderContext
-	 * @param expander
-	 * @param out
-	 * @param wrapMargin
 	 * @param physicalLineOffset offset of the physical lines which these chunks belong to required for implementing elastic tabstops
 	 */
 	public void init(SyntaxStyle[] styles,
@@ -209,15 +187,6 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 		return new Chunk(id,offset,length,
 			getParserRuleSet(context),styles,
 			context.rules.getDefault());
-	} //}}}
-
-	//{{{ initChunk() method
-	/**
-	 * @deprecated Use {@link #initChunk(Chunk,Segment,int)} instead
-	 */
-	protected void initChunk(Chunk chunk, Segment seg)
-	{
-		initChunk(chunk, seg, -1);
 	} //}}}
 
 	//{{{ initChunk() method

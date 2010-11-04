@@ -30,23 +30,9 @@ import javax.swing.text.Segment;
  */
 public class SegmentCharSequence implements CharSequence, Serializable
 {
-
 	public SegmentCharSequence(Segment seg)
 	{
-		this(seg, false);
-	}
-
-	/**
-	 * @deprecated
-	 *   Use ReverseCharSequence to get reverse view of this class (or
-	 *   any other CharSequence). This class doesn't support
-	 *   subSequence() and toString() for reversed instance.
-	 */
-	@Deprecated
-	public SegmentCharSequence(Segment seg, boolean reverse)
-	{
 		this(seg, 0, seg.count);
-		this.reverse = reverse;
 	}
 
 	public SegmentCharSequence(Segment seg, int off, int len)
@@ -58,8 +44,6 @@ public class SegmentCharSequence implements CharSequence, Serializable
 
 	public char charAt(int index)
 	{
-		if (reverse)
-			index = length - index - 1;
 		return seg.array[seg.offset + offset + index];
 	}
 
@@ -70,8 +54,6 @@ public class SegmentCharSequence implements CharSequence, Serializable
 
 	public CharSequence subSequence(int start, int end)
 	{
-		if (reverse)
-			throw new IllegalStateException("reverse sub-sequences are not supported");
 		return new SegmentCharSequence(seg, offset + start, end - start);
 	}
 
@@ -80,10 +62,8 @@ public class SegmentCharSequence implements CharSequence, Serializable
 		return new String(seg.array, offset+seg.offset, length);
 	}
 
-	private boolean reverse;
 	private int 	offset;
 	private int 	length;
 	private Segment seg;
-
 }
 

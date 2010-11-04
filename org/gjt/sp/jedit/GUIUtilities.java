@@ -970,16 +970,6 @@ public class GUIUtilities
 		return SyntaxUtilities.parseColor(name, Color.black);
 	} //}}}
 
-	//{{{ parseColor() method
-	/**
-	 * @deprecated use {@link SyntaxUtilities#parseColor(String,Color)}
-	 */
-	@Deprecated
-	public static Color parseColor(String name, Color defaultColor)
-	{
-		return SyntaxUtilities.parseColor(name, defaultColor);
-	} //}}}
-
 	//{{{ getColorHexString() method
 	/**
 	 * Converts a color object to its hex value. The hex value
@@ -1006,25 +996,6 @@ public class GUIUtilities
 		throws IllegalArgumentException
 	{
 		return SyntaxUtilities.parseStyle(str,family,size,true);
-	} //}}}
-
-	//{{{ parseStyle() method
-	/**
-	 * Converts a style string to a style object.
-	 * @param str The style string
-	 * @param family Style strings only specify font style, not font family
-	 * @param size Style strings only specify font style, not font family
-	 * @param color If false, the styles will be monochrome
-	 * @exception IllegalArgumentException if the style is invalid
-	 * @since jEdit 4.0pre4
-	 * @deprecated use {@link SyntaxUtilities#parseStyle(String,String,int,boolean)}
-	 */
-	@Deprecated
-	public static SyntaxStyle parseStyle(String str, String family, int size,
-		boolean color)
-		throws IllegalArgumentException
-	{
-		return SyntaxUtilities.parseStyle(str,family,size,color);
 	} //}}}
 
 	//{{{ getStyleString() method
@@ -1057,36 +1028,6 @@ public class GUIUtilities
 		}
 
 		return buf.toString();
-	} //}}}
-
-	//{{{ loadStyles() method
-	/**
-	 * Loads the syntax styles from the properties, giving them the specified
-	 * base font family and size.
-	 * @param family The font family
-	 * @param size The font size
-	 * @since jEdit 3.2pre6
-	 * @deprecated use {@link SyntaxUtilities#loadStyles(String,int)}
-	 */
-	@Deprecated
-	public static SyntaxStyle[] loadStyles(String family, int size)
-	{
-		return SyntaxUtilities.loadStyles(family,size,true);
-	}
-
-	/**
-	 * Loads the syntax styles from the properties, giving them the specified
-	 * base font family and size.
-	 * @param family The font family
-	 * @param size The font size
-	 * @param color If false, the styles will be monochrome
-	 * @since jEdit 4.0pre4
-	 * @deprecated use {@link SyntaxUtilities#loadStyles(String,int,boolean)}
-	 */
-	@Deprecated
-	public static SyntaxStyle[] loadStyles(String family, int size, boolean color)
-	{
-		return SyntaxUtilities.loadStyles(family, size, color);
 	} //}}}
 
 	//}}}
@@ -1363,26 +1304,6 @@ public class GUIUtilities
 		jEdit.setIntegerProperty(name + ".y",y);
 		jEdit.setIntegerProperty(name + ".width", bounds.width);
 		jEdit.setIntegerProperty(name + ".height", bounds.height);
-	} //}}}
-
-	//{{{ centerOnScreen() method
-	/**
-	 * Centers the given window on the screen. This method is needed because
-	 * JDK 1.3 does not have a <code>JWindow.setLocationRelativeTo()</code>
-	 * method.
-	 * @since jEdit 4.2pre3
-	 * @deprecated use {@link javax.swing.JWindow#setLocationRelativeTo(java.awt.Component)}
-	 */
-	@Deprecated
-	public static void centerOnScreen(Window win)
-	{
-		GraphicsDevice gd = GraphicsEnvironment
-			.getLocalGraphicsEnvironment()
-			.getDefaultScreenDevice();
-		Rectangle gcbounds = gd.getDefaultConfiguration().getBounds();
-		int x = gcbounds.x + (gcbounds.width - win.getWidth()) / 2;
-		int y = gcbounds.y + (gcbounds.height - win.getHeight()) / 2;
-		win.setLocation(x,y);
 	} //}}}
 
 	//}}}

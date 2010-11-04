@@ -995,16 +995,6 @@ public class JEditBuffer
 
 	//{{{ indentLine() methods
 	/**
-	 * @deprecated Use {@link #indentLine(int,boolean)} instead.
-	 */
-	 @Deprecated
-	 public boolean indentLine(int lineIndex, boolean canIncreaseIndent,
-		boolean canDecreaseIndent)
-	{
-		return indentLine(lineIndex,canDecreaseIndent);
-	}
-
-	/**
 	 * Indents the specified line.
 	 * @param lineIndex The line number to indent
 	 * @param canDecreaseIndent If true, the indent can be decreased as a
@@ -1306,18 +1296,6 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//{{{ isElectricKey() methods
-	/**
-	 * Should inserting this character trigger a re-indent of
-	 * the current line?
-	 * @since jEdit 4.3pre2
-	 * @deprecated Use #isElectricKey(char,int)
-	 */
-	@Deprecated
-	public boolean isElectricKey(char ch)
-	{
-		return mode.isElectricKey(ch);
-	}
-
 	/**
 	 * Should inserting this character trigger a re-indent of
 	 * the current line?

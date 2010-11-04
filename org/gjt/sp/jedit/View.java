@@ -221,12 +221,6 @@ public class View extends JFrame implements InputHandlerProvider
 
 	// Layers for bottom group
 	/**
-	 * @deprecated Status bar no longer added as a tool bar.
-	 */
-	@Deprecated
-	public static final int ABOVE_ACTION_BAR_LAYER = -50;
-
-	/**
 	 * Action bar layer.
 	 * @see #addToolBar(int,int,java.awt.Component)
 	 * @since jEdit 4.2pre1
@@ -638,23 +632,10 @@ public class View extends JFrame implements InputHandlerProvider
 	 */
 	public void processKeyEvent(KeyEvent evt, int from)
 	{
-		processKeyEvent(evt,from,false);
-	}
-	/**
-	 * Forwards key events directly to the input handler.
-	 * This is slightly faster than using a KeyListener
-	 * because some Swing overhead is avoided.
-	 * @deprecated do not use, try {@link org.gjt.sp.jedit.gui.InputHandler#processKeyEvent(java.awt.event.KeyEvent, int, boolean)}
-	 */
-	@Deprecated
-	public void processKeyEvent(KeyEvent evt, int from, boolean global)
-	{
-		inputHandler.processKeyEvent(evt, from, global);
+		inputHandler.processKeyEvent(evt, from, false);
 		if(!evt.isConsumed())
 			super.processKeyEvent(evt);
-	} //}}}
-
-
+	}
 	//}}}
 
 	//{{{ Buffers, edit panes, split panes

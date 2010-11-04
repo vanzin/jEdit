@@ -197,21 +197,6 @@ public class KeyEventTranslator
 			return returnValue;
 		else
 			return trans;
-	}
-
-	/**
-	 * Pass this an event from {@link
-	 * KeyEventWorkaround#processKeyEvent(java.awt.event.KeyEvent)}.
-	 * @param evt the KeyEvent to translate
-	 * @since jEdit 4.2pre3
-	 * @deprecated
-	 *   This gives completely same result with translateKeyEvent()
-	 *   since jEdit 4.4pre1.
-	 */
-	@Deprecated
-	public static Key translateKeyEvent2(KeyEvent evt)
-	{
-		return translateKeyEvent(evt);
 	} //}}}
 
 	//{{{ parseKey() method
@@ -521,12 +506,6 @@ public class KeyEventTranslator
 		public boolean isFromGlobalContext()
 		{
 			return isFromGlobalContext;
-		}
-
-		@Deprecated
-		public boolean isPhantom()
-		{
-			return false;
 		}
 	} //}}}
 }

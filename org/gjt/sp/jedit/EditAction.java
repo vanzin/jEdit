@@ -93,17 +93,6 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 	 * abstract since jEdit 4.3pre7
 	 */
 	abstract public void invoke(View view);
-	
-	//{{{ getView() method
-	/**
-	 * @deprecated Call <code>GUIUtilities.getView()</code> instead.
-	 */
-	 @Deprecated
-	public static View getView(Component comp)
-	{
-		// moved to GUIUtilities as it makes no sense being here.
-		return GUIUtilities.getView(comp);
-	} //}}}
 
 	//{{{ isToggle() method
 	/**

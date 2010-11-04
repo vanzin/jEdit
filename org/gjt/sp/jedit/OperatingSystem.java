@@ -262,29 +262,6 @@ public class OperatingSystem
 		return hasScreenMenuBar == 1;
 	} //}}}
 
-	//{{{ hasJava14() method
-	/**
-	 * Returns if Java 2 version 1.4, or Java 2 version 1.5 is in use.
-	 */
-	@Deprecated
-	public static boolean hasJava14()
-	{
-		// jEdit 4.3 requires Java 1.4 or later. However, this method exists
-		// for two reasons. Compatibility with plugins for jEdit 4.2, and
-		// in case somebody wants to borrow this class for their app.
-		return java14;
-	} //}}}
-
-	//{{{ hasJava15() method
-	/**
-	 * Returns if Java 2 version 1.5 is in use.
-	 */
-	@Deprecated
-	public static boolean hasJava15()
-	{
-		return java15;
-	} //}}}
-
 	//{{{ hasJava16() method
 	/**
 	 * Returns if Java 2 version 1.6 is in use.
@@ -314,8 +291,6 @@ public class OperatingSystem
 	private static final int UNKNOWN = 0xBAD;
 
 	private static int os;
-	private static boolean java14;
-	private static boolean java15;
 	private static boolean java16;
 	private static int hasScreenMenuBar = -1;
 
@@ -365,8 +340,6 @@ public class OperatingSystem
 			javaVersion = System.getProperty("java.version");
 		if(javaVersion == null || javaVersion.length() == 0)
 			javaVersion = System.getProperty("java.runtime.version");
-		java14 = javaVersion.compareTo("1.4") >= 0;
-		java15 = javaVersion.compareTo("1.5") >= 0;
 		java16 = javaVersion.compareTo("1.6") >= 0;
 	} //}}}
 

@@ -44,14 +44,6 @@ import javax.swing.text.Segment;
  */
 public abstract class FoldHandler
 {
-	/**
-	 * The service type. See {@link org.gjt.sp.jedit.ServiceManager}.
-	 * @since jEdit 4.2pre1
-	 * @deprecated use {@link org.gjt.sp.jedit.ServiceManager.ServiceFoldHandlerProvider}
-	 */
-	@Deprecated
-	public static final String SERVICE = "org.gjt.sp.jedit.buffer.FoldHandler";
-
 	/** The FoldHandlerProvider. */
 	public static FoldHandlerProvider foldHandlerProvider;
 

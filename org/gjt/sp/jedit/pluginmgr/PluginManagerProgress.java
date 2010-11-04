@@ -73,24 +73,6 @@ class PluginManagerProgress extends JDialog implements ProgressObserver
 	} //}}}
 
 	//{{{ setValue() method
-
-	/**
-	 * @param value the new value
-	 * @deprecated Use {@link #setValue(long)}
-	 */
-	@Deprecated
-	public void setValue(final int value)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				progress.setValue(valueSoFar + value);
-			}
-		});
-	} //}}}
-
-	//{{{ setValue() method
 	/**
 	 * Update the progress value.
 	 *

@@ -883,22 +883,5 @@ public class Registers
 		}
 	} //}}}
 
-	//{{{ StringRegister class
-	/**
-	 * Register that stores a string.
-	 */
-	@Deprecated
-	public static class StringRegister extends DefaultRegister
-	{
-		/**
-		 * Creates a new string register.
-		 * @param value The contents
-		 */
-		public StringRegister(String value)
-		{
-			setValue(value);
-		}
-	} //}}}
-
 	//}}}
 }

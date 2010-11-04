@@ -49,15 +49,9 @@ public class ParserRule
 	//{{{ Action hints
 	public static final int ACTION_HINTS = 0x0000FF00;
 
-	@Deprecated
-	public static final int EXCLUDE_MATCH = 1 << 8;
-
 	public static final int NO_LINE_BREAK = 1 << 9;
 	public static final int NO_WORD_BREAK = 1 << 10;
 	public static final int IS_ESCAPE = 1 << 11;
-
-	@Deprecated
-	public static final int NO_ESCAPE = 1 << 12;
 
 	public static final int REGEXP = 1 << 13;
 	//}}}
@@ -106,12 +100,6 @@ public class ParserRule
 	public final ParserRule escapeRule;
 
 	public ParserRuleSet delegate;
-
-	/**
-	* @deprecated As the linking between rules is not anymore done within the rule but external. See {@link ParserRuleSet#getRules(Character)}
-	*/
-	@Deprecated
-	public ParserRule next;
 	//}}}
 
 	//{{{ createSequenceRule() method
@@ -121,20 +109,6 @@ public class ParserRule
 		return new ParserRule(SEQ, seq.substring(0,1),
 			posMatch, seq.toCharArray(), null,
 			0, null, delegate, id, MATCH_TYPE_CONTEXT, null);
-	} //}}}
-
-	//{{{ createRegexpSequenceRule() method
-	/**
-	 * @deprecated Use {@link #createRegexpSequenceRule(String,int,String,ParserRuleSet,byte,boolean)} instead
-	 */
-	@Deprecated
-	public static ParserRule createRegexpSequenceRule(
-		char hashChar, int posMatch, String seq,
-		ParserRuleSet delegate, byte id, boolean ignoreCase)
-		throws PatternSyntaxException
-	{
-		return createRegexpSequenceRule(String.valueOf(hashChar), posMatch,
-			seq, delegate, id, ignoreCase);
 	} //}}}
 
 	//{{{ createRegexpSequenceRule() method
@@ -221,20 +195,6 @@ public class ParserRule
 		return new ParserRule(ruleAction, seq.substring(0,1), posMatch,
 			seq.toCharArray(), null, 0, null,
 			delegate, id, matchType, null);
-	} //}}}
-
-	//{{{ createRegexpEOLSpanRule() method
-	/**
-	 * @deprecated Use {@link #createRegexpEOLSpanRule(String,int,String,ParserRuleSet,byte,byte,boolean)} instead
-	 */
-	@Deprecated
-	public static ParserRule createRegexpEOLSpanRule(
-		char hashChar, int posMatch, String seq, ParserRuleSet delegate,
-		byte id, byte matchType, boolean ignoreCase)
-		throws PatternSyntaxException
-	{
-		return createRegexpEOLSpanRule(String.valueOf(hashChar),
-			posMatch,seq,delegate,id,matchType,ignoreCase);
 	} //}}}
 
 	//{{{ createRegexpEOLSpanRule() method

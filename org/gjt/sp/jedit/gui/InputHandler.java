@@ -294,16 +294,6 @@ public abstract class InputHandler extends AbstractInputHandler<EditAction>
 		readNextChar = code;
 	} //}}}
 
-	//{{{ readNextChar() method
-	/**
-	 * @deprecated Use the other form of this method instead
-	 */
-	@Deprecated
-	public void readNextChar(String code)
-	{
-		readNextChar = code;
-	} //}}}
-
 	//{{{ invokeAction() method
 	/**
 	 * Invokes the specified action, repeating and recording it as

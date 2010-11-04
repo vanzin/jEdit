@@ -344,16 +344,6 @@ public class Chunk extends Token
 	} //}}}
 
 	//{{{ init() method
-	/**
-	 * @deprecated Use {@link #init(Segment,TabExpander,float,FontRenderContext,int)} instead
-	 */
-	public void init(Segment seg, TabExpander expander, float x,
-		FontRenderContext fontRenderContext)
-	{
-		init(seg, expander, x, fontRenderContext, -1);
-	} //}}}
-
-	//{{{ init() method
 	public void init(Segment seg, TabExpander expander, float x,
 		FontRenderContext fontRenderContext, int physicalLineOffset)
 	{

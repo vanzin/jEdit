@@ -97,18 +97,6 @@ public class CloseBracketIndentRule extends BracketIndentRule
 		}
 	} //}}}
 
-	//{{{ isMatch() method
-	/**
-	 * @deprecated
-	 *   This method calls BracketIndentRule#getBrackets(String)
-	 *   which has been deprecated.
-	 */
-	@Deprecated
-	public boolean isMatch(String line)
-	{
-		return getBrackets(line).closeCount != 0;
-	} //}}}
-
 	private boolean aligned;
 
 	//{{{ AlignBracket class

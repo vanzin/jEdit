@@ -373,16 +373,6 @@ public class PluginJAR
 		return zipFile;
 	} //}}}
 
-	//{{{ getActions() method
-	/**
-	 * @deprecated Call getActionSet() instead
-	 */
-	@Deprecated
-	public ActionSet getActions()
-	{
-		return getActionSet();
-	} //}}}
-
 	//{{{ getActionSet() method
 	/**
 	 * Returns the plugin's action set for the jEdit action context

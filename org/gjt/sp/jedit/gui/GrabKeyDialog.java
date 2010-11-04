@@ -40,16 +40,6 @@ import org.gjt.sp.util.Log;
  */
 public class GrabKeyDialog extends JDialog
 {
-	//{{{ toString() method
-	/**
-	 * @deprecated use {@link org.gjt.sp.jedit.input.AbstractInputHandler#toString(java.awt.event.KeyEvent)}
-	 */
-	@Deprecated
-	public static String toString(KeyEvent evt)
-	{
-		return AbstractInputHandler.toString(evt);
-	} //}}}
-
 	//{{{ GrabKeyDialog constructor
 	/**
 	 * Create and show a new modal dialog.
