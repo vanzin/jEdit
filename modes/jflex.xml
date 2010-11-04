@@ -39,8 +39,9 @@
 	<SEQ TYPE="KEYWORD1">%standalone</SEQ>
 	<SEQ TYPE="KEYWORD1">ignorecase</SEQ>
 	<SEQ TYPE="KEYWORD1">%type</SEQ>
+	<SEQ TYPE="KEYWORD1">%debug</SEQ>
 	<SEQ TYPE="OPERATOR">%%</SEQ>
-	
+
 	<SEQ_REGEXP HASH_CHAR="&lt;" TYPE="KEYWORD2">&lt;\w+&gt;</SEQ_REGEXP>
     </RULES>
 </MODE>
