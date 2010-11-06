@@ -780,41 +780,6 @@ public class MiscUtilities
 
 	//{{{ Text methods
 
-	//{{{ getLeadingWhiteSpaceWidth() method
-	/**
-	 * Returns the width of the leading white space in the specified
-	 * string.
-	 * @param str The string
-	 * @param tabSize The tab size
-	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#getLeadingWhiteSpace(String)}
-	 */
-	@Deprecated
-	public static int getLeadingWhiteSpaceWidth(String str, int tabSize)
-	{
-		return StandardUtilities.getLeadingWhiteSpaceWidth(str, tabSize);
-	} //}}}
-
-	//{{{ createWhiteSpace() methods
-	/**
-	 * Creates a string of white space with the specified length.<p>
-	 *
-	 * To get a whitespace string tuned to the current buffer's
-	 * settings, call this method as follows:
-	 *
-	 * <pre>myWhitespace = MiscUtilities.createWhiteSpace(myLength,
-	 *     (buffer.getBooleanProperty("noTabs") ? 0
-	 *     : buffer.getTabSize()));</pre>
-	 *
-	 * @param len The length
-	 * @param tabSize The tab size, or 0 if tabs are not to be used
-	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#createWhiteSpace(int, int)}
-	 */
-	@Deprecated
-	public static String createWhiteSpace(int len, int tabSize)
-	{
-		return StandardUtilities.createWhiteSpace(len,tabSize,0);
-	}//}}}
-
 	//{{{ escapesToChars() method
 	/**
 	 * Converts "\n" and "\t" escapes in the specified string to

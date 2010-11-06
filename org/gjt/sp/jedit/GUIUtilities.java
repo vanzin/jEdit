@@ -970,19 +970,6 @@ public class GUIUtilities
 		return SyntaxUtilities.parseColor(name, Color.black);
 	} //}}}
 
-	//{{{ getColorHexString() method
-	/**
-	 * Converts a color object to its hex value. The hex value
-	 * prefixed is with `#', for example `#ff0088'.
-	 * @param c The color object
-	 * @deprecated use {@link SyntaxUtilities#parseStyle(String,String,int,boolean)}
-	 */
-	@Deprecated
-	public static String getColorHexString(Color c)
-	{
-		return SyntaxUtilities.getColorHexString(c);
-	} //}}}
-
 	//{{{ parseStyle() method
 	/**
 	 * Converts a style string to a style object.
