@@ -822,20 +822,6 @@ public class MiscUtilities
 		return buf.toString();
 	} //}}}
 
-	//{{{ charsToEscapes() methods
-	/**
-	 * Escapes the specified characters in the specified string.
-	 * @param str The string
-	 * @param toEscape Any characters that require escaping
-	 * @since jEdit 4.1pre3
-	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#charsToEscapes(String)}
-	 */
-	@Deprecated
-	public static String charsToEscapes(String str, String toEscape)
-	{
-		return StandardUtilities.charsToEscapes(str, toEscape);
-	} //}}}
-
 	//{{{ compareVersions() method
 	/**
 	 * @deprecated Call {@link StandardUtilities#compareStrings(String, String, boolean)} instead

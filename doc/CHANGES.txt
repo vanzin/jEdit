@@ -95,6 +95,7 @@ this release
  EditBus.getComponents()
  JarClassLoader.getZipFile()
  MiscUtilities.charsToEscapes(String str)
+ MiscUtilities.charsToEscapes(String str, String toEscape)
  MiscUtilities.getLeadingWhiteSpace(String str)
  MiscUtilities.getTrailingWhiteSpace(String str)
  MiscUtilities.getVirtualWidth(Segment seg, int tabSize)
