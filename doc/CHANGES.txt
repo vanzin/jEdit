@@ -84,6 +84,11 @@ this release
  GUIUtilities.parseStyle(String str, String family, int size, boolean color)
  GUIUtilities.parseColor(String name, Color defaultColor)
  GUIUtilities.getColorHexString(Color c)
+ GUIUtilities.NEW_BUFFER_ICON
+ GUIUtilities.DIRTY_BUFFER_ICON
+ GUIUtilities.READ_ONLY_BUFFER_ICON
+ GUIUtilities.NORMAL_BUFFER_ICON
+ GUIUtilities.WINDOW_ICON
  BeanShell.runScript(View view, String path, Reader in, boolean ownNamespace, boolean rethrowBshErrors)
  BeanShell.eval(View view, NameSpace namespace, String command, boolean rethrowBshErrors)
  EditAction.getView(Component comp)

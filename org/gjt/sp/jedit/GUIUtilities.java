@@ -90,43 +90,6 @@ import java.awt.event.*;
  */
 public class GUIUtilities
 {
-	//{{{ Some predefined icons
-	/**
-	 * @deprecated Use <code>GUIUtilities.loadIcon("new.gif");</code>
-	 * instead.
-	 */
-	@Deprecated
-	public static Icon NEW_BUFFER_ICON;
-
-	/**
-	 * @deprecated Use <code>GUIUtilities.loadIcon("dirty.gif");</code>
-	 * instead.
-	 */
-	@Deprecated
-	public static Icon DIRTY_BUFFER_ICON;
-
-	/**
-	 * @deprecated Use <code>GUIUtilities.loadIcon("readonly.gif");</code>
-	 * instead.
-	 */
-	@Deprecated
-	public static Icon READ_ONLY_BUFFER_ICON;
-
-	/**
-	 * @deprecated Use <code>GUIUtilities.loadIcon("normal.gif");</code>
-	 * instead.
-	 */
-	@Deprecated
-	public static Icon NORMAL_BUFFER_ICON;
-
-	/**
-	 * @deprecated Use <code>GUIUtilities.loadIcon("jedit-icon.gif");</code>
-	 * instead.
-	 */
-	@Deprecated
-	public static Icon WINDOW_ICON;
-	//}}}
-
 	//{{{ Icon methods
 
 	//{{{ setIconPath() method
@@ -1762,14 +1725,6 @@ public class GUIUtilities
 		Log.log(Log.DEBUG, GUIUtilities.class, "Icon theme set to: "+theme);
 		setIconPath("jeditresource:/org/gjt/sp/jedit/icons/themes/" + theme + '/');
 		Log.log(Log.DEBUG, GUIUtilities.class, "Loading icon theme from: "+iconPath);
-
-		// don't do this in static{} since we need jEdit.initMisc()
-		// run first so we have the jeditresource: protocol
-		NEW_BUFFER_ICON = loadIcon("new.gif");
-		DIRTY_BUFFER_ICON = loadIcon("dirty.gif");
-		READ_ONLY_BUFFER_ICON = loadIcon("readonly.gif");
-		NORMAL_BUFFER_ICON = loadIcon("normal.gif");
-		WINDOW_ICON = loadIcon(jEdit.getProperty("logo.icon.medium"));
 	} //}}}
 
 	//{{{ showSplashScreen() method
