@@ -12,6 +12,10 @@ this release
  TextArea.getVisibleLineSegment() that returns
  the visible part of the given line (Matthieu Casanova)
 
+-API made private:
+ FileVFS.modified
+ (Matthieu Casanova)
+ 
 -Removed Deprecated apis :
  JEditTextArea.getSelectionStart()
  JEditTextArea.getSelectionStart(int line)

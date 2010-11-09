@@ -212,11 +212,7 @@ public class FileVFS extends VFS
 		public static DateFormat DATE_FORMAT
 			= DateFormat.getInstance();
 
-		/**
-		 * @deprecated Call getModified() instead.
-		 */
-		@Deprecated
-		public long modified;
+		private long modified;
 
 		//{{{ LocalFile() class
 		public LocalFile(File file)
