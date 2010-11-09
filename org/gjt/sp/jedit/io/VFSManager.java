@@ -207,6 +207,12 @@ public class VFSManager
 	 * Executes the specified runnable in the AWT thread once all
 	 * pending I/O requests are complete.
 	 * @since jEdit 2.5pre1
+	 * @deprecated Using that method, when you run a task in AWT Thread,
+	 * it will wait for all background task causing some unwanted delays.
+	 * If you need calling a task after a background work, please add your
+	 * runnable to the EDT thread yourself at the end of the background task
+	 * @see org.gjt.sp.util.ThreadUtilities#runInDispatchThread(Runnable)
+	 * @see org.gjt.sp.util.ThreadUtilities#runInDispatchThreadAndWait(Runnable)
 	 */
 	@Deprecated
 	public static void runInAWTThread(Runnable run)
@@ -218,6 +224,10 @@ public class VFSManager
 	/**
 	 * Executes the specified runnable in one of the I/O threads.
 	 * @since jEdit 2.6pre2
+	 * @deprecated You should not use this method, this threadpool
+	 * links the AWT Threads and Work threads.
+	 * @see org.gjt.sp.util.ThreadUtilities#runInBackground(org.gjt.sp.util.Task)
+	 * @see org.gjt.sp.util.ThreadUtilities#runInBackground(Runnable)
 	 */
 	@Deprecated
 	public static void runInWorkThread(Runnable run)
