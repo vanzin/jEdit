@@ -402,7 +402,7 @@ public class ExtendedGridLayoutConstraints
 	  * @return {@code true} if this object is the same as the o
 	  *         argument; {@code false} otherwise.
 	  * @see #hashCode()
-	  * @see <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Hashtable.html"><code>java.util.Hashtable</code></a>
+	  * @see <a href="http://download.oracle.com/javase/6/docs/api/java/util/Hashtable.html"><code>java.util.Hashtable</code></a>
 	  */
 	public boolean equals(Object o)
 	{
@@ -436,7 +436,7 @@ public class ExtendedGridLayoutConstraints
 	  *     the two objects must produce the same integer result.
 	  * <li>It is <em>not</em> required that if two objects are unequal
 	  *     according to the
-	  *     <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Object.html#equals(java.lang.Object)">{@code java.lang.Object#equals(java.lang.Object)}</a>
+	  *     <a href="http://download.oracle.com/javase/6/docs/api/java/lang/Object.html#equals(java.lang.Object)">{@code java.lang.Object#equals(java.lang.Object)}</a>
 	  *     method, then calling the <tt>hashCode</tt> method on each of the
 	  *     two objects must produce distinct integer results.  However, the
 	  *     programmer should be aware that producing distinct integer results
@@ -445,7 +445,7 @@ public class ExtendedGridLayoutConstraints
 	  * 
 	  * @return a hash code value for this object.
 	  * @see #equals(java.lang.Object)
-	  * @see <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Hashtable.html"><code>java.util.Hashtable</code></a>
+	  * @see <a href="http://download.oracle.com/javase/6/docs/api/java/util/Hashtable.html"><code>java.util.Hashtable</code></a>
 	  */
 	public int hashCode()
 	{
