@@ -50,6 +50,7 @@ import org.gjt.sp.jedit.ActionSet;
 import org.gjt.sp.jedit.EditAction;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.AbstractContextOptionPane.MenuItem;
 //}}}
 
 
@@ -201,7 +202,7 @@ public class ContextAddDialog extends EnhancedDialog
 		jEdit.setProperty(CONTEXT_ADD_DIALOG_LAST_SELECTION, actionSet.getLabel());
 
 		EditAction[] actions = actionSet.getActions();
-		Vector listModel = new Vector(actions.length);
+		Vector<MenuItem> listModel = new Vector<MenuItem>(actions.length);
 
 		for(int i = 0; i < actions.length; i++)
 		{
@@ -210,8 +211,7 @@ public class ContextAddDialog extends EnhancedDialog
 			if(label == null)
 				continue;
 
-			listModel.addElement(new AbstractContextOptionPane.MenuItem(
-										    action.getName(),label));
+			listModel.addElement(new MenuItem(action.getName(),label));
 		}
 
 		Collections.sort(listModel,new AbstractContextOptionPane.MenuItemCompare());

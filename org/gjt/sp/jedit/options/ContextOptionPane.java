@@ -19,15 +19,8 @@
 
 package org.gjt.sp.jedit.options;
 
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.*;
-import java.util.*;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.StandardUtilities;
 
 /**
  * Right-click context menu editor.

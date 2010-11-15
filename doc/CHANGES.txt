@@ -19,6 +19,8 @@ contributing to this release.
 
 - VFSBrowser escape handling fixed when used as a dialog (#3101808 - Alan Ezust)
 
+- Context menu sorted when adding toolbar buttons (#3074164 - Alan Ezust)
+
 - Fixed an exception when clicking ok while adding new action to the context
   menu if no action has been selected (Matthieu Casanova #3072546)
 
