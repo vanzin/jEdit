@@ -371,7 +371,7 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="focus-on-textarea">
+<ACTION NAME="focus-textarea">
 	<CODE>
 		editPane.focusOnTextArea();
 	</CODE>

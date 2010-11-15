@@ -616,6 +616,7 @@ docking=left-docking-area \
 	top-docking-area \
 	right-docking-area \
 	bottom-docking-area \
+	focus-textarea \
 	- \
 	toggle-dock-areas \
 	close-docking-area \
@@ -631,6 +632,7 @@ left-docking-area.label=Go to $Left Docking Area
 top-docking-area.label=Go to $Top Docking Area
 right-docking-area.label=Go to $Right Docking Area
 bottom-docking-area.label=Go to $Bottom Docking Area
+focus-textarea.label=Go to Text Area
 close-docking-area.label=$Close Current Docking Area
 layout-load.label=$Load docking layout ...
 layout-save.label=$Save docking layout ...
