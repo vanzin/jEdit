@@ -363,9 +363,8 @@ public class VFSDirectoryEntryTable extends JTable
 				ac.invokeAction(evt, newDir);
 				break;
 			case KeyEvent.VK_ESCAPE:
-				EditAction cda = jac.getAction("close-docking-area");
-				cda.invoke(jEdit.getActiveView());
-				evt.consume();
+				EditAction cda = ac.getAction("vfs.browser.closedialog");
+				ac.invokeAction(evt, cda);
 				break;
 			case KeyEvent.VK_F2:
 				EditAction ren = ac.getAction("vfs.browser.rename");

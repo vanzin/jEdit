@@ -33,6 +33,13 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="vfs.browser.closedialog">
+	<CODE>
+		browser.dispose();
+	</CODE>
+</ACTION>
+
+
 <ACTION NAME="vfs.browser.browse-window">
 	<CODE>
 		for(int i = 0; i &lt; files.length; i++)
