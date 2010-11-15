@@ -57,7 +57,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 {
 	public static final String NAME = "vfs.browser";
 
-	//{{{ Browser types
+	//{{{ Browser modes
 	/**
 	 * Open file dialog mode. Equals JFileChooser.OPEN_DIALOG for
 	 * backwards compatibility.
@@ -79,7 +79,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	public static final int CHOOSE_DIRECTORY_DIALOG = 3;
 
 	/**
-	 * Stand-alone browser mode.
+	 * Stand-alone dockable browser mode.
 	 */
 	public static final int BROWSER = 2;
 	//}}}
@@ -172,9 +172,6 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		this.multipleSelection = multipleSelection;
 		this.view = view;
 
-		DockableWindowManager dwm = view.getDockableWindowManager();
-		KeyListener keyListener = dwm.closeListener(NAME);
-		addKeyListener(keyListener);
 		
 		currentEncoding = null;
 		autoDetectEncoding = jEdit.getBooleanProperty(
@@ -211,25 +208,10 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 		pathField = new HistoryTextField("vfs.browser.path");
 		pathField.setName("path");
-		pathField.addKeyListener(keyListener);
 		pathField.setInstantPopups(true);
 		pathField.setEnterAddsToHistory(false);
 		pathField.setSelectAllOnFocus(true);
 		
-		if (mode == BROWSER)
-		{
-			pathField.addKeyListener(new KeyAdapter()
-			{
-				@Override
-				public void keyReleased(KeyEvent e)
-				{
-					if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-					{
-						pathField.setText(VFSBrowser.this.path);
-					}
-				}
-			});
-		}
 
 		// because its preferred size can be quite wide, we
 		// don't want it to make the browser way too big,
@@ -253,7 +235,6 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			"vfs.browser.filter-enabled"));
 
 		filterCheckbox.addActionListener(actionHandler);
-		filterCheckbox.addKeyListener(keyListener);
 		filterCheckbox.setName("filter-checkbox");
 		if(mode != CHOOSE_DIRECTORY_DIALOG)
 		{
@@ -271,9 +252,30 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		filterEditor.setInstantPopups(true);
 		filterEditor.setSelectAllOnFocus(true);
 		filterEditor.addActionListener(actionHandler);
-		filterEditor.addKeyListener(keyListener);
 		filterField.setName("filter-field");
 		String filter;
+		if (mode == BROWSER)
+		{
+			DockableWindowManager dwm = view.getDockableWindowManager();
+			KeyListener keyListener = dwm.closeListener(NAME);
+			filterCheckbox.addKeyListener(keyListener);	
+			addKeyListener(keyListener);
+			filterEditor.addKeyListener(keyListener);
+			pathField.addKeyListener(keyListener);
+			// save the location on close of dockable.
+			pathField.addKeyListener(new KeyAdapter()
+			{
+				@Override
+				public void keyReleased(KeyEvent e)
+				{
+					if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
+					{
+						pathField.setText(VFSBrowser.this.path);
+					}
+				}
+			});
+		}
+
 		if(mode == BROWSER || !jEdit.getBooleanProperty(
 			"vfs.browser.currentBufferFilter"))
 		{
@@ -1160,6 +1162,19 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		}
 	} //}}}
 
+	//{{{ dispose() method
+	/** Disposes the browser, regardless of whether it is a dialog or a dockable
+	*/
+	public void dispose() {	
+		if (this.mode == BROWSER) {
+			ActionContext jac = jEdit.getActionContext();
+			EditAction action = jac.getAction("close-docking-area");
+			action.invoke(view);			
+		}
+		else {
+			GUIUtilities.getParentDialog(this).dispose();
+		}	
+	}//}}}
 
 	//{{{ move() method
 	public void move(String newPosition)

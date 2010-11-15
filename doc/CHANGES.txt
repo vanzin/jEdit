@@ -4,8 +4,8 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to Matthieu Casanova, cy6erGn0m, Bad Sector, jclopes, Dale Anson, Damien Radtke and Matthew Gilbert for contributing to
-this release
+Thanks to Matthieu Casanova, Alan Ezust, cy6erGn0m, Bad Sector, jclopes, Dale Anson, Damien Radtke
+and Matthew Gilbert for contributing to this release
 
 {{{ API Changes
 -New method TextArea.getVisibleLineText(screenLine) and
@@ -146,6 +146,8 @@ this release
 }}}
 {{{ UI
 - Updated ColorWellButton to use the dialog provided by JColorChooser rather than creating its own dialog since the JColorChooser dialog is much richer. (Dale Anson)
+
+- VFSBrowser escape handling fixed when used as a dialog (#3101808 - Alan Ezust)
 }}}
 {{{ Miscellaneous
 -Added a new menu item "New Macro" in Macros menu (patch #2983607 from Damien Radtke, Matthieu Casanova)
