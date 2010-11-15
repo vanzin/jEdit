@@ -1167,9 +1167,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	*/
 	public void dispose() {	
 		if (this.mode == BROWSER) {
-			ActionContext jac = jEdit.getActionContext();
-			EditAction action = jac.getAction("close-docking-area");
-			action.invoke(view);			
+			view.getDockableWindowManager().hideDockableWindow(NAME);			
 		}
 		else {
 			GUIUtilities.getParentDialog(this).dispose();
