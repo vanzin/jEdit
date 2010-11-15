@@ -30,6 +30,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.net.*;
 import java.util.*;
+
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.*;
 import org.gjt.sp.jedit.*;
@@ -484,6 +485,7 @@ class ToolBarEditDialog extends EnhancedDialog
 				}
 			}
 		}
+		Collections.sort(vec, new ActionSetCompare());
 		combo = new JComboBox(vec);
 		if (selectedItem != null)
 			combo.setSelectedItem(selectedItem);
@@ -761,4 +763,13 @@ class ToolBarEditDialog extends EnhancedDialog
 			}
 		}
 	} //}}}
+	class ActionSetCompare implements Comparator<ActionSet> {
+
+		@Override
+		public int compare(ActionSet o1, ActionSet o2)
+		{
+			return StandardUtilities.compareStrings(o1.getLabel(), o2.getLabel(), false);
+		}
+		
+	}
 } //}}}
