@@ -2,7 +2,7 @@ jEdit 4.4 version history
        (changes since jEdit 4.3)
 :encoding=UTF-8:
 
-{{{ Version 4.4pre1
+{{{ Version 4.4
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
 Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
