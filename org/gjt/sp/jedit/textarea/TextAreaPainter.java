@@ -268,11 +268,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	 */
 	public final void setStyles(SyntaxStyle[] styles)
 	{
-		// assumed this is called after a font render context is set up.
-		// changing font render context settings without a setStyles()
-		// call will not reset cached monospaced font info.
-		fonts.clear();
-
 		this.styles = styles;
 		styles[Token.NULL] = new SyntaxStyle(getForeground(),null,getFont());
 		repaint();
@@ -986,7 +981,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 		this.textArea = textArea;
 		antiAlias = new AntiAlias(0);
-		fonts = new HashMap();
 		extensionMgr = new ExtensionManager();
 
 		setAutoscrolls(true);
@@ -1018,7 +1012,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private final ExtensionManager extensionMgr;
 	private final PaintCaret caretExtension;
 	private FontRenderContext fontRenderContext;
-	private final Map fonts;
 	private Cursor hiddenCursor;
 	private boolean defaultCursor = true;
 	//}}}
