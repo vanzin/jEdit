@@ -32,6 +32,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /**
@@ -69,16 +70,19 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		filter = new JTextField();
 		filter.getDocument().addDocumentListener(new DocumentListener()
 		{
+			@Override
 			public void changedUpdate(DocumentEvent e)
 			{
 				setFilter();
 			}
 
+			@Override
 			public void insertUpdate(DocumentEvent e)
 			{
 				setFilter();
 			}
 
+			@Override
 			public void removeUpdate(DocumentEvent e)
 			{
 				setFilter();
@@ -96,12 +100,14 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		caption.add(Box.createHorizontalStrut(6));
 		
 		JButton settings = new JButton(jEdit.getProperty("log-viewer.settings.label"));
-		settings.addActionListener(
-			new ActionListener(){
-				public void actionPerformed(ActionEvent ae) {
-					new LogSettings();
-				}
-			});
+		settings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent ae)
+			{
+				new LogSettings();
+			}
+		});
 		caption.add(settings);
 
 		ListModel model = Log.getLogListModel();
@@ -167,6 +173,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ focusOnDefaultComponent() method
+	@Override
 	public void focusOnDefaultComponent()
 	{
 		list.requestFocus();
@@ -174,7 +181,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 
 	//{{{ Private members
 	private ListHandler listHandler;
-	private final FilteredListModel listModel;
+	private final FilteredListModel<ListModel> listModel;
 	private final JList list;
 	private final JButton copy;
 	private final JCheckBox tail;
@@ -215,8 +222,9 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	private void scrollLaterIfRequired()
 	{
 		if (tailIsOn)
-			SwingUtilities.invokeLater(new Runnable()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					scrollToTail();
@@ -229,6 +237,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	//{{{ ActionHandler class
 	private class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			Object src = e.getSource();
@@ -270,16 +279,19 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	//{{{ ListHandler class
 	private class ListHandler implements ListDataListener
 	{
+		@Override
 		public void intervalAdded(ListDataEvent e)
 		{
 			contentsChanged(e);
 		}
 
+		@Override
 		public void intervalRemoved(ListDataEvent e)
 		{
 			contentsChanged(e);
 		}
 
+		@Override
 		public void contentsChanged(ListDataEvent e)
 		{
 			scrollLaterIfRequired();
@@ -302,8 +314,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		{
 			if(evt.getID() == MouseEvent.MOUSE_PRESSED)
 			{
-				startIndex = list.locationToIndex(
-								  evt.getPoint());
+				startIndex = list.locationToIndex(evt.getPoint());
 			}
 			super.processMouseEvent(evt);
 		}
@@ -340,6 +351,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 
 		// This is the only method defined by ListCellRenderer.
 		// We just reconfigure the JLabel each time we're called.
+		@Override
 		public Component getListCellRendererComponent(
 							      JList list,
 							      Object value,              // value to display
@@ -388,7 +400,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ MyFilteredListModel
-	private static class MyFilteredListModel extends FilteredListModel
+	private static class MyFilteredListModel extends FilteredListModel<ListModel>
 	{
 		MyFilteredListModel(ListModel model)
 		{
@@ -427,6 +439,7 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 			super(jEdit.getActiveView(), jEdit.getProperty("log-viewer.dialog.title"));
 			AbstractOptionPane pane = new AbstractOptionPane(jEdit.getProperty("log-viewer.settings.label"))
 			{
+				@Override
 				protected void _init()
 				{
 					setBorder(BorderFactory.createEmptyBorder(11, 11, 12, 12));
@@ -472,28 +485,33 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 					
 					JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 					JButton okButton = new JButton(jEdit.getProperty("common.ok"));
-					okButton.addActionListener(
-						new ActionListener() {
-							public void actionPerformed(ActionEvent ae) {
-								save();	
-								LogSettings.this.setVisible(false);
-								LogSettings.this.dispose();
-							}
-						});
+					okButton.addActionListener(new ActionListener()
+					{
+						@Override
+						public void actionPerformed(ActionEvent ae)
+						{
+							save();
+							LogSettings.this.setVisible(false);
+							LogSettings.this.dispose();
+						}
+					});
 					JButton cancelButton = new JButton(jEdit.getProperty("common.cancel"));
-					cancelButton.addActionListener(
-						new ActionListener() {
-							public void actionPerformed(ActionEvent ae) {
-								LogSettings.this.setVisible(false);
-								LogSettings.this.dispose();
-							}
-						});
+					cancelButton.addActionListener(new ActionListener()
+					{
+						@Override
+						public void actionPerformed(ActionEvent ae)
+						{
+							LogSettings.this.setVisible(false);
+							LogSettings.this.dispose();
+						}
+					});
 					buttonPanel.add(okButton);
 					buttonPanel.add(cancelButton);
 					addComponent(buttonPanel, GridBagConstraints.HORIZONTAL);
 				}
 				
-				protected void _save() 
+				@Override
+				protected void _save()
 				{
 					jEdit.setIntegerProperty("log-viewer.maxlines", ((SpinnerNumberModel)maxLines.getModel()).getNumber().intValue());
 					
