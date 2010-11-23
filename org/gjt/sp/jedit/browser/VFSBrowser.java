@@ -42,6 +42,7 @@ import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.jedit.menu.MenuItemTextComparator;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /**
@@ -253,7 +254,6 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		filterEditor.setSelectAllOnFocus(true);
 		filterEditor.addActionListener(actionHandler);
 		filterField.setName("filter-field");
-		String filter;
 		if (mode == BROWSER)
 		{
 			DockableWindowManager dwm = view.getDockableWindowManager();
@@ -276,6 +276,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			});
 		}
 
+		String filter;
 		if(mode == BROWSER || !jEdit.getBooleanProperty(
 			"vfs.browser.currentBufferFilter"))
 		{
@@ -377,8 +378,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 		final String _path = path;
 
-		SwingUtilities.invokeLater(new Runnable()
+		ThreadUtilities.runInDispatchThread(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				setDirectory(_path);
@@ -387,6 +389,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	} //}}}
 
 	//{{{ focusOnDefaultComponent() method
+	@Override
 	public void focusOnDefaultComponent()
 	{
 		// pathField.requestFocus();		
@@ -610,6 +613,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		browserView.saveExpansionState();
 		Runnable delayedAWTRequest = new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				endRequest();
@@ -703,6 +707,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 				null,null));
 		}
 
+		// Do not change this until all VFS Browser tasks are
+		// done in ThreadUtilities
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
@@ -737,6 +743,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			BrowserIORequest.RENAME,this,
 			session,vfs,from,to,null));
 
+		// Do not change this until all VFS Browser tasks are
+		// done in ThreadUtilities
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
@@ -770,6 +778,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			BrowserIORequest.RENAME,this,
 			session,vfs,from,to,null));
 
+		// Do not change this until all VFS Browser tasks are
+		// done in ThreadUtilities
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
@@ -817,6 +827,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			BrowserIORequest.MKDIR,this,
 			session,vfs,newDirectory,null,null));
 
+		// Do not change this until all VFS Browser tasks are
+		// done in ThreadUtilities
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
@@ -985,6 +997,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			setFilenameFilter(null);
 
 		setDirectory(MiscUtilities.getParentOfPath(path));
+		// Do not change this until all VFS Browser tasks are
+		// done in ThreadUtilities
 		VFSManager.runInAWTThread(new Runnable()
 		{
 			public void run()
@@ -997,7 +1011,6 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	//{{{ createPluginsMenu() method
 	public JComponent createPluginsMenu(JComponent pluginMenu, boolean showManagerOptions)
 	{
-		ActionHandler actionHandler = new ActionHandler();
 		if(showManagerOptions && getMode() == BROWSER)
 		{
 			pluginMenu.add(GUIUtilities.loadMenuItem("plugin-manager",false));
@@ -1165,16 +1178,20 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ dispose() method
 	/** Disposes the browser, regardless of whether it is a dialog or a dockable
 	*/
-	public void dispose() {	
-		if (this.mode == BROWSER) {
+	public void dispose()
+	{
+		if (mode == BROWSER)
+		{
 			view.getDockableWindowManager().hideDockableWindow(NAME);			
 		}
-		else {
+		else
+		{
 			GUIUtilities.getParentDialog(this).dispose();
 		}	
 	}//}}}
 
 	//{{{ move() method
+	@Override
 	public void move(String newPosition)
 	{
 		boolean horz = mode != BROWSER
@@ -1512,6 +1529,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 			finally
 			{
+				// Do not change this until all VFS Browser tasks are
+				// done in ThreadUtilities
 				VFSManager.runInAWTThread(new Runnable()
 				{
 					public void run()
@@ -1530,6 +1549,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ ActionHandler class
 	class ActionHandler implements ActionListener, ItemListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			if (isProcessingEvent)
@@ -1577,6 +1597,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 		}
 
+		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
 			if (isProcessingEvent)
@@ -1613,9 +1634,9 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		 */
 		private void resetLater()
 		{
-			SwingUtilities.invokeLater(
-				new Runnable()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						isProcessingEvent = false;
@@ -1815,6 +1836,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 		//{{{ ActionHandler class
 		class ActionHandler implements ActionListener
 		{
+			@Override
 			public void actionPerformed(ActionEvent evt)
 			{
 				String actionCommand = evt.getActionCommand();
@@ -1958,6 +1980,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			super(key);
 		}
 
+		@Override
 		public Object getItem()
 		{
 			if (current == null)
@@ -1973,6 +1996,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			return current;
 		}
 
+		@Override
 		public void setItem(Object item)
 		{
 			if (item == current)
@@ -2028,6 +2052,7 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			}
 		}
 
+		@Override
 		public Component getEditorComponent()
 		{
 			return this;
@@ -2058,18 +2083,20 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 	//{{{ DirectoriesOnlyFilter class
 	public static class DirectoriesOnlyFilter implements VFSFileFilter
 	{
-
+		@Override
 		public boolean accept(VFSFile file)
 		{
 			return file.getType() == VFSFile.DIRECTORY
 				|| file.getType() == VFSFile.FILESYSTEM;
 		}
 
+		@Override
 		public boolean accept(String url)
 		{
 			return false;
 		}
 
+		@Override
 		public String getDescription()
 		{
 			return jEdit.getProperty("vfs.browser.file_filter.dir_only");
