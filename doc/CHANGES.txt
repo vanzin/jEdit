@@ -131,6 +131,16 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  VFSManager.registerVFS(String protocol, VFS vfs)
  VFSManager.error(final Component comp, final String error, final Object[] args)
  VFSManager.getFilesystems()
+ VFSFile.name
+ VFSFile.path
+ VFSFile.symlinkPath
+ VFSFile.deletePath
+ VFSFile.type
+ VFSFile.length
+ VFSFile.hidden
+ VFSFile.canRead
+ VFSFile.canWrite
+
  (Matthieu Casanova)
 
 }}}

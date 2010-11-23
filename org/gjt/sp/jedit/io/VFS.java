@@ -41,7 +41,6 @@ import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ProgressObserver;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
-import org.gjt.sp.util.ThreadUtilities;
 import org.gjt.sp.util.WorkThread;
 //}}}
 
@@ -823,20 +822,7 @@ public abstract class VFS
 		public DirectoryEntry(String name, String path, String deletePath,
 			int type, long length, boolean hidden)
 		{
-			this.name = name;
-			this.path = path;
-			this.deletePath = deletePath;
-			this.symlinkPath = path;
-			this.type = type;
-			this.length = length;
-			this.hidden = hidden;
-			if(path != null)
-			{
-				// maintain backwards compatibility
-				VFS vfs = VFSManager.getVFSForPath(path);
-				canRead = ((vfs.getCapabilities() & READ_CAP) != 0);
-				canWrite = ((vfs.getCapabilities() & WRITE_CAP) != 0);
-			}
+			super(name, path, deletePath, type, length, hidden);
 		} //}}}
 	} //}}}
 
