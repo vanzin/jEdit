@@ -39,6 +39,11 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  Buffer.getMarkersPath(VFS vfs)
  Buffer.insertString(int offset, String str, AttributeSet attr)
  Buffer.editSyntaxStyle(JEditTextArea textArea)
+ Buffer.addBufferChangeListener(BufferChangeListener listener)
+ Buffer.removeBufferChangeListener(BufferChangeListener listener)
+ Buffer.addBufferChangeListener(BufferChangeListener listener)
+ BufferChangeAdapter
+ BufferChangeListener
  BufferIORequest.UTF8_MAGIC_1
  BufferIORequest.UTF8_MAGIC_2
  BufferIORequest.UTF8_MAGIC_3

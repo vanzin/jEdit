@@ -34,12 +34,9 @@ import java.util.Vector;
 
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import javax.swing.text.AttributeSet;
 import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.buffer.BufferChangeListener;
-import org.gjt.sp.jedit.buffer.BufferListener;
 import org.gjt.sp.jedit.buffer.BufferUndoListener;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -47,18 +44,14 @@ import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
 import org.gjt.sp.jedit.bufferset.BufferSet;
-import org.gjt.sp.jedit.gui.StyleEditor;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.options.GeneralOptionPane;
-import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
-import org.gjt.sp.jedit.syntax.Token;
-import org.gjt.sp.jedit.textarea.JEditTextArea;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.gjt.sp.jedit.visitors.SaveCaretInfoVisitor;
 import org.gjt.sp.util.IntegerArray;
@@ -933,43 +926,6 @@ public class Buffer extends JEditBuffer
 			return GUIUtilities.loadIcon("new.gif");
 		else
 			return GUIUtilities.loadIcon("normal.gif");
-	} //}}}
-
-	//}}}
-
-	//{{{ Buffer events
-
-	//{{{ addBufferChangeListener() method
-	/**
-	 * @deprecated Call {@link JEditBuffer#addBufferListener(BufferListener)}.
-	 */
-	@Deprecated
-	public void addBufferChangeListener(BufferChangeListener listener)
-	{
-		addBufferListener(new BufferChangeListener.Adapter(listener), NORMAL_PRIORITY);
-	} //}}}
-
-	//{{{ removeBufferChangeListener() method
-	/**
-	 * @deprecated Call {@link JEditBuffer#removeBufferListener(BufferListener)}.
-	 */
-	@Deprecated
-	public void removeBufferChangeListener(BufferChangeListener listener)
-	{
-		BufferListener[] listeners = getBufferListeners();
-
-		for(int i = 0; i < listeners.length; i++)
-		{
-			BufferListener l = listeners[i];
-			if(l instanceof BufferChangeListener.Adapter)
-			{
-				if(((BufferChangeListener.Adapter)l).getDelegate() == listener)
-				{
-					removeBufferListener(l);
-					return;
-				}
-			}
-		}
 	} //}}}
 
 	//}}}
