@@ -67,11 +67,10 @@ import org.gjt.sp.util.WorkThread;
  *
  * Methods whose names are prefixed with "_" expect to be given a
  * previously-obtained session object. A session must be obtained from the AWT
- * thread in one of two ways:
+ * thread this method:
  *
  * <ul>
  * <li>{@link #createVFSSession(String,Component)}</li>
- * <li>{@link #showBrowseDialog(Object[],Component)}</li>
  * </ul>
  *
  * When done, the session must be disposed of using
@@ -86,7 +85,6 @@ import org.gjt.sp.util.WorkThread;
  * <li>{@link #insert(View,Buffer,String)}</li>
  * <li>{@link #load(View,Buffer,String)}</li>
  * <li>{@link #save(View,Buffer,String)}</li>
- * <li>{@link #showBrowseDialog(Object[],Component)}</li>
  * </ul>
  *
  * All remaining methods are required to be thread-safe in subclasses.
@@ -263,25 +261,6 @@ public abstract class VFS
 	public String[] getExtendedAttributes()
 	{
 		return extAttrs;
-	} //}}}
-
-	//{{{ showBrowseDialog() method
-	/**
-	 * Displays a dialog box that should set up a session and return
-	 * the initial URL to browse.
-	 * @param session Where the VFS session will be stored
-	 * @param comp The component that will parent error dialog boxes
-	 * @return The URL
-	 * @since jEdit 2.7pre1
-	 * @deprecated This function is not used in the jEdit core anymore,
-	 *             so it doesn't have to be provided anymore. If you want
-	 *             to use it for another purpose like in the FTP plugin,
-	 *             feel free to do so.
-	 */
-	@Deprecated
-	public String showBrowseDialog(Object[] session, Component comp)
-	{
-		return null;
 	} //}}}
 
 	//{{{ getFileName() method
@@ -751,18 +730,6 @@ public abstract class VFS
 		Component comp)
 		throws IOException
 	{
-		return _listDirectory(session,directory,comp);
-	} //}}}
-
-	//{{{ _listDirectory() method
-	/**
-	 * @deprecated Use <code>_listFiles()</code> instead.
-	 */
-	@Deprecated
-	public DirectoryEntry[] _listDirectory(Object session, String directory,
-		Component comp)
-		throws IOException
-	{
 		VFSManager.error(comp,directory,"vfs.not-supported.list",new String[] { name });
 		return null;
 	} //}}}
@@ -781,49 +748,7 @@ public abstract class VFS
 		Component comp)
 		throws IOException
 	{
-		return _getDirectoryEntry(session,path,comp);
-	} //}}}
-
-	//{{{ _getDirectoryEntry() method
-	/**
-	 * Returns the specified directory entry.
-	 * @param session The session get it with {@link VFS#createVFSSession(String, Component)}
-	 * @param path The path
-	 * @param comp The component that will parent error dialog boxes
-	 * @exception IOException if an I/O error occurred
-	 * @return The specified directory entry, or null if it doesn't exist.
-	 * @since jEdit 2.7pre1
-	 * @deprecated Use <code>_getFile()</code> instead.
-	 */
-	@Deprecated
-	public DirectoryEntry _getDirectoryEntry(Object session, String path,
-		Component comp)
-		throws IOException
-	{
 		return null;
-	} //}}}
-
-	//{{{ DirectoryEntry class
-	/**
-	 * @deprecated Use <code>VFSFile</code> instead.
-	 */
-	@Deprecated
-	public static class DirectoryEntry extends VFSFile
-	{
-		//{{{ DirectoryEntry constructor
-		/**
-		 * @since jEdit 4.2pre2
-		 */
-		public DirectoryEntry()
-		{
-		} //}}}
-
-		//{{{ DirectoryEntry constructor
-		public DirectoryEntry(String name, String path, String deletePath,
-			int type, long length, boolean hidden)
-		{
-			super(name, path, deletePath, type, length, hidden);
-		} //}}}
 	} //}}}
 
 	//{{{ _delete() method
@@ -1004,7 +929,7 @@ public abstract class VFS
 	//{{{ DirectoryEntryCompare class
 	/**
 	 * Implementation of {@link Comparator}
-	 * interface that compares {@link VFS.DirectoryEntry} instances.
+	 * interface that compares {@link VFSFile} instances.
 	 * @since jEdit 4.2pre1
 	 */
 	public static class DirectoryEntryCompare implements Comparator<VFSFile>

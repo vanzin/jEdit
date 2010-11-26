@@ -133,7 +133,11 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile)
  jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile, Hashtable props)
  jEdit.createTextArea()
+ VFS.DirectoryEntry
  VFS.VFS(String name)
+ VFS.showBrowseDialog(Object[] session, Component comp)
+ VFS._listDirectory(Object session, String directory, Component comp)
+ VFS._getDirectoryEntry(Object session, String path, Component comp)
  VFSManager.getVFSByName(String name)
  VFSManager.registerVFS(String protocol, VFS vfs)
  VFSManager.error(final Component comp, final String error, final Object[] args)

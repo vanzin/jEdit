@@ -380,7 +380,7 @@ public class FileVFS extends VFS
 	{
 		if(path.equals("/") && OperatingSystem.isUnix())
 		{
-			return new VFS.DirectoryEntry(path,path,path,
+			return new VFSFile(path,path,path,
 				VFSFile.DIRECTORY,0L,false);
 		}
 
