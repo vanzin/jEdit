@@ -155,6 +155,7 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  VFSFile.hidden
  VFSFile.canRead
  VFSFile.canWrite
+ ReadWriteLock
 
  (Matthieu Casanova)
 
