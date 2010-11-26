@@ -44,6 +44,8 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  Buffer.addBufferChangeListener(BufferChangeListener listener)
  BufferChangeAdapter
  BufferChangeListener
+ BufferIORequest.GZIP_MAGIC_1
+ BufferIORequest.GZIP_MAGIC_2
  BufferIORequest.UTF8_MAGIC_1
  BufferIORequest.UTF8_MAGIC_2
  BufferIORequest.UTF8_MAGIC_3
