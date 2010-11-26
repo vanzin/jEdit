@@ -822,16 +822,6 @@ public class MiscUtilities
 		return buf.toString();
 	} //}}}
 
-	//{{{ compareVersions() method
-	/**
-	 * @deprecated Call {@link StandardUtilities#compareStrings(String, String, boolean)} instead
-	 */
-	@Deprecated
-	public static int compareVersions(String v1, String v2)
-	{
-		return StandardUtilities.compareStrings(v1,v2,false);
-	} //}}}
-
 	//{{{ compareStrings() method
 	/**
 	 * Compares two strings.<p>
@@ -935,34 +925,7 @@ loop:		for(;;)
 
 	//}}}
 
-	//{{{ quicksort() deprecated methods
-	/**
-	 * Sorts the specified array. Equivalent to calling
-	 * <code>Arrays.sort()</code>.
-	 * @param obj The array
-	 * @param compare Compares the objects
-	 * @since jEdit 4.0pre4
-	 * @deprecated use <code>Arrays.sort()</code>
-	 */
-	@Deprecated
-	public static void quicksort(Object[] obj, Comparator compare)
-	{
-		Arrays.sort(obj,compare);
-	}
-
-	/**
-	 * Sorts the specified list.
-	 * @param list The list
-	 * @param compare Compares the objects
-	 * @since jEdit 4.0pre4
-	 * @deprecated <code>Collections.sort()</code>
-	 */
-	@Deprecated
-	public static void quicksort(List list, Comparator compare)
-	{
-		Collections.sort(list,compare);
-	}
-
+	//{{{ quicksort() deprecated method
 	/**
 	 * Sorts the specified vector.
 	 * @param vector The vector
