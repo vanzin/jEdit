@@ -103,17 +103,6 @@ public class HistoryModel extends DefaultListModel
 		return super.removeElement(obj);
 	} //}}}
 
-	//{{{ clear() method
-	/**
-	 * @deprecated Call <code>removeAllElements()</code> instead.
-	 */
-	@Override
-	@Deprecated
-	public void clear()
-	{
-		removeAllElements();
-	} //}}}
-
 	//{{{ removeAllElements() method
 	@Override
 	public void removeAllElements()

@@ -17,6 +17,7 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  (Matthieu Casanova)
  
 -Removed Deprecated apis :
+ HistoryModel.clear()
  JEditTextArea.getSelectionStart()
  JEditTextArea.getSelectionStart(int line)
  JEditTextArea.getSelectionStartLine()
