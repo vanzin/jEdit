@@ -111,14 +111,19 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  JarClassLoader.getZipFile()
  MiscUtilities.charsToEscapes(String str)
  MiscUtilities.charsToEscapes(String str, String toEscape)
+ MiscUtilities.compareStrings(String str1, String str2, boolean ignoreCase)
+ MiscUtilities.StringCompare
+ MiscUtilities.StringICaseCompare
  MiscUtilities.getLeadingWhiteSpace(String str)
  MiscUtilities.getTrailingWhiteSpace(String str)
  MiscUtilities.getVirtualWidth(Segment seg, int tabSize)
  MiscUtilities.getOffsetOfVirtualColumn(Segment seg, int tabSize, int column, int[] totalVirtualWidth)
  MiscUtilities.createWhiteSpace(int len, int tabSize, int start)
  MiscUtilities.globToRE(String glob)
+ MiscUtilities.quicksort(Vector vector, Compare compare)
  MiscUtilities.quicksort(Vector vector, Comparator compare)
  MiscUtilities.quicksort(Object[] obj, Compare compare)
+ MiscUtilities.Compare
  MiscUtilities.MenuItemCompare
  MiscUtilities.getEncodings()
  MiscUtilities.parseXML(InputStream in, DefaultHandler handler)

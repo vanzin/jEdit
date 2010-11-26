@@ -35,7 +35,6 @@ import java.util.regex.Pattern;
 
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.IOUtilities;
 
 import org.gjt.sp.jedit.buffer.JEditBuffer;
@@ -52,16 +51,6 @@ import org.gjt.sp.jedit.buffer.JEditBuffer;
  * <li>{@link #getParentOfPath(String)}</li>
  * <li>{@link #constructPath(String,String)}</li>
  * </ul>
- * <b>String comparison:</b><p>
-
- * A {@link #compareStrings(String,String,boolean)} method that unlike
- * <function>String.compareTo()</function>, correctly recognizes and handles
- * embedded numbers.<p>
- *
- * For example, you might call:<p>
- *
- * <code>Arrays.sort(myListOfStrings,
- *     new MiscUtilities.StringICaseCompare());</code>
  *
  * @author Slava Pestov
  * @author John Gellene (API documentation)
@@ -822,28 +811,6 @@ public class MiscUtilities
 		return buf.toString();
 	} //}}}
 
-	//{{{ compareStrings() method
-	/**
-	 * Compares two strings.<p>
-	 *
-	 * Unlike <function>String.compareTo()</function>,
-	 * this method correctly recognizes and handles embedded numbers.
-	 * For example, it places "My file 2" before "My file 10".<p>
-	 *
-	 * @param str1 The first string
-	 * @param str2 The second string
-	 * @param ignoreCase If true, case will be ignored
-	 * @return negative If str1 &lt; str2, 0 if both are the same,
-	 * positive if str1 &gt; str2
-	 * @since jEdit 4.0pre1
-	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities#compareStrings(String, String, boolean)}
-	 */
-	@Deprecated
-	public static int compareStrings(String str1, String str2, boolean ignoreCase)
-	{
-		return StandardUtilities.compareStrings(str1, str2, ignoreCase);
-	} //}}}
-
 	//{{{ getLongestPrefix() methods
 	/**
 	 * Returns the longest common prefix in the given set of strings.
@@ -924,62 +891,6 @@ loop:		for(;;)
 	} //}}}
 
 	//}}}
-
-	//{{{ quicksort() deprecated method
-	/**
-	 * Sorts the specified vector.
-	 * @param vector The vector
-	 * @param compare Compares the objects
-	 * @deprecated <code>Collections.sort()</code>
-	 */
-	@Deprecated
-	public static void quicksort(Vector vector, Compare compare)
-	{
-		Collections.sort(vector,compare);
-	} //}}}
-
-	//{{{ Compare deprecated interface
-	/**
-	 * An interface for comparing objects. This is a hold-over from
-	 * they days when jEdit had its own sorting API due to JDK 1.1
-	 * compatibility requirements. Use <code>java.util.Comparator</code>
-	 * instead.
-	 * @deprecated
-	 */
-	@Deprecated
-	public interface Compare extends Comparator
-	{
-		int compare(Object obj1, Object obj2);
-	} //}}}
-
-	//{{{ StringCompare deprecated class
-	/**
-	 * Compares strings.
-	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities.StringCompare}
-	 */
-	@Deprecated
-	public static class StringCompare implements Compare
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			return StandardUtilities.compareStrings(obj1.toString(),
-				obj2.toString(),false);
-		}
-	} //}}}
-
-	//{{{ StringICaseCompare deprecated class
-	/**
-	 * Compares strings ignoring case.
-	 * @deprecated use {@link org.gjt.sp.util.StandardUtilities.StringCompare}
-	 */
-	@Deprecated
-	public static class StringICaseCompare implements Comparator<Object>
-	{
-		public int compare(Object obj1, Object obj2)
-		{
-			return StandardUtilities.compareStrings(obj1.toString(), obj2.toString(), true);
-		}
-	} //}}}
 
 	//{{{ buildToVersion() method
 	/**
