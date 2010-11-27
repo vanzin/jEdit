@@ -23,13 +23,11 @@
 package org.gjt.sp.jedit;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
-import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.Vector;
 
 /**
  * The abstract base class that every plugin must implement.
@@ -767,26 +765,6 @@ public abstract class EditPlugin
 
 		return null;
 	} //}}}
-
-	//{{{ Deprecated methods
-
-	//{{{ createMenuItems() method
-	/**
-	 * @deprecated Instead of overriding this method, define properties
-	 * as specified in the description of this class.
-	 */
-	@Deprecated
-	public void createMenuItems(Vector menuItems) {} //}}}
-
-	//{{{ createOptionPanes() method
-	/**
-	 * @deprecated Instead of overriding this method, define properties
-	 * as specified in the description of this class.
-	 */
-	@Deprecated
-	public void createOptionPanes(OptionsDialog optionsDialog) {} //}}}
-
-	//}}}
 
 	//{{{ Package-private members
 	PluginJAR jar;

@@ -76,21 +76,7 @@ public class PluginOptions extends OptionsDialog
 				continue;
 
 			String className = ep.getClassName();
-			if(jEdit.getProperty("plugin." + className + ".activate") == null)
-			{
-				// Old API
-				try
-				{
-					ep.createOptionPanes(this);
-				}
-				catch(Throwable t)
-				{
-					Log.log(Log.ERROR, ep,
-						"Error creating option pane");
-					Log.log(Log.ERROR, ep, t);
-				}
-			}
-			else
+			if (jEdit.getProperty("plugin." + className + ".activate") != null)
 			{
 				String optionPane = jEdit.getProperty(
 					"plugin." + className + ".option-pane");

@@ -17,6 +17,8 @@ Damien Radtke and Matthew Gilbert for contributing to this release
  (Matthieu Casanova)
  
 -Removed Deprecated apis :
+ EditPlugin.createMenuItems(Vector menuItems)
+ EditPlugin.createOptionPanes(OptionsDialog optionsDialog)
  HistoryModel.clear()
  JEditTextArea.getSelectionStart()
  JEditTextArea.getSelectionStart(int line)
