@@ -11,15 +11,6 @@ for contributing to this release.
   in a buffer that uses an edit mode that has no line comment
   (Matthieu Casanova #2138160)
   
-- When saving a buffer the autoreload option of the buffer was overridden
-  by global settings (Matthieu Casanova #2999966)
-
-- Improve indentation settings of the shellscript edit mode.
-  (Björn "Vampire" Kautler #3005463)
-
-- Removed the duplicated "Architecture" line from the Debian control file.
-  (Björn "Vampire" Kautler #2999456)
-
 - In the manage panel, when selecting a library, the description panel do
   not contains "null" for every fields and the title is set to the jar name
   instead of "null" (Matthieu Casanova)
@@ -29,6 +20,13 @@ for contributing to this release.
 
 - Fix paste into Find dialog does nothing on Mac with non Aqua L&F
   (SF.net bug #2959723 - Seph Soliman)
+
+- When having two monitors the About dialog was appearing between them, one half
+  on each monitor. Now it's position is relative to the active View
+  (Matthieu Casanova)
+
+- Using regex style encoding auto detectors, StringIndexOutOfBoundsException
+  could happen when loading a file. (Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous
@@ -126,10 +124,6 @@ Anson)
 
 }}}
   
-- When having two monitors the About dialog was appearing between them, one half
-  on each monitor. Now it's position is relative to the active View
-  (Matthieu Casanova)
-
 }}}
 
 {{{ Version 4.3
@@ -149,10 +143,6 @@ Alan Ezust, Eric Berry, and Eric Le Lay for contributing to this release.
 
 - Fixed bug #2907139: Upgrading from 4.2final to 4.3pre18 causes freeze at
   startup (Shlomy Reinstein)
-
-
-- Using regex style encoding auto detectors, StringIndexOutOfBoundsException
-  could happen when loading a file. (Kazutoshi Satoda)
 
 }}}
 {{{ Miscellaneous
