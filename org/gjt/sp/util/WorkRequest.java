@@ -26,7 +26,7 @@ package org.gjt.sp.util;
  * A subclass of the Runnable interface.
  * @since jEdit 2.6pre1
  * @deprecated
- * @see org.gjt.sp.util.ThreadUtilities 
+ * @see org.gjt.sp.util.Task 
  * @version $Id$
  */
 @Deprecated
