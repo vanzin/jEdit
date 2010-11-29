@@ -816,7 +816,7 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre12
 	 */
 	public static int listConfirm(Component comp, String name, String[] args,
-		Object[] listModel, List<?> selectedItems)
+		Object[] listModel, List selectedItems)
 	{
 		JList list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
