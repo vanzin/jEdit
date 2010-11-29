@@ -32,7 +32,7 @@ if (color != null){
 	if(buffer.isReadOnly())
 		Macros.error(view, "Buffer is read-only.");
 	else
-		textArea.setSelectedText(GUIUtilities.getColorHexString(color));
+		textArea.setSelectedText(SyntaxUtilities.getColorHexString(color));
 }
 
 /*
