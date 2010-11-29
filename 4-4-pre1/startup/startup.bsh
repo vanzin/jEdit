@@ -1,0 +1,134 @@
+// Slava Pestov's startup script. Doesn't have much in it yet.
+// :folding=explicit:expandFolds=1:
+
+//Most of the file is commented out. Note that the hacks here are
+//not guaranteed to work, might break various features in odd ways,
+//etc.
+
+// Print something useful...
+Log.log(Log.DEBUG,scriptPath,"BeanShell interpreter version "
+	+ this.interpreter.VERSION);
+
+/*{{{ Some useful scripting aids */
+/* If you are a plugin developer you will like this. After calling
+ * ac(), you can access private variables and methods in BeanShell.
+ */
+ac()
+{
+	setAccessibility(true);
+}
+
+/* For the mathematicians among us. */
+e = Math.E;
+pi = Math.PI;
+
+/* I use this for scripting various search and replace operations. */
+s(search,replace,flags)
+{
+	SearchAndReplace.setSearchString(search);
+	SearchAndReplace.setReplaceString(replace);
+	SearchAndReplace.setBeanShellReplace(flags.indexOf('b') != -1);
+	SearchAndReplace.setIgnoreCase(flags.indexOf('i') != -1);
+	SearchAndReplace.setRegexp(flags.indexOf('r') != -1);
+	SearchAndReplace.setSearchFileSet(new CurrentBufferSet());
+	SearchAndReplace.replaceAll(view);
+} /*}}}*/
+
+/*{{{ Setting environment variables on Console plugin */
+
+/* If you use the Console plugin, and want to set some environment
+ * variables for programs you run in the Console, without having to
+ * change operating system specific-scripts (as if the below method is
+ * any easier...)
+ */
+/* if(jEdit.getPlugin("console.ConsolePlugin") != null)
+{
+	setenv("CVS_RSH","ssh");
+	// setenv("PATH",getenv("PATH") + ":" + getenv("HOME") + "/bin");
+} */
+
+/*}}}*/
+
+/*{{{ Hang on copy/paste workaround */
+
+/* If your Java version has shitty clipboard support you can have jEdit
+ * use an internal storage area for the clipboard.
+ *
+ * A rare bug in Sun's Java virtual machine on Linux, for example, can
+ * make the JVM (or the AWT thread at least) hang while trying to copy
+ * or paste.
+ */
+//Registers.setRegister('$',new Registers.StringRegister());
+//Registers.setRegister('%',new Registers.StringRegister());
+
+/*}}}*/
+
+/*{{{ Remapping modifier keys part I */
+
+/* The below is the default, swap the items around to
+ * change meaning of C+, A+, M+, S+.
+ */
+//KeyEventTranslator.setModifierMapping(InputEvent.CTRL_MASK,
+//	InputEvent.ALT_MASK, InputEvent.META_MASK,
+//	InputEvent.SHIFT_MASK);
+
+/* ... and this the MacOS default: */
+//KeyEventTranslator.setModifierMapping(InputEvent.META_MASK,  /* == C+ */
+//	InputEvent.CTRL_MASK,  /* == A+ */
+//	InputEvent.ALT_MASK,   /* == M+ */
+//	InputEvent.SHIFT_MASK  /* == S+ */);
+
+/*}}}*/
+
+/*{{{ Remapping modifier keys part II */
+
+/* Note if you chose to make use of the M+ (option key) prefix on MacOS, you
+ * will need to disable a little piece of code: */
+//Debug.ALT_KEY_PRESSED_DISABLED = false;
+/* Otherwise M+ will be ignored for the purposes of keyboard shortcuts. */
+
+/* But if you enable this, you might find that Option+8 for example invokes your
+ * macro but also inserts a bulletpoint, as per standard Macintosh keyboard
+ * behavior. To disable the Option key for inserting special high ASCII
+ * characters, uncomment this. Note that it has wider implications, notably
+ * DROVAK keyboard shortcuts will be mapped as if the keyboard was QWERTY. */
+//Debug.ALTERNATIVE_DISPATCHER = false;
+
+/*}}}*/
+
+/*{{{ Workaround for buggy international key handling */
+
+/* If international keys do not work in the text area, sometimes it is possible
+ * to workaround the problem by adding translation mappings: */
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("CS",KeyEvent.VK_COMMA,'\0'),
+//	new KeyEventTranslator.Key("C",KeyEvent.VK_SEMICOLON,'\0')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key(null,KeyEvent.VK_CLOSE_BRACKET,'\0'),
+//	new KeyEventTranslator.Key(null,0,'"')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("S",KeyEvent.VK_CLOSE_BRACKET,'\0'),
+//	new KeyEventTranslator.Key(null,0,(char)0x5e)
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("C",KeyEvent.VK_CLOSE_BRACKET,'\0'),
+//	new KeyEventTranslator.Key(null,0,'~')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key(null,KeyEvent.VK_EQUALS,'\0'),
+//	new KeyEventTranslator.Key(null,0,'\'')
+// );
+
+// KeyEventTranslator.translateKey(
+//	new KeyEventTranslator.Key("S",KeyEvent.VK_EQUALS,'\0'),
+//	new KeyEventTranslator.Key(null,0,'`')
+// );
+
+/*}}}*/
