@@ -25,6 +25,42 @@
 
 // import statements
 import javax.swing.border.*;
+import org.gjt.sp.util.Log;
+import java.util.Comparator;
+
+public class PluginDependency
+{
+    public String className;
+    public String simpleName;
+    public String version;
+    
+    public PluginDependency(String cn, String v)
+    {
+        className = cn;
+        version = v;
+        simpleName = jEdit.getProperty("plugin." + cn + ".name");
+        if(simpleName != null)
+        {
+            simpleName = simpleName.trim();
+        }
+        if(simpleName == null || simpleName.length() <= 0)
+        {
+            int lastDotIndex = cn.lastIndexOf(".");
+            simpleName = cn.substring(lastDotIndex + 1);
+        }
+        Log.log(Log.DEBUG, this, "new PluginDependency class: " + className + " | name: " + simpleName + " | version: " + version);
+    }
+}
+
+public class PluginDependencyNameComparator implements Comparator
+{
+    public int compare(Object o1, Object o2)
+    {
+        PluginDependency pd1 = (PluginDependency)o1;
+        PluginDependency pd2 = (PluginDependency)o2;
+        return pd1.simpleName.compareTo(pd2.simpleName);
+    }
+}
 
 // main routine
 void pluginTextDialog( View view, Buffer buffer )
@@ -92,11 +128,13 @@ void pluginTextDialog( View view, Buffer buffer )
                 }
                 else if( parts[0].equals( "plugin" ) )
                 {
-                    pluginDependencies.add( parts[1] + " " + parts[2] );
+                    Log.log(Log.DEBUG, this, "required plugin name - class: " + parts[1] + " | name: " + jEdit.getProperty("plugin." + parts[1] + ".name"));
+                    pluginDependencies.add(new PluginDependency(parts[1], parts[2]));
                 }
                 else if( parts[0].equals( "optional" ) && parts[1].equals( "plugin" ) )
                 {
-                    optionalPluginDependencies.add( parts[2] + " " + parts[3] );
+                    Log.log(Log.DEBUG, this, "optional plugin name - class: " + parts[2] + " | name: " + jEdit.getProperty("plugin." + parts[2] + ".name"));
+                    optionalPluginDependencies.add(new PluginDependency(parts[2], parts[3]));
                 }
                 else
                 {
@@ -185,15 +223,20 @@ void pluginTextDialog( View view, Buffer buffer )
     propsPanel.add( new JLabel( jEditDependency ) );
     propsPanel.add( new JLabel( "JDK Dependency" ) );
     propsPanel.add( new JLabel( javaDependency ) );
+    PluginDependencyNameComparator comparator = new PluginDependencyNameComparator();
+    Collections.sort(pluginDependencies, comparator);
+    Collections.sort(optionalPluginDependencies, comparator);
     for( int i=0; i<pluginDependencies.size(); i++ )
     {
         propsPanel.add( new JLabel( "Depends on" ) );
-        propsPanel.add( new JLabel( pluginDependencies.get( i ).toString() ) );
+        PluginDependency requiredPlugin = pluginDependencies.get( i );
+        propsPanel.add( new JLabel( requiredPlugin.simpleName + " " + requiredPlugin.version ) );
     }
     for( int i=0; i<optionalPluginDependencies.size(); i++ )
     {
         propsPanel.add( new JLabel( "Optional" ) );
-        propsPanel.add( new JLabel( optionalPluginDependencies.get( i ).toString() ) );
+        PluginDependency optionalPlugin = optionalPluginDependencies.get( i );
+        propsPanel.add( new JLabel( optionalPlugin.simpleName + " " + optionalPlugin.version ) );
     }
     content.add( propsPanel, "Center" );
 
@@ -259,76 +302,6 @@ void pluginTextDialog( View view, Buffer buffer )
         }
         dialog.dispose();
     }
-    
-    boolean validateVersions()
-    {
-    	 boolean valid = true;
-    	 StringBuilder builder = new StringBuilder();
-    	 builder.append(
-    	 	 "There are some inconsistencies in your plugin's requirements. The\n" +
-    	 	 "version numbers below don't match what you are working with in\n" +
-    	 	 "your installation of jEdit.\n\n");
-    	 
-    	 // check jEdit dependency against running build.
-    	 String build = jEdit.getBuild();
-    	 if(!build.equals(jEditDependency))
-    	 {
-    	 	 valid = false;
-    	 	 builder.append("      jEdit - Required: " + jEditDependency + " - Running: " + build + "\n");
-    	 }
-    	 
-    	 // check required plugin dependencies.
-    	 for( int i = 0; i < pluginDependencies.size(); i++ )
-		 {
-		     String plugin = pluginDependencies.get(i);
-		     String[] pluginParts = plugin.split("\\s+");
-		     String pluginClass = pluginParts[0];
-		     String pluginVersion = pluginParts[1];
-		     String installed = jEdit.getProperty("plugin." + pluginClass + ".version").trim();
-		     if(!installed.equals(pluginVersion))
-		     {
-		         valid = false;
-		         builder.append("      " + pluginClass + " - Required: " + pluginVersion + " - Running: " + installed + "\n");
-		     }
-		 }
-		 
-		 // check optional plugin dependencies.
-    	 for( int i = 0; i < optionalPluginDependencies.size(); i++ )
-		 {
-		     String plugin = optionalPluginDependencies.get(i);
-			 String[] pluginParts = plugin.split("\\s+");
-		     String pluginClass = pluginParts[0];
-		     String pluginVersion = pluginParts[1];
-		     String installed = jEdit.getProperty("plugin." + pluginClass + ".version").trim();
-		     if(!installed.equals(pluginVersion))
-		     {
-		         valid = false;
-		         builder.append("      " + pluginClass + " - Optional: " + pluginVersion + " - Running: " + installed + "\n");
-		     }
-		 }
-    	 
-    	 if(!valid)
-    	 {
-    	 	 builder.append("\n\n" +
-    	 	 	 "Note that your plugin will be tested against the latest released\n" +
-    	 	 	 "versions of jEdit and your plugin's dependencies before it is\n" +
-    	 	 	 "released.\n\n" +
-    	 	 	 "Do you want to continue creating this announcement, or would you\n" +
-    	 	 	 "like to cancel it, and update the version numbers?\n\n" +
-    	 	 	 "       \"Yes\" to create announcement as is.\n" +
-    	 	 	 "       \"No\" to cancel and update props.");
-    	 	 int choice = JOptionPane.showConfirmDialog(
-    	 	 	 					view,
-    	 	 	 					builder.toString(),
-    	 	 	 					"Versions don't match",
-    	 	 	 					JOptionPane.YES_NO_OPTION,
-    	 	 	 					JOptionPane.WARNING_MESSAGE);
-    	 	 
-    	 	 // if user's chosen yes, then announcement is created.
-    	 	 valid = (choice == JOptionPane.YES_OPTION);
-    	 }
-    	 return valid;
-    }
 
     void createAnnouncement()
     {
@@ -356,7 +329,8 @@ void pluginTextDialog( View view, Buffer buffer )
             for( int i=0; i<pluginDependencies.size(); i++ )
             {
                 ret.append( "\n        " );
-                ret.append( pluginDependencies.get( i ) );
+                PluginDependency plugin = pluginDependencies.get( i );
+                ret.append( plugin.simpleName + " " + plugin.version + " (" + plugin.className + ")"  );
             }
         }
         if( optionalPluginDependencies.size() > 0 )
@@ -365,7 +339,8 @@ void pluginTextDialog( View view, Buffer buffer )
             for( int i=0; i<optionalPluginDependencies.size(); i++ )
             {
                 ret.append( "\n        " );
-                ret.append( optionalPluginDependencies.get( i ) );
+                PluginDependency plugin = optionalPluginDependencies.get( i );
+                ret.append( plugin.simpleName + " " + plugin.version + " (" + plugin.className + ")"  );
             }
         }
         if( shortDescription!=null && !shortDescription.equals( "" ) )
@@ -379,6 +354,81 @@ void pluginTextDialog( View view, Buffer buffer )
         ret.append( " }}}" );
         newbuf = jEdit.newFile( view );
         newbuf.insert( 0, ret.toString() );
+    }
+    
+    boolean pluginIsNotInstalled(PluginDependency dependency, String installed) {
+        if(installed != null) {
+            installed = installed.trim();
+            if(!installed.equals(dependency.version))
+            {
+                return true;
+            }
+        } else {
+            return true;
+        }
+        return false;
+    }
+    
+    boolean validateVersions()
+    {
+    	 boolean valid = true;
+    	 StringBuilder builder = new StringBuilder();
+    	 builder.append(
+    	 	 "There are some inconsistencies in your plugin's requirements. The\n" +
+    	 	 "version numbers below don't match what you are working with in\n" +
+    	 	 "your installation of jEdit.\n\n");
+    	 
+    	 // check jEdit dependency against running build.
+    	 String build = jEdit.getBuild();
+    	 if(!build.equals(jEditDependency))
+    	 {
+    	 	 valid = false;
+    	 	 builder.append("      jEdit - Required: " + jEditDependency + " - Running: " + build + "\n");
+    	 }
+    	 
+    	 // check required plugin dependencies.
+    	 for( int i = 0; i < pluginDependencies.size(); i++ )
+		 {
+		     PluginDependency plugin = pluginDependencies.get(i);
+		     String installed = jEdit.getProperty("plugin." + plugin.className + ".version");
+		     if(pluginIsNotInstalled(plugin, installed)) {
+		         valid = false;
+		         builder.append("      " + plugin.simpleName + " - Required: " + plugin.version + " - Running: " + installed + "\n");
+		     }
+		 }
+		 
+		 // check optional plugin dependencies.
+    	 for( int i = 0; i < optionalPluginDependencies.size(); i++ )
+		 {
+		     PluginDependency plugin = optionalPluginDependencies.get(i);
+		     String installed = jEdit.getProperty("plugin." + plugin.className + ".version");
+		     if(pluginIsNotInstalled(plugin, installed)) {
+		         valid = false;
+		         builder.append("      " + plugin.simpleName + " - Optional: " + plugin.version + " - Running: " + installed + "\n");
+		     }
+		 }
+    	 
+    	 if(!valid)
+    	 {
+    	 	 builder.append("\n\n" +
+    	 	 	 "Note that your plugin will be tested against the latest released\n" +
+    	 	 	 "versions of jEdit and your plugin's dependencies before it is\n" +
+    	 	 	 "released.\n\n" +
+    	 	 	 "Do you want to continue creating this announcement, or would you\n" +
+    	 	 	 "like to cancel it, and update the version numbers?\n\n" +
+    	 	 	 "       \"Yes\" to create announcement as is.\n" +
+    	 	 	 "       \"No\" to cancel and update props.");
+    	 	 int choice = JOptionPane.showConfirmDialog(
+    	 	 	 					view,
+    	 	 	 					builder.toString(),
+    	 	 	 					"Versions don't match",
+    	 	 	 					JOptionPane.YES_NO_OPTION,
+    	 	 	 					JOptionPane.WARNING_MESSAGE);
+    	 	 
+    	 	 // if user's chosen yes, then announcement is created.
+    	 	 valid = (choice == JOptionPane.YES_OPTION);
+    	 }
+    	 return valid;
     }
 }
 
