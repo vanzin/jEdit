@@ -1,0 +1,30 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="jEdit (background mode)" type="Application" factoryName="Application">
+    <log_file path="$PROJECT_DIR$/build/settings/activity.log" checked="true" skipped="true" show_all="false" alias="Activity Log" />
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
+    <extension name="snapshooter" />
+    <option name="MAIN_CLASS_NAME" value="org.gjt.sp.jedit.jEdit" />
+    <option name="VM_PARAMETERS" value="-Xmx192M" />
+    <option name="PROGRAM_PARAMETERS" value="-settings=&quot;$PROJECT_DIR$/build/settings&quot; -background" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" value="" />
+    <option name="ENABLE_SWING_INSPECTOR" value="false" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <module name="jEdit" />
+    <envs />
+    <RunnerSettings RunnerId="JProfiler">
+      <option name="WINDOW" value="false" />
+      <option name="JVMPI" value="false" />
+      <option name="INTERPRETED" value="false" />
+    </RunnerSettings>
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Run" />
+    <method>
+      <option name="AntTarget" enabled="true" antfile="file://$PROJECT_DIR$/build.xml" target="build" />
+      <option name="Make" enabled="false" />
+      <option name="Run Ant target" value="true" />
+    </method>
+  </configuration>
+</component>

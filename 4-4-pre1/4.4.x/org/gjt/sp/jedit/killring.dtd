@@ -1,0 +1,5 @@
+<!-- KILLRING element -->
+<!ELEMENT KILLRING ( ENTRY+ ) >
+
+<!-- ENTRY element -->
+<!ELEMENT ENTRY ( #PCDATA ) >

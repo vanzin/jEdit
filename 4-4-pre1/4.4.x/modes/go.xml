@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!-- Syntax highlighting mode for Go (http://www.golang.org). 
+     Jim Lawton (jim.lawton@gmail.com) 
+     This is based on the first release of Go, November 2009. -->
+
+<MODE>
+    <PROPS>
+        <PROPERTY NAME="commentStart" VALUE="/*" />
+        <PROPERTY NAME="commentEnd" VALUE="*/" />
+        <PROPERTY NAME="lineComment" VALUE="//" />
+        <PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+
+        <PROPERTY NAME="indentOpenBrackets" VALUE="{" />
+        <PROPERTY NAME="indentCloseBrackets" VALUE="}" />
+        <PROPERTY NAME="unalignedOpenBrackets" VALUE="(" />
+        <PROPERTY NAME="unalignedCloseBrackets" VALUE=")" />
+        <PROPERTY NAME="indentNextLine"
+            VALUE="(?!^\s*(#|//)).*(\b(if|for)\s*\(.*\)|\b(else)\b)[^{;]*$" />
+        <PROPERTY NAME="unindentThisLine"
+            VALUE="^\s*((case\b.*|[\p{Alpha}_][\p{Alnum}_]*)\s*:(?!:)).*$" />
+        <PROPERTY NAME="electricKeys" VALUE=":" />
+    </PROPS>
+
+    <RULES
+        IGNORE_CASE="FALSE"
+        HIGHLIGHT_DIGITS="TRUE" DIGIT_RE="[0-9][0-9a-zA-Z]*">
+        
+        <EOL_SPAN TYPE="COMMENT2">//</EOL_SPAN>
+
+        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
+            <BEGIN>"</BEGIN>
+            <END>"</END>
+        </SPAN>
+        <SPAN TYPE="LITERAL1" NO_LINE_BREAK="TRUE" ESCAPE="\">
+            <BEGIN>'</BEGIN>
+            <END>'</END>
+        </SPAN>
+
+        <SEQ TYPE="LITERAL4">??(</SEQ>
+        <SEQ TYPE="LITERAL4">??/</SEQ>
+        <SEQ TYPE="LITERAL4">??)</SEQ>
+        <SEQ TYPE="LITERAL4">??'</SEQ>
+        <SEQ TYPE="LITERAL4">??&lt;</SEQ>
+        <SEQ TYPE="LITERAL4">??!</SEQ>
+        <SEQ TYPE="LITERAL4">??&gt;</SEQ>
+        <SEQ TYPE="LITERAL4">??-</SEQ>
+        <SEQ TYPE="LITERAL4">??=</SEQ>
+
+        <SEQ TYPE="LITERAL4">&lt;:</SEQ>
+        <SEQ TYPE="LITERAL4">:&gt;</SEQ>
+        <SEQ TYPE="LITERAL4">&lt;%</SEQ>
+        <SEQ TYPE="LITERAL4">%&gt;</SEQ>
+        <SEQ TYPE="LITERAL4">%:</SEQ>
+
+        <MARK_PREVIOUS AT_WHITESPACE_END="TRUE"
+            MATCH_TYPE="OPERATOR"
+            TYPE="LABEL">:</MARK_PREVIOUS>
+
+        <MARK_PREVIOUS
+            TYPE="FUNCTION"
+            MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+
+        <SEQ TYPE="OPERATOR">=</SEQ>
+        <SEQ TYPE="OPERATOR">:=</SEQ>
+        <SEQ TYPE="OPERATOR">==</SEQ>
+        <SEQ TYPE="OPERATOR">!=</SEQ>
+        <SEQ TYPE="OPERATOR">+=</SEQ>
+        <SEQ TYPE="OPERATOR">-=</SEQ>
+        <SEQ TYPE="OPERATOR">*=</SEQ>
+        <SEQ TYPE="OPERATOR">/=</SEQ>
+        <SEQ TYPE="OPERATOR">&amp;=</SEQ>
+        <SEQ TYPE="OPERATOR">&amp;&amp;</SEQ>
+        <SEQ TYPE="OPERATOR">&amp;^</SEQ>
+        <SEQ TYPE="OPERATOR">&amp;^=</SEQ>
+        <SEQ TYPE="OPERATOR">|=</SEQ>
+        <SEQ TYPE="OPERATOR">||</SEQ>
+        <SEQ TYPE="OPERATOR">^=</SEQ>
+        <SEQ TYPE="OPERATOR">!</SEQ>
+        <SEQ TYPE="OPERATOR">+</SEQ>
+        <SEQ TYPE="OPERATOR">++</SEQ>
+        <SEQ TYPE="OPERATOR">-</SEQ>
+        <SEQ TYPE="OPERATOR">--</SEQ>
+        <SEQ TYPE="OPERATOR">/</SEQ>
+        <SEQ TYPE="OPERATOR">*</SEQ>
+        <SEQ TYPE="OPERATOR">&gt;</SEQ>
+        <SEQ TYPE="OPERATOR">&lt;</SEQ>
+        <SEQ TYPE="OPERATOR">&gt;=</SEQ>
+        <SEQ TYPE="OPERATOR">&gt;&gt;</SEQ>
+        <SEQ TYPE="OPERATOR">&gt;&gt;=</SEQ>
+        <SEQ TYPE="OPERATOR">&lt;=</SEQ>
+        <SEQ TYPE="OPERATOR">&lt;-</SEQ>
+        <SEQ TYPE="OPERATOR">&lt;&lt;</SEQ>
+        <SEQ TYPE="OPERATOR">&lt;&lt;=</SEQ>
+        <SEQ TYPE="OPERATOR">%</SEQ>
+        <SEQ TYPE="OPERATOR">%=</SEQ>
+        <SEQ TYPE="OPERATOR">&amp;</SEQ>
+        <SEQ TYPE="OPERATOR">|</SEQ>
+        <SEQ TYPE="OPERATOR">^</SEQ>
+        <SEQ TYPE="OPERATOR">?</SEQ>
+        <SEQ TYPE="OPERATOR">:</SEQ>
+        <SEQ TYPE="OPERATOR">.</SEQ>
+        <SEQ TYPE="OPERATOR">...</SEQ>
+        <SEQ TYPE="OPERATOR">,</SEQ>
+        <SEQ TYPE="OPERATOR">[</SEQ>
+        <SEQ TYPE="OPERATOR">]</SEQ>
+        <SEQ TYPE="OPERATOR">(</SEQ>
+        <SEQ TYPE="OPERATOR">)</SEQ>
+        <SEQ TYPE="OPERATOR">}</SEQ>
+        <SEQ TYPE="OPERATOR">{</SEQ>
+        <SEQ TYPE="OPERATOR">;</SEQ>
+
+        <KEYWORDS>
+            <KEYWORD1>package</KEYWORD1>
+            <KEYWORD1>import</KEYWORD1>
+            <KEYWORD1>func</KEYWORD1>
+            <KEYWORD1>type</KEYWORD1>
+            <KEYWORD1>var</KEYWORD1>
+            <KEYWORD1>const</KEYWORD1>
+            <KEYWORD1>interface</KEYWORD1>
+            <KEYWORD1>chan</KEYWORD1>
+
+            <KEYWORD2>for</KEYWORD2>
+            <KEYWORD2>goto</KEYWORD2>
+            <KEYWORD2>go</KEYWORD2>
+            <KEYWORD2>if</KEYWORD2>
+            <KEYWORD2>return</KEYWORD2>
+            <KEYWORD2>switch</KEYWORD2>
+            <KEYWORD2>break</KEYWORD2>
+            <KEYWORD2>case</KEYWORD2>
+            <KEYWORD2>continue</KEYWORD2>
+            <KEYWORD2>default</KEYWORD2>
+            <KEYWORD2>else</KEYWORD2>
+            <KEYWORD2>defer</KEYWORD2>
+            <KEYWORD2>select</KEYWORD2>
+            <KEYWORD2>fallthrough</KEYWORD2>
+            <KEYWORD2>range</KEYWORD2>
+            <KEYWORD2>map</KEYWORD2>
+            <KEYWORD2>new</KEYWORD2>
+            <KEYWORD2>make</KEYWORD2>
+            <KEYWORD2>iota</KEYWORD2>
+            
+            <KEYWORD3>string</KEYWORD3>
+            <KEYWORD3>byte</KEYWORD3>
+            <KEYWORD3>bool</KEYWORD3>
+            <KEYWORD3>float</KEYWORD3>
+            <KEYWORD3>float32</KEYWORD3>
+            <KEYWORD3>float64</KEYWORD3>
+            <KEYWORD3>int</KEYWORD3>
+            <KEYWORD3>int8</KEYWORD3>
+            <KEYWORD3>int16</KEYWORD3>
+            <KEYWORD3>int32</KEYWORD3>
+            <KEYWORD3>int64</KEYWORD3>
+            <KEYWORD3>uint</KEYWORD3>
+            <KEYWORD3>uint8</KEYWORD3>
+            <KEYWORD3>uint16</KEYWORD3>
+            <KEYWORD3>uint32</KEYWORD3>
+            <KEYWORD3>uint64</KEYWORD3>
+            <KEYWORD3>uintptr</KEYWORD3>
+            <KEYWORD3>struct</KEYWORD3>
+
+            <LITERAL2>nil</LITERAL2>
+            <LITERAL2>false</LITERAL2>
+            <LITERAL2>true</LITERAL2>
+
+        </KEYWORDS>
+    </RULES>
+
+</MODE>
+
+
+ 	  	 

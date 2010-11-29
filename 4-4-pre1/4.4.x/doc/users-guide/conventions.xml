@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="conventions">
+    <title>Conventions</title>
+    <!-- jEdit buffer-local properties: -->
+    <!-- :tabSize=1:indentSize=1:noTabs=true: -->
+    <!-- :xml.root=users-guide.xml: -->
+    
+    <para>Several conventions are used throughout jEdit's user interface and
+    this manual. They will be described here. Macintosh users should note how
+    their modifier keys map to the terms used in the manual.</para>
+    
+    <informaltable>
+        <tgroup cols="2">
+            <tbody>
+                <row>
+                    <entry><guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Scroll
+                    to Current Line</guimenuitem></entry>
+
+                    <entry>The <guimenuitem>Scroll to Current Line</guimenuitem>
+                    command contained in the <guisubmenu>Scrolling</guisubmenu>
+                    submenu of the <guimenu>View</guimenu> menu.</entry>
+                </row>
+
+                <row>
+                    <entry><guimenu>Edit</guimenu>&gt;<guimenuitem>Go to
+                    Line...</guimenuitem></entry>
+
+                    <entry>Menu items that end with ellipsis (...) display
+                    dialog boxes.</entry>
+                </row>
+
+                <row>
+                    <entry><keycap>C</keycap></entry>
+
+                    <entry>The primary modifier key in jEdit. On MacOS X, this
+                    is actually the key known as <quote>Command</quote>. On most
+                    other keyboards, this key is labelled
+                    <quote>Control</quote>.</entry>
+                </row>
+
+                <row>
+                    <entry><keycap>A</keycap></entry>
+
+                    <entry>The secondary modifier key in jEdit. On MacOS X, this
+                    is actually the key labelled <quote>Control</quote>. On most
+                    other keyboards, this key is labelled
+                    <quote>Alt</quote>.</entry>
+                </row>
+
+                <row>
+                    <entry><keycap>S</keycap></entry>
+
+                    <entry>The standard <quote>Shift</quote> key.</entry>
+                </row>
+
+                <row>
+                    <entry><keycap>C+o</keycap></entry>
+
+                    <entry>Refers to pressing and holding the
+                    <keycap>Control</keycap> key, pressing and releasing
+                    <keycap>O</keycap>, and finally releasing the
+                    <keycap>Control</keycap> key.</entry>
+                </row>
+
+                <row>
+                    <entry><keycap>C+e C+j</keycap></entry>
+
+                    <entry>Refers to holding down <keycap>Control</keycap>,
+                    pressing <keycap>E</keycap>, pressing <keycap>J</keycap>,
+                    and releasing <keycap>Control</keycap>.</entry>
+                </row>
+
+                <row>
+                    <entry>Default buttons</entry>
+
+                    <entry>In many dialog boxes, the default button (it has a
+                    heavy outline, or a special border, depending on the current
+                    Swing look and feel) can be activated by pressing
+                    <keycap>Enter</keycap>. Similarly, pressing
+                    <keycap>Escape</keycap> will usually close a dialog
+                    box.</entry>
+                </row>
+
+                <row>
+                    <entry><keycap>Alt</keycap>-key mnemonics</entry>
+
+                    <entry>Some user interface elements (menus, menu items,
+                    buttons) have a certain letter in their label underlined.
+                    Pressing this letter in combination with the
+                    <keycap>Alt</keycap> key activates the associated user
+                    interface widget. Note that this functionality is not
+                    available on MacOS X with the <quote>MacOS Adaptive</quote>
+                    look and feel. See <xref linkend="appearance-pane" /> for
+                    information on changing the look and feel.</entry>
+                </row>
+
+                <row>
+                    <entry>Right mouse button</entry>
+
+                    <entry>Used in jEdit to show context-sensitive menus. If you
+                    have a one button Macintosh mouse, a
+                    <keycap>Control</keycap>-click has the same effect.</entry>
+                </row>
+
+                <row>
+                    <entry>Middle mouse button</entry>
+
+                    <entry>Used by the quick copy feature (see <xref
+                    linkend="quick-copy" />). True 3-button mice are rare these
+                    days. If you have a wheel mouse, press down on the wheel
+                    without rolling it. On a Macintosh with a one-button mouse,
+                    <keycap>Option</keycap>-click. On other platforms without a
+                    three-button mouse, <keycap>Alt</keycap>-click.</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </informaltable>
+</chapter>
