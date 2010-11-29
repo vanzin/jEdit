@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article>
+
+    <title> What's new in jEdit 4.4 </title>
+    <articleinfo>
+        <author>
+            <othername>The jEdit all-volunteer development team</othername>
+        </author>
+
+    </articleinfo>
+
+    <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
+    but here are some of the major features of this version. </para>
+    <itemizedlist>
+    <listitem><para> jEdit 4.4 now requires Java 1.6. </para></listitem>
+    <listitem><para> Buffersets have been re-engineered, and simplified. All editpanes
+        have the same bufferset scope, so changes to the scope affects all editpanes
+        immediately. </para></listitem>
+    <listitem><para> Introduction of a new ThreadUtilities class implementing a
+        threadpool using Java 1.6 Concurrent API. Use this instead of
+        VFSManager's WorkThreadPool, which is now deprecated.
+        Related: A new Task Monitor dockable which will eventually replace
+        the I/O progress monitor, for showing progress of tasks.
+        Still TODO: rewrite VFSManager + all plugins to use ThreadUtilities
+        instead of WorkThreadPool.
+    </para></listitem>
+    <listitem><para> New DataTransfer API to allow for rich text copy/paste.
+    </para></listitem>
+    </itemizedlist>
+
+<!-- :maxLineLen=80:wrap=hard: -->
+</article>

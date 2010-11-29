@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="plugin-tips">
+    <title>Plugin Tips and Techniques</title>
+    <!-- jEdit buffer-local properties: -->
+    <!-- :tabSize=1:indentSize=1:noTabs=true: -->
+    <!-- :xml.root=users-guide.xml: -->
+
+    <section id="plugin-tips-libraries">
+        <title>Bundling Additional Class Libraries</title>
+
+        <para>Recall that any class whose name ends with
+        <classname>Plugin.class</classname> is called a plugin core class. JAR
+        files with no plugin core classes are also loaded by jEdit; the classes
+        they contain are made available to other plugins. Many plugins that rely
+        on third-party class libraries ship them as separate JAR files. The
+        libraries will be available inside the jEdit environment but are not
+        part of a general classpath or library collection when running other
+        Java applications.</para>
+
+        <para>A plugin that bundles extra JAR files must list them in the
+        <filename>plugin.<replaceable>class name</replaceable>.jars</filename>
+        property. See the documentation for the <ulink
+        url="../api/org/gjt/sp/jedit/EditPlugin.html">
+        <classname>EditPlugin</classname></ulink> class for details.</para>
+    </section>
+
+    <section id="plugin-tips-non-java-libraries">
+        <title>Bundling Additional Non-Java Libraries</title>
+
+        <para>If your plugin bundles non-Java files, like native libraries, you
+        need to list them in the <filename>plugin.<replaceable>class
+        name</replaceable>.files</filename> property. If you don't do so, they
+        don't get deleted if the plugin is uninstalled. See the documentation
+        for the <ulink url="../api/org/gjt/sp/jedit/EditPlugin.html">
+        <classname>EditPlugin</classname></ulink> class for details.</para>
+    </section>
+
+    <section id="plugin-tips-plugin-data">
+        <title>Storing plugin data</title>
+
+        <para>If your plugin needs to create files and store data in the
+        filesystem, you should use the <methodname>getPluginHome()</methodname>
+        API of the <classname>EditPlugin</classname> class. To signal that you
+        use the plugin home API you have to set the
+        <filename>plugin.<replaceable>class
+        name</replaceable>.usePluginHome</filename> property to
+        <constant>true</constant>. Even if your plugin doesn't create any files,
+        you should set the property to <constant>true</constant>, so that e. g.
+        the plugin manager knows that there is actually no data in favor of not
+        knowing if there is any data and thus displaying that it doesn't know
+        the data size. See the documentation for the <ulink
+        url="../api/org/gjt/sp/jedit/EditPlugin.html"><classname>EditPlugin</classname></ulink>
+        class for details.</para>
+    </section>
+
+    <section id="plugin-tips-colors">
+     <title>Plugin colors</title>
+     <para>There are a number of colors used by the View that should also be
+        used by plugins where possible.  This helps promote a consistent color
+        scheme throughout jEdit.
+        </para><para>
+        The main color properties are:
+         </para>
+         <itemizedlist>
+          <listitem><para><literal>view.bgColor</literal> - the background color of the main text area</para></listitem>
+          <listitem><para><literal>view.fgColor</literal> - the base foreground color for text in the main text area</para></listitem>
+          <listitem><para><literal>view.lineHighlightColor</literal> - color of the current line highlight</para></listitem>
+          <listitem><para><literal>view.selectionColor</literal> - the color of selected text in the main text area</para></listitem>
+          <listitem><para><literal>view.caretColor</literal> - the color of the caret in the main text area</para></listitem>
+          <listitem><para><literal>view.eolMarkerColor</literal> - the color of the end-of-line marker</para></listitem>
+         </itemizedlist>
+         <para>
+        To use these colors in your plugin, use
+        <programlisting>jEdit.getColorProperty("view.whatever", default_color)</programlisting>
+        </para>
+        <para>
+        For example, the QuickNotepad example should have lines like this:
+        </para>
+        <programlisting>
+        textarea.setBackground(jEdit.getColorProperty("view.bgColor", Color.WHITE);
+        textarea.setForeground(jEdit.getColorProperty("view.fgColor", Color.BLACK);
+        </programlisting><para>
+        This sets the foreground and background colors of QuickNotepad to be the same
+        as those in the View.
+        </para>
+        <para>
+        There are other color properties that may be useful, depending on what your
+        plugin displays.
+        </para>
+        <para>
+        Gutter colors:
+        </para><itemizedlist>
+         <listitem><para><literal>view.gutter.bgColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.currentLineColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.fgColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.focusBorderColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.foldColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.highlightColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.markerColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.noFocusBorderColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.registerColor</literal></para></listitem>
+         <listitem><para><literal>view.gutter.structureHighlightColor</literal></para></listitem>
+         </itemizedlist>
+         <para>
+        Status bar colors:
+        </para>
+        <itemizedlist>
+          <listitem><para><literal>view.status.background</literal></para></listitem>
+          <listitem><para><literal>view.status.foreground</literal></para></listitem>
+          <listitem><para><literal>view.status.memory.background</literal></para></listitem>
+          <listitem><para><literal>view.status.memory.foreground</literal></para></listitem>
+         </itemizedlist>
+         <para>
+        </para><para>
+        Structure highlight colors:
+        </para><itemizedlist>
+         <listitem><para><literal>view.structureHighlightColor</literal></para></listitem>
+         <listitem><para><literal>view.structureHighlightColor</literal></para></listitem>
+         </itemizedlist>
+        <para>
+        Style colors.  Use <classname>GUIUtilities.parseStyle</classname> for these.
+        </para>
+        <itemizedlist>
+          <listitem><para><literal>view.style.comment1</literal></para></listitem>
+          <listitem><para><literal>view.style.comment2</literal></para></listitem>
+          <listitem><para><literal>view.style.comment3</literal></para></listitem>
+          <listitem><para><literal>view.style.comment4</literal></para></listitem>
+          <listitem><para><literal>view.style.digit</literal></para></listitem>
+          <listitem><para><literal>view.style.foldLine.0</literal></para></listitem>
+          <listitem><para><literal>view.style.foldLine.1</literal></para></listitem>
+          <listitem><para><literal>view.style.foldLine.2</literal></para></listitem>
+          <listitem><para><literal>view.style.foldLine.3</literal></para></listitem>
+          <listitem><para><literal>view.style.function</literal></para></listitem>
+          <listitem><para><literal>view.style.invalid</literal></para></listitem>
+          <listitem><para><literal>view.style.keyword1</literal></para></listitem>
+          <listitem><para><literal>view.style.keyword2</literal></para></listitem>
+          <listitem><para><literal>view.style.keyword3</literal></para></listitem>
+          <listitem><para><literal>view.style.keyword4</literal></para></listitem>
+          <listitem><para><literal>view.style.label</literal></para></listitem>
+          <listitem><para><literal>view.style.literal1</literal></para></listitem>
+          <listitem><para><literal>view.style.literal2</literal></para></listitem>
+          <listitem><para><literal>view.style.literal3</literal></para></listitem>
+          <listitem><para><literal>view.style.literal4</literal></para></listitem>
+          <listitem><para><literal>view.style.markup</literal></para></listitem>
+          <listitem><para><literal>view.style.operator</literal></para></listitem>
+          <listitem><para><literal>view.wrapGuideColor</literal></para></listitem>
+          </itemizedlist>
+          <para>
+        For example, here is a setting for a fold line color:
+        </para>
+        <programlisting>
+         view.style.foldLine.0=color\:\#000000 bgColor\:\#f5deb8 style\:b
+         </programlisting>
+         <para>
+        Passing the value to <classname>GUIUtilities.parseStyle</classname> will
+        return a SyntaxStyle object, which you can query for background color,
+        foreground color, and font.
+        </para>
+     </section>
+</chapter>
