@@ -318,7 +318,7 @@ public class GUIUtilities
 			while(st.hasMoreTokens())
 			{
 				String menuItemName = st.nextToken();
-				if(menuItemName.equals("-"))
+				if("-".equals(menuItemName))
 					menu.addSeparator();
 				else
 					menu.add(loadMenuItem(context,menuItemName,false));
@@ -461,7 +461,7 @@ public class GUIUtilities
 			while(st.hasMoreTokens())
 			{
 				String button = st.nextToken();
-				if(button.equals("-"))
+				if("-".equals(button))
 				{
 					toolB.addSeparator(new Dimension(12,12));
 				}
@@ -752,6 +752,7 @@ public class GUIUtilities
 		{
 			EventQueue.invokeAndWait(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					retValue[0] = confirm(comp, name, args, buttons, type);
@@ -815,7 +816,7 @@ public class GUIUtilities
 	 * @since jEdit 4.3pre12
 	 */
 	public static int listConfirm(Component comp, String name, String[] args,
-		Object[] listModel, List selectedItems)
+		Object[] listModel, List<?> selectedItems)
 	{
 		JList list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -1321,6 +1322,7 @@ public class GUIUtilities
 			{
 				EventQueue.invokeLater(new Runnable()
 				{
+						@Override
 						public void run()
 						{
 							comp.requestFocusInWindow();
@@ -1572,6 +1574,8 @@ public class GUIUtilities
 	//{{{ getView() method
 	/**
 	 * Finds the view parent of the specified component.
+	 * @param comp the component from which you want to get the parent view
+	 * @return the parent view, or null if the component was not in a View.
 	 * @since jEdit 4.0pre2
 	 */
 	public static View getView(Component comp)
@@ -1816,9 +1820,9 @@ public class GUIUtilities
 	 */
 	private static class SizeSaver extends ComponentAdapter implements WindowStateListener
 	{
-		private Frame frame;
-		private Container parent;
-		private String name;
+		private final Frame frame;
+		private final Container parent;
+		private final String name;
 
 		//{{{ SizeSaver constructors
 		/**
@@ -1840,6 +1844,7 @@ public class GUIUtilities
 		} //}}}
 
 		//{{{ windowStateChanged() method
+		@Override
 		public void windowStateChanged(WindowEvent wse)
 		{
 			int extendedState = wse.getNewState();
@@ -1883,6 +1888,7 @@ public class GUIUtilities
 			final Rectangle bounds = frame.getBounds();
 			final Runnable sizeSaver = new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					int extendedState = frame.getExtendedState();
