@@ -1,0 +1,312 @@
+[global]
+alpha|α
+beta|β
+gamma|γ
+delta|δ
+epsilon|ε
+zeta|ζ 
+eta|η
+theta|ϴ
+iota|ι
+kappa|κ
+lambda|λ
+mu|μ
+nu|ν
+xi|ξ
+pi|π
+rho|ρ
+sigma|σ
+tau|τ
+upsilon|υ
+phi|ϕ
+varphi|φ
+chi|χ
+psi|ψ
+omega|ω
+Gamma|Γ
+Delta|Δ
+Theta|Θ
+Lambda|Λ
+Xi|Ξ
+Pi|Π
+Sigma|Σ
+Upsilon|Υ
+Phi|Φ
+Psi|Ψ
+Omega|Ω
+
+
+pm|±
+mp|∓
+times|
+div|∻
+divides|∣
+doesnotdivide|∤
+ast|∗
+star|∗
+circ|∘
+bullet|∙
+setminus|∖
+cdot|⋅
+diamond|◇
+bigtriangleup|∆
+bigtriangledown|∇
+ominus|⊝
+sqcap|⊔
+wr|≀
+triangleleft|⊲
+triangleright|⊳
+lhd|▷
+rhd|◁
+nabla|∇
+increment|∆
+oslash|⊘
+bigcirc|◯
+odot|⊙
+oplus♁
+otimes|⊗
+female|♀
+male|♂
+sun|☼
+sqcup|⊔
+cap|∩
+inter|∩
+cup|∪
+union|∪
+complement|∁
+vee|∨
+or|∨
+wedge|∧
+and|∧
+leq|≤
+prec|≺
+preceq|≼
+ll|≪
+subset|⊂
+subseteq|⊆
+in|∈
+smallin|∊
+notin|∉
+vdash
+geq|≥
+succ|≻
+succeq|≽
+gg|≫
+supset|⊃
+supseteq|⊇
+ni|∋
+niton|∌
+nillams|∍
+dashv|⊢
+equiv|≡
+sim|∼
+notsim|≁
+simeq|≃
+approx|≈
+doteq|≐
+propto|∝
+cong|≅
+neq|≠
+models|⊨
+top|⊤
+perp|⊥
+parallel|∥
+notparallel|∦
+sqsubset|⊏
+sqsubseteq|⊑
+sqsupset|⊐
+sqsupseteq|⊒
+asymp|≍
+mid||
+bowtie|⋈
+smile|‿
+frown|⁀
+leftarrow|←
+<-|←
+Leftarrow|⇐
+<=|⇐
+rightarrow|→
+->|→
+Rightarrow|⇒
+=>|⇒
+leftrightarrow|↔
+<->|↔
+mapsto|↦
+|->|↦
+uparrow|↑
+hookleftarrow|↪
+c->|↪
+hookrightarrow|↩
+leftarpoonup|↼
+rightharpoonup|⇀
+leftharpoondown|↽
+rightharpoondown|⇁
+rightleftharpoons|⇋
+leftrighthaproons|⇌
+leadsto|↝
+nearrow|↗
+searrow|↘
+swarrow|↙
+nwarrow|↖
+downarrow|↓
+uparrow|↑
+updownarrow|↕
+
+Downarrow|⇓
+Uparrow|⇑
+Updownarrow|⇳
+dag|†
+pounds|£
+ddag|‡
+copyright|©
+qed|∎
+aleph|א
+emptyset|∅
+angle|∠
+mangle|∢
+sangle|∢
+forall|∀
+exists|∃
+notexists|∄
+neg|¬
+partial|∂
+infty|
+Box|∞
+sum|∑
+prod|∏
+coprod|∐
+int|∫
+oint|∮
+S|§
+Diamond|◇
+clubsuit|♣
+diamondsuit|♢
+heartsuit|♡
+spadesuit|♠
+surd|√
+bemol|♭
+sharp|♯
+oe|œ
+OE|Œ
+ae|æ
+AE|Æ
+aa|å
+AA|Å
+oo|ø
+OO|Ø
+ss|ß
+??|¿
+
+lfloor|⎣
+rfloor|⎦
+lceil|⎡
+rceil|⎤
+backslash|\
+
+[java]
+Br|BufferedReader $1 = new BufferedReader(\|);
+D|do\n{\n\t\|\n}\nwhile($1);
+DMTN|DefaultMutableTreeNode
+E|Exception
+Ei|else if($1)\n{\n\t\|\n}
+El|else\n{\n\t\|\n}
+F|for(int $1 = 0; $1 < $2; $1++)\n{\n\t\|\n}
+Fa|for(int $1 = 0; $1 < $2.length; $1++)\n{\n\t$3 \| = $2[$1];\n}
+Fc|for(int $1 = 0; $1 < $2.size(); $1++)\n{\n\t$3 \| = ($3)$2.get($1);\n}
+Fd|for(int $1 = $2 - 1; $1 >= 0; $1--)\n{\n\t\|\n}
+H|Hashtable
+I|if($1)\n{\n\t\|\n}
+Ie|if($1)\n{\n\t|\n}\nelse\n{\n\t\n}\n
+IO|IOException
+N|$1 $2 = new $1(\|);
+O|Object
+P|public
+S|String
+V|Vector
+W|while($1)\n{\n\t\|\n}
+Mal|MalformedURLException
+hme|hasMoreElements()
+ne|nextElement()
+serr|System.err.println(\|);
+sout|System.out.println(\|);
+cg|Box.createGlue()
+chs|Box.createHorizontalStrut(\|)
+cvs|Box.createVerticalStrut(\|)
+Il|SwingUtilities.invokeLater(new Runnable()\n{\n\tpublic void run()\n\t{\n\t\t\|\n\t}\n});
+B|Buffer
+JE|JEditTextArea
+VDE|VFS.DirectoryEntry
+gta|getTextArea()
+gb|getBuffer()
+gp|jEdit.getProperty(\|)
+gbp|jEdit.getBooleanProperty(\|)
+gip|jEdit.getIntegerProperty(\|)
+sp|jEdit.setProperty(\|);
+sbp|jEdit.setBooleanProperty(\|);
+ogs|import org.gjt.sp.
+ogsj|import org.gjt.sp.jedit.
+ogsu|import org.gjt.sp.util.
+loge|Log.log(Log.ERROR,this,\|);
+logw|Log.log(Log.WARNING,this,\|);
+logn|Log.log(Log.NOTICE,this,\|);
+logm|Log.log(Log.MESSAGE,this,\|);
+logd|Log.log(Log.DEBUG,this,\|);
+C|$1 $2 = ($1)\|
+Cget|($1)$2.get($3)
+CtoArray|($1[])$2.toArray(new $1[$2.size()])
+WI|while($1.hasNext())\n{\n\t\|\n}
+IN|$1 $2 = ($1)$3.next();
+[vhdl]
+sl|std_logic
+slv|std_logic_vector( x downto y )
+var|variable
+sig|signal
+[xml]
+Ykeycap|<keycap>\|</keycap>
+Ykeycombo|<keycombo><keycap>$1</keycap><keycap>$2</keycap></keycombo>
+YY|<$1>\n\|\n</$1>
+[xsl]
+ai|<xsl:apply-imports/>
+an|<xsl:attribute name="\|"></xsl:attribute>
+asn|<xsl:attribute-set name="\|">\n</xsl:attribute-set>
+atsm|<xsl:apply-templates select="\|" mode=""/>
+ats|<xsl:apply-templates select="\|"/>
+com|<xsl:comment>\|</xsl:comment>
+cos|<xsl:copy-of select="\|"/>
+co|<xsl:copy>\|</xsl:copy>
+ctnwp|<xsl:call-template name="\|">\n\t<xsl:with-param name="" select=""/>\n</xsl:call-template>
+ctn|<xsl:call-template name="\|"/>
+cwto|<xsl:choose>\n\t<xsl:when test="\|">\n\t</xsl:when>\n\t<xsl:otherwise>\n\t</xsl:otherwise>\n</xsl:choose>
+cwt|<xsl:choose>\n\t<xsl:when test="\|">\n\t</xsl:when>\n</xsl:choose>
+en|<xsl:element name="\|">\n</xsl:element>
+fes|<xsl:for-each select="\|">\n</xsl:for-each>
+f|<xsl:fallback>\|</xsl:fallback>
+imh|<xsl:import href="\|"/>
+inh|<xsl:include href="\|"/>
+it|<xsl:if test="\|">\n</xsl:if>
+k|<xsl:key name="\|" match="" use=""/>
+mt|<xsl:message terminate="\|"></xsl:message>
+m|<xsl:message>\|</xsl:message>
+n|<xsl:number/>
+nc|<xsl:number count="\|"/>
+oe|<xsl:output encoding="\|"/>
+om|<xsl:output method="\|"/>
+o|<xsl:otherwise>\n\|\n</xsl:otherwise>
+pin|<xsl:processing-instruction name="\|"></xsl:processing-instruction>
+pn|<xsl:param name="\|"/>
+pse|<xsl:preserve-space elements="\|"/>
+sse|<xsl:strip-space elements="\|"/>
+ss|<xsl:sort select="\|"/>
+s|<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">\n\|\n</xsl:stylesheet>
+tdoe|<xsl:text disable-output-escaping="\|"></xsl:text>
+tmm|<xsl:template match="\|" mode="">\n</xsl:template>
+tm|<xsl:template match="\|">\n</xsl:template>
+tnm|<xsl:template name="\|" match="">\n</xsl:template>
+tn|<xsl:template name="\|">\n</xsl:template>
+t|<xsl:text>\|</xsl:text>
+vns|<xsl:variable name="\|" select=""/>
+vn|<xsl:variable name="\|"/>
+vos|<xsl:value-of select="\|"/>
+wpn|<xsl:with-param name="\|" select=""/>
+xe|<?xml vesion="1.0" encoding="\|"?>
+x|<?xml version="1.0"?>\|

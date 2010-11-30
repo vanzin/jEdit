@@ -1,0 +1,36 @@
+/*
+ * Cut_Lines_Containing.bsh - Cuts lines from current buffer that
+ * contain a user-supplied string to the clipboard.
+ * 
+ * Copyright (C) 2004 Ollie Rutherfurd <oliver@jedit.org>
+ *
+ * $Id$
+ */
+
+cutLinesContaining(){
+	String text = Macros.input(view,"Cut lines containing:");
+	if(text == null || "".equals(text))
+		return;
+	int count = 0;
+	int start = 0;
+	int end = 0;
+	StringBuffer buff = new StringBuffer();
+	for(int i = buffer.getLineCount() - 1 ; i >= 0; i--){
+		String line = buffer.getLineText(i);
+		if(line.indexOf(text) > -1){
+			buff.insert(0,'\n').insert(0,line);
+			int start = buffer.getLineStartOffset(i);
+			int end = buffer.getLineEndOffset(i);
+			buffer.remove(start,Math.min(end,buffer.getLength())-start);
+			count++;
+		}
+	}
+	Registers.setRegister('$',buff.toString());
+	HistoryModel.getModel("clipboard").addItem(buff.toString());
+	view.getStatus().setMessageAndClear("" + count + " lines cut");
+}
+
+if(buffer.isReadOnly())
+	Toolkit.getDefaultToolkit().beep();
+else
+	cutLinesContaining();
