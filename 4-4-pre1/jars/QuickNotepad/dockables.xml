@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<!-- Dockable component definition file for QuickNotepad plugin -->
+<!-- $Id$
+-->
+
+<!DOCTYPE DOCKABLES SYSTEM "dockables.dtd">
+
+<!-- QuickNotepad dockable windows -->
+
+<DOCKABLES>
+	<DOCKABLE NAME="quicknotepad">
+		new QuickNotepad(view, position);
+	</DOCKABLE>
+</DOCKABLES>
