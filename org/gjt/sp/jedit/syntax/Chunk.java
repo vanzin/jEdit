@@ -223,13 +223,15 @@ public class Chunk extends Token
 			fontSubstEnabled = false;
 			preferredFonts = null;
 		}
+		else
+		{
+			fontSubstEnabled = Boolean.parseBoolean(props.getProperty("view.enableFontSubst"));
+		}
 
 
 		int i = 0;
 		String family;
 		List<Font> userFonts = new ArrayList<Font>();
-
-		fontSubstEnabled = Boolean.parseBoolean(props.getProperty("view.enableFontSubst"));
 
 		while ((family = props.getProperty("view.fontSubstList." + i)) != null)
 		{
