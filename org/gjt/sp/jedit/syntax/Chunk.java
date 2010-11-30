@@ -225,12 +225,12 @@ public class Chunk extends Token
 		}
 
 
-		int i = 0;
-		String family;
 		List<Font> userFonts = new ArrayList<Font>();
 
 		fontSubstEnabled = Boolean.parseBoolean(props.getProperty("view.enableFontSubst"));
 
+		String family;
+		int i = 0;
 		while ((family = props.getProperty("view.fontSubstList." + i)) != null)
 		{
 			/*
@@ -239,8 +239,8 @@ public class Chunk extends Token
 			 * check skips fonts that don't exist.
 			 */
 			Font f = new Font(family, Font.PLAIN, 12);
-			if (!f.getFamily().equalsIgnoreCase("dialog") ||
-			    family.equalsIgnoreCase("dialog"))
+			if (!"dialog".equalsIgnoreCase(f.getFamily()) ||
+				"dialog".equalsIgnoreCase(family))
 				userFonts.add(f);
 			i++;
 		}
@@ -320,10 +320,10 @@ public class Chunk extends Token
 				float[] pos = gv.getGlyphPositions(0, gv.getNumGlyphs(), null);
 				for (int i = 0; i < gv.getNumGlyphs(); i++)
 				{
-					float glyphX = myx + pos[i * 2];
+					float glyphX = myx + pos[i << 1];
 					float nextX = (i == gv.getNumGlyphs() - 1)
 					            ? width
-					            : myx + pos[i * 2 + 2];
+					            : myx + pos[(i << 1) + 2];
 
 					if (nextX > x)
 					{
@@ -492,7 +492,7 @@ public class Chunk extends Token
 	 * @return Width of the rendered text.
 	 */
 	private float layoutGlyphs(FontRenderContext frc,
-				   char text[],
+				   char[] text,
 				   int start,
 				   int end)
 	{
