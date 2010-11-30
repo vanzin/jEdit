@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sect1 id="intro">
+    <title>Introduction</title>
+
+    <!-- jEdit buffer-local properties:                      -->
+
+    <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
+
+    <!-- :xml.root=faq.xml:                                  -->
+
+    <!-- jEdit FAQ                                           -->
+
+    <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
+
+    <para>This document explains many of the basic features of jEdit and
+    provides solutions for commonly encountered problems. It is not the
+    principal resource for learning how to use and customize jEdit. The
+    application includes an extensive User's Guide available from within jEdit
+    by selecting <guimenuitem>jEdit Help</guimenuitem> on the
+    <guimenu>Help</guimenu> menu.</para>
+
+    <para>The User's Guide includes tutorials on writing macros and plugins as
+    well as an annotated guide to jEdit's Application Programming Interface
+    (API). It is worth browsing through the User's Guide to get a full sense of
+    what jEdit has to offer. This document is intended to supplement the User's
+    Guide by focusing on specific, relatively narrow topics in the traditional
+    question-and-answer format.</para>
+
+    <para>Each section of this document deals with a different category of
+    topics, and each begins with a listing of the questions covered. This should
+    allow you to find the information you are seeking quickly.</para>
+</sect1>
