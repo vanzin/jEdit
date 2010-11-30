@@ -542,7 +542,7 @@ public class Registers
 		}
 		else
 		{
-			DefaultRegister defaultRegister = new DefaultRegister();
+			Register defaultRegister = new DefaultRegister();
 			defaultRegister.setTransferable(transferable);
 			setRegister(name, defaultRegister);
 		}
@@ -738,9 +738,10 @@ public class Registers
 		/**
 		 * Sets the clipboard contents.
 		 */
+		@Override
 		public void setValue(String value)
 		{
-			StringSelection selection = new StringSelection(value);
+			Transferable selection = new StringSelection(value);
 			clipboard.setContents(selection,null);
 		}
 
@@ -808,11 +809,13 @@ public class Registers
 			}
 		}
 
+		@Override
 		public Transferable getTransferable()
 		{
 			return clipboard.getContents(this);
 		}
 
+		@Override
 		public void setTransferable(Transferable transferable)
 		{
 			clipboard.setContents(transferable, null);
@@ -844,9 +847,10 @@ public class Registers
 	{
 		private Transferable transferable;
 
+		@Override
 		public void setValue(String value)
 		{
-			this.transferable = new StringSelection(value);
+			transferable = new StringSelection(value);
 		}
 
 		@Override
@@ -872,11 +876,13 @@ public class Registers
 			return transferable.toString();
 		}
 
+		@Override
 		public Transferable getTransferable()
 		{
 			return transferable;
 		}
 
+		@Override
 		public void setTransferable(Transferable transferable)
 		{
 			this.transferable = transferable;
