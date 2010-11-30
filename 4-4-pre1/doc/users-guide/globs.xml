@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appendix id="globs">
+    <title>Glob Patterns</title>
+
+    <!-- jEdit buffer-local properties: -->
+
+    <!-- :indentSize=1:noTabs=true: -->
+
+    <!-- :xml.root=users-guide.xml: -->
+
+    <para>jEdit uses glob patterns similar to those in the various Unix shells
+    to implement file name filters in the file system browser. Glob patterns
+    resemble regular expressions somewhat, but have a much simpler syntax. The
+    following character sequences have special meaning within a glob
+    pattern:</para>
+
+    <itemizedlist>
+        <listitem>
+            <para><literal>?</literal> matches any one character</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>*</literal> matches any number of characters</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>{!<replaceable>glob</replaceable>}</literal> Matches
+            anything that does <emphasis>not</emphasis> match
+            <replaceable>glob</replaceable></para>
+        </listitem>
+
+        <listitem>
+            <para><literal>{<replaceable>a</replaceable>,<replaceable>b</replaceable>,<replaceable>c</replaceable>}</literal>
+            matches any one of <replaceable>a</replaceable>,
+            <replaceable>b</replaceable> or <replaceable>c</replaceable></para>
+        </listitem>
+
+        <listitem>
+            <para><literal>[<replaceable>abc</replaceable>]</literal> matches
+            any character in the set <replaceable>a</replaceable>,
+            <replaceable>b</replaceable> or <replaceable>c</replaceable></para>
+        </listitem>
+
+        <listitem>
+            <para><literal>[^<replaceable>abc</replaceable>]</literal> matches
+            any character not in the set <replaceable>a</replaceable>,
+            <replaceable>b</replaceable> or <replaceable>c</replaceable></para>
+        </listitem>
+
+        <listitem>
+            <para><literal>[<replaceable>a-z</replaceable>]</literal> matches
+            any character in the range <replaceable>a</replaceable> to
+            <replaceable>z</replaceable>, inclusive. A leading or trailing dash
+            will be interpreted literally</para>
+        </listitem>
+    </itemizedlist>
+
+    <para>Since we use <literal>java.util.regex</literal> patterns to implement
+    globs, this means that in addition to the above, a number of
+    <quote>character class metacharacters</quote> may be used. Keep in mind,
+    their usefulness is limited since the regex quantifier metacharacters
+    (asterisk, questionmark, and curly brackets) are redefined to mean something
+    else in filename glob language, and the regex quantifiers are not available
+    in glob language.</para>
+
+    <itemizedlist>
+        <listitem>
+            <para><literal>\w</literal> matches any alphanumeric character or
+            underscore</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\s</literal> matches a space or horizontal tab</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\S</literal> matches a printable
+            non-whitespace.</para>
+        </listitem>
+
+        <listitem>
+            <para><literal>\d</literal> matches a decimal digit</para>
+        </listitem>
+    </itemizedlist>
+
+    <para>Here are some examples of glob patterns:</para>
+
+    <itemizedlist>
+        <listitem>
+            <para><userinput>*</userinput> - all files.</para>
+        </listitem>
+
+        <listitem>
+            <para><userinput>*.java</userinput> - all files whose names end with
+            <quote>.java</quote>.</para>
+        </listitem>
+
+        <listitem>
+            <para><userinput>*.[ch]</userinput> - all files whose names end with
+            either <quote>.c</quote> or <quote>.h</quote>.</para>
+        </listitem>
+
+        <listitem>
+            <para><userinput>*.{c,cpp,h,hpp,cxx,hxx}</userinput> - all C or C++
+            files.</para>
+        </listitem>
+
+        <listitem>
+            <para><userinput>[^#]*</userinput> - all files whose names do not
+            start with <quote>#</quote>.</para>
+        </listitem>
+    </itemizedlist>
+
+    <bridgehead>Using regexes instead of globs</bridgehead>
+
+    <para>Sometimes it is desirable to use a regular expression instead of a
+    glob for specifying file sets. This is because regular expressions are more
+    powerful than globs and can provide the user with more specific filename
+    matching criteria. To avoid the glob-to-regex transformation, prefix your
+    pattern with the string <literal>(re)</literal>, which will tell jEdit to
+    not translate the following pattern into a regex (since it already is one).
+    For example:</para>
+
+    <glosslist>
+        <glossentry>
+            <glossterm><literal> (re).*\.(h|c(c|pp)?) </literal></glossterm>
+
+            <glossdef>
+                <para>Matches *.c, *.cpp, *.h, *.cc</para>
+            </glossdef>
+        </glossentry>
+    </glosslist>
+
+    <para>If you need to match files that begin with the glob-translate-disable
+    prefix <literal>(re)</literal>, you can escape it with a leading backslash
+    and the metacharacters will be translated into globs as before.</para>
+</appendix>

@@ -1,0 +1,365 @@
+jEdit 4.4 version history
+       (changes since jEdit 4.3)
+:encoding=UTF-8:
+
+{{{ Version 4.4
+
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
+Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
+Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead,
+Marcelo Vanzin, Jesse Pavel, Bernhard Walle and Jakub Roztočil for
+contributing to this release.
+
+{{{ Bug fixes
+- Fixed an exception when trying to add new menu items to the context menu
+  if some ActionSets have been unloaded (plugin deactivation)
+  (Matthieu Casanova #3071355)
+
+- Closes menus when toggling dockables. (#3022084 - Anshal Shukla)
+
+- VFSBrowser escape handling fixed when used as a dialog (#3101808 - Alan Ezust)
+
+- Context menu sorted when adding toolbar buttons (#3074164 - Alan Ezust)
+
+- Fixed an exception when clicking ok while adding new action to the context
+  menu if no action has been selected (Matthieu Casanova #3072546)
+
+- Fixed TextArea.selectBlock() when the block is at offset 0
+  (Jesse Pavel #3062072)
+
+- Fixed a memory leak in the beanshell snippet replacement
+  (Matthieu Casanova #3043132)
+
+- The "buffer" variable is always the current buffer and not the buffer
+  where the replacement occurs when using beanshell snippet replacement
+  (Matthieu Casanova #3043118)
+
+- Removed workaround in drag & drop code of TextArea that doesn't seem
+  useful anymore on Ubuntu and cause exceptions when dropping a Transferable
+  that is not a String but has a java.io.InputStream as representation class
+  (Matthieu Casanova)
+
+- Fixed caret going to the wrong position when adding explicit folds
+  in a buffer that uses an edit mode that has no line comment
+  (Matthieu Casanova #2138160)
+
+- Fixed caret going after the explicit folds when adding explicit folds
+  to the wrong position when adding explicit folds while having no
+  selection, in any edit mode  (Matthieu Casanova)
+
+- When saving a buffer the autoreload option of the buffer was overridden
+  by global settings (Matthieu Casanova #2999966)
+
+- Improve indentation settings of the shellscript edit mode.
+  (Björn "Vampire" Kautler #3005463)
+
+- Removed the duplicated "Architecture" line from the Debian control file.
+  (Björn "Vampire" Kautler #2999456)
+
+- In the manage panel, when selecting a library, the description panel do
+  not contains "null" for every fields and the title is set to the jar name
+  instead of "null" (Matthieu Casanova)
+
+- Update of textarea scrollbars and bufferSwitcher are now done in
+  EventQueue thread (Matthieu Casanova #2946031)
+
+- Removed unnecessary popup warnings from InstallPanel when loading a
+  pluginset. (Alan Ezust)
+
+- fix #1439605 - remove installer.VariableGridLayout (r16596).
+
+- Fixed bug in "selection-length" status bar widget: The widget was not added
+  to the edit bus, so it wasn't updated when the edit pane changed.
+  (Shlomy Reinstein)
+
+- Removed write capability to the UrlVFS. Now http:// files are marked
+  read-only. (Eric Le Lay #2805986)
+
+- When having two monitors the About dialog was appearing between them, one half
+  on each monitor. Now it's position is relative to the active View
+  (Matthieu Casanova)
+
+- Selection foreground color broken when soft wrap. (Shlomy Reinstein #2946203)
+
+- Using regex style encoding auto detectors, StringIndexOutOfBoundsException
+  could happen when loading a file. (Kazutoshi Satoda)
+
+- The encoding could be less accurate when opening a file from
+  File System Browser. (SF.net bug #1524181,1721796 - Kazutoshi Satoda)
+
+- ALT key typing with Windows Look&Feel (for menu bar interaction) now
+  behaves a bit closer to native Windows applications.
+  NOTE: It's still incomplete due to some problems in JVM.
+        http://bugs.sun.com/view_bug.do?bug_id=6923687
+        http://bugs.sun.com/view_bug.do?bug_id=6458497
+        ALT key typing is disabled on TextArea for now to prevent the latter
+        problem.
+  (SF.net bug #2795635 - Kazutoshi Satoda)
+
+- HelpViewer loads pages asynchronously (SF.net bug #1231914 - Eric Le Lay)
+
+- Don't replace colons by slashes in canonPath() on Mac OS X
+  (SF.net bug #1488911 - Eric Le Lay - r17754)
+
+- Fix Angle brackets showing up in plugin descriptions in plugin manager
+  (SF.net bug #1963667 - Eric Le Lay)
+
+- Fix SOCKS proxy accessing wrong property.
+  Therefore, SOCKS proxy was never getting enabled.
+  (SF.net patch #2820969 - Milutin Jovanović)
+
+- CopyFileWorker now throws a FileNotFoundException instead of a NPE if
+  the target path is not a directory and it's parent doesn't exists.
+   (Matthieu Casanova)
+
+- CopyFileWorker do not accept that the source and target are the same
+  (Matthieu Casanova)
+
+- Changed GUIUtilities.confirm() to work also from worker threads, by
+  deferring the confirmation dialog to the EDT. This fixes threading
+  issues with HyperSearchRequest, if the number of results exceeds the
+  "max results" option. (Shlomy Reinstein)
+
+- Fix "-reuseview" not bringing the view to the front.
+  (Sf.net bug #1510651 - Shlomy Reinstein)
+
+- Show search bar in full screen mode. (Sf.net bug #2944752 - Shlomy Reinstein)
+}}}
+{{{ API changes
+- Added methods to manage the cursor if the TextArea :
+  In the TextAreaPainter class, added
+  resetCursor()
+  setCursor(Cursor)
+  The cursor behavior is the following :
+  when the cursor is the default one : TEXT_CURSOR,
+  when typing text it is hidden, after moving the mouse it reappears.
+  If a plugin calls setCursor() to replace it for whatever reason,
+  the cursor will not disappear anymore when typing or be changed to
+  TEXT_CURSOR until resetCursor() is called (Matthieu Casanova)
+
+- Introduction of a new ThreadUtilities class implementing a
+    threadpool using Java 1.6 Concurrent API. Use this instead of
+    VFSManager's WorkThreadPool, which is now deprecated.
+    Related: A new Task Monitor dockable which will eventually replace
+    the I/O progress monitor, for showing progress of tasks.
+    Still TODO: rewrite VFSManager + all plugins to use ThreadUtilities
+    instead of WorkThreadPool. (Matthieu Casanova)
+
+- Made method TextUtilities.getCharType() public (Matthieu Casanova)
+
+- Method MiscUtilities.formatFileSize() moved to StandardUtilities
+  (Matthieu Casanova)
+
+- New method E ServiceManager.getService(Class<E> clazz, String name) to get
+  service instance (Matthieu Casanova)
+
+- Register api changed, it now contains Transferable (Matthieu Casanova)
+
+- Added ThreadUtilities utility class (Matthieu Casanova)
+
+- Removed deprecated objectfactory xml parser.
+
+- File System Browser dynamic menu support (#2938170 - François Rey)
+
+- Added a method for unregistering macro handlers: Macros.unregisterHandler().
+
+- bufferSet api rewritten. Now each editPane have its own bufferSet,
+  does not share it with other editPanes. The bufferset scope is the
+  same for all EditPanes. (Matthieu Casanova)
+
+- Status bar widget : it is now possible to use labels starting with letters
+  in status bar. (Matthieu Casanova)
+
+- Removed long deprecated TextArea#isDragInProgress() and
+  TextArea#setDragInProgress(). (SF.net patch #2809776,2936146 - Kevin Hunter)
+
+- EditBus.send() will now always deliver messages on the AWT thread, although
+  it can be called from any thread. (Marcelo Vanzin)
+
+- Added EditBus.sendAsync(): this just enqueues messages to be send over
+  the EditBus as soon as the AWT thread is not busy, and returns immediately.
+  (Marcelo Vanzin)
+
+- Added ability to tag classes with EditBus.EBHandler. This is only useful
+  when tagging an EditPlugin class, and makes the plugin instance behave
+  as if it implemented EBComponent (it's added to the bus when the plugin
+  is activated). (Marcelo Vanzin)
+
+- RFC edit mode was misplaced in catalog and was never matching anything because
+  text edit mode glob was more global and checked first (Matthieu Casanova)
+
+- New ping-pong list component org.gjt.sp.jedit.gui.PingPongList
+  (Matthieu Casanova)
+
+- PluginUpdate bus message now have a method getPluginVersion() that returns
+  the plugin version if there is one (Matthieu Casanova #2953163)
+
+- Added StyleEditor.invokeForCaret(textArea) which does same as
+  buffer.editSyntaxStyle(textArea) did, but can be invoked without
+  specifying the buffer object carefully. (Kazutoshi Satoda)
+
+- HistoryModel's max size is no more defined globally : replaced the static
+  max variable by a per-instance max variable and a static defaultMax variable
+  (Eric Le Lay)
+
+- The JeditBuffer class now have thread-safe getText() params-less convenience
+  method (Vadim Voituk)
+
+- Patch 3008954 to Mode and ModeProvider to allow an exact filename
+  match when selecting the mode for a file. (Patch provided by Bernhard Walle)
+
+- Patch 3022084 added View.closeAllMenus(). (Anshal Shukla)
+
+}}}
+{{{ Editing
+
+- Update for Stata-edit mode (goebbe, # 3019042)
+
+- Added visualbasic.xml edit mode (Anonymous submitter, #3031412)
+
+- Added haxe.xml and hxml mode files to support haXe language
+  (Dion Whitehead, François Rey, # 2922986)
+
+- Added plaintex.xml mode file, for plain tex files. (# 2787012 - James Nicholl)
+
+- nsis2.xml update (#2653404 Uwe donovaly)
+
+- sas.xml update (#2926121, 3015899 - goebbe)
+
+- html.erb added to rhtml mode catalog entry. (# 2734062 Sergey Mezentsev)
+
+- Added Go edit mode (#2898646 - Jim Lawton)
+
+- When pasting text copied from the textarea, if the target textarea has
+  no edit mode, the edit mode from the source is copied (Matthieu Casanova)
+
+- Added the missing doxygen commands for doxygen v1.6.1
+  (bug #2895272 - report and patch from Bernhard Walle).
+  doxygen now highlights quoted strings in comments.
+
+- Ruby mode - keyword highlighting bug fix ( # 2868654 - Suraj Kurapati)
+
+- Updated logtalk.xml file (# 2937909 - Paulo Moura)
+
+- Slax Edit Mode ( # 2883030 - curtis_call )
+
+- Json edit mode ( # 2979745 - Dale Anson )
+
+- PHP Smarty Templates Mode ( # 2969956 - Rowan Collins)
+
+- Haskell edit mode rewrite ( # 2993269 - Stephen Blackheath)
+
+- Pure edit mode updates ( # 2988741 - asitdepends)
+
+- url.xml mode (# 1991306 - Kevin Hunter)
+
+- LaTeX mode - code indentation (2872638 - Michael Schlotter)
+
+- 'dot.xml' mode file indent{Open,Close}Brackets wrong
+  (#3008614 - Robin Neatherway)
+
+- Added logtalk.xml mode file (#1945284 - Paulo Moura)
+
+- Added regex.xml mode file (#2782258 - Kevin Hunter)
+
+- Added sip.xml mode file to read sip messages (Matthieu Casanova)
+
+- New paste special action accessible from menu
+  Edit->More clipboard->Paste Special that will suggest different mode to paste
+  data from clipboard, currently plain text, rich jEdit text
+  (plain text + edit mode) and mime type html are supported (Matthieu Casanova)
+
+- Added Ant mode file for Ant build files. (#3016053 - Dale Anson)
+
+- Added TLD mode file for JSP Tag Definition Library files. (#3016054 - Dale Anson)
+
+- Added Maven mode file for Maven pom.xml files. (#3016057 - Dale Anson)
+
+- Updated javacc mode to better highlight keywords and regular expressions. (Dale Anson)
+
+- Updated Django temlate mode to Django 1.2, added missing keywords
+  and better integration with HTML, CSS and JS (Jakub Roztočil)
+
+}}}
+{{{ Miscellaneous
+- Wrap mode tooltip in status bar now indicates the current wrap mode (Matthieu Casanova)
+
+- It is now possible to copy several files in the VFS Browser at the same time,
+  and copy from/to the OS explorer (Matthieu Casanova)
+
+- Removed LatestVersion plugin.
+
+- HelpViewer font can be configured via Appearance Option Pane. (#3002186 - Alan Ezust)
+
+- Added actions for eating whitespace at word ends in both directions
+  for findWordStart. (#1953341 - strank)
+
+- Added a configurable selection foreground color. If set, this color will be
+  used for the selection foreground instead of the syntax highlighting color.
+  The new option can be set from Global Options -> Text Area.
+  (Shlomy Reinstein)
+
+- Implemented feature request #2919875: Namable views. You can now specify a
+  name for each view using View -> Set view title. The name is persistent in the
+  perspective.xml file.
+
+- In Hypersearchs result panel, the query string length is now limited to 100
+  chars by default for display (Matthieu Casanova)
+
+- Applied patch #2887520: Allow filtering the recent file list using file globs,
+  e.g. "*.java" or "{*.c,*.h}". (Patch provided by Joerg Spieler)
+
+- New status bar widget design (Matthieu Casanova #1540560)
+
+- New Encodings option pane using drag & drop (Matthieu Casanova)
+
+- Parsing buffer local properties is limited to the first 10000 characters of
+  the first and last 10 lines. This is a performance enhancement when loading
+  buffers containing very long lines (Matthieu Casanova)
+
+. Added a new option to perform font substitution in the text area when the
+  current configured font can't display characters in the buffer. It's disabled
+  by default, and can be enabled in the text area option pane, along with the
+  option to choose preferred fonts for substitution. This makes reading files
+  which contain text in multiple scripts more bearable. (Marcelo Vanzin)
+
+- Fixed ModeCatalogHandler so if an edit mode in the user-specific catalog has
+  the same name as an edit mode in the system catalog, the version in the
+  user-specific catalog will override the system default.  This is what the
+  documentation for writing an edit mode has stated is true for some time, now
+  it is. (Dale Anson)
+
+- Gave better priorities within modes which matches with a file at the
+  same time, as the following order:
+  - exact filename match
+  - both the filename glob and the first line glob
+  - only the filename glob
+  - the first line glob  (Dale Anson)
+
+- In status bar option pane, when adding a widget only widgets that are not
+  already in the bar will be proposed (Matthieu Casanova feature #2937286)
+
+- Added jedit.exe in the Windows installer, so that users can invoke
+  jEdit more like a native application.
+  (Feature Request #2661227, Patch #2984552 - Hisateru Tanaka)
+
+- Added some more encoding detectors as default. (Kazutoshi Satoda)
+
+- Extended the scope of the workaround for a bug in Sun (and Apple) JVM 5
+  to cover IBM JVM because the same problem was reported on it.
+  (SF.net bug #3006686 - Kazutoshi Satoda)
+
+- Added settings to Activity Log to adjust colors and filter by message type.
+  (Dale Anson)
+
+- Updated 'Make Get and Set' macro. (Dale Anson)
+
+- Ctrl-P and Ctrl-N work from completion popups now (#3080463 - Damien Radtke)
+
+- Added "Replace" button to Search and Replace dialog. This allows a 'replace once' as opposed to 'replace and find'. (#3084224 - Dale Anson)
+}}}
+
+}}}
+
+jEdit buffer local properties:
+:folding=explicit:collapseFolds=2:
