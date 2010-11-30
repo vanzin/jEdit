@@ -1,0 +1,44 @@
+/*
+ * Next_Dirty_Buffer.bsh - Changes the buffer in
+ * the current EditPane to the next dirty buffer, if 
+ * there is one.
+ *
+ * Copyright (C) 2002-2004 Ollie Rutherfurd <oliver@rutherfurd.net>
+ *
+ * $Id$
+ */
+
+void nextDirtyBuffer(View view)
+{
+	Buffer current = view.getBuffer();
+	Buffer b = current.getNext();
+	for(int i=0; i < jEdit.getBufferCount()-1; i++)
+	{
+		// Buffer.getNext() returns null on last
+		if(b == null)
+			b = jEdit.getFirstBuffer();
+		if(b.isDirty())
+		{
+			view.getEditPane().setBuffer(b);
+			return;
+		}
+		b = b.getNext();	// check next
+	}
+	// if we get here, we didn't switch
+	if(current.isDirty())
+		view.getStatus().setMessageAndClear("No other buffers are dirty");
+	else
+		view.getStatus().setMessageAndClear("No buffers are dirty");
+}
+
+nextDirtyBuffer(view);
+
+/*
+
+<listitem>
+	<para><filename>Next_Dirty_Buffer.bsh</filename></para>
+	<abstract><para>Switches to the next dirty buffer, if there is one.
+	</para></abstract>
+</listitem>
+
+*/

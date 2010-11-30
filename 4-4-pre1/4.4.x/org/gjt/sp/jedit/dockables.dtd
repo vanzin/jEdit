@@ -1,0 +1,11 @@
+<!ENTITY % att-bool '( TRUE | FALSE )' >
+
+<!-- DOCKABLES element -->
+<!ELEMENT DOCKABLES ( DOCKABLE+ ) >
+
+<!-- DOCKABLE element -->
+<!ELEMENT DOCKABLE ( #PCDATA ) >
+<!ATTLIST DOCKABLE
+	NAME CDATA #REQUIRED
+	NO_ACTIONS %att-bool; "FALSE"
+	MOVABLE %att-bool; "FALSE" >

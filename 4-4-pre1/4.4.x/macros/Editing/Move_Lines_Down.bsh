@@ -1,0 +1,106 @@
+/*
+Move_Lines_Down.bsh - Beanshell macro to move a selection of lines down by one
+line.  This should handle multiple selections, but doesn't work quite right.
+
+Copyright (c) Dale Anson, 2004
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+   3. The name of the author may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+// check buffer read-only status
+if ( buffer.isReadOnly() ) {
+   Macros.error( view, "File is read only." );
+   return ;
+}
+
+Mode mode = buffer.getMode();
+boolean shouldIndent = false;
+String[] indentProps = new String[]{"indentOpenBrackets", "indentOpenBrackets", "unalignedOpenBrackets", "unalignedCloseBrackets", "indentNextLine", "unindentThisLine", "electricKeys", "doubleBracketIndent", "lineUpClosingBracket"};
+for (String name : indentProps) {
+    if (mode.getProperty(name) != null) {
+        shouldIndent = true;
+        break;
+    }
+}
+
+// get the current selection or the current line if no selection
+Selection[] selections = textArea.getSelection();
+
+// this doesn't work right with multiple selection, so don't do anything
+if (selections.length > 1) {
+   Macros.error( view, "Line move does not work with multiple selection." );
+   return ;
+}
+
+String ls = buffer.getStringProperty( "lineSeparator" );
+
+int line = textArea.getCaretLine();
+
+// make sure last line ends with a line separator
+String line_text = textArea.getLineText(textArea.getLineCount() - 1);
+if (!line_text.endsWith(ls) && line >= textArea.getLineCount() - 3) {
+    buffer.insert(buffer.getLength(), ls);
+}
+
+// if nothing is selected, select current line
+if (selection == null || selections.length == 0) {
+   selections = new Selection[1];
+   int start_offset = textArea.getLineStartOffset(line);
+   int end_offset = textArea.getLineEndOffset(line);
+   selections[0] = new Selection.Range(start_offset, end_offset);
+   textArea.addToSelection(selections[0]);
+}
+
+// adjust the start and end line offsets to reselect after the move
+int[] startLines = new int[selections.length];
+int[] endLines = new int[selections.length];
+for (int i = 0; i < selections.length; i++) {
+   startLines[i] = selections[i].getStartLine() + 1;
+   endLines[i] = selections[i].getEndLine() + 1;
+}
+
+// cut the selected text, move down one line, and paste it back in
+Registers.cut( textArea, '_' );
+textArea.goToNextLine( false );
+Registers.paste( textArea, '_', false );
+textArea.goToPrevLine( false );
+
+// indent lines
+if (shouldIndent) {
+    for (int i = 0; i < startLines.length; i++) {
+        buffer.indentLines( startLines[i] - 1, endLines[i] );
+    }
+}
+
+// reselect the moved text
+textArea.selectNone();
+for (int i = 0; i < startLines.length; i++) {
+   selection = new Selection.Range(
+      textArea.getLineStartOffset( startLines[i] ),
+      textArea.getLineStartOffset( endLines[i] )
+   );
+   textArea.addToSelection(selection);
+}
+
+
+
