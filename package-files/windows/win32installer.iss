@@ -80,6 +80,7 @@ Source: startup\*; DestDir: {app}\startup; Flags: ignoreversion recursesubdirs c
 Source: @base.dir@\icons\jedit.ico; DestDir: {app}; Flags: ignoreversion sortfilesbyextension; Components: main
 Source: doc\README.txt; DestDir: {app}\doc; Flags: isreadme ignoreversion sortfilesbyextension; Components: main
 Source: classes\package-files\windows\jedit.bat; DestDir: {app}; Flags: ignoreversion sortfilesbyextension; AfterInstall: UpdateBatchfile; Components: batchfile
+Source: classes\installer\installer\ServerKiller.class; Flags: ignoreversion dontcopy
 
 [INI]
 Filename: {app}\jEdit.url; Section: InternetShortcut; Key: URL; String: http://www.jEdit.org
@@ -287,6 +288,27 @@ begin
 	end;
 end;
 
+// Called before extracting jedit.jar
+procedure killServer;
+var
+  ResultCode : Integer;
+begin
+    ExtractTemporaryFile('ServerKiller.class');
+    CreateDir(ExpandConstant('{tmp}\installer'));
+    RenameFile(ExpandConstant('{tmp}\ServerKiller.class'),ExpandConstant('{tmp}\installer\ServerKiller.class'));
+    if MsgBox('The installer will now try to contact any running instance of jEdit' + #13 +
+           'Please save your work and exit jEdit for the installation to continue !',
+           mbConfirmation, MB_YESNO) = IDYES then
+    begin
+    ExecAsOriginalUser(javaPath(''),
+                       'installer.ServerKiller',
+                       ExpandConstant('{tmp}'),
+                       SW_SHOW,
+                        ewWaitUntilTerminated, ResultCode);
+    end;
+end;
+
+
 // save ini file for native laucher
 procedure UpdateLaunch4jIniFile;
 begin
@@ -296,6 +318,7 @@ end;
 // Called on setup startup
 function InitializeSetup: Boolean;
 begin
+  killServer();
 	// check if java >= 1.4 is installed
 	if Length(javaPath('')) > 0 then begin
 		Result := true;

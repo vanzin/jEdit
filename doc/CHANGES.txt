@@ -15,6 +15,9 @@ contributing to this release.
   if some ActionSets have been unloaded (plugin deactivation)
   (Matthieu Casanova #3071355)
 
+- Windows installer kills existing jEdit instance before trying to install
+  (#2617610 - Eric Le Lay)
+  
 - Closes menus when toggling dockables. (#3022084 - Anshal Shukla)
 
 - VFSBrowser escape handling fixed when used as a dialog (#3101808 - Alan Ezust)
