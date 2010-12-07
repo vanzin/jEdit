@@ -1460,6 +1460,12 @@
 						value="jedit.l4j.ini" />
 			</filterset>
 		</copy>
+		 <antcall target="compile-installer">
+						 <param name="config.build.debuglevel"
+												value="lines,source" />
+						 <param name="classes.dir"
+												location="${dist.dir}/classes" />
+		</antcall>
 		<exec executable="${config.innosetup.compiler.executable}"
 			  failonerror="true">
 			<arg file="${dist.dir}/classes/package-files/windows/win32installer.iss" />
