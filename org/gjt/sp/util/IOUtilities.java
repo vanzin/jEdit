@@ -25,7 +25,7 @@ package org.gjt.sp.util;
 import java.io.*;
 
 /**
- * IO tools that depends on JDK only.
+ * IO tools that depend on JDK only.
  *
  * @author Matthieu Casanova
  * @version $Id$

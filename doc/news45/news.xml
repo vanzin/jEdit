@@ -14,7 +14,8 @@
     <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
     but here are some of the major features of this version. </para>
     <itemizedlist>
-    <listitem><para> This is an item </para></listitem>
+    <listitem><para> Lots of old deprecated APIs were removed. Some plugins may be broken as a result. </para></listitem>
+    <listitem><para> This is another list item. </para></listitem>
     </itemizedlist>
 
 <!-- :maxLineLen=80:wrap=hard: -->

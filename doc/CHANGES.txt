@@ -5,7 +5,7 @@ jEdit 4.5 version history
 {{{ Version 4.5pre1
 
 Thanks to Matthieu Casanova, Alan Ezust, cy6erGn0m, Bad Sector, jclopes, Dale Anson,
-Damien Radtke and Matthew Gilbert for contributing to this release
+Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this release
 
 {{{ API Changes
 -New method TextArea.getVisibleLineText(screenLine) and
@@ -168,6 +168,8 @@ Damien Radtke and Matthew Gilbert for contributing to this release
 
 }}}
 {{{ Editing
+
+-New edit mode option: Elastic Tabstops (Anshal Shukla + Shlomy Reinstein).
 
 -Applied patch from Matthew Gilbert to add ability to increase/decrease line spacing in the text area. (#3023134, Dale Anson)
 
