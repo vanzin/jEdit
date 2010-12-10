@@ -7,6 +7,12 @@ jEdit 4.5 version history
 Thanks to Matthieu Casanova, Alan Ezust, cy6erGn0m, Bad Sector, jclopes, Dale Anson,
 Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this release
 
+{{{ Bug fixes
+
+- Made jedit.exe to find JDK, so that jEdit runs only with JDK (without
+  JRE) like 4.3.x and before. (SF.net bug #3134149 - Kazutoshi Satoda)
+
+}}}
 {{{ API Changes
 -New method TextArea.getVisibleLineText(screenLine) and
  TextArea.getVisibleLineSegment() that returns

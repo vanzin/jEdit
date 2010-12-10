@@ -17,7 +17,7 @@
   <jre>
     <path></path>
     <minVersion>@target.java.version@.0</minVersion>
-    <jdkPreference>jreOnly</jdkPreference>
+    <jdkPreference>preferJre</jdkPreference>
   </jre>
   <versionInfo>
     <fileVersion>@jedit.build.number@</fileVersion>
