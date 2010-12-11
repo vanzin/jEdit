@@ -141,6 +141,7 @@
       <KEYWORD2>public</KEYWORD2>
       <KEYWORD2>static</KEYWORD2>
       <KEYWORD2>typedef</KEYWORD2>
+      <KEYWORD2>using</KEYWORD2>
       <KEYWORD2>var</KEYWORD2>
 
       <!-- Built-in types -->

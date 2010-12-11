@@ -221,6 +221,9 @@ contributing to this release.
 
 - Update for Stata-edit mode (goebbe, # 3019042)
 
+- Added "using" keyword to haXe edit mode (patch #3081482 from Bad Sector,
+  Matthieu Casanova)
+
 - Added visualbasic.xml edit mode (Anonymous submitter, #3031412)
 
 - Added haxe.xml and hxml mode files to support haXe language
