@@ -1015,26 +1015,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	private Cursor hiddenCursor;
 	private boolean defaultCursor = true;
 	//}}}
-
-	private static Object sm_hrgbRender;
-	private static Constructor<FontRenderContext> sm_frcConstructor;
-
-	static
-	{
-		try
-		{
-			Field f = RenderingHints.class.getField("VALUE_TEXT_ANTIALIAS_LCD_HRGB");
-			sm_hrgbRender = f.get(null);
-			Class[] fracFontMetricsTypeList = {AffineTransform.class, Object.class, Object.class};
-			sm_frcConstructor = FontRenderContext.class.getConstructor(fracFontMetricsTypeList);
-		}
-		catch (NullPointerException npe) {}
-		catch (SecurityException se) {}
-		catch (NoSuchFieldException nsfe) {}
-		catch (IllegalArgumentException iae) {}
-		catch (IllegalAccessException iae) {}
-		catch (NoSuchMethodException nsme) {}
-	}
+	
 	//{{{ updateRenderingHints() method
 	private void updateRenderingHints()
 	{
@@ -1044,28 +1025,22 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			fracFontMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON
 				: RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 
+		hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, antiAlias.renderHint());
+		
+
 		if (antiAlias.val() == 0)
 		{
 			hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 			fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
 		}
-		/** LCD HRGB mode - works with JRE 1.6 only, which is why we use reflection */
-		else if (antiAlias.val() == 2 && sm_hrgbRender != null )
+		/* Subpixel antialiasing mode */
+		else if (antiAlias.val() > 1) 
 		{
-			hints.put(RenderingHints.KEY_TEXT_ANTIALIASING, sm_hrgbRender);
 			Object fontRenderHint = fracFontMetrics ?
 				RenderingHints.VALUE_FRACTIONALMETRICS_ON :
 				RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
-			Object[] paramList = {null, sm_hrgbRender, fontRenderHint};
-			try
-			{
-				fontRenderContext = sm_frcConstructor.newInstance(paramList);
-			}
-			catch (Exception e)
-			{
-				fontRenderContext = new FontRenderContext(null, antiAlias.val() > 0, fracFontMetrics);
-			}
+			fontRenderContext = new FontRenderContext(null, antiAlias.renderHint(), 
+				fontRenderHint);			
 		}
 		else /** Standard Antialias Version */
 		{

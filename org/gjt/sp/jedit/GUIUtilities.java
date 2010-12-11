@@ -452,6 +452,7 @@ public class GUIUtilities
 		JToolBar toolB = new JToolBar();
 		toolB.setName(name);
 		toolB.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		toolB.setFloatable(jEdit.getBooleanProperty("view.toolbar.floatable"));
 
 		String buttons = jEdit.getProperty(name);
 		if(buttons != null)

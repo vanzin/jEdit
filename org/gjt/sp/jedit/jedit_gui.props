@@ -2187,6 +2187,7 @@ options.toolbar.reset.dialog.message=Are you sure you want to reset the toolbar 
 options.view.label=View
 options.view.code=new ViewOptionPane();
 options.view.viewLayout=View layout
+options.view.floatableToolbars=Floatable Toolbars
 options.view.alternateDockingLayout=Alternate docked window placement
 options.view.alternateToolBarLayout=Alternate tool bar placement
 options.view.showFullPath=Show full path of buffer in title bar

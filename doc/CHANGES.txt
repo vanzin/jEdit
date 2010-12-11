@@ -191,8 +191,14 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 {{{ UI
 - Updated ColorWellButton to use the dialog provided by JColorChooser rather than creating its own dialog since the JColorChooser dialog is much richer. (Dale Anson)
 
+- New View option: Floatable toolbars. (Alan Ezust)
+
+- New TextArea Option: Choice of color ordering w/ subpixel antialiasing. (Alan Ezust) 
+
 }}}
 {{{ Miscellaneous
+-New View option: Floatable Toolbars.
+
 -Added a new menu item "New Macro" in Macros menu (patch #2983607 from Damien Radtke, Matthieu Casanova)
 
 -In search and replace when replacing by a beanshell snippet, it is now possible to use multiple statements instead of
