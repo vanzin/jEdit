@@ -29,6 +29,7 @@ goto-line.shortcut=C+g
 new-file.shortcut=C+n
 new-file-in-mode.shortcut=CS+n
 open-file.shortcut=C+o
+reload.shortcut=F5
 print.shortcut=C+p
 exit.shortcut=C+q
 # C+r is a prefix
