@@ -193,7 +193,7 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 
 - New View option: Floatable toolbars. (Alan Ezust)
 
-- New TextArea Option: Choice of color ordering w/ subpixel antialiasing. (Alan Ezust) 
+- New TextArea Option: Choice of color ordering w/ subpixel antialiasing. (#2989209 - Alan Ezust) 
 
 }}}
 {{{ Miscellaneous

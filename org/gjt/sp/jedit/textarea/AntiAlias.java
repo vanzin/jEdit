@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2006 Alan Ezust
+ * Copyright (C) 2006, 2010 Alan Ezust
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,8 @@ package org.gjt.sp.jedit.textarea;
 import java.awt.RenderingHints;
 
 /**
- * Class for representing AntiAlias values. The following modes are supported:
- * none standard lcd subpixel (JDK 1.6 only)
+ * Class for representing AntiAlias values. 
+ * All subpixel modes are supported as of jEdit 4.5pre1
  * 
  * @author ezust
  * @since jedit 4.3pre4
@@ -46,19 +46,24 @@ public class AntiAlias
 	
 	public static final String SUBPIXEL_VBGR = "subpixel VBGR";
 	
-	public static final String[] comboChoices = { NONE, STANDARD, SUBPIXEL_HRGB, SUBPIXEL_VRGB, 
-		SUBPIXEL_HBGR, SUBPIXEL_VBGR };
+	public static final String[] comboChoices = { NONE, 
+		STANDARD, SUBPIXEL_HRGB, SUBPIXEL_VRGB, SUBPIXEL_HBGR, SUBPIXEL_VBGR };
 
-	public static final Object[] renderHints = {RenderingHints.VALUE_TEXT_ANTIALIAS_OFF,
-		RenderingHints.VALUE_TEXT_ANTIALIAS_ON, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB,
-		RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_VRGB, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR,
-		RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_VBGR};
+	public static final Object[] renderHints = {
+		RenderingHints.VALUE_TEXT_ANTIALIAS_OFF,
+		RenderingHints.VALUE_TEXT_ANTIALIAS_ON,
+		RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB,
+		RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_VRGB,
+		RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR,
+		RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_VBGR
+		};
 	
 	public void set(int newValue)
 	{
 		m_val = newValue;
 	}
 
+	/** @return corresponding text antialias value from RenderingHints class */
 	public Object renderHint() {
 		return renderHints[m_val];
 	}
