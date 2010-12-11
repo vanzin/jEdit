@@ -12,6 +12,9 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 - Made jedit.exe to find JDK, so that jEdit runs only with JDK (without
   JRE) like 4.3.x and before. (SF.net bug #3134149 - Kazutoshi Satoda)
 
+- Got rid of extra Component created as parent of every JToolBar in 
+  GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
+
 }}}
 {{{ API Changes
 -New method TextArea.getVisibleLineText(screenLine) and
