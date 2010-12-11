@@ -184,9 +184,17 @@ public class AboutDialog extends JDialog implements ActionListener
 			}
 			else if ((e.getKeyCode() == KeyEvent.VK_LEFT) ||
 					(e.getKeyCode() == KeyEvent.VK_RIGHT) ||
-					(e.getKeyCode() == KeyEvent.VK_ESCAPE))
+					(e.getKeyCode() == KeyEvent.VK_SPACE)) 
 			{
 				skipDrain = ! skipDrain;
+				e.consume();
+			}
+			else if ((e.getKeyCode()) == KeyEvent.VK_ESCAPE) 
+			{
+				e.consume();
+				JDialog d = GUIUtilities.getParentDialog(this);
+				stopThread();
+				d.dispose();
 			}
 		}
 
