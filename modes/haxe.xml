@@ -113,6 +113,7 @@
       <KEYWORD1>catch</KEYWORD1>
       <KEYWORD1>continue</KEYWORD1>
       <KEYWORD1>default</KEYWORD1>
+      <KEYWORD1>never</KEYWORD1>
       <KEYWORD1>do</KEYWORD1>
       <KEYWORD1>else</KEYWORD1>
       <KEYWORD1>for</KEYWORD1>
@@ -143,6 +144,7 @@
       <KEYWORD2>typedef</KEYWORD2>
       <KEYWORD2>using</KEYWORD2>
       <KEYWORD2>var</KEYWORD2>
+      <KEYWORD2>dynamic</KEYWORD2>
 
       <!-- Built-in types -->
       <KEYWORD3>ArrayAccess</KEYWORD3>
