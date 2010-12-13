@@ -45,14 +45,14 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * that row, and each column is as wide as the widest component in
   * that column. </p>
   * <p>
-  * This behavior is similar to 
-  * <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/GridLayout.html">{@code java.awt.GridLayout}</a>
+  * This behavior is similar to
+  * <a href="http://download.oracle.com/javase/6/docs/api/java/awt/GridLayout.html">{@code java.awt.GridLayout}</a>
   * but it supports different row heights and
   * column widths for each row/column. </p>
   * <p>
   * For example, the following is a Dialog that lays out ten buttons
   * exactly the same as in the example of the JavaDoc of
-  * <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/GridBagLayout.html">{@code java.awt.GridBagLayout}</a>
+  * <a href="http://download.oracle.com/javase/6/docs/api/java/awt/GridBagLayout.html">{@code java.awt.GridBagLayout}</a>
   * with the difference of vertical and horizontal gaps that can be configured:
   * <hr>
   * <blockquote><pre><font color="#000000">
@@ -70,7 +70,7 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * <font color="#000000">  12:</font>    <font color="#006699"><strong>public</strong></font> <font color="#9966ff">ExampleDialog</font>() <font color="#000000"><strong>{</strong></font>
   * <font color="#000000">  13:</font>        <font color="#cc00cc">super</font>(<font color="#cc00cc">null</font>,<font color="#ff00cc">&quot;</font><font color="#ff00cc">Example</font><font color="#ff00cc"> </font><font color="#ff00cc">Dialog</font><font color="#ff00cc">&quot;</font>,<font color="#cc00cc">true</font>);
   * <font color="#000000">  14:</font>        <font color="#9966ff">setLayout</font>(<font color="#006699"><strong>new</strong></font> <font color="#9966ff">ExtendedGridLayout</font>(<font color="#ff0000">5</font>,<font color="#ff0000">5</font>,<font color="#006699"><strong>new</strong></font> <font color="#9966ff">Insets</font>(<font color="#ff0000">5</font>,<font color="#ff0000">5</font>,<font color="#ff0000">5</font>,<font color="#ff0000">5</font>)));
-  * <font color="#990066">  15:</font>        
+  * <font color="#990066">  15:</font>
   * <font color="#000000">  16:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button1</font><font color="#ff00cc">&quot;</font>));
   * <font color="#000000">  17:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button2</font><font color="#ff00cc">&quot;</font>));
   * <font color="#000000">  18:</font>        <font color="#9966ff">add</font>(<font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button3</font><font color="#ff00cc">&quot;</font>));
@@ -87,12 +87,12 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * <font color="#000000">  29:</font>        <font color="#9966ff">add</font>(button,<font color="#006699"><strong>new</strong></font> <font color="#9966ff">ExtendedGridLayoutConstraints</font>(<font color="#ff0000">3</font>,<font color="#ff0000">3</font>,<font color="#ff0000">1</font>,button));
   * <font color="#990066">  30:</font>        button <font color="#000000"><strong>=</strong></font> <font color="#9966ff">makeButton</font>(<font color="#ff00cc">&quot;</font><font color="#ff00cc">Button10</font><font color="#ff00cc">&quot;</font>);
   * <font color="#000000">  31:</font>        <font color="#9966ff">add</font>(button,<font color="#006699"><strong>new</strong></font> <font color="#9966ff">ExtendedGridLayoutConstraints</font>(<font color="#ff0000">4</font>,REMAINDER,<font color="#ff0000">1</font>,button));
-  * <font color="#000000">  32:</font>        
+  * <font color="#000000">  32:</font>
   * <font color="#000000">  33:</font>        <font color="#9966ff">pack</font>();
   * <font color="#000000">  34:</font>        <font color="#9966ff">setLocationRelativeTo</font>(<font color="#cc00cc">null</font>);
   * <font color="#990066">  35:</font>        <font color="#9966ff">setVisible</font>(<font color="#cc00cc">true</font>);
   * <font color="#000000">  36:</font>    <font color="#000000"><strong>}</strong></font>
-  * <font color="#000000">  37:</font>    
+  * <font color="#000000">  37:</font>
   * <font color="#000000">  38:</font>    <font color="#006699"><strong>private</strong></font> Button <font color="#9966ff">makeButton</font>(String name) <font color="#000000"><strong>{</strong></font>
   * <font color="#000000">  39:</font>        Button button <font color="#000000"><strong>=</strong></font> <font color="#006699"><strong>new</strong></font> <font color="#9966ff">Button</font>(name);
   * <font color="#990066">  40:</font>        button.<font color="#9966ff">setMaximumSize</font>(<font color="#006699"><strong>new</strong></font> <font color="#9966ff">Dimension</font>(Integer.MAX_VALUE,Integer.MAX_VALUE));
@@ -109,13 +109,13 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * <p>
   * Components for which {@code isVisible() == false} are ignored. Because
   * of this, components can be replaced "in-place" by adding two components next to
-  * each other, with different {@code isVisible()} values, and toggling the 
+  * each other, with different {@code isVisible()} values, and toggling the
   * {@code setVisible()} values of both when we wish to swap the currently
   * visible component with the one that is hidden. </p>
   *
   * <p>
-  * If you want to reserve free space in a row inbetween components,  
-  * add a <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/Box.Filler.html">{@code javax.swing.Box.Filler}</a>
+  * If you want to reserve free space in a row inbetween components,
+  * add a <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/Box.Filler.html">{@code javax.swing.Box.Filler}</a>
   * to the layout if the free space is in the middle of a row,
   * or just don't add components if the free space
   * should be at the end of a row.</p>
@@ -130,8 +130,8 @@ import static org.gjt.sp.jedit.gui.ExtendedGridLayoutConstraints.REMAINDER;
   * @author Björn "Vampire" Kautler
   * @version 1.0
   * @see ExtendedGridLayoutConstraints
-  * @see <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/Component.html"><code>java.awt.Component</code></a>
-  * @see <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/Box.Filler.html"><code>javax.swing.Box.Filler</code></a>
+  * @see <a href="http://download.oracle.com/javase/6/docs/api/java/awt/Component.html"><code>java.awt.Component</code></a>
+  * @see <a href="http://download.oracle.com/javase/6/docs/api/javax/swing/Box.Filler.html"><code>javax.swing.Box.Filler</code></a>
   */
 public class ExtendedGridLayout implements LayoutManager2
 {
@@ -144,46 +144,46 @@ public class ExtendedGridLayout implements LayoutManager2
 	  * @see ExtendedGridLayoutConstraints
 	  */
 	private final Hashtable<Component,ExtendedGridLayoutConstraints> comptable;
-	
+
 	/**
 	  * Specifies the horizontal space between two columns.
 	  * The default value is 0.
-	  * 
+	  *
 	  * @see #distanceToBorders
 	  * @see #vgap
 	  */
 	private final int hgap;
-	
+
 	/**
 	  * Specifies the vertical space between two rows.
 	  * The default value is 0.
-	  * 
+	  *
 	  * @see #distanceToBorders
 	  * @see #hgap
 	  */
 	private final int vgap;
-	
+
 	/**
 	  * Specifies the gap between the grid and the borders of the parent container.
 	  * The default value is 0 for all four borders.
-	  * 
+	  *
 	  * @see #hgap
 	  * @see #vgap
 	  */
 	private final Insets distanceToBorders;
-	
+
 	/**
 	  * An enum to tell the {@code getSize()} method which size is requested.
-	  * 
+	  *
 	  * @see #getSize()
 	  */
 	private static enum LayoutSize { MINIMUM, PREFERRED, MAXIMUM }
-	
+
 	/**
 	  * Creates an extended grid layout manager with the specified horizontal
 	  * and vertical gap, and the specified distance to the borders
 	  * of the parent container.
-	  * 
+	  *
 	  * @param hgap The horizontal space between two columns ({@literal >=0})
 	  * @param vgap The vertical space between two rows ({@literal >=0})
 	  * @param distanceToBorders The distances to the borders of the parent container
@@ -205,7 +205,7 @@ public class ExtendedGridLayout implements LayoutManager2
 		this.distanceToBorders = (Insets)distanceToBorders.clone();
 		comptable = new Hashtable<Component,ExtendedGridLayoutConstraints>();
 	}
-	
+
 	/**
 	  * Creates an extended grid layout manager with zero horizontal
 	  * and vertical gap, and zero distance to the borders
@@ -215,12 +215,12 @@ public class ExtendedGridLayout implements LayoutManager2
 	{
 		this(0,0,new Insets(0,0,0,0));
 	}
-	
+
 	/**
 	  * If the layout manager uses a per-component string,
 	  * adds the component <code>component</code> to the layout,
 	  * associating it with the string specified by <code>name</code>.
-	  * 
+	  *
 	  * @param name      The string to be associated with the component.
 	  *                  Has to be {@code null}, so that default constraints are used.
 	  * @param component The component to be added
@@ -231,11 +231,11 @@ public class ExtendedGridLayout implements LayoutManager2
 	{
 		addLayoutComponent(component,name);
 	}
-	
+
 	/**
 	  * Adds the specified component to the layout, using the specified
 	  * constraints object.
-	  * 
+	  *
 	  * @param component    The component to be added
 	  * @param constraints  Where/how the component is added to the layout.
 	  * @throws IllegalArgumentException if {@code constraints} is not an ExtendedGridLayoutConstraints object
@@ -262,17 +262,17 @@ public class ExtendedGridLayout implements LayoutManager2
 			}
 			comptable.put(component,eglConstraints);
 		}
-		else 
+		else
 		{
 			throw new IllegalArgumentException("constraints must not be an ExtendedGridLayoutConstraints object");
 		}
 	}
-	
+
 	/**
 	  * Retrieves the constraints for the specified {@code component}.
 	  * If {@code component} is not in the {@code ExtendedGridLayout},
 	  * a set of default {@code ExtendedGridLayoutConstraints} are returned.
-	  * 
+	  *
 	  * @param component the {@code component} to be queried
 	  * @return the contraints for the specified {@code component}
 	  * @throws NullPointerException if {@code component} is {@code null}
@@ -292,24 +292,24 @@ public class ExtendedGridLayout implements LayoutManager2
 		}
 		return constraints;
 	}
-	
+
 	/**
 	  * Removes the specified component from the layout.
-	  * 
+	  *
 	  * @param component The component to be removed
 	  */
 	public void removeLayoutComponent(Component component)
 	{
 		comptable.remove(component);
 	}
-	
+
 	/**
 	  * Returns the alignment along the X axis.  This specifies how
 	  * the component would like to be aligned relative to other
 	  * components.  The value should be a number between 0 and 1
 	  * where 0 represents alignment along the origin, 1 is aligned
 	  * the furthest away from the origin, 0.5 is centered, etc.
-	  * 
+	  *
 	  * @param container The container for which the alignment should be returned
 	  * @return {@code java.awt.Component.CENTER_ALIGNMENT}
 	  */
@@ -317,14 +317,14 @@ public class ExtendedGridLayout implements LayoutManager2
 	{
 		return CENTER_ALIGNMENT;
 	}
-	
+
 	/**
 	  * Returns the alignment along the Y axis. This specifies how
 	  * the component would like to be aligned relative to other
 	  * components. The value should be a number between 0 and 1
 	  * where 0 represents alignment along the origin, 1 is aligned
 	  * the furthest away from the origin, 0.5 is centered, etc.
-	  * 
+	  *
 	  * @param container The container for which the alignment should be returned
 	  * @return {@code java.awt.Component.CENTER_ALIGNMENT}
 	  */
@@ -332,11 +332,11 @@ public class ExtendedGridLayout implements LayoutManager2
 	{
 		return CENTER_ALIGNMENT;
 	}
-	
+
 	/**
 	  * Calculates the minimum size dimensions for the specified
 	  * container, given the components it contains.
-	  * 
+	  *
 	  * @param parent The component to be laid out
 	  * @return The minimum size for the container
 	  * @see #maximumLayoutSize
@@ -353,11 +353,11 @@ public class ExtendedGridLayout implements LayoutManager2
 			return getSize(parent,LayoutSize.MINIMUM,false,gridSize,gridRows,colspans,rowspans,new int[0][0]);
 		}
 	}
-	
+
 	/**
 	  * Calculates the preferred size dimensions for the specified
 	  * container, given the components it contains.
-	  * 
+	  *
 	  * @param parent The container to be laid out
 	  * @return The preferred size for the container
 	  * @see #maximumLayoutSize
@@ -374,11 +374,11 @@ public class ExtendedGridLayout implements LayoutManager2
 			return getSize(parent,LayoutSize.PREFERRED,false,gridSize,gridRows,colspans,rowspans,new int[0][0]);
 		}
 	}
-	
+
 	/**
 	  * Calculates the maximum size dimensions for the specified
 	  * container, given the components it contains.
-	  * 
+	  *
 	  * @param parent The container to be laid out
 	  * @return The maximum size for the container
 	  * @see #minimumLayoutSize
@@ -395,21 +395,21 @@ public class ExtendedGridLayout implements LayoutManager2
 			return getSize(parent,LayoutSize.MAXIMUM,false,gridSize,gridRows,colspans,rowspans,new int[0][0]);
 		}
 	}
-	
+
 	/**
 	  * Invalidates the layout, indicating that if the layout manager
 	  * has cached information it should be discarded.
-	  * 
+	  *
 	  * @param container The container for which the cached information should be discarded
 	  */
 	public void invalidateLayout(Container container)
 	{
 	}
-	
+
 	/**
 	  * Lays out the specified container.
-	  * 
-	  * @param parent The container to be laid out 
+	  *
+	  * @param parent The container to be laid out
 	  */
 	public void layoutContainer(Container parent)
 	{
@@ -420,7 +420,7 @@ public class ExtendedGridLayout implements LayoutManager2
 			Set<ExtendedGridLayoutConstraints> colspans = new HashSet<ExtendedGridLayoutConstraints>();
 			Set<ExtendedGridLayoutConstraints> rowspans = new HashSet<ExtendedGridLayoutConstraints>();
 			Dimension gridSize = buildGrid(parent,gridRows,colspans,rowspans);
-			
+
 			// Pass 2: compute minimum, preferred and maximum column widths / row heights
 			int[][] layoutSizes = new int[6][];
 			Dimension preferredSize = getSize(parent,LayoutSize.PREFERRED,true,gridSize,gridRows,colspans,rowspans,layoutSizes);
@@ -430,7 +430,7 @@ public class ExtendedGridLayout implements LayoutManager2
 			int[] preferredRowHeights = layoutSizes[3];
 			int[] maximumColWidths = layoutSizes[4];
 			int[] maximumRowHeights = layoutSizes[5];
-			
+
 			// Pass 3: redistribute free space
 			Dimension parentSize = parent.getSize();
 			Insets insets = parent.getInsets();
@@ -454,7 +454,7 @@ public class ExtendedGridLayout implements LayoutManager2
 					  preferredRowHeights,
 					  minimumRowHeights,
 					  maximumRowHeights);
-			
+
 			// Pass 4: layout components
 			for (int row=0, y=insets.top+distanceToBorders.top ; row<gridSize.height ; y+=preferredRowHeights[row]+vgap, row++)
 			{
@@ -496,19 +496,19 @@ public class ExtendedGridLayout implements LayoutManager2
 							yCorrection = (int)((height-maxSize.height) * component.getAlignmentY());
 							height = maxSize.height;
 						}
-						
+
 						component.setBounds(x + xCorrection, y + yCorrection, width, height);
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	  * Redistributs free space (positive or negative) to all available
 	  * columns or rows while taking elements maximum and minimum sizes into
 	  * account if possible.
-	  * 
+	  *
 	  * @param totalSize             The cumulated preferred sizes of the components
 	  * @param freeSize              The available space for displaying components
 	  *                              without any gaps between components or between
@@ -613,11 +613,11 @@ public class ExtendedGridLayout implements LayoutManager2
 			}
 		}
 	}
-	
+
 	/**
 	  * Calculates the minimum, preferred or maximum size dimensions
 	  * for the specified container, given the components it contains.
-	  * 
+	  *
 	  * @param parent       The container to be laid out
 	  * @param layoutSize   if {@code LayoutSize.MINIMUM} compute minimum layout size,
 	  *                     if {@code LayoutSize.PREFERRED} compute preferred layout size,
@@ -669,7 +669,7 @@ public class ExtendedGridLayout implements LayoutManager2
 		Arrays.fill(preferredRowHeights,0);
 		Arrays.fill(maximumColWidths,0);
 		Arrays.fill(maximumRowHeights,0);
-		
+
 		// get the maximum of the minimum sizes,
 		//     the maximum of the preferred sizes and
 		//     the minimum of the maximum sizes
@@ -702,7 +702,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				}
 			}
 		}
-		
+
 		// correct cases where
 		// minimumColWidths[col] <= preferredColWidths[col] <= maximumColWidths[col]
 		// is not true by clipping to the minimumColWidths and maximumColWidths
@@ -722,7 +722,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				preferredColWidths[col] = maximumColWidths[col];
 			}
 		}
-		
+
 		// plug in the colspans and correct the minimum, preferred and
 		// maximum column widths the colspans are part of
 		for (ExtendedGridLayoutConstraints cell : colspans)
@@ -795,7 +795,7 @@ public class ExtendedGridLayout implements LayoutManager2
 						  maximumColWidths);
 			}
 		}
-		
+
 		// correct cases where
 		// minimumColWidths[col] <= preferredColWidths[col] <= maximumColWidths[col]
 		// is not true by clipping to the minimumColWidths and maximumColWidths
@@ -815,7 +815,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				preferredColWidths[col] = maximumColWidths[col];
 			}
 		}
-		
+
 		// correct cases where
 		// minimumRowHeights[row] <= preferredRowHeights[row] <= maximumRowHeights[row]
 		// is not true by clipping to the minimumRowHeights and maximumRowHeights
@@ -835,7 +835,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				preferredRowHeights[row] = maximumRowHeights[row];
 			}
 		}
-		
+
 		// plug in the rowspans and correct the minimum, preferred and
 		// maximum row heights the rowspans are part of
 		for (ExtendedGridLayoutConstraints cell : rowspans)
@@ -908,7 +908,7 @@ public class ExtendedGridLayout implements LayoutManager2
 						  maximumRowHeights);
 			}
 		}
-		
+
 		// correct cases where
 		// minimumRowHeights[row] <= preferredRowHeights[row] <= maximumRowHeights[row]
 		// is not true by clipping to the minimumRowHeights and maximumRowHeights
@@ -928,7 +928,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				preferredRowHeights[row] = maximumRowHeights[row];
 			}
 		}
-		
+
 		// copies the computed sizes to the result arrays
 		if (fillRawSizes)
 		{
@@ -939,7 +939,7 @@ public class ExtendedGridLayout implements LayoutManager2
 			resultArrays[4] = maximumColWidths;
 			resultArrays[5] = maximumRowHeights;
 		}
-		
+
 		// sums up the sizes for return value
 		int[] colWidths;
 		int[] rowHeights;
@@ -949,17 +949,17 @@ public class ExtendedGridLayout implements LayoutManager2
 				colWidths = minimumColWidths;
 				rowHeights = minimumRowHeights;
 				break;
-			
+
 			case PREFERRED:
 				colWidths = preferredColWidths;
 				rowHeights = preferredRowHeights;
 				break;
-			
+
 			case MAXIMUM:
 				colWidths = maximumColWidths;
 				rowHeights = maximumRowHeights;
 				break;
-			
+
 			default:
 				throw new InternalError("Missing case branch for LayoutSize: " + layoutSize);
 		}
@@ -973,7 +973,7 @@ public class ExtendedGridLayout implements LayoutManager2
 		{
 			totalHeight += height;
 		}
-		
+
 		// add space between components or between
 		// componetns and the borders of the parent container
 		if (!fillRawSizes)
@@ -982,7 +982,7 @@ public class ExtendedGridLayout implements LayoutManager2
 			totalWidth += insets.left + insets.right + ((gridSize.width - 1) * hgap) + distanceToBorders.left + distanceToBorders.right;
 			totalHeight += insets.top + insets.bottom + ((gridSize.height - 1) * vgap) + distanceToBorders.top + distanceToBorders.bottom;
 		}
-		
+
 		// clip the size to Integer.MAX_VALUE if too big
 		if (totalWidth > Integer.MAX_VALUE)
 		{
@@ -992,14 +992,14 @@ public class ExtendedGridLayout implements LayoutManager2
 		{
 			totalHeight = Integer.MAX_VALUE;
 		}
-		
+
 		return new Dimension((int)totalWidth,(int)totalHeight);
 	}
-	
+
 	/**
 	  * Builds up the grid for the specified container,
 	  * given the components it contains.
-	  * 
+	  *
 	  * @param parent   The container to be laid out
 	  * @param gridRows In this {@code List<List>} the grid gets stored
 	  * @param colspans In this {@code Set} the constraints which are part
@@ -1028,7 +1028,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				row.add(constraints);
 			}
 		}
-		
+
 		// initialize the rowIterators, gridRowIterators and gridRows
 		List<Iterator<ExtendedGridLayoutConstraints>> rowIterators = new ArrayList<Iterator<ExtendedGridLayoutConstraints>>();
 		List<ListIterator<ExtendedGridLayoutConstraints>> gridRowIterators = new ArrayList<ListIterator<ExtendedGridLayoutConstraints>>();
@@ -1045,7 +1045,7 @@ public class ExtendedGridLayout implements LayoutManager2
 			gridRows.add(gridRow);
 			gridRowIterators.add(gridRow.listIterator());
 		}
-		
+
 		// build the grid
 		int col = -1;
 		while (haveNext)
@@ -1056,7 +1056,7 @@ public class ExtendedGridLayout implements LayoutManager2
 			{
 				Iterator<ExtendedGridLayoutConstraints> rowIterator = rowIterators.get(row);
 				ListIterator<ExtendedGridLayoutConstraints> gridRowIterator = gridRowIterators.get(row);
-				
+
 				// look for a rowspan in the previous row
 				if (row > 0)
 				{
@@ -1074,7 +1074,7 @@ public class ExtendedGridLayout implements LayoutManager2
 								{
 									case REMAINDER:
 										break;
-									
+
 									default:
 										haveNext = true;
 								}
@@ -1087,7 +1087,7 @@ public class ExtendedGridLayout implements LayoutManager2
 						}
 					}
 				}
-				
+
 				// look for a colspan in the previous column
 				if (gridRowIterator.hasPrevious())
 				{
@@ -1106,7 +1106,7 @@ public class ExtendedGridLayout implements LayoutManager2
 								{
 									case REMAINDER:
 										break;
-									
+
 									default:
 										haveNext = true;
 								}
@@ -1119,7 +1119,7 @@ public class ExtendedGridLayout implements LayoutManager2
 						}
 					}
 				}
-				
+
 				// add a new element or null
 				if (rowIterator.hasNext())
 				{
@@ -1132,7 +1132,7 @@ public class ExtendedGridLayout implements LayoutManager2
 						{
 							case REMAINDER:
 								break;
-							
+
 							default:
 								haveNext = true;
 						}
@@ -1148,7 +1148,7 @@ public class ExtendedGridLayout implements LayoutManager2
 				}
 			}
 		}
-		
+
 		// check the last gridRow for rowspans and probably add rows for these
 		haveNext = false;
 		int gridRowsSize = gridRows.size();
@@ -1202,17 +1202,17 @@ public class ExtendedGridLayout implements LayoutManager2
 				}
 			}
 		}
-		
+
 		return new Dimension(col+1,gridRows.size());
 	}
-	
+
 	/**
 	  * Returns a string representation of the object. In general, the
 	  * {@code toString} method returns a string that
 	  * "textually represents" this object. The result should
 	  * be a concise but informative representation that is easy for a
 	  * person to read.
-	  * 
+	  *
 	  * @return  a string representation of the object.
 	  */
 	public String toString()

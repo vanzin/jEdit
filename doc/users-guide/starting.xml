@@ -87,6 +87,7 @@
             <informaltable>
                 <tgroup cols="2">
                     <colspec colnum="1" colwidth="1.5in" />
+                    <colspec colwidth="*"/>
 
                     <thead>
                         <row>
@@ -139,6 +140,7 @@
             <informaltable>
                 <tgroup cols="2">
                     <colspec colnum="1" colwidth="1.5in" />
+                    <colspec colwidth="*"/>
 
                     <thead>
                         <row>
@@ -242,6 +244,7 @@
             <informaltable>
                 <tgroup cols="2">
                     <colspec colnum="1" colwidth="1.5in" />
+                    <colspec colwidth="*"/>
 
                     <thead>
                         <row>

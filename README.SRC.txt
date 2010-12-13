@@ -11,10 +11,10 @@ General jEdit documentation can be found in the 'doc' directory.
     work. If an older version doesn't work, install an update. If a newer
     version doesn't work, please submit a bug report.
     Get it from <http://ant.apache.org>.
-  - The Ant-nodeps package. This is included in the download from ants website,
+  - The Ant Optional package. This is included in the download from ants website,
     as well as the AntPlugin from the Plugin Manager,
     but not in some default installs on various *nix systems.
-    There you should get the ant-nodeps package through your
+    There you should get the ant-optional package through your
     package management system.
   - Configure the build.properties.sample file with your local paths and save it
     as build.properties.
@@ -26,34 +26,35 @@ General jEdit documentation can be found in the 'doc' directory.
  distribution files except of the source package:
 
   - A Java compiler of at least version 1.6, such as Sun's javac
-    which is included in the JDK. Get it from <http://java.sun.com/downloads/>
+    which is included in the JDK. Get it from <http://www.java.com/download> or
+    from your package manager - e. g. sun-java6-jdk.
 
  For building the API documentation:
 
   - Sun's javadoc tool, which is included in the JDK.
-    Get it from <http://java.sun.com/downloads/>
+    Get it from <http://www.java.com/download> or from your package
+    manager - e. g. sun-java6-jdk.
 
  For building the online help in either HTML- or PDF-format:
 
-  - docbook-xsl 1.7.x stylesheets for docbook 4.4 DTD-based documentation.
-    https://sourceforge.net/projects/docbook/files/docbook-xsl/
-  - docbook-xsl-ns -
-    https://sourceforge.net/projects/docbook/files/docbook-xsl-ns/
-    This package that combines schama/catalog data for all Docbook versions
-    with docbook 5 xsl stylesheets.
-    NOTE: Our documentation does not yet build on Docbook 5,
-    which is why we still need Docbook 4 stylesheets from the previous
-    package. Hopefully this will change soon.
+  - DocBook XML 4.4. Get it from <http://www.docbook.org/xml/4.4/> or from your
+    package manager - e. g. "docbook-xml" or "docbook-dtd". This contains
+    the DocBook definition and catalog information.
+  - DocBook XSL.
+    Get it from <http://sourceforge.net/projects/docbook/files/docbook-xsl/> or
+    from your package manager - e. g. "docbook-xsl". This contains style sheets
+    for transformation into HTML or FO (for PDF).
+    Don't use a ".0" version, these are experimental releases. They are normally
+    followed by a ".1" version short time after release of the ".0" version.
   - Set the "docbook.catalog" property in build.properties to the path of the
     catalog.xml catalog file. Examples for various OS can be found in
     build.properties.sample.
   - Set the "docbook.xsl" property in build.properties to the installation path
-    of the DocBook XSL files (from the first package).
-    Examples for various OS can be found in build.properties.sample.
-  - xsltproc. sometimes packaged as "libxslt" from package managers:
-    This is originally a *nix program, but there are ports
-    e. g. for Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html>
-    or <http://www.zlatkovic.com/libxml.en.html>.
+    of the DocBook XSL files. Examples for various OS can be found in
+    build.properties.sample.
+  - xsltproc. This is originally a *nix program, but there are ports e. g. for
+    Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html> or
+    from your package manager.
   - Set the "xsltproc.executable" property in build.properties to the path of
     your xsltproc executable. If it is in your PATH environment variable,
     "xsltproc" is sufficient as value. Examples for various OS can be found in
@@ -61,16 +62,23 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the online help in PDF-format:
 
-  - Apache FOP 0.20.5. Maybe a later FOP works too, but someone needs to test it.
-    Get it from <http://xmlgraphics.apache.org/fop/download.html>
+  - Apache FOP. Get it from <http://xmlgraphics.apache.org/fop/download.html> or
+    from your package manager. The old 0.20.5 release will not work anymore with
+    our files. 0.93 or newer has to be used.
+
+ For building the windows EXE launcher:
+
+  - Launch4j. Get it from <http://sourceforge.net/projects/launch4j/files/>
 
  For building the windows installer (for the final step):
 
-  - Launch4j. Get it from <http://launch4j.sourceforge.net/>
-  - Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
-  - A box running windows.
+  - Unicode Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
+  - A box running windows or wine, e. g. on *nix. If innosetup should be
+    built via wine, a wine version where http://bugs.winehq.org/show_bug.cgi?id=14882
+    is fixed or where the attached patch is applied has to be used.
 
- For building the Mac OS X disk image (DMG) for easy distribution (for the final step):
+ For building the Mac OS X disk image (DMG) for easy distribution
+ (for the final step):
 
   - A box running Mac OS X
 
@@ -87,6 +95,11 @@ General jEdit documentation can be found in the 'doc' directory.
  - run                run jEdit
   runs the jEdit-version in the build-folder, configured in build.properties.
   If there isn't any, it builds it in front of execution.
+
+ - run-debug          run jEdit with debug listening enabled
+  runs the jEdit-version in the build-folder, configured in build.properties.
+  If there isn't any, it builds it in front of execution.
+  The debug listening for this JVM is enabled.
 
  - docs-html          generate HTML docs (needs xsltproc)
   builds the online help in HTML-format in the build-folder, configured in build.properties.
@@ -142,14 +155,13 @@ General jEdit documentation can be found in the 'doc' directory.
   a file called jedit<version_here>-dist-win-finish.tar.bz2 in the dist-folder,
   configured in build.properties. Give that to someone running Windows and ask him
   to extract the archive and to execute "ant dist-win-finish".
-  The only things that need to be installed for this final step is Apache Ant,
-  Lanch4j, and Inno Setup. Prior to running "ant dist-win-finish", the helper
-  has to set up the build.properties file with the path to his Launch4j and
-  Inno Setup installation.
+  The only things that need to be installed for this final step is Apache Ant
+  and Inno Setup. Prior to running "ant dist-win-finish", the helper has to set
+  up the build.properties file with the path to his Inno Setup installation.
 
- - dist-win-finish    finish building the Windows installer (EXE-file) on Windows
+ - dist-win-finish    finish building the Windows installer (EXE-file) on Windows or via wine
   build the windows installer in the dist-folder, configured in build.properties if
-  building on a box running Winows. This target is normally only run directly, if
+  building on a box running Windows or via wine. This target is normally only run directly, if
   someone just has to do the final step that was prepared by "dist-win" or "dist".
 
  - clean              clean up build.dir and dist.dir

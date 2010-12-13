@@ -20,34 +20,50 @@
 ### This has to be a relative directory.
 #dist.dir=dist
 
+### The name of the wine executable for building the Windows installer on *nix.
+#wine.executable=wine
+
+### The name of the winepath executable for translating paths for wine.
+#winepath.executable=winepath
+
 ### The name of the Inno Setup command line compiler
 ### executable for building the Windows installer.
-#innosetup.compiler.executable=C:\\Programme\\Inno Setup 5\\ISCC.exe
 
-# If xsltproc is in your path, uncomment this:
-#xsltproc.executable=xsltproc
+# Example Windows location
+#innosetup.compiler.executable=C:\\Program Files\\Inno Setup 5\\ISCC.exe
+
+# Example wine location
+#innosetup.compiler.executable=/home/vampire/.wine/drive_c/Program Files/Inno Setup 5/ISCC.exe
+#innosetup.via.wine=true
 
 ### For generating the docs, adjust the following to your local paths
+### Prefer xml over sgml packages if available.
 ### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
 ### If you need multiple catalogs, then use a space as separator
 
-# cygwin "docbook-xml44" and "docbook-xsl" packages
-# can be used to install docbook-xml and docbook-dtd
-# Prefer xml over sgml packages if available.
-# (example windows locations)
-#docbook.catalog=c:/cygwin/usr/share/xml/docbook/4.4/docbook.cat
-#docbook.xsl=c:/cygwin/usr/share/docbook-xsl
-#xsltproc.executable=C:/cygwin/usr/bin/xsltproc.exe
+# Example Windows locations
+#xsltproc.executable=C:\\Programme\\xsltproc\\xsltproc.exe
+#docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.75.2\\
+#docbook.catalog=C:\\Programme\\DocBook\\XML\\4.4\\catalog.xml
 
-# Example Debian squeeze locations
+# Example Cygwin locations
+#xsltproc.executable=C:\\cygwin\\usr\\bin\\xsltproc.exe
+#docbook.xsl=c:\\cygwin\\usr\\share\\docbook-xsl
+#docbook.catalog=c:\\cygwin\\usr\\share\\xml\\docbook\\4.4\\docbook.cat
+
+# Example Debian and Ubuntu locations
+#xsltproc.executable=xsltproc
 #docbook.xsl=/usr/share/xml/docbook/stylesheet/docbook-xsl
+#docbook.xsl=/usr/share/xml/docbook/stylesheet/nwalsh
 #docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.4/catalog.xml
 
 # Example Fedora Core locations
+#xsltproc.executable=xsltproc
 #docbook.xsl=/usr/share/sgml/docbook/xsl-stylesheets
 #docbook.catalog=/usr/share/sgml/docbook/xml-dtd-4.4-1.0-48.fc12/catalog
 
 # Example Fink (Mac OS/X) locations
+#xsltproc.executable=xsltproc
 #docbook.catalog=/sw/share/xml/dtd/docbookx/4.4.0/docbook.cat
 #docbook.xsl=/sw/share/xml/xsl/docbook-xsl
 
@@ -60,18 +76,28 @@
 ### If you want to build the PDF user's guide,
 ### set this to your local FOP install directory.
 ### (the above three properties are needed also)
+
+# Example Windows location
 #fop.dir=C:\\Programme\\FOP
 
-## For generating Windows executable file, make sure to install Launch4j
-## and set the path to launch4j installed directory.
+# Example Linux location
+#fop.dir=/opt/fop-1.0
+
+### For generating the Windows executable file, make sure to install
+### Launch4j and set the path to Launch4j install directory here
+
+# Example Windows location
 #launch4j.dir=C:\\Programme\\launch4j
+
+# Example Linux location
+#launch4j.dir=/opt/launch4j
 
 # debug settings
 #build.debug=true
 #build.debuglevel=lines,vars,source
+#docbook.catalog.debug=1
 
 # warning settings
 #build.nowarn=false
 #build.deprecation=true
 #build.compilerarg=-Xlint:unchecked
-

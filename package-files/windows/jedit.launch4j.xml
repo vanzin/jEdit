@@ -1,34 +1,30 @@
-<?xml version="1.0" encoding="US-ASCII"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
-  <dontWrapJar>true</dontWrapJar>
-  <headerType>gui</headerType>
-  <jar>@jar.filename@</jar>
-  <outfile>jedit.exe</outfile>
-  <errTitle>jEdit</errTitle>
-  <cmdLine>@cmd.line@</cmdLine>
-  <chdir></chdir>
-  <priority>normal</priority>
-  <downloadUrl>http://java.com/download</downloadUrl>
-  <supportUrl></supportUrl>
-  <customProcName>false</customProcName>
-  <stayAlive>true</stayAlive>
-  <manifest>jedit.exe.manifest</manifest>
-  <icon>@base.dir@/icons/jedit.ico</icon>
-  <jre>
-    <path></path>
-    <minVersion>@target.java.version@.0</minVersion>
-    <jdkPreference>preferJre</jdkPreference>
-  </jre>
-  <versionInfo>
-    <fileVersion>@jedit.build.number@</fileVersion>
-    <txtFileVersion>@jedit.version@</txtFileVersion>
-    <fileDescription>Programmer&apos;s Text Editor</fileDescription>
-    <copyright>Copyright (C) 1998-@current.year@ Contributors</copyright>
-    <productVersion>@jedit.build.number@</productVersion>
-    <txtProductVersion>@jedit.version@</txtProductVersion>
-    <productName>jEdit</productName>
-    <companyName>Contributors</companyName>
-    <internalName>jEdit</internalName>
-    <originalFilename>jedit.exe</originalFilename>
-  </versionInfo>
+	<headerType>gui</headerType>
+	<outfile>jedit.exe</outfile>
+	<jar>@jar.filename@</jar>
+	<dontWrapJar>true</dontWrapJar>
+	<errTitle>jEdit</errTitle>
+	<downloadUrl>http://www.java.com/download</downloadUrl>
+	<supportUrl>http://www.jEdit.org</supportUrl>
+	<cmdLine>-reuseview</cmdLine>
+	<customProcName>true</customProcName>
+	<stayAlive>true</stayAlive>
+	<icon>@base.dir@/icons/jedit.ico</icon>
+	<jre>
+		<minVersion>@target.java.version@.0</minVersion>
+		<jdkPreference>preferJdk</jdkPreference>
+	</jre>
+	<versionInfo>
+		<fileVersion>@jedit.build.number@</fileVersion>
+		<txtFileVersion>@jedit.version@</txtFileVersion>
+		<fileDescription>Programmer&apos;s Text Editor</fileDescription>
+		<copyright>Copyright (C) 1998-@current.year@ Contributors</copyright>
+		<productVersion>@jedit.build.number@</productVersion>
+		<txtProductVersion>@jedit.version@</txtProductVersion>
+		<productName>jEdit</productName>
+		<companyName>Contributors</companyName>
+		<internalName>jEdit</internalName>
+		<originalFilename>jedit.exe</originalFilename>
+	</versionInfo>
 </launch4jConfig>
