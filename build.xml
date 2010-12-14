@@ -659,7 +659,7 @@
 			<arg line="${xsltproc.cygwin.arg}"/>
 			<arg value="--stringparam"/>
 			<arg value="paper.type"/>
-			<arg value="&quot;${paper.type}&quot;"/>
+			<arg value="${paper.type}"/>
 			<arg value="--output"/>
 			<arg value="../${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"/>
 			<arg value="jeditfo.xsl"/>
