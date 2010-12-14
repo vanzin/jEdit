@@ -17,6 +17,9 @@ contributing to this release.
   (Matthieu Casanova #3071355)
 
 - Closes menus when toggling dockables. (#3022084 - Anshal Shukla)
+  
+- Fix for tracker 3134215, restore previously opened files setting not being
+  considered when saving perspective. (#3134215 - Dale Anson)
 
 - VFSBrowser escape handling fixed when used as a dialog (#3101808 - Alan Ezust)
 
