@@ -116,10 +116,11 @@ public class LogViewer extends JPanel implements DefaultFocusComponent
 		// See addNotify() and removeNotify(), and constructor of
 		// FilteredListModel.
 		model.removeListDataListener(listModel);
-		setFilter();
 
 		list = new LogList(listModel);
 		listModel.setList(list);
+		setFilter();
+
 		add(BorderLayout.NORTH,caption);
 		JScrollPane scroller = new JScrollPane(list);
 		Dimension dim = scroller.getPreferredSize();
