@@ -1690,7 +1690,7 @@ public class View extends JFrame implements InputHandlerProvider
 		{
 			return editPane = createEditPane(buffer);
 		}
-		else if(splitConfig == null)
+		else if(splitConfig == null || splitConfig.trim().length() == 0)
 		{
 
 			Buffer buf = jEdit.getFirstBuffer();
@@ -2264,7 +2264,7 @@ loop:		while (true)
 				setLocationRelativeTo(parent);
 			else
 			{
-				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND)
+				if(OperatingSystem.isX11() && Debug.GEOMETRY_WORKAROUND) 
 					new GUIUtilities.UnixWorkaround(this,"view",desired,config.extState);
 				else
 				{

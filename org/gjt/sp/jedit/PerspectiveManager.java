@@ -123,13 +123,17 @@ public class PerspectiveManager
 		if(jEdit.getBufferCount() == 0)
 			return;
 
+		boolean restoreFiles = jEdit.getBooleanProperty("restore", true);
 		Buffer[] buffers = jEdit.getBuffers();
 		Collection<Buffer> savedBuffers = new LinkedList<Buffer>();
-		for (Buffer buffer: buffers)
+		if (restoreFiles) 
 		{
-			if (!buffer.isNewFile())
+			for (Buffer buffer: buffers)
 			{
-				savedBuffers.add(buffer);
+				if (!buffer.isNewFile())
+				{
+					savedBuffers.add(buffer);
+				}
 			}
 		}
 
@@ -182,7 +186,8 @@ public class PerspectiveManager
 				out.write("<VIEW PLAIN=\"");
 				out.write(config.plainView ? "TRUE" : "FALSE");
 				out.write("\">");
-
+				out.write(lineSep);
+				
 				if (config.title != null)
 				{
 					out.write(lineSep);
@@ -194,8 +199,13 @@ public class PerspectiveManager
 
 				out.write("<PANES>");
 				out.write(lineSep);
-				out.write(XMLUtilities.charsToEntities(
-					config.splitConfig,false));
+				// save the split config only if the user has
+				// elected to restore files on start up.
+				if (restoreFiles)
+				{					
+					out.write(XMLUtilities.charsToEntities(
+						config.splitConfig,false));
+				}
 				out.write(lineSep);
 				out.write("</PANES>");
 				out.write(lineSep);
@@ -341,8 +351,10 @@ public class PerspectiveManager
 					}
 				}
 			}
-			else if(name.equals("PANES"))
+			else if(name.equals("PANES") && restoreFiles)
+			{
 				config.splitConfig = charData.toString();
+			}
 			else if(name.equals("VIEW"))
 			{
 				if (config.docking != null)

@@ -14,6 +14,9 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 
 - Got rid of extra Component created as parent of every JToolBar in 
   GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
+  
+- Fix for tracker 3134215, restore previously opened files setting not being
+  considered when saving perspective. (#3134215 - Dale Anson)
 
 }}}
 {{{ API Changes
