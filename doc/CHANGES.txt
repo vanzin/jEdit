@@ -16,7 +16,7 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
   GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
   
 - Fix for tracker 3134215, restore previously opened files setting not being
-  considered when saving perspective. (#3134215 - Dale Anson)
+  considered when restoring split configuration. (#3134215 - Dale Anson)
 
 }}}
 {{{ API Changes
@@ -197,6 +197,8 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 - New View option: Floatable toolbars. (Alan Ezust)
 
 - New TextArea Option: Choice of color ordering w/ subpixel antialiasing. (#2989209 - Alan Ezust) 
+
+- In conjunction with the fix for tracker 3134215, added a new option to the General options pane to let the user choose whether to restore the split configuration. (Dale Anson)
 
 }}}
 {{{ Miscellaneous

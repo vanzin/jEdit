@@ -22,9 +22,12 @@
 
 package org.gjt.sp.jedit;
 
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -123,17 +126,13 @@ public class PerspectiveManager
 		if(jEdit.getBufferCount() == 0)
 			return;
 
-		boolean restoreFiles = jEdit.getBooleanProperty("restore", true);
 		Buffer[] buffers = jEdit.getBuffers();
 		Collection<Buffer> savedBuffers = new LinkedList<Buffer>();
-		if (restoreFiles) 
+		for (Buffer buffer: buffers)
 		{
-			for (Buffer buffer: buffers)
+			if (!buffer.isNewFile())
 			{
-				if (!buffer.isNewFile())
-				{
-					savedBuffers.add(buffer);
-				}
+				savedBuffers.add(buffer);
 			}
 		}
 
@@ -199,13 +198,8 @@ public class PerspectiveManager
 
 				out.write("<PANES>");
 				out.write(lineSep);
-				// save the split config only if the user has
-				// elected to restore files on start up.
-				if (restoreFiles)
-				{					
-					out.write(XMLUtilities.charsToEntities(
-						config.splitConfig,false));
-				}
+				out.write(XMLUtilities.charsToEntities(
+					config.splitConfig,false));
 				out.write(lineSep);
 				out.write("</PANES>");
 				out.write(lineSep);
@@ -267,11 +261,13 @@ public class PerspectiveManager
 		private StringBuilder charData;
 		View.ViewConfig config;
 		boolean restoreFiles;
+		boolean restoreSplits;
 		String autoReload, autoReloadDialog;
 		
 		PerspectiveHandler(boolean restoreFiles)
 		{
 			this.restoreFiles = restoreFiles;
+			restoreSplits = jEdit.getBooleanProperty("restore.splits", true);
 			config = new View.ViewConfig();
 			charData = new StringBuilder();
 			config.docking = View.getDockingFrameworkProvider().createDockingLayout();
@@ -351,9 +347,28 @@ public class PerspectiveManager
 					}
 				}
 			}
-			else if(name.equals("PANES") && restoreFiles)
+			else if(name.equals("PANES"))
 			{
-				config.splitConfig = charData.toString();
+				if (restoreFiles && restoreSplits)
+				{
+					config.splitConfig = charData.toString();
+				}
+				else if (restoreFiles)
+				{
+					config.splitConfig = removeSplits(charData.toString());	
+				}
+				else if (restoreSplits)
+				{
+					config.splitConfig = removeFiles(charData.toString());
+				}
+				else
+				{
+					config.splitConfig = null;	
+				}
+				if (config.splitConfig != null && !jEdit.getBooleanProperty("restore.remote"))
+				{
+					config.splitConfig = removeRemotes(config.splitConfig);	
+				}
 			}
 			else if(name.equals("VIEW"))
 			{
@@ -372,6 +387,235 @@ public class PerspectiveManager
 		{
 			charData.append(ch,start,length);
 		}
+		
+		//{{{ removeFiles
+		// removes filenames from the split config string.  This is used
+		// when the user has options set to not restore files but do 
+		// restore the split configuration. This includes removing remote
+		// files since there is no option setting to allow only restoring
+		// remote files.
+		private String removeFiles(String splitConfig) 
+		{
+			StringBuilder sb = new StringBuilder();
+			Stack<Object> stack = new Stack<Object>();
+	
+			try {
+				StreamTokenizer st = new StreamTokenizer(new StringReader(splitConfig));
+				st.whitespaceChars(0,' ');
+				st.wordChars('#','~');
+				st.commentChar('!');
+				st.quoteChar('"');
+				st.eolIsSignificant(false);
+				
+				int token = st.nextToken();
+				
+				while (token != StreamTokenizer.TT_EOF)
+				{
+					switch(token)
+					{
+						case StreamTokenizer.TT_WORD:
+							if(st.sval.equals("vertical") || st.sval.equals("horizontal"))
+							{
+								Object number = stack.pop();
+								sb.append(number.toString());
+								sb.append(' ');
+								sb.append(st.sval);
+								sb.append(' ');
+							}
+							else if(st.sval.equals("buffer"))
+							{
+								stack.pop();	// pop filename and discard it
+								sb.append("\"Untitled-1\" ");
+								sb.append(st.sval);
+								sb.append(' ');
+							}
+							else if(st.sval.equals("buff"))
+							{
+								stack.pop();	// pop filename and discard it
+							}
+							else if (st.sval.equals("bufferset"))
+							{
+								Object scope = stack.pop();
+								sb.append('\"');
+								sb.append(scope.toString());
+								sb.append("\" ");
+								sb.append(st.sval);
+								sb.append(' ');
+							}
+							break;
+						case StreamTokenizer.TT_NUMBER:
+							stack.push((int)st.nval);
+							break;
+						case '"':
+							stack.push(st.sval);
+							break;
+					}
+					token = st.nextToken();
+				}
+				return sb.toString();
+		    }
+		    catch(Exception e) {	// NOPMD
+		    }
+		    return splitConfig;
+		}
+		//}}}
+		
+		//{{{ removeSplits
+		// removes split configuration from the split configuration string.
+		// This is used when the user has options set to restore files but
+		// to not restore the split configuration.
+		private String removeSplits(String splitConfig)
+		{
+			StringBuilder sb = new StringBuilder();
+			Stack<Object> stack = new Stack<Object>();
+	
+			try {
+				StreamTokenizer st = new StreamTokenizer(new StringReader(splitConfig));
+				st.whitespaceChars(0,' ');
+				st.wordChars('#','~');
+				st.commentChar('!');
+				st.quoteChar('"');
+				st.eolIsSignificant(false);
+				
+				int token = st.nextToken();
+				boolean haveBuffer = false;
+				boolean haveBufferSet = false;
+				String bufferSetScope = "";
+				
+				while (token != StreamTokenizer.TT_EOF)
+				{
+					switch(token)
+					{
+						case StreamTokenizer.TT_WORD:
+							if(st.sval.equals("vertical") || st.sval.equals("horizontal"))
+							{
+								stack.pop();     // pop divider location and discard it
+							}
+							else if(st.sval.equals("buffer"))
+							{
+								Object filename = stack.pop();
+								sb.append('\"');
+								sb.append(filename.toString());
+								sb.append("\" ");
+								sb.append(!haveBuffer ? "buffer" : "buff");
+								sb.append(' ');
+								haveBuffer = true;
+							}
+							else if(st.sval.equals("buff"))
+							{
+								Object filename = stack.pop();
+								sb.append('\"');
+								sb.append(filename.toString());
+								sb.append("\" ");
+								sb.append(st.sval);
+								sb.append(' ');
+							}
+							else if (st.sval.equals("bufferset"))
+							{
+								Object scope = stack.pop();
+								bufferSetScope = scope.toString();
+								haveBufferSet = true;
+							}
+							break;
+						case StreamTokenizer.TT_NUMBER:
+							stack.push((int)st.nval);
+							break;
+						case '"':
+							stack.push(st.sval);
+							break;
+					}
+					token = st.nextToken();
+				}
+				if (haveBufferSet) 
+				{
+				     sb.append('"');
+				     sb.append(bufferSetScope);
+				     sb.append("\" bufferset");
+				}
+				return sb.toString();
+		    }
+		    catch(Exception e) {	// NOPMD 
+		    }
+		    return splitConfig;
+		}
+		//}}}
+		
+		//{{{ removeRemotes
+		// removes file entries that point to a remote file.
+		private String removeRemotes(String splitConfig) 
+		{
+			StringBuilder sb = new StringBuilder();
+			Stack<Object> stack = new Stack<Object>();
+	
+			try {
+				StreamTokenizer st = new StreamTokenizer(new StringReader(splitConfig));
+				st.whitespaceChars(0,' ');
+				st.wordChars('#','~');
+				st.commentChar('!');
+				st.quoteChar('"');
+				st.eolIsSignificant(false);
+				
+				boolean haveBuffer = false;
+				int token = st.nextToken();
+				
+				while (token != StreamTokenizer.TT_EOF)
+				{
+					switch(token)
+					{
+						case StreamTokenizer.TT_WORD:
+							if(st.sval.equals("vertical") || st.sval.equals("horizontal"))
+							{
+								Object number = stack.pop();
+								sb.append(number.toString());
+								sb.append(' ');
+								sb.append(st.sval);
+								sb.append(' ');
+							}
+							else if(st.sval.equals("buffer") || st.sval.equals("buff"))
+							{
+								Object filename = stack.pop();
+								if (!skipRemote(filename.toString()))
+								{
+									sb.append('"').append(filename.toString()).append("\" ");
+									if (!haveBuffer)
+									{
+										sb.append("buffer");
+										haveBuffer = true;
+									}
+									else {
+										sb.append("buff");	
+									}
+									sb.append(' ');
+								}
+							}
+							else if (st.sval.equals("bufferset"))
+							{
+								Object scope = stack.pop();
+								sb.append('\"');
+								sb.append(scope.toString());
+								sb.append("\" ");
+								sb.append(st.sval);
+								sb.append(' ');
+								haveBuffer = false;
+							}
+							break;
+						case StreamTokenizer.TT_NUMBER:
+							stack.push((int)st.nval);
+							break;
+						case '"':
+							stack.push(st.sval);
+							break;
+					}
+					token = st.nextToken();
+				}
+				return sb.toString();
+		    }
+		    catch(Exception e) {	// NOPMD
+		    	    e.printStackTrace();
+		    }
+		    return splitConfig;
+		}
+		//}}}
 	} //}}}
 
 	//}}}
