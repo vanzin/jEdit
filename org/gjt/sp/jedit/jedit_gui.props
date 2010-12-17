@@ -1797,6 +1797,7 @@ options.general.saveCaret=Save caret positions in recent file list
 options.general.persistentMarkers=Save marker positions
 options.general.resetUndo=Reset undo history on save
 options.general.restore=Restore previously open files on startup
+options.general.restore.splits=Restore split configuration
 options.general.restore.remote=... including remote files over VFS
 options.general.restore.cli=... including file names specified on the command line
 options.general.encodingDetectors=List of encoding autodetectors:
