@@ -486,10 +486,9 @@ public class GUIUtilities
 	 */
 	public static Container loadToolBar(ActionContext context, String name)
 	{
-		JPanel toolBar = new JPanel(new BorderLayout());
 		JToolBar toolB = new JToolBar();
-		toolB.setFloatable(false);
-		toolB.setMargin(new Insets(0,0,0,0));
+		toolB.setName(name);
+		toolB.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
 		String buttons = jEdit.getProperty(name);
 		if(buttons != null)
@@ -510,9 +509,8 @@ public class GUIUtilities
 				}
 			}
 		}
-
-		toolBar.add(toolB);
-		return toolBar;
+		toolB.addSeparator(new Dimension(12,12));
+		return toolB;
 	} //}}}
 
 	//{{{ loadToolButton() method

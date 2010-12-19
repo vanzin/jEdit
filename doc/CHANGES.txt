@@ -129,6 +129,9 @@ contributing to this release.
 
 - Show search bar in full screen mode. (Sf.net bug #2944752 - Shlomy Reinstein)
 
+- Got rid of extra Component created as parent of every JToolBar in 
+  GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
+
 }}}
 {{{ API changes
 
