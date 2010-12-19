@@ -487,6 +487,7 @@ public class GUIUtilities
 	public static Container loadToolBar(ActionContext context, String name)
 	{
 		JToolBar toolB = new JToolBar();
+		toolB.setFloatable(false);
 		toolB.setName(name);
 		toolB.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
