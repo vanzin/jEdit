@@ -178,6 +178,16 @@ public class EditBus
 	 * and this method will wait until all handlers receive the
 	 * message before returning.
 	 *
+	 * NOTE: If the calling thread is not the AWT thread and the
+	 * thread is interrupted before or while the call of this
+	 * method, this method can return before completion of handlers.
+	 * However, the interruption state is set in this case, so the
+	 * caller can detect the interruption after the call. If you
+	 * really need the completion of handlers, you should make sure
+	 * the call is in the AWT thread or the calling thread is never
+	 * interrupted. If you don't care about the completion of
+	 * handlers, it is recommended to use sendAsync() instead.
+	 *
 	 * @param message The message
 	 */
 	public static void send(EBMessage message)
@@ -196,17 +206,26 @@ public class EditBus
 		 * expects this method to not throw them. So we catch
 		 * them and log them instead.
 		 */
+		boolean interrupted = false;
 		try
 		{
 			EventQueue.invokeAndWait(sender);
 		}
 		catch (InterruptedException ie)
 		{
+			interrupted = true;
 			Log.log(Log.ERROR, EditBus.class, ie);
 		}
 		catch (InvocationTargetException ite)
 		{
 			Log.log(Log.ERROR, EditBus.class, ite);
+		}
+		finally
+		{
+			if (interrupted)
+			{
+				Thread.currentThread().interrupt();
+			}
 		}
 	} //}}}
 
