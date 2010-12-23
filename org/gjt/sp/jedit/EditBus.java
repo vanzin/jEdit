@@ -178,7 +178,8 @@ public class EditBus
 	 * and this method will wait until all handlers receive the
 	 * message before returning.
 	 *
-	 * NOTE: If the calling thread is not the AWT thread and the
+	 * <p><b>NOTE:</b>
+	 * If the calling thread is not the AWT thread and the
 	 * thread is interrupted before or while the call of this
 	 * method, this method can return before completion of handlers.
 	 * However, the interruption state is set in this case, so the
@@ -186,7 +187,9 @@ public class EditBus
 	 * really need the completion of handlers, you should make sure
 	 * the call is in the AWT thread or the calling thread is never
 	 * interrupted. If you don't care about the completion of
-	 * handlers, it is recommended to use sendAsync() instead.
+	 * handlers, it is recommended to use
+	 * {@link #sendAsync(EBMessage)} instead.
+	 * </p>
 	 *
 	 * @param message The message
 	 */
