@@ -19,7 +19,7 @@ contributing to this release.
 - Closes menus when toggling dockables. (#3022084 - Anshal Shukla)
   
 - Fix for tracker 3134215, restore previously opened files setting not being
-  considered when restoring split configuration. (#3134215 - Dale Anson)
+  considered when saving perspective. (#3134215 - Dale Anson)
 
 - VFSBrowser escape handling fixed when used as a dialog (#3101808 - Alan Ezust)
 
@@ -294,10 +294,6 @@ contributing to this release.
 
 }}}
 {{{ Miscellaneous
-
-- In conjunction with the fix for tracker 3134215, added a new option to the
-  General options pane to let the user choose whether to restore the split
-  configuration. (Dale Anson)
 
 - Fixed the build.xml which was for the Windows installer only working if
   completely run on Windows, making "ant dist-win" on another system and then

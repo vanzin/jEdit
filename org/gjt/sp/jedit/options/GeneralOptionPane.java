@@ -66,7 +66,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restore;
 	private JCheckBox restoreRemote;
 	private JCheckBox restoreCLI;
-	private JCheckBox restoreSplits;
 	//}}}
 
 	//{{{ GeneralOptionPane constructor
@@ -191,11 +190,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		restoreCLI.setEnabled(restore.isSelected());
 		addComponent(restoreCLI);
 
-		restoreSplits = new JCheckBox(jEdit.getProperty(
-			"options.general.restore.splits", "Restore split configuration"));
-		restoreSplits.setSelected(jEdit.getBooleanProperty("restore.splits", true));
-		addComponent(restoreSplits);
-
+		
 		hypersearchResultsWarning = new JTextField(jEdit.getProperty("hypersearch.maxWarningResults"));
 		addComponent(jEdit.getProperty("options.general.hypersearch.maxWarningResults"),
 			hypersearchResultsWarning);
@@ -251,7 +246,6 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore",restore.isSelected());
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("restore.remote", restoreRemote.isSelected());
-		jEdit.setBooleanProperty("restore.splits", restoreSplits.isSelected());
 		try
 		{
 			jEdit.setIntegerProperty("hypersearch.maxWarningResults", Integer.parseInt(hypersearchResultsWarning.getText()));
