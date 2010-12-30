@@ -8,7 +8,7 @@ Conflicts: jedit-cvs
 Replaces: jedit-cvs
 Recommends: sun-java6-jre
 Build-depends: sun-java6-jdk, ant
-Suggests: exuberant-ctags, cscope, global, ant, sun-java6-jdk
+Suggests: exuberant-ctags, cscope, global, ant, sun-java5-jdk, sun-java6-jdk
 Priority: optional
 Installed-Size: @deb.installed.size@
 Description: A plugin-based editor for programmers.

@@ -16,8 +16,8 @@ plugin.macosx.MacOSXPlugin.longdescription=description.html
 #
 # Dependencies
 #
-plugin.macosx.MacOSXPlugin.depend.0=jedit 04.03.16.00
-plugin.macosx.MacOSXPlugin.depend.1=jdk 1.5.0
+plugin.macosx.MacOSXPlugin.depend.0=jedit 04.04.01.00
+plugin.macosx.MacOSXPlugin.depend.1=jdk 1.6.0
 
 MacOSXPlugin.depend.os.name=Mac OS X
 MacOSXPlugin.depend.mrj.version=99
