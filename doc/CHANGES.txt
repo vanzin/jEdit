@@ -200,6 +200,8 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 
 - New mode for Oracle PL/SQL 11. (#3078863 - Diogo Kollross)
 
+- Factor Mode fix (# 3100731 - Valeri Mytinski) 
+
 - In conjunction with the fix for tracker 3134215, added a new option to the General options pane to let the user choose whether to restore the split configuration. (Dale Anson)
 
 }}}
