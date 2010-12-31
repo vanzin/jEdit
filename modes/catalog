@@ -363,9 +363,12 @@
 
 <MODE NAME="plaintex"		FILE="plaintex.xml" />
 
-<MODE NAME="pl-sql"		FILE="pl-sql.xml"
-				FILE_NAME_GLOB="*.pls" />
+<MODE NAME="pl-sql"		FILE="osql.xml"
+                           FILE_NAME_GLOB="*.{pls,sql}" />
 
+<!-- Older version of pl-sql mode not currently used -->                           
+<MODE NAME="pl-sql9"		FILE="pl-sql.xml" />                           
+                           
 <MODE NAME="pl1"		FILE="pl1.xml"
 				FILE_NAME_GLOB="*.pl[i1]" />
 
@@ -534,8 +537,7 @@
 <MODE NAME="tsp"		FILE="tsp.xml"
 				FILE_NAME_GLOB="*.tsp" />
 
-<MODE NAME="transact-sql"	FILE="tsql.xml"
-				FILE_NAME_GLOB="*.sql" />
+<MODE NAME="transact-sql"	FILE="tsql.xml" />
 
 <MODE NAME="template-toolkit"	FILE="tthtml.xml"
 				FILE_NAME_GLOB="*.tt{html,css,js}" />
