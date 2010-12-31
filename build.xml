@@ -68,10 +68,20 @@
 
 	<!-- Cygwin detection (xsltproc needs special arguments) -->
 	<dirname property="xsltproc.dir" file="${config.xsltproc.executable}" />
-	<available file="${xsltproc.dir}/cygcheck.exe" property="xsltproc.cygwin" />
-	<condition property="xsltproc.cygwin.arg" value="--path /usr/share/docbook-xsl/html/" else="">
-		<isset property="xsltproc.cygwin" />
+	<available file="${xsltproc.dir}/cygcheck.exe" property="xsltproc.cygwin" value="${xsltproc.dir}/.."/>
+	<condition property="xsltproc.cygwin.arg" value="--path /usr/share/sgml/docbook/xsl-stylesheets/html/">
+		<and>
+			<isset property="xsltproc.cygwin" />
+			<available file="${xsltproc.cygwin}/usr/share/sgml/docbook/xsl-stylesheets/html/docbook.xsl" />
+		</and>
 	</condition>
+	<condition property="xsltproc.cygwin.arg" value="--path /usr/share/docbook-xsl/html/">
+		<and>
+			<isset property="xsltproc.cygwin" />
+			<available file="${xsltproc.cygwin}/usr/share/docbook-xsl/html/docbook.xsl" />
+		</and>
+	</condition>
+	<property name="xsltproc.cygwin.arg" value="" />
 
 	<target name="init"
 			unless="init.done">
