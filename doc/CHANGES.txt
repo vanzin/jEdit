@@ -18,6 +18,9 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 - Fix for tracker 3134215, restore previously opened files setting not being
   considered when restoring split configuration. (#3134215 - Dale Anson)
 
+- After using save-as action on a read-only buffer the new buffer is no longer
+  read-only (#3148102 - Matthieu Casanova)
+
 }}}
 {{{ API Changes
 - New method TextArea.getVisibleLineText(screenLine) and
