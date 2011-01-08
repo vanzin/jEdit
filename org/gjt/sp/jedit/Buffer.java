@@ -357,6 +357,7 @@ public class Buffer extends JEditBuffer
 	 * @param view The view
 	 * @param rename True if the buffer's path should be changed, false
 	 * if only a copy should be saved to the specified filename
+	 * @return true if the buffer was successfully saved
 	 * @since jEdit 2.6pre5
 	 */
 	public boolean saveAs(View view, boolean rename)
@@ -378,6 +379,7 @@ public class Buffer extends JEditBuffer
 	 * name if it's null.
 	 * @param view The view
 	 * @param path The path name to save the buffer to, or null to use
+	 * @return true if the buffer was successfully saved
 	 * the existing path
 	 */
 	public boolean save(View view, String path)
@@ -394,6 +396,7 @@ public class Buffer extends JEditBuffer
 	 * the existing path
 	 * @param rename True if the buffer's path should be changed, false
 	 * if only a copy should be saved to the specified filename
+	 * @return true if the buffer was successfully saved
 	 * @since jEdit 2.6pre5
 	 */
 	public boolean save(View view, String path, boolean rename)
@@ -412,6 +415,7 @@ public class Buffer extends JEditBuffer
 	 * if only a copy should be saved to the specified filename
 	 * @param disableFileStatusCheck  Disables file status checking
 	 * regardless of the state of the checkFileStatus property
+	 * @return true if the buffer was successfully saved
 	 */
 	public boolean save(final View view, String path, final boolean rename, boolean disableFileStatusCheck)
 	{
