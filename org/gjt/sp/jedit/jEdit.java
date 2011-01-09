@@ -139,6 +139,7 @@ public class jEdit
 		boolean wait = false;
 		boolean shouldRelocateSettings = true;
 		String userDir = System.getProperty("user.dir");
+		boolean splash = true;
 
 		// script to run
 		String scriptFile = null;
@@ -222,6 +223,8 @@ public class jEdit
 					wait = true;
 				else if(arg.equals("-quit"))
 					quit = true;
+				else if(arg.equals("-nosplash"))
+					splash = false;
 				else
 				{
 					System.err.println("Unknown option: "
@@ -324,7 +327,7 @@ public class jEdit
 
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory
-		if(!new File(settingsDirectory,"nosplash").exists())
+		if(splash && (!new File(settingsDirectory,"nosplash").exists()))
 			GUIUtilities.showSplashScreen();
 
 		//{{{ Mac settings migration code. Should eventually be removed
@@ -3053,6 +3056,7 @@ public class jEdit
 		System.out.println("	<file> +line:<line>,<column>: Positions caret"
 			+ " at line number <line> and column number <column>");
 		System.out.println("	--: End of options");
+		System.out.println("	-nosplash: Don't show splash screen");
 		System.out.println("	-background: Run in background mode");
 		System.out.println("	-nobackground: Disable background mode (default)");
 		System.out.println("	-gui: Only if running in background mode; open initial view (default)");

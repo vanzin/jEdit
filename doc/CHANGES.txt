@@ -5,7 +5,8 @@ jEdit 4.5 version history
 {{{ Version 4.5pre1
 
 Thanks to Matthieu Casanova, Alan Ezust, cy6erGn0m, Bad Sector, jclopes, Dale Anson,
-Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this release
+Anshal Shukla, Damien Radtke, Matthew Gilbert and Shlomy Reinstein for contributing
+to this release
 
 {{{ Bug fixes
 
@@ -214,6 +215,9 @@ Anshal Shukla, Damien Radtke and Matthew Gilbert for contributing to this releas
 
 - In search and replace when replacing by a beanshell snippet, it is now possible to use multiple statements instead of
  only one statement. To do that, enclose your code in braces (patch #3002207 from cy6erGn0m, Matthieu Casanova)
+
+- Added a command line option "-nosplash" to avoid the splash screen
+  (Shlomy Reinstein).
 }}}
 }}}
 

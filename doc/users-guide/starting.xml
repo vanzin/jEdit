@@ -122,12 +122,20 @@
                         </row>
 
                         <row>
+                            <entry><userinput>-nosplash</userinput></entry>
+
+                            <entry>Don't show the splash screen on startup.
+                            </entry>
+                        </row>
+
+                        <row>
                             <entry><userinput>--</userinput></entry>
 
                             <entry>Specifies the end of command-line processing.
                             Further parameters are treated as file names, even if
                             they begin with a dash.</entry>
                         </row>
+
                     </tbody>
                 </tgroup>
             </informaltable>
