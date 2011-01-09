@@ -376,7 +376,10 @@ public class Buffer extends JEditBuffer
 		if(files == null)
 			return false;
 
-		return save(view,files[0],rename);
+		boolean saved = save(view, files[0], rename);
+		if (saved)
+			setReadOnly(false);
+		return saved;
 	} //}}}
 
 	//{{{ save() method

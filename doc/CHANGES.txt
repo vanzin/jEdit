@@ -136,6 +136,9 @@ contributing to this release.
 - Got rid of extra Component created as parent of every JToolBar in 
   GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
 
+- After using save-as action on a read-only buffer the new buffer is no longer
+  read-only (#3148102 - Matthieu Casanova)
+
 }}}
 {{{ API changes
 - Added methods to manage the cursor if the TextArea :
