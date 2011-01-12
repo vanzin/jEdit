@@ -198,6 +198,8 @@ to this release
 {{{ UI
 - Updated ColorWellButton to use the dialog provided by JColorChooser rather than creating its own dialog since the JColorChooser dialog is much richer. (Dale Anson)
 
+- Filter field in PluginManager InstallPanel (#2810926 - Olivier Chafik)
+
 - New View option: Floatable toolbars. (Alan Ezust)
 
 - New TextArea Option: Choice of color ordering w/ subpixel antialiasing. (#2989209 - Alan Ezust) 

@@ -40,6 +40,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -149,6 +151,43 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 		});
 
+		final JTextField searchField = new JTextField();
+		searchField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
+					table.requestFocus();
+				}
+			}
+		});
+		searchField.getDocument().addDocumentListener(new DocumentListener() {
+			void update() {
+				pluginModel.setFilterString(searchField.getText());
+			}
+			public void changedUpdate(DocumentEvent e) {
+				update();
+			}
+			public void insertUpdate(DocumentEvent e) {
+				update();
+			}
+			public void removeUpdate(DocumentEvent e) {
+				update();
+			}
+		});
+		table.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				int i = table.getSelectedRow(), n = table.getModel().getRowCount();
+				if (e.getKeyCode() == KeyEvent.VK_DOWN && i == (n - 1) ||
+					e.getKeyCode() == KeyEvent.VK_UP && i == 0) 
+				{
+					searchField.requestFocus();
+					searchField.selectAll();
+				}
+			}
+		});
+		Box filterBox = Box.createHorizontalBox();
+		filterBox.add(new JLabel("Filter : "));
+		filterBox.add(searchField);
+		add(BorderLayout.NORTH,filterBox);
 		add(BorderLayout.CENTER,split);
 
 		/* Create buttons */
@@ -258,8 +297,52 @@ class InstallPanel extends JPanel implements EBComponent
 	{
 		/** This List can contain String or Entry. */
 		private List entries = new ArrayList();
+		private List filteredEntries = new ArrayList();
 		private int sortType = EntryCompare.COLUMN_NAME;
+		private String filterString;
 		int sortDirection = 1;
+		
+		//{{{ setFilterString() method
+		public void setFilterString(String filterString) {
+			this.filterString = filterString;
+			updateFilteredEntries();
+		} //}}}
+		
+		//{{{ updateFilteredEntries() method
+		void updateFilteredEntries() {
+			filteredEntries.clear();
+			if (filterString == null)
+				filteredEntries.addAll(entries);
+			else {
+				String[] words = filterString.toLowerCase().split("\\s+");
+				for (Object o : entries) {
+					if (!(o instanceof Entry))
+						continue;
+					Entry e = (Entry)o;
+					
+					String s = (e.name + " " + e.set + " " + e.description).toLowerCase();
+					boolean hasAll = true;
+					boolean negative = false;
+					for (String word : words) {
+						if (word.startsWith("-")) {
+							word = word.substring(1);
+							negative = true;
+						}
+						if (word.length() == 0)
+							continue;
+						
+						if (negative == s.contains(word)) {
+							hasAll = false;
+							break;
+						}
+						negative = false;
+					}
+					if (hasAll)
+						filteredEntries.add(e);
+				}
+			}
+			fireTableChanged(new TableModelEvent(PluginTableModel.this));
+		} //}}}
 
 		//{{{ getColumnClass() method
 		@Override
@@ -302,13 +385,13 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ getRowCount() method
 		public int getRowCount()
 		{
-			return entries.size();
+			return filteredEntries.size();
 		} //}}}
 
 		//{{{ getValueAt() method
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
-			Object obj = entries.get(rowIndex);
+			Object obj = filteredEntries.get(rowIndex);
 			if(obj instanceof String)
 			{
 				if(columnIndex == 1)
@@ -362,7 +445,7 @@ class InstallPanel extends JPanel implements EBComponent
 					setValueAt(Boolean.TRUE,i,0);
 				else
 				{
-					Entry entry = (Entry)entries.get(i);
+					Entry entry = (Entry)filteredEntries.get(i);
 					entry.parents = new LinkedList<Entry>();
 					entry.install = false;
 				}
@@ -407,7 +490,7 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			if (column != 0) return;
 
-			Object obj = entries.get(row);
+			Object obj = filteredEntries.get(row);
 			if(obj instanceof String)
 				return;
 
@@ -425,9 +508,9 @@ class InstallPanel extends JPanel implements EBComponent
 				PluginList.Dependency dep = deps.get(i);
 				if (dep.what.equals("plugin"))
 				{
-					for (int j = 0; j < entries.size(); j++)
+					for (int j = 0; j < filteredEntries.size(); j++)
 					{
-						Entry temp = (Entry)entries.get(j);
+						Entry temp = (Entry)filteredEntries.get(j);
 						if (temp.plugin == dep.plugin)
 						{
 							if (entry.install)
@@ -462,7 +545,7 @@ class InstallPanel extends JPanel implements EBComponent
 				return;
 
 			Collections.sort(entries,new EntryCompare(type, sortDirection));
-			fireTableChanged(new TableModelEvent(this));
+			updateFilteredEntries();
 			restoreSelection(savedChecked,savedSelection);
 			table.getTableHeader().repaint();
 		}
@@ -477,8 +560,8 @@ class InstallPanel extends JPanel implements EBComponent
 		//{{{ clear() method
 		public void clear()
 		{
-			entries = new ArrayList();
-			fireTableChanged(new TableModelEvent(this));
+			entries.clear();
+			updateFilteredEntries();
 		} //}}}
 
 		//{{{ update() method
@@ -492,8 +575,8 @@ class InstallPanel extends JPanel implements EBComponent
 
 			if (pluginList == null) return;
 
-			entries = new ArrayList();
-
+			entries.clear();
+			
 			for(int i = 0; i < pluginList.pluginSets.size(); i++)
 			{
 				PluginList.PluginSet set = pluginList.pluginSets.get(i);
@@ -523,8 +606,7 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 
 			sort(sortType);
-
-			fireTableChanged(new TableModelEvent(this));
+			updateFilteredEntries();
 			restoreSelection(savedChecked, savedSelection);
 		} //}}}
 
@@ -537,13 +619,13 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				if ((Boolean)getValueAt(i,0))
 				{
-					savedChecked.add(entries.get(i).toString());
+					savedChecked.add(filteredEntries.get(i).toString());
 				}
 			}
 			int[] rows = table.getSelectedRows();
 			for (int i=0 ; i<rows.length ; i++)
 			{
-				savedSelection.add(entries.get(rows[i]).toString());
+				savedSelection.add(filteredEntries.get(rows[i]).toString());
 			}
 		} //}}}
 
@@ -552,7 +634,7 @@ class InstallPanel extends JPanel implements EBComponent
 		{
 			for (int i=0, c=getRowCount() ; i<c ; i++)
 			{
-				Object obj = entries.get(i);
+				Object obj = filteredEntries.get(i);
 				String name = obj.toString();
 				if (obj instanceof Entry) {
 					name = ((Entry)obj).plugin.jar;
@@ -570,7 +652,7 @@ class InstallPanel extends JPanel implements EBComponent
 				int rowCount = getRowCount();
 				for ( ; i<rowCount ; i++)
 				{
-					String name = entries.get(i).toString();
+					String name = filteredEntries.get(i).toString();
 					if (savedSelection.contains(name))
 					{
 						table.setRowSelectionInterval(i,i);
@@ -580,7 +662,7 @@ class InstallPanel extends JPanel implements EBComponent
 				ListSelectionModel lsm = table.getSelectionModel();
 				for ( ; i<rowCount ; i++)
 				{
-					String name = entries.get(i).toString();
+					String name = filteredEntries.get(i).toString();
 					if (savedSelection.contains(name))
 					{
 						lsm.addSelectionInterval(i,i);
@@ -689,7 +771,7 @@ class InstallPanel extends JPanel implements EBComponent
 			String text = "";
 			if (table.getSelectedRowCount() == 1)
 			{
-				Entry entry = (Entry) pluginModel.entries
+				Entry entry = (Entry) pluginModel.filteredEntries
 					.get(table.getSelectedRow());
 				params[0] = entry.author;
 				params[1] = entry.date;
@@ -727,7 +809,7 @@ class InstallPanel extends JPanel implements EBComponent
 				for (int i = 0; i < length; i++)
 				{
 					Entry entry = (Entry)pluginModel
-						.entries.get(i);
+						.filteredEntries.get(i);
 					if (entry.install)
 						size += entry.size;
 				}
@@ -893,7 +975,7 @@ class InstallPanel extends JPanel implements EBComponent
 			int instcount = 0;
 			for (int i = 0; i < length; i++)
 			{
-				Entry entry = (Entry)pluginModel.entries.get(i);
+				Entry entry = (Entry)pluginModel.filteredEntries.get(i);
 				if (entry.install)
 				{
 					entry.plugin.install(roster,installDirectory,downloadSource);
