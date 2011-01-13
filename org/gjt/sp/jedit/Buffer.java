@@ -1104,7 +1104,7 @@ public class Buffer extends JEditBuffer
 
 		String firstLine = getLineText(0);
 
-		Mode mode = ModeProvider.instance.getModeForFile(name, firstLine);
+		Mode mode = ModeProvider.instance.getModeForFile(path, firstLine);
 		if (mode != null)
 		{
 			setMode(mode);
