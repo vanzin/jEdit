@@ -1,57 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="updating-modes">
     <title>Updating Edit Modes</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :indentSize=1:noTabs=true: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
-    <section id="from40to41" >
-        <title>From jEdit 4.0 to 4.1</title>
-
-        <para>In jEdit 4.1, the mode file grammar has been cleaned up somewhat.
-        As a result, some edit modes written for jEdit 4.0 and earlier need to
-        be updated:</para>
-
-        <itemizedlist>
-            <listitem>
-                <para>Defining <literal>&lt;WHITESPACE&gt;</literal> rules is no
-                longer necessary and doing so will print warnings to the
-                activity logs.</para>
-            </listitem>
-
-            <listitem>
-                <para>The <literal>&lt;KEYWORDS&gt;</literal> tag no longer
-                accepts an <literal>IGNORE_CASE</literal> attribute. Set the
-                <literal>IGNORE_CASE</literal> attribute of the
-                <literal>&lt;RULES&gt;</literal> tag instead.</para>
-            </listitem>
-
-            <listitem>
-                <para>The <literal>&lt;END&gt;</literal> tag of the
-                <literal>&lt;SPAN&gt;</literal> rule used to be optional, in
-                which case any occurrence of the start string would cause the
-                remainder of the buffer to be highlighted with the span. In
-                jEdit 4.1, the <literal>&lt;END&gt;</literal> tag can no longer
-                be omitted, however a <literal>&lt;SEQ&gt;</literal> tag with a
-                <literal>DELEGATE</literal> attribute can be used to achieve the
-                same effect as endless span.</para>
-            </listitem>
-
-            <listitem>
-                <para>Defining <literal>&lt;SEQ TYPE="NULL"&gt;</literal> rules
-                for word separators is no longer necessary. Now, any
-                non-alphanumeric character not appearing in a keyword definition
-                or the ruleset's <literal>NO_WORD_SEP</literal> attribute is
-                considered a word separator.</para>
-            </listitem>
-        </itemizedlist>
-    </section>
-
-    <section id="currentmodeformat">
-        <title>From jEdit 4.2 to 4.3</title>
+    <section id="modeformat4.3">
+        <title>From jEdit 4.2 to 4.4</title>
 
         <orderedlist>
             <listitem>
