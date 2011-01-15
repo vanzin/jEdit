@@ -869,6 +869,7 @@
 			<fileset refid="jedit-os2"/>
 		</calculatesize>
 		<copy todir="${dist.dir}/classes/installer/installer"
+		      encoding="UTF-8"
 		      overwrite="true">
 			<fileset file="installer/install.props"/>
 			<filterset>
@@ -1127,6 +1128,7 @@
 				pattern="yyyy"/>
 		</tstamp>
 		<copy todir="${classes.dir}/package-files"
+		      encoding="UTF-8"
 		      overwrite="true">
 			<fileset dir="package-files"/>
 			<filterset>
@@ -1353,6 +1355,7 @@
 					   ${jar.filename}"/>
 		</calculatesize>
 		<copy todir="${dist.dir}/classes/package-files/linux/deb"
+		      encoding="UTF-8"
 		      overwrite="true">
 			<fileset file="package-files/linux/deb/control"/>
 			<filterset>

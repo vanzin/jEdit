@@ -273,6 +273,9 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Made the filter tasks use UTF-8 encoding as all our files are UTF-8 encoded
+  (Björn "Vampire" Kautler)
+
 - build files and properties cleanup (Björn "Vampire" Kautler)
 
 - Fixed various indentation errors (Björn "Vampire" Kautler)
