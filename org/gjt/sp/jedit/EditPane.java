@@ -58,6 +58,7 @@ import org.gjt.sp.jedit.textarea.TextAreaExtension;
 import org.gjt.sp.jedit.textarea.TextAreaPainter;
 import org.gjt.sp.jedit.textarea.TextAreaTransferHandler;
 import org.gjt.sp.util.SyntaxUtilities;
+import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
 /**
@@ -202,22 +203,21 @@ public class EditPane extends JPanel implements BufferSetListener
 			});
 		}
 
-		// Only do this after all I/O requests are complete
-		Runnable runnable = new Runnable()
+		// If the buffer is loading, the caret info will automatically be loaded when
+		// that task completes. Otherwise, we don't need to wait for IO.
+		if (!buffer.isLoading())
 		{
-			public void run()
+			ThreadUtilities.runInDispatchThread(new Runnable()
 			{
-				// avoid a race condition
-				// see bug #834338
-				if(buffer == getBuffer())
-					loadCaretInfo();
-			}
-		};
-
-		if(buffer.isPerformingIO())
-			VFSManager.runInAWTThread(runnable);
-		else
-			runnable.run();
+				public void run()
+				{
+					// avoid a race condition
+					// see bug #834338
+					if(buffer == getBuffer())
+						loadCaretInfo();
+				}
+			});
+		}
 	} //}}}
 
 	//{{{ prevBuffer() method
