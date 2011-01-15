@@ -4,11 +4,11 @@
     <!-- jEdit buffer-local properties: -->
     <!-- :tabSize=1:indentSize=1:noTabs=true: -->
     <!-- :xml.root=users-guide.xml: -->
-    
+
     <para>Several conventions are used throughout jEdit's user interface and
     this manual. They will be described here. Macintosh users should note how
     their modifier keys map to the terms used in the manual.</para>
-    
+
     <informaltable>
         <tgroup cols="2">
             <tbody>

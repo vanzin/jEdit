@@ -291,23 +291,22 @@ end;
 // Called before extracting jedit.jar
 procedure killServer;
 var
-  ResultCode : Integer;
+	ResultCode : Integer;
 begin
-    ExtractTemporaryFile('ServerKiller.class');
-    CreateDir(ExpandConstant('{tmp}\installer'));
-    RenameFile(ExpandConstant('{tmp}\ServerKiller.class'),ExpandConstant('{tmp}\installer\ServerKiller.class'));
-    if MsgBox('The installer will now try to contact any running instance of jEdit' + #13 +
-           'Please save your work and exit jEdit for the installation to continue !',
-           mbConfirmation, MB_YESNO) = IDYES then
-    begin
-    ExecAsOriginalUser(javaPath(''),
-                       'installer.ServerKiller',
-                       ExpandConstant('{tmp}'),
-                       SW_SHOW,
-                        ewWaitUntilTerminated, ResultCode);
-    end;
+	ExtractTemporaryFile('ServerKiller.class');
+	CreateDir(ExpandConstant('{tmp}\installer'));
+	RenameFile(ExpandConstant('{tmp}\ServerKiller.class'),ExpandConstant('{tmp}\installer\ServerKiller.class'));
+	if MsgBox('The installer will now try to contact any running instance of jEdit' + #13 +
+		  'Please save your work and exit jEdit for the installation to continue!',
+		  mbConfirmation, MB_YESNO) = IDYES then
+	begin
+		ExecAsOriginalUser(javaPath(''),
+				   'installer.ServerKiller',
+				   ExpandConstant('{tmp}'),
+				   SW_SHOW,
+				   ewWaitUntilTerminated, ResultCode);
+	end;
 end;
-
 
 // save ini file for native laucher
 procedure UpdateLaunch4jIniFile;
@@ -318,14 +317,14 @@ end;
 // Called on setup startup
 function InitializeSetup: Boolean;
 begin
-  killServer();
+	killServer();
 	// check if java >= 1.4 is installed
 	if Length(javaPath('')) > 0 then begin
 		Result := true;
 	end	else begin
 		MsgBox('Setup was unable to find an installed Java Runtime Environment or Java Development Kit of version 1.4, or higher.' + #13 +
-			   'You must have installed at least JDK or JRE 1.4 to continue setup.' + #13 +
-			   'Please install one from http://java.sun.com and restart setup.', mbInformation, MB_OK);
+		       'You must have installed at least JDK or JRE 1.4 to continue setup.' + #13 +
+		       'Please install one from http://java.sun.com and restart setup.', mbInformation, MB_OK);
 		Result := false;
 	end;
 end;
@@ -371,4 +370,3 @@ begin
 		DelTree(ExpandConstant('{app}\jars'),true,true,true);
 	end;
 end;
-

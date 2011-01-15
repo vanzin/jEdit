@@ -4,18 +4,18 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to Matthieu Casanova, Alan Ezust, cy6erGn0m, Bad Sector, jclopes, Dale Anson,
-Anshal Shukla, Damien Radtke, Matthew Gilbert and Shlomy Reinstein for contributing
-to this release
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
+Bad Sector, jclopes, Dale Anson, Anshal Shukla, Damien Radtke, Matthew Gilbert
+and Shlomy Reinstein for contributing to this release
 
 {{{ Bug fixes
 
 - Made jedit.exe to find JDK, so that jEdit runs only with JDK (without
   JRE) like 4.3.x and before. (SF.net bug #3134149 - Kazutoshi Satoda)
 
-- Got rid of extra Component created as parent of every JToolBar in 
+- Got rid of extra Component created as parent of every JToolBar in
   GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
-  
+
 - Fix for tracker 3134215, restore previously opened files setting not being
   considered when restoring split configuration. (#3134215 - Dale Anson)
 
@@ -24,205 +24,270 @@ to this release
 
 }}}
 {{{ API Changes
+
 - New method TextArea.getVisibleLineText(screenLine) and
- TextArea.getVisibleLineSegment() that returns
- the visible part of the given line (Matthieu Casanova)
+  TextArea.getVisibleLineSegment() that returns
+  the visible part of the given line (Matthieu Casanova)
 
 - API made private:
- FileVFS.modified
- (Matthieu Casanova)
- 
-- Removed Deprecated apis :
- EditPlugin.createMenuItems(Vector menuItems)
- EditPlugin.createOptionPanes(OptionsDialog optionsDialog)
- HistoryModel.clear()
- JEditTextArea.getSelectionStart()
- JEditTextArea.getSelectionStart(int line)
- JEditTextArea.getSelectionStartLine()
- JEditTextArea.setSelectionStart(int selectionStart)
- JEditTextArea.getSelectionEnd()
- JEditTextArea.getSelectionEnd(int line)
- JEditTextArea.getSelectionEndLine()
- JEditTextArea.setSelectionEnd(int selectionEnd)
- JEditTextArea.select(int start, int end)
- JEditTextArea.select(int start, int end, boolean doElectricScroll)
- JEditTextArea.isSelectionRectangular()
- TextAreaPainter.setAntiAliasEnabled(boolean isEnabled)
- TextAreaPainter.isAntiAliasEnabled()
- FoldHandler.SERVICE
- Buffer.addBufferChangeListener(BufferChangeListener listener, int priority)
- Buffer.putProperty(Object name, Object value)
- Buffer.putBooleanProperty(String name, boolean value)
- Buffer.markTokens(int lineIndex)
- Buffer.TokenList
- Buffer.getMarkersPath(VFS vfs)
- Buffer.insertString(int offset, String str, AttributeSet attr)
- Buffer.editSyntaxStyle(JEditTextArea textArea)
- Buffer.addBufferChangeListener(BufferChangeListener listener)
- Buffer.removeBufferChangeListener(BufferChangeListener listener)
- Buffer.addBufferChangeListener(BufferChangeListener listener)
- BufferChangeAdapter
- BufferChangeListener
- BufferIORequest.GZIP_MAGIC_1
- BufferIORequest.GZIP_MAGIC_2
- BufferIORequest.UTF8_MAGIC_1
- BufferIORequest.UTF8_MAGIC_2
- BufferIORequest.UTF8_MAGIC_3
- BufferIORequest.UNICODE_MAGIC_1
- BufferIORequest.UNICODE_MAGIC_2
- BufferIORequest.XML_PI_LENGTH
- JEditBuffer.indentLine(int lineIndex, boolean canIncreaseIndent, boolean canDecreaseIndent)
- JEditBuffer.isElectricKey(char ch)
- MiscUtilities.UTF_8_Y
- MiscUtilities.getFileParent(String path)
- MiscUtilities.getFileProtocol(String url)
- MiscUtilities.moveFile(File source, File dest)
- MiscUtilities.compareVersions(String v1, String v2)
- MiscUtilities.quicksort(Object[] obj, Comparator compare)
- MiscUtilities.quicksort(List list, Comparator compare)
- MiscUtilities.copyStream(int bufferSize, ProgressObserver progress, InputStream in, OutputStream out, boolean canStop)
- MiscUtilities.copyStream(ProgressObserver progress, InputStream in, OutputStream out, boolean canStop)
- MiscUtilities.isBinary(Reader reader)
- MiscUtilities.closeQuietly(InputStream in)
- MiscUtilities.closeQuietly(OutputStream out)
- MiscUtilities.createWhiteSpace(int len, int tabSize)
- MiscUtilities.getLeadingWhiteSpaceWidth(String str, int tabSize)
- MiscUtilities.getColorHexString(Color c)
- Chunk.init(Segment seg, TabExpander expander, float x, FontRenderContext fontRenderContext)
- DisplayTokenHandler.init(SyntaxStyle[] styles, FontRenderContext fontRenderContext, TabExpander expander, List<Chunk> out, float wrapMargin)
- DisplayTokenHandler.initChunk(Chunk chunk, Segment seg)
- ParserRuleSet.getRules(char ch)
- ParserRule.EXCLUDE_MATCH
- ParserRule.NO_ESCAPE
- ParserRule.next
- ParserRule.createRegexpSequenceRule(char hashChar, int posMatch, String seq, ParserRuleSet delegate, byte id, boolean ignoreCase)
- ParserRule.createRegexpEOLSpanRule(char hashChar, int posMatch, String seq, ParserRuleSet delegate, byte id, byte matchType, boolean ignoreCase)
- PluginManagerProgress.setValue(int value)
- BracketIndentRule.getBrackets(String line)
- CloseBracketIndentRule.isMatch(String line)
- RegexpIndentRule.isMatch(String line)
- DockableLayout.setAlternateLayout()
- GrabKeyDialog.toString(KeyEvent evt)
- InputHandler.readNextChar(String code)
- KeyEventTranslator.translateKeyEvent2(KeyEvent evt)
- KeyEventTranslator.Key.isPhantom()
- VFSBrowser.getFilenameFilter()
- View.ABOVE_ACTION_BAR_LAYER
- View.processKeyEvent(KeyEvent evt, int from, boolean global)
- OperatingSystem.hasJava14()
- OperatingSystem.hasJava15()
- GUIUtilities.centerOnScreen(Window win)
- GUIUtilities.loadStyles(String family, int size)
- GUIUtilities.loadStyles(String family, int size, boolean color)
- GUIUtilities.parseStyle(String str, String family, int size, boolean color)
- GUIUtilities.parseColor(String name, Color defaultColor)
- GUIUtilities.getColorHexString(Color c)
- GUIUtilities.NEW_BUFFER_ICON
- GUIUtilities.DIRTY_BUFFER_ICON
- GUIUtilities.READ_ONLY_BUFFER_ICON
- GUIUtilities.NORMAL_BUFFER_ICON
- GUIUtilities.WINDOW_ICON
- BeanShell.runScript(View view, String path, Reader in, boolean ownNamespace, boolean rethrowBshErrors)
- BeanShell.eval(View view, NameSpace namespace, String command, boolean rethrowBshErrors)
- EditAction.getView(Component comp)
- EditBus.getComponents()
- JarClassLoader.getZipFile()
- MiscUtilities.charsToEscapes(String str)
- MiscUtilities.charsToEscapes(String str, String toEscape)
- MiscUtilities.compareStrings(String str1, String str2, boolean ignoreCase)
- MiscUtilities.StringCompare
- MiscUtilities.StringICaseCompare
- MiscUtilities.getLeadingWhiteSpace(String str)
- MiscUtilities.getTrailingWhiteSpace(String str)
- MiscUtilities.getVirtualWidth(Segment seg, int tabSize)
- MiscUtilities.getOffsetOfVirtualColumn(Segment seg, int tabSize, int column, int[] totalVirtualWidth)
- MiscUtilities.createWhiteSpace(int len, int tabSize, int start)
- MiscUtilities.globToRE(String glob)
- MiscUtilities.quicksort(Vector vector, Compare compare)
- MiscUtilities.quicksort(Vector vector, Comparator compare)
- MiscUtilities.quicksort(Object[] obj, Compare compare)
- MiscUtilities.Compare
- MiscUtilities.MenuItemCompare
- MiscUtilities.getEncodings()
- MiscUtilities.parseXML(InputStream in, DefaultHandler handler)
- MiscUtilities.findEntity(String systemId, String test, Class where)
- MiscUtilities.charsToEntities(String str)
- MiscUtilities.stringsEqual(String s1, String s2)
- MiscUtilities.objectsEqual(Object o1, Object o2)
- MiscUtilities.KB_FORMAT
- MiscUtilities.MB_FORMAT
- MiscUtilities.formatFileSize(long length)
- SegmentCharSequence.SegmentCharSequence(Segment seg, boolean reverse)
- PluginJar.getActions()
- Registers.StringRegister
- jEdit.getActionSetForAction(EditAction action)
- jEdit.getActions()
- jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile)
- jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile, Hashtable props)
- jEdit.createTextArea()
- VFS.DirectoryEntry
- VFS.VFS(String name)
- VFS.showBrowseDialog(Object[] session, Component comp)
- VFS._listDirectory(Object session, String directory, Component comp)
- VFS._getDirectoryEntry(Object session, String path, Component comp)
- VFSManager.getVFSByName(String name)
- VFSManager.registerVFS(String protocol, VFS vfs)
- VFSManager.error(final Component comp, final String error, final Object[] args)
- VFSManager.getFilesystems()
- VFSFile.name
- VFSFile.path
- VFSFile.symlinkPath
- VFSFile.deletePath
- VFSFile.type
- VFSFile.length
- VFSFile.hidden
- VFSFile.canRead
- VFSFile.canWrite
- ReadWriteLock
+  FileVFS.modified
+  (Matthieu Casanova)
 
- (Matthieu Casanova)
+- Removed Deprecated apis :
+  EditPlugin.createMenuItems(Vector menuItems)
+  EditPlugin.createOptionPanes(OptionsDialog optionsDialog)
+  HistoryModel.clear()
+  JEditTextArea.getSelectionStart()
+  JEditTextArea.getSelectionStart(int line)
+  JEditTextArea.getSelectionStartLine()
+  JEditTextArea.setSelectionStart(int selectionStart)
+  JEditTextArea.getSelectionEnd()
+  JEditTextArea.getSelectionEnd(int line)
+  JEditTextArea.getSelectionEndLine()
+  JEditTextArea.setSelectionEnd(int selectionEnd)
+  JEditTextArea.select(int start, int end)
+  JEditTextArea.select(int start, int end, boolean doElectricScroll)
+  JEditTextArea.isSelectionRectangular()
+  TextAreaPainter.setAntiAliasEnabled(boolean isEnabled)
+  TextAreaPainter.isAntiAliasEnabled()
+  FoldHandler.SERVICE
+  Buffer.addBufferChangeListener(BufferChangeListener listener, int priority)
+  Buffer.putProperty(Object name, Object value)
+  Buffer.putBooleanProperty(String name, boolean value)
+  Buffer.markTokens(int lineIndex)
+  Buffer.TokenList
+  Buffer.getMarkersPath(VFS vfs)
+  Buffer.insertString(int offset, String str, AttributeSet attr)
+  Buffer.editSyntaxStyle(JEditTextArea textArea)
+  Buffer.addBufferChangeListener(BufferChangeListener listener)
+  Buffer.removeBufferChangeListener(BufferChangeListener listener)
+  Buffer.addBufferChangeListener(BufferChangeListener listener)
+  BufferChangeAdapter
+  BufferChangeListener
+  BufferIORequest.GZIP_MAGIC_1
+  BufferIORequest.GZIP_MAGIC_2
+  BufferIORequest.UTF8_MAGIC_1
+  BufferIORequest.UTF8_MAGIC_2
+  BufferIORequest.UTF8_MAGIC_3
+  BufferIORequest.UNICODE_MAGIC_1
+  BufferIORequest.UNICODE_MAGIC_2
+  BufferIORequest.XML_PI_LENGTH
+  JEditBuffer.indentLine(int lineIndex,
+                         boolean canIncreaseIndent,
+                         boolean canDecreaseIndent)
+  JEditBuffer.isElectricKey(char ch)
+  MiscUtilities.UTF_8_Y
+  MiscUtilities.getFileParent(String path)
+  MiscUtilities.getFileProtocol(String url)
+  MiscUtilities.moveFile(File source, File dest)
+  MiscUtilities.compareVersions(String v1, String v2)
+  MiscUtilities.quicksort(Object[] obj, Comparator compare)
+  MiscUtilities.quicksort(List list, Comparator compare)
+  MiscUtilities.copyStream(int bufferSize,
+                           ProgressObserver progress,
+                           InputStream in,
+                           OutputStream out,
+                           boolean canStop)
+  MiscUtilities.copyStream(ProgressObserver progress,
+                           InputStream in,
+                           OutputStream out,
+                           boolean canStop)
+  MiscUtilities.isBinary(Reader reader)
+  MiscUtilities.closeQuietly(InputStream in)
+  MiscUtilities.closeQuietly(OutputStream out)
+  MiscUtilities.createWhiteSpace(int len, int tabSize)
+  MiscUtilities.getLeadingWhiteSpaceWidth(String str, int tabSize)
+  MiscUtilities.getColorHexString(Color c)
+  Chunk.init(Segment seg,
+             TabExpander expander,
+             float x,
+             FontRenderContext fontRenderContext)
+  DisplayTokenHandler.init(SyntaxStyle[] styles,
+                           FontRenderContext fontRenderContext,
+                           TabExpander expander,
+                           List<Chunk> out,
+                           float wrapMargin)
+  DisplayTokenHandler.initChunk(Chunk chunk, Segment seg)
+  ParserRuleSet.getRules(char ch)
+  ParserRule.EXCLUDE_MATCH
+  ParserRule.NO_ESCAPE
+  ParserRule.next
+  ParserRule.createRegexpSequenceRule(char hashChar,
+                                      int posMatch,
+                                      String seq,
+                                      ParserRuleSet delegate,
+                                      byte id,
+                                      boolean ignoreCase)
+  ParserRule.createRegexpEOLSpanRule(char hashChar,
+                                     int posMatch,
+                                     String seq,
+                                     ParserRuleSet delegate,
+                                     byte id,
+                                     byte matchType,
+                                     boolean ignoreCase)
+  PluginManagerProgress.setValue(int value)
+  BracketIndentRule.getBrackets(String line)
+  CloseBracketIndentRule.isMatch(String line)
+  RegexpIndentRule.isMatch(String line)
+  DockableLayout.setAlternateLayout()
+  GrabKeyDialog.toString(KeyEvent evt)
+  InputHandler.readNextChar(String code)
+  KeyEventTranslator.translateKeyEvent2(KeyEvent evt)
+  KeyEventTranslator.Key.isPhantom()
+  VFSBrowser.getFilenameFilter()
+  View.ABOVE_ACTION_BAR_LAYER
+  View.processKeyEvent(KeyEvent evt, int from, boolean global)
+  OperatingSystem.hasJava14()
+  OperatingSystem.hasJava15()
+  GUIUtilities.centerOnScreen(Window win)
+  GUIUtilities.loadStyles(String family, int size)
+  GUIUtilities.loadStyles(String family, int size, boolean color)
+  GUIUtilities.parseStyle(String str, String family, int size, boolean color)
+  GUIUtilities.parseColor(String name, Color defaultColor)
+  GUIUtilities.getColorHexString(Color c)
+  GUIUtilities.NEW_BUFFER_ICON
+  GUIUtilities.DIRTY_BUFFER_ICON
+  GUIUtilities.READ_ONLY_BUFFER_ICON
+  GUIUtilities.NORMAL_BUFFER_ICON
+  GUIUtilities.WINDOW_ICON
+  BeanShell.runScript(View view,
+                      String path,
+                      Reader in,
+                      boolean ownNamespace,
+                      boolean rethrowBshErrors)
+  BeanShell.eval(View view,
+                 NameSpace namespace,
+                 String command,
+                 boolean rethrowBshErrors)
+  EditAction.getView(Component comp)
+  EditBus.getComponents()
+  JarClassLoader.getZipFile()
+  MiscUtilities.charsToEscapes(String str)
+  MiscUtilities.charsToEscapes(String str, String toEscape)
+  MiscUtilities.compareStrings(String str1, String str2, boolean ignoreCase)
+  MiscUtilities.StringCompare
+  MiscUtilities.StringICaseCompare
+  MiscUtilities.getLeadingWhiteSpace(String str)
+  MiscUtilities.getTrailingWhiteSpace(String str)
+  MiscUtilities.getVirtualWidth(Segment seg, int tabSize)
+  MiscUtilities.getOffsetOfVirtualColumn(Segment seg,
+                                         int tabSize,
+                                         int column,
+                                         int[] totalVirtualWidth)
+  MiscUtilities.createWhiteSpace(int len, int tabSize, int start)
+  MiscUtilities.globToRE(String glob)
+  MiscUtilities.quicksort(Vector vector, Compare compare)
+  MiscUtilities.quicksort(Vector vector, Comparator compare)
+  MiscUtilities.quicksort(Object[] obj, Compare compare)
+  MiscUtilities.Compare
+  MiscUtilities.MenuItemCompare
+  MiscUtilities.getEncodings()
+  MiscUtilities.parseXML(InputStream in, DefaultHandler handler)
+  MiscUtilities.findEntity(String systemId, String test, Class where)
+  MiscUtilities.charsToEntities(String str)
+  MiscUtilities.stringsEqual(String s1, String s2)
+  MiscUtilities.objectsEqual(Object o1, Object o2)
+  MiscUtilities.KB_FORMAT
+  MiscUtilities.MB_FORMAT
+  MiscUtilities.formatFileSize(long length)
+  SegmentCharSequence.SegmentCharSequence(Segment seg, boolean reverse)
+  PluginJar.getActions()
+  Registers.StringRegister
+  jEdit.getActionSetForAction(EditAction action)
+  jEdit.getActions()
+  jEdit.openFile(View view,
+                 String parent,
+                 String path,
+                 boolean readOnly,
+                 boolean newFile)
+  jEdit.openFile(View view,
+                 String parent,
+                 String path,
+                 boolean readOnly,
+                 boolean newFile,
+                 Hashtable props)
+  jEdit.createTextArea()
+  VFS.DirectoryEntry
+  VFS.VFS(String name)
+  VFS.showBrowseDialog(Object[] session, Component comp)
+  VFS._listDirectory(Object session, String directory, Component comp)
+  VFS._getDirectoryEntry(Object session, String path, Component comp)
+  VFSManager.getVFSByName(String name)
+  VFSManager.registerVFS(String protocol, VFS vfs)
+  VFSManager.error(final Component comp,
+                   final String error,
+                   final Object[] args)
+  VFSManager.getFilesystems()
+  VFSFile.name
+  VFSFile.path
+  VFSFile.symlinkPath
+  VFSFile.deletePath
+  VFSFile.type
+  VFSFile.length
+  VFSFile.hidden
+  VFSFile.canRead
+  VFSFile.canWrite
+  ReadWriteLock
+  (Matthieu Casanova)
 
 }}}
 {{{ Editing
 
-- Consider full path when using file name glob in edit mode decisions (#2557712 - Alan Ezust)
+- Consider full path when using file name glob in edit mode decisions.
+  (#2557712 - Alan Ezust)
 
-- New edit mode option: Elastic Tabstops (Anshal Shukla + Shlomy Reinstein).
+- New edit mode option: Elastic Tabstops. (Anshal Shukla + Shlomy Reinstein)
 
-- Applied patch from Matthew Gilbert to add ability to increase/decrease line spacing in the text area. (#3023134, Dale Anson)
+- Applied patch from Matthew Gilbert to add ability to increase/decrease line
+  spacing in the text area. (#3023134, Dale Anson)
 
 - Added jflex edit mode (Matthieu Casanova)
 
 - Haxe mode update (Dion Amago # 3123602)
 
-- Updated erlang mode and associated *.hrl to erlang language (patch #3042398 from jclopes , Matthieu Casanova)
+- Updated erlang mode and associated *.hrl to erlang language
+  (patch #3042398 from jclopes, Matthieu Casanova)
+
 }}}
 {{{ UI
-- Updated ColorWellButton to use the dialog provided by JColorChooser rather than creating its own dialog since the JColorChooser dialog is much richer. (Dale Anson)
+
+- Updated ColorWellButton to use the dialog provided by JColorChooser rather
+  than creating its own dialog since the JColorChooser dialog is much richer.
+  (Dale Anson)
 
 - Filter field in PluginManager InstallPanel (#2810926 - Olivier Chafik)
 
 - New View option: Floatable toolbars. (Alan Ezust)
 
-- New TextArea Option: Choice of color ordering w/ subpixel antialiasing. (#2989209 - Alan Ezust) 
+- New TextArea Option: Choice of color ordering w/ subpixel antialiasing.
+  (#2989209 - Alan Ezust)
 
 - New mode for Oracle PL/SQL 11. (#3078863 - Diogo Kollross)
 
-- Factor Mode fix (# 3100731 - Valeri Mytinski) 
+- Factor Mode fix (#3100731 - Valeri Mytinski)
 
-- In conjunction with the fix for tracker 3134215, added a new option to the General options pane to let the user choose whether to restore the split configuration. (Dale Anson)
+- In conjunction with the fix for tracker 3134215, added a new option to the
+  General options pane to let the user choose whether to restore the split
+  configuration. (Dale Anson)
 
 }}}
 {{{ Miscellaneous
 
-- Added a new menu item "New Macro" in Macros menu (patch #2983607 from Damien Radtke, Matthieu Casanova)
+- Fixed various indentation errors (Björn "Vampire" Kautler)
 
-- In search and replace when replacing by a beanshell snippet, it is now possible to use multiple statements instead of
- only one statement. To do that, enclose your code in braces (patch #3002207 from cy6erGn0m, Matthieu Casanova)
+- Added a new menu item "New Macro" in Macros menu
+  (patch #2983607 from Damien Radtke, Matthieu Casanova)
+
+- In search and replace when replacing by a BeanShell snippet, it is now
+  possible to use multiple statements instead of only one statement. To do
+  that, enclose your code in braces
+  (patch #3002207 from cy6erGn0m, Matthieu Casanova)
 
 - Added a command line option "-nosplash" to avoid the splash screen
   (Shlomy Reinstein).
+
 }}}
+
 }}}
 
 jEdit buffer local properties:
