@@ -203,8 +203,8 @@ public class EditPane extends JPanel implements BufferSetListener
 			});
 		}
 
-		// If the buffer is loading, the caret info will automatically be loaded when
-		// that task completes. Otherwise, we don't need to wait for IO.
+		// If the buffer is loading, the caret info will be loaded on
+		// BufferUpdate.LOADED. Otherwise, we don't need to wait for IO.
 		if (!buffer.isLoading())
 		{
 			ThreadUtilities.runInDispatchThread(new Runnable()
