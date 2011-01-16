@@ -304,6 +304,8 @@ contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- build files and properties cleanup (Björn "Vampire" Kautler)
+
 - Fixed various indentation errors (Björn "Vampire" Kautler)
 
 - Wrap mode tooltip in status bar now indicates the current wrap mode (Matthieu Casanova)

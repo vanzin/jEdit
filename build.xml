@@ -36,8 +36,6 @@
 		  location="${build.dir}/classes"/>
 	<property name="jar.location"
 		  location="${build.dir}"/>
-	<property name="docbook.catalog"
-		  value="${config.docbook.catalog}"/>
 	<property name="textAreaPackage"
 		  location="../textarea"/>
 
@@ -64,27 +62,24 @@
 		  value="true"/>
 	<property name="config.build.compilerarg"
 		  value="-Xlint:unchecked"/>
-	<property name="docbook.catalog.debug"
+	<property name="config.docbook.catalog.debug"
 		  value="1"/>
 
 	<!-- Cygwin detection (xsltproc needs special arguments) -->
 	<dirname property="xsltproc.dir"
 		 file="${config.xsltproc.executable}"/>
-	<available file="${xsltproc.dir}/cygcheck.exe"
-		   property="xsltproc.cygwin"
-		   value="${xsltproc.dir}/.."/>
 	<condition property="xsltproc.cygwin.arg"
 		   value="--path /usr/share/sgml/docbook/xsl-stylesheets/html/">
 		<and>
-			<isset property="xsltproc.cygwin"/>
-			<available file="${xsltproc.cygwin}/usr/share/sgml/docbook/xsl-stylesheets/html/docbook.xsl"/>
+			<available file="${xsltproc.dir}/cygcheck.exe"/>
+			<available file="${xsltproc.dir}/../usr/share/sgml/docbook/xsl-stylesheets/html/docbook.xsl"/>
 		</and>
 	</condition>
 	<condition property="xsltproc.cygwin.arg"
 		   value="--path /usr/share/docbook-xsl/html/">
 		<and>
-			<isset property="xsltproc.cygwin"/>
-			<available file="${xsltproc.cygwin}/usr/share/docbook-xsl/html/docbook.xsl"/>
+			<available file="${xsltproc.dir}/cygcheck.exe"/>
+			<available file="${xsltproc.dir}/../usr/share/docbook-xsl/html/docbook.xsl"/>
 		</and>
 	</condition>
 	<property name="xsltproc.cygwin.arg"
@@ -329,6 +324,19 @@
 		</copy>
 	</target>
 
+	<target name="build-exe-launcher"
+		depends="init,filter-package-files"
+		unless="build.on.non.win"
+		description="build the EXE launcher">
+		<fail message="Please set the property &quot;launch4j.dir&quot; in build.properties, you may find example values in build.properties.sample"
+		      unless="config.launch4j.dir"/>
+		<taskdef name="launch4j"
+			 classname="net.sf.launch4j.ant.Launch4jTask"
+			 classpath="${config.launch4j.dir}/launch4j.jar"/>
+		<launch4j configFile="${classes.dir}/package-files/windows/jedit.launch4j.xml"
+			  outfile="${jar.location}/jedit.exe"/>
+	</target>
+
 	<target name="build-textArea"
 		depends="init,compile-textArea"
 		description="build the textArea JAR-file with full debug-information">
@@ -360,8 +368,6 @@
 		      fork="true"
 		      spawn="true"
 		      maxmemory="192M">
-			<sysproperty key="xml.catalog.verbosity"
-				     value="9"/>
 			<arg value="-settings=${build.dir}/settings"/>
 		</java>
 	</target>
@@ -415,7 +421,7 @@
 		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 		      unless="config.xsltproc.executable"/>
 		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="docbook.catalog"/>
+		      unless="config.docbook.catalog"/>
 		<mkdir dir="${doc.output.location}/FAQ"/>
 		<exec executable="${config.xsltproc.executable}"
 		      dir="doc"
@@ -426,9 +432,9 @@
 			<arg value="jedithtml.xsl"/>
 			<arg value="FAQ/faq.xml"/>
 			<env key="XML_CATALOG_FILES"
-			     value="${docbook.catalog}"/>
+			     value="${config.docbook.catalog}"/>
 			<env key="XML_DEBUG_CATALOG"
-			     value="${docbook.catalog.debug}"/>
+			     value="${config.docbook.catalog.debug}"/>
 		</exec>
 	</target>
 
@@ -439,7 +445,7 @@
 		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 		      unless="config.xsltproc.executable"/>
 		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="docbook.catalog"/>
+		      unless="config.docbook.catalog"/>
 		<mkdir dir="${doc.output.location}/news44"/>
 		<exec executable="${config.xsltproc.executable}"
 		      dir="doc"
@@ -450,9 +456,9 @@
 			<arg value="jedithtml.xsl"/>
 			<arg value="news44/news.xml"/>
 			<env key="XML_CATALOG_FILES"
-			     value="${docbook.catalog}"/>
+			     value="${config.docbook.catalog}"/>
 			<env key="XML_DEBUG_CATALOG"
-			     value="${docbook.catalog.debug}"/>
+			     value="${config.docbook.catalog.debug}"/>
 		</exec>
 	</target>
 
@@ -463,7 +469,7 @@
 		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
 		      unless="config.xsltproc.executable"/>
 		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="docbook.catalog"/>
+		      unless="config.docbook.catalog"/>
 		<mkdir dir="${doc.output.location}/users-guide"/>
 		<exec executable="${config.xsltproc.executable}"
 		      dir="doc"
@@ -474,9 +480,9 @@
 			<arg value="jedithtml.xsl"/>
 			<arg value="users-guide/users-guide.xml"/>
 			<env key="XML_CATALOG_FILES"
-			     value="${docbook.catalog}"/>
+			     value="${config.docbook.catalog}"/>
 			<env key="XML_DEBUG_CATALOG"
-			     value="${docbook.catalog.debug}"/>
+			     value="${config.docbook.catalog.debug}"/>
 		</exec>
 	</target>
 
@@ -585,6 +591,8 @@
 			 source="${target.java.version}">
 			<group title="jEdit"
 			       packages="org.gjt.sp*"/>
+			<group title="BeanShell"
+			       packages="org.gjt.sp.jedit.bsh*"/>
 		</javadoc>
 	</target>
 
@@ -657,7 +665,7 @@
 			<arg line="${xsltproc.cygwin.arg}"/>
 			<arg value="--stringparam"/>
 			<arg value="paper.type"/>
-			<arg value="&quot;${paper.type}&quot;"/>
+			<arg value="${paper.type}"/>
 			<arg value="--output"/>
 			<arg value="../${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"/>
 			<arg value="jeditfo.xsl"/>
@@ -666,11 +674,11 @@
 		<delete file="doc/docbook-wrapper-fo.xsl"
 			failonerror="false"/>
 		<taskdef name="fop"
-			 classname="org.apache.fop.tools.anttasks.Fop"
-			 classpath="${config.fop.dir}/build/fop.jar">
+			 classname="org.apache.fop.tools.anttasks.Fop">
 			<classpath>
-				<fileset dir="${config.fop.dir}/lib"
-					 includes="*.jar"/>
+				<fileset dir="${config.fop.dir}"
+					 includes="build/fop.jar
+						   lib/*.jar"/>
 			</classpath>
 		</taskdef>
 		<fop fofile="${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"
@@ -817,7 +825,7 @@
 		<tar destfile="${dist.dir}/jedit-os2.tar.bz2"
 		     compression="bzip2">
 			<tarfileset id="jedit-os2"
-				    dir="package-files/os2"
+				    dir="${dist.dir}/classes/package-files/os2"
 				    includes="jedit.cmd"/>
 		</tar>
 		<antcall target="compile-installer">
@@ -905,7 +913,7 @@
 		</jar>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
@@ -928,7 +936,7 @@
 		</antcall>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
@@ -1054,7 +1062,7 @@
 		</exec>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
@@ -1095,16 +1103,48 @@
 			</not>
 		</condition>
 		<antcall target="dist-mac-finish">
-			<param name="config.dont.wipe.dist.files"
+			<param name="dont.wipe.dist.files"
 			       value="true"/>
 		</antcall>
 		<antcall target="prepare-dist-mac-finish"/>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
+	</target>
+
+	<target name="filter-package-files"
+		depends="init">
+		<tstamp>
+			<format property="current.year"
+				pattern="yyyy"/>
+		</tstamp>
+		<copy todir="${classes.dir}/package-files"
+		      overwrite="true">
+			<fileset dir="package-files"/>
+			<filterset>
+				<filter token="base.dir"
+					value="${basedir}"/>
+				<filter token="current.year"
+					value="${current.year}"/>
+				<filter token="dist.dir"
+					value="${dist.dir}"/>
+				<filter token="jar.filename"
+					value="${jar.filename}"/>
+				<filter token="jedit.build.number"
+					value="${jedit.build.number}"/>
+				<filter token="jedit.version"
+					value="${jedit.version}"/>
+				<filter token="slackware.target.java.version"
+					value="${slackware.target.java.version}"/>
+				<filter token="target.java.version"
+					value="${target.java.version}"/>
+				<filter token="win.filename"
+					value="${win.filename}"/>
+			</filterset>
+		</copy>
 	</target>
 
 	<target name="prepare-dist-files"
@@ -1134,20 +1174,10 @@
 			       location="${dist.dir}"/>
 		</antcall>
 		<antcall target="compile-default-plugins-for-dist"/>
-		<copy todir="${dist.dir}/classes/package-files"
-		      overwrite="true">
-			<fileset dir="package-files"/>
-			<filterset>
-				<filter token="jar.filename"
-					value="${jar.filename}"/>
-				<filter token="jedit.version"
-					value="${jedit.version}"/>
-				<filter token="jedit.build.number"
-					value="${jedit.build.number}"/>
-				<filter token="slackware.target.java.version"
-					value="${slackware.target.java.version}"/>
-			</filterset>
-		</copy>
+		<antcall target="filter-package-files">
+			<param name="classes.dir"
+			       location="${dist.dir}/classes"/>
+		</antcall>
 		<gzip src="${dist.dir}/classes/package-files/linux/jedit.1"
 		      destfile="${dist.dir}/classes/package-files/linux/jedit.1.gz"/>
 	</target>
@@ -1207,7 +1237,7 @@
 		</tar>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
@@ -1386,54 +1416,10 @@
 		</deb>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
-	</target>
-
-	<target name="dist-win-exe"
-		unless="build.on.non.win"
-		description="creates a native windows application launcher">
-		<fail message="Please set the property &quot;launch4j.dir&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.launch4j.dir"/>
-		<taskdef name="launch4j"
-			 classname="net.sf.launch4j.ant.Launch4jTask"
-			 classpath="${config.launch4j.dir}/launch4j.jar:${config.launch4j.dir}/lib/xstream.jar"/>
-		<copy todir="${dist.dir}/classes/package-files/windows"
-		      file="package-files/windows/jedit.exe.manifest"
-		      overwrite="true"/>
-		<tstamp>
-			<format property="current.year"
-				pattern="yyyy"/>
-		</tstamp>
-		<filterset id="dist-win-exe-config-params">
-			<filter token="jar.filename"
-				value="${jar.filename}"/>
-			<filter token="jedit.version"
-				value="${jedit.version}"/>
-			<filter token="jedit.build.number"
-				value="${jedit.build.number}"/>
-			<filter token="dist.dir"
-				value="${dist.dir}"/>
-			<filter token="base.dir"
-				value="${basedir}"/>
-			<filter token="current.year"
-				value="${current.year}"/>
-			<filter token="target.java.version"
-				value="${target.java.version}"/>
-		</filterset>
-		<copy file="package-files/windows/jedit.launch4j.xml"
-		      tofile="${config.dist.dir}/classes/package-files/windows/jedit.launch4j.xml"
-		      overwrite="true">
-			<filterset refid="dist-win-exe-config-params"/>
-			<filterset>
-				<filter token="cmd.line"
-					value="-reuseview"/>
-			</filterset>
-		</copy>
-		<launch4j configFile="${config.dist.dir}/classes/package-files/windows/jedit.launch4j.xml"
-			  outfile="${config.dist.dir}/classes/package-files/windows/jedit.exe"/>
 	</target>
 
 	<target name="dist-win-finish"
@@ -1449,50 +1435,13 @@
 		</fail>
 		<fail message="Please set the property &quot;innosetup.compiler.executable&quot; in build.properties, you may find example values in build.properties.sample"
 		      unless="config.innosetup.compiler.executable"/>
-		<tstamp>
-			<format property="current.year"
-				pattern="yyyy"/>
-		</tstamp>
-		<copy todir="${dist.dir}/classes/package-files/windows"
-		      file="package-files/windows/jedit.l4j.ini"
-		      overwrite="true"/>
-		<copy todir="${dist.dir}/classes/package-files/windows"
-		      overwrite="true">
-			<fileset file="package-files/windows/win32installer.iss"/>
-			<filterset>
-				<filter token="jar.filename"
-					value="${jar.filename}"/>
-				<filter token="jedit.version"
-					value="${jedit.version}"/>
-				<filter token="jedit.build.number"
-					value="${jedit.build.number}"/>
-				<filter token="win.filename"
-					value="${win.filename}"/>
-				<filter token="dist.dir"
-					value="${dist.dir}"/>
-				<filter token="base.dir"
-					value="${basedir}"/>
-				<filter token="current.year"
-					value="${current.year}"/>
-				<filter token="jedit.exefile"
-					value="jedit.exe"/>
-				<filter token="jedit.inifile"
-					value="jedit.l4j.ini"/>
-			</filterset>
-		</copy>
-		<antcall target="compile-installer">
-			<param name="config.build.debuglevel"
-			       value="lines,source"/>
-			<param name="classes.dir"
-			       location="${dist.dir}/classes"/>
-		</antcall>
 		<exec executable="${config.innosetup.compiler.executable}"
 		      failonerror="true">
 			<arg file="${dist.dir}/classes/package-files/windows/win32installer.iss"/>
 		</exec>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
@@ -1507,7 +1456,6 @@
 			       icons/jedit.ico
 			       icons/WindowsInstallerSmallImage.bmp
 			       icons/WindowsInstallerImage.bmp
-			       package-files/windows/win32installer.iss
 			       ${config.dist.dir}/${jar.filename}
 			       ${config.dist.dir}/classes/package-files/windows/**
 			       ${config.dist.dir}/doc/**
@@ -1528,15 +1476,20 @@
 				<os family="windows"/>
 			</not>
 		</condition>
-		<antcall target="dist-win-exe"/>
+		<antcall target="build-exe-launcher">
+			<param name="classes.dir"
+			       location="${dist.dir}/classes"/>
+			<param name="jar.location"
+			       location="${dist.dir}"/>
+		</antcall>
 		<antcall target="dist-win-finish">
-			<param name="config.dont.wipe.dist.files"
+			<param name="dont.wipe.dist.files"
 			       value="true"/>
 		</antcall>
 		<antcall target="prepare-dist-win-finish"/>
 		<condition property="wipe.dist.files">
 			<not>
-				<isset property="config.dont.wipe.dist.files"/>
+				<isset property="dont.wipe.dist.files"/>
 			</not>
 		</condition>
 		<antcall target="dist-cleanup"/>
@@ -1545,7 +1498,7 @@
 	<target name="dist"
 		depends="init"
 		description="build all distribution files">
-		<property name="config.dont.wipe.dist.files"
+		<property name="dont.wipe.dist.files"
 			  value="true"/>
 		<antcall target="dist-java"/>
 		<antcall target="dist-manuals"/>
@@ -1572,6 +1525,7 @@
 						<filename name="properties/**"/>
 						<filename name="startup/**"/>
 						<filename name="${jar.filename}"/>
+						<filename name="jedit.exe"/>
 						<and>
 							<filename name="*.tar.bz2"/>
 							<filename name="${src.archive.filename}"
