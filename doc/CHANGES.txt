@@ -273,6 +273,8 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- README.SRC.txt cleanup (Björn "Vampire" Kautler)
+
 - Made the Windows installer correctly show special characters like german
   umlauts (Björn "Vampire" Kautler)
 
