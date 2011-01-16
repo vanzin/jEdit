@@ -273,6 +273,8 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
+
 - Made our documentation build on FOP 0.93+, 0.20.5 is no longer supported by
   our files (Björn "Vampire" Kautler)
 
