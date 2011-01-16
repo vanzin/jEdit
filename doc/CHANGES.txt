@@ -273,6 +273,9 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Made our documentation build on FOP 0.93+, 0.20.5 is no longer supported by
+  our files (Björn "Vampire" Kautler)
+
 - Made the Windows installer buildable completely via wine on non-Windows
   systems (Björn "Vampire" Kautler)
 

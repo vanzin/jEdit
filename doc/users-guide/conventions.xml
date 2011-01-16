@@ -11,6 +11,9 @@
 
     <informaltable>
         <tgroup cols="2">
+            <colspec colwidth="*"/>
+            <colspec colwidth="*"/>
+
             <tbody>
                 <row>
                     <entry><guimenu>View</guimenu>&gt;<guisubmenu>Scrolling</guisubmenu>&gt;<guimenuitem>Scroll
