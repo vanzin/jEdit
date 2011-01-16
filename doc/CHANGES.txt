@@ -273,6 +273,8 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Fixed the settings for building the Windows launcher (Björn "Vampire" Kautler)
+
 - Made the Deb Ant task compatible to Ant 1.8+ (Björn "Vampire" Kautler)
 
 - Replaced the links to Java 5 documentation with links to Java 6 documentation
