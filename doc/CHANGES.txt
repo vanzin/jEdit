@@ -273,6 +273,9 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Replaced the links to Java 5 documentation with links to Java 6 documentation
+  (Björn "Vampire" Kautler)
+
 - Fixed the build.xml which was for the Windows installer only working if
   completely run on Windows, making "ant dist-win" on another system and then
   using "ant dist-win-finish" was broken (Björn "Vampire" Kautler)
