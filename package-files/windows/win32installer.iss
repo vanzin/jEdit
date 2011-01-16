@@ -43,7 +43,6 @@ WizardSmallImageFile=@base.dir@\icons\WindowsInstallerSmallImage.bmp
 Name: main; Description: jEdit - Programmer's Text Editor; Flags: fixed; Types: custom compact full
 Name: apidoc; Description: {cm:APIDocumentation}; Types: full
 Name: macros; Description: {cm:Macros}; Types: compact full
-Name: batchfile; Description: {cm:BatchFile}; Types: full
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}
@@ -62,7 +61,6 @@ Source: macros\*; DestDir: {app}\macros; Flags: ignoreversion recursesubdirs cre
 Source: modes\*; DestDir: {app}\modes; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
 Source: properties\*; DestDir: {app}\properties; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
 Source: startup\*; DestDir: {app}\startup; Flags: ignoreversion recursesubdirs createallsubdirs sortfilesbyextension sortfilesbyname; Components: main
-Source: classes\package-files\windows\jedit.bat; DestDir: {app}; Flags: ignoreversion sortfilesbyextension sortfilesbyname; AfterInstall: updateBatchfile; Components: batchfile
 
 [Icons]
 Name: {group}\jEdit; Filename: {app}\jedit.exe; WorkingDir: {app}; Comment: jEdit - Programmer's Text Editor; HotKey: ctrl+alt+j
@@ -101,8 +99,6 @@ APIDocumentation=API Documentation (for macro and plugin development)
 de.APIDocumentation=API Dokumentation (für Macro und Plugin Entwicklung)
 Macros=Default set of macros (highly recommended)
 de.Macros=Standard Makros (sehr empfohlen)
-BatchFile=Batch file (for usage in scripts)
-de.BatchFile=Batch file (für die Benutzung in Skripten)
 AutostartJEditServer=Start jEdit Server automatically on system startup
 de.AutostartJEditServer=jEdit Server automatisch beim Hochfahren starten
 QuitProgram=Quit %1
@@ -127,146 +123,6 @@ Filename: {app}\jedit.exe; Description: {cm:LaunchProgram,jEdit}; Parameters: "-
 Filename: {app}\jedit.exe; Description: {cm:LaunchProgram,jEdit}; Parameters: "--l4j-dont-wait -background"; WorkingDir: {app}; Flags: nowait postinstall skipifsilent; Tasks: autostartserver
 
 [Code]
-var
-	javawExePath: String;
-
-// looks for current JRE version, in Registry
-function getJREVersion: String;
-var
-	jreVersion : String;
-begin
-	jreVersion := '';
-	RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment','CurrentVersion',jreVersion);
-	if (Length(jreVersion) = 0) and IsWin64 then begin
-		RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Runtime Environment','CurrentVersion',jreVersion);
-	end;
-	Result := jreVersion;
-end;
-
-// looks for current JDK version, in Registry
-function getJDKVersion: String;
-var
-	jdkVersion : String;
-begin
-	jdkVersion := '';
-	RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Development Kit', 'CurrentVersion', jdkVersion);
-	if (Length(jdkVersion) = 0) and IsWin64 then begin
-		RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Development Kit', 'CurrentVersion', jdkVersion);
-	end;
-	Result := jdkVersion;
-end;
-
-// Finds path to "javaw.exe" by looking up System directory or JDK/JRE
-// locations in the registry.  Ensures the file actually exists.  If
-// none is found, an empty string is returned.
-function javaPath: String;
-var
-	javaVersion : String;
-	javaHome : String;
-	sysWow64 : String;
-	path : String;
-begin
-	if Length(javawExePath) > 0 then begin
-		Result := javawExePath;
-		exit;
-	end;
-
-	// Workaround for 64-bit Windows.
-	// GetSysWow64Dir must be checked before GetSystemDir because of
-	// the following reasons.
-	//   - Sun's JRE 1.6.0_03 puts javaw.exe in SysWOW64 even if user
-	//     chose the 64-bit installer. This is not documented. But an
-	//     user reports this. See SF.net bug #1849762 for more detail.
-	//   - "File System Redirector"
-	//     http://msdn2.microsoft.com/en-us/library/aa384187.aspx
-	//   - This installer is a 32-bit program while installed paths are
-	//     used by 64-bit programs.
-	// Without this workaround, the installer finds javaw.exe in
-	// System32 which is mimiced by the redirector. But all links
-	// pointing there doesn't work for 64-bit programs (including
-	// Windows Explorer) because javaw.exe really is in SysWOW64.
-	sysWow64 := GetSysWow64Dir;
-	if sysWow64 <> '' then begin
-		path := sysWow64 + '\javaw.exe';
-		if FileExists(path) then begin
-			Log('(SysWow64Dir) found javaw.exe: ' + path);
-			javawExePath := path;
-			Result := javawExePath;
-			exit;
-		end;
-	end;
-
-	path := GetSystemDir + '\javaw.exe';
-	if FileExists(path) then begin
-		Log('(SystemDir) found javaw.exe: ' + path);
-		javawExePath := path;
-		Result := javawExePath;
-		exit;
-	end;
-
-	// try to find JDK "javaw.exe"
-	javaVersion := getJDKVersion;
-	if (Length(javaVersion) > 0) and (javaVersion >= '1.6') then begin
-		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Development Kit\' + javaVersion,'JavaHome',javaHome);
-		if (Length(javaHome) = 0) and IsWin64 then begin
-			RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Development Kit\' + javaVersion,'JavaHome',javaHome);
-		end;
-		path := javaHome + '\bin\javaw.exe';
-		if FileExists(path) then begin
-			Log('(JDK) found javaw.exe: ' + path);
-			javawExePath := path;
-			Result := javawExePath;
-			exit;
-		end;
-	end;
-
-	// if we didn't find a JDK "javaw.exe", try for a JRE one
-	Log('(JRE) JDK not found or too old, looking for JRE');
-	javaVersion := getJREVersion;
-	if (Length(javaVersion) > 0) and (javaVersion >= '1.6') then begin
-		RegQueryStringValue(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion,'JavaHome',javaHome);
-		if (Length(javaHome) = 0) and IsWin64 then begin
-			RegQueryStringValue(HKLM32,'SOFTWARE\JavaSoft\Java Runtime Environment\' + javaVersion,'JavaHome',javaHome);
-		end;
-		path := javaHome + '\bin\javaw.exe';
-		if FileExists(path) then begin
-			Log('(JRE) found javaw.exe: ' + path);
-			javawExePath := path;
-			Result := javawExePath;
-			exit;
-		end;
-	end;
-
-	// we didn't find a suitable "javaw.exe"
-	Result := '';
-end;
-
-procedure updateBatchFile;
-var
-	tmpSAnsi : AnsiString;
-	tmpS : String;
-begin
-	LoadStringFromFile(ExpandConstant('{app}\jedit.bat'),tmpSAnsi);
-	tmpS := tmpSAnsi;
-
-	StringChangeEx(tmpS,'{jvmOptions}','-Xmx192M',False);
-	StringChangeEx(tmpS,'{jedit.jar}','{app}\@jar.filename@',False);
-	SaveStringToFile(ExpandConstant('{app}\jedit.bat'),ExpandConstantEx(tmpS,'javaw.exe',javaPath),false);
-end;
-
-function InitializeSetup: Boolean;
-begin
-	// check if java >= 1.6 is installed
-	if Length(javaPath) > 0 then begin
-		Result := true;
-	end else begin
-		MsgBox('Setup was unable to find an installed Java Runtime Environment or Java Development Kit of version 1.6, or higher.' + #13 +
-			   'You must have installed at least JDK or JRE 1.6 to continue setup.' + #13 +
-			   'Please install one from http://www.java.com/download and restart setup.',mbInformation,MB_OK);
-		Result := false;
-	end;
-end;
-
 function findPathLine(lines: Array Of String): Integer;
 var
 	i : Integer;

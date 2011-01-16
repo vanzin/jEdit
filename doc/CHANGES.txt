@@ -273,6 +273,9 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Removed the BAT launcher in the Windows installer in favor of the EXE
+  launcher (Björn "Vampire" Kautler)
+
 - Fixed the settings for building the Windows launcher (Björn "Vampire" Kautler)
 
 - Made the Deb Ant task compatible to Ant 1.8+ (Björn "Vampire" Kautler)
