@@ -273,6 +273,12 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Fixed the build.xml which was for the Windows installer only working if
+  completely run on Windows, making "ant dist-win" on another system and then
+  using "ant dist-win-finish" was broken (Björn "Vampire" Kautler)
+
+- Made the Windows launcher buildable on any system (Björn "Vampire" Kautler)
+
 - README.SRC.txt cleanup (Björn "Vampire" Kautler)
 
 - Made the Windows installer correctly show special characters like german
