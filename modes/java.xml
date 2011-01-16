@@ -210,7 +210,7 @@
 		<!-- Note: the labels in comments are handled by SPANs above -->
 
 		<!-- Official javadoc tags:
-			 http://java.sun.com/j2se/1.5/docs/tooldocs/windows/javadoc.html#javadoctags -->
+			 http://download.oracle.com/javase/6/docs/technotes/tools/windows/javadoc.html#javadoctags -->
 			<LABEL>@author</LABEL>
 			<LABEL>@deprecated</LABEL>
 		<!--<LABEL>@docRoot</LABEL>-->
