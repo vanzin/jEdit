@@ -1120,8 +1120,44 @@
 		<antcall target="dist-cleanup"/>
 	</target>
 
+	<target name="translate-paths-for-wine"
+		if="config.winepath.executable">
+		<exec executable="${config.winepath.executable}"
+		      outputproperty="basedir.for.wine"
+		      failonerror="true">
+			<arg value="-w"/>
+			<arg value="${basedir}"/>
+		</exec>
+		<exec executable="${config.winepath.executable}"
+		      outputproperty="dist.dir.for.wine"
+		      failonerror="true">
+			<arg value="-w"/>
+			<arg value="${dist.dir}"/>
+		</exec>
+	</target>
+
 	<target name="filter-package-files"
-		depends="init">
+		depends="init,translate-paths-for-wine">
+		<fail message="Please set the property &quot;winepath.executable&quot; in build.properties, you may find example values in build.properties.sample">
+			<condition>
+				<and>
+					<istrue value="${config.innosetup.via.wine}"/>
+					<not>
+						<isset property="config.winepath.executable"/>
+					</not>
+				</and>
+			</condition>
+		</fail>
+		<condition property="basedir.possibly.for.wine"
+			   value="${basedir.for.wine}"
+			   else="${basedir}">
+			<istrue value="${config.innosetup.via.wine}"/>
+		</condition>
+		<condition property="dist.dir.possibly.for.wine"
+			   value="${dist.dir.for.wine}"
+			   else="${dist.dir}">
+			<istrue value="${config.innosetup.via.wine}"/>
+		</condition>
 		<tstamp>
 			<format property="current.year"
 				pattern="yyyy"/>
@@ -1154,8 +1190,10 @@
 			<fileset file="package-files/windows/win32installer.iss"/>
 			<filterset refid="package-files-filter"/>
 			<filterset>
-				<filter token="dist.dir"
-					value="${dist.dir}"/>
+				<filter token="base.dir.possibly.for.wine"
+					value="${basedir.possibly.for.wine}"/>
+				<filter token="dist.dir.possibly.for.wine"
+					value="${dist.dir.possibly.for.wine}"/>
 				<filter token="win.filename"
 					value="${win.filename}"/>
 			</filterset>
@@ -1447,19 +1485,44 @@
 	<target name="dist-win-finish"
 		depends="init"
 		unless="build.on.non.win"
-		description="finish building the Windows installer (EXE-file) on Windows">
-		<fail message="The Windows installer (EXE-file) can only be built on Windows currently">
+		description="finish building the Windows installer (EXE-file) on Windows or via wine">
+		<fail message="The Windows installer (EXE-file) can only be built on Windows or via wine currently">
 			<condition>
 				<not>
-					<os family="windows"/>
+					<or>
+						<os family="windows"/>
+						<istrue value="${config.innosetup.via.wine}"/>
+					</or>
 				</not>
 			</condition>
 		</fail>
 		<fail message="Please set the property &quot;innosetup.compiler.executable&quot; in build.properties, you may find example values in build.properties.sample"
 		      unless="config.innosetup.compiler.executable"/>
-		<exec executable="${config.innosetup.compiler.executable}"
+		<fail message="Please set the property &quot;wine.executable&quot; in build.properties, you may find example values in build.properties.sample">
+			<condition>
+				<and>
+					<istrue value="${config.innosetup.via.wine}"/>
+					<not>
+						<isset property="config.wine.executable"/>
+					</not>
+				</and>
+			</condition>
+		</fail>
+		<condition property="innosetup.compiler.executable"
+			   value="${config.wine.executable}"
+			   else="${config.innosetup.compiler.executable}">
+			<istrue value="${config.innosetup.via.wine}"/>
+		</condition>
+		<condition property="innosetup.compiler.argument"
+			   value="&quot;${config.innosetup.compiler.executable}&quot;"
+			   else="">
+			<istrue value="${config.innosetup.via.wine}"/>
+		</condition>
+		<exec executable="${innosetup.compiler.executable}"
+		      dir="${dist.dir}"
 		      failonerror="true">
-			<arg file="${dist.dir}/classes/package-files/windows/win32installer.iss"/>
+			<arg line="${innosetup.compiler.argument}"/>
+			<arg value="classes/package-files/windows/win32installer.iss"/>
 		</exec>
 		<condition property="wipe.dist.files">
 			<not>
@@ -1495,7 +1558,10 @@
 		<antcall target="prepare-dist-files"/>
 		<condition property="build.on.non.win">
 			<not>
-				<os family="windows"/>
+				<or>
+					<os family="windows"/>
+					<istrue value="${config.innosetup.via.wine}"/>
+				</or>
 			</not>
 		</condition>
 		<antcall target="dist-win-finish">

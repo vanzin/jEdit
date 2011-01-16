@@ -73,7 +73,9 @@ General jEdit documentation can be found in the 'doc' directory.
  For building the windows installer (for the final step):
 
   - Unicode Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
-  - A box running windows.
+  - A box running windows or wine, e. g. on *nix. If Inno Setup should be
+    run via wine, a wine version where http://bugs.winehq.org/show_bug.cgi?id=14882
+    is fixed or where the attached patch is applied has to be used.
 
  For building the Mac OS X disk image (DMG) for easy distribution
  (for the final step):
@@ -160,9 +162,9 @@ General jEdit documentation can be found in the 'doc' directory.
   and Inno Setup. Prior to running "ant dist-win-finish", the helper has to set
   up the build.properties file with the path to his Inno Setup installation.
 
- - dist-win-finish     finish building the Windows installer (EXE-file) on Windows
+ - dist-win-finish     finish building the Windows installer (EXE-file) on Windows or via wine
   build the windows installer in the dist-folder, configured in build.properties if
-  building on a box running Winows. This target is normally only run directly, if
+  building on a box running Windows or via wine. This target is normally only run directly, if
   someone just has to do the final step that was prepared by "dist-win" or "dist".
 
  - clean               clean up build.dir and dist.dir

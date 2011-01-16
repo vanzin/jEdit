@@ -273,6 +273,9 @@ and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
+- Made the Windows installer buildable completely via wine on non-Windows
+  systems (Björn "Vampire" Kautler)
+
 - Removed the BAT launcher in the Windows installer in favor of the EXE
   launcher (Björn "Vampire" Kautler)
 
