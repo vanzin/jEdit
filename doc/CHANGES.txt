@@ -5,8 +5,8 @@ jEdit 4.5 version history
 {{{ Version 4.5pre1
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
-Bad Sector, jclopes, Dale Anson, Anshal Shukla, Damien Radtke, Matthew Gilbert
-and Shlomy Reinstein for contributing to this release
+Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
+Matthew Gilbert and Shlomy Reinstein for contributing to this release
 
 {{{ Bug fixes
 
@@ -22,6 +22,9 @@ and Shlomy Reinstein for contributing to this release
 - After using save-as action on a read-only buffer the new buffer is no longer
   read-only (#3148102 - Matthieu Casanova)
 
+- Applied patch from Ryan Mott that fixes textarea scrolling left
+  automatically when selecting text at the end of a long line and trying to
+  scroll down if next lines are shorter. (#2841162, Matthieu Casanova)
 }}}
 {{{ API Changes
 

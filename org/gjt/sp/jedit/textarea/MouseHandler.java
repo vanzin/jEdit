@@ -169,6 +169,10 @@ public class MouseHandler extends TextAreaMouseHandler
 
 		maybeDragAndDrop = false;
 		dragged = false;
+		if(!(textArea.isRectangularSelectionEnabled()
+			|| (control && ctrlForRectangularSelection)))
+			// avoid scrolling away from rectangular selection
+			textArea.scrollToCaret(false);
 	} //}}}
 
 	//{{{ Private members

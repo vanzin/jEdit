@@ -204,7 +204,11 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		}
 
 		if(!quickCopyDrag)
-			textArea.moveCaretPosition(dragStart,false);
+		{
+			Point p = textArea.offsetToXY(dragStart);
+			// defer scrolling until mouserelease if result is off-screen
+			textArea.moveCaretPosition(dragStart, (p.x < 0) ? textArea.NO_SCROLL : textArea.NORMAL_SCROLL);
+		}
 
 		if(!(textArea.isMultipleSelectionEnabled()
 			|| quickCopyDrag))
@@ -376,8 +380,17 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		}
 		else
 		{
+			Point p = textArea.offsetToXY(dot);
 			if(dot != textArea.getCaretPosition())
-				textArea.moveCaretPosition(dot,false);
+			{
+				// defer scroll to mouserelease if result is offscreen left without dragging that direction
+				textArea.moveCaretPosition(dot, (p.x < 0 && x > 1) ? textArea.NO_SCROLL : textArea.NORMAL_SCROLL);
+			}
+			else if(p.x < 0 && x < 1)
+			{
+				// caret already offscreen left, user now attempting to drag left
+				textArea.scrollToCaret(false);
+			}
 			if(textArea.isRectangularSelectionEnabled()
 				&& extraEndVirt != 0)
 			{
