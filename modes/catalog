@@ -23,7 +23,7 @@
 				FILE_NAME_GLOB="*.g" />
 
 <MODE NAME="apacheconf"		FILE="apacheconf.xml"
-				FILE_NAME_GLOB="*httpd.conf" />
+				FILE_NAME_GLOB="{/etc/apache*,*httpd.conf}" />
 
 <MODE NAME="apdl"		FILE="apdl.xml"
 				FILE_NAME_GLOB="*.{ans,inp,mak,mac}" />
