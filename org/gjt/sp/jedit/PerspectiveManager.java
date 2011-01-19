@@ -532,7 +532,9 @@ public class PerspectiveManager
 				     sb.append(bufferSetScope);
 				     sb.append("\" bufferset");
 				}
-				return sb.toString();
+				String toReturn = sb.toString();
+				toReturn = toReturn.replaceAll("\\\\", "\\\\\\\\");
+				return toReturn;
 		    }
 		    catch(Exception e) {	// NOPMD 
 		    }
@@ -608,10 +610,11 @@ public class PerspectiveManager
 					}
 					token = st.nextToken();
 				}
-				return sb.toString();
+				String toReturn = sb.toString();
+				toReturn = toReturn.replaceAll("\\\\", "\\\\\\\\");
+				return toReturn;
 		    }
 		    catch(Exception e) {	// NOPMD
-		    	    e.printStackTrace();
 		    }
 		    return splitConfig;
 		}
