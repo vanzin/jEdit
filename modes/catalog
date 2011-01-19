@@ -103,7 +103,7 @@
 				FILE_NAME_GLOB="*.clj" />
 
 <MODE NAME="cmake"		FILE="cmake.xml"
-				FILE_NAME_GLOB="CMakeLists.txt"/>
+				FILE_NAME_GLOB="*CMakeLists.txt"/>
 
 <MODE NAME="cobol"		FILE="cobol.xml"
 				FILE_NAME_GLOB="*.cbl" />
@@ -124,7 +124,7 @@
 				FILE_NAME_GLOB="*.csv" />
 
 <MODE NAME="cvs-commit"		FILE="cvs-commit.xml"
-				FILE_NAME_GLOB="cvs*.tmp"/>
+				FILE_NAME_GLOB="*cvs*.tmp"/>
 
 <MODE NAME="d"			FILE="d.xml"
 				FILE_NAME_GLOB="*.d" />
@@ -135,7 +135,7 @@
 				FILE_NAME_GLOB="*.dot" />
 
 <MODE NAME="doxygen"		FILE="doxygen.xml"
-				FILE_NAME_GLOB="doxyfile*" />
+				FILE_NAME_GLOB="*doxyfile*" />
 
 <MODE NAME="dsssl"		FILE="dsssl.xml"
 				FILE_NAME_GLOB="*.dsl" />
@@ -301,7 +301,7 @@
 				FILE_NAME_GLOB="*.{mpl,mws}" />
 
 <MODE NAME="maven"		FILE="maven.xml"
-				FILE_NAME_GLOB="pom.xml"/>			
+				FILE_NAME_GLOB="*pom.xml"/>			
 
 <MODE NAME="ml"			FILE="ml.xml"
 				FILE_NAME_GLOB="*.{sml,ml}" />
@@ -316,7 +316,7 @@
 				FILE_NAME_GLOB="*.mqsc" />
 
 <MODE NAME="myghty"		FILE="myghty.xml"
-				FILE_NAME_GLOB="{autohandler,dhandler,*.myt}"/>
+				FILE_NAME_GLOB="*{autohandler,dhandler,.myt}"/>
 
 <MODE NAME="mysql"		FILE="mysql.xml" />
 
@@ -503,13 +503,13 @@
 				FILE_NAME_GLOB="*.{sqr,sqc}" />
 
 <MODE NAME="squidconf"		FILE="squidconf.xml"
-				FILE_NAME_GLOB="squid.conf" />
+				FILE_NAME_GLOB="*squid.conf" />
 
 <MODE NAME="stata"     FILE="stata.xml"
 				FILE_NAME_GLOB="*.{do,ado,mata}" />
 				
 <MODE NAME="svn-commit"		FILE="svn-commit.xml"
-				FILE_NAME_GLOB="svn-commit*.tmp" />
+				FILE_NAME_GLOB="*svn-commit*.tmp" />
 
 <MODE NAME="swig"		FILE="swig.xml"
 				FILE_NAME_GLOB="*.{i,swg}" />
@@ -529,7 +529,7 @@
 <!-- This mode MUST be placed after text mode
      because filename globs are checked in reverse order -->
 <MODE NAME="rfc"		FILE="rfc.xml"
-				FILE_NAME_GLOB="rfc*.txt" />
+				FILE_NAME_GLOB="*rfc*.txt" />
 			
 <MODE NAME="tld"		FILE="tld.xml" 
 				FILE_NAME_GLOB="*.tld"/>
