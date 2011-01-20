@@ -454,7 +454,7 @@ public class PerspectiveManager
 				}
 				return sb.toString();
 		    }
-		    catch(Exception e) {	// NOPMD
+		    catch(IOException e) {	// NOPMD -- StringReader will not throw an IOException
 		    }
 		    return splitConfig;
 		}
@@ -536,7 +536,7 @@ public class PerspectiveManager
 				toReturn = toReturn.replaceAll("\\\\", "\\\\\\\\");
 				return toReturn;
 		    }
-		    catch(Exception e) {	// NOPMD 
+		    catch(IOException e) {	// NOPMD -- StringReader will not throw an IOException 
 		    }
 		    return splitConfig;
 		}
@@ -614,7 +614,7 @@ public class PerspectiveManager
 				toReturn = toReturn.replaceAll("\\\\", "\\\\\\\\");
 				return toReturn;
 		    }
-		    catch(Exception e) {	// NOPMD
+		    catch(IOException e) {	// NOPMD -- StringReader will not throw an IOException
 		    }
 		    return splitConfig;
 		}
