@@ -22,8 +22,8 @@ Kazutoshi Satoda for contributing to this release.
 - Made jedit.exe to find JDK, so that jEdit runs only with JDK (without
   JRE) like 4.3.x and before. (SF.net bug #3134149 - Kazutoshi Satoda)
 
-- Windows installer kills existing jEdit instance before trying to install
-  (#2617610 - Eric Le Lay)
+- Windows installer tries to quit existing jEdit instance before trying to
+  install (Björn "Vampire" Kautler)
 
 - Closes menus when toggling dockables. (#3022084 - Anshal Shukla)
 
@@ -306,6 +306,8 @@ Kazutoshi Satoda for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- build files and properties cleanup (Björn "Vampire" Kautler)
 
 - Fixed various indentation errors (Björn "Vampire" Kautler)
 
