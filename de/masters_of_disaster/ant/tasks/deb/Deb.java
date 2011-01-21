@@ -195,11 +195,11 @@ public class Deb extends MatchingTask {
         mkdir.setDir(tempDir);
         mkdir.perform();
 
-        Echo echo = new Echo();
-        prepareTask(echo);
         EchoLevel echoLevel = new EchoLevel();
         echoLevel.setValue("error");
         File debianBinaryFile = new File(tempDir,"debian-binary");
+        Echo echo = new Echo();
+        prepareTask(echo);
         echo.setFile(debianBinaryFile);
         echo.setLevel(echoLevel);
         echo.setMessage("2.0\n");
@@ -284,7 +284,10 @@ public class Deb extends MatchingTask {
                     md5Count++;
                 }
             }
+            echo = new Echo();
+            prepareTask(echo);
             echo.setFile(md5sumsFile);
+            echo.setLevel(echoLevel);
             echo.setMessage(md5sums.toString());
             echo.perform();
             tarFileSet = controlTarGz.createTarFileSet();

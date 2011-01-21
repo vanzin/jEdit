@@ -307,6 +307,8 @@ Kazutoshi Satoda for contributing to this release.
 
 - Wrap mode tooltip in status bar now indicates the current wrap mode (Matthieu Casanova)
 
+- Made the Deb Ant task compatible to Ant 1.8+ (Björn "Vampire" Kautler)
+
 - It is now possible to copy several files in the VFS Browser at the same time,
   and copy from/to the OS explorer (Matthieu Casanova)
 
