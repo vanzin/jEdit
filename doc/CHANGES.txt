@@ -310,6 +310,12 @@ Kazutoshi Satoda for contributing to this release.
 - Replaced the links to Java 5 documentation with links to Java 6 documentation
   (Björn "Vampire" Kautler)
 
+- Fixed the build.xml which was for the Windows installer only working if
+  completely run on Windows, meaning "ant dist-win" on another system and then
+  using "ant dist-win-finish" was broken (Björn "Vampire" Kautler)
+
+- Made the Windows launcher buildable on any system (Björn "Vampire" Kautler)
+
 - README.SRC.txt cleanup (Björn "Vampire" Kautler)
 
 - Made the Windows installer correctly show special characters like german

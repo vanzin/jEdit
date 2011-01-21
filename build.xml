@@ -326,7 +326,6 @@
 
 	<target name="build-exe-launcher"
 		depends="init,filter-package-files"
-		unless="build.on.non.win"
 		description="build the EXE launcher">
 		<fail message="Please set the property &quot;launch4j.dir&quot; in build.properties, you may find example values in build.properties.sample"
 		      unless="config.launch4j.dir"/>
@@ -1189,6 +1188,12 @@
 			<param name="classes.dir"
 			       location="${dist.dir}/classes"/>
 		</antcall>
+		<antcall target="build-exe-launcher">
+			<param name="classes.dir"
+			       location="${dist.dir}/classes"/>
+			<param name="jar.location"
+			       location="${dist.dir}"/>
+		</antcall>
 		<gzip src="${dist.dir}/classes/package-files/linux/jedit.1"
 		      destfile="${dist.dir}/classes/package-files/linux/jedit.1.gz"/>
 	</target>
@@ -1488,12 +1493,6 @@
 				<os family="windows"/>
 			</not>
 		</condition>
-		<antcall target="build-exe-launcher">
-			<param name="classes.dir"
-			       location="${dist.dir}/classes"/>
-			<param name="jar.location"
-			       location="${dist.dir}"/>
-		</antcall>
 		<antcall target="dist-win-finish">
 			<param name="dont.wipe.dist.files"
 			       value="true"/>
