@@ -77,7 +77,7 @@
                 <literal>RULE</literal>, respectively. For more information see
                 <xref linkend="mode-match-type" />.</para>
             </listitem>
-            
+
             <listitem>
                <para> <literal>NO_ESCAPE</literal> is now deprecated and ignored by the parsing engine.
                <literal>ESCAPE</literal> is now a valid attribute for <literal>SPAN</literal> and <literal>SPAN_REGEXP</literal> rules.

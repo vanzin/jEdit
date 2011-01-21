@@ -34,20 +34,20 @@ public class ExtendedGridLayoutConstraints
 	  * and takes up the remaining space.
 	  */
 	public static final int REMAINDER = Integer.MAX_VALUE;
-	
+
 	/**
 	  * Specifies the row in which a component starts its display area.
 	  * {@code row} has to be non-negative and the default
 	  * value is 0.
 	  */
 	private int row;
-	
+
 	/**
 	  * Specifies the column in which a component starts its display area.
 	  * {@code col} has to be non-negative.
 	  */
 	private int col;
-	
+
 	/**
 	  * Specifies the number of cells in a row for the
 	  * component's display area.
@@ -58,23 +58,23 @@ public class ExtendedGridLayoutConstraints
 	  * <p>
 	  * {@code colspan} has to be {@literal >= 1} and the default
 	  * value is 1.
-	  * 
+	  *
 	  * @see #REMAINDER
 	  * @see #rowspan
 	  */
 	private int colspan;
-	
+
 	/**
 	  * Specifies the effective number of cells in a row for the
 	  * component's display area. This is used internally
 	  * to get the effective number of cells in a row in cases
 	  * where {@code REMAINDER} is used for colspan.
-	  * 
+	  *
 	  * @see #REMAINDER
 	  * @see #colspan
 	  */
 	private int effectiveColspan;
-	
+
 	/**
 	  * Specifies the number of cells in a column for the
 	  * component's display area.
@@ -85,61 +85,61 @@ public class ExtendedGridLayoutConstraints
 	  * <p>
 	  * {@code rowspan} has to be {@literal >= 1} and the default
 	  * value is 1.
-	  * 
+	  *
 	  * @see #REMAINDER
 	  * @see #colspan
 	  */
 	private int rowspan;
-	
+
 	/**
 	  * Specifies the effective number of cells in a column for the
 	  * component's display area. This is used internally
 	  * to get the effective number of cells in a column in cases
 	  * where {@code REMAINDER} is used for rowspan.
-	  * 
+	  *
 	  * @see #REMAINDER
 	  * @see #rowspan
 	  */
 	private int effectiveRowspan;
-	
+
 	/**
 	  * Specifies if this Constraint is used as placeholder to build the grid.
 	  * This is used internally and the default value is {@code false}.
 	  */
 	private boolean placeholder;
-	
+
 	/**
 	  * Specifies the mainConstraints object for which this constraints
 	  * object is a placeholder. If this constraints object is no placeholder,
 	  * mainConstraints is set to {@code null}.
 	  */
 	private ExtendedGridLayoutConstraints mainConstraints;
-	
+
 	/**
 	  * Specifies the {@code Component} this constraints object describes.
 	  */
 	private Component component;
-	
+
 	/**
 	  * Creates an {@code ExtendedGridLayoutConstraints} object with
 	  * all of its fields set to their default value. For further information
 	  * about the default values see
 	  * {@link #ExtendedGridLayoutConstraints(int, int, int, java.awt.Component)}.
-	  * 
+	  *
 	  * @param component The {@code Component} this constraints object describes
 	  */
 	public ExtendedGridLayoutConstraints(Component component)
 	{
 		this(0,0,1,1,component,false,null);
 	}
-	
+
 	/**
 	  * Creates an {@code ExtendedGridLayoutConstraints} object with
 	  * all of its fields set to their default value
 	  * except of the row which is specified. For further information
 	  * about the default values see
 	  * {@link #ExtendedGridLayoutConstraints(int, int, int, java.awt.Component)}.
-	  * 
+	  *
 	  * @param row       The row in which a component starts its display area. First row is 0
 	  * @param component The {@code Component} this constraints object d describes
 	  * @throws IllegalArgumentException If row {@literal < 0}
@@ -148,11 +148,11 @@ public class ExtendedGridLayoutConstraints
 	{
 		this(row,0,1,1,component,false,null);
 	}
-	
+
 	/**
 	  * Creates an {@code ExtendedGridLayoutConstraints} object with
 	  * all of its fields set to the passed-in arguments.
-	  * 
+	  *
 	  * @param row       The row in which a component starts its display area.
 	  *                  First row is 0. Default value is 0.
 	  * @param colspan   The number of cells in a row for the component's display area.
@@ -172,11 +172,11 @@ public class ExtendedGridLayoutConstraints
 	{
 		this(row,0,colspan,rowspan,component,false,null);
 	}
-	
+
 	/**
 	  * Creates an {@code ExtendedGridLayoutConstraints} object with
 	  * all of its fields set to the passed-in arguments.
-	  * 
+	  *
 	  * @param row             The row in which a component starts its display area.
 	  *                        First row is 0.
 	  * @param col             The col in which a component starts its display area.
@@ -226,11 +226,11 @@ public class ExtendedGridLayoutConstraints
 		this.placeholder = placeholder;
 		this.mainConstraints = mainConstraints;
 	}
-	
+
 	/**
 	  * Creates an {@code ExtendedGridLayoutConstraints} object which can be
 	  * used as placeholder for building a grid with colspans.
-	  * 
+	  *
 	  * @param forUsage If the returned object will be used in the grid
 	  *                 and therefor the effectiveColspan should be raised by one
 	  * @return The newly created {@code ExtendedGridLayoutConstraints}
@@ -250,11 +250,11 @@ public class ExtendedGridLayoutConstraints
 		}
 		return result;
 	}
-	
+
 	/**
 	  * Creates an {@code ExtendedGridLayoutConstraints} object which can be
 	  * used as placeholder for building a grid with rowspans.
-	  * 
+	  *
 	  * @param forUsage If the returned object will be used in the grid
 	  *                 and therefor the effectiveRowspan should be raised by one
 	  * @return The newly created {@code ExtendedGridLayoutConstraints}
@@ -274,7 +274,7 @@ public class ExtendedGridLayoutConstraints
 		}
 		return result;
 	}
-	
+
 	/**
 	  * @return The row in which the component starts its display area.
 	  */
@@ -282,7 +282,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return row;
 	}
-	
+
 	/**
 	  * @return The column in which the component starts its display area.
 	  */
@@ -290,7 +290,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return col;
 	}
-	
+
 	/**
 	  * @param col The column in which the component starts its display area.
 	  */
@@ -302,7 +302,7 @@ public class ExtendedGridLayoutConstraints
 		}
 		this.col = col;
 	}
-	
+
 	/**
 	  * @return The number of cells in a row for the component's display area
 	  *         or {@code REMAINDER} if the component's display area will be
@@ -312,7 +312,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return colspan;
 	}
-	
+
 	/**
 	  * @return The effective number of cells in a row for the component's display area.
 	  */
@@ -320,7 +320,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return null == mainConstraints ? effectiveColspan : mainConstraints.effectiveColspan;
 	}
-	
+
 	/**
 	  * @return The number of cells in a column for the component's display area
 	  *         or {@code REMAINDER} if the component's display area will be
@@ -330,7 +330,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return rowspan;
 	}
-	
+
 	/**
 	  * @return The effective number of cells in a column for the component's display area.
 	  */
@@ -338,7 +338,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return null == mainConstraints ? effectiveRowspan : mainConstraints.effectiveRowspan;
 	}
-	
+
 	/**
 	  * @return The {@code Component} this constraints object describes
 	  */
@@ -346,7 +346,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return component;
 	}
-	
+
 	/**
 	  * @return Whether this constraints object is a placeholder or not
 	  */
@@ -354,7 +354,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return placeholder;
 	}
-	
+
 	/**
 	  * @return A work copy if this constraints object. This is a flat copy
 	  *         which means that the reference to the component stays the same.
@@ -365,7 +365,7 @@ public class ExtendedGridLayoutConstraints
 	{
 		return new ExtendedGridLayoutConstraints(row,col,colspan,rowspan,component,placeholder,(null == mainConstraints ? null : mainConstraints.getWorkCopy()));
 	}
-	
+
 	/**
 	  * Indicates whether some other object is "equal to" this one.
 	  * <p>
@@ -397,7 +397,7 @@ public class ExtendedGridLayoutConstraints
 	  * The <tt>equals</tt> method for class
 	  * {@code ExtendedGridLayoutConstraints} returns {@code true}
 	  * if and only if the constraints objects describe the same {@code Component}
-	  * 
+	  *
 	  * @param o the reference object with which to compare.
 	  * @return {@code true} if this object is the same as the o
 	  *         argument; {@code false} otherwise.
@@ -417,7 +417,7 @@ public class ExtendedGridLayoutConstraints
 		}
 		return component.equals(((ExtendedGridLayoutConstraints)o).component);
 	}
-	
+
 	/**
 	  * Returns a hash code value for the object. This method is
 	  * supported for the benefit of hashtables such as those provided by
@@ -442,7 +442,7 @@ public class ExtendedGridLayoutConstraints
 	  *     programmer should be aware that producing distinct integer results
 	  *     for unequal objects may improve the performance of hashtables.
 	  * </ul>
-	  * 
+	  *
 	  * @return a hash code value for this object.
 	  * @see #equals(java.lang.Object)
 	  * @see <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/Hashtable.html"><code>java.util.Hashtable</code></a>
@@ -455,14 +455,14 @@ public class ExtendedGridLayoutConstraints
 		}
 		return component.hashCode();
 	}
-	
+
 	/**
 	  * Returns a string representation of the object. In general, the
 	  * {@code toString} method returns a string that
 	  * "textually represents" this object. The result should
 	  * be a concise but informative representation that is easy for a
 	  * person to read.
-	  * 
+	  *
 	  * @return  a string representation of the object.
 	  */
 	public String toString()

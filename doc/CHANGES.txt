@@ -26,7 +26,7 @@ Kazutoshi Satoda for contributing to this release.
   (#2617610 - Eric Le Lay)
 
 - Closes menus when toggling dockables. (#3022084 - Anshal Shukla)
-  
+
 - Fix for tracker 3134215, restore previously opened files setting not being
   considered when saving perspective. (#3134215 - Dale Anson)
 
@@ -123,7 +123,7 @@ Kazutoshi Satoda for contributing to this release.
 
 - CopyFileWorker now throws a FileNotFoundException instead of a NPE if
   the target path is not a directory and it's parent doesn't exists.
-   (Matthieu Casanova)
+  (Matthieu Casanova)
 
 - CopyFileWorker do not accept that the source and target are the same
   (Matthieu Casanova)
@@ -137,14 +137,16 @@ Kazutoshi Satoda for contributing to this release.
   (Sf.net bug #1510651 - Shlomy Reinstein)
 
 - Show search bar in full screen mode. (Sf.net bug #2944752 - Shlomy Reinstein)
-- Got rid of extra Component created as parent of every JToolBar in 
-  GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
+
+- Got rid of extra Component created as parent of every JToolBar in
+  GuiUtilities.loadToolBar() (#2114751 - Alan Ezust)
 
 - After using save-as action on a read-only buffer the new buffer is no longer
   read-only (#3148102 - Matthieu Casanova)
 
 }}}
 {{{ API changes
+
 - Added methods to manage the cursor if the TextArea :
   In the TextAreaPainter class, added
   resetCursor()
@@ -157,12 +159,12 @@ Kazutoshi Satoda for contributing to this release.
   TEXT_CURSOR until resetCursor() is called (Matthieu Casanova)
 
 - Introduction of a new ThreadUtilities class implementing a
-    threadpool using Java 1.6 Concurrent API. Use this instead of
-    VFSManager's WorkThreadPool, which is now deprecated.
-    Related: A new Task Monitor dockable which will eventually replace
-    the I/O progress monitor, for showing progress of tasks.
-    Still TODO: rewrite VFSManager + all plugins to use ThreadUtilities
-    instead of WorkThreadPool. (Matthieu Casanova)
+  threadpool using Java 1.6 Concurrent API. Use this instead of
+  VFSManager's WorkThreadPool, which is now deprecated.
+  Related: A new Task Monitor dockable which will eventually replace
+  the I/O progress monitor, for showing progress of tasks.
+  Still TODO: rewrite VFSManager + all plugins to use ThreadUtilities
+  instead of WorkThreadPool. (Matthieu Casanova)
 
 - Made method TextUtilities.getCharType() public (Matthieu Casanova)
 
@@ -305,6 +307,8 @@ Kazutoshi Satoda for contributing to this release.
 }}}
 {{{ Miscellaneous
 
+- Fixed various indentation errors (Björn "Vampire" Kautler)
+
 - Wrap mode tooltip in status bar now indicates the current wrap mode (Matthieu Casanova)
 
 - Made the Deb Ant task compatible to Ant 1.8+ (Björn "Vampire" Kautler)
@@ -328,7 +332,7 @@ Kazutoshi Satoda for contributing to this release.
   name for each view using View -> Set view title. The name is persistent in the
   perspective.xml file.
 
-- In Hypersearchs result panel, the query string length is now limited to 100
+- In Hypersearch results panel, the query string length is now limited to 100
   chars by default for display (Matthieu Casanova)
 
 - Applied patch #2887520: Allow filtering the recent file list using file globs,
@@ -342,7 +346,7 @@ Kazutoshi Satoda for contributing to this release.
   the first and last 10 lines. This is a performance enhancement when loading
   buffers containing very long lines (Matthieu Casanova)
 
-. Added a new option to perform font substitution in the text area when the
+- Added a new option to perform font substitution in the text area when the
   current configured font can't display characters in the buffer. It's disabled
   by default, and can be enabled in the text area option pane, along with the
   option to choose preferred fonts for substitution. This makes reading files
@@ -381,7 +385,9 @@ Kazutoshi Satoda for contributing to this release.
 
 - Ctrl-P and Ctrl-N work from completion popups now (#3080463 - Damien Radtke)
 
-- Added "Replace" button to Search and Replace dialog. This allows a 'replace once' as opposed to 'replace and find'. (#3084224 - Dale Anson)
+- Added "Replace" button to Search and Replace dialog. This allows a 'replace
+  once' as opposed to 'replace and find'. (#3084224 - Dale Anson)
+
 }}}
 
 }}}
