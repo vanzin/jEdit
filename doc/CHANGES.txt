@@ -310,6 +310,8 @@ Kazutoshi Satoda for contributing to this release.
 - Replaced the links to Java 5 documentation with links to Java 6 documentation
   (Björn "Vampire" Kautler)
 
+- README.SRC.txt cleanup (Björn "Vampire" Kautler)
+
 - Made the Windows installer correctly show special characters like german
   umlauts (Björn "Vampire" Kautler)
 
