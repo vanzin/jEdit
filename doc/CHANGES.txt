@@ -5,12 +5,16 @@ jEdit 4.4 version history
 {{{ Version 4.4pre1
 
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry, Shlomy
-Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay,
+Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova, Eric Le Lay, 
 Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey, Dion Whitehead,
-Marcelo Vanzin, Jesse Pavel, Bernhard Walle and Jakub Roztočil for
-contributing to this release.
+Marcelo Vanzin, Jesse Pavel, Bernhard Walle, Jakub Roztočil and
+Kazutoshi Satoda for contributing to this release.
 
 {{{ Bug fixes
+
+- Hypersearch opens results at correct caret position 
+  (Kazutoshi Satoda - #3134951)
+
 - Fixed an exception when trying to add new menu items to the context menu
   if some ActionSets have been unloaded (plugin deactivation)
   (Matthieu Casanova #3071355)
