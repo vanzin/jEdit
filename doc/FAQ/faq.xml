@@ -11,24 +11,9 @@
 <!-- all <h1> headings should be changed to <h2>          -->
 <!-- Command line for processing:                         -->
 <!--                                                      -->
-<!-- xsltproc -catalogs -output .\html\ faq.xsl faq.xml -->
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
-<!-- Changes required for posting on jEdit Community: -->
-<!-- Title should be <h2> without class;              -->
-<!-- all <h1> headings should be changed to <h2>      -->
-
-<!ENTITY faq-intro SYSTEM "faq-intro.xml">
-<!ENTITY faq-general SYSTEM "faq-general.xml">
-<!ENTITY faq-install SYSTEM "faq-install.xml">
-<!ENTITY faq-use SYSTEM "faq-use.xml">
-<!ENTITY faq-macros SYSTEM "faq-macros.xml">
-<!ENTITY faq-plugins SYSTEM "faq-plugins.xml">
-<!ENTITY faq-problems SYSTEM "faq-problems.xml">
-<!ENTITY faq-contrib SYSTEM "faq-contrib.xml">
-<!ENTITY faq-legal SYSTEM "faq-legal.xml">
-]>
-<article class="faq" id="faq">
+<!-- xsltproc -xinclude -output .\html\ faq.xsl faq.xml  -->
+<article class="faq" id="faq"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
     <articleinfo>
         <author>
             <firstname>John</firstname>
@@ -67,7 +52,7 @@
         </copyright>
 
         <copyright>
-            <year>2010</year>
+            <year>2011</year>
 
             <holder>Alan Ezust</holder>
         </copyright>
@@ -169,21 +154,13 @@
         Community web site</ulink>.</releaseinfo>
     </articleinfo>
 
-    &faq-intro;
-
-    &faq-general;
-
-    &faq-install;
-
-    &faq-use;
-
-    &faq-macros;
-
-    &faq-plugins;
-
-    &faq-problems;
-
-    &faq-contrib;
-
-    &faq-legal;
+    <xi:include href="faq-intro.xml" />
+    <xi:include href="faq-general.xml" />
+    <xi:include href="faq-install.xml" />
+    <xi:include href="faq-use.xml" />
+    <xi:include href="faq-macros.xml" />
+    <xi:include href="faq-plugins.xml" />
+    <xi:include href="faq-problems.xml" />
+    <xi:include href="faq-contrib.xml" />
+    <xi:include href="faq-legal.xml" />
 </article>

@@ -431,6 +431,7 @@
 		      dir="doc"
 		      failonerror="true">
 			<arg line="${xsltproc.cygwin.arg}"/>
+			<arg value="--xinclude"/>
 			<arg value="--output"/>
 			<arg value="../${doc.output.location}/FAQ/"/>
 			<arg value="jedithtml.xsl"/>
@@ -479,6 +480,7 @@
 		      dir="doc"
 		      failonerror="true">
 			<arg line="${xsltproc.cygwin.arg}"/>
+			<arg value="--xinclude"/>
 			<arg value="--output"/>
 			<arg value="../${doc.output.location}/users-guide/"/>
 			<arg value="jedithtml.xsl"/>
@@ -670,6 +672,7 @@
 			<arg value="--stringparam"/>
 			<arg value="paper.type"/>
 			<arg value="${paper.type}"/>
+			<arg value="--xinclude"/>
 			<arg value="--output"/>
 			<arg value="../${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"/>
 			<arg value="jeditfo.xsl"/>
