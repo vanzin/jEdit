@@ -12,23 +12,14 @@ Kazutoshi Satoda for contributing to this release.
 
 {{{ Bug fixes
 
-- Hypersearch opens results at correct caret position 
-  (Kazutoshi Satoda - #3134951)
-
 - Fixed an exception when trying to add new menu items to the context menu
   if some ActionSets have been unloaded (plugin deactivation)
   (Matthieu Casanova #3071355)
-
-- Made jedit.exe to find JDK, so that jEdit runs only with JDK (without
-  JRE) like 4.3.x and before. (SF.net bug #3134149 - Kazutoshi Satoda)
 
 - Windows installer tries to quit existing jEdit instance before trying to
   install (Björn "Vampire" Kautler)
 
 - Closes menus when toggling dockables. (#3022084 - Anshal Shukla)
-
-- Fix for tracker 3134215, restore previously opened files setting not being
-  considered when saving perspective. (#3134215 - Dale Anson)
 
 - VFSBrowser escape handling fixed when used as a dialog (#3101808 - Alan Ezust)
 
@@ -310,12 +301,6 @@ Kazutoshi Satoda for contributing to this release.
 - Replaced the links to Java 5 documentation with links to Java 6 documentation
   (Björn "Vampire" Kautler)
 
-- Fixed the build.xml which was for the Windows installer only working if
-  completely run on Windows, meaning "ant dist-win" on another system and then
-  using "ant dist-win-finish" was broken (Björn "Vampire" Kautler)
-
-- Made the Windows launcher buildable on any system (Björn "Vampire" Kautler)
-
 - README.SRC.txt cleanup (Björn "Vampire" Kautler)
 
 - Made the Windows installer correctly show special characters like german
@@ -389,7 +374,8 @@ Kazutoshi Satoda for contributing to this release.
 
 - Added jedit.exe in the Windows installer, so that users can invoke
   jEdit more like a native application.
-  (Feature Request #2661227, Patch #2984552 - Hisateru Tanaka)
+  (Feature Request #2661227, Patch #2984552 - Hisateru Tanaka,
+   and Björn "Vampire" Kautler)
 
 - Added some more encoding detectors as default. (Kazutoshi Satoda)
 
