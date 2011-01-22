@@ -4,7 +4,7 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to BjÃ¶rn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert and Shlomy Reinstein for contributing to this release
 
