@@ -7,13 +7,12 @@ jEdit 4.4 version history
 Thanks to Björn "Vampire" Kautler, Alan Ezust, Eric Berry,
 Shlomy Reinstein, Damien Radtke, Dale Anson, Matthieu Casanova,
 Eric Le Lay, Bernhard Walle, Joerg Spieler, Kevin Hunter, François Rey,
-Dion Whitehead, Marcelo Vanzin, Jesse Pavel, Bernhard Walle,
-Jakub Roztočil, Kazutoshi Satoda, Anshal Shukla, Milutin Jovanović,
-Vadim Voituk, goebbe, James Nicholl, Uwe donovaly, Sergey Mezentsev,
-Jim Lawton, Bernhard Walle, Suraj Kurapati, Paulo Moura, curtis_call,
-Rowan Collins, Stephen Blackheath, asitdepends, Michael Schlotter,
-Robin Neatherway, strank, and Hisateru Tanaka for contributing to this
-release.
+Dion Whitehead, Marcelo Vanzin, Jesse Pavel, Jakub Roztočil,
+Kazutoshi Satoda, Anshal Shukla, Milutin Jovanović, Vadim Voituk,
+goebbe, James Nicholl, Uwe donovaly, Sergey Mezentsev, Jim Lawton,
+Suraj Kurapati, Paulo Moura, curtis_call, Rowan Collins,
+Stephen Blackheath, asitdepends, Michael Schlotter, Robin Neatherway,
+strank, and Hisateru Tanaka for contributing to this release.
 
 {{{ Bug fixes
 
