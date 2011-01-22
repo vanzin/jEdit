@@ -283,7 +283,7 @@ public class FileVFS extends VFS
 
 				icon = fsView.getSystemIcon(file);
 			}
-			return icon;  
+			return icon;
 		} //}}}
 
 		//{{{ getSymlinkPath() method
@@ -412,8 +412,8 @@ public class FileVFS extends VFS
 		if (!file.isDirectory())
 		{
 			retVal = file.delete();
-		} 
-		else 
+		}
+		else
 		{
 			retVal = recursiveDelete(file);
 		}
@@ -600,7 +600,7 @@ public class FileVFS extends VFS
 
 		if(OperatingSystem.isUnix())
 		{
-			String[] cmdarray = { "ls", "-ld", path };
+			String[] cmdarray = { "ls", "-lLd", path };
 
 			InputStreamReader isr = null;
 			BufferedReader reader = null;

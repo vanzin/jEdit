@@ -4,7 +4,7 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
+Thanks to BjÃ¶rn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert and Shlomy Reinstein for contributing to this release
 
@@ -25,6 +25,9 @@ Matthew Gilbert and Shlomy Reinstein for contributing to this release
 - Applied patch from Ryan Mott that fixes textarea scrolling left
   automatically when selecting text at the end of a long line and trying to
   scroll down if next lines are shorter. (#2841162, Matthieu Casanova)
+
+- Applied suggestion from bug 3160310 to correctly set permissions on
+  symlinked files (Marcelo Vanzin)
 }}}
 {{{ API Changes
 
@@ -276,41 +279,41 @@ Matthew Gilbert and Shlomy Reinstein for contributing to this release
 }}}
 {{{ Miscellaneous
 
-- Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
+- Included the Windows launcher in the Java installer (BjÃ¶rn "Vampire" Kautler)
 
 - Made our documentation build on FOP 0.93+, 0.20.5 is no longer supported by
-  our files (Björn "Vampire" Kautler)
+  our files (BjÃ¶rn "Vampire" Kautler)
 
 - Made the Windows installer buildable completely via wine on non-Windows
-  systems (Björn "Vampire" Kautler)
+  systems (BjÃ¶rn "Vampire" Kautler)
 
 - Removed the BAT launcher in the Windows installer in favor of the EXE
-  launcher (Björn "Vampire" Kautler)
+  launcher (BjÃ¶rn "Vampire" Kautler)
 
-- Fixed the settings for building the Windows launcher (Björn "Vampire" Kautler)
+- Fixed the settings for building the Windows launcher (BjÃ¶rn "Vampire" Kautler)
 
-- Made the Deb Ant task compatible to Ant 1.8+ (Björn "Vampire" Kautler)
+- Made the Deb Ant task compatible to Ant 1.8+ (BjÃ¶rn "Vampire" Kautler)
 
 - Replaced the links to Java 5 documentation with links to Java 6 documentation
-  (Björn "Vampire" Kautler)
+  (BjÃ¶rn "Vampire" Kautler)
 
 - Fixed the build.xml which was for the Windows installer only working if
   completely run on Windows, making "ant dist-win" on another system and then
-  using "ant dist-win-finish" was broken (Björn "Vampire" Kautler)
+  using "ant dist-win-finish" was broken (BjÃ¶rn "Vampire" Kautler)
 
-- Made the Windows launcher buildable on any system (Björn "Vampire" Kautler)
+- Made the Windows launcher buildable on any system (BjÃ¶rn "Vampire" Kautler)
 
-- README.SRC.txt cleanup (Björn "Vampire" Kautler)
+- README.SRC.txt cleanup (BjÃ¶rn "Vampire" Kautler)
 
 - Made the Windows installer correctly show special characters like german
-  umlauts (Björn "Vampire" Kautler)
+  umlauts (BjÃ¶rn "Vampire" Kautler)
 
 - Made the filter tasks use UTF-8 encoding as all our files are UTF-8 encoded
-  (Björn "Vampire" Kautler)
+  (BjÃ¶rn "Vampire" Kautler)
 
-- build files and properties cleanup (Björn "Vampire" Kautler)
+- build files and properties cleanup (BjÃ¶rn "Vampire" Kautler)
 
-- Fixed various indentation errors (Björn "Vampire" Kautler)
+- Fixed various indentation errors (BjÃ¶rn "Vampire" Kautler)
 
 - Added a new menu item "New Macro" in Macros menu
   (patch #2983607 from Damien Radtke, Matthieu Casanova)
