@@ -266,6 +266,8 @@ strank, and Hisateru Tanaka for contributing to this release.
 
 - PHP Smarty Templates Mode ( # 2969956 - Rowan Collins)
 
+- Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
+
 - Haskell edit mode rewrite ( # 2993269 - Stephen Blackheath)
 
 - Pure edit mode updates ( # 2988741 - asitdepends)

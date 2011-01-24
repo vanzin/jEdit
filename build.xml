@@ -809,6 +809,12 @@
 					      ${jar.filename}"
 				    excludes="doc/api/**"/>
 		</tar>
+		<tar destfile="${dist.dir}/jedit-windows.tar.bz2"
+		     compression="bzip2">
+			<tarfileset id="jedit-windows"
+				    dir="${dist.dir}"
+				    includes="jedit.exe"/>
+		</tar>
 		<tar destfile="${dist.dir}/jedit-mac.tar.bz2"
 		     compression="bzip2">
 			<tarfileset id="jedit-mac"
@@ -850,6 +856,10 @@
 			       disksizeproperty="jedit-program.disksize">
 			<fileset refid="jedit-program"/>
 		</calculatesize>
+		<calculatesize realsizeproperty="jedit-windows.realsize"
+			       disksizeproperty="jedit-windows.disksize">
+			<fileset refid="jedit-windows"/>
+		</calculatesize>
 		<calculatesize realsizeproperty="jedit-mac.realsize"
 			       disksizeproperty="jedit-mac.disksize">
 			<fileset refid="jedit-mac"/>
@@ -877,6 +887,10 @@
 					value="${jedit-program.realsize}"/>
 				<filter token="jedit-program.disksize"
 					value="${jedit-program.disksize}"/>
+				<filter token="jedit-windows.realsize"
+					value="${jedit-windows.realsize}"/>
+				<filter token="jedit-windows.disksize"
+					value="${jedit-windows.disksize}"/>
 				<filter token="jedit-mac.realsize"
 					value="${jedit-mac.realsize}"/>
 				<filter token="jedit-mac.disksize"
@@ -908,6 +922,7 @@
 					      jedit-mac.tar.bz2
 					      jedit-macros.tar.bz2
 					      jedit-os2.tar.bz2
+					      jedit-windows.tar.bz2
 					      jedit-program.tar.bz2"
 				    prefix="installer"/>
 		</jar>
