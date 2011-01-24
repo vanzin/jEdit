@@ -46,7 +46,7 @@ book      toc
 part      nop
 </xsl:param>
 
-<xsl:param name="fop.extensions" select="1"></xsl:param>
+<xsl:param name="fop1.extensions" select="1"></xsl:param>
 
 <xsl:param name="ulink.show" select="0"></xsl:param>
 <xsl:param name="ulink.footnotes" select="1"></xsl:param>

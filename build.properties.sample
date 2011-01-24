@@ -71,7 +71,7 @@
 #fop.dir=C:\\Programme\\FOP
 
 # Example Linux location
-#fop.dir=/opt/fop-0.20.5
+#fop.dir=/opt/fop-1.0
 
 ### For generating the Windows executable file, make sure to install
 ### Launch4j and set the path to Launch4j install directory here

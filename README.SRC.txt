@@ -62,9 +62,9 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For building the online help in PDF-format:
 
-  - Apache FOP 0.20.5. Get it from
-    <http://xmlgraphics.apache.org/fop/download.html> or from your package
-    manager. The newer releases will not work with our files.
+  - Apache FOP 0.93 or later. <http://xmlgraphics.apache.org/fop/download.html>.
+    Currently the build requires the full binary distribution, 
+    but we will soon make it work with versions from your package manager too.  
 
  For building the windows EXE launcher:
 
