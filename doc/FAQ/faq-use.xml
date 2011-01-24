@@ -273,7 +273,7 @@
                 <answer>
                     <para>You associate the file extension with
                     <userinput><replaceable>&lt;jEdit installation
-                    directory&gt;</replaceable>\jedit.bat</userinput>.
+                    directory&gt;</replaceable>\jedit.exe</userinput>.
                     This can be done from the <guimenuitem>File Types</guimenuitem>
                     tab in the Windows Explorer's <guimenuitem>Tools</guimenuitem>
                     -&gt; <guimenuitem>Folder options...</guimenuitem> menu.</para>
