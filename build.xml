@@ -685,7 +685,8 @@
 			<classpath>
 				<fileset dir="${config.fop.dir}"
 					 includes="build/fop.jar
-						   lib/*.jar"/>
+						   lib/*.jar
+						   *.jar"/>
 			</classpath>
 		</taskdef>
 		<fop fofile="${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"

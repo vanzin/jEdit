@@ -83,8 +83,7 @@
 # Example Linux location
 #fop.dir=/opt/fop-1.0
 
-# If you want to use the debian distribution from the package manager, you can
-# execute "sudo ln -s /usr/share/java /usr/share/java/lib" and use
+# Example Debian and Ubuntu location
 #fop.dir=/usr/share/java
 
 ### For generating the Windows executable file, make sure to install
