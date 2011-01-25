@@ -253,10 +253,10 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 	 */
 	public static void loadMacros()
 	{
+		jEdit.removeActionSet(macroActionSet);
 		macroActionSet.removeAllActions();
 		macroHierarchy.removeAllElements();
 		macroHash.clear();
-
 		// since subsequent macros with the same name are ignored,
 		// load user macros first so that they override the system
 		// macros.
@@ -275,7 +275,7 @@ file_loop:			for(int i = 0; i < paths.length; i++)
 				jEdit.getJEditHome(),"macros");
 			loadMacros(macroHierarchy,"",new File(systemMacroPath));
 		}
-
+		jEdit.addActionSet(macroActionSet);
 		EditBus.send(new DynamicMenuChanged("macros"));
 	} //}}}
 

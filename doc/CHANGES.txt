@@ -9,6 +9,10 @@ Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert and Shlomy Reinstein for contributing to this release
 
 {{{ Bug fixes
+- When macros are reloaded, if one of them was overriding a built-in action,
+  the action is not restored if the overriding macro is removed
+  (#3110689 - Matthieu Casanova)
+
 - Shortcuts option pane was showing shortcuts twice when an action was
   overridden by a macro or a plugin (Matthieu Casanova)
 
