@@ -168,6 +168,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 	private void initModels()
 	{
 		List<KeyBinding[]> allBindings = new ArrayList<KeyBinding[]>();
+		Set<String> knownBindings = new HashSet<String>();
 		models = new Vector<ShortcutsModel>();
 		ActionSet[] actionSets = jEdit.getActionSets();
 		for(int i = 0; i < actionSets.length; i++)
@@ -184,7 +185,16 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				ShortcutsModel model = createModel(modelLabel,
 						actionSet.getActionNames());
 				models.addElement(model);
-				allBindings.addAll(model.getBindings());
+				List<KeyBinding[]> bindings = model.getBindings();
+				for (KeyBinding[] binding : bindings)
+				{
+					String name = binding[0].name;
+					if (!knownBindings.contains(name))
+					{
+						knownBindings.add(name);
+						allBindings.add(binding);
+					}
+				}
 			}
 		}
 		if (models.size() > 1)
