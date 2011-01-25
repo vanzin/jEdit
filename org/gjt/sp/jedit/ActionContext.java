@@ -22,8 +22,6 @@
 
 package org.gjt.sp.jedit;
 
-import java.util.*;
-
 /**
  * Manages a collection of action sets. There are two instances of this class
  * in jEdit:
