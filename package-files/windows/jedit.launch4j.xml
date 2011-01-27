@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- US-ASCII is the best encoding to avoid problem of Launch4j which
+uses system default encoding no matter what encoding the config file
+declare in it. Here, "best" means a common subset of system default
+encodings on many of known OS and locales. -->
 <launch4jConfig>
 	<headerType>gui</headerType>
 	<outfile>jedit.exe</outfile>
