@@ -1180,8 +1180,12 @@
 			<filterset id="package-files-filter">
 				<filter token="base.dir"
 					value="${basedir}"/>
+				<filter token="base.dir.possibly.for.wine"
+					value="${basedir.possibly.for.wine}"/>
 				<filter token="current.year"
 					value="${current.year}"/>
+				<filter token="dist.dir.possibly.for.wine"
+					value="${dist.dir.possibly.for.wine}"/>
 				<filter token="jar.filename"
 					value="${jar.filename}"/>
 				<filter token="jedit.build.number"
@@ -1192,19 +1196,6 @@
 					value="${slackware.target.java.version}"/>
 				<filter token="target.java.version"
 					value="${target.java.version}"/>
-			</filterset>
-		</copy>
-		<copy todir="${classes.dir}/package-files/windows"
-		      encoding="UTF-8"
-		      outputencoding="ISO-8859-1"
-		      overwrite="true">
-			<fileset file="package-files/windows/win32installer.iss"/>
-			<filterset refid="package-files-filter"/>
-			<filterset>
-				<filter token="base.dir.possibly.for.wine"
-					value="${basedir.possibly.for.wine}"/>
-				<filter token="dist.dir.possibly.for.wine"
-					value="${dist.dir.possibly.for.wine}"/>
 				<filter token="win.filename"
 					value="${win.filename}"/>
 			</filterset>

@@ -1,4 +1,7 @@
-; Inno Setup installer script for jEdit
+﻿; Inno Setup installer script for jEdit
+; encoding=UTF-8Y
+; (BOM seems the only way to let Inno Setup know the encoding)
+;
 ; Björn "Vampire" Kautler <Vampire@jEdit.org>
 ;
 
