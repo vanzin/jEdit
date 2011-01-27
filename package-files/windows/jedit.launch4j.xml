@@ -12,7 +12,7 @@ encodings on many of known OS and locales. -->
 	<downloadUrl>http://www.java.com/download</downloadUrl>
 	<supportUrl>http://www.jEdit.org</supportUrl>
 	<cmdLine>-reuseview</cmdLine>
-	<customProcName>true</customProcName>
+	<customProcName>false</customProcName>
 	<stayAlive>true</stayAlive>
 	<icon>@base.dir@/icons/jedit.ico</icon>
 	<jre>
