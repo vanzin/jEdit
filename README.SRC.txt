@@ -74,8 +74,8 @@ General jEdit documentation can be found in the 'doc' directory.
 
   - Unicode Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
   - A box running windows or wine, e. g. on *nix. If Inno Setup should be
-    run via wine, a wine version where http://bugs.winehq.org/show_bug.cgi?id=14882
-    is fixed or where the attached patch is applied has to be used.
+    run via wine, a wine version of at least 1.3.10 is required because
+    of a bug in earlier wine versions.
 
  For building the Mac OS X disk image (DMG) for easy distribution
  (for the final step):
