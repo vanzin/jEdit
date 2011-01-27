@@ -61,10 +61,9 @@ General jEdit documentation can be found in the 'doc' directory.
     build.properties.sample.
 
  For building the online help in PDF-format:
-
-  - Apache FOP 0.93 or later. <http://xmlgraphics.apache.org/fop/download.html>.
-    Currently the build requires the full binary distribution, 
-    but we will soon make it work with versions from your package manager too.  
+  - Apache FOP 0.93 or later, from binary distributions or 
+    from your system distro. 
+    <http://xmlgraphics.apache.org/fop/download.html>.
 
  For building the windows EXE launcher:
 

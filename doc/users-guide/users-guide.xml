@@ -6,7 +6,7 @@
 <!-- jEdit user's guide -->
 <!-- (C) 1999, 2004 Slava Pestov -->
 <!-- (C) 2001, 2002 John Gellene -->
-<!-- (C) 2005, 2009 Alan Ezust -->
+<!-- (C) 2005, 2011 Alan Ezust -->
 
 <!ENTITY conventions SYSTEM "conventions.xml">
 <!ENTITY starting SYSTEM "starting.xml">
@@ -57,7 +57,7 @@
         <copyright>
             <year>2005</year>
 
-            <year>2009</year>
+            <year>2011</year>
 
             <holder>Alan Ezust</holder>
         </copyright>

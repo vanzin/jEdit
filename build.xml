@@ -676,8 +676,7 @@
 			 classname="org.apache.fop.tools.anttasks.Fop">
 			<classpath>
 				<fileset dir="${config.fop.dir}"
-					 includes="build/fop.jar
-						   lib/*.jar"/>
+					 includes="build/fop.jar lib/*.jar *.jar" />
 			</classpath>
 		</taskdef>
 		<fop fofile="${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"
