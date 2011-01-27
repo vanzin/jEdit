@@ -356,7 +356,7 @@
 
 <MODE NAME="php"		FILE="php.xml"
 				FILE_NAME_GLOB="*.{php3,php4,php,phtml,inc}"
-				FIRST_LINE_GLOB="{&lt;?php*,#!/*php*}" />
+				FIRST_LINE_GLOB="{&lt;\?php*,#!/*php*}" />
 
 <MODE NAME="pike"		FILE="pike.xml"
 				FILE_NAME_GLOB="*.{pike,pmod}" />
