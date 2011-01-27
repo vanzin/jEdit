@@ -24,7 +24,7 @@
         the View is split.  </para>
 
         <para>The drop-down buffer switcher list at the top of each EditPane shows
-        a buffer set which by default includes all open buffers.
+        a BufferSet, or a set of open buffers (see <xref linkend="buffersets" />). 
         Selecting a buffer on this list will make it visible in the TextArea. Different
         emblems are displayed next to buffer names in the list, depending the
         buffer's state; a red disk is shown for buffers with unsaved changes, a
