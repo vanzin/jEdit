@@ -70,7 +70,10 @@
 # Example Windows location
 #fop.dir=C:\\Programme\\FOP
 
-# Example Debian location
+# Example Linux location
+#fop.dir=/opt/fop-1.0
+
+# Example Debian and Ubuntu location
 #fop.dir=/usr/share/java
 
 ### For generating the Windows executable file, make sure to install
