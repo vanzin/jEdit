@@ -13,6 +13,7 @@
 	<icon>@base.dir@/icons/jedit.ico</icon>
 	<jre>
 		<minVersion>@target.java.version@.0</minVersion>
+		<!-- Prefer JDK to make tools.jar available if possible. -->
 		<jdkPreference>preferJdk</jdkPreference>
 	</jre>
 	<versionInfo>
