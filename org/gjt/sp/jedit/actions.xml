@@ -1554,6 +1554,16 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="userFeedback">
+	<CODE>
+		import java.awt.Desktop;
+		if (Desktop.isDesktopSupported())
+		{
+			Desktop.getDesktop().browse(new URI("http://jEdit.uservoice.com"));
+		}
+	</CODE>
+</ACTION>
+
 <ACTION NAME="vertical-paste">
 	<CODE>
 		Registers.paste(textArea,'$',true);
