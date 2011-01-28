@@ -61,9 +61,10 @@ General jEdit documentation can be found in the 'doc' directory.
     build.properties.sample.
 
  For building the online help in PDF-format:
-  - Apache FOP 0.93 or later, from binary distributions or 
-    from your system distro. 
-    <http://xmlgraphics.apache.org/fop/download.html>.
+
+  - Apache FOP. Get it from <http://xmlgraphics.apache.org/fop/download.html> or
+    from your package manager. The old 0.20.5 release will not work anymore with
+    our files. 0.93 or newer has to be used.
 
  For building the windows EXE launcher:
 
@@ -73,8 +74,8 @@ General jEdit documentation can be found in the 'doc' directory.
 
   - Unicode Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
   - A box running windows or wine, e. g. on *nix. If Inno Setup should be
-    run via wine, a wine version where http://bugs.winehq.org/show_bug.cgi?id=14882
-    is fixed or where the attached patch is applied has to be used.
+    run via wine, a wine version of at least 1.3.10 is required because
+    of a bug in earlier wine versions.
 
  For building the Mac OS X disk image (DMG) for easy distribution
  (for the final step):
