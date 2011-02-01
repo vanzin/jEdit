@@ -142,6 +142,9 @@ strank, and Hisateru Tanaka for contributing to this release.
 }}}
 {{{ API changes
 
+- API made public:
+  org.gjt.sp.jedit.browser.VFSFileNameField (Marcelo Vanzin)
+
 - Added methods to manage the cursor if the TextArea :
   In the TextAreaPainter class, added
   resetCursor()
