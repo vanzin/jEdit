@@ -6,7 +6,8 @@ jEdit 4.5 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
-Matthew Gilbert and Shlomy Reinstein for contributing to this release
+Matthew Gilbert, Shlomy Reinstein and Marcelo Vanzin for contributing to this
+release.
 
 {{{ Bug fixes
 - When macros are reloaded, if one of them was overriding a built-in action,
@@ -40,6 +41,9 @@ Matthew Gilbert and Shlomy Reinstein for contributing to this release
 - New method TextArea.getVisibleLineText(screenLine) and
   TextArea.getVisibleLineSegment() that returns
   the visible part of the given line (Matthieu Casanova)
+
+- API made public:
+  org.gjt.sp.jedit.browser.VFSFileNameField (Marcelo Vanzin)
 
 - API made private:
   FileVFS.modified

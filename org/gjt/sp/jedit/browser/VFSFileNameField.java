@@ -36,12 +36,12 @@ import org.gjt.sp.util.Log;
 /**
  * @author Slava Pestov
  * @version $Id$
- * @since jEdit 4.2pre1
+ * @since jEdit 4.2pre1 (public since 4.5pre1)
  */
-class VFSFileNameField extends HistoryTextField
+public class VFSFileNameField extends HistoryTextField
 {
 	//{{{ VFSFileNameField constructor
-	VFSFileNameField(VFSBrowser browser, String model)
+	public VFSFileNameField(VFSBrowser browser, String model)
 	{
 		super(model);
 		setEnterAddsToHistory(false);
@@ -202,7 +202,7 @@ class VFSFileNameField extends HistoryTextField
 			dir = doComplete(VFSBrowser.getRootDirectory(),dir,false);
 			if(dir == null)
 				return;
-	
+
 			browser.setDirectory(dir);
 			VFSManager.waitForRequests();
 
@@ -221,10 +221,10 @@ class VFSFileNameField extends HistoryTextField
 				dir = doComplete(browser.getDirectory(),dir,false);
 				if(dir == null)
 					return;
-	
+
 				browser.setDirectory(dir);
 				VFSManager.waitForRequests();
-	
+
 				currentText = currentText.substring(index + 1);
 			}
 		}
