@@ -65,24 +65,10 @@ public class PatternSearchMatcher extends SearchMatcher
 
 	//{{{ nextMatch() method
 	/**
-	 * Returns the offset of the first match of the specified text
-	 * within this matcher.
-	 *
-	 * @param text 		The text to search in
-	 * @param start 	True if the start of the segment is the beginning
-	 *			of the buffer
-	 * @param end 		True if the end of the segment is the end of the
-	 *			buffer
-	 * @param firstTime 	If false and the search string matched at the
-	 *			start offset with length zero, automatically
-	 *			find next match
-	 * @param reverse 	If true find match prior to current match
-	 * 			(this is done by searching from the beginning to
-	 * 			just prior to the current match, so will be inefficient
-	 * 			for large buffers)
-	 *
-	 * @return A {@link SearchMatcher.Match} object.
-	 * @since jEdit 4.3pre5
+	 * {@inheritDoc}
+	 * <p>Reverse regex search is done by searching from the beginning to
+	 * just prior to the current match, so will be inefficient for large
+	 * buffers.</p>
 	 */
 	@Override
 	public SearchMatcher.Match nextMatch(CharSequence text, boolean start,

@@ -10,6 +10,7 @@ Matthew Gilbert, Shlomy Reinstein and Marcelo Vanzin for contributing to this
 release.
 
 {{{ Bug fixes
+
 - When macros are reloaded, if one of them was overriding a built-in action,
   the action is not restored if the overriding macro is removed
   (#3110689 - Matthieu Casanova)
@@ -35,6 +36,15 @@ release.
 
 - Applied suggestion from bug 3160310 to correctly set permissions on
   symlinked files (Marcelo Vanzin)
+
+- When the cursor was at a start (or end) of non-top (non-bottom) line,
+  Find Next (Previous) for a non-empty regex starting with "^" (ending
+  with "$") wrongly skipped the occurrence at the cursor.
+  (SF.net bug #2953604 - Kazutoshi Satoda)
+
+- Corrected a wrong specifications (javadoc comments) of
+  SearchMatcher#nextMatch(). (SF.net bug #2953604 - Kazutoshi Satoda)
+
 }}}
 {{{ API Changes
 
