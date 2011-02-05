@@ -108,6 +108,9 @@
 <MODE NAME="cobol"		FILE="cobol.xml"
 				FILE_NAME_GLOB="*.cbl" />
 
+<MODE NAME="coffeescript"	FILE="coffeescript.xml"
+				FILE_NAME_GLOB="*.coffee" />
+
 <MODE NAME="coldfusion"		FILE="coldfusion.xml"
 				FILE_NAME_GLOB="*.{cfm,dbm,cfc}" />
 

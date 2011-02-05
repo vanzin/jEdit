@@ -6,7 +6,8 @@ jEdit 4.5 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
-Matthew Gilbert, Shlomy Reinstein and Marcelo Vanzin for contributing to this
+Matthew Gilbert, Dennis Hotson, Shlomy Reinstein and Marcelo Vanzin for
+contributing to this
 release.
 
 {{{ Bug fixes
@@ -273,6 +274,8 @@ release.
 
 - Updated erlang mode and associated *.hrl to erlang language
   (patch #3042398 from jclopes, Matthieu Casanova)
+
+- Added coffee edit mode (patch #3173375 from Dennis Hotson, Matthieu Casanova)
 
 }}}
 {{{ UI

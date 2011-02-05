@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+
+<!-- CoffeeScript mode by Dennis Hotson, Balazs Toth
+
+Beta
+
+TODO:
+- reconsider (un)indentation rules for brackets
+-->
+<MODE>
+	<PROPS>
+		<PROPERTY NAME="commentStart" VALUE="###" />
+		<PROPERTY NAME="commentEnd" VALUE="###" />
+		<PROPERTY NAME="lineComment" VALUE="#" />
+		<PROPERTY NAME="wordBreakChars" VALUE=",+-=&lt;&gt;/?^&amp;*" />
+
+		<!-- Auto indent -->
+		<PROPERTY NAME="indentNextLines"
+			VALUE="((\s*|.*\s+)([\-=]&gt;|[\+\-\*/%\\&lt;&gt;=\!&amp;\|\^~]|(.*:|&lt;&lt;|&gt;&gt;|&gt;&gt;&gt;|\+=|\-=|\*=|/=|%=|&lt;=|&gt;=|==|===|\!=|\!==|is|isnt|not|and|or|&amp;&amp;|\|\||of|in))|\s*(if|else|try|catch|finally|class|while|until|for)(\s*|\s+.*))\s*" />
+
+		<PROPERTY NAME="unindentThisLine"  VALUE="^\s*(else|catch|finally)(\s*|\s+.*)$" />
+		<PROPERTY NAME="unindentNextLines" VALUE="^\s*(else|catch|finally)(\s*|\s+.*)$" />
+
+		<!-- Props regarding brackets generally do not play well with CoffeScript -->
+
+		<!-- Triggers reindentation on character input.
+		TODO: reconsider the use of this one, including "ehy" -->
+		<!-- PROPERTY NAME="electricKeys" VALUE="}])" /-->
+
+		<!-- Originally designed for Python, does not work correctly with CS -->
+		<!-- PROPERTY NAME="ignoreWhitespace" VALUE="false" /-->
+	</PROPS>
+
+	<RULES
+		IGNORE_CASE="FALSE"
+		HIGHLIGHT_DIGITS="TRUE"
+		DIGIT_RE="(0[xX][0-9a-fA-F]+)|([0-9]+(\.[0-9]+)?([eE][+\-]?[0-9]+)?)">
+
+		<SPAN TYPE="COMMENT2">
+			<BEGIN>###</BEGIN>
+			<END>###</END>
+		</SPAN>
+		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" ESCAPE="\" DELEGATE="doubleQuoteLiteral">
+			<BEGIN>"""</BEGIN>
+			<END>"""</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="FALSE" ESCAPE="\">
+			<BEGIN>'''</BEGIN>
+			<END>'''</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" NO_LINE_BREAK="FALSE" ESCAPE="\" DELEGATE="doubleQuoteLiteral">
+			<BEGIN>"</BEGIN>
+			<END>"</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL2" NO_LINE_BREAK="FALSE" ESCAPE="\">
+			<BEGIN>'</BEGIN>
+			<END>'</END>
+		</SPAN>
+
+		<SPAN TYPE="LITERAL1" DELEGATE="javascript::MAIN">
+			<BEGIN>`</BEGIN>
+			<END>`</END>
+		</SPAN>
+
+		<!-- Javascript-style regexps -->
+		<SEQ_REGEXP TYPE="MARKUP">(?&lt;!\d)\s*/(?![\s/*+{}?]).*/[igmy]*</SEQ_REGEXP>
+		<!-- Heregexps -->
+		<SPAN TYPE="MARKUP" DELEGATE="hereRegexp">
+			<BEGIN>///</BEGIN>
+			<END>///</END>
+		</SPAN>
+
+		<MARK_PREVIOUS TYPE="FUNCTION" MATCH_TYPE="OPERATOR">(</MARK_PREVIOUS>
+		<!-- Seems to be equivalent to
+		SEQ_REGEXP TYPE="FUNCTION">([a-zA-Z\$_](\w|\$)*)(?=\s*\()</SEQ_REGEXP -->
+
+		<SEQ TYPE="OPERATOR">)</SEQ>
+		<SEQ TYPE="OPERATOR">{</SEQ>
+		<SEQ TYPE="OPERATOR">}</SEQ>
+		<SEQ TYPE="OPERATOR">[</SEQ>
+		<SEQ TYPE="OPERATOR">]</SEQ>
+		<SEQ TYPE="OPERATOR">.</SEQ>
+
+		<SEQ TYPE="OPERATOR">+</SEQ>
+		<SEQ TYPE="OPERATOR">/</SEQ>
+		<SEQ TYPE="OPERATOR">*</SEQ>
+		<SEQ TYPE="OPERATOR">&amp;</SEQ>
+		<SEQ TYPE="OPERATOR">|</SEQ>
+		<SEQ TYPE="OPERATOR">\</SEQ>
+		<SEQ TYPE="OPERATOR">-</SEQ>
+		<SEQ TYPE="OPERATOR">%</SEQ>
+		<SEQ TYPE="OPERATOR">=</SEQ>
+		<SEQ TYPE="OPERATOR">&lt;</SEQ>
+		<SEQ TYPE="OPERATOR">&gt;</SEQ>
+		<SEQ TYPE="OPERATOR">:</SEQ>
+		<SEQ TYPE="OPERATOR">!</SEQ>
+		<SEQ TYPE="OPERATOR">;</SEQ>
+		<SEQ TYPE="OPERATOR">^</SEQ>
+		<SEQ TYPE="OPERATOR">~</SEQ>
+		<SEQ TYPE="OPERATOR">?</SEQ>
+
+		<SEQ_REGEXP TYPE="KEYWORD3">@([a-zA-Z\$_](\w|\$)*)</SEQ_REGEXP>
+		<SEQ_REGEXP TYPE="KEYWORD4">([a-zA-Z\$_](\w|\$)*)(?=\s*[:\.])</SEQ_REGEXP>
+
+		<KEYWORDS>
+			<KEYWORD3>this</KEYWORD3>
+			<KEYWORD3>super</KEYWORD3>
+
+			<KEYWORD1>if</KEYWORD1>
+			<KEYWORD1>else</KEYWORD1>
+			<KEYWORD1>new</KEYWORD1>
+			<KEYWORD1>return</KEYWORD1>
+			<KEYWORD1>try</KEYWORD1>
+			<KEYWORD1>catch</KEYWORD1>
+			<KEYWORD1>finally</KEYWORD1>
+			<KEYWORD1>throw</KEYWORD1>
+			<KEYWORD1>break</KEYWORD1>
+			<KEYWORD1>continue</KEYWORD1>
+			<KEYWORD1>for</KEYWORD1>
+			<KEYWORD1>in</KEYWORD1>
+			<KEYWORD1>while</KEYWORD1>
+			<KEYWORD1>delete</KEYWORD1>
+			<KEYWORD1>instanceof</KEYWORD1>
+			<KEYWORD1>typeof</KEYWORD1>
+			<KEYWORD1>switch</KEYWORD1>
+			<KEYWORD1>extends</KEYWORD1>
+			<KEYWORD1>class</KEYWORD1>
+			<KEYWORD1>constructor</KEYWORD1>
+			<KEYWORD1>case</KEYWORD1>
+			<KEYWORD1>default</KEYWORD1>
+			<KEYWORD1>do</KEYWORD1>
+			<KEYWORD1>function</KEYWORD1>
+			<KEYWORD1>var</KEYWORD1>
+			<KEYWORD1>void</KEYWORD1>
+			<KEYWORD1>with</KEYWORD1>
+			<KEYWORD1>const</KEYWORD1>
+			<KEYWORD1>let</KEYWORD1>
+			<KEYWORD1>enum</KEYWORD1>
+			<KEYWORD1>export</KEYWORD1>
+			<KEYWORD1>import</KEYWORD1>
+			<KEYWORD1>native</KEYWORD1>
+			<KEYWORD1>then</KEYWORD1>
+			<KEYWORD1>unless</KEYWORD1>
+			<KEYWORD1>until</KEYWORD1>
+			<KEYWORD1>of</KEYWORD1>
+			<KEYWORD1>by</KEYWORD1>
+			<KEYWORD1>where</KEYWORD1>
+			<KEYWORD1>when</KEYWORD1>
+
+			<KEYWORD1>and</KEYWORD1>
+			<KEYWORD1>or</KEYWORD1>
+			<KEYWORD1>not</KEYWORD1>
+			<KEYWORD1>is</KEYWORD1>
+			<KEYWORD1>isnt</KEYWORD1>
+
+			<KEYWORD3>prototype</KEYWORD3>
+			<KEYWORD3>Array</KEYWORD3>
+			<KEYWORD3>Boolean</KEYWORD3>
+			<KEYWORD3>Date</KEYWORD3>
+			<KEYWORD3>Function</KEYWORD3>
+			<KEYWORD3>Global</KEYWORD3>
+			<KEYWORD3>Math</KEYWORD3>
+			<KEYWORD3>Number</KEYWORD3>
+			<KEYWORD3>Object</KEYWORD3>
+			<KEYWORD3>RegExp</KEYWORD3><!-- Not ECMA -->
+			<KEYWORD3>String</KEYWORD3>
+
+			<!-- Literals -->
+			<LITERAL2>false</LITERAL2>
+			<LITERAL2>null</LITERAL2>
+			<LITERAL2>true</LITERAL2>
+			<LITERAL2>yes</LITERAL2>
+			<LITERAL2>no</LITERAL2>
+			<LITERAL2>on</LITERAL2>
+			<LITERAL2>off</LITERAL2>
+			<LITERAL2>NaN</LITERAL2>
+			<LITERAL2>Infinity</LITERAL2>
+
+			<!-- Global functions -->
+			<LITERAL2>eval</LITERAL2>
+			<LITERAL2>parseInt</LITERAL2>
+			<LITERAL2>parseFloat</LITERAL2>
+			<LITERAL2>escape</LITERAL2>
+			<LITERAL2>unescape</LITERAL2>
+			<LITERAL2>isNaN</LITERAL2>
+			<LITERAL2>isFinite</LITERAL2>
+		</KEYWORDS>
+	</RULES>
+
+	<!-- Delegate contents of #{} expression in double quotes to MAIN so that
+	     it will be syntax highlighted as well -->
+	<RULES DEFAULT="LITERAL1" SET="doubleQuoteLiteral" ESCAPE="\">
+		<SPAN DELEGATE="MAIN" TYPE="OPERATOR">
+			<BEGIN>#{</BEGIN>
+			<END>}</END>
+		</SPAN>
+	</RULES>
+
+	<!-- Comments in heregexes -->
+	<RULES DEFAULT="MARKUP" SET="hereRegexp" ESCAPE="\">
+		<EOL_SPAN TYPE="COMMENT1">#</EOL_SPAN>
+	</RULES>
+
+</MODE>
