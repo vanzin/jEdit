@@ -46,6 +46,9 @@ release.
 - Corrected a wrong specifications (javadoc comments) of
   SearchMatcher#nextMatch(). (SF.net bug #2953604 - Kazutoshi Satoda)
 
+- Fixed an exception that occurs when opening jEdit from command line
+  with some files to open as argument if a jEdit server is running
+  (#3173669 - Matthieu Casanova)
 }}}
 {{{ API Changes
 
