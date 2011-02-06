@@ -11,6 +11,8 @@ contributing to this
 release.
 
 {{{ Bug fixes
+- Collapsing all folds will move the caret outside any fold if necessary
+  (Matthieu Casanova)
 
 - When macros are reloaded, if one of them was overriding a built-in action,
   the action is not restored if the overriding macro is removed
