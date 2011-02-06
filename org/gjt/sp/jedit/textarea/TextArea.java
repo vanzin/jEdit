@@ -3914,6 +3914,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	/**
 	 * Like {@link DisplayManager#collapseFold(int)}, but
 	 * also moves the caret to the first line of the fold.
+	 * @param line the physical line index of the fold that we want to collapse
 	 * @since jEdit 4.3pre7
 	 */
 	public void collapseFold(int line)
@@ -3930,7 +3931,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		if(!multi)
 		{
-			// cannot use selectNone() beacause the finishCaretUpdate method will reopen the fold
+			// cannot use selectNone() because the finishCaretUpdate method will reopen the fold
 			invalidateSelectedLines();
 			selectionManager.setSelection((Selection) null);
 		}
