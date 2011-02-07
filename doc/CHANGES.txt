@@ -354,6 +354,8 @@ release.
 - Added a command line option "-nosplash" to avoid the splash screen
   (Shlomy Reinstein).
 
+- Minor optimization of TextAreaTransferHandler.canImport() method that
+  is called when dragging things on the textArea (Matthieu Casanova)
 }}}
 
 }}}

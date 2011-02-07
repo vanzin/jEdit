@@ -428,12 +428,16 @@ public class TextAreaTransferHandler extends TransferHandler
 				DataFlavor.javaFileListFlavor))
 			{
 				returnValue = true;
+				break;
 			}
 			else if(flavors[i].equals(
 				DataFlavor.stringFlavor))
 			{
 				if(textArea.isEditable())
+				{
 					returnValue = true;
+					break;
+				}
 			}
 		}
 
