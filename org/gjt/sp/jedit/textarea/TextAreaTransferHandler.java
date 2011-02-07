@@ -110,18 +110,17 @@ public class TextAreaTransferHandler extends TransferHandler
 			{
 				DataFlavor uriListStringDataFlavor = null;
 				DataFlavor[] dataFlavors = t.getTransferDataFlavors();
-				
-				for (int i = 0;i<dataFlavors.length;i++)
+
+				for (DataFlavor dataFlavor : dataFlavors)
 				{
-					DataFlavor dataFlavor = dataFlavors[i];
 					if ("text".equals(dataFlavor.getPrimaryType()) &&
-					    "uri-list".equals(dataFlavor.getSubType()) &&
-					    dataFlavor.getRepresentationClass() == String.class)
+						"uri-list".equals(dataFlavor.getSubType()) &&
+						dataFlavor.getRepresentationClass() == String.class)
 					{
 						uriListStringDataFlavor = dataFlavor;
 						break;
 					}
- 				}
+				}
 				
 				if (uriListStringDataFlavor != null &&t.isDataFlavorSupported(uriListStringDataFlavor))
 				{
@@ -269,9 +268,8 @@ public class TextAreaTransferHandler extends TransferHandler
 			boolean found = false;
 			String[] components = str.split("\n");
 
-			for (int i = 0;i<components.length;i++)
+			for (String str0 : components)
 			{
-				String str0 = components[i];
 				// Only examine the string for a URL if it came from
 				// outside of jEdit.
 				VFS vfs = VFSManager.getVFSForPath(str0);
@@ -283,10 +281,10 @@ public class TextAreaTransferHandler extends TransferHandler
 						str0 = str0.substring(7);
 					}
 
-					VFSManager.runInWorkThread(new DraggedURLLoader(textArea,str0));
+					VFSManager.runInWorkThread(new DraggedURLLoader(textArea, str0));
 				}
 				found = true;
-				
+
 			}
 			
 			if (found)
@@ -328,10 +326,10 @@ public class TextAreaTransferHandler extends TransferHandler
 				insertPos = caret;
 				insertOffset = 0;
 				Selection[] selections = textArea.getSelection();
-				for (int i=0;i<selections.length;i++)
+				for (Selection selection : selections)
 				{
-					if (selections[i].end < insertPos + insertOffset)
-						insertOffset -= selections[i].end - selections[i].start;
+					if (selection.end < insertPos + insertOffset)
+						insertOffset -= selection.end - selection.start;
 				}
 			}
 			else
@@ -422,18 +420,17 @@ public class TextAreaTransferHandler extends TransferHandler
 		// + text area read only, do an or of all flags
 		boolean returnValue = false;
 
-		for(int i = 0; i < flavors.length; i++)
+		for (DataFlavor flavor : flavors)
 		{
-			if(flavors[i].equals(
+			if (flavor.equals(
 				DataFlavor.javaFileListFlavor))
 			{
 				returnValue = true;
 				break;
-			}
-			else if(flavors[i].equals(
+			} else if (flavor.equals(
 				DataFlavor.stringFlavor))
 			{
-				if(textArea.isEditable())
+				if (textArea.isEditable())
 				{
 					returnValue = true;
 					break;
