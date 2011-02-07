@@ -266,10 +266,6 @@ view.minStartupHeight=200
 # The default bufferSet scope
 editpane.bufferset.default=view
 
-# Copy the current bufferSet content when creating a new bufferSet for an
-# EditPane
-editpane.bufferset.new=copy
-
 #{{{ Gutter
 
 # Gutter background color
