@@ -207,11 +207,11 @@ public class TextAreaTransferHandler extends TransferHandler
 			for (int i = 0;i<components.length;i++)
 			{
 				String str0 = components[i];
-				
+
 				if (str0.length() > 0)
 				{
 					URI uri = new URI(str0); // this handles the URI-decoding
-					
+
 					if ("file".equals(uri.getScheme()))
 					{
 						File file = new File(uri.getPath());
@@ -243,7 +243,7 @@ public class TextAreaTransferHandler extends TransferHandler
 					}
 				}
 			}
-			
+
 			if (found)
 			{
 				return true;
@@ -410,7 +410,19 @@ public class TextAreaTransferHandler extends TransferHandler
 		dragSource = null;
 	} //}}}
 
-	//{{{ canImport() method
+	//{{{ canImport() methods
+	@Override
+	public boolean canImport(TransferSupport support)
+	{
+		if (support.getTransferable() instanceof TextAreaSelection)
+			return true;
+		else
+		{
+			support.setDropAction(COPY);
+			return super.canImport(support);
+		}
+	}
+
 	@Override
 	public boolean canImport(JComponent c, DataFlavor[] flavors)
 	{
