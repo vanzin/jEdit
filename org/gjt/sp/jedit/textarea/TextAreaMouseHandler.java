@@ -182,9 +182,8 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 
 		if(evt.isShiftDown())
 		{
-			// XXX: getMarkPosition() deprecated!
 			textArea.resizeSelection(
-				textArea.getMarkPosition(),dragStart,extraEndVirt,
+				getSelectionPivotCaret(),dragStart,extraEndVirt,
 				textArea.isRectangularSelectionEnabled()
 				|| (control && ctrlForRectangularSelection));
 
@@ -192,8 +191,8 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 				textArea.moveCaretPosition(dragStart,false);
 
 			// so that shift-click-drag works
-			dragStartLine = textArea.getMarkLine();
-			dragStart = textArea.getMarkPosition();
+			dragStartLine = getSelectionPivotLine();
+			dragStart = getSelectionPivotCaret();
 			dragStartOffset = dragStart
 				- textArea.getLineStartOffset(dragStartLine);
 
@@ -580,6 +579,60 @@ public class TextAreaMouseHandler extends MouseInputAdapter
 		else
 			return (modifiers & InputEvent.BUTTON3_MASK) != 0;
 	} //}}}
+
+	//{{{ Private methods
+
+	//{{{ getSelectionPivotCaret() method
+	/*
+	 * Dynamically get the "pivot" point associated with a current
+	 * selection.  See inline comments for details.
+	 */
+	private int getSelectionPivotCaret()
+	{
+		int caret = textArea.caret;
+
+		Selection s = textArea.getSelectionAtOffset(textArea.caret);
+		if (s == null)
+			return caret;
+
+		// The mental model: an existing selection, and then a shift+click
+		// somewhere else.  What happens to the selection?  Because a selection
+		// exists, we need a "pivot" point.  If the caret is at the start of a
+		// selection, the end of the selection pivot point.  So, a click above
+		// the start of the caret will enlarge the selection, and a click below
+		// the end will reverse the selection around the pivot point: the text
+		// before the pivot will no longer be selected, and the text after it
+		// and up to the click will be newly selected.  Vice versa holds true
+		// when the caret is at the end of the selection.  If the caret is
+		// somewhere else, just give up, and let the user fix it.
+
+		caret = ( caret == s.start ? s.end   :
+		          caret == s.end   ? s.start :
+		          caret );
+
+		return caret;
+	} //}}}
+
+	//{{{ getSelectionPivotLine() method
+	/*
+	 * See getSelectionPivotCaret for an explanation of this function
+	 */
+	private int getSelectionPivotLine()
+	{
+		int c  = textArea.caret;
+		int cl = textArea.caretLine;
+
+		if(textArea.getSelectionCount() != 1)
+			return cl;
+
+		Selection s = textArea.getSelection(0);
+		cl = ( c == s.start ? s.endLine   :
+		       c == s.end   ? s.startLine :
+		       cl );
+
+		return cl;
+	} //}}}
+	//}}}
 
 	//{{{ Private members
 	protected final TextArea textArea;

@@ -6,8 +6,8 @@ jEdit 4.5 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
-Matthew Gilbert, Dennis Hotson, nherzing, Shlomy Reinstein and Marcelo Vanzin
-for contributing to this release.
+Matthew Gilbert, Dennis Hotson, Kevin Hunter, nherzing, Shlomy Reinstein
+and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
 - Collapsing all folds will move the caret outside any fold if necessary
@@ -261,6 +261,8 @@ for contributing to this release.
   ReadWriteLock
   (Matthieu Casanova)
 
+- Applied patch #2809978 to remove use of deprecated methods in jEdit's
+  textarea (#2809978 from Kevin Hunter, Matthieu Casanova)
 }}}
 {{{ Editing
 - Added new keywords to C# edit mode (patch #3120746 from nherzing,
