@@ -4831,25 +4831,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return caret;
 	} //}}}
 
-	//{{{ getMarkLine() method
-	/**
-	 * @deprecated Do not use.
-	 */
-	@Deprecated
-	public final int getMarkLine()
-	{
-		if(getSelectionCount() != 1)
-			return caretLine;
-
-		Selection s = getSelection(0);
-		if(s.start == caret)
-			return s.endLine;
-		else if(s.end == caret)
-			return s.startLine;
-		else
-			return caretLine;
-	} //}}}
-
 	//{{{ Package-private members
 
 	static TextArea focusedComponent;

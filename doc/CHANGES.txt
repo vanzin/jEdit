@@ -238,6 +238,7 @@ and Marcelo Vanzin for contributing to this release.
                  boolean newFile,
                  Hashtable props)
   jEdit.createTextArea()
+  TextArea.getMarkLine()
   VFS.DirectoryEntry
   VFS.VFS(String name)
   VFS.showBrowseDialog(Object[] session, Component comp)
