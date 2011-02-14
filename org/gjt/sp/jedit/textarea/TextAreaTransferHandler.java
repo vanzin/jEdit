@@ -156,6 +156,10 @@ public class TextAreaTransferHandler extends TransferHandler
 		View view = editPane.getView();
 		Buffer buffer = null;
 
+		// per the Java API, javaFileListFlavor guarantees that a 
+		// List<File> will be returned.  So suppress warning for this
+		// statement.  We know what we're doing.
+		@SuppressWarnings("unchecked")
 		List<File> data = (List<File>) t.getTransferData(DataFlavor.javaFileListFlavor);
 
 		boolean browsedDirectory = false;
