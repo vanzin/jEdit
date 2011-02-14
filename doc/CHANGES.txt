@@ -6,9 +6,8 @@ jEdit 4.5 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
-Matthew Gilbert, Dennis Hotson, Shlomy Reinstein and Marcelo Vanzin for
-contributing to this
-release.
+Matthew Gilbert, Dennis Hotson, nherzing, Shlomy Reinstein and Marcelo Vanzin
+for contributing to this release.
 
 {{{ Bug fixes
 - Collapsing all folds will move the caret outside any fold if necessary
@@ -264,6 +263,8 @@ release.
 
 }}}
 {{{ Editing
+- Added new keywords to C# edit mode (patch #3120746 from nherzing,
+  Matthieu Casanova)
 
 - Consider full path when using file name glob in edit mode decisions.
   (#2557712 - Alan Ezust)
