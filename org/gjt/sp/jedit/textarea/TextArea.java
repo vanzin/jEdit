@@ -5872,11 +5872,21 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			{
 				foo[i] = ' ';
 			}
-			wrapToWidth = false;
-			wrapMargin = (int)painter.getFont().getStringBounds(
+			int maxRenderedLineLen = (int)painter.getFont().getStringBounds(
 				foo,0,foo.length,
 				painter.getFontRenderContext())
 				.getWidth();
+
+			if (softWrap && painter.getWidth() < maxRenderedLineLen)
+			{
+				wrapToWidth = true;
+				wrapMargin = painter.getWidth() - charWidth * 3;
+			}
+			else
+			{
+				wrapToWidth = false;
+				wrapMargin = maxRenderedLineLen;
+			}
 		}
 	} //}}}
 

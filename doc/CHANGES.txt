@@ -310,6 +310,10 @@ Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+- Dynamic softwrap. Now the softwrap margin is the minimum of the buffer wrap
+  guide and the max length displayable in the TextArea (patch #2846458 from
+  Suraj Kurapati, Matthieu Casanova)
+
 - Added an option to search for entire words (patch #2842461 from encorejane,
   Matthieu Casanova)
 
