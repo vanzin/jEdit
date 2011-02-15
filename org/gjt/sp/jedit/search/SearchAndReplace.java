@@ -330,7 +330,7 @@ public class SearchAndReplace
 		}
 		else if(wholeWord)
 		{
-			matcher = new PatternSearchMatcher("\\b"+search+"\\b", ignoreCase);
+			matcher = new PatternSearchMatcher("\\b\\Q"+search+"\\E\\b", ignoreCase);
 		}
 		else
 			matcher = new BoyerMooreSearchMatcher(search, ignoreCase);
