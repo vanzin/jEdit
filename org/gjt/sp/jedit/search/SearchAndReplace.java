@@ -119,6 +119,24 @@ public class SearchAndReplace
 		return replace;
 	} //}}}
 
+	//{{{ setWholeWord() method
+	/**
+	 * Sets the whole word flag.
+	 * @param wholeWord True if only whole words should be searched,
+	 * false otherwise
+	 * @since 4.5pre1
+	 */
+	public static void setWholeWord(boolean wholeWord)
+	{
+		if(wholeWord == SearchAndReplace.wholeWord)
+			return;
+
+		SearchAndReplace.wholeWord = wholeWord;
+		matcher = null;
+
+		EditBus.send(new SearchSettingsChanged(null));
+	} //}}}
+
 	//{{{ setIgnoreCase() method
 	/**
 	 * Sets the ignore case flag.
@@ -134,6 +152,18 @@ public class SearchAndReplace
 		matcher = null;
 
 		EditBus.send(new SearchSettingsChanged(null));
+	} //}}}
+
+	//{{{ getWholeWord() method
+	/**
+	 * Returns the state of the whole word flag.
+	 * @return True if only whole words should be searched,
+	 * false otherwise
+	 * @since 4.5pre1
+	 */
+	public static boolean getWholeWord()
+	{
+		return wholeWord;
 	} //}}}
 
 	//{{{ getIgnoreCase() method
@@ -264,7 +294,7 @@ public class SearchAndReplace
 	//{{{ setSearchMatcher() method
 	/**
 	 * Sets a custom search string matcher. Note that calling
-	 * {@link #setSearchString(String)},
+	 * {@link #setSearchString(String)}, {@link #setWholeWord(boolean)},
 	 * {@link #setIgnoreCase(boolean)}, or {@link #setRegexp(boolean)}
 	 * will reset the matcher to the default.
 	 */
@@ -297,6 +327,10 @@ public class SearchAndReplace
 			Pattern re = Pattern.compile(search, 
 				PatternSearchMatcher.getFlag(ignoreCase));
 			matcher = new PatternSearchMatcher(re, ignoreCase);
+		}
+		else if(wholeWord)
+		{
+			matcher = new PatternSearchMatcher("\\b"+search+"\\b", ignoreCase);
 		}
 		else
 			matcher = new BoyerMooreSearchMatcher(search, ignoreCase);
@@ -962,6 +996,7 @@ loop:			while(path != null)
 	{
 		search = jEdit.getProperty("search.find.value");
 		replace = jEdit.getProperty("search.replace.value");
+		wholeWord = jEdit.getBooleanProperty("search.wholeWord.toggle");
 		ignoreCase = jEdit.getBooleanProperty("search.ignoreCase.toggle");
 		regexp = jEdit.getBooleanProperty("search.regexp.toggle");
 		beanshell = jEdit.getBooleanProperty("search.beanshell.toggle");
@@ -984,6 +1019,7 @@ loop:			while(path != null)
 	{
 		jEdit.setProperty("search.find.value",search);
 		jEdit.setProperty("search.replace.value",replace);
+		jEdit.setBooleanProperty("search.wholeWord.toggle",wholeWord);
 		jEdit.setBooleanProperty("search.ignoreCase.toggle",ignoreCase);
 		jEdit.setBooleanProperty("search.regexp.toggle",regexp);
 		jEdit.setBooleanProperty("search.beanshell.toggle",beanshell);
@@ -1019,6 +1055,7 @@ loop:			while(path != null)
 		BeanShell.getNameSpace().getClassManager(),
 		"search and replace");
 	private static boolean regexp;
+	private static boolean wholeWord;
 	private static boolean ignoreCase;
 	private static boolean reverse;
 	private static boolean beanshell;
@@ -1074,6 +1111,8 @@ loop:			while(path != null)
 					+ reverse + ");");
 			}
 
+			recorder.record("SearchAndReplace.setWholeWord("
+				+ wholeWord + ");");
 			recorder.record("SearchAndReplace.setIgnoreCase("
 				+ ignoreCase + ");");
 			recorder.record("SearchAndReplace.setRegexp("

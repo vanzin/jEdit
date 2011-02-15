@@ -236,4 +236,34 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="vfs.browser.favorites.add-to-favorites">
+	<CODE>
+		if (files.length == 0)
+		{
+			if(browser.getPath().equals(FavoritesVFS.PROTOCOL + ':'))
+			{
+				GUIUtilities.error(browser, "vfs.browser.recurse-favorites", null);
+			}
+			else
+			{
+				FavoritesVFS.addToFavorites(browser.getDirectory(), VFSFile.DIRECTORY);
+			}
+		}
+		else
+		{
+			for(int i = 0; i &lt; files.length; i++)
+			{
+				VFSFile file = files[i];
+				FavoritesVFS.addToFavorites(file.getPath(), file.getType());
+			}
+		}
+	</CODE>
+</ACTION>
+
+<ACTION NAME="vfs.browser.favorites.edit-favorites">
+	<CODE>
+		browser.setDirectory("favorites:");
+	</CODE>
+</ACTION>
+
 </ACTIONS>

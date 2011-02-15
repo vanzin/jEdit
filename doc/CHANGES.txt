@@ -6,8 +6,8 @@ jEdit 4.5 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
-Matthew Gilbert, Dennis Hotson, Kevin Hunter, nherzing, Shlomy Reinstein
-and Marcelo Vanzin for contributing to this release.
+Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing,
+Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
 - Collapsing all folds will move the caret outside any fold if necessary
@@ -310,6 +310,8 @@ and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+- Added an option to search for entire words (patch #2842461 from encorejane,
+  Matthieu Casanova)
 
 - Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
 

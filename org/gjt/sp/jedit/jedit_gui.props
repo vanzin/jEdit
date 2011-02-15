@@ -434,6 +434,7 @@ search=find \
        quick-search-word \
        hypersearch-word \
        - \
+       whole-word \
        ignore-case \
        regexp \
        - \
@@ -450,8 +451,9 @@ replace-and-find-next.label=Re$place and Find Next
 replace-all.label=Replace $All
 quick-search.label=$Incremental Search Bar
 hypersearch.label=$HyperSearch Bar
-quick-search-word.label=Incremental Search for $Word
+quick-search-word.label=I$ncremental Search for Word
 hypersearch-word.label=H$yperSearch for Word
+whole-word.label=$Whole Word
 ignore-case.label=Ignore $Case
 regexp.label=Regular E$xpressions
 hypersearch-results.label=HyperSearch Results
@@ -1401,6 +1403,8 @@ search.beanshell-replace-btn=Return value of a BeanShell snippet
 search.settings=Settings:
 search.keep=Keep dialog
 search.keep.mnemonic=k
+search.word=Whole word
+search.word.mnemonic=q
 search.case=Ignore case
 search.case.mnemonic=i
 search.regexp=Regular expressions

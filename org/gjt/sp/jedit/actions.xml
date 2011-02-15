@@ -460,6 +460,15 @@
 	</CODE>
 </ACTION>
 
+<ACTION NAME="whole-word">
+	<CODE>
+		SearchAndReplace.setWholeWord(!SearchAndReplace.getWholeWord());
+	</CODE>
+	<IS_SELECTED>
+		SearchAndReplace.getWholeWord();
+	</IS_SELECTED>
+</ACTION>
+
 <ACTION NAME="ignore-case">
 	<CODE>
 		SearchAndReplace.setIgnoreCase(!SearchAndReplace.getIgnoreCase());

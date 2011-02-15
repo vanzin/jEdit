@@ -276,7 +276,7 @@ public class SearchDialog extends EnhancedDialog
 	private JRadioButton stringReplace, beanShellReplace;
 
 	// search settings
-	private JCheckBox keepDialog, ignoreCase, regexp, hyperSearch,
+	private JCheckBox keepDialog, wholeWord, ignoreCase, regexp, hyperSearch,
 		wrap;
 	private JRadioButton searchBack, searchForward;
 	private JRadioButton searchSelection, searchCurrentBuffer,
@@ -519,6 +519,15 @@ public class SearchDialog extends EnhancedDialog
 		searchSettings.add(hyperSearch);
 		hyperSearch.addActionListener(actionHandler);
 
+		searchSettings.add(new JLabel(""));
+		searchSettings.add(new JLabel(""));
+
+		wholeWord = new JCheckBox(jEdit.getProperty("search.word"));
+		wholeWord.setMnemonic(jEdit.getProperty("search.word.mnemonic")
+			.charAt(0));
+		searchSettings.add(wholeWord);
+		wholeWord.addActionListener(actionHandler);
+
 		return searchSettings;
 	} //}}}
 
@@ -698,6 +707,8 @@ public class SearchDialog extends EnhancedDialog
 		if(!reverseEnabled)
 			searchForward.setSelected(true);
 
+		wholeWord.setEnabled(!regexp.isSelected());
+
 		filter.setEnabled(searchAllBuffers.isSelected()
 			|| searchDirectory.isSelected());
 
@@ -730,6 +741,7 @@ public class SearchDialog extends EnhancedDialog
 			// prevents us from handling SearchSettingsChanged
 			// as a result of below
 			saving = true;
+			SearchAndReplace.setWholeWord(wholeWord.isSelected());
 			SearchAndReplace.setIgnoreCase(ignoreCase.isSelected());
 			SearchAndReplace.setRegexp(regexp.isSelected());
 			SearchAndReplace.setReverseSearch(searchBack.isSelected());
@@ -851,6 +863,7 @@ public class SearchDialog extends EnhancedDialog
 	//{{{ load() method
 	private void load()
 	{
+		wholeWord.setSelected(SearchAndReplace.getWholeWord());
 		ignoreCase.setSelected(SearchAndReplace.getIgnoreCase());
 		regexp.setSelected(SearchAndReplace.getRegexp());
 		wrap.setSelected(SearchAndReplace.getAutoWrapAround());
