@@ -330,7 +330,26 @@ public class SearchAndReplace
 		}
 		else if(wholeWord)
 		{
-			matcher = new PatternSearchMatcher("\\b\\Q"+search+"\\E\\b", ignoreCase);
+			String s = Pattern.quote(search);
+			String begin;
+			if (Character.isLetter(search.charAt(0)))
+			{
+				begin = "(?:\\b|^)";
+			}
+			else
+			{
+				begin = "(?:\\B|^)";
+			}
+			String end;
+			if (Character.isLetter(search.charAt(search.length()-1)))
+			{
+				end = "(?:\\b|$)";
+			}
+			else
+			{
+				end = "(?:\\B|$)";
+			}
+			matcher = new PatternSearchMatcher(begin+s+end, ignoreCase);
 		}
 		else
 			matcher = new BoyerMooreSearchMatcher(search, ignoreCase);
