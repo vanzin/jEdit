@@ -4,6 +4,7 @@
  * :folding=explicit:collapseFolds=1:
  *
  * Copyright (C) 1999, 2003 Slava Pestov
+ * Portions copyright (C) 2011 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,9 +60,16 @@ public class MacrosProvider implements DynamicMenuProvider
 	private void createMacrosMenu(JMenu menu, Vector vector, int start)
 	{
 		Vector<JMenuItem> menuItems = new Vector<JMenuItem>();
-
+		int maxItems = jEdit.getIntegerProperty("menu.spillover", 20);
+		JMenu subMenu = null;
 		for(int i = start; i < vector.size(); i++)
 		{
+			if (i != 0 && i % maxItems == 0)
+			{
+				subMenu = new JMenu(jEdit.getProperty("common.more"));
+				createMacrosMenu(subMenu, vector, i+1);
+				break;
+			}
 			Object obj = vector.elementAt(i);
 			if(obj instanceof String)
 			{
@@ -81,6 +89,10 @@ public class MacrosProvider implements DynamicMenuProvider
 		}
 
 		Collections.sort(menuItems, new MenuItemTextComparator());
+
+		if (subMenu != null)
+			menuItems.add(subMenu);
+
 		for(int i = 0; i < menuItems.size(); i++)
 		{
 			menu.add(menuItems.get(i));

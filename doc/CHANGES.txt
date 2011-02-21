@@ -288,6 +288,8 @@ Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ UI
+- The Macros menu can now be splitted if there are too many macros or
+  macro folders (#3172647 - Matthieu Casanova)
 
 - Updated ColorWellButton to use the dialog provided by JColorChooser rather
   than creating its own dialog since the JColorChooser dialog is much richer.
