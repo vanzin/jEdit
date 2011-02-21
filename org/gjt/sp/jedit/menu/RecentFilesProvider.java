@@ -23,7 +23,6 @@
 package org.gjt.sp.jedit.menu;
 
 //{{{ Imports
-
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
 import org.gjt.sp.util.Log;
@@ -67,25 +66,6 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			}
 		}; //}}}
 
-		//{{{ MouseListener...
-		/*
-		MouseListener mouseListener = new MouseAdapter()
-		{
-			public void mouseEntered(MouseEvent evt)
-			{
-				view.getStatus().setMessage(
-					((JMenuItem)evt.getSource())
-					.getActionCommand());
-			}
-
-			public void mouseExited(MouseEvent evt)
-			{
-				view.getStatus().setMessage(null);
-			}
-		};
-		*/
-		//}}}
-		
 		//{{{ ChangeListener...
 		ChangeListener changeListener = new ChangeListener()
 		{
