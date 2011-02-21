@@ -48,8 +48,6 @@ public class PluginsProvider implements DynamicMenuProvider
 			letters[i] = new ArrayList<JMenuItem>();
 		}
 
-		Vector<JMenuItem> pluginMenuItems = new Vector<JMenuItem>();
-
 		PluginJAR[] pluginArray = jEdit.getPluginJARs();
 		for(int i = 0; i < pluginArray.length; i++)
 		{
