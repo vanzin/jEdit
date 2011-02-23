@@ -4,10 +4,14 @@ jEdit 4.4 version history
 
 {{{ Version 4.4pre2
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler, and Matthieu Casanova for
+contributing to this release.
 
 {{{ Bug Fixes
 
+- Fixed an exception that occurs when opening jEdit from command line
+  with some files to open as argument if a jEdit server is running
+  (#3173669 - Matthieu Casanova)
 
 }}}
 {{{ Miscellaneous

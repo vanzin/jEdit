@@ -202,15 +202,27 @@ public class EditServer extends Thread
 			// no views open.
 			// no buffers open if args empty.
 
-			Buffer buffer = jEdit.openFiles(null,parent,args);
+			boolean hasBufferArgs = false;
+
+			for (String arg : args)
+			{
+				if (arg != null)
+				{
+					hasBufferArgs = true;
+					break;
+				}
+			}
+
 
 			boolean restoreFiles = restore
 				&& jEdit.getBooleanProperty("restore")
-				&& (buffer == null
+				&& (!hasBufferArgs
 				|| jEdit.getBooleanProperty("restore.cli"));
 
 			View view = PerspectiveManager.loadPerspective(
 				restoreFiles);
+
+			Buffer buffer = jEdit.openFiles(view,parent,args);
 
 			if(view == null)
 			{
