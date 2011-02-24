@@ -266,6 +266,9 @@ Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
   textarea (#2809978 from Kevin Hunter, Matthieu Casanova)
 }}}
 {{{ Editing
+- Fixed indentation in javacc edit mode that can fail if a token contains
+  "else" (Matthieu Casanova)
+
 - Added new keywords to C# edit mode (patch #3120746 from nherzing,
   Matthieu Casanova)
 
