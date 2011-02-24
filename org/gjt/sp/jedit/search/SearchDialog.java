@@ -707,8 +707,6 @@ public class SearchDialog extends EnhancedDialog
 		if(!reverseEnabled)
 			searchForward.setSelected(true);
 
-		wholeWord.setEnabled(!regexp.isSelected());
-
 		filter.setEnabled(searchAllBuffers.isSelected()
 			|| searchDirectory.isSelected());
 

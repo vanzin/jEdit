@@ -324,35 +324,12 @@ public class SearchAndReplace
 
 		if (regexp)
 		{
-			Pattern re = Pattern.compile(search, 
+			Pattern re = Pattern.compile(search,
 				PatternSearchMatcher.getFlag(ignoreCase));
-			matcher = new PatternSearchMatcher(re, ignoreCase);
-		}
-		else if(wholeWord)
-		{
-			String s = Pattern.quote(search);
-			String begin;
-			if (Character.isLetter(search.charAt(0)))
-			{
-				begin = "(?:\\b|^)";
-			}
-			else
-			{
-				begin = "(?:\\B|^)";
-			}
-			String end;
-			if (Character.isLetter(search.charAt(search.length()-1)))
-			{
-				end = "(?:\\b|$)";
-			}
-			else
-			{
-				end = "(?:\\B|$)";
-			}
-			matcher = new PatternSearchMatcher(begin+s+end, ignoreCase);
+			matcher = new PatternSearchMatcher(re, ignoreCase, wholeWord);
 		}
 		else
-			matcher = new BoyerMooreSearchMatcher(search, ignoreCase);
+			matcher = new BoyerMooreSearchMatcher(search, ignoreCase, wholeWord);
 
 		return matcher;
 	} //}}}
@@ -675,6 +652,9 @@ loop:			for(;;)
 				buffer.getLineOfOffset(start)) == start);
 			endOfLine = true;
 		}
+
+		String noWordSep = (String) buffer.getMode().getProperty("noWordSep");
+		matcher.setNoWordSep(noWordSep);
 		SearchMatcher.Match match = matcher.nextMatch(text,
 			startOfLine,endOfLine,firstTime,reverse);
 		if(match != null)
@@ -1212,6 +1192,8 @@ loop:			while(path != null)
 		boolean smartCaseReplace)
 		throws Exception
 	{
+		String wordBreakChars = (String) buffer.getMode().getProperty("wordBreakChars");
+		matcher.setNoWordSep(wordBreakChars);
 		int occurCount = 0;
 
 		boolean endOfLine = (buffer.getLineEndOffset(

@@ -22,6 +22,8 @@
 
 package org.gjt.sp.jedit.search;
 
+import org.gjt.sp.jedit.TextUtilities;
+
 /**
  * An abstract class for matching strings.
  * @author Slava Pestov
@@ -50,7 +52,80 @@ public abstract class SearchMatcher
 	public abstract Match nextMatch(CharSequence text, boolean start,
 		boolean end, boolean firstTime, boolean reverse);
 
+	/**
+	 * @param noWordSep the chars that are considered as word chars for this search
+	 * @since jEdit 4.5pre1
+	 */
+	public void setNoWordSep(String noWordSep)
+	{
+		if (noWordSep == null)
+			this.noWordSep = "_";
+		else
+			this.noWordSep = noWordSep;
+	}
+
+	/**
+	 * Returns the noWordSep that should be used.
+	 * This is used by the HyperSearchOperationNode that
+	 * needs to remember this property since it can have
+	 * to restore it.
+	 * @return the noWordSep property
+	 */
+	String getNoWordSep()
+	{
+		return noWordSep;
+	}
+
+	/**
+	 * Check if the result is a whole word
+	 * @param text the full text search
+	 * @param start the start match
+	 * @param end the end match
+	 * @return true if the word is a whole word
+	 */
+	protected boolean isWholeWord(CharSequence text, int start, int end)
+	{
+		if (start != 0)
+		{
+			char firstChar = text.charAt(start);
+			char prevChar = text.charAt(start - 1);
+			if (!isEndWord(firstChar, prevChar))
+			{
+				return false;
+			}
+		}
+		if (end < text.length())
+		{
+			char lastChar = text.charAt(end - 1);
+			char nextChar = text.charAt(end);
+			if (!isEndWord(lastChar, nextChar))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isEndWord(char current, char next)
+	{
+		int currentCharType = TextUtilities.getCharType(current, noWordSep);
+		if (currentCharType != TextUtilities.WORD_CHAR)
+			return true;
+
+		int nextCharType = TextUtilities.getCharType(next, noWordSep);
+		return nextCharType != TextUtilities.WORD_CHAR;
+	}
+
 	protected Match returnValue;
+	/**
+	 * true if this SearchMatcher search for whole words only.
+	 */
+	protected boolean wholeWord;
+	/**
+	 * This should contains the noWordSep property of the edit mode of your buffer.
+	 * It contains a list of chars that should be considered as word chars
+	 */
+	protected String noWordSep;
 
 	//{{{ Match class
 	public static class Match
@@ -58,5 +133,11 @@ public abstract class SearchMatcher
 		public int start;
 		public int end;
 		public String[] substitutions;
+
+		@Override
+		public String toString()
+		{
+			return "Match[" + start + ',' + end + ']';
+		}
 	} //}}}
 }
