@@ -443,35 +443,6 @@ public class BeanShell
 		return bsh.getNameSpace();
 	} //}}}
 
-	//{{{ Deprecated functions
-
-	//{{{ runScript() method
-	/**
-	 * @deprecated The <code>rethrowBshErrors</code> parameter is now
-	 * obsolete; call <code>_runScript()</code> or <code>runScript()</code>
-	 * instead.
-	 */
-	@Deprecated
-	public static void runScript(View view, String path,
-		boolean ownNamespace, boolean rethrowBshErrors)
-	{
-		runScript(view,path,null,ownNamespace);
-	} //}}}
-
-	//{{{ eval() method
-	/**
-	 * @deprecated The <code>rethrowBshErrors</code> parameter is now
-	 * obsolete; call <code>_eval()</code> or <code>eval()</code> instead.
-	 */
-	@Deprecated
-	public static Object eval(View view, String command,
-		boolean rethrowBshErrors)
-	{
-		return bsh.eval(view,command);
-	} //}}}
-
-	//}}}
-
 	//{{{ Package-private members
 
 	//{{{ resetClassManager() method

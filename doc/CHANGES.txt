@@ -186,6 +186,13 @@ Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
                       Reader in,
                       boolean ownNamespace,
                       boolean rethrowBshErrors)
+  BeanShell.runScript(View view,
+  		      String path,
+  		      boolean ownNamespace,
+  		      boolean rethrowBshErrors)
+  BeanShell.eval(View view,
+  		 String command,
+  		 boolean rethrowBshErrors)
   BeanShell.eval(View view,
                  NameSpace namespace,
                  String command,
