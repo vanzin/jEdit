@@ -977,7 +977,6 @@ public abstract class TextArea extends JComponent
 	 */
 	public int xyToOffset(int x, int y, boolean round)
 	{
-		FontMetrics fm = painter.getFontMetrics();
 		int height = painter.getLineHeight();
 		int line = y / height;
 
@@ -1065,8 +1064,6 @@ public abstract class TextArea extends JComponent
 		if(screenLine == -1)
 			return null;
 
-		FontMetrics fm = painter.getFontMetrics();
-
 		retVal.y = screenLine * painter.getLineHeight();
 
 		ChunkCache.LineInfo info = chunkCache.getLineInfo(screenLine);
@@ -1103,7 +1100,6 @@ public abstract class TextArea extends JComponent
 		if(chunkCache.needFullRepaint())
 			end = visibleLines;
 
-		FontMetrics fm = painter.getFontMetrics();
 		int y = start * painter.getLineHeight();
 		int height = (end - start + 1) * painter.getLineHeight();
 		painter.repaint(0,y,painter.getWidth(),height);
