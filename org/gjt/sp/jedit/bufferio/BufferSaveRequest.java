@@ -154,6 +154,14 @@ public class BufferSaveRequest extends BufferIORequest
 			if(!twoStageSave)
 				VFSManager.sendVFSUpdate(vfs,path,true);
 		}
+		catch (FileNotFoundException e)
+		{
+			Log.log(Log.ERROR,this,"Unable to save buffer " + e);
+			String[] pp = { e.getMessage() };
+			VFSManager.error(view,path,"ioerror.write-error",pp);
+
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
+		}
 		catch(UnsupportedCharsetException e)
 		{
 			Log.log(Log.ERROR, this, e, e);

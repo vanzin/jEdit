@@ -323,6 +323,10 @@ Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
   General options pane to let the user choose whether to restore the split
   configuration. (Dale Anson)
 
+- If jEdit doesn't have rights to save a buffer, the dialog doesn't display
+  an exception anymore, making the error message less dramatic.
+  (Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 - Dynamic softwrap. Now the softwrap margin is the minimum of the buffer wrap
