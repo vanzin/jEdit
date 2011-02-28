@@ -253,7 +253,9 @@ public class Buffer extends JEditBuffer
 				undoMgr.setLimit(jEdit.getIntegerProperty(
 					"buffer.undoCount",100));
 
-				if(!getFlag(TEMPORARY))
+				if (getFlag(TEMPORARY))
+					setMode();
+				else
 					finishLoading();
 
 				setLoading(false);
