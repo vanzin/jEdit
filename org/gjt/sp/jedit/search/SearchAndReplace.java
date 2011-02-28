@@ -875,9 +875,7 @@ loop:			for(;;)
 
 		view.showWaitCursor();
 
-		boolean smartCaseReplace = (replace != null
-			&& TextUtilities.getStringCase(replace)
-			== TextUtilities.LOWER_CASE);
+		boolean smartCaseReplace = getSmartCaseReplace();
 
 		int fileCount = 0;
 		int occurCount = 0;
