@@ -81,6 +81,10 @@ public class BufferAutosaveRequest extends BufferIORequest
 
 				write(buffer,out);
 			}
+			catch (FileNotFoundException e)
+			{
+				Log.log(Log.WARNING,this,"Unable to save " + e.getMessage());
+			}
 			catch(Exception e)
 			{
 				Log.log(Log.ERROR,this,e);

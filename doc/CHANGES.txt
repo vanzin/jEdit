@@ -10,6 +10,9 @@ Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing,
 Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
 
 {{{ Bug fixes
+- When jEdit is unable to autosave jEdit now logs a warning, but doesn't
+  pop an error dialog every 30 seconds (#3154842 - Matthieu Casanova)
+
 - Collapsing all folds will move the caret outside any fold if necessary
   (Matthieu Casanova)
 
