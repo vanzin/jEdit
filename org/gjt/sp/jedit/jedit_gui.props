@@ -309,7 +309,7 @@ clipboard=cut-append \
 	  paste-deleted \
 	  - \
 	  cut-string-register \
-          copy-string-register \
+	  copy-string-register \
 	  paste-string-register \
 	  - \
 	  cut-append-string-register \
@@ -345,7 +345,7 @@ selection=select-none \
 	  toggle-multi-select \
 	  toggle-rect-select \
 	  - \
-          select-line-range
+	  select-line-range
 selection.label=More $Selection
 select-none.label=Select $None
 select-word.label=Select $Word
@@ -586,13 +586,13 @@ scroll-down-page.label=Page Scroll D$own
 
 #{{{ Splitting menu
 splitting=unsplit-current \
-          unsplit \
-          split-horizontal \
-          split-vertical \
+	  unsplit \
+	  split-horizontal \
+	  split-vertical \
 	  resplit \
 	  - \
-          prev-textarea \
-          next-textarea
+	  prev-textarea \
+	  next-textarea
 splitting.label=$Splitting
 split-horizontal.label=Split $Horizontally
 split-vertical.label=Split $Vertically
@@ -800,14 +800,14 @@ userFeedback.label=Make a suggestion...
 #{{{ Macro strings
 
 macro.temp.header=// This is a temporary macro. First, check over the\n\
-                  // commands to make sure this is what you intended.\n\
-                  // Then, to run this macro, switch to the buffer\n\
-                  // where you would like to execute it and press C+m C+p.
+		  // commands to make sure this is what you intended.\n\
+		  // Then, to run this macro, switch to the buffer\n\
+		  // where you would like to execute it and press C+m C+p.
 
 macro.header=// This is a recorded macro. First, check over the\n\
-             // commands to make sure this is what you intended. Then,\n\
-             // save this buffer, and the macro should appear in the\n\
-             // Macros menu.
+	     // commands to make sure this is what you intended. Then,\n\
+	     // save this buffer, and the macro should appear in the\n\
+	     // Macros menu.
 
 #}}}
 
@@ -2466,8 +2466,8 @@ vfs.browser.commands.encoding.auto-detect=Auto-detect
 
 vfs.browser.open-in.label=Open in
 vfs.browser.open-in=vfs.browser.open-view \
-                    vfs.browser.open-plain-view \
-                    vfs.browser.open-split
+		    vfs.browser.open-plain-view \
+		    vfs.browser.open-split
 vfs.browser.open-view.label=New View
 vfs.browser.open-plain-view.label=New Plain View
 vfs.browser.open-split.label=New Split
