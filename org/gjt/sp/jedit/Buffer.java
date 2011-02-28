@@ -253,6 +253,10 @@ public class Buffer extends JEditBuffer
 				undoMgr.setLimit(jEdit.getIntegerProperty(
 					"buffer.undoCount",100));
 
+				// If the buffer is temporary, we don't need to
+				// call finishLoading() because it sets the FoldHandler
+				// and reload markers. But we always need to set the edit
+				// mode that is necessary for HyperSearch on directories
 				if (getFlag(TEMPORARY))
 					setMode();
 				else
