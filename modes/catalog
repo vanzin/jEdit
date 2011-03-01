@@ -346,6 +346,9 @@
 
 <MODE NAME="omnimark"		FILE="omnimark.xml"
 				FILE_NAME_GLOB="*.x{om,in}" />
+				
+<MODE NAME="outline"		FILE="outline.xml"
+				FILE_NAME_GLOB="*.{outline}" />
 
 <MODE NAME="pascal"		FILE="pascal.xml"
 				FILE_NAME_GLOB="*.{pas,dpr,dpk}" />
