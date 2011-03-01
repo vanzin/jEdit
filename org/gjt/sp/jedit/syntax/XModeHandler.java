@@ -263,7 +263,8 @@ public abstract class XModeHandler extends DefaultHandler
 							tag.lastNoLineBreak,
 							tag.lastNoWordBreak,
 							findParent("RULES").lastIgnoreCase,
-							tag.lastEscape));
+							tag.lastEscape,
+							tag.lastEndRegexp));
 					}
 					else
 					{
@@ -278,7 +279,8 @@ public abstract class XModeHandler extends DefaultHandler
 							tag.lastNoLineBreak,
 							tag.lastNoWordBreak,
 							findParent("RULES").lastIgnoreCase,
-							tag.lastEscape));
+							tag.lastEscape,
+							tag.lastEndRegexp));
 					}
 				}
 				catch(PatternSyntaxException re)
@@ -594,6 +596,7 @@ public abstract class XModeHandler extends DefaultHandler
 			lastIgnoreCase = (attrs.getValue("IGNORE_CASE") == null ||
 					"TRUE".equals(attrs.getValue("IGNORE_CASE")));
 			lastHighlightDigits = "TRUE".equals(attrs.getValue("HIGHLIGHT_DIGITS"));
+			lastRegexp = "TRUE".equals(attrs.getValue("REGEXP"));
 			lastDigitRE = attrs.getValue("DIGIT_RE");
 
 			tmp = attrs.getValue("NO_WORD_SEP");
@@ -719,6 +722,7 @@ public abstract class XModeHandler extends DefaultHandler
 					target.lastEndPosMatch = ((this.lastAtLineStart ? ParserRule.AT_LINE_START : 0)
 						| (this.lastAtWhitespaceEnd ? ParserRule.AT_WHITESPACE_END : 0)
 						| (this.lastAtWordStart ? ParserRule.AT_WORD_START : 0));
+					target.lastEndRegexp = this.lastRegexp;
 					target.lastAtLineStart = false;
 					target.lastAtWordStart = false;
 					target.lastAtWhitespaceEnd = false;
@@ -756,6 +760,8 @@ public abstract class XModeHandler extends DefaultHandler
 		public boolean lastAtLineStart;
 		public boolean lastAtWhitespaceEnd;
 		public boolean lastAtWordStart;
+		public boolean lastRegexp;
+		public boolean lastEndRegexp;
 		public int lastStartPosMatch;
 		public int lastEndPosMatch;
 		public String lastDigitRE;

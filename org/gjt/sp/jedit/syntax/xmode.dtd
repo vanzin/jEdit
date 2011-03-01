@@ -100,7 +100,9 @@
 <!ELEMENT BEGIN ( #PCDATA ) >
 <!ATTLIST BEGIN %att-position-mix; >
 <!ELEMENT END ( #PCDATA ) >
-<!ATTLIST END %att-position-mix; >
+<!ATTLIST END
+	%att-position-mix;
+	REGEXP %att-bool; >
 
 <!-- EOL_SPAN element -->
 <!ELEMENT EOL_SPAN ( #PCDATA ) >

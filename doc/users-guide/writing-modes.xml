@@ -447,10 +447,10 @@
     <section id="mode-rule-span-regexp">
         <title>The SPAN_REGEXP Tag</title>
         <para>The <literal>SPAN_REGEXP</literal> rule is similar to the
-        <literal>SPAN</literal> rule except the start sequence is taken to be a
-        regular expression. In addition to the attributes supported by the
-        <literal>SPAN</literal> tag, the following attributes are
-        supported:</para>
+        <literal>SPAN</literal> rule except the start sequence and optionally
+        the end sequence are taken to be regular expressions. In addition to the
+        attributes supported by the <literal>SPAN</literal> tag, the following
+        attributes are supported:</para>
         <itemizedlist>
             <listitem>
                 <para><literal>HASH_CHAR</literal> - a literal string which must
@@ -472,6 +472,10 @@
         case where there is no other reliable way to get the highlighting you
         need, for example, with comments in the Cobol programming
         language.</para>
+        <para>In addition, the <literal>END</literal> subtag supports the
+        attribute <literal>REGEXP</literal>, which if set to
+        <literal>TRUE</literal>, tells the highlighter to interpret the
+        <literal>END</literal> text as a regular expression as well.</para>
         <para>The regular expression match cannot span more than one line. Any
         text matched by groups in the <literal>BEGIN</literal> regular
         expression is substituted in the <literal>END</literal> string. See

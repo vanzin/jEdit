@@ -113,6 +113,7 @@ public class TokenMarker
 			context.setInRule(prevContext.inRule);
 			context.rules = prevContext.rules;
 			context.spanEndSubst = prevContext.spanEndSubst;
+			context.spanEndSubstRegex = prevContext.spanEndSubstRegex;
 		}
 
 		keywords = context.rules.getKeywords();
@@ -286,7 +287,7 @@ unwind:		while(context.parent != null)
 	//{{{ checkDelegateEnd() method
 	private boolean checkDelegateEnd(ParserRule rule)
 	{
-		if(rule.end == null)
+		if(rule.end == null && rule.endRegexp == null)
 			return false;
 
 		LineContext tempContext = context;
@@ -452,6 +453,7 @@ unwind:		while(context.parent != null)
 			//{{{ SEQ
 			case ParserRule.SEQ:
 				context.spanEndSubst = null;
+				context.spanEndSubstRegex = null;
 
 				if((checkRule.action & ParserRule.REGEXP) != 0)
 				{
@@ -504,6 +506,7 @@ unwind:		while(context.parent != null)
 				}
 
 				char[] spanEndSubst = null;
+				Pattern spanEndSubstRegex = null;
 				/* substitute result of matching the rule start
 				 * into the end string.
 				 *
@@ -513,13 +516,24 @@ unwind:		while(context.parent != null)
 				 * ...
 				 * EOF
 				 */
-				if(charSeq != null && checkRule.end != null)
+				if(match != null && match.groupCount() > 0)
 				{
-					spanEndSubst = substitute(match,
-						checkRule.end);
+					if (checkRule.end != null)
+					{
+						spanEndSubst = substitute(match, checkRule.end, false);
+					}
+					else if (checkRule.endRegexp != null)
+					{
+						char[] pattern =
+							checkRule.endRegexp.pattern().toCharArray();
+						pattern = substitute(match, pattern, true);
+						
+						spanEndSubstRegex = Pattern.compile(new String(pattern));
+					}
 				}
 
 				context.spanEndSubst = spanEndSubst;
+				context.spanEndSubstRegex = spanEndSubstRegex;
 				context = new LineContext(
 					checkRule.delegate,
 					context);
@@ -535,12 +549,14 @@ unwind:		while(context.parent != null)
 					pattern.count,context);
 
 				context.spanEndSubst = null;
+				context.spanEndSubstRegex = null;
 				context.setInRule(checkRule);
 				break;
 			//}}}
 			//{{{ MARK_PREVIOUS
 			case ParserRule.MARK_PREVIOUS:
 				context.spanEndSubst = null;
+				context.spanEndSubstRegex = null;
 
 				if(pos != lastOffset)
 				{
@@ -589,17 +605,42 @@ unwind:		while(context.parent != null)
 		// See if the rule's end sequence matches here
 		if((checkRule.action & ParserRule.MARK_FOLLOWING) == 0)
 		{
-			if(context.spanEndSubst != null)
-				pattern.array = context.spanEndSubst;
-			else
-				pattern.array = checkRule.end;
-			pattern.offset = 0;
-			pattern.count = pattern.array.length;
-
-			if(!SyntaxUtilities.regionMatches(context.rules
-				.getIgnoreCase(),line,pos,pattern.array))
+			if ((checkRule.action & ParserRule.END_REGEXP) == 0)
 			{
-				return false;
+				if(context.spanEndSubst != null)
+					pattern.array = context.spanEndSubst;
+				else
+					pattern.array = checkRule.end;
+				pattern.offset = 0;
+				pattern.count = pattern.array.length;
+				
+				if(!SyntaxUtilities.regionMatches(context.rules
+					.getIgnoreCase(),line,pos,pattern.array))
+				{
+					return false;
+				}
+			}
+			else
+			{	
+				CharSequence charSeq =
+					new SegmentCharSequence(line, pos - line.offset,
+								line.count - (pos - line.offset));
+					
+				Pattern regex;
+				if (context.spanEndSubstRegex != null)
+					regex = context.spanEndSubstRegex;
+				else
+					regex = checkRule.endRegexp;
+				Matcher match = regex.matcher(charSeq);
+				if (!match.lookingAt())
+				{
+					return false;
+				}
+				else
+				{
+					// This is used in checkDelegateEnd
+					pattern.count = match.end();
+				}
 			}
 		}
 
@@ -764,7 +805,19 @@ unwind:		while(context.parent != null)
 	} //}}}
 
 	//{{{ substitute() method
-	private static char[] substitute(Matcher match, char[] end)
+	/**
+	 * Perform substitution references in <code>end</code> to the matched groups in
+	 * <code>match</code>. In particular, "$1" is replaced with the first match group in
+	 * <code>match</code>, $2 is replaced with the second, all the way up to "$9". Moreover,
+	 * if group <code>i</code> matched a single bracket character, then "~i" is replaced with
+	 * the complementary bracket.
+	 * @param match the <code>Matcher</code> produced by matching the "start" regex
+	 * @param end the pattern to substitute in to
+	 * @param escape if true, then escape matched text before inserting into <code>end</code>, so that
+	 * 	the result can be interpreted as a regex pattern.
+	 * @return the substituted pattern
+	 */
+	private static char[] substitute(Matcher match, char[] end, boolean escape)
 	{
 		StringBuilder buf = new StringBuilder();
 		for(int i = 0; i < end.length; i++)
@@ -781,8 +834,10 @@ unwind:		while(context.parent != null)
 						buf.append(ch);
 					else if (ch == '$')
 					{
-						buf.append(match.group(
-							digit - '0'));
+						String text = match.group(digit - '0');
+						if (escape)
+							text = TextUtilities.escapeText(text);
+						buf.append(text);
 						i++;
 					}
 					else
@@ -854,6 +909,7 @@ unwind:		while(context.parent != null)
 		public ParserRuleSet rules;
 		// used for SPAN_REGEXP rules; otherwise null
 		public char[] spanEndSubst;
+		public Pattern spanEndSubstRegex;
 		public ParserRule escapeRule;
 
 		//{{{ LineContext constructor
@@ -909,7 +965,8 @@ unwind:		while(context.parent != null)
 				LineContext lc = (LineContext)obj;
 				return lc.inRule == inRule && lc.rules == rules
 					&& StandardUtilities.objectsEqual(parent,lc.parent)
-					&& charArraysEqual(spanEndSubst,lc.spanEndSubst);
+					&& charArraysEqual(spanEndSubst,lc.spanEndSubst)
+					&& StandardUtilities.objectsEqual(spanEndSubstRegex, lc.spanEndSubstRegex);
 			}
 			else
 				return false;
@@ -923,6 +980,7 @@ unwind:		while(context.parent != null)
 			lc.rules = rules;
 			lc.parent = (parent == null) ? null : (LineContext) parent.clone();
 			lc.spanEndSubst = spanEndSubst;
+			lc.spanEndSubstRegex = spanEndSubstRegex;
 			lc.escapeRule = escapeRule;
 
 			return lc;

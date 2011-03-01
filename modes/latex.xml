@@ -176,7 +176,7 @@
     <EOL_SPAN TYPE="COMMENT1">%</EOL_SPAN>
     
     <!-- quotes, including those defined by package `(n)german' -->
-    <SPAN TYPE="LITERAL1"><BEGIN>``</BEGIN><END>''</END></SPAN>
+    <SPAN_REGEXP TYPE="LITERAL1"><BEGIN>``</BEGIN><END REGEXP="TRUE">''|"</END></SPAN_REGEXP>
     <SPAN TYPE="LITERAL1"><BEGIN>"`</BEGIN><END>"'</END></SPAN>
     <SPAN TYPE="LITERAL1"><BEGIN>"&lt;</BEGIN><END>"&gt;</END></SPAN>
     <SPAN TYPE="LITERAL1"><BEGIN>\glqq</BEGIN><END>\grqq</END></SPAN>

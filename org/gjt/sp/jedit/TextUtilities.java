@@ -954,6 +954,19 @@ public class TextUtilities
 		}
 	} //}}}
 
+	//{{{ escapeText() method
+	/**
+	 * Escapes a given string for use in a java.util.regex pattern.
+	 * @since jEdit 4.5pre1
+	 */
+	public static String escapeText(String text)
+	{
+		// Make sure that every "\E" appearing in the text is escaped, and then
+		// surround it with the quotation tags \Q and \E.
+		String result = text.replace("\\E", "\\\\E");
+		return "\\Q" + result + "\\E";
+	} //}}}
+	
 	//{{{ Private members
 	//{{{ formatParagraph() method
 	private static void formatParagraph(String text, int maxLineLength,

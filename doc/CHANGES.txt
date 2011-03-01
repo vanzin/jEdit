@@ -7,9 +7,13 @@ jEdit 4.5 version history
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing,
-Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
+Evan Wright Shlomy Reinstein and Marcelo Vanzin for contributing to this
+release.
 
 {{{ Bug fixes
+- Latex string literal fixed : when starting with `` the String literal can
+  now end with " or '' (#3152515 - patch #3162735 Evan Wright)
+
 - When jEdit is unable to autosave jEdit now logs a warning, but doesn't
   pop an error dialog every 30 seconds (#3154842 - Matthieu Casanova)
 
@@ -329,6 +333,9 @@ Shlomy Reinstein and Marcelo Vanzin for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+- In mode syntax file, SPAN_REGEXP can now end with a regex
+ (patch #3162735 from Evan Wright, Matthieu Casanova)
+
 - Dynamic softwrap. Now the softwrap margin is the minimum of the buffer wrap
   guide and the max length displayable in the TextArea (patch #2846458 from
   Suraj Kurapati, Matthieu Casanova)
