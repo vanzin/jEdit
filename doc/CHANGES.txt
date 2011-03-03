@@ -13,6 +13,10 @@ contributing to this release.
   with some files to open as argument if a jEdit server is running
   (#3173669 - Matthieu Casanova)
 
+- jEdit now force drops from external applications to be COPY and not
+  MOVE drops. It prevents ftp explorer from deleting dropped files
+  (#1208598 - Matthieu Casanova)
+
 }}}
 {{{ Miscellaneous
 
