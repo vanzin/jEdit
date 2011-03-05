@@ -53,7 +53,7 @@ public class FilePropertiesDialog extends EnhancedDialog
 {
 	private final VFSBrowser browser;
 	private final VFSFile[] selectedFiles;
-	private final LocalFile local;
+	private final VFSFile local;
 
 	//{{{ FilePropertiesDialog(View view, VFSBrowser browser) constructor
 	/**
@@ -72,7 +72,7 @@ public class FilePropertiesDialog extends EnhancedDialog
 			selectedFiles = files;
 		else
 			selectedFiles = browser.getSelectedFiles();
-		local = (LocalFile) selectedFiles[0];
+		local = selectedFiles[0];
 		createAndShowGUI();
 	} //}}}
 
@@ -218,7 +218,13 @@ public class FilePropertiesDialog extends EnhancedDialog
 		propField.setLayout(new GridLayout(4, 1));
 		propField.add(new JLabel(jEdit.getProperty("fileprop.name")+": "+local.getName()));
 		propField.add(new JLabel(jEdit.getProperty("fileprop.path")+": "+local.getPath()));
-		propField.add(new JLabel(jEdit.getProperty("fileprop.lastmod")+": "+sdf.format(new Date(local.getModified()))));
+
+		// Show last modified property only for LocalFile
+		if (local instanceof LocalFile)
+		{
+			propField.add(new JLabel(jEdit.getProperty("fileprop.lastmod")+": "+
+				sdf.format(new Date(((LocalFile)local).getModified()))));
+		}
 		if(local.getType() == VFSFile.DIRECTORY)
 		{
 			File ioFile = new File(local.getPath());
