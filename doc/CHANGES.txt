@@ -314,6 +314,9 @@ release.
 
 }}}
 {{{ UI
+- The Statusbar widget choice in global options has now a preview to see how
+  the status bar will look like (Matthieu Casanova)
+
 - A new status bar widget is added to show the last modified time of the current
   buffer (feature request #1551454 - Matthieu Casanova)
 

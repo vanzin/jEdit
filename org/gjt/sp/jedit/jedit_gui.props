@@ -2662,3 +2662,36 @@ errorwidget.popupmenu=logs-remove-all-errors
 logs-remove-all-errors.label=Remove all errors
 
 taskmanager.remainingtasks.label={0} remaining task(s)
+
+#{{{ Statusbar Widgets
+# the widgets should have a label and a sample.
+# the label is displayed when choosing the list of widgets
+# the sample is an example of what the widget will show, for the
+# preview in the options
+statusbar.mode.label=Buffer edit mode (ex:java)
+statusbar.mode.sample=java
+statusbar.fold.label=Buffer fold handler (ex:explicit)
+statusbar.fold.sample=explicit
+statusbar.encoding.label=Buffer encoding (ex:UTF-8)
+statusbar.encoding.sample=UTF-8
+statusbar.wrap.label=Buffer wrapping mode (ex:N)
+statusbar.wrap.sample=N
+statusbar.multiSelect.label=Buffer multiple selection mode (ex:m)
+statusbar.multiSelect.sample=m
+statusbar.rectSelect.label=Buffer rectangular selection mode (ex:r)
+statusbar.rectSelect.sample=r
+statusbar.overwrite.label=Buffer overwrite (ex:o)
+statusbar.overwrite.sample=o
+statusbar.lineSep.label=Buffer line separator (ex:U)
+statusbar.lineSep.sample=U
+statusbar.memory-status.label=Memory status (ex:9/24Mb)
+statusbar.memory-status.sample=9/24Mb
+statusbar.clock.label=Clock (ex:16:45)
+statusbar.clock.sample=16:45
+statusbar.buffersets.label=Bufferset scope (ex:G)
+statusbar.buffersets.sample=G
+statusbar.selection-length.label=Selection's length (ex:192)
+statusbar.selection-length.sample=192
+statusbar.last-modified.label=Date of last modification on disk (ex:12/03/11 16:43)
+statusbar.last-modified.sample=12/03/11 16:43
+#}}}

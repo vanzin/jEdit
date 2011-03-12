@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008-2010 Matthieu Casanova
+ * Copyright (C) 2008-2011 Matthieu Casanova
  * Portions Copyright (C) 2000-2002 Slava Pestov
  *
  * This program is free software; you can redistribute it and/or
@@ -54,18 +54,25 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		setLayout(new BorderLayout());
 
 		//{{{ North
-		JPanel panel = new JPanel(new GridLayout(2,1));
+		JPanel checkboxPanel = new JPanel(new GridLayout(2,1));
 		showStatusbar = new JCheckBox(jEdit.getProperty(
 			"options.status.visible"));
 		showStatusbar.setSelected(jEdit.getBooleanProperty("view.status.visible"));
-		panel.add(showStatusbar);
+		checkboxPanel.add(showStatusbar);
 		showStatusbarPlain = new JCheckBox(jEdit.getProperty(
 			"options.status.plainview.visible"));
 		showStatusbarPlain.setSelected(jEdit.getBooleanProperty("view.status.plainview.visible"));
-		panel.add(showStatusbarPlain);
-		panel.add(new JLabel(jEdit.getProperty(
+		checkboxPanel.add(showStatusbarPlain);
+		checkboxPanel.add(new JLabel(jEdit.getProperty(
 			"options.status.caption")));
-		add(panel, BorderLayout.NORTH);
+
+		JPanel previewPanel = new JPanel();
+		previewStatusBar = new JLabel();
+		previewPanel.add(previewStatusBar);
+		JPanel north = new JPanel(new GridLayout(2,1));
+		north.add(checkboxPanel);
+		north.add(previewPanel);
+		add(north, BorderLayout.NORTH);
 		//}}}
 
 		//{{{ Options panel
@@ -141,6 +148,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 
 
 		list = new JList(listModel);
+		list.setCellRenderer(new WidgetListCellRenderer());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(new ListHandler());
 
@@ -189,6 +197,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		tabs.add("Widgets", widgetsPanel);
 
 		add(tabs, BorderLayout.CENTER);
+		updatePreview();
 	} ///}}}
 
 	//{{{ _save() method
@@ -239,6 +248,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private JCheckBox showStatusbar;
 	private JCheckBox showStatusbarPlain;
 	private DefaultListModel listModel;
+	private JLabel previewStatusBar;
 	private JList list;
 	private RolloverButton add;
 	private RolloverButton remove;
@@ -260,6 +270,24 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		moveUp.setEnabled(index > 0);
 		moveDown.setEnabled(index != -1 && index != listModel.getSize() - 1);
 		edit.setEnabled(index != -1);
+	} //}}}
+
+	//{{{ updateButtons() method
+	/**
+	 * Update the preview
+	 */
+	private void updatePreview()
+	{
+		StringBuilder buf = new StringBuilder();
+		for(int i = 0; i < listModel.getSize(); i++)
+		{
+			if (i != 0)
+				buf.append(' ');
+			String widgetName = (String) listModel.elementAt(i);
+			String sample = jEdit.getProperty("statusbar."+widgetName+".sample",widgetName);
+			buf.append(sample);
+		}
+		previewStatusBar.setText(buf.toString());
 	} //}}}
 
 	//}}}
@@ -289,6 +317,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				listModel.insertElementAt(value,index);
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
+				updatePreview();
 			}
 			else if(source == remove)
 			{
@@ -302,6 +331,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 						list.setSelectedIndex(index);
 				}
 				updateButtons();
+				updatePreview();
 			}
 			else if(source == moveUp)
 			{
@@ -311,6 +341,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				listModel.insertElementAt(selected,index-1);
 				list.setSelectedIndex(index-1);
 				list.ensureIndexIsVisible(index-1);
+				updatePreview();
 			}
 			else if(source == moveDown)
 			{
@@ -320,6 +351,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				listModel.insertElementAt(selected,index+1);
 				list.setSelectedIndex(index+1);
 				list.ensureIndexIsVisible(index+1);
+				updatePreview();
 			}
 			else if(source == edit)
 			{
@@ -332,6 +364,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 				listModel.insertElementAt(value,index);
 				list.setSelectedIndex(index);
 				list.ensureIndexIsVisible(index);
+				updatePreview();
 			}
 		}
 
@@ -353,6 +386,22 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			updateButtons();
 		}
 	} //}}}
+
+	private class WidgetListCellRenderer extends DefaultListCellRenderer
+	{
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value, int index,
+							      boolean isSelected, boolean cellHasFocus)
+		{
+			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			if (value == null)
+				return this;
+			String widget = String.valueOf(value);
+			String label = jEdit.getProperty("statusbar."+widget+".label", widget);
+			setText(label);
+			return this;
+		}
+	}
 
 	//}}}
 
@@ -399,6 +448,7 @@ public class StatusBarOptionPane extends AbstractOptionPane
 					widgets.add(widget);
 			}
 			widgetCombo = new JComboBox(widgets);
+			widgetCombo.setRenderer(new WidgetListCellRenderer());
 			ActionHandler actionHandler = new ActionHandler();
 			labelRadio.addActionListener(actionHandler);
 			widgetRadio.addActionListener(actionHandler);
@@ -437,6 +487,13 @@ public class StatusBarOptionPane extends AbstractOptionPane
 			p = new JPanel(new BorderLayout());
 			p.add(widgetLabel, BorderLayout.WEST);
 			p.add(widgetCombo);
+			if (widgets.isEmpty())
+			{
+				labelRadio.setSelected(true);
+				widgetRadio.setEnabled(false);
+				widgetLabel.setEnabled(false);
+				widgetCombo.setEnabled(false);
+			}
 			center.add(p);
 
 
