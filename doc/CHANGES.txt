@@ -11,6 +11,9 @@ Evan Wright Shlomy Reinstein and Marcelo Vanzin for contributing to this
 release.
 
 {{{ Bug fixes
+- The selectionLength status bar widget is now updated when jEdit starts, and
+  says 0 instead of nothing if there is no selection (Matthieu Casanova)
+
 - Fixed the file properties dialog when the VFS has no rename capability
   (Matthieu Casanova)
 
