@@ -314,6 +314,9 @@ release.
 
 }}}
 {{{ UI
+- A new status bar widget is added to show the last modified time of the current
+  buffer (feature request #1551454 - Matthieu Casanova)
+
 - The Macros menu can now be splitted if there are too many macros or
   macro folders (#3172647 - Matthieu Casanova)
 

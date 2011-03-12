@@ -138,6 +138,10 @@
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new SelectionLengthWidgetFactory();
 	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="last-modified">
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new LastModifiedWidgetFactory();
+	</SERVICE>
 	<!-- }}} -->
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 	
