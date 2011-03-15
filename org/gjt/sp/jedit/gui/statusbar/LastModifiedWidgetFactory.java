@@ -99,7 +99,14 @@ public class LastModifiedWidgetFactory implements StatusWidgetFactory
 			try
 			{
 				VFSFile file = vfs._getFile(session, path, view);
-				lastModifiedLabel.setText(file.getExtendedAttribute(VFS.EA_MODIFIED));
+				if (file == null)
+				{
+					lastModifiedLabel.setText("");
+				}
+				else
+				{
+					lastModifiedLabel.setText(file.getExtendedAttribute(VFS.EA_MODIFIED));
+				}
 			}
 			catch (IOException e)
 			{
