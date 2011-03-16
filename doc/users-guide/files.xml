@@ -167,7 +167,8 @@
 
                 <listitem>
                     <para>If the <guilabel>Backup directory</guilabel> setting
-                    is non-empty, backups are saved in that location. Otherwise,
+                    is non-empty, backups are saved in that location (with the
+                    full path to the original file under it). Otherwise,
                     they are saved in the same directory as the original file.
                     The latter is the default behavior.</para>
                 </listitem>
