@@ -56,6 +56,7 @@ import org.gjt.sp.jedit.syntax.Token;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.ThreadUtilities;
+//}}}
 
 /** Abstract TextArea component.
  *
