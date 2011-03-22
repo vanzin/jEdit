@@ -335,7 +335,7 @@ public class ParserRuleSet
 	} //}}}
 
 	//{{{ Private members
-	private static ParserRuleSet[] standard;
+	private static final ParserRuleSet[] standard;
 
 	static
 	{
@@ -348,7 +348,8 @@ public class ParserRuleSet
 		}
 	}
 
-	private String modeName, setName;
+	private final String modeName;
+	private final String setName;
 	private Hashtable<String, String> props;
 
 	private KeywordMap keywords;
