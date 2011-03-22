@@ -55,7 +55,7 @@ public class TokenMarker
 	{
 		ruleSets.put(rules.getSetName(), rules);
 
-		if (rules.getSetName().equals("MAIN"))
+		if ("MAIN".equals(rules.getSetName()))
 			mainRuleSet = rules;
 	} //}}}
 
@@ -391,8 +391,7 @@ unwind:		while(context.parent != null)
 			return false;
 		}
 
-		int matchedChars = 1;
-		CharSequence charSeq = null;
+		int matchedChars;
 		Matcher match = null;
 
 		// See if the rule's start sequence matches here
@@ -414,8 +413,8 @@ unwind:		while(context.parent != null)
 			// note that all regexps start with \A so they only
 			// match the start of the string
 			//int matchStart = pos - line.offset;
-			charSeq = new SegmentCharSequence(line, pos - line.offset,
-							  line.count - (pos - line.offset));
+			CharSequence charSeq = new SegmentCharSequence(line, pos - line.offset,
+				line.count - (pos - line.offset));
 			match = checkRule.startRegexp.matcher(charSeq);
 			if(!match.lookingAt())
 			{
@@ -973,6 +972,7 @@ unwind:		while(context.parent != null)
 		} //}}}
 
 		//{{{ clone() method
+		@Override
 		public Object clone()
 		{
 			LineContext lc = new LineContext();
