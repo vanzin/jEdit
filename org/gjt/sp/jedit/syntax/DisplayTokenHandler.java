@@ -99,6 +99,7 @@ public class DisplayTokenHandler extends DefaultTokenHandler
 	 * @param context The line context
 	 * @since jEdit 4.2pre3
 	 */
+	@Override
 	public void handleToken(Segment seg, byte id, int offset, int length,
 		TokenMarker.LineContext context)
 	{
