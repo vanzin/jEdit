@@ -39,6 +39,8 @@ public class SyntaxUtilities
 	 * @param text The segment
 	 * @param offset The offset into the segment
 	 * @param match The character array to match
+	 * @return true if the subregion of the segment was
+	 * equals to the character array
 	 * @since jEdit 4.2pre1
 	 */
 	public static boolean regionMatches(boolean ignoreCase, Segment text,
