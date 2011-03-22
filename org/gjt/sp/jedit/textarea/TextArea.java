@@ -24,7 +24,6 @@
 package org.gjt.sp.jedit.textarea;
 
 //{{{ Imports
-
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -744,7 +743,7 @@ public abstract class TextArea extends JComponent
 			// it was not possible to see the second (or next)
 			// subregion of a line
 			ChunkCache.LineInfo[] infos = chunkCache
-			.getLineInfosForPhysicalLine(line);
+				.getLineInfosForPhysicalLine(line);
 			int subregion = ChunkCache.getSubregionOfOffset(
 				offset,infos);
 			setFirstPhysicalLine(line,subregion);
@@ -4016,7 +4015,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 			return;
 		}
-		if(!buffer.getStringProperty("folding").equals("explicit"))
+		if(!"explicit".equals(buffer.getStringProperty("folding")))
 		{
 			throw new TextAreaException("folding-not-explicit");
 		}
@@ -4774,8 +4773,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		String oldWrap = wrap;
 		wrap = buffer.getStringProperty("wrap");
-		hardWrap = wrap.equals("hard");
-		softWrap = wrap.equals("soft");
+		hardWrap = "hard".equals(wrap);
+		softWrap = "soft".equals(wrap);
 		boolean oldWrapToWidth = wrapToWidth;
 		int oldWrapMargin = wrapMargin;
 		setMaxLineLength(buffer.getIntegerProperty("maxLineLen",0));
@@ -4993,6 +4992,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 			Runnable runnable = new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					vertical.setValues(firstLine,visible,0,lineCount);
@@ -5136,7 +5136,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private final MutableCaretEvent caretEvent;
 
 	private boolean caretBlinks;
-	private ElasticTabstopsTabExpander elasticTabstopsExpander = new ElasticTabstopsTabExpander(this);
+	private final ElasticTabstopsTabExpander elasticTabstopsExpander = new ElasticTabstopsTabExpander(this);
 	protected InputHandlerProvider inputHandlerProvider;
 
 	private InputMethodSupport inputMethodSupport;
@@ -5746,9 +5746,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		if(getSelectionCount() != 0)
 		{
 			Selection[] selections = getSelection();
-			for(int i = 0; i < selections.length; i++)
+			for (Selection s : selections)
 			{
-				Selection s = selections[i];
 				if(s instanceof Selection.Rect)
 				{
 					Selection.Rect r = (Selection.Rect)s;
@@ -6235,6 +6234,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private static class CaretBlinker implements ActionListener
 	{
 		//{{{ actionPerformed() method
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(focusedComponent != null && focusedComponent.hasFocus())
@@ -6270,6 +6270,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private class AdjustHandler implements AdjustmentListener
 	{
 		//{{{ adjustmentValueChanged() method
+		@Override
 		public void adjustmentValueChanged(AdjustmentEvent evt)
 		{
 			if(!scrollBarsInitialized)
@@ -6286,6 +6287,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	private class FocusHandler implements FocusListener
 	{
 		//{{{ focusGained() method
+		@Override
 		public void focusGained(FocusEvent evt)
 		{
 			if(bufferChanging)
@@ -6305,6 +6307,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		} //}}}
 
 		//{{{ focusLost() method
+		@Override
 		public void focusLost(FocusEvent evt)
 		{
 			if(!isShowing())
@@ -6325,6 +6328,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	//{{{ MouseWheelHandler class
 	private class MouseWheelHandler implements MouseWheelListener
 	{
+		@Override
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
 			/****************************************************
@@ -6414,6 +6418,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 
 		structureTimer = new Timer(100,new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent evt)
 			{
 				if(focusedComponent != null)
