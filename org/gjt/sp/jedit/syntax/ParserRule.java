@@ -69,7 +69,11 @@ public class ParserRule
 	//}}}
 
 	//{{{ Instance variables
-	public final String upHashChar;
+	/**
+	 * The upHashChar should be a String but it is stored
+	 * in an array making iterations much faster
+	 */
+	public final char[] upHashChar;
 	public final char[] upHashChars;
 	public final int startPosMatch;
 	public final char[] start;
@@ -305,7 +309,7 @@ public class ParserRule
 		result.append(",NO_WORD_BREAK=").append((actionHints & NO_WORD_BREAK) != 0);
 		result.append(",IS_ESCAPE=").append((actionHints & IS_ESCAPE) != 0);
 		result.append(",REGEXP=").append((actionHints & REGEXP) != 0);
-		result.append("],upHashChar=").append(upHashChar);
+		result.append("],upHashChar=").append(new String(upHashChar));
 		result.append(",upHashChars=").append(Arrays.toString(upHashChars));
 		result.append(",startPosMatch=");
 		result.append("[AT_LINE_START=").append((startPosMatch & AT_LINE_START) != 0);
@@ -332,7 +336,7 @@ public class ParserRule
 		String escape)
 	{
 		this.action = action;
-		this.upHashChar = null == hashChar ? null : hashChar.toUpperCase();
+		this.upHashChar = null == hashChar ? null : hashChar.toUpperCase().toCharArray();
 		this.upHashChars = null;
 		this.startPosMatch = startPosMatch;
 		this.start = start;

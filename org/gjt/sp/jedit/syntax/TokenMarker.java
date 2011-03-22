@@ -369,7 +369,7 @@ unwind:		while(context.parent != null)
 		if (null == checkRule.upHashChars)
 		{
 			if (checkRule.upHashChar != null &&
-			    (pos + checkRule.upHashChar.length() < line.array.length) &&
+			    (pos + checkRule.upHashChar.length < line.array.length) &&
 			    !checkHashString(checkRule))
 			{
 				return false;
@@ -613,7 +613,7 @@ unwind:		while(context.parent != null)
 					pattern.array = checkRule.end;
 				pattern.offset = 0;
 				pattern.count = pattern.array.length;
-				
+
 				if(!SyntaxUtilities.regionMatches(context.rules
 					.getIgnoreCase(),line,pos,pattern.array))
 				{
@@ -884,9 +884,9 @@ unwind:		while(context.parent != null)
 	//{{{ checkHashString() method
 	private boolean checkHashString(ParserRule rule)
 	{
-		for (int i = 0; i < rule.upHashChar.length(); i++)
+		for (int i = 0; i < rule.upHashChar.length; i++)
 		{
-			if (Character.toUpperCase(line.array[pos+i]) != rule.upHashChar.charAt(i))
+			if (Character.toUpperCase(line.array[pos+i]) != rule.upHashChar[i])
 			{
 				return false;
 			}

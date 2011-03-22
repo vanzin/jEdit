@@ -139,13 +139,13 @@ public class ParserRuleSet
 		if (null == r.upHashChars)
 		{
 			keys = new Character[1];
-			if ((null == r.upHashChar) || (0 >= r.upHashChar.length()))
+			if ((null == r.upHashChar) || (0 >= r.upHashChar.length))
 			{
 				keys[0] = null;
 			}
 			else
 			{
-				keys[0] = Character.valueOf(r.upHashChar.charAt(0));
+				keys[0] = Character.valueOf(r.upHashChar[0]);
 			}
 		}
 		else
