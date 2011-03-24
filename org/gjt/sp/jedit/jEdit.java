@@ -23,7 +23,6 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
-import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
 
 import java.awt.*;
@@ -261,7 +260,7 @@ public class jEdit
 			{
 				BufferedReader in = new BufferedReader(new FileReader(portFile));
 				String check = in.readLine();
-				if(!check.equals("b"))
+				if(!"b".equals(check))
 					throw new Exception("Wrong port file format");
 
 				int port = Integer.parseInt(in.readLine());
@@ -1046,7 +1045,7 @@ public class jEdit
 	 */
 	public static EditPlugin[] getPlugins()
 	{
-		List<EditPlugin> pluginList = new ArrayList<EditPlugin>();
+		Collection<EditPlugin> pluginList = new ArrayList<EditPlugin>();
 		for(int i = 0; i < jars.size(); i++)
 		{
 			EditPlugin plugin = jars.elementAt(i).getPlugin();
@@ -1482,7 +1481,7 @@ public class jEdit
 		try
 		{
 			URL u = new URL(path);
-			if (u.getProtocol().equals("file"))
+			if ("file".equals(u.getProtocol()))
 				path = URLDecoder.decode(u.getPath());
 		}
 		catch (MalformedURLException mue)
@@ -1574,7 +1573,7 @@ public class jEdit
 
 		if(MiscUtilities.isURL(path))
 		{
-			if(MiscUtilities.getProtocolOfURL(path).equals("file"))
+			if("file".equals(MiscUtilities.getProtocolOfURL(path)))
 				path = path.substring(5);
 		}
 
@@ -2235,8 +2234,7 @@ public class jEdit
 		// will jump to the same location
 		visit(new SaveCaretInfoVisitor());
 
-		Buffer buffer;
-		buffer = buffersFirst;
+		Buffer buffer = buffersFirst;
 
 		int[] states = new int[bufferCount];
 		int i = 0;
@@ -2506,7 +2504,7 @@ public class jEdit
 		File newSettingsDir = new File(settingsDirectory);
 		if(oldSettingsDir.exists() && !newSettingsDir.exists())
 		{
-			Log.log(Log.NOTICE,jEdit.class,"Old settings directory found (HOME/.jedit). Moving to new location ("+newSettingsDir+")");
+			Log.log(Log.NOTICE,jEdit.class,"Old settings directory found (HOME/.jedit). Moving to new location ("+newSettingsDir+ ')');
 			try
 			{
 				oldSettingsDir.renameTo(newSettingsDir);
@@ -2969,6 +2967,7 @@ public class jEdit
 			{
 				EventQueue.invokeLater(new Runnable()
 				{
+					@Override
 					public void run()
 					{
 						showPluginErrorDialog();
@@ -3037,7 +3036,7 @@ public class jEdit
 	private static View viewsLast;
 	private static View activeView;
 
-	private static Vector<Boolean> startupDone = new Vector<Boolean>();
+	private static final List<Boolean> startupDone = new Vector<Boolean>();
 
 	private static Thread mainThread;
 	//}}}
@@ -3297,6 +3296,7 @@ public class jEdit
 		// not need this
 		EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				Thread.currentThread().setContextClassLoader(
@@ -3789,6 +3789,7 @@ public class jEdit
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				int count = getBufferCount();
@@ -3904,6 +3905,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	{
 		VFSManager.runInAWTThread(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				int pos;
@@ -4227,12 +4229,12 @@ loop:		for(int i = 0; i < list.length; i++)
 		if(entry != null && saveCaret && props.get(Buffer.CARET) == null)
 		{
 			props.put(Buffer.CARET, entry.caret);
-			/* if(entry.selection != null)
+			 if(entry.selection != null)
 			{
 				// getSelection() converts from string to
 				// Selection[]
 				props.put(Buffer.SELECTION,entry.getSelection());
-			} */
+			}
 		}
 
 		if(entry != null && props.get(JEditBuffer.ENCODING) == null)
@@ -4297,6 +4299,7 @@ loop:		for(int i = 0; i < list.length; i++)
 	//{{{ JEditPropertyManager class
 	public static class JEditPropertyManager implements IPropertyManager
 	{
+		@Override
 		public String getProperty(String name)
 		{
 			return jEdit.getProperty(name);
@@ -4306,9 +4309,9 @@ loop:		for(int i = 0; i < list.length; i++)
 	//{{{ DockingLayoutSetter class
 	private static class DockingLayoutSetter implements Runnable
 	{
-		private View view;
-		private ViewConfig config;
-		private int startupDoneIndex;
+		private final View view;
+		private final ViewConfig config;
+		private final int startupDoneIndex;
 
 		DockingLayoutSetter(View view, ViewConfig config, int startupDoneIndex)
 		{
@@ -4317,6 +4320,7 @@ loop:		for(int i = 0; i < list.length; i++)
 			this.startupDoneIndex = startupDoneIndex;
 		}
 
+		@Override
 		public void run()
 		{
 			DockableWindowManager wm = view.getDockableWindowManager();
