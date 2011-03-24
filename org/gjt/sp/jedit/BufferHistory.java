@@ -277,7 +277,7 @@ public class BufferHistory
 
 	//{{{ Private members
 	private static LinkedList<Entry> history;
-	private static ReentrantReadWriteLock historyLock;
+	private static final ReentrantReadWriteLock historyLock;
 	private static SettingsXML recentXML;
 
 	//{{{ Class initializer
@@ -379,7 +379,7 @@ public class BufferHistory
 			}
 
 			Selection sel;
-			if(type.equals("range"))
+			if("range".equals(type))
 				sel = new Selection.Range(start,end);
 			else //if(type.equals("rect"))
 				sel = new Selection.Rect(start,end);
@@ -393,7 +393,7 @@ public class BufferHistory
 	} //}}}
 
 	//{{{ trimToLimit() method
-	private static void trimToLimit(LinkedList<Entry> list)
+	private static void trimToLimit(Deque<Entry> list)
 	{
 		int max = jEdit.getIntegerProperty("recentFiles",50);
 		while(list.size() > max)
@@ -411,14 +411,16 @@ public class BufferHistory
 	{
 		public LinkedList<Entry> result = new LinkedList<Entry>();
 
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId)
 		{
 			return XMLUtilities.findEntity(systemId, "recent.dtd", getClass());
 		}
 
+		@Override
 		public void endElement(String uri, String localName, String name)
 		{
-			if(name.equals("ENTRY"))
+			if("ENTRY".equals(name))
 			{
 				result.addLast(new Entry(
 					path,caret,selection,
@@ -430,19 +432,20 @@ public class BufferHistory
 				encoding = null;
 				mode = null;
 			}
-			else if(name.equals("PATH"))
+			else if("PATH".equals(name))
 				path = charData.toString();
-			else if(name.equals("CARET"))
+			else if("CARET".equals(name))
 				caret = Integer.parseInt(charData.toString());
-			else if(name.equals("SELECTION"))
+			else if("SELECTION".equals(name))
 				selection = charData.toString();
-			else if(name.equals("ENCODING"))
+			else if("ENCODING".equals(name))
 				encoding = charData.toString();
-			else if(name.equals("MODE"))
+			else if("MODE".equals(name))
 				mode = charData.toString();
 			charData.setLength(0);
 		}
 
+		@Override
 		public void characters(char[] ch, int start, int length)
 		{
 			charData.append(ch,start,length);
@@ -456,7 +459,7 @@ public class BufferHistory
 		private String selection;
 		private String encoding;
 		private String mode;
-		private StringBuilder charData = new StringBuilder();
+		private final StringBuilder charData = new StringBuilder();
 	} //}}}
 
 	//}}}
