@@ -68,6 +68,12 @@ release.
   (#3173669 - Matthieu Casanova)
 }}}
 {{{ API Changes
+- New methods JEditBuffer.setContextInsensitive(boolean) and
+  JEditBuffer.GetContextInsensitive() to manage the new attribute
+  contextInsensitive of JEditBuffer. By default it is set by the
+  edit mode, but you can change it's value (careful, it can break
+  the syntax highlight of your buffer if you don't know what you do)
+  (Matthieu Casanova)
 
 - New method TextArea.getVisibleLineText(screenLine) and
   TextArea.getVisibleLineSegment() that returns
@@ -348,6 +354,52 @@ release.
 
 }}}
 {{{ Miscellaneous
+- New property for the edit modes : contextInsensitive.
+  By default the value is false, but if set to true the color highlight of
+  a line of the buffer do not depends on the previous line. It works of course
+  only for modes that do not have multiline comments and no tokens that can be
+  on several lines (like literal in several languages)
+  This cause major performances improvement on buffers that use an edit mode
+  that is context insensitive.
+  The following modes are now context insensitive :
+  assembly-agc
+  assembly-ags
+  assembly-m68k
+  assembly-mcs51
+  assembly-parrot
+  assembly-r2000
+  assembly-x86
+  awk
+  cobol
+  csv
+  csv-commits
+  eiffel
+  foxpro
+  hex
+  htaccess
+  hxml
+  icon
+  ini
+  jmk
+  json
+  mqsc
+  outline
+  props
+  ptl
+  pvwave
+  rfc
+  rib
+  rpmspec
+  sip
+  splus
+  sqr
+  squidconf
+  svn-commit
+  text
+  vhdl
+  visualbasic
+  yab
+
 - In mode syntax file, SPAN_REGEXP can now end with a regex
  (patch #3162735 from Evan Wright, Matthieu Casanova)
 

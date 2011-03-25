@@ -6,6 +6,7 @@
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="#" />
 		<PROPERTY NAME="noWordSep" VALUE="-" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true" />
 	</PROPS>
 	<RULES HIGHLIGHT_DIGITS="FALSE" IGNORE_CASE="TRUE">
 

@@ -5,6 +5,7 @@
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="#" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true" />
 	</PROPS>
 	<RULES>
 		<!-- comments -->

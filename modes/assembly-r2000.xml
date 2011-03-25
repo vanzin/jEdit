@@ -12,6 +12,7 @@
 	<PROPS>
 		<PROPERTY NAME="blockComment" VALUE="#" />
 		<PROPERTY NAME="wordBreakChars" VALUE=",()" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
 	</PROPS>
 
 	<RULES HIGHLIGHT_DIGITS="TRUE" IGNORE_CASE="TRUE">

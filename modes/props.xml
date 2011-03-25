@@ -5,6 +5,7 @@
 <MODE>
 	<PROPS>
 		<PROPERTY NAME="lineComment" VALUE="#" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true" />
 	</PROPS>
 	<RULES DEFAULT="KEYWORD1">
 		<EOL_SPAN TYPE="COMMENT1" AT_LINE_START="TRUE">#</EOL_SPAN>

@@ -9,6 +9,7 @@
 		<PROPERTY NAME="indentOpenBrackets" VALUE="{" />
 		<PROPERTY NAME="indentCloseBrackets" VALUE="}" />
 		<PROPERTY NAME="wordBreakChars" VALUE="|.\\:,+-*/=?^!@%&lt;&gt;&amp;" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true" />
 	</PROPS>
 	<RULES IGNORE_CASE="FALSE"
 	    HIGHLIGHT_DIGITS="TRUE"

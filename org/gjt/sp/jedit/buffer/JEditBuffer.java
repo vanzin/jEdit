@@ -1332,7 +1332,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		int firstInvalidLineContext = lineMgr.getFirstInvalidLineContext();
 		int start;
-		if(textMode || firstInvalidLineContext == -1)
+		if(contextInsensitive || firstInvalidLineContext == -1)
 		{
 			start = lineIndex;
 		}
@@ -1353,7 +1353,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 			oldContext = lineMgr.getLineContext(i);
 
 			TokenMarker.LineContext prevContext = (
-				(i == 0 || textMode) ? null
+				(i == 0 || contextInsensitive) ? null
 				: lineMgr.getLineContext(i - 1)
 			);
 
@@ -1839,7 +1839,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 
 		this.mode = mode;
 
-		textMode = "text".equals(mode.getName());
+		contextInsensitive = mode.getBooleanProperty("contextInsensitive");
 
 		setTokenMarker(mode.getTokenMarker());
 
@@ -2354,6 +2354,32 @@ loop:		for(int i = 0; i < seg.count; i++)
 		return undoMgr.canRedo();
 	} //}}}
 
+	//{{{ isContextInsensitive() method
+	/**
+	 * Returns true if the buffer highlight is
+	 * not sensitive to the context.
+	 * @return true if the highlight is insensitive to
+	 * the context
+	 * @since jEdit 4.5pre1
+	 */
+	public boolean isContextInsensitive()
+	{
+		return contextInsensitive;
+	}//}}}
+
+	//{{{ setContextInsensitive() method
+	/**
+	 * Set the buffer to be insensitive to the context during
+	 * highlight.
+	 * @param contextInsensitive the new contextInsensitive value
+	 * the context
+	 * @since jEdit 4.5pre1
+	 */
+	public void setContextInsensitive(boolean contextInsensitive)
+	{
+		this.contextInsensitive = contextInsensitive;
+	}//}}}
+
 	//}}}
 
 	//{{{ Protected members
@@ -2361,7 +2387,11 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 * The edit mode of the buffer.
 	 */
 	protected Mode mode;
-	protected boolean textMode;
+	/**
+	 * If true the syntax highlight is context insensitive.
+	 * To highlight a line we don't keed the context of the previous line.
+	 */
+	protected boolean contextInsensitive;
 	protected UndoManager undoMgr;
 
 	//{{{ Event firing methods

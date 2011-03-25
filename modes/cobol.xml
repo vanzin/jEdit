@@ -4,6 +4,9 @@
 
 <!-- COBOL mode, by Matthias M. Schneider -->
 <MODE>
+	<PROPS>
+		<PROPERTY NAME="contextInsensitive" VALUE="true"/>
+	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
 		<EOL_SPAN_REGEXP TYPE="COMMENT1" AT_LINE_START="TRUE">.{6}(\*|/)</EOL_SPAN_REGEXP>
 

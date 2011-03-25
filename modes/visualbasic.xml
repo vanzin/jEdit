@@ -20,6 +20,7 @@
 			VALUE="\s*(do until|else|elseif|for|function|if|select case|sub|while)\s*(then)?.*"
 		/>
 		<PROPERTY NAME="unindentNextLine" VALUE="\s*(end (if|select)|loop|wend)\s*" />
+		<PROPERTY NAME="contextInsensitive" VALUE="true" />
 	</PROPS>
 
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE">
