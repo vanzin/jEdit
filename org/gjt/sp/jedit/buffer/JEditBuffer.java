@@ -424,13 +424,12 @@ public class JEditBuffer
 	 */
 	public int getPriorNonEmptyLine(int lineIndex)
 	{
-		int returnValue = -1;
-
 		if (!mode.getIgnoreWhitespace())
 		{
 			return lineIndex - 1;
 		}
 
+		int returnValue = -1;
 		for(int i = lineIndex - 1; i >= 0; i--)
 		{
 			Segment seg = new Segment();
@@ -841,23 +840,23 @@ public class JEditBuffer
 
 			for(int i = 0; i < lines.length; i++)
 			{
-				int pos, lineStart, lineEnd, tail;
 				Segment seg = new Segment();
 				getLineText(lines[i],seg);
 
 				// blank line
 				if (seg.count == 0) continue;
 
-				lineStart = seg.offset;
-				lineEnd = seg.offset + seg.count - 1;
+				int lineStart = seg.offset;
+				int lineEnd = seg.offset + seg.count - 1;
 
+				int pos;
 				for (pos = lineEnd; pos >= lineStart; pos--)
 				{
 					if (!Character.isWhitespace(seg.array[pos]))
 						break;
 				}
 
-				tail = lineEnd - pos;
+				int tail = lineEnd - pos;
 
 				// no whitespace
 				if (tail == 0) continue;
@@ -2358,7 +2357,9 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ Protected members
-
+	/**
+	 * The edit mode of the buffer.
+	 */
 	protected Mode mode;
 	protected boolean textMode;
 	protected UndoManager undoMgr;
@@ -2664,13 +2665,13 @@ loop:		for(int i = 0; i < seg.count; i++)
 	//}}}
 
 	//{{{ Private members
-	private List<Listener> bufferListeners;
+	private final List<Listener> bufferListeners;
 	private final ReentrantReadWriteLock lock;
-	private ContentManager contentMgr;
-	private LineManager lineMgr;
-	private PositionManager positionMgr;
+	private final ContentManager contentMgr;
+	private final LineManager lineMgr;
+	private final PositionManager positionMgr;
 	private FoldHandler foldHandler;
-	private IntegerArray integerArray;
+	private final IntegerArray integerArray;
 	private TokenMarker tokenMarker;
 	private boolean undoInProgress;
 	private boolean dirty;
@@ -2880,7 +2881,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	}
 	 //}}}
 	
-	public String columnBlockLock = "columnBlockLock";
+	public final String columnBlockLock = "columnBlockLock";
 	
 	//{{{ indentUsingElasticTabstops() method
 	public void indentUsingElasticTabstops()
