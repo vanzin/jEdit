@@ -262,13 +262,6 @@
             take effect.</para>
         </section>
 
-        <section id="autosave-backups-pane">
-            <title>The Autosave and Backup Pane</title>
-
-            <para>The <guibutton>Autosave</guibutton> option pane contains
-            settings for the autosave and backup features. See <xref
-            linkend="autosave" /> and <xref linkend="backups" />.</para>
-        </section>
 
         <section id="context-pane">
             <title>The Context Menu Pane</title>
@@ -281,11 +274,12 @@
         <section id="docking-pane">
             <title>The Docking Pane</title>
 
-            <para>The <guibutton>Docking</guibutton> option pane specifies
-            docking location for various dockable windows. Another way to
+            <para>The <guibutton>Docking</guibutton> option pane shows a 
+            list of available dockables, and allows you to specify
+            docking locations for each of them. Another way to
             specify docking locations is to use the popup menus associated with each dockable window. </para>
 
-            <para> It is possible to configure jEdit to automatically load and/or save <emphasis role="bold">Docking Layouts</emphasis> (similar to eclipse perspectives) based on the edit mode of your current buffer through the checkboxes in this pane. See <xref linkend="docking" />.
+            <para> It is possible to configure jEdit to automatically load and/or save <emphasis role="bold">Docking Layouts</emphasis> (similar to eclipse perspectives) based on the edit mode of your current b uffer through the checkboxes in this pane. See <xref linkend="docking" />.
             </para>
 
 
@@ -432,6 +426,14 @@
             connections, for example when downloading plugins.</para>
         </section>
 
+        <section id="autosave-backups-pane">
+            <title>The Saving and Backup Pane</title>
+
+            <para>The <guibutton>Saving and Backup</guibutton> option pane contains
+            settings for the autosave and backup features. See <xref
+            linkend="autosave" /> and <xref linkend="backups" />.</para>
+        </section>
+        
         <section id="shortcuts-pane">
             <title>The Shortcuts Pane</title>
 
