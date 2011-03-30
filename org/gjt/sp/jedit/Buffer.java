@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.text.Segment;
 
 import org.gjt.sp.jedit.browser.VFSBrowser;
@@ -1113,17 +1112,57 @@ public class Buffer extends JEditBuffer
 		Mode mode = ModeProvider.instance.getModeForFile(path, firstLine);
 		if (mode != null)
 		{
-			setMode(mode);
+			boolean forceInsensitive = false;
+			if (!getFlag(TEMPORARY) && getLength() > jEdit.getIntegerProperty("largeBufferSize", 4000000))
+			{
+				boolean contextInsensitive = mode.getBooleanProperty("contextInsensitive");
+				if (!contextInsensitive)
+				{
+					JTextPane tp = new JTextPane();
+					tp.setEditable(false);
+					tp.setText(jEdit.getProperty("largeBufferDialog.message"));
+					int i = JOptionPane.showOptionDialog(jEdit.getActiveView(),
+						tp,
+						jEdit.getProperty("largeBufferDialog.title"),
+						JOptionPane.DEFAULT_OPTION,
+						JOptionPane.WARNING_MESSAGE,
+						null,
+						new String[]{
+							jEdit.getProperty("largeBufferDialog.fullSyntax"),
+							jEdit.getProperty("largeBufferDialog.contextInsensitive"),
+							jEdit.getProperty("largeBufferDialog.defaultMode")},
+						jEdit.getProperty("largeBufferDialog.fullSyntax"));
+					switch (i)
+					{
+						case 0:
+							// do nothing
+							break;
+						case 1:
+							forceInsensitive = true;
+							break;
+						case 2:
+							mode =  getDefaultMode();
+							break;
+					}
+				}
+			}
+			setMode(mode, forceInsensitive);
 			return;
 		}
 
-		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
-		if(defaultMode == null)
-			defaultMode = jEdit.getMode("text");
+		Mode defaultMode = getDefaultMode();
 
 		if (defaultMode != null)
 			setMode(defaultMode);
 	} //}}}
+
+	private static Mode getDefaultMode()
+	{
+		Mode defaultMode = jEdit.getMode(jEdit.getProperty("buffer.defaultMode"));
+		if(defaultMode == null)
+			defaultMode = jEdit.getMode("text");
+		return defaultMode;
+	}
 
 	//}}}
 
@@ -1715,6 +1754,10 @@ public class Buffer extends JEditBuffer
 	private long modTime;
 	private byte[] md5hash;
 	private int initialLength;
+	/**
+	 * The longBufferMode is an option
+	 */
+	private int longBufferMode;
 
 	private final Vector<Marker> markers;
 

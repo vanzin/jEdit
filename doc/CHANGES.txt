@@ -400,6 +400,10 @@ release.
   visualbasic
   yab
 
+- When editing a big file, a dialog will suggest to disable syntax
+  highlight or make it context-insensitive so that jEdit remains fast
+  (Matthieu Casanova)
+
 - In mode syntax file, SPAN_REGEXP can now end with a regex
  (patch #3162735 from Evan Wright, Matthieu Casanova)
 
