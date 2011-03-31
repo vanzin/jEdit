@@ -1122,7 +1122,7 @@ public class Buffer extends JEditBuffer
 					tp.setText(jEdit.getProperty("largeBufferDialog.message"));
 					int i = JOptionPane.showOptionDialog(jEdit.getActiveView(),
 						tp,
-						jEdit.getProperty("largeBufferDialog.title"),
+						jEdit.getProperty("largeBufferDialog.title", new String[]{name}),
 						JOptionPane.DEFAULT_OPTION,
 						JOptionPane.WARNING_MESSAGE,
 						null,

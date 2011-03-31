@@ -1190,7 +1190,7 @@ error-list.plugin-manager=Plugin Manager
 #}}}
 
 #{{{
-largeBufferDialog.title=Large buffer
+largeBufferDialog.title=Large buffer {0}
 largeBufferDialog.message=The buffer is very large and jEdit may become\n\
 	unresponsive because of syntax highlight. You should consider the\n\
 	following options.\n\
