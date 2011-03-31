@@ -1095,21 +1095,20 @@ public class Buffer extends JEditBuffer
 	 */
 	public void setMode()
 	{
+		Mode mode = null;
 		String userMode = getStringProperty("mode");
 		if(userMode != null)
 		{
 			unsetProperty("mode");
-			Mode m = ModeProvider.instance.getMode(userMode);
-			if(m != null)
-			{
-				setMode(m);
-				return;
-			}
+			mode = ModeProvider.instance.getMode(userMode);
 		}
 
-		String firstLine = getLineText(0);
+		if (mode == null)
+		{
+			String firstLine = getLineText(0);
+			mode = ModeProvider.instance.getModeForFile(path, firstLine);
+		}
 
-		Mode mode = ModeProvider.instance.getModeForFile(path, firstLine);
 		if (mode != null)
 		{
 			boolean forceInsensitive = false;
