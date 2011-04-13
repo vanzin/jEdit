@@ -145,7 +145,7 @@ void showShortcuts(View view)
 
 	Vector v = new Vector();
 	makeShortcutsVector(v);
-	MiscUtilities.quicksort(v, new MiscUtilities.StringICaseCompare());
+	Collections.sort(v, new StandardUtilities.StringCompare());
 
 	table = new JTable(v, makeRow( "Name", "Shortcut-1", "Shortcut-2"));
 	table.getColumnModel().getColumn(0).setPreferredWidth(200);

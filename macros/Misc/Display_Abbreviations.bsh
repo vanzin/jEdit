@@ -112,8 +112,8 @@ Vector makeTableDataForMode(Vector v, String name)
 			row.addElement(expandEnum.nextElement());
 			newData.addElement(row);
 		}
-		MiscUtilities.quicksort(newData,
-			new MiscUtilities.StringICaseCompare());
+		Collections.sort(newData,
+			new StandardUtilities.StringCompare(true));
 		currentSet = name;
 		if( v != null)
 			v.removeAllElements();

@@ -27,7 +27,7 @@ buf.append("The jEdit action bar can be opened via the Utilities menu and is usu
 buf.append("assigned to the C+ENTER keyboard shortcut.\n\n");
 
 actionSets = jEdit.getActionSets();
-Arrays.sort(actionSets,new MiscUtilities.StringICaseCompare());
+Arrays.sort(actionSets,new StandardUtilities.StringCompare(true));
 
 for(i = 0; i < actionSets.length; i++)
 {
@@ -37,7 +37,7 @@ for(i = 0; i < actionSets.length; i++)
 		buf.append("{{{ " + actionSet.getLabel() + "\n");
 
 		actions = actionSet.getActionNames();
-		Arrays.sort(actions,new MiscUtilities.StringICaseCompare());
+		Arrays.sort(actions,new StandardUtilities.StringCompare());
 
 		for(j = 0; j < actions.length; j++)
 		{
