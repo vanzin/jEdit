@@ -28,8 +28,16 @@ void setCaret(int selectionStart, int selectionEnd)
 
 String getClassName()
 {
-  int selectionStart = textArea.getSelectionStart();
-  int selectionEnd = textArea.getSelectionEnd();
+  int selectionStart;
+  int selectionEnd;
+  if(textArea.getSelection().length != 0){  // if there are selections exists
+      selectionStart = textArea.getSelection(0).getStart();
+      selectionEnd = textArea.getSelection(0).getEnd();
+  }
+  else{		// if no selection
+      selectionStart = textArea.getCaretPosition();
+      selectionEnd = textArea.getCaretPosition();
+  }
   
   String text = textArea.getText();
   int index = text.lastIndexOf("class", selectionStart);
@@ -138,8 +146,16 @@ public String createCppConstructor(String className, String[] typeNames, String[
 
 void parseSelection()
 {
-  int selectionStart = textArea.getSelectionStart();
-  int selectionEnd = textArea.getSelectionEnd();
+  int selectionStart;
+  int selectionEnd;
+  if(textArea.getSelection().length != 0){  // if there are selections exists
+      selectionStart = textArea.getSelection(0).getStart();
+      selectionEnd = textArea.getSelection(0).getEnd();
+  }
+  else{		// if no selection
+      selectionStart = textArea.getCaretPosition();
+      selectionEnd = textArea.getCaretPosition();
+  }
   
   textArea.setCaretPosition(selectionStart);
   int startLine = textArea.getCaretLine();
