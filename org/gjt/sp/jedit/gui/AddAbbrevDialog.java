@@ -29,7 +29,7 @@ public class AddAbbrevDialog extends JDialog
 {
 	public AddAbbrevDialog(View view, String abbrev)
 	{
-		super(view,jEdit.getProperty("add-abbrev.title"),true);
+		super(view,jEdit.getProperty("add-abbrev.title"),false);
 
 		this.view = view;
 
