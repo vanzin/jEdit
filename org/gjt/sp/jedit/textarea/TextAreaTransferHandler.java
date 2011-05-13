@@ -412,6 +412,14 @@ public class TextAreaTransferHandler extends TransferHandler
 		dragSource = null;
 	} //}}}
 
+	//{{{ isUriList() method
+	private boolean isUriList(DataFlavor flavor)
+	{
+		return ("text".equals(flavor.getPrimaryType()) &&
+			"uri-list".equals(flavor.getSubType()) &&
+			flavor.getRepresentationClass() == String.class);
+	} //}}}
+
 	//{{{ canImport() methods
 	@Override
 	public boolean canImport(TransferSupport support)
@@ -425,12 +433,6 @@ public class TextAreaTransferHandler extends TransferHandler
 		}
 	}
 
-	private boolean isUriList(DataFlavor flavor)
-	{
-		return ("text".equals(flavor.getPrimaryType()) &&
-			"uri-list".equals(flavor.getSubType()) &&
-			flavor.getRepresentationClass() == String.class);
-	}
 	@Override
 	public boolean canImport(JComponent c, DataFlavor[] flavors)
 	{
