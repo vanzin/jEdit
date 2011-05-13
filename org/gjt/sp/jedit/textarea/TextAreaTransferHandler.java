@@ -113,9 +113,7 @@ public class TextAreaTransferHandler extends TransferHandler
 
 				for (DataFlavor dataFlavor : dataFlavors)
 				{
-					if ("text".equals(dataFlavor.getPrimaryType()) &&
-						"uri-list".equals(dataFlavor.getSubType()) &&
-						dataFlavor.getRepresentationClass() == String.class)
+					if (isUriList(dataFlavor))
 					{
 						uriListStringDataFlavor = dataFlavor;
 						break;
@@ -427,6 +425,12 @@ public class TextAreaTransferHandler extends TransferHandler
 		}
 	}
 
+	private boolean isUriList(DataFlavor flavor)
+	{
+		return ("text".equals(flavor.getPrimaryType()) &&
+			"uri-list".equals(flavor.getSubType()) &&
+			flavor.getRepresentationClass() == String.class);
+	}
 	@Override
 	public boolean canImport(JComponent c, DataFlavor[] flavors)
 	{
@@ -438,8 +442,8 @@ public class TextAreaTransferHandler extends TransferHandler
 
 		for (DataFlavor flavor : flavors)
 		{
-			if (flavor.equals(
-				DataFlavor.javaFileListFlavor))
+			if (flavor.equals(DataFlavor.javaFileListFlavor) ||
+				isUriList(flavor))
 			{
 				returnValue = true;
 				break;
