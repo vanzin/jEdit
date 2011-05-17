@@ -6,6 +6,9 @@ Thanks to Eric Le Lay, Björn "Vampire" Kautler, Seph Soliman, and Dale Anson
 for contributing to this release.
 
 {{{ Bug Fixes
+- When macros are reloaded, if one of them was overriding a built-in action,
+  the action is not restored if the overriding macro is removed
+  (#3110689 - Matthieu Casanova)
 
 - Fixed caret going to the wrong position when adding explicit folds
   in a buffer that uses an edit mode that has no line comment
