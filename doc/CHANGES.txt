@@ -2,7 +2,7 @@ JEDIT 4.3 VERSION HISTORY
 
 {{{ Version 4.3.3
 
-Thanks to Eric Le Lay, Björn "Vampire" Kautler and Seph Soliman
+Thanks to Eric Le Lay, Björn "Vampire" Kautler, Seph Soliman, and Dale Anson
 for contributing to this release.
 
 {{{ Bug Fixes
@@ -31,6 +31,11 @@ for contributing to this release.
 - jEdit now force drops from external applications to be COPY and not
   MOVE drops. It prevents ftp explorer from deleting dropped files
   (#1208598 - Matthieu Casanova)
+
+- View#getEditPane() could return wrong value after a call of setSplitConfig(), 
+  or resplit() which uses the formar. This could cause some problems including 
+  wrong title of View.
+  (SF.net Plugin Bug #2939615 - Dale Anson)
 
 }}}
 {{{ Miscellaneous
