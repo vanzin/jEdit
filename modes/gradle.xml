@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<!DOCTYPE MODE SYSTEM "xmode.dtd"><!--
-<MODE NAME="groovy"			FILE="groovy.xml"
+<!DOCTYPE MODE SYSTEM "xmode.dtd">
+<!--
+<MODE NAME="gradle"			FILE="gradle.xml"
 				FILE_NAME_GLOB="*.{gradle}"/>
 -->
 <MODE>
