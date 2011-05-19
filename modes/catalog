@@ -186,9 +186,12 @@
 
 <MODE NAME="go"			FILE="go.xml"
 				FILE_NAME_GLOB="*.go" />
+				
+<MODE NAME="gradle"		FILE="gradle.xml"
+				FILE_NAME_GLOB="*.{gradle}" />
 
 <MODE NAME="groovy"		FILE="groovy.xml"
-				FILE_NAME_GLOB="*.{gant,gradle,groovy,grv}"/>
+				FILE_NAME_GLOB="*.{gant,groovy,grv}"/>
 
 <MODE NAME="gsp"			FILE="jsp.xml"
 				FILE_NAME_GLOB="*.{gsp}" />
