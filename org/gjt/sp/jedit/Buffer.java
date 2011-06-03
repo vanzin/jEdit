@@ -57,6 +57,7 @@ import org.gjt.sp.util.IntegerArray;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.ThreadUtilities;
+//}}}
 
 /**
  * A <code>Buffer</code> represents the contents of an open text
