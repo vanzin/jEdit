@@ -2134,8 +2134,7 @@ options.textarea.wrapGuide=Wrap guide:
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
 options.textarea.antiAlias=Anti Aliased smooth text
-options.textarea.antiAlias.tooltip=Slow down display on some systems. \
-Subpixel does not work w/ MS Remote Desktop.
+options.textarea.antiAlias.tooltip=Slows down display on some systems. 
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
 options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialiasing
