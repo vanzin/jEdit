@@ -416,7 +416,7 @@ public class TextAreaTransferHandler extends TransferHandler
 	@Override
 	public boolean canImport(TransferSupport support)
 	{
-		if (support.getTransferable() instanceof TextAreaSelection)
+		if (dragSource != null)
 			return true;
 		else
 		{
