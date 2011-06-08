@@ -3863,24 +3863,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void collapseFold(int line)
 	{
-		int x = chunkCache.subregionOffsetToX(caretLine,
-			caret - getLineStartOffset(caretLine));
-
 		displayManager.collapseFold(line);
-
-		if(displayManager.isLineVisible(caretLine))
-			return;
-
-		line = displayManager.getPrevVisibleLine(caretLine);
-
-		if(!multi)
-		{
-			// cannot use selectNone() beacause the finishCaretUpdate method will reopen the fold
-			invalidateSelectedLines();
-			selectionManager.setSelection((Selection) null);
-		}
-		moveCaretPosition(buffer.getLineStartOffset(line)
-			+ chunkCache.xToSubregionOffset(line,0,x,true));
 	} //}}}
 
 	//{{{ expandFold() method
@@ -4902,6 +4885,22 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		chunkCache.invalidateAll();
 		recalculateLastPhysicalLine();
+
+		if(!displayManager.isLineVisible(caretLine))
+		{
+			int x = chunkCache.subregionOffsetToX(caretLine,
+				caret - getLineStartOffset(caretLine));
+			int line = displayManager.getPrevVisibleLine(caretLine);
+
+			if(!multi)
+			{
+				// cannot use selectNone() because the finishCaretUpdate method will reopen the fold
+				invalidateSelectedLines();
+				selectionManager.setSelection((Selection) null);
+			}
+			moveCaretPosition(buffer.getLineStartOffset(line)
+				+ chunkCache.xToSubregionOffset(line,0,x,true));
+		}
 		repaint();
 	} //}}}
 

@@ -46,6 +46,8 @@ Stephen Blackheath, asitdepends, Michael Schlotter, Robin Neatherway,
 strank, and Hisateru Tanaka for contributing to this release.
 
 {{{ Bug fixes
+- Collapsing all folds will move the caret outside any fold if necessary
+  (Matthieu Casanova)
 
 - Fixed an exception when trying to add new menu items to the context menu
   if some ActionSets have been unloaded (plugin deactivation)
