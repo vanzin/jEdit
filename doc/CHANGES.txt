@@ -26,9 +26,6 @@ release.
 - When jEdit is unable to autosave jEdit now logs a warning, but doesn't
   pop an error dialog every 30 seconds (#3154842 - Matthieu Casanova)
 
-- Collapsing all folds will move the caret outside any fold if necessary
-  (Matthieu Casanova)
-
 - When macros are reloaded, if one of them was overriding a built-in action,
   the action is not restored if the overriding macro is removed
   (#3110689 - Matthieu Casanova)
@@ -38,9 +35,6 @@ release.
 
 - Made jedit.exe to find JDK, so that jEdit runs only with JDK (without
   JRE) like 4.3.x and before. (SF.net bug #3134149 - Kazutoshi Satoda)
-
-- Got rid of extra Component created as parent of every JToolBar in
-  GuiUtilities.loadToolBar() (#2114751-Alan Ezust)
 
 - Fix for tracker 3134215, restore previously opened files setting not being
   considered when restoring split configuration. (#3134215 - Dale Anson)
@@ -54,14 +48,6 @@ release.
 
 - Applied suggestion from bug 3160310 to correctly set permissions on
   symlinked files (Marcelo Vanzin)
-
-- When the cursor was at a start (or end) of non-top (non-bottom) line,
-  Find Next (Previous) for a non-empty regex starting with "^" (ending
-  with "$") wrongly skipped the occurrence at the cursor.
-  (SF.net bug #2953604 - Kazutoshi Satoda)
-
-- Corrected a wrong specifications (javadoc comments) of
-  SearchMatcher#nextMatch(). (SF.net bug #2953604 - Kazutoshi Satoda)
 
 - Fixed an exception that occurs when opening jEdit from command line
   with some files to open as argument if a jEdit server is running
@@ -415,40 +401,6 @@ release.
   Matthieu Casanova)
 
 - Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
-
-- Made our documentation build on FOP 0.93+, 0.20.5 is no longer supported by
-  our files (Björn "Vampire" Kautler)
-
-- Made the Windows installer buildable completely via wine on non-Windows
-  systems (Björn "Vampire" Kautler)
-
-- Removed the BAT launcher in the Windows installer in favor of the EXE
-  launcher (Björn "Vampire" Kautler)
-
-- Fixed the settings for building the Windows launcher (Björn "Vampire" Kautler)
-
-- Made the Deb Ant task compatible to Ant 1.8+ (Björn "Vampire" Kautler)
-
-- Replaced the links to Java 5 documentation with links to Java 6 documentation
-  (Björn "Vampire" Kautler)
-
-- Fixed the build.xml which was for the Windows installer only working if
-  completely run on Windows, making "ant dist-win" on another system and then
-  using "ant dist-win-finish" was broken (Björn "Vampire" Kautler)
-
-- Made the Windows launcher buildable on any system (Björn "Vampire" Kautler)
-
-- README.SRC.txt cleanup (Björn "Vampire" Kautler)
-
-- Made the Windows installer correctly show special characters like german
-  umlauts (Björn "Vampire" Kautler)
-
-- Made the filter tasks use UTF-8 encoding as all our files are UTF-8 encoded
-  (Björn "Vampire" Kautler)
-
-- build files and properties cleanup (Björn "Vampire" Kautler)
-
-- Fixed various indentation errors (Björn "Vampire" Kautler)
 
 - Added a new menu item "New Macro" in Macros menu
   (patch #2983607 from Damien Radtke, Matthieu Casanova)
