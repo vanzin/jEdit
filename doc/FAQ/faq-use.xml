@@ -677,7 +677,16 @@ expand-all-folds.shortcut=C+q x
                     select the fonts used for various displayed items.</para>
                 </answer>
             </qandaentry>
-
+            <qandaentry>
+                <question id="antialiased-text-everywhere">
+                    <para>How can I get antialiased text everywhere? </para>
+                </question>
+                <answer>
+                   <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>.
+                   <para>Starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else. 
+                   You can add these options to the batch file or shell script line that starts jEdit. </para>
+			    </answer>
+            </qandaentry>
             <qandaentry>
                 <question id="settings-add-classpath">
                     <para>I want to add a directory to the classpath. I did this

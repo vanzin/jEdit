@@ -188,15 +188,6 @@ view.unsplitCurrent();
                 </answer>
             </qandaentry>
             <qandaentry>
-                <question id="antialiased-text-everywhere">
-                    <para>How can I get antialiased text everywhere? </para>
-                </question>
-                <answer>
-                   <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>. Note that "Standard" works over Microsoft remote desktop, while "subpixel" does not. <guimenuitem> Fractional Font Metrics</guimenuitem>, a very old option, combined with Subpixel does not seem to do anything good. </para>
-                   <para>Also, starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else. You can add these options to the batch file or shell script line that starts jEdit. </para>
-			    </answer>
-            </qandaentry>
-            <qandaentry>
                 <question id="install-no-such-file">
                     <para>What should I do when the installer displays the
                     message, <screen>No such file or directory</screen>?</para>
