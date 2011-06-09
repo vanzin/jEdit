@@ -390,12 +390,14 @@
 </ACTION>
 <ACTION NAME="global-bufferset">
 	<CODE>
-		editPane.setBufferSetScope(BufferSet.Scope.global);
+		bufferSetManager = jEdit.getBufferSetManager();
+		bufferSetManager.setScope(BufferSet.Scope.global);
 	</CODE>
 </ACTION>
 <ACTION NAME="view-bufferset">
 	<CODE>
-		editPane.setBufferSetScope(BufferSet.Scope.view);
+		bufferSetManager = jEdit.getBufferSetManager();
+		bufferSetManager.setScope(BufferSet.Scope.view);
 	</CODE>
 </ACTION>
 
@@ -411,7 +413,8 @@
 
 <ACTION NAME="editpane-bufferset">
 	<CODE>
-		editPane.setBufferSetScope(BufferSet.Scope.editpane);
+		bufferSetManager = jEdit.getBufferSetManager();
+		bufferSetManager.setScope(BufferSet.Scope.editpane);
 	</CODE>
 </ACTION>
 
