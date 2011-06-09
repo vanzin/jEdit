@@ -682,9 +682,9 @@ expand-all-folds.shortcut=C+q x
                     <para>How can I get antialiased text everywhere? </para>
                 </question>
                 <answer>
-                   <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>.
-                   <para>Starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else. 
-                   You can add these options to the batch file or shell script line that starts jEdit. </para>
+                   <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>. </para>
+                   <para>For the dockables, starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else.  
+                   You can add these options to the batch file or shell script line that starts jEdit.</para>
 			    </answer>
             </qandaentry>
             <qandaentry>
