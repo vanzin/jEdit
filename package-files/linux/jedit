@@ -24,4 +24,4 @@ fi
 
 # Launch application.
 
-exec $JAVA -Xmx${JAVA_HEAP_MAX_SIZE}M -jar /usr/share/jEdit/@jar.filename@ -reuseview "$@" &
+exec $JAVA -Xmx${JAVA_HEAP_MAX_SIZE}M -jar /usr/share/jEdit/@jar.filename@ -reuseview "$@"
