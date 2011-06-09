@@ -606,22 +606,24 @@ loop:			for(;;)
 		}
 
 		CharSequence text;
-		boolean startOfBuffer;
-		boolean endOfBuffer;
+		boolean startOfLine;
+		boolean endOfLine;
 		if(reverse)
 		{
 			text = new ReverseCharSequence(buffer.getSegment(0,start));
-			startOfBuffer = true;
-			endOfBuffer = (start == buffer.getLength());
+			startOfLine = true;
+			endOfLine = (buffer.getLineEndOffset(
+				buffer.getLineOfOffset(start)) - 1 == start);
 		}
 		else
 		{
 			text = buffer.getSegment(start,buffer.getLength() - start);
-			startOfBuffer = (start == 0);
-			endOfBuffer = true;
+			startOfLine = (buffer.getLineStartOffset(
+				buffer.getLineOfOffset(start)) == start);
+			endOfLine = true;
 		}
 		SearchMatcher.Match match = matcher.nextMatch(text,
-			startOfBuffer,endOfBuffer,firstTime,reverse);
+			startOfLine,endOfLine,firstTime,reverse);
 		if(match != null)
 		{
 			jEdit.commitTemporary(buffer);

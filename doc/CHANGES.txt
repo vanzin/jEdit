@@ -9,6 +9,9 @@ contributing to this release.
 
 {{{ Bug Fixes
 
+- Collapsing all folds will move the caret outside any fold if necessary
+  (Matthieu Casanova)
+
 - Fixed an exception that occurs when opening jEdit from command line
   with some files to open as argument if a jEdit server is running
   (#3173669 - Matthieu Casanova)
@@ -16,7 +19,15 @@ contributing to this release.
 - jEdit now force drops from external applications to be COPY and not
   MOVE drops. It prevents ftp explorer from deleting dropped files
   (#1208598 - Matthieu Casanova)
+  
+- When the cursor was at a start (or end) of non-top (non-bottom) line,
+  Find Next (Previous) for a non-empty regex starting with "^" (ending
+  with "$") wrongly skipped the occurrence at the cursor.
+  (SF.net bug #2953604 - Kazutoshi Satoda)
 
+- Corrected a wrong specifications (javadoc comments) of
+  SearchMatcher#nextMatch(). (SF.net bug #2953604 - Kazutoshi Satoda)  
+  
 }}}
 {{{ Miscellaneous
 
@@ -46,8 +57,6 @@ Stephen Blackheath, asitdepends, Michael Schlotter, Robin Neatherway,
 strank, and Hisateru Tanaka for contributing to this release.
 
 {{{ Bug fixes
-- Collapsing all folds will move the caret outside any fold if necessary
-  (Matthieu Casanova)
 
 - Fixed an exception when trying to add new menu items to the context menu
   if some ActionSets have been unloaded (plugin deactivation)
@@ -171,6 +180,7 @@ strank, and Hisateru Tanaka for contributing to this release.
 
 - After using save-as action on a read-only buffer the new buffer is no longer
   read-only (#3148102 - Matthieu Casanova)
+
 
 }}}
 {{{ API changes
