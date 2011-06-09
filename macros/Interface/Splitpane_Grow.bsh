@@ -1,11 +1,11 @@
 /*
- * Splitpane_grow.bsh v1.0 - a BeanShell macro script for the
- * jEdit text editor -
+ * Splitpane_grow.bsh v1.1 - a BeanShell macro script for the jEdit text editor
  * Increases the size of the currently active split pane.
  * 
  * Based on SplitPane_up by Claudio Vicari
- *    (c) 2005 by Alan Ezust
- *   
+ *    (c) 2005, 2011 by Alan Ezust
+ *    Version 1.1 supports more than 2 editpanes. 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -21,16 +21,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  *
- * Checked for jEdit 4.2 API
+ * Checked for jEdit 4.5 API
  *
  */
 
- splitPaneGrow() { 
- 
-     EditPane active_area = view.getEditPane();
+ import javax.swing.JSplitPane;
+ import org.gjt.sp.jedit.GUIUtilities; 
 
+ splitPaneGrow() { 
+     EditPane active_area = view.getEditPane(); 
      if( view.getSplitPane() != null ) {
-         JSplitPane splitPane = view.getSplitPane();
+         splitPane = GUIUtilities.getComponentParent(active_area, JSplitPane.class);
          int minimum = splitPane.getMinimumDividerLocation();
          int maximum = splitPane.getMaximumDividerLocation();
          double actual_position = (double)splitPane.getDividerLocation();
