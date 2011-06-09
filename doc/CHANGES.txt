@@ -4,8 +4,8 @@ jEdit 4.4 version history
 
 {{{ Version 4.4pre2
 
-Thanks to Björn "Vampire" Kautler, and Matthieu Casanova for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
+and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
 
@@ -26,7 +26,11 @@ contributing to this release.
   (SF.net bug #2953604 - Kazutoshi Satoda)
 
 - Corrected a wrong specifications (javadoc comments) of
-  SearchMatcher#nextMatch(). (SF.net bug #2953604 - Kazutoshi Satoda)  
+  SearchMatcher#nextMatch(). (SF.net bug #2953604 - Kazutoshi Satoda)
+
+- Fixed an exception that prevent from opening properties dialog of non local
+  files in the VFS Browser (#3199876 - Matthieu Casanova)
+  
   
 }}}
 {{{ Miscellaneous
