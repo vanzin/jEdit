@@ -17,9 +17,6 @@ release.
 - Fixed the file properties dialog when the VFS has no rename capability
   (Matthieu Casanova)
 
-- Fixed an exception that prevent from opening properties dialog of non local
-  files in the VFS Browser (#3199876 - Matthieu Casanova)
-
 - Latex string literal fixed : when starting with `` the String literal can
   now end with " or '' (#3152515 - patch #3162735 Evan Wright)
 
@@ -415,10 +412,6 @@ release.
 
 - Minor optimization of TextAreaTransferHandler.canImport() method that
   is called when dragging things on the textArea (Matthieu Casanova)
-
-- jEdit now force drops from external applications to be COPY and not
-  MOVE drops. It prevents ftp explorer from deleting dropped files
-  (#1208598 - Matthieu Casanova)
 
 - Allow dragging files with data flavor type "text/uri-list" into jEdit. This
   type is used by several file managers in Ubuntu. (Shlomy Reinstein)
