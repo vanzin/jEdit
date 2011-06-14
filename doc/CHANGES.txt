@@ -19,6 +19,12 @@ and Matthieu Casanova for contributing to this release.
 - jEdit now force drops from external applications to be COPY and not
   MOVE drops. It prevents ftp explorer from deleting dropped files
   (#1208598 - Matthieu Casanova)
+
+- New views no longer have buffersets populated with old view buffers.
+  (#2990965 - Matthieu Casanova)
+  
+- Changing bufferset scopes now saved to properties as default scope.
+  (#3316329 - Matthieu Casanova)
   
 - When the cursor was at a start (or end) of non-top (non-bottom) line,
   Find Next (Previous) for a non-empty regex starting with "^" (ending

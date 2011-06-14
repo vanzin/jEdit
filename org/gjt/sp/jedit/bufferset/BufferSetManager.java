@@ -104,6 +104,7 @@ public class BufferSetManager
 	{
 		if (scope == this.scope)
 			return;
+		jEdit.setProperty("bufferset.scope", scope.name());
 		if (scope.compareTo(this.scope) > 0)
 		{
 			// The new scope is wider
