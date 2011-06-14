@@ -11,14 +11,21 @@ Evan Wright, Shlomy Reinstein and Marcelo Vanzin for contributing to this
 release.
 
 {{{ Bug fixes
+
+- Improve integration with Unity Launcher. Without this change if you pin jEdit
+  to the Launcher and then run it, a separate icon for the running instance is
+  shown. With this change this is correctly merged with the pinned starter.
+  (Björn "Vampire" Kautler)
+
+- Remove sending to background from the Linux start script, otherwise it cannot
+  be used properly as commit editor with the -wait option or to get the -usage
+  output on the commandline properly (Björn "Vampire" Kautler)
+
 - The selectionLength status bar widget is now updated when jEdit starts, and
   says 0 instead of nothing if there is no selection (Matthieu Casanova)
 
 - Fixed the file properties dialog when the VFS has no rename capability
   (Matthieu Casanova)
-
-- Fixed an exception that prevent from opening properties dialog of non local
-  files in the VFS Browser (#3199876 - Matthieu Casanova)
 
 - Latex string literal fixed : when starting with `` the String literal can
   now end with " or '' (#3152515 - patch #3162735 Evan Wright)
@@ -52,8 +59,10 @@ release.
 - Fixed an exception that occurs when opening jEdit from command line
   with some files to open as argument if a jEdit server is running
   (#3173669 - Matthieu Casanova)
+
 }}}
 {{{ API Changes
+
 - New methods JEditBuffer.setContextInsensitive(boolean) and
   JEditBuffer.GetContextInsensitive() to manage the new attribute
   contextInsensitive of JEditBuffer. By default it is set by the
@@ -279,8 +288,10 @@ release.
 
 - Applied patch #2809978 to remove use of deprecated methods in jEdit's
   textarea (#2809978 from Kevin Hunter, Matthieu Casanova)
+
 }}}
 {{{ Editing
+
 - Fixed indentation in javacc edit mode that can fail if a token contains
   "else" (Matthieu Casanova)
 
@@ -306,6 +317,7 @@ release.
 
 }}}
 {{{ UI
+
 - The Statusbar widget choice in global options has now a preview to see how
   the status bar will look like (Matthieu Casanova)
 
@@ -340,8 +352,6 @@ release.
 
 }}}
 {{{ Miscellaneous
-- New view now only contains the current buffer if not global scope
-  (#2990965)
 
 - New property for the edit modes : contextInsensitive.
   By default the value is false, but if set to true the color highlight of
@@ -419,12 +429,9 @@ release.
 - Minor optimization of TextAreaTransferHandler.canImport() method that
   is called when dragging things on the textArea (Matthieu Casanova)
 
-- jEdit now force drops from external applications to be COPY and not
-  MOVE drops. It prevents ftp explorer from deleting dropped files
-  (#1208598 - Matthieu Casanova)
-
 - Allow dragging files with data flavor type "text/uri-list" into jEdit. This
   type is used by several file managers in Ubuntu. (Shlomy Reinstein)
+
 }}}
 
 }}}
