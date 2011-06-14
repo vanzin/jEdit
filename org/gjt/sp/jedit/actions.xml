@@ -631,15 +631,9 @@
 	</CODE>
 </ACTION>
 
-<ACTION NAME="new-view-copy">
-	<CODE>
-		jEdit.newView(view);
-	</CODE>
-</ACTION>
-
 <ACTION NAME="new-view">
 	<CODE>
-		jEdit.newView(view, buffer, new View.ViewConfig());
+		jEdit.newView(view);
 	</CODE>
 </ACTION>
 
