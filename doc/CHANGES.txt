@@ -11,6 +11,7 @@ Evan Wright, Shlomy Reinstein and Marcelo Vanzin for contributing to this
 release.
 
 {{{ Bug fixes
+
 - The selectionLength status bar widget is now updated when jEdit starts, and
   says 0 instead of nothing if there is no selection (Matthieu Casanova)
 
@@ -49,8 +50,10 @@ release.
 - Fixed an exception that occurs when opening jEdit from command line
   with some files to open as argument if a jEdit server is running
   (#3173669 - Matthieu Casanova)
+
 }}}
 {{{ API Changes
+
 - New methods JEditBuffer.setContextInsensitive(boolean) and
   JEditBuffer.GetContextInsensitive() to manage the new attribute
   contextInsensitive of JEditBuffer. By default it is set by the
@@ -276,8 +279,10 @@ release.
 
 - Applied patch #2809978 to remove use of deprecated methods in jEdit's
   textarea (#2809978 from Kevin Hunter, Matthieu Casanova)
+
 }}}
 {{{ Editing
+
 - Fixed indentation in javacc edit mode that can fail if a token contains
   "else" (Matthieu Casanova)
 
@@ -303,6 +308,7 @@ release.
 
 }}}
 {{{ UI
+
 - The Statusbar widget choice in global options has now a preview to see how
   the status bar will look like (Matthieu Casanova)
 
@@ -337,6 +343,7 @@ release.
 
 }}}
 {{{ Miscellaneous
+
 - New property for the edit modes : contextInsensitive.
   By default the value is false, but if set to true the color highlight of
   a line of the buffer do not depends on the previous line. It works of course
@@ -415,6 +422,7 @@ release.
 
 - Allow dragging files with data flavor type "text/uri-list" into jEdit. This
   type is used by several file managers in Ubuntu. (Shlomy Reinstein)
+
 }}}
 
 }}}
