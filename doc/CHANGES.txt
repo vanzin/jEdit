@@ -12,6 +12,10 @@ release.
 
 {{{ Bug fixes
 
+- Remove sending to background from the Linux start script, otherwise it cannot
+  be used properly as commit editor with the -wait option or to get the -usage
+  output on the commandline properly (Björn "Vampire" Kautler)
+
 - The selectionLength status bar widget is now updated when jEdit starts, and
   says 0 instead of nothing if there is no selection (Matthieu Casanova)
 
