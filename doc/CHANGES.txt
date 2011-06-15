@@ -23,6 +23,8 @@ and Matthieu Casanova for contributing to this release.
 - Changing bufferset scopes now saved to properties as default scope.
   (#3316329 - Matthieu Casanova)
   
+- Buffersets no longer populated with open files when creating new view. (#2990965)  
+  
 - When the cursor was at a start (or end) of non-top (non-bottom) line,
   Find Next (Previous) for a non-empty regex starting with "^" (ending
   with "$") wrongly skipped the occurrence at the cursor.
