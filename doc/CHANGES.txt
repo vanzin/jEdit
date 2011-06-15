@@ -62,6 +62,8 @@ release.
 
 }}}
 {{{ API Changes
+- TaskManager.countTasks() returns the number of tasks in queue
+  (Matthieu Casanova)
 
 - New methods JEditBuffer.setContextInsensitive(boolean) and
   JEditBuffer.GetContextInsensitive() to manage the new attribute
@@ -317,6 +319,8 @@ release.
 
 }}}
 {{{ UI
+- New Status bar widget to monitor task manager. (feature #3316561)
+  (Matthieu Casanova)
 
 - The Statusbar widget choice in global options has now a preview to see how
   the status bar will look like (Matthieu Casanova)

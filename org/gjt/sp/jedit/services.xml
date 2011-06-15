@@ -142,6 +142,10 @@
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new LastModifiedWidgetFactory();
 	</SERVICE>
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="task-monitor">
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new TaskMonitorWidgetFactory();
+	</SERVICE>
 	<!-- }}} -->
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
 	
