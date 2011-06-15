@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- QuickNotepad 2.0 help documentation -->
 <!-- Copyright (C) 2001 John Gellene	 -->
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-<article id="QuickNotepad">
-    <articleinfo>
+<article id="QuickNotepad"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
+>
+<articleinfo>
         <author>
             <firstname>John</firstname>
 
@@ -35,9 +35,8 @@
         </legalnotice>
 
         <title>QuickNotepad 4.2</title>
-    </articleinfo>
-
-    <simplesect>
+</articleinfo>
+<section>
         <title>Introduction</title>
 
         <indexterm>
@@ -65,9 +64,8 @@
         <para>The file <filename>changes40.txt</filename> in the plugin's source
         code details the changes that were made to the plugin to conform to the
         new plugin API for jEdit version 4.0.</para>
-    </simplesect>
-
-    <simplesect>
+</section>
+<section>
         <title>Operation</title>
 
         <para><indexterm>
@@ -159,9 +157,8 @@
 
         <para>QuickNotepad ignores function keys and other combination key
         presses.</para>
-    </simplesect>
-
-    <simplesect>
+</section>
+<section>
         <title>Toolbar buttons</title>
 
         <para>Three buttons above the text area provide file management
@@ -204,9 +201,8 @@
         <para>One other operation is available as a keyboard shortcut.
         <guilabel>Bring QuickNotepad to front</guilabel> activates the plugin
         and makes visible if it is currently hidden in a docking window.</para>
-    </simplesect>
-
-    <simplesect id="options">
+</section>
+<section id="options">
         <title>Options</title>
 
         <indexterm>
@@ -244,9 +240,8 @@
                 committed.</para>
             </listitem>
         </itemizedlist>
-    </simplesect>
-
-    <simplesect>
+</section>
+<section>
         <title>Legal notices</title>
 
         <para>The QuickNotepad plugin is released under the GNU General Public
@@ -265,13 +260,12 @@
         copy of the license is included in the file
         <filename>COPYING.DOC.txt</filename> included with the jEdit
         distribution.</para>
-    </simplesect>
-
-    <simplesect>
+</section>
+<section>
         <title>Feedback</title>
 
         <para>Comments, bug reports and other feedback may be sent to the <ulink
         url="mailto:jgellene@nyc.rr.com">author</ulink> or the jEdit-users
         mailing list.</para>
-    </simplesect>
+</section>
 </article>
