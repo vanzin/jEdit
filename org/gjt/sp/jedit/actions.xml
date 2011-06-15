@@ -662,6 +662,7 @@
 <ACTION NAME="new-view">
 	<CODE>
 		View.ViewConfig config = new View.ViewConfig();
+		config.docking = view.getViewConfig().docking;
 		jEdit.newView(view,buffer,config);
 	</CODE>
 </ACTION>
