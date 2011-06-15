@@ -2712,7 +2712,7 @@ statusbar.selection-length.sample=192
 statusbar.last-modified.label=Date of last modification on disk (ex:12/03/11 16:43)
 statusbar.last-modified.sample=12/03/11 16:43
 statusbar.task-monitor.label=Task monitor (ex: 7 task(s))
-statusbar.task-monitor.tooltip=Double-click to see running tasks dockable
+statusbar.task-monitor.tooltip=Click to see running tasks dockable
 statusbar.task-monitor.sample=7 task(s)
 statusbar.task-monitor.template={0} task(s)
 #}}}

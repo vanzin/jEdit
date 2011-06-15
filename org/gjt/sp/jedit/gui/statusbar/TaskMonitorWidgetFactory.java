@@ -59,7 +59,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
                 @Override
                 public void mouseClicked(MouseEvent e)
                 {
-                    if (e.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(e))
+                    if (SwingUtilities.isLeftMouseButton(e))
                     {
                         view.getDockableWindowManager().showDockableWindow("task-monitor");
                     }
