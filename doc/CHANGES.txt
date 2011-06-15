@@ -33,7 +33,10 @@ and Matthieu Casanova for contributing to this release.
 
 - Fixed an exception that prevent from opening properties dialog of non local
   files in the VFS Browser (#3199876 - Matthieu Casanova)
-  
+
+- Remove sending to background from the Linux start script, otherwise it cannot
+  be used properly as commit editor with the -wait option or to get the -usage
+  output on the commandline properly (Björn "Vampire" Kautler)
   
 }}}
 {{{ Miscellaneous
@@ -65,9 +68,11 @@ strank, and Hisateru Tanaka for contributing to this release.
 
 {{{ Bug fixes
 
+
 - Fixed an exception when trying to add new menu items to the context menu
   if some ActionSets have been unloaded (plugin deactivation)
   (Matthieu Casanova #3071355)
+
 
 - Windows installer tries to quit existing jEdit instance before trying to
   install (Björn "Vampire" Kautler)
