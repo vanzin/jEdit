@@ -633,9 +633,15 @@
 
 <ACTION NAME="new-view">
 	<CODE>
+	bsm = jEdit.getBufferSetManager(); 
+	if (bsm.getScope() == BufferSet.Scope.global) {
+		jEdit.newView(view);
+	}
+	else {
 		View.ViewConfig config = new View.ViewConfig();
 		config.docking = view.getViewConfig().docking;
-		jEdit.newView(view,buffer,config);
+		jEdit.newView(view,bsm.createUntitledBuffer(),config);
+	}
 	</CODE>
 </ACTION>
 
