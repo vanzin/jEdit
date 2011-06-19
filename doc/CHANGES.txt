@@ -44,6 +44,8 @@ and Matthieu Casanova for contributing to this release.
   to the Launcher and then run it, a separate icon for the running instance is
   shown. With this change this is correctly merged with the pinned starter.
   (Björn "Vampire" Kautler) 
+
+- BufferSet contents of New View #2990965 and new Plain View #3317405 fixed (Matthieu Casanova)  
   
 }}}
 {{{ Miscellaneous
