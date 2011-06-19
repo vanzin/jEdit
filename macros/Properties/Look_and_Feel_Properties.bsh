@@ -28,13 +28,17 @@
 
 void lookAndFeelProperties()
 {
-	keys = javax.swing.UIManager.getLookAndFeelDefaults().keys();
-	sb = new StringBuffer("--listing look and feel property names--\n");
-	while(keys.hasMoreElements())
-	{
-		sb.append(keys.nextElement());
-		sb.append('\n');
+	defaults = javax.swing.UIManager.getLookAndFeelDefaults();
+	sb = new StringWriter();
+	Properties p = new Properties();
+	for(Iterator it=defaults.entrySet().iterator();it.hasNext();){
+		Map.Entry e = it.next();
+		
+		Object s = e.getKey();
+		Object o = e.getValue();
+		p.put(s.toString(),o.toString());
 	}
+	p.store(sb,"--listing look and feel property names--");
 	newbuf = jEdit.newFile(view);
 	newbuf.insert(0, sb.toString());
 }
