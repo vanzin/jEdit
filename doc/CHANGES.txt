@@ -23,8 +23,11 @@ and Matthieu Casanova for contributing to this release.
 - Changing bufferset scopes now saved to properties as default scope.
   (#3316329 - Matthieu Casanova)
   
-- Buffersets no longer populated with open files when creating new view. (#2990965)  
-  
+- Buffersets no longer populated with open files when creating new view. 
+  (#2990965 - Matthieu Casanova and Alan Ezust)  
+
+- BufferSet contents of new Plain View #3317405 fixed (Matthieu Casanova)
+
 - When the cursor was at a start (or end) of non-top (non-bottom) line,
   Find Next (Previous) for a non-empty regex starting with "^" (ending
   with "$") wrongly skipped the occurrence at the cursor.
@@ -44,8 +47,7 @@ and Matthieu Casanova for contributing to this release.
   to the Launcher and then run it, a separate icon for the running instance is
   shown. With this change this is correctly merged with the pinned starter.
   (Björn "Vampire" Kautler) 
-
-- BufferSet contents of New View #2990965 and new Plain View #3317405 fixed (Matthieu Casanova)  
+ 
   
 }}}
 {{{ Miscellaneous
