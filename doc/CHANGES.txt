@@ -6,6 +6,7 @@ Thanks to Eric Le Lay, Björn "Vampire" Kautler, Seph Soliman, and Dale Anson
 for contributing to this release.
 
 {{{ Bug Fixes
+
 - When macros are reloaded, if one of them was overriding a built-in action,
   the action is not restored if the overriding macro is removed
   (#3110689 - Matthieu Casanova)
@@ -39,18 +40,6 @@ for contributing to this release.
   or resplit() which uses the formar. This could cause some problems including 
   wrong title of View.
   (SF.net Plugin Bug #2939615 - Dale Anson)
-
-}}}
-{{{ Miscellaneous
-
-
-}}}
-{{{ API Changes
-
-
-}}}
-{{{ Editing
-
 
 }}}
 
