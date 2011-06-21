@@ -1,28 +1,5 @@
 JEDIT 4.3 VERSION HISTORY
 
-{{{ Version 4.3.4
-
-Thanks to Björn "Vampire" Kautler for contributing to this release.
-
-{{{ Bug Fixes
-
-
-}}}
-{{{ Miscellaneous
-
-
-}}}
-{{{ API Changes
-
-
-}}}
-{{{ Editing
-
-
-}}}
-
-}}}
-
 {{{ Version 4.3.3
 
 Thanks to Eric Le Lay, Björn "Vampire" Kautler, Seph Soliman and Dale Anson
