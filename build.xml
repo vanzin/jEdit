@@ -10,9 +10,9 @@
 
 	<!-- jEdit Version -->
 	<property name="jedit.version"
-		  value="4.4.1"/>
+		  value="4.4.2"/>
 	<property name="jedit.build.number"
-		  value="04.04.99.01"/>
+		  value="04.04.99.02"/>
 
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
