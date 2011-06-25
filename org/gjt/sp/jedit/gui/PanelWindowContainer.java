@@ -646,7 +646,7 @@ public class PanelWindowContainer implements DockableWindowContainer, DockingAre
 			this.font = font;
 
 			FontRenderContext fontRenderContext
-				= new FontRenderContext(null,true,true);
+				= new FontRenderContext(null,true,false);
 			glyphs = font.createGlyphVector(fontRenderContext,text);
 			width = (int)glyphs.getLogicalBounds().getWidth() + 4;
 			//height = (int)glyphs.getLogicalBounds().getHeight();
