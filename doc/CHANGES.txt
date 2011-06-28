@@ -53,6 +53,7 @@ release.
 
 }}}
 {{{ API Changes
+
 - TaskManager.countTasks() returns the number of tasks in queue
   (Matthieu Casanova)
 
@@ -310,6 +311,7 @@ release.
 
 }}}
 {{{ UI
+
 - New Status bar widget to monitor task manager. (feature #3316561)
   (Matthieu Casanova)
 
@@ -347,6 +349,8 @@ release.
 
 }}}
 {{{ Miscellaneous
+
+- Add some quotes and explicit variable markers to *nix launcher
 
 - New property for the edit modes : contextInsensitive.
   By default the value is false, but if set to true the color highlight of
