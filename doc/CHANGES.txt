@@ -351,6 +351,7 @@ release.
 {{{ Miscellaneous
 
 - Add some quotes and explicit variable markers to *nix launcher
+  (Björn "Vampire" Kautler)
 
 - New property for the edit modes : contextInsensitive.
   By default the value is false, but if set to true the color highlight of
