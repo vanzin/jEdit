@@ -12,15 +12,6 @@ release.
 
 {{{ Bug fixes
 
-- Improve integration with Unity Launcher. Without this change if you pin jEdit
-  to the Launcher and then run it, a separate icon for the running instance is
-  shown. With this change this is correctly merged with the pinned starter.
-  (Björn "Vampire" Kautler)
-
-- Remove sending to background from the Linux start script, otherwise it cannot
-  be used properly as commit editor with the -wait option or to get the -usage
-  output on the commandline properly (Björn "Vampire" Kautler)
-
 - The selectionLength status bar widget is now updated when jEdit starts, and
   says 0 instead of nothing if there is no selection (Matthieu Casanova)
 
