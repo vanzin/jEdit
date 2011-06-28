@@ -129,7 +129,7 @@ public abstract class OperatingSystem
 				dir = System.getProperty("user.home");
 			}
 
-			return new File(dir,name.toLowerCase() + "/" + version).getPath();
+			return new File(dir,name + "/" + version).getPath();
 		}
 
 		public String getExtraClassPath()
@@ -165,11 +165,10 @@ public abstract class OperatingSystem
 
 				mkdirs(directory);
 
-				String name = installer.getProperty("app.name");
-
 				// create app start script
+				String name = installer.getProperty("app.name");
 				String script = directory + File.separatorChar
-					+ name.toLowerCase();
+						+ name.toLowerCase();
 
 				// Delete existing copy
 				new File(script).delete();
@@ -184,23 +183,27 @@ public abstract class OperatingSystem
 				out.write("# Set jvm heap initial and maximum sizes (in megabytes).\n");
 				out.write("JAVA_HEAP_MAX_SIZE=192\n");
 				out.write("\n");
-				out.write("DEFAULT_JAVA_HOME=\""
-					+ System.getProperty("java.home")
-					+ "\"\n");
-				out.write("if [ -z \"$JAVA_HOME\" ]; then\n");
-				out.write("\tJAVA_HOME=\"$DEFAULT_JAVA_HOME\"\n");
+				out.write("# Find a java installation.\n");
+				out.write("if [ -z \"${JAVA_HOME}\" ]; then\n");
+				out.write("	echo 'Warning: $JAVA_HOME environment variable not set! Consider setting it.'\n");
+				out.write("	echo '         Attempting to locate java...'\n");
+				out.write("	j=`which java 2>/dev/null`\n");
+				out.write("	if [ -z \"$j\" ]; then\n");
+				out.write("		echo \"Failed to locate the java virtual machine! Bailing...\"\n");
+				out.write("		exit 1\n");
+				out.write("	else\n");
+				out.write("		echo \"Found a virtual machine at: $j...\"\n");
+				out.write("		JAVA=\"$j\"\n");
+				out.write("	fi\n");
+				out.write("else\n");
+				out.write("	JAVA=\"${JAVA_HOME}/bin/java\"\n");
 				out.write("fi\n");
 				out.write("\n");
 				out.write("# Launch application.\n");
 				out.write("\n");
-				
-				String jar = "\""+ installDir + File.separator
-					+ name.toLowerCase() + ".jar"+"\"";
-
-                
- 				out.write("exec \"$JAVA_HOME/bin/java\"" +
- 					  " -Xmx${JAVA_HEAP_MAX_SIZE}M -jar " +
-					  jar + " \"$@\"\n");
+				out.write("exec \"${JAVA}\" -Xmx${JAVA_HEAP_MAX_SIZE}M -jar \""
+					  + installDir + File.separator
+					  + "jedit.jar\" -reuseview \"$@\"\n");
 				out.close();
 
 				// Make it executable
