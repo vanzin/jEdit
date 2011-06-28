@@ -50,7 +50,7 @@ release.
 - Fixed an exception that occurs when opening jEdit from command line
   with some files to open as argument if a jEdit server is running
   (#3173669 - Matthieu Casanova)
-
+  
 }}}
 {{{ API Changes
 
@@ -289,6 +289,8 @@ release.
 - Fixed indentation in javacc edit mode that can fail if a token contains
   "else" (Matthieu Casanova)
 
+- Factor Mode fix (#3100731 - Valeri Mytinski)  
+  
 - Added new keywords to C# edit mode (patch #3120746 from nherzing,
   Matthieu Casanova)
 
@@ -301,6 +303,8 @@ release.
   spacing in the text area. (#3023134, Dale Anson)
 
 - Added jflex edit mode (Matthieu Casanova)
+
+- New mode for Oracle PL/SQL 11. (#3078863 - Diogo Kollross)
 
 - Haxe mode update (Dion Amago # 3123602)
 
@@ -334,10 +338,6 @@ release.
 
 - New TextArea Option: Choice of color ordering w/ subpixel antialiasing.
   (#2989209 - Alan Ezust)
-
-- New mode for Oracle PL/SQL 11. (#3078863 - Diogo Kollross)
-
-- Factor Mode fix (#3100731 - Valeri Mytinski)
 
 - In conjunction with the fix for tracker 3134215, added a new option to the
   General options pane to let the user choose whether to restore the split
