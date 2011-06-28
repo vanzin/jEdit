@@ -350,6 +350,9 @@ release.
 }}}
 {{{ Miscellaneous
 
+- Update Java installer generated *nix launcher to be the same as the one in
+  the native *nix packages (Björn "Vampire" Kautler)
+
 - Add some quotes and explicit variable markers to *nix launcher
   (Björn "Vampire" Kautler)
 
