@@ -207,12 +207,12 @@
 
         <section id="general-pane">
             <title>The General Pane</title>
-
             <para>The <guibutton>General</guibutton> pane contains various
-            settings, such as the default line separator, the number of recent
-            files to remember, if the buffer list should be sorted, and so
-            on.</para>
-
+            settings, such as 
+            the number of recent files to remember, 
+            how often to check for changed files,
+            if the recent file list should be sorted, 
+            if previously open files or split configurations should be restored on startup, and so on.</para>
         </section>
 
         <section id="abbrevs-pane">
@@ -312,11 +312,12 @@
         <section id="encodings-pane">
             <title>The Encodings Pane</title>
 
-            <para>This option pane is new to jEdit 4.3, and offers international
-            users of jEdit many flexible options for defining how Encodings are
-            handled in jEdit. See <xref linkend="encodings" /> for the
+            <para>This option pane offers 
+            users of jEdit many flexible options for defining how Encodings are handled in jEdit. See <xref linkend="encodings" /> for the
             basics.</para>
 
+            <para>The default line separator character (see <xref linkend="line-separators" />) can be set from here. </para>
+            
             <para> In previous versions of jEdit, there was very little encoding autodetection, so <guilabel>use autodetection when possible</guilabel> is an option you can switch on or off.
             </para>
 

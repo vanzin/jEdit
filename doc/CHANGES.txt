@@ -319,6 +319,8 @@ release.
 - New Status bar widget to monitor task manager. (feature #3316561)
   (Matthieu Casanova)
 
+- Moved Default Line Separator Char from General to Encodings Option Pane.
+  
 - The Statusbar widget choice in global options has now a preview to see how
   the status bar will look like (Matthieu Casanova)
 
