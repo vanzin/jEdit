@@ -11,6 +11,9 @@ Evan Wright, Shlomy Reinstein and Marcelo Vanzin for contributing to this
 release.
 
 {{{ Bug fixes
+- If the current buffer is on a VFS that is not browseable (ex:http), trying
+  to open a new file was trying to browse the path of the current file giving
+  an error (Matthieu Casanova)
 
 - The selectionLength status bar widget is now updated when jEdit starts, and
   says 0 instead of nothing if there is no selection (Matthieu Casanova)
