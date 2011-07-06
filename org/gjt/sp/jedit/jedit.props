@@ -461,6 +461,7 @@ vfs.browser.colors.7.color=#330066
 vfs.browser.colors.8.glob=*.{props,properties}
 vfs.browser.colors.8.color=#666666
 
+browser.custom.context=
 #}}}
 
 #{{{ Plugin manager settings

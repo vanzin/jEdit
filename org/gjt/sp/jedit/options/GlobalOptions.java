@@ -28,6 +28,7 @@ import java.awt.Frame;
 import org.gjt.sp.jedit.gui.OptionsDialog;
 import org.gjt.sp.jedit.msg.PropertiesChanging;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.Log;
 //}}}
 
 public class GlobalOptions extends OptionsDialog
@@ -59,6 +60,7 @@ public class GlobalOptions extends OptionsDialog
 	//{{{ createOptionTreeModel() method
 	protected OptionTreeModel createOptionTreeModel()
 	{
+		Log.log(Log.ERROR, this, "GLOBAL OPTIONS");
 		OptionTreeModel paneTreeModel = new OptionTreeModel();
 		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
 
@@ -89,6 +91,7 @@ public class GlobalOptions extends OptionsDialog
 		OptionGroup browserGroup = new OptionGroup("browser");
 		browserGroup.addOptionPane("browser.general");
 		browserGroup.addOptionPane("browser.colors");
+		browserGroup.addOptionPane("browser.custom.context");
 		rootGroup.addOptionGroup(browserGroup);
 
 		return paneTreeModel;

@@ -24,8 +24,10 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 
 import org.gjt.sp.jedit.io.*;
@@ -158,6 +160,17 @@ public class BrowserCommandsMenu extends JPopupMenu
 			addSeparator();
 			add(createEncodingMenu());
 		}
+		JMenu customMenu = createCustomMenu();
+		if (customMenu != null)
+		{
+			addSeparator();
+			Component[] menuComponents = customMenu.getMenuComponents();
+			for (Component menuComponent : menuComponents)
+			{
+				add((JMenuItem) menuComponent);
+			}
+		}
+
 		addSeparator();
 		add(createPluginMenu(browser));
 		update();
@@ -274,6 +287,18 @@ public class BrowserCommandsMenu extends JPopupMenu
 		menu.add(otherEncoding);
 
 		return encodingMenu;
+	} //}}}
+
+	//{{{ createCustomMenu() method
+	private JMenu createCustomMenu()
+	{
+		if (jEdit.getProperty("browser.custom.context", "").length() != 0)
+		{
+			JMenu custom = GUIUtilities.loadMenu(VFSBrowser.getActionContext(),
+				"browser.custom.context");
+			return custom;
+		}
+		return null;
 	} //}}}
 
 	//{{{ createPluginsMenu() method

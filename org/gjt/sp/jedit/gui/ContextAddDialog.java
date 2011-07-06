@@ -46,10 +46,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
-import org.gjt.sp.jedit.ActionSet;
-import org.gjt.sp.jedit.EditAction;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.AbstractContextOptionPane.MenuItem;
 //}}}
 
@@ -65,7 +63,7 @@ public class ContextAddDialog extends EnhancedDialog
 	private static final String CONTEXT_ADD_DIALOG_LAST_SELECTION = "contextAddDialog.lastSelection";
 
 	//{{{ ContextAddDialog constructor
-	public ContextAddDialog(Component comp)
+	public ContextAddDialog(Component comp, AbstractContextOptionPane.ContextType type)
 	{
 		super(GUIUtilities.getParentDialog(comp),
 		      jEdit.getProperty("options.context.add.title"),
@@ -100,7 +98,15 @@ public class ContextAddDialog extends EnhancedDialog
 
 		JPanel actionPanel = new JPanel(new BorderLayout(6,6));
 
-		ActionSet[] actionsList = jEdit.getActionSets();
+		ActionSet[] actionsList;
+		if (type == AbstractContextOptionPane.ContextType.jEdit)
+		{
+			actionsList = jEdit.getActionSets();
+		}
+		else
+		{
+			actionsList = VFSBrowser.getActionContext().getActionSets();
+		}
 		Collection<ActionSet> actionSets = new TreeSet<ActionSet>();
 		String lastSelectionLabel = jEdit.getProperty(CONTEXT_ADD_DIALOG_LAST_SELECTION);
 		for (ActionSet actionSet : actionsList)
@@ -108,6 +114,18 @@ public class ContextAddDialog extends EnhancedDialog
 			if (actionSet.getActionCount() != 0)
 			{
 				actionSets.add(actionSet);
+			}
+		}
+		if (type == AbstractContextOptionPane.ContextType.browser)
+		{
+			PluginJAR[] pluginJARs = jEdit.getPluginJARs();
+			for (PluginJAR pluginJAR : pluginJARs)
+			{
+				ActionSet browserActionSet = pluginJAR.getBrowserActionSet();
+				if (browserActionSet != null && browserActionSet.getActionCount() != 0)
+				{
+					actionSets.add(browserActionSet);
+				}
 			}
 		}
 		int selectionIndex = 0;

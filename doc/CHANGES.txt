@@ -318,6 +318,8 @@ release.
 
 }}}
 {{{ UI
+- Ability to customize the browser context menu (feature #3354306)
+  (Matthieu Casanova)
 
 - New Status bar widget to monitor task manager. (feature #3316561)
   (Matthieu Casanova)

@@ -2270,6 +2270,12 @@ options.browser.general.currentBufferFilter=Filter in file dialogs is \
 options.browser.general.useDefaultIcons=Use default icons
 #}}}
 
+#{{{ Browser Context Menu
+options.browser.custom.context.label=Context menu
+options.browser.custom.context.caption=Custom items in browser right click menu:
+options.browser.custom.context.code=new BrowserContextOptionPane();
+#}}}
+
 #{{{ Font selector
 font-selector.title=Font Selector
 font-selector.family=Font family:

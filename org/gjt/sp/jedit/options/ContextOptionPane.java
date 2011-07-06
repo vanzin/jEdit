@@ -32,7 +32,7 @@ public class ContextOptionPane extends AbstractContextOptionPane
 
 	public ContextOptionPane()
 	{
-		super("context", jEdit.getProperty("options.context.caption"));
+		super("context", jEdit.getProperty("options.context.caption"), ContextType.jEdit);
 	}
 
 	/**
