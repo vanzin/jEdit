@@ -1151,6 +1151,12 @@ public class PluginJAR
 				cache.cachedBrowserActionNames,
 				cache.cachedBrowserActionToggleFlags,
 				cache.browserActionsURI);
+			String label = jEdit.getProperty(
+					"plugin." + cache.pluginClass
+					+ ".name");
+			browserActions.setLabel(jEdit.getProperty(
+					"action-set.plugin",
+					new String[] { label }));
 			VFSBrowser.getActionContext().addActionSet(browserActions);
 		}
 
