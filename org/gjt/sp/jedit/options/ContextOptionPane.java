@@ -29,10 +29,9 @@ import org.gjt.sp.jedit.*;
  */
 public class ContextOptionPane extends AbstractContextOptionPane
 {
-
 	public ContextOptionPane()
 	{
-		super("context", jEdit.getProperty("options.context.caption"), ContextType.jEdit);
+		super("context", jEdit.getProperty("options.context.caption"));
 	}
 
 	/**

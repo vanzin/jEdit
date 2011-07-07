@@ -41,12 +41,7 @@ import org.gjt.sp.util.StandardUtilities;
  */
 public abstract class AbstractContextOptionPane extends AbstractOptionPane
 {
-	public enum ContextType
-	{
-		jEdit, browser
-	}
-
-	private final ContextType type;
+	private final ActionContext actionContext;
 
 	/**
 	 * Constructor that takes a name as an argument, for use by
@@ -59,7 +54,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 	 */
 	protected AbstractContextOptionPane(String name, String caption)
 	{
-		this(name, caption, ContextType.jEdit);
+		this(name, caption, jEdit.getActionContext());
 	}
 
 	/**
@@ -69,18 +64,20 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 	 * @param name    Name of the option pane.
 	 * @param caption String to use as the caption of the context menu
 	 *                configuration list.
+	 * @param actionContext the actionContext
 	 * @since jEdit 4.5pre1
 	 */
-	protected AbstractContextOptionPane(String name, String caption, ContextType type)
+	protected AbstractContextOptionPane(String name, String caption, ActionContext actionContext)
 	{
 		super(name);
-		this.type = type;
+		this.actionContext = actionContext;
 		this.caption = new JLabel(caption);
 	}
 
 	/**
 	 * Initializes the pane's UI.
 	 */
+	@Override
 	protected void _init()
 	{
 		setLayout(new BorderLayout());
@@ -210,7 +207,8 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 				listModel.addElement(new AbstractContextOptionPane.MenuItem("-", "-"));
 			else
 			{
-				EditAction action = jEdit.getAction(actionName);
+				EditAction action = actionContext.getAction(actionName);
+
 				if (action == null)
 					continue;
 				String label = action.getLabel();
@@ -240,6 +238,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 
 	class ActionHandler implements ActionListener
 	{
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
@@ -247,7 +246,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 			if (source == add)
 			{
 				ContextAddDialog dialog = new ContextAddDialog(
-					AbstractContextOptionPane.this, type);
+					AbstractContextOptionPane.this, actionContext);
 				String selection = dialog.getSelection();
 				if (selection == null)
 					return;
@@ -263,8 +262,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 					menuItem = new AbstractContextOptionPane.MenuItem("-", "-");
 				else
 				{
-					EditAction action = type == ContextType.jEdit ? jEdit.getAction(selection):
-						VFSBrowser.getActionContext().getAction(selection);
+					EditAction action = actionContext.getAction(selection);
 					String label = action
 						.getLabel();
 					menuItem = new AbstractContextOptionPane.MenuItem(selection,
@@ -331,6 +329,7 @@ public abstract class AbstractContextOptionPane extends AbstractOptionPane
 
 	class ListHandler implements ListSelectionListener
 	{
+		@Override
 		public void valueChanged(ListSelectionEvent evt)
 		{
 			updateButtons();
