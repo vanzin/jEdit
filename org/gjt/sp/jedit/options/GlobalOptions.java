@@ -60,7 +60,6 @@ public class GlobalOptions extends OptionsDialog
 	//{{{ createOptionTreeModel() method
 	protected OptionTreeModel createOptionTreeModel()
 	{
-		Log.log(Log.ERROR, this, "GLOBAL OPTIONS");
 		OptionTreeModel paneTreeModel = new OptionTreeModel();
 		OptionGroup rootGroup = (OptionGroup) paneTreeModel.getRoot();
 
