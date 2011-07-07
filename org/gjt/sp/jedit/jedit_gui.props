@@ -1807,6 +1807,14 @@ options.jedit.label=jEdit
 # Option pane to show by default
 options.last=editing
 
+#{{{ Options groups
+options.groups=jedit browser
+options.group.jedit=general abbrevs appearance context docking editing \
+	encodings gutter mouse plugin-manager print firewall save-back \
+	shortcuts status syntax textarea toolbar view
+options.group.browser=browser.general browser.colors browser.custom.context
+#}}}
+
 #{{{ General pane
 options.general.label=General
 options.general.code=new GeneralOptionPane();
