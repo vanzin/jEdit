@@ -7,8 +7,8 @@ jEdit 4.5 version history
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing,
-Evan Wright, Shlomy Reinstein and Marcelo Vanzin for contributing to this
-release.
+Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
+to this release.
 
 {{{ Bug fixes
 - If the current buffer is on a VFS that is not browseable (ex:http), trying
@@ -444,6 +444,7 @@ release.
 - Allow dragging files with data flavor type "text/uri-list" into jEdit. This
   type is used by several file managers in Ubuntu. (Shlomy Reinstein)
 
+- Enhance System, Look&feel, jEdit properties macros (r19599, bug #1593358, Eric Le Lay)
 }}}
 
 }}}
