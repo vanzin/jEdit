@@ -232,7 +232,9 @@ public class Mode
 	 */
 	public boolean accept(String fileName, String firstLine)
 	{
-		return acceptFilename(fileName) || acceptFirstLine(firstLine);
+		return acceptFilenameIdentical(fileName) 
+			|| acceptFilename(fileName) 
+			|| acceptFirstLine(firstLine);
 	} //}}}
 
 	//{{{ acceptFilename() method

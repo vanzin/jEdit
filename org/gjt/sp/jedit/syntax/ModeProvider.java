@@ -22,6 +22,10 @@
 package org.gjt.sp.jedit.syntax;
 
 //{{{ Imports
+
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
+
 import org.gjt.sp.jedit.Mode;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
@@ -90,8 +94,11 @@ public class ModeProvider
 	 */
 	public Mode getModeForFile(String filename, String firstLine)
 	{
-		String nogzName = filename.substring(0,filename.length() -
-			(filename.endsWith(".gz") ? 3 : 0));
+		// get the name of the file minus the path and .gz extension
+		VFS vfs = VFSManager.getVFSForPath(filename);
+		filename = vfs.getFileName(filename);
+		if (filename.endsWith(".gz"))
+			filename = filename.substring(0, filename.length() - 3);
 
 		List<Mode> acceptable = new ArrayList<Mode>();
 		
@@ -99,7 +106,7 @@ public class ModeProvider
 		// User modes have priority.
 		for(Mode mode : overrideModes.values())
 		{
-			if(mode.accept(nogzName,firstLine))
+			if(mode.accept(filename, firstLine))
 			{
 				acceptable.add(mode);
 			}
@@ -109,7 +116,7 @@ public class ModeProvider
 			// no user modes were acceptable, so check standard modes.
 			for(Mode mode : modes.values())
 			{
-				if(mode.accept(nogzName,firstLine))
+				if(mode.accept(filename, firstLine))
 				{
 					acceptable.add(mode);
 				}
