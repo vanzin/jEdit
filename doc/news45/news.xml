@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
-"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
-<article>
+<article id="whatsnewarticle"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xmlns:xi="http://www.w3.org/2001/XInclude"
+     xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'  >
 
     <title> What's new in jEdit 4.5 </title>
     <articleinfo>
@@ -13,9 +14,12 @@
 
     <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
     but here are some of the major features of this version. </para>
-    <itemizedlist>
-    <listitem><para> Elastic tabstops </para></listitem>
+    <itemizedlist> 
+    <listitem><para> Edit using <ulink url="http://nickgravgaard.com/elastictabstops/">Elastic tabstops</ulink>, 
+    set from Global Options - Editing, Buffer Options, or via buffer-local properties. </para></listitem>
     <listitem><para> Lots of old deprecated APIs were removed. Some plugins may be broken as a result. </para></listitem>
+    <listitem><para> Choose color ordering for subpixel antialiasing (Global
+    Options - Text Area - Anti-Aliased Smoothed Text) </para></listitem>
     </itemizedlist>
 
 <!-- :maxLineLen=80:wrap=hard: -->

@@ -318,13 +318,11 @@
 
             <para>The default line separator character (see <xref linkend="line-separators" />) can be set from here. </para>
             
-            <para> In previous versions of jEdit, there was very little encoding autodetection, so <guilabel>use autodetection when possible</guilabel> is an option you can switch on or off.
-            </para>
+            <para> <guilabel>Use autodetection when possible</guilabel> is an option you can switch on or off.</para>
 
             <para>The <literal>List of Encoding Autodetector Names</literal>
-            can be used to control what encoding detections are used on each
-            file when it is loaded. The order they appear in this list
-            determines the order of detectors that are tried.
+            can be used to control what encoding detections are used on each file when it is loaded. 
+            The order they appear in this list determines the order of detectors that are tried.
             There are some detectors which are available with jEdit core:
             <itemizedlist>
               <listitem><para>
