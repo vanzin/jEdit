@@ -189,7 +189,7 @@ class BrowserView extends JPanel
 			}
 		};
 		ThreadUtilities.runInBackground(new ListDirectoryBrowserTask(browser,
-			session, vfs, path, null, loadInfo, awtRunnable));
+			session, vfs, path, loadInfo, awtRunnable));
 	} //}}}
 
 	//{{{ directoryLoaded() method
