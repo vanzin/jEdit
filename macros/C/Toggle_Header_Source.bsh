@@ -1,10 +1,10 @@
 /**
-	ToggleHeaderSource.bsh V1.4
+	ToggleHeaderSource.bsh V1.5
 	by Alan Ezust
 	$Id$
 
 	A jedit beanshell macro that toggles your current buffer
-	between the header file (.h) and the source file (.c(c|pp|xx)?).
+	between the header file (.hh?) and the source file (.c(c|pp|xx)?).
 
 	Enables you to switch the current text
 	buffer between C/C++ header and sourcecode
@@ -19,8 +19,11 @@
 
 	New to 1.4: Instead of throwing an exception, treats
 	files with no extension as header files, and tries to
-	open .cpp file with same basename.
+	open .cpp file with same basename. Searches in 
+	current project for header/source files too.
 
+	New to 1.5: Supports multiple, default header extensions. 
+	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
@@ -48,7 +51,13 @@ import java.util.*;
 
 String defaultSourceExtension = jEdit.getProperty("default.extension.c", "cpp");
 
+/* jEdit.setProperty("default.extension.h", "hh"); */
+
+String defaultHeaderExtension = jEdit.getProperty("default.extension.h", "h");
+
 String[] sourceExtensions = new String[]{"cpp", "cxx", "cc", "c"};
+
+String[] headerExtensions = new String[]{"h", "hh", "hpp", "hxx"};
 
 /** Looks for an existing file in the current project, if ProjectViewer is
    installed and a 'current' project exists.
@@ -128,6 +137,34 @@ String getSourceFile(String baseName)
     return baseName + "." + defaultSourceExtension;
 }
 
+String getHeaderFile(String baseName) 
+{
+    int numExt = headerExtensions.length;
+    for (int i=numExt-1; i>=0; --i)
+    {
+        String ext = headerExtensions[i];
+        String tryFile = baseName + "." + ext;
+        String path = findBuffer(tryFile);
+        if (path != null) return path;
+    }
+    
+    // Try no extension at all:
+    String path = findBuffer(baseName);
+    if (path != null) return path;
+    
+    // Then try current project
+    if (activeProjectExists())
+        for (int i=numExt-1; i>=0; --i)
+        {
+            String ext = headerExtensions[i];
+            String tryFile = baseName + "." + ext;
+            path = findBufferInProject(tryFile);
+            if (path != null) return path;
+        }
+    // No extension at all in project:
+    return findBufferInProject(baseName);
+}
+
 boolean isSourceFile(String extension)
 {
     for (int i=0; i<sourceExtensions.length; ++i) {
@@ -135,6 +172,7 @@ boolean isSourceFile(String extension)
     }
     return false;
 }
+
 
 void toggleHeaderSource()
 {
@@ -149,15 +187,12 @@ void toggleHeaderSource()
         String extension = currentFile.substring(pos+1);
         if (isSourceFile(extension))
         {
-            String header = baseName + ".h";
-            path = findBuffer(header);
-            if (path == null) {
-                if (activeProjectExists())
-        	    path = findBufferInProject(header);
-            }
-            if (path == null) path = baseName + ".h";
+            path = getHeaderFile(baseName);
+            if (path == null) 
+                path = baseName + "." + defaultHeaderExtension;
         }
-        else if (extension.equals("h")) {
+        else 
+        {
             path = getSourceFile(baseName);
         }
     }
