@@ -21,7 +21,6 @@
 
 package org.gjt.sp.jedit.options;
 
-import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.gui.AbstractContextOptionPane;
 import org.gjt.sp.jedit.jEdit;
 
@@ -33,10 +32,10 @@ import org.gjt.sp.jedit.jEdit;
  */
 public class BrowserContextOptionPane extends AbstractContextOptionPane
 {
+
 	public BrowserContextOptionPane()
 	{
-		super("browser.custom.context", jEdit.getProperty("options.browser.context.caption"),
-			VFSBrowser.getActionContext());
+		super("browser.custom.context", jEdit.getProperty("options.browser.context.caption"));
 	}
 
 	/**
