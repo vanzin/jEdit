@@ -56,7 +56,9 @@ to this release.
   
 - Fixed mode selection by exact file name match. This is useful for
   distinguishing Maven pom.xml files from other xml files. (Dale Anson)  
-  
+
+- Fixed wrong mode detection on drag and drop from GNOME Commander.
+  (#3374207 - Shlomy Reinstein)
 }}}
 {{{ API Changes
 
