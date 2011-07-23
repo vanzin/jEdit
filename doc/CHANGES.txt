@@ -59,6 +59,9 @@ to this release.
 
 - Fixed wrong mode detection on drag and drop from GNOME Commander.
   (#3374207 - Shlomy Reinstein)
+
+- Fixed deadlock (jEdit freeze) when multiple files are dragged into the text
+  area from file managers. (Shlomy Reinstein)
 }}}
 {{{ API Changes
 
