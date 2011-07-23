@@ -210,6 +210,10 @@ public class TextAreaTransferHandler extends TransferHandler
 			{
 				String str0 = components[i];
 
+				// gnome-commander adds a 0 byte at the end of the file name, discard it
+				int len = str0.length();
+				if (len > 0 && (int)str0.charAt(len - 1) == 0)
+					str0 = str0.substring(0, len - 1);
 				if (str0.length() > 0)
 				{
 					URI uri = new URI(str0); // this handles the URI-decoding
