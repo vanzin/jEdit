@@ -231,7 +231,7 @@ public class TextAreaTransferHandler extends TransferHandler
 						}
 						else
 						{
-							VFSManager.runInWorkThread(new DraggedURLLoader(textArea,uri.getPath()));
+							VFSManager.runInAWTThread(new DraggedURLLoader(textArea,uri.getPath()));
 						}
 						found = true;
 					}

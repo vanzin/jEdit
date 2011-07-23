@@ -29,6 +29,7 @@ import org.gjt.sp.jedit.msg.BufferUpdate;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.EditBus.EBHandler;
+import org.gjt.sp.util.Log;
 import org.gjt.sp.util.ThreadUtilities;
 //}}}
 
@@ -72,6 +73,7 @@ public class HyperSearchResult implements HyperSearchNode
 		{
 			int start = o.startPos.getOffset();
 			int end = o.endPos.getOffset();
+			System.err.println("#" + i + ": startPos=" + o.startPos + "(=" + start + "),endPos=" + o.endPos + "(=" + end + ")");
 			Selection.Range s = new Selection.Range(
 				start,
 				end
@@ -184,8 +186,15 @@ public class HyperSearchResult implements HyperSearchNode
 		//{{{ bufferOpened() method
 		void bufferOpened()
 		{
-			startPos = buffer.createPosition(Math.min(
-				buffer.getLength(),start));
+			try
+			{
+				startPos = buffer.createPosition(Math.min(
+					buffer.getLength(),start));
+			}
+			catch (Exception e)
+			{
+				Log.log(Log.ERROR, this, "Exception while setting startPos for buffer " + buffer.getPath() + "\n" + e);
+			}
 			endPos = buffer.createPosition(Math.min(
 				buffer.getLength(),end));
 		} //}}}
@@ -193,7 +202,14 @@ public class HyperSearchResult implements HyperSearchNode
 		//{{{ bufferClosed() method
 		void bufferClosed()
 		{
-			start = startPos.getOffset();
+			try
+			{
+				start = startPos.getOffset();
+			}
+			catch (Exception e)
+			{
+				Log.log(Log.ERROR, this, "Exception while using startPos for buffer " + buffer.getPath() + " in bufferClosed()\n" + e);
+			}
 			end = endPos.getOffset();
 			startPos = endPos = null;
 		} //}}}
