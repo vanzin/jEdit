@@ -64,6 +64,8 @@ to this release.
   area from file managers. (Shlomy Reinstein)
 }}}
 {{{ API Changes
+- Added TaskAdapter that is a default implementation of the TaskListener
+  (Matthieu Casanova)
 
 - TaskManager.countTasks() returns the number of tasks in queue
   (Matthieu Casanova)
