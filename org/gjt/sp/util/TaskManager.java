@@ -45,15 +45,16 @@ public class TaskManager
 		tasks = Collections.synchronizedList(new ArrayList<Task>());
 	}
 
-    /**
-     * Return the number of tasks in queue.
-     * @return the number of tasks in queue
-     * @since jEdit 4.5pre1
-     */
-    public int countTasks()
-    {
-        return tasks.size();
-    }
+	/**
+	 * Return the number of tasks in queue.
+	 *
+	 * @return the number of tasks in queue
+	 * @since jEdit 4.5pre1
+	 */
+	public int countTasks()
+	{
+		return tasks.size();
+	}
 
 	public void addTaskListener(TaskListener listener)
 	{
