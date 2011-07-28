@@ -4,7 +4,7 @@ jEdit 4.5 version history
 
 {{{ Version 4.5pre1
 
-Thanks to BjÃ¶rn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
+Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing,
 Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
@@ -54,9 +54,6 @@ to this release.
   with some files to open as argument if a jEdit server is running
   (#3173669 - Matthieu Casanova)
   
-- Fixed mode selection by exact file name match. This is useful for
-  distinguishing Maven pom.xml files from other xml files. (Dale Anson)  
-
 - Fixed wrong mode detection on drag and drop from GNOME Commander.
   (#3374207 - Shlomy Reinstein)
 
@@ -372,10 +369,10 @@ to this release.
   (Matthieu Casanova)
 
 - Update Java installer generated *nix launcher to be the same as the one in
-  the native *nix packages (BjÃ¶rn "Vampire" Kautler)
+  the native *nix packages (Björn "Vampire" Kautler)
 
 - Add some quotes and explicit variable markers to *nix launcher
-  (BjÃ¶rn "Vampire" Kautler)
+  (Björn "Vampire" Kautler)
 
 - New property for the edit modes : contextInsensitive.
   By default the value is false, but if set to true the color highlight of
@@ -437,7 +434,7 @@ to this release.
 - Added an option to search for entire words (patch #2842461 from encorejane,
   Matthieu Casanova)
 
-- Included the Windows launcher in the Java installer (BjÃ¶rn "Vampire" Kautler)
+- Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
 
 - Added a new menu item "New Macro" in Macros menu
   (patch #2983607 from Damien Radtke, Matthieu Casanova)

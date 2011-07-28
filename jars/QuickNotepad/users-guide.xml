@@ -3,8 +3,7 @@
 <!-- Copyright (C) 2001 John Gellene	 -->
 <article id="QuickNotepad"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
->
-<articleinfo>
+><articleinfo>
         <author>
             <firstname>John</firstname>
 
@@ -33,7 +32,6 @@
             the file <filename>COPYING.DOC.txt</filename> included with the
             jEdit distribution.</para>
         </legalnotice>
-
         <title>QuickNotepad 4.2</title>
 </articleinfo>
 <section>
