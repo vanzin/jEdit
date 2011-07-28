@@ -1103,13 +1103,11 @@ public class Buffer extends JEditBuffer
 			unsetProperty("mode");
 			mode = ModeProvider.instance.getMode(userMode);
 		}
-
+		String firstLine = getLineText(0);
 		if (mode == null)
 		{
-			String firstLine = getLineText(0);
-			mode = ModeProvider.instance.getModeForFile(path, firstLine);
+			mode = ModeProvider.instance.getModeForFile(name, firstLine);
 		}
-
 		if (mode != null)
 		{
 			boolean forceInsensitive = false;
