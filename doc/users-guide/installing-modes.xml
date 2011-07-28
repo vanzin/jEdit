@@ -53,7 +53,8 @@
         </listitem>
 
         <listitem>
-            <para><literal>FILE_NAME_GLOB</literal> - file paths (yes, the entire path) whose names match this glob pattern will be opened in this edit mode.</para>
+            <para><literal>FILE_NAME_GLOB</literal> - files whose names match
+            this glob pattern will be opened in this edit mode.</para>
         </listitem>
 
         <listitem>

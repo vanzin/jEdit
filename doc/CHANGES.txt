@@ -304,9 +304,6 @@ to this release.
 - Added new keywords to C# edit mode (patch #3120746 from nherzing,
   Matthieu Casanova)
 
-- Consider full path when using file name glob in edit mode decisions.
-  (#2557712 - Alan Ezust)
-
 - New edit mode option: Elastic Tabstops. (Anshal Shukla + Shlomy Reinstein)
 
 - Applied patch from Matthew Gilbert to add ability to increase/decrease line
