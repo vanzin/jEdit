@@ -362,6 +362,9 @@ to this release.
 {{{ Miscellaneous
 - VFS Browser jobs now use the new Task api (Matthieu Casanova)
 
+- MiscUtilities.expandVariables() now recognizes %varname% on Windows,
+  meaning it can reverse what MiscUtilities.abbreviate() does. (Alan Ezust).
+
 - Global options now use properties to display options tree
   (Matthieu Casanova)
 
