@@ -917,6 +917,8 @@ public class jEdit
 	 */
 	public static void propertiesChanged()
 	{
+		initPLAF();
+
 		initKeyBindings();
 
 		Autosave.setInterval(getIntegerProperty("autosave",30));
