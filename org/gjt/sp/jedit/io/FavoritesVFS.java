@@ -57,14 +57,14 @@ public class FavoritesVFS extends VFS
 
 	//{{{ getParentOfPath() method
 	@Override
-    public String getParentOfPath(String path)
+	public String getParentOfPath(String path)
 	{
 		return PROTOCOL + ':';
 	} //}}}
 
 	//{{{ _listFiles() method
 	@Override
-    public VFSFile[] _listFiles(Object session, String url,
+	public VFSFile[] _listFiles(Object session, String url,
 		Component comp)
 	{
 		return getFavorites();
@@ -72,7 +72,7 @@ public class FavoritesVFS extends VFS
 
 	//{{{ _getFile() method
 	@Override
-    public VFSFile _getFile(Object session, String path,
+	public VFSFile _getFile(Object session, String path,
 		Component comp)
 	{
 		// does it matter that this doesn't set the type correctly?
@@ -81,7 +81,7 @@ public class FavoritesVFS extends VFS
 
 	//{{{ _delete() method
 	@Override
-    public boolean _delete(Object session, String path, Component comp)
+	public boolean _delete(Object session, String path, Component comp)
 	{
 		synchronized(lock)
 		{
@@ -198,7 +198,7 @@ public class FavoritesVFS extends VFS
 		}
 
 		@Override
-        public String getExtendedAttribute(String name)
+		public String getExtendedAttribute(String name)
 		{
 			if(name.equals(EA_TYPE))
 				return super.getExtendedAttribute(name);
