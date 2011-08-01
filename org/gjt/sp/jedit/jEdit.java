@@ -30,13 +30,14 @@ import java.awt.*;
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.bsh.UtilEvalError;
 import javax.swing.*;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
 
+import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.xml.sax.SAXParseException;
 
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
@@ -3846,9 +3847,102 @@ public class jEdit
 				// -nogui -nobackground switches on command
 				// line)
 				Toolkit.getDefaultToolkit();
+				addSystemTrayIcon(restore, userDir, args);
 			}
 		});
 	} //}}}
+
+	private static void addSystemTrayIcon(final boolean restore, final String userDir, final String[] args)
+	{
+		if (SystemTray.isSupported())
+		{
+			SystemTray systemTray = SystemTray.getSystemTray();
+			Image editorIcon = ((ImageIcon) GUIUtilities.loadIcon(jEdit.getProperty("logo.icon.small"))).getImage();
+
+			PopupMenu popup = new PopupMenu();
+			final MenuItem newViewItem = new MenuItem(jEdit.getProperty("tray.newView.label"));
+			final MenuItem newPlainViewItem = new MenuItem(jEdit.getProperty("tray.newPlainView.label"));
+			final MenuItem exitItem = new MenuItem(jEdit.getProperty("tray.exit.label"));
+
+			popup.add(newViewItem);
+			popup.add(newPlainViewItem);
+			popup.addSeparator();
+			popup.add(exitItem);
+			ActionListener actionListener = new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					if (e.getSource() == newViewItem)
+					{
+						jEdit.newView(null);
+					}
+					else if (e.getSource() == newPlainViewItem)
+					{
+						jEdit.newView(null,null,true);
+					}
+					else if (e.getSource() == exitItem)
+					{
+						jEdit.exit(null, true);
+					}
+				}
+			};
+			newViewItem.addActionListener(actionListener);
+			newPlainViewItem.addActionListener(actionListener);
+			exitItem.addActionListener(actionListener);
+			TrayIcon trayIcon = new TrayIcon(editorIcon, "jEdit", popup);
+			trayIcon.addMouseListener(new MouseAdapter()
+			{
+				private final Map<Window,Boolean> windowState = new HashMap<Window, Boolean>();
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					if (e.getButton() != MouseEvent.BUTTON1)
+						return;
+					if (jEdit.getViewCount() == 0)
+					{
+						EditServer.handleClient(restore, true, false, userDir, args);
+					}
+					else
+					{
+						boolean newVisibilityState = !jEdit.getActiveView().isVisible();
+						if (newVisibilityState)
+						{
+							for (Window window : Window.getWindows())
+							{
+								Boolean previousState = windowState.get(window);
+								if (previousState == null)
+									window.setVisible(true);
+								else if (previousState)
+									window.setVisible(previousState);
+							}
+							windowState.clear();
+							if (jEdit.getActiveView().getState() == Frame.ICONIFIED)
+								jEdit.getActiveView().setState(Frame.NORMAL);
+							jEdit.getActiveView().toFront();
+						}
+						else
+						{
+							for (Window window : Window.getWindows())
+							{
+								windowState.put(window, window.isVisible());
+								window.setVisible(false);
+							}
+						}
+					}
+				}
+			});
+			trayIcon.setImageAutoSize(true);
+			try
+			{
+				systemTray.add(trayIcon);
+			}
+			catch (AWTException e)
+			{
+				Log.log(Log.ERROR, jEdit.class, e, e);
+			}
+		}
+	}
 
 	//{{{ showPluginErrorDialog() method
 	private static void showPluginErrorDialog()
