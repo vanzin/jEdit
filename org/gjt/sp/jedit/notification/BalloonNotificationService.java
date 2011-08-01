@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,6 +22,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.jEdit;
 
 public class BalloonNotificationService implements NotificationService
 {
@@ -32,20 +36,41 @@ public class BalloonNotificationService implements NotificationService
 	@SuppressWarnings("serial")
 	public class BalloonFrame extends JFrame
 	{
-		int num = 0;
+		private int num = 0;
+		private JPanel p;
+		private final static int BalloonWidth = 500;
+		private final static int BalloonHeight = 80;
+		private final static int MaxHeight = 400;
+		private final Dimension size = new Dimension(BalloonWidth, 0);
+		private Point bottomRight = new Point();
+
 
 		public class Balloon extends JPanel
 		{
+			private static final int BALLOON_TIME_MS = 2000;
 			private Timer timer;
 			private static final int MaxMessageLines = 2;
-			Balloon(ErrorEntry entry)
+			Balloon(final ErrorEntry entry)
 			{
 				setBorder(BorderFactory.createEtchedBorder());
 				setLayout(new BorderLayout());
 				setBackground(Color.yellow);
+				JPanel top = new JPanel(new BorderLayout());
+				add(top, BorderLayout.NORTH);
+				JButton extend = new JButton("+");
+				top.add(extend, BorderLayout.WEST);
+				extend.addActionListener(new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent arg0)
+					{
+						DefaultNotificationService.instance().error(
+							null, entry.path, null, entry.messages);
+					}
+				});
 				JLabel path = new JLabel("<html><body><b>" + entry.path + "</b></html>");
 				path.setBorder(BorderFactory.createLineBorder(Color.black));
-				add(path, BorderLayout.NORTH);
+				top.add(path, BorderLayout.CENTER);
 				JTextArea ta = new JTextArea();
 				for (int i = 0; i < MaxMessageLines; i++)
 				{
@@ -55,7 +80,7 @@ public class BalloonNotificationService implements NotificationService
 				}
 				ta.setEditable(false);
 				add(ta, BorderLayout.CENTER);
-				timer = new Timer(2000, new ActionListener()
+				timer = new Timer(BALLOON_TIME_MS, new ActionListener()
 				{
 					@Override
 					public void actionPerformed(ActionEvent arg0)
@@ -74,13 +99,6 @@ public class BalloonNotificationService implements NotificationService
 				timer.restart();
 			}
 		}
-
-		private JPanel p;
-		private final static int BalloonWidth = 500;
-		private final static int BalloonHeight = 80;
-		private final static int MaxHeight = 400;
-		private final Dimension size = new Dimension(BalloonWidth, 0);
-		private Point bottomRight = new Point();
 
 		public BalloonFrame()
 		{
