@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -77,6 +80,7 @@ public class BalloonNotificationService implements NotificationService
 		private final static int BalloonHeight = 80;
 		private final static int MaxHeight = 400;
 		private final Dimension size = new Dimension(BalloonWidth, 0);
+		private Point bottomRight = new Point();
 
 		public BalloonFrame()
 		{
@@ -88,7 +92,13 @@ public class BalloonNotificationService implements NotificationService
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
 			p.setLayout(new GridLayout(0, 1));
 		}
-		
+
+		public void setOwner(Frame owner)
+		{
+			bottomRight.x = owner.getX() + owner.getWidth();
+			bottomRight.y = owner.getY() + owner.getHeight();
+		}
+
 		public void addBalloon(ErrorEntry entry)
 		{
 			num++;
@@ -102,6 +112,7 @@ public class BalloonNotificationService implements NotificationService
 			if (size.height > MaxHeight)
 				size.height = MaxHeight;
 			setSize(size);
+			setLocation(bottomRight.x - size.width, bottomRight.y - size.height);
 		}
 
 		public void removeBalloon(Balloon b)
@@ -144,7 +155,7 @@ public class BalloonNotificationService implements NotificationService
 	public void error(Component comp, String path, String messageProp,
 		Object[] args)
 	{
-		//final Frame frame = JOptionPane.getFrameForComponent(comp);
+		final Frame owner = JOptionPane.getFrameForComponent(comp);
 		synchronized(errorLock)
 		{
 			error = true;
@@ -157,6 +168,7 @@ public class BalloonNotificationService implements NotificationService
 					{
 						if (frame == null)
 							frame = new BalloonFrame();
+						frame.setOwner(owner);
 						synchronized(errorLock)
 						{
 							for (ErrorEntry e: errors)
