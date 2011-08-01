@@ -357,9 +357,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			else if("buffer".equals(defaultPath))
 			{
 				Buffer buffer = view.getBuffer();
-                boolean browseable = (buffer.getVFS().getCapabilities() & VFS.BROWSE_CAP) != 0;
-                if (browseable)
-			    	path = buffer.getDirectory();
+				boolean browseable = (buffer.getVFS().getCapabilities() & VFS.BROWSE_CAP) != 0;
+				if (browseable)
+					path = buffer.getDirectory();
 			}
 			else if("last".equals(defaultPath))
 			{
@@ -372,7 +372,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			else if("favorites".equals(defaultPath))
 				path = "favorites:";
 
-            if (path == null || path.isEmpty())
+			if (path == null || path.isEmpty())
 			{
 				// unknown value??!!!
 				path = userHome;
