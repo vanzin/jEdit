@@ -1763,12 +1763,7 @@ public class GUIUtilities
 	private static JMenuItem _loadMenuItem(String name, ActionContext context, boolean setMnemonic)
 	{
 
-		String label = jEdit.getProperty(name + ".label");
-		
-		if (label == null)
-		{
-			label = name;
-		}
+		String label = jEdit.getProperty(name + ".label", name);
 		char mnemonic;
 		int index = label.indexOf('$');
 		if (index != -1 && label.length() - index > 1)
