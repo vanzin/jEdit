@@ -23,16 +23,10 @@
 package org.gjt.sp.jedit.io;
 
 //{{{ Imports
-import javax.swing.JOptionPane;
-import java.awt.Component;
-import java.awt.Frame;
-import java.io.IOException;
 import java.util.*;
 
-import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.msg.VFSUpdate;
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.util.Log;
 import org.gjt.sp.util.WorkThreadPool;
 import org.gjt.sp.util.StandardUtilities;
 //}}}
@@ -184,15 +178,6 @@ public class VFSManager
 		ioThreadPool.waitForRequests();
 	} //}}}
 
-	//{{{ errorOccurred() method
-	/**
-	 * Returns if the last request caused an error.
-	 */
-	public static boolean errorOccurred()
-	{
-		return error;
-	} //}}}
-
 	//{{{ getRequestCount() method
 	/**
 	 * Returns the number of pending I/O requests.
@@ -236,67 +221,6 @@ public class VFSManager
 	} //}}}
 
 	//}}}
-
-	//{{{ error() method
-	/**
-	 * Handle an I/O error.
-	 * @since jEdit 4.3pre3
-	 */
-	public static void error(IOException e, String path, Component comp)
-	{
-		Log.log(Log.ERROR,VFSManager.class,e);
-		VFSManager.error(comp,path,"ioerror",new String[] { e.toString() });
-	} //}}}
-
-	//{{{ error() method
-	/**
-	 * Reports an I/O error.
-	 *
-	 * @param comp The component
-	 * @param path The path name that caused the error
-	 * @param messageProp The error message property name
-	 * @param args Positional parameters
-	 * @since jEdit 4.0pre3
-	 */
-	public static void error(Component comp,
-		final String path,
-		String messageProp,
-		Object[] args)
-	{
-		final Frame frame = JOptionPane.getFrameForComponent(comp);
-
-		synchronized(errorLock)
-		{
-			error = true;
-
-			errors.add(new ErrorListDialog.ErrorEntry(
-				path,messageProp,args));
-
-			if(errors.size() == 1)
-			{
-				
-
-				VFSManager.runInAWTThread(new Runnable()
-				{
-					public void run()
-					{
-						String caption = jEdit.getProperty(
-							"ioerror.caption" + (errors.size() == 1
-							? "-1" : ""),new Integer[] {
-							Integer.valueOf(errors.size())});
-						new ErrorListDialog(
-							frame.isShowing()
-							? frame
-							: jEdit.getFirstView(),
-							jEdit.getProperty("ioerror.title"),
-							caption,errors,false);
-						errors.clear();
-						error = false;
-					}
-				});
-			}
-		}
-	} //}}}
 
 	//{{{ sendVFSUpdate() method
 	/**
@@ -378,9 +302,6 @@ public class VFSManager
 	private static WorkThreadPool ioThreadPool;
 	private static VFS fileVFS;
 	private static VFS urlVFS;
-	private static boolean error;
-	private static final Object errorLock = new Object();
-	private static final Vector<ErrorListDialog.ErrorEntry> errors;
 	private static final Object vfsUpdateLock = new Object();
 	private static final List<VFSUpdate> vfsUpdates;
 	//}}}
@@ -388,7 +309,6 @@ public class VFSManager
 	//{{{ Class initializer
 	static
 	{
-		errors = new Vector<ErrorListDialog.ErrorEntry>();
 		fileVFS = new FileVFS();
 		urlVFS = new UrlVFS();
 		vfsUpdates = new ArrayList<VFSUpdate>(10);

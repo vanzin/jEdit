@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.util.*;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.*;
@@ -573,7 +574,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 			}
 			catch(IOException e)
 			{
-				VFSManager.error(e,path,browser);
+				NotificationManager.error(e,path,browser);
 			}
 			finally
 			{
@@ -585,7 +586,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 				}
 				catch(IOException e)
 				{
-					VFSManager.error(e,path,browser);
+					NotificationManager.error(e,path,browser);
 				}
 			}
 		}

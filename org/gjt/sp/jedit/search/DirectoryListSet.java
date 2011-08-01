@@ -27,6 +27,7 @@ import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -158,7 +159,7 @@ public class DirectoryListSet extends BufferListSet
 		}
 		catch(IOException io)
 		{
-			VFSManager.error(comp,directory,"ioerror",new String[]
+			NotificationManager.error(comp,directory,"ioerror",new String[]
 				{ io.toString() });
 			return null;
 		}

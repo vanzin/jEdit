@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
@@ -63,14 +64,14 @@ class MkDirBrowserTask extends AbstractBrowserTask
 			path = vfs._canonPath(session, path,browser);
 
 			if(!vfs._mkdir(session, path,browser))
-				VFSManager.error(browser, path,"ioerror.mkdir-error",null);
+				NotificationManager.error(browser, path,"ioerror.mkdir-error",null);
 		}
 		catch(IOException io)
 		{
 			setCancellable(false);
 			Log.log(Log.ERROR,this,io);
 			args[0] = io.toString();
-			VFSManager.error(browser, path,"ioerror",args);
+			NotificationManager.error(browser, path,"ioerror",args);
 		}
 		finally
 		{
@@ -83,7 +84,7 @@ class MkDirBrowserTask extends AbstractBrowserTask
 				setCancellable(false);
 				Log.log(Log.ERROR,this,io);
 				args[0] = io.toString();
-				VFSManager.error(browser, path,"ioerror",args);
+				NotificationManager.error(browser, path,"ioerror",args);
 			}
 		}
 	} //}}}

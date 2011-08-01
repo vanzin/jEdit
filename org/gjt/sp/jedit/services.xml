@@ -90,7 +90,7 @@
 	</SERVICE>
 	
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="wrap">
-		import org.gjt.sp.jedit.gui.statusbar.*;
+		import orgetg.gjt.sp.jedit.gui.statusbar.*;
 		new WrapWidgetFactory();
 	</SERVICE>
 	
@@ -160,5 +160,9 @@
 
 	<SERVICE CLASS="org.gjt.sp.jedit.datatransfer.JEditTransferableService" NAME="application/x-java-jEdit-rich-text">
 		new org.gjt.sp.jedit.datatransfer.RichJEditTextTransferableService();
+	</SERVICE>
+
+	<SERVICE CLASS="org.gjt.sp.jedit.notification.NotificationService" NAME="Balloon">
+		new org.gjt.sp.jedit.notification.BalloonNotificationService();
 	</SERVICE>
 </SERVICES>

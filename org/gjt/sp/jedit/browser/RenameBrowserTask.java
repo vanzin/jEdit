@@ -27,6 +27,7 @@ import org.gjt.sp.jedit.OperatingSystem;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
@@ -79,7 +80,7 @@ class RenameBrowserTask extends AbstractBrowserTask
 				}
 				else
 				{
-					VFSManager.error(browser, path,
+					NotificationManager.error(browser, path,
 					    "ioerror.rename-exists",
 					    new String[]{path2});
 					return;
@@ -87,7 +88,7 @@ class RenameBrowserTask extends AbstractBrowserTask
 			}
 
 			if (!vfs._rename(session, path, path2, browser))
-				VFSManager.error(browser, path, "ioerror.rename-error",
+				NotificationManager.error(browser, path, "ioerror.rename-error",
 				    new String[]{path2});
 		}
 		catch (IOException io)
@@ -95,7 +96,7 @@ class RenameBrowserTask extends AbstractBrowserTask
 			setCancellable(false);
 			Log.log(Log.ERROR, this, io);
 			String[] pp = {io.toString()};
-			VFSManager.error(browser, path, "ioerror.directory-error", pp);
+			NotificationManager.error(browser, path, "ioerror.directory-error", pp);
 		}
 		finally
 		{
@@ -108,7 +109,7 @@ class RenameBrowserTask extends AbstractBrowserTask
 				setCancellable(false);
 				Log.log(Log.ERROR, this, io);
 				String[] pp = {io.toString()};
-				VFSManager.error(browser, path, "ioerror.directory-error", pp);
+				NotificationManager.error(browser, path, "ioerror.directory-error", pp);
 			}
 		}
 	} //}}}

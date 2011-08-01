@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.browser;
 //{{{ Imports
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSManager;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
@@ -65,14 +66,14 @@ class DeleteBrowserTask extends AbstractBrowserTask
 
 
 			if (!vfs._delete(session, path, browser))
-				VFSManager.error(browser, path, "ioerror.delete-error", null);
+				NotificationManager.error(browser, path, "ioerror.delete-error", null);
 		}
 		catch (IOException io)
 		{
 			setCancellable(false);
 			Log.log(Log.ERROR, this, io);
 			String[] pp = {io.toString()};
-			VFSManager.error(browser, path, "ioerror.directory-error", pp);
+			NotificationManager.error(browser, path, "ioerror.directory-error", pp);
 		}
 		finally
 		{
@@ -85,7 +86,7 @@ class DeleteBrowserTask extends AbstractBrowserTask
 				setCancellable(false);
 				Log.log(Log.ERROR, this, io);
 				String[] pp = {io.toString()};
-				VFSManager.error(browser, path, "ioerror.directory-error", pp);
+				NotificationManager.error(browser, path, "ioerror.directory-error", pp);
 			}
 		}
 	} //}}}

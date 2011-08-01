@@ -27,6 +27,7 @@ import org.gjt.sp.jedit.bsh.*;
 
 import java.io.*;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.gui.BeanShellErrorDialog;
 import org.gjt.sp.jedit.textarea.*;
 import org.gjt.sp.util.Log;
@@ -522,7 +523,7 @@ public class BeanShell
 		{
 			if(t instanceof IOException)
 			{
-				VFSManager.error(view,path,"ioerror.read-error",
+				NotificationManager.error(view,path,"ioerror.read-error",
 					new String[] { t.toString() });
 			}
 			else

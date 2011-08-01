@@ -29,6 +29,7 @@ import java.io.*;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.jedit.browser.FileCellRenderer;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.StandardUtilities;
@@ -112,7 +113,7 @@ public class VFSFile implements Serializable
 		}
 		catch(IOException e)
 		{
-			VFSManager.error(e,path,browser);
+			NotificationManager.error(e,path,browser);
 		}
 		finally
 		{
@@ -122,7 +123,7 @@ public class VFSFile implements Serializable
 			}
 			catch(IOException e)
 			{
-				VFSManager.error(e,path,browser);
+				NotificationManager.error(e,path,browser);
 			}
 		}
 		

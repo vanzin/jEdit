@@ -32,6 +32,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.gjt.sp.jedit.msg.PropertiesChanged;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.bufferio.BufferLoadRequest;
 import org.gjt.sp.jedit.bufferio.BufferSaveRequest;
@@ -410,7 +411,7 @@ public abstract class VFS
 	{
 		if((getCapabilities() & READ_CAP) == 0)
 		{
-			VFSManager.error(view,path,"vfs.not-supported.load",new String[] { name });
+			NotificationManager.error(view,path,"vfs.not-supported.load",new String[] { name });
 			return false;
 		}
 
@@ -446,7 +447,7 @@ public abstract class VFS
 	{
 		if((getCapabilities() & WRITE_CAP) == 0)
 		{
-			VFSManager.error(view,path,"vfs.not-supported.save",new String[] { name });
+			NotificationManager.error(view,path,"vfs.not-supported.save",new String[] { name });
 			return false;
 		}
 
@@ -587,7 +588,7 @@ public abstract class VFS
 	{
 		if((getCapabilities() & READ_CAP) == 0)
 		{
-			VFSManager.error(view,path,"vfs.not-supported.load",new String[] { name });
+			NotificationManager.error(view,path,"vfs.not-supported.load",new String[] { name });
 			return false;
 		}
 
@@ -730,7 +731,7 @@ public abstract class VFS
 		Component comp)
 		throws IOException
 	{
-		VFSManager.error(comp,directory,"vfs.not-supported.list",new String[] { name });
+		NotificationManager.error(comp,directory,"vfs.not-supported.list",new String[] { name });
 		return null;
 	} //}}}
 
@@ -831,7 +832,7 @@ public abstract class VFS
 		String path, boolean ignoreErrors, Component comp)
 		throws IOException
 	{
-		VFSManager.error(comp,path,"vfs.not-supported.load",new String[] { name });
+		NotificationManager.error(comp,path,"vfs.not-supported.load",new String[] { name });
 		return null;
 	} //}}}
 
@@ -849,7 +850,7 @@ public abstract class VFS
 		String path, Component comp)
 		throws IOException
 	{
-		VFSManager.error(comp,path,"vfs.not-supported.save",new String[] { name });
+		NotificationManager.error(comp,path,"vfs.not-supported.save",new String[] { name });
 		return null;
 	} //}}}
 

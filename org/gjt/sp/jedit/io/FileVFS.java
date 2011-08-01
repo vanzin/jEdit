@@ -32,6 +32,7 @@ import java.io.*;
 import java.text.*;
 import java.util.Date;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
 //}}}
@@ -145,14 +146,14 @@ public class FileVFS extends VFS
 
 		if(file.isDirectory())
 		{
-			VFSManager.error(view,file.getPath(),
+			NotificationManager.error(view,file.getPath(),
 				"ioerror.open-directory",null);
 			return false;
 		}
 
 		if(!file.canRead())
 		{
-			VFSManager.error(view,file.getPath(),
+			NotificationManager.error(view,file.getPath(),
 				"ioerror.no-read",null);
 			return false;
 		} //}}}
@@ -362,7 +363,7 @@ public class FileVFS extends VFS
 
 		if(list == null)
 		{
-			VFSManager.error(comp,path,"ioerror.directory-error-nomsg",null);
+			NotificationManager.error(comp,path,"ioerror.directory-error-nomsg",null);
 			return null;
 		}
 

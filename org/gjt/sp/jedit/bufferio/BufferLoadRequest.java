@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import org.gjt.sp.jedit.io.*;
+import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.util.*;
@@ -105,14 +106,14 @@ public class BufferLoadRequest extends BufferIORequest
 		{
 			Log.log(Log.ERROR,this,e);
 			Object[] pp = { e.toString() };
-			VFSManager.error(view,path,"ioerror.read-error",pp);
+			NotificationManager.error(view,path,"ioerror.read-error",pp);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
 		catch(OutOfMemoryError oom)
 		{
 			Log.log(Log.ERROR,this,oom);
-			VFSManager.error(view,path,"out-of-memory-error",null);
+			NotificationManager.error(view,path,"out-of-memory-error",null);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
@@ -130,7 +131,7 @@ public class BufferLoadRequest extends BufferIORequest
 			{
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
-				VFSManager.error(view,path,"ioerror.read-error",pp);
+				NotificationManager.error(view,path,"ioerror.read-error",pp);
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}
@@ -338,7 +339,7 @@ public class BufferLoadRequest extends BufferIORequest
 			{
 				pp[1] = "See details in Activity Log";
 			}
-			VFSManager.error(view,path,"ioerror.encoding-error",pp);
+			NotificationManager.error(view,path,"ioerror.encoding-error",pp);
 			markedStream = rewindContentsStream(markedStream, gzipped);
 			read(EncodingServer.getEncoding(
 				buffer.getStringProperty(JEditBuffer.ENCODING)

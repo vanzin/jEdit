@@ -24,10 +24,7 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import org.gjt.sp.jedit.bsh.NameSpace;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.SwingUtilities;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
@@ -67,6 +64,7 @@ public class EditServer extends Thread
 		super("jEdit server daemon [" + portFile + "]");
 		setDaemon(true);
 		this.portFile = portFile;
+
 		try
 		{
 			// On Unix, set permissions of port file to rw-------,
