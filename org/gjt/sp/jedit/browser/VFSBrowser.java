@@ -757,6 +757,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 		to = MiscUtilities.constructPath(vfs.getParentOfPath(from),to);
 
+		if (to.equals(from))
+			return;
+
 		Object session = vfs.createVFSSession(from,this);
 		if(session == null)
 			return;
