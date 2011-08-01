@@ -764,7 +764,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		if(!startRequest())
 			return;
 
-		Runnable delatedAWT = new Runnable()
+		Runnable delayedAWT = new Runnable()
 		{
 			@Override
 			public void run()
@@ -772,7 +772,7 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 				endRequest();
 			}
 		};
-		Task renameTask = new RenameBrowserTask(this, session, vfs, from, to, delatedAWT);
+		Task renameTask = new RenameBrowserTask(this, session, vfs, from, to, delayedAWT);
 		ThreadUtilities.runInBackground(renameTask);
 	} //}}}
 
