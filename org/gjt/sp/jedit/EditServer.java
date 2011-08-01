@@ -24,7 +24,10 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import org.gjt.sp.jedit.bsh.NameSpace;
-import javax.swing.SwingUtilities;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.Random;
@@ -64,7 +67,7 @@ public class EditServer extends Thread
 		super("jEdit server daemon [" + portFile + "]");
 		setDaemon(true);
 		this.portFile = portFile;
-
+		addSystemTrayIcon();
 		try
 		{
 			// On Unix, set permissions of port file to rw-------,
@@ -117,6 +120,80 @@ public class EditServer extends Thread
 			Log.log(Log.NOTICE,this,io);
 		}
 	} //}}}
+
+	private static void addSystemTrayIcon()
+	{
+		if (SystemTray.isSupported())
+		{
+			SystemTray systemTray = SystemTray.getSystemTray();
+			Image editorIcon = ((ImageIcon) GUIUtilities.loadIcon(jEdit.getProperty("logo.icon.small"))).getImage();
+
+			PopupMenu popup = new PopupMenu();
+			final MenuItem newViewItem = new MenuItem(jEdit.getProperty("tray.newView.label"));
+			final MenuItem newPlainViewItem = new MenuItem(jEdit.getProperty("tray.newPlainView.label"));
+			final MenuItem exitItem = new MenuItem(jEdit.getProperty("tray.exit.label"));
+
+			popup.add(newViewItem);
+			popup.add(newPlainViewItem);
+			popup.addSeparator();
+			popup.add(exitItem);
+			ActionListener actionListener = new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					if (e.getSource() == newViewItem)
+					{
+						jEdit.newView(null);
+					}
+					else if (e.getSource() == newPlainViewItem)
+					{
+						jEdit.newView(null,null,true);
+					}
+					else if (e.getSource() == exitItem)
+					{
+						jEdit.exit(null, true);
+					}
+				}
+			};
+			newViewItem.addActionListener(actionListener);
+			newPlainViewItem.addActionListener(actionListener);
+			exitItem.addActionListener(actionListener);
+			TrayIcon trayIcon = new TrayIcon(editorIcon, "jEdit", popup);
+			trayIcon.addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					if (e.getButton() != MouseEvent.BUTTON1)
+						return;
+					View activeView = jEdit.getActiveView();
+					if (activeView != null)
+					{
+						int state = activeView.getState();
+						if (state == Frame.ICONIFIED)
+						{
+							activeView.setState(Frame.NORMAL);
+						}
+						activeView.toFront();
+					}
+					else
+					{
+						jEdit.newView(null);
+					}
+				}
+			});
+			trayIcon.setImageAutoSize(true);
+			try
+			{
+				systemTray.add(trayIcon);
+			}
+			catch (AWTException e)
+			{
+				Log.log(Log.ERROR, EditServer.class, e, e);
+			}
+		}
+	}
 
 	//{{{ run() method
 	public void run()

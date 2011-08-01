@@ -360,6 +360,8 @@ to this release.
 
 }}}
 {{{ Miscellaneous
+- jEdit has now a systray icon (feature #1657143) (Matthieu Casanova)
+
 - VFS Browser jobs now use the new Task api (Matthieu Casanova)
 
 - MiscUtilities.expandVariables() now recognizes %varname% on Windows,

@@ -183,6 +183,13 @@ view.context=cut copy paste paste-previous paste-deleted - \
 view.context.customize=Customize This Menu...
 #}}}
 
+#{{{ System tray menu
+tray.newView.label=New view
+tray.newPlainView.label=New plain view
+tray.exit.label=Exit
+
+#}}}
+
 #{{{ Menu bar
 view.mbar=file edit search markers folds view utils macros plugins help-menu
 
