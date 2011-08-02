@@ -161,8 +161,4 @@
 	<SERVICE CLASS="org.gjt.sp.jedit.datatransfer.JEditTransferableService" NAME="application/x-java-jEdit-rich-text">
 		new org.gjt.sp.jedit.datatransfer.RichJEditTextTransferableService();
 	</SERVICE>
-
-	<SERVICE CLASS="org.gjt.sp.jedit.gui.notification.NotificationService" NAME="Balloon">
-		new org.gjt.sp.jedit.gui.notification.BalloonNotificationService();
-	</SERVICE>
 </SERVICES>
