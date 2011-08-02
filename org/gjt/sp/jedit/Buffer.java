@@ -43,12 +43,12 @@ import org.gjt.sp.jedit.bufferio.BufferAutosaveRequest;
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
 import org.gjt.sp.jedit.bufferio.MarkersSaveRequest;
 import org.gjt.sp.jedit.bufferset.BufferSet;
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.jedit.io.FileVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.BufferUpdate;
-import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.options.GeneralOptionPane;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.jedit.syntax.ParserRuleSet;
@@ -501,7 +501,7 @@ public class Buffer extends JEditBuffer
 						if (savePath == null)
 						{
 							Log.log(Log.DEBUG, this, "Buffer saving : two stage save impossible because path is null");
-							NotificationManager.error(view,
+							NotificationService.error(view,
 								newPath,
 								"ioerror.save-readonly-twostagefail",
 								null);
@@ -531,7 +531,7 @@ public class Buffer extends JEditBuffer
 					else
 					{
 						Log.log(Log.WARNING, this, "Buffer saving : file is readonly and vfs cannot do two stage save");
-						NotificationManager.error(view,
+						NotificationService.error(view,
 							newPath,
 							"ioerror.write-error-readonly",
 							null);
@@ -574,7 +574,7 @@ public class Buffer extends JEditBuffer
 		}
 		catch(IOException io)
 		{
-			NotificationManager.error(view,newPath,"ioerror",
+			NotificationService.error(view,newPath,"ioerror",
 				new String[] { io.toString() });
 			setPerformingIO(false);
 			return false;
@@ -587,7 +587,7 @@ public class Buffer extends JEditBuffer
 			}
 			catch(IOException io)
 			{
-				NotificationManager.error(view,newPath,"ioerror",
+				NotificationService.error(view,newPath,"ioerror",
 					new String[] { io.toString() });
 				setPerformingIO(false);
 				return false;
@@ -1433,7 +1433,7 @@ public class Buffer extends JEditBuffer
 		if (((vfs.getCapabilities() & VFS.WRITE_CAP) == 0) ||
 		    !vfs.isMarkersFileSupported())
 		{
-			NotificationManager.error(view, path, "vfs.not-supported.save",
+			NotificationService.error(view, path, "vfs.not-supported.save",
 				new String[] { "markers file" });
 			return false;
 		}
@@ -1858,7 +1858,7 @@ public class Buffer extends JEditBuffer
 
 				if(!file.isReadable())
 				{
-					NotificationManager.error(view,path,"ioerror.no-read",null);
+					NotificationService.error(view,path,"ioerror.no-read",null);
 					setNewFile(false);
 					return false;
 				}
@@ -1867,7 +1867,7 @@ public class Buffer extends JEditBuffer
 
 				if(file.getType() != VFSFile.FILE)
 				{
-					NotificationManager.error(view,path,
+					NotificationService.error(view,path,
 						"ioerror.open-directory",null);
 					setNewFile(false);
 					return false;
@@ -1875,7 +1875,7 @@ public class Buffer extends JEditBuffer
 			}
 			catch(IOException io)
 			{
-				NotificationManager.error(view,path,"ioerror",
+				NotificationService.error(view,path,"ioerror",
 					new String[] { io.toString() });
 				return false;
 			}
@@ -1887,7 +1887,7 @@ public class Buffer extends JEditBuffer
 				}
 				catch(IOException io)
 				{
-					NotificationManager.error(view,path,"ioerror",
+					NotificationService.error(view,path,"ioerror",
 						new String[] { io.toString() });
 					return false;
 				}
@@ -1914,14 +1914,14 @@ public class Buffer extends JEditBuffer
 
 				if(file.getType() != VFSFile.FILE)
 				{
-					NotificationManager.error(view,path,
+					NotificationService.error(view,path,
 						"ioerror.save-directory",null);
 					return false;
 				}
 			}
 			catch(IOException io)
 			{
-				NotificationManager.error(view,path,"ioerror",
+				NotificationService.error(view,path,"ioerror",
 					new String[] { io.toString() });
 				return false;
 			}
@@ -1933,7 +1933,7 @@ public class Buffer extends JEditBuffer
 				}
 				catch(IOException io)
 				{
-					NotificationManager.error(view,path,"ioerror",
+					NotificationService.error(view,path,"ioerror",
 						new String[] { io.toString() });
 					return false;
 				}

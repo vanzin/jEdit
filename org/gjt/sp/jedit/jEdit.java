@@ -44,9 +44,8 @@ import org.gjt.sp.jedit.buffer.KillRing;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
 import org.gjt.sp.jedit.buffer.FoldHandler;
 import org.gjt.sp.jedit.msg.*;
-import org.gjt.sp.jedit.notification.ErrorEntry;
-import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.jedit.help.HelpViewer;
 import org.gjt.sp.jedit.io.*;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
@@ -1760,7 +1759,7 @@ public class jEdit
 		if(buffer.isPerformingIO())
 		{
 			VFSManager.waitForRequests();
-			if(NotificationManager.errorOccurred())
+			if(NotificationService.errorOccurred())
 				return false;
 		}
 
@@ -1944,7 +1943,7 @@ public class jEdit
 
 		// Wait for pending I/O requests
 		VFSManager.waitForRequests();
-		if(NotificationManager.errorOccurred())
+		if(NotificationService.errorOccurred())
 			return false;
 
 		// close remaining buffers (the close dialog only deals with

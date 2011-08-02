@@ -26,8 +26,9 @@ package org.gjt.sp.jedit.search;
 import javax.swing.SwingUtilities;
 import java.awt.Component;
 import java.io.*;
+
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -159,7 +160,7 @@ public class DirectoryListSet extends BufferListSet
 		}
 		catch(IOException io)
 		{
-			NotificationManager.error(comp,directory,"ioerror",new String[]
+			NotificationService.error(comp,directory,"ioerror",new String[]
 				{ io.toString() });
 			return null;
 		}

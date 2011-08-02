@@ -1,18 +1,17 @@
-package org.gjt.sp.jedit.notification;
+package org.gjt.sp.jedit.gui.notification;
 
 import java.awt.Component;
 import java.awt.Frame;
-import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.ErrorEntry;
 import org.gjt.sp.jedit.gui.ErrorListDialog;
 import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.util.Log;
 
-public class DefaultNotificationService implements NotificationService
+public class DefaultNotificationService extends NotificationService
 {
 	private static final DefaultNotificationService instance =
 		new DefaultNotificationService();
@@ -31,14 +30,7 @@ public class DefaultNotificationService implements NotificationService
 	}
 
 	@Override
-	public void error(IOException e, String path, Component comp)
-	{
-		Log.log(Log.ERROR,VFSManager.class,e);
-		error(comp,path,"ioerror",new String[] { e.toString() });
-	}
-
-	@Override
-	public void error(Component comp, String path, String messageProp, Object[] args)
+	public void notifyError(Component comp, String path, String messageProp, Object[] args)
 	{
 		final Frame frame = JOptionPane.getFrameForComponent(comp);
 
@@ -74,7 +66,7 @@ public class DefaultNotificationService implements NotificationService
 	}
 
 	@Override
-	public boolean errorOccurred()
+	public boolean unnotifiedErrors()
 	{
 		return error;
 	}

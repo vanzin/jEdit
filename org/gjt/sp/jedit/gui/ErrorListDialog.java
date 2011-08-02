@@ -34,7 +34,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.notification.ErrorEntry;
 import org.gjt.sp.jedit.pluginmgr.PluginManager;
 
 public class ErrorListDialog extends EnhancedDialog

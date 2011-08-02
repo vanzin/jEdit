@@ -24,8 +24,9 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
+
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 //}}}
@@ -94,7 +95,7 @@ public class BufferInsertRequest extends BufferIORequest
 		{
 			Log.log(Log.ERROR,this,e);
 			String[] pp = { e.toString() };
-			NotificationManager.error(view,path,"ioerror.read-error",pp);
+			NotificationService.error(view,path,"ioerror.read-error",pp);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
@@ -113,7 +114,7 @@ public class BufferInsertRequest extends BufferIORequest
 			{
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
-				NotificationManager.error(view,path,"ioerror.read-error",pp);
+				NotificationService.error(view,path,"ioerror.read-error",pp);
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}

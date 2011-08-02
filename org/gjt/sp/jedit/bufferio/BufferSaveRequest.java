@@ -26,8 +26,8 @@ package org.gjt.sp.jedit.bufferio;
 import java.io.*;
 import java.util.zip.*;
 
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 import java.nio.charset.UnsupportedCharsetException;
@@ -159,7 +159,7 @@ public class BufferSaveRequest extends BufferIORequest
 		{
 			Log.log(Log.ERROR,this,"Unable to save buffer " + e);
 			String[] pp = { e.getMessage() };
-			NotificationManager.error(view,path,"ioerror.write-error",pp);
+			NotificationService.error(view,path,"ioerror.write-error",pp);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
@@ -167,7 +167,7 @@ public class BufferSaveRequest extends BufferIORequest
 		{
 			Log.log(Log.ERROR, this, e, e);
 			String[] pp = { e.getCharsetName() };
-			NotificationManager.error(view,path,"ioerror.unsupported-encoding-error",pp);
+			NotificationService.error(view,path,"ioerror.unsupported-encoding-error",pp);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
@@ -175,7 +175,7 @@ public class BufferSaveRequest extends BufferIORequest
 		{
 			Log.log(Log.ERROR,this,e);
 			String[] pp = { e.toString() };
-			NotificationManager.error(view,path,"ioerror.write-error",pp);
+			NotificationService.error(view,path,"ioerror.write-error",pp);
 
 			buffer.setBooleanProperty(ERROR_OCCURRED,true);
 		}
@@ -201,7 +201,7 @@ public class BufferSaveRequest extends BufferIORequest
 			{
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
-				NotificationManager.error(view,path,"ioerror.write-error",pp);
+				NotificationService.error(view,path,"ioerror.write-error",pp);
 
 				buffer.setBooleanProperty(ERROR_OCCURRED,true);
 			}

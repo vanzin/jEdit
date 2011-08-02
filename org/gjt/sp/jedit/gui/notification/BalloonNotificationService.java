@@ -1,4 +1,4 @@
-package org.gjt.sp.jedit.notification;
+package org.gjt.sp.jedit.gui.notification;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,7 +9,6 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -23,15 +22,19 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
-import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.gui.ErrorEntry;
 
-public class BalloonNotificationService implements NotificationService
+public class BalloonNotificationService extends NotificationService
 {
 	private Object errorLock = new Object();
 	private boolean error = false;
 	private BalloonFrame frame;
 	private final Vector<ErrorEntry> errors = new Vector<ErrorEntry>();
+	static private final String BALLOON_TIME_MS_PROP = "balloon.notification.time.ms";
+	static private final int BALLOON_TIME_MS_DEFAULT = 5000;
+	static private final String BALLOON_COLOR_PROP = "balloon.notification.color";
+	static private final Color BALLOON_COLOR_DEFAULT = Color.yellow;
 
 	@SuppressWarnings("serial")
 	public class BalloonFrame extends JFrame
@@ -47,14 +50,14 @@ public class BalloonNotificationService implements NotificationService
 
 		public class Balloon extends JPanel
 		{
-			private static final int BALLOON_TIME_MS = 2000;
 			private Timer timer;
 			private static final int MaxMessageLines = 2;
 			Balloon(final ErrorEntry entry)
 			{
 				setBorder(BorderFactory.createEtchedBorder());
 				setLayout(new BorderLayout());
-				setBackground(Color.yellow);
+				Color c = jEdit.getColorProperty(BALLOON_COLOR_PROP, BALLOON_COLOR_DEFAULT);
+				setBackground(c);
 				JPanel top = new JPanel(new BorderLayout());
 				add(top, BorderLayout.NORTH);
 				JButton extend = new JButton("+");
@@ -64,23 +67,26 @@ public class BalloonNotificationService implements NotificationService
 					@Override
 					public void actionPerformed(ActionEvent arg0)
 					{
-						DefaultNotificationService.instance().error(
-							null, entry.path, null, entry.messages);
+						DefaultNotificationService.instance().notifyError(
+							null, entry.path(), null, entry.messages());
 					}
 				});
-				JLabel path = new JLabel("<html><body><b>" + entry.path + "</b></html>");
+				JLabel path = new JLabel("<html><body><b>" + entry.path() + "</b></html>");
 				path.setBorder(BorderFactory.createLineBorder(Color.black));
 				top.add(path, BorderLayout.CENTER);
 				JTextArea ta = new JTextArea();
+				String [] messages = entry.messages();
 				for (int i = 0; i < MaxMessageLines; i++)
 				{
-					ta.append(entry.messages[i]);
+					ta.append(messages[i]);
 					if (i < MaxMessageLines - 1)
 						ta.append("\n");
 				}
 				ta.setEditable(false);
 				add(ta, BorderLayout.CENTER);
-				timer = new Timer(BALLOON_TIME_MS, new ActionListener()
+				int timeMs = jEdit.getIntegerProperty(BALLOON_TIME_MS_PROP,
+					BALLOON_TIME_MS_DEFAULT);
+				timer = new Timer(timeMs, new ActionListener()
 				{
 					@Override
 					public void actionPerformed(ActionEvent arg0)
@@ -158,19 +164,13 @@ public class BalloonNotificationService implements NotificationService
 	}
 
 	@Override
-	public boolean errorOccurred()
+	public boolean unnotifiedErrors()
 	{
 		return error;
 	}
 
 	@Override
-	public void error(IOException e, String path, Component comp)
-	{
-		error(comp, path, null, new String [] { e.toString() });
-	}
-
-	@Override
-	public void error(Component comp, String path, String messageProp,
+	public void notifyError(Component comp, String path, String messageProp,
 		Object[] args)
 	{
 		final Frame owner = JOptionPane.getFrameForComponent(comp);

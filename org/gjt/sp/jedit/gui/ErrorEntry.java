@@ -1,4 +1,4 @@
-package org.gjt.sp.jedit.notification;
+package org.gjt.sp.jedit.gui;
 
 import java.util.Vector;
 

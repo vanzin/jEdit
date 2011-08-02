@@ -27,7 +27,7 @@ import java.awt.Component;
 import java.io.*;
 import java.net.*;
 
-import org.gjt.sp.jedit.notification.NotificationManager;
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.util.Log;
 //}}}
 
@@ -66,7 +66,7 @@ public class UrlVFS extends VFS
 		{
 			Log.log(Log.ERROR,this,mu);
 			String[] args = { mu.getMessage() };
-			NotificationManager.error(comp,path,"ioerror.badurl",args);
+			NotificationService.error(comp,path,"ioerror.badurl",args);
 			return null;
 		}
 	} //}}}
@@ -84,7 +84,7 @@ public class UrlVFS extends VFS
 		{
 			Log.log(Log.ERROR,this,mu);
 			String[] args = { mu.getMessage() };
-			NotificationManager.error(comp,path,"ioerror.badurl",args);
+			NotificationService.error(comp,path,"ioerror.badurl",args);
 			return null;
 		}
 	} //}}}

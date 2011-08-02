@@ -162,7 +162,7 @@
 		new org.gjt.sp.jedit.datatransfer.RichJEditTextTransferableService();
 	</SERVICE>
 
-	<SERVICE CLASS="org.gjt.sp.jedit.notification.NotificationService" NAME="Balloon">
-		new org.gjt.sp.jedit.notification.BalloonNotificationService();
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.notification.NotificationService" NAME="Balloon">
+		new org.gjt.sp.jedit.gui.notification.BalloonNotificationService();
 	</SERVICE>
 </SERVICES>

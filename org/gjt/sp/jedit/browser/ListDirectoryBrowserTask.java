@@ -24,10 +24,9 @@
 package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
-import org.gjt.sp.jedit.io.VFSManager;
-import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
 
@@ -79,7 +78,7 @@ class ListDirectoryBrowserTask extends AbstractBrowserTask
 			setCancellable(false);
 			Log.log(Log.ERROR,this,io);
 			String[] pp = { io.toString() };
-			NotificationManager.error(browser, path,"ioerror.directory-error",pp);
+			NotificationService.error(browser, path,"ioerror.directory-error",pp);
 		}
 		finally
 		{
@@ -92,7 +91,7 @@ class ListDirectoryBrowserTask extends AbstractBrowserTask
 				setCancellable(false);
 				Log.log(Log.ERROR,this,io);
 				String[] pp = { io.toString() };
-				NotificationManager.error(browser, path,"ioerror.directory-error",pp);
+				NotificationService.error(browser, path,"ioerror.directory-error",pp);
 			}
 		}
 

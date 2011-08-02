@@ -24,8 +24,9 @@ package org.gjt.sp.jedit.bufferio;
 
 //{{{ Imports
 import java.io.*;
+
+import org.gjt.sp.jedit.gui.notification.NotificationService;
 import org.gjt.sp.jedit.io.*;
-import org.gjt.sp.jedit.notification.NotificationManager;
 import org.gjt.sp.jedit.*;
 import org.gjt.sp.util.*;
 //}}}
@@ -90,7 +91,7 @@ public class BufferAutosaveRequest extends BufferIORequest
 			{
 				Log.log(Log.ERROR,this,e);
 				String[] pp = { e.toString() };
-				NotificationManager.error(view,path,"ioerror.write-error",pp);
+				NotificationService.error(view,path,"ioerror.write-error",pp);
 
 				// Incomplete autosave file should not exist.
 				if(out != null)

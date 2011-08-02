@@ -26,7 +26,6 @@ import java.awt.*;
 import java.util.*;
 
 import org.gjt.sp.jedit.*;
-import org.gjt.sp.jedit.browser.VFSBrowser;
 import org.gjt.sp.util.StandardUtilities;
 
 /**
