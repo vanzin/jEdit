@@ -614,14 +614,8 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 
 		historyStack.push(path);
 		browserView.saveExpansionState();
-		Runnable delayedAWTRequest = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				endRequest();
-			}
-		};
+
+		Runnable delayedAWTRequest = new DelayedEndRequest();
 		browserView.loadDirectory(null,path,true, delayedAWTRequest);
 		this.path = path;
 	} //}}}
@@ -733,17 +727,11 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 			Log.log(Log.ERROR, this, e, e);
 		}
 
-		EventQueue.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				endRequest();
-			}
-		});
+		Runnable delayedAWTRequest = new DelayedEndRequest();
+		EventQueue.invokeLater(delayedAWTRequest);
 	} //}}}
 
-	//{{{ rename() method
+	//{{{ rename() methods
 	public void rename(String from)
 	{
 		VFS vfs = VFSManager.getVFSForPath(from);
@@ -752,34 +740,14 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		String[] args = { filename };
 		String to = GUIUtilities.input(this,"vfs.browser.rename",
 			args,filename);
-		if(to == null)
-			return;
-
-		to = MiscUtilities.constructPath(vfs.getParentOfPath(from),to);
-
-		if (to.equals(from))
-			return;
-
-		Object session = vfs.createVFSSession(from,this);
-		if(session == null)
-			return;
-
-		if(!startRequest())
-			return;
-
-		Runnable delayedAWT = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				endRequest();
-			}
-		};
-		Task renameTask = new RenameBrowserTask(this, session, vfs, from, to, delayedAWT);
-		ThreadUtilities.runInBackground(renameTask);
+		rename(from, to);
 	} //}}}
 
-	//{{{ rename() method
+	/**
+	 * Rename a file
+	 * @param from the full path name of the file to be renamed
+	 * @param newname the new name (only filename, not full path)
+	 */
 	public void rename(String from, String newname)
 	{
 		VFS vfs = VFSManager.getVFSForPath(from);
@@ -799,16 +767,9 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		if(!startRequest())
 			return;
 
-		Runnable delayedAWT = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				endRequest();
-			}
-		};
-		Task task = new RenameBrowserTask(this, session, vfs, from, to, delayedAWT);
-		ThreadUtilities.runInBackground(task);
+		Runnable delayedAWTRequest = new DelayedEndRequest();
+		Task renameTask = new RenameBrowserTask(this, session, vfs, from, to, delayedAWTRequest);
+		ThreadUtilities.runInBackground(renameTask);
 	} //}}}		
 
 	//{{{ mkdir() method
@@ -2121,6 +2082,16 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 			return jEdit.getProperty("vfs.browser.file_filter.dir_only");
 		}
 
+	} //}}}
+
+	//{{{ DelayedEndRequest class
+	private class DelayedEndRequest implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			endRequest();
+		}
 	} //}}}
 
 	//}}}
