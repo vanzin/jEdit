@@ -184,6 +184,7 @@ view.context.customize=Customize This Menu...
 #}}}
 
 #{{{ System tray menu
+systrayicon=true
 tray.newView.label=New view
 tray.newPlainView.label=New plain view
 tray.exit.label=Exit
@@ -1852,6 +1853,7 @@ options.general.restore.cli=... including file names specified on the command li
 options.general.encodingDetectors=List of encoding autodetectors:
 options.general.fallbackEncodings=List of fallback encodings:
 options.general.fallbackEncodings.tooltip=A whitespace-separated list of encodings to try against encoding errors on loading
+options.general.systrayicon=Show the systray icon
 #}}}
 
 #{{{ Abbreviations pane

@@ -67,6 +67,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 	private JCheckBox restoreRemote;
 	private JCheckBox restoreCLI;
 	private JCheckBox restoreSplits;
+	private JCheckBox systemTrayIcon;
 	//}}}
 
 	//{{{ GeneralOptionPane constructor
@@ -179,6 +180,11 @@ public class GeneralOptionPane extends AbstractOptionPane
 		restoreSplits.setSelected(jEdit.getBooleanProperty("restore.splits", true));
 		addComponent(restoreSplits);
 
+		systemTrayIcon = new JCheckBox(jEdit.getProperty(
+					"options.general.systrayicon", "Show the systray icon"));
+		systemTrayIcon.setSelected(jEdit.getBooleanProperty("systrayicon", true));
+		addComponent(systemTrayIcon);
+
 		hypersearchResultsWarning = new JTextField(jEdit.getProperty("hypersearch.maxWarningResults"));
 		addComponent(jEdit.getProperty("options.general.hypersearch.maxWarningResults"),
 			hypersearchResultsWarning);
@@ -221,6 +227,7 @@ public class GeneralOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("restore.cli",restoreCLI.isSelected());
 		jEdit.setBooleanProperty("restore.remote", restoreRemote.isSelected());
 		jEdit.setBooleanProperty("restore.splits", restoreSplits.isSelected());
+		jEdit.setBooleanProperty("systrayicon", systemTrayIcon.isSelected());
 		try
 		{
 			jEdit.setIntegerProperty("hypersearch.maxWarningResults", Integer.parseInt(hypersearchResultsWarning.getText()));
