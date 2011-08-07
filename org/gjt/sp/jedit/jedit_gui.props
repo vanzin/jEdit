@@ -184,6 +184,7 @@ view.context.customize=Customize This Menu...
 #}}}
 
 #{{{ System tray menu
+systrayicon.service=swing
 systrayicon=true
 tray.newView.label=New view
 tray.newPlainView.label=New plain view

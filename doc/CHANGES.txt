@@ -360,7 +360,9 @@ to this release.
 
 }}}
 {{{ Miscellaneous
-- jEdit has now a systray icon (feature #1657143) (Matthieu Casanova)
+- jEdit has now a systray icon. It can be replaced by implementing the
+  org.gjt.sp.jedit.gui.tray.JEditTrayIcon service(feature #1657143)
+  (Matthieu Casanova)
 
 - VFS Browser jobs now use the new Task api (Matthieu Casanova)
 

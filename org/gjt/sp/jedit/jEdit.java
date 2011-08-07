@@ -23,7 +23,8 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
-import org.gjt.sp.jedit.gui.tray.JEditTrayIcon;
+import org.gjt.sp.jedit.gui.tray.JEditSwingTrayIcon;
+import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
 
 import java.awt.*;
@@ -38,7 +39,6 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
 
-import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
 import org.xml.sax.SAXParseException;
 
 import org.gjt.sp.jedit.bufferio.BufferIORequest;
@@ -236,6 +236,9 @@ public class jEdit
 				args[i] = null;
 			}
 		} //}}}
+
+		JTrayIconManager.setTrayIconArgs(restore, userDir, args);
+
 
 		//{{{ We need these initializations very early on
 		if(settingsDirectory != null)
@@ -460,7 +463,6 @@ public class jEdit
 		KillRing.setInstance(new JEditKillRing());
 		KillRing.getInstance().load();
 		GUIUtilities.advanceSplashProgress("init various properties");
-		JEditTrayIcon.setTrayIconArgs(restore, userDir, args);
 		propertiesChanged();
 
 		GUIUtilities.advanceSplashProgress("init modes");
@@ -954,13 +956,13 @@ public class jEdit
 		KillRing.getInstance().propertiesChanged(getIntegerProperty("history",25));
 		Chunk.propertiesChanged(propertyManager);
 
-		if (jEdit.getBooleanProperty("systrayicon"))
+		if (getBooleanProperty("systrayicon"))
 		{
-			JEditTrayIcon.addTrayIcon();
+			JTrayIconManager.addTrayIcon();
 		}
 		else
 		{
-			JEditTrayIcon.removeTrayIcon();
+			JTrayIconManager.removeTrayIcon();
 		}
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
