@@ -21,6 +21,7 @@
 
 package org.gjt.sp.jedit.gui.tray;
 
+//{{{ Imports
 import org.gjt.sp.jedit.GUIUtilities;
 
 import javax.swing.*;
@@ -28,8 +29,10 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.*;
 import java.awt.event.*;
+//}}}
 
 /**
+ * A TrayIcon that accepts Swing JPopupMenu.
  * @author Matthieu Casanova
  */
 public class JTrayIcon extends TrayIcon
@@ -39,17 +42,20 @@ public class JTrayIcon extends TrayIcon
 	private MouseListener mouseListener;
 	private PopupMenuListener popupMenuListener;
 
+	//{{{ JTrayIcon constructor
 	public JTrayIcon(Image image, String tooltip)
 	{
 		super(image, tooltip, null);
 
-	}
+	} //}}}
 
+	//{{{ getMenu() method
 	public JPopupMenu getMenu()
 	{
 		return menu;
-	}
+	} //}}}
 
+	//{{{ setMenu() method
 	public void setMenu(JPopupMenu menu)
 	{
 		if (menu == null)
@@ -81,8 +87,9 @@ public class JTrayIcon extends TrayIcon
 			menu.addPopupMenuListener(popupMenuListener);
 		}
 		this.menu = menu;
-	}
+	} //}}}
 
+	//{{{ MyMouseListener class
 	private class MyMouseListener extends MouseAdapter
 	{
 		@Override
@@ -95,8 +102,9 @@ public class JTrayIcon extends TrayIcon
 				menu.show(parent, 0, 0);
 			}
 		}
-	}
+	} //}}}
 
+	//{{{ MyPopupMenuListener class
 	private class MyPopupMenuListener implements PopupMenuListener
 	{
 		@Override
@@ -115,5 +123,5 @@ public class JTrayIcon extends TrayIcon
 		{
 			parent.setVisible(false);
 		}
-	}
+	} //}}}
 }
