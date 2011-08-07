@@ -119,7 +119,6 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 					{
 						if (window.getClass().getName().endsWith("XTrayIconEmbeddedFrame"))
 							continue;
-						Log.log(Log.ERROR, this, "Window:"+window);
 						windowState.put(window, window.isVisible());
 						window.setVisible(false);
 					}
