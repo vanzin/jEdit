@@ -34,7 +34,7 @@ import java.awt.*;
  */
 public class JTrayIconManager
 {
-	private static JEditSwingTrayIcon trayIcon;
+	private static JEditTrayIcon trayIcon;
 	private static boolean restore;
 	private static String userDir;
 	private static String[] args;
@@ -55,7 +55,7 @@ public class JTrayIconManager
 
 			SystemTray systemTray = SystemTray.getSystemTray();
 			String trayIconName = jEdit.getProperty("systrayicon.service", "swing");
-			JEditTrayIcon trayIcon = ServiceManager.getService(JEditTrayIcon.class, trayIconName);
+			trayIcon = ServiceManager.getService(JEditTrayIcon.class, trayIconName);
 			trayIcon.setTrayIconArgs(restore, userDir, args);
 			try
 			{
