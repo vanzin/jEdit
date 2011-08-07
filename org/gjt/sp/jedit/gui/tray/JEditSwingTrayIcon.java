@@ -25,6 +25,7 @@ package org.gjt.sp.jedit.gui.tray;
 import org.gjt.sp.jedit.EditServer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.Log;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,6 +100,8 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 				{
 					for (Window window : Window.getWindows())
 					{
+						if (window.getClass().getName().endsWith("XTrayIconEmbeddedFrame"))
+							continue;
 						Boolean previousState = windowState.get(window);
 						if (previousState == null)
 							window.setVisible(true);
@@ -114,6 +117,9 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 				{
 					for (Window window : Window.getWindows())
 					{
+						if (window.getClass().getName().endsWith("XTrayIconEmbeddedFrame"))
+							continue;
+						Log.log(Log.ERROR, this, "Window:"+window);
 						windowState.put(window, window.isVisible());
 						window.setVisible(false);
 					}
