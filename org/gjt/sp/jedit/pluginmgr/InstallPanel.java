@@ -160,6 +160,7 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP)
 				{
+					table.dispatchEvent(e);
 					table.requestFocus();
 				}
 			}
