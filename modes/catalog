@@ -280,6 +280,9 @@
 <MODE NAME="latex"		FILE="latex.xml"
 				FILE_NAME_GLOB="*.{tex,sty,ltx}" />
 
+<MODE NAME="lex"		FILE="lex.xml"
+				FILE_NAME_GLOB="*.l" />
+
 <MODE NAME="lilypond"		FILE="lilypond.xml"
 				FILE_NAME_GLOB="*.{ly,ily}" />
 

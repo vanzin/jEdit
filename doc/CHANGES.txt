@@ -300,7 +300,7 @@ to this release.
   "else" (Matthieu Casanova)
 
 - Factor Mode fix (#3100731 - Valeri Mytinski)  
-  
+
 - Added new keywords to C# edit mode (patch #3120746 from nherzing,
   Matthieu Casanova)
 
@@ -310,6 +310,8 @@ to this release.
   spacing in the text area. (#3023134, Dale Anson)
 
 - Added jflex edit mode (Matthieu Casanova)
+
+- Added lex/flex edit mode (Matthieu Casanova)
 
 - New mode for Oracle PL/SQL 11. (#3078863 - Diogo Kollross)
 
