@@ -345,6 +345,13 @@ class InstallPanel extends JPanel implements EBComponent
 					if (!(o instanceof Entry))
 						continue;
 					Entry e = (Entry)o;
+
+					if (e.install)
+					{
+						filteredEntries.add(e);
+						continue;
+					}
+
 					
 					String s = (e.name + ' ' + e.set + ' ' + e.description).toLowerCase();
 					boolean hasAll = true;
@@ -540,11 +547,13 @@ class InstallPanel extends JPanel implements EBComponent
 				PluginList.Dependency dep = deps.get(i);
 				if ("plugin".equals(dep.what))
 				{
+					boolean found = false;
 					for (int j = 0; j < filteredEntries.size(); j++)
 					{
 						Entry temp = (Entry)filteredEntries.get(j);
 						if (temp.plugin == dep.plugin)
 						{
+							found = true;
 							if (entry.install)
 							{
 								temp.parents.add(entry);
@@ -552,12 +561,33 @@ class InstallPanel extends JPanel implements EBComponent
 							}
 							else
 								temp.parents.remove(entry);
+
+							break;
+						}
+					}
+					if (!found)
+					{
+						// the dependency was not found in the filtered list so we search in
+						// global list.
+						for (int a = 0;a<entries.size();a++)
+						{
+							Entry temp = (Entry) entries.get(a);
+							if (temp.plugin == dep.plugin)
+							{
+								if (entry.install)
+								{
+									temp.parents.add(entry);
+									temp.install = true;
+								}
+								else
+									temp.parents.remove(entry);
+								break;
+							}
 						}
 					}
 				}
 			}
-
-			fireTableCellUpdated(row,column);
+			updateFilteredEntries();
 		} //}}}
 
 		//{{{ sort() method
@@ -841,11 +871,11 @@ class InstallPanel extends JPanel implements EBComponent
 
 				size = 0;
 				nbPlugins = 0;
-				int length = pluginModel.getRowCount();
+				int length = pluginModel.entries.size();
 				for (int i = 0; i < length; i++)
 				{
 					Entry entry = (Entry)pluginModel
-						.filteredEntries.get(i);
+						.entries.get(i);
 					if (entry.install)
 					{
 						nbPlugins++;
@@ -1021,11 +1051,11 @@ class InstallPanel extends JPanel implements EBComponent
 					jEdit.getJEditHome(),"jars");
 			}
 
-			int length = pluginModel.getRowCount();
+			int length = pluginModel.entries.size();
 			int instcount = 0;
 			for (int i = 0; i < length; i++)
 			{
-				Entry entry = (Entry)pluginModel.filteredEntries.get(i);
+				Entry entry = (Entry)pluginModel.entries.get(i);
 				if (entry.install)
 				{
 					entry.plugin.install(roster,installDirectory,downloadSource);

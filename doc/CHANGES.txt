@@ -11,6 +11,11 @@ Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
 to this release.
 
 {{{ Bug fixes
+- Fixed plugin install panel : when the selected plugin had dependencies that
+  were not visible because of the filtered view, those dependencies were not
+  installed. Now the install panel will always show selected plugins so you can
+  know what will be installed (Matthieu Casanova)
+
 - If the current buffer is on a VFS that is not browseable (ex:http), trying
   to open a new file was trying to browse the path of the current file giving
   an error (Matthieu Casanova)
