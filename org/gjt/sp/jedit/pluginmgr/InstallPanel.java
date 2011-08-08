@@ -68,14 +68,14 @@ class InstallPanel extends JPanel implements EBComponent
 
 	//{{{ Variables
 	private final JTable table;
-	private JScrollPane scrollpane;
-	private PluginTableModel pluginModel;
-	private PluginManager window;
-	private PluginInfoBox infoBox;
-	private ChoosePluginSet chooseButton;
-	private boolean updates;
+	private final JScrollPane scrollpane;
+	private final PluginTableModel pluginModel;
+	private final PluginManager window;
+	private final PluginInfoBox infoBox;
+	private final ChoosePluginSet chooseButton;
+	private final boolean updates;
 
-	private final Set<String> pluginSet = new HashSet<String>();
+	private final Collection<String> pluginSet = new HashSet<String>();
 	//}}}
 
 	//{{{ InstallPanel constructor
@@ -143,8 +143,9 @@ class InstallPanel extends JPanel implements EBComponent
 		infoPane.setPreferredSize(new Dimension(500,100));
 		split.setBottomComponent(infoPane);
 
-		SwingUtilities.invokeLater(new Runnable()
+		EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				split.setDividerLocation(0.75);
@@ -152,29 +153,47 @@ class InstallPanel extends JPanel implements EBComponent
 		});
 
 		final JTextField searchField = new JTextField();
-		searchField.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
+		searchField.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
+				if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP)
+				{
 					table.requestFocus();
 				}
 			}
 		});
-		searchField.getDocument().addDocumentListener(new DocumentListener() {
-			void update() {
+		searchField.getDocument().addDocumentListener(new DocumentListener()
+		{
+			void update()
+			{
 				pluginModel.setFilterString(searchField.getText());
 			}
-			public void changedUpdate(DocumentEvent e) {
+
+			@Override
+			public void changedUpdate(DocumentEvent e)
+			{
 				update();
 			}
-			public void insertUpdate(DocumentEvent e) {
+
+			@Override
+			public void insertUpdate(DocumentEvent e)
+			{
 				update();
 			}
-			public void removeUpdate(DocumentEvent e) {
+
+			@Override
+			public void removeUpdate(DocumentEvent e)
+			{
 				update();
 			}
 		});
-		table.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
+		table.addKeyListener(new KeyAdapter()
+		{
+			@Override
+			public void keyPressed(KeyEvent e)
+			{
 				int i = table.getSelectedRow(), n = table.getModel().getRowCount();
 				if (e.getKeyCode() == KeyEvent.VK_DOWN && i == (n - 1) ||
 					e.getKeyCode() == KeyEvent.VK_UP && i == 0) 
@@ -204,7 +223,7 @@ class InstallPanel extends JPanel implements EBComponent
 
 		add(BorderLayout.SOUTH,buttons);
 		String path = jEdit.getProperty(PluginManager.PROPERTY_PLUGINSET, "");
-		if (!path.equals(""))
+		if (!path.isEmpty())
 		{
 			loadPluginSet(path);
 		}
@@ -248,6 +267,7 @@ class InstallPanel extends JPanel implements EBComponent
 
 		ThreadUtilities.runInDispatchThread(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				infoBox.setText(null);
@@ -258,6 +278,7 @@ class InstallPanel extends JPanel implements EBComponent
 	} //}}}
 
 	//{{{ handleMessage() method
+	@Override
 	public void handleMessage(EBMessage message)
 	{
 		 if (message.getSource() == PluginManager.getInstance())
@@ -296,42 +317,49 @@ class InstallPanel extends JPanel implements EBComponent
 	private class PluginTableModel extends AbstractTableModel
 	{
 		/** This List can contain String or Entry. */
-		private List entries = new ArrayList();
-		private List filteredEntries = new ArrayList();
+		private final List entries = new ArrayList();
+		private final List filteredEntries = new ArrayList();
 		private int sortType = EntryCompare.COLUMN_NAME;
 		private String filterString;
 		int sortDirection = 1;
 		
 		//{{{ setFilterString() method
-		public void setFilterString(String filterString) {
+		public void setFilterString(String filterString)
+		{
 			this.filterString = filterString;
 			updateFilteredEntries();
 		} //}}}
 		
 		//{{{ updateFilteredEntries() method
-		void updateFilteredEntries() {
+		void updateFilteredEntries()
+		{
 			filteredEntries.clear();
 			if (filterString == null)
 				filteredEntries.addAll(entries);
-			else {
+			else
+			{
 				String[] words = filterString.toLowerCase().split("\\s+");
-				for (Object o : entries) {
+				for (Object o : entries)
+				{
 					if (!(o instanceof Entry))
 						continue;
 					Entry e = (Entry)o;
 					
-					String s = (e.name + " " + e.set + " " + e.description).toLowerCase();
+					String s = (e.name + ' ' + e.set + ' ' + e.description).toLowerCase();
 					boolean hasAll = true;
 					boolean negative = false;
-					for (String word : words) {
-						if (word.startsWith("-")) {
+					for (String word : words)
+					{
+						if (word.startsWith("-"))
+						{
 							word = word.substring(1);
 							negative = true;
 						}
 						if (word.length() == 0)
 							continue;
 						
-						if (negative == s.contains(word)) {
+						if (negative == s.contains(word))
+						{
 							hasAll = false;
 							break;
 						}
@@ -361,6 +389,7 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ getColumnCount() method
+		@Override
 		public int getColumnCount()
 		{
 			return 6;
@@ -383,12 +412,14 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ getRowCount() method
+		@Override
 		public int getRowCount()
 		{
 			return filteredEntries.size();
 		} //}}}
 
 		//{{{ getValueAt() method
+		@Override
 		public Object getValueAt(int rowIndex,int columnIndex)
 		{
 			Object obj = filteredEntries.get(rowIndex);
@@ -506,7 +537,7 @@ class InstallPanel extends JPanel implements EBComponent
 			for (int i = 0; i < deps.size(); i++)
 			{
 				PluginList.Dependency dep = deps.get(i);
-				if (dep.what.equals("plugin"))
+				if ("plugin".equals(dep.what))
 				{
 					for (int j = 0; j < filteredEntries.size(); j++)
 					{
@@ -636,7 +667,8 @@ class InstallPanel extends JPanel implements EBComponent
 			{
 				Object obj = filteredEntries.get(i);
 				String name = obj.toString();
-				if (obj instanceof Entry) {
+				if (obj instanceof Entry)
+				{
 					name = ((Entry)obj).plugin.jar;
 				}
 				if (pluginSet.contains(name))
@@ -766,6 +798,7 @@ class InstallPanel extends JPanel implements EBComponent
 		}
 
 
+		@Override
 		public void valueChanged(ListSelectionEvent e)
 		{
 			String text = "";
@@ -797,6 +830,7 @@ class InstallPanel extends JPanel implements EBComponent
 			pluginModel.addTableModelListener(this);
 		}
 
+		@Override
 		public void tableChanged(TableModelEvent e)
 		{
 			if (e.getType() == TableModelEvent.UPDATE)
@@ -829,11 +863,13 @@ class InstallPanel extends JPanel implements EBComponent
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			pluginModel.setSelectAll(isSelected());
 		}
 
+		@Override
 		public void tableChanged(TableModelEvent e)
 		{
 			if(pluginModel.isDownloadingList())
@@ -867,7 +903,7 @@ class InstallPanel extends JPanel implements EBComponent
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attrs) throws SAXException
 		{
-			if (localName.equals("plugin"))
+			if ("plugin".equals(localName))
 			{
 				pluginSet.add(attrs.getValue("jar"));
 			}
@@ -898,6 +934,7 @@ class InstallPanel extends JPanel implements EBComponent
 		}//}}}
 
 		//{{{ actionPerformed() method
+		@Override
 		public void actionPerformed(ActionEvent ae)
 		{
 			
@@ -929,6 +966,7 @@ class InstallPanel extends JPanel implements EBComponent
 		} //}}}
 
 		//{{{ actionPerformed() method
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			pluginSet.clear();
@@ -949,6 +987,7 @@ class InstallPanel extends JPanel implements EBComponent
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(pluginModel.isDownloadingList())
@@ -1007,6 +1046,7 @@ class InstallPanel extends JPanel implements EBComponent
 			}
 		}
 
+		@Override
 		public void tableChanged(TableModelEvent e)
 		{
 			if(pluginModel.isDownloadingList())
@@ -1036,10 +1076,10 @@ class InstallPanel extends JPanel implements EBComponent
 		private static final int COLUMN_SIZE = 4;
 		private static final int COLUMN_RELEASE = 5;
 
-		private int type;
+		private final int type;
 
 		/** 1=up, -1=down */
-		private int sortDirection;
+		private final int sortDirection;
 
 		EntryCompare(int type, int sortDirection)
 		{
@@ -1047,6 +1087,7 @@ class InstallPanel extends JPanel implements EBComponent
 			this.sortDirection = sortDirection;
 		}
 
+		@Override
 		public int compare(Entry e1, Entry e2)
 		{
 			int result;
@@ -1124,7 +1165,7 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ TextRenderer
 	private static class TextRenderer extends DefaultTableCellRenderer
 	{
-		private DefaultTableCellRenderer tcr;
+		private final DefaultTableCellRenderer tcr;
 
 		TextRenderer(DefaultTableCellRenderer tcr)
 		{
@@ -1153,6 +1194,7 @@ class InstallPanel extends JPanel implements EBComponent
 			this.command = command;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			switch (command)
@@ -1206,7 +1248,7 @@ class InstallPanel extends JPanel implements EBComponent
 	//{{{ HeaderRenderer
 	private static class HeaderRenderer extends DefaultTableCellRenderer
 	{
-		private DefaultTableCellRenderer tcr;
+		private final DefaultTableCellRenderer tcr;
 
 		HeaderRenderer(DefaultTableCellRenderer tcr)
 		{
