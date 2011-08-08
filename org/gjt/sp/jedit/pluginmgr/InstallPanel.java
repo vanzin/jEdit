@@ -823,11 +823,11 @@ class InstallPanel extends JPanel implements EBComponent
 	private class SizeLabel extends JLabel implements TableModelListener
 	{
 		private int size;
+		private int nbPlugins;
 
 		SizeLabel()
 		{
-			size = 0;
-			setText(jEdit.getProperty("install-plugins.totalSize")+formatSize(size));
+			update();
 			pluginModel.addTableModelListener(this);
 		}
 
@@ -840,16 +840,26 @@ class InstallPanel extends JPanel implements EBComponent
 					return;
 
 				size = 0;
+				nbPlugins = 0;
 				int length = pluginModel.getRowCount();
 				for (int i = 0; i < length; i++)
 				{
 					Entry entry = (Entry)pluginModel
 						.filteredEntries.get(i);
 					if (entry.install)
+					{
+						nbPlugins++;
 						size += entry.size;
+					}
 				}
-				setText(jEdit.getProperty("install-plugins.totalSize")+formatSize(size));
+				update();
 			}
+		}
+
+		private void update()
+		{
+			Object[] args = {nbPlugins, formatSize(size)};
+			setText(jEdit.getProperty("install-plugins.totalSize", args));
 		}
 	} //}}}
 

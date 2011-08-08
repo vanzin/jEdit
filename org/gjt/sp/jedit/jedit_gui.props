@@ -184,7 +184,6 @@ view.context.customize=Customize This Menu...
 #}}}
 
 #{{{ System tray menu
-systrayicon.service=swing
 systrayicon=true
 tray.newView.label=New view
 tray.newPlainView.label=New plain view
@@ -2648,7 +2647,7 @@ install-plugins.info.releaseDate=Release date
 install-plugins.info.version=Version
 install-plugins.info.category=Category
 
-install-plugins.totalSize=Total Size:\ 
+install-plugins.totalSize={0} plugin(s), total size: {1}
 install-plugins.select-all=Select All
 install-plugins.install=Install
 install-plugins.show-updates=Show Updates
