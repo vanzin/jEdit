@@ -329,6 +329,9 @@ to this release.
 
 }}}
 {{{ UI
+- Error Widget now use the same color as Invalid token instead of being always
+  red (Matthieu Casanova)
+
 - Ability to customize the browser context menu (feature #3354306)
   (Matthieu Casanova)
 

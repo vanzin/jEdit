@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright (C) 2008 Matthieu Casanova
+ * Copyright (C) 2008-2011 Matthieu Casanova
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.gui.EnhancedDialog;
+import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.util.Log;
 
 import javax.swing.*;
@@ -44,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 public class ErrorsWidgetFactory implements StatusWidgetFactory
 {
 	//{{{ getWidget() method
+	@Override
 	public Widget getWidget(View view)
 	{
 		Widget errorWidget = new ErrorWidget(view);
@@ -60,16 +62,19 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 			errorHighlight = new ErrorHighlight(view);
 		}
 
+		@Override
 		public JComponent getComponent()
 		{
 			return errorHighlight;
 		}
 
+		@Override
 		public void update()
 		{
 			errorHighlight.update();
 		}
 
+		@Override
 		public void propertiesChanged()
 		{
 		}
@@ -79,11 +84,18 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 	private static class ErrorHighlight extends JLabel implements ActionListener
 	{
 		private int currentSize;
+		private final Color foregroundColor;
 
 		//{{{ ErrorHighlight constructor
 		ErrorHighlight(View view)
 		{
-			setForeground(jEdit.getColorProperty("view.status.foreground"));
+			String defaultFont = jEdit.getProperty("view.font");
+			int defaultFontSize = jEdit.getIntegerProperty("view.fontsize", 12);
+			SyntaxStyle invalid = GUIUtilities.parseStyle(
+				jEdit.getProperty("view.style.invalid"),
+				defaultFont,defaultFontSize);
+			foregroundColor = invalid.getForegroundColor();
+			setForeground(foregroundColor);
 			setBackground(jEdit.getColorProperty("view.status.background"));
 			addMouseListener(new MyMouseAdapter(view));
 		} //}}}
@@ -119,6 +131,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		} //}}}
 
 		//{{{ actionPerformed() method
+		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			update();
@@ -135,13 +148,12 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 				currentSize = size;
 				if (size == 0)
 				{
-					setForeground(jEdit.getColorProperty("view.status.foreground"));
 					setText(null);
 					setToolTipText(size + " error");
 				}
 				else
 				{
-					setForeground(Color.red);
+					setForeground(foregroundColor);
 					setText(Integer.toString(size) + " error(s)");
 					setToolTipText(size + " error(s)");
 				}
@@ -275,6 +287,7 @@ public class ErrorsWidgetFactory implements StatusWidgetFactory
 		//{{{ MyActionListener class
 		private class MyActionListener implements ActionListener
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				Object source = e.getSource();
