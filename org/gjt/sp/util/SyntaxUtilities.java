@@ -66,7 +66,9 @@ public class SyntaxUtilities
 	{
 		if(name == null || name.length() == 0)
 			return defaultColor;
-		else if(name.charAt(0) == '#')
+
+		name = name.trim();
+		if(name.charAt(0) == '#')
 		{
 			try
 			{
