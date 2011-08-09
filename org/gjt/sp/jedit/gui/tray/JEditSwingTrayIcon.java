@@ -100,7 +100,7 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 				{
 					for (Window window : Window.getWindows())
 					{
-						if (window.getClass().getName().endsWith("XTrayIconEmbeddedFrame"))
+						if (skipWindow(window))
 							continue;
 						Boolean previousState = windowState.get(window);
 						if (previousState == null)
@@ -117,7 +117,7 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 				{
 					for (Window window : Window.getWindows())
 					{
-						if (window.getClass().getName().endsWith("XTrayIconEmbeddedFrame"))
+						if (skipWindow(window))
 							continue;
 						windowState.put(window, window.isVisible());
 						window.setVisible(false);
@@ -125,6 +125,22 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 				}
 			}
 		}
+
+		//{{{ MyMouseAdapter class
+		/**
+		 * Check if a window is not top level or systray icon
+		 * @param window the checked window
+		 * @return true if it is not toplevel or systray icon
+		 */
+		private boolean skipWindow(Window window)
+		{
+			if (window.getOwner() != null)
+				return true;
+			if (window.getClass().getName().contains("Tray"))
+				return true;
+			return false;
+		} //}}}
+
 	} //}}}
 
 	//{{{ MyActionListener class
