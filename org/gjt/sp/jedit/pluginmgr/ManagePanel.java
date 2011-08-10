@@ -955,6 +955,7 @@ public class ManagePanel extends JPanel
 					scrollbar.setValue(scrollbar.getMinimum());
 				}
 			}
+			PluginManager.getInstance().pluginRemoved();
 		}
 
 		public void valueChanged(ListSelectionEvent e)

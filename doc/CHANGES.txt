@@ -11,6 +11,9 @@ Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
 to this release.
 
 {{{ Bug fixes
+- When removing a plugin, the update and install panel were not refreshed
+  (Matthieu Casanova)
+
 - Fixed plugin install panel : when the selected plugin had dependencies that
   were not visible because of the filtered view, those dependencies were not
   installed. Now the install panel will always show selected plugins so you can
