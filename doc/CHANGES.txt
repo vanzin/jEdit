@@ -307,7 +307,10 @@ to this release.
 - Fixed indentation in javacc edit mode that can fail if a token contains
   "else" (Matthieu Casanova)
 
-- Factor Mode fix (#3100731 - Valeri Mytinski)  
+- Updated java edit mode among other things it now highlight special chars
+  like \n \uXXXX unicode, \t, \r in string literal (Matthieu Casanova)
+
+- Factor Mode fix (#3100731 - Valeri Mytinski)
 
 - Added new keywords to C# edit mode (patch #3120746 from nherzing,
   Matthieu Casanova)
