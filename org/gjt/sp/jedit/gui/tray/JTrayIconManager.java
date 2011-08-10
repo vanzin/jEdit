@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 2011 Matthieu Casanova
+ * Copyright © 2011 jEdit contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,24 @@ public class JTrayIconManager
 			SystemTray systemTray = SystemTray.getSystemTray();
 			String trayIconName = jEdit.getProperty("systrayicon.service", "swing");
 			trayIcon = ServiceManager.getService(JEditTrayIcon.class, trayIconName);
+			if (trayIcon == null)
+			{
+				if ("swing".equals(trayIconName))
+				{
+					Log.log(Log.ERROR, JTrayIconManager.class, "No service " +
+						JEditTrayIcon.class.getName() + " with name swing");
+					return;
+				}
+				Log.log(Log.WARNING, JTrayIconManager.class, "No service " +
+					JEditTrayIcon.class.getName() + " with name "+ trayIconName);
+				trayIcon = ServiceManager.getService(JEditTrayIcon.class, "swing");
+			}
+			if (trayIcon == null)
+			{
+				Log.log(Log.ERROR, JTrayIconManager.class, "No service " +
+					JEditTrayIcon.class.getName() + " with name swing");
+				return;
+			}
 			trayIcon.setTrayIconArgs(restore, userDir, args);
 			try
 			{

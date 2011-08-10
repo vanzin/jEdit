@@ -3,7 +3,7 @@
  * :tabSize=8:indentSize=8:noTabs=false:
  * :folding=explicit:collapseFolds=1:
  *
- * Copyright © 2011 Matthieu Casanova
+ * Copyright © 2011 jEdit contributors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 				boolean newVisibilityState = !jEdit.getActiveView().isVisible();
 				if (newVisibilityState)
 				{
-					for (Window window : Window.getWindows())
+					for (Window window : Window.getOwnerlessWindows())
 					{
 						if (skipWindow(window))
 							continue;
@@ -115,7 +115,7 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 				}
 				else
 				{
-					for (Window window : Window.getWindows())
+					for (Window window : Window.getOwnerlessWindows())
 					{
 						if (skipWindow(window))
 							continue;
@@ -126,7 +126,7 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 			}
 		}
 
-		//{{{ MyMouseAdapter class
+		//{{{ skipWindow method
 		/**
 		 * Check if a window is not top level or systray icon
 		 * @param window the checked window
@@ -134,8 +134,6 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 		 */
 		private boolean skipWindow(Window window)
 		{
-			if (window.getOwner() != null)
-				return true;
 			if (window.getClass().getName().contains("Tray"))
 				return true;
 			return false;
