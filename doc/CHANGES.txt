@@ -11,6 +11,7 @@ Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
 to this release.
 
 {{{ Bug fixes
+
 - When removing a plugin, the update and install panel were not refreshed
   (Matthieu Casanova)
 
@@ -61,14 +62,16 @@ to this release.
 - Fixed an exception that occurs when opening jEdit from command line
   with some files to open as argument if a jEdit server is running
   (#3173669 - Matthieu Casanova)
-  
+
 - Fixed wrong mode detection on drag and drop from GNOME Commander.
   (#3374207 - Shlomy Reinstein)
 
 - Fixed deadlock (jEdit freeze) when multiple files are dragged into the text
   area from file managers. (Shlomy Reinstein)
+
 }}}
 {{{ API Changes
+
 - Added TaskAdapter that is a default implementation of the TaskListener
   (Matthieu Casanova)
 
@@ -216,12 +219,12 @@ to this release.
                       boolean ownNamespace,
                       boolean rethrowBshErrors)
   BeanShell.runScript(View view,
-  		      String path,
-  		      boolean ownNamespace,
-  		      boolean rethrowBshErrors)
+                      String path,
+                      boolean ownNamespace,
+                      boolean rethrowBshErrors)
   BeanShell.eval(View view,
-  		 String command,
-  		 boolean rethrowBshErrors)
+                 String command,
+                 boolean rethrowBshErrors)
   BeanShell.eval(View view,
                  NameSpace namespace,
                  String command,
@@ -335,6 +338,11 @@ to this release.
 
 }}}
 {{{ UI
+
+- jEdit has now a systray icon. It can be replaced by implementing the
+  org.gjt.sp.jedit.gui.tray.JEditTrayIcon service (feature #1657143)
+  (Matthieu Casanova)
+
 - Error Widget now use the same color as Invalid token instead of being always
   red (Matthieu Casanova)
 
@@ -345,7 +353,7 @@ to this release.
   (Matthieu Casanova)
 
 - Moved Default Line Separator Char from General to Encodings Option Pane.
-  
+
 - The Statusbar widget choice in global options has now a preview to see how
   the status bar will look like (Matthieu Casanova)
 
@@ -376,9 +384,6 @@ to this release.
 
 }}}
 {{{ Miscellaneous
-- jEdit has now a systray icon. It can be replaced by implementing the
-  org.gjt.sp.jedit.gui.tray.JEditTrayIcon service(feature #1657143)
-  (Matthieu Casanova)
 
 - VFS Browser jobs now use the new Task api (Matthieu Casanova)
 
@@ -473,7 +478,9 @@ to this release.
 - Allow dragging files with data flavor type "text/uri-list" into jEdit. This
   type is used by several file managers in Ubuntu. (Shlomy Reinstein)
 
-- Enhance System, Look&feel, jEdit properties macros (r19599, bug #1593358, Eric Le Lay)
+- Enhance System, Look&feel, jEdit properties macros
+  (r19599, bug #1593358, Eric Le Lay)
+
 }}}
 
 }}}
