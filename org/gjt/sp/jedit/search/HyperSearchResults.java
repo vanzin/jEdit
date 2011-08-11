@@ -41,6 +41,7 @@ import org.gjt.sp.jedit.msg.*;
 import org.gjt.sp.jedit.search.SearchMatcher.Match;
 import org.gjt.sp.jedit.syntax.SyntaxStyle;
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.EnhancedTreeCellRenderer;
 import org.gjt.sp.util.HtmlUtilities;
 import org.gjt.sp.util.SyntaxUtilities;
 //}}}
@@ -75,7 +76,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			"hypersearch-results.highlight.label"));
 		highlight.addActionListener(ah);
 		toolBar.add(highlight);
-		
+
 		clear = new RolloverButton(GUIUtilities.loadIcon(
 			jEdit.getProperty("hypersearch-results.clear.icon")));
 		clear.setToolTipText(jEdit.getProperty(
@@ -190,7 +191,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	} //}}}
 
 	//{{{ traverseNodes() method
-	public static boolean traverseNodes(DefaultMutableTreeNode node, 
+	public static boolean traverseNodes(DefaultMutableTreeNode node,
 			HyperSearchTreeNodeCallback callbackInterface)
 	{
 		if (!callbackInterface.processNode(node))
@@ -343,7 +344,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			highlight.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.match.normal.icon")));
 		resultTree.repaint();
 	} //}}}
-	
+
 	//{{{ updateMultiStatus() method
 	private void updateMultiStatus()
 	{
@@ -352,7 +353,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		else
 			multi.setIcon(GUIUtilities.loadIcon(jEdit.getProperty("hypersearch-results.multi.single.icon")));
 	} //}}}
-	
+
 	//{{{ goToSelectedNode() method
 	public static final int M_OPEN = 0;
 	public static final int M_OPEN_NEW_VIEW = 1;
@@ -485,7 +486,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		}
 		return s;
 	} //}}}
-	
+
 	//}}}
 
 	//{{{ ActionHandler class
@@ -537,7 +538,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	{
 		private String prop;
 		private String styleTag;
-		
+
 		public HighlightingTree(DefaultTreeModel model)
 		{
 			super(model);
@@ -592,7 +593,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			return HtmlUtilities.highlightString(s, styleTag, matches);
 		}
 	} //}}}
-	
+
 	//{{{ KeyHandler class
 	class KeyHandler extends KeyAdapter
 	{
@@ -661,7 +662,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		{
 			TreePath path = resultTree.getSelectionPath();
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
-			
+
 			popupMenu = new JPopupMenu();
 			Object userObj = node.getUserObject();
 			if (userObj instanceof HyperSearchFileNode
@@ -694,7 +695,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			{
 				popupMenu.add(new JPopupMenu.Separator());
 				HyperSearchOperationNode resultNode = (HyperSearchOperationNode)userObj;
-				JCheckBoxMenuItem chkItem = 
+				JCheckBoxMenuItem chkItem =
 					new JCheckBoxMenuItem(jEdit.getProperty("hypersearch-results.tree-view"),
 							resultNode.isTreeViewDisplayed());
 				chkItem.addActionListener(new TreeDisplayAction());
@@ -739,7 +740,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			removeAllNodes();
 		}
 	}//}}}
-	
+
 	//{{{ NewSearchAction class
 	class NewSearchAction extends AbstractAction
 	{
@@ -753,7 +754,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			TreePath path = resultTree.getSelectionPath();
 			DefaultMutableTreeNode operNode = (DefaultMutableTreeNode)path.getLastPathComponent();
 			HyperSearchFolderNode nodeObj = (HyperSearchFolderNode)operNode.getUserObject();
-			
+
 			String glob = "*";
 			SearchFileSet dirList = SearchAndReplace.getSearchFileSet();
 			if (dirList instanceof DirectoryListSet)
@@ -876,10 +877,10 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		{
 			JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) evt.getSource();
 			boolean curState = menuItem.isSelected();
-			
+
 			TreePath path = resultTree.getSelectionPath();
 			DefaultMutableTreeNode operNode = (DefaultMutableTreeNode)path.getLastPathComponent();
-			
+
 			HyperSearchOperationNode operNodeObj = (HyperSearchOperationNode)operNode.getUserObject();
 			if (curState)
 				operNodeObj.cacheResultNodes(operNode);
@@ -890,7 +891,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 				try
 				{
 					operNodeObj.insertTreeNodes(resultTree, operNode);
-				} 
+				}
 				catch (Exception ex)
 				{
 					operNodeObj.restoreFlatNodes(resultTree, operNode);
@@ -902,22 +903,22 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 					((DefaultTreeModel)resultTree.getModel()).nodeStructureChanged(operNode);
 					expandAllNodes(operNode);
 					resultTree.scrollPathToVisible(
-							new TreePath(operNode.getPath()));					
+							new TreePath(operNode.getPath()));
 				}
 				if (excp != null)
 					throw new RuntimeException(excp);
 			}
 			else
 				operNodeObj.restoreFlatNodes(resultTree, operNode);
-			
+
 			operNodeObj.setTreeViewDisplayed(menuItem.isSelected());
 		}
 	}//}}}
-	
+
 	//{{{ expandAllNodes() method
 	public void expandAllNodes(DefaultMutableTreeNode node)
 	{
-		
+
 		traverseNodes(node, new TreeNodeCallbackAdapter()
 		{
 			@Override
@@ -928,7 +929,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			}
 		});
 	} //}}}
-	
+
 	//{{{ GoToNodeAction class
 	class GoToNodeAction extends AbstractAction
 	{
@@ -947,10 +948,9 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 	}//}}}
 
 	//{{{ ResultCellRenderer class
-	static class ResultCellRenderer extends DefaultTreeCellRenderer
+	static class ResultCellRenderer extends EnhancedTreeCellRenderer
 	{
-		Font plainFont, boldFont;
-		
+
 		//{{{ ResultCellRenderer constructor
 		ResultCellRenderer()
 		{
@@ -961,14 +961,18 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 				plainFont.getSize());
 		} //}}}
 
+		@Override
+		protected TreeCellRenderer newInstance()
+		{
+			return new ResultCellRenderer();
+		}
+
 		//{{{ getTreeCellRendererComponent() method
 		@Override
-		public Component getTreeCellRendererComponent(JTree tree,
+		protected void configureTreeCellRendererComponent(JTree tree,
 			Object value, boolean sel, boolean expanded,
 			boolean leaf, int row, boolean hasFocus)
 		{
-			super.getTreeCellRendererComponent(tree,value,sel,
-				expanded,leaf,row,hasFocus);
 			setIcon(null);
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
 
@@ -1007,8 +1011,6 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			{
 				setFont(plainFont);
 			}
-
-			return this;
 		} //}}}
 
 		//{{{ CountNodes class
@@ -1027,6 +1029,8 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 				return true;
 			}
 		}//}}}
+
+		Font plainFont, boldFont;
 	} //}}}
 
 	//{{{
@@ -1050,7 +1054,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			clipboard.setContents(selection, null);
 		}
 	} //}}}
-	
+
 	// these are used to eliminate code duplication. i don't normally use
 	// the visitor or "template method" pattern, but this code was contributed
 	// by Peter Cox and i don't feel like changing it around too much.
@@ -1078,7 +1082,7 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 			result.bufferClosed();
 		}
 	} //}}}
-	
+
 	//{{{ TreeNodeCallbackAdapter class
 	static class TreeNodeCallbackAdapter implements HyperSearchTreeNodeCallback
 	{
@@ -1086,6 +1090,6 @@ public class HyperSearchResults extends JPanel implements DefaultFocusComponent
 		{
 			return false;
 		}
-		
+
 	} //}}}
 }

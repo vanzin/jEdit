@@ -38,6 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import org.gjt.sp.jedit.browser.FileCellRenderer; // for icons
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.EnhancedTreeCellRenderer;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
 import org.gjt.sp.util.XMLUtilities;
@@ -455,23 +456,26 @@ public class HelpTOCPanel extends JPanel
 	} //}}}
 
 	//{{{ TOCCellRenderer class
-	static class TOCCellRenderer extends DefaultTreeCellRenderer
+	static class TOCCellRenderer extends EnhancedTreeCellRenderer
 	{
-		EmptyBorder border = new EmptyBorder(1,0,1,1);
+		@Override
+		protected TreeCellRenderer newInstance()
+		{
+			return new TOCCellRenderer();
+		}
 
-		public Component getTreeCellRendererComponent(JTree tree,
+		@Override
+		protected void configureTreeCellRendererComponent(JTree tree,
 			Object value, boolean sel, boolean expanded,
 			boolean leaf, int row, boolean focus)
 		{
-			super.getTreeCellRendererComponent(tree,value,sel,
-				expanded,leaf,row,focus);
 			setIcon(leaf ? FileCellRenderer.fileIcon
 				: (expanded ? FileCellRenderer.openDirIcon
 				: FileCellRenderer.dirIcon));
 			setBorder(border);
-
-			return this;
 		}
+
+		EmptyBorder border = new EmptyBorder(1,0,1,1);
 	} //}}}
 
 	//{{{ PluginCompare class

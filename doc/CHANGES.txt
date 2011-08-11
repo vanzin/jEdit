@@ -12,6 +12,10 @@ to this release.
 
 {{{ Bug fixes
 
+- When changing the Look and Feel on-the-fly, already shown JTrees with
+  explicitly set TreeCellRenderers were rendered wrongly, now they are robust
+  in regards to Look and Feel changes. (Björn "Vampire" Kautler)
+
 - When removing a plugin, the update and install panel were not refreshed
   (Matthieu Casanova)
 
@@ -71,6 +75,10 @@ to this release.
 
 }}}
 {{{ API Changes
+
+- Added EnhancedTreeCellRenderer to be used as Look and Feel change aware
+  alternative base class instead of DefaultTreeCellRenderer for custom
+  TreeCellRenderers. (Björn "Vampire" Kautler)
 
 - Added TaskAdapter that is a default implementation of the TaskListener
   (Matthieu Casanova)
