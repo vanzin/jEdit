@@ -922,6 +922,8 @@ public class jEdit
 	 */
 	public static void propertiesChanged()
 	{
+		initPLAF();
+
 		initKeyBindings();
 
 		Autosave.setInterval(getIntegerProperty("autosave",30));
@@ -1160,7 +1162,7 @@ public class jEdit
 			String path = MiscUtilities.constructPath(directory,plugin);
 			if (jEdit.getBooleanProperty("plugin-blacklist."+plugin))
 				continue;
-			
+
 			addPluginJAR(path);
 		}
 	} //}}}
@@ -3621,6 +3623,14 @@ public class jEdit
 			getBooleanProperty("decorate.frames"));
 		JDialog.setDefaultLookAndFeelDecorated(
 			getBooleanProperty("decorate.dialogs"));
+
+		if (isStartupDone())
+		{
+			for (Window window : Window.getWindows())
+			{
+				SwingUtilities.updateComponentTreeUI(window);
+			}
+		}
 	} //}}}
 
 	//{{{ getNextUntitledBufferId() method
