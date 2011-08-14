@@ -245,9 +245,9 @@
 
         <para>By default, new files are saved with your operating system's
         native line separator. This can be changed in the
-        <guibutton>General</guibutton> pane of the
+        <guibutton>Encodings</guibutton> pane of the
         <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-        Options</guimenuitem> dialog box; see <xref linkend="general-pane" />.
+        Options</guimenuitem> dialog box; see <xref linkend="encodings-pane" />.
         Note that changing this setting has no effect on existing files.</para>
     </section>
 

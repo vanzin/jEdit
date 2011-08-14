@@ -165,7 +165,7 @@ public class MiscUtilities
 	} //}}}
 
 	//{{{ abbreviate() method
-	/** returns an abbreviated path, replacing
+	/** @return an abbreviated path, replacing
 	 *  values with variables, if a prefix exists.
 	 *  @since jEdit 4.3pre16
 	 */

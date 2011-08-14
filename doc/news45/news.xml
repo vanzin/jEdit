@@ -20,6 +20,10 @@
     <listitem><para> Lots of old deprecated APIs were removed. Some plugins may be broken as a result. </para></listitem>
     <listitem><para> Choose color ordering for subpixel antialiasing (Global
     Options - Text Area - Anti-Aliased Smoothed Text) </para></listitem>
+    <listitem><para> Desktop System Tray icon to indicate when jEdit is running. </para></listitem>
+    <listitem><para> It is now possible to switch look and feel without
+    restarting jEdit. </para></listitem>
+    <listitem><para> Plugin Manager Enhancements. </para></listitem>
     </itemizedlist>
 
 <!-- :maxLineLen=80:wrap=hard: -->
