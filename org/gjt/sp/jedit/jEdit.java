@@ -3307,6 +3307,12 @@ public class jEdit
 		// macros if they are changed from within the editor
 		EditBus.addToBus(new SettingsReloader());
 
+		// Set the ContextClassLoader for the main jEdit thread.
+		// This way, the ContextClassLoader will be a JARClassLoader
+		// even at plugin activation and the EventQueue can also pick
+		// up the JARClassLoader. That's why this call has to be done
+		// before the usage of the EventQueue.
+		Thread.currentThread().setContextClassLoader(new JARClassLoader());
 		// Perhaps if Xerces wasn't slightly brain-damaged, we would
 		// not need this
 		EventQueue.invokeLater(new Runnable()
@@ -3318,10 +3324,6 @@ public class jEdit
 					new JARClassLoader());
 			}
 		});
-		// Also set the ContextClassLoader for the main jEdit thread.
-		// This way, the ContextClassLoader will be a JARClassLoader
-		// even at plugin activation.
-		Thread.currentThread().setContextClassLoader(new JARClassLoader());
 	} //}}}
 
 	//{{{ initSystemProperties() method
