@@ -86,7 +86,8 @@ public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
 	/** Update tooltip to reflect the window titles currently available. */
 	public void handleMessage(EBMessage message)
 	{
-		if (message instanceof ViewUpdate || message instanceof EditPaneUpdate) {
+		if (message instanceof EditPaneUpdate && 
+			(((EditPaneUpdate)message).getWhat() == EditPaneUpdate.BUFFER_CHANGED)) {
 			StringList sl = new StringList();
 			for (View v: jEdit.getViews()) 
 				sl.add(v.getTitle());					
