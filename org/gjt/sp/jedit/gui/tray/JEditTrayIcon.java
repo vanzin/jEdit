@@ -21,7 +21,7 @@
 
 package org.gjt.sp.jedit.gui.tray;
 
-import java.awt.*;
+import java.awt.Image;
 
 /**
  * The mother class of the tray icon service.

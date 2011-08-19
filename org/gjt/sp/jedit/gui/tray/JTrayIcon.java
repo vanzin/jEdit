@@ -22,18 +22,25 @@
 package org.gjt.sp.jedit.gui.tray;
 
 //{{{ Imports
-import org.gjt.sp.jedit.GUIUtilities;
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.TrayIcon;
 
-import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JDialog;
+import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import java.awt.*;
-import java.awt.event.*;
-//}}}
+
+import org.gjt.sp.jedit.GUIUtilities;
 
 /**
  * A TrayIcon that accepts Swing JPopupMenu.
  * @author Matthieu Casanova
+ * @since jEdit 4.5pre1
  */
 public class JTrayIcon extends TrayIcon
 {

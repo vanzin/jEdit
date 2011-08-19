@@ -22,28 +22,27 @@
 package org.gjt.sp.jedit.gui.tray;
 
 //{{{ Imports
-import org.gjt.sp.jedit.EBMessage;
-import org.gjt.sp.jedit.EditBus;
-import org.gjt.sp.jedit.EditServer;
-import org.gjt.sp.jedit.GUIUtilities;
-import org.gjt.sp.jedit.View;
-import org.gjt.sp.jedit.jEdit;
-import org.gjt.sp.util.Log;
-import org.gjt.sp.util.StringList;
-import org.gjt.sp.jedit.EBComponent;
-import org.gjt.sp.jedit.msg.BufferUpdate;
-import org.gjt.sp.jedit.msg.EditPaneUpdate;
-import org.gjt.sp.jedit.msg.ViewUpdate;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
-//}}}
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;
+import org.gjt.sp.jedit.EditServer;
+import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.View;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.msg.EditPaneUpdate;
+import org.gjt.sp.util.StringList;
 
 /**
  * @author Matthieu Casanova
