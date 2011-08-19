@@ -22,10 +22,16 @@
 package org.gjt.sp.jedit.gui.tray;
 
 //{{{ Imports
+import org.gjt.sp.jedit.EBMessage;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.EditServer;
 import org.gjt.sp.jedit.GUIUtilities;
+import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
+import org.gjt.sp.util.StringList;
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.msg.ViewUpdate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +47,7 @@ import java.util.Map;
  * @author Matthieu Casanova
  * @since jEdit 4.5pre1
  */
-public class JEditSwingTrayIcon extends JEditTrayIcon
+public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
 {
 	private boolean restore;
 	private String userDir;
@@ -66,10 +72,31 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 		newPlainViewItem.addActionListener(actionListener);
 		exitItem.addActionListener(actionListener);
 		setMenu(popup);
-
+		EditBus.addToBus(this);
 		addMouseListener(new MyMouseAdapter());
 	} //}}}
 
+	public void finalize() {
+		EditBus.removeFromBus(this);
+	}
+	
+	@Override
+	/** Update tooltip to reflect the window titles currently available. */
+	public void handleMessage(EBMessage message)
+	{
+		if (message instanceof ViewUpdate) {
+			ViewUpdate vu = (ViewUpdate)message;
+			if (vu.getWhat().equals(ViewUpdate.CLOSED) ||
+				vu.getWhat().equals(ViewUpdate.CREATED)) {
+				StringList sl = new StringList();
+				for (View v: jEdit.getViews()) 
+					sl.add(v.getTitle());					
+				setToolTip(sl.join(" | "));
+			}
+		}
+	}
+	
+	
 	//{{{ setTrayIconArgs() method
 	@Override
 	void setTrayIconArgs(boolean restore, String userDir, String[] args)
@@ -141,6 +168,8 @@ public class JEditSwingTrayIcon extends JEditTrayIcon
 
 	} //}}}
 
+	
+	
 	//{{{ MyActionListener class
 	private static class MyActionListener implements ActionListener
 	{
