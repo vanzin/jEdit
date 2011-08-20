@@ -33,6 +33,8 @@ import java.awt.*;
 
 /**
  * @author Matthieu Casanova
+ * @since jEdit 4.5pre1
+ * 
  */
 public class JTrayIconManager
 {
@@ -84,6 +86,7 @@ public class JTrayIconManager
 			catch (AWTException e)
 			{
 				Log.log(Log.ERROR, JEditSwingTrayIcon.class, "Unable to add Tray icon", e);
+				return;
 			}
 			if (trayIcon instanceof EBComponent) {
 				EditBus.addToBus(trayIcon);
