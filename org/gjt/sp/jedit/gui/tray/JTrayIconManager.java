@@ -22,6 +22,8 @@
 package org.gjt.sp.jedit.gui.tray;
 
 //{{{ Imports
+import org.gjt.sp.jedit.EBComponent;
+import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.ServiceManager;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.util.Log;
@@ -83,6 +85,9 @@ public class JTrayIconManager
 			{
 				Log.log(Log.ERROR, JEditSwingTrayIcon.class, "Unable to add Tray icon", e);
 			}
+			if (trayIcon instanceof EBComponent) {
+				EditBus.addToBus(trayIcon);
+			}
 		}
 	} //}}}
 
@@ -92,6 +97,9 @@ public class JTrayIconManager
 		if (trayIcon != null)
 		{
 			SystemTray.getSystemTray().remove(trayIcon);
+			if (trayIcon instanceof EBComponent) {
+				EditBus.removeFromBus(trayIcon);
+			}
 			trayIcon = null;
 		}
 	} //}}}

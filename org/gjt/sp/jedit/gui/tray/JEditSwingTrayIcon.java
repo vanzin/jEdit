@@ -36,7 +36,6 @@ import javax.swing.JPopupMenu;
 
 import org.gjt.sp.jedit.EBComponent;
 import org.gjt.sp.jedit.EBMessage;
-import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.EditServer;
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.View;
@@ -73,13 +72,9 @@ public class JEditSwingTrayIcon extends JEditTrayIcon implements EBComponent
 		newPlainViewItem.addActionListener(actionListener);
 		exitItem.addActionListener(actionListener);
 		setMenu(popup);
-		EditBus.addToBus(this);
 		addMouseListener(new MyMouseAdapter());
 	} //}}}
 
-	public void finalize() {
-		EditBus.removeFromBus(this);
-	}
 	
 	@Override
 	/** Update tooltip to reflect the window titles currently available. */
