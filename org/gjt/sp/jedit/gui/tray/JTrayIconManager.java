@@ -86,6 +86,7 @@ public class JTrayIconManager
 			catch (AWTException e)
 			{
 				Log.log(Log.ERROR, JEditSwingTrayIcon.class, "Unable to add Tray icon", e);
+				trayIcon = null;
 				return;
 			}
 			if (trayIcon instanceof EBComponent) {
