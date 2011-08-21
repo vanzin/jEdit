@@ -3515,6 +3515,12 @@ public class jEdit
 	 */
 	private static void initPLAF()
 	{
+		String lf = getProperty("lookAndFeel");
+		if (isStartupDone() && UIManager.getLookAndFeel().getClass().getName().equals(lf))
+		{
+			return;
+		}
+
 		Font primaryFont = jEdit.getFontProperty(
 			"metal.primary.font");
 		if(primaryFont != null)
@@ -3557,7 +3563,6 @@ public class jEdit
 
 		try
 		{
-			String lf = getProperty("lookAndFeel");
 			if(lf != null && lf.length() != 0)
 				UIManager.setLookAndFeel(lf);
 			else if(OperatingSystem.isMacOS())
