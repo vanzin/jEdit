@@ -71,6 +71,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		lookAndFeel.setSelectedIndex(index);
 		lookAndFeel.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent evt)
 			{
 				updateEnabled();
@@ -135,6 +136,11 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		continuousLayout.setSelected(jEdit.getBooleanProperty("appearance.continuousLayout"));
 		addComponent(continuousLayout);
 
+		systemTrayIcon = new JCheckBox(jEdit.getProperty(
+					"options.general.systrayicon", "Show the systray icon"));
+		systemTrayIcon.setSelected(jEdit.getBooleanProperty("systrayicon", true));
+		addComponent(systemTrayIcon);
+
 		addSeparator("options.appearance.startup.label");
 
 		/* Show splash screen */
@@ -189,6 +195,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		jEdit.setProperty("menu.spillover",menuSpillover.getText());
 		jEdit.setBooleanProperty("tip.show",showTips.isSelected());
 		jEdit.setBooleanProperty("appearance.continuousLayout",continuousLayout.isSelected());
+		jEdit.setBooleanProperty("systrayicon", systemTrayIcon.isSelected());
 		IconTheme.set(iconThemes.getSelectedItem().toString());
 
 		jEdit.setProperty(View.VIEW_DOCKING_FRAMEWORK_PROPERTY,
@@ -255,6 +262,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JCheckBox decorateDialogs;
 	private JComboBox antiAliasExtras;
 	private JComboBox iconThemes;
+	private JCheckBox systemTrayIcon;
 	//}}}
 
 	//{{{ updateEnabled() method
