@@ -2671,13 +2671,6 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 	public void goToPrevCharacter(boolean select)
 	{
 		Selection s = getSelectionAtOffset(caret);
-
-		if(caret == 0)
-		{
-			getToolkit().beep();
-			return;
-		}
-
 		if(!select && s instanceof Selection.Range)
 		{
 			if(multi)
@@ -2694,6 +2687,13 @@ loop:		for(int i = getCaretPosition() - 1; i >= 0; i--)
 				return;
 			}
 		}
+
+		if(caret == 0)
+		{
+			getToolkit().beep();
+			return;
+		}
+
 
 		int extraStartVirt = 0;
 		int extraEndVirt = 0;

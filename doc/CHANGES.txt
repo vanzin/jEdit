@@ -11,6 +11,9 @@ Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
 to this release.
 
 {{{ Bug fixes
+- Pressing left arrow when the caret is at the buffer start but in a selection
+  now cancel the selection as it should do (#3396672) (Matthieu Casanova)
+
 - Fixed loading of jEdit in case of corrupted recent.xml file in the settings
   (#3396545) (Matthieu Casanova)
 
