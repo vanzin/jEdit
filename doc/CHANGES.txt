@@ -106,6 +106,9 @@ to this release.
   TextArea.getVisibleLineSegment() that returns
   the visible part of the given line (Matthieu Casanova)
 
+- AbstractOptionPane.save() and AbstractOptionPane.init() are now
+  final as they should be since jEdit 4.2
+
 - API made public:
   org.gjt.sp.jedit.browser.VFSFileNameField (Marcelo Vanzin)
 

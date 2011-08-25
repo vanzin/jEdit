@@ -97,11 +97,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	} //}}}
 
 	//{{{ init() method
-	/**
-	 * Do not override this method, override {@link #_init()} instead.
-	 */
-	// final in 4.2
-	public void init()
+	public final void init()
 	{
 		if(!initialized)
 		{
@@ -111,11 +107,7 @@ public class AbstractOptionPane extends JPanel implements OptionPane
 	} //}}}
 
 	//{{{ save() method
-	/**
-	 * Do not override this method, override {@link #_save()} instead.
-	 */
-	// final in 4.2
-	public void save()
+	public final void save()
 	{
 		if(initialized)
 			_save();
