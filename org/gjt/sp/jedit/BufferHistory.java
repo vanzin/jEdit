@@ -435,7 +435,25 @@ public class BufferHistory
 			else if("PATH".equals(name))
 				path = charData.toString();
 			else if("CARET".equals(name))
-				caret = Integer.parseInt(charData.toString());
+			{
+				try
+				{
+					String s = charData.toString().trim();
+
+					if (s.length() != charData.length())
+					{
+						Log.log(Log.WARNING, this,
+							"The caret position in recent.xml was wrong: '"+
+							charData + "', fixing it");
+					}
+					caret = Integer.parseInt(s);
+				}
+				catch (NumberFormatException e)
+				{
+					Log.log(Log.ERROR, this, "Unable to parse caret position " +
+						charData);
+				}
+			}
 			else if("SELECTION".equals(name))
 				selection = charData.toString();
 			else if("ENCODING".equals(name))
