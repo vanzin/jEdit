@@ -3018,13 +3018,12 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void smartEnd(boolean select)
 	{
-		int pos = getCaretPosition();
-		int npos = 0;
 		switch(getInputHandler().getLastActionCount())
 		{
 		case 1:
+			int pos = getCaretPosition();
 			goToEndOfCode(select);
-			npos = getCaretPosition();
+			int npos = getCaretPosition();
 			if (npos == pos) goToEndOfWhiteSpace(select);
 			break;
 		case 2:
@@ -3089,7 +3088,6 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	{
 		int line = getCaretLine();
 
-		// @todo - Should tokenHandler be an TextArea instance variable?
 		DefaultTokenHandler tokenHandler = new DefaultTokenHandler();
 		buffer.markTokens(line,tokenHandler);
 		Token token = tokenHandler.getTokens();
