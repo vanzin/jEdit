@@ -7,6 +7,9 @@ jEdit 4.4 version history
 Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
+- Fixed loading of jEdit in case of corrupted recent.xml file in the settings
+  (#3396545) (Matthieu Casanova)
+
 - If the current buffer is on a VFS that is not browseable (ex:http), trying
   to open a new file was trying to browse the path of the current file giving
   an error (Matthieu Casanova)
