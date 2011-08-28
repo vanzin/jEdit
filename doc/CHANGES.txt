@@ -11,8 +11,6 @@ Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
 to this release.
 
 {{{ Bug fixes
-- Untitled buffer should not be created on VFS without write capability
-  (#3399387) (Matthieu Casanova)
 - Fixed a corner case when trying to move caret during a buffer operation
   (loading, transaction, undo) prevent to move the caret forever
   (Matthieu Casanova)
@@ -22,9 +20,6 @@ to this release.
 
 - Pressing left arrow when the caret is at the buffer start but in a selection
   now cancel the selection as it should do (#3396672) (Matthieu Casanova)
-
-- Fixed loading of jEdit in case of corrupted recent.xml file in the settings
-  (#3396545) (Matthieu Casanova)
 
 - Fixed a class loading issue when no GUI (SplashScreen or TrayIcon) was shown
   on startup. The effects were visible if the VoxSpell plugin was installed
@@ -41,10 +36,6 @@ to this release.
   were not visible because of the filtered view, those dependencies were not
   installed. Now the install panel will always show selected plugins so you can
   know what will be installed (Matthieu Casanova)
-
-- If the current buffer is on a VFS that is not browseable (ex:http), trying
-  to open a new file was trying to browse the path of the current file giving
-  an error (Matthieu Casanova)
 
 - The selectionLength status bar widget is now updated when jEdit starts, and
   says 0 instead of nothing if there is no selection (Matthieu Casanova)
@@ -376,9 +367,6 @@ to this release.
 - jEdit has now a systray icon. It can be replaced by implementing the
   org.gjt.sp.jedit.gui.tray.JEditTrayIcon service (feature #1657143)
   (Matthieu Casanova)
-
-- Error Widget now use the same color as Invalid token instead of being always
-  red (Matthieu Casanova)
 
 - Ability to customize the browser context menu (feature #3354306)
   (Matthieu Casanova)
