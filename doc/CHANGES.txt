@@ -7,6 +7,9 @@ jEdit 4.4 version history
 Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
+- Untitled buffer should not be created on VFS without write capability
+  (#3399387) (Matthieu Casanova)
+
 - Fixed loading of jEdit in case of corrupted recent.xml file in the settings
   (#3396545) (Matthieu Casanova)
 
