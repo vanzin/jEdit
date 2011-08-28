@@ -2157,7 +2157,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	 */
 	public boolean isTransactionInProgress()
 	{
-		return transaction || undoInProgress || insideCompoundEdit();
+		return transaction || undoInProgress || insideCompoundEdit() || loading;
 	} //}}}
 
 	//{{{ beginCompoundEdit() method

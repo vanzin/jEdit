@@ -732,6 +732,8 @@ public abstract class TextArea extends JComponent
 	 */
 	public void scrollTo(int line, int offset, boolean doElectricScroll)
 	{
+		if (buffer.isLoading())
+			return;
 		if(Debug.SCROLL_TO_DEBUG)
 			Log.log(Log.DEBUG,this,"scrollTo(), lineCount="
 				+ getLineCount());
@@ -2595,6 +2597,8 @@ loop:		for(int i = lineNo + 1; i < getLineCount(); i++)
 	 */
 	public void goToNextWord(boolean select, boolean eatWhitespace)
 	{
+		if (buffer.isLoading())
+			return;
 		int lineStart = getLineStartOffset(caretLine);
 		int newCaret = caret - lineStart;
 		String lineText = getLineText(caretLine);
@@ -2901,6 +2905,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToPrevWord(boolean select, boolean eatWhitespace, boolean eatOnlyAfterWord)
 	{
+		if (buffer.isLoading())
+			return;
 		int lineStart = getLineStartOffset(caretLine);
 		int newCaret = caret - lineStart;
 		String lineText = getLineText(caretLine);
@@ -3132,6 +3138,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToStartOfWhiteSpace(boolean select)
 	{
+		if (buffer.isLoading())
+			return;
 		Selection s = getSelectionAtOffset(caret);
 		int line, offset;
 		if(select || s == null)
@@ -3170,6 +3178,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToEndOfWhiteSpace(boolean select)
 	{
+		if (buffer.isLoading())
+			return;
 		Selection s = getSelectionAtOffset(caret);
 		int line, offset;
 		if(select || s == null)
