@@ -23,6 +23,8 @@ package org.gjt.sp.jedit.bufferset;
 
 //{{{ Imports
 import org.gjt.sp.jedit.*;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
 import org.gjt.sp.jedit.visitors.JEditVisitorAdapter;
@@ -334,7 +336,16 @@ public class BufferSetManager
 	public static Buffer createUntitledBuffer()
 	{
 		int untitledCount = jEdit.getNextUntitledBufferId();
-		Buffer newEmptyBuffer = jEdit.openTemporary(jEdit.getActiveView(), null,
+
+		View view = jEdit.getActiveView();
+		String parent = view.getBuffer().getDirectory();
+		VFS vfs = VFSManager.getVFSForPath(parent);
+		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
+		{
+			// cannot write on that VFS, creating untitled buffer in home directory
+			parent = System.getProperty("user.home");
+		}
+		Buffer newEmptyBuffer = jEdit.openTemporary(view, parent,
 							    "Untitled-" + untitledCount,true, null);
 		jEdit.commitTemporary(newEmptyBuffer);
 		return newEmptyBuffer;

@@ -11,6 +11,8 @@ Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
 to this release.
 
 {{{ Bug fixes
+- Untitled buffer should not be created on VFS without write capability
+  (#3399387) (Matthieu Casanova)
 - Fixed a corner case when trying to move caret during a buffer operation
   (loading, transaction, undo) prevent to move the caret forever
   (Matthieu Casanova)
