@@ -28,10 +28,7 @@ import javax.swing.JComponent;
 
 import java.awt.event.MouseEvent;
 import java.awt.font.*;
-import java.awt.geom.AffineTransform;
 import java.awt.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.*;
 import org.gjt.sp.jedit.buffer.IndentFoldHandler;
 import org.gjt.sp.jedit.buffer.JEditBuffer;
