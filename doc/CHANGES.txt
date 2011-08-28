@@ -335,6 +335,8 @@ to this release.
 
 }}}
 {{{ Editing
+- `elsif compiler directive added to verilog edit mode (#3261277)
+  (Matthieu Casanova)
 
 - Fixed indentation in javacc edit mode that can fail if a token contains
   "else" (Matthieu Casanova)
