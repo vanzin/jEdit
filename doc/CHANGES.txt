@@ -4,9 +4,12 @@ jEdit 4.4 version history
 
 {{{ Version 4.4.2
 
-Thanks to Björn "Vampire" Kautler for contributing to this release.
+Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to this release.
 
 {{{ Bug Fixes
+- If the current buffer is on a VFS that is not browseable (ex:http), trying
+  to open a new file was trying to browse the path of the current file giving
+  an error (Matthieu Casanova)
 
 
 }}}
