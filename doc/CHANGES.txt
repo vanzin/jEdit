@@ -11,7 +11,8 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to thi
   to open a new file was trying to browse the path of the current file giving
   an error (Matthieu Casanova)
 
-
+- Error Widget now use the same color as Invalid token instead of being always
+  red (Matthieu Casanova)
 }}}
 {{{ Miscellaneous
 
@@ -25,9 +26,7 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to thi
 
 
 }}}
-
 }}}
-
 {{{ Version 4.4.1
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
