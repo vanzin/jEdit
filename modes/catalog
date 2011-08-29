@@ -400,7 +400,7 @@
 				FILE_NAME_GLOB="*.{ssc,stm}" />
 
 <MODE NAME="powershell"		FILE="powershell.xml"
-				FILE_NAME_GLOB="*.ps1" />
+				FILE_NAME_GLOB="*.{ps1,psm1,psd1}" />
 
 <MODE NAME="prolog"		FILE="prolog.xml"
 				FILE_NAME_GLOB="*.pro" />

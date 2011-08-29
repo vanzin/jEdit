@@ -6,7 +6,7 @@ jEdit 4.5 version history
 
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
-Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing,
+Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing, Jeremy,
 Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
 to this release.
 
@@ -325,6 +325,8 @@ to this release.
 {{{ Editing
 
 - Additional mode for CPlex LP files (#3332052) (Kevin Hunter)
+
+- PowerShell mode update (#3316284) (Jeremy)
 
 - `elsif compiler directive added to verilog edit mode (#3261277)
   (Matthieu Casanova)
