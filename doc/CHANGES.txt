@@ -10,6 +10,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to thi
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- Pressing left arrow when the caret is at the buffer start but in a selection
+  now cancels the selection as it should. (#3396672) (Matthieu Casanova)
+
 - Fixed loading of jEdit in case of corrupted recent.xml file in the settings
   (#3396545) (Matthieu Casanova)
 
