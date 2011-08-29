@@ -18,9 +18,6 @@ to this release.
 - Fixed several case where userinput during buffer loading cause exceptions
   (#3398342) (Matthieu Casanova)
 
-- Pressing left arrow when the caret is at the buffer start but in a selection
-  now cancel the selection as it should do (#3396672) (Matthieu Casanova)
-
 - Fixed a class loading issue when no GUI (SplashScreen or TrayIcon) was shown
   on startup. The effects were visible if the VoxSpell plugin was installed
   and the Markdown plugin was tried to be used. (Björn "Vampire" Kautler)
