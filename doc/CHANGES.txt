@@ -323,6 +323,9 @@ to this release.
 
 }}}
 {{{ Editing
+
+- Additional mode for CPlex LP files (#3332052) (Kevin Hunter)
+
 - `elsif compiler directive added to verilog edit mode (#3261277)
   (Matthieu Casanova)
 
