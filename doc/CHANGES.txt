@@ -7,8 +7,8 @@ jEdit 4.5 version history
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing, Jeremy,
-Evan Wright, Shlomy Reinstein, Marcelo Vanzin and Eric Le Lay for contributing
-to this release.
+Evan Wright, Shlomy Reinstein, glen117, Marcelo Vanzin and Eric Le Lay for 
+contributing to this release.
 
 {{{ Bug fixes
 - Fixed a corner case when trying to move caret during a buffer operation
@@ -323,6 +323,8 @@ to this release.
 
 }}}
 {{{ Editing
+
+- Syntax for Macro Scheduler (#3085538) (glen117)
 
 - Additional mode for CPlex LP files (#3332052) (Kevin Hunter)
 

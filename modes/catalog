@@ -304,6 +304,9 @@
 <MODE NAME="lua"		FILE="lua.xml"
 				FILE_NAME_GLOB="*.lua" />
 
+<MODE NAME="macroscheduler"		FILE="macroscheduler.xml" 
+        FILE_NAME_GLOB="*.scp" />
+				
 <MODE NAME="mail"		FILE="mail.xml" />
 
 <MODE NAME="makefile"		FILE="makefile.xml"
