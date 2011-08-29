@@ -114,7 +114,7 @@
 <MODE NAME="coldfusion"		FILE="coldfusion.xml"
 				FILE_NAME_GLOB="*.{cfm,dbm,cfc}" />
 
-<MODE NAME='CPlex LP (Linear Program)'  FILE='cplexlp.xml'
+<MODE NAME='CPlex-LP'  FILE='cplexlp.xml'
 					FILE_NAME_GLOB='*.lp'  />
 
 <MODE NAME="c++"		FILE="cplusplus.xml"

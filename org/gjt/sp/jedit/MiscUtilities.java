@@ -132,7 +132,7 @@ public class MiscUtilities
 	 *     expansions.
 	 *     @return a string which is either the unchanged input string, or one with expanded variables.
 	 *     @since 4.3pre7
-	 *     @see MiscUtilities.abbreviate()
+	 *     @see #abbreviate
 	 *     @author ezust
 	 */
 	public static String expandVariables(String arg)
@@ -167,7 +167,7 @@ public class MiscUtilities
 
 	//{{{ abbreviate() method
 	/** @return an abbreviated path, replacing values with variables, if a prefix exists.
-	 *  @see MiscUtilities.expandVariables()
+	 *  @see #expandVariables
 	 *  @since jEdit 4.3pre16
 	 */
 	public static String abbreviate(String path)
