@@ -187,7 +187,7 @@
 <ACTION NAME="vfs.browser.rename">
 	<CODE>
 		if (files.length != 0)
-			browser.rename(files[0].path);
+			browser.rename(files[0]);
 	</CODE>
 </ACTION>
 

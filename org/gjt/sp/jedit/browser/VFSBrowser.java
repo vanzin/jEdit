@@ -732,6 +732,23 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	} //}}}
 
 	//{{{ rename() methods
+	/**
+	 * Rename a file.
+	 * It will prompt for the new name.
+	 * @param from the file to rename
+	 * @since jEdit 4.5pre1
+	 */
+	public void rename(VFSFile from)
+	{
+		String filename = from.getName();
+		String[] args = { filename };
+		String to = GUIUtilities.input(this,"vfs.browser.rename",
+			args,filename);
+		if (to == null)
+			return;
+		rename(from.getVFS(), from.getPath(), to);
+	}
+
 	public void rename(String from)
 	{
 		VFS vfs = VFSManager.getVFSForPath(from);
@@ -740,25 +757,33 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		String[] args = { filename };
 		String to = GUIUtilities.input(this,"vfs.browser.rename",
 			args,filename);
+		if (to == null)
+			return;
 		rename(from, to);
-	} //}}}
+	}
 
 	/**
 	 * Rename a file
+	 * @param vfs the VFS. It may be strange to give the VFS, but in
+	 * case of FavoriteVFS we cannot know that it is favorite.
 	 * @param from the full path name of the file to be renamed
 	 * @param newname the new name (only filename, not full path)
+	 * @since jEdit 4.5pre1
 	 */
-	public void rename(String from, String newname)
+	private void rename(VFS vfs, String from, String newname)
 	{
-		VFS vfs = VFSManager.getVFSForPath(from);
-
 		String filename = vfs.getFileName(from);
 		String to = newname;
-		
-		if(to == null || filename.equals(newname))
+
+		if(to == null)
 			return;
 
-		to = MiscUtilities.constructPath(vfs.getParentOfPath(from),to);
+		if (!(vfs instanceof FavoritesVFS))
+		{
+			if (filename.equals(newname))
+				return;
+			to = MiscUtilities.constructPath(vfs.getParentOfPath(from),to);
+		}
 
 		Object session = vfs.createVFSSession(from,this);
 		if(session == null)
@@ -770,7 +795,18 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 		Runnable delayedAWTRequest = new DelayedEndRequest();
 		Task renameTask = new RenameBrowserTask(this, session, vfs, from, to, delayedAWTRequest);
 		ThreadUtilities.runInBackground(renameTask);
-	} //}}}		
+	}
+
+	/**
+	 * Rename a file
+	 * @param from the full path name of the file to be renamed
+	 * @param newname the new name (only filename, not full path)
+	 */
+	public void rename(String from, String newname)
+	{
+		VFS vfs = VFSManager.getVFSForPath(from);
+		rename(vfs, from, newname);
+	} //}}}
 
 	//{{{ mkdir() method
 	public void mkdir()
@@ -1797,8 +1833,8 @@ check_selected: for(int i = 0; i < selectedFiles.length; i++)
 					sortIgnoreCase));
 				for(int i = 0; i < favorites.length; i++)
 				{
-					VFSFile favorite = favorites[i];
-					mi = new JMenuItem(favorite.getPath());
+					FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) favorites[i];
+					mi = new JMenuItem(favorite.getLabel());
 					mi.setIcon(FileCellRenderer
 						.getIconForFile(
 						favorite,false));

@@ -30,6 +30,8 @@ import java.awt.font.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+
+import org.gjt.sp.jedit.io.FavoritesVFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.*;
 //}}}
@@ -91,7 +93,15 @@ public class FileCellRenderer extends DefaultTableCellRenderer
 				setIcon(showIcons
 					? getIconForFile(file,entry.expanded,
 					openBuffer) : null);
-				setText(file.getName());
+				if (file instanceof FavoritesVFS.Favorite)
+				{
+					FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) file;
+					setText(favorite.getLabel());
+				}
+				else
+				{
+					setText(file.getName());
+				}
 
 				int state;
 				if(file.getType() == VFSFile.FILE)

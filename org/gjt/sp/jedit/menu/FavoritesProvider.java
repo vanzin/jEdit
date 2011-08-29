@@ -81,9 +81,10 @@ public class FavoritesProvider implements DynamicMenuProvider
 				jEdit.getBooleanProperty("vfs.browser.sortIgnoreCase")));
 			for(int i = 0; i < favorites.length; i++)
 			{
-				VFSFile favorite = favorites[i];
+				FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) favorites[i];
 				JMenuItem mi = new JMenuItem(
-					favorite.getPath());
+					favorite.getLabel());
+				mi.setActionCommand(favorite.getPath());
 				mi.setIcon(FileCellRenderer
 					.getIconForFile(
 					favorite,false));

@@ -24,6 +24,7 @@ package org.gjt.sp.jedit.browser;
 
 //{{{ Imports
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.io.FavoritesVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.io.VFSFile;
 import org.gjt.sp.jedit.io.VFSManager;
@@ -68,21 +69,24 @@ class RenameBrowserTask extends AbstractBrowserTask
 			path = vfs._canonPath(session, path, browser);
 			path2 = vfs._canonPath(session, path2, browser);
 
-			VFSFile file = vfs._getFile(session, path2, browser);
-			if (file != null)
+			if (!(vfs instanceof FavoritesVFS))
 			{
-				if ((OperatingSystem.isCaseInsensitiveFS())
-				    && path.equalsIgnoreCase(path2))
+				VFSFile file = vfs._getFile(session, path2, browser);
+				if (file != null)
 				{
-					// allow user to change name
-					// case
-				}
-				else
-				{
-					VFSManager.error(browser, path,
-					    "ioerror.rename-exists",
-					    new String[]{path2});
-					return;
+					if ((OperatingSystem.isCaseInsensitiveFS())
+							&& path.equalsIgnoreCase(path2))
+					{
+						// allow user to change name
+						// case
+					}
+					else
+					{
+						VFSManager.error(browser, path,
+								"ioerror.rename-exists",
+								new String[]{path2});
+						return;
+					}
 				}
 			}
 

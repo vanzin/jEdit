@@ -403,6 +403,9 @@ to this release.
 
 }}}
 {{{ Miscellaneous
+- Ability to rename favorites. Renaming a favorite now only apply a label
+  on the favorite without modifying the target file (feature #3292159)
+  (Matthieu Casanova)
 
 - VFS Browser jobs now use the new Task api (Matthieu Casanova)
 
