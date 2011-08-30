@@ -169,11 +169,11 @@ icons=22x22/actions/resize-horisontal.png \
 #}}}
 
 view.search.find=Search for:
-view.search.close-tooltip=Hide search bar
+view.search.close-tooltip=Hide search bar (ESCAPE)
 
 view.action.prompt=Action:
 view.action.no-completions=No matching actions found
-view.action.close-tooltip=Hide action bar
+view.action.close-tooltip=Hide action bar (ESCAPE)
 #}}}
 
 #{{{ Context menu
