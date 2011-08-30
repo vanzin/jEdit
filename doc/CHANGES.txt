@@ -10,6 +10,9 @@ Thanks to Björn "Vampire" Kautler and Matthieu Casanova for contributing to thi
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- Fixed several case where userinput during buffer loading cause exceptions
+  (#3398342) (Matthieu Casanova)
+
 - Pressing left arrow when the caret is at the buffer start but in a selection
   now cancels the selection as it should. (#3396672) (Matthieu Casanova)
 
