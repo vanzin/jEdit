@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.gjt.sp.jedit.buffer.*;
+import org.gjt.sp.jedit.search.SearchAndReplace;
 //}}}
 
 class SelectionManager
@@ -149,6 +150,7 @@ class SelectionManager
 			selection.add(addMe);
 
 		textArea.invalidateLineRange(addMe.startLine,addMe.endLine);
+		SearchAndReplace.setSearchString(textArea.getSelectedText());
 	} //}}}
 
 	//{{{ setSelection() method
