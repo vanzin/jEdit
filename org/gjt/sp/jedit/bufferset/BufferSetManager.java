@@ -338,7 +338,17 @@ public class BufferSetManager
 		int untitledCount = jEdit.getNextUntitledBufferId();
 
 		View view = jEdit.getActiveView();
-		String parent = view.getBuffer().getDirectory();
+		String parent = null;
+
+		if (view != null)
+		{
+			Buffer buffer = view.getBuffer();
+			parent = buffer.getDirectory();
+		}
+		if (parent == null)
+		{
+			parent = System.getProperty("user.home");
+		}
 		VFS vfs = VFSManager.getVFSForPath(parent);
 		if ((vfs.getCapabilities() & VFS.WRITE_CAP) == 0)
 		{

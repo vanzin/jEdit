@@ -11,6 +11,8 @@ Evan Wright, Shlomy Reinstein, glen117, Marcelo Vanzin and Eric Le Lay,
 Jason Gardner for contributing to this release.
 
 {{{ Bug fixes
+- Fixed NPE when starting jEdit with nosettings (#3401814) (Matthieu Casanova)
+
 - Fix Checkbox Menu not working on OSX (#3155813 patch #3159277) (Evan Wright)
 
 - Fixed a class loading issue when no GUI (SplashScreen or TrayIcon) was shown
