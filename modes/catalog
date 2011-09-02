@@ -15,8 +15,8 @@
 
 <MODE NAME="ada95"		FILE="ada95.xml" />
 
-<MODE NAME="ant"		FILE="ant.xml" 
-				FILE_NAME_GLOB="*.xml" 
+<MODE NAME="ant"		FILE="ant.xml"
+				FILE_NAME_GLOB="*.xml"
 				FIRST_LINE_GLOB="&lt;project*&gt;" />
 
 <MODE NAME="antlr"		FILE="antlr.xml"
@@ -161,7 +161,7 @@
 <MODE NAME="factor"		FILE="factor.xml"
 				FILE_NAME_GLOB="*.factor"/>
 
-<MODE NAME="jflex"		FILE="jflex.xml" 
+<MODE NAME="jflex"		FILE="jflex.xml"
 				FILE_NAME_GLOB="*.flex"/>
 
 <MODE NAME="forth"		FILE="forth.xml"
@@ -189,7 +189,7 @@
 
 <MODE NAME="go"			FILE="go.xml"
 				FILE_NAME_GLOB="*.go" />
-				
+
 <MODE NAME="gradle"		FILE="gradle.xml"
 				FILE_NAME_GLOB="*.{gradle}" />
 
@@ -262,7 +262,7 @@
 <MODE NAME="jcl"		FILE="jcl.xml"
 				FILE_NAME_GLOB="*.jcl" />
 
-<MODE NAME="jedit-actions"	FILE="jedit-actions.xml" 
+<MODE NAME="jedit-actions"	FILE="jedit-actions.xml"
 				FILE_NAME_GLOB="actions.xml"/>
 
 <MODE NAME="jhtml"		FILE="jhtml.xml"
@@ -304,9 +304,9 @@
 <MODE NAME="lua"		FILE="lua.xml"
 				FILE_NAME_GLOB="*.lua" />
 
-<MODE NAME="macroscheduler"		FILE="macroscheduler.xml" 
+<MODE NAME="macroscheduler"		FILE="macroscheduler.xml"
         FILE_NAME_GLOB="*.scp" />
-				
+
 <MODE NAME="mail"		FILE="mail.xml" />
 
 <MODE NAME="makefile"		FILE="makefile.xml"
@@ -316,7 +316,7 @@
 				FILE_NAME_GLOB="*.{mpl,mws}" />
 
 <MODE NAME="maven"		FILE="maven.xml"
-				FILE_NAME_GLOB="pom.xml"/>			
+				FILE_NAME_GLOB="pom.xml"/>
 
 <MODE NAME="ml"			FILE="ml.xml"
 				FILE_NAME_GLOB="*.{sml,ml}" />
@@ -358,7 +358,7 @@
 
 <MODE NAME="omnimark"		FILE="omnimark.xml"
 				FILE_NAME_GLOB="*.x{om,in}" />
-				
+
 <MODE NAME="outline"		FILE="outline.xml"
 				FILE_NAME_GLOB="*.{outline}" />
 
@@ -384,9 +384,9 @@
 <MODE NAME="pl-sql"		FILE="osql.xml"
                            FILE_NAME_GLOB="*.{pls,sql}" />
 
-<!-- Older version of pl-sql mode not currently used -->                           
-<MODE NAME="pl-sql9"		FILE="pl-sql.xml" />                           
-                           
+<!-- Older version of pl-sql mode not currently used -->
+<MODE NAME="pl-sql9"		FILE="pl-sql.xml" />
+
 <MODE NAME="pl1"		FILE="pl1.xml"
 				FILE_NAME_GLOB="*.pl[i1]" />
 
@@ -525,7 +525,7 @@
 
 <MODE NAME="stata"     FILE="stata.xml"
 				FILE_NAME_GLOB="*.{do,ado,mata}" />
-				
+
 <MODE NAME="svn-commit"		FILE="svn-commit.xml"
 				FILE_NAME_GLOB="svn-commit*.tmp" />
 
@@ -548,8 +548,8 @@
      because filename globs are checked in reverse order -->
 <MODE NAME="rfc"		FILE="rfc.xml"
 				FILE_NAME_GLOB="rfc*.txt" />
-			
-<MODE NAME="tld"		FILE="tld.xml" 
+
+<MODE NAME="tld"		FILE="tld.xml"
 				FILE_NAME_GLOB="*.tld"/>
 
 <MODE NAME="tsp"		FILE="tsp.xml"
