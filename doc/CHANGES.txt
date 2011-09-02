@@ -11,6 +11,9 @@ contributing to this release.
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- MiscUtilities.expandVariables() now recognizes %varname% on Windows,
+  meaning it can reverse what MiscUtilities.abbreviate() does. (Alan Ezust).
+
 - Fixed NPE when starting jEdit with nosettings (#3401814) (Matthieu Casanova)
 
 - Fixed a corner case when trying to move caret during a buffer operation
@@ -402,12 +405,6 @@ strank, and Hisateru Tanaka for contributing to this release.
 
 - Made the Windows installer buildable completely via wine on non-Windows
   systems (Björn "Vampire" Kautler)
-
-- MiscUtilities.expandVariables() now recognizes %varname% on Windows,
-  meaning it can reverse what MiscUtilities.abbreviate() does. (Alan Ezust).
-
-- Global options now use properties to display options tree
-  (Matthieu Casanova)
 
 - Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
 
