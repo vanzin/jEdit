@@ -21,7 +21,6 @@ see http://jedit.org/users-guide/installing-modes.html
 		<PROPERTY NAME="maxLineLen" VALUE="0"/>
 		<PROPERTY NAME="noWordSep" VALUE="_"/>
 		<PROPERTY NAME="folding" VALUE="none"/>
-		<PROPERTY NAME="filenameGlob" VALUE="CMakeLists.txt"/>
 		<PROPERTY NAME="customSettings" VALUE="true"/>
 		<PROPERTY NAME="deepIndent" VALUE="false"/>
 		<PROPERTY NAME="collapseFolds" VALUE="1000"/>
@@ -82,7 +81,7 @@ see http://jedit.org/users-guide/installing-modes.html
       <!-- conditionals -->
       <KEYWORD4>FOREACH</KEYWORD4>
       <KEYWORD4>ELSE</KEYWORD4>
-      <KEYWORD4>ELSEIF</KEYWORD4> 
+      <KEYWORD4>ELSEIF</KEYWORD4>
       <KEYWORD4>IF</KEYWORD4>
       <KEYWORD4>MACRO</KEYWORD4>
       <KEYWORD4>ENDIF</KEYWORD4>
@@ -184,4 +183,4 @@ see http://jedit.org/users-guide/installing-modes.html
 
 </MODE>
 
- 	  	 
+
