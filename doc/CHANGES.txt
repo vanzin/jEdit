@@ -11,8 +11,9 @@ Evan Wright, Shlomy Reinstein, glen117, Marcelo Vanzin and Eric Le Lay for
 contributing to this release.
 
 {{{ Bug fixes
+
 - Fixed jEdit starting when max heap size is too low to load Killring
-  (#1827853) (Matthieu Casanova
+  (#1827853) (Matthieu Casanova)
 
 - Fix Checkbox Menu not working on OSX (#3155813 patch #3159277) (Evan Wright)
 
@@ -408,6 +409,7 @@ contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
 - Ability to rename favorites. Renaming a favorite now only apply a label
   on the favorite without modifying the target file (feature #3292159)
   (Matthieu Casanova)
