@@ -81,6 +81,11 @@ contributing to this release.
 }}}
 {{{ API Changes
 
+- Added a possibility to get the pure path from a VFS path without the
+  overhead of the VFS like usernames, passwords, hosts, archive files and
+  so on. VFS implementations should check whether they need to override
+  the new getFilePath method. (Björn "Vampire" Kautler)
+
 - Added EnhancedTreeCellRenderer to be used as Look and Feel change aware
   alternative base class instead of DefaultTreeCellRenderer for custom
   TreeCellRenderers. (Björn "Vampire" Kautler)
