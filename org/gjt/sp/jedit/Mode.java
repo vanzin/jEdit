@@ -36,6 +36,7 @@ import org.gjt.sp.jedit.indent.DeepIndentRule;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.indent.IndentRuleFactory;
 import org.gjt.sp.jedit.indent.WhitespaceRule;
+import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.util.Log;
@@ -75,12 +76,25 @@ public class Mode
 	{
 		try
 		{
-			filenameRE = null;
+			filepathRE = null;
 			String filenameGlob = (String)getProperty("filenameGlob");
 			if(filenameGlob != null && filenameGlob.length() != 0)
 			{
-				filenameRE = Pattern.compile(StandardUtilities.globToRE(filenameGlob),
-							     Pattern.CASE_INSENSITIVE);
+				// translate glob to regex
+				String filepathRE = StandardUtilities.globToRE(filenameGlob);
+				// if glob includes a path separator (both are supported as
+				// users can supply them in the GUI and thus will copy
+				// Windows paths in there)
+				if (filepathRE.contains("/") || filepathRE.contains("\\\\"))
+				{
+					// replace path separators by both separator possibilities in the regex
+					filepathRE = filepathRE.replaceAll("/|\\\\\\\\", "[/\\\\\\\\]");
+				} else {
+					// glob is for a filename without path, prepend the regex with
+					// an optional path prefix to be able to match against full paths
+					filepathRE = String.format("(?:.*[/\\\\])?%s", filepathRE);
+				}
+				this.filepathRE = Pattern.compile(filepathRE, Pattern.CASE_INSENSITIVE);
 			}
 
 			firstlineRE = null;
@@ -225,26 +239,62 @@ public class Mode
 	 * Returns true if the edit mode is suitable for editing the specified
 	 * file. The buffer name and first line is checked against the
 	 * file name and first line globs, respectively.
-	 * @param fileName The buffer's name
+	 * @param fileName The buffer's name, can be {@code null}
 	 * @param firstLine The first line of the buffer
 	 *
 	 * @since jEdit 3.2pre3
 	 */
 	public boolean accept(String fileName, String firstLine)
 	{
-		return acceptFilename(fileName) || acceptFirstLine(firstLine);
+		return accept(null, fileName, firstLine);
+	} //}}}
+
+	//{{{ accept() method
+	/**
+	 * Returns true if the edit mode is suitable for editing the specified
+	 * file. The buffer name and first line is checked against the
+	 * file name and first line globs, respectively.
+	 * @param filePath The buffer's path, can be {@code null}
+	 * @param fileName The buffer's name, can be {@code null}
+	 * @param firstLine The first line of the buffer
+	 *
+	 * @since jEdit 4.5pre1
+	 */
+	public boolean accept(String filePath, String fileName, String firstLine)
+	{
+		return acceptIdentical(filePath, fileName)
+		       || acceptFile(filePath, fileName)
+		       || acceptFirstLine(firstLine);
 	} //}}}
 
 	//{{{ acceptFilename() method
 	/**
 	 * Returns true if the buffer name matches the file name glob.
-	 * @param fileName The buffer's name
+	 * @param fileName The buffer's name, can be {@code null}
 	 * @return true if the file name matches the file name glob.
 	 * @since jEdit 4.3pre18
+	 * @deprecated use {@link #acceptFile(String, String)} instead
 	 */
+	@Deprecated
 	public boolean acceptFilename(String fileName)
 	{
-		return filenameRE != null && filenameRE.matcher(fileName).matches();
+		return acceptFile(null, fileName);
+	} //}}}
+
+	//{{{ acceptFile() method
+	/**
+	 * Returns true if the buffer's name or path matches the file name glob.
+	 * @param filePath The buffer's path, can be {@code null}
+	 * @param fileName The buffer's name, can be {@code null}
+	 * @return true if the file path or name matches the file name glob.
+	 * @since jEdit 4.5pre1
+	 */
+	public boolean acceptFile(String filePath, String fileName)
+	{
+		String cleanPath = filePath == null ? null : VFSManager.getVFSForPath(filePath).getFilePath(filePath);
+		return filepathRE != null
+		       && (((cleanPath != null) && filepathRE.matcher(cleanPath).matches())
+			   || ((fileName != null) && filepathRE.matcher(fileName).matches()));
 	} //}}}
 
 	//{{{ acceptFilenameIdentical() method
@@ -252,20 +302,34 @@ public class Mode
 	 * Returns true if the buffer name is identical to the file name glob.
 	 * This works only for regular expressions that only represent themselves,
 	 * i.e. without any meta-characters.
-	 * @param fileName The buffer's name
+	 * @param fileName The buffer's name, can be {@code null}
 	 * @return true if the file name matches the file name glob.
 	 * @since jEdit 4.4pre1
 	 */
 	public boolean acceptFilenameIdentical(String fileName)
 	{
-		if (fileName == null) 
-		{
-			return false;	
-		}
-		return (fileName.equals((String)getProperty("filenameGlob")) &&
-		       (filenameRE == null || filenameRE.matcher(fileName).matches()));
-	} //}}}	
-	
+		return acceptIdentical(null, fileName);
+	} //}}}
+
+	//{{{ acceptIdentical() method
+	/**
+	 * Returns true if the buffer path or name is identical to the file name glob.
+	 * This works only for regular expressions that only represent themselves,
+	 * i.e. without any meta-characters.
+	 * @param filePath The buffer's path, can be {@code null}
+	 * @param fileName The buffer's name, can be {@code null}
+	 * @return true if the file name matches the file name glob.
+	 * @since jEdit 4.5pre1
+	 */
+	public boolean acceptIdentical(String filePath, String fileName)
+	{
+		String cleanPath = filePath == null ? null : VFSManager.getVFSForPath(filePath).getFilePath(filePath);
+		return ((cleanPath != null) && cleanPath.equals(getProperty("filenameGlob"))
+		        && (filepathRE == null || filepathRE.matcher(cleanPath).matches()))
+		       || ((fileName != null) && fileName.equals(getProperty("filenameGlob"))
+		           && (filepathRE == null || filepathRE.matcher(fileName).matches()));
+	} //}}}
+
 	//{{{ acceptFirstLine() method
 	/**
 	 * Returns true if the first line matches the first line glob.
@@ -454,7 +518,7 @@ public class Mode
 	protected String name;
 	protected Map<String, Object> props;
 	private Pattern firstlineRE;
-	private Pattern filenameRE;
+	private Pattern filepathRE;
 	protected TokenMarker marker;
 	private List<IndentRule> indentRules;
 	private String electricKeys;

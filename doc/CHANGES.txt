@@ -328,6 +328,11 @@ contributing to this release.
 }}}
 {{{ Editing
 
+- Filename globs for matching edit modes now support specifying a full
+  path as glob with either "/" or "\" as path separator while "\" has
+  to be doubled as it is also the escape character for meta characters.
+  (Björn "Vampire" Kautler)
+
 - Syntax for Macro Scheduler (#3085538) (glen117)
 
 - Additional mode for CPlex LP files (#3332052) (Kevin Hunter)
