@@ -14,8 +14,6 @@ contributing to this release.
 - Fixed jEdit starting when max heap size is too low to load Killring
   (#1827853) (Matthieu Casanova
 
-- Fixed NPE when starting jEdit with nosettings (#3401814) (Matthieu Casanova)
-
 - Fix Checkbox Menu not working on OSX (#3155813 patch #3159277) (Evan Wright)
 
 - Fixed a class loading issue when no GUI (SplashScreen or TrayIcon) was shown
@@ -415,9 +413,6 @@ contributing to this release.
   (Matthieu Casanova)
 
 - VFS Browser jobs now use the new Task api (Matthieu Casanova)
-
-- MiscUtilities.expandVariables() now recognizes %varname% on Windows,
-  meaning it can reverse what MiscUtilities.abbreviate() does. (Alan Ezust).
 
 - Global options now use properties to display options tree
   (Matthieu Casanova)
