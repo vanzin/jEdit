@@ -155,13 +155,16 @@ public class MiscUtilities
 	//{{{ expandVariables() method
 	static final String varPatternString = "(\\$([a-zA-Z0-9_]+))";
 	static final String varPatternString2 = "(\\$\\{([^}]+)\\})";
+	static final String winPatternString  = "(%([^%]+)%)";
 	static final Pattern varPattern = Pattern.compile(varPatternString);
 	static final Pattern varPattern2 = Pattern.compile(varPatternString2);
-
+	static final Pattern winPattern = Pattern.compile(winPatternString);
+	
 	/** Accepts a string from the user which may contain variables of various syntaxes.
-	 *  The goal is to support the following:
+	 *  The function supports the following expansion syntaxes:
 	 *     $varname
-	 *     ${varname}
+	 *     ${varname} (on non-windows)
+	 *     %varname% (on Windows)
 	 *     And expand each of these by looking at the system environment variables for possible
 	 *     expansions.
 	 *     @return a string which is either the unchanged input string, or one with expanded variables.
@@ -174,7 +177,9 @@ public class MiscUtilities
 		Matcher m = p.matcher(arg);
 		if (!m.find())
 		{
-			p = varPattern2;
+			if (OperatingSystem.isWindows()) 
+				p = winPattern;
+			else p = varPattern2;
 			m = p.matcher(arg);
 			if (!m.find()) // no variables to substitute
 				return arg;

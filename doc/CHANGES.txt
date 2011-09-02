@@ -403,6 +403,12 @@ strank, and Hisateru Tanaka for contributing to this release.
 - Made the Windows installer buildable completely via wine on non-Windows
   systems (Björn "Vampire" Kautler)
 
+- MiscUtilities.expandVariables() now recognizes %varname% on Windows,
+  meaning it can reverse what MiscUtilities.abbreviate() does. (Alan Ezust).
+
+- Global options now use properties to display options tree
+  (Matthieu Casanova)
+
 - Included the Windows launcher in the Java installer (Björn "Vampire" Kautler)
 
 - Made the Windows installer correctly show special characters like german
