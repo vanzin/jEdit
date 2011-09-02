@@ -23,7 +23,7 @@
 package org.gjt.sp.jedit.buffer;
 
 import javax.swing.event.ListDataListener;
-import java.util.List;
+import java.util.Collection;
 
 import org.gjt.sp.jedit.gui.MutableListModel;
 
@@ -89,10 +89,10 @@ public class KillRing implements MutableListModel
 	 *     getElementAt(n).toString().
 	 *   - Otherwise, it is converted as if it is a Object which was
 	 *     obtained by getElementAt(n).
-	 *
+	 * @param source the loaded killring.
 	 * @since jEdit 4.3pre12
 	 */
-	protected void reset(List source)
+	protected void reset(Collection<?> source)
 	{
 		UndoManager.RemovedContent[] newRing
 			= new UndoManager.RemovedContent[source.size()];
@@ -117,17 +117,21 @@ public class KillRing implements MutableListModel
 	} //}}}
 
 	//{{{ MutableListModel implementation
+	@Override
 	public void addListDataListener(ListDataListener listener) {}
 
+	@Override
 	public void removeListDataListener(ListDataListener listener) {}
 
 	//{{{ getElementAt() method
+	@Override
 	public Object getElementAt(int index)
 	{
 		return ring[virtualToPhysicalIndex(index)];
 	} //}}}
 
 	//{{{ getSize() method
+	@Override
 	public int getSize()
 	{
 		if(wrap)
@@ -137,6 +141,7 @@ public class KillRing implements MutableListModel
 	} //}}}
 
 	//{{{ removeElement() method
+	@Override
 	public boolean removeElement(Object value)
 	{
 		for(int i = 0; i < getSize(); i++)
@@ -151,6 +156,7 @@ public class KillRing implements MutableListModel
 	} //}}}
 
 	//{{{ insertElementAt() method
+	@Override
 	public void insertElementAt(Object value, int index)
 	{
 		/* This is not terribly efficient, but this method is only
