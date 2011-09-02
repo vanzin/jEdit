@@ -152,15 +152,7 @@ public class XMLUtilities
 		}
 		finally
 		{
-			try
-			{
-				if(in != null)
-					in.close();
-			}
-			catch(IOException io)
-			{
-				Log.log(Log.ERROR,XMLUtilities.class,io);
-			}
+			IOUtilities.closeQuietly(in);
 		}
 		return false;
 	} //}}}
