@@ -331,7 +331,7 @@ contributing to this release.
 - Filename globs for matching edit modes now support specifying a full
   path as glob with either "/" or "\" as path separator while "\" has
   to be doubled as it is also the escape character for meta characters.
-  (Björn "Vampire" Kautler)
+  (Feature Request #2557712 - Björn "Vampire" Kautler)
 
 - Syntax for Macro Scheduler (#3085538) (glen117)
 
