@@ -150,7 +150,6 @@ class SelectionManager
 			selection.add(addMe);
 
 		textArea.invalidateLineRange(addMe.startLine,addMe.endLine);
-		SearchAndReplace.setSearchString(textArea.getSelectedText());
 	} //}}}
 
 	//{{{ setSelection() method
