@@ -143,7 +143,6 @@
 		       encoding="UTF-8"
 		       includeAntRuntime="false">
 			<include name="org/**"/>
-			<include name="com/**"/>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
@@ -582,7 +581,7 @@
 		</javac>
 		<javadoc sourcepath="."
 			 destdir="${classes.dir}/javadoc/api"
-			 packagenames="org.*,com.*"
+			 packagenames="org.*"
 			 classpath="${classes.dir}/core"
 			 doclet="doclet.GenerateTocXML"
 			 docletpath="${classes.dir}/javadoc"
@@ -610,8 +609,6 @@
 				<include name="doclet/**/*.java"/>
 				<include name="org/**/*.java"/>
 				<include name="org/**/package.html"/>
-				<include name="com/**/*.java"/>
-				<include name="com/**/package.html"/>
 			</srcfileset>
 			<targetfileset dir="${classes.dir}/javadoc"/>
 		</dependset>
