@@ -105,10 +105,9 @@
 		description="clean up intermediate files">
 		<delete includeemptydirs="true"
 			failonerror="false">
-			<fileset dir="${build.dir}/classes"/>
-			<fileset dir="${dist.dir}/classes"/>
-			<fileset dir="doc"
-				 includes="docbook-wrapper-*.xsl"/>
+			<fileset dir="${build.dir}/classes" defaultexcludes="false"/>
+			<fileset dir="${dist.dir}/classes" defaultexcludes="false"/>
+			<fileset dir="doc" includes="docbook-wrapper-*.xsl"/>
 		</delete>
 	</target>
 
@@ -117,11 +116,10 @@
 		description="clean up build.dir and dist.dir completely">
 		<delete includeemptydirs="true"
 			failonerror="false">
-			<fileset dir="${build.dir}"/>
-			<fileset dir="${dist.dir}"/>
-			<fileset dir="${textAreaPackage}/build"/>
-			<fileset dir="doc"
-				 includes="docbook-wrapper-*.xsl"/>
+			<fileset dir="${build.dir}" defaultexcludes="false"/>
+			<fileset dir="${dist.dir}" defaultexcludes="false"/>
+			<fileset dir="${textAreaPackage}/build" defaultexcludes="false"/>
+			<fileset dir="doc" includes="docbook-wrapper-*.xsl"/>
 		</delete>
 	</target>
 
