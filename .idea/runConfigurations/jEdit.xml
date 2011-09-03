@@ -2,7 +2,6 @@
   <configuration default="false" name="jEdit" type="Application" factoryName="Application">
     <log_file path="$PROJECT_DIR$/build/settings/activity.log" checked="true" skipped="true" show_all="false" alias="Activity Log" />
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="emma" />
-    <extension name="snapshooter" />
     <option name="MAIN_CLASS_NAME" value="org.gjt.sp.jedit.jEdit" />
     <option name="VM_PARAMETERS" value="-Xmx192M" />
     <option name="PROGRAM_PARAMETERS" value="-settings=&quot;$PROJECT_DIR$/build/settings&quot;" />

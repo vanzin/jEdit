@@ -12,8 +12,85 @@
             <option name="SMART_TABS" value="false" />
             <option name="LABEL_INDENT_SIZE" value="0" />
             <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+            <option name="USE_RELATIVE_INDENTS" value="false" />
           </value>
         </option>
+        <option name="USE_FQ_CLASS_NAMES_IN_JAVADOC" value="false" />
+        <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
+        <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
+        <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
+          <value />
+        </option>
+        <option name="IMPORT_LAYOUT_TABLE">
+          <value>
+            <package name="java" withSubpackages="true" static="false" />
+            <package name="javax" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="" withSubpackages="true" static="true" />
+          </value>
+        </option>
+        <option name="XML_ATTRIBUTE_WRAP" value="4" />
+        <option name="XML_KEEP_BLANK_LINES" value="1" />
+        <option name="HTML_ATTRIBUTE_WRAP" value="4" />
+        <option name="HTML_KEEP_BLANK_LINES" value="1" />
+        <option name="HTML_ALIGN_TEXT" value="true" />
+        <option name="KEEP_LINE_BREAKS" value="false" />
+        <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
+        <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+        <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
+        <option name="BRACE_STYLE" value="2" />
+        <option name="CLASS_BRACE_STYLE" value="2" />
+        <option name="METHOD_BRACE_STYLE" value="2" />
+        <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
+        <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
+        <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
+        <option name="ALIGN_MULTILINE_ASSIGNMENT" value="true" />
+        <option name="ALIGN_MULTILINE_TERNARY_OPERATION" value="true" />
+        <option name="ALIGN_MULTILINE_THROWS_LIST" value="true" />
+        <option name="ALIGN_MULTILINE_EXTENDS_LIST" value="true" />
+        <option name="ALIGN_MULTILINE_METHOD_BRACKETS" value="true" />
+        <option name="ALIGN_MULTILINE_PARENTHESIZED_EXPRESSION" value="true" />
+        <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
+        <option name="SPACE_WITHIN_ARRAY_INITIALIZER_BRACES" value="true" />
+        <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />
+        <option name="CALL_PARAMETERS_WRAP" value="1" />
+        <option name="METHOD_PARAMETERS_WRAP" value="1" />
+        <option name="RESOURCE_LIST_WRAP" value="1" />
+        <option name="EXTENDS_LIST_WRAP" value="1" />
+        <option name="THROWS_LIST_WRAP" value="1" />
+        <option name="EXTENDS_KEYWORD_WRAP" value="1" />
+        <option name="THROWS_KEYWORD_WRAP" value="1" />
+        <option name="METHOD_CALL_CHAIN_WRAP" value="1" />
+        <option name="BINARY_OPERATION_WRAP" value="1" />
+        <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+        <option name="TERNARY_OPERATION_WRAP" value="5" />
+        <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+        <option name="FOR_STATEMENT_WRAP" value="5" />
+        <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+        <option name="ASSIGNMENT_WRAP" value="1" />
+        <option name="WRAP_COMMENTS" value="true" />
+        <option name="ASSERT_STATEMENT_WRAP" value="5" />
+        <option name="ASSERT_STATEMENT_COLON_ON_NEXT_LINE" value="true" />
+        <option name="VARIABLE_ANNOTATION_WRAP" value="2" />
+        <option name="ENUM_CONSTANTS_WRAP" value="1" />
+        <JSCodeStyleSettings>
+          <option name="INDENT_PACKAGE_CHILDREN" value="1" />
+        </JSCodeStyleSettings>
+        <PHPCodeStyleSettings>
+          <option name="INDENT_CODE_IN_PHP_TAGS" value="true" />
+        </PHPCodeStyleSettings>
+        <ADDITIONAL_INDENT_OPTIONS fileType="css">
+          <option name="INDENT_SIZE" value="4" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="groovy">
           <option name="INDENT_SIZE" value="2" />
           <option name="CONTINUATION_INDENT_SIZE" value="8" />
@@ -22,6 +99,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="gsp">
           <option name="INDENT_SIZE" value="2" />
@@ -31,6 +109,17 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="haml">
+          <option name="INDENT_SIZE" value="2" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="java">
           <option name="INDENT_SIZE" value="8" />
@@ -40,6 +129,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="true" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="js">
           <option name="INDENT_SIZE" value="4" />
@@ -49,6 +139,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="jsp">
           <option name="INDENT_SIZE" value="4" />
@@ -58,6 +149,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="php">
           <option name="INDENT_SIZE" value="4" />
@@ -67,6 +159,17 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
+        </ADDITIONAL_INDENT_OPTIONS>
+        <ADDITIONAL_INDENT_OPTIONS fileType="sass">
+          <option name="INDENT_SIZE" value="2" />
+          <option name="CONTINUATION_INDENT_SIZE" value="8" />
+          <option name="TAB_SIZE" value="4" />
+          <option name="USE_TAB_CHARACTER" value="false" />
+          <option name="SMART_TABS" value="false" />
+          <option name="LABEL_INDENT_SIZE" value="0" />
+          <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="sql">
           <option name="INDENT_SIZE" value="2" />
@@ -76,6 +179,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="xml">
           <option name="INDENT_SIZE" value="8" />
@@ -85,6 +189,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
         <ADDITIONAL_INDENT_OPTIONS fileType="yml">
           <option name="INDENT_SIZE" value="2" />
@@ -94,6 +199,7 @@
           <option name="SMART_TABS" value="false" />
           <option name="LABEL_INDENT_SIZE" value="0" />
           <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+          <option name="USE_RELATIVE_INDENTS" value="false" />
         </ADDITIONAL_INDENT_OPTIONS>
       </value>
     </option>
