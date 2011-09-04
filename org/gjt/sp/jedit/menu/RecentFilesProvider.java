@@ -136,6 +136,7 @@ public class RecentFilesProvider implements DynamicMenuProvider
 			String path = iter.next().path;
 			JMenuItem menuItem = new JMenuItem(MiscUtilities
 				.getFileName(path));
+			menuItem.setToolTipText(path);
 			menuItem.setActionCommand(path);
 			menuItem.addActionListener(actionListener);
 //			menuItem.addMouseListener(mouseListener);
