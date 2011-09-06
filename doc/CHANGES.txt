@@ -77,6 +77,9 @@ contributing to this release.
 
 - Fixed deadlock (jEdit freeze) when multiple files are dragged into the text
   area from file managers. (Shlomy Reinstein)
+  
+- Fix for tracker 3034220, jEdit fails to load text-file under Mac OS X
+  (#3034220 - Evan Wright)
 
 }}}
 {{{ API Changes
