@@ -16,10 +16,6 @@ contributing to this release.
 
 - Fixed NPE when starting jEdit with nosettings (#3401814) (Matthieu Casanova)
 
-- Fixed a corner case when trying to move caret during a buffer operation
-  (loading, transaction, undo) prevent to move the caret forever
-  (Matthieu Casanova)
-
 - Fixed several case where userinput during buffer loading cause exceptions
   (#3398342) (Matthieu Casanova)
 

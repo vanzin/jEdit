@@ -5015,7 +5015,7 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		// clear these flags.
 		finally
 		{
-			queuedFireCaretEvent = false;
+			queuedCaretUpdate = queuedFireCaretEvent = false;
 			queuedScrollMode = NO_SCROLL;
 		}
 	} //}}}
@@ -5184,17 +5184,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			return;
 
 		this.oldCaretLine = oldCaretLine;
-
 		queuedCaretUpdate = true;
-		try
-		{
-			if(!buffer.isTransactionInProgress())
-				_finishCaretUpdate();
-		}
-		finally
-		{
-			queuedCaretUpdate = false;
-		}
+
+		if(!buffer.isTransactionInProgress())
+			_finishCaretUpdate();
+		/* otherwise DisplayManager.BufferChangeHandler calls */
 	} //}}}
 
 	//{{{ fireCaretEvent() method
