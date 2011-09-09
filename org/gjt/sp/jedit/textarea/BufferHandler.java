@@ -65,6 +65,7 @@ class BufferHandler implements BufferListener
 	public void bufferLoaded(JEditBuffer buffer)
 	{
 		displayManager.bufferLoaded();
+		textArea._finishCaretUpdate();
 	} //}}}
 
 	//{{{ foldHandlerChanged() method

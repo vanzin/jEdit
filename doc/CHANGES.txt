@@ -11,6 +11,10 @@ Evan Wright, Shlomy Reinstein, glen117, Marcelo Vanzin and Eric Le Lay for
 contributing to this release.
 
 {{{ Bug fixes
+- Fixed a corner case when trying to move caret during a buffer operation
+  (loading, transaction, undo) prevent to move the caret forever
+  (Matthieu Casanova)
+
 - Fixed jEdit starting when max heap size is too low to load Killring
   (#1827853) (Matthieu Casanova)
 
