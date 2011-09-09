@@ -97,7 +97,7 @@ public class FavoritesVFS extends VFS
 					iter.remove();
 					VFSManager.sendVFSUpdate(this,PROTOCOL
 						+ ':',false);
-					EditBus.send(new DynamicMenuChanged(
+					EditBus.sendAsync(new DynamicMenuChanged(
 						"favorites"));
 					return true;
 				}
