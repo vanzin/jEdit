@@ -37,6 +37,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.gjt.sp.jedit.GUIUtilities;
 import org.gjt.sp.jedit.OperatingSystem;
+import org.gjt.sp.jedit.io.FavoritesVFS;
 import org.gjt.sp.jedit.io.VFS;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.View;
@@ -200,7 +201,17 @@ public class FilePropertiesDialog extends EnhancedDialog
 
 		JPanel nameField = new JPanel();
 		nameField.add(new JLabel(jEdit.getProperty("fileprop.name")+": "));
-		nameTextField = new JTextField(local.getName(), 20);
+		String filename;
+		if (local instanceof FavoritesVFS.Favorite)
+		{
+			FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) local;
+			filename = favorite.getLabel();
+		}
+		else
+		{
+			filename = local.getName();
+		}
+		nameTextField = new JTextField(filename, 20);
 		if ((local.getVFS().getCapabilities() & VFS.RENAME_CAP) == 0)
 		{
 			// If the VFS cannot rename, the nameTextField is non editable
@@ -291,7 +302,7 @@ public class FilePropertiesDialog extends EnhancedDialog
 			VFSFile vfsFile = browser.getSelectedFiles()[0];
 			if ((vfsFile.getVFS().getCapabilities() & VFS.RENAME_CAP) != 0)
 			{
-				browser.rename(vfsFile.getPath(), nameTextField.getText());
+				browser.rename(vfsFile, nameTextField.getText());
 			}
 		}
 

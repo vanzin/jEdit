@@ -740,12 +740,33 @@ public class VFSBrowser extends JPanel implements DefaultFocusComponent,
 	 */
 	public void rename(VFSFile from)
 	{
-		String filename = from.getName();
+		String filename;
+		if (from instanceof FavoritesVFS.Favorite)
+		{
+			FavoritesVFS.Favorite favorite = (FavoritesVFS.Favorite) from;
+			filename = favorite.getLabel();
+		}
+		else
+		{
+			filename = from.getName();
+		}
 		String[] args = { filename };
 		String to = GUIUtilities.input(this,"vfs.browser.rename",
 			args,filename);
 		if (to == null)
 			return;
+		rename(from.getVFS(), from.getPath(), to);
+	}
+
+	/**
+	 * Rename a file.
+	 * It will prompt for the new name.
+	 * @param from the file to rename
+	 * @param from to the target name
+	 * @since jEdit 4.5pre1
+	 */
+	public void rename(VFSFile from, String to)
+	{
 		rename(from.getVFS(), from.getPath(), to);
 	}
 
