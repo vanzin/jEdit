@@ -110,6 +110,7 @@
 			<KEYWORD2>`ifdef</KEYWORD2>
 			<KEYWORD2>`ifndef</KEYWORD2>
 			<KEYWORD2>`else</KEYWORD2>
+			<KEYWORD2>`elsif</KEYWORD2>
 			<KEYWORD2>`endif</KEYWORD2>
 			<KEYWORD2>`timescale</KEYWORD2>
 			<KEYWORD2>`resetall</KEYWORD2>
