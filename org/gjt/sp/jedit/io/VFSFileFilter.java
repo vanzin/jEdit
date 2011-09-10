@@ -33,25 +33,25 @@ package org.gjt.sp.jedit.io;
  */
 public interface VFSFileFilter 
 {
-	public static final String SERVICE_NAME = VFSFileFilter.class.getName();
+	String SERVICE_NAME = VFSFileFilter.class.getName();
 
 	/**
 	 * Should return whether the entry represented by the given URL
 	 * should be listed in the browser view. Can be a file or a directory. 
 	 */
-	public boolean accept(VFSFile file);
+	boolean accept(VFSFile file);
 
 	/**
 	 * Same thing as {@link #accept(VFSFile)} above, but operates on
 	 * the raw URL instead of a VFSFile object.
 	 */
-	public boolean accept(String url);
+	boolean accept(String url);
 
 	/**
 	 * Returns the description of the filter, to be used in the
 	 * VFSBrowser window.
 	 */
-	public String getDescription();
+	String getDescription();
 
 }
 
