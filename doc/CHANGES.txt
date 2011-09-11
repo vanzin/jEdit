@@ -11,6 +11,9 @@ contributing to this release.
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- Fixed jEdit starting when max heap size is too low to load Killring
+  (#1827853) (Matthieu Casanova
+
 - MiscUtilities.expandVariables() now recognizes %varname% on Windows,
   meaning it can reverse what MiscUtilities.abbreviate() does. (Alan Ezust).
 
