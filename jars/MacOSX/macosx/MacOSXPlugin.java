@@ -23,6 +23,7 @@
 package macosx;
 
 //{{{ Imports
+import java.awt.EventQueue;
 import javax.swing.*;
 import java.util.regex.Pattern;
 import java.io.File;
@@ -51,33 +52,45 @@ public class MacOSXPlugin extends EBPlugin
 	{
 		if(osok())
 		{
-			try {
-				// Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
-				// use as delegates for various com.apple.eawt.ApplicationListener methods
-				OSXAdapter.setQuitHandler(this, getClass().getDeclaredMethod("handleQuit", (Class[])null));
-				OSXAdapter.setAboutHandler(this, getClass().getDeclaredMethod("handleAbout", (Class[])null));
-				OSXAdapter.setPreferencesHandler(this, getClass().getDeclaredMethod("handlePreferences", (Class[])null));
-				OSXAdapter.setFileHandler(this, getClass().getDeclaredMethod("handleOpenFile", new Class[] { String.class }));
-				OSXAdapter.setReOpenApplicationHandler(this, getClass().getDeclaredMethod("handleReOpenApplication", (Class[])null));
-				
-				String lf = jEdit.getProperty("lookAndFeel");
-				if(lf != null && lf.length() != 0)
+			Runnable setup = new Runnable() {
+				public void run()
 				{
-					// Fix key bindings for OS X for anything other than Aqua LNF
-					// See: http://lists.apple.com/archives/java-dev/2008/Apr/msg00209.html
-					if (!UIManager.getLookAndFeel().isNativeLookAndFeel())
+					try
 					{
-						Log.log(Log.DEBUG, this, "Fixing keybindingds on current LNF");
-						UIDefaults uid = UIManager.getLookAndFeelDefaults();
-						fixMacKeyBindings(uid);
+						MacOSXPlugin listener = MacOSXPlugin.this;
+						Class theClass = listener.getClass();
+						
+						// Generate and register the OSXAdapter, passing it a hash of all the methods we wish to
+						// use as delegates for various com.apple.eawt.ApplicationListener methods
+						OSXAdapter.setQuitHandler(listener, theClass.getDeclaredMethod("handleQuit", (Class[])null));
+						OSXAdapter.setAboutHandler(listener, theClass.getDeclaredMethod("handleAbout", (Class[])null));
+						OSXAdapter.setPreferencesHandler(listener, theClass.getDeclaredMethod("handlePreferences", (Class[])null));
+						OSXAdapter.setFileHandler(listener, theClass.getDeclaredMethod("handleOpenFile", new Class[] { String.class }));
+						OSXAdapter.setReOpenApplicationHandler(listener, theClass.getDeclaredMethod("handleReOpenApplication", (Class[])null));
+						
+						String lf = jEdit.getProperty("lookAndFeel");
+						if(lf != null && lf.length() != 0)
+						{
+							// Fix key bindings for OS X for anything other than Aqua LNF
+							// See: http://lists.apple.com/archives/java-dev/2008/Apr/msg00209.html
+							if (!UIManager.getLookAndFeel().isNativeLookAndFeel())
+							{
+								Log.log(Log.DEBUG, this, "Fixing keybindingds on current LNF");
+								UIDefaults uid = UIManager.getLookAndFeelDefaults();
+								fixMacKeyBindings(uid);
+							}
+						}
+						
+					}
+					catch (Exception e)
+					{
+						System.err.println("Error while loading the OSXAdapter:" + e);
+						e.printStackTrace();
 					}
 				}
-			}
-			catch (Exception e)
-			{
-				System.err.println("Error while loading the OSXAdapter:");
-				e.printStackTrace();
-			}
+			};
+			
+			EventQueue.invokeLater(setup);
 		}
 	} //}}}
 	
@@ -112,18 +125,28 @@ public class MacOSXPlugin extends EBPlugin
 		File file = new File(filepath);
 		if(file.exists())
 		{
-			View view = jEdit.getActiveView();
-			if(view == null)
-				view = PerspectiveManager.loadPerspective(false);
-			
 			if(file.isDirectory())
 			{
 				// TODO: What to do with dirs?
 				//VFSBrowser.browseDirectory(jEdit.getActiveView(), file.getPath());
 				return;
 			}
-			if (jEdit.openFile(view, file.getPath()) == null)
-				Log.log(Log.ERROR, this, "Unable to open file: " + filepath);
+			
+			if (jEdit.isStartupDone())
+			{
+				View view = jEdit.getActiveView();
+				if (view == null)
+				{
+					view = PerspectiveManager.loadPerspective(false);
+				}
+				
+				if (jEdit.openFile(view, file.getPath()) == null)
+					Log.log(Log.ERROR, this, "Unable to open file: " + filepath);
+			}
+			else
+			{
+				jEdit.openFileAfterStartup(file.getPath());
+			}
 		}
 		else
 		{
