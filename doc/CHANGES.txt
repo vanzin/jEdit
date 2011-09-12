@@ -4,8 +4,8 @@ jEdit 4.4 version history
 
 {{{ Version 4.4.2
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, and Matthieu Casanova for 
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Matthieu Casanova, and
+Evan Wright for contributing to this release.
 
 {{{ Bug Fixes
 - Untitled buffer should not be created on VFS without write capability
@@ -34,6 +34,10 @@ contributing to this release.
 
 - Error Widget now use the same color as Invalid token instead of being always
   red (Matthieu Casanova)
+
+- Fix for tracker 3034220, jEdit fails to load text-file under Mac OS X
+  (#3034220 - Evan Wright)
+
 }}}
 {{{ Miscellaneous
 
