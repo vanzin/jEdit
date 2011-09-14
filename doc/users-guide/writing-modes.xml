@@ -118,7 +118,7 @@
         </itemizedlist>
         <para>When performing auto indent, a number of mode properties determine
         the resulting indent level:</para>
-        <itemizedlist>
+        <itemizedlist>        
             <listitem>
                 <para>The line and the one before it are scanned for brackets
                 listed in the <literal>indentCloseBrackets</literal> and
@@ -154,11 +154,15 @@
                 the <literal>doubleBracketIndent</literal> property is set to
                 <literal>true</literal>, the previous line is checked against
                 the regular expressions in the <literal>indentNextLine</literal>
-                and <literal>indentNextLines</literal> properties. If the
+                and <literal>indentNextLines</literal> properties.
+                If the
                 previous line matches the former, the indent of the current line
                 is increased and the subsequent line is shifted back again. If
                 the previous line matches the latter, the indent of the current
                 and subsequent lines is increased.</para>
+
+                <para> There are corresponding <literal>unindentThisLine</literal> and <literal>unindentNextLines</literal> properties which are checked also, for doing the reverse-indent operation on lines that match certain regular expressions. </para>
+                
                 <para>In Java mode, for example, the
                 <literal>indentNextLine</literal> property is set to match
                 control structures such as <quote>if</quote>,
