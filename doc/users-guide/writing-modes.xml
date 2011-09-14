@@ -283,8 +283,13 @@
             expression that highlights Java-style numeric literals (normal
             numbers, hexadecimals prefixed with <literal>0x</literal>, numbers
             suffixed with various type indicators, and floating point literals
-            containing an exponent):</para>
-            <programlisting>DIGIT_RE="(0[lL]?|[1-9]\d{0,9}(\d{0,9}[lL])?|0[xX]\p{XDigit}{1,8}(\p{XDigit}{0,8}[lL])?|0[0-7]{1,11}([0-7]{0,11}[lL])?|([0-9]+\.[0-9]*|\.[0-9]+)([eE][+-]?[0-9]+)?[fFdD]?|[0-9]+([eE][+-]?[0-9]+[fFdD]?|([eE][+-]?[0-9]+)?[fFdD]))"</programlisting>
+            containing an exponent). Note that newlines have been inserted here
+            for readability.</para>
+            <programlisting>DIGIT_RE="(0[lL]?|[1-9]\d{0,9}(\d{0,9}[lL])?
+|0[xX]\p{XDigit}{1,8}(\p{XDigit}{0,8}[lL])?
+|0[0-7]{1,11}([0-7]{0,11}[lL])?|([0-9]+\.[0-9]*
+|\.[0-9]+)([eE][+-]?[0-9]+)?[fFdD]?|[0-9]+([eE][+-]?[0-9]+[fFdD]?
+|([eE][+-]?[0-9]+)?[fFdD]))"</programlisting>
             <para>Regular expression syntax is described in <xref
             linkend="regexps" />.</para>
         </section>
@@ -756,7 +761,8 @@
         (wikiword) that can start with any uppercase letter and contain lower
         case letters and at least one uppercase letter in the middle.</para>
         <programlisting>
- 		&lt;SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_WORD_START="TRUE" TYPE="KEYWORD2"&gt;[A-Z][a-z]+[A-Z][a-zA-Z]+&lt;/SEQ_REGEXP&gt;
+ 		&lt;SEQ_REGEXP HASH_CHARS="ABCDEFGHIJKLMNOPQRSTUVWXYZ" AT_WORD_START="TRUE"
+ 		TYPE="KEYWORD2"&gt;[A-Z][a-z]+[A-Z][a-zA-Z]+&lt;/SEQ_REGEXP&gt;
  </programlisting>
     </section>
     <section id="mode-rule-import">
