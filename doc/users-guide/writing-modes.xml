@@ -177,6 +177,8 @@
             next.paint(g);
     }</programlisting>
             </listitem>
+            <listitem><para>
+             <literal>electricKeys</literal>: characters listed here, when typed on a line, cause the current line to be re-indented. </para></listitem>
         </itemizedlist>
         <para>Here is the complete <literal>&lt;PROPS&gt;</literal> tag for Java
         mode:</para>
