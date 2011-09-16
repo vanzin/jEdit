@@ -58,10 +58,6 @@ for contributing to this release.
 - Using regex style encoding auto detectors, StringIndexOutOfBoundsException
   could happen when loading a file. (Kazutoshi Satoda)
 
-- jEdit now force drops from external applications to be COPY and not
-  MOVE drops. It prevents ftp explorer from deleting dropped files
-  (#1208598 - Matthieu Casanova)
-
 - View#getEditPane() could return wrong value after a call of setSplitConfig(),
   or resplit() which uses the formar. This could cause some problems including
   wrong title of View.
