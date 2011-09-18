@@ -289,13 +289,18 @@ public class DisplayManager
 	 * Expands the fold at the specified physical line index.
 	 * @param line A physical line index
 	 * @param fully If true, all subfolds will also be expanded
+	 * @return the line number of the first subfold, or -1 if none
 	 * @since jEdit 4.2pre1
 	 */
 	public int expandFold(int line, boolean fully)
 	{
-		int returnValue = _expandFold(line, fully);
-		textArea.foldStructureChanged();
-		return returnValue;
+		MutableInteger firstSubfold = new MutableInteger(-1);
+		boolean unfolded = _expandFold(line, fully, firstSubfold);
+		
+		if (unfolded)
+			textArea.foldStructureChanged();
+		
+		return firstSubfold.get();
 	} //}}}
 
 	//{{{ expandAllFolds() method
@@ -772,35 +777,41 @@ public class DisplayManager
 	 * Expands the fold at the specified physical line index.
 	 * @param line A physical line index
 	 * @param fully If true, all subfolds will also be expanded
+	 * @param firstSubfold Will be set to the line number of the first
+	 * subfold, or -1 if there is none.
+	 * @return True if some line was unfolded, false otherwise.
 	 */
-	public int _expandFold(int line, boolean fully)
+	public boolean _expandFold(int line, boolean fully, MutableInteger firstSubfold)
 	{
-		// the first sub-fold. used by JEditTextArea.expandFold().
-		int returnValue = -1;
+		boolean unfolded = false;
 
 		int lineCount = buffer.getLineCount();
 		int end = lineCount - 1;
 
 		if (line == lineCount - 1)
 		{
-			return -1;
+			return false;
 		}
 		while (!isLineVisible(line))
 		{
 			int prevLine = folds.lookup(folds.search(line)) - 1;
 			if (!isLineVisible(prevLine))
 			{
-				return -1;
+				return unfolded;
 			}
-			_expandFold(prevLine, fully);
+			
+			// If any fold farther down was unfolded, then the text
+			// area needs to be updated
+			unfolded |= _expandFold(prevLine, fully, firstSubfold);
+			
 			if (!isLineVisible(prevLine + 1))
 			{
-				return -1;
+				return unfolded;
 			}
 		}
 		if (isLineVisible(line+1) && !fully)
 		{
-			return -1;
+			return unfolded;
 		}
 
 		//{{{ Find fold start and fold end...
@@ -831,7 +842,7 @@ public class DisplayManager
 		{
 			if (!fully)
 			{
-				return -1;
+				return unfolded;
 			}
 			start = line;
 			while (start > 0 && buffer.getFoldLevel(start) >= initialFoldLevel)
@@ -856,11 +867,13 @@ public class DisplayManager
 		}
 		else
 		{
+			boolean foundSubfold = false;
 			for (int i = start + 1; i <= end;)
 			{
-				if (returnValue == -1 && buffer.isFoldStart(i))
+				if (!foundSubfold && buffer.isFoldStart(i))
 				{
-					returnValue = i;
+					firstSubfold.set(i);
+					foundSubfold = true;
 				}
 
 				showLineRange(i, i);
@@ -871,11 +884,34 @@ public class DisplayManager
 					i++;
 				}
 			}
-		} // }}}
+		}
+		
+		unfolded = true;
+		// }}}
 		
 		notifyScreenLineChanges();
-
-		return returnValue;
+		return unfolded;
+	} //}}}
+	
+	//{{{ MutableInteger class
+	private class MutableInteger
+	{
+		MutableInteger(int value)
+		{
+			this.value = value;
+		}
+		
+		public void set(int value)
+		{
+			this.value = value;
+		}
+		
+		public int get()
+		{
+			return value;
+		}
+		
+		private int value;
 	} //}}}
 	
 	//}}}
