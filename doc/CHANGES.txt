@@ -83,6 +83,9 @@ contributing to this release.
   
 - Fix for tracker 3034220, jEdit fails to load text-file under Mac OS X
   (#3034220 - Evan Wright)
+  
+- Fixed a bug that occured when jumping to a line inside of a nested fold.
+  (#3406213 - Evan Wright)
 
 }}}
 {{{ API Changes

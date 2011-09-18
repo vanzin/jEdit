@@ -293,107 +293,8 @@ public class DisplayManager
 	 */
 	public int expandFold(int line, boolean fully)
 	{
-		// the first sub-fold. used by JEditTextArea.expandFold().
-		int returnValue = -1;
-
-		int lineCount = buffer.getLineCount();
-		int end = lineCount - 1;
-
-		if (line == lineCount - 1)
-		{
-			return -1;
-		}
-		while (!isLineVisible(line))
-		{
-			int prevLine = folds.lookup(folds.search(line)) - 1;
-			if (!isLineVisible(prevLine))
-			{
-				return -1;
-			}
-			expandFold(prevLine, fully);
-			if (!isLineVisible(prevLine + 1))
-			{
-				return -1;
-			}
-		}
-		if (isLineVisible(line+1) && !fully)
-		{
-			return -1;
-		}
-
-		//{{{ Find fold start and fold end...
-		int start;
-		int initialFoldLevel = buffer.getFoldLevel(line);
-		if (buffer.getFoldLevel(line + 1) > initialFoldLevel)
-		{
-			// this line is the start of a fold
-			start = line;
-			if (!isLineVisible(line + 1) && folds.search(line + 1) != folds.count() - 1)
-			{
-				int index = folds.search(line + 1);
-				end = folds.lookup(index + 1) - 1;
-			}
-			else
-			{
-				for (int i = line + 1; i < lineCount; i++)
-				{
-					if (buffer.getFoldLevel(i) <= initialFoldLevel)
-					{
-						end = i - 1;
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			if (!fully)
-			{
-				return -1;
-			}
-			start = line;
-			while (start > 0 && buffer.getFoldLevel(start) >= initialFoldLevel)
-			{
-				start--;
-			}
-			initialFoldLevel = buffer.getFoldLevel(start);
-			for (int i = line + 1; i < lineCount; i++)
-			{
-				if (buffer.getFoldLevel(i) <= initialFoldLevel)
-				{
-					end = i - 1;
-					break;
-				}
-			}
-		} // }}}
-
-		//{{{ Expand the fold...
-		if(fully)
-		{
-			showLineRange(start,end);
-		}
-		else
-		{
-			for (int i = start + 1; i <= end;)
-			{
-				if (returnValue == -1 && buffer.isFoldStart(i))
-				{
-					returnValue = i;
-				}
-
-				showLineRange(i, i);
-				int fold = buffer.getFoldLevel(i);
-				i++;
-				while (i <= end && buffer.getFoldLevel(i) > fold)
-				{
-					i++;
-				}
-			}
-		} // }}}
-
-		notifyScreenLineChanges();
+		int returnValue = _expandFold(line, fully);
 		textArea.foldStructureChanged();
-
 		return returnValue;
 	} //}}}
 
@@ -866,5 +767,116 @@ public class DisplayManager
 		scrollLineCount.callChanged = true;
 	} //}}}
 
+	//{{{ _expandFold() method
+	/**
+	 * Expands the fold at the specified physical line index.
+	 * @param line A physical line index
+	 * @param fully If true, all subfolds will also be expanded
+	 */
+	public int _expandFold(int line, boolean fully)
+	{
+		// the first sub-fold. used by JEditTextArea.expandFold().
+		int returnValue = -1;
+
+		int lineCount = buffer.getLineCount();
+		int end = lineCount - 1;
+
+		if (line == lineCount - 1)
+		{
+			return -1;
+		}
+		while (!isLineVisible(line))
+		{
+			int prevLine = folds.lookup(folds.search(line)) - 1;
+			if (!isLineVisible(prevLine))
+			{
+				return -1;
+			}
+			_expandFold(prevLine, fully);
+			if (!isLineVisible(prevLine + 1))
+			{
+				return -1;
+			}
+		}
+		if (isLineVisible(line+1) && !fully)
+		{
+			return -1;
+		}
+
+		//{{{ Find fold start and fold end...
+		int start;
+		int initialFoldLevel = buffer.getFoldLevel(line);
+		if (buffer.getFoldLevel(line + 1) > initialFoldLevel)
+		{
+			// this line is the start of a fold
+			start = line;
+			if (!isLineVisible(line + 1) && folds.search(line + 1) != folds.count() - 1)
+			{
+				int index = folds.search(line + 1);
+				end = folds.lookup(index + 1) - 1;
+			}
+			else
+			{
+				for (int i = line + 1; i < lineCount; i++)
+				{
+					if (buffer.getFoldLevel(i) <= initialFoldLevel)
+					{
+						end = i - 1;
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			if (!fully)
+			{
+				return -1;
+			}
+			start = line;
+			while (start > 0 && buffer.getFoldLevel(start) >= initialFoldLevel)
+			{
+				start--;
+			}
+			initialFoldLevel = buffer.getFoldLevel(start);
+			for (int i = line + 1; i < lineCount; i++)
+			{
+				if (buffer.getFoldLevel(i) <= initialFoldLevel)
+				{
+					end = i - 1;
+					break;
+				}
+			}
+		} // }}}
+
+		//{{{ Expand the fold...
+		if(fully)
+		{
+			showLineRange(start,end);
+		}
+		else
+		{
+			for (int i = start + 1; i <= end;)
+			{
+				if (returnValue == -1 && buffer.isFoldStart(i))
+				{
+					returnValue = i;
+				}
+
+				showLineRange(i, i);
+				int fold = buffer.getFoldLevel(i);
+				i++;
+				while (i <= end && buffer.getFoldLevel(i) > fold)
+				{
+					i++;
+				}
+			}
+		} // }}}
+		
+		notifyScreenLineChanges();
+
+		return returnValue;
+	} //}}}
+	
 	//}}}
 }
