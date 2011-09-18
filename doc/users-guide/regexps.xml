@@ -9,7 +9,7 @@
     <!-- :xml.root=users-guide.xml: -->
 
     <para>jEdit 4.3pre5 and later uses regular expressions from <ulink
-    url="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
+    url="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
     to implement inexact search and replace. Click there to see a complete
     reference guide to all supported meta-characters.</para>
 
