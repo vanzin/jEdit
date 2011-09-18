@@ -8,7 +8,7 @@ plugin.macosx.MacOSXPlugin.activate=startup
 #
 plugin.macosx.MacOSXPlugin.name=Mac OS X Support
 plugin.macosx.MacOSXPlugin.author=Seph Soliman
-plugin.macosx.MacOSXPlugin.version=1.1
+plugin.macosx.MacOSXPlugin.version=1.2
 plugin.macosx.MacOSXPlugin.docs=docs/MacOSX.html
 plugin.macosx.MacOSXPlugin.description=Provides better MacOS X integration through features such as better CMD-key mapping, drag-and-drop from Finder and more.
 plugin.macosx.MacOSXPlugin.longdescription=description.html
@@ -16,7 +16,7 @@ plugin.macosx.MacOSXPlugin.longdescription=description.html
 #
 # Dependencies
 #
-plugin.macosx.MacOSXPlugin.depend.0=jedit 04.03.16.00
+plugin.macosx.MacOSXPlugin.depend.0=jedit 04.04.99.02
 plugin.macosx.MacOSXPlugin.depend.1=jdk 1.5.0
 
 MacOSXPlugin.depend.os.name=Mac OS X
