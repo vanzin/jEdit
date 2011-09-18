@@ -579,17 +579,11 @@
                     project page</ulink> of the <ulink
                     url="http://sourceforge.net">SourceForge web site</ulink>,
                     which hosts jEdit's development resources.</para>
-                    <para>In addition, a plugin named <application>Check jEdit
-                    Version</application> can be run from within jEdit by
-                    selecting <guimenuitem>Check jEdit Version</guimenuitem>
-                    from the application's <guimenu>Plugins</guimenu> menu. It
-                    queries the jEdit web site, compares version information
-                    with the version of the currently running instance of jEdit,
-                    and reports the result to the user in a message box. It will
-                    tell you if you do not have the latest version of jEdit,
-                    regardless of whether that version is in
-                    <quote>stable</quote> or <quote>development</quote>
-                    form.</para>
+                    <para>In addition, a plugin named <application>Updater</application> can be run from
+                    within jEdit by installing the Updater plugin,
+                    and then selecting <guimenuitem>Updater</guimenuitem>
+                    from the application's <guimenu>Plugins</guimenu> menu. It has actions to update to the latest released version, or the latest daily build from the development branch. It queries the jEdit web site, compares chosen version information
+                    with the version of the currently running instance of jEdit, and reports the result to the user in a message box. If an update is available, it will download the version, install it and shut down jEdit for you. </para>
                     <para>Finally, if you subscribe to the <ulink
                     url="http://lists.sourceforge.net/lists/listinfo/jedit-announce">
                     jedit-announce</ulink> or <ulink
