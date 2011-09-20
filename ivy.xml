@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ jEdit - Programmer's Text Editor
+  ~ :tabSize=8:indentSize=8:noTabs=false:
+  ~ :folding=explicit:collapseFolds=1:
+  ~
+  ~ Copyright © 2011 jEdit contributors
+  ~
+  ~ This program is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU General Public License
+  ~ as published by the Free Software Foundation; either version 2
+  ~ of the License, or any later version.
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program; if not, write to the Free Software
+  ~ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  -->
+
+<ivy-module version="2.0"
+	    xmlns:e="http://ant.apache.org/ivy/extra"
+	    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	    xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+
+	<info organisation="org.jedit" module="jedit">
+		<license name="GPLv2" url="http://www.gnu.org/licenses/gpl-2.0.txt"/>
+		<ivyauthor name="Björn &quot;Vampire&quot; Kautler"/>
+		<description homepage="http://www.jEdit.org">
+		    jEdit - Programmer's Text Editor
+		</description>
+	</info>
+
+	<configurations confmappingoverride="true"
+			defaultconfmapping="sources,javadoc->@;
+					    compile->master;
+					    %->default">
+		<conf name="default" description="Runtime dependencies and master artifacts" extends="master, runtime"/>
+		<conf name="master" description="Artifacts of this module without dependencies"/>
+		<conf name="compile" description="Compile dependencies" visibility="private" transitive="false"/>
+		<conf name="runtime" description="Runtime dependencies" extends="compile"/>
+		<conf name="test" description="Testing dependencies" visibility="private" extends="runtime"/>
+		<conf name="provided" description="Provided dependencies" visibility="private"/>
+		<conf name="sources" description="Source artifacts" visibility="private"/>
+		<conf name="javadoc" description="JavaDoc artifacts" visibility="private"/>
+		<conf name="ant-contrib" description="Dependencies for ant-contrib" visibility="private"/>
+		<conf name="docbook" description="Dependencies for translating DocBook files" visibility="private"/>
+		<conf name="fop" description="Dependencies for FOP" visibility="private"/>
+		<conf name="jarbundler" description="Dependencies for JarBundler" visibility="private"/>
+		<conf name="launch4j" description="Dependencies for Launch4j" visibility="private"/>
+		<conf name="default-plugins" description="Shipped default plugins" visibility="private"/>
+	</configurations>
+
+	<publications defaultconf="master"/>
+
+	<dependencies defaultconf="compile;sources;javadoc">
+		<dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="ant-contrib"/>
+		<dependency org="saxon" name="saxon" rev="6.5.3" conf="docbook"/>
+		<dependency org="net.sf.docbook" name="docbook-xsl" rev="1.76.1" conf="docbook">
+			<artifact name="docbook-xsl" e:classifier="resources" type="zip"/>
+		</dependency>
+		<dependency org="net.sf.docbook" name="docbook-xsl-saxon" rev="1.0.0" conf="docbook"/>
+		<dependency org="xerces" name="xercesImpl" rev="2.10.0" conf="docbook,jarbundler"/>
+		<dependency org="org.apache.xmlgraphics" name="fop" rev="1.0" conf="fop"/>
+		<dependency org="net.sf.launch4j" name="launch4j" rev="3.0.2" conf="launch4j">
+			<artifact name="launch4j" e:classifier="win32" type="zip"/>
+			<artifact name="launch4j" e:classifier="macosx" type="tgz"/>
+			<artifact name="launch4j" e:classifier="linux" type="tgz"/>
+		</dependency>
+		<dependency org="org.jedit.plugins" name="MacOSX" rev="1.2" conf="default-plugins"/>
+		<dependency org="org.jedit.plugins" name="QuickNotepad" rev="4.4" conf="default-plugins"/>
+	</dependencies>
+</ivy-module>

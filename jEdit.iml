@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/org" isTestSource="false" packagePrefix="org" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/lib" />
       <excludeFolder url="file://$MODULE_DIR$/org/gjt/sp/jedit/bsh/commands" />
     </content>
     <orderEntry type="inheritedJdk" />

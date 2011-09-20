@@ -5,7 +5,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version='1.0'>
 
-<xsl:import href="docbook-wrapper-fo.xsl"/>
+<xsl:import href="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"/>
 
 <xsl:template match="guibutton">
   <xsl:call-template name="inline.boldseq"/>
@@ -46,6 +46,7 @@ book      toc
 part      nop
 </xsl:param>
 
+<xsl:param name="use.extensions">1</xsl:param>
 <xsl:param name="fop1.extensions" select="1"></xsl:param>
 
 <xsl:param name="ulink.show" select="0"></xsl:param>

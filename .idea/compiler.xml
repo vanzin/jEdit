@@ -18,6 +18,9 @@
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
       <entry name="?*.ftl" />
+      <entry name="?*.js" />
+      <entry name="?*.css" />
+      <entry name="?*.swf" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

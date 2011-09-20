@@ -5,7 +5,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version='1.0'>
 
-<xsl:import href="docbook-wrapper-html.xsl"/>
+<xsl:import href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
 
 <!-- {{{ Various customizations -->
 
@@ -40,6 +40,8 @@
 <xsl:template match="property">
   <xsl:call-template name="inline.monoseq"/>
 </xsl:template>
+
+<xsl:param name="use.extensions">1</xsl:param>
 
 <xsl:param name="use.id.as.filename">1</xsl:param>
 
@@ -103,10 +105,17 @@
   <xsl:call-template name="toc"/>
 </xsl:template>
 
+<xsl:variable name="tocfilename">
+  <xsl:call-template name="make-relative-filename">
+    <xsl:with-param name="base.dir" select="$base.dir"/>
+    <xsl:with-param name="base.name" select="'toc.xml'"/>
+  </xsl:call-template>
+</xsl:variable>
+
 <xsl:template name="toc">
   <xsl:apply-templates/>
   <xsl:call-template name="write.chunk">
-    <xsl:with-param name="filename" select="'toc.xml'"/>
+    <xsl:with-param name="filename" select="$tocfilename"/>
     <xsl:with-param name="method" select="'xml'"/>
     <xsl:with-param name="indent" select="'yes'"/>
     <xsl:with-param name="content">

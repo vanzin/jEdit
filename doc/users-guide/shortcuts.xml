@@ -21,7 +21,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -106,7 +106,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -176,7 +176,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -204,7 +204,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -282,7 +282,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -393,7 +393,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -433,7 +433,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -510,7 +510,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -626,7 +626,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -688,7 +688,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -780,7 +780,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -834,7 +834,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -917,7 +917,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
@@ -955,7 +955,7 @@
     <informaltable frame="none">
         <tgroup cols="2">
             <colspec colnum="1" colwidth="2.2in" />
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>

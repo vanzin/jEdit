@@ -4,8 +4,6 @@
     <scope name="jEdit Sourcefiles" pattern="file[jEdit]:org//*.java" />
     <scope name="Modes" pattern="file[jEdit]:modes//*.xml" />
     <scope name="Macros" pattern="file[jEdit]:macros//*.bsh" />
-    <scope name="MacOSX Sourcefiles" pattern="file[MacOSX]:macosx//*.java" />
-    <scope name="QuickNotepad Sourcefiles" pattern="file[QuickNotepad]:*.java" />
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="EntryPointsManager">

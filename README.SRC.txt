@@ -7,20 +7,16 @@ General jEdit documentation can be found in the 'doc' directory.
 
  For all tasks:
 
-  - Apache Ant. I use version 1.7; older or newer versions might or might not
-    work. If an older version doesn't work, install an update. If a newer
-    version doesn't work, please submit a bug report.
-    Get it from <http://ant.apache.org>.
+  - Apache Ant. Get it from <http://ant.apache.org>.
+    1.8.0 or newer has to be used.
   - The Ant Optional package. This is included in the download from ants website,
     as well as the AntPlugin from the Plugin Manager,
     but not in some default installs on various *nix systems.
     There you should get the ant-optional package through your
     package management system.
-  - Configure the build.properties.sample file with your local paths and save it
-    as build.properties.
-  - Make sure you also have the build-support module.
-  - Configure the build.properties.sample file from build-support with your
-    local paths and save it as build.properties in the folder jars.
+  - Make sure you also have the build-support module. This is expected as sibling
+    of the project directory. If it is somewhere else, you can set the build.support
+    property in jars/build.properties to the correct path.
 
  For building jEdit, the API documentation or any of the
  distribution files except of the source package:
@@ -35,47 +31,16 @@ General jEdit documentation can be found in the 'doc' directory.
     Get it from <http://www.java.com/download> or from your package
     manager - e. g. sun-java6-jdk.
 
- For building the online help in either HTML- or PDF-format:
-
-  - DocBook XML 4.4. Get it from <http://www.docbook.org/xml/4.4/> or from your
-    package manager - e. g. "docbook-xml" or "docbook-dtd". This contains
-    the DocBook definition and catalog information.
-  - DocBook XSL.
-    Get it from <http://sourceforge.net/projects/docbook/files/docbook-xsl/> or
-    from your package manager - e. g. "docbook-xsl". This contains style sheets
-    for transformation into HTML or FO (for PDF).
-    Don't use a ".0" version, these are experimental releases. They are normally
-    followed by a ".1" version short time after release of the ".0" version.
-  - Set the "docbook.catalog" property in build.properties to the path of the
-    catalog.xml catalog file. Examples for various OS can be found in
-    build.properties.sample.
-  - Set the "docbook.xsl" property in build.properties to the installation path
-    of the DocBook XSL files. Examples for various OS can be found in
-    build.properties.sample.
-  - xsltproc. This is originally a *nix program, but there are ports e. g. for
-    Windows too. Get it from <http://www.xmlsoft.org/XSLT/downloads.html> or
-    from your package manager.
-  - Set the "xsltproc.executable" property in build.properties to the path of
-    your xsltproc executable. If it is in your PATH environment variable,
-    "xsltproc" is sufficient as value. Examples for various OS can be found in
-    build.properties.sample.
-
- For building the online help in PDF-format:
-
-  - Apache FOP. Get it from <http://xmlgraphics.apache.org/fop/download.html> or
-    from your package manager. The old 0.20.5 release will not work anymore with
-    our files. 0.93 or newer has to be used.
-
- For building the windows EXE launcher:
-
-  - Launch4j. Get it from <http://sourceforge.net/projects/launch4j/files/>
-
  For building the windows installer (for the final step):
 
   - Unicode Inno Setup. Get it from <http://www.jrsoftware.org/isdl.php>
   - A box running windows or wine, e. g. on *nix. If Inno Setup should be
     run via wine, a wine version of at least 1.3.10 is required because
     of a bug in earlier wine versions.
+
+ For building the EXE launcher on Mac OS X:
+
+  - Rosetta. Get it from your installation DVD at "Optional Installs".
 
  For building the Mac OS X disk image (DMG) for easy distribution
  (for the final step):
@@ -87,6 +52,11 @@ General jEdit documentation can be found in the 'doc' directory.
 
  If all necessary tools are installed and set up, you can use ant with a couple of targets.
  The default target if you just run "ant" is "build", like running "ant build".
+
+ - retrieve            retrieve the dependencies
+  retrieves almost all dependencies needed for building jEdit, only InnoSetup for the
+  windows installer and wine, if InnoSetup should be run on *nix or Mac OS X, have to
+  be installed and configured in build.properties manually.
 
  - build               build the jEdit JAR-file with full debug-information
   builds jEdit in the build-folder, configured in build.properties,
@@ -104,17 +74,17 @@ General jEdit documentation can be found in the 'doc' directory.
   If there isn't any, it builds it in front of execution.
   The debug listening for this JVM is enabled.
 
- - docs-html           generate HTML docs (needs xsltproc)
+ - docs-html           generate HTML docs
   builds the online help in HTML-format in the build-folder, configured in build.properties.
 
  - docs-javadoc        generate JavaDoc API docs
   builds the API documentation in the build-folder, configured in build.properties.
 
- - docs-pdf-USletter   generate PDF users-guide with US letter paper size (needs xsltproc and fop)
+ - docs-pdf-USletter   generate PDF users-guide with US letter paper size
   builds the User's Guide in PDF-format with US letter page size
   in the build-folder, configured in build.properties.
 
- - docs-pdf-a4         generate PDF users-guide with A4 paper size (needs xsltproc and fop)
+ - docs-pdf-a4         generate PDF users-guide with A4 paper size
   builds the User's Guide in PDF-format with A4 page size
   in the build-folder, configured in build.properties.
 
@@ -167,12 +137,12 @@ General jEdit documentation can be found in the 'doc' directory.
   building on a box running Windows or via wine. This target is normally only run directly, if
   someone just has to do the final step that was prepared by "dist-win" or "dist".
 
- - clean               clean up build.dir and dist.dir
+ - clean               clean up intermediate files
   cleans up the temporary files from the build- and dist-folder, configured in build.properties.
   Leaves the runnable jEdit, and the distribution files in place.
 
- - clean-all           clean up build.dir and dist.dir completely
-  cleans up all files from the build- and dist-folder, configured in build.properties,
+ - clean-all           clean up lib.dir, build.dir and dist.dir completely
+  cleans up all files from the lib-, build- and dist-folder, configured in build.properties,
   and the folders itself too.
 
 

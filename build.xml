@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <project name="jedit"
-	 default="build">
+	 default="build"
+	 xmlns:mod="antlib:de.masters_of_disaster.ant.tasks"
+	 xmlns:contrib="antlib:net.sf.antcontrib"
+	 xmlns:launch4j="antlib:net.sf.launch4j.ant"
+	 xmlns:jarbundler="antlib:net.sourceforge.jarbundler"
+	 xmlns:fop="antlib:org.apache.fop.tools.anttasks"
+	 xmlns:ivy="antlib:org.apache.ivy.ant">
 	<description>
 		This is an ant build.xml file for building jEdit - Programmer's Text Editor.
 	</description>
@@ -24,10 +30,14 @@
 		  value="1_6_0_20-i586-1"/>
 
 	<!-- Various Paths -->
+	<property name="config.lib.dir"
+		  value="lib"/>
 	<property name="config.build.dir"
 		  value="build"/>
 	<property name="config.dist.dir"
 		  value="dist"/>
+	<property name="lib.dir"
+		  location="${config.lib.dir}"/>
 	<property name="build.dir"
 		  location="${config.build.dir}"/>
 	<property name="dist.dir"
@@ -53,6 +63,16 @@
 	<property name="mac.disk.image.filename"
 		  value="jedit${jedit.version}install.dmg"/>
 
+	<!-- Ivy Properties -->
+	<property name="config.ivy.version"
+		  value="2.2.0"/>
+	<property name="ivy.jar.dir"
+		  location="${lib.dir}/ivy"/>
+	<property name="ivy.jar.filename"
+		  value="ivy-${config.ivy.version}.jar"/>
+	<property name="ivy.jar.file"
+		  location="${ivy.jar.dir}/${ivy.jar.filename}"/>
+
 	<!-- Miscellaneous -->
 	<property name="config.build.debuglevel"
 		  value="lines,vars,source"/>
@@ -62,33 +82,18 @@
 		  value="true"/>
 	<property name="config.build.compilerarg"
 		  value="-Xlint:unchecked"/>
-	<property name="config.docbook.catalog.debug"
-		  value="1"/>
-
-	<!-- Cygwin detection (xsltproc needs special arguments) -->
-	<dirname property="xsltproc.dir"
-		 file="${config.xsltproc.executable}"/>
-	<condition property="xsltproc.cygwin.arg"
-		   value="--path /usr/share/sgml/docbook/xsl-stylesheets/html/">
-		<and>
-			<available file="${xsltproc.dir}/cygcheck.exe"/>
-			<available file="${xsltproc.dir}/../usr/share/sgml/docbook/xsl-stylesheets/html/docbook.xsl"/>
-		</and>
-	</condition>
-	<condition property="xsltproc.cygwin.arg"
-		   value="--path /usr/share/docbook-xsl/html/">
-		<and>
-			<available file="${xsltproc.dir}/cygcheck.exe"/>
-			<available file="${xsltproc.dir}/../usr/share/docbook-xsl/html/docbook.xsl"/>
-		</and>
-	</condition>
-	<property name="xsltproc.cygwin.arg"
-		  value=""/>
 
 	<target name="init"
 		unless="init.done">
 		<echo message="Buildfile for ${ant.project.name} (${ant.file})"
 		      level="info"/>
+		<fail message="Ant 1.8 or newer is needed for jEdit to build, please install it and rerun">
+			<condition>
+				<not>
+					<antversion atleast="1.8"/>
+				</not>
+			</condition>
+		</fail>
 		<fail message="The ant-optional package is needed for jEdit to build, please install it and rerun">
 			<condition>
 				<not>
@@ -100,36 +105,95 @@
 			  value="true"/>
 	</target>
 
+	<target name="check-ivy"
+		depends="init">
+		<available property="ivy.jar.present"
+			   file="${ivy.jar.file}"
+			   type="file"/>
+	</target>
+
+	<target name="download-ivy"
+		depends="init,check-ivy"
+		unless="ivy.jar.present">
+		<mkdir dir="${ivy.jar.dir}"/>
+		<get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${config.ivy.version}/ivy-${config.ivy.version}.jar"
+		     dest="${ivy.jar.file}"
+		     usetimestamp="true"/>
+	</target>
+
+	<target name="init-ivy"
+		depends="init,download-ivy">
+		<property name="ivy.retrieve.pattern"
+			  value="${lib.dir}/[conf]/[artifact](-[classifier]).[ext]"/>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml"
+			 classpath="${ivy.jar.file}"
+			 loaderref="ivy.loader"
+			 uri="antlib:org.apache.ivy.ant"/>
+		<ivy:settings file="ivysettings.xml"/>
+	</target>
+
+	<target name="retrieve"
+		description="retrieve the dependencies"
+		depends="init,init-ivy">
+		<ivy:retrieve sync="true"/>
+		<ivy:retrieve pattern="${lib.dir}/ivy/[artifact]-[revision].[ext]"
+			      organisation="org.apache.ivy"
+			      module="ivy"
+			      revision="${config.ivy.version}"
+			      conf="default"
+			      inline="true"/>
+	</target>
+
+	<target name="setup"
+		depends="init,retrieve">
+		<taskdef resource="net/sf/antcontrib/antlib.xml"
+			 uri="antlib:net.sf.antcontrib">
+			<classpath>
+				<fileset dir="${lib.dir}/ant-contrib"
+					 includes="*.jar"/>
+			</classpath>
+		</taskdef>
+	</target>
+
 	<target name="clean"
 		depends="init"
 		description="clean up intermediate files">
 		<delete includeemptydirs="true"
 			failonerror="false">
-			<fileset dir="${build.dir}/classes" defaultexcludes="false"/>
-			<fileset dir="${dist.dir}/classes" defaultexcludes="false"/>
-			<fileset dir="doc" includes="docbook-wrapper-*.xsl"/>
+			<fileset dir="${build.dir}/classes"
+				 defaultexcludes="false"/>
+			<fileset dir="${dist.dir}/classes"
+				 defaultexcludes="false"/>
 		</delete>
 	</target>
 
 	<target name="clean-all"
 		depends="init"
-		description="clean up build.dir and dist.dir completely">
+		description="clean up lib.dir, build.dir and dist.dir completely">
 		<delete includeemptydirs="true"
 			failonerror="false">
-			<fileset dir="${build.dir}" defaultexcludes="false"/>
-			<fileset dir="${dist.dir}" defaultexcludes="false"/>
-			<fileset dir="${textAreaPackage}/build" defaultexcludes="false"/>
-			<fileset dir="doc" includes="docbook-wrapper-*.xsl"/>
+			<fileset dir="${lib.dir}"
+				 defaultexcludes="false"/>
+			<fileset dir="${build.dir}"
+				 defaultexcludes="false"/>
+			<fileset dir="${dist.dir}"
+				 defaultexcludes="false"/>
+			<fileset dir="${textAreaPackage}/build"
+				 defaultexcludes="false"/>
 		</delete>
 	</target>
 
 	<target name="compile"
 		depends="init">
 		<mkdir dir="${classes.dir}/core"/>
-		<depend srcDir="."
+		<depend srcDir="${basedir}"
 			destDir="${classes.dir}/core"
 			cache="${classes.dir}"/>
-		<javac srcdir="."
+		<dependset>
+			<srcfilelist files="build.xml"/>
+			<targetfileset dir="${classes.dir}/core"/>
+		</dependset>
+		<javac srcdir="${basedir}"
 		       destdir="${classes.dir}/core"
 		       debug="true"
 		       debuglevel="${config.build.debuglevel}"
@@ -154,7 +218,7 @@
 
 		<mkdir dir="${textAreaPackage}/src"/>
 		<copy todir="${textAreaPackage}/src">
-			<fileset dir=".">
+			<fileset dir="${basedir}">
 				<include name="modes/*"/>
 				<include name="org/gjt/sp/jedit/bsh/*"/>
 				<include name="org/gjt/sp/jedit/bsh/**/*"/>
@@ -290,12 +354,14 @@
 		       source="${target.java.version}"
 		       target="${target.java.version}"
 		       compiler="modern"
-		       encoding="UTF-8">
+		       encoding="UTF-8"
+		       includeAntRuntime="false">
+			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
 
 	<target name="build"
-		depends="init,compile"
+		depends="init,retrieve,setup,compile"
 		description="build the jEdit JAR-file with full debug-information">
 		<mkdir dir="${jar.location}"/>
 		<jar destfile="${jar.location}/${jar.filename}"
@@ -304,7 +370,7 @@
 		     manifest="org/gjt/sp/jedit/jedit.manifest"
 		     duplicate="fail"
 		     index="true">
-			<fileset dir=".">
+			<fileset dir="${basedir}">
 				<include name="org/gjt/sp/jedit/bsh/commands/*.bsh"/>
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
@@ -317,25 +383,86 @@
 			</fileset>
 		</jar>
 		<copy todir="${jar.location}">
-			<fileset dir=".">
+			<fileset dir="${basedir}">
 				<include name="macros/**"/>
 				<include name="modes/**"/>
 				<include name="properties/**"/>
 				<include name="startup/**"/>
 			</fileset>
 		</copy>
+		<copy todir="${jar.location}/jars">
+			<fileset dir="${lib.dir}/default-plugins">
+				<exclude name="MacOSX.jar"/>
+			</fileset>
+		</copy>
+		<contrib:if>
+			<os family="mac"/>
+			<contrib:then>
+				<copy todir="${jar.location}/jars">
+					<fileset dir="${lib.dir}/default-plugins">
+						<include name="MacOSX.jar"/>
+					</fileset>
+				</copy>
+			</contrib:then>
+		</contrib:if>
 	</target>
 
 	<target name="build-exe-launcher"
-		depends="init,filter-package-files"
+		depends="init,retrieve,setup,filter-package-files"
 		description="build the EXE launcher">
-		<fail message="Please set the property &quot;launch4j.dir&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.launch4j.dir"/>
-		<taskdef name="launch4j"
+		<contrib:if>
+			<os family="windows"/>
+			<contrib:then>
+				<property name="osfamily"
+					  value="windows"/>
+			</contrib:then>
+		</contrib:if>
+		<contrib:if>
+			<os family="mac"/>
+			<contrib:then>
+				<property name="osfamily"
+					  value="mac"/>
+			</contrib:then>
+		</contrib:if>
+		<contrib:if>
+			<os family="unix"/>
+			<contrib:then>
+				<property name="osfamily"
+					  value="unix"/>
+			</contrib:then>
+		</contrib:if>
+		<contrib:switch value="${osfamily}">
+			<contrib:case value="windows">
+				<unzip src="${lib.dir}/launch4j/launch4j-win32.zip"
+				       dest="${build.dir}/"/>
+			</contrib:case>
+			<contrib:case value="unix">
+				<untar src="${lib.dir}/launch4j/launch4j-linux.tgz"
+				       dest="${build.dir}/"
+				       compression="gzip"/>
+				<chmod dir="${build.dir}/launch4j/bin/"
+				       perm="+x"
+				       includes="**"/>
+			</contrib:case>
+			<contrib:case value="mac">
+				<untar src="${lib.dir}/launch4j/launch4j-macosx.tgz"
+				       dest="${build.dir}/"
+				       compression="gzip"/>
+				<chmod dir="${build.dir}/launch4j/bin/"
+				       perm="+x"
+				       includes="**"
+				       osfamily="mac"/>
+			</contrib:case>
+			<contrib:default>
+				<fail message="Unsupported OS family (${osfamily}). If you are on Windows, *nix or MacOS, please report this as bug, if not, please report it as a feature request"/>
+			</contrib:default>
+		</contrib:switch>
+		<taskdef name="create"
 			 classname="net.sf.launch4j.ant.Launch4jTask"
-			 classpath="${config.launch4j.dir}/launch4j.jar"/>
-		<launch4j configFile="${classes.dir}/package-files/windows/jedit.launch4j.xml"
-			  outfile="${jar.location}/jedit.exe"/>
+			 classpath="${build.dir}/launch4j/launch4j.jar"
+			 uri="antlib:net.sf.launch4j.ant"/>
+		<launch4j:create configFile="${classes.dir}/package-files/windows/jedit.launch4j.xml"
+				 outfile="${jar.location}/jedit.exe"/>
 	</target>
 
 	<target name="build-textArea"
@@ -385,173 +512,126 @@
 		</java>
 	</target>
 
-	<target name="generate-docbook-wrapper"
-		if="format"
-		depends="init">
-		<fail message="Please set the property &quot;docbook.xsl&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.docbook.xsl"/>
-		<pathconvert property="absolute-stylesheet"
-			     dirsep="/">
-			<path location="${config.docbook.xsl}/${stylesheet}"/>
-		</pathconvert>
-		<echo message="&lt;?xml version=&quot;1.0&quot;?&gt;${line.separator}"
-		      file="doc/docbook-wrapper-${format}.xsl"
-		      level="error"/>
-		<echo message="&lt;xsl:stylesheet xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;${line.separator}"
-		      file="doc/docbook-wrapper-${format}.xsl"
-		      append="true"
-		      level="error"/>
-		<echo message="                version=&quot;1.0&quot;&gt;${line.separator}"
-		      file="doc/docbook-wrapper-${format}.xsl"
-		      append="true"
-		      level="error"/>
-		<echo message="    &lt;xsl:import href=&quot;file:///${absolute-stylesheet}&quot; /&gt;${line.separator}"
-		      file="doc/docbook-wrapper-${format}.xsl"
-		      append="true"
-		      level="error"/>
-		<echo message="&lt;/xsl:stylesheet&gt;${line.separator}"
-		      file="doc/docbook-wrapper-${format}.xsl"
-		      append="true"
-		      level="error"/>
+	<target name="unpack-docbook-xsl"
+		depends="init,retrieve">
+		<unzip src="${lib.dir}/docbook/docbook-xsl-resources.zip"
+		       dest="${build.dir}/docbook-xsl/"/>
 	</target>
 
+	<presetdef name="dependset.build">
+		<dependset>
+			<srcfilelist dir="${basedir}">
+				<file name="build.xml"/>
+				<file name="ivy.xml"/>
+				<file name="ivysettings.xml"/>
+			</srcfilelist>
+		</dependset>
+	</presetdef>
+
+	<presetdef name="dependset.html">
+		<dependset.build>
+			<srcfileset dir="${lib.dir}/docbook"/>
+			<srcfilelist files="doc/jedithtml.xsl"/>
+		</dependset.build>
+	</presetdef>
+
+	<presetdef name="xslt.doc">
+		<xslt>
+			<classpath>
+				<fileset dir="${lib.dir}/docbook"
+					 includes="*.jar"/>
+			</classpath>
+			<xmlcatalog>
+				<entity publicid="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
+					location="${build.dir}/docbook-xsl/docbook/html/chunk.xsl"/>
+				<entity publicid="http://docbook.sourceforge.net/release/xsl/current/fo/docbook.xsl"
+					location="${build.dir}/docbook-xsl/docbook/fo/docbook.xsl"/>
+			</xmlcatalog>
+			<sysproperty key="javax.xml.parsers.DocumentBuilderFactory"
+				     value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+			<sysproperty key="javax.xml.parsers.SAXParserFactory"
+				     value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
+			<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration"
+				     value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+		</xslt>
+	</presetdef>
+
 	<target name="generate-doc-faq"
-		depends="init"
-		if="doc.output.location"
-		unless="faq.is.up.to.date">
-		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.xsltproc.executable"/>
-		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.docbook.catalog"/>
-		<mkdir dir="${doc.output.location}/FAQ"/>
-		<exec executable="${config.xsltproc.executable}"
-		      dir="doc"
-		      failonerror="true">
-			<arg line="${xsltproc.cygwin.arg}"/>
-			<arg value="--xinclude"/>
-			<arg value="--output"/>
-			<arg value="../${doc.output.location}/FAQ/"/>
-			<arg value="jedithtml.xsl"/>
-			<arg value="FAQ/faq.xml"/>
-			<env key="XML_CATALOG_FILES"
-			     value="${config.docbook.catalog}"/>
-			<env key="XML_DEBUG_CATALOG"
-			     value="${config.docbook.catalog.debug}"/>
-		</exec>
+		depends="init,retrieve,setup,unpack-docbook-xsl">
+		<dependset.html>
+			<srcfileset dir="doc/FAQ"/>
+			<targetfileset dir="${jar.location}/doc/FAQ"/>
+		</dependset.html>
+		<contrib:if>
+			<available file="${jar.location}/doc/FAQ/toc.xml"
+				   type="file"/>
+			<contrib:then>
+				<echo message="FAQ is up-to-date"
+				      level="info"/>
+			</contrib:then>
+			<contrib:else>
+				<xslt.doc style="doc/jedithtml.xsl"
+					  in="doc/FAQ/faq.xml"
+					  out="${jar.location}/doc/FAQ/index.html">
+					<param name="base.dir"
+					       expression="${jar.location}/doc/FAQ/"/>
+				</xslt.doc>
+			</contrib:else>
+		</contrib:if>
 	</target>
 
 	<target name="generate-doc-news"
-		depends="init"
-		if="doc.output.location"
-		unless="news.is.up.to.date">
-		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.xsltproc.executable"/>
-		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.docbook.catalog"/>
-		<mkdir dir="${doc.output.location}/news45"/>
-		<exec executable="${config.xsltproc.executable}"
-		      dir="doc"
-		      failonerror="true">
-			<arg line="${xsltproc.cygwin.arg}"/>
-			<arg value="--output"/>
-			<arg value="../${doc.output.location}/news45/"/>
-			<arg value="jedithtml.xsl"/>
-			<arg value="news45/news.xml"/>
-			<env key="XML_CATALOG_FILES"
-			     value="${config.docbook.catalog}"/>
-			<env key="XML_DEBUG_CATALOG"
-			     value="${config.docbook.catalog.debug}"/>
-		</exec>
+		depends="init,retrieve,setup,unpack-docbook-xsl">
+		<dependset.html>
+			<srcfileset dir="doc/news45"/>
+			<targetfileset dir="${jar.location}/doc/news45"/>
+		</dependset.html>
+		<contrib:if>
+			<available file="${jar.location}/doc/news45/toc.xml"
+				   type="file"/>
+			<contrib:then>
+				<echo message="News is up-to-date"
+				      level="info"/>
+			</contrib:then>
+			<contrib:else>
+				<xslt.doc style="doc/jedithtml.xsl"
+					  in="doc/news45/news.xml"
+					  out="${jar.location}/doc/news45/index.html">
+					<param name="base.dir"
+					       expression="${jar.location}/doc/news45/"/>
+				</xslt.doc>
+			</contrib:else>
+		</contrib:if>
 	</target>
 
 	<target name="generate-doc-users-guide"
-		depends="init"
-		if="doc.output.location"
-		unless="users-guide.is.up.to.date">
-		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.xsltproc.executable"/>
-		<fail message="Please set the property &quot;docbook.catalog&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.docbook.catalog"/>
-		<mkdir dir="${doc.output.location}/users-guide"/>
-		<exec executable="${config.xsltproc.executable}"
-		      dir="doc"
-		      failonerror="true">
-			<arg line="${xsltproc.cygwin.arg}"/>
-			<arg value="--xinclude"/>
-			<arg value="--output"/>
-			<arg value="../${doc.output.location}/users-guide/"/>
-			<arg value="jedithtml.xsl"/>
-			<arg value="users-guide/users-guide.xml"/>
-			<env key="XML_CATALOG_FILES"
-			     value="${config.docbook.catalog}"/>
-			<env key="XML_DEBUG_CATALOG"
-			     value="${config.docbook.catalog.debug}"/>
-		</exec>
-	</target>
-
-	<target name="userdocs"
-		depends="init,docs-html,docs-javadoc"
-		description="generate HTML and JavaDoc API docs (needs xsltproc)"/>
-
-	<target name="docs-upload"
-		depends="userdocs"
-		description="upload generated documentation to public website (needs xsltproc and rsync)">
-		<fail message="Please set the property &quot;rsync.executable&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.rsync.executable"/>
-		<exec executable="${config.rsync.executable}"
-		      dir="${jar.location}/doc/"
-		      failonerror="true">
-			<arg value="-avz"/>
-			<arg value="api"/>
-			<arg value="FAQ"/>
-			<arg value="users-guide"/>
-			<arg value="plugins.jedit.org:/home/groups/j/je/jedit/htdocs/"/>
-		</exec>
+		depends="init,retrieve,setup,unpack-docbook-xsl">
+		<dependset.html>
+			<srcfileset dir="doc/users-guide"/>
+			<targetfileset dir="${jar.location}/doc/users-guide"/>
+		</dependset.html>
+		<contrib:if>
+			<available file="${jar.location}/doc/users-guide/toc.xml"
+				   type="file"/>
+			<contrib:then>
+				<echo message="User's Guide is up-to-date"
+				      level="info"/>
+			</contrib:then>
+			<contrib:else>
+				<xslt.doc style="doc/jedithtml.xsl"
+					  in="doc/users-guide/users-guide.xml"
+					  out="${jar.location}/doc/users-guide/index.html">
+					<param name="base.dir"
+					       expression="${jar.location}/doc/users-guide/"/>
+				</xslt.doc>
+			</contrib:else>
+		</contrib:if>
 	</target>
 
 	<target name="docs-html"
-		depends="init"
-		description="generate HTML docs (needs xsltproc)">
-		<antcall target="generate-docbook-wrapper">
-			<param name="format"
-			       value="html"/>
-			<param name="stylesheet"
-			       value="html/chunk.xsl"/>
-		</antcall>
-		<pathconvert property="doc.output.location"
-			     dirsep="/">
-			<path location="${jar.location}/doc"/>
-			<globmapper from="${basedir}/*"
-				    to="*"
-				    handledirsep="true"/>
-		</pathconvert>
-		<dependset>
-			<srcfileset dir="doc/FAQ"/>
-			<targetfileset dir="${doc.output.location}/FAQ"/>
-		</dependset>
-		<available property="faq.is.up.to.date"
-			   file="${doc.output.location}/FAQ/toc.xml"
-			   type="file"/>
-		<antcall target="generate-doc-faq"/>
-		<dependset>
-			<srcfileset dir="doc/news45"/>
-			<targetfileset dir="${doc.output.location}/news45"/>
-		</dependset>
-		<available property="news.is.up.to.date"
-			   file="${doc.output.location}/news45/toc.xml"
-			   type="file"/>
-		<antcall target="generate-doc-news"/>
-		<dependset>
-			<srcfileset dir="doc/users-guide"/>
-			<targetfileset dir="${doc.output.location}/users-guide"/>
-		</dependset>
-		<available property="users-guide.is.up.to.date"
-			   file="${doc.output.location}/users-guide/toc.xml"
-			   type="file"/>
-		<antcall target="generate-doc-users-guide"/>
-		<delete file="doc/docbook-wrapper-html.xsl"
-			failonerror="false"/>
-		<copy todir="${doc.output.location}">
+		depends="init,generate-doc-faq,generate-doc-news,generate-doc-users-guide"
+		description="generate HTML docs">
+		<copy todir="${jar.location}/doc">
 			<fileset dir="doc">
 				<include name="*.txt"/>
 				<include name="*.html"/>
@@ -562,58 +642,66 @@
 	</target>
 
 	<target name="generate-javadoc"
-		depends="init"
-		unless="javadoc.is.up.to.date">
-		<mkdir dir="${classes.dir}/javadoc"/>
-		<javac srcdir="."
-		       destdir="${classes.dir}/javadoc"
-		       includes="doclet/**"
-		       debug="true"
-		       debuglevel="${config.build.debuglevel}"
-		       nowarn="${config.build.nowarn}"
-		       deprecation="${config.build.deprecation}"
-		       source="${target.java.version}"
-		       target="${target.java.version}"
-		       compiler="modern">
-			<compilerarg line="${config.build.compilerarg}"/>
-		</javac>
-		<javadoc sourcepath="."
-			 destdir="${classes.dir}/javadoc/api"
-			 packagenames="org.*"
-			 classpath="${classes.dir}/core"
-			 doclet="doclet.GenerateTocXML"
-			 docletpath="${classes.dir}/javadoc"
-			 version="true"
-			 use="true"
-			 author="true"
-			 splitindex="true"
-			 locale="en"
-			 windowtitle="jEdit API"
-			 doctitle="jEdit API"
-			 failonerror="true"
-			 source="${target.java.version}">
-			<group title="jEdit"
-			       packages="org.gjt.sp*"/>
-			<group title="BeanShell"
-			       packages="org.gjt.sp.jedit.bsh*"/>
-		</javadoc>
-	</target>
-
-	<target name="docs-javadoc"
-		depends="init"
-		description="generate JavaDoc API docs">
+		depends="init,setup,compile">
 		<dependset>
-			<srcfileset dir=".">
+			<srcfileset dir="${basedir}">
+				<include name="build.xml"/>
 				<include name="doclet/**/*.java"/>
 				<include name="org/**/*.java"/>
 				<include name="org/**/package.html"/>
 			</srcfileset>
 			<targetfileset dir="${classes.dir}/javadoc"/>
 		</dependset>
-		<available property="javadoc.is.up.to.date"
-			   file="${classes.dir}/javadoc/api/toc.xml"
-			   type="file"/>
-		<antcall target="generate-javadoc"/>
+		<contrib:if>
+			<available file="${classes.dir}/javadoc/api/toc.xml"
+				   type="file"/>
+			<contrib:then>
+				<echo message="JavaDoc is up-to-date"
+				      level="info"/>
+			</contrib:then>
+			<contrib:else>
+				<mkdir dir="${classes.dir}/javadoc"/>
+				<javac srcdir="${basedir}"
+				       destdir="${classes.dir}/javadoc"
+				       includes="doclet/**"
+				       debug="true"
+				       debuglevel="${config.build.debuglevel}"
+				       nowarn="${config.build.nowarn}"
+				       deprecation="${config.build.deprecation}"
+				       source="${target.java.version}"
+				       target="${target.java.version}"
+				       compiler="modern"
+				       encoding="UTF-8"
+				       includeAntRuntime="true">
+					<compilerarg line="${config.build.compilerarg}"/>
+				</javac>
+				<javadoc sourcepath="${basedir}"
+					 destdir="${classes.dir}/javadoc/api"
+					 packagenames="org.*"
+					 classpath="${classes.dir}/core"
+					 doclet="doclet.GenerateTocXML"
+					 docletpath="${classes.dir}/javadoc"
+					 version="true"
+					 use="true"
+					 author="true"
+					 splitindex="true"
+					 locale="en"
+					 windowtitle="jEdit API"
+					 doctitle="jEdit API"
+					 failonerror="true"
+					 source="${target.java.version}">
+					<group title="jEdit"
+					       packages="org.gjt.sp*"/>
+					<group title="BeanShell"
+					       packages="org.gjt.sp.jedit.bsh*"/>
+				</javadoc>
+			</contrib:else>
+		</contrib:if>
+	</target>
+
+	<target name="docs-javadoc"
+		depends="init,generate-javadoc"
+		description="generate JavaDoc API docs">
 		<copy todir="${jar.location}/doc">
 			<fileset dir="${classes.dir}/javadoc"
 				 includes="api/**"
@@ -639,88 +727,65 @@
 	</target>
 
 	<target name="generate-pdf-users-guide"
-		depends="init"
-		if="paper.type"
-		unless="pdf-users-guide.is.up.to.date">
-		<fail message="Please set the property &quot;xsltproc.executable&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.xsltproc.executable"/>
-		<fail message="Please set the property &quot;fop.dir&quot; in build.properties, you may find example values in build.properties.sample"
-		      unless="config.fop.dir"/>
-		<antcall target="generate-docbook-wrapper">
-			<param name="format"
-			       value="fo"/>
-			<param name="stylesheet"
-			       value="fo/docbook.xsl"/>
-		</antcall>
-		<pathconvert property="docs-pdf.classes.dir"
-			     dirsep="/">
-			<path location="${classes.dir}/docs-pdf"/>
-			<globmapper from="${basedir}/*"
-				    to="*"
-				    handledirsep="true"/>
-		</pathconvert>
-		<mkdir dir="${docs-pdf.classes.dir}"/>
-		<exec executable="${config.xsltproc.executable}"
-		      dir="doc"
-		      failonerror="true">
-			<arg line="${xsltproc.cygwin.arg}"/>
-			<arg value="--stringparam"/>
-			<arg value="paper.type"/>
-			<arg value="${paper.type}"/>
-			<arg value="--xinclude"/>
-			<arg value="--output"/>
-			<arg value="../${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"/>
-			<arg value="jeditfo.xsl"/>
-			<arg value="users-guide/users-guide.xml"/>
-		</exec>
-		<delete file="doc/docbook-wrapper-fo.xsl"
-			failonerror="false"/>
-		<taskdef name="fop"
-			 classname="org.apache.fop.tools.anttasks.Fop">
-			<classpath>
-				<fileset dir="${config.fop.dir}"
-					 includes="build/fop.jar
-						   lib/*.jar
-						   *.jar"/>
-			</classpath>
-		</taskdef>
-		<fop fofile="${docs-pdf.classes.dir}/${manual.filename.prefix}${manual.filename.paper.type}.fot"
-		     outfile="${jar.location}/${manual.filename.prefix}${manual.filename.paper.type}.pdf"
-		     format="application/pdf"
-		     messagelevel="info"/>
-	</target>
-
-	<target name="docs-pdf"
-		depends="init"
-		if="paper.type">
-		<condition property="manual.filename.paper.type"
-			   value="a4">
-			<equals arg1="A4"
-				arg2="${paper.type}"/>
-		</condition>
-		<condition property="manual.filename.paper.type"
-			   value="letter"
-			   else="${paper.type}">
-			<equals arg1="USletter"
-				arg2="${paper.type}"/>
-		</condition>
-		<dependset>
+		depends="init,retrieve,setup,unpack-docbook-xsl">
+		<fail message="Please set the property &quot;paper.type&quot;"
+		      unless="paper.type"/>
+		<contrib:switch value="${paper.type}">
+			<contrib:case value="A4">
+				<property name="manual.filename.paper.type"
+					  value="a4"/>
+			</contrib:case>
+			<contrib:case value="USletter">
+				<property name="manual.filename.paper.type"
+					  value="letter"/>
+			</contrib:case>
+			<contrib:default>
+				<property name="manual.filename.paper.type"
+					  value="${paper.type}"/>
+			</contrib:default>
+		</contrib:switch>
+		<dependset.build>
+			<srcfileset dir="${lib.dir}/docbook"/>
+			<srcfileset dir="${lib.dir}/fop"/>
+			<srcfilelist files="doc/jeditfo.xsl"/>
 			<srcfileset dir="doc/users-guide"/>
-			<targetfilelist dir="${classes.dir}/docs-pdf"
-					files="${manual.filename.prefix}${manual.filename.paper.type}.fot"/>
-			<targetfilelist dir="${jar.location}"
-					files="${manual.filename.prefix}${manual.filename.paper.type}.pdf"/>
-		</dependset>
-		<available property="pdf-users-guide.is.up.to.date"
-			   file="${jar.location}/${manual.filename.prefix}${manual.filename.paper.type}.pdf"
-			   type="file"/>
-		<antcall target="generate-pdf-users-guide"/>
+			<targetfileset file="${classes.dir}/docs-pdf/${manual.filename.prefix}${manual.filename.paper.type}.fot"/>
+			<targetfileset file="${jar.location}/${manual.filename.prefix}${manual.filename.paper.type}.pdf"/>
+		</dependset.build>
+		<contrib:if>
+			<available file="${jar.location}/${manual.filename.prefix}${manual.filename.paper.type}.pdf"
+				   type="file"/>
+			<contrib:then>
+				<echo message="${paper.type} PDF User's Guide is up-to-date"
+				      level="info"/>
+			</contrib:then>
+			<contrib:else>
+				<xslt.doc style="doc/jeditfo.xsl"
+					  in="doc/users-guide/users-guide.xml"
+					  out="${classes.dir}/docs-pdf/${manual.filename.prefix}${manual.filename.paper.type}.fot">
+					<param name="paper.type"
+					       expression="${paper.type}"/>
+				</xslt.doc>
+				<taskdef name="transform"
+					 classname="org.apache.fop.tools.anttasks.Fop"
+					 uri="antlib:org.apache.fop.tools.anttasks">
+					<classpath>
+						<fileset dir="${lib.dir}/fop"
+							 includes="*.jar"/>
+					</classpath>
+				</taskdef>
+				<fop:transform fofile="${classes.dir}/docs-pdf/${manual.filename.prefix}${manual.filename.paper.type}.fot"
+					       outfile="${jar.location}/${manual.filename.prefix}${manual.filename.paper.type}.pdf"
+					       format="application/pdf"
+					       messagelevel="info"/>
+			</contrib:else>
+		</contrib:if>
 	</target>
 
 	<target name="docs-pdf-a4"
 		depends="init"
-		description="generate PDF users-guide with A4 paper size (needs xsltproc and fop)">
-		<antcall target="docs-pdf">
+		description="generate PDF users-guide with A4 paper size">
+		<antcall target="generate-pdf-users-guide">
 			<param name="paper.type"
 			       value="A4"/>
 		</antcall>
@@ -728,20 +793,42 @@
 
 	<target name="docs-pdf-USletter"
 		depends="init"
-		description="generate PDF users-guide with US letter paper size (needs xsltproc and fop)">
-		<antcall target="docs-pdf">
+		description="generate PDF users-guide with US letter paper size">
+		<antcall target="generate-pdf-users-guide">
 			<param name="paper.type"
 			       value="USletter"/>
 		</antcall>
 	</target>
 
+	<target name="docs-upload"
+		depends="init,docs-html,docs-javadoc"
+		description="upload generated documentation to public website (needs rsync)">
+		<fail message="Please set the property &quot;rsync.executable&quot; in build.properties, you may find example values in build.properties.sample"
+		      unless="config.rsync.executable"/>
+		<exec executable="${config.rsync.executable}"
+		      dir="${jar.location}/doc/"
+		      failonerror="true">
+			<arg value="-avz"/>
+			<arg value="--delete"/>
+			<arg value="--progress"/>
+			<arg value="api"/>
+			<arg value="FAQ"/>
+			<arg value="users-guide"/>
+			<arg value="web.sourceforge.net:/home/project-web/jedit/htdocs"/>
+		</exec>
+	</target>
+
 	<target name="compile-installer"
 		depends="init">
 		<mkdir dir="${classes.dir}/installer"/>
-		<depend srcDir="."
+		<depend srcDir="${basedir}"
 			destDir="${classes.dir}/installer"
 			cache="${classes.dir}"/>
-		<javac srcdir="."
+		<dependset>
+			<srcfilelist files="build.xml"/>
+			<targetfileset dir="${classes.dir}/installer"/>
+		</dependset>
+		<javac srcdir="${basedir}"
 		       destdir="${classes.dir}/installer"
 		       includes="installer/**"
 		       debug="true"
@@ -750,51 +837,16 @@
 		       deprecation="${config.build.deprecation}"
 		       source="${target.java.version}"
 		       target="${target.java.version}"
-		       compiler="modern">
+		       compiler="modern"
+		       encoding="UTF-8"
+		       includeAntRuntime="false">
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
 
-	<target name="compile-default-plugins-for-dist"
-		depends="init">
-		<ant dir="jars/QuickNotepad"
-		     target="dist"
-		     inheritAll="false">
-			<property name="jedit.install.dir"
-				  value="${dist.dir}"/>
-			<property name="install.dir"
-				  value="${dist.dir}/jars"/>
-		</ant>
-		<ant dir="jars/QuickNotepad"
-		     target="clean"
-		     inheritAll="false">
-			<property name="jedit.install.dir"
-				  value="${dist.dir}"/>
-			<property name="install.dir"
-				  value="${dist.dir}/jars"/>
-		</ant>
-		<ant dir="jars/MacOSX"
-		     target="dist"
-		     inheritAll="false">
-			<property name="jedit.install.dir"
-				  value="${dist.dir}"/>
-			<property name="install.dir"
-				  value="${dist.dir}/jars"/>
-		</ant>
-		<ant dir="jars/MacOSX"
-		     target="clean"
-		     inheritAll="false">
-			<property name="jedit.install.dir"
-				  value="${dist.dir}"/>
-			<property name="install.dir"
-				  value="${dist.dir}/jars"/>
-		</ant>
-	</target>
-
 	<target name="dist-java"
-		depends="init"
+		depends="init,setup,prepare-dist-files"
 		description="build the Java-installer">
-		<antcall target="prepare-dist-files"/>
 		<tar destfile="${dist.dir}/jedit-macros.tar.bz2"
 		     compression="bzip2">
 			<tarfileset id="jedit-macros"
@@ -806,12 +858,13 @@
 			<tarfileset id="jedit-program"
 				    dir="${dist.dir}"
 				    includes="doc/**
-					      jars/QuickNotepad.jar
+					      jars/**
 					      modes/**
 					      properties/**
 					      startup/**
 					      ${jar.filename}"
-				    excludes="doc/api/**"/>
+				    excludes="doc/api/**
+					      jars/MacOSX.jar"/>
 		</tar>
 		<tar destfile="${dist.dir}/jedit-windows.tar.bz2"
 		     compression="bzip2">
@@ -851,31 +904,32 @@
 		</antcall>
 		<taskdef name="calculatesize"
 			 classname="de.masters_of_disaster.ant.tasks.calculatesize.CalculateSize"
-			 classpath="${dist.dir}/classes/calculatesize"/>
-		<calculatesize realsizeproperty="jedit-macros.realsize"
-			       disksizeproperty="jedit-macros.disksize">
+			 classpath="${dist.dir}/classes/calculatesize"
+			 uri="antlib:de.masters_of_disaster.ant.tasks"/>
+		<mod:calculatesize realsizeproperty="jedit-macros.realsize"
+				   disksizeproperty="jedit-macros.disksize">
 			<fileset refid="jedit-macros"/>
-		</calculatesize>
-		<calculatesize realsizeproperty="jedit-program.realsize"
-			       disksizeproperty="jedit-program.disksize">
+		</mod:calculatesize>
+		<mod:calculatesize realsizeproperty="jedit-program.realsize"
+				   disksizeproperty="jedit-program.disksize">
 			<fileset refid="jedit-program"/>
-		</calculatesize>
-		<calculatesize realsizeproperty="jedit-windows.realsize"
-			       disksizeproperty="jedit-windows.disksize">
+		</mod:calculatesize>
+		<mod:calculatesize realsizeproperty="jedit-windows.realsize"
+				   disksizeproperty="jedit-windows.disksize">
 			<fileset refid="jedit-windows"/>
-		</calculatesize>
-		<calculatesize realsizeproperty="jedit-mac.realsize"
-			       disksizeproperty="jedit-mac.disksize">
+		</mod:calculatesize>
+		<mod:calculatesize realsizeproperty="jedit-mac.realsize"
+				   disksizeproperty="jedit-mac.disksize">
 			<fileset refid="jedit-mac"/>
-		</calculatesize>
-		<calculatesize realsizeproperty="jedit-api.realsize"
-			       disksizeproperty="jedit-api.disksize">
+		</mod:calculatesize>
+		<mod:calculatesize realsizeproperty="jedit-api.realsize"
+				   disksizeproperty="jedit-api.disksize">
 			<fileset refid="jedit-api"/>
-		</calculatesize>
-		<calculatesize realsizeproperty="jedit-os2.realsize"
-			       disksizeproperty="jedit-os2.disksize">
+		</mod:calculatesize>
+		<mod:calculatesize realsizeproperty="jedit-os2.realsize"
+				   disksizeproperty="jedit-os2.disksize">
 			<fileset refid="jedit-os2"/>
-		</calculatesize>
+		</mod:calculatesize>
 		<copy todir="${dist.dir}/classes/installer/installer"
 		      encoding="UTF-8"
 		      overwrite="true">
@@ -915,7 +969,7 @@
 		     manifest="installer/install.mf"
 		     duplicate="fail"
 		     index="true">
-			<fileset dir=".">
+			<fileset dir="${basedir}">
 				<include name="installer/*.html"/>
 			</fileset>
 			<fileset dir="${dist.dir}/classes/package-files/linux">
@@ -930,16 +984,13 @@
 					      jedit-program.tar.bz2"
 				    prefix="installer"/>
 		</jar>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="dist-manuals"
-		depends="init"
+		depends="init,setup"
 		description="build the PDF-manuals">
 		<antcall target="docs-pdf-a4">
 			<param name="classes.dir"
@@ -953,12 +1004,9 @@
 			<param name="jar.location"
 			       location="${dist.dir}"/>
 		</antcall>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="dist-src"
@@ -967,11 +1015,11 @@
 		<mkdir dir="${dist.dir}"/>
 		<tar destfile="${dist.dir}/${src.archive.filename}"
 		     compression="bzip2">
-			<tarfileset dir="."
-				    excludes="${config.build.dir}/**
+			<tarfileset dir="${basedir}"
+				    excludes="${config.lib.dir}/**
+					      ${config.build.dir}/**
 					      ${config.dist.dir}/**
-					      **/build.properties
-					      doc/docbook-wrapper-*.xsl"
+					      **/build.properties"
 				    prefix="jEdit/"/>
 			<tarfileset dir="../build-support"
 				    prefix="build-support/"/>
@@ -979,12 +1027,16 @@
 	</target>
 
 	<target name="compile-jarbundler"
-		depends="init">
+		depends="init,retrieve">
 		<mkdir dir="${classes.dir}/jarbundler"/>
-		<depend srcDir="."
+		<depend srcDir="${basedir}"
 			destDir="${classes.dir}/jarbundler"
 			cache="${classes.dir}"/>
-		<javac srcdir="."
+		<dependset>
+			<srcfilelist files="build.xml"/>
+			<targetfileset dir="${classes.dir}/jarbundler"/>
+		</dependset>
+		<javac srcdir="${basedir}"
 		       destdir="${classes.dir}/jarbundler"
 		       includes="net/**"
 		       debug="true"
@@ -993,14 +1045,19 @@
 		       deprecation="${config.build.deprecation}"
 		       source="1.4"
 		       target="1.4"
-		       compiler="modern">
+		       compiler="modern"
+		       encoding="UTF-8"
+		       includeAntRuntime="true">
+			<classpath>
+				<fileset dir="${lib.dir}/jarbundler"
+					 includes="*.jar"/>
+			</classpath>
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
 
 	<target name="dist-mac-finish"
-		depends="init"
-		unless="build.on.non.mac"
+		depends="init,retrieve,setup"
 		description="finish building the Mac OS X disk image (DMG-file) on Mac OS X">
 		<fail message="The disk image (DMG-file) for easy distribution on Mac OS X can only be built on Mac OS X currently">
 			<condition>
@@ -1009,34 +1066,40 @@
 				</not>
 			</condition>
 		</fail>
-		<taskdef name="jarbundler"
+		<taskdef name="create"
 			 classname="net.sourceforge.jarbundler.JarBundler"
-			 classpath="${dist.dir}/classes/jarbundler"/>
+			 classpath="${dist.dir}/classes/jarbundler"
+			 uri="antlib:net.sourceforge.jarbundler">
+			<classpath>
+				<fileset dir="${lib.dir}/jarbundler"
+					 includes="*.jar"/>
+			</classpath>
+		</taskdef>
 		<tstamp>
 			<format property="current.year"
 				pattern="yyyy"/>
 		</tstamp>
 		<mkdir dir="${dist.dir}/classes/mac"/>
-		<jarbundler dir="${dist.dir}/classes/mac"
-			    name="jEdit"
-			    mainclass="org.gjt.sp.jedit.jEdit"
-			    jar="${dist.dir}/${jar.filename}"
-			    arguments="-background"
-			    build="${jedit.build.number}"
-			    bundleid="org.gjt.sp.jedit"
-			    extraclasspath="/System/Library/Java"
-			    icon="icons/icon.icns"
-			    infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
-			    jvmversion="${mac.target.java.version}"
-			    shortname="jEdit"
-			    signature="JESP"
-			    stubfile="jedit"
-			    version="${jedit.version}"
-			    vmoptions="-Xmx192M">
+		<jarbundler:create dir="${dist.dir}/classes/mac"
+				   name="jEdit"
+				   mainclass="org.gjt.sp.jedit.jEdit"
+				   jar="${dist.dir}/${jar.filename}"
+				   arguments="-background"
+				   build="${jedit.build.number}"
+				   bundleid="org.gjt.sp.jedit"
+				   extraclasspath="/System/Library/Java"
+				   icon="icons/icon.icns"
+				   infostring="jEdit ${jedit.version}, Copyright &#169; 1998-${current.year} Contributors"
+				   jvmversion="${mac.target.java.version}"
+				   shortname="jEdit"
+				   signature="JESP"
+				   stubfile="jedit"
+				   version="${jedit.version}"
+				   vmoptions="-Xmx192M">
 			<javaproperty name="apple.awt.antialiasing" value="true"/>
 			<javaproperty name="apple.awt.textantialiasing" value="true"/>
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
-			<!-- Comented due https://sourceforge.net/tracker/?func=detail&atid=100588&aid=2820535&group_id=588 discussion -->
+			<!-- Commented due https://sourceforge.net/tracker/?func=detail&atid=100588&aid=2820535&group_id=588 discussion -->
 			<!--javaproperty name="apple.awt.graphics.UseQuartz" value="true" />
 			<javaproperty name="apple.awt.rendering"          value="speed" /-->
 			<javafileset dir="${dist.dir}"
@@ -1060,7 +1123,14 @@
 			<service message="openSelection"
 				 menuitem="jEdit/New Buffer with Text"
 				 sendtypes="NSStringPboardType"/>
-		</jarbundler>
+		</jarbundler:create>
+		<delete file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
+		<exec executable="ln"
+		      failonerror="true">
+			<arg value="-s" />
+			<arg file="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub" />
+			<arg file="${dist.dir}/classes/mac/jEdit.app/Contents/MacOS/jedit" />
+		</exec>
 		<delete file="${dist.dir}/${mac.disk.image.filename}"
 			failonerror="false"/>
 		<exec executable="hdiutil"
@@ -1079,79 +1149,54 @@
 			<arg value="-quiet"/>
 			<arg file="${dist.dir}/${mac.disk.image.filename}"/>
 		</exec>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
-	</target>
-
-	<target name="prepare-dist-mac-finish"
-		depends="init"
-		if="build.on.non.mac">
-		<tar destfile="${dist.dir}/jedit${jedit.version}-dist-mac-finish.tar.bz2"
-		     basedir="."
-		     includes="build.xml
-			       icons/file.icns
-			       icons/icon.icns
-			       ${config.dist.dir}/${jar.filename}
-			       ${config.dist.dir}/classes/jarbundler/**
-			       ${config.dist.dir}/doc/**
-			       ${config.dist.dir}/jars/**
-			       ${config.dist.dir}/macros/**
-			       ${config.dist.dir}/modes/**
-			       ${config.dist.dir}/properties/**
-			       ${config.dist.dir}/startup/**"
-		     compression="bzip2"/>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="dist-mac"
-		depends="init"
+		depends="init,retrieve,setup,prepare-dist-files"
 		description="build the Mac OS X disk image (DMG-file)">
-		<antcall target="prepare-dist-files"/>
 		<antcall target="compile-jarbundler">
 			<param name="config.build.debuglevel"
 			       value="lines,source"/>
 			<param name="classes.dir"
 			       location="${dist.dir}/classes"/>
 		</antcall>
-		<condition property="build.on.non.mac">
-			<not>
-				<os family="mac"/>
-			</not>
-		</condition>
-		<antcall target="dist-mac-finish">
-			<param name="dont.wipe.dist.files"
-			       value="true"/>
-		</antcall>
-		<antcall target="prepare-dist-mac-finish"/>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
-	</target>
-
-	<target name="translate-paths-for-wine"
-		if="config.winepath.executable">
-		<exec executable="${config.winepath.executable}"
-		      outputproperty="basedir.for.wine"
-		      failonerror="true">
-			<arg value="-w"/>
-			<arg value="${basedir}"/>
-		</exec>
-		<exec executable="${config.winepath.executable}"
-		      outputproperty="dist.dir.for.wine"
-		      failonerror="true">
-			<arg value="-w"/>
-			<arg value="${dist.dir}"/>
-		</exec>
+		<contrib:if>
+			<os family="mac"/>
+			<contrib:then>
+				<antcall target="dist-mac-finish">
+					<param name="wipe.dist.files"
+					       value="false"/>
+				</antcall>
+			</contrib:then>
+			<contrib:else>
+				<tar destfile="${dist.dir}/jedit${jedit.version}-dist-mac-finish.tar.bz2"
+				     basedir="${basedir}"
+				     includes="build.xml
+					       ivy.xml
+					       ivysettings.xml
+					       icons/file.icns
+					       icons/icon.icns
+					       ${config.dist.dir}/${jar.filename}
+					       ${config.dist.dir}/classes/jarbundler/**
+					       ${config.dist.dir}/doc/**
+					       ${config.dist.dir}/jars/**
+					       ${config.dist.dir}/macros/**
+					       ${config.dist.dir}/modes/**
+					       ${config.dist.dir}/properties/**
+					       ${config.dist.dir}/startup/**"
+				     compression="bzip2"/>
+			</contrib:else>
+		</contrib:if>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="filter-package-files"
-		depends="init,translate-paths-for-wine">
+		depends="init,setup">
 		<fail message="Please set the property &quot;winepath.executable&quot; in build.properties, you may find example values in build.properties.sample">
 			<condition>
 				<and>
@@ -1162,16 +1207,32 @@
 				</and>
 			</condition>
 		</fail>
-		<condition property="basedir.possibly.for.wine"
-			   value="${basedir.for.wine}"
-			   else="${basedir}">
-			<istrue value="${config.innosetup.via.wine}"/>
-		</condition>
-		<condition property="dist.dir.possibly.for.wine"
-			   value="${dist.dir.for.wine}"
-			   else="${dist.dir}">
-			<istrue value="${config.innosetup.via.wine}"/>
-		</condition>
+		<contrib:if>
+			<and>
+				<istrue value="${config.innosetup.via.wine}"/>
+				<isset property="config.winepath.executable"/>
+			</and>
+			<contrib:then>
+				<exec executable="${config.winepath.executable}"
+				      outputproperty="basedir.for.innosetup"
+				      failonerror="true">
+					<arg value="-w"/>
+					<arg value="${basedir}"/>
+				</exec>
+				<exec executable="${config.winepath.executable}"
+				      outputproperty="dist.dir.for.innosetup"
+				      failonerror="true">
+					<arg value="-w"/>
+					<arg value="${dist.dir}"/>
+				</exec>
+			</contrib:then>
+			<contrib:else>
+				<property name="basedir.for.innosetup"
+					  value="${basedir}"/>
+				<property name="dist.dir.for.innosetup"
+					  value="${dist.dir}"/>
+			</contrib:else>
+		</contrib:if>
 		<tstamp>
 			<format property="current.year"
 				pattern="yyyy"/>
@@ -1183,12 +1244,12 @@
 			<filterset id="package-files-filter">
 				<filter token="base.dir"
 					value="${basedir}"/>
-				<filter token="base.dir.possibly.for.wine"
-					value="${basedir.possibly.for.wine}"/>
+				<filter token="base.dir.for.innosetup"
+					value="${basedir.for.innosetup}"/>
 				<filter token="current.year"
 					value="${current.year}"/>
-				<filter token="dist.dir.possibly.for.wine"
-					value="${dist.dir.possibly.for.wine}"/>
+				<filter token="dist.dir.for.innosetup"
+					value="${dist.dir.for.innosetup}"/>
 				<filter token="jar.filename"
 					value="${jar.filename}"/>
 				<filter token="jedit.build.number"
@@ -1206,7 +1267,7 @@
 	</target>
 
 	<target name="prepare-dist-files"
-		depends="init">
+		depends="init,retrieve,setup">
 		<antcall target="build">
 			<param name="config.build.debuglevel"
 			       value="lines,source"/>
@@ -1231,7 +1292,9 @@
 			<param name="jar.location"
 			       location="${dist.dir}"/>
 		</antcall>
-		<antcall target="compile-default-plugins-for-dist"/>
+		<copy todir="${dist.dir}/jars">
+			<fileset dir="${lib.dir}/default-plugins"/>
+		</copy>
 		<antcall target="filter-package-files">
 			<param name="classes.dir"
 			       location="${dist.dir}/classes"/>
@@ -1247,12 +1310,11 @@
 	</target>
 
 	<target name="dist-slackware"
-		depends="init"
+		depends="init,setup,prepare-dist-files"
 		description="build the Slackware Package">
-		<antcall target="prepare-dist-files"/>
 		<tar destfile="${dist.dir}/jedit-${jedit.version}-noarch-1sao.tgz"
 		     compression="gzip">
-			<tarfileset file="."
+			<tarfileset file="${basedir}"
 				    username="root"
 				    group="root"
 				    fullpath="./"/>
@@ -1283,12 +1345,13 @@
 				    fullpath="usr/share/applications/jEdit.desktop"/>
 			<tarfileset dir="${dist.dir}"
 				    includes="doc/**
-					      jars/QuickNotepad.jar
+					      jars/**
 					      macros/**
 					      modes/**
 					      properties/**
 					      startup/**
 					      ${jar.filename}"
+				    excludes="jars/MacOSX.jar"
 				    username="root"
 				    group="root"
 				    prefix="usr/share/jedit-${jedit.version}/"/>
@@ -1299,21 +1362,22 @@
 				    group="root"
 				    prefix="usr/share/pixmaps/"/>
 		</tar>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="compile-ar"
 		depends="init">
 		<mkdir dir="${classes.dir}/ar"/>
-		<depend srcDir="."
+		<depend srcDir="${basedir}"
 			destDir="${classes.dir}/ar"
 			cache="${classes.dir}"/>
-		<javac srcdir="."
+		<dependset>
+			<srcfilelist files="build.xml"/>
+			<targetfileset dir="${classes.dir}/ar"/>
+		</dependset>
+		<javac srcdir="${basedir}"
 		       destdir="${classes.dir}/ar"
 		       includes="de/masters_of_disaster/ant/tasks/ar/**"
 		       debug="true"
@@ -1322,7 +1386,9 @@
 		       deprecation="${config.build.deprecation}"
 		       source="${target.java.version}"
 		       target="${target.java.version}"
-		       compiler="modern">
+		       compiler="modern"
+		       encoding="UTF-8"
+		       includeAntRuntime="true">
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
@@ -1330,10 +1396,14 @@
 	<target name="compile-deb"
 		depends="init">
 		<mkdir dir="${classes.dir}/deb"/>
-		<depend srcDir="."
+		<depend srcDir="${basedir}"
 			destDir="${classes.dir}/deb"
 			cache="${classes.dir}"/>
-		<javac srcdir="."
+		<dependset>
+			<srcfilelist files="build.xml"/>
+			<targetfileset dir="${classes.dir}/deb"/>
+		</dependset>
+		<javac srcdir="${basedir}"
 		       destdir="${classes.dir}/deb"
 		       includes="de/masters_of_disaster/ant/tasks/deb/**"
 		       debug="true"
@@ -1342,7 +1412,9 @@
 		       deprecation="${config.build.deprecation}"
 		       source="${target.java.version}"
 		       target="${target.java.version}"
-		       compiler="modern">
+		       compiler="modern"
+		       encoding="UTF-8"
+		       includeAntRuntime="true">
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
@@ -1350,10 +1422,14 @@
 	<target name="compile-calculatesize"
 		depends="init">
 		<mkdir dir="${classes.dir}/calculatesize"/>
-		<depend srcDir="."
+		<depend srcDir="${basedir}"
 			destDir="${classes.dir}/calculatesize"
 			cache="${classes.dir}"/>
-		<javac srcdir="."
+		<dependset>
+			<srcfilelist files="build.xml"/>
+			<targetfileset dir="${classes.dir}/calculatesize"/>
+		</dependset>
+		<javac srcdir="${basedir}"
 		       destdir="${classes.dir}/calculatesize"
 		       includes="de/masters_of_disaster/ant/tasks/calculatesize/**"
 		       debug="true"
@@ -1362,15 +1438,16 @@
 		       deprecation="${config.build.deprecation}"
 		       source="${target.java.version}"
 		       target="${target.java.version}"
-		       compiler="modern">
+		       compiler="modern"
+		       encoding="UTF-8"
+		       includeAntRuntime="true">
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
 
 	<target name="dist-deb"
-		depends="init"
+		depends="init,setup,prepare-dist-files"
 		description="build the DEB Package">
-		<antcall target="prepare-dist-files"/>
 		<antcall target="compile-ar">
 			<param name="config.build.debuglevel"
 			       value="lines,source"/>
@@ -1385,7 +1462,8 @@
 		</antcall>
 		<taskdef name="deb"
 			 classname="de.masters_of_disaster.ant.tasks.deb.Deb"
-			 classpath="${dist.dir}/classes/deb"/>
+			 classpath="${dist.dir}/classes/deb"
+			 uri="antlib:de.masters_of_disaster.ant.tasks"/>
 		<antcall target="compile-calculatesize">
 			<param name="config.build.debuglevel"
 			       value="lines,source"/>
@@ -1394,8 +1472,9 @@
 		</antcall>
 		<taskdef name="calculatesize"
 			 classname="de.masters_of_disaster.ant.tasks.calculatesize.CalculateSize"
-			 classpath="${dist.dir}/classes/calculatesize"/>
-		<calculatesize realsizeproperty="deb.installed.size">
+			 classpath="${dist.dir}/classes/calculatesize"
+			 uri="antlib:de.masters_of_disaster.ant.tasks"/>
+		<mod:calculatesize realsizeproperty="deb.installed.size">
 			<fileset dir="${dist.dir}/doc"
 				 includes="*.txt"/>
 			<fileset dir="${dist.dir}"
@@ -1404,13 +1483,14 @@
 					   classes/package-files/linux/deb/jedit.desktop
 					   classes/package-files/linux/jedit.1.gz
 					   doc/**
-					   jars/QuickNotepad.jar
+					   jars/**
 					   macros/**
 					   modes/**
 					   properties/**
 					   startup/**
-					   ${jar.filename}"/>
-		</calculatesize>
+					   ${jar.filename}"
+				excludes="jars/MacOSX.jar"/>
+		</mod:calculatesize>
 		<copy todir="${dist.dir}/classes/package-files/linux/deb"
 		      encoding="UTF-8"
 		      overwrite="true">
@@ -1422,10 +1502,10 @@
 					value="${deb.installed.size}"/>
 			</filterset>
 		</copy>
-		<deb destfile="${dist.dir}/jedit_${jedit.version}_all.deb"
-		     tempDir="${dist.dir}/classes/deb"
-		     deleteTempFiles="false"
-		     includeMd5sums="true">
+		<mod:deb destfile="${dist.dir}/jedit_${jedit.version}_all.deb"
+			 tempDir="${dist.dir}/classes/deb"
+			 deleteTempFiles="false"
+			 includeMd5sums="true">
 			<controlfileset file="${dist.dir}/classes/package-files/linux/deb/control"/>
 			<controlfileset dir="${dist.dir}/classes/package-files/linux/deb"
 					includes="postinst
@@ -1470,7 +1550,7 @@
 			<datafileset file="."
 				     fullpath="usr/share/jEdit/jars/"/>
 			<datafileset dir="${dist.dir}/jars"
-				     includes="QuickNotepad.jar"
+				     excludes="MacOSX.jar"
 				     prefix="usr/share/jEdit/jars/"/>
 			<datafileset file="."
 				     fullpath="usr/share/man/"/>
@@ -1478,18 +1558,14 @@
 				     fullpath="usr/share/man/man1/"/>
 			<datafileset file="${dist.dir}/classes/package-files/linux/jedit.1.gz"
 				     fullpath="usr/share/man/man1/jedit.1.gz"/>
-		</deb>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
+		</mod:deb>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="dist-win-finish"
-		depends="init"
-		unless="build.on.non.win"
+		depends="init,setup"
 		description="finish building the Windows installer (EXE-file) on Windows or via wine">
 		<fail message="The Windows installer (EXE-file) can only be built on Windows or via wine currently">
 			<condition>
@@ -1513,119 +1589,124 @@
 				</and>
 			</condition>
 		</fail>
-		<condition property="innosetup.compiler.executable"
-			   value="${config.wine.executable}"
-			   else="${config.innosetup.compiler.executable}">
+		<antcall target="filter-package-files">
+			<param name="classes.dir"
+			       location="${dist.dir}/classes"/>
+		</antcall>
+		<contrib:if>
 			<istrue value="${config.innosetup.via.wine}"/>
-		</condition>
-		<condition property="innosetup.compiler.argument"
-			   value="&quot;${config.innosetup.compiler.executable}&quot;"
-			   else="">
-			<istrue value="${config.innosetup.via.wine}"/>
-		</condition>
-		<exec executable="${innosetup.compiler.executable}"
-		      dir="${dist.dir}"
-		      failonerror="true">
-			<arg line="${innosetup.compiler.argument}"/>
-			<arg value="classes/package-files/windows/win32installer.iss"/>
-		</exec>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
-	</target>
-
-	<target name="prepare-dist-win-finish"
-		depends="init"
-		if="build.on.non.win">
-		<tar destfile="${dist.dir}/jedit${jedit.version}-dist-win-finish.tar.bz2"
-		     basedir="."
-		     includes="build.xml
-			       icons/jedit.ico
-			       icons/WindowsInstallerSmallImage.bmp
-			       icons/WindowsInstallerImage.bmp
-			       ${config.dist.dir}/${jar.filename}
-			       ${config.dist.dir}/classes/package-files/windows/**
-			       ${config.dist.dir}/doc/**
-			       ${config.dist.dir}/jars/QuickNotepad.jar
-			       ${config.dist.dir}/macros/**
-			       ${config.dist.dir}/modes/**
-			       ${config.dist.dir}/properties/**
-			       ${config.dist.dir}/startup/**"
-		     compression="bzip2"/>
+			<contrib:then>
+				<exec executable="${config.wine.executable}"
+				      dir="${dist.dir}"
+				      failonerror="true">
+					<arg value="${config.innosetup.compiler.executable}"/>
+					<arg value="classes/package-files/windows/win32installer.iss"/>
+				</exec>
+			</contrib:then>
+			<contrib:else>
+				<exec executable="${config.innosetup.compiler.executable}"
+				      dir="${dist.dir}"
+				      failonerror="true">
+					<arg value="classes/package-files/windows/win32installer.iss"/>
+				</exec>
+			</contrib:else>
+		</contrib:if>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="dist-win"
-		depends="init"
+		depends="init,setup,prepare-dist-files"
 		description="build the Windows installer (EXE-file)">
-		<antcall target="prepare-dist-files"/>
-		<condition property="build.on.non.win">
-			<not>
-				<or>
-					<os family="windows"/>
-					<istrue value="${config.innosetup.via.wine}"/>
-				</or>
-			</not>
-		</condition>
-		<antcall target="dist-win-finish">
-			<param name="dont.wipe.dist.files"
-			       value="true"/>
-		</antcall>
-		<antcall target="prepare-dist-win-finish"/>
-		<condition property="wipe.dist.files">
-			<not>
-				<isset property="dont.wipe.dist.files"/>
-			</not>
-		</condition>
-		<antcall target="dist-cleanup"/>
+		<contrib:if>
+			<or>
+				<os family="windows"/>
+				<istrue value="${config.innosetup.via.wine}"/>
+			</or>
+			<contrib:then>
+				<antcall target="dist-win-finish">
+					<param name="wipe.dist.files"
+					       value="false"/>
+				</antcall>
+			</contrib:then>
+			<contrib:else>
+				<tar destfile="${dist.dir}/jedit${jedit.version}-dist-win-finish.tar.bz2"
+				     basedir="${basedir}"
+				     includes="build.properties.sample
+					       build.xml
+					       ivy.xml
+					       ivysettings.xml
+					       icons/jedit.ico
+					       icons/WindowsInstallerSmallImage.bmp
+					       icons/WindowsInstallerImage.bmp
+					       package-files/windows/win32installer.iss
+					       ${config.dist.dir}/jedit.exe
+					       ${config.dist.dir}/${jar.filename}
+					       ${config.dist.dir}/classes/package-files/windows/**
+					       ${config.dist.dir}/doc/**
+					       ${config.dist.dir}/jars/**
+					       ${config.dist.dir}/macros/**
+					       ${config.dist.dir}/modes/**
+					       ${config.dist.dir}/properties/**
+					       ${config.dist.dir}/startup/**"
+				     excludes="${config.dist.dir}/jars/MacOSX.jar"
+				     compression="bzip2"/>
+			</contrib:else>
+		</contrib:if>
+		<property name="wipe.dist.files"
+			  value="true"/>
+		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
 	<target name="dist"
-		depends="init"
+		depends="init,setup"
 		description="build all distribution files">
-		<property name="dont.wipe.dist.files"
-			  value="true"/>
-		<antcall target="dist-java"/>
-		<antcall target="dist-manuals"/>
-		<antcall target="dist-src"/>
-		<antcall target="dist-slackware"/>
-		<antcall target="dist-deb"/>
-		<antcall target="dist-mac"/>
-		<antcall target="dist-win"/>
 		<property name="wipe.dist.files"
-			  value="true"/>
-		<antcall target="dist-cleanup"/>
+			  value="false"/>
+		<contrib:runtarget target="dist-java"/>
+		<contrib:runtarget target="dist-manuals"/>
+		<contrib:runtarget target="dist-src"/>
+		<contrib:runtarget target="dist-slackware"/>
+		<contrib:runtarget target="dist-deb"/>
+		<contrib:runtarget target="dist-mac"/>
+		<contrib:runtarget target="dist-win"/>
+		<antcall target="dist-cleanup">
+			<param name="wipe.dist.files"
+			       value="true"/>
+		</antcall>
 	</target>
 
 	<target name="dist-cleanup"
-		depends="init">
-		<delete includeemptydirs="true">
-			<fileset dir="${dist.dir}">
-				<selector if="wipe.dist.files">
-					<or>
-						<filename name="macros/**"/>
-						<filename name="doc/**"/>
-						<filename name="jars/**"/>
-						<filename name="modes/**"/>
-						<filename name="properties/**"/>
-						<filename name="startup/**"/>
-						<filename name="${jar.filename}"/>
-						<filename name="jedit.exe"/>
-						<and>
-							<filename name="*.tar.bz2"/>
-							<filename name="${src.archive.filename}"
-								  negate="true"/>
-							<filename name="jedit${jedit.version}-dist-mac-finish.tar.bz2"
-								  negate="true"/>
-							<filename name="jedit${jedit.version}-dist-win-finish.tar.bz2"
-								  negate="true"/>
-						</and>
-						<filename name="classes/**"/>
-					</or>
-				</selector>
-			</fileset>
-		</delete>
+		depends="init,setup">
+		<contrib:if>
+			<istrue value="${wipe.dist.files}"/>
+			<contrib:then>
+				<delete includeemptydirs="true">
+					<fileset dir="${dist.dir}">
+						<or>
+							<filename name="macros/**"/>
+							<filename name="doc/**"/>
+							<filename name="jars/**"/>
+							<filename name="modes/**"/>
+							<filename name="properties/**"/>
+							<filename name="startup/**"/>
+							<filename name="${jar.filename}"/>
+							<filename name="jedit.exe"/>
+							<and>
+								<filename name="*.tar.bz2"/>
+								<filename name="${src.archive.filename}"
+									  negate="true"/>
+								<filename name="jedit${jedit.version}-dist-mac-finish.tar.bz2"
+									  negate="true"/>
+								<filename name="jedit${jedit.version}-dist-win-finish.tar.bz2"
+									  negate="true"/>
+							</and>
+							<filename name="classes/**"/>
+						</or>
+					</fileset>
+				</delete>
+			</contrib:then>
+		</contrib:if>
 	</target>
 </project>

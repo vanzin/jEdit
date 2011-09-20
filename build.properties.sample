@@ -2,6 +2,15 @@
 ### Build property file for jEdit
 ###
 
+### The directory where to download dependencies to
+### Use a directory exclusive used for that,
+### because the target "clean-all" will delete
+### it with all its content. (So don't use your
+### home-directory or your project-directory
+### if you don't want to loose all your files!)
+### This has to be a relative directory.
+#lib.dir=lib
+
 ### The directory where to put the build-files
 ### Use a directory exclusive used for that,
 ### because the target "clean-all" will delete
@@ -20,6 +29,9 @@
 ### This has to be a relative directory.
 #dist.dir=dist
 
+### The Ivy version to be used
+#ivy.version=2.2.0
+
 ### The name of the wine executable for building the Windows installer on *nix.
 #wine.executable=wine
 
@@ -36,72 +48,17 @@
 #innosetup.compiler.executable=/home/vampire/.wine/drive_c/Program Files/Inno Setup 5/ISCC.exe
 #innosetup.via.wine=true
 
-### For generating the docs, adjust the following to your local paths
-### Prefer xml over sgml packages if available.
-### For xsltproc to work, the path to the DocBook stuff MUST NOT contain spaces!
-### If you need multiple catalogs, then use a space as separator
-
-# Example Windows locations
-#xsltproc.executable=C:\\Programme\\xsltproc\\xsltproc.exe
-#docbook.xsl=C:\\Programme\\DocBook\\XSL\\1.75.2\\
-#docbook.catalog=C:\\Programme\\DocBook\\XML\\4.4\\catalog.xml
-
-# Example Cygwin locations
-#xsltproc.executable=C:\\cygwin\\usr\\bin\\xsltproc.exe
-#docbook.xsl=c:\\cygwin\\usr\\share\\docbook-xsl
-#docbook.catalog=c:\\cygwin\\usr\\share\\xml\\docbook\\4.4\\catalog.xml
-
-# Example Debian and Ubuntu locations
-#xsltproc.executable=xsltproc
-#docbook.xsl=/usr/share/xml/docbook/stylesheet/docbook-xsl
-#docbook.xsl=/usr/share/xml/docbook/stylesheet/nwalsh
-#docbook.catalog=/usr/share/xml/docbook/schema/dtd/4.4/catalog.xml
-
-# Example Fedora Core locations
-#xsltproc.executable=xsltproc
-#docbook.xsl=/usr/share/sgml/docbook/xsl-stylesheets
-#docbook.catalog=/usr/share/sgml/docbook/xsl-ns-stylesheets-1.75.2/catalog.xml
-
-# Example Fink (Mac OS/X) locations
-#xsltproc.executable=xsltproc
-#docbook.catalog=/sw/share/xml/dtd/docbookx/4.4.0/docbook.cat
-#docbook.xsl=/sw/share/xml/xsl/docbook-xsl
-
 ### For uploading the docs to the public webserver
 ### adjust the following to your local path
 #rsync.executable=C:\\Programme\\cwRsync\\bin\\rsync.exe
 # If it's in your path, this is sufficient:
 #rsync.executable=rsync
 
-### If you want to build the PDF user's guide,
-### set this to your local FOP install directory.
-### (the above three properties are needed also)
-
-# Example Windows location
-#fop.dir=C:\\Programme\\FOP
-
-# Example Linux location
-#fop.dir=/opt/fop-1.0
-
-# Example Debian and Ubuntu location
-#fop.dir=/usr/share/java
-
-### For generating the Windows executable file, make sure to install
-### Launch4j and set the path to Launch4j install directory here
-
-# Example Windows location
-#launch4j.dir=C:\\Programme\\launch4j
-
-# Example Linux location
-#launch4j.dir=/opt/launch4j
-
 # debug settings
 #build.debug=true
 #build.debuglevel=lines,vars,source
-#docbook.catalog.debug=1
 
 # warning settings
 #build.nowarn=false
 #build.deprecation=true
 #build.compilerarg=-Xlint:unchecked
-

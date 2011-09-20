@@ -84,7 +84,7 @@
         <informaltable>
             <tgroup cols="2">
                 <colspec colnum="1" colwidth="1.5in" />
-                <colspec colwidth="*"/>
+                <colspec colwidth="1*"/>
 
                 <thead>
                     <row>
@@ -208,10 +208,10 @@
         <section id="general-pane">
             <title>The General Pane</title>
             <para>The <guibutton>General</guibutton> pane contains various
-            settings, such as 
-            the number of recent files to remember, 
+            settings, such as
+            the number of recent files to remember,
             how often to check for changed files,
-            if the recent file list should be sorted, 
+            if the recent file list should be sorted,
             if previously open files or split configurations should be restored on startup, and so on.</para>
         </section>
 
@@ -274,7 +274,7 @@
         <section id="docking-pane">
             <title>The Docking Pane</title>
 
-            <para>The <guibutton>Docking</guibutton> option pane shows a 
+            <para>The <guibutton>Docking</guibutton> option pane shows a
             list of available dockables, and allows you to specify
             docking locations for each of them. Another way to
             specify docking locations is to use the popup menus associated with each dockable window. </para>
@@ -312,16 +312,16 @@
         <section id="encodings-pane">
             <title>The Encodings Pane</title>
 
-            <para>This option pane offers 
+            <para>This option pane offers
             users of jEdit many flexible options for defining how Encodings are handled in jEdit. See <xref linkend="encodings" /> for the
             basics.</para>
 
             <para>The default line separator character (see <xref linkend="line-separators" />) can be set from here. </para>
-            
+
             <para> <guilabel>Use autodetection when possible</guilabel> is an option you can switch on or off.</para>
 
             <para>The <literal>List of Encoding Autodetector Names</literal>
-            can be used to control what encoding detections are used on each file when it is loaded. 
+            can be used to control what encoding detections are used on each file when it is loaded.
             The order they appear in this list determines the order of detectors that are tried.
             There are some detectors which are available with jEdit core:
             <itemizedlist>
@@ -432,7 +432,7 @@
             settings for the autosave and backup features. See <xref
             linkend="autosave" /> and <xref linkend="backups" />.</para>
         </section>
-        
+
         <section id="shortcuts-pane">
             <title>The Shortcuts Pane</title>
 
@@ -535,8 +535,8 @@
         Log</guimenuitem>). For example:</para>
 
         <screen>[message] jEdit: Settings directory is /home/slava/.jedit</screen>
-       
-        <para>Another way to find the location of your settings directory is to 
+
+        <para>Another way to find the location of your settings directory is to
         use the "Utilities" menu, then the "Settings Directory" menu item. The
         first item in the pullout menu is the location of your settings directory.
         </para>
@@ -668,7 +668,7 @@
                 files.</para>
             </listitem>
         </itemizedlist>
-       
+
         <section id="propertiesfile">
             <title>The jEdit properties file</title>
 
@@ -681,16 +681,16 @@
             is possible that your changes will be lost since jEdit writes to this
             this file frequently.</para>
         </section>
-       
+
         <section id="sitepropertiesfiles">
             <title>Site Properties</title>
             <para>
-                You may also put properties files in the "properties" directory in 
-                the jEdit home directory (NOT the .jedit settings directory). You 
+                You may also put properties files in the "properties" directory in
+                the jEdit home directory (NOT the .jedit settings directory). You
                 can locate the jEdit home directory by going to the Utilities menu
                 directory, then the "jEdit Home Directory" menu item, and the first
                 item in the pullout menu will be the location of the jEdit home
-                directory. This is intended for site-wide settings and it is  
+                directory. This is intended for site-wide settings and it is
                 useful for things like a set of custom key bindings that you might
                 want to share between different computers. This lets you keep your
                 custom properties separate from the jEdit properties, so they are
@@ -704,7 +704,7 @@
                 that was read.
             </para>
             <para>
-                You can edit these files inside jEdit - changes made to these files will not be re-read until the next time jEdit is started. 
+                You can edit these files inside jEdit - changes made to these files will not be re-read until the next time jEdit is started.
             </para>
         </section>
     </section>

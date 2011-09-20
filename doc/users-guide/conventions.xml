@@ -11,8 +11,8 @@
 
     <informaltable>
         <tgroup cols="2">
-            <colspec colwidth="*"/>
-            <colspec colwidth="*"/>
+            <colspec colwidth="1*"/>
+            <colspec colwidth="1*"/>
 
             <tbody>
                 <row>
