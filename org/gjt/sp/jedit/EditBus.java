@@ -260,7 +260,25 @@ public class EditBus
 		throws Exception
 	{
 		if (emh.handler != null)
-			emh.handler.invoke(emh.comp, msg);
+		{
+			try
+			{
+				emh.handler.invoke(emh.comp, msg);
+			}
+			catch (InvocationTargetException e)
+			{
+				// Unwrap the actual exception so we at least
+				// get a useful stack trace
+				if (e.getCause() instanceof Exception)
+				{
+					throw (Exception)e.getCause();
+				}
+				else
+				{
+					throw e;
+				}
+			}
+		}
 		else
 		{
 			assert (emh.comp instanceof EBComponent);
