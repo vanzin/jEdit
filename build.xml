@@ -97,7 +97,10 @@
 		<fail message="The ant-optional package is needed for jEdit to build, please install it and rerun">
 			<condition>
 				<not>
-					<available classname="org.apache.tools.ant.taskdefs.optional.depend.Depend"/>
+					<and>
+						<available classname="org.apache.tools.ant.taskdefs.optional.depend.Depend"/>
+						<available classname="org.apache.tools.ant.taskdefs.optional.TraXLiaison"/>
+					</and>
 				</not>
 			</condition>
 		</fail>
