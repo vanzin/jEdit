@@ -781,7 +781,7 @@ public class DisplayManager
 	 * subfold, or -1 if there is none.
 	 * @return True if some line was unfolded, false otherwise.
 	 */
-	public boolean _expandFold(int line, boolean fully, MutableInteger firstSubfold)
+	private boolean _expandFold(int line, boolean fully, MutableInteger firstSubfold)
 	{
 		boolean unfolded = false;
 
