@@ -260,25 +260,7 @@ public class EditBus
 		throws Exception
 	{
 		if (emh.handler != null)
-		{
-			try
-			{
-				emh.handler.invoke(emh.comp, msg);
-			}
-			catch (InvocationTargetException e)
-			{
-				// Unwrap the actual exception so we at least
-				// get a useful stack trace
-				if (e.getCause() instanceof Exception)
-				{
-					throw (Exception)e.getCause();
-				}
-				else
-				{
-					throw e;
-				}
-			}
-		}
+			emh.handler.invoke(emh.comp, msg);
 		else
 		{
 			assert (emh.comp instanceof EBComponent);
@@ -324,7 +306,14 @@ public class EditBus
 				{
 					Log.log(Log.ERROR,EditBus.class,"Exception"
 						+ " while sending message on EditBus:");
-					Log.log(Log.ERROR,EditBus.class,t);
+					if (t instanceof InvocationTargetException)
+					{
+						Log.log(Log.ERROR, EditBus.class, ((InvocationTargetException)t).getCause());
+					}
+					else
+					{
+						Log.log(Log.ERROR,EditBus.class,t);
+					}
 				}
 			}
 			type = type.getSuperclass();
