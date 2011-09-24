@@ -14,9 +14,6 @@ General jEdit documentation can be found in the 'doc' directory.
     but not in some default installs on various *nix systems.
     There you should get the ant-optional package through your
     package management system.
-  - Make sure you also have the build-support module. This is expected as sibling
-    of the project directory. If it is somewhere else, you can set the build.support
-    property in jars/build.properties to the correct path.
 
  For building jEdit, the API documentation or any of the
  distribution files except of the source package:
@@ -182,7 +179,7 @@ Follow these steps:
 
  - Project properties - Java build path
  - Source - Excluded dirs - Edit - Add multiple
- - Add these subdirs: jars, net, de, build
+ - Add these subdirs: net, de, build
 
 The "eclipse-formatting.xml" file can be used to set the
 code format style to be the same as what is currently used here.
