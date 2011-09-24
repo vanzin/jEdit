@@ -36,7 +36,6 @@ import org.gjt.sp.jedit.indent.DeepIndentRule;
 import org.gjt.sp.jedit.indent.IndentRule;
 import org.gjt.sp.jedit.indent.IndentRuleFactory;
 import org.gjt.sp.jedit.indent.WhitespaceRule;
-import org.gjt.sp.jedit.io.VFSManager;
 import org.gjt.sp.jedit.syntax.TokenMarker;
 import org.gjt.sp.jedit.syntax.ModeProvider;
 import org.gjt.sp.util.Log;
@@ -291,9 +290,8 @@ public class Mode
 	 */
 	public boolean acceptFile(String filePath, String fileName)
 	{
-		String cleanPath = filePath == null ? null : VFSManager.getVFSForPath(filePath).getFilePath(filePath);
 		return filepathRE != null
-		       && (((cleanPath != null) && filepathRE.matcher(cleanPath).matches())
+		       && (((filePath != null) && filepathRE.matcher(filePath).matches())
 			   || ((fileName != null) && filepathRE.matcher(fileName).matches()));
 	} //}}}
 
@@ -323,9 +321,8 @@ public class Mode
 	 */
 	public boolean acceptIdentical(String filePath, String fileName)
 	{
-		String cleanPath = filePath == null ? null : VFSManager.getVFSForPath(filePath).getFilePath(filePath);
-		return ((cleanPath != null) && cleanPath.equals(getProperty("filenameGlob"))
-		        && (filepathRE == null || filepathRE.matcher(cleanPath).matches()))
+		return ((filePath != null) && filePath.equals(getProperty("filenameGlob"))
+		        && (filepathRE == null || filepathRE.matcher(filePath).matches()))
 		       || ((fileName != null) && fileName.equals(getProperty("filenameGlob"))
 		           && (filepathRE == null || filepathRE.matcher(fileName).matches()));
 	} //}}}

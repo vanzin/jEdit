@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import org.gjt.sp.jedit.buffer.*;
-import org.gjt.sp.jedit.search.SearchAndReplace;
 //}}}
 
 class SelectionManager
@@ -272,7 +271,7 @@ class SelectionManager
 
 		return returnValue;
 	} //}}}
-	
+
 	//{{{ invertSelection() method
 	void invertSelection()
 	{
