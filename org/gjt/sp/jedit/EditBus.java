@@ -302,18 +302,17 @@ public class EditBus
 							dispatch(emh, message);
 					}
 				}
+				catch (InvocationTargetException t)
+				{
+					Log.log(Log.ERROR,EditBus.class,"Exception"
+						+ " while sending message on EditBus:");
+					Log.log(Log.ERROR, EditBus.class, t.getCause());
+				}
 				catch(Throwable t)
 				{
 					Log.log(Log.ERROR,EditBus.class,"Exception"
 						+ " while sending message on EditBus:");
-					if (t instanceof InvocationTargetException)
-					{
-						Log.log(Log.ERROR, EditBus.class, ((InvocationTargetException)t).getCause());
-					}
-					else
-					{
-						Log.log(Log.ERROR,EditBus.class,t);
-					}
+					Log.log(Log.ERROR,EditBus.class,t);
 				}
 			}
 			type = type.getSuperclass();
