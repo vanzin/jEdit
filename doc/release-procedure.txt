@@ -40,8 +40,8 @@ Release procedure of jEdit
 
 5. Receive bugs for preview builds, and fix them.
 
-  Basically, the fixes first applied on the trunk. If it seems also good
-  for a release branch, it can be submitted into the Merge Requests
+  Basically, the fixes are first applied on the trunk. If it seems also
+  good for a release branch, it can be submitted into the Merge Requests
   tracker.
   http://sourceforge.net/tracker/?group_id=588&atid=1235750&status=1
 
@@ -49,13 +49,17 @@ Release procedure of jEdit
   doesn't exist in the trunk), it can be applied to a separate branch
   which is created from the target release branch.
 
-  When submitting a merge request, please make sure
-    - to put the complete set of revision numbers which should be
-      merged, and
-    - to set the target branch by "Group".
+  When submitting a merge request, please make sure:
+    - to mention the complete set of revision numbers which should be
+      merged
+    - to set the target branch by "Group"
+ 
+  If a merge request applies to multiple target branches, open separate
+  merge requests for each target branch and mention the sibling merge
+  requests in each other.
 
   If a fix can't be merged cleanly by just running "svn merge ...", the
-  submitter can make another branch (called as a backport branch) from a
+  submitter can make another branch (called a backport branch) from a
   stable branch to show how it can be merged. In this case, put the
   branch name in the merge request.
 
@@ -66,11 +70,11 @@ Release procedure of jEdit
   . If a fix was rejected, it can be proposed again with some
   refinements made on the trunk or the backport branch.
 
-  This means each fix is reviewed at least two persons. This reduces
+  This means each fix is reviewed by at least two persons. This reduces
   possibility of unexpected breakages, and achieves the stability of the
   release branch.
 
-  While this process, some more preview builds may be made periodically.
+  During this process, some more preview builds may be made periodically.
 
 6. If no major bugs are reported against the preview build for the last
    period, release from the branch as a stable release. (ex. M.N.0)
