@@ -1024,8 +1024,6 @@
 					      ${config.dist.dir}/**
 					      **/build.properties"
 				    prefix="jEdit/"/>
-			<tarfileset dir="../build-support"
-				    prefix="build-support/"/>
 		</tar>
 	</target>
 
