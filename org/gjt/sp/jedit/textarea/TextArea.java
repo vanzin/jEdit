@@ -4432,6 +4432,11 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 			getToolkit().beep();
 		else
 		{
+			if (buffer.isElectricKey('\n', caretLine))
+			{
+				buffer.indentLine(caretLine, true);
+			}
+			
 			try
 			{
 				buffer.beginCompoundEdit();

@@ -186,7 +186,12 @@
     }</programlisting>
             </listitem>
             <listitem><para>
-             <literal>electricKeys</literal>: characters listed here, when typed on a line, cause the current line to be re-indented. </para></listitem>
+             <literal>electricKeys</literal>: characters listed here, when typed
+             on a line, cause the current line to be re-indented. Notice that by
+             default, pressing "Enter" does not re-indent the current line, only
+             the new line. To get this behavior, add the newline character to
+             <literal>electricKeys</literal> in the xml-escaped form &amp;#xA;
+             </para></listitem>
         </itemizedlist>
         <para>Here is the complete <literal>&lt;PROPS&gt;</literal> tag for Java
         mode:</para>

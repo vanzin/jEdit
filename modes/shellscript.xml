@@ -13,7 +13,7 @@
 			VALUE="^\s*(fi|else|done|esac|[^(]*\).*)\s*(#.*)?$" />
 		<PROPERTY NAME="unindentNextLines"
 			VALUE="^\s*(fi|else|done|esac)\s*(#.*)?$" />
-		<PROPERTY NAME="electricKeys" VALUE=")" />
+		<PROPERTY NAME="electricKeys" VALUE=")&#xA;" />
 	</PROPS>
 	<RULES IGNORE_CASE="TRUE" HIGHLIGHT_DIGITS="TRUE" ESCAPE="\">
 		<!-- Comments -->

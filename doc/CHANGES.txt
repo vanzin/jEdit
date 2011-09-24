@@ -384,6 +384,8 @@ contributing to this release.
 
 - Added coffee edit mode (patch #3173375 from Dennis Hotson, Matthieu Casanova)
 
+- Added support for the newline character in electricKeys (Evan Wright)
+
 }}}
 {{{ UI
 
