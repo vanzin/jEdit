@@ -13,7 +13,7 @@ Before you read this document, be sure to read first the README.SRC.txt, in the 
 Workflow
 --------
 
-1. Execute the BeanShell snippet at the end of this file ("Utilities -> BeanShell -> Evaluate Selection") and select the release branch for which you want to create a release in the directory chooser dialog popping up. This will replace the version tags in this document by actual version numbers for easy copy & paste.
+1. Execute the BeanShell snippet at the end of this file ("Utilities -> BeanShell -> Evaluate Selection"). This will replace the version tags in this document by actual version numbers for easy copy & paste.
 
 2. Tag the sourcecode for release in the SVN repository by doing
         svn copy https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/branches/[branch] https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/tags/[tag] -m "Tagging [version] for release."
@@ -148,16 +148,7 @@ Thanks to  for contributing to this release.
 
 ====================================================================================================
 import java.util.regex.Pattern;
-fileChooser = new VFSFileChooserDialog(view,
-                                       new File(buffer.getPath())
-                                       .getParentFile()
-                                       .getParentFile()
-                                       .getParentFile()
-                                       .getPath(),
-                                       VFSBrowser.CHOOSE_DIRECTORY_DIALOG,
-                                       false,
-                                       true);
-file = new File(fileChooser.getSelectedFiles()[0], "org/gjt/sp/jedit/jEdit.java");
+file = new File(new File(buffer.getPath()).getParentFile(), "../org/gjt/sp/jedit/jEdit.java");
 fileChars = new char[file.length()];
 reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 reader.read(fileChars, 0, fileChars.length);
@@ -205,6 +196,7 @@ SearchAndReplace.replaceAll(view);
 SearchAndReplace.setSearchString("[nextBuild]");
 SearchAndReplace.setReplaceString(nextBuild);
 SearchAndReplace.replaceAll(view);
+textArea.replaceSelection("Versions replaced\n");
 buffer.endCompoundEdit();
 ====================================================================================================
 
