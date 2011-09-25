@@ -86,6 +86,9 @@ contributing to this release.
   
 - Fixed a bug that occured when jumping to a line inside of a nested fold.
   (#3406213 - Evan Wright)
+  
+- Fixed a bug which caused lines to disappear when using indent folding
+  if every line was indented (#3412237 - Evan Wright)
 
 }}}
 {{{ API Changes

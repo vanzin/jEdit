@@ -343,14 +343,21 @@ public class DisplayManager
 
 		showLineRange(0,buffer.getLineCount() - 1);
 
-		/* this ensures that the first line is always visible */
-		boolean seenVisibleLine = false;
-
+		int leastFolded = -1;
 		int firstInvisible = 0;
 
 		for(int i = 0; i < buffer.getLineCount(); i++)
 		{
-			if(!seenVisibleLine || buffer.getFoldLevel(i) < foldLevel)
+			// Keep track of the least fold level up to this point in the file,
+			// because we can't hide a line at this level since there will be no "root"
+			// line to unfold it from
+			if (leastFolded == -1 || buffer.getFoldLevel(i) < leastFolded)
+			{
+				leastFolded = buffer.getFoldLevel(i);
+			}
+		
+			if (buffer.getFoldLevel(i) < foldLevel ||
+			    buffer.getFoldLevel(i) == leastFolded)
 			{
 				if(firstInvisible != i)
 				{
@@ -358,7 +365,6 @@ public class DisplayManager
 						i - 1);
 				}
 				firstInvisible = i + 1;
-				seenVisibleLine = true;
 			}
 		}
 
