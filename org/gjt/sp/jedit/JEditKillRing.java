@@ -21,6 +21,7 @@
  */
 package org.gjt.sp.jedit;
 
+import java.io.File;
 import java.util.List;
 import java.util.LinkedList;
 import java.io.IOException;
@@ -73,12 +74,23 @@ class JEditKillRing extends KillRing
 		catch (OutOfMemoryError oem)
 		{
 			Log.log(Log.ERROR, this, "Unable to load entire Killring, too low memory, increase your jvm max heap size");
-			int confirm = GUIUtilities.confirm(null, "killring.load-memoryerror", null, JOptionPane.YES_NO_OPTION,
-					JOptionPane.ERROR_MESSAGE);
-			if (confirm == JOptionPane.NO_OPTION)
+			String start = jEdit.getProperty("killring.start");
+			String deleteKillRing = jEdit.getProperty("killring.delete");
+			String stop = jEdit.getProperty("killring.stop");
+			int selected = GUIUtilities.option(null, "killring.load-memoryerror", null,
+							      JOptionPane.ERROR_MESSAGE,
+							      new Object[]{start, deleteKillRing, stop}, start);
+			if (selected == 2)
 			{
 				System.exit(-1);
 			}
+			else if (selected == 1)
+			{
+				new File(MiscUtilities.constructPath(
+					jEdit.getSettingsDirectory(),"killring.xml")).delete();
+				return;
+			}
+
 		}
 		catch (IOException ioe)
 		{

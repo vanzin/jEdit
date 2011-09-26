@@ -2740,6 +2740,9 @@ statusbar.task-monitor.sample=7 task(s)
 statusbar.task-monitor.template={0} task(s)
 #}}}
 
-killring.load-memoryerror.message=Unable to load previously deleted text. Please increase your memory heap space.\
-  Press Yes to start jEdit anyway, or No to stop and change your settings.
+killring.load-memoryerror.message=<html>Unable to load previously deleted text. Please increase your memory heap space.<br>\
+  Press <b>start</b> to start jEdit anyway, or <br><b>stop</b> to stop and change your settings. <br>You can also <b>delete the history file</b> and start jEdit</html>
 killring.load-memoryerror.title=Memory error
+killring.start=start
+killring.stop=stop
+killring.delete=delete killring and start

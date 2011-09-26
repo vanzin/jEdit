@@ -92,6 +92,8 @@ contributing to this release.
 
 }}}
 {{{ API Changes
+- Added GUIUtilities.option() method to display a JOptionPane.option()
+  dialog (Matthieu Casanova)
 
 - Added a possibility to get the pure path from a VFS path without the
   overhead of the VFS like usernames, passwords, hosts, archive files and
