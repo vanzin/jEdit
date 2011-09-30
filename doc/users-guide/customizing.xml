@@ -117,6 +117,10 @@
     offset));</programlisting></entry>
                     </row>
 
+                    <row><entry><varname>encoding</varname></entry>
+                    <entry> The character encoding that should be used for this file. 
+                    See <xref linkend="encodings"/>. </entry></row>
+                    
                     <row>
                         <entry><varname>folding</varname></entry>
 

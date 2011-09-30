@@ -282,6 +282,9 @@
         <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding</guisubmenu>
         menu.</para>
 
+        <para>It is possible to specify the encoding for a file in a
+        buffer-local property at the top of a file. See <xref linkend="buffer-local" /> for more details. </para>  
+        
         <para>Note that there is no general way to auto-detect the encoding used
         by a file, however in a few cases it is possible:</para>
 
