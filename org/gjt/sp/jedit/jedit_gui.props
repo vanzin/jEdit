@@ -2620,6 +2620,15 @@ plugin-manager.status.error=Error
 
 plugin-manager.list-download-connect=Connecting to plugins.jedit.org
 plugin-manager.list-download=Downloading plugin list from plugins.jedit.org
+plugin-manager.list-download.need-password.title=HTTP Proxy needs password
+plugin-manager.list-download.need-password.message=HTTP Proxy needs password.\n\
+Please configure a valid username/password in "Download Options".
+plugin-manager.list-download.disconnected.title=Error downloading plugin list
+plugin-manager.list-download.disconnected.message=The plugin list can''t be downloaded:\n\
+host {0} is not available. It may be worth checking your internet connection...
+plugin-manager.list-download.generic-error.title=Error downloading plugin list
+plugin-manager.list-download.generic-error.message=Error downloading plugin list:\n\
+error is {0} - {1}
 plugin-manager.filterField=Show only plugins whose name contains this text
 
 #{{{ Plugin management
