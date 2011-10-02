@@ -283,15 +283,20 @@
         <guimenu>Commands</guimenu>&gt;<guisubmenu>Encoding</guisubmenu>
         menu.</para>
 
-        <para>It is possible to specify the encoding for a file in a
-        buffer-local property at the top of a file. See <xref linkend="buffer-local" /> for more details. </para>  
-        
+        <para>It is also possible to override the encoding for a file in a
+        jEdit "buffer-local" property at the top of the file. See
+        <xref linkend="buffer-local" /> for more details. </para>
+
         <para>Note that there is no general way to auto-detect the encoding used
-        by a file, however in a few cases it is possible:</para>
+        by a file, however jEdit supports "encoding detectors", of which there
+        are 4 in the core, and others can be provided by plugins through the
+        services api. From the encodings option pane <xref linkend="encodings-pane"/>, you can customize which
+        ones are used, and the order they are tried. Here are some of the
+        encoding detectors recognized by jEdit: </para>
 
         <itemizedlist>
             <listitem>
-                <para><literal>UTF-16</literal> and <literal>UTF-8Y</literal>
+                <para> <emphasis role="bold">BOM</emphasis>:       <literal>UTF-16</literal> and <literal>UTF-8Y</literal>
                 files are auto-detected, because they begin with a certain fixed
                 character sequence. Note that plain UTF-8 does not mandate a
                 specific header, and thus cannot be auto-detected, unless the
@@ -299,11 +304,25 @@
             </listitem>
 
             <listitem>
-                <para>Encodings used in XML files with an XML PI like the
+             <para> <emphasis role="bold">XML-PI</emphasis>:
+                Encodings used in XML files with an XML PI like the
                 following are auto-detected:</para>
 
                 <programlisting>&lt;?xml version="1.0" encoding="UTF-8"&gt;</programlisting>
             </listitem>
+
+            <listitem>
+             <para> <emphasis role="bold">html</emphasis>:
+                Encodings specified in HTML files with a <literal>content=</literal> attribute in a <literal>meta</literal> element may be auto-detected:</para>
+                <programlisting>&lt;html&gt;&lt;head&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt; </programlisting>
+            </listitem>
+            <listitem> <para> <emphasis role="bold">python</emphasis>:
+                Python has its own way of specifying encoding at the top of
+                a file.</para>
+                <programlisting># -*- coding: utf-8 -*-                </programlisting>
+            </listitem>
+
+
         </itemizedlist>
 
         <para>The encoding that will be used to save the current buffer is shown
