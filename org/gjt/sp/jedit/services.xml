@@ -78,48 +78,48 @@
        import org.gjt.sp.jedit.gui.statusbar.*;
        new ModeWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="fold">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new FoldWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="encoding">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new EncodingWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="wrap">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new WrapWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="multiSelect">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new MultiSelectWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="rectSelect">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new RectSelectWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="overwrite">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new OverwriteWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="lineSep">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new LineSepWidgetFactory();
 	</SERVICE>
-	
-		
+
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="memory-status">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new MemoryStatusWidgetFactory();
 	</SERVICE>
-	
+
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="clock">
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new ClockWidgetFactory();
@@ -148,7 +148,7 @@
 	</SERVICE>
 	<!-- }}} -->
 	<!--jEdit.setProperty("view.status"," mode , fold , encoding ) wrap multiSelect rectSelect overwrite lineSep memory-status clock")-->
-	
+
 	<!-- Docking framework -->
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.DockingFrameworkProvider" NAME="Original">
 		new org.gjt.sp.jedit.gui.DockableWindowManagerProvider();
