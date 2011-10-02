@@ -11,6 +11,9 @@ Evan Wright for contributing to this release.
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- Fixed a bug which caused lines to disappear when using indent folding
+  if every line was indented (#3412237 - Evan Wright)
+
 - When removing a plugin, the update and install panel were not refreshed
   (Matthieu Casanova)
 
@@ -43,7 +46,7 @@ Evan Wright for contributing to this release.
 
 - Fixed a bug that occured when jumping to a line inside of a nested fold.
   (#3406213 - Evan Wright)
-  
+
 }}}
 {{{ Miscellaneous
 
@@ -76,13 +79,12 @@ and Matthieu Casanova for contributing to this release.
 - jEdit now force drops from external applications to be COPY and not
   MOVE drops. It prevents ftp explorer from deleting dropped files
   (#1208598 - Matthieu Casanova)
-  
+
 - Changing bufferset scopes now saved to properties as default scope.
   (#3316329 - Matthieu Casanova)
-  
-- Buffersets no longer populated with open files when creating new view. 
-  (#2990965 - Matthieu Casanova and Alan Ezust)  
-  
+
+- Buffersets no longer populated with open files when creating new view.
+  (#2990965 - Matthieu Casanova and Alan Ezust)
 
 - BufferSet contents of new Plain View #3317405 fixed (Matthieu Casanova)
 
@@ -104,8 +106,8 @@ and Matthieu Casanova for contributing to this release.
 - Improve integration with Unity Launcher. Without this change if you pin jEdit
   to the Launcher and then run it, a separate icon for the running instance is
   shown. With this change this is correctly merged with the pinned starter.
-  (Björn "Vampire" Kautler) 
- 
+  (Björn "Vampire" Kautler)
+
 }}}
 
 }}}
