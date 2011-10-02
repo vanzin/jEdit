@@ -11,6 +11,9 @@ Evan Wright for contributing to this release.
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- When removing a plugin, the update and install panel were not refreshed
+  (Matthieu Casanova)
+
 - Fixed jEdit starting when max heap size is too low to load Killring
   (#1827853) (Matthieu Casanova
 
