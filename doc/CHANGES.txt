@@ -17,6 +17,10 @@ Evan Wright for contributing to this release.
 - When removing a plugin, the update and install panel were not refreshed
   (Matthieu Casanova)
 
+- Fixed a corner case when trying to move caret during a buffer operation
+  (loading, transaction, undo) prevent to move the caret forever
+  (Matthieu Casanova)
+
 - Fixed jEdit starting when max heap size is too low to load Killring
   (#1827853) (Matthieu Casanova
 
