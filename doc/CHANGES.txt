@@ -11,6 +11,10 @@ Evan Wright for contributing to this release.
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- When macros are reloaded, if one of them was overriding a built-in action,
+  the action is not restored if the overriding macro is removed
+  (#3110689 - Matthieu Casanova)
+
 - Fixed a bug which caused lines to disappear when using indent folding
   if every line was indented (#3412237 - Evan Wright)
 
