@@ -11,6 +11,9 @@ Evan Wright for contributing to this release.
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
+- Shortcuts option pane was showing shortcuts twice when an action was
+  overridden by a macro or a plugin (Matthieu Casanova)
+
 - When macros are reloaded, if one of them was overriding a built-in action,
   the action is not restored if the overriding macro is removed
   (#3110689 - Matthieu Casanova)
