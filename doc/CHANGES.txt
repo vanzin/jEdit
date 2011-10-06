@@ -1,5 +1,5 @@
 jEdit 4.5 version history
-       (changes since jEdit 4.4)
+       (changes since jEdit 4.4.2)
 :encoding=UTF-8:
 
 {{{ Version 4.5pre1
@@ -11,9 +11,6 @@ Evan Wright, Shlomy Reinstein, glen117, Marcelo Vanzin and Eric Le Lay for
 contributing to this release.
 
 {{{ Bug fixes
-- Fixed a corner case when trying to move caret during a buffer operation
-  (loading, transaction, undo) prevent to move the caret forever
-  (Matthieu Casanova)
 
 - Fixed jEdit starting when max heap size is too low to load Killring
   (#1827853) (Matthieu Casanova)
@@ -27,9 +24,6 @@ contributing to this release.
 - When changing the Look and Feel on-the-fly, already shown JTrees with
   explicitly set TreeCellRenderers were rendered wrongly, now they are robust
   in regards to Look and Feel changes. (Björn "Vampire" Kautler)
-
-- When removing a plugin, the update and install panel were not refreshed
-  (Matthieu Casanova)
 
 - Fixed plugin install panel : when the selected plugin had dependencies that
   were not visible because of the filtered view, those dependencies were not
@@ -47,13 +41,6 @@ contributing to this release.
 
 - When jEdit is unable to autosave jEdit now logs a warning, but doesn't
   pop an error dialog every 30 seconds (#3154842 - Matthieu Casanova)
-
-- When macros are reloaded, if one of them was overriding a built-in action,
-  the action is not restored if the overriding macro is removed
-  (#3110689 - Matthieu Casanova)
-
-- Shortcuts option pane was showing shortcuts twice when an action was
-  overridden by a macro or a plugin (Matthieu Casanova)
 
 - Made jedit.exe to find JDK, so that jEdit runs only with JDK (without
   JRE) like 4.3.x and before. (SF.net bug #3134149 - Kazutoshi Satoda)
@@ -80,15 +67,9 @@ contributing to this release.
 
 - Fixed deadlock (jEdit freeze) when multiple files are dragged into the text
   area from file managers. (Shlomy Reinstein)
-  
+
 - Fix for tracker 3034220, jEdit fails to load text-file under Mac OS X
   (#3034220 - Evan Wright)
-  
-- Fixed a bug that occured when jumping to a line inside of a nested fold.
-  (#3406213 - Evan Wright)
-  
-- Fixed a bug which caused lines to disappear when using indent folding
-  if every line was indented (#3412237 - Evan Wright)
 
 }}}
 {{{ API Changes

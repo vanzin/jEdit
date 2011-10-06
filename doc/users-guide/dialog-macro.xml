@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="dialog-macro">
     <title>A Dialog-Based Macro</title>
-
-    <!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene                 -->
-
-    <!-- jEdit buffer-local properties:                                     -->
-
-    <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:                  -->
-
-    <!-- :xml.root=users-guide.xml:                                         -->
-
-    <!-- This file contains an extended discussion of a                     -->
-
-    <!-- dialog-based macro example "Add_Prefix_and_Suffix.bsh"             -->
-
-    <!-- $Id$      -->
+    <!-- jEdit 4.x Macro Guide, (C) 2001, 2002 John Gellene         -->
+    <!-- jEdit buffer-local properties:                             -->
+    <!-- :indentSize=1:noTabs=yes:maxLineLen=80:tabSize=2:          -->
+    <!-- :xml.root=users-guide.xml:                                 -->
+    <!-- This file contains an extended discussion of a             -->
+    <!-- dialog-based macro example "Add_Prefix_and_Suffix.bsh"     -->
+    <!-- $Id$   -->
 
     <para>Now we will look at a more complicated macro which will demonstrate
     some useful techniques and BeanShell features.</para>
