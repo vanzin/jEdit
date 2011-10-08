@@ -2187,7 +2187,7 @@ options.textarea.wrapGuide=Wrap guide:
 options.textarea.electricBorders=Electric (auto scroll) borders
 options.textarea.stdNextPrevWord=Go to next/previous word commands eat whitespace
 options.textarea.antiAlias=Anti Aliased smooth text
-options.textarea.antiAlias.tooltip=Slows down display on some systems 
+options.textarea.antiAlias.tooltip=Slows down display on some systems
 options.textarea.fracFontMetrics=Fractional font metrics (for better smooth \
 	text display)
 options.textarea.fracFontMetrics.tooltip=Not recommended with subpixel antialiasing
@@ -2450,6 +2450,7 @@ vfs.browser.new-file.icon=22x22/actions/document-new.png
 vfs.browser.new-file.label=New File
 vfs.browser.new-file.shortcut=C+n
 vfs.browser.open.label=Open
+vfs.browser.open-desktop.label=Open in $Desktop
 vfs.browser.other-encoding-2.label=Other ({0})...
 vfs.browser.other-encoding.label=Other...
 vfs.browser.reload.icon=22x22/actions/view-refresh.png

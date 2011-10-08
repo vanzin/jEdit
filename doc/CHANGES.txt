@@ -378,6 +378,8 @@ contributing to this release.
 - Changes to the Look and Feel are now applied immediately without the need to
   restart the application. (Björn "Vampire" Kautler)
 
+- New VFS Browser action: "Open in desktop" (feature# 3406759)   
+  
 - jEdit has now a systray icon. It can be replaced by implementing the
   org.gjt.sp.jedit.gui.tray.JEditTrayIcon service (feature #1657143)
   (Matthieu Casanova)

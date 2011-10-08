@@ -104,6 +104,8 @@ public class BrowserCommandsMenu extends JPopupMenu
 				|| browser.getMode() == VFSBrowser.BROWSER_DIALOG))
 			{
 				add(createMenuItem("open"));
+				add(GUIUtilities.loadMenuItem(VFSBrowser.getActionContext(),
+					"vfs.browser.open-desktop", true));
 				add(GUIUtilities.loadMenu(
 					VFSBrowser.getActionContext(),
 					"vfs.browser.open-in"));
@@ -123,10 +125,10 @@ public class BrowserCommandsMenu extends JPopupMenu
 
 			add(createMenuItem("copy-path"));
 			add(createMenuItem("paste"));
-			
-			if((files.length == 1) || (browser.getSelectedFiles().length != 0)) 
+
+			if((files.length == 1) || (browser.getSelectedFiles().length != 0))
 		   		add(createMenuItem("properties"));
-			
+
 			addSeparator();
 		}
 
@@ -307,10 +309,10 @@ public class BrowserCommandsMenu extends JPopupMenu
 		JMenu pluginMenu = new JMenu(jEdit.getProperty(
 			"vfs.browser.plugins.label"));
 		return (JMenu)browser.createPluginsMenu(pluginMenu,false);
-		
+
 	} //}}}
 
-	
+
 	//}}}
 
 	//{{{ ActionHandler class
