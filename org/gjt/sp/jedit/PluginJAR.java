@@ -762,7 +762,7 @@ public class PluginJAR
 	public void activatePluginIfNecessary()
 	{
 		String filename = MiscUtilities.getFileName(getPath());
-		jEdit.setBooleanProperty("plugin-blacklist." + filename, false);
+		jEdit.unsetProperty("plugin-blacklist." + filename);
 		if(!(plugin instanceof EditPlugin.Deferred && plugin != null))
 		{
 			return;
