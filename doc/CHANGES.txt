@@ -2,12 +2,36 @@ jEdit 4.4 version history
        (changes since jEdit 4.3)
 :encoding=UTF-8:
 
+{{{ Version 4.4.3
+
+Thanks to Björn "Vampire" Kautler for contributing to this release.
+
+{{{ Bug Fixes
+
+
+}}}
+{{{ Miscellaneous
+
+
+}}}
+{{{ API Changes
+
+
+}}}
+{{{ Editing
+
+
+}}}
+
+}}}
+
 {{{ Version 4.4.2
 
-Thanks to Björn "Vampire" Kautler, Alan Ezust, Matthieu Casanova, and
+Thanks to Björn "Vampire" Kautler, Alan Ezust, Matthieu Casanova and
 Evan Wright for contributing to this release.
 
 {{{ Bug Fixes
+
 - Untitled buffer should not be created on VFS without write capability
   (#3399387) (Matthieu Casanova)
 
@@ -59,20 +83,15 @@ Evan Wright for contributing to this release.
   (#3406213 - Evan Wright)
 
 }}}
-{{{ Miscellaneous
-
-
-}}}
-{{{ API Changes
-
-
-}}}
 {{{ Editing
-- `elsif compiler directive added to verilog edit mode (#3261277)
+
+- elsif compiler directive added to verilog edit mode (#3261277)
   (Matthieu Casanova)
 
 }}}
+
 }}}
+
 {{{ Version 4.4.1
 
 Thanks to Björn "Vampire" Kautler, Kazutoshi Satoda, Alan Ezust,
