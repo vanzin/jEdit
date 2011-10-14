@@ -257,7 +257,7 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 		return buf.toString();
 	} //}}}
-	
+
 	//{{{ createWhiteSpace() method
 	/**
 	 * Creates a string of white space with the specified length.<p>
@@ -735,9 +735,9 @@ loop:		for(int i = 0; i < str.length(); i++)
 	// {{{ MD5 sum method
 	/**
 	 * Returns the md5sum for given string. Or dummy byte array on error
-	 * Supress NoSuchAlgorithmException because MD5 algorithm always present in JRE
+	 * Suppress NoSuchAlgorithmException because MD5 algorithm always present in JRE
 	 * @param s Given string
-	 * @return md5 sum of given string 
+	 * @return md5 sum of given string
 	 */
 	public static byte[] md5(String s) {
 		final byte[] dummy = new byte[1];
