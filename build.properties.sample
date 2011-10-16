@@ -54,6 +54,12 @@
 # If it's in your path, this is sufficient:
 #rsync.executable=rsync
 
+### GPG settings for signing the Debian repository metadata
+### The password can also be supplied interactively
+#gpg.ignore.missing.secring=true
+#gpg.secring=/home/vampire/.gnupg/secring.gpg
+#gpg.secring.password=<password>
+
 # debug settings
 #build.debug=true
 #build.debuglevel=lines,vars,source

@@ -15,27 +15,30 @@ Workflow
 
 1. Execute the BeanShell snippet at the end of this file ("Utilities -> BeanShell -> Evaluate Selection"). This will replace the version tags in this document by actual version numbers for easy copy & paste.
 
-2. Tag the sourcecode for release in the SVN repository by doing
+2. Review http://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/branches/[branch]/doc/CHANGES.txt for formatting errors (like missing newline characters, wrong indentation or empty blocks), fix them and check them in.
+
+3. Tag the sourcecode for release in the SVN repository by doing
         svn copy https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/branches/[branch] https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/tags/[tag] -m "Tagging [version] for release."
    with the correct version in the second URL and in the commit message
 
-3. To be sure to work with the exact tagged source, check out the newly tagged source in a new directory by doing
+4. To be sure to work with the exact tagged source, check out the newly tagged source in a new directory by doing
         svn checkout https://jedit.svn.sourceforge.net/svnroot/jedit/jEdit/tags/[tag]
    no matter where. You will find the source in a subfolder [tag] where you executed the command
 
-4. Copy build.properties from your jEdit source directory to the newly created [tag] source directory if needed. If you don't have it, then create it if needed. You find a template called build.properties.sample in the root directory.
+5. Copy build.properties from your jEdit source directory to the newly created [tag] source directory if needed. If you don't have it, then create it if needed. You find a template called build.properties.sample in the root directory.
    To give an example, in build.properties I customized the following properties:
     - wine.executable=wine
     - winepath.executable=winepath
     - innosetup.compiler.executable=/home/vampire/.wine/drive_c/Programme/Inno Setup 5/ISCC.exe
     - innosetup.via.wine=true
+    - gpg.secring=/home/vampire/.gnupg/secring.gpg
    You may not need to customize the same properties than me, e. g. if you are on Windows you don't need to set the three wine properties.
    For further information about what you need to build the source, please read README.SRC.txt in the sources root directory.
 
-5.1. Build the distribution files by doing
+6.1. Build the distribution files by doing
           ant dist
      in the [tag] directory
-     In the newly created directory [tag]/dist you find 8 files:
+     In the newly created directory [tag]/dist you find [ifdevel]8[/ifdevel][iffinal]13[/iffinal] files:
       - jedit[version]manual-a4.pdf
       - jedit[version]manual-letter.pdf
       - jedit[version]source.tar.bz2
@@ -44,22 +47,34 @@ Workflow
       - jedit_[version]_all.deb
       - jedit[version]install.exe or jedit[version]-dist-win-finish.tar.bz2
       - jedit[version]install.dmg or jedit[version]-dist-mac-finish.tar.bz2
-
-5.2. If you have jedit[version]-dist-win-finish.tar.bz2 in your [tag]/dist folder you probably don't run a Windows box and don't have wine installed and set up, so please hand over this file to someone (e. g. <Björn "Vampire" Kautler> Vampire@jEdit.org) who does and ask him to unpack the file and run
+[iffinal]      - Packages
+      - Packages.gz
+      - Packages.bz2
+      - Release
+      - Release.gpg
+[/iffinal]
+6.2. If you have jedit[version]-dist-win-finish.tar.bz2 in your [tag]/dist folder you probably don't run a Windows box and don't have wine installed and set up, so please hand over this file to someone (e. g. <Björn "Vampire" Kautler> Vampire@jEdit.org) who does and ask him to unpack the file and run
           ant dist-win-finish
      and to hand over the resulting file jedit[version]install.exe to you. The requirements for this are described in README.SRC.txt
 
-5.3. If you have jedit[version]-dist-mac-finish.tar.bz2 in your [tag]/dist folder you probably don't run a Mac OS X box, so please hand over this file to someone (e. g. Björn "Vampire" Kautler <Vampire@jEdit.org>) who does and ask him to unpack the file and run
+6.3. If you have jedit[version]-dist-mac-finish.tar.bz2 in your [tag]/dist folder you probably don't run a Mac OS X box, so please hand over this file to someone (e. g. Björn "Vampire" Kautler <Vampire@jEdit.org>) who does and ask him to unpack the file and run
           ant dist-mac-finish
      and to hand over the resulting file jedit[version]install.dmg to you. The requirements for this are described in README.SRC.txt
 
-5.4. After you received the final distribution files jedit[version]install.exe and jedit[version]install.dmg you can delete jedit[version]-dist-win-finish.tar.bz2 and jedit[version]-dist-mac-finish.tar.bz2
-
-6. - Connect to the SourceForge servers via one of the methods described in https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download
-   - Add the sub-folder "[version]" under "/home/frs/project/j/je/jedit/jedit-devel"
-   - Upload the 8 final distribution files to the newly created folder on the SourceForge servers
-
-7. - Go to https://sourceforge.net/projects/jedit/files/jedit-devel/[version]/
+6.4. After you received the final distribution files jedit[version]install.exe and jedit[version]install.dmg you can delete jedit[version]-dist-win-finish.tar.bz2 and jedit[version]-dist-mac-finish.tar.bz2
+[iffinal]
+6.5. If you don't have Release.gpg, you didn't have setup a GPG secring. Either create a GPG secring, run
+          ant dist-sign-deb-Release
+     , upload the public key to a public keyserver and make sure your key is mentioned on http://jedit.org/index.php?page=download&platform=unix#option_two so the users know the key is valid for signing jEdit releases. Alternatively send Release to someone whose key is already mentioned on the download page (e. g. Björn "Vampire" Kautler <Vampire@jEdit.org>) and ask him to put Release in the dist folder, to run
+          ant dist-sign-deb-Release
+     and to hand over the resulting file Release.gpg to you. The second way is preferable if you only create a release once or from time to time as a new key means the user will get confused and has to react for verifying and installing the new key.
+[/iffinal]
+7. - Connect to the SourceForge servers via one of the methods described in https://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download
+   - Add the sub-folder "[version]" under "/home/frs/project/j/je/jedit/jedit[ifdevel]-devel[/ifdevel]"
+   - Upload the 8 final distribution files [iffinal]starting with "jedit" [/iffinal]to the newly created folder on the SourceForge servers
+[iffinal]   - Upload the 5 remaining distribution files not starting with "jedit" to the folder "/home/frs/project/j/je/jedit" on the SourceForge servers.
+[/iffinal]
+8. - Go to https://sourceforge.net/projects/jedit/files/jedit[ifdevel]-devel[/ifdevel]/[version]/
    - Make the following settings for each file after clicking on the respective "i" icon
         - jedit_[version]_all.deb
             - Download Button: Debian Installer
@@ -69,7 +84,7 @@ Workflow
             - Default Download For: <none>
         - jedit[version]install.jar
             - Download Button: Java based Installer
-            - Default Download For: linux, bsd, solaris, others (if this is a stable release, <none> otherwise)
+            - Default Download For: [ifdevel]<none>[/ifdevel][iffinal]linux, bsd, solaris, others[/iffinal]
         - jedit[version]manual-letter.pdf
             - Download Button: Manual in Letter Paper size
             - Default Download For: <none>
@@ -78,39 +93,46 @@ Workflow
             - Default Download For: <none>
         - jedit[version]install.dmg
             - Download Button: Mac OS X Installer
-            - Default Download For: mac (if this is a stable release, <none> otherwise)
+            - Default Download For: [ifdevel]<none>[/ifdevel][iffinal]mac[/iffinal]
         - jedit[version]install.exe
             - Download Button: Windows Installer
-            - Default Download For: windows (if this is a stable release, <none> otherwise)
+            - Default Download For: [ifdevel]<none>[/ifdevel][iffinal]windows[/iffinal]
         - jedit-[version]-noarch-1sao.tgz
             - Download Button: Slackware Installer
             - Default Download For: <none>
 
-8. Update the website in the following places and also update this state in SVN:
+9. Update the website in the following places and also update this state in SVN:
     - Open sftp://<your sf username>,jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/download.html e. g. in jEdit with installed FTP plugin and update the website for the new release, means the filenames, filesizes and amount of pages in the User's Guides
     - Open sftp://<your sf username>,jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/jEdit-version.txt e. g. in jEdit with installed FTP plugin and update the versions in the file, which is needed by the LatestVersion Plugin
     - Open sftp://<your sf username>,jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/CHANGES44.txt e. g. in jEdit with installed FTP plugin and copy the contents of [tag]/doc/CHANGES.txt to this file
     - Open sftp://<your sf username>,jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/index.php e. g. in jEdit with installed FTP plugin and update the version number and the Last Site Update date
     - Open sftp://<your sf username>,jedit@web.sourceforge.net/home/groups/j/je/jedit/htdocs/devel.html e. g. in jEdit with installed FTP plugin and add a line for [version] in the Release Schedule
 
-9. Update the plugin wizard
+10. Update the plugin wizard
      - Go to http://plugins.jedit.org/wiz/release_add.php?package_id=24
      - Enter the Version "[version]"
-     - Switch "Head of Branch" to "devel"
+     - Switch "Head of Branch" to "[ifdevel]devel[/ifdevel][iffinal]main[/iffinal]"
      - Check the "Remove" checkbox for the jEdit dependency
      - Switch the "Low Version" of the JDK dependency to "1.6 [jdk-1.6]"
      - Click "Update Dependencies"
      - Click "Create Release"
 
-10. Send an announcement eMail to the jEdit-announce list. The announcement should contain some announcing text and in the end the contents of [tag]/doc/CHANGES.txt for this release.
+11. Send an announcement eMail to the jEdit-announce list. The announcement should contain some announcing text and in the end the contents of [tag]/doc/CHANGES.txt for this release.
     You have to be set up to be able to post to jEdit-announce list.
     The mail should automatically get forwarded to the jedit-users list, but for that you have to be subscribed to that list too.
 
-11. Ask Vampire <Vampire@jEdit.org> (Vampire0@#jEdit@chat.freenode.net) to update the topic of the IRC Channel
+12. Ask Vampire <Vampire@jEdit.org> (Vampire0@#jEdit@chat.freenode.net) to update the topic of the IRC Channel
 
-12. Delete the [tag] folder
+13. Spread the word about the new release whereever possible e. g.:
+     - On Twitter
+     - On Google+
+     - On Facebook
+     - Send a mail to the Community Growth Hacker of SourceForge for promotion of the release, currently this is Elizabeth Naramore <elizabethn@sourceforge.net>
+     - Send a mail to Heise for inclusion in the weekly Heise Developer Snapshots at developer@ix.de
 
-13. Update the version number on the release branch
+14. Delete the [tag] folder
+
+15. Update the version number on the release branch
      - Add the following section to doc/CHANGES.txt
 
 {{{ Version [nextVersion]
@@ -195,6 +217,14 @@ SearchAndReplace.setReplaceString(nextVersion);
 SearchAndReplace.replaceAll(view);
 SearchAndReplace.setSearchString("[nextBuild]");
 SearchAndReplace.setReplaceString(nextBuild);
+SearchAndReplace.replaceAll(view);
+SearchAndReplace.setRegexp(true);
+SearchAndReplace.setBeanShellReplace(true);
+SearchAndReplace.setSearchString("\\[ifdevel\\]((?:.|\n)*?)\\[/ifdevel\\]");
+SearchAndReplace.setReplaceString(beta != 99 ? "_1" : "");
+SearchAndReplace.replaceAll(view);
+SearchAndReplace.setSearchString("\\[iffinal\\]((?:.|\n)*?)\\[/iffinal\\]");
+SearchAndReplace.setReplaceString(beta != 99 ? "" : "_1");
 SearchAndReplace.replaceAll(view);
 textArea.replaceSelection("Versions replaced\n");
 buffer.endCompoundEdit();

@@ -19,6 +19,8 @@
 		  value="4.5pre1"/>
 	<property name="jedit.build.number"
 		  value="04.05.01.00"/>
+	<property name="jedit.version.final"
+		  value="false"/>
 
 	<!-- Target Java Versions -->
 	<property name="target.java.version"
@@ -1450,7 +1452,7 @@
 	</target>
 
 	<target name="dist-deb"
-		depends="init,setup,prepare-dist-files"
+		depends="init,retrieve,setup,prepare-dist-files"
 		description="build the DEB Package">
 		<antcall target="compile-ar">
 			<param name="config.build.debuglevel"
@@ -1563,9 +1565,240 @@
 			<datafileset file="${dist.dir}/classes/package-files/linux/jedit.1.gz"
 				     fullpath="usr/share/man/man1/jedit.1.gz"/>
 		</mod:deb>
+		<contrib:if>
+			<istrue value="${jedit.version.final}"/>
+			<contrib:then>
+				<length property="deb.size"
+					file="${dist.dir}/jedit_${jedit.version}_all.deb"/>
+				<checksum file="${dist.dir}/jedit_${jedit.version}_all.deb"
+					  algorithm="MD5"
+					  property="deb.md5"/>
+				<checksum file="${dist.dir}/jedit_${jedit.version}_all.deb"
+					  algorithm="SHA1"
+					  property="deb.sha1"/>
+				<checksum file="${dist.dir}/jedit_${jedit.version}_all.deb"
+					  algorithm="SHA-256"
+					  property="deb.sha256"/>
+				<copy todir="${dist.dir}"
+				      encoding="UTF-8"
+				      overwrite="true">
+					<fileset file="package-files/linux/deb/Packages"/>
+					<filterset>
+						<filter token="jedit.build.number"
+							value="${jedit.build.number}"/>
+						<filter token="deb.installed.size"
+							value="${deb.installed.size}"/>
+						<filter token="deb.repository.file"
+							value="./jedit/${jedit.version}/jedit_${jedit.version}_all.deb"/>
+						<filter token="deb.size"
+							value="${deb.size}"/>
+						<filter token="deb.md5"
+							value="${deb.md5}"/>
+						<filter token="deb.sha1"
+							value="${deb.sha1}"/>
+						<filter token="deb.sha256"
+							value="${deb.sha256}"/>
+					</filterset>
+				</copy>
+				<gzip src="${dist.dir}/Packages"
+				      destfile="${dist.dir}/Packages.gz"/>
+				<bzip2 src="${dist.dir}/Packages"
+				       destfile="${dist.dir}/Packages.bz2"/>
+				<length property="packages.size"
+					file="${dist.dir}/Packages"/>
+				<checksum file="${dist.dir}/Packages"
+					  algorithm="MD5"
+					  property="packages.md5"/>
+				<checksum file="${dist.dir}/Packages"
+					  algorithm="SHA1"
+					  property="packages.sha1"/>
+				<checksum file="${dist.dir}/Packages"
+					  algorithm="SHA-256"
+					  property="packages.sha256"/>
+				<length property="packages.gz.size"
+					file="${dist.dir}/Packages.gz"/>
+				<checksum file="${dist.dir}/Packages.gz"
+					  algorithm="MD5"
+					  property="packages.gz.md5"/>
+				<checksum file="${dist.dir}/Packages.gz"
+					  algorithm="SHA1"
+					  property="packages.gz.sha1"/>
+				<checksum file="${dist.dir}/Packages.gz"
+					  algorithm="SHA-256"
+					  property="packages.gz.sha256"/>
+				<length property="packages.bz2.size"
+					file="${dist.dir}/Packages.bz2"/>
+				<checksum file="${dist.dir}/Packages.bz2"
+					  algorithm="MD5"
+					  property="packages.bz2.md5"/>
+				<checksum file="${dist.dir}/Packages.bz2"
+					  algorithm="SHA1"
+					  property="packages.bz2.sha1"/>
+				<checksum file="${dist.dir}/Packages.bz2"
+					  algorithm="SHA-256"
+					  property="packages.bz2.sha256"/>
+				<script language="beanshell">
+					<classpath>
+						<fileset dir="${lib.dir}/scripting"
+							 includes="*.jar"/>
+					</classpath>
+
+					new Formatter(new File(project.getProperty("dist.dir"), "Release"), "UTF-8", Locale.ENGLISH)
+						.format("Date: %1$ta, %1$td %1$tb %1$tY %1$tT %1$tZ\n", new Object[] {
+							Calendar.getInstance(TimeZone.getTimeZone("UTC")) })
+						.format("MD5Sum:\n", new Object[0])
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.md5"),
+							project.getProperty("packages.size"),
+							"Packages" })
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.bz2.md5"),
+							project.getProperty("packages.bz2.size"),
+							"Packages.bz2" })
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.gz.md5"),
+							project.getProperty("packages.gz.size"),
+							"Packages.gz" })
+						.format("SHA1:\n", new Object[0])
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.sha1"),
+							project.getProperty("packages.size"),
+							"Packages" })
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.bz2.sha1"),
+							project.getProperty("packages.bz2.size"),
+							"Packages.bz2" })
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.gz.sha1"),
+							project.getProperty("packages.gz.size"),
+							"Packages.gz" })
+						.format("SHA256:\n", new Object[0])
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.sha256"),
+							project.getProperty("packages.size"),
+							"Packages" })
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.bz2.sha256"),
+							project.getProperty("packages.bz2.size"),
+							"Packages.bz2" })
+						.format(" %s %16s %s\n", new Object[] {
+							project.getProperty("packages.gz.sha256"),
+							project.getProperty("packages.gz.size"),
+							"Packages.gz" })
+						.close()
+				</script>
+				<contrib:runtarget target="dist-sign-deb-Release"/>
+			</contrib:then>
+		</contrib:if>
 		<property name="wipe.dist.files"
 			  value="true"/>
 		<contrib:runtarget target="dist-cleanup"/>
+	</target>
+
+	<target name="dist-sign-deb-Release"
+		depends="init,retrieve,setup"
+		description="sign the DEB Release file">
+		<contrib:if>
+			<not>
+				<or>
+					<isset property="config.gpg.secring"/>
+					<istrue value="${config.gpg.ignore.missing.secring}"/>
+				</or>
+			</not>
+			<contrib:then>
+				<input>
+WARN: The property "gpg.secring" is not set in build.properties, you may find example values in build.properties.sample.
+WARN: The debian repository metadata will not be signed (Release.gpg) unless you define that property.
+WARN: Set the property "gpg.ignore.missing.secring" to "true" in build.properties to suppress this message.
+
+Press Return key to continue...
+				</input>
+			</contrib:then>
+		</contrib:if>
+		<contrib:if>
+			<isset property="config.gpg.secring"/>
+			<contrib:then>
+				<input addproperty="config.gpg.secring.password">
+					<handler type="secure"/>
+	Please enter the secring password and press Return key.
+	You can also set the property "gpg.secring.password" in build.properties instead.
+
+	Password: </input>
+			</contrib:then>
+		</contrib:if>
+		<script language="beanshell">
+			<classpath>
+				<fileset dir="${lib.dir}/scripting"
+					 includes="*.jar"/>
+			</classpath>
+
+			import java.security.Security;
+			import org.bouncycastle.bcpg.ArmoredOutputStream;
+			import org.bouncycastle.bcpg.BCPGOutputStream;
+			import org.bouncycastle.jce.provider.BouncyCastleProvider;
+			import org.bouncycastle.openpgp.PGPUtil;
+			import org.bouncycastle.openpgp.PGPSecretKeyRingCollection;
+			import org.bouncycastle.openpgp.PGPSignatureGenerator;
+			import org.bouncycastle.openpgp.PGPSignature;
+
+			if (project.getProperty("config.gpg.secring") == null)
+			{
+				return;
+			}
+			Security.addProvider(new BouncyCastleProvider());
+			fIn = null;
+			out = null;
+			keyIn = null;
+			try
+			{
+				keyIn = new BufferedInputStream(new FileInputStream(project.getProperty("config.gpg.secring")));
+				pgpSec = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(keyIn));
+				if (pgpSec == null)
+				{
+					System.out.println("Secring could not be decoded");
+					return;
+				}
+			outer:	for (keyRing : pgpSec.getKeyRings())
+				{
+					for (key : keyRing.getSecretKeys())
+					{
+						if (key.isSigningKey())
+						{
+							pgpSec = key;
+							break outer;
+						}
+					}
+				}
+				if (pgpSec == null)
+				{
+					System.out.println("No signing key found");
+					return;
+				}
+				pgpPrivKey = pgpSec.extractPrivateKey(project.getProperty("config.gpg.secring.password").toCharArray(), "BC");
+				sGen = new PGPSignatureGenerator(pgpSec.getPublicKey().getAlgorithm(), PGPUtil.SHA1, "BC");
+				sGen.initSign(PGPSignature.BINARY_DOCUMENT, pgpPrivKey);
+				fIn = new BufferedInputStream(new FileInputStream(new File (project.getProperty("dist.dir"), "Release")));
+				while ((ch = fIn.read()) >= 0)
+				{
+				    sGen.update((byte)ch);
+				}
+				out = new BCPGOutputStream(new ArmoredOutputStream(new BufferedOutputStream(new FileOutputStream(new File (project.getProperty("dist.dir"), "Release.gpg")))));
+				sGen.generate().encode(out);
+			} finally {
+				if (fIn != null)
+				{
+					fIn.close();
+				}
+				if (out != null)
+				{
+					out.close();
+				}
+				if (keyIn != null)
+				{
+					keyIn.close();
+				}
+			}
+		</script>
 	</target>
 
 	<target name="dist-win-finish"

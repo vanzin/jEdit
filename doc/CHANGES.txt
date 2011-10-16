@@ -73,6 +73,7 @@ contributing to this release.
 
 }}}
 {{{ API Changes
+
 - Added GUIUtilities.option() method to display a JOptionPane.option()
   dialog (Matthieu Casanova)
 
@@ -422,6 +423,9 @@ contributing to this release.
 
 }}}
 {{{ Miscellaneous
+
+- Debian repository metadata is now generated during normal build procedure.
+  (Björn "Vampire" Kautler)
 
 - Ability to rename favorites. Renaming a favorite now only apply a label
   on the favorite without modifying the target file (feature #3292159)
