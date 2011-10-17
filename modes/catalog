@@ -571,6 +571,9 @@
 
 <MODE NAME="uscript"		FILE="uscript.xml"
 				FILE_NAME_GLOB="*.uc" />
+				
+<MODE NAME="vala"		FILE="vala.xml"
+				FILE_NAME_GLOB="*.vala" />
 
 <MODE NAME="vbscript"		FILE="vbscript.xml"
 				FILE_NAME_GLOB="*.{vbs,bas,cls}" />

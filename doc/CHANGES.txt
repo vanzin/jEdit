@@ -7,8 +7,8 @@ jEdit 4.5 version history
 Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing, Jeremy,
-Evan Wright, Shlomy Reinstein, glen117, Marcelo Vanzin and Eric Le Lay for
-contributing to this release.
+Evan Wright, Shlomy Reinstein, glen117, kog13, Marcelo Vanzin and
+Eric Le Lay for contributing to this release.
 
 {{{ Bug fixes
 
@@ -323,6 +323,7 @@ contributing to this release.
 
 }}}
 {{{ Editing
+- Added edit mode for vala language (patch #3407321) (kog13)
 
 - Improvement of filename glob for apacheconf mode to include more files
   in the conf directories on Windows and Linux.
