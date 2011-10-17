@@ -728,7 +728,6 @@ eval-selection.label=Evaluate $Selection
 troubleshooting=log-viewer \
 		update-log \
 		- \
-		io-progress-monitor \
 		task-monitor \
 		keyboard-tester \
 		memory-status \

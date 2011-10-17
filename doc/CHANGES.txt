@@ -376,6 +376,9 @@ contributing to this release.
 }}}
 {{{ UI
 
+- The IO Progress Monitor dockable panel is now included in Task Monitor Panel
+  (feature #3420671) (Matthieu Casanova)
+
 - Changes to the Look and Feel are now applied immediately without the need to
   restart the application. (Björn "Vampire" Kautler)
 

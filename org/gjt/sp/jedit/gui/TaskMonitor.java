@@ -51,8 +51,9 @@ public class TaskMonitor extends JPanel implements TaskListener
 	public TaskMonitor()
 	{
 		super(new BorderLayout());
+		JPanel panel = new JPanel(new BorderLayout());
 		remainingCount = new JLabel();
-		add(remainingCount, BorderLayout.NORTH);
+		panel.add(remainingCount, BorderLayout.NORTH);
 
 		model = new TaskTableModel();
 		model.addTableModelListener(new TableModelListener()
@@ -73,8 +74,11 @@ public class TaskMonitor extends JPanel implements TaskListener
 		table.getColumnModel().getColumn(1).setMaxWidth(16);
 		table.getColumnModel().getColumn(1).setMinWidth(16);
 		JScrollPane scroll = new JScrollPane(table);
-		add(scroll);
+		panel.add(scroll);
 		updateTasksCount();
+
+		add(new IOProgressMonitor(), BorderLayout.NORTH);
+		add(panel);
 	}
 
 	@Override
