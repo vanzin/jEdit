@@ -45,8 +45,10 @@ public class PasteFromListDialog extends EnhancedDialog
 		setContentPane(content);
 		JPanel center = new JPanel(new GridLayout(2,1,2,12));
 
+		int maxItemLength =
+			jEdit.getIntegerProperty("paste-from-list.max-item-length", 1000);
 		clips = new JList(model);
-		clips.setCellRenderer(new Renderer());
+		clips.setCellRenderer(new Renderer(maxItemLength));
 		clips.setVisibleRowCount(12);
 
 		clips.addMouseListener(new MouseHandler());
@@ -121,13 +123,13 @@ public class PasteFromListDialog extends EnhancedDialog
 
 		view.getTextArea().setSelectedText(text);
 
-		dispose();
+		cleanup();
 	} //}}}
 
 	//{{{ cancel() method
 	public void cancel()
 	{
-		dispose();
+		cleanup();
 	} //}}}
 
 	//{{{ Private members
@@ -140,19 +142,39 @@ public class PasteFromListDialog extends EnhancedDialog
 	private JButton insert;
 	private JButton cancel;
 	//}}}
+	
+	//{{{ cleanup()
+	private void cleanup()
+	{
+		// Remove the reference to the JList from the history model so that the
+		// list doesn't keep getting updated after the dialog is gone
+		Object[] nothing = {};
+		clips.setListData(nothing);
+		dispose();
+	} //}}}
 
 	//{{{ getSelectedClipText()
 	private String getSelectedClipText()
 	{
 		Object[] selected = clips.getSelectedValues();
-		StringBuilder clip = new StringBuilder();
-		for(int i = 0; i < selected.length; i++)
+		
+		if (selected.length == 1)
 		{
-			if(i != 0)
-				clip.append('\n');
-			clip.append(selected[i]);
+			// These strings may be very large, so if we can just return the same string
+			// instead of making a copy, do so
+			return selected[0].toString();
 		}
-		return clip.toString();
+		else
+		{
+			StringBuilder clip = new StringBuilder();
+			for(int i = 0; i < selected.length; i++)
+			{
+				if(i != 0)
+					clip.append('\n');
+				clip.append(selected[i]);
+			}
+			return clip.toString();
+		}
 	}
 	//}}}
 
@@ -168,9 +190,29 @@ public class PasteFromListDialog extends EnhancedDialog
 	{
 		Object[] selected = clips.getSelectedValues();
 		if(selected == null || selected.length == 0)
+		{
 			clipText.setText("");
+		}
 		else
-			clipText.setText(getSelectedClipText());
+		{
+			String text = getSelectedClipText();
+			int maxPreviewLength = 
+				jEdit.getIntegerProperty("paste-from-list.max-preview-length",
+					100000);
+			
+			if (text.length() > maxPreviewLength)
+			{
+				String showText = text.substring(0, maxPreviewLength);
+				showText += "<" + (text.length() - maxPreviewLength) +
+					" more bytes>";
+				clipText.setText(showText);
+			}
+			else
+			{
+				clipText.setText(text);
+			}
+		}
+
 		clipText.setCaretPosition(0);
 	}
 	//}}}
@@ -180,6 +222,11 @@ public class PasteFromListDialog extends EnhancedDialog
 	//{{{ Renderer class
 	static class Renderer extends DefaultListCellRenderer
 	{
+		public Renderer(int maxItemLength)
+		{
+			this.maxItemLength = maxItemLength;
+		}
+		
 		String shorten(String item)
 		{
 			StringBuilder buf = new StringBuilder();
@@ -190,6 +237,13 @@ public class PasteFromListDialog extends EnhancedDialog
 			boolean ws = true;
 			for(int i = 0; i < item.length(); i++)
 			{
+				// Don't make the list items too large
+				if (buf.length() == maxItemLength)
+				{
+					buf.append("...");
+					break;
+				}
+				
 				char ch = item.charAt(i);
 				if(Character.isWhitespace(ch))
 				{
@@ -224,6 +278,8 @@ public class PasteFromListDialog extends EnhancedDialog
 
 			return this;
 		}
+		
+		private int maxItemLength;
 	} //}}}
 
 	//{{{ ActionHandler class

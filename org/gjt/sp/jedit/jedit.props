@@ -42,6 +42,9 @@ autosaveUntitled=true
 # Maximum number of elements in a history list
 history=20
 
+# Maximum size (in characters) of a history list
+historyMaxSize=5000000
+
 # Number of recent files
 recentFiles=40
 

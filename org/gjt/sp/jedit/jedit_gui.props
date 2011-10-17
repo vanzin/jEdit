@@ -1567,6 +1567,8 @@ search-no-selection.message=Please select some text or deactivate the\n\
 
 #{{{ Paste previous and paste deleted dialogs
 paste-from-list.whitespace=<whitespace>
+paste-from-list.max-item-length=1000
+paste-from-list.max-preview-length=100000
 paste-previous.title=Paste Previous
 paste-previous.caption=Recently copied and pasted text:
 paste-deleted.title=Paste Deleted

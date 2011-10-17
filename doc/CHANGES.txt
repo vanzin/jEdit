@@ -427,6 +427,7 @@ Eric Le Lay for contributing to this release.
 
 }}}
 {{{ Miscellaneous
+- Optimize performances of HistoryModel (patch #3185856) (Evan Wright)
 
 - Debian repository metadata is now generated during normal build procedure.
   (Björn "Vampire" Kautler)

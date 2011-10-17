@@ -955,6 +955,7 @@ public class jEdit
 		}
 
 		HistoryModel.setDefaultMax(getIntegerProperty("history",25));
+		HistoryModel.setDefaultMaxSize(getIntegerProperty("historyMaxSize", 5000000));
 		KillRing.getInstance().propertiesChanged(getIntegerProperty("history",25));
 		Chunk.propertiesChanged(propertyManager);
 

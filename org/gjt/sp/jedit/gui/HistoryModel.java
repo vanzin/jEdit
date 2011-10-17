@@ -52,6 +52,7 @@ public class HistoryModel extends DefaultListModel
 	{
 		this.name = name;
 		this.max = -1;
+		this.maxSize = -1;
 	} //}}}
 
 	//{{{ addItem() method
@@ -64,10 +65,27 @@ public class HistoryModel extends DefaultListModel
 	{
 		if(text == null || text.length() == 0)
 			return;
-
+		
+		// Don't add duplicates
 		int index = indexOf(text);
-		if(index != -1)
+		if (index == 0)
+			return;
+		if (index != -1)
 			removeElementAt(index);
+		
+		// Make room so that adding this new item doesn't cause the history model to run
+		// over its maximum size
+		int myMaxSize = (maxSize == -1) ? defaultMaxSize : maxSize;
+		if (text.length() > myMaxSize)
+		{
+			return;
+		}
+		int currentSize = getCurrentSize();
+		while (currentSize + text.length() > myMaxSize)
+		{
+			currentSize -= getItem(getSize() - 1).length();
+			removeElementAt(getSize() - 1);
+		}
 
 		insertElementAt(text,0);
 
@@ -174,6 +192,27 @@ public class HistoryModel extends DefaultListModel
 	{
 		return max;
 	} //}}}
+	
+	//{{{ setMaxSize() method
+	/**
+	 * Sets the maximum size (in characters) for this history model
+	 * @param max the new maximum size for the history model, or -1 to restore the default
+	 * @since jEdit 4.5pre1
+	 */
+	public void setMaxSize(int max)
+	{
+		this.maxSize = max;
+	} //}}}
+
+	//{{{ getMaxSize() method
+	/**
+	 * @return the maximum size (in characters) for this history model, or -1 for the default
+	 * @since jEdit 4.5pre1
+	 */
+	public int getMaxSize()
+	{
+		return maxSize;
+	} //}}}
 
 	//{{{ setDefaultMax() method
 	/**
@@ -195,6 +234,27 @@ public class HistoryModel extends DefaultListModel
 	{
 		return HistoryModel.defaultMax;
 	} //}}}
+	
+	//{{{ setDefaultMaxSize() method
+	/**
+	 * Sets the default max size (in characters) for all history models. To change the max
+	 * size of one history, call {@link #setMaxSize} instead.
+	 * @since jEdit 4.5pre1
+	 */
+	public static void setDefaultMaxSize(int newMax)
+	{
+		HistoryModel.defaultMaxSize = newMax;
+	} //}}}
+	
+	//{{{ getDefaultMaxSize() method
+	/**
+	 * Gets the default maximum size (in characters) for all history models.
+	 * @since jEdit 4.5pre1
+	 */
+	public static int getDefaultMaxSize()
+	{
+		return HistoryModel.defaultMaxSize;
+	} //}}}
 
 	//{{{ setSaver() method
 	public static void setSaver(HistoryModelSaver saver)
@@ -205,11 +265,29 @@ public class HistoryModel extends DefaultListModel
 	//{{{ Private members
 	private int max;
 	private static int defaultMax;
+	
+	private int maxSize;
+	private static int defaultMaxSize;
 
 	private final String name;
 	private static Map<String, HistoryModel> models;
 
 	private static boolean modified;
 	private static HistoryModelSaver saver;
+	
+	//{{{ getCurrentSize() method
+	/**
+	 * Gets the current size (in characters) of the entire history model.
+	 */
+	private int getCurrentSize()
+	{
+		int currentSize = 0;
+		for (int i = 0; i < getSize(); i++)
+		{
+			currentSize += getItem(i).length();
+		}
+		
+		return currentSize;
+	}
 	//}}}
 }
