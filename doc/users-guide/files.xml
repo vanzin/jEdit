@@ -623,10 +623,10 @@
         operations.</para>
 
         <para>The
-        <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;<guimenuitem>I/O
-        Progress Monitor</guimenuitem> command displays a window with more
+        <guimenu>Utilities</guimenu>&gt;<guisubmenu>Troubleshooting</guisubmenu>&gt;
+        <guimenuitem>Task Monitor</guimenuitem> command displays a window with more
         detailed status information and progress meters. By default, the
-        <guimenuitem>I/O Progress Monitor</guimenuitem> is shown in a floating
+        <guimenuitem>Task Monitor</guimenuitem> is shown in a floating
         window. This window can be docked using the commands in its top-left
         corner popup menu; see <xref linkend="docking" />. I/O requests can also
         be aborted in this window, however note that aborting a buffer save can
