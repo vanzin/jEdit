@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sect1 id="problems">
+<section id="problems">
     <title>Problems</title>
     <!-- jEdit buffer-local properties:                      -->
     <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
     <!-- jEdit FAQ                                           -->
-    <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
     <para>This section deals with problems you may experience while using or
     installing jEdit. Problems that aren't OS specific are listed under <link
     linkend="general-problems"><quote>General Problems</quote></link>.</para>
@@ -311,7 +310,7 @@ Exception in thread "main" java.awt.AWTError: Cannot load AWT toolkit: gnu.java.
 				</question>
 				<answer>
 				 <para> Make sure the version of Java you are running is Sun Java 1.6 or higher.
-				 In debian/ubuntu, 
+				 In debian/ubuntu,
 				 <literal> apt-get install sun-java6-jdk </literal>
 				 </para>
 		        </answer>
@@ -409,4 +408,4 @@ Exception in thread "main" java.awt.AWTError: Cannot load AWT toolkit: gnu.java.
             </qandaentry>
         </qandadiv>
     </qandaset>
-</sect1>
+</section>

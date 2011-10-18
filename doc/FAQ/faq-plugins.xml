@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sect1 id="plugins">
+<section id="plugins">
     <title>Plugin Questions</title>
     <!-- jEdit buffer-local properties:                      -->
     <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
@@ -98,7 +98,7 @@
             </qandaentry>
             <qandaentry>
                 <question id="plugin-cvs">
-                    <para>Can I work with cvs/svn/Perforce/cogito/mercurial
+                    <para>Can I work with cvs/svn/git/hg/bzr/Perforce
                     under jEdit? Is there a plugin for my favorite SCCS system?
                     How can I send a command from jEdit to cvs/svn without
                     leaving my editor?</para>
@@ -112,8 +112,7 @@
                     cvs/svn/hg command-line tools, all of which can be run from
                     the Console dockable.</para>
                     <para>The ProjectViewer plugin has some support for reading
-                    the "entries" file for each directory, to decide which files
-                    to import. CVS/SVN are built-in.</para>
+                    the "entries" in your working directory, and will use that as a filter for importing. CVS/SVN support is built-in, and p4, bzr, git, and hg are also supported via plugins. </para>
                     <para>The P4Plugin adds Perforce support to ProjectViewer,
                     and has some other advanced features for working with
                     Perforce repositories.</para>
@@ -129,12 +128,14 @@
                     <para>Is there a debugger plugin?</para>
                 </question>
                 <answer>
+					<para> The GdbPlugin provides gdb/mi support for C/C++
+                    programs. Also, the Console BeanShell can be used to debug Java classes in the current running JVM. </para>
                     <para>A plugin based on the version 1.4 of the JSwat
                     debugger application is currently available for download
-                    using jEdit's Plugin Manager feature. The JavaDebugger plugin
-                    is also available (for jEdit 4.2 only). JPyDebugger offers debugging for Python.
-                    The GdbPlugin provides gdb/mi support for C/C++
-                    programs. Also, the Console BeanShell can be used to debug Java classes in the current running JVM.</para>
+                    using jEdit's Plugin Manager feature. </para>
+                    <para>The developers would like to come up with a common
+                    debugger plugin that can be shared between java, gdb, and python, but such a thing does not exist at this time.
+                    </para>
                 </answer>
             </qandaentry>
             <qandaentry>
@@ -168,4 +169,4 @@
             </qandaentry>
         </qandadiv>
     </qandaset>
-</sect1>
+</section>

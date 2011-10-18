@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sect1 id="macros">
+<section id="macros">
     <title>Macros</title>
-
     <!-- jEdit buffer-local properties:                      -->
-
     <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
-
     <!-- :xml.root=faq.xml:                                  -->
-
     <!-- jEdit FAQ                                           -->
-
-    <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
-
     <para>This section deals with questions on writing and running
     macros.</para>
 
@@ -131,4 +124,4 @@
             </qandaentry>
         </qandadiv>
     </qandaset>
-</sect1>
+</section>
