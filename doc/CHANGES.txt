@@ -4,16 +4,27 @@ jEdit 4.6 version history
 
 {{{ Version 4.6pre1
 
+Thanks to Björn "Vampire" Kautler for contributing to this release.
 
 {{{ Bug fixes
+
+
 }}}
 {{{ API Changes
+
+
 }}}
 {{{ Editing
+
+
 }}}
 {{{ UI
+
+
 }}}
 {{{ Miscellaneous
+
+
 }}}
 
 }}}

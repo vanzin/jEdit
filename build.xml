@@ -217,6 +217,37 @@
 		</javac>
 	</target>
 
+	<target name="compile-test"
+		depends="init,retrieve,compile">
+		<mkdir dir="${classes.dir}/test"/>
+		<depend srcDir="${basedir}/test"
+			destDir="${classes.dir}/test"
+			cache="${classes.dir}"/>
+		<dependset>
+			<srcfilelist files="build.xml"/>
+			<srcfilelist files="ivy.xml"/>
+			<targetfileset dir="${classes.dir}/test"/>
+		</dependset>
+		<javac srcdir="test"
+		       destdir="${classes.dir}/test"
+		       debug="true"
+		       debuglevel="${config.build.debuglevel}"
+		       nowarn="${config.build.nowarn}"
+		       deprecation="${config.build.deprecation}"
+		       source="${target.java.version}"
+		       target="${target.java.version}"
+		       compiler="modern"
+		       encoding="UTF-8"
+		       includeAntRuntime="false">
+			<classpath id="classpath.test">
+				<fileset dir="${lib.dir}/test"
+					 includes="*.jar"/>
+				<pathelement location="${classes.dir}/core"/>
+			</classpath>
+			<compilerarg line="${config.build.compilerarg}"/>
+		</javac>
+	</target>
+
 	<target name="prepare-textArea"
 		depends="init">
 		<delete includeemptydirs="true"
@@ -368,8 +399,32 @@
 		</javac>
 	</target>
 
+	<target name="test"
+		depends="init,retrieve,compile,compile-test"
+		description="run unit tests">
+		<delete dir="${build.dir}/test/raw-reports"/>
+		<mkdir dir="${build.dir}/test/raw-reports"/>
+		<junit printsummary="true"
+		       failureproperty="tests.failed"
+		       enabletestlistenerevents="true">
+			<classpath refid="classpath.test"/>
+			<classpath location="${classes.dir}/test"/>
+			<formatter type="xml"/>
+			<batchtest todir="${build.dir}/test/raw-reports">
+				<fileset dir="test"/>
+			</batchtest>
+		</junit>
+		<mkdir dir="${build.dir}/test/merged-reports"/>
+		<junitreport todir="${build.dir}/test/merged-reports">
+			<fileset dir="${build.dir}/test/raw-reports"/>
+			<report todir="${build.dir}/test/reports"/>
+		</junitreport>
+		<fail message="Unit test(s) failed! See reports at ${build.dir}/test/reports/index.html"
+		      if="tests.failed"/>
+	</target>
+
 	<target name="build"
-		depends="init,retrieve,setup,compile"
+		depends="init,retrieve,setup,compile,test"
 		description="build the jEdit JAR-file with full debug-information">
 		<mkdir dir="${jar.location}"/>
 		<jar destfile="${jar.location}/${jar.filename}"

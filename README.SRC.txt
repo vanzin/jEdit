@@ -72,6 +72,9 @@ General jEdit documentation can be found in the 'doc' directory.
   If there isn't any, it builds it in front of execution.
   The debug listening for this JVM is enabled.
 
+ - test                    run unit tests
+  runs the available unit tests.
+
  - docs-html               generate HTML docs
   builds the online help in HTML-format in the build-folder, configured in build.properties.
 
