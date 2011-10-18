@@ -75,8 +75,8 @@
 
 	<!-- {{{ Status Bar widgets -->
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="mode">
-       import org.gjt.sp.jedit.gui.statusbar.*;
-       new ModeWidgetFactory();
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new ModeWidgetFactory();
 	</SERVICE>
 
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="fold">
