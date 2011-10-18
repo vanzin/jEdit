@@ -530,6 +530,9 @@ and Eric Le Lay for contributing to this release.
 
 - Enhance System, Look&feel, jEdit properties macros
   (r19599, bug #1593358, Eric Le Lay)
+  
+- Disabled the search dialog pool by default on Mac OS X to avoid dialogs
+  showing up in the wrong Space (Evan Wright)
 
 }}}
 

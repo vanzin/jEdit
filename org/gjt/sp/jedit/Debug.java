@@ -140,8 +140,10 @@ public class Debug
 
 	/**
 	 * Create new search dialogs instead of reusing instances.
+	 * <b> Off by default on Mac OS because it can cause search dialogs to
+	 * show up on the wrong space. </b>
 	 */
-	public static boolean DISABLE_SEARCH_DIALOG_POOL = false;
+	public static boolean DISABLE_SEARCH_DIALOG_POOL = OperatingSystem.isMacOS();
 
 	/**
 	 * Disable multihead support, since it can cause window positioning
