@@ -70,23 +70,25 @@
 -->
 
             <revision>
-                <author> <firstname>John</firstname> <surname>Gellene</surname> </author>
                 <revnumber>0.8</revnumber>
                 <date>2001,2002</date>
+                <author> <firstname>John</firstname> <surname>Gellene</surname> </author>
                 <revremark>Initial HTML FAQ, revisions for jEdit 4.0 release</revremark>
+
             </revision>
 
             <revision>
-                <author> <firstname>Kris</firstname> <surname>Kopicki</surname></author>
                 <revnumber>1.0</revnumber>
                 <date>2003</date>
+                <author> <firstname>Kris</firstname> <surname>Kopicki</surname></author>
                 <revremark>First docbook version, &amp; additions for jEdit 4.1 release</revremark>
+
             </revision>
 
             <revision>
-                <author> Alan Ezust </author>
                 <revnumber>1.3</revnumber>
                 <date>2006,2011</date>
+                <author> <firstname>Alan </firstname> <surname>Ezust </surname></author>
                 <revremark>Updates for jEdit 4.3, jEdit 4.6 releases</revremark>
             </revision>
         </revhistory>
