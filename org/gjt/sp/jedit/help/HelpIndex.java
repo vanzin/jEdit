@@ -91,7 +91,7 @@ class HelpIndex
 			{
 				indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","users-guide"));
 				indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","FAQ"));
-				indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","news45"));
+				indexDirectory(MiscUtilities.constructPath(jEditHome,"doc","whatsnew"));
 			}
 		}
 		catch(Throwable e)

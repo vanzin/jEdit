@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article id="whatsnewarticle"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:xi="http://www.w3.org/2001/XInclude"
+     xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'  >
+
+    <title> What's new in jEdit 4.6 </title>
+    <articleinfo>
+        <author>
+            <othername>The jEdit all-volunteer development team</othername>
+        </author>
+
+    </articleinfo>
+
+    <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
+    but here are some of the major features of this version. </para>
+
+<!-- :maxLineLen=80:wrap=hard: -->
+</article>

@@ -16,9 +16,9 @@
 
 	<!-- jEdit Version -->
 	<property name="jedit.version"
-		  value="4.5pre1"/>
+		  value="4.6pre1"/>
 	<property name="jedit.build.number"
-		  value="04.05.01.00"/>
+		  value="04.06.01.00"/>
 	<property name="jedit.version.final"
 		  value="false"/>
 
@@ -591,11 +591,11 @@
 	<target name="generate-doc-news"
 		depends="init,retrieve,setup,unpack-docbook-xsl">
 		<dependset.html>
-			<srcfileset dir="doc/news45"/>
-			<targetfileset dir="${jar.location}/doc/news45"/>
+			<srcfileset dir="doc/whatsnew"/>
+			<targetfileset dir="${jar.location}/doc/whatsnew"/>
 		</dependset.html>
 		<contrib:if>
-			<available file="${jar.location}/doc/news45/toc.xml"
+			<available file="${jar.location}/doc/whatsnew/toc.xml"
 				   type="file"/>
 			<contrib:then>
 				<echo message="News is up-to-date"
@@ -603,10 +603,10 @@
 			</contrib:then>
 			<contrib:else>
 				<xslt.doc style="doc/jedithtml.xsl"
-					  in="doc/news45/news.xml"
-					  out="${jar.location}/doc/news45/index.html">
+					  in="doc/whatsnew/news.xml"
+					  out="${jar.location}/doc/whatsnew/index.html">
 					<param name="base.dir"
-					       expression="${jar.location}/doc/news45/"/>
+					       expression="${jar.location}/doc/whatsnew/"/>
 				</xslt.doc>
 			</contrib:else>
 		</contrib:if>

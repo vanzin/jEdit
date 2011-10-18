@@ -90,7 +90,7 @@ public class jEdit
 	public static String getBuild()
 	{
 		// (major).(minor).(<99 = preX, 99 = "final").(bug fix)
-		return "04.05.01.00";
+		return "04.06.01.00";
 	} //}}}
 
 	//{{{ main() method
@@ -1443,7 +1443,7 @@ public class jEdit
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Opens a file. Note that as of jEdit 2.5pre1, this may return
 	 * null if the buffer could not be opened.
@@ -3867,7 +3867,7 @@ public class jEdit
 						view = newView(null,null);
 
 					Buffer buffer;
-					
+
 					// Treat the elements of additionalFiles just like command-line arguments
 					if (!additionalFiles.isEmpty())
 					{
@@ -3880,7 +3880,7 @@ public class jEdit
 					{
 						buffer = openFiles(null,userDir,args);
 					}
-					
+
 					if(buffer != null)
 						view.setBuffer(buffer,true);
 				}
