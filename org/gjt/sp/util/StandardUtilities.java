@@ -729,7 +729,6 @@ loop:		for(int i = 0; i < str.length(); i++)
 		}
 	} //}}}
 
-	//}}}
 	private StandardUtilities(){}
 
 	// {{{ MD5 sum method

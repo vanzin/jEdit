@@ -67,6 +67,7 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.gui.DockableWindowManager.DockingArea;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.util.StandardUtilities;
+//}}}
 
 /**
  * A container for dockable windows. This class should never be used

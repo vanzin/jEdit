@@ -638,6 +638,8 @@ public class View extends JFrame implements InputHandlerProvider
 	}
 	//}}}
 
+	//}}}
+	
 	//{{{ Buffers, edit panes, split panes
 
 	//{{{ splitHorizontally() method

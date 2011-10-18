@@ -244,7 +244,7 @@ public class ServiceManager
 			}
 			return value.getInstance();
 		}
-	} //}}}
+	}
 
     /**
      * Returns an instance of the given service. The first time this is

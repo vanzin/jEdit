@@ -243,6 +243,7 @@ public class PerspectiveManager
 	//{{{ Private members
 	private static boolean dirty, enabled = true;
 	private static SettingsXML perspectiveXML;
+	//}}}
 
 	//{{{ Class initializer
 	static

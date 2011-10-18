@@ -420,7 +420,7 @@ public class KeyEventTranslator
 		if(buf.indexOf(String.valueOf(ch)) == -1)
 			buf.append(ch);
 		return buf;
-	} //}}}
+	}
 
 	static
 	{

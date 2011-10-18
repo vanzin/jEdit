@@ -22,6 +22,7 @@
 
 package org.gjt.sp.jedit.options;
 
+//{{{ Imports
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;

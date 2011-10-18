@@ -93,6 +93,7 @@ public abstract class EditAction extends JEditAbstractEditAction<View>
 	 * abstract since jEdit 4.3pre7
 	 */
 	abstract public void invoke(View view);
+	//}}}
 
 	//{{{ isToggle() method
 	/**

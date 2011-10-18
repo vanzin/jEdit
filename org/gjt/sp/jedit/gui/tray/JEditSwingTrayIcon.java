@@ -42,6 +42,7 @@ import org.gjt.sp.jedit.View;
 import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.msg.EditPaneUpdate;
 import org.gjt.sp.util.StringList;
+//}}}
 
 /**
  * @author Matthieu Casanova

@@ -1434,7 +1434,7 @@ public class GUIUtilities
 			}
 		}
 		return bounds;
-	}
+	} //}}}
 
 	//{{{ showPopupMenu() method
 	/**

@@ -230,7 +230,6 @@ public class TextAreaPainter extends JComponent implements TabExpander
 		}
 	} //}}}
 
-
 	//{{{ getFocusTraversalKeysEnabled() method
 	/**
 	 * Makes the tab key work in Java 1.4.
@@ -764,7 +763,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	public int getLineHeight()
 	{
 		return fm.getHeight() + extraLineSpacing;
-	}
+	} //}}}
 	
 	//{{{ getFontHeight() method
 	/**
@@ -840,7 +839,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
         public RenderingHints getRenderingHints()
 	{
             return renderingHints;
-        }
+        } //}}}
 
 	//{{{ update() method
 	/**
@@ -1492,6 +1491,8 @@ public class TextAreaPainter extends JComponent implements TabExpander
 			}
 		}
 	} //}}}
+
+	//}}}
 
 	//}}}
 }

@@ -36,6 +36,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import org.gjt.sp.jedit.GUIUtilities;
+//}}}
 
 /**
  * A TrayIcon that accepts Swing JPopupMenu.

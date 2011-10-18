@@ -290,4 +290,6 @@ public class HistoryModel extends DefaultListModel
 		return currentSize;
 	}
 	//}}}
+
+	//}}}
 }

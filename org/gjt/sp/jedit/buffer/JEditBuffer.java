@@ -536,7 +536,6 @@ public class JEditBuffer
 		}
 	} //}}}
 	
-	//}}}
 	//{{{ getLineSegment() method
 	/**
 	 * Returns the text on the specified line.

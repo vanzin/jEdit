@@ -50,6 +50,7 @@ public class TaskMonitorWidgetFactory implements StatusWidgetFactory
 		return widget;
 	} //}}}
 
+    //{{{ TaskMonitorWidget class
     private static class TaskMonitorWidget extends JLabel implements Widget, TaskListener
     {
         private TaskMonitorWidget(final View view)

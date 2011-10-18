@@ -88,6 +88,7 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
 
+	//{{{ VFSFileChooserDialog constructor
 	/**
 	 * Constructs a new VFSFileChooserDialog.
 	 * This version can specify a Frame as the parent instead
@@ -101,7 +102,6 @@ public class VFSFileChooserDialog extends EnhancedDialog
 		setFocusTraversalPolicy(new LayoutFocusTraversalPolicy());		
 		_init(view,path,mode,multipleSelection,autoshow);
 	} //}}}
-
 
 	//{{{ getBrowser() method
 	/**
