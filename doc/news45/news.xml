@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <article id="whatsnewarticle"
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xmlns:xi="http://www.w3.org/2001/XInclude"
      xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'  >
 
@@ -14,8 +14,8 @@
 
     <para> Detailed changes can always be found in the <ulink url="../CHANGES.txt">Detailed Change Log</ulink>,
     but here are some of the major features of this version. </para>
-    <itemizedlist> 
-    <listitem><para> Edit using <ulink url="http://nickgravgaard.com/elastictabstops/">Elastic tabstops</ulink>, 
+    <itemizedlist>
+    <listitem><para> Edit using <ulink url="http://nickgravgaard.com/elastictabstops/">Elastic tabstops</ulink>,
     set from Global Options - Editing, Buffer Options, or via buffer-local properties. </para></listitem>
     <listitem><para> Lots of old deprecated APIs were removed. Some plugins may be broken as a result. </para></listitem>
     <listitem><para> Choose color ordering for subpixel antialiasing (Global
@@ -23,7 +23,12 @@
     <listitem><para> Desktop System Tray icon to indicate when jEdit is running. </para></listitem>
     <listitem><para> It is now possible to switch look and feel without
     restarting jEdit. </para></listitem>
-    <listitem><para> Plugin Manager Enhancements. </para></listitem>
+    <listitem><para> It is possible to specify a <literal>FILE_NAME_GLOB</literal> for an edit mode based on the full
+    path (see entry for <literal>apacheconf</literal> mode in
+    <literal>modes/catalog</literal> for an example). </para></listitem>
+    <listitem><para>File System Browser can now open files in desktop, using
+    desktop filename associations to launch another program. </para></listitem>
+    <listitem><para> Plugin Manager Enhancements, filter field, bugs fixed. </para></listitem>
     </itemizedlist>
 
 <!-- :maxLineLen=80:wrap=hard: -->
