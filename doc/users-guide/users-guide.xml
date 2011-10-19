@@ -8,7 +8,7 @@
 <book id="users-guide"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
     <bookinfo>
-        <title>jEdit 4.6 User's Guide</title>
+        <title>jEdit 5.0 User's Guide</title>
 
         <copyright>
             <year>1999</year>

@@ -1,8 +1,8 @@
-jEdit 4.6 version history
+jEdit 5.0 version history
        (changes since jEdit 4.5)
 :encoding=UTF-8:
 
-{{{ Version 4.6pre1
+{{{ Version 5.0pre1
 
 Thanks to Björn "Vampire" Kautler for contributing to this release.
 
