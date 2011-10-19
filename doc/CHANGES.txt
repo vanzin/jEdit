@@ -232,22 +232,10 @@ and Eric Le Lay for contributing to this release.
   GUIUtilities.READ_ONLY_BUFFER_ICON
   GUIUtilities.NORMAL_BUFFER_ICON
   GUIUtilities.WINDOW_ICON
-  BeanShell.runScript(View view,
-                      String path,
-                      Reader in,
-                      boolean ownNamespace,
-                      boolean rethrowBshErrors)
-  BeanShell.runScript(View view,
-                      String path,
-                      boolean ownNamespace,
-                      boolean rethrowBshErrors)
-  BeanShell.eval(View view,
-                 String command,
-                 boolean rethrowBshErrors)
-  BeanShell.eval(View view,
-                 NameSpace namespace,
-                 String command,
-                 boolean rethrowBshErrors)
+  BeanShell.runScript(View view, String path, Reader in, boolean ownNamespace, boolean rethrowBshErrors)
+  BeanShell.runScript(View view, String path, boolean ownNamespace, boolean rethrowBshErrors)
+  BeanShell.eval(View view, String command, boolean rethrowBshErrors)
+  BeanShell.eval(View view, NameSpace namespace, String command, boolean rethrowBshErrors)
   EditAction.getView(Component comp)
   EditBus.getComponents()
   JarClassLoader.getZipFile()
@@ -259,10 +247,7 @@ and Eric Le Lay for contributing to this release.
   MiscUtilities.getLeadingWhiteSpace(String str)
   MiscUtilities.getTrailingWhiteSpace(String str)
   MiscUtilities.getVirtualWidth(Segment seg, int tabSize)
-  MiscUtilities.getOffsetOfVirtualColumn(Segment seg,
-                                         int tabSize,
-                                         int column,
-                                         int[] totalVirtualWidth)
+  MiscUtilities.getOffsetOfVirtualColumn(Segment seg, int tabSize, int column, int[] totalVirtualWidth)
   MiscUtilities.createWhiteSpace(int len, int tabSize, int start)
   MiscUtilities.globToRE(String glob)
   MiscUtilities.quicksort(Vector vector, Compare compare)
@@ -284,17 +269,8 @@ and Eric Le Lay for contributing to this release.
   Registers.StringRegister
   jEdit.getActionSetForAction(EditAction action)
   jEdit.getActions()
-  jEdit.openFile(View view,
-                 String parent,
-                 String path,
-                 boolean readOnly,
-                 boolean newFile)
-  jEdit.openFile(View view,
-                 String parent,
-                 String path,
-                 boolean readOnly,
-                 boolean newFile,
-                 Hashtable props)
+  jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile)
+  jEdit.openFile(View view, String parent, String path, boolean readOnly, boolean newFile, Hashtable props)
   jEdit.createTextArea()
   TextArea.getMarkLine()
   VFS.DirectoryEntry
@@ -304,9 +280,7 @@ and Eric Le Lay for contributing to this release.
   VFS._getDirectoryEntry(Object session, String path, Component comp)
   VFSManager.getVFSByName(String name)
   VFSManager.registerVFS(String protocol, VFS vfs)
-  VFSManager.error(final Component comp,
-                   final String error,
-                   final Object[] args)
+  VFSManager.error(final Component comp, final String error, final Object[] args)
   VFSManager.getFilesystems()
   VFSFile.name
   VFSFile.path
@@ -341,9 +315,6 @@ and Eric Le Lay for contributing to this release.
 - Additional mode for CPlex LP files (#3332052) (Kevin Hunter)
 
 - PowerShell mode update (#3316284) (Jeremy)
-
-- `elsif compiler directive added to verilog edit mode (#3261277)
-  (Matthieu Casanova)
 
 - Fixed indentation in javacc edit mode that can fail if a token contains
   "else" (Matthieu Casanova)
@@ -530,7 +501,7 @@ and Eric Le Lay for contributing to this release.
 
 - Enhance System, Look&feel, jEdit properties macros
   (r19599, bug #1593358, Eric Le Lay)
-  
+
 - Disabled the search dialog pool by default on Mac OS X to avoid dialogs
   showing up in the wrong Space (Evan Wright)
 

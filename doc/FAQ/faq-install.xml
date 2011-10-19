@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sect1 id="installation">
+<section id="installation">
     <title>Installation Questions</title>
-
     <!-- jEdit buffer-local properties:                      -->
-
     <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
-
     <!-- :xml.root=faq.xml:                                  -->
-
     <!-- jEdit FAQ                                           -->
-
-    <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
 
     <para>This section deals with installing jEdit using the Java-based
     installation program, as well as installation issues that are specific to
@@ -245,21 +239,8 @@
                     <para>Regardless of the version of Windows that you use, if
                     you have kept it reasonably up-to-date with service packs or
                     component upgrades from Microsoft, you should have no
-                    trouble running jEditLauncher. Users of Windows 98, Windows
-                    ME, Windows NT (version 4.0), Windows 2000 and Windows XP
-                    have not reported problems involving missing
-                    components.</para>
+                    trouble running jEditLauncher. </para>
 
-                    <para>Some users of older versions of Windows 95 may need to
-                    upgrade their version of the Windows Sockets package. Others
-                    may be missing Microsoft's package for supporting DCOM
-                    (Distributed Component Object Model) components on Windows
-                    95. Both the <ulink
-                    url="http://www.microsoft.com/windows95/downloads/contents/wuadmintools/s_wunetworkingtools/w95sockets2/">
-                    Windows Sockets upgrade</ulink> and the <ulink
-                    url="http://www.microsoft.com/com/dcom/dcom95/dcom1_3.asp">
-                    DCOM package</ulink> are available for download from
-                    Microsoft.</para>
                 </answer>
             </qandaentry>
 
@@ -276,4 +257,4 @@
             </qandaentry>
         </qandadiv>
     </qandaset>
-</sect1>
+</section>

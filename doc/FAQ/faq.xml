@@ -1,61 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- jEdit buffer-local properties:                       -->
 <!-- :indentSize=1   -->
-<!--                                                      -->
 <!-- jEdit FAQ                                            -->
-<!-- Copyright (C) 2001-2002 John Gellene                 -->
-<!-- $Id$
--->
 <!-- Changes required for posting on jEdit Community:     -->
-<!-- Title should be <h2> without class;                  -->
-<!-- all <h1> headings should be changed to <h2>          -->
 <!-- Command line for processing:                         -->
 <!--                                                      -->
 <!-- xsltproc -xinclude -output .\html\ faq.xsl faq.xml  -->
 <article class="faq" id="faq"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"  xsi:noNamespaceSchemaLocation='http://www.docbook.org/xsd/4.4/docbook.xsd'>
     <articleinfo>
-        <author>
-            <firstname>John</firstname>
-
-            <surname>Gellene</surname>
-
-            <affiliation>
-                <address><email>jgellene@nyc.rr.com</email></address>
-            </affiliation>
-        </author>
 
         <author>
-            <firstname>Kris</firstname>
-
-            <surname>Kopicki</surname>
-
-            <affiliation>
-                <address><email>krisko@users.sourceforge.net</email></address>
-            </affiliation>
+           <othername> The jEdit Community </othername>
         </author>
-
-        <author>
-            <firstname>Alan</firstname>
-
-            <surname>Ezust</surname>
-
-            <affiliation>
-                <address><email>ezust@users.sourceforge.net</email></address>
-            </affiliation>
-        </author>
-
-        <copyright>
-            <year>2002</year>
-
-            <holder>John Gellene</holder>
-        </copyright>
-
-        <copyright>
-            <year>2011</year>
-
-            <holder>Alan Ezust</holder>
-        </copyright>
 
         <legalnotice>
             <title>Legal Notice</title>
@@ -114,41 +71,29 @@
 
             <revision>
                 <revnumber>0.8</revnumber>
+                <date>2001,2002</date>
+                <author> <firstname>John</firstname> <surname>Gellene</surname> </author>
+                <revremark>Initial HTML FAQ, revisions for jEdit 4.0 release</revremark>
 
-                <date>Feb. 17, 2002</date>
-
-                <revremark>Additional revisions for jEdit 4.0
-                release</revremark>
-            </revision>
-
-            <revision>
-                <revnumber>0.9</revnumber>
-
-                <date>Feb. 9, 2003</date>
-
-                <revremark>Additional revisions for jEdit 4.1
-                release</revremark>
             </revision>
 
             <revision>
                 <revnumber>1.0</revnumber>
+                <date>2003</date>
+                <author> <firstname>Kris</firstname> <surname>Kopicki</surname></author>
+                <revremark>First docbook version, &amp; additions for jEdit 4.1 release</revremark>
 
-                <date>Feb. 18, 2003</date>
-
-                <revremark>New format &amp; additions for jEdit 4.1
-                release</revremark>
             </revision>
 
             <revision>
-                <revnumber>1.1</revnumber>
-
-                <date>September 6, 2006</date>
-
-                <revremark>Revised for jEdit 4.3 release</revremark>
+                <revnumber>1.2</revnumber>
+                <date>2006,2011</date>
+                <author> <firstname>Alan </firstname> <surname>Ezust </surname></author>
+                <revremark>Updates for jEdit 4.3-4.5 releases</revremark>
             </revision>
         </revhistory>
 
-        <releaseinfo><emphasis>Note: </emphasis> This draft incorporates some
+        <releaseinfo><emphasis>Note: </emphasis> This document incorporates some
         material from the Interactive FAQ section of the <ulink
         url="http://community.jedit.org/modules.php?op=modload&amp;name=faq&amp;file=index">jEdit
         Community web site</ulink>.</releaseinfo>
@@ -162,5 +107,4 @@
     <xi:include href="faq-plugins.xml" />
     <xi:include href="faq-problems.xml" />
     <xi:include href="faq-contrib.xml" />
-    <xi:include href="faq-legal.xml" />
 </article>

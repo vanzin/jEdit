@@ -1,40 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sect1 id="usage">
+<section id="usage">
     <title>Usage Questions</title>
 
     <!-- jEdit buffer-local properties:                      -->
-
     <!-- :indentSize=4:noTabs=false:tabSize=4: -->
-
     <!-- :xml.root=faq.xml:                                  -->
-
     <!-- jEdit FAQ                                           -->
-
-    <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
 
     <para>This section deals general usage of jEdit, including
     customisation.</para>
 
     <qandaset defaultlabel="qanda">
         <!--********************************************************* Abrevs -->
-
         <qandadiv id="text-abbrev">
             <title>Abbreviations</title>
-
             <qandaentry>
                 <question id="abbrevs-create-onfly">
                     <para>How can I create abbreviations <quote>on the
                     fly</quote> as I type?</para>
                 </question>
-
                 <answer>
                     <para>Type the form of abbreviation you wish to use, then
                     without pressing the <keycap>SPACE</keycap> key, press
                     <keycombo action="simul">
-                            <keycap>CTRL</keycap>
-
-                            <keycap>;</keycap>
-                        </keycombo>. A dialog will appear for entering text that
+                    <keycap>CTRL</keycap> <keycap>;</keycap> </keycombo>.
+                    A dialog will appear for entering text that
                     goes before and after the editing caret. For example, you
                     can insert an opening HTML or XML tag before the cursor and
                     its corresponding closing tag after the cursor. Use the
@@ -683,7 +673,7 @@ expand-all-folds.shortcut=C+q x
                 </question>
                 <answer>
                    <para>For the text area, go to <guimenuitem>Global Options - TextArea - Anti Aliased Smooth Text</guimenuitem>. </para>
-                   <para>For the dockables, starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else.  
+                   <para>For the dockables, starting <command>java</command> with command line options <literal>"-Dawt.useSystemAAFontSettings=on" "-Dswing.aatext=true"</literal> will give you antialiased text everywhere else.
                    You can add these options to the batch file or shell script line that starts jEdit.</para>
 			    </answer>
             </qandaentry>
@@ -721,4 +711,4 @@ expand-all-folds.shortcut=C+q x
             </qandaentry>
         </qandadiv>
     </qandaset>
-</sect1>
+</section>

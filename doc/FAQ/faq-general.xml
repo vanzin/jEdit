@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sect1 id="general">
+<section id="general">
     <title>General Questions</title>
     <!-- jEdit buffer-local properties:                      -->
     <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
     <!-- jEdit FAQ                                           -->
-    <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
-    <!-- Copyright (C) 2006 Alan Ezust                       -->
     <para>This section deals with some background information, how to obtain the
     latest version of jEdit and how to obtain further information/help.</para>
     <qandaset defaultlabel="qanda">
@@ -632,12 +630,10 @@
                     files in jEdit?</para>
                 </question>
                 <answer>
-                    <para>Consult an article on the <ulink
-                    url="http://community.jedit.org">jEdit Community</ulink> web
-                    site entitled <quote>Build jEdit yourself: the 'Open' in
-                    Open Source</quote>.</para>
+                    <para>The classpath can be set from ProjectViewer's project properties on a per-project basis. The ClassPath plugin provides this option pane to ProjectViewer. JavaSideKick uses it for completion, and other Java plugins should also. At the time of writing, the JCompiler plugin needs to be updated to use it, for example.
+                    </para>
                 </answer>
             </qandaentry>
         </qandadiv>
     </qandaset>
-</sect1>
+</section>
