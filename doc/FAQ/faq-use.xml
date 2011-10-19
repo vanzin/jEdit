@@ -456,6 +456,20 @@
         <qandadiv id="source-compile">
             <title>Compiling source code</title>
 
+			<qandaentry>
+                <question id="jedit-compile">
+                    <para>How do you set the classpath for compiling Java files in jEdit?</para>
+                </question>
+                <answer>
+                    <para>The classpath can be set from ProjectViewer's project properties
+                    on a per-project basis. The ClassPath plugin provides this option pane
+                    to ProjectViewer. JavaSideKick uses it for completion, and other Java
+                    plugins should also. At the time of writing, the JCompiler plugin needs
+                    to be updated to use it, for example.
+                    </para>
+                </answer>
+            </qandaentry>
+
             <qandaentry>
                 <question id="compile-java">
                     <para>How do I compile my Java source in JEdit?</para>
@@ -465,18 +479,16 @@
                     <para>There are a number of plugins that you can use to
                     compile Java source code. You can run a Java compiler on the
                     command line in the <quote>System</quote> shell of the
-                    <application>Console</application> plugin. If you are using
-                    the JCompiler plugin, you will have a
-                    <quote>JCompiler</quote> shell in the
-                    <application>Console</application> plugin, and you can run
-                    the <userinput>compile</userinput> command for the current
-                    file, or the <userinput>compilepkg</userinput> command on
-                    all of the current directory's source code files. You can
-                    also use the <quote>Ant</quote> commandos from the
-                    <application>Console</application> plugin or the
-                    <application>AntFarm</application> plugin to run complex
-                    builds on a project of source code files, using a
-                    <filename>build.xml</filename> file to specify build
+                    <application>Console</application> plugin. When JCompiler is updated,
+                    you can use that again. Many Java projects
+                    can be built with Apache Ant, and that is how we build jEdit.
+                    You can use the <quote>Ant</quote> commandos from the
+                    <application>Console</application> plugin to run ant from jEdit,
+                    and parse the error messages for ErrorList. Also, the
+                    <application>Antelope</application> or
+                    <application>AntFarm</application> plugins provide a more
+                    Eclipse-like GUI front-end for Apache Ant.
+                    Apache Ant uses a <filename>build.xml</filename> file to specify build
                     commands and dependencies.</para>
                 </answer>
             </qandaentry>

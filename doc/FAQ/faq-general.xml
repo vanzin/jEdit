@@ -624,16 +624,6 @@
                     web site</ulink>.</para>
                 </answer>
             </qandaentry>
-            <qandaentry>
-                <question id="jedit-compile">
-                    <para>How do you set the classpath and compile the Java
-                    files in jEdit?</para>
-                </question>
-                <answer>
-                    <para>The classpath can be set from ProjectViewer's project properties on a per-project basis. The ClassPath plugin provides this option pane to ProjectViewer. JavaSideKick uses it for completion, and other Java plugins should also. At the time of writing, the JCompiler plugin needs to be updated to use it, for example.
-                    </para>
-                </answer>
-            </qandaentry>
         </qandadiv>
     </qandaset>
 </section>
