@@ -154,9 +154,7 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   BufferIORequest.UNICODE_MAGIC_1
   BufferIORequest.UNICODE_MAGIC_2
   BufferIORequest.XML_PI_LENGTH
-  JEditBuffer.indentLine(int lineIndex,
-                         boolean canIncreaseIndent,
-                         boolean canDecreaseIndent)
+  JEditBuffer.indentLine(int lineIndex, boolean canIncreaseIndent, boolean canDecreaseIndent)
   JEditBuffer.isElectricKey(char ch)
   MiscUtilities.UTF_8_Y
   MiscUtilities.getFileParent(String path)
@@ -165,48 +163,23 @@ Eric Berry, and Eric Le Lay for contributing to this release.
   MiscUtilities.compareVersions(String v1, String v2)
   MiscUtilities.quicksort(Object[] obj, Comparator compare)
   MiscUtilities.quicksort(List list, Comparator compare)
-  MiscUtilities.copyStream(int bufferSize,
-                           ProgressObserver progress,
-                           InputStream in,
-                           OutputStream out,
-                           boolean canStop)
-  MiscUtilities.copyStream(ProgressObserver progress,
-                           InputStream in,
-                           OutputStream out,
-                           boolean canStop)
+  MiscUtilities.copyStream(int bufferSize, ProgressObserver progress, InputStream in, OutputStream out, boolean canStop)
+  MiscUtilities.copyStream(ProgressObserver progress, InputStream in, OutputStream out, boolean canStop)
   MiscUtilities.isBinary(Reader reader)
   MiscUtilities.closeQuietly(InputStream in)
   MiscUtilities.closeQuietly(OutputStream out)
   MiscUtilities.createWhiteSpace(int len, int tabSize)
   MiscUtilities.getLeadingWhiteSpaceWidth(String str, int tabSize)
   MiscUtilities.getColorHexString(Color c)
-  Chunk.init(Segment seg,
-             TabExpander expander,
-             float x,
-             FontRenderContext fontRenderContext)
-  DisplayTokenHandler.init(SyntaxStyle[] styles,
-                           FontRenderContext fontRenderContext,
-                           TabExpander expander,
-                           List<Chunk> out,
-                           float wrapMargin)
+  Chunk.init(Segment seg, TabExpander expander, float x, FontRenderContext fontRenderContext)
+  DisplayTokenHandler.init(SyntaxStyle[] styles, FontRenderContext fontRenderContext, TabExpander expander, List<Chunk> out, float wrapMargin)
   DisplayTokenHandler.initChunk(Chunk chunk, Segment seg)
   ParserRuleSet.getRules(char ch)
   ParserRule.EXCLUDE_MATCH
   ParserRule.NO_ESCAPE
   ParserRule.next
-  ParserRule.createRegexpSequenceRule(char hashChar,
-                                      int posMatch,
-                                      String seq,
-                                      ParserRuleSet delegate,
-                                      byte id,
-                                      boolean ignoreCase)
-  ParserRule.createRegexpEOLSpanRule(char hashChar,
-                                     int posMatch,
-                                     String seq,
-                                     ParserRuleSet delegate,
-                                     byte id,
-                                     byte matchType,
-                                     boolean ignoreCase)
+  ParserRule.createRegexpSequenceRule(char hashChar, int posMatch, String seq, ParserRuleSet delegate, byte id, boolean ignoreCase)
+  ParserRule.createRegexpEOLSpanRule(char hashChar, int posMatch, String seq, ParserRuleSet delegate, byte id, byte matchType, boolean ignoreCase)
   PluginManagerProgress.setValue(int value)
   BracketIndentRule.getBrackets(String line)
   CloseBracketIndentRule.isMatch(String line)
