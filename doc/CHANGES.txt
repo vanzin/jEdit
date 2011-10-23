@@ -8,7 +8,7 @@ Thanks to Björn "Vampire" Kautler, Matthieu Casanova, Alan Ezust, cy6erGn0m,
 Bad Sector, jclopes, Dale Anson, Anshal Shukla, Ryan Mott, Damien Radtke,
 Matthew Gilbert, Dennis Hotson, Kevin Hunter, encorejane, nherzing, Jeremy,
 Evan Wright, Shlomy Reinstein, glen117, kog13, Marcelo Vanzin, Anthony Keeley
-and Eric Le Lay for contributing to this release.
+Eric Berry, and Eric Le Lay for contributing to this release.
 
 {{{ Bug fixes
 
