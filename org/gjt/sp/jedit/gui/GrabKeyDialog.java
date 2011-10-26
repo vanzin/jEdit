@@ -87,7 +87,7 @@ public class GrabKeyDialog extends JDialog
 	public String getShortcut()
 	{
 		if(isOK)
-			return shortcut.getText();
+			return shortcut.getShortcut();
 		else
 			return null;
 	} //}}}
@@ -359,6 +359,19 @@ public class GrabKeyDialog extends JDialog
 			return false;
 		} //}}}
 
+		// The public-facing string is converted to a platform-specific
+		// form, but we keep the canonical shortcut string around for
+		// internal use.
+		public void setText(String s)
+		{
+			rawShortcut = s;
+			super.setText( GUIUtilities.getPlatformShortcutLabel(s) );
+		}
+		public String getShortcut()
+		{
+			return rawShortcut;
+		}
+
 		//{{{ processKeyEvent() method
 		@Override
 		protected void processKeyEvent(KeyEvent _evt)
@@ -397,7 +410,7 @@ public class GrabKeyDialog extends JDialog
 					"==> Translated to " + key + '\n');
 			}
 
-			StringBuilder keyString = new StringBuilder(getText());
+			StringBuilder keyString = new StringBuilder(getShortcut());
 
 			if(getDocument().getLength() != 0)
 				keyString.append(' ');
@@ -436,6 +449,8 @@ public class GrabKeyDialog extends JDialog
 			if(debugBuffer == null)
 				updateAssignedTo(keyString.toString());
 		} //}}}
+		
+		protected String rawShortcut = "";
 	} //}}}
 
 	//{{{ ActionHandler class
@@ -469,7 +484,7 @@ public class GrabKeyDialog extends JDialog
 		//{{{ canClose() method
 		private boolean canClose()
 		{
-			String shortcutString = shortcut.getText();
+			String shortcutString = shortcut.getShortcut();
 			if(shortcutString.length() == 0
 				&& binding.isAssigned())
 			{

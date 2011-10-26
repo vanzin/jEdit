@@ -368,14 +368,16 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		@Override
 		public Object getValueAt(int row, int col)
 		{
+			// The only place this gets used is in JTable's own display code, so
+			// we translate the shortcut to platform-specific form for display here.
 			switch(col)
 			{
 			case 0:
 				return getBindingAt(row,0).label;
 			case 1:
-				return getBindingAt(row,0).shortcut;
+				return GUIUtilities.getPlatformShortcutLabel(getBindingAt(row,0).shortcut);
 			case 2:
-				return getBindingAt(row,1).shortcut;
+				return GUIUtilities.getPlatformShortcutLabel(getBindingAt(row,1).shortcut);
 			default:
 				return null;
 			}

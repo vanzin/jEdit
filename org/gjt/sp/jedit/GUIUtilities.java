@@ -552,6 +552,29 @@ public class GUIUtilities
 		return label;
 	} //}}}
 
+	//{{{ getPlatformShortcutLabel() method
+	/**
+	* Translates a shortcut description string (e.g. "CS+SEMICOLON") to
+	* a platform-localized description.  On OS X this puts in the pretty
+	* unicode characters for Shift, Cmd, etc.
+	*/
+	public static String getPlatformShortcutLabel(String label)
+	{
+		if( !OperatingSystem.isMacOSLF() || label == null || label.length() == 0)
+			return label;
+
+		String[] strokes = label.split(" +");
+		StringBuilder out = new StringBuilder();
+		for (int i = 0; i < strokes.length; i++)
+		{
+			if (i > 0)
+				out.append(' ');
+			out.append(getMacShortcutLabel(strokes[i]));
+		}
+		
+		return out.toString();
+        } //}}}
+
 	//{{{ getShortcutLabel() method
 	/**
 	 * Returns a label string to show users what shortcut are
@@ -565,6 +588,9 @@ public class GUIUtilities
 		{
 			String shortcut1 = jEdit.getProperty(action + ".shortcut");
 			String shortcut2 = jEdit.getProperty(action + ".shortcut2");
+
+			shortcut1 = getPlatformShortcutLabel(shortcut1);
+			shortcut2 = getPlatformShortcutLabel(shortcut2);
 
 			if(shortcut1 == null || shortcut1.length() == 0)
 			{
@@ -1845,6 +1871,95 @@ public class GUIUtilities
 		return mi;
 	} //}}}
 
+	private static HashMap<String, String> macKeySymbols = null;
+	
+	/*
+	 * Create a list of unicode characters to be used in displaying keyboard shortcuts
+	 * on Mac OS X.
+	 */
+	static
+	{
+		macKeySymbols = new HashMap<String, String>();
+		
+		// These are the unicode code points used in cocoa apps for displaying
+		// shortcuts.
+		macKeySymbols.put("ENTER",         "\u21A9");
+		macKeySymbols.put("HOME",          "\u2196");
+		macKeySymbols.put("END",           "\u2198");
+		macKeySymbols.put("BACK_SPACE",    "\u232B");
+		macKeySymbols.put("DELETE",        "\u2326");
+		macKeySymbols.put("PAGE_UP",       "\u21DE");
+		macKeySymbols.put("PAGE_DOWN",     "\u21DF");
+		macKeySymbols.put("LEFT",          "\u2190");
+		macKeySymbols.put("UP",            "\u2191");
+		macKeySymbols.put("RIGHT",         "\u2192");
+		macKeySymbols.put("DOWN",          "\u2193");
+		macKeySymbols.put("ESCAPE",        "\u238B");
+		macKeySymbols.put("TAB",           "\u21E5");
+		macKeySymbols.put("SPACE",         "\u2423");
+	}
+
+	//{{{ getMacShortcutLabel() method
+	/**
+	 * Convert a shortcut label to a Mac-friendly version by changing written-out
+	 * names and modifiers (e.g. C+PERIOD) to symbols.
+	 */
+	private static String getMacShortcutLabel(String label)
+	{	
+		StringBuilder out = new StringBuilder();
+		
+		int endOfModifiers = label.indexOf('+');
+		for (int i = 0; i < endOfModifiers; i++)
+		{
+			char c = Character.toUpperCase(label.charAt(i));
+			switch (c)
+			{
+			case 'A':
+				out.append('\u2303');  // ctrl
+				break;
+			case 'C':
+				out.append('\u2318');  // cmd
+				break;
+			case 'M':
+				out.append('\u2325');  // alt
+				break;
+			case 'S':
+				out.append('\u21E7');  // shift
+				break;
+			}
+		}
+		
+		// We've done the modifiers, now do the key
+		String key = label.substring(endOfModifiers + 1);
+		
+		// Some keys have Mac-specific symbols
+		String text = macKeySymbols.get(key);
+		
+		// Others don't
+		if (text == null)
+		{
+			// Everything else: periods, commas, etc. should be shown as the actual
+			// character
+			try
+			{
+				// e.g., convert the string "PERIOD" to the int KeyEvent.VK_PERIOD
+				int keyCode = KeyEvent.class.getField("VK_".concat(key)).getInt(null);
+				
+				// And then convert KeyEvent.VK_PERIOD to the string "."
+				text = KeyEvent.getKeyText(keyCode).toUpperCase();
+			}
+			catch(Exception e)
+			{
+				// This is probably an error, but it will be logged in
+				// KeyEventTranslator.parseKey anyway, so just ignore it here.
+				text = key.toUpperCase();
+			}
+		}
+		out.append(text);
+		
+		return out.toString();
+	} //}}}
+	
 	private GUIUtilities() {}
 	//}}}
 
