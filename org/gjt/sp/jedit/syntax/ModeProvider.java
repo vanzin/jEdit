@@ -35,6 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.LinkedHashMap;
@@ -51,11 +52,11 @@ public class ModeProvider
 {
 	public static ModeProvider instance = new ModeProvider();
 
-	private LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(180);
+	private final LinkedHashMap<String, Mode> modes = new LinkedHashMap<String, Mode>(180);
 
 	// any mode that is added that is already in the 'modes' map is added here. These
 	// 'override' modes are modes loaded from outside of the standard issue catalog files.
-	private LinkedHashMap<String, Mode> overrideModes = new LinkedHashMap<String, Mode>(20);
+	private final LinkedHashMap<String, Mode> overrideModes = new LinkedHashMap<String, Mode>(20);
 
 	//{{{ removeAll() method
 	public void removeAll()
@@ -104,9 +105,9 @@ public class ModeProvider
 	 */
 	public Mode getModeForFile(String filepath, String filename, String firstLine)
 	{
-		if ((filepath != null) && filepath.endsWith(".gz"))
+		if (filepath != null && filepath.endsWith(".gz"))
 			filepath = filepath.substring(0, filepath.length() - 3);
-		if ((filename != null) && filename.endsWith(".gz"))
+		if (filename != null && filename.endsWith(".gz"))
 			filename = filename.substring(0, filename.length() - 3);
 
 		List<Mode> acceptable = new ArrayList<Mode>();
@@ -120,7 +121,7 @@ public class ModeProvider
 				acceptable.add(mode);
 			}
 		}
-		if (acceptable.size() == 0)
+		if (acceptable.isEmpty())
 		{
 			// no user modes were acceptable, so check standard modes.
 			for(Mode mode : modes.values())
@@ -184,8 +185,10 @@ public class ModeProvider
 	public Mode[] getModes()
 	{
 		Mode[] array = new Mode[modes.size() + overrideModes.size()];
-		Mode[] standard = modes.values().toArray(new Mode[0]);
-		Mode[] override = overrideModes.values().toArray(new Mode[0]);
+		Collection<Mode> modesValues = modes.values();
+		Mode[] standard = modesValues.toArray(new Mode[modesValues.size()]);
+		Collection<Mode> overridenValues = overrideModes.values();
+		Mode[] override = overridenValues.toArray(new Mode[overridenValues.size()]);
 		System.arraycopy(standard, 0, array, 0, standard.length);
 		System.arraycopy(override, 0, array, standard.length, override.length);
 		return array;
