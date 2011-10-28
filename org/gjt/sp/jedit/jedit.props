@@ -489,3 +489,16 @@ server.brokenToFront=false
 options.general.restore.remote=true
 
 mime2mode.text/html=html
+
+{{{ Keymaps
+# the current keymap name
+keymap.current=jedit
+# the default keymap name
+keymap.default=jedit
+# the list of system keymaps
+keymaps.names=jedit intellij
+# the user defined keymaps
+user.keymaps.names=
+keymaps.jedit.label=jEdit
+keymaps.intellij.label=IntelliJ IDEA
+}}}

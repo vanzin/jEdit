@@ -19,6 +19,8 @@ import org.gjt.sp.jedit.jEdit;
 import org.gjt.sp.jedit.EditBus.EBHandler;
 import org.gjt.sp.jedit.View.ViewConfig;
 import org.gjt.sp.jedit.gui.KeyEventTranslator.Key;
+import org.gjt.sp.jedit.keymap.Keymap;
+import org.gjt.sp.jedit.keymap.KeymapManager;
 import org.gjt.sp.jedit.msg.DockableWindowUpdate;
 import org.gjt.sp.jedit.msg.PluginUpdate;
 import org.gjt.sp.jedit.msg.PropertiesChanged;
@@ -631,8 +633,10 @@ import org.gjt.sp.util.Log;
 
 		KeyHandler(String dockableName)
 		{
-			String shortcut1=jEdit.getProperty(action + ".shortcut");
-			String shortcut2=jEdit.getProperty(action + ".shortcut2");
+			KeymapManager keymapManager = jEdit.getKeymapManager();
+			Keymap keymap = keymapManager.getKeymap();
+			String shortcut1 = keymap.getShortcut(action + ".shortcut");
+			String shortcut2 = keymap.getShortcut(action + ".shortcut2");
 			if (shortcut1 != null)
 				b1 = parseShortcut(shortcut1);
 			if (shortcut2 != null)

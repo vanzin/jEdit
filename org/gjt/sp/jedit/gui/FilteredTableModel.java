@@ -83,12 +83,16 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 
 	private JTable table;
 
-	//{{{ FilteredTableModel() constructor
+	//{{{ FilteredTableModel() constructors
 	protected FilteredTableModel(E delegated)
 	{
 		this.delegated = delegated;
 		delegated.addTableModelListener(this);
 		resetFilter();
+	}
+
+	protected FilteredTableModel()
+	{
 	} //}}}
 
 	//{{{ setTable() method
@@ -116,7 +120,8 @@ public abstract class FilteredTableModel<E extends TableModel> extends AbstractT
 	//{{{ setDelegated() method
 	public void setDelegated(E delegated)
 	{
-		this.delegated.removeTableModelListener(this);
+		if (this.delegated != null)
+			this.delegated.removeTableModelListener(this);
 		delegated.addTableModelListener(this);
 		this.delegated = delegated;
 	} //}}}

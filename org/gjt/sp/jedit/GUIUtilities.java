@@ -29,6 +29,7 @@ import org.gjt.sp.jedit.gui.EnhancedButton;
 import org.gjt.sp.jedit.gui.FloatingWindowContainer;
 import org.gjt.sp.jedit.gui.SplashScreen;
 import org.gjt.sp.jedit.gui.VariableGridLayout;
+import org.gjt.sp.jedit.keymap.Keymap;
 import org.gjt.sp.jedit.menu.EnhancedCheckBoxMenuItem;
 import org.gjt.sp.jedit.menu.EnhancedMenu;
 import org.gjt.sp.jedit.menu.EnhancedMenuItem;
@@ -586,8 +587,9 @@ public class GUIUtilities
 			return null;
 		else
 		{
-			String shortcut1 = jEdit.getProperty(action + ".shortcut");
-			String shortcut2 = jEdit.getProperty(action + ".shortcut2");
+			Keymap keymap = jEdit.getKeymapManager().getKeymap();
+			String shortcut1 = keymap.getShortcut(action + ".shortcut");
+			String shortcut2 = keymap.getShortcut(action + ".shortcut2");
 
 			shortcut1 = getPlatformShortcutLabel(shortcut1);
 			shortcut2 = getPlatformShortcutLabel(shortcut2);

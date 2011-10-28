@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/lib" />
       <excludeFolder url="file://$MODULE_DIR$/org/gjt/sp/jedit/bsh/commands" />
+      <excludeFolder url="file://$MODULE_DIR$/textarea" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

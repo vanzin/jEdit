@@ -438,6 +438,7 @@
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 				<include name="org/gjt/sp/jedit/*.props"/>
+				<include name="org/gjt/sp/jedit/keymap/*.props"/>
 				<include name="org/gjt/sp/jedit/*.xml"/>
 				<include name="org/gjt/sp/jedit/textarea/*.xml"/>
 				<include name="org/gjt/sp/jedit/icons/**/*.gif"/>
@@ -447,6 +448,7 @@
 		</jar>
 		<copy todir="${jar.location}">
 			<fileset dir="${basedir}">
+				<include name="keymaps/**"/>
 				<include name="macros/**"/>
 				<include name="modes/**"/>
 				<include name="properties/**"/>

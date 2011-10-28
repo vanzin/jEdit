@@ -583,7 +583,6 @@ public class StandaloneTextArea extends TextArea
 	public static StandaloneTextArea createTextArea()
 	{
 		final Properties props = new Properties();
-		props.putAll(loadProperties("/org/gjt/sp/jedit/jedit_keys.props"));
 		props.putAll(loadProperties("/org/gjt/sp/jedit/jedit.props"));
 		StandaloneTextArea textArea = new StandaloneTextArea(new IPropertyManager()
 		{

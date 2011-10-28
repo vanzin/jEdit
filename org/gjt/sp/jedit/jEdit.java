@@ -23,8 +23,9 @@ package org.gjt.sp.jedit;
 
 //{{{ Imports
 import org.gjt.sp.jedit.datatransfer.JEditTransferableService;
-import org.gjt.sp.jedit.gui.tray.JEditSwingTrayIcon;
 import org.gjt.sp.jedit.gui.tray.JTrayIconManager;
+import org.gjt.sp.jedit.keymap.KeymapManager;
+import org.gjt.sp.jedit.keymap.KeymapManagerImpl;
 import org.gjt.sp.jedit.visitors.JEditVisitor;
 
 import java.awt.*;
@@ -924,6 +925,7 @@ public class jEdit
 	{
 		initPLAF();
 
+		keymapManager.reload();
 		initKeyBindings();
 
 		Autosave.setInterval(getIntegerProperty("autosave",30));
@@ -969,6 +971,11 @@ public class jEdit
 		}
 		EditBus.send(new PropertiesChanged(null));
 	} //}}}
+
+	public static KeymapManager getKeymapManager()
+	{
+		return keymapManager;
+	}
 
 	//}}}
 
@@ -2691,6 +2698,7 @@ public class jEdit
 			return;
 
 		Abbrevs.save();
+		keymapManager.getKeymap().save();
 		FavoritesVFS.saveFavorites();
 		HistoryModel.saveHistory();
 		Registers.saveRegisters();
@@ -3054,6 +3062,7 @@ public class jEdit
 
 	private static boolean saveCaret;
 	private static InputHandler inputHandler;
+	private static KeymapManager keymapManager;
 
 	private static BufferSetManager bufferSetManager;
 
@@ -3257,6 +3266,7 @@ public class jEdit
 
 		bufferHash = new HashMap<String, Buffer>();
 
+		keymapManager = new KeymapManagerImpl(propertyManager);
 		inputHandler = new DefaultInputHandler(null);
 		// Add our protocols to java.net.URL's list
 		System.getProperties().put("java.protocol.handler.pkgs",
@@ -3366,8 +3376,6 @@ public class jEdit
 				"/org/gjt/sp/jedit/jedit.props"));
 			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
 				"/org/gjt/sp/jedit/jedit_gui.props"));
-			propMgr.loadSystemProps(jEdit.class.getResourceAsStream(
-				"/org/gjt/sp/jedit/jedit_keys.props"));
 		}
 		catch(Exception e)
 		{
@@ -3377,7 +3385,6 @@ public class jEdit
 				"One of the following property files could not be loaded:\n"
 				+ "- jedit.props\n"
 				+ "- jedit_gui.props\n"
-				+ "- jedit_keys.props\n"
 				+ "jedit.jar is probably corrupt.");
 			Log.log(Log.ERROR,jEdit.class,e);
 			System.exit(1);
