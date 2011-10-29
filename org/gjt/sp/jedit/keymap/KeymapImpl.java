@@ -21,6 +21,7 @@
 
 package org.gjt.sp.jedit.keymap;
 
+//{{{ Imports
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -32,8 +33,10 @@ import java.util.Properties;
 
 import org.gjt.sp.util.IOUtilities;
 import org.gjt.sp.util.Log;
+//}}}
 
 /**
+ * The default keymap implementation.
  * @author Matthieu Casanova
  * @since jEdit 5.0
  */
@@ -45,18 +48,21 @@ public class KeymapImpl implements Keymap
 	private final File file;
 	private boolean modified;
 
+	//{{{ KeymapImpl() constructor
 	public KeymapImpl(String name, File file)
 	{
 		this.name = name;
 		this.file = file;
 		loadProperties();
-	}
+	} //}}}
 
+	//{{{ getInputStream() method
 	protected InputStream getInputStream()
 	{
 		return Keymap.class.getResourceAsStream(name + "_keys.props");
-	}
+	} //}}}
 
+	//{{{ loadProperties() method
 	private void loadProperties()
 	{
 		props = new Properties();
@@ -74,15 +80,17 @@ public class KeymapImpl implements Keymap
 		{
 			IOUtilities.closeQuietly(in);
 		}
-	}
+	} //}}}
 
+	//{{{ getShortcut() method
 	@Override
 	public String getShortcut(String name)
 	{
 		String property = props.getProperty(name);
 		return property;
-	}
+	} //}}}
 
+	//{{{ setShortcut() method
 	@Override
 	public void setShortcut(String name, String shortcut)
 	{
@@ -97,20 +105,23 @@ public class KeymapImpl implements Keymap
 		}
 		modified = true;
 		props.setProperty(name, shortcut);
-	}
+	} //}}}
 
+	//{{{ toString() method
 	@Override
 	public String toString()
 	{
 		return name;
-	}
+	} //}}}
 
+	//{{{ hashCode() method
 	@Override
 	public int hashCode()
 	{
 		return name.hashCode();
-	}
+	} //}}}
 
+	//{{{ equals() method
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -119,8 +130,9 @@ public class KeymapImpl implements Keymap
 
 		Keymap keymap = (Keymap) obj;
 		return name.equals(keymap.toString());
-	}
+	} //}}}
 
+	//{{{ save() method
 	@Override
 	public void save()
 	{
@@ -145,5 +157,5 @@ public class KeymapImpl implements Keymap
 			}
 		}
 
-	}
+	} //}}}
 }
