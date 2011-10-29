@@ -225,7 +225,7 @@ public class KeymapManagerImpl implements KeymapManager
 	private static File getUserKeymapFolder()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
-		return new File(settingsDirectory, "keymap");
+		return new File(settingsDirectory, "keymaps");
 	} //}}}
 
 	//{{{ getSystemKeymapFolder() method
