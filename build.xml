@@ -438,7 +438,7 @@
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 				<include name="org/gjt/sp/jedit/*.props"/>
-				<include name="org/gjt/sp/jedit/keymap/*.props"/>
+				<include name="org/gjt/sp/jedit/keymaps/*.props"/>
 				<include name="org/gjt/sp/jedit/*.xml"/>
 				<include name="org/gjt/sp/jedit/textarea/*.xml"/>
 				<include name="org/gjt/sp/jedit/icons/**/*.gif"/>
@@ -924,6 +924,7 @@
 				    dir="${dist.dir}"
 				    includes="doc/**
 					      jars/**
+					      keymaps/**
 					      modes/**
 					      properties/**
 					      startup/**
@@ -1168,6 +1169,7 @@
 			<javafileset dir="${dist.dir}"
 				     includes="doc/**
 					       jars/**
+					       keymaps/**
 					       macros/**
 					       modes/**
 					       properties/**
@@ -1246,6 +1248,7 @@
 					       ${config.dist.dir}/classes/jarbundler/**
 					       ${config.dist.dir}/doc/**
 					       ${config.dist.dir}/jars/**
+					       ${config.dist.dir}/keymaps/**
 					       ${config.dist.dir}/macros/**
 					       ${config.dist.dir}/modes/**
 					       ${config.dist.dir}/properties/**
@@ -1254,7 +1257,7 @@
 			</contrib:else>
 		</contrib:if>
 		<property name="wipe.dist.files"
-			  value="true"/>
+			  value="false"/>
 		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
@@ -1409,6 +1412,7 @@
 			<tarfileset dir="${dist.dir}"
 				    includes="doc/**
 					      jars/**
+					      keymaps/**
 					      macros/**
 					      modes/**
 					      properties/**
@@ -1547,6 +1551,7 @@
 					   classes/package-files/linux/jedit.1.gz
 					   doc/**
 					   jars/**
+					   keymaps/**
 					   macros/**
 					   modes/**
 					   properties/**
@@ -1604,6 +1609,7 @@
 				     fullpath="usr/share/jEdit/"/>
 			<datafileset dir="${dist.dir}"
 				     includes="doc/**
+					       keymaps/**
 					       macros/**
 					       modes/**
 					       properties/**
@@ -1940,6 +1946,7 @@ Press Return key to continue...
 					       ${config.dist.dir}/classes/package-files/windows/**
 					       ${config.dist.dir}/doc/**
 					       ${config.dist.dir}/jars/**
+					       ${config.dist.dir}/keymaps/**
 					       ${config.dist.dir}/macros/**
 					       ${config.dist.dir}/modes/**
 					       ${config.dist.dir}/properties/**
@@ -1982,6 +1989,7 @@ Press Return key to continue...
 							<filename name="macros/**"/>
 							<filename name="doc/**"/>
 							<filename name="jars/**"/>
+							<filename name="keymaps/**"/>
 							<filename name="modes/**"/>
 							<filename name="properties/**"/>
 							<filename name="startup/**"/>
