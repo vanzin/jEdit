@@ -21,7 +21,13 @@
 
 package org.gjt.sp.jedit.keymap;
 
+//{{{ Imports
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -29,8 +35,12 @@ import java.util.Set;
 
 import org.gjt.sp.jedit.IPropertyManager;
 import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.util.IOUtilities;
+import org.gjt.sp.util.Log;
+//}}}
 
 /**
+ * The default keymap manager implementation.
  * @author Matthieu Casanova
  * @since jEdit 5.0
  */
@@ -39,11 +49,20 @@ public class KeymapManagerImpl implements KeymapManager
 	private Keymap currentKeymap;
 	private final IPropertyManager propertyManager;
 
+	//{{{ KeymapManagerImpl() constructor
 	public KeymapManagerImpl(IPropertyManager propertyManager)
 	{
 		this.propertyManager = propertyManager;
-	}
+	} //}}}
 
+	//{{{ getKeymap() method
+	@Override
+	public Keymap getKeymap()
+	{
+		return currentKeymap;
+	} //}}}
+
+	//{{{ getKeymapNames() method
 	@Override
 	public Collection<String> getKeymapNames()
 	{
@@ -54,8 +73,9 @@ public class KeymapManagerImpl implements KeymapManager
 		keyMaps.addAll(systemKeymapNames);
 		keyMaps.addAll(userKeymapNames);
 		return keyMaps;
-	}
+	} //}}}
 
+	//{{{ getKeymap() method
 	@Override
 	public Keymap getKeymap(String name)
 	{
@@ -64,8 +84,9 @@ public class KeymapManagerImpl implements KeymapManager
 		if (keymapFile.isFile())
 			keymap = new KeymapImpl(name, keymapFile);
 		return keymap;
-	}
+	} //}}}
 
+	//{{{ getKeymapState() method
 	@Override
 	public State getKeymapState(String name)
 	{
@@ -80,38 +101,110 @@ public class KeymapManagerImpl implements KeymapManager
 		if (systemKeymapFile.isFile())
 			return State.System;
 		return State.Unknown;
-	}
+	} //}}}
 
+	//{{{ resetKeymap() method
+	@Override
+	public void resetKeymap(String name)
+	{
+		State keymapState = getKeymapState(name);
+		if (keymapState == State.SystemModified)
+		{
+			File userFile = getUserKeymapFile(name);
+			userFile.delete();
+		}
+	} //}}}
+
+	//{{{ deleteUserKeymap() method
+	@Override
+	public void deleteUserKeymap(String name)
+	{
+		State keymapState = getKeymapState(name);
+		if (keymapState == State.User)
+		{
+			File userFile = getUserKeymapFile(name);
+			userFile.delete();
+		}
+	} //}}}
+
+	//{{{ copyKeymap() method
+	@Override
+	public boolean copyKeymap(String name, String newName)
+	{
+		File keymapFile = getUserKeymapFile(newName);
+		if (keymapFile.exists())
+			throw new IllegalArgumentException("Keymap " + newName + " already exists");
+
+		File originalKeymap = getKeymapFile(name);
+		if (!originalKeymap.isFile())
+			throw new IllegalArgumentException("Keymap " + name + " doesn't exist");
+		BufferedInputStream in = null;
+		BufferedOutputStream out = null;
+		try
+		{
+			in = new BufferedInputStream(new FileInputStream(originalKeymap));
+			out = new BufferedOutputStream(new FileOutputStream(keymapFile));
+			IOUtilities.copyStream(null, in, out, false);
+			return true;
+		}
+		catch (IOException e)
+		{
+			Log.log(Log.ERROR, this, e);
+		}
+		finally
+		{
+			IOUtilities.closeQuietly(in);
+			IOUtilities.closeQuietly(out);
+		}
+		return false;
+	} //}}}
+
+	//{{{ reload() method
+	@Override
+	public void reload()
+	{
+		String name = getCurrentKeymapName();
+		currentKeymap = getKeymap(name);
+		if (currentKeymap == null)
+			currentKeymap = getKeymap("jedit");
+	} //}}}
+
+	//{{{ getKeymapFile() method
 	private static File getKeymapFile(String name)
 	{
 		File file = getUserKeymapFile(name);
 		if (!file.isFile())
 			file = getSystemKeymapFile(name);
 		return file;
-	}
+	} //}}}
 
+	//{{{ getUserKeymapFile() method
 	static File getUserKeymapFile(String name)
 	{
 		return new File(getUserKeymapFolder(), name + "_keys.props");
-	}
+	} //}}}
 
+	//{{{ getSystemKeymapFile() method
 	private static File getSystemKeymapFile(String name)
 	{
 		return new File(getSystemKeymapFolder(), name + "_keys.props");
-	}
+	} //}}}
 
+	//{{{ getSystemKeymapNames() method
 	private static Collection<String> getSystemKeymapNames()
 	{
 		File keymapFolder = getSystemKeymapFolder();
 		return getKeymapsFromFolder(keymapFolder);
-	}
+	} //}}}
 
+	//{{{ getUserKeymapNames() method
 	private static Collection<String> getUserKeymapNames()
 	{
 		File keymapFolder = getUserKeymapFolder();
 		return getKeymapsFromFolder(keymapFolder);
-	}
+	} //}}}
 
+	//{{{ getKeymapsFromFolder() method
 	private static Collection<String> getKeymapsFromFolder(File folder)
 	{
 		Collection<String> names = new ArrayList<String>();
@@ -126,33 +219,25 @@ public class KeymapManagerImpl implements KeymapManager
 			}
 		}
 		return names;
-	}
+	} //}}}
 
+	//{{{ getUserKeymapFolder() method
 	private static File getUserKeymapFolder()
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		return new File(settingsDirectory, "keymap");
-	}
+	} //}}}
 
+	//{{{ getSystemKeymapFolder() method
 	private static File getSystemKeymapFolder()
 	{
 		String homeDirectory = jEdit.getJEditHome();
 		return new File(homeDirectory, "keymaps");
-	}
+	} //}}}
 
-	@Override
-	public void reload()
+	//{{{ getCurrentKeymapName() method
+	private String getCurrentKeymapName()
 	{
-		String name = propertyManager.getProperty("keymap.current");
-		currentKeymap = getKeymap(name);
-		if (currentKeymap == null)
-			currentKeymap = getKeymap("jedit");
-	}
-
-
-	@Override
-	public Keymap getKeymap()
-	{
-		return currentKeymap;
-	}
+		return propertyManager.getProperty("keymap.current");
+	} //}}}
 }

@@ -55,9 +55,29 @@ public interface KeymapManager
 	State getKeymapState(String name);
 
 	/**
+	 * Reset the keymap to it's original state if it was a modified system keymap
+	 * @param name the keymap name
+	 */
+	void resetKeymap(String name);
+
+	/**
+	 * Delete a user keymap.
+	 * @param name the keymap name
+	 */
+	void deleteUserKeymap(String name);
+
+	/**
+	 * Copy the keymap to another one
+	 * @param name the original keymap
+	 * @param newName the new keymap
+	 */
+	boolean copyKeymap(String name, String newName);
+
+	/**
 	 * The states of the keymaps
 	 */
-	enum State {
+	enum State
+	{
 		/** User keymap. */
 		User,
 		/** System keymap. */
@@ -65,5 +85,6 @@ public interface KeymapManager
 		/** Modified system keymap. */
 		SystemModified,
 		/** Unknown keymap (doesn't exists). */
-		Unknown }
+		Unknown
+	}
 }
