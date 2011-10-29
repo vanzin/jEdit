@@ -89,6 +89,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		keymaps.setSelectedItem(keymapName);
 		duplicateKeymap.addActionListener(actionHandler);
 		resetKeymap.addActionListener(actionHandler);
+		deleteKeymap.addActionListener(actionHandler);
 		keymaps.addActionListener(actionHandler);
 		keymaps.setSelectedItem(selectedKeymap);
 
@@ -472,7 +473,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 				KeymapManager.State keymapState = manager.getKeymapState(selectedKeymap.toString());
 				if (keymapState == KeymapManager.State.User)
 				{
-
+					manager.deleteUserKeymap(selectedKeymap.toString());
 					KeymapsModel model = (KeymapsModel) keymaps.getModel();
 					model.reset();
 				}
