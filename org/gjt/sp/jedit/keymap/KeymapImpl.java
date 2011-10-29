@@ -40,7 +40,7 @@ import org.gjt.sp.util.Log;
  * @author Matthieu Casanova
  * @since jEdit 5.0
  */
-public class KeymapImpl implements Keymap
+class KeymapImpl implements Keymap
 {
 	protected Properties props;
 
