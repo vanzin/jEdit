@@ -495,6 +495,6 @@ mime2mode.text/html=html
 keymap.current=jEdit
 # the default keymap name
 keymap.default=jEdit
-keymaps.jedit.label=jEdit
-keymaps.intellij.label=IntelliJ IDEA
+keymaps.jEdit.label=jEdit
+keymaps.IntelliJ.label=IntelliJ IDEA
 #}}}
