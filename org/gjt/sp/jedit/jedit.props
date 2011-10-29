@@ -490,11 +490,11 @@ options.general.restore.remote=true
 
 mime2mode.text/html=html
 
-{{{ Keymaps
+#{{{ Keymaps
 # the current keymap name
 keymap.current=jEdit
 # the default keymap name
 keymap.default=jEdit
 keymaps.jedit.label=jEdit
 keymaps.intellij.label=IntelliJ IDEA
-}}}
+#}}}
