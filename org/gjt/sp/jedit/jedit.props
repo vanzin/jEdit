@@ -492,11 +492,11 @@ mime2mode.text/html=html
 
 {{{ Keymaps
 # the current keymap name
-keymap.current=jedit
+keymap.current=jEdit
 # the default keymap name
-keymap.default=jedit
+keymap.default=jEdit
 # the list of system keymaps
-keymaps.names=jedit intellij
+keymaps.names=jEdit IntelliJ
 # the user defined keymaps
 user.keymaps.names=
 keymaps.jedit.label=jEdit

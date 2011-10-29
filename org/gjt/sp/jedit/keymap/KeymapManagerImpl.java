@@ -97,12 +97,12 @@ public class KeymapManagerImpl implements KeymapManager
 
 	private static File getSystemKeymapFile(String name)
 	{
-		return new File("keymaps/" + name + "_keys.props");
+		return new File(getSystemKeymapFolder(), name + "_keys.props");
 	}
 
 	private static Collection<String> getSystemKeymapNames()
 	{
-		File keymapFolder = new File("keymaps");
+		File keymapFolder = getSystemKeymapFolder();
 		return getKeymapsFromFolder(keymapFolder);
 	}
 
@@ -132,6 +132,12 @@ public class KeymapManagerImpl implements KeymapManager
 	{
 		String settingsDirectory = jEdit.getSettingsDirectory();
 		return new File(settingsDirectory, "keymap");
+	}
+
+	private static File getSystemKeymapFolder()
+	{
+		String homeDirectory = jEdit.getJEditHome();
+		return new File(homeDirectory, "keymaps");
 	}
 
 	@Override
