@@ -103,8 +103,12 @@ class KeymapImpl implements Keymap
 			}
 			return;
 		}
-		modified = true;
-		props.setProperty(name, shortcut);
+		String oldShortcut = props.getProperty(name);
+		if (!shortcut.equals(oldShortcut))
+		{
+			modified = true;
+			props.setProperty(name, shortcut);
+		}
 	} //}}}
 
 	//{{{ toString() method
