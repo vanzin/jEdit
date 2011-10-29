@@ -362,6 +362,7 @@ public class GrabKeyDialog extends JDialog
 		// The public-facing string is converted to a platform-specific
 		// form, but we keep the canonical shortcut string around for
 		// internal use.
+		@Override
 		public void setText(String s)
 		{
 			rawShortcut = s;
@@ -457,6 +458,7 @@ public class GrabKeyDialog extends JDialog
 	private class ActionHandler implements ActionListener
 	{
 		//{{{ actionPerformed() method
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			if(evt.getSource() == ok)
