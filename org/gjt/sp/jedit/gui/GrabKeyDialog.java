@@ -365,7 +365,7 @@ public class GrabKeyDialog extends JDialog
 		@Override
 		public void setText(String s)
 		{
-			rawShortcut = s;
+			rawShortcut = (s == null) ? "" : s;
 			super.setText( GUIUtilities.getPlatformShortcutLabel(s) );
 		}
 		public String getShortcut()
