@@ -260,10 +260,10 @@ public class TextUtilities
 	 *
 	 * @since jedit 4.3pre3
 	 */
-	public static String join(Collection<String> c, String delim)
+	public static String join(Collection<?> c, String delim)
 	{
 		StringBuilder retval = new StringBuilder();
-		Iterator<String> itr = c.iterator();
+		Iterator<?> itr = c.iterator();
 		if (itr.hasNext())
 			retval.append( itr.next() );
 		else

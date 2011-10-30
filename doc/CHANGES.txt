@@ -12,7 +12,8 @@ contributing to this release.
 
 }}}
 {{{ API Changes
-
+- TextUtilities.join() now accept Collection<?> instead of Collection<String>
+  (Matthieu Casanova)
 
 }}}
 {{{ Editing
