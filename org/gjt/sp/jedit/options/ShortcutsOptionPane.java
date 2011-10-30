@@ -469,13 +469,20 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 			}
 			else if (evt.getSource() == deleteKeymap)
 			{
-				KeymapManager manager = jEdit.getKeymapManager();
-				KeymapManager.State keymapState = manager.getKeymapState(selectedKeymap.toString());
-				if (keymapState == KeymapManager.State.User)
+				int ret = JOptionPane.showConfirmDialog(ShortcutsOptionPane.this, jEdit.getProperty(
+					"options.shortcuts.deletekeymap.dialog.label"), jEdit.getProperty(
+					"options.shortcuts.deletekeymap.dialog.title"), JOptionPane.YES_NO_OPTION,
+								      JOptionPane.QUESTION_MESSAGE);
+				if (ret == JOptionPane.YES_OPTION)
 				{
-					manager.deleteUserKeymap(selectedKeymap.toString());
-					KeymapsModel model = (KeymapsModel) keymaps.getModel();
-					model.reset();
+					KeymapManager manager = jEdit.getKeymapManager();
+					KeymapManager.State keymapState = manager.getKeymapState(selectedKeymap.toString());
+					if (keymapState == KeymapManager.State.User)
+					{
+						manager.deleteUserKeymap(selectedKeymap.toString());
+						KeymapsModel model = (KeymapsModel) keymaps.getModel();
+						model.reset();
+					}
 				}
 			}
 		}
