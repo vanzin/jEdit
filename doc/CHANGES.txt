@@ -4,8 +4,8 @@ jEdit 5.0 version history
 
 {{{ Version 5.0pre1
 
-Thanks to Björn "Vampire" Kautler, Nathan Gray and Matthieu Casanova for
-contributing to this release.
+Thanks to Björn "Vampire" Kautler, Nathan Gray, Evan Wright, and
+Matthieu Casanova for contributing to this release.
 
 {{{ Bug fixes
 
@@ -23,6 +23,9 @@ contributing to this release.
 {{{ UI
 - Changed menus to use Mac-specific symbols for accelerator keys when using
   OS X and the native look & feel (SF.net patch #1950147 - Nathan Gray)
+  
+- Added an option (on by default) to use the native Quartz renderer on
+  Mac OS X (Evan Wright)
 
 }}}
 {{{ Miscellaneous

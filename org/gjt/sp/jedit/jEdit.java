@@ -329,6 +329,14 @@ public class jEdit
 			// just exit
 			System.exit(0);
 		} //}}}
+		
+		// This must be done before anything graphical is displayed, so we can't even
+		// wait for the settings to be loaded, because the splash screen will already
+		// be visible
+		if (OperatingSystem.isMacOS() && !new File(settingsDirectory, "noquartz").exists())
+		{
+			System.setProperty("apple.awt.graphics.UseQuartz", "true");
+		}
 
 		// don't show splash screen if there is a file named
 		// 'nosplash' in the settings directory

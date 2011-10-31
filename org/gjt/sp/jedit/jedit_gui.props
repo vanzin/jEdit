@@ -1884,6 +1884,7 @@ options.appearance.secondaryFont=List and text field font:
 options.appearance.helpViewerFont=HelpViewer/Browser Text font:
 options.appearance.history=History text field entries to remember:
 options.appearance.menuSpillover=Number of items before menus spill over:
+options.appearance.useQuartz=Use OS X native Quartz renderer (restart required)
 options.appearance.startup.label=Startup options
 options.appearance.showSplash=Show splash screen on startup
 options.appearance.showTips=Show tips on startup

@@ -140,6 +140,14 @@ public class AppearanceOptionPane extends AbstractOptionPane
 					"options.general.systrayicon", "Show the systray icon"));
 		systemTrayIcon.setSelected(jEdit.getBooleanProperty("systrayicon", true));
 		addComponent(systemTrayIcon);
+		
+		if (OperatingSystem.isMacOS())
+		{
+			String settingsDirectory = jEdit.getSettingsDirectory();
+			useQuartz = new JCheckBox(jEdit.getProperty("options.appearance.useQuartz"));
+			useQuartz.setSelected(!new File(settingsDirectory, "noquartz").exists());
+			addComponent(useQuartz);
+		}
 
 		addSeparator("options.appearance.startup.label");
 
@@ -209,34 +217,15 @@ public class AppearanceOptionPane extends AbstractOptionPane
 		primaryFont.repaint();
 		secondaryFont.repaint(); */
 
-		// this is handled a little differently from other jEdit settings
-		// as the splash screen flag needs to be known very early in the
+		// These are handled a little differently from other jEdit settings
+		// as these flags need to be known very early in the
 		// startup sequence, before the user properties have been loaded
-		String settingsDirectory = jEdit.getSettingsDirectory();
-		if(settingsDirectory != null)
+		setFileFlag("nosplash", !showSplash.isSelected());
+		if (OperatingSystem.isMacOS())
 		{
-			File file = new File(settingsDirectory,"nosplash");
-			if(showSplash.isSelected())
-				file.delete();
-			else
-			{
-				FileOutputStream out = null;
-				try
-				{
-					out = new FileOutputStream(file);
-					out.write('\n');
-					out.close();
-				}
-				catch(IOException io)
-				{
-					Log.log(Log.ERROR,this,io);
-				}
-				finally
-				{
-					IOUtilities.closeQuietly(out);
-				}
-			}
+			setFileFlag("noquartz", !useQuartz.isSelected());
 		}
+		
 		jEdit.setBooleanProperty("textColors",textColors.isSelected());
 		jEdit.setBooleanProperty("decorate.frames",decorateFrames.isSelected());
 		jEdit.setBooleanProperty("decorate.dialogs",decorateDialogs.isSelected());
@@ -263,6 +252,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	private JComboBox antiAliasExtras;
 	private JComboBox iconThemes;
 	private JCheckBox systemTrayIcon;
+	private JCheckBox useQuartz;
 	//}}}
 
 	//{{{ updateEnabled() method
@@ -301,4 +291,36 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	}
 
 	//}}}
+	
+	//{{{ setFileFlag() method
+	private void setFileFlag(String fileName, boolean present)
+	{
+		String settingsDirectory = jEdit.getSettingsDirectory();
+		if(settingsDirectory != null)
+		{
+			File file = new File(settingsDirectory, fileName);
+			if (!present)
+			{
+				file.delete();
+			}
+			else
+			{
+				FileOutputStream out = null;
+				try
+				{
+					out = new FileOutputStream(file);
+					out.write('\n');
+					out.close();
+				}
+				catch(IOException io)
+				{
+					Log.log(Log.ERROR,this,io);
+				}
+				finally
+				{
+					IOUtilities.closeQuietly(out);
+				}
+			}
+		}
+	} //}}}
 }
