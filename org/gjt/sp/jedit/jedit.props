@@ -160,6 +160,9 @@ buffer.tabSize=8
 # Indent width
 buffer.indentSize=8
 
+# Automatic indentation
+buffer.autoIndent=true
+
 # Soft tabs
 buffer.noTabs=false
 

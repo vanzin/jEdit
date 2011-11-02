@@ -89,6 +89,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 		foldWidget = _getWidget("fold");
 		encodingWidget = _getWidget("encoding");
 		wrapWidget = _getWidget("wrap");
+		indentWidget = _getWidget("indent");
 		multiSelectWidget = _getWidget("multiSelect");
 		rectSelectWidget = _getWidget("rectSelect");
 		overwriteWidget = _getWidget("overwrite");
@@ -400,6 +401,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	public void updateBufferStatus()
 	{
 		wrapWidget.update();
+		indentWidget.update();
 		lineSepWidget.update();
 		modeWidget.update();
 		foldWidget.update();
@@ -426,6 +428,7 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 	private final Widget foldWidget;
 	private final Widget encodingWidget;
 	private final Widget wrapWidget;
+	private final Widget indentWidget;
 	private final Widget multiSelectWidget;
 	private final Widget rectSelectWidget;
 	private final Widget overwriteWidget;
@@ -452,6 +455,8 @@ public class StatusBar extends JPanel implements WorkThreadProgressListener
 			return encodingWidget;
 		if ("wrap".equals(name))
 			return wrapWidget;
+		if ("indent".equals(name))
+			return indentWidget;
 		if ("multiSelect".equals(name))
 			return multiSelectWidget;
 		if ("rectSelect".equals(name))

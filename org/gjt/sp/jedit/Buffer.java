@@ -1019,6 +1019,23 @@ public class Buffer extends JEditBuffer
 		setProperty("wrap",wrap);
 		propertiesChanged();
 	} //}}}
+	
+	//{{{ toggleAutoIndent() method
+	/**
+	 * Toggles automatic indentation on and off.
+	 * @param view This view's status bar will display the message
+	 * @since jEdit 5.0
+	 */
+	public void toggleAutoIndent(View view)
+	{
+		boolean indent = getBooleanProperty("autoIndent");
+		setBooleanProperty("autoIndent", !indent);
+		
+		view.getStatus().setMessageAndClear(
+			jEdit.getProperty("view.status.autoindent-changed",
+			new Integer[] { !indent ? 1 : 0 }));
+	}
+			
 
 	//{{{ toggleLineSeparator() method
 	/**

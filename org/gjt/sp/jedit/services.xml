@@ -108,6 +108,11 @@
 		import org.gjt.sp.jedit.gui.statusbar.*;
 		new OverwriteWidgetFactory();
 	</SERVICE>
+	
+	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="indent">
+		import org.gjt.sp.jedit.gui.statusbar.*;
+		new IndentWidgetFactory();
+	</SERVICE>
 
 	<SERVICE CLASS="org.gjt.sp.jedit.gui.statusbar.StatusWidget" NAME="lineSep">
 		import org.gjt.sp.jedit.gui.statusbar.*;

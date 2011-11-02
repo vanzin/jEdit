@@ -954,6 +954,8 @@ view.status.vertical-paste-string-register=Register to vertical paste \
 	from? [{0}]
 view.status.wrap-changed=Word wrap mode is now "{0}"
 view.status.wrap-tooltip=<html>Word wrap mode is {0} (click to change)</html>
+view.status.indent-toolip=Automatic indentation indicator (click to change)
+view.status.autoindent-changed=Automatic indentation is {0,choice,0#off|1#on}
 view.status.bufferset-tooltip=BufferSet scope is {0}
 wrap.none=disabled
 wrap.hard=hard
@@ -1964,6 +1966,7 @@ options.editing.camelCasedWords=Separate "CamelCased" words
 options.editing.noTabs=Soft (emulated with spaces) tabs
 options.editing.elasticTabstops=Indent using elastic tabstops
 options.editing.deepIndent=Deep indent
+options.editing.autoIndent=Automatic indentation
 #}}}
 
 #{{{ Encodings pane
@@ -2739,6 +2742,8 @@ statusbar.encoding.label=Buffer encoding (ex:UTF-8)
 statusbar.encoding.sample=UTF-8
 statusbar.wrap.label=Buffer wrapping mode (ex:N)
 statusbar.wrap.sample=N
+statusbar.indent.label=Automatic indentation (ex:A)
+statusbar.wrap.sample=A
 statusbar.multiSelect.label=Buffer multiple selection mode (ex:m)
 statusbar.multiSelect.sample=m
 statusbar.rectSelect.label=Buffer rectangular selection mode (ex:r)

@@ -17,7 +17,8 @@ Matthieu Casanova for contributing to this release.
 
 }}}
 {{{ Editing
-
+- Made it possible to disable automatic indentation by buffer or by edit
+  mode, and created a status widget to toggle the setting (Evan Wright)
 
 }}}
 {{{ UI
