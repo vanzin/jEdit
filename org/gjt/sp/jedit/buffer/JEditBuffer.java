@@ -2858,21 +2858,23 @@ loop:		for(int i = 0; i < seg.count; i++)
 	} //}}}
 
 	//{{{ updateColumnBlocks() method
-	public void updateColumnBlocks(int startLine,int endLine,int startColumn,Node parent)
+	public void updateColumnBlocks(int startLine,int endLine,int startColumn, Node parent)
 	{
-		if((parent!=null)&&(startLine>=0)&&(endLine>=0)&&(startLine<=endLine))
+		if (parent != null && startLine >= 0 && endLine >= 0 && startLine <= endLine)
 		{	
 			int currentLine = startLine;
 			int colBlockWidth=0;
 			Vector<ColumnBlockLine> columnBlockLines = new Vector<ColumnBlockLine>();
 			//while(currentLine<=endLine)
-			for(int ik=startLine-((ColumnBlock)parent).getStartLine();currentLine<=endLine;ik++)
+			ColumnBlock parentColumnBlock = (ColumnBlock) parent;
+			for(int ik=startLine- parentColumnBlock.getStartLine();currentLine<=endLine;ik++)
 			{
 				Segment seg = new Segment();
 				int actualStart =  startColumn ;
-				if(((ColumnBlock)parent).getLines().size()>0)
+				if(!parentColumnBlock.getLines().isEmpty())
 				{
-					ColumnBlockLine line = ((ColumnBlockLine)(((ColumnBlock)parent).getLines().elementAt(ik)));
+					ColumnBlockLine line =
+						parentColumnBlock.getLines().elementAt(ik);
 					if(currentLine!=line.getLine())
 					{
 						throw new IllegalArgumentException();
@@ -2889,9 +2891,14 @@ loop:		for(int i = 0; i < seg.count; i++)
 						colBlockWidth =  tabPos;
 					}
 				}
-				if((( tabPos<0)&&(columnBlockLines.size()>0))||((columnBlockLines.size()>0)&&(currentLine==endLine)))
+				if (tabPos < 0 && !columnBlockLines.isEmpty()
+				    || !columnBlockLines.isEmpty() && currentLine == endLine)
 				{
-					ColumnBlock  block = new ColumnBlock(this,((ColumnBlockLine)columnBlockLines.elementAt(0)).getLine(),startColumn+colBlockWidth,((ColumnBlockLine)columnBlockLines.elementAt(columnBlockLines.size()-1)).getLine(),startColumn+colBlockWidth);
+					ColumnBlock  block = new ColumnBlock(this,
+									     columnBlockLines.elementAt(0).getLine(),
+									     startColumn+colBlockWidth,
+									     columnBlockLines.elementAt(columnBlockLines.size()-1).getLine(),
+									     startColumn+colBlockWidth);
 					block.setLines(columnBlockLines);
 					block.setParent(parent);
 					block.setWidth(colBlockWidth);
@@ -2926,7 +2933,7 @@ loop:		for(int i = 0; i < seg.count; i++)
 	}
 	 //}}}
 	
-	public final String columnBlockLock = "columnBlockLock";
+	public final Object columnBlockLock = new Object();
 	
 	//{{{ indentUsingElasticTabstops() method
 	public void indentUsingElasticTabstops()
