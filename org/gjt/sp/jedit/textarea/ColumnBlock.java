@@ -40,7 +40,7 @@ public class ColumnBlock extends Rect implements Node
 
 	private JEditBuffer buffer;
 
-	private boolean isDirty = false;
+	private boolean isDirty;
 
 	@Override
 	//{{{ addChild() method
@@ -49,7 +49,6 @@ public class ColumnBlock extends Rect implements Node
 		// must add the children in sorted order
 		ColumnBlock block = (ColumnBlock) node;
 		ColumnBlock blockBelow = searchChildren(block.startLine);
-		int index = -1;
 		if (blockBelow != null)
 		{
 			if (blockBelow.isLineWithinThisBlock(block.endLine) >= 0)
@@ -57,7 +56,7 @@ public class ColumnBlock extends Rect implements Node
 				throw new IllegalArgumentException("Overlapping column blocks: "
 					+ block + " \n&\n" + blockBelow);
 			}
-			index = children.indexOf(blockBelow);
+			int index = children.indexOf(blockBelow);
 			children.add(index, node);
 		}
 		else
@@ -127,12 +126,14 @@ public class ColumnBlock extends Rect implements Node
 	}//}}}
 
 	//{{{  getStartLine() method
+	@Override
 	public int getStartLine()
 	{
 		return startLine;
 	}//}}}
 
 	//{{{  getEndLine() method
+	@Override
 	public int getEndLine()
 	{
 		return endLine;
@@ -165,24 +166,22 @@ public class ColumnBlock extends Rect implements Node
 	public ColumnBlock getContainingBlock(int line, int offset)
 	{
 		ColumnBlock retBlock = null;
-		int relativeOffset = -1;
-		if ((line >= startLine) && (line <= endLine))
+		if (line >= startLine && line <= endLine)
 		{
-			relativeOffset = offset - buffer.getLineStartOffset(line);
-			if ((lines != null) && (lines.size() > 0))
+			int relativeOffset = offset - buffer.getLineStartOffset(line);
+			if (lines != null && !lines.isEmpty())
 			{
-				ColumnBlockLine blockLine = (ColumnBlockLine) (lines.get(line
-					- startLine));
-				if ((blockLine.getColumnEndIndex() >= relativeOffset)
-					&& (blockLine.getColumnStartIndex() <= relativeOffset))
+				ColumnBlockLine blockLine = lines.get(line - startLine);
+				if (blockLine.getColumnEndIndex() >= relativeOffset
+					&& blockLine.getColumnStartIndex() <= relativeOffset)
 				{
 					retBlock = this;
 				}
 			}
-			if ((retBlock == null) && (children != null) && (children.size() > 0))
+			if (retBlock == null && children != null && !children.isEmpty())
 			{
 				ColumnBlock block = searchChildren(line);
-				if ((block != null) && (block.isLineWithinThisBlock(line) == 0))
+				if (block != null && block.isLineWithinThisBlock(line) == 0)
 				{
 					retBlock = block.getContainingBlock(line, offset);
 				}
@@ -199,30 +198,29 @@ public class ColumnBlock extends Rect implements Node
 			return null;
 		}
 		// int tabSize=-5;
-		ColumnBlock colBlock = null;
 		synchronized (buffer.columnBlockLock)
 		{
-			if ((line >= startLine) && (line <= endLine))
+			ColumnBlock colBlock = null;
+			if (line >= startLine && line <= endLine)
 			{
-				if ((lines != null) && (lines.size() > 0))
+				if (lines != null && !lines.isEmpty())
 				{
-					ColumnBlockLine blockLine = (ColumnBlockLine) (lines
-						.get(line - startLine));
-					if ((blockLine.getColumnEndIndex() + buffer
-						.getLineStartOffset(line)) == offset)
+					ColumnBlockLine blockLine = lines.get(line - startLine);
+					if (blockLine.getColumnEndIndex() + buffer
+						.getLineStartOffset(line) == offset)
 					{
 						// tabSize =
 						// blockLine.getTabSize();
 						colBlock = this;
 					}
 				}
-				if ((colBlock == null) && (children != null)
-					&& (children.size() > 0))
+				if (colBlock == null && children != null
+					&& !children.isEmpty())
 				{
 					ColumnBlock block = searchChildren(line, 0,
 						children.size() - 1);
-					if ((block == null)
-						|| (block.isLineWithinThisBlock(line) != 0))
+					if (block == null
+						|| block.isLineWithinThisBlock(line) != 0)
 					{
 						throwException(offset, line);
 					}
@@ -243,7 +241,7 @@ public class ColumnBlock extends Rect implements Node
 	//{{{ searchChildren() method
 	public ColumnBlock searchChildren(int line)
 	{
-		if ((children != null) && (children.size() > 0))
+		if (children != null && !children.isEmpty())
 		{
 			return searchChildren(line, 0, children.size() - 1);
 		}
@@ -280,7 +278,7 @@ public class ColumnBlock extends Rect implements Node
 			}
 			else if (found > 0)
 			{
-				if ((children.size() - 1) > currentSearchIndex)
+				if (children.size() - 1 > currentSearchIndex)
 				{
 					return searchChildren(line, currentSearchIndex + 1,
 						stopIndex);
@@ -313,18 +311,18 @@ public class ColumnBlock extends Rect implements Node
 	public String toString()
 	{
 		StringBuilder buf = new StringBuilder();
-		buf.append("ColumnBlock[startLine : " + startLine + " ,endLine : " + endLine
-			+ " ,columnBlockWidth : " + columnBlockWidth + "] LINES:");
+		buf.append("ColumnBlock[startLine : ").append(startLine).append(" ,endLine : ").append(endLine)
+		   .append(" ,columnBlockWidth : ").append(columnBlockWidth).append("] LINES:");
 		for (int i = 0; i < lines.size(); i++)
 		{
-			buf.append("\n");
-			buf.append("LINE " + i + ":" + lines.elementAt(i));
+			buf.append('\n');
+			buf.append("LINE ").append(i).append(':').append(lines.elementAt(i));
 		}
 
 		for (int i = 0; i < children.size(); i++)
 		{
-			buf.append("\n");
-			buf.append("CHILD " + i + ":" + children.elementAt(i));
+			buf.append('\n');
+			buf.append("CHILD ").append(i).append(':').append(children.elementAt(i));
 		}
 		return buf.toString();
 	}//}}}
@@ -356,8 +354,8 @@ public class ColumnBlock extends Rect implements Node
 		// update line no. in this column block
 		// update column block lines in this column block
 		// call this method on all children
-		this.startLine += line;
-		this.endLine += line;
+		startLine += line;
+		endLine += line;
 
 		for (int i = 0; i < lines.size(); i++)
 		{
@@ -373,22 +371,21 @@ public class ColumnBlock extends Rect implements Node
 	//{{{ updateColumnBlockLineOffset() method
 	public void updateColumnBlockLineOffset(int line, int offsetAdd, boolean increaseStartOffset)
 	{
-		if ((line >= startLine) && (line <= endLine))
+		if (line >= startLine && line <= endLine)
 		{
-			if ((lines != null) && (lines.size() > 0))
+			if (lines != null && !lines.isEmpty())
 			{
-				ColumnBlockLine blockLine = (ColumnBlockLine) (lines.get(line
-					- startLine));
+				ColumnBlockLine blockLine = lines.get(line - startLine);
 				if (increaseStartOffset)
 				{
 					blockLine.colStartIndex += offsetAdd;
 				}
 				blockLine.colEndIndex += offsetAdd;
 			}
-			if ((children != null) && (children.size() > 0))
+			if (children != null && !children.isEmpty())
 			{
 				ColumnBlock block = searchChildren(line);
-				if ((block != null) && (block.isLineWithinThisBlock(line) == 0))
+				if (block != null && block.isLineWithinThisBlock(line) == 0)
 				{
 					block.updateColumnBlockLineOffset(line, offsetAdd, true);
 				}
@@ -404,15 +401,8 @@ public class ColumnBlock extends Rect implements Node
 	 */
 	public void setTabSizeDirtyStatus(boolean dirty, boolean recursive)
 	{
-		if (dirty)
-		{
-			tabSizesDirty = true;
-		}
-		else
-		{
-			tabSizesDirty = false;
-		}
-		if (recursive && children != null && children.size() > 0)
+		tabSizesDirty = dirty;
+		if (recursive && children != null && !children.isEmpty())
 		{
 			for (int i = 0; i < children.size(); i++)
 			{
