@@ -109,6 +109,7 @@ public class SearchBar extends JToolBar
 		//{{{ Create the timer used by incremental search
 		timer = new Timer(0,new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent evt)
 			{
 				if(!incrementalSearch(searchStart,searchReverse))
@@ -160,7 +161,7 @@ public class SearchBar extends JToolBar
 	public void propertiesChanged()
 	{
 		// Option may have been changed
-		isRemovable = !(jEdit.getBooleanProperty("view.showSearchbar"));
+		isRemovable = !jEdit.getBooleanProperty("view.showSearchbar");
 		
 		Log.log(Log.DEBUG, this, "in SearchBar.propertiesChanged(), isRemovable = " + isRemovable);
 		
@@ -171,15 +172,18 @@ public class SearchBar extends JToolBar
 	//{{{ Private members
 
 	//{{{ Instance variables
-	private View view;
-	private HistoryTextField find;
-	private JCheckBox ignoreCase, regexp, hyperSearch, wholeWord;
-	private Timer timer;
+	private final View view;
+	private final HistoryTextField find;
+	private final JCheckBox ignoreCase;
+	private final JCheckBox regexp;
+	private final JCheckBox hyperSearch;
+	private final JCheckBox wholeWord;
+	private final Timer timer;
 	private boolean wasError;
-	private Color defaultBackground;
-	private Color defaultForeground;
-	private Color errorForeground;
-	private Color errorBackground;
+	private final Color defaultBackground;
+	private final Color defaultForeground;
+	private final Color errorForeground;
+	private final Color errorBackground;
 	// close button only there if 'isRemovable' is true
 	private RolloverButton close;
 
@@ -206,7 +210,7 @@ public class SearchBar extends JToolBar
 		{
 			if(isRemovable)
 			{
-				view.removeToolBar(SearchBar.this);
+				view.removeToolBar(this);
 			}
 			else
 				find.setText(null);
@@ -348,6 +352,7 @@ public class SearchBar extends JToolBar
 	class ActionHandler implements ActionListener
 	{
 		//{{{ actionPerformed() method
+		@Override
 		public void actionPerformed(ActionEvent evt)
 		{
 			Object source = evt.getSource();
@@ -386,6 +391,7 @@ public class SearchBar extends JToolBar
 	class DocumentHandler implements DocumentListener
 	{
 		//{{{ insertUpdate() method
+		@Override
 		public void insertUpdate(DocumentEvent evt)
 		{
 			// on insert, start search from beginning of
@@ -407,6 +413,7 @@ public class SearchBar extends JToolBar
 		} //}}}
 
 		//{{{ removeUpdate() method
+		@Override
 		public void removeUpdate(DocumentEvent evt)
 		{
 			// on backspace, restart from beginning
@@ -443,6 +450,7 @@ public class SearchBar extends JToolBar
 		} //}}}
 
 		//{{{ changedUpdate() method
+		@Override
 		public void changedUpdate(DocumentEvent evt) {}
 		//}}}
 	} //}}}
@@ -450,6 +458,7 @@ public class SearchBar extends JToolBar
 	//{{{ KeyHandler class
 	class KeyHandler extends KeyAdapter
 	{
+		@Override
 		public void keyPressed(KeyEvent evt)
 		{
 			switch(evt.getKeyCode())
@@ -476,6 +485,7 @@ public class SearchBar extends JToolBar
 	//{{{ FocusHandler class
 	class FocusHandler extends FocusAdapter
 	{
+		@Override
 		public void focusLost(FocusEvent e)
 		{
 			getField().addCurrentToHistory();
