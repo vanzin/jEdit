@@ -2,7 +2,7 @@
 <section id="intro">
     <title>Introduction</title>
     <!-- jEdit buffer-local properties:                      -->
-    <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
+    <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
     <!-- jEdit FAQ                                           -->
     <para>This document explains many of the basic features of jEdit and

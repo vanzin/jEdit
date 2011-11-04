@@ -2,7 +2,7 @@
 <section id="macros">
     <title>Macros</title>
     <!-- jEdit buffer-local properties:                      -->
-    <!-- :indentSize=4:noTabs=false:maxLineLen=72:tabSize=4: -->
+    <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
     <!-- jEdit FAQ                                           -->
     <para>This section deals with questions on writing and running
@@ -22,7 +22,7 @@
                     will provide a similar interface to jEdit's plugin manager
                     for installing new macros. The plugin downloads the macros
                     from the jEdit Community site, so an internet connection is
-                    necessary.</para>
+                    necessary. It needs to be updated for jEdit 4.4. </para>
                 </answer>
             </qandaentry>
 

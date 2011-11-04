@@ -5,7 +5,6 @@
     <!-- :indentSize=4:noTabs=false:maxLineLen=80:tabSize=4: -->
     <!-- :xml.root=faq.xml:                                  -->
     <!-- jEdit FAQ                                           -->
-    <!-- Copyright (C) 2003 John Gellene, Kris Kopicki       -->
     <para>This section deals with questions concerning the use of jEdit's
     plugins. Plugins are applications that share jEdit's memory space and user
     interface and provide a wide variety of functions and services.</para>

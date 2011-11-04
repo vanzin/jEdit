@@ -575,12 +575,11 @@
                     used for many things in jEdit. If you want to redefine it to
                     be a single-key shortcut, first thing you need to do is
                     decide on another Ctrl-key to use as a prefix, to redefine
-                    jEdit's fold features. I recommend using Ctrl-Q as the
-                    prefix, and if you want to use Ctrl-Q to quit, you have to
+                    all of the below actions. I am using Ctrl-Q as the
+                    prefix, and I bind quit so I have to
                     hit Ctrl-Q twice. Cut and paste the below shortcuts into
-                    your own properties file.</para>
-
-                    <programlisting>
+                    your own properties file and customize as you like. </para>
+		<programlisting>
 # emacs end of line
 end.shortcut2=C+e
 # Ctrl-Q twice to quit
@@ -655,7 +654,7 @@ expand-all-folds.shortcut=C+q x
                 </question>
 
                 <answer>
-                    <para>Check out <literal>macros/Emacs_Ctrl_K.bsh</literal>.
+                    <para>Check out <literal>macros/Editing/Emacs_Ctrl_K.bsh</literal>.
                     Bind it to Ctrl-k from the shortcuts option pane.</para>
                 </answer>
             </qandaentry>

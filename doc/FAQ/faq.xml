@@ -2,7 +2,6 @@
 <!-- jEdit buffer-local properties:                       -->
 <!-- :indentSize=1   -->
 <!-- jEdit FAQ                                            -->
-<!-- Changes required for posting on jEdit Community:     -->
 <!-- Command line for processing:                         -->
 <!--                                                      -->
 <!-- xsltproc -xinclude -output .\html\ faq.xsl faq.xml  -->
