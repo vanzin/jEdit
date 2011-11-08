@@ -356,7 +356,6 @@
                 detects same syntax described at <xref linkend="buffer-local" />
                 for property name "encoding". Note that unlike other buffer-local
                 properties, this one will not work unless it is at the top of the file.
-                The above "python" encoding detector also accepts this syntax.
               </para></listitem>
             </itemizedlist>
             Others can be defined in plugins as services and added to this
