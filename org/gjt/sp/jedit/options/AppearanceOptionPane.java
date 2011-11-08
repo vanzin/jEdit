@@ -54,7 +54,7 @@ public class AppearanceOptionPane extends AbstractOptionPane
 	protected void _init()
 	{
 		/* Look and feel */
-		addComponent(new JLabel(jEdit.getProperty("options.appearance.lf.note")));
+//		addComponent(new JLabel(jEdit.getProperty("options.appearance.lf.note")));
 
 		lfs = UIManager.getInstalledLookAndFeels();
 		String[] names = new String[lfs.length];
