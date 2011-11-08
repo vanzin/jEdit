@@ -118,9 +118,9 @@
                     </row>
 
                     <row><entry><varname>encoding</varname></entry>
-                    <entry> The character encoding that should be used for this file. 
+                    <entry> The character encoding that should be used for this file.
                     See <xref linkend="encodings"/>. </entry></row>
-                    
+
                     <row>
                         <entry><varname>folding</varname></entry>
 
@@ -354,8 +354,9 @@
               <listitem><para>
                 <literal>buffer-local-property</literal>:
                 detects same syntax described at <xref linkend="buffer-local" />
-                for property name "encoding".
-                (The above "python" encoding detector also accepts this syntax.)
+                for property name "encoding". Note that unlike other buffer-local
+                properties, this one will not work unless it is at the top of the file.
+                The above "python" encoding detector also accepts this syntax.
               </para></listitem>
             </itemizedlist>
             Others can be defined in plugins as services and added to this
