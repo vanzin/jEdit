@@ -261,9 +261,6 @@
             retained in history text fields can also be set here; see
             <xref linkend="history" />.</para>
 
-            <para>Note that changes to certain settings such as the Swing look
-            and feel and the docking framework require a restart of jEdit to
-            take effect.</para>
         </section>
 
 
