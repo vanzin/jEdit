@@ -558,6 +558,7 @@ public class View extends JFrame implements InputHandlerProvider
 	/**
 	 * Returns the input handler.
 	 */
+	@Override
 	public InputHandler getInputHandler()
 	{
 		return inputHandler;
@@ -727,6 +728,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 		EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				newSplitPane.setDividerLocation(dividerPosition);
@@ -1402,7 +1404,7 @@ public class View extends JFrame implements InputHandlerProvider
 	//{{{ toggleFullScreen() method
 	public void toggleFullScreen()
 	{
-		fullScreenMode = (! fullScreenMode);
+		fullScreenMode = !fullScreenMode;
 		GraphicsDevice sd = getGraphicsConfiguration().getDevice();
 		dispose();
 		if (fullScreenMode)
@@ -1417,7 +1419,7 @@ public class View extends JFrame implements InputHandlerProvider
 		{
 			boolean showStatus = plainView ? jEdit.getBooleanProperty("view.status.plainview.visible") :
 				jEdit.getBooleanProperty("view.status.visible");
-			if ((menuBar != null) && (getJMenuBar() != menuBar))
+			if (menuBar != null && getJMenuBar() != menuBar)
 				setJMenuBar(menuBar);
 			boolean alternateLayout = jEdit.getBooleanProperty(
 				"view.toolbar.alternateLayout");
@@ -1520,11 +1522,11 @@ public class View extends JFrame implements InputHandlerProvider
 	//{{{ Instance variables
 	private boolean closed;
 
-	private DockableWindowManager dockableWindowManager;
-	private JPanel mainPanel;
+	private final DockableWindowManager dockableWindowManager;
+	private final JPanel mainPanel;
 
-	private JPanel topToolBars;
-	private JPanel bottomToolBars;
+	private final JPanel topToolBars;
+	private final JPanel bottomToolBars;
 	private ToolBarManager toolBarManager;
 
 	private Container toolBar;
@@ -1535,7 +1537,7 @@ public class View extends JFrame implements InputHandlerProvider
 	private JSplitPane splitPane;
 	private String lastSplitConfig;
 
-	private StatusBar status;
+	private final StatusBar status;
 
 	private InputHandler inputHandler;
 	private Macros.Recorder recorder;
@@ -1545,7 +1547,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 	private boolean showFullPath;
 
-	private boolean plainView;
+	private final boolean plainView;
 
 	private Socket waitSocket;
 	private Component mainContent;
@@ -1725,15 +1727,13 @@ loop:		while (true)
 			case StreamTokenizer.TT_EOF:
 				break loop;
 			case StreamTokenizer.TT_WORD:
-				if(st.sval.equals("vertical") ||
-					st.sval.equals("horizontal"))
+				if("vertical".equals(st.sval) || "horizontal".equals(st.sval))
 				{
 					int orientation
-						= st.sval.equals("vertical")
+						= "vertical".equals(st.sval)
 						? JSplitPane.VERTICAL_SPLIT
 						: JSplitPane.HORIZONTAL_SPLIT;
-					int divider = ((Integer)stack.pop())
-						.intValue();
+					int divider = (Integer) stack.pop();
 					Object obj1 = stack.pop();
 					Object obj2 = stack.pop();
 					// Backward compatibility with pre-bufferset versions
@@ -1758,12 +1758,12 @@ loop:		while (true)
 						new Dimension(0,0));
 					splitPane.setDividerLocation(divider);
 				}
-				else if(st.sval.equals("buffer"))
+				else if("buffer".equals(st.sval))
 				{
 					Object obj = stack.pop();
 					if(obj instanceof Integer)
 					{
-						int index = ((Integer)obj).intValue();
+						int index = (Integer) obj;
 						if(index >= 0 && index < buffers.length)
 							buffer = buffers[index];
 					}
@@ -1784,7 +1784,7 @@ loop:		while (true)
 					stack.push(buffer);
 					editPaneBuffers.add(buffer);
 				}
-				else if (st.sval.equals("buff"))
+				else if ("buff".equals(st.sval))
 				{
 					String path = (String)stack.pop();
 					buffer = jEdit.getBuffer(path);
@@ -1797,7 +1797,7 @@ loop:		while (true)
 						editPaneBuffers.add(buffer);
 					}
 				}
-				else if (st.sval.equals("bufferset"))
+				else if ("bufferset".equals(st.sval))
 				{
 					// pop the bufferset scope. Not used anymore but still here for compatibility
 					// with old perspectives
@@ -1936,7 +1936,7 @@ loop:		while (true)
 	//{{{ loadToolBars() method
 	private void loadToolBars()
 	{
-		if((! plainView) && (fullScreenMode ?
+		if(!plainView && (fullScreenMode ?
 			jEdit.getBooleanProperty("fullScreenIncludesToolbar") :
 			jEdit.getBooleanProperty("view.showToolbar")))
 		{
@@ -2121,6 +2121,7 @@ loop:		while (true)
 	//{{{ CaretHandler class
 	private class CaretHandler implements CaretListener
 	{
+		@Override
 		public void caretUpdate(CaretEvent evt)
 		{
 			if(evt.getSource() == getTextArea())
@@ -2154,12 +2155,14 @@ loop:		while (true)
 	//{{{ ScrollHandler class
 	private class ScrollHandler implements ScrollListener
 	{
+		@Override
 		public void scrolledVertically(TextArea textArea)
 		{
 			if(getTextArea() == textArea)
 				status.updateCaretStatus();
 		}
 
+		@Override
 		public void scrolledHorizontally(TextArea textArea) {}
 	} //}}}
 
@@ -2178,6 +2181,7 @@ loop:		while (true)
 			// windowActivated()
 			EventQueue.invokeLater(new Runnable()
 			{
+				@Override
 				public void run()
 				{
 					int check = jEdit.getIntegerProperty("checkFileStatus");
