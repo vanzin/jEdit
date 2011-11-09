@@ -3,10 +3,7 @@
     <title>Introducing the Plugin API</title>
     <!-- :indentSize=1:tabSize=2:noTabs=true:wrap=soft:maxLineLen=0:     -->
     <!-- :xml.root=users-guide.xml: -->
-    <!-- jEdit 4 Plugin Guide, (C) 2001, 2002 John Gellene      -->
     <!-- jEdit buffer-local properties:                         -->
-    <!-- This is the introduction of the jEdit 4 Plugin Guide -->
-    <!-- $Id$ -->
 
     <indexterm>
         <primary>Plugin API</primary>
