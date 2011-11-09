@@ -129,7 +129,7 @@ autoReload=true
 checkFileStatus=0
 
 # Encoding detectors
-encodingDetectors=BOM XML-PI html python
+encodingDetectors=BOM XML-PI html python buffer-local-property
 
 #}}}
 
