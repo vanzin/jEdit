@@ -150,10 +150,10 @@ class PropertyManager
 	} //}}}
 
 	//{{{ Private members
-	private Properties system = new Properties();
-	private List<Properties> plugins = new LinkedList<Properties>();
-	private Properties site = new Properties();
-	private Properties user = new Properties();
+	private final Properties system = new Properties();
+	private final List<Properties> plugins = new LinkedList<Properties>();
+	private final Properties site = new Properties();
+	private final Properties user = new Properties();
 
 	//{{{ getDefaultProperty() method
 	private String getDefaultProperty(String name)
