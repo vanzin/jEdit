@@ -205,8 +205,8 @@ file=new-file \
      %reload-encoding \
      - \
      close-buffer \
-     global-close-buffer \
      closeall-except-active \
+     global-close-buffer \
      close-all \
      - \
      save \
@@ -241,7 +241,8 @@ bufferset-toggle-exclusive.label=Toggle E$xclusive BufferSets
 bufferset-toggle-exclusive.tooltip=When a buffer is opened, close it in other non-intersecting buffersets.
 closeall-except-active.icon.small=16x16/actions/document-close.png
 global-close-buffer.icon.small=16x16/actions/document-close.png
-close-all.label=Clos$e All
+close-all.label=Clos$e All (global)
+close-all.tooltip=Close all buffers in all Views
 close-all.icon.small=16x16/actions/document-close.png
 save.label=$Save
 save.icon.small=16x16/actions/document-save.png
