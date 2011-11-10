@@ -82,6 +82,7 @@ public class GenerateTocXML
 				for (String s : opts) {
 					if (destIsNext) {
 						destDirName = s;
+						break;
 					} else {
 						destIsNext = s.equals("-d");
 					}
