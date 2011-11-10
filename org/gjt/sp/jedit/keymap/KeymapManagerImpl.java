@@ -138,6 +138,7 @@ public class KeymapManagerImpl implements KeymapManager
 		File originalKeymap = getKeymapFile(name);
 		if (!originalKeymap.isFile())
 			throw new IllegalArgumentException("Keymap " + name + " doesn't exist");
+		keymapFile.getParentFile().mkdirs();
 		BufferedInputStream in = null;
 		BufferedOutputStream out = null;
 		try
