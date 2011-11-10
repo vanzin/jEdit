@@ -99,9 +99,20 @@
 	</CODE>
 </ACTION>
 
+
 <ACTION NAME="close-all">
 	<CODE>
 		jEdit.closeAllBuffers(view);
+	</CODE>
+</ACTION>
+
+<ACTION NAME="closeall-bufferset">
+	<CODE>
+		org.gjt.sp.jedit.bufferset.BufferSet bufferSet = editPane.getBufferSet();
+		Buffer[] buffers = bufferSet.getAllBuffers();
+		for (Buffer buff: buffers) {
+			jEdit.closeBuffer(editPane,buff);
+		}
 	</CODE>
 </ACTION>
 

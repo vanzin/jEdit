@@ -206,6 +206,7 @@ file=new-file \
      - \
      close-buffer \
      closeall-except-active \
+     closeall-bufferset \
      global-close-buffer \
      close-all \
      - \
@@ -231,17 +232,20 @@ reload.label=$Reload
 reload.icon.small=16x16/actions/view-refresh.png
 reload-all.label=Reloa$d All
 close-buffer.label=$Close
-close-buffer.tooltip=Close buffer in EditPane's BufferSet only.
+close-buffer.tooltip=Close buffer in EditPane's BufferSet only
 close-buffer.icon.small=16x16/actions/document-close.png
 global-close-buffer.label=Close (global)
-global-close-buffer.tooltip=Close buffer in all editpanes and views
-closeall-except-active.tooltip=Clear current editpane's BufferSet except for buffer(s) currently showing
+global-close-buffer.tooltip=Close buffer in all Views
+closeall-except-active.tooltip=Close others in EditPane's BufferSet
 closeall-except-active.label=Close O$thers
+closeall-bufferset.label=Clos$e All
+closeall-bufferset.tooltip=Clear Editpane's BufferSet
+closeall-bufferset.icon.small=16x16/actions/document-close.png
 bufferset-toggle-exclusive.label=Toggle E$xclusive BufferSets
-bufferset-toggle-exclusive.tooltip=When a buffer is opened, close it in other non-intersecting buffersets.
+bufferset-toggle-exclusive.tooltip=When a buffer is opened, close it in other non-intersecting buffersets
 closeall-except-active.icon.small=16x16/actions/document-close.png
 global-close-buffer.icon.small=16x16/actions/document-close.png
-close-all.label=Clos$e All (global)
+close-all.label=Close All (global)
 close-all.tooltip=Close all buffers in all Views
 close-all.icon.small=16x16/actions/document-close.png
 save.label=$Save
