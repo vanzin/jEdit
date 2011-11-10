@@ -167,7 +167,7 @@ public class KeymapManagerImpl implements KeymapManager
 		String name = getCurrentKeymapName();
 		currentKeymap = getKeymap(name);
 		if (currentKeymap == null)
-			currentKeymap = getKeymap("jedit");
+			currentKeymap = getKeymap("jEdit");
 	} //}}}
 
 	//{{{ getKeymapFile() method
