@@ -435,7 +435,6 @@
 				<include name="org/gjt/sp/jedit/**/*.dtd"/>
 				<include name="org/gjt/sp/jedit/default.abbrevs"/>
 				<include name="org/gjt/sp/jedit/*.props"/>
-				<include name="org/gjt/sp/jedit/keymaps/*.props"/>
 				<include name="org/gjt/sp/jedit/*.xml"/>
 				<include name="org/gjt/sp/jedit/textarea/*.xml"/>
 				<include name="org/gjt/sp/jedit/icons/**/*.gif"/>
@@ -1254,7 +1253,7 @@
 			</contrib:else>
 		</contrib:if>
 		<property name="wipe.dist.files"
-			  value="false"/>
+			  value="true"/>
 		<contrib:runtarget target="dist-cleanup"/>
 	</target>
 
