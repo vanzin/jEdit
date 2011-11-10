@@ -89,14 +89,11 @@
 		unless="init.done">
 		<echo message="Buildfile for ${ant.project.name} (${ant.file})"
 		      level="info"/>
-		<fail message="Ant 1.8 or newer (1.8.1 excluded due to a bug) is needed for jEdit to build, please install it and rerun">
+		<fail message="Ant 1.8.2 or newer is needed for jEdit to build, please install it and rerun">
 			<condition>
-				<or>
-					<not>
-						<antversion atleast="1.8"/>
-					</not>
-					<antversion exactly="1.8.1"/>
-				</or>
+				<not>
+					<antversion atleast="1.8.2"/>
+				</not>
 			</condition>
 		</fail>
 		<fail message="The ant-optional package is needed for jEdit to build, please install it and rerun">
