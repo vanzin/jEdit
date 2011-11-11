@@ -440,31 +440,45 @@
 
             <para>The <guibutton>Shortcuts</guibutton> option pane associates
             keyboard shortcuts with commands. Each command can have up to two
-            shortcuts associated with it.</para>
+            shortcuts associated with it, and each shortcut can be a 1 or 2-key 
+            sequence.</para>
 
-            <para>The combo box at the top of the option pane selects the
+            <para>jEdit 5 adds a new feature known as "keymaps". Each keymap is 
+            a named set of keyboard shortcut mappings. Default keymaps are found in jEdit's
+            <literal>keymaps</literal> folder, and user customized keymaps are are stored in the 
+            user settings <literal>keymaps</literal> folder. </para> 
+            
+            <para> The top combobox allows you to <guilabel>Choose a Keymap</guilabel>,
+            or a set of shortcuts. 
+            The "imported" keymap is automatically created and selected when jEdit needs to create a "keymaps" user settings folder. At this point, jEdit imports the existing
+            shortcuts and places them into "imported". This makes it easy to bring in shortcuts from properties files that were customized with jEdit 4.5 or earlier. </para>
+            
+            <para> If a keymap of the same name exists in the defaults and the user settings
+            directory, the user version is the one that is used in favor of the default. 
+            To take an existing keymap and customize it, select it, click
+            <guibutton>duplicate</guibutton> and you will be asked for the name of the new
+            keymap. A copy of that keymap will be
+            saved in the user settings <literal>keymaps</literal> directory. At this point,
+            this keymap will be selected and will determine where new shortcut properties are
+            stored. To remove all customizations to a default keymap, click <guibutton>reset</guibutton>. </para>
+            
+            <para>The combo box below the keymap selector selects the
             command set to edit. Command sets include the set of all built-in
             commands, the commands of each plugin, and the set of macros.</para>
 
             <para>To change a shortcut, click the appropriate table entry and
             press the keys you want associated with that command in the
             resulting dialog box. The dialog box will warn you if the shortcut
-            is already assigned.</para>
-
-            <bridgehead> 2-key shortcut prefixes </bridgehead>
-
-            <para> Some shortcuts, such as C+e, C+m, and C+r, are prefixes for two-keystroke shortcuts. Another  keystroke may be used as a prefix in a 2-key shortcut, so for example, C+x can be redefined as a prefix to make it more emacs-like, by mapping any other action to a C+x prefixed shortcut.</para>
-
-            <para> Conversely, emacs users will notice at first that C+e can not be mapped as a single key shortcut to go to the end of the line, unless all of the other actions that contain C+e prefixed shortcuts are remapped to other shortcuts first. After that, C+e can be bound to end-of-line. </para>
-
-            <para> The default shortcuts can be found in  <literal>jedit_keys.props</literal>. </para>
+            is already assigned. The properties will be saved in the currently selected
+            keymap.
+            </para>
 
         </section>
 
         <section id="status-bar-pane">
             <title>The Status Bar Pane</title>
 
-            <para>The <guibutton>Status Bar</guibutton>, its API, and its coprresponding option pane were redesigned in jEdit 4.3. Now, the pane contains settings to customize which widgets are in the status bar, their order, and what separators exist between them. Or, you can disable it completely, for regular and/or plain views. See <xref linkend="status-bar" />.</para>
+            <para>The <guibutton>Status Bar</guibutton>, its API, and its corresponding option pane were redesigned in jEdit 4.3. Now, the pane contains settings to customize which widgets are in the status bar, their order, and what separators exist between them. Or, you can disable it completely, for regular and/or plain views. See <xref linkend="status-bar" />.</para>
 
             <para> From the <literal>Options</literal> tab, you can
             customize information about the caret display in the lower

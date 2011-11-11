@@ -357,10 +357,7 @@
 				<include name="org/gjt/sp/jedit/TextUtilities.java"/>
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
-				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
-
 				<include name="modes/*"/>
-
 				<include name="org/gjt/sp/util/Log*.java"/>
 				<include name="org/gjt/sp/util/IntegerArray.java"/>
 				<include name="org/gjt/sp/util/IOUtilities.java"/>
@@ -540,7 +537,6 @@
 				<include name="org/gjt/sp/jedit/syntax/xmode.dtd"/>
 				<include name="org/gjt/sp/jedit/actions.dtd"/>
 				<include name="org/gjt/sp/jedit/jedit.props"/>
-				<include name="org/gjt/sp/jedit/jedit_keys.props"/>
 				<include name="modes/*"/>
 			</fileset>
 			<manifest>

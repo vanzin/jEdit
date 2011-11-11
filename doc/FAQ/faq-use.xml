@@ -565,86 +565,9 @@
                 </question>
 
                 <answer>
-                    <para>jEdit has it set up as a 2-key shortcut. In order to
-                    make Ctrl-E a one-key shortcut again, you first have to
-                    redefine all of the Ctrl-E prefix shortcuts to mean
-                    something else.</para>
-
-                    <para><literal>jedit_keys.props</literal> shows you all of
-                    the current keyboard bindings. As you can see, Ctrl-e is
-                    used for many things in jEdit. If you want to redefine it to
-                    be a single-key shortcut, first thing you need to do is
-                    decide on another Ctrl-key to use as a prefix, to redefine
-                    all of the below actions. I am using Ctrl-Q as the
-                    prefix, and I bind quit so I have to
-                    hit Ctrl-Q twice. Cut and paste the below shortcuts into
-                    your own properties file and customize as you like. </para>
-		<programlisting>
-# emacs end of line
-end.shortcut2=C+e
-# Ctrl-Q twice to quit
-exit.shortcut=C+q C+q
-# C+q is our new C+e prefix
-#{{{ C+q C+X
-
-# Unused: f, h, q, y
-copy-append.shortcut=C+q C+a
-search-in-open-buffers.shortcut=C+q C+b
-range-comment.shortcut=C+q C+c
-search-in-directory.shortcut=C+q C+d
-replace-and-find-next.shortcut=C+q C+g
-ignore-case.shortcut=C+q C+i
-scroll-to-current-line.shortcut=C+q C+j
-line-comment.shortcut=C+q C+k
-select-line-range.shortcut=C+q C+l
-add-marker.shortcut=C+q C+m
-center-caret.shortcut=C+q C+n
-open-path.shortcut=C+q C+o
-vertical-paste.shortcut=C+q C+p
-replace-in-selection.shortcut=C+q C+r
-save-all.shortcut=C+q C+s
-toggle-line-numbers.shortcut=C+q C+t
-cut-append.shortcut=C+q C+u
-paste-previous.shortcut=C+q C+v
-close-all.shortcut=C+q C+w
-regexp.shortcut=C+q C+x
-paste-deleted.shortcut=C+q C+y
-redo.shortcut=C+q C+z
-#}}}
-
-#{{{ C+q C+non-alpha
-left-docking-area.shortcut=C+q C+LEFT
-top-docking-area.shortcut=C+q C+UP
-right-docking-area.shortcut=C+q C+RIGHT
-bottom-docking-area.shortcut=C+q C+DOWN
-
-prev-marker.shortcut=C+q C+COMMA
-next-marker.shortcut=C+q C+PERIOD
-prev-bracket.shortcut=C+q C+OPEN_BRACKET
-next-bracket.shortcut=C+q C+CLOSE_BRACKET
-close-docking-area.shortcut=C+q C+BACK_QUOTE
-#}}}
-
-#{{{ C+q X
-# Unused: b e g h j k m o q t y z
-add-explicit-fold.shortcut=C+q a
-collapse-all-folds.shortcut=C+q c
-delete-paragraph.shortcut=C+q d
-format-paragraph.shortcut=C+q f
-find-previous.shortcut=C+q g
-invert-selection.shortcut=C+q i
-select-line.shortcut=C+q l
-narrow-to-fold.shortcut=C+q n n
-narrow-to-selection.shortcut=C+q n s
-select-paragraph.shortcut=C+q p
-remove-trailing-ws.shortcut=C+q r
-select-fold.shortcut=C+q s
-insert-literal.shortcut=C+q v
-select-word.shortcut=C+q w
-parent-fold.shortcut=C+q u
-expand-all-folds.shortcut=C+q x
-#}}}
-</programlisting>
+                    <para>Start with "Alan's Emacsey Keymap" which binds Ctrl-E
+                    to end of line, and customize it by setting your own shortcuts
+                    for other things. </para>
                 </answer>
             </qandaentry>
 
