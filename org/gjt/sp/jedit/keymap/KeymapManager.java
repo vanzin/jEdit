@@ -29,6 +29,7 @@ import java.util.Collection;
  */
 public interface KeymapManager
 {
+	String DEFAULT_KEYMAP_NAME = "jEdit";
 	/**
 	 * Returns the current keymap.
 	 * @return the current keymap

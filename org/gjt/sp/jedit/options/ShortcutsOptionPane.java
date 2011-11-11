@@ -73,7 +73,7 @@ public class ShortcutsOptionPane extends AbstractOptionPane
 		String keymapName = jEdit.getProperty("keymap.current");
 		selectedKeymap = keymapManager.getKeymap(keymapName);
 		if (selectedKeymap == null)
-			selectedKeymap = keymapManager.getKeymap("jedit");
+			selectedKeymap = keymapManager.getKeymap(KeymapManager.DEFAULT_KEYMAP_NAME);
 		initModels();
 
 		duplicateKeymap = new JButton(jEdit.getProperty("options.shortcuts.duplicatekeymap.label"));

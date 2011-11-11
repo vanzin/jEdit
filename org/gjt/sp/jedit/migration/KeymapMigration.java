@@ -46,7 +46,7 @@ public class KeymapMigration implements MigrationService
 			return;
 
 		KeymapManager keymapManager = jEdit.getKeymapManager();
-		keymapManager.copyKeymap("jEdit", "imported");
+		keymapManager.copyKeymap(KeymapManager.DEFAULT_KEYMAP_NAME, "imported");
 		Keymap imported = keymapManager.getKeymap("imported");
 		Properties properties = jEdit.getProperties();
 		Set<Map.Entry<Object,Object>> entries = properties.entrySet();
