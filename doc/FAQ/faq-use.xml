@@ -565,9 +565,11 @@
                 </question>
 
                 <answer>
-                    <para>Start with "Alan's Emacsey Keymap" which binds Ctrl-E
-                    to end of line, and customize it by setting your own shortcuts
-                    for other things. </para>
+                    <para>Start with a keymap that does not contain any
+                    multiple-key shortcuts beginning with Ctrl-E, such as the
+                    "Emacs" Keymap which binds Ctrl-E
+                    to "smart end", and customize it by setting your own shortcuts to make it more like your flavor of emacs.
+                    </para>
                 </answer>
             </qandaentry>
 

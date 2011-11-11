@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appendix id="regexps">
     <title>Regular Expressions</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :indentSize=1:noTabs=yes: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
-    <para>jEdit 4.3pre5 and later uses regular expressions from <ulink
+    <para>jEdit 4.3 and later uses regular expressions from <ulink
     url="http://download.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</ulink>
     to implement inexact search and replace. Click there to see a complete
     reference guide to all supported meta-characters.</para>
@@ -242,7 +239,7 @@
 
                 <para>There are some known issues with the
                 <literal>java.util.regex</literal> library, as it stands in
-                Sun's Java 1.5 and 1.6. In particular, it is possible to create
+                Sun's Java 1.6. In particular, it is possible to create
                 regular expressions that hang the JVM, or cause stack overflow
                 errors, which was not as easy to accomplish using the legacy
                 <literal>gnu.regexp</literal> library. If you find that
@@ -252,6 +249,5 @@
                 uses it and can provide a replacement to the built-in search
                 dialog.</para>
             </note>
-
 
 </appendix>

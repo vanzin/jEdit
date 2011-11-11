@@ -119,7 +119,7 @@
 
                     <row><entry><varname>encoding</varname></entry>
                     <entry> The character encoding that should be used for this file
-                    (only works if at the top of file). 
+                    (only works if at the top of file).
                     See <xref linkend="encodings"/>. </entry></row>
 
                     <row>
@@ -440,23 +440,24 @@
 
             <para>The <guibutton>Shortcuts</guibutton> option pane associates
             keyboard shortcuts with commands. Each command can have up to two
-            shortcuts associated with it, and each shortcut can be a 1 or 2-key 
-            sequence.</para>
+            shortcuts associated with it, and each shortcut can be a single
+            or multiple key sequence. </para>
 
-            <para>jEdit 5 adds a new feature known as "keymaps". Each keymap is 
-            a named set of keyboard shortcut mappings. Default keymaps are found in jEdit's
-            <literal>keymaps</literal> folder, and user customized keymaps are are stored in the 
-            user settings <literal>keymaps</literal> folder. </para> 
-            
+            <para>jEdit 5 introduces a new feature known as "keymaps". Each keymap is
+            a named set of keyboard shortcut mappings.
+            Default keymaps are found in jEdit's <literal>keymaps</literal> folder,
+            and user customized keymaps are are stored in the
+            user settings' <literal>keymaps</literal> folder. </para>
+
             <para> The top combobox allows you to <guilabel>Choose a Keymap</guilabel>,
-            or a set of shortcuts. 
+            or a set of shortcuts.
             The "imported" keymap is automatically created and selected when jEdit needs
-            to create a "keymaps" user settings folder. At this point, jEdit imports the existing
-            shortcuts and places them into "imported". This makes it easy to bring in shortcuts 
+            to initially create a "keymaps" user settings folder.
+            At this point, jEdit imports the existing shortcuts and places them into "imported". This makes it easy to bring in shortcuts
             from properties files that were customized with jEdit 4.5 or earlier. </para>
-            
+
             <para> If a keymap of the same name exists in the defaults and the user settings
-            directory, the user version is the one that is used in favor of the default. 
+            directory, the user version is the one that is used in favor of the default.
             To take an existing keymap and customize it, select it, click
             <guibutton>duplicate</guibutton> and you will be asked for the name of the new
             keymap. A copy of that keymap will be
@@ -464,7 +465,7 @@
             this keymap will be selected and will determine where new shortcut properties are
             stored. To remove all customizations and restore a default keymap,
             click <guibutton>reset</guibutton>. </para>
-            
+
             <para>The combo box below the keymap selector selects the
             command set to edit. Command sets exist for the set of all built-in
             commands, the commands of each plugin, and the set of macros.</para>

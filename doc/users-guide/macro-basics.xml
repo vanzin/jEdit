@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="macro-basics">
     <title>Macro Basics</title>
-    <!-- jEdit 4.0 Macro Guide, (C) 2001, 2002 John Gellene          -->
     <!-- jEdit buffer-local properties:                              -->
-    <!-- :indentSize=1:noTabs=yes:maxLineLen=72:tabSize=2:           -->
+    <!-- :indentSize=1:noTabs=yes:maxLineLen=80:tabSize=2:           -->
     <!-- :xml.root=users-guide.xml:                                  -->
     <!-- This file cover the introductory section of the macro guide -->
-    <!-- $Id$  -->
 
     <section id="beanshell-intro">
         <title>Introducing BeanShell</title>

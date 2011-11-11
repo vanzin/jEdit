@@ -241,6 +241,14 @@ view.unsplitCurrent();
 					</para>
                 </answer>
             </qandaentry>
+			<qandaentry>
+                <question id="too-many-shortcuts">
+                    <para>I can't remember all these multiple-key shortcuts! </para>
+                    </question>
+                    <answer>
+                      <para> Install ShortcutDisplay plugin for help. </para>
+                    </answer>
+			</qandaentry>
             <qandaentry>
                 <question id="general-slowstart">
                     <para>Why is jEdit so slow to start up?</para>
@@ -290,9 +298,8 @@ view.unsplitCurrent();
                 <answer>
                     <para>The plugin is missing a
                     <methodname>requestDefaultFocus()</methodname> method.
-                    Plugin updates will be available from time to time, or you
-                    can email the author of the plugin to let them know of the
-                    problem.</para>
+                    Check the jedit plugin bugs tracker to see if the ticket
+                    is already opened and you can open a ticket if it's not there. </para>
                 </answer>
             </qandaentry>
         </qandadiv>

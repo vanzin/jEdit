@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appendix id="shortcuts">
     <title>Keyboard Shortcuts</title>
-
+    <!-- This is for the default jEdit keymap. Do we really need this? -->
     <!-- jEdit buffer-local properties: -->
-
     <!-- :tabSize=1:indentSize=1:noTabs=true: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
-    <para>This appendix documents the default set of keyboard shortcuts. They
-    can be customized to suit your taste in the <guibutton>Shortcuts</guibutton>
-    pane of the <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global
-    Options</guimenuitem> dialog box; see <xref linkend="global-opts" />.</para>
+    <para>This appendix documents the "jEdit" keymap of keyboard shortcuts.
+    Keymaps can be created and customized to suit your taste in the
+    <guibutton>Shortcuts</guibutton> pane of the
+    <guimenu>Utilities</guimenu>&gt;<guimenuitem>Global Options</guimenuitem>
+    dialog box; see <xref linkend="shortcuts-pane" />.</para>
 
     <bridgehead>Files</bridgehead>
 
@@ -26,7 +25,6 @@
             <tbody>
                 <row>
                     <entry><keycap>C+n</keycap></entry>
-
                     <entry>New file.</entry>
                 </row>
 

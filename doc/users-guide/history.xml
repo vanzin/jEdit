@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appendix id="history">
     <title>History Text Fields</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :indentSize=1:noTabs=true: -->
-
     <!-- :xml.root=users-guide.xml: -->
 
     <para>The text fields in many jEdit components, such as the file system

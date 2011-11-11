@@ -562,8 +562,10 @@ view=new-view \
      toggle-full-screen
 view.label=$View
 new-view.label=New $View
+new-view.tooltip=New main window with dockables
 new-view.icon.small=16x16/actions/window-new.png
 new-plain-view.label=Ne$w Plain View
+new-plain-view.tooltip=New main window with fewer toolbars and no dockables
 close-view.label=$Close View
 close-view.tooltip=Closes main window, and exits jEdit if this is the only View
 close-view.icon.small=16x16/actions/document-close.png

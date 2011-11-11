@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter id="installing-modes">
     <title>Installing Edit Modes</title>
-
     <!-- jEdit buffer-local properties: -->
-
     <!-- :indentSize=1:noTabs=true: -->
-
     <!-- :xml.root=users-guide.xml: -->
     <para>jEdit looks for edit modes in two locations; the
     <filename>modes</filename> subdirectory of the jEdit settings directory, and
@@ -55,7 +52,7 @@
         <listitem>
             <para><literal>FILE_NAME_GLOB</literal> - files whose names match
             this glob pattern will be opened in this edit mode.
-            This can also specify full paths, if the glob pattern contains a path separator character. <literal>FILE_NAME_GLOB</literal> can be specified in the <literal>modes/catalog</literal> file, or the mode file itself. See the <literal>FILE_NAME_GLOB</literal> for <literal>apacheconf.xml</literal> in <literal>modes/catalog</literal> for an example of full path filename globbing. 
+            This can also specify full paths, if the glob pattern contains a path separator character. <literal>FILE_NAME_GLOB</literal> can be specified in the <literal>modes/catalog</literal> file, or the mode file itself. See the <literal>FILE_NAME_GLOB</literal> for <literal>apacheconf.xml</literal> in <literal>modes/catalog</literal> for an example of full path filename globbing.
             </para>
         </listitem>
 
