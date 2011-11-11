@@ -32,21 +32,21 @@ public class GenerateTocXML
 		+ "<ENTRY HREF='overview-summary.html'><TITLE>jEdit API Reference</TITLE>";
 	public static final String FOOTER = "</ENTRY></TOC>\n";
 
-	private static String destDirName = null;
-
 	public static boolean start(RootDoc root)
 	{
-		if (destDirName == null) {
-			return false;
-		}
-
 		if (!Standard.start(root))
 		{
 			return false;
 		}
-
 		try
 		{
+			String destDirName = null;
+			for (String[] option : root.options()) {
+				if ("-d".equals(option[0].toLowerCase())) {
+					destDirName = option[1];
+					break;
+				}
+			}
 			FileWriter out = new FileWriter(new File(destDirName, OUT));
 			out.write(HEADER);
 
@@ -75,26 +75,7 @@ public class GenerateTocXML
 
 	public static boolean validOptions(String[][] options, DocErrorReporter reporter)
 	{
-		if (Standard.validOptions(options,reporter))
-		{
-			boolean destIsNext = false;
-			for (String[] opts : options) {
-				for (String s : opts) {
-					if (destIsNext) {
-						destDirName = s;
-						break;
-					} else {
-						destIsNext = s.equals("-d");
-					}
-				}
-				if (destIsNext) {
-					break;
-				}
-			}
-
-			return destDirName != null;
-		}
-		return false;
+		return Standard.validOptions(options,reporter);
 	}
 
 	public static LanguageVersion languageVersion()
